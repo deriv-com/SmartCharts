@@ -24,7 +24,7 @@ class ConnectionManager extends EventEmitter {
     static get MSG_OHLC() { return 'ohlc'; }
     static get EVENT_CONNECTION_CLOSE() { return 'CONNECTION_CLOSE'; }
     static get EVENT_CONNECTION_REOPEN() { return 'CONNECTION_REOPEN'; }
-    constructor({appId, endpoint, language}) {
+    constructor({ appId, endpoint, language }) {
         super();
         this._url = `${endpoint}?l=${language}&app_id=${appId}`;
         this._counterReqId = 1;
@@ -46,15 +46,13 @@ class ConnectionManager extends EventEmitter {
         this._connectionOpened.resolve();
     }
     _onclose() {
-        if(this._connectionOpened.isPending) {
+        if (this._connectionOpened.isPending) {
             this._connectionOpened.reject('Connection Error');
         }
-        Object.keys(this._pendingRequests).forEach(
-            req_id => this._pendingRequests[req_id]
-                          .reject('Connection Error')
-        );
+        Object.keys(this._pendingRequests).forEach(req_id => this._pendingRequests[req_id]
+                .reject('Connection Error'));
         this._pendingRequests = { };
-        if(this._autoReconnect) {
+        if (this._autoReconnect) {
             this._initialize();
             this._connectionOpened.then(() => {
                 this.emit(ConnectionManager.EVENT_CONNECTION_REOPEN);
@@ -64,23 +62,23 @@ class ConnectionManager extends EventEmitter {
     }
     _onmessage(message) {
         const data = JSON.parse(message.data);
-        const {req_id, msg_type} = data;
-        if(this._pendingRequests[req_id]) {
+        const { req_id, msg_type } = data;
+        if (this._pendingRequests[req_id]) {
             this._pendingRequests[req_id].resolve(data);
             delete this._pendingRequests[req_id];
         }
         this.emit(msg_type, data);
     }
     _assertConnected() {
-        ["CONNECTING", "CLOSING", "CLOSED"].forEach(state => {
-            if(this._websocket.readyState === WebSocket[state]) {
+        ['CONNECTING', 'CLOSING', 'CLOSED'].forEach((state) => {
+            if (this._websocket.readyState === WebSocket[state]) {
                 throw new Error(`Websocket is ${state}`);
             }
         });
     }
     _timeoutRequest(req_id, timeout) {
         setTimeout(() => {
-            if(this._pendingRequests[req_id] && this._pendingRequests[req_id].isPending) {
+            if (this._pendingRequests[req_id] && this._pendingRequests[req_id].isPending) {
                 this._pendingRequests[req_id].reject(new Error('Request Timeout'));
                 delete this._pendingRequests[req_id];
             }
@@ -90,9 +88,7 @@ class ConnectionManager extends EventEmitter {
         data.req_id = this._counterReqId++;
         await this._connectionOpened;
         this._assertConnected();
-        this._websocket.send(
-            JSON.stringify(data)
-        );
+        this._websocket.send(JSON.stringify(data));
         this._pendingRequests[data.req_id] = PendingPromise(data);
         if (timeout) {
             this._timeoutRequest(data.req_id, timeout);

@@ -1,0 +1,54 @@
+{
+    "parser": "babel-eslint",
+    "extends": [
+        "eslint:recommended",
+        "eslint-config-airbnb",
+        "plugin:import/errors",
+        "plugin:import/warnings"
+    ],
+    "env": {
+        "browser": true,
+        "commonjs": true,
+        "es6": true,
+        "node": true
+    },
+    "plugins": [
+    ],
+    "parserOptions": {
+        "ecmaVersion": 8,
+        "sourceType": "module"
+    },
+    "rules": {
+        "indent": [1, 4],
+        "no-param-reassign": 1,
+        "consistent-return": 1,
+        "no-plusplus": 0,
+        "camelcase": 0,
+        "no-shadow": 1,
+        "no-bitwise": 1,
+        "one-var": 1,
+        "one-var-declaration-per-line": 1,
+        "no-mixed-operators": 1,
+        "prefer-promise-reject-errors": 1,
+        "no-restricted-syntax": 1,
+        "max-len": 0,
+        "no-underscore-dangle": 0,
+        "prefer-const": 0,
+        "prefer-destructuring": 0,
+        "no-trailing-spaces": 1,
+        "no-const-assign": 1,
+        "no-this-before-super": 1,
+        "no-unused-expressions": 2,
+        "no-undef": 1,
+        "no-unreachable": 1,
+        "no-unused-vars": 1,
+        "constructor-super": 1,
+        "valid-typeof": 1,
+        "no-extra-semi": 1,
+        "array-bracket-spacing": 1,
+        "global-require": 1,
+        "curly": 1,
+        "semi": 2,
+        "no-console": 1
+    }
+}

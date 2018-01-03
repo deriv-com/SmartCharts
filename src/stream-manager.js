@@ -1,12 +1,12 @@
 /* eslint-disable-camelcase */
-import ConnectionManager from './connection-manager.js';
 import EventEmitter from 'event-emitter-es6';
+import ConnectionManager from './connection-manager';
 
 class Subscription {
     static get DEFAULT_COUNT() { return 5; }
-    static get DEFAULT_TIMEOUT() { return 20*1000; }
+    static get DEFAULT_TIMEOUT() { return 20 * 1000; }
 
-    constructor({symbol, granularity}, {connection, response = null}) {
+    constructor({ symbol, granularity }, { connection, response = null }) {
         this._connection = connection;
         this._symbol = symbol;
         this._granularity = granularity;
@@ -31,7 +31,7 @@ class Subscription {
                     delete req.subscribe;
                     return this._connection.send(
                         req,
-                        Subscription.DEFAULT_TIMEOUT
+                        Subscription.DEFAULT_TIMEOUT,
                     );
                 }
                 // else
@@ -50,7 +50,7 @@ class Subscription {
             echo_req: Object.assign({}, data.echo_req),
         };
 
-        if(data.history) {
+        if (data.history) {
             const prices = data.history.prices.slice(0);
             const times = data.history.times.slice(0);
             clone.history = { prices, times };
@@ -63,18 +63,18 @@ class Subscription {
         const diff = {
             echo_req: Object.assign({}, now.echo_req),
         };
-        if(perv.history && now.history) {
+        if (perv.history && now.history) {
             const epoch = perv.history.times[perv.history.times.length - 1];
             const index = now.history.times.indexOf(epoch);
 
             diff.history = { times: [], prices: [] };
-            if(index !== -1) {
-                diff.history.times  = now.history.times.slice(index + 1);     
+            if (index !== -1) {
+                diff.history.times = now.history.times.slice(index + 1);
                 diff.history.prices = now.history.prices.slice(index + 1);
             }
             return diff;
         }
-        if(perv.candles && now.candles) {
+        if (perv.candles && now.candles) {
             const findIndex = (array, predicate) => {
                 for (let idx = 0; idx < array.length; ++idx) {
                     if (predicate(array[idx])) {
@@ -84,10 +84,10 @@ class Subscription {
                 return -1;
             };
             const epoch = perv.candles[perv.candles.length - 1].epoch;
-            let index = findIndex(now.candles, candle => candle.epoch == epoch);
-            
+            const index = findIndex(now.candles, candle => candle.epoch === epoch);
+
             diff.candles = [];
-            if(index !== -1){
+            if (index !== -1) {
                 diff.candles = now.candles.slice(index);
             }
             return diff;
@@ -109,9 +109,9 @@ export class Stream extends EventEmitter {
         this._subscription = subscription;
         this._emitter = emitter;
         this._callbacks = {
-            [Stream.EVENT_STREAM]    : [],
-            [Stream.EVENT_RECONNECT] : [],
-            [Stream.EVENT_DISCONNECT]: []
+            [Stream.EVENT_STREAM]: [],
+            [Stream.EVENT_RECONNECT]: [],
+            [Stream.EVENT_DISCONNECT]: [],
         };
         this._emitter.emit(Stream.EVENT_REMEMBER_STREAM);
     }
@@ -122,8 +122,8 @@ export class Stream extends EventEmitter {
         return this._subscription.isMarketClosed;
     }
     forget() {
-        for(const event of Object.keys(this._callbacks)) {
-            for(const callback of this._callbacks[event]) {
+        for (const event of Object.keys(this._callbacks)) {
+            for (const callback of this._callbacks[event]) {
                 this._emitter.off(event, callback);
             }
             this._callbacks[event] = [];
@@ -154,11 +154,11 @@ class StreamManager {
         this._initialize();
     }
     _initialize() {
-        for(const msgType of [ConnectionManager.MSG_TICK, ConnectionManager.MSG_OHLC]) {
+        for (const msgType of [ConnectionManager.MSG_TICK, ConnectionManager.MSG_OHLC]) {
             this._connection.on(msgType, (data) => {
-                const {ticks_history: symbol, granularity} = data.echo_req;
+                const { ticks_history: symbol, granularity } = data.echo_req;
                 const key = `${symbol}-${granularity}`;
-                if(this._emitters[key]) {
+                if (this._emitters[key]) {
                     this._streamIds[key] = data[msgType].id;
                     this._emitters[key].emit(Stream.EVENT_STREAM, data);
                 } else {
@@ -168,15 +168,15 @@ class StreamManager {
         }
         this._connection.on(ConnectionManager.EVENT_CONNECTION_CLOSE, () => {
             this._streamIds = { };
-            for(const key of Object.keys(this._emitters)) {
+            for (const key of Object.keys(this._emitters)) {
                 this._emitters[key].emit(Stream.EVENT_DISCONNECT);
             }
         });
         this._connection.on(ConnectionManager.EVENT_CONNECTION_REOPEN, () => {
-            for(const key of Object.keys(this._subscriptionData)) {
+            for (const key of Object.keys(this._subscriptionData)) {
                 const data = this._subscriptionData[key];
-                const {ticks_history: symbol, granularity} = data.echo_req;
-                const subscription = new Subscription({symbol, granularity}, {connection: this._connection});
+                const { ticks_history: symbol, granularity } = data.echo_req;
+                const subscription = new Subscription({ symbol, granularity }, { connection: this._connection });
                 subscription.subscribe();
                 this._trackSubscription(subscription);
             }
@@ -184,11 +184,11 @@ class StreamManager {
     }
     _trackSubscription(subscription) {
         subscription.response.then((data) => {
-            const {ticks_history: symbol, granularity} = data.echo_req;
+            const { ticks_history: symbol, granularity } = data.echo_req;
             const key = `${symbol}-${granularity}`;
 
             const shouldSendStreamReconnect = this._subscriptionData[key] && this._emitters[key];
-            if(shouldSendStreamReconnect) {
+            if (shouldSendStreamReconnect) {
                 const diff = Subscription.diffResponseData(this._subscriptionData[key], data);
                 this._emitters[key].emit(Stream.EVENT_RECONNECT, diff);
             }
@@ -196,22 +196,26 @@ class StreamManager {
         });
     }
     _trackStream(stream) {
-        stream.onStream(({echo_req, ohlc, tick}) => {
-            const {ticks_history: symbol, granularity} = echo_req;
+        stream.onStream(({ echo_req, ohlc, tick }) => {
+            const { ticks_history: symbol, granularity } = echo_req;
             const key = `${symbol}-${granularity}`;
-            if(ohlc) {
+            if (ohlc) {
                 const candles = this._subscriptionData[key].candles;
-                const {close, open_time: epoch, high, low, open} = ohlc;
-                const candle = {close, high, low, open, epoch};
-                if(+candles[candles.length - 1].epoch === +candle.epoch) {
+                const {
+                    close, open_time: epoch, high, low, open,
+                } = ohlc;
+                const candle = {
+                    close, high, low, open, epoch,
+                };
+                if (+candles[candles.length - 1].epoch === +candle.epoch) {
                     candles[candles.length - 1] = candle;
                 } else {
                     candles.push(candle);
                     candles.shift();
                 }
-            } else if(tick) {
-                const {prices, times} = this._subscriptionData[key].history;
-                const {quote: price, epoch: time} = tick;
+            } else if (tick) {
+                const { prices, times } = this._subscriptionData[key].history;
+                const { quote: price, epoch: time } = tick;
                 prices.push(price);
                 prices.shift();
                 times.push(time);
@@ -221,17 +225,17 @@ class StreamManager {
     }
     _forgetStream(key) {
         this._clearEmitter(key);
-        if(this._streamIds[key]) {
+        if (this._streamIds[key]) {
             const id = this._streamIds[key];
             delete this._streamIds[key];
-            this._connection.send({forget: id});
+            this._connection.send({ forget: id });
         }
-        if(this._subscriptionData[key]) {
+        if (this._subscriptionData[key]) {
             delete this._subscriptionData[key];
         }
     }
     _clearEmitter(key) {
-        if(this._emitters[key]) {
+        if (this._emitters[key]) {
             this._emitters[key].off(Stream.EVENT_REMEMBER_STREAM);
             this._emitters[key].off(Stream.EVENT_FORGET_STREAM);
             delete this._emitters[key];
@@ -242,7 +246,7 @@ class StreamManager {
         this._emitters[key] = emitter;
 
         subscription.response.then(() => {
-            if(subscription.isMarketClosed) {
+            if (subscription.isMarketClosed) {
                 this._clearEmitter(key);
             }
         });
@@ -254,16 +258,16 @@ class StreamManager {
         });
         emitter.on(Stream.EVENT_FORGET_STREAM, () => {
             --subscribers;
-            if(subscribers === 0) {
+            if (subscribers === 0) {
                 this._forgetStream(key);
             }
         });
 
         return emitter;
     }
-    _handleNewStream({symbol, granularity}) {
+    _handleNewStream({ symbol, granularity }) {
         const key = `${symbol}-${granularity}`;
-        const subscription = new Subscription({symbol, granularity}, {connection: this._connection});
+        const subscription = new Subscription({ symbol, granularity }, { connection: this._connection });
         subscription.subscribe();
         this._trackSubscription(subscription);
         const emitter = this._setupEmitter(key, subscription);
@@ -272,41 +276,43 @@ class StreamManager {
         this._trackStream(stream);
         return stream;
     }
-    _handleExistingStream({symbol, granularity}) {
+    _handleExistingStream({ symbol, granularity }) {
         const key = `${symbol}-${granularity}`;
         const response = new Promise((resolve, reject) => {
             const data = this._subscriptionData[key];
-            if(data) {
+            if (data) {
                 resolve(Subscription.cloneResponseData(data));
             } else {
-                reject("No existing stream");
+                reject('No existing stream');
             }
         });
-        const subscription = new Subscription({symbol, granularity}, {response, connection: this._connection});
+        const subscription = new Subscription({ symbol, granularity }, { response, connection: this._connection });
         const emitter = this._emitters[key];
-        const stream = new Stream(subscription, emitter); 
+        const stream = new Stream(subscription, emitter);
         return stream;
     }
-    subscribe({symbol, granularity = 0}) {
+    subscribe({ symbol, granularity = 0 }) {
         const key = `${symbol}-${granularity}`;
-        if(this._emitters[key]) {
-            return this._handleExistingStream({symbol, granularity});
+        if (this._emitters[key]) {
+            return this._handleExistingStream({ symbol, granularity });
         }
-        return this._handleNewStream({symbol, granularity});
+        return this._handleNewStream({ symbol, granularity });
     }
-    historicalData({symbol, granularity, start, end}) {
+    historicalData({
+        symbol, granularity, start, end,
+    }) {
         const req = {
             ticks_history: symbol,
             end,
             start,
             adjust_start_time: 1,
-            granularity: granularity,
+            granularity,
             style: granularity ? 'candles' : 'ticks',
         };
         return this._connection.send(req);
     }
-    static buildFor({appId, endpoint, language = 'en'}) {
-        const connectionManager = new ConnectionManager({appId, endpoint, language});
+    static buildFor({ appId, endpoint, language = 'en' }) {
+        const connectionManager = new ConnectionManager({ appId, endpoint, language });
         return new StreamManager(connectionManager);
     }
 }

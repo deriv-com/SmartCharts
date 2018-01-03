@@ -15,11 +15,24 @@ const config = {
                 test: /\.js$/,
                 exclude: /node_modules/,
                 use: {
-                    loader: 'babel-loader',
-                    options: {
-                        plugins: ['transform-class-properties'],
+                        loader: 'babel-loader',
+                        options: {
+                            plugins: ['transform-class-properties'],
+                        }
                     }
-                }
+            },
+            {
+                test: /\.js$/,
+                exclude: [
+                    /node_modules/,
+                    /js\/chartiq\.js/,
+                    /js\/components\.js/,
+                    /js\/componentUI\.js/,
+                    /js\/extras/,
+                    /js\/thirdparty/,
+                    /js\/legacy/
+                ],
+                use: { loader: 'eslint-loader' }
             },
         ]
     },
