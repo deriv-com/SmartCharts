@@ -1,0 +1,23 @@
+{
+  "name": "binary-chartiq",
+  "version": "1.0.0",
+  "main": "src/index.js",
+  "author": "amin@binary.com",
+  "license": "ISC",
+  "scripts": {
+    "build": "webpack --progress",
+    "watch": "webpack --progress --watch"
+  },
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-plugin-transform-runtime": "^6.23.0",
+    "babel-preset-env": "^1.6.1",
+    "webpack": "^3.10.0"
+  },
+  "dependencies": {
+    "event-emitter-es6": "^1.1.5",
+    "jquery": "^3.2.1"
+  }
+}
