@@ -6,7 +6,8 @@
   "license": "ISC",
   "scripts": {
     "build": "webpack --progress",
-    "watch": "webpack --progress --watch"
+    "watch": "webpack --progress --watch",
+    "start": "webpack-dev-server --open  --hot --inline"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",
