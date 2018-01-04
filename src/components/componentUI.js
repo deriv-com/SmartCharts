@@ -1,5 +1,7 @@
 // Copyright 2015-2016 by ChartIQ, Inc.
-import {CIQ} from './chartiq';
+import {
+    CIQ,
+} from '../../js/chartiq';
 import jQuery from 'jquery';
 
 var claims=[];

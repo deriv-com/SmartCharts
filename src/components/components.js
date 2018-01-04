@@ -1,4 +1,6 @@
-import {CIQ} from './chartiq';
+import {
+    CIQ,
+} from '../../js/chartiq';
 import './componentUI';
 
 /**
