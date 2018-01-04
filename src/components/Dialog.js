@@ -204,4 +204,5 @@ class Dialog extends HTMLElement {
     }
 }
 
+export default Dialog;
 CIQ.UI.Dialog = document.registerElement('cq-dialog', Dialog);

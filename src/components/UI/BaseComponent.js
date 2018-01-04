@@ -1,5 +1,6 @@
 import { claims } from './constants';
 import { CIQ } from '../../../js/chartiq';
+import UI from './UI';
 
 /**
  * Abstract class for WebComponents using this framework
@@ -76,7 +77,7 @@ class BaseComponent extends HTMLElement {
      */
     activate(node, e, params, setter) {
         let attribute = setter ? 'stxsetget' : 'stxtap';
-        let method = CIQ.UI.splitMethod(node.getAttribute(attribute));
+        let method = UI.splitMethod(node.getAttribute(attribute));
         if (!method) return;
         let helperName = method.helperName;
         let f = method.functionName;
@@ -185,7 +186,7 @@ class BaseComponent extends HTMLElement {
                     this.activate(node, e, params, true);
                 };
             }
-            let method = CIQ.UI.splitMethod(setget);
+            let method = UI.splitMethod(setget);
             if (!method) {
                 console.log(`Syntax error ${  setget}`);
                 return;
@@ -211,7 +212,7 @@ class BaseComponent extends HTMLElement {
      * @memberof CIQ.UI.BaseComponent
      */
     nextTick() {
-        if (!CIQ.UI.release) return; // UI hasn't started yet
+        if (!UI.release) return; // UI hasn't started yet
         clearTimeout(this.timeout);
         let scheduledBindings = this.scheduledBindings;
         // We traverse through the bindings backwards which ensures that we attempt to bind to the closest
@@ -250,7 +251,7 @@ class BaseComponent extends HTMLElement {
      * @memberof CIQ.UI.BaseComponent
      */
     buildReverseBindings() {
-        if (CIQ.UI.bypassBindings) return;
+        if (UI.bypassBindings) return;
         let traverseNode = this;
         let acceptFunc = function (node) {
             if (node.hasAttribute('stxbind') ||

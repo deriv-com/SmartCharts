@@ -174,4 +174,5 @@ class ChartTitle extends ModalTag {
     }
 }
 
+export default ChartTitle;
 CIQ.UI.ChartTitle = document.registerElement('cq-chart-title', ChartTitle);
