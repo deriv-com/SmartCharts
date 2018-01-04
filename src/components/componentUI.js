@@ -15,7 +15,7 @@ import StudyEdit from './UI/StudyEdit';
 import Keystroke from './UI/Keystroke';
 import Layout from './UI/Layout';
 import HeadsUpMarker from './UI/HeadsUpMarker';
-import './UI/UIManager';
+import UIManager from './UI/UIManager';
 import './UI/Driver';
 
 CIQ.UI.BaseComponent = BaseComponent;
@@ -31,6 +31,7 @@ CIQ.UI.StudyEdit = StudyEdit;
 CIQ.UI.Keystroke = Keystroke;
 CIQ.UI.Layout = Layout;
 CIQ.Marker.HeadsUp = HeadsUpMarker;
+CIQ.UI.UIManager = document.registerElement('cq-ui-manager', UIManager);
 
 // node.stxtap([selector],callback)
 jQuery.fn.extend({

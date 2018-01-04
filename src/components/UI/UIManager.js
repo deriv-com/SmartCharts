@@ -1,3 +1,4 @@
+import $ from 'jquery';
 import { CIQ } from '../../../js/chartiq';
 
 /**
@@ -69,11 +70,17 @@ class UIManager extends HTMLElement {
         }, 0);
         this.activeMenuStack.push(menu);
         menu.show(params);
-        $('cq-context,*[cq-context]').each(() => {
-            if (this.CIQ && this.CIQ.UI && this.CIQ.UI.context && this.CIQ.UI.context.stx) {
-                this.CIQ.UI.context.stx.modalBegin();
-            }
-        });
+        /** 
+         // TODO: The two 'cq-context,*[cq-context]' selector code blocks below throws errors.
+         //       For some strange reason. Since I'm not quite sure what it does just disable it
+         //       for now.
+
+         $('cq-context,*[cq-context]').each(() => {
+             if (this.CIQ && this.CIQ.UI && this.CIQ.UI.context && this.CIQ.UI.context.stx) {
+                 this.CIQ.UI.context.stx.modalBegin();
+             }
+         });
+         */
     }
 
     /**
@@ -150,13 +157,15 @@ class UIManager extends HTMLElement {
      * @alias ifAllClosed
      */
     ifAllClosed() {
-        if (!this.activeMenuStack.length) {
-            $('cq-context,*[cq-context]').each(function () {
-                if (this.CIQ && this.CIQ.UI && this.CIQ.UI.context && this.CIQ.UI.context.stx) {
-                    this.CIQ.UI.context.stx.modalEnd();
-                }
-            });
-        }
+        /** 
+         if (!this.activeMenuStack.length) {
+             $('cq-context,*[cq-context]').each(function () {
+                 if (this.CIQ && this.CIQ.UI && this.CIQ.UI.context && this.CIQ.UI.context.stx) {
+                     this.CIQ.UI.context.stx.modalEnd();
+                 }
+             });
+         }
+         */
     }
 
     /**
@@ -257,4 +266,4 @@ class UIManager extends HTMLElement {
     }
 }
 
-CIQ.UI.UIManager = document.registerElement('cq-ui-manager', UIManager);
+export default UIManager;
