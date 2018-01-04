@@ -28,9 +28,12 @@ class KeystrokeHub extends Helper {
         }
 
         let self = this;
-        this.keystroke = new CIQ.UI.Keystroke(node, (...args) => {
-            self.handler(args);
-        });
+        function handler() {
+            return (...args) => {
+                self.handler.apply(self, args);
+            };
+        }
+        this.keystroke = new CIQ.UI.Keystroke(node, handler());
     }
 
     /**
@@ -179,4 +182,3 @@ class KeystrokeHub extends Helper {
 }
 
 export default KeystrokeHub;
-CIQ.UI.KeystrokeHub = KeystrokeHub;

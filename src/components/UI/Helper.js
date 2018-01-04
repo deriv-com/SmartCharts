@@ -36,4 +36,3 @@ class Helper {
 }
 
 export default Helper;
-CIQ.UI.Helper = Helper;

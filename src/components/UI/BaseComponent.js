@@ -356,5 +356,3 @@ class BaseComponent extends HTMLElement {
 }
 
 export default BaseComponent;
-
-CIQ.UI.BaseComponent = BaseComponent;

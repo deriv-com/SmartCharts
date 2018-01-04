@@ -50,4 +50,3 @@ class ModalTag extends ContextTag {
 }
 
 export default ModalTag;
-CIQ.UI.ModalTag = ModalTag;

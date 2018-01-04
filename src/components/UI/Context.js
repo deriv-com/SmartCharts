@@ -102,4 +102,3 @@ class Context {
 }
 
 export default Context;
-CIQ.UI.Context = Context;

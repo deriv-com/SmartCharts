@@ -56,4 +56,3 @@ class DialogContentTag extends BaseComponent {
 }
 
 export default DialogContentTag;
-CIQ.UI.DialogContentTag = DialogContentTag;

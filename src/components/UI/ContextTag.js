@@ -119,4 +119,3 @@ class ContextTag extends BaseComponent {
 }
 
 export default ContextTag;
-CIQ.UI.ContextTag = ContextTag;
