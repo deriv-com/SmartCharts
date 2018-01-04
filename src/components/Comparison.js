@@ -1,5 +1,5 @@
 import { CIQ } from '../../js/chartiq';
-import ModalTag from './ModalTag';
+import ModalTag from './UI/ModalTag';
 
 class Comparison extends ModalTag {
     /**

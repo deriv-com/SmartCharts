@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import { CIQ } from '../../js/chartiq';
 import './componentUI';
-import BaseComponent from './BaseComponent';
+import BaseComponent from './UI/BaseComponent';
 
 /**
  * Scroll web component `<cq-scroll>`.

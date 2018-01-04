@@ -1,5 +1,5 @@
 import { CIQ } from '../../js/chartiq';
-import ContextTag from './ContextTag';
+import ContextTag from './UI/ContextTag';
 
 /**
  * Lookup component `<cq-lookup>`.

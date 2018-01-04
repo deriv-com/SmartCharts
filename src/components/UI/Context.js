@@ -1,4 +1,4 @@
-import { CIQ } from '../../js/chartiq';
+import { CIQ } from '../../../js/chartiq';
 
 /**
  * UI context helper class. Construct with an {@link CIQ.ChartEngine} object

@@ -19,6 +19,9 @@
         "sourceType": "module"
     },
     "rules": {
+        "no-useless-return": 1,
+        "no-empty": 1,
+        "no-restricted-globals": 1,
         "guard-for-in": 1,
         "no-nested-ternary": 1,
         "import/prefer-default-export": 1,

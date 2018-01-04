@@ -1,5 +1,5 @@
 import { claims } from './constants';
-import { CIQ } from '../../js/chartiq';
+import { CIQ } from '../../../js/chartiq';
 
 /**
  * Abstract class for WebComponents using this framework

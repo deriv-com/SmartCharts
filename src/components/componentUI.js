@@ -1,44 +1,47 @@
 // Copyright 2015-2016 by ChartIQ, Inc.
 import jQuery from 'jquery';
 import { CIQ } from '../../js/chartiq';
-import './constants';
-import BaseComponent from './BaseComponent';
-import DialogContentTag from './DialogContentTag';
-import ContextTag from './ContextTag';
-import ModalTag from './ModalTag';
-import Context from './Context';
+import './UI/constants';
+import BaseComponent from './UI/BaseComponent';
+import DialogContentTag from './UI/DialogContentTag';
+import ContextTag from './UI/ContextTag';
+import ModalTag from './UI/ModalTag';
+import Context from './UI/Context';
+import Helper from './UI/Helper';
+import KeystrokeHub from './UI/KeystrokeHub';
+import './UI/Driver';
 
 // node.stxtap([selector],callback)
 jQuery.fn.extend({
-    stxtap: function(arg1, arg2) {
-        return this.each(function() {
-            CIQ.installTapEvent(this/*, {stopPropagation:true}*/);
-            if(typeof arg1=="string"){
-                $(this).on("stxtap", arg1, function(e){
+    stxtap(arg1, arg2) {
+        return this.each(function () {
+            CIQ.installTapEvent(this/* , {stopPropagation:true} */);
+            if (typeof arg1 === 'string') {
+                $(this).on('stxtap', arg1, function (e) {
                     arg2.call(this, e);
                 });
-            }else{
-                $(this).on("stxtap", function(e){
+            } else {
+                $(this).on('stxtap', function (e) {
                     arg1.call(this, e);
                 });
             }
         });
-    }
+    },
 });
 
 jQuery.fn.extend($.expr[':'], {
-    trulyvisible: function(node, j, attr){
-        var parents=$(node).parents();
-        parents=parents.add(node);
-        for(var i=0;i<parents.length;i++){
-            var p=$(parents[i]);
-            if(p.css("opacity") === "0" ) return false;
-            if(p.css("visibility") === "hidden" ) return false;
-            if(p.css("height") === "0px" && p.css("overflow-y")=="hidden") return false;
-            if(!p.is(":visible")) return false;
+    trulyvisible(node, j, attr) {
+        let parents = $(node).parents();
+        parents = parents.add(node);
+        for (let i = 0; i < parents.length; i++) {
+            let p = $(parents[i]);
+            if (p.css('opacity') === '0') return false;
+            if (p.css('visibility') === 'hidden') return false;
+            if (p.css('height') === '0px' && p.css('overflow-y') == 'hidden') return false;
+            if (!p.is(':visible')) return false;
         }
         return true;
-    }
+    },
 });
 
 /**
@@ -46,23 +49,23 @@ jQuery.fn.extend($.expr[':'], {
  * are the same then no rendering is done. This prevents flicker. React style.
  */
 jQuery.fn.extend({
-    parentsAndMe : function(arg1){
-        var us=$(this).parents();
-        us=us.add($(this));
+    parentsAndMe(arg1) {
+        let us = $(this).parents();
+        us = us.add($(this));
         return us;
     },
-    cqvirtual: function(arg1){
-        var virtual=this.clone();
+    cqvirtual(arg1) {
+        let virtual = this.clone();
         virtual.empty();
-        virtual.original=this;
+        virtual.original = this;
         return virtual;
     },
-    cqrender: function(arg1){
-        if(this[0].innerHTML==this.original[0].innerHTML) return this.original;
+    cqrender(arg1) {
+        if (this[0].innerHTML == this.original[0].innerHTML) return this.original;
         this.original.empty();
-        var children=this.children();
-        if(children.length){
-            var newStuff=children.detach();
+        let children = this.children();
+        if (children.length) {
+            let newStuff = children.detach();
             this.original.append(newStuff);
         }
 
@@ -70,76 +73,76 @@ jQuery.fn.extend({
     },
     // Returns a guaranteed width. For instance, cq-context or any other wrapping tag can have
     // a width of zero, so we need to go one level up to get the actual width
-    guaranteedWidth: function(){
-        var node=this;
-        var w=node.width();
-        while(!w){
-            node=node.parent();
-            if(node[0].tagName==="BODY" || node[0]===window){
+    guaranteedWidth() {
+        let node = this;
+        let w = node.width();
+        while (!w) {
+            node = node.parent();
+            if (node[0].tagName === 'BODY' || node[0] === window) {
                 return window.innerWidth;
             }
-            w=node.width();
+            w = node.width();
         }
         return w;
     },
     // See guaranteedWidth
-    guaranteedHeight: function(){
-        var node=this;
-        var h=node.height();
-        while(!h){
-            node=node.parent();
-            if(node[0].tagName==="BODY" || node[0]===window){
+    guaranteedHeight() {
+        let node = this;
+        let h = node.height();
+        while (!h) {
+            node = node.parent();
+            if (node[0].tagName === 'BODY' || node[0] === window) {
                 return window.innerHeight;
             }
-            h=node.height();
+            h = node.height();
         }
         return h;
     },
-    emptyExceptTemplate: function(){
-        this.children().not("template").remove();
+    emptyExceptTemplate() {
+        this.children().not('template').remove();
         return this;
     },
     // Returns true if an attribute exists, or is not explicitly set to false
-    truthyAttr: function(arg1){
-        var val=this.attr(arg1);
-        if(typeof(val)=="undefined") return false;
-        if(val.toLowerCase()=="false") return false;
-        if(val=="0") return false;
+    truthyAttr(arg1) {
+        let val = this.attr(arg1);
+        if (typeof (val) === 'undefined') return false;
+        if (val.toLowerCase() == 'false') return false;
+        if (val == '0') return false;
         return true;
     },
     // More efficient because it doesn't change the DOM unless it needs to. Returns true
     // if a change was made. Note that this does not support jquery chaining!
-    attrBetter: function(attribute, value){
-        if(typeof value=="undefined") value="true";
-        var val=this.attr(attribute);
-        if(val===value) return false;
+    attrBetter(attribute, value) {
+        if (typeof value === 'undefined') value = 'true';
+        let val = this.attr(attribute);
+        if (val === value) return false;
         this.attr(attribute, value);
         return true;
     },
     // More efficient because it doesn't change the DOM unless it needs to. Returns true
     // if a change was made. Note that this does not support jquery chaining!
-    removeAttrBetter: function(attribute){
-        var val=this.attr(attribute);
-        if(!val && val!=="") return false;
+    removeAttrBetter(attribute) {
+        let val = this.attr(attribute);
+        if (!val && val !== '') return false;
         this.removeAttr(attribute);
         return true;
     },
     // More efficient because it doesn't change the DOM unless it needs to. Returns true
     // if a change was made. Note that this is a setter function only. It is not meant to replace
     // the getter aspect of jquery's built in text()
-    textBetter: function(str){
-        if(this.text()===str) return false;
+    textBetter(str) {
+        if (this.text() === str) return false;
         this.text(str);
         return true;
-    }
+    },
 });
 
 
-jQuery.queryString=function(sParam){
-    var sPageURL = window.location.search.substring(1);
-    var sURLVariables = sPageURL.split('&');
-    for (var i = 0; i < sURLVariables.length; i++){
-        var sParameterName = sURLVariables[i].split('=');
+jQuery.queryString = function (sParam) {
+    let sPageURL = window.location.search.substring(1);
+    let sURLVariables = sPageURL.split('&');
+    for (let i = 0; i < sURLVariables.length; i++) {
+        let sParameterName = sURLVariables[i].split('=');
         if (sParameterName[0] == sParam) return sParameterName[1];
     }
     return null;
@@ -150,32 +153,32 @@ jQuery.queryString=function(sParam){
  * http://www.backalleycoder.com/2013/03/18/cross-browser-event-based-element-resize-detection/
  */
 
-(function(){
-    var attachEvent = document.attachEvent;
-    var isIE = navigator.userAgent.match(/Trident/);
-    var requestFrame = (function(){
-    var raf = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame ||
-        function(fn){ return window.setTimeout(fn, 20); };
-            return function(fn){ return raf(fn); };
-        })();
+(function () {
+    let attachEvent = document.attachEvent;
+    let isIE = navigator.userAgent.match(/Trident/);
+    let requestFrame = (function () {
+        let raf = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame ||
+        function (fn) { return window.setTimeout(fn, 20); };
+        return function (fn) { return raf(fn); };
+    }());
 
-    var cancelFrame = (function(){
-        var cancel = window.cancelAnimationFrame || window.mozCancelAnimationFrame || window.webkitCancelAnimationFrame || window.clearTimeout;
-        return function(id){ return cancel(id); };
-    })();
+    let cancelFrame = (function () {
+        let cancel = window.cancelAnimationFrame || window.mozCancelAnimationFrame || window.webkitCancelAnimationFrame || window.clearTimeout;
+        return function (id) { return cancel(id); };
+    }());
 
-    function resizeListener(e){
-        var win = e.target || e.srcElement;
+    function resizeListener(e) {
+        let win = e.target || e.srcElement;
         if (win.__resizeRAF__) cancelFrame(win.__resizeRAF__);
-        win.__resizeRAF__ = requestFrame(function(){
-            var trigger = win.__resizeTrigger__;
-            trigger.__resizeListeners__.forEach(function(fn){
+        win.__resizeRAF__ = requestFrame(() => {
+            let trigger = win.__resizeTrigger__;
+            trigger.__resizeListeners__.forEach((fn) => {
                 fn.call(trigger, e);
             });
         });
     }
 
-    function objectLoad(e){
+    function objectLoad(e) {
         this.contentDocument.defaultView.__resizeTrigger__ = this.__resizeElement__;
         this.contentDocument.defaultView.addEventListener('resize', resizeListener);
     }
@@ -186,10 +189,10 @@ jQuery.queryString=function(sParam){
      * @param {function} callback
      * @memberof CIQ
      */
-    CIQ.addResizeListener = function(element, fn){
-        var uiManager=$("cq-ui-manager");
-        if(uiManager.length>0){
-            uiManager=uiManager[0];
+    CIQ.addResizeListener = function (element, fn) {
+        let uiManager = $('cq-ui-manager');
+        if (uiManager.length > 0) {
+            uiManager = uiManager[0];
             uiManager.registerForResize(element);
         }
         if (!element.__resizeListeners__) {
@@ -198,8 +201,8 @@ jQuery.queryString=function(sParam){
                 element.__resizeTrigger__ = element;
                 element.attachEvent('onresize', resizeListener);
             } else {
-                //if (!getComputedStyle(element) || getComputedStyle(element).position == 'static') element.style.position = 'relative';
-                var obj = element.__resizeTrigger__ = document.createElement('object');
+                // if (!getComputedStyle(element) || getComputedStyle(element).position == 'static') element.style.position = 'relative';
+                let obj = element.__resizeTrigger__ = document.createElement('object');
                 obj.setAttribute('style', 'visibility:hidden; display: block; position: absolute; top: 0; left: 0; height: 100%; width: 100%; overflow: hidden; pointer-events: none; z-index: -1; border:0px;');
                 obj.__resizeElement__ = element;
                 obj.onload = objectLoad;
@@ -218,10 +221,10 @@ jQuery.queryString=function(sParam){
      * @param {function} callback
      * @memberof CIQ
      */
-    CIQ.removeResizeListener = function(element, fn){
-        var uiManager=$("cq-ui-manager");
-        if(uiManager.length>0){
-            uiManager=uiManager[0];
+    CIQ.removeResizeListener = function (element, fn) {
+        let uiManager = $('cq-ui-manager');
+        if (uiManager.length > 0) {
+            uiManager = uiManager[0];
             uiManager.unregisterForResize(element);
         }
         element.__resizeListeners__.splice(element.__resizeListeners__.indexOf(fn), 1);
@@ -233,7 +236,7 @@ jQuery.queryString=function(sParam){
             }
         }
     };
-})();
+}());
 
 /**
  * @typedef Selector
@@ -250,17 +253,15 @@ jQuery.queryString=function(sParam){
  *
  * This implementation assumes the chart is attached to to a quotefeed for interactive data loading.
  * If you will not be using a quotefeed, you will need to adjust these components accordingly.
- * 
- * Performance considerations: These web components include dynamically updating modules that will react to every data change and redraw certain elements. 
- * Although visually pleasing, they can sometimes cause performance issues on slow devices or when multiple charts are displayed. 
+ *
+ * Performance considerations: These web components include dynamically updating modules that will react to every data change and redraw certain elements.
+ * Although visually pleasing, they can sometimes cause performance issues on slow devices or when multiple charts are displayed.
  * See {@link CIQ.UI.animatePrice} for setting options.
  *
  * @see {@link CIQ.UI.ContextTag} which provides a model and base functionality for many components
  * @namespace WebComponents
  */
- function WebComponents() {}
-
-
+function WebComponents() {}
 
 /**
  * Executes a function in the nearest parent component (container). For instance, a cq-close tag might call "close"
@@ -270,14 +271,14 @@ jQuery.queryString=function(sParam){
  * @param  {string} fn   The name of the function
  * @param  {Array}   args Arguments array (a "spread" is also supported)
  */
-CIQ.UI.containerExecute=function(self, fn, args){
-    var myArgs=args;
-    if(args && myArgs.constructor!==Array) myArgs=Array.prototype.slice.call(arguments, 2);
-    var parents=self.node.parents();
-    for(var i=0;i<parents.length;i++){
-        var parent=parents[i];
-        if(parent[fn] && parent[fn].constructor==Function){
-            return parent[fn].apply(parent, myArgs);
+CIQ.UI.containerExecute = function (self, fn, args) {
+    let myArgs = args;
+    if (args && myArgs.constructor !== Array) myArgs = Array.prototype.slice.call(arguments, 2);
+    let parents = self.node.parents();
+    for (let i = 0; i < parents.length; i++) {
+        let parent = parents[i];
+        if (parent[fn] && parent[fn].constructor == Function) {
+            return parent[fn](...myArgs);
         }
     }
     return null;
@@ -285,8 +286,8 @@ CIQ.UI.containerExecute=function(self, fn, args){
 
 /**
  * Convenience function to display the changing price of a node (price flash green/red).
- * 
- * This functionality can be CPU expensive if many updates per second or multiple charts on a screen exist. 
+ *
+ * This functionality can be CPU expensive if many updates per second or multiple charts on a screen exist.
  * To disable simply set `CIQ.UI.animatePrice = function () { };`
  * @kind function
  * @memberof CIQ.UI
@@ -294,13 +295,13 @@ CIQ.UI.containerExecute=function(self, fn, args){
  * @param {number} newPrice
  * @param {number} oldPrice
  */
-CIQ.UI.animatePrice=function(node, newPrice, oldPrice){
-    node.removeClass("cq-stable");
-    if(newPrice>oldPrice) node.addClass("cq-up");
-    else if(newPrice<oldPrice) node.addClass("cq-down");
-    setTimeout(function(){
-        node.addClass("cq-stable").removeClass("cq-up").removeClass("cq-down");
-    },0);
+CIQ.UI.animatePrice = function (node, newPrice, oldPrice) {
+    node.removeClass('cq-stable');
+    if (newPrice > oldPrice) node.addClass('cq-up');
+    else if (newPrice < oldPrice) node.addClass('cq-down');
+    setTimeout(() => {
+        node.addClass('cq-stable').removeClass('cq-up').removeClass('cq-down');
+    }, 0);
 };
 
 /**
@@ -312,22 +313,22 @@ CIQ.UI.animatePrice=function(node, newPrice, oldPrice){
  * If appendTo==true then the new node will automatically be added in place (appended to the template's parent)
  * @return {JQuery}      A jquery node
  */
-CIQ.UI.makeFromTemplate=function(node, appendTo){
-    var n=$(node)[0].content;
-    var newNode=document.importNode(n, true);
-    var jq = null;
+CIQ.UI.makeFromTemplate = function (node, appendTo) {
+    let n = $(node)[0].content;
+    let newNode = document.importNode(n, true);
+    let jq = null;
 
     // find first real element
     // nodeType for element = 1
     // nodeType for text = 3
-    for(var i=0; i<newNode.childNodes.length; i++){
-        var child = newNode.childNodes[i];
+    for (let i = 0; i < newNode.childNodes.length; i++) {
+        let child = newNode.childNodes[i];
 
         // found element
-        if(child.nodeType == 1){
-            jq=$(child);
-            if(appendTo===true) $(node).parent().append(newNode);
-            else if(appendTo) $(appendTo).append(newNode);
+        if (child.nodeType == 1) {
+            jq = $(child);
+            if (appendTo === true) $(node).parent().append(newNode);
+            else if (appendTo) $(appendTo).append(newNode);
             break;
         }
     }
@@ -342,49 +343,50 @@ CIQ.UI.makeFromTemplate=function(node, appendTo){
  * @memberof CIQ.UI
  * @private
  */
-CIQ.UI.splitMethod=function(cmd){
-    if(!cmd) return null;
-    var openParentheses=cmd.indexOf("(");
-    var closeParentheses=cmd.lastIndexOf(")");
-    if(openParentheses==-1 || closeParentheses==-1){
-        console.log("malformed stxtap attribute: " + cmd);
+CIQ.UI.splitMethod = function (cmd) {
+    if (!cmd) return null;
+    let openParentheses = cmd.indexOf('(');
+    let closeParentheses = cmd.lastIndexOf(')');
+    if (openParentheses == -1 || closeParentheses == -1) {
+        console.log(`malformed stxtap attribute: ${cmd}`);
         return null;
     }
-    var helperName=null, functionName;
-    var beforeParentheses=cmd.substring(0, openParentheses);
-    var period=beforeParentheses.indexOf(".");
-    if(period==-1){ // web component
-        functionName=beforeParentheses;
-    }else{
-        helperName=beforeParentheses.substring(0,period);
-        functionName=cmd.substring(period+1, openParentheses);
+    let helperName = null,
+        functionName;
+    let beforeParentheses = cmd.substring(0, openParentheses);
+    let period = beforeParentheses.indexOf('.');
+    if (period == -1) { // web component
+        functionName = beforeParentheses;
+    } else {
+        helperName = beforeParentheses.substring(0, period);
+        functionName = cmd.substring(period + 1, openParentheses);
     }
-    var args=cmd.substring(openParentheses+1, closeParentheses);
-    var parsed=args.match(/('[^']+'|[^,]+)/g);
-    var isFloat = new RegExp("^[0-9]+([,.][0-9]+)?$", "g");
-    var isInteger = new RegExp("^\\d+$");
-    var argArray = [];
-    if(parsed){
-        for(var i=0;i<parsed.length;i++){
-            var arg=parsed[i];
-            while(arg.charAt(0)==" ") arg=arg.substring(1);
-            if(arg.indexOf('"')!=-1 || arg.indexOf("'")!=-1){
-                argArray.push(arg.substring(1, arg.length-1));
-            }else if(arg=="true"){
+    let args = cmd.substring(openParentheses + 1, closeParentheses);
+    let parsed = args.match(/('[^']+'|[^,]+)/g);
+    let isFloat = new RegExp('^[0-9]+([,.][0-9]+)?$', 'g');
+    let isInteger = new RegExp('^\\d+$');
+    let argArray = [];
+    if (parsed) {
+        for (let i = 0; i < parsed.length; i++) {
+            let arg = parsed[i];
+            while (arg.charAt(0) == ' ') arg = arg.substring(1);
+            if (arg.indexOf('"') != -1 || arg.indexOf("'") != -1) {
+                argArray.push(arg.substring(1, arg.length - 1));
+            } else if (arg == 'true') {
                 argArray.push(true);
-            }else if(arg=="false"){
+            } else if (arg == 'false') {
                 argArray.push(false);
-            }else if(arg=="null"){
+            } else if (arg == 'null') {
                 argArray.push(null);
-            }else if(isInteger.test(arg)){
-                argArray.push(parseInt(arg,10));
-            }else if(isFloat.test(arg)){
+            } else if (isInteger.test(arg)) {
+                argArray.push(parseInt(arg, 10));
+            } else if (isFloat.test(arg)) {
                 argArray.push(parseFloat(arg));
-            }else{
-                var a=arg.split(".");
-                var aObj=window;
-                for(var b=0;b<a.length;b++){
-                    aObj=aObj[a[b]];
+            } else {
+                let a = arg.split('.');
+                let aObj = window;
+                for (let b = 0; b < a.length; b++) {
+                    aObj = aObj[a[b]];
                 }
                 argArray.push(aObj);
             }
@@ -392,9 +394,9 @@ CIQ.UI.splitMethod=function(cmd){
     }
 
     return {
-        helperName: helperName,
-        functionName: functionName,
-        args: argArray
+        helperName,
+        functionName,
+        args: argArray,
     };
 };
 
@@ -421,65 +423,60 @@ CIQ.UI.splitMethod=function(cmd){
  * }});
 
  */
-CIQ.UI.observe=function(params){
-    var self=this;
+CIQ.UI.observe = function (params) {
+    let self = this;
     function observed(change) {
-        var match=false;
-        if(!params.member){ // wildcard
-            match=true;
-        }else if(change.name===params.member){
-            match=true;
-        }else if(params.member.constructor == Array){
-            for(var i=0;i<params.member.length;i++){
-                if(change.name===params.member[i]) match=true;
+        let match = false;
+        if (!params.member) { // wildcard
+            match = true;
+        } else if (change.name === params.member) {
+            match = true;
+        } else if (params.member.constructor == Array) {
+            for (let i = 0; i < params.member.length; i++) {
+                if (change.name === params.member[i]) match = true;
             }
         }
-        if(match){
-            var nodes=$(params.selector);
-            if(!nodes.length && params.action==="callback"){ // simple callback not associated with a selector
+        if (match) {
+            let nodes = $(params.selector);
+            if (!nodes.length && params.action === 'callback') { // simple callback not associated with a selector
                 params.value.call(self, params);
                 return;
             }
-            if(params.action==="class") nodes.removeClass(params.value);
-            nodes.each(function(){
-                var isTrue=false;
-                if(params.member){
-                    if(params.condition){
-                        if(params.obj[params.member]===params.condition) isTrue=true;
-                    }else{
-                        isTrue=params.obj[params.member];
+            if (params.action === 'class') nodes.removeClass(params.value);
+            nodes.each(function () {
+                let isTrue = false;
+                if (params.member) {
+                    if (params.condition) {
+                        if (params.obj[params.member] === params.condition) isTrue = true;
+                    } else {
+                        isTrue = params.obj[params.member];
                     }
                 }
-                if(params.action==="class"){
-                    if(isTrue) nodes.addClass(params.value);
+                if (params.action === 'class') {
+                    if (isTrue) nodes.addClass(params.value);
                 }
-                if(params.action==="callback"){
+                if (params.action === 'callback') {
                     params.value.call(self, params, this);
                 }
-                if(params.action==="value"){
-                    if(params.value){
-                        this.value=params.value;
-                    }else{
-                        if(!params.obj[params.member])
-                            this.value="";
-                        else
-                            this.value=params.obj[params.member];
-                    }
+                if (params.action === 'value') {
+                    if (params.value) {
+                        this.value = params.value;
+                    } else if (!params.obj[params.member]) { this.value = ''; } else { this.value = params.obj[params.member]; }
                 }
             });
         }
     }
 
-    Object.observe(params.obj, function(changes){changes.forEach(observed);}, ["update","add","delete"]);
-    observed({name:params.member}); // initialize
+    Object.observe(params.obj, (changes) => { changes.forEach(observed); }, ['update', 'add', 'delete']);
+    observed({ name: params.member }); // initialize
 };
 
 /**
  * Utility function that returns all contexts on the screen
  * @return {JQuery} A jquery node with all contexts
  */
-CIQ.UI.allContexts=function(){
-    return $("cq-context,*[cq-context]");
+CIQ.UI.allContexts = function () {
+    return $('cq-context,*[cq-context]');
 };
 
 /**
@@ -488,12 +485,12 @@ CIQ.UI.allContexts=function(){
  * @param  {HTMLElement} me The element to get the context for
  * @return {CIQ.UI.Context}    The context or null if none found
  */
-CIQ.UI.getMyContext=function(me){
-    var nodes=$(me).parentsAndMe();
-    for(var i=0;i<nodes.length;i++){
-        var node=nodes[i];
-        if(node.context) return node.context;
-        if(node.CIQ && node.CIQ.UI) return node.CIQ.UI.context;
+CIQ.UI.getMyContext = function (me) {
+    let nodes = $(me).parentsAndMe();
+    for (let i = 0; i < nodes.length; i++) {
+        let node = nodes[i];
+        if (node.context) return node.context;
+        if (node.CIQ && node.CIQ.UI) return node.CIQ.UI.context;
     }
     return null;
 };
@@ -506,32 +503,32 @@ CIQ.UI.getMyContext=function(me){
  *  	this.stx.doSomething();
  *  });
  */
-CIQ.UI.contextsForEach=function(func){
-    var contexts=CIQ.UI.allContexts();
-    contexts.each(function(){
+CIQ.UI.contextsForEach = function (func) {
+    let contexts = CIQ.UI.allContexts();
+    contexts.each(function () {
         func.apply(this.CIQ.UI.context);
     });
 };
 
-CIQ.UI.release=false;
+CIQ.UI.release = false;
 
 /**
  * Set this flag to true to bypass bindings when adding a component to the DOM.
  * For instance when components are created by html2canvas we don't want them to do any heavy lifting.
  * @type {Boolean}
  */
-CIQ.UI.bypassBindings=false;
+CIQ.UI.bypassBindings = false;
 
 /**
  * Starts the UI
  * @param {Function} [cb] Optional callback returns when web components are initialized
  */
-CIQ.UI.begin=function(cb){
-    CIQ.UI.release=true;
-    setTimeout(function(){
+CIQ.UI.begin = function (cb) {
+    CIQ.UI.release = true;
+    setTimeout(() => {
         BaseComponent.nextTick();
-        if(cb) cb();
-    },0); // release the bindings
+        if (cb) cb();
+    }, 0); // release the bindings
 };
 
 /**
@@ -539,140 +536,14 @@ CIQ.UI.begin=function(cb){
  * @param {Object} target Target object
  * @param {Object} source Source object
  */
-CIQ.UI.addInheritance=function(target, source){
+CIQ.UI.addInheritance = function (target, source) {
 // We put this in a catch loop because BaseComponent is itself an HTMLElement and the browser barfs on trying to copy some
 // of those values
-for (var key in source.prototype)  {
-        try{
+    for (let key in source.prototype) {
+        try {
             target.prototype[key] = source.prototype[key];
-        }catch(e){}
+        } catch (e) {}
     }
-};
-
-/**
- * Abstract class for UI Helpers
- * @name CIQ.UI.Helper
- * @constructor
- */
-CIQ.UI.Helper=function(node, context){
-    this.node=node;
-    this.context=context;
-    this.injections=[]; // To keep track of injections for later removal
-};
-
-/**
- * Adds an injection. These will be automatically destroyed if the helper object is destroyed
- * @param {string} position  "prepend" or "append"
- * @param {string} injection The injection name. i.e. "draw"
- * @param {Function} code      The code to be run
- * @memberof CIQ.UI.Helper
- */
-CIQ.UI.Helper.prototype.addInjection=function(position, injection, code){
-    this.injections.push(this.context.stx[position](injection,code));
-};
-
-/**
- * Removes injections from the ChartEngine
- * @memberof CIQ.UI.Helper
- */
-CIQ.UI.Helper.prototype.destroy=function(){
-    for(var i=0;i<this.injections.length;i++){
-        this.context.stx.removeInjection(this.injections[i]);
-    }
-    this.injections=[];
-};
-
-/**
- * @constructor CIQ.UI.Lookup
- */
-CIQ.UI.Lookup=function(){};
-
-
-/**
- * Base class that drives the lookup widget. You should derive your own Driver that interacts with your datafeed.
- * @name  CIQ.UI.Lookup.Driver
- * @constructor
- */
-CIQ.UI.Lookup.Driver=function(){};
-
-/**
- * Abstract method, override this to accept the selected text and optional filter. Fetch results
- * and return them by calling this.cb This default driver returns no results.
- * @param  {string} text The text entered by the user
- * @param {string} [filter] The optional filter text selected by the user. This will be the innerHTML of the cq-filter element that is selected.
- * @memberof CIQ.UI.Lookup.Driver
- */
-CIQ.UI.Lookup.Driver.prototype.acceptText=function(text, filter){
-    if(!this.cb) return;
-};
-
-/**
- * An example of an asynchronous Lookup.Driver that uses ChartIQ's suggestive search as its source for symbol search
- * @memberof CIQ.UI.Lookup.Driver
- * @param {array} exchanges An array of ecxchanges that can be searched against
- */
-CIQ.UI.Lookup.Driver.ChartIQ=function(exchanges){
-    this.exchanges=exchanges;
-    if(!this.exchanges) this.exchanges=["XNYS","XASE","XNAS","XASX","INDCBSX","INDXASE","INDXNAS","IND_DJI","ARCX","INDARCX","forex"];
-    this.url="https://symbols.chartiq.com/chiq.symbolserver.SymbolLookup.service";
-    this.requestCounter=0;  //used to invalidate old requests
-    //t=ibm&m=10&x=[]&e=STOCKS
-};
-
-/**
- * An example instance of the Lookup Driver scoped to CIQ.UI.Lookup.Driver
- *
- * Inherits all of the base Look Driver's properties via `ciqInheritsFrom()`
- * @name ChartIQ
- * @memberof CIQ.UI.Lookup.Driver
- */
-CIQ.UI.Lookup.Driver.ChartIQ.ciqInheritsFrom(CIQ.UI.Lookup.Driver);
-
-/**
- * @memberof CIQ.UI.Lookup.Driver.ChartIQ
- * @param {string} text Text to serach for
- * @param {string} filter Any filter to be applied to the search results
- * @param {number} maxResults Max number of results to return from the server
- * @param {function} cb Callback upon results
- */
-CIQ.UI.Lookup.Driver.ChartIQ.prototype.acceptText=function(text, filter, maxResults, cb){
-    if(filter=="FX") filter="FOREX";
-    if(isNaN(parseInt(maxResults, 10))) maxResults=100;
-    var url=this.url+"?t=" + encodeURIComponent(text) + "&m="+maxResults+"&x=[";
-    if(this.exchanges){
-        url+=this.exchanges.join(",");
-    }
-    url+="]";
-    if(filter && filter.toUpperCase()!="ALL"){
-        url+="&e=" + filter;
-    }
-
-    var counter=++this.requestCounter;
-    var self=this;
-    function handleResponse(status, response){
-        if(counter<self.requestCounter) return;
-        if(status!=200) return;
-        try{
-            response=JSON.parse(response);
-            var symbols=response.payload.symbols;
-
-            var results=[];
-            for(var i=0;i<symbols.length;i++){
-                var fields=symbols[i].split('|');
-                var item={
-                    symbol: fields[0],
-                    name: fields[1],
-                    exchDisp: fields[2]
-                };
-                results.push({
-                    display:[item.symbol, item.name, item.exchDisp],
-                    data:item
-                });
-            }
-                cb(results);
-        }catch(e){}
-    }
-    CIQ.postAjax({url: url, cb: handleResponse});
 };
 
 /**
@@ -687,17 +558,17 @@ CIQ.UI.Lookup.Driver.ChartIQ.prototype.acceptText=function(text, filter, maxResu
  * @name CIQ.UI.StudyMenu
  * @constructor
  */
-CIQ.UI.StudyMenu=function(node, context, params){
-    this.node=$(node);
-    this.context=context;
-    this.params=params?params:{};
-    if(!this.params.template) this.params.template=".stxTemplate";
-    this.params.template=this.node.find(this.params.template);
+CIQ.UI.StudyMenu = function (node, context, params) {
+    this.node = $(node);
+    this.context = context;
+    this.params = params || {};
+    if (!this.params.template) this.params.template = '.stxTemplate';
+    this.params.template = this.node.find(this.params.template);
     this.params.template.detach();
-    this.alwaysDisplayDialog=this.params.alwaysDisplayDialog?this.params.alwaysDisplayDialog:false;
-    this.excludedStudies=this.params.excludedStudies;
-    if(!this.excludedStudies) this.excludedStudies=[];
-    context.advertiseAs(this, "StudyMenu");
+    this.alwaysDisplayDialog = this.params.alwaysDisplayDialog ? this.params.alwaysDisplayDialog : false;
+    this.excludedStudies = this.params.excludedStudies;
+    if (!this.excludedStudies) this.excludedStudies = [];
+    context.advertiseAs(this, 'StudyMenu');
 };
 CIQ.UI.StudyMenu.ciqInheritsFrom(CIQ.UI.Helper);
 
@@ -707,37 +578,37 @@ CIQ.UI.StudyMenu.ciqInheritsFrom(CIQ.UI.Helper);
  * generate the menu.
  * @memberOf CIQ.UI.StudyMenu
  */
-CIQ.UI.StudyMenu.prototype.renderMenu=function(){
-    var stx=this.context.stx;
-    var alphabetized=[];
-    var sd;
-    for(var field in CIQ.Studies.studyLibrary){
-        sd=CIQ.Studies.studyLibrary[field];
-        if(!sd.name) sd.name=field; // Make sure there's always a name
-        if(this.excludedStudies[field] || this.excludedStudies[sd.name]) continue;
+CIQ.UI.StudyMenu.prototype.renderMenu = function () {
+    let stx = this.context.stx;
+    let alphabetized = [];
+    let sd;
+    for (let field in CIQ.Studies.studyLibrary) {
+        sd = CIQ.Studies.studyLibrary[field];
+        if (!sd.name) sd.name = field; // Make sure there's always a name
+        if (this.excludedStudies[field] || this.excludedStudies[sd.name]) continue;
         alphabetized.push(field);
     }
-    alphabetized.sort(function(lhs, rhs){
-        var lsd=CIQ.Studies.studyLibrary[lhs];
-        var rsd=CIQ.Studies.studyLibrary[rhs];
-        if(lsd.name<rsd.name) return -1;
-        if(lsd.name>rsd.name) return 1;
+    alphabetized.sort((lhs, rhs) => {
+        let lsd = CIQ.Studies.studyLibrary[lhs];
+        let rsd = CIQ.Studies.studyLibrary[rhs];
+        if (lsd.name < rsd.name) return -1;
+        if (lsd.name > rsd.name) return 1;
         return 0;
     });
-    var menu=$(this.node);
-    var self=this;
-    var tapFn=function(studyName, context){
-        return function(e){
+    let menu = $(this.node);
+    let self = this;
+    let tapFn = function (studyName, context) {
+        return function (e) {
             self.pickStudy(e.target, studyName);
             menu.resize();
         };
     };
-    for(var i=0;i<alphabetized.length;i++){
-        var menuItem=this.params.template.clone();
-        sd=CIQ.Studies.studyLibrary[alphabetized[i]];
-        menuItem.append(CIQ.translatableTextNode(stx,sd.name));
+    for (let i = 0; i < alphabetized.length; i++) {
+        let menuItem = this.params.template.clone();
+        sd = CIQ.Studies.studyLibrary[alphabetized[i]];
+        menuItem.append(CIQ.translatableTextNode(stx, sd.name));
         menu.append(menuItem);
-        menuItem[0].selectFC=tapFn(alphabetized[i], this.context);
+        menuItem[0].selectFC = tapFn(alphabetized[i], this.context);
         menuItem.stxtap(menuItem[0].selectFC);
     }
 };
@@ -746,9 +617,9 @@ CIQ.UI.StudyMenu.prototype.renderMenu=function(){
  * Pops up a study dialog for the given study
  * @memberof CIQ.UI.StudyMenu
  */
-CIQ.UI.StudyMenu.prototype.studyDialog=function(params){
-    params.context=this.context;
-    $("cq-study-dialog").each(function(){
+CIQ.UI.StudyMenu.prototype.studyDialog = function (params) {
+    params.context = this.context;
+    $('cq-study-dialog').each(function () {
         this.open(params);
     });
 };
@@ -760,28 +631,27 @@ CIQ.UI.StudyMenu.prototype.studyDialog=function(params){
  * @param  {string} studyName The name of the study (entry in studyLibrary)
  * @memberOf CIQ.UI.StudyMenu
  */
-CIQ.UI.StudyMenu.prototype.pickStudy=function(node, studyName){
-    var stx=this.context.stx;
-    var self=this;
+CIQ.UI.StudyMenu.prototype.pickStudy = function (node, studyName) {
+    let stx = this.context.stx;
+    let self = this;
 
-    function handleSpecialCase(flag, params){
-        if(flag===true){
+    function handleSpecialCase(flag, params) {
+        if (flag === true) {
             self.studyDialog(params);
             return true;
-        }else if(typeof flag==="object"){
-            for(var i in flag){
-                if(i==studyName && flag[i]){
+        } else if (typeof flag === 'object') {
+            for (let i in flag) {
+                if (i == studyName && flag[i]) {
                     self.studyDialog(params);
                     return true;
                 }
             }
         }
-
     }
 
-    if(handleSpecialCase(this.params.dialogBeforeAddingStudy, {stx: stx, name: studyName})) return;
-    var sd=CIQ.Studies.addStudy(stx, studyName);
-    handleSpecialCase(this.alwaysDisplayDialog, {sd: sd, stx: stx});
+    if (handleSpecialCase(this.params.dialogBeforeAddingStudy, { stx, name: studyName })) return;
+    let sd = CIQ.Studies.addStudy(stx, studyName);
+    handleSpecialCase(this.alwaysDisplayDialog, { sd, stx });
 };
 
 /**
@@ -792,11 +662,11 @@ CIQ.UI.StudyMenu.prototype.pickStudy=function(node, studyName){
  * @param {object} params
  * @param showClass
  */
-CIQ.Marker.HeadsUp=function(params, showClass){
-    if(!this.className) this.className="CIQ.Marker.HeadsUp";
+CIQ.Marker.HeadsUp = function (params, showClass) {
+    if (!this.className) this.className = 'CIQ.Marker.HeadsUp';
     CIQ.Marker.call(this, params);
-    this.prevTick=null;
-    this.showClass=showClass;
+    this.prevTick = null;
+    this.showClass = showClass;
 };
 
 CIQ.Marker.HeadsUp.ciqInheritsFrom(CIQ.Marker, false);
@@ -807,18 +677,17 @@ CIQ.Marker.HeadsUp.ciqInheritsFrom(CIQ.Marker, false);
  * @memberof CIQ.Marker.HeadsUp
  * @param {object} params
  */
-CIQ.Marker.HeadsUp.placementFunction = function(params) {
-    var panel = params.panel;
-    var chart = panel.chart;
-    var stx = params.stx;
-    var useHighs = stx.highLowBars[stx.layout.chartType];
-    if(!params.showClass) params.showClass="stx-show";
+CIQ.Marker.HeadsUp.placementFunction = function (params) {
+    let panel = params.panel;
+    let chart = panel.chart;
+    let stx = params.stx;
+    let useHighs = stx.highLowBars[stx.layout.chartType];
+    if (!params.showClass) params.showClass = 'stx-show';
 
-    for (var i = 0; i < params.arr.length; ++i) {
-
-        var marker = params.arr[i];
-        var node = $(marker.node);
-        if(panel.hidden || !CIQ.ChartEngine.insideChart) {
+    for (let i = 0; i < params.arr.length; ++i) {
+        let marker = params.arr[i];
+        let node = $(marker.node);
+        if (panel.hidden || !CIQ.ChartEngine.insideChart) {
             node.removeClass(params.showClass);
             return;
         }
@@ -831,51 +700,49 @@ CIQ.Marker.HeadsUp.placementFunction = function(params) {
             node.removeClass(params.showClass);
             return;
         }
-        var quote = chart.dataSet[marker.params.x];
-        var x = stx.pixelFromTick(marker.params.x);
-        if (!quote || x<chart.left || x > chart.right) {
+        let quote = chart.dataSet[marker.params.x];
+        let x = stx.pixelFromTick(marker.params.x);
+        if (!quote || x < chart.left || x > chart.right) {
             node.removeClass(params.showClass);
             return;
         }
         node.addClass(params.showClass);
 
-        if (!marker.clientWidth)
-            marker.clientWidth = node.width();
-        if (!marker.clientHeight)
-            marker.clientHeight = node.height();
+        if (!marker.clientWidth) { marker.clientWidth = node.width(); }
+        if (!marker.clientHeight) { marker.clientHeight = node.height(); }
         if (marker.clientWidth > x) {
-            node.removeClass("stx-left");
-            node.addClass("stx-right");
+            node.removeClass('stx-left');
+            node.addClass('stx-right');
             node.css({
-                "left" : x + "px",
-                "right" : "auto"
+                left: `${x}px`,
+                right: 'auto',
             });
         } else {
-            node.addClass("stx-left");
-            node.removeClass("stx-right");
+            node.addClass('stx-left');
+            node.removeClass('stx-right');
             node.css({
-                "right" : (stx.chart.canvasWidth - x) + "px",
-                "left" : "auto"
+                right: `${stx.chart.canvasWidth - x}px`,
+                left: 'auto',
             });
         }
 
         var bottom;
-        var containerHeight = marker.params.chartContainer ? stx.chart.canvasHeight : panel.bottom;
+        let containerHeight = marker.params.chartContainer ? stx.chart.canvasHeight : panel.bottom;
         if (useHighs) {
             bottom = getBottomPixel(stx, panel, containerHeight, stx.getBarBounds(quote).high);
         } else {
             bottom = getBottomPixel(stx, panel, containerHeight, quote[stx.chart.defaultPlotField]);
         }
         // Keep below top of screen
-        var top = containerHeight - bottom - marker.clientHeight + stx.top;
+        let top = containerHeight - bottom - marker.clientHeight + stx.top;
         if (top < 0) {
             node.addClass('stx-below');
-            bottom = ( useHighs ? getBottomPixel(stx, panel, containerHeight, stx.getBarBounds(quote).low) : bottom) - marker.clientHeight;
+            bottom = (useHighs ? getBottomPixel(stx, panel, containerHeight, stx.getBarBounds(quote).low) : bottom) - marker.clientHeight;
         } else {
             node.removeClass('stx-below');
         }
 
-        var bottomPX = bottom + "px";
+        let bottomPX = `${bottom}px`;
 
         if (marker.node.style.bottom != bottomPX) {
             marker.node.style.bottom = bottomPX;
@@ -907,14 +774,14 @@ function getBottomPixel(stx, panel, containerHeight, price) {
  * @constructor
  * @since 3.0.0
  */
-CIQ.UI.HeadsUp=function(node, context, params){
-    this.params=params?params:{};
-    if(typeof this.params.autoStart=="undefined") this.params.autoStart=true;
-    this.node=$(node);
+CIQ.UI.HeadsUp = function (node, context, params) {
+    this.params = params || {};
+    if (typeof this.params.autoStart === 'undefined') this.params.autoStart = true;
+    this.node = $(node);
     this.node.detach();
-    this.context=context;
-    this.maxVolume={lastCheckDate:null, value:0};	// This contains the maximum volume in the dataSet, used to generate the volume icon element
-    if(this.params.autoStart) this.begin();
+    this.context = context;
+    this.maxVolume = { lastCheckDate: null, value: 0 };	// This contains the maximum volume in the dataSet, used to generate the volume icon element
+    if (this.params.autoStart) this.begin();
 };
 
 CIQ.UI.HeadsUp.ciqInheritsFrom(CIQ.UI.Helper);
@@ -924,78 +791,80 @@ CIQ.UI.HeadsUp.ciqInheritsFrom(CIQ.UI.Helper);
  * the head's up.
  * @memberof CIQ.UI.HeadsUp
  */
-CIQ.UI.HeadsUp.prototype.begin=function(){
-    var params;
-    if(this.params.followMouse){
-        this.node.css({"top":"auto"}); // allow style.bottom to override the default top value
-        params={
-            stx:this.context.stx,
-            label: "headsup",
-            xPositioner: "bar",
+CIQ.UI.HeadsUp.prototype.begin = function () {
+    let params;
+    if (this.params.followMouse) {
+        this.node.css({ top: 'auto' }); // allow style.bottom to override the default top value
+        params = {
+            stx: this.context.stx,
+            label: 'headsup',
+            xPositioner: 'bar',
             chartContainer: true,
-            x:0,
-            node:this.node[0]
+            x: 0,
+            node: this.node[0],
         };
-        this.marker=new CIQ.Marker.HeadsUp(params, this.params.showClass);
-        //this.node.addClass(this.params.showClass);
+        this.marker = new CIQ.Marker.HeadsUp(params, this.params.showClass);
+        // this.node.addClass(this.params.showClass);
 
-        this.addInjection("append", "handleMouseOut", function(self){ return function(){
-            self.followMouse(-1);
-        };}(this));
-    }else if(this.params.staticNode){
+        this.addInjection('append', 'handleMouseOut', (function (self) {
+            return function () {
+                self.followMouse(-1);
+            };
+        }(this)));
+    } else if (this.params.staticNode) {
         // placeholder
-    }else{
-        this.node.css({"top":"", "left":""}); // Remove any existing styles
-        params={
-            stx:this.context.stx,
-            label: "headsup",
-            xPositioner: "none",
+    } else {
+        this.node.css({ top: '', left: '' }); // Remove any existing styles
+        params = {
+            stx: this.context.stx,
+            label: 'headsup',
+            xPositioner: 'none',
             chartContainer: false,
-            node:this.node[0]
+            node: this.node[0],
         };
         $.extend(params, this.params); // Override default marker setup by passing marker parameters into CIQ.UI.HaedsUp
-        this.marker=new CIQ.Marker(params);
-        //this.node.addClass(this.params.showClass);
+        this.marker = new CIQ.Marker(params);
+        // this.node.addClass(this.params.showClass);
     }
 
     // enable the crosshairs for touch devices
-    if(CIQ.isMobile){
-        this.context.stx.layout.crosshair=true;
+    if (CIQ.isMobile) {
+        this.context.stx.layout.crosshair = true;
     }
 
     this.calculateMaxVolume();
-    this.addInjection("prepend","headsUpHR", function(self){ return function(){self.position();};}(this));
-    this.addInjection("append","createXAxis", function(self){ return function(){self.position();};}(this));
-    this.addInjection("append","createDataSet", function(self){ return function(dontRoll, whichChart, params){self.calculateMaxVolume(params.appending);};}(this));
+    this.addInjection('prepend', 'headsUpHR', (function (self) { return function () { self.position(); }; }(this)));
+    this.addInjection('append', 'createXAxis', (function (self) { return function () { self.position(); }; }(this)));
+    this.addInjection('append', 'createDataSet', (function (self) { return function (dontRoll, whichChart, params) { self.calculateMaxVolume(params.appending); }; }(this)));
 };
 
 /**
  * Stops the head's up from operating by removing injections and hiding. You can start it again by calling {@link CIQ.UI.HeadsUp#begin}.
  * @memberOf CIQ.UI.HeadsUp
  */
-CIQ.UI.HeadsUp.prototype.end=function(){
-    if(CIQ.isMobile){
-        this.context.stx.layout.crosshair=false;
+CIQ.UI.HeadsUp.prototype.end = function () {
+    if (CIQ.isMobile) {
+        this.context.stx.layout.crosshair = false;
     }
-    if(this.marker) this.marker.remove();
+    if (this.marker) this.marker.remove();
     this.destroy();
-    this.marker=null;
+    this.marker = null;
 };
 
 /**
  * @memberof CIQ.UI.HeadsUp
  * @param {boolean} appending
  */
-CIQ.UI.HeadsUp.prototype.calculateMaxVolume=function(appending){
-    if(!appending) this.maxVolume={lastCheckDate:null, value:0};
-    var dataSet=this.context.stx.chart.dataSet;
-    if(!dataSet || !dataSet.length) return;
-    for(var i=dataSet.length-1;i>=0;i--){
-        var q=dataSet[i];
-        if(q.DT<this.maxVolume.lastCheckDate) break;
-        if(q.Volume>this.maxVolume.value) this.maxVolume.value=q.Volume;
+CIQ.UI.HeadsUp.prototype.calculateMaxVolume = function (appending) {
+    if (!appending) this.maxVolume = { lastCheckDate: null, value: 0 };
+    let dataSet = this.context.stx.chart.dataSet;
+    if (!dataSet || !dataSet.length) return;
+    for (let i = dataSet.length - 1; i >= 0; i--) {
+        let q = dataSet[i];
+        if (q.DT < this.maxVolume.lastCheckDate) break;
+        if (q.Volume > this.maxVolume.value) this.maxVolume.value = q.Volume;
     }
-    this.maxVolume.lastCheckDate=dataSet[dataSet.length-1].DT;
+    this.maxVolume.lastCheckDate = dataSet[dataSet.length - 1].DT;
 };
 
 /**
@@ -1003,76 +872,76 @@ CIQ.UI.HeadsUp.prototype.calculateMaxVolume=function(appending){
  * @memberof CIQ.UI.HeadsUp
  * @private
  */
-CIQ.UI.HeadsUp.prototype.position=function(){
-    var stx=this.context.stx;
-    var bar=stx.barFromPixel(stx.cx);
-    this.tick=stx.tickFromPixel(stx.cx);
-    var prices=stx.chart.xaxis[bar];
-    var currentQuote=stx.chart.currentQuote;
-    var plotField=stx.chart.defaultPlotField;
-    if(!plotField || stx.highLowBars[stx.layout.chartType]) plotField="Close";
+CIQ.UI.HeadsUp.prototype.position = function () {
+    let stx = this.context.stx;
+    let bar = stx.barFromPixel(stx.cx);
+    this.tick = stx.tickFromPixel(stx.cx);
+    let prices = stx.chart.xaxis[bar];
+    let currentQuote = stx.chart.currentQuote;
+    let plotField = stx.chart.defaultPlotField;
+    if (!plotField || stx.highLowBars[stx.layout.chartType]) plotField = 'Close';
 
-    var node=this.node;
-    var self=this;
-            
-    function printValues(){
-        self.timeout=null;
-        node.find("cq-hu-price").text("");
-        node.find("cq-hu-open").text("");
-        node.find("cq-hu-close").text("");
-        node.find("cq-hu-high").text("");
-        node.find("cq-hu-low").text("");
-        node.find("cq-hu-date").text("");
-        node.find("cq-hu-volume").text("");
-        node.find("cq-volume-rollup").text("");
-        if(prices){
-            if(prices.data){
-                node.find("cq-hu-open").text(stx.formatPrice(prices.data.Open));
-                node.find("cq-hu-price").text(stx.formatPrice(prices.data[plotField]));
-                node.find("cq-hu-close").text(stx.formatPrice(prices.data.Close));
-                node.find("cq-hu-high").text(stx.formatPrice(prices.data.High));
-                node.find("cq-hu-low").text(stx.formatPrice(prices.data.Low));
+    let node = this.node;
+    let self = this;
 
-                var volume=CIQ.condenseInt(prices.data.Volume);
-                var rollup=volume.charAt(volume.length-1);
-                if(rollup>'9'){
-                    volume=volume.substring(0,volume.length-1);
-                    node.find("cq-volume-rollup").text(rollup.toUpperCase());
+    function printValues() {
+        self.timeout = null;
+        node.find('cq-hu-price').text('');
+        node.find('cq-hu-open').text('');
+        node.find('cq-hu-close').text('');
+        node.find('cq-hu-high').text('');
+        node.find('cq-hu-low').text('');
+        node.find('cq-hu-date').text('');
+        node.find('cq-hu-volume').text('');
+        node.find('cq-volume-rollup').text('');
+        if (prices) {
+            if (prices.data) {
+                node.find('cq-hu-open').text(stx.formatPrice(prices.data.Open));
+                node.find('cq-hu-price').text(stx.formatPrice(prices.data[plotField]));
+                node.find('cq-hu-close').text(stx.formatPrice(prices.data.Close));
+                node.find('cq-hu-high').text(stx.formatPrice(prices.data.High));
+                node.find('cq-hu-low').text(stx.formatPrice(prices.data.Low));
+
+                let volume = CIQ.condenseInt(prices.data.Volume);
+                let rollup = volume.charAt(volume.length - 1);
+                if (rollup > '9') {
+                    volume = volume.substring(0, volume.length - 1);
+                    node.find('cq-volume-rollup').text(rollup.toUpperCase());
                 }
-                node.find("cq-hu-volume").text(volume);
-                var tickDate = prices.data.displayDate;
+                node.find('cq-hu-volume').text(volume);
+                let tickDate = prices.data.displayDate;
                 if (!tickDate) tickDate = prices.data.DT;
-                if (CIQ.ChartEngine.isDailyInterval(stx.layout.interval)){
-                    node.find("cq-hu-date").text(CIQ.mmddyyyy(CIQ.yyyymmddhhmm(tickDate)));
+                if (CIQ.ChartEngine.isDailyInterval(stx.layout.interval)) {
+                    node.find('cq-hu-date').text(CIQ.mmddyyyy(CIQ.yyyymmddhhmm(tickDate)));
                 } else {
-                    node.find("cq-hu-date").text(CIQ.mmddhhmm(CIQ.yyyymmddhhmmssmmm(tickDate)));
+                    node.find('cq-hu-date').text(CIQ.mmddhhmm(CIQ.yyyymmddhhmmssmmm(tickDate)));
                 }
-                var visuals=node.find("cq-volume-visual");
-                if(visuals.length){
-                    var relativeCandleSize=self.maxVolume.value?prices.data.Volume/self.maxVolume.value:0;
-                    visuals.css({"width":Math.round(relativeCandleSize*100)+"%"});
+                let visuals = node.find('cq-volume-visual');
+                if (visuals.length) {
+                    let relativeCandleSize = self.maxVolume.value ? prices.data.Volume / self.maxVolume.value : 0;
+                    visuals.css({ width: `${Math.round(relativeCandleSize * 100)}%` });
                 }
             }
-            if(currentQuote && currentQuote[plotField] && self.tick==stx.chart.dataSet.length-1){
-                node.find("cq-hu-price").text(stx.formatPrice(currentQuote[plotField]));
+            if (currentQuote && currentQuote[plotField] && self.tick == stx.chart.dataSet.length - 1) {
+                node.find('cq-hu-price').text(stx.formatPrice(currentQuote[plotField]));
             }
         }
     }
-    if(this.tick!=this.prevTick || (stx.chart.dataSegment && bar==stx.chart.dataSegment.length-1)){
-        if(this.timeout) clearTimeout(this.timeout);
-        var ms=this.params.followMouse?0:0; // IE and FF struggle to keep up with the dynamic head's up.
-        this.timeout=setTimeout(printValues, ms);
+    if (this.tick != this.prevTick || (stx.chart.dataSegment && bar == stx.chart.dataSegment.length - 1)) {
+        if (this.timeout) clearTimeout(this.timeout);
+        let ms = this.params.followMouse ? 0 : 0; // IE and FF struggle to keep up with the dynamic head's up.
+        this.timeout = setTimeout(printValues, ms);
     }
-    this.prevTick=this.tick; // We don't want to update the dom every pixel, just when we cross into a new candle
-    if(this.params.followMouse){
-        if(stx.openDialog) this.tick=-1;  // Turn off the headsup when a modal is on
+    this.prevTick = this.tick; // We don't want to update the dom every pixel, just when we cross into a new candle
+    if (this.params.followMouse) {
+        if (stx.openDialog) this.tick = -1; // Turn off the headsup when a modal is on
         this.followMouse(this.tick);
     }
 };
 
-CIQ.UI.HeadsUp.prototype.followMouse=function(tick){
-    this.marker.params.x=tick;
-    var self=this;
+CIQ.UI.HeadsUp.prototype.followMouse = function (tick) {
+    this.marker.params.x = tick;
+    let self = this;
     self.marker.render();
 };
 
@@ -1087,12 +956,12 @@ CIQ.UI.HeadsUp.prototype.followMouse=function(tick){
  * @constructor
  * @since  4.1.0 contextDialog is no longer passed in.
  */
-CIQ.UI.StudyEdit=function(node, context){
-    this.context=context;
-    this.node=node?node:context.topNode;
-    this.contextDialog=$("cq-study-context");
+CIQ.UI.StudyEdit = function (node, context) {
+    this.context = context;
+    this.node = node || context.topNode;
+    this.contextDialog = $('cq-study-context');
 
-    context.advertiseAs(this, "StudyEdit");
+    context.advertiseAs(this, 'StudyEdit');
     this.initialize();
 };
 
@@ -1102,9 +971,9 @@ CIQ.UI.StudyEdit.ciqInheritsFrom(CIQ.UI.Helper);
  * Closes Study Edit dialog.
  * @memberof CIQ.UI.StudyEdit
  */
-CIQ.UI.StudyEdit.prototype.remove=function(){
+CIQ.UI.StudyEdit.prototype.remove = function () {
     CIQ.Studies.removeStudy(this.params.stx, this.params.sd);
-    this.contextDialog.each(function(){
+    this.contextDialog.each(function () {
         this.close();
     });
 };
@@ -1113,8 +982,8 @@ CIQ.UI.StudyEdit.prototype.remove=function(){
  * Proxy for editing a study. Assumes the params for the study have already been set.
  * @memberof CIQ.UI.StudyEdit
  */
-CIQ.UI.StudyEdit.prototype.edit=function(){
-    this.contextDialog.each(function(){
+CIQ.UI.StudyEdit.prototype.edit = function () {
+    this.contextDialog.each(function () {
         this.close();
     });
     this.editPanel(this.params);
@@ -1126,12 +995,12 @@ CIQ.UI.StudyEdit.prototype.edit=function(){
  * @memberof CIQ.UI.StudyEdit
  * @param  {Object} params Parameters from studyPanelEdit callback
  */
-CIQ.UI.StudyEdit.prototype.editPanel=function(params){
-    params.context=this.context;
+CIQ.UI.StudyEdit.prototype.editPanel = function (params) {
+    params.context = this.context;
     // Make sure we don't open the dialog in the context menu position
-    params.x=null;
-    params.y=null;
-    $("cq-study-dialog").each(function(){
+    params.x = null;
+    params.y = null;
+    $('cq-study-dialog').each(function () {
         this.open(params);
     });
 };
@@ -1141,15 +1010,15 @@ CIQ.UI.StudyEdit.prototype.editPanel=function(params){
  * @memberof CIQ.UI.StudyEdit
  * @param  {Object} params Parameters from studyOverlayEdit callback
  */
-CIQ.UI.StudyEdit.prototype.editOverlay=function(params){
-    this.params=params;
-    params.context=this.context;
-    if(params.forceEdit){
+CIQ.UI.StudyEdit.prototype.editOverlay = function (params) {
+    this.params = params;
+    params.context = this.context;
+    if (params.forceEdit) {
         this.editPanel(params);
-    }else{
-        this.contextDialog.each(function(){
-            params.x=CIQ.ChartEngine.crosshairX;
-            params.y=CIQ.ChartEngine.crosshairY;
+    } else {
+        this.contextDialog.each(function () {
+            params.x = CIQ.ChartEngine.crosshairX;
+            params.y = CIQ.ChartEngine.crosshairY;
             this.open(params);
         });
     }
@@ -1159,17 +1028,17 @@ CIQ.UI.StudyEdit.prototype.editOverlay=function(params){
  * Creates the callbacks for self and the context.
  * @memberof CIQ.UI.StudyEdit
  */
-CIQ.UI.StudyEdit.prototype.initialize=function(){
-    var stx=this.context.stx;
-    var self=this;
+CIQ.UI.StudyEdit.prototype.initialize = function () {
+    let stx = this.context.stx;
+    let self = this;
 
-    function closure(fc){
-        return function(){
+    function closure(fc) {
+        return function () {
             fc.apply(self, arguments);
         };
     }
-    stx.callbacks.studyOverlayEdit=closure(self.editOverlay);
-    stx.callbacks.studyPanelEdit=closure(self.editPanel);
+    stx.callbacks.studyOverlayEdit = closure(self.editOverlay);
+    stx.callbacks.studyPanelEdit = closure(self.editPanel);
 };
 
 /**
@@ -1182,11 +1051,11 @@ CIQ.UI.StudyEdit.prototype.initialize=function(){
  * @constructor
  * @since  4.1.0 Layout no longer takes a node as its first parameter
  */
-CIQ.UI.Layout=function(context, params){
-    this.params=params?params:{};
-    if(!this.params.activeClassName) this.params.activeClassName="ciq-active";
-    this.context=context;
-    context.advertiseAs(this, "Layout");
+CIQ.UI.Layout = function (context, params) {
+    this.params = params || {};
+    if (!this.params.activeClassName) this.params.activeClassName = 'ciq-active';
+    this.context = context;
+    context.advertiseAs(this, 'Layout');
 };
 
 CIQ.UI.Layout.ciqInheritsFrom(CIQ.UI.Helper);
@@ -1196,32 +1065,30 @@ CIQ.UI.Layout.ciqInheritsFrom(CIQ.UI.Helper);
  * @param {HTMLElement} node
  * @param {string} chartType
  */
-CIQ.UI.Layout.prototype.getChartType=function(node, chartType){
-    var activeClassName=this.params.activeClassName;
+CIQ.UI.Layout.prototype.getChartType = function (node, chartType) {
+    let activeClassName = this.params.activeClassName;
     // A little complexity here to consolidate two fields (aggregationType and chartType) into one
     // set of radio buttons
-    function showChartType(params, node){
-        var layout=params.obj;
-        if(layout.aggregationType && layout.aggregationType!="ohlc"){
-            if(chartType!==layout.aggregationType){
+    function showChartType(params, node) {
+        let layout = params.obj;
+        if (layout.aggregationType && layout.aggregationType != 'ohlc') {
+            if (chartType !== layout.aggregationType) {
                 $(node).removeClass(activeClassName);
-            }else{
+            } else {
                 $(node).addClass(activeClassName);
             }
-        }else{
-            if(chartType!==layout.chartType){
-                $(node).removeClass(activeClassName);
-            }else{
-                $(node).addClass(activeClassName);
-            }
+        } else if (chartType !== layout.chartType) {
+            $(node).removeClass(activeClassName);
+        } else {
+            $(node).addClass(activeClassName);
         }
     }
     CIQ.UI.observe({
         selector: node,
         obj: this.context.stx.layout,
-        member: ["chartType","aggregationType"],
-        action: "callback",
-        value: showChartType
+        member: ['chartType', 'aggregationType'],
+        action: 'callback',
+        value: showChartType,
     });
 };
 
@@ -1230,19 +1097,19 @@ CIQ.UI.Layout.prototype.getChartType=function(node, chartType){
  * @param {HTMLElement} node
  * @param {string} chartType
  */
-CIQ.UI.Layout.prototype.setChartType=function(node, chartType){
-    var aggregations={
-        "heikinashi":true,
-        "kagi":true,
-        "linebreak":true,
-        "pandf":true,
-        "rangebars":true,
-        "renko":true
+CIQ.UI.Layout.prototype.setChartType = function (node, chartType) {
+    let aggregations = {
+        heikinashi: true,
+        kagi: true,
+        linebreak: true,
+        pandf: true,
+        rangebars: true,
+        renko: true,
     };
-    if(aggregations[chartType]){
+    if (aggregations[chartType]) {
         // this.context.stx.setChartType("candle");
         this.context.stx.setAggregationType(chartType);
-    }else{
+    } else {
         this.context.stx.setChartType(chartType);
         // this.context.stx.setAggregationType(null);
     }
@@ -1253,14 +1120,14 @@ CIQ.UI.Layout.prototype.setChartType=function(node, chartType){
  * @param {HTMLElement} node
  * @param {string} chartScale
  */
-CIQ.UI.Layout.prototype.getChartScale=function(node, chartScale){
+CIQ.UI.Layout.prototype.getChartScale = function (node, chartScale) {
     CIQ.UI.observe({
         selector: node,
         obj: this.context.stx.layout,
-        member: "chartScale",
+        member: 'chartScale',
         condition: chartScale,
-        action: "class",
-        value: this.params.activeClassName
+        action: 'class',
+        value: this.params.activeClassName,
     });
 };
 
@@ -1269,11 +1136,11 @@ CIQ.UI.Layout.prototype.getChartScale=function(node, chartScale){
  * @param {HTMLElement} node
  * @param {string} chartType
  */
-CIQ.UI.Layout.prototype.setChartScale=function(node, chartScale){
-    var stx=this.context.stx;
-    if(stx.layout.chartScale==chartScale){
+CIQ.UI.Layout.prototype.setChartScale = function (node, chartScale) {
+    let stx = this.context.stx;
+    if (stx.layout.chartScale == chartScale) {
         stx.setChartScale(null);
-    }else{
+    } else {
         stx.setChartScale(chartScale);
     }
 };
@@ -1282,14 +1149,14 @@ CIQ.UI.Layout.prototype.setChartScale=function(node, chartScale){
  * @memberof CIQ.UI.Layout
  * @param {HTMLElement} node
  */
-CIQ.UI.Layout.prototype.getExtendedHours=function(node){
+CIQ.UI.Layout.prototype.getExtendedHours = function (node) {
     CIQ.UI.observe({
         selector: node,
         obj: this.context.stx.layout,
-        member: "extended",
+        member: 'extended',
         condition: true,
-        action: "class",
-        value: this.params.activeClassName
+        action: 'class',
+        value: this.params.activeClassName,
     });
 };
 
@@ -1297,15 +1164,15 @@ CIQ.UI.Layout.prototype.getExtendedHours=function(node){
  * @memberof CIQ.UI.Layout
  * @param {HTMLElement} node
  */
-CIQ.UI.Layout.prototype.setExtendedHours=function(node){
-    var stx=this.context.stx;
-    stx.layout.extended=!stx.layout.extended;
-    stx.changeOccurred("layout");
+CIQ.UI.Layout.prototype.setExtendedHours = function (node) {
+    let stx = this.context.stx;
+    stx.layout.extended = !stx.layout.extended;
+    stx.changeOccurred('layout');
 
-    if(stx.extendedHours){
-        var loader=this.context.loader;
-        if(loader) loader.show();
-        stx.extendedHours.set(stx.layout.extended,null,function(){
+    if (stx.extendedHours) {
+        let loader = this.context.loader;
+        if (loader) loader.show();
+        stx.extendedHours.set(stx.layout.extended, null, () => {
             loader.hide();
         });
     }
@@ -1315,14 +1182,14 @@ CIQ.UI.Layout.prototype.setExtendedHours=function(node){
  * @memberof CIQ.UI.Layout
  * @param {HTMLElement} node
  */
-CIQ.UI.Layout.prototype.getRangeSlider=function(node){
+CIQ.UI.Layout.prototype.getRangeSlider = function (node) {
     CIQ.UI.observe({
         selector: node,
         obj: this.context.stx.layout,
-        member: "rangeSlider",
+        member: 'rangeSlider',
         condition: true,
-        action: "class",
-        value: this.params.activeClassName
+        action: 'class',
+        value: this.params.activeClassName,
     });
 };
 
@@ -1330,11 +1197,11 @@ CIQ.UI.Layout.prototype.getRangeSlider=function(node){
  * @memberof CIQ.UI.Layout
  * @param {HTMLElement} node
  */
-CIQ.UI.Layout.prototype.setRangeSlider=function(node){
-    var stx=this.context.stx;
-    stx.layout.rangeSlider=!stx.layout.rangeSlider;
-    if(stx.slider) stx.slider.display(stx.layout.rangeSlider);
-    stx.changeOccurred("layout");
+CIQ.UI.Layout.prototype.setRangeSlider = function (node) {
+    let stx = this.context.stx;
+    stx.layout.rangeSlider = !stx.layout.rangeSlider;
+    if (stx.slider) stx.slider.display(stx.layout.rangeSlider);
+    stx.changeOccurred('layout');
 };
 
 /**
@@ -1342,14 +1209,14 @@ CIQ.UI.Layout.prototype.setRangeSlider=function(node){
  * @param {HTMLElement} node
  * @param {string} aggregationType
  */
-CIQ.UI.Layout.prototype.getAggregationType=function(node, aggregationType){
+CIQ.UI.Layout.prototype.getAggregationType = function (node, aggregationType) {
     CIQ.UI.observe({
         selector: node,
         obj: this.context.stx.layout,
-        member: "aggregationType",
+        member: 'aggregationType',
         condition: aggregationType,
-        action: "class",
-        value: this.params.activeClassName
+        action: 'class',
+        value: this.params.activeClassName,
     });
 };
 
@@ -1358,10 +1225,10 @@ CIQ.UI.Layout.prototype.getAggregationType=function(node, aggregationType){
  * @param {HTMLElement} node
  * @param {string} aggregationType
  */
-CIQ.UI.Layout.prototype.setAggregationType=function(node, aggregationType){
-    if(this.context.stx.layout.aggregationType==aggregationType){
+CIQ.UI.Layout.prototype.setAggregationType = function (node, aggregationType) {
+    if (this.context.stx.layout.aggregationType == aggregationType) {
         this.context.stx.setAggregationType(null);
-    }else{
+    } else {
         this.context.stx.setAggregationType(aggregationType);
     }
 };
@@ -1371,25 +1238,25 @@ CIQ.UI.Layout.prototype.setAggregationType=function(node, aggregationType){
  * @param {HTMLElement} node
  * @param {string} field
  */
-CIQ.UI.Layout.prototype.getAggregationEdit=function(node, field){
-    var stx=this.context.stx;
-    function populateEditField(params){
-        var name=params.selector.name;
-        var value=params.obj[params.member];
-        if(!value && stx.chart.defaultChartStyleConfig[name]){
+CIQ.UI.Layout.prototype.getAggregationEdit = function (node, field) {
+    let stx = this.context.stx;
+    function populateEditField(params) {
+        let name = params.selector.name;
+        let value = params.obj[params.member];
+        if (!value && stx.chart.defaultChartStyleConfig[name]) {
             $(params.selector).val(stx.chart.defaultChartStyleConfig[name]);
-        }else{
+        } else {
             $(params.selector).val(value);
         }
     }
 
-    var tuple=CIQ.deriveFromObjectChain(stx.layout, field);
+    let tuple = CIQ.deriveFromObjectChain(stx.layout, field);
     CIQ.UI.observe({
         selector: node,
         obj: tuple.obj,
         member: tuple.member,
-        action: "callback",
-        value: populateEditField
+        action: 'callback',
+        value: populateEditField,
     });
 };
 
@@ -1398,29 +1265,29 @@ CIQ.UI.Layout.prototype.getAggregationEdit=function(node, field){
  * @param {HTMLElement} node
  * @param {string} field
  */
-CIQ.UI.Layout.prototype.setAggregationEdit=function(node, field){
-    var stx=this.context.stx;
-    if(field==="auto"){
-        if(stx.layout.aggregationType==="kagi"){
-            stx.layout.kagi=null;
-        }else if(stx.layout.aggregationType==="renko"){
-            stx.layout.renko=null;
-        }else if(stx.layout.aggregationType==="linebreak"){
-            stx.layout.priceLines=null;
-        }else if(stx.layout.aggregationType==="rangebars"){
-            stx.layout.range=null;
-        }else if(stx.layout.aggregationType==="pandf"){
-            if(!stx.layout.pandf){
-                stx.layout.pandf={box:null, reversal:null};
+CIQ.UI.Layout.prototype.setAggregationEdit = function (node, field) {
+    let stx = this.context.stx;
+    if (field === 'auto') {
+        if (stx.layout.aggregationType === 'kagi') {
+            stx.layout.kagi = null;
+        } else if (stx.layout.aggregationType === 'renko') {
+            stx.layout.renko = null;
+        } else if (stx.layout.aggregationType === 'linebreak') {
+            stx.layout.priceLines = null;
+        } else if (stx.layout.aggregationType === 'rangebars') {
+            stx.layout.range = null;
+        } else if (stx.layout.aggregationType === 'pandf') {
+            if (!stx.layout.pandf) {
+                stx.layout.pandf = { box: null, reversal: null };
             }
-            stx.layout.pandf.box=null;
-            stx.layout.pandf.reversal=null;
+            stx.layout.pandf.box = null;
+            stx.layout.pandf.reversal = null;
         }
-    }else{
-        var tuple=CIQ.deriveFromObjectChain(stx.layout, field);
-        tuple.obj[tuple.member]=$(node.node).val();
+    } else {
+        let tuple = CIQ.deriveFromObjectChain(stx.layout, field);
+        tuple.obj[tuple.member] = $(node.node).val();
     }
-    stx.changeOccurred("layout");
+    stx.changeOccurred('layout');
     stx.createDataSet();
     stx.draw();
 };
@@ -1430,9 +1297,9 @@ CIQ.UI.Layout.prototype.setAggregationEdit=function(node, field){
  * @param {HTMLElement} node
  * @param {string} aggregationType
  */
-CIQ.UI.Layout.prototype.showAggregationEdit=function(node, aggregationType){
-    var dialog=$("cq-aggregation-dialog");
-    dialog[0].open({context:this.context, aggregationType:aggregationType});
+CIQ.UI.Layout.prototype.showAggregationEdit = function (node, aggregationType) {
+    let dialog = $('cq-aggregation-dialog');
+    dialog[0].open({ context: this.context, aggregationType });
 };
 
 /**
@@ -1440,11 +1307,11 @@ CIQ.UI.Layout.prototype.showAggregationEdit=function(node, aggregationType){
  * @memberof CIQ.UI.Layout
  * @param {HTMLElement} node
  */
-CIQ.UI.Layout.prototype.clearStudies=function(node){
-    var stx=this.context.stx;
-    for(var id in stx.layout.studies){
-        var sd=stx.layout.studies[id];
-        if(!sd.customLegend) CIQ.Studies.removeStudy(stx, sd);
+CIQ.UI.Layout.prototype.clearStudies = function (node) {
+    let stx = this.context.stx;
+    for (let id in stx.layout.studies) {
+        let sd = stx.layout.studies[id];
+        if (!sd.customLegend) CIQ.Studies.removeStudy(stx, sd);
     }
     stx.draw();
 };
@@ -1456,11 +1323,11 @@ CIQ.UI.Layout.prototype.clearStudies=function(node){
  * @param {number} interval
  * @param {number} timeUnit
  */
-CIQ.UI.Layout.prototype.setPeriodicity=function(node, periodicity, interval, timeUnit){
-    var self=this;
-    if(self.context.loader) self.context.loader.show();
-    self.context.stx.setPeriodicity({period:periodicity, interval:interval, timeUnit:timeUnit}, function(){
-        if(self.context.loader) self.context.loader.hide();
+CIQ.UI.Layout.prototype.setPeriodicity = function (node, periodicity, interval, timeUnit) {
+    let self = this;
+    if (self.context.loader) self.context.loader.show();
+    self.context.stx.setPeriodicity({ period: periodicity, interval, timeUnit }, () => {
+        if (self.context.loader) self.context.loader.hide();
     });
 };
 
@@ -1471,46 +1338,48 @@ CIQ.UI.Layout.prototype.setPeriodicity=function(node, periodicity, interval, tim
  * @param  {Object} params Parameters
  * @param {HTMLElement} params.selector The selector to update
  */
-CIQ.UI.Layout.prototype.showPeriodicity=function(stx, params){
-    var text="";
-    var periodicity=stx.layout.periodicity, interval=stx.layout.interval, timeUnit=stx.layout.timeUnit;
-    if(isNaN(interval)){
-        timeUnit=interval;
-        interval=1;
+CIQ.UI.Layout.prototype.showPeriodicity = function (stx, params) {
+    let text = '';
+    let periodicity = stx.layout.periodicity,
+        interval = stx.layout.interval,
+        timeUnit = stx.layout.timeUnit;
+    if (isNaN(interval)) {
+        timeUnit = interval;
+        interval = 1;
     }
-    periodicity*=interval;
-    text=periodicity;
-    if(timeUnit=="day"){
-        text+="D";
-    }else if(timeUnit=="week"){
-        text+="W";
-    }else if(timeUnit=="month"){
-        text+="M";
-    }else if(timeUnit=="tick"){
-        text+="T";
-    }else if(timeUnit=="second"){
-        text+="s";
-    }else if(timeUnit=="millisecond"){
-        text+="ms";
-    }else if(periodicity>=60 && periodicity%15===0){
-        text=periodicity/60+"H";
-    }else{
-        text+="m";
+    periodicity *= interval;
+    text = periodicity;
+    if (timeUnit == 'day') {
+        text += 'D';
+    } else if (timeUnit == 'week') {
+        text += 'W';
+    } else if (timeUnit == 'month') {
+        text += 'M';
+    } else if (timeUnit == 'tick') {
+        text += 'T';
+    } else if (timeUnit == 'second') {
+        text += 's';
+    } else if (timeUnit == 'millisecond') {
+        text += 'ms';
+    } else if (periodicity >= 60 && periodicity % 15 === 0) {
+        text = `${periodicity / 60}H`;
+    } else {
+        text += 'm';
     }
-    $(params.selector).empty().append(CIQ.translatableTextNode(stx,text));
+    $(params.selector).empty().append(CIQ.translatableTextNode(stx, text));
 };
 
-CIQ.UI.Layout.prototype.periodicity=function(node){
-    var self=this;
-    function showPeriodicity(params){
+CIQ.UI.Layout.prototype.periodicity = function (node) {
+    let self = this;
+    function showPeriodicity(params) {
         self.showPeriodicity(self.context.stx, params);
     }
     CIQ.UI.observe({
         selector: node,
         obj: this.context.stx.layout,
-        member: ["interval","periodicity","timeUnit"],
-        action: "callback",
-        value: showPeriodicity
+        member: ['interval', 'periodicity', 'timeUnit'],
+        action: 'callback',
+        value: showPeriodicity,
     });
 };
 
@@ -1518,8 +1387,8 @@ CIQ.UI.Layout.prototype.periodicity=function(node){
  * Populates and displays the language widget
  * @memberof CIQ.UI.Layout
  */
-CIQ.UI.Layout.prototype.setLanguage=function(){
-    var dialog=$("cq-language-dialog").each(function(){
+CIQ.UI.Layout.prototype.setLanguage = function () {
+    let dialog = $('cq-language-dialog').each(function () {
         this.open();
     });
 };
@@ -1529,18 +1398,18 @@ CIQ.UI.Layout.prototype.setLanguage=function(){
  * Displays the current language
  * @memberof CIQ.UI.Layout
  */
-CIQ.UI.Layout.prototype.getLanguage=function(node){
-    function showLanguage(params, node){
-        $(node).find("cq-language-name").text(CIQ.I18N.languages[CIQ.I18N.language]);
-        $(node).find("cq-flag").attr("cq-lang", CIQ.I18N.language);
+CIQ.UI.Layout.prototype.getLanguage = function (node) {
+    function showLanguage(params, node) {
+        $(node).find('cq-language-name').text(CIQ.I18N.languages[CIQ.I18N.language]);
+        $(node).find('cq-flag').attr('cq-lang', CIQ.I18N.language);
     }
 
     CIQ.UI.observe({
         selector: node,
         obj: CIQ.I18N,
-        member: "language",
-        action: "callback",
-        value: showLanguage
+        member: 'language',
+        action: 'callback',
+        value: showLanguage,
     });
 };
 
@@ -1553,15 +1422,15 @@ CIQ.UI.Layout.prototype.getLanguage=function(node){
  * @param {Function} [cb] Callback when key pressed
  * @constructor
  */
-CIQ.UI.Keystroke=function(node, cb){
-    this.node=$(node);
-    this.cb=cb;
+CIQ.UI.Keystroke = function (node, cb) {
+    this.node = $(node);
+    this.cb = cb;
     this.initialize();
-    this.shift=false;
-    this.ctrl=false;
-    this.cmd=false;
-    this.capsLock=false;
-    this.downValue=""; // Android Chrome bug requires a workaround for keyup.
+    this.shift = false;
+    this.ctrl = false;
+    this.cmd = false;
+    this.capsLock = false;
+    this.downValue = ''; // Android Chrome bug requires a workaround for keyup.
 };
 
 /**
@@ -1569,22 +1438,22 @@ CIQ.UI.Keystroke=function(node, cb){
  * @memberof CIQ.UI.Keystroke
  * @type {Boolean}
  */
-CIQ.UI.Keystroke.noKeyCapture=false;
+CIQ.UI.Keystroke.noKeyCapture = false;
 
 // http://stackoverflow.com/questions/30743490/capture-keys-typed-on-android-virtual-keyboard-using-javascript
 // On Chrome Android, the keydown/keyup events are broken. We have to figure out the key that was pressed by
 // examining the value of an input box before (keydown) and after (keyup) and identifying what changed
 // Note that CIQ.isAndroid is false when the user requests "desktop site" and so some input boxes won't work
 // in that situation. There is no workaround other than to always treat 229 as a false value (it is a swedish character)
-CIQ.UI.Keystroke.prototype.androidWorkaroundKeyup=function(e){
-    var newValue=e.target.value;
-    var key;
-    if(newValue.length>this.downValue.length){
-        key=newValue.charCodeAt(newValue.length-1);
-    }else{
-        key="delete";
+CIQ.UI.Keystroke.prototype.androidWorkaroundKeyup = function (e) {
+    let newValue = e.target.value;
+    let key;
+    if (newValue.length > this.downValue.length) {
+        key = newValue.charCodeAt(newValue.length - 1);
+    } else {
+        key = 'delete';
     }
-    this.cb({key:key,e:e,keystroke:this});
+    this.cb({ key, e, keystroke: this });
 };
 
 // Managing keystroke events. We will get three key events from the browser: keydown, keyup, keypress
@@ -1598,83 +1467,81 @@ CIQ.UI.Keystroke.prototype.androidWorkaroundKeyup=function(e){
 // before the input field is updated, we save any key that has been handled by these in this.key
 // but we don't process the stroke until the keyup event is fired. This ensures that our handlers
 // will always have the right key (capitalized) and that input field value will be up to date.
-CIQ.UI.Keystroke.prototype.keyup=function(e){
-    var key = e.which;
-    if(this.implementAndroidWorkaround){
+CIQ.UI.Keystroke.prototype.keyup = function (e) {
+    let key = e.which;
+    if (this.implementAndroidWorkaround) {
         this.androidWorkaroundKeyup(e);
-        this.implementAndroidWorkaround=false;
+        this.implementAndroidWorkaround = false;
         return;
     }
 
-    switch(key){
-        case 16:
-            this.shift=false;
-            this.cb({key:key,e:e,keystroke:this});
-            return;
-        case 17:
-        case 18:
-            this.ctrl=false;
-            this.cb({key:key,e:e,keystroke:this});
-            return;
-        case 91:
-            this.cmd=false;
-            this.cb({key:key,e:e,keystroke:this});
-            return;
-        default:
-            break;
+    switch (key) {
+    case 16:
+        this.shift = false;
+        this.cb({ key, e, keystroke: this });
+        return;
+    case 17:
+    case 18:
+        this.ctrl = false;
+        this.cb({ key, e, keystroke: this });
+        return;
+    case 91:
+        this.cmd = false;
+        this.cb({ key, e, keystroke: this });
+        return;
+    default:
+        break;
     }
     // This is where we handle the keystroke, regardless of whether we captured the key with a down or press event
     // The exception to this is the arrow keys, which are processed in keydown
-    if(this.key) this.cb({key:this.key,e:e,keystroke:this});
+    if (this.key) this.cb({ key: this.key, e, keystroke: this });
 };
 
-CIQ.UI.Keystroke.prototype.keydown=function(e){
-    if(this.noKeyCapture) return;
-    var key = e.which;
-    if(key==229 && CIQ.isAndroid){
-        this.implementAndroidWorkaround=true;
+CIQ.UI.Keystroke.prototype.keydown = function (e) {
+    if (this.noKeyCapture) return;
+    let key = e.which;
+    if (key == 229 && CIQ.isAndroid) {
+        this.implementAndroidWorkaround = true;
         return;
     }
-    if(!this.ctrl)
-        if((key != 91 && key>=48 && key<=222)||key==32) return; // handled by keypress
+    if (!this.ctrl) { if ((key != 91 && key >= 48 && key <= 222) || key == 32) return; } // handled by keypress
 
-    switch(key){
-        case 91:
-            this.cmd=true;
-            return;
-        case 16:
-            this.shift=true;
-            return;
-        case 17:
-        case 18:
-            this.ctrl=true;
-            return;
-        case 20:
-            this.capsLock=!this.capsLock;
-            return;
+    switch (key) {
+    case 91:
+        this.cmd = true;
+        return;
+    case 16:
+        this.shift = true;
+        return;
+    case 17:
+    case 18:
+        this.ctrl = true;
+        return;
+    case 20:
+        this.capsLock = !this.capsLock;
+        return;
     }
-    if(key==8) key="backspace"; // delete on mac
-    if(key==9) key="tab";
-    if(key==13) key="enter";
-    if(key==27) key="escape";
-    if(key==33) key="page up";
-    if(key==34) key="page down";
-    if(key==35) key="end";
-    if(key==36) key="home";
-    if(key==45) key="insert";
-    if(key==46) key="delete";
-    this.key=key;
+    if (key == 8) key = 'backspace'; // delete on mac
+    if (key == 9) key = 'tab';
+    if (key == 13) key = 'enter';
+    if (key == 27) key = 'escape';
+    if (key == 33) key = 'page up';
+    if (key == 34) key = 'page down';
+    if (key == 35) key = 'end';
+    if (key == 36) key = 'home';
+    if (key == 45) key = 'insert';
+    if (key == 46) key = 'delete';
+    this.key = key;
 
     // If you hold a key down, then keydown will repeat. These are the keys
     // that we want to capture repeat action.
-    if(key==37 || key==38 || key==39 || key==40){
-        if(key==37) key="left";
-        if(key==38) key="up";
-        if(key==39) key="right";
-        if(key==40) key="down";
-        this.key=null;
-        this.cb({key:key,e:e,keystroke:this});
-        return;
+    if (key == 37 || key == 38 || key == 39 || key == 40) {
+        if (key == 37) key = 'left';
+        if (key == 38) key = 'up';
+        if (key == 39) key = 'right';
+        if (key == 40) key = 'down';
+        this.key = null;
+        this.cb({ key, e, keystroke: this });
     }
 };
 
@@ -1683,211 +1550,33 @@ CIQ.UI.Keystroke.prototype.keydown=function(e){
  * @memberof CIQ.UI.Keystroke
  * @param e
  */
-CIQ.UI.Keystroke.prototype.keypress=function(e){
-    if(this.noKeyCapture) return;
-    var key = e.which;
-    if(key<32 || key>222) return; // handled by keydown
-    this.key=key;
+CIQ.UI.Keystroke.prototype.keypress = function (e) {
+    if (this.noKeyCapture) return;
+    let key = e.which;
+    if (key < 32 || key > 222) return; // handled by keydown
+    this.key = key;
 };
 
 /**
  * initializes member funcitons
  * @memberof CIQ.UI.Keystroke
  */
-CIQ.UI.Keystroke.prototype.initialize=function(){
-    var self=this;
-    $(document).on("keyup", this.node, function(e){
+CIQ.UI.Keystroke.prototype.initialize = function () {
+    let self = this;
+    $(document).on('keyup', this.node, (e) => {
         self.keyup(e);
     });
-    $(document).on("keydown", this.node, function(e){
-        self.downValue=e.target.value;
+    $(document).on('keydown', this.node, (e) => {
+        self.downValue = e.target.value;
         self.keydown(e);
     });
-    $(document).on("keypress", this.node, function(e){
+    $(document).on('keypress', this.node, (e) => {
         self.keypress(e);
     });
-    $(window).on("blur", function(e){ // otherwise ctrl-t to switch tabs causes ctrl to get stuck
-        self.ctrl=false;
-        self.cb({key:17,e:e,keystroke:self});
+    $(window).on('blur', (e) => { // otherwise ctrl-t to switch tabs causes ctrl to get stuck
+        self.ctrl = false;
+        self.cb({ key: 17, e, keystroke: self });
     });
-};
-
-
-/**
- * UI Helper for capturing and handling keystrokes. A helper or ContextTag can
- * "claim" keystrokes and intercept them, otherwise the keystrokes will be handled
- * by keyup and keydown.
- *
- * @param {HTMLElement} [node] The node to which to attach, generally the chart container
- * @param {CIQ.UI.Context} context The context for the chart
- * @param {Object} [params] Parameters to drive the helper
- * @param {Function} [params.cb] Callback to handle hot keys.
- * @name CIQ.UI.KeyboardShortcuts
- * @constructor
- */
-CIQ.UI.KeystrokeHub=function(node, context, params){
-    this.node=$(node);
-    this.context=context;
-    this.params=params?params:{};
-    this.uiManager=$("cq-ui-manager");
-    if(this.uiManager.length>0){
-        this.uiManager=this.uiManager[0];
-        this.uiManager.keystrokeHub=this; // Register the keystroke hub so that it can be found
-    }
-
-    var self=this;
-    function handler(){
-        return function(){
-            self.handler.apply(self, arguments);
-        };
-    }
-    this.keystroke=new CIQ.UI.Keystroke(node, handler());
-};
-
-CIQ.UI.KeystrokeHub.ciqInheritsFrom(CIQ.UI.Helper);
-
-/**
- * Global default hotkey method. Pass this or your own metho in to CIQ.UI.KeystrokeHub
- * @memberof CIQ.UI.KeyboardShortcuts
- * @param  {number} key The pressed key
- * @param  {CIQ.UI.KeystrokeHub} hub The hub that processed the key
- * @return {boolean}     Return true if you captured the key
- */
-CIQ.UI.KeystrokeHub.defaultHotKeys=function(key, hub){
-    var stx=hub.context.stx;
-    var push=1;
-    switch(key){
-        case "up":
-            stx.zoomIn();
-            break;
-        case "down":
-            stx.zoomOut();
-            break;
-        case "home":
-            stx.home();
-            stx.headsUpHR();
-            break;
-        case "end":
-            stx.chart.scroll=stx.chart.dataSet.length;
-            stx.draw();
-            stx.headsUpHR();
-            break;
-        case "left":
-            if(stx.ctrl){
-                stx.zoomOut();
-            }else{
-                push=1;
-                if(stx.shift || hub.capsLock) push=Math.max(5,5*(8-Math.round(stx.layout.candleWidth)));
-                if(stx.chart.scroll+push>=stx.chart.dataSet.length)
-                    push=stx.chart.dataSet.length-stx.chart.scroll;
-                stx.chart.scroll+=push;
-                stx.draw();
-                stx.headsUpHR();
-            }
-            break;
-        case "right":
-            if(stx.ctrl){
-                stx.zoomIn();
-            }else{
-                push=1;
-                if(stx.shift || hub.capsLock) push=Math.max(5,5*(8-Math.round(stx.layout.candleWidth)));
-                stx.chart.scroll-=push;
-                stx.draw();
-                stx.headsUpHR();
-            }
-            break;
-        case "delete":
-        case "backspace":
-            if(CIQ.ChartEngine.drawingLine){
-                stx.undo();
-            }else if(stx.anyHighlighted){
-                stx.deleteHighlighted();
-            }else{
-                return false;
-            }
-            break;
-        case "escape":
-            if(CIQ.ChartEngine.drawingLine){
-                stx.undo();
-            }else{
-                if(hub.uiManager) hub.uiManager.closeMenu();
-            }
-            break;
-        default:
-            return false; // not captured
-    }
-    return true;
-};
-
-/**
- * Change the active context for the hub, for instance when dealing with multiple charts
- * @param {CIQ.UI.Context} context The context
- * @memberof CIQ.UI.KeystrokeHub
- */
-CIQ.UI.KeystrokeHub.prototype.setActiveContext=function(context){
-    this.context=context;
-};
-
-/**
- * @param hub
- * @param key
- * @param e Event
- * @param keystroke
- * @memberof CIQ.UI.KeystrokeHub
- * @private
- */
-CIQ.UI.KeystrokeHub.prototype.processKeyStrokeClaims=function(hub, key, e, keystroke){
-    for(var i=claims.length-1;i>-1;i--){
-        var helper=claims[i].helper;
-        var response=helper.keyStroke(hub, key, e, keystroke);
-        if(response){
-            if(!response.allowDefault) e.preventDefault();
-            return true;
-        }
-    }
-    return false;
-};
-
-/**
- * Handles keystrokes
- * @param  {object} obj Event object
- * @memberof CIQ.UI.KeystrokeHub
- * @private
- */
-CIQ.UI.KeystrokeHub.prototype.handler=function(obj){
-    var stx=this.context.stx;
-    if(stx.editingAnnotation) return;
-    var e=obj.e, key=obj.key, keystroke=obj.keystroke, targetTagName=obj.e.target.tagName;
-    switch(key){
-        case 16:
-            stx.shift=keystroke.shift;
-            break;
-        case 17:
-        case 18:
-            stx.ctrl=keystroke.ctrl;
-            break;
-        case 91:
-            stx.cmd=keystroke.cmd;
-            break;
-        case 20:
-            this.capsLock=!this.capsLock;
-            break;
-        default:
-            break;
-    }
-    if(!CIQ.ChartEngine.drawingLine){
-        if(this.processKeyStrokeClaims(this, key, e, keystroke)) return;
-    }
-
-    if(key!="escape"){
-        if(this.context.isModal()) return;
-    }
-
-    if(targetTagName=="INPUT" || targetTagName=="TEXTAREA") return; // target is not the chart
-
-    if(this.params.cb){
-        if(this.params.cb(key, this)) e.preventDefault();
-    }
 };
 
 /**
@@ -1896,7 +1585,7 @@ CIQ.UI.KeystrokeHub.prototype.handler=function(obj){
  * @namespace WebComponents.cq-ui-manager
  * @memberof WebComponents
  */
-var UIManager = {
+let UIManager = {
     prototype: Object.create(HTMLElement.prototype),
 };
 
@@ -1907,17 +1596,17 @@ var UIManager = {
  * @memberof WebComponents.cq-ui-manager
  * @alias createdCallback
  */
-UIManager.prototype.createdCallback=function(){
-    CIQ.installTapEvent($("body")[0], {preventUnderlayClick:false});
-    this.activeMenuStack=[];
-    this.registeredForResize=[];
-    this.keystrokeHub=null; // KeystrokeHub should register itself here
+UIManager.prototype.createdCallback = function () {
+    CIQ.installTapEvent($('body')[0], { preventUnderlayClick: false });
+    this.activeMenuStack = [];
+    this.registeredForResize = [];
+    this.keystrokeHub = null; // KeystrokeHub should register itself here
 
-    var self=this;
-    function handleTap(){
+    let self = this;
+    function handleTap() {
         self.closeTopMenu();
     }
-    $("body").on("stxtap", handleTap);
+    $('body').on('stxtap', handleTap);
 };
 
 /**
@@ -1925,12 +1614,12 @@ UIManager.prototype.createdCallback=function(){
  * @memberof WebComponents.cq-ui-manager
  * @alias attachedCallback
  */
-UIManager.prototype.attachedCallback=function(){
-    var self=this;
-    this.resize=function(){
-        var rr=self.registeredForResize;
-        for(var i=0;i<rr.length;i++){
-            if(typeof rr[i].resize=="function") rr[i].resize();
+UIManager.prototype.attachedCallback = function () {
+    let self = this;
+    this.resize = function () {
+        let rr = self.registeredForResize;
+        for (let i = 0; i < rr.length; i++) {
+            if (typeof rr[i].resize === 'function') rr[i].resize();
         }
     };
     window.addEventListener('resize', this.resize);
@@ -1941,7 +1630,7 @@ UIManager.prototype.attachedCallback=function(){
  * @memberof WebComponents.cq-ui-manager
  * @alias detachedCallback
  */
-UIManager.prototype.detachedCallback=function(){
+UIManager.prototype.detachedCallback = function () {
     window.removeEventListener('resize', this.resize);
 };
 
@@ -1952,16 +1641,15 @@ UIManager.prototype.detachedCallback=function(){
  * @param {HTMLElement} menu
  * @param {object} params
  */
-UIManager.prototype.openMenu=function(menu, params){
+UIManager.prototype.openMenu = function (menu, params) {
     // Find the first input box, if any, and give focus
-    setTimeout(function(){
+    setTimeout(() => {
         $(menu).find('input[cq-focus]:first-child').focus();
-    },0);
+    }, 0);
     this.activeMenuStack.push(menu);
     menu.show(params);
-    $("cq-context,*[cq-context]").each(function(){
-        if(this.CIQ && this.CIQ.UI && this.CIQ.UI.context && this.CIQ.UI.context.stx)
-            this.CIQ.UI.context.stx.modalBegin();
+    $('cq-context,*[cq-context]').each(function () {
+        if (this.CIQ && this.CIQ.UI && this.CIQ.UI.context && this.CIQ.UI.context.stx) { this.CIQ.UI.context.stx.modalBegin(); }
     });
 };
 
@@ -1971,10 +1659,10 @@ UIManager.prototype.openMenu=function(menu, params){
  * @alias topMenu
  * @return activeMenuStack
  */
-UIManager.prototype.topMenu=function(){
-    var activeMenuStack=this.activeMenuStack;
-    if(!activeMenuStack.length) return null;
-    return activeMenuStack[activeMenuStack.length-1];
+UIManager.prototype.topMenu = function () {
+    let activeMenuStack = this.activeMenuStack;
+    if (!activeMenuStack.length) return null;
+    return activeMenuStack[activeMenuStack.length - 1];
 };
 
 /**
@@ -1983,31 +1671,29 @@ UIManager.prototype.topMenu=function(){
  * @alias closeMenu
  * @param {HTMLElement} element
  */
-UIManager.prototype.closeMenu=function(menu){
+UIManager.prototype.closeMenu = function (menu) {
     console.warn('closeMenu');
-    var activeMenuStack=this.activeMenuStack;
-    var parents=$(menu).parents("cq-menu");
-    var closeThese=[];
-    if(menu){
+    let activeMenuStack = this.activeMenuStack;
+    let parents = $(menu).parents('cq-menu');
+    let closeThese = [];
+    if (menu) {
         // if menu is specified then close it
         closeThese.push(menu);
         // along with any active parent menus
-        for(var i=0;i<parents.length;i++){
-            var parent=parents[i];
-            if(parent.active) closeThese.push(parent);
+        for (let i = 0; i < parents.length; i++) {
+            let parent = parents[i];
+            if (parent.active) closeThese.push(parent);
         }
-    }else{
+    } else {
         // close them all if no menu is specified
-        closeThese=activeMenuStack;
+        closeThese = activeMenuStack;
     }
     // hide all the items we've decided to close
-    for(var j=0;j<closeThese.length;j++){
+    for (let j = 0; j < closeThese.length; j++) {
         closeThese[j].hide();
     }
     // filter out the ones that are inactive
-    this.activeMenuStack=activeMenuStack.filter(function(item){
-        return item.active;
-    });
+    this.activeMenuStack = activeMenuStack.filter(item => item.active);
     this.ifAllClosed();
 };
 
@@ -2017,7 +1703,7 @@ UIManager.prototype.closeMenu=function(menu){
  * @alias registerForResize
  * @param {HTMLElement} element
  */
-UIManager.prototype.registerForResize=function(element){
+UIManager.prototype.registerForResize = function (element) {
     this.registeredForResize.push(element);
 };
 
@@ -2026,11 +1712,11 @@ UIManager.prototype.registerForResize=function(element){
  * @alias unregisterForResize
  * @param {HTMLElement} element
  */
-UIManager.prototype.unregisterForResize=function(element){
-    var rr=this.registeredForResize;
-    for(var i=0;i<rr.length;i++){
-        if(rr[i]===element){
-            rr.splice(i,1);
+UIManager.prototype.unregisterForResize = function (element) {
+    let rr = this.registeredForResize;
+    for (let i = 0; i < rr.length; i++) {
+        if (rr[i] === element) {
+            rr.splice(i, 1);
             return;
         }
     }
@@ -2040,11 +1726,10 @@ UIManager.prototype.unregisterForResize=function(element){
  * @memberof WebComponents.cq-ui-manager
  * @alias ifAllClosed
  */
-UIManager.prototype.ifAllClosed=function(){
-    if(!this.activeMenuStack.length){
-        $("cq-context,*[cq-context]").each(function(){
-            if(this.CIQ && this.CIQ.UI && this.CIQ.UI.context && this.CIQ.UI.context.stx)
-                this.CIQ.UI.context.stx.modalEnd();
+UIManager.prototype.ifAllClosed = function () {
+    if (!this.activeMenuStack.length) {
+        $('cq-context,*[cq-context]').each(function () {
+            if (this.CIQ && this.CIQ.UI && this.CIQ.UI.context && this.CIQ.UI.context.stx) { this.CIQ.UI.context.stx.modalEnd(); }
         });
     }
 };
@@ -2053,18 +1738,18 @@ UIManager.prototype.ifAllClosed=function(){
  * @memberof WebComponents.cq-ui-manager
  * @alias closeTopMenu
  */
-UIManager.prototype.closeTopMenu=function(){
-    var activeMenuStack=this.activeMenuStack;
-    if(!activeMenuStack.length) return;
-    var menu=activeMenuStack[activeMenuStack.length-1];
+UIManager.prototype.closeTopMenu = function () {
+    let activeMenuStack = this.activeMenuStack;
+    if (!activeMenuStack.length) return;
+    let menu = activeMenuStack[activeMenuStack.length - 1];
     // If the top menu is a dialog, and isn't active yet then it has just been added, don't remove it
-    if(!menu.isDialog || menu.active){
+    if (!menu.isDialog || menu.active) {
         activeMenuStack.pop();
         menu.hide();
-        var self=this;
-        setTimeout(function(){
+        let self = this;
+        setTimeout(() => {
             self.ifAllClosed(); // Put this in a timeout so that a click on the body doesn't start a drawing
-        },0);
+        }, 0);
     }
 };
 
@@ -2076,12 +1761,12 @@ UIManager.prototype.closeTopMenu=function(){
  * @param  {HTMLElement} menu The menu to search
  * @return {JQuery}      Jquery selector containing any lifts
  */
-UIManager.prototype.findLifts=function(menu){
-    var lifts=$(menu).find("*[cq-lift]").filter(function(){
+UIManager.prototype.findLifts = function (menu) {
+    let lifts = $(menu).find('*[cq-lift]').filter(function () {
         // only valid if the closest cq-menu or cq-dialog parent is the menu itself
         // otherwise the lift is in a nested menu
-        var closest=$(this).closest("cq-menu,cq-dialog");
-        return closest.length && closest[0]==menu;
+        let closest = $(this).closest('cq-menu,cq-dialog');
+        return closest.length && closest[0] == menu;
     });
     return lifts;
 };
@@ -2092,10 +1777,10 @@ UIManager.prototype.findLifts=function(menu){
  * @alias restoreLift
  * @param {HTMLElement} element
  */
-UIManager.prototype.restoreLift=function(element){
-    var node=$(element);
-    if(!node.length) return;
-    var remember=node[0].remember;
+UIManager.prototype.restoreLift = function (element) {
+    let node = $(element);
+    if (!node.length) return;
+    let remember = node[0].remember;
     node.detach();
     node.css(remember.css);
     $(remember.parentNode).append(node);
@@ -2112,11 +1797,11 @@ UIManager.prototype.restoreLift=function(element){
  * @private
  * @memberof WebComponents.cq-ui-manager
  */
-UIManager.prototype.lift=function(element){
-    var node=$(element);
-    if(!node.length) return;
-    var n=$(node)[0];
-    n.remember={
+UIManager.prototype.lift = function (element) {
+    let node = $(element);
+    if (!node.length) return;
+    let n = $(node)[0];
+    n.remember = {
         parentNode: n.parentNode,
         css: {
             position: n.style.position,
@@ -2125,26 +1810,26 @@ UIManager.prototype.lift=function(element){
             top: n.style.top,
             height: n.style.height,
             width: n.style.width,
-            opacity: n.style.opacity
-        }
+            opacity: n.style.opacity,
+        },
     };
-    var offset=n.getBoundingClientRect();
-    var height=node.height();
+    let offset = n.getBoundingClientRect();
+    let height = node.height();
     node.detach();
     node.css({
-        "position": "absolute",
-        "display": "block",
-        "left": offset.left + "px",
-        "top": offset.top + "px",
-        "height": height + "px",
-        "opacity": 1
+        position: 'absolute',
+        display: 'block',
+        left: `${offset.left}px`,
+        top: `${offset.top}px`,
+        height: `${height}px`,
+        opacity: 1,
     });
-    $("body").append(node);
-    if(typeof(n.resize)!="undefined") n.resize();
-    node.find("cq-scroll").each(function(){
+    $('body').append(node);
+    if (typeof (n.resize) !== 'undefined') n.resize();
+    node.find('cq-scroll').each(function () {
         this.resize();
     });
 };
 
-CIQ.UI.UIManager=document.registerElement("cq-ui-manager", UIManager);
+CIQ.UI.UIManager = document.registerElement('cq-ui-manager', UIManager);
 

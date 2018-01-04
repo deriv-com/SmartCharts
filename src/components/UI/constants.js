@@ -1,4 +1,4 @@
-import { CIQ } from '../../js/chartiq';
+import { CIQ } from '../../../js/chartiq';
 
 /**
  * Namespace for UI helper objects
