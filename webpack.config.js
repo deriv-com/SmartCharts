@@ -1,8 +1,10 @@
 const webpack = require('webpack');
 const path = require('path');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 const config = {
-    entry: './src/index.js',
+    devtool: "source-map",
+    entry: ['./src/index.js' /* , './sass/chartiq.scss' */],
     output: {
         publicPath: '/dist/',
         path: path.resolve(__dirname, 'dist'),
@@ -10,6 +12,36 @@ const config = {
     },
     module: {
         rules: [
+/** SCSS compilation **
+            {
+			    test: /\.svg/,
+			    use: {
+			        loader: 'svg-url-loader'
+			    }
+            },
+            {
+                test: /\.scss$/,
+                use: ExtractTextPlugin.extract({
+                    fallback: 'style-loader',
+                    use: [
+                        {
+                            loader: 'css-loader',
+                            options: { 
+                                // minimize: true,
+                                url: false,
+                                sourceMap: true
+                            }
+                        },
+                        {
+                            loader: "sass-loader",
+                            options: {
+                                sourceMap: true
+                            }
+                        },
+                    ]
+                })
+            },
+*/
             { parser: { amd: false } },
             {
                 test: /\.js$/,
@@ -37,6 +69,9 @@ const config = {
         ]
     },
     plugins: [
+        new ExtractTextPlugin({
+            filename: '../css/chartiq.css',
+        }),
         new webpack.ProvidePlugin({ $: 'jquery', jQuery: 'jquery' }),
         // new webpack.optimize.UglifyJsPlugin(),
     ]

@@ -1,4 +1,4 @@
-/*
+@import url(https://fonts.googleapis.com/css?family=Roboto:400,700,500,100,300,400italic|Roboto+Condensed:400,700,300);/*
  Edit (and rename) this file to implement your own style. Please avoid editing the imported _ciq...scss files
  other than _ciq_general.scss so that you can receive upgrades without having to reimplement your changes.
  Instead, override any styles from within this file, or substitute the includes with your own.
@@ -20,7 +20,6 @@ for building additional themes.
 
  */
 /* TODO: deal with translations on all :after and :before content */
-@import url("https://fonts.googleapis.com/css?family=Roboto:400,700,500,100,300,400italic|Roboto+Condensed:400,700,300");
 /* Default (Light) Theme */
 /* to allow style to color the background of the chart */
 cq-context {
@@ -65,8 +64,8 @@ cq-context {
     margin-left: 6px;
     width: 5px;
     height: 5px;
-    border-right: solid thin #949494;
-    border-bottom: solid thin #949494;
+    border-right: solid thin #959595;
+    border-bottom: solid thin #959595;
     -webkit-transform: rotate(45deg);
     /* Saf3.1+, Chrome */
     -moz-transform: rotate(45deg);
@@ -510,8 +509,8 @@ cq-side-panel[cq-active] {
 cq-menu-dropdown {
   position: absolute;
   /*margin-top:5px;
-  padding-bottom:6px;
-  padding-top:10px;*/
+	padding-bottom:6px;
+	padding-top:10px;*/
   left: 0;
   background: #fff;
   color: #666;
@@ -538,7 +537,8 @@ cq-menu-dropdown {
     -moz-border-radius: 0px;
     -ms-border-radius: 0px;
     border-radius: 0px; }
-  .stxMenuActive > cq-menu-dropdown, .stxMenuActive > * > cq-menu-dropdown {
+  .stxMenuActive > cq-menu-dropdown,
+  .stxMenuActive > * > cq-menu-dropdown {
     opacity: 1;
     height: auto;
     margin-top: 5px;
@@ -736,7 +736,7 @@ cq-toggle {
   margin-top: 3px; }
 
 .ciq-menu {
-  color: #565656;
+  color: #575757;
   padding: 0 10px;
   transition: color .20s 0s; }
   .ciq-menu:hover {
@@ -764,8 +764,8 @@ cq-toggle {
   display: block;
   width: 5px;
   height: 5px;
-  border-right: solid thin #949494;
-  border-bottom: solid thin #949494;
+  border-right: solid thin #959595;
+  border-bottom: solid thin #959595;
   -webkit-transform: rotate(45deg);
   /* Saf3.1+, Chrome */
   -moz-transform: rotate(45deg);
@@ -805,7 +805,8 @@ body:not(.break-sm) .sidenav-toggle {
 
 cq-toggle {
   position: relative; }
-  body:not(.break-sm) cq-toggle.ciq-draw, body:not(.break-sm) cq-toggle.ciq-HU {
+  body:not(.break-sm) cq-toggle.ciq-draw,
+  body:not(.break-sm) cq-toggle.ciq-HU {
     display: block; }
   cq-toggle.ciq-CH {
     display: block; }
@@ -825,7 +826,8 @@ cq-toggle {
     background-image: url(img/stx-sprite-ui.svg);
     opacity: .85;
     transition: opacity .20s 0s; }
-  cq-toggle:hover > *, cq-toggle:active > * {
+  cq-toggle:hover > *,
+  cq-toggle:active > * {
     border: solid 1px #e4e4e4;
     opacity: 1; }
   cq-toggle.active {
@@ -959,7 +961,9 @@ cq-toggle {
   float: left; }
   .ciq-HU.active {
     border-bottom: none; }
-    .ciq-HU.active span, .ciq-HU.active:hover span, .ciq-HU.active:active span {
+    .ciq-HU.active span,
+    .ciq-HU.active:hover span,
+    .ciq-HU.active:active span {
       border: solid 1px #398dff; }
 
 .ciq-search cq-menu-dropdown > ul {
@@ -1019,7 +1023,8 @@ cq-lookup cq-menu-dropdown {
   position: relative;
   padding: 0px;
   transition: opacity .20s .50s; }
-  .break-md cq-lookup cq-menu-dropdown, .break-lg cq-lookup cq-menu-dropdown {
+  .break-md cq-lookup cq-menu-dropdown,
+  .break-lg cq-lookup cq-menu-dropdown {
     width: auto; }
   .break-md cq-lookup cq-menu-dropdown {
     left: 0px;
@@ -1041,9 +1046,11 @@ cq-lookup cq-scroll {
 cq-lookup-results .cq-iscroller {
   display: table;
   width: 100%; }
+
 cq-lookup-results cq-scroll:first-child {
   display: table;
   width: 100%; }
+
 cq-lookup-results cq-item {
   height: 27px;
   display: table-row;
@@ -1053,6 +1060,7 @@ cq-lookup-results cq-item {
     padding-top: 10px; }
   cq-lookup-results cq-item:last-child span {
     padding-bottom: 10px; }
+
 cq-lookup-results cq-item span {
   /* Results Row Content */
   line-height: 27px;
@@ -1192,11 +1200,13 @@ cq-marker-label:after {
     transform: rotate(0deg); }
   100% {
     transform: rotate(450deg); } }
+
 @keyframes reverse-hovershow-toggle-animation {
   0% {
     transform: rotate(450deg); }
   100% {
     transform: rotate(0deg); } }
+
 cq-study-legend[cq-marker] > cq-marker-label:after {
   animation: reverse-hovershow-toggle-animation ease-in-out .5s; }
 
@@ -1206,18 +1216,18 @@ cq-study-legend[cq-marker]:hover > cq-marker-label:after {
   transform-origin: 50% 50%;
   animation-fill-mode: forwards;
   /*	-webkit-animation: hovershow-toggle-animation ease-in-out .5s;
-  	-webkit-animation-iteration-count: 1;
-  	-webkit-transform-origin: 50% 50%;
-  	-webkit-animation-fill-mode:forwards;
-  	-moz-animation: hovershow-toggle-animation ease-in-out .5s;
-  	-moz-animation-iteration-count: 1;
-  	-moz-transform-origin: 50% 50%;
-  	-moz-animation-fill-mode:forwards;
-  	-ms-animation: hovershow-toggle-animation ease-in-out .5s;
-  	-ms-animation-iteration-count: 1;
-  	-ms-transform-origin: 50% 50%;
-  	-ms-animation-fill-mode:forwards;
-  	*/ }
+	-webkit-animation-iteration-count: 1;
+	-webkit-transform-origin: 50% 50%;
+	-webkit-animation-fill-mode:forwards;
+	-moz-animation: hovershow-toggle-animation ease-in-out .5s;
+	-moz-animation-iteration-count: 1;
+	-moz-transform-origin: 50% 50%;
+	-moz-animation-fill-mode:forwards;
+	-ms-animation: hovershow-toggle-animation ease-in-out .5s;
+	-ms-animation-iteration-count: 1;
+	-ms-transform-origin: 50% 50%;
+	-ms-animation-fill-mode:forwards;
+	*/ }
 
 cq-study-legend[cq-marker]:hover {
   height: auto; }
@@ -1308,7 +1318,7 @@ cq-annotation .ciq-btn {
   -webkit-box-shadow: 0 0 0 transparent ;
   -moz-box-shadow: 0 0 0 transparent ;
   box-shadow: 0 0 0 transparent ;
-  color: #4c4c4c;
+  color: #4d4d4d;
   border: solid 1px transparent; }
   cq-annotation .ciq-btn:hover {
     -webkit-box-shadow: 0 0 0 transparent ;
@@ -1660,7 +1670,7 @@ cq-hu-static {
 
 /* --------------------------------------------------------- FOOTER --------------------------------------------------------- */
 .ciq-footer {
-  color: #565656; }
+  color: #575757; }
 
 .ciq-footer > .ciq-btn {
   /* Share button */
@@ -1911,7 +1921,7 @@ cq-share-button {
   display: inline-block;
   line-height: 40px;
   cursor: pointer;
-  color: #565656;
+  color: #575757;
   position: relative;
   padding: 0 10px;
   transition: color .20s 0s; }
@@ -2227,7 +2237,7 @@ cq-comparison-add-label {
   cq-menu.cq-comparison-new:hover cq-comparison-add-label {
     /* Brighter text on hover */ }
     cq-menu.cq-comparison-new:hover cq-comparison-add-label {
-      color: #323232; }
+      color: #333333; }
   cq-comparison-add-label > * {
     display: inline-block;
     vertical-align: top; }
@@ -2279,8 +2289,8 @@ cq-comparison-add {
     -moz-box-sizing: border-box;
     box-sizing: border-box;
     /*@include placeholder {
-    	color: mix(#000, $DEFAULT-main, 40% );
-    }*/ }
+			color: mix(#000, $DEFAULT-main, 40% );
+		}*/ }
   cq-comparison-add .stx-btn {
     transition: color .20s .2s !important;
     height: 36px !important;
@@ -2640,6 +2650,7 @@ cq-flag[cq-lang="ja"] {
   -webkit-box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3) ;
   -moz-box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3) ;
   box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3) ; }
+
 .break-sm.ciq-night .ciq-chart {
   /* Hide Drop-shadow when app is in break-sm + ciq-night mode */
   -webkit-box-shadow: 0px 2px 5px transparent ;
@@ -2658,8 +2669,10 @@ cq-flag[cq-lang="ja"] {
 .ciq-night cq-lookup-input input {
   background: rgba(21, 31, 40, 0);
   color: #fff; }
+
 ciq-night cq-lookup-input:hover input {
   background: #233542; }
+
 .ciq-night .stxMenuActive cq-lookup-input input {
   background: #233542; }
 
@@ -2667,19 +2680,23 @@ ciq-night cq-lookup-input:hover input {
   background-position: -45px -50px; }
 
 .ciq-night .ciq-menu {
-  color: #c4c7c9; }
+  color: #c5c7c9; }
+
 ciq-night .ciq-menu:hover {
   color: #fff; }
+
 .ciq-night .ciq-menu:active {
   color: #fff; }
+
 .ciq-night .ciq-menu.stxMenuActive {
   color: #fff; }
+
 .ciq-night .break-sm .ciq-menu.stxMenuActive {
   color: #fff; }
 
 .ciq-night .ciq-menu:after {
-  border-right: solid thin #8a8f93;
-  border-bottom: solid thin #8a8f93; }
+  border-right: solid thin #8a8f94;
+  border-bottom: solid thin #8a8f94; }
 
 .ciq-night .ciq-toggles:after {
   background: black; }
@@ -2726,20 +2743,22 @@ ciq-night .ciq-menu:hover {
 cq-toolbar .ciq-heading {
   /* Background and line color headings */ }
   .ciq-night cq-toolbar .ciq-heading {
-    color: #767f85; }
+    color: #777f86; }
 
 cq-toolbar .ciq-select {
   /* Menu Triggers in toolbar */ }
   .ciq-night cq-toolbar .ciq-select {
     background: none;
     border-color: #2e4456; }
-  .ciq-night cq-toolbar .ciq-select:hover, .ciq-night cq-toolbar .ciq-select:active, .ciq-night cq-toolbar .ciq-select.stxMenuActive {
+  .ciq-night cq-toolbar .ciq-select:hover,
+  .ciq-night cq-toolbar .ciq-select:active,
+  .ciq-night cq-toolbar .ciq-select.stxMenuActive {
     color: #fff; }
 
 cq-annotation .ciq-btn {
   /* Menu Triggers in toolbar */ }
   .ciq-night cq-annotation .ciq-btn {
-    color: #babfc2;
+    color: #bbbfc2;
     background: none; }
   .ciq-night cq-annotation .ciq-btn:hover {
     color: #fff;
@@ -2752,6 +2771,7 @@ cq-annotation .ciq-btn {
 
 .ciq-night cq-toolbar .ciq-checkbox span {
   border-color: #517999; }
+
 .ciq-night cq-toolbar .ciq-checkbox:hover span {
   border-color: #8dabc3; }
 
@@ -2809,10 +2829,12 @@ cq-hu-dynamic cq-hu-col2 > * {
 
 .ciq-night cq-hu-static {
   background: #1c2a35; }
+
 cq-hu-static > div > div {
   /* label */ }
   .ciq-night cq-hu-static > div > div {
     color: #ccc; }
+
 cq-hu-static > div > * {
   /* value */ }
   .ciq-night cq-hu-static > div > * {
@@ -2823,23 +2845,29 @@ cq-hu-static > div > * {
 /* legend will have light icons */
 .ciq-night cq-study-legend .ciq-icon.ciq-close:after {
   background-position: -250px -50px; }
+
 .ciq-night cq-study-legend .ciq-icon.ciq-edit:after, .ciq-night cq-study-legend .ciq-edit {
   background-position: -300px -50px; }
+
 .ciq-night cq-study-legend .ciq-icon.ciq-delete:after {
   background-position: -400px -50px; }
 
 .ciq-night cq-study-legend cq-item:hover .ciq-icon.ciq-close:after {
   background-position: -250px -25px; }
+
 .ciq-night cq-study-legend cq-item:hover .ciq-icon.ciq-edit:after, .ciq-night cq-study-legend cq-item:hover .ciq-edit {
   background-position: -300px -25px; }
+
 .ciq-night cq-study-legend cq-item:hover .ciq-icon.ciq-delete:after {
   background-position: -400px -25px; }
 
 /* or unless it's in a menu */
 .ciq-night cq-menu cq-study-legend .ciq-icon.ciq-close:after {
   background-position: -250px -25px; }
+
 .ciq-night cq-menu cq-study-legend .ciq-icon.ciq-edit:after, .ciq-night cq-menu cq-study-legend .ciq-edit {
   background-position: -300px -25px; }
+
 .ciq-night cq-menu cq-study-legend .ciq-icon.ciq-delete:after {
   background-position: -400px -25px; }
 
@@ -2852,7 +2880,7 @@ cq-hu-static > div > * {
   color: #fff; }
 
 .ciq-night cq-chart-title cq-chart-price {
-  color: #8d949a; }
+  color: #8e959a; }
 
 .ciq-night .stx-panel-title {
   color: #fff;
@@ -2860,7 +2888,8 @@ cq-hu-static > div > * {
   -webkit-box-shadow: none; }
 
 .ciq-night cq-comparison-add-label {
-  color: #a4a9ae; }
+  color: #a4aaae; }
+
 cq-menu.cq-comparison-new:hover cq-comparison-add-label {
   /* Brighter text on hover */ }
   .ciq-night cq-menu.cq-comparison-new:hover cq-comparison-add-label {
@@ -2868,20 +2897,25 @@ cq-menu.cq-comparison-new:hover cq-comparison-add-label {
 
 .ciq-night cq-comparison-add {
   background: #253746; }
+
 .ciq-night cq-comparison-add input {
-  color: #d1d4d6;
+  color: #d2d4d7;
   /*@include placeholder {
-  	color: mix(#FFF, $theme2-main, 40% );
-  }*/ }
+				color: mix(#FFF, $theme2-main, 40% );
+			}*/ }
+
 .ciq-night cq-comparison-add .stx-btn {
-  color: #a4a9ae !important; }
+  color: #a4aaae !important; }
+
 .ciq-night cq-comparison-add .stx-btn:hover {
   color: #fff !important; }
+
 .ciq-night cq-comparison-add .stx-btn:active {
   color: #398dff !important; }
 
 .ciq-night cq-comparison-item:hover {
   background: #21323f; }
+
 .ciq-night cq-comparison-item .ciq-close {
   background-position: -250px -50px; }
 
@@ -2898,7 +2932,7 @@ cq-menu.cq-comparison-new:hover cq-comparison-add-label {
 
 /* --------------------------------------------------------- FOOTER --------------------------------------------------------- */
 .ciq-night .ciq-footer {
-  color: #c4c7c9; }
+  color: #c5c7c9; }
 
 cq-show-range {
   /* Set Range Button List Container */ }
@@ -2937,13 +2971,17 @@ cq-show-range {
   border-color: #fff; }
 
 .ciq-night cq-share-button {
-  color: #c4c7c9; }
+  color: #c5c7c9; }
+
 .ciq-night cq-share-button:hover {
   color: #fff; }
+
 .ciq-night cq-share-button:active {
   color: #fff; }
+
 .ciq-night cq-share-button.stxMenuActive {
   color: #fff; }
+
 .ciq-night .break-sm cq-share-button.stxMenuActive {
   color: #fff; }
 
@@ -2991,13 +3029,13 @@ cq-show-range {
   color: #333; }
 
 .ciq-night .stx_xaxis {
-  color: #c4c7c9; }
+  color: #c5c7c9; }
 
 .ciq-night .stx_xaxis_dark {
   color: #fff; }
 
 .ciq-night .stx_yaxis {
-  color: #c4c7c9; }
+  color: #c5c7c9; }
 
 .ciq-night .stx_crosshair {
   background-color: rgba(255, 255, 255, 0.4); }
@@ -3703,4 +3741,4 @@ body .stx-trade-panel ul.stx-account li {
 
 /* Plugins and other pieces */
 
-/*# sourceMappingURL=chartiq.css.map */
+/*# sourceMappingURL=chartiq.css.map*/
