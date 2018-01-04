@@ -6,8 +6,7 @@ import '../js/thirdparty/webcomponents-lite.min';
 import '../js/thirdparty/perfect-scrollbar.jquery';
 
 import { CIQ } from '../js/chartiq';
-import '../js/componentUI';
-import '../js/components';
+import './components';
 
 import '../plugins/tfc/tfc';
 import '../js/plugin';
@@ -51,7 +50,7 @@ stxx.callbacks.symbolChange = saveLayout;
 function startUI() {
     const UIContext = new CIQ.UI.Context(stxx, $('*[cq-context]'));
 
-    UIContext.changeSymbol = function (data) {
+    UIContext.changeSymbol = (data) => {
         let stx = this.stx;
         if (this.loader) this.loader.show();
         data.symbol = data.symbol.toUpperCase(); // set a pretty display version
