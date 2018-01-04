@@ -1,7 +1,8 @@
 import EventEmitter from 'event-emitter-es6';
 
 function PendingPromise(data = null) {
-    let resolve, reject;
+    let resolve,
+        reject;
     const promise = new Promise((_resolve, _reject) => {
         resolve = _resolve;
         reject = _reject;
@@ -50,7 +51,7 @@ class ConnectionManager extends EventEmitter {
             this._connectionOpened.reject('Connection Error');
         }
         Object.keys(this._pendingRequests).forEach(req_id => this._pendingRequests[req_id]
-                .reject('Connection Error'));
+            .reject('Connection Error'));
         this._pendingRequests = { };
         if (this._autoReconnect) {
             this._initialize();

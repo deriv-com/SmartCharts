@@ -30,7 +30,6 @@
         "one-var-declaration-per-line": 1,
         "no-mixed-operators": 1,
         "prefer-promise-reject-errors": 1,
-        "no-restricted-syntax": 1,
         "max-len": 0,
         "no-underscore-dangle": 0,
         "prefer-const": 0,
@@ -49,6 +48,12 @@
         "global-require": 1,
         "curly": 1,
         "semi": 2,
-        "no-console": 1
+        "no-console": 1,
+        "no-restricted-syntax": [
+            "error",
+            "ForInStatement",
+            "LabeledStatement",
+            "WithStatement"
+        ]
     }
 }
