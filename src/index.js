@@ -5,12 +5,14 @@ import '../js/thirdparty/object-observe';
 import '../js/thirdparty/webcomponents-lite.min';
 import '../js/thirdparty/perfect-scrollbar.jquery';
 
-import {
-    CIQ,
-} from '../js/chartiq';
-// import IScroll from '../js/thirdparty/iscroll';
+import { CIQ } from '../js/chartiq';
 import '../js/componentUI';
 import '../js/components';
+
+import '../plugins/tfc/tfc';
+import '../js/plugin';
+
+window.CIQ = CIQ;
 
 const _streamManager = StreamManager.buildFor({
     appId: 1,
@@ -82,6 +84,11 @@ function startUI() {
             symbol: 'R_100',
         }); // load an initial symbol
     }
+
+    let tfcConfig = { stx: stxx };
+    stxx.tfc = new CIQ.TFC(tfcConfig);
+
+    window.stxx = stxx; // stxx.tfc.newTrade('enableStraddle') // 'enableShort'
 }
 
 function resizeScreen() {

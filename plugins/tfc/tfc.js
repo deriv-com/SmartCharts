@@ -1,3 +1,4 @@
+import {CIQ, $$$} from '../../js/chartiq';
 /**
 * Account object used by {@link CIQ.TFC}.
 * Derive an account object from this basic template and
@@ -752,7 +753,6 @@ CIQ.TFC.prototype.enableBuy=function(params){
 };
 
 
-
 /**
  * Enables a sell order.
  * @param  {object} [params] Initial parameters for the order, only used when modifying an open order to obtain the current limit/stop price.
@@ -944,6 +944,11 @@ CIQ.TFC.prototype.enableBracket=function(params){
  * capture a breakout from a presumed trading range. The resulting position may be either long or short.
  */
 CIQ.TFC.prototype.enableStraddle=function(){
+	var which=this.menu['enableStraddle'];
+	for(var i=0;i<which.dom.length;i++){
+		var tradeElementName = which.dom[i];
+		this.dom[tradeElementName].style.display="";
+	}
 	this.activeTrade="straddle";
 	CIQ.swapClassName(this.dom.dragLineAbove, "green", "red");
 	CIQ.swapClassName(this.dom.dragLineBelow, "green", "red");
@@ -957,8 +962,8 @@ CIQ.TFC.prototype.enableStraddle=function(){
 	var y=this.stx.pixelFromPriceTransform(this.centerPrice, this.chart.panel);
 	this.positionAboveLine(this.stx.valueFromPixelUntransform(y-50, this.chart.panel));
 	this.positionBelowLine(this.stx.valueFromPixelUntransform(y+50, this.chart.panel));
-	this.updateValues();
-	this.render();
+	// this.updateValues();
+	// this.render();
 };
 
 /**
@@ -2039,7 +2044,7 @@ CIQ.TFC.prototype.updateData=function(){
 			/*if(symbol!=self.stx.chart.symbol)*/ symbolList.push(symbol);
 		}
 		foundCurrentSymbol=false;
-		currentSymbol="";
+		var currentSymbol="";
 		var cumGL;
 		for(j=0;j<symbolList.length;j++){
 			var hedgedFields={};
@@ -2489,6 +2494,7 @@ CIQ.TFC.prototype.newTrade=function(componentName, params){
 	}
 	this.hideAllDOM();
 	var which=this.menu[componentName];
+    console.warn(which);
 	var dom=which.dom;
 	for(var i=0;i<dom.length;i++){
 		var tradeElementName=dom[i];

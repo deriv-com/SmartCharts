@@ -3,21 +3,21 @@ const path = require('path');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 const config = {
-    devtool: "source-map",
-    entry: ['./src/index.js' /* , './sass/chartiq.scss' */],
+    devtool: 'source-map',
+    entry: ['./src/index.js'],
     output: {
         publicPath: '/dist/',
         path: path.resolve(__dirname, 'dist'),
-        filename: 'bundle.js'
+        filename: 'bundle.js',
     },
     module: {
         rules: [
-/** SCSS compilation **
+            /** SCSS compilation *
             {
-			    test: /\.svg/,
-			    use: {
-			        loader: 'svg-url-loader'
-			    }
+                test: /\.svg/,
+                use: {
+                    loader: 'svg-url-loader'
+                }
             },
             {
                 test: /\.scss$/,
@@ -26,7 +26,7 @@ const config = {
                     use: [
                         {
                             loader: 'css-loader',
-                            options: { 
+                            options: {
                                 // minimize: true,
                                 url: false,
                                 sourceMap: true
@@ -45,16 +45,6 @@ const config = {
             { parser: { amd: false } },
             {
                 test: /\.js$/,
-                exclude: /node_modules/,
-                use: {
-                        loader: 'babel-loader',
-                        options: {
-                            plugins: ['transform-class-properties'],
-                        }
-                    }
-            },
-            {
-                test: /\.js$/,
                 exclude: [
                     /node_modules/,
                     /js\/chartiq\.js/,
@@ -62,11 +52,16 @@ const config = {
                     /js\/componentUI\.js/,
                     /js\/extras/,
                     /js\/thirdparty/,
-                    /js\/legacy/
+                    /js\/legacy/,
                 ],
-                use: { loader: 'eslint-loader' }
+                use: { loader: 'eslint-loader' },
             },
-        ]
+            {
+                test: /\.js$/,
+                exclude: /node_modules/,
+                loader: 'babel-loader',
+            },
+        ],
     },
     plugins: [
         new ExtractTextPlugin({
@@ -74,7 +69,7 @@ const config = {
         }),
         new webpack.ProvidePlugin({ $: 'jquery', jQuery: 'jquery' }),
         // new webpack.optimize.UglifyJsPlugin(),
-    ]
+    ],
 };
 
 module.exports = config;

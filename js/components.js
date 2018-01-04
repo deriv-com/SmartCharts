@@ -2401,15 +2401,16 @@ TFC.prototype.start=function(){
 };
 
 TFC.prototype.initialize=function(){
-    var self=this;
-    function acc(err){
-        if(err){
-            console.log(err);
-        }else{
-            CIQ.loadScript("plugins/tfc/tfc-demo.js", self.start.bind(self));
-        }
-    }
-    CIQ.loadWidget("plugins/tfc/tfc", acc);
+    // var self=this;
+    setTimeout(() => this.start());
+    // function acc(err){
+    //     if(err){
+    //         console.log(err);
+    //     }else{
+    //         CIQ.loadScript("plugins/tfc/tfc-demo.js", self.start.bind(self));
+    //     }
+    // }
+    // CIQ.loadWidget("plugins/tfc/tfc", acc);
 };
 
 CIQ.UI.TFC=document.registerElement("cq-tfc", TFC);
