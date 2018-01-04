@@ -1,5 +1,6 @@
 import $ from 'jquery';
 import StreamManager from './stream-manager';
+import ExampleDriver from './ExampleDriver';
 import Feed from './feed';
 import '../js/thirdparty/object-observe';
 import '../js/thirdparty/webcomponents-lite.min';
@@ -62,7 +63,7 @@ function startUI() {
     };
 
 
-    UIContext.setLookupDriver(new CIQ.UI.Lookup.Driver.ChartIQ());
+    UIContext.setLookupDriver(new ExampleDriver());
 
     UIContext.UISymbolLookup = $('.ciq-search cq-lookup')[0];
     UIContext.UISymbolLookup.setCallback((context, data) => {

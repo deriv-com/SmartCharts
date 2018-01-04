@@ -1,5 +1,5 @@
+import './UI';
 import { CIQ } from '../../js/chartiq';
-import './componentUI';
 import Scroll from './Scroll';
 import ChartTitle from './ChartTitle';
 import Dialog from './Dialog';
