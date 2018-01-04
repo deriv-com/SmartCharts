@@ -8,7 +8,7 @@ import ContextTag from './ContextTag';
  * @namespace CIQ.UI.ModalTag
  * @memberof CIQ.UI
  */
-export default class ModalTag extends ContextTag {
+class ModalTag extends ContextTag {
     /**
      *
      * @kind function
@@ -49,4 +49,5 @@ export default class ModalTag extends ContextTag {
     }
 }
 
+export default ModalTag;
 CIQ.UI.ModalTag = ModalTag;

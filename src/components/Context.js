@@ -10,7 +10,7 @@ import { CIQ } from '../../js/chartiq';
  * @constructor
  */
 
-export default class Context {
+class Context {
     constructor(stx, topNode, params) {
         this.params = params || {};
         this.stx = stx;
@@ -101,4 +101,5 @@ export default class Context {
     }
 }
 
+export default Context;
 CIQ.UI.Context = Context;

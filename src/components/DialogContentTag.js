@@ -8,7 +8,7 @@ import BaseComponent from './BaseComponent';
  * @namespace CIQ.UI.DialogContentTag
  * @memberof CIQ.UI
  */
-export default class DialogContentTag extends BaseComponent {
+class DialogContentTag extends BaseComponent {
     /**
      * Opens the parent dialog
      * @param {Object} [params] Optional params
@@ -55,4 +55,5 @@ export default class DialogContentTag extends BaseComponent {
     }
 }
 
+export default DialogContentTag;
 CIQ.UI.DialogContentTag = DialogContentTag;

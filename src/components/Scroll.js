@@ -29,7 +29,7 @@ import BaseComponent from './BaseComponent';
      <cq-scroll></cq-scroll>
  */
 
-export default class Scroll extends BaseComponent {
+class Scroll extends BaseComponent {
     /**
      * Scroll back to top
      */
@@ -198,4 +198,5 @@ export default class Scroll extends BaseComponent {
     }
 }
 
+export default Scroll;
 CIQ.UI.Scroll = document.registerElement('cq-scroll', Scroll);

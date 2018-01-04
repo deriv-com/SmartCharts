@@ -1,9 +1,7 @@
-import {
-    CIQ,
-} from '../../js/chartiq';
+import { CIQ } from '../../js/chartiq';
 import ModalTag from './ModalTag';
 
-export default class Comparison extends ModalTag {
+class Comparison extends ModalTag {
     /**
      * Symbol comparison component `<cq-comparison>`.
      *
@@ -351,4 +349,6 @@ export default class Comparison extends ModalTag {
         });
     }
 }
+
+export default Comparison;
 CIQ.UI.Comparison = document.registerElement('cq-comparison', Comparison);

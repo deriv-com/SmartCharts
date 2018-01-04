@@ -9,7 +9,7 @@ import Context from './Context';
  * @namespace ContextTag
  * @type {HTMLElement}
  */
-export default class ContextTag extends BaseComponent {
+class ContextTag extends BaseComponent {
     /**
      * Stores the component in the contextHolder so that when the context
      * is started it knows that this tag is contextual
@@ -118,4 +118,5 @@ export default class ContextTag extends BaseComponent {
     }
 }
 
+export default ContextTag;
 CIQ.UI.ContextTag = ContextTag;

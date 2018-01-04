@@ -11,7 +11,7 @@ import { CIQ } from '../../js/chartiq';
  * @namespace BaseComponent
  * @type {HTMLElement}
  */
-export default class BaseComponent extends HTMLElement {
+class BaseComponent extends HTMLElement {
     constructor() {
         super();
         this.scheduledBindings = [];
@@ -354,5 +354,7 @@ export default class BaseComponent extends HTMLElement {
         this.attached = false;
     }
 }
+
+export default BaseComponent;
 
 CIQ.UI.BaseComponent = BaseComponent;
