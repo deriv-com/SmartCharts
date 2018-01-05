@@ -11,6 +11,15 @@ import UI from './UI';
 CIQ.UI = UI;
 CIQ.UI.UIManager = document.registerElement('cq-ui-manager', UIManager);
 
+CIQ.UI.release = false;
+
+/**
+ * Set this flag to true to bypass bindings when adding a component to the DOM.
+ * For instance when components are created by html2canvas we don't want them to do any heavy lifting.
+ * @type {Boolean}
+ */
+CIQ.UI.bypassBindings = false;
+
 /*
  * http://www.backalleycoder.com/2013/03/18/cross-browser-event-based-element-resize-detection/
  */

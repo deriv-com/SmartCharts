@@ -211,7 +211,7 @@ class BaseComponent extends HTMLElement {
      * @memberof CIQ.UI.BaseComponent
      */
     nextTick() {
-        if (!UI.release) return; // UI hasn't started yet
+        if (!CIQ.UI.release) return; // UI hasn't started yet
         clearTimeout(this.timeout);
         let scheduledBindings = this.scheduledBindings;
         // We traverse through the bindings backwards which ensures that we attempt to bind to the closest
@@ -250,7 +250,7 @@ class BaseComponent extends HTMLElement {
      * @memberof CIQ.UI.BaseComponent
      */
     buildReverseBindings() {
-        if (UI.bypassBindings) return;
+        if (CIQ.UI.bypassBindings) return;
         let traverseNode = this;
         let acceptFunc = function (node) {
             if (node.hasAttribute('stxbind') ||
