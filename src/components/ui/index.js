@@ -1,16 +1,13 @@
 import $ from 'jquery';
-import './jquery-extensions';
 import { CIQ } from '../../../js/chartiq';
-import UIManager from './UIManager';
-import UI from './UI';
+import './jquery-extensions';
+import './UI';
+import './UIManager';
 
 /**
  * Namespace for UI helper objects
  * @namespace CIQ.UI
  */
-CIQ.UI = UI;
-CIQ.UI.UIManager = document.registerElement('cq-ui-manager', UIManager);
-
 CIQ.UI.release = false;
 
 /**

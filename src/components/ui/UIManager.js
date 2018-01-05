@@ -267,3 +267,4 @@ class UIManager extends HTMLElement {
 }
 
 export default UIManager;
+CIQ.UI.UIManager = document.registerElement('cq-ui-manager', UIManager);

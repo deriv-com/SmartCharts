@@ -286,3 +286,4 @@ class UI {
 }
 
 export default UI;
+CIQ.UI = UI;
