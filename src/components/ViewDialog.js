@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import DialogContentTag from './UI/DialogContentTag';
+import DialogContentTag from './ui/DialogContentTag';
 import { CIQ } from '../../js/chartiq';
 
 /**

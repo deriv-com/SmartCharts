@@ -5,13 +5,13 @@ import StreamManager from './stream-manager';
 import Feed from './feed';
 import ExampleDriver from './ExampleDriver';
 
-// Before using components, you need to first import components/UI
-import './components/UI';
+// Before using components, you need to first import components/ui
+import './components/ui';
 import './components/Scroll';
 import './components/Lookup';
 import './components/Menu';
-import Context from './components/UI/Context';
-import KeystrokeHub from './components/UI/KeystrokeHub';
+import Context from './components/ui/Context';
+import KeystrokeHub from './components/ui/KeystrokeHub';
 
 import '../js/thirdparty/object-observe';
 import '../js/thirdparty/webcomponents-lite.min';

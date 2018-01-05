@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import { CIQ } from '../../js/chartiq';
-import DialogContentTag from './UI/DialogContentTag';
+import DialogContentTag from './ui/DialogContentTag';
 
 /**
  * Theme Dialog web component `<cq-theme-dialog>`.

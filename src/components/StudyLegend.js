@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import { CIQ } from '../../js/chartiq';
-import ModalTag from './UI/ModalTag';
+import ModalTag from './ui/ModalTag';
 
 /**
  * Study legend web component `<cq-study-legend>`.

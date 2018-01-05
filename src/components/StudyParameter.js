@@ -1,5 +1,5 @@
 import { CIQ } from '../../js/chartiq';
-import BaseComponent from './UI/BaseComponent';
+import BaseComponent from './ui/BaseComponent';
 
 /**
  * Study parameters web component `<cq-study-parameter>`.

@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import { CIQ } from '../../js/chartiq';
-import BaseComponent from './UI/BaseComponent';
+import BaseComponent from './ui/BaseComponent';
 
 class Close extends BaseComponent {
 /**

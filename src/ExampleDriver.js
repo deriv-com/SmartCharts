@@ -1,5 +1,5 @@
 import { CIQ } from '../js/chartiq';
-import Driver from './components/UI/Driver';
+import Driver from './components/ui/Driver';
 
 /**
  * An example instance of the Lookup Driver scoped to CIQ.UI.Lookup.Driver

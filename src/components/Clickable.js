@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import { CIQ } from '../../js/chartiq';
-import ContextTag from './UI/ContextTag';
+import ContextTag from './ui/ContextTag';
 
 /**
  * clickable web component `<cq-clickable>`. When tapped/clicked this component can run a method on any
