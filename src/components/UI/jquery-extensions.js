@@ -1,7 +1,7 @@
-import jQuery from 'jquery';
+import $ from 'jquery';
 import { CIQ } from '../../../js/chartiq';
 
-jQuery.fn.extend({
+$.fn.extend({
     stxtap(arg1, arg2) {
         return this.each(function () {
             CIQ.installTapEvent(this/* , {stopPropagation:true} */);
@@ -18,15 +18,15 @@ jQuery.fn.extend({
     },
 });
 
-jQuery.fn.extend($.expr[':'], {
-    trulyvisible(node, j, attr) {
+$.fn.extend($.expr[':'], {
+    trulyvisible(node) {
         let parents = $(node).parents();
         parents = parents.add(node);
         for (let i = 0; i < parents.length; i++) {
             let p = $(parents[i]);
             if (p.css('opacity') === '0') return false;
             if (p.css('visibility') === 'hidden') return false;
-            if (p.css('height') === '0px' && p.css('overflow-y') == 'hidden') return false;
+            if (p.css('height') === '0px' && p.css('overflow-y') === 'hidden') return false;
             if (!p.is(':visible')) return false;
         }
         return true;
@@ -37,20 +37,20 @@ jQuery.fn.extend($.expr[':'], {
  * Creates a virtual DOM and then compares contents before rendering. If the contents
  * are the same then no rendering is done. This prevents flicker. React style.
  */
-jQuery.fn.extend({
-    parentsAndMe(arg1) {
+$.fn.extend({
+    parentsAndMe() {
         let us = $(this).parents();
         us = us.add($(this));
         return us;
     },
-    cqvirtual(arg1) {
+    cqvirtual() {
         let virtual = this.clone();
         virtual.empty();
         virtual.original = this;
         return virtual;
     },
-    cqrender(arg1) {
-        if (this[0].innerHTML == this.original[0].innerHTML) return this.original;
+    cqrender() {
+        if (this[0].innerHTML === this.original[0].innerHTML) return this.original;
         this.original.empty();
         let children = this.children();
         if (children.length) {
@@ -95,8 +95,8 @@ jQuery.fn.extend({
     truthyAttr(arg1) {
         let val = this.attr(arg1);
         if (typeof (val) === 'undefined') return false;
-        if (val.toLowerCase() == 'false') return false;
-        if (val == '0') return false;
+        if (val.toLowerCase() === 'false') return false;
+        if (val === '0') return false;
         return true;
     },
     // More efficient because it doesn't change the DOM unless it needs to. Returns true
@@ -127,12 +127,12 @@ jQuery.fn.extend({
 });
 
 
-jQuery.queryString = function (sParam) {
+$.queryString = function (sParam) {
     let sPageURL = window.location.search.substring(1);
     let sURLVariables = sPageURL.split('&');
     for (let i = 0; i < sURLVariables.length; i++) {
         let sParameterName = sURLVariables[i].split('=');
-        if (sParameterName[0] == sParam) return sParameterName[1];
+        if (sParameterName[0] === sParam) return sParameterName[1];
     }
     return null;
 };

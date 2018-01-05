@@ -1,3 +1,4 @@
+import $ from 'jquery';
 import { CIQ } from '../../js/chartiq';
 
 /**
@@ -106,7 +107,7 @@ class Dialog extends HTMLElement {
 
     stxContextMenu() {
         let parent = this.node.parent();
-        if (parent[0].tagName == 'BODY') parent = $(window);
+        if (parent[0].tagName === 'BODY') parent = $(window);
         let w = parent.guaranteedWidth();
         let h = parent.guaranteedHeight();
         let cw = this.node.outerWidth();
@@ -124,7 +125,7 @@ class Dialog extends HTMLElement {
 
     center() {
         let parent = this.node.parent();
-        if (parent[0].tagName == 'BODY') parent = $(window);
+        if (parent[0].tagName === 'BODY') parent = $(window);
         let w = parent.guaranteedWidth();
         let h = parent.guaranteedHeight();
         let cw = this.node.outerWidth();
@@ -163,14 +164,14 @@ class Dialog extends HTMLElement {
         this.active = false;
         if (this.uiManager.overlay) this.uiManager.overlay.removeAttrBetter('cq-active');
         this.uiManager.overlay = null;
-        for (let attribute in this.activeAttributes) {
+        for (let attribute of Object.keys(this.activeAttributes)) {
             this.node.removeAttrBetter(attribute);
         }
         this.activeAttributes = {};
 
         // blur any input boxes that are inside the dialog we're closing, to get rid of soft keyboard
         $(this).find('input').each(function () {
-            if (this == document.activeElement) this.blur();
+            if (this === document.activeElement) this.blur();
         });
     }
 
@@ -186,6 +187,7 @@ class Dialog extends HTMLElement {
      */
     show(params) {
         this.params = params;
+        // eslint-disable-next-line no-param-reassign
         if (!params) params = this.params = {};
         let self = this;
         if (!this.uiManager.overlay && !params.bypassOverlay) {
@@ -195,7 +197,7 @@ class Dialog extends HTMLElement {
         setTimeout(() => { // to get the opacity transition effect
             if (self.uiManager.overlay && !params.bypassOverlay) self.uiManager.overlay.attrBetter('cq-active');
             self.activeAttributes['cq-active'] = true; // cq-active is what css uses to display the dialog
-            for (let attribute in self.activeAttributes) {
+            for (let attribute of Object.keys(self.activeAttributes)) {
                 self.node.attrBetter(attribute);
             }
             self.resize();

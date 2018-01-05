@@ -1,3 +1,4 @@
+import $ from 'jquery';
 import { CIQ } from '../../../js/chartiq';
 
 function getBottomPixel(stx, panel, containerHeight, price) {
@@ -14,6 +15,7 @@ function getBottomPixel(stx, panel, containerHeight, price) {
  */
 class HeadsUpMarker extends CIQ.Marker {
     constructor(params, showClass) {
+        super(params, showClass);
         if (!this.className) this.className = 'CIQ.Marker.HeadsUp';
         CIQ.Marker.call(this, params);
         this.prevTick = null;
@@ -97,7 +99,7 @@ class HeadsUpMarker extends CIQ.Marker {
 
             let bottomPX = `${bottom}px`;
 
-            if (marker.node.style.bottom != bottomPX) {
+            if (marker.node.style.bottom !== bottomPX) {
                 marker.node.style.bottom = bottomPX;
             }
         }

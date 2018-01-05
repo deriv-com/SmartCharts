@@ -1,3 +1,4 @@
+import $ from 'jquery';
 import { CIQ } from '../../js/chartiq';
 import ContextTag from './UI/ContextTag';
 
@@ -70,9 +71,9 @@ class Themes extends ContextTag {
                     self.params.customThemes = result;
                 }
                 // Set the current theme to the last one selected by user
-                self.params.nameValueStore.get(`${self.id}CIQ.Themes.prototype.current`, (err, result) => {
-                    if (!err && result && result.theme) {
-                        self.loadTheme(result.theme);
+                self.params.nameValueStore.get(`${self.id}CIQ.Themes.prototype.current`, (error, res) => {
+                    if (!error && res && res.theme) {
+                        self.loadTheme(res.theme);
                     } else {
                         self.loadTheme(self.params.defaultTheme);
                     }
@@ -92,7 +93,7 @@ class Themes extends ContextTag {
  */
     configureMenu() {
         function loadBuiltIn(self, className) {
-            return function (e) {
+            return function () {
                 self.loadBuiltIn(className);
                 if (self.params.callback) {
                     self.params.callback({ theme: self.currentTheme });
@@ -101,7 +102,7 @@ class Themes extends ContextTag {
             };
         }
         function loadCustom(self, themeName) {
-            return function (e) {
+            return function () {
                 self.loadCustom(themeName);
                 if (self.params.callback) {
                     self.params.callback({ theme: self.currentTheme });
@@ -114,25 +115,24 @@ class Themes extends ContextTag {
         let display,
             newMenuItem;
         let builtInThemes = this.params.builtInThemes;
-        for (let className in builtInThemes) {
-            display = builtInThemes[className];
+        Object.keys(builtInThemes).forEach((theme, className) => {
             newMenuItem = CIQ.UI.makeFromTemplate(this.builtInTemplate);
-            newMenuItem.text(display);
+            newMenuItem.text(theme);
             newMenuItem[0].selectFC = loadBuiltIn(this, className);
             newMenuItem.stxtap(newMenuItem[0].selectFC);
             this.builtInMenu.append(newMenuItem);
-        }
+        });
 
         let customThemes = this.params.customThemes;
-        for (let themeName in customThemes) {
+        Object.keys(customThemes).forEach((val, themeName) => {
             display = themeName;
             newMenuItem = CIQ.UI.makeFromTemplate(this.customTemplate);
             newMenuItem.find('cq-label').text(display);
             newMenuItem[0].selectFC = loadCustom(this, themeName);
             newMenuItem.stxtap(newMenuItem[0].selectFC);
-            newMenuItem[0].close = (function (self, themeName) { return function () { self.removeTheme(themeName); }; }(this, themeName));
+            newMenuItem[0].close = (function (self, name) { return function () { self.removeTheme(name); }; }(this, themeName));
             this.customMenu.append(newMenuItem);
-        }
+        });
     }
 
     /**
@@ -159,8 +159,8 @@ class Themes extends ContextTag {
  */
     persist(which) {
         if (!this.params.nameValueStore) return;
-        if (!which || which == 'current') this.params.nameValueStore.set(`${this.id}CIQ.Themes.prototype.current`, { theme: this.currentTheme });
-        if (!which || which == 'custom') this.params.nameValueStore.set('CIQ.Themes.prototype.custom', this.params.customThemes);
+        if (!which || which === 'current') this.params.nameValueStore.set(`${this.id}CIQ.Themes.prototype.current`, { theme: this.currentTheme });
+        if (!which || which === 'custom') this.params.nameValueStore.set('CIQ.Themes.prototype.custom', this.params.customThemes);
     }
 
     /**

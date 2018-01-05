@@ -1,3 +1,4 @@
+import $ from 'jquery';
 import { CIQ } from '../../js/chartiq';
 import ContextTag from './UI/ContextTag';
 
@@ -15,7 +16,7 @@ class TFC extends ContextTag {
         this.attached = true;
     }
 
-    setContext(context) {
+    setContext(/* context */) {
         this.initialize();
     }
 

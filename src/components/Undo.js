@@ -1,3 +1,4 @@
+import $ from 'jquery';
 import { CIQ } from '../../js/chartiq';
 import ContextTag from './UI/ContextTag';
 
@@ -31,7 +32,7 @@ class Undo extends ContextTag {
         });
     }
 
-    setContext(context) {
+    setContext(/* context */) {
         this.manageContext(this.context);
 
         let self = this;
@@ -59,7 +60,7 @@ class Undo extends ContextTag {
     }
 
     keyStroke(hub, key, e, keystroke) {
-        if (key == 90 && (keystroke.ctrl || keystroke.cmd)) { // ctrl-z
+        if (key === 90 && (keystroke.ctrl || keystroke.cmd)) { // ctrl-z
             if (keystroke.shift) {
                 this.redo();
             } else {
@@ -67,7 +68,7 @@ class Undo extends ContextTag {
             }
             return true;
         }
-        if (key == 89 && (keystroke.ctrl || keystroke.cmd)) { // ctrl-y
+        if (key === 89 && (keystroke.ctrl || keystroke.cmd)) { // ctrl-y
             this.redo();
             return true;
         }
@@ -125,7 +126,7 @@ class Undo extends ContextTag {
      * @alias clear
      * @memberof WebComponents.cq-undo
      */
-    clear(context) {
+    clear() {
         this.setButtonStyle();
     }
 

@@ -31,14 +31,14 @@ class ExampleDriver extends Driver {
      * @param {function} cb Callback upon results
      */
     acceptText(text, filter, maxResults, cb) {
-        if (filter == 'FX') filter = 'FOREX';
+        if (filter === 'FX') filter = 'FOREX';
         if (isNaN(parseInt(maxResults, 10))) maxResults = 100;
         let url = `${this.url}?t=${encodeURIComponent(text)}&m=${maxResults}&x=[`;
         if (this.exchanges) {
             url += this.exchanges.join(',');
         }
         url += ']';
-        if (filter && filter.toUpperCase() != 'ALL') {
+        if (filter && filter.toUpperCase() !== 'ALL') {
             url += `&e=${filter}`;
         }
 
@@ -47,7 +47,7 @@ class ExampleDriver extends Driver {
 
         function handleResponse(status, response) {
             if (counter < self.requestCounter) return;
-            if (status != 200) return;
+            if (status !== 200) return;
             try {
                 response = JSON.parse(response);
                 let symbols = response.payload.symbols;
@@ -66,7 +66,7 @@ class ExampleDriver extends Driver {
                     });
                 }
                 cb(results);
-            } catch (e) {}
+            } catch (e) {} // eslint-disable-line no-empty
         }
         CIQ.postAjax({
             url,

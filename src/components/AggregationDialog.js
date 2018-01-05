@@ -1,3 +1,4 @@
+import $ from 'jquery';
 import { CIQ } from '../../js/chartiq';
 import DialogContentTag from './UI/DialogContentTag';
 
@@ -12,8 +13,8 @@ class AggregationDialog extends DialogContentTag {
      * @alias open
      * @memberof WebComponents.cq-aggregation-dialog
      */
-    open(params) {
-        CIQ.UI.DialogContentTag.open.apply(this, arguments);
+    open(params, ...args) {
+        CIQ.UI.DialogContentTag.open.apply(this, args);
         let stx = this.context.stx;
         let aggregationType = params.aggregationType;
         let map = {
@@ -33,18 +34,18 @@ class AggregationDialog extends DialogContentTag {
                 title: 'Set Point & Figure Parameters',
             },
         };
-        if (stx.layout.aggregationType != aggregationType) { stx.setAggregationType(aggregationType); }
+        if (stx.layout.aggregationType !== aggregationType) { stx.setAggregationType(aggregationType); }
 
         let entry = map[aggregationType];
         let node = this.node;
         node.find('.title').text(stx.translateIf(entry.title));
 
-        for (let type in map) {
+        for (let type of Object.keys(map)) {
             node.find(`.ciq${type}`).css(aggregationType === type ? { display: '' } : { display: 'none' });
         }
         node.find(`.ciq${aggregationType} input`).each(function () {
             let name = this.name;
-            if (name == 'box' || name == 'reversal') name = `pandf.${name}`;
+            if (name === 'box' || name === 'reversal') name = `pandf.${name}`;
             let tuple = CIQ.deriveFromObjectChain(stx.layout, name);
             if (tuple && !tuple.obj[tuple.member] && stx.chart.defaultChartStyleConfig[this.name]) { $(this).val(stx.chart.defaultChartStyleConfig[this.name]); }
         });

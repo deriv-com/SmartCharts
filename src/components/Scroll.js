@@ -166,7 +166,8 @@ class Scroll extends BaseComponent {
         items.removeAttr('cq-focused');
 
         // locate our location in the list of items
-        for (let i = 0; i < items.length; i++) {
+        let i;
+        for (i = 0; i < items.length; i++) {
             if (items[i] === focused[0]) break;
         }
 

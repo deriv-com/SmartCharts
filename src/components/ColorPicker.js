@@ -1,3 +1,4 @@
+import $ from 'jquery';
 import { CIQ } from '../../js/chartiq';
 import Dialog from './Dialog';
 
@@ -81,9 +82,9 @@ class ColorPicker extends Dialog {
         if (!this.colors.length) this.colors = this.picker;
         this.colors.empty();// allow re-initialize, with new colors for instance
 
-        function closure(self, color) {
+        function closure(that, color) {
             return function () {
-                self.pickColor(color);
+                that.pickColor(color);
             };
         }
         for (let a = 0; a < this.params.colorMap.length; a++) {
@@ -149,13 +150,14 @@ class ColorPicker extends Dialog {
                 let override = activator.overrides[i];
                 let n = CIQ.UI.makeFromTemplate(this.template, true);
                 n.text(override);
-                n.stxtap((function (self, override) { return function () { self.pickColor(override); }; })(this, override));
+                n.stxtap((function (self, override) { return function () { self.pickColor(override); }; })(this, override)); // eslint-disable-line no-shadow
             }
         }
 
         if (!this.picker.hasClass('stxMenuActive')) {
             this.picker[0].open(); // Manually activate the color picker
         } else {
+            // eslint-disable-next-line no-lonely-if
             if (this.context.e) this.context.e.stopPropagation(); // Otherwise the color picker is closed when you swap back and forth between fill and line swatches on the toolbar
         }
     }

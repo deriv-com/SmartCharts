@@ -1,3 +1,4 @@
+import $ from 'jquery';
 import { CIQ } from '../../js/chartiq';
 import DialogContentTag from './UI/DialogContentTag';
 
@@ -45,12 +46,10 @@ class FibSettingsDialog extends DialogContentTag {
                 let vectorType = vectorParameters.vectorType;
 
                 // fibonacci type
-                if (vectorParameters.fibonacci && vectorType != 'fibtimezone') {
+                if (vectorParameters.fibonacci && vectorType !== 'fibtimezone') {
                     let defaultFibs = vectorParameters.fibonacci.fibs;
-                    if (this.type == 'checkbox') {
-                        for (let index in defaultFibs) {
-                            let fib = defaultFibs[index];
-
+                    if (this.type === 'checkbox') {
+                        for (let fib of Object.keys(defaultFibs)) {
                             if (fib.level === item) {
                                 fib.display = !!this.checked;
                             }
@@ -68,23 +67,21 @@ class FibSettingsDialog extends DialogContentTag {
  * @memberOf WebComponents.cq-fib-settings-dialog
  */
 
-    open(params) {
-        CIQ.UI.DialogContentTag.open.apply(this, arguments);
+    open(params, ...args) {
+        CIQ.UI.DialogContentTag.open.apply(this, args);
         let vectorParameters = this.context.stx.currentVectorParameters;
         let vectorType = vectorParameters.vectorType;
         let dialog = $(this);
 
         // fibonacci type
         let parameters;
-        if (vectorParameters.fibonacci && vectorType != 'fibtimezone') {
+        if (vectorParameters.fibonacci && vectorType !== 'fibtimezone') {
             dialog.find('.title').text('Fibonacci Settings');
             let defaultFibs = vectorParameters.fibonacci.fibs || {};
             parameters = dialog.find('cq-fibonacci-settings');
             parameters.emptyExceptTemplate();
 
-            for (let index in defaultFibs) {
-                let fib = defaultFibs[index];
-
+            for (let fib of defaultFibs) {
                 // no negative values for fibonacci arc
                 if (vectorType === 'fibarc' && fib.level < 0) continue;
 

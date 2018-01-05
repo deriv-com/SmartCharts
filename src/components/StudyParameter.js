@@ -10,14 +10,14 @@ import BaseComponent from './UI/BaseComponent';
 class StudyParameter extends BaseComponent {
     initialize(params) {
         this.params = params;
-    };
-    
+    }
+
     setColor(color) {
         if (!this.params) return;
         let updates = { parameters: {} };
         updates.parameters[this.params.parameter] = color;
         this.params.studyDialog.updateStudy(updates);
-    };
+    }
 }
 
 export default StudyParameter;

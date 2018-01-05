@@ -1,3 +1,4 @@
+import $ from 'jquery';
 import { CIQ } from '../../js/chartiq';
 
 /**
@@ -76,7 +77,7 @@ class Swatch extends HTMLElement {
         let hslb = CIQ.hsl(bgColor);
         if (!color) color = 'transparent';
         let fillColor = color;
-        if (color == 'auto') {
+        if (color === 'auto') {
             fillColor = this.getDefaultColor();
         }
         let hslf = CIQ.hsl(fillColor);

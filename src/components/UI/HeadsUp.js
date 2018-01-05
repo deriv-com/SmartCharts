@@ -1,3 +1,4 @@
+import $ from 'jquery';
 import { CIQ } from '../../../js/chartiq';
 import Helper from './Helper';
 
@@ -22,6 +23,7 @@ import Helper from './Helper';
 
 class HeadsUp extends Helper {
     constructor(node, context, params) {
+        super(node, context, params);
         this.params = params || {};
         if (typeof this.params.autoStart === 'undefined') this.params.autoStart = true;
         this.node = $(node);
@@ -96,8 +98,8 @@ class HeadsUp extends Helper {
             };
         }(this)));
         this.addInjection('append', 'createDataSet', (function (self) {
-            return function (dontRoll, whichChart, params) {
-                self.calculateMaxVolume(params.appending);
+            return function (dontRoll, whichChart, prms) {
+                self.calculateMaxVolume(prms.appending);
             };
         }(this)));
     }
@@ -193,12 +195,12 @@ class HeadsUp extends Helper {
                         });
                     }
                 }
-                if (currentQuote && currentQuote[plotField] && self.tick == stx.chart.dataSet.length - 1) {
+                if (currentQuote && currentQuote[plotField] && self.tick === stx.chart.dataSet.length - 1) {
                     node.find('cq-hu-price').text(stx.formatPrice(currentQuote[plotField]));
                 }
             }
         }
-        if (this.tick != this.prevTick || (stx.chart.dataSegment && bar == stx.chart.dataSegment.length - 1)) {
+        if (this.tick !== this.prevTick || (stx.chart.dataSegment && bar === stx.chart.dataSegment.length - 1)) {
             if (this.timeout) clearTimeout(this.timeout);
             let ms = this.params.followMouse ? 0 : 0; // IE and FF struggle to keep up with the dynamic head's up.
             this.timeout = setTimeout(printValues, ms);

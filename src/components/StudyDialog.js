@@ -1,3 +1,4 @@
+import $ from 'jquery';
 import { CIQ } from '../../js/chartiq';
 import DialogContentTag from './UI/DialogContentTag';
 
@@ -100,7 +101,7 @@ class StudyDialog extends DialogContentTag {
                 let updates = {};
                 updates[section] = {};
                 updates[section][name] = this.value;
-                if (this.type == 'checkbox' || this.type == 'radio') {
+                if (this.type === 'checkbox' || this.type === 'radio') {
                     updates[section][name] = this.checked;
                 }
                 self.updateStudy(updates);
@@ -135,8 +136,8 @@ class StudyDialog extends DialogContentTag {
         this.updateStudy(updates);
     }
 
-    open(params) {
-        CIQ.UI.DialogContentTag.open.apply(this, arguments);
+    open(params, ...args) {
+        CIQ.UI.DialogContentTag.open.apply(this, args);
 
         // Generate a "helper" which tells us how to create a dialog
         this.helper = new CIQ.Studies.DialogHelper(params);
@@ -149,7 +150,7 @@ class StudyDialog extends DialogContentTag {
             let menu = CIQ.UI.makeFromTemplate(self.menuTemplate);
             let cqMenu = menu.find('cq-menu-dropdown'); // scrollable in menu.
             cqMenu[0].context = self.context;
-            for (let field in fields) {
+            for (let field of Object.keys(fields)) {
                 let item = $('<cq-item></cq-item>');
                 item.text(fields[field]);
                 item.attr('stxtap', 'StudyDialog.setSelectOption()'); // must call StudyDialog because the item is "lifted" and so doesn't know it's parent
@@ -167,8 +168,7 @@ class StudyDialog extends DialogContentTag {
         let attributes;
         let inputs = dialog.find('cq-study-inputs');
         inputs.empty();
-        for (let i in this.helper.inputs) {
-            let input = this.helper.inputs[i];
+        for (let input of this.helper.inputs) {
             let newInput = CIQ.UI.makeFromTemplate(this.inputTemplate, inputs);
             this.menuTemplate = newInput.find('template[cq-menu]');
             newInput.find('.ciq-heading').text(input.heading);
@@ -177,27 +177,27 @@ class StudyDialog extends DialogContentTag {
 
             let iAttr;
             attributes = this.helper.attributes[input.name];
-            if (input.type == 'number') {
+            if (input.type === 'number') {
                 formField = $('<input>');
                 formField.attr('type', 'number');
                 formField.val(input.value);
                 this.setChangeEvent(formField, 'inputs', input.name);
-                for (iAttr in attributes) formField.attr(iAttr, attributes[iAttr]);
-            } else if (input.type == 'text') {
+                for (iAttr of Object.keys(attributes)) formField.attr(iAttr, attributes[iAttr]);
+            } else if (input.type === 'text') {
                 formField = $('<input>');
                 formField.attr('type', 'text');
                 formField.val(input.value);
                 this.setChangeEvent(formField, 'inputs', input.name);
-                for (iAttr in attributes) formField.attr(iAttr, attributes[iAttr]);
-            } else if (input.type == 'select') {
+                for (iAttr of Object.keys(attributes)) formField.attr(iAttr, attributes[iAttr]);
+            } else if (input.type === 'select') {
                 formField = makeMenu(input.name, input.value, input.options);
                 if (attributes && attributes.readonly) formField.attr('readonly', attributes.readonly);
-            } else if (input.type == 'checkbox') {
+            } else if (input.type === 'checkbox') {
                 formField = $('<input>');
                 formField.attr('type', 'checkbox');
                 if (input.value) formField.prop('checked', true);
                 this.setChangeEvent(formField, 'inputs', input.name);
-                for (iAttr in attributes) formField.attr(iAttr, attributes[iAttr]);
+                for (iAttr of Object.keys(attributes)) formField.attr(iAttr, attributes[iAttr]);
             }
             if (attributes && attributes.hidden) newInput.hide();
             if (formField) newInput.find('.stx-data').append(formField);
@@ -205,8 +205,7 @@ class StudyDialog extends DialogContentTag {
         let swatch;
         let outputs = dialog.find('cq-study-outputs');
         outputs.empty();
-        for (i in this.helper.outputs) {
-            let output = this.helper.outputs[i];
+        for (let output of this.helper.outputs) {
             let newOutput = CIQ.UI.makeFromTemplate(this.outputTemplate, outputs);
             newOutput[0].initialize({ studyDialog: this, output: output.name, params });
             newOutput.find('.ciq-heading').text(output.heading);
@@ -222,23 +221,22 @@ class StudyDialog extends DialogContentTag {
 
         let parameters = dialog.find('cq-study-parameters');
         parameters.empty();
-        for (i in this.helper.parameters) {
-            let parameter = this.helper.parameters[i];
+        for (let parameter of this.helper.parameters) {
             let newParam = CIQ.UI.makeFromTemplate(this.parameterTemplate, parameters);
             newParam.find('.ciq-heading').text(parameter.heading);
             swatch = newParam.find('cq-swatch');
             let paramInput = $('<input>');
             let pAttr;
             attributes = {};
-            if (parameter.defaultValue.constructor == Boolean) {
+            if (parameter.defaultValue.constructor === Boolean) {
                 paramInput.attr('type', 'checkbox');
                 if (parameter.value) paramInput.prop('checked', true);
                 this.setChangeEvent(paramInput, 'parameters', `${parameter.name}Enabled`);
                 swatch.remove();
 
                 attributes = this.helper.attributes[`${parameter.name}Enabled`];
-                for (pAttr in attributes) paramInput.attr(pAttr, attributes[pAttr]);
-            } else if (parameter.defaultValue.constructor == Number) {
+                for (pAttr of Object.keys(attributes)) paramInput.attr(pAttr, attributes[pAttr]);
+            } else if (parameter.defaultValue.constructor === Number) {
                 paramInput.attr('type', 'number');
                 paramInput.val(parameter.value);
                 this.setChangeEvent(paramInput, 'parameters', `${parameter.name}Value`);
@@ -246,7 +244,7 @@ class StudyDialog extends DialogContentTag {
                 swatch[0].setColor(parameter.color, false); // don't percolate
 
                 attributes = this.helper.attributes[`${parameter.name}Value`];
-                for (pAttr in attributes) paramInput.attr(pAttr, attributes[pAttr]);
+                for (pAttr of Object.keys(attributes)) paramInput.attr(pAttr, attributes[pAttr]);
             } else continue;
 
             if (attributes && attributes.hidden) newParam.hide();

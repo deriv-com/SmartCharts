@@ -1,3 +1,4 @@
+import $ from 'jquery';
 import { CIQ } from '../../js/chartiq';
 /**
  * Menu web component `<cq-menu>`.
@@ -73,7 +74,7 @@ class Menu extends HTMLElement {
         this.lifts = null;
     }
 
-    show(params) {
+    show() {
         if (this.active) return;
         this.active = true;
         this.node.addClass(this.activeClassName);
@@ -93,7 +94,7 @@ class Menu extends HTMLElement {
         this.active = false;
         // blur any input boxes that are inside the menu we're closing, to get rid of soft keyboard
         $(this).find('input').each(function () {
-            if (this == document.activeElement) this.blur();
+            if (this === document.activeElement) this.blur();
         });
     }
 

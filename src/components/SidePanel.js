@@ -1,6 +1,5 @@
-import {
-    CIQ,
-} from '../../js/chartiq';
+import $ from 'jquery';
+import { CIQ } from '../../js/chartiq';
 import ContextTag from './UI/ContextTag';
 
 
@@ -12,8 +11,8 @@ import ContextTag from './UI/ContextTag';
      <cq-side-panel><cq-side-panel>
  */
 class SidePanel extends ContextTag {
-    createdCallback() {
-        CIQ.UI.ContextTag.createdCallback.apply(this, arguments);
+    createdCallback(...args) {
+        CIQ.UI.ContextTag.createdCallback.apply(this, args);
         this.callbacks = [];
     }
 
@@ -57,7 +56,7 @@ class SidePanel extends ContextTag {
         children.each(function () {
             if (this.sidePanelActiveClass) {
                 $(this).removeClass(this.sidePanelActiveClass);
-            } else { // turn off a child by removing the class name added to it           
+            } else { // turn off a child by removing the class name added to it
                 $(this).removeAttr(this.sidePanelActiveAttribute);
             } // turn off a child by removing the attribute name added to it
         });

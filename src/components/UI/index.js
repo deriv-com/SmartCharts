@@ -1,5 +1,4 @@
-// Copyright 2015-2016 by ChartIQ, Inc.
-
+import $ from 'jquery';
 import './jquery-extensions';
 import { CIQ } from '../../../js/chartiq';
 import Driver from './Driver';
@@ -75,7 +74,7 @@ CIQ.Marker.HeadsUp = HeadsUpMarker;
         });
     }
 
-    function objectLoad(e) {
+    function objectLoad() {
         this.contentDocument.defaultView.__resizeTrigger__ = this.__resizeElement__;
         this.contentDocument.defaultView.addEventListener('resize', resizeListener);
     }
@@ -98,7 +97,7 @@ CIQ.Marker.HeadsUp = HeadsUpMarker;
                 element.__resizeTrigger__ = element;
                 element.attachEvent('onresize', resizeListener);
             } else {
-                // if (!getComputedStyle(element) || getComputedStyle(element).position == 'static') element.style.position = 'relative';
+                // if (!getComputedStyle(element) || getComputedStyle(element).position === 'static') element.style.position = 'relative';
                 let obj = element.__resizeTrigger__ = document.createElement('object');
                 obj.setAttribute('style', 'visibility:hidden; display: block; position: absolute; top: 0; left: 0; height: 100%; width: 100%; overflow: hidden; pointer-events: none; z-index: -1; border:0px;');
                 obj.__resizeElement__ = element;
@@ -150,4 +149,4 @@ CIQ.Marker.HeadsUp = HeadsUpMarker;
  * @see {@link CIQ.UI.ContextTag} which provides a model and base functionality for many components
  * @namespace WebComponents
  */
-function WebComponents() {}
+function WebComponents() {} // eslint-disable-line no-unused-vars

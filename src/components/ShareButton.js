@@ -1,3 +1,4 @@
+import $ from 'jquery';
 import { CIQ } from '../../js/chartiq';
 import ContextTag from './UI/ContextTag';
 
@@ -16,7 +17,7 @@ class ShareButton extends ContextTag {
  * @alias tap
  * @memberof WebComponents.cq-share-button
  */
-    tap(e) {
+    tap(/* e */) {
         let context = this.context;
         $('cq-share-dialog').each(function () {
             this.open({ context });

@@ -1,3 +1,4 @@
+import $ from 'jquery';
 import { CIQ } from '../../js/chartiq';
 import DialogContentTag from './UI/DialogContentTag';
 
@@ -25,8 +26,8 @@ class LanguageDialog extends DialogContentTag {
  * @memberof WebComponents.cq-share-dialog
  * @since 4.0.0
  */
-    open(params) {
-        CIQ.UI.DialogContentTag.open.apply(this, arguments);
+    open(params, ...args) {
+        CIQ.UI.DialogContentTag.open.apply(this, args);
         let cqLanguages = this.node.find('cq-languages');
         cqLanguages.emptyExceptTemplate();
         let template = this.node.find('template');
@@ -43,7 +44,7 @@ class LanguageDialog extends DialogContentTag {
                 });
             };
         }
-        for (let langCode in languages) {
+        for (let langCode of Object.keys(languages)) {
             let node = CIQ.UI.makeFromTemplate(template, cqLanguages);
             node.find('cq-language-name').text(languages[langCode]);
             node.find('cq-flag').attr('cq-lang', langCode);

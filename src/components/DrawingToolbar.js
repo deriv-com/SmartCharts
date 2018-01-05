@@ -1,3 +1,4 @@
+import $ from 'jquery';
 import { CIQ } from '../../js/chartiq';
 import ContextTag from './UI/ContextTag';
 
@@ -22,19 +23,19 @@ class DrawingToolbar extends ContextTag {
 
     defaultElements(drawingParameters) {
         let arr = [];
-        for (let param in drawingParameters) {
-            if (param == 'color') arr.push('cq-line-color');
-            else if (param == 'fillColor') arr.push('cq-fill-color');
-            else if (param == 'pattern' || param == 'lineWidth') arr.push('cq-line-style');
-            else if (param == 'axisLabel') arr.push('cq-axis-label');
-            else if (param == 'font') arr.push('cq-annotation');
-            else if (param == 'parameters') arr.push('cq-clickable');
+        for (let param of Object.keys(drawingParameters)) {
+            if (param === 'color') arr.push('cq-line-color');
+            else if (param === 'fillColor') arr.push('cq-fill-color');
+            else if (param === 'pattern' || param === 'lineWidth') arr.push('cq-line-style');
+            else if (param === 'axisLabel') arr.push('cq-axis-label');
+            else if (param === 'font') arr.push('cq-annotation');
+            else if (param === 'parameters') arr.push('cq-clickable');
         }
 
         return arr;
     }
 
-    setContext(context) {
+    setContext(/* context */) {
         this.noToolSelectedText = $(this.params.toolSelection).text();
         this.sync();
     }
@@ -46,6 +47,7 @@ class DrawingToolbar extends ContextTag {
  */
     sync(cvp) {
         let stx = this.context.stx;
+        // eslint-disable-next-line no-param-reassign
         if (!cvp) cvp = stx.currentVectorParameters;
         else stx.currentVectorParameters = cvp;
 
@@ -149,7 +151,7 @@ class DrawingToolbar extends ContextTag {
         this.setFibs(width, pattern);
         if (this.currentLineSelectedClass) $(this.params.lineSelection).removeClass(this.currentLineSelectedClass);
         this.currentLineSelectedClass = `ciq-${pattern}-${parseInt(width, 10)}`;
-        if (pattern == 'none') {
+        if (pattern === 'none') {
             this.currentLineSelectedClass = null;
         } else {
             $(this.params.lineSelection).addClass(this.currentLineSelectedClass);
@@ -180,7 +182,7 @@ class DrawingToolbar extends ContextTag {
     setFontFamily(activator, fontFamily) {
         let stx = this.context.stx;
 
-        if (fontFamily == 'Default') {
+        if (fontFamily === 'Default') {
             stx.currentVectorParameters.annotation.font.family = null;
         } else {
             stx.currentVectorParameters.annotation.font.family = fontFamily;
@@ -192,16 +194,16 @@ class DrawingToolbar extends ContextTag {
     toggleFontStyle(activator, fontStyle) {
         let stx = this.context.stx;
 
-        if (fontStyle == 'italic') {
-            if (stx.currentVectorParameters.annotation.font.style == 'italic') {
+        if (fontStyle === 'italic') {
+            if (stx.currentVectorParameters.annotation.font.style === 'italic') {
                 stx.currentVectorParameters.annotation.font.style = null;
                 $(activator.node).removeClass('ciq-active');
             } else {
                 stx.currentVectorParameters.annotation.font.style = 'italic';
                 $(activator.node).addClass('ciq-active');
             }
-        } else if (fontStyle == 'bold') {
-            if (stx.currentVectorParameters.annotation.font.weight == 'bold') {
+        } else if (fontStyle === 'bold') {
+            if (stx.currentVectorParameters.annotation.font.weight === 'bold') {
                 stx.currentVectorParameters.annotation.font.weight = null;
                 $(activator.node).removeClass('ciq-active');
             } else {
@@ -253,7 +255,7 @@ class DrawingToolbar extends ContextTag {
         let node = activator.node;
         if (!node) node = $(this).find('cq-line-color');
         let color = this.context.stx.currentVectorParameters.currentColor;
-        if (color == 'transparent' || color == 'auto') color = '';
+        if (color === 'transparent' || color === 'auto') color = '';
         $(node).css({ 'background-color': color });
     }
 

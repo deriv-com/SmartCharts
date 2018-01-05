@@ -1,3 +1,4 @@
+import $ from 'jquery';
 import { CIQ } from '../../js/chartiq';
 import ContextTag from './UI/ContextTag';
 
@@ -43,7 +44,7 @@ class Lookup extends ContextTag {
         this.params = {};
     }
 
-    setContext(context) {
+    setContext(/* context */) {
         this.initialize();
     }
 
@@ -187,13 +188,13 @@ class Lookup extends ContextTag {
     // Note that when comparisons are enabled, there are two Lookup components on the screen. Each keypress will therefore pass
     // through this function twice, once for each Lookup component. Only the active component will process the keystroke.
     keyStroke(hub, key, e, keystroke) {
-        if (keystroke.ctrl || key == 91) return false;
+        if (keystroke.ctrl || key === 91) return false;
         let domChain = $(this).parents().addBack();
         let input = this.input[0];
         let result = false;
         let focused = (document.activeElement === input); // If focused then we need to allow the input box to get most keystrokes
         if (!focused && document.activeElement &&
-            (document.activeElement.tagName == 'INPUT' || document.activeElement.tagName == 'TEXTAREA')) return false; // some other input has focus
+            (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA')) return false; // some other input has focus
 
         let iAmActive = false,
             iAmDisplayed = false;
@@ -214,7 +215,7 @@ class Lookup extends ContextTag {
             self.acceptText(input.value, self.currentFilter);
             result = true;
         }
-        if (key == 'delete' || key == 'backspace') {
+        if (key === 'delete' || key === 'backspace') {
             if (this.context.stx.anyHighlighted) return false;
             if (input.value.length) {
                 // ctrl-a or highlight all text + delete implies remove all text
@@ -229,7 +230,7 @@ class Lookup extends ContextTag {
 
                 result = true; // only capture delete key if there was something to delete
             }
-            if (key == 'backspace') result = true; // always capture backspace because otherwise chrome will navigate back
+            if (key === 'backspace') result = true; // always capture backspace because otherwise chrome will navigate back
         }
         if (key === 'escape' && iAmDisplayed) {
             input.value = '';
@@ -260,16 +261,16 @@ class Lookup extends ContextTag {
         if (result) {
             // If we're focused, then keep the lookup open unless we hit escape.
             // Otherwise, if there is no length close it (user hit "escape", "enter", or "backspace/delete" while unfocused)
-            if (this.usingEmptyDriver || (!input.value.length && (key == 'escape' || key == 'enter' || !focused))) {
+            if (this.usingEmptyDriver || (!input.value.length && (key === 'escape' || key === 'enter' || !focused))) {
                 this.close();
             } else {
                 this.open();
             }
             if (focused) {
- return {
-                allowDefault: true,
-            }; 
-}
+                return {
+                    allowDefault: true,
+                };
+            }
             return true;
         }
     }
@@ -291,7 +292,7 @@ class Lookup extends ContextTag {
      */
     results(arr) {
         function closure(self, data) {
-            return function (e) {
+            return function () {
                 CIQ.blur(self.input);
                 // self.close();
                 self.selectItem(data);
@@ -304,7 +305,7 @@ class Lookup extends ContextTag {
             let item = arr[i];
             let nodeText = '<cq-item>';
             for (let j = 0; j < item.display.length; j++) {
-                nodeText += `<SPAN>${  item.display[j]  }</SPAN>`;
+                nodeText += `<SPAN>${item.display[j]}</SPAN>`;
             }
             nodeText += '</cq-item>';
             let node = $(nodeText);

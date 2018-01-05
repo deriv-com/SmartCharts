@@ -1,4 +1,6 @@
+import $ from 'jquery';
 import { CIQ } from '../../../js/chartiq';
+import BaseComponent from './BaseComponent';
 
 class UI {
     /**
@@ -9,14 +11,12 @@ class UI {
      * @param  {string} fn   The name of the function
      * @param  {Array}   args Arguments array (a "spread" is also supported)
      */
-    static containerExecute(self, fn, args) {
-        let myArgs = args;
-        if (args && myArgs.constructor !== Array) myArgs = Array.prototype.slice.call(arguments, 2);
+    static containerExecute(self, fn, ...args) {
         let parents = self.node.parents();
         for (let i = 0; i < parents.length; i++) {
             let parent = parents[i];
-            if (parent[fn] && parent[fn].constructor == Function) {
-                return parent[fn](...myArgs);
+            if (parent[fn] && parent[fn].constructor === Function) {
+                return parent[fn](...args);
             }
         }
         return null;
@@ -63,7 +63,7 @@ class UI {
             let child = newNode.childNodes[i];
 
             // found element
-            if (child.nodeType == 1) {
+            if (child.nodeType === 1) {
                 jq = $(child);
                 if (appendTo === true) $(node).parent().append(newNode);
                 else if (appendTo) $(appendTo).append(newNode);
@@ -85,7 +85,7 @@ class UI {
         if (!cmd) return null;
         let openParentheses = cmd.indexOf('(');
         let closeParentheses = cmd.lastIndexOf(')');
-        if (openParentheses == -1 || closeParentheses == -1) {
+        if (openParentheses === -1 || closeParentheses === -1) {
             console.log(`malformed stxtap attribute: ${cmd}`);
             return null;
         }
@@ -93,7 +93,7 @@ class UI {
             functionName;
         let beforeParentheses = cmd.substring(0, openParentheses);
         let period = beforeParentheses.indexOf('.');
-        if (period == -1) { // web component
+        if (period === -1) { // web component
             functionName = beforeParentheses;
         } else {
             helperName = beforeParentheses.substring(0, period);
@@ -107,14 +107,14 @@ class UI {
         if (parsed) {
             for (let i = 0; i < parsed.length; i++) {
                 let arg = parsed[i];
-                while (arg.charAt(0) == ' ') arg = arg.substring(1);
-                if (arg.indexOf('"') != -1 || arg.indexOf("'") != -1) {
+                while (arg.charAt(0) === ' ') arg = arg.substring(1);
+                if (arg.indexOf('"') !== -1 || arg.indexOf("'") !== -1) {
                     argArray.push(arg.substring(1, arg.length - 1));
-                } else if (arg == 'true') {
+                } else if (arg === 'true') {
                     argArray.push(true);
-                } else if (arg == 'false') {
+                } else if (arg === 'false') {
                     argArray.push(false);
-                } else if (arg == 'null') {
+                } else if (arg === 'null') {
                     argArray.push(null);
                 } else if (isInteger.test(arg)) {
                     argArray.push(parseInt(arg, 10));
@@ -151,15 +151,15 @@ class UI {
      *
      * @example - Add or remove a class based on whether stx.layout.crosshair is true or false
      * CIQ.UI.observe({selector:".toggle", obj:stx.layout, member:"crosshair", action:"class", value:"active"});
-    
+
      * @example - Add or remove a class based on whether stx.layout.chartType=="candle"
      * CIQ.UI.observe({selector:".toggle", obj:stx.layout, member:"chartType", condition:"candle", action:"class", value:"active"});
-    
+
      * @example - Get a callback from a change in value
      * CIQ.UI.observe({selector:".toggle", obj:stx.layout, member:"chartType", condition:"candle", action:"callback", value:function(params){
      *    console.log("new value is" + params.obj[params.member]);
      * }});
-    
+
      */
     static observe(params) {
         let self = this;
@@ -170,7 +170,7 @@ class UI {
                 match = true;
             } else if (change.name === params.member) {
                 match = true;
-            } else if (params.member.constructor == Array) {
+            } else if (params.member.constructor === Array) {
                 for (let i = 0; i < params.member.length; i++) {
                     if (change.name === params.member[i]) match = true;
                 }
@@ -277,11 +277,11 @@ class UI {
     static addInheritance(target, source) {
         // We put this in a catch loop because BaseComponent is itself an HTMLElement and the browser barfs on trying to copy some
         // of those values
-        for (let key in source.prototype) {
+        Object.keys(source.prototype).forEach((val, key) => {
             try {
                 target.prototype[key] = source.prototype[key];
-            } catch (e) {}
-        }
+            } catch (e) {} // eslint-disable-line no-empty
+        });
     }
 }
 

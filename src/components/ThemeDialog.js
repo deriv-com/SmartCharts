@@ -1,3 +1,4 @@
+import $ from 'jquery';
 import { CIQ } from '../../js/chartiq';
 import DialogContentTag from './UI/DialogContentTag';
 
@@ -76,8 +77,8 @@ class ThemeDialog extends DialogContentTag {
  * @alias configure
  * @memberof WebComponents.cq-theme-dialog
  */
-    open(params) {
-        CIQ.UI.DialogContentTag.open.apply(this, arguments);
+    open(params, ...args) {
+        CIQ.UI.DialogContentTag.open.apply(this, args);
         let themeName = params.themeName;
 
         this.initiatingMenu = params.initiatingMenu;
@@ -90,7 +91,7 @@ class ThemeDialog extends DialogContentTag {
             let cu = self.node.find(`cq-theme-piece[cq-piece="${name}"]`);
 
             cu[0].piece = { obj, field };
-            if (type == 'color') {
+            if (type === 'color') {
                 cu.find('cq-swatch')[0].setColor(obj[field], false);
             }
         }

@@ -1,5 +1,3 @@
-import { CIQ } from '../../../js/chartiq';
-
 class Helper {
     /**
      * Abstract class for UI Helpers

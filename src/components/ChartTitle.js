@@ -1,3 +1,4 @@
+import $ from 'jquery';
 import { CIQ } from '../../js/chartiq';
 import ModalTag from './UI/ModalTag';
 
@@ -47,7 +48,7 @@ class ChartTitle extends ModalTag {
         this.attached = true;
     }
 
-    setContext(context) {
+    setContext(/* context */) {
         let self = this;
         CIQ.UI.observe({
             obj: self.context.stx.chart.symbolObject,
@@ -128,7 +129,7 @@ class ChartTitle extends ModalTag {
 
         if ((doUpdatePrice || doUpdateBrowserTab) && symbol && priceChanged) {
             // Default to iqPrevClose if the developer hasn't set this.previousClose
-            let previousClose = this.previousClose ? this.previousClose : (currentQuote ? currentQuote.iqPrevClose : null);
+            let previousClose = this.previousClose ? this.previousClose : (currentQuote ? currentQuote.iqPrevClose : null); // eslint-disable-line no-nested-ternary
 
             if (currentQuote && previousClose) {
                 todaysChange = CIQ.fixPrice(currentQuote.Close - previousClose);
@@ -136,7 +137,7 @@ class ChartTitle extends ModalTag {
                 if (internationalizer) {
                     todaysChangeDisplay = internationalizer.percent2.format(todaysChangePct / 100);
                 } else {
-                    todaysChangeDisplay = `${todaysChangePct.toFixed(2) }%`;
+                    todaysChangeDisplay = `${todaysChangePct.toFixed(2)}%`;
                 }
                 changeDiv.css({
                     display: 'block',
@@ -161,11 +162,11 @@ class ChartTitle extends ModalTag {
 
             // These strange characters create some spacing so that the title appears
             // correctly in a browser tab
-            this.title = `${symbol } \u200b \u200b ${currentPrice} \u200b \u200b \u200b `;
+            this.title = `${symbol} \u200b \u200b ${currentPrice} \u200b \u200b \u200b `;
             if (todaysChangePct > 0) {
-                this.title += `\u25b2 ${  todaysChangeAbs}`;
+                this.title += `\u25b2 ${todaysChangeAbs}`;
             } else if (todaysChangePct < 0) {
-                this.title += `\u25bc ${  todaysChangeAbs}`;
+                this.title += `\u25bc ${todaysChangeAbs}`;
             }
             if (doUpdateBrowserTab) {
                 document.title = this.title;

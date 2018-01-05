@@ -1,3 +1,4 @@
+import $ from 'jquery';
 import { CIQ } from '../../../js/chartiq';
 import BaseComponent from './BaseComponent';
 import Context from './Context';
@@ -19,7 +20,7 @@ class ContextTag extends BaseComponent {
     setContextHolder() {
         let nearestContext = this.node.parents('cq-context,*[cq-context]');
         if (!nearestContext.length) {
-            console.log('No cq-context found for ' + this.tagName);
+            console.log(`No cq-context found for ${this.tagName}`);
             return;
         }
         let contextElement = nearestContext[0];
@@ -38,7 +39,7 @@ class ContextTag extends BaseComponent {
      * @memberof CIQ.UI.ContextTag
      * @param {CIQ.UI.Context} context The context
      */
-    setContext(context) {
+    setContext(/* context */) {
         // override me
     }
 

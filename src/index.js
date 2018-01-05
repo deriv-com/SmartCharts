@@ -57,7 +57,7 @@ function startUI() {
         data.symbol = data.symbol.toUpperCase(); // set a pretty display version
 
         let self = this;
-        stx.newChart(data, null, null, (err) => {
+        stx.newChart(data, null, null, () => {
             if (self.loader) self.loader.hide();
         });
     };
@@ -70,6 +70,7 @@ function startUI() {
         context.changeSymbol(data);
     });
 
+    // eslint-disable-next-line no-unused-vars
     let KeystrokeHub = new CIQ.UI.KeystrokeHub($('body'), UIContext, {
         cb: CIQ.UI.KeystrokeHub.defaultHotKeys,
     });
@@ -96,7 +97,7 @@ function resizeScreen() {
     stxx.resizeChart();
 }
 
-window.addEventListener('WebComponentsReady', (e) => {
+window.addEventListener('WebComponentsReady', () => {
     startUI();
     resizeScreen();
 });

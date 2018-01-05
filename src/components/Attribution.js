@@ -51,6 +51,7 @@ class Attribution extends ModalTag {
 
     insert(stx, panel) {
         let attrib = CIQ.UI.makeFromTemplate(this.template);
+        // eslint-disable-next-line no-new
         new CIQ.Marker({
             stx,
             node: attrib[0],
@@ -80,31 +81,30 @@ class Attribution extends ModalTag {
                 exchange = self.messages.exchanges[this.chart.attribution.exchange];
                 if (!source) source = '';
                 if (!exchange) exchange = '';
-                if (source + exchange != chartAttrib.attr('lastAttrib')) {
+                if (source + exchange !== chartAttrib.attr('lastAttrib')) {
                     chartAttrib.find('cq-attrib-source').html(source);
                     chartAttrib.find('cq-attrib-quote-type').html(exchange);
                     CIQ.I18N.translateUI(null, chartAttrib[0]);
                     chartAttrib.attr('lastAttrib', source + exchange);
                 }
             }
-            outer:
-                for (let study in this.layout.studies) {
-                    let type = this.layout.studies[study].type;
-                    if (self.messages.sources[type]) {
-                        for (let i = 0; i < this.markers.attribution.length; i++) {
-                            if (this.markers.attribution[i].params.panelName == this.layout.studies[study].panel) continue outer;
-                        }
-                        if (!this.panels[study]) continue;
-                        source = self.messages.sources[type];
-                        exchange = self.messages.exchanges[type];
-                        if (!source) source = '';
-                        if (!exchange) exchange = '';
-                        let attrib = self.insert(this, study);
-                        attrib.find('cq-attrib-source').html(source);
-                        attrib.find('cq-attrib-quote-type').html(exchange);
-                        CIQ.I18N.translateUI(null, attrib[0]);
+
+            Object.keys(this.layout.studies).forEach((type, study) => {
+                if (self.messages.sources[type]) {
+                    for (let i = 0; i < this.markers.attribution.length; i++) {
+                        if (this.markers.attribution[i].params.panelName === this.layout.studies[study].panel) return;
                     }
+                    if (!this.panels[study]) return;
+                    source = self.messages.sources[type];
+                    exchange = self.messages.exchanges[type];
+                    if (!source) source = '';
+                    if (!exchange) exchange = '';
+                    let attrib = self.insert(this, study);
+                    attrib.find('cq-attrib-source').html(source);
+                    attrib.find('cq-attrib-quote-type').html(exchange);
+                    CIQ.I18N.translateUI(null, attrib[0]);
                 }
+            });
         });
     }
 }

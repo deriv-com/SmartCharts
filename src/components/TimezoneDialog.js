@@ -24,8 +24,8 @@ class TimezoneDialog extends DialogContentTag {
  * @alias configure
  * @memberof WebComponents.cq-theme-dialog
  */
-    open(params) {
-        CIQ.UI.DialogContentTag.open.apply(this, arguments);
+    open(params, ...args) {
+        CIQ.UI.DialogContentTag.open.apply(this, args);
         let node = this.node;
         let self = this;
 
@@ -39,7 +39,7 @@ class TimezoneDialog extends DialogContentTag {
         }
 
         function setTimezone(zone) {
-            return function (e) {
+            return function () {
                 CIQ.UI.DialogContentTag.close.apply(self);
                 let translatedZone = CIQ.timeZoneMap[zone];
                 CIQ.ChartEngine.defaultDisplayTimeZone = translatedZone;
@@ -49,7 +49,7 @@ class TimezoneDialog extends DialogContentTag {
         }
 
         ul.empty();
-        for (let key in CIQ.timeZoneMap) {
+        Object.keys(CIQ.timeZoneMap).forEach((val, key) => {
             let zone = key;
             let display = stx.translateIf(zone);
             let li = this.template.cloneNode(true);
@@ -57,13 +57,13 @@ class TimezoneDialog extends DialogContentTag {
             li.innerHTML = display;
             CIQ.safeClickTouch(li, setTimezone(zone));
             ul.append(li);
-        }
+        });
         let currentUserTimeZone = node.find('#currentUserTimeZone');
         if (stx.displayZone) {
             let fullZone = stx.displayZone;
-            for (let tz in CIQ.timeZoneMap) {
-                if (CIQ.timeZoneMap[tz] === stx.displayZone) fullZone = tz;
-            }
+            Object.keys(CIQ.timeZoneMap).forEach((val, tz) => {
+                if (val === stx.displayZone) fullZone = tz;
+            });
             currentUserTimeZone.text(`${stx.translateIf('Current TimeZone is')} ${fullZone}`);
             button.show();
         } else {

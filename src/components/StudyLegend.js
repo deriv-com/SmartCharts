@@ -1,3 +1,4 @@
+import $ from 'jquery';
 import { CIQ } from '../../js/chartiq';
 import ModalTag from './UI/ModalTag';
 
@@ -60,7 +61,7 @@ import ModalTag from './UI/ModalTag';
  *
  */
 class StudyLegend extends ModalTag {
-    setContext(context) {
+    setContext(/* context */) {
         this.template = this.node.find('template');
         this.previousStudies = {};
         this.begin();
@@ -82,8 +83,8 @@ class StudyLegend extends ModalTag {
     }
 
     showHide() {
-        for (let s in this.context.stx.layout.studies) {
-            if (!this.context.stx.layout.studies[s].customLegend) {
+        for (let study of this.context.stx.layout.studies) {
+            if (!study.customLegend) {
                 this.node.css({ display: '' });
                 return;
             }
@@ -100,12 +101,11 @@ class StudyLegend extends ModalTag {
         let stx = this.context.stx;
         if (!stx.layout.studies) return;
         let foundAChange = false;
-        let id;
 
         // Logic to determine if the studies have changed, otherwise don't re-create the legend
-        if (CIQ.objLength(this.previousStudies) == CIQ.objLength(stx.layout.studies)) {
-            for (id in stx.layout.studies) {
-                if (!this.previousStudies[id]) {
+        if (CIQ.objLength(this.previousStudies) === CIQ.objLength(stx.layout.studies)) {
+            for (let idx of Object.keys(stx.layout.studies)) {
+                if (!this.previousStudies[idx]) {
                     foundAChange = true;
                     break;
                 }
@@ -117,7 +117,7 @@ class StudyLegend extends ModalTag {
         $(this.template).parent().emptyExceptTemplate();
 
         function closeStudy(self, sd) {
-            return function (e) {
+            return function () {
             // Need to run this in the nextTick because the study legend can be removed by this click
             // causing the underlying chart to receive the mousedown (on IE win7)
                 setTimeout(() => {
@@ -150,12 +150,11 @@ class StudyLegend extends ModalTag {
             panelName = holder.attr('cq-panel-name');
         }
 
-        for (id in stx.layout.studies) {
-            let sd = stx.layout.studies[id];
-            if (sd.customLegend) continue;
-            if (customRemovalOnly && !sd.study.customRemoval) continue;
-            if (panelOnly && sd.panel != panelName) continue;
-            if (overlaysOnly && !sd.overlay && !sd.underlay) continue;
+        Object.keys(stx.layout.studies).forEach((sd, idx) => {
+            if (sd.customLegend) return;
+            if (customRemovalOnly && !sd.study.customRemoval) return;
+            if (panelOnly && sd.panel !== panelName) return;
+            if (overlaysOnly && !sd.overlay && !sd.underlay) return;
             let newChild = CIQ.UI.makeFromTemplate(this.template, true);
             newChild.find('cq-label').html(sd.inputs.display);
             let close = newChild.find('.ciq-close');
@@ -166,8 +165,8 @@ class StudyLegend extends ModalTag {
             }
             let edit = newChild.find('.ciq-edit');
             if (!edit.length) edit = newChild.find('cq-label');
-            edit.stxtap(editStudy(this, id));
-        }
+            edit.stxtap(editStudy(this, idx));
+        });
         // Only want to render the marker label if at least one study has been
         // rendered in the legend. If no studies are rendered, only the template tag
         // will be in there.

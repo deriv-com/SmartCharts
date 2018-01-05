@@ -1,4 +1,3 @@
-import { CIQ } from '../../../js/chartiq';
 import BaseComponent from './BaseComponent';
 
 /**

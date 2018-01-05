@@ -1,3 +1,4 @@
+import $ from 'jquery';
 import DialogContentTag from './UI/DialogContentTag';
 import { CIQ } from '../../js/chartiq';
 
@@ -31,18 +32,18 @@ class ViewDialog extends DialogContentTag {
         let viewName = this.node.find('input').val();
         if (!viewName) return;
 
-        let self = this;
         let madeChange = false;
         let layout = this.context.stx.exportLayout();
         $('cq-views').each(function () {
             let obj = this.params.viewObj;
             let view;
 
-            for (let i = 0; i < obj.views.length; i++) {
+            let i;
+            for (i = 0; i < obj.views.length; i++) {
                 view = obj.views[i];
-                if (viewName == CIQ.first(view)) break;
+                if (viewName === CIQ.first(view)) break;
             }
-            if (i == obj.views.length) {
+            if (i === obj.views.length) {
                 view = {};
                 view[viewName] = {};
                 obj.views.push(view);

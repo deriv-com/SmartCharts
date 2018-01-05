@@ -1,3 +1,4 @@
+import $ from 'jquery';
 import { CIQ } from '../../js/chartiq';
 import ContextTag from './UI/ContextTag';
 
@@ -128,7 +129,7 @@ class Views extends ContextTag {
         menu.find('cq-views-content cq-item').remove();
         for (let v = 0; v < this.params.viewObj.views.length; v++) {
             let view = CIQ.first(self.params.viewObj.views[v]);
-            if (view == 'recent') continue;
+            if (view === 'recent') continue;
             let item = CIQ.UI.makeFromTemplate(this.params.template);
             let label = item.find('cq-label');
             let removeView = item.find('div');
@@ -145,7 +146,7 @@ class Views extends ContextTag {
         let addNew = menu.find('cq-view-save');
         if (addNew) {
             let context = this.context;
-            addNew.stxtap((e) => {
+            addNew.stxtap(() => {
                 $('cq-view-dialog').each(function () {
                     $(this).find('input').val('');
                     this.open({

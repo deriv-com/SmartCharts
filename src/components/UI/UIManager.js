@@ -70,7 +70,7 @@ class UIManager extends HTMLElement {
         }, 0);
         this.activeMenuStack.push(menu);
         menu.show(params);
-        /** 
+        /**
          // TODO: The two 'cq-context,*[cq-context]' selector code blocks below throws errors.
          //       For some strange reason. Since I'm not quite sure what it does just disable it
          //       for now.
@@ -157,7 +157,7 @@ class UIManager extends HTMLElement {
      * @alias ifAllClosed
      */
     ifAllClosed() {
-        /** 
+        /**
          if (!this.activeMenuStack.length) {
              $('cq-context,*[cq-context]').each(function () {
                  if (this.CIQ && this.CIQ.UI && this.CIQ.UI.context && this.CIQ.UI.context.stx) {
@@ -200,7 +200,7 @@ class UIManager extends HTMLElement {
             // only valid if the closest cq-menu or cq-dialog parent is the menu itself
             // otherwise the lift is in a nested menu
             let closest = $(this).closest('cq-menu,cq-dialog');
-            return closest.length && closest[0] == menu;
+            return closest.length && closest[0] === menu;
         });
         return lifts;
     }

@@ -56,7 +56,7 @@ class Advertisement extends ModalTag {
 
     makeMarker() {
         if (this.markerExists) return;
-        new CIQ.Marker({
+        new CIQ.Marker({ // eslint-disable-line no-new
             stx: this.context.stx,
             xPositioner: 'none',
             label: 'advertisement',
@@ -125,11 +125,11 @@ class Advertisement extends ModalTag {
             if (!self.sleepAmount) self.sleepAmount = { units: 1, unitType: 'day' };
             let u = self.sleepAmount.units;
             let ut = self.sleepAmount.unitType;
-            if (ut == 'minute') future.setMinutes(future.getMinutes() + u);
-            else if (ut == 'hour') future.setHours(future.getHours() + u);
-            else if (ut == 'day') future.setDate(future.getDate() + u);
-            else if (ut == 'week') future.setDate(future.getDate() + (u * 7));
-            else if (ut == 'month') future.setMonth(future.getMonth() + u);
+            if (ut === 'minute') future.setMinutes(future.getMinutes() + u);
+            else if (ut === 'hour') future.setHours(future.getHours() + u);
+            else if (ut === 'day') future.setDate(future.getDate() + u);
+            else if (ut === 'week') future.setDate(future.getDate() + (u * 7));
+            else if (ut === 'month') future.setMonth(future.getMonth() + u);
             let ms = future.getTime();
             if (!ls || typeof (ls) !== 'object') ls = {};
             ls[self.selector] = ms;
@@ -149,12 +149,12 @@ class Advertisement extends ModalTag {
         if (!ms) ms = 1000;
         let self = this;
         setInterval(() => {
-            if (self.node.css('display') == 'none') return; // already closed, do nothing
+            if (self.node.css('display') === 'none') return; // already closed, do nothing
             self.nameValueStore.get('cq-advertisement', (err, ls) => {
                 if (err) return;
                 if (!ls || typeof (ls) !== 'object') ls = {};
-                let ms = ls[self.selector];
-                if (ms && ms > Date.now()) { self.close(); }
+                let m = ls[self.selector];
+                if (m && m > Date.now()) { self.close(); }
             });
         }, ms);
     }

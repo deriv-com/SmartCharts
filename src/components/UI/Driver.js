@@ -1,5 +1,3 @@
-import { CIQ } from '../../../js/chartiq';
-
 /**
  * Base class that drives the lookup widget. You should derive your own Driver that interacts with your datafeed.
  * @name  CIQ.UI.Lookup.Driver
@@ -13,8 +11,8 @@ class Driver {
      * @param {string} [filter] The optional filter text selected by the user. This will be the innerHTML of the cq-filter element that is selected.
      * @memberof CIQ.UI.Lookup.Driver
      */
-    acceptText(text, filter) {
-        if (!this.cb) return;
+    acceptText(/* text, filter */) {
+        if (!this.cb) return; // eslint-disable-line no-useless-return
     }
 }
 

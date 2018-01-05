@@ -28,7 +28,7 @@ class ThemePiece extends BaseComponent {
  * @memberof WebComponents.cq-theme-piece
  */
     setColor(color) {
-        if (color == 'Hollow' || color == 'No Border') {
+        if (color === 'Hollow' || color === 'No Border') {
             color = 'transparent';
             this.node.find('cq-swatch')[0].setColor('transparent', false);
         }

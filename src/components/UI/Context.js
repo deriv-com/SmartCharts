@@ -1,3 +1,4 @@
+import $ from 'jquery';
 import { CIQ } from '../../../js/chartiq';
 
 /**
@@ -45,7 +46,7 @@ class Context {
      * @param  {Object} data A symbol data object acceptible for {@link CIQ.ChartEngine#newChart}
      * @memberof CIQ.UI.Context
      */
-    changeSymbol(data) {
+    changeSymbol(/* data */) {
         console.log('Please implement CIQ.UI.Context.prototype.changeSymbol');
     }
 

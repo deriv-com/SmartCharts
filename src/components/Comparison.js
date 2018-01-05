@@ -1,3 +1,4 @@
+import $ from 'jquery';
 import { CIQ } from '../../js/chartiq';
 import ModalTag from './UI/ModalTag';
 
@@ -71,7 +72,7 @@ class Comparison extends ModalTag {
      * @alias removeSeries
      * @memberof WebComponents.cq-comparison
      */
-    removeSeries(symbol, series) {
+    removeSeries(symbol/* , series */) {
         // console.log(typeof symbol, symbol);
         // console.log(typeof series, series);
         this.context.stx.removeSeries(symbol);
@@ -92,7 +93,7 @@ class Comparison extends ModalTag {
         let currentColor = swatch[0].style.backgroundColor;
 
         let usedColors = {};
-        for (let s in stx.chart.series) {
+        for (let s in stx.chart.series) { // eslint-disable-line guard-for-in
             let series = stx.chart.series[s];
             if (!series.parameters.isComparison) continue;
             usedColors[series.parameters.color] = true;
@@ -120,7 +121,7 @@ class Comparison extends ModalTag {
         let key = node.find('cq-comparison-key').cqvirtual();
         let stx = this.context.stx;
         let q = stx.currentQuote();
-        for (let s in stx.chart.series) {
+        for (let s in stx.chart.series) { // eslint-disable-line guard-for-in
             let series = stx.chart.series[s];
             if (!series.parameters.isComparison) continue;
             let frag = CIQ.UI.makeFromTemplate(this.template);
@@ -147,10 +148,10 @@ class Comparison extends ModalTag {
             if (series.parameters.error) frag.attr('cq-error', true);
             if (series.parameters.permanent) btn.hide();
             else {
-                btn.stxtap(function (self, s, series) {
+                btn.stxtap(function (self, t, srss) {
                     return function () {
                         self.nomore = true;
-                        self.removeSeries(s, series);
+                        self.removeSeries(t, srss);
                         self.modalEnd(); // tricky, we miss mouseout events when we remove items from under ourselves
                     };
                 }(this, s, series));
@@ -223,7 +224,7 @@ class Comparison extends ModalTag {
                 }
             }
         }
-        if (this.tick != this.prevTick) {
+        if (this.tick !== this.prevTick) {
             if (this.timeout) clearTimeout(this.timeout);
             let ms = 0; // IE and FF struggle to keep up with the dynamic head's up.
             this.timeout = setTimeout(printValues, ms);
@@ -240,7 +241,7 @@ class Comparison extends ModalTag {
         }(this)));
     }
 
-    setContext(context) {
+    setContext(/* context */) {
         let chart = this.context.stx.chart;
         this.node.attr('cq-show', 'true');
         // if attribute cq-marker then detach and put ourselves in the chart holder

@@ -1,3 +1,4 @@
+import $ from 'jquery';
 import { CIQ } from '../../../js/chartiq';
 import Helper from './Helper';
 
@@ -13,6 +14,7 @@ import Helper from './Helper';
  */
 class Layout extends Helper {
     constructor(context, params) {
+        super(context, params);
         this.params = params || {};
         if (!this.params.activeClassName) this.params.activeClassName = 'ciq-active';
         this.context = context;
@@ -29,18 +31,18 @@ class Layout extends Helper {
         let activeClassName = this.params.activeClassName;
         // A little complexity here to consolidate two fields (aggregationType and chartType) into one
         // set of radio buttons
-        function showChartType(params, node) {
+        function showChartType(params, nd) {
             let layout = params.obj;
-            if (layout.aggregationType && layout.aggregationType != 'ohlc') {
+            if (layout.aggregationType && layout.aggregationType !== 'ohlc') {
                 if (chartType !== layout.aggregationType) {
-                    $(node).removeClass(activeClassName);
+                    $(nd).removeClass(activeClassName);
                 } else {
-                    $(node).addClass(activeClassName);
+                    $(nd).addClass(activeClassName);
                 }
             } else if (chartType !== layout.chartType) {
-                $(node).removeClass(activeClassName);
+                $(nd).removeClass(activeClassName);
             } else {
-                $(node).addClass(activeClassName);
+                $(nd).addClass(activeClassName);
             }
         }
         CIQ.UI.observe({
@@ -98,7 +100,7 @@ class Layout extends Helper {
      */
     setChartScale(node, chartScale) {
         let stx = this.context.stx;
-        if (stx.layout.chartScale == chartScale) {
+        if (stx.layout.chartScale === chartScale) {
             stx.setChartScale(null);
         } else {
             stx.setChartScale(chartScale);
@@ -124,7 +126,7 @@ class Layout extends Helper {
      * @memberof CIQ.UI.Layout
      * @param {HTMLElement} node
      */
-    setExtendedHours(node) {
+    setExtendedHours() {
         let stx = this.context.stx;
         stx.layout.extended = !stx.layout.extended;
         stx.changeOccurred('layout');
@@ -157,7 +159,7 @@ class Layout extends Helper {
      * @memberof CIQ.UI.Layout
      * @param {HTMLElement} node
      */
-    setRangeSlider(node) {
+    setRangeSlider() {
         let stx = this.context.stx;
         stx.layout.rangeSlider = !stx.layout.rangeSlider;
         if (stx.slider) stx.slider.display(stx.layout.rangeSlider);
@@ -186,7 +188,7 @@ class Layout extends Helper {
      * @param {string} aggregationType
      */
     setAggregationType(node, aggregationType) {
-        if (this.context.stx.layout.aggregationType == aggregationType) {
+        if (this.context.stx.layout.aggregationType === aggregationType) {
             this.context.stx.setAggregationType(null);
         } else {
             this.context.stx.setAggregationType(aggregationType);
@@ -274,12 +276,11 @@ class Layout extends Helper {
      * @memberof CIQ.UI.Layout
      * @param {HTMLElement} node
      */
-    clearStudies(node) {
+    clearStudies() {
         let stx = this.context.stx;
-        for (let id in stx.layout.studies) {
-            let sd = stx.layout.studies[id];
+        Object.keys(stx.layout.studies).forEach((sd) => {
             if (!sd.customLegend) CIQ.Studies.removeStudy(stx, sd);
-        }
+        });
         stx.draw();
     }
 
@@ -320,17 +321,17 @@ class Layout extends Helper {
         }
         periodicity *= interval;
         text = periodicity;
-        if (timeUnit == 'day') {
+        if (timeUnit === 'day') {
             text += 'D';
-        } else if (timeUnit == 'week') {
+        } else if (timeUnit === 'week') {
             text += 'W';
-        } else if (timeUnit == 'month') {
+        } else if (timeUnit === 'month') {
             text += 'M';
-        } else if (timeUnit == 'tick') {
+        } else if (timeUnit === 'tick') {
             text += 'T';
-        } else if (timeUnit == 'second') {
+        } else if (timeUnit === 'second') {
             text += 's';
-        } else if (timeUnit == 'millisecond') {
+        } else if (timeUnit === 'millisecond') {
             text += 'ms';
         } else if (periodicity >= 60 && periodicity % 15 === 0) {
             text = `${periodicity / 60}H`;
@@ -360,7 +361,7 @@ class Layout extends Helper {
      * @memberof CIQ.UI.Layout
      */
     setLanguage() {
-        let dialog = $('cq-language-dialog').each(function () {
+        $('cq-language-dialog').each(function () {
             this.open();
         });
     }
@@ -371,9 +372,9 @@ class Layout extends Helper {
      * @memberof CIQ.UI.Layout
      */
     getLanguage(node) {
-        function showLanguage(params, node) {
-            $(node).find('cq-language-name').text(CIQ.I18N.languages[CIQ.I18N.language]);
-            $(node).find('cq-flag').attr('cq-lang', CIQ.I18N.language);
+        function showLanguage(params, nd) {
+            $(nd).find('cq-language-name').text(CIQ.I18N.languages[CIQ.I18N.language]);
+            $(nd).find('cq-flag').attr('cq-lang', CIQ.I18N.language);
         }
 
         CIQ.UI.observe({

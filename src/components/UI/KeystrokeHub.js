@@ -1,3 +1,4 @@
+import $ from 'jquery';
 import Helper from './Helper';
 import { CIQ } from '../../../js/chartiq';
 import { claims } from './constants';
@@ -169,11 +170,11 @@ class KeystrokeHub extends Helper {
             if (this.processKeyStrokeClaims(this, key, e, keystroke)) return;
         }
 
-        if (key != 'escape') {
+        if (key !== 'escape') {
             if (this.context.isModal()) return;
         }
 
-        if (targetTagName == 'INPUT' || targetTagName == 'TEXTAREA') return; // target is not the chart
+        if (targetTagName === 'INPUT' || targetTagName === 'TEXTAREA') return; // target is not the chart
 
         if (this.params.cb) {
             if (this.params.cb(key, this)) e.preventDefault();

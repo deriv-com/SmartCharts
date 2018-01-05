@@ -23,7 +23,7 @@ import ContextTag from './UI/ContextTag';
  * })
  */
 class Toggle extends ContextTag {
-    setContext(context) {
+    setContext(/* context */) {
         this.currentValue = false;
         this.params.obj = this.context.stx.layout;
         let member = this.node.attr('cq-member');
@@ -35,7 +35,7 @@ class Toggle extends ContextTag {
         let toggles = this.node.attr('cq-toggles');
         if (toggles) this.params.toggles = toggles.split(',');
         for (let i = 0; i < this.params.toggles.length; i++) {
-            if (this.params.toggles[i] == 'null') this.params.toggles[i] = null;
+            if (this.params.toggles[i] === 'null') this.params.toggles[i] = null;
         }
         this.begin();
     }
@@ -68,7 +68,7 @@ class Toggle extends ContextTag {
     updateFromBinding(params) {
         this.currentValue = params.obj[params.member];
         if (!this.params.callbacks.length) {
-            if (this.params.action == 'class') {
+            if (this.params.action === 'class') {
                 if (this.currentValue) {
                     this.node.addClass(this.params.value);
                 } else {
@@ -81,7 +81,7 @@ class Toggle extends ContextTag {
             }
         }
 
-        if (params.member == 'crosshair' && this.currentValue === false) this.context.stx.doDisplayCrosshairs();
+        if (params.member === 'crosshair' && this.currentValue === false) this.context.stx.doDisplayCrosshairs();
     }
 
     /**
@@ -122,14 +122,15 @@ class Toggle extends ContextTag {
             let toggles = self.params.toggles;
             let obj = self.params.obj;
             if (toggles.length > 1) { // Cycle through each field in the array with each tap
-                for (let i = 0; i < toggles.length; i++) {
+                let i;
+                for (i = 0; i < toggles.length; i++) {
                     let toggle = toggles[i];
-                    if (self.currentValue == toggle) {
+                    if (self.currentValue === toggle) {
                         if (i < toggles.length - 1) { self.set(toggles[i + 1]); } else { self.set(toggles[0]); }
                         break;
                     }
                 }
-                if (i == toggles.length) { // default to first item in toggle
+                if (i === toggles.length) { // default to first item in toggle
                     self.set(toggles[0]);
                 }
             } else if (self.currentValue) {

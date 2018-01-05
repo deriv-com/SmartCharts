@@ -1,3 +1,4 @@
+import $ from 'jquery';
 import { claims } from './constants';
 import { CIQ } from '../../../js/chartiq';
 import UI from './UI';
@@ -38,13 +39,13 @@ class BaseComponent extends HTMLElement {
         let paren = binding.indexOf('(');
         let beforeParen = binding.substring(0, paren);
         let period = binding.indexOf('.');
-        if (paren == -1 || beforeParen.indexOf('.') != -1) { // Layout or Layout.Chart or Layout.Chart('blah')
+        if (paren === -1 || beforeParen.indexOf('.') !== -1) { // Layout or Layout.Chart or Layout.Chart('blah')
             let helperName = binding;
-            if (period != -1) {
+            if (period !== -1) {
                 helperName = binding.substring(0, period);
             }
             if (!this.context) {
-                console.log(`No context attached to ${  this.tagName  }. A context is required when binding to a helper.`);
+                console.log(`No context attached to ${this.tagName}. A context is required when binding to a helper.`);
                 return null;
             }
             helper = this.context.getAdvertised(helperName);
@@ -81,7 +82,7 @@ class BaseComponent extends HTMLElement {
         if (!method) return;
         let helperName = method.helperName;
         let f = method.functionName;
-        if (setter) f = `set${  f}`;
+        if (setter) f = `set${f}`;
         // All helper methods take the node that was activated as the first argument
         let argArray = [{
             node,
@@ -93,7 +94,7 @@ class BaseComponent extends HTMLElement {
             let helper = this.getHelper(node, null, attribute);
 
             if (!helper[f]) {
-                console.log(`Method '${ f}' not found in helper`, helper);
+                console.log(`Method '${f}' not found in helper`, helper);
                 return;
             }
             helper[f](...argArray);
@@ -147,14 +148,14 @@ class BaseComponent extends HTMLElement {
         let setget = node.getAttribute('stxsetget');
 
         // One way binding
-        function bindHelper(helper) {
+        function bindHelper(h) {
             let method;
             let paren = binding.indexOf('(');
             method = binding.substring(binding.indexOf('.') + 1);
             if (paren !== -1) {
                 method = binding.substring(0, paren);
             }
-            helper[method](node);
+            h[method](node);
         }
         if (binding && binding !== '') {
             helper = this.getHelper(node, binding, 'stxbind');
@@ -162,16 +163,14 @@ class BaseComponent extends HTMLElement {
         }
 
         // "tap" binding
-        let self = this;
-
-        function closure(node) {
+        function closure(nd) {
             return function (e) {
                 this.e = e;
-                this.activate(node, e, params, false);
+                this.activate(nd, e, params, false);
             };
         }
         if (tap && tap !== '') {
-            if (node.tagName == 'INPUT' && (node.type === 'text' || node.type === 'number')) {
+            if (node.tagName === 'INPUT' && (node.type === 'text' || node.type === 'number')) {
                 this.inputEntry(node, closure(node));
             } else {
                 this.makeTap(node, closure(node));
@@ -179,7 +178,7 @@ class BaseComponent extends HTMLElement {
         }
 
         // Setter/Getter binding
-        function setGetHelper(helper) {
+        function setGetHelper(h) {
             function createSetter() {
                 return function (e) {
                     this.e = e;
@@ -188,11 +187,11 @@ class BaseComponent extends HTMLElement {
             }
             let method = UI.splitMethod(setget);
             if (!method) {
-                console.log(`Syntax error ${  setget}`);
+                console.log(`Syntax error ${setget}`);
                 return;
             }
             let argArray = [node].concat(method.args).concat(params);
-            if (helper) helper[`get${  method.functionName}`](...argArray);
+            if (h) h[`get${method.functionName}`](...argArray);
             if (node.type === 'text' || node.type === 'number') {
                 this.inputEntry(node, createSetter());
             } else {
@@ -287,10 +286,10 @@ class BaseComponent extends HTMLElement {
      */
     inputEntry(node, cb) {
         $(node).on('keypress', (e) => {
-            switch (e.which) {
-                case 13:
-                case 9:
-                    cb();
+            switch (e.which) { // eslint-disable-line default-case
+            case 13:
+            case 9:
+                cb();
             }
         });
     }
