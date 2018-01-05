@@ -48,8 +48,6 @@ const config = {
                 exclude: [
                     /node_modules/,
                     /js\/chartiq\.js/,
-                    /src\/components\/components\.js/,
-                    /src\/components\/componentUI\.js/,
                     /js\/extras/,
                     /js\/thirdparty/,
                     /js\/plugin/,

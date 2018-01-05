@@ -14,7 +14,7 @@ class AggregationDialog extends DialogContentTag {
      * @memberof WebComponents.cq-aggregation-dialog
      */
     open(params, ...args) {
-        DialogContentTag.open.apply(this, args);
+        DialogContentTag.open(...args);
         let stx = this.context.stx;
         let aggregationType = params.aggregationType;
         let map = {

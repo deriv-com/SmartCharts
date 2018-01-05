@@ -68,7 +68,7 @@ class FibSettingsDialog extends DialogContentTag {
  */
 
     open(params, ...args) {
-        DialogContentTag.open.apply(this, args);
+        DialogContentTag.open(...args);
         let vectorParameters = this.context.stx.currentVectorParameters;
         let vectorType = vectorParameters.vectorType;
         let dialog = $(this);

@@ -78,7 +78,7 @@ class ThemeDialog extends DialogContentTag {
  * @memberof WebComponents.cq-theme-dialog
  */
     open(params, ...args) {
-        DialogContentTag.open.apply(this, args);
+        DialogContentTag.open(...args);
         let themeName = params.themeName;
 
         this.initiatingMenu = params.initiatingMenu;

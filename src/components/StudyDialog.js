@@ -137,7 +137,7 @@ class StudyDialog extends DialogContentTag {
     }
 
     open(params, ...args) {
-        DialogContentTag.open.apply(this, args);
+        DialogContentTag.open(...args);
 
         // Generate a "helper" which tells us how to create a dialog
         this.helper = new CIQ.Studies.DialogHelper(params);

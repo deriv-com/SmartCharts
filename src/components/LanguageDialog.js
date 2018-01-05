@@ -27,7 +27,7 @@ class LanguageDialog extends DialogContentTag {
  * @since 4.0.0
  */
     open(params, ...args) {
-        DialogContentTag.open.apply(this, args);
+        DialogContentTag.open(...args);
         let cqLanguages = this.node.find('cq-languages');
         cqLanguages.emptyExceptTemplate();
         let template = this.node.find('template');

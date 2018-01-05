@@ -25,7 +25,7 @@ class TimezoneDialog extends DialogContentTag {
  * @memberof WebComponents.cq-theme-dialog
  */
     open(params, ...args) {
-        DialogContentTag.open.apply(this, args);
+        DialogContentTag.open(...args);
         let node = this.node;
         let self = this;
 
