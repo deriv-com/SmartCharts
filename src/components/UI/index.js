@@ -1,20 +1,6 @@
 import $ from 'jquery';
 import './jquery-extensions';
 import { CIQ } from '../../../js/chartiq';
-import Driver from './Driver';
-import BaseComponent from './BaseComponent';
-import DialogContentTag from './DialogContentTag';
-import ContextTag from './ContextTag';
-import ModalTag from './ModalTag';
-import Context from './Context';
-import Helper from './Helper';
-import KeystrokeHub from './KeystrokeHub';
-import HeadsUp from './HeadsUp';
-import StudyMenu from './StudyMenu';
-import StudyEdit from './StudyEdit';
-import Keystroke from './Keystroke';
-import Layout from './Layout';
-import HeadsUpMarker from './HeadsUpMarker';
 import UIManager from './UIManager';
 import UI from './UI';
 
@@ -23,27 +9,7 @@ import UI from './UI';
  * @namespace CIQ.UI
  */
 CIQ.UI = UI;
-CIQ.UI.BaseComponent = BaseComponent;
-CIQ.UI.DialogContentTag = DialogContentTag;
-CIQ.UI.ContextTag = ContextTag;
-CIQ.UI.ModalTag = ModalTag;
-CIQ.UI.Context = Context;
-CIQ.UI.Helper = Helper;
-CIQ.UI.KeystrokeHub = KeystrokeHub;
-CIQ.UI.HeadsUp = HeadsUp;
-CIQ.UI.StudyMenu = StudyMenu;
-CIQ.UI.StudyEdit = StudyEdit;
-CIQ.UI.Keystroke = Keystroke;
-CIQ.UI.Layout = Layout;
 CIQ.UI.UIManager = document.registerElement('cq-ui-manager', UIManager);
-
-/**
- * @constructor CIQ.UI.Lookup
- */
-CIQ.UI.Lookup = {};
-CIQ.UI.Lookup.Driver = Driver;
-
-CIQ.Marker.HeadsUp = HeadsUpMarker;
 
 /*
  * http://www.backalleycoder.com/2013/03/18/cross-browser-event-based-element-resize-detection/

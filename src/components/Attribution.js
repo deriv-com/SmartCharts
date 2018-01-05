@@ -65,7 +65,7 @@ class Attribution extends ModalTag {
 
     attachedCallback() {
         if (this.attached) return;
-        CIQ.UI.ModalTag.attachedCallback.apply(this);
+        ModalTag.attachedCallback.apply(this);
         this.attached = true;
     }
 

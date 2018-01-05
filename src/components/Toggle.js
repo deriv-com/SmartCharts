@@ -50,7 +50,7 @@ class Toggle extends ContextTag {
             toggles: [],
             callbacks: [],
         };
-        CIQ.UI.ContextTag.attachedCallback.apply(this);
+        ContextTag.attachedCallback.apply(this);
         this.attached = true;
     }
 

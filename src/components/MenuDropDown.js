@@ -38,7 +38,7 @@ class MenuDropDown extends ContextTag {
     createdCallback() {
         if (this.ownerDocument !== document) return; // https://bugs.chromium.org/p/chromium/issues/detail?id=430578
         let node = $(this);
-        CIQ.UI.ContextTag.createdCallback.call(this);
+        ContextTag.createdCallback.call(this);
         if (typeof (node.attr('cq-no-scroll')) === 'undefined') { CIQ.UI.Scroll.prototype.createdCallback.call(this); }
     }
 
@@ -46,7 +46,7 @@ class MenuDropDown extends ContextTag {
         if (this.attached) return;
         let node = $(this);
         this.noMaximize = true;
-        CIQ.UI.ContextTag.attachedCallback.call(this);
+        ContextTag.attachedCallback.call(this);
         this.attached = false; // double inheritance!
         if (typeof (node.attr('cq-no-scroll')) === 'undefined') { CIQ.UI.Scroll.prototype.attachedCallback.call(this); }
         this.attached = true;
@@ -54,7 +54,7 @@ class MenuDropDown extends ContextTag {
 }
 
 // Whoa, double inheritance! Yes, we need this web component to inherit from both
-// CIQ.UI.Scroll as well as CIQ.UI.ContextTag.
+// CIQ.UI.Scroll as well as ContextTag.
 CIQ.UI.addInheritance(MenuDropDown, CIQ.UI.Scroll);
 
 export default MenuDropDown;

@@ -9,7 +9,7 @@ import ContextTag from './UI/ContextTag';
 class DrawingToolbar extends ContextTag {
     attachedCallback() {
         if (this.attached) return;
-        CIQ.UI.ContextTag.attachedCallback.apply(this);
+        ContextTag.attachedCallback.apply(this);
         this.node = $(this);
         this.params = {
             toolSelection: this.node.find('*[cq-current-tool]'),

@@ -1,5 +1,6 @@
 import $ from 'jquery';
 import Helper from './Helper';
+import Keystroke from './Keystroke';
 import { CIQ } from '../../../js/chartiq';
 import { claims } from './constants';
 
@@ -34,7 +35,7 @@ class KeystrokeHub extends Helper {
                 self.handler.apply(self, args);
             };
         }
-        this.keystroke = new CIQ.UI.Keystroke(node, handler());
+        this.keystroke = new Keystroke(node, handler());
     }
 
     /**

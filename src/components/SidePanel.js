@@ -12,7 +12,7 @@ import ContextTag from './UI/ContextTag';
  */
 class SidePanel extends ContextTag {
     createdCallback(...args) {
-        CIQ.UI.ContextTag.createdCallback.apply(this, args);
+        ContextTag.createdCallback.apply(this, args);
         this.callbacks = [];
     }
 

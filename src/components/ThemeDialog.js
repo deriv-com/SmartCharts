@@ -48,7 +48,7 @@ class ThemeDialog extends DialogContentTag {
         this.helper.settings = this.revert;
         this.applyChanges();
         // CIQ.UI.containerExecute(this, "close");
-        CIQ.UI.DialogContentTag.close.apply(this);
+        DialogContentTag.close.apply(this);
     }
 
     /**
@@ -70,7 +70,7 @@ class ThemeDialog extends DialogContentTag {
             theme.builtIn = this.currentLoadedBuiltIn;
             this.addCustom(theme, self.initiatingMenu);
         });
-        CIQ.UI.DialogContentTag.close.apply(this);
+        DialogContentTag.close.apply(this);
     }
 
     /**
@@ -78,7 +78,7 @@ class ThemeDialog extends DialogContentTag {
  * @memberof WebComponents.cq-theme-dialog
  */
     open(params, ...args) {
-        CIQ.UI.DialogContentTag.open.apply(this, args);
+        DialogContentTag.open.apply(this, args);
         let themeName = params.themeName;
 
         this.initiatingMenu = params.initiatingMenu;

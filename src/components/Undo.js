@@ -15,7 +15,7 @@ import ContextTag from './UI/ContextTag';
 
 class Undo extends ContextTag {
     createdCallback() {
-        CIQ.UI.ContextTag.createdCallback.apply(this);
+        ContextTag.createdCallback.apply(this);
         this.redoButton = null;
         this.undostack = [];
         this.redostack = [];
@@ -24,7 +24,7 @@ class Undo extends ContextTag {
 
     attachedCallback() {
         if (this.attached) return;
-        CIQ.UI.ContextTag.attachedCallback.apply(this);
+        ContextTag.attachedCallback.apply(this);
         this.attached = true;
         let self = this;
         $(this).stxtap(() => {

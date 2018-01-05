@@ -14,7 +14,7 @@ import ContextTag from './UI/ContextTag';
 class Views extends ContextTag {
     attachedCallback() {
         if (this.attached) return;
-        CIQ.UI.ContextTag.attachedCallback.apply(this);
+        ContextTag.attachedCallback.apply(this);
         this.attached = true;
     }
 

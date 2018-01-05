@@ -1,5 +1,6 @@
 import $ from 'jquery';
 import { CIQ } from '../../js/chartiq';
+import BaseComponent from './UI/BaseComponent';
 
 /**
  * Dialog web component `<cq-dialog>`.
@@ -37,14 +38,14 @@ class Dialog extends HTMLElement {
     static activeAttributes = null;
 
     createdCallback() {
-        CIQ.UI.BaseComponent.createdCallback.apply(this);
+        BaseComponent.createdCallback.apply(this);
         this.activeAttributes = {};
     }
 
     attachedCallback() {
         if (this.attached) return;
         this.isDialog = true;
-        CIQ.UI.BaseComponent.attachedCallback.apply(this);
+        BaseComponent.attachedCallback.apply(this);
         let self = this;
 
         function handleTap(e) {

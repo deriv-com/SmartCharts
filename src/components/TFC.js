@@ -12,7 +12,7 @@ import ContextTag from './UI/ContextTag';
 class TFC extends ContextTag {
     attachedCallback() {
         if (this.attached) return;
-        CIQ.UI.ContextTag.attachedCallback.apply(this);
+        ContextTag.attachedCallback.apply(this);
         this.attached = true;
     }
 

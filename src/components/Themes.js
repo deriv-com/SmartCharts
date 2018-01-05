@@ -38,7 +38,7 @@ import ContextTag from './UI/ContextTag';
 class Themes extends ContextTag {
     attachedCallback() {
         if (this.attached) return;
-        CIQ.UI.ContextTag.attachedCallback.apply(this);
+        ContextTag.attachedCallback.apply(this);
         this.attached = true;
         this.builtInMenu = $(this).find('cq-themes-builtin');
         this.builtInTemplate = this.builtInMenu.find('template');

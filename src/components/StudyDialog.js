@@ -58,13 +58,13 @@ import DialogContentTag from './UI/DialogContentTag';
 
 class StudyDialog extends DialogContentTag {
     setContext(context) {
-        CIQ.UI.DialogContentTag.setContext.call(this, context);
+        DialogContentTag.setContext.call(this, context);
         context.advertiseAs(this, 'StudyDialog');
     }
 
     attachedCallback() {
         if (this.attached) return;
-        CIQ.UI.DialogContentTag.attachedCallback.apply(this);
+        DialogContentTag.attachedCallback.apply(this);
         let dialog = $(this);
         this.inputTemplate = dialog.find('template[cq-study-input]');
         this.outputTemplate = dialog.find('template[cq-study-output]');
@@ -137,7 +137,7 @@ class StudyDialog extends DialogContentTag {
     }
 
     open(params, ...args) {
-        CIQ.UI.DialogContentTag.open.apply(this, args);
+        DialogContentTag.open.apply(this, args);
 
         // Generate a "helper" which tells us how to create a dialog
         this.helper = new CIQ.Studies.DialogHelper(params);

@@ -17,7 +17,7 @@ class TimezoneDialog extends DialogContentTag {
 
         if (stx.displayInitialized) stx.draw();
 
-        CIQ.UI.DialogContentTag.close.apply(this);
+        DialogContentTag.close.apply(this);
     }
 
     /**
@@ -25,7 +25,7 @@ class TimezoneDialog extends DialogContentTag {
  * @memberof WebComponents.cq-theme-dialog
  */
     open(params, ...args) {
-        CIQ.UI.DialogContentTag.open.apply(this, args);
+        DialogContentTag.open.apply(this, args);
         let node = this.node;
         let self = this;
 
@@ -40,7 +40,7 @@ class TimezoneDialog extends DialogContentTag {
 
         function setTimezone(zone) {
             return function () {
-                CIQ.UI.DialogContentTag.close.apply(self);
+                DialogContentTag.close.apply(self);
                 let translatedZone = CIQ.timeZoneMap[zone];
                 CIQ.ChartEngine.defaultDisplayTimeZone = translatedZone;
                 stx.setTimeZone(stx.dataZone, translatedZone);

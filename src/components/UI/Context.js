@@ -1,5 +1,4 @@
 import $ from 'jquery';
-import { CIQ } from '../../../js/chartiq';
 
 /**
  * UI context helper class. Construct with an {@link CIQ.ChartEngine} object
@@ -17,7 +16,7 @@ class Context {
         this.stx = stx;
         topNode = this.topNode = $(topNode)[0];
         this.node = $(this.topNode);
-        let storage = CIQ.UI.Context.assembleContext(topNode);
+        let storage = Context.assembleContext(topNode);
         this.advertised = {};
         topNode.CIQ.UI.context = this;
         // Search through all of the components that have registered themselves. Call setContext() on each

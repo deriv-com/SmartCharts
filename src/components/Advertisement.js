@@ -31,7 +31,7 @@ import ModalTag from './UI/ModalTag';
 class Advertisement extends ModalTag {
     attachedCallback() {
         if (this.attached) return;
-        CIQ.UI.ModalTag.attachedCallback.apply(this);
+        ModalTag.attachedCallback.apply(this);
         this.nameValueStore = new CIQ.NameValueStore();
         this.attached = true;
     }

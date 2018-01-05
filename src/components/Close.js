@@ -23,7 +23,7 @@ class Close extends BaseComponent {
             self.tap();
         }
         $(this).stxtap(closure);
-        CIQ.UI.BaseComponent.attachedCallback.apply(this);
+        BaseComponent.attachedCallback.apply(this);
         this.attached = true;
     }
     /**

@@ -1,13 +1,21 @@
 import $ from 'jquery';
+import { CIQ } from '../js/chartiq';
+
 import StreamManager from './stream-manager';
-import ExampleDriver from './ExampleDriver';
 import Feed from './feed';
+import ExampleDriver from './ExampleDriver';
+
+// Before using components, you need to first import components/UI
+import './components/UI';
+import './components/Scroll';
+import './components/Lookup';
+import './components/Menu';
+import Context from './components/UI/Context';
+import KeystrokeHub from './components/UI/KeystrokeHub';
+
 import '../js/thirdparty/object-observe';
 import '../js/thirdparty/webcomponents-lite.min';
 import '../js/thirdparty/perfect-scrollbar.jquery';
-
-import { CIQ } from '../js/chartiq';
-import './components';
 
 import '../plugins/tfc/tfc';
 import '../js/plugin';
@@ -49,7 +57,7 @@ stxx.callbacks.layout = saveLayout;
 stxx.callbacks.symbolChange = saveLayout;
 
 function startUI() {
-    const UIContext = new CIQ.UI.Context(stxx, $('*[cq-context]'));
+    const UIContext = new Context(stxx, $('*[cq-context]'));
 
     UIContext.changeSymbol = (data) => {
         let stx = this.stx;
@@ -71,8 +79,8 @@ function startUI() {
     });
 
     // eslint-disable-next-line no-unused-vars
-    let KeystrokeHub = new CIQ.UI.KeystrokeHub($('body'), UIContext, {
-        cb: CIQ.UI.KeystrokeHub.defaultHotKeys,
+    let keyhub = new KeystrokeHub($('body'), UIContext, {
+        cb: KeystrokeHub.defaultHotKeys,
     });
 
     if (UIContext.loader) UIContext.loader.show();

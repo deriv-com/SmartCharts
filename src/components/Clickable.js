@@ -18,12 +18,12 @@ import ContextTag from './UI/ContextTag';
 
 class Clickable extends ContextTag {
     createdCallback() {
-        CIQ.UI.ContextTag.createdCallback.apply(this);
+        ContextTag.createdCallback.apply(this);
     }
 
     attachedCallback() {
         if (this.attached) return;
-        CIQ.UI.ContextTag.attachedCallback.apply(this);
+        ContextTag.attachedCallback.apply(this);
         this.attached = true;
         let self = this;
 

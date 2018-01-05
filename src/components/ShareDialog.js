@@ -39,7 +39,7 @@ class ShareDialog extends DialogContentTag {
     close() {
     // Clear out the link and then close
         $('cq-share-dialog .share-link-div').html('');
-        CIQ.UI.DialogContentTag.close.apply(this);
+        DialogContentTag.close.apply(this);
     }
 
     /**
