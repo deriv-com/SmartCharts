@@ -1162,7 +1162,7 @@ CIQ.UI.ModalTag = ModalTag;
  * @namespace CIQ.UI.DialogContentTag
  * @memberof CIQ.UI
  */
-class DialogContentTag extends BaseComponent {
+export class DialogContentTag extends BaseComponent {
     /**
      * Opens the parent dialog
      * @param {Object} [params] Optional params
