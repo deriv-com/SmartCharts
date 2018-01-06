@@ -1,5 +1,6 @@
 import { CIQ } from '../../js/chartiq';
 import ShareDialog from './ShareDialog';
+import ShareButton from './ShareButton';
 import './componentUI';
 
 /**
@@ -3827,36 +3828,8 @@ MenuDropDown.prototype.attachedCallback = function () {
 CIQ.UI.MenuDropDown = document.registerElement('cq-menu-dropdown', MenuDropDown);
  */
 
-/**
- * Share Button web component `<cq-share-button>`.
- *
- * @namespace WebComponents.cq-share-button
- * @example
- <cq-share-button>
-     <div stxtap="tap();">Share</div>
- </cq-share-button>
- */
-class ShareButton extends CIQ.UI.ContextTag {
-    /**
-     * Opens a customizable dialog that can share a chart.
-     * @alias tap
-     * @memberof WebComponents.cq-share-button
-     */
-    tap(e) {
-        let context = this.context;
-        $('cq-share-dialog').each(function () {
-            this.open({
-                context,
-            });
-        });
-    }
-}
 
 CIQ.UI.ShareButton = document.registerElement('cq-share-button', ShareButton);
-
-
-
-
 CIQ.UI.ShareDialog = document.registerElement('cq-share-dialog', ShareDialog);
 
 

@@ -996,7 +996,7 @@ CIQ.UI.BaseComponent = BaseComponent;
  * @namespace ContextTag
  * @type {HTMLElement}
  */
-class ContextTag extends BaseComponent {
+export class ContextTag extends BaseComponent {
     /**
      * Stores the component in the contextHolder so that when the context
      * is started it knows that this tag is contextual
