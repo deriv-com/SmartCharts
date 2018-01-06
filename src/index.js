@@ -6,8 +6,8 @@ import '../js/thirdparty/webcomponents-lite.min';
 import '../js/thirdparty/perfect-scrollbar.jquery';
 
 import { CIQ } from '../js/chartiq';
-import '../js/componentUI';
-import '../js/components';
+import './components/componentUI';
+import './components/components';
 
 import '../plugins/tfc/tfc';
 import '../js/plugin';
