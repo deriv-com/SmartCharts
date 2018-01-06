@@ -1,7 +1,6 @@
 import $ from 'jquery';
 import StreamManager from './stream-manager';
 import Feed from './feed';
-import '../js/thirdparty/object-observe';
 import '../js/thirdparty/webcomponents-lite.min';
 import '../js/thirdparty/perfect-scrollbar.jquery';
 import '../js/thirdparty/html2canvas';

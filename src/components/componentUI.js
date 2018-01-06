@@ -1,6 +1,6 @@
 // Copyright 2015-2016 by ChartIQ, Inc.
+import 'object.observe';
 import { CIQ } from '../../js/chartiq';
-import '../../js/thirdparty/object-observe';
 import '../../js/thirdparty/webcomponents-lite.min';
 
 let claims = [];
