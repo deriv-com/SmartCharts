@@ -2611,9 +2611,12 @@ UIManager.prototype.openMenu = function (menu, params) {
     }, 0);
     this.activeMenuStack.push(menu);
     menu.show(params);
+    /** Not sure why this throw errors but it runs fine without it...
+
     $('cq-context,*[cq-context]').each(function () {
         if (this.CIQ && this.CIQ.UI && this.CIQ.UI.context && this.CIQ.UI.context.stx) { this.CIQ.UI.context.stx.modalBegin(); }
     });
+    */
 };
 
 /**
@@ -2690,9 +2693,12 @@ UIManager.prototype.unregisterForResize = function (element) {
  */
 UIManager.prototype.ifAllClosed = function () {
     if (!this.activeMenuStack.length) {
+        /** Not sure why this throw errors but it runs fine without it...
+
         $('cq-context,*[cq-context]').each(function () {
             if (this.CIQ && this.CIQ.UI && this.CIQ.UI.context && this.CIQ.UI.context.stx) { this.CIQ.UI.context.stx.modalEnd(); }
         });
+        */
     }
 };
 
