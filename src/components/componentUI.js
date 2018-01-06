@@ -278,7 +278,7 @@ CIQ.UI.containerExecute = function (self, fn, args) {
     for (let i = 0; i < parents.length; i++) {
         let parent = parents[i];
         if (parent[fn] && parent[fn].constructor === Function) {
-            return parent[fn](...myArgs);
+            return parent[fn].apply(parent, myArgs);
         }
     }
     return null;
@@ -657,7 +657,7 @@ Context.prototype.isModal = function () {
  * @namespace BaseComponent
  * @type {HTMLElement}
  */
-class BaseComponent extends HTMLElement {
+export class BaseComponent extends HTMLElement {
     static scheduledBindings = [];
     static timeout = null;
 
