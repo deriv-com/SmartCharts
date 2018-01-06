@@ -3880,77 +3880,75 @@ CIQ.UI.ShareButton = document.registerElement('cq-share-button', ShareButton);
      </cq-share-dialog>
  </cq-dialog>
  */
-let ShareDialog = {
-    prototype: Object.create(CIQ.UI.DialogContentTag),
-};
-
-ShareDialog.prototype.setState = function (state) {
-    this.node.find('cq-share-create').css({
-        display: 'none',
-    });
-    this.node.find('cq-share-generating').css({
-        display: 'none',
-    });
-    this.node.find('cq-share-uploading').css({
-        display: 'none',
-    });
-    this.node.find(`cq-share-${state}`).css({
-        display: 'inline-block',
-    });
-};
-
-ShareDialog.prototype.close = function () {
-    // Clear out the link and then close
-    $('cq-share-dialog .share-link-div').html('');
-    CIQ.UI.DialogContentTag.close.apply(this);
-};
-
-/**
- * Shares a chart with default parameters
- * @alias share
- * @memberof WebComponents.cq-share-dialog
- */
-ShareDialog.prototype.share = function () {
-    let stx = this.context.stx;
-    let self = this;
-    this.setState('generating');
-    $('cq-share-dialog .share-link-div').html('');
-    // "hide" is a selector list, of DOM elements to be hidden while an image of the chart is created.  "cq-comparison-add-label" and "#chartSize" are hidden by default.
-    CIQ.UI.bypassBindings = true;
-    CIQ.Share.createImage(stx, {
-        hide: ['.stx_chart_controls'],
-    }, (data) => {
-        CIQ.UI.bypassBindings = false;
-        let id = CIQ.uniqueID();
-        let host = 'https://share.chartiq.com';
-        let startOffset = stx.getStartDateOffset();
-        let metaData = {
-            layout: stx.exportLayout(),
-            drawings: stx.exportDrawings(),
-            xOffset: startOffset,
-            startDate: stx.chart.dataSegment[startOffset].Date,
-            endDate: stx.chart.dataSegment[stx.chart.dataSegment.length - 1].Date,
-            id,
-            symbol: stx.chart.symbol,
-        };
-        let url = `${host}/upload/${id}`;
-        let payload = {
-            id,
-            image: data,
-            config: metaData,
-        };
-
-        self.setState('uploading');
-        CIQ.Share.uploadImage(data, url, payload, (err, response) => {
-            self.setState('create');
-            if (err !== null) {
-                CIQ.alert(`error: ${err}`);
-            } else {
-                $('cq-share-dialog .share-link-div').html(host + response);
-            }
+class ShareDialog extends CIQ.UI.DialogContentTag {
+    setState(state) {
+        this.node.find('cq-share-create').css({
+            display: 'none',
         });
-    });
-};
+        this.node.find('cq-share-generating').css({
+            display: 'none',
+        });
+        this.node.find('cq-share-uploading').css({
+            display: 'none',
+        });
+        this.node.find(`cq-share-${state}`).css({
+            display: 'inline-block',
+        });
+    };
+    
+    close() {
+        // Clear out the link and then close
+        $('cq-share-dialog .share-link-div').html('');
+        super.close();
+    };
+    
+    /**
+     * Shares a chart with default parameters
+     * @alias share
+     * @memberof WebComponents.cq-share-dialog
+     */
+    share() {
+        let stx = this.context.stx;
+        let self = this;
+        this.setState('generating');
+        $('cq-share-dialog .share-link-div').html('');
+        // "hide" is a selector list, of DOM elements to be hidden while an image of the chart is created.  "cq-comparison-add-label" and "#chartSize" are hidden by default.
+        CIQ.UI.bypassBindings = true;
+        CIQ.Share.createImage(stx, {
+            hide: ['.stx_chart_controls'],
+        }, (data) => {
+            CIQ.UI.bypassBindings = false;
+            let id = CIQ.uniqueID();
+            let host = 'https://share.chartiq.com';
+            let startOffset = stx.getStartDateOffset();
+            let metaData = {
+                layout: stx.exportLayout(),
+                drawings: stx.exportDrawings(),
+                xOffset: startOffset,
+                startDate: stx.chart.dataSegment[startOffset].Date,
+                endDate: stx.chart.dataSegment[stx.chart.dataSegment.length - 1].Date,
+                id,
+                symbol: stx.chart.symbol,
+            };
+            let url = `${host}/upload/${id}`;
+            let payload = {
+                id,
+                image: data,
+                config: metaData,
+            };
+    
+            self.setState('uploading');
+            CIQ.Share.uploadImage(data, url, payload, (err, response) => {
+                self.setState('create');
+                if (err !== null) {
+                    CIQ.alert(`error: ${err}`);
+                } else {
+                    $('cq-share-dialog .share-link-div').html(host + response);
+                }
+            });
+        });
+    };
+}
 
 CIQ.UI.ShareDialog = document.registerElement('cq-share-dialog', ShareDialog);
 
