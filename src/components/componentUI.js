@@ -9,7 +9,7 @@ let claims = [];
 jQuery.fn.extend({
     stxtap(arg1, arg2) {
         return this.each(function () {
-            CIQ.installTapEvent(this /* , {stopPropagation:true} */ );
+            CIQ.installTapEvent(this /* , {stopPropagation:true} */);
             if (typeof arg1 === 'string') {
                 $(this).on('stxtap', arg1, function (e) {
                     arg2.call(this, e);
@@ -657,335 +657,337 @@ Context.prototype.isModal = function () {
  * @namespace BaseComponent
  * @type {HTMLElement}
  */
-var BaseComponent = CIQ.UI.BaseComponent = Object.create(HTMLElement.prototype);
+class BaseComponent extends HTMLElement {
+    static scheduledBindings = [];
+    static timeout = null;
 
-/**
- * Locates the nearest UI helper for the given attribute. If none exists then it is created at the topNode.
- * @param  {HTMLElement} node    The node with either stxbind or stxtap attribute
- * @param {string} [binding] The type of binding or helper name being looked for, otherwise the stxbind and then stxtap attributes are queried
- * @param {string} attribute Either "stxtap" or "stxbind". Only required if binding==null.
- * @return {CIQ.UI.Helper}     A UI helper object
- * @memberof CIQ.UI.BaseComponent
- */
-BaseComponent.getHelper = function (node, binding, attribute) {
-    if (!node) node = this.topNode;
-    else node = $(node)[0];
-    if (!binding) {
-        binding = node.getAttribute(attribute);
-        if (!binding) return null;
-    }
-    let helper;
-    let paren = binding.indexOf('(');
-    let beforeParen = binding.substring(0, paren);
-    let period = binding.indexOf('.');
-    if (paren === -1 || beforeParen.indexOf('.') !== -1) { // Layout or Layout.Chart or Layout.Chart('blah')
-        let helperName = binding;
-        if (period !== -1) {
-            helperName = binding.substring(0, period);
+    /**
+     * Locates the nearest UI helper for the given attribute. If none exists then it is created at the topNode.
+     * @param  {HTMLElement} node    The node with either stxbind or stxtap attribute
+     * @param {string} [binding] The type of binding or helper name being looked for, otherwise the stxbind and then stxtap attributes are queried
+     * @param {string} attribute Either "stxtap" or "stxbind". Only required if binding==null.
+     * @return {CIQ.UI.Helper}     A UI helper object
+     * @memberof CIQ.UI.BaseComponent
+     */
+    getHelper(node, binding, attribute) {
+        if (!node) node = this.topNode;
+        else node = $(node)[0];
+        if (!binding) {
+            binding = node.getAttribute(attribute);
+            if (!binding) return null;
         }
-        if (!this.context) {
-            console.log(`No context attached to ${this.tagName}. A context is required when binding to a helper.`);
-            return null;
-        }
-        helper = this.context.getAdvertised(helperName);
-    } else { // bind to nearest web component // chart()
-        let f = binding.substring(0, paren);
-        let parents = $(node).parents();
-        for (let i = 0; i < parents.length; i++) {
-            let component = parents[i];
-            if (typeof (component[f]) === 'function') {
-                return component;
-            }
-        }
-    }
-    return helper;
-};
-
-/**
- * Activates an element that was tapped on via the stxtap attribute. The contents of stxtap
- * should be the name of a class derived from {@link CIQ.UI.Element}, a member function of that
- * class and the arguments.
- *
- * The DOM tree will be searched for an instance of that class. If one cannot be found, then an
- * instance will be created on the spot. The instance itself should attach itself if it wants to be re-used.
- * @param  {HTMLElement} node The node that was tapped
- * @param {Event} e The event that triggered the function
- * @param {Object} [params] Optional object to send as last argument
- * @param {Boolean} [setter] If true then use stxsetget instead of stxtap
- * @memberof CIQ.UI.BaseComponent
- * @private
- */
-BaseComponent.activate = function (node, e, params, setter) {
-    let attribute = setter ? 'stxsetget' : 'stxtap';
-    let method = CIQ.UI.splitMethod(node.getAttribute(attribute));
-    if (!method) return;
-    let helperName = method.helperName;
-    let f = method.functionName;
-    if (setter) f = `set${f}`;
-    // All helper methods take the node that was activated as the first argument
-    let argArray = [{ node, e, params }].concat(method.args);
-
-    if (helperName) {
-        let helper = this.getHelper(node, null, attribute);
-
-        if (!helper[f]) {
-            console.log(`Method '${f}' not found in helper`, helper);
-            return;
-        }
-        helper[f](...argArray);
-    } else { // Look for nearest parent web component that contains our desired activation function
-        let parents = $(node).parents();
-        for (let j = 0; j < parents.length; j++) {
-            let component = parents[j];
-            if (typeof (component[f]) === 'function') {
-                component[f](...argArray);
-            }
-        }
-    }
-};
-
-/**
- * We need to attach a safeClickTouch
- * @param  {HTMLElement}   node The element to attach a tap event to
- * @param  {Function} cb   The callback when tapped
- * @memberof CIQ.UI.BaseComponent
- */
-BaseComponent.makeTap = function (node, cb) {
-    node.selectFC = cb;
-    $(node).stxtap(cb);
-};
-
-/**
- * Set bindings for a node that has been created dynamically. The attribute can be either "stxbind", "stxtap" or "stxsetget".
- *
- * In the case of stxsetget, a "set" and "get" will be prepended to the bound method.
- * <Helper>.getXxxxx() will be called once during this initialization. That method should set up a binding.
- *
- * When tapping (or changing value in the case of an input field) <Helper>.setXxxx() will be called.
- *
- * bindings in web components will search for the nearest parent component that contains the expected function:
- * @example
- * stxtap="tool('gartley')" // Will look for the next parent with method "tool"
- *
- * To explicitly target a web component, use a prefix
- * @example
- * stxtap="DrawingToolbar.tool('gartley')"
- *
- * @param  {HTMLElement} node      The node to bind
- * @param {Object} [params] Optional parameters that will be passed as final argument
- * @memberof CIQ.UI.BaseComponent
- */
-BaseComponent.bind = function (node, params) {
-    node = $(node)[0]; // If jquery, convert to raw HTMLElement
-    let helper;
-    let binding = node.getAttribute('stxbind');
-    let tap = node.getAttribute('stxtap');
-    let setget = node.getAttribute('stxsetget');
-
-    // One way binding
-    function bindHelper(helper) {
-        let method;
+        let helper;
         let paren = binding.indexOf('(');
-        method = binding.substring(binding.indexOf('.') + 1);
-        if (paren !== -1) {
-            method = binding.substring(0, paren);
+        let beforeParen = binding.substring(0, paren);
+        let period = binding.indexOf('.');
+        if (paren === -1 || beforeParen.indexOf('.') !== -1) { // Layout or Layout.Chart or Layout.Chart('blah')
+            let helperName = binding;
+            if (period !== -1) {
+                helperName = binding.substring(0, period);
+            }
+            if (!this.context) {
+                console.log(`No context attached to ${this.tagName}. A context is required when binding to a helper.`);
+                return null;
+            }
+            helper = this.context.getAdvertised(helperName);
+        } else { // bind to nearest web component // chart()
+            let f = binding.substring(0, paren);
+            let parents = $(node).parents();
+            for (let i = 0; i < parents.length; i++) {
+                let component = parents[i];
+                if (typeof (component[f]) === 'function') {
+                    return component;
+                }
+            }
         }
-        helper[method](node);
-    }
-    if (binding && binding !== '') {
-        helper = this.getHelper(node, binding, 'stxbind');
-        bindHelper(helper);
+        return helper;
     }
 
-    // "tap" binding
-    let self = this;
+    /**
+     * Activates an element that was tapped on via the stxtap attribute. The contents of stxtap
+     * should be the name of a class derived from {@link CIQ.UI.Element}, a member function of that
+     * class and the arguments.
+     *
+     * The DOM tree will be searched for an instance of that class. If one cannot be found, then an
+     * instance will be created on the spot. The instance itself should attach itself if it wants to be re-used.
+     * @param  {HTMLElement} node The node that was tapped
+     * @param {Event} e The event that triggered the function
+     * @param {Object} [params] Optional object to send as last argument
+     * @param {Boolean} [setter] If true then use stxsetget instead of stxtap
+     * @memberof CIQ.UI.BaseComponent
+     * @private
+     */
+    activate(node, e, params, setter) {
+        let attribute = setter ? 'stxsetget' : 'stxtap';
+        let method = CIQ.UI.splitMethod(node.getAttribute(attribute));
+        if (!method) return;
+        let helperName = method.helperName;
+        let f = method.functionName;
+        if (setter) f = `set${f}`;
+        // All helper methods take the node that was activated as the first argument
+        let argArray = [{ node, e, params }].concat(method.args);
 
-    function closure(node) {
-        return function (e) {
-            self.e = e;
-            self.activate(node, e, params, false);
-        };
-    }
-    if (tap && tap !== '') {
-        if (node.tagName === 'INPUT' && (node.type === 'text' || node.type === 'number')) {
-            this.inputEntry(node, closure(node));
-        } else {
-            this.makeTap(node, closure(node));
+        if (helperName) {
+            let helper = this.getHelper(node, null, attribute);
+
+            if (!helper[f]) {
+                console.log(`Method '${f}' not found in helper`, helper);
+                return;
+            }
+            helper[f](...argArray);
+        } else { // Look for nearest parent web component that contains our desired activation function
+            let parents = $(node).parents();
+            for (let j = 0; j < parents.length; j++) {
+                let component = parents[j];
+                if (typeof (component[f]) === 'function') {
+                    component[f](...argArray);
+                }
+            }
         }
     }
 
-    // Setter/Getter binding
-    function setGetHelper(helper) {
-        function createSetter() {
+    /**
+     * We need to attach a safeClickTouch
+     * @param  {HTMLElement}   node The element to attach a tap event to
+     * @param  {Function} cb   The callback when tapped
+     * @memberof CIQ.UI.BaseComponent
+     */
+    makeTap(node, cb) {
+        node.selectFC = cb;
+        $(node).stxtap(cb);
+    }
+
+    /**
+     * Set bindings for a node that has been created dynamically. The attribute can be either "stxbind", "stxtap" or "stxsetget".
+     *
+     * In the case of stxsetget, a "set" and "get" will be prepended to the bound method.
+     * <Helper>.getXxxxx() will be called once during this initialization. That method should set up a binding.
+     *
+     * When tapping (or changing value in the case of an input field) <Helper>.setXxxx() will be called.
+     *
+     * bindings in web components will search for the nearest parent component that contains the expected function:
+     * @example
+     * stxtap="tool('gartley')" // Will look for the next parent with method "tool"
+     *
+     * To explicitly target a web component, use a prefix
+     * @example
+     * stxtap="DrawingToolbar.tool('gartley')"
+     *
+     * @param  {HTMLElement} node      The node to bind
+     * @param {Object} [params] Optional parameters that will be passed as final argument
+     * @memberof CIQ.UI.BaseComponent
+     */
+    bind(node, params) {
+        node = $(node)[0]; // If jquery, convert to raw HTMLElement
+        let helper;
+        let binding = node.getAttribute('stxbind');
+        let tap = node.getAttribute('stxtap');
+        let setget = node.getAttribute('stxsetget');
+
+        // One way binding
+        function bindHelper(helper) {
+            let method;
+            let paren = binding.indexOf('(');
+            method = binding.substring(binding.indexOf('.') + 1);
+            if (paren !== -1) {
+                method = binding.substring(0, paren);
+            }
+            helper[method](node);
+        }
+        if (binding && binding !== '') {
+            helper = this.getHelper(node, binding, 'stxbind');
+            bindHelper(helper);
+        }
+
+        // "tap" binding
+        let self = this;
+
+        function closure(node) {
             return function (e) {
                 self.e = e;
-                self.activate(node, e, params, true);
+                self.activate(node, e, params, false);
             };
         }
-        let method = CIQ.UI.splitMethod(setget);
-        if (!method) {
-            console.log(`Syntax error ${setget}`);
-            return;
+        if (tap && tap !== '') {
+            if (node.tagName === 'INPUT' && (node.type === 'text' || node.type === 'number')) {
+                this.inputEntry(node, closure(node));
+            } else {
+                this.makeTap(node, closure(node));
+            }
         }
-        let argArray = [node].concat(method.args).concat(params);
-        if (helper) helper[`get${method.functionName}`](...argArray);
-        if (node.type === 'text' || node.type === 'number') {
-            self.inputEntry(node, createSetter());
-        } else {
-            self.makeTap(node, createSetter());
+
+        // Setter/Getter binding
+        function setGetHelper(helper) {
+            function createSetter() {
+                return function (e) {
+                    self.e = e;
+                    self.activate(node, e, params, true);
+                };
+            }
+            let method = CIQ.UI.splitMethod(setget);
+            if (!method) {
+                console.log(`Syntax error ${setget}`);
+                return;
+            }
+            let argArray = [node].concat(method.args).concat(params);
+            if (helper) helper[`get${method.functionName}`](...argArray);
+            if (node.type === 'text' || node.type === 'number') {
+                self.inputEntry(node, createSetter());
+            } else {
+                self.makeTap(node, createSetter());
+            }
+        }
+        if (setget) {
+            helper = this.getHelper(node, setget, 'stxsetget');
+            setGetHelper(helper);
         }
     }
-    if (setget) {
-        helper = this.getHelper(node, setget, 'stxsetget');
-        setGetHelper(helper);
-    }
-};
 
-BaseComponent.scheduledBindings = [];
-BaseComponent.timeout = null;
-
-/**
- * Static method. Gets called once and only once per DOM processing cycle, and only
- * if it's been triggered by a call to scheduledForBinding.
- * @private
- * @memberof CIQ.UI.BaseComponent
- */
-BaseComponent.nextTick = function () {
-    if (!CIQ.UI.release) return; // UI hasn't started yet
-    clearTimeout(BaseComponent.timeout);
-    let scheduledBindings = BaseComponent.scheduledBindings;
-    // We traverse through the bindings backwards which ensures that we attempt to bind to the closest
-    // web component ancestor to the actual binding.
-    for (let i = scheduledBindings.length - 1; i >= 0; i--) {
-        let binding = scheduledBindings[i];
-        if (binding.node.ciqAlreadyBound) continue; // a node can only be bound once in it's lifetime
-        binding.contextTag.bind.call(binding.contextTag, binding.node);
-        binding.node.ciqAlreadyBound = true;
-    }
-};
-
-/**
- * Schedules a node to be processed for binding. The binding will occur in the next tick, in order
- * to provide time for the DOM to be completed.
- * @param  {HTMLElement} node The node to be bound
- * @memberof CIQ.UI.BaseComponent
- * @private
- */
-BaseComponent.scheduleForBinding = function (node) {
-    BaseComponent.scheduledBindings.push({ node, contextTag: this });
-
-    // This ensures that one and only one nextTick event will occur
-    if (BaseComponent.timeout) clearTimeout(BaseComponent.timeout);
-    BaseComponent.timeout = setTimeout(BaseComponent.nextTick, 0);
-};
-
-/**
- * Travels the DOM tree and locates stxbind attributes. UI elements can use these to configure menus or dialogs.
- * To effect reverse binding, set the value of the stxbind attribute to a Helper class name and data element. For instance "Layout.chartStyle".
- * The Helper element will seek out all children with "stxtap" attribution and examine the arguments to that function call for a match.
- * @param {HTMLElement} [traverseNode] Specify the node to traverse. Defaults to topNode for the context.
- * @memberof CIQ.UI.BaseComponent
- */
-BaseComponent.buildReverseBindings = function () {
-    if (CIQ.UI.bypassBindings) return;
-    let traverseNode = this;
-    let acceptFunc = function (node) {
-        if (node.hasAttribute('stxbind') ||
-            node.hasAttribute('stxtap') ||
-            node.hasAttribute('stxsetget')) {
-            return NodeFilter.FILTER_ACCEPT;
+    /**
+     * Static method. Gets called once and only once per DOM processing cycle, and only
+     * if it's been triggered by a call to scheduledForBinding.
+     * @private
+     * @memberof CIQ.UI.BaseComponent
+     */
+    static nextTick() {
+        if (!CIQ.UI.release) return; // UI hasn't started yet
+        clearTimeout(BaseComponent.timeout);
+        let scheduledBindings = BaseComponent.scheduledBindings;
+        // We traverse through the bindings backwards which ensures that we attempt to bind to the closest
+        // web component ancestor to the actual binding.
+        for (let i = scheduledBindings.length - 1; i >= 0; i--) {
+            let binding = scheduledBindings[i];
+            if (binding.node.ciqAlreadyBound) continue; // a node can only be bound once in it's lifetime
+            binding.contextTag.bind.call(binding.contextTag, binding.node);
+            binding.node.ciqAlreadyBound = true;
         }
-    };
+    }
 
-    let walker = document.createNodeIterator(
-        traverseNode,
-        NodeFilter.SHOW_ELEMENT,
-        CIQ.isIE ? acceptFunc : { acceptNode: acceptFunc },
-        false,
-    );
+    /**
+     * Schedules a node to be processed for binding. The binding will occur in the next tick, in order
+     * to provide time for the DOM to be completed.
+     * @param  {HTMLElement} node The node to be bound
+     * @memberof CIQ.UI.BaseComponent
+     * @private
+     */
+    scheduleForBinding(node) {
+        BaseComponent.scheduledBindings.push({ node, contextTag: this });
 
-    let node;
+        // This ensures that one and only one nextTick event will occur
+        if (BaseComponent.timeout) clearTimeout(BaseComponent.timeout);
+        BaseComponent.timeout = setTimeout(BaseComponent.nextTick, 0);
+    }
 
-    node = walker.nextNode();
-    while (node) {
-        this.scheduleForBinding(node);
+    /**
+     * Travels the DOM tree and locates stxbind attributes. UI elements can use these to configure menus or dialogs.
+     * To effect reverse binding, set the value of the stxbind attribute to a Helper class name and data element. For instance "Layout.chartStyle".
+     * The Helper element will seek out all children with "stxtap" attribution and examine the arguments to that function call for a match.
+     * @param {HTMLElement} [traverseNode] Specify the node to traverse. Defaults to topNode for the context.
+     * @memberof CIQ.UI.BaseComponent
+     */
+    buildReverseBindings() {
+        if (CIQ.UI.bypassBindings) return;
+        let traverseNode = this;
+        let acceptFunc = function (node) {
+            if (node.hasAttribute('stxbind') ||
+                node.hasAttribute('stxtap') ||
+                node.hasAttribute('stxsetget')) {
+                return NodeFilter.FILTER_ACCEPT;
+            }
+        };
+
+        let walker = document.createNodeIterator(
+            traverseNode,
+            NodeFilter.SHOW_ELEMENT,
+            CIQ.isIE ? acceptFunc : { acceptNode: acceptFunc },
+            false,
+        );
+
+        let node;
+
         node = walker.nextNode();
+        while (node) {
+            this.scheduleForBinding(node);
+            node = walker.nextNode();
+        }
     }
-};
 
-/**
- * We need to attach an input entry event
- * @param  {HTMLElement}   node The element to attach input entry event to
- * @param  {Function} cb   The callback when entered
- * @memberof CIQ.UI.BaseComponent
- */
-BaseComponent.inputEntry = function (node, cb) {
-    $(node).on('keypress', (e) => {
-        switch (e.which) {
+    /**
+     * We need to attach an input entry event
+     * @param  {HTMLElement}   node The element to attach input entry event to
+     * @param  {Function} cb   The callback when entered
+     * @memberof CIQ.UI.BaseComponent
+     */
+    inputEntry(node, cb) {
+        $(node).on('keypress', (e) => {
+            switch (e.which) {
             case 13:
             case 9:
                 cb();
-        }
-    });
-};
+            }
+        });
+    }
 
-/**
- * Claim any keystrokes that come in. Once claimed, any keystrokes
- * that come in will be passed to the helper. It can then choose
- * to capture or propagate the keystrokes. This allows a helper to capture
- * keystrokes even if it doesn't have mouse focus.
- * @param {CIQ.UI.Helper} helper A helper of ContextTag
- * @memberof CIQ.UI.BaseComponent
- */
-BaseComponent.addClaim = function (helper) {
-    claims.push({ helper });
-};
+    /**
+     * Claim any keystrokes that come in. Once claimed, any keystrokes
+     * that come in will be passed to the helper. It can then choose
+     * to capture or propagate the keystrokes. This allows a helper to capture
+     * keystrokes even if it doesn't have mouse focus.
+     * @param {CIQ.UI.Helper} helper A helper of ContextTag
+     * @memberof CIQ.UI.BaseComponent
+     */
+    addClaim(helper) {
+        claims.push({ helper });
+    }
 
-/**
- * Remove a claim on keystrokes.
- * @param  {CIQ.UI.Helper} helper Helper or ContextTag
- * @memberof CIQ.UI.BaseComponent
- */
-BaseComponent.removeClaim = function (helper) {
-    for (let i = 0; i < claims.length; i++) {
-        if (claims[i].helper === helper) {
-            claims.splice(i, 1);
-            return;
+    /**
+     * Remove a claim on keystrokes.
+     * @param  {CIQ.UI.Helper} helper Helper or ContextTag
+     * @memberof CIQ.UI.BaseComponent
+     */
+    removeClaim(helper) {
+        for (let i = 0; i < claims.length; i++) {
+            if (claims[i].helper === helper) {
+                claims.splice(i, 1);
+                return;
+            }
         }
     }
-};
 
-/**
- * Convience function that creates an array of injections for the component and sets a variable of node equal to self.
- * @kind function
- * @memberof CIQ.UI.BaseComponent
- * @private
- */
-BaseComponent.createdCallback = function () {
-    this.node = $(this);
-};
+    /**
+     * Convience function that creates an array of injections for the component and sets a variable of node equal to self.
+     * @kind function
+     * @memberof CIQ.UI.BaseComponent
+     * @private
+     */
+    createdCallback() {
+        this.node = $(this);
+    }
 
-/**
- * Called automatically when a tag is instantiated
- * @kind function
- * @memberof CIQ.UI.BaseComponent
- * @private
- */
-BaseComponent.attachedCallback = function () {
-    if (this.attached) return;
-    this.buildReverseBindings();
-    this.attached = true;
-};
+    /**
+     * Called automatically when a tag is instantiated
+     * @kind function
+     * @memberof CIQ.UI.BaseComponent
+     * @private
+     */
+    attachedCallback() {
+        if (this.attached) return;
+        this.buildReverseBindings();
+        this.attached = true;
+    }
 
-/**
- * Called automatically when a tag is removed from the DOM.
- * @kind function
- * @memberOf CIQ.UI.BaseComponent
- * @private
- */
-BaseComponent.detachedCallback = function () {
-    this.attached = false;
-};
+    /**
+     * Called automatically when a tag is removed from the DOM.
+     * @kind function
+     * @memberOf CIQ.UI.BaseComponent
+     * @private
+     */
+    detachedCallback() {
+        this.attached = false;
+    }
+}
+
+CIQ.UI.BaseComponent = BaseComponent;
 
 /**
  * Abstract class for web components that use a {@link CIQ.UI.Context} in order to gain access to a ChartEngine
@@ -994,110 +996,113 @@ BaseComponent.detachedCallback = function () {
  * @namespace ContextTag
  * @type {HTMLElement}
  */
-let ContextTag = CIQ.UI.ContextTag = Object.create(BaseComponent);
-
-/**
- * Stores the component in the contextHolder so that when the context
- * is started it knows that this tag is contextual
- * @kind function
- * @memberof CIQ.UI.ContextTag
- */
-ContextTag.setContextHolder = function () {
-    let nearestContext = this.node.parents('cq-context,*[cq-context]');
-    if (!nearestContext.length) {
-        console.log(`No cq-context found for ${this.tagName}`);
-        return;
-    }
-    let contextElement = nearestContext[0];
-    let storage = Context.assembleContext(contextElement);
-    storage.Components.push(this);
-
-    // This will only get called for components that are generated dynamically, after a context
-    // has already been established
-    if (storage.context) this.setContextPrivate(storage.context);
-};
-
-/**
- * This is called for every registered component when the context is constructed. You can override
- * this as an initialization.
- * @kind function
- * @memberof CIQ.UI.ContextTag
- * @param {CIQ.UI.Context} context The context
- */
-ContextTag.setContext = function (context) {
-    // override me
-};
-
-/**
- * @kind function
- * @memberof CIQ.UI.ContextTag
- * @param {CIQ.UI.Context} context The context
- * @private
- */
-ContextTag.setContextPrivate = function (context) {
-    this.context = context;
-    this.uiManager = $('cq-ui-manager');
-    if (this.uiManager.length > 0) this.uiManager = this.uiManager[0];
-
-    let node = $(this);
-    if (typeof (node.attr('cq-marker')) !== 'undefined') {
-        node.detach();
-        this.marker = new CIQ.Marker({
-            stx: context.stx,
-            node: node[0],
-            xPositioner: 'none',
-            yPositioner: 'none',
-            permanent: true,
-        });
-    }
-    setTimeout(function (s, c) { return function () { s.setContext(c); }; }(this, context));
-};
-
-/**
- * Convience function that creates an array of injections for the component and sets a variable of node equal to self.
- * @kind function
- * @memberof CIQ.UI.ContextTag
- */
-ContextTag.createdCallback = function () {
-    BaseComponent.createdCallback.apply(this);
-    this.injections = [];
-};
-
-/**
- *
- * @kind function
- * @memberof CIQ.UI.ContextTag
- * @param {string} position Where in the animation loop the injection should be added. Append or Prepend.
- * @param {string} injection What function to add the injection too
- * @param {function} code The callback to fired when the injection occurs
- */
-ContextTag.addInjection = function (position, injection, code) {
-    this.injections.push(this.context.stx[position](injection, code));
-};
-
-/**
- * Removes all the the injections for a context tag and resets the tag to its default state
- * @kind function
- * @memberof CIQ.UI.ContextTag
- */
-ContextTag.detachedCallback = function () {
-    if (this.context && this.injections) {
-        for (let i = 0; i < this.injections.length; i++) {
-            this.context.stx.removeInjection(this.injections[i]);
+class ContextTag extends BaseComponent {
+    /**
+     * Stores the component in the contextHolder so that when the context
+     * is started it knows that this tag is contextual
+     * @kind function
+     * @memberof CIQ.UI.ContextTag
+     */
+    setContextHolder() {
+        let nearestContext = this.node.parents('cq-context,*[cq-context]');
+        if (!nearestContext.length) {
+            console.log(`No cq-context found for ${this.tagName}`);
+            return;
         }
+        let contextElement = nearestContext[0];
+        let storage = Context.assembleContext(contextElement);
+        storage.Components.push(this);
+
+        // This will only get called for components that are generated dynamically, after a context
+        // has already been established
+        if (storage.context) this.setContextPrivate(storage.context);
+    }
+    
+    /**
+     * This is called for every registered component when the context is constructed. You can override
+     * this as an initialization.
+     * @kind function
+     * @memberof CIQ.UI.ContextTag
+     * @param {CIQ.UI.Context} context The context
+     */
+    setContext(/* context */) {
+        // override me
+    }
+    
+    /**
+     * @kind function
+     * @memberof CIQ.UI.ContextTag
+     * @param {CIQ.UI.Context} context The context
+     * @private
+     */
+    setContextPrivate(context) {
+        this.context = context;
+        this.uiManager = $('cq-ui-manager');
+        if (this.uiManager.length > 0) this.uiManager = this.uiManager[0];
+
+        let node = $(this);
+        if (typeof (node.attr('cq-marker')) !== 'undefined') {
+            node.detach();
+            this.marker = new CIQ.Marker({
+                stx: context.stx,
+                node: node[0],
+                xPositioner: 'none',
+                yPositioner: 'none',
+                permanent: true,
+            });
+        }
+        setTimeout(function (s, c) { return function () { s.setContext(c); }; }(this, context));
+    }
+    
+    /**
+     * Convience function that creates an array of injections for the component and sets a variable of node equal to self.
+     * @kind function
+     * @memberof CIQ.UI.ContextTag
+     */
+    createdCallback() {
+        super.createdCallback();
         this.injections = [];
     }
-};
+    
+    /**
+     *
+     * @kind function
+     * @memberof CIQ.UI.ContextTag
+     * @param {string} position Where in the animation loop the injection should be added. Append or Prepend.
+     * @param {string} injection What function to add the injection too
+     * @param {function} code The callback to fired when the injection occurs
+     */
+    addInjection(position, injection, code) {
+        this.injections.push(this.context.stx[position](injection, code));
+    }
+    
+    /**
+     * Removes all the the injections for a context tag and resets the tag to its default state
+     * @kind function
+     * @memberof CIQ.UI.ContextTag
+     */
+    detachedCallback() {
+        if (this.context && this.injections) {
+            for (let i = 0; i < this.injections.length; i++) {
+                this.context.stx.removeInjection(this.injections[i]);
+            }
+            this.injections = [];
+        }
+    }
+    
+    /**
+     * Called automatically when a tag is instantiated
+     * @private
+     */
+    attachedCallback() {
+        if (this.attached) return;
+        this.setContextHolder();
+        super.attachedCallback();
+    }
+}
 
-/**
- * Called automatically when a tag is instantiated
- * @private
- */
-ContextTag.attachedCallback = function () {
-    if (this.attached) return;
-    this.setContextHolder();
-    BaseComponent.attachedCallback.apply(this);
-};
+CIQ.UI.ContextTag = ContextTag;
+
 
 /**
  * A tag that is modally aware of the chart
@@ -1106,46 +1111,49 @@ ContextTag.attachedCallback = function () {
  * @namespace CIQ.UI.ModalTag
  * @memberof CIQ.UI
  */
-let ModalTag = CIQ.UI.ModalTag = Object.create(ContextTag);
+class ModalTag extends ContextTag {
+    /**
+     *
+     * @kind function
+     * @memberof CIQ.UI.ModalTag
+     */
+    modalBegin() {
+        if (!this.context) return;
+        this.context.stx.modalBegin();
+    };
+    
+    /**
+     *
+     * @kind function
+     * @memberof CIQ.UI.ModalTag
+     */
+    modalEnd() {
+        if (!this.context) return;
+        if (this.uiManager.activeMenuStack.length) return; // If an active menu then don't turn off the modal. Let uiManager handle it.
+        this.context.stx.modalEnd();
+    };
+    
+    /**
+     *
+     * @kind function
+     * @memberof CIQ.UI.ModalTag
+     */
+    attachedCallback() {
+        if (this.attached) return;
+        let node = $(this);
+        let self = this;
+        node.mouseover(() => {
+            self.modalBegin();
+        });
+        node.mouseout(() => {
+            self.modalEnd();
+        });
+        super.attachedCallback();
+    };
+}
 
-/**
- *
- * @kind function
- * @memberof CIQ.UI.ModalTag
- */
-ModalTag.modalBegin = function () {
-    if (!this.context) return;
-    this.context.stx.modalBegin();
-};
+CIQ.UI.ModalTag = ModalTag;
 
-/**
- *
- * @kind function
- * @memberof CIQ.UI.ModalTag
- */
-ModalTag.modalEnd = function () {
-    if (!this.context) return;
-    if (this.uiManager.activeMenuStack.length) return; // If an active menu then don't turn off the modal. Let uiManager handle it.
-    this.context.stx.modalEnd();
-};
-
-/**
- *
- * @kind function
- * @memberof CIQ.UI.ModalTag
- */
-ModalTag.attachedCallback = function () {
-    if (this.attached) return;
-    let node = $(this);
-    let self = this;
-    node.mouseover(() => {
-        self.modalBegin();
-    });
-    node.mouseout(() => {
-        self.modalEnd();
-    });
-    ContextTag.attachedCallback.apply(this);
-};
 
 /**
  * A tag that is inside of a cq-dialog.
@@ -1154,52 +1162,43 @@ ModalTag.attachedCallback = function () {
  * @namespace CIQ.UI.DialogContentTag
  * @memberof CIQ.UI
  */
-let DialogContentTag = CIQ.UI.DialogContentTag = Object.create(BaseComponent);
+class DialogContentTag extends BaseComponent {
+    /**
+     * Opens the parent dialog
+     * @param {Object} [params] Optional params
+     * @param {CIQ.UI.Context} [params.context] Optionally pass in a context to set
+     */
+    open(params) {
+        if (params && params.context) this.setContext(params.context);
+        let tagName = this.tagName.toLowerCase();
+        this.node.closest('cq-dialog,cq-menu').each(function () {
+            this.addActiveAttribute(tagName);
+            this.open(params);
+        });
+    }
 
-/**
- * Opens the parent dialog
- * @param {Object} [params] Optional params
- * @param {CIQ.UI.Context} [params.context] Optionally pass in a context to set
- */
-DialogContentTag.open = function (params) {
-    if (params && params.context) this.setContext(params.context);
-    let tagName = this.tagName.toLowerCase();
-    this.node.closest('cq-dialog,cq-menu').each(function () {
-        this.addActiveAttribute(tagName);
-        this.open(params);
-    });
-};
+    /**
+     * Close the dialog
+     */
+    close() {
+        this.node.parents('cq-dialog')[0].close();
+        this.node.find('cq-swatch').each(function () {
+            if (this.colorPicker) this.colorPicker.close();
+        });
+    }
 
-/**
- * Close the dialog
- */
-DialogContentTag.close = function () {
-    this.node.parents('cq-dialog')[0].close();
-    this.node.find('cq-swatch').each(function () {
-        if (this.colorPicker) this.colorPicker.close();
-    });
-};
+    /**
+     * Dynamically set the context for a dialog, so that it knows which chart to change when there
+     * are more than one chart on the screen.
+     * @param {CIQ.UI.Context} context The context to set
+     */
+    setContext(context) {
+        this.context = context;
+    }
+}
 
-DialogContentTag.attachedCallback = function () {
-    BaseComponent.attachedCallback.apply(this);
-};
+CIQ.UI.DialogContentTag = DialogContentTag;
 
-DialogContentTag.createdCallback = function () {
-    BaseComponent.createdCallback.apply(this);
-};
-
-DialogContentTag.detachedCallback = function () {
-    BaseComponent.detachedCallback.apply(this);
-};
-
-/**
- * Dynamically set the context for a dialog, so that it knows which chart to change when there
- * are more than one chart on the screen.
- * @param {CIQ.UI.Context} context The context to set
- */
-DialogContentTag.setContext = function (context) {
-    this.context = context;
-};
 
 /**
  * Abstract class for UI Helpers
@@ -2260,21 +2259,21 @@ CIQ.UI.Keystroke.prototype.keyup = function (e) {
     }
 
     switch (key) {
-        case 16:
-            this.shift = false;
-            this.cb({ key, e, keystroke: this });
-            return;
-        case 17:
-        case 18:
-            this.ctrl = false;
-            this.cb({ key, e, keystroke: this });
-            return;
-        case 91:
-            this.cmd = false;
-            this.cb({ key, e, keystroke: this });
-            return;
-        default:
-            break;
+    case 16:
+        this.shift = false;
+        this.cb({ key, e, keystroke: this });
+        return;
+    case 17:
+    case 18:
+        this.ctrl = false;
+        this.cb({ key, e, keystroke: this });
+        return;
+    case 91:
+        this.cmd = false;
+        this.cb({ key, e, keystroke: this });
+        return;
+    default:
+        break;
     }
     // This is where we handle the keystroke, regardless of whether we captured the key with a down or press event
     // The exception to this is the arrow keys, which are processed in keydown
@@ -2291,19 +2290,19 @@ CIQ.UI.Keystroke.prototype.keydown = function (e) {
     if (!this.ctrl) { if ((key !== 91 && key >= 48 && key <= 222) || key === 32) return; } // handled by keypress
 
     switch (key) {
-        case 91:
-            this.cmd = true;
-            return;
-        case 16:
-            this.shift = true;
-            return;
-        case 17:
-        case 18:
-            this.ctrl = true;
-            return;
-        case 20:
-            this.capsLock = !this.capsLock;
-            return;
+    case 91:
+        this.cmd = true;
+        return;
+    case 16:
+        this.shift = true;
+        return;
+    case 17:
+    case 18:
+        this.ctrl = true;
+        return;
+    case 20:
+        this.capsLock = !this.capsLock;
+        return;
     }
     if (key === 8) key = 'backspace'; // delete on mac
     if (key === 9) key = 'tab';
@@ -2409,61 +2408,61 @@ CIQ.UI.KeystrokeHub.defaultHotKeys = function (key, hub) {
     let stx = hub.context.stx;
     let push = 1;
     switch (key) {
-        case 'up':
-            stx.zoomIn();
-            break;
-        case 'down':
+    case 'up':
+        stx.zoomIn();
+        break;
+    case 'down':
+        stx.zoomOut();
+        break;
+    case 'home':
+        stx.home();
+        stx.headsUpHR();
+        break;
+    case 'end':
+        stx.chart.scroll = stx.chart.dataSet.length;
+        stx.draw();
+        stx.headsUpHR();
+        break;
+    case 'left':
+        if (stx.ctrl) {
             stx.zoomOut();
-            break;
-        case 'home':
-            stx.home();
-            stx.headsUpHR();
-            break;
-        case 'end':
-            stx.chart.scroll = stx.chart.dataSet.length;
+        } else {
+            push = 1;
+            if (stx.shift || hub.capsLock) push = Math.max(5, 5 * (8 - Math.round(stx.layout.candleWidth)));
+            if (stx.chart.scroll + push >= stx.chart.dataSet.length) { push = stx.chart.dataSet.length - stx.chart.scroll; }
+            stx.chart.scroll += push;
             stx.draw();
             stx.headsUpHR();
-            break;
-        case 'left':
-            if (stx.ctrl) {
-                stx.zoomOut();
-            } else {
-                push = 1;
-                if (stx.shift || hub.capsLock) push = Math.max(5, 5 * (8 - Math.round(stx.layout.candleWidth)));
-                if (stx.chart.scroll + push >= stx.chart.dataSet.length) { push = stx.chart.dataSet.length - stx.chart.scroll; }
-                stx.chart.scroll += push;
-                stx.draw();
-                stx.headsUpHR();
-            }
-            break;
-        case 'right':
-            if (stx.ctrl) {
-                stx.zoomIn();
-            } else {
-                push = 1;
-                if (stx.shift || hub.capsLock) push = Math.max(5, 5 * (8 - Math.round(stx.layout.candleWidth)));
-                stx.chart.scroll -= push;
-                stx.draw();
-                stx.headsUpHR();
-            }
-            break;
-        case 'delete':
-        case 'backspace':
-            if (CIQ.ChartEngine.drawingLine) {
-                stx.undo();
-            } else if (stx.anyHighlighted) {
-                stx.deleteHighlighted();
-            } else {
-                return false;
-            }
-            break;
-        case 'escape':
-            if (CIQ.ChartEngine.drawingLine) {
-                stx.undo();
-            } else if (hub.uiManager) hub.uiManager.closeMenu();
-            break;
-        default:
-            return false; // not captured
+        }
+        break;
+    case 'right':
+        if (stx.ctrl) {
+            stx.zoomIn();
+        } else {
+            push = 1;
+            if (stx.shift || hub.capsLock) push = Math.max(5, 5 * (8 - Math.round(stx.layout.candleWidth)));
+            stx.chart.scroll -= push;
+            stx.draw();
+            stx.headsUpHR();
+        }
+        break;
+    case 'delete':
+    case 'backspace':
+        if (CIQ.ChartEngine.drawingLine) {
+            stx.undo();
+        } else if (stx.anyHighlighted) {
+            stx.deleteHighlighted();
+        } else {
+            return false;
+        }
+        break;
+    case 'escape':
+        if (CIQ.ChartEngine.drawingLine) {
+            stx.undo();
+        } else if (hub.uiManager) hub.uiManager.closeMenu();
+        break;
+    default:
+        return false; // not captured
     }
     return true;
 };
@@ -2511,21 +2510,21 @@ CIQ.UI.KeystrokeHub.prototype.handler = function (obj) {
         keystroke = obj.keystroke,
         targetTagName = obj.e.target.tagName;
     switch (key) {
-        case 16:
-            stx.shift = keystroke.shift;
-            break;
-        case 17:
-        case 18:
-            stx.ctrl = keystroke.ctrl;
-            break;
-        case 91:
-            stx.cmd = keystroke.cmd;
-            break;
-        case 20:
-            this.capsLock = !this.capsLock;
-            break;
-        default:
-            break;
+    case 16:
+        stx.shift = keystroke.shift;
+        break;
+    case 17:
+    case 18:
+        stx.ctrl = keystroke.ctrl;
+        break;
+    case 91:
+        stx.cmd = keystroke.cmd;
+        break;
+    case 20:
+        this.capsLock = !this.capsLock;
+        break;
+    default:
+        break;
     }
     if (!CIQ.ChartEngine.drawingLine) {
         if (this.processKeyStrokeClaims(this, key, e, keystroke)) return;
