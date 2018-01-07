@@ -196,4 +196,5 @@ class Scroll extends BaseComponent {
     }
 }
 
+document.registerElement('cq-scroll', Scroll);
 export default Scroll;

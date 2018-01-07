@@ -1,13 +1,11 @@
 import { CIQ } from '../../js/chartiq';
-import ShareDialog from './ShareDialog';
-import ShareButton from './ShareButton';
-import Scroll from './Scroll';
-import MenuDropDown from './MenuDropDown';
-import ThemeDialog from './ThemeDialog';
+import './ShareDialog';
+import './ShareButton';
+import './Scroll';
+import './MenuDropDown';
+import './ThemeDialog';
+import './StudyParameter';
 import './componentUI';
-
-CIQ.UI.Scroll = document.registerElement('cq-scroll', Scroll);
-
 
 /**
  * Dialog web component `<cq-dialog>`.
@@ -2269,7 +2267,6 @@ class TFC extends CIQ.UI.ContextTag {
 
 
 CIQ.UI.TFC = document.registerElement('cq-tfc', TFC);
-CIQ.UI.ThemeDialog = document.registerElement('cq-theme-dialog', ThemeDialog);
 
 
 /**
@@ -3432,10 +3429,6 @@ class Menu extends HTMLElement {
 }
 
 CIQ.UI.Menu = document.registerElement('cq-menu', Menu);
-CIQ.UI.MenuDropDown = document.registerElement('cq-menu-dropdown', MenuDropDown);
-CIQ.UI.ShareButton = document.registerElement('cq-share-button', ShareButton);
-CIQ.UI.ShareDialog = document.registerElement('cq-share-dialog', ShareDialog);
-
 
 /**
  * Aggregation Dialog web component `<cq-aggregation-dialog>`.
@@ -4173,28 +4166,3 @@ class StudyOutput extends CIQ.UI.BaseComponent {
 
 
 CIQ.UI.StudyOutput = document.registerElement('cq-study-output', StudyOutput);
-
-
-/**
- * Study parameters web component `<cq-study-parameter>`.
- *
- * See example in {@link CIQ.WebComponents.cq-study-dialog}.
- * @name CIQ.WebComponents.cq-study-parameter
- */
-class StudyParameter extends CIQ.UI.BaseComponent {
-    initialize(params) {
-        this.params = params;
-    }
-
-    setColor(color) {
-        if (!this.params) return;
-        let updates = {
-            parameters: {},
-        };
-        updates.parameters[this.params.parameter] = color;
-        this.params.studyDialog.updateStudy(updates);
-    }
-}
-
-
-CIQ.UI.StudyParameter = document.registerElement('cq-study-parameter', StudyParameter);

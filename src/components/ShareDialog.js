@@ -1,3 +1,4 @@
+import { CIQ } from '../../js/chartiq';
 import { DialogContentTag } from './componentUI';
 
 /**
@@ -40,13 +41,13 @@ class ShareDialog extends DialogContentTag {
         this.node.find(`cq-share-${state}`).css({
             display: 'inline-block',
         });
-    };
+    }
     
     close() {
         // Clear out the link and then close
         $('cq-share-dialog .share-link-div').html('');
         super.close();
-    };
+    }
     
     /**
      * Shares a chart with default parameters
@@ -82,7 +83,7 @@ class ShareDialog extends DialogContentTag {
                 image: data,
                 config: metaData,
             };
-    
+
             self.setState('uploading');
             CIQ.Share.uploadImage(data, url, payload, (err, response) => {
                 self.setState('create');
@@ -93,7 +94,8 @@ class ShareDialog extends DialogContentTag {
                 }
             });
         });
-    };
+    }
 }
 
+document.registerElement('cq-share-dialog', ShareDialog);
 export default ShareDialog;

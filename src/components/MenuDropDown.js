@@ -56,5 +56,5 @@ class MenuDropDown extends aggregation(ContextTag, Scroll) {
     }
 }
 
-
+document.registerElement('cq-menu-dropdown', MenuDropDown);
 export default MenuDropDown;

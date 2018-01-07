@@ -119,4 +119,5 @@ class ThemeDialog extends DialogContentTag {
     }
 }
 
+document.registerElement('cq-theme-dialog', ThemeDialog);
 export default ThemeDialog;

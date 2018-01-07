@@ -24,4 +24,5 @@ class ShareButton extends ContextTag {
     }
 }
 
+document.registerElement('cq-share-button', ShareButton);
 export default ShareButton;
