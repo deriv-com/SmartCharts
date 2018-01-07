@@ -235,9 +235,8 @@ CIQ.UI.Dialog = document.registerElement('cq-dialog', Dialog);
         </cq-view-dialog>
      </cq-dialog>
  */
-let ViewDialog = {
-    prototype: Object.create(CIQ.UI.DialogContentTag),
-};
+class ViewDialog extends CIQ.UI.DialogContentTag {
+}
 
 /**
  * Saves the new view. This updates all cq-view menus on the screen, and persists the view in the nameValueStore.
@@ -307,9 +306,8 @@ CIQ.UI.ViewDialog = document.registerElement('cq-view-dialog', ViewDialog);
 </cq-advertisement>
      *
      */
-let Advertisement = {
-    prototype: Object.create(CIQ.UI.ModalTag),
-};
+class Advertisement extends CIQ.UI.ModalTag {
+}
 
 Advertisement.prototype.attachedCallback = function () {
     if (this.attached) return;
@@ -1212,9 +1210,8 @@ CIQ.UI.Comparison = document.registerElement('cq-comparison', Comparison);
  * @since 3.0.9
  */
 
-let FibSettingsDialog = {
-    prototype: Object.create(CIQ.UI.DialogContentTag),
-};
+class FibSettingsDialog extends CIQ.UI.DialogContentTag {
+}
 
 /**
  * Sets up a handler to process changes to fields
@@ -1319,9 +1316,8 @@ CIQ.UI.FibSettingsDialog = document.registerElement('cq-fib-settings-dialog', Fi
      </cq-language-dialog>
  </cq-dialog>
  */
-let LanguageDialog = {
-    prototype: Object.create(CIQ.UI.DialogContentTag),
-};
+class LanguageDialog extends CIQ.UI.DialogContentTag {
+}
 
 /**
  * Opens the nearest {@link WebComponents.cq-dialog} to display your dialog.
@@ -1379,9 +1375,8 @@ CIQ.UI.LanguageDialog = document.registerElement('cq-language-dialog', LanguageD
  * @example
  <cq-loader><cq-loader>
  */
-let Loader = {
-    prototype: Object.create(CIQ.UI.ContextTag),
-};
+class Loader extends CIQ.UI.ContextTag {
+}
 
 Loader.prototype.setContext = function (context) {
     this.context.setLoader(this);
@@ -2077,9 +2072,8 @@ CIQ.UI.SidePanel = document.registerElement('cq-side-panel', SidePanel);
  * @namespace WebComponents.cq-study-context
  * @since  4.1.0 cq-study-context is now required (cq-dialog[cq-study-context] no longer works)
  */
-let StudyContext = {
-    prototype: Object.create(CIQ.UI.DialogContentTag),
-};
+class StudyContext extends CIQ.UI.DialogContentTag {
+}
 
 CIQ.UI.StudyContext = document.registerElement('cq-study-context', StudyContext);
 
@@ -2114,9 +2108,8 @@ CIQ.UI.StudyContext = document.registerElement('cq-study-context', StudyContext)
          </cq-placeholder>
      </cq-section>
  */
-let Swatch = {
-    prototype: Object.create(HTMLElement.prototype),
-};
+class Swatch extends HTMLElement {
+}
 
 /**
  * Optionally set the default color for the swatch.
@@ -2214,9 +2207,8 @@ CIQ.UI.Swatch = document.registerElement('cq-swatch', Swatch);
  * @example
       <cq-tfc></cq-tfc>
  */
-let TFC = {
-    prototype: Object.create(CIQ.UI.ContextTag),
-};
+class TFC extends CIQ.UI.ContextTag {
+}
 
 TFC.prototype.attachedCallback = function () {
     if (this.attached) return;
@@ -2297,9 +2289,8 @@ CIQ.UI.TFC = document.registerElement('cq-tfc', TFC);
             </cq-theme-dialog>
         </cq-dialog>
  */
-let ThemeDialog = {
-    prototype: Object.create(CIQ.UI.DialogContentTag),
-};
+class ThemeDialog extends CIQ.UI.DialogContentTag {
+}
 
 /**
  * Applies changes to all charts on the screen
@@ -2424,9 +2415,8 @@ CIQ.UI.ThemeDialog = document.registerElement('cq-theme-dialog', ThemeDialog);
          </cq-placeholder>
      </cq-section>
  */
-let ThemePiece = {
-    prototype: Object.create(CIQ.UI.BaseComponent),
-};
+class ThemePiece extends CIQ.UI.BaseComponent {
+}
 
 /**
  * @alias setColor
@@ -2728,9 +2718,8 @@ CIQ.UI.Themes = document.registerElement('cq-themes', Themes);
 /**
  * Timezone Dialog web component `<cq-timezone-dialog>`.
  */
-let TimezoneDialog = {
-    prototype: Object.create(CIQ.UI.DialogContentTag),
-};
+class TimezoneDialog extends CIQ.UI.DialogContentTag {
+}
 
 /**
  * @alias save
@@ -3436,9 +3425,8 @@ CIQ.UI.Views = document.registerElement('cq-views', Views);
  </cq-menu>
  */
 
-let Menu = {
-    prototype: Object.create(HTMLElement.prototype),
-};
+class Menu extends HTMLElement {
+}
 
 Menu.prototype.createdCallback = function () {
     this.node = $(this);
@@ -3578,9 +3566,8 @@ CIQ.UI.ShareDialog = document.registerElement('cq-share-dialog', ShareDialog);
  *
  * @namespace WebComponents.cq-aggregation-dialog
  */
-let AggregationDialog = {
-    prototype: Object.create(CIQ.UI.DialogContentTag),
-};
+class AggregationDialog extends CIQ.UI.DialogContentTag {
+}
 
 /**
  * Opens the nearest {@link WebComponents.cq-dialog} to display your dialog.
@@ -3652,9 +3639,8 @@ CIQ.UI.AggregationDialog = document.registerElement('cq-aggregation-dialog', Agg
          </cq-overrides>
      </cq-color-picker>
  */
-let ColorPicker = {
-    prototype: Object.create(CIQ.UI.Dialog.prototype),
-};
+class ColorPicker extends CIQ.UI.Dialog {
+}
 
 ColorPicker.prototype.createdCallback = function () {
     CIQ.UI.Dialog.prototype.createdCallback.apply(this);
@@ -4087,9 +4073,8 @@ CIQ.UI.StudyDialog = document.registerElement('cq-study-dialog', StudyDialog);
  * See example in {@link CIQ.WebComponents.cq-study-dialog}.
  * @name CIQ.WebComponents.cq-study-input
  */
-let StudyInput = {
-    prototype: Object.create(CIQ.UI.BaseComponent),
-};
+class StudyInput extends CIQ.UI.BaseComponent {
+}
 
 CIQ.UI.StudyInput = document.registerElement('cq-study-input', StudyInput);
 
@@ -4152,9 +4137,8 @@ CIQ.UI.StudyInput = document.registerElement('cq-study-input', StudyInput);
 </cq-menu>
      *
      */
-let StudyLegend = {
-    prototype: Object.create(CIQ.UI.ModalTag),
-};
+class StudyLegend extends CIQ.UI.ModalTag {
+}
 
 StudyLegend.prototype.setContext = function (context) {
     this.template = this.node.find('template');
@@ -4296,9 +4280,8 @@ CIQ.UI.StudyLegend = document.registerElement('cq-study-legend', StudyLegend);
  * See example in {@link CIQ.WebComponents.cq-study-dialog}.
  * @name CIQ.WebComponents.cq-study-output
  */
-let StudyOutput = {
-    prototype: Object.create(CIQ.UI.BaseComponent),
-};
+class StudyOutput extends CIQ.UI.BaseComponent {
+}
 
 StudyOutput.prototype.initialize = function (params) {
     this.params = params;
@@ -4323,9 +4306,8 @@ CIQ.UI.StudyOutput = document.registerElement('cq-study-output', StudyOutput);
  * See example in {@link CIQ.WebComponents.cq-study-dialog}.
  * @name CIQ.WebComponents.cq-study-parameter
  */
-let StudyParameter = {
-    prototype: Object.create(CIQ.UI.BaseComponent),
-};
+class StudyParameter extends CIQ.UI.BaseComponent {
+}
 
 StudyParameter.prototype.initialize = function (params) {
     this.params = params;
