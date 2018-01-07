@@ -8,27 +8,26 @@ let claims = [];
 // Auxiliary function that enables multiple inheritence with es6 classes: https://stackoverflow.com/a/45332959/1471258
 export const aggregation = (baseClass, ...mixins) => {
     class base extends baseClass {
-        constructor (...args) {
+        constructor(...args) {
             super(...args);
             mixins.forEach((mixin) => {
-                copyProps(this,(new mixin));
+                copyProps(this, (new mixin()));
             });
         }
     }
-    let copyProps = (target, source) => {  // this function copies all properties and symbols, filtering out some special ones
+    let copyProps = (target, source) => { // this function copies all properties and symbols, filtering out some special ones
         Object.getOwnPropertyNames(source)
-              .concat(Object.getOwnPropertySymbols(source))
-              .forEach((prop) => {
-                 if (!prop.match(/^(?:constructor|prototype|arguments|caller|name|bind|call|apply|toString|length)$/))
-                    Object.defineProperty(target, prop, Object.getOwnPropertyDescriptor(source, prop));
-               })
-    }
+            .concat(Object.getOwnPropertySymbols(source))
+            .forEach((prop) => {
+                if (!prop.match(/^(?:constructor|prototype|arguments|caller|name|bind|call|apply|toString|length)$/)) { Object.defineProperty(target, prop, Object.getOwnPropertyDescriptor(source, prop)); }
+            });
+    };
     mixins.forEach((mixin) => { // outside contructor() to allow aggregation(A,B,C).staticFunction() to be called etc.
         copyProps(base.prototype, mixin.prototype);
         copyProps(base, mixin);
     });
     return base;
-}
+};
 
 // node.stxtap([selector],callback)
 jQuery.fn.extend({
@@ -303,7 +302,7 @@ CIQ.UI.containerExecute = function (self, fn, args) {
     for (let i = 0; i < parents.length; i++) {
         let parent = parents[i];
         if (parent[fn] && parent[fn].constructor === Function) {
-            return parent[fn].apply(parent, myArgs);
+            return parent[fn](...myArgs);
         }
     }
     return null;
@@ -581,96 +580,99 @@ CIQ.UI.addInheritance = function (target, source) {
  * @name CIQ.UI.Context
  * @constructor
  */
-let Context = CIQ.UI.Context = function (stx, topNode, params) {
-    this.params = params || {};
-    this.stx = stx;
-    topNode = this.topNode = $(topNode)[0];
-    this.node = $(this.topNode);
-    let storage = CIQ.UI.Context.assembleContext(topNode);
-    this.advertised = {};
-    topNode.CIQ.UI.context = this;
-    // Search through all of the components that have registered themselves. Call setContext() on each
-    // so that they can get their context. This usually initializes and makes the component active.
-    for (let i = 0; i < storage.Components.length; i++) {
-        storage.Components[i].setContextPrivate(this);
+class Context {
+    constructor(stx, topNode, params) {
+        this.params = params || {};
+        this.stx = stx;
+        topNode = this.topNode = $(topNode)[0];
+        this.node = $(this.topNode);
+        let storage = CIQ.UI.Context.assembleContext(topNode);
+        this.advertised = {};
+        topNode.CIQ.UI.context = this;
+        // Search through all of the components that have registered themselves. Call setContext() on each
+        // so that they can get their context. This usually initializes and makes the component active.
+        for (let i = 0; i < storage.Components.length; i++) {
+            storage.Components[i].setContextPrivate(this);
+        }
     }
-};
 
-/**
- * The DOM tag for a context needs some storage. ContextTag components register
- * themselves by placing themselves in this storage. This method creates that
- * storage, if it hasn't already been created.
- * @param  {HTMLElement} contextElement The context node
- * @returns {object} The storage object
- * @private
- */
-Context.assembleContext = function (contextElement) {
-    if (!contextElement.CIQ) contextElement.CIQ = {}; // claim our namespace
-    if (!contextElement.CIQ.UI) contextElement.CIQ.UI = {};
-    if (!contextElement.CIQ.UI.Components) contextElement.CIQ.UI.Components = [];
-    return contextElement.CIQ.UI;
-};
+    /**
+     * The DOM tag for a context needs some storage. ContextTag components register
+     * themselves by placing themselves in this storage. This method creates that
+     * storage, if it hasn't already been created.
+     * @param  {HTMLElement} contextElement The context node
+     * @returns {object} The storage object
+     * @private
+     */
+    static assembleContext(contextElement) {
+        if (!contextElement.CIQ) contextElement.CIQ = {}; // claim our namespace
+        if (!contextElement.CIQ.UI) contextElement.CIQ.UI = {};
+        if (!contextElement.CIQ.UI.Components) contextElement.CIQ.UI.Components = [];
+        return contextElement.CIQ.UI;
+    }
 
-/**
- * Abstract method that should be overridden
- * @param  {Object} data A symbol data object acceptible for {@link CIQ.ChartEngine#newChart}
- * @memberof CIQ.UI.Context
- */
-Context.prototype.changeSymbol = function (data) {
-    console.log('Please implement CIQ.UI.Context.prototype.changeSymbol');
-};
+    /**
+     * Abstract method that should be overridden
+     * @param  {Object} data A symbol data object acceptible for {@link CIQ.ChartEngine#newChart}
+     * @memberof CIQ.UI.Context
+     */
+    changeSymbol(data) {
+        console.log('Please implement CIQ.UI.Context.prototype.changeSymbol');
+    }
 
-/**
- * Sets the lookup driver for this context
- * @param {CIQ.UI.Lookup.Driver} driver Lookup driver for cq-lookup component
- * @memberof CIQ.UI.Context
- */
-Context.prototype.setLookupDriver = function (driver) {
-    this.lookupDriver = driver;
-};
-
-
-/**
- * Attaches a Helper to the context, so that it can be found later on.
- * @param {CIQ.UI.Helper} uiHelper A UI Helper to attach
- * @param {string} helperName The helperName of the element. For instance "Loader"
- * @memberof CIQ.UI.Context
- */
-Context.prototype.advertiseAs = function (uiHelper, helperName) {
-    this.advertised[helperName] = uiHelper;
-};
+    /**
+     * Sets the lookup driver for this context
+     * @param {CIQ.UI.Lookup.Driver} driver Lookup driver for cq-lookup component
+     * @memberof CIQ.UI.Context
+     */
+    setLookupDriver(driver) {
+        this.lookupDriver = driver;
+    }
 
 
-/**
- * Finds the nearest (parent) node that contains the class (CIQ.UI.Element type) referenced
- * by an stxtap attribute. Returns null if none found.
- * @param  {string} helperName The type of UI Helper to look for
- * @return {Array.CIQ.UI.Helper} The associated array of helpers or null if none found
- * @memberof CIQ.UI.Context
- * @private
- */
-Context.prototype.getAdvertised = function (helperName) {
-    return this.advertised[helperName];
-};
+    /**
+     * Attaches a Helper to the context, so that it can be found later on.
+     * @param {CIQ.UI.Helper} uiHelper A UI Helper to attach
+     * @param {string} helperName The helperName of the element. For instance "Loader"
+     * @memberof CIQ.UI.Context
+     */
+    advertiseAs(uiHelper, helperName) {
+        this.advertised[helperName] = uiHelper;
+    }
 
-/**
- * Attaches a loader to a UI context
- * @param {CIQ.UI.Loader} loader Loader instance
- * @memberof CIQ.UI.Context
- */
-Context.prototype.setLoader = function (loader) {
-    this.loader = loader;
-};
 
-/**
- * Is the context in modal mode?
- * @return {Boolean} true if in modal mode
- * @memberof CIQ.UI.Context
- */
-Context.prototype.isModal = function () {
-    return (this.stx.openDialog !== '');
-};
+    /**
+     * Finds the nearest (parent) node that contains the class (CIQ.UI.Element type) referenced
+     * by an stxtap attribute. Returns null if none found.
+     * @param  {string} helperName The type of UI Helper to look for
+     * @return {Array.CIQ.UI.Helper} The associated array of helpers or null if none found
+     * @memberof CIQ.UI.Context
+     * @private
+     */
+    getAdvertised(helperName) {
+        return this.advertised[helperName];
+    }
 
+    /**
+     * Attaches a loader to a UI context
+     * @param {CIQ.UI.Loader} loader Loader instance
+     * @memberof CIQ.UI.Context
+     */
+    setLoader(loader) {
+        this.loader = loader;
+    }
+
+    /**
+     * Is the context in modal mode?
+     * @return {Boolean} true if in modal mode
+     * @memberof CIQ.UI.Context
+     */
+    isModal() {
+        return (this.stx.openDialog !== '');
+    }
+}
+
+CIQ.UI.Context = Context;
 
 /**
  * Abstract class for WebComponents using this framework
@@ -1042,7 +1044,7 @@ export class ContextTag extends BaseComponent {
         // has already been established
         if (storage.context) this.setContextPrivate(storage.context);
     }
-    
+
     /**
      * This is called for every registered component when the context is constructed. You can override
      * this as an initialization.
@@ -1053,7 +1055,7 @@ export class ContextTag extends BaseComponent {
     setContext(/* context */) {
         // override me
     }
-    
+
     /**
      * @kind function
      * @memberof CIQ.UI.ContextTag
@@ -1078,7 +1080,7 @@ export class ContextTag extends BaseComponent {
         }
         setTimeout(function (s, c) { return function () { s.setContext(c); }; }(this, context));
     }
-    
+
     /**
      * Convience function that creates an array of injections for the component and sets a variable of node equal to self.
      * @kind function
@@ -1088,7 +1090,7 @@ export class ContextTag extends BaseComponent {
         super.createdCallback();
         this.injections = [];
     }
-    
+
     /**
      *
      * @kind function
@@ -1100,7 +1102,7 @@ export class ContextTag extends BaseComponent {
     addInjection(position, injection, code) {
         this.injections.push(this.context.stx[position](injection, code));
     }
-    
+
     /**
      * Removes all the the injections for a context tag and resets the tag to its default state
      * @kind function
@@ -1114,7 +1116,7 @@ export class ContextTag extends BaseComponent {
             this.injections = [];
         }
     }
-    
+
     /**
      * Called automatically when a tag is instantiated
      * @private
@@ -1145,8 +1147,8 @@ export class ModalTag extends ContextTag {
     modalBegin() {
         if (!this.context) return;
         this.context.stx.modalBegin();
-    };
-    
+    }
+
     /**
      *
      * @kind function
@@ -1156,8 +1158,8 @@ export class ModalTag extends ContextTag {
         if (!this.context) return;
         if (this.uiManager.activeMenuStack.length) return; // If an active menu then don't turn off the modal. Let uiManager handle it.
         this.context.stx.modalEnd();
-    };
-    
+    }
+
     /**
      *
      * @kind function
@@ -1174,7 +1176,7 @@ export class ModalTag extends ContextTag {
             self.modalEnd();
         });
         super.attachedCallback();
-    };
+    }
 }
 
 CIQ.UI.ModalTag = ModalTag;
@@ -1230,33 +1232,37 @@ CIQ.UI.DialogContentTag = DialogContentTag;
  * @name CIQ.UI.Helper
  * @constructor
  */
-CIQ.UI.Helper = function (node, context) {
-    this.node = node;
-    this.context = context;
-    this.injections = []; // To keep track of injections for later removal
-};
-
-/**
- * Adds an injection. These will be automatically destroyed if the helper object is destroyed
- * @param {string} position  "prepend" or "append"
- * @param {string} injection The injection name. i.e. "draw"
- * @param {Function} code      The code to be run
- * @memberof CIQ.UI.Helper
- */
-CIQ.UI.Helper.prototype.addInjection = function (position, injection, code) {
-    this.injections.push(this.context.stx[position](injection, code));
-};
-
-/**
- * Removes injections from the ChartEngine
- * @memberof CIQ.UI.Helper
- */
-CIQ.UI.Helper.prototype.destroy = function () {
-    for (let i = 0; i < this.injections.length; i++) {
-        this.context.stx.removeInjection(this.injections[i]);
+class Helper {
+    constructor(node, context) {
+        this.node = node;
+        this.context = context;
+        this.injections = []; // To keep track of injections for later removal
     }
-    this.injections = [];
-};
+
+    /**
+     * Adds an injection. These will be automatically destroyed if the helper object is destroyed
+     * @param {string} position  "prepend" or "append"
+     * @param {string} injection The injection name. i.e. "draw"
+     * @param {Function} code      The code to be run
+     * @memberof CIQ.UI.Helper
+     */
+    addInjection(position, injection, code) {
+        this.injections.push(this.context.stx[position](injection, code));
+    }
+
+    /**
+     * Removes injections from the ChartEngine
+     * @memberof CIQ.UI.Helper
+     */
+    destroy() {
+        for (let i = 0; i < this.injections.length; i++) {
+            this.context.stx.removeInjection(this.injections[i]);
+        }
+        this.injections = [];
+    }
+}
+
+CIQ.UI.Helper = Helper;
 
 /**
  * @constructor CIQ.UI.Lookup
@@ -1269,88 +1275,20 @@ CIQ.UI.Lookup = function () {};
  * @name  CIQ.UI.Lookup.Driver
  * @constructor
  */
-CIQ.UI.Lookup.Driver = function () {};
-
-/**
- * Abstract method, override this to accept the selected text and optional filter. Fetch results
- * and return them by calling this.cb This default driver returns no results.
- * @param  {string} text The text entered by the user
- * @param {string} [filter] The optional filter text selected by the user. This will be the innerHTML of the cq-filter element that is selected.
- * @memberof CIQ.UI.Lookup.Driver
- */
-CIQ.UI.Lookup.Driver.prototype.acceptText = function (text, filter) {
-    if (!this.cb) return;
-};
-
-/**
- * An example of an asynchronous Lookup.Driver that uses ChartIQ's suggestive search as its source for symbol search
- * @memberof CIQ.UI.Lookup.Driver
- * @param {array} exchanges An array of ecxchanges that can be searched against
- */
-CIQ.UI.Lookup.Driver.ChartIQ = function (exchanges) {
-    this.exchanges = exchanges;
-    if (!this.exchanges) this.exchanges = ['XNYS', 'XASE', 'XNAS', 'XASX', 'INDCBSX', 'INDXASE', 'INDXNAS', 'IND_DJI', 'ARCX', 'INDARCX', 'forex'];
-    this.url = 'https://symbols.chartiq.com/chiq.symbolserver.SymbolLookup.service';
-    this.requestCounter = 0; // used to invalidate old requests
-    // t=ibm&m=10&x=[]&e=STOCKS
-};
-
-/**
- * An example instance of the Lookup Driver scoped to CIQ.UI.Lookup.Driver
- *
- * Inherits all of the base Look Driver's properties via `ciqInheritsFrom()`
- * @name ChartIQ
- * @memberof CIQ.UI.Lookup.Driver
- */
-CIQ.UI.Lookup.Driver.ChartIQ.ciqInheritsFrom(CIQ.UI.Lookup.Driver);
-
-/**
- * @memberof CIQ.UI.Lookup.Driver.ChartIQ
- * @param {string} text Text to serach for
- * @param {string} filter Any filter to be applied to the search results
- * @param {number} maxResults Max number of results to return from the server
- * @param {function} cb Callback upon results
- */
-CIQ.UI.Lookup.Driver.ChartIQ.prototype.acceptText = function (text, filter, maxResults, cb) {
-    if (filter === 'FX') filter = 'FOREX';
-    if (isNaN(parseInt(maxResults, 10))) maxResults = 100;
-    let url = `${this.url}?t=${encodeURIComponent(text)}&m=${maxResults}&x=[`;
-    if (this.exchanges) {
-        url += this.exchanges.join(',');
+export class Driver {
+    /**
+     * Abstract method, override this to accept the selected text and optional filter. Fetch results
+     * and return them by calling this.cb This default driver returns no results.
+     * @param  {string} text The text entered by the user
+     * @param {string} [filter] The optional filter text selected by the user. This will be the innerHTML of the cq-filter element that is selected.
+     * @memberof CIQ.UI.Lookup.Driver
+     */
+    acceptText(/* text, filter */) {
+        if (!this.cb) return;
     }
-    url += ']';
-    if (filter && filter.toUpperCase() !== 'ALL') {
-        url += `&e=${filter}`;
-    }
+}
 
-    let counter = ++this.requestCounter;
-    let self = this;
-
-    function handleResponse(status, response) {
-        if (counter < self.requestCounter) return;
-        if (status !== 200) return;
-        try {
-            response = JSON.parse(response);
-            let symbols = response.payload.symbols;
-
-            let results = [];
-            for (let i = 0; i < symbols.length; i++) {
-                let fields = symbols[i].split('|');
-                let item = {
-                    symbol: fields[0],
-                    name: fields[1],
-                    exchDisp: fields[2],
-                };
-                results.push({
-                    display: [item.symbol, item.name, item.exchDisp],
-                    data: item,
-                });
-            }
-            cb(results);
-        } catch (e) {}
-    }
-    CIQ.postAjax({ url, cb: handleResponse });
-};
+CIQ.UI.Lookup.Driver = Driver;
 
 /**
  * UI helper for StudyMenu UI element.
@@ -2572,250 +2510,248 @@ CIQ.UI.KeystrokeHub.prototype.handler = function (obj) {
  * @namespace WebComponents.cq-ui-manager
  * @memberof WebComponents
  */
-let UIManager = {
-    prototype: Object.create(HTMLElement.prototype),
-};
+class UIManager extends HTMLElement {
+    /**
+     * Prevents underlay clicks and handles tap events and callbacks.
+     *
+     * Creates an array of the active Menus to keep track of which component is currently active.
+     * @memberof WebComponents.cq-ui-manager
+     * @alias createdCallback
+     */
+    createdCallback() {
+        CIQ.installTapEvent($('body')[0], { preventUnderlayClick: false });
+        this.activeMenuStack = [];
+        this.registeredForResize = [];
+        this.keystrokeHub = null; // KeystrokeHub should register itself here
 
-/**
- * Prevents underlay clicks and handles tap events and callbacks.
- *
- * Creates an array of the active Menus to keep track of which component is currently active.
- * @memberof WebComponents.cq-ui-manager
- * @alias createdCallback
- */
-UIManager.prototype.createdCallback = function () {
-    CIQ.installTapEvent($('body')[0], { preventUnderlayClick: false });
-    this.activeMenuStack = [];
-    this.registeredForResize = [];
-    this.keystrokeHub = null; // KeystrokeHub should register itself here
+        let self = this;
 
-    let self = this;
-
-    function handleTap() {
-        self.closeTopMenu();
-    }
-    $('body').on('stxtap', handleTap);
-};
-
-/**
- * Attach a callback to an individual component as part of the context
- * @memberof WebComponents.cq-ui-manager
- * @alias attachedCallback
- */
-UIManager.prototype.attachedCallback = function () {
-    let self = this;
-    this.resize = function () {
-        let rr = self.registeredForResize;
-        for (let i = 0; i < rr.length; i++) {
-            if (typeof rr[i].resize === 'function') rr[i].resize();
+        function handleTap() {
+            self.closeTopMenu();
         }
-    };
-    window.addEventListener('resize', this.resize);
-};
-
-/**
- * Removes a callback from a component
- * @memberof WebComponents.cq-ui-manager
- * @alias detachedCallback
- */
-UIManager.prototype.detachedCallback = function () {
-    window.removeEventListener('resize', this.resize);
-};
-
-/**
- * Opens a menu item within the UI.Context
- * @memberof WebComponents.cq-ui-manager
- * @alias openMenu
- * @param {HTMLElement} menu
- * @param {object} params
- */
-UIManager.prototype.openMenu = function (menu, params) {
-    // Find the first input box, if any, and give focus
-    setTimeout(() => {
-        $(menu).find('input[cq-focus]:first-child').focus();
-    }, 0);
-    this.activeMenuStack.push(menu);
-    menu.show(params);
-    $('cq-context,*[cq-context]').each(function () {
-        if (this.CIQ && this.CIQ.UI && this.CIQ.UI.context && this.CIQ.UI.context.stx) { this.CIQ.UI.context.stx.modalBegin(); }
-    });
-};
-
-/**
- * Sets the top level menu in the activeMenuStack
- * @memberof WebComponents.cq-ui-manager
- * @alias topMenu
- * @return activeMenuStack
- */
-UIManager.prototype.topMenu = function () {
-    let activeMenuStack = this.activeMenuStack;
-    if (!activeMenuStack.length) return null;
-    return activeMenuStack[activeMenuStack.length - 1];
-};
-
-/**
- * Closes the current acttive menu and resets the activeMenuStack
- * @memberof WebComponents.cq-ui-manager
- * @alias closeMenu
- * @param {HTMLElement} element
- */
-UIManager.prototype.closeMenu = function (menu) {
-    let activeMenuStack = this.activeMenuStack;
-    let parents = $(menu).parents('cq-menu');
-    let closeThese = [];
-    if (menu) {
-        // if menu is specified then close it
-        closeThese.push(menu);
-        // along with any active parent menus
-        for (let i = 0; i < parents.length; i++) {
-            let parent = parents[i];
-            if (parent.active) closeThese.push(parent);
-        }
-    } else {
-        // close them all if no menu is specified
-        closeThese = activeMenuStack;
+        $('body').on('stxtap', handleTap);
     }
-    // hide all the items we've decided to close
-    for (let j = 0; j < closeThese.length; j++) {
-        closeThese[j].hide();
+
+    /**
+     * Attach a callback to an individual component as part of the context
+     * @memberof WebComponents.cq-ui-manager
+     * @alias attachedCallback
+     */
+    attachedCallback() {
+        let self = this;
+        this.resize = function () {
+            let rr = self.registeredForResize;
+            for (let i = 0; i < rr.length; i++) {
+                if (typeof rr[i].resize === 'function') rr[i].resize();
+            }
+        };
+        window.addEventListener('resize', this.resize);
     }
-    // filter out the ones that are inactive
-    this.activeMenuStack = activeMenuStack.filter(item => item.active);
-    this.ifAllClosed();
-};
 
-/**
- *
- * @memberof WebComponents.cq-ui-manager
- * @alias registerForResize
- * @param {HTMLElement} element
- */
-UIManager.prototype.registerForResize = function (element) {
-    this.registeredForResize.push(element);
-};
-
-/**
- * @memberof WebComponents.cq-ui-manager
- * @alias unregisterForResize
- * @param {HTMLElement} element
- */
-UIManager.prototype.unregisterForResize = function (element) {
-    let rr = this.registeredForResize;
-    for (let i = 0; i < rr.length; i++) {
-        if (rr[i] === element) {
-            rr.splice(i, 1);
-            return;
-        }
+    /**
+     * Removes a callback from a component
+     * @memberof WebComponents.cq-ui-manager
+     * @alias detachedCallback
+     */
+    detachedCallback() {
+        window.removeEventListener('resize', this.resize);
     }
-};
 
-/**
- * @memberof WebComponents.cq-ui-manager
- * @alias ifAllClosed
- */
-UIManager.prototype.ifAllClosed = function () {
-    if (!this.activeMenuStack.length) {
+    /**
+     * Opens a menu item within the UI.Context
+     * @memberof WebComponents.cq-ui-manager
+     * @alias openMenu
+     * @param {HTMLElement} menu
+     * @param {object} params
+     */
+    openMenu(menu, params) {
+        // Find the first input box, if any, and give focus
+        setTimeout(() => {
+            $(menu).find('input[cq-focus]:first-child').focus();
+        }, 0);
+        this.activeMenuStack.push(menu);
+        menu.show(params);
         $('cq-context,*[cq-context]').each(function () {
-            if (this.CIQ && this.CIQ.UI && this.CIQ.UI.context && this.CIQ.UI.context.stx) { this.CIQ.UI.context.stx.modalEnd(); }
+            if (this.CIQ && this.CIQ.UI && this.CIQ.UI.context && this.CIQ.UI.context.stx) { this.CIQ.UI.context.stx.modalBegin(); }
         });
     }
-};
 
-/**
- * @memberof WebComponents.cq-ui-manager
- * @alias closeTopMenu
- */
-UIManager.prototype.closeTopMenu = function () {
-    let activeMenuStack = this.activeMenuStack;
-    if (!activeMenuStack.length) return;
-    let menu = activeMenuStack[activeMenuStack.length - 1];
-    // If the top menu is a dialog, and isn't active yet then it has just been added, don't remove it
-    if (!menu.isDialog || menu.active) {
-        activeMenuStack.pop();
-        menu.hide();
-        let self = this;
-        setTimeout(() => {
-            self.ifAllClosed(); // Put this in a timeout so that a click on the body doesn't start a drawing
-        }, 0);
+    /**
+     * Sets the top level menu in the activeMenuStack
+     * @memberof WebComponents.cq-ui-manager
+     * @alias topMenu
+     * @return activeMenuStack
+     */
+    topMenu() {
+        let activeMenuStack = this.activeMenuStack;
+        if (!activeMenuStack.length) return null;
+        return activeMenuStack[activeMenuStack.length - 1];
     }
-};
+
+    /**
+     * Closes the current acttive menu and resets the activeMenuStack
+     * @memberof WebComponents.cq-ui-manager
+     * @alias closeMenu
+     * @param {HTMLElement} element
+     */
+    closeMenu(menu) {
+        let activeMenuStack = this.activeMenuStack;
+        let parents = $(menu).parents('cq-menu');
+        let closeThese = [];
+        if (menu) {
+            // if menu is specified then close it
+            closeThese.push(menu);
+            // along with any active parent menus
+            for (let i = 0; i < parents.length; i++) {
+                let parent = parents[i];
+                if (parent.active) closeThese.push(parent);
+            }
+        } else {
+            // close them all if no menu is specified
+            closeThese = activeMenuStack;
+        }
+        // hide all the items we've decided to close
+        for (let j = 0; j < closeThese.length; j++) {
+            closeThese[j].hide();
+        }
+        // filter out the ones that are inactive
+        this.activeMenuStack = activeMenuStack.filter(item => item.active);
+        this.ifAllClosed();
+    }
+
+    /**
+     *
+     * @memberof WebComponents.cq-ui-manager
+     * @alias registerForResize
+     * @param {HTMLElement} element
+     */
+    registerForResize(element) {
+        this.registeredForResize.push(element);
+    }
+
+    /**
+     * @memberof WebComponents.cq-ui-manager
+     * @alias unregisterForResize
+     * @param {HTMLElement} element
+     */
+    unregisterForResize(element) {
+        let rr = this.registeredForResize;
+        for (let i = 0; i < rr.length; i++) {
+            if (rr[i] === element) {
+                rr.splice(i, 1);
+                return;
+            }
+        }
+    }
+
+    /**
+     * @memberof WebComponents.cq-ui-manager
+     * @alias ifAllClosed
+     */
+    ifAllClosed() {
+        if (!this.activeMenuStack.length) {
+            $('cq-context,*[cq-context]').each(function () {
+                if (this.CIQ && this.CIQ.UI && this.CIQ.UI.context && this.CIQ.UI.context.stx) { this.CIQ.UI.context.stx.modalEnd(); }
+            });
+        }
+    }
+
+    /**
+     * @memberof WebComponents.cq-ui-manager
+     * @alias closeTopMenu
+     */
+    closeTopMenu() {
+        let activeMenuStack = this.activeMenuStack;
+        if (!activeMenuStack.length) return;
+        let menu = activeMenuStack[activeMenuStack.length - 1];
+        // If the top menu is a dialog, and isn't active yet then it has just been added, don't remove it
+        if (!menu.isDialog || menu.active) {
+            activeMenuStack.pop();
+            menu.hide();
+            let self = this;
+            setTimeout(() => {
+                self.ifAllClosed(); // Put this in a timeout so that a click on the body doesn't start a drawing
+            }, 0);
+        }
+    }
 
 
-/**
- * Find all lifts for the menu, but not lifts that are within nested menus.
- * @memberof WebComponets.cq-ui-manager
- * @alias findLifts
- * @param  {HTMLElement} menu The menu to search
- * @return {JQuery}      Jquery selector containing any lifts
- */
-UIManager.prototype.findLifts = function (menu) {
-    let lifts = $(menu).find('*[cq-lift]').filter(function () {
-        // only valid if the closest cq-menu or cq-dialog parent is the menu itself
-        // otherwise the lift is in a nested menu
-        let closest = $(this).closest('cq-menu,cq-dialog');
-        return closest.length && closest[0] === menu;
-    });
-    return lifts;
-};
+    /**
+     * Find all lifts for the menu, but not lifts that are within nested menus.
+     * @memberof WebComponets.cq-ui-manager
+     * @alias findLifts
+     * @param  {HTMLElement} menu The menu to search
+     * @return {JQuery}      Jquery selector containing any lifts
+     */
+    findLifts(menu) {
+        let lifts = $(menu).find('*[cq-lift]').filter(function () {
+            // only valid if the closest cq-menu or cq-dialog parent is the menu itself
+            // otherwise the lift is in a nested menu
+            let closest = $(this).closest('cq-menu,cq-dialog');
+            return closest.length && closest[0] === menu;
+        });
+        return lifts;
+    }
 
-/**
- *
- * @memberof WebComponents.cq-ui-manager
- * @alias restoreLift
- * @param {HTMLElement} element
- */
-UIManager.prototype.restoreLift = function (element) {
-    let node = $(element);
-    if (!node.length) return;
-    let remember = node[0].remember;
-    node.detach();
-    node.css(remember.css);
-    $(remember.parentNode).append(node);
-};
+    /**
+     *
+     * @memberof WebComponents.cq-ui-manager
+     * @alias restoreLift
+     * @param {HTMLElement} element
+     */
+    restoreLift(element) {
+        let node = $(element);
+        if (!node.length) return;
+        let remember = node[0].remember;
+        node.detach();
+        node.css(remember.css);
+        $(remember.parentNode).append(node);
+    }
 
-/**
- * Lifts a menu to an absolute position on the body, so that it can rise above any
- * overflow: hidden, scroll or iscroll situations
- *
- * Use cq-lift attribute to indicate that the menu should be lifted when opened
- *
- * context.lifts is an array that contains all of the current lifts so that
- * they can be restored when the menu is closed
- * @private
- * @memberof WebComponents.cq-ui-manager
- */
-UIManager.prototype.lift = function (element) {
-    let node = $(element);
-    if (!node.length) return;
-    let n = $(node)[0];
-    n.remember = {
-        parentNode: n.parentNode,
-        css: {
-            position: n.style.position,
-            display: n.style.display,
-            left: n.style.left,
-            top: n.style.top,
-            height: n.style.height,
-            width: n.style.width,
-            opacity: n.style.opacity,
-        },
-    };
-    let offset = n.getBoundingClientRect();
-    let height = node.height();
-    node.detach();
-    node.css({
-        position: 'absolute',
-        display: 'block',
-        left: `${offset.left}px`,
-        top: `${offset.top}px`,
-        height: `${height}px`,
-        opacity: 1,
-    });
-    $('body').append(node);
-    if (typeof (n.resize) !== 'undefined') n.resize();
-    node.find('cq-scroll').each(function () {
-        this.resize();
-    });
-};
+    /**
+     * Lifts a menu to an absolute position on the body, so that it can rise above any
+     * overflow: hidden, scroll or iscroll situations
+     *
+     * Use cq-lift attribute to indicate that the menu should be lifted when opened
+     *
+     * context.lifts is an array that contains all of the current lifts so that
+     * they can be restored when the menu is closed
+     * @private
+     * @memberof WebComponents.cq-ui-manager
+     */
+    lift(element) {
+        let node = $(element);
+        if (!node.length) return;
+        let n = $(node)[0];
+        n.remember = {
+            parentNode: n.parentNode,
+            css: {
+                position: n.style.position,
+                display: n.style.display,
+                left: n.style.left,
+                top: n.style.top,
+                height: n.style.height,
+                width: n.style.width,
+                opacity: n.style.opacity,
+            },
+        };
+        let offset = n.getBoundingClientRect();
+        let height = node.height();
+        node.detach();
+        node.css({
+            position: 'absolute',
+            display: 'block',
+            left: `${offset.left}px`,
+            top: `${offset.top}px`,
+            height: `${height}px`,
+            opacity: 1,
+        });
+        $('body').append(node);
+        if (typeof (n.resize) !== 'undefined') n.resize();
+        node.find('cq-scroll').each(function () {
+            this.resize();
+        });
+    }
+}
 
 CIQ.UI.UIManager = document.registerElement('cq-ui-manager', UIManager);

@@ -1,7 +1,6 @@
 import $ from 'jquery';
 import StreamManager from './stream-manager';
 import Feed from './feed';
-import '../js/thirdparty/webcomponents-lite.min';
 import '../js/thirdparty/perfect-scrollbar.jquery';
 import '../js/thirdparty/html2canvas';
 import '../js/thirdparty/iscroll';
@@ -47,6 +46,8 @@ import './components/Toggle';
 import './components/Undo';
 import './components/ViewDialog';
 import './components/Views';
+
+import ExampleDriver from './ExampleDriver';
 
 window.CIQ = CIQ;
 
@@ -246,7 +247,7 @@ function startUI() {
     };
 
 
-    UIContext.setLookupDriver(new CIQ.UI.Lookup.Driver.ChartIQ());
+    UIContext.setLookupDriver(new ExampleDriver());
 
     UIContext.UISymbolLookup = $('.ciq-search cq-lookup')[0];
     UIContext.UISymbolLookup.setCallback((context, data) => {
