@@ -1136,7 +1136,7 @@ CIQ.UI.ContextTag = ContextTag;
  * @namespace CIQ.UI.ModalTag
  * @memberof CIQ.UI
  */
-class ModalTag extends ContextTag {
+export class ModalTag extends ContextTag {
     /**
      *
      * @kind function

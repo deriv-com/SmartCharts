@@ -7,13 +7,46 @@ import '../js/thirdparty/html2canvas';
 import '../js/thirdparty/iscroll';
 
 import { CIQ } from '../js/chartiq';
-import './components/componentUI';
-import './components/components';
 
 import '../js/addOns';
 import '../js/translations';
 import '../plugins/tfc/tfc';
 import '../js/plugin';
+
+import './components/ShareDialog';
+import './components/ShareButton';
+import './components/Scroll';
+import './components/MenuDropDown';
+import './components/ThemeDialog';
+import './components/ColorPicker';
+import './components/StudyParameter';
+import './components/Advertisement';
+import './components/AggregationDialog';
+import './components/Attribution';
+import './components/ChartTitle';
+import './components/Close';
+import './components/Lookup';
+import './components/Comparison';
+import './components/DrawingToolbar';
+import './components/FibSettingsDialog';
+import './components/LanguageDialog';
+import './components/Loader';
+import './components/Menu';
+import './components/Redo';
+import './components/ShowRange';
+import './components/SidePanel';
+import './components/StudyContext';
+import './components/StudyDialog';
+import './components/StudyInput';
+import './components/StudyOutput';
+import './components/Swatch';
+import './components/TFC';
+import './components/Themes';
+import './components/TimezoneDialog';
+import './components/Toggle';
+import './components/Undo';
+import './components/ViewDialog';
+import './components/Views';
 
 window.CIQ = CIQ;
 
