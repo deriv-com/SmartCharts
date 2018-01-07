@@ -1,5 +1,6 @@
 import $ from 'jquery';
 import { CIQ } from '../../../js/chartiq';
+import HeadsUpMarker from './HeadsUpMarker';
 import Helper from './Helper';
 
 /**
@@ -49,7 +50,7 @@ class HeadsUp extends Helper {
                 x: 0,
                 node: this.node[0],
             };
-            this.marker = new CIQ.Marker.HeadsUp(params, this.params.showClass);
+            this.marker = new HeadsUpMarker(params, this.params.showClass);
             // this.node.addClass(this.params.showClass);
 
             this.addInjection('append', 'handleMouseOut', (function (self) {
