@@ -1,4 +1,4 @@
-import { DialogContentTag } from './componentUI';
+import DialogContentTag from './ui/DialogContentTag';
 import { CIQ } from '../../js/chartiq';
 
 /**

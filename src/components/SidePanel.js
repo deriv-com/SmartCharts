@@ -1,5 +1,5 @@
 import { CIQ } from '../../js/chartiq';
-import { ContextTag } from './componentUI';
+import ContextTag from './ui/ContextTag';
 
 /**
  * Side Panel web component `<cq-side-panel>`.

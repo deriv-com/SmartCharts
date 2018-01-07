@@ -1,4 +1,5 @@
-import { ContextTag, aggregation } from './componentUI';
+import { aggregation } from './ui';
+import ContextTag from './ui/ContextTag';
 import Scroll from './Scroll';
 
 /**

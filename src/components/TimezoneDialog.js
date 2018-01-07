@@ -1,5 +1,5 @@
 import { CIQ } from '../../js/chartiq';
-import { DialogContentTag } from './componentUI';
+import DialogContentTag from './ui/DialogContentTag';
 
 /**
  * Timezone Dialog web component `<cq-timezone-dialog>`.

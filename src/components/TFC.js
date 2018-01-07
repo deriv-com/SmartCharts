@@ -1,5 +1,5 @@
 import { CIQ } from '../../js/chartiq';
-import { ContextTag } from './componentUI';
+import ContextTag from './ui/ContextTag';
 
 /**
  * Trade From Chart web component `<cq-tfc>`.

@@ -1,5 +1,5 @@
 import { CIQ } from '../../js/chartiq';
-import { DialogContentTag } from './componentUI';
+import DialogContentTag from './ui/DialogContentTag';
 
 /**
  * Language Dialog web component `<cq-language-dialog>`. This creates a dialog that the user can use to change the language.

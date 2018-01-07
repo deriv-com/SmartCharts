@@ -1,4 +1,4 @@
-import { ContextTag } from './componentUI';
+import ContextTag from './ui/ContextTag';
 
 /**
  * clickable web component `<cq-clickable>`. When tapped/clicked this component can run a method on any

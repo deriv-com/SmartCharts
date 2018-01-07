@@ -1,5 +1,5 @@
 import { CIQ } from '../../js/chartiq';
-import { ModalTag } from './componentUI';
+import ModalTag from './ui/ModalTag';
 
 /**
  * Study legend web component `<cq-study-legend>`.

@@ -1,4 +1,4 @@
-import { BaseComponent } from './componentUI';
+import BaseComponent from './ui/BaseComponent';
 /**
  * Study input web component `<cq-study-input>`.
  *

@@ -1,5 +1,5 @@
 import { CIQ } from '../../js/chartiq';
-import { BaseComponent } from './componentUI';
+import BaseComponent from './ui/BaseComponent';
 
 /**
  * Dialog web component `<cq-dialog>`.

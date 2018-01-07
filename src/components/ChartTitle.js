@@ -1,4 +1,4 @@
-import { ModalTag } from './componentUI';
+import ModalTag from './ui/ModalTag';
 import { CIQ } from '../../js/chartiq';
 
 /**

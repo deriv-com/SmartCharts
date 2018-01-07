@@ -1,5 +1,5 @@
 import { CIQ } from '../../js/chartiq';
-import { DialogContentTag } from './componentUI';
+import DialogContentTag from './ui/DialogContentTag';
 
 /**
  * fibonacci settings dialog web component `<cq-fib-settings-dialog>`.

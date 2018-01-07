@@ -1,4 +1,4 @@
-import { ContextTag } from './componentUI';
+import ContextTag from './ui/ContextTag';
 /**
  * Share Button web component `<cq-share-button>`.
  *
