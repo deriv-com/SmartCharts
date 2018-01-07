@@ -237,45 +237,45 @@ CIQ.UI.Dialog = document.registerElement('cq-dialog', Dialog);
      </cq-dialog>
  */
 class ViewDialog extends CIQ.UI.DialogContentTag {
+    /**
+     * Saves the new view. This updates all cq-view menus on the screen, and persists the view in the nameValueStore.
+     * @alias save
+     * @memberof WebComponents.cq-view-dialog
+     */
+    save() {
+        let viewName = this.node.find('input').val();
+        if (!viewName) return;
+
+        let self = this;
+        let madeChange = false;
+        let layout = this.context.stx.exportLayout();
+        $('cq-views').each(function () {
+            let obj = this.params.viewObj;
+            let view;
+
+            for (var i = 0; i < obj.views.length; i++) {
+                view = obj.views[i];
+                if (viewName === CIQ.first(view)) break;
+            }
+            if (i === obj.views.length) {
+                view = {};
+                view[viewName] = {};
+                obj.views.push(view);
+            }
+            view[viewName] = layout;
+            delete view[viewName].candleWidth;
+            this.renderMenu();
+            // this.context.stx.updateListeners("layout");
+            if (!madeChange) {
+                // We might have a cq-view menu on multiple charts on the screen. Only persist once.
+                madeChange = true;
+                this.params.nameValueStore.set('stx-views', obj.views);
+            }
+        });
+        this.close();
+    }
 }
 
-/**
- * Saves the new view. This updates all cq-view menus on the screen, and persists the view in the nameValueStore.
- * @alias save
- * @memberof WebComponents.cq-view-dialog
- */
-ViewDialog.prototype.save = function () {
-    let viewName = this.node.find('input').val();
-    if (!viewName) return;
-
-    let self = this;
-    let madeChange = false;
-    let layout = this.context.stx.exportLayout();
-    $('cq-views').each(function () {
-        let obj = this.params.viewObj;
-        let view;
-
-        for (var i = 0; i < obj.views.length; i++) {
-            view = obj.views[i];
-            if (viewName === CIQ.first(view)) break;
-        }
-        if (i === obj.views.length) {
-            view = {};
-            view[viewName] = {};
-            obj.views.push(view);
-        }
-        view[viewName] = layout;
-        delete view[viewName].candleWidth;
-        this.renderMenu();
-        // this.context.stx.updateListeners("layout");
-        if (!madeChange) {
-            // We might have a cq-view menu on multiple charts on the screen. Only persist once.
-            madeChange = true;
-            this.params.nameValueStore.set('stx-views', obj.views);
-        }
-    });
-    this.close();
-};
 
 CIQ.UI.ViewDialog = document.registerElement('cq-view-dialog', ViewDialog);
 
@@ -308,153 +308,153 @@ CIQ.UI.ViewDialog = document.registerElement('cq-view-dialog', ViewDialog);
      *
      */
 class Advertisement extends CIQ.UI.ModalTag {
-}
-
-Advertisement.prototype.attachedCallback = function () {
-    if (this.attached) return;
-    CIQ.UI.ModalTag.attachedCallback.apply(this);
-    this.nameValueStore = new CIQ.NameValueStore();
-    this.attached = true;
-};
-
-/**
- * Sets the sleep time for this amount of time before re-displaying
- * @param  {Number} units    Units
- * @param  {string} unitType Unit type. Value values "minute","hour","day","week"
- * @alias setSleepAmount
- * @memberof WebComponents.cq-advertisement
- */
-Advertisement.prototype.setSleepAmount = function (units, unitType) {
-    this.sleepAmount = {
-        units,
-        unitType,
-    };
-};
-
-Advertisement.prototype.setNameValueStore = function (nameValueStore) {
-    this.nameValueStore = nameValueStore;
-};
-
-Advertisement.prototype.makeMarker = function () {
-    if (this.markerExists) return;
-    new CIQ.Marker({
-        stx: this.context.stx,
-        xPositioner: 'none',
-        label: 'advertisement',
-        permanent: true,
-        node: this.node[0],
-    });
-    this.markerExists = true;
-};
-
-/**
- * Show the advertisement. This should be a div inside of the web component.
- * @param  {Selector} [selector]    A selector. If none specified then the first div will be selected.
- * @param  {Boolean} [ignoreSleep=false] If true then ignore sleep
- * @alias show
- * @memberof WebComponents.cq-advertisement
- */
-Advertisement.prototype.show = function (selector, ignoreSleep) {
-    if (this.selector) {
-        let priorContent = this.node.find(this.selector);
-        priorContent.removeClass('ciq-show');
+    attachedCallback() {
+        if (this.attached) return;
+        super.attachedCallback();
+        this.nameValueStore = new CIQ.NameValueStore();
+        this.attached = true;
     }
-    this.selector = selector;
-    if (!this.selector) {
-        let div = this.node.find('div:first-of-type');
-        this.selector = `.${div.attr('class')}`;
+
+    /**
+     * Sets the sleep time for this amount of time before re-displaying
+     * @param  {Number} units    Units
+     * @param  {string} unitType Unit type. Value values "minute","hour","day","week"
+     * @alias setSleepAmount
+     * @memberof WebComponents.cq-advertisement
+     */
+    setSleepAmount(units, unitType) {
+        this.sleepAmount = {
+            units,
+            unitType,
+        };
     }
-    this.ignoreSleep = ignoreSleep;
-    let self = this;
 
-    function doIt() {
-        self.makeMarker();
-        self.node.css({
-            display: 'block',
-        });
-        let content = self.node.find(self.selector);
-        content.addClass('ciq-show');
+    setNameValueStore(nameValueStore) {
+        this.nameValueStore = nameValueStore;
+    }
 
-        // resize content
-        self.node.css({
-            height: '0px',
+    makeMarker() {
+        if (this.markerExists) return;
+        new CIQ.Marker({
+            stx: this.context.stx,
+            xPositioner: 'none',
+            label: 'advertisement',
+            permanent: true,
+            node: this.node[0],
         });
-        setTimeout(() => {
+        this.markerExists = true;
+    }
+
+    /**
+     * Show the advertisement. This should be a div inside of the web component.
+     * @param  {Selector} [selector]    A selector. If none specified then the first div will be selected.
+     * @param  {Boolean} [ignoreSleep=false] If true then ignore sleep
+     * @alias show
+     * @memberof WebComponents.cq-advertisement
+     */
+    show(selector, ignoreSleep) {
+        if (this.selector) {
+            let priorContent = this.node.find(this.selector);
+            priorContent.removeClass('ciq-show');
+        }
+        this.selector = selector;
+        if (!this.selector) {
+            let div = this.node.find('div:first-of-type');
+            this.selector = `.${div.attr('class')}`;
+        }
+        this.ignoreSleep = ignoreSleep;
+        let self = this;
+
+        function doIt() {
+            self.makeMarker();
             self.node.css({
-                height: `${self.node[0].scrollHeight}px`,
+                display: 'block',
             });
-        }, 0);
+            let content = self.node.find(self.selector);
+            content.addClass('ciq-show');
+
+            // resize content
+            self.node.css({
+                height: '0px',
+            });
+            setTimeout(() => {
+                self.node.css({
+                    height: `${self.node[0].scrollHeight}px`,
+                });
+            }, 0);
+        }
+        if (!ignoreSleep) {
+            this.nameValueStore.get('cq-advertisement', (err, ls) => {
+                if (err) return;
+                if (!ls || typeof (ls) !== 'object') ls = {};
+                let ms = ls[self.selector];
+                if (ms && ms > Date.now()) return; // still surpressed
+                doIt();
+            });
+        } else {
+            doIt();
+        }
     }
-    if (!ignoreSleep) {
+
+    /**
+     * Hides the advertisement and surpresses it for 24 hours by storing it in local storage.
+     * If the selector itself changes however then the ad will reappear.
+     * @alias close
+     * @memberof WebComponents.cq-advertisement
+     */
+    close() {
+        this.node.css({
+            display: 'none',
+        });
+        let self = this;
         this.nameValueStore.get('cq-advertisement', (err, ls) => {
             if (err) return;
-            if (!ls || typeof (ls) !== 'object') ls = {};
-            let ms = ls[self.selector];
-            if (ms && ms > Date.now()) return; // still surpressed
-            doIt();
-        });
-    } else {
-        doIt();
-    }
-};
-
-/**
- * Hides the advertisement and surpresses it for 24 hours by storing it in local storage.
- * If the selector itself changes however then the ad will reappear.
- * @alias close
- * @memberof WebComponents.cq-advertisement
- */
-Advertisement.prototype.close = function () {
-    this.node.css({
-        display: 'none',
-    });
-    let self = this;
-    this.nameValueStore.get('cq-advertisement', (err, ls) => {
-        if (err) return;
-        let future = new Date();
-        if (!self.sleepAmount) {
-            self.sleepAmount = {
-                units: 1,
-                unitType: 'day',
-            };
-        }
-        let u = self.sleepAmount.units;
-        let ut = self.sleepAmount.unitType;
-        if (ut === 'minute') future.setMinutes(future.getMinutes() + u);
-        else if (ut === 'hour') future.setHours(future.getHours() + u);
-        else if (ut === 'day') future.setDate(future.getDate() + u);
-        else if (ut === 'week') future.setDate(future.getDate() + (u * 7));
-        else if (ut === 'month') future.setMonth(future.getMonth() + u);
-        let ms = future.getTime();
-        if (!ls || typeof (ls) !== 'object') ls = {};
-        ls[self.selector] = ms;
-        self.nameValueStore.set('cq-advertisement', ls);
-    });
-};
-
-/**
- * Call this to force the advertisement to monitor the nameValueStore for updates. It will do this by
- * polling. This is useful when running in multiple windows, do that if the advertisement is closed in one
- * window then it will automatically close in the other windows.
- * @param {Number} [ms=1000] Number of milliseconds to poll.
- * @alias watchForRemoteClose
- * @memberof WebComponents.cq-advertisement.prototype
- */
-Advertisement.prototype.watchForRemoteClose = function (ms) {
-    if (!ms) ms = 1000;
-    let self = this;
-    setInterval(() => {
-        if (self.node.css('display') === 'none') return; // already closed, do nothing
-        self.nameValueStore.get('cq-advertisement', (err, ls) => {
-            if (err) return;
-            if (!ls || typeof (ls) !== 'object') ls = {};
-            let ms = ls[self.selector];
-            if (ms && ms > Date.now()) {
-                self.close();
+            let future = new Date();
+            if (!self.sleepAmount) {
+                self.sleepAmount = {
+                    units: 1,
+                    unitType: 'day',
+                };
             }
+            let u = self.sleepAmount.units;
+            let ut = self.sleepAmount.unitType;
+            if (ut === 'minute') future.setMinutes(future.getMinutes() + u);
+            else if (ut === 'hour') future.setHours(future.getHours() + u);
+            else if (ut === 'day') future.setDate(future.getDate() + u);
+            else if (ut === 'week') future.setDate(future.getDate() + (u * 7));
+            else if (ut === 'month') future.setMonth(future.getMonth() + u);
+            let ms = future.getTime();
+            if (!ls || typeof (ls) !== 'object') ls = {};
+            ls[self.selector] = ms;
+            self.nameValueStore.set('cq-advertisement', ls);
         });
-    }, ms);
-};
+    }
+
+    /**
+     * Call this to force the advertisement to monitor the nameValueStore for updates. It will do this by
+     * polling. This is useful when running in multiple windows, do that if the advertisement is closed in one
+     * window then it will automatically close in the other windows.
+     * @param {Number} [ms=1000] Number of milliseconds to poll.
+     * @alias watchForRemoteClose
+     * @memberof WebComponents.cq-advertisement.prototype
+     */
+    watchForRemoteClose(ms) {
+        if (!ms) ms = 1000;
+        let self = this;
+        setInterval(() => {
+            if (self.node.css('display') === 'none') return; // already closed, do nothing
+            self.nameValueStore.get('cq-advertisement', (err, ls) => {
+                if (err) return;
+                if (!ls || typeof (ls) !== 'object') ls = {};
+                let ms = ls[self.selector];
+                if (ms && ms > Date.now()) {
+                    self.close();
+                }
+            });
+        }, ms);
+    }
+}
+
 
 CIQ.UI.Advertisement = document.registerElement('cq-advertisement', Advertisement);
 
@@ -1212,91 +1212,91 @@ CIQ.UI.Comparison = document.registerElement('cq-comparison', Comparison);
  */
 
 class FibSettingsDialog extends CIQ.UI.DialogContentTag {
-}
+    /**
+     * Sets up a handler to process changes to fields
+     * @param {HTMLElement} node    The input field
+     * @param {string} section The section that is being updated
+     * @param {string} name    The name of the field being updated
+     * @memberOf WebComponents.cq-fib-settings-dialog
+     * @private
+     */
 
-/**
- * Sets up a handler to process changes to fields
- * @param {HTMLElement} node    The input field
- * @param {string} section The section that is being updated
- * @param {string} name    The name of the field being updated
- * @memberOf WebComponents.cq-fib-settings-dialog
- * @private
- */
+    setChangeEvent(node, section, item) {
+        let self = this;
 
-FibSettingsDialog.prototype.setChangeEvent = function (node, section, item) {
-    let self = this;
+        function closure() {
+            return function () {
+                let vectorParameters = self.context.stx.currentVectorParameters;
+                let vectorType = vectorParameters.vectorType;
 
-    function closure() {
-        return function () {
-            let vectorParameters = self.context.stx.currentVectorParameters;
-            let vectorType = vectorParameters.vectorType;
+                // fibonacci type
+                if (vectorParameters.fibonacci && vectorType !== 'fibtimezone') {
+                    let defaultFibs = vectorParameters.fibonacci.fibs;
+                    if (this.type === 'checkbox') {
+                        for (let index in defaultFibs) {
+                            let fib = defaultFibs[index];
 
-            // fibonacci type
-            if (vectorParameters.fibonacci && vectorType !== 'fibtimezone') {
-                let defaultFibs = vectorParameters.fibonacci.fibs;
-                if (this.type === 'checkbox') {
-                    for (let index in defaultFibs) {
-                        let fib = defaultFibs[index];
-
-                        if (fib.level === item) {
-                            fib.display = !!this.checked;
+                            if (fib.level === item) {
+                                fib.display = !!this.checked;
+                            }
                         }
                     }
                 }
-            }
-        };
+            };
+        }
+        node.change(closure());
     }
-    node.change(closure());
-};
 
-/**
- * Opens the cq-fib-settings-dialog
- * @param  {Object} params Parameters
- * @memberOf WebComponents.cq-fib-settings-dialog
- */
+    /**
+     * Opens the cq-fib-settings-dialog
+     * @param  {Object} params Parameters
+     * @memberOf WebComponents.cq-fib-settings-dialog
+     */
 
-FibSettingsDialog.prototype.open = function (params) {
-    CIQ.UI.DialogContentTag.open.apply(this, arguments);
-    let vectorParameters = this.context.stx.currentVectorParameters;
-    let vectorType = vectorParameters.vectorType;
-    let dialog = $(this);
+    open(params) {
+        super.open(arguments);
+        let vectorParameters = this.context.stx.currentVectorParameters;
+        let vectorType = vectorParameters.vectorType;
+        let dialog = $(this);
 
-    // fibonacci type
-    let parameters;
-    if (vectorParameters.fibonacci && vectorType !== 'fibtimezone') {
-        dialog.find('.title').text('Fibonacci Settings');
-        let defaultFibs = vectorParameters.fibonacci.fibs || {};
-        parameters = dialog.find('cq-fibonacci-settings');
-        parameters.emptyExceptTemplate();
+        // fibonacci type
+        let parameters;
+        if (vectorParameters.fibonacci && vectorType !== 'fibtimezone') {
+            dialog.find('.title').text('Fibonacci Settings');
+            let defaultFibs = vectorParameters.fibonacci.fibs || {};
+            parameters = dialog.find('cq-fibonacci-settings');
+            parameters.emptyExceptTemplate();
 
-        for (let index in defaultFibs) {
-            let fib = defaultFibs[index];
+            for (let index in defaultFibs) {
+                let fib = defaultFibs[index];
 
-            // no negative values for fibonacci arc
-            if (vectorType === 'fibarc' && fib.level < 0) continue;
+                // no negative values for fibonacci arc
+                if (vectorType === 'fibarc' && fib.level < 0) continue;
 
-            let newParam = CIQ.UI.makeFromTemplate(this.node.find('template'), parameters);
-            let convertPercent = fib.level * 100;
-            newParam.find('.ciq-heading').text(`${convertPercent.toFixed(1)}%`);
-            let paramInput = newParam.find('input');
+                let newParam = CIQ.UI.makeFromTemplate(this.node.find('template'), parameters);
+                let convertPercent = fib.level * 100;
+                newParam.find('.ciq-heading').text(`${convertPercent.toFixed(1)}%`);
+                let paramInput = newParam.find('input');
 
-            if (fib.display) {
-                paramInput.prop('checked', true);
+                if (fib.display) {
+                    paramInput.prop('checked', true);
+                }
+
+                this.setChangeEvent(paramInput, 'fib', fib.level);
+                newParam.find('.stx-data').append(paramInput);
             }
+        }
+        // settings dialog default
+        else {
+            dialog.find('.title').text('Settings');
 
-            this.setChangeEvent(paramInput, 'fib', fib.level);
-            newParam.find('.stx-data').append(paramInput);
+            // clear the existing web components
+            parameters = dialog.find('cq-fibonacci-settings');
+            parameters.emptyExceptTemplate();
         }
     }
-    // settings dialog default
-    else {
-        dialog.find('.title').text('Settings');
+}
 
-        // clear the existing web components
-        parameters = dialog.find('cq-fibonacci-settings');
-        parameters.emptyExceptTemplate();
-    }
-};
 
 CIQ.UI.FibSettingsDialog = document.registerElement('cq-fib-settings-dialog', FibSettingsDialog);
 
@@ -1318,52 +1318,52 @@ CIQ.UI.FibSettingsDialog = document.registerElement('cq-fib-settings-dialog', Fi
  </cq-dialog>
  */
 class LanguageDialog extends CIQ.UI.DialogContentTag {
+    /**
+     * Opens the nearest {@link WebComponents.cq-dialog} to display your dialog.
+     * @alias open
+     * @memberof WebComponents.cq-share-dialog
+     * @since 4.0.0
+     */
+    open(params) {
+        super.open(arguments);
+        let cqLanguages = this.node.find('cq-languages');
+        cqLanguages.emptyExceptTemplate();
+        let template = this.node.find('template');
+        let languages = CIQ.I18N.languages;
+        if (!languages) return;
+
+        function switchToLanguage(langCode) {
+            return function () {
+                CIQ.UI.contextsForEach(function () {
+                    let stx = this.stx;
+                    stx.preferences.language = langCode;
+                    stx.changeOccurred('preferences');
+                    CIQ.I18N.localize(stx, langCode);
+                    stx.draw();
+                });
+            };
+        }
+        for (let langCode in languages) {
+            let node = CIQ.UI.makeFromTemplate(template, cqLanguages);
+            node.find('cq-language-name').text(languages[langCode]);
+            node.find('cq-flag').attr('cq-lang', langCode);
+            node.stxtap(switchToLanguage(langCode));
+        }
+    }
+
+    /**
+     * Closes dialog box
+     * @alias close
+     * @memberof WebComponents.cq-share-dialog
+     * @since 4.0.0
+     */
+    close() {
+        $('cq-language-dialog').closest('cq-dialog,cq-menu').each(function () {
+            this.close();
+        });
+    }
 }
 
-/**
- * Opens the nearest {@link WebComponents.cq-dialog} to display your dialog.
- * @alias open
- * @memberof WebComponents.cq-share-dialog
- * @since 4.0.0
- */
-LanguageDialog.prototype.open = function (params) {
-    CIQ.UI.DialogContentTag.open.apply(this, arguments);
-    let cqLanguages = this.node.find('cq-languages');
-    cqLanguages.emptyExceptTemplate();
-    let template = this.node.find('template');
-    let languages = CIQ.I18N.languages;
-    if (!languages) return;
-
-    function switchToLanguage(langCode) {
-        return function () {
-            CIQ.UI.contextsForEach(function () {
-                let stx = this.stx;
-                stx.preferences.language = langCode;
-                stx.changeOccurred('preferences');
-                CIQ.I18N.localize(stx, langCode);
-                stx.draw();
-            });
-        };
-    }
-    for (let langCode in languages) {
-        let node = CIQ.UI.makeFromTemplate(template, cqLanguages);
-        node.find('cq-language-name').text(languages[langCode]);
-        node.find('cq-flag').attr('cq-lang', langCode);
-        node.stxtap(switchToLanguage(langCode));
-    }
-};
-
-/**
- * Closes dialog box
- * @alias close
- * @memberof WebComponents.cq-share-dialog
- * @since 4.0.0
- */
-LanguageDialog.prototype.close = function () {
-    $('cq-language-dialog').closest('cq-dialog,cq-menu').each(function () {
-        this.close();
-    });
-};
 
 CIQ.UI.LanguageDialog = document.registerElement('cq-language-dialog', LanguageDialog);
 
@@ -1377,28 +1377,28 @@ CIQ.UI.LanguageDialog = document.registerElement('cq-language-dialog', LanguageD
  <cq-loader><cq-loader>
  */
 class Loader extends CIQ.UI.ContextTag {
+    setContext(context) {
+        this.context.setLoader(this);
+    }
+    /**
+     * Shows the loading icon.
+     * @alias show
+     * @memberof WebComponents.cq-loader
+     */
+    show() {
+        $(this).addClass('stx-show');
+    }
+
+    /**
+     * Hides the loading icon.
+     * @alias hide
+     * @memberof WebComponents.cq-loader
+     */
+    hide() {
+        $(this).removeClass('stx-show');
+    }
 }
 
-Loader.prototype.setContext = function (context) {
-    this.context.setLoader(this);
-};
-/**
- * Shows the loading icon.
- * @alias show
- * @memberof WebComponents.cq-loader
- */
-Loader.prototype.show = function () {
-    $(this).addClass('stx-show');
-};
-
-/**
- * Hides the loading icon.
- * @alias hide
- * @memberof WebComponents.cq-loader
- */
-Loader.prototype.hide = function () {
-    $(this).removeClass('stx-show');
-};
 
 CIQ.UI.Loader = document.registerElement('cq-loader', Loader);
 
@@ -2073,8 +2073,7 @@ CIQ.UI.SidePanel = document.registerElement('cq-side-panel', SidePanel);
  * @namespace WebComponents.cq-study-context
  * @since  4.1.0 cq-study-context is now required (cq-dialog[cq-study-context] no longer works)
  */
-class StudyContext extends CIQ.UI.DialogContentTag {
-}
+class StudyContext extends CIQ.UI.DialogContentTag {}
 
 CIQ.UI.StudyContext = document.registerElement('cq-study-context', StudyContext);
 
@@ -2110,6 +2109,84 @@ CIQ.UI.StudyContext = document.registerElement('cq-study-context', StudyContext)
      </cq-section>
  */
 class Swatch extends HTMLElement {
+    attachedCallback() {
+        if (this.attached) return;
+        this.node = $(this);
+        this.node.stxtap(function (self) {
+            return function (e) {
+                self.launchColorPicker();
+                e.stopPropagation();
+            };
+        }(this));
+        this.attached = true;
+    }
+
+    /**
+     * Attempts to identify the default color for the associated chart. It does so by traversing
+     * up the parent stack and looking for any component that has a context. Or you can set
+     * the default color manually by setting member variable defaultColor;
+     * @memberof WebComponents.cq-swatch
+     */
+    getDefaultColor() {
+        if (this.defaultColor) return this.defaultColor;
+        let context = CIQ.UI.getMyContext(this);
+        if (context) return context.stx.defaultColor; // some parent with a context
+        return 'trasparent';
+    }
+
+    /**
+     * @alias setColor
+     * @memberof WebComponents.cq-swatch
+     */
+    setColor(color, percolate) {
+        let node = $(this);
+        let bgColor = CIQ.getBackgroundColor(this.parentNode);
+        let hslb = CIQ.hsl(bgColor);
+        if (!color) color = 'transparent';
+        let fillColor = color;
+        if (color === 'auto') {
+            fillColor = this.getDefaultColor();
+        }
+        let hslf = CIQ.hsl(fillColor);
+        if ((Math.abs(hslb[2] - hslf[2]) < 0.2) || CIQ.isTransparent(color)) {
+            let border = CIQ.chooseForegroundColor(bgColor);
+            node.css({
+                border: `solid ${border} 1px`,
+            });
+        } else {
+            node.css({
+                border: '',
+            });
+        }
+
+        node.css({
+            'background-color': fillColor,
+        });
+        if (percolate !== false) CIQ.UI.containerExecute(this, 'setColor', color);
+    }
+
+    /**
+     * @alias launchColorPicker
+     * @memberof WebComponents.cq-swatch
+     */
+    launchColorPicker() {
+        let node = $(this);
+
+        let colorPickers = $('cq-color-picker');
+        let colorPicker = colorPickers[0];
+        colorPicker.callback = (function (self) {
+            return function (color) {
+                self.setColor(color, null);
+            };
+        }(this));
+        let overrides = this.node.attr('cq-overrides');
+        if (overrides) overrides = overrides.split(',');
+        colorPicker.display({
+            node,
+            overrides,
+        });
+        this.colorPicker = colorPicker;
+    }
 }
 
 /**
@@ -2118,85 +2195,6 @@ class Swatch extends HTMLElement {
  * @memberof WebComponents.cq-swatch
  */
 Swatch.prototype.defaultColor = null;
-
-Swatch.prototype.attachedCallback = function () {
-    if (this.attached) return;
-    this.node = $(this);
-    this.node.stxtap(function (self) {
-        return function (e) {
-            self.launchColorPicker();
-            e.stopPropagation();
-        };
-    }(this));
-    this.attached = true;
-};
-
-/**
- * Attempts to identify the default color for the associated chart. It does so by traversing
- * up the parent stack and looking for any component that has a context. Or you can set
- * the default color manually by setting member variable defaultColor;
- * @memberof WebComponents.cq-swatch
- */
-Swatch.prototype.getDefaultColor = function () {
-    if (this.defaultColor) return this.defaultColor;
-    let context = CIQ.UI.getMyContext(this);
-    if (context) return context.stx.defaultColor; // some parent with a context
-    return 'trasparent';
-};
-
-/**
- * @alias setColor
- * @memberof WebComponents.cq-swatch
- */
-Swatch.prototype.setColor = function (color, percolate) {
-    let node = $(this);
-    let bgColor = CIQ.getBackgroundColor(this.parentNode);
-    let hslb = CIQ.hsl(bgColor);
-    if (!color) color = 'transparent';
-    let fillColor = color;
-    if (color === 'auto') {
-        fillColor = this.getDefaultColor();
-    }
-    let hslf = CIQ.hsl(fillColor);
-    if ((Math.abs(hslb[2] - hslf[2]) < 0.2) || CIQ.isTransparent(color)) {
-        let border = CIQ.chooseForegroundColor(bgColor);
-        node.css({
-            border: `solid ${border} 1px`,
-        });
-    } else {
-        node.css({
-            border: '',
-        });
-    }
-
-    node.css({
-        'background-color': fillColor,
-    });
-    if (percolate !== false) CIQ.UI.containerExecute(this, 'setColor', color);
-};
-
-/**
- * @alias launchColorPicker
- * @memberof WebComponents.cq-swatch
- */
-Swatch.prototype.launchColorPicker = function () {
-    let node = $(this);
-
-    let colorPickers = $('cq-color-picker');
-    let colorPicker = colorPickers[0];
-    colorPicker.callback = (function (self) {
-        return function (color) {
-            self.setColor(color, null);
-        };
-    }(this));
-    let overrides = this.node.attr('cq-overrides');
-    if (overrides) overrides = overrides.split(',');
-    colorPicker.display({
-        node,
-        overrides,
-    });
-    this.colorPicker = colorPicker;
-};
 
 CIQ.UI.Swatch = document.registerElement('cq-swatch', Swatch);
 
@@ -2209,66 +2207,66 @@ CIQ.UI.Swatch = document.registerElement('cq-swatch', Swatch);
       <cq-tfc></cq-tfc>
  */
 class TFC extends CIQ.UI.ContextTag {
+    attachedCallback() {
+        if (this.attached) return;
+        super.attachedCallback();
+        this.attached = true;
+    }
+
+    setContext(context) {
+        this.initialize();
+    }
+
+    /**
+     * @alias start
+     * @memberof WebComponents.cq-tfc
+     */
+    start() {
+        $('.stx-trade-panel').appendTo($('cq-side-panel'));
+        let stx = this.context.stx;
+
+        stx.account = new CIQ.Account.Demo();
+        let tfcConfig = {
+            stx,
+            account: stx.account,
+        };
+        stx.tfc = new CIQ.TFC(tfcConfig);
+        // stx.tfc.setResizeCallback(resizeScreen);
+
+        let self = this;
+        $('.stx-trade-nav .stx-trade-ticket-toggle').stxtap(() => {
+            $('.stx-trade-nav').removeClass('active');
+            $('.stx-trade-info').addClass('active');
+            $('cq-side-panel')[0].resizeMyself();
+        });
+        $('.stx-trade-info .stx-trade-ticket-toggle').stxtap(() => {
+            $('.stx-trade-nav').addClass('active');
+            $('.stx-trade-info').removeClass('active');
+            $('cq-side-panel')[0].resizeMyself();
+        });
+
+        stx.tfc.selectSymbol = function (symbol) {
+            symbol = symbol.toUpperCase();
+            self.context.changeSymbol({
+                symbol,
+            });
+        };
+    }
+
+    initialize() {
+        let self = this;
+
+        function acc(err) {
+            if (err) {
+                console.log(err);
+            } else {
+                CIQ.loadScript('plugins/tfc/tfc-demo.js', self.start.bind(self));
+            }
+        }
+        CIQ.loadWidget('plugins/tfc/tfc', acc);
+    }
 }
 
-TFC.prototype.attachedCallback = function () {
-    if (this.attached) return;
-    CIQ.UI.ContextTag.attachedCallback.apply(this);
-    this.attached = true;
-};
-
-TFC.prototype.setContext = function (context) {
-    this.initialize();
-};
-
-/**
- * @alias start
- * @memberof WebComponents.cq-tfc
- */
-TFC.prototype.start = function () {
-    $('.stx-trade-panel').appendTo($('cq-side-panel'));
-    let stx = this.context.stx;
-
-    stx.account = new CIQ.Account.Demo();
-    let tfcConfig = {
-        stx,
-        account: stx.account,
-    };
-    stx.tfc = new CIQ.TFC(tfcConfig);
-    // stx.tfc.setResizeCallback(resizeScreen);
-
-    let self = this;
-    $('.stx-trade-nav .stx-trade-ticket-toggle').stxtap(() => {
-        $('.stx-trade-nav').removeClass('active');
-        $('.stx-trade-info').addClass('active');
-        $('cq-side-panel')[0].resizeMyself();
-    });
-    $('.stx-trade-info .stx-trade-ticket-toggle').stxtap(() => {
-        $('.stx-trade-nav').addClass('active');
-        $('.stx-trade-info').removeClass('active');
-        $('cq-side-panel')[0].resizeMyself();
-    });
-
-    stx.tfc.selectSymbol = function (symbol) {
-        symbol = symbol.toUpperCase();
-        self.context.changeSymbol({
-            symbol,
-        });
-    };
-};
-
-TFC.prototype.initialize = function () {
-    let self = this;
-
-    function acc(err) {
-        if (err) {
-            console.log(err);
-        } else {
-            CIQ.loadScript('plugins/tfc/tfc-demo.js', self.start.bind(self));
-        }
-    }
-    CIQ.loadWidget('plugins/tfc/tfc', acc);
-};
 
 CIQ.UI.TFC = document.registerElement('cq-tfc', TFC);
 CIQ.UI.ThemeDialog = document.registerElement('cq-theme-dialog', ThemeDialog);
@@ -2296,27 +2294,27 @@ CIQ.UI.ThemeDialog = document.registerElement('cq-theme-dialog', ThemeDialog);
      </cq-section>
  */
 class ThemePiece extends CIQ.UI.BaseComponent {
+    /**
+     * @alias setColor
+     * @memberof WebComponents.cq-theme-piece
+     */
+    setColor(color) {
+        if (color === 'Hollow' || color === 'No Border') {
+            color = 'transparent';
+            this.node.find('cq-swatch')[0].setColor('transparent', false);
+        }
+        CIQ.UI.containerExecute(this, 'setValue', this.piece.obj, this.piece.field, color);
+    }
+
+    /**
+     * @alias setBoolean
+     * @memberof WebComponents.cq-theme-piece
+     */
+    setBoolean(result) {
+        CIQ.UI.containerExecute(this, 'setValue', this.piece.obj, this.piece.field, result);
+    }
 }
 
-/**
- * @alias setColor
- * @memberof WebComponents.cq-theme-piece
- */
-ThemePiece.prototype.setColor = function (color) {
-    if (color === 'Hollow' || color === 'No Border') {
-        color = 'transparent';
-        this.node.find('cq-swatch')[0].setColor('transparent', false);
-    }
-    CIQ.UI.containerExecute(this, 'setValue', this.piece.obj, this.piece.field, color);
-};
-
-/**
- * @alias setBoolean
- * @memberof WebComponents.cq-theme-piece
- */
-ThemePiece.prototype.setBoolean = function (result) {
-    CIQ.UI.containerExecute(this, 'setValue', this.piece.obj, this.piece.field, result);
-};
 
 CIQ.UI.ThemePiece = document.registerElement('cq-theme-piece', ThemePiece);
 
@@ -2599,74 +2597,73 @@ CIQ.UI.Themes = document.registerElement('cq-themes', Themes);
  * Timezone Dialog web component `<cq-timezone-dialog>`.
  */
 class TimezoneDialog extends CIQ.UI.DialogContentTag {
+    /**
+     * @alias save
+     * @memberof WebComponents.cq-timezone-dialog
+     */
+    removeTimezone() {
+        CIQ.ChartEngine.defaultDisplayTimeZone = null;
+        let stx = this.context.stx;
+        stx.displayZone = null;
+        stx.setTimeZone();
+
+        if (stx.displayInitialized) stx.draw();
+
+        super.close();
+    }
+
+    /**
+     * @alias configure
+     * @memberof WebComponents.cq-theme-dialog
+     */
+    open(params) {
+        super.open(arguments);
+        let node = this.node;
+        let self = this;
+
+        this.context = params.context;
+        let stx = this.context.stx;
+
+        let ul = node.find('ul');
+        let button = node.find('.ciq-btn');
+        if (!this.template) {
+            this.template = ul.find('li#timezoneTemplate')[0].cloneNode(true);
+        }
+
+        ul.empty();
+        for (let key in CIQ.timeZoneMap) {
+            let zone = key;
+            let display = stx.translateIf(zone);
+            let li = this.template.cloneNode(true);
+            li.style.display = 'block';
+            li.innerHTML = display;
+            CIQ.safeClickTouch(li, setTimezone(zone));
+            ul.append(li);
+        }
+        let currentUserTimeZone = node.find('#currentUserTimeZone');
+        if (stx.displayZone) {
+            let fullZone = stx.displayZone;
+            for (let tz in CIQ.timeZoneMap) {
+                if (CIQ.timeZoneMap[tz] === stx.displayZone) fullZone = tz;
+            }
+            currentUserTimeZone.text(`${stx.translateIf('Current TimeZone is')} ${fullZone}`);
+            button.show();
+        } else {
+            currentUserTimeZone.text(stx.translateIf('Your timezone is your current location'));
+            button.hide();
+        }
+    }
+
+    setTimezone(zone) {
+        let stx = this.context.stx;
+        super.close();
+        let translatedZone = CIQ.timeZoneMap[zone];
+        CIQ.ChartEngine.defaultDisplayTimeZone = translatedZone;
+        stx.setTimeZone(stx.dataZone, translatedZone);
+        if (stx.chart.symbol) stx.draw();
+    }
 }
 
-/**
- * @alias save
- * @memberof WebComponents.cq-timezone-dialog
- */
-TimezoneDialog.prototype.removeTimezone = function () {
-    CIQ.ChartEngine.defaultDisplayTimeZone = null;
-    let stx = this.context.stx;
-    stx.displayZone = null;
-    stx.setTimeZone();
-
-    if (stx.displayInitialized) stx.draw();
-
-    CIQ.UI.DialogContentTag.close.apply(this);
-};
-
-/**
- * @alias configure
- * @memberof WebComponents.cq-theme-dialog
- */
-TimezoneDialog.prototype.open = function (params) {
-    CIQ.UI.DialogContentTag.open.apply(this, arguments);
-    let node = this.node;
-    let self = this;
-
-    this.context = params.context;
-    let stx = this.context.stx;
-
-    let ul = node.find('ul');
-    let button = node.find('.ciq-btn');
-    if (!this.template) {
-        this.template = ul.find('li#timezoneTemplate')[0].cloneNode(true);
-    }
-
-    ul.empty();
-    for (let key in CIQ.timeZoneMap) {
-        let zone = key;
-        let display = stx.translateIf(zone);
-        let li = this.template.cloneNode(true);
-        li.style.display = 'block';
-        li.innerHTML = display;
-        CIQ.safeClickTouch(li, setTimezone(zone));
-        ul.append(li);
-    }
-    let currentUserTimeZone = node.find('#currentUserTimeZone');
-    if (stx.displayZone) {
-        let fullZone = stx.displayZone;
-        for (let tz in CIQ.timeZoneMap) {
-            if (CIQ.timeZoneMap[tz] === stx.displayZone) fullZone = tz;
-        }
-        currentUserTimeZone.text(`${stx.translateIf('Current TimeZone is')} ${fullZone}`);
-        button.show();
-    } else {
-        currentUserTimeZone.text(stx.translateIf('Your timezone is your current location'));
-        button.hide();
-    }
-
-    function setTimezone(zone) {
-        return function (e) {
-            CIQ.UI.DialogContentTag.close.apply(self);
-            let translatedZone = CIQ.timeZoneMap[zone];
-            CIQ.ChartEngine.defaultDisplayTimeZone = translatedZone;
-            stx.setTimeZone(stx.dataZone, translatedZone);
-            if (stx.chart.symbol) stx.draw();
-        };
-    }
-};
 
 CIQ.UI.TimezoneDialog = document.registerElement('cq-timezone-dialog', TimezoneDialog);
 
@@ -3306,134 +3303,133 @@ CIQ.UI.Views = document.registerElement('cq-views', Views);
  */
 
 class Menu extends HTMLElement {
-}
-
-Menu.prototype.createdCallback = function () {
-    this.node = $(this);
-    this.activeClassName = 'stxMenuActive';
-    this.active = false;
-};
-
-Menu.prototype.attachedCallback = function () {
-    if (this.attached) return;
-    this.uiManager = $('cq-ui-manager');
-    if (this.uiManager.length > 0) this.uiManager = this.uiManager[0];
-
-    this.attached = true;
-
-    if (this.node.attr('readonly')) return;
-    let self = this;
-
-    function handleTap(e) {
-        self.tap(e);
+    createdCallback() {
+        this.node = $(this);
+        this.activeClassName = 'stxMenuActive';
+        this.active = false;
     }
 
-    function handleCaptureTap(e) {
-        self.captureTap(e);
-    }
-    let thisNode = this.node[0];
-    this.node.stxtap(handleTap);
-    thisNode.addEventListener('stxtap', handleCaptureTap, true);
-};
+    attachedCallback() {
+        if (this.attached) return;
+        this.uiManager = $('cq-ui-manager');
+        if (this.uiManager.length > 0) this.uiManager = this.uiManager[0];
 
-Menu.prototype.open = function (params) {
-    this.uiManager.openMenu(this, params);
-};
+        this.attached = true;
 
-Menu.prototype.close = function () {
-    this.uiManager.closeMenu(this);
-};
+        if (this.node.attr('readonly')) return;
+        let self = this;
 
-Menu.prototype.lift = function () {
-    let lifts = this.lifts = this.uiManager.findLifts(this);
-    for (let i = 0; i < lifts.length; i++) {
-        this.uiManager.lift(lifts[i]);
-    }
-};
-
-Menu.prototype.unlift = function () {
-    let lifts = this.lifts;
-    if (!lifts) return;
-    for (let i = 0; i < lifts.length; i++) {
-        this.uiManager.restoreLift(lifts[i]);
-    }
-    this.lifts = null;
-};
-
-Menu.prototype.show = function (params) {
-    if (this.active) return;
-    this.active = true;
-    this.node.addClass(this.activeClassName);
-    this.lift();
-    // For good measure, call resize on any nested scrollables to give them
-    // a chance to change their height and scrollbars
-    let scrolls = this.node.find('cq-scroll');
-    scrolls.each(function () {
-        this.resize();
-    });
-};
-
-Menu.prototype.hide = function () {
-    if (!this.active) return;
-    this.unlift();
-    this.node.removeClass(this.activeClassName);
-    this.active = false;
-    // blur any input boxes that are inside the menu we're closing, to get rid of soft keyboard
-    $(this).find('input').each(function () {
-        if (this === document.activeElement) this.blur();
-    });
-};
-
-/**
- * Captures a tap event *before* it descends down to what it is clicked on. The key thing this does is determine
- * whether the thing clicked on was inside of a "cq-no-close" section. We do this on the way down, because the act
- * of clicking on something may release it from the dom, making it impossible to figure out on propagation.
- * @param {object} e Element
- * @private
- */
-Menu.prototype.captureTap = function (e) {
-    let target = $(e.target);
-    let domChain = target.parents().addBack();
-    // Determine if the tapped element, or any of its parents have a cq-no-close attribute
-    this.noClose = domChain.filter(function () {
-        let attr = $(this).attr('cq-no-close');
-        return typeof attr !== typeof undefined && attr !== false;
-    }).length;
-
-    // Determine if the tapped element was inside of something untappable, like a cq-heading or cq-separator
-    if (!this.noClose) {
-        this.noClose = domChain.filter(function () {
-            return $(this).is('cq-separator,cq-heading');
-        }).length;
-    }
-};
-
-Menu.prototype.tap = function (e) {
-    let uiManager = this.uiManager;
-    if (this.active) { // tapping on the menu if it is open will close it
-        // todo, don't close if active children (cascading). Note, cascading already works for dialogs.
-        e.stopPropagation();
-        if (!this.noClose) uiManager.closeMenu(this);
-    } else if (!this.active) { // if we've clicked on the label for the menu, then open the menu
-        e.stopPropagation();
-
-        // If the tap came from within this menu's cq-menu-dropdown then this is probably an accidental
-        // "re-open", which occurs when a click on a menu item causes an action that closes the menu, tricking
-        // it into thinking it should re-open
-        let target = $(e.target);
-        let insideDropdown = target.parents('cq-menu-dropdown');
-        if (insideDropdown.length) return;
-
-        let child = false;
-        let parents = this.node.parents('cq-menu,cq-dialog');
-        for (let i = 0; i < parents.length; i++) {
-            if (parents[i].active) child = true;
+        function handleTap(e) {
+            self.tap(e);
         }
-        if (!child) uiManager.closeMenu(); // close all menus unless we're the child of an active menu (cascading)
 
-        this.open();
+        function handleCaptureTap(e) {
+            self.captureTap(e);
+        }
+        let thisNode = this.node[0];
+        this.node.stxtap(handleTap);
+        thisNode.addEventListener('stxtap', handleCaptureTap, true);
     }
-};
+
+    open(params) {
+        this.uiManager.openMenu(this, params);
+    }
+
+    close() {
+        this.uiManager.closeMenu(this);
+    }
+
+    lift() {
+        let lifts = this.lifts = this.uiManager.findLifts(this);
+        for (let i = 0; i < lifts.length; i++) {
+            this.uiManager.lift(lifts[i]);
+        }
+    }
+
+    unlift() {
+        let lifts = this.lifts;
+        if (!lifts) return;
+        for (let i = 0; i < lifts.length; i++) {
+            this.uiManager.restoreLift(lifts[i]);
+        }
+        this.lifts = null;
+    }
+
+    show(params) {
+        if (this.active) return;
+        this.active = true;
+        this.node.addClass(this.activeClassName);
+        this.lift();
+        // For good measure, call resize on any nested scrollables to give them
+        // a chance to change their height and scrollbars
+        let scrolls = this.node.find('cq-scroll');
+        scrolls.each(function () {
+            this.resize();
+        });
+    }
+
+    hide() {
+        if (!this.active) return;
+        this.unlift();
+        this.node.removeClass(this.activeClassName);
+        this.active = false;
+        // blur any input boxes that are inside the menu we're closing, to get rid of soft keyboard
+        $(this).find('input').each(function () {
+            if (this === document.activeElement) this.blur();
+        });
+    }
+
+    /**
+     * Captures a tap event *before* it descends down to what it is clicked on. The key thing this does is determine
+     * whether the thing clicked on was inside of a "cq-no-close" section. We do this on the way down, because the act
+     * of clicking on something may release it from the dom, making it impossible to figure out on propagation.
+     * @param {object} e Element
+     * @private
+     */
+    captureTap(e) {
+        let target = $(e.target);
+        let domChain = target.parents().addBack();
+        // Determine if the tapped element, or any of its parents have a cq-no-close attribute
+        this.noClose = domChain.filter(function () {
+            let attr = $(this).attr('cq-no-close');
+            return typeof attr !== typeof undefined && attr !== false;
+        }).length;
+
+        // Determine if the tapped element was inside of something untappable, like a cq-heading or cq-separator
+        if (!this.noClose) {
+            this.noClose = domChain.filter(function () {
+                return $(this).is('cq-separator,cq-heading');
+            }).length;
+        }
+    }
+
+    tap(e) {
+        let uiManager = this.uiManager;
+        if (this.active) { // tapping on the menu if it is open will close it
+            // todo, don't close if active children (cascading). Note, cascading already works for dialogs.
+            e.stopPropagation();
+            if (!this.noClose) uiManager.closeMenu(this);
+        } else if (!this.active) { // if we've clicked on the label for the menu, then open the menu
+            e.stopPropagation();
+
+            // If the tap came from within this menu's cq-menu-dropdown then this is probably an accidental
+            // "re-open", which occurs when a click on a menu item causes an action that closes the menu, tricking
+            // it into thinking it should re-open
+            let target = $(e.target);
+            let insideDropdown = target.parents('cq-menu-dropdown');
+            if (insideDropdown.length) return;
+
+            let child = false;
+            let parents = this.node.parents('cq-menu,cq-dialog');
+            for (let i = 0; i < parents.length; i++) {
+                if (parents[i].active) child = true;
+            }
+            if (!child) uiManager.closeMenu(); // close all menus unless we're the child of an active menu (cascading)
+
+            this.open();
+        }
+    }
+}
 
 CIQ.UI.Menu = document.registerElement('cq-menu', Menu);
 CIQ.UI.MenuDropDown = document.registerElement('cq-menu-dropdown', MenuDropDown);
@@ -3447,58 +3443,58 @@ CIQ.UI.ShareDialog = document.registerElement('cq-share-dialog', ShareDialog);
  * @namespace WebComponents.cq-aggregation-dialog
  */
 class AggregationDialog extends CIQ.UI.DialogContentTag {
-}
+    /**
+     * Opens the nearest {@link WebComponents.cq-dialog} to display your dialog.
+     * @alias open
+     * @memberof WebComponents.cq-aggregation-dialog
+     */
+    open(params) {
+        super.open(arguments);
+        let stx = this.context.stx;
+        let aggregationType = params.aggregationType;
+        let map = {
+            kagi: {
+                title: 'Set Reversal Percentage',
+            },
+            renko: {
+                title: 'Set Range',
+            },
+            linebreak: {
+                title: 'Set Price Lines',
+            },
+            rangebars: {
+                title: 'Set Range',
+            },
+            pandf: {
+                title: 'Set Point & Figure Parameters',
+            },
+        };
+        if (stx.layout.aggregationType !== aggregationType) {
+            stx.setAggregationType(aggregationType);
+        }
 
-/**
- * Opens the nearest {@link WebComponents.cq-dialog} to display your dialog.
- * @alias open
- * @memberof WebComponents.cq-aggregation-dialog
- */
-AggregationDialog.prototype.open = function (params) {
-    CIQ.UI.DialogContentTag.open.apply(this, arguments);
-    let stx = this.context.stx;
-    let aggregationType = params.aggregationType;
-    let map = {
-        kagi: {
-            title: 'Set Reversal Percentage',
-        },
-        renko: {
-            title: 'Set Range',
-        },
-        linebreak: {
-            title: 'Set Price Lines',
-        },
-        rangebars: {
-            title: 'Set Range',
-        },
-        pandf: {
-            title: 'Set Point & Figure Parameters',
-        },
-    };
-    if (stx.layout.aggregationType !== aggregationType) {
-        stx.setAggregationType(aggregationType);
-    }
+        let entry = map[aggregationType];
+        let node = this.node;
+        node.find('.title').text(stx.translateIf(entry.title));
 
-    let entry = map[aggregationType];
-    let node = this.node;
-    node.find('.title').text(stx.translateIf(entry.title));
-
-    for (let type in map) {
-        node.find(`.ciq${type}`).css(aggregationType === type ? {
-            display: '',
-        } : {
-            display: 'none',
+        for (let type in map) {
+            node.find(`.ciq${type}`).css(aggregationType === type ? {
+                display: '',
+            } : {
+                display: 'none',
+            });
+        }
+        node.find(`.ciq${aggregationType} input`).each(function () {
+            let name = this.name;
+            if (name === 'box' || name === 'reversal') name = `pandf.${name}`;
+            let tuple = CIQ.deriveFromObjectChain(stx.layout, name);
+            if (tuple && !tuple.obj[tuple.member] && stx.chart.defaultChartStyleConfig[this.name]) {
+                $(this).val(stx.chart.defaultChartStyleConfig[this.name]);
+            }
         });
     }
-    node.find(`.ciq${aggregationType} input`).each(function () {
-        let name = this.name;
-        if (name === 'box' || name === 'reversal') name = `pandf.${name}`;
-        let tuple = CIQ.deriveFromObjectChain(stx.layout, name);
-        if (tuple && !tuple.obj[tuple.member] && stx.chart.defaultChartStyleConfig[this.name]) {
-            $(this).val(stx.chart.defaultChartStyleConfig[this.name]);
-        }
-    });
-};
+}
+
 
 CIQ.UI.AggregationDialog = document.registerElement('cq-aggregation-dialog', AggregationDialog);
 
@@ -3520,161 +3516,161 @@ CIQ.UI.AggregationDialog = document.registerElement('cq-aggregation-dialog', Agg
      </cq-color-picker>
  */
 class ColorPicker extends CIQ.UI.Dialog {
-}
-
-ColorPicker.prototype.createdCallback = function () {
-    CIQ.UI.Dialog.prototype.createdCallback.apply(this);
-    this.params = {
-        colorMap: [
-            ['#ffffff', '#e1e1e1', '#cccccc', '#b7b7b7', '#a0a0a5', '#898989', '#707070', '#626262', '#555555', '#464646', '#363636', '#262626', '#1d1d1d', '#000000'],
-            ['#f4977c', '#f7ac84', '#fbc58d', '#fff69e', '#c4de9e', '#85c99e', '#7fcdc7', '#75d0f4', '#81a8d7', '#8594c8', '#8983bc', '#a187bd', '#bb8dbe', '#f29bc1'],
-            ['#ef6c53', '#f38d5b', '#f8ae63', '#fff371', '#acd277', '#43b77a', '#2ebbb3', '#00bff0', '#4a8dc8', '#5875b7', '#625da6', '#8561a7', '#a665a7', '#ee6fa9'],
-            ['#ea1d2c', '#ee652e', '#f4932f', '#fff126', '#8ec648', '#00a553', '#00a99c', '#00afed', '#0073ba', '#0056a4', '#323390', '#66308f', '#912a8e', '#e9088c'],
-            ['#9b0b16', '#9e4117', '#a16118', '#c6b920', '#5a852d', '#007238', '#00746a', '#0077a1', '#004c7f', '#003570', '#1d1762', '#441261', '#62095f', '#9c005d'],
-            ['#770001', '#792e03', '#7b4906', '#817a0b', '#41661e', '#005827', '#005951', '#003b5c', '#001d40', '#000e35', '#04002c', '#19002b', '#2c002a', '#580028'],
-        ],
-    };
-};
-
-ColorPicker.prototype.attachedCallback = function () {
-    if (this.attached) return;
-    CIQ.UI.Dialog.prototype.attachedCallback.apply(this);
-
-    let node = $(this);
-    let colors = node.attr('cq-colors');
-    if (colors) {
-        // Convert a csv list of colors to a two dimensional array
-        colors = colors.split(',');
-        let cols = Math.ceil(Math.sqrt(colors.length));
-        this.params.colorMap = [];
-        console.log('this.params.colorMap=[]');
-        console.log(typeof this.params.colorMap);
-        let col = 0;
-        let row = [];
-        for (let i = 0; i < colors.length; i++) {
-            if (col >= cols) {
-                col = 0;
-                this.params.colorMap.push(row);
-                row = [];
-            }
-            row.push(colors[i]);
-            col++;
-        }
-        this.params.colorMap.push(row);
-    }
-    this.cqOverrides = node.find('cq-overrides');
-    this.template = this.cqOverrides.find('template');
-    this.initialize();
-    this.attached = true;
-};
-
-/**
- * @param {object} colorMap Object that holds an array of various color arrays.
- * @alias setColors
- * @memberof WebComponents.cq-color-picker
- */
-ColorPicker.prototype.setColors = function (colorMap) {
-    this.params.colorMap = colorMap;
-    this.initialize();
-};
-
-ColorPicker.prototype.initialize = function () {
-    let self = this;
-    this.picker = $(this);
-    this.colors = this.picker.find('cq-colors');
-    if (!this.colors.length) this.colors = this.picker;
-    this.colors.empty(); // allow re-initialize, with new colors for instance
-
-    function closure(self, color) {
-        return function () {
-            self.pickColor(color);
+    createdCallback() {
+        super.createdCallback();
+        this.params = {
+            colorMap: [
+                ['#ffffff', '#e1e1e1', '#cccccc', '#b7b7b7', '#a0a0a5', '#898989', '#707070', '#626262', '#555555', '#464646', '#363636', '#262626', '#1d1d1d', '#000000'],
+                ['#f4977c', '#f7ac84', '#fbc58d', '#fff69e', '#c4de9e', '#85c99e', '#7fcdc7', '#75d0f4', '#81a8d7', '#8594c8', '#8983bc', '#a187bd', '#bb8dbe', '#f29bc1'],
+                ['#ef6c53', '#f38d5b', '#f8ae63', '#fff371', '#acd277', '#43b77a', '#2ebbb3', '#00bff0', '#4a8dc8', '#5875b7', '#625da6', '#8561a7', '#a665a7', '#ee6fa9'],
+                ['#ea1d2c', '#ee652e', '#f4932f', '#fff126', '#8ec648', '#00a553', '#00a99c', '#00afed', '#0073ba', '#0056a4', '#323390', '#66308f', '#912a8e', '#e9088c'],
+                ['#9b0b16', '#9e4117', '#a16118', '#c6b920', '#5a852d', '#007238', '#00746a', '#0077a1', '#004c7f', '#003570', '#1d1762', '#441261', '#62095f', '#9c005d'],
+                ['#770001', '#792e03', '#7b4906', '#817a0b', '#41661e', '#005827', '#005951', '#003b5c', '#001d40', '#000e35', '#04002c', '#19002b', '#2c002a', '#580028'],
+            ],
         };
     }
-    for (let a = 0; a < this.params.colorMap.length; a++) {
-        let lineOfColors = this.params.colorMap[a];
-        let ul = $('<UL></UL>').appendTo(this.colors);
-        for (let b = 0; b < lineOfColors.length; b++) {
-            let li = $('<LI></LI>').appendTo(ul);
-            let span = $('<SPAN></SPAN>').appendTo(li);
-            span.css({
-                'background-color': lineOfColors[b],
-            });
-            span.stxtap(closure(self, lineOfColors[b]));
+
+    attachedCallback() {
+        if (this.attached) return;
+        super.attachedCallback();
+
+        let node = $(this);
+        let colors = node.attr('cq-colors');
+        if (colors) {
+            // Convert a csv list of colors to a two dimensional array
+            colors = colors.split(',');
+            let cols = Math.ceil(Math.sqrt(colors.length));
+            this.params.colorMap = [];
+            console.log('this.params.colorMap=[]');
+            console.log(typeof this.params.colorMap);
+            let col = 0;
+            let row = [];
+            for (let i = 0; i < colors.length; i++) {
+                if (col >= cols) {
+                    col = 0;
+                    this.params.colorMap.push(row);
+                    row = [];
+                }
+                row.push(colors[i]);
+                col++;
+            }
+            this.params.colorMap.push(row);
         }
+        this.cqOverrides = node.find('cq-overrides');
+        this.template = this.cqOverrides.find('template');
+        this.initialize();
+        this.attached = true;
     }
-};
 
-/**
- * @param color
- * @alias pickColor
- * @memberof WebComponents.cq-color-picker
- */
-ColorPicker.prototype.pickColor = function (color) {
-    if (this.callback) this.callback(color);
-    this.close();
-};
+    /**
+     * @param {object} colorMap Object that holds an array of various color arrays.
+     * @alias setColors
+     * @memberof WebComponents.cq-color-picker
+     */
+    setColors(colorMap) {
+        this.params.colorMap = colorMap;
+        this.initialize();
+    }
 
-ColorPicker.prototype.resize = function () {
-    // do nothing for resize, overrides Dialog default which centers
-};
+    initialize() {
+        let self = this;
+        this.picker = $(this);
+        this.colors = this.picker.find('cq-colors');
+        if (!this.colors.length) this.colors = this.picker;
+        this.colors.empty(); // allow re-initialize, with new colors for instance
 
-/**
- * Displays the color picker in proximity to the node passed in
- * @param  {object} activator The object representing what caused picker to display
- * @param  {HTMLElement} [activator.node] The node near where to display the color picker
- * @param {Array} [activator.overrides] Optional array of overrides. For each of these, a button will be created that if pressed
- * will pass that override back instead of the color
- * @alias display
- * @memberof WebComponents.cq-color-picker
- */
-ColorPicker.prototype.display = function (activator) {
-    let node = $(activator.node);
-
-    // Algorithm to place the color picker to the right of whichever node was just pressed
-    let positionOfNode = node[0].getBoundingClientRect();
-    this.picker.css({
-        top: '0px',
-        left: '0px',
-    });
-    let positionOfColorPicker = this.parentNode.getBoundingClientRect();
-    let x = positionOfNode.left - positionOfColorPicker.left + node.width() + 10;
-    let y = positionOfNode.top - positionOfColorPicker.top + 5;
-
-    // ensure color picker doesn't go off right edge of screen
-    let docWidth = $(document).width();
-    let w = this.picker.width();
-    if (x + w > docWidth) x = docWidth - w - 20; // 20 for a little whitespace and padding
-
-    // or bottom of screen
-    let docHeight = $(document).height();
-    let h = this.picker.height();
-    if (y + h > docHeight) y = docHeight - h - 20; // 20 for a little whitespace and padding
-
-    this.picker.css({
-        left: `${x}px`,
-        top: `${y}px`,
-    });
-    this.cqOverrides.emptyExceptTemplate();
-
-    if (activator.overrides && this.template.length) {
-        for (let i = 0; i < activator.overrides.length; i++) {
-            let override = activator.overrides[i];
-            let n = CIQ.UI.makeFromTemplate(this.template, true);
-            n.text(override);
-            n.stxtap((function (self, override) {
-                return function () {
-                    self.pickColor(override);
-                };
-            })(this, override));
+        function closure(self, color) {
+            return function () {
+                self.pickColor(color);
+            };
+        }
+        for (let a = 0; a < this.params.colorMap.length; a++) {
+            let lineOfColors = this.params.colorMap[a];
+            let ul = $('<UL></UL>').appendTo(this.colors);
+            for (let b = 0; b < lineOfColors.length; b++) {
+                let li = $('<LI></LI>').appendTo(ul);
+                let span = $('<SPAN></SPAN>').appendTo(li);
+                span.css({
+                    'background-color': lineOfColors[b],
+                });
+                span.stxtap(closure(self, lineOfColors[b]));
+            }
         }
     }
 
-    if (!this.picker.hasClass('stxMenuActive')) {
-        this.picker[0].open(); // Manually activate the color picker
-    } else {
-        if (this.context.e) this.context.e.stopPropagation(); // Otherwise the color picker is closed when you swap back and forth between fill and line swatches on the toolbar
+    /**
+     * @param color
+     * @alias pickColor
+     * @memberof WebComponents.cq-color-picker
+     */
+    pickColor(color) {
+        if (this.callback) this.callback(color);
+        this.close();
     }
-};
+
+    resize() {
+        // do nothing for resize, overrides Dialog default which centers
+    }
+
+    /**
+     * Displays the color picker in proximity to the node passed in
+     * @param  {object} activator The object representing what caused picker to display
+     * @param  {HTMLElement} [activator.node] The node near where to display the color picker
+     * @param {Array} [activator.overrides] Optional array of overrides. For each of these, a button will be created that if pressed
+     * will pass that override back instead of the color
+     * @alias display
+     * @memberof WebComponents.cq-color-picker
+     */
+    display(activator) {
+        let node = $(activator.node);
+
+        // Algorithm to place the color picker to the right of whichever node was just pressed
+        let positionOfNode = node[0].getBoundingClientRect();
+        this.picker.css({
+            top: '0px',
+            left: '0px',
+        });
+        let positionOfColorPicker = this.parentNode.getBoundingClientRect();
+        let x = positionOfNode.left - positionOfColorPicker.left + node.width() + 10;
+        let y = positionOfNode.top - positionOfColorPicker.top + 5;
+
+        // ensure color picker doesn't go off right edge of screen
+        let docWidth = $(document).width();
+        let w = this.picker.width();
+        if (x + w > docWidth) x = docWidth - w - 20; // 20 for a little whitespace and padding
+
+        // or bottom of screen
+        let docHeight = $(document).height();
+        let h = this.picker.height();
+        if (y + h > docHeight) y = docHeight - h - 20; // 20 for a little whitespace and padding
+
+        this.picker.css({
+            left: `${x}px`,
+            top: `${y}px`,
+        });
+        this.cqOverrides.emptyExceptTemplate();
+
+        if (activator.overrides && this.template.length) {
+            for (let i = 0; i < activator.overrides.length; i++) {
+                let override = activator.overrides[i];
+                let n = CIQ.UI.makeFromTemplate(this.template, true);
+                n.text(override);
+                n.stxtap((function (self, override) {
+                    return function () {
+                        self.pickColor(override);
+                    };
+                })(this, override));
+            }
+        }
+
+        if (!this.picker.hasClass('stxMenuActive')) {
+            this.picker[0].open(); // Manually activate the color picker
+        } else {
+            if (this.context.e) this.context.e.stopPropagation(); // Otherwise the color picker is closed when you swap back and forth between fill and line swatches on the toolbar
+        }
+    }
+}
+
 
 CIQ.UI.ColorPicker = document.registerElement('cq-color-picker', ColorPicker);
 
@@ -3816,7 +3812,7 @@ class StudyDialog extends CIQ.UI.DialogContentTag {
     }
 
     open(params) {
-        CIQ.UI.DialogContentTag.open.apply(this, arguments);
+        super.open(arguments);
 
         // Generate a "helper" which tells us how to create a dialog
         this.helper = new CIQ.Studies.DialogHelper(params);
@@ -3953,8 +3949,7 @@ CIQ.UI.StudyDialog = document.registerElement('cq-study-dialog', StudyDialog);
  * See example in {@link CIQ.WebComponents.cq-study-dialog}.
  * @name CIQ.WebComponents.cq-study-input
  */
-class StudyInput extends CIQ.UI.BaseComponent {
-}
+class StudyInput extends CIQ.UI.BaseComponent {}
 
 CIQ.UI.StudyInput = document.registerElement('cq-study-input', StudyInput);
 
@@ -4018,136 +4013,136 @@ CIQ.UI.StudyInput = document.registerElement('cq-study-input', StudyInput);
      *
      */
 class StudyLegend extends CIQ.UI.ModalTag {
-}
-
-StudyLegend.prototype.setContext = function (context) {
-    this.template = this.node.find('template');
-    this.previousStudies = {};
-    this.begin();
-};
-
-/**
- * Begins running the StudyLegend.
- * @memberof! WebComponents.cq-study-legend
- * @private
- */
-StudyLegend.prototype.begin = function () {
-    let self = this;
-
-    function render() {
-        self.showHide();
-        self.renderLegend();
+    setContext(context) {
+        this.template = this.node.find('template');
+        this.previousStudies = {};
+        this.begin();
     }
-    this.addInjection('append', 'createDataSet', render);
-    render();
-};
 
-StudyLegend.prototype.showHide = function () {
-    for (let s in this.context.stx.layout.studies) {
-        if (!this.context.stx.layout.studies[s].customLegend) {
-            this.node.css({
-                display: '',
-            });
-            return;
+    /**
+     * Begins running the StudyLegend.
+     * @memberof! WebComponents.cq-study-legend
+     * @private
+     */
+    begin() {
+        let self = this;
+
+        function render() {
+            self.showHide();
+            self.renderLegend();
         }
+        this.addInjection('append', 'createDataSet', render);
+        render();
     }
-    this.node.css({
-        display: 'none',
-    });
-};
 
-/**
- * Renders the legend based on the current studies in the CIQ.ChartEngine object. Since this gets called
- * continually in the draw animation loop we are very careful not to render unnecessarily.
- * @memberof! WebComponents.cq-study-legend
- */
-StudyLegend.prototype.renderLegend = function () {
-    let stx = this.context.stx;
-    if (!stx.layout.studies) return;
-    let foundAChange = false;
-    let id;
-
-    // Logic to determine if the studies have changed, otherwise don't re-create the legend
-    if (CIQ.objLength(this.previousStudies) === CIQ.objLength(stx.layout.studies)) {
-        for (id in stx.layout.studies) {
-            if (!this.previousStudies[id]) {
-                foundAChange = true;
-                break;
+    showHide() {
+        for (let s in this.context.stx.layout.studies) {
+            if (!this.context.stx.layout.studies[s].customLegend) {
+                this.node.css({
+                    display: '',
+                });
+                return;
             }
         }
-        if (!foundAChange) return;
-    }
-    this.previousStudies = CIQ.shallowClone(stx.layout.studies);
-
-    $(this.template).parent().emptyExceptTemplate();
-
-    function closeStudy(self, sd) {
-        return function (e) {
-            // Need to run this in the nextTick because the study legend can be removed by this click
-            // causing the underlying chart to receive the mousedown (on IE win7)
-            setTimeout(() => {
-                CIQ.Studies.removeStudy(self.context.stx, sd);
-                if (self.node[0].hasAttribute('cq-marker')) self.context.stx.modalEnd();
-                self.renderLegend();
-            }, 0);
-        };
+        this.node.css({
+            display: 'none',
+        });
     }
 
-    function editStudy(self, studyId) {
-        return function (e) {
-            let sd = stx.layout.studies[studyId];
-            if (!sd.editFunction) return;
-            e.stopPropagation();
-            self.uiManager.closeMenu();
-            let studyEdit = self.context.getAdvertised('StudyEdit');
-            let params = {
-                stx,
-                sd,
-                inputs: sd.inputs,
-                outputs: sd.outputs,
-                parameters: sd.parameters,
-            };
-            studyEdit.editPanel(params);
-        };
-    }
-    let overlaysOnly = typeof (this.node.attr('cq-overlays-only')) !== 'undefined';
-    let panelOnly = typeof (this.node.attr('cq-panel-only')) !== 'undefined';
-    let customRemovalOnly = typeof (this.node.attr('cq-custom-removal-only')) !== 'undefined';
-    let holder = this.node.parents('.stx-holder');
-    let panelName = null;
-    let markerLabel = this.node.attr('cq-marker-label');
-    if (holder.length) {
-        panelName = holder.attr('cq-panel-name');
-    }
+    /**
+     * Renders the legend based on the current studies in the CIQ.ChartEngine object. Since this gets called
+     * continually in the draw animation loop we are very careful not to render unnecessarily.
+     * @memberof! WebComponents.cq-study-legend
+     */
+    renderLegend() {
+        let stx = this.context.stx;
+        if (!stx.layout.studies) return;
+        let foundAChange = false;
+        let id;
 
-    for (id in stx.layout.studies) {
-        let sd = stx.layout.studies[id];
-        if (sd.customLegend) continue;
-        if (customRemovalOnly && !sd.study.customRemoval) continue;
-        if (panelOnly && sd.panel !== panelName) continue;
-        if (overlaysOnly && !sd.overlay && !sd.underlay) continue;
-        let newChild = CIQ.UI.makeFromTemplate(this.template, true);
-        newChild.find('cq-label').html(sd.inputs.display);
-        let close = newChild.find('.ciq-close');
-        if (sd.permanent) {
-            close.hide();
-        } else {
-            close.stxtap(closeStudy(this, sd));
+        // Logic to determine if the studies have changed, otherwise don't re-create the legend
+        if (CIQ.objLength(this.previousStudies) === CIQ.objLength(stx.layout.studies)) {
+            for (id in stx.layout.studies) {
+                if (!this.previousStudies[id]) {
+                    foundAChange = true;
+                    break;
+                }
+            }
+            if (!foundAChange) return;
         }
-        let edit = newChild.find('.ciq-edit');
-        if (!edit.length) edit = newChild.find('cq-label');
-        edit.stxtap(editStudy(this, id));
+        this.previousStudies = CIQ.shallowClone(stx.layout.studies);
+
+        $(this.template).parent().emptyExceptTemplate();
+
+        function closeStudy(self, sd) {
+            return function (e) {
+                // Need to run this in the nextTick because the study legend can be removed by this click
+                // causing the underlying chart to receive the mousedown (on IE win7)
+                setTimeout(() => {
+                    CIQ.Studies.removeStudy(self.context.stx, sd);
+                    if (self.node[0].hasAttribute('cq-marker')) self.context.stx.modalEnd();
+                    self.renderLegend();
+                }, 0);
+            };
+        }
+
+        function editStudy(self, studyId) {
+            return function (e) {
+                let sd = stx.layout.studies[studyId];
+                if (!sd.editFunction) return;
+                e.stopPropagation();
+                self.uiManager.closeMenu();
+                let studyEdit = self.context.getAdvertised('StudyEdit');
+                let params = {
+                    stx,
+                    sd,
+                    inputs: sd.inputs,
+                    outputs: sd.outputs,
+                    parameters: sd.parameters,
+                };
+                studyEdit.editPanel(params);
+            };
+        }
+        let overlaysOnly = typeof (this.node.attr('cq-overlays-only')) !== 'undefined';
+        let panelOnly = typeof (this.node.attr('cq-panel-only')) !== 'undefined';
+        let customRemovalOnly = typeof (this.node.attr('cq-custom-removal-only')) !== 'undefined';
+        let holder = this.node.parents('.stx-holder');
+        let panelName = null;
+        let markerLabel = this.node.attr('cq-marker-label');
+        if (holder.length) {
+            panelName = holder.attr('cq-panel-name');
+        }
+
+        for (id in stx.layout.studies) {
+            let sd = stx.layout.studies[id];
+            if (sd.customLegend) continue;
+            if (customRemovalOnly && !sd.study.customRemoval) continue;
+            if (panelOnly && sd.panel !== panelName) continue;
+            if (overlaysOnly && !sd.overlay && !sd.underlay) continue;
+            let newChild = CIQ.UI.makeFromTemplate(this.template, true);
+            newChild.find('cq-label').html(sd.inputs.display);
+            let close = newChild.find('.ciq-close');
+            if (sd.permanent) {
+                close.hide();
+            } else {
+                close.stxtap(closeStudy(this, sd));
+            }
+            let edit = newChild.find('.ciq-edit');
+            if (!edit.length) edit = newChild.find('cq-label');
+            edit.stxtap(editStudy(this, id));
+        }
+        // Only want to render the marker label if at least one study has been
+        // rendered in the legend. If no studies are rendered, only the template tag
+        // will be in there.
+        if (typeof (markerLabel) !== 'undefined' && this.node[0].childElementCount > 1) {
+            this.node.prepend(`<cq-marker-label>${markerLabel}</cq-marker-label>`);
+        }
+        CIQ.I18N.translateUI(null, this.node[0]);
+        // this.context.resize();
+        this.showHide();
     }
-    // Only want to render the marker label if at least one study has been
-    // rendered in the legend. If no studies are rendered, only the template tag
-    // will be in there.
-    if (typeof (markerLabel) !== 'undefined' && this.node[0].childElementCount > 1) {
-        this.node.prepend(`<cq-marker-label>${markerLabel}</cq-marker-label>`);
-    }
-    CIQ.I18N.translateUI(null, this.node[0]);
-    // this.context.resize();
-    this.showHide();
-};
+}
+
 
 CIQ.UI.StudyLegend = document.registerElement('cq-study-legend', StudyLegend);
 
@@ -4161,21 +4156,21 @@ CIQ.UI.StudyLegend = document.registerElement('cq-study-legend', StudyLegend);
  * @name CIQ.WebComponents.cq-study-output
  */
 class StudyOutput extends CIQ.UI.BaseComponent {
+    initialize(params) {
+        this.params = params;
+    }
+
+    setColor(color) {
+        if (!this.params) return;
+        let updates = {
+            outputs: {},
+        };
+        updates.outputs[this.params.output] = {};
+        updates.outputs[this.params.output].color = color;
+        this.params.studyDialog.updateStudy(updates);
+    }
 }
 
-StudyOutput.prototype.initialize = function (params) {
-    this.params = params;
-};
-
-StudyOutput.prototype.setColor = function (color) {
-    if (!this.params) return;
-    let updates = {
-        outputs: {},
-    };
-    updates.outputs[this.params.output] = {};
-    updates.outputs[this.params.output].color = color;
-    this.params.studyDialog.updateStudy(updates);
-};
 
 CIQ.UI.StudyOutput = document.registerElement('cq-study-output', StudyOutput);
 
@@ -4187,19 +4182,19 @@ CIQ.UI.StudyOutput = document.registerElement('cq-study-output', StudyOutput);
  * @name CIQ.WebComponents.cq-study-parameter
  */
 class StudyParameter extends CIQ.UI.BaseComponent {
+    initialize(params) {
+        this.params = params;
+    }
+
+    setColor(color) {
+        if (!this.params) return;
+        let updates = {
+            parameters: {},
+        };
+        updates.parameters[this.params.parameter] = color;
+        this.params.studyDialog.updateStudy(updates);
+    }
 }
 
-StudyParameter.prototype.initialize = function (params) {
-    this.params = params;
-};
-
-StudyParameter.prototype.setColor = function (color) {
-    if (!this.params) return;
-    let updates = {
-        parameters: {},
-    };
-    updates.parameters[this.params.parameter] = color;
-    this.params.studyDialog.updateStudy(updates);
-};
 
 CIQ.UI.StudyParameter = document.registerElement('cq-study-parameter', StudyParameter);
