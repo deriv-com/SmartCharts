@@ -1,3 +1,4 @@
+import $ from 'jquery';
 import { CIQ } from '../../js/chartiq';
 import DialogContentTag from './ui/DialogContentTag';
 
@@ -29,7 +30,7 @@ class ThemeDialog extends DialogContentTag {
         this.helper.update(stx);
         stx.changeOccurred('theme');
     }
-    
+
     /**
      * @alias setValue
      * @memberof WebComponents.cq-theme-dialog
@@ -38,7 +39,7 @@ class ThemeDialog extends DialogContentTag {
         obj[field] = value;
         this.applyChanges();
     }
-    
+
     /**
      * @alias close
      * @memberof WebComponents.cq-theme-dialog
@@ -49,7 +50,7 @@ class ThemeDialog extends DialogContentTag {
         // CIQ.UI.containerExecute(this, "close");
         super.close();
     }
-    
+
     /**
      * @alias save
      * @memberof WebComponents.cq-theme-dialog
@@ -71,7 +72,7 @@ class ThemeDialog extends DialogContentTag {
         });
         super.close();
     }
-    
+
     /**
      * @alias configure
      * @memberof WebComponents.cq-theme-dialog

@@ -47,9 +47,9 @@ const config = {
                 test: /\.js$/,
                 exclude: [
                     /node_modules/,
-                    /src\/components\/components\.js/,
-                    /src\/components\/componentUI\.js/,
-                    /js/,
+                    /plugins\//,
+                    /js\//,
+                    /src\/components\//,
                 ],
                 loader: 'eslint-loader',
                 enforce: 'pre',

@@ -13,7 +13,7 @@ class ExampleDriver extends Driver {
         this.url = 'https://symbols.chartiq.com/chiq.symbolserver.SymbolLookup.service';
         this.requestCounter = 0; // used to invalidate old requests
         // t=ibm&m=10&x=[]&e=STOCKS
-    };
+    }
 
     /**
      * @memberof CIQ.UI.Lookup.Driver.ChartIQ
@@ -61,7 +61,7 @@ class ExampleDriver extends Driver {
             } catch (e) {}
         }
         CIQ.postAjax({ url, cb: handleResponse });
-    };
+    }
 }
 
 export default ExampleDriver;

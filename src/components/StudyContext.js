@@ -1,4 +1,3 @@
-import { CIQ } from '../../js/chartiq';
 import DialogContentTag from './ui/DialogContentTag';
 
 /**

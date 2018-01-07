@@ -1,5 +1,6 @@
-import DialogContentTag from './ui/DialogContentTag';
+import $ from 'jquery';
 import { CIQ } from '../../js/chartiq';
+import DialogContentTag from './ui/DialogContentTag';
 
 /**
      * Study Dialogs web component `<cq-study-dialog>`.

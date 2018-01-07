@@ -1,3 +1,5 @@
+import $ from 'jquery';
+
 /**
  * UI context helper class. Construct with an {@link CIQ.ChartEngine} object
  * @param {CIQ.ChartEngine} stx The chart object to associate this UI

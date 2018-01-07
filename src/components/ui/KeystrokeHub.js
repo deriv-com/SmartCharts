@@ -1,3 +1,4 @@
+import $ from 'jquery';
 import { CIQ } from '../../../js/chartiq';
 import Helper from './Helper';
 import Keystroke from './Keystroke';

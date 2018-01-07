@@ -193,11 +193,11 @@ function restorePreferences() {
     if (pref) stxx.importPreferences(JSON.parse(pref));
 }
 
-function savePreferences(obj) {
+function savePreferences() {
     CIQ.localStorageSetItem('myChartPreferences', JSON.stringify(stxx.exportPreferences()));
 }
 
-function retoggleEvents(obj) {
+function retoggleEvents() {
     let active = $('.stx-markers .ciq-radio.ciq-active');
     active.parent().triggerHandler('stxtap');
 }
@@ -211,7 +211,7 @@ stxx.callbacks.preferences = savePreferences;
 function startUI() {
     const contextNode = $('cq-context,[cq-context]');
     UIContext = new CIQ.UI.Context(stxx, contextNode);
-    let UILayout = new CIQ.UI.Layout(UIContext);
+    new CIQ.UI.Layout(UIContext);
     let UIHeadsUpDynamic = new CIQ.UI.HeadsUp($('cq-hu-dynamic'), UIContext, {
         followMouse: true,
         autoStart: false,
@@ -256,11 +256,11 @@ function startUI() {
         context.changeSymbol(data);
     });
 
-    let KeystrokeHub = new CIQ.UI.KeystrokeHub($('body'), UIContext, {
+    new CIQ.UI.KeystrokeHub($('body'), UIContext, {
         cb: CIQ.UI.KeystrokeHub.defaultHotKeys,
     });
 
-    let UIStudyEdit = new CIQ.UI.StudyEdit(null, UIContext);
+    new CIQ.UI.StudyEdit(null, UIContext);
 
     let UIStorage = new CIQ.NameValueStore();
 
@@ -481,7 +481,7 @@ function showMarkers(standardType) {
             node: new CIQ.Marker.Simple(datum),
         };
 
-        let marker = new CIQ.Marker(params);
+        new CIQ.Marker(params);
     }
     stxx.draw();
 }
@@ -500,7 +500,7 @@ if (webComponentsSupported) {
     startUI();
     resizeScreen();
 } else {
-    window.addEventListener('WebComponentsReady', (e) => {
+    window.addEventListener('WebComponentsReady', () => {
         startUI();
         resizeScreen();
     });
@@ -531,7 +531,7 @@ $('.stx-markers cq-item.abstract').stxtap(() => {
         'z-index': '30',
         left: `${(0.4 * stxx.chart.width).toString()}px`,
     });
-    let marker = new CIQ.Marker({
+    new CIQ.Marker({
         stx: stxx,
         xPositioner: 'none',
         yPositioner: 'above_candle',

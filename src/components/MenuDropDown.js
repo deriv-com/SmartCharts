@@ -1,3 +1,4 @@
+import $ from 'jquery';
 import { aggregation } from './ui';
 import ContextTag from './ui/ContextTag';
 import Scroll from './Scroll';
@@ -43,7 +44,7 @@ class MenuDropDown extends aggregation(ContextTag, Scroll) {
             Scroll.prototype.createdCallback.apply(this);
         }
     }
-    
+
     attachedCallback() {
         if (this.attached) return;
         let node = $(this);

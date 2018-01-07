@@ -1,3 +1,4 @@
+import $ from 'jquery';
 import ContextTag from './ui/ContextTag';
 /**
  * Share Button web component `<cq-share-button>`.

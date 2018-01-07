@@ -1,7 +1,8 @@
+import $ from 'jquery';
 import { CIQ } from '../../../js/chartiq';
 
 // node.stxtap([selector],callback)
-jQuery.fn.extend({
+$.fn.extend({
     stxtap(arg1, arg2) {
         return this.each(function () {
             CIQ.installTapEvent(this /* , {stopPropagation:true} */);
@@ -18,7 +19,7 @@ jQuery.fn.extend({
     },
 });
 
-jQuery.fn.extend($.expr[':'], {
+$.fn.extend($.expr[':'], {
     trulyvisible(node, j, attr) {
         let parents = $(node).parents();
         parents = parents.add(node);
@@ -37,7 +38,7 @@ jQuery.fn.extend($.expr[':'], {
  * Creates a virtual DOM and then compares contents before rendering. If the contents
  * are the same then no rendering is done. This prevents flicker. React style.
  */
-jQuery.fn.extend({
+$.fn.extend({
     parentsAndMe(arg1) {
         let us = $(this).parents();
         us = us.add($(this));
@@ -127,7 +128,7 @@ jQuery.fn.extend({
 });
 
 
-jQuery.queryString = function (sParam) {
+$.queryString = function (sParam) {
     let sPageURL = window.location.search.substring(1);
     let sURLVariables = sPageURL.split('&');
     for (let i = 0; i < sURLVariables.length; i++) {

@@ -1,3 +1,4 @@
+import $ from 'jquery';
 import { CIQ } from '../../js/chartiq';
 import DialogContentTag from './ui/DialogContentTag';
 
@@ -42,13 +43,13 @@ class ShareDialog extends DialogContentTag {
             display: 'inline-block',
         });
     }
-    
+
     close() {
         // Clear out the link and then close
         $('cq-share-dialog .share-link-div').html('');
         super.close();
     }
-    
+
     /**
      * Shares a chart with default parameters
      * @alias share

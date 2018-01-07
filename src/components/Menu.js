@@ -1,4 +1,4 @@
-import { CIQ } from '../../js/chartiq';
+import $ from 'jquery';
 
 /**
  * Menu web component `<cq-menu>`.

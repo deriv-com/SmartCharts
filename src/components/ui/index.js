@@ -1,4 +1,4 @@
-// Copyright 2015-2016 by ChartIQ, Inc.
+import $ from 'jquery';
 import 'object.observe';
 import { CIQ } from '../../../js/chartiq';
 import '../../../js/thirdparty/webcomponents-lite.min';
@@ -36,14 +36,6 @@ export const claims = [];
 
 // Auxiliary function that enables multiple inheritence with es6 classes: https://stackoverflow.com/a/45332959/1471258
 export const aggregation = (baseClass, ...mixins) => {
-    class base extends baseClass {
-        constructor(...args) {
-            super(...args);
-            mixins.forEach((mixin) => {
-                copyProps(this, (new mixin()));
-            });
-        }
-    }
     let copyProps = (target, source) => { // this function copies all properties and symbols, filtering out some special ones
         Object.getOwnPropertyNames(source)
             .concat(Object.getOwnPropertySymbols(source))
@@ -51,6 +43,14 @@ export const aggregation = (baseClass, ...mixins) => {
                 if (!prop.match(/^(?:constructor|prototype|arguments|caller|name|bind|call|apply|toString|length)$/)) { Object.defineProperty(target, prop, Object.getOwnPropertyDescriptor(source, prop)); }
             });
     };
+    class base extends baseClass {
+        constructor(...args) {
+            super(...args);
+            mixins.forEach((mixin) => {
+                copyProps(this, (new mixin())); // eslint-disable-line new-cap
+            });
+        }
+    }
     mixins.forEach((mixin) => { // outside contructor() to allow aggregation(A,B,C).staticFunction() to be called etc.
         copyProps(base.prototype, mixin.prototype);
         copyProps(base, mixin);
@@ -87,7 +87,7 @@ export const aggregation = (baseClass, ...mixins) => {
         });
     }
 
-    function objectLoad(e) {
+    function objectLoad(/* e */) {
         this.contentDocument.defaultView.__resizeTrigger__ = this.__resizeElement__;
         this.contentDocument.defaultView.addEventListener('resize', resizeListener);
     }
@@ -161,14 +161,12 @@ CIQ.UI = {};
  * @param  {string} fn   The name of the function
  * @param  {Array}   args Arguments array (a "spread" is also supported)
  */
-CIQ.UI.containerExecute = function (self, fn, args) {
-    let myArgs = args;
-    if (args && myArgs.constructor !== Array) myArgs = Array.prototype.slice.call(arguments, 2);
+CIQ.UI.containerExecute = function (self, fn, ...args) {
     let parents = self.node.parents();
     for (let i = 0; i < parents.length; i++) {
         let parent = parents[i];
         if (parent[fn] && parent[fn].constructor === Function) {
-            return parent[fn](...myArgs);
+            return parent[fn](...args);
         }
     }
     return null;
@@ -417,21 +415,6 @@ CIQ.UI.begin = function (cb) {
         BaseComponent.nextTick();
         if (cb) cb();
     }, 0); // release the bindings
-};
-
-/**
- * Utility method for adding multiple inheritances to a base object
- * @param {Object} target Target object
- * @param {Object} source Source object
- */
-CIQ.UI.addInheritance = function (target, source) {
-    // We put this in a catch loop because BaseComponent is itself an HTMLElement and the browser barfs on trying to copy some
-    // of those values
-    for (let key in source.prototype) {
-        try {
-            target.prototype[key] = source.prototype[key];
-        } catch (e) {}
-    }
 };
 
 CIQ.Marker.HeadsUp = HeadsUpMarker;

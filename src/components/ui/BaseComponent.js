@@ -1,3 +1,4 @@
+import $ from 'jquery';
 import { CIQ } from '../../../js/chartiq';
 import { claims } from './';
 /**
@@ -274,9 +275,9 @@ class BaseComponent extends HTMLElement {
     inputEntry(node, cb) {
         $(node).on('keypress', (e) => {
             switch (e.which) {
-                case 13:
-                case 9:
-                    cb();
+            case 13:
+            case 9:
+                cb();
             }
         });
     }

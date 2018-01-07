@@ -1,3 +1,4 @@
+import $ from 'jquery';
 import ModalTag from './ui/ModalTag';
 import { CIQ } from '../../js/chartiq';
 

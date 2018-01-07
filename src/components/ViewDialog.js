@@ -1,3 +1,4 @@
+import $ from 'jquery';
 import DialogContentTag from './ui/DialogContentTag';
 import { CIQ } from '../../js/chartiq';
 
