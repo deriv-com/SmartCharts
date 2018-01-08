@@ -1,4 +1,5 @@
 import { CIQ, $$$ } from '../../js/chartiq';
+import html from './tfc.html';
 
 class TFC {
 
@@ -28,10 +29,6 @@ class TFC {
 
         this.construct();
         CIQ.I18N.translateUI();
-    }
-
-    isMobileMode() {
-        return $('.break-sm').length > 0;
     }
 
     /**
@@ -436,8 +433,13 @@ class TFC {
      * @param {object} [config.chart]   The specific chart (panel) for trading componentry. Defaults to the default chart.
      * @param {boolean} [config.skipConfirms] If set to true then there will be no confirm messages. Pressing buy or sell buttons will place a trade!
      */
+    static htmlToDom(html) {
+        const wrapper= document.createElement('div');
+        wrapper.innerHTML= html;
+        return wrapper.firstChild;
+    }
     construct(){
-        let container = $$$('.tfc.container');
+        const container = TFC.htmlToDom(html);
         this.holder = this.stx.chart.panel.holder;
         this.dom.dragLineAbove = $$$('.drag-price-line', container).cloneNode(true);
         this.dom.dragLineCenter = $$$('.drag-price-line', container).cloneNode(true);
