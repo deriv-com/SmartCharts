@@ -6,6 +6,7 @@
   "license": "ISC",
   "scripts": {
     "build": "webpack --progress",
+    "analyze": "ANALYZE_BUNDLE=true webpack --progress",
     "watch": "webpack --progress --watch",
     "start": "webpack-dev-server --open  --hot --inline"
   },
@@ -36,6 +37,7 @@
     "style-loader": "^0.19.1",
     "svg-url-loader": "^2.3.1",
     "webpack": "^3.10.0",
+    "webpack-bundle-analyzer": "^2.9.1",
     "webpack-dev-server": "^2.9.7"
   },
   "dependencies": {

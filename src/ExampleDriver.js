@@ -58,7 +58,9 @@ class ExampleDriver extends Driver {
                     });
                 }
                 cb(results);
-            } catch (e) {}
+            } catch (e) {
+                /* do nothing */
+            }
         }
         CIQ.postAjax({ url, cb: handleResponse });
     }
