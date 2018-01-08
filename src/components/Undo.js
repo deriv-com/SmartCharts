@@ -15,7 +15,7 @@ import ContextTag from './ui/ContextTag';
 
 class Undo extends ContextTag {
     createdCallback() {
-        ContextTag.createdCallback.apply(this);
+        super.createdCallback();
         this.redoButton = null;
         this.undostack = [];
         this.redostack = [];
@@ -24,7 +24,7 @@ class Undo extends ContextTag {
 
     attachedCallback() {
         if (this.attached) return;
-        ContextTag.attachedCallback.apply(this);
+        super.attachedCallback();
         this.attached = true;
         let self = this;
         $(this).stxtap(() => {
@@ -32,7 +32,7 @@ class Undo extends ContextTag {
         });
     }
 
-    setContext(/* context */) {
+    setContext(context) {
         this.manageContext(this.context);
 
         let self = this;
@@ -45,7 +45,10 @@ class Undo extends ContextTag {
 
 
     handleEvent(context, type, data) {
-        this.undostack.push({ context, drawings: data.before });
+        this.undostack.push({
+            context,
+            drawings: data.before,
+        });
         this.redostack = [];
         this.setButtonStyle();
     }
@@ -93,7 +96,10 @@ class Undo extends ContextTag {
         let state = this.undostack.pop();
         if (state) {
             let context = state.context;
-            this.redostack.push({ context, drawings: CIQ.shallowClone(context.stx.drawingObjects) });
+            this.redostack.push({
+                context,
+                drawings: CIQ.shallowClone(context.stx.drawingObjects),
+            });
             let drawings = state.drawings;
             context.stx.drawingObjects = CIQ.shallowClone(drawings);
             context.stx.changeOccurred('vector');
@@ -111,7 +117,10 @@ class Undo extends ContextTag {
         let state = this.redostack.pop();
         if (state) {
             let context = state.context;
-            this.undostack.push({ context, drawings: CIQ.shallowClone(context.stx.drawingObjects) });
+            this.undostack.push({
+                context,
+                drawings: CIQ.shallowClone(context.stx.drawingObjects),
+            });
             let drawings = state.drawings;
             context.stx.drawingObjects = CIQ.shallowClone(drawings);
             context.stx.changeOccurred('vector');
@@ -126,7 +135,7 @@ class Undo extends ContextTag {
      * @alias clear
      * @memberof WebComponents.cq-undo
      */
-    clear() {
+    clear(context) {
         this.setButtonStyle();
     }
 
@@ -149,6 +158,5 @@ class Undo extends ContextTag {
     }
 }
 
+document.registerElement('cq-undo', Undo);
 export default Undo;
-CIQ.UI.Undo = document.registerElement('cq-undo', Undo);
-

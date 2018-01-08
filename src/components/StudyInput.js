@@ -1,4 +1,3 @@
-import { CIQ } from '../../js/chartiq';
 import BaseComponent from './ui/BaseComponent';
 /**
  * Study input web component `<cq-study-input>`.
@@ -8,6 +7,5 @@ import BaseComponent from './ui/BaseComponent';
  */
 class StudyInput extends BaseComponent {}
 
+document.registerElement('cq-study-input', StudyInput);
 export default StudyInput;
-CIQ.UI.StudyInput = document.registerElement('cq-study-input', StudyInput);
-

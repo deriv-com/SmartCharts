@@ -7,14 +7,14 @@ import ContextTag from './ui/ContextTag';
  *
  * This web component has two functions. The first is displaying available views in a menu.
  * The second is providing a views dialog for entering a new view.
- *
+ *     *
  * @name CIQ.UI.Views
  * @namespace WebComponents.cq-views
  */
 class Views extends ContextTag {
     attachedCallback() {
         if (this.attached) return;
-        ContextTag.attachedCallback.apply(this);
+        super.attachedCallback();
         this.attached = true;
     }
 
@@ -29,7 +29,7 @@ class Views extends ContextTag {
      * @memberof WebComponents.cq-views
      * @constructor
      * @example
-     *  //
+     *     //
         // To have the views web component menus use a different storage function,
         // just add it to the 'parameters.nameValueStore' like so:
 
@@ -146,7 +146,7 @@ class Views extends ContextTag {
         let addNew = menu.find('cq-view-save');
         if (addNew) {
             let context = this.context;
-            addNew.stxtap(() => {
+            addNew.stxtap((e) => {
                 $('cq-view-dialog').each(function () {
                     $(this).find('input').val('');
                     this.open({
@@ -159,5 +159,6 @@ class Views extends ContextTag {
     }
 }
 
+
+document.registerElement('cq-views', Views);
 export default Views;
-CIQ.UI.Views = document.registerElement('cq-views', Views);

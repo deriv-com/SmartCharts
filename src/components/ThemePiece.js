@@ -23,10 +23,10 @@ import BaseComponent from './ui/BaseComponent';
      </cq-section>
  */
 class ThemePiece extends BaseComponent {
-/**
- * @alias setColor
- * @memberof WebComponents.cq-theme-piece
- */
+    /**
+     * @alias setColor
+     * @memberof WebComponents.cq-theme-piece
+     */
     setColor(color) {
         if (color === 'Hollow' || color === 'No Border') {
             color = 'transparent';
@@ -36,12 +36,14 @@ class ThemePiece extends BaseComponent {
     }
 
     /**
- * @alias setBoolean
- * @memberof WebComponents.cq-theme-piece
- */
+     * @alias setBoolean
+     * @memberof WebComponents.cq-theme-piece
+     */
     setBoolean(result) {
         CIQ.UI.containerExecute(this, 'setValue', this.piece.obj, this.piece.field, result);
     }
 }
+
+
+document.registerElement('cq-theme-piece', ThemePiece);
 export default ThemePiece;
-CIQ.UI.ThemePiece = document.registerElement('cq-theme-piece', ThemePiece);

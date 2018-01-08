@@ -1,4 +1,3 @@
-import $ from 'jquery';
 import ContextTag from './ContextTag';
 
 /**
@@ -45,7 +44,7 @@ class ModalTag extends ContextTag {
         node.mouseout(() => {
             self.modalEnd();
         });
-        super.attachedCallback.apply(this);
+        super.attachedCallback();
     }
 }
 

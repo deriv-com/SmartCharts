@@ -32,16 +32,6 @@ import { CIQ } from '../../js/chartiq';
      </cq-section>
  */
 class Swatch extends HTMLElement {
-    constructor() {
-        super();
-        /**
-     * Optionally set the default color for the swatch.
-     * @type {string}
-     * @memberof WebComponents.cq-swatch
-     */
-        this.defaultColor = null;
-    }
-
     attachedCallback() {
         if (this.attached) return;
         this.node = $(this);
@@ -55,11 +45,11 @@ class Swatch extends HTMLElement {
     }
 
     /**
- * Attempts to identify the default color for the associated chart. It does so by traversing
- * up the parent stack and looking for any component that has a context. Or you can set
- * the default color manually by setting member variable defaultColor;
- * @memberof WebComponents.cq-swatch
- */
+     * Attempts to identify the default color for the associated chart. It does so by traversing
+     * up the parent stack and looking for any component that has a context. Or you can set
+     * the default color manually by setting member variable defaultColor;
+     * @memberof WebComponents.cq-swatch
+     */
     getDefaultColor() {
         if (this.defaultColor) return this.defaultColor;
         let context = CIQ.UI.getMyContext(this);
@@ -68,9 +58,9 @@ class Swatch extends HTMLElement {
     }
 
     /**
- * @alias setColor
- * @memberof WebComponents.cq-swatch
- */
+     * @alias setColor
+     * @memberof WebComponents.cq-swatch
+     */
     setColor(color, percolate) {
         let node = $(this);
         let bgColor = CIQ.getBackgroundColor(this.parentNode);
@@ -83,19 +73,25 @@ class Swatch extends HTMLElement {
         let hslf = CIQ.hsl(fillColor);
         if ((Math.abs(hslb[2] - hslf[2]) < 0.2) || CIQ.isTransparent(color)) {
             let border = CIQ.chooseForegroundColor(bgColor);
-            node.css({ border: `solid ${border} 1px` });
+            node.css({
+                border: `solid ${border} 1px`,
+            });
         } else {
-            node.css({ border: '' });
+            node.css({
+                border: '',
+            });
         }
 
-        node.css({ 'background-color': fillColor });
+        node.css({
+            'background-color': fillColor,
+        });
         if (percolate !== false) CIQ.UI.containerExecute(this, 'setColor', color);
     }
 
     /**
- * @alias launchColorPicker
- * @memberof WebComponents.cq-swatch
- */
+     * @alias launchColorPicker
+     * @memberof WebComponents.cq-swatch
+     */
     launchColorPicker() {
         let node = $(this);
 
@@ -108,10 +104,20 @@ class Swatch extends HTMLElement {
         }(this));
         let overrides = this.node.attr('cq-overrides');
         if (overrides) overrides = overrides.split(',');
-        colorPicker.display({ node, overrides });
+        colorPicker.display({
+            node,
+            overrides,
+        });
         this.colorPicker = colorPicker;
     }
 }
-export default Swatch;
-CIQ.UI.Swatch = document.registerElement('cq-swatch', Swatch);
 
+/**
+ * Optionally set the default color for the swatch.
+ * @type {string}
+ * @memberof WebComponents.cq-swatch
+ */
+Swatch.prototype.defaultColor = null;
+
+document.registerElement('cq-swatch', Swatch);
+export default Swatch;

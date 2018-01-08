@@ -2,14 +2,13 @@ import $ from 'jquery';
 import { CIQ } from '../../js/chartiq';
 import ContextTag from './ui/ContextTag';
 
-
 /**
  * Emits a "change" event when changed
  */
 class DrawingToolbar extends ContextTag {
     attachedCallback() {
         if (this.attached) return;
-        ContextTag.attachedCallback.apply(this);
+        super.attachedCallback();
         this.node = $(this);
         this.params = {
             toolSelection: this.node.find('*[cq-current-tool]'),
@@ -23,7 +22,7 @@ class DrawingToolbar extends ContextTag {
 
     defaultElements(drawingParameters) {
         let arr = [];
-        for (let param of Object.keys(drawingParameters)) {
+        for (let param in drawingParameters) {
             if (param === 'color') arr.push('cq-line-color');
             else if (param === 'fillColor') arr.push('cq-fill-color');
             else if (param === 'pattern' || param === 'lineWidth') arr.push('cq-line-style');
@@ -35,19 +34,18 @@ class DrawingToolbar extends ContextTag {
         return arr;
     }
 
-    setContext(/* context */) {
+    setContext(context) {
         this.noToolSelectedText = $(this.params.toolSelection).text();
         this.sync();
     }
 
 
     /**
- * Synchronizes the drawing toolbar with stx.currentVectorParameters. Poor man's data binding.
- * @param {Object} [cvp=stx.currentVectorParameters] A new drawing object, otherwise defaults to the current one
- */
+     * Synchronizes the drawing toolbar with stx.currentVectorParameters. Poor man's data binding.
+     * @param {Object} [cvp=stx.currentVectorParameters] A new drawing object, otherwise defaults to the current one
+     */
     sync(cvp) {
         let stx = this.context.stx;
-        // eslint-disable-next-line no-param-reassign
         if (!cvp) cvp = stx.currentVectorParameters;
         else stx.currentVectorParameters = cvp;
 
@@ -68,7 +66,7 @@ class DrawingToolbar extends ContextTag {
     }
 
     emit() {
-    // This is old style to support IE11
+        // This is old style to support IE11
         let event = document.createEvent('Event');
         event.initEvent('change', true, true);
         this.dispatchEvent(event);
@@ -105,7 +103,7 @@ class DrawingToolbar extends ContextTag {
     }
 
     toggleMagnet(activator) {
-        let toggle = $(activator.node);// .find("cq-toggle");
+        let toggle = $(activator.node); // .find("cq-toggle");
         let stx = this.context.stx;
         if (stx.preferences.magnet) {
             toggle.removeClass('active');
@@ -130,7 +128,7 @@ class DrawingToolbar extends ContextTag {
         this.node.find('*[cq-section]').removeClass('ciq-active');
         let drawingParameters = CIQ.Drawing.getDrawingParameters(stx, toolName);
         if (drawingParameters) {
-        // fibtimezone has no values to display in the settings dialog
+            // fibtimezone has no values to display in the settings dialog
             if (toolName === 'fibtimezone') {
                 delete drawingParameters.parameters;
             }
@@ -231,7 +229,9 @@ class DrawingToolbar extends ContextTag {
         let node = activator.node;
         if (!node) node = $(this).find('cq-fill-color');
         let color = this.context.stx.currentVectorParameters.fillColor;
-        $(node).css({ 'background-color': color });
+        $(node).css({
+            'background-color': color,
+        });
     }
 
     pickFillColor(activator) {
@@ -245,10 +245,14 @@ class DrawingToolbar extends ContextTag {
         let self = this;
         colorPicker.callback = function (color) {
             self.context.stx.currentVectorParameters.fillColor = color;
-            self.getFillColor({ node });
+            self.getFillColor({
+                node,
+            });
             self.emit();
         };
-        colorPicker.display({ node });
+        colorPicker.display({
+            node,
+        });
     }
 
     getLineColor(activator) {
@@ -256,7 +260,9 @@ class DrawingToolbar extends ContextTag {
         if (!node) node = $(this).find('cq-line-color');
         let color = this.context.stx.currentVectorParameters.currentColor;
         if (color === 'transparent' || color === 'auto') color = '';
-        $(node).css({ 'background-color': color });
+        $(node).css({
+            'background-color': color,
+        });
     }
 
     pickLineColor(activator) {
@@ -270,14 +276,20 @@ class DrawingToolbar extends ContextTag {
         let self = this;
         colorPicker.callback = function (color) {
             self.context.stx.currentVectorParameters.currentColor = color;
-            self.getLineColor({ node });
+            self.getLineColor({
+                node,
+            });
             self.emit();
         };
         let overrides = $(node).attr('cq-overrides');
         if (overrides) overrides = overrides.split(',');
-        colorPicker.display({ node, overrides });
+        colorPicker.display({
+            node,
+            overrides,
+        });
     }
 }
+
 /**
  * Drawing toolbar web component
  * @param {Object} [params] Parameters to drive the helper
@@ -288,5 +300,6 @@ class DrawingToolbar extends ContextTag {
  * @name CIQ.UI.DrawingToolbar
  * @constructor
  */
+document.registerElement('cq-toolbar', DrawingToolbar);
 export default DrawingToolbar;
-CIQ.UI.DrawingToolbar = document.registerElement('cq-toolbar', DrawingToolbar);
+

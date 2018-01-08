@@ -1,16 +1,21 @@
-import $ from 'jquery';
+import 'object.observe';
 import { CIQ } from '../../../js/chartiq';
 import BaseComponent from './BaseComponent';
 
+/**
+ * Namespace for UI helper objects
+ * @namespace CIQ.UI
+ */
+
+/**
+ * Executes a function in the nearest parent component (container). For instance, a cq-close tag might call "close"
+ * on its containing component
+ * @memberof CIQ.UI
+ * @param {object} self
+ * @param  {string} fn   The name of the function
+ * @param  {Array}   args Arguments array (a "spread" is also supported)
+ */
 class UI {
-    /**
-     * Executes a function in the nearest parent component (container). For instance, a cq-close tag might call "close"
-     * on its containing component
-     * @memberof CIQ.UI
-     * @param {object} self
-     * @param  {string} fn   The name of the function
-     * @param  {Array}   args Arguments array (a "spread" is also supported)
-     */
     static containerExecute(self, fn, ...args) {
         let parents = self.node.parents();
         for (let i = 0; i < parents.length; i++) {
@@ -151,15 +156,12 @@ class UI {
      *
      * @example - Add or remove a class based on whether stx.layout.crosshair is true or false
      * CIQ.UI.observe({selector:".toggle", obj:stx.layout, member:"crosshair", action:"class", value:"active"});
-
      * @example - Add or remove a class based on whether stx.layout.chartType=="candle"
      * CIQ.UI.observe({selector:".toggle", obj:stx.layout, member:"chartType", condition:"candle", action:"class", value:"active"});
-
      * @example - Get a callback from a change in value
      * CIQ.UI.observe({selector:".toggle", obj:stx.layout, member:"chartType", condition:"candle", action:"callback", value:function(params){
      *    console.log("new value is" + params.obj[params.member]);
      * }});
-
      */
     static observe(params) {
         let self = this;
@@ -200,22 +202,14 @@ class UI {
                     if (params.action === 'value') {
                         if (params.value) {
                             this.value = params.value;
-                        } else if (!params.obj[params.member]) {
-                            this.value = '';
-                        } else {
-                            this.value = params.obj[params.member];
-                        }
+                        } else if (!params.obj[params.member]) { this.value = ''; } else { this.value = params.obj[params.member]; }
                     }
                 });
             }
         }
 
-        Object.observe(params.obj, (changes) => {
-            changes.forEach(observed);
-        }, ['update', 'add', 'delete']);
-        observed({
-            name: params.member,
-        }); // initialize
+        Object.observe(params.obj, (changes) => { changes.forEach(observed); }, ['update', 'add', 'delete']);
+        observed({ name: params.member }); // initialize
     }
 
     /**
@@ -251,7 +245,7 @@ class UI {
      *  });
      */
     static contextsForEach(func) {
-        let contexts = UI.allContexts();
+        let contexts = CIQ.UI.allContexts();
         contexts.each(function () {
             func.apply(this.CIQ.UI.context);
         });
@@ -268,22 +262,6 @@ class UI {
             if (cb) cb();
         }, 0); // release the bindings
     }
-
-    /**
-     * Utility method for adding multiple inheritances to a base object
-     * @param {Object} target Target object
-     * @param {Object} source Source object
-     */
-    static addInheritance(target, source) {
-        // We put this in a catch loop because BaseComponent is itself an HTMLElement and the browser barfs on trying to copy some
-        // of those values
-        Object.keys(source.prototype).forEach((val, key) => {
-            try {
-                target.prototype[key] = source.prototype[key];
-            } catch (e) {} // eslint-disable-line no-empty
-        });
-    }
 }
 
-export default UI;
 CIQ.UI = UI;

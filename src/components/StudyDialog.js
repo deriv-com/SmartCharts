@@ -2,69 +2,68 @@ import $ from 'jquery';
 import { CIQ } from '../../js/chartiq';
 import DialogContentTag from './ui/DialogContentTag';
 
-
 /**
- * Study Dialogs web component `<cq-study-dialog>`.
- *
- * Creates and manages Study Dialogs based on the corresponding study library entry
- * (title, inputs, outputs, parameters, etc).
- *
- * @name CIQ.WebComponents.cq-study-dialog
- * @example
+     * Study Dialogs web component `<cq-study-dialog>`.
+     *
+     * Creates and manages Study Dialogs based on the corresponding study library entry
+     * (title, inputs, outputs, parameters, etc).
+     *
+     * @name CIQ.WebComponents.cq-study-dialog
+     * @example
 <cq-dialog cq-study-dialog>
-<cq-study-dialog>
-    <h4 class="title">Study</h4>
-    <cq-scroll cq-no-maximize>
-        <cq-study-inputs>
-            <template cq-study-input>
-                <cq-study-input>
-                    <div class="ciq-heading"></div>
-                    <div class="stx-data">
-                        <template cq-menu>
-                            <cq-menu class="ciq-select">
-                                <cq-selected></cq-selected>
-                                <cq-menu-dropdown cq-lift></cq-menu-dropdown>
-                            </cq-menu>
-                        </template>
-                    </div>
-                </cq-study-input>
-            </template>
-        </cq-study-inputs>
-        <hr>
-        <cq-study-outputs>
-            <template cq-study-output>
-                <cq-study-output>
-                    <div class="ciq-heading"></div>
-                    <cq-swatch cq-overrides="auto"></cq-swatch>
-                </cq-study-output>
-            </template>
-        </cq-study-outputs>
-        <hr>
-        <cq-study-parameters>
-            <template cq-study-parameters>
-                <cq-study-parameter>
-                    <div class="ciq-heading"></div>
-                    <div class="stx-data"><cq-swatch cq-overrides="auto"></cq-swatch></div>
-                </cq-study-parameter>
-            </template>
-        </cq-study-parameters>
-    </cq-scroll>
-    <div class="ciq-dialog-cntrls">
-        <div class="ciq-btn" stxtap="close()">Done</div>
-    </div>
-</cq-study-dialog>
+    <cq-study-dialog>
+        <h4 class="title">Study</h4>
+        <cq-scroll cq-no-maximize>
+            <cq-study-inputs>
+                <template cq-study-input>
+                    <cq-study-input>
+                        <div class="ciq-heading"></div>
+                        <div class="stx-data">
+                            <template cq-menu>
+                                <cq-menu class="ciq-select">
+                                    <cq-selected></cq-selected>
+                                    <cq-menu-dropdown cq-lift></cq-menu-dropdown>
+                                </cq-menu>
+                            </template>
+                        </div>
+                    </cq-study-input>
+                </template>
+            </cq-study-inputs>
+            <hr>
+            <cq-study-outputs>
+                <template cq-study-output>
+                    <cq-study-output>
+                        <div class="ciq-heading"></div>
+                        <cq-swatch cq-overrides="auto"></cq-swatch>
+                    </cq-study-output>
+                </template>
+            </cq-study-outputs>
+            <hr>
+            <cq-study-parameters>
+                <template cq-study-parameters>
+                    <cq-study-parameter>
+                        <div class="ciq-heading"></div>
+                        <div class="stx-data"><cq-swatch cq-overrides="auto"></cq-swatch></div>
+                    </cq-study-parameter>
+                </template>
+            </cq-study-parameters>
+        </cq-scroll>
+        <div class="ciq-dialog-cntrls">
+            <div class="ciq-btn" stxtap="close()">Done</div>
+        </div>
+    </cq-study-dialog>
 </cq-dialog>
- */
+     */
 
 class StudyDialog extends DialogContentTag {
     setContext(context) {
-        DialogContentTag.setContext.call(this, context);
+        super.setContext(context);
         context.advertiseAs(this, 'StudyDialog');
     }
 
     attachedCallback() {
         if (this.attached) return;
-        DialogContentTag.attachedCallback.apply(this);
+        super.attachedCallback();
         let dialog = $(this);
         this.inputTemplate = dialog.find('template[cq-study-input]');
         this.outputTemplate = dialog.find('template[cq-study-output]');
@@ -87,15 +86,16 @@ class StudyDialog extends DialogContentTag {
     }
 
     /**
- * Sets up a handler to process changes to input fields
- * @param {HTMLElement} node    The input field
- * @param {string} section The section that is being updated, "inputs","outputs","parameters"
- * @param {string} name    The name of the field being updated
- * @memberOf CIQ.UI.StudyDialog
- * @private
- */
+     * Sets up a handler to process changes to input fields
+     * @param {HTMLElement} node    The input field
+     * @param {string} section The section that is being updated, "inputs","outputs","parameters"
+     * @param {string} name    The name of the field being updated
+     * @memberOf CIQ.UI.StudyDialog
+     * @private
+     */
     setChangeEvent(node, section, name) {
         let self = this;
+
         function closure() {
             return function () {
                 let updates = {};
@@ -120,9 +120,9 @@ class StudyDialog extends DialogContentTag {
     }
 
     /**
- * Accepts new menu (select box) selections
- * @param {object} activator
- */
+     * Accepts new menu (select box) selections
+     * @param {object} activator
+     */
     setSelectOption(activator) {
         let node = $(activator.node);
         let name = node.attr('name');
@@ -131,13 +131,15 @@ class StudyDialog extends DialogContentTag {
         let inputValue = newInput.find('cq-selected');
         inputValue.text(this.helper.stx.translateIf(value));
         newInput[0].fieldValue = value;
-        let updates = { inputs: {} };
+        let updates = {
+            inputs: {},
+        };
         updates.inputs[name] = value;
         this.updateStudy(updates);
     }
 
-    open(params, ...args) {
-        DialogContentTag.open(...args);
+    open(params) {
+        super.open(arguments);
 
         // Generate a "helper" which tells us how to create a dialog
         this.helper = new CIQ.Studies.DialogHelper(params);
@@ -146,11 +148,12 @@ class StudyDialog extends DialogContentTag {
         dialog.find('.title').text(this.helper.title);
 
         let self = this;
+
         function makeMenu(name, currentValue, fields) {
             let menu = CIQ.UI.makeFromTemplate(self.menuTemplate);
             let cqMenu = menu.find('cq-menu-dropdown'); // scrollable in menu.
             cqMenu[0].context = self.context;
-            for (let field of Object.keys(fields)) {
+            for (let field in fields) {
                 let item = $('<cq-item></cq-item>');
                 item.text(fields[field]);
                 item.attr('stxtap', 'StudyDialog.setSelectOption()'); // must call StudyDialog because the item is "lifted" and so doesn't know it's parent
@@ -168,27 +171,28 @@ class StudyDialog extends DialogContentTag {
         let attributes;
         let inputs = dialog.find('cq-study-inputs');
         inputs.empty();
-        for (let input of this.helper.inputs) {
+        for (var i in this.helper.inputs) {
+            let input = this.helper.inputs[i];
             let newInput = CIQ.UI.makeFromTemplate(this.inputTemplate, inputs);
             this.menuTemplate = newInput.find('template[cq-menu]');
             newInput.find('.ciq-heading').text(input.heading);
             newInput[0].fieldName = input.name;
             let formField = null;
 
-            let iAttr;
+            var iAttr;
             attributes = this.helper.attributes[input.name];
             if (input.type === 'number') {
                 formField = $('<input>');
                 formField.attr('type', 'number');
                 formField.val(input.value);
                 this.setChangeEvent(formField, 'inputs', input.name);
-                for (iAttr of Object.keys(attributes)) formField.attr(iAttr, attributes[iAttr]);
+                for (iAttr in attributes) formField.attr(iAttr, attributes[iAttr]);
             } else if (input.type === 'text') {
                 formField = $('<input>');
                 formField.attr('type', 'text');
                 formField.val(input.value);
                 this.setChangeEvent(formField, 'inputs', input.name);
-                for (iAttr of Object.keys(attributes)) formField.attr(iAttr, attributes[iAttr]);
+                for (iAttr in attributes) formField.attr(iAttr, attributes[iAttr]);
             } else if (input.type === 'select') {
                 formField = makeMenu(input.name, input.value, input.options);
                 if (attributes && attributes.readonly) formField.attr('readonly', attributes.readonly);
@@ -197,7 +201,7 @@ class StudyDialog extends DialogContentTag {
                 formField.attr('type', 'checkbox');
                 if (input.value) formField.prop('checked', true);
                 this.setChangeEvent(formField, 'inputs', input.name);
-                for (iAttr of Object.keys(attributes)) formField.attr(iAttr, attributes[iAttr]);
+                for (iAttr in attributes) formField.attr(iAttr, attributes[iAttr]);
             }
             if (attributes && attributes.hidden) newInput.hide();
             if (formField) newInput.find('.stx-data').append(formField);
@@ -205,9 +209,14 @@ class StudyDialog extends DialogContentTag {
         let swatch;
         let outputs = dialog.find('cq-study-outputs');
         outputs.empty();
-        for (let output of this.helper.outputs) {
+        for (i in this.helper.outputs) {
+            let output = this.helper.outputs[i];
             let newOutput = CIQ.UI.makeFromTemplate(this.outputTemplate, outputs);
-            newOutput[0].initialize({ studyDialog: this, output: output.name, params });
+            newOutput[0].initialize({
+                studyDialog: this,
+                output: output.name,
+                params,
+            });
             newOutput.find('.ciq-heading').text(output.heading);
             newOutput.find('.ciq-heading')[0].fieldName = output.name;
 
@@ -221,12 +230,13 @@ class StudyDialog extends DialogContentTag {
 
         let parameters = dialog.find('cq-study-parameters');
         parameters.empty();
-        for (let parameter of this.helper.parameters) {
+        for (i in this.helper.parameters) {
+            let parameter = this.helper.parameters[i];
             let newParam = CIQ.UI.makeFromTemplate(this.parameterTemplate, parameters);
             newParam.find('.ciq-heading').text(parameter.heading);
             swatch = newParam.find('cq-swatch');
             let paramInput = $('<input>');
-            let pAttr;
+            var pAttr;
             attributes = {};
             if (parameter.defaultValue.constructor === Boolean) {
                 paramInput.attr('type', 'checkbox');
@@ -235,16 +245,20 @@ class StudyDialog extends DialogContentTag {
                 swatch.remove();
 
                 attributes = this.helper.attributes[`${parameter.name}Enabled`];
-                for (pAttr of Object.keys(attributes)) paramInput.attr(pAttr, attributes[pAttr]);
+                for (pAttr in attributes) paramInput.attr(pAttr, attributes[pAttr]);
             } else if (parameter.defaultValue.constructor === Number) {
                 paramInput.attr('type', 'number');
                 paramInput.val(parameter.value);
                 this.setChangeEvent(paramInput, 'parameters', `${parameter.name}Value`);
-                newParam[0].initialize({ studyDialog: this, parameter: `${parameter.name}Color`, params });
+                newParam[0].initialize({
+                    studyDialog: this,
+                    parameter: `${parameter.name}Color`,
+                    params,
+                });
                 swatch[0].setColor(parameter.color, false); // don't percolate
 
                 attributes = this.helper.attributes[`${parameter.name}Value`];
-                for (pAttr of Object.keys(attributes)) paramInput.attr(pAttr, attributes[pAttr]);
+                for (pAttr in attributes) paramInput.attr(pAttr, attributes[pAttr]);
             } else continue;
 
             if (attributes && attributes.hidden) newParam.hide();
@@ -252,6 +266,6 @@ class StudyDialog extends DialogContentTag {
         }
     }
 }
-export default StudyDialog;
-CIQ.UI.StudyDialog = document.registerElement('cq-study-dialog', StudyDialog);
 
+document.registerElement('cq-study-dialog', StudyDialog);
+export default StudyDialog;

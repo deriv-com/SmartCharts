@@ -1,5 +1,5 @@
-import { CIQ } from '../../js/chartiq';
 import ModalTag from './ui/ModalTag';
+import { CIQ } from '../../js/chartiq';
 
 /**
  * Advertisement web component `<cq-advertisement>`.
@@ -13,25 +13,25 @@ import ModalTag from './ui/ModalTag';
  * @namespace WebComponents.cq-advertisement
  * @example
 <cq-advertisement style="display: block; height: 106px;">
-<cq-close class="ciq-tight"></cq-close>
-<div class="sample ciq-show">
-    <div cq-desktop="">
-        <div><translate original="$1 Trades">$1 Trades</translate></div>
-        <div><translate original="Use code ">Use code </translate><strong><translate original="Sample">Sample</translate></strong></div>
-        <a target="_blank" href="https://yourURL?codeSample&desktop"><translate original="Click to learn more">Click to learn more</translate></a>
+    <cq-close class="ciq-tight"></cq-close>
+    <div class="sample ciq-show">
+        <div cq-desktop="">
+            <div><translate original="$1 Trades">$1 Trades</translate></div>
+            <div><translate original="Use code ">Use code </translate><strong><translate original="Sample">Sample</translate></strong></div>
+            <a target="_blank" href="https://yourURL?codeSample&desktop"><translate original="Click to learn more">Click to learn more</translate></a>
+        </div>
+        <div cq-phone="">
+            <div><translate original="$1 Trades">$1 Trades</translate></div>
+            <a target="_blank" href="https://yourURL?codeSample&mobile"><translate original="Click to learn more">Click to learn more</translate></a>
+        </div>
     </div>
-    <div cq-phone="">
-        <div><translate original="$1 Trades">$1 Trades</translate></div>
-        <a target="_blank" href="https://yourURL?codeSample&mobile"><translate original="Click to learn more">Click to learn more</translate></a>
-    </div>
-</div>
 </cq-advertisement>
- *
- */
+     *
+     */
 class Advertisement extends ModalTag {
     attachedCallback() {
         if (this.attached) return;
-        ModalTag.attachedCallback.apply(this);
+        super.attachedCallback();
         this.nameValueStore = new CIQ.NameValueStore();
         this.attached = true;
     }
@@ -56,7 +56,7 @@ class Advertisement extends ModalTag {
 
     makeMarker() {
         if (this.markerExists) return;
-        new CIQ.Marker({ // eslint-disable-line no-new
+        new CIQ.Marker({
             stx: this.context.stx,
             xPositioner: 'none',
             label: 'advertisement',
@@ -85,16 +85,23 @@ class Advertisement extends ModalTag {
         }
         this.ignoreSleep = ignoreSleep;
         let self = this;
+
         function doIt() {
             self.makeMarker();
-            self.node.css({ display: 'block' });
+            self.node.css({
+                display: 'block',
+            });
             let content = self.node.find(self.selector);
             content.addClass('ciq-show');
 
             // resize content
-            self.node.css({ height: '0px' });
+            self.node.css({
+                height: '0px',
+            });
             setTimeout(() => {
-                self.node.css({ height: `${self.node[0].scrollHeight}px` });
+                self.node.css({
+                    height: `${self.node[0].scrollHeight}px`,
+                });
             }, 0);
         }
         if (!ignoreSleep) {
@@ -117,12 +124,19 @@ class Advertisement extends ModalTag {
      * @memberof WebComponents.cq-advertisement
      */
     close() {
-        this.node.css({ display: 'none' });
+        this.node.css({
+            display: 'none',
+        });
         let self = this;
         this.nameValueStore.get('cq-advertisement', (err, ls) => {
             if (err) return;
             let future = new Date();
-            if (!self.sleepAmount) self.sleepAmount = { units: 1, unitType: 'day' };
+            if (!self.sleepAmount) {
+                self.sleepAmount = {
+                    units: 1,
+                    unitType: 'day',
+                };
+            }
             let u = self.sleepAmount.units;
             let ut = self.sleepAmount.unitType;
             if (ut === 'minute') future.setMinutes(future.getMinutes() + u);
@@ -153,13 +167,15 @@ class Advertisement extends ModalTag {
             self.nameValueStore.get('cq-advertisement', (err, ls) => {
                 if (err) return;
                 if (!ls || typeof (ls) !== 'object') ls = {};
-                let m = ls[self.selector];
-                if (m && m > Date.now()) { self.close(); }
+                let ms = ls[self.selector];
+                if (ms && ms > Date.now()) {
+                    self.close();
+                }
             });
         }, ms);
     }
 }
 
-export default Advertisement;
-CIQ.UI.Advertisement = document.registerElement('cq-advertisement', Advertisement);
 
+document.registerElement('cq-advertisement', Advertisement);
+export default Advertisement;

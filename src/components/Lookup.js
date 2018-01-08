@@ -3,48 +3,48 @@ import { CIQ } from '../../js/chartiq';
 import ContextTag from './ui/ContextTag';
 
 /**
- * Lookup component `<cq-lookup>`.
- *
- * Note, a {@link CIQ.UI.Lookup.Driver} must be provided.
- * If none is provided then the default will be used which displays no results.
- *
- * Set <cq-lookup cq-uppercase> to force free form text to be converted to uppercase
- *
- * To turn off the result window modify CSS  to `.stxMenuActive cq-lookup cq-menu { opacity: 0 }`
- *
- * @namespace WebComponents.cq-lookup
- * @example
+     * Lookup component `<cq-lookup>`.
+     *
+     * Note, a {@link CIQ.UI.Lookup.Driver} must be provided.
+     * If none is provided then the default will be used which displays no results.
+     *
+     * Set <cq-lookup cq-uppercase> to force free form text to be converted to uppercase
+     *
+     * To turn off the result window modify CSS  to `.stxMenuActive cq-lookup cq-menu { opacity: 0 }`
+     *
+     * @namespace WebComponents.cq-lookup
+     * @example
 <cq-lookup cq-keystroke-claim cq-keystroke-default>
-<cq-lookup-input cq-no-close>
-    <input id="symbol" type="text" spellcheck="off" autocomplete="off" autocorrect="off" autocapitalize="off" name="symbol" placeholder="Enter Symbol">
-    <cq-lookup-icon></cq-lookup-icon>
-</cq-lookup-input>
-<cq-lookup-results>
-    <cq-lookup-filters cq-no-close>
-        <cq-filter class="true">ALL</cq-filter>
-        <cq-filter>STOCKS</cq-filter>
-        <cq-filter>FX</cq-filter>
-        <cq-filter>INDEXES</cq-filter>
-        <cq-filter>FUNDS</cq-filter>
-        <cq-filter>FUTURES</cq-filter>
-    </cq-lookup-filters>
-    <cq-scroll></cq-scroll>
-</cq-lookup-results>
+    <cq-lookup-input cq-no-close>
+        <input id="symbol" type="text" spellcheck="off" autocomplete="off" autocorrect="off" autocapitalize="off" name="symbol" placeholder="Enter Symbol">
+        <cq-lookup-icon></cq-lookup-icon>
+    </cq-lookup-input>
+    <cq-lookup-results>
+        <cq-lookup-filters cq-no-close>
+            <cq-filter class="true">ALL</cq-filter>
+            <cq-filter>STOCKS</cq-filter>
+            <cq-filter>FX</cq-filter>
+            <cq-filter>INDEXES</cq-filter>
+            <cq-filter>FUNDS</cq-filter>
+            <cq-filter>FUTURES</cq-filter>
+        </cq-lookup-filters>
+        <cq-scroll></cq-scroll>
+    </cq-lookup-results>
 </cq-lookup>
- *
- * @since  4.0.0 Added optional cq-uppercase attribute
- */
+     *
+     * @since  4.0.0 Added optional cq-uppercase attribute
+     */
 class Lookup extends ContextTag {
     attachedCallback() {
         if (this.attached) return;
         this.usingEmptyDriver = false;
-        super.attachedCallback.apply(this);
+        super.attachedCallback();
         this.attached = true;
         this.currentFilter = null;
         this.params = {};
     }
 
-    setContext(/* context */) {
+    setContext(context) {
         this.initialize();
     }
 
@@ -292,7 +292,7 @@ class Lookup extends ContextTag {
      */
     results(arr) {
         function closure(self, data) {
-            return function () {
+            return function (e) {
                 CIQ.blur(self.input);
                 // self.close();
                 self.selectItem(data);
@@ -318,5 +318,6 @@ class Lookup extends ContextTag {
     }
 }
 
+
+document.registerElement('cq-lookup', Lookup);
 export default Lookup;
-CIQ.UI.SymbolLookup = document.registerElement('cq-lookup', Lookup);

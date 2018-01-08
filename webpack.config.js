@@ -4,7 +4,7 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 const config = {
     devtool: 'source-map',
-    entry: ['./src/index.js'],
+    entry: ['babel-polyfill', './src/index.js'],
     output: {
         publicPath: '/dist/',
         path: path.resolve(__dirname, 'dist'),
@@ -47,12 +47,9 @@ const config = {
                 test: /\.js$/,
                 exclude: [
                     /node_modules/,
-                    /js\/chartiq\.js/,
-                    /js\/extras/,
-                    /js\/thirdparty/,
-                    /js\/plugin/,
                     /plugins\//,
-                    /js\/legacy/,
+                    /js\//,
+                    /src\/components\//,
                 ],
                 loader: 'eslint-loader',
                 enforce: 'pre',

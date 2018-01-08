@@ -16,7 +16,7 @@ import Helper from './Helper';
  */
 class StudyMenu extends Helper {
     constructor(node, context, params) {
-        super(node, context, params);
+        super(node, context);
         this.node = $(node);
         this.context = context;
         this.params = params || {};
@@ -28,7 +28,6 @@ class StudyMenu extends Helper {
         if (!this.excludedStudies) this.excludedStudies = [];
         context.advertiseAs(this, 'StudyMenu');
     }
-
     /**
      * Creates the menu. You have the option of coding a hardcoded HTML menu and just using
      * CIQ.UI.StudyMenu for processing stxtap attributes, or you can call renderMenu() to automatically
@@ -39,7 +38,7 @@ class StudyMenu extends Helper {
         let stx = this.context.stx;
         let alphabetized = [];
         let sd;
-        for (let field of Object.keys(CIQ.Studies.studyLibrary)) {
+        for (let field in CIQ.Studies.studyLibrary) {
             sd = CIQ.Studies.studyLibrary[field];
             if (!sd.name) sd.name = field; // Make sure there's always a name
             if (this.excludedStudies[field] || this.excludedStudies[sd.name]) continue;
@@ -54,7 +53,7 @@ class StudyMenu extends Helper {
         });
         let menu = $(this.node);
         let self = this;
-        let tapFn = function (studyName) {
+        let tapFn = function (studyName, context) {
             return function (e) {
                 self.pickStudy(e.target, studyName);
                 menu.resize();
@@ -97,12 +96,12 @@ class StudyMenu extends Helper {
                 self.studyDialog(params);
                 return true;
             } else if (typeof flag === 'object') {
-                Object.keys(flag).forEach((val, i) => {
+                for (let i in flag) {
                     if (i === studyName && flag[i]) {
                         self.studyDialog(params);
                         return true;
                     }
-                });
+                }
             }
         }
 

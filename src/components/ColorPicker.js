@@ -20,7 +20,7 @@ import Dialog from './Dialog';
  */
 class ColorPicker extends Dialog {
     createdCallback() {
-        CIQ.UI.Dialog.prototype.createdCallback.apply(this);
+        super.createdCallback();
         this.params = {
             colorMap: [
                 ['#ffffff', '#e1e1e1', '#cccccc', '#b7b7b7', '#a0a0a5', '#898989', '#707070', '#626262', '#555555', '#464646', '#363636', '#262626', '#1d1d1d', '#000000'],
@@ -35,12 +35,12 @@ class ColorPicker extends Dialog {
 
     attachedCallback() {
         if (this.attached) return;
-        CIQ.UI.Dialog.prototype.attachedCallback.apply(this);
+        super.attachedCallback();
 
         let node = $(this);
         let colors = node.attr('cq-colors');
         if (colors) {
-        // Convert a csv list of colors to a two dimensional array
+            // Convert a csv list of colors to a two dimensional array
             colors = colors.split(',');
             let cols = Math.ceil(Math.sqrt(colors.length));
             this.params.colorMap = [];
@@ -66,10 +66,10 @@ class ColorPicker extends Dialog {
     }
 
     /**
- * @param {object} colorMap Object that holds an array of various color arrays.
- * @alias setColors
- * @memberof WebComponents.cq-color-picker
- */
+     * @param {object} colorMap Object that holds an array of various color arrays.
+     * @alias setColors
+     * @memberof WebComponents.cq-color-picker
+     */
     setColors(colorMap) {
         this.params.colorMap = colorMap;
         this.initialize();
@@ -80,11 +80,11 @@ class ColorPicker extends Dialog {
         this.picker = $(this);
         this.colors = this.picker.find('cq-colors');
         if (!this.colors.length) this.colors = this.picker;
-        this.colors.empty();// allow re-initialize, with new colors for instance
+        this.colors.empty(); // allow re-initialize, with new colors for instance
 
-        function closure(that, color) {
+        function closure(self, color) {
             return function () {
-                that.pickColor(color);
+                self.pickColor(color);
             };
         }
         for (let a = 0; a < this.params.colorMap.length; a++) {
@@ -93,41 +93,46 @@ class ColorPicker extends Dialog {
             for (let b = 0; b < lineOfColors.length; b++) {
                 let li = $('<LI></LI>').appendTo(ul);
                 let span = $('<SPAN></SPAN>').appendTo(li);
-                span.css({ 'background-color': lineOfColors[b] });
+                span.css({
+                    'background-color': lineOfColors[b],
+                });
                 span.stxtap(closure(self, lineOfColors[b]));
             }
         }
     }
 
     /**
- * @param color
- * @alias pickColor
- * @memberof WebComponents.cq-color-picker
- */
+     * @param color
+     * @alias pickColor
+     * @memberof WebComponents.cq-color-picker
+     */
     pickColor(color) {
         if (this.callback) this.callback(color);
         this.close();
     }
 
     resize() {
-    // do nothing for resize, overrides Dialog default which centers
+        // do nothing for resize, overrides Dialog default which centers
     }
 
     /**
- * Displays the color picker in proximity to the node passed in
- * @param  {object} activator The object representing what caused picker to display
- * @param  {HTMLElement} [activator.node] The node near where to display the color picker
- * @param {Array} [activator.overrides] Optional array of overrides. For each of these, a button will be created that if pressed
- * will pass that override back instead of the color
- * @alias display
- * @memberof WebComponents.cq-color-picker
- */
+     * Displays the color picker in proximity to the node passed in
+     * @param  {object} activator The object representing what caused picker to display
+     * @param  {HTMLElement} [activator.node] The node near where to display the color picker
+     * @param {Array} [activator.overrides] Optional array of overrides. For each of these, a button will be created that if pressed
+     * will pass that override back instead of the color
+     * @alias display
+     * @memberof WebComponents.cq-color-picker
+     */
     display(activator) {
         let node = $(activator.node);
 
         // Algorithm to place the color picker to the right of whichever node was just pressed
         let positionOfNode = node[0].getBoundingClientRect();
-        this.picker.css({ top: '0px', left: '0px' });
+        this.picker.css({
+            top: '0px',
+            left: '0px',
+        });
         let positionOfColorPicker = this.parentNode.getBoundingClientRect();
         let x = positionOfNode.left - positionOfColorPicker.left + node.width() + 10;
         let y = positionOfNode.top - positionOfColorPicker.top + 5;
@@ -142,7 +147,10 @@ class ColorPicker extends Dialog {
         let h = this.picker.height();
         if (y + h > docHeight) y = docHeight - h - 20; // 20 for a little whitespace and padding
 
-        this.picker.css({ left: `${x}px`, top: `${y}px` });
+        this.picker.css({
+            left: `${x}px`,
+            top: `${y}px`,
+        });
         this.cqOverrides.emptyExceptTemplate();
 
         if (activator.overrides && this.template.length) {
@@ -150,17 +158,22 @@ class ColorPicker extends Dialog {
                 let override = activator.overrides[i];
                 let n = CIQ.UI.makeFromTemplate(this.template, true);
                 n.text(override);
-                n.stxtap((function (self, override) { return function () { self.pickColor(override); }; })(this, override)); // eslint-disable-line no-shadow
+                n.stxtap((function (self, override) {
+                    return function () {
+                        self.pickColor(override);
+                    };
+                })(this, override));
             }
         }
 
         if (!this.picker.hasClass('stxMenuActive')) {
             this.picker[0].open(); // Manually activate the color picker
         } else {
-            // eslint-disable-next-line no-lonely-if
             if (this.context.e) this.context.e.stopPropagation(); // Otherwise the color picker is closed when you swap back and forth between fill and line swatches on the toolbar
         }
     }
 }
+
+
+document.registerElement('cq-color-picker', ColorPicker);
 export default ColorPicker;
-CIQ.UI.ColorPicker = document.registerElement('cq-color-picker', ColorPicker);

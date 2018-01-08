@@ -20,11 +20,11 @@ import DialogContentTag from './ui/DialogContentTag';
         </cq-dialog>
  */
 class ThemeDialog extends DialogContentTag {
-/**
- * Applies changes to all charts on the screen
- * @memberof WebComponents.cq-theme-dialog
- * @private
- */
+    /**
+     * Applies changes to all charts on the screen
+     * @memberof WebComponents.cq-theme-dialog
+     * @private
+     */
     applyChanges() {
         let stx = this.context.stx;
         this.helper.update(stx);
@@ -32,29 +32,29 @@ class ThemeDialog extends DialogContentTag {
     }
 
     /**
- * @alias setValue
- * @memberof WebComponents.cq-theme-dialog
- */
+     * @alias setValue
+     * @memberof WebComponents.cq-theme-dialog
+     */
     setValue(obj, field, value) {
         obj[field] = value;
         this.applyChanges();
     }
 
     /**
- * @alias close
- * @memberof WebComponents.cq-theme-dialog
- */
+     * @alias close
+     * @memberof WebComponents.cq-theme-dialog
+     */
     close() {
         this.helper.settings = this.revert;
         this.applyChanges();
         // CIQ.UI.containerExecute(this, "close");
-        DialogContentTag.close.apply(this);
+        super.close();
     }
 
     /**
- * @alias save
- * @memberof WebComponents.cq-theme-dialog
- */
+     * @alias save
+     * @memberof WebComponents.cq-theme-dialog
+     */
     save() {
         let themeName = this.node.find('cq-action input').val();
         let theme = {
@@ -70,27 +70,33 @@ class ThemeDialog extends DialogContentTag {
             theme.builtIn = this.currentLoadedBuiltIn;
             this.addCustom(theme, self.initiatingMenu);
         });
-        DialogContentTag.close.apply(this);
+        super.close();
     }
 
     /**
- * @alias configure
- * @memberof WebComponents.cq-theme-dialog
- */
-    open(params, ...args) {
-        DialogContentTag.open(...args);
+     * @alias configure
+     * @memberof WebComponents.cq-theme-dialog
+     */
+    open(params) {
+        super.open(arguments);
         let themeName = params.themeName;
 
         this.initiatingMenu = params.initiatingMenu;
         this.context = params.context;
-        this.helper = new CIQ.ThemeHelper({ stx: this.context.stx });
+        this.helper = new CIQ.ThemeHelper({
+            stx: this.context.stx,
+        });
         this.revert = CIQ.clone(this.helper.settings);
 
         let self = this;
+
         function configurePiece(name, obj, field, type) {
             let cu = self.node.find(`cq-theme-piece[cq-piece="${name}"]`);
 
-            cu[0].piece = { obj, field };
+            cu[0].piece = {
+                obj,
+                field,
+            };
             if (type === 'color') {
                 cu.find('cq-swatch')[0].setColor(obj[field], false);
             }
@@ -113,5 +119,6 @@ class ThemeDialog extends DialogContentTag {
         this.node.find('cq-action input').val(themeName);
     }
 }
+
+document.registerElement('cq-theme-dialog', ThemeDialog);
 export default ThemeDialog;
-CIQ.UI.ThemeDialog = document.registerElement('cq-theme-dialog', ThemeDialog);

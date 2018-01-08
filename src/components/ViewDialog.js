@@ -32,14 +32,14 @@ class ViewDialog extends DialogContentTag {
         let viewName = this.node.find('input').val();
         if (!viewName) return;
 
+        let self = this;
         let madeChange = false;
         let layout = this.context.stx.exportLayout();
         $('cq-views').each(function () {
             let obj = this.params.viewObj;
             let view;
 
-            let i;
-            for (i = 0; i < obj.views.length; i++) {
+            for (var i = 0; i < obj.views.length; i++) {
                 view = obj.views[i];
                 if (viewName === CIQ.first(view)) break;
             }
@@ -63,5 +63,5 @@ class ViewDialog extends DialogContentTag {
 }
 
 
+document.registerElement('cq-view-dialog', ViewDialog);
 export default ViewDialog;
-CIQ.UI.ViewDialog = document.registerElement('cq-view-dialog', ViewDialog);

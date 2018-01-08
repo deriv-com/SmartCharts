@@ -1,4 +1,3 @@
-import { CIQ } from '../../js/chartiq';
 import DialogContentTag from './ui/DialogContentTag';
 
 /**
@@ -10,6 +9,5 @@ import DialogContentTag from './ui/DialogContentTag';
  */
 class StudyContext extends DialogContentTag {}
 
+document.registerElement('cq-study-context', StudyContext);
 export default StudyContext;
-CIQ.UI.StudyContext = document.registerElement('cq-study-context', StudyContext);
-

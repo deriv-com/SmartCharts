@@ -1,16 +1,15 @@
 import $ from 'jquery';
-import { CIQ } from '../../js/chartiq';
 import ModalTag from './ui/ModalTag';
+import { CIQ } from '../../js/chartiq';
 
-class Comparison extends ModalTag {
-    /**
-     * Symbol comparison component `<cq-comparison>`.
-     *
-     * Add attribute cq-marker in order to have the component insert itself as a marker on the chart
-     *
-     * @namespace WebComponents.cq-comparison
-     * @example
-    <cq-comparison cq-marker>
+/**
+ * Symbol comparison component `<cq-comparison>`.
+ *
+ * Add attribute cq-marker in order to have the component insert itself as a marker on the chart
+ *
+ * @namespace WebComponents.cq-comparison
+ * @example
+<cq-comparison cq-marker>
     <cq-menu class="cq-comparison-new">
         <cq-comparison-add-label>
             <cq-comparison-plus></cq-comparison-plus><span>Compare</span><span>...</span>
@@ -47,18 +46,18 @@ class Comparison extends ModalTag {
                 <!-- cq-comparison-price displays the current price with color animation -->
                 <cq-comparison-price cq-animate></cq-comparison-price>
                 <!-- cq-comparison-tick-price displays the price for the active crosshair item -->
-                <!-- <cq-comparison-tick-price></cq-comparison-tick-price> -->
+                <!-- <cq-comparison-tick-price></cq-comparison-tick-price>    -->
                 <cq-comparison-loader></cq-comparison-loader>
                 <div class="stx-btn-ico ciq-close"></div>
             </cq-comparison-item>
         </template>
     </cq-comparison-key>
-    </cq-comparison>
+</cq-comparison>
      */
-
+class Comparison extends ModalTag {
     attachedCallback() {
         if (this.attached) return;
-        ModalTag.attachedCallback.apply(this);
+        super.attachedCallback();
         this.attached = true;
         this.swatchColors = ['#8ec648', '#00afed', '#ee652e', '#912a8e', '#fff126',
             '#e9088c', '#ea1d2c', '#00a553', '#00a99c', '#0056a4', '#f4932f', '#0073ba', '#66308f', '#323390',
@@ -66,25 +65,25 @@ class Comparison extends ModalTag {
         this.loading = [];
     }
     /**
-     * Handles removing a series from the comparison.
-     * @param {string} symbol Name of series as a string.
-     * @param {object}  series Object containing info on series.
-     * @alias removeSeries
-     * @memberof WebComponents.cq-comparison
-     */
-    removeSeries(symbol/* , series */) {
+         * Handles removing a series from the comparison.
+         * @param {string} symbol Name of series as a string.
+         * @param {object}  series Object containing info on series.
+         * @alias removeSeries
+         * @memberof WebComponents.cq-comparison
+         */
+    removeSeries(symbol, series) {
         // console.log(typeof symbol, symbol);
         // console.log(typeof series, series);
         this.context.stx.removeSeries(symbol);
     }
 
     /**
-     * Picks a color to display the new comparison as.
-     * Loops through preset colors and picks the next one on the list.
-     * If the all colors are taken then the last color will be repeated.
-     * @alias pickSwatchColor
-     * @memberof WebComponents.cq-comparison
-     */
+         * Picks a color to display the new comparison as.
+         * Loops through preset colors and picks the next one on the list.
+         * If the all colors are taken then the last color will be repeated.
+         * @alias pickSwatchColor
+         * @memberof WebComponents.cq-comparison
+         */
     pickSwatchColor() {
         let node = $(this);
         let stx = this.context.stx;
@@ -93,7 +92,7 @@ class Comparison extends ModalTag {
         let currentColor = swatch[0].style.backgroundColor;
 
         let usedColors = {};
-        for (let s in stx.chart.series) { // eslint-disable-line guard-for-in
+        for (let s in stx.chart.series) {
             let series = stx.chart.series[s];
             if (!series.parameters.isComparison) continue;
             usedColors[series.parameters.color] = true;
@@ -110,18 +109,18 @@ class Comparison extends ModalTag {
     }
 
     /**
-     * The legend gets re-rendered whenever we createDataSet() (wherein the series may have changed).
-     * We re-render the entire thing each time, but we use a virtual DOM to determine whether
-     * to actually change anything on the screen (so as to avoid unnecessary flickering)
-     * @alias renderLegend
-     * @memberof WebComponents.cq-comparison
-     */
+         * The legend gets re-rendered whenever we createDataSet() (wherein the series may have changed).
+         * We re-render the entire thing each time, but we use a virtual DOM to determine whether
+         * to actually change anything on the screen (so as to avoid unnecessary flickering)
+         * @alias renderLegend
+         * @memberof WebComponents.cq-comparison
+         */
     renderLegend() {
         let node = $(this);
         let key = node.find('cq-comparison-key').cqvirtual();
         let stx = this.context.stx;
         let q = stx.currentQuote();
-        for (let s in stx.chart.series) { // eslint-disable-line guard-for-in
+        for (let s in stx.chart.series) {
             let series = stx.chart.series[s];
             if (!series.parameters.isComparison) continue;
             let frag = CIQ.UI.makeFromTemplate(this.template);
@@ -148,10 +147,10 @@ class Comparison extends ModalTag {
             if (series.parameters.error) frag.attr('cq-error', true);
             if (series.parameters.permanent) btn.hide();
             else {
-                btn.stxtap(function (self, t, srss) {
+                btn.stxtap(function (self, s, series) {
                     return function () {
                         self.nomore = true;
-                        self.removeSeries(t, srss);
+                        self.removeSeries(s, series);
                         self.modalEnd(); // tricky, we miss mouseout events when we remove items from under ourselves
                     };
                 }(this, s, series));
@@ -163,10 +162,10 @@ class Comparison extends ModalTag {
     }
 
     /**
-     * Loops thru `stxx.chart.series` to update the current price of all comparisons.
-     * @alias updatePrices
-     * @memberof WebComponents.cq-comparison
-     */
+         * Loops thru `stxx.chart.series` to update the current price of all comparisons.
+         * @alias updatePrices
+         * @memberof WebComponents.cq-comparison
+         */
     updatePrices() {
         let key; // lazy eval this to prevent jquery work when no comparisons exist
         let stx = this.context.stx;
@@ -190,11 +189,11 @@ class Comparison extends ModalTag {
     }
 
     /**
-     * Adds an injection to the ChartEngine that tracks the price of Comparisons.
-     * @param {number} updatePrices
-     * @alias startPriceTracker
-     * @memberof WebComponents.cq-comparison
-     */
+         * Adds an injection to the ChartEngine that tracks the price of Comparisons.
+         * @param {number} updatePrices
+         * @alias startPriceTracker
+         * @memberof WebComponents.cq-comparison
+         */
     startPriceTracker(updatePrices) {
         let self = this;
         this.addInjection('append', 'createDataSet', function () {
@@ -241,7 +240,7 @@ class Comparison extends ModalTag {
         }(this)));
     }
 
-    setContext(/* context */) {
+    setContext(context) {
         let chart = this.context.stx.chart;
         this.node.attr('cq-show', 'true');
         // if attribute cq-marker then detach and put ourselves in the chart holder
@@ -250,7 +249,7 @@ class Comparison extends ModalTag {
         CIQ.UI.observe({
             obj: chart.series,
             action: 'callback',
-            value: () => {
+            value() {
                 self.renderLegend();
             },
         });
@@ -262,13 +261,13 @@ class Comparison extends ModalTag {
     }
 
     /**
-     * Fires whenever a new security is added as a comparison.
-     * Handles all the necessary events to update the chart with the new comparison.
-     * @param {object} context `CIQ.UI.Context` The context of the chart.
-     * @param {object} obj The object holding info on a security.
-     * @alias selectItem
-     * @memberof WebComponents.cq-comparison
-     */
+         * Fires whenever a new security is added as a comparison.
+         * Handles all the necessary events to update the chart with the new comparison.
+         * @param {object} context `CIQ.UI.Context` The context of the chart.
+         * @param {object} obj The object holding info on a security.
+         * @alias selectItem
+         * @memberof WebComponents.cq-comparison
+         */
     selectItem(context, obj) {
         let self = this;
 
@@ -304,7 +303,7 @@ class Comparison extends ModalTag {
             forceData: true,
         };
 
-        // don't allow symbol if same as main chart, comparison already exists, or just white space
+            // don't allow symbol if same as main chart, comparison already exists, or just white space
         let exists = stx.getSeries({
             symbolObject: obj,
         });
@@ -314,17 +313,17 @@ class Comparison extends ModalTag {
 
         // don't allow symbol if same as main chart or just white space
         if (context.stx.chart.symbol.toLowerCase() !== obj.symbol.toLowerCase() &&
-            obj.symbol.trim().length > 0) {
+                obj.symbol.trim().length > 0) {
             stx.addSeries(obj.symbol, params, cb);
         }
     }
 
     /**
-     * Initializes all the children UI elements that make up `<cq-comparison>`.
-     * @alias configureUI
-     * @memberof WebComponents.cq-comparison
-     */
-    configureUI(...args) {
+         * Initializes all the children UI elements that make up `<cq-comparison>`.
+         * @alias configureUI
+         * @memberof WebComponents.cq-comparison
+         */
+    configureUI() {
         let node = this.node;
         let addNew = node.find('cq-accept-btn');
         this.template = node.find('*[cq-comparison-item]');
@@ -335,10 +334,11 @@ class Comparison extends ModalTag {
         }
         let lookup = node.find('cq-lookup');
         if (lookup.length) {
-            const self = this;
-            lookup[0].setCallback(() => {
-                self.selectItem(args);
-            });
+            lookup[0].setCallback(function (self) {
+                return function () {
+                    self.selectItem(...arguments);
+                };
+            }(this));
         }
         addNew.stxtap((e) => {
             lookup[0].forceInput();
@@ -351,5 +351,6 @@ class Comparison extends ModalTag {
     }
 }
 
+
+document.registerElement('cq-comparison', Comparison);
 export default Comparison;
-CIQ.UI.Comparison = document.registerElement('cq-comparison', Comparison);

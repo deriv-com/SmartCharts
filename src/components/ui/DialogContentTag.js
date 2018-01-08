@@ -16,7 +16,7 @@ class DialogContentTag extends BaseComponent {
     open(params) {
         if (params && params.context) this.setContext(params.context);
         let tagName = this.tagName.toLowerCase();
-        this.node.closest('cq-dialog,cq-menu').each(() => {
+        this.node.closest('cq-dialog,cq-menu').each(function () {
             this.addActiveAttribute(tagName);
             this.open(params);
         });
@@ -27,21 +27,9 @@ class DialogContentTag extends BaseComponent {
      */
     close() {
         this.node.parents('cq-dialog')[0].close();
-        this.node.find('cq-swatch').each(() => {
+        this.node.find('cq-swatch').each(function () {
             if (this.colorPicker) this.colorPicker.close();
         });
-    }
-
-    attachedCallback() {
-        super.attachedCallback.apply(this);
-    }
-
-    createdCallback() {
-        super.createdCallback.apply(this);
-    }
-
-    detachedCallback() {
-        super.detachedCallback.apply(this);
     }
 
     /**

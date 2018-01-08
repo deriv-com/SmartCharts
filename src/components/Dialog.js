@@ -1,5 +1,4 @@
 import $ from 'jquery';
-import { CIQ } from '../../js/chartiq';
 import BaseComponent from './ui/BaseComponent';
 
 /**
@@ -10,42 +9,34 @@ import BaseComponent from './ui/BaseComponent';
  * @namespace WebComponents.cq-dialog
  * @example
 <cq-dialog cq-timezone-dialog>
-<cq-timezone-dialog>
-    <h4 class="title">Choose Timezone</h4>
-    <cq-close></cq-close>
+    <cq-timezone-dialog>
+        <h4 class="title">Choose Timezone</h4>
+        <cq-close></cq-close>
 
-    <p>To set your timezone use the location button below, or scroll through the following list...</p>
-    <p id="currentUserTimeZone"></p>
-<div class="detect">
-<div class="ciq-btn" stxtap="Layout.removeTimezone()">Use My Current Location</div>
-</div>
-<div id="timezoneDialogWrapper" style="max-height:360px; overflow: auto;">
-        <ul>
-          <li id="timezoneTemplate" style="display:none;cursor:pointer;"></li>
-        </ul>
+        <p>To set your timezone use the location button below, or scroll through the following list...</p>
+        <p id="currentUserTimeZone"></p>
+    <div class="detect">
+    <div class="ciq-btn" stxtap="Layout.removeTimezone()">Use My Current Location</div>
     </div>
-<div class="instruct">(Scroll for more options)</div>
-</cq-timezone-dialog>
+    <div id="timezoneDialogWrapper" style="max-height:360px; overflow: auto;">
+            <ul>
+              <li id="timezoneTemplate" style="display:none;cursor:pointer;"></li>
+            </ul>
+        </div>
+    <div class="instruct">(Scroll for more options)</div>
+    </cq-timezone-dialog>
 </cq-dialog>
- */
-class Dialog extends HTMLElement {
-    /**
-     * The attributes that are added to a cq-dialog when it is opened (and removed when closed).
-     * Contains "cq-active" by default.
-     * @memberof WebComponents.cq-dialog
-     * @type {Object}
      */
-    static activeAttributes = null;
-
+class Dialog extends BaseComponent {
     createdCallback() {
-        BaseComponent.createdCallback.apply(this);
+        super.createdCallback();
         this.activeAttributes = {};
     }
 
     attachedCallback() {
         if (this.attached) return;
         this.isDialog = true;
-        BaseComponent.attachedCallback.apply(this);
+        super.attachedCallback();
         let self = this;
 
         function handleTap(e) {
@@ -165,7 +156,7 @@ class Dialog extends HTMLElement {
         this.active = false;
         if (this.uiManager.overlay) this.uiManager.overlay.removeAttrBetter('cq-active');
         this.uiManager.overlay = null;
-        for (let attribute of Object.keys(this.activeAttributes)) {
+        for (let attribute in this.activeAttributes) {
             this.node.removeAttrBetter(attribute);
         }
         this.activeAttributes = {};
@@ -188,7 +179,6 @@ class Dialog extends HTMLElement {
      */
     show(params) {
         this.params = params;
-        // eslint-disable-next-line no-param-reassign
         if (!params) params = this.params = {};
         let self = this;
         if (!this.uiManager.overlay && !params.bypassOverlay) {
@@ -198,7 +188,7 @@ class Dialog extends HTMLElement {
         setTimeout(() => { // to get the opacity transition effect
             if (self.uiManager.overlay && !params.bypassOverlay) self.uiManager.overlay.attrBetter('cq-active');
             self.activeAttributes['cq-active'] = true; // cq-active is what css uses to display the dialog
-            for (let attribute of Object.keys(self.activeAttributes)) {
+            for (let attribute in self.activeAttributes) {
                 self.node.attrBetter(attribute);
             }
             self.resize();
@@ -207,5 +197,13 @@ class Dialog extends HTMLElement {
     }
 }
 
+/**
+ * The attributes that are added to a cq-dialog when it is opened (and removed when closed).
+ * Contains "cq-active" by default.
+ * @memberof WebComponents.cq-dialog
+ * @type {Object}
+ */
+Dialog.prototype.activeAttributes = null;
+
+document.registerElement('cq-dialog', Dialog);
 export default Dialog;
-CIQ.UI.Dialog = document.registerElement('cq-dialog', Dialog);

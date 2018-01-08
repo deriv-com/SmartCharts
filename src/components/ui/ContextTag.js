@@ -65,11 +65,7 @@ class ContextTag extends BaseComponent {
                 permanent: true,
             });
         }
-        setTimeout(function (s, c) {
-            return function () {
-                s.setContext(c);
-            };
-        }(this, context));
+        setTimeout(function (s, c) { return function () { s.setContext(c); }; }(this, context));
     }
 
     /**
@@ -78,7 +74,7 @@ class ContextTag extends BaseComponent {
      * @memberof CIQ.UI.ContextTag
      */
     createdCallback() {
-        super.createdCallback.apply(this);
+        super.createdCallback();
         this.injections = [];
     }
 
@@ -115,7 +111,7 @@ class ContextTag extends BaseComponent {
     attachedCallback() {
         if (this.attached) return;
         this.setContextHolder();
-        super.attachedCallback.apply(this);
+        super.attachedCallback();
     }
 }
 

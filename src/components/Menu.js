@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import { CIQ } from '../../js/chartiq';
+
 /**
  * Menu web component `<cq-menu>`.
  *
@@ -7,19 +7,19 @@ import { CIQ } from '../../js/chartiq';
  * @namespace WebComponents.cq-menu
  * @example
  <cq-menu class="ciq-menu stx-markers collapse">
-    <span>Events</span>
-    <cq-menu-dropdown>
-        <cq-item class="square">Simple Square <span class="ciq-radio"><span></span></span>
-        </cq-item>
-        <cq-item class="circle">Simple Circle <span class="ciq-radio"><span></span></span>
-        </cq-item>
-        <cq-item class="callouts">Callouts <span class="ciq-radio"><span></span></span>
-        </cq-item>
-        <cq-item class="abstract">Abstract <span class="ciq-radio"><span></span></span>
-        </cq-item>
-        <cq-item class="none">None <span class="ciq-radio ciq-active"><span></span></span>
-        </cq-item>
-    </cq-menu-dropdown>
+     <span>Events</span>
+     <cq-menu-dropdown>
+         <cq-item class="square">Simple Square <span class="ciq-radio"><span></span></span>
+         </cq-item>
+         <cq-item class="circle">Simple Circle <span class="ciq-radio"><span></span></span>
+         </cq-item>
+         <cq-item class="callouts">Callouts <span class="ciq-radio"><span></span></span>
+         </cq-item>
+         <cq-item class="abstract">Abstract <span class="ciq-radio"><span></span></span>
+         </cq-item>
+         <cq-item class="none">None <span class="ciq-radio ciq-active"><span></span></span>
+         </cq-item>
+     </cq-menu-dropdown>
  </cq-menu>
  */
 
@@ -39,9 +39,11 @@ class Menu extends HTMLElement {
 
         if (this.node.attr('readonly')) return;
         let self = this;
+
         function handleTap(e) {
             self.tap(e);
         }
+
         function handleCaptureTap(e) {
             self.captureTap(e);
         }
@@ -74,7 +76,7 @@ class Menu extends HTMLElement {
         this.lifts = null;
     }
 
-    show() {
+    show(params) {
         if (this.active) return;
         this.active = true;
         this.node.addClass(this.activeClassName);
@@ -99,12 +101,12 @@ class Menu extends HTMLElement {
     }
 
     /**
- * Captures a tap event *before* it descends down to what it is clicked on. The key thing this does is determine
- * whether the thing clicked on was inside of a "cq-no-close" section. We do this on the way down, because the act
- * of clicking on something may release it from the dom, making it impossible to figure out on propagation.
- * @param {object} e Element
- * @private
- */
+     * Captures a tap event *before* it descends down to what it is clicked on. The key thing this does is determine
+     * whether the thing clicked on was inside of a "cq-no-close" section. We do this on the way down, because the act
+     * of clicking on something may release it from the dom, making it impossible to figure out on propagation.
+     * @param {object} e Element
+     * @private
+     */
     captureTap(e) {
         let target = $(e.target);
         let domChain = target.parents().addBack();
@@ -125,7 +127,7 @@ class Menu extends HTMLElement {
     tap(e) {
         let uiManager = this.uiManager;
         if (this.active) { // tapping on the menu if it is open will close it
-        // todo, don't close if active children (cascading). Note, cascading already works for dialogs.
+            // todo, don't close if active children (cascading). Note, cascading already works for dialogs.
             e.stopPropagation();
             if (!this.noClose) uiManager.closeMenu(this);
         } else if (!this.active) { // if we've clicked on the label for the menu, then open the menu
@@ -150,5 +152,6 @@ class Menu extends HTMLElement {
     }
 }
 
+document.registerElement('cq-menu', Menu);
 export default Menu;
-CIQ.UI.Menu = document.registerElement('cq-menu', Menu);
+

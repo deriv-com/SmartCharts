@@ -9,7 +9,6 @@ import $ from 'jquery';
  * @name CIQ.UI.Context
  * @constructor
  */
-
 class Context {
     constructor(stx, topNode, params) {
         this.params = params || {};
@@ -25,6 +24,7 @@ class Context {
             storage.Components[i].setContextPrivate(this);
         }
     }
+
     /**
      * The DOM tag for a context needs some storage. ContextTag components register
      * themselves by placing themselves in this storage. This method creates that
@@ -45,7 +45,7 @@ class Context {
      * @param  {Object} data A symbol data object acceptible for {@link CIQ.ChartEngine#newChart}
      * @memberof CIQ.UI.Context
      */
-    changeSymbol(/* data */) {
+    changeSymbol(data) {
         console.log('Please implement CIQ.UI.Context.prototype.changeSymbol');
     }
 

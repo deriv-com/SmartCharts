@@ -1,6 +1,7 @@
 import $ from 'jquery';
-import { CIQ } from '../../js/chartiq';
+import { aggregation } from './ui';
 import ContextTag from './ui/ContextTag';
+import Scroll from './Scroll';
 
 /**
  * Menu DropDown web component `<cq-menu-dropdown>`.
@@ -34,29 +35,28 @@ import ContextTag from './ui/ContextTag';
      </cq-menu-dropdown>
  */
 
-class MenuDropDown extends ContextTag {
+class MenuDropDown extends aggregation(ContextTag, Scroll) {
     createdCallback() {
         if (this.ownerDocument !== document) return; // https://bugs.chromium.org/p/chromium/issues/detail?id=430578
         let node = $(this);
-        ContextTag.createdCallback.call(this);
-        if (typeof (node.attr('cq-no-scroll')) === 'undefined') { CIQ.UI.Scroll.prototype.createdCallback.call(this); }
+        ContextTag.prototype.createdCallback.apply(this);
+        if (typeof (node.attr('cq-no-scroll')) === 'undefined') {
+            Scroll.prototype.createdCallback.apply(this);
+        }
     }
 
     attachedCallback() {
         if (this.attached) return;
         let node = $(this);
         this.noMaximize = true;
-        ContextTag.attachedCallback.call(this);
+        ContextTag.prototype.attachedCallback.apply(this);
         this.attached = false; // double inheritance!
-        if (typeof (node.attr('cq-no-scroll')) === 'undefined') { CIQ.UI.Scroll.prototype.attachedCallback.call(this); }
+        if (typeof (node.attr('cq-no-scroll')) === 'undefined') {
+            Scroll.prototype.attachedCallback.apply(this);
+        }
         this.attached = true;
     }
 }
 
-// Whoa, double inheritance! Yes, we need this web component to inherit from both
-// CIQ.UI.Scroll as well as ContextTag.
-CIQ.UI.addInheritance(MenuDropDown, CIQ.UI.Scroll);
-
+document.registerElement('cq-menu-dropdown', MenuDropDown);
 export default MenuDropDown;
-CIQ.UI.MenuDropDown = document.registerElement('cq-menu-dropdown', MenuDropDown);
-

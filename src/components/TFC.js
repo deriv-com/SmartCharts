@@ -7,23 +7,23 @@ import ContextTag from './ui/ContextTag';
  *
  * @namespace WebComponents.cq-tfc
  * @example
-     <cq-tfc></cq-tfc>
+      <cq-tfc></cq-tfc>
  */
 class TFC extends ContextTag {
     attachedCallback() {
         if (this.attached) return;
-        ContextTag.attachedCallback.apply(this);
+        super.attachedCallback();
         this.attached = true;
     }
 
-    setContext(/* context */) {
+    setContext(context) {
         this.initialize();
     }
 
     /**
- * @alias start
- * @memberof WebComponents.cq-tfc
- */
+     * @alias start
+     * @memberof WebComponents.cq-tfc
+     */
     start() {
         $('.stx-trade-panel').appendTo($('cq-side-panel'));
         let stx = this.context.stx;
@@ -50,12 +50,15 @@ class TFC extends ContextTag {
 
         stx.tfc.selectSymbol = function (symbol) {
             symbol = symbol.toUpperCase();
-            self.context.changeSymbol({ symbol });
+            self.context.changeSymbol({
+                symbol,
+            });
         };
     }
 
     initialize() {
         let self = this;
+
         function acc(err) {
             if (err) {
                 console.log(err);
@@ -66,5 +69,7 @@ class TFC extends ContextTag {
         CIQ.loadWidget('plugins/tfc/tfc', acc);
     }
 }
+
+
+document.registerElement('cq-tfc', TFC);
 export default TFC;
-CIQ.UI.TFC = document.registerElement('cq-tfc', TFC);
