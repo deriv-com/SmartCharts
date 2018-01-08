@@ -9,17 +9,14 @@ class TFC {
 
         this.elements = { }
         this.menu = {
-            enableShort: { dom: ['dragLineCenter'] },
-            enableStraddle: { dom: ['ocoOrder', 'ocoAbove', 'ocoBelow', 'dragLineAbove', 'dragLineBelow', 'shadeAbove', 'shadeBelow'] },
-            enableStrangle: { dom: ['ocoOrder', 'ocoAbove', 'ocoBelow', 'dragLineAbove', 'dragLineBelow', 'shadeAbove', 'shadeBelow'] },
+            enableShort: { dom: [/*'ocoAbove',*/ 'dragLineCenter'] },
+            enableStraddle: { dom: [/*'ocoAbove', 'ocoBelow',*/ 'dragLineAbove', 'dragLineBelow', 'shadeAbove', 'shadeBelow'] },
+            enableStrangle: { dom: [/*'ocoAbove', 'ocoBelow',*/ 'dragLineAbove', 'dragLineBelow', 'shadeAbove', 'shadeBelow'] },
         };
         this.dom = {
             dragLineAbove: null,
             dragLineCenter: null,
             dragLineBelow: null,
-            otoAbove: null,
-            otoBelow: null,
-            ocoOrder: null,
             ocoAbove: null,
             ocoBelow: null,
             shadeAbove: null,
@@ -40,8 +37,7 @@ class TFC {
      */
     positionAtPrice(price, nodes, where, noOverlap, keepOnChart) {
         if (!where) where = 'center';
-        let px = this.locationFromPrice(price),
-            node;
+        let px = this.locationFromPrice(price), node;
         for (let i = 0; i < nodes.length; i++) {
             let nodeName = nodes[i];
             if (typeof nodeName === 'string') {
@@ -50,8 +46,7 @@ class TFC {
                 node = nodeName;
             }
             let top = null;
-            var j,
-                oNode;
+            let j, oNode;
             if (where == 'center') {
                 top = (px - (node.offsetHeight / 2));
             } else if (where == 'top') {
@@ -141,8 +136,6 @@ class TFC {
         CIQ.unappendClassName(this.dom.shadeBelow, 'tfc-neutral');
         CIQ.swapClassName(this.dom.shadeAbove, 'tfc-profit', 'tfc-loss');
         CIQ.swapClassName(this.dom.shadeBelow, 'tfc-profit', 'tfc-loss');
-        this.elements.ocoAboveHead.innerHTML = 'Buy Stop';
-        this.elements.ocoBelowHead.innerHTML = 'Sell Stop';
         this.centerPrice = this.stx.currentQuote().Close;
         let y = this.stx.pixelFromPriceTransform(this.centerPrice, this.chart.panel);
         this.positionAboveLine(this.stx.valueFromPixelUntransform(y - 50, this.chart.panel));
@@ -167,8 +160,6 @@ class TFC {
         CIQ.unappendClassName(this.dom.shadeBelow, 'tfc-neutral');
         CIQ.swapClassName(this.dom.shadeAbove, 'tfc-loss', 'tfc-profit');
         CIQ.swapClassName(this.dom.shadeBelow, 'tfc-loss', 'tfc-profit');
-        this.elements.ocoAboveHead.innerHTML = 'Sell Limit';
-        this.elements.ocoBelowHead.innerHTML = 'Buy Limit';
         this.centerPrice = this.stx.currentQuote().Close;
         let y = this.stx.pixelFromPriceTransform(this.centerPrice, this.chart.panel);
         this.positionAboveLine(this.stx.valueFromPixelUntransform(y - 50, this.chart.panel));
@@ -190,6 +181,7 @@ class TFC {
         this.elements.dragLineCenterPrice.innerHTML = this.formatPrice(this.centerPrice);
         this.positionBelowLine(Math.min(this.centerPrice, this.belowPrice));
         this.positionAboveLine(Math.max(this.centerPrice, this.abovePrice));
+        this.positionAtPrice(this.centerPrice, ['ocoAbove'], 'center', null, keepOnChart);
     }
 
     /**
@@ -204,15 +196,7 @@ class TFC {
         if (this.abovePrice < this.centerPrice) this.abovePrice = this.centerPrice;
         this.positionAtPrice(this.abovePrice, ['dragLineAbove'], 'center', null, keepOnChart);
         this.elements.dragLineAbovePrice.innerHTML = this.formatPrice(this.abovePrice);
-        if (this.activeTrade == 'short' || this.activeTrade == 'buy') {
-            this.positionAtPrice(this.abovePrice, ['otoAbove'], 'bottom', null, keepOnChart);
-        } else if (this.activeTrade == 'strangle' || this.activeTrade == 'straddle') {
-            this.positionAtPrice(this.abovePrice, ['ocoAbove'], 'bottom', null, keepOnChart);
-        } else if (this.activeTrade == 'bracket_sell') {
-            this.positionAtPrice(this.abovePrice, ['otoAbove'], 'bottom', null, keepOnChart);
-        } else if (this.activeTrade == 'bracket_cover') {
-            this.positionAtPrice(this.abovePrice, ['otoAbove'], 'bottom', null, keepOnChart);
-        }
+        this.positionAtPrice(this.abovePrice, ['ocoAbove'], 'bottom', null, keepOnChart);
     }
 
     /**
@@ -227,14 +211,7 @@ class TFC {
         if (this.belowPrice > this.centerPrice) this.belowPrice = this.centerPrice;
         this.positionAtPrice(this.belowPrice, ['dragLineBelow'], 'center', null, keepOnChart);
         this.elements.dragLineBelowPrice.innerHTML = this.formatPrice(this.belowPrice);
-        if (this.activeTrade == 'buy' || this.activeTrade == 'short') {
-            this.positionAtPrice(this.belowPrice, ['otoBelow'], 'top', null, keepOnChart);
-        } else if (this.activeTrade == 'strangle' || this.activeTrade == 'straddle') {
-            this.positionAtPrice(this.belowPrice, ['ocoBelow'], 'top', null, keepOnChart);
-            this.dom.ocoOrder.style.top = this.dom.ocoBelow.style.top;
-        } else if (this.activeTrade == 'bracket_sell' || this.activeTrade == 'bracket_cover') {
-            this.positionAtPrice(this.belowPrice, ['otoBelow'], 'top', null, keepOnChart);
-        }
+        this.positionAtPrice(this.belowPrice, ['ocoBelow'], 'top', null, keepOnChart);
     }
 
     /**
@@ -403,24 +380,14 @@ class TFC {
         this.dom.dragLineAbove = $$$('.drag-price-line', container).cloneNode(true);
         this.dom.dragLineCenter = $$$('.drag-price-line', container).cloneNode(true);
         this.dom.dragLineBelow = $$$('.drag-price-line', container).cloneNode(true);
-        this.dom.otoAbove = $$$('.OTO.stx-stop', container).cloneNode(true);
-        this.dom.otoBelow = $$$('.OTO.stx-stop', container).cloneNode(true);
-        this.dom.ocoOrder = $$$('.stx-oco-order', container).cloneNode(true);
         this.dom.ocoAbove = $$$('.oco.tfc-oco-above', container).cloneNode(true);
         this.dom.ocoBelow = $$$('.oco.tfc-oco-below', container).cloneNode(true);
         this.dom.shadeAbove = $$$('.tfc-shade', container).cloneNode(true);
         this.dom.shadeBelow = $$$('.tfc-shade', container).cloneNode(true);
 
-        this.elements.ocoAboveHead = $$$('.stx-head', this.dom.ocoAbove);
-        this.elements.ocoBelowHead = $$$('.stx-head', this.dom.ocoBelow);
         this.elements.dragLineAbovePrice = $$$('.tfc-price', this.dom.dragLineAbove);
         this.elements.dragLineCenterPrice = $$$('.tfc-price', this.dom.dragLineCenter);
         this.elements.dragLineBelowPrice = $$$('.tfc-price', this.dom.dragLineBelow);
-        this.elements.removeOTOAbove = $$$('.stx-btn.stx-ico .stx-ico-close', this.dom.otoAbove);
-        this.elements.removeOTOBelow = $$$('.stx-btn.stx-ico .stx-ico-close', this.dom.otoBelow);
-
-        CIQ.safeClickTouch(this.elements.removeOTOAbove, () => this.removeOTOAbove());
-        CIQ.safeClickTouch(this.elements.removeOTOBelow, () => this.removeOTOBelow());
 
         const modalBegin = () => {
             if (this.stx.grabbingScreen) return;
@@ -470,19 +437,7 @@ class TFC {
             (e) => endDrag(e, this.dom.dragLineAbove),
         );
         CIQ.safeDrag(
-            this.dom.otoAbove,
-            (e) => this.startDrag(e, this.dom.dragLineAbove),
-            (e) => this.dragAboveLine(e),
-            (e) => endDrag(e, this.dom.dragLineAbove),
-        );
-        CIQ.safeDrag(
             this.dom.dragLineBelow,
-            (e) => this.startDrag(e, this.dom.dragLineBelow),
-            (e) => this.dragBelowLine(e),
-            (e) => endDrag(e, this.dom.dragLineBelow),
-        );
-        CIQ.safeDrag(
-            this.dom.ocoOrder,
             (e) => this.startDrag(e, this.dom.dragLineBelow),
             (e) => this.dragBelowLine(e),
             (e) => endDrag(e, this.dom.dragLineBelow),
@@ -493,17 +448,11 @@ class TFC {
             (e) => this.dragBelowLine(e),
             (e) => endDrag(e, this.dom.dragLineBelow),
         );
-        CIQ.safeDrag(
-            this.dom.otoBelow,
-            (e) => this.startDrag(e, this.dom.dragLineBelow),
-            (e) => this.dragBelowLine(e),
-            (e) => endDrag(e, this.dom.dragLineBelow),
-        );
 
         CIQ.ChartEngine.prototype.append('draw', () => {
             this.positionAboveLine(this.abovePrice);
             this.positionBelowLine(this.belowPrice);
-            this.positionAtPrice(this.centerPrice, ['dragLineCenter'], 'center', null, true);
+            this.positionAtPrice(this.centerPrice, ['dragLineCenter', 'ocoAbove'], 'center', null, true);
             this.dom.shadeAbove.style.top = '0px';
             this.dom.shadeAbove.style.bottom = `${this.chart.panel.height - this.locationFromPrice(this.abovePrice)}px`;
             this.dom.shadeBelow.style.top = `${this.locationFromPrice(this.belowPrice)}px`;
