@@ -1,13 +1,21 @@
 import $ from 'jquery';
+import { CIQ } from '../js/chartiq';
+
 import StreamManager from './stream-manager';
 import Feed from './feed';
+import ExampleDriver from './ExampleDriver';
+
+// Before using components, you need to first import components/ui
+import './components/ui';
+import './components/Scroll';
+import './components/Lookup';
+import './components/Menu';
+import Context from './components/ui/Context';
+import KeystrokeHub from './components/ui/KeystrokeHub';
+
 import '../js/thirdparty/object-observe';
 import '../js/thirdparty/webcomponents-lite.min';
 import '../js/thirdparty/perfect-scrollbar.jquery';
-
-import { CIQ } from '../js/chartiq';
-import '../js/componentUI';
-import '../js/components';
 
 import '../plugins/tfc/tfc';
 import '../js/plugin';
@@ -49,29 +57,30 @@ stxx.callbacks.layout = saveLayout;
 stxx.callbacks.symbolChange = saveLayout;
 
 function startUI() {
-    const UIContext = new CIQ.UI.Context(stxx, $('*[cq-context]'));
+    const UIContext = new Context(stxx, $('*[cq-context]'));
 
-    UIContext.changeSymbol = function (data) {
+    UIContext.changeSymbol = (data) => {
         let stx = this.stx;
         if (this.loader) this.loader.show();
         data.symbol = data.symbol.toUpperCase(); // set a pretty display version
 
         let self = this;
-        stx.newChart(data, null, null, (err) => {
+        stx.newChart(data, null, null, () => {
             if (self.loader) self.loader.hide();
         });
     };
 
 
-    UIContext.setLookupDriver(new CIQ.UI.Lookup.Driver.ChartIQ());
+    UIContext.setLookupDriver(new ExampleDriver());
 
     UIContext.UISymbolLookup = $('.ciq-search cq-lookup')[0];
     UIContext.UISymbolLookup.setCallback((context, data) => {
         context.changeSymbol(data);
     });
 
-    let KeystrokeHub = new CIQ.UI.KeystrokeHub($('body'), UIContext, {
-        cb: CIQ.UI.KeystrokeHub.defaultHotKeys,
+    // eslint-disable-next-line no-unused-vars
+    let keyhub = new KeystrokeHub($('body'), UIContext, {
+        cb: KeystrokeHub.defaultHotKeys,
     });
 
     if (UIContext.loader) UIContext.loader.show();
@@ -96,7 +105,7 @@ function resizeScreen() {
     stxx.resizeChart();
 }
 
-window.addEventListener('WebComponentsReady', (e) => {
+window.addEventListener('WebComponentsReady', () => {
     startUI();
     resizeScreen();
 });
