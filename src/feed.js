@@ -35,7 +35,7 @@ class Feed {
             granularity: Feed.calculateGranularity(period, interval),
         });
 
-        this._streams.forEach(stream => stream.forget());
+        this._streams.forEach(_stream => _stream.forget());
         this._streams = [stream];
         this._trackStream(stream);
 
@@ -54,7 +54,7 @@ class Feed {
         const start = suggestedStartDate.getTime() / 1000;
         const end = endDate.getTime() / 1000;
         const now = (new Date().getTime() / 1000) | 0;
-        const startLimit = now - 2.8 * 365 * 24 * 60 * 60;
+        const startLimit = now - (2.8 * 365 * 24 * 60 * 60);
         const { period, interval } = params;
 
         let result = { quotes: [] };

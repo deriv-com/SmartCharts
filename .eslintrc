@@ -25,7 +25,7 @@
         "no-plusplus": 0,
         "camelcase": 0,
         "no-shadow": 1,
-        "no-bitwise": 1,
+        "no-bitwise": 0,
         "one-var": 1,
         "one-var-declaration-per-line": 1,
         "no-mixed-operators": 1,

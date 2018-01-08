@@ -1,15 +1,15 @@
 import EventEmitter from 'event-emitter-es6';
 
 function PendingPromise(data = null) {
-    let resolve,
-        reject;
+    let resolve;
+    let reject;
     const promise = new Promise((_resolve, _reject) => {
         resolve = _resolve;
         reject = _reject;
     });
-    promise.resolve = (data) => {
+    promise.resolve = (res) => {
         promise.isPending = false;
-        resolve(data);
+        resolve(res);
     };
     promise.reject = (error) => {
         promise.isPending = false;
@@ -86,15 +86,16 @@ class ConnectionManager extends EventEmitter {
         }, timeout);
     }
     async send(data, timeout) {
-        data.req_id = this._counterReqId++;
+        const req = Object.assign({}, data);
+        req.req_id = this._counterReqId++;
         await this._connectionOpened;
         this._assertConnected();
-        this._websocket.send(JSON.stringify(data));
-        this._pendingRequests[data.req_id] = PendingPromise(data);
+        this._websocket.send(JSON.stringify(req));
+        this._pendingRequests[req.req_id] = PendingPromise(req);
         if (timeout) {
-            this._timeoutRequest(data.req_id, timeout);
+            this._timeoutRequest(req.req_id, timeout);
         }
-        return this._pendingRequests[data.req_id];
+        return this._pendingRequests[req.req_id];
     }
 
     destroy() {

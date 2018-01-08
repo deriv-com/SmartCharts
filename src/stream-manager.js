@@ -72,7 +72,6 @@ class Subscription {
                 diff.history.times = now.history.times.slice(index + 1);
                 diff.history.prices = now.history.prices.slice(index + 1);
             }
-            return diff;
         }
         if (perv.candles && now.candles) {
             const findIndex = (array, predicate) => {
@@ -90,8 +89,8 @@ class Subscription {
             if (index !== -1) {
                 diff.candles = now.candles.slice(index);
             }
-            return diff;
         }
+        return diff;
     }
 }
 
@@ -283,7 +282,7 @@ class StreamManager {
             if (data) {
                 resolve(Subscription.cloneResponseData(data));
             } else {
-                reject('No existing stream');
+                reject(new Error('No existing stream'));
             }
         });
         const subscription = new Subscription({ symbol, granularity }, { response, connection: this._connection });
