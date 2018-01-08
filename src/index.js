@@ -13,8 +13,6 @@ import './components/Menu';
 import Context from './components/ui/Context';
 import KeystrokeHub from './components/ui/KeystrokeHub';
 
-import '../js/thirdparty/object-observe';
-import '../js/thirdparty/webcomponents-lite.min';
 import '../js/thirdparty/perfect-scrollbar.jquery';
 
 import '../plugins/tfc/tfc';
