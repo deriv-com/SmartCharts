@@ -3,18 +3,12 @@ import { CIQ, $$$ } from '../js/chartiq';
 
 import StreamManager from './stream-manager';
 import Feed from './feed';
-import ExampleDriver from './ExampleDriver';
 
 // Before using components, you need to first import components/ui
-import './components/Scroll';
 import './components/Lookup';
 import './components/Menu';
 import Context from './components/ui/Context';
 import KeystrokeHub from './components/ui/KeystrokeHub';
-
-// import '../js/thirdparty/object-observe';
-import '../js/thirdparty/webcomponents-lite.min';
-// import '../js/thirdparty/perfect-scrollbar.jquery';
 
 import TFC from '../plugins/tfc/tfc';
 
@@ -67,14 +61,6 @@ function startUI() {
             if (self.loader) self.loader.hide();
         });
     };
-
-
-    UIContext.setLookupDriver(new ExampleDriver());
-
-    UIContext.UISymbolLookup = $('.ciq-search cq-lookup')[0];
-    UIContext.UISymbolLookup.setCallback((context, data) => {
-        context.changeSymbol(data);
-    });
 
     // eslint-disable-next-line no-unused-vars
     let keyhub = new KeystrokeHub($('body'), UIContext, {
