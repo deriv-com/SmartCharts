@@ -12,7 +12,7 @@ class Driver {
      * @memberof CIQ.UI.Lookup.Driver
      */
     acceptText(/* text, filter */) {
-        if (!this.cb) return; // eslint-disable-line no-useless-return
+        if (!this.cb) return;
     }
 }
 

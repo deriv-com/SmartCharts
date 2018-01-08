@@ -1,5 +1,3 @@
-import $ from 'jquery';
-import { CIQ } from '../../js/chartiq';
 import ContextTag from './ui/ContextTag';
 
 /**
@@ -18,12 +16,12 @@ import ContextTag from './ui/ContextTag';
 
 class Clickable extends ContextTag {
     createdCallback() {
-        ContextTag.createdCallback.apply(this);
+        super.createdCallback();
     }
 
     attachedCallback() {
         if (this.attached) return;
-        ContextTag.attachedCallback.apply(this);
+        super.attachedCallback();
         this.attached = true;
         let self = this;
 
@@ -33,19 +31,25 @@ class Clickable extends ContextTag {
     }
 
     /**
- * Runs the clickable
- * @memberof WebComponents.cq-theme-dialog
- */
+     * Runs the clickable
+     * @memberof WebComponents.cq-theme-dialog
+     */
     runMethod() {
         let selector = this.node.attr('cq-selector');
         let method = this.node.attr('cq-method');
 
         let clickable = this;
         $(selector).each(function () {
-            if (this[method]) this[method].call(this, { context: clickable.context, caller: clickable });
+            if (this[method]) {
+                this[method].call(this, {
+                    context: clickable.context,
+                    caller: clickable,
+                });
+            }
         });
     }
 }
 
+
+document.registerElement('cq-clickable', Clickable);
 export default Clickable;
-CIQ.UI.Clickable = document.registerElement('cq-clickable', Clickable);

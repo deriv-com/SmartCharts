@@ -56,10 +56,9 @@ class Scroll extends BaseComponent {
         let node = this.node;
         if (node.parents('.sharing').length) return;
         /* share.js appends this class to the body.
-           Do not attempt unnecessary resize of scroll
-           for a chart about to become a shared image.
-           Besides, jquery will choke on offset() below.
-        */
+            Do not attempt unnecessary resize of scroll
+            for a chart about to become a shared image.
+            Besides, jquery will choke on offset() below. */
         if (typeof (node.attr('cq-no-resize')) !== 'undefined') return;
         if (typeof (node.attr('cq-no-maximize')) !== 'undefined') this.noMaximize = true;
         let position = node[0].getBoundingClientRect();
@@ -95,7 +94,7 @@ class Scroll extends BaseComponent {
     }
 
     createdCallback() {
-        super.createdCallback.apply(this);
+        super.createdCallback();
         let node = this.node = $(this);
         if (node.perfectScrollbar) {
             node.perfectScrollbar({
@@ -109,11 +108,11 @@ class Scroll extends BaseComponent {
 
     attachedCallback() {
         if (this.attached) return;
-        super.attachedCallback.apply(this);
+        super.attachedCallback();
         this.uiManager = $('cq-ui-manager');
         if (this.uiManager.length > 0) this.uiManager = this.uiManager[0];
 
-        super.addClaim(this);
+        this.addClaim(this);
 
         // prevent mousewheel event from propagating up to parents, such as when embedded in a chart
         this.addEventListener(CIQ.wheelEvent, (e) => {
@@ -166,8 +165,7 @@ class Scroll extends BaseComponent {
         items.removeAttr('cq-focused');
 
         // locate our location in the list of items
-        let i;
-        for (i = 0; i < items.length; i++) {
+        for (var i = 0; i < items.length; i++) {
             if (items[i] === focused[0]) break;
         }
 
@@ -198,5 +196,5 @@ class Scroll extends BaseComponent {
     }
 }
 
+document.registerElement('cq-scroll', Scroll);
 export default Scroll;
-CIQ.UI.Scroll = document.registerElement('cq-scroll', Scroll);

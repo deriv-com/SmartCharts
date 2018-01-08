@@ -16,9 +16,7 @@ class UIManager extends HTMLElement {
      * @alias createdCallback
      */
     createdCallback() {
-        CIQ.installTapEvent($('body')[0], {
-            preventUnderlayClick: false,
-        });
+        CIQ.installTapEvent($('body')[0], { preventUnderlayClick: false });
         this.activeMenuStack = [];
         this.registeredForResize = [];
         this.keystrokeHub = null; // KeystrokeHub should register itself here
@@ -70,17 +68,9 @@ class UIManager extends HTMLElement {
         }, 0);
         this.activeMenuStack.push(menu);
         menu.show(params);
-        /**
-         // TODO: The two 'cq-context,*[cq-context]' selector code blocks below throws errors.
-         //       For some strange reason. Since I'm not quite sure what it does just disable it
-         //       for now.
-
-         $('cq-context,*[cq-context]').each(() => {
-             if (this.CIQ && this.CIQ.UI && this.CIQ.UI.context && this.CIQ.UI.context.stx) {
-                 this.CIQ.UI.context.stx.modalBegin();
-             }
-         });
-         */
+        $('cq-context,*[cq-context]').each(function () {
+            if (this.CIQ && this.CIQ.UI && this.CIQ.UI.context && this.CIQ.UI.context.stx) { this.CIQ.UI.context.stx.modalBegin(); }
+        });
     }
 
     /**
@@ -102,7 +92,6 @@ class UIManager extends HTMLElement {
      * @param {HTMLElement} element
      */
     closeMenu(menu) {
-        console.warn('closeMenu');
         let activeMenuStack = this.activeMenuStack;
         let parents = $(menu).parents('cq-menu');
         let closeThese = [];
@@ -157,15 +146,11 @@ class UIManager extends HTMLElement {
      * @alias ifAllClosed
      */
     ifAllClosed() {
-        /**
-         if (!this.activeMenuStack.length) {
-             $('cq-context,*[cq-context]').each(function () {
-                 if (this.CIQ && this.CIQ.UI && this.CIQ.UI.context && this.CIQ.UI.context.stx) {
-                     this.CIQ.UI.context.stx.modalEnd();
-                 }
-             });
-         }
-         */
+        if (!this.activeMenuStack.length) {
+            $('cq-context,*[cq-context]').each(function () {
+                if (this.CIQ && this.CIQ.UI && this.CIQ.UI.context && this.CIQ.UI.context.stx) { this.CIQ.UI.context.stx.modalEnd(); }
+            });
+        }
     }
 
     /**
@@ -260,11 +245,10 @@ class UIManager extends HTMLElement {
         });
         $('body').append(node);
         if (typeof (n.resize) !== 'undefined') n.resize();
-        node.find('cq-scroll').each(() => {
+        node.find('cq-scroll').each(function () {
             this.resize();
         });
     }
 }
 
-export default UIManager;
-CIQ.UI.UIManager = document.registerElement('cq-ui-manager', UIManager);
+document.registerElement('cq-ui-manager', UIManager);

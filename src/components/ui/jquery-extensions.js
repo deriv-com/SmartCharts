@@ -1,10 +1,11 @@
 import $ from 'jquery';
 import { CIQ } from '../../../js/chartiq';
 
+// node.stxtap([selector],callback)
 $.fn.extend({
     stxtap(arg1, arg2) {
         return this.each(function () {
-            CIQ.installTapEvent(this/* , {stopPropagation:true} */);
+            CIQ.installTapEvent(this /* , {stopPropagation:true} */);
             if (typeof arg1 === 'string') {
                 $(this).on('stxtap', arg1, function (e) {
                     arg2.call(this, e);
@@ -19,7 +20,7 @@ $.fn.extend({
 });
 
 $.fn.extend($.expr[':'], {
-    trulyvisible(node) {
+    trulyvisible(node, j, attr) {
         let parents = $(node).parents();
         parents = parents.add(node);
         for (let i = 0; i < parents.length; i++) {
@@ -38,18 +39,18 @@ $.fn.extend($.expr[':'], {
  * are the same then no rendering is done. This prevents flicker. React style.
  */
 $.fn.extend({
-    parentsAndMe() {
+    parentsAndMe(arg1) {
         let us = $(this).parents();
         us = us.add($(this));
         return us;
     },
-    cqvirtual() {
+    cqvirtual(arg1) {
         let virtual = this.clone();
         virtual.empty();
         virtual.original = this;
         return virtual;
     },
-    cqrender() {
+    cqrender(arg1) {
         if (this[0].innerHTML === this.original[0].innerHTML) return this.original;
         this.original.empty();
         let children = this.children();

@@ -13,8 +13,8 @@ class AggregationDialog extends DialogContentTag {
      * @alias open
      * @memberof WebComponents.cq-aggregation-dialog
      */
-    open(params, ...args) {
-        DialogContentTag.open(...args);
+    open(params) {
+        super.open(arguments);
         let stx = this.context.stx;
         let aggregationType = params.aggregationType;
         let map = {
@@ -34,23 +34,32 @@ class AggregationDialog extends DialogContentTag {
                 title: 'Set Point & Figure Parameters',
             },
         };
-        if (stx.layout.aggregationType !== aggregationType) { stx.setAggregationType(aggregationType); }
+        if (stx.layout.aggregationType !== aggregationType) {
+            stx.setAggregationType(aggregationType);
+        }
 
         let entry = map[aggregationType];
         let node = this.node;
         node.find('.title').text(stx.translateIf(entry.title));
 
-        for (let type of Object.keys(map)) {
-            node.find(`.ciq${type}`).css(aggregationType === type ? { display: '' } : { display: 'none' });
+        for (let type in map) {
+            node.find(`.ciq${type}`).css(aggregationType === type ? {
+                display: '',
+            } : {
+                display: 'none',
+            });
         }
         node.find(`.ciq${aggregationType} input`).each(function () {
             let name = this.name;
             if (name === 'box' || name === 'reversal') name = `pandf.${name}`;
             let tuple = CIQ.deriveFromObjectChain(stx.layout, name);
-            if (tuple && !tuple.obj[tuple.member] && stx.chart.defaultChartStyleConfig[this.name]) { $(this).val(stx.chart.defaultChartStyleConfig[this.name]); }
+            if (tuple && !tuple.obj[tuple.member] && stx.chart.defaultChartStyleConfig[this.name]) {
+                $(this).val(stx.chart.defaultChartStyleConfig[this.name]);
+            }
         });
     }
 }
 
+
+document.registerElement('cq-aggregation-dialog', AggregationDialog);
 export default AggregationDialog;
-CIQ.UI.AggregationDialog = document.registerElement('cq-aggregation-dialog', AggregationDialog);

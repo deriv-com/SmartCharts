@@ -1,7 +1,6 @@
 import { CIQ } from '../../js/chartiq';
 import ContextTag from './ui/ContextTag';
 
-
 /**
  * Toggle web component `<cq-toggle>`.
  *
@@ -23,7 +22,7 @@ import ContextTag from './ui/ContextTag';
  * })
  */
 class Toggle extends ContextTag {
-    setContext(/* context */) {
+    setContext(context) {
         this.currentValue = false;
         this.params.obj = this.context.stx.layout;
         let member = this.node.attr('cq-member');
@@ -50,7 +49,7 @@ class Toggle extends ContextTag {
             toggles: [],
             callbacks: [],
         };
-        ContextTag.attachedCallback.apply(this);
+        super.attachedCallback();
         this.attached = true;
     }
 
@@ -61,10 +60,10 @@ class Toggle extends ContextTag {
     }
 
     /**
- * @param params
- * @alias updateFromBinding
- * @memberof WebComponents.cq-toggle
- */
+     * @param params
+     * @alias updateFromBinding
+     * @memberof WebComponents.cq-toggle
+     */
     updateFromBinding(params) {
         this.currentValue = params.obj[params.member];
         if (!this.params.callbacks.length) {
@@ -85,10 +84,10 @@ class Toggle extends ContextTag {
     }
 
     /**
- * @param value
- * @alias set
- * @memberof WebComponents.cq-toggle
- */
+     * @param value
+     * @alias set
+     * @memberof WebComponents.cq-toggle
+     */
     set(value) {
         if (this.params.member) {
             this.params.obj[this.params.member] = value;
@@ -101,9 +100,9 @@ class Toggle extends ContextTag {
     }
 
     /**
- * @alias begin
- * @memberof WebComponents.cq-toggle
- */
+     * @alias begin
+     * @memberof WebComponents.cq-toggle
+     */
     begin() {
         let self = this;
         let stx = this.context.stx;
@@ -122,11 +121,14 @@ class Toggle extends ContextTag {
             let toggles = self.params.toggles;
             let obj = self.params.obj;
             if (toggles.length > 1) { // Cycle through each field in the array with each tap
-                let i;
-                for (i = 0; i < toggles.length; i++) {
+                for (var i = 0; i < toggles.length; i++) {
                     let toggle = toggles[i];
                     if (self.currentValue === toggle) {
-                        if (i < toggles.length - 1) { self.set(toggles[i + 1]); } else { self.set(toggles[0]); }
+                        if (i < toggles.length - 1) {
+                            self.set(toggles[i + 1]);
+                        } else {
+                            self.set(toggles[0]);
+                        }
                         break;
                     }
                 }
@@ -143,5 +145,8 @@ class Toggle extends ContextTag {
         });
     }
 }
+
+
+document.registerElement('cq-toggle', Toggle);
 export default Toggle;
-CIQ.UI.Toggle = document.registerElement('cq-toggle', Toggle);
+

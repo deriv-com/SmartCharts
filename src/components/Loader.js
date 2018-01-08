@@ -1,5 +1,4 @@
 import $ from 'jquery';
-import { CIQ } from '../../js/chartiq';
 import ContextTag from './ui/ContextTag';
 
 /**
@@ -11,27 +10,29 @@ import ContextTag from './ui/ContextTag';
  <cq-loader><cq-loader>
  */
 class Loader extends ContextTag {
-    setContext(/* context */) {
+    setContext(context) {
         this.context.setLoader(this);
     }
     /**
- * Shows the loading icon.
- * @alias show
- * @memberof WebComponents.cq-loader
- */
+     * Shows the loading icon.
+     * @alias show
+     * @memberof WebComponents.cq-loader
+     */
     show() {
         $(this).addClass('stx-show');
     }
 
     /**
- * Hides the loading icon.
- * @alias hide
- * @memberof WebComponents.cq-loader
- */
+     * Hides the loading icon.
+     * @alias hide
+     * @memberof WebComponents.cq-loader
+     */
     hide() {
         $(this).removeClass('stx-show');
     }
 }
+
+
+document.registerElement('cq-loader', Loader);
 export default Loader;
-CIQ.UI.Loader = document.registerElement('cq-loader', Loader);
 

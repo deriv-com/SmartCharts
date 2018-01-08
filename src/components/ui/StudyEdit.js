@@ -12,6 +12,7 @@ import Helper from './Helper';
  * @constructor
  * @since  4.1.0 contextDialog is no longer passed in.
  */
+
 class StudyEdit extends Helper {
     constructor(node, context) {
         super(node, context);
@@ -88,8 +89,8 @@ class StudyEdit extends Helper {
         let self = this;
 
         function closure(fc) {
-            return function (...args) {
-                fc.apply(self, args);
+            return function () {
+                fc.apply(self, arguments);
             };
         }
         stx.callbacks.studyOverlayEdit = closure(self.editOverlay);

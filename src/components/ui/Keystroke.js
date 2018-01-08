@@ -11,6 +11,13 @@ import { CIQ } from '../../../js/chartiq';
  * @constructor
  */
 class Keystroke {
+    /**
+     * Set this to true to bypass key capture. Shift, CTRL, CMD will still be toggled however
+     * @memberof CIQ.UI.Keystroke
+     * @type {Boolean}
+     */
+    static noKeyCapture = false;
+
     constructor(node, cb) {
         this.node = $(node);
         this.cb = cb;
@@ -35,11 +42,7 @@ class Keystroke {
         } else {
             key = 'delete';
         }
-        this.cb({
-            key,
-            e,
-            keystroke: this,
-        });
+        this.cb({ key, e, keystroke: this });
     }
 
     // Managing keystroke events. We will get three key events from the browser: keydown, keyup, keypress
@@ -64,41 +67,23 @@ class Keystroke {
         switch (key) {
         case 16:
             this.shift = false;
-            this.cb({
-                key,
-                e,
-                keystroke: this,
-            });
+            this.cb({ key, e, keystroke: this });
             return;
         case 17:
         case 18:
             this.ctrl = false;
-            this.cb({
-                key,
-                e,
-                keystroke: this,
-            });
+            this.cb({ key, e, keystroke: this });
             return;
         case 91:
             this.cmd = false;
-            this.cb({
-                key,
-                e,
-                keystroke: this,
-            });
+            this.cb({ key, e, keystroke: this });
             return;
         default:
             break;
         }
         // This is where we handle the keystroke, regardless of whether we captured the key with a down or press event
         // The exception to this is the arrow keys, which are processed in keydown
-        if (this.key) {
-            this.cb({
-                key: this.key,
-                e,
-                keystroke: this,
-            });
-        }
+        if (this.key) this.cb({ key: this.key, e, keystroke: this });
     }
 
     keydown(e) {
@@ -108,11 +93,9 @@ class Keystroke {
             this.implementAndroidWorkaround = true;
             return;
         }
-        if (!this.ctrl) {
-            if ((key !== 91 && key >= 48 && key <= 222) || key === 32) return;
-        } // handled by keypress
+        if (!this.ctrl) { if ((key !== 91 && key >= 48 && key <= 222) || key === 32) return; } // handled by keypress
 
-        switch (key) { // eslint-disable-line default-case
+        switch (key) {
         case 91:
             this.cmd = true;
             return;
@@ -147,11 +130,7 @@ class Keystroke {
             if (key === 39) key = 'right';
             if (key === 40) key = 'down';
             this.key = null;
-            this.cb({
-                key,
-                e,
-                keystroke: this,
-            });
+            this.cb({ key, e, keystroke: this });
         }
     }
 
@@ -185,20 +164,9 @@ class Keystroke {
         });
         $(window).on('blur', (e) => { // otherwise ctrl-t to switch tabs causes ctrl to get stuck
             self.ctrl = false;
-            self.cb({
-                key: 17,
-                e,
-                keystroke: self,
-            });
+            self.cb({ key: 17, e, keystroke: self });
         });
     }
 }
-
-/**
- * Set this to true to bypass key capture. Shift, CTRL, CMD will still be toggled however
- * @memberof CIQ.UI.Keystroke
- * @type {Boolean}
- */
-Keystroke.noKeyCapture = false;
 
 export default Keystroke;

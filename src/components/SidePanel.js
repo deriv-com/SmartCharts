@@ -1,18 +1,16 @@
 import $ from 'jquery';
-import { CIQ } from '../../js/chartiq';
 import ContextTag from './ui/ContextTag';
-
 
 /**
  * Side Panel web component `<cq-side-panel>`.
  *
  * @namespace WebComponents.cq-side-panel
  * @example
-     <cq-side-panel><cq-side-panel>
+      <cq-side-panel><cq-side-panel>
  */
 class SidePanel extends ContextTag {
-    createdCallback(...args) {
-        ContextTag.createdCallback.apply(this, args);
+    createdCallback() {
+        super.createdCallback(arguments);
         this.callbacks = [];
     }
 
@@ -56,7 +54,8 @@ class SidePanel extends ContextTag {
         children.each(function () {
             if (this.sidePanelActiveClass) {
                 $(this).removeClass(this.sidePanelActiveClass);
-            } else { // turn off a child by removing the class name added to it
+            } // turn off a child by removing the class name added to it
+            else {
                 $(this).removeAttr(this.sidePanelActiveAttribute);
             } // turn off a child by removing the attribute name added to it
         });
@@ -86,13 +85,16 @@ class SidePanel extends ContextTag {
         this.node.css({
             width: `${width}px`,
         }); // expand the side panel
-        for (let i = 0; i < this.callbacks.length; i++) { // let any callbacks know that we've been resized
+        for (let i = 0; i < this.callbacks.length; i++) // let any callbacks know that we've been resized
+        {
             this.callbacks[i].call(this, width);
         }
     }
 }
+
+
 /**
  * A side panel contains children that should be enabled by calling open({selector:selector}).
  */
+document.registerElement('cq-side-panel', SidePanel);
 export default SidePanel;
-CIQ.UI.SidePanel = document.registerElement('cq-side-panel', SidePanel);

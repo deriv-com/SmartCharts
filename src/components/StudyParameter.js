@@ -1,4 +1,3 @@
-import { CIQ } from '../../js/chartiq';
 import BaseComponent from './ui/BaseComponent';
 
 /**
@@ -14,11 +13,13 @@ class StudyParameter extends BaseComponent {
 
     setColor(color) {
         if (!this.params) return;
-        let updates = { parameters: {} };
+        let updates = {
+            parameters: {},
+        };
         updates.parameters[this.params.parameter] = color;
         this.params.studyDialog.updateStudy(updates);
     }
 }
 
+document.registerElement('cq-study-parameter', StudyParameter);
 export default StudyParameter;
-CIQ.UI.StudyParameter = document.registerElement('cq-study-parameter', StudyParameter);

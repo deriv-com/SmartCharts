@@ -1,6 +1,6 @@
 import $ from 'jquery';
-import { CIQ } from '../../js/chartiq';
 import ModalTag from './ui/ModalTag';
+import { CIQ } from '../../js/chartiq';
 
 /**
  * Chart Title web component `<cq-chart-title>`.
@@ -20,40 +20,30 @@ import ModalTag from './ui/ModalTag';
  * @since 06-15-16
  * @example
  * <cq-chart-title>
- *  <cq-symbol></cq-symbol>
- *  <cq-chart-price>
- *      <cq-current-price></cq-current-price>
- *      <cq-change>
- *          <div class="ico"></div> <cq-todays-change></cq-todays-change> (<cq-todays-change-pct></cq-todays-change-pct>)
- *      </cq-change>
- *  </cq-chart-price>
+ *     <cq-symbol></cq-symbol>
+ *     <cq-chart-price>
+ *         <cq-current-price></cq-current-price>
+ *         <cq-change>
+ *             <div class="ico"></div> <cq-todays-change></cq-todays-change> (<cq-todays-change-pct></cq-todays-change-pct>)
+ *         </cq-change>
+ *     </cq-chart-price>
  * </cq-chart-title>
  * @since  4.0.0
  * Browser tab now updates with stock symbol and latest price using cq-browser-tab attribute
  */
 class ChartTitle extends ModalTag {
-    constructor() {
-        super();
-        /**
-         * Keep this value up to date in order to calculate change from yesterday's close
-         * @type {Float}
-         * @alias previousClose
-         * @memberof WebComponents.cq-chart-title
-         */
-        this.previousClose = null;
-    }
     attachedCallback() {
         if (this.attached) return;
-        super.attachedCallback.apply(this);
+        super.attachedCallback();
         this.attached = true;
     }
 
-    setContext(/* context */) {
+    setContext(context) {
         let self = this;
         CIQ.UI.observe({
             obj: self.context.stx.chart.symbolObject,
             action: 'callback',
-            value: () => {
+            value() {
                 if (self.context.stx.currentQuote()) self.previousClose = self.context.stx.currentQuote().iqPrevClose;
             },
         });
@@ -129,7 +119,7 @@ class ChartTitle extends ModalTag {
 
         if ((doUpdatePrice || doUpdateBrowserTab) && symbol && priceChanged) {
             // Default to iqPrevClose if the developer hasn't set this.previousClose
-            let previousClose = this.previousClose ? this.previousClose : (currentQuote ? currentQuote.iqPrevClose : null); // eslint-disable-line no-nested-ternary
+            let previousClose = this.previousClose ? this.previousClose : (currentQuote ? currentQuote.iqPrevClose : null);
 
             if (currentQuote && previousClose) {
                 todaysChange = CIQ.fixPrice(currentQuote.Close - previousClose);
@@ -175,5 +165,13 @@ class ChartTitle extends ModalTag {
     }
 }
 
+/**
+ * Keep this value up to date in order to calculate change from yesterday's close
+ * @type {Float}
+ * @alias previousClose
+ * @memberof WebComponents.cq-chart-title
+ */
+ChartTitle.prototype.previousClose = null;
+
+document.registerElement('cq-chart-title', ChartTitle);
 export default ChartTitle;
-CIQ.UI.ChartTitle = document.registerElement('cq-chart-title', ChartTitle);

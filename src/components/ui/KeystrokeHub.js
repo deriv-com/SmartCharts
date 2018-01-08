@@ -1,8 +1,8 @@
 import $ from 'jquery';
+import { CIQ } from '../../../js/chartiq';
 import Helper from './Helper';
 import Keystroke from './Keystroke';
-import { CIQ } from '../../../js/chartiq';
-import { claims } from './constants';
+import { claims } from './';
 
 /**
  * UI Helper for capturing and handling keystrokes. A helper or ContextTag can
@@ -16,7 +16,6 @@ import { claims } from './constants';
  * @name CIQ.UI.KeyboardShortcuts
  * @constructor
  */
-
 class KeystrokeHub extends Helper {
     constructor(node, context, params) {
         super(node, context, params);
@@ -30,6 +29,7 @@ class KeystrokeHub extends Helper {
         }
 
         let self = this;
+
         function handler() {
             return (...args) => {
                 self.handler(...args);
@@ -37,14 +37,13 @@ class KeystrokeHub extends Helper {
         }
         this.keystroke = new Keystroke(node, handler());
     }
-
     /**
-      * Global default hotkey method. Pass this or your own metho in to CIQ.UI.KeystrokeHub
-      * @memberof CIQ.UI.KeyboardShortcuts
-      * @param  {number} key The pressed key
-      * @param  {CIQ.UI.KeystrokeHub} hub The hub that processed the key
-      * @return {boolean}     Return true if you captured the key
-      */
+     * Global default hotkey method. Pass this or your own metho in to CIQ.UI.KeystrokeHub
+     * @memberof CIQ.UI.KeyboardShortcuts
+     * @param  {number} key The pressed key
+     * @param  {CIQ.UI.KeystrokeHub} hub The hub that processed the key
+     * @return {boolean}     Return true if you captured the key
+     */
     static defaultHotKeys(key, hub) {
         let stx = hub.context.stx;
         let push = 1;
@@ -109,22 +108,22 @@ class KeystrokeHub extends Helper {
     }
 
     /**
-      * Change the active context for the hub, for instance when dealing with multiple charts
-      * @param {CIQ.UI.Context} context The context
-      * @memberof CIQ.UI.KeystrokeHub
-      */
+     * Change the active context for the hub, for instance when dealing with multiple charts
+     * @param {CIQ.UI.Context} context The context
+     * @memberof CIQ.UI.KeystrokeHub
+     */
     setActiveContext(context) {
         this.context = context;
     }
 
     /**
-      * @param hub
-      * @param key
-      * @param e Event
-      * @param keystroke
-      * @memberof CIQ.UI.KeystrokeHub
-      * @private
-      */
+     * @param hub
+     * @param key
+     * @param e Event
+     * @param keystroke
+     * @memberof CIQ.UI.KeystrokeHub
+     * @private
+     */
     processKeyStrokeClaims(hub, key, e, keystroke) {
         for (let i = claims.length - 1; i > -1; i--) {
             let helper = claims[i].helper;
@@ -138,11 +137,11 @@ class KeystrokeHub extends Helper {
     }
 
     /**
-      * Handles keystrokes
-      * @param  {object} obj Event object
-      * @memberof CIQ.UI.KeystrokeHub
-      * @private
-      */
+     * Handles keystrokes
+     * @param  {object} obj Event object
+     * @memberof CIQ.UI.KeystrokeHub
+     * @private
+     */
     handler(obj) {
         let stx = this.context.stx;
         if (stx.editingAnnotation) return;

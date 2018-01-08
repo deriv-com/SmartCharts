@@ -1,5 +1,5 @@
-import { CIQ } from '../../js/chartiq';
 import ModalTag from './ui/ModalTag';
+import { CIQ } from '../../js/chartiq';
 
 /**
  * Attribution web component `<cq-attribution>`.
@@ -11,47 +11,17 @@ import ModalTag from './ui/ModalTag';
  * @since 2016-07-16
  * @example
  * <cq-attribution>
- *  <template>
- *      <cq-attrib-container>
- *          <cq-attrib-source></cq-attrib-source>
- *          <cq-attrib-quote-type></cq-attrib-quote-type>
- *      </cq-attrib-container>
- *  </template>
+ *     <template>
+ *         <cq-attrib-container>
+ *             <cq-attrib-source></cq-attrib-source>
+ *             <cq-attrib-quote-type></cq-attrib-quote-type>
+ *         </cq-attrib-container>
+ *     </template>
  * </cq-attribution>
  */
 class Attribution extends ModalTag {
-    constructor() {
-        super();
-        /**
-         * Here is where the messages go.  This could be supplemented, overridden, etc. by the developer.
-         * The sources contain properties whose values which go into <cq-attrib-source>.
-         * The exchanges contain properties whose values which go into <cq-attrib-quote-type>.
-         *
-         * For quotes, the sources would match the quote source.  For a study, it would match the study type.
-         * If there is no matching property, the appropriate component will have no text.
-         * @alias messages
-         * @memberof WebComponents.cq-attribution
-         */
-        this.messages = {
-            sources: {
-                simulator: 'Simulated data.',
-                demo: 'Demo data.',
-                xignite: '<a target="_blank" href="https://www.xignite.com">Market Data</a> by Xignite.',
-                Twiggs: 'Formula courtesy <a target="_blank" href="https://www.incrediblecharts.com/indicators/twiggs_money_flow.php">IncredibleCharts</a>.',
-            },
-            exchanges: {
-                RANDOM: 'Data is randomized.',
-                'REAL-TIME': 'Data is real-time.',
-                DELAYED: 'Data delayed 15 min.',
-                BATS: 'BATS BZX real-time.',
-                EOD: 'End of day data.',
-            },
-        };
-    }
-
     insert(stx, panel) {
         let attrib = CIQ.UI.makeFromTemplate(this.template);
-        // eslint-disable-next-line no-new
         new CIQ.Marker({
             stx,
             node: attrib[0],
@@ -65,7 +35,7 @@ class Attribution extends ModalTag {
 
     attachedCallback() {
         if (this.attached) return;
-        ModalTag.attachedCallback.apply(this);
+        super.attachedCallback();
         this.attached = true;
     }
 
@@ -88,13 +58,14 @@ class Attribution extends ModalTag {
                     chartAttrib.attr('lastAttrib', source + exchange);
                 }
             }
-
-            Object.keys(this.layout.studies).forEach((type, study) => {
+            outer:
+            for (let study in this.layout.studies) {
+                let type = this.layout.studies[study].type;
                 if (self.messages.sources[type]) {
                     for (let i = 0; i < this.markers.attribution.length; i++) {
-                        if (this.markers.attribution[i].params.panelName === this.layout.studies[study].panel) return;
+                        if (this.markers.attribution[i].params.panelName === this.layout.studies[study].panel) continue outer;
                     }
-                    if (!this.panels[study]) return;
+                    if (!this.panels[study]) continue;
                     source = self.messages.sources[type];
                     exchange = self.messages.exchanges[type];
                     if (!source) source = '';
@@ -104,10 +75,36 @@ class Attribution extends ModalTag {
                     attrib.find('cq-attrib-quote-type').html(exchange);
                     CIQ.I18N.translateUI(null, attrib[0]);
                 }
-            });
+            }
         });
     }
 }
 
+/**
+ * Here is where the messages go.  This could be supplemented, overridden, etc. by the developer.
+ * The sources contain properties whose values which go into <cq-attrib-source>.
+ * The exchanges contain properties whose values which go into <cq-attrib-quote-type>.
+ *
+ * For quotes, the sources would match the quote source.  For a study, it would match the study type.
+ * If there is no matching property, the appropriate component will have no text.
+ * @alias messages
+ * @memberof WebComponents.cq-attribution
+ */
+Attribution.prototype.messages = {
+    sources: {
+        simulator: 'Simulated data.',
+        demo: 'Demo data.',
+        xignite: '<a target="_blank" href="https://www.xignite.com">Market Data</a> by Xignite.',
+        Twiggs: 'Formula courtesy <a target="_blank" href="https://www.incrediblecharts.com/indicators/twiggs_money_flow.php">IncredibleCharts</a>.',
+    },
+    exchanges: {
+        RANDOM: 'Data is randomized.',
+        'REAL-TIME': 'Data is real-time.',
+        DELAYED: 'Data delayed 15 min.',
+        BATS: 'BATS BZX real-time.',
+        EOD: 'End of day data.',
+    },
+};
+
+document.registerElement('cq-attribution', Attribution);
 export default Attribution;
-CIQ.UI.Attribution = document.registerElement('cq-attribution', Attribution);

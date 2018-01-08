@@ -1,5 +1,5 @@
-import { CIQ } from '../../js/chartiq';
 import BaseComponent from './ui/BaseComponent';
+
 /**
  * Study output web component `<cq-study-output>`.
  *
@@ -24,6 +24,5 @@ class StudyOutput extends BaseComponent {
     }
 }
 
+document.registerElement('cq-study-output', StudyOutput);
 export default StudyOutput;
-CIQ.UI.StudyOutput = document.registerElement('cq-study-output', StudyOutput);
-

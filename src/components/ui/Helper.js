@@ -1,9 +1,10 @@
+
+/**
+ * Abstract class for UI Helpers
+ * @name CIQ.UI.Helper
+ * @constructor
+ */
 class Helper {
-    /**
-     * Abstract class for UI Helpers
-     * @name CIQ.UI.Helper
-     * @constructor
-     */
     constructor(node, context) {
         this.node = node;
         this.context = context;

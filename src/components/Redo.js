@@ -1,5 +1,4 @@
 import $ from 'jquery';
-import { CIQ } from '../../js/chartiq';
 import ContextTag from './ui/ContextTag';
 
 /**
@@ -17,14 +16,14 @@ import ContextTag from './ui/ContextTag';
 class Redo extends ContextTag {
     attachedCallback() {
         if (this.attached) return;
-        ContextTag.attachedCallback.apply(this);
+        super.attachedCallback();
         this.attached = true;
     }
     /**
- * Finds {@link WebComponents.cq-undo} and pairs with it to find the last undo and reverse it.
- * @alias pairUp
- * @memberof WebComponents.cq-redo
- */
+     * Finds {@link WebComponents.cq-undo} and pairs with it to find the last undo and reverse it.
+     * @alias pairUp
+     * @memberof WebComponents.cq-redo
+     */
     pairUp(undo) {
         this.undo = $(undo)[0];
         this.undo.redoButton = this;
@@ -34,5 +33,7 @@ class Redo extends ContextTag {
         });
     }
 }
+
+document.registerElement('cq-redo', Redo);
 export default Redo;
-CIQ.UI.Redo = document.registerElement('cq-redo', Redo);
+

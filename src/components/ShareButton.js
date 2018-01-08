@@ -1,7 +1,5 @@
 import $ from 'jquery';
-import { CIQ } from '../../js/chartiq';
 import ContextTag from './ui/ContextTag';
-
 /**
  * Share Button web component `<cq-share-button>`.
  *
@@ -12,19 +10,20 @@ import ContextTag from './ui/ContextTag';
  </cq-share-button>
  */
 class ShareButton extends ContextTag {
-/**
- * Opens a customizable dialog that can share a chart.
- * @alias tap
- * @memberof WebComponents.cq-share-button
- */
-    tap(/* e */) {
+    /**
+     * Opens a customizable dialog that can share a chart.
+     * @alias tap
+     * @memberof WebComponents.cq-share-button
+     */
+    tap(e) {
         let context = this.context;
         $('cq-share-dialog').each(function () {
-            this.open({ context });
+            this.open({
+                context,
+            });
         });
     }
 }
 
+document.registerElement('cq-share-button', ShareButton);
 export default ShareButton;
-CIQ.UI.ShareButton = document.registerElement('cq-share-button', ShareButton);
-

@@ -20,8 +20,6 @@ class Layout extends Helper {
         this.context = context;
         context.advertiseAs(this, 'Layout');
     }
-
-
     /**
      * @memberof CIQ.UI.Layout
      * @param {HTMLElement} node
@@ -31,18 +29,18 @@ class Layout extends Helper {
         let activeClassName = this.params.activeClassName;
         // A little complexity here to consolidate two fields (aggregationType and chartType) into one
         // set of radio buttons
-        function showChartType(params, nd) {
+        function showChartType(params, node) {
             let layout = params.obj;
             if (layout.aggregationType && layout.aggregationType !== 'ohlc') {
                 if (chartType !== layout.aggregationType) {
-                    $(nd).removeClass(activeClassName);
+                    $(node).removeClass(activeClassName);
                 } else {
-                    $(nd).addClass(activeClassName);
+                    $(node).addClass(activeClassName);
                 }
             } else if (chartType !== layout.chartType) {
-                $(nd).removeClass(activeClassName);
+                $(node).removeClass(activeClassName);
             } else {
-                $(nd).addClass(activeClassName);
+                $(node).addClass(activeClassName);
             }
         }
         CIQ.UI.observe({
@@ -126,7 +124,7 @@ class Layout extends Helper {
      * @memberof CIQ.UI.Layout
      * @param {HTMLElement} node
      */
-    setExtendedHours() {
+    setExtendedHours(node) {
         let stx = this.context.stx;
         stx.layout.extended = !stx.layout.extended;
         stx.changeOccurred('layout');
@@ -159,7 +157,7 @@ class Layout extends Helper {
      * @memberof CIQ.UI.Layout
      * @param {HTMLElement} node
      */
-    setRangeSlider() {
+    setRangeSlider(node) {
         let stx = this.context.stx;
         stx.layout.rangeSlider = !stx.layout.rangeSlider;
         if (stx.slider) stx.slider.display(stx.layout.rangeSlider);
@@ -241,10 +239,7 @@ class Layout extends Helper {
                 stx.layout.range = null;
             } else if (stx.layout.aggregationType === 'pandf') {
                 if (!stx.layout.pandf) {
-                    stx.layout.pandf = {
-                        box: null,
-                        reversal: null,
-                    };
+                    stx.layout.pandf = { box: null, reversal: null };
                 }
                 stx.layout.pandf.box = null;
                 stx.layout.pandf.reversal = null;
@@ -265,10 +260,7 @@ class Layout extends Helper {
      */
     showAggregationEdit(node, aggregationType) {
         let dialog = $('cq-aggregation-dialog');
-        dialog[0].open({
-            context: this.context,
-            aggregationType,
-        });
+        dialog[0].open({ context: this.context, aggregationType });
     }
 
     /**
@@ -276,11 +268,12 @@ class Layout extends Helper {
      * @memberof CIQ.UI.Layout
      * @param {HTMLElement} node
      */
-    clearStudies() {
+    clearStudies(node) {
         let stx = this.context.stx;
-        Object.keys(stx.layout.studies).forEach((sd) => {
+        for (let id in stx.layout.studies) {
+            let sd = stx.layout.studies[id];
             if (!sd.customLegend) CIQ.Studies.removeStudy(stx, sd);
-        });
+        }
         stx.draw();
     }
 
@@ -294,11 +287,7 @@ class Layout extends Helper {
     setPeriodicity(node, periodicity, interval, timeUnit) {
         let self = this;
         if (self.context.loader) self.context.loader.show();
-        self.context.stx.setPeriodicity({
-            period: periodicity,
-            interval,
-            timeUnit,
-        }, () => {
+        self.context.stx.setPeriodicity({ period: periodicity, interval, timeUnit }, () => {
             if (self.context.loader) self.context.loader.hide();
         });
     }
@@ -361,7 +350,7 @@ class Layout extends Helper {
      * @memberof CIQ.UI.Layout
      */
     setLanguage() {
-        $('cq-language-dialog').each(function () {
+        let dialog = $('cq-language-dialog').each(function () {
             this.open();
         });
     }
@@ -372,9 +361,9 @@ class Layout extends Helper {
      * @memberof CIQ.UI.Layout
      */
     getLanguage(node) {
-        function showLanguage(params, nd) {
-            $(nd).find('cq-language-name').text(CIQ.I18N.languages[CIQ.I18N.language]);
-            $(nd).find('cq-flag').attr('cq-lang', CIQ.I18N.language);
+        function showLanguage(params, node) {
+            $(node).find('cq-language-name').text(CIQ.I18N.languages[CIQ.I18N.language]);
+            $(node).find('cq-flag').attr('cq-lang', CIQ.I18N.language);
         }
 
         CIQ.UI.observe({

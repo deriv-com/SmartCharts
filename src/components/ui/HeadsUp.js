@@ -1,5 +1,6 @@
 import $ from 'jquery';
 import { CIQ } from '../../../js/chartiq';
+import HeadsUpMarker from './HeadsUpMarker';
 import Helper from './Helper';
 
 /**
@@ -29,10 +30,7 @@ class HeadsUp extends Helper {
         this.node = $(node);
         this.node.detach();
         this.context = context;
-        this.maxVolume = {
-            lastCheckDate: null,
-            value: 0,
-        }; // This contains the maximum volume in the dataSet, used to generate the volume icon element
+        this.maxVolume = { lastCheckDate: null, value: 0 }; // This contains the maximum volume in the dataSet, used to generate the volume icon element
         if (this.params.autoStart) this.begin();
     }
     /**
@@ -43,9 +41,7 @@ class HeadsUp extends Helper {
     begin() {
         let params;
         if (this.params.followMouse) {
-            this.node.css({
-                top: 'auto',
-            }); // allow style.bottom to override the default top value
+            this.node.css({ top: 'auto' }); // allow style.bottom to override the default top value
             params = {
                 stx: this.context.stx,
                 label: 'headsup',
@@ -54,7 +50,7 @@ class HeadsUp extends Helper {
                 x: 0,
                 node: this.node[0],
             };
-            this.marker = new CIQ.Marker.HeadsUp(params, this.params.showClass);
+            this.marker = new HeadsUpMarker(params, this.params.showClass);
             // this.node.addClass(this.params.showClass);
 
             this.addInjection('append', 'handleMouseOut', (function (self) {
@@ -65,10 +61,7 @@ class HeadsUp extends Helper {
         } else if (this.params.staticNode) {
             // placeholder
         } else {
-            this.node.css({
-                top: '',
-                left: '',
-            }); // Remove any existing styles
+            this.node.css({ top: '', left: '' }); // Remove any existing styles
             params = {
                 stx: this.context.stx,
                 label: 'headsup',
@@ -87,21 +80,9 @@ class HeadsUp extends Helper {
         }
 
         this.calculateMaxVolume();
-        this.addInjection('prepend', 'headsUpHR', (function (self) {
-            return function () {
-                self.position();
-            };
-        }(this)));
-        this.addInjection('append', 'createXAxis', (function (self) {
-            return function () {
-                self.position();
-            };
-        }(this)));
-        this.addInjection('append', 'createDataSet', (function (self) {
-            return function (dontRoll, whichChart, prms) {
-                self.calculateMaxVolume(prms.appending);
-            };
-        }(this)));
+        this.addInjection('prepend', 'headsUpHR', (function (self) { return function () { self.position(); }; }(this)));
+        this.addInjection('append', 'createXAxis', (function (self) { return function () { self.position(); }; }(this)));
+        this.addInjection('append', 'createDataSet', (function (self) { return function (dontRoll, whichChart, params) { self.calculateMaxVolume(params.appending); }; }(this)));
     }
 
     /**
@@ -122,12 +103,7 @@ class HeadsUp extends Helper {
      * @param {boolean} appending
      */
     calculateMaxVolume(appending) {
-        if (!appending) {
-            this.maxVolume = {
-                lastCheckDate: null,
-                value: 0,
-            };
-        }
+        if (!appending) this.maxVolume = { lastCheckDate: null, value: 0 };
         let dataSet = this.context.stx.chart.dataSet;
         if (!dataSet || !dataSet.length) return;
         for (let i = dataSet.length - 1; i >= 0; i--) {
@@ -190,9 +166,7 @@ class HeadsUp extends Helper {
                     let visuals = node.find('cq-volume-visual');
                     if (visuals.length) {
                         let relativeCandleSize = self.maxVolume.value ? prices.data.Volume / self.maxVolume.value : 0;
-                        visuals.css({
-                            width: `${Math.round(relativeCandleSize * 100)}%`,
-                        });
+                        visuals.css({ width: `${Math.round(relativeCandleSize * 100)}%` });
                     }
                 }
                 if (currentQuote && currentQuote[plotField] && self.tick === stx.chart.dataSet.length - 1) {

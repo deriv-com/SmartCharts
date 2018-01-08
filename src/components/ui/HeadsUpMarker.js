@@ -28,7 +28,7 @@ class HeadsUpMarker extends CIQ.Marker {
      * @memberof CIQ.Marker.HeadsUp
      * @param {object} params
      */
-    placementFunction(params) {
+    static placementFunction(params) {
         let panel = params.panel;
         let chart = panel.chart;
         let stx = params.stx;
@@ -59,12 +59,8 @@ class HeadsUpMarker extends CIQ.Marker {
             }
             node.addClass(params.showClass);
 
-            if (!marker.clientWidth) {
-                marker.clientWidth = node.width();
-            }
-            if (!marker.clientHeight) {
-                marker.clientHeight = node.height();
-            }
+            if (!marker.clientWidth) { marker.clientWidth = node.width(); }
+            if (!marker.clientHeight) { marker.clientHeight = node.height(); }
             if (marker.clientWidth > x) {
                 node.removeClass('stx-left');
                 node.addClass('stx-right');
@@ -81,7 +77,7 @@ class HeadsUpMarker extends CIQ.Marker {
                 });
             }
 
-            let bottom;
+            var bottom;
             let containerHeight = marker.params.chartContainer ? stx.chart.canvasHeight : panel.bottom;
             if (useHighs) {
                 bottom = getBottomPixel(stx, panel, containerHeight, stx.getBarBounds(quote).high);

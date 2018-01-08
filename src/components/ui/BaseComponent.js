@@ -1,8 +1,6 @@
 import $ from 'jquery';
-import { claims } from './constants';
 import { CIQ } from '../../../js/chartiq';
-import UI from './UI';
-
+import { claims } from './';
 /**
  * Abstract class for WebComponents using this framework
  *
@@ -14,11 +12,8 @@ import UI from './UI';
  * @type {HTMLElement}
  */
 class BaseComponent extends HTMLElement {
-    constructor() {
-        super();
-        this.scheduledBindings = [];
-        this.timeout = null;
-    }
+    static scheduledBindings = [];
+    static timeout = null;
 
     /**
      * Locates the nearest UI helper for the given attribute. If none exists then it is created at the topNode.
@@ -78,17 +73,13 @@ class BaseComponent extends HTMLElement {
      */
     activate(node, e, params, setter) {
         let attribute = setter ? 'stxsetget' : 'stxtap';
-        let method = UI.splitMethod(node.getAttribute(attribute));
+        let method = CIQ.UI.splitMethod(node.getAttribute(attribute));
         if (!method) return;
         let helperName = method.helperName;
         let f = method.functionName;
         if (setter) f = `set${f}`;
         // All helper methods take the node that was activated as the first argument
-        let argArray = [{
-            node,
-            e,
-            params,
-        }].concat(method.args);
+        let argArray = [{ node, e, params }].concat(method.args);
 
         if (helperName) {
             let helper = this.getHelper(node, null, attribute);
@@ -148,14 +139,14 @@ class BaseComponent extends HTMLElement {
         let setget = node.getAttribute('stxsetget');
 
         // One way binding
-        function bindHelper(h) {
+        function bindHelper(helper) {
             let method;
             let paren = binding.indexOf('(');
             method = binding.substring(binding.indexOf('.') + 1);
             if (paren !== -1) {
                 method = binding.substring(0, paren);
             }
-            h[method](node);
+            helper[method](node);
         }
         if (binding && binding !== '') {
             helper = this.getHelper(node, binding, 'stxbind');
@@ -163,10 +154,12 @@ class BaseComponent extends HTMLElement {
         }
 
         // "tap" binding
-        function closure(nd) {
+        let self = this;
+
+        function closure(node) {
             return function (e) {
-                this.e = e;
-                this.activate(nd, e, params, false);
+                self.e = e;
+                self.activate(node, e, params, false);
             };
         }
         if (tap && tap !== '') {
@@ -178,24 +171,24 @@ class BaseComponent extends HTMLElement {
         }
 
         // Setter/Getter binding
-        function setGetHelper(h) {
+        function setGetHelper(helper) {
             function createSetter() {
                 return function (e) {
-                    this.e = e;
-                    this.activate(node, e, params, true);
+                    self.e = e;
+                    self.activate(node, e, params, true);
                 };
             }
-            let method = UI.splitMethod(setget);
+            let method = CIQ.UI.splitMethod(setget);
             if (!method) {
                 console.log(`Syntax error ${setget}`);
                 return;
             }
             let argArray = [node].concat(method.args).concat(params);
-            if (h) h[`get${method.functionName}`](...argArray);
+            if (helper) helper[`get${method.functionName}`](...argArray);
             if (node.type === 'text' || node.type === 'number') {
-                this.inputEntry(node, createSetter());
+                self.inputEntry(node, createSetter());
             } else {
-                this.makeTap(node, createSetter());
+                self.makeTap(node, createSetter());
             }
         }
         if (setget) {
@@ -205,15 +198,15 @@ class BaseComponent extends HTMLElement {
     }
 
     /**
-     * method. Gets called once and only once per DOM processing cycle, and only
+     * Static method. Gets called once and only once per DOM processing cycle, and only
      * if it's been triggered by a call to scheduledForBinding.
      * @private
      * @memberof CIQ.UI.BaseComponent
      */
-    nextTick() {
+    static nextTick() {
         if (!CIQ.UI.release) return; // UI hasn't started yet
-        clearTimeout(this.timeout);
-        let scheduledBindings = this.scheduledBindings;
+        clearTimeout(BaseComponent.timeout);
+        let scheduledBindings = BaseComponent.scheduledBindings;
         // We traverse through the bindings backwards which ensures that we attempt to bind to the closest
         // web component ancestor to the actual binding.
         for (let i = scheduledBindings.length - 1; i >= 0; i--) {
@@ -232,14 +225,11 @@ class BaseComponent extends HTMLElement {
      * @private
      */
     scheduleForBinding(node) {
-        this.scheduledBindings.push({
-            node,
-            contextTag: this,
-        });
+        BaseComponent.scheduledBindings.push({ node, contextTag: this });
 
         // This ensures that one and only one nextTick event will occur
-        if (this.timeout) clearTimeout(this.timeout);
-        this.timeout = setTimeout(this.nextTick, 0);
+        if (BaseComponent.timeout) clearTimeout(BaseComponent.timeout);
+        BaseComponent.timeout = setTimeout(BaseComponent.nextTick, 0);
     }
 
     /**
@@ -263,9 +253,7 @@ class BaseComponent extends HTMLElement {
         let walker = document.createNodeIterator(
             traverseNode,
             NodeFilter.SHOW_ELEMENT,
-            CIQ.isIE ? acceptFunc : {
-                acceptNode: acceptFunc,
-            },
+            CIQ.isIE ? acceptFunc : { acceptNode: acceptFunc },
             false,
         );
 
@@ -286,7 +274,7 @@ class BaseComponent extends HTMLElement {
      */
     inputEntry(node, cb) {
         $(node).on('keypress', (e) => {
-            switch (e.which) { // eslint-disable-line default-case
+            switch (e.which) {
             case 13:
             case 9:
                 cb();
@@ -303,9 +291,7 @@ class BaseComponent extends HTMLElement {
      * @memberof CIQ.UI.BaseComponent
      */
     addClaim(helper) {
-        claims.push({
-            helper,
-        });
+        claims.push({ helper });
     }
 
     /**

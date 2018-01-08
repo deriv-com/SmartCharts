@@ -1,21 +1,13 @@
 import { CIQ } from '../js/chartiq';
 import Driver from './components/ui/Driver';
-
 /**
- * An example instance of the Lookup Driver scoped to CIQ.UI.Lookup.Driver
- *
- * Inherits all of the base Look Driver's properties via `ciqInheritsFrom()`
- * @name ChartIQ
+ * An example of an asynchronous Lookup.Driver that uses ChartIQ's suggestive search as its source for symbol search
  * @memberof CIQ.UI.Lookup.Driver
+ * @param {array} exchanges An array of ecxchanges that can be searched against
  */
 class ExampleDriver extends Driver {
-    /**
-     * An example of an asynchronous Lookup.Driver that uses ChartIQ's suggestive search as its source for symbol search
-     * @memberof CIQ.UI.Lookup.Driver
-     * @param {array} exchanges An array of ecxchanges that can be searched against
-     */
     constructor(exchanges) {
-        super();
+        super(exchanges);
         this.exchanges = exchanges;
         if (!this.exchanges) this.exchanges = ['XNYS', 'XASE', 'XNAS', 'XASX', 'INDCBSX', 'INDXASE', 'INDXNAS', 'IND_DJI', 'ARCX', 'INDARCX', 'forex'];
         this.url = 'https://symbols.chartiq.com/chiq.symbolserver.SymbolLookup.service';
@@ -66,12 +58,9 @@ class ExampleDriver extends Driver {
                     });
                 }
                 cb(results);
-            } catch (e) {} // eslint-disable-line no-empty
+            } catch (e) {}
         }
-        CIQ.postAjax({
-            url,
-            cb: handleResponse,
-        });
+        CIQ.postAjax({ url, cb: handleResponse });
     }
 }
 

@@ -10,11 +10,13 @@
     "start": "webpack-dev-server --open  --hot --inline"
   },
   "devDependencies": {
+    "babel-cli": "^6.26.0",
     "babel-core": "^6.26.0",
     "babel-eslint": "^8.1.2",
     "babel-loader": "^7.1.2",
     "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-plugin-transform-runtime": "^6.23.0",
+    "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.6.1",
     "css-loader": "^0.28.7",
     "eslint": "^4.14.0",
@@ -38,6 +40,7 @@
   },
   "dependencies": {
     "event-emitter-es6": "^1.1.5",
-    "jquery": "^3.2.1"
+    "jquery": "^3.2.1",
+    "object.observe": "^0.2.6"
   }
 }

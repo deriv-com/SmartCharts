@@ -6,14 +6,13 @@ import Feed from './feed';
 import ExampleDriver from './ExampleDriver';
 
 // Before using components, you need to first import components/ui
-import './components/ui';
 import './components/Scroll';
 import './components/Lookup';
 import './components/Menu';
 import Context from './components/ui/Context';
 import KeystrokeHub from './components/ui/KeystrokeHub';
 
-import '../js/thirdparty/object-observe';
+// import '../js/thirdparty/object-observe';
 import '../js/thirdparty/webcomponents-lite.min';
 // import '../js/thirdparty/perfect-scrollbar.jquery';
 
@@ -58,7 +57,7 @@ stxx.callbacks.symbolChange = saveLayout;
 function startUI() {
     const UIContext = new Context(stxx, $('*[cq-context]'));
 
-    UIContext.changeSymbol = (data) => {
+    UIContext.changeSymbol = function (data) {
         let stx = this.stx;
         if (this.loader) this.loader.show();
         data.symbol = data.symbol.toUpperCase(); // set a pretty display version

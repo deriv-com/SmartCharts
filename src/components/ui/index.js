@@ -1,13 +1,34 @@
 import $ from 'jquery';
 import { CIQ } from '../../../js/chartiq';
+import '../../../js/thirdparty/webcomponents-lite.min';
 import './jquery-extensions';
 import './UI';
 import './UIManager';
 
+import Context from './Context';
+import HeadsUp from './HeadsUp';
+import StudyEdit from './StudyEdit';
+import Layout from './Layout';
+import HeadsUpMarker from './HeadsUpMarker';
+import StudyMenu from './StudyMenu';
+import KeystrokeHub from './KeystrokeHub';
+
 /**
- * Namespace for UI helper objects
- * @namespace CIQ.UI
+ * The following is a set of webComponents used in our sample templates to illustrate how the API can be leveraged to build full featured UI to control the chart.
+ *
+ * Feel free to use them as provided or modify as needed to meet your needs. You can find all of the source code for these webComponents in `js/components.js` and `js/ui.js`.
+ *
+ * This implementation assumes the chart is attached to to a quotefeed for interactive data loading.
+ * If you will not be using a quotefeed, you will need to adjust these components accordingly.
+ *
+ * Performance considerations: These web components include dynamically updating modules that will react to every data change and redraw certain elements.
+ * Although visually pleasing, they can sometimes cause performance issues on slow devices or when multiple charts are displayed.
+ * See {@link CIQ.UI.animatePrice} for setting options.
+ *
+ * @see {@link CIQ.UI.ContextTag} which provides a model and base functionality for many components
+ * @namespace WebComponents
  */
+
 CIQ.UI.release = false;
 
 /**
@@ -16,6 +37,32 @@ CIQ.UI.release = false;
  * @type {Boolean}
  */
 CIQ.UI.bypassBindings = false;
+
+export const claims = [];
+
+// Auxiliary function that enables multiple inheritence with es6 classes: https://stackoverflow.com/a/45332959/1471258
+export const aggregation = (baseClass, ...mixins) => {
+    let copyProps = (target, source) => { // this function copies all properties and symbols, filtering out some special ones
+        Object.getOwnPropertyNames(source)
+            .concat(Object.getOwnPropertySymbols(source))
+            .forEach((prop) => {
+                if (!prop.match(/^(?:constructor|prototype|arguments|caller|name|bind|call|apply|toString|length)$/)) { Object.defineProperty(target, prop, Object.getOwnPropertyDescriptor(source, prop)); }
+            });
+    };
+    class base extends baseClass {
+        constructor(...args) {
+            super(...args);
+            mixins.forEach((mixin) => {
+                copyProps(this, (new mixin())); // eslint-disable-line new-cap
+            });
+        }
+    }
+    mixins.forEach((mixin) => { // outside contructor() to allow aggregation(A,B,C).staticFunction() to be called etc.
+        copyProps(base.prototype, mixin.prototype);
+        copyProps(base, mixin);
+    });
+    return base;
+};
 
 /*
  * http://www.backalleycoder.com/2013/03/18/cross-browser-event-based-element-resize-detection/
@@ -26,7 +73,7 @@ CIQ.UI.bypassBindings = false;
     let isIE = navigator.userAgent.match(/Trident/);
     let requestFrame = (function () {
         let raf = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame ||
-        function (fn) { return window.setTimeout(fn, 20); };
+            function (fn) { return window.setTimeout(fn, 20); };
         return function (fn) { return raf(fn); };
     }());
 
@@ -46,7 +93,7 @@ CIQ.UI.bypassBindings = false;
         });
     }
 
-    function objectLoad() {
+    function objectLoad(/* e */) {
         this.contentDocument.defaultView.__resizeTrigger__ = this.__resizeElement__;
         this.contentDocument.defaultView.addEventListener('resize', resizeListener);
     }
@@ -106,19 +153,10 @@ CIQ.UI.bypassBindings = false;
     };
 }());
 
-/**
- * The following is a set of webComponents used in our sample templates to illustrate how the API can be leveraged to build full featured UI to control the chart.
- *
- * Feel free to use them as provided or modify as needed to meet your needs. You can find all of the source code for these webComponents in `js/components.js` and `js/componentUI.js`.
- *
- * This implementation assumes the chart is attached to to a quotefeed for interactive data loading.
- * If you will not be using a quotefeed, you will need to adjust these components accordingly.
- *
- * Performance considerations: These web components include dynamically updating modules that will react to every data change and redraw certain elements.
- * Although visually pleasing, they can sometimes cause performance issues on slow devices or when multiple charts are displayed.
- * See {@link CIQ.UI.animatePrice} for setting options.
- *
- * @see {@link CIQ.UI.ContextTag} which provides a model and base functionality for many components
- * @namespace WebComponents
- */
-function WebComponents() {} // eslint-disable-line no-unused-vars
+CIQ.Marker.HeadsUp = HeadsUpMarker;
+CIQ.UI.Context = Context;
+CIQ.UI.HeadsUp = HeadsUp;
+CIQ.UI.KeystrokeHub = KeystrokeHub;
+CIQ.UI.StudyEdit = StudyEdit;
+CIQ.UI.StudyMenu = StudyMenu;
+CIQ.UI.Layout = Layout;
