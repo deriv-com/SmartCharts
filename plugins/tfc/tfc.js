@@ -9,7 +9,7 @@ class TFC {
 
         this.elements = { }
         this.menu = {
-            enableShort: { dom: ['limitOrder', 'dragLineCenter'] },
+            enableShort: { dom: ['dragLineCenter'] },
             enableStraddle: { dom: ['ocoOrder', 'ocoAbove', 'ocoBelow', 'dragLineAbove', 'dragLineBelow', 'shadeAbove', 'shadeBelow'] },
             enableStrangle: { dom: ['ocoOrder', 'ocoAbove', 'ocoBelow', 'dragLineAbove', 'dragLineBelow', 'shadeAbove', 'shadeBelow'] },
         };
@@ -17,7 +17,6 @@ class TFC {
             dragLineAbove: null,
             dragLineCenter: null,
             dragLineBelow: null,
-            limitOrder: null,
             otoAbove: null,
             otoBelow: null,
             ocoOrder: null,
@@ -119,15 +118,8 @@ class TFC {
         CIQ.swapClassName(this.dom.dragLineAbove, 'green', 'red');
         CIQ.swapClassName(this.dom.dragLineBelow, 'green', 'red');
         CIQ.swapClassName(this.dom.dragLineCenter, 'red', 'green');
-        CIQ.unappendClassName(this.dom.limitOrder, 'new-cover-order');
-        CIQ.unappendClassName(this.dom.limitOrder, 'new-sell-order');
-        CIQ.unappendClassName(this.dom.limitOrder, 'new-buy-order');
-        CIQ.appendClassName(this.dom.limitOrder, 'new-short-order');
-
-        CIQ.unappendClassName(this.dom.limitOrder, 'with-stop');
-        CIQ.unappendClassName(this.dom.limitOrder, 'with-limit');
         this.centerPrice = this.stx.currentQuote().Close;
-        this.positionAtPrice(this.centerPrice, ['limitOrder', 'dragLineCenter']);
+        this.positionAtPrice(this.centerPrice, ['dragLineCenter']);
         this.elements.dragLineCenterPrice.innerHTML = this.formatPrice(this.centerPrice);
 
     }
@@ -186,38 +178,6 @@ class TFC {
 
 
     /**
-     * Removes the OTO order (stop or limit) that is above the buy/short order.
-     */
-    removeOTOAbove() {
-        this.dom.otoAbove.style.display = 'none';
-        this.dom.dragLineAbove.style.display = 'none';
-        if (this.activeTrade == 'buy') {
-            CIQ.unappendClassName(this.dom.limitOrder, 'with-limit');
-        } else if (this.activeTrade == 'short') {
-            CIQ.unappendClassName(this.dom.limitOrder, 'with-stop');
-        } else if (this.activeTrade == 'bracket_sell' || this.activeTrade == 'bracket_cover') {
-            if (this.dom.otoBelow.style.display == 'none') this.closeTFC();
-        }
-    }
-
-
-    /**
-     * Removes the OTO order that is below the buy/short order.
-     */
-    removeOTOBelow() {
-        this.dom.otoBelow.style.display = 'none';
-        this.dom.dragLineBelow.style.display = 'none';
-        if (this.activeTrade == 'buy') {
-            CIQ.unappendClassName(this.dom.limitOrder, 'with-stop');
-        } else if (this.activeTrade == 'short') {
-            CIQ.unappendClassName(this.dom.limitOrder, 'with-limit');
-        } else if (this.activeTrade == 'bracket_sell' || this.activeTrade == 'bracket_cover') {
-            if (this.dom.otoAbove.style.display == 'none') this.closeTFC();
-        }
-    }
-
-
-    /**
      * Positions the center line at the requested price. The center line is the line that runs through the middle of a buy,sell,short,cover widget and
      * represents the limit or stop price for the trade.
      * @param  {number} price The price to set the center line
@@ -226,7 +186,7 @@ class TFC {
     positionCenterLine(price, keepOnChart) {
         if (keepOnChart !== false) keepOnChart = true;
         this.centerPrice = price;
-        this.positionAtPrice(this.centerPrice, ['limitOrder', 'dragLineCenter'], 'center', null, keepOnChart);
+        this.positionAtPrice(this.centerPrice, ['dragLineCenter'], 'center', null, keepOnChart);
         this.elements.dragLineCenterPrice.innerHTML = this.formatPrice(this.centerPrice);
         this.positionBelowLine(Math.min(this.centerPrice, this.belowPrice));
         this.positionAboveLine(Math.max(this.centerPrice, this.abovePrice));
@@ -245,7 +205,7 @@ class TFC {
         this.positionAtPrice(this.abovePrice, ['dragLineAbove'], 'center', null, keepOnChart);
         this.elements.dragLineAbovePrice.innerHTML = this.formatPrice(this.abovePrice);
         if (this.activeTrade == 'short' || this.activeTrade == 'buy') {
-            this.positionAtPrice(this.abovePrice, ['otoAbove'], 'bottom', ['limitOrder'], keepOnChart);
+            this.positionAtPrice(this.abovePrice, ['otoAbove'], 'bottom', null, keepOnChart);
         } else if (this.activeTrade == 'strangle' || this.activeTrade == 'straddle') {
             this.positionAtPrice(this.abovePrice, ['ocoAbove'], 'bottom', null, keepOnChart);
         } else if (this.activeTrade == 'bracket_sell') {
@@ -268,13 +228,12 @@ class TFC {
         this.positionAtPrice(this.belowPrice, ['dragLineBelow'], 'center', null, keepOnChart);
         this.elements.dragLineBelowPrice.innerHTML = this.formatPrice(this.belowPrice);
         if (this.activeTrade == 'buy' || this.activeTrade == 'short') {
-            this.positionAtPrice(this.belowPrice, ['otoBelow'], 'top', ['limitOrder'], keepOnChart);
+            this.positionAtPrice(this.belowPrice, ['otoBelow'], 'top', null, keepOnChart);
         } else if (this.activeTrade == 'strangle' || this.activeTrade == 'straddle') {
             this.positionAtPrice(this.belowPrice, ['ocoBelow'], 'top', null, keepOnChart);
             this.dom.ocoOrder.style.top = this.dom.ocoBelow.style.top;
         } else if (this.activeTrade == 'bracket_sell' || this.activeTrade == 'bracket_cover') {
             this.positionAtPrice(this.belowPrice, ['otoBelow'], 'top', null, keepOnChart);
-            this.dom.limitOrder.style.top = `${CIQ.stripPX(this.dom.otoBelow.style.top) + this.dom.otoBelow.clientHeight}px`;
         }
     }
 
@@ -444,7 +403,6 @@ class TFC {
         this.dom.dragLineAbove = $$$('.drag-price-line', container).cloneNode(true);
         this.dom.dragLineCenter = $$$('.drag-price-line', container).cloneNode(true);
         this.dom.dragLineBelow = $$$('.drag-price-line', container).cloneNode(true);
-        this.dom.limitOrder = $$$('.stx-limit-order', container).cloneNode(true);
         this.dom.otoAbove = $$$('.OTO.stx-stop', container).cloneNode(true);
         this.dom.otoBelow = $$$('.OTO.stx-stop', container).cloneNode(true);
         this.dom.ocoOrder = $$$('.stx-oco-order', container).cloneNode(true);
@@ -500,12 +458,6 @@ class TFC {
             (e) => endDrag(e, this.dom.dragLineCenter),
         );
         CIQ.safeDrag(
-            this.dom.limitOrder,
-            (e) => this.startDrag(e, this.dom.dragLineCenter),
-            (e) => this.dragCenterLine(e),
-            (e) => endDrag(e, this.dom.dragLineCenter),
-        );
-        CIQ.safeDrag(
             this.dom.dragLineAbove,
             (e) => this.startDrag(e, this.dom.dragLineAbove),
             (e) => this.dragAboveLine(e),
@@ -551,7 +503,7 @@ class TFC {
         CIQ.ChartEngine.prototype.append('draw', () => {
             this.positionAboveLine(this.abovePrice);
             this.positionBelowLine(this.belowPrice);
-            this.positionAtPrice(this.centerPrice, ['limitOrder', 'dragLineCenter']);
+            this.positionAtPrice(this.centerPrice, ['dragLineCenter'], 'center', null, true);
             this.dom.shadeAbove.style.top = '0px';
             this.dom.shadeAbove.style.bottom = `${this.chart.panel.height - this.locationFromPrice(this.abovePrice)}px`;
             this.dom.shadeBelow.style.top = `${this.locationFromPrice(this.belowPrice)}px`;
