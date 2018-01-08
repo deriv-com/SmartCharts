@@ -2,6 +2,7 @@ import $ from 'jquery';
 import { CIQ } from '../../../js/chartiq';
 import BaseComponent from './BaseComponent';
 import Context from './Context';
+import { getParents } from './utils';
 
 /**
  * Abstract class for web components that use a {@link CIQ.UI.Context} in order to gain access to a ChartEngine
@@ -18,7 +19,7 @@ class ContextTag extends BaseComponent {
      * @memberof CIQ.UI.ContextTag
      */
     setContextHolder() {
-        let nearestContext = this.node.parents('cq-context,*[cq-context]');
+        let nearestContext = getParents(this.node, 'cq-context,*[cq-context]');
         if (!nearestContext.length) {
             console.log(`No cq-context found for ${this.tagName}`);
             return;

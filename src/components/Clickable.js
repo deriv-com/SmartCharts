@@ -25,7 +25,7 @@ class Clickable extends ContextTag {
         this.attached = true;
         let self = this;
 
-        $(this).stxtap(() => {
+        this.addEventListener('stxtap', () => {
             self.runMethod();
         });
     }

@@ -28,7 +28,7 @@ class Redo extends ContextTag {
         this.undo = $(undo)[0];
         this.undo.redoButton = this;
         let self = this;
-        $(this).stxtap(() => {
+        this.addEventListener('stxtap', () => {
             self.undo.redo();
         });
     }

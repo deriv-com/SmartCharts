@@ -27,7 +27,7 @@ class Undo extends ContextTag {
         super.attachedCallback();
         this.attached = true;
         let self = this;
-        $(this).stxtap(() => {
+        this.addEventListener('stxtap', () => {
             self.undo();
         });
     }
