@@ -31,8 +31,8 @@ class KeystrokeHub extends Helper {
         let self = this;
 
         function handler() {
-            return function () {
-                self.handler(...arguments);
+            return (...args) => {
+                self.handler(...args);
             };
         }
         this.keystroke = new Keystroke(node, handler());

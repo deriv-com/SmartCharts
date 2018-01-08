@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import { CIQ } from '../js/chartiq';
+import { CIQ, $$$ } from '../js/chartiq';
 
 import StreamManager from './stream-manager';
 import Feed from './feed';
@@ -12,10 +12,11 @@ import './components/Menu';
 import Context from './components/ui/Context';
 import KeystrokeHub from './components/ui/KeystrokeHub';
 
-import '../js/thirdparty/perfect-scrollbar.jquery';
+// import '../js/thirdparty/object-observe';
+import '../js/thirdparty/webcomponents-lite.min';
+// import '../js/thirdparty/perfect-scrollbar.jquery';
 
-import '../plugins/tfc/tfc';
-import '../js/plugin';
+import TFC from '../plugins/tfc/tfc';
 
 window.CIQ = CIQ;
 
@@ -26,7 +27,7 @@ const _streamManager = StreamManager.buildFor({
 });
 
 const stxx = new CIQ.ChartEngine({
-    container: $('#chartContainer')[0],
+    container: $$$('#chartContainer'),
 });
 
 // connect chart to data
@@ -92,7 +93,7 @@ function startUI() {
     }
 
     let tfcConfig = { stx: stxx };
-    stxx.tfc = new CIQ.TFC(tfcConfig);
+    stxx.tfc = new TFC(tfcConfig);
 
     window.stxx = stxx; // stxx.tfc.newTrade('enableStraddle') // 'enableShort'
 }
