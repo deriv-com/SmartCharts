@@ -1,0 +1,146 @@
+@charset "UTF-8";
+
+/* Images */
+.tfc-price-arrow,
+.tfc-price-arrow span,
+.tfc-price {
+    background-image: url(icons.png);
+    background-repeat: no-repeat;
+}
+
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    .tfc-price-arrow,
+    .tfc-price-arrow span,
+    .tfc-price {
+        background-size: 80px 650px;
+    }
+}
+
+/*--------------------------------------------------*/
+/* Drag Lines and Prices */
+.drag-price-line, .drag-price, .tfc-price, .tfc-price-arrow {
+    height: 23px;
+}
+
+.drag-price-line {
+    position: absolute;
+    width: 100%;
+    left: 0px;
+    font-size: 10px;
+    z-index: 100;
+}
+
+/*hover*/
+.drag-price-line:hover {
+    cursor: ns-resize;
+    background: rgba(0, 0, 0, 0.05);
+}
+
+.drag-line {
+    height: 0px;
+    float: left;
+    width: 100%;
+    margin-left: -10px;
+    margin-top: 11px;
+}
+
+.red .drag-line {
+    border-top: 2px #ec553c dotted;
+}
+
+.green .drag-line {
+    border-top: 2px #8bc273 dotted;
+}
+
+/*hover*/
+.drag-price-line:hover .drag-line {
+    border-top-style: solid;
+}
+
+.drag-price {
+    position: absolute;
+    right: 0px;
+    display: block;
+    width: auto;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -o-user-select: none;
+}
+
+.tfc-price-arrow {
+    float: left;
+    position: relative;
+    width: 12px;
+    transition: width .2s;
+}
+
+.red .tfc-price-arrow {
+    background-position: 0 -360px;
+}
+
+.green .tfc-price-arrow {
+    background-position: 0 -390px;
+}
+
+/*hover*/
+.no-touch .drag-price-line:hover .tfc-price-arrow {
+    width: 20px;
+    height: 23px;
+}
+
+.no-touch .tfc-price-arrow span {
+    position: absolute;
+    top: 4px;
+    left: 6px;
+    display: block;
+    width: 15px;
+    height: 15px;
+    background-position: -4px -488px;
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+/*hover*/
+.no-touch .drag-price-line:hover .tfc-price-arrow span {
+    opacity: 1;
+}
+
+.tfc-price {
+    color: #000;
+    display: block;
+    float: left;
+    width: 45px;
+    line-height: 23px;
+    overflow: hidden;
+}
+
+.red .tfc-price {
+    background-position: right -360px;
+}
+
+.green .tfc-price {
+    background-position: right -390px;
+}
+
+/*--------------------------------------------------*/
+/* shade */
+.tfc-shade {
+    position: absolute;
+    width: 380px;
+    right: 0px;
+    z-index: 1;
+}
+
+.shade-above.green {
+    background-image: linear-gradient(to bottom, rgba(140, 193, 118, 0) 30%, rgba(140, 193, 118, 0.3));
+}
+.shade-above.red {
+    background-image: linear-gradient(to bottom, rgba(255, 0, 0, 0) 30%, rgba(255, 0, 0, 0.2));
+}
+.shade-below.green {
+    background-image: linear-gradient(to bottom, rgba(140, 193, 118, 0.3), rgba(140, 193, 118, 0) 70%);
+}
+.shade-below.red {
+    background-image: linear-gradient(to bottom, rgba(255, 0, 0, 0.2), rgba(255, 0, 0, 0) 70%);
+} 

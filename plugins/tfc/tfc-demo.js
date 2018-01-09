@@ -1,4 +1,3 @@
-import {CIQ, $$$} from '../../js/chartiq';
 /**
 	Demo account - A demo implementation of the CIQ.Account abstract class. This
 	class supports placing, modifying and canceling orders. The openOrders will reflect

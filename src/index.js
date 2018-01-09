@@ -12,12 +12,11 @@ import './components/Menu';
 import Context from './components/ui/Context';
 import KeystrokeHub from './components/ui/KeystrokeHub';
 
-// import '../js/thirdparty/object-observe';
 import '../js/thirdparty/webcomponents-lite.min';
-// import '../js/thirdparty/perfect-scrollbar.jquery';
 
-import TFC from '../plugins/tfc/tfc';
+import Line from './draw/line';
 
+window.Line = Line;
 window.CIQ = CIQ;
 
 const _streamManager = StreamManager.buildFor({
@@ -91,9 +90,6 @@ function startUI() {
             symbol: 'R_100',
         }); // load an initial symbol
     }
-
-    let tfcConfig = { stx: stxx };
-    stxx.tfc = new TFC(tfcConfig);
 
     window.stxx = stxx; // stxx.tfc.newTrade('enableStraddle') // 'enableShort'
 }
