@@ -34,7 +34,6 @@ class Scroll extends BaseComponent {
      */
     top() {
         this.scrollTop = 0;
-        if (this.node.perfectScrollbar) this.node.perfectScrollbar('update');
     }
 
     /**
@@ -49,7 +48,6 @@ class Scroll extends BaseComponent {
         let itemBottom = item.offsetTop + item.clientHeight;
         if (item.offsetTop > scrolled && itemBottom < bottom + scrolled) return;
         this.scrollTop = Math.max(itemBottom - bottom, 0);
-        if (this.node.perfectScrollbar) this.node.perfectScrollbar('update');
     }
 
     resize() {
@@ -90,17 +88,11 @@ class Scroll extends BaseComponent {
         node.css({
             'max-height': `${height}px`,
         });
-        if (this.node.perfectScrollbar) this.node.perfectScrollbar('update');
     }
 
     createdCallback() {
         super.createdCallback();
         let node = this.node = $(this);
-        if (node.perfectScrollbar) {
-            node.perfectScrollbar({
-                suppressScrollX: true,
-            });
-        }
         node.css({
             'overflow-y': 'auto',
         });

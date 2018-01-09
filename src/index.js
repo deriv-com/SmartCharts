@@ -14,7 +14,6 @@ import KeystrokeHub from './components/ui/KeystrokeHub';
 
 // import '../js/thirdparty/object-observe';
 import '../js/thirdparty/webcomponents-lite.min';
-// import '../js/thirdparty/perfect-scrollbar.jquery';
 
 import TFC from '../plugins/tfc/tfc';
 
