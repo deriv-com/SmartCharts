@@ -1,5 +1,6 @@
 import $ from 'jquery';
 import { CIQ } from '../../js/chartiq';
+import { getParents } from './ui/utils';
 import BaseComponent from './ui/BaseComponent';
 
 /**
@@ -52,23 +53,22 @@ class Scroll extends BaseComponent {
 
     resize() {
         let node = this.node;
-        if (node.parents('.sharing').length) return;
+        if (getParents(node[0], '.sharing').length) return;
         /* share.js appends this class to the body.
             Do not attempt unnecessary resize of scroll
             for a chart about to become a shared image.
             Besides, jquery will choke on offset() below. */
-        if (typeof (node.attr('cq-no-resize')) !== 'undefined') return;
-        if (typeof (node.attr('cq-no-maximize')) !== 'undefined') this.noMaximize = true;
+        if (node[0].getAttribute('cq-no-resize') !== null) return;
+        if (node[0].getAttribute('cq-no-maximize') !== null) this.noMaximize = true;
         let position = node[0].getBoundingClientRect();
         let reduceMenuHeight = 45; // hard coded for now to take into account 15px of padding on menus and then an extra 5px for aesthetics
-        let winHeight = $(window).height();
+        let winHeight = screen.height;
         if (!winHeight) return;
         let height = winHeight - position.top - reduceMenuHeight;
-        let holders = node.parents('.stx-holder,.stx-subholder');
+        let holders = getParents(node[0], '.stx-holder,.stx-subholder');
         if (holders.length) {
-            holders.each(function () {
-                let h = $(this);
-                let holderBottom = h[0].getBoundingClientRect().top + h.height();
+            holders.forEach((h) => {
+                let holderBottom = h.getBoundingClientRect().top + h.clientHeight;
                 height = Math.min(height, holderBottom - position.top - 5); // inside a holder we ignore reduceMenuHeight, but take off 5 pixels just for aesthetics
             });
         }

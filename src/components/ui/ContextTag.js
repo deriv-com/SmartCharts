@@ -19,12 +19,12 @@ class ContextTag extends BaseComponent {
      * @memberof CIQ.UI.ContextTag
      */
     setContextHolder() {
-        let nearestContext = getParents(this.node, 'cq-context,*[cq-context]');
-        if (!nearestContext.length) {
-            console.log(`No cq-context found for ${this.tagName}`);
+        let parents = getParents(this.node[0], 'cq-context,*[cq-context]');
+        if (!parents.length) {
+            console.error(`No cq-context found for ${this.tagName}`);
             return;
         }
-        let contextElement = nearestContext[0];
+        let contextElement = parents[parents.length - 1];
         let storage = Context.assembleContext(contextElement);
         storage.Components.push(this);
 
