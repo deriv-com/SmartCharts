@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import { CIQ } from '../../js/chartiq';
+import { CIQ, $$$ } from '../../js/chartiq';
 import { getParents } from './ui/utils';
 import BaseComponent from './ui/BaseComponent';
 
@@ -81,28 +81,21 @@ class Scroll extends BaseComponent {
             height -= sibling.height();
         }
         if (!this.noMaximize) {
-            node.css({
-                height: `${height}px`,
-            });
+            node[0].style.height =  `${height}px`;
         }
-        node.css({
-            'max-height': `${height}px`,
-        });
+        node[0].style.maxHeight = `${height}px`;
     }
 
     createdCallback() {
         super.createdCallback();
         let node = this.node = $(this);
-        node.css({
-            'overflow-y': 'auto',
-        });
+        node[0].style.overflowY = 'auto';
     }
 
     attachedCallback() {
         if (this.attached) return;
         super.attachedCallback();
-        this.uiManager = $('cq-ui-manager');
-        if (this.uiManager.length > 0) this.uiManager = this.uiManager[0];
+        this.uiManager = $$$('cq-ui-manager');
 
         this.addClaim(this);
 
@@ -139,8 +132,8 @@ class Scroll extends BaseComponent {
 
         if (!node.is(':trulyvisible')) return false;
         if (key !== 'up' && key !== 'down' && key !== 'enter' && key !== 32) return false;
-        let items = node.find('cq-item');
-        let focused = node.find('cq-item[cq-focused]');
+        let items = node[0].querySelectorAll('cq-item');
+        let focused = node[0].querySelectorAll('cq-item[cq-focused]');
 
         if (key === 32 || key === 'enter') {
             if (focused.length && focused[0].selectFC) {
@@ -150,14 +143,15 @@ class Scroll extends BaseComponent {
             return false;
         }
         if (!focused.length) {
-            $(items[0]).attr('cq-focused', 'true');
+            items[0].setAttribute('cq-focused', 'true');
             this.scrollToElement(items[0]);
             return true;
         }
-        items.removeAttr('cq-focused');
+        items[0].removeAttribute('cq-focused');
 
         // locate our location in the list of items
-        for (var i = 0; i < items.length; i++) {
+        let i;
+        for (i = 0; i < items.length; i++) {
             if (items[i] === focused[0]) break;
         }
 
@@ -169,7 +163,7 @@ class Scroll extends BaseComponent {
             i++;
             if (i >= items.length) i = items.length - 1;
         }
-        $(items[i]).attr('cq-focused', 'true');
+        items[i].setAttribute('cq-focused', 'true');
         this.scrollToElement(items[i]);
         return true;
     }
