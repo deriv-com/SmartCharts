@@ -1,4 +1,6 @@
 import $ from 'jquery';
+import { $$$ } from '../../js/chartiq';
+import { createElement } from './ui/utils';
 import BaseComponent from './ui/BaseComponent';
 
 /**
@@ -39,24 +41,18 @@ class Dialog extends BaseComponent {
         super.attachedCallback();
         let self = this;
 
-        function handleTap(e) {
+        this.node[0].addEventListener('stxtap', (e) => {
             self.tap(e);
-        }
-        this.node.stxtap(handleTap);
-
-        let uiManager = $('cq-ui-manager');
-        uiManager.each(function () {
-            this.registerForResize(self);
-            self.uiManager = this;
         });
+
+        let uiManager = $$$('cq-ui-manager');
+        uiManager.registerForResize(this);
+        this.uiManager = uiManager;
     }
 
     detachedCallback() {
-        let self = this;
-        let uiManager = $('cq-ui-manager');
-        uiManager.each(function () {
-            this.unregisterForResize(self);
-        });
+        let uiManager = $$$('cq-ui-manager');
+        uiManager.unregisterForResize(this);
     }
 
     /**
@@ -91,10 +87,8 @@ class Dialog extends BaseComponent {
         } else {
             this.center();
         }
-        let scrollers = $(this.node).find('cq-scroll');
-        scrollers.each(function () {
-            this.resize();
-        });
+        let scrollers = $$$('cq-scroll', this.node[0]);
+        scrollers.resize();
     }
 
     stxContextMenu() {
@@ -145,7 +139,7 @@ class Dialog extends BaseComponent {
 
 
     hide() {
-        if ($(this).find(':invalid').length) return;
+        if ($$$(':invalid', this)) return;
         // Call the "hide()" function for any immediate children. This will allow nested
         // components to clean themselves up when a dialog is removed from outside of their scope.
         this.node.children().each(function () {
@@ -162,8 +156,8 @@ class Dialog extends BaseComponent {
         this.activeAttributes = {};
 
         // blur any input boxes that are inside the dialog we're closing, to get rid of soft keyboard
-        $(this).find('input').each(function () {
-            if (this === document.activeElement) this.blur();
+        this.querySelectorAll('input').forEach((el) => {
+            if (el === document.activeElement) el.blur();
         });
     }
 
@@ -186,7 +180,9 @@ class Dialog extends BaseComponent {
             $('BODY').append(this.uiManager.overlay);
         }
         setTimeout(() => { // to get the opacity transition effect
-            if (self.uiManager.overlay && !params.bypassOverlay) self.uiManager.overlay.attrBetter('cq-active');
+            if (self.uiManager.overlay && !params.bypassOverlay) {
+                self.uiManager.overlay.attrBetter('cq-active');
+            }
             self.activeAttributes['cq-active'] = true; // cq-active is what css uses to display the dialog
             for (let attribute in self.activeAttributes) {
                 self.node.attrBetter(attribute);

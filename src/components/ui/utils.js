@@ -1,4 +1,3 @@
-
 // jQuery parents() vanilla alternative: https://stackoverflow.com/a/12981248/1471258
 export function getParents(el, parentSelector /* optional */) {
     // If no parentSelector defined will bubble up all the way to *document*
@@ -19,4 +18,10 @@ export function getParents(el, parentSelector /* optional */) {
     parents.push(parentSelector); // Push that parentSelector you wanted to stop at
 
     return parents;
+}
+
+export function createElement(html) {
+    const wrapper = document.createElement('div');
+    wrapper.innerHTML = html;
+    return wrapper.firstChild;
 }
