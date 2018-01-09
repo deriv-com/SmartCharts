@@ -138,7 +138,7 @@ class Dialog extends BaseComponent {
         if ($$$(':invalid', this)) return;
         // Call the "hide()" function for any immediate children. This will allow nested
         // components to clean themselves up when a dialog is removed from outside of their scope.
-        Array.from(this.node[0].children).forEach((el) => {
+        [].forEach.call(this.node[0].children, (el) => {
             if (typeof el.hide === 'function') {
                 el.hide();
             }
