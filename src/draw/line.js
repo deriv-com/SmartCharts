@@ -135,7 +135,7 @@ class Line {
 
     constructor({
         stx,
-        shadeState = Line.SHADE_ABOVE,
+        shadeState = Line.SHADE_NONE,
         shadeColor = Line.COLOR_GREEN,
         lineColor = Line.COLOR_GREEN,
         visible = true,
