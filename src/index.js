@@ -76,7 +76,7 @@ function startUI() {
     });
 
     // eslint-disable-next-line no-unused-vars
-    let keyhub = new KeystrokeHub($('body'), UIContext, {
+    let keyhub = new KeystrokeHub($$$('body'), UIContext, {
         cb: KeystrokeHub.defaultHotKeys,
     });
 
