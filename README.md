@@ -1,5 +1,7 @@
 # BinaryChartIQ
 
+Binary.com charting library based on chartiq.
+
 ## Commands:
 - use `yarn install` to install dependencies
 - use `yarn start` to launch webpack dev server
@@ -12,8 +14,8 @@ const line = new Line({
     stx       : stx,              // chart instance
     lineColor : Line.COLOR_RED,   // optional, defaults to Line.COLOR_GREEN
     shadeState: Line.SHADE_BELOW, // optional, defaults to Line.SHADE_NONE
-    shadeColor: Line.COLOR,       // optional, defaults to Line.COLOR_GREEN
-    price     : undefined,        // optional, defaults to chartQoute.Close
+    shadeColor: Line.COLOR_RED,   // optional, defaults to Line.COLOR_GREEN
+    price     : null,             // optional, defaults to chartQoute.Close
     visible   : false,            // optional, defaults to true   
     pipSize   : 2,                // number of digits to show for price
 });
