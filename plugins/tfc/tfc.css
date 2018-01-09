@@ -1334,7 +1334,22 @@ table.stx-current-position .stx-btn {
   position: absolute;
   width: 380px;
   right: 0px;
-  z-index: 1; }
+  z-index: 1;
+}
+
+.shade-above.green {
+  background-image: linear-gradient(to bottom, rgba(140, 193, 118, 0) 30%, rgba(140, 193, 118, 0.3));
+}
+.shade-above.red {
+  background-image: linear-gradient(to bottom, rgba(255, 0, 0, 0) 30%, rgba(255, 0, 0, 0.2));
+}
+.shade-below.green {
+  background-image: linear-gradient(to bottom, rgba(140, 193, 118, 0.3), rgba(140, 193, 118, 0) 70%);
+}
+.shade-below.red {
+  background-image: linear-gradient(to bottom, rgba(255, 0, 0, 0.2), rgba(255, 0, 0, 0) 70%);
+}
+
 
 .tfc-profit {
   background-color: transparent;
