@@ -285,56 +285,40 @@ class Layout extends Helper {
      * @param {number} timeUnit
      */
     setPeriodicity(node, periodicity, interval, timeUnit) {
-        let self = this;
-        if (self.context.loader) self.context.loader.show();
-        self.context.stx.setPeriodicity({ period: periodicity, interval, timeUnit }, () => {
-            if (self.context.loader) self.context.loader.hide();
-        });
-    }
+        const context = this.context;
+        const stx = context.stx;
 
-    /**
-     * Sets the display periodicity. Usually this is called from an observer that is in CIQ.UI.Layout#periodicity.
-     *
-     * @param  {CIQ.ChartEngine} stx    The chart object to examine for periodicity
-     * @param  {Object} params Parameters
-     * @param {HTMLElement} params.selector The selector to update
-     */
-    showPeriodicity(stx, params) {
-        let text = '';
-        let periodicity = stx.layout.periodicity,
-            interval = stx.layout.interval,
-            timeUnit = stx.layout.timeUnit;
-        if (isNaN(interval)) {
-            timeUnit = interval;
-            interval = 1;
+        const wasTick = stx.layout.timeUnit === 'second';
+
+        if (context.loader) {
+            context.loader.show();
         }
-        periodicity *= interval;
-        text = periodicity;
-        if (timeUnit === 'day') {
-            text += 'D';
-        } else if (timeUnit === 'week') {
-            text += 'W';
-        } else if (timeUnit === 'month') {
-            text += 'M';
-        } else if (timeUnit === 'tick') {
-            text += 'T';
-        } else if (timeUnit === 'second') {
-            text += 's';
-        } else if (timeUnit === 'millisecond') {
-            text += 'ms';
-        } else if (periodicity >= 60 && periodicity % 15 === 0) {
-            text = `${periodicity / 60}H`;
-        } else {
-            text += 'm';
-        }
-        $(params.selector).empty().append(CIQ.translatableTextNode(stx, text));
+
+        stx.setPeriodicity({ period: periodicity, interval, timeUnit }, () => {
+            if (context.loader) {
+                context.loader.hide();
+            }
+
+            const isTickFriendly = ['line', 'mountain', 'baseline_delta'].indexOf(stx.layout.chartType) !== -1;
+            const isTick = timeUnit === 'second';
+
+            if (!wasTick && isTick && !isTickFriendly) {
+                stx.setChartType('mountain');
+            } else if(wasTick && !isTick && isTickFriendly) {
+                stx.setChartType('candle');
+            }
+        });
     }
 
     periodicity(node) {
         let self = this;
 
-        function showPeriodicity(params) {
-            self.showPeriodicity(self.context.stx, params);
+        function showPeriodicity({obj}) {
+            const selector = `cq-menu cq-item[stxvalue="${obj.periodicity}-${obj.interval}-${obj.timeUnit || ''}"]`;
+            const cqitem = document.querySelector(selector);
+            if(cqitem) {
+                node.textContent = cqitem.textContent;
+            }
         }
         CIQ.UI.observe({
             selector: node,

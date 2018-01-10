@@ -79,9 +79,9 @@ class Line {
             let top = null;
             let j,
                 oNode;
-            if (where == 'center') {
+            if (where === 'center') {
                 top = (px - (node.offsetHeight / 2));
-            } else if (where == 'top') {
+            } else if (where === 'top') {
                 if (noOverlap) {
                     for (j = 0; j < noOverlap.length; j++) {
                         oNode = noOverlap[j];
@@ -90,7 +90,7 @@ class Line {
                     }
                 }
                 top = Math.round(px) + 1;
-            } else if (where == 'bottom') {
+            } else if (where === 'bottom') {
                 if (noOverlap) {
                     for (j = 0; j < noOverlap.length; j++) {
                         oNode = noOverlap[j];
