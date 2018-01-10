@@ -1,6 +1,5 @@
 const webpack = require('webpack');
 const path = require('path');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 const config = {
@@ -12,56 +11,49 @@ const config = {
         filename: 'bundle.js',
     },
     module: {
-        rules: [
-            {
-                test: [/\.(scss|css)$/],
-                use: ExtractTextPlugin.extract({
-                    fallback: 'style-loader',
-                    use: [{
-                        loader: 'css-loader',
-                        options: {
-                            // minimize: true,
-                            url: false,
-                            sourceMap: true,
-                        },
-                    },
-                    {
-                        loader: 'sass-loader',
-                        options: {
-                            sourceMap: true,
-                        },
-                    },
-                    ],
-                }),
+        rules: [{
+            test: /\.svg/,
+            use: {
+                loader: 'svg-url-loader',
             },
-            { parser: { amd: false } },
-            {
-                test: /\.js$/,
-                exclude: [
-                    /node_modules/,
-                    /plugins\//,
-                    /js\//,
-                    /src\/components\//,
-                ],
-                loader: 'eslint-loader',
-                enforce: 'pre',
-                options: { fix: true },
-            },
-            {
-                test: /\.js$/,
-                exclude: /node_modules/,
-                loader: 'babel-loader',
-            },
-            {
-                test: /\.html/,
-                use: 'raw-loader',
-            },
+        },
+        {
+            test: [/\.(scss|css)$/],
+            use: [
+                'style-loader',
+                'css-loader',
+                'sass-loader',
+            ],
+        },
+        {
+            test: /\.(jpe?g|png|cur|ttf|eot|svg|woff(2)?)(\?[a-z0-9=&.]+)?$/,
+            loader: 'base64-inline-loader',
+        },
+        { parser: { amd: false } },
+        {
+            test: /\.js$/,
+            exclude: [
+                /node_modules/,
+                /plugins\//,
+                /js\//,
+                /src\/components\//,
+            ],
+            loader: 'eslint-loader',
+            enforce: 'pre',
+            options: { fix: true },
+        },
+        {
+            test: /\.js$/,
+            exclude: /node_modules/,
+            loader: 'babel-loader',
+        },
+        {
+            test: /\.html/,
+            use: 'raw-loader',
+        },
         ],
     },
     plugins: [
-        new ExtractTextPlugin({
-            filename: 'binarychartiq.css',
-        }),
         new webpack.ProvidePlugin({ $: 'jquery', jQuery: 'jquery' }),
         // new webpack.optimize.UglifyJsPlugin(),
     ],
