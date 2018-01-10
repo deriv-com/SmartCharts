@@ -52,20 +52,25 @@ This is a fully functional example showing how to load a chart with a correspond
         <div class="ciq-dropdowns">
           <cq-menu class="ciq-menu ciq-period">
             <span>
-              <cq-clickable stxbind="Layout.periodicity">1 D</cq-clickable>
+              <cq-clickable stxbind="Layout.periodicity">1 Tick</cq-clickable>
             </span>
             <cq-menu-dropdown>
-              <cq-item stxtap="Layout.setPeriodicity(1, 'day')">1 D</cq-item>
-              <cq-item stxtap="Layout.setPeriodicity(1, 'week')">1 W</cq-item>
-              <cq-item stxtap="Layout.setPeriodicity(1, 'month')">1 Mo</cq-item>
+              <cq-item stxtap="Layout.setPeriodicity(1, 1, 'second')">1 Tick</cq-item>
               <cq-separator></cq-separator>
-              <cq-item stxtap="Layout.setPeriodicity(1, 1)">1 Min</cq-item>
-              <cq-item stxtap="Layout.setPeriodicity(1,5)">5 Min</cq-item>
-              <cq-item stxtap="Layout.setPeriodicity(1,10)">10 Min</cq-item>
-              <cq-item stxtap="Layout.setPeriodicity(3,5)">15 Min</cq-item>
-              <cq-item stxtap="Layout.setPeriodicity(1,30)">30 Min</cq-item>
-              <cq-item stxtap="Layout.setPeriodicity(2,30)">1 Hour</cq-item>
-              <cq-item stxtap="Layout.setPeriodicity(8,30)">4 Hour</cq-item>
+              <cq-item stxtap="Layout.setPeriodicity(1, 1, 'minute')">1 Min</cq-item>
+              <cq-item stxtap="Layout.setPeriodicity(1, 2, 'minute')">2 Min</cq-item>
+              <cq-item stxtap="Layout.setPeriodicity(1, 3, 'minute')">3 Min</cq-item>
+              <cq-item stxtap="Layout.setPeriodicity(1, 5, 'minute')">5 Min</cq-item>
+              <cq-item stxtap="Layout.setPeriodicity(1, 10, 'minute')">10 Min</cq-item>
+              <cq-item stxtap="Layout.setPeriodicity(1, 15, 'minute')">15 Min</cq-item>
+              <cq-item stxtap="Layout.setPeriodicity(1, 30, 'minute')">30 Min</cq-item>
+              <cq-separator></cq-separator>
+              <cq-item stxtap="Layout.setPeriodicity(1, 1, 'hour')">1 Hour</cq-item>
+              <cq-item stxtap="Layout.setPeriodicity(1, 2, 'hour')">2 Hour</cq-item>
+              <cq-item stxtap="Layout.setPeriodicity(1, 4, 'hour')">4 Hour</cq-item>
+              <cq-item stxtap="Layout.setPeriodicity(1, 8, 'hour')">8 Hour</cq-item>
+              <cq-separator></cq-separator>
+              <cq-item stxtap="Layout.setPeriodicity(1, 1, 'day')">1 Day</cq-item>
             </cq-menu-dropdown>
           </cq-menu>
           <cq-menu class="ciq-menu ciq-views collapse">

@@ -110,10 +110,6 @@ stxx.attachQuoteFeed(new Feed(_streamManager, stxx), {
     refreshInterval: null,
 });
 
-// Optionally set a market factory to the chart to make it market hours aware. Otherwise it will operate in 24x7 mode.
-// This is required for the simulator, or if you intend to also enable Extended hours trading zones.
-stxx.setMarketFactory(CIQ.Market.Symbology.factory);
-
 // Extended hours trading zones -- Make sure this is instantiated before calling startUI as a timing issue with may occur
 new CIQ.ExtendedHours({
     stx: stxx,
@@ -123,7 +119,9 @@ new CIQ.ExtendedHours({
 // Floating tooltip on mousehover
 // comment in the following line if you want a tooltip to display when the crosshair toggle is turned on
 // This should be used as an *alternative* to the HeadsUP (HUD).
-// new CIQ.Tooltip({stx:stxx, ohl:true, volume:true, series:true, studies:true});
+new CIQ.Tooltip({
+    stx: stxx, ohl: true, volume: false, series: true, studies: true,
+});
 
 // Inactivity timer
 new CIQ.InactivityTimer({
@@ -272,7 +270,7 @@ function startUI() {
             'ciq-day': 'Day',
             'ciq-night': 'Night',
         },
-        defaultTheme: 'ciq-night',
+        defaultTheme: 'ciq-day',
         nameValueStore: UIStorage,
     });
 
