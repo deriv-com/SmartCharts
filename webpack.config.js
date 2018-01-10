@@ -13,6 +13,27 @@ const config = {
     },
     module: {
         rules: [
+            {
+                test: [/\.(scss|css)$/],
+                use: ExtractTextPlugin.extract({
+                    fallback: 'style-loader',
+                    use: [{
+                        loader: 'css-loader',
+                        options: {
+                            // minimize: true,
+                            url: false,
+                            sourceMap: true,
+                        },
+                    },
+                    {
+                        loader: 'sass-loader',
+                        options: {
+                            sourceMap: true,
+                        },
+                    },
+                    ],
+                }),
+            },
             { parser: { amd: false } },
             {
                 test: /\.js$/,
@@ -33,16 +54,20 @@ const config = {
             },
             {
                 test: /\.html/,
-                use: 'raw-loader'
-            }
+                use: 'raw-loader',
+            },
         ],
     },
     plugins: [
+        new ExtractTextPlugin({
+            filename: 'binarychartiq.css',
+        }),
         new webpack.ProvidePlugin({ $: 'jquery', jQuery: 'jquery' }),
         // new webpack.optimize.UglifyJsPlugin(),
     ],
 };
-if(process.env.ANALYZE_BUNDLE) {
+
+if (process.env.ANALYZE_BUNDLE) {
     config.plugins.push(new BundleAnalyzerPlugin());
 }
 

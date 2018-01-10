@@ -8,6 +8,12 @@ import '../js/thirdparty/iscroll';
 
 import { CIQ, $$$ } from '../js/chartiq';
 
+/* css + scss */
+import '../css/normalize.css';
+import '../css/page-defaults.css';
+import '../css/stx-chart.css';
+import '../sass/chartiq.scss';
+
 import '../js/addOns';
 import '../js/translations';
 // import '../plugins/tfc/tfc';
