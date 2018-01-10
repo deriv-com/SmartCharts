@@ -3,19 +3,6 @@ const path = require('path');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
-const sassCssLoader = {
-    fallback: 'style-loader',
-    use: [
-        { loader: 'css-loader' },
-        { loader: 'sass-loader' },
-    ],
-};
-
-if (process.env.NODE_ENV) {
-    // set css-loader to minimize during production build
-    sassCssLoader.use[0].options = { minimize: true };
-}
-
 const config = {
     devtool: 'source-map',
     entry: ['babel-polyfill', './src/index.js'],
@@ -28,7 +15,13 @@ const config = {
         rules: [
             {
                 test: /\.(s*)css$/,
-                use: ['css-hot-loader'].concat(ExtractTextPlugin.extract(sassCssLoader)),
+                use: ['css-hot-loader'].concat(ExtractTextPlugin.extract({
+                    fallback: 'style-loader',
+                    use: [
+                        { loader: 'css-loader' },
+                        { loader: 'sass-loader' },
+                    ],
+                })),
             },
             {
                 test: /\.(png|jp(e*)g|svg)$/,
@@ -69,10 +62,5 @@ const config = {
 if (process.env.ANALYZE_BUNDLE) {
     config.plugins.push(new BundleAnalyzerPlugin());
 }
-
-if (process.env.NODE_ENV) {
-    config.plugins.push(new webpack.optimize.UglifyJsPlugin());
-}
-
 
 module.exports = config;
