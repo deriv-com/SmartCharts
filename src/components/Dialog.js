@@ -1,4 +1,6 @@
-import $ from 'jquery';
+import { $$$ } from '../../js/chartiq';
+import { createElement } from './ui/utils';
+import VDom from './ui/VDom';
 import BaseComponent from './ui/BaseComponent';
 
 /**
@@ -39,24 +41,18 @@ class Dialog extends BaseComponent {
         super.attachedCallback();
         let self = this;
 
-        function handleTap(e) {
+        this.node[0].addEventListener('stxtap', (e) => {
             self.tap(e);
-        }
-        this.node.stxtap(handleTap);
-
-        let uiManager = $('cq-ui-manager');
-        uiManager.each(function () {
-            this.registerForResize(self);
-            self.uiManager = this;
         });
+
+        let uiManager = $$$('cq-ui-manager');
+        uiManager.registerForResize(this);
+        this.uiManager = uiManager;
     }
 
     detachedCallback() {
-        let self = this;
-        let uiManager = $('cq-ui-manager');
-        uiManager.each(function () {
-            this.unregisterForResize(self);
-        });
+        let uiManager = $$$('cq-ui-manager');
+        uiManager.unregisterForResize(this);
     }
 
     /**
@@ -91,37 +87,33 @@ class Dialog extends BaseComponent {
         } else {
             this.center();
         }
-        let scrollers = $(this.node).find('cq-scroll');
-        scrollers.each(function () {
-            this.resize();
-        });
+        const scrollers = $$$('cq-scroll', this.node[0]);
+        if (scrollers) scrollers.resize();
     }
 
     stxContextMenu() {
-        let parent = this.node.parent();
-        if (parent[0].tagName === 'BODY') parent = $(window);
-        let w = parent.guaranteedWidth();
-        let h = parent.guaranteedHeight();
-        let cw = this.node.outerWidth();
-        let ch = this.node.outerHeight();
+        let parent = this.node[0].parentNode;
+        if (parent.tagName === 'BODY') parent = window;
+        let w = VDom(parent).guaranteedWidth();
+        let h = VDom(parent).guaranteedHeight();
+        let cw = this.node[0].offsetWidth;
+        let ch = this.node[0].offsetHeight;
         let left = this.params.x;
         let top = this.params.y;
         if (left + cw > w) left = w - cw;
         if (top + ch > h) top -= ch;
         if (top < 0) top = 0;
-        this.node.css({
-            top: `${top}px`,
-            left: `${left}px`,
-        });
+        this.node[0].style.top = `${top}px`;
+        this.node[0].style.left = `${left}px`;
     }
 
     center() {
-        let parent = this.node.parent();
-        if (parent[0].tagName === 'BODY') parent = $(window);
-        let w = parent.guaranteedWidth();
-        let h = parent.guaranteedHeight();
-        let cw = this.node.outerWidth();
-        let ch = this.node.outerHeight();
+        let parent = this.node[0].parentNode;
+        if (parent.tagName === 'BODY') parent = window;
+        let w = VDom(parent).guaranteedWidth();
+        let h = VDom(parent).guaranteedHeight();
+        let cw = this.node[0].offsetWidth;
+        let ch = this.node[0].offsetHeight;
         let left = w / 2 - cw / 2;
         let top = h / 2 - ch / 2;
         if (left < 0) left = 0;
@@ -129,10 +121,8 @@ class Dialog extends BaseComponent {
             top = h / 3 - ch / 2; // Position 1/3 down the screen on large screens
         }
         if (top < 0) top = 0;
-        this.node.css({
-            top: `${top}px`,
-            left: `${left}px`,
-        });
+        this.node[0].style.top = `${top}px`;
+        this.node[0].style.left = `${left}px`;
     }
 
     open(params) {
@@ -145,25 +135,28 @@ class Dialog extends BaseComponent {
 
 
     hide() {
-        if ($(this).find(':invalid').length) return;
+        if ($$$(':invalid', this)) return;
         // Call the "hide()" function for any immediate children. This will allow nested
         // components to clean themselves up when a dialog is removed from outside of their scope.
-        this.node.children().each(function () {
-            if (typeof this.hide === 'function') {
-                this.hide();
+        [].forEach.call(this.node[0].children, (el) => {
+            if (typeof el.hide === 'function') {
+                el.hide();
             }
         });
         this.active = false;
-        if (this.uiManager.overlay) this.uiManager.overlay.removeAttrBetter('cq-active');
+        if (this.uiManager.overlay) {
+            VDom(this.uiManager.overlay).removeAttribute('cq-active');
+        }
+
         this.uiManager.overlay = null;
         for (let attribute in this.activeAttributes) {
-            this.node.removeAttrBetter(attribute);
+            VDom(this.node[0]).removeAttribute(attribute);
         }
         this.activeAttributes = {};
 
         // blur any input boxes that are inside the dialog we're closing, to get rid of soft keyboard
-        $(this).find('input').each(function () {
-            if (this === document.activeElement) this.blur();
+        this.querySelectorAll('input').forEach((el) => {
+            if (el === document.activeElement) el.blur();
         });
     }
 
@@ -182,14 +175,16 @@ class Dialog extends BaseComponent {
         if (!params) params = this.params = {};
         let self = this;
         if (!this.uiManager.overlay && !params.bypassOverlay) {
-            this.uiManager.overlay = $('<cq-dialog-overlay></cq-dialog-overlay>');
-            $('BODY').append(this.uiManager.overlay);
+            this.uiManager.overlay = createElement('<cq-dialog-overlay></cq-dialog-overlay>');
+            document.body.appendChild(this.uiManager.overlay);
         }
         setTimeout(() => { // to get the opacity transition effect
-            if (self.uiManager.overlay && !params.bypassOverlay) self.uiManager.overlay.attrBetter('cq-active');
+            if (self.uiManager.overlay && !params.bypassOverlay) {
+                VDom(self.uiManager.overlay).setAttribute('cq-active');
+            }
             self.activeAttributes['cq-active'] = true; // cq-active is what css uses to display the dialog
             for (let attribute in self.activeAttributes) {
-                self.node.attrBetter(attribute);
+                VDom(self.node[0]).setAttribute(attribute);
             }
             self.resize();
             self.active = true;

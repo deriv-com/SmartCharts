@@ -1,4 +1,5 @@
 import $ from 'jquery';
+import { getParents } from './utils';
 import { CIQ } from '../../../js/chartiq';
 import { claims } from './';
 /**
@@ -25,7 +26,6 @@ class BaseComponent extends HTMLElement {
      */
     getHelper(node, binding, attribute) {
         if (!node) node = this.topNode;
-        else node = $(node)[0];
         if (!binding) {
             binding = node.getAttribute(attribute);
             if (!binding) return null;
@@ -46,7 +46,7 @@ class BaseComponent extends HTMLElement {
             helper = this.context.getAdvertised(helperName);
         } else { // bind to nearest web component // chart()
             let f = binding.substring(0, paren);
-            let parents = $(node).parents();
+            let parents = getParents(node);
             for (let i = 0; i < parents.length; i++) {
                 let component = parents[i];
                 if (typeof (component[f]) === 'function') {
@@ -90,7 +90,7 @@ class BaseComponent extends HTMLElement {
             }
             helper[f](...argArray);
         } else { // Look for nearest parent web component that contains our desired activation function
-            let parents = $(node).parents();
+            let parents = getParents(node);
             for (let j = 0; j < parents.length; j++) {
                 let component = parents[j];
                 if (typeof (component[f]) === 'function') {
@@ -108,7 +108,7 @@ class BaseComponent extends HTMLElement {
      */
     makeTap(node, cb) {
         node.selectFC = cb;
-        $(node).stxtap(cb);
+        node.addEventListener('stxtap', cb);
     }
 
     /**
@@ -132,7 +132,6 @@ class BaseComponent extends HTMLElement {
      * @memberof CIQ.UI.BaseComponent
      */
     bind(node, params) {
-        node = $(node)[0]; // If jquery, convert to raw HTMLElement
         let helper;
         let binding = node.getAttribute('stxbind');
         let tap = node.getAttribute('stxtap');
@@ -273,7 +272,7 @@ class BaseComponent extends HTMLElement {
      * @memberof CIQ.UI.BaseComponent
      */
     inputEntry(node, cb) {
-        $(node).on('keypress', (e) => {
+        node.addEventListener('keypress', (e) => {
             switch (e.which) {
             case 13:
             case 9:

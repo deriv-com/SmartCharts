@@ -1,4 +1,3 @@
-import $ from 'jquery';
 import BaseComponent from './ui/BaseComponent';
 import { CIQ } from '../../js/chartiq';
 
@@ -23,7 +22,7 @@ class Close extends BaseComponent {
         function closure() {
             self.tap();
         }
-        $(this).stxtap(closure);
+        this.addEventListener('stxtap', closure);
         super.attachedCallback();
         this.attached = true;
     }

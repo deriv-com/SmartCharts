@@ -1,4 +1,3 @@
-import $ from 'jquery';
 import { CIQ } from '../../../js/chartiq';
 
 /**
@@ -19,7 +18,7 @@ class Keystroke {
     static noKeyCapture = false;
 
     constructor(node, cb) {
-        this.node = $(node);
+        this.node = node;
         this.cb = cb;
         this.initialize();
         this.shift = false;
@@ -152,17 +151,17 @@ class Keystroke {
      */
     initialize() {
         let self = this;
-        $(document).on('keyup', this.node, (e) => {
+        this.node.addEventListener('keyup', (e) => {
             self.keyup(e);
         });
-        $(document).on('keydown', this.node, (e) => {
+        this.node.addEventListener('keydown', (e) => {
             self.downValue = e.target.value;
             self.keydown(e);
         });
-        $(document).on('keypress', this.node, (e) => {
+        this.node.addEventListener('keypress', (e) => {
             self.keypress(e);
         });
-        $(window).on('blur', (e) => { // otherwise ctrl-t to switch tabs causes ctrl to get stuck
+        window.addEventListener('blur', (e) => { // otherwise ctrl-t to switch tabs causes ctrl to get stuck
             self.ctrl = false;
             self.cb({ key: 17, e, keystroke: self });
         });
