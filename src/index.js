@@ -8,7 +8,6 @@ import '../js/thirdparty/iscroll';
 
 import { CIQ, $$$ } from '../js/chartiq';
 
-import '../js/addOns';
 import '../js/translations';
 // import '../plugins/tfc/tfc';
 import '../js/plugin';
@@ -113,27 +112,6 @@ stxx.attachQuoteFeed(new Feed(_streamManager, stxx), {
 // Optionally set a market factory to the chart to make it market hours aware. Otherwise it will operate in 24x7 mode.
 // This is required for the simulator, or if you intend to also enable Extended hours trading zones.
 stxx.setMarketFactory(CIQ.Market.Symbology.factory);
-
-// Extended hours trading zones -- Make sure this is instantiated before calling startUI as a timing issue with may occur
-new CIQ.ExtendedHours({
-    stx: stxx,
-    filter: true,
-});
-
-// Floating tooltip on mousehover
-// comment in the following line if you want a tooltip to display when the crosshair toggle is turned on
-// This should be used as an *alternative* to the HeadsUP (HUD).
-// new CIQ.Tooltip({stx:stxx, ohl:true, volume:true, series:true, studies:true});
-
-// Inactivity timer
-new CIQ.InactivityTimer({
-    stx: stxx,
-    minutes: 30,
-});
-
-// Animation (using tension requires splines.js)
-// new CIQ.Animation(stxx, {tension:0.3});
-
 
 function resizeScreen() {
     if (!UIContext) return;
@@ -487,12 +465,6 @@ function showMarkers(standardType) {
     }
     stxx.draw();
 }
-
-
-// Range Slider; needs to be created before startUI() is called for custom themes to apply
-new CIQ.RangeSlider({
-    stx: stxx,
-});
 
 let webComponentsSupported = ('registerElement' in document &&
     'import' in document.createElement('link') &&
