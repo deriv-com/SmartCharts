@@ -33,6 +33,7 @@
     "eslint-plugin-standard": "^3.0.1",
     "extract-text-webpack-plugin": "^3.0.2",
     "file-loader": "^1.1.6",
+    "jquery": "^3.2.1",
     "node-sass": "^4.7.2",
     "raw-loader": "^0.5.1",
     "rimraf": "^2.6.2",
@@ -46,7 +47,9 @@
   },
   "dependencies": {
     "event-emitter-es6": "^1.1.5",
-    "jquery": "^3.2.1",
     "object.observe": "^0.2.6"
+  },
+  "peerDependencies": {
+    "jquery": "^3.2.1"
   }
 }

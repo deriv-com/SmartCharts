@@ -55,8 +55,10 @@ const config = {
         new ExtractTextPlugin({
             filename: 'binarychartiq.css',
         }),
-        new webpack.ProvidePlugin({ $: 'jquery', jQuery: 'jquery' }),
     ],
+    externals: {
+        jquery: 'jQuery',
+    },
 };
 
 if (process.env.ANALYZE_BUNDLE) {
