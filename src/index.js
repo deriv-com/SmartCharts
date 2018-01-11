@@ -1,3 +1,4 @@
+/* eslint-disable no-new */
 import $ from 'jquery';
 
 import StreamManager from './stream-manager';
@@ -73,6 +74,8 @@ const stxx = new CIQ.ChartEngine({
 });
 
 window.stxx = stxx;
+
+CIQ.Animation(stxx, { tension: 0.3, stayPut: true });
 
 function checkWidth() {
     if ($(window).width() > 700) {

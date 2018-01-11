@@ -285,10 +285,28 @@ class Layout extends Helper {
      * @param {number} timeUnit
      */
     setPeriodicity(node, periodicity, interval, timeUnit) {
-        let self = this;
-        if (self.context.loader) self.context.loader.show();
-        self.context.stx.setPeriodicity({ period: periodicity, interval, timeUnit }, () => {
-            if (self.context.loader) self.context.loader.hide();
+        const context = this.context;
+        const stx = context.stx;
+
+        const wasTick = stx.layout.timeUnit === 'second';
+
+        if (context.loader) {
+            context.loader.show();
+        }
+
+        stx.setPeriodicity({ period: periodicity, interval, timeUnit }, () => {
+            if (context.loader) {
+                context.loader.hide();
+            }
+
+            const isTickFriendly = ['line', 'mountain', 'baseline_delta'].indexOf(stx.layout.chartType) !== -1;
+            const isTick = timeUnit === 'second';
+
+            if (!wasTick && isTick && !isTickFriendly) {
+                stx.setChartType('mountain');
+            } else if(wasTick && !isTick && isTickFriendly) {
+                stx.setChartType('candle');
+            }
         });
     }
 
