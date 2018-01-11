@@ -4,6 +4,7 @@ launch.json
 
 # Distribution folder
 dist/
+.publish/
 
 # Optional npm cache directory
 .npm

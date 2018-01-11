@@ -7,6 +7,7 @@ Binary.com charting library based on chartiq.
 - use `yarn start` to launch webpack dev server
 - use `yarn build` to build the project
 - use `yarn analyze` to run webpack-bundle-analyzer
+- use `yarn deploy:gh-pages` to deploy demo to gh-pages
 
 ## Line Class
 ```js
