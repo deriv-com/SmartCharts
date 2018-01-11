@@ -5,12 +5,11 @@
   "author": "amin@binary.com",
   "license": "ISC",
   "scripts": {
-    "build": "webpack --optimize-minimize --progress",
+    "build": "rimraf dist && webpack --optimize-minimize --progress",
     "analyze": "ANALYZE_BUNDLE=true webpack --progress",
     "watch": "webpack --progress --watch",
     "start": "rimraf dist && webpack-dev-server --open  --hot --inline",
-    "deploy:gh-pages": "bash gh-pages-deploy.sh",
-    "run-gh-pages": "gh-pages --add --dist .publish"
+    "gh-pages": "yarn build && gh-pages --dist '.' --src '{index.html,dist/**}' --add"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
