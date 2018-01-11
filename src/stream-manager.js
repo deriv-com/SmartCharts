@@ -3,7 +3,7 @@ import EventEmitter from 'event-emitter-es6';
 import ConnectionManager from './connection-manager';
 
 class Subscription {
-    static get DEFAULT_COUNT() { return 5; }
+    static get DEFAULT_COUNT() { return 1000; }
     static get DEFAULT_TIMEOUT() { return 20 * 1000; }
 
     constructor({ symbol, granularity }, { connection, response = null }) {
