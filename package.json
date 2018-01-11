@@ -5,7 +5,7 @@
   "author": "amin@binary.com",
   "license": "ISC",
   "scripts": {
-    "build": "webpack -p --progress",
+    "build": "webpack --optimize-minimize --progress",
     "analyze": "ANALYZE_BUNDLE=true webpack --progress",
     "watch": "webpack --progress --watch",
     "start": "rimraf dist && webpack-dev-server --open  --hot --inline"
