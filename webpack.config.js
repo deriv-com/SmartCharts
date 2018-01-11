@@ -1,7 +1,7 @@
 const webpack = require('webpack');
 const path = require('path');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 const config = {
     devtool: 'source-map',
@@ -13,6 +13,20 @@ const config = {
     },
     module: {
         rules: [
+            {
+                test: /\.(s*)css$/,
+                use: ['css-hot-loader'].concat(ExtractTextPlugin.extract({
+                    fallback: 'style-loader',
+                    use: [
+                        { loader: 'css-loader' },
+                        { loader: 'sass-loader' },
+                    ],
+                })),
+            },
+            {
+                test: /\.(png|cur|jp(e*)g|svg)$/,
+                use: ['url-loader'],
+            },
             { parser: { amd: false } },
             {
                 test: /\.js$/,
@@ -33,18 +47,22 @@ const config = {
             },
             {
                 test: /\.html/,
-                use: 'raw-loader'
-            }
+                use: 'raw-loader',
+            },
         ],
     },
     plugins: [
-        new webpack.ProvidePlugin({ $: 'jquery', jQuery: 'jquery' }),
-        // new webpack.optimize.UglifyJsPlugin(),
+        new ExtractTextPlugin({
+            filename: 'binarychartiq.css',
+        }),
     ],
+    externals: {
+        jquery: 'jQuery',
+    },
 };
-if(process.env.ANALYZE_BUNDLE) {
+
+if (process.env.ANALYZE_BUNDLE) {
     config.plugins.push(new BundleAnalyzerPlugin());
 }
-
 
 module.exports = config;
