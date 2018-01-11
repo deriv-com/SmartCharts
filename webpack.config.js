@@ -24,7 +24,7 @@ const config = {
                 })),
             },
             {
-                test: /\.(png|jp(e*)g|svg)$/,
+                test: /\.(png|cur|jp(e*)g|svg)$/,
                 use: ['url-loader'],
             },
             { parser: { amd: false } },
