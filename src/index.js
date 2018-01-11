@@ -55,6 +55,7 @@ import './components/Undo';
 import './components/ViewDialog';
 import './components/Views';
 import './components/Clickable';
+import './components/ChartControls';
 
 import Line from './draw/line';
 

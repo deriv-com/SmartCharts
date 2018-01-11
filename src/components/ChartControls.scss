@@ -1,0 +1,38 @@
+#chartControls {
+  /* Chart Control module */
+  position: absolute;
+  display: flex !important;
+  bottom: 60px;
+  left: 50%;
+  margin-left: -55px;
+  height: 25px;
+  width: auto;
+  text-align: center;
+  background: #fafafa;
+  box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.2);
+  z-index: 30;
+  border-radius: 5px;
+  #chartSize {
+      box-shadow: none;
+  }
+  .ciq-menu {
+      line-height: 25px;
+      &:after {
+          right: 5px;
+          top: 11px;
+          transform: rotate(225deg); /* 180 + 45 */
+      }
+
+      cq-separator {
+          margin: 0;
+      }
+
+      cq-menu-dropdown {
+          bottom: 30px;
+          margin-top: 0;
+          padding-bottom: 0;
+          padding-top: 0;
+          border-top: 1px solid #bbb;
+      }
+  }
+}

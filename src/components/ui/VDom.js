@@ -15,12 +15,33 @@ export class VirtualDom {
         const val = this.element.getAttribute(attribute);
         if (val === value) return;
         this.element.setAttribute(attribute, value);
+        return this;
     }
 
     removeAttribute(attribute) {
         const val = this.element.getAttribute(attribute);
         if (!val && val !== '') return;
         this.element.removeAttribute(attribute);
+        return this;
+    }
+
+    addClass(className) {
+        const el = this.element;
+        if (el.classList) {
+            el.classList.add(className);
+        } else {
+            el.className += ' ' + className;
+        }
+        return this;
+    }
+    removeClass(className) {
+        const el = this.element;
+        if (el.classList) {
+            el.classList.remove(className);
+        } else {
+            el.className = el.className.replace(new RegExp('(^|\\b)' + className.split(' ').join('|') + '(\\b|$)', 'gi'), ' ');
+        }
+        return this;
     }
 
     // Returns a guaranteed width. For instance, cq-context or any other wrapping tag can have
