@@ -49,6 +49,7 @@ import './components/Toggle';
 import './components/Undo';
 import './components/ViewDialog';
 import './components/Views';
+import './components/Clickable';
 
 import Line from './draw/line';
 
@@ -66,6 +67,8 @@ const _streamManager = StreamManager.buildFor({
 const stxx = new CIQ.ChartEngine({
     container: $$$('#chartContainer'),
 });
+
+window.stxx = stxx;
 
 function checkWidth() {
     if ($(window).width() > 700) {
