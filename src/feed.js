@@ -79,7 +79,7 @@ class Feed {
     static calculateGranularity(period, interval) {
         const toSeconds = {
             second: 0,
-            hour: 60 * 60,
+            minute: 60,
             day: 24 * 60 * 60,
         };
 
