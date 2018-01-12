@@ -264,23 +264,13 @@ function startUI() {
         });
     };
 
-    const driver = new ActiveSymbolDriver();
+    const driver = new ActiveSymbolDriver(_connectionManager);
 
     UIContext.setLookupDriver(driver);
 
     const symbolLookup = $$$('.ciq-search cq-lookup');
-    const comparisonLookup = $$$('cq-comparison cq-lookup');
     symbolLookup.setCallback((context, data) => {
         context.changeSymbol(data);
-    });
-
-    _connectionManager.send({
-        active_symbols: 'brief',
-        product_type: 'basic',
-    }).then((data) => {
-        driver.activeSymbols = data.active_symbols;
-        symbolLookup.results(driver.activeSymbols);
-        comparisonLookup.results(driver.activeSymbols);
     });
 
     new CIQ.UI.KeystrokeHub($$$('body'), UIContext, {

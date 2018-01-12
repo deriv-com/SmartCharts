@@ -45,6 +45,7 @@ class Lookup extends ContextTag {
     }
 
     setContext(context) {
+        this.setDriver(this.context.lookupDriver);
         this.initialize();
     }
 
@@ -70,6 +71,10 @@ class Lookup extends ContextTag {
      * @memberof WebComponents.cq-lookup
      */
     setDriver(driver) {
+        const self = this;
+        driver.activeSymbolsPromise.then((activeSymbols) => {
+            self.results(activeSymbols);
+        });
         this.params.driver = driver;
     }
 
@@ -148,11 +153,7 @@ class Lookup extends ContextTag {
     acceptText(value, filter) {
         let self = this;
         if (!this.params.driver) {
-            if (this.context.lookupDriver) {
-                this.setDriver(this.context.lookupDriver);
-            } else {
-                throw new Error('Please define a Driver for your Context!');
-            }
+            throw new Error('Please define a Driver for your Context!');
         }
 
         function closure(results) {

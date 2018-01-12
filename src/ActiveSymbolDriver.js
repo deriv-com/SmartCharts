@@ -1,19 +1,26 @@
 import Driver from './components/ui/Driver';
+
 /**
  * An example of an asynchronous Lookup.Driver that uses ChartIQ's suggestive search as its source for symbol search
  * @memberof CIQ.UI.Lookup.Driver
  * @param {array} exchanges An array of ecxchanges that can be searched against
  */
 class ActiveSymbolDriver extends Driver {
-    constructor() {
+    constructor(connectionManager) {
         super();
-        this.symbols = [];
+        this.symbolsPromise = connectionManager.send({
+            active_symbols: 'brief',
+            product_type: 'basic',
+        }).then((data) => {
+            this._setActiveSymbols(data.active_symbols);
+            return this.symbols;
+        });
     }
 
-    set activeSymbols(symbols) {
+    _setActiveSymbols(symbols) {
         this.symbols = [];
 
-        for (let s of symbols) {
+        for (const s of symbols) {
             this.symbols.push({
                 data: {
                     symbol: s.symbol,
@@ -26,8 +33,8 @@ class ActiveSymbolDriver extends Driver {
         }
     }
 
-    get activeSymbols() {
-        return this.symbols;
+    get activeSymbolsPromise() {
+        return this.symbolsPromise;
     }
 
     /**
