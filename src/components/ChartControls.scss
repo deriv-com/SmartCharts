@@ -4,7 +4,7 @@
   display: flex !important;
   bottom: 60px;
   left: 50%;
-  margin-left: -55px;
+  transform: translateX(-50%);
   height: 25px;
   width: auto;
   text-align: center;
@@ -33,6 +33,15 @@
           padding-bottom: 0;
           padding-top: 0;
           border-top: 1px solid #bbb;
+      }
+  }
+
+  #chartStyle {
+      cq-clickable {
+          padding-right: 7px;
+      }
+      cq-item {
+          text-align: left;
       }
   }
 }

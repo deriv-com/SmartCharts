@@ -424,6 +424,7 @@ function startUI() {
     }
 
     CIQ.UI.begin();
+    stxx.setStyle('stx_line_chart', 'color', '#4DAFEE'); // TODO => why is not working in css?
 
     // CIQ.I18N.setLanguage(stxx, "zh"); // Optionally set a language for the UI, after it has been initialized, and translate.
 }

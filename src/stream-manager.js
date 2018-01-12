@@ -36,6 +36,14 @@ class Subscription {
                 }
                 // else
                 throw up;
+            })
+            .then((data) => {
+                if (data.error) {
+                    const up = new Error(data.error.message);
+                    up.response = data;
+                    throw up;
+                }
+                return data;
             });
     }
     get response() {
