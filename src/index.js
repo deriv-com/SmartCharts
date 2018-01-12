@@ -268,8 +268,9 @@ function startUI() {
 
     UIContext.setLookupDriver(driver);
 
-    UIContext.UISymbolLookup = $$$('.ciq-search cq-lookup');
-    UIContext.UISymbolLookup.setCallback((context, data) => {
+    const symbolLookup = $$$('.ciq-search cq-lookup');
+    const comparisonLookup = $$$('cq-comparison cq-lookup');
+    symbolLookup.setCallback((context, data) => {
         context.changeSymbol(data);
     });
 
@@ -278,7 +279,8 @@ function startUI() {
         product_type: 'basic',
     }).then((data) => {
         driver.activeSymbols = data.active_symbols;
-        UIContext.UISymbolLookup.results(driver.activeSymbols);
+        symbolLookup.results(driver.activeSymbols);
+        comparisonLookup.results(driver.activeSymbols);
     });
 
     new CIQ.UI.KeystrokeHub($$$('body'), UIContext, {
@@ -432,7 +434,7 @@ function startUI() {
     });
 
     if (!stxx.chart.symbol) {
-        UIContext.UISymbolLookup.selectItem({
+        symbolLookup.selectItem({
             symbol: 'R_100',
         }); // load an initial symbol
     }
