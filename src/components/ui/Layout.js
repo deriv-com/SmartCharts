@@ -75,6 +75,25 @@ class Layout extends Helper {
         }
     }
 
+    chartType(node) {
+        let self = this;
+
+        function showChartType({obj}) {
+            const selector = `cq-menu cq-item[stxvalue="${obj.chartType}"]`;
+            const cqitem = document.querySelector(selector);
+            if(cqitem) {
+                node.textContent = cqitem.textContent;
+            }
+        }
+        CIQ.UI.observe({
+            selector: node,
+            obj: this.context.stx.layout,
+            member: ['chartType'],
+            action: 'callback',
+            value: showChartType,
+        });
+    }
+
     /**
      * @memberof CIQ.UI.Layout
      * @param {HTMLElement} node

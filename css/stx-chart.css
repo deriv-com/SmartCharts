@@ -519,7 +519,7 @@ html,body{
 
 .stx_line_chart {/* Default width for line Charts */
 	width: 1px;
-	border-top-style:solid;
+	border-top-style: dotted;
 }
 .stx_bar_chart, .stx_bar_up, .stx_bar_down, .stx_bar_even {/* Default width for bar Charts */
 	width: 1px;

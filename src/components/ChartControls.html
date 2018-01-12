@@ -1,3 +1,23 @@
+<cq-menu id="chartStyle" class="ciq-menu ciq-display collapse">
+    <cq-clickable stxbind="Layout.chartType">Candle</cq-clickable>
+    <cq-menu-dropdown>
+        <cq-item stxvalue='candle' stxsetget="Layout.ChartType('candle')">Candle
+            <span class="ciq-radio"> <span></span> </span>
+        </cq-item>
+        <cq-item stxvalue='colored_bar' stxsetget="Layout.ChartType('colored_bar')">OHLC
+            <span class="ciq-radio"> <span></span> </span>
+        </cq-item>
+        <cq-item stxvalue='mountain' stxsetget="Layout.ChartType('mountain')">Line
+            <span class="ciq-radio"> <span></span> </span>
+        </cq-item>
+        <cq-item stxvalue='line' stxsetget="Layout.ChartType('line')">Dot
+            <span class="ciq-radio"> <span></span> </span>
+        </cq-item>
+        <cq-item stxvalue='hollow_candle' stxsetget="Layout.ChartType('hollow_candle')">Hollow Candle
+            <span class="ciq-radio"> <span></span> </span>
+        </cq-item>
+    </cq-menu-dropdown>
+</cq-menu>
 <cq-menu class="ciq-menu ciq-period">
     <span>
         <cq-clickable stxbind="Layout.periodicity">1 Tick</cq-clickable>
