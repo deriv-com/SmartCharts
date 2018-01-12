@@ -5,7 +5,6 @@ import './jquery-extensions';
 import './UI';
 import './UIManager';
 
-import Context from './Context';
 import HeadsUp from './HeadsUp';
 import StudyEdit from './StudyEdit';
 import Layout from './Layout';
@@ -154,7 +153,6 @@ export const aggregation = (baseClass, ...mixins) => {
 }());
 
 CIQ.Marker.HeadsUp = HeadsUpMarker;
-CIQ.UI.Context = Context;
 CIQ.UI.HeadsUp = HeadsUp;
 CIQ.UI.KeystrokeHub = KeystrokeHub;
 CIQ.UI.StudyEdit = StudyEdit;
