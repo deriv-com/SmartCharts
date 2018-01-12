@@ -44,7 +44,7 @@ class ActiveSymbolDriver extends Driver {
         const result = [];
         filter = this.getFilterFromDisplay(filter) || 'All';
 
-        for (let s of this.symbols) {
+        for (const s of this.symbols) {
             const d = s.data;
             if (filter !== 'All' && d.market_display_name !== filter) continue;
 
