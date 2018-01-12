@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import { CIQ, $$$ } from '../../js/chartiq';
 import { getParents } from './ui/utils';
-import BaseComponent from './ui/BaseComponent';
+import ContextTag from './ui/ContextTag';
 
 /**
  * Scroll web component `<cq-scroll>`.
@@ -29,7 +29,7 @@ import BaseComponent from './ui/BaseComponent';
      <cq-scroll></cq-scroll>
  */
 
-class Scroll extends BaseComponent {
+class Scroll extends ContextTag {
     /**
      * Scroll back to top
      */
@@ -52,6 +52,11 @@ class Scroll extends BaseComponent {
     }
 
     resize() {
+        if (!this.context) {
+            // return if context is not intialized yet
+            return;
+        }
+        
         let node = this.node;
         if (getParents(node[0], '.sharing').length) return;
         /* share.js appends this class to the body.
@@ -61,10 +66,9 @@ class Scroll extends BaseComponent {
         if (node[0].getAttribute('cq-no-resize') !== null) return;
         if (node[0].getAttribute('cq-no-maximize') !== null) this.noMaximize = true;
         let position = node[0].getBoundingClientRect();
-        let reduceMenuHeight = 45; // hard coded for now to take into account 15px of padding on menus and then an extra 5px for aesthetics
-        let winHeight = screen.height;
-        if (!winHeight) return;
-        let height = winHeight - position.top - reduceMenuHeight;
+
+        let chartHeight = this.context.stx.chart.height;
+        let height = chartHeight * 0.6;
         let holders = getParents(node[0], '.stx-holder,.stx-subholder');
         if (holders.length) {
             holders.forEach((h) => {
@@ -81,7 +85,7 @@ class Scroll extends BaseComponent {
             height -= sibling.height();
         }
         if (!this.noMaximize) {
-            node[0].style.height =  `${height}px`;
+            node[0].style.height = `${height}px`;
         }
         node[0].style.maxHeight = `${height}px`;
     }
