@@ -26,6 +26,7 @@ class ActiveSymbolDriver extends Driver {
                     symbol: s.symbol,
                     name: s.display_name,
                     market_display_name: s.market_display_name,
+                    exchange_is_open: s.exchange_is_open,
                     exchDisp: s.market,
                 },
                 display: [s.symbol, s.display_name, s.market.toUpperCase()],

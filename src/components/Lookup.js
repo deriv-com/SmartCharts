@@ -1,5 +1,6 @@
 import $ from 'jquery';
 import { CIQ } from '../../js/chartiq';
+import { createElement } from './ui/utils';
 import ContextTag from './ui/ContextTag';
 
 /**
@@ -301,17 +302,18 @@ class Lookup extends ContextTag {
         }
 
         this.resultList.empty();
-        for (let i = 0; i < arr.length; i++) {
-            let item = arr[i];
-            let nodeText = '<cq-item>';
-            for (let j = 0; j < item.display.length; j++) {
-                nodeText += `<SPAN>${item.display[j]}</SPAN>`;
+        for (const item of arr) {
+            let nodeText = `<cq-item ${item.data.exchange_is_open ? '' : 'disabled'}>`;
+            for (const display of item.display) {
+                nodeText += `<SPAN>${display}</SPAN>`;
             }
             nodeText += '</cq-item>';
-            let node = $(nodeText);
+            let node = createElement(nodeText);
             this.resultList.append(node);
-            node[0].selectFC = closure(this, item.data);
-            node.stxtap(node[0].selectFC);
+            node.selectFC = closure(this, item.data);
+            if (item.data.exchange_is_open) {
+                node.addEventListener('stxtap', node.selectFC);
+            }
         }
         let scrollable = this.node.find('cq-scroll');
         if (scrollable.length) scrollable[0].top();
