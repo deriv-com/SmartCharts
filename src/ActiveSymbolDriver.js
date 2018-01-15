@@ -12,8 +12,8 @@ class ActiveSymbolDriver extends Driver {
             active_symbols: 'brief',
             product_type: 'basic',
         }).then((data) => {
-            this.symbols = this._processSymbols(data.active_symbols);
-            return this.symbols;
+            this._symbols = this._processSymbols(data.active_symbols);
+            return this._symbols;
         });
     }
 
@@ -48,7 +48,7 @@ class ActiveSymbolDriver extends Driver {
      * @param {function} callback Callback upon results
      */
     acceptText(text, filter, maxResults, callback) {
-        if (!this.symbols) return [];
+        if (!this._symbols) return [];
 
         const reg = RegExp(text, 'i');
         const result = [];
@@ -65,7 +65,7 @@ class ActiveSymbolDriver extends Driver {
             break;
         }
 
-        for (const s of this.symbols) {
+        for (const s of this._symbols) {
             const d = s.data;
             if (_filter !== 'All' && d.market_display_name !== _filter) continue;
 
