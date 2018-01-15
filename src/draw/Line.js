@@ -1,5 +1,6 @@
 import { CIQ, $$$ } from '../../js/chartiq';
-import html from './line.html';
+import html from './Line.html';
+import { createElement } from '../components/ui/utils';
 
 class Line {
     static get SHADE_NONE() { return 'SHADE_NONE'; }
@@ -11,9 +12,7 @@ class Line {
 
     static get DOM() {
         if (!Line._DOM) {
-            const wrapper = document.createElement('div');
-            wrapper.innerHTML = html;
-            Line._DOM = wrapper.firstChild;
+            Line._DOM = createElement(html);
         }
         return Line._DOM;
     }
