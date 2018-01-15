@@ -47,27 +47,6 @@ This is a fully functional example showing how to load a chart with a correspond
 
       <div class="ciq-menu-section">
         <div class="ciq-dropdowns">
-          <cq-menu class="ciq-menu ciq-views collapse">
-            <span>Views</span>
-            <cq-menu-dropdown>
-              <cq-views>
-                <cq-heading>Saved Views</cq-heading>
-                <cq-views-content>
-                  <template cq-view>
-                    <cq-item>
-                      <cq-label></cq-label>
-                      <div class="ciq-icon ciq-close"></div>
-                    </cq-item>
-                  </template>
-                </cq-views-content>
-                <cq-separator cq-partial></cq-separator>
-                <cq-view-save>
-                  <cq-item>
-                    <cq-plus></cq-plus>Save View</cq-item>
-                </cq-view-save>
-              </cq-views>
-            </cq-menu-dropdown>
-          </cq-menu>
           <cq-menu class="ciq-menu ciq-display collapse">
             <span>Display</span>
             <cq-menu-dropdown>
@@ -225,26 +204,6 @@ This is a fully functional example showing how to load a chart with a correspond
           </cq-toggle>
         </div>
 
-        <!-- any entry in this div will be shown in the side navigation bar in break-sm mode -->
-        <div class="icon-toggles ciq-toggles">
-          <cq-toggle class="ciq-CH" cq-member="crosshair">
-            <span></span>
-            <cq-tooltip>Crosshair</cq-tooltip>
-          </cq-toggle>
-          <cq-toggle class="ciq-HU" cq-member="headsUp" cq-toggles="dynamic,static,null">
-            <span></span>
-            <cq-tooltip>Info</cq-tooltip>
-          </cq-toggle>
-          <cq-toggle class="ciq-draw">
-            <span></span>
-            <cq-tooltip>Draw</cq-tooltip>
-          </cq-toggle>
-
-          <!-- comment in the following line if you are using the TFC plug in -->
-          <!-- <cq-toggle class="sidebar stx-trade"><span></span><cq-tooltip>Trade</cq-tooltip></cq-toggle> -->
-          <!-- comment in the following line if you are using the tradingcentral plug in -->
-          <!-- <cq-toggle class="stx-tradingcentral"><span></span><cq-tooltip>Analysis</cq-tooltip></cq-toggle> -->
-        </div>
       </div>
     </div>
     <!-- End Navbar -->
