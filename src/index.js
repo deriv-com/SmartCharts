@@ -240,8 +240,6 @@ function startUI() {
     UIContext.changeSymbol = function (data) {
         let stx = this.stx;
         if (this.loader) this.loader.show();
-        data.symbol = data.symbol.toUpperCase(); // set a pretty display version
-
 
         // reset comparisons - remove this loop to transfer from symbol to symbol.
         for (let field in stx.chart.series) {

@@ -1141,6 +1141,10 @@ cq-lookup-results{
 		&:first-child span { padding-top:10px;}
 		&:last-child span { padding-bottom:10px;}
 	}
+	& cq-item[disabled] span {
+		color: #c5c5c5 !important;
+		pointer-events: none;
+	}
 	& cq-item span { /* Results Row Content */
 		line-height: 27px;
 		display:table-cell;
