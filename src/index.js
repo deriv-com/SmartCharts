@@ -3,7 +3,10 @@ import $ from 'jquery';
 
 import StreamManager from './stream-manager';
 import Feed from './feed';
-import ExampleDriver from './ExampleDriver';
+import ActiveSymbolDriver from './ActiveSymbolDriver';
+import ConnectionManager from './connection-manager';
+import Context from './components/ui/Context';
+
 import '../js/thirdparty/html2canvas';
 import '../js/thirdparty/iscroll';
 
@@ -64,11 +67,13 @@ window.CIQ = CIQ;
 
 let UIContext;
 
-const _streamManager = StreamManager.buildFor({
+const _connectionManager = new ConnectionManager({
     appId: 1,
     language: 'en',
     endpoint: 'wss://frontend.binaryws.com/websockets/v3',
 });
+
+const _streamManager = new StreamManager(_connectionManager);
 
 const stxx = new CIQ.ChartEngine({
     container: $$$('#chartContainer'),
@@ -221,7 +226,7 @@ stxx.callbacks.preferences = savePreferences;
 
 function startUI() {
     const contextNode = $('cq-context,[cq-context]');
-    UIContext = new CIQ.UI.Context(stxx, contextNode);
+    UIContext = new Context(stxx, contextNode);
     new CIQ.UI.Layout(UIContext);
     let UIHeadsUpDynamic = new CIQ.UI.HeadsUp($('cq-hu-dynamic'), UIContext, {
         followMouse: true,
@@ -259,11 +264,12 @@ function startUI() {
         });
     };
 
+    const driver = new ActiveSymbolDriver(_connectionManager);
 
-    UIContext.setLookupDriver(new ExampleDriver());
+    UIContext.setLookupDriver(driver);
 
-    UIContext.UISymbolLookup = $('.ciq-search cq-lookup')[0];
-    UIContext.UISymbolLookup.setCallback((context, data) => {
+    const symbolLookup = $$$('.ciq-search cq-lookup');
+    symbolLookup.setCallback((context, data) => {
         context.changeSymbol(data);
     });
 
@@ -275,8 +281,8 @@ function startUI() {
 
     let UIStorage = new CIQ.NameValueStore();
 
-    let UIThemes = $('cq-themes');
-    UIThemes[0].initialize({
+    let UIThemes = $$$('cq-themes');
+    UIThemes.initialize({
         builtInThemes: {
             'ciq-day': 'Day',
             'ciq-night': 'Night',
@@ -285,7 +291,7 @@ function startUI() {
         nameValueStore: UIStorage,
     });
 
-    let sidePanel = $('cq-side-panel')[0];
+    let sidePanel = $$$('cq-side-panel');
     if (sidePanel) sidePanel.registerCallback(resizeScreen);
 
     $('.ciq-sidenav')[0].registerCallback(function (value) {
@@ -418,7 +424,7 @@ function startUI() {
     });
 
     if (!stxx.chart.symbol) {
-        UIContext.UISymbolLookup.selectItem({
+        symbolLookup.selectItem({
             symbol: 'R_100',
         }); // load an initial symbol
     }

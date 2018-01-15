@@ -45,6 +45,7 @@ class Lookup extends ContextTag {
     }
 
     setContext(context) {
+        this.setDriver(this.context.lookupDriver);
         this.initialize();
     }
 
@@ -70,6 +71,10 @@ class Lookup extends ContextTag {
      * @memberof WebComponents.cq-lookup
      */
     setDriver(driver) {
+        const self = this;
+        driver.activeSymbolsPromise.then((activeSymbols) => {
+            self.results(activeSymbols);
+        });
         this.params.driver = driver;
     }
 
@@ -148,12 +153,7 @@ class Lookup extends ContextTag {
     acceptText(value, filter) {
         let self = this;
         if (!this.params.driver) {
-            if (this.context.lookupDriver) {
-                this.setDriver(this.context.lookupDriver);
-            } else {
-                this.setDriver(new CIQ.UI.Lookup.Driver());
-                this.usingEmptyDriver = true;
-            }
+            throw new Error('Please define a Driver for your Context!');
         }
 
         function closure(results) {
@@ -221,15 +221,15 @@ class Lookup extends ContextTag {
                 // ctrl-a or highlight all text + delete implies remove all text
                 if (window.getSelection().toString()) {
                     input.value = '';
-                } else {
-                    if (!focused) input.value = input.value.substring(0, input.value.length - 1);
-                    if (input.value.length) {
-                        self.acceptText(input.value, self.currentFilter);
-                    }
+                } else if (!focused) {
+                    input.value = input.value.substring(0, input.value.length - 1);
                 }
 
                 result = true; // only capture delete key if there was something to delete
             }
+
+            self.acceptText(input.value, self.currentFilter);
+
             if (key === 'backspace') result = true; // always capture backspace because otherwise chrome will navigate back
         }
         if (key === 'escape' && iAmDisplayed) {
