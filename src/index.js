@@ -1,10 +1,10 @@
 /* eslint-disable no-new */
 import $ from 'jquery';
 
-import StreamManager from './stream-manager';
-import Feed from './feed';
+import StreamManager from './StreamManager';
+import Feed from './Feed';
 import ActiveSymbolDriver from './ActiveSymbolDriver';
-import ConnectionManager from './connection-manager';
+import ConnectionManager from './ConnectionManager';
 import Context from './components/ui/Context';
 
 import '../js/thirdparty/html2canvas';
@@ -60,7 +60,7 @@ import './components/Views';
 import './components/Clickable';
 import './components/ChartControls';
 
-import Line from './draw/line';
+import Line from './draw/Line';
 
 window.Line = Line;
 window.CIQ = CIQ;
