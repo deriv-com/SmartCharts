@@ -1024,10 +1024,10 @@ cq-toggle {
 .ciq-HU {
 	float:left;
 	&.active {
-		border-bottom:none;
-		& span,
-		&:hover span,
-		&:active span {border:solid 1px $DEFAULT-accent;}
+		// border-bottom:none;
+		// & span,
+		// &:hover span,
+		// &:active span {border:solid 1px $DEFAULT-accent;}
 	}
 }
 

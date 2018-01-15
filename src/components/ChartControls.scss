@@ -43,6 +43,18 @@
       }
   }
 
+  .ciq-views  {
+      cq-item {
+          text-align: left;
+          padding: 0 10px;
+          cq-label {
+              width: 155px;
+          }
+      }
+      cq-separator {
+          width: 200px;
+      }
+  }
   #chartStyle {
       cq-clickable {
           padding-right: 7px;
