@@ -102,7 +102,7 @@ class Subscription {
     }
 }
 
-export class Stream extends EventEmitter {
+export class Stream {
     static get EVENT_STREAM() { return 'EVENT_STREAM'; }
     static get EVENT_DISCONNECT() { return 'EVENT_DISCONNECT'; }
     static get EVENT_RECONNECT() { return 'EVENT_RECONNECT'; }
@@ -112,7 +112,6 @@ export class Stream extends EventEmitter {
         subscription,
         emitter,
     ) {
-        super();
         this._subscription = subscription;
         this._emitter = emitter;
         this._callbacks = {

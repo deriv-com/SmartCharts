@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import { aggregation } from './ui';
+import { aggregation } from './ui/utils';
 import ContextTag from './ui/ContextTag';
 import Scroll from './Scroll';
 
