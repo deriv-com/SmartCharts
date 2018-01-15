@@ -12,16 +12,16 @@ class ActiveSymbolDriver extends Driver {
             active_symbols: 'brief',
             product_type: 'basic',
         }).then((data) => {
-            this._setActiveSymbols(data.active_symbols);
+            this.symbols = this._processSymbols(data.active_symbols);
             return this.symbols;
         });
     }
 
-    _setActiveSymbols(symbols) {
-        this.symbols = [];
+    _processSymbols(symbols) {
+        const processedSymbols = [];
 
         for (const s of symbols) {
-            this.symbols.push({
+            processedSymbols.push({
                 data: {
                     symbol: s.symbol,
                     name: s.display_name,
@@ -31,9 +31,11 @@ class ActiveSymbolDriver extends Driver {
                 display: [s.symbol, s.display_name, s.market.toUpperCase()],
             });
         }
+
+        return processedSymbols;
     }
 
-    get activeSymbolsPromise() {
+    get activeSymbols() {
         return this.symbolsPromise;
     }
 
@@ -42,36 +44,36 @@ class ActiveSymbolDriver extends Driver {
      * @param {string} text Text to serach for
      * @param {string} filter Any filter to be applied to the search results
      * @param {number} maxResults Max number of results to return from the server
-     * @param {function} cb Callback upon results
+     * @param {function} callback Callback upon results
      */
-    acceptText(text, filter, maxResults, cb) {
+    acceptText(text, filter, maxResults, callback) {
         if (!this.symbols) return [];
 
         const reg = RegExp(text, 'i');
         const result = [];
-        filter = this.getFilterFromDisplay(filter) || 'All';
+        let _filter = filter || 'All';
+
+        switch (_filter) {
+        case 'OTC':
+            _filter = 'OTC Stocks';
+            break;
+        case 'Volatility':
+            _filter = 'Volatility Indices';
+            break;
+        default:
+            break;
+        }
 
         for (const s of this.symbols) {
             const d = s.data;
-            if (filter !== 'All' && d.market_display_name !== filter) continue;
+            if (_filter !== 'All' && d.market_display_name !== _filter) continue;
 
             if (reg.test(d.symbol) || reg.test(d.name)) {
                 result.push(s);
             }
         }
 
-        cb(result);
-    }
-
-    getFilterFromDisplay(display) {
-        switch (display) {
-        case 'OTC':
-            return 'OTC Stocks';
-        case 'Volatility':
-            return 'Volatility Indices';
-        default:
-            return display;
-        }
+        callback(result);
     }
 }
 

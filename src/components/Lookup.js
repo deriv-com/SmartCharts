@@ -72,7 +72,7 @@ class Lookup extends ContextTag {
      */
     setDriver(driver) {
         const self = this;
-        driver.activeSymbolsPromise.then((activeSymbols) => {
+        driver.activeSymbols.then((activeSymbols) => {
             self.results(activeSymbols);
         });
         this.params.driver = driver;
