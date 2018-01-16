@@ -1,7 +1,8 @@
+import EventEmitter from 'event-emitter-es6';
 import { CIQ, $$$ } from '../../js/chartiq';
 import Line from './Line';
 
-class HorizontalLine extends Line {
+class PriceLine extends Line {
     static get SHADE_NONE() { return 'SHADE_NONE'; }
     static get SHADE_ABOVE() { return 'SHADE_ABOVE'; }
     static get SHADE_BELOW() { return 'SHADE_BELOW'; }
@@ -10,18 +11,20 @@ class HorizontalLine extends Line {
 
     constructor({
         stx,
-        shadeState = HorizontalLine.SHADE_NONE,
-        shadeColor = HorizontalLine.COLOR_GREEN,
-        lineColor = HorizontalLine.COLOR_GREEN,
+        shadeState = PriceLine.SHADE_NONE,
+        shadeColor = PriceLine.COLOR_GREEN,
+        lineColor = PriceLine.COLOR_GREEN,
         visible = true,
         pipSize = 2,
         price,
+        draggable = true,
     }) {
         super({
-            stx, lineColor, visible, pipSize, price,
+            stx, lineColor, visible, pipSize, price, draggable,
         });
         this.shadeState = shadeState;
         this.shadeColor = shadeColor;
+        this._emitter = new EventEmitter();
         CIQ.appendClassName(this._line, 'horizontal');
 
         this._stx.append('draw', this._draw.bind(this));
@@ -145,12 +148,12 @@ class HorizontalLine extends Line {
         if (this.visible) {
             this._positionAtPrice(this.price, [this._line], 'center', null, true);
             this._linePrice.textContent = this.price.toFixed(this._pipSize);
-            if (this._shadeState === HorizontalLine.SHADE_ABOVE) {
+            if (this._shadeState === PriceLine.SHADE_ABOVE) {
                 this._shade.style.top = '0px';
                 this._shade.style.bottom = `${
                     this._chart.panel.height - this._locationFromPrice(this.price)
                 }px`;
-            } else if (this._shadeState === HorizontalLine.SHADE_BELOW) {
+            } else if (this._shadeState === PriceLine.SHADE_BELOW) {
                 this._shade.style.bottom = '0px';
                 this._shade.style.top = `${this._locationFromPrice(this.price)}px`;
             }
@@ -163,7 +166,7 @@ class HorizontalLine extends Line {
 
     set shadeState(shadeState) {
         this._shadeState = shadeState;
-        if (this._shadeState === HorizontalLine.SHADE_NONE) {
+        if (this._shadeState === PriceLine.SHADE_NONE) {
             this._shade.style.display = 'none';
             CIQ.unappendClassName(this._shade, 'shade-above');
             CIQ.unappendClassName(this._shade, 'shade-below');
@@ -172,7 +175,7 @@ class HorizontalLine extends Line {
             this._shade.style.display = '';
             CIQ.unappendClassName(this._shade, 'tfc-neutral');
 
-            if (this._shadeState === HorizontalLine.SHADE_ABOVE) {
+            if (this._shadeState === PriceLine.SHADE_ABOVE) {
                 CIQ.swapClassName(this._shade, 'shade-above', 'shade-below');
             } else { // SHADE_BELOW
                 CIQ.swapClassName(this._shade, 'shade-below', 'shade-above');
@@ -187,10 +190,10 @@ class HorizontalLine extends Line {
 
     set shadeColor(shadeColor) {
         this._shadeColor = shadeColor;
-        if (this._shadeColor === HorizontalLine.COLOR_GREEN) {
-            CIQ.swapClassName(this._shade, HorizontalLine.COLOR_GREEN, HorizontalLine.COLOR_RED);
+        if (this._shadeColor === PriceLine.COLOR_GREEN) {
+            CIQ.swapClassName(this._shade, PriceLine.COLOR_GREEN, PriceLine.COLOR_RED);
         } else {
-            CIQ.swapClassName(this._shade, HorizontalLine.COLOR_RED, HorizontalLine.COLOR_GREEN);
+            CIQ.swapClassName(this._shade, PriceLine.COLOR_RED, PriceLine.COLOR_GREEN);
         }
         this._draw();
     }
@@ -201,8 +204,8 @@ class HorizontalLine extends Line {
 
     set lineColor(lineColor) {
         super.lineColor = lineColor;
-        CIQ.unappendClassName(this._line, HorizontalLine.COLOR_RED);
-        CIQ.unappendClassName(this._line, HorizontalLine.COLOR_GREEN);
+        CIQ.unappendClassName(this._line, PriceLine.COLOR_RED);
+        CIQ.unappendClassName(this._line, PriceLine.COLOR_GREEN);
         CIQ.appendClassName(this._line, this._lineColor);
     }
 
@@ -213,7 +216,7 @@ class HorizontalLine extends Line {
     set visible(value) {
         super.visible = value;
         if (this._visible) {
-            if (this.shadeState !== HorizontalLine.SHADE_NONE) {
+            if (this.shadeState !== PriceLine.SHADE_NONE) {
                 this._shade.style.display = '';
             }
         } else {
@@ -223,4 +226,4 @@ class HorizontalLine extends Line {
     }
 }
 
-export default HorizontalLine;
+export default PriceLine;

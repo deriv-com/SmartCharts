@@ -16,6 +16,7 @@ class Line {
         visible = true,
         pipSize = 2,
         price,
+        draggable = true,
     }) {
         this._stx = stx;
         this._chart = stx.chart;
@@ -45,6 +46,8 @@ class Line {
             e => exitIfNotDraggable(e, this._dragLine),
             e => exitIfNotDraggable(e, this._endDrag),
         );
+
+        this.draggable = draggable;
     }
 
     get draggable() {

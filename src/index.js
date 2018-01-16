@@ -60,9 +60,9 @@ import './components/Views';
 import './components/Clickable';
 import './components/ChartControls';
 
-import HorizontalLine from './draw/HorizontalLine';
+import PriceLine from './draw/PriceLine';
 
-window.Line = HorizontalLine;
+window.Line = PriceLine;
 window.CIQ = CIQ;
 
 let UIContext;
