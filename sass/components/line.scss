@@ -3,18 +3,18 @@
 
 /* Images */
 
-.tfc-price-arrow,
-.tfc-price-arrow span,
-.tfc-price {
+.price-arrow,
+.price-arrow span,
+.price {
     background-image: url(img/stx-sprite-trade.png);
     background-repeat: no-repeat;
 }
 
 @media (-webkit-min-device-pixel-ratio: 2),
 (min-resolution: 192dpi) {
-    .tfc-price-arrow,
-    .tfc-price-arrow span,
-    .tfc-price {
+    .price-arrow,
+    .price-arrow span,
+    .price {
         background-image: url(img/stx-sprite-trade@2x.png);
         background-size: 80px 650px;
     }
@@ -28,8 +28,8 @@
 
 .drag-price-line,
 .drag-price,
-.tfc-price,
-.tfc-price-arrow {
+.price,
+.price-arrow {
     height: 23px;
 }
 
@@ -59,11 +59,11 @@
     border-top-width: 2px;
 }
 
-.red .tfc-price-arrow {
+.red .price-arrow {
     background-position: 0 -360px;
 }
 
-.green .tfc-price-arrow {
+.green .price-arrow {
     background-position: 0 -390px;
 }
 
@@ -93,30 +93,30 @@
     -o-user-select: none;
 }
 
-.tfc-price-arrow {
+.price-arrow {
     float: left;
     position: relative;
     width: 12px;
     transition: width .2s;
 }
 
-.red .tfc-price-arrow {
+.red .price-arrow {
     background-position: 0 -360px;
 }
 
-.green .tfc-price-arrow {
+.green .price-arrow {
     background-position: 0 -390px;
 }
 
 
 /*hover*/
 
-.no-touch .drag-price-line:hover .tfc-price-arrow {
+.no-touch .drag-price-line:hover .price-arrow {
     width: 20px;
     height: 23px;
 }
 
-.no-touch .tfc-price-arrow span {
+.no-touch .price-arrow span {
     position: absolute;
     top: 4px;
     left: 6px;
@@ -131,11 +131,11 @@
 
 /*hover*/
 
-.no-touch .drag-price-line:hover .tfc-price-arrow span {
+.no-touch .drag-price-line:hover .price-arrow span {
     opacity: 1;
 }
 
-.tfc-price {
+.price {
     color: #000;
     display: block;
     float: left;
@@ -144,11 +144,11 @@
     overflow: hidden;
 }
 
-.red .tfc-price {
+.red .price {
     background-position: right -360px;
 }
 
-.green .tfc-price {
+.green .price {
     background-position: right -390px;
 }
 
@@ -158,7 +158,7 @@
 
 /* shade */
 
-.tfc-shade {
+.shade {
     position: absolute;
     width: 100%;
     right: 0px;

@@ -25,8 +25,8 @@ class Line {
 
         this._line = $$$('.drag-price-line', Line.DOM).cloneNode(true);
         this._drag = $$$('.drag-line', this._line);
-        this._linePrice = $$$('.tfc-price', this._line);
-        this._shade = $$$('.tfc-shade', Line.DOM).cloneNode(true);
+        this._linePrice = $$$('.price', this._line);
+        this._shade = $$$('.shade', Line.DOM).cloneNode(true);
 
         this.lineColor = lineColor;
 
