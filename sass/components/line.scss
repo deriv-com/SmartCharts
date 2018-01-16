@@ -44,7 +44,7 @@
 
 /*hover*/
 
-.drag-price-line:hover {
+.draggable.drag-price-line:hover {
     cursor: ns-resize;
     background: rgba(0, 0, 0, 0.05);
 }
@@ -78,7 +78,7 @@
 
 /*hover*/
 
-.drag-price-line:hover .drag-line {
+.draggable.drag-price-line:hover .drag-line {
     border-top-style: solid;
 }
 

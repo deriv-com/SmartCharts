@@ -33,8 +33,35 @@ class Line {
         holder.appendChild(this._line);
         holder.appendChild(this._shade);
 
-
         this.visible = visible;
+
+        const exitIfNotDraggable = (e, callback) => {
+            if (this.draggable) callback.call(this, e);
+        };
+
+        CIQ.safeDrag(
+            this._line,
+            e => exitIfNotDraggable(e, this._startDrag),
+            e => exitIfNotDraggable(e, this._dragLine),
+            e => exitIfNotDraggable(e, this._endDrag),
+        );
+    }
+
+    get draggable() {
+        if (this._draggable === undefined) {
+            this.draggable = true;
+        }
+
+        return this._draggable;
+    }
+
+    set draggable(value) {
+        this._draggable = value;
+        if (this._draggable) {
+            CIQ.appendClassName(this._line, 'draggable');
+        } else {
+            CIQ.unappendClassName(this._line, 'draggable');
+        }
     }
 
     _modalBegin() {

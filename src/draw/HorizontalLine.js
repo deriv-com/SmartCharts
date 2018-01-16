@@ -24,13 +24,6 @@ class HorizontalLine extends Line {
         this.shadeColor = shadeColor;
         CIQ.appendClassName(this._line, 'horizontal');
 
-        CIQ.safeDrag(
-            this._line,
-            e => this._startDrag(e),
-            e => this._dragLine(e),
-            e => this._endDrag(e),
-        );
-
         this._stx.append('draw', this._draw.bind(this));
     }
 
