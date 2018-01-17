@@ -932,24 +932,6 @@ cq-toggle {
 	}
 }
 
-/* toggles in the nav bar need some space */
-
-.ciq-nav {
-	& cq-toggle {
-		width: 40px;
-		margin-top: 9px;
-		& > * {
-			margin-left:7px;
-		}
-		&:before {
-			top:35px;
-		}
-		&:after {
-			top:37px;
-		}
-	}
-}
-
 .break-sm, .break-md {
 	& .ciq-menu.collapse > span {
 		display:block;
