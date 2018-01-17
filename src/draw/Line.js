@@ -146,9 +146,9 @@ class Line {
         this._price = price;
         this._pipSize = pipSize;
 
-        this._line = CIQ.$$$('.drag-price-line', Line.DOM).cloneNode(true);
-        this._linePrice = CIQ.$$$('.tfc-price', this._line);
-        this._shade = CIQ.$$$('.tfc-shade', Line.DOM).cloneNode(true);
+        this._line = $$$('.drag-price-line', Line.DOM).cloneNode(true);  // eslint-disable-line
+        this._linePrice = $$$('.tfc-price', this._line); // eslint-disable-line
+        this._shade = $$$('.tfc-shade', Line.DOM).cloneNode(true); // eslint-disable-line
 
         this.shadeState = shadeState;
         this.shadeColor = shadeColor;
