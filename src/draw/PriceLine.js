@@ -22,11 +22,16 @@ class PriceLine extends Line {
         });
         const element = createElement(html);
         this._line.appendChild(element);
-        this._linePrice = $$$('.price', element);
+        this._priceText = $$$('.price', element);
         this._emitter = new EventEmitter();
         CIQ.appendClassName(this._line, 'horizontal');
 
         this._stx.append('draw', this._draw.bind(this));
+    }
+
+    // override to limit drag movement
+    constrainPrice(price) {
+        return price;
     }
 
     _startDrag(e) {
@@ -40,6 +45,7 @@ class PriceLine extends Line {
         let newPrice = this._priceFromLocation(newCenter);
 
         // let currentPrice = this.stx.currentQuote().Close;
+        newPrice = this.constrainPrice(newPrice);
         if (newPrice < 0) newPrice = 0;
 
         this.price = this._snapPrice(newPrice);
@@ -153,7 +159,7 @@ class PriceLine extends Line {
     _draw() {
         if (this.visible) {
             this._positionAtPrice(this.price, [this._line], 'center', null, true);
-            this._linePrice.textContent = this.price.toFixed(this._pipSize);
+            this._priceText.textContent = this.price.toFixed(this._pipSize);
         }
     }
 

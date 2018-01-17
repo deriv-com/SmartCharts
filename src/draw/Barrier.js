@@ -10,6 +10,7 @@ class Barrier {
     static get BARRIER_BETWEEN() { return 'BARRIER_BETWEEN'; }
     static get BARRIER_OUTSIDE() { return 'BARRIER_OUTSIDE'; }
     static MARGIN_OFFSET = 13;
+    static MIN_DIFFERENCE_BETWEEN_BARRIERS = 0.01;
 
     static createShadeElement() {
         return createElement('<div class="shade"></div>');
@@ -27,9 +28,13 @@ class Barrier {
         barrier = Barrier.BARRIER_SINGLE,
     }) {
         this._barrier = Barrier.createBarrierElement();
+        this._stx = stx;
 
         this.barrier1 = new PriceLine({ stx });
         this.barrier2 = new PriceLine({ stx });
+
+        this._setupConstrainBarrierPrices();
+
         this.barrier1.onPriceChanged(this._drawShadedArea.bind(this));
         this.barrier2.onPriceChanged(this._drawShadedArea.bind(this));
 
@@ -54,6 +59,28 @@ class Barrier {
 
         this.draggable = draggable;
         this.visible = visible;
+    }
+
+    _setupConstrainBarrierPrices() {
+        // barrier 1 cannot go below barrier 2
+        this.barrier1.constrainPrice = (newPrice) => {
+            if (this.barrier2.visible) {
+                if (newPrice < this.barrier2.price + Barrier.MIN_DIFFERENCE_BETWEEN_BARRIERS) {
+                    return this.barrier1.price;
+                }
+            }
+
+            return newPrice;
+        };
+
+        // barrier 2 cannot go above barrier 1
+        this.barrier2.constrainPrice = (newPrice) => {
+            if (newPrice > this.barrier1.price - Barrier.MIN_DIFFERENCE_BETWEEN_BARRIERS) {
+                return this.barrier2.price;
+            }
+
+            return newPrice;
+        };
     }
 
     get visible() {
@@ -111,16 +138,10 @@ class Barrier {
             setHidden(this._shade1, true);
             setHidden(this._shade2, true);
         } else {
-            const shade1Enable =
-                this._barrierState === Barrier.BARRIER_ABOVE
-                || this._barrierState === Barrier.BARRIER_BELOW
-                || this._barrierState === Barrier.BARRIER_OUTSIDE
-                || this._barrierState === Barrier.BARRIER_BETWEEN;
-
             const shade2Enable =
                 this._barrierState === Barrier.BARRIER_OUTSIDE;
 
-            setHidden(this._shade1, !shade1Enable);
+            setHidden(this._shade1, false);
             setHidden(this._shade2, !shade2Enable);
 
             this._drawShadedArea();
