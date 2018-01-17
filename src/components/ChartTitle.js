@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import ModalTag from './ui/ModalTag';
-import { CIQ } from '../../js/chartiq';
+import CIQ from 'chartiq';
 
 /**
  * Chart Title web component `<cq-chart-title>`.

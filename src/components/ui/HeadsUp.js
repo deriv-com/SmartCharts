@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import { CIQ } from '../../../js/chartiq';
+import CIQ from 'chartiq';
 import HeadsUpMarker from './HeadsUpMarker';
 import Helper from './Helper';
 

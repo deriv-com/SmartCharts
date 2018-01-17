@@ -3,7 +3,9 @@ node_modules/
 launch.json
 
 # Distribution folder
-dist/
+dist/*
+!dist/jquery.js
+!dist/chartiq.js
 
 # Optional npm cache directory
 .npm

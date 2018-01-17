@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import { CIQ } from '../../js/chartiq';
+import CIQ from 'chartiq';
 
 /**
  * Swatch web component `<cq-swatch>`.

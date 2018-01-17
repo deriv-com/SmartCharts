@@ -1,4 +1,4 @@
-import { CIQ, $$$ } from '../../../js/chartiq';
+import CIQ from 'chartiq';
 import Helper from './Helper';
 import Keystroke from './Keystroke';
 import { claims } from './';

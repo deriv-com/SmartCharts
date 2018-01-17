@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import { CIQ } from '../../../js/chartiq';
+import CIQ from 'chartiq';
 
 /**
  * Global web component that manages the overall UI. This component keeps track of open menus and dialogs.

@@ -1,4 +1,4 @@
-import { CIQ } from '../../../js/chartiq';
+import CIQ from 'chartiq';
 
 /**
  * UI Helper for capturing and handling keystrokes. cb to capture the key. Developer is responsible

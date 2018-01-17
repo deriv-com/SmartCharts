@@ -1,4 +1,4 @@
-import { CIQ, $$$ } from '../../js/chartiq';
+import CIQ from 'chartiq'; // eslint-disable-line
 import html from './Line.html';
 import { createElement } from '../components/ui/utils';
 
@@ -146,9 +146,9 @@ class Line {
         this._price = price;
         this._pipSize = pipSize;
 
-        this._line = $$$('.drag-price-line', Line.DOM).cloneNode(true);
-        this._linePrice = $$$('.tfc-price', this._line);
-        this._shade = $$$('.tfc-shade', Line.DOM).cloneNode(true);
+        this._line = CIQ.$$$('.drag-price-line', Line.DOM).cloneNode(true);
+        this._linePrice = CIQ.$$$('.tfc-price', this._line);
+        this._shade = CIQ.$$$('.tfc-shade', Line.DOM).cloneNode(true);
 
         this.shadeState = shadeState;
         this.shadeColor = shadeColor;
