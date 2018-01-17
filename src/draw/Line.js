@@ -3,11 +3,8 @@ import html from './Line.html';
 import { createElement, setHidden } from '../components/ui/utils';
 
 class Line {
-    static get DOM() {
-        if (!Line._DOM) {
-            Line._DOM = createElement(html);
-        }
-        return Line._DOM;
+    static createLine() {
+        return createElement(html);
     }
 
     constructor({
@@ -23,7 +20,7 @@ class Line {
         this._price = price;
         this._pipSize = pipSize;
 
-        this._line = $$$('.drag-price-line', Line.DOM).cloneNode(true);
+        this._line = Line.createLine();
         this._drag = $$$('.drag-line', this._line);
 
         this.lineColor = lineColor;
@@ -49,10 +46,6 @@ class Line {
     }
 
     get draggable() {
-        if (this._draggable === undefined) {
-            this.draggable = true;
-        }
-
         return this._draggable;
     }
 

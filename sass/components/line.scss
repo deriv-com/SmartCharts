@@ -26,14 +26,14 @@
 
 /* Drag Lines and Prices */
 
-.drag-price-line,
+.chart-line,
 .drag-price,
 .price,
 .price-arrow {
     height: 23px;
 }
 
-.drag-price-line {
+.chart-line {
     position: absolute;
     width: 100%;
     left: 0px;
@@ -44,7 +44,7 @@
 
 /*hover*/
 
-.draggable.drag-price-line:hover {
+.draggable.chart-line:hover {
     cursor: ns-resize;
     background: rgba(0, 0, 0, 0.05);
 }
@@ -78,7 +78,7 @@
 
 /*hover*/
 
-.draggable.drag-price-line:hover .drag-line {
+.draggable.chart-line:hover .drag-line {
     border-top-style: solid;
 }
 
@@ -111,7 +111,7 @@
 
 /*hover*/
 
-.no-touch .drag-price-line:hover .price-arrow {
+.no-touch .chart-line:hover .price-arrow {
     width: 20px;
     height: 23px;
 }
@@ -131,7 +131,7 @@
 
 /*hover*/
 
-.no-touch .drag-price-line:hover .price-arrow span {
+.no-touch .chart-line:hover .price-arrow span {
     opacity: 1;
 }
 

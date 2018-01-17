@@ -1,5 +1,7 @@
 import EventEmitter from 'event-emitter-es6';
 import { CIQ, $$$ } from '../../js/chartiq';
+import { createElement } from '../components/ui/utils';
+import html from './PriceLine.html';
 import Line from './Line';
 
 class PriceLine extends Line {
@@ -18,8 +20,9 @@ class PriceLine extends Line {
         super({
             stx, lineColor, visible, pipSize, price, draggable,
         });
-
-        this._linePrice = $$$('.price', this._line);
+        const element = createElement(html);
+        this._line.appendChild(element);
+        this._linePrice = $$$('.price', element);
         this._emitter = new EventEmitter();
         CIQ.appendClassName(this._line, 'horizontal');
 
