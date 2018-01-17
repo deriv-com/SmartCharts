@@ -1,10 +1,10 @@
 /* eslint-disable no-new */
 import $ from 'jquery';
 
-import StreamManager from './stream-manager';
+import StreamManager from './StreamManager';
 import Feed from './feed';
 import ActiveSymbolDriver from './ActiveSymbolDriver';
-import ConnectionManager from './connection-manager';
+import ConnectionManager from './ConnectionManager';
 import Context from './components/ui/Context';
 
 import '../js/thirdparty/html2canvas';
