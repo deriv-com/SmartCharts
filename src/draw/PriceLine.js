@@ -3,16 +3,12 @@ import { CIQ, $$$ } from '../../js/chartiq';
 import Line from './Line';
 
 class PriceLine extends Line {
-    static get SHADE_NONE() { return 'SHADE_NONE'; }
-    static get SHADE_ABOVE() { return 'SHADE_ABOVE'; }
-    static get SHADE_BELOW() { return 'SHADE_BELOW'; }
     static get COLOR_GREEN() { return 'green'; }
     static get COLOR_RED() { return 'red'; }
+    static get EVENT_PRICE_CHANGED() { return 'EVENT_PRICE_CHANGED'; }
 
     constructor({
         stx,
-        shadeState = PriceLine.SHADE_NONE,
-        shadeColor = PriceLine.COLOR_GREEN,
         lineColor = PriceLine.COLOR_GREEN,
         visible = true,
         pipSize = 2,
@@ -22,8 +18,8 @@ class PriceLine extends Line {
         super({
             stx, lineColor, visible, pipSize, price, draggable,
         });
-        this.shadeState = shadeState;
-        this.shadeColor = shadeColor;
+
+        this._linePrice = $$$('.price', this._line);
         this._emitter = new EventEmitter();
         CIQ.appendClassName(this._line, 'horizontal');
 
@@ -140,62 +136,26 @@ class PriceLine extends Line {
     }
 
     set price(value) {
-        this._price = value;
-        this._draw();
+        if (value !== this._price) {
+            this._price = value;
+            this._draw();
+            this._emitter.emit(PriceLine.EVENT_PRICE_CHANGED, this._price);
+        }
+    }
+
+    onPriceChanged(callback) {
+        this._emitter.on(PriceLine.EVENT_PRICE_CHANGED, callback);
     }
 
     _draw() {
         if (this.visible) {
             this._positionAtPrice(this.price, [this._line], 'center', null, true);
             this._linePrice.textContent = this.price.toFixed(this._pipSize);
-            if (this._shadeState === PriceLine.SHADE_ABOVE) {
-                this._shade.style.top = '0px';
-                this._shade.style.bottom = `${
-                    this._chart.panel.height - this._locationFromPrice(this.price)
-                }px`;
-            } else if (this._shadeState === PriceLine.SHADE_BELOW) {
-                this._shade.style.bottom = '0px';
-                this._shade.style.top = `${this._locationFromPrice(this.price)}px`;
-            }
         }
     }
 
-    get shadeState() {
-        return this._shadeState;
-    }
-
-    set shadeState(shadeState) {
-        this._shadeState = shadeState;
-        if (this._shadeState === PriceLine.SHADE_NONE) {
-            this._shade.style.display = 'none';
-            CIQ.unappendClassName(this._shade, 'shade-above');
-            CIQ.unappendClassName(this._shade, 'shade-below');
-            CIQ.appendClassName(this._shade, 'tfc-neutral');
-        } else {
-            this._shade.style.display = '';
-            CIQ.unappendClassName(this._shade, 'tfc-neutral');
-
-            if (this._shadeState === PriceLine.SHADE_ABOVE) {
-                CIQ.swapClassName(this._shade, 'shade-above', 'shade-below');
-            } else { // SHADE_BELOW
-                CIQ.swapClassName(this._shade, 'shade-below', 'shade-above');
-            }
-        }
-        this._draw();
-    }
-
-    get shadeColor() {
-        return this._shadeColor;
-    }
-
-    set shadeColor(shadeColor) {
-        this._shadeColor = shadeColor;
-        if (this._shadeColor === PriceLine.COLOR_GREEN) {
-            CIQ.swapClassName(this._shade, PriceLine.COLOR_GREEN, PriceLine.COLOR_RED);
-        } else {
-            CIQ.swapClassName(this._shade, PriceLine.COLOR_RED, PriceLine.COLOR_GREEN);
-        }
-        this._draw();
+    get top() {
+        return CIQ.stripPX(this._line.style.top);
     }
 
     get lineColor() {
@@ -207,22 +167,6 @@ class PriceLine extends Line {
         CIQ.unappendClassName(this._line, PriceLine.COLOR_RED);
         CIQ.unappendClassName(this._line, PriceLine.COLOR_GREEN);
         CIQ.appendClassName(this._line, this._lineColor);
-    }
-
-    get visible() {
-        return super.visible;
-    }
-
-    set visible(value) {
-        super.visible = value;
-        if (this._visible) {
-            if (this.shadeState !== PriceLine.SHADE_NONE) {
-                this._shade.style.display = '';
-            }
-        } else {
-            this._shade.style.display = 'none';
-        }
-        this._draw();
     }
 }
 

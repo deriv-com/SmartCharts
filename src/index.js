@@ -61,8 +61,10 @@ import './components/Clickable';
 import './components/ChartControls';
 
 import PriceLine from './draw/PriceLine';
+import Barrier from './draw/Barrier';
 
 window.Line = PriceLine;
+window.Barrier = Barrier;
 window.CIQ = CIQ;
 
 let UIContext;

@@ -1,6 +1,6 @@
 import { CIQ, $$$ } from '../../js/chartiq';
 import html from './Line.html';
-import { createElement } from '../components/ui/utils';
+import { createElement, setHidden } from '../components/ui/utils';
 
 class Line {
     static get DOM() {
@@ -25,19 +25,13 @@ class Line {
 
         this._line = $$$('.drag-price-line', Line.DOM).cloneNode(true);
         this._drag = $$$('.drag-line', this._line);
-        this._linePrice = $$$('.price', this._line);
-        this._shade = $$$('.shade', Line.DOM).cloneNode(true);
 
         this.lineColor = lineColor;
-
-        const holder = this._chart.panel.holder;
-        holder.appendChild(this._line);
-        holder.appendChild(this._shade);
 
         this.visible = visible;
 
         const exitIfNotDraggable = (e, callback) => {
-            if (this.draggable) callback.call(this, e);
+            if (this.visible && this.draggable) callback.call(this, e);
         };
 
         CIQ.safeDrag(
@@ -48,6 +42,10 @@ class Line {
         );
 
         this.draggable = draggable;
+    }
+
+    get element() {
+        return this._line;
     }
 
     get draggable() {
@@ -106,11 +104,7 @@ class Line {
 
     set visible(value) {
         this._visible = value;
-        if (this._visible) {
-            this._line.removeAttribute('hidden');
-        } else {
-            this._line.setAttribute('hidden', true);
-        }
+        setHidden(this._line, !this._visible);
     }
 }
 

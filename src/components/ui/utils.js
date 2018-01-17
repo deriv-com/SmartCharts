@@ -49,4 +49,12 @@ export function aggregation(baseClass, ...mixins) {
         copyProps(base, mixin);
     });
     return base;
-};
+}
+
+export function setHidden(element, isHidden) {
+    if (isHidden) {
+        element.setAttribute('hidden', true);
+    } else {
+        element.removeAttribute('hidden');
+    }
+}
