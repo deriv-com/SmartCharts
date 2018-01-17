@@ -1,4 +1,4 @@
-import { CIQ, $$$ } from '../../../js/chartiq';
+import CIQ from 'chartiq';
 import Helper from './Helper';
 import Keystroke from './Keystroke';
 import { claims } from './';
@@ -21,7 +21,7 @@ class KeystrokeHub extends Helper {
         this.node = node;
         this.context = context;
         this.params = params || {};
-        this.uiManager = $$$('cq-ui-manager');
+        this.uiManager = CIQ.$$$('cq-ui-manager');
         if (this.uiManager) {
             this.uiManager.keystrokeHub = this; // Register the keystroke hub so that it can be found
         }

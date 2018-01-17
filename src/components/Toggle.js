@@ -1,4 +1,4 @@
-import { CIQ } from '../../js/chartiq';
+import CIQ from 'chartiq';
 import ContextTag from './ui/ContextTag';
 
 /**

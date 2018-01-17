@@ -32,8 +32,7 @@ const config = {
                 test: /\.js$/,
                 exclude: [
                     /node_modules/,
-                    /plugins\//,
-                    /js\//,
+                    /chartiq\//,
                     /src\/components\//,
                 ],
                 loader: 'eslint-loader',
@@ -58,6 +57,7 @@ const config = {
     ],
     externals: {
         jquery: 'jQuery',
+        chartiq: 'CIQ',
     },
 };
 

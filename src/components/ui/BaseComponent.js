@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import { getParents } from './utils';
-import { CIQ } from '../../../js/chartiq';
+import CIQ from 'chartiq';
 import { claims } from './';
 /**
  * Abstract class for WebComponents using this framework

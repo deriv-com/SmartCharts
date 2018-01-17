@@ -1,5 +1,5 @@
 import ModalTag from './ui/ModalTag';
-import { CIQ } from '../../js/chartiq';
+import CIQ from 'chartiq';
 
 /**
  * Attribution web component `<cq-attribution>`.
