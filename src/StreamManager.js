@@ -1,6 +1,6 @@
 /* eslint-disable-camelcase */
 import EventEmitter from 'event-emitter-es6';
-import ConnectionManager from './connection-manager';
+import ConnectionManager from './ConnectionManager';
 
 class Subscription {
     static get DEFAULT_COUNT() { return 1000; }
