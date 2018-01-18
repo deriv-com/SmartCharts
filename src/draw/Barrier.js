@@ -154,6 +154,11 @@ class Barrier {
         this.barrier2.visible = showBarrier2;
     }
 
+    _isBarriersOffScreen() {
+        return this.barrier1.element.getAttribute('off-screen')
+            && this.barrier2.element.getAttribute('off-screen');
+    }
+
     _drawShadedArea() {
         if (!this.visible) return;
 
@@ -166,6 +171,11 @@ class Barrier {
         } else if (this._barrierState === Barrier.BARRIER_OUTSIDE) {
             this._shadeAbove(1);
             this._shadeBelow(2);
+        }
+
+        if (this.barrier2.visible && this._isBarriersOffScreen()) {
+            const order = (this.barrier1.top === 0) ? null : 101;
+            this.barrier1.element.style.zIndex = order;
         }
     }
 
