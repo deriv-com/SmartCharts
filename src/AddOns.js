@@ -84,6 +84,16 @@ CIQ.ExtendedHours = function (params) {
     let styles = {};
     this.stx = stx;
     this.stx.extendedHours = this;
+
+    stx.addEventListener('theme', (tObject) => {
+        // reinitialize the session colors after a theme change
+        styles = {};
+        for (let sess in stx.layout.marketSessions) {
+            if (!styles.session) styles.session = {};
+            styles.session[sess] = stx.canvasStyle(`stx_market_session ${sess}`);
+        }
+    });
+
     /**
      * Prepares the extended hours settings and classes for the session names enumerated in the arguments without actually displaying or loading the data.
      *
@@ -115,7 +125,6 @@ CIQ.ExtendedHours = function (params) {
                 stx.layout.marketSessions = sessions;
             }
         }
-        stx.changeOccurred('layout');
         for (sess in stx.layout.marketSessions) {
             if (!styles.session) styles.session = {};
             styles.session[sess] = stx.canvasStyle(`stx_market_session ${sess}`);
@@ -133,6 +142,7 @@ CIQ.ExtendedHours = function (params) {
      * @since 5.0.0
      */
     this.complete = function (cb) {
+        stx.changeOccurred('layout');
         if (!stx.chart.market.market_def) {
             // possibly a 24 hours Market. Not necessarily an error but nothing to do for ExtendedHours
             if (cb) cb();
@@ -232,6 +242,10 @@ CIQ.ExtendedHours = function (params) {
 /**
  * Add-On that creates a hovering "tooltip" as mouse is moved over the chart when the cross-hairs are active.
  *
+ * The tool-tip is directly linked to the cross-hairs. So if you disable the cross hairs, the tool-tip also goes away.
+ *
+ * To toggle cross-hairs use <a href="CIQ.ChartEngine.html#layout%5B%60crosshair%60%5D">CIQ.ChartEngine.layout.crosshair</a>. Set to `true` or `false` as needed.
+ *
  * Requires `jquery` and `addOns.js`; as well as `markers.js` to be bundled in `chartiq.js`.
  *
  * There can be only one CIQ.Tooltip per chart.
@@ -263,9 +277,6 @@ CIQ.ExtendedHours = function (params) {
  * If no override HTML is found for a particular field, the default will be used.
  * This HTML must be placed *inside the chart container*.
  *
- * Numbers will be displayed using the {@link CIQ.ChartEngine.YAxis#priceFormattery, if any,
- * or {@link CIQ.ChartEngine#formatYAxisPrice} to guarantee uniformity with the y-axis.
- *
  * All of the code is provided in `addOns.js` and can be fully customized by copying the source code from the library and overriding
  * the functions with your changes. Be sure to never modify a library file as this will hinder upgrades.
  *
@@ -279,11 +290,9 @@ CIQ.ExtendedHours = function (params) {
  * @param {boolean} [tooltipParams.series] set to true to show value of series.
  * @param {boolean} [tooltipParams.studies] set to true to show value of studies.
  * @param {boolean} [tooltipParams.showOverBarOnly] set to true to show tooltip only when over the primary line/bars.
+ * @param {boolean} [tooltipParams.change] set to true to show the change in daily value when isDailyInterval
  * @constructor
  * @name  CIQ.Tooltip
- * @since
- * <br>&bull; 09-2016-19
- * <br>&bull; 5.0.0 now `tooltipParams.showOverBarOnly` available to show tooltip only when over the primary line/bars.
  * @example <caption>Adding a hover tool tip to a chart:</caption>
  *
  * //First declare your chart engine
@@ -340,6 +349,10 @@ CIQ.ExtendedHours = function (params) {
         display:table-cell;
         text-align:right;
     }
+ * @since
+ * <br>&bull; 09-2016-19
+ * <br>&bull; 5.0.0 now `tooltipParams.showOverBarOnly` available to show tooltip only when over the primary line/bars.
+ * <br>&bull; 5.1.1 [tooltipParams.change] set to true to show the change in daily value when displaying a daily interval.
  */
 
 CIQ.Tooltip = function (tooltipParams) {
@@ -439,12 +452,13 @@ CIQ.Tooltip = function (tooltipParams) {
             (stx.controls.crossY && stx.controls.crossY.style.display == 'none')
         ) return;
 
-        let bar = this.barFromPixel(this.cx);
-        if (!this.chart.dataSegment[bar]) {
+        let bar = this.barFromPixel(this.cx),
+            data = this.chart.dataSegment[bar];
+        if (!data) {
             this.positionMarkers();
             return;
         }
-        if (CIQ.Marker.Tooltip.sameBar(this.chart.dataSegment[bar], this.huTooltip.lastBar) && bar != this.chart.dataSegment.length - 1) return;
+        if (CIQ.Marker.Tooltip.sameBar(data, this.huTooltip.lastBar) && bar != this.chart.dataSegment.length - 1) return;
         let node = $(this.huTooltip.node);
         node.find('[auto]').remove();
         node.find('stx-hu-tooltip-field-value').html();
@@ -460,6 +474,11 @@ CIQ.Tooltip = function (tooltipParams) {
             member: 'Close', display: 'Close', panel, yAxis,
         });
         dupMap.DT = dupMap.Close = 1;
+        if (showChange && CIQ.ChartEngine.isDailyInterval(this.layout.interval)) {
+            fields.push({
+                member: 'Change', display: 'Change', panel, yAxis,
+            });
+        }
         if (showOhl) {
             fields.push({
                 member: 'Open', display: 'Open', panel, yAxis,
@@ -487,7 +506,6 @@ CIQ.Tooltip = function (tooltipParams) {
                 if (!yAxis && rendererToDisplay.params.shareYAxis) yAxis = panel.yAxis;
                 for (let id = 0; id < rendererToDisplay.seriesParams.length; id++) {
                     let seriesParams = rendererToDisplay.seriesParams[id];
-                    if (!yAxis && seriesParams.shareYAxis) yAxis = panel.yAxis;
                     // if a series has a symbol and a field then it maybe a object chain
                     let sKey = seriesParams.symbol;
                     let subField = seriesParams.field;
@@ -506,7 +524,7 @@ CIQ.Tooltip = function (tooltipParams) {
         if (showStudies) {
             for (let study in this.layout.studies) {
                 panel = this.panels[this.layout.studies[study].panel];
-                yAxis = panel.yAxis;
+                yAxis = panel.yAxis; // after 4377 is merged: this.getYAxisByName(panel, study);
                 for (let output in this.layout.studies[study].outputMap) {
                     if (output && !dupMap[output]) {
                         fields.push({
@@ -549,10 +567,18 @@ CIQ.Tooltip = function (tooltipParams) {
                     if (yAxis.maxDecimalPlaces || yAxis.maxDecimalPlaces === 0) labelDecimalPlaces = Math.min(labelDecimalPlaces, yAxis.maxDecimalPlaces);
                 }
             }
+            let dsField = null;
+            // account for object chains
+            let tuple = CIQ.existsInObjectChain(data, name);
+            if (tuple) dsField = tuple.obj[tuple.member];
+            else if (name == 'Change') dsField = data.Close - data.iqPrevClose;
+
             let fieldName = displayName.replace(/^(Result )(.*)/, '$2');
-            let dsField = this.chart.dataSegment[bar][name];
-            if ((dsField || dsField === 0) && (typeof dsField !== 'object' || name == 'DT')) {
+            if ((dsField || dsField === 0) &&
+                (name == 'DT' || typeof dsField !== 'object' || dsField.Close || dsField.Close === 0)
+            ) {
                 let fieldValue = '';
+                if (dsField.Close || dsField.Close === 0) dsField = dsField.Close;
                 if (dsField.constructor == Number) {
                     if (!yAxis) { // raw value
                         fieldValue = dsField;
@@ -563,7 +589,7 @@ CIQ.Tooltip = function (tooltipParams) {
                     } else {
                         fieldValue = this.formatYAxisPrice(dsField, panel, labelDecimalPlaces, yAxis);
                     }
-                } else if (this.chart.dataSegment[bar][name].constructor == Date) {
+                } else if (dsField.constructor == Date) {
                     if (name == 'DT' && this.controls.floatDate && this.controls.floatDate.innerHTML) {
                         if (CIQ.ChartEngine.hideDates()) fieldValue = 'N/A';
                         else fieldValue = this.controls.floatDate.innerHTML;
@@ -692,6 +718,10 @@ CIQ.InactivityTimer = function (params) {
  * 2.  The current price appears to move smoothly from the previous price
  * 3.  The chart's y-axis smoothly expands/contracts when a new high or low is reached
  *
+ * The following chart types are supported: line, mountain, baseline_delta
+ *
+ * Example <iframe width="800" height="500" scrolling="no" seamless="seamless" align="top" style="float:top" src="http://jsfiddle.net/chartiq/q1qdp8yj/embedded/result,js,html/" allowfullscreen="allowfullscreen" frameborder="1"></iframe>
+ *
  * @param {CIQ.ChartEngine} stx The chart object
  * @param {object} animationParameters Configuration parameters
  * @param {boolean} [animationParameters.stayPut=false] Set to true for last tick to stay in position it was scrolled and have rest of the chart move backwards as new ticks are added instead of having new ticks advance forward and leave the rest of the chart in place.
@@ -738,35 +768,33 @@ CIQ.Animation = function (stx, animationParameters, easeMachine) {
         initMarketSessionFlags();
     });
 
-    stx.prepend('appendMasterData', function (appendQuotes, chart, params) {
+    stx.prepend('updateChartData', function (appendQuotes, chart, params) {
         let self = this;
         if (!chart) {
             chart = self.chart;
         }
-        // Animations don't support all chart types, only ones with aggregationType values of ohlc or null
-        if (this.layout.aggregationType === 'ohlc' || this.layout.aggregationType === null) {
-            if (!self.tickAnimator) {
-                console.error('Animation plug-in can not run because the tickAnimator has not be declared. See instructions in animation.js');
+
+        function unanimateScroll() {
+            if (chart.animatingHorizontalScroll) {
+                chart.animatingHorizontalScroll = false;
+                self.micropixels = self.nextMicroPixels = self.previousMicroPixels; // <-- Reset self.nextMicroPixels here
+                chart.lastTickOffset = 0;
+            }
+            if (chart.closePendingAnimation) {
+                chart.masterData[chart.masterData.length - 1].Close = chart.closePendingAnimation;
+                chart.closePendingAnimation = 0;
+            }
+        }
+        if (params !== undefined && params.animationEntry) return;
+        if (!chart || !chart.defaultChartStyleConfig || chart.defaultChartStyleConfig == 'none') return;
+        let tickAnimator = self.tickAnimator;
+        // These chart types are the only types supported by animation
+        let supportedChartType = this.mainSeriesRenderer && this.mainSeriesRenderer.supportsAnimation;
+        if (supportedChartType) {
+            if (!tickAnimator) {
+                alert('Animation plug-in can not run because the tickAnimator has not been declared. See instructions in animation.js');
                 return;
             }
-            let tickAnimator = self.tickAnimator;
-
-            function unanimateScroll() {
-                if (chart.animatingHorizontalScroll) {
-                    chart.animatingHorizontalScroll = false;
-                    self.micropixels = self.nextMicroPixels = self.previousMicroPixels; // <-- Reset self.nextMicroPixels here
-                    chart.lastTickOffset = 0;
-                }
-                if (chart.closePendingAnimation) {
-                    chart.masterData[chart.masterData.length - 1].Close = chart.closePendingAnimation;
-                    chart.closePendingAnimation = 0;
-                }
-            }
-
-            if (chart === null || chart === undefined) return;
-
-            if (params !== undefined && params.animationEntry) return;
-
             // If symbol changes then reset all of our variables
             if (this.prevSymbol != chart.symbol) {
                 this.prevQuote = 0;
@@ -1067,6 +1095,9 @@ CIQ.RangeSlider = function (params) {
     this.setSymbol = function (symbol) {
         self.chart.symbol = symbol;
         self.adjustPanelPositions();
+        self.setMainSeriesRenderer();
+        self.resizeChart();
+        this.drawSlider();
     };
     this.acceptLayoutChange = function (layout) {
         let doDraw = false;
@@ -1085,6 +1116,7 @@ CIQ.RangeSlider = function (params) {
         });
         if (!ciqSlider.is(':visible')) return;
         if (doDraw) {
+            self.setMainSeriesRenderer();
             self.draw();
             this.drawSlider();
         }
@@ -1092,14 +1124,18 @@ CIQ.RangeSlider = function (params) {
     this.copyData = function (chart) {
         // if(!ciqSlider.is(":visible")) return;
         if (!chart.dataSet) return;
-        self.chart.symbol = chart.symbol;
-        self.masterData = self.chart.masterData = chart.masterData;
-        self.chart.dataSet = chart.dataSet;
-        self.chart.state = chart.state;
-        self.chart.baseline.defaultLevel = chart.baseline.actualLevel;
-        self.chart.scroll = self.chart.dataSet.length;
-        self.chart.maxTicks = self.chart.scroll + 1;
-        self.layout.candleWidth = chart.width / (self.chart.maxTicks + 1);
+        let scrollOffset = 0;
+        if (stx.quoteDriver && stx.quoteDriver.behavior && stx.quoteDriver.behavior.bufferSize) { scrollOffset = stx.quoteDriver.behavior.bufferSize; }
+
+        let myChart = self.chart;
+        myChart.symbol = chart.symbol;
+        myChart.masterData = self.masterData = chart.masterData;
+        myChart.dataSet = chart.dataSet;
+        myChart.state = chart.state;
+        myChart.baseline.defaultLevel = chart.baseline.actualLevel;
+        myChart.scroll = myChart.dataSet.length - scrollOffset;
+        myChart.maxTicks = myChart.scroll + 1;
+        self.layout.candleWidth = chart.width / (myChart.maxTicks + 1);
         self.draw();
         this.drawSlider();
     };
