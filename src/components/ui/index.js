@@ -1,6 +1,6 @@
 import $ from 'jquery';
-import { CIQ } from '../../../js/chartiq';
-import '../../../js/thirdparty/webcomponents-lite.min';
+import CIQ from 'chartiq';
+import '../../../chartiq/webcomponents-lite.min';
 import './jquery-extensions';
 import './UI';
 import './UIManager';

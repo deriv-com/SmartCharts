@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import { CIQ } from '../../../js/chartiq';
+import CIQ from 'chartiq';
 
 function getBottomPixel(stx, panel, containerHeight, price) {
     return Math.round(containerHeight - stx.pixelFromPrice(price, panel));

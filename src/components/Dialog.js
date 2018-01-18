@@ -1,4 +1,4 @@
-import { $$$ } from '../../js/chartiq';
+import CIQ from 'chartiq';
 import { createElement } from './ui/utils';
 import VDom from './ui/VDom';
 import BaseComponent from './ui/BaseComponent';

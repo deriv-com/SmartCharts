@@ -1,4 +1,4 @@
-import { CIQ } from '../js/chartiq';
+import CIQ from 'chartiq';
 import Driver from './components/ui/Driver';
 /**
  * An example of an asynchronous Lookup.Driver that uses ChartIQ's suggestive search as its source for symbol search

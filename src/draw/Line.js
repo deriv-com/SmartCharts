@@ -1,4 +1,4 @@
-import { CIQ, $$$ } from '../../js/chartiq';
+import CIQ from 'chartiq';
 import html from './Line.html';
 import { createElement, setHidden } from '../components/ui/utils';
 

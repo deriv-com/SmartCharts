@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import ModalTag from './ui/ModalTag';
-import { CIQ } from '../../js/chartiq';
+import CIQ from 'chartiq';
 
 /**
  * Symbol comparison component `<cq-comparison>`.

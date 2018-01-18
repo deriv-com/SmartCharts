@@ -1,17 +1,11 @@
+/* eslint-disable */
+// TODO => Move to es6
 // -------------------------------------------------------------------------------------------
 // Copyright 2012-2016 by ChartIQ, Inc
 // -------------------------------------------------------------------------------------------
 (function (definition) {
-    if (typeof exports === 'object' && typeof module === 'object') {
-        module.exports = definition(require('./thirdparty/iscroll'), require('./chartiq'));
-    } else if (typeof define === 'function' && define.amd) {
-        define(['thirdparty/iscroll', 'chartiq'], definition);
-    } else if (typeof window !== 'undefined' || typeof self !== 'undefined') {
-        let global = typeof window !== 'undefined' ? window : self;
-        definition(global, global, global);
-    } else {
-        throw new Error('Only CommonJS, RequireJS, and <script> tags supported for plugin.js.');
-    }
+    let global = typeof window !== 'undefined' ? window : self;
+    definition(global, global, global);
 }((iscroll, _exports) => {
     let CIQ = _exports.CIQ;
     let $$ = _exports.$$;

@@ -1,4 +1,3 @@
-import { CIQ, $$$ } from '../../js/chartiq';
 import PriceLine from './PriceLine';
 import { createElement, setHidden } from '../components/ui/utils';
 

@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import { CIQ } from '../../../js/chartiq';
+import CIQ from 'chartiq';
 import BaseComponent from './BaseComponent';
 import Context from './Context';
 import { getParents } from './utils';

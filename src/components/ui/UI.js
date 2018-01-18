@@ -1,5 +1,5 @@
 import 'object.observe';
-import { CIQ } from '../../../js/chartiq';
+import CIQ from 'chartiq';
 import BaseComponent from './BaseComponent';
 
 /**

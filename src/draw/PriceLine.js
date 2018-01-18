@@ -1,5 +1,5 @@
 import EventEmitter from 'event-emitter-es6';
-import { CIQ, $$$ } from '../../js/chartiq';
+import CIQ from 'chartiq';
 import { createElement } from '../components/ui/utils';
 import html from './PriceLine.html';
 import Line from './Line';

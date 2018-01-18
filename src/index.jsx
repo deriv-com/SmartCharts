@@ -7,17 +7,17 @@ import ActiveSymbolDriver from './ActiveSymbolDriver';
 import ConnectionManager from './ConnectionManager';
 import Context from './components/ui/Context';
 
-import '../js/thirdparty/html2canvas';
-import '../js/thirdparty/iscroll';
+import '../chartiq/html2canvas';
+import '../chartiq/iscroll';
 
-import { CIQ, $$$ } from '../js/chartiq';
+import CIQ from 'chartiq';
 
 /* css + scss */
 import '../css/stx-chart.css';
 import '../sass/chartiq.scss';
 
-import '../js/addOns';
-import '../js/plugin';
+import './AddOns';
+import './Plugin';
 
 import './components/Attribution';
 import './components/ChartTitle';
@@ -47,9 +47,11 @@ import './components/Views';
 import './components/Clickable';
 import './components/ChartControls';
 
-import Line from './draw/line';
+import Barrier from './draw/Barrier';
 import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
+
+window.Barrier = Barrier;
 
 class App extends Component {
     componentDidMount() {
@@ -67,10 +69,7 @@ class App extends Component {
             container: $$$('#chartContainer'),
         });
 
-        window.Line = Line;
-        window.CIQ = CIQ;
         window.stxx = stxx;
-        window.$$$ = $$$;
 
         CIQ.Animation(stxx, { tension: 0.3, stayPut: true });
 

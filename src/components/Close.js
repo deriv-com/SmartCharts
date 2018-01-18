@@ -1,5 +1,5 @@
 import BaseComponent from './ui/BaseComponent';
-import { CIQ } from '../../js/chartiq';
+import CIQ from 'chartiq';
 
 class Close extends BaseComponent {
     /**
