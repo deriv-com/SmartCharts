@@ -29,7 +29,7 @@ const config = {
             },
             { parser: { amd: false } },
             {
-                test: /\.js$/,
+                test: /\.(js|jsx)$/,
                 exclude: [
                     /node_modules/,
                     /chartiq\//,
