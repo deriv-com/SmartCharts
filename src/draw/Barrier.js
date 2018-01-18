@@ -179,12 +179,12 @@ class Barrier {
         }
     }
 
-    _calcBottomShade(id) {
-        return this._chart.panel.height - this[`barrier${id}`].top - Barrier.MARGIN_OFFSET;
+    _calcBottomShade(barrierId) {
+        return this._chart.panel.height - this[`barrier${barrierId}`].top - Barrier.MARGIN_OFFSET;
     }
 
-    _calcTopShade(id) {
-        return this[`barrier${id}`].top + Barrier.MARGIN_OFFSET;
+    _calcTopShade(barrierId) {
+        return this[`barrier${barrierId}`].top + Barrier.MARGIN_OFFSET;
     }
 
     _shadeBetween() {
@@ -194,16 +194,16 @@ class Barrier {
         this._shade1.style.bottom = `${bottom}px`;
     }
 
-    _shadeBelow(id) {
-        const top = this._calcTopShade(id);
-        const shadeName = `_shade${id}`;
+    _shadeBelow(barrierId) {
+        const top = this._calcTopShade(barrierId);
+        const shadeName = `_shade${barrierId}`;
         this[shadeName].style.top = `${top}px`;
         this[shadeName].style.bottom = '0px';
     }
 
-    _shadeAbove(id) {
-        const bottom = this._calcBottomShade(id);
-        const shadeName = `_shade${id}`;
+    _shadeAbove(barrierId) {
+        const bottom = this._calcBottomShade(barrierId);
+        const shadeName = `_shade${barrierId}`;
         this[shadeName].style.top = '0px';
         this[shadeName].style.bottom = `${bottom}px`;
     }
