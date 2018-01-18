@@ -13,6 +13,7 @@
         "node": true
     },
     "plugins": [
+        "react"
     ],
     "parserOptions": {
         "ecmaVersion": 8,
