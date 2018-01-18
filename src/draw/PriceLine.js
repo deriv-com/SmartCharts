@@ -12,6 +12,7 @@ class PriceLine extends Line {
     constructor({
         stx,
         lineColor = PriceLine.COLOR_GREEN,
+        relative = false,
         visible = true,
         pipSize = 2,
         price,
@@ -27,7 +28,31 @@ class PriceLine extends Line {
         CIQ.appendClassName(this._line, 'horizontal');
 
         this._stx.append('draw', this._draw.bind(this));
-        this._price = price || this._stx.currentQuote().Close;
+
+        this._currentPrice = this._stx.currentQuote().Close;
+        this._price = price || (relative ? 0 : this._currentPrice);
+
+        this._stx.prepend('updateChartData', (appendQuotes) => {
+            this._currentPrice = appendQuotes[appendQuotes.length - 1].Close;
+        });
+
+        this._relative = relative;
+    }
+
+    get relative() {
+        return this._relative;
+    }
+
+    set relative(value) {
+        if (this._relative === value) return;
+
+        this._relative = value;
+
+        if (this._relative) {
+            this._price -= this._currentPrice; // absolute to relative
+        } else {
+            this._price += this._currentPrice; // relative to absolute
+        }
     }
 
     // override to limit drag movement
@@ -41,13 +66,12 @@ class PriceLine extends Line {
     }
 
     _dragLine(e) {
-        let newTop = this._initialPosition + e.displacementY;
-        let newCenter = newTop + (this._line.offsetHeight / 2);
+        const newTop = this._initialPosition + e.displacementY;
+        const newCenter = newTop + (this._line.offsetHeight / 2);
         let newPrice = this._priceFromLocation(newCenter);
 
-        // let currentPrice = this.stx.currentQuote().Close;
         newPrice = this.constrainPrice(newPrice);
-        if (newPrice < 0) newPrice = 0;
+        if (this.relative) newPrice -= this._currentPrice;
 
         this.price = this._snapPrice(newPrice);
         this._draw();
@@ -138,6 +162,10 @@ class PriceLine extends Line {
         }
     }
 
+    get realPrice() {
+        return this.relative ? (this._currentPrice + this.price) : this.price;
+    }
+
     get price() {
         return this._price;
     }
@@ -156,8 +184,8 @@ class PriceLine extends Line {
 
     _draw() {
         if (this.visible) {
-            this._positionAtPrice(this.price, [this._line], 'center', null, true);
-            this._priceText.textContent = this.price.toFixed(this._pipSize);
+            this._positionAtPrice(this.realPrice, [this._line], 'center', null, true);
+            this._priceText.textContent = this.realPrice.toFixed(this._pipSize);
         }
     }
 

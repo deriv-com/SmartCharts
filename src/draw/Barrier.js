@@ -29,8 +29,8 @@ class Barrier {
         this._barrier = Barrier.createBarrierElement();
         this._stx = stx;
 
-        this.barrier1 = new PriceLine({ stx });
-        this.barrier2 = new PriceLine({ stx });
+        this.barrier1 = new PriceLine({ stx, relative });
+        this.barrier2 = new PriceLine({ stx, relative });
 
         this._setupConstrainBarrierPrices();
 
@@ -40,8 +40,10 @@ class Barrier {
         this._barrier.appendChild(this.barrier1.element);
         this._barrier.appendChild(this.barrier2.element);
 
-        this.barrier1.price = this.barrier1.price + 1;
-        this.barrier2.price = this.barrier2.price - 1;
+        const distance = stx.chart.yAxis.priceTick;
+        this.barrier1.price = this.barrier1.price + distance;
+        this.barrier2.price = this.barrier2.price - distance;
+
         this._chart = stx.chart;
 
         this._shade1 = Barrier.createShadeElement();
@@ -60,12 +62,21 @@ class Barrier {
         this.visible = visible;
     }
 
+    get relative() {
+        return this.barrier1.relative;
+    }
+
+    set relative(value) {
+        this.barrier1.relative = value;
+        this.barrier2.relative = value;
+    }
+
     _setupConstrainBarrierPrices() {
         // barrier 1 cannot go below barrier 2
         this.barrier1.constrainPrice = (newPrice) => {
             if (this.barrier2.visible) {
-                if (newPrice < this.barrier2.price + Barrier.MIN_DIFFERENCE_BETWEEN_BARRIERS) {
-                    return this.barrier1.price;
+                if (newPrice < this.barrier2.realPrice + Barrier.MIN_DIFFERENCE_BETWEEN_BARRIERS) {
+                    return this.barrier1.realPrice;
                 }
             }
 
@@ -74,8 +85,8 @@ class Barrier {
 
         // barrier 2 cannot go above barrier 1
         this.barrier2.constrainPrice = (newPrice) => {
-            if (newPrice > this.barrier1.price - Barrier.MIN_DIFFERENCE_BETWEEN_BARRIERS) {
-                return this.barrier2.price;
+            if (newPrice > this.barrier1.realPrice - Barrier.MIN_DIFFERENCE_BETWEEN_BARRIERS) {
+                return this.barrier2.realPrice;
             }
 
             return newPrice;
