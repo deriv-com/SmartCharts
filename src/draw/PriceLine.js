@@ -18,7 +18,7 @@ class PriceLine extends Line {
         draggable = true,
     }) {
         super({
-            stx, lineColor, visible, pipSize, price, draggable,
+            stx, lineColor, visible, pipSize, draggable,
         });
         const element = createElement(html);
         this._line.appendChild(element);
@@ -27,6 +27,7 @@ class PriceLine extends Line {
         CIQ.appendClassName(this._line, 'horizontal');
 
         this._stx.append('draw', this._draw.bind(this));
+        this._price = price || this._stx.currentQuote().Close;
     }
 
     // override to limit drag movement
@@ -138,9 +139,6 @@ class PriceLine extends Line {
     }
 
     get price() {
-        if (this._price === undefined || this._price === null) {
-            this._price = this._stx.currentQuote().Close;
-        }
         return this._price;
     }
 

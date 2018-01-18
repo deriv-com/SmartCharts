@@ -12,12 +12,10 @@ class Line {
         lineColor = Line.COLOR_GREEN,
         visible = true,
         pipSize = 2,
-        price,
         draggable = true,
     }) {
         this._stx = stx;
         this._chart = stx.chart;
-        this._price = price;
         this._pipSize = pipSize;
 
         this._line = Line.createLine();
