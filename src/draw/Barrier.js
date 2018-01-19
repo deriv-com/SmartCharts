@@ -1,3 +1,4 @@
+import EventEmitter from 'event-emitter-es6';
 import PriceLine from './PriceLine';
 import { createElement, setHidden } from '../components/ui/utils';
 
@@ -11,6 +12,8 @@ class Barrier {
     static get SHADE_BELOW() { return 'SHADE_BELOW'; }
     static get SHADE_BETWEEN() { return 'SHADE_BETWEEN'; }
     static get SHADE_OUTSIDE() { return 'SHADE_OUTSIDE'; }
+
+    static get BARRIER_CHANGED() { return 'BARRIER_CHANGED'; }
 
     static MARGIN_OFFSET = 13;
     static MIN_DIFFERENCE_BETWEEN_BARRIERS = 0.01;
@@ -31,6 +34,7 @@ class Barrier {
         shade = Barrier.SHADE_NONE_SINGLE,
         shadeColor = 'rgba(140, 193, 118, 0.3)',
     }) {
+        this._emitter = new EventEmitter();
         this._barrierElement = Barrier.createBarrierElement();
         this._stx = stx;
 
@@ -39,8 +43,8 @@ class Barrier {
 
         this._setupConstrainBarrierPrices();
 
-        this._barrier1.onPriceChanged(this._drawShadedArea.bind(this));
-        this._barrier2.onPriceChanged(this._drawShadedArea.bind(this));
+        this._barrier1.onPriceChanged(this._onPriceChanged.bind(this));
+        this._barrier2.onPriceChanged(this._onPriceChanged.bind(this));
 
         this._barrierElement.appendChild(this._barrier1.element);
         this._barrierElement.appendChild(this._barrier2.element);
@@ -67,6 +71,26 @@ class Barrier {
 
         this.draggable = draggable;
         this.visible = visible;
+    }
+
+    onBarrierChanged(callback) {
+        this._emitter.on(Barrier.BARRIER_CHANGED, callback);
+    }
+
+    get high_barrier() {
+        return this._barrier1.price;
+    }
+
+    set high_barrier(price) {
+        this._barrier1.price = price;
+    }
+
+    get low_barrier() {
+        return this._barrier2.price;
+    }
+
+    set low_barrier(price) {
+        this._barrier2.price = price;
     }
 
     get relative() {
@@ -220,6 +244,15 @@ class Barrier {
             const order = (this._barrier1.top === 0) ? null : 101;
             this._barrier1.element.style.zIndex = order;
         }
+    }
+
+    _onPriceChanged() {
+        const high_barrier = this._barrier1.visible ? this._barrier1.price : undefined;
+        const low_barrier = this._barrier2.visible ? this._barrier2.price : undefined;
+
+        this._emitter.emit(Barrier.BARRIER_CHANGED, { high_barrier, low_barrier });
+
+        this._drawShadedArea();
     }
 
     _calcBottomShade(barrierId) {
