@@ -2,12 +2,16 @@ import PriceLine from './PriceLine';
 import { createElement, setHidden } from '../components/ui/utils';
 
 class Barrier {
+    static get LINE_COLOR_RED() { return 'red'; }
+    static get LINE_COLOR_GREEN() { return 'green'; }
+
     static get SHADE_NONE_SINGLE() { return 'SHADE_NONE_SINGLE'; }
     static get SHADE_NONE_DOUBLE() { return 'SHADE_NONE_DOUBLE'; }
     static get SHADE_ABOVE() { return 'SHADE_ABOVE'; }
     static get SHADE_BELOW() { return 'SHADE_BELOW'; }
     static get SHADE_BETWEEN() { return 'SHADE_BETWEEN'; }
     static get SHADE_OUTSIDE() { return 'SHADE_OUTSIDE'; }
+
     static MARGIN_OFFSET = 13;
     static MIN_DIFFERENCE_BETWEEN_BARRIERS = 0.01;
 
@@ -25,8 +29,9 @@ class Barrier {
         draggable = true,
         visible = true,
         shade = Barrier.SHADE_NONE_SINGLE,
+        shadeColor = 'rgba(140, 193, 118, 0.3)',
     }) {
-        this._barrier = Barrier.createBarrierElement();
+        this._barrierElement = Barrier.createBarrierElement();
         this._stx = stx;
 
         this._barrier1 = new PriceLine({ stx, relative });
@@ -37,8 +42,8 @@ class Barrier {
         this._barrier1.onPriceChanged(this._drawShadedArea.bind(this));
         this._barrier2.onPriceChanged(this._drawShadedArea.bind(this));
 
-        this._barrier.appendChild(this._barrier1.element);
-        this._barrier.appendChild(this._barrier2.element);
+        this._barrierElement.appendChild(this._barrier1.element);
+        this._barrierElement.appendChild(this._barrier2.element);
 
         this._chart = stx.chart;
 
@@ -46,15 +51,17 @@ class Barrier {
         this._barrier1.price += distance;
         this._barrier2.price -= distance;
 
-        this._shade1 = Barrier.createShadeElement();
-        this._shade2 = Barrier.createShadeElement();
-        this._barrier.appendChild(this._shade1);
-        this._barrier.appendChild(this._shade2);
+        this._aboveShade = Barrier.createShadeElement();
+        this._betweenShade = Barrier.createShadeElement();
+        this._belowShade = Barrier.createShadeElement();
+        this._barrierElement.appendChild(this._aboveShade);
+        this._barrierElement.appendChild(this._betweenShade);
+        this._barrierElement.appendChild(this._belowShade);
 
         const holder = this._chart.panel.holder;
-        holder.appendChild(this._barrier);
+        holder.appendChild(this._barrierElement);
 
-        this.shadeColor = 'rgba(140, 193, 118, 0.3)';
+        this.shadeColor = shadeColor;
         this.shadeState = shade;
         stx.append('draw', this._drawShadedArea.bind(this));
 
@@ -69,6 +76,15 @@ class Barrier {
     set relative(value) {
         this._barrier1.relative = value;
         this._barrier2.relative = value;
+    }
+
+    get lineColor() {
+        return this._barrier1.lineColor;
+    }
+
+    set lineColor(color) {
+        this._barrier1.lineColor = color;
+        this._barrier2.lineColor = color;
     }
 
     _setupConstrainBarrierPrices() {
@@ -111,15 +127,7 @@ class Barrier {
             this._barrier2.visible = false;
         }
 
-        setHidden(this._barrier, !visible);
-    }
-
-    get shadeState() {
-        return this._shadeState;
-    }
-
-    get shadeColor() {
-        return this._shadeColor;
+        setHidden(this._barrierElement, !visible);
     }
 
     get draggable() {
@@ -131,10 +139,19 @@ class Barrier {
         this._barrier2.draggable = value;
     }
 
+    get shadeColor() {
+        return this._shadeColor;
+    }
+
     set shadeColor(shadeColor) {
         this._shadeColor = shadeColor;
-        this._shade1.style.backgroundColor = shadeColor;
-        this._shade2.style.backgroundColor = shadeColor;
+        this._aboveShade.style.backgroundImage = `linear-gradient(to bottom, transparent 30%, ${shadeColor})`;
+        this._betweenShade.style.backgroundColor = shadeColor;
+        this._belowShade.style.backgroundImage = `linear-gradient(to bottom, ${shadeColor}, transparent 70%)`;
+    }
+
+    get shadeState() {
+        return this._shadeState;
     }
 
     set shadeState(shadeState) {
@@ -145,14 +162,22 @@ class Barrier {
             || this._shadeState === Barrier.SHADE_NONE_DOUBLE;
 
         if (noShade) {
-            setHidden(this._shade1, true);
-            setHidden(this._shade2, true);
+            setHidden(this._aboveShade, true);
+            setHidden(this._betweenShade, true);
+            setHidden(this._belowShade, true);
         } else {
-            const shade2Enable =
-                this._shadeState === Barrier.SHADE_OUTSIDE;
+            const aboveShadeEnable =
+                this._shadeState === Barrier.SHADE_ABOVE
+                || this._shadeState === Barrier.SHADE_OUTSIDE;
+            const belowShadeEnable =
+                this._shadeState === Barrier.SHADE_BELOW
+                || this._shadeState === Barrier.SHADE_OUTSIDE;
+            const betweenShadeEnable =
+                this._shadeState === Barrier.SHADE_BETWEEN;
 
-            setHidden(this._shade1, false);
-            setHidden(this._shade2, !shade2Enable);
+            setHidden(this._aboveShade, !aboveShadeEnable);
+            setHidden(this._belowShade, !belowShadeEnable);
+            setHidden(this._betweenShade, !betweenShadeEnable);
 
             this._drawShadedArea();
         }
@@ -182,14 +207,13 @@ class Barrier {
         if (!this.visible) return;
 
         if (this._shadeState === Barrier.SHADE_ABOVE) {
-            this._shadeAbove(1);
+            this._shadeAbove();
         } else if (this._shadeState === Barrier.SHADE_BELOW) {
-            this._shadeBelow(1);
+            this._shadeBelow();
         } else if (this._shadeState === Barrier.SHADE_BETWEEN) {
             this._shadeBetween();
         } else if (this._shadeState === Barrier.SHADE_OUTSIDE) {
-            this._shadeAbove(1);
-            this._shadeBelow(2);
+            this._shadeOutside();
         }
 
         if (this._barrier2.visible && this._isBarriersOffScreen()) {
@@ -209,22 +233,25 @@ class Barrier {
     _shadeBetween() {
         const top = this._calcTopShade(1);
         const bottom = this._calcBottomShade(2);
-        this._shade1.style.top = `${top}px`;
-        this._shade1.style.bottom = `${bottom}px`;
+        this._betweenShade.style.top = `${top}px`;
+        this._betweenShade.style.bottom = `${bottom}px`;
     }
 
-    _shadeBelow(barrierId) {
+    _shadeBelow(barrierId = 1) {
         const top = this._calcTopShade(barrierId);
-        const shadeName = `_shade${barrierId}`;
-        this[shadeName].style.top = `${top}px`;
-        this[shadeName].style.bottom = '0px';
+        this._belowShade.style.top = `${top}px`;
+        this._belowShade.style.bottom = '0px';
     }
 
-    _shadeAbove(barrierId) {
+    _shadeAbove(barrierId = 1) {
         const bottom = this._calcBottomShade(barrierId);
-        const shadeName = `_shade${barrierId}`;
-        this[shadeName].style.top = '0px';
-        this[shadeName].style.bottom = `${bottom}px`;
+        this._aboveShade.style.top = '0px';
+        this._aboveShade.style.bottom = `${bottom}px`;
+    }
+
+    _shadeOutside() {
+        this._shadeAbove(1);
+        this._shadeBelow(2);
     }
 }
 
