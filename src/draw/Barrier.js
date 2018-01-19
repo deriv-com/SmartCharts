@@ -40,11 +40,11 @@ class Barrier {
         this._barrier.appendChild(this.barrier1.element);
         this._barrier.appendChild(this.barrier2.element);
 
-        const distance = stx.chart.yAxis.priceTick;
+        this._chart = stx.chart;
+
+        const distance = this._chart.yAxis.priceTick;
         this.barrier1.price = this.barrier1.price + distance;
         this.barrier2.price = this.barrier2.price - distance;
-
-        this._chart = stx.chart;
 
         this._shade1 = Barrier.createShadeElement();
         this._shade2 = Barrier.createShadeElement();
@@ -162,7 +162,15 @@ class Barrier {
             || this._barrierState === Barrier.BARRIER_BETWEEN
             || this._barrierState === Barrier.BARRIER_DOUBLE;
 
+        const wasBarrier2Visible = this.barrier2.visible;
         this.barrier2.visible = showBarrier2;
+
+        if (showBarrier2 && !wasBarrier2Visible) {
+            if (this.barrier2.realPrice >= this.barrier1.realPrice) {
+                // fix position if barrier2 above barrier1, since barrier2 position is not updated when not visible
+                this.barrier2.price = this.barrier1.price - this._chart.yAxis.priceTick;
+            }
+        }
     }
 
     _isBarriersOffScreen() {
