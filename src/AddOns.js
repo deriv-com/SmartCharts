@@ -474,6 +474,7 @@ CIQ.Tooltip = function (tooltipParams) {
             member: 'Close', display: 'Close', panel, yAxis,
         });
         dupMap.DT = dupMap.Close = 1;
+        let showChange = false;
         if (showChange && CIQ.ChartEngine.isDailyInterval(this.layout.interval)) {
             fields.push({
                 member: 'Change', display: 'Change', panel, yAxis,
