@@ -5,7 +5,7 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 const config = {
     devtool: 'source-map',
-    entry: ['babel-polyfill', './src/index.jsx'],
+    entry: ['babel-polyfill', path.resolve(__dirname, './src/index.jsx')],
     output: {
         publicPath: '/dist/',
         path: path.resolve(__dirname, 'dist'),
