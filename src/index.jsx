@@ -1,8 +1,11 @@
-/* eslint-disable no-new */
+/* eslint-disable no-new, react/jsx-indent, react/no-danger, react/jsx-indent-props */
 import $ from 'jquery';
+import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
+import CIQ from 'chartiq'; // eslint-disable-line
 
 import StreamManager from './StreamManager';
-import Feed from './feed';
+import Feed from './Feed';
 import ActiveSymbolDriver from './ActiveSymbolDriver';
 import ConnectionManager from './ConnectionManager';
 import Context from './components/ui/Context';
@@ -10,7 +13,6 @@ import Context from './components/ui/Context';
 import '../chartiq/html2canvas';
 import '../chartiq/iscroll';
 
-import CIQ from 'chartiq';
 
 /* css + scss */
 import '../css/stx-chart.css';
@@ -48,8 +50,6 @@ import './components/Clickable';
 import './components/ChartControls';
 
 import Barrier from './draw/Barrier';
-import React, {Component} from 'react';
-import ReactDOM from 'react-dom';
 
 window.Barrier = Barrier;
 
@@ -103,9 +103,9 @@ class App extends Component {
         // Floating tooltip on mousehover
         // comment in the following line if you want a tooltip to display when the crosshair toggle is turned on
         // This should be used as an *alternative* to the HeadsUP (HUD).
-            new CIQ.Tooltip({
-                stx: stxx, ohl: true, volume: false, series: true, studies: true,
-            });
+        new CIQ.Tooltip({
+            stx: stxx, ohl: true, volume: false, series: true, studies: true,
+        });
 
         // Inactivity timer
         new CIQ.InactivityTimer({
@@ -201,10 +201,10 @@ class App extends Component {
                 if (this.loader) this.loader.show();
 
                 // reset comparisons - remove this loop to transfer from symbol to symbol.
-                    for (let field in stx.chart.series) {
-                        // keep studies
-                        if (stxx.chart.series[field].parameters.bucket !== 'study') stx.removeSeries(field);
-                    }
+                for (let field in stx.chart.series) {
+                    // keep studies
+                    if (stxx.chart.series[field].parameters.bucket !== 'study') stx.removeSeries(field);
+                }
 
                 let self = this;
                 stx.newChart(data, null, null, (err) => {
@@ -299,7 +299,7 @@ class App extends Component {
         }
 
         // Range Slider; needs to be created before startUI() is called for custom themes to apply
-        new CIQ.RangeSlider({ stx: stxx, });
+        new CIQ.RangeSlider({ stx: stxx });
 
         let webComponentsSupported = ('registerElement' in document &&
             'import' in document.createElement('link') &&
@@ -320,12 +320,12 @@ class App extends Component {
     render() {
         return (
             <cq-context>
-                <cq-ui-manager></cq-ui-manager>
+                <cq-ui-manager />
                 <cq-color-picker>
-                    <cq-colors></cq-colors>
+                    <cq-colors />
                     <cq-overrides>
                         <template>
-                            <div className="ciq-btn"></div>
+                            <div className="ciq-btn" />
                         </template>
                     </cq-overrides>
                 </cq-color-picker>
@@ -334,9 +334,17 @@ class App extends Component {
                     <cq-menu class="ciq-search">
                         <cq-lookup cq-keystroke-claim cq-keystroke-default cq-uppercase>
                             <cq-lookup-input cq-no-close>
-                                <input id="symbol" type="text" spellCheck="off" autoComplete="off"
-                                    autoCorrect="off" autoCapitalize="off" name="symbol" placeholder="" />
-                                <cq-lookup-icon></cq-lookup-icon>
+                                <input
+                                    id="symbol"
+                                    type="text"
+                                    spellCheck="off"
+                                    autoComplete="off"
+                                    autoCorrect="off"
+                                    autoCapitalize="off"
+                                    name="symbol"
+                                    placeholder=""
+                                />
+                                <cq-lookup-icon />
                             </cq-lookup-input>
                             <cq-lookup-results>
                                 <cq-lookup-filters cq-no-close>
@@ -347,7 +355,7 @@ class App extends Component {
                                     <cq-filter>Commodities</cq-filter>
                                     <cq-filter>Volatility</cq-filter>
                                 </cq-lookup-filters>
-                                <cq-scroll></cq-scroll>
+                                <cq-scroll />
                             </cq-lookup-results>
                         </cq-lookup>
                     </cq-menu>
@@ -363,7 +371,7 @@ class App extends Component {
                                     <cq-item stxtap="noTool()">None</cq-item>
                                     <cq-item stxtap="clearDrawings()">Clear Drawings</cq-item>
                                     <cq-item stxtap="tool('measure')">Measure</cq-item>
-                                    <cq-separator></cq-separator>
+                                    <cq-separator />
                                     <cq-item stxtap="tool('annotation')">Annotation</cq-item>
                                     <cq-item stxtap="tool('average')">Average Line</cq-item>
                                     <cq-item stxtap="tool('callout')">Callout</cq-item>
@@ -401,43 +409,48 @@ class App extends Component {
                             </cq-menu>
                             <cq-toolbar-settings>
                                 <cq-fill-color cq-section class="ciq-color" stxbind="getFillColor()" stxtap="pickFillColor()">
-                                    <span></span>
+                                    <span />
                                 </cq-fill-color>
                                 <div>
-                                    <cq-line-color cq-section cq-overrides="auto" class="ciq-color"
-                                        stxbind="getLineColor()" stxtap="pickLineColor()">
-                                        <span></span>
+                                    <cq-line-color
+                                        cq-section
+                                        cq-overrides="auto"
+                                        class="ciq-color"
+                                        stxbind="getLineColor()"
+                                        stxtap="pickLineColor()"
+                                    >
+                                        <span />
                                     </cq-line-color>
                                     <cq-line-style cq-section>
                                         <cq-menu class="ciq-select">
-                                            <span cq-line-style="" className="ciq-line ciq-selected"></span>
+                                            <span cq-line-style="" className="ciq-line ciq-selected" />
                                             <cq-menu-dropdown class="ciq-line-style-menu">
                                                 <cq-item stxtap="setLine(1,'solid')">
-                                                    <span className="ciq-line-style-option ciq-solid-1"></span>
+                                                    <span className="ciq-line-style-option ciq-solid-1" />
                                                 </cq-item>
                                                 <cq-item stxtap="setLine(3,'solid')">
-                                                    <span className="ciq-line-style-option ciq-solid-3"></span>
+                                                    <span className="ciq-line-style-option ciq-solid-3" />
                                                 </cq-item>
                                                 <cq-item stxtap="setLine(5,'solid')">
-                                                    <span className="ciq-line-style-option ciq-solid-5"></span>
+                                                    <span className="ciq-line-style-option ciq-solid-5" />
                                                 </cq-item>
                                                 <cq-item stxtap="setLine(1,'dotted')">
-                                                    <span className="ciq-line-style-option ciq-dotted-1"></span>
+                                                    <span className="ciq-line-style-option ciq-dotted-1" />
                                                 </cq-item>
                                                 <cq-item stxtap="setLine(3,'dotted')">
-                                                    <span className="ciq-line-style-option ciq-dotted-3"></span>
+                                                    <span className="ciq-line-style-option ciq-dotted-3" />
                                                 </cq-item>
                                                 <cq-item stxtap="setLine(5,'dotted')">
-                                                    <span className="ciq-line-style-option ciq-dotted-5"></span>
+                                                    <span className="ciq-line-style-option ciq-dotted-5" />
                                                 </cq-item>
                                                 <cq-item stxtap="setLine(1,'dashed')">
-                                                    <span className="ciq-line-style-option ciq-dashed-1"></span>
+                                                    <span className="ciq-line-style-option ciq-dashed-1" />
                                                 </cq-item>
                                                 <cq-item stxtap="setLine(3,'dashed')">
-                                                    <span className="ciq-line-style-option ciq-dashed-3"></span>
+                                                    <span className="ciq-line-style-option ciq-dashed-3" />
                                                 </cq-item>
                                                 <cq-item stxtap="setLine(5,'dashed')">
-                                                    <span className="ciq-line-style-option ciq-dashed-5"></span>
+                                                    <span className="ciq-line-style-option ciq-dashed-5" />
                                                 </cq-item>
                                                 <cq-item stxtap="setLine(0,'none')" class="ciq-none">None</cq-item>
                                             </cq-menu-dropdown>
@@ -447,12 +460,12 @@ class App extends Component {
                                 <cq-axis-label cq-section>
                                     <div className="ciq-heading">Axis Label:</div>
                                     <span stxtap="toggleAxisLabel()" className="ciq-checkbox ciq-active">
-                                        <span></span>
+                                        <span />
                                     </span>
                                 </cq-axis-label>
                                 <cq-annotation cq-section>
-                                    <div stxtap="toggleFontStyle('italic')" className="ciq-btn" style={{fontStyle:'italic'}}>I</div>
-                                    <div stxtap="toggleFontStyle('bold')" className="ciq-btn" style={{fontWeight:'bold'}}>B</div>
+                                    <div stxtap="toggleFontStyle('italic')" className="ciq-btn" style={{ fontStyle: 'italic' }}>I</div>
+                                    <div stxtap="toggleFontStyle('bold')" className="ciq-btn" style={{ fontWeight: 'bold' }}>B</div>
                                     <cq-menu class="ciq-select">
                                         <span cq-font-size="">12px</span>
                                         <cq-menu-dropdown class="ciq-font-size">
@@ -486,7 +499,7 @@ class App extends Component {
                                 </cq-clickable>
                             </cq-toolbar-settings>
                             <cq-measure>
-                                <span className="measureUnlit" id="mMeasure"></span>
+                                <span className="measureUnlit" id="mMeasure" />
                             </cq-measure>
                             <cq-undo-section>
                                 <cq-undo class="ciq-btn">Undo</cq-undo>
@@ -495,34 +508,34 @@ class App extends Component {
                         </cq-toolbar>
                         <div className="chartContainer" id="chartContainer">
 
-                            <cq-chart-controls></cq-chart-controls>
+                            <cq-chart-controls />
 
                             <stx-hu-tooltip>
                                 <stx-hu-tooltip-field field="DT">
                                     <stx-hu-tooltip-field-name>Date/Time</stx-hu-tooltip-field-name>
-                                    <stx-hu-tooltip-field-value></stx-hu-tooltip-field-value>
+                                    <stx-hu-tooltip-field-value />
                                 </stx-hu-tooltip-field>
                                 <stx-hu-tooltip-field field="Close">
-                                    <stx-hu-tooltip-field-name></stx-hu-tooltip-field-name>
-                                    <stx-hu-tooltip-field-value></stx-hu-tooltip-field-value>
+                                    <stx-hu-tooltip-field-name />
+                                    <stx-hu-tooltip-field-value />
                                 </stx-hu-tooltip-field>
                             </stx-hu-tooltip>
 
                             <cq-chart-title cq-marker cq-browser-tab>
-                                <cq-symbol></cq-symbol>
+                                <cq-symbol />
                                 <cq-chart-price>
-                                    <cq-current-price cq-animate></cq-current-price>
+                                    <cq-current-price cq-animate />
                                     <cq-change>
-                                        <div className="ico"></div>
-                                        <cq-todays-change></cq-todays-change> (
-                                        <cq-todays-change-pct></cq-todays-change-pct>)
+                                        <div className="ico" />
+                                        <cq-todays-change /> (
+                                        <cq-todays-change-pct />)
                                     </cq-change>
                                 </cq-chart-price>
                             </cq-chart-title>
                             <cq-comparison cq-marker>
                                 <cq-menu class="cq-comparison-new">
                                     <cq-comparison-add-label class="ciq-no-share">
-                                        <cq-comparison-plus></cq-comparison-plus>
+                                        <cq-comparison-plus />
                                         <span>Compare</span>
                                         <span>...</span>
                                     </cq-comparison-add-label>
@@ -530,9 +543,16 @@ class App extends Component {
                                         <cq-comparison-lookup-frame>
                                             <cq-lookup cq-keystroke-claim cq-uppercase>
                                                 <cq-lookup-input cq-no-close>
-                                                    <input type="text" cq-focus="" spellCheck="off" autoComplete="off"
-                                                        autoCorrect="off" autoCapitalize="off" placeholder="Enter Symbol" />
-                                                    <cq-lookup-icon></cq-lookup-icon>
+                                                    <input
+                                                        type="text"
+                                                        cq-focus=""
+                                                        spellCheck="off"
+                                                        autoComplete="off"
+                                                        autoCorrect="off"
+                                                        autoCapitalize="off"
+                                                        placeholder="Enter Symbol"
+                                                    />
+                                                    <cq-lookup-icon />
                                                 </cq-lookup-input>
                                                 <cq-lookup-results>
                                                     <cq-lookup-filters cq-no-close>
@@ -543,11 +563,11 @@ class App extends Component {
                                                         <cq-filter>Commodities</cq-filter>
                                                         <cq-filter>Volatility</cq-filter>
                                                     </cq-lookup-filters>
-                                                    <cq-scroll></cq-scroll>
+                                                    <cq-scroll />
                                                 </cq-lookup-results>
                                             </cq-lookup>
                                         </cq-comparison-lookup-frame>
-                                        <cq-swatch cq-no-close></cq-swatch>
+                                        <cq-swatch cq-no-close />
                                         <span>
                                             <cq-accept-btn class="stx-btn">ADD</cq-accept-btn>
                                         </span>
@@ -565,13 +585,16 @@ class App extends Component {
                                             <div className="stx-btn-ico ciq-close"></div>
                                         </cq-comparison-item>
                                     </template>
-                                        `
+                                        `,
                                     }}
-                                >
-                                </cq-comparison-key>
+                                />
                             </cq-comparison>
 
-                            <cq-study-legend cq-marker-label="Studies" cq-overlays-only cq-marker cq-hovershow
+                            <cq-study-legend
+                                cq-marker-label="Studies"
+                                cq-overlays-only
+                                cq-marker
+                                cq-hovershow
                                 dangerouslySetInnerHTML={{ /* TODO: fix this */
                                     __html: `
                                 <template>
@@ -581,37 +604,35 @@ class App extends Component {
                                         <div className="ciq-icon ciq-close"></div>
                                     </cq-item>
                                 </template>
-                                `
+                                `,
                                 }}
-                            >
-                            </cq-study-legend>
-                            <cq-loader></cq-loader>
+                            />
+                            <cq-loader />
                             <cq-hu-static>
                                 <div>
                                     <div>Price</div>
-                                    <cq-hu-price></cq-hu-price>
+                                    <cq-hu-price />
                                     <div>Open</div>
-                                    <cq-hu-open></cq-hu-open>
+                                    <cq-hu-open />
                                     <div>Close</div>
-                                    <cq-hu-close></cq-hu-close>
+                                    <cq-hu-close />
                                 </div>
                                 <div>
                                     <div>Vol</div>
                                     <cq-volume-section>
-                                        <cq-hu-volume></cq-hu-volume>
-                                        <cq-volume-rollup></cq-volume-rollup>
+                                        <cq-hu-volume />
+                                        <cq-volume-rollup />
                                     </cq-volume-section>
                                     <div>High</div>
-                                    <cq-hu-high></cq-hu-high>
+                                    <cq-hu-high />
                                     <div>Low</div>
-                                    <cq-hu-low></cq-hu-low>
+                                    <cq-hu-low />
                                 </div>
                             </cq-hu-static>
 
                         </div>
                     </div>
                 </div>
-
 
 
                 <cq-attribution
@@ -623,16 +644,14 @@ class App extends Component {
                             <cq-attrib-quote-type></cq-attrib-quote-type>
                         </cq-attrib-container>
                     </template>
-                    `
+                    `,
                     }}
-                >
-                </cq-attribution>
+                />
 
                 <div className="ciq-footer">
                     <cq-share-button>
                         <div stxtap="tap();">Share</div>
                     </cq-share-button>
-                    {/*<!--<div className="ciq-btn ciq-primary">Share!</div>-->*/}
                     <cq-show-range>
                         <div stxtap="set(1,'today');">1D</div>
                         <div stxtap="set(5,'day',30,2);">5D</div>
@@ -649,12 +668,18 @@ class App extends Component {
                 <cq-dialog>
                     <cq-view-dialog>
                         <h4>Save View</h4>
-                        <div stxtap="close()" className="ciq-icon ciq-close"></div>
-                        <div style={{textAlign:'center',marginTop:'10px'}}>
+                        <div stxtap="close()" className="ciq-icon ciq-close" />
+                        <div style={{ textAlign: 'center', marginTop: '10px' }}>
                             <i>Enter name of view:</i>
                             <p>
-                                <input spellCheck="false" autoCapitalize="off" autoCorrect="off" autoComplete="off"
-                                    maxLength="40" placeholder="Name" />
+                                <input
+                                    spellCheck="false"
+                                    autoCapitalize="off"
+                                    autoCorrect="off"
+                                    autoComplete="off"
+                                    maxLength="40"
+                                    placeholder="Name"
+                                />
                                 <br />
                             </p>
                             <span className="ciq-btn" stxtap="save()">Save</span>
@@ -684,10 +709,9 @@ class App extends Component {
                                         </div>
                                     </cq-fibonacci-setting>
                                 </template>
-                                `
+                                `,
                                 }}
-                            >
-                            </cq-fibonacci-settings>
+                            />
                         </cq-scroll>
                         <div className="ciq-dialog-cntrls">
                             <div className="ciq-btn" stxtap="close()">Done</div>
@@ -715,10 +739,9 @@ class App extends Component {
                                         </div>
                                     </cq-study-input>
                                 </template>
-                                `
+                                `,
                                 }}
-                            >
-                            </cq-study-inputs>
+                            />
                             <hr />
                             <cq-study-outputs
                                 dangerouslySetInnerHTML={{ /* TODO: fix this */
@@ -729,9 +752,9 @@ class App extends Component {
                                         <cq-swatch cq-overrides="auto"></cq-swatch>
                                     </cq-study-output>
                                 </template>
-                                `}}
-                            >
-                            </cq-study-outputs>
+                                `,
+                                }}
+                            />
                             <hr />
                             <cq-study-parameters
                                 dangerouslySetInnerHTML={{ /* TODO: fix this */
@@ -744,10 +767,9 @@ class App extends Component {
                                         </div>
                                     </cq-study-parameter>
                                 </template>
-                                `
+                                `,
                                 }}
-                            >
-                            </cq-study-parameters>
+                            />
                         </cq-scroll>
                         <div className="ciq-dialog-cntrls">
                             <div className="ciq-btn" stxtap="close()">Done</div>
@@ -758,10 +780,10 @@ class App extends Component {
             </cq-context>
         );
     }
-};
+}
 
 ReactDOM.render(
     <App />,
-    document.getElementById('root')
+    document.getElementById('root'),
 );
 
