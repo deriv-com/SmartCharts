@@ -19,6 +19,13 @@
         "ecmaVersion": 8,
         "sourceType": "module"
     },
+    "settings": {
+        "import/resolver": {
+            "node": {
+                "extensions": [".js",".jsx"]
+            }
+        }
+    },
     "rules": {
         "no-lonely-if": 1,
         "no-labels": 1,

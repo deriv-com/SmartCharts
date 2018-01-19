@@ -47,7 +47,7 @@ import './components/Undo';
 import './components/ViewDialog';
 import './components/Views';
 import './components/Clickable';
-import './components/ChartControls';
+import ChartControls from './components/ChartControls.jsx'; // eslint-disable-line
 
 import Barrier from './draw/Barrier';
 
@@ -276,9 +276,6 @@ class App extends Component {
             let UIStudyMenu = new CIQ.UI.StudyMenu($('*[cq-studies]'), UIContext, params);
             UIStudyMenu.renderMenu();
 
-            $('cq-views').each(function () {
-                this.initialize();
-            });
 
             if (UIContext.loader) UIContext.loader.show();
             restorePreferences();
@@ -508,7 +505,7 @@ class App extends Component {
                         </cq-toolbar>
                         <div className="chartContainer" id="chartContainer">
 
-                            <cq-chart-controls />
+                            <ChartControls />
 
                             <stx-hu-tooltip>
                                 <stx-hu-tooltip-field field="DT">
