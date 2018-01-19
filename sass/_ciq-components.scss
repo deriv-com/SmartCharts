@@ -12,15 +12,17 @@ cq-context {
 		   -moz-user-select: text;
 			-ms-user-select: text;
 				user-select: text;
-	
+
 		font-weight: 300;
 		color: #071931;
 	}
-	
+
 	div, li, span, a {
 		-webkit-tap-highlight-color: rgba(0,0,0,0); /* eliminated annoying flash when tapping screen on ipads */
 		-webkit-tap-highlight-color: transparent; /* For some Androids */
 	}
+
+	@import "components/line";
 }
 
 /* --------------------------------------------------------- FIELDS, SELECTS, INPUTS --------------------------------------------------------- */
@@ -2813,5 +2815,3 @@ cq-flag[cq-lang="ja"]{
 	border: solid 2px rgba(0,144,183,1);
 	width: 5px;
 }
-
-@import 'components/line'
