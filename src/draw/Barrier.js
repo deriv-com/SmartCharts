@@ -2,12 +2,12 @@ import PriceLine from './PriceLine';
 import { createElement, setHidden } from '../components/ui/utils';
 
 class Barrier {
-    static get BARRIER_SINGLE() { return 'BARRIER_SINGLE'; }
-    static get BARRIER_DOUBLE() { return 'BARRIER_DOUBLE'; }
-    static get BARRIER_ABOVE() { return 'BARRIER_ABOVE'; }
-    static get BARRIER_BELOW() { return 'BARRIER_BELOW'; }
-    static get BARRIER_BETWEEN() { return 'BARRIER_BETWEEN'; }
-    static get BARRIER_OUTSIDE() { return 'BARRIER_OUTSIDE'; }
+    static get SHADE_NONE_SINGLE() { return 'SHADE_NONE_SINGLE'; }
+    static get SHADE_NONE_DOUBLE() { return 'SHADE_NONE_DOUBLE'; }
+    static get SHADE_ABOVE() { return 'SHADE_ABOVE'; }
+    static get SHADE_BELOW() { return 'SHADE_BELOW'; }
+    static get SHADE_BETWEEN() { return 'SHADE_BETWEEN'; }
+    static get SHADE_OUTSIDE() { return 'SHADE_OUTSIDE'; }
     static MARGIN_OFFSET = 13;
     static MIN_DIFFERENCE_BETWEEN_BARRIERS = 0.01;
 
@@ -24,27 +24,27 @@ class Barrier {
         relative = false,
         draggable = true,
         visible = true,
-        barrier = Barrier.BARRIER_SINGLE,
+        shade = Barrier.SHADE_NONE_SINGLE,
     }) {
         this._barrier = Barrier.createBarrierElement();
         this._stx = stx;
 
-        this.barrier1 = new PriceLine({ stx, relative });
-        this.barrier2 = new PriceLine({ stx, relative });
+        this._barrier1 = new PriceLine({ stx, relative });
+        this._barrier2 = new PriceLine({ stx, relative });
 
         this._setupConstrainBarrierPrices();
 
-        this.barrier1.onPriceChanged(this._drawShadedArea.bind(this));
-        this.barrier2.onPriceChanged(this._drawShadedArea.bind(this));
+        this._barrier1.onPriceChanged(this._drawShadedArea.bind(this));
+        this._barrier2.onPriceChanged(this._drawShadedArea.bind(this));
 
-        this._barrier.appendChild(this.barrier1.element);
-        this._barrier.appendChild(this.barrier2.element);
+        this._barrier.appendChild(this._barrier1.element);
+        this._barrier.appendChild(this._barrier2.element);
 
         this._chart = stx.chart;
 
         const distance = this._chart.yAxis.priceTick;
-        this.barrier1.price = this.barrier1.price + distance;
-        this.barrier2.price = this.barrier2.price - distance;
+        this._barrier1.price += distance;
+        this._barrier2.price -= distance;
 
         this._shade1 = Barrier.createShadeElement();
         this._shade2 = Barrier.createShadeElement();
@@ -55,7 +55,7 @@ class Barrier {
         holder.appendChild(this._barrier);
 
         this.shadeColor = 'rgba(140, 193, 118, 0.3)';
-        this.barrierState = barrier;
+        this.shadeState = shade;
         stx.append('draw', this._drawShadedArea.bind(this));
 
         this.draggable = draggable;
@@ -63,20 +63,20 @@ class Barrier {
     }
 
     get relative() {
-        return this.barrier1.relative;
+        return this._barrier1.relative;
     }
 
     set relative(value) {
-        this.barrier1.relative = value;
-        this.barrier2.relative = value;
+        this._barrier1.relative = value;
+        this._barrier2.relative = value;
     }
 
     _setupConstrainBarrierPrices() {
         // barrier 1 cannot go below barrier 2
-        this.barrier1.constrainPrice = (newPrice) => {
-            if (this.barrier2.visible) {
-                if (newPrice < this.barrier2.realPrice + Barrier.MIN_DIFFERENCE_BETWEEN_BARRIERS) {
-                    return this.barrier1.realPrice;
+        this._barrier1.constrainPrice = (newPrice) => {
+            if (this._barrier2.visible) {
+                if (newPrice < this._barrier2.realPrice + Barrier.MIN_DIFFERENCE_BETWEEN_BARRIERS) {
+                    return this._barrier1.realPrice;
                 }
             }
 
@@ -84,9 +84,9 @@ class Barrier {
         };
 
         // barrier 2 cannot go above barrier 1
-        this.barrier2.constrainPrice = (newPrice) => {
-            if (newPrice > this.barrier1.realPrice - Barrier.MIN_DIFFERENCE_BETWEEN_BARRIERS) {
-                return this.barrier2.realPrice;
+        this._barrier2.constrainPrice = (newPrice) => {
+            if (newPrice > this._barrier1.realPrice - Barrier.MIN_DIFFERENCE_BETWEEN_BARRIERS) {
+                return this._barrier2.realPrice;
             }
 
             return newPrice;
@@ -103,19 +103,19 @@ class Barrier {
         this._visible = visible;
 
         if (visible) {
-            this.barrierState = this.barrierState; // restore barrier state
-            this.barrier1.visible = true;
+            this.shadeState = this.shadeState; // restore barrier state
+            this._barrier1.visible = true;
         } else {
             // Also disable visibility of barriers to turn off draw updates
-            this.barrier1.visible = false;
-            this.barrier2.visible = false;
+            this._barrier1.visible = false;
+            this._barrier2.visible = false;
         }
 
         setHidden(this._barrier, !visible);
     }
 
-    get barrierState() {
-        return this._barrierState;
+    get shadeState() {
+        return this._shadeState;
     }
 
     get shadeColor() {
@@ -123,12 +123,12 @@ class Barrier {
     }
 
     get draggable() {
-        return this.barrier1.draggable;
+        return this._barrier1.draggable;
     }
 
     set draggable(value) {
-        this.barrier1.draggable = value;
-        this.barrier2.draggable = value;
+        this._barrier1.draggable = value;
+        this._barrier2.draggable = value;
     }
 
     set shadeColor(shadeColor) {
@@ -137,19 +137,19 @@ class Barrier {
         this._shade2.style.backgroundColor = shadeColor;
     }
 
-    set barrierState(barrierState) {
-        this._barrierState = barrierState;
+    set shadeState(shadeState) {
+        this._shadeState = shadeState;
 
         const noShade =
-            this._barrierState === Barrier.BARRIER_SINGLE
-            || this._barrierState === Barrier.BARRIER_DOUBLE;
+            this._shadeState === Barrier.SHADE_NONE_SINGLE
+            || this._shadeState === Barrier.SHADE_NONE_DOUBLE;
 
         if (noShade) {
             setHidden(this._shade1, true);
             setHidden(this._shade2, true);
         } else {
             const shade2Enable =
-                this._barrierState === Barrier.BARRIER_OUTSIDE;
+                this._shadeState === Barrier.SHADE_OUTSIDE;
 
             setHidden(this._shade1, false);
             setHidden(this._shade2, !shade2Enable);
@@ -158,52 +158,52 @@ class Barrier {
         }
 
         const showBarrier2 =
-            this._barrierState === Barrier.BARRIER_OUTSIDE
-            || this._barrierState === Barrier.BARRIER_BETWEEN
-            || this._barrierState === Barrier.BARRIER_DOUBLE;
+            this._shadeState === Barrier.SHADE_OUTSIDE
+            || this._shadeState === Barrier.SHADE_BETWEEN
+            || this._shadeState === Barrier.SHADE_NONE_DOUBLE;
 
-        const wasBarrier2Visible = this.barrier2.visible;
-        this.barrier2.visible = showBarrier2;
+        const wasBarrier2Visible = this._barrier2.visible;
+        this._barrier2.visible = showBarrier2;
 
         if (showBarrier2 && !wasBarrier2Visible) {
-            if (this.barrier2.realPrice >= this.barrier1.realPrice) {
-                // fix position if barrier2 above barrier1, since barrier2 position is not updated when not visible
-                this.barrier2.price = this.barrier1.price - this._chart.yAxis.priceTick;
+            if (this._barrier2.realPrice >= this._barrier1.realPrice) {
+                // fix position if _barrier2 above _barrier1, since _barrier2 position is not updated when not visible
+                this._barrier2.price = this._barrier1.price - this._chart.yAxis.priceTick;
             }
         }
     }
 
     _isBarriersOffScreen() {
-        return this.barrier1.element.getAttribute('off-screen')
-            && this.barrier2.element.getAttribute('off-screen');
+        return this._barrier1.element.getAttribute('off-screen')
+            && this._barrier2.element.getAttribute('off-screen');
     }
 
     _drawShadedArea() {
         if (!this.visible) return;
 
-        if (this._barrierState === Barrier.BARRIER_ABOVE) {
+        if (this._shadeState === Barrier.SHADE_ABOVE) {
             this._shadeAbove(1);
-        } else if (this._barrierState === Barrier.BARRIER_BELOW) {
+        } else if (this._shadeState === Barrier.SHADE_BELOW) {
             this._shadeBelow(1);
-        } else if (this._barrierState === Barrier.BARRIER_BETWEEN) {
+        } else if (this._shadeState === Barrier.SHADE_BETWEEN) {
             this._shadeBetween();
-        } else if (this._barrierState === Barrier.BARRIER_OUTSIDE) {
+        } else if (this._shadeState === Barrier.SHADE_OUTSIDE) {
             this._shadeAbove(1);
             this._shadeBelow(2);
         }
 
-        if (this.barrier2.visible && this._isBarriersOffScreen()) {
-            const order = (this.barrier1.top === 0) ? null : 101;
-            this.barrier1.element.style.zIndex = order;
+        if (this._barrier2.visible && this._isBarriersOffScreen()) {
+            const order = (this._barrier1.top === 0) ? null : 101;
+            this._barrier1.element.style.zIndex = order;
         }
     }
 
     _calcBottomShade(barrierId) {
-        return this._chart.panel.height - this[`barrier${barrierId}`].top - Barrier.MARGIN_OFFSET;
+        return this._chart.panel.height - this[`_barrier${barrierId}`].top - Barrier.MARGIN_OFFSET;
     }
 
     _calcTopShade(barrierId) {
-        return this[`barrier${barrierId}`].top + Barrier.MARGIN_OFFSET;
+        return this[`_barrier${barrierId}`].top + Barrier.MARGIN_OFFSET;
     }
 
     _shadeBetween() {
