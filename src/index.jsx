@@ -49,7 +49,9 @@ import './components/Views';
 import './components/Clickable';
 import ChartControls from './components/ChartControls.jsx'; // eslint-disable-line
 
-import Line from './draw/Line';
+import Barrier from './draw/Barrier';
+
+window.Barrier = Barrier;
 
 class App extends Component {
     componentDidMount() {
@@ -67,7 +69,6 @@ class App extends Component {
             container: $$$('#chartContainer'),
         });
 
-        window.Line = Line;
         window.stxx = stxx;
 
         CIQ.Animation(stxx, { tension: 0.3, stayPut: true });

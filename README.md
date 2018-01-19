@@ -9,24 +9,26 @@ Binary.com charting library based on chartiq.
 - use `yarn analyze` to run webpack-bundle-analyzer
 - use `yarn gh-pages` to deploy demo to gh-pages
 
-## Line Class
+## Barrier Class
 ```js
-const line = new Line({
-    stx       : stx,              // chart instance
-    lineColor : Line.COLOR_RED,   // optional, defaults to Line.COLOR_GREEN
-    shadeState: Line.SHADE_BELOW, // optional, defaults to Line.SHADE_NONE
-    shadeColor: Line.COLOR_RED,   // optional, defaults to Line.COLOR_GREEN
-    price     : null,             // optional, defaults to chartQoute.Close
-    visible   : false,            // optional, defaults to true   
-    pipSize   : 2,                // number of digits to show for price
+const barrier = new Barrier({
+    stx       : stx,                        // chart instance
+    shadeState: Barrier.SHADE_BELOW,        // optional
+    shadeColor: 'rgba(140, 193, 118, 0.3)', // optional
+    visible   : false,                      // optional, defaults to true   
 });
 
-line.visible = true;                // show the line
-line.lineColor = Line.COLOR_GREEN;  // change line color
-line.price += 0.3;                  // update the price
-line.shadeState = Line.SHADE_ABOVE; // change shade direction
+barrier.lineColor = Barrier.LINE_COLOR_RED;    // use either Barrier.LINE_COLOR_RED or Barrier.LINE_COLOR_GREEN
+barrier.visible = true;                        // show/hide barrier
+barrier.lineColor = Barrier.LINE_COLOR_GREEN;  // change line color
+barrier.high_barrier = 9000;                   // set price of high barrier
+barrier.low_barrier = 8900;
+barrier.relative = true; // tweak absolute and relative barrier from here
+barrier.shadeState = Barrier.SHADE_BETWEEN; // use one of 6 presets in Barrier.SHADE_*
+barrier.draggable = true;                   // choose whether user can interact with barriers
 
-// TODO: To be implemented
-line.draggable = true; // false
-line.dashStyle = Line.DOTTED; // Line.NORMAL
+barrier.onBarrierChanged(({high_barrier, low_barrier}) => {
+    // ...do something with barrier changes
+});
+
 ```

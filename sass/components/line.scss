@@ -1,29 +1,38 @@
 @charset "UTF-8";
 
+
 /* Images */
-.tfc-price-arrow,
-.tfc-price-arrow span,
-.tfc-price {
-    background-image: url(img/stx-sprite-trade.png);
-    background-repeat: no-repeat;
+
+.price-arrow,
+.price-arrow span,
+.price {
+    background: url(img/stx-sprite-trade.png) no-repeat;
 }
 
-@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
-    .tfc-price-arrow,
-    .tfc-price-arrow span,
-    .tfc-price {
-        background-image:url(img/stx-sprite-trade@2x.png);
+@media (-webkit-min-device-pixel-ratio: 2),
+(min-resolution: 192dpi) {
+    .price-arrow,
+    .price-arrow span,
+    .price {
+        background-image: url(img/stx-sprite-trade@2x.png);
         background-size: 80px 650px;
     }
 }
 
+
 /*--------------------------------------------------*/
+
+
 /* Drag Lines and Prices */
-.drag-price-line, .drag-price, .tfc-price, .tfc-price-arrow {
+
+.chart-line,
+.drag-price,
+.price,
+.price-arrow {
     height: 23px;
 }
 
-.drag-price-line {
+.chart-line {
     position: absolute;
     width: 100%;
     left: 0px;
@@ -31,30 +40,43 @@
     z-index: 100;
 }
 
+
 /*hover*/
-.drag-price-line:hover {
+
+.draggable.chart-line:hover {
     cursor: ns-resize;
     background: rgba(0, 0, 0, 0.05);
 }
 
-.drag-line {
+.horizontal .drag-line {
     height: 0px;
     float: left;
     width: 100%;
     margin-left: -10px;
     margin-top: 11px;
+    border-top: 2px dashed;
 }
 
-.red .drag-line {
-    border-top: 2px #ec553c dashed;
+.red .price-arrow {
+    background-position: 0 -360px;
 }
 
-.green .drag-line {
-    border-top: 2px #8bc273 dashed;
+.green .price-arrow {
+    background-position: 0 -390px;
 }
+
+.vertical .drag-line {
+    height: 100%;
+    width: 10px;
+    border-left: 2px dashed blue;
+    left: 200px;
+    margin-left: 10px;
+}
+
 
 /*hover*/
-.drag-price-line:hover .drag-line {
+
+.draggable.chart-line:hover .drag-line {
     border-top-style: solid;
 }
 
@@ -69,28 +91,30 @@
     -o-user-select: none;
 }
 
-.tfc-price-arrow {
+.price-arrow {
     float: left;
     position: relative;
     width: 12px;
     transition: width .2s;
 }
 
-.red .tfc-price-arrow {
+.red .price-arrow {
     background-position: 0 -360px;
 }
 
-.green .tfc-price-arrow {
+.green .price-arrow {
     background-position: 0 -390px;
 }
 
+
 /*hover*/
-.no-touch .drag-price-line:hover .tfc-price-arrow {
+
+.no-touch .chart-line:hover .price-arrow {
     width: 20px;
     height: 23px;
 }
 
-.no-touch .tfc-price-arrow span {
+.no-touch .price-arrow span {
     position: absolute;
     top: 4px;
     left: 6px;
@@ -102,12 +126,14 @@
     transition: opacity 0.2s;
 }
 
+
 /*hover*/
-.no-touch .drag-price-line:hover .tfc-price-arrow span {
+
+.no-touch .chart-line:hover .price-arrow span {
     opacity: 1;
 }
 
-.tfc-price {
+.price {
     color: #000;
     display: block;
     float: left;
@@ -116,32 +142,23 @@
     overflow: hidden;
 }
 
-.red .tfc-price {
+.red .price {
     background-position: right -360px;
 }
 
-.green .tfc-price {
+.green .price {
     background-position: right -390px;
 }
 
+
 /*--------------------------------------------------*/
+
+
 /* shade */
-.tfc-shade {
+
+.shade {
     position: absolute;
     width: 100%;
     right: 0px;
-    z-index: 1;
 }
 
-.shade-above.green {
-    background-image: linear-gradient(to bottom, rgba(140, 193, 118, 0) 30%, rgba(140, 193, 118, 0.3));
-}
-.shade-above.red {
-    background-image: linear-gradient(to bottom, rgba(255, 0, 0, 0) 30%, rgba(255, 0, 0, 0.2));
-}
-.shade-below.green {
-    background-image: linear-gradient(to bottom, rgba(140, 193, 118, 0.3), rgba(140, 193, 118, 0) 70%);
-}
-.shade-below.red {
-    background-image: linear-gradient(to bottom, rgba(255, 0, 0, 0.2), rgba(255, 0, 0, 0) 70%);
-}
