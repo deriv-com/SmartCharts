@@ -26,6 +26,15 @@ class Barrier {
         return createElement('<div class="barrier"></div>');
     }
 
+    /**
+     *
+     * @param {CIQ.ChartEngine} stx
+     * @param {Boolean} relative
+     * @param {Boolean} draggable
+     * @param {Boolean} visible
+     * @param {Enum} shade use one of 6 presets in Barrier.SHADE_*
+     * @param {String} shadeColor use CSS rgba
+     */
     constructor({
         stx,
         relative = false,
