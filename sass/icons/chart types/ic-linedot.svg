@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 48.2 (47327) - http://www.bohemiancoding.com/sketch -->
+    <title>icons/system/binary/chart settings/chart types/ic-linedot</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="icons/system/binary/chart-settings/chart-types/ic-linedot">
+            <g id="vector">
+                <rect id="Rectangle-Copy" fill="#D8D8D8" opacity="0" x="0" y="0" width="16" height="16"></rect>
+                <circle id="Oval" fill="#2A3052" cx="2" cy="8" r="2"></circle>
+                <rect id="Rectangle-2" fill="#2A3052" x="1" y="7" width="14" height="2"></rect>
+                <circle id="Oval-Copy" fill="#2A3052" cx="8" cy="8" r="2"></circle>
+                <circle id="Oval-Copy-2" fill="#2A3052" cx="14" cy="8" r="2"></circle>
+            </g>
+            <g id="ic-linedot">
+                <rect id="Rectangle-Copy" fill="#D8D8D8" opacity="0" x="0" y="0" width="16" height="16"></rect>
+                <path d="M12.2675644,7 C12.6133738,6.40219863 13.2597176,6 14,6 C15.1045695,6 16,6.8954305 16,8 C16,9.1045695 15.1045695,10 14,10 C13.2597176,10 12.6133738,9.59780137 12.2675644,9 L9.73243561,9 C9.38662619,9.59780137 8.74028236,10 8,10 C7.25971764,10 6.61337381,9.59780137 6.26756439,9 L3.73243561,9 C3.38662619,9.59780137 2.74028236,10 2,10 C0.8954305,10 0,9.1045695 0,8 C0,6.8954305 0.8954305,6 2,6 C2.74028236,6 3.38662619,6.40219863 3.73243561,7 L6.26756439,7 C6.61337381,6.40219863 7.25971764,6 8,6 C8.74028236,6 9.38662619,6.40219863 9.73243561,7 L12.2675644,7 Z" id="Combined-Shape" fill="#2A3052"></path>
+            </g>
+        </g>
+    </g>
+</svg>

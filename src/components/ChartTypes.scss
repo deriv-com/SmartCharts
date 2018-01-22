@@ -1,0 +1,42 @@
+.ciq-chart-types {
+    ciq-menu-dropdown {
+        width: 110px;
+    }
+    .ciq-title {
+        display: flex;
+        align-items: center;
+    }
+    .ciq-row {
+        text-align: left;
+        height: 24px;
+        display: flex;
+        align-items: center;
+        color: black;
+        &:hover {
+            background: #E4E6F1;
+        }
+    }
+    .ciq-icon {
+        width: 16px;
+        height: 16px;
+        margin: 0 5px;
+        display: inline-block;
+    }
+    .ciq-mountain {
+        background: url('../../sass/icons/chart types/ic-line.svg');
+    }
+    .ciq-line {
+        background: url('../../sass/icons/chart types/ic-dot.svg');
+    }
+    .ciq-candle {
+        background: url('../../sass/icons/chart types/ic-candle.svg');
+    }
+    .ciq-colored-bar {
+        background: url('../../sass/icons/chart types/ic-ohlc.svg');
+    }
+    .ciq-hollow-candle {
+        background: url('../../sass/icons/chart types/ic-hollow-candle.svg');
+    }
+
+    &:after { display: none; }
+}
