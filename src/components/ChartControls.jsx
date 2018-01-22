@@ -1,14 +1,11 @@
 import $ from 'jquery';
 import React, { Component } from 'react';
-import ContextTag from './ui/ContextTag';
+import contextAware from '../contextAware';
 import './ChartControls.scss';
 
-class ChartControlsTag extends ContextTag {
-    createdCallback() {
-        super.createdCallback();
-    }
-    setContext(context) {
-        let UIHeadsUpStatic = new CIQ.UI.HeadsUp($('cq-hu-static'), this.context, {
+class  ChartControls extends Component {
+    onContextReady(context) {
+        let UIHeadsUpStatic = new CIQ.UI.HeadsUp($('cq-hu-static'), context, {
             autoStart: true,
         });
         $('.ciq-HU')[0].registerCallback(function (value) {
@@ -26,12 +23,9 @@ class ChartControlsTag extends ContextTag {
             this.initialize();
         });
     }
-};
-
-class  ChartControls extends Component {
     render() {
         return (
-            <cq-chart-controls id='chartControls'>
+            <div id='chartControls'>
                 <div className="icon-toggles ciq-toggles">
                     <cq-toggle class="ciq-CH" cq-member="crosshair">
                         <span></span>
@@ -147,12 +141,9 @@ class  ChartControls extends Component {
                     <span id="zoomIn" className="stx-zoom-in">
                     </span>
                 </div>
-            </cq-chart-controls>
+            </div>
         );
     }
 }
 
-
-
-document.registerElement('cq-chart-controls', ChartControlsTag);
-export default ChartControls;
+export default contextAware(ChartControls);
