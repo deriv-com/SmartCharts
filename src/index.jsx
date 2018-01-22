@@ -1,5 +1,6 @@
 /* eslint-disable no-new, react/jsx-indent, react/no-danger, react/jsx-indent-props */
 import $ from 'jquery';
+import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import CIQ from 'chartiq'; // eslint-disable-line
@@ -47,15 +48,24 @@ import './components/Undo';
 import './components/ViewDialog';
 import './components/Views';
 import './components/Clickable';
-import ChartControls from './components/ChartControls.jsx'; // eslint-disable-line
+import ChartControls from './components/ChartControls.jsx';
+import PendingPromise from './utils/PendingPromise';
 
 import Barrier from './draw/Barrier';
 
 window.Barrier = Barrier;
 
 class App extends Component {
+    static childContextTypes = { promise: PropTypes.object };
+    constructor() {
+        super();
+        this._contextPromise = new PendingPromise();
+    }
+    getChildContext() {
+        return { promise: this._contextPromise };
+    }
     componentDidMount() {
-        let UIContext;
+        let UIContext = null;
 
         const _connectionManager = new ConnectionManager({
             appId: 1,
@@ -117,7 +127,7 @@ class App extends Component {
         // new CIQ.Animation(stxx, {tension:0.3});
 
 
-        function resizeScreen() {
+        const resizeScreen = () => {
             if (!UIContext) return;
             setHeight();
             let sidePanel = $('cq-side-panel')[0];
@@ -127,7 +137,7 @@ class App extends Component {
             }
             stxx.resizeChart();
             if (stxx.slider) stxx.slider.display(stxx.layout.rangeSlider);
-        }
+        };
 
         function restoreDrawings(stx, symbol) {
             let memory = CIQ.localStorage.getItem(symbol);
@@ -191,7 +201,7 @@ class App extends Component {
         stxx.callbacks.newChart = retoggleEvents;
         stxx.callbacks.preferences = savePreferences;
 
-        function startUI() {
+        const startUI = () => {
             const contextNode = $('cq-context,[cq-context]');
             UIContext = new Context(stxx, contextNode);
             new CIQ.UI.Layout(UIContext);
@@ -289,11 +299,12 @@ class App extends Component {
                 }); // load an initial symbol
             }
 
+            this._contextPromise.resolve(UIContext);
             CIQ.UI.begin();
             stxx.setStyle('stx_line_chart', 'color', '#4DAFEE'); // TODO => why is not working in css?
 
             // CIQ.I18N.setLanguage(stxx, "zh"); // Optionally set a language for the UI, after it has been initialized, and translate.
-        }
+        };
 
         // Range Slider; needs to be created before startUI() is called for custom themes to apply
         new CIQ.RangeSlider({ stx: stxx });

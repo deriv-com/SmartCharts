@@ -20,11 +20,7 @@
         "sourceType": "module"
     },
     "settings": {
-        "import/resolver": {
-            "node": {
-                "extensions": [".js",".jsx"]
-            }
-        }
+        "import/resolver": "webpack"
     },
     "rules": {
         "no-lonely-if": 1,
@@ -41,6 +37,7 @@
         "import/prefer-default-export": 1,
         "import/no-mutable-exports": 1,
         "import/no-extraneous-dependencies": 0,
+        "import/extensions": ["error", "never", { "packages": "always" }],
         "class-methods-use-this": 0,
         "default-case": 1,
         "eqeqeq": 1,
