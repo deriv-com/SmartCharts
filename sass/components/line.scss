@@ -25,36 +25,61 @@
 
 /* Drag Lines and Prices */
 
-.chart-line,
-.drag-price,
-.price,
-.price-arrow {
-    height: 23px;
+.horizontal {
+    &.chart-line,
+    .drag-price,
+    .price,
+    .price-arrow {
+        height: 23px;
+    }
 }
 
 .chart-line {
     position: absolute;
-    width: 100%;
-    left: 0px;
-    font-size: 10px;
     z-index: 100;
-}
 
+    &.horizontal {
+        width: 100%;
+        left: 0px;
+        font-size: 10px;
+
+        .drag-line {
+            height: 0px;
+            float: left;
+            width: 100%;
+            margin-left: -10px;
+            margin-top: 11px;
+            border-top: 2px dashed;
+        }
+    }
+
+    &.vertical {
+        height: 100%;
+        top: 0px;
+
+        .drag-line {
+            border-image: linear-gradient(to top, black 80%, transparent) 1 100%;
+            height: 100%;
+            width: 10px;
+            border-left: 2px dashed;
+            left: 200px;
+            margin-left: 10px;
+        }
+    }
+}
 
 /*hover*/
 
 .draggable.chart-line:hover {
-    cursor: ns-resize;
     background: rgba(0, 0, 0, 0.05);
-}
 
-.horizontal .drag-line {
-    height: 0px;
-    float: left;
-    width: 100%;
-    margin-left: -10px;
-    margin-top: 11px;
-    border-top: 2px dashed;
+    &.horizontal {
+        cursor: ns-resize;
+    }
+
+    &.vertical {
+        cursor: ew-resize;
+    }
 }
 
 .red .price-arrow {
@@ -65,18 +90,10 @@
     background-position: 0 -390px;
 }
 
-.vertical .drag-line {
-    height: 100%;
-    width: 10px;
-    border-left: 2px dashed blue;
-    left: 200px;
-    margin-left: 10px;
-}
-
 
 /*hover*/
 
-.draggable.chart-line:hover .drag-line {
+.draggable.horizontal.chart-line:hover .drag-line {
     border-top-style: solid;
 }
 
@@ -98,14 +115,33 @@
     transition: width .2s;
 }
 
-.red .price-arrow {
-    background-position: 0 -360px;
+.red {
+    .price-arrow {
+        background-position: 0 -360px;
+    }
+
+    .price {
+        background-position: right -360px;
+    }
+
+    .drag-line {
+        color: #ff7862;
+    }
 }
 
-.green .price-arrow {
-    background-position: 0 -390px;
-}
+.green {
+    .price-arrow {
+        background-position: 0 -390px;
+    }
 
+    .price {
+        background-position: right -390px;
+    }
+
+    .drag-line {
+        color: #8cc176;
+    }
+}
 
 /*hover*/
 
@@ -140,14 +176,6 @@
     width: 45px;
     line-height: 23px;
     overflow: hidden;
-}
-
-.red .price {
-    background-position: right -360px;
-}
-
-.green .price {
-    background-position: right -390px;
 }
 
 

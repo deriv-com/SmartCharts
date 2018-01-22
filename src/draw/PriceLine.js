@@ -19,7 +19,7 @@ class PriceLine extends Line {
         draggable = true,
     }) {
         super({
-            stx, lineColor, visible, pipSize, draggable,
+            stx, visible, pipSize, draggable,
         });
         const element = createElement(html);
         this._line.appendChild(element);
@@ -36,6 +36,7 @@ class PriceLine extends Line {
             this._currentPrice = appendQuotes[appendQuotes.length - 1].Close;
         });
 
+        this.lineColor = lineColor;
         this._relative = relative;
     }
 
@@ -166,11 +167,11 @@ class PriceLine extends Line {
     }
 
     get lineColor() {
-        return super.lineColor;
+        return this._lineColor;
     }
 
     set lineColor(lineColor) {
-        super.lineColor = lineColor;
+        this._lineColor = lineColor;
         CIQ.unappendClassName(this._line, PriceLine.COLOR_RED);
         CIQ.unappendClassName(this._line, PriceLine.COLOR_GREEN);
         CIQ.appendClassName(this._line, this._lineColor);

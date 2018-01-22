@@ -10,7 +10,6 @@ class Line {
 
     constructor({
         stx,
-        lineColor = Line.COLOR_GREEN,
         visible = true,
         pipSize = 2,
         draggable = true,
@@ -21,8 +20,6 @@ class Line {
 
         this._line = Line.createLine();
         this._drag = $$$('.drag-line', this._line);
-
-        this.lineColor = lineColor;
 
         this.visible = visible;
 
@@ -79,15 +76,6 @@ class Line {
     _endDrag(e) {
         this._modalEnd();
         CIQ.unappendClassName(this._line, 'dragging');
-    }
-
-    get lineColor() {
-        return this._lineColor;
-    }
-
-    set lineColor(lineColor) {
-        this._lineColor = lineColor;
-        this._drag.style.color = lineColor;
     }
 
     get visible() {

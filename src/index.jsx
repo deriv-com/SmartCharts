@@ -52,8 +52,10 @@ import ChartControls from './components/ChartControls.jsx';
 import PendingPromise from './utils/PendingPromise';
 
 import Barrier from './draw/Barrier';
+import DateLine from './draw/DateLine';
 
 window.Barrier = Barrier;
+window.DateLine = DateLine;
 
 class App extends Component {
     static childContextTypes = { promise: PropTypes.object };
