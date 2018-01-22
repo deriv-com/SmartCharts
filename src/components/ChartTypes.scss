@@ -1,6 +1,10 @@
 .ciq-chart-types {
-    ciq-menu-dropdown {
+    cq-menu-dropdown {
         width: 110px;
+        padding: 8px 0 !important;
+        border-top: none !important;
+        box-shadow: 0 6px 10px 0 rgba(0, 0, 0, 0.14);
+        border-radius: 2px;
     }
     .ciq-title {
         display: flex;
