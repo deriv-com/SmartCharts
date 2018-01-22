@@ -89,13 +89,13 @@ class PriceLine extends Line {
 
     _locationFromPrice(p) {
         return (
-            this._stx.pixelFromPriceTransform(p, this._chart.panel) -
+            this._stx.pixelFromPrice(p, this._chart.panel) -
             this._chart.panel.top
         );
     }
 
     _priceFromLocation(y) {
-        let price = this._stx.valueFromPixelUntransform(
+        let price = this._stx.valueFromPixel(
             y + this._chart.panel.top,
             this._chart.panel,
         );
