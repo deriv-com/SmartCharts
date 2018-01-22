@@ -74,7 +74,6 @@ class PriceLine extends Line {
         if (this.relative) newPrice -= this._currentPrice;
 
         this.price = this._snapPrice(newPrice);
-        this._draw();
     }
 
     _snapPrice(price) {
@@ -109,57 +108,30 @@ class PriceLine extends Line {
      * @param  {array} nodes       An array of nodes to move to the desired location
      * @param  {string} [where]       If either "top" or "bottom", then the node will not be allowed to overlap the noOverlap nodes
      * @param  {array} [noOverlap]   An array of nodes which cannot be overlapped
-     * @param  {boolean} [keepOnChart] If true then the nodes will not be allowed to move off the chart
      */
-    _positionAtPrice(price, nodes, where, noOverlap, keepOnChart) {
-        if (!where) where = 'center';
-        let px = this._locationFromPrice(price),
-            node;
-        for (let i = 0; i < nodes.length; i++) {
-            node = nodes[i];
-            let top = null;
-            let j,
-                oNode;
-            if (where === 'center') {
-                top = (px - (node.offsetHeight / 2));
-            } else if (where === 'top') {
-                if (noOverlap) {
-                    for (j = 0; j < noOverlap.length; j++) {
-                        oNode = noOverlap[j];
-                        let bottom = CIQ.stripPX(oNode.style.top) + oNode.offsetHeight;
-                        if (bottom > px) px = bottom;
-                    }
-                }
-                top = Math.round(px) + 1;
-            } else if (where === 'bottom') {
-                if (noOverlap) {
-                    for (j = 0; j < noOverlap.length; j++) {
-                        oNode = noOverlap[j];
-                        top = CIQ.stripPX(oNode.style.top);
-                        if (px > top) px = top;
-                    }
-                }
-                top = Math.round(px - node.offsetHeight);
+    _positionAtPrice(price) {
+        let top = this._locationFromPrice(price);
+        top -= (this._line.offsetHeight / 2);
+
+        // keep line on chart even if price is off viewable area:
+        if (top < 0) {
+            this._line.setAttribute('uncentered', true);
+            if (top < this._line.offsetHeight / 2 * -1) {
+                this._line.setAttribute('off-screen', true);
             }
-            node.removeAttribute('uncentered');
-            node.removeAttribute('off-screen');
-            if (keepOnChart) {
-                if (top < 0) {
-                    node.setAttribute('uncentered', true);
-                    if (top < node.offsetHeight / 2 * -1) {
-                        node.setAttribute('off-screen', true);
-                    }
-                    top = 0;
-                } else if (top + node.offsetHeight > this._chart.panel.height) {
-                    node.setAttribute('uncentered', true);
-                    if ((top + node.offsetHeight) - this._chart.panel.height > node.offsetHeight / 2) {
-                        node.setAttribute('off-screen', true);
-                    }
-                    top = this._chart.panel.height - node.offsetHeight;
-                }
+            top = 0;
+        } else if (top + this._line.offsetHeight > this._chart.panel.height) {
+            this._line.setAttribute('uncentered', true);
+            if ((top + this._line.offsetHeight) - this._chart.panel.height > this._line.offsetHeight / 2) {
+                this._line.setAttribute('off-screen', true);
             }
-            if (top !== null) node.style.top = `${top}px`;
+            top = this._chart.panel.height - this._line.offsetHeight;
+        } else {
+            this._line.removeAttribute('uncentered');
+            this._line.removeAttribute('off-screen');
         }
+
+        this._line.style.top = `${top}px`;
     }
 
     get realPrice() {
@@ -184,7 +156,7 @@ class PriceLine extends Line {
 
     _draw() {
         if (this.visible) {
-            this._positionAtPrice(this.realPrice, [this._line], 'center', null, true);
+            this._positionAtPrice(this.realPrice);
             this._priceText.textContent = this.realPrice.toFixed(this._pipSize);
         }
     }
