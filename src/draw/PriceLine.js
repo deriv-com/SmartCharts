@@ -29,12 +29,7 @@ class PriceLine extends Line {
 
         this._stx.append('draw', this._draw.bind(this));
 
-        this._currentPrice = this._stx.currentQuote().Close;
-        this._price = price || (relative ? 0 : this._currentPrice);
-
-        this._stx.prepend('updateChartData', (appendQuotes) => {
-            this._currentPrice = appendQuotes[appendQuotes.length - 1].Close;
-        });
+        this._price = price || (relative ? 0 : this._stx.currentQuote().Close);
 
         this.lineColor = lineColor;
         this._relative = relative;
@@ -48,11 +43,12 @@ class PriceLine extends Line {
         if (this._relative === value) return;
 
         this._relative = value;
+        const currentPrice = this._stx.currentQuote().Close;
 
         if (this._relative) {
-            this._price -= this._currentPrice; // absolute to relative
+            this._price -= currentPrice; // absolute to relative
         } else {
-            this._price += this._currentPrice; // relative to absolute
+            this._price += currentPrice; // relative to absolute
         }
     }
 
@@ -72,7 +68,7 @@ class PriceLine extends Line {
         let newPrice = this._priceFromLocation(newCenter);
 
         newPrice = this.constrainPrice(newPrice);
-        if (this.relative) newPrice -= this._currentPrice;
+        if (this.relative) newPrice -= this._stx.currentQuote().Close;
 
         this.price = this._snapPrice(newPrice);
     }
@@ -136,7 +132,7 @@ class PriceLine extends Line {
     }
 
     get realPrice() {
-        return this.relative ? (this._currentPrice + this.price) : this.price;
+        return this.relative ? (this._stx.currentQuote().Close + this.price) : this.price;
     }
 
     get price() {
