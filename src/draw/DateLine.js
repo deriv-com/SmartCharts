@@ -48,40 +48,20 @@ class DateLine extends Line {
     }
 
     set date(date) {
+        if (this._date === date) return;
+
         this._date = date;
         this._draw();
     }
 
     set epoch(epoch) {
         const d = new Date(epoch * 1000);
-
-        const fixedTo2Units = (str) => {
-            if (str.length === 1) return `0${str}`;
-            return str;
-        };
-
-        const year = d.getFullYear();
-        const month = fixedTo2Units((d.getMonth() + 1).toString());
-        const day = fixedTo2Units(d.getDate().toString());
-        const hours = fixedTo2Units(d.getHours().toString());
-        const minutes = fixedTo2Units(d.getMinutes().toString());
-        const dateStr = `${year}${month}${day}${hours}${minutes}`;
-        this.date = dateStr;
+        this.date = CIQ.yyyymmddhhmmssmmm(d);
     }
 
     get epoch() {
-        const d = this._dateFromString(this.date);
+        const d = CIQ.strToDateTime(this.date);
         return d.getTime() / 1000;
-    }
-
-    _dateFromString(dateStr) {
-        return new Date(
-            dateStr.slice(0, 4),
-            Number.parseInt(dateStr.slice(4, 6), 10) - 1,
-            dateStr.slice(6, 8),
-            dateStr.slice(8, 10),
-            dateStr.slice(10, 12),
-        );
     }
 
     _pixelFromDate(dateStr) {
