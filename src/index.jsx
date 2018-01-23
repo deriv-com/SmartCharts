@@ -52,7 +52,8 @@ import ChartControls from './components/ChartControls.jsx';
 import PendingPromise from './utils/PendingPromise';
 
 import Barrier from './draw/Barrier';
-import DateLine from './draw/DateLine';
+import DateLine, { TradeStart, TradeEnd } from './draw/DateLine';
+import { createElement } from './components/ui/utils';
 
 window.Barrier = Barrier;
 window.DateLine = DateLine;
@@ -204,6 +205,14 @@ class App extends Component {
         stxx.callbacks.preferences = savePreferences;
 
         const startUI = () => {
+            // TODO: temporary means to test date line:
+            setTimeout(() => {
+                const start = new TradeStart({ stx: stxx });
+
+                const end = new TradeEnd({ stx: stxx });
+                end.epoch += 250;
+            }, 4000);
+
             const contextNode = $('cq-context,[cq-context]');
             UIContext = new Context(stxx, contextNode);
             new CIQ.UI.Layout(UIContext);

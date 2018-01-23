@@ -1,10 +1,10 @@
 import Line from './Line';
 import PriceLine from './PriceLine';
+import { createElement } from '../components/ui/utils';
 
 class DateLine extends Line {
     constructor({
         stx,
-        lineColor = PriceLine.COLOR_GREEN,
         relative = false,
         visible = true,
         pipSize = 2,
@@ -12,7 +12,7 @@ class DateLine extends Line {
         draggable = false,
     }) {
         super({
-            stx, lineColor, visible, pipSize, draggable,
+            stx, visible, pipSize, draggable,
         });
         CIQ.appendClassName(this._line, 'vertical');
 
@@ -56,9 +56,9 @@ class DateLine extends Line {
         const d = new Date(epoch * 1000);
 
         const fixedTo2Units = (str) => {
-            if (str.length === 1) return '0' + str;
+            if (str.length === 1) return `0${str}`;
             return str;
-        }
+        };
 
         const year = d.getFullYear();
         const month = fixedTo2Units((d.getMonth() + 1).toString());
@@ -109,3 +109,43 @@ class DateLine extends Line {
 }
 
 export default DateLine;
+
+export class TradeStart extends DateLine {
+    constructor({
+        stx,
+        relative = false,
+        visible = true,
+        pipSize = 2,
+        epoch,
+        draggable = false,
+    }) {
+        super({
+            stx, visible, pipSize, draggable, epoch, relative,
+        });
+
+        CIQ.appendClassName(this._line, 'trade-start-line');
+        const tradeText = createElement('<div class="trade-text">Trade Start</div>');
+        this._line.appendChild(tradeText);
+    }
+}
+
+export class TradeEnd extends DateLine {
+    constructor({
+        stx,
+        relative = false,
+        visible = true,
+        pipSize = 2,
+        epoch,
+        draggable = false,
+    }) {
+        super({
+            stx, visible, pipSize, draggable, epoch, relative,
+        });
+
+        CIQ.appendClassName(this._line, 'trade-end-line');
+        const tradeText = createElement('<div class="trade-text">Trade End</div>');
+        const tradeEndFlag = createElement('<div class="trade-end-flag"><div class="circle"></div><div class="ic-flag"></div></div>');
+        this._line.appendChild(tradeText);
+        this._line.appendChild(tradeEndFlag);
+    }
+}

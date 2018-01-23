@@ -190,3 +190,62 @@
     right: 0px;
 }
 
+$trade-end-color: #e98024;
+$trade-start-color: #a2a2a2;
+$trade-text-distance: 1.6em;
+
+/* Trade Start and End */
+.chart-line.vertical {
+    .trade-text {
+        top: 1em;
+        position: absolute;
+        font-size: 0.9em;
+    }
+
+    &.trade-start-line {
+        .drag-line {
+            border-image: linear-gradient(to top, $trade-start-color 80%, transparent) 1 100%;
+        }
+
+        .trade-text {
+            text-align: right;
+            right: $trade-text-distance;
+            color: $trade-start-color;
+        }
+    }
+
+    &.trade-end-line {
+        .drag-line {
+            border-image: linear-gradient(to top, $trade-end-color 80%, transparent) 1 100%;
+        }
+
+        .trade-text {
+            text-align: left;
+            left: $trade-text-distance;
+            color: $trade-end-color;
+        }
+
+        .trade-end-flag {
+            bottom: 1.9em;
+            position: absolute;
+
+            .ic-flag {
+                $icon-diameter: 1.9em;
+                background: url(img/ic-flag.svg) no-repeat;
+                height: $icon-diameter;
+                width: $icon-diameter;
+                position: inherit;
+                left: -0.07em;
+            }
+
+            .circle {
+                $circle-diameter: 1.9em;
+                border-radius: 100%;
+                width: $circle-diameter;
+                height: $circle-diameter;
+                background-color: $trade-end-color;
+                position: inherit;
+            }
+        }
+    }
+}
