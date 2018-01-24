@@ -90,9 +90,18 @@ class DateLine extends Line {
             if (this._isFollowNow) {
                 this._updateNowPosition();
             } else {
-                this._positionAtDate(this._date);
+                if (this._date) this._positionAtDate(this._date);
             }
         }
+    }
+
+    get visible() {
+        return super.visible;
+    }
+
+    set visible(value) {
+        super.visible = value;
+        if (value) this._draw();
     }
 
     _updateNowPosition() {
