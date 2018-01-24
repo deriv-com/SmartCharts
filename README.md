@@ -32,3 +32,20 @@ barrier.onBarrierChanged(({high_barrier, low_barrier}) => {
 });
 
 ```
+
+## DateLine Class
+
+Inherited by TradeStart and TradeEnd.
+
+```js
+const dl = new DateLine({
+    stx       : stx,        // chart instance
+    epoch     : 1516765840, // defaults to current datetime           
+    visible   : false,      // optional, defaults to true   
+});
+
+dl.isFollowNow = true; // if enabled, date line follows the current datetime
+dl.epoch = 1516765840; // get/set epoch (not used if isFollowNow is true).
+dl.visible = true;     // show/hide DateLine
+
+```
