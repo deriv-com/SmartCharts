@@ -198,11 +198,11 @@ class App extends Component {
             active.parent().triggerHandler('stxtap');
         }
 
-        stxx.callbacks.layout = saveLayout;
-        stxx.callbacks.symbolChange = saveLayout;
-        stxx.callbacks.drawing = saveDrawings;
-        stxx.callbacks.newChart = retoggleEvents;
-        stxx.callbacks.preferences = savePreferences;
+        stxx.addEventListener('layout', saveLayout);
+        stxx.addEventListener('symbolChange', saveLayout);
+        stxx.addEventListener('drawing', saveDrawings);
+        stxx.addEventListener('newChart', retoggleEvents);
+        stxx.addEventListener('preferences', savePreferences);
 
         const startUI = () => {
             // TODO: temporary means to test date line:

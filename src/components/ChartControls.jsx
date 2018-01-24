@@ -1,6 +1,7 @@
 import $ from 'jquery';
 import React, { Component } from 'react';
 import contextAware from '../contextAware';
+import ChartTypes from './ChartTypes.jsx';
 import './ChartControls.scss';
 
 class  ChartControls extends Component {
@@ -40,26 +41,7 @@ class  ChartControls extends Component {
                         <cq-tooltip>Draw</cq-tooltip>
                     </cq-toggle>
                 </div>
-                <cq-menu id="chartStyle" class="ciq-menu ciq-display collapse">
-                    <cq-clickable stxbind="Layout.chartType">Candle</cq-clickable>
-                    <cq-menu-dropdown>
-                        <cq-item stxvalue='candle' stxsetget="Layout.ChartType('candle')">Candle
-                            <span className="ciq-radio"> <span></span> </span>
-                        </cq-item>
-                        <cq-item stxvalue='colored_bar' stxsetget="Layout.ChartType('colored_bar')">OHLC
-                            <span className="ciq-radio"> <span></span> </span>
-                        </cq-item>
-                        <cq-item stxvalue='mountain' stxsetget="Layout.ChartType('mountain')">Line
-                            <span className="ciq-radio"> <span></span> </span>
-                        </cq-item>
-                        <cq-item stxvalue='line' stxsetget="Layout.ChartType('line')">Dot
-                            <span className="ciq-radio"> <span></span> </span>
-                        </cq-item>
-                        <cq-item stxvalue='hollow_candle' stxsetget="Layout.ChartType('hollow_candle')">Hollow Candle
-                            <span className="ciq-radio"> <span></span> </span>
-                        </cq-item>
-                    </cq-menu-dropdown>
-                </cq-menu>
+                <ChartTypes />
                 <cq-menu class="ciq-menu ciq-studies collapse">
                     <span>Indicators</span>
                     <cq-menu-dropdown cq-no-scroll>
