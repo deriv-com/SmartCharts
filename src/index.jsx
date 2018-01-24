@@ -208,10 +208,10 @@ class App extends Component {
             // TODO: temporary means to test date line:
             setTimeout(() => {
                 const start = new TradeStart({ stx: stxx });
-
+                start.isFollowNow = true;
                 const end = new TradeEnd({ stx: stxx });
-                end.epoch += 250;
-            }, 4000);
+                end.epoch += 25;
+            }, 6000);
 
             const contextNode = $('cq-context,[cq-context]');
             UIContext = new Context(stxx, contextNode);

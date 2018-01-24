@@ -1,15 +1,14 @@
 import Line from './Line';
-import PriceLine from './PriceLine';
 import { createElement } from '../components/ui/utils';
 
 class DateLine extends Line {
     constructor({
         stx,
-        relative = false,
         visible = true,
         pipSize = 2,
         epoch,
         draggable = false,
+        isFollowNow = false,
     }) {
         super({
             stx, visible, pipSize, draggable,
@@ -22,10 +21,22 @@ class DateLine extends Line {
         if (epoch) {
             this.epoch = epoch;
         } else {
-            this.date = this._stx.currentQuote().Date;
+            this._date = this._stx.currentQuote().Date;
         }
 
         this._stx.append('draw', this._draw.bind(this));
+        this._isFollowNow = isFollowNow;
+    }
+
+    get isFollowNow() {
+        return this._isFollowNow;
+    }
+
+    set isFollowNow(value) {
+        if (this._isFollowNow === value) return;
+
+        this._isFollowNow = value;
+        this._draw();
     }
 
     /** TODO: Dragging causes it to snap in odd ways. I suspect it's something the ChartIQ guys will need to look into
@@ -39,28 +50,22 @@ class DateLine extends Line {
         const newCenter = newWidth + (this._line.offsetWidth / 2);
         let newDate = this._dateFromPixel(newCenter);
 
-        this.date = newDate;
+        this._date = newDate;
     }
     */
 
-    get date() {
-        return this._date;
-    }
-
-    set date(date) {
-        if (this._date === date) return;
-
-        this._date = date;
+    set epoch(epoch) {
+        const d = new Date(epoch * 1000);
+        this._date = CIQ.yyyymmddhhmmssmmm(d);
         this._draw();
     }
 
-    set epoch(epoch) {
-        const d = new Date(epoch * 1000);
-        this.date = CIQ.yyyymmddhhmmssmmm(d);
+    get epoch() {
+        return this._dateStrToEpoch(this._date);
     }
 
-    get epoch() {
-        const d = CIQ.strToDateTime(this.date);
+    _dateStrToEpoch(dateStr) {
+        const d = CIQ.strToDateTime(dateStr);
         return d.getTime() / 1000;
     }
 
@@ -70,7 +75,6 @@ class DateLine extends Line {
 
     _dateFromPixel(x) {
         const dateStr = this._stx.dateFromTick(this._stx.tickFromPixel(x));
-        console.log(this._stx.tickFromPixel(x));
         return dateStr;
     }
 
@@ -83,8 +87,23 @@ class DateLine extends Line {
 
     _draw() {
         if (this.visible && this._chart.dataSet) {
-            this._positionAtDate(this.date);
+            if (this._isFollowNow) {
+                this._updateNowPosition();
+            } else {
+                this._positionAtDate(this._date);
+            }
         }
+    }
+
+    _updateNowPosition() {
+        const date = this._stx.currentQuote().Date;
+        let left = this._pixelFromDate(date);
+        if (this._chart.lastTickOffset) left += this._chart.lastTickOffset;
+        left -= (this._line.offsetWidth / 2);
+
+        // to prevent jitter, only update position when difference is noticeable
+        const diff = Math.abs(CIQ.stripPX(this._line.style.left) - left);
+        if (diff > 1) this._line.style.left = `${left | 0}px`;
     }
 }
 
