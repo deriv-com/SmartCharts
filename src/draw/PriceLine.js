@@ -52,9 +52,8 @@ class PriceLine extends Line {
         }
     }
 
-    // override to limit drag movement
-    constrainPrice(price) {
-        return price;
+    set priceConstrainer(value) {
+        this._priceConstrainer = value;
     }
 
     _startDrag(e) {
@@ -67,7 +66,7 @@ class PriceLine extends Line {
         const newCenter = newTop + (this._line.offsetHeight / 2);
         let newPrice = this._priceFromLocation(newCenter);
 
-        newPrice = this.constrainPrice(newPrice);
+        if (this._priceConstrainer) newPrice = this._priceConstrainer(newPrice);
         if (this.relative) newPrice -= this._stx.currentQuote().Close;
 
         this.price = this._snapPrice(newPrice);

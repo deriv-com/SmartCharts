@@ -122,7 +122,7 @@ class Barrier {
 
     _setupConstrainBarrierPrices() {
         // barrier 1 cannot go below barrier 2
-        this._barrier1.constrainPrice = (newPrice) => {
+        this._barrier1.priceConstrainer = (newPrice) => {
             if (this._barrier2.visible) {
                 if (newPrice < this._barrier2.realPrice + Barrier.MIN_DIFFERENCE_BETWEEN_BARRIERS) {
                     return this._barrier1.realPrice;
@@ -133,7 +133,7 @@ class Barrier {
         };
 
         // barrier 2 cannot go above barrier 1
-        this._barrier2.constrainPrice = (newPrice) => {
+        this._barrier2.priceConstrainer = (newPrice) => {
             if (newPrice > this._barrier1.realPrice - Barrier.MIN_DIFFERENCE_BETWEEN_BARRIERS) {
                 return this._barrier2.realPrice;
             }
