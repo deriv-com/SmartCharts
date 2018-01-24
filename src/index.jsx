@@ -590,7 +590,7 @@ class App extends Component {
                                             <cq-comparison-label>AAPL</cq-comparison-label>
                                             <cq-comparison-price cq-animate></cq-comparison-price>
                                             <cq-comparison-loader></cq-comparison-loader>
-                                            <div className="stx-btn-ico ciq-close"></div>
+                                            <div class="stx-btn-ico ciq-close"></div>
                                         </cq-comparison-item>
                                     </template>
                                         `,
@@ -608,8 +608,8 @@ class App extends Component {
                                 <template>
                                     <cq-item>
                                         <cq-label></cq-label>
-                                        <span className="ciq-edit"></span>
-                                        <div className="ciq-icon ciq-close"></div>
+                                        <span class="ciq-edit"></span>
+                                        <div class="ciq-icon ciq-close"></div>
                                     </cq-item>
                                 </template>
                                 `,
@@ -711,8 +711,8 @@ class App extends Component {
                                     __html: `
                                 <template cq-fibonacci-setting>
                                     <cq-fibonacci-setting>
-                                        <div className="ciq-heading"></div>
-                                        <div className="stx-data">
+                                        <div class="ciq-heading"></div>
+                                        <div class="stx-data">
                                             <input type="checkbox" />
                                         </div>
                                     </cq-fibonacci-setting>
@@ -756,7 +756,7 @@ class App extends Component {
                                     __html: `
                                 <template cq-study-output>
                                     <cq-study-output>
-                                        <div className="ciq-heading"></div>
+                                        <div class="ciq-heading"></div>
                                         <cq-swatch cq-overrides="auto"></cq-swatch>
                                     </cq-study-output>
                                 </template>
@@ -769,8 +769,8 @@ class App extends Component {
                                     __html: `
                                 <template cq-study-parameters>
                                     <cq-study-parameter>
-                                        <div className="ciq-heading"></div>
-                                        <div className="stx-data">
+                                        <div class="ciq-heading"></div>
+                                        <div class="stx-data">
                                             <cq-swatch cq-overrides="auto"></cq-swatch>
                                         </div>
                                     </cq-study-parameter>
