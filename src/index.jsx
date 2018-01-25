@@ -198,21 +198,28 @@ class App extends Component {
             active.parent().triggerHandler('stxtap');
         }
 
+        let start, end;
+        const setupTradeDateLines = () => {
+            if (start === undefined) {
+                start = new TradeStart({ stx: stxx });
+                start.isFollowNow = true;
+                end = new TradeEnd({ stx: stxx });
+                end.epoch += 25;
+            } else {
+                end.epoch = (new Date().getTime() / 1000) + 25;
+            }
+        };
+
         stxx.addEventListener('layout', saveLayout);
         stxx.addEventListener('symbolChange', saveLayout);
         stxx.addEventListener('drawing', saveDrawings);
-        stxx.addEventListener('newChart', retoggleEvents);
+        stxx.addEventListener('newChart', () => {
+            retoggleEvents();
+            setupTradeDateLines();
+        });
         stxx.addEventListener('preferences', savePreferences);
 
         const startUI = () => {
-            // TODO: temporary means to test date line:
-            setTimeout(() => {
-                const start = new TradeStart({ stx: stxx });
-                start.isFollowNow = true;
-                const end = new TradeEnd({ stx: stxx });
-                end.epoch += 25;
-            }, 6000);
-
             const contextNode = $('cq-context,[cq-context]');
             UIContext = new Context(stxx, contextNode);
             new CIQ.UI.Layout(UIContext);
