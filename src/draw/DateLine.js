@@ -8,7 +8,7 @@ class DateLine extends Line {
         pipSize = 2,
         epoch,
         draggable = false,
-        isFollowNow = false,
+        followsCurrentQuote = false,
     }) {
         super({
             stx, visible, pipSize, draggable,
@@ -25,17 +25,17 @@ class DateLine extends Line {
         }
 
         this._stx.append('draw', this._draw.bind(this));
-        this._isFollowNow = isFollowNow;
+        this._followsCurrentQuote = followsCurrentQuote;
     }
 
-    get isFollowNow() {
-        return this._isFollowNow;
+    get followsCurrentQuote() {
+        return this._followsCurrentQuote;
     }
 
-    set isFollowNow(value) {
-        if (this._isFollowNow === value) return;
+    set followsCurrentQuote(value) {
+        if (this._followsCurrentQuote === value) return;
 
-        this._isFollowNow = value;
+        this._followsCurrentQuote = value;
         this._draw();
     }
 
@@ -87,7 +87,7 @@ class DateLine extends Line {
 
     _draw() {
         if (this.visible && this._chart.dataSet) {
-            if (this._isFollowNow) {
+            if (this._followsCurrentQuote) {
                 this._updateNowPosition();
             } else {
                 if (this._date) this._positionAtDate(this._date);
@@ -118,7 +118,7 @@ class DateLine extends Line {
 
 export default DateLine;
 
-export class TradeStart extends DateLine {
+export class TradeStartLine extends DateLine {
     constructor({
         stx,
         relative = false,
@@ -126,9 +126,10 @@ export class TradeStart extends DateLine {
         pipSize = 2,
         epoch,
         draggable = false,
+        followsCurrentQuote = false,
     }) {
         super({
-            stx, visible, pipSize, draggable, epoch, relative,
+            stx, visible, pipSize, draggable, epoch, relative, followsCurrentQuote,
         });
 
         CIQ.appendClassName(this._line, 'trade-start-line');
@@ -137,7 +138,7 @@ export class TradeStart extends DateLine {
     }
 }
 
-export class TradeEnd extends DateLine {
+export class TradeEndLine extends DateLine {
     constructor({
         stx,
         relative = false,
@@ -145,9 +146,10 @@ export class TradeEnd extends DateLine {
         pipSize = 2,
         epoch,
         draggable = false,
+        followsCurrentQuote = false,
     }) {
         super({
-            stx, visible, pipSize, draggable, epoch, relative,
+            stx, visible, pipSize, draggable, epoch, relative, followsCurrentQuote,
         });
 
         CIQ.appendClassName(this._line, 'trade-end-line');

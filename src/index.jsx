@@ -52,7 +52,7 @@ import ChartControls from './components/ChartControls.jsx';
 import PendingPromise from './utils/PendingPromise';
 
 import Barrier from './draw/Barrier';
-import DateLine, { TradeStart, TradeEnd } from './draw/DateLine';
+import DateLine, { TradeStartLine, TradeEndLine } from './draw/DateLine';
 import { createElement } from './components/ui/utils';
 
 window.Barrier = Barrier;
@@ -201,9 +201,9 @@ class App extends Component {
         let start, end;
         const setupTradeDateLines = () => {
             if (start === undefined) {
-                start = new TradeStart({ stx: stxx });
-                start.isFollowNow = true;
-                end = new TradeEnd({ stx: stxx });
+                start = new TradeStartLine({ stx: stxx });
+                start.followsCurrentQuote = true;
+                end = new TradeEndLine({ stx: stxx });
                 end.epoch += 25;
             } else {
                 end.epoch = (new Date().getTime() / 1000) + 25;

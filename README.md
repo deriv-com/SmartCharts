@@ -35,8 +35,6 @@ barrier.onBarrierChanged(({high_barrier, low_barrier}) => {
 
 ## DateLine Class
 
-Inherited by TradeStart and TradeEnd.
-
 ```js
 const dl = new DateLine({
     stx       : stx,        // chart instance
@@ -44,8 +42,13 @@ const dl = new DateLine({
     visible   : false,      // optional, defaults to true   
 });
 
-dl.isFollowNow = true; // if enabled, date line follows the current datetime
-dl.epoch = 1516765840; // get/set epoch (not used if isFollowNow is true).
+dl.followsCurrentQuote = true; // if enabled, date line follows the current datetime
+dl.epoch = 1516765840; // get/set epoch (not used if followsCurrentQuote is true).
 dl.visible = true;     // show/hide DateLine
 
 ```
+
+The API for `TradeStartLine` and `TradeEndLine` is the same as `DateLine`:
+
+![](https://bruceoutdoors.files.wordpress.com/2018/01/screen-shot-2018-01-25-at-5-07-39-pm.png)
+

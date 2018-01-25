@@ -98,13 +98,6 @@ class PriceLine extends Line {
         return this._snapPrice(price);
     }
 
-    /**
-     * Positions nodes at the given price.
-     * @param  {number} price       The price (relative to the y-axis)
-     * @param  {array} nodes       An array of nodes to move to the desired location
-     * @param  {string} [where]       If either "top" or "bottom", then the node will not be allowed to overlap the noOverlap nodes
-     * @param  {array} [noOverlap]   An array of nodes which cannot be overlapped
-     */
     _positionAtPrice(price) {
         let top = this._locationFromPrice(price);
         top -= (this._line.offsetHeight / 2);
