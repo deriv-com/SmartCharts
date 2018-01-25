@@ -1,16 +1,42 @@
+function binarySearch(array, dt) {
+    let minIndex = 0;
+    let maxIndex = array.length - 1;
+    let currentIndex;
+    let currentElement;
+
+    while (minIndex <= maxIndex) {
+        currentIndex = (minIndex + maxIndex) / 2 | 0;
+        currentElement = array[currentIndex];
+
+        if (currentElement.DT < dt) {
+            minIndex = currentIndex + 1;
+        } else if (currentElement.DT > dt) {
+            maxIndex = currentIndex - 1;
+        } else {
+            return currentElement;
+        }
+    }
+
+    return null;
+}
+window.binarySearch = binarySearch;
+
 class Feed {
     constructor(streamManager, cxx) {
         this._cxx = cxx;
         this._streamManager = streamManager;
-        this._streams = [];
+        this._stream = null;
+        this._cmpStreams = [];
     }
 
     unsubscribe() {
-        this._streams.forEach(stream => stream.forget());
-        this._streams = [];
+        if (this._stream) this._stream.forget();
+        this._stream = null;
+        this._cmpStreams.forEach(s => s.forget());
+        this._cmpStreams = [];
     }
 
-    _trackStream(stream) {
+    _trackStream(stream, is_master) {
         stream.onStream(({ tick, ohlc }) => {
             const quotes = ohlc ? [{
                 DT: new Date(+ohlc.open_time * 1000),
@@ -23,7 +49,15 @@ class Feed {
                 Close: +tick.quote,
             }];
 
-            this._cxx.appendMasterData(quotes);
+            if (is_master) {
+                this._cxx.appendMasterData(quotes);
+            } else {
+                setTimeout(() => {
+                    const data = binarySearch(this._cxx.masterData, quotes[0].DT);
+                    data[tick ? tick.symbol : ohlc.symbol] = quotes[0];
+                    this._cxx.updateChartData([data]);
+                }, 2000);
+            }
         });
     }
 
@@ -35,9 +69,14 @@ class Feed {
             granularity: Feed.calculateGranularity(period, interval),
         });
 
-        this._streams.forEach(_stream => _stream.forget());
-        this._streams = [stream];
-        this._trackStream(stream);
+        if (params.symbol === 'R_10' /* TODO: If it is a main symbol */) {
+            this.unsubscribe();
+            this._stream = stream;
+            this._trackStream(stream, true);
+        } else { /* R_100 */
+            this._cmpStreams.push(stream);
+            this._trackStream(stream, false);
+        }
 
         try {
             const { candles, history } = await stream.response;
