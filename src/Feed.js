@@ -9,29 +9,12 @@ class Feed {
     subscribe() {}
 
     // Do not call explicitly! Method below is called by ChartIQ when unsubscribing symbols.
-    unsubscribe(data /* , period, interval */) {
-        const { symbol } = data;
+    unsubscribe({ symbol }) {
         this._streams[symbol].forget();
         delete this._streams[symbol];
     }
 
     _trackStream(stream, comparison_chart_symbol) {
-        let addChartData;
-        if (comparison_chart_symbol) {
-            addChartData = (quotes) => {
-                CIQ.addMemberToMasterdata({
-                    stx: this._cxx,
-                    label: comparison_chart_symbol,
-                    data: quotes,
-                    createObject: true,
-                });
-            };
-        } else {
-            addChartData = (quotes) => {
-                this._cxx.updateChartData(quotes);
-            };
-        }
-
         stream.onStream(({ tick, ohlc }) => {
             const quotes = ohlc ? [{
                 DT: new Date(+ohlc.open_time * 1000),
@@ -44,7 +27,16 @@ class Feed {
                 Close: +tick.quote,
             }];
 
-            addChartData(quotes);
+            if (comparison_chart_symbol) {
+                CIQ.addMemberToMasterdata({
+                    stx: this._cxx,
+                    label: comparison_chart_symbol,
+                    data: quotes,
+                    createObject: true,
+                });
+            } else {
+                this._cxx.updateChartData(quotes);
+            }
         });
     }
 
