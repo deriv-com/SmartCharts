@@ -105,7 +105,10 @@ class DateLine extends Line {
     }
 
     _updateNowPosition() {
-        const date = this._stx.currentQuote().Date;
+        const currentQuote = this._stx.currentQuote();
+        if (!currentQuote) return;
+
+        const date = currentQuote.Date;
         let left = this._pixelFromDate(date);
         if (this._chart.lastTickOffset) left += this._chart.lastTickOffset;
         left -= (this._line.offsetWidth / 2);
