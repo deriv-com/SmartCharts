@@ -2,15 +2,19 @@ class Feed {
     constructor(streamManager, cxx) {
         this._cxx = cxx;
         this._streamManager = streamManager;
-        this._streams = [];
+        this._streams = {};
     }
 
-    unsubscribe() {
-        this._streams.forEach(stream => stream.forget());
-        this._streams = [];
+    // although not used, subscribe is overriden so that unsubscribe will be called by ChartIQ
+    subscribe() {}
+
+    // Do not call explicitly! Method below is called by ChartIQ when unsubscribing symbols.
+    unsubscribe({ symbol }) {
+        this._streams[symbol].forget();
+        delete this._streams[symbol];
     }
 
-    _trackStream(stream) {
+    _trackStream(stream, comparison_chart_symbol) {
         stream.onStream(({ tick, ohlc }) => {
             const quotes = ohlc ? [{
                 DT: new Date(+ohlc.open_time * 1000),
@@ -23,21 +27,35 @@ class Feed {
                 Close: +tick.quote,
             }];
 
-            this._cxx.appendMasterData(quotes);
+            if (comparison_chart_symbol) {
+                CIQ.addMemberToMasterdata({
+                    stx: this._cxx,
+                    label: comparison_chart_symbol,
+                    data: quotes,
+                    createObject: true,
+                });
+            } else {
+                this._cxx.updateChartData(quotes);
+            }
         });
     }
 
     async fetchInitialData(symbol, suggestedStartDate, suggestedEndDate, params, callback) {
+        if (symbol in this._streams) {
+            console.error(`Duplicate symbol "${symbol}" in Feed streams!`);
+            return;
+        }
+
         const { period, interval } = params;
+        const isComparisonChart = !params.initializeChart;
 
         const stream = this._streamManager.subscribe({
             symbol,
             granularity: Feed.calculateGranularity(period, interval),
         });
 
-        this._streams.forEach(_stream => _stream.forget());
-        this._streams = [stream];
-        this._trackStream(stream);
+        this._trackStream(stream, isComparisonChart ? symbol : undefined);
+        this._streams[symbol] = stream;
 
         try {
             const { candles, history } = await stream.response;

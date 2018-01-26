@@ -84,6 +84,7 @@ class App extends Component {
 
         window.stxx = stxx;
 
+        // Animation (using tension requires splines.js)
         CIQ.Animation(stxx, { tension: 0.3, stayPut: true });
 
         function setHeight() {
@@ -125,10 +126,6 @@ class App extends Component {
             stx: stxx,
             minutes: 30,
         });
-
-        // Animation (using tension requires splines.js)
-        // new CIQ.Animation(stxx, {tension:0.3});
-
 
         const resizeScreen = () => {
             if (!UIContext) return;
