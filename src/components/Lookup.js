@@ -302,8 +302,14 @@ class Lookup extends ContextTag {
         }
 
         this.resultList.empty();
+        const activeSymbol = this.context.stx.chart.symbol;
         for (const item of arr) {
-            let nodeText = `<cq-item ${item.data.exchange_is_open ? '' : 'disabled'}>`;
+            const { symbol, exchange_is_open } = item.data;
+            const isActiveSymbol = activeSymbol === symbol;
+            const disabled = (exchange_is_open && !isActiveSymbol) ? '' : 'disabled';
+            const selected = isActiveSymbol ? 'class="selected"' : '';
+
+            let nodeText = `<cq-item ${disabled} ${selected}>`;
             for (const display of item.display) {
                 nodeText += `<SPAN>${display}</SPAN>`;
             }
@@ -311,7 +317,7 @@ class Lookup extends ContextTag {
             let node = createElement(nodeText);
             this.resultList.append(node);
             node.selectFC = closure(this, item.data);
-            if (item.data.exchange_is_open) {
+            if (exchange_is_open) {
                 node.addEventListener('stxtap', node.selectFC);
             }
         }

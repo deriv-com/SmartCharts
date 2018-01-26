@@ -9,9 +9,10 @@ class Feed {
     subscribe() {}
 
     // Do not call explicitly! Method below is called by ChartIQ when unsubscribing symbols.
-    unsubscribe({ symbol }) {
-        this._streams[symbol].forget();
-        delete this._streams[symbol];
+    unsubscribe({ symbol, period, interval }) {
+        const key = JSON.stringify({ symbol, period, interval });
+        this._streams[key].forget();
+        delete this._streams[key];
     }
 
     _trackStream(stream, comparison_chart_symbol) {
@@ -41,12 +42,14 @@ class Feed {
     }
 
     async fetchInitialData(symbol, suggestedStartDate, suggestedEndDate, params, callback) {
-        if (symbol in this._streams) {
-            console.error(`Duplicate symbol "${symbol}" in Feed streams!`);
+        const { period, interval } = params;
+        const key = JSON.stringify({ symbol, period, interval });
+
+        if (key in this._streams) {
+            console.error(`Duplicate symbol "${key}" in Feed streams!`);
             return;
         }
 
-        const { period, interval } = params;
         const isComparisonChart = !params.initializeChart;
 
         const stream = this._streamManager.subscribe({
@@ -55,7 +58,7 @@ class Feed {
         });
 
         this._trackStream(stream, isComparisonChart ? symbol : undefined);
-        this._streams[symbol] = stream;
+        this._streams[key] = stream;
 
         try {
             const { candles, history } = await stream.response;

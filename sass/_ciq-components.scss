@@ -1125,9 +1125,15 @@ cq-lookup-results{
 		&:first-child span { padding-top:10px;}
 		&:last-child span { padding-bottom:10px;}
 	}
-	& cq-item[disabled] span {
-		color: #c5c5c5 !important;
+	& cq-item[disabled] {
 		pointer-events: none;
+		&:not(.selected) span {
+			color: #c5c5c5 !important;
+		}
+		&.selected {
+			background-color: #efefef;
+		}
+
 	}
 	& cq-item span { /* Results Row Content */
 		line-height: 27px;
