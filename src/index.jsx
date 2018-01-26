@@ -52,8 +52,11 @@ import ChartControls from './components/ChartControls.jsx';
 import PendingPromise from './utils/PendingPromise';
 
 import Barrier from './draw/Barrier';
+import DateLine, { TradeStartLine, TradeEndLine } from './draw/DateLine';
+import { createElement } from './components/ui/utils';
 
 window.Barrier = Barrier;
+window.DateLine = DateLine;
 
 class App extends Component {
     static childContextTypes = { promise: PropTypes.object };
@@ -195,10 +198,25 @@ class App extends Component {
             active.parent().triggerHandler('stxtap');
         }
 
+        let start, end;
+        const setupTradeDateLines = () => {
+            if (start === undefined) {
+                start = new TradeStartLine({ stx: stxx });
+                start.followsCurrentQuote = true;
+                end = new TradeEndLine({ stx: stxx });
+                end.epoch += 25;
+            } else {
+                end.epoch = (new Date().getTime() / 1000) + 25;
+            }
+        };
+
         stxx.addEventListener('layout', saveLayout);
         stxx.addEventListener('symbolChange', saveLayout);
         stxx.addEventListener('drawing', saveDrawings);
-        stxx.addEventListener('newChart', retoggleEvents);
+        stxx.addEventListener('newChart', () => {
+            retoggleEvents();
+            setupTradeDateLines();
+        });
         stxx.addEventListener('preferences', savePreferences);
 
         const startUI = () => {
