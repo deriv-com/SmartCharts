@@ -50,13 +50,12 @@ class Feed {
             return;
         }
 
-        const isComparisonChart = !params.initializeChart;
-
         const stream = this._streamManager.subscribe({
             symbol,
             granularity: Feed.calculateGranularity(period, interval),
         });
 
+        const isComparisonChart = this._cxx.chart.symbol !== symbol;
         this._trackStream(stream, isComparisonChart ? symbol : undefined);
         this._streams[key] = stream;
 
@@ -66,6 +65,7 @@ class Feed {
             const attribution = { message: stream.isMarketClosed ? 'Market is presently closed' : '' };
             callback({ quotes, attribution });
         } catch (err) {
+            delete this._streams[key];
             console.error(err); // eslint-disable-line
             callback({ error: err });
         }
