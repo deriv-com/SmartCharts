@@ -292,15 +292,6 @@ class Lookup extends ContextTag {
      * @memberof WebComponents.cq-lookup
      */
     results(arr) {
-        function closure(self, data) {
-            return function (e) {
-                CIQ.blur(self.input);
-                // self.close();
-                self.selectItem(data);
-                self.input[0].value = '';
-            };
-        }
-
         this.resultList.empty();
         const activeSymbol = this.context.stx.chart.symbol;
         for (const item of arr) {
@@ -316,7 +307,13 @@ class Lookup extends ContextTag {
             nodeText += '</cq-item>';
             let node = createElement(nodeText);
             this.resultList.append(node);
-            node.selectFC = closure(this, item.data);
+            node.selectFC = () => {
+                CIQ.blur(self.input);
+                this.selectItem(item.data);
+                this.input[0].value = '';
+                // rerender lookup results to update selected symbol
+                this.results(arr);
+            };
             if (exchange_is_open) {
                 node.addEventListener('stxtap', node.selectFC);
             }
