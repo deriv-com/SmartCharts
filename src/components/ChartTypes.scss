@@ -1,10 +1,10 @@
 .ciq-chart-types {
     cq-menu-dropdown {
-        width: 110px;
-        padding: 8px 0 !important;
+        width: 12em;
+        padding: 0.5em 0 !important;
         border-top: none !important;
-        box-shadow: 0 6px 10px 0 rgba(0, 0, 0, 0.14);
-        border-radius: 2px;
+        box-shadow: 0 0.375em 0.625em 0 rgba(0, 0, 0, 0.14);
+        border-radius: 0.125em;
     }
     .ciq-title {
         display: flex;
@@ -16,6 +16,7 @@
         display: flex;
         align-items: center;
         color: black;
+        padding: 0.2em 0.9em;
         &:hover {
             background: #E4E6F1;
         }
@@ -40,6 +41,9 @@
     }
     .ciq-hollow-candle {
         background: url('../../sass/icons/chart types/ic-hollow-candle.svg');
+    }
+    .ciq-spline {
+        background: url('../../sass/icons/chart types/ic-spline.svg');
     }
 
     &:after { display: none; }
