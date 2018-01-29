@@ -9,9 +9,14 @@ class Feed {
     subscribe() {}
 
     // Do not call explicitly! Method below is called by ChartIQ when unsubscribing symbols.
-    unsubscribe({ symbol }) {
-        this._streams[symbol].forget();
-        delete this._streams[symbol];
+    unsubscribe(symObj) {
+        const key = this._getStreamKey(symObj);
+        this._streams[key].forget();
+        delete this._streams[key];
+    }
+
+    _getStreamKey({ symbol, period, interval }) {
+        return JSON.stringify({ symbol, period, interval });
     }
 
     _trackStream(stream, comparison_chart_symbol) {
@@ -41,21 +46,17 @@ class Feed {
     }
 
     async fetchInitialData(symbol, suggestedStartDate, suggestedEndDate, params, callback) {
-        if (symbol in this._streams) {
-            console.error(`Duplicate symbol "${symbol}" in Feed streams!`);
-            return;
-        }
-
         const { period, interval } = params;
-        const isComparisonChart = !params.initializeChart;
+        const key = this._getStreamKey(params);
 
-        const stream = this._streamManager.subscribe({
+        const stream = this._streams[key] || this._streamManager.subscribe({
             symbol,
             granularity: Feed.calculateGranularity(period, interval),
         });
 
+        const isComparisonChart = this._cxx.chart.symbol !== symbol;
         this._trackStream(stream, isComparisonChart ? symbol : undefined);
-        this._streams[symbol] = stream;
+        this._streams[key] = stream;
 
         try {
             const { candles, history } = await stream.response;
@@ -63,6 +64,8 @@ class Feed {
             const attribution = { message: stream.isMarketClosed ? 'Market is presently closed' : '' };
             callback({ quotes, attribution });
         } catch (err) {
+            this._streams[key].forget();
+            delete this._streams[key];
             console.error(err); // eslint-disable-line
             callback({ error: err });
         }
