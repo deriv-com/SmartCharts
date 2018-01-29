@@ -6,7 +6,7 @@
 	// executed as a simple <script>, it creates a SplinePlotter global instead.
 
 	if (typeof exports === "object" && typeof module === "object") {
-		module.exports = definition(require('../chartiq'));
+		module.exports = definition(require('chartiq'));
 	} else if (typeof define === "function" && define.amd) {
 		define(['chartiq'], definition);
 	} else if (typeof window !== "undefined" || typeof self !== "undefined") {
@@ -85,7 +85,7 @@
 			if(cp===null) return;
 			if(!colorPatternChanges) colorPatternChanges=[];
 			var colorPatternIndex=0;
-			
+
 			function seeIfStrokeNeeded(i){
 				if(colorPatternIndex==colorPatternChanges.length) return;
 				var colorPatternChange=colorPatternChanges[colorPatternIndex];
@@ -93,6 +93,8 @@
 					context.stroke();
 					context.strokeStyle=colorPatternChange.color;
 					context.setLineDash(colorPatternChange.pattern);
+					context.lineDashOffset=0;
+					context.lineWidth=colorPatternChange.width;
 					context.beginPath();
 					context.moveTo(points[i],points[i+1]);  //reset back to last point
 					colorPatternIndex++;

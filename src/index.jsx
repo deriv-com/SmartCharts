@@ -85,7 +85,7 @@ class App extends Component {
         window.stxx = stxx;
 
         // Animation (using tension requires splines.js)
-        CIQ.Animation(stxx, { tension: 0.3, stayPut: true });
+        CIQ.Animation(stxx, { stayPut: true });
 
         function setHeight() {
             let windowHeight = $(window).height();
