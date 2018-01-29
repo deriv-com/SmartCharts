@@ -45,15 +45,16 @@ class Feed {
         const { period, interval } = params;
         const key = JSON.stringify({ symbol, period, interval });
 
-        if (key in this._streams) {
-            console.error(`Duplicate symbol "${key}" in Feed streams!`);
-            return;
-        }
-
         const stream = this._streamManager.subscribe({
             symbol,
             granularity: Feed.calculateGranularity(period, interval),
         });
+
+        if (key in this._streams) {
+            // If stream is already subscribed, StreamManager will return the existing stream.
+            console.warn(`Symbol "${key}" in Feed has already been subscribed.`);
+            this._streams[key].forget(); // Make sure there are no leaking streams!
+        }
 
         const isComparisonChart = this._cxx.chart.symbol !== symbol;
         this._trackStream(stream, isComparisonChart ? symbol : undefined);
