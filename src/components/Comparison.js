@@ -130,9 +130,7 @@ class Comparison extends ModalTag {
             let price = frag.find('cq-comparison-price');
             let loader = frag.find('cq-comparison-loader');
             let btn = frag.find('.ciq-close');
-            swatch.css({
-                'background-color': series.parameters.color,
-            });
+            swatch.css({ 'background-color': series.parameters.color });
             label.text(stx.translateIf(series.display));
             description.text(stx.translateIf(series.description));
             frag.attr('cq-symbol', s);
@@ -171,14 +169,18 @@ class Comparison extends ModalTag {
         let stx = this.context.stx;
         let q = stx.currentQuote();
         if (q) {
-            for (let s in stx.chart.series) {
+            for (const s in stx.chart.series) {
                 if (!key) key = this.node.find('cq-comparison-key');
                 let price = key.find(`cq-comparison-item[cq-symbol="${s}"] cq-comparison-price`);
                 if (price.length) {
                     let oldPrice = parseFloat(price.text());
                     let symbol = stx.chart.series[s].parameters.symbol;
                     let newPrice = q[symbol];
-                    if (!newPrice) newPrice = stx.chart.series[s].lastQuote;
+                    if (newPrice && (newPrice.Close || newPrice.Close === 0)) newPrice = newPrice.Close;
+                    if (!newPrice && newPrice !== 0 && stx.chart.series[s].lastQuote) {
+                        newPrice = stx.chart.series[s].lastQuote.Close;
+                    }
+                    if (newPrice === oldPrice) continue;
                     price.text(stx.padOutPrice(newPrice));
                     if (typeof (price.attr('cq-animate')) !== 'undefined') {
                         CIQ.UI.animatePrice(price, newPrice, oldPrice);
