@@ -56,7 +56,7 @@ class Scroll extends ContextTag {
             // return if context is not intialized yet
             return;
         }
-        
+
         let node = this.node;
         if (getParents(node[0], '.sharing').length) return;
         /* share.js appends this class to the body.
@@ -146,12 +146,14 @@ class Scroll extends ContextTag {
             }
             return false;
         }
+
         if (!focused.length) {
             items[0].setAttribute('cq-focused', 'true');
             this.scrollToElement(items[0]);
             return true;
         }
-        items[0].removeAttribute('cq-focused');
+
+        items.forEach(item => item.removeAttribute('cq-focused'));
 
         // locate our location in the list of items
         let i;
@@ -163,10 +165,12 @@ class Scroll extends ContextTag {
             i--;
             if (i < 0) i = 0;
         }
+
         if (key === 'down') {
             i++;
             if (i >= items.length) i = items.length - 1;
         }
+
         items[i].setAttribute('cq-focused', 'true');
         this.scrollToElement(items[i]);
         return true;
