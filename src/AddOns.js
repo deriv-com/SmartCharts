@@ -748,11 +748,6 @@ CIQ.Animation = function (stx, animationParameters, easeMachine) {
     };
     animationParameters = CIQ.extend(params, animationParameters);
 
-    const linear = function (t, b, c, d) {
-        t /= d;
-        return b + t * c;
-    };
-
     if (params.tension) stx.chart.tension = animationParameters.tension;
     stx.tickAnimator = easeMachine || new CIQ.EaseMachine(Math.easeOutCubic, 1000);
     let scrollAnimator = new CIQ.EaseMachine(Math.easeInOutCubic, 200);
