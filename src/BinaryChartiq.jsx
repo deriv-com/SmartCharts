@@ -367,10 +367,14 @@ class BinaryChartiq extends Component {
             <cq-context id={this._elementId}>
                 <cq-color-picker>
                     <cq-colors />
-                    <cq-overrides>
-                        <template>
-                            <div className="ciq-btn" />
-                        </template>
+                    <cq-overrides dangerouslySetInnerHTML={{
+                        /* TODO: fix this */
+                        __html: `
+                            <template>
+                                <div class="ciq-btn" />
+                            </template>
+                            `,
+                    }}>
                     </cq-overrides>
                 </cq-color-picker>
 
