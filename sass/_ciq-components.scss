@@ -1,6 +1,7 @@
 
 /* to allow style to color the background of the chart */
 cq-context {
+	bottom: 45px; /* <= remove white space from removing the navbar */
 	position: absolute;
 	height: 100%;
 	width: 100%;
@@ -686,14 +687,17 @@ cq-lookup{
 .ciq-search {
 	width: 130px;
 	height:$nav-height;
-	padding:9px 10px 0 10px;
+	bottom: 1px;
+	right: 52px;
 	float:left;
-	position:relative;
-	z-index:4;
+	position: absolute;
+	z-index:-12;
 	@include box-sizing(border-box);
-
+	&.stxMenuActive {
+		z-index:4;
+	}
 	& input {
-		height:27px;
+		height:3.15em;
 		border:none;
 		//background:rbga($DEFAULT-bg,0);
 	}
@@ -2304,6 +2308,9 @@ cq-share-dialog {
 	display:none;
 }
 cq-chart-title {
+	box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.12);
+	padding: 0.7em 1em;
+	cursor: pointer;
 	display: none;
 	position:relative;
 	background: #fff;
@@ -2312,10 +2319,13 @@ cq-chart-title {
 	float:none;
 	margin:10px 10px;
 	color: #333;
-	padding: 0 10px 0 10px;
 	line-height: 22px;
 	font-size: 12px;
 	text-align: left;
+	width: 13.8em;
+	&:hover {
+		box-shadow: 2px 4px 4px 0 rgba(0, 0, 0, 0.12);
+	}
 }
 cq-chart-title.stx-show{
 	display:inline-block;
