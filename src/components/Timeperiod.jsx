@@ -2,47 +2,32 @@ import React, {Component} from 'react';
 import contextAware from '../contextAware';
 import '../../sass/components/timeperiod.scss';
 
-function getTimeperiodString (layout) {
-    const timeUnit_str = {
-        second: 'Tick',
-        minute: 'Min',
-        hour: 'Hour',
-        day: 'Day',
-    };
-    const interval = layout.interval % 60 === 0
-        ? layout.interval/60 : +layout.interval ? layout.interval : 1;
-
-    return `${interval} ${timeUnit_str[getTimeUnit(layout)]}`;
-}
-
-function getTimeUnit (layout) {
-    if(layout.timeUnit === null && layout.interval === 'day') {
-        return 'day';
-    } else if(layout.timeUnit === 'minute' && layout.interval % 60 === 0) {
-        return 'hour';
-    } else {
-        return layout.timeUnit;
-    }
-}
 
 class Timeperiod extends Component {
-    state = { timeperiod: '' };
+    state = { timeperiod: '', open: false };
 
     onContextReady(context) {
         this.setState({
-            timeperiod: getTimeperiodString(context.stx.layout),
-            timeUnit: getTimeUnit(context.stx.layout),
+            timeUnit: this.getTimeUnit(context.stx.layout),
             interval: context.stx.layout.interval,
         });
         this._context = context;
+        console.log(context);
     }
 
     setPeriodicity(interval, timeUnit) {
         const stx = this._context.stx;
+
+        if(this._context.loader) {
+            this._context.loader.show();
+        }
+
         stx.setPeriodicity({period: 1, interval, timeUnit}, () => {
             const isTick = timeUnit === 'second';
             const isCandle = ~['candle','hollow_condle','colored_bar'].indexOf(stx.layout.chartType);
-
+            if (this._context.loader) {
+                this._context.loader.hide();
+            }
             if( isCandle && isTick ) {
                 stx.setChartType('mountain');
             } else if ( !isTick && !isCandle ) {
@@ -50,21 +35,52 @@ class Timeperiod extends Component {
             }
         });
         this.setState({
-            timeperiod: getTimeperiodString(stx.layout),
-            timeUnit: getTimeUnit(stx.layout),
+            timeUnit: this.getTimeUnit(stx.layout),
             interval: stx.layout.interval,
+            open: false,
         });
+    }
+
+    getTimeUnit (layout) {
+        if(layout.timeUnit === null && layout.interval === 'day') {
+            return 'day';
+        } else if(layout.timeUnit === 'minute' && layout.interval % 60 === 0) {
+            return 'hour';
+        } else if(layout.timeUnit === 'second') {
+            return 'tick';
+        } else {
+            return layout.timeUnit;
+        }
+    }
+
+    Interval () {
+        const interval = this.state.interval;
+        if(interval % 60 === 0) {
+            return interval/60;
+        }
+
+        return +interval ? interval : 1;
+    }
+
+    Toggle () {
+        this.setState({open: !this.state.open});
     }
 
     render() {
         return (
-            <cq-menu class="ciq-menu ciq-period">
-                <span>
-                    <cq-clickable>{this.state.timeperiod}</cq-clickable>
-                </span>
+            <div className={`ciq-menu ciq-period ${this.state.open ? 'stxMenuActive' : ''}`}>
+                <div>
+                    <span
+                        className={this.state.open ? 'selected' : ''}
+                        onClick={() => this.Toggle()}>
+                        <span className="icon"></span>
+                        <span className="unit_display">{this.state.timeUnit}</span>
+                        <span className="interval_display">{this.Interval()}</span>
+                    </span>
+                </div>
                 <cq-menu-dropdown class="dropdown timePeriod">
                     <div className="timeUnit">
-                        <span className={this.state.timeUnit === 'second' ? 'selected' : ''}>Tick</span>
+                        <span className={this.state.timeUnit === 'tick' ? 'selected' : ''}>Tick</span>
                         <span className={this.state.timeUnit === 'minute' ? 'selected' : ''}>Minute</span>
                         <span className={this.state.timeUnit === 'hour' ? 'selected' : ''}>Hour</span>
                         <span className={this.state.timeUnit === 'day' ? 'selected' : ''}>Day</span>
@@ -73,7 +89,7 @@ class Timeperiod extends Component {
                         <div className="row">
                             <span
                                 onClick={() => this.setPeriodicity(1, 'second')}
-                                className={this.state.timeUnit === 'second' && this.state.interval === 1 ? 'selected' : ''}
+                                className={this.state.timeUnit === 'tick' && this.state.interval === 1 ? 'selected' : ''}
                             >1</span>
                         </div>
                         <div className="row">
@@ -132,7 +148,7 @@ class Timeperiod extends Component {
                         </div>
                     </div>
                 </cq-menu-dropdown>
-            </cq-menu>
+            </div>
         );
     }
 }
