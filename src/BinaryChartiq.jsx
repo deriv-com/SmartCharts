@@ -50,16 +50,10 @@ import { TradeEndLine, TradeStartLine } from './draw/DateLine';
 
 class BinaryChartiq extends Component {
     static childContextTypes = { promise: PropTypes.object };
-    static _currentId = 1;
 
     constructor() {
         super();
         this._contextPromise = new PendingPromise();
-        this._id = BinaryChartiq._currentId++;
-        this._elementId = `binarychartiq-${this._id}`;
-        this._containerId = `binarychartiq-container-${this._id}`;
-        this._preferenceKey = `binarychartiq-${this._id}-preference`;
-        this._layoutKey = `binarychartiq-${this._id}-layout`;
     }
 
     static initConnection() {
@@ -85,6 +79,15 @@ class BinaryChartiq extends Component {
 
     getChildContext() {
         return { promise: this._contextPromise };
+    }
+
+    componentWillMount() {
+        const { id } = this.props;
+        this._id = id;
+        this._elementId = `binarychartiq-${this._id}`;
+        this._containerId = `binarychartiq-container-${this._id}`;
+        this._preferenceKey = `binarychartiq-${this._id}-preference`;
+        this._layoutKey = `binarychartiq-${this._id}-layout`;
     }
 
     componentDidMount() {
