@@ -1,0 +1,58 @@
+.timePeriod {
+    width: 344px!important;
+    height: 200px!important;
+    border: 0!important;
+    max-height: 200px!important;
+    left: -210px;
+    font-size: 12px;
+    font-weight: normal;
+
+    .timeUnit {
+        display: inline-block;
+        width: 112px;
+        height: 100%;
+        box-shadow: 2px 0px 5px 0px rgba(42, 48, 82, 0.08);
+
+        span {
+            display: block;
+            height: 40px;
+            width: 100%;
+            line-height: 40px;
+            color: #c2c2c2;
+
+            &.selected {
+                color: #e98024;
+            }
+        }
+    }
+
+    .interval {
+        display: inline-block;
+        width: 232px;
+        height: 100%;
+        text-align: left;
+
+        .row {
+            height: 40px;
+            line-height: 8px;
+
+            span {
+                display: inline-block;
+                margin: 0 4px;
+                width: 24px;
+                height: 18px;
+                line-height: 1.5;
+                text-align: center;
+                color: #2a3052;
+
+                &.selected {
+                    height: 24px;
+                    background: #e98024;
+                    border-radius: 12px;
+                    color: #fff;
+                    line-height: 24px;
+                }
+            }
+        }
+    }
+}
