@@ -157,6 +157,7 @@ class StreamManager {
         this._emitters = { };
         this._streamIds = { };
         this._subscriptionData = { };
+        this._inProgress = { };
         this._initialize();
     }
     _initialize() {
@@ -184,12 +185,12 @@ class StreamManager {
                 const { ticks_history: symbol, granularity } = data.echo_req;
                 const subscription = new Subscription({ symbol, granularity }, { connection: this._connection });
                 subscription.subscribe();
-                this._trackSubscription(subscription);
+                this._inProgress[key] = this._trackSubscription(subscription);
             }
         });
     }
     _trackSubscription(subscription) {
-        subscription.response.then((data) => {
+        return subscription.response.then((data) => {
             const { ticks_history: symbol, granularity } = data.echo_req;
             const key = `${symbol}-${granularity}`;
 
@@ -199,6 +200,8 @@ class StreamManager {
                 this._emitters[key].emit(Stream.EVENT_RECONNECT, diff);
             }
             this._subscriptionData[key] = Subscription.cloneResponseData(data);
+            delete this._inProgress[key];
+            return this._subscriptionData[key];
         });
     }
     _trackStream(stream) {
@@ -275,7 +278,7 @@ class StreamManager {
         const key = `${symbol}-${granularity}`;
         const subscription = new Subscription({ symbol, granularity }, { connection: this._connection });
         subscription.subscribe();
-        this._trackSubscription(subscription);
+        this._inProgress[key] = this._trackSubscription(subscription, key);
         const emitter = this._setupEmitter(key, subscription);
 
         const stream = new Stream(subscription, emitter);
@@ -289,7 +292,13 @@ class StreamManager {
             if (data) {
                 resolve(Subscription.cloneResponseData(data));
             } else {
-                reject(new Error('No existing stream'));
+                const progress = this._inProgress[key];
+                if (progress) {
+                    progress.then(data => resolve(Subscription.cloneResponseData(data)))
+                        .catch(reject);
+                } else {
+                    reject(new Error('No existing stream'));
+                }
             }
         });
         const subscription = new Subscription({ symbol, granularity }, { response, connection: this._connection });
