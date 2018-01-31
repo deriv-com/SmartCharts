@@ -687,7 +687,7 @@ cq-lookup{
 .ciq-search {
 	width: 130px;
 	height:$nav-height;
-	bottom: 1px;
+	bottom: -0.7em;
 	right: 52px;
 	float:left;
 	position: absolute;
@@ -697,7 +697,7 @@ cq-lookup{
 		z-index:4;
 	}
 	& input {
-		height:3.15em;
+		height:2em;
 		border:none;
 		//background:rbga($DEFAULT-bg,0);
 	}
@@ -2308,7 +2308,6 @@ cq-share-dialog {
 	display:none;
 }
 cq-chart-title {
-	box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.12);
 	padding: 0.7em 1em;
 	cursor: pointer;
 	display: none;
@@ -2322,10 +2321,6 @@ cq-chart-title {
 	line-height: 22px;
 	font-size: 12px;
 	text-align: left;
-	width: 13.8em;
-	&:hover {
-		box-shadow: 2px 4px 4px 0 rgba(0, 0, 0, 0.12);
-	}
 }
 cq-chart-title.stx-show{
 	display:inline-block;
