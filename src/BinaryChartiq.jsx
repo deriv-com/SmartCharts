@@ -236,6 +236,7 @@ class BinaryChartiq extends Component {
         stxx.addEventListener('preferences', savePreferences);
 
         const startUI = () => {
+            stxx.chart.allowScrollPast = false;
             const contextNode = chartNode;
             UIContext = new Context(stxx, contextNode);
             new CIQ.UI.Layout(UIContext);
