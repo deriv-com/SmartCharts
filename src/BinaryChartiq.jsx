@@ -218,7 +218,7 @@ class BinaryChartiq extends Component {
         const setupTradeDateLines = () => {
             if (start === undefined) {
                 start = new TradeStartLine({ stx: stxx });
-                start.followsCurrentQuote = true;
+                // start.followsCurrentQuote = true;
                 end = new TradeEndLine({ stx: stxx });
                 end.epoch += 25;
             } else {
@@ -236,6 +236,7 @@ class BinaryChartiq extends Component {
         stxx.addEventListener('preferences', savePreferences);
 
         const startUI = () => {
+            stxx.chart.allowScrollPast = false;
             const contextNode = chartNode;
             UIContext = new Context(stxx, contextNode);
             new CIQ.UI.Layout(UIContext);
@@ -377,39 +378,6 @@ class BinaryChartiq extends Component {
                     }}>
                     </cq-overrides>
                 </cq-color-picker>
-
-                <div className="ciq-nav">
-                    <cq-menu class="ciq-search">
-                        <cq-lookup cq-keystroke-claim cq-keystroke-default cq-uppercase>
-                            <cq-lookup-input cq-no-close>
-                                <input
-                                    id="symbol"
-                                    type="text"
-                                    spellCheck="off"
-                                    autoComplete="off"
-                                    autoCorrect="off"
-                                    autoCapitalize="off"
-                                    name="symbol"
-                                    placeholder=""
-                                />
-                                <cq-lookup-icon />
-                            </cq-lookup-input>
-                            <cq-lookup-results>
-                                <cq-lookup-filters cq-no-close>
-                                    <cq-filter class="true">All</cq-filter>
-                                    <cq-filter>Forex</cq-filter>
-                                    <cq-filter>Indices</cq-filter>
-                                    <cq-filter>OTC</cq-filter>
-                                    <cq-filter>Commodities</cq-filter>
-                                    <cq-filter>Volatility</cq-filter>
-                                </cq-lookup-filters>
-                                <cq-scroll />
-                            </cq-lookup-results>
-                        </cq-lookup>
-                    </cq-menu>
-                </div>
-
-
                 <div className="ciq-chart-area">
                     <div className="ciq-chart">
                         <cq-toolbar>
@@ -591,14 +559,42 @@ class BinaryChartiq extends Component {
                             </stx-hu-tooltip>
 
                             <cq-chart-title cq-marker cq-browser-tab>
+                                <cq-menu class="ciq-search">
+                                    <cq-lookup cq-keystroke-claim cq-keystroke-default cq-uppercase>
+                                        <cq-lookup-input cq-no-close>
+                                            <input
+                                                id="symbol"
+                                                cq-focus=""
+                                                type="text"
+                                                spellCheck="off"
+                                                autoComplete="off"
+                                                autoCorrect="off"
+                                                autoCapitalize="off"
+                                                name="symbol"
+                                                placeholder=""
+                                            />
+                                            <cq-lookup-icon />
+                                        </cq-lookup-input>
+                                        <cq-lookup-results>
+                                            <cq-lookup-filters cq-no-close>
+                                                <cq-filter class="true">All</cq-filter>
+                                                <cq-filter>Forex</cq-filter>
+                                                <cq-filter>Indices</cq-filter>
+                                                <cq-filter>OTC</cq-filter>
+                                                <cq-filter>Commodities</cq-filter>
+                                                <cq-filter>Volatility</cq-filter>
+                                            </cq-lookup-filters>
+                                            <cq-scroll />
+                                        </cq-lookup-results>
+                                    </cq-lookup>
+                                </cq-menu>
                                 <cq-symbol />
                                 <cq-chart-price>
                                     <cq-current-price cq-animate />
                                     <cq-change>
                                         <div className="ico" />
                                         <cq-todays-change />
-                                        (
-                                        <cq-todays-change-pct />)
+                                        <cq-todays-change-pct />
                                     </cq-change>
                                 </cq-chart-price>
                             </cq-chart-title>

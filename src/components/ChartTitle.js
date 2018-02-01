@@ -70,6 +70,11 @@ class ChartTitle extends ModalTag {
         this.marker = null;
 
         if (this.params.autoStart) this.begin();
+
+        const menu = this.node.find('cq-menu')[0];
+        this.node.stxtap((e) => {
+            menu.tap(e);
+        });
     }
 
     /**

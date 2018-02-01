@@ -14,7 +14,7 @@ class App extends Component {
             <React.Fragment>
                 <cq-ui-manager />
                 <BinaryChartiq id={1} />
-                <BinaryChartiq id={2} />
+                {/*<BinaryChartiq id={2} />*/}
             </React.Fragment>
         );
     }
