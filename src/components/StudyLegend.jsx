@@ -1,6 +1,7 @@
 import $ from 'jquery';
 import CIQ from 'chartiq';
-import ModalTag from './ui/ModalTag';
+import React, { Component } from 'react';
+import contextAware from '../contextAware';
 
 /**
  * Study legend web component `<cq-study-legend>`.
@@ -60,10 +61,26 @@ import ModalTag from './ui/ModalTag';
 </cq-menu>
  *
  */
-class StudyLegend extends ModalTag {
-    setContext(context) {
-        this.template = this.node.find('template');
+class StudyLegend extends Component {
+    constructor() {
+        super();
+        this.injections = [];
+        this.state = {
+            studies: [],
+            clearStudies: undefined,
+        };
+    }
+
+    onContextReady(context) {
+        this._context = context;
+
+        const layout = this._context.advertised.Layout;
+        this.setState({
+            clearStudies: layout.clearStudies.bind(layout),
+        })
+
         this.previousStudies = {};
+        this.uiManager = $$$('cq-ui-manager');
         this.begin();
     }
 
@@ -73,28 +90,8 @@ class StudyLegend extends ModalTag {
      * @private
      */
     begin() {
-        let self = this;
-
-        function render() {
-            self.showHide();
-            self.renderLegend();
-        }
-        this.addInjection('append', 'createDataSet', render);
-        render();
-    }
-
-    showHide() {
-        for (let s in this.context.stx.layout.studies) {
-            if (!this.context.stx.layout.studies[s].customLegend) {
-                this.node.css({
-                    display: '',
-                });
-                return;
-            }
-        }
-        this.node.css({
-            display: 'none',
-        });
+        this.addInjection('append', 'createDataSet', this.renderLegend.bind(this));
+        this.renderLegend();
     }
 
     /**
@@ -103,7 +100,7 @@ class StudyLegend extends ModalTag {
      * @memberof! WebComponents.cq-study-legend
      */
     renderLegend() {
-        let stx = this.context.stx;
+        let stx = this._context.stx;
         if (!stx.layout.studies) return;
         let foundAChange = false;
         let id;
@@ -120,15 +117,12 @@ class StudyLegend extends ModalTag {
         }
         this.previousStudies = CIQ.shallowClone(stx.layout.studies);
 
-        $(this.template).parent().emptyExceptTemplate();
-
         function closeStudy(self, sd) {
             return function (e) {
                 // Need to run this in the nextTick because the study legend can be removed by this click
                 // causing the underlying chart to receive the mousedown (on IE win7)
                 setTimeout(() => {
-                    CIQ.Studies.removeStudy(self.context.stx, sd);
-                    if (self.node[0].hasAttribute('cq-marker')) self.context.stx.modalEnd();
+                    CIQ.Studies.removeStudy(self._context.stx, sd);
                     self.renderLegend();
                 }, 0);
             };
@@ -140,7 +134,7 @@ class StudyLegend extends ModalTag {
                 if (!sd.editFunction) return;
                 e.stopPropagation();
                 self.uiManager.closeMenu();
-                let studyEdit = self.context.getAdvertised('StudyEdit');
+                let studyEdit = self._context.getAdvertised('StudyEdit');
                 let params = {
                     stx,
                     sd,
@@ -151,45 +145,93 @@ class StudyLegend extends ModalTag {
                 studyEdit.editPanel(params);
             };
         }
-        let overlaysOnly = typeof (this.node.attr('cq-overlays-only')) !== 'undefined';
-        let panelOnly = typeof (this.node.attr('cq-panel-only')) !== 'undefined';
-        let customRemovalOnly = typeof (this.node.attr('cq-custom-removal-only')) !== 'undefined';
-        let holder = this.node.parents('.stx-holder');
-        let panelName = null;
-        let markerLabel = this.node.attr('cq-marker-label');
-        if (holder.length) {
-            panelName = holder.attr('cq-panel-name');
-        }
 
-        for (id in stx.layout.studies) {
+        const studies = [];
+        for (const id in stx.layout.studies) {
             let sd = stx.layout.studies[id];
             if (sd.customLegend) continue;
-            if (customRemovalOnly && !sd.study.customRemoval) continue;
-            if (panelOnly && sd.panel !== panelName) continue;
-            if (overlaysOnly && !sd.overlay && !sd.underlay) continue;
-            let newChild = CIQ.UI.makeFromTemplate(this.template, true);
-            newChild.find('cq-label').html(sd.inputs.display);
-            let close = newChild.find('.ciq-close');
-            if (sd.permanent) {
-                close.hide();
-            } else {
-                close.stxtap(closeStudy(this, sd));
+
+            let closeFunc;
+            if (!sd.permanent) {
+                closeFunc = closeStudy(this, sd);
             }
-            let edit = newChild.find('.ciq-edit');
-            if (!edit.length) edit = newChild.find('cq-label');
-            edit.stxtap(editStudy(this, id));
+
+            const editFunc = editStudy(this, id);
+
+            studies.push({
+                display: sd.inputs.display,
+                closeFunc,
+                editFunc,
+            });
         }
-        // Only want to render the marker label if at least one study has been
-        // rendered in the legend. If no studies are rendered, only the template tag
-        // will be in there.
-        if (typeof (markerLabel) !== 'undefined' && this.node[0].childElementCount > 1) {
-            this.node.prepend(`<cq-marker-label>${markerLabel}</cq-marker-label>`);
+
+        this.setState({
+            studies,
+        });
+    }
+
+    /**
+     *
+     * @kind function
+     * @memberof CIQ.UI.ContextTag
+     * @param {string} position Where in the animation loop the injection should be added. Append or Prepend.
+     * @param {string} injection What function to add the injection too
+     * @param {function} code The callback to fired when the injection occurs
+     */
+    addInjection(position, injection, code) {
+        this.injections.push(this._context.stx[position](injection, code));
+    }
+
+    componentWillUnmount() {
+        if (this._context && this.injections) {
+            for (const inj of this.injections) {
+                this._context.stx.removeInjection(inj);
+            }
+            this.injections = [];
         }
-        CIQ.I18N.translateUI(null, this.node[0]);
-        // this.context.resize();
-        this.showHide();
+    }
+
+    render() {
+        const { studies, clearStudies } = this.state;
+
+        return (
+            <cq-menu class="ciq-menu ciq-studies collapse">
+                <span>Indicators</span>
+                <cq-menu-dropdown cq-no-scroll>
+                    <cq-study-legend cq-no-close>
+                        {studies.length > 0 &&
+                            <cq-section-dynamic>
+                                <cq-heading>Current Indicators</cq-heading>
+                                <cq-study-legend-content>
+                                    {studies.map((c, i) =>
+                                        <cq-item key={i}>
+                                            <cq-label
+                                                onClick={c.editFunc}
+                                                className="click-to-edit"
+                                            >
+                                                {c.display}
+                                            </cq-label>
+                                            <div
+                                                onClick={c.closeFunc}
+                                                className="ciq-icon ciq-close"
+
+                                            />
+                                        </cq-item>
+                                    )}
+                                </cq-study-legend-content>
+                                <cq-placeholder>
+                                    <div onClick={clearStudies} className="ciq-btn sm">Clear All</div>
+                                </cq-placeholder>
+                            </cq-section-dynamic>
+                        }
+                    </cq-study-legend>
+                    <cq-scroll cq-studies>
+                        <cq-item class="stxTemplate"></cq-item>
+                    </cq-scroll>
+                </cq-menu-dropdown>
+            </cq-menu>
+        );
     }
 }
 
-document.registerElement('cq-study-legend', StudyLegend);
-export default StudyLegend;
+export default contextAware(StudyLegend);

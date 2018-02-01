@@ -2,6 +2,7 @@ import $ from 'jquery';
 import React, { Component } from 'react';
 import contextAware from '../contextAware';
 import ChartTypes from './ChartTypes.jsx';
+import StudyLegend from './StudyLegend.jsx';
 import './ChartControls.scss';
 
 class  ChartControls extends Component {
@@ -42,34 +43,7 @@ class  ChartControls extends Component {
                     </cq-toggle>
                 </div>
                 <ChartTypes />
-                <cq-menu class="ciq-menu ciq-studies collapse">
-                    <span>Indicators</span>
-                    <cq-menu-dropdown cq-no-scroll>
-                        <cq-study-legend cq-no-close>
-                            <cq-section-dynamic>
-                                <cq-heading>Current Indicators</cq-heading>
-                                <cq-study-legend-content
-                                    dangerouslySetInnerHTML={{ /* TODO: fix this */
-                                        __html: `
-                                            <template>
-                                                <cq-item>
-                                                    <cq-label class="click-to-edit"></cq-label>
-                                                    <div className="ciq-icon ciq-close"></div>
-                                                </cq-item>
-                                            </template>`,
-                                    }}
-                                >
-                                </cq-study-legend-content>
-                                <cq-placeholder>
-                                    <div stxtap="Layout.clearStudies()" className="ciq-btn sm">Clear All</div>
-                                </cq-placeholder>
-                            </cq-section-dynamic>
-                        </cq-study-legend>
-                        <cq-scroll cq-studies>
-                            <cq-item class="stxTemplate"></cq-item>
-                        </cq-scroll>
-                    </cq-menu-dropdown>
-                </cq-menu>
+                <StudyLegend />
                 <cq-menu class="ciq-menu ciq-views collapse">
                     <span>Templates</span>
                     <cq-menu-dropdown>
