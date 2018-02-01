@@ -1,4 +1,3 @@
-// TODO: add spline & line-dot.
 import React, { Component } from 'react';
 import contextAware from '../contextAware';
 import './ChartTypes.scss';

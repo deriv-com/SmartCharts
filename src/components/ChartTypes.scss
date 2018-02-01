@@ -17,7 +17,8 @@
         align-items: center;
         color: black;
         padding: 0.2em 0.9em;
-        &:hover {
+        &:hover,
+        &[cq-focused] {
             background: #E4E6F1;
         }
     }

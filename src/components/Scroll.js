@@ -136,13 +136,23 @@ class Scroll extends ContextTag {
 
         if (!node.is(':trulyvisible')) return false;
         if (key !== 'up' && key !== 'down' && key !== 'enter' && key !== 32) return false;
+
+        // TODO: once code base is fully ported to react, remove querying 'cq-item'
         let items = node[0].querySelectorAll('cq-item');
         let focused = node[0].querySelectorAll('cq-item[cq-focused]');
 
+        if (items.length === 0) {
+            items = node[0].querySelectorAll('.ciq-row');
+            focused = node[0].querySelectorAll('.ciq-row[cq-focused]');
+        }
+
         if (key === 32 || key === 'enter') {
             if (focused.length && focused[0].selectFC) {
+                // TODO: review whether code here is needed once code base is fully ported to react
                 focused[0].selectFC.call(focused, e);
                 return true;
+            } else if (focused.length) {
+                focused[0].click();
             }
             return false;
         }
@@ -184,7 +194,11 @@ class Scroll extends ContextTag {
      * @memberof WebComponents.cq-scroll
      */
     focused() {
+        // TODO: review this area once code base is ported to react
         let focused = this.node.find('cq-item[cq-focused]');
+        if (focused.length === 0) {
+            focused = this.node.find('.ciq-row[cq-focused]');
+        }
         if (focused.length) return focused[0];
         return null;
     }
