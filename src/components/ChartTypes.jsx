@@ -62,7 +62,7 @@ class ChartTypes extends Component {
             <cq-menu class="ciq-menu ciq-display collapse ciq-chart-types">
                 <div className="ciq-title">
                     <span className={this.state.type.icon} />
-                    <span>{this.state.type.name}</span>
+                    <span className="ciq-description">{this.state.type.name}</span>
                 </div>
                 <cq-menu-dropdown>
                     {types.map((type, idx) => (

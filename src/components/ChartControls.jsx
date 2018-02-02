@@ -27,6 +27,8 @@ class  ChartControls extends Component {
     render() {
         return (
             <div id='chartControls'>
+                <ChartTypes />
+                <StudyLegend />
                 <div className="icon-toggles ciq-toggles">
                     <cq-toggle class="ciq-CH" cq-member="crosshair">
                         <span></span>
@@ -41,8 +43,6 @@ class  ChartControls extends Component {
                         <cq-tooltip>Draw</cq-tooltip>
                     </cq-toggle>
                 </div>
-                <ChartTypes />
-                <StudyLegend />
                 <cq-menu class="ciq-menu ciq-views collapse">
                     <span>Templates</span>
                     <cq-menu-dropdown>
@@ -53,7 +53,7 @@ class  ChartControls extends Component {
                                         <template cq-view="">
                                             <cq-item>
                                                 <cq-label></cq-label>
-                                                <div className="ciq-icon ciq-close"></div>
+                                                <div class="ciq-icon ciq-close"></div>
                                             </cq-item>
                                         </template>`,
                                 }}

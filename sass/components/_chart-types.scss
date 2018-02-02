@@ -9,24 +9,12 @@
     .ciq-title {
         display: flex;
         align-items: center;
-    }
-    .ciq-row {
-        text-align: left;
-        height: 24px;
-        display: flex;
-        align-items: center;
-        color: black;
-        padding: 0.2em 0.9em;
-        &:hover,
-        &[cq-focused] {
-            background: #E4E6F1;
-        }
+        width: 9.3em;
     }
     .ciq-icon {
-        width: 16px;
-        height: 16px;
-        margin: 0 5px;
-        display: inline-block;
+        width: 16px !important;
+        height: 16px !important;
+        margin: 0 5px !important;
     }
     .ciq-mountain {
         background: url('icons/chart types/ic-line.svg');
@@ -46,6 +34,4 @@
     .ciq-spline {
         background: url('icons/chart types/ic-spline.svg');
     }
-
-    &:after { display: none; }
 }

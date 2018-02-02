@@ -196,7 +196,7 @@ class StudyLegend extends Component {
 
         return (
             <cq-menu class="ciq-menu ciq-studies collapse">
-                <span>Indicators</span>
+                <span className="ciq-icon ciq-ic-indicator-normal" />
                 <cq-menu-dropdown cq-no-scroll>
                     <cq-study-legend cq-no-close>
                         {studies.length > 0 &&
