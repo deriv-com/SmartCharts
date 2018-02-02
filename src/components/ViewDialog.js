@@ -32,32 +32,33 @@ class ViewDialog extends DialogContentTag {
         let viewName = this.node.find('input').val();
         if (!viewName) return;
 
-        let self = this;
         let madeChange = false;
         let layout = this.context.stx.exportLayout();
-        $('cq-views').each(function () {
-            let obj = this.params.viewObj;
-            let view;
 
-            for (var i = 0; i < obj.views.length; i++) {
-                view = obj.views[i];
-                if (viewName === CIQ.first(view)) break;
-            }
-            if (i === obj.views.length) {
-                view = {};
-                view[viewName] = {};
-                obj.views.push(view);
-            }
-            view[viewName] = layout;
-            delete view[viewName].candleWidth;
-            this.renderMenu();
-            // this.context.stx.updateListeners("layout");
-            if (!madeChange) {
-                // We might have a cq-view menu on multiple charts on the screen. Only persist once.
-                madeChange = true;
-                this.params.nameValueStore.set('stx-views', obj.views);
-            }
-        });
+        // TODO: this is a really hackish way to use React components like web components...
+        const viewComponent = this.context.viewComponent;
+
+        let obj = viewComponent.params.viewObj;
+        let view;
+        let i;
+        for (i = 0; i < obj.views.length; i++) {
+            view = obj.views[i];
+            if (viewName === CIQ.first(view)) break;
+        }
+        if (i === obj.views.length) {
+            view = {};
+            view[viewName] = {};
+            obj.views.push(view);
+        }
+        view[viewName] = layout;
+        delete view[viewName].candleWidth;
+        viewComponent.renderMenu();
+        // this.context.stx.updateListeners("layout");
+        if (!madeChange) {
+            // We might have a cq-view menu on multiple charts on the screen. Only persist once.
+            madeChange = true;
+            viewComponent.params.nameValueStore.set('stx-views', obj.views);
+        }
         this.close();
     }
 }

@@ -129,7 +129,9 @@ class Menu extends HTMLElement {
         if (this.active) { // tapping on the menu if it is open will close it
             // todo, don't close if active children (cascading). Note, cascading already works for dialogs.
             e.stopPropagation();
-            if (!this.noClose) uiManager.closeMenu(this);
+            if (!this.noClose) {
+                uiManager.closeMenu(this);
+            }
         } else if (!this.active) { // if we've clicked on the label for the menu, then open the menu
             e.stopPropagation();
 
