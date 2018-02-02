@@ -20,7 +20,7 @@ $selected-background-color: #e4e6f1;
     min-width: 7em;
   }
   > .ciq-period {
-    min-width: 7.2em;
+    min-width: 11.5em;
   }
   &:hover {
       background: rgba(250, 250, 250, 1);
@@ -54,7 +54,7 @@ $selected-background-color: #e4e6f1;
   .ciq-menu {
       line-height: 2.1em;
       padding: 0.35em 0.35em;
-      span {
+      > span {
         margin: 0;
         padding: 0;
       }

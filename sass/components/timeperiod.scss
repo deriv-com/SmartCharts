@@ -38,8 +38,8 @@
     }
 }
 .timePeriod {
-    width: 344px!important;
-    height: 200px!important;
+    width: 27.8em!important;
+    height: 13.4em!important;
     border: 0!important;
     max-height: 200px!important;
     left: -140px;
@@ -49,7 +49,8 @@
 
     .timeUnit {
         display: inline-block;
-        width: 112px;
+        float: left;
+        width: 8em;
         height: 100%;
         box-shadow: 2px 0px 5px 0px rgba(42, 48, 82, 0.08);
 
@@ -69,12 +70,16 @@
     .interval {
         display: inline-block;
         width: 232px;
-        height: 100%;
         text-align: left;
+        float: left;
+        padding-top: 0.1em;
 
         .row {
-            height: 40px;
+            height: 2em;
             line-height: 8px;
+            padding-top: 0.9em;
+            padding-bottom: 0.4em;
+            padding-left: 0.5em;
 
             span {
                 display: inline-block;
