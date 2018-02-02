@@ -35,7 +35,6 @@ import './components/ShowRange';
 import './components/StudyContext';
 import './components/StudyDialog';
 import './components/StudyInput';
-import './components/StudyLegend';
 import './components/StudyOutput';
 import './components/StudyParameter';
 import './components/Swatch';
@@ -656,25 +655,6 @@ class BinaryChartiq extends Component {
                                     }}
                                 />
                             </cq-comparison>
-
-                            <cq-study-legend
-                                cq-marker-label="Studies"
-                                cq-overlays-only
-                                cq-marker
-                                cq-hovershow
-                                dangerouslySetInnerHTML={{
-                                    /* TODO: fix this */
-                                    __html: `
-                            <template>
-                                <cq-item>
-                                    <cq-label></cq-label>
-                                    <span class="ciq-edit"></span>
-                                    <div class="ciq-icon ciq-close"></div>
-                                </cq-item>
-                            </template>
-                            `,
-                                }}
-                            />
                             <cq-loader />
                             <cq-hu-static>
                                 <div>

@@ -98,8 +98,8 @@ class ContextTag extends BaseComponent {
      */
     detachedCallback() {
         if (this.context && this.injections) {
-            for (let i = 0; i < this.injections.length; i++) {
-                this.context.stx.removeInjection(this.injections[i]);
+            for (const inj of this.injections) {
+                this.context.stx.removeInjection(inj);
             }
             this.injections = [];
         }

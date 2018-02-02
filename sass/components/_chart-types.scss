@@ -1,0 +1,37 @@
+.ciq-chart-types {
+    cq-menu-dropdown {
+        width: 12em;
+        padding: 0.5em 0 !important;
+        border-top: none !important;
+        box-shadow: 0 0.375em 0.625em 0 rgba(0, 0, 0, 0.14);
+        border-radius: 0.125em;
+    }
+    .ciq-title {
+        display: flex;
+        align-items: center;
+        width: 9.3em;
+    }
+    .ciq-icon {
+        width: 16px !important;
+        height: 16px !important;
+        margin: 0 5px !important;
+    }
+    .ciq-mountain {
+        background: url('icons/chart types/ic-line.svg');
+    }
+    .ciq-line {
+        background: url('icons/chart types/ic-dot.svg');
+    }
+    .ciq-candle {
+        background: url('icons/chart types/ic-candle.svg');
+    }
+    .ciq-colored-bar {
+        background: url('icons/chart types/ic-ohlc.svg');
+    }
+    .ciq-hollow-candle {
+        background: url('icons/chart types/ic-hollow-candle.svg');
+    }
+    .ciq-spline {
+        background: url('icons/chart types/ic-spline.svg');
+    }
+}

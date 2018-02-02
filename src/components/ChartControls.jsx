@@ -2,8 +2,8 @@ import $ from 'jquery';
 import React, { Component } from 'react';
 import contextAware from '../contextAware';
 import ChartTypes from './ChartTypes.jsx';
+import StudyLegend from './StudyLegend.jsx';
 import Timeperiod from './Timeperiod.jsx';
-import './ChartControls.scss';
 
 class  ChartControls extends Component {
     onContextReady(context) {
@@ -28,6 +28,8 @@ class  ChartControls extends Component {
     render() {
         return (
             <div id='chartControls'>
+                <ChartTypes />
+                <StudyLegend />
                 <div className="icon-toggles ciq-toggles">
                     <cq-toggle class="ciq-CH" cq-member="crosshair">
                         <span></span>
@@ -42,35 +44,6 @@ class  ChartControls extends Component {
                         <cq-tooltip>Draw</cq-tooltip>
                     </cq-toggle>
                 </div>
-                <ChartTypes />
-                <cq-menu class="ciq-menu ciq-studies collapse">
-                    <span>Indicators</span>
-                    <cq-menu-dropdown cq-no-scroll>
-                        <cq-study-legend cq-no-close>
-                            <cq-section-dynamic>
-                                <cq-heading>Current Indicators</cq-heading>
-                                <cq-study-legend-content
-                                    dangerouslySetInnerHTML={{ /* TODO: fix this */
-                                        __html: `
-                                            <template>
-                                                <cq-item>
-                                                    <cq-label class="click-to-edit"></cq-label>
-                                                    <div className="ciq-icon ciq-close"></div>
-                                                </cq-item>
-                                            </template>`,
-                                    }}
-                                >
-                                </cq-study-legend-content>
-                                <cq-placeholder>
-                                    <div stxtap="Layout.clearStudies()" className="ciq-btn sm">Clear All</div>
-                                </cq-placeholder>
-                            </cq-section-dynamic>
-                        </cq-study-legend>
-                        <cq-scroll cq-studies>
-                            <cq-item class="stxTemplate"></cq-item>
-                        </cq-scroll>
-                    </cq-menu-dropdown>
-                </cq-menu>
                 <cq-menu class="ciq-menu ciq-views collapse">
                     <span>Templates</span>
                     <cq-menu-dropdown>
@@ -81,7 +54,7 @@ class  ChartControls extends Component {
                                         <template cq-view="">
                                             <cq-item>
                                                 <cq-label></cq-label>
-                                                <div className="ciq-icon ciq-close"></div>
+                                                <div class="ciq-icon ciq-close"></div>
                                             </cq-item>
                                         </template>`,
                                 }}
