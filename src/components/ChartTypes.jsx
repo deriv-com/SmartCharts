@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import contextAware from '../contextAware';
-import './ChartTypes.scss';
 
 const types = [
     {

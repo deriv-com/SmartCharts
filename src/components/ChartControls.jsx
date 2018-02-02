@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import contextAware from '../contextAware';
 import ChartTypes from './ChartTypes.jsx';
 import StudyLegend from './StudyLegend.jsx';
-import './ChartControls.scss';
 
 class  ChartControls extends Component {
     onContextReady(context) {

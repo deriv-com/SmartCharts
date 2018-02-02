@@ -29,22 +29,22 @@
         display: inline-block;
     }
     .ciq-mountain {
-        background: url('../../sass/icons/chart types/ic-line.svg');
+        background: url('icons/chart types/ic-line.svg');
     }
     .ciq-line {
-        background: url('../../sass/icons/chart types/ic-dot.svg');
+        background: url('icons/chart types/ic-dot.svg');
     }
     .ciq-candle {
-        background: url('../../sass/icons/chart types/ic-candle.svg');
+        background: url('icons/chart types/ic-candle.svg');
     }
     .ciq-colored-bar {
-        background: url('../../sass/icons/chart types/ic-ohlc.svg');
+        background: url('icons/chart types/ic-ohlc.svg');
     }
     .ciq-hollow-candle {
-        background: url('../../sass/icons/chart types/ic-hollow-candle.svg');
+        background: url('icons/chart types/ic-hollow-candle.svg');
     }
     .ciq-spline {
-        background: url('../../sass/icons/chart types/ic-spline.svg');
+        background: url('icons/chart types/ic-spline.svg');
     }
 
     &:after { display: none; }
