@@ -12,12 +12,6 @@ class Timeperiod extends Component {
             interval: context.stx.layout.interval,
         });
         this._context = context;
-        console.log(context);
-        // this.node.parentNode.addEventListener('click', (e) => console.log(e));
-        // context.stx.callbackListeners.tap.push(function (e) {
-        //     const target = document.elementFromPoint(e.x, e.y);
-        //     console.log(target);
-        // });
     }
 
     setPeriodicity(interval, timeUnit) {
