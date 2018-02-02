@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import contextAware from '../contextAware';
 import ChartTypes from './ChartTypes.jsx';
 import StudyLegend from './StudyLegend.jsx';
+import Timeperiod from './Timeperiod.jsx';
 
 class  ChartControls extends Component {
     onContextReady(context) {
@@ -67,29 +68,7 @@ class  ChartControls extends Component {
                         </cq-views>
                     </cq-menu-dropdown>
                 </cq-menu>
-                <cq-menu class="ciq-menu ciq-period">
-                    <span>
-                        <cq-clickable stxbind="Layout.periodicity">1 Tick</cq-clickable>
-                    </span>
-                    <cq-menu-dropdown>
-                        <cq-item stxvalue="1-1-second" stxtap="Layout.setPeriodicity(1, 1, 'second')">1 Tick</cq-item>
-                        <cq-separator></cq-separator>
-                        <cq-item stxvalue="1-1-minute" stxtap="Layout.setPeriodicity(1, 1, 'minute')">1 Min</cq-item>
-                        <cq-item stxvalue="1-2-minute" stxtap="Layout.setPeriodicity(1, 2, 'minute')">2 Min</cq-item>
-                        <cq-item stxvalue="1-3-minute" stxtap="Layout.setPeriodicity(1, 3, 'minute')">3 Min</cq-item>
-                        <cq-item stxvalue="1-5-minute" stxtap="Layout.setPeriodicity(1, 5, 'minute')">5 Min</cq-item>
-                        <cq-item stxvalue="1-10-minute" stxtap="Layout.setPeriodicity(1, 10, 'minute')">10 Min</cq-item>
-                        <cq-item stxvalue="1-15-minute" stxtap="Layout.setPeriodicity(1, 15, 'minute')">15 Min</cq-item>
-                        <cq-item stxvalue="1-30-minute" stxtap="Layout.setPeriodicity(1, 30, 'minute')">30 Min</cq-item>
-                        <cq-separator></cq-separator>
-                        <cq-item stxvalue="1-60-minute" stxtap="Layout.setPeriodicity(1, 60, 'minute')">1 Hour</cq-item>
-                        <cq-item stxvalue="1-120-minute" stxtap="Layout.setPeriodicity(1, 120, 'minute')">2 Hour</cq-item>
-                        <cq-item stxvalue="1-240-minute" stxtap="Layout.setPeriodicity(1, 240, 'minute')">4 Hour</cq-item>
-                        <cq-item stxvalue="1-480-minute" stxtap="Layout.setPeriodicity(1, 480, 'minute')">8 Hour</cq-item>
-                        <cq-separator></cq-separator>
-                        <cq-item stxvalue="1-day-" stxtap="Layout.setPeriodicity(1, 1, 'day')">1 Day</cq-item>
-                    </cq-menu-dropdown>
-                </cq-menu>
+                <Timeperiod />
                 <div id="chartSize">
                     <span id="zoomOut" className="stx-zoom-out">
                     </span>

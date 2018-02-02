@@ -154,4 +154,3 @@ class Menu extends HTMLElement {
 
 document.registerElement('cq-menu', Menu);
 export default Menu;
-
