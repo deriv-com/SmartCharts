@@ -13,6 +13,11 @@ class Timeperiod extends Component {
         });
         this._context = context;
         console.log(context);
+        // this.node.parentNode.addEventListener('click', (e) => console.log(e));
+        // context.stx.callbackListeners.tap.push(function (e) {
+        //     const target = document.elementFromPoint(e.x, e.y);
+        //     console.log(target);
+        // });
     }
 
     setPeriodicity(interval, timeUnit) {
@@ -68,11 +73,9 @@ class Timeperiod extends Component {
 
     render() {
         return (
-            <div className={`ciq-menu ciq-period ${this.state.open ? 'stxMenuActive' : ''}`}>
+            <cq-menu class='ciq-menu ciq-period'>
                 <div>
-                    <span
-                        className={this.state.open ? 'selected' : ''}
-                        onClick={() => this.Toggle()}>
+                    <span>
                         <span className="icon"></span>
                         <span className="unit_display">{this.state.timeUnit}</span>
                         <span className="interval_display">{this.Interval()}</span>
@@ -148,7 +151,7 @@ class Timeperiod extends Component {
                         </div>
                     </div>
                 </cq-menu-dropdown>
-            </div>
+            </cq-menu>
         );
     }
 }

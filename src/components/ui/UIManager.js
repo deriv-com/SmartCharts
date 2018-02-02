@@ -92,6 +92,7 @@ class UIManager extends HTMLElement {
      * @param {HTMLElement} element
      */
     closeMenu(menu) {
+        console.log(1)
         let activeMenuStack = this.activeMenuStack;
         let parents = $(menu).parents('cq-menu');
         let closeThese = [];

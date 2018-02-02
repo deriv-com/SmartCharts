@@ -11,8 +11,13 @@
             border-radius: 3px;
 
             &.selected {
-                background: #e4e6f1;
+
             }
+        }
+    }
+    &.stxMenuActive {
+        > div > span {
+            background: #e4e6f1;
         }
     }
     &:after {
@@ -32,6 +37,9 @@
         margin: 0 0 0 15px;
         background: url('../icons/time interval/ic-timeinterval-light.svg');
     }
+    &.stxMenuActive .timePeriod {
+        visibility: visible;
+    }
 }
 .timePeriod {
     width: 344px!important;
@@ -41,6 +49,7 @@
     left: -140px;
     font-size: 12px;
     font-weight: normal;
+    visibility: hidden;
 
     .timeUnit {
         display: inline-block;
