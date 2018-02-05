@@ -175,11 +175,27 @@ class Views extends Component {
                                 </cq-item>
                             )}
                         </cq-views-content>
-                        <cq-separator cq-partial></cq-separator>
-                        <cq-view-save onClick={this.addNew}>
-                            <cq-item>
-                                <cq-plus></cq-plus>Save Template</cq-item>
-                        </cq-view-save>
+                        <div
+                            onClick={() => {}}
+                            className="ciq-row"
+                        >
+                            <span className="ciq-icon ciq-ic-templatelist" />
+                            <span>Template List</span>
+                        </div>
+                        <div
+                            onClick={this.addNew}
+                            className="ciq-row"
+                        >
+                            <span className="ciq-icon ciq-ic-add" />
+                            <span>Add Template</span>
+                        </div>
+                        <div
+                            onClick={() => {}}
+                            className="ciq-row"
+                        >
+                            <span className="ciq-icon ciq-ic-download" />
+                            <span>Download Chart</span>
+                        </div>
                     </cq-views>
                 </cq-menu-dropdown>
             </cq-menu>

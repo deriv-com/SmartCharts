@@ -214,7 +214,6 @@ class StudyLegend extends Component {
                                             <div
                                                 onClick={c.closeFunc}
                                                 className="ciq-icon ciq-close"
-
                                             />
                                         </cq-item>
                                     )}
