@@ -41,7 +41,6 @@ import './components/Swatch';
 import './components/Toggle';
 import './components/Undo';
 import './components/ViewDialog';
-import './components/Views';
 import './components/Clickable';
 import ChartControls from './components/ChartControls.jsx';
 import PendingPromise from './utils/PendingPromise';

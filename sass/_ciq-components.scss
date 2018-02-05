@@ -26,6 +26,7 @@ cq-context {
 	@import "components/line";
 	@import "components/chart-types";
 	@import "components/chart-controls";
+	@import "components/chart-templates";
 }
 
 /* --------------------------------------------------------- FIELDS, SELECTS, INPUTS --------------------------------------------------------- */
@@ -1177,32 +1178,6 @@ cq-lookup-results{
 /* Period Menu */
 body:not(.break-sm) .ciq-period cq-menu-dropdown {
 	width:100px;
-}
-
-/* Views Menu */
-cq-views {
-	display: block;
-	overflow: hidden;
-	padding: 0;
-
-	width: 200px;
-
-	cq-item {
-		@include box-sizing(border-box);
-	}
-
-	cq-label {
-		display: inline-block;
-		@include text-truncate;
-		width: 140px;
-		vertical-align:text-bottom;
-
-		i {
-			margin-left:85px;
-			margin-top:-2px;
-			font-size:13px;
-		}
-	}
 }
 
 /* Themes in Display Menu */

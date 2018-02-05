@@ -1,0 +1,33 @@
+.ciq-views {
+  cq-menu-dropdown {
+      width: 26em;
+      left: -11.5em;
+  }
+  cq-label {
+    display: inline-block;
+    @include text-truncate;
+    width: 140px;
+    vertical-align:text-bottom;
+
+    i {
+      margin-left:85px;
+      margin-top:-2px;
+      font-size:13px;
+    }
+  }
+  .ciq-row {
+      height: 2.3em !important;
+      .ciq-icon {
+          margin: 0 16px 0 6px !important;
+      }
+  }
+  .ciq-ic-download {
+      background: url('icons/chart template/ic-download-light.svg');
+  }
+  .ciq-ic-templatelist {
+      background: url('icons/chart template/ic-templatelist-light.svg');
+  }
+  .ciq-ic-add {
+       background: url('icons/chart template/ic-add-light.svg');
+   }
+}

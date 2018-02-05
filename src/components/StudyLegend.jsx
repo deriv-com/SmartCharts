@@ -73,12 +73,6 @@ class StudyLegend extends Component {
 
     onContextReady(context) {
         this._context = context;
-
-        const layout = this._context.advertised.Layout;
-        this.setState({
-            clearStudies: layout.clearStudies.bind(layout),
-        })
-
         this.previousStudies = {};
         this.uiManager = $$$('cq-ui-manager');
         this.begin();
@@ -191,8 +185,14 @@ class StudyLegend extends Component {
         }
     }
 
+    clearStudies = () => {
+        if (this._context) {
+            this._context.advertised.Layout.clearStudies();
+        }
+    }
+
     render() {
-        const { studies, clearStudies } = this.state;
+        const { studies } = this.state;
 
         return (
             <cq-menu class="ciq-menu ciq-studies collapse">
@@ -214,13 +214,12 @@ class StudyLegend extends Component {
                                             <div
                                                 onClick={c.closeFunc}
                                                 className="ciq-icon ciq-close"
-
                                             />
                                         </cq-item>
                                     )}
                                 </cq-study-legend-content>
                                 <cq-placeholder>
-                                    <div onClick={clearStudies} className="ciq-btn sm">Clear All</div>
+                                    <div onClick={this.clearStudies} className="ciq-btn sm">Clear All</div>
                                 </cq-placeholder>
                             </cq-section-dynamic>
                         }
