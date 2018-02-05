@@ -4,6 +4,7 @@ import contextAware from '../contextAware';
 import ChartTypes from './ChartTypes.jsx';
 import StudyLegend from './StudyLegend.jsx';
 import Timeperiod from './Timeperiod.jsx';
+import ChartSize from './ChartSize.jsx';
 
 class  ChartControls extends Component {
     onContextReady(context) {
@@ -69,12 +70,7 @@ class  ChartControls extends Component {
                     </cq-menu-dropdown>
                 </cq-menu>
                 <Timeperiod />
-                <div id="chartSize">
-                    <span id="zoomOut" className="stx-zoom-out">
-                    </span>
-                    <span id="zoomIn" className="stx-zoom-in">
-                    </span>
-                </div>
+                <ChartSize />
             </div>
         );
     }
