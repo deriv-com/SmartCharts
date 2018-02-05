@@ -108,11 +108,11 @@ var __drawing_ =
 	};
 
 	/**
-	 * Since not all drawings have the same configuration parameters, 
-	 * this is a helper function intended to return the relevant drawing parameters and default settings for the requested drawing type. 
-	 * 
-	 * For example,  you can use the returning object as your template for creating the proper UI tool box for that particular drawing. 
-	 * Will you need a line width UI element, a fill color?, etc. Or you can use it to determine what values you should be setting if enabling 
+	 * Since not all drawings have the same configuration parameters,
+	 * this is a helper function intended to return the relevant drawing parameters and default settings for the requested drawing type.
+	 *
+	 * For example,  you can use the returning object as your template for creating the proper UI tool box for that particular drawing.
+	 * Will you need a line width UI element, a fill color?, etc. Or you can use it to determine what values you should be setting if enabling
 	 * a particular drawing type programatically with specific properties.
 	 * @param {CIQ.ChartEngine} stx Chart object
 	 * @param {string} drawingName Name of drawing, e.g. "ray', "segment"
@@ -419,13 +419,13 @@ var __drawing_ =
 			var adj=this["tzo"+point]-d.getTimezoneOffset();
 			d.setMinutes(d.getMinutes()+adj);
 			var forward=false;
-			// if no match, we advance on intro-day when there is a no time portion 
-			// except for free form which already handles time placement internally 
+			// if no match, we advance on intro-day when there is a no time portion
+			// except for free form which already handles time placement internally
 			if( this.name != "freeform" &&
-				!CIQ.ChartEngine.isDailyInterval(this.stx.layout.interval) && 
+				!CIQ.ChartEngine.isDailyInterval(this.stx.layout.interval) &&
 				!d.getHours() && !d.getMinutes() && !d.getSeconds() && !d.getMilliseconds()
 			) forward=true;
-			
+
 			this["p"+point]=[this.stx.tickFromDate(CIQ.yyyymmddhhmmssmmm(d), chart,null,forward), y];
 		}
 	};
@@ -4647,7 +4647,7 @@ var __span_ =
 	 * If there is no quotefeed attached (or using a version prior to 04-2015), then setRange will use whatever data is available in the masterData. So you must ensure you have preloaded enough to display the requested range.
 	 *
 	 * This function must be called after newChart() creates a datSet.
-	 * 
+	 *
 	 * ** Layout preservation and the range **
 	 * <br>The selected range will be recorded in the chart {@link CIQ.ChartEngine#layout} when it is requested through {@link CIQ.ChartEngine#newChart}, or when you call setRange directly.
 	 * <br>It is then used in {@link CIQ.ChartEngine#importLayout} and {@link CIQ.ChartEngine#newChart} to reset that range, until a new range is selected.
@@ -4982,7 +4982,7 @@ var __span_ =
 					this.layout.periodicity!=periodToUse ||
 					this.layout.timeUnit!=timeUnitToUse ||
 					!this.chart.dataSegment ||
-					!this.chart.dataSegment[0] || 
+					!this.chart.dataSegment[0] ||
 					this.chart.dataSegment[0].DT!=chart.inflectionPoint){
 					this.layout.interval=intervalToUse;
 					this.layout.periodicity=periodToUse;
@@ -5048,9 +5048,9 @@ var __span_ =
 	 * It will also exclude days when the market is closed.
 	 * <br>&bull; If 'all' data is requested, {@link CIQ.ChartEngine#displayAll} is called first to ensure all quotefeed data for that particular instrument is loaded. Note that 'all' will display the data in `monthly` periodicity unless otherwise specified. Please note that "all" will attempt to load all of the data the quotefeed has available for that symbol. Use this span with caution.
 	 * <br>&bull; If 'today' is requested, the chart will display the current market day but extend the chart all the way to market close (as per market hours set in the active market definition - see {@link CIQ.Market})
-	 * <br>&bull; If 1 'day' is requested --on market days--,the chart will start from same time on the previous market day, wich may be over a weekend. Example from 3:30 PM Friday to 3:30 PM Monday, if the market is closed Saturday and Sunday. 
-	 * <br>&bull; If 1 'day' is requested --on weekends and holidays-- or if 2 or more days are requested, the chart will will always start from market open of prior days. 
-	 * @param {boolean} [params.maintainPeriodicity] If set to true, it will maintain the current periodicity for the chart instead of trying to select the most optimal periodicity for the selected range. See {@link CIQ.ChartEngine#setRange} for details. 
+	 * <br>&bull; If 1 'day' is requested --on market days--,the chart will start from same time on the previous market day, wich may be over a weekend. Example from 3:30 PM Friday to 3:30 PM Monday, if the market is closed Saturday and Sunday.
+	 * <br>&bull; If 1 'day' is requested --on weekends and holidays-- or if 2 or more days are requested, the chart will will always start from market open of prior days.
+	 * @param {boolean} [params.maintainPeriodicity] If set to true, it will maintain the current periodicity for the chart instead of trying to select the most optimal periodicity for the selected range. See {@link CIQ.ChartEngine#setRange} for details.
 	 * <br>**Note:** if the chart is in `tick` periodicity, the periodicity will be automatically selected even if it was requested to be maintained because in `tick` periodicity we have no way to know how many ticks to get to fulfill the requested range.
 	 * @param {number} [params.padding] Whitespace padding in pixels to apply to right side of chart after sizing for date range. If not set will default whitespace to 0.
 	 * @param {boolean} [params.forceLoad] Forces a complete load (used by newChart)
@@ -5827,7 +5827,7 @@ var __studies_ =
 	 * @param {string} [panelName] Optionally specify the panel. The relationship between studies and their panels is kept in {@link CIQ.Studies.studyPanelMap}. If not specified then an attempt will be made to locate a panel based on the input id or otherwise created if required.
 	 * @param {object} [study] Optionally supply a study definition, overriding what may be found in the study library
 	 * @return {object} A study descriptor which can be used to remove or modify the study.
-	 * @since 
+	 * @since
 	 * <br>&bull; 3.0.0 added study argument
 	 * <br>&bull; 5.1.1 `parameters.display` added. If this is supplied, use it to form the full study name.
 	 * @memberOf CIQ.Studies
@@ -5877,7 +5877,7 @@ var __studies_ =
 				parameters.display=libraryParameters.display;
 			}
 		}
-		
+
 
 		if(!inputs) inputs=CIQ.clone(CIQ.Studies.DEFAULT_INPUTS);
 		if(!outputs) outputs=CIQ.clone(CIQ.Studies.DEFAULT_OUTPUTS);
@@ -12906,7 +12906,7 @@ var __drawingAdvanced_ =
 			return obj;
 		}
 	});
-	
+
 	/**
 	 * Quadrant Lines drawing tool.
 	 *
@@ -14396,12 +14396,12 @@ var __renderersAdvanced_ =
 			if(pType=="rangechannel") type="rangechannel";
 		}
 		if(type===null) return null;
-		
+
 		return new CIQ.Renderer.Shading({
 			params:CIQ.extend(params,{type:type})
 		});
 	};
-	
+
 	/**
 	 * Sets the shading scheme of the renderer
 	 * @param  {array} scheme single object or array of objects denoting shading
@@ -14470,18 +14470,18 @@ var __renderersAdvanced_ =
 			};
 		}
 		stx.drawSeries(chart, seriesMap, this.params.yAxis, this);
-		
+
 		if( chart.legend && this.params.type=="rangechannel" ) {
 			if (!chart.legend.colorMap) chart.legend.colorMap={};
 			var display=this.params.display;
 			var colors=[stx.getCanvasColor("stx_line_up"),stx.getCanvasColor("stx_line_down")];
 			chart.legend.colorMap[display]={color:colors, display:display, isBase:this==stx.mainSeriesRenderer}; // add in the optional display text to send into the legendRenderer function
 		}
-		
+
 		for(s in seriesMap){
 			this.caches[s]=seriesMap[s].yValueCache;
 		}
-		
+
 		function joinFields(series){
 			var map=seriesMap[series];
 			if(map){
@@ -14524,7 +14524,7 @@ var __renderersAdvanced_ =
 
 	/**
 	 * Creates a multi-part histogram renderer where bars can be stacked one on top of the other, clustered next to each other, or overlaid over each other.
-	 * 
+	 *
 	 * See {@link CIQ.Renderer#construct} for parameters required by all renderers
 	 * @param {Object} config Config for renderer
 	 * @param  {object} [config.params] Parameters to control the renderer itself
@@ -14554,24 +14554,24 @@ var __renderersAdvanced_ =
 		// set the renderer
 		var histRenderer=stxx.setSeriesRenderer(new CIQ.Renderer.Histogram({params: params, callback: histogramLegend}));
 
-		// add data and attach. 
+		// add data and attach.
 		stxx.addSeries("^NIOALL", {display:"Symbol 1"}, function() {histRenderer.attachSeries("^NIOALL","#6B9CF7").ready();});
 		stxx.addSeries("^NIOAFN", {display:"Symbol 2"}, function() {histRenderer.attachSeries("^NIOAFN","#95B7F6").ready();});
 		stxx.addSeries("^NIOAMD", {display:"Symbol 3"}, function() {histRenderer.attachSeries("^NIOAMD","#B9D0F5").ready();});
 	 *
 	 * @example
-		// this is an example on how completely remove a renderer and all associated data. 
+		// this is an example on how completely remove a renderer and all associated data.
 		// This should only be necessary if you are also removing the chart itself
-		
+
 		// Remove all series from the renderer including series data from the masterData
   		renderer.removeAllSeries(true);
-  		
+
   		// detach the series renderer from the chart.
   		stxx.removeSeriesRenderer(renderer);
-  		
+
   		// delete the renderer itself.
   		delete renderer;
-  		
+
 	 * @version ChartIQ Advanced Package
 	 */
 	CIQ.Renderer.Histogram=function(config){
@@ -14687,10 +14687,10 @@ var __renderersAdvanced_ =
 			if(pType=="scatterplot") type="scatter";
 		}
 		if(type===null) return null;
-		
+
 		return new CIQ.Renderer.Scatter({
 			params:CIQ.extend(params,{type:type})
-		});	
+		});
 	};
 
 	CIQ.Renderer.Scatter.prototype.drawIndividualSeries=function(chart, parameters){
@@ -14724,8 +14724,8 @@ var __share_ =
 
 	/**
 	 * Creates a png image or canvas of the current chart and everything inside the container associated with the chart when it was instantiated; including HTML.
-	 * Elements outside the chart container will **NOT** be included. 
-	 * 
+	 * Elements outside the chart container will **NOT** be included.
+	 *
 	 * It will dynamically try to load `js/thirdparty/html2canvas.js` if not already loaded.
 	 *
 	 * This function is asynchronous and requires a callback function. The callback will be passed
@@ -14848,13 +14848,13 @@ var __share_ =
 
 	/**
 	 * Creates a png image of the current chart and everything inside the container associated with the chart when it was instantiated; including HTML.
-	 * Elements outside the chart container will **NOT** be included. 
-	 * 
+	 * Elements outside the chart container will **NOT** be included.
+	 *
 	 * If widthPX and heightPX are passed in then the image will be scaled to the requested dimensions.
-	 * 
+	 *
 	 * It will dynamically try to load `js/thirdparty/html2canvas.js` if not already loaded.
 	 *
-	 * This function is asynchronous and requires a callback function. 
+	 * This function is asynchronous and requires a callback function.
 	 * The callback will be passed a data object or canvas which can be sent to a server or converted to an image.
 	 *
 	 * Important Notes:
@@ -14862,7 +14862,7 @@ var __share_ =
 	 *
 	 * - ** This method does not always work with React or Safari **
 	 *
-	 * - **Canvases can only be exported if all the contents including CSS images come from the same domain, 
+	 * - **Canvases can only be exported if all the contents including CSS images come from the same domain,
 	 * or all images have cross origin set properly and come from a server that supports CORS; which may or may not be possible with CSS images.**
 	 *
 	 * - **When using the charts from `file:///` :**
@@ -14998,7 +14998,7 @@ var __share_ =
 			});
 			// end sample code to upload image to a server
 		});
-	 * 
+	 *
 	 */
 	CIQ.Share.shareChart=function(stx, override, cb){
 		CIQ.Share.createImage(stx, {}, function(imgData){
@@ -19373,7 +19373,7 @@ var __core_ =
 	 * @param {number} [parameters.tension] Tension for splining. Requires "js/thirdparty/splines.js"
 	 * @param {string} [parameters.color] The fill color
 	 * @memberof CIQ
-	 * @since 
+	 * @since
 	 * <br>&bull; 4.0.0 Added `parameters.reverse`, made `parameters.threshold` optional in case filling to top or bottom of panel
 	 * <br>&bull; 4.1.2 Removed quotes argument; function always uses dataSegment.
 	 * @example
@@ -19497,7 +19497,7 @@ var __core_ =
 	 * @param {boolean} parameters.skipTransform If true then any transformations (such as comparison charting) will not be applied
 		 * @param {number} parameters.opacity The color opacity/transparency as a decimal number (1= full opacity / no transparency).  Default is 0.3.
 	 * @memberof CIQ
-	 * @since 
+	 * @since
 	 * <br>&bull; 4.0.0 Changed `sd` argument to `panelName` argument, added `parameters.topColor`, `parameters.bottomColor`, `parameters.opacity` and `parameters.skipTransform`, removed `parameters.fillFuture`
 	 * <br>&bull; 4.1.2 Removed quotes argument; function always uses dataSegment.
 	 * @example
@@ -19731,7 +19731,7 @@ var __core_ =
 
 
 	/**
-	 * Convenience function to iterate through the charts masterData and add a data member. 
+	 * Convenience function to iterate through the charts masterData and add a data member.
 	 * Generally used for additional comparison or study symbols.
 	 * Can be used with any array of data objects which contains at least the 'DT' (date in javascript format) and 'Close' ( close/last price ) elements of an [OHLC object](index.html#data-format).
 	 * @param {object} params Parameters object
@@ -19752,7 +19752,7 @@ var __core_ =
 	 * {DT:epoch,Date:strDate,Field1:value,Field2:value,Field3:value,Field4:value}
 	 * //data element format if createObject is used
 	 * {DT:epoch,Date:strDate,AnyOtherData:otherData,MoreData:otherData,...}
-	 * @since 
+	 * @since
 	 * <br>&bull; 04-2015 added
 	 * <br>&bull; 15-07-01 fieldForLabel argument
 	 * <br>&bull; 3.0.0 all data sent in will be forced into the chart. Dates are no longer required to be exact matches (minutes, hours, seconds, milliseconds) in order to show up in comparisons.
@@ -20482,9 +20482,9 @@ var __core_ =
 	 * A renderer is used to draw a complex visualization based on one or more "series" of data.
 	 * This is a reusable object. Once defined and attached to a chart, it shouldn’t have to be recreated every time a symbol changed.
 	 * The series inside the renderers may change with a new symbol, but the linked renderer itself remains the vehicle for adding series.
-	 * 
+	 *
 	 * To create a renderer use {@link CIQ.ChartEngine#setSeriesRenderer}
-	 * 
+	 *
 	 * @name  CIQ.Renderer
 	 * @constructor
 	 */
@@ -20602,7 +20602,7 @@ var __core_ =
 
 	/**
 	 * Attach a series to the renderer.
-	 * This assumes that the series data *is already in the dataSet* and simply connects it to the renderer with the specified parameters. 
+	 * This assumes that the series data *is already in the dataSet* and simply connects it to the renderer with the specified parameters.
 	 * See {@link CIQ.ChartEngine#addSeries} for details on how to create a series.
 	 *
 	 * Any parameters defined when attaching a series, such as colors, will supersede any defined when a series was created. This allows you to attach the same series to multiple renderers, each rendering displaying the same series data in a different color, for example.
@@ -20798,7 +20798,7 @@ var __core_ =
 	 * @param  {string} [config.params.colorFunction] Optional override string (or function) used to determine color of bar.  May be an actual function or a string name of the registered function (see {@link CIQ.Renderer.registerColorFunction})
 	 * @constructor
 	 * @name  CIQ.Renderer.Lines
-	 * @since 
+	 * @since
 	 * <br>&bull; 4.0.0 - New `config.params.useChartLegend` added
 	 * <br>&bull; 5.1.0 removed subtype parameter, this will be determined internally from config.params.step=true
 	 * <br>&bull; 5.1.0 added highlightable, overChart, step, baseline, vertex, style, colored, and colorFunction parameters
@@ -21323,7 +21323,7 @@ var __core_ =
 		}
 		return rc;
 	};
-	
+
 	/**
 	 * Creates a Bars renderer
 	 *
@@ -22224,7 +22224,7 @@ var __engine_ =
 			this.cancelTouchSingleClick=false; 				// Set this to true whenever a screen item is touched so as to avoid a chart touch event
 		    /**
 		     * Contains the current chart layout.
-		     * 
+		     *
 		     * Layout parameters can be directly **pre-set** on a chart at the time the engine is instantiated.<br>
 		     * The following is an example for setting some of the available layout parameters:
 		     * ```
@@ -22232,17 +22232,17 @@ var __engine_ =
 		     * ```
 		     * These parameters will then be activated when [newChart()]{@link CIQ.ChartEngine#newChart} is called to render the chart.<br>
 		     * Once a chart is rendered, most of these parameters become READ ONLY,and must be modified using their corresponding methods, as indicated in the documentation, to ensure chart integrity.
-		     * 
-		     * See [importLayout]{@link CIQ.ChartEngine#importLayout} and [exportLayout]{@link CIQ.ChartEngine#exportLayout} for methods to serialize a layout and restore previously saved settings. 
-		     * 
+		     *
+		     * See [importLayout]{@link CIQ.ChartEngine#importLayout} and [exportLayout]{@link CIQ.ChartEngine#exportLayout} for methods to serialize a layout and restore previously saved settings.
+		     *
 		     * @type object
 		     * @alias layout
 		     * @memberof CIQ.ChartEngine#
 		     */
 			this.layout={
 			    /**
-			     * READ ONLY. Chart interval. 
-			     * 
+			     * READ ONLY. Chart interval.
+			     *
 			     * Note that internal periodicity format will differ from API parameters used in {@link CIQ.ChartEngine#setPeriodicity}
 			     *
 			     * Available options are:
@@ -22269,8 +22269,8 @@ var __engine_ =
 			     */
 				periodicity: 1,
 				/**
-				 * READ ONLY. Time unit for the interval. 
-				 * 
+				 * READ ONLY. Time unit for the interval.
+				 *
 				 * Note that internal periodicity format will differ from API parameters used in {@link CIQ.ChartEngine#setPeriodicity}
 				 *
 			     * See the [Periodicity and Quote feed]{@tutorial Periodicity} tutorial.
@@ -22295,7 +22295,7 @@ var __engine_ =
 				candleWidth: 8,
 				volumeUnderlay: false,
 			    /**
-			     * Whether adjusted or nominal prices are being displayed. 
+			     * Whether adjusted or nominal prices are being displayed.
 			     * If true then the chart will look for "Adj_Close" in the masterData as an alternative to "Close".
 			     * @type boolean
 			     * @default
@@ -22306,9 +22306,9 @@ var __engine_ =
 				adj: true,
 			    /**
 			     * READ ONLY. Whether crosshairs are being displayed.
-			     * 
+			     *
 			     * Use {@link CIQ.ChartEngine.showCrosshairs} to enable or disable crosshairs.
-			     * 
+			     *
 			     * @type boolean
 			     * @default
 			     * @alias layout[`crosshair`]
@@ -22425,10 +22425,10 @@ var __engine_ =
 			};
 		    /**
 		     * Contains the chart preferences.
-		     * 
+		     *
 		     * Preferences parameters, unless otherwise indicated, can be set at any time and only require a [draw()]{@link CIQ.ChartEngine#draw} call to activate.
-		     * 
-		     * See [importPreferences]{@link CIQ.ChartEngine#importPreferences} and [exportPreferences]{@link CIQ.ChartEngine#exportPreferences} for methods to serialize and restore previously saved preferences. 
+		     *
+		     * See [importPreferences]{@link CIQ.ChartEngine#importPreferences} and [exportPreferences]{@link CIQ.ChartEngine#exportPreferences} for methods to serialize and restore previously saved preferences.
 
 		     * @type object
 		     * @alias preferences
@@ -22527,7 +22527,7 @@ var __engine_ =
 				labels: true,
 				/**
 				 * Stores preferred language for the chart.
-				 * 
+				 *
 				 * It can be individually restored using {@link CIQ.I18N.setLanguage} and activated by {@link CIQ.I18N.translateUI}
 				 * @type {string}
 				 * @alias preferences[`language`]
@@ -22536,8 +22536,8 @@ var __engine_ =
 				 */
 				language: null,
 				/**
-				 * Stores the preferred timezone for the display of the x axis labels. 
-				 * 
+				 * Stores the preferred timezone for the display of the x axis labels.
+				 *
 				 * It is automatically set and can be individually restored by {@link CIQ.ChartEngine#setTimeZone}.
 				 * @type {string}
 				 * @alias preferences[`timezone`]
@@ -28875,8 +28875,8 @@ var __engine_ =
 	 *
 	 * Series are plotted using [renderers]{@link CIQ.Renderer}. Renderers can plot lines, mountains, bars, candles, etc.
 	 *
-	 * This method can create its own renderer, if only basic behavior is required, 
-	 * or you can explicitly use `[setSeriesRenderer()]{@link CIQ.ChartEngine#setSeriesRenderer}` to group multiple series into a single renderer, for example, 
+	 * This method can create its own renderer, if only basic behavior is required,
+	 * or you can explicitly use `[setSeriesRenderer()]{@link CIQ.ChartEngine#setSeriesRenderer}` to group multiple series into a single renderer, for example,
 	 * when drawing a stacked histogram, or group of lines sharing similar properties.
 	 *
 	 * Example 1 <iframe width="100%" height="500" scrolling="no" seamless="seamless" align="top" style="float:top" src="http://jsfiddle.net/chartiq/b6pkzrad/embedded/result,js,html/" allowfullscreen="allowfullscreen" frameborder="1"></iframe>
@@ -28892,7 +28892,7 @@ var __engine_ =
 	 * -  If **`parameters.color` or `parameters.renderer` are included**, the series will automatically create a renderer and attached to it. This will cause it to be immediately displayed on the chart.
 	 *
 	 * Use this method if you don't need any of the advanced features available through [custom renderers]{@link CIQ.ChartEngine#setSeriesRenderer}.<br>
-	 * In this case, there is no need to manually create a renderer and attach this seres to it, 
+	 * In this case, there is no need to manually create a renderer and attach this seres to it,
 	 * unless you want the same data to also be displayed differently by another renderer.<br>
 	 * But remember that if you do so, it WILL render again using the new renderer settings.
 	 * So never use `parameters.color` or `parameters.renderer` in `addSeries` if you intend to have the series managed by a custom renderer.
@@ -28905,7 +28905,7 @@ var __engine_ =
 	 * 		})
 	 * );
 	 * ```
-	 * 
+	 *
 	 * If you you include `parameters.renderer`, then that is the renderer that will be created.
 	 *
 	 * In this mode, the series `parameters` object will also accept any valid parameters for the [attachSeries]{@link CIQ.Renderer#attachSeries} and [setSeriesRenderer]{@link CIQ.ChartEngine#setSeriesRenderer} call.
@@ -29576,7 +29576,7 @@ var __engine_ =
 			if(arguments.length>3) timeUnit=arguments[2];
 		}
 		if(typeof(cb)!=="function") cb=null;
-		
+
 		var internalPeriodicity = CIQ.cleanPeriodicity(period,interval,timeUnit);
 		period=internalPeriodicity.period;
 		interval=internalPeriodicity.interval;
@@ -30836,7 +30836,7 @@ var __engine_ =
 					periodicity.period?periodicity.period:periodicity.periodicity,
 					periodicity.interval,
 					periodicity.timeUnit
-				);			
+				);
 			layout.interval=internalPeriodicity.interval;
 			layout.periodicity=internalPeriodicity.period;
 			layout.timeUnit=internalPeriodicity.timeUnit;
@@ -34107,13 +34107,13 @@ var __engine_ =
 	 * <br>&bull; 5.1.0 Imports the range from layout if it is there to preserve between sessions.
 	 */
 	CIQ.ChartEngine.prototype.importLayout=function(config, params){
-		
+
 		if(!config) {
 			// if no config to restore, nothing to do.
 			if(params.cb) params.cb();
 			return;
 		}
-		
+
 		if (typeof params !== "object") {
 			// backwards compatibility hack, this function used to accept three named arguments
 			params = {
@@ -34251,13 +34251,13 @@ var __engine_ =
 		}
 
 		if(!noDataLoad){
-			
-			// Now we execute the data loading functions. 
-			
+
+			// Now we execute the data loading functions.
+
 			if(config.symbols && config.symbols.length){
-				
+
 				// load symbols; primary and additional series. Also adjust ranges and periodicity at the same time
-				
+
 				var params2={};
 				if(managePeriodicity){
 					if(config.setSpan){
@@ -34295,8 +34295,8 @@ var __engine_ =
 					if(cb) cb.apply(null, arguments);
 				}, params2);
 				return;
-			} 	
-				
+			}
+
 			// Otherwise, if only data ranges or periodicity are required, load them now
 			var range=view.range;
 			if(range && Object.keys(range).length) {
@@ -36584,7 +36584,7 @@ var __market_ =
 				}
 			}
 			if( this.clock.ctime > end ) {
-				// if not an exact match, we are one tick too far in the future by now. 
+				// if not an exact match, we are one tick too far in the future by now.
 				// Go back one to return the tick that contains this time in its range. Rather than the next tick.
 				ticks--;
 			}
@@ -38974,7 +38974,7 @@ var __utility_ =
 		this.closePath();
 	};
 
-	
+
 	/* Easing cubics from
 	http://gizma.com/easing/#expo1
 	t = current time (t should move from zero to d)
@@ -38996,7 +38996,7 @@ var __utility_ =
 		t -= 2;
 		return c/2*(t*t*t + 2) + b;
 	};
-	
+
 	Math.easeOutCubic = function (t, b, c, d) {
 		t /= d;
 		t--;
@@ -40624,9 +40624,9 @@ var __utility_ =
 		}
 		return true;
 	};
-	
+
 	/**
-	 * Convenience function to convert API periodicity parameters to internal periodicity format. 
+	 * Convenience function to convert API periodicity parameters to internal periodicity format.
 	 * @param  {string} period The period value as required by {@link CIQ.ChartEngine#setPeriodicity}
 	 * @param  {string} [interval] The interval value as required by {@link CIQ.ChartEngine#setPeriodicity}
 	 * @param  {string} timeUnit The timeUnit value as required by {@link CIQ.ChartEngine#setPeriodicity}
@@ -40646,12 +40646,12 @@ var __utility_ =
 				timeUnit=null;
 			}
 		}
-		
+
 		// clean up timeUnit
 		//if(CIQ.ChartEngine.isDailyInterval(interval)) timeUnit=null; // redundant
 		else if(interval=="tick") timeUnit=null;
 		else if(!timeUnit && !isNaN(interval)) timeUnit="minute";
-		
+
 		// support year
 		if(interval=="year"){
 			interval = "month";
