@@ -164,7 +164,7 @@ class Views extends Component {
         const { views } = this.state;
         return (
             <cq-menu class="ciq-menu ciq-views collapse">
-                <span>Templates</span>
+                <span className="ciq-icon ciq-ic-charttemplate-normal" />
                 <cq-menu-dropdown>
                     <cq-views cq-no-close>
                         <cq-views-content>

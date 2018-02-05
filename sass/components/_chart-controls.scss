@@ -53,7 +53,7 @@ $selected-background-color: #e4e6f1;
   }
   .ciq-menu {
       line-height: 2.1em;
-      padding: 0.35em 0.35em;
+      padding: 0.35em 0.2em;
       > span {
         margin: 0;
         padding: 0;
@@ -97,7 +97,10 @@ $selected-background-color: #e4e6f1;
   .ciq-ic-indicator-normal {
       background: url('icons/indicators/ic-indicator-normal-light.svg');
   }
-  .ciq-draw > span{
+  .ciq-ic-charttemplate-normal {
+      background: url('icons/chart template/ic-charttemplate-normal-light.svg');
+  }
+  .ciq-draw > span {
       background: url('icons/drawing tools/ic-drawingtools-normal-light.svg');
   }
 }
