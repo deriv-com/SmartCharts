@@ -3,12 +3,12 @@ import contextAware from '../contextAware';
 import '../../sass/components/timeperiod.scss';
 
 
-class Timeperiod extends Component {
+export class Timeperiod extends Component {
     state = { timeperiod: '', open: false };
 
     onContextReady(context) {
         this.setState({
-            timeUnit: this.getTimeUnit(context.stx.layout),
+            timeUnit: Timeperiod.getTimeUnit(context.stx.layout),
             interval: context.stx.layout.interval,
         });
         this._context = context;
@@ -34,13 +34,13 @@ class Timeperiod extends Component {
             }
         });
         this.setState({
-            timeUnit: this.getTimeUnit(stx.layout),
+            timeUnit: Timeperiod.getTimeUnit(stx.layout),
             interval: stx.layout.interval,
             open: false,
         });
     }
 
-    getTimeUnit (layout) {
+    static getTimeUnit (layout) {
         if(layout.timeUnit === null && layout.interval === 'day') {
             return 'day';
         } else if(layout.timeUnit === 'minute' && layout.interval % 60 === 0) {
@@ -59,10 +59,6 @@ class Timeperiod extends Component {
         }
 
         return +interval ? interval : 1;
-    }
-
-    Toggle () {
-        this.setState({open: !this.state.open});
     }
 
     render() {
