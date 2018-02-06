@@ -11,5 +11,5 @@ node_js:
   - "8"
 before_script:
   - yarn install
-script:
+after_success:
   - yarn gh-pages -- --repo 'git@github.com:regentmarkets/chartiq.git'
