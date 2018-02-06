@@ -3,10 +3,13 @@ branches:
   only:
   - master
 notifications:
-  slack: binary-group:TI7oyWjkwf9Xx2Rllt2Pr5zY
+  slack:
+    rooms:
+      - binary-group:TI7oyWjkwf9Xx2Rllt2Pr5zY
+    on_pull_requests: false
 node_js:
   - "8"
 before_script:
   - yarn install
-script:
+after_success:
   - yarn gh-pages -- --repo 'git@github.com:regentmarkets/chartiq.git'
