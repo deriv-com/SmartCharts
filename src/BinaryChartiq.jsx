@@ -376,6 +376,7 @@ class BinaryChartiq extends Component {
                     }}>
                     </cq-overrides>
                 </cq-color-picker>
+                <cq-loader />
                 <div className="ciq-chart-area">
                     <div className="ciq-chart">
                         <cq-toolbar>
@@ -654,7 +655,6 @@ class BinaryChartiq extends Component {
                                     }}
                                 />
                             </cq-comparison>
-                            <cq-loader />
                             <cq-hu-static>
                                 <div>
                                     <div>Price</div>
