@@ -9,7 +9,7 @@
     "analyze": "ANALYZE_BUNDLE=true webpack --progress",
     "watch": "webpack --progress --watch",
     "start": "rimraf dist && webpack-dev-server --open  --hot --inline",
-    "gh-pages": "yarn build && gh-pages --dist '.' --src '{index.html,dist/**,chartiq/chartiq.js,chartiq/jquery.js}' --add"
+    "gh-pages": "yarn build && gh-pages --dist '.' --src '{index.html,dist/**,chartiq/**}' --add"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
