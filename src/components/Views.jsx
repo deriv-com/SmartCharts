@@ -2,6 +2,7 @@ import $ from 'jquery';
 import CIQ from 'chartiq';
 import React, { Component } from 'react';
 import contextAware from '../contextAware';
+import { downloadURI } from '../components/ui/utils';
 
 /**
  * Views web component `<cq-views>`.
@@ -151,12 +152,42 @@ class Views extends Component {
         if (this.params.renderCB) this.params.renderCB(menu);
     }
 
+    getChartFileName = (stx) => {
+        let unit, value;
+        if (typeof stx.layout.interval === 'string') {
+            value = stx.layout.periodicity;
+            unit = stx.layout.interval;
+        } else {
+            value = stx.layout.interval;
+            unit = stx.layout.timeUnit;
+        }
+        return `${stx.chart.symbol} (${value} ${unit}).png`;
+    }
+
     addNew = () => {
         let context = this._context;
         const viewDialog = $$$('cq-view-dialog', this._context.topNode);
         $(viewDialog).find('input').val('');
         viewDialog.open({
             context,
+        });
+    }
+
+    downloadChart = () => {
+        CIQ.UI.bypassBindings = true;
+        if (this._context.loader) {
+            this._context.loader.show();
+        }
+        const stx = this._context.stx;
+        CIQ.Share.createImage(stx, {
+            hide: ['#chartControls'],
+        }, (data) => {
+            CIQ.UI.bypassBindings = false;
+            if (this._context.loader) {
+                this._context.loader.hide();
+            }
+            const name = this.getChartFileName(stx);
+            downloadURI(data, name);
         });
     }
 
@@ -190,7 +221,7 @@ class Views extends Component {
                             <span>Add Template</span>
                         </div>
                         <div
-                            onClick={() => {}}
+                            onClick={this.downloadChart}
                             className="ciq-row"
                         >
                             <span className="ciq-icon ciq-ic-download" />
