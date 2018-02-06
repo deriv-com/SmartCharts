@@ -1,0 +1,12 @@
+language: node_js
+branches:
+  only:
+  - master
+notifications:
+  slack: binary-group:TI7oyWjkwf9Xx2Rllt2Pr5zY
+node_js:
+  - "8"
+before_script:
+  - yarn install
+script:
+  - yarn gh-pages -- --repo 'git@github.com:regentmarkets/chartiq.git'
