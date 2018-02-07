@@ -14,10 +14,12 @@ Binary.com charting library based on chartiq.
 ```js
 const chart = BinaryChartiq.addNewChart({
     selector: '#mychart',
+    symbols: active_symbols // https://developers.binary.com/api/#active_symbols
 });
 
 // Access the ChartIQ chart engine:
 const stxx = chart.getChartEngine();
+chart.symbols = active_symbols; // set symbols later
 ```
 
 ## API Documentation

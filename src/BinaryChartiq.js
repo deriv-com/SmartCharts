@@ -6,8 +6,8 @@ import { createElement } from './components/ui/utils';
 import Chart from './components/Chart.jsx';
 
 class BinaryChartiq {
-    static addNewChart({ selector }) {
-        const chart = new BinaryChartiq(selector);
+    static addNewChart(params) {
+        const chart = new BinaryChartiq(params);
         return chart;
     }
 
@@ -18,9 +18,14 @@ class BinaryChartiq {
         }
     }
 
-    constructor(selector) {
+    set symbols(s) {
+        this._updateRender({ symbols: s });
+    }
+
+    constructor({ selector, symbols }) {
         BinaryChartiq._initCqManager();
         this.selector = selector;
+        if (symbols) this.symbols = symbols;
 
         this._updateRender();
     }

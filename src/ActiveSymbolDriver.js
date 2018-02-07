@@ -6,15 +6,11 @@ import Driver from './components/ui/Driver';
  * @param {array} exchanges An array of ecxchanges that can be searched against
  */
 class ActiveSymbolDriver extends Driver {
-    constructor(connectionManager) {
+    constructor(symbols) {
         super();
-        this.symbolsPromise = connectionManager.send({
-            active_symbols: 'brief',
-            product_type: 'basic',
-        }).then((data) => {
-            this._symbols = this._processSymbols(data.active_symbols);
-            return this._symbols;
-        });
+        if (symbols) {
+            this.symbols = symbols;
+        }
     }
 
     _processSymbols(symbols) {
@@ -36,8 +32,12 @@ class ActiveSymbolDriver extends Driver {
         return processedSymbols;
     }
 
-    get activeSymbols() {
-        return this.symbolsPromise;
+    set symbols(active_symbols) {
+        this._symbols = this._processSymbols(active_symbols);
+    }
+
+    get symbols() {
+        return this._symbols;
     }
 
     /**

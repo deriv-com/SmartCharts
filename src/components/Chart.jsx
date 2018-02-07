@@ -52,6 +52,7 @@ class Chart extends Component {
     constructor() {
         super();
         this._contextPromise = new PendingPromise();
+        this._driver = new ActiveSymbolDriver();
     }
 
     static initConnection() {
@@ -79,6 +80,19 @@ class Chart extends Component {
         return { promise: this._contextPromise };
     }
 
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.symbols && this.UIContext) {
+            this._driver.symbols = nextProps.symbols.active_symbols;
+            // update lookup with new symbols
+            this.UIContext.setLookupDriver(this._driver);
+            // TODO: Anti-pattern, but we need access to Lookup. May change once ported to React
+            const lookups = $$$(`#${this._elementId}`).querySelectorAll('cq-lookup');
+            for (const l of lookups) {
+                l.results(this._driver.symbols);
+            }
+        }
+    }
+
     componentWillMount() {
         const { id } = this.props;
         this._id = id;
@@ -89,9 +103,8 @@ class Chart extends Component {
     }
 
     componentDidMount() {
-        let UIContext = null;
+        this.UIContext = null;
         const streamManager = Chart.getStreamManager();
-        const connectionManager = Chart.getConnectionManager();
         const chartNode = $(`#${this._elementId}`);
 
         const stxx = new CIQ.ChartEngine({
@@ -142,7 +155,7 @@ class Chart extends Component {
         };
 
         const resizeScreen = () => {
-            if (!UIContext) return;
+            if (!this.UIContext) return;
             updateHeight();
             let sidePanel = chartNode.find('cq-side-panel')[0];
             if (sidePanel) {
@@ -236,10 +249,10 @@ class Chart extends Component {
         const startUI = () => {
             stxx.chart.allowScrollPast = false;
             const contextNode = chartNode;
-            UIContext = new Context(stxx, contextNode);
-            new CIQ.UI.Layout(UIContext);
+            this.UIContext = new Context(stxx, contextNode);
+            new CIQ.UI.Layout(this.UIContext);
 
-            UIContext.changeSymbol = function (data) {
+            this.UIContext.changeSymbol = function (data) {
                 let stx = this.stx;
                 if (this.loader) this.loader.show();
 
@@ -264,20 +277,18 @@ class Chart extends Component {
                 });
             };
 
-            const driver = new ActiveSymbolDriver(connectionManager);
-
-            UIContext.setLookupDriver(driver);
+            this.UIContext.setLookupDriver(this._driver);
 
             const symbolLookup = chartNode.find('.ciq-search cq-lookup')[0];
             symbolLookup.setCallback((context, data) => {
                 context.changeSymbol(data);
             });
 
-            new CIQ.UI.KeystrokeHub($$$('body'), UIContext, {
+            new CIQ.UI.KeystrokeHub($$$('body'), this.UIContext, {
                 cb: CIQ.UI.KeystrokeHub.defaultHotKeys,
             });
 
-            new CIQ.UI.StudyEdit(null, UIContext);
+            new CIQ.UI.StudyEdit(null, this.UIContext);
 
             let UIStorage = new CIQ.NameValueStore();
 
@@ -317,14 +328,14 @@ class Chart extends Component {
                 },
                 /* dialogBeforeAddingStudy: {"rsi": true} // here's how to always show a dialog before adding the study */
             };
-            let UIStudyMenu = new CIQ.UI.StudyMenu(chartNode.find('*[cq-studies]'), UIContext, params);
+            let UIStudyMenu = new CIQ.UI.StudyMenu(chartNode.find('*[cq-studies]'), this.UIContext, params);
             UIStudyMenu.renderMenu();
 
 
-            if (UIContext.loader) UIContext.loader.show();
+            if (this.UIContext.loader) this.UIContext.loader.show();
             restorePreferences();
             restoreLayout(stxx, () => {
-                if (UIContext.loader) UIContext.loader.hide();
+                if (this.UIContext.loader) this.UIContext.loader.hide();
             });
 
             if (!stxx.chart.symbol) {
@@ -333,7 +344,7 @@ class Chart extends Component {
                 }); // load an initial symbol
             }
 
-            this._contextPromise.resolve(UIContext);
+            this._contextPromise.resolve(this.UIContext);
             CIQ.UI.begin();
             stxx.setStyle('stx_line_chart', 'color', '#4DAFEE'); // TODO => why is not working in css?
 
@@ -357,8 +368,7 @@ class Chart extends Component {
             });
         }
 
-        $(window)
-            .resize(resizeScreen);
+        $(window).resize(resizeScreen);
     }
 
     render() {

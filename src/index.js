@@ -3,9 +3,20 @@ import $ from 'jquery';
 
 import '../sass/demo.scss';
 
-import BinaryChartiq from './BinaryChartiq.js';
+import BinaryChartiq from './BinaryChartiq';
+import Chart from './components/Chart.jsx';
+
 
 // TODO: addNewChart will need to support multiple charts
-window.chart = BinaryChartiq.addNewChart({
+const bchart = BinaryChartiq.addNewChart({
     selector: '#root',
 });
+
+Chart.getConnectionManager().send({
+    active_symbols: 'brief',
+    product_type: 'basic',
+}).then((data) => {
+    bchart.symbols = data;
+});
+
+window.chart = bchart;
