@@ -4,6 +4,7 @@ import contextAware from '../contextAware';
 import ChartTypes from './ChartTypes.jsx';
 import StudyLegend from './StudyLegend.jsx';
 import Timeperiod from './Timeperiod.jsx';
+import Comparison from './Comparison.jsx';
 import ChartSize from './ChartSize.jsx';
 import Views from './Views.jsx';
 
@@ -29,6 +30,7 @@ class  ChartControls extends Component {
             <div id='chartControls'>
                 <ChartTypes />
                 <StudyLegend />
+                <Comparison />
                 <Views />
                 <div className="icon-toggles ciq-toggles">
                     <cq-toggle class="ciq-CH" cq-member="crosshair">

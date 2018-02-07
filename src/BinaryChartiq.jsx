@@ -22,7 +22,7 @@ import './components/Attribution';
 import './components/ChartTitle';
 import './components/Close';
 import './components/ColorPicker';
-import './components/Comparison';
+import './components/ComparisonList';
 import './components/DrawingToolbar';
 import './components/FibSettingsDialog';
 import './components/Loader';
@@ -633,9 +633,6 @@ class BinaryChartiq extends Component {
                                             </cq-lookup>
                                         </cq-comparison-lookup-frame>
                                         <cq-swatch cq-no-close />
-                                        <span>
-                                            <cq-accept-btn class="stx-btn">ADD</cq-accept-btn>
-                                        </span>
                                     </cq-comparison-add>
                                 </cq-menu>
                                 <cq-comparison-key
