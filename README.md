@@ -17,9 +17,8 @@ const chart = BinaryChartiq.addNewChart({
     symbols: active_symbols // https://developers.binary.com/api/#active_symbols
 });
 
-// Access the ChartIQ chart engine:
-const stxx = chart.getChartEngine();
-chart.symbols = active_symbols; // set symbols later
+const stxx = chart.getChartEngine(); // Access the ChartIQ chart engine
+chart.symbols = active_symbols; // You can set symbols later
 ```
 
 ## API Documentation
