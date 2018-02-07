@@ -12,9 +12,12 @@ Binary.com charting library based on chartiq.
 ## Quick Start
 
 ```js
-BinaryChartiq.addNewChart({
+const chart = BinaryChartiq.addNewChart({
     selector: '#mychart',
 });
+
+// Access the ChartIQ chart engine:
+const stxx = chart.getChartEngine();
 ```
 
 ## API Documentation

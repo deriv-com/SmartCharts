@@ -2,53 +2,51 @@
 import $ from 'jquery';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
 import CIQ from 'chartiq'; // eslint-disable-line
-import StreamManager from './StreamManager';
-import Feed from './Feed';
-import ActiveSymbolDriver from './ActiveSymbolDriver';
-import ConnectionManager from './ConnectionManager';
-import Context from './components/ui/Context';
+import StreamManager from '../StreamManager';
+import Feed from '../Feed';
+import ActiveSymbolDriver from '../ActiveSymbolDriver';
+import ConnectionManager from '../ConnectionManager';
+import Context from '../components/ui/Context';
 
-import '../chartiq/html2canvas';
-import '../chartiq/iscroll';
+import '../../chartiq/html2canvas';
+import '../../chartiq/iscroll';
 /* css + scss */
-import '../css/stx-chart.css';
-import '../sass/chartiq.scss';
+import '../../css/stx-chart.css';
+import '../../sass/chartiq.scss';
 
-import './AddOns';
-import './Plugin';
+import '../AddOns';
+import '../Plugin';
 
-import './components/Attribution';
-import './components/ChartTitle';
-import './components/Close';
-import './components/ColorPicker';
-import './components/Comparison';
-import './components/DrawingToolbar';
-import './components/FibSettingsDialog';
-import './components/Loader';
-import './components/Lookup';
-import './components/Menu';
-import './components/MenuDropDown';
-import './components/Redo';
-import './components/Scroll';
-import './components/ShowRange';
-import './components/StudyContext';
-import './components/StudyDialog';
-import './components/StudyInput';
-import './components/StudyOutput';
-import './components/StudyParameter';
-import './components/Swatch';
-import './components/Toggle';
-import './components/Undo';
-import './components/ViewDialog';
-import './components/Clickable';
-import ChartControls from './components/ChartControls.jsx';
-import PendingPromise from './utils/PendingPromise';
-import { TradeEndLine, TradeStartLine } from './draw/DateLine';
-import { createElement } from './components/ui/utils';
+import './Attribution';
+import './ChartTitle';
+import './Close';
+import './ColorPicker';
+import './Comparison';
+import './DrawingToolbar';
+import './FibSettingsDialog';
+import './Loader';
+import './Lookup';
+import './Menu';
+import './MenuDropDown';
+import './Redo';
+import './Scroll';
+import './ShowRange';
+import './StudyContext';
+import './StudyDialog';
+import './StudyInput';
+import './StudyOutput';
+import './StudyParameter';
+import './Swatch';
+import './Toggle';
+import './Undo';
+import './ViewDialog';
+import './Clickable';
+import ChartControls from './ChartControls.jsx';
+import PendingPromise from '../utils/PendingPromise';
+import { TradeEndLine, TradeStartLine } from '../draw/DateLine';
 
-class BinaryChartiq extends Component {
+class Chart extends Component {
     static childContextTypes = { promise: PropTypes.object };
 
     constructor() {
@@ -56,37 +54,25 @@ class BinaryChartiq extends Component {
         this._contextPromise = new PendingPromise();
     }
 
-    static addNewChart({ selector }) {
-        const cqManager = $$$('cq-ui-manager');
-        if (!cqManager) {
-            document.body.appendChild(createElement('<cq-ui-manager />'));
-        }
-
-        ReactDOM.render(
-            <BinaryChartiq id={selector.slice(1, selector.length)} />,
-            $$$(selector),
-        );
-    }
-
     static initConnection() {
-        if (BinaryChartiq._connectionManager === undefined) {
-            BinaryChartiq._connectionManager = new ConnectionManager({
+        if (Chart._connectionManager === undefined) {
+            Chart._connectionManager = new ConnectionManager({
                 appId: 1,
                 language: 'en',
                 endpoint: 'wss://frontend.binaryws.com/websockets/v3',
             });
-            BinaryChartiq._streamManager = new StreamManager(BinaryChartiq._connectionManager);
+            Chart._streamManager = new StreamManager(Chart._connectionManager);
         }
     }
 
     static getConnectionManager() {
-        BinaryChartiq.initConnection();
-        return BinaryChartiq._connectionManager;
+        Chart.initConnection();
+        return Chart._connectionManager;
     }
 
     static getStreamManager() {
-        BinaryChartiq.initConnection();
-        return BinaryChartiq._streamManager;
+        Chart.initConnection();
+        return Chart._streamManager;
     }
 
     getChildContext() {
@@ -104,8 +90,8 @@ class BinaryChartiq extends Component {
 
     componentDidMount() {
         let UIContext = null;
-        const streamManager = BinaryChartiq.getStreamManager();
-        const connectionManager = BinaryChartiq.getConnectionManager();
+        const streamManager = Chart.getStreamManager();
+        const connectionManager = Chart.getConnectionManager();
         const chartNode = $(`#${this._elementId}`);
 
         const stxx = new CIQ.ChartEngine({
@@ -834,4 +820,4 @@ class BinaryChartiq extends Component {
     }
 }
 
-export default BinaryChartiq;
+export default Chart;

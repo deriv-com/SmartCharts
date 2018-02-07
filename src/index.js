@@ -3,9 +3,9 @@ import $ from 'jquery';
 
 import '../sass/demo.scss';
 
-import BinaryChartiq from './BinaryChartiq.jsx';
+import BinaryChartiq from './BinaryChartiq.js';
 
 // TODO: addNewChart will need to support multiple charts
-BinaryChartiq.addNewChart({
+window.chart = BinaryChartiq.addNewChart({
     selector: '#root',
 });
