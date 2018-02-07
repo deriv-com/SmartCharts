@@ -2,6 +2,7 @@
 import $ from 'jquery';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
 import CIQ from 'chartiq'; // eslint-disable-line
 import StreamManager from './StreamManager';
 import Feed from './Feed';
@@ -45,6 +46,7 @@ import './components/Clickable';
 import ChartControls from './components/ChartControls.jsx';
 import PendingPromise from './utils/PendingPromise';
 import { TradeEndLine, TradeStartLine } from './draw/DateLine';
+import { createElement } from './components/ui/utils';
 
 class BinaryChartiq extends Component {
     static childContextTypes = { promise: PropTypes.object };
@@ -52,6 +54,18 @@ class BinaryChartiq extends Component {
     constructor() {
         super();
         this._contextPromise = new PendingPromise();
+    }
+
+    static addNewChart({ selector }) {
+        const cqManager = $$$('cq-ui-manager');
+        if (!cqManager) {
+            document.body.appendChild(createElement('<cq-ui-manager />'));
+        }
+
+        ReactDOM.render(
+            <BinaryChartiq id={selector.slice(1, selector.length)} />,
+            $$$(selector),
+        );
     }
 
     static initConnection() {

@@ -9,7 +9,17 @@ Binary.com charting library based on chartiq.
 - use `yarn analyze` to run webpack-bundle-analyzer
 - use `yarn gh-pages` to deploy demo to gh-pages
 
-## Barrier Class
+## Quick Start
+
+```js
+BinaryChartiq.addNewChart({
+    selector: '#mychart',
+});
+```
+
+## API Documentation
+
+### Barrier Class
 ```js
 const barrier = new Barrier({
     stx       : stx,                        // chart instance
@@ -33,7 +43,7 @@ barrier.onBarrierChanged(({high_barrier, low_barrier}) => {
 
 ```
 
-## DateLine Class
+### DateLine Class
 
 ```js
 const dl = new DateLine({
