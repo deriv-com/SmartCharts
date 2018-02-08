@@ -2,6 +2,7 @@ import CIQ from 'chartiq';
 import Helper from './Helper';
 import Keystroke from './Keystroke';
 import { claims } from './';
+import UIManager from './UIManager';
 
 /**
  * UI Helper for capturing and handling keystrokes. A helper or ContextTag can
@@ -21,7 +22,7 @@ class KeystrokeHub extends Helper {
         this.node = node;
         this.context = context;
         this.params = params || {};
-        this.uiManager = $$$('cq-ui-manager');
+        this.uiManager = UIManager.instance;
         if (this.uiManager) {
             this.uiManager.keystrokeHub = this; // Register the keystroke hub so that it can be found
         }

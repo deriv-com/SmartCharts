@@ -2,7 +2,6 @@
 import $ from 'jquery';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { createElement } from './components/ui/utils';
 import Chart from './components/Chart.jsx';
 
 class BinaryChartiq {
@@ -11,19 +10,11 @@ class BinaryChartiq {
         return chart;
     }
 
-    static _initCqManager() {
-        const cqManager = $$$('cq-ui-manager');
-        if (!cqManager) {
-            document.body.appendChild(createElement('<cq-ui-manager />'));
-        }
-    }
-
     set symbols(s) {
         this._updateRender({ symbols: s });
     }
 
     constructor({ selector, symbols }) {
-        BinaryChartiq._initCqManager();
         this.selector = selector;
         if (symbols) this.symbols = symbols;
 
