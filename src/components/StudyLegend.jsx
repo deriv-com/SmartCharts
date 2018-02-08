@@ -2,6 +2,7 @@ import $ from 'jquery';
 import CIQ from 'chartiq';
 import React, { Component } from 'react';
 import contextAware from '../contextAware';
+import UIManager from './ui/UIManager';
 
 /**
  * Study legend web component `<cq-study-legend>`.
@@ -74,7 +75,7 @@ class StudyLegend extends Component {
     onContextReady(context) {
         this._context = context;
         this.previousStudies = {};
-        this.uiManager = $$$('cq-ui-manager');
+        this.uiManager = UIManager.instance;
         this.begin();
     }
 

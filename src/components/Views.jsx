@@ -3,6 +3,7 @@ import CIQ from 'chartiq';
 import React, { Component } from 'react';
 import contextAware from '../contextAware';
 import { downloadURI } from '../components/ui/utils';
+import UIManager from './ui/UIManager';
 
 /**
  * Views web component `<cq-views>`.
@@ -26,7 +27,7 @@ class Views extends Component {
         context.viewComponent = this;
 
         this._context = context;
-        this.uiManager = $$$('cq-ui-manager');
+        this.uiManager = UIManager.instance;
         this.initialize();
     }
     /**

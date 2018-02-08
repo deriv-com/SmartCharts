@@ -3,7 +3,7 @@ import CIQ from 'chartiq';
 import '../../../chartiq/webcomponents-lite.min';
 import './jquery-extensions';
 import './UI';
-import './UIManager';
+import UIManager from './UIManager';
 
 import HeadsUp from './HeadsUp';
 import StudyEdit from './StudyEdit';
@@ -80,11 +80,9 @@ export const claims = [];
      * @memberof CIQ
      */
     CIQ.addResizeListener = function (element, fn) {
-        let uiManager = $('cq-ui-manager');
-        if (uiManager.length > 0) {
-            uiManager = uiManager[0];
-            uiManager.registerForResize(element);
-        }
+        const uiManager = UIManager.instance;
+        uiManager.registerForResize(element);
+
         if (!element.__resizeListeners__) {
             element.__resizeListeners__ = [];
             if (attachEvent) {
@@ -112,11 +110,8 @@ export const claims = [];
      * @memberof CIQ
      */
     CIQ.removeResizeListener = function (element, fn) {
-        let uiManager = $('cq-ui-manager');
-        if (uiManager.length > 0) {
-            uiManager = uiManager[0];
-            uiManager.unregisterForResize(element);
-        }
+        const uiManager = UIManager.instance;
+        uiManager.unregisterForResize(element);
         element.__resizeListeners__.splice(element.__resizeListeners__.indexOf(fn), 1);
         if (!element.__resizeListeners__.length) {
             if (attachEvent) element.detachEvent('onresize', resizeListener);

@@ -7,7 +7,16 @@ import CIQ from 'chartiq';
  * @namespace WebComponents.cq-ui-manager
  * @memberof WebComponents
  */
-class UIManager extends HTMLElement {
+class UIManager {
+    static _instance;
+
+    static get instance() {
+        if (!UIManager._instance) {
+            UIManager._instance = new UIManager();
+        }
+
+        return UIManager._instance;
+    }
     /**
      * Prevents underlay clicks and handles tap events and callbacks.
      *
@@ -15,43 +24,27 @@ class UIManager extends HTMLElement {
      * @memberof WebComponents.cq-ui-manager
      * @alias createdCallback
      */
-    createdCallback() {
-        CIQ.installTapEvent($('body')[0], { preventUnderlayClick: false });
+    constructor() {
         this.activeMenuStack = [];
         this.registeredForResize = [];
         this.keystrokeHub = null; // KeystrokeHub should register itself here
 
-        let self = this;
+        document.addEventListener('DOMContentLoaded', () => {
+            CIQ.installTapEvent($('body')[0], { preventUnderlayClick: false });
 
-        function handleTap() {
-            self.closeTopMenu();
-        }
-        $('body').on('stxtap', handleTap);
-    }
+            $('body').on('stxtap', () => {
+                this.closeTopMenu();
+            });
 
-    /**
-     * Attach a callback to an individual component as part of the context
-     * @memberof WebComponents.cq-ui-manager
-     * @alias attachedCallback
-     */
-    attachedCallback() {
-        let self = this;
-        this.resize = function () {
-            let rr = self.registeredForResize;
-            for (let i = 0; i < rr.length; i++) {
-                if (typeof rr[i].resize === 'function') rr[i].resize();
-            }
-        };
-        window.addEventListener('resize', this.resize);
-    }
+            const resize = () => {
+                let rr = this.registeredForResize;
+                for (let i = 0; i < rr.length; i++) {
+                    if (typeof rr[i].resize === 'function') rr[i].resize();
+                }
+            };
 
-    /**
-     * Removes a callback from a component
-     * @memberof WebComponents.cq-ui-manager
-     * @alias detachedCallback
-     */
-    detachedCallback() {
-        window.removeEventListener('resize', this.resize);
+            window.addEventListener('resize', resize);
+        });
     }
 
     /**
@@ -251,4 +244,4 @@ class UIManager extends HTMLElement {
     }
 }
 
-document.registerElement('cq-ui-manager', UIManager);
+export default UIManager;
