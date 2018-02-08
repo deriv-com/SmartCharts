@@ -27,4 +27,4 @@ jobs:
 stages:
   - test
   - name: deploy
-    if: type IS push
+    if: not type in (pull_request)
