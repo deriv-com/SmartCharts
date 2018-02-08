@@ -2379,14 +2379,6 @@ cq-comparison-add-label {
 		display:none;
 	}
 }
-cq-comparison-plus {/* Plus icon image */
-	width:12px;
-	height:12px;
-	background-image:url(img/stx-sprite-ui.svg);
-	background-position: -532px -32px;
-	margin-right:4px;
-}
-
 
 /* Add Comparison Module */
 cq-comparison-add {
@@ -2394,8 +2386,6 @@ cq-comparison-add {
 	position:absolute;
 	top: -15px;
 	white-space: nowrap;
-	min-width: 210px;
-	height: 36px;
 	opacity:0;
 	background:darken( $DEFAULT-main, 2% );
 	@include border-radius($soft-corners);
