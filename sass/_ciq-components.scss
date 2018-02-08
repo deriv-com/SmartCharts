@@ -723,6 +723,7 @@ cq-lookup-input {
 
 	.stxMenuActive & input {
 		background: darken( $DEFAULT-main, 1% );
+		height:36px;
 	}
 	& input {
 		width: 100%;
@@ -1028,7 +1029,7 @@ cq-toggle {
 }
 
 cq-lookup-results {
-	display: block;
+	display: flex;
 	text-align: left;
 	background-color: $DEFAULT-menu-bg;
 	margin-top: 5px;
@@ -1046,10 +1047,11 @@ cq-lookup-results {
 }
 
 cq-lookup-filters { /* Results Filter Row */
+    display: flex;
+    flex-direction: column;
 	text-align:center;
-	height:45px;
 	padding:0;
-	border-bottom:solid thin $DEFAULT-border-subtle;
+	border-right:solid thin $DEFAULT-border-subtle;
 }
 
 cq-lookup-filters cq-filter { /* Filter Options */
@@ -1057,7 +1059,6 @@ cq-lookup-filters cq-filter { /* Filter Options */
 	padding:0 5px;
 	display:inline-block;
 	line-height:45px;
-	height:42px;
 	font-size:12px;
 	text-transform: uppercase;
 	color: $DEFAULT-text-subtle;
@@ -2298,6 +2299,10 @@ cq-chart-title {
 	line-height: 22px;
 	font-size: 12px;
 	text-align: left;
+	cq-lookup {
+		position: absolute;
+		left: 3em;
+	}
 }
 cq-chart-title.stx-show{
 	display:inline-block;
@@ -2379,14 +2384,6 @@ cq-comparison-add-label {
 		display:none;
 	}
 }
-cq-comparison-plus {/* Plus icon image */
-	width:12px;
-	height:12px;
-	background-image:url(img/stx-sprite-ui.svg);
-	background-position: -532px -32px;
-	margin-right:4px;
-}
-
 
 /* Add Comparison Module */
 cq-comparison-add {
@@ -2394,8 +2391,6 @@ cq-comparison-add {
 	position:absolute;
 	top: -15px;
 	white-space: nowrap;
-	min-width: 210px;
-	height: 36px;
 	opacity:0;
 	background:darken( $DEFAULT-main, 2% );
 	@include border-radius($soft-corners);
@@ -2422,7 +2417,6 @@ cq-comparison-add {
 
 	& input {
 		border:none;
-		height:36px;
 		@include box-sizing(border-box);
 		/*@include placeholder {
 			color: mix(#000, $DEFAULT-main, 40% );

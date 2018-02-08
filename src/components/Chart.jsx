@@ -22,7 +22,7 @@ import './Attribution';
 import './ChartTitle';
 import './Close';
 import './ColorPicker';
-import './Comparison';
+import './ComparisonList';
 import './DrawingToolbar';
 import './FibSettingsDialog';
 import './Loader';
@@ -552,7 +552,7 @@ class Chart extends Component {
                                 <cq-redo class="ciq-btn">Redo</cq-redo>
                             </cq-undo-section>
                         </cq-toolbar>
-                        <div className="chartContainer" id={`binarychartiq-container-${this._id}`}>
+                        <div className="chartContainer" id={this._containerId}>
 
                             <ChartControls />
 
@@ -608,46 +608,6 @@ class Chart extends Component {
                                 </cq-chart-price>
                             </cq-chart-title>
                             <cq-comparison cq-marker>
-                                <cq-menu class="cq-comparison-new">
-                                    <cq-comparison-add-label class="ciq-no-share">
-                                        <cq-comparison-plus />
-                                        <span>Compare</span>
-                                        <span>...</span>
-                                    </cq-comparison-add-label>
-                                    <cq-comparison-add>
-                                        <cq-comparison-lookup-frame>
-                                            <cq-lookup cq-keystroke-claim cq-uppercase>
-                                                <cq-lookup-input cq-no-close>
-                                                    <input
-                                                        type="text"
-                                                        cq-focus=""
-                                                        spellCheck="off"
-                                                        autoComplete="off"
-                                                        autoCorrect="off"
-                                                        autoCapitalize="off"
-                                                        placeholder="Enter Symbol"
-                                                    />
-                                                    <cq-lookup-icon />
-                                                </cq-lookup-input>
-                                                <cq-lookup-results>
-                                                    <cq-lookup-filters cq-no-close>
-                                                        <cq-filter class="true">All</cq-filter>
-                                                        <cq-filter>Forex</cq-filter>
-                                                        <cq-filter>Indices</cq-filter>
-                                                        <cq-filter>OTC</cq-filter>
-                                                        <cq-filter>Commodities</cq-filter>
-                                                        <cq-filter>Volatility</cq-filter>
-                                                    </cq-lookup-filters>
-                                                    <cq-scroll />
-                                                </cq-lookup-results>
-                                            </cq-lookup>
-                                        </cq-comparison-lookup-frame>
-                                        <cq-swatch cq-no-close />
-                                        <span>
-                                            <cq-accept-btn class="stx-btn">ADD</cq-accept-btn>
-                                        </span>
-                                    </cq-comparison-add>
-                                </cq-menu>
                                 <cq-comparison-key
                                     dangerouslySetInnerHTML={{
                                         /* TODO: fix this */

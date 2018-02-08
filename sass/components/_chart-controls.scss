@@ -101,6 +101,15 @@ $selected-background-color: #e4e6f1;
             width: 200px;
         }
     }
+
+    cq-comparison-add {
+        cq-comparison-lookup-frame {
+            position: absolute;
+            bottom: 0em;
+            left: -10em;
+        }
+    }
+
     .ciq-ic-indicator-normal {
         background: url('icons/indicators/ic-indicator-normal-light.svg');
     }
@@ -109,5 +118,8 @@ $selected-background-color: #e4e6f1;
     }
     .ciq-draw > span {
         background: url('icons/drawing tools/ic-drawingtools-normal-light.svg');
+    }
+    .ciq-ic-comparison {
+      background: url('icons/comparison/ic-comparison-normal-light.svg');
     }
 }
