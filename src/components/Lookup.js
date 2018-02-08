@@ -72,10 +72,7 @@ class Lookup extends ContextTag {
      * @memberof WebComponents.cq-lookup
      */
     setDriver(driver) {
-        const self = this;
-        driver.activeSymbols.then((activeSymbols) => {
-            self.results(activeSymbols);
-        });
+        if (driver.symbols) this.results(driver.symbols);
         this.params.driver = driver;
     }
 

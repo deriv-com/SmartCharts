@@ -2,6 +2,7 @@ import $ from 'jquery';
 import CIQ from 'chartiq';
 import { getParents } from './ui/utils';
 import ContextTag from './ui/ContextTag';
+import UIManager from './ui/UIManager';
 
 /**
  * Scroll web component `<cq-scroll>`.
@@ -99,7 +100,7 @@ class Scroll extends ContextTag {
     attachedCallback() {
         if (this.attached) return;
         super.attachedCallback();
-        this.uiManager = $$$('cq-ui-manager');
+        this.uiManager = UIManager.instance;
 
         this.addClaim(this);
 

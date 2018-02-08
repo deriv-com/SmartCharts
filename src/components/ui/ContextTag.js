@@ -2,7 +2,7 @@ import $ from 'jquery';
 import CIQ from 'chartiq';
 import BaseComponent from './BaseComponent';
 import Context from './Context';
-import { getParents } from './utils';
+import UIManager from './UIManager';
 
 /**
  * Abstract class for web components that use a {@link CIQ.UI.Context} in order to gain access to a ChartEngine
@@ -52,8 +52,7 @@ class ContextTag extends BaseComponent {
      */
     setContextPrivate(context) {
         this.context = context;
-        this.uiManager = $('cq-ui-manager');
-        if (this.uiManager.length > 0) this.uiManager = this.uiManager[0];
+        this.uiManager = UIManager.instance;
 
         let node = $(this);
         if (typeof (node.attr('cq-marker')) !== 'undefined') {

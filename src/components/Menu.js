@@ -1,4 +1,5 @@
 import $ from 'jquery';
+import UIManager from './ui/UIManager';
 
 /**
  * Menu web component `<cq-menu>`.
@@ -32,8 +33,7 @@ class Menu extends HTMLElement {
 
     attachedCallback() {
         if (this.attached) return;
-        this.uiManager = $('cq-ui-manager');
-        if (this.uiManager.length > 0) this.uiManager = this.uiManager[0];
+        this.uiManager = UIManager.instance;
 
         this.attached = true;
 

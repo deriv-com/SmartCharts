@@ -2,6 +2,7 @@ import CIQ from 'chartiq';
 import { createElement } from './ui/utils';
 import VDom from './ui/VDom';
 import BaseComponent from './ui/BaseComponent';
+import UIManager from './ui/UIManager';
 
 /**
  * Dialog web component `<cq-dialog>`.
@@ -45,13 +46,13 @@ class Dialog extends BaseComponent {
             self.tap(e);
         });
 
-        let uiManager = $$$('cq-ui-manager');
+        let uiManager = UIManager.instance;
         uiManager.registerForResize(this);
         this.uiManager = uiManager;
     }
 
     detachedCallback() {
-        let uiManager = $$$('cq-ui-manager');
+        let uiManager = UIManager.instance;
         uiManager.unregisterForResize(this);
     }
 

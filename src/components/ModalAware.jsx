@@ -1,6 +1,7 @@
+import $ from 'jquery';
 import React, { Component } from 'react';
 import contextAware from '../contextAware';
-import $ from 'jquery';
+import UIManager from './ui/UIManager';
 
 /**
  * A component that is modally aware of the chart
@@ -11,7 +12,7 @@ import $ from 'jquery';
  */
 class ModalAware extends Component {
     onContextReady(context) {
-        this._uiManager = $$$('cq-ui-manager');
+        this._uiManager = UIManager.instance;
         this._context = context;
     }
 
@@ -23,7 +24,6 @@ class ModalAware extends Component {
     modalBegin = () => {
         if (!this._context) return;
         this._context.stx.modalBegin();
-        console.log('bigbigbigbig');
     }
 
     /**

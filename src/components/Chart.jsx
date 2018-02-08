@@ -3,80 +3,94 @@ import $ from 'jquery';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import CIQ from 'chartiq'; // eslint-disable-line
-import StreamManager from './StreamManager';
-import Feed from './Feed';
-import ActiveSymbolDriver from './ActiveSymbolDriver';
-import ConnectionManager from './ConnectionManager';
-import Context from './components/ui/Context';
+import StreamManager from '../StreamManager';
+import Feed from '../Feed';
+import ActiveSymbolDriver from '../ActiveSymbolDriver';
+import ConnectionManager from '../ConnectionManager';
+import Context from '../components/ui/Context';
 
-import '../chartiq/html2canvas';
-import '../chartiq/iscroll';
+import '../../chartiq/html2canvas';
+import '../../chartiq/iscroll';
 /* css + scss */
-import '../css/stx-chart.css';
-import '../sass/chartiq.scss';
+import '../../css/stx-chart.css';
+import '../../sass/chartiq.scss';
 
-import './AddOns';
-import './Plugin';
+import '../AddOns';
+import '../Plugin';
 
-import './components/Attribution';
-import './components/ChartTitle';
-import './components/Close';
-import './components/ColorPicker';
-import './components/Comparison';
-import './components/DrawingToolbar';
-import './components/FibSettingsDialog';
-import './components/Loader';
-import './components/Lookup';
-import './components/Menu';
-import './components/MenuDropDown';
-import './components/Redo';
-import './components/Scroll';
-import './components/ShowRange';
-import './components/StudyContext';
-import './components/StudyDialog';
-import './components/StudyInput';
-import './components/StudyOutput';
-import './components/StudyParameter';
-import './components/Swatch';
-import './components/Toggle';
-import './components/Undo';
-import './components/ViewDialog';
-import './components/Clickable';
-import ChartControls from './components/ChartControls.jsx';
-import PendingPromise from './utils/PendingPromise';
-import { TradeEndLine, TradeStartLine } from './draw/DateLine';
+import './Attribution';
+import './ChartTitle';
+import './Close';
+import './ColorPicker';
+import './Comparison';
+import './DrawingToolbar';
+import './FibSettingsDialog';
+import './Loader';
+import './Lookup';
+import './Menu';
+import './MenuDropDown';
+import './Redo';
+import './Scroll';
+import './ShowRange';
+import './StudyContext';
+import './StudyDialog';
+import './StudyInput';
+import './StudyOutput';
+import './StudyParameter';
+import './Swatch';
+import './Toggle';
+import './Undo';
+import './ViewDialog';
+import './Clickable';
+import ChartControls from './ChartControls.jsx';
+import PendingPromise from '../utils/PendingPromise';
+import { TradeEndLine, TradeStartLine } from '../draw/DateLine';
 
-class BinaryChartiq extends Component {
+class Chart extends Component {
     static childContextTypes = { promise: PropTypes.object };
 
     constructor() {
         super();
         this._contextPromise = new PendingPromise();
+        this._driver = new ActiveSymbolDriver();
     }
 
     static initConnection() {
-        if (BinaryChartiq._connectionManager === undefined) {
-            BinaryChartiq._connectionManager = new ConnectionManager({
+        if (Chart._connectionManager === undefined) {
+            Chart._connectionManager = new ConnectionManager({
                 appId: 1,
                 language: 'en',
                 endpoint: 'wss://frontend.binaryws.com/websockets/v3',
             });
-            BinaryChartiq._streamManager = new StreamManager(BinaryChartiq._connectionManager);
+            Chart._streamManager = new StreamManager(Chart._connectionManager);
         }
     }
 
     static getConnectionManager() {
-        BinaryChartiq.initConnection();
-        return BinaryChartiq._connectionManager;
+        Chart.initConnection();
+        return Chart._connectionManager;
     }
 
     static getStreamManager() {
-        BinaryChartiq.initConnection();
-        return BinaryChartiq._streamManager;
+        Chart.initConnection();
+        return Chart._streamManager;
     }
 
     getChildContext() {
         return { promise: this._contextPromise };
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.symbols && this.UIContext) {
+            this._driver.symbols = nextProps.symbols.active_symbols;
+            // update lookup with new symbols
+            this.UIContext.setLookupDriver(this._driver);
+            // TODO: Anti-pattern, but we need access to Lookup. May change once ported to React
+            const lookups = $$$(`#${this._elementId}`).querySelectorAll('cq-lookup');
+            for (const l of lookups) {
+                l.results(this._driver.symbols);
+            }
+        }
     }
 
     componentWillMount() {
@@ -89,9 +103,8 @@ class BinaryChartiq extends Component {
     }
 
     componentDidMount() {
-        let UIContext = null;
-        const streamManager = BinaryChartiq.getStreamManager();
-        const connectionManager = BinaryChartiq.getConnectionManager();
+        this.UIContext = null;
+        const streamManager = Chart.getStreamManager();
         const chartNode = $(`#${this._elementId}`);
 
         const stxx = new CIQ.ChartEngine({
@@ -142,7 +155,7 @@ class BinaryChartiq extends Component {
         };
 
         const resizeScreen = () => {
-            if (!UIContext) return;
+            if (!this.UIContext) return;
             updateHeight();
             let sidePanel = chartNode.find('cq-side-panel')[0];
             if (sidePanel) {
@@ -236,10 +249,10 @@ class BinaryChartiq extends Component {
         const startUI = () => {
             stxx.chart.allowScrollPast = false;
             const contextNode = chartNode;
-            UIContext = new Context(stxx, contextNode);
-            new CIQ.UI.Layout(UIContext);
+            this.UIContext = new Context(stxx, contextNode);
+            new CIQ.UI.Layout(this.UIContext);
 
-            UIContext.changeSymbol = function (data) {
+            this.UIContext.changeSymbol = function (data) {
                 let stx = this.stx;
                 if (this.loader) this.loader.show();
 
@@ -264,20 +277,18 @@ class BinaryChartiq extends Component {
                 });
             };
 
-            const driver = new ActiveSymbolDriver(connectionManager);
-
-            UIContext.setLookupDriver(driver);
+            this.UIContext.setLookupDriver(this._driver);
 
             const symbolLookup = chartNode.find('.ciq-search cq-lookup')[0];
             symbolLookup.setCallback((context, data) => {
                 context.changeSymbol(data);
             });
 
-            new CIQ.UI.KeystrokeHub($$$('body'), UIContext, {
+            new CIQ.UI.KeystrokeHub($$$('body'), this.UIContext, {
                 cb: CIQ.UI.KeystrokeHub.defaultHotKeys,
             });
 
-            new CIQ.UI.StudyEdit(null, UIContext);
+            new CIQ.UI.StudyEdit(null, this.UIContext);
 
             let UIStorage = new CIQ.NameValueStore();
 
@@ -317,14 +328,14 @@ class BinaryChartiq extends Component {
                 },
                 /* dialogBeforeAddingStudy: {"rsi": true} // here's how to always show a dialog before adding the study */
             };
-            let UIStudyMenu = new CIQ.UI.StudyMenu(chartNode.find('*[cq-studies]'), UIContext, params);
+            let UIStudyMenu = new CIQ.UI.StudyMenu(chartNode.find('*[cq-studies]'), this.UIContext, params);
             UIStudyMenu.renderMenu();
 
 
-            if (UIContext.loader) UIContext.loader.show();
+            if (this.UIContext.loader) this.UIContext.loader.show();
             restorePreferences();
             restoreLayout(stxx, () => {
-                if (UIContext.loader) UIContext.loader.hide();
+                if (this.UIContext.loader) this.UIContext.loader.hide();
             });
 
             if (!stxx.chart.symbol) {
@@ -333,7 +344,7 @@ class BinaryChartiq extends Component {
                 }); // load an initial symbol
             }
 
-            this._contextPromise.resolve(UIContext);
+            this._contextPromise.resolve(this.UIContext);
             CIQ.UI.begin();
             stxx.setStyle('stx_line_chart', 'color', '#4DAFEE'); // TODO => why is not working in css?
 
@@ -357,8 +368,7 @@ class BinaryChartiq extends Component {
             });
         }
 
-        $(window)
-            .resize(resizeScreen);
+        $(window).resize(resizeScreen);
     }
 
     render() {
@@ -820,4 +830,4 @@ class BinaryChartiq extends Component {
     }
 }
 
-export default BinaryChartiq;
+export default Chart;
