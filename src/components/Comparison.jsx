@@ -90,7 +90,8 @@ class Comparison extends Component {
     }
 
     componentDidMount() {
-        this.cqLookup.setCallback(function (self) {
+        const self = this;
+        this.cqLookup.setCallback(function () {
             return function () {
                 self.selectItem(...arguments);
             };
