@@ -1,0 +1,63 @@
+
+.stx-chart-panel.stx-show {/* Hide default Chart Title and Icons */
+    display:none;
+}
+cq-chart-title {
+    padding: 0.7em 1em;
+    cursor: pointer;
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.12);
+    display: none;
+    position:relative;
+    background: #fff;
+    float:none;
+    margin:10px 10px;
+    color: #333;
+    cq-symbol, cq-chart-price {
+        font-family:$heading-font;
+        font-weight:700;
+        line-height: 22px;
+        font-size: 12px;
+        text-align: left;
+    }
+    cq-menu {
+        left: 0.3em;
+    }
+    cq-lookup {
+        width: 130px;
+    }
+}
+cq-chart-title.stx-show{
+    display:inline-block;
+}
+cq-chart-title cq-symbol {
+    //	display:inline-block;
+    font-size:28px;
+    //	text-transform: uppercase;
+    //	line-height:30px;
+}
+cq-chart-title cq-chart-price {
+    font-family:$base-font;
+    display:inline-block;
+    line-height:13px;
+    font-size:11px;
+    margin-left:5px;
+    font-weight:500;
+    color:$DEFAULT-text-medium;
+    vertical-align:text-bottom;
+}
+cq-chart-title cq-chart-price > * {position:relative;}
+cq-chart-title cq-chart-price cq-change:after {/* Up/Down Arrow indicators */
+    content:"";
+    display: block;
+    height: 12px;
+    width: 12px;
+    float:left;
+}
+cq-chart-title cq-chart-price.stx-up cq-change:after {
+    background-image: url(img/stx-sprite-ui.svg);
+    background-position: -633px -31px;
+}
+cq-chart-title cq-chart-price.stx-down cq-change:after {
+    background-image: url(img/stx-sprite-ui.svg);
+    background-position: -683px -31px;
+}

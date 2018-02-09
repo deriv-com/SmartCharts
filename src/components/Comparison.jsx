@@ -131,9 +131,9 @@ class Comparison extends Component {
                                     <cq-filter class="true">All</cq-filter>
                                     <cq-filter>Forex</cq-filter>
                                     <cq-filter>Indices</cq-filter>
-                                    <cq-filter>OTC</cq-filter>
+                                    <cq-filter>OTC Stocks</cq-filter>
                                     <cq-filter>Commodities</cq-filter>
-                                    <cq-filter>Volatility</cq-filter>
+                                    <cq-filter>Volatility Indices</cq-filter>
                                 </cq-lookup-filters>
                                 <cq-scroll />
                             </cq-lookup-results>

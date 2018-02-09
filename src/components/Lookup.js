@@ -104,6 +104,7 @@ class Lookup extends ContextTag {
                 } else {
                     self.currentFilter = this.innerHTML;
                 }
+
                 self.acceptText(self.input[0].value, self.currentFilter);
             });
         }
@@ -117,6 +118,10 @@ class Lookup extends ContextTag {
             // add keyboard claim for entire body
             this.addClaim(this);
         }
+    }
+
+    getCategoryId(txt) {
+        return `category-${txt}`.replace(/ /g, '');
     }
 
     /**
@@ -290,8 +295,20 @@ class Lookup extends ContextTag {
      */
     results(arr) {
         this.resultList.empty();
+        if (arr.length === 0) return;
+
         const activeSymbol = this.context.stx.chart.symbol;
+        let market = arr[0].data.market_display_name;
+        const createCategoryTitleElement = () => createElement(`<div class="category-title" id="${this.getCategoryId(market)}">${market}</div>`);
+        const createCategoryElement = () => createElement('<div class="category"></div>');
+        let currentCategoryElement = createCategoryElement();
         for (const item of arr) {
+            if (market !== item.data.market_display_name) {
+                this.resultList.append(createCategoryTitleElement());
+                this.resultList.append(currentCategoryElement);
+                currentCategoryElement = createCategoryElement();
+                market = item.data.market_display_name;
+            }
             const { symbol, exchange_is_open } = item.data;
             const isActiveSymbol = activeSymbol === symbol;
             const disabled = (exchange_is_open && !isActiveSymbol) ? '' : 'disabled';
@@ -303,7 +320,7 @@ class Lookup extends ContextTag {
             }
             nodeText += '</cq-item>';
             let node = createElement(nodeText);
-            this.resultList.append(node);
+            currentCategoryElement.append(node);
             node.selectFC = () => {
                 CIQ.blur(self.input);
                 this.selectItem(item.data);
@@ -315,6 +332,8 @@ class Lookup extends ContextTag {
                 node.addEventListener('stxtap', node.selectFC);
             }
         }
+        this.resultList.append(createCategoryTitleElement());
+        this.resultList.append(currentCategoryElement);
         let scrollable = this.node.find('cq-scroll');
         if (scrollable.length) scrollable[0].top();
     }
