@@ -5,11 +5,14 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 const config = {
     devtool: 'source-map',
-    entry: ['babel-polyfill', path.resolve(__dirname, './src/index.js')],
+    entry: ['babel-polyfill', path.resolve(__dirname, './src/BinaryChartiq.js')],
     output: {
         publicPath: '/dist/',
         path: path.resolve(__dirname, 'dist'),
-        filename: 'bundle.js',
+        filename: 'binarychartiq.js',
+        libraryExport: 'default',
+        library: 'BinaryChartiq',
+        libraryTarget: 'umd',
     },
     module: {
         rules: [

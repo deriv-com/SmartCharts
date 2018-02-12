@@ -9,7 +9,6 @@ import ActiveSymbolDriver from '../ActiveSymbolDriver';
 import ConnectionManager from '../ConnectionManager';
 import Context from '../components/ui/Context';
 
-import '../../chartiq/html2canvas';
 import '../../chartiq/iscroll';
 /* css + scss */
 import '../../css/stx-chart.css';
@@ -45,6 +44,7 @@ import './Clickable';
 import ChartControls from './ChartControls.jsx';
 import PendingPromise from '../utils/PendingPromise';
 import { TradeEndLine, TradeStartLine } from '../draw/DateLine';
+import BinaryChartiq from '../BinaryChartiq';
 
 class Chart extends Component {
     static childContextTypes = { promise: PropTypes.object };
@@ -53,27 +53,6 @@ class Chart extends Component {
         super();
         this._contextPromise = new PendingPromise();
         this._driver = new ActiveSymbolDriver();
-    }
-
-    static initConnection() {
-        if (Chart._connectionManager === undefined) {
-            Chart._connectionManager = new ConnectionManager({
-                appId: 1,
-                language: 'en',
-                endpoint: 'wss://frontend.binaryws.com/websockets/v3',
-            });
-            Chart._streamManager = new StreamManager(Chart._connectionManager);
-        }
-    }
-
-    static getConnectionManager() {
-        Chart.initConnection();
-        return Chart._connectionManager;
-    }
-
-    static getStreamManager() {
-        Chart.initConnection();
-        return Chart._streamManager;
     }
 
     getChildContext() {
@@ -104,7 +83,7 @@ class Chart extends Component {
 
     componentDidMount() {
         this.UIContext = null;
-        const streamManager = Chart.getStreamManager();
+        const streamManager = BinaryChartiq.getStreamManager();
         const chartNode = $(`#${this._elementId}`);
 
         const stxx = new CIQ.ChartEngine({

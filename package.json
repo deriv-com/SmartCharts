@@ -51,6 +51,7 @@
   },
   "dependencies": {
     "event-emitter-es6": "^1.1.5",
+    "html2canvas": "^1.0.0-alpha.9",
     "object.observe": "^0.2.6",
     "prop-types": "^15.6.0",
     "react": "^16.2.0",
