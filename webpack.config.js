@@ -29,7 +29,14 @@ const config = {
             },
             {
                 test: /\.(png|cur|jp(e*)g|svg)$/,
-                use: ['url-loader'],
+                use: [
+                    'url-loader',
+                    {
+                        loader: 'image-webpack-loader',
+                        options: {
+                            bypassOnDebug: true,
+                        },
+                    }],
             },
             { parser: { amd: false } },
             {
