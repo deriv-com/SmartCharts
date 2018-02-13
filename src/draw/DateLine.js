@@ -89,9 +89,7 @@ class DateLine extends Line {
         if (this.visible && this._chart.dataSet) {
             if (this._followsCurrentQuote) {
                 this._updateNowPosition();
-            } else {
-                if (this._date) this._positionAtDate(this._date);
-            }
+            } else if (this._date) this._positionAtDate(this._date);
         }
     }
 
