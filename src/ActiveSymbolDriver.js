@@ -24,7 +24,6 @@ class ActiveSymbolDriver extends Driver {
                     name: s.display_name,
                     market_display_name: s.market_display_name,
                     exchange_is_open: s.exchange_is_open,
-                    exchDisp: s.market,
                 },
                 display: [s.display_name],
             });
