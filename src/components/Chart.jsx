@@ -43,7 +43,7 @@ import './ViewDialog';
 import './Clickable';
 import ChartControls from './ChartControls.jsx';
 import PendingPromise from '../utils/PendingPromise';
-import { TradeEndLine, TradeStartLine } from '../draw/DateLine';
+
 import BinaryChartiq from '../BinaryChartiq';
 
 class Chart extends Component {
@@ -203,25 +203,11 @@ class Chart extends Component {
                 .triggerHandler('stxtap');
         };
 
-        let start,
-            end;
-        const setupTradeDateLines = () => {
-            if (start === undefined) {
-                start = new TradeStartLine({ stx: stxx });
-                // start.followsCurrentQuote = true;
-                end = new TradeEndLine({ stx: stxx });
-                end.epoch += 25;
-            } else {
-                end.epoch = (new Date().getTime() / 1000) + 25;
-            }
-        };
-
         stxx.addEventListener('layout', saveLayout);
         stxx.addEventListener('symbolChange', saveLayout);
         stxx.addEventListener('drawing', saveDrawings);
         stxx.addEventListener('newChart', () => {
             retoggleEvents();
-            // setupTradeDateLines();
         });
         stxx.addEventListener('preferences', savePreferences);
 
