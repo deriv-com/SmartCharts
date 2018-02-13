@@ -2,6 +2,7 @@ const webpack = require('webpack');
 const path = require('path');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin')
 
 const config = {
     devtool: 'source-map',
@@ -57,6 +58,9 @@ const config = {
         new ExtractTextPlugin({
             filename: 'binarychartiq.css',
         }),
+        new CopyWebpackPlugin([
+            { from: './chartiq/chartiq.js' },
+        ])
     ],
     externals: {
         jquery: 'jQuery',
