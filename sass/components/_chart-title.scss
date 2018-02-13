@@ -44,6 +44,7 @@ cq-chart-title cq-chart-price {
     font-weight:500;
     color:$DEFAULT-text-medium;
     vertical-align:text-bottom;
+    min-width: 7em;
 }
 cq-chart-title cq-chart-price > * {position:relative;}
 cq-chart-title cq-chart-price cq-change:after {/* Up/Down Arrow indicators */
