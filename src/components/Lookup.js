@@ -61,6 +61,7 @@ class Lookup extends ContextTag {
      * @memberof WebComponents.cq-lookup
      */
     setCallback(cb) {
+        if (!this.params) this.params = {};
         this.params.cb = cb;
     }
 
