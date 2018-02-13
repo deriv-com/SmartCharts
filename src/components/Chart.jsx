@@ -570,8 +570,7 @@ class Chart extends Component {
                                         <cq-current-price cq-animate />
                                         <cq-change>
                                             <div className="ico" />
-                                            <cq-todays-change />
-                                            <cq-todays-change-pct />
+                                            <cq-todays-change /> (<cq-todays-change-pct />)
                                         </cq-change>
                                     </cq-chart-price>
                                 </cq-chart-title>

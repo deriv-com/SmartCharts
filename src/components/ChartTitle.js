@@ -102,7 +102,7 @@ class ChartTitle extends ModalTag {
         let internationalizer = stx.internationalizer;
         let priceChanged = false;
 
-        symbolDiv.textBetter(symbol);
+        symbolDiv.textBetter(stx.chart.symbolObject.name);
 
         let todaysChange = '',
             todaysChangePct = 0,
