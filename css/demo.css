@@ -1,0 +1,13 @@
+/* Used for demo app only. Do not deploy with library! */
+
+#root {
+  display: flex;
+
+  /*cq-context {*/
+    /*width: 50%;*/
+  /*}*/
+
+  cq-context#binarychartiq-2 {
+    left: 50%;
+  }
+}
