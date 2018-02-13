@@ -3,7 +3,7 @@ import $ from 'jquery';
 
 import '../sass/demo.scss';
 
-import BinaryChartiq from './BinaryChartiq';
+import BinaryChartiq from './BinaryChartiq.jsx';
 import Chart from './components/Chart.jsx';
 
 

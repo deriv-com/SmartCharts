@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import contextAware from '../contextAware';
-import {Timeperiod} from './Timeperiod.jsx';
 import '../../sass/components/_chart-size.scss';
+import {getTimeUnit} from '../store/utils';
 
 class ChartSize extends Component {
     state = {text: ''};
@@ -11,7 +11,7 @@ class ChartSize extends Component {
             const {stx, layout} = data;
             const interval = +layout.interval ? Math.floor(layout.interval / 60) || layout.interval : 1;
             let total = interval * stx.chart.maxTicks;
-            let timeUnit = Timeperiod.getTimeUnit(layout);
+            let timeUnit = getTimeUnit(layout);
             console.log(total);
             if(total >= 1000) {
                 total = Math.round(total/60);
