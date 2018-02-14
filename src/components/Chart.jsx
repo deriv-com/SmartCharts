@@ -307,6 +307,9 @@ class Chart extends Component {
             if (!stxx.chart.symbol) {
                 symbolLookup.selectItem({
                     symbol: 'R_100',
+                    name: "Volatility 100 Index",
+                    market_display_name: "Volatility Indices",
+                    exchange_is_open: 1
                 }); // load an initial symbol
             }
 
@@ -557,9 +560,9 @@ class Chart extends Component {
                                                     <cq-filter class="true">All</cq-filter>
                                                     <cq-filter>Forex</cq-filter>
                                                     <cq-filter>Indices</cq-filter>
-                                                    <cq-filter>OTC</cq-filter>
+                                                    <cq-filter>OTC Stocks</cq-filter>
                                                     <cq-filter>Commodities</cq-filter>
-                                                    <cq-filter>Volatility</cq-filter>
+                                                    <cq-filter>Volatility Indices</cq-filter>
                                                 </cq-lookup-filters>
                                                 <cq-scroll />
                                             </cq-lookup-results>
