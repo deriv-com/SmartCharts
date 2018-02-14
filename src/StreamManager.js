@@ -23,22 +23,27 @@ class Subscription {
             style: this._granularity ? 'candles' : 'ticks',
             granularity: this._granularity,
         };
+        const handleNoStream = (code) => {
+            if (/^(MarketIsClosed|NoRealtimeQuotes)$/.test(code)) {
+                this._isMarketClosed = true;
+                delete req.subscribe;
+                return this._connection.send(
+                    req,
+                    Subscription.DEFAULT_TIMEOUT,
+                );
+            }
+        }
         this._response = this._connection
             .send(req, Subscription.DEFAULT_TIMEOUT)
             .catch((up) => {
-                if (/^(MarketIsClosed|NoRealtimeQuotes)$/.test(up.code)) {
-                    this._isMarketClosed = true;
-                    delete req.subscribe;
-                    return this._connection.send(
-                        req,
-                        Subscription.DEFAULT_TIMEOUT,
-                    );
-                }
-                // else
+                const x = handleNoStream(up.code);
+                if (x) return x;
                 throw up;
             })
             .then((data) => {
                 if (data.error) {
+                    const x = handleNoStream(data.error.code);
+                    if (x) return x;
                     const up = new Error(data.error.message);
                     up.response = data;
                     throw up;
