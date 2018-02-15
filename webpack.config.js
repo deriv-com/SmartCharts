@@ -2,14 +2,18 @@ const webpack = require('webpack');
 const path = require('path');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin')
 
 const config = {
     devtool: 'source-map',
-    entry: ['babel-polyfill', path.resolve(__dirname, './src/index.js')],
+    entry: ['babel-polyfill', path.resolve(__dirname, './src/BinaryChartiq.js')],
     output: {
         publicPath: '/dist/',
         path: path.resolve(__dirname, 'dist'),
-        filename: 'bundle.js',
+        filename: 'binarychartiq.js',
+        libraryExport: 'default',
+        library: 'BinaryChartiq',
+        libraryTarget: 'umd',
     },
     module: {
         rules: [
@@ -25,7 +29,14 @@ const config = {
             },
             {
                 test: /\.(png|cur|jp(e*)g|svg)$/,
-                use: ['url-loader'],
+                use: [
+                    'url-loader',
+                    {
+                        loader: 'image-webpack-loader',
+                        options: {
+                            bypassOnDebug: true,
+                        },
+                    }],
             },
             { parser: { amd: false } },
             {
@@ -54,12 +65,23 @@ const config = {
         new ExtractTextPlugin({
             filename: 'binarychartiq.css',
         }),
+        new CopyWebpackPlugin([
+            { from: './chartiq/chartiq.js' },
+        ])
     ],
     externals: {
         jquery: 'jQuery',
         chartiq: 'CIQ',
     },
 };
+
+if (process.env.NODE_ENV === 'production') {
+    config.plugins.push(new webpack.DefinePlugin({
+        'process.env': {
+            NODE_ENV: JSON.stringify('production'),
+        },
+    }),);
+}
 
 if (process.env.ANALYZE_BUNDLE) {
     config.plugins.push(new BundleAnalyzerPlugin());

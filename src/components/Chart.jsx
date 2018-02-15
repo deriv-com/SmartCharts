@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import CIQ from 'chartiq'; // eslint-disable-line
 
-import '../../chartiq/html2canvas';
 import '../../chartiq/iscroll';
 /* css + scss */
 import '../../css/stx-chart.css';
@@ -40,6 +39,7 @@ import './Clickable';
 import ChartControls from './ChartControls.jsx';
 import { MobxProvider, connect } from '../store/Connect';
 import MainStore from '../store';
+import BinaryChartiq from '../BinaryChartiq';
 
 const chartStore = MainStore.Instance.chart;
 class Chart extends Component {
@@ -280,9 +280,9 @@ class Chart extends Component {
                                                     <cq-filter class="true">All</cq-filter>
                                                     <cq-filter>Forex</cq-filter>
                                                     <cq-filter>Indices</cq-filter>
-                                                    <cq-filter>OTC</cq-filter>
+                                                    <cq-filter>OTC Stocks</cq-filter>
                                                     <cq-filter>Commodities</cq-filter>
-                                                    <cq-filter>Volatility</cq-filter>
+                                                    <cq-filter>Volatility Indices</cq-filter>
                                                 </cq-lookup-filters>
                                                 <cq-scroll />
                                             </cq-lookup-results>
@@ -293,8 +293,7 @@ class Chart extends Component {
                                         <cq-current-price cq-animate />
                                         <cq-change>
                                             <div className="ico" />
-                                            <cq-todays-change />
-                                            <cq-todays-change-pct />
+                                            <cq-todays-change /> (<cq-todays-change-pct />)
                                         </cq-change>
                                     </cq-chart-price>
                                 </cq-chart-title>

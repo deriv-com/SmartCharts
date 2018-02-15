@@ -1,0 +1,15 @@
+docs/
+chartiq/
+css/
+sass/
+src/
+npm-debug.log
+example/
+index.html
+design-v1.js
+.travis.yml
+webpack.config.js
+yarn.lock
+.babelrc
+.eslintignore
+.eslintrc

@@ -14,7 +14,8 @@ class ActiveSymbolDriver extends Driver {
     }
 
     _processSymbols(symbols) {
-        const processedSymbols = [];
+        let processedSymbols = [];
+        const order = ['Forex', 'Indices', 'OTC Stocks', 'Commodities', 'Volatility Indices'];
 
         for (const s of symbols) {
             processedSymbols.push({
@@ -23,13 +24,22 @@ class ActiveSymbolDriver extends Driver {
                     name: s.display_name,
                     market_display_name: s.market_display_name,
                     exchange_is_open: s.exchange_is_open,
-                    exchDisp: s.market,
                 },
-                display: [s.symbol, s.display_name, s.market.toUpperCase()],
+                display: [s.display_name],
             });
         }
 
-        return processedSymbols;
+        // Categorize symbols in order defined by another array; there's probably a more
+        // efficient algo for this, but for just~100 items it's not worth the effort
+        const orderedSymbols = [];
+        for (const o of order) {
+            for (const p of processedSymbols) {
+                if (o === p.data.market_display_name) {
+                    orderedSymbols.push(p);
+                }
+            }
+        }
+        return orderedSymbols;
     }
 
     set symbols(active_symbols) {
@@ -51,19 +61,8 @@ class ActiveSymbolDriver extends Driver {
         if (!this._symbols) return [];
 
         const reg = RegExp(text, 'i');
-        const result = [];
+        let result = [];
         let _filter = filter || 'All';
-
-        switch (_filter) {
-        case 'OTC':
-            _filter = 'OTC Stocks';
-            break;
-        case 'Volatility':
-            _filter = 'Volatility Indices';
-            break;
-        default:
-            break;
-        }
 
         for (const s of this._symbols) {
             const d = s.data;
