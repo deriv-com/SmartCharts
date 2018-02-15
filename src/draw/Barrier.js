@@ -147,7 +147,7 @@ class Barrier {
     }
 
     set visible(visible) {
-        if (this._visible === visible) return;
+        if (this._visible === visible) {return;}
 
         this._visible = visible;
 
@@ -237,7 +237,7 @@ class Barrier {
     }
 
     _drawShadedArea() {
-        if (!this.visible) return;
+        if (!this.visible) {return;}
 
         if (this._shadeState === Barrier.SHADE_ABOVE) {
             this._shadeAbove();

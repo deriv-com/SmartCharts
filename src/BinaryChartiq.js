@@ -46,7 +46,7 @@ class BinaryChartiq {
 
     constructor({ selector, symbols }) {
         this.selector = selector;
-        if (symbols) this.symbols = symbols;
+        if (symbols) {this.symbols = symbols;}
 
         this._updateRender();
     }

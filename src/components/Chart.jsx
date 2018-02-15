@@ -3,11 +3,6 @@ import $ from 'jquery';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import CIQ from 'chartiq'; // eslint-disable-line
-import StreamManager from '../StreamManager';
-import Feed from '../Feed';
-import ActiveSymbolDriver from '../ActiveSymbolDriver';
-import ConnectionManager from '../ConnectionManager';
-import Context from '../components/ui/Context';
 
 import '../../chartiq/iscroll';
 /* css + scss */
@@ -42,309 +37,34 @@ import './Undo';
 import './ViewDialog';
 import './Clickable';
 import ChartControls from './ChartControls.jsx';
-import PendingPromise from '../utils/PendingPromise';
-import { MobxProvider } from '../store/Connect';
+import { MobxProvider, connect } from '../store/Connect';
 import MainStore from '../store';
 import BinaryChartiq from '../BinaryChartiq';
 
+const chartStore = MainStore.Instance.chart;
 class Chart extends Component {
     static childContextTypes = { promise: PropTypes.object };
 
-    constructor() {
-        super();
-        this._contextPromise = new PendingPromise();
-        this._driver = new ActiveSymbolDriver();
+    static getConnectionManager() {
+        return chartStore.connectionManager;
     }
 
     getChildContext() {
-        return { promise: this._contextPromise };
+        return { promise: chartStore.contextPromise };
     }
 
     componentWillReceiveProps(nextProps) {
-        if (nextProps.symbols && this.UIContext) {
-            this._driver.symbols = nextProps.symbols.active_symbols;
-            // update lookup with new symbols
-            this.UIContext.setLookupDriver(this._driver);
-            // TODO: Anti-pattern, but we need access to Lookup. May change once ported to React
-            const lookups = $$$(`#${this._elementId}`).querySelectorAll('cq-lookup');
-            for (const l of lookups) {
-                l.results(this._driver.symbols);
-            }
-        }
-    }
-
-    componentWillMount() {
-        const { id } = this.props;
-        this._id = id;
-        this._elementId = `binarychartiq-${this._id}`;
-        this._containerId = `binarychartiq-container-${this._id}`;
-        this._preferenceKey = `binarychartiq-${this._id}-preference`;
-        this._layoutKey = `binarychartiq-${this._id}-layout`;
+        chartStore.setSymbols(nextProps.symbols);
     }
 
     componentDidMount() {
-        this.UIContext = null;
-        const streamManager = BinaryChartiq.getStreamManager();
-        const chartNode = $(`#${this._elementId}`);
-
-        const stxx = new CIQ.ChartEngine({
-            container: $$$(`#${this._containerId}`),
-        });
-
-        // Animation (using tension requires splines.js)
-        CIQ.Animation(stxx, { stayPut: true });
-
-        // connect chart to data
-        stxx.attachQuoteFeed(new Feed(streamManager, stxx), {
-            refreshInterval: null,
-        });
-
-        // Extended hours trading zones -- Make sure this is instantiated before calling startUI as a timing issue with may occur
-        new CIQ.ExtendedHours({
-            stx: stxx,
-            filter: true,
-        });
-
-        // Floating tooltip on mousehover
-        // comment in the following line if you want a tooltip to display when the crosshair toggle is turned on
-        // This should be used as an *alternative* to the HeadsUP (HUD).
-        new CIQ.Tooltip({
-            stx: stxx,
-            ohl: true,
-            volume: false,
-            series: true,
-            studies: true,
-        });
-
-        // Inactivity timer
-        new CIQ.InactivityTimer({
-            stx: stxx,
-            minutes: 30,
-        });
-
-        const updateHeight = () => {
-            const ciqNode = chartNode.find('.ciq-chart');
-            const ciqHeight = ciqNode.height();
-            const containerNode = $(`#${this._containerId}`);
-
-            if (ciqNode.hasClass('toolbar-on')) {
-                containerNode.height(ciqHeight - 45);
-            } else {
-                containerNode.height(ciqHeight);
-            }
-        };
-
-        const resizeScreen = () => {
-            if (!this.UIContext) return;
-            updateHeight();
-            let sidePanel = chartNode.find('cq-side-panel')[0];
-            if (sidePanel) {
-                chartNode.find('.ciq-chart-area')
-                    .css({ right: `${sidePanel.nonAnimatedWidth()}px` });
-                chartNode.find('cq-tradingcentral')
-                    .css({ 'margin-right': `${sidePanel.nonAnimatedWidth() + 15}px` });
-            }
-            stxx.resizeChart();
-            if (stxx.slider) stxx.slider.display(stxx.layout.rangeSlider);
-        };
-
-        function restoreDrawings(stx, symbol) {
-            let memory = CIQ.localStorage.getItem(symbol);
-            if (memory !== null) {
-                let parsed = JSON.parse(memory);
-                if (parsed) {
-                    stx.importDrawings(parsed);
-                    stx.draw();
-                }
-            }
-        }
-
-        const restoreLayout = (stx, cb) => {
-            const datum = CIQ.localStorage.getItem(this._layoutKey);
-            if (datum === null) return;
-
-            function closure() {
-                restoreDrawings(stx, stx.chart.symbol);
-                if (cb) cb();
-            }
-
-            stx.importLayout(JSON.parse(datum), {
-                managePeriodicity: true,
-                cb: closure,
-            });
-        };
-
-        // save the chart's layout when the symbol or layout changes
-        const saveLayout = (obj) => {
-            const s = JSON.stringify(obj.stx.exportLayout(true));
-            CIQ.localStorageSetItem(this._layoutKey, s);
-        };
-
-        const saveDrawings = (obj) => {
-            let tmp = obj.stx.exportDrawings();
-            if (tmp.length === 0) {
-                CIQ.localStorage.removeItem(obj.symbol);
-            } else {
-                CIQ.localStorageSetItem(obj.symbol, JSON.stringify(tmp));
-            }
-        };
-
-        const restorePreferences = () => {
-            let pref = CIQ.localStorage.getItem(this._preferenceKey);
-            if (pref) stxx.importPreferences(JSON.parse(pref));
-        };
-
-        const savePreferences = () => {
-            CIQ.localStorageSetItem(this._preferenceKey, JSON.stringify(stxx.exportPreferences()));
-        };
-
-        const retoggleEvents = () => {
-            let active = chartNode.find('.stx-markers .ciq-radio.ciq-active');
-            active.parent()
-                .triggerHandler('stxtap');
-        };
-
-        stxx.addEventListener('layout', saveLayout);
-        stxx.addEventListener('symbolChange', saveLayout);
-        stxx.addEventListener('drawing', saveDrawings);
-        stxx.addEventListener('newChart', () => {
-            retoggleEvents();
-        });
-        stxx.addEventListener('preferences', savePreferences);
-
-        const startUI = () => {
-            stxx.chart.allowScrollPast = false;
-            const contextNode = chartNode;
-            this.UIContext = new Context(stxx, contextNode);
-            new CIQ.UI.Layout(this.UIContext);
-
-            this.UIContext.changeSymbol = function (data) {
-                let stx = this.stx;
-                if (this.loader) this.loader.show();
-
-                // reset comparisons - remove this loop to transfer from symbol to symbol.
-                for (let field in stx.chart.series) {
-                    // keep studies
-                    if (stxx.chart.series[field].parameters.bucket !== 'study') stx.removeSeries(field);
-                }
-
-                let self = this;
-                stx.newChart(data, null, null, (err) => {
-                    if (err) {
-                        // TODO, symbol not found error
-                        if (self.loader) self.loader.hide();
-                        return;
-                    }
-                    // The user has changed the symbol, populate $("cq-chart-title")[0].previousClose with yesterday's closing price
-
-                    if (stx.tfc) stx.tfc.changeSymbol(); // Update trade from chart
-                    if (self.loader) self.loader.hide();
-                    restoreDrawings(stx, stx.chart.symbol);
-                });
-            };
-
-            this.UIContext.setLookupDriver(this._driver);
-
-            const symbolLookup = chartNode.find('.ciq-search cq-lookup')[0];
-            symbolLookup.setCallback((context, data) => {
-                context.changeSymbol(data);
-            });
-
-            new CIQ.UI.KeystrokeHub($$$('body'), this.UIContext, {
-                cb: CIQ.UI.KeystrokeHub.defaultHotKeys,
-            });
-
-            new CIQ.UI.StudyEdit(null, this.UIContext);
-
-            let UIStorage = new CIQ.NameValueStore();
-
-            const self = this;
-            chartNode.find('.ciq-draw')[0].registerCallback(function (value) {
-                const ciqChart = chartNode.find('.ciq-chart')[0];
-                if (value) {
-                    this.node.addClass('active');
-                    CIQ.appendClassName(ciqChart, 'toolbar-on');
-                } else {
-                    this.node.removeClass('active');
-                    CIQ.unappendClassName(ciqChart, 'toolbar-on');
-                }
-                updateHeight();
-                stxx.resizeChart();
-
-                // a little code here to remember what the previous drawing tool was
-                // and to re-enable it when the toolbar is reopened
-                if (value) {
-                    stxx.changeVectorType(this.priorVectorType);
-                } else {
-                    this.priorVectorType = stxx.currentVectorParameters.vectorType;
-                    stxx.changeVectorType('');
-                }
-            });
-
-            chartNode.find('cq-redo')[0].pairUp(chartNode.find('cq-undo'));
-
-            let params = {
-                excludedStudies: {
-                    Directional: true,
-                    Gopala: true,
-                    vchart: true,
-                },
-                alwaysDisplayDialog: {
-                    ma: true,
-                },
-                /* dialogBeforeAddingStudy: {"rsi": true} // here's how to always show a dialog before adding the study */
-            };
-            let UIStudyMenu = new CIQ.UI.StudyMenu(chartNode.find('*[cq-studies]'), this.UIContext, params);
-            UIStudyMenu.renderMenu();
-
-
-            if (this.UIContext.loader) this.UIContext.loader.show();
-            restorePreferences();
-            restoreLayout(stxx, () => {
-                if (this.UIContext.loader) this.UIContext.loader.hide();
-            });
-
-            if (!stxx.chart.symbol) {
-                symbolLookup.selectItem({
-                    symbol: 'R_100',
-                    name: "Volatility 100 Index",
-                    market_display_name: "Volatility Indices",
-                    exchange_is_open: 1
-                }); // load an initial symbol
-            }
-
-            this._contextPromise.resolve(this.UIContext);
-            MainStore.Instance.timeperiod.context = this.UIContext;
-            CIQ.UI.begin();
-            stxx.setStyle('stx_line_chart', 'color', '#4DAFEE'); // TODO => why is not working in css?
-
-            // CIQ.I18N.setLanguage(stxx, "zh"); // Optionally set a language for the UI, after it has been initialized, and translate.
-        };
-
-        // Range Slider; needs to be created before startUI() is called for custom themes to apply
-        new CIQ.RangeSlider({ stx: stxx });
-
-        let webComponentsSupported = ('registerElement' in document &&
-            'import' in document.createElement('link') &&
-            'content' in document.createElement('template'));
-
-        if (webComponentsSupported) {
-            startUI();
-            resizeScreen();
-        } else {
-            window.addEventListener('WebComponentsReady', () => {
-                startUI();
-                resizeScreen();
-            });
-        }
-
-        $(window).resize(resizeScreen);
+        chartStore.init(this.root);
     }
 
     render() {
         return (
             <MobxProvider store={MainStore.Instance}>
-                <cq-context id={this._elementId}>
+                <cq-context ref={(root) => { this.root = root; }}>
                     <cq-color-picker>
                         <cq-colors />
                     </cq-color-picker>
@@ -513,7 +233,7 @@ class Chart extends Component {
                                     <cq-redo class="ciq-btn">Redo</cq-redo>
                                 </cq-undo-section>
                             </cq-toolbar>
-                            <div className="chartContainer" id={this._containerId}>
+                            <div className="chartContainer primary">
 
                                 <ChartControls />
 
