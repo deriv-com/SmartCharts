@@ -8,8 +8,6 @@ export default class TimeperiodStore {
     }
     get context() { return this._context; }
 
-    @observable timeperiod = '';
-    @observable open = false;
     @observable timeUnit = null;
     @observable interval = null;
 

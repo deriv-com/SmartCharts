@@ -58,7 +58,7 @@ class ActiveSymbolDriver extends Driver {
      * @param {function} callback Callback upon results
      */
     acceptText(text, filter, maxResults, callback) {
-        if (!this._symbols) return [];
+        if (!this._symbols) {return [];}
 
         const reg = RegExp(text, 'i');
         let result = [];
@@ -66,7 +66,7 @@ class ActiveSymbolDriver extends Driver {
 
         for (const s of this._symbols) {
             const d = s.data;
-            if (_filter !== 'All' && d.market_display_name !== _filter) continue;
+            if (_filter !== 'All' && d.market_display_name !== _filter) {continue;}
 
             if (reg.test(d.symbol) || reg.test(d.name)) {
                 result.push(s);
