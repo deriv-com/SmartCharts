@@ -6,7 +6,7 @@ const CopyWebpackPlugin = require('copy-webpack-plugin')
 
 const config = {
     devtool: 'source-map',
-    entry: ['babel-polyfill', path.resolve(__dirname, './src/BinaryChartiq.js')],
+    entry: ['babel-polyfill', path.resolve(__dirname, './src/index.js')],
     output: {
         publicPath: '/dist/',
         path: path.resolve(__dirname, 'dist'),

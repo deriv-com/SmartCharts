@@ -2,11 +2,11 @@ import { observable, action, computed } from 'mobx';
 import { getTimeUnit } from './utils';
 
 export default class TimeperiodStore {
-    set context(ctx) {
-        this._context = ctx;
-        this.onContextReady();
+    constructor(mainStore) {
+        this.mainStore = mainStore;
     }
-    get context() { return this._context; }
+
+    get context() { return this.mainStore.chart.context; }
 
     @observable open = false;
     @observable timeUnit = null;
@@ -39,6 +39,8 @@ export default class TimeperiodStore {
             } else if (!isTick && !isCandle) {
                 stx.setChartType('candle');
             }
+
+            this.mainStore.chart.saveLayout();
         });
 
         this.timeUnit = getTimeUnit(stx.layout);

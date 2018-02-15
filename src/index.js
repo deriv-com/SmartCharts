@@ -7,8 +7,10 @@ import * as html2canvas from 'html2canvas';
 import Chart from './components/Chart.jsx';
 import ConnectionManager from './ConnectionManager';
 import StreamManager from './StreamManager';
-import { TradeEndLine, TradeStartLine } from './draw/DateLine';
+import {TradeEndLine, TradeStartLine} from './draw/DateLine';
 import Barrier from './draw/Barrier';
+import MainStore from './store';
+import {MobxProvider} from './store/Connect';
 
 // chartiq accesses html2canvas from global scope
 window.html2canvas = html2canvas;
@@ -19,36 +21,21 @@ class BinaryChartiq {
         return chart;
     }
 
-    static initConnection() {
-        if (BinaryChartiq._connectionManager === undefined) {
-            BinaryChartiq._connectionManager = new ConnectionManager({
-                appId: 1,
-                language: 'en',
-                endpoint: 'wss://frontend.binaryws.com/websockets/v3',
-            });
-            BinaryChartiq._streamManager = new StreamManager(BinaryChartiq._connectionManager);
-        }
+    get connectionManager() {
+        return this.mainStore.chart.connectionManager;
     }
 
-    static getConnectionManager() {
-        BinaryChartiq.initConnection();
-        return BinaryChartiq._connectionManager;
-    }
-
-    static getStreamManager() {
-        BinaryChartiq.initConnection();
-        return BinaryChartiq._streamManager;
-    }
-
-    set symbols(s) {
-        this._updateRender({ symbols: s });
+    set symbols(symbols) {
+        this.mainStore.chart.setSymbols(symbols);
+        // this.render({ symbols: symbols });
     }
 
     constructor({ selector, symbols }) {
         this.selector = selector;
         if (symbols) {this.symbols = symbols;}
 
-        this._updateRender();
+        this.mainStore = new MainStore();
+        this.render();
     }
 
     getChartEngine() {
@@ -75,9 +62,11 @@ class BinaryChartiq {
         return barrier;
     }
 
-    _updateRender(props) {
+    render(props) {
         ReactDOM.render(
-            <Chart id={this.selector.slice(1, this.selector.length)} {...props} />,
+            <MobxProvider store={this.mainStore}>
+                <Chart />
+            </MobxProvider>,
             $$$(this.selector),
         );
     }
