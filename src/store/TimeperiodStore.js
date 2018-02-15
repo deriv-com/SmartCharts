@@ -8,9 +8,13 @@ export default class TimeperiodStore {
     }
     get context() { return this._context; }
 
+    @observable open = false;
     @observable timeUnit = null;
     @observable interval = null;
 
+    @action.bound setOpen(val) {
+        this.open = val;
+    }
 
     @action.bound onContextReady() {
         const { timeUnit, interval } = this.context.stx.layout;
@@ -39,6 +43,7 @@ export default class TimeperiodStore {
 
         this.timeUnit = getTimeUnit(stx.layout);
         this.interval = stx.layout.interval;
+        this.open = false;
     }
 
     @computed get interval_display() {
