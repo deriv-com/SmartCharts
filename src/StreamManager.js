@@ -32,18 +32,18 @@ class Subscription {
                     Subscription.DEFAULT_TIMEOUT,
                 );
             }
-        }
+        };
         this._response = this._connection
             .send(req, Subscription.DEFAULT_TIMEOUT)
             .catch((up) => {
                 const result = handleNoStream(up.code);
-                if (result) return result;
+                if (result) {return result;}
                 throw up;
             })
             .then((data) => {
                 if (data.error) {
                     const result = handleNoStream(data.error.code);
-                    if (result) return result;
+                    if (result) {return result;}
                     const up = new Error(data.error.message);
                     up.response = data;
                     throw up;

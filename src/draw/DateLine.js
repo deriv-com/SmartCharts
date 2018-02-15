@@ -33,7 +33,7 @@ class DateLine extends Line {
     }
 
     set followsCurrentQuote(value) {
-        if (this._followsCurrentQuote === value) return;
+        if (this._followsCurrentQuote === value) {return;}
 
         this._followsCurrentQuote = value;
         this._draw();
@@ -89,7 +89,7 @@ class DateLine extends Line {
         if (this.visible && this._chart.dataSet) {
             if (this._followsCurrentQuote) {
                 this._updateNowPosition();
-            } else if (this._date) this._positionAtDate(this._date);
+            } else if (this._date) {this._positionAtDate(this._date);}
         }
     }
 
@@ -99,21 +99,21 @@ class DateLine extends Line {
 
     set visible(value) {
         super.visible = value;
-        if (value) this._draw();
+        if (value) {this._draw();}
     }
 
     _updateNowPosition() {
         const currentQuote = this._stx.currentQuote();
-        if (!currentQuote) return;
+        if (!currentQuote) {return;}
 
         const date = currentQuote.Date;
         let left = this._pixelFromDate(date);
-        if (this._chart.lastTickOffset) left += this._chart.lastTickOffset;
+        if (this._chart.lastTickOffset) {left += this._chart.lastTickOffset;}
         left -= (this._line.offsetWidth / 2);
 
         // to prevent jitter, only update position when difference is noticeable
         const diff = Math.abs(CIQ.stripPX(this._line.style.left) - left);
-        if (diff > 1) this._line.style.left = `${left | 0}px`;
+        if (diff > 1) {this._line.style.left = `${left | 0}px`;}
     }
 }
 

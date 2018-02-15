@@ -24,7 +24,7 @@ class Line {
         this.visible = visible;
 
         const exitIfNotDraggable = (e, callback) => {
-            if (this.visible && this.draggable) callback.call(this, e);
+            if (this.visible && this.draggable) {callback.call(this, e);}
         };
 
         CIQ.safeDrag(
@@ -55,7 +55,7 @@ class Line {
     }
 
     _modalBegin() {
-        if (this._stx.grabbingScreen) return;
+        if (this._stx.grabbingScreen) {return;}
         this._stx.editingAnnotation = true;
         this._stx.modalBegin();
     }

@@ -51,13 +51,13 @@ class ChartStore {
     }
     restoreLayout(stx) {
         const datum = CIQ.localStorage.getItem(`layout-${this.id}`);
-        if (datum === null) return;
+        if (datum === null) {return;}
 
         stx.importLayout(JSON.parse(datum), {
             managePeriodicity: true,
             cb: () => {
                 this.restoreDrawings(stx, stx.chart.symbol);
-                if (this.context.loader) this.context.loader.hide();
+                if (this.context.loader) {this.context.loader.hide();}
             },
         });
     }
@@ -119,7 +119,7 @@ class ChartStore {
         new CIQ.UI.Layout(this.context);
 
         this.context.changeSymbol = (data) => {
-            if (this.context.loader) this.context.loader.show();
+            if (this.context.loader) {this.context.loader.show();}
 
             // reset comparisons
             for (const field in this.stxx.chart.series) {
@@ -129,7 +129,7 @@ class ChartStore {
             }
 
             this.stxx.newChart(data, null, null, (err) => {
-                if (this.context.loader) this.context.loader.hide();
+                if (this.context.loader) {this.context.loader.hide();}
                 if (err) {
                     /* TODO, symbol not found error */
                     return;
@@ -192,7 +192,7 @@ class ChartStore {
         const UIStudyMenu = new CIQ.UI.StudyMenu(this.rootNode.querySelector('*[cq-studies]'), this.context, params);
         UIStudyMenu.renderMenu();
 
-        if (this.context.loader) this.context.loader.show();
+        if (this.context.loader) {this.context.loader.show();}
 
         this.restorePreferences();
         this.restoreLayout(stxx);
