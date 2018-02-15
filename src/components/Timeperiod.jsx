@@ -14,7 +14,7 @@ const Timeperiod = ({
     return (
         <Menu
             className="ciq-period"
-            selected={open}
+            isOpened={open}
             setOpen={setOpen}
             menuBtn={
                 <span>

@@ -7,8 +7,8 @@ class Menu extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        if (this.props.selected !== nextProps.selected
-            && !nextProps.selected
+        if (this.props.isOpened !== nextProps.isOpened
+            && !nextProps.isOpened
             && this._context) {
             this._context.stx.modalEnd();
         }
@@ -25,8 +25,8 @@ class Menu extends Component {
     }
 
     handleClickOutside = (e) => {
-        const { selected, setOpen } = this.props;
-        if (selected
+        const { isOpened, setOpen } = this.props;
+        if (isOpened
             && setOpen
             && !(this.dropdown.contains(e.target) || this.menuBtn.contains(e.target))) {
             setOpen(false);
@@ -34,18 +34,18 @@ class Menu extends Component {
     };
 
     closeOnEscape = (e) => {
-        const { selected, setOpen } = this.props;
-        if (selected && e.keyCode === 27 && setOpen) {
+        const { isOpened, setOpen } = this.props;
+        if (isOpened && e.keyCode === 27 && setOpen) {
             setOpen(false);
         }
     };
 
-    mouseEnterDropdown = (e) => this.onMouseInDropdown(e, true);
-    mouseLeaveDropdown = (e) => this.onMouseInDropdown(e, false);
+    mouseEnterDropdown = (e) => this.handleMouseInDropdown(e, true);
+    mouseLeaveDropdown = (e) => this.handleMouseInDropdown(e, false);
 
-    onMouseInDropdown = (e, isMouseEnter) => {
-        const { selected } = this.props;
-        if (selected
+    handleMouseInDropdown = (e, isMouseEnter) => {
+        const { isOpened } = this.props;
+        if (isOpened
             && this._context
             && this.dropdown.contains(e.target)) {
             if (isMouseEnter) {
@@ -57,14 +57,14 @@ class Menu extends Component {
     }
 
     render() {
-        const { selected, className, setOpen, menuBtn, children } = this.props;
+        const { isOpened, className, setOpen, menuBtn, children } = this.props;
 
         return (
-            <div className={`ciq-menu ${className || ''} ${selected ? 'stxMenuActive' : ''}`}>
+            <div className={`ciq-menu ${className || ''} ${isOpened ? 'stxMenuActive' : ''}`}>
                 <div
                     ref={el => this.menuBtn = el}
                     className="cq-menu-btn"
-                    onClick={() => {setOpen(!selected);}}
+                    onClick={() => {setOpen(!isOpened);}}
                 >
                     {menuBtn}
                 </div>
