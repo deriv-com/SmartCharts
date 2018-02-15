@@ -1,113 +1,118 @@
-import React, { Component } from 'react';
-import contextAware from '../contextAware';
-import '../../sass/components/timeperiod.scss';
+import React from 'react';
 import { connect } from '../store/Connect';
+import Menu from './Menu.jsx';
+
 
 const Timeperiod = ({
     setPeriodicity,
+    open,
+    setOpen,
     interval,
     timeUnit,
     interval_display
 }) => {
     return (
-        <cq-menu class="ciq-menu ciq-period">
-            <div>
+        <Menu
+            className="ciq-period"
+            isOpened={open}
+            setOpen={setOpen}
+            menuBtn={
                 <span>
                     <span className="icon" />
                     <span className="unit_display">{timeUnit}</span>
                     <span className="interval_display">{interval_display}</span>
                 </span>
+        }>
+            <div className="timeUnit">
+                <span className={timeUnit === 'tick' ? 'selected' : ''}>Tick</span>
+                <span className={timeUnit === 'minute' ? 'selected' : ''}>Minute</span>
+                <span className={timeUnit === 'hour' ? 'selected' : ''}>Hour</span>
+                <span className={timeUnit === 'day' ? 'selected' : ''}>Day</span>
             </div>
-            <cq-menu-dropdown class="dropdown timePeriod">
-                <div className="timeUnit">
-                    <span className={timeUnit === 'tick' ? 'selected' : ''}>Tick</span>
-                    <span className={timeUnit === 'minute' ? 'selected' : ''}>Minute</span>
-                    <span className={timeUnit === 'hour' ? 'selected' : ''}>Hour</span>
-                    <span className={timeUnit === 'day' ? 'selected' : ''}>Day</span>
+            <div className="interval">
+                <div className="row">
+                    <span
+                        onClick={() => setPeriodicity(1, 'second')}
+                        className={timeUnit === 'tick' && interval === 1 ? 'selected' : ''}
+                    >1
+                    </span>
                 </div>
-                <div className="interval">
-                    <div className="row">
-                        <span
-                            onClick={() => setPeriodicity(1, 'second')}
-                            className={timeUnit === 'tick' && interval === 1 ? 'selected' : ''}
-                        >1
-                        </span>
-                    </div>
-                    <div className="row">
-                        <span
-                            onClick={() => setPeriodicity(1, 'minute')}
-                            className={timeUnit === 'minute' && interval === 1 ? 'selected' : ''}
-                        >1
-                        </span>
-                        <span
-                            onClick={() => setPeriodicity(2, 'minute')}
-                            className={interval === 2 ? 'selected' : ''}
-                        >2
-                        </span>
-                        <span
-                            onClick={() => setPeriodicity(3, 'minute')}
-                            className={interval === 3 ? 'selected' : ''}
-                        >3
-                        </span>
-                        <span
-                            onClick={() => setPeriodicity(5, 'minute')}
-                            className={interval === 5 ? 'selected' : ''}
-                        >5
-                        </span>
-                        <span
-                            onClick={() => setPeriodicity(10, 'minute')}
-                            className={interval === 10 ? 'selected' : ''}
-                        >10
-                        </span>
-                        <span
-                            onClick={() => setPeriodicity(15, 'minute')}
-                            className={interval === 15 ? 'selected' : ''}
-                        >15
-                        </span>
-                        <span
-                            onClick={() => setPeriodicity(30, 'minute')}
-                            className={interval === 30 ? 'selected' : ''}
-                        >30
-                        </span>
-                    </div>
-                    <div className="row">
-                        <span
-                            onClick={() => setPeriodicity(60, 'minute')}
-                            className={interval === 60 ? 'selected' : ''}
-                        >1
-                        </span>
-                        <span
-                            onClick={() => setPeriodicity(120, 'minute')}
-                            className={interval === 120 ? 'selected' : ''}
-                        >2
-                        </span>
-                        <span
-                            onClick={() => setPeriodicity(240, 'minute')}
-                            className={interval === 240 ? 'selected' : ''}
-                        >4
-                        </span>
-                        <span
-                            onClick={() => setPeriodicity(480, 'minute')}
-                            className={interval === 480 ? 'selected' : ''}
-                        >8
-                        </span>
-                    </div>
-                    <div className="row">
-                        <span
-                            onClick={() => setPeriodicity(1, 'day')}
-                            className={timeUnit === 'day' ? 'selected' : ''}
-                        >1
-                        </span>
-                    </div>
+                <div className="row">
+                    <span
+                        onClick={() => setPeriodicity(1, 'minute')}
+                        className={timeUnit === 'minute' && interval === 1 ? 'selected' : ''}
+                    >1
+                    </span>
+                    <span
+                        onClick={() => setPeriodicity(2, 'minute')}
+                        className={interval === 2 ? 'selected' : ''}
+                    >2
+                    </span>
+                    <span
+                        onClick={() => setPeriodicity(3, 'minute')}
+                        className={interval === 3 ? 'selected' : ''}
+                    >3
+                    </span>
+                    <span
+                        onClick={() => setPeriodicity(5, 'minute')}
+                        className={interval === 5 ? 'selected' : ''}
+                    >5
+                    </span>
+                    <span
+                        onClick={() => setPeriodicity(10, 'minute')}
+                        className={interval === 10 ? 'selected' : ''}
+                    >10
+                    </span>
+                    <span
+                        onClick={() => setPeriodicity(15, 'minute')}
+                        className={interval === 15 ? 'selected' : ''}
+                    >15
+                    </span>
+                    <span
+                        onClick={() => setPeriodicity(30, 'minute')}
+                        className={interval === 30 ? 'selected' : ''}
+                    >30
+                    </span>
                 </div>
-            </cq-menu-dropdown>
-        </cq-menu>
+                <div className="row">
+                    <span
+                        onClick={() => setPeriodicity(60, 'minute')}
+                        className={interval === 60 ? 'selected' : ''}
+                    >1
+                    </span>
+                    <span
+                        onClick={() => setPeriodicity(120, 'minute')}
+                        className={interval === 120 ? 'selected' : ''}
+                    >2
+                    </span>
+                    <span
+                        onClick={() => setPeriodicity(240, 'minute')}
+                        className={interval === 240 ? 'selected' : ''}
+                    >4
+                    </span>
+                    <span
+                        onClick={() => setPeriodicity(480, 'minute')}
+                        className={interval === 480 ? 'selected' : ''}
+                    >8
+                    </span>
+                </div>
+                <div className="row">
+                    <span
+                        onClick={() => setPeriodicity(1, 'day')}
+                        className={timeUnit === 'day' ? 'selected' : ''}
+                    >1
+                    </span>
+                </div>
+            </div>
+        </Menu>
     );
 };
 
 export default connect(
     ({ timeperiod: s }) => ({
         setPeriodicity: s.setPeriodicity,
+        open: s.open,
+        setOpen: s.setOpen,
         timeUnit: s.timeUnit,
         interval: s.interval,
         interval_display: s.interval_display,

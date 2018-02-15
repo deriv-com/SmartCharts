@@ -281,11 +281,8 @@ class DrawingToolbar extends ContextTag {
             });
             self.emit();
         };
-        let overrides = $(node).attr('cq-overrides');
-        if (overrides) overrides = overrides.split(',');
         colorPicker.display({
             node,
-            overrides,
         });
     }
 }

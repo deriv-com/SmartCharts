@@ -11,11 +11,6 @@ import Dialog from './Dialog';
  * @example
      <cq-color-picker>
          <cq-colors></cq-colors>
-         <cq-overrides>
-             <template>
-                 <div class="ciq-btn"></div>
-             </template>
-         </cq-overrides>
      </cq-color-picker>
  */
 class ColorPicker extends Dialog {
@@ -59,8 +54,6 @@ class ColorPicker extends Dialog {
             }
             this.params.colorMap.push(row);
         }
-        this.cqOverrides = node.find('cq-overrides');
-        this.template = this.cqOverrides.find('template');
         this.initialize();
         this.attached = true;
     }
@@ -151,20 +144,6 @@ class ColorPicker extends Dialog {
             left: `${x}px`,
             top: `${y}px`,
         });
-        this.cqOverrides.emptyExceptTemplate();
-
-        if (activator.overrides && this.template.length) {
-            for (let i = 0; i < activator.overrides.length; i++) {
-                let override = activator.overrides[i];
-                let n = CIQ.UI.makeFromTemplate(this.template, true);
-                n.text(override);
-                n.stxtap((function (self, override) {
-                    return function () {
-                        self.pickColor(override);
-                    };
-                })(this, override));
-            }
-        }
 
         if (!this.picker.hasClass('stxMenuActive')) {
             this.picker[0].open(); // Manually activate the color picker

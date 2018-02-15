@@ -201,6 +201,9 @@ class ChartStore {
         if (!stxx.chart.symbol) {
             symbolLookup.selectItem({
                 symbol: 'R_100',
+                name: "Volatility 100 Index",
+                market_display_name: "Volatility Indices",
+                exchange_is_open: 1
             }); // load an initial symbol
         }
 

@@ -55,15 +55,6 @@ class Chart extends Component {
             <cq-context ref={(root) => { this.root = root; }}>
                 <cq-color-picker>
                     <cq-colors />
-                    <cq-overrides dangerouslySetInnerHTML={{
-                        /* TODO: fix this */
-                        __html: `
-                            <template>
-                                <div class="ciq-btn" />
-                            </template>
-                            `,
-                    }}>
-                    </cq-overrides>
                 </cq-color-picker>
                 <cq-loader />
                 <div className="ciq-chart-area">
@@ -123,7 +114,6 @@ class Chart extends Component {
                                 <div>
                                     <cq-line-color
                                         cq-section
-                                        cq-overrides="auto"
                                         class="ciq-color"
                                         stxbind="getLineColor()"
                                         stxtap="pickLineColor()"
