@@ -1,9 +1,10 @@
-import { observable, action, computed } from 'mobx';
+import { observable, action, computed, autorunAsync } from 'mobx';
 import { getTimeUnit } from './utils';
 
 export default class TimeperiodStore {
     constructor(mainStore) {
         this.mainStore = mainStore;
+        autorunAsync(this.onContextReady.bind(this));
     }
 
     get context() { return this.mainStore.chart.context; }
@@ -16,10 +17,12 @@ export default class TimeperiodStore {
         this.open = val;
     }
 
-    @action.bound onContextReady() {
-        const { timeUnit, interval } = this.context.stx.layout;
-        this.timeUnit = getTimeUnit({ timeUnit, interval });
-        this.interval = interval;
+    onContextReady() {
+        if(this.context) {
+            const { timeUnit, interval } = this.context.stx.layout;
+            this.timeUnit = getTimeUnit({ timeUnit, interval });
+            this.interval = interval;
+        }
     }
 
     @action.bound setPeriodicity(interval, timeUnit) {

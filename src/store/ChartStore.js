@@ -1,4 +1,4 @@
-import { action } from 'mobx';
+import { action, observable } from 'mobx';
 import StreamManager from '../StreamManager';
 import ActiveSymbolDriver from '../ActiveSymbolDriver';
 import ConnectionManager from '../ConnectionManager';
@@ -28,9 +28,9 @@ class ChartStore {
     driver = new ActiveSymbolDriver();
     contextPromise = new PendingPromise();
     rootNode = null;
-    context = null;
     stxx = null;
     id = null;
+    @observable context = null;
 
     @action.bound setSymbols(symbols) {
         if (symbols && this.context) {
@@ -116,11 +116,11 @@ class ChartStore {
     startUI() {
         const stxx = this.stxx;
         stxx.chart.allowScrollPast = false;
-        this.context = new Context(stxx, this.rootNode);
-        new CIQ.UI.Layout(this.context);
+        const context = new Context(stxx, this.rootNode);
+        new CIQ.UI.Layout(context);
 
-        this.context.changeSymbol = (data) => {
-            if (this.context.loader) {this.context.loader.show();}
+        context.changeSymbol = (data) => {
+            if (context.loader) {context.loader.show();}
 
             // reset comparisons
             for (const field in this.stxx.chart.series) {
@@ -130,7 +130,7 @@ class ChartStore {
             }
 
             this.stxx.newChart(data, null, null, (err) => {
-                if (this.context.loader) {this.context.loader.hide();}
+                if (context.loader) {context.loader.hide();}
                 if (err) {
                     /* TODO, symbol not found error */
                     return;
@@ -139,18 +139,18 @@ class ChartStore {
             });
         };
 
-        this.context.setLookupDriver(this.driver);
+        context.setLookupDriver(this.driver);
 
         const symbolLookup = this.rootNode.querySelector('.ciq-search cq-lookup');
         symbolLookup.setCallback((context, data) => {
             context.changeSymbol(data);
         });
 
-        new CIQ.UI.KeystrokeHub(document.querySelector('body'), this.context, {
+        new CIQ.UI.KeystrokeHub(document.querySelector('body'), context, {
             cb: CIQ.UI.KeystrokeHub.defaultHotKeys,
         });
 
-        new CIQ.UI.StudyEdit(null, this.context);
+        new CIQ.UI.StudyEdit(null, context);
 
         const UIStorage = new CIQ.NameValueStore();
 
@@ -190,10 +190,10 @@ class ChartStore {
             },
             /* dialogBeforeAddingStudy: {"rsi": true} // here's how to always show a dialog before adding the study */
         };
-        const UIStudyMenu = new CIQ.UI.StudyMenu(this.rootNode.querySelector('*[cq-studies]'), this.context, params);
+        const UIStudyMenu = new CIQ.UI.StudyMenu(this.rootNode.querySelector('*[cq-studies]'), context, params);
         UIStudyMenu.renderMenu();
 
-        if (this.context.loader) {this.context.loader.show();}
+        if (context.loader) {context.loader.show();}
 
         this.restorePreferences();
         this.restoreLayout(stxx);
@@ -207,11 +207,13 @@ class ChartStore {
             }); // load an initial symbol
         }
 
-        this.contextPromise.resolve(this.context);
+        this.context = context;
+        this.contextPromise.resolve(context);
         CIQ.UI.begin();
         stxx.setStyle('stx_line_chart', 'color', '#4DAFEE'); // TODO => why is not working in css?
 
-        // CIQ.I18N.setLanguage(stxx, "zh"); // Optionally set a language for the UI, after it has been initialized, and translate.
+        // Optionally set a language for the UI, after it has been initialized, and translate.
+        // CIQ.I18N.setLanguage(stxx, "zh");
     }
 
     @action.bound init(rootNode) {
