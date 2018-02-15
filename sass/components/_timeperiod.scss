@@ -1,0 +1,104 @@
+.ciq-period {
+    border-right: 1px solid rgba(0, 0, 0, 0.2);
+    border-left: 1px solid rgba(0, 0, 0, 0.2);
+    padding: 0;
+
+    > .cq-menu-btn {
+        margin: 0 12px;
+
+        > span {
+            padding: 3px 0;
+            border-radius: 3px;
+        }
+    }
+    &.stxMenuActive {
+        > div > span {
+            background: #e4e6f1;
+        }
+    }
+    &:after {
+        display: none;
+    }
+    .unit_display {
+        text-transform: capitalize;
+        margin: 0 15px;
+    }
+    .interval_display {
+        margin: 0 15px 0 0;
+    }
+    .icon {
+        display: inline-block;
+        width: 8px;
+        height: 8px;
+        margin: 0 0 0 15px;
+        background: url('icons/time interval/ic-timeinterval-light.svg');
+    }
+    &.stxMenuActive .cq-menu-dropdown {
+        visibility: visible;
+    }
+    .cq-menu-dropdown {
+        width: 27.8em !important;
+        height: 13.4em !important;
+        border: 0 !important;
+        max-height: 200px !important;
+        left: -8em;
+        font-size: 12px;
+        font-weight: normal;
+        visibility: hidden;
+
+        .timeUnit {
+            display: inline-block;
+            float: left;
+            width: 8em;
+            height: 100%;
+            box-shadow: 2px 0px 5px 0px rgba(42, 48, 82, 0.08);
+
+            span {
+                display: block;
+                height: 40px;
+                width: 100%;
+                line-height: 40px;
+                color: #c2c2c2;
+
+                &.selected {
+                    color: #e98024;
+                }
+            }
+        }
+
+        .interval {
+            display: inline-block;
+            width: 232px;
+            text-align: left;
+            float: left;
+            padding-top: 0.1em;
+
+            .row {
+                height: 2em;
+                line-height: 8px;
+                padding-top: 0.9em;
+                padding-bottom: 0.4em;
+                padding-left: 0.5em;
+
+                span {
+                    display: inline-block;
+                    margin: 0 4px;
+                    width: 24px;
+                    height: 18px;
+                    line-height: 1.5;
+                    text-align: center;
+                    color: #2a3052;
+
+                    &.selected {
+                        height: 24px;
+                        background: #e98024;
+                        border-radius: 12px;
+                        color: #fff;
+                        line-height: 24px;
+                    }
+                }
+            }
+        }
+    }
+}
+
