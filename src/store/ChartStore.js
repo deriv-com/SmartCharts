@@ -20,8 +20,9 @@ class ChartStore {
 
     static _id_counter = 0;
 
-    constructor() {
+    constructor(mainStore) {
         this.id = ++ChartStore._id_counter;
+        this.mainStore = mainStore;
     }
 
     driver = new ActiveSymbolDriver();
@@ -45,8 +46,8 @@ class ChartStore {
         }
     }
 
-    saveLayout(obj) {
-        const json = JSON.stringify(obj.stx.exportLayout(true));
+    saveLayout() {
+        const json = JSON.stringify(this.stxx.exportLayout(true));
         CIQ.localStorageSetItem(`layout-${this.id}`, json);
     }
     restoreLayout(stx) {
@@ -204,14 +205,13 @@ class ChartStore {
         }
 
         this.contextPromise.resolve(this.context);
-        MainStore.Instance.timeperiod.context = this.context;
         CIQ.UI.begin();
         stxx.setStyle('stx_line_chart', 'color', '#4DAFEE'); // TODO => why is not working in css?
 
         // CIQ.I18N.setLanguage(stxx, "zh"); // Optionally set a language for the UI, after it has been initialized, and translate.
     }
 
-    init(rootNode) {
+    @action.bound init(rootNode) {
         this.rootNode = rootNode;
 
         const stxx = this.stxx = new CIQ.ChartEngine({
