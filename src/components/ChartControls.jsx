@@ -33,17 +33,14 @@ class  ChartControls extends Component {
                 <Comparison />
                 <Views />
                 <div className="icon-toggles ciq-toggles">
-                    <cq-toggle class="ciq-CH" cq-member="crosshair">
-                        <span></span>
-                        <cq-tooltip>Crosshair</cq-tooltip>
+                    <cq-toggle class="ciq-CH toggle-icon" cq-member="crosshair">
+                        <span className='tooltip' tooltip-title='Crosshair'></span>
                     </cq-toggle>
-                    <cq-toggle class="ciq-HU" cq-member="headsUp" cq-toggles="static,null">
-                        <span></span>
-                        <cq-tooltip>Info</cq-tooltip>
+                    <cq-toggle class="ciq-HU toggle-icon" cq-member="headsUp" cq-toggles="static,null">
+                        <span className='tooltip' tooltip-title='Info'></span>
                     </cq-toggle>
-                    <cq-toggle class="ciq-draw">
-                        <span></span>
-                        <cq-tooltip>Draw</cq-tooltip>
+                    <cq-toggle class="ciq-draw toggle-icon">
+                        <span className='tooltip' tooltip-title='Draw'></span>
                     </cq-toggle>
                 </div>
                 <Timeperiod />
