@@ -2,6 +2,7 @@ import $ from 'jquery';
 import CIQ from 'chartiq';
 import { getParents } from './ui/utils';
 import ContextTag from './ui/ContextTag';
+import UIManager from './ui/UIManager';
 
 /**
  * Scroll web component `<cq-scroll>`.
@@ -69,13 +70,6 @@ class Scroll extends ContextTag {
 
         let chartHeight = this.context.stx.chart.height;
         let height = chartHeight * 0.6;
-        let holders = getParents(node[0], '.stx-holder,.stx-subholder');
-        if (holders.length) {
-            holders.forEach((h) => {
-                let holderBottom = h.getBoundingClientRect().top + h.clientHeight;
-                height = Math.min(height, holderBottom - position.top - 5); // inside a holder we ignore reduceMenuHeight, but take off 5 pixels just for aesthetics
-            });
-        }
 
         // If there are subsequent siblings that have a fixed height then make room for them
         let nextAll = node.nextAll();
@@ -99,7 +93,7 @@ class Scroll extends ContextTag {
     attachedCallback() {
         if (this.attached) return;
         super.attachedCallback();
-        this.uiManager = $$$('cq-ui-manager');
+        this.uiManager = UIManager.instance;
 
         this.addClaim(this);
 

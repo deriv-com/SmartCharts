@@ -26,6 +26,10 @@ cq-context {
 	@import "components/line";
 	@import "components/chart-types";
 	@import "components/chart-controls";
+	@import "components/chart-templates";
+	@import "components/symbol-lookup";
+	@import "components/chart-title";
+	@import "components/timeperiod";
 }
 
 /* --------------------------------------------------------- FIELDS, SELECTS, INPUTS --------------------------------------------------------- */
@@ -158,6 +162,7 @@ cq-loader {
 }
 cq-loader.stx-show{
 	display:block;
+	z-index: 9;
 }
 
 
@@ -291,7 +296,8 @@ cq-clickable {
 cq-selected,
 cq-toolbar,
 cq-menu,
-cq-menu-dropdown {
+cq-menu-dropdown,
+.cq-menu-dropdown {
 	display:block;
 }
 cq-scroll{
@@ -301,7 +307,8 @@ cq-scroll{
 }
 
 cq-scroll .ps-scrollbar-y-rail,
-cq-menu-dropdown .ps-scrollbar-y-rail {
+cq-menu-dropdown .ps-scrollbar-y-rail
+.cq-menu-dropdown .ps-scrollbar-y-rail{
 	z-index:1000000;
 }
 
@@ -532,7 +539,7 @@ cq-side-panel[cq-active] {
 
 /* --------------------------------------------------------- Menus --------------------------------------------------------- */
 
-cq-menu-dropdown {
+cq-menu-dropdown, .cq-menu-dropdown {
 	position:absolute;
 	/*margin-top:5px;
 	padding-bottom:6px;
@@ -599,7 +606,6 @@ cq-item, cq-heading, cq-placeholder {
 	padding:0 20px;
 	clear: both;
 	line-height:27px;
-	height:27px;
 	display:block;
 }
 
@@ -672,9 +678,6 @@ cq-lookup{
 	width:120px;
 	transition: width .50s 0s;
 	z-index:2;
-	.stxMenuActive & {
-		width: 481px;
-	}
 	.break-sm .stxMenuActive &, .break-md .stxMenuActive & {
 		width: 300px;
 	}
@@ -685,7 +688,6 @@ cq-lookup{
 		width: 85px;
 	}
 }
-
 .ciq-search {
 	width: 130px;
 	height:$nav-height;
@@ -721,6 +723,7 @@ cq-lookup-input {
 
 	.stxMenuActive & input {
 		background: darken( $DEFAULT-main, 1% );
+		height:36px;
 	}
 	& input {
 		width: 100%;
@@ -740,9 +743,6 @@ cq-lookup-icon {
 	opacity: .6;
 	transition: opacity .20s 0s;
 }
-
-.stxMenuActive cq-lookup-icon {opacity:1;}
-
 
 /* Menus/Panel Toggles */
 
@@ -1025,184 +1025,9 @@ cq-toggle {
     padding: 0;
 }
 
-cq-lookup-results {
-	display: block;
-	text-align: left;
-	background-color: $DEFAULT-menu-bg;
-	margin-top: 5px;
-	color: $DEFAULT-text-medium;
-	opacity: 0;
-	transition: opacity .20s .50s;
-	overflow: hidden;
-	height: 0px;
-	@include box-shadow (0px, 2px, 4px, rgba(0, 0, 0, .2));
-
-	.stxMenuActive & {
-		opacity:1;
-		height: auto;
-	}
-}
-
-cq-lookup-filters { /* Results Filter Row */
-	text-align:center;
-	height:45px;
-	padding:0;
-	border-bottom:solid thin $DEFAULT-border-subtle;
-}
-
-cq-lookup-filters cq-filter { /* Filter Options */
-	margin:0 10px;
-	padding:0 5px;
-	display:inline-block;
-	line-height:45px;
-	height:42px;
-	font-size:12px;
-	text-transform: uppercase;
-	color: $DEFAULT-text-subtle;
-	font-weight: 700;
-	font-family:$heading-font;
-	cursor:pointer;
-	transition: color .20s .0s;
-
-	&.true,
-	&.true:hover,
-	&.true:active {/* Selected Filter Options */
-		border-bottom:3px solid $DEFAULT-accent;
-		color:$DEFAULT-accent;
-	}
-	&:hover,
-	&:active {
-		color: $DEFAULT-text-medium;
-	}
-}
-
-cq-lookup-filters {
-	.break-sm &, .break-md & {
-		height: 90px;
-	}
-}
-
-cq-lookup cq-menu-dropdown { /* Search Results Panel */
-	position:relative;
-	padding: 0px;
-	transition: opacity .20s .50s;
-
-	.break-md &,
-	.break-lg & {
-		width: auto;
-	}
-	.break-md & {
-		left:0px;
-		top:$nav-height;
-		right:0px;
-		bottom:auto;
-	}
-	.break-sm & {
-		left:0px;
-		top:10px;
-		right:0px;
-		bottom:auto;
-	}
-}
-cq-lookup cq-scroll {/* Div Containing UL Containing Results */
-	padding:0;
-
-	.break-sm &, .break-md & {
-		padding-bottom: 5px;
-	}
-}
-
-cq-lookup-results{
-	& .cq-iscroller {
-		display:table;
-		width:100%;
-	}
-	& cq-scroll:first-child {
-		display:table;
-		width:100%;
-	}
-	& cq-item {
-		height:27px;
-		display:table-row;
-		cursor:pointer;
-		white-space: normal;
-
-		&:first-child span { padding-top:10px;}
-		&:last-child span { padding-bottom:10px;}
-	}
-	& cq-item[disabled] {
-		pointer-events: none;
-		&:not(.selected) span {
-			color: #c5c5c5 !important;
-		}
-		&.selected {
-			background-color: #efefef;
-		}
-
-	}
-	& cq-item span { /* Results Row Content */
-		line-height: 27px;
-		display:table-cell;
-		margin: 0px;
-
-
-		&:nth-of-type(1) { /* Search results Symbol */
-			color: #333333;
-			font-weight: bold;
-			padding-right:10px;
-			padding-left:20px;
-			padding-bottom:10px;
-			line-height:17px;
-			/*white-space: nowrap;*/
-		}
-		&:nth-of-type(2) { /* Search results Company */
-			line-height:normal;
-			padding:3px;
-			width:100%;
-		}
-		&:nth-of-type(3) { /* Search results exchange */
-			color: #333333;
-			font-size: 10px;
-			min-width: 40px;
-			text-align:right;
-			line-height:normal;
-			padding:3px;
-			white-space:nowrap;
-			padding-right:20px;
-		}
-	}
-}
-
-
 /* Period Menu */
 body:not(.break-sm) .ciq-period cq-menu-dropdown {
 	width:100px;
-}
-
-/* Views Menu */
-cq-views {
-	display: block;
-	overflow: hidden;
-	padding: 0;
-
-	width: 200px;
-
-	cq-item {
-		@include box-sizing(border-box);
-	}
-
-	cq-label {
-		display: inline-block;
-		@include text-truncate;
-		width: 140px;
-		vertical-align:text-bottom;
-
-		i {
-			margin-left:85px;
-			margin-top:-2px;
-			font-size:13px;
-		}
-	}
 }
 
 /* Themes in Display Menu */
@@ -2303,62 +2128,6 @@ cq-share-dialog {
 .cq-up {
 	color: #85c730;
 }
-/* Chart Title */
-
-.stx-chart-panel.stx-show {/* Hide default Chart Title and Icons */
-	display:none;
-}
-cq-chart-title {
-	padding: 0.7em 1em;
-	cursor: pointer;
-	display: none;
-	position:relative;
-	background: #fff;
-	font-family:$heading-font;
-	font-weight:700;
-	float:none;
-	margin:10px 10px;
-	color: #333;
-	line-height: 22px;
-	font-size: 12px;
-	text-align: left;
-}
-cq-chart-title.stx-show{
-	display:inline-block;
-}
-cq-chart-title cq-symbol {
-//	display:inline-block;
-	font-size:28px;
-//	text-transform: uppercase;
-//	line-height:30px;
-}
-cq-chart-title cq-chart-price {
-	font-family:$base-font;
-	display:inline-block;
-	line-height:13px;
-	font-size:11px;
-	margin-left:5px;
-	font-weight:500;
-	color:$DEFAULT-text-medium;
-	vertical-align:text-bottom;
-}
-cq-chart-title cq-chart-price > * {position:relative;}
-cq-chart-title cq-chart-price cq-change:after {/* Up/Down Arrow indicators */
-	content:"";
-    display: block;
-    height: 12px;
-    width: 12px;
-	float:left;
-}
-cq-chart-title cq-chart-price.stx-up cq-change:after {
-    background-image: url(img/stx-sprite-ui.svg);
-	background-position: -633px -31px;
-}
-cq-chart-title cq-chart-price.stx-down cq-change:after {
-    background-image: url(img/stx-sprite-ui.svg);
-	background-position: -683px -31px;
-}
-
 
 /* Comparisons */
 cq-comparison {
@@ -2403,14 +2172,6 @@ cq-comparison-add-label {
 		display:none;
 	}
 }
-cq-comparison-plus {/* Plus icon image */
-	width:12px;
-	height:12px;
-	background-image:url(img/stx-sprite-ui.svg);
-	background-position: -532px -32px;
-	margin-right:4px;
-}
-
 
 /* Add Comparison Module */
 cq-comparison-add {
@@ -2418,8 +2179,6 @@ cq-comparison-add {
 	position:absolute;
 	top: -15px;
 	white-space: nowrap;
-	min-width: 210px;
-	height: 36px;
 	opacity:0;
 	background:darken( $DEFAULT-main, 2% );
 	@include border-radius($soft-corners);
@@ -2446,7 +2205,6 @@ cq-comparison-add {
 
 	& input {
 		border:none;
-		height:36px;
 		@include box-sizing(border-box);
 		/*@include placeholder {
 			color: mix(#000, $DEFAULT-main, 40% );
@@ -2469,8 +2227,6 @@ cq-comparison-add {
 		}
 	}
 }
-//cq-comparison-lookup-frame {
-//}
 
 /* Comparison Key */
 cq-comparison-key {

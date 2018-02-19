@@ -1,10 +1,13 @@
 .ciq-chart-types {
+    width: 112px;
+    &.stxMenuActive {
+        .ciq-title {
+            background-color: #e4e6f1;
+            border-radius: 2px;
+        }
+    }
     cq-menu-dropdown {
         width: 12em;
-        padding: 0.5em 0 !important;
-        border-top: none !important;
-        box-shadow: 0 0.375em 0.625em 0 rgba(0, 0, 0, 0.14);
-        border-radius: 0.125em;
     }
     .ciq-title {
         display: flex;

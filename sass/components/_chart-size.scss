@@ -1,29 +1,29 @@
 #chartSize {
-    width: 120px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
     height: auto;
-    margin: auto 0 auto 15px;
 
     &:after {
         display: none;
     }
-    span {
-        height: auto;
-
-        &#text {
-            width: 75px;
-            padding: 0 10px;
-        }
-        &#zoomOut {
-            background: url('../icons/minus/ic-minus-light.svg');
-            background-repeat: no-repeat;
-            width: 8px;
-            height: 8px;
-        }
-        &#zoomIn {
-            background: url('../icons/add/ic-add-light.svg');
-            background-repeat: no-repeat;
-            width: 8px;
-            height: 8px;
-        }
+    #zoomOut, #zoomIn {
+        background-repeat: no-repeat !important;
+        background-position: 50% 50% !important;
+        flex-grow: 1;
+        height: 100%;
+        opacity: 1;
+    }
+    #zoomOut {
+        background: url('../icons/minus/ic-minus-light.svg');
+    }
+    #zoomIn {
+        background: url('../icons/add/ic-add-light.svg');
+    }
+    .interval-title {
+        white-space: nowrap;
+        width: auto;
+        line-height: 25px;
+        display: none; /* TODO */
     }
 }

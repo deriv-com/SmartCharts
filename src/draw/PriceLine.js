@@ -40,7 +40,7 @@ class PriceLine extends Line {
     }
 
     set relative(value) {
-        if (this._relative === value) return;
+        if (this._relative === value) {return;}
 
         this._relative = value;
         const currentPrice = this._stx.currentQuote().Close;
@@ -66,8 +66,8 @@ class PriceLine extends Line {
         const newCenter = newTop + (this._line.offsetHeight / 2);
         let newPrice = this._priceFromLocation(newCenter);
 
-        if (this._priceConstrainer) newPrice = this._priceConstrainer(newPrice);
-        if (this.relative) newPrice -= this._stx.currentQuote().Close;
+        if (this._priceConstrainer) {newPrice = this._priceConstrainer(newPrice);}
+        if (this.relative) {newPrice -= this._stx.currentQuote().Close;}
 
         this.price = this._snapPrice(newPrice);
     }
@@ -75,7 +75,7 @@ class PriceLine extends Line {
     _snapPrice(price) {
         // snap the limit price to the desired interval if one defined
         let minTick = this._stx.chart.yAxis.minimumPriceTick;
-        if (!minTick) minTick = 0.00000001; // maximum # places
+        if (!minTick) {minTick = 0.00000001;} // maximum # places
         let numToRoundTo = 1 / minTick;
         price = Math.round(price * numToRoundTo) / numToRoundTo;
 

@@ -1,4 +1,5 @@
 import $ from 'jquery';
+import UIManager from './ui/UIManager';
 
 /**
  * Menu web component `<cq-menu>`.
@@ -32,8 +33,7 @@ class Menu extends HTMLElement {
 
     attachedCallback() {
         if (this.attached) return;
-        this.uiManager = $('cq-ui-manager');
-        if (this.uiManager.length > 0) this.uiManager = this.uiManager[0];
+        this.uiManager = UIManager.instance;
 
         this.attached = true;
 
@@ -129,7 +129,9 @@ class Menu extends HTMLElement {
         if (this.active) { // tapping on the menu if it is open will close it
             // todo, don't close if active children (cascading). Note, cascading already works for dialogs.
             e.stopPropagation();
-            if (!this.noClose) uiManager.closeMenu(this);
+            if (!this.noClose) {
+                uiManager.closeMenu(this);
+            }
         } else if (!this.active) { // if we've clicked on the label for the menu, then open the menu
             e.stopPropagation();
 

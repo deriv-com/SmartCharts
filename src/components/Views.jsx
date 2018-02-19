@@ -1,6 +1,9 @@
 import $ from 'jquery';
 import CIQ from 'chartiq';
-import ContextTag from './ui/ContextTag';
+import React, { Component } from 'react';
+import contextAware from '../contextAware';
+import { downloadURI } from '../components/ui/utils';
+import UIManager from './ui/UIManager';
 
 /**
  * Views web component `<cq-views>`.
@@ -11,13 +14,22 @@ import ContextTag from './ui/ContextTag';
  * @name CIQ.UI.Views
  * @namespace WebComponents.cq-views
  */
-class Views extends ContextTag {
-    attachedCallback() {
-        if (this.attached) return;
-        super.attachedCallback();
-        this.attached = true;
+class Views extends Component {
+    constructor() {
+        super();
+        this.state = {
+            views: [],
+        };
     }
 
+    onContextReady(context) {
+        // TODO: this is a really hackish way to use React components like web components...
+        context.viewComponent = this;
+
+        this._context = context;
+        this.uiManager = UIManager.instance;
+        this.initialize();
+    }
     /**
      * Initialize a views menu
      *
@@ -69,9 +81,6 @@ class Views extends ContextTag {
             };
         }
         if (!this.params.nameValueStore) this.params.nameValueStore = new CIQ.NameValueStore();
-        if (!this.params.template) this.params.template = 'template[cq-view]';
-        this.params.template = this.node.find(this.params.template);
-        this.params.template.detach();
         let self = this;
         this.params.nameValueStore.get('stx-views', (err, obj) => {
             if (!err && obj) self.params.viewObj.views = obj;
@@ -88,22 +97,20 @@ class Views extends ContextTag {
      * @memberof WebComponents.cq-views
      */
     renderMenu() {
-        let menu = $(this.node);
         let self = this;
-        let stx = self.context.stx;
+        let stx = self._context.stx;
 
         function remove(i) {
             return function (e) {
                 e.stopPropagation();
                 let saved = false;
-                $('cq-views').each(function () {
-                    this.params.viewObj.views.splice(i, 1);
-                    if (!saved) {
-                        this.params.nameValueStore.set('stx-views', self.params.viewObj.views);
-                        saved = true;
-                    }
-                    this.renderMenu();
-                });
+
+                self.params.viewObj.views.splice(i, 1);
+                if (!saved) {
+                    self.params.nameValueStore.set('stx-views', self.params.viewObj.views);
+                    saved = true;
+                }
+                self.renderMenu();
             };
         }
 
@@ -111,7 +118,7 @@ class Views extends ContextTag {
             return function (e) {
                 e.stopPropagation();
                 self.uiManager.closeMenu();
-                if (self.context.loader) self.context.loader.show();
+                if (self._context.loader) self._context.loader.show();
                 let layout = CIQ.first(self.params.viewObj.views[i]);
 
                 function importLayout() {
@@ -120,45 +127,112 @@ class Views extends ContextTag {
                     stx.dispatch('layout', {
                         stx,
                     });
-                    if (self.context.loader) self.context.loader.hide();
+                    if (self._context.loader) self._context.loader.hide();
                 }
                 setTimeout(importLayout, 10);
             };
         }
 
-        menu.find('cq-views-content cq-item').remove();
+        const views = [];
         for (let v = 0; v < this.params.viewObj.views.length; v++) {
             let view = CIQ.first(self.params.viewObj.views[v]);
             if (view === 'recent') continue;
-            let item = CIQ.UI.makeFromTemplate(this.params.template);
-            let label = item.find('cq-label');
-            let removeView = item.find('div');
-
-            if (label.length) {
-                label.addClass(`view-name-${view}`);
-                label.prepend(view); // don't use text(); it wipes out anything else embedded in the item
-            }
-            if (removeView.length) removeView.stxtap(remove(v));
-            item.stxtap(enable(v));
-            menu.find('cq-views-content').append(item);
-        }
-
-        let addNew = menu.find('cq-view-save');
-        if (addNew) {
-            let context = this.context;
-            addNew.stxtap((e) => {
-                $('cq-view-dialog').each(function () {
-                    $(this).find('input').val('');
-                    this.open({
-                        context,
-                    });
-                });
+            views.push({
+                labelClass: `view-name-${view}`,
+                label: view,
+                enableFunc: enable(v),
+                removeFunc: remove(v),
             });
         }
+
+
+        this.setState({
+            views,
+        });
+
         if (this.params.renderCB) this.params.renderCB(menu);
+    }
+
+    getChartFileName = (stx) => {
+        let unit, value;
+        if (typeof stx.layout.interval === 'string') {
+            value = stx.layout.periodicity;
+            unit = stx.layout.interval;
+        } else {
+            value = stx.layout.interval;
+            unit = stx.layout.timeUnit;
+        }
+        return `${stx.chart.symbol} (${value} ${unit}).png`;
+    }
+
+    addNew = () => {
+        let context = this._context;
+        const viewDialog = $$$('cq-view-dialog', this._context.topNode);
+        $(viewDialog).find('input').val('');
+        viewDialog.open({
+            context,
+        });
+    }
+
+    downloadChart = () => {
+        CIQ.UI.bypassBindings = true;
+        if (this._context.loader) {
+            this._context.loader.show();
+        }
+        const stx = this._context.stx;
+        CIQ.Share.createImage(stx, {
+            hide: ['#chartControls'],
+        }, (data) => {
+            CIQ.UI.bypassBindings = false;
+            if (this._context.loader) {
+                this._context.loader.hide();
+            }
+            const name = this.getChartFileName(stx);
+            downloadURI(data, name);
+        });
+    }
+
+    render() {
+        const { views } = this.state;
+        return (
+            <cq-menu class="ciq-menu ciq-views collapse">
+                <span className="ciq-icon ciq-ic-charttemplate-normal" />
+                <cq-menu-dropdown>
+                    <cq-views cq-no-close>
+                        <cq-views-content>
+                            {views.map((c, i) =>
+                                <cq-item key={i} onClick={c.enableFunc}>
+                                    <cq-label className={c.labelClass}>{c.label}</cq-label>
+                                    <div className="ciq-icon ciq-close" onClick={c.removeFunc} />
+                                </cq-item>
+                            )}
+                        </cq-views-content>
+                        <div
+                            onClick={() => {}}
+                            className="ciq-row"
+                        >
+                            <span className="ciq-icon ciq-ic-templatelist" />
+                            <span>Template List</span>
+                        </div>
+                        <div
+                            onClick={this.addNew}
+                            className="ciq-row"
+                        >
+                            <span className="ciq-icon ciq-ic-add" />
+                            <span>Add Template</span>
+                        </div>
+                        <div
+                            onClick={this.downloadChart}
+                            className="ciq-row"
+                        >
+                            <span className="ciq-icon ciq-ic-download" />
+                            <span>Download Chart</span>
+                        </div>
+                    </cq-views>
+                </cq-menu-dropdown>
+            </cq-menu>
+        );
     }
 }
 
-
-document.registerElement('cq-views', Views);
-export default Views;
+export default contextAware(Views);

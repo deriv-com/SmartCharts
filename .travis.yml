@@ -1,0 +1,30 @@
+language: node_js
+
+branches:
+  only:
+  - master
+
+notifications:
+  slack:
+    rooms:
+      - binary-group:TI7oyWjkwf9Xx2Rllt2Pr5zY
+    on_pull_requests: false
+
+node_js:
+  - "8"
+
+install:
+  - yarn install
+
+jobs:
+  include:
+    - stage: test
+      script: echo 'No tests are implemented yet...'
+    - stage: deploy
+      script:
+        - yarn gh-pages -- --repo 'git@github.com:regentmarkets/chartiq.git'
+
+stages:
+  - test
+  - name: deploy
+    if: not type in (pull_request)

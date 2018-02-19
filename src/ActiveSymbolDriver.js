@@ -6,19 +6,16 @@ import Driver from './components/ui/Driver';
  * @param {array} exchanges An array of ecxchanges that can be searched against
  */
 class ActiveSymbolDriver extends Driver {
-    constructor(connectionManager) {
+    constructor(symbols) {
         super();
-        this.symbolsPromise = connectionManager.send({
-            active_symbols: 'brief',
-            product_type: 'basic',
-        }).then((data) => {
-            this._symbols = this._processSymbols(data.active_symbols);
-            return this._symbols;
-        });
+        if (symbols) {
+            this.symbols = symbols;
+        }
     }
 
     _processSymbols(symbols) {
-        const processedSymbols = [];
+        let processedSymbols = [];
+        const order = ['Forex', 'Indices', 'OTC Stocks', 'Commodities', 'Volatility Indices'];
 
         for (const s of symbols) {
             processedSymbols.push({
@@ -27,17 +24,30 @@ class ActiveSymbolDriver extends Driver {
                     name: s.display_name,
                     market_display_name: s.market_display_name,
                     exchange_is_open: s.exchange_is_open,
-                    exchDisp: s.market,
                 },
-                display: [s.symbol, s.display_name, s.market.toUpperCase()],
+                display: [s.display_name],
             });
         }
 
-        return processedSymbols;
+        // Categorize symbols in order defined by another array; there's probably a more
+        // efficient algo for this, but for just~100 items it's not worth the effort
+        const orderedSymbols = [];
+        for (const o of order) {
+            for (const p of processedSymbols) {
+                if (o === p.data.market_display_name) {
+                    orderedSymbols.push(p);
+                }
+            }
+        }
+        return orderedSymbols;
     }
 
-    get activeSymbols() {
-        return this.symbolsPromise;
+    set symbols(active_symbols) {
+        this._symbols = this._processSymbols(active_symbols);
+    }
+
+    get symbols() {
+        return this._symbols;
     }
 
     /**
@@ -48,26 +58,15 @@ class ActiveSymbolDriver extends Driver {
      * @param {function} callback Callback upon results
      */
     acceptText(text, filter, maxResults, callback) {
-        if (!this._symbols) return [];
+        if (!this._symbols) {return [];}
 
         const reg = RegExp(text, 'i');
-        const result = [];
+        let result = [];
         let _filter = filter || 'All';
-
-        switch (_filter) {
-        case 'OTC':
-            _filter = 'OTC Stocks';
-            break;
-        case 'Volatility':
-            _filter = 'Volatility Indices';
-            break;
-        default:
-            break;
-        }
 
         for (const s of this._symbols) {
             const d = s.data;
-            if (_filter !== 'All' && d.market_display_name !== _filter) continue;
+            if (_filter !== 'All' && d.market_display_name !== _filter) {continue;}
 
             if (reg.test(d.symbol) || reg.test(d.name)) {
                 result.push(s);

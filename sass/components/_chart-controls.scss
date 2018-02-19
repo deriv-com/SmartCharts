@@ -1,103 +1,181 @@
 $selected-background-color: #e4e6f1;
 
-#chartControls {
-  /* Chart Control module */
-  position: absolute;
-  display: flex !important;
-  bottom: 37px !important;
-  left: 50%;
-  transform: translateX(-50%);
-  height: 32px;
-  width: auto;
-  text-align: center;
-  background: rgba(250, 250, 250, 0.8);
-  box-shadow: 1px 1px 3px rgba(0,0,0,0.12), 1px 1px 2px rgba(0,0,0,0.24);
-  padding: 0 1.5em;
-  z-index: 30;
-  border-radius: 5px;
-  transition: background 1s;
-  .ciq-toggles {
-    min-width: 7em;
-  }
-  > .ciq-period {
-    min-width: 11.5em;
-  }
-  &:hover {
-      background: rgba(250, 250, 250, 1);
-      transition: background 0.3s;
-  }
-  #chartSize {
-      background: transparent;
-      box-shadow: none;
-      min-width: 6em;
-  }
-  .stxMenuActive {
-      .ciq-title {
-          background-color: $selected-background-color;
-      }
-      >.ciq-icon {
-          background-color: $selected-background-color;
-      }
-  }
-  .ciq-row {
-    text-align: left;
-    height: 24px;
-    display: flex;
-    align-items: center;
-    color: black;
-    padding: 0.2em 0.9em;
-    &:hover,
-    &[cq-focused] {
-      background: $selected-background-color;
-    }
-  }
-  .ciq-menu {
-      line-height: 2.1em;
-      padding: 0.35em 0.35em;
-      > span {
-        margin: 0;
+  #chartControls {
+    /* Chart Control module */
+    position: absolute;
+    display: flex !important;
+    bottom: 37px !important;
+    left: 50%;
+    transform: translateX(-50%);
+    height: 32px;
+    width: auto;
+
+    /* background: */
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 2px;
+    box-sizing: border-box;
+    box-shadow: 0 2px 2px 0 rgba(0,0,0,0.12);
+
+    z-index: 31;
+    transition: background 1s;
+    .ciq-toggles {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
         padding: 0;
-      }
-      &:after {
-          right: 5px;
-          top: 11px;
-          transform: rotate(225deg); /* 180 + 45 */
-          display: none;
-      }
+        width: 79px;
+        padding: 0 5px;
+        border-left: 1px solid #E9E9ED;
+        .toggle-icon {
+            position: relative;
+            &.active {
+                background-color: #e4e6f1;
+                border: none;
+                border-radius: 2px;
+            }
 
-      cq-separator {
+            .tooltip {
+                border: none;
+                position: relative;
+                height: 25px;
+                width: 25px;
+                font-size: 12px;
+                &:after {
+                    position: absolute;
+                    opacity: 0;
+                    transition: opacity 0.3s;
+                    pointer-events: none;
+                    border-radius: 5px;
+                    top: 32px;
+                    color: #fff;
+                    content: attr(tooltip-title);
+                    left: 10%;
+                    padding: 6px;
+                    z-index: 98;
+                    background: rgba(21,33,45,0.88);
+                    box-shadow: 0 2px 8px 0 rgba(21,33,45,0.32);
+                    border-radius: 4px;
+                }
+                &:before {
+                    position: absolute;
+                    opacity: 0;
+                    transition: opacity 0.3s;
+                    pointer-events: none;
+                    border: solid;
+                    border-color: rgba(21,33,45,0.88) transparent;
+                    border-width: 0px 4px 4px 4px;
+                    top: 28px;
+                    content: "";
+                    left: 40%;
+                    z-index: 99;
+                }
+                &:hover:after { opacity: 1; }
+                &:hover:before { opacity: 1; }
+            }
+        }
+        &:after { display: none; }
+    }
+    > .ciq-period {
+        min-width: 11.5em;
+    }
+    &:hover {
+        background: rgba(255, 255, 255, 1);
+        transition: background 0.3s;
+    }
+    #chartSize {
+        background: transparent;
+        box-shadow: none;
+        min-width: 6em;
+    }
+    .stxMenuActive {
+        .ciq-title {
+            background-color: $selected-background-color;
+        }
+        >.ciq-icon {
+            background-color: $selected-background-color;
+        }
+    }
+    .ciq-row {
+      text-align: left;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      color: black;
+      padding: 0.2em 0.9em;
+      &:hover,
+      &[cq-focused] {
+          background: $selected-background-color;
+      }
+    }
+    .ciq-menu {
+        line-height: 2.1em;
+        padding: 0.35em 0.2em;
+        > span {
           margin: 0;
-      }
+          padding: 0;
+        }
+        &:after {
+            right: 5px;
+            top: 11px;
+            transform: rotate(225deg); /* 180 + 45 */
+            display: none;
+        }
 
-      cq-menu-dropdown {
-          bottom: 3.6em;
-          margin-top: 0;
-          padding-bottom: 0;
-          padding-top: 0;
-          border-top: 1px solid #bbb;
-      }
-  }
-  .ciq-icon {
-    width: 24px;
-    height: 24px;
-    display: inline-block;
-  }
-  .ciq-views  {
-      cq-item {
-          text-align: left;
-          padding: 0 10px;
-          cq-label {
-              width: 155px;
-          }
-      }
-      cq-separator {
-          width: 200px;
-      }
-  }
-  .ciq-ic-indicator-normal {
-      background: url('icons/indicators/ic-indicator-normal-light.svg');
-  }
-  .ciq-draw > span{
-      background: url('icons/drawing tools/ic-drawingtools-normal-light.svg');
-  }
+        cq-separator {
+            margin: 0;
+        }
+
+        cq-menu-dropdown, .cq-menu-dropdown {
+            bottom: 3.6em;
+            margin-top: 0;
+            border-top: 1px solid #bbb;
+            padding: 0.5em 0;
+            border-top: none;
+            box-shadow: 0 0.375em 0.625em 0 rgba(0, 0, 0, 0.14);
+            border-radius: 0.125em;
+            .ciq-icon {
+                width: 16px;
+                height: 16px;
+                margin: 0 5px;
+            }
+        }
+    }
+    .ciq-icon {
+        width: 24px;
+        height: 24px;
+        display: inline-block;
+    }
+    .ciq-views  {
+        cq-item {
+            text-align: left;
+            padding: 0 10px;
+            cq-label {
+                width: 155px;
+            }
+        }
+        cq-separator {
+            width: 200px;
+        }
+    }
+
+    cq-comparison-add {
+        cq-comparison-lookup-frame {
+            position: absolute;
+            bottom: 0em;
+            left: -10em;
+        }
+    }
+
+    .ciq-ic-indicator-normal {
+        background: url('icons/indicators/ic-indicator-normal-light.svg');
+    }
+    .ciq-ic-charttemplate-normal {
+        background: url('icons/chart template/ic-charttemplate-normal-light.svg');
+    }
+    .ciq-draw > span {
+        background: url('icons/drawing tools/ic-drawingtools-normal-light.svg');
+    }
+    .ciq-ic-comparison {
+      background: url('icons/comparison/ic-comparison-normal-light.svg');
+    }
 }
