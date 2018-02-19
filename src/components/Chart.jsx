@@ -7,8 +7,8 @@ import CIQ from 'chartiq'; // eslint-disable-line
 import '../../chartiq/iscroll';
 /* css + scss */
 import '../../css/stx-chart.css';
-import '../../sass/chartiq.scss';
-import '../sass/_ciq-custom.scss';
+import 'sass/chartiq.scss';
+import 'sass/_ciq-custom.scss';
 
 import '../AddOns';
 import '../Plugin';
