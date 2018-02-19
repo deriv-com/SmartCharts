@@ -61,11 +61,6 @@ const config = {
             },
         ],
     },
-    resolve: {
-        alias: {
-            sass: path.resolve(__dirname, 'sass'),
-        }
-    },
     plugins: [
         new ExtractTextPlugin({
             filename: 'binarychartiq.css',
