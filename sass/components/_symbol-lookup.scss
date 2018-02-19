@@ -7,7 +7,7 @@ cq-lookup-results {
     margin-top: 5px;
     color: $DEFAULT-text-medium;
     opacity: 0;
-    transition: opacity .20s .50s;
+    //transition: opacity .20s .50s;
     overflow: hidden;
     height: 0px;
     @include box-shadow (0px, 2px, 4px, rgba(0, 0, 0, .2));
@@ -32,7 +32,7 @@ cq-lookup-results {
     cq-lookup {
         width: 40em;
     }
-    cq-lookup-results {
+    cq-lookup-results, &.cq-categorical-display > .cq-menu-dropdown {
         opacity: 1;
         height: auto;
     }
