@@ -35,7 +35,7 @@ class ChartSize extends Component {
                     id='zoomOut'
                 >
                 </span>
-                <span class="interval-title">{this.state.text}</span>
+                <span className="interval-title">{this.state.text}</span>
                 <span
                     id='zoomIn'
                 >

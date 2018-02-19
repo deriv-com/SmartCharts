@@ -26,15 +26,12 @@ const ChartTypes = ({
     </cq-menu>
 );
 
+const addIcon = t => Object.assign({}, t, { icon: `ciq-icon ciq-${t.id.replace('_', '-')}`});
 export default connect(
     ({chartType}) => ({
-        type: chartType.type,
+        type: addIcon(chartType.type),
         setType: chartType.setType,
-        types: chartType.map(type => Object.assign(
-            {},
-            type,
-            { icon: `ciq-icon ciq-${type.id.replace('_', '-')}`}
-        ))
+        types: chartType.types.map(addIcon)
     })
 )(ChartTypes);
 
