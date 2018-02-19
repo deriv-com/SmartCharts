@@ -114,22 +114,6 @@ cq-lookup-icon {
 	}
 }
 
-.ciq-toggles {
-	&:after {
-		.#{$DARK} & {background: darken( $DARK-bg, 20% );}
-
-	}
-}
-
-cq-toggle {
-	&.active {
-		.#{$DARK} & {color:$DARK-text;}
-	}
-}
-
-
-.#{$DARK} cq-toggle:hover > span,
-.#{$DARK} cq-toggle:active > span,
 .break-sm .#{$DARK} .ciq-menu.collapse:hover > span,
 .break-sm .#{$DARK} .ciq-menu.collapse:active > span {
 	border:solid 1px lighten( $DARK-bg, 10% );

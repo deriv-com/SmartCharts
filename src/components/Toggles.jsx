@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import {connect} from '../store/Connect';
-import '../../sass/components/_toggles.scss';
 
 const ChartTypes = ({
     toggleCrosshair,
