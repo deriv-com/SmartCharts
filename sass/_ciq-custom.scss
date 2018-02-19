@@ -1,0 +1,19 @@
+.stx_grid { /* Default Grid lines */
+    background: #f2f2f2;
+    width: 1px;
+}
+.stx_grid_border {/* Default Grid borders */
+    opacity: 0;
+}
+.stx_grid_dark {/* Default Grid dividers */
+    color: #f2f2f2;
+    opacity: 1;
+}
+.stx_yaxis, .stx_xaxis, .stx_xaxis_dark {
+    color: #bfbfbf;
+    font-size: 10px;
+    font-family: Roboto;
+}
+.chartContainer {
+    background: #fcfcfc;
+}

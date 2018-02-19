@@ -8,6 +8,7 @@ import '../../chartiq/iscroll';
 /* css + scss */
 import '../../css/stx-chart.css';
 import '../../sass/chartiq.scss';
+import '../../sass/_ciq-custom.scss';
 
 import '../AddOns';
 import '../Plugin';
@@ -304,4 +305,3 @@ export default connect(
         init: chart.init
     })
 )(Chart);
-
