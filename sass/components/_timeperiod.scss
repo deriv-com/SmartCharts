@@ -1,14 +1,16 @@
 .ciq-period {
-    border-right: 1px solid rgba(0, 0, 0, 0.2);
-    border-left: 1px solid rgba(0, 0, 0, 0.2);
+    border-left: 1px solid #E9E9ED;
+    border-right: 1px solid #E9E9ED;
+
     padding: 0;
 
     > .cq-menu-btn {
         margin: 0 12px;
 
         > span {
-            padding: 3px 0;
-            border-radius: 3px;
+            border-radius: 2px;
+            height: 25px;
+            display: inline-block;
         }
     }
     &.stxMenuActive {
