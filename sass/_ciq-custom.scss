@@ -1,0 +1,15 @@
+.stx_grid { /* Default Grid lines */
+    background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0), #f2f2f2);
+    width: 1px;
+}
+.stx_grid_border {/* Default Grid borders */
+    opacity: 0;
+}
+.stx_yaxis, .stx_xaxis {
+    color: #bfbfbf;
+    font-size: 10px;
+    font-family: Roboto;
+}
+.chartContainer {
+    background: #fcfcfc;
+}
