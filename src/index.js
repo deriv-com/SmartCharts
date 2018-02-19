@@ -2,7 +2,6 @@
 import $ from 'jquery';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import '../chartiq/splines';
 import * as html2canvas from 'html2canvas';
 import Chart from './components/Chart.jsx';
 import ConnectionManager from './ConnectionManager';

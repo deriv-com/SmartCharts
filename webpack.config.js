@@ -67,6 +67,9 @@ const config = {
         }),
         new CopyWebpackPlugin([
             { from: './chartiq/chartiq.js' },
+        ]),
+        new CopyWebpackPlugin([
+            { from: './chartiq/splines.js' },
         ])
     ],
     externals: {
