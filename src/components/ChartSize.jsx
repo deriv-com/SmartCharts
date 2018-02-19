@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import contextAware from '../contextAware';
-import '../../sass/components/_chart-size.scss';
+import 'sass/components/_chart-size.scss';
 import {getTimeUnit} from '../store/utils';
 
 class ChartSize extends Component {
