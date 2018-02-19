@@ -6,7 +6,7 @@ const bchart = BinaryChartiq.addNewChart({
     selector: '#root',
 });
 
-BinaryChartiq.getConnectionManager().send({
+bchart.connectionManager.send({
     active_symbols: 'brief',
     product_type: 'basic',
 }).then((data) => {
