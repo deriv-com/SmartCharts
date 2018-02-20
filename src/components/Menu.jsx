@@ -1,16 +1,12 @@
-import React, { Component } from 'react';
-import contextAware from '../contextAware';
+import React, { Component, Fragment } from 'react';
+import {connect} from '../store/Connect';
 
 class Menu extends Component {
-    onContextReady(context) {
-        this._context = context;
-    }
-
     componentWillReceiveProps(nextProps) {
         if (this.props.isOpened !== nextProps.isOpened
             && !nextProps.isOpened
-            && this._context) {
-            this._context.stx.modalEnd();
+            && nextProps.context) {
+            nextProps.context.stx.modalEnd();
         }
     }
 
@@ -46,18 +42,20 @@ class Menu extends Component {
     handleMouseInDropdown = (e, isMouseEnter) => {
         const { isOpened } = this.props;
         if (isOpened
-            && this._context
+            && this.props.context
             && this.dropdown.contains(e.target)) {
             if (isMouseEnter) {
-                this._context.stx.modalBegin();
+                this.props.context.stx.modalBegin();
             } else {
-                this._context.stx.modalEnd();
+                this.props.context.stx.modalEnd();
             }
         }
     }
 
     render() {
         const { isOpened, className, setOpen, menuBtn, children } = this.props;
+        const first = React.Children.map(children, (child, i) => i === 0 ? child : null);
+        const rest  = React.Children.map(children, (child, i) => i !== 0 ? child : null);
 
         return (
             <div className={`ciq-menu ${className || ''} ${isOpened ? 'stxMenuActive' : ''}`}>
@@ -66,7 +64,7 @@ class Menu extends Component {
                     className="cq-menu-btn"
                     onClick={() => {setOpen(!isOpened);}}
                 >
-                    {menuBtn}
+                    {first}
                 </div>
                 <div
                     ref={el => this.dropdown = el}
@@ -74,11 +72,20 @@ class Menu extends Component {
                     onMouseEnter={this.mouseEnterDropdown}
                     onMouseLeave={this.mouseLeaveDropdown}
                 >
-                    {children}
+                    {rest}
                 </div>
             </div>
         );
     }
 }
 
-export default contextAware(Menu);
+const MenuConnected = connect(
+    ({chart}) => ({
+        context: chart.context
+    })
+)(Menu);
+
+MenuConnected.Title = ({children}) => <span> {children} </span>;
+MenuConnected.Body  = ({children}) => <Fragment> {children} </Fragment>;
+
+export default MenuConnected;

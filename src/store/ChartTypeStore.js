@@ -17,6 +17,9 @@ export default class ChartTypeStore {
     }
 
     @action.bound setType(type) {
+        if(typeof type === 'string') {
+            type = this.types.filter(t => t.id === type)[0];
+        }
         if (type.id === 'spline') {
             // Spline is just a line with tension
             this.stx.setChartType('mountain');
@@ -26,16 +29,26 @@ export default class ChartTypeStore {
             this.stx.chart.tension = 0;
         }
         this.type = type;
+        this.open = false;
     }
 
-    @observable types = [
-        { id: 'mountain', name: 'Line', },
-        { id: 'line', name: 'Dot', },
-        { id: 'spline', name: 'Spline', },
-        { id: 'candle', name: 'Candle', },
-        { id: 'colored_bar', name: 'OHLC', },
-        { id: 'hollow_candle', name: 'Hollow Candle', },
-    ];
+    @computed get types() {
+        const isTickSelected = this.mainStore.timeperiod.timeUnit === 'tick';
 
-    @observable type = this.types[0];
+        return [
+            { id: 'mountain', name: 'Line', disable: false },
+            { id: 'line', name: 'Dot', disable: false },
+            { id: 'spline', name: 'Spline', disable: false },
+            { id: 'candle', name: 'Candle', disable: isTickSelected },
+            { id: 'colored_bar', name: 'OHLC', disable: isTickSelected },
+            { id: 'hollow_candle', name: 'Hollow Candle', disable: isTickSelected },
+        ];
+    }
+
+    @observable type = { id: 'mountain', name: 'Line', };
+    @observable open = false;
+
+    @action.bound setOpen(value) {
+        this.open = value;
+    }
 }
