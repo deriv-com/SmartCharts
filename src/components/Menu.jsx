@@ -4,13 +4,14 @@ import {connect} from '../store/Connect';
 class Menu extends Component {
     componentWillReceiveProps(nextProps) {
         if (this.props.isOpened !== nextProps.isOpened) {
-            if (!nextProps.isOpened && this._context) {
-                document.activeElement.blur();
-                this._context.stx.modalEnd();
-            }
             if (nextProps.isOpened) {
                 const { onOpen } = this.props;
                 if (onOpen) onOpen();
+            } else {
+                if (nextProps.context) {
+                    document.activeElement.blur();
+                    nextProps.context.stx.modalEnd();
+                }
             }
         }
     }
