@@ -37,7 +37,14 @@
         padding: 0.5em 0.9em;
     }
     .cq-filter {
-        padding-left: 0.9em
+        padding-left: 0.9em;
+        line-height: 3em;
+        text-align: left;
+        cursor: pointer;
+    }
+    .cq-filter:hover {
+        background-color: #efefef;
+        color: #000;
     }
     .cq-item {
         line-height: 3em;
@@ -47,8 +54,9 @@
         background-color: #f4f4f6;
         width: 25em;
     }
-    .filtered-symbols {
-        padding-bottom: 30em;
+    .results-panel {
+        position: relative;
+        padding-bottom: 5em;
     }
 }
 

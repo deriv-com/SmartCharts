@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import {connect} from '../store/Connect';
 
 class Menu extends Component {
