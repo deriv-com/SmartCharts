@@ -38,4 +38,9 @@ export default class ChartTypeStore {
     ];
 
     @observable type = this.types[0];
+    @observable open = false;
+
+    @action.bound setOpen(value) {
+        this.open = value;
+    }
 }
