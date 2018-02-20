@@ -19,11 +19,11 @@ export default class ComparisonStore {
 
     symbols = [];
     @observable filteredSymbols = [];
-    @observable open = false;
+    @observable isOpened = false;
     @observable filterText = '';
 
     @action.bound setOpen(val) {
-        this.open = val;
+        this.isOpened = val;
     }
 
     onSymbolsChange() {

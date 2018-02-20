@@ -11,9 +11,6 @@
     height: 0px;
     width: 32em;
     @include box-shadow (0px, 2px, 4px, rgba(0, 0, 0, .2));
-    cq-scroll {
-        padding-top: 1.6em;
-    }
     .cq-lookup-input  {
         margin: 1.5em 0.7em 0.7em 0.7em;
         > input {
@@ -46,8 +43,12 @@
         line-height: 3em;
     }
     cq-scroll {
+        padding-top: 0.8em;
         background-color: #f4f4f6;
         width: 25em;
+    }
+    .filtered-symbols {
+        padding-bottom: 30em;
     }
 }
 

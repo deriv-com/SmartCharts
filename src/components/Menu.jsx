@@ -58,7 +58,7 @@ class Menu extends Component {
     }
 
     render() {
-        const { isOpened, className, setOpen, menuBtn, children } = this.props;
+        const { isOpened, className, setOpen, children } = this.props;
         const first = React.Children.map(children, (child, i) => i === 0 ? child : null);
         const rest  = React.Children.map(children, (child, i) => i !== 0 ? child : null);
 
@@ -90,7 +90,7 @@ const MenuConnected = connect(
     })
 )(Menu);
 
-MenuConnected.Title = ({children}) => <span> {children} </span>;
-MenuConnected.Body  = ({children}) => <Fragment> {children} </Fragment>;
+MenuConnected.Title = ({children}) => children;
+MenuConnected.Body  = ({children}) => children;
 
 export default MenuConnected;
