@@ -15,6 +15,12 @@ class CategoricalDisplay extends Component {
                 this.filterSymbols();
             });
         }
+
+        if (this.props.isShown !== nextProps.isShown) {
+            if (nextProps.isShown) {
+                this.searchInput.focus();
+            }
+        }
     }
 
     filterSymbols() {

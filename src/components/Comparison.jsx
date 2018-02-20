@@ -20,6 +20,7 @@ const Comparison = ({
             </Menu.Title>
             <Menu.Body>
                 <CategoricalDisplay
+                    isShown={isOpened}
                     activeSymbols={activeSymbols}
                     onSelectItem={onSelectItem}
                 />
