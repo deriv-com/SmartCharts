@@ -5,7 +5,7 @@ import Menu from './Menu.jsx';
 
 const Timeperiod = ({
     setPeriodicity,
-    open,
+    isOpened,
     setOpen,
     interval,
     timeUnit,
@@ -14,7 +14,7 @@ const Timeperiod = ({
     return (
         <Menu
             className="ciq-period"
-            isOpened={open}
+            isOpened={isOpened}
             setOpen={setOpen}
         >
             <Menu.Title>
@@ -112,7 +112,7 @@ const Timeperiod = ({
 export default connect(
     ({ timeperiod: s }) => ({
         setPeriodicity: s.setPeriodicity,
-        open: s.open,
+        isOpened: s.open,
         setOpen: s.setOpen,
         timeUnit: s.timeUnit,
         interval: s.interval,

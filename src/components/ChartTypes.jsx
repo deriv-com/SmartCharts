@@ -24,7 +24,7 @@ const ChartTypes = ({
             {types.map((type, idx) => (
                 <div
                     onClick={() => setType(type)}
-                    className="ciq-row"
+                    className={`ciq-row ${type.disable ? 'disabled' : ''}`}
                     key={idx}
                 >
                     <span className={type.icon} />
