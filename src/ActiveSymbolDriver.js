@@ -22,6 +22,7 @@ class ActiveSymbolDriver extends Driver {
                 data: {
                     symbol: s.symbol,
                     name: s.display_name,
+                    market: s.market,
                     market_display_name: s.market_display_name,
                     submarket_display_name: s.submarket_display_name,
                     exchange_is_open: s.exchange_is_open,

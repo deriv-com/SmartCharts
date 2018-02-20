@@ -34,17 +34,22 @@ const Comparison = ({
                         autoCorrect="off"
                         autoCapitalize="off"
                         name="symbol"
-                        placeholder=""
+                        placeholder={'"AUD/JPY" or "Apple"'}
                     />
                 </div>
                 { filteredSymbols.map((category, i) =>
-                    <div key={i} className="cq-filter">{category.categoryName}</div>
+                    <div key={i}
+                        className="cq-filter cq-item"
+                        onClick={() => document.getElementById(`category-${category.categoryId}`).scrollIntoView()}
+                    >
+                        {category.categoryName}
+                    </div>
                 )}
             </div>
             <cq-scroll>
                 { filteredSymbols.map((category, i) =>
                     <React.Fragment key={i}>
-                        <div className="category-title" id={`category-${category.categoryName}`.replace(/ /g, '')}>{category.categoryName}</div>
+                        <div className="category-title" id={`category-${category.categoryId}`}>{category.categoryName}</div>
                         <div className="category">
                             { category.data.map((subcategory, j) =>
                                 <React.Fragment key={j}>

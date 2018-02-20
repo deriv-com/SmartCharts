@@ -1,4 +1,4 @@
-import { observable, observe, action, computed, autorunAsync } from 'mobx';
+import { observable, action, autorunAsync } from 'mobx';
 import { getTimeUnit } from './utils';
 
 const swatchColors = [
@@ -20,13 +20,10 @@ export default class ComparisonStore {
     symbols = [];
     @observable filteredSymbols = [];
     @observable open = false;
+    @observable filterText = '';
 
     @action.bound setOpen(val) {
         this.open = val;
-    }
-
-    _onActiveSymbolsChange(change) {
-        console.log(change);
     }
 
     onSymbolsChange() {
@@ -42,6 +39,7 @@ export default class ComparisonStore {
             const getCategory = (d) => {
                 return {
                     categoryName: d.market_display_name,
+                    categoryId: d.market,
                     hasSubcategory: true,
                     data: []
                 };
@@ -67,9 +65,21 @@ export default class ComparisonStore {
 
             category.data.push(subcategory);
             this.symbols.push(category);
-
-            this.filteredSymbols = this.symbols;
+        } else {
+            this.symbols = [];
         }
+
+        this.filterSymbols();
+    }
+
+    filterSymbols() {
+        // TODO: Filter the symbols based on text input
+        this.filteredSymbols = this.symbols;
+    }
+
+    @action.bound setFilterText(val) {
+        this.filterText = val;
+        this.filterSymbols();
     }
 
     @action.bound onSelectItem(symbolObj) {
