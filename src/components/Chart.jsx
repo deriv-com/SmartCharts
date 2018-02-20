@@ -33,7 +33,6 @@ import './StudyInput';
 import './StudyOutput';
 import './StudyParameter';
 import './Swatch';
-import './Toggle';
 import './Undo';
 import './ViewDialog';
 import './Clickable';

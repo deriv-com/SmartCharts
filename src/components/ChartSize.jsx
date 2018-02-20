@@ -12,7 +12,6 @@ class ChartSize extends Component {
             const interval = +layout.interval ? Math.floor(layout.interval / 60) || layout.interval : 1;
             let total = interval * stx.chart.maxTicks;
             let timeUnit = getTimeUnit(layout);
-            console.log(total);
             if(total >= 1000) {
                 total = Math.round(total/60);
                 if(timeUnit === 'minute') {
@@ -35,7 +34,7 @@ class ChartSize extends Component {
                     id='zoomOut'
                 >
                 </span>
-                <span class="interval-title">{this.state.text}</span>
+                <span className="interval-title">{this.state.text}</span>
                 <span
                     id='zoomIn'
                 >

@@ -30,6 +30,7 @@ cq-context {
 	@import "components/symbol-lookup";
 	@import "components/chart-title";
 	@import "components/timeperiod";
+	@import "components/toggles";
 	@import "components/categorical-display";
 }
 
@@ -471,10 +472,6 @@ cq-toolbar {
 	transition: height .20s 0s, padding .20s 0s;
 }
 
-cq-magnetize cq-toggle span:after{
-	background-position: -482px -25px;
-}
-
 /* Chart Area Block */
 .ciq-chart-area {
 	position:absolute;
@@ -761,18 +758,10 @@ cq-lookup-icon {
 	position:absolute;
 	right:0px;
 }
-.ciq-dropdowns, .ciq-toggles {float:left;}
-.ciq-menu, cq-toggle {
-	float:left;
-}
-cq-toggle {
-	cursor: pointer;
-}
-.ciq-menu,
-cq-toggle {position:relative;}
+.ciq-dropdowns {float:left;}
+.ciq-menu {position:relative;}
 
-.break-sm .ciq-menu,
-cq-toggle {
+.break-sm .ciq-menu {
   position: inherit;
 }
 
@@ -846,93 +835,6 @@ cq-toggle {
 /* Panel Toggles */
 body:not(.break-sm) .sidenav-toggle {
 	display: none;
-}
-
-/* Align button with sidenav */
-.sidenav-toggle.ciq-toggles {
-	padding: 0 0 0 0;
-}
-
-.ciq-toggles {
-	position:relative;
-	padding:0 10px 0 0;
-	&:after {
-		content:"";
-		position:absolute;
-		left:0;
-		top:10px;
-		bottom:0px;
-		width:1px;
-		background:$DEFAULT-border-subtle;
-	}
-}
-
-.break-sm cq-toggle.ciq-sidenav {
-  display: block;
-}
-
-cq-toggle {
-	position:relative;
-
-	body:not(.break-sm) &.ciq-draw,
-	body:not(.break-sm) &.ciq-HU {display:block;}
-	&.ciq-CH {display:block;}
-	.break-sm &.ciq-sidenav span {
-    	display: block;
-    	background-image: url(img/stx-sprite-panels.svg);
-    }
-	.break-lg & {display:block;}
-
-	& > * {
-		@include box-sizing(border-box);
-		display:block;
-		width:27px;
-		height:27px;
-		border:solid 1px transparent;
-
-		background-image:url(img/stx-sprite-ui.svg);
-		opacity: .85;
-		transition: opacity .20s 0s;
-	}
-
-	&:hover > *,
-	&:active > *{
-		border:solid 1px darken( $DEFAULT-bg, 8% );
-		opacity: 1;
-	}
-
-	&.active {
-		border-bottom:solid 3px $DEFAULT-accent;
-		color:$DEFAULT-text;
-	}
-
-	& cq-tooltip {
-		bottom:-8px;
-		position:absolute;
-		display:block;
-		background:$DEFAULT-accent;
-		transition: opacity .10s .0s, margin .50s .0s;
-		opacity: 0;
-		z-index:4;
-		width:44px;
-		height:16px;
-		left:-8px;
-		text-align:center;
-		font-weight:400;
-		font-size:10px;
-		color:$DEFAULT-bg;
-		@include border-radius($soft-corners);
-	}
-	&:hover cq-tooltip{
-		opacity: 1;
-		transition: opacity .10s 1s, bottom .50s 1s;
-		bottom:-24px;
-	}
-
-	&:hover:after {margin-top:5px;}
-	//&.stx-watch:after {content:"Lists";}
-	//&.stx-trade:after {content:"Trade";}
-	//cq-magnetize &:after {content:"Snap";}
 }
 
 .break-sm, .break-md {
@@ -2560,10 +2462,6 @@ cq-flag[cq-lang="ja"]{
     margin-top: -3px;
 }
 
-.sidenav cq-toggle.active {
-    border-bottom: solid 3px #398dff;
-}
-
 .sidenav cq-tooltip {
 	left: auto;
 	right:10px;
@@ -2571,10 +2469,6 @@ cq-flag[cq-lang="ja"]{
 
 .break-sm .sidenav {
     top: 45px;
-}
-
-.break-sm cq-toggle.ciq-sidenav {
-  	display: block;
 }
 
 .break-sm ciq-sidenav {

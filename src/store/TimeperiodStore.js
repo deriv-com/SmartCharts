@@ -32,15 +32,19 @@ export default class TimeperiodStore {
 
         const stx = this.context.stx;
         stx.setPeriodicity({ period: 1, interval, timeUnit }, () => {
-            const isTick = timeUnit === 'second';
-            const isCandle = ~['candle', 'hollow_condle', 'colored_bar'].indexOf(stx.layout.chartType);
             if (this.context.loader) {
                 this.context.loader.hide();
             }
+
+            const chartType = this.mainStore.chartType;
+            const isTick = timeUnit === 'second';
+            const isCandle = ['candle', 'hollow_condle', 'colored_bar'].indexOf(chartType.type.id) !== -1;
+            const isLine = chartType.type.id == 'mountain';
+
             if (isCandle && isTick) {
-                stx.setChartType('mountain');
-            } else if (!isTick && !isCandle) {
-                stx.setChartType('candle');
+                chartType.setType('mountain');
+            } else if (!isTick && isLine) {
+                chartType.setType('candle');
             }
 
             this.mainStore.chart.saveLayout();

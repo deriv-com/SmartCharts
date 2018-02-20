@@ -157,29 +157,6 @@ class ChartStore {
 
         const UIStorage = new CIQ.NameValueStore();
 
-        const ciqDrawNode = this.rootNode.querySelector('.ciq-draw');
-        ciqDrawNode.registerCallback((value) => {
-            const ciqChart = this.rootNode.querySelector('.ciq-chart');
-            if (value) {
-                ciqDrawNode.node.addClass('active');
-                CIQ.appendClassName(ciqChart, 'toolbar-on');
-            } else {
-                ciqDrawNode.node.removeClass('active');
-                CIQ.unappendClassName(ciqChart, 'toolbar-on');
-            }
-            this.updateHeight();
-            stxx.resizeChart();
-
-            // a little code here to remember what the previous drawing tool was
-            // and to re-enable it when the toolbar is reopened
-            if (value) {
-                stxx.changeVectorType(ciqDrawNode.priorVectorType);
-            } else {
-                ciqDrawNode.priorVectorType = stxx.currentVectorParameters.vectorType;
-                stxx.changeVectorType('');
-            }
-        });
-
         this.rootNode.querySelector('cq-redo').pairUp(this.rootNode.querySelector('cq-undo'));
 
         const params = {

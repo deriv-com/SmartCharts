@@ -1,0 +1,67 @@
+.ciq-toggles {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 0;
+    width: 79px;
+    padding: 0 5px;
+    border-left: 1px solid #E9E9ED;
+    .toggle-icon {
+        position: relative;
+        height: 25px;
+        width: 25px;
+        &.active {
+            background-color: #e4e6f1;
+            border: none;
+            border-radius: 2px;
+        }
+
+        &.ciq-HU span {background-position: -400px -25px;}
+        &.ciq-CH span {background-position: -443px -25px;}
+        span {
+            background-image:url(img/stx-sprite-ui.svg);
+            display: inline-block;
+            cursor: pointer;
+        }
+
+        .tooltip {
+            border: none;
+            position: relative;
+            height: 25px;
+            width: 25px;
+            font-size: 12px;
+            &:after {
+                position: absolute;
+                opacity: 0;
+                transition: opacity 0.3s;
+                pointer-events: none;
+                border-radius: 5px;
+                top: 32px;
+                color: #fff;
+                content: attr(tooltip-title);
+                left: 10%;
+                padding: 6px;
+                z-index: 98;
+                background: rgba(21,33,45,0.88);
+                box-shadow: 0 2px 8px 0 rgba(21,33,45,0.32);
+                border-radius: 4px;
+            }
+            &:before {
+                position: absolute;
+                opacity: 0;
+                transition: opacity 0.3s;
+                pointer-events: none;
+                border: solid;
+                border-color: rgba(21,33,45,0.88) transparent;
+                border-width: 0px 4px 4px 4px;
+                top: 28px;
+                content: "";
+                left: 40%;
+                z-index: 99;
+            }
+            &:hover:after { opacity: 1; }
+            &:hover:before { opacity: 1; }
+        }
+    }
+    &:after { display: none; }
+}
