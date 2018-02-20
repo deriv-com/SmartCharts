@@ -1,12 +1,10 @@
-import $ from 'jquery';
-import CIQ from 'chartiq';
-import React, { Component } from 'react';
-import contextAware from '../contextAware';
+import React from 'react';
 import Menu from './Menu.jsx';
 import { connect } from '../store/Connect';
 
 const Comparison = ({
     filteredSymbols,
+    handleFilterTextChange,
     isOpened,
     setOpen,
     onSelectItem,
@@ -27,6 +25,7 @@ const Comparison = ({
                         <input
                             ref={(input) => { this.comparisonInput = input; }}
                             onClick={() => this.comparisonInput.focus()}
+                            onChange={handleFilterTextChange}
                             id="symbol"
                             cq-focus=""
                             type="text"
@@ -74,6 +73,7 @@ const Comparison = ({
 export default connect(
     ({ comparison: c }) => ({
         filteredSymbols: c.filteredSymbols,
+        handleFilterTextChange: c.handleFilterTextChange,
         isOpened: c.isOpened,
         setOpen: c.setOpen,
         onSelectItem: c.onSelectItem

@@ -27,59 +27,43 @@ export default class ComparisonStore {
     }
 
     onSymbolsChange() {
-        if(this.activeSymbols.length > 0) {
-            this.symbols = [];
-            let first = this.activeSymbols[0].data;
-            const getSubcategory = (d) => {
-                return {
-                    subcategoryName: d.submarket_display_name,
-                    data: []
-                };
-            };
-            const getCategory = (d) => {
-                return {
-                    categoryName: d.market_display_name,
-                    categoryId: d.market,
-                    hasSubcategory: true,
-                    data: []
-                };
-            };
-            let subcategory = getSubcategory(first);
-            let category = getCategory(first);
-            for (const { data } of this.activeSymbols) {
-                if (category.categoryName !== data.market_display_name) {
-                    category.data.push(subcategory);
-                    this.symbols.push(category);
-                    subcategory = getSubcategory(data);
-                    category = getCategory(data);
-                }
-                if (subcategory.subcategoryName !== data.submarket_display_name) {
-                    category.data.push(subcategory);
-                    subcategory = getSubcategory(data);
-                }
-                subcategory.data.push({
-                    display: data.name,
-                    symbolObj: data,
-                });
-            }
-
-            category.data.push(subcategory);
-            this.symbols.push(category);
-        } else {
-            this.symbols = [];
-        }
-
+        this.symbols = this._categorizeSymbols(this.activeSymbols);
         this.filterSymbols();
     }
 
     filterSymbols() {
-        // TODO: Filter the symbols based on text input
-        this.filteredSymbols = this.symbols;
+        if (this.filterText === '') {
+            this.filteredSymbols = this.symbols;
+            return;
+        }
+
+        const reg = RegExp(this.filterText, 'i');
+        const filterCategory = c => {
+            c.data = c.data.filter(item => {
+                return reg.test(item.display);
+            });
+        };
+        let filteredSymbols = this.symbols.slice(0); // Clone array
+        for (const category of filteredSymbols) {
+            if (category.hasSubcategory) {
+                for (const subcategory of category.data) {
+                    filterCategory(subcategory);
+                }
+            } else {
+                filterCategory(category);
+            }
+        }
+
+        this.filteredSymbols = filteredSymbols;
     }
 
-    @action.bound setFilterText(val) {
+    setFilterText(val) {
         this.filterText = val;
         this.filterSymbols();
+    }
+
+    @action.bound handleFilterTextChange(event) {
+        this.setFilterText(event.target.value);
     }
 
     @action.bound onSelectItem(symbolObj) {
@@ -142,8 +126,47 @@ export default class ComparisonStore {
         return selectedColor;
     }
 
-    _convertToComparisonSymbols(symbols) {
+    _categorizeSymbols(activeSymbols) {
+        let categorizedSymbols = [];
+        if(activeSymbols.length > 0) {
+            let first = activeSymbols[0].data;
+            const getSubcategory = (d) => {
+                return {
+                    subcategoryName: d.submarket_display_name,
+                    data: []
+                };
+            };
+            const getCategory = (d) => {
+                return {
+                    categoryName: d.market_display_name,
+                    categoryId: d.market,
+                    hasSubcategory: true,
+                    data: []
+                };
+            };
+            let subcategory = getSubcategory(first);
+            let category = getCategory(first);
+            for (const { data } of activeSymbols) {
+                if (category.categoryName !== data.market_display_name) {
+                    category.data.push(subcategory);
+                    categorizedSymbols.push(category);
+                    subcategory = getSubcategory(data);
+                    category = getCategory(data);
+                }
+                if (subcategory.subcategoryName !== data.submarket_display_name) {
+                    category.data.push(subcategory);
+                    subcategory = getSubcategory(data);
+                }
+                subcategory.data.push({
+                    display: data.name,
+                    symbolObj: data,
+                });
+            }
 
+            category.data.push(subcategory);
+            categorizedSymbols.push(category);
+        }
+
+        return categorizedSymbols;
     }
-
 }
