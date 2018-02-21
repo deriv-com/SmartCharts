@@ -1,4 +1,5 @@
 import Driver from './components/ui/Driver';
+import { stableSort } from './store/utils';
 
 /**
  * An example of an asynchronous Lookup.Driver that uses ChartIQ's suggestive search as its source for symbol search
@@ -15,22 +16,29 @@ class ActiveSymbolDriver extends Driver {
 
     _processSymbols(symbols) {
         let processedSymbols = [];
-        const order = ['Forex', 'Indices', 'OTC Stocks', 'Commodities', 'Volatility Indices'];
 
         for (const s of symbols) {
             processedSymbols.push({
                 data: {
                     symbol: s.symbol,
                     name: s.display_name,
+                    market: s.market,
                     market_display_name: s.market_display_name,
+                    submarket_display_name: s.submarket_display_name,
                     exchange_is_open: s.exchange_is_open,
                 },
                 display: [s.display_name],
             });
         }
 
+        // Stable sort is required to retain the order of the symbol name
+        stableSort(processedSymbols, (a, b) => {
+            return a.data.submarket_display_name.localeCompare(b.data.submarket_display_name);
+        });
+
         // Categorize symbols in order defined by another array; there's probably a more
-        // efficient algo for this, but for just~100 items it's not worth the effort
+        // efficient algo for this, but for just ~100 items it's not worth the effort
+        const order = ['Forex', 'Indices', 'OTC Stocks', 'Commodities', 'Volatility Indices'];
         const orderedSymbols = [];
         for (const o of order) {
             for (const p of processedSymbols) {

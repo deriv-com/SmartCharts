@@ -31,6 +31,7 @@ class ChartStore {
     stxx = null;
     id = null;
     @observable context = null;
+    @observable activeSymbols = [];
 
     @action.bound setSymbols(symbols) {
         if (symbols && this.context) {
@@ -43,6 +44,8 @@ class ChartStore {
             for (const lookup of lookups) {
                 lookup.results(this.driver.symbols);
             }
+
+            this.activeSymbols = this.driver.symbols;
         }
     }
 

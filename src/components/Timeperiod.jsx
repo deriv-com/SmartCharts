@@ -18,9 +18,11 @@ const Timeperiod = ({
             setOpen={setOpen}
         >
             <Menu.Title>
-                <span className="icon" />
-                <span className="unit_display">{timeUnit}</span>
-                <span className="interval_display">{interval_display}</span>
+                <span>
+                    <span className="icon" />
+                    <span className="unit_display">{timeUnit}</span>
+                    <span className="interval_display">{interval_display}</span>
+                </span>
             </Menu.Title>
             <Menu.Body>
                 <div className="timeUnit">

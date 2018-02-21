@@ -34,7 +34,7 @@ $selected-background-color: #e4e6f1;
         .ciq-title {
             background-color: $selected-background-color;
         }
-        >.ciq-icon {
+        >.ciq-icon, .cq-menu-btn > .ciq-icon {
             background-color: $selected-background-color;
         }
     }
