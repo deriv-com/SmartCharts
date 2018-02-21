@@ -1,18 +1,16 @@
 import React, { Component } from 'react';
 import {connect} from '../store/Connect';
-import Menu from './Menu.jsx';
+import Menu_ from './Menu.jsx';
+
+const Menu = Menu_.connectBy(stroes => stroes.chartType.menu);
 
 const ChartTypes = ({
     type,
     setType,
     types,
-    isOpened,
-    setOpen,
 }) => (
     <Menu
         className="ciq-menu ciq-display collapse ciq-chart-types"
-        isOpened={isOpened}
-        setOpen={setOpen}
     >
         <Menu.Title>
             <div className="ciq-title">

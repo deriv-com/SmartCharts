@@ -1,9 +1,11 @@
 import { observable, action, computed, autorunAsync } from 'mobx';
+import MenuStore from './MenuStore';
 
 export default class StudyLegendStore {
     constructor(mainStore) {
         this.mainStore = mainStore;
         autorunAsync(this.onContextReady.bind(this));
+        this.menu = new MenuStore(mainStore);
     }
 
     get context() { return this.mainStore.chart.context; }
@@ -18,12 +20,7 @@ export default class StudyLegendStore {
     injections = [];
     previousStudies = { };
 
-    @observable open = false;
     @observable studies = [];
-
-    @action.bound setOpen(value) {
-        this.open = value;
-    }
 
     begin() {
         this.injections.push(this.stx.append('createDataSet', () => this.renderLegend()));
@@ -89,7 +86,7 @@ export default class StudyLegendStore {
                     parameters: sd.parameters,
                 };
                 studyEdit.editPanel(params);
-                this.open = false;
+                this.menu.open = false;
             };
 
             studies.push({

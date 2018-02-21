@@ -1,12 +1,11 @@
 import React from 'react';
 import { connect } from '../store/Connect';
-import Menu from './Menu.jsx';
+import Menu_ from './Menu.jsx';
 
+const Menu = Menu_.connectBy(stroes => stroes.timeperiod.menu);
 
 const Timeperiod = ({
     setPeriodicity,
-    isOpened,
-    setOpen,
     interval,
     timeUnit,
     interval_display
@@ -14,8 +13,6 @@ const Timeperiod = ({
     return (
         <Menu
             className="ciq-period"
-            isOpened={isOpened}
-            setOpen={setOpen}
         >
             <Menu.Title>
                 <span>
@@ -114,8 +111,6 @@ const Timeperiod = ({
 export default connect(
     ({ timeperiod: s }) => ({
         setPeriodicity: s.setPeriodicity,
-        isOpened: s.open,
-        setOpen: s.setOpen,
         timeUnit: s.timeUnit,
         interval: s.interval,
         interval_display: s.interval_display,

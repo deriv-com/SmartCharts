@@ -1,26 +1,25 @@
 import React from 'react';
-import Menu from './Menu.jsx';
+import Menu_ from './Menu.jsx';
 import { connect } from '../store/Connect';
 import SymbolsCategoricalDisplay from './SymbolsCategoricalDisplay.jsx';
 
+const Menu = Menu_.connectBy(stroes => stroes.comparison.menu);
+
 const Comparison = ({
     activeSymbols,
+    isMenuOpened,
     onSelectItem,
-    isOpened,
-    setOpen,
 }) => {
     return (
         <Menu
             className="cq-comparison-new cq-categorical-display"
-            isOpened={isOpened}
-            setOpen={setOpen}
         >
             <Menu.Title>
                 <span className="ciq-icon ciq-ic-comparison" />
             </Menu.Title>
             <Menu.Body>
                 <SymbolsCategoricalDisplay
-                    isShown={isOpened}
+                    isShown={isMenuOpened}
                     activeSymbols={activeSymbols}
                     onSelectItem={onSelectItem}
                 />
@@ -32,8 +31,7 @@ const Comparison = ({
 export default connect(
     ({ comparison: c }) => ({
         activeSymbols: c.activeSymbols,
-        isOpened: c.isOpened,
-        setOpen: c.setOpen,
+        isMenuOpened: c.menu.open,
         onSelectItem: c.onSelectItem
     })
 )(Comparison);

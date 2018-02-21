@@ -1,7 +1,9 @@
 import CIQ from 'chartiq';
 import React, { Component } from 'react';
-import Menu from './Menu.jsx';
+import Menu_ from './Menu.jsx';
 import {connect} from '../store/Connect';
+
+const Menu = Menu_.connectBy(stroes => stroes.studies.menu);
 
 class StudyLegend extends Component {
     componentWillUnmount() {
