@@ -31,6 +31,7 @@ cq-context {
 	@import "components/chart-title";
 	@import "components/timeperiod";
 	@import "components/toggles";
+	@import "components/categorical-display";
 }
 
 /* --------------------------------------------------------- FIELDS, SELECTS, INPUTS --------------------------------------------------------- */
@@ -592,14 +593,14 @@ cq-col {
 	vertical-align: top;
 }
 
-cq-item {
+cq-item, .cq-item {
 	position: relative;
 	cursor:pointer;
 	text-overflow: clip;
 	white-space: nowrap;
 }
 
-cq-item, cq-heading, cq-placeholder {
+cq-item, .cq-item, cq-heading, cq-placeholder {
 	padding:0 20px;
 	clear: both;
 	line-height:27px;
@@ -607,7 +608,9 @@ cq-item, cq-heading, cq-placeholder {
 }
 
 cq-item:hover,
-cq-item[cq-focused] {
+.cq-item:hover,
+cq-item[cq-focused],
+.cq-item[cq-focused]{
 	background: #efefef;
 	color:$DEFAULT-text-strong;
 }

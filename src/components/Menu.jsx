@@ -1,12 +1,18 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import {connect} from '../store/Connect';
 
 class Menu extends Component {
     componentWillReceiveProps(nextProps) {
-        if (this.props.isOpened !== nextProps.isOpened
-            && !nextProps.isOpened
-            && nextProps.context) {
-            nextProps.context.stx.modalEnd();
+        if (this.props.isOpened !== nextProps.isOpened) {
+            if (nextProps.isOpened) {
+                const { onOpen } = this.props;
+                if (onOpen) onOpen();
+            } else {
+                if (nextProps.context) {
+                    document.activeElement.blur();
+                    nextProps.context.stx.modalEnd();
+                }
+            }
         }
     }
 
@@ -53,7 +59,7 @@ class Menu extends Component {
     }
 
     render() {
-        const { isOpened, className, setOpen, menuBtn, children } = this.props;
+        const { isOpened, className, setOpen, children } = this.props;
         const first = React.Children.map(children, (child, i) => i === 0 ? child : null);
         const rest  = React.Children.map(children, (child, i) => i !== 0 ? child : null);
 
@@ -85,7 +91,7 @@ const MenuConnected = connect(
     })
 )(Menu);
 
-MenuConnected.Title = ({children}) => <span> {children} </span>;
-MenuConnected.Body  = ({children}) => <Fragment> {children} </Fragment>;
+MenuConnected.Title = ({children}) => children;
+MenuConnected.Body  = ({children}) => children;
 
 export default MenuConnected;
