@@ -1,7 +1,7 @@
 import React from 'react';
 import Menu from './Menu.jsx';
 import { connect } from '../store/Connect';
-import CategoricalDisplay from './CategoricalDisplay.jsx';
+import SymbolsCategoricalDisplay from './SymbolsCategoricalDisplay.jsx';
 
 const Comparison = ({
     activeSymbols,
@@ -19,7 +19,7 @@ const Comparison = ({
                 <span className="ciq-icon ciq-ic-comparison" />
             </Menu.Title>
             <Menu.Body>
-                <CategoricalDisplay
+                <SymbolsCategoricalDisplay
                     isShown={isOpened}
                     activeSymbols={activeSymbols}
                     onSelectItem={onSelectItem}
