@@ -49,6 +49,17 @@
     .cq-item {
         line-height: 3em;
     }
+    .cq-item[disabled] {
+        pointer-events: none;
+        cursor: default;
+        &:not(.selected) {
+            color: #c5c5c5 !important;
+        }
+        &.selected {
+            background-color: #efefef;
+        }
+
+    }
     cq-scroll {
         padding-top: 0.8em;
         background-color: #f4f4f6;
