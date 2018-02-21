@@ -51,7 +51,7 @@ export default class ComparisonStore {
             symbolObject: symbolObj,
         });
         for (let i = 0; i < exists.length; i++) {
-            if (exists[i].parameters.isComparison) return;
+            if (exists[i].parameters.isComparison) {return;}
         }
 
         // don't allow symbol if same as main chart or just white space
@@ -68,7 +68,7 @@ export default class ComparisonStore {
         let usedColors = {};
         for (let s in stx.chart.series) {
             let series = stx.chart.series[s];
-            if (!series.parameters.isComparison) continue;
+            if (!series.parameters.isComparison) {continue;}
             usedColors[series.parameters.color] = true;
         }
 
