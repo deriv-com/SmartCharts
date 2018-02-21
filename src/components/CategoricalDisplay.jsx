@@ -100,6 +100,26 @@ class CategoricalDisplay extends Component {
         return categorizedSymbols;
     }
 
+    getItemCount = (category) => {
+        let count = 0;
+        if (category.hasSubcategory) {
+            for (const sub of category.data) {
+                count += sub.data.length;
+            }
+        } else {
+            count += category.data.length;
+        }
+
+        return count;
+    }
+
+    handleFilterClick = (category) => {
+        const element = document.getElementById(`category-${category.categoryId}`);
+        if (element) element.scrollIntoView();
+    }
+
+    renderItem = (item, k) => <div className="cq-item" onClick={() => this.props.onSelectItem(item.symbolObj)} key={k}>{item.display}</div>
+
     handleFilterTextChange = (event) => this.setFilterText(event.target.value);
 
     render() {
@@ -128,7 +148,7 @@ class CategoricalDisplay extends Component {
                     { filteredSymbols.map((category, i) =>
                         <div key={i}
                             className="cq-filter"
-                            onClick={() => document.getElementById(`category-${category.categoryId}`).scrollIntoView()}
+                            onClick={() => this.handleFilterClick(category)}
                         >
                             {category.categoryName}
                         </div>
@@ -137,19 +157,20 @@ class CategoricalDisplay extends Component {
                 <cq-scroll>
                     <div className="results-panel">
                         { filteredSymbols.map((category, i) =>
-                            <React.Fragment key={i}>
+                            this.getItemCount(category) > 0 &&
+                            <Fragment key={i}>
                                 <div className="category-title" id={`category-${category.categoryId}`}>{category.categoryName}</div>
                                 <div className="category">
-                                    { category.data.map((subcategory, j) =>
-                                        <React.Fragment key={j}>
+                                    { category.hasSubcategory ? category.data.map((subcategory, j) =>
+                                        this.getItemCount(subcategory) > 0 &&
+                                        <Fragment key={j}>
                                             <div className="subcategory">{subcategory.subcategoryName}</div>
-                                            { subcategory.data.map((item, k) =>
-                                                <div className="cq-item" onClick={() => onSelectItem(item.symbolObj)} key={k}>{item.display}</div>
-                                            )}
-                                        </React.Fragment>
-                                    )}
+                                            { subcategory.data.map(this.renderItem)}
+                                        </Fragment>
+                                    ) : category.data.map(this.renderItem)
+                                    }
                                 </div>
-                            </React.Fragment>
+                            </Fragment>
                         ) }
                     </div>
                 </cq-scroll>
