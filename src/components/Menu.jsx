@@ -2,96 +2,68 @@ import React, { Component } from 'react';
 import {connect} from '../store/Connect';
 
 class Menu extends Component {
-    componentWillReceiveProps(nextProps) {
-        if (this.props.isOpened !== nextProps.isOpened) {
-            if (nextProps.isOpened) {
-                const { onOpen } = this.props;
-                if (onOpen) onOpen();
-            } else {
-                if (nextProps.context) {
-                    document.activeElement.blur();
-                    nextProps.context.stx.modalEnd();
-                }
-            }
-        }
-    }
-
-    componentDidMount() {
-        document.addEventListener('click', this.handleClickOutside);
-        document.addEventListener('keydown', this.closeOnEscape);
-    }
-
-    componentWillUnmount() {
-        document.removeEventListener('click', this.handleClickOutside);
-        document.removeEventListener('keydown', this.closeOnEscape);
-    }
-
-    handleClickOutside = (e) => {
-        const { isOpened, setOpen } = this.props;
-        if (isOpened
-            && setOpen
-            && !(this.dropdown.contains(e.target) || this.menuBtn.contains(e.target))) {
-            setOpen(false);
-        }
-    };
-
-    closeOnEscape = (e) => {
-        const { isOpened, setOpen } = this.props;
-        if (isOpened && e.keyCode === 27 && setOpen) {
-            setOpen(false);
-        }
-    };
-
-    mouseEnterDropdown = (e) => this.handleMouseInDropdown(e, true);
-    mouseLeaveDropdown = (e) => this.handleMouseInDropdown(e, false);
-
-    handleMouseInDropdown = (e, isMouseEnter) => {
-        const { isOpened } = this.props;
-        if (isOpened
-            && this.props.context
-            && this.dropdown.contains(e.target)) {
-            if (isMouseEnter) {
-                this.props.context.stx.modalBegin();
-            } else {
-                this.props.context.stx.modalEnd();
-            }
-        }
-    }
+    componentDidMount() { this.props.init(); }
+    componentWillUnmount() { this.props.destroy(); }
 
     render() {
-        const { isOpened, className, setOpen, children } = this.props;
+        const {
+            open,
+            className,
+            setOpen,
+            children,
+            init,
+            destroy,
+            onTitleClick,
+            onBodyClick,
+            onMouseEnterBody,
+            onMouseLeaveBody,
+        } = this.props;
         const first = React.Children.map(children, (child, i) => i === 0 ? child : null);
         const rest  = React.Children.map(children, (child, i) => i !== 0 ? child : null);
 
         return (
-            <div className={`ciq-menu ${className || ''} ${isOpened ? 'stxMenuActive' : ''}`}>
+            <div className={`ciq-menu ${className || ''} ${open ? 'stxMenuActive' : ''}`}>
                 <div
                     ref={el => this.menuBtn = el}
                     className="cq-menu-btn"
-                    onClick={() => {setOpen(!isOpened);}}
+                    onClick={onTitleClick}
                 >
                     {first}
                 </div>
                 <div
-                    ref={el => this.dropdown = el}
                     className="cq-menu-dropdown"
-                    onMouseEnter={this.mouseEnterDropdown}
-                    onMouseLeave={this.mouseLeaveDropdown}
+                    onMouseEnter={onMouseEnterBody}
+                    onMouseLeave={onMouseLeaveBody}
+                    onClick={onBodyClick}
                 >
                     {rest}
                 </div>
             </div>
         );
     }
+} 
+
+Menu.connectBy = selector => {
+    const Connected = connect(
+        (stores) => {
+            const s = selector(stores);
+            return {
+                open: s.open,
+                className: s.className,
+                setOpen: s.setOpen,
+                children: s.children,
+                init: s.init,
+                destroy: s.destroy,
+                onTitleClick: s.onTitleClick,
+                onBodyClick: s.onBodyClick,
+                onMouseEnterBody: s.onMouseEnterBody,
+                onMouseLeaveBody: s.onMouseLeaveBody,
+            }
+        }
+    )(Menu);
+    Connected.Title = ({children}) => children;
+    Connected.Body  = ({children}) => children;
+    return Connected;
 }
 
-const MenuConnected = connect(
-    ({chart}) => ({
-        context: chart.context
-    })
-)(Menu);
-
-MenuConnected.Title = ({children}) => children;
-MenuConnected.Body  = ({children}) => children;
-
-export default MenuConnected;
+export default Menu;

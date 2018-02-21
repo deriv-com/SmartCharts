@@ -1,21 +1,19 @@
 import { observable, action, computed, autorunAsync } from 'mobx';
 import { getTimeUnit } from './utils';
+import MenuStore from './MenuStore';
 
 export default class TimeperiodStore {
     constructor(mainStore) {
         this.mainStore = mainStore;
         autorunAsync(this.onContextReady.bind(this));
+        this.menu = new MenuStore(mainStore);
+        window.tps = this;
     }
 
     get context() { return this.mainStore.chart.context; }
 
-    @observable open = false;
     @observable timeUnit = null;
     @observable interval = null;
-
-    @action.bound setOpen(val) {
-        this.open = val;
-    }
 
     onContextReady() {
         if(this.context) {
@@ -52,7 +50,7 @@ export default class TimeperiodStore {
 
         this.timeUnit = getTimeUnit(stx.layout);
         this.interval = stx.layout.interval;
-        this.open = false;
+        this.menu.open = false;
     }
 
     @computed get interval_display() {

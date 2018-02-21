@@ -1,9 +1,11 @@
 import { observable, action, computed, autorunAsync } from 'mobx';
+import MenuStore from './MenuStore';
 
 export default class ChartTypeStore {
     constructor(mainStore) {
         this.mainStore = mainStore;
         autorunAsync(this.onContextReady.bind(this));
+        this.menu = new MenuStore(mainStore);
     }
 
     get context() { return this.mainStore.chart.context; }
@@ -29,7 +31,7 @@ export default class ChartTypeStore {
             this.stx.chart.tension = 0;
         }
         this.type = type;
-        this.open = false;
+        this.menu.open = false;
     }
 
     @computed get types() {
@@ -46,9 +48,4 @@ export default class ChartTypeStore {
     }
 
     @observable type = { id: 'mountain', name: 'Line', };
-    @observable open = false;
-
-    @action.bound setOpen(value) {
-        this.open = value;
-    }
 }
