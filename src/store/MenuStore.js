@@ -23,7 +23,6 @@ export default class MenuStore {
     }
 
     handleClickOutside = (e) => {
-        console.warn('handleClickOutside()', this.open);
         if(!e.isHandledByMenu) {
             this.open = false;
         }
