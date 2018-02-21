@@ -72,7 +72,7 @@ class CategoricalDisplay extends Component {
         if (element) element.scrollIntoView();
     }
 
-    renderItem = (item, k) => <div className="cq-item" onClick={() => this.props.onSelectItem(item.symbolObj)} key={k}>{item.display}</div>
+    renderItem = (item, k) => <div className={`cq-item ${item.selected ? 'selected ' : ''}`} onClick={() => this.props.onSelectItem(item.symbolObj)} key={k} disabled={!item.enabled}>{item.display}</div>
 
     handleFilterTextChange = (event) => this.setFilterText(event.target.value);
 
