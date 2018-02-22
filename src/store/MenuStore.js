@@ -1,13 +1,11 @@
-import { observable, action, computed, reaction, autorunAsync } from 'mobx';
-import { getTimeUnit } from './utils';
+import { observable, action, reaction } from 'mobx';
 
-const allMenues = [];
+let activeMenu;
 
 export default class MenuStore {
     constructor(mainStore) {
         this.mainStore = mainStore;
         reaction(() => this.open, () => this.blurInput());
-        allMenues.push(this);
     }
 
     get context() { return this.mainStore.chart.context; }
@@ -25,9 +23,14 @@ export default class MenuStore {
     }
 
     @action.bound setOpen(val) {
+        if(this.open === val) return;
         this.open = val;
-        if(this.open === true) { // close others.
-            allMenues.filter(m => m !== this).forEach(m => m.setOpen(false));
+        if(this.open) {
+            // Only one menu should be opened at a time
+            if(activeMenu) activeMenu.setOpen(false);
+            activeMenu = this;
+        } else {
+            activeMenu = undefined;
         }
     }
 
