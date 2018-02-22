@@ -77,7 +77,7 @@ class Chart extends Component {
                                 </stx-hu-tooltip-field>
                             </stx-hu-tooltip>
                             <ChartTitle />
-                            <cq-comparison cq-marker>
+                            <cq-comparison >
                                 <cq-comparison-key
                                     dangerouslySetInnerHTML={{
                                         /* TODO: fix this */

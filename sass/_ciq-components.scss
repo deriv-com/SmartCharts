@@ -2007,6 +2007,8 @@ cq-comparison {
 	z-index:3;
 	width:200px;
 	&[cq-show] {
+		margin-top: 25px;
+		z-index: 40;
 		display: block;
 	}
 	.break-sm &[cq-show] {
