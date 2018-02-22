@@ -88,7 +88,6 @@ class CategoricalDisplay extends Component {
                             ref={(input) => { this.searchInput = input; }}
                             onClick={() => this.searchInput.focus()}
                             onChange={this.handleFilterTextChange}
-                            cq-focus=""
                             type="text"
                             spellCheck="off"
                             autoComplete="off"

@@ -1,10 +1,13 @@
 import { observable, action, computed, reaction, autorunAsync } from 'mobx';
 import { getTimeUnit } from './utils';
 
+const allMenues = [];
+
 export default class MenuStore {
     constructor(mainStore) {
         this.mainStore = mainStore;
         reaction(() => this.open, () => this.blurInput());
+        allMenues.push(this);
     }
 
     get context() { return this.mainStore.chart.context; }
@@ -16,18 +19,29 @@ export default class MenuStore {
             document.activeElement.blur();
             this.context.stx.modalEnd();
         }
+        else {
+            this.context.stx.modalBegin();
+        }
     }
 
     @action.bound setOpen(val) {
         this.open = val;
+        if(this.open === true) { // close others.
+            allMenues.filter(m => m !== this).forEach(m => m.setOpen(false));
+        }
     }
 
     handleClickOutside = (e) => {
         if(!e.isHandledByMenu) {
-            this.open = false;
+            this.setOpen(false);
         }
     };
-    closeOnEscape = (e) => { this.open = false; };
+    closeOnEscape = (e) => {
+        const ESCAPE = 27;
+        if(e.keyCode === ESCAPE) {
+            this.setOpen(false);
+        }
+    };
 
     @action.bound init() {
         document.addEventListener('click', this.handleClickOutside, false);
@@ -43,18 +57,10 @@ export default class MenuStore {
         /* TODO: why stopPropagation() is not working ಠ_ಠ */
         // e.stopPropagation();
         e.nativeEvent.isHandledByMenu = true;
-        this.open = !this.open;
+        this.setOpen(!this.open);
     }
     @action.bound onBodyClick(e) {
         // e.stopPropagation();
         e.nativeEvent.isHandledByMenu = true;
-    }
-
-    @action.bound onMouseEntrBody() {
-        this.context.stx.modalBegin();
-    }
-
-    @action.bound onMouseLeaveBody() {
-        this.context.stx.modalBegin();
     }
 }
