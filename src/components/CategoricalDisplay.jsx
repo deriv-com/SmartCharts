@@ -68,7 +68,7 @@ class CategoricalDisplay extends Component {
     }
 
     handleFilterClick = (category) => {
-        const element = document.getElementById(`category-${category.categoryId}`);
+        const element = this.resultsPanel.querySelector(`.category-${category.categoryId}`);
         if (element) element.scrollIntoView();
     }
 
@@ -81,7 +81,7 @@ class CategoricalDisplay extends Component {
         const { filteredItems } = this.state;
 
         return (
-            <Fragment>
+            <div className="cq-categorical-display">
                 <div className="cq-lookup-filters">
                     <div className="cq-lookup-input">
                         <input
@@ -106,11 +106,11 @@ class CategoricalDisplay extends Component {
                     )}
                 </div>
                 <cq-scroll>
-                    <div className="results-panel">
+                    <div className="results-panel" ref={el => this.resultsPanel = el}>
                         { filteredItems.map((category, i) =>
                             this.getItemCount(category) > 0 &&
                             <Fragment key={i}>
-                                <div className="category-title" id={`category-${category.categoryId}`}>{category.categoryName}</div>
+                                <div className={`category-title category-${category.categoryId}`}>{category.categoryName}</div>
                                 <div className="category">
                                     { category.hasSubcategory ? category.data.map((subcategory, j) =>
                                         this.getItemCount(subcategory) > 0 &&
@@ -125,7 +125,7 @@ class CategoricalDisplay extends Component {
                         ) }
                     </div>
                 </cq-scroll>
-            </Fragment>
+            </div>
         );
     }
 }

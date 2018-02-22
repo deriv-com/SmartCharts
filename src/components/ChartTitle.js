@@ -39,14 +39,6 @@ class ChartTitle extends ModalTag {
     }
 
     setContext(context) {
-        let self = this;
-        CIQ.UI.observe({
-            obj: self.context.stx.chart.symbolObject,
-            action: 'callback',
-            value() {
-                if (self.context.stx.currentQuote()) self.previousClose = self.context.stx.currentQuote().iqPrevClose;
-            },
-        });
         this.initialize();
     }
 
@@ -84,6 +76,8 @@ class ChartTitle extends ModalTag {
      */
     update() {
         let stx = this.context.stx;
+        const currentQuote = stx.currentQuote();
+        this.previousClose = currentQuote ? currentQuote.iqPrevClose : undefined;
 
         let node = $(this);
         if (stx.chart.dataSet && stx.chart.dataSet.length) node.addClass('stx-show');
@@ -108,7 +102,6 @@ class ChartTitle extends ModalTag {
             todaysChangePct = 0,
             todaysChangeDisplay = '',
             currentPrice = '';
-        let currentQuote = stx.currentQuote();
         currentPrice = currentQuote ? currentQuote.Close : '';
         if (currentPrice && doUpdatePrice) {
             let oldPrice = parseFloat(currentPriceDiv.text());
@@ -163,9 +156,6 @@ class ChartTitle extends ModalTag {
             } else if (todaysChangePct < 0) {
                 this.title += `\u25bc ${todaysChangeAbs}`;
             }
-            if (doUpdateBrowserTab) {
-                document.title = this.title;
-            }
         }
     }
 }
@@ -179,4 +169,3 @@ class ChartTitle extends ModalTag {
 ChartTitle.prototype.previousClose = null;
 
 document.registerElement('cq-chart-title', ChartTitle);
-export default ChartTitle;

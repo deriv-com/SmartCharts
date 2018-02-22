@@ -1,5 +1,4 @@
 import { observable, action, computed } from 'mobx';
-import { getTimeUnit } from './utils';
 import MenuStore from './MenuStore';
 
 const swatchColors = [
