@@ -7,7 +7,6 @@ export default class TimeperiodStore {
         this.mainStore = mainStore;
         autorunAsync(this.onContextReady.bind(this));
         this.menu = new MenuStore(mainStore);
-        window.tps = this;
     }
 
     get context() { return this.mainStore.chart.context; }

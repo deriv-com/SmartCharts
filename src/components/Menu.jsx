@@ -15,8 +15,6 @@ class Menu extends Component {
             destroy,
             onTitleClick,
             onBodyClick,
-            onMouseEnterBody,
-            onMouseLeaveBody,
         } = this.props;
         const first = React.Children.map(children, (child, i) => i === 0 ? child : null);
         const rest  = React.Children.map(children, (child, i) => i !== 0 ? child : null);
@@ -32,8 +30,6 @@ class Menu extends Component {
                 </div>
                 <div
                     className="cq-menu-dropdown"
-                    onMouseEnter={onMouseEnterBody}
-                    onMouseLeave={onMouseLeaveBody}
                     onClick={onBodyClick}
                 >
                     {rest}
@@ -56,8 +52,6 @@ Menu.connectBy = selector => {
                 destroy: s.destroy,
                 onTitleClick: s.onTitleClick,
                 onBodyClick: s.onBodyClick,
-                onMouseEnterBody: s.onMouseEnterBody,
-                onMouseLeaveBody: s.onMouseLeaveBody,
             }
         }
     )(Menu);
