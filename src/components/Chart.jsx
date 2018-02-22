@@ -14,7 +14,6 @@ import '../AddOns';
 import '../Plugin';
 
 import './Attribution';
-import './ChartTitle';
 import './Close';
 import './ColorPicker';
 import './ComparisonList';
