@@ -47,13 +47,6 @@ class ChartStore {
             this.driver.symbols = symbols.active_symbols;
             // update lookup with new symbols
             this.context.setLookupDriver(this.driver);
-
-            // TODO: Anti-pattern, but we need access to Lookup.
-            const lookups = this.rootNode.querySelectorAll('cq-lookup');
-            for (const lookup of lookups) {
-                lookup.results(this.driver.symbols);
-            }
-
             this.activeSymbols = this.driver.symbols;
         }
     }

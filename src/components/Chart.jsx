@@ -20,7 +20,6 @@ import './ComparisonList';
 import './DrawingToolbar';
 import './FibSettingsDialog';
 import './Loader';
-import './Lookup';
 import './Menu';
 import './MenuDropDown';
 import './Redo';
