@@ -53,8 +53,9 @@ export default class ChartTitleStore {
             if (oldPrice !== currentPrice) {
                 priceChanged = true;
             }
+            this.currentPrice.setPrice(currentPrice);
         }
-        this.currentPrice.setPrice(currentPrice);
+
         if (priceChanged) {
             // Default to iqPrevClose if the developer hasn't set previousClose
             let previousClose = previousClose || (currentQuote ? currentQuote.iqPrevClose : null);
