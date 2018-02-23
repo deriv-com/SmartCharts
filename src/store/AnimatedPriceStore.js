@@ -13,14 +13,16 @@ export default class AnimatedPriceStore {
         let isIncrease = false;
         if (newVal > oldVal) isIncrease = true;
         else if (newVal === oldVal) {
-            this.showStable = true;
+            this.setShowStable(true);
             return false;
         }
-        this.showStable = false;
-        setTimeout(() => {
-            this.showStable = true;
-        }, 0);
+        this.setShowStable(false);
+        setTimeout(() => this.setShowStable(true), 0);
         this.oldPrice = this.price;
         this.isIncrease = isIncrease;
+    }
+
+    @action.bound setShowStable(val) {
+        this.showStable = val;
     }
 }
