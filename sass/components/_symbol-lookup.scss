@@ -32,7 +32,7 @@ cq-lookup-results {
     cq-lookup {
         width: 40em;
     }
-    cq-lookup-results, &.cq-categorical-display > .cq-menu-dropdown {
+    cq-lookup-results, .cq-menu-dropdown > .cq-categorical-display {
         opacity: 1;
         height: auto;
     }

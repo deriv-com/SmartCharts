@@ -6,6 +6,7 @@ import TogglesStore from './TogglesStore';
 import StudyLegendStore from './StudyLegendStore';
 import ComparisonStore from './ComparisonStore';
 import DrawToolsStore from './DrawToolsStore';
+import ChartTitleStore from './ChartTitleStore';
 
 export default class MainStore {
     @observable timeperiod = new TimeperiodStore(this);
@@ -15,4 +16,5 @@ export default class MainStore {
     @observable studies = new StudyLegendStore(this);
     @observable comparison = new ComparisonStore(this);
     @observable drawTools = new DrawToolsStore(this);
+    @observable chartTitle = new ChartTitleStore(this);
 }

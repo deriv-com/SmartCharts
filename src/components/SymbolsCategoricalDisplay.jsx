@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import CategoricalDisplay from './CategoricalDisplay.jsx';
+import { connect } from '../store/Connect';
 
 class SymbolsCategoricalDisplay extends Component {
     constructor() {
@@ -46,7 +47,11 @@ class SymbolsCategoricalDisplay extends Component {
                     category.data.push(subcategory);
                     subcategory = getSubcategory(data);
                 }
+                const selected = data.symbol === this.props.context.stx.chart.symbol;
+                const enabled = selected ? false : data.exchange_is_open;
                 subcategory.data.push({
+                    enabled,
+                    selected,
                     display: data.name,
                     symbolObj: data,
                 });
@@ -72,4 +77,10 @@ class SymbolsCategoricalDisplay extends Component {
     }
 }
 
-export default SymbolsCategoricalDisplay;
+const SymbolsCategoricalDisplayConnected = connect(
+    ({chart}) => ({
+        context: chart.context
+    })
+)(SymbolsCategoricalDisplay);
+
+export default SymbolsCategoricalDisplayConnected;

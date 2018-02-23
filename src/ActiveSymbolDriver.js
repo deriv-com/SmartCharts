@@ -26,6 +26,7 @@ class ActiveSymbolDriver extends Driver {
                     market_display_name: s.market_display_name,
                     submarket_display_name: s.submarket_display_name,
                     exchange_is_open: s.exchange_is_open,
+                    decimal_places: s.pip.length - 2
                 },
                 display: [s.display_name],
             });

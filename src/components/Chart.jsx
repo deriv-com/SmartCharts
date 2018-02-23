@@ -14,7 +14,6 @@ import '../AddOns';
 import '../Plugin';
 
 import './Attribution';
-import './ChartTitle';
 import './Close';
 import './ColorPicker';
 import './ComparisonList';
@@ -38,6 +37,7 @@ import './Clickable';
 import ChartControls from './ChartControls.jsx';
 
 import Toolbar from './Toolbar.jsx';
+import ChartTitle from './ChartTitle.jsx';
 import { MobxProvider, connect } from '../store/Connect';
 
 class Chart extends Component {
@@ -74,51 +74,13 @@ class Chart extends Component {
                                     <stx-hu-tooltip-field-value />
                                 </stx-hu-tooltip-field>
                             </stx-hu-tooltip>
-
-                            <cq-chart-title cq-marker cq-browser-tab>
-                                <cq-menu class="ciq-search">
-                                    <cq-lookup cq-keystroke-claim cq-keystroke-default cq-uppercase>
-                                        <cq-lookup-input cq-no-close>
-                                            <input
-                                                id="symbol"
-                                                cq-focus=""
-                                                type="text"
-                                                spellCheck="off"
-                                                autoComplete="off"
-                                                autoCorrect="off"
-                                                autoCapitalize="off"
-                                                name="symbol"
-                                                placeholder=""
-                                            />
-                                            <cq-lookup-icon />
-                                        </cq-lookup-input>
-                                        <cq-lookup-results>
-                                            <cq-lookup-filters cq-no-close>
-                                                <cq-filter class="true">All</cq-filter>
-                                                <cq-filter>Forex</cq-filter>
-                                                <cq-filter>Indices</cq-filter>
-                                                <cq-filter>OTC Stocks</cq-filter>
-                                                <cq-filter>Commodities</cq-filter>
-                                                <cq-filter>Volatility Indices</cq-filter>
-                                            </cq-lookup-filters>
-                                            <cq-scroll />
-                                        </cq-lookup-results>
-                                    </cq-lookup>
-                                </cq-menu>
-                                <cq-symbol />
-                                <cq-chart-price>
-                                    <cq-current-price cq-animate />
-                                    <cq-change>
-                                        <div className="ico" />
-                                        <cq-todays-change /> (<cq-todays-change-pct />)
-                                    </cq-change>
-                                </cq-chart-price>
-                            </cq-chart-title>
-                            <cq-comparison cq-marker>
-                                <cq-comparison-key
-                                    dangerouslySetInnerHTML={{
-                                        /* TODO: fix this */
-                                        __html: `
+                            <div className="cq-top-ui-widgets">
+                                <ChartTitle />
+                                <cq-comparison >
+                                    <cq-comparison-key
+                                        dangerouslySetInnerHTML={{
+                                            /* TODO: fix this */
+                                            __html: `
                                 <template cq-comparison-item>
                                     <cq-comparison-item>
                                         <cq-comparison-swatch></cq-comparison-swatch>
@@ -129,9 +91,10 @@ class Chart extends Component {
                                     </cq-comparison-item>
                                 </template>
                                     `,
-                                    }}
-                                />
-                            </cq-comparison>
+                                        }}
+                                    />
+                                </cq-comparison>
+                            </div>
                             <cq-hu-static>
                                 <div>
                                     <div>Price</div>

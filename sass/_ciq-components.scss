@@ -23,6 +23,12 @@ cq-context {
 		-webkit-tap-highlight-color: transparent; /* For some Androids */
 	}
 
+	.cq-top-ui-widgets {
+		position: absolute;
+		z-index: 40;
+		margin: 0.2em 0.5em;
+	}
+
 	@import "components/line";
 	@import "components/chart-types";
 	@import "components/chart-controls";
@@ -539,10 +545,6 @@ cq-side-panel[cq-active] {
 
 cq-menu-dropdown, .cq-menu-dropdown {
 	position:absolute;
-	/*margin-top:5px;
-	padding-bottom:6px;
-	padding-top:10px;*/
-	left:0;
 	background:$DEFAULT-menu-bg;
 	color: $DEFAULT-text-medium;
 	height:0px;
@@ -551,7 +553,6 @@ cq-menu-dropdown, .cq-menu-dropdown {
 	@include box-shadow (0px, 2px, 4px, rgba(0, 0, 0, .2));
 	transition: opacity .20s 0s;
 	z-index:6;
-	width:200px;
 	@include border-radius($soft-corners);
 
 	.break-sm & {
@@ -567,8 +568,6 @@ cq-menu-dropdown, .cq-menu-dropdown {
 		opacity: 1;
 		height:auto;
 		margin-top:5px;
-		padding-bottom:6px;
-		padding-top:10px;
 	}
 
 	&[cq-lift] {
@@ -749,7 +748,6 @@ cq-lookup-icon {
 .ciq-dropdowns,
 .ciq-menu {
 	display:inline-block;
-	line-height:40px;
 	@include box-sizing(border-box);
 }
 
@@ -773,7 +771,6 @@ cq-lookup-icon {
 }
 .ciq-menu {
 	color:mix(#000, $DEFAULT-bg, 65% );
-	padding:0 10px;
 	transition: color .20s 0s;
 
 	&:hover {
@@ -804,33 +801,6 @@ cq-lookup-icon {
 	font-weight:400;
 
 }
-
-.ciq-menu{
-	&:after {
-		content:"";
-		position: absolute;
-		right:10px;
-		top:19px;
-		display: block;
-		width: 5px;
-		height: 5px;
-		border-right:solid thin mix(#000, $DEFAULT-bg, 40% );
-		border-bottom:solid thin mix(#000, $DEFAULT-bg, 40% );
-		@include rotate(45deg);
-	}
-}
-
-// Hide carat on small screen
-.break-sm, .break-md {
-	& .ciq-menu:after {
-		display:none;
-	}
-}
-
-// Hide markers icon on small screen
-//.break-sm .stx-markers {
-//	display:none;
-//}
 
 /* Panel Toggles */
 body:not(.break-sm) .sidenav-toggle {
@@ -2050,6 +2020,8 @@ cq-comparison {
 	z-index:3;
 	width:200px;
 	&[cq-show] {
+		margin-top: 25px;
+		margin-left: 12px;
 		display: block;
 	}
 	.break-sm &[cq-show] {
