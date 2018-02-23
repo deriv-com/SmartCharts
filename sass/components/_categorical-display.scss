@@ -1,9 +1,8 @@
-.cq-categorical-display > .cq-menu-dropdown {
+.cq-categorical-display {
     padding: 0 !important;
     display: flex;
     text-align: left;
     background-color: $DEFAULT-menu-bg;
-    margin-top: 5px;
     color: $DEFAULT-text-medium;
     opacity: 0;
     //transition: opacity .20s .50s;

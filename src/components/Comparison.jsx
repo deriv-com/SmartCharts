@@ -12,7 +12,7 @@ const Comparison = ({
 }) => {
     return (
         <Menu
-            className="cq-comparison-new cq-categorical-display"
+            className="cq-comparison-new"
         >
             <Menu.Title>
                 <span className="ciq-icon ciq-ic-comparison" />

@@ -14,6 +14,14 @@ const connectionManager = new ConnectionManager({
 });
 const streamManager = new StreamManager(connectionManager);
 
+const defaultSymbol = {
+    symbol: 'R_100',
+    name: "Volatility 100 Index",
+    market_display_name: "Volatility Indices",
+    exchange_is_open: 1,
+    decimal_places: 2
+};
+
 class ChartStore {
     get connectionManager() { return connectionManager; }
     get streamManager() { return streamManager; }
@@ -32,6 +40,7 @@ class ChartStore {
     id = null;
     @observable context = null;
     @observable activeSymbols = [];
+    @observable currentActiveSymbol = defaultSymbol;
 
     @action.bound setSymbols(symbols) {
         if (symbols && this.context) {
@@ -140,14 +149,11 @@ class ChartStore {
                 }
                 this.restoreDrawings(this.stxx, this.stxx.chart.symbol);
             });
+
+            this.currentActiveSymbol = data;
         };
 
         context.setLookupDriver(this.driver);
-
-        const symbolLookup = this.rootNode.querySelector('.ciq-search cq-lookup');
-        symbolLookup.setCallback((context, data) => {
-            context.changeSymbol(data);
-        });
 
         new CIQ.UI.KeystrokeHub(document.querySelector('body'), context, {
             cb: CIQ.UI.KeystrokeHub.defaultHotKeys,
@@ -178,13 +184,10 @@ class ChartStore {
         this.restorePreferences();
         this.restoreLayout(stxx);
 
-        if (!stxx.chart.symbol) {
-            symbolLookup.selectItem({
-                symbol: 'R_100',
-                name: "Volatility 100 Index",
-                market_display_name: "Volatility Indices",
-                exchange_is_open: 1
-            }); // load an initial symbol
+        if (stxx.chart.symbol) {
+            this.currentActiveSymbol = stxx.chart.symbolObject;
+        } else {
+            context.changeSymbol(defaultSymbol);
         }
 
         this.context = context;

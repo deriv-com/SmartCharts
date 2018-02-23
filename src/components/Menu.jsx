@@ -9,10 +9,7 @@ class Menu extends Component {
         const {
             open,
             className,
-            setOpen,
             children,
-            init,
-            destroy,
             onTitleClick,
             onBodyClick,
         } = this.props;
@@ -37,7 +34,7 @@ class Menu extends Component {
             </div>
         );
     }
-} 
+}
 
 Menu.connectBy = selector => {
     const Connected = connect(
