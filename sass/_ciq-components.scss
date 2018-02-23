@@ -1505,25 +1505,33 @@ cq-hu-static {
 }
 
 #mSticky {
-	font-family: $heading-font;
-    font-size: 13px;
-    font-weight: bold;
-	border-radius: 0;
-	-webkit-border-radius: 0;
-	color: #000;
-	background-color: #fff;
-    border: solid #398DFF 2px;
-    padding: 5px;
+    font-size: 12px;
+    color: #fff;
+    padding: 0 5px;
+
+    background: rgba(21,33,45,0.88);
+    box-shadow: 0 2px 8px 0 rgba(21,33,45,0.32);
+    border-radius: 6px;
+    height: 34px;
+    line-height: 34px;
+    box-sizing: border-box;
+    &:before {
+        position: absolute;
+        pointer-events: none;
+        border: solid;
+        border-color: rgba(21,33,45,0.88) transparent;
+        border-width: 4px 4px 0px 4px;
+        top: 34px;
+        content: "";
+        left: calc(50% - 4px);
+    }
 }
 
 #mStickyInterior {
+    position: absolute;
+    top: -30px;
+    color: black;
 	padding: 0;
-}
-
-#mouseDeleteInstructions {
-	text-align: center;
-	font-family: $base-font;
-	padding: 5px 0 0 0;
 }
 
 /* --------------------------------------------------------- FOOTER --------------------------------------------------------- */

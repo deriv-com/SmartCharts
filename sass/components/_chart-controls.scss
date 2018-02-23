@@ -1,6 +1,6 @@
 $selected-background-color: #e4e6f1;
 
-  #chartControls {
+#chartControls {
     /* Chart Control module */
     position: absolute;
     display: flex !important;
@@ -35,27 +35,37 @@ $selected-background-color: #e4e6f1;
             background-color: $selected-background-color;
         }
         >.ciq-icon, .cq-menu-btn > .ciq-icon {
-            background-color: $selected-background-color;
+            border: 2px solid rgba(76,87,148,0.40);
+            box-sizing: border-box;
+            background-position: -2px -2px;
+            border-radius: 2px;
+            &:before {
+                content: " ";
+                width: 18px;
+                height: 18px;
+                border: 1px solid #4C5794;
+                position: absolute;
+            }
         }
     }
     .ciq-row {
-      text-align: left;
-      height: 24px;
-      display: flex;
-      align-items: center;
-      color: black;
-      padding: 0.2em 0.9em;
-      &:hover,
-      &[cq-focused] {
-          background: $selected-background-color;
-      }
+        text-align: left;
+        height: 24px;
+        display: flex;
+        align-items: center;
+        color: black;
+        padding: 0.2em 0.9em;
+        &:hover,
+        &[cq-focused] {
+            background: $selected-background-color;
+        }
     }
     .ciq-menu {
         line-height: 2.1em;
         padding: 0.35em 0.2em;
         > span {
-          margin: 0;
-          padding: 0;
+            margin: 0;
+            padding: 0;
         }
         &:after {
             right: 5px;
@@ -87,6 +97,7 @@ $selected-background-color: #e4e6f1;
         width: 24px;
         height: 24px;
         display: inline-block;
+        box-sizing: border-box;
     }
     .ciq-views  {
         cq-item {
@@ -115,10 +126,12 @@ $selected-background-color: #e4e6f1;
     .ciq-ic-charttemplate-normal {
         background: url('icons/chart template/ic-charttemplate-normal-light.svg');
     }
+
+    .ciq-ic-draw-tools,
     .ciq-draw > span {
         background: url('icons/drawing tools/ic-drawingtools-normal-light.svg');
     }
     .ciq-ic-comparison {
-      background: url('icons/comparison/ic-comparison-normal-light.svg');
+        background: url('icons/comparison/ic-comparison-normal-light.svg');
     }
 }
