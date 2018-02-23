@@ -45,9 +45,10 @@ export default class ChartTitleStore {
 
         let todaysChange = 0;
         let todaysChangePct = 0;
-        const currentPrice = currentQuote ? currentQuote.Close : '';
+        let currentPrice = currentQuote ? currentQuote.Close : '';
         if (currentPrice) {
-            let oldPrice = this.currentPrice;
+            currentPrice = currentPrice.toFixed(4);
+            let oldPrice = this.currentPrice.price;
             if (oldPrice !== currentPrice) {
                 priceChanged = true;
             }
@@ -66,7 +67,7 @@ export default class ChartTitleStore {
                     this.todayChangePercentage = `${todaysChangePct.toFixed(2)}%`;
                 }
             }
-            this.todayChange = Math.abs(todaysChange).toFixed(2);
+            this.todayChange = Math.abs(todaysChange).toFixed(4);
         }
 
         if (todaysChangePct > 0) {
