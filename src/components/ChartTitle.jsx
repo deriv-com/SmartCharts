@@ -1,12 +1,12 @@
 import React from 'react';
 import { connect } from '../store/Connect';
 import Menu_ from './Menu.jsx';
-import SymbolsCategoricalDisplay_ from './SymbolsCategoricalDisplay.jsx';
+import CategoricalDisplay_ from './CategoricalDisplay.jsx';
 import AnimatedPrice_ from './AnimatedPrice.jsx';
 
 const Menu = Menu_.connectBy(stores => stores.chartTitle.menu);
 const AnimatedPrice = AnimatedPrice_.connectBy(stores => stores.chartTitle.currentPrice);
-const SymbolsCategoricalDisplay = SymbolsCategoricalDisplay_.connectBy(stores => stores.chartTitle.symbolsCategoricalDisplay);
+const CategoricalDisplay = CategoricalDisplay_.connectBy(stores => stores.chartTitle.symbolsDisplay);
 
 const ChartTitle = ({
     todayChange,
@@ -14,7 +14,6 @@ const ChartTitle = ({
     isVisible,
     isPriceUp,
     isMenuOpened,
-    activeSymbols,
     symbolName,
     onSelectItem
 }) => {
@@ -34,9 +33,8 @@ const ChartTitle = ({
                 </div>}
             </Menu.Title>
             <Menu.Body>
-                <SymbolsCategoricalDisplay
+                <CategoricalDisplay
                     isShown={isMenuOpened}
-                    activeSymbols={activeSymbols}
                     onSelectItem={onSelectItem}
                 />
             </Menu.Body>
@@ -47,7 +45,6 @@ const ChartTitle = ({
 export default connect(
     ({ chartTitle: c }) => ({
         todayChange: c.todayChange,
-        activeSymbols: c.activeSymbols,
         todayChangePercentage: c.todayChangePercentage,
         isPriceUp: c.isPriceUp,
         isVisible: c.isVisible,

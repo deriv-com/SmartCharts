@@ -9,7 +9,7 @@ export default class SymbolsCategoricalDisplayStore {
 
     @computed get activeSymbols() { return this.mainStore.chart.activeSymbols; }
     @computed get currentActiveSymbol() { return this.mainStore.chart.currentActiveSymbol; }
-    @computed get categorizedSymbols() { return this._categorizeSymbols(this.activeSymbols); }
+    @computed get categorizedItems() { return this._categorizeSymbols(this.activeSymbols); }
 
     _categorizeSymbols(activeSymbols) {
         let categorizedSymbols = [];

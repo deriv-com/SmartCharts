@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from 'react';
+import { connect } from '../store/Connect';
 
 class CategoricalDisplay extends Component {
     constructor() {
@@ -129,5 +130,19 @@ class CategoricalDisplay extends Component {
         );
     }
 }
+
+CategoricalDisplay.connectBy = selector => {
+    const Connected = connect(
+        (stores) => {
+            const s = selector(stores);
+            return {
+                categorizedItems: s.categorizedItems,
+                ...s,
+            };
+        }
+    )(CategoricalDisplay);
+    return Connected;
+}
+
 
 export default CategoricalDisplay;
