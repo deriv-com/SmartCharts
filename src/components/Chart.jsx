@@ -75,12 +75,13 @@ class Chart extends Component {
                                     <stx-hu-tooltip-field-value />
                                 </stx-hu-tooltip-field>
                             </stx-hu-tooltip>
-                            <ChartTitle />
-                            <cq-comparison >
-                                <cq-comparison-key
-                                    dangerouslySetInnerHTML={{
-                                        /* TODO: fix this */
-                                        __html: `
+                            <div className="cq-top-ui-widgets">
+                                <ChartTitle />
+                                <cq-comparison >
+                                    <cq-comparison-key
+                                        dangerouslySetInnerHTML={{
+                                            /* TODO: fix this */
+                                            __html: `
                                 <template cq-comparison-item>
                                     <cq-comparison-item>
                                         <cq-comparison-swatch></cq-comparison-swatch>
@@ -91,9 +92,10 @@ class Chart extends Component {
                                     </cq-comparison-item>
                                 </template>
                                     `,
-                                    }}
-                                />
-                            </cq-comparison>
+                                        }}
+                                    />
+                                </cq-comparison>
+                            </div>
                             <cq-hu-static>
                                 <div>
                                     <div>Price</div>

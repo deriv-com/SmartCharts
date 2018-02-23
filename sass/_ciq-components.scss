@@ -23,6 +23,12 @@ cq-context {
 		-webkit-tap-highlight-color: transparent; /* For some Androids */
 	}
 
+	.cq-top-ui-widgets {
+		position: absolute;
+		z-index: 40;
+		margin: 0.2em 0.5em;
+	}
+
 	@import "components/line";
 	@import "components/chart-types";
 	@import "components/chart-controls";
@@ -765,7 +771,6 @@ cq-lookup-icon {
 }
 .ciq-menu {
 	color:mix(#000, $DEFAULT-bg, 65% );
-	padding:0 10px;
 	transition: color .20s 0s;
 
 	&:hover {
@@ -2008,7 +2013,7 @@ cq-comparison {
 	width:200px;
 	&[cq-show] {
 		margin-top: 25px;
-		z-index: 40;
+		margin-left: 12px;
 		display: block;
 	}
 	.break-sm &[cq-show] {
