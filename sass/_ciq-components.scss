@@ -614,7 +614,6 @@ cq-item[cq-focused],
 	color:$DEFAULT-text-strong;
 }
 
-cq-lookup-filters,
 cq-menu-wrap {
 	display:block;
 }
@@ -672,21 +671,6 @@ cq-section-dynamic .ciq-icon { /* Delete button placement for custom item */
 
 /* Search Area */
 
-cq-lookup{
-	display:block;
-	width:120px;
-	transition: width .50s 0s;
-	z-index:2;
-	.break-sm .stxMenuActive &, .break-md .stxMenuActive & {
-		width: 300px;
-	}
-	.break-sm & {
-		width: 50px;
-	}
-	.break-md & {
-		width: 85px;
-	}
-}
 .ciq-search {
 	width: 130px;
 	height:$nav-height;
@@ -730,17 +714,6 @@ cq-lookup-input {
 		@include border-radius($soft-corners);
 		transition: background .60s 0s;
 	}
-}
-cq-lookup-icon {
-	position:absolute;
-	height:27px;
-	width: 27px;
-	right:15px;
-	top:-5px;
-	background-image:url(img/stx-sprite-ui.svg);
-	background-position: -45px -25px;
-	opacity: .6;
-	transition: opacity .20s 0s;
 }
 
 /* Menus/Panel Toggles */

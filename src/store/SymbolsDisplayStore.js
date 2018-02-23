@@ -1,20 +1,15 @@
-import React, { Component, Fragment } from 'react';
-import CategoricalDisplay from './CategoricalDisplay.jsx';
-import { connect } from '../store/Connect';
+import { observable, action, computed, autorunAsync } from 'mobx';
+import MenuStore from './MenuStore';
+import AnimatedPriceStore from './AnimatedPriceStore';
 
-class SymbolsCategoricalDisplay extends Component {
-    constructor() {
-        super();
-        this.state = {
-            categorizedItems: [],
-        };
+export default class SymbolsCategoricalDisplayStore {
+    constructor(mainStore) {
+        this.mainStore = mainStore;
     }
 
-    componentWillReceiveProps(nextProps) {
-        if (this.props.activeSymbols !== nextProps.activeSymbols) {
-            this.setState({ categorizedItems: this._categorizeSymbols(nextProps.activeSymbols) });
-        }
-    }
+    @computed get activeSymbols() { return this.mainStore.chart.activeSymbols; }
+    @computed get currentActiveSymbol() { return this.mainStore.chart.currentActiveSymbol; }
+    @computed get categorizedItems() { return this._categorizeSymbols(this.activeSymbols); }
 
     _categorizeSymbols(activeSymbols) {
         let categorizedSymbols = [];
@@ -47,7 +42,7 @@ class SymbolsCategoricalDisplay extends Component {
                     category.data.push(subcategory);
                     subcategory = getSubcategory(data);
                 }
-                const selected = data.symbol === this.props.context.stx.chart.symbol;
+                const selected = data.symbol === this.currentActiveSymbol.symbol;
                 const enabled = selected ? false : data.exchange_is_open;
                 subcategory.data.push({
                     enabled,
@@ -63,24 +58,4 @@ class SymbolsCategoricalDisplay extends Component {
 
         return categorizedSymbols;
     }
-
-    render() {
-        const { categorizedItems } = this.state;
-
-        return (
-            <CategoricalDisplay
-                {...this.props}
-                categorizedItems={categorizedItems}
-                placeholderText={'"AUD/JPY" or "Apple"'}
-            />
-        );
-    }
 }
-
-const SymbolsCategoricalDisplayConnected = connect(
-    ({chart}) => ({
-        context: chart.context
-    })
-)(SymbolsCategoricalDisplay);
-
-export default SymbolsCategoricalDisplayConnected;
