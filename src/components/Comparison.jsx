@@ -1,9 +1,10 @@
 import React from 'react';
 import Menu_ from './Menu.jsx';
 import { connect } from '../store/Connect';
-import SymbolsCategoricalDisplay from './SymbolsCategoricalDisplay.jsx';
+import SymbolsCategoricalDisplay_ from './SymbolsCategoricalDisplay.jsx';
 
-const Menu = Menu_.connectBy(stroes => stroes.comparison.menu);
+const Menu = Menu_.connectBy(stores => stores.comparison.menu);
+const SymbolsCategoricalDisplay = SymbolsCategoricalDisplay_.connectBy(stores => stores.comparison.symbolsCategoricalDisplay);
 
 const Comparison = ({
     activeSymbols,

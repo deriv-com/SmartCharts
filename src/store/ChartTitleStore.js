@@ -1,12 +1,14 @@
 import { observable, action, computed, autorunAsync } from 'mobx';
 import MenuStore from './MenuStore';
 import AnimatedPriceStore from './AnimatedPriceStore';
+import SymbolsCategoricalDisplayStore from './SymbolsCategoricalDisplayStore';
 
 export default class ChartTitleStore {
     constructor(mainStore) {
         this.mainStore = mainStore;
         autorunAsync(this.onContextReady.bind(this));
         this.menu = new MenuStore(mainStore);
+        this.symbolsCategoricalDisplay = new SymbolsCategoricalDisplayStore(mainStore);
         this.currentPrice = new AnimatedPriceStore();
     }
 
@@ -22,6 +24,7 @@ export default class ChartTitleStore {
 
     @action.bound onSelectItem(symbolObj) {
         this.context.changeSymbol(symbolObj);
+        this.menu.setOpen(false);
     }
 
     onContextReady() {

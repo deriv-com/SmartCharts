@@ -1,11 +1,12 @@
 import React from 'react';
 import { connect } from '../store/Connect';
 import Menu_ from './Menu.jsx';
-import SymbolsCategoricalDisplay from './SymbolsCategoricalDisplay.jsx';
+import SymbolsCategoricalDisplay_ from './SymbolsCategoricalDisplay.jsx';
 import AnimatedPrice_ from './AnimatedPrice.jsx';
 
 const Menu = Menu_.connectBy(stores => stores.chartTitle.menu);
 const AnimatedPrice = AnimatedPrice_.connectBy(stores => stores.chartTitle.currentPrice);
+const SymbolsCategoricalDisplay = SymbolsCategoricalDisplay_.connectBy(stores => stores.chartTitle.symbolsCategoricalDisplay);
 
 const ChartTitle = ({
     todayChange,
