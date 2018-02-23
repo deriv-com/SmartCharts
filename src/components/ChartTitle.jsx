@@ -1,14 +1,15 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import { connect } from '../store/Connect';
 import Menu_ from './Menu.jsx';
 import SymbolsCategoricalDisplay from './SymbolsCategoricalDisplay.jsx';
+import AnimatedPrice_ from './AnimatedPrice.jsx';
 
 const Menu = Menu_.connectBy(stores => stores.chartTitle.menu);
+const AnimatedPrice = AnimatedPrice_.connectBy(stores => stores.chartTitle.currentPrice);
 
 const ChartTitle = ({
     todayChange,
     todayChangePercentage,
-    currentPrice,
     isVisible,
     isPriceUp,
     isMenuOpened,
@@ -17,13 +18,13 @@ const ChartTitle = ({
     onSelectItem
 }) => {
     return (
-        <Menu className="cq-chart-title stx-show" hidden>
+        <Menu className="cq-chart-title stx-show">
             <Menu.Title>
                 {isVisible &&
                 <div className="cq-symbol-select-btn">
                     <div className="cq-symbol">{symbolName}</div>
                     <div className="cq-chart-price">
-                        <div className="cq-current-price">{currentPrice.toFixed(2)}</div>
+                        <AnimatedPrice className="cq-current-price" />
                         <div className={`cq-change ${isPriceUp ? 'stx-up' : 'stx-down'}`}>
                             <span className="ico" />
                             <span className="cq-todays-change">{todayChange}</span> (<span className="cq-todays-change-pct">{todayChangePercentage}</span>)
@@ -47,7 +48,6 @@ export default connect(
         todayChange: c.todayChange,
         activeSymbols: c.activeSymbols,
         todayChangePercentage: c.todayChangePercentage,
-        currentPrice: c.currentPrice,
         isPriceUp: c.isPriceUp,
         isVisible: c.isVisible,
         symbolName: c.symbolName,

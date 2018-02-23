@@ -1,16 +1,17 @@
 import { observable, action, computed, autorunAsync } from 'mobx';
 import MenuStore from './MenuStore';
+import AnimatedPriceStore from './AnimatedPriceStore';
 
 export default class ChartTitleStore {
     constructor(mainStore) {
         this.mainStore = mainStore;
         autorunAsync(this.onContextReady.bind(this));
         this.menu = new MenuStore(mainStore);
+        this.currentPrice = new AnimatedPriceStore();
     }
 
     @observable todayChange;
     @observable todayChangePercentage;
-    @observable currentPrice;
     @observable isPriceUp = false;
     @observable isVisible = false;
 
@@ -51,7 +52,7 @@ export default class ChartTitleStore {
                 priceChanged = true;
             }
         }
-        this.currentPrice = currentPrice;
+        this.currentPrice.setPrice(currentPrice);
         if (priceChanged) {
             // Default to iqPrevClose if the developer hasn't set previousClose
             let previousClose = previousClose || (currentQuote ? currentQuote.iqPrevClose : null);
