@@ -17,6 +17,7 @@ export default class ChartTitleStore {
 
     get context() { return this.mainStore.chart.context; }
     @computed get symbolName() { return this.mainStore.chart.currentActiveSymbol.name; }
+    @computed get decimalPlaces() { return this.mainStore.chart.currentActiveSymbol.decimal_places; }
     @computed get activeSymbols() { return this.mainStore.chart.activeSymbols; }
 
     @action.bound onSelectItem(symbolObj) {
@@ -47,7 +48,7 @@ export default class ChartTitleStore {
         let todaysChangePct = 0;
         let currentPrice = currentQuote ? currentQuote.Close : '';
         if (currentPrice) {
-            currentPrice = currentPrice.toFixed(4);
+            currentPrice = currentPrice.toFixed(this.decimalPlaces);
             let oldPrice = this.currentPrice.price;
             if (oldPrice !== currentPrice) {
                 priceChanged = true;
@@ -67,7 +68,7 @@ export default class ChartTitleStore {
                     this.todayChangePercentage = `${todaysChangePct.toFixed(2)}%`;
                 }
             }
-            this.todayChange = Math.abs(todaysChange).toFixed(4);
+            this.todayChange = Math.abs(todaysChange).toFixed(this.decimalPlaces);
         }
 
         if (todaysChangePct > 0) {
