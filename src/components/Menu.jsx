@@ -36,25 +36,7 @@ class Menu extends Component {
     }
 }
 
-Menu.connectBy = selector => {
-    const Connected = connect(
-        (stores) => {
-            const s = selector(stores);
-            return {
-                open: s.open,
-                className: s.className,
-                setOpen: s.setOpen,
-                children: s.children,
-                init: s.init,
-                destroy: s.destroy,
-                onTitleClick: s.onTitleClick,
-                onBodyClick: s.onBodyClick,
-            }
-        }
-    )(Menu);
-    Connected.Title = ({children}) => children;
-    Connected.Body  = ({children}) => children;
-    return Connected;
-}
+Menu.Title = ({children}) => children;
+Menu.Body  = ({children}) => children;
 
 export default Menu;

@@ -1,14 +1,13 @@
 import React from 'react';
 import { connect } from '../store/Connect';
-import Menu_ from './Menu.jsx';
-
-const Menu = Menu_.connectBy(stroes => stroes.timeperiod.menu);
+import Menu from './Menu.jsx';
 
 const Timeperiod = ({
     setPeriodicity,
     interval,
     timeUnit,
-    interval_display
+    interval_display,
+    Menu,
 }) => {
     return (
         <Menu
@@ -114,5 +113,6 @@ export default connect(
         timeUnit: s.timeUnit,
         interval: s.interval,
         interval_display: s.interval_display,
+        Menu: s.menu.connect(Menu),
     })
 )(Timeperiod);

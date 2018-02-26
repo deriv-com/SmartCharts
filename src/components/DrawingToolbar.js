@@ -133,6 +133,7 @@ class DrawingToolbar extends ContextTag {
                 delete drawingParameters.parameters;
             }
 
+            console.warn(this.node);
             let elements = this.defaultElements(drawingParameters);
             for (let i = 0; i < elements.length; i++) {
                 $(this.node).find(elements[i]).addClass('ciq-active');

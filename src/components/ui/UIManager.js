@@ -27,7 +27,6 @@ class UIManager {
     constructor() {
         this.activeMenuStack = [];
         this.registeredForResize = [];
-        this.keystrokeHub = null; // KeystrokeHub should register itself here
 
         document.addEventListener('DOMContentLoaded', () => {
             CIQ.installTapEvent($('body')[0], { preventUnderlayClick: false });

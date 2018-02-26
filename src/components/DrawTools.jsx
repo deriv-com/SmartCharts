@@ -1,15 +1,23 @@
 import React from 'react';
 import { connect } from '../store/Connect';
-import Menu_ from './Menu.jsx';
+import Menu from './Menu.jsx';
+import List_ from './List.jsx';
 import '../../sass/_draw-tools.scss';
+import KeystrokeHub from './ui/KeystrokeHub';
 
-const Menu = Menu_.connectBy(stroes => stroes.drawTools.menu);
+const List = connect(
+    ({ drawTools: dt }) => ({
+        isOpen: dt.menu.open,
+        height: 250,
+    })
+)(List_);
 
 const DrawTools = ({
     clearAll,
     noTool,
     selectTool,
     clearDrawings,
+    Menu,
 }) => {
     return (
         <Menu
@@ -19,8 +27,7 @@ const DrawTools = ({
                 <span className="ciq-icon ciq-ic-draw-tools"></span>
             </Menu.Title>
             <Menu.Body>
-                <cq-scroll>
-                <div className="rows">
+                <List>
                     <div className="row" onClick={noTool}>None</div>
                     <div className="row" onClick={clearDrawings}>Clear Drawings</div>
                     <div className="row" onClick={() => selectTool('measure')}>Measure</div>
@@ -58,8 +65,7 @@ const DrawTools = ({
                     <div className="row" onClick={() => selectTool('timecycle')}>Time Cycle</div>
                     <div className="row" onClick={() => selectTool('tirone')}>Tirone Levels</div>
                     <div className="row" onClick={() => selectTool('vertical')}>Vertical</div>
-                </div>
-                </cq-scroll>
+                </List>
             </Menu.Body>
         </Menu>
     );
@@ -71,5 +77,6 @@ export default connect(
         noTool: dt.noTool,
         selectTool: dt.selectTool,
         clearDrawings: dt.clearDrawings,
+        Menu: dt.menu.connect(Menu),
     })
 )(DrawTools);

@@ -60,14 +60,15 @@ const unboxProps = (props) => {
     return unboxedProps;
 };
 
-export const connect = mapStoresToProps => (WrappedComponent) => {
+export const connect = mapStoresToProps => {
     class UnboxedComponent extends Component {
         shouldComponentUpdate(nextProps) {
             return !isShallowEqual(nextProps, this.props);
         }
 
         render() {
-            return React.createElement(WrappedComponent, this.props);
+            const WC = UnboxedComponent.WrappedComponent;
+            return WC ? React.createElement(WC, this.props) : null;
         }
     }
 
@@ -81,14 +82,24 @@ export const connect = mapStoresToProps => (WrappedComponent) => {
 
     // apply the mobx store injection with our wrapped function
     const InjectedComponent = inject(unboxedMapStoresToProps)(UnboxedComponent);
+    return (WrappedComponent) => {
+        UnboxedComponent.WrappedComponent = WrappedComponent;
+        // make some nice names that will show up in the React Devtools
+        const wrappedDisplayName = WrappedComponent.displayName
+            || WrappedComponent.name
+            || (WrappedComponent.constructor && WrappedComponent.constructor.name)
+            || 'Unknown';
+        InjectedComponent.displayName = `inject-${wrappedDisplayName}`;
+        UnboxedComponent.displayName = `unbox-${wrappedDisplayName}`;
 
-    // make some nice names that will show up in the React Devtools
-    const wrappedDisplayName = WrappedComponent.displayName
-        || WrappedComponent.name
-        || (WrappedComponent.constructor && WrappedComponent.constructor.name)
-        || 'Unknown';
-    InjectedComponent.displayName = `inject-${wrappedDisplayName}`;
-    UnboxedComponent.displayName = `unbox-${wrappedDisplayName}`;
+        // let sub components like Menu.Body or List.Item work.
+        Object.keys(WrappedComponent).forEach(key => {
+            const SubComponent = WrappedComponent[key];
+            if(!/^childContextTypes$/.test(key) && typeof SubComponent === 'function') {
+                InjectedComponent[key] = SubComponent;
+            }
+        });
 
-    return InjectedComponent;
+        return InjectedComponent;
+    };
 };

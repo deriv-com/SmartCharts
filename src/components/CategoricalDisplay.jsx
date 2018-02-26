@@ -131,18 +131,4 @@ class CategoricalDisplay extends Component {
     }
 }
 
-CategoricalDisplay.connectBy = selector => {
-    const Connected = connect(
-        (stores) => {
-            const s = selector(stores);
-            return {
-                categorizedItems: s.categorizedItems,
-                ...s,
-            };
-        }
-    )(CategoricalDisplay);
-    return Connected;
-}
-
-
 export default CategoricalDisplay;

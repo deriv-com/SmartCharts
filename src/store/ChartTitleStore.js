@@ -1,15 +1,14 @@
 import { observable, action, computed, autorunAsync } from 'mobx';
 import MenuStore from './MenuStore';
 import AnimatedPriceStore from './AnimatedPriceStore';
-import SymbolsDisplayStore from './SymbolsDisplayStore';
+import { connect } from './Connect';
 
 export default class ChartTitleStore {
     constructor(mainStore) {
         this.mainStore = mainStore;
         autorunAsync(this.onContextReady.bind(this));
         this.menu = new MenuStore(mainStore);
-        this.symbolsDisplay = new SymbolsDisplayStore(mainStore);
-        this.currentPrice = new AnimatedPriceStore();
+        this.animatedPrice = new AnimatedPriceStore();
     }
 
     @observable todayChange;
@@ -51,11 +50,11 @@ export default class ChartTitleStore {
         let currentPrice = currentQuote ? currentQuote.Close : '';
         if (currentPrice) {
             currentPrice = currentPrice.toFixed(this.decimalPlaces);
-            let oldPrice = this.currentPrice.price;
+            let oldPrice = this.animatedPrice.price;
             if (oldPrice !== currentPrice) {
                 priceChanged = true;
             }
-            this.currentPrice.setPrice(currentPrice);
+            this.animatedPrice.setPrice(currentPrice);
         }
 
         if (priceChanged) {
@@ -81,4 +80,10 @@ export default class ChartTitleStore {
         }
         this.isVisible = hasData;
     }
+
+    connectCategoricalDisplay = connect(() => ({
+        categorizedItems: this.mainStore.chart.categorizedItems,
+        isMenuOpened: this.menu.open,
+        onSelectItem: this.onSelectItem,
+    }));
 }

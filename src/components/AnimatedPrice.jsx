@@ -12,19 +12,4 @@ const AnimatedPrice = ({
     );
 };
 
-AnimatedPrice.connectBy = selector => {
-    const Connected = connect(
-        (stores) => {
-            const s = selector(stores);
-            return {
-                price: s.price,
-                showStable: s.showStable,
-                isIncrease: s.isIncrease,
-                className: s.className
-            };
-        }
-    )(AnimatedPrice);
-    return Connected;
-}
-
 export default AnimatedPrice;

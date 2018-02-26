@@ -1,4 +1,5 @@
 import { observable, observe, action, computed, reaction, autorunAsync } from 'mobx';
+import { connect } from './Connect';
 
 export default class AnimatedPriceStore {
     @observable price = '';
@@ -25,4 +26,11 @@ export default class AnimatedPriceStore {
     @action.bound setShowStable(val) {
         this.showStable = val;
     }
+
+    connect = connect(() => ({
+        price: this.price,
+        showStable: this.showStable,
+        isIncrease: this.isIncrease,
+        className: this.className
+    }));
 }

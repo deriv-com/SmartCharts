@@ -3,6 +3,7 @@ import CIQ from 'chartiq';
 import { getParents } from './ui/utils';
 import ContextTag from './ui/ContextTag';
 import UIManager from './ui/UIManager';
+import KeystrokeHub from './ui/KeystrokeHub';
 
 /**
  * Scroll web component `<cq-scroll>`.
@@ -95,7 +96,7 @@ class Scroll extends ContextTag {
         super.attachedCallback();
         this.uiManager = UIManager.instance;
 
-        this.addClaim(this);
+        this.addClaim(this)
 
         // prevent mousewheel event from propagating up to parents, such as when embedded in a chart
         this.addEventListener(CIQ.wheelEvent, (e) => {
