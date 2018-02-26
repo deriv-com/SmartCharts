@@ -17,7 +17,6 @@ import './Attribution';
 import './Close';
 import './ColorPicker';
 import './ComparisonList';
-import './DrawingToolbar';
 import './FibSettingsDialog';
 import './Loader';
 import './Menu';
@@ -35,6 +34,7 @@ import './Undo';
 import './ViewDialog';
 import './Clickable';
 import ChartControls from './ChartControls.jsx';
+
 import Toolbar from './Toolbar.jsx';
 import ChartTitle from './ChartTitle.jsx';
 import { MobxProvider, connect } from '../store/Connect';
@@ -84,7 +84,6 @@ class Chart extends Component {
                         <div className="chartContainer primary">
 
                             <ChartControls />
-
                             <stx-hu-tooltip>
                                 <stx-hu-tooltip-field field="DT">
                                     <stx-hu-tooltip-field-name>Date/Time</stx-hu-tooltip-field-name>

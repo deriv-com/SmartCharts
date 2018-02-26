@@ -17,16 +17,15 @@ import UIManager from './UIManager';
  * @constructor
  */
 class KeystrokeHub extends Helper {
+    static instance = null;
     constructor(node, context, params) {
         super(node, context, params);
         this.node = node;
         this.context = context;
         this.params = params || {};
         this.uiManager = UIManager.instance;
-        if (this.uiManager) {
-            this.uiManager.keystrokeHub = this; // Register the keystroke hub so that it can be found
-        }
 
+        KeystrokeHub.instance = this;
         let self = this;
 
         function handler() {
@@ -133,6 +132,19 @@ class KeystrokeHub extends Helper {
             }
         }
         return false;
+    }
+
+    addClaim(helper) {
+        claims.push({ helper });
+    }
+
+    removeClaim(helper) {
+        for (let i = 0; i < claims.length; i++) {
+            if (claims[i].helper === helper) {
+                claims.splice(i, 1);
+                return;
+            }
+        }
     }
 
     /**

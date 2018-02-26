@@ -22,5 +22,6 @@ dist/
 .Trashes
 ehthumbs.db
 Thumbs.db
+tags
 
 jsconfig.json

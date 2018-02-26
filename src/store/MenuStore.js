@@ -1,5 +1,6 @@
 import { observable, action, computed, reaction, autorunAsync } from 'mobx';
 import { getTimeUnit } from './utils';
+import { connect } from './Connect';
 
 const allMenues = [];
 
@@ -63,4 +64,16 @@ export default class MenuStore {
         // e.stopPropagation();
         e.nativeEvent.isHandledByMenu = true;
     }
+
+
+    connect = connect(() => ({
+        open: this.open,
+        className: this.className,
+        setOpen: this.setOpen,
+        children: this.children,
+        init: this.init,
+        destroy: this.destroy,
+        onTitleClick: this.onTitleClick,
+        onBodyClick: this.onBodyClick,
+    }))
 }

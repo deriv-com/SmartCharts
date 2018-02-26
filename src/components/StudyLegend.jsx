@@ -1,9 +1,7 @@
 import CIQ from 'chartiq';
 import React, { Component } from 'react';
-import Menu_ from './Menu.jsx';
+import Menu from './Menu.jsx';
 import {connect} from '../store/Connect';
-
-const Menu = Menu_.connectBy(stroes => stroes.studies.menu);
 
 class StudyLegend extends Component {
     componentWillUnmount() {
@@ -11,7 +9,7 @@ class StudyLegend extends Component {
     }
 
     render() {
-        const {isOpened, setOpen, clearStudies, studies} = this.props;
+        const {isOpened, setOpen, clearStudies, studies, Menu} = this.props;
 
         return (
             <Menu
@@ -65,5 +63,6 @@ export default connect(
         studies: studies.studies,
         clearStudies: studies.clearStudies,
         cleanUp: studies.cleanUp,
+        Menu: studies.menu.connect(Menu),
     })
 )(StudyLegend);

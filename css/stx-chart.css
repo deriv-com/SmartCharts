@@ -332,9 +332,6 @@ html, body {
 #mSticky, #showMeasure { /* These are the small divs that come up when you hover over a drawing or study overlay */
     display: none;
     background: #efefef;
-    border: solid #ddd 1px;
-    -webkit-border-radius: 3px;
-    -moz-border-radius: 3px;
     border-radius: 3px;
     color: #666;
     font-size: 11px;
@@ -412,10 +409,8 @@ html, body {
 
 #mouseDeleteInstructions {
     margin: 0px;
-    padding: 5px 10px 5px 10px;
+    background: transparent;
     display: block;
-    clear: both;
-    font-size: xx-small;
 }
 
 #mouseDeleteText, #mouseManageText {

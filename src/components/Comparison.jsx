@@ -1,14 +1,11 @@
 import React from 'react';
-import Menu_ from './Menu.jsx';
+import Menu from './Menu.jsx';
 import { connect } from '../store/Connect';
-import CategoricalDisplay_ from './CategoricalDisplay.jsx';
-
-const Menu = Menu_.connectBy(stores => stores.comparison.menu);
-const CategoricalDisplay = CategoricalDisplay_.connectBy(stores => stores.comparison.symbolsDisplay);
+import CategoricalDisplay from './CategoricalDisplay.jsx';
 
 const Comparison = ({
-    isMenuOpened,
-    onSelectItem,
+    CategoricalDisplay,
+    Menu,
 }) => {
     return (
         <Menu
@@ -18,10 +15,7 @@ const Comparison = ({
                 <span className="ciq-icon ciq-ic-comparison" />
             </Menu.Title>
             <Menu.Body>
-                <CategoricalDisplay
-                    isShown={isMenuOpened}
-                    onSelectItem={onSelectItem}
-                />
+                <CategoricalDisplay />
             </Menu.Body>
         </Menu>
     );
@@ -29,7 +23,7 @@ const Comparison = ({
 
 export default connect(
     ({ comparison: c }) => ({
-        isMenuOpened: c.menu.open,
-        onSelectItem: c.onSelectItem
+        CategoricalDisplay: c.connectCategoricalDisplay(CategoricalDisplay),
+        Menu: c.menu.connect(Menu),
     })
 )(Comparison);

@@ -1,21 +1,18 @@
 import React from 'react';
 import { connect } from '../store/Connect';
-import Menu_ from './Menu.jsx';
-import CategoricalDisplay_ from './CategoricalDisplay.jsx';
-import AnimatedPrice_ from './AnimatedPrice.jsx';
-
-const Menu = Menu_.connectBy(stores => stores.chartTitle.menu);
-const AnimatedPrice = AnimatedPrice_.connectBy(stores => stores.chartTitle.currentPrice);
-const CategoricalDisplay = CategoricalDisplay_.connectBy(stores => stores.chartTitle.symbolsDisplay);
+import Menu from './Menu.jsx';
+import CategoricalDisplay from './CategoricalDisplay.jsx';
+import AnimatedPrice from './AnimatedPrice.jsx';
 
 const ChartTitle = ({
     todayChange,
     todayChangePercentage,
     isVisible,
     isPriceUp,
-    isMenuOpened,
     symbolName,
-    onSelectItem
+    Menu,
+    CategoricalDisplay,
+    AnimatedPrice,
 }) => {
     return (
         <Menu className="cq-chart-title stx-show">
@@ -27,16 +24,14 @@ const ChartTitle = ({
                         <AnimatedPrice className="cq-current-price" />
                         <div className={`cq-change ${isPriceUp ? 'stx-up' : 'stx-down'}`}>
                             <span className="ico" />
-                            <span className="cq-todays-change">{todayChange}</span> (<span className="cq-todays-change-pct">{todayChangePercentage}</span>)
+                            <span className="cq-todays-change">{todayChange}</span>
+                            (<span className="cq-todays-change-pct">{todayChangePercentage}</span>)
                         </div>
                     </div>
                 </div>}
             </Menu.Title>
             <Menu.Body>
-                <CategoricalDisplay
-                    isShown={isMenuOpened}
-                    onSelectItem={onSelectItem}
-                />
+                <CategoricalDisplay />
             </Menu.Body>
         </Menu>
     );
@@ -49,7 +44,8 @@ export default connect(
         isPriceUp: c.isPriceUp,
         isVisible: c.isVisible,
         symbolName: c.symbolName,
-        isMenuOpened: c.menu.open,
-        onSelectItem: c.onSelectItem
+        Menu: c.menu.connect(Menu),
+        CategoricalDisplay: c.connectCategoricalDisplay(CategoricalDisplay),
+        AnimatedPrice: c.animatedPrice.connect(AnimatedPrice),
     })
 )(ChartTitle);

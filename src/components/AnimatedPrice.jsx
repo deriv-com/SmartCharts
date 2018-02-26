@@ -5,26 +5,12 @@ const AnimatedPrice = ({
     showStable,
     isIncrease,
     price,
-    className
+    className,
 }) => {
-    return (
-        <div className={`cq-animated-price ${className || ''} ${showStable ? 'cq-stable ' : (isIncrease ? 'cq-up' : 'cq-down')}`}>{price}</div>
-    );
+    const classes = `cq-animated-price ${className || ''} ${
+        showStable ? 'cq-stable ' : (isIncrease ? 'cq-up' : 'cq-down')
+    }`
+    return (<div className={classes}>{price}</div>);
 };
-
-AnimatedPrice.connectBy = selector => {
-    const Connected = connect(
-        (stores) => {
-            const s = selector(stores);
-            return {
-                price: s.price,
-                showStable: s.showStable,
-                isIncrease: s.isIncrease,
-                className: s.className
-            };
-        }
-    )(AnimatedPrice);
-    return Connected;
-}
 
 export default AnimatedPrice;

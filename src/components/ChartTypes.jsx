@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
 import {connect} from '../store/Connect';
-import Menu_ from './Menu.jsx';
-
-const Menu = Menu_.connectBy(stroes => stroes.chartType.menu);
+import Menu from './Menu.jsx';
 
 const ChartTypes = ({
     type,
     setType,
     types,
+    Menu,
 }) => (
     <Menu
         className="ciq-menu ciq-display collapse ciq-chart-types"
@@ -42,6 +41,7 @@ export default connect(
         types: chartType.types.map(addIcon),
         isOpened: chartType.open,
         setOpen: chartType.setOpen,
+        Menu: chartType.menu.connect(Menu),
     })
 )(ChartTypes);
 
