@@ -1,12 +1,14 @@
 import { observable, action, computed, autorunAsync } from 'mobx';
 import MenuStore from './MenuStore';
 import AnimatedPriceStore from './AnimatedPriceStore';
+import SymbolsDisplayStore from './SymbolsDisplayStore';
 
 export default class ChartTitleStore {
     constructor(mainStore) {
         this.mainStore = mainStore;
         autorunAsync(this.onContextReady.bind(this));
         this.menu = new MenuStore(mainStore);
+        this.symbolsDisplay = new SymbolsDisplayStore(mainStore);
         this.currentPrice = new AnimatedPriceStore();
     }
 
@@ -18,10 +20,10 @@ export default class ChartTitleStore {
     get context() { return this.mainStore.chart.context; }
     @computed get symbolName() { return this.mainStore.chart.currentActiveSymbol.name; }
     @computed get decimalPlaces() { return this.mainStore.chart.currentActiveSymbol.decimal_places; }
-    @computed get activeSymbols() { return this.mainStore.chart.activeSymbols; }
 
     @action.bound onSelectItem(symbolObj) {
         this.context.changeSymbol(symbolObj);
+        this.menu.setOpen(false);
     }
 
     onContextReady() {
@@ -53,8 +55,9 @@ export default class ChartTitleStore {
             if (oldPrice !== currentPrice) {
                 priceChanged = true;
             }
+            this.currentPrice.setPrice(currentPrice);
         }
-        this.currentPrice.setPrice(currentPrice);
+
         if (priceChanged) {
             // Default to iqPrevClose if the developer hasn't set previousClose
             let previousClose = previousClose || (currentQuote ? currentQuote.iqPrevClose : null);

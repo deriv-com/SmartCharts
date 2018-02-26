@@ -16,8 +16,8 @@ export default class TogglesStore {
                 this.context,
                 { autoStart: this.stx.layout.headsUp }
             );
-            this.setHeadsUp(this.stx.layout.headsUp);
-            this.setCrosshair(this.stx.layout.crosshair);
+            this.headsUp = this.stx.layout.headsUp;
+            this.crosshair = this.stx.layout.crosshair;
         }
     }
 

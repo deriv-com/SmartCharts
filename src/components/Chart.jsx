@@ -19,7 +19,6 @@ import './ColorPicker';
 import './ComparisonList';
 import './FibSettingsDialog';
 import './Loader';
-import './Lookup';
 import './Menu';
 import './MenuDropDown';
 import './Redo';
@@ -61,6 +60,27 @@ class Chart extends Component {
                 <div className="ciq-chart-area">
                     <div className="ciq-chart">
                         <Toolbar />
+                        <div className="cq-top-ui-widgets">
+                            <ChartTitle />
+                            <cq-comparison >
+                                <cq-comparison-key
+                                    dangerouslySetInnerHTML={{
+                                        /* TODO: fix this */
+                                        __html: `
+                                <template cq-comparison-item>
+                                    <cq-comparison-item>
+                                        <cq-comparison-swatch></cq-comparison-swatch>
+                                        <cq-comparison-label>AAPL</cq-comparison-label>
+                                        <cq-comparison-price cq-animate></cq-comparison-price>
+                                        <cq-comparison-loader></cq-comparison-loader>
+                                        <div class="stx-btn-ico ciq-close"></div>
+                                    </cq-comparison-item>
+                                </template>
+                                    `,
+                                    }}
+                                />
+                            </cq-comparison>
+                        </div>
                         <div className="chartContainer primary">
 
                             <ChartControls />
@@ -74,27 +94,6 @@ class Chart extends Component {
                                     <stx-hu-tooltip-field-value />
                                 </stx-hu-tooltip-field>
                             </stx-hu-tooltip>
-                            <div className="cq-top-ui-widgets">
-                                <ChartTitle />
-                                <cq-comparison >
-                                    <cq-comparison-key
-                                        dangerouslySetInnerHTML={{
-                                            /* TODO: fix this */
-                                            __html: `
-                                <template cq-comparison-item>
-                                    <cq-comparison-item>
-                                        <cq-comparison-swatch></cq-comparison-swatch>
-                                        <cq-comparison-label>AAPL</cq-comparison-label>
-                                        <cq-comparison-price cq-animate></cq-comparison-price>
-                                        <cq-comparison-loader></cq-comparison-loader>
-                                        <div class="stx-btn-ico ciq-close"></div>
-                                    </cq-comparison-item>
-                                </template>
-                                    `,
-                                        }}
-                                    />
-                                </cq-comparison>
-                            </div>
                             <cq-hu-static>
                                 <div>
                                     <div>Price</div>
