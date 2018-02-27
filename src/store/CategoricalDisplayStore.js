@@ -107,6 +107,7 @@ export default class CategoricalDisplayStore {
         setResultsPanel: this.setResultsPanel,
         handleFilterClick: this.handleFilterClick,
         handleInputClick: this.handleInputClick,
-        onSelectItem: this.onSelectItem
+        onSelectItem: this.onSelectItem,
+        hasActiveItems: (this.getActiveItems !== undefined),
     }))
 }

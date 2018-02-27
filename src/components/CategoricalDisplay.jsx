@@ -7,7 +7,7 @@ const CategoricalDisplay = ({
     setFilterText,
     handleFilterClick,
     handleInputClick,
-    activeItems,
+    hasActiveItems,
     filteredItems,
     getItemCount,
     onSelectItem
@@ -53,7 +53,7 @@ const CategoricalDisplay = ({
                                         <div className="subcategory">{subcategory.subcategoryName}</div>
                                         { subcategory.data.map(renderItem)}
                                     </Fragment>
-                                ) : category.data.map((i === 0 && activeItems) ? renderActiveItem : renderItem)
+                                ) : category.data.map((i === 0 && hasActiveItems) ? renderActiveItem : renderItem)
                                 }
                             </div>
                         </Fragment>
