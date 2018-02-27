@@ -1,14 +1,19 @@
-import { observable, action, computed, autorunAsync } from 'mobx';
+import { observable, action, computed, when } from 'mobx';
 import MenuStore from './MenuStore';
 import AnimatedPriceStore from './AnimatedPriceStore';
-import { connect } from './Connect';
+import CategoricalDisplayStore from './CategoricalDisplayStore';
 
 export default class ChartTitleStore {
     constructor(mainStore) {
         this.mainStore = mainStore;
-        autorunAsync(this.onContextReady.bind(this));
+        when(() => this.context, this.onContextReady);
         this.menu = new MenuStore(mainStore);
         this.animatedPrice = new AnimatedPriceStore();
+        this.categoricalDisplay = new CategoricalDisplayStore({
+            getCategoricalItems: () => this.mainStore.chart.categorizedItems,
+            getIsShown: () => this.menu.open,
+            onSelectItem: this.onSelectItem.bind(this)
+        });
     }
 
     @observable todayChange;
@@ -25,13 +30,11 @@ export default class ChartTitleStore {
         this.menu.setOpen(false);
     }
 
-    onContextReady() {
-        if (this.context) {
-            this.context.stx.append('createDataSet', () => {
-                this.update();
-            });
+    onContextReady = () => {
+        this.context.stx.append('createDataSet', () => {
             this.update();
-        }
+        });
+        this.update();
     }
 
     update() {
@@ -80,10 +83,4 @@ export default class ChartTitleStore {
         }
         this.isVisible = hasData;
     }
-
-    connectCategoricalDisplay = connect(() => ({
-        categorizedItems: this.mainStore.chart.categorizedItems,
-        isMenuOpened: this.menu.open,
-        onSelectItem: this.onSelectItem,
-    }));
 }

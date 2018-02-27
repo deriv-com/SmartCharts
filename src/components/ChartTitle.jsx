@@ -45,7 +45,7 @@ export default connect(
         isVisible: c.isVisible,
         symbolName: c.symbolName,
         Menu: c.menu.connect(Menu),
-        CategoricalDisplay: c.connectCategoricalDisplay(CategoricalDisplay),
+        CategoricalDisplay: c.categoricalDisplay.connect(CategoricalDisplay),
         AnimatedPrice: c.animatedPrice.connect(AnimatedPrice),
     })
 )(ChartTitle);

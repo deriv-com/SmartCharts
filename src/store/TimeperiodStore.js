@@ -1,11 +1,11 @@
-import { observable, action, computed, autorunAsync } from 'mobx';
+import { observable, action, computed, when } from 'mobx';
 import { getTimeUnit } from './utils';
 import MenuStore from './MenuStore';
 
 export default class TimeperiodStore {
     constructor(mainStore) {
         this.mainStore = mainStore;
-        autorunAsync(this.onContextReady.bind(this));
+        when(() => this.context, this.onContextReady);
         this.menu = new MenuStore(mainStore);
     }
 
@@ -14,12 +14,10 @@ export default class TimeperiodStore {
     @observable timeUnit = null;
     @observable interval = null;
 
-    onContextReady() {
-        if(this.context) {
-            const { timeUnit, interval } = this.context.stx.layout;
-            this.timeUnit = getTimeUnit({ timeUnit, interval });
-            this.interval = interval;
-        }
+    onContextReady = () => {
+        const { timeUnit, interval } = this.context.stx.layout;
+        this.timeUnit = getTimeUnit({ timeUnit, interval });
+        this.interval = interval;
     }
 
     @action.bound setPeriodicity(interval, timeUnit) {

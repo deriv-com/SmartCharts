@@ -9,7 +9,6 @@ import DrawToolsStore from './DrawToolsStore';
 import ChartTitleStore from './ChartTitleStore';
 
 export default class MainStore {
-    @observable timeperiod = new TimeperiodStore(this);
     @observable chart = new ChartStore(this);
     @observable chartType = new ChartTypeStore(this);
     @observable toggles = new TogglesStore(this);
@@ -17,4 +16,5 @@ export default class MainStore {
     @observable comparison = new ComparisonStore(this);
     @observable drawTools = new DrawToolsStore(this);
     @observable chartTitle = new ChartTitleStore(this);
+    @observable timeperiod = new TimeperiodStore(this);
 }

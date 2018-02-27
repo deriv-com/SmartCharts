@@ -1,5 +1,6 @@
 import { observable, action, computed } from 'mobx';
 import MenuStore from './MenuStore';
+import CategoricalDisplayStore from './CategoricalDisplayStore';
 import { connect } from './Connect';
 
 const swatchColors = [
@@ -13,6 +14,12 @@ export default class ComparisonStore {
     constructor(mainStore) {
         this.mainStore = mainStore;
         this.menu = new MenuStore(mainStore);
+        this.categoricalDisplay = new CategoricalDisplayStore({
+            getActiveItems: () => this.mainStore.chart.comparisonSymbols,
+            getCategoricalItems: () => this.mainStore.chart.categorizedItems,
+            getIsShown: () => this.menu.open,
+            onSelectItem: this.onSelectItem.bind(this)
+        });
     }
 
     get context() { return this.mainStore.chart.context; }
@@ -78,10 +85,4 @@ export default class ComparisonStore {
 
         return selectedColor;
     }
-
-    connectCategoricalDisplay = connect(() => ({
-        categorizedItems: this.mainStore.chart.categorizedItems,
-        isMenuOpened: this.menu.open,
-        onSelectItem: this.onSelectItem,
-    }));
 }
