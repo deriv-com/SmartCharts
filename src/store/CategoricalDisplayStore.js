@@ -4,7 +4,7 @@ import { connect } from './Connect';
 export default class CategoricalDisplayStore {
     constructor({ getCategoricalItems, onSelectItem, getIsShown, getActiveItems }) {
         reaction(getIsShown, () => {
-            if (getIsShown) this.searchInput.focus();
+            if (getIsShown) {this.searchInput.focus();}
         });
         this.getCategoricalItems = getCategoricalItems;
         this.onSelectItem = onSelectItem;
@@ -52,7 +52,7 @@ export default class CategoricalDisplayStore {
 
     @action.bound handleFilterClick(category) {
         const element = this.resultsPanel.querySelector(`.category-${category.categoryId}`);
-        if (element) element.scrollIntoView();
+        if (element) {element.scrollIntoView();}
     }
 
     @action.bound setSearchInput(element) {
@@ -81,7 +81,7 @@ export default class CategoricalDisplayStore {
     }
 
     getActiveCategory(actives) {
-        const category =  {
+        const category = {
             categoryName: 'Active',
             categoryId: 'active',
             hasSubcategory: false,

@@ -1,79 +1,81 @@
-import { observable, action, computed, when } from 'mobx';
-import { getTimeUnit } from './utils';
+import { observable, action, computed, reaction, autorunAsync } from 'mobx';
+import { connect } from './Connect';
 import KeystrokeHub from '../components/ui/KeystrokeHub';
 
 export default class ListStore {
-    constructor(mainStore) {
-        this.mainStore = mainStore;
-        when(() => this.context, () => this.onContextReady());
+    constructor({ getIsOpen, getContext, getItems, onItemSelected }) {
+        this.getIsOpen = getIsOpen;
+        this.getContext = getContext;
+        this.getItems = getItems; // items : [{id: '', text: ''}]
+        this.onItemSelected = onItemSelected;
+
+        reaction(() => this.getIsOpen(), this.claimKeyboard);
     }
 
-    get context() { return this.mainStore.chart.context; }
+    itemRefs = [];
+    @observable selectedIdx = 0;
 
-    @observable open = false;
+    claimKeyboard = () => {
+        const kh = KeystrokeHub.instance;
+        if(kh) {
+            const isOpen = this.getIsOpen();
 
-    onContextReady = () => {
-        KeystrokeHub.instance.addClaim(this);
+            if(isOpen) { kh.addClaim(this); }
+            else { kh.removeClaim(this); }
+        }
+    };
+
+    @action.bound onItemClick(idx, item) {
+        this.selectedIdx = idx;
+        this.onItemSelected(item);
     }
 
-    @action.bound destroy() {
-        KeystrokeHub.instance.removeClaim(this);
+    onRootRef = (root) => {
+        this.root = root;
+        root.addEventListener(CIQ.wheelEvent, (e) => {
+            e.stopPropagation();
+        });
+    };
+    onItemRef = (idx, ref) => this.itemRefs[idx] = ref;
+
+    scrollToElement(item) {
+        const root = this.root;
+        let bottom = root.clientHeight;
+        let scrolled = root.scrollTop;
+
+        let itemBottom = item.offsetTop + item.clientHeight;
+        if(item.offsetTop > scrolled && itemBottom < bottom + scrolled) { return; }
+        root.scrollTop = Math.max(itemBottom - bottom, 0);
     }
 
     keyStroke(hub, key, e) {
-        let node = this.root;
-
-        return;
-        if (!this.props.isOpen) {return false;}
-        if (['up', 'down', 'enter', 32].indexOf(key) === -1) {return false;}
-        return false;
-
-        // TODO: once code base is fully ported to react, remove querying 'cq-item'
-        let items = node[0].querySelectorAll('cq-item');
-        let focused = node[0].querySelectorAll('cq-item[cq-focused]');
-
-        if (items.length === 0) {
-            items = node[0].querySelectorAll('.ciq-row');
-            focused = node[0].querySelectorAll('.ciq-row[cq-focused]');
-        }
-
-        if (key === 32 || key === 'enter') {
-            if (focused.length && focused[0].selectFC) {
-                // TODO: review whether code here is needed once code base is fully ported to react
-                focused[0].selectFC.call(focused, e);
-                return true;
-            } else if (focused.length) {
-                focused[0].click();
-            }
+        if (['up', 'down', 'enter', 32].indexOf(key) === -1) {
             return false;
         }
-
-        if (!focused.length) {
-            items[0].setAttribute('cq-focused', 'true');
-            this.scrollToElement(items[0]);
-            return true;
-        }
-
-        items.forEach(item => item.removeAttribute('cq-focused'));
-
-        // locate our location in the list of items
-        let i;
-        for (i = 0; i < items.length; i++) {
-            if (items[i] === focused[0]) {break;}
+        if (key === 32 || key === 'enter') {
+            const item = this.getItems()[this.selectedIdx];
+            this.onItemSelected(item);
         }
 
         if (key === 'up') {
-            i--;
-            if (i < 0) {i = 0;}
+            this.selectedIdx = Math.max(this.selectedIdx - 1, 0);
         }
 
         if (key === 'down') {
-            i++;
-            if (i >= items.length) {i = items.length - 1;}
+            this.selectedIdx = Math.min(this.selectedIdx + 1, this.getItems().length - 1);
         }
 
-        items[i].setAttribute('cq-focused', 'true');
-        this.scrollToElement(items[i]);
+        this.scrollToElement(this.itemRefs[this.selectedIdx]);
+
         return true;
     }
+
+    connect = connect(() => ({
+        items: this.getItems(),
+        selectedIdx: this.selectedIdx,
+        onItemClick: this.onItemClick,
+        onItemRef: this.onItemRef,
+        onRootRef: this.onRootRef,
+        height: 250,
+    }));
 }
