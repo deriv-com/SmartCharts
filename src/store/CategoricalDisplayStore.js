@@ -2,23 +2,23 @@ import { action, observable, computed, when, reaction } from 'mobx';
 import { connect } from './Connect';
 
 export default class CategoricalDisplayStore {
-    constructor({ getCategoricalItems, onSelectItem, getIsShown }) {
+    constructor({ getCategoricalItems, onSelectItem, getIsShown, getActiveItems }) {
         reaction(getIsShown, () => {
             if (getIsShown) this.searchInput.focus();
         });
         this.getCategoricalItems = getCategoricalItems;
         this.onSelectItem = onSelectItem;
+        this.getActiveItems = getActiveItems;
     }
 
     @observable filterText = '';
-    @observable activeItems;
     @observable placeholderText = '';
 
     @computed get filteredItems() {
         let filteredItems = JSON.parse(JSON.stringify(this.getCategoricalItems())); // Deep clone array
 
-        if (this.activeItems) {
-            const activeCategory = this.getActiveCategory(this.activeItems);
+        if (this.getActiveItems) {
+            const activeCategory = this.getActiveCategory(this.getActiveItems());
             filteredItems.unshift(activeCategory);
         }
 

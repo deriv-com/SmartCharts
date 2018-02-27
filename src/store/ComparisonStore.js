@@ -15,6 +15,7 @@ export default class ComparisonStore {
         this.mainStore = mainStore;
         this.menu = new MenuStore(mainStore);
         this.categoricalDisplay = new CategoricalDisplayStore({
+            getActiveItems: () => this.mainStore.chart.comparisonSymbols,
             getCategoricalItems: () => this.mainStore.chart.categorizedItems,
             getIsShown: () => this.menu.open,
             onSelectItem: this.onSelectItem.bind(this)
@@ -22,8 +23,6 @@ export default class ComparisonStore {
     }
 
     get context() { return this.mainStore.chart.context; }
-
-    @computed get activeItems() { return this.mainStore.chart.comparisonSymbols; }
 
     @action.bound onSelectItem(symbolObj) {
         const context = this.context;
