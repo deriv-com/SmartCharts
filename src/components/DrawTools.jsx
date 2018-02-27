@@ -19,12 +19,19 @@ const DrawTools = ({
             className="ciq-draw-tools"
         >
             <Menu.Title>
-                <span className="ciq-icon ciq-ic-draw-tools"></span>
+                <span className="ciq-icon ciq-ic-draw-tools" />
             </Menu.Title>
             <Menu.Body>
-                <div className="row" onClick={noTool}>None</div>
-                <div className="row" onClick={clearDrawings}>Clear Drawings</div>
-                <div className="row" onClick={() => selectTool('measure')}>Measure</div>
+                <div className='ciq-bars'>
+                    <div onClick={clearDrawings}>
+                        <span className="ciq-icon ciq-ic-clear-all" />
+                        Clear All
+                    </div>
+                    <div onClick={() => selectTool('measure')}>
+                        <span className="ciq-icon ciq-ic-measure" />
+                        Measure
+                    </div>
+                </div>
                 <DrawList />
             </Menu.Body>
         </Menu>

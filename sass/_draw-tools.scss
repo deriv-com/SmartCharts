@@ -8,8 +8,33 @@
         width: 200px;
         box-sizing: border-box;
         bottom: 3.6em;
-        padding: 16px 16px 0 16px  !important;
+        padding: 5px 16px 0 16px  !important;
 		background: #FAFAFB;
 		border-radius: 4px;
+    }
+
+    .ciq-bars {
+      height: 45px;
+      display: flex;
+      justify-content: space-around;
+      color: black;
+
+      > div {
+        cursor: pointer;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .ciq-ic-clear-all {
+        width: 24px !important;
+        height: 24px !important;
+        background: url('icons/drawing tools/ic-drawingtools-clear-all.svg');
+      }
+      .ciq-ic-measure {
+        width: 24px !important;
+        height: 24px !important;
+        background: url('icons/drawing tools/ic-drawingtools-measure.svg');
+      }
     }
 }
