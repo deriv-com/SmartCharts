@@ -1,23 +1,32 @@
 import React, { Component } from 'react';
-import {connect} from '../store/Connect';
+import '../../sass/_ciq-list.scss';
 
-export default class List extends React.Component {
-    componentDidMount() {
-        this.root.addEventListener(CIQ.wheelEvent, (e) => {
-            e.stopPropagation();
-        });
-    }
-
-    render() { 
-        const {height, children} = this.props;
-        return (
-            <div
-                className='rows'
-                style={{height: `${height}px`}}
-                ref={root => this.root = root}
-            >
-                {children}
-            </div>
-        );
-    }
+const List = ({
+    height,
+    selectedIdx,
+    items,
+    onItemClick,
+    onItemRef,
+    onRootRef
+}) => {
+    return (
+        <div
+            className='ciq-list'
+            style={{height: `${height}px`}}
+            ref={onRootRef}
+        >
+            {items.map((it, idx) => (
+                <div
+                    key={it.id}
+                    className={`ciq-list-item ${idx === selectedIdx ? 'selected' : ''}`}
+                    onClick={() => onItemClick(idx, it)}
+                    ref={ref => onItemRef(idx, ref)}
+                >
+                    {it.text}
+                </div>
+            ))}
+        </div>
+    );
 };
+
+export default List;

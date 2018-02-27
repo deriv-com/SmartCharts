@@ -1,0 +1,20 @@
+.ciq-list {
+  height: 250px;
+  overflow-y: auto;
+  position: relative;
+
+  .ciq-list-item {
+    background: #FFFFFF;
+    border: 1px solid #E9E9ED;
+    border-bottom: none;
+    box-sizing: border-box;
+    height: 40px;
+    line-height: 30px;
+    font-size: 12px;
+    padding-left: 16px;
+    cursor: pointer;
+    &.selected {
+      background: #efefef;
+    }
+  }
+}
