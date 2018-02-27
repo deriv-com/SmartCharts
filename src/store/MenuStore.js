@@ -1,5 +1,4 @@
-import { observable, action, computed, reaction, autorunAsync } from 'mobx';
-import { getTimeUnit } from './utils';
+import { observable, action, computed, reaction } from 'mobx';
 import { connect } from './Connect';
 
 const allMenues = [];

@@ -1,24 +1,22 @@
-import { observable, action, computed, autorunAsync } from 'mobx';
+import { observable, action, when } from 'mobx';
 
 export default class TogglesStore {
     constructor(mainStore) {
         this.mainStore = mainStore;
-        autorunAsync(this.onContextReady.bind(this));
+        when(() => this.context, this.onContextReady);
     }
 
     get context() { return this.mainStore.chart.context; }
     get stx() { return this.context.stx; }
 
-    onContextReady() {
-        if(this.context) {
-            this.uiHeadsUpStatic = new CIQ.UI.HeadsUp(
-                $('cq-hu-static'),
-                this.context,
-                { autoStart: this.stx.layout.headsUp }
-            );
-            this.headsUp = this.stx.layout.headsUp;
-            this.crosshair = this.stx.layout.crosshair;
-        }
+    onContextReady = () => {
+        this.uiHeadsUpStatic = new CIQ.UI.HeadsUp(
+            $('cq-hu-static'),
+            this.context,
+            { autoStart: this.stx.layout.headsUp }
+        );
+        this.headsUp = this.stx.layout.headsUp;
+        this.crosshair = this.stx.layout.crosshair;
     }
 
     uiHeadsUpStatic = null;

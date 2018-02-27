@@ -19,7 +19,6 @@ class Menu extends Component {
         return (
             <div className={`ciq-menu ${className || ''} ${open ? 'stxMenuActive' : ''}`}>
                 <div
-                    ref={el => this.menuBtn = el}
                     className="cq-menu-btn"
                     onClick={onTitleClick}
                 >

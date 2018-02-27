@@ -1,4 +1,4 @@
-import { observable, action, computed, autorunAsync, reaction } from 'mobx';
+import { observable, action, computed, when, reaction } from 'mobx';
 import MenuStore from './MenuStore';
 import ListStore from './ListStore';
 
@@ -7,7 +7,7 @@ export default class DrawToolsStore {
         this.mainStore = mainStore;
         this.menu = new MenuStore(mainStore);
         this.list = new ListStore(mainStore);
-        reaction(() => this.context, this.onContextReady.bind(this));
+        when(() => this.context, this.onContextReady);
         reaction(() => this.menu.open, this.onMenuOpen.bind(this));
         window.dts = this;
     }
@@ -22,11 +22,9 @@ export default class DrawToolsStore {
         }
     };
 
-    onContextReady() {
-        if(this.context) {
-            this.stx.addEventListener('drawing',() => this.stx.changeVectorType(''));
-            document.addEventListener('keydown',this.closeOnEscape.bind(this), false);
-        }
+    onContextReady = () => {
+        this.stx.addEventListener('drawing',() => this.stx.changeVectorType(''));
+        document.addEventListener('keydown',this.closeOnEscape.bind(this), false);
     }
     onMenuOpen() {
         if(this.menu.open && this.context) {

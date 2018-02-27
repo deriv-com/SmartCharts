@@ -1,21 +1,19 @@
-import { observable, action, computed, autorunAsync } from 'mobx';
+import { observable, action, computed, when } from 'mobx';
 import MenuStore from './MenuStore';
 
 export default class ChartTypeStore {
     constructor(mainStore) {
         this.mainStore = mainStore;
-        autorunAsync(this.onContextReady.bind(this));
+        when(() => this.context, this.onContextReady);
         this.menu = new MenuStore(mainStore);
     }
 
     get context() { return this.mainStore.chart.context; }
     get stx() { return this.context.stx; }
 
-    onContextReady() {
-        if(this.context) {
-            const type = this.types.find(t => t.id === this.stx.layout.chartType);
-            this.type = type;
-        }
+    onContextReady = () => {
+        const type = this.types.find(t => t.id === this.stx.layout.chartType);
+        this.type = type;
     }
 
     @action.bound setType(type) {

@@ -1,21 +1,19 @@
-import { observable, action, computed, reaction, autorunAsync } from 'mobx';
+import { observable, action, computed, when } from 'mobx';
 import { getTimeUnit } from './utils';
 import KeystrokeHub from '../components/ui/KeystrokeHub';
 
 export default class ListStore {
     constructor(mainStore) {
         this.mainStore = mainStore;
-        reaction(() => this.context, () => this.onContextReady());
+        when(() => this.context, () => this.onContextReady());
     }
 
     get context() { return this.mainStore.chart.context; }
 
     @observable open = false;
 
-    onContextReady() {
-        if(this.context) {
-            KeystrokeHub.instance.addClaim(this);
-        }
+    onContextReady = () => {
+        KeystrokeHub.instance.addClaim(this);
     }
 
     @action.bound destroy() {

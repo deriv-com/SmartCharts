@@ -1,4 +1,4 @@
-import { observable, action, computed, autorunAsync } from 'mobx';
+import { observable, action, computed, when } from 'mobx';
 import MenuStore from './MenuStore';
 import AnimatedPriceStore from './AnimatedPriceStore';
 import { connect } from './Connect';
@@ -6,7 +6,7 @@ import { connect } from './Connect';
 export default class ChartTitleStore {
     constructor(mainStore) {
         this.mainStore = mainStore;
-        autorunAsync(this.onContextReady.bind(this));
+        when(() => this.context, this.onContextReady);
         this.menu = new MenuStore(mainStore);
         this.animatedPrice = new AnimatedPriceStore();
     }
@@ -25,13 +25,11 @@ export default class ChartTitleStore {
         this.menu.setOpen(false);
     }
 
-    onContextReady() {
-        if (this.context) {
-            this.context.stx.append('createDataSet', () => {
-                this.update();
-            });
+    onContextReady = () => {
+        this.context.stx.append('createDataSet', () => {
             this.update();
-        }
+        });
+        this.update();
     }
 
     update() {
