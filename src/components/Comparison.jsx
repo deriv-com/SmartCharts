@@ -27,7 +27,7 @@ const Comparison = ({
 export default connect(
     ({ comparison: c }) => ({
         activeItems: c.activeItems,
-        CategoricalDisplay: c.connectCategoricalDisplay(CategoricalDisplay),
+        CategoricalDisplay: c.categoricalDisplay.connect(CategoricalDisplay),
         Menu: c.menu.connect(Menu),
     })
 )(Comparison);
