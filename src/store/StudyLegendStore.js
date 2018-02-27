@@ -1,20 +1,18 @@
-import { observable, action, computed, autorunAsync } from 'mobx';
+import { observable, action, computed, when } from 'mobx';
 import MenuStore from './MenuStore';
 
 export default class StudyLegendStore {
     constructor(mainStore) {
         this.mainStore = mainStore;
-        autorunAsync(this.onContextReady.bind(this));
+        when(() => this.context, this.onContextReady);
         this.menu = new MenuStore(mainStore);
     }
 
     get context() { return this.mainStore.chart.context; }
     get stx() { return this.context.stx; }
 
-    onContextReady() {
-        if(this.context) {
-            this.begin();
-        }
+    onContextReady = () => {
+        this.begin();
     }
 
     injections = [];
