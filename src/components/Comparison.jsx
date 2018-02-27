@@ -6,6 +6,7 @@ import CategoricalDisplay from './CategoricalDisplay.jsx';
 const Comparison = ({
     CategoricalDisplay,
     Menu,
+    activeItems,
 }) => {
     return (
         <Menu
@@ -15,7 +16,9 @@ const Comparison = ({
                 <span className="ciq-icon ciq-ic-comparison" />
             </Menu.Title>
             <Menu.Body>
-                <CategoricalDisplay />
+                <CategoricalDisplay
+                    activeItems={activeItems}
+                />
             </Menu.Body>
         </Menu>
     );
@@ -23,6 +26,7 @@ const Comparison = ({
 
 export default connect(
     ({ comparison: c }) => ({
+        activeItems: c.activeItems,
         CategoricalDisplay: c.connectCategoricalDisplay(CategoricalDisplay),
         Menu: c.menu.connect(Menu),
     })

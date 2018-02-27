@@ -17,6 +17,8 @@ export default class ComparisonStore {
 
     get context() { return this.mainStore.chart.context; }
 
+    @computed get activeItems() { return this.mainStore.chart.comparisonSymbols; }
+
     @action.bound onSelectItem(symbolObj) {
         const context = this.context;
         function cb(err, series) {

@@ -599,7 +599,7 @@ cq-item, .cq-item {
 	white-space: nowrap;
 }
 
-cq-item, .cq-item, cq-heading, cq-placeholder {
+cq-item, .cq-item, .cq-active-item, cq-heading, cq-placeholder {
 	padding:0 20px;
 	clear: both;
 	line-height:27px;

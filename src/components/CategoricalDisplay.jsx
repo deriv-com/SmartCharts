@@ -15,6 +15,10 @@ class CategoricalDisplay extends Component {
             this.filterItems(nextProps.categorizedItems);
         }
 
+        if (this.props.activeItems !== nextProps.activeItems) {
+            this.filterItems(this.props.categorizedItems, nextProps.activeItems);
+        }
+
         if (this.props.isShown !== nextProps.isShown) {
             if (nextProps.isShown) {
                 this.searchInput.focus();
@@ -22,10 +26,36 @@ class CategoricalDisplay extends Component {
         }
     }
 
-    filterItems(categorizedItems = this.props.categorizedItems) {
+    getActiveCategory(actives) {
+        const result = [];
+        const category =  {
+            categoryName: 'Active',
+            categoryId: 'active',
+            hasSubcategory: false,
+            data: []
+        };
+        for (const symbol of actives) {
+            category.data.push({
+                enabled: true,
+                selected: false,
+                display: symbol.symbolObject.name,
+                symbolObj: symbol.symbolObject
+            });
+        }
+        return category;
+    }
+
+    filterItems(categorizedItems = this.props.categorizedItems, activeItems = this.props.activeItems) {
         const { filterText } = this.state;
+        let filteredItems = JSON.parse(JSON.stringify(categorizedItems)); // Deep clone array
+
+        if (activeItems) {
+            const activeCategory = this.getActiveCategory(activeItems);
+            filteredItems.unshift(activeCategory);
+        }
+
         if (filterText === '') {
-            this.setState({ filteredItems: categorizedItems });
+            this.setState({ filteredItems });
             return;
         }
 
@@ -35,7 +65,7 @@ class CategoricalDisplay extends Component {
                 return reg.test(item.display);
             });
         };
-        let filteredItems = JSON.parse(JSON.stringify(categorizedItems)); // Deep clone array
+
         for (const category of filteredItems) {
             if (category.hasSubcategory) {
                 for (const subcategory of category.data) {
@@ -74,11 +104,12 @@ class CategoricalDisplay extends Component {
     }
 
     renderItem = (item, k) => <div className={`cq-item ${item.selected ? 'selected ' : ''}`} onClick={() => this.props.onSelectItem(item.symbolObj)} key={k} disabled={!item.enabled}>{item.display}</div>
+    renderActiveItem = (item, k) => <div className="cq-active-item" key={k}>{item.display}</div>
 
     handleFilterTextChange = (event) => this.setFilterText(event.target.value);
 
     render() {
-        const { placeholderText } = this.props;
+        const { placeholderText, activeItems } = this.props;
         const { filteredItems } = this.state;
 
         return (
@@ -119,7 +150,7 @@ class CategoricalDisplay extends Component {
                                             <div className="subcategory">{subcategory.subcategoryName}</div>
                                             { subcategory.data.map(this.renderItem)}
                                         </Fragment>
-                                    ) : category.data.map(this.renderItem)
+                                    ) : category.data.map((i === 0 && activeItems) ? this.renderActiveItem : this.renderItem)
                                     }
                                 </div>
                             </Fragment>
