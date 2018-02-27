@@ -41,6 +41,7 @@ class ChartStore {
     @observable context = null;
     @observable activeSymbols = [];
     @observable currentActiveSymbol = defaultSymbol;
+    @observable comparisonSymbols = [];
 
     @action.bound setSymbols(symbols) {
         if (symbols && this.context) {
@@ -51,15 +52,33 @@ class ChartStore {
         }
     }
 
+    _extractComparisonSymbols(layoutDat) {
+        const comparisons = [];
+        for (const symbol of layoutDat.symbols) {
+            if (symbol.parameters && symbol.parameters.isComparison) {
+                comparisons.push({
+                    symbolObject: symbol.symbolObject,
+                    color: symbol.parameters.color,
+                });
+            }
+        }
+        this.comparisonSymbols = comparisons;
+    }
+
     saveLayout() {
-        const json = JSON.stringify(this.stxx.exportLayout(true));
+        const layoutDat = this.stxx.exportLayout(true);
+        const json = JSON.stringify(layoutDat);
+        this._extractComparisonSymbols(layoutDat);
         CIQ.localStorageSetItem(`layout-${this.id}`, json);
     }
-    restoreLayout(stx) {
-        const datum = CIQ.localStorage.getItem(`layout-${this.id}`);
-        if (datum === null) {return;}
 
-        stx.importLayout(JSON.parse(datum), {
+    restoreLayout(stx) {
+        let layoutDat = CIQ.localStorage.getItem(`layout-${this.id}`);
+        if (layoutDat === null) {return;}
+        layoutDat = JSON.parse(layoutDat);
+        this._extractComparisonSymbols(layoutDat);
+
+        stx.importLayout(layoutDat, {
             managePeriodicity: true,
             cb: () => {
                 this.restoreDrawings(stx, stx.chart.symbol);

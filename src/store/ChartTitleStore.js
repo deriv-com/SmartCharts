@@ -1,7 +1,7 @@
 import { observable, action, computed, when } from 'mobx';
 import MenuStore from './MenuStore';
 import AnimatedPriceStore from './AnimatedPriceStore';
-import { connect } from './Connect';
+import CategoricalDisplayStore from './CategoricalDisplayStore';
 
 export default class ChartTitleStore {
     constructor(mainStore) {
@@ -9,6 +9,11 @@ export default class ChartTitleStore {
         when(() => this.context, this.onContextReady);
         this.menu = new MenuStore(mainStore);
         this.animatedPrice = new AnimatedPriceStore();
+        this.categoricalDisplay = new CategoricalDisplayStore({
+            getCategoricalItems: () => this.mainStore.chart.categorizedItems,
+            getIsShown: () => this.menu.open,
+            onSelectItem: this.onSelectItem.bind(this)
+        });
     }
 
     @observable todayChange;
@@ -78,10 +83,4 @@ export default class ChartTitleStore {
         }
         this.isVisible = hasData;
     }
-
-    connectCategoricalDisplay = connect(() => ({
-        categorizedItems: this.mainStore.chart.categorizedItems,
-        isMenuOpened: this.menu.open,
-        onSelectItem: this.onSelectItem,
-    }));
 }
