@@ -92,6 +92,7 @@ export default class CategoricalDisplayStore {
                 enabled: true,
                 selected: false,
                 display: symbol.symbolObject.name,
+                itemId: symbol.symbolObject.symbol,
                 symbolObj: symbol.symbolObject
             });
         }

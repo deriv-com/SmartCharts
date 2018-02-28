@@ -309,6 +309,7 @@ class ChartStore {
                 subcategory.data.push({
                     enabled,
                     selected,
+                    itemId: data.symbol,
                     display: data.name,
                     symbolObj: data,
                 });

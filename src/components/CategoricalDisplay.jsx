@@ -12,8 +12,26 @@ const CategoricalDisplay = ({
     getItemCount,
     onSelectItem
 }) => {
-    const renderItem = (item, k) => <div className={`cq-item ${item.selected ? 'selected ' : ''}`} onClick={() => onSelectItem(item.symbolObj)} key={k} disabled={!item.enabled}>{item.display}</div>;
-    const renderActiveItem = (item, k) => <div className="cq-active-item" key={k}>{item.display}</div>;
+    const renderIcon = (item) => {return item.itemId ? <span className={`ciq-item-icon ic-${item.itemId.toLowerCase()}`} /> : '';};
+    const renderText = (item) => <span className="ciq-item-display">{item.display}</span>;
+
+    const renderItem = (item, k) =>
+        <div
+            className={`cq-item ${item.selected ? 'selected ' : ''}`}
+            onClick={() => onSelectItem(item.symbolObj)}
+            key={k}
+            disabled={!item.enabled}
+        >
+            {renderIcon(item)}{renderText(item)}
+        </div>;
+
+    const renderActiveItem = (item, k) =>
+        <div
+            className="cq-active-item"
+            key={k}
+        >
+            {renderIcon(item)}{renderText(item)}
+        </div>;
 
     return (
         <div className="cq-categorical-display">

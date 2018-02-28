@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="24px" height="16px" viewBox="0 0 24 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 48.2 (47327) - http://www.bohemiancoding.com/sketch -->
+    <title>icons/flags/norwegian nok</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="icons/flags/norwegian-nok">
+            <g id="Icon/Flag/Norwegian" fill-rule="nonzero">
+                <path d="M22.2025781,15.9868571 L1.79742187,15.9868571 C0.804703125,15.9868571 0,15.169381 0,14.1609048 L0,1.83909524 C0,0.830666667 0.804703125,0.0131428571 1.79742187,0.0131428571 L22.2025781,0.0131428571 C23.19525,0.0131428571 24,0.830619048 24,1.83909524 L24,14.1609524 C24,15.169381 23.1952969,15.9868571 22.2025781,15.9868571 Z" id="BG-red" fill="#F44336"></path>
+                <polygon id="White" fill="#FFFFFF" points="24 5.89819048 10.7586094 5.89819048 10.7586094 0.0131428571 6.62067188 0.0131428571 6.62067188 5.89819048 0 5.89819048 0 10.1018095 6.62067188 10.1018095 6.62067188 15.9868571 10.7586094 15.9868571 10.7586094 10.1018095 24 10.1018095"></polygon>
+                <polygon id="Blue" fill="#0D47A1" points="24 6.73890476 9.93103125 6.73890476 9.93103125 0.0131428571 7.44829687 0.0131428571 7.44829687 6.73890476 0 6.73890476 0 9.26109524 7.44829687 9.26109524 7.44829687 15.9868571 9.93103125 15.9868571 9.93103125 9.26109524 24 9.26109524"></polygon>
+            </g>
+            <rect id="border" stroke-opacity="0.04" stroke="#000000" x="0.5" y="0.5" width="23" height="15" rx="2"></rect>
+        </g>
+    </g>
+</svg>
