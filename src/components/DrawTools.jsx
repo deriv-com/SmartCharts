@@ -3,8 +3,6 @@ import { connect } from '../store/Connect';
 import Menu from './Menu.jsx';
 import List from './List.jsx';
 import '../../sass/_draw-tools.scss';
-import KeystrokeHub from './ui/KeystrokeHub';
-
 
 const DrawTools = ({
     clearAll,

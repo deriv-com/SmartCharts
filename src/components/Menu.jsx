@@ -2,16 +2,13 @@ import React, { Component } from 'react';
 import {connect} from '../store/Connect';
 
 class Menu extends Component {
-    componentDidMount() { this.props.init(); }
-    componentWillUnmount() { this.props.destroy(); }
-
     render() {
         const {
             open,
             className,
             children,
             onTitleClick,
-            onBodyClick,
+            DropdownDialog,
         } = this.props;
         const first = React.Children.map(children, (child, i) => i === 0 ? child : null);
         const rest  = React.Children.map(children, (child, i) => i !== 0 ? child : null);
@@ -24,12 +21,9 @@ class Menu extends Component {
                 >
                     {first}
                 </div>
-                <div
-                    className="cq-menu-dropdown"
-                    onClick={onBodyClick}
-                >
+                <DropdownDialog className='cq-menu-dropdown'>
                     {rest}
-                </div>
+                </DropdownDialog>
             </div>
         );
     }

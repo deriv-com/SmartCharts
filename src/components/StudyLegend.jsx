@@ -1,6 +1,7 @@
 import CIQ from 'chartiq';
 import React, { Component } from 'react';
 import Menu from './Menu.jsx';
+import List from './List.jsx';
 import {connect} from '../store/Connect';
 
 class StudyLegend extends Component {
@@ -9,7 +10,7 @@ class StudyLegend extends Component {
     }
 
     render() {
-        const {isOpened, setOpen, clearStudies, studies, Menu} = this.props;
+        const {isOpened, setOpen, clearStudies, studies, Menu, StudyList} = this.props;
 
         return (
             <Menu
@@ -47,9 +48,7 @@ class StudyLegend extends Component {
                             </cq-section-dynamic>
                         }
                     </cq-study-legend>
-                    <cq-scroll cq-studies>
-                        <cq-item class="stxTemplate"></cq-item>
-                    </cq-scroll>
+                    <StudyList />
                 </Menu.Body>
             </Menu>
         );
@@ -64,5 +63,6 @@ export default connect(
         clearStudies: studies.clearStudies,
         cleanUp: studies.cleanUp,
         Menu: studies.menu.connect(Menu),
+        StudyList: studies.list.connect(List),
     })
 )(StudyLegend);

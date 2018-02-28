@@ -1,11 +1,24 @@
 import { observable, action, computed, when } from 'mobx';
 import MenuStore from './MenuStore';
+import ListStore from './ListStore';
 
 export default class StudyLegendStore {
     constructor(mainStore) {
         this.mainStore = mainStore;
         when(() => this.context, this.onContextReady);
         this.menu = new MenuStore(mainStore);
+        this.list = new ListStore({
+            getIsOpen: () => this.menu.open,
+            getContext: () => this.context,
+            onItemSelected: item => {
+                let sd = CIQ.Studies.addStudy(this.stx, item.id);
+                console.warn(sd);
+            },
+            getItems: () => Object.keys(CIQ.Studies.studyLibrary).map(key => ({
+                id: key,
+                text: CIQ.Studies.studyLibrary[key].name,
+            })),
+        });
     }
 
     get context() { return this.mainStore.chart.context; }

@@ -188,8 +188,6 @@ class ChartStore {
             },
             /* dialogBeforeAddingStudy: {"rsi": true} // here's how to always show a dialog before adding the study */
         };
-        const UIStudyMenu = new CIQ.UI.StudyMenu(this.rootNode.querySelector('*[cq-studies]'), context, params);
-        UIStudyMenu.renderMenu();
 
         if (context.loader) {context.loader.show();}
 

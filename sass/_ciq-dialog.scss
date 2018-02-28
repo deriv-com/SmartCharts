@@ -1,0 +1,10 @@
+.cq-dialog {
+    width: 344px;
+    height: 366px;
+    left: calc(50% - 344px/2);
+    top: calc(50% - 366px/2);
+    position: absolute;
+    box-shadow: 0 0.375em 0.625em 0 rgba(0, 0, 0, 0.14);
+    background: white;
+    z-index: 3;
+}
