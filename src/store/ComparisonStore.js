@@ -18,11 +18,18 @@ export default class ComparisonStore {
             getActiveItems: () => this.mainStore.chart.comparisonSymbols,
             getCategoricalItems: () => this.mainStore.chart.categorizedItems,
             getIsShown: () => this.menu.open,
+            activeOptions: [
+                { id: 'delete', onClick: this.onDeleteItem.bind(this) },
+            ],
             onSelectItem: this.onSelectItem.bind(this)
         });
     }
 
     get context() { return this.mainStore.chart.context; }
+
+    @action.bound onDeleteItem(symbolObj) {
+        this.context.stx.removeSeries(symbolObj.symbol);
+    }
 
     @action.bound onSelectItem(symbolObj) {
         const context = this.context;

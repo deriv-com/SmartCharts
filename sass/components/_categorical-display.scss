@@ -76,6 +76,26 @@
     }
 }
 
+/* Active Options */
+.cq-categorical-display .cq-active-options {
+    float: right;
+    > span {
+        height:16px;
+        width: 16px;
+        display: inline-block;
+        margin-left: 5px;
+    }
+    .ic-delete {
+        margin-top: 5px;
+        background-image: url('icons/common/ic-delete-light.svg');
+        cursor: pointer;
+        &:hover {
+            background-color: #d1d1d1;
+        }
+    }
+
+}
+
 /* Categorical Display Icons */
 .cq-categorical-display .ciq-item-icon {
     margin-right: 8px;

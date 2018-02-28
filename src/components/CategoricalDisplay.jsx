@@ -10,7 +10,8 @@ const CategoricalDisplay = ({
     hasActiveItems,
     filteredItems,
     getItemCount,
-    onSelectItem
+    onSelectItem,
+    activeOptions,
 }) => {
     const renderIcon = (item) => {return item.itemId ? <span className={`ciq-item-icon ic-${item.itemId.toLowerCase()}`} /> : '';};
     const renderText = (item) => <span className="ciq-item-display">{item.display}</span>;
@@ -31,6 +32,12 @@ const CategoricalDisplay = ({
             key={k}
         >
             {renderIcon(item)}{renderText(item)}
+            {activeOptions &&
+            <span className="cq-active-options">
+                {activeOptions.map((opt, i) =>
+                    <span key={`active-opt-${i}`} className={`ic-${opt.id}`} onClick={() => opt.onClick(item.symbolObj)} />
+                )}
+            </span>}
         </div>;
 
     return (
