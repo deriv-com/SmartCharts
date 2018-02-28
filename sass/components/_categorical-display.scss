@@ -93,6 +93,14 @@
             background-color: #d1d1d1;
         }
     }
+    .ic-cmp-color > span {
+        display: inline-block;
+        width: 13px;
+        border-radius: 15px;
+        height: 2px;
+        vertical-align: super;
+        margin-bottom: 1px;
+    }
 
 }
 

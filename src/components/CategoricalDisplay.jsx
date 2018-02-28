@@ -35,7 +35,9 @@ const CategoricalDisplay = ({
             {activeOptions &&
             <span className="cq-active-options">
                 {activeOptions.map((opt, i) =>
-                    <span key={`active-opt-${i}`} className={`ic-${opt.id}`} onClick={() => opt.onClick(item.symbolObj)} />
+                    <span key={`active-opt-${i}`} className={`ic-${opt.id}`} onClick={() => opt.onClick(item.symbolObj)}>
+                        {opt.renderChild && opt.renderChild(item)}
+                    </span>
                 )}
             </span>}
         </div>;

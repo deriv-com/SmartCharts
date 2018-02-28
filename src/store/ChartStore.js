@@ -57,8 +57,10 @@ class ChartStore {
         for (const symbol of layoutDat.symbols) {
             if (symbol.parameters && symbol.parameters.isComparison) {
                 comparisons.push({
-                    symbolObject: symbol.symbolObject,
-                    color: symbol.parameters.color,
+                    symbolObject: {
+                        ...symbol.symbolObject,
+                        color: symbol.parameters.color
+                    }
                 });
             }
         }

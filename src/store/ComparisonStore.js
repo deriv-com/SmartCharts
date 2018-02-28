@@ -1,6 +1,7 @@
 import { observable, action, computed } from 'mobx';
 import MenuStore from './MenuStore';
 import CategoricalDisplayStore from './CategoricalDisplayStore';
+import React from 'react';
 import { connect } from './Connect';
 
 const swatchColors = [
@@ -19,6 +20,7 @@ export default class ComparisonStore {
             getCategoricalItems: () => this.mainStore.chart.categorizedItems,
             getIsShown: () => this.menu.open,
             activeOptions: [
+                { id: 'cmp-color', renderChild: (item) => <span style={{backgroundColor: item.symbolObj.color}} /> },
                 { id: 'delete', onClick: this.onDeleteItem.bind(this) },
             ],
             onSelectItem: this.onSelectItem.bind(this)

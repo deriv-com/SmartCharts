@@ -88,13 +88,13 @@ export default class CategoricalDisplayStore {
             hasSubcategory: false,
             data: []
         };
-        for (const symbol of actives) {
+        for (const item of actives) {
             category.data.push({
                 enabled: true,
                 selected: false,
-                display: symbol.symbolObject.name,
-                itemId: symbol.symbolObject.symbol,
-                symbolObj: symbol.symbolObject
+                display: item.symbolObject.name,
+                itemId: item.symbolObject.symbol,
+                symbolObj: item.symbolObject
             });
         }
         return category;
