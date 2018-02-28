@@ -35,6 +35,7 @@ class StudyMenu extends Helper {
      * @memberOf CIQ.UI.StudyMenu
      */
     renderMenu() {
+        return; // DELETE THE ENT
         let stx = this.context.stx;
         let alphabetized = [];
         let sd;

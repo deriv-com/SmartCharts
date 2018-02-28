@@ -29,7 +29,7 @@ export default class ChartTypeStore {
             this.stx.chart.tension = 0;
         }
         this.type = type;
-        this.menu.open = false;
+        this.menu.setOpen(false);
     }
 
     @computed get types() {

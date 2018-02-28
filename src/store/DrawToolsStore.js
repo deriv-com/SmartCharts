@@ -1,10 +1,17 @@
 import { observable, action, reaction, computed, autorunAsync, when } from 'mobx';
 import MenuStore from './MenuStore';
 import ListStore from './ListStore';
+import DialogStore from './DialogStore';
+
 export default class DrawToolsStore {
     constructor(mainStore) {
         this.mainStore = mainStore;
         this.menu = new MenuStore(mainStore);
+        this.dialog = new DialogStore({
+            getContext: () => this.mainStore.chart.context,
+        });
+        this.settingsMenu = new MenuStore(mainStore);
+
         this.list = new ListStore({
             getIsOpen: () => this.menu.open,
             getContext: () => this.context,
@@ -64,6 +71,19 @@ export default class DrawToolsStore {
     onContextReady = () => {
         this.stx.addEventListener('drawing',this.clearDrawTool);
         document.addEventListener('keydown',this.closeOnEscape, false);
+        this.stx.prepend("rightClickHighlighted", (...args) => {
+            for(const drawing of this.stx.drawingObjects) {
+                if(drawing.highlighted && !drawing.permanent){
+                    var dontDeleteMe=drawing.abort();
+                    if(!dontDeleteMe){
+                        const parameters = CIQ.Drawing.getDrawingParameters(this.stx, drawing.name);
+                        console.warn(parameters, drawing);
+                        return true;
+                    }
+                }
+            }
+            return false;
+        });
     };
 
     clearDrawTool = () => {
@@ -73,6 +93,7 @@ export default class DrawToolsStore {
     };
 
     @action.bound clearAll() {
+        this.stx.clearDrawings();
     }
 
     @action.bound noTool() {

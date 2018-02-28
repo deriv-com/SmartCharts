@@ -9,7 +9,6 @@ import HeadsUp from './HeadsUp';
 import StudyEdit from './StudyEdit';
 import Layout from './Layout';
 import HeadsUpMarker from './HeadsUpMarker';
-import StudyMenu from './StudyMenu';
 import KeystrokeHub from './KeystrokeHub';
 
 /**
@@ -127,5 +126,4 @@ CIQ.Marker.HeadsUp = HeadsUpMarker;
 CIQ.UI.HeadsUp = HeadsUp;
 CIQ.UI.KeystrokeHub = KeystrokeHub;
 CIQ.UI.StudyEdit = StudyEdit;
-CIQ.UI.StudyMenu = StudyMenu;
 CIQ.UI.Layout = Layout;

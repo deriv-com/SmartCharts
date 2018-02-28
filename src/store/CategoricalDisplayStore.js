@@ -61,6 +61,9 @@ export default class CategoricalDisplayStore {
 
     @action.bound setResultsPanel(element) {
         this.resultsPanel = element;
+        this.resultsPanel.addEventListener(CIQ.wheelEvent, (e) => {
+            e.stopPropagation();
+        });
     }
 
     @action.bound getItemCount(category) {

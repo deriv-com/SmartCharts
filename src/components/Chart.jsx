@@ -34,7 +34,8 @@ import './Undo';
 import './ViewDialog';
 import './Clickable';
 import ChartControls from './ChartControls.jsx';
-
+import Menu from './Menu.jsx'
+import Dialog from './Dialog.jsx'
 import Toolbar from './Toolbar.jsx';
 import ChartTitle from './ChartTitle.jsx';
 import { MobxProvider, connect } from '../store/Connect';
@@ -51,6 +52,7 @@ class Chart extends Component {
     }
 
     render() {
+        const {DrawToolsDialog} = this.props;
         return (
             <cq-context ref={(root) => { this.root = root; }}>
                 <cq-color-picker>
@@ -254,14 +256,16 @@ class Chart extends Component {
                     </cq-study-dialog>
                 </cq-dialog>
 
+                <DrawToolsDialog />
             </cq-context>
         );
     }
 }
 
 export default connect(
-    ({chart}) => ({
+    ({chart, drawTools}) => ({
         contextPromise: chart.contextPromise,
-        init: chart.init
+        init: chart.init,
+        DrawToolsDialog : drawTools.dialog.connect(Dialog),
     })
 )(Chart);
