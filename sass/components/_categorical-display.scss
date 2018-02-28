@@ -61,14 +61,10 @@
         }
 
     }
-    cq-scroll {
-        padding-top: 0.8em;
-        background-color: #f4f4f6;
-        width: 28em;
-    }
     .results-panel {
         position: relative;
-        padding-bottom: 5em;
+        height: 300px;
+        overflow-y: scroll;
     }
     .ciq-item-display {
         display: inline-block;

@@ -67,26 +67,24 @@ const CategoricalDisplay = ({
                     </div>
                 )}
             </div>
-            <cq-scroll>
-                <div className="results-panel" ref={setResultsPanel}>
-                    { filteredItems.map((category, i) =>
-                        getItemCount(category) > 0 &&
-                        <Fragment key={i}>
-                            <div className={`category-title category-${category.categoryId}`}>{category.categoryName}</div>
-                            <div className="category">
-                                { category.hasSubcategory ? category.data.map((subcategory, j) =>
-                                    getItemCount(subcategory) > 0 &&
-                                    <Fragment key={j}>
-                                        <div className="subcategory">{subcategory.subcategoryName}</div>
-                                        { subcategory.data.map(renderItem)}
-                                    </Fragment>
-                                ) : category.data.map((i === 0 && hasActiveItems) ? renderActiveItem : renderItem)
-                                }
-                            </div>
-                        </Fragment>
-                    ) }
-                </div>
-            </cq-scroll>
+            <div className="results-panel" ref={setResultsPanel}>
+                { filteredItems.map((category, i) =>
+                    getItemCount(category) > 0 &&
+                    <Fragment key={i}>
+                        <div className={`category-title category-${category.categoryId}`}>{category.categoryName}</div>
+                        <div className="category">
+                            { category.hasSubcategory ? category.data.map((subcategory, j) =>
+                                getItemCount(subcategory) > 0 &&
+                                <Fragment key={j}>
+                                    <div className="subcategory">{subcategory.subcategoryName}</div>
+                                    { subcategory.data.map(renderItem)}
+                                </Fragment>
+                            ) : category.data.map((i === 0 && hasActiveItems) ? renderActiveItem : renderItem)
+                            }
+                        </div>
+                    </Fragment>
+                ) }
+            </div>
         </div>
     );
 };

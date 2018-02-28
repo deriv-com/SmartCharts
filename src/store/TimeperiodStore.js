@@ -47,7 +47,7 @@ export default class TimeperiodStore {
 
         this.timeUnit = getTimeUnit(stx.layout);
         this.interval = stx.layout.interval;
-        this.menu.open = false;
+        this.menu.setOpen(false);
     }
 
     @computed get interval_display() {

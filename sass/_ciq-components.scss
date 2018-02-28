@@ -1,7 +1,6 @@
 
 /* to allow style to color the background of the chart */
 cq-context {
-	bottom: 45px; /* <= remove white space from removing the navbar */
 	position: absolute;
 	height: 100%;
 	width: 100%;
@@ -483,9 +482,8 @@ cq-toolbar {
 	position:absolute;
 	left:0;
 	right:0;
-	padding:15px;
-	top:$nav-height;
-	bottom:$footer-height;
+	top: 0;
+	bottom: 0;
 	background:$DEFAULT-bg;
 	z-index: 1;
 
