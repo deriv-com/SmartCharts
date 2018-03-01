@@ -6,6 +6,7 @@ cq-context {
 	width: 100%;
 	font-family: $base-font;
 	font-size: $font-size-base;
+	overflow-x: hidden;
 
 	input {
 		-webkit-user-select: text;

@@ -53,10 +53,15 @@
         line-height: 3em;
         text-align: left;
         cursor: pointer;
-    }
-    .cq-filter:hover {
-        background-color: #efefef;
-        color: #000;
+        &:hover {
+            background-color: #f2f3f8;
+        }
+        &.cq-active-filter {
+            font-weight: 800;
+            color: #4C5794;
+            border-right: 2px solid #4C5794;
+            background-color: #f2f3f8;
+        }
     }
     .cq-item, .cq-active-item {
         padding: 10px 20px 0px 20px;
@@ -132,7 +137,11 @@
         .ic-category-#{$cat-id} {
             background: url('icons/active symbols/categories/ic-#{$cat-id}-normal-light.svg') no-repeat left;
         }
+        &.cq-active-filter .ic-category-#{$cat-id} {
+            background: url('icons/active symbols/categories/ic-#{$cat-id}-active-light.svg') no-repeat left;
+        }
     }
+    @include category(active);
     @include category(forex);
     @include category(indices);
     @include category(stocks);
@@ -149,6 +158,7 @@
         width: 32px;
         display: inline-block;
         background: no-repeat center;
+        background-image: url('icons/active symbols/ic-symbol-placeholder.svg');
     }
 
     @function flag($country) {
