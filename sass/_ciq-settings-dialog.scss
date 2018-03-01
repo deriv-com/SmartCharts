@@ -1,0 +1,62 @@
+.cq-settings-dialog {
+    .titlebar {
+        height: 40x;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .title {
+            font-size: 24px;
+            padding-left: 16px;
+        }
+
+        .ciq-ic-delete {
+            background: url('icons/drawing tools/ic-drawingtools-clear-all.svg');
+        }
+        .ciq-ic-star {
+            background: url('icons/favorite/ic-favorite-normal-light.svg');
+            &.active { background: url('icons/favorite/ic-favorite-active-light.svg'); }
+        }
+
+        .ciq-ic-delete,
+        .ciq-ic-star,
+        .ciq-ic-star.active {
+            width: 40px !important;
+            height: 40px !important;
+            background-repeat: no-repeat;
+            background-position: 50% 50%;
+        }
+    }
+    .tabs {
+        height: 40px;
+        box-sizing: border-box;
+        align-items: stretch;
+        display: flex;
+        position: relative;
+        border-bottom: 1px solid #E9E9ED;
+        > div {
+            text-align: center;
+            line-height: 40px;
+            width: 50%;
+            cursor: pointer;
+            font-size: 14px;
+            &.active { font-weight: bold; }
+            &:first-child {
+                border-right: 1px solid #E9E9ED;
+                padding-right: 1px;
+            }
+        }
+        .active-border {
+            position: absolute;
+            background: #4C5794;
+            height: 2px;
+            width: calc(50% + 1px);
+            bottom: -1px;
+            left: 0;
+            transition: left linear 0.1s;
+            &.second {
+                left: 50%;
+            }
+        }
+    }
+}

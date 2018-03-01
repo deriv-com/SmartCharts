@@ -2,15 +2,24 @@ import { observable, action, reaction, computed, autorunAsync, when } from 'mobx
 import MenuStore from './MenuStore';
 import ListStore from './ListStore';
 import DialogStore from './DialogStore';
+import SettingsDialogStore from './SettingsDialogStore';
+
+// camelcase to spaces separated capitalized string.
+const formatCamelCase = s => {
+    const capitalized = s.charAt(0).toUpperCase() + s.slice(1);
+    return capitalized.replace(/([a-z](?=[A-Z]))/g, '$1 ');
+};
 
 export default class DrawToolsStore {
     constructor(mainStore) {
         this.mainStore = mainStore;
         this.menu = new MenuStore(mainStore);
-        this.dialog = new DialogStore({
+        this.settingsDialog = new SettingsDialogStore({
             getContext: () => this.mainStore.chart.context,
+            onDeleted: () => console.warn('onDeleted'),
+            onStared: (value) => console.warn('onStared', value),
+            onChanged: items => console.warn('onChanged', items),
         });
-        this.settingsMenu = new MenuStore(mainStore);
 
         this.list = new ListStore({
             getIsOpen: () => this.menu.open,
@@ -67,23 +76,36 @@ export default class DrawToolsStore {
         }
     };
 
+    onRightClick = () => {
+        for (const drawing of this.stx.drawingObjects) {
+            if (drawing.highlighted && !drawing.permanent) {
+                var dontDeleteMe = drawing.abort();
+                const parameters = CIQ.Drawing.getDrawingParameters(this.stx, drawing.name);
+
+                this.settingsDialog.items = Object.keys(parameters)
+                    .filter(key => key !== 'font')
+                    .map(key => ({
+                        id: key,
+                        title: formatCamelCase(key),
+                        value: parameters[key],
+                    }));
+                this.settingsDialog.title = formatCamelCase(drawing.name);
+                this.settingsDialog.setOpen(true);
+                this.settingsDialog.description = `
+                The Double Exponential Moving Average (CKS) by Patrick Mulloy
+                attempts to remove the inherent lag associated to Moving Averages by placing more weight on recent
+                values.`;
+                console.warn(parameters, drawing, dontDeleteMe);
+                return true;
+            }
+        }
+        return false;
+    };
 
     onContextReady = () => {
-        this.stx.addEventListener('drawing',this.clearDrawTool);
-        document.addEventListener('keydown',this.closeOnEscape, false);
-        this.stx.prepend("rightClickHighlighted", (...args) => {
-            for(const drawing of this.stx.drawingObjects) {
-                if(drawing.highlighted && !drawing.permanent){
-                    var dontDeleteMe=drawing.abort();
-                    if(!dontDeleteMe){
-                        const parameters = CIQ.Drawing.getDrawingParameters(this.stx, drawing.name);
-                        console.warn(parameters, drawing);
-                        return true;
-                    }
-                }
-            }
-            return false;
-        });
+        document.addEventListener('keydown', this.closeOnEscape, false);
+        this.stx.addEventListener('drawing', this.clearDrawTool);
+        this.stx.prepend("rightClickHighlighted", this.onRightClick);
     };
 
     clearDrawTool = () => {
