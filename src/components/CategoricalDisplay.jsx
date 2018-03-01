@@ -63,6 +63,7 @@ const CategoricalDisplay = ({
                         className="cq-filter"
                         onClick={() => handleFilterClick(category)}
                     >
+                        <span className={`ciq-item-icon ic-category-${category.categoryId}`}/>
                         {category.categoryName}
                     </div>
                 )}

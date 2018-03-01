@@ -23,7 +23,8 @@ export default class ComparisonStore {
                 { id: 'cmp-color', renderChild: (item) => <span style={{backgroundColor: item.symbolObj.color}} /> },
                 { id: 'delete', onClick: this.onDeleteItem.bind(this) },
             ],
-            onSelectItem: this.onSelectItem.bind(this)
+            onSelectItem: this.onSelectItem.bind(this),
+            placeholderText: '"AUD/JPY" or "Apple"',
         });
     }
 

@@ -2,6 +2,7 @@
     padding: 0 !important;
     display: flex;
     text-align: left;
+    border-radius: 3px;
     background-color: $DEFAULT-menu-bg;
     color: $DEFAULT-text-medium;
     opacity: 0;
@@ -11,17 +12,27 @@
     @include box-shadow (0px, 2px, 4px, rgba(0, 0, 0, .2));
     .cq-lookup-filters {
         width: 16em;
+        border-right: 1px solid #e9e9ed;
     }
     .cq-lookup-input  {
-        margin: 1.5em 0.7em 0.7em 0.7em;
+        margin: 1.5em 1.3em 0.7em 1.3em;
         > input {
-            line-height: 1.7em;
+            background: url('icons/common/ic-search-light.svg') no-repeat scroll 7px 11px;
+            padding-left: 30px;
+            line-height: 3em;
             font-size: 1em;
+            border: none;
+            width: calc(100% - 30px);
+            box-shadow: inset 0 -1px 0 0 #f0f0f0;
+            @include placeholder {
+                color: #dfdfdf;
+            }
         }
     }
     .category {
         margin: 0.4em 1em 1em 1em;
-        box-shadow: 2px 0 5px 0 rgba(0, 0, 0, 0.08);
+        border: 1px solid #e9e9ed;
+        border-radius: 3px;
         background-color: white;
     }
     .subcategory {
@@ -38,7 +49,7 @@
         padding: 0.1em 0.7em;
     }
     .cq-filter {
-        padding-left: 0.9em;
+        padding-left: 1.3em;
         line-height: 3em;
         text-align: left;
         cursor: pointer;
@@ -49,6 +60,7 @@
     }
     .cq-item, .cq-active-item {
         padding: 10px 20px 0px 20px;
+        border-bottom: 1px solid #e9e9ed;
     }
     .cq-item[disabled] {
         pointer-events: none;
@@ -103,28 +115,50 @@
 
 }
 
-/* Categorical Display Icons */
-.cq-categorical-display .ciq-item-icon {
-    margin-right: 8px;
-    line-height: 32px;
-    height: 23px;
-    width: 32px;
-    display: inline-block;
-    background: no-repeat center;
+/* Active Symbol Category Filter Icons */
+.cq-symbols-display .cq-categorical-display .cq-lookup-filters .cq-filter {
+    .ciq-item-icon {
+        padding-left: 32px;
+        float: left;
+        padding-top: 18px;
+        height: 16px;
+    }
+    @mixin category($cat-id) {
+        .ic-category-#{$cat-id} {
+            background: url('icons/active symbols/categories/ic-#{$cat-id}-normal-light.svg') no-repeat left;
+        }
+    }
+    @include category(forex);
+    @include category(indices);
+    @include category(stocks);
+    @include category(commodities);
+    @include category(volidx);
+}
+
+/* Active Symbol Icons */
+.cq-categorical-display .results-panel {
+    .ciq-item-icon {
+        margin-right: 8px;
+        line-height: 32px;
+        height: 23px;
+        width: 32px;
+        display: inline-block;
+        background: no-repeat center;
+    }
 
     @function flag($country) {
         @return url('icons/flags/#{$country}.svg');
     }
 
     @mixin frx($a, $b) {
-        &.ic-frx#{$a}#{$b} {
+        .ic-frx#{$a}#{$b} {
             background: no-repeat bottom right, no-repeat top left;
             background-image: flag($b), flag($a);
         }
     }
 
     @mixin wld($a) {
-        &.ic-wld#{$a} {
+        .ic-wld#{$a} {
             background-image: flag($a);
         }
     }
@@ -169,6 +203,6 @@
     @include wld(usd);
 
     /* INDICES */
-    &.ic-spc  { background-image: flag(usd) };
-    &.ic-as51 { background-image: flag(aud) };
+    .ic-spc  { background-image: flag(usd) };
+    .ic-as51 { background-image: flag(aud) };
 }

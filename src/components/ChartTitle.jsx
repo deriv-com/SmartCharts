@@ -15,7 +15,7 @@ const ChartTitle = ({
     AnimatedPrice,
 }) => {
     return (
-        <Menu className="cq-chart-title stx-show">
+        <Menu className="cq-chart-title stx-show cq-symbols-display">
             <Menu.Title>
                 {isVisible &&
                 <div className="cq-symbol-select-btn">

@@ -12,7 +12,8 @@ export default class ChartTitleStore {
         this.categoricalDisplay = new CategoricalDisplayStore({
             getCategoricalItems: () => this.mainStore.chart.categorizedItems,
             getIsShown: () => this.menu.open,
-            onSelectItem: this.onSelectItem.bind(this)
+            onSelectItem: this.onSelectItem.bind(this),
+            placeholderText: '"AUD/JPY" or "Apple"',
         });
     }
 

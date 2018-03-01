@@ -2,7 +2,7 @@ import { action, observable, computed, when, reaction } from 'mobx';
 import { connect } from './Connect';
 
 export default class CategoricalDisplayStore {
-    constructor({ getCategoricalItems, onSelectItem, getIsShown, getActiveItems, activeOptions }) {
+    constructor({ getCategoricalItems, onSelectItem, getIsShown, getActiveItems, activeOptions, placeholderText }) {
         reaction(getIsShown, () => {
             if (getIsShown) {this.searchInput.focus();}
         });
@@ -10,6 +10,7 @@ export default class CategoricalDisplayStore {
         this.onSelectItem = onSelectItem;
         this.getActiveItems = getActiveItems;
         this.activeOptions = activeOptions;
+        this.placeholderText = placeholderText;
     }
 
     @observable filterText = '';
@@ -115,5 +116,6 @@ export default class CategoricalDisplayStore {
         onSelectItem: this.onSelectItem,
         hasActiveItems: (this.getActiveItems !== undefined),
         activeOptions: this.activeOptions,
+        placeholderText: this.placeholderText,
     }))
 }
