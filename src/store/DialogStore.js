@@ -18,7 +18,11 @@ export default class DialogStore {
     }
 
     handleClickOutside = (e) => {
-        if(!e.isHandledByDialog) {
+        let isRightClick = false;
+        if ("which" in e) { isRightClick = e.which == 3; }
+        else if ("button" in e) { isRightClick = e.button == 2; }
+
+        if(!e.isHandledByDialog && !isRightClick) {
             this.setOpen(false);
         }
     };

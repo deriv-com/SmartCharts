@@ -21,10 +21,13 @@ const config = {
                 test: /\.(s*)css$/,
                 use: ['css-hot-loader'].concat(ExtractTextPlugin.extract({
                     fallback: 'style-loader',
-                    use: [
-                        { loader: 'css-loader' },
-                        { loader: 'sass-loader' },
-                    ],
+                    use: [{
+                        loader: 'css-loader',
+                        options: { sourceMap: true, minimize: true }
+                    }, {
+                        loader: 'sass-loader',
+                        options: { sourceMap: true }
+                    }],
                 })),
             },
             {
