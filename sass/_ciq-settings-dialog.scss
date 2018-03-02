@@ -1,4 +1,5 @@
 .cq-settings-dialog {
+    // background: rgba(255, 255, 255, 0.95) !important;
     .titlebar {
         height: 40x;
         display: flex;
@@ -26,7 +27,11 @@
             background-repeat: no-repeat;
             background-position: 50% 50%;
         }
+        &.no-tabs {
+            border-bottom: 1px solid #E9E9ED;
+        }
     }
+
     .tabs {
         height: 40px;
         box-sizing: border-box;
@@ -58,5 +63,25 @@
                 left: 50%;
             }
         }
+    }
+
+    .items {
+        padding: 16px 0;
+        .item {
+            height: 60px;
+            box-sizing: border-box;
+            padding: 8px 16px;
+            .title {
+                font-size: 12px;
+                display: flex;
+                justify-content: space-between;
+            }
+        }
+    }
+
+    .description {
+        padding: 16px;
+        font-size: 12px;
+        line-height: 18px;
     }
 }

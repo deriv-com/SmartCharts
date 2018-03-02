@@ -1,10 +1,9 @@
 import { observable, action, reaction, computed, autorunAsync, when } from 'mobx';
 import MenuStore from './MenuStore';
 import ListStore from './ListStore';
-import DialogStore from './DialogStore';
 import SettingsDialogStore from './SettingsDialogStore';
 
-// camelcase to spaces separated capitalized string.
+// camelCase to spaces separated capitalized string.
 const formatCamelCase = s => {
     const capitalized = s.charAt(0).toUpperCase() + s.slice(1);
     return capitalized.replace(/([a-z](?=[A-Z]))/g, '$1 ');
@@ -13,12 +12,12 @@ const formatCamelCase = s => {
 export default class DrawToolsStore {
     constructor(mainStore) {
         this.mainStore = mainStore;
-        this.menu = new MenuStore(mainStore);
+        this.menu = new MenuStore({getContext: () => this.mainStore.chart.context});
         this.settingsDialog = new SettingsDialogStore({
             getContext: () => this.mainStore.chart.context,
-            onDeleted: () => console.warn('onDeleted'),
-            onStared: (value) => console.warn('onStared', value),
-            onChanged: items => console.warn('onChanged', items),
+            onDeleted: this.onDeleted,
+            onStared: this.onStared,
+            onChanged: this.onChanged,
         });
 
         this.list = new ListStore({
@@ -63,11 +62,18 @@ export default class DrawToolsStore {
         });
 
         when(() => this.context, this.onContextReady);
-        reaction(() => this.menu.open, this.clearDrawTool);
+        reaction(() => this.menu.open, this.noTool);
     }
 
     get context() { return this.mainStore.chart.context; }
     get stx() { return this.context.stx; }
+    activeDrawing = null;
+
+    onContextReady = () => {
+        document.addEventListener('keydown', this.closeOnEscape, false);
+        this.stx.addEventListener('drawing', this.noTool);
+        this.stx.prepend("rightClickHighlighted", this.onRightClick);
+    };
 
     closeOnEscape = (e) => {
         const ESCAPE = 27;
@@ -89,12 +95,10 @@ export default class DrawToolsStore {
                         title: formatCamelCase(key),
                         value: parameters[key],
                     }));
+                this.activeDrawing = drawing;
+                this.activeDrawing.highlighted = false;
                 this.settingsDialog.title = formatCamelCase(drawing.name);
                 this.settingsDialog.setOpen(true);
-                this.settingsDialog.description = `
-                The Double Exponential Moving Average (CKS) by Patrick Mulloy
-                attempts to remove the inherent lag associated to Moving Averages by placing more weight on recent
-                values.`;
                 console.warn(parameters, drawing, dontDeleteMe);
                 return true;
             }
@@ -102,23 +106,16 @@ export default class DrawToolsStore {
         return false;
     };
 
-    onContextReady = () => {
-        document.addEventListener('keydown', this.closeOnEscape, false);
-        this.stx.addEventListener('drawing', this.clearDrawTool);
-        this.stx.prepend("rightClickHighlighted", this.onRightClick);
-    };
-
-    clearDrawTool = () => {
-        if(this.menu.open && this.context) {
+    noTool = () => {
+        const count = this.stx.drawingObjects.length;
+        if((this.menu.open && this.context) || this._pervDrawingObjectCount !== count) {
             this.stx.changeVectorType('');
         }
+        this._pervDrawingObjectCount = count;
     };
 
     @action.bound clearAll() {
         this.stx.clearDrawings();
-    }
-
-    @action.bound noTool() {
     }
 
     @action.bound selectTool(id) {
@@ -126,22 +123,24 @@ export default class DrawToolsStore {
         stx.clearMeasure(); // TODO remove this line
         stx.changeVectorType(id);
         this.menu.setOpen(false);
+        // let drawingParameters = CIQ.Drawing.getDrawingParameters(stx, id);
+    }
 
-        // this.node.find('*[cq-section]').removeClass('ciq-active');
-
-        let drawingParameters = CIQ.Drawing.getDrawingParameters(stx, id);
-        if (drawingParameters) {
-            // fibtimezone has no values to display in the settings dialog
-            if (id === 'fibtimezone') {
-                delete drawingParameters.parameters;
-            }
-
-            console.warn(drawingParameters);
-
-            // let elements = this.defaultElements(drawingParameters);
-            // for (let i = 0; i < elements.length; i++) {
-            //     $(this.node).find(elements[i]).addClass('ciq-active');
-            // }
+    @action.bound onChanged(items) {
+        for(const item of items) {
+            this.activeDrawing[item.id] = item.value;
         }
+        this.activeDrawing.highlighted = false;
+        this.activeDrawing.adjust();
+    }
+
+    @action.bound onStared(value) {
+        console.warn('onStared not implemented yet.');
+        // TODO: implement favorites.
+    }
+
+    @action.bound onDeleted() {
+        this.stx.removeDrawing(this.activeDrawing);
+        this.activeDrawing = null;
     }
 }

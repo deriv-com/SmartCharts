@@ -6,7 +6,7 @@ export default class StudyLegendStore {
     constructor(mainStore) {
         this.mainStore = mainStore;
         when(() => this.context, this.onContextReady);
-        this.menu = new MenuStore(mainStore);
+        this.menu = new MenuStore({getContext: () => this.context});
         this.list = new ListStore({
             getIsOpen: () => this.menu.open,
             getContext: () => this.context,

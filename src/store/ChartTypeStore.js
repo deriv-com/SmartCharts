@@ -5,7 +5,7 @@ export default class ChartTypeStore {
     constructor(mainStore) {
         this.mainStore = mainStore;
         when(() => this.context, this.onContextReady);
-        this.menu = new MenuStore(mainStore);
+        this.menu = new MenuStore({getContext: () => this.context});
     }
 
     get context() { return this.mainStore.chart.context; }

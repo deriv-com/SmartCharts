@@ -25,7 +25,9 @@ export default class SettingsDialogStore {
     get stx() { return this.context.stx; }
 
     @computed get open() { return this.dialog.open; }
-    @action.bound setOpen(value) { return this.dialog.setOpen(value); }
+    @action.bound setOpen(value) {
+        return this.dialog.setOpen(value);
+    }
 
     @action.bound onDeleteClick() {
         this.onDeleted();
@@ -39,6 +41,15 @@ export default class SettingsDialogStore {
     @action.bound onTabClick(id) {
         this.activeTab = id;
     }
+    @action.bound onItemChange(id, newValue) {
+        const items = this.items.map(item => {
+            const clone = JSON.parse(JSON.stringify(item));
+            if(item.id === id) { clone.value = newValue; }
+            return clone;
+        });
+        this.items = items;
+        this.onChanged(items);
+    }
 
     connect = connect(
         () => ({
@@ -51,6 +62,7 @@ export default class SettingsDialogStore {
             onTabClick: this.onTabClick,
             onDeleteClick: this.onDeleteClick,
             onStarClick: this.onStarClick,
+            onItemChange: this.onItemChange,
             Dialog: this.dialog.connect(Dialog),
         })
     );

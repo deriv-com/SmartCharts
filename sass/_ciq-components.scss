@@ -1144,36 +1144,6 @@ cq-menu-dropdown.ciq-line-style-menu li.ciq-none {/* Center "none" option */
 	padding-bottom:0;
 }
 
-span.ciq-line {/* Formatting for line styles */
-	display: block;
-	width: auto;
-	height: 0px;
-	padding: 0px;
-	border-top-color: #666;
-	border-radius:0;
-}
-/*Centers the span inside of its parent so the hover effect looks good*/
-.ciq-line-style-option {
-  top:50%;
-  position:relative;
-}
-/* Line style types */
-cq-toolbar-settings .ciq-solid-1 {@extend span.ciq-line; border-top-style: solid; border-top-width: 1px;}
-cq-toolbar-settings .ciq-dotted-1 {@extend span.ciq-line; border-top-style: dotted; border-top-width: 1px;}
-cq-toolbar-settings .ciq-dashed-1 {@extend span.ciq-line; border-top-style: dashed; border-top-width: 1px;}
-cq-toolbar-settings .ciq-solid-3 {@extend span.ciq-line; border-top-style: solid; border-top-width: 2px;}
-cq-toolbar-settings .ciq-dotted-3 {@extend span.ciq-line; border-top-style: dotted; border-top-width: 2px;}
-cq-toolbar-settings .ciq-dashed-3 {@extend span.ciq-line; border-top-style: dashed; border-top-width: 2px;}
-cq-toolbar-settings .ciq-solid-5 {@extend span.ciq-line; border-top-style: solid; border-top-width: 3px;}
-cq-toolbar-settings .ciq-dotted-5 {@extend span.ciq-line; border-top-style: dotted; border-top-width: 3px;}
-cq-toolbar-settings .ciq-dashed-5 {@extend span.ciq-line; border-top-style: dashed; border-top-width: 3px;}
-
-span.ciq-line.ciq-selected {/* Formatting for selected line */
-	margin: 13px 0 0 0;
-	width:30px;
-}
-
-
 /*  Annotation Formatting */
 
 cq-annotation .ciq-btn {/* Make formatting buttons square */
