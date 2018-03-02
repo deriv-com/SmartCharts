@@ -1,4 +1,5 @@
 .cq-categorical-display {
+    width: 44em;
     padding: 0 !important;
     display: flex;
     text-align: left;
@@ -11,26 +12,36 @@
     height: 0px;
     @include box-shadow (0px, 2px, 4px, rgba(0, 0, 0, .2));
     .cq-lookup-filters {
-        width: 16em;
+        width: 40%;
         border-right: 1px solid #e9e9ed;
     }
     .cq-lookup-input  {
-        margin: 1.5em 1.3em 0.7em 1.3em;
+        margin: 1.5em 1.3em 1.1em 1.3em;
         > input {
             background: url('icons/common/ic-search-light.svg') no-repeat scroll 7px 11px;
             padding-left: 30px;
             line-height: 3em;
             font-size: 1em;
             border: none;
+            outline: 0;
             width: calc(100% - 30px);
-            box-shadow: inset 0 -1px 0 0 #f0f0f0;
+            border-bottom: 1px solid #f0f0f0;
             @include placeholder {
                 color: #dfdfdf;
+            }
+            &:focus {
+                border-bottom: 1px solid #2A3052;
             }
         }
     }
     .category {
-        margin: 0.4em 1em 1em 1em;
+        padding-top: 2em;
+    }
+    .category-title {
+        color: #333333;
+    }
+    .category-content {
+        margin: 0.4em 1em 0em 1em;
         border: 1px solid #e9e9ed;
         border-radius: 3px;
         background-color: white;
@@ -49,8 +60,8 @@
         padding: 0.1em 0.7em;
     }
     .cq-filter {
-        padding-left: 1.3em;
-        line-height: 3em;
+        padding-left: 1.6em;
+        line-height: 3.4em;
         text-align: left;
         cursor: pointer;
         &:hover {
@@ -82,8 +93,7 @@
         position: relative;
         height: 500px;
         overflow-y: scroll;
-        width: 28em;
-        padding-top: 0.8em;
+        width: 60%;
         background-color: #f4f4f6
     }
     .ciq-item-display {
@@ -129,9 +139,9 @@
 .cq-symbols-display .cq-categorical-display .cq-lookup-filters .cq-filter {
     .ciq-item-icon {
         padding-left: 32px;
-        float: left;
-        padding-top: 18px;
         height: 16px;
+        display: inline-flex;
+        vertical-align: text-bottom;
     }
     @mixin category($cat-id) {
         .ic-category-#{$cat-id} {

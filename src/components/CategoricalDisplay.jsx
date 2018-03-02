@@ -35,7 +35,11 @@ const CategoricalDisplay = ({
             {activeOptions &&
             <span className="cq-active-options">
                 {activeOptions.map((opt, i) =>
-                    <span key={`active-opt-${i}`} className={`ic-${opt.id}`} onClick={() => opt.onClick(item.symbolObj)}>
+                    <span
+                        key={`active-opt-${i}`}
+                        className={`ic-${opt.id}`}
+                        onClick={() => opt.onClick && opt.onClick(item.symbolObj)}
+                    >
                         {opt.renderChild && opt.renderChild(item)}
                     </span>
                 )}
@@ -71,9 +75,9 @@ const CategoricalDisplay = ({
             <div className="results-panel" ref={setResultsPanel}>
                 { filteredItems.map((category, i) =>
                     getItemCount(category) > 0 &&
-                    <Fragment key={i}>
-                        <div className={`category-title category-${category.categoryId}`}>{category.categoryName}</div>
-                        <div className="category">
+                    <div key={`cat-${i}`} className={`category category-${category.categoryId}`}>
+                        <div className="category-title">{category.categoryName}</div>
+                        <div className="category-content">
                             { category.hasSubcategory ? category.data.map((subcategory, j) =>
                                 getItemCount(subcategory) > 0 &&
                                 <Fragment key={j}>
@@ -83,7 +87,7 @@ const CategoricalDisplay = ({
                             ) : category.data.map((i === 0 && hasActiveItems) ? renderActiveItem : renderItem)
                             }
                         </div>
-                    </Fragment>
+                    </div>
                 ) }
             </div>
         </div>
