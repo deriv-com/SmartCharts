@@ -36,6 +36,9 @@
     }
     .category {
         padding-top: 2em;
+        &:last-child {
+            padding-bottom: 2.5em;
+        }
     }
     .category-title {
         color: #333333;
@@ -89,10 +92,9 @@
         }
 
     }
-    .results-panel {
+    .cq-scroll-panel {
         position: relative;
         height: 500px;
-        overflow-y: scroll;
         width: 60%;
         background-color: #f4f4f6
     }

@@ -12,6 +12,7 @@ const CategoricalDisplay = ({
     getItemCount,
     onSelectItem,
     activeOptions,
+    setScrollPanel,
 }) => {
     const renderIcon = (item) => {return item.itemId ? <span className={`ciq-item-icon ic-${item.itemId.toLowerCase()}`} /> : '';};
     const renderText = (item) => <span className="ciq-item-display">{item.display}</span>;
@@ -72,23 +73,25 @@ const CategoricalDisplay = ({
                     </div>
                 )}
             </div>
-            <div className="results-panel" ref={setResultsPanel}>
-                { filteredItems.map((category, i) =>
-                    getItemCount(category) > 0 &&
-                    <div key={`cat-${i}`} className={`category category-${category.categoryId}`}>
-                        <div className="category-title">{category.categoryName}</div>
-                        <div className="category-content">
-                            { category.hasSubcategory ? category.data.map((subcategory, j) =>
-                                getItemCount(subcategory) > 0 &&
-                                <Fragment key={j}>
-                                    <div className="subcategory">{subcategory.subcategoryName}</div>
-                                    { subcategory.data.map(renderItem)}
-                                </Fragment>
-                            ) : category.data.map((i === 0 && hasActiveItems) ? renderActiveItem : renderItem)
-                            }
+            <div className="cq-scroll-panel" ref={setScrollPanel}>
+                <div className="results-panel" ref={setResultsPanel}>
+                    { filteredItems.map((category, i) =>
+                        getItemCount(category) > 0 &&
+                        <div key={`cat-${i}`} className={`category category-${category.categoryId}`}>
+                            <div className="category-title">{category.categoryName}</div>
+                            <div className="category-content">
+                                { category.hasSubcategory ? category.data.map((subcategory, j) =>
+                                    getItemCount(subcategory) > 0 &&
+                                    <Fragment key={j}>
+                                        <div className="subcategory">{subcategory.subcategoryName}</div>
+                                        { subcategory.data.map(renderItem)}
+                                    </Fragment>
+                                ) : category.data.map((i === 0 && hasActiveItems) ? renderActiveItem : renderItem)
+                                }
+                            </div>
                         </div>
-                    </div>
-                ) }
+                    ) }
+                </div>
             </div>
         </div>
     );

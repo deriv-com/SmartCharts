@@ -1,20 +1,36 @@
 import { action, observable, computed, when, reaction } from 'mobx';
 import { connect } from './Connect';
+import IScroll from 'iscroll';
 
 export default class CategoricalDisplayStore {
     constructor({ getCategoricalItems, onSelectItem, getIsShown, getActiveItems, activeOptions, placeholderText }) {
         reaction(getIsShown, () => {
-            if (getIsShown) {this.searchInput.focus();}
+            if (getIsShown()) {
+                // Odd. Why is setTimeout needed here?
+                setTimeout(() =>  this.searchInput.focus(), 0);
+                if (!this.isInit) {this.init();}
+                setTimeout(() => this.scroll.refresh(), 0);
+            }
         });
         this.getCategoricalItems = getCategoricalItems;
         this.onSelectItem = onSelectItem;
         this.getActiveItems = getActiveItems;
         this.activeOptions = activeOptions;
         this.placeholderText = placeholderText;
+
+        this.isInit = false;
     }
 
     @observable filterText = '';
     @observable placeholderText = '';
+
+    init() {
+        this.isInit = true;
+        this.scroll = new IScroll(this.scrollPanel, {
+            mouseWheel: true,
+            scrollbars: true,
+        });
+    }
 
     @computed get filteredItems() {
         let filteredItems = JSON.parse(JSON.stringify(this.getCategoricalItems())); // Deep clone array
@@ -45,6 +61,7 @@ export default class CategoricalDisplayStore {
             }
         }
 
+        setTimeout(() => this.scroll.refresh(), 0);
         return filteredItems;
     }
 
@@ -63,9 +80,10 @@ export default class CategoricalDisplayStore {
 
     @action.bound setResultsPanel(element) {
         this.resultsPanel = element;
-        this.resultsPanel.addEventListener(CIQ.wheelEvent, (e) => {
-            e.stopPropagation();
-        });
+    }
+
+    @action.bound setScrollPanel(element) {
+        this.scrollPanel = element;
     }
 
     @action.bound getItemCount(category) {
@@ -81,6 +99,7 @@ export default class CategoricalDisplayStore {
         return count;
     }
 
+    // TODO: we shouldn't need to do this after we shift this out of ChartContainer
     @action.bound handleInputClick() {
         this.searchInput.focus();
     }
@@ -117,5 +136,8 @@ export default class CategoricalDisplayStore {
         hasActiveItems: (this.getActiveItems !== undefined),
         activeOptions: this.activeOptions,
         placeholderText: this.placeholderText,
+        scrollId: this.scrollId,
+        init: this.init,
+        setScrollPanel: this.setScrollPanel,
     }))
 }
