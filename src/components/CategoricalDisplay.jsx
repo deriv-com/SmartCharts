@@ -13,6 +13,8 @@ const CategoricalDisplay = ({
     onSelectItem,
     activeOptions,
     setScrollPanel,
+    setCategoryElement,
+    activeCategoryKey,
 }) => {
     const renderIcon = (item) => {return item.itemId ? <span className={`ciq-item-icon ic-${item.itemId.toLowerCase()}`} /> : '';};
     const renderText = (item) => <span className="ciq-item-display">{item.display}</span>;
@@ -65,7 +67,7 @@ const CategoricalDisplay = ({
                 </div>
                 { filteredItems.map((category, i) =>
                     <div key={i}
-                        className="cq-filter"
+                        className={`cq-filter ${activeCategoryKey === category.categoryId ? 'cq-active-filter' : ''}`}
                         onClick={() => handleFilterClick(category)}
                     >
                         <span className={`ciq-item-icon ic-category-${category.categoryId}`}/>
@@ -77,7 +79,11 @@ const CategoricalDisplay = ({
                 <div className="results-panel" ref={setResultsPanel}>
                     { filteredItems.map((category, i) =>
                         getItemCount(category) > 0 &&
-                        <div key={`cat-${i}`} className={`category category-${category.categoryId}`}>
+                        <div
+                            key={`cat-${i}`}
+                            className={`category category-${category.categoryId}`}
+                            ref={(el) => setCategoryElement(el, category.categoryId)}
+                        >
                             <div className="category-title">{category.categoryName}</div>
                             <div className="category-content">
                                 { category.hasSubcategory ? category.data.map((subcategory, j) =>

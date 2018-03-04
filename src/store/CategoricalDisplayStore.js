@@ -1,6 +1,6 @@
 import { action, observable, computed, when, reaction } from 'mobx';
 import { connect } from './Connect';
-import IScroll from 'iscroll';
+import IScroll from 'iscroll/build/iscroll-probe';
 
 export default class CategoricalDisplayStore {
     constructor({ getCategoricalItems, onSelectItem, getIsShown, getActiveItems, activeOptions, placeholderText }) {
@@ -17,18 +17,38 @@ export default class CategoricalDisplayStore {
         this.getActiveItems = getActiveItems;
         this.activeOptions = activeOptions;
         this.placeholderText = placeholderText;
+        this.categoryElements = {};
 
         this.isInit = false;
     }
 
     @observable filterText = '';
     @observable placeholderText = '';
+    @observable activeCategoryKey = '';
 
     init() {
         this.isInit = true;
         this.scroll = new IScroll(this.scrollPanel, {
+            probeType: 2,
             mouseWheel: true,
             scrollbars: true,
+        });
+        const self = this;
+        this.scroll.on('scroll', function () {
+            const best = {
+                key: null,
+                top: -1000*1000, // really small value
+            };
+            Object.keys(self.categoryElements).forEach(key => {
+                const el = self.categoryElements[key];
+                const r = el.getBoundingClientRect();
+                if(r.top < 200 && r.top > best.top) {
+                    best.top = r.top;
+                    best.key = key;
+                }
+            });
+            self.activeCategoryKey = best.key;
+            console.log(this.y, best.key);
         });
     }
 
@@ -63,6 +83,10 @@ export default class CategoricalDisplayStore {
 
         setTimeout(() => this.scroll.refresh(), 0);
         return filteredItems;
+    }
+
+    @action.bound setCategoryElement(element, id) {
+        this.categoryElements[id] = element;
     }
 
     @action.bound setFilterText(filterText) {
@@ -138,6 +162,8 @@ export default class CategoricalDisplayStore {
         placeholderText: this.placeholderText,
         scrollId: this.scrollId,
         init: this.init,
+        activeCategoryKey: this.activeCategoryKey,
         setScrollPanel: this.setScrollPanel,
+        setCategoryElement: this.setCategoryElement,
     }))
 }
