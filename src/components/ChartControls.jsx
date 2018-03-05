@@ -12,9 +12,9 @@ const ChartControls = () => (
     <div className="cq-chart-controls">
         <Toggles />
         <ChartTypes />
-        <DrawTools />
         <StudyLegend />
         <Comparison />
+        <DrawTools />
         <Views />
         <Timeperiod />
         <ChartSize />

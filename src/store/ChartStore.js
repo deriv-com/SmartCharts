@@ -271,6 +271,8 @@ class ChartStore {
         }
 
         $(window).resize(this.resizeScreen.bind(this));
+
+        // stxx.addInjection()
     }
 
     @computed get categorizedItems() {
