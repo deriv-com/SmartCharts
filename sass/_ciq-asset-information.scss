@@ -1,0 +1,23 @@
+.ciq-asset-information {
+    position: absolute;
+    z-index: +1;
+    background: transparent;
+    width: 100%;
+    display: flex;
+    left: 20px;
+    top: 80px;
+    justify-content: flex-start;
+    .info {
+        width: 88px;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        font-size: 12px;
+        div:first-child {
+            padding: 0 8px;
+        }
+        div:last-child {
+            font-weight: bold;
+        }
+    }
+}

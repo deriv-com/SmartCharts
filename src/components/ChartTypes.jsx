@@ -31,10 +31,10 @@ const ChartTypes = ({
                 />
             </div>
             <TypeList height={257}>
-                {(type) => (
+                {t => (
                     <React.Fragment>
-                        <span className={type.icon} />
-                        <span className='ciq-icon-text'>{type.text}</span>
+                        <span className={t.icon} />
+                        <span className='ciq-icon-text'>{t.text}</span>
                     </React.Fragment>
                 )}
             </TypeList>

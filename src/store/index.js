@@ -7,6 +7,7 @@ import StudyLegendStore from './StudyLegendStore';
 import ComparisonStore from './ComparisonStore';
 import DrawToolsStore from './DrawToolsStore';
 import ChartTitleStore from './ChartTitleStore';
+import AssetInformationStore from './AssetInformationStore';
 
 export default class MainStore {
     @observable chart = new ChartStore(this);
@@ -17,4 +18,5 @@ export default class MainStore {
     @observable drawTools = new DrawToolsStore(this);
     @observable chartTitle = new ChartTitleStore(this);
     @observable timeperiod = new TimeperiodStore(this);
+    @observable assetInformation = new AssetInformationStore(this);
 }
