@@ -1,4 +1,3 @@
-/* eslint-disable */
 // TODO => Move to es6
 import CIQ from 'chartiq';
 import $ from 'jquery';
@@ -6,7 +5,6 @@ import $ from 'jquery';
 // Copyright 2012-2016 by ChartIQ, Inc.
 // All rights reserved
 //-------------------------------------------------------------------------------------------
-
 
 /**
  * Use this constructor to initialize visualization styles of extended hours by the use of shading and delimitation lines.
@@ -40,34 +38,34 @@ import $ from 'jquery';
  * @name  CIQ.ExtendedHours
  * @example
  * // Call this only once to initialize the market sessions display manager.
-    new CIQ.ExtendedHours({stx:stxx, filter:true});
+ new CIQ.ExtendedHours({stx:stxx, filter:true});
 
-    // By default all sessions are disabled unless explicitly enabled.
-    // This forces the extended hours sessions ["pre","post"] to be enabled when the chart is initially loaded.
-    stxx.extendedHours.prepare(true);
+ // By default all sessions are disabled unless explicitly enabled.
+ // This forces the extended hours sessions ["pre","post"] to be enabled when the chart is initially loaded.
+ stxx.extendedHours.prepare(true);
 
-    //Now display your chart
-    stxx.newChart(stxx.chart.symbol, null, null, function(){});
-
- * @example
-    // once your chart is displayed, you can call this from any UI interface to turn on extended hours.
-    stx.extendedHours.set(true);
-
-    // or call this from any UI interface to turn off extended hours.
-    stx.extendedHours.set(false);
+ //Now display your chart
+ stxx.newChart(stxx.chart.symbol, null, null, function(){});
 
  * @example
- * 	// CSS entries for a session divider and sessions named "pre" and "post"
-    .stx_market_session.divider {
-        background-color: rgba(0,255,0,0.8);
-        width: 1px;
-    }
-    .stx_market_session.pre {
-        background-color: rgba(255,255,0,0.1);
-    }
-    .stx_market_session.post {
-        background-color: rgba(0,0,255,0.2);
-    }
+ // once your chart is displayed, you can call this from any UI interface to turn on extended hours.
+ stx.extendedHours.set(true);
+
+ // or call this from any UI interface to turn off extended hours.
+ stx.extendedHours.set(false);
+
+ * @example
+ *    // CSS entries for a session divider and sessions named "pre" and "post"
+ .stx_market_session.divider {
+			background-color: rgba(0,255,0,0.8);
+			width: 1px;
+		}
+ .stx_market_session.pre {
+			background-color: rgba(255,255,0,0.1);
+		}
+ .stx_market_session.post {
+			background-color: rgba(0,0,255,0.2);
+		}
  * @since
  * <br>&bull; 06-2016-02
  * <br>&bull; 3.0.0 changed argument to an object to support filter
@@ -75,21 +73,21 @@ import $ from 'jquery';
  * <br>&bull; 5.0.0 no longer necessary to explicitly set `stx.layout.marketSessions` or 1stx.layout.extended` to manage sessions; instead call {@link CIQ.ExtendedHours.prepare} or {@link CIQ.ExtendedHours.set}
  */
 CIQ.ExtendedHours = function (params) {
-    let stx = params.stx;
-    let filter = params.filter;
+    var stx = params.stx;
+    var filter = params.filter;
     if (!stx) { // backwards compatibility
         stx = params;
         filter = false;
     }
-    let styles = {};
+    var styles = {};
     this.stx = stx;
     this.stx.extendedHours = this;
 
-    stx.addEventListener('theme', (tObject) => {
+    stx.addEventListener('theme', function (tObject) {
         // reinitialize the session colors after a theme change
         styles = {};
-        for (let sess in stx.layout.marketSessions) {
-            if (!styles.session) styles.session = {};
+        for (var sess in stx.layout.marketSessions) {
+            if (!styles.session) {styles.session = {};}
             styles.session[sess] = stx.canvasStyle(`stx_market_session ${sess}`);
         }
     });
@@ -116,9 +114,9 @@ CIQ.ExtendedHours = function (params) {
         }
         stx.layout.marketSessions = {};
         if (enable) {
-            if (!sessions) sessions = ['pre', 'post'];
+            if (!sessions) {sessions = ['pre', 'post'];}
             if (sessions.length) {
-                for (let s = 0; s < sessions.length; s++) {
+                for (var s = 0; s < sessions.length; s++) {
                     stx.layout.marketSessions[sessions[s]] = true;
                 }
             } else {
@@ -126,7 +124,7 @@ CIQ.ExtendedHours = function (params) {
             }
         }
         for (sess in stx.layout.marketSessions) {
-            if (!styles.session) styles.session = {};
+            if (!styles.session) {styles.session = {};}
             styles.session[sess] = stx.canvasStyle(`stx_market_session ${sess}`);
             stx.chart.market.disableSession(sess, true);
         }
@@ -145,13 +143,13 @@ CIQ.ExtendedHours = function (params) {
         stx.changeOccurred('layout');
         if (!stx.chart.market.market_def) {
             // possibly a 24 hours Market. Not necessarily an error but nothing to do for ExtendedHours
-            if (cb) cb();
+            if (cb) {cb();}
             return;
         }
         if (filter) {
             stx.createDataSet();
             stx.draw();
-            if (cb) cb();
+            if (cb) {cb();}
         } else {
             stx.newChart(stx.chart.symbol, null, null, cb);
         }
@@ -171,65 +169,75 @@ CIQ.ExtendedHours = function (params) {
     };
 
     this.stx.append('createYAxis', function (panel) {
-        if (!this.layout.extended) return;
-        let chart = panel.chart;
-        if (CIQ.ChartEngine.isDailyInterval(this.layout.interval)) return;
+        if (!this.layout.extended) {return;}
+        var chart = panel.chart;
+        if (CIQ.ChartEngine.isDailyInterval(this.layout.interval)) {return;}
         styles.divider = this.canvasStyle('stx_market_session divider');
         if (styles.session) {
-            let m = chart.market;
-            let ranges = [];
-            let range = {};
-            let nextBoundary,
+            var m = chart.market;
+            var ranges = [];
+            var range = {};
+            var nextBoundary,
                 thisSession;
             for (var i = 0; i < chart.dataSegment.length; i++) {
-                let ds = chart.dataSegment[i];
-                if (!ds || !ds.DT) continue;
-                let c = null;
+                var ds = chart.dataSegment[i];
+                if (!ds || !ds.DT) {continue;}
+                var c = null;
                 if (m.market_def) {
                     if (!nextBoundary || nextBoundary <= ds.DT) {
                         thisSession = m.getSession(ds.DT, this.dataZone);
-                        let filterSession = (thisSession !== '' && (!this.layout.marketSessions || !this.layout.marketSessions[thisSession]));
+                        var filterSession = (thisSession !== '' && (!this.layout.marketSessions || !this.layout.marketSessions[thisSession]));
                         nextBoundary = m[filterSession ? 'getNextOpen' : 'getNextClose'](ds.DT, this.dataZone, this.dataZone);
                     }
                 }
 
-                let s = styles.session[thisSession];
-                if (s) c = s.backgroundColor;
+                var s = styles.session[thisSession];
+                if (s) {c = s.backgroundColor;}
                 if (range.color && range.color != c) {
-                    ranges.push({ start: range.start, end: range.end, color: range.color });
+                    ranges.push({
+                        start: range.start,
+                        end: range.end,
+                        color: range.color
+                    });
                     range = {};
                 }
                 if (c) {
-                    let cw = this.layout.candleWidth;
-                    if (ds.candleWidth) cw = ds.candleWidth;
+                    var cw = this.layout.candleWidth;
+                    if (ds.candleWidth) {cw = ds.candleWidth;}
                     range.end = this.pixelFromBar(i, chart) + cw / 2;
-                    if (!range.start && range.start !== 0) range.start = range.end - cw + 1;
+                    if (!range.start && range.start !== 0) {range.start = range.end - cw + 1;}
                     range.color = c;
                 } else {
                     range = {};
                 }
             }
-            if (range.start || range.start === 0) ranges.push({ start: range.start, end: range.end, color: range.color });
-            let noDashes = CIQ.isTransparent(styles.divider.backgroundColor);
-            let dividerLineWidth = styles.divider.width.replace(/px/g, '');
-            for (let p in this.panels) {
-                let thisPanel = this.panels[p];
-                if (thisPanel.shareChartXAxis === false) continue;
-                if (thisPanel.hidden) continue;
+            if (range.start || range.start === 0) {
+                ranges.push({
+                    start: range.start,
+                    end: range.end,
+                    color: range.color
+                });
+            }
+            var noDashes = CIQ.isTransparent(styles.divider.backgroundColor);
+            var dividerLineWidth = styles.divider.width.replace(/px/g, '');
+            for (var p in this.panels) {
+                var thisPanel = this.panels[p];
+                if (thisPanel.shareChartXAxis === false) {continue;}
+                if (thisPanel.hidden) {continue;}
                 this.startClip(p);
                 for (i = 0; i < ranges.length; i++) {
                     chart.context.fillStyle = ranges[i].color;
                     if (!noDashes && ranges[i].start > chart.left) {
                         this.plotLine(ranges[i].start, ranges[i].start, thisPanel.bottom, thisPanel.top, styles.divider.backgroundColor, 'line', chart.context, thisPanel, {
                             pattern: 'dashed',
-                            lineWidth: dividerLineWidth,
+                            lineWidth: dividerLineWidth
                         });
                     }
                     chart.context.fillRect(ranges[i].start, thisPanel.top, ranges[i].end - ranges[i].start, thisPanel.bottom - thisPanel.top);
                     if (!noDashes && ranges[i].end < chart.right) {
                         this.plotLine(ranges[i].end, ranges[i].end, thisPanel.bottom, thisPanel.top, styles.divider.backgroundColor, 'line', chart.context, thisPanel, {
                             pattern: 'dashed',
-                            lineWidth: dividerLineWidth,
+                            lineWidth: dividerLineWidth
                         });
                     }
                 }
@@ -256,10 +264,10 @@ CIQ.ExtendedHours = function (params) {
  * Here is an example of the structure (there will be one field tag per displayed element):
  * ```
  * <stx-hu-tooltip>
- * 		<stx-hu-tooltip-field>
- * 			<stx-hu-tooltip-field-name></stx-hu-tooltip-field-name>
- * 			<stx-hu-tooltip-field-value></stx-hu-tooltip-field-value>
- * 		</stx-hu-tooltip-field>
+ *        <stx-hu-tooltip-field>
+ *            <stx-hu-tooltip-field-name></stx-hu-tooltip-field-name>
+ *            <stx-hu-tooltip-field-value></stx-hu-tooltip-field-value>
+ *        </stx-hu-tooltip-field>
  * </stx-hu-tooltip>
  * ```
  * By default, the `stx-hu-tooltip-field` elements are inserted in the following order:
@@ -307,48 +315,48 @@ CIQ.ExtendedHours = function (params) {
  * // We are also labeling the DT 'Date/Time' and the Close 'Last'
  * // The rest of the fileds will be then displayed in their default order.
  *
-    <stx-hu-tooltip>
-        <stx-hu-tooltip-field field="Close">
-            <stx-hu-tooltip-field-name>Last</stx-hu-tooltip-field-name>
-            <stx-hu-tooltip-field-value></stx-hu-tooltip-field-value>
-        </stx-hu-tooltip-field>
-        <stx-hu-tooltip-field field="DT">
-            <stx-hu-tooltip-field-name>Date/Time</stx-hu-tooltip-field-name>
-            <stx-hu-tooltip-field-value></stx-hu-tooltip-field-value>
-        </stx-hu-tooltip-field>
-    </stx-hu-tooltip>
+ <stx-hu-tooltip>
+ <stx-hu-tooltip-field field="Close">
+ <stx-hu-tooltip-field-name>Last</stx-hu-tooltip-field-name>
+ <stx-hu-tooltip-field-value></stx-hu-tooltip-field-value>
+ </stx-hu-tooltip-field>
+ <stx-hu-tooltip-field field="DT">
+ <stx-hu-tooltip-field-name>Date/Time</stx-hu-tooltip-field-name>
+ <stx-hu-tooltip-field-value></stx-hu-tooltip-field-value>
+ </stx-hu-tooltip-field>
+ </stx-hu-tooltip>
  *
  * @example
  * // Sample CSS for the hover tool tip. Working sample found in stx-chart.css
-    stx-hu-tooltip {
-        position: absolute;
-        left: -50000px;
-        z-index: 30;
-        white-space: nowrap;
-        padding: 6px;
-        border: 1px solid gray;
-        background-color: rgba(42,81,208,.5);
-        color: white;
-    }
+ stx-hu-tooltip {
+			position: absolute;
+			left: -50000px;
+			z-index: 30;
+			white-space: nowrap;
+			padding: 6px;
+			border: 1px solid gray;
+			background-color: rgba(42,81,208,.5);
+			color: white;
+		}
 
-    stx-hu-tooltip-field {
-        display:table-row;
-    }
+ stx-hu-tooltip-field {
+			display:table-row;
+		}
 
-    stx-hu-tooltip-field-name {
-        display:table-cell;
-        font-weight:bold;
-        padding-right:5px;
-    }
+ stx-hu-tooltip-field-name {
+			display:table-cell;
+			font-weight:bold;
+			padding-right:5px;
+		}
 
-    stx-hu-tooltip-field-name:after {
-        content:':';
-    }
+ stx-hu-tooltip-field-name:after {
+			content:':';
+		}
 
-    stx-hu-tooltip-field-value {
-        display:table-cell;
-        text-align:right;
-    }
+ stx-hu-tooltip-field-value {
+			display:table-cell;
+			text-align:right;
+		}
  * @since
  * <br>&bull; 09-2016-19
  * <br>&bull; 5.0.0 now `tooltipParams.showOverBarOnly` available to show tooltip only when over the primary line/bars.
@@ -356,19 +364,22 @@ CIQ.ExtendedHours = function (params) {
  */
 
 CIQ.Tooltip = function (tooltipParams) {
-    let stx = tooltipParams.stx;
-    let showOhl = tooltipParams.ohl;
-    let showVolume = tooltipParams.volume;
-    let showSeries = tooltipParams.series;
-    let showStudies = tooltipParams.studies;
-    let showOverBarOnly = tooltipParams.showOverBarOnly;
+    var stx = tooltipParams.stx;
+    var showOhl = tooltipParams.ohl;
+    var showChange = tooltipParams.change;
+    var showVolume = tooltipParams.volume;
+    var showSeries = tooltipParams.series;
+    var showStudies = tooltipParams.studies;
+    var showOverBarOnly = tooltipParams.showOverBarOnly;
 
-    let node = $(stx.chart.container).find('stx-hu-tooltip')[0];
+    var node = $(stx.chart.container)
+        .find('stx-hu-tooltip')[0];
     if (!node) {
-        node = $('<stx-hu-tooltip></stx-hu-tooltip>').appendTo($(stx.chart.container))[0];
+        node = $('<stx-hu-tooltip></stx-hu-tooltip>')
+            .appendTo($(stx.chart.container))[0];
     }
     CIQ.Marker.Tooltip = function (params) {
-        if (!this.className) this.className = 'CIQ.Marker.Tooltip';
+        if (!this.className) {this.className = 'CIQ.Marker.Tooltip';}
         params.label = 'tooltip';
         CIQ.Marker.call(this, params);
     };
@@ -376,37 +387,37 @@ CIQ.Tooltip = function (tooltipParams) {
     CIQ.Marker.Tooltip.ciqInheritsFrom(CIQ.Marker, false);
 
     CIQ.Marker.Tooltip.sameBar = function (bar1, bar2) {
-        if (!bar1 || !bar2) return false;
-        if (+bar1.DT != +bar2.DT) return false;
-        if (bar1.Close != bar2.Close) return false;
-        if (bar1.Open != bar2.Open) return false;
-        if (bar1.Volume != bar2.Volume) return false;
+        if (!bar1 || !bar2) {return false;}
+        if (+bar1.DT != +bar2.DT) {return false;}
+        if (bar1.Close != bar2.Close) {return false;}
+        if (bar1.Open != bar2.Open) {return false;}
+        if (bar1.Volume != bar2.Volume) {return false;}
         return true;
     };
 
     CIQ.Marker.Tooltip.placementFunction = function (params) {
-        let offset = 30;
-        let stx = params.stx;
-        for (let i = 0; i < params.arr.length; i++) {
-            let marker = params.arr[i];
-            let bar = stx.barFromPixel(stx.cx);
-            let quote = stx.chart.dataSegment[bar];
+        var offset = 30;
+        var stx = params.stx;
+        for (var i = 0; i < params.arr.length; i++) {
+            var marker = params.arr[i];
+            var bar = stx.barFromPixel(stx.cx);
+            var quote = stx.chart.dataSegment[bar];
             var goodBar;
-            let overBar = true;
+            var overBar = true;
             var highPx,
                 lowPx;
 
             if (quote != 'undefined' && quote && quote.DT) {
                 goodBar = true;
-                if (quote.High) highPx = stx.pixelFromPrice(quote.High);
-                if (quote.Low) lowPx = stx.pixelFromPrice(quote.Low);
+                if (quote.High) {highPx = stx.pixelFromPrice(quote.High);}
+                if (quote.Low) {lowPx = stx.pixelFromPrice(quote.Low);}
                 if (!stx.highLowBars[stx.layout.chartType]) {
                     if (quote.Close) {
                         highPx = stx.pixelFromPrice(quote.Close) - 15;
                         lowPx = stx.pixelFromPrice(quote.Close) + 15;
                     }
                 }
-                if (showOverBarOnly && !(stx.cy >= highPx && stx.cy <= lowPx)) overBar = false;
+                if (showOverBarOnly && !(stx.cy >= highPx && stx.cy <= lowPx)) {overBar = false;}
             }
 
             if (
@@ -428,7 +439,7 @@ CIQ.Tooltip = function (tooltipParams) {
                 marker.lastBar = {};
                 return;
             }
-            if (CIQ.Marker.Tooltip.sameBar(stx.chart.dataSegment[bar], marker.lastBar) && bar != stx.chart.dataSegment.length - 1) return;
+            if (CIQ.Marker.Tooltip.sameBar(stx.chart.dataSegment[bar], marker.lastBar) && bar != stx.chart.dataSegment.length - 1) {return;}
             marker.lastBar = stx.chart.dataSegment[bar];
             if (parseInt(getComputedStyle(marker.node).width, 10) + offset < CIQ.ChartEngine.crosshairX) {
                 marker.node.style.left = 'auto';
@@ -444,78 +455,106 @@ CIQ.Tooltip = function (tooltipParams) {
 
     function renderFunction() {
         // the tooltip has not been initialized with this chart.
-        if (!this.huTooltip) return;
+        if (!this.huTooltip) {return;}
 
         // crosshairs are not on
         if (
             (stx.controls.crossX && stx.controls.crossX.style.display == 'none') ||
             (stx.controls.crossY && stx.controls.crossY.style.display == 'none')
-        ) return;
+        ) {
+            return;
+        }
 
-        let bar = this.barFromPixel(this.cx),
+        var bar = this.barFromPixel(this.cx),
             data = this.chart.dataSegment[bar];
         if (!data) {
             this.positionMarkers();
             return;
         }
-        if (CIQ.Marker.Tooltip.sameBar(data, this.huTooltip.lastBar) && bar != this.chart.dataSegment.length - 1) return;
-        let node = $(this.huTooltip.node);
-        node.find('[auto]').remove();
-        node.find('stx-hu-tooltip-field-value').html();
+        if (CIQ.Marker.Tooltip.sameBar(data, this.huTooltip.lastBar) && bar != this.chart.dataSegment.length - 1) {return;}
+        var node = $(this.huTooltip.node);
+        node.find('[auto]')
+            .remove();
+        node.find('stx-hu-tooltip-field-value')
+            .html();
 
-        let panel = this.chart.panel;
-        let yAxis = panel.yAxis;
-        let dupMap = {};
-        let fields = [];
+        var panel = this.chart.panel;
+        var yAxis = panel.yAxis;
+        var dupMap = {};
+        var fields = [];
         fields.push({
-            member: 'DT', display: 'DT', panel, yAxis,
+            member: 'DT',
+            display: 'DT',
+            panel: panel,
+            yAxis: yAxis
         });
         fields.push({
-            member: 'Close', display: 'Close', panel, yAxis,
+            member: 'Close',
+            display: 'Close',
+            panel: panel,
+            yAxis: yAxis
         });
         dupMap.DT = dupMap.Close = 1;
-        let showChange = false;
         if (showChange && CIQ.ChartEngine.isDailyInterval(this.layout.interval)) {
             fields.push({
-                member: 'Change', display: 'Change', panel, yAxis,
+                member: 'Change',
+                display: 'Change',
+                panel: panel,
+                yAxis: yAxis
             });
         }
         if (showOhl) {
             fields.push({
-                member: 'Open', display: 'Open', panel, yAxis,
+                member: 'Open',
+                display: 'Open',
+                panel: panel,
+                yAxis: yAxis
             });
             fields.push({
-                member: 'High', display: 'High', panel, yAxis,
+                member: 'High',
+                display: 'High',
+                panel: panel,
+                yAxis: yAxis
             });
             fields.push({
-                member: 'Low', display: 'Low', panel, yAxis,
+                member: 'Low',
+                display: 'Low',
+                panel: panel,
+                yAxis: yAxis
             });
             dupMap.Open = dupMap.High = dupMap.Low = 1;
         }
         if (showVolume) {
             fields.push({
-                member: 'Volume', display: 'Volume', panel: null, yAxis: null,
+                member: 'Volume',
+                display: 'Volume',
+                panel: null,
+                yAxis: null
             }); // null yAxis use raw value
             dupMap.Volume = 1;
         }
         if (showSeries) {
-            let renderers = this.chart.seriesRenderers;
-            for (let renderer in renderers) {
-                let rendererToDisplay = renderers[renderer];
+            var renderers = this.chart.seriesRenderers;
+            for (var renderer in renderers) {
+                var rendererToDisplay = renderers[renderer];
                 panel = this.panels[rendererToDisplay.params.panel];
                 yAxis = rendererToDisplay.params.yAxis;
-                if (!yAxis && rendererToDisplay.params.shareYAxis) yAxis = panel.yAxis;
-                for (let id = 0; id < rendererToDisplay.seriesParams.length; id++) {
-                    let seriesParams = rendererToDisplay.seriesParams[id];
+                if (!yAxis && rendererToDisplay.params.shareYAxis) {yAxis = panel.yAxis;}
+                for (var id = 0; id < rendererToDisplay.seriesParams.length; id++) {
+                    var seriesParams = rendererToDisplay.seriesParams[id];
                     // if a series has a symbol and a field then it maybe a object chain
-                    let sKey = seriesParams.symbol;
-                    let subField = seriesParams.field;
-                    if (!sKey) sKey = subField;
-                    else if (subField && sKey != subField) sKey = CIQ.createObjectChainNames(sKey, subField)[0];
-                    let display = seriesParams.display || seriesParams.symbol || seriesParams.field;
+                    var sKey = seriesParams.symbol;
+                    var subField = seriesParams.field;
+                    if (!sKey) {
+                        sKey = subField;
+                    } else if (subField && sKey != subField) {sKey = CIQ.createObjectChainNames(sKey, subField)[0];}
+                    var display = seriesParams.display || seriesParams.symbol || seriesParams.field;
                     if (sKey && !dupMap[display]) {
                         fields.push({
-                            member: sKey, display, panel, yAxis,
+                            member: sKey,
+                            display: display,
+                            panel: panel,
+                            yAxis: yAxis
                         });
                         dupMap[display] = 1;
                     }
@@ -523,63 +562,77 @@ CIQ.Tooltip = function (tooltipParams) {
             }
         }
         if (showStudies) {
-            for (let study in this.layout.studies) {
+            for (var study in this.layout.studies) {
                 panel = this.panels[this.layout.studies[study].panel];
                 yAxis = panel.yAxis; // after 4377 is merged: this.getYAxisByName(panel, study);
-                for (let output in this.layout.studies[study].outputMap) {
+                for (var output in this.layout.studies[study].outputMap) {
                     if (output && !dupMap[output]) {
                         fields.push({
-                            member: output, display: output, panel, yAxis,
+                            member: output,
+                            display: output,
+                            panel: panel,
+                            yAxis: yAxis
                         });
                         dupMap[output] = 1;
                     }
                 }
                 if (!dupMap[`${study}_hist`]) {
                     fields.push({
-                        member: `${study}_hist`, display: `${study}_hist`, panel, yAxis,
+                        member: `${study}_hist`,
+                        display: `${study}_hist`,
+                        panel: panel,
+                        yAxis: yAxis
                     });
                     fields.push({
-                        member: `${study}_hist1`, display: `${study}_hist1`, panel, yAxis,
+                        member: `${study}_hist1`,
+                        display: `${study}_hist1`,
+                        panel: panel,
+                        yAxis: yAxis
                     });
                     fields.push({
-                        member: `${study}_hist2`, display: `${study}_hist2`, panel, yAxis,
+                        member: `${study}_hist2`,
+                        display: `${study}_hist2`,
+                        panel: panel,
+                        yAxis: yAxis
                     });
                     dupMap[`${study}_hist`] = 1;
                 }
             }
         }
-        for (let f = 0; f < fields.length; f++) {
-            let obj = fields[f];
-            let name = obj.member;
-            let displayName = obj.display;
+        for (var f = 0; f < fields.length; f++) {
+            var obj = fields[f];
+            var name = obj.member;
+            var displayName = obj.display;
             panel = obj.panel;
             yAxis = obj.yAxis;
-            let labelDecimalPlaces = null;
+            var labelDecimalPlaces = null;
             if (yAxis) {
                 if (panel !== panel.chart.panel) {
                     // If a study panel, use yAxis settings to determine decimal places
-                    if (yAxis.decimalPlaces || yAxis.decimalPlaces === 0) labelDecimalPlaces = yAxis.decimalPlaces;
-                    else if (yAxis.maxDecimalPlaces || yAxis.maxDecimalPlaces === 0) labelDecimalPlaces = yAxis.maxDecimalPlaces;
+                    if (yAxis.decimalPlaces || yAxis.decimalPlaces === 0) {
+                        labelDecimalPlaces = yAxis.decimalPlaces;
+                    } else if (yAxis.maxDecimalPlaces || yAxis.maxDecimalPlaces === 0) {labelDecimalPlaces = yAxis.maxDecimalPlaces;}
                 } else {
                     // If a chart panel, then always display at least the number of decimal places as calculated by masterData (panel.chart.decimalPlaces)
                     // but if we are zoomed to high granularity then expand all the way out to the y-axis significant digits (panel.yAxis.printDecimalPlaces)
                     labelDecimalPlaces = Math.max(yAxis.printDecimalPlaces, panel.chart.decimalPlaces);
                     //	... and never display more decimal places than the symbol is supposed to be quoting at
-                    if (yAxis.maxDecimalPlaces || yAxis.maxDecimalPlaces === 0) labelDecimalPlaces = Math.min(labelDecimalPlaces, yAxis.maxDecimalPlaces);
+                    if (yAxis.maxDecimalPlaces || yAxis.maxDecimalPlaces === 0) {labelDecimalPlaces = Math.min(labelDecimalPlaces, yAxis.maxDecimalPlaces);}
                 }
             }
-            let dsField = null;
+            var dsField = null;
             // account for object chains
-            let tuple = CIQ.existsInObjectChain(data, name);
-            if (tuple) dsField = tuple.obj[tuple.member];
-            else if (name == 'Change') dsField = data.Close - data.iqPrevClose;
+            var tuple = CIQ.existsInObjectChain(data, name);
+            if (tuple) {
+                dsField = tuple.obj[tuple.member];
+            } else if (name == 'Change') {dsField = data.Close - data.iqPrevClose;}
 
-            let fieldName = displayName.replace(/^(Result )(.*)/, '$2');
+            var fieldName = displayName.replace(/^(Result )(.*)/, '$2');
             if ((dsField || dsField === 0) &&
                 (name == 'DT' || typeof dsField !== 'object' || dsField.Close || dsField.Close === 0)
             ) {
-                let fieldValue = '';
-                if (dsField.Close || dsField.Close === 0) dsField = dsField.Close;
+                var fieldValue = '';
+                if (dsField.Close || dsField.Close === 0) {dsField = dsField.Close;}
                 if (dsField.constructor == Number) {
                     if (!yAxis) { // raw value
                         fieldValue = dsField;
@@ -592,22 +645,29 @@ CIQ.Tooltip = function (tooltipParams) {
                     }
                 } else if (dsField.constructor == Date) {
                     if (name == 'DT' && this.controls.floatDate && this.controls.floatDate.innerHTML) {
-                        if (CIQ.ChartEngine.hideDates()) fieldValue = 'N/A';
-                        else fieldValue = this.controls.floatDate.innerHTML;
+                        if (CIQ.ChartEngine.hideDates()) {
+                            fieldValue = 'N/A';
+                        } else {
+                            fieldValue = this.controls.floatDate.innerHTML;
+                        }
                     } else {
                         fieldValue = CIQ.yyyymmdd(dsField);
                         if (!CIQ.ChartEngine.isDailyInterval(this.layout.interval)) {
-                            fieldValue += ` ${dsField.toTimeString().substr(0, 8)}`;
+                            fieldValue += ` ${dsField.toTimeString()
+                                .substr(0, 8)}`;
                         }
                     }
                 } else {
                     fieldValue = dsField;
                 }
-                let dedicatedField = node.find(`stx-hu-tooltip-field[field="${fieldName}"]`);
+                var dedicatedField = node.find(`stx-hu-tooltip-field[field="${fieldName}"]`);
                 if (dedicatedField.length) {
-                    dedicatedField.find('stx-hu-tooltip-field-value').html(fieldValue);
-                    let fieldNameField = dedicatedField.find('stx-hu-tooltip-field-name');
-                    if (fieldNameField.html() === '') { fieldNameField.html(this.translateIf(fieldName)); }
+                    dedicatedField.find('stx-hu-tooltip-field-value')
+                        .html(fieldValue);
+                    var fieldNameField = dedicatedField.find('stx-hu-tooltip-field-name');
+                    if (fieldNameField.html() === '') {
+                        fieldNameField.html(this.translateIf(fieldName));
+                    }
                 } else {
                     $('<stx-hu-tooltip-field auto></stx-hu-tooltip-field>')
                         .append($(`<stx-hu-tooltip-field-name>${this.translateIf(fieldName)}</stx-hu-tooltip-field-name>`))
@@ -615,10 +675,13 @@ CIQ.Tooltip = function (tooltipParams) {
                         .appendTo(node);
                 }
             } else {
-                let naField = node.find(`stx-hu-tooltip-field[field="${fieldName}"]`);
+                var naField = node.find(`stx-hu-tooltip-field[field="${fieldName}"]`);
                 if (naField.length) {
-                    let naFieldNameField = naField.find('stx-hu-tooltip-field-name');
-                    if (naFieldNameField.html() !== '') { naField.find('stx-hu-tooltip-field-value').html('n/a'); }
+                    var naFieldNameField = naField.find('stx-hu-tooltip-field-name');
+                    if (naFieldNameField.html() !== '') {
+                        naField.find('stx-hu-tooltip-field-value')
+                            .html('n/a');
+                    }
                 }
             }
         }
@@ -626,9 +689,9 @@ CIQ.Tooltip = function (tooltipParams) {
     }
 
     CIQ.ChartEngine.prototype.append('undisplayCrosshairs', function () {
-        let tt = this.huTooltip;
+        var tt = this.huTooltip;
         if (tt && tt.node) {
-            let node = $(tt.node);
+            var node = $(tt.node);
             if (node && node[0]) {
                 node[0].style.left = '-50000px';
                 node[0].style.right = 'auto';
@@ -643,7 +706,10 @@ CIQ.Tooltip = function (tooltipParams) {
     CIQ.ChartEngine.prototype.append('headsUpHR', renderFunction);
     CIQ.ChartEngine.prototype.append('createDataSegment', renderFunction);
     stx.huTooltip = new CIQ.Marker.Tooltip({
-        stx, xPositioner: 'bar', chartContainer: true, node,
+        stx: stx,
+        xPositioner: 'bar',
+        chartContainer: true,
+        node: node
     });
 };
 
@@ -660,19 +726,19 @@ CIQ.Tooltip = function (tooltipParams) {
  * @param {CIQ.ChartEngine} [params.stx] The chart object
  * @param {number} [params.minutes] Inactivity period in _minutes_.  Set to 0 to disable the sleep mode.
  * @param {number} [params.interval] Sleeping quote update interval in _seconds_.  During sleep mode, this is used for the update loop.
- * 									Set to non-zero positive number or defaults to 60.
+ *                                    Set to non-zero positive number or defaults to 60.
  * @param {function} [params.wakeCB] Optional callback function after waking
  * @param {function} [params.sleepCB] Optional callback function after sleeping
  * @constructor
  * @name  CIQ.InactivityTimer
  * @since 3.0.0
  * @example
- * 	new CIQ.InactivityTimer({stx:stxx, minutes:30, interval:15});  //30 minutes of inactivity will put chart into sleep mode, updating every 15 seconds
+ *    new CIQ.InactivityTimer({stx:stxx, minutes:30, interval:15});  //30 minutes of inactivity will put chart into sleep mode, updating every 15 seconds
  *
  */
 CIQ.InactivityTimer = function (params) {
-    if (!params.minutes) return;
-    if (!params.interval || params.interval < 0) params.interval = 60;
+    if (!params.minutes) {return;}
+    if (!params.interval || params.interval < 0) {params.interval = 60;}
     this.stx = params.stx;
     this.timeout = params.minutes;
     this.interval = params.interval;
@@ -685,26 +751,31 @@ CIQ.InactivityTimer = function (params) {
         window.clearTimeout(this.sleepTimer);
         this.last = new Date().getTime();
         if (this.sleeping) {
-            if (this.stx.quoteDriver) this.stx.quoteDriver.updateChartLoop();
+            if (this.stx.quoteDriver) {this.stx.quoteDriver.updateChartLoop();}
             this.sleeping = false;
             CIQ.unappendClassName(document.body, 'ciq-sleeping');
         }
         this.sleepTimer = window.setTimeout(this.sleepChart.bind(this), this.timeout * 60000);
-        if (this.wakeCB) wakeCB();
+        if (this.wakeCB) {wakeCB();}
     };
     this.sleepChart = function () {
         if (!this.sleeping) {
-            if (this.stx.quoteDriver) this.stx.quoteDriver.updateChartLoop(this.interval);
+            if (this.stx.quoteDriver) {this.stx.quoteDriver.updateChartLoop(this.interval);}
             this.sleeping = true;
             CIQ.appendClassName(document.body, 'ciq-sleeping');
         }
-        if (this.sleepCB) sleepCB();
+        if (this.sleepCB) {sleepCB();}
     };
-    $(document).on(
-        'mousemove mousedown touchstart touchmove pointerdown pointermove keydown wheel',
-        $('body'),
-        (function (self) { return function (e) { self.wakeChart(); }; }(this)),
-    );
+    $(document)
+        .on(
+            'mousemove mousedown touchstart touchmove pointerdown pointermove keydown wheel',
+            $('body'),
+            function (self) {
+                return function (e) {
+                    self.wakeChart();
+                };
+            }(this)
+        );
     this.wakeChart();
 };
 
@@ -736,43 +807,54 @@ CIQ.InactivityTimer = function (params) {
  * <br>&bull; 3.0.0 Now part of addOns.js. Previously provided as a standalone animation.js file
  * <br>&bull; 4.0.0 beacon only flashes for line charts. On Candles or bars it is suppressed as it produces an unnatural effect.
  * @example
- * 	new CIQ.Animation(stxx, {tension:0.3});  //Default animation with splining tension of 0.3
- * @since TBD Animation does not support aggregation types
+ *    new CIQ.Animation(stxx, {tension:0.3});  //Default animation with splining tension of 0.3
  *
  */
 CIQ.Animation = function (stx, animationParameters, easeMachine) {
-    let params = {
+    var params = {
         stayPut: false,
         ticksFromEdgeOfScreen: 5,
-        granularity: 1000000,
+        granularity: 1000000
     };
     animationParameters = CIQ.extend(params, animationParameters);
 
-    if (params.tension) stx.chart.tension = animationParameters.tension;
+    if (params.tension) {stx.chart.tension = animationParameters.tension;}
     stx.tickAnimator = easeMachine || new CIQ.EaseMachine(Math.easeOutCubic, 1000);
-    let scrollAnimator = new CIQ.EaseMachine(Math.easeInOutCubic, 200);
+    var scrollAnimator = new CIQ.EaseMachine(Math.easeInOutCubic, 1000);
 
-    let flashingColors = ['#0298d3', '#19bcfc', '#5dcffc', '#9ee3ff'];
-    let flashingColorIndex = 0;
-    let flashingColorThrottle = 20;
-    let flashingColorThrottleCounter = 0;
+    var flashingColors = ['#0298d3', '#19bcfc', '#5dcffc', '#9ee3ff'];
+    var flashingColorIndex = 0;
+    var flashingColorThrottle = 20;
+    var flashingColorThrottleCounter = 0;
 
-    let filterSession = false;
-    let nextBoundary = null;
+    var filterSession = false;
+    var nextBoundary = null;
 
     function initMarketSessionFlags() {
         filterSession = false;
         nextBoundary = null;
     }
 
-    stx.addEventListener(['symbolChange', 'layout'], (obj) => {
+    stx.addEventListener(['symbolChange', 'layout'], function (obj) {
         initMarketSessionFlags();
     });
 
     stx.prepend('updateChartData', function (appendQuotes, chart, params) {
-        let self = this;
+        var self = this;
         if (!chart) {
             chart = self.chart;
+        }
+        if (!chart || !chart.defaultChartStyleConfig || chart.defaultChartStyleConfig == 'none') {return;}
+        if (params && params.animationEntry) {return;}
+
+        function completeLastBar(value) {
+            for (var md = chart.masterData.length - 1; md >= 0; md--) {
+                var bar = chart.masterData[md];
+                if (bar.Close || bar.Close === 0) {
+                    bar.Close = value;
+                    return;
+                }
+            }
         }
 
         function unanimateScroll() {
@@ -781,25 +863,25 @@ CIQ.Animation = function (stx, animationParameters, easeMachine) {
                 self.micropixels = self.nextMicroPixels = self.previousMicroPixels; // <-- Reset self.nextMicroPixels here
                 chart.lastTickOffset = 0;
             }
-            if (chart.closePendingAnimation) {
-                chart.masterData[chart.masterData.length - 1].Close = chart.closePendingAnimation;
-                chart.closePendingAnimation = 0;
+            if (chart.closePendingAnimation !== null) {
+                completeLastBar(chart.closePendingAnimation);
+                chart.closePendingAnimation = null;
             }
         }
-        if (params !== undefined && params.animationEntry) return;
-        if (!chart || !chart.defaultChartStyleConfig || chart.defaultChartStyleConfig == 'none') return;
-        let tickAnimator = self.tickAnimator;
+
+        var tickAnimator = self.tickAnimator;
         // These chart types are the only types supported by animation
-        let supportedChartType = this.mainSeriesRenderer && this.mainSeriesRenderer.supportsAnimation;
+        var supportedChartType = this.mainSeriesRenderer && this.mainSeriesRenderer.supportsAnimation;
         if (supportedChartType) {
             if (!tickAnimator) {
                 alert('Animation plug-in can not run because the tickAnimator has not been declared. See instructions in animation.js');
                 return;
             }
+
             // If symbol changes then reset all of our variables
             if (this.prevSymbol != chart.symbol) {
                 this.prevQuote = 0;
-                chart.closePendingAnimation = 0;
+                chart.closePendingAnimation = null;
                 this.prevSymbol = chart.symbol;
             }
             unanimateScroll();
@@ -807,80 +889,83 @@ CIQ.Animation = function (stx, animationParameters, easeMachine) {
             if (appendQuotes.length > 2) {
                 return;
             }
-            let newParams = CIQ.clone(params);
-            if (!newParams) newParams = {};
-            newParams.animationEntry = true;
-            newParams.bypassGovernor = true;
-            newParams.noCreateDataSet = false;
-            // newParams.allowReplaceOHL = true;
-            newParams.firstLoop = true;
-            let symbol = this.chart.symbol;
-            let period = this.layout.periodicity;
-            let interval = this.layout.interval;
-            let timeUnit = this.layout.timeUnit;
+        }
+        var newParams = CIQ.clone(params);
+        if (!newParams) {newParams = {};}
+        newParams.animationEntry = true;
+        newParams.bypassGovernor = true;
+        newParams.noCreateDataSet = false;
+        //newParams.allowReplaceOHL = true;
+        newParams.firstLoop = true;
+        var symbol = this.chart.symbol;
+        var period = this.layout.periodicity;
+        var interval = this.layout.interval;
+        var timeUnit = this.layout.timeUnit;
 
-            function cb(quote, prevQuote, chartJustAdvanced) {
-                return function (newData) {
-                    let newClose = newData.Close;
-                    if (!chart.dataSet.length || symbol != chart.symbol || period != self.layout.periodicity || interval != self.layout.interval || timeUnit != self.layout.timeUnit) {
-                        // console.log ("---- STOP animating: Old",symbol,' New : ',chart.symbol, Date())
-                        unanimateScroll();
-                        tickAnimator.stop();
-                        return; // changed symbols mid animation
-                    }
-                    let q = CIQ.clone(quote);
-                    q.Close = Math.round(newClose * animationParameters.granularity) / animationParameters.granularity; // <<------ IMPORTANT! Use 1000000 for small price increments, otherwise animation will be in increments of .0001
-                    // q.Close = Math.round(newClose*chart.roundit)/chart.roundit; // to ensure decimal points don't go out too far for interim values
-                    if (chartJustAdvanced) {
-                        if (!q.Open && q.Open !== 0) q.Open = q.Close;
-                        if (!q.High && q.High !== 0) q.High = Math.max(q.Open, q.Close);
-                        if (!q.Low && q.Low !== 0) q.Low = Math.min(q.Open, q.Close);
-                    } else {
-                        if (quote.Close > prevQuote.High) q.High = q.Close;
-                        if (quote.Close < prevQuote.Low) q.Low = q.Close;
-                    }
-                    if (chart.animatingHorizontalScroll) {
-                        self.micropixels = newData.micropixels;
-                        chart.lastTickOffset = newData.lineOffset;
-                    }
-                    newParams.updateDataSegmentInPlace = !tickAnimator.hasCompleted;
-                    // console.log("animating: Old",symbol,' New : ',chart.symbol);
-                    self.appendMasterData([q], chart, newParams);
-                    newParams.firstLoop = false;
-                    if (tickAnimator.hasCompleted) {
-                        // console.log( 'animator has completed') ;
-                        // self.pendingScrollAdvance=false;
-                        // var possibleYAxisChange = chart.animatingHorizontalScroll;
-                        unanimateScroll();
-                        /* if (possibleYAxisChange) { // <---- Logic no longer necessary
-                         // After completion, one more draw for good measure in case our
-                         // displayed high and low have changed, which would trigger
-                         // the y-axis animation
-                         setTimeout(function(){
-                         self.draw();
-                         }, 0);
-                         } */
-                    }
-                };
-            }
+        function cb(quote, prevQuote, chartJustAdvanced) {
+            return function (newData) {
+                var newClose = newData.Close;
+                if (!chart.dataSet.length || symbol != chart.symbol || period != self.layout.periodicity || interval != self.layout.interval || timeUnit != self.layout.timeUnit) {
+                    //console.log ("---- STOP animating: Old",symbol,' New : ',chart.symbol, Date())
+                    tickAnimator.stop();
+                    unanimateScroll();
+                    return; // changed symbols mid animation
+                }
+                var q = CIQ.clone(quote);
+                q.Close = Math.round(newClose * animationParameters.granularity) / animationParameters.granularity; //<<------ IMPORTANT! Use 1000000 for small price increments, otherwise animation will be in increments of .0001
+                //q.Close = Math.round(newClose*chart.roundit)/chart.roundit; // to ensure decimal points don't go out too far for interim values
+                if (chartJustAdvanced) {
+                    if (!q.Open && q.Open !== 0) {q.Open = q.Close;}
+                    if (!q.High && q.High !== 0) {q.High = Math.max(q.Open, q.Close);}
+                    if (!q.Low && q.Low !== 0) {q.Low = Math.min(q.Open, q.Close);}
+                } else {
+                    if (quote.Close > prevQuote.High) {q.High = q.Close;}
+                    if (quote.Close < prevQuote.Low) {q.Low = q.Close;}
+                }
+                if (chart.animatingHorizontalScroll) {
+                    self.micropixels = newData.micropixels;
+                    chart.lastTickOffset = newData.lineOffset;
+                }
+                newParams.updateDataSegmentInPlace = !tickAnimator.hasCompleted;
+                //console.log("animating: Old",symbol,' New : ',chart.symbol);
+                self.updateChartData([q], chart, newParams);
+                newParams.firstLoop = false;
+                if (tickAnimator.hasCompleted) {
+                    //console.log( 'animator has completed') ;
+                    //self.pendingScrollAdvance=false;
+                    //var possibleYAxisChange = chart.animatingHorizontalScroll;
+                    unanimateScroll();
+                    /*if (possibleYAxisChange) { // <---- Logic no longer necessary
+                     // After completion, one more draw for good measure in case our
+                     // displayed high and low have changed, which would trigger
+                     // the y-axis animation
+                     setTimeout(function(){
+                     self.draw();
+                     }, 0);
+                     }*/
+                }
+            };
+        }
 
-            let quote = appendQuotes[appendQuotes.length - 1];
+        if (supportedChartType) {
+            var quote = appendQuotes[appendQuotes.length - 1];
             this.prevQuote = this.currentQuote(); // <---- prevQuote logic has been changed to prevent forward/back jitter when more than one tick comes in between animations
-            let chartJustAdvanced = false; // When advancing, we need special logic to deal with the open
+            var chartJustAdvanced = false; // When advancing, we need special logic to deal with the open
             if (period == 1 && appendQuotes.length == 2) { // Don't do this if consolidating
                 this.prevQuote = appendQuotes[0];
+                completeLastBar(this.prevQuote.Close);
                 appendQuotes.splice(1, 1);
             }
-            if (!quote || !this.prevQuote) return false;
+            if (!quote || !this.prevQuote) {return false;}
 
-            let dataZone = this.dataZone;
+            var dataZone = this.dataZone;
             if (this.extendedHours && chart.market.market_def) {
                 // Filter out unwanted sessions
-                let dtToFilter = quote.DT;
+                var dtToFilter = quote.DT;
                 if (CIQ.ChartEngine.isDailyInterval(interval)) {
                     filterSession = !chart.market.isMarketDate(dtToFilter);
                 } else if (!nextBoundary || nextBoundary <= dtToFilter) {
-                    let session = chart.market.getSession(dtToFilter, dataZone);
+                    var session = chart.market.getSession(dtToFilter, dataZone);
                     filterSession = (session !== '' && (!this.layout.marketSessions || !this.layout.marketSessions[session]));
                     nextBoundary = chart.market[filterSession ? 'getNextOpen' : 'getNextClose'](dtToFilter, dataZone, dataZone);
                 }
@@ -890,21 +975,27 @@ CIQ.Animation = function (stx, animationParameters, easeMachine) {
                 }
             }
 
-            let barSpan = period;
-            if (interval == 'second' || timeUnit == 'second') barSpan *= 1000;
-            else if (interval == 'minute' || timeUnit == 'minute') barSpan *= 60000;
-            if (!isNaN(interval)) barSpan *= interval;
-            if (interval == 'day' || timeUnit == 'day') chartJustAdvanced = quote.DT.getDate() != this.prevQuote.DT.getDate();
-            else if (interval == 'week' || timeUnit == 'week') chartJustAdvanced = quote.DT.getDate() >= this.prevQuote.DT.getDate() + 7;
-            else if (interval == 'month' || timeUnit == 'month') chartJustAdvanced = quote.DT.getMonth() != this.prevQuote.DT.getMonth();
-            else chartJustAdvanced = quote.DT.getTime() >= this.prevQuote.DT.getTime() + barSpan;
+            var barSpan = period;
+            if (interval == 'second' || timeUnit == 'second') {
+                barSpan *= 1000;
+            } else if (interval == 'minute' || timeUnit == 'minute') {barSpan *= 60000;}
+            if (!isNaN(interval)) {barSpan *= interval;}
+            if (interval == 'day' || timeUnit == 'day') {
+                chartJustAdvanced = quote.DT.getDate() != this.prevQuote.DT.getDate();
+            } else if (interval == 'week' || timeUnit == 'week') {
+                chartJustAdvanced = quote.DT.getDate() >= this.prevQuote.DT.getDate() + 7;
+            } else if (interval == 'month' || timeUnit == 'month') {
+                chartJustAdvanced = quote.DT.getMonth() != this.prevQuote.DT.getMonth();
+            } else {
+                chartJustAdvanced = quote.DT.getTime() >= this.prevQuote.DT.getTime() + barSpan;
+            }
 
-            let linearChart = !this.standaloneBars[this.layout.chartType];
+            var linearChart = (!this.mainSeriesRenderer || !this.mainSeriesRenderer.standaloneBars) && !this.standaloneBars[this.layout.chartType];
 
-            let beginningOffset = 0;
+            var beginningOffset = 0;
             if (chartJustAdvanced) {
                 if (this.animations.zoom.hasCompleted) {
-                    let candleWidth = this.layout.candleWidth;
+                    var candleWidth = this.layout.candleWidth;
                     if (chart.scroll <= chart.maxTicks) {
                         while (this.micropixels > 0) { // If micropixels is larger than a candle then scroll back further
                             chart.scroll++;
@@ -929,21 +1020,25 @@ CIQ.Animation = function (stx, animationParameters, easeMachine) {
                 }
             }
             chart.closePendingAnimation = quote.Close;
-            let start = (chartJustAdvanced && !linearChart) ? quote.Open : this.prevQuote.Close;
+            var start = (chartJustAdvanced && !linearChart) ? quote.Open : this.prevQuote.Close;
             tickAnimator.run(cb(quote, CIQ.clone(this.prevQuote), chartJustAdvanced), {
-                Close: start,
-                micropixels: this.nextMicroPixels,
-                lineOffset: beginningOffset,
-            }, { Close: quote.Close, micropixels: this.micropixels, lineOffset: 0 });
+                'Close': start,
+                'micropixels': this.nextMicroPixels,
+                'lineOffset': beginningOffset
+            }, {
+                'Close': quote.Close,
+                'micropixels': this.micropixels,
+                'lineOffset': 0
+            });
             return true; // bypass default behavior in favor of animation
         }
     });
 
     stx.prepend('renderYAxis', function (chart) {
-        if (this.grabbingScreen) return;
+        if (this.grabbingScreen) {return;}
 
-        let panel = chart.panel;
-        let arr = panel.yaxisRHS.concat(panel.yaxisLHS);
+        var panel = chart.panel;
+        var arr = panel.yaxisRHS.concat(panel.yaxisLHS);
 
         function closure(self) {
             return function (values) {
@@ -952,10 +1047,11 @@ CIQ.Animation = function (stx, animationParameters, easeMachine) {
                 self.draw();
             };
         }
-        let i;
+
+        var i;
         for (i = 0; i < arr.length; i++) {
-            let yAxis = arr[i];
-            let low = null,
+            var yAxis = arr[i];
+            var low = null,
                 high = null;
             if (panel.yAxis === yAxis) {
                 // initialize prev values
@@ -967,24 +1063,37 @@ CIQ.Animation = function (stx, animationParameters, easeMachine) {
                 }
 
                 // check for a change, if so we will spin off an animation
-
-                if (chart.prevLowValue != chart.lowValue || chart.prevHighValue != chart.highValue) {
-                    chart.animatingVerticalScroll = true;
-                    scrollAnimator.stop();
-                    let prevLow = chart.prevLowValue; let prevHigh = chart.prevHighValue;
-                    chart.prevLowValue = chart.lowValue;
-                    chart.prevHighValue = chart.highValue;
-                    scrollAnimator.run(closure(this), { low: prevLow, high: prevHigh }, { low: chart.lowValue, high: chart.highValue });
-                    return true;
+                if (!scrollAnimator.running) {chart.animatingVerticalScroll = false;}
+                if (chart.prevLowValue >= chart.lowValue && chart.prevHighValue <= chart.highValue) {
+                    if (chart.animatingVerticalScroll) {
+                        chart.highValue = chart.animatedHigh;
+                        chart.lowValue = chart.animatedLow;
+                    }
+                    return;
                 }
-                chart.animatingVerticalScroll = false;
+                if (yAxis.priceFormatter == CIQ.Comparison.priceFormat) {return;} // too difficult to animate y-axis change when it changes on every tick due to percentage axis on comparison
+
+                if (scrollAnimator.running) {scrollAnimator.stop();}
+                var prevLow = chart.prevLowValue;
+                var prevHigh = chart.prevHighValue;
+                chart.prevLowValue = chart.lowValue;
+                chart.prevHighValue = chart.highValue;
+                chart.animatingVerticalScroll = true;
+                scrollAnimator.run(closure(this), {
+                    'low': prevLow,
+                    'high': prevHigh
+                }, {
+                    'low': chart.lowValue,
+                    'high': chart.highValue
+                });
+
                 low = chart.animatedLow;
                 high = chart.animatedHigh;
             }
             this.calculateYAxisRange(panel, yAxis, low, high);
         }
 
-        let parameters = {};
+        var parameters = {};
 
         for (i = 0; i < arr.length; i++) {
             parameters.yAxis = arr[i];
@@ -995,34 +1104,34 @@ CIQ.Animation = function (stx, animationParameters, easeMachine) {
         return true; // bypass original kernel code
     });
 
-    stx.prepend('draw', function () {
-        if (this.chart.animatingVerticalScroll) {
+    /*stx.prepend("draw", function() {
+        if(this.chart.animatingVerticalScroll) {
             this.renderYAxis(this.chart);
             return true;
         }
-    });
+    });*/
 
     stx.append('draw', function () {
-        if (filterSession) return;
-        if (this.chart.dataSet && this.chart.dataSet.length && !this.standaloneBars[this.layout.chartType]) {
+        if (filterSession) {return;}
+        if (this.chart.dataSet && this.chart.dataSet.length && this.mainSeriesRenderer && this.mainSeriesRenderer.supportsAnimation) {
             if (flashingColorThrottleCounter % flashingColorThrottle === 0) {
                 flashingColorIndex++;
                 flashingColorThrottleCounter = 0;
             }
             flashingColorThrottleCounter++;
 
-            let context = this.chart.context;
-            let panel = this.chart.panel;
-            let currentQuote = this.currentQuote();
-            if (!currentQuote) return;
-            let price = currentQuote.Close;
-            let x = this.pixelFromTick(currentQuote.tick, this.chart);
-            if (this.chart.lastTickOffset) x += this.chart.lastTickOffset;
-            let y = this.pixelFromPrice(price, panel);
+            var context = this.chart.context;
+            var panel = this.chart.panel;
+            var currentQuote = this.currentQuote();
+            if (!currentQuote) {return;}
+            var price = currentQuote.Close;
+            var x = this.pixelFromTick(currentQuote.tick, this.chart);
+            if (this.chart.lastTickOffset) {x = x + this.chart.lastTickOffset;}
+            var y = this.pixelFromPrice(price, panel);
             if (this.chart.yAxis.left > x &&
-            this.chart.yAxis.top <= y &&
-            this.chart.yAxis.bottom >= y) {
-                if (flashingColorIndex >= flashingColors.length) flashingColorIndex = 0;
+                this.chart.yAxis.top <= y &&
+                this.chart.yAxis.bottom >= y) {
+                if (flashingColorIndex >= flashingColors.length) {flashingColorIndex = 0;}
                 context.beginPath();
                 context.moveTo(x, y);
                 context.arc(x, y, 2 + flashingColorIndex * 1.07, 0, Math.PI * 2, false);
@@ -1055,39 +1164,48 @@ CIQ.Animation = function (stx, animationParameters, easeMachine) {
  * @since 4.0.0
  * @example
  *  // instantiate a range slider
- * 	new CIQ.RangeSlider({stx:stxx,height:95,chartContainer:$("#chartContainer")});
+ *    new CIQ.RangeSlider({stx:stxx,height:95,chartContainer:$("#chartContainer")});
  *
  *  // display the slider
- * 	stxx.slider.display(true);
+ *    stxx.slider.display(true);
  *
  *  // hide the slider
- * 	stxx.slider.display(false);
+ *    stxx.slider.display(false);
  */
 CIQ.RangeSlider = function (params) {
-    let stx = params.stx;
+    var stx = params.stx;
     stx.slider = this;
-    let sliderHeight = params.height ? params.height : 95;
-    let chartContainer = params.chartContainer ? $(params.chartContainer) : $(params.stx.container);
+    var sliderHeight = params.height ? params.height : 95;
+    var chartContainer = params.chartContainer ? $(params.chartContainer) : $(params.stx.container);
 
-    let ciqSlider = $('<div class="ciq-slider"></div>');
-    let sliderContainer = $('<div class="chartContainer" id="sliderContainer"></div>');
-    ciqSlider.insertAfter(chartContainer.parent()).append(sliderContainer);
-    ciqSlider.css('height', `${sliderHeight}px`).css('padding-top', '5px').hide();
+    var ciqSlider = $('<div class="ciq-slider"></div>');
+    var sliderContainer = $('<div class="chartContainer" id="sliderContainer"></div>');
+    ciqSlider.insertAfter(chartContainer.parent())
+        .append(sliderContainer);
+    ciqSlider.css('height', `${sliderHeight}px`)
+        .css('padding-top', '5px')
+        .hide();
     sliderContainer.css('height', `${ciqSlider.height()}px`);
     sliderContainer.prop('dimensionlessCanvas', true);
-    let self = this.slider = new CIQ.ChartEngine({ container: sliderContainer[0], preferences: { labels: false, whitespace: 0 } });
+    var self = this.slider = new CIQ.ChartEngine({
+        container: sliderContainer[0],
+        preferences: {
+            labels: false,
+            whitespace: 0
+        }
+    });
     self.xaxisHeight = 30;
     self.manageTouchAndMouse = false;
     self.chart.yAxis.drawCurrentPriceLabel = false;
     self.chart.baseline.userLevel = false;
     self.initializeChart();
-    let subholder = self.chart.panel.subholder;
-    let style = stx.canvasStyle('stx_range_slider shading');
+    var subholder = self.chart.panel.subholder;
+    var style = stx.canvasStyle('stx_range_slider shading');
 
     this.display = function (on) {
         ciqSlider[on ? 'show' : 'hide']();
         stx.resizeChart();
-        if (!on) return;
+        if (!on) {return;}
         self.resizeChart();
         self.initializeChart();
         self.draw();
@@ -1101,21 +1219,21 @@ CIQ.RangeSlider = function (params) {
         this.drawSlider();
     };
     this.acceptLayoutChange = function (layout) {
-        let doDraw = false;
+        var doDraw = false;
         if (self.layout.rangeSlider !== layout.rangeSlider) {
             stx.slider.display(layout.rangeSlider);
         }
-        let relevantLayoutPropertiesForRedraw = ['chartType', 'aggregationType',
+        var relevantLayoutPropertiesForRedraw = ['chartType', 'aggregationType',
             'periodicity', 'interval', 'timeUnit',
             'chartScale', 'extended', 'marketSessions', 'rangeSlider',
             'kagi', 'range', 'renko', 'priceLines', 'pandf'];
-        relevantLayoutPropertiesForRedraw.forEach((x) => {
+        relevantLayoutPropertiesForRedraw.forEach(function (x) {
             if (!CIQ.equals(self.layout[x], layout[x])) {
                 self.layout[x] = layout[x];
                 doDraw = true;
             }
         });
-        if (!ciqSlider.is(':visible')) return;
+        if (!ciqSlider.is(':visible')) {return;}
         if (doDraw) {
             self.setMainSeriesRenderer();
             self.draw();
@@ -1123,12 +1241,14 @@ CIQ.RangeSlider = function (params) {
         }
     };
     this.copyData = function (chart) {
-        // if(!ciqSlider.is(":visible")) return;
-        if (!chart.dataSet) return;
-        let scrollOffset = 0;
-        if (stx.quoteDriver && stx.quoteDriver.behavior && stx.quoteDriver.behavior.bufferSize) { scrollOffset = stx.quoteDriver.behavior.bufferSize; }
+        //if(!ciqSlider.is(":visible")) return;
+        if (!chart.dataSet) {return;}
+        var scrollOffset = 0;
+        if (stx.quoteDriver && stx.quoteDriver.behavior && stx.quoteDriver.behavior.bufferSize) {
+            scrollOffset = stx.quoteDriver.behavior.bufferSize;
+        }
 
-        let myChart = self.chart;
+        var myChart = self.chart;
         myChart.symbol = chart.symbol;
         myChart.masterData = self.masterData = chart.masterData;
         myChart.dataSet = chart.dataSet;
@@ -1141,15 +1261,15 @@ CIQ.RangeSlider = function (params) {
         this.drawSlider();
     };
     this.drawSlider = function () {
-        if (!stx.chart.dataSet || !stx.chart.dataSet.length) return;
-        let chartSubholder = stx.chart.panel.subholder,
+        if (!stx.chart.dataSet || !stx.chart.dataSet.length) {return;}
+        var chartSubholder = stx.chart.panel.subholder,
             ctx = self.chart.context,
-            segmentImage = self.chart.segmentImage,
+            segmentImage = self.chart.segmentImage || [],
             halfCandle = self.layout.candleWidth / 2;
-        let left = self.tickLeft = Math.max(stx.tickFromPixel(chartSubholder.offsetLeft), 0);
-        let right = self.tickRight = Math.min(left + stx.chart.maxTicks - 2, stx.chart.dataSet.length - 1);
-        let pLeft = self.pixelLeft = self.pixelFromTick(left) - (segmentImage ? segmentImage[left].candleWidth / 2 : halfCandle);
-        let pRight = self.pixelRight = self.pixelFromTick(right) + (segmentImage ? segmentImage[right].candleWidth / 2 : halfCandle);
+        var left = self.tickLeft = Math.max(stx.tickFromPixel(chartSubholder.offsetLeft), 0);
+        var right = self.tickRight = Math.min(left + stx.chart.maxTicks - 2, stx.chart.dataSet.length - 1);
+        var pLeft = self.pixelLeft = self.pixelFromTick(left) - (segmentImage[left] ? segmentImage[left].candleWidth / 2 : halfCandle);
+        var pRight = self.pixelRight = self.pixelFromTick(right) + (segmentImage[right] ? segmentImage[right].candleWidth / 2 : halfCandle);
         ctx.save();
         ctx.beginPath();
         ctx.fillStyle = style.backgroundColor;
@@ -1172,21 +1292,21 @@ CIQ.RangeSlider = function (params) {
         ctx.stroke();
         ctx.restore();
     };
-    stx.addEventListener('layout', (obj) => {
+    stx.addEventListener('layout', function (obj) {
         obj.stx.slider.acceptLayoutChange(obj.stx.layout);
     });
-    stx.addEventListener('symbolChange', (obj) => {
-        if (obj.action == 'master') obj.stx.slider.setSymbol(obj.symbol);
+    stx.addEventListener('symbolChange', function (obj) {
+        if (obj.action == 'master') {obj.stx.slider.setSymbol(obj.symbol);}
     });
-    stx.addEventListener('symbolImport', (obj) => {
-        if (obj.action == 'master') obj.stx.slider.setSymbol(obj.symbol);
+    stx.addEventListener('symbolImport', function (obj) {
+        if (obj.action == 'master') {obj.stx.slider.setSymbol(obj.symbol);}
         obj.stx.slider.acceptLayoutChange(obj.stx.layout);
     });
-    stx.addEventListener('theme', (obj) => {
+    stx.addEventListener('theme', function (obj) {
         self.clearPixelCache();
         self.styles = {};
         self.chart.container.style.backgroundColor = '';
-        let helper = new CIQ.ThemeHelper({ stx: obj.stx });
+        var helper = new CIQ.ThemeHelper({ stx: obj.stx });
         helper.params.stx = self;
         helper.update();
     });
@@ -1194,71 +1314,79 @@ CIQ.RangeSlider = function (params) {
         this.slider.copyData(this.chart);
     });
     stx.append('draw', function () {
-        if (!ciqSlider.is(':visible')) return;
-        if (!self.chart.dataSet) return;
+        if (!ciqSlider.is(':visible')) {return;}
+        if (!self.chart.dataSet) {return;}
         self.chart.baseline.defaultLevel = this.chart.baseline.actualLevel;
         self.draw();
         this.slider.drawSlider();
     });
-    stx.prepend('resizeChart', () => {
-        let ciqChart = chartContainer.parent();
-        let heightOffset = ciqChart.height() - chartContainer.height();
-        ciqChart.height(ciqChart.parent().height() - (ciqSlider.is(':visible') ? sliderHeight : 0));
+    stx.prepend('resizeChart', function () {
+        var ciqChart = chartContainer.parent();
+        var heightOffset = ciqChart.height() - chartContainer.height();
+        ciqChart.height(ciqChart.parent()
+            .height() - (ciqSlider.is(':visible') ? sliderHeight : 0));
         chartContainer.height(ciqChart.height() - heightOffset);
     });
-    $(subholder).on('mousedown touchstart pointerdown', (e) => {
-        let start = e.offsetX || e.originalEvent.layerX;
-        if (!start && start !== 0) return; // wrong event
-        let s = $(self);
-        s.prop('startDrag', start)
-            .prop('startPixelLeft', self.pixelLeft)
-            .prop('startPixelRight', self.pixelRight);
-        let bw = parseInt(style.borderLeftWidth, 10);
-        if (start < self.pixelRight - bw) s.prop('needsLeft', true);
-        if (start > self.pixelLeft + bw) s.prop('needsRight', true);
-        if (CIQ.touchDevice) return;
-        CIQ.appendClassName(e.target, 'stx-drag-chart');
-    });
-    $(subholder).on('mouseup mouseout touchend pointerup', (e) => {
-        CIQ.unappendClassName(e.target, 'stx-drag-chart');
-        let s = $(self);
-        s.prop('startDrag', null)
-            .prop('needsLeft', false)
-            .prop('needsRight', false);
-    });
-    $(subholder).on('mousemove touchmove pointermove', (e) => {
-        let s = $(self);
-        let startDrag = s.prop('startDrag');
-        if (!startDrag && startDrag !== 0) return;
-        let touches = e.originalEvent.touches;
-        let movement = (touches && touches.length) ? touches[0].pageX - e.target.offsetLeft : e.offsetX;
-        if (!movement && movement !== 0) return; // wrong event
-        movement -= startDrag;
-        let tickLeft = self.tickLeft,
-            tickRight = self.tickRight;
-        let startPixelLeft = s.prop('startPixelLeft'),
-            startPixelRight = s.prop('startPixelRight');
-        let needsLeft = s.prop('needsLeft'),
-            needsRight = s.prop('needsRight');
-        if (needsLeft) {
-            if (startPixelLeft + movement < 0) movement = -startPixelLeft;
-            tickLeft = self.tickFromPixel(startPixelLeft + movement);
-            if (needsRight) tickRight = self.tickRight + tickLeft - self.tickLeft;
-        } else if (needsRight) {
-            tickRight = Math.min(self.tickFromPixel(startPixelRight + movement), stx.chart.dataSet.length - 1);
-        } else return;
-
-        let newCandleWidth = stx.chart.width / (tickRight - tickLeft + 1);
-        if (tickRight >= tickLeft && newCandleWidth >= stx.minimumCandleWidth) {
-            self.tickLeft = tickLeft;
-            self.tickRight = tickRight;
-            stx.chart.scroll = stx.chart.dataSet.length - tickLeft;
-            if (!needsLeft || !needsRight) {
-                stx.setCandleWidth(newCandleWidth);
+    $(subholder)
+        .on('mousedown touchstart pointerdown', function (e) {
+            var start = e.offsetX || e.originalEvent.layerX;
+            if (!start && start !== 0) {return;} // wrong event
+            var s = $(self);
+            s.prop('startDrag', start)
+                .prop('startPixelLeft', self.pixelLeft)
+                .prop('startPixelRight', self.pixelRight);
+            var bw = parseInt(style.borderLeftWidth, 10);
+            if (start < self.pixelRight - bw) {s.prop('needsLeft', true);}
+            if (start > self.pixelLeft + bw) {s.prop('needsRight', true);}
+            if (CIQ.touchDevice) {return;}
+            CIQ.appendClassName(e.target, 'stx-drag-chart');
+        });
+    $(subholder)
+        .on('mouseup mouseout touchend pointerup', function (e) {
+            CIQ.unappendClassName(e.target, 'stx-drag-chart');
+            var s = $(self);
+            s.prop('startDrag', null)
+                .prop('needsLeft', false)
+                .prop('needsRight', false);
+        });
+    $(subholder)
+        .on('mousemove touchmove pointermove', function (e) {
+            var s = $(self);
+            var startDrag = s.prop('startDrag');
+            if (!startDrag && startDrag !== 0) {return;}
+            var touches = e.originalEvent.touches;
+            var movement = (touches && touches.length) ? touches[0].pageX - e.target.offsetLeft : e.offsetX;
+            if (!movement && movement !== 0) {return;} // wrong event
+            movement -= startDrag;
+            var tickLeft = self.tickLeft,
+                tickRight = self.tickRight;
+            var startPixelLeft = s.prop('startPixelLeft'),
+                startPixelRight = s.prop('startPixelRight');
+            var needsLeft = s.prop('needsLeft'),
+                needsRight = s.prop('needsRight');
+            if (needsLeft) {
+                if (startPixelLeft + movement < 0) {movement = -startPixelLeft;}
+                tickLeft = self.tickFromPixel(startPixelLeft + movement);
+                if (needsRight) {tickRight = self.tickRight + tickLeft - self.tickLeft;}
             }
-            stx.micropixels = 0;
-            stx.draw();
-        }
-    });
+            else if (needsRight) {
+                tickRight = Math.min(self.tickFromPixel(startPixelRight + movement), stx.chart.dataSet.length - 1);
+            }
+            else {
+                return;
+            }
+
+            var newCandleWidth = stx.chart.width / (tickRight - tickLeft + 1);
+            if (tickRight >= tickLeft && newCandleWidth >= stx.minimumCandleWidth) {
+                self.tickLeft = tickLeft;
+                self.tickRight = tickRight;
+                stx.chart.scroll = stx.chart.dataSet.length - tickLeft;
+                if (!needsLeft || !needsRight) {
+                    stx.setCandleWidth(newCandleWidth);
+                }
+                stx.micropixels = 0;
+                stx.draw();
+            }
+        });
     this.copyData(stx.chart);
 };

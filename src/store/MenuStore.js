@@ -6,14 +6,14 @@ import Dialog from '../components/Dialog.jsx';
 const allMenues = [];
 
 export default class MenuStore {
-    constructor(mainStore) {
-        this.mainStore = mainStore;
+    constructor({getContext}) {
+        this.getContext = getContext;
         this.dialog = new DialogStore();
         reaction(() => this.open, () => this.blurInput());
         allMenues.push(this);
     }
 
-    get context() { return this.mainStore.chart.context; }
+    get context() { return this.getContext(); }
 
     @computed get open() { return this.dialog.open; }
     @action.bound setOpen(val) { this.dialog.setOpen(val); }

@@ -23,7 +23,6 @@ export default class TogglesStore {
     priorVectorType = null;
     @observable crosshair = false;
     @observable headsUp = false;
-    @observable draw = false;
 
     @action.bound setCrosshair(value) {
         this.stx.layout.crosshair = value;
@@ -41,26 +40,5 @@ export default class TogglesStore {
         this.stx.layout.headsUp = value;
         this.mainStore.chart.saveLayout();
         this.headsUp = value;
-    }
-
-    @action.bound setDraw(value) {
-        const ciqChart = this.context.topNode.querySelector('.ciq-chart');
-        if (value) {
-            CIQ.appendClassName(ciqChart, 'toolbar-on');
-        } else {
-            CIQ.unappendClassName(ciqChart, 'toolbar-on');
-        }
-        // remember last draw tool
-        if (value) {
-            this.stx.changeVectorType(this.priorVectorType);
-        } else {
-            this.priorVectorType = this.stx.currentVectorParameters.vectorType;
-            this.stx.changeVectorType('');
-        }
-
-        this.mainStore.chart.updateHeight();
-        this.stx.resizeChart();
-        this.draw = value;
-        return false;
     }
 }

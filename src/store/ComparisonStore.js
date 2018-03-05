@@ -14,7 +14,7 @@ const swatchColors = [
 export default class ComparisonStore {
     constructor(mainStore) {
         this.mainStore = mainStore;
-        this.menu = new MenuStore(mainStore);
+        this.menu = new MenuStore({getContext: () => this.context});
         this.categoricalDisplay = new CategoricalDisplayStore({
             getActiveItems: () => this.mainStore.chart.comparisonSymbols,
             getCategoricalItems: () => this.mainStore.chart.categorizedItems,
