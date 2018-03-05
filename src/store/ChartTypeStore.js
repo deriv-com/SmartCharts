@@ -1,15 +1,29 @@
 import { observable, action, computed, when } from 'mobx';
 import MenuStore from './MenuStore';
+import ListStore from './ListStore';
+
 
 export default class ChartTypeStore {
     constructor(mainStore) {
         this.mainStore = mainStore;
         when(() => this.context, this.onContextReady);
         this.menu = new MenuStore({getContext: () => this.context});
+
+        this.list = new ListStore({
+            getIsOpen: () => this.menu.open,
+            getContext: () => this.context,
+            onItemSelected: item => this.setType(item),
+            getItems: () => this.types,
+        });
     }
 
     get context() { return this.mainStore.chart.context; }
     get stx() { return this.context.stx; }
+
+    addIcon = type => {
+        const icon = `ciq-icon ciq-${type.id.replace('_', '-')}`;
+        return {icon, ...type};
+    }
 
     onContextReady = () => {
         const type = this.types.find(t => t.id === this.stx.layout.chartType);
@@ -31,19 +45,25 @@ export default class ChartTypeStore {
         this.type = type;
         this.menu.setOpen(false);
     }
+    @action.bound setAssetInformation(value) { this.assetInformation = value; }
 
     @computed get types() {
         const isTickSelected = this.mainStore.timeperiod.timeUnit === 'tick';
 
         return [
-            { id: 'mountain', name: 'Line', disable: false },
-            { id: 'line', name: 'Dot', disable: false },
-            { id: 'spline', name: 'Spline', disable: false },
-            { id: 'candle', name: 'Candle', disable: isTickSelected },
-            { id: 'colored_bar', name: 'OHLC', disable: isTickSelected },
-            { id: 'hollow_candle', name: 'Hollow Candle', disable: isTickSelected },
-        ];
+            { id: 'mountain', text: 'Line', disabled: false },
+            { id: 'line', text: 'Dot', disabled: false },
+            { id: 'colored_line', text: 'Colored Dot', disabled: false },
+            { id: 'spline', text: 'Spline', disabled: false },
+            { id: 'baseline', text: 'Baseline', disabled: false },
+            { id: 'candle', text: 'Candle', disabled: isTickSelected },
+            { id: 'colored_bar', text: 'OHLC', disabled: isTickSelected },
+            { id: 'hollow_candle', text: 'Hollow Candle', disabled: isTickSelected },
+        ]
+            .map(t => this.addIcon(t))
+            .map(t => ({ ...t, active: t.id === this.type.id }));
     }
 
-    @observable type = { id: 'mountain', name: 'Line', };
+    @observable type = this.addIcon({ id: 'mountain', text: 'Line' });
+    @observable assetInformation = false;
 }
