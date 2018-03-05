@@ -96,28 +96,6 @@ class Chart extends Component {
                                     <stx-hu-tooltip-field-value />
                                 </stx-hu-tooltip-field>
                             </stx-hu-tooltip>
-                            <cq-hu-static>
-                                <div>
-                                    <div>Price</div>
-                                    <cq-hu-price />
-                                    <div>Open</div>
-                                    <cq-hu-open />
-                                    <div>Close</div>
-                                    <cq-hu-close />
-                                </div>
-                                <div>
-                                    <div>Vol</div>
-                                    <cq-volume-section>
-                                        <cq-hu-volume />
-                                        <cq-volume-rollup />
-                                    </cq-volume-section>
-                                    <div>High</div>
-                                    <cq-hu-high />
-                                    <div>Low</div>
-                                    <cq-hu-low />
-                                </div>
-                            </cq-hu-static>
-
                         </div>
                     </div>
                 </div>

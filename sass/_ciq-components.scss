@@ -6,7 +6,7 @@ cq-context {
 	width: 100%;
 	font-family: $base-font;
 	font-size: $font-size-base;
-	overflow-x: hidden;
+	overflow: hidden;
 
 	input {
 		-webkit-user-select: text;
@@ -831,8 +831,6 @@ body:not(.break-sm) .sidenav-toggle {
 
 .stx-watch span {background-position: -150px -25px;}
 .stx-trade span {background-position: -200px -25px;}
-.ciq-HU span{background-position: -400px -25px;}
-.ciq-CH span {background-position: -443px -25px;}
 .ciq-sidenav span { background-position: -300px -25px; }
 
 
