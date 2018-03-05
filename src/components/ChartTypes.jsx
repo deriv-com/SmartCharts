@@ -43,14 +43,14 @@ const ChartTypes = ({
 );
 
 export default connect(
-    ({chartType}) => ({
+    ({chartType, assetInformation: ai}) => ({
         type: chartType.type,
         setType: chartType.setType,
         types: chartType.types,
         isOpened: chartType.open,
         setOpen: chartType.setOpen,
-        assetInformation: chartType.assetInformation,
-        setAssetInformation: chartType.setAssetInformation,
+        assetInformation: ai.visible,
+        setAssetInformation: ai.setVisible,
         Menu: chartType.menu.connect(Menu),
         TypeList: chartType.list.connect(List),
     })

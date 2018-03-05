@@ -45,7 +45,6 @@ export default class ChartTypeStore {
         this.type = type;
         this.menu.setOpen(false);
     }
-    @action.bound setAssetInformation(value) { this.assetInformation = value; }
 
     @computed get types() {
         const isTickSelected = this.mainStore.timeperiod.timeUnit === 'tick';
@@ -65,5 +64,4 @@ export default class ChartTypeStore {
     }
 
     @observable type = this.addIcon({ id: 'mountain', text: 'Line' });
-    @observable assetInformation = false;
 }

@@ -64,6 +64,7 @@ class Chart extends Component {
                     <div className="ciq-chart">
                         <Toolbar />
                         <div className="cq-top-ui-widgets">
+                            <AssetInformation />
                             <ChartTitle />
                             <cq-comparison >
                                 <cq-comparison-key
@@ -257,7 +258,6 @@ class Chart extends Component {
                     </cq-study-dialog>
                 </cq-dialog>
 
-                <AssetInformation />
                 <DrawToolsSettingsDialog />
             </cq-context>
         );
