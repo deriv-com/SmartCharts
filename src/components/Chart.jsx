@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import CIQ from 'chartiq'; // eslint-disable-line
 
-import '../../chartiq/iscroll';
 /* css + scss */
 import '../../css/stx-chart.css';
 import '../../sass/chartiq.scss';

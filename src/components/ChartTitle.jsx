@@ -15,7 +15,7 @@ const ChartTitle = ({
     AnimatedPrice,
 }) => {
     return (
-        <Menu className="cq-chart-title stx-show">
+        <Menu className="cq-chart-title stx-show cq-symbols-display">
             <Menu.Title>
                 {isVisible &&
                 <div className="cq-symbol-select-btn">
@@ -24,8 +24,8 @@ const ChartTitle = ({
                         <AnimatedPrice className="cq-current-price" />
                         <div className={`cq-change ${isPriceUp ? 'stx-up' : 'stx-down'}`}>
                             <span className="ico" />
-                            <span className="cq-todays-change">{todayChange}</span>
-                            (<span className="cq-todays-change-pct">{todayChangePercentage}</span>)
+                            <span className="cq-todays-change">{todayChange}</span>&nbsp;
+                            <span className="cq-todays-change-pct">({todayChangePercentage})</span>
                         </div>
                     </div>
                 </div>}

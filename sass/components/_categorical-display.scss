@@ -1,25 +1,52 @@
 .cq-categorical-display {
+    width: 44em;
     padding: 0 !important;
     display: flex;
     text-align: left;
+    border-radius: 3px;
     background-color: $DEFAULT-menu-bg;
     color: $DEFAULT-text-medium;
     opacity: 0;
-    //transition: opacity .20s .50s;
+    transition: opacity 1s;
     overflow: hidden;
     height: 0px;
-    width: 32em;
     @include box-shadow (0px, 2px, 4px, rgba(0, 0, 0, .2));
+    .cq-lookup-filters {
+        width: 40%;
+        border-right: 1px solid #e9e9ed;
+    }
     .cq-lookup-input  {
-        margin: 1.5em 0.7em 0.7em 0.7em;
+        margin: 1.5em 1.3em 1.1em 1.3em;
         > input {
-            line-height: 1.7em;
+            background: url('icons/common/ic-search-light.svg') no-repeat scroll 7px 11px;
+            padding-left: 30px;
+            line-height: 3em;
             font-size: 1em;
+            border: none;
+            outline: 0;
+            width: calc(100% - 30px);
+            border-bottom: 1px solid #f0f0f0;
+            @include placeholder {
+                color: #dfdfdf;
+            }
+            &:focus {
+                border-bottom: 1px solid #2A3052;
+            }
         }
     }
     .category {
-        margin: 0.4em 1em 1em 1em;
-        box-shadow: 2px 0 5px 0 rgba(0, 0, 0, 0.08);
+        padding-top: 2em;
+        &:last-child {
+            padding-bottom: 2.5em;
+        }
+    }
+    .category-title {
+        color: #333333;
+    }
+    .category-content {
+        margin: 0.4em 1em 0em 1em;
+        border: 1px solid #e9e9ed;
+        border-radius: 3px;
         background-color: white;
     }
     .subcategory {
@@ -31,22 +58,30 @@
     }
     .category-title {
         display: block;
-        font-size: 1.2em;
-        font-weight: bold;
-        padding: 0.5em 0.9em;
+        font-size: 1.4em;
+        font-weight: 500;
+        padding: 0.1em 0.7em;
     }
     .cq-filter {
-        padding-left: 0.9em;
-        line-height: 3em;
+        padding-left: 1.6em;
+        line-height: 3.4em;
         text-align: left;
         cursor: pointer;
-    }
-    .cq-filter:hover {
-        background-color: #efefef;
-        color: #000;
+        box-sizing: border-box;
+        transition: background-color 0.3s;
+        &:hover {
+            background-color: #f2f3f8;
+        }
+        &.cq-active-filter {
+            font-weight: 800;
+            color: #4C5794;
+            border-right: 2px solid #4C5794;
+            background-color: #f2f3f8;
+        }
     }
     .cq-item, .cq-active-item {
-        line-height: 3em;
+        padding: 10px 20px 0px 20px;
+        border-bottom: 1px solid #e9e9ed;
     }
     .cq-item[disabled] {
         pointer-events: none;
@@ -59,13 +94,143 @@
         }
 
     }
-    .results-panel {
+    .cq-scroll-panel {
         position: relative;
-        height: 300px;
-        overflow-y: scroll;
+        height: 500px;
+        width: 60%;
+        background-color: #f4f4f6
+    }
+    .ciq-item-display {
+        display: inline-block;
+        vertical-align: super;
     }
 }
 
-.cq-comparison-new > .cq-menu-dropdown {
-    left: -7em;
+.stxMenuActive .cq-categorical-display {
+    opacity: 1;
+    height: auto;
+}
+
+/* Active Options */
+.cq-categorical-display .cq-active-options {
+    float: right;
+    > span {
+        height:16px;
+        width: 16px;
+        display: inline-block;
+        margin-left: 5px;
+    }
+    .ic-delete {
+        margin-top: 5px;
+        background-image: url('icons/common/ic-delete-light.svg');
+        cursor: pointer;
+        &:hover {
+            background-color: #d1d1d1;
+        }
+    }
+    .ic-cmp-color > span {
+        display: inline-block;
+        width: 13px;
+        border-radius: 15px;
+        height: 2px;
+        vertical-align: super;
+        margin-bottom: 1px;
+    }
+
+}
+
+/* Active Symbol Category Filter Icons */
+.cq-symbols-display .cq-categorical-display .cq-lookup-filters .cq-filter {
+    .ciq-item-icon {
+        padding-left: 32px;
+        height: 16px;
+        display: inline-flex;
+        vertical-align: text-bottom;
+    }
+    @mixin category($cat-id) {
+        .ic-category-#{$cat-id} {
+            background: url('icons/active symbols/categories/ic-#{$cat-id}-normal-light.svg') no-repeat left;
+        }
+        &.cq-active-filter .ic-category-#{$cat-id} {
+            background: url('icons/active symbols/categories/ic-#{$cat-id}-active-light.svg') no-repeat left;
+        }
+    }
+    @include category(active);
+    @include category(forex);
+    @include category(indices);
+    @include category(stocks);
+    @include category(commodities);
+    @include category(volidx);
+}
+
+/* Active Symbol Icons */
+.cq-categorical-display .results-panel {
+    .ciq-item-icon {
+        margin-right: 8px;
+        height: 23px;
+        width: 32px;
+        display: inline-block;
+        background: no-repeat center;
+        background-image: url('icons/active symbols/ic-symbol-placeholder.svg');
+    }
+
+    @function flag($country) {
+        @return url('icons/flags/#{$country}.svg');
+    }
+
+    @mixin frx($a, $b) {
+        .ic-frx#{$a}#{$b} {
+            background: no-repeat bottom right, no-repeat top left;
+            background-image: flag($b), flag($a);
+        }
+    }
+
+    @mixin wld($a) {
+        .ic-wld#{$a} {
+            background-image: flag($a);
+        }
+    }
+
+    /* FOREX */
+    /* Major Pairs */
+    @include frx(aud, jpy);
+    @include frx(aud, usd);
+    @include frx(eur, aud);
+    @include frx(eur, chf);
+    @include frx(eur, jpy);
+    @include frx(eur, cad);
+    @include frx(eur, gbp);
+    @include frx(eur, usd);
+    @include frx(gbp, aud);
+    @include frx(gbp, jpy);
+    @include frx(gbp, usd);
+    @include frx(usd, cad);
+    @include frx(usd, chf);
+    @include frx(usd, jpy);
+    /* Minor Pairs */
+    @include frx(aud, cad);
+    @include frx(aud, chf);
+    @include frx(aud, nzd);
+    @include frx(aud, pln);
+    @include frx(eur, nzd);
+    @include frx(gbp, cad);
+    @include frx(gbp, chf);
+    @include frx(gbp, nok);
+    @include frx(gbp, nzd);
+    @include frx(gbp, pln);
+    @include frx(nzd, jpy);
+    @include frx(nzd, usd);
+    @include frx(usd, mxn);
+    @include frx(usd, nok);
+    @include frx(usd, pln);
+    @include frx(usd, sek);
+    /* Smart FX */
+    @include wld(aud);
+    @include wld(eur);
+    @include wld(gbp);
+    @include wld(usd);
+
+    /* INDICES */
+    .ic-spc  { background-image: flag(usd) };
+    .ic-as51 { background-image: flag(aud) };
 }

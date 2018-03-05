@@ -32,7 +32,7 @@ $font-size-base:		12px !default;
 $font-size-button:		11px !default;
 $font-size-toolbar:		14px !default;
 
-$soft-corners: 1px !default; // Set to zero to eliminate soft corners
+$soft-corners: 3px !default; // Set to zero to eliminate soft corners
 
 $nav-height: 45px !default;
 $footer-height: 45px !default;
@@ -85,6 +85,30 @@ $DEFAULT-border-strong:		#999 !default;
 	-webkit-box-sizing: $box;
        -moz-box-sizing: $box;
             box-sizing: $box;
+}
+
+@mixin optional-at-root($sel) {
+    @at-root #{if(not &, $sel, selector-append(&, $sel))} {
+        @content;
+    }
+}
+
+@mixin placeholder {
+    @include optional-at-root('::-webkit-input-placeholder') {
+        @content;
+    }
+
+    @include optional-at-root(':-moz-placeholder') {
+        @content;
+    }
+
+    @include optional-at-root('::-moz-placeholder') {
+        @content;
+    }
+
+    @include optional-at-root(':-ms-input-placeholder') {
+        @content;
+    }
 }
 
 @mixin rotate($degrees) {
