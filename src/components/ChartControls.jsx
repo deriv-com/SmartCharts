@@ -10,12 +10,12 @@ import DrawTools from './DrawTools.jsx';
 
 const ChartControls = () => (
     <div className="cq-chart-controls">
+        <Toggles />
         <ChartTypes />
-        <DrawTools />
         <StudyLegend />
         <Comparison />
+        <DrawTools />
         <Views />
-        <Toggles />
         <Timeperiod />
         <ChartSize />
     </div>

@@ -3,7 +3,6 @@
     justify-content: space-around;
     align-items: center;
     padding: 0;
-    width: 79px;
     padding: 0 5px;
     border-left: 1px solid #E9E9ED;
     .toggle-icon {
@@ -17,7 +16,7 @@
         }
 
         &.ciq-HU span {background-position: -400px -25px;}
-        &.ciq-CH span {background-position: -443px -25px;}
+        &.ciq-CH span {background-image: url('icons/chart-controls/ic-crosshair-normal.svg');}
         span {
             background-image:url(img/stx-sprite-ui.svg);
             display: inline-block;
