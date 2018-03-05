@@ -9,7 +9,10 @@ export default class CategoricalDisplayStore {
                 // Odd. Why is setTimeout needed here?
                 setTimeout(() =>  this.searchInput.focus(), 0);
                 if (!this.isInit) {this.init();}
-                setTimeout(() => this.scroll.refresh(), 0);
+                setTimeout(() => {
+                    this.scroll.refresh();
+                    this.updateScrollOffset();
+                }, 0);
             }
         });
         this.getCategoricalItems = getCategoricalItems;
@@ -25,6 +28,39 @@ export default class CategoricalDisplayStore {
     @observable filterText = '';
     @observable placeholderText = '';
     @observable activeCategoryKey = '';
+    scrollOffset = 0;
+
+    updateScrollOffset() {
+        this.scrollOffset = this.scrollPanel.getBoundingClientRect().top;
+    }
+
+    updateScrollSpy() {
+        if (this.filteredItems.length === 0) {return;}
+
+        let i = 0;
+        for (const category of this.filteredItems) {
+            const el = this.categoryElements[category.categoryId];
+            if (el === null) {
+                i++;
+                continue;
+            }
+            const r = el.getBoundingClientRect();
+            const top = r.top - this.scrollOffset;
+            if (top > 0) {break;}
+            i++;
+        }
+        // get first non-empty category
+        let idx = i - 1;
+        let id;
+        do {
+            id = this.filteredItems[idx].categoryId;
+            if (this.categoryElements[id] !== null) {
+                break;
+            }
+            idx--;
+        } while (idx >= 0);
+        this.activeCategoryKey = id;
+    }
 
     init() {
         this.isInit = true;
@@ -33,23 +69,12 @@ export default class CategoricalDisplayStore {
             mouseWheel: true,
             scrollbars: true,
         });
-        const self = this;
-        this.scroll.on('scroll', function () {
-            const best = {
-                key: null,
-                top: -1000*1000, // really small value
-            };
-            Object.keys(self.categoryElements).forEach(key => {
-                const el = self.categoryElements[key];
-                const r = el.getBoundingClientRect();
-                if(r.top < 200 && r.top > best.top) {
-                    best.top = r.top;
-                    best.key = key;
-                }
-            });
-            self.activeCategoryKey = best.key;
-            console.log(this.y, best.key);
-        });
+
+        this.scroll.on('scroll', this.updateScrollSpy.bind(this));
+
+        if (this.activeCategoryKey === '' && this.filteredItems.length > 0) {
+            this.activeCategoryKey = this.filteredItems[0].categoryId;
+        }
     }
 
     @computed get filteredItems() {
@@ -81,7 +106,6 @@ export default class CategoricalDisplayStore {
             }
         }
 
-        setTimeout(() => this.scroll.refresh(), 0);
         return filteredItems;
     }
 
@@ -91,11 +115,18 @@ export default class CategoricalDisplayStore {
 
     @action.bound setFilterText(filterText) {
         this.filterText = filterText;
+        setTimeout(() => {
+            this.scroll.refresh();
+            this.updateScrollSpy();
+        }, 0);
     }
 
     @action.bound handleFilterClick(category) {
-        const element = this.resultsPanel.querySelector(`.category-${category.categoryId}`);
-        if (element) {element.scrollIntoView();}
+        const el = this.categoryElements[category.categoryId];
+        if (el) {
+            this.activeCategoryKey = category.categoryId;
+            this.scroll.scrollToElement(el, 200);
+        }
     }
 
     @action.bound setSearchInput(element) {
