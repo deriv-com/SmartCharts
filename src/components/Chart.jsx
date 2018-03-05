@@ -37,6 +37,7 @@ import Menu from './Menu.jsx';
 import SettingsDialog from './SettingsDialog.jsx';
 import Toolbar from './Toolbar.jsx';
 import ChartTitle from './ChartTitle.jsx';
+import AssetInformation from './AssetInformation.jsx';
 import { MobxProvider, connect } from '../store/Connect';
 
 class Chart extends Component {
@@ -62,6 +63,7 @@ class Chart extends Component {
                     <div className="ciq-chart">
                         <Toolbar />
                         <div className="cq-top-ui-widgets">
+                            <AssetInformation />
                             <ChartTitle />
                             <cq-comparison >
                                 <cq-comparison-key

@@ -6,43 +6,75 @@
             border-radius: 2px;
         }
     }
-    cq-menu-dropdown {
-        width: 12em;
+    .ciq-toggle-asset-information {
+        font-size: 10px;
+        display: flex;
+        color: black;
+        justify-content: space-between;
+        align-items: center;
+        position: relative;
+        top: -5px;
+    }
+    .cq-menu-dropdown {
+        width: 200px;
+        padding: 16px;
+        padding-bottom: 0;
+        background: #fafafa;
+        box-sizing: border-box;
     }
     .ciq-title {
         display: flex;
         align-items: center;
         width: 9.3em;
-    }
-    .ciq-row {
         cursor: pointer;
-        &.disabled {
-            opacity: 0.2;
-            cursor: auto;
-            pointer-events: none;
+        .ciq-icon {
+            background-position: 50% 50%;
+            background-repeat: no-repeat;
         }
     }
-    .ciq-icon {
-        width: 16px !important;
-        height: 16px !important;
-        margin: 0 5px !important;
+    .ciq-list {
+        .ciq-list-item {
+            padding: 0;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            &.active {
+                color: white;
+                background-color: #4C5794;
+            }
+        }
     }
     .ciq-mountain {
-        background: url('icons/chart types/ic-line.svg');
+        background-image: url('icons/chart types/ic-line.svg');
     }
     .ciq-line {
-        background: url('icons/chart types/ic-dot.svg');
+        background-image: url('icons/chart types/ic-dot.svg');
     }
     .ciq-candle {
-        background: url('icons/chart types/ic-candle.svg');
+        background-image: url('icons/chart types/ic-candle.svg');
     }
     .ciq-colored-bar {
-        background: url('icons/chart types/ic-ohlc.svg');
+        background-image: url('icons/chart types/ic-ohlc.svg');
+    }
+    .ciq-colored-line {
+        background-image: url('icons/chart types/ic-dot.svg');
+    }
+    .ciq-baseline {
+        background-image: url('icons/chart types/ic-line.svg');
     }
     .ciq-hollow-candle {
-        background: url('icons/chart types/ic-hollow-candle.svg');
+        background-image: url('icons/chart types/ic-hollow-candle.svg');
     }
     .ciq-spline {
-        background: url('icons/chart types/ic-spline.svg');
+        background-image: url('icons/chart types/ic-spline.svg');
+    }
+    .ciq-icon {
+        width: 16px;
+        height: 16px;
+        margin-left: 8px;
+        margin-right: 8px;
+    }
+    .ciq-icon-text {
+        line-height: 32px;
     }
 }

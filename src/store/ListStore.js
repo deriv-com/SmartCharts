@@ -6,7 +6,7 @@ export default class ListStore {
     constructor({ getIsOpen, getContext, getItems, onItemSelected }) {
         this.getIsOpen = getIsOpen;
         this.getContext = getContext;
-        this.getItems = getItems; // items : [{id: '', text: ''}]
+        this.getItems = getItems; // items : [{id: '', text: '', disabled?: false, active?: false}]
         this.onItemSelected = onItemSelected;
 
         reaction(() => this.getIsOpen(), this.claimKeyboard);
@@ -54,7 +54,9 @@ export default class ListStore {
         }
         if (key === 32 || key === 'enter') {
             const item = this.getItems()[this.selectedIdx];
-            this.onItemSelected(item);
+            if(!item.disabled) {
+                this.onItemSelected(item);
+            }
         }
 
         if (key === 'up') {
@@ -76,6 +78,5 @@ export default class ListStore {
         onItemClick: this.onItemClick,
         onItemRef: this.onItemRef,
         onRootRef: this.onRootRef,
-        height: 250,
     }));
 }

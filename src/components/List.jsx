@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import '../../sass/_ciq-list.scss';
 
 const List = ({
@@ -7,26 +7,35 @@ const List = ({
     items,
     onItemClick,
     onItemRef,
-    onRootRef
+    onRootRef,
+    children,
 }) => {
+    const hasFunctionAsChildren = (typeof children == 'function');
+    const renderRow = hasFunctionAsChildren ? children : (item => item.text);
+    const itemClassName = (it, idx) => {
+        return 'ciq-list-item' +
+               ` ${idx === selectedIdx ? 'selected' : ''}` +
+               ` ${it.disabled ? 'disabled' : ''}` +
+               ` ${it.active ? 'active' : ''}`;
+    };
     return (
         <div
             className='ciq-list'
-            style={{height: `${height}px`}}
+            style={height && {height: `${height}px`}}
             ref={onRootRef}
         >
             {items.map((it, idx) => (
                 <div
                     key={it.id}
-                    className={`ciq-list-item ${idx === selectedIdx ? 'selected' : ''}`}
+                    className={itemClassName(it, idx)}
                     onClick={() => onItemClick(idx, it)}
                     ref={ref => onItemRef(idx, ref)}
                 >
-                    {it.text}
+                    {renderRow(it)}
                 </div>
             ))}
         </div>
     );
 };
 
-export default List; 
+export default List;
