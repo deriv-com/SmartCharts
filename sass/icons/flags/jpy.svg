@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="24px" height="16px" viewBox="0 0 24 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 48.2 (47327) - http://www.bohemiancoding.com/sketch -->
+    <title>icons/flags/japan jpy</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="icons/flags/japan-jpy">
+            <g id="Icon/Flag/Japan" fill-rule="nonzero">
+                <path d="M22.2025781,0.0130952381 L1.79742187,0.0130952381 C0.804703125,0.0130952381 0,0.830571429 0,1.83904762 L0,14.1609524 C0,15.169381 0.804703125,15.9869048 1.79742187,15.9869048 L22.2025781,15.9869048 C23.19525,15.9869048 24,15.1694286 24,14.1609524 L24,1.83904762 C24,0.830571429 23.1952969,0.0130952381 22.2025781,0.0130952381 Z" id="White" fill="#FFFFFF"></path>
+                <ellipse id="Red" fill="#ED293F" cx="12" cy="7.99995238" rx="4.5515625" ry="4.62380952"></ellipse>
+            </g>
+            <rect id="border" stroke-opacity="0.04" stroke="#000000" x="0.5" y="0.5" width="23" height="15" rx="2"></rect>
+        </g>
+    </g>
+</svg>

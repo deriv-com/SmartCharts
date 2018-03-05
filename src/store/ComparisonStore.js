@@ -1,6 +1,7 @@
 import { observable, action, computed } from 'mobx';
 import MenuStore from './MenuStore';
 import CategoricalDisplayStore from './CategoricalDisplayStore';
+import React from 'react';
 import { connect } from './Connect';
 
 const swatchColors = [
@@ -18,11 +19,20 @@ export default class ComparisonStore {
             getActiveItems: () => this.mainStore.chart.comparisonSymbols,
             getCategoricalItems: () => this.mainStore.chart.categorizedItems,
             getIsShown: () => this.menu.open,
-            onSelectItem: this.onSelectItem.bind(this)
+            activeOptions: [
+                { id: 'cmp-color', renderChild: (item) => <span style={{backgroundColor: item.symbolObj.color}} /> },
+                { id: 'delete', onClick: this.onDeleteItem.bind(this) },
+            ],
+            onSelectItem: this.onSelectItem.bind(this),
+            placeholderText: '"AUD/JPY" or "Apple"',
         });
     }
 
     get context() { return this.mainStore.chart.context; }
+
+    @action.bound onDeleteItem(symbolObj) {
+        this.context.stx.removeSeries(symbolObj.symbol);
+    }
 
     @action.bound onSelectItem(symbolObj) {
         const context = this.context;

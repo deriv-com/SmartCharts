@@ -6,6 +6,7 @@ cq-context {
 	width: 100%;
 	font-family: $base-font;
 	font-size: $font-size-base;
+	overflow-x: hidden;
 
 	input {
 		-webkit-user-select: text;
@@ -32,7 +33,6 @@ cq-context {
 	@import "components/chart-types";
 	@import "components/chart-controls";
 	@import "components/chart-templates";
-	@import "components/symbol-lookup";
 	@import "components/chart-title";
 	@import "components/timeperiod";
 	@import "components/toggles";

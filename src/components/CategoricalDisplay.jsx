@@ -10,10 +10,44 @@ const CategoricalDisplay = ({
     hasActiveItems,
     filteredItems,
     getItemCount,
-    onSelectItem
+    onSelectItem,
+    activeOptions,
+    setScrollPanel,
+    setCategoryElement,
+    activeCategoryKey,
 }) => {
-    const renderItem = (item, k) => <div className={`cq-item ${item.selected ? 'selected ' : ''}`} onClick={() => onSelectItem(item.symbolObj)} key={k} disabled={!item.enabled}>{item.display}</div>;
-    const renderActiveItem = (item, k) => <div className="cq-active-item" key={k}>{item.display}</div>;
+    const renderIcon = (item) => {return item.itemId ? <span className={`ciq-item-icon ic-${item.itemId.toLowerCase()}`} /> : '';};
+    const renderText = (item) => <span className="ciq-item-display">{item.display}</span>;
+
+    const renderItem = (item, k) =>
+        <div
+            className={`cq-item ${item.selected ? 'selected ' : ''}`}
+            onClick={() => onSelectItem(item.symbolObj)}
+            key={k}
+            disabled={!item.enabled}
+        >
+            {renderIcon(item)}{renderText(item)}
+        </div>;
+
+    const renderActiveItem = (item, k) =>
+        <div
+            className="cq-active-item"
+            key={k}
+        >
+            {renderIcon(item)}{renderText(item)}
+            {activeOptions &&
+            <span className="cq-active-options">
+                {activeOptions.map((opt, i) =>
+                    <span
+                        key={`active-opt-${i}`}
+                        className={`ic-${opt.id}`}
+                        onClick={() => opt.onClick && opt.onClick(item.symbolObj)}
+                    >
+                        {opt.renderChild && opt.renderChild(item)}
+                    </span>
+                )}
+            </span>}
+        </div>;
 
     return (
         <div className="cq-categorical-display">
@@ -33,30 +67,37 @@ const CategoricalDisplay = ({
                 </div>
                 { filteredItems.map((category, i) =>
                     <div key={i}
-                        className="cq-filter"
+                        className={`cq-filter ${activeCategoryKey === category.categoryId ? 'cq-active-filter' : ''}`}
                         onClick={() => handleFilterClick(category)}
                     >
+                        <span className={`ciq-item-icon ic-category-${category.categoryId}`}/>
                         {category.categoryName}
                     </div>
                 )}
             </div>
-            <div className="results-panel" ref={setResultsPanel}>
-                { filteredItems.map((category, i) =>
-                    getItemCount(category) > 0 &&
-                    <Fragment key={i}>
-                        <div className={`category-title category-${category.categoryId}`}>{category.categoryName}</div>
-                        <div className="category">
-                            { category.hasSubcategory ? category.data.map((subcategory, j) =>
-                                getItemCount(subcategory) > 0 &&
-                                <Fragment key={j}>
-                                    <div className="subcategory">{subcategory.subcategoryName}</div>
-                                    { subcategory.data.map(renderItem)}
-                                </Fragment>
-                            ) : category.data.map((i === 0 && hasActiveItems) ? renderActiveItem : renderItem)
-                            }
+            <div className="cq-scroll-panel" ref={setScrollPanel}>
+                <div className="results-panel" ref={setResultsPanel}>
+                    { filteredItems.map((category, i) =>
+                        getItemCount(category) > 0 &&
+                        <div
+                            key={`cat-${i}`}
+                            className={`category category-${category.categoryId}`}
+                            ref={(el) => setCategoryElement(el, category.categoryId)}
+                        >
+                            <div className="category-title">{category.categoryName}</div>
+                            <div className="category-content">
+                                { category.hasSubcategory ? category.data.map((subcategory, j) =>
+                                    getItemCount(subcategory) > 0 &&
+                                    <Fragment key={j}>
+                                        <div className="subcategory">{subcategory.subcategoryName}</div>
+                                        { subcategory.data.map(renderItem)}
+                                    </Fragment>
+                                ) : category.data.map((i === 0 && hasActiveItems) ? renderActiveItem : renderItem)
+                                }
+                            </div>
                         </div>
-                    </Fragment>
-                ) }
+                    ) }
+                </div>
             </div>
         </div>
     );

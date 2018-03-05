@@ -1,18 +1,81 @@
 import { action, observable, computed, when, reaction } from 'mobx';
 import { connect } from './Connect';
+import IScroll from 'iscroll/build/iscroll-probe';
 
 export default class CategoricalDisplayStore {
-    constructor({ getCategoricalItems, onSelectItem, getIsShown, getActiveItems }) {
+    constructor({ getCategoricalItems, onSelectItem, getIsShown, getActiveItems, activeOptions, placeholderText }) {
         reaction(getIsShown, () => {
-            if (getIsShown) {this.searchInput.focus();}
+            if (getIsShown()) {
+                // Odd. Why is setTimeout needed here?
+                setTimeout(() =>  this.searchInput.focus(), 0);
+                if (!this.isInit) {this.init();}
+                setTimeout(() => {
+                    this.scroll.refresh();
+                    this.updateScrollOffset();
+                }, 0);
+            }
         });
         this.getCategoricalItems = getCategoricalItems;
         this.onSelectItem = onSelectItem;
         this.getActiveItems = getActiveItems;
+        this.activeOptions = activeOptions;
+        this.placeholderText = placeholderText;
+        this.categoryElements = {};
+
+        this.isInit = false;
     }
 
     @observable filterText = '';
     @observable placeholderText = '';
+    @observable activeCategoryKey = '';
+    scrollOffset = 0;
+
+    updateScrollOffset() {
+        this.scrollOffset = this.scrollPanel.getBoundingClientRect().top;
+    }
+
+    updateScrollSpy() {
+        if (this.filteredItems.length === 0) {return;}
+
+        let i = 0;
+        for (const category of this.filteredItems) {
+            const el = this.categoryElements[category.categoryId];
+            if (el === null) {
+                i++;
+                continue;
+            }
+            const r = el.getBoundingClientRect();
+            const top = r.top - this.scrollOffset;
+            if (top > 0) {break;}
+            i++;
+        }
+        // get first non-empty category
+        let idx = i - 1;
+        let id;
+        do {
+            id = this.filteredItems[idx].categoryId;
+            if (this.categoryElements[id] !== null) {
+                break;
+            }
+            idx--;
+        } while (idx >= 0);
+        this.activeCategoryKey = id;
+    }
+
+    init() {
+        this.isInit = true;
+        this.scroll = new IScroll(this.scrollPanel, {
+            probeType: 2,
+            mouseWheel: true,
+            scrollbars: true,
+        });
+
+        this.scroll.on('scroll', this.updateScrollSpy.bind(this));
+
+        if (this.activeCategoryKey === '' && this.filteredItems.length > 0) {
+            this.activeCategoryKey = this.filteredItems[0].categoryId;
+        }
+    }
 
     @computed get filteredItems() {
         let filteredItems = JSON.parse(JSON.stringify(this.getCategoricalItems())); // Deep clone array
@@ -46,13 +109,24 @@ export default class CategoricalDisplayStore {
         return filteredItems;
     }
 
+    @action.bound setCategoryElement(element, id) {
+        this.categoryElements[id] = element;
+    }
+
     @action.bound setFilterText(filterText) {
         this.filterText = filterText;
+        setTimeout(() => {
+            this.scroll.refresh();
+            this.updateScrollSpy();
+        }, 0);
     }
 
     @action.bound handleFilterClick(category) {
-        const element = this.resultsPanel.querySelector(`.category-${category.categoryId}`);
-        if (element) {element.scrollIntoView();}
+        const el = this.categoryElements[category.categoryId];
+        if (el) {
+            this.activeCategoryKey = category.categoryId;
+            this.scroll.scrollToElement(el, 200);
+        }
     }
 
     @action.bound setSearchInput(element) {
@@ -61,9 +135,10 @@ export default class CategoricalDisplayStore {
 
     @action.bound setResultsPanel(element) {
         this.resultsPanel = element;
-        this.resultsPanel.addEventListener(CIQ.wheelEvent, (e) => {
-            e.stopPropagation();
-        });
+    }
+
+    @action.bound setScrollPanel(element) {
+        this.scrollPanel = element;
     }
 
     @action.bound getItemCount(category) {
@@ -79,6 +154,7 @@ export default class CategoricalDisplayStore {
         return count;
     }
 
+    // TODO: we shouldn't need to do this after we shift this out of ChartContainer
     @action.bound handleInputClick() {
         this.searchInput.focus();
     }
@@ -90,12 +166,13 @@ export default class CategoricalDisplayStore {
             hasSubcategory: false,
             data: []
         };
-        for (const symbol of actives) {
+        for (const item of actives) {
             category.data.push({
                 enabled: true,
                 selected: false,
-                display: symbol.symbolObject.name,
-                symbolObj: symbol.symbolObject
+                display: item.symbolObject.name,
+                itemId: item.symbolObject.symbol,
+                symbolObj: item.symbolObject
             });
         }
         return category;
@@ -112,5 +189,12 @@ export default class CategoricalDisplayStore {
         handleInputClick: this.handleInputClick,
         onSelectItem: this.onSelectItem,
         hasActiveItems: (this.getActiveItems !== undefined),
+        activeOptions: this.activeOptions,
+        placeholderText: this.placeholderText,
+        scrollId: this.scrollId,
+        init: this.init,
+        activeCategoryKey: this.activeCategoryKey,
+        setScrollPanel: this.setScrollPanel,
+        setCategoryElement: this.setCategoryElement,
     }))
 }

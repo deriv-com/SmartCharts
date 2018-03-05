@@ -82,10 +82,7 @@ $selected-background-color: #e4e6f1;
         cq-menu-dropdown, .cq-menu-dropdown {
             bottom: 3.6em;
             margin-top: 0;
-            border-top: 1px solid #bbb;
-            border-top: none;
             box-shadow: 0 0.375em 0.625em 0 rgba(0, 0, 0, 0.14);
-            border-radius: 0.125em;
             .ciq-icon {
                 width: 16px;
                 height: 16px;
@@ -134,4 +131,8 @@ $selected-background-color: #e4e6f1;
     .ciq-ic-comparison {
         background: url('icons/comparison/ic-comparison-normal-light.svg');
     }
+}
+
+.cq-comparison-new > .cq-menu-dropdown {
+    left: -14.2em;
 }
