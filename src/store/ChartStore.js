@@ -216,6 +216,7 @@ class ChartStore {
 
         const stxx = this.stxx = new CIQ.ChartEngine({
             container: this.rootNode.querySelector('.chartContainer.primary'),
+            controls: {chartControls:null} // hide the default zoom buttons
         });
 
         // Animation (using tension requires splines.js)

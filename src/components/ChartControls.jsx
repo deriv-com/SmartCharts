@@ -9,7 +9,7 @@ import ChartSize from './ChartSize.jsx';
 import DrawTools from './DrawTools.jsx';
 
 const ChartControls = () => (
-    <div id='chartControls'>
+    <div className="cq-chart-controls">
         <ChartTypes />
         <DrawTools />
         <StudyLegend />
