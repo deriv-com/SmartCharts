@@ -134,76 +134,9 @@ html, body {
     z-index: 30;
 }
 
-#chartSize, #chartSize span { /* Chart Control element defaults */
-    height: 25px;
-    display: inline-block;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-}
-
-#chartSize { /* Chart size container */
-    margin: 0px auto;
-    position: relative;
-    -webkit-border-radius: 3px;
-    -moz-border-radius: 3px;
-    border-radius: 3px;
-    background: #fafafa;
-    -webkit-box-shadow: 0px 1px 2px rgba(0, 0, 0, .2);
-    -moz-box-shadow: 0px 1px 2px rgba(0, 0, 0, .2);
-    box-shadow: 0px 1px 1px rgba(0, 0, 0, .2);
-}
-
-#chartSize:after { /* Divider between zoom buttons */
-    position: absolute;
-    top: 4px;
-    bottom: 4px;
-    width: 1px;
-    left: 36px;
-    content: "";
-    display: block;
-    background: rgba(0, 0, 0, .2);
-}
-
-#chartSize span { /* Chart size (+) and (-) buttons */
-    background-image: url(img/stx-sprite-panels.svg);
-    width: 35px;
-    cursor: pointer;
-    transition: opacity .25s, transform .2s;
-    -webkit-transition: opacity .25s, -webkit-transform .2s;
-    opacity: .6;
-}
-
-.no-svg #chartSize span { /*Chart size (+) and (-) buttons for non SVG browsers */
-    background-image: url(img/stx-sprite-panels.png);
-}
-
-#chartSize .stx-zoom-out { /* Zoom out */
-    background-position: -45px -25px;
-    -webkit-border-radius: 3px 0 0 3px;
-    -moz-border-radius: 3px 0 0 3px;
-    border-radius: 3px 0 0 3px;
-}
-
-#chartSize .stx-zoom-in { /* Zoom in */
-    background-position: -95px -25px;
-    -webkit-border-radius: 0 3px 3px 0;
-    -moz-border-radius: 0 3px 3px 0;
-    border-radius: 0 3px 3px 0;
-}
-
-#chartSize span:hover,
-#chartSize span:active,
 .stx_jump_today:hover,
 .stx_jump_today:active { /* Make buttons full opacity on hover or hit */
     opacity: 1;
-}
-
-#chartSize span:active { /* Scale up when active */
-    -webkit-transform: scale(1.2, 1.2);
-    -ms-transform: scale(1.2, 1.2);
-    transform: scale(1.2, 1.2);
 }
 
 .stx_jump_today { /* Button  jumping to today's data */

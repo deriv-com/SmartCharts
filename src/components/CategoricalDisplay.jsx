@@ -55,7 +55,6 @@ const CategoricalDisplay = ({
                 <div className="cq-lookup-input">
                     <input
                         ref={setSearchInput}
-                        onClick={handleInputClick}
                         onChange={e => setFilterText(e.target.value)}
                         type="text"
                         spellCheck="off"

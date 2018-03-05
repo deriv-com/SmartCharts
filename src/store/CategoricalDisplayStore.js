@@ -154,11 +154,6 @@ export default class CategoricalDisplayStore {
         return count;
     }
 
-    // TODO: we shouldn't need to do this after we shift this out of ChartContainer
-    @action.bound handleInputClick() {
-        this.searchInput.focus();
-    }
-
     getActiveCategory(actives) {
         const category = {
             categoryName: 'Active',
