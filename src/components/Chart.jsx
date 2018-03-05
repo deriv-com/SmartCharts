@@ -63,8 +63,8 @@ class Chart extends Component {
                     <div className="ciq-chart">
                         <Toolbar />
                         <div className="cq-top-ui-widgets">
-                            <AssetInformation />
                             <ChartTitle />
+                            <AssetInformation />
                             <cq-comparison >
                                 <cq-comparison-key
                                     dangerouslySetInnerHTML={{
