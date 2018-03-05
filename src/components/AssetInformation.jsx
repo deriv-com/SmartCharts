@@ -13,11 +13,11 @@ const AssetInformation = ({
     <div
         className={`ciq-asset-information ${!visible ? 'hide' : ''}`}
     >
-        {price && <div className='info'> <div>PRICE:</div> <div>{price}</div> </div>}
-        {open && <div className='info'> <div>OPEN:</div> <div>{open}</div> </div>}
-        {close && <div className='info'> <div>CLOSE:</div> <div>{close}</div> </div>}
-        {high && <div className='info'> <div>HIGH:</div> <div>{high}</div> </div>}
-        {low && <div className='info'> <div>LOW:</div> <div>{low}</div> </div>}
+        {price && <div> <div>PRICE:</div> <div>{price}</div> </div>}
+        {open && <div> <div>OPEN:</div> <div>{open}</div> </div>}
+        {close && <div> <div>CLOSE:</div> <div>{close}</div> </div>}
+        {high && <div> <div>HIGH:</div> <div>{high}</div> </div>}
+        {low && <div> <div>LOW:</div> <div>{low}</div> </div>}
     </div>
 );
 
