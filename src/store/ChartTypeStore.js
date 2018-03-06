@@ -1,7 +1,14 @@
 import { observable, action, computed, when } from 'mobx';
 import MenuStore from './MenuStore';
 import ListStore from './ListStore';
-
+import {
+    LineIcon,
+    DotIcon,
+    CandleIcon,
+    OHLCIcon,
+    HollowCandleIcon,
+    SplineIcon
+} from '../components/Icons.jsx';
 
 export default class ChartTypeStore {
     constructor(mainStore) {
@@ -19,11 +26,6 @@ export default class ChartTypeStore {
 
     get context() { return this.mainStore.chart.context; }
     get stx() { return this.context.stx; }
-
-    addIcon = type => {
-        const icon = `ciq-icon ciq-${type.id.replace('_', '-')}`;
-        return {icon, ...type};
-    }
 
     onContextReady = () => {
         const type = this.types.find(t => t.id === this.stx.layout.chartType);
@@ -50,18 +52,16 @@ export default class ChartTypeStore {
         const isTickSelected = this.mainStore.timeperiod.timeUnit === 'tick';
 
         return [
-            { id: 'mountain', text: 'Line', disabled: false },
-            { id: 'line', text: 'Dot', disabled: false },
-            { id: 'colored_line', text: 'Colored Dot', disabled: false },
-            { id: 'spline', text: 'Spline', disabled: false },
-            { id: 'baseline', text: 'Baseline', disabled: false },
-            { id: 'candle', text: 'Candle', disabled: isTickSelected },
-            { id: 'colored_bar', text: 'OHLC', disabled: isTickSelected },
-            { id: 'hollow_candle', text: 'Hollow Candle', disabled: isTickSelected },
-        ]
-            .map(t => this.addIcon(t))
-            .map(t => ({ ...t, active: t.id === this.type.id }));
+            { id: 'mountain', text: 'Line', disabled: false, icon: LineIcon },
+            { id: 'line', text: 'Dot', disabled: false, icon: DotIcon },
+            { id: 'colored_line', text: 'Colored Dot', disabled: false, icon: DotIcon },
+            { id: 'spline', text: 'Spline', disabled: false, icon: SplineIcon },
+            { id: 'baseline', text: 'Baseline', disabled: false, icon: LineIcon },
+            { id: 'candle', text: 'Candle', disabled: isTickSelected, icon: CandleIcon },
+            { id: 'colored_bar', text: 'OHLC', disabled: isTickSelected, icon: OHLCIcon },
+            { id: 'hollow_candle', text: 'Hollow Candle', disabled: isTickSelected, icon: HollowCandleIcon },
+        ].map(t => ({ ...t, active: t.id === this.type.id }));
     }
 
-    @observable type = this.addIcon({ id: 'mountain', text: 'Line' });
+    @observable type = { id: 'mountain', text: 'Line', icon: LineIcon };
 }

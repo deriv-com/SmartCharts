@@ -1,16 +1,18 @@
 import React, { Component } from 'react';
 import {connect} from '../store/Connect';
+import {CrosshairIcon} from './Icons.jsx';
 
 const ChartTypes = ({
     toggleCrosshair,
     crosshairClass,
 }) => (
-    <div className="icon-toggles ciq-toggles">
-        <div onClick={toggleCrosshair}
-            className={`ciq-CH toggle-icon ${crosshairClass}`}
-        >
-            <span className='tooltip' tooltip-title='Crosshair'></span>
-        </div>
+    <div
+        className="icon-toggles ciq-toggles"
+    >
+        <CrosshairIcon
+            onClick={toggleCrosshair}
+            className={`tooltip ${crosshairClass}`}
+            tooltip-title='Crosshair' />
     </div>
 );
 
@@ -20,4 +22,3 @@ export default connect(
         crosshairClass : toggles.crosshair ? 'active' : '',
     })
 )(ChartTypes);
-
