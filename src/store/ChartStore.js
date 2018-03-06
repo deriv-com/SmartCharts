@@ -52,25 +52,9 @@ class ChartStore {
         }
     }
 
-    _extractComparisonSymbols(layoutDat) {
-        const comparisons = [];
-        for (const symbol of layoutDat.symbols) {
-            if (symbol.parameters && symbol.parameters.isComparison) {
-                comparisons.push({
-                    symbolObject: {
-                        ...symbol.symbolObject,
-                        color: symbol.parameters.color
-                    }
-                });
-            }
-        }
-        this.comparisonSymbols = comparisons;
-    }
-
     saveLayout() {
         const layoutDat = this.stxx.exportLayout(true);
         const json = JSON.stringify(layoutDat);
-        this._extractComparisonSymbols(layoutDat);
         CIQ.localStorageSetItem(`layout-${this.id}`, json);
     }
 
@@ -78,7 +62,6 @@ class ChartStore {
         let layoutDat = CIQ.localStorage.getItem(`layout-${this.id}`);
         if (layoutDat === null) {return;}
         layoutDat = JSON.parse(layoutDat);
-        this._extractComparisonSymbols(layoutDat);
 
         stx.importLayout(layoutDat, {
             managePeriodicity: true,
@@ -272,7 +255,27 @@ class ChartStore {
 
         $(window).resize(this.resizeScreen.bind(this));
 
-        // stxx.addInjection()
+        stxx.append('createDataSet', this.updateComparisons);
+    }
+
+    updateComparisons = () => {
+        let stx = this.context.stx;
+        let q = stx.currentQuote();
+        const comparisons = [];
+        if (q) {
+            for (const s in stx.chart.series) {
+                const d = stx.chart.series[s];
+                const p = d.parameters;
+                const price = d.lastQuote ? d.lastQuote.Close : undefined;
+
+                comparisons.push({
+                    color: p.color,
+                    price,
+                    symbolObject: p.symbolObject,
+                });
+            }
+        }
+        this.comparisonSymbols = comparisons;
     }
 
     @computed get categorizedItems() {
@@ -314,7 +317,7 @@ class ChartStore {
                     selected,
                     itemId: data.symbol,
                     display: data.name,
-                    symbolObj: data,
+                    dataObject: data,
                 });
             }
 
