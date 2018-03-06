@@ -3,9 +3,6 @@ import {connect} from '../store/Connect';
 import '../../sass/_ciq-dialog.scss';
 
 class Dialog extends Component {
-    componentDidMount() { this.props.init(); }
-    componentWillUnmount() { this.props.destroy(); }
-
     render() {
         const {
             open,

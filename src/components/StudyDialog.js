@@ -144,6 +144,7 @@ class StudyDialog extends DialogContentTag {
         // Generate a "helper" which tells us how to create a dialog
         this.helper = new CIQ.Studies.DialogHelper(params);
         let dialog = $(this);
+        console.warn(params, this.helper);
 
         dialog.find('.title').text(this.helper.title);
 

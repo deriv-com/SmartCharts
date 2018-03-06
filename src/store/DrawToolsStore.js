@@ -88,18 +88,28 @@ export default class DrawToolsStore {
                 var dontDeleteMe = drawing.abort();
                 const parameters = CIQ.Drawing.getDrawingParameters(this.stx, drawing.name);
 
+                const typeMap = {
+                    color: 'colorpicker',
+                    fillColor: 'colorpicker',
+                    pattern: 'pattern',
+                    axisLabel: 'switch',
+                    font: 'font',
+                    lineWidth: 'none',
+                };
                 this.settingsDialog.items = Object.keys(parameters)
-                    .filter(key => key !== 'font')
                     .map(key => ({
                         id: key,
                         title: formatCamelCase(key),
-                        value: parameters[key],
+                        value: drawing[key],
+                        defaultValue: parameters[key],
+                        type: typeMap[key],
                     }));
                 this.activeDrawing = drawing;
                 this.activeDrawing.highlighted = false;
                 this.settingsDialog.title = formatCamelCase(drawing.name);
                 this.settingsDialog.setOpen(true);
-                console.warn(parameters, drawing, dontDeleteMe);
+
+                console.warn(parameters, drawing);
                 return true;
             }
         }
