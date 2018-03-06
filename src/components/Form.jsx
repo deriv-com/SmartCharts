@@ -12,18 +12,16 @@ export const Slider = ({
     onChange,
 }) => {
     return (
-        <Fragment>
-            <div className={`cq-slider ${className}`}>
-                <input
-                    type='range'
-                    value={value}
-                    min={min}
-                    max={max}
-                    step={step}
-                    onChange={e => onChange(+e.target.value)}
-                ></input>
-            </div>
-        </Fragment>
+        <div className={`cq-slider ${className}`}>
+            <input
+                type='range'
+                value={value}
+                min={min}
+                max={max}
+                step={step}
+                onChange={e => onChange(+e.target.value)}
+            ></input>
+        </div>
     );
 };
 

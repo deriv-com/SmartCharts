@@ -51,7 +51,7 @@ class Chart extends Component {
     }
 
     render() {
-        const { DrawToolsSettingsDialog } = this.props;
+        const { DrawToolsSettingsDialog, StudySettingsDialog } = this.props;
         return (
             <cq-context ref={(root) => { this.root = root; }}>
                 <cq-color-picker>
@@ -217,15 +217,17 @@ class Chart extends Component {
                 </cq-dialog>
 
                 <DrawToolsSettingsDialog />
+                <StudySettingsDialog />
             </cq-context>
         );
     }
 }
 
 export default connect(
-    ({chart, drawTools}) => ({
+    ({chart, drawTools, studies}) => ({
         contextPromise: chart.contextPromise,
         init: chart.init,
+        StudySettingsDialog : studies.settingsDialog.connect(SettingsDialog),
         DrawToolsSettingsDialog : drawTools.settingsDialog.connect(SettingsDialog),
     })
 )(Chart);

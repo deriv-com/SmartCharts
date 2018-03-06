@@ -30,7 +30,7 @@ const ChartTypes = ({
                     onChange={setAssetInformation}
                 />
             </div>
-            <TypeList height={257}>
+            <TypeList height={260}>
                 {t => (
                     <React.Fragment>
                         <span className={t.icon} />
