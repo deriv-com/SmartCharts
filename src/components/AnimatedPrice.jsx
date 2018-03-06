@@ -1,5 +1,4 @@
 import React from 'react';
-import { connect } from '../store/Connect';
 
 const AnimatedPrice = ({
     showStable,

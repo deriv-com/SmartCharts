@@ -167,7 +167,7 @@ export default class CategoricalDisplayStore {
                 selected: false,
                 display: item.symbolObject.name,
                 itemId: item.symbolObject.symbol,
-                symbolObj: item.symbolObject
+                dataObject: item
             });
         }
         return category;
