@@ -1,15 +1,19 @@
 .ciq-asset-information {
-    position: absolute;
+    position: relative;
     z-index: +1;
     background: transparent;
     display: flex;
-    left: 15px;
-    top: 75px;
+    margin: 15px 0px;
+    left: 10px;
+    top: 10px;
     justify-content: flex-start;
     opacity: 1;
-    transform: opacity 0.1s;
+    transition: all 0.1s;
+    height: 14px;
     &.hide {
+        height: 0;
         opacity: 0;
+        margin: 0;
         pointer-events: none;
     }
     > div {

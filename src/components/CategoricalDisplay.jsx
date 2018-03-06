@@ -22,7 +22,7 @@ const CategoricalDisplay = ({
     const renderItem = (item, k) =>
         <div
             className={`cq-item ${item.selected ? 'selected ' : ''}`}
-            onClick={() => onSelectItem(item.symbolObj)}
+            onClick={() => onSelectItem(item.dataObject)}
             key={k}
             disabled={!item.enabled}
         >
@@ -41,7 +41,7 @@ const CategoricalDisplay = ({
                     <span
                         key={`active-opt-${i}`}
                         className={`ic-${opt.id}`}
-                        onClick={() => opt.onClick && opt.onClick(item.symbolObj)}
+                        onClick={() => opt.onClick && opt.onClick(item.dataObject)}
                     >
                         {opt.renderChild && opt.renderChild(item)}
                     </span>
@@ -55,7 +55,6 @@ const CategoricalDisplay = ({
                 <div className="cq-lookup-input">
                     <input
                         ref={setSearchInput}
-                        onClick={handleInputClick}
                         onChange={e => setFilterText(e.target.value)}
                         type="text"
                         spellCheck="off"

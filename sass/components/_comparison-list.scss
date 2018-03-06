@@ -1,0 +1,69 @@
+/* Comparisons */
+.cq-comparison {
+    $icon-size: 1.3em;
+    position: relative;
+    z-index: 3;
+    width: fit-content;
+    margin-top: 25px;
+    margin-left: 12px;
+    display: block;
+    .cq-comparison-label {
+        margin-left: 0.8em;
+    }
+    .cq-comparison-item {
+        position: relative;
+        justify-content: space-between;
+        margin-top: 5px;
+        padding: 5px 10px;
+        font-size: 12px;
+        height: 18px;
+        opacity: 1;
+        transition: background .20s 0s, padding .20s 0s, opacity .20s .20s, height .20s .40s, font-size .0s .40s, margin .2s .40s;
+        &, .left, .right {
+            display: flex;
+            align-items: center;
+        }
+        .right {
+            justify-content: flex-end;
+            margin-left: 1.5em;
+        }
+        &:hover {
+            background: white;
+            @include border-radius($soft-corners);
+            box-shadow: 0 2px 8px 0 rgba(42, 48, 82, 0.14);
+        }
+    }
+    .cq-comparison-swatch {
+        bottom: 1px;
+        width: $icon-size;
+        height: $icon-size;
+    }
+    .cq-comparison-item .ciq-close {
+        transition: opacity .20s .0s;
+        margin-left: 5px;
+        height: $icon-size;
+        width: $icon-size;
+        background: url('icons/common/ic-close-light.svg') no-repeat center;
+        cursor: pointer;
+        opacity: 0;
+    }
+    .cq-comparison-item:hover .ciq-close {
+        opacity: .6;
+    }
+    .cq-comparison-item .ciq-close:hover,
+    .cq-comparison-item .ciq-close:active {
+        opacity: 1;
+    }
+    .cq-comparison-loader {
+        display: none;
+        height: $icon-size;
+        width: $icon-size;
+        margin-left: 10px;
+        background-image: url('img/loading-spin.svg');
+        background-size: cover;
+    }
+    .cq-comparison-loader.stx-show {
+        display: inline-flex;
+    }
+}
+

@@ -6,7 +6,7 @@ cq-context {
 	width: 100%;
 	font-family: $base-font;
 	font-size: $font-size-base;
-	overflow-x: hidden;
+	overflow: hidden;
 
 	input {
 		-webkit-user-select: text;
@@ -37,6 +37,8 @@ cq-context {
 	@import "components/timeperiod";
 	@import "components/toggles";
 	@import "components/categorical-display";
+	@import "components/chart-size";
+	@import "components/comparison-list";
 }
 
 /* --------------------------------------------------------- FIELDS, SELECTS, INPUTS --------------------------------------------------------- */
@@ -830,8 +832,6 @@ body:not(.break-sm) .sidenav-toggle {
 
 .stx-watch span {background-position: -150px -25px;}
 .stx-trade span {background-position: -200px -25px;}
-.ciq-HU span{background-position: -400px -25px;}
-.ciq-CH span {background-position: -443px -25px;}
 .ciq-sidenav span { background-position: -300px -25px; }
 
 
@@ -1951,189 +1951,6 @@ cq-share-dialog {
 
 .cq-up {
 	color: #85c730;
-}
-
-/* Comparisons */
-cq-comparison {
-	position:relative;
-	margin:5px 0 0 10px;
-	display:none;
-	z-index:3;
-	width:200px;
-	&[cq-show] {
-		margin-top: 25px;
-		margin-left: 12px;
-		display: block;
-	}
-	.break-sm &[cq-show] {
-		display:none;
-	}
-}
-
-
-/* Add Comparison Btn */
-cq-menu.cq-comparison-new {
-	position:relative;
-	display:inline-block;
-	cursor:pointer;
-	color:mix(#000, $DEFAULT-main, 60% );
-	transition: color .20s 0s, opacity .20s .0s;
-	z-index: 1;
-	height: 1px; /* hack so that jquery doesn't think it's 0px */
-	margin-bottom: 13px;
-}
-
-cq-comparison-add-label {
-	padding-left: 10px;
-	display:inline-block;
-	cq-menu.cq-comparison-new:hover & {/* Brighter text on hover */
-		& {color:mix(#000, $DEFAULT-main, 80% );}
-	}
-	& > * {
-		display:inline-block;
-		vertical-align: top;
-	}
-	.stxMenuActive & {
-		height: 0px;
-		display:none;
-	}
-}
-
-/* Add Comparison Module */
-cq-comparison-add {
-	display: block;
-	position:absolute;
-	top: -15px;
-	white-space: nowrap;
-	opacity:0;
-	background:darken( $DEFAULT-main, 2% );
-	@include border-radius($soft-corners);
-	transition: opacity .5s;
-	@include box-shadow(0px, 1px, 1px, rgba(0, 0, 0, .2));
-
-	& .stx-btn {
-		padding:0 10px;
-	}
-	.stxMenuActive & {
-		opacity: 1;
-		& > * {
-			//opacity:1;
-			display:inline-block;
-		}
-	}
-	& > * {
-		display: none;
-		vertical-align: top;
-	}
-	& cq-swatch {
-		margin: 8px;
-	}
-
-	& input {
-		border:none;
-		@include box-sizing(border-box);
-		/*@include placeholder {
-			color: mix(#000, $DEFAULT-main, 40% );
-		}*/
-	}
-
-	& .stx-btn {
-		transition: color .20s .2s !important;
-		height:36px !important;
-		line-height:36px !important;
-		border:none !important;
-		color: mix(#000, $DEFAULT-main, 60% );
-
-		&:hover {
-			& {color:$DEFAULT-text !important;}
-		}
-
-		&:active {
-			color: $DEFAULT-accent !important;
-		}
-	}
-}
-
-/* Comparison Key */
-cq-comparison-key {
-	min-width:110px;
-	display:block;
-	position: relative;
-}
-cq-comparison-item {
-	position:relative;
-	display:block;
-	padding-left:10px;
-	padding-right:30px; // space for close X
-	font-size:12px;
-	font-weight:700;
-	height: 28px;
-	line-height: 28px;
-	opacity: 1;
-	transition: background .20s 0s, padding .20s 0s, opacity .20s .20s, height .20s .40s, font-size .0s .40s, margin .2s .40s;
-
-	&:hover {
-		& {
-			background:transparent;
-			background:darken( $DEFAULT-main, 2% );
-			@include border-radius($soft-corners);
-			@include box-shadow (0px, 1px, 1px, rgba(0, 0, 0, .2));
-		}
-	}
-	& > * {
-		margin-left: 5px;
-	}
-	&[cq-error] {
-		opacity:.5;
-	}
-}
-cq-comparison-swatch {
-	display:inline-block;
-	position:relative;
-	top:2px;
-	width:12px;
-	height:12px;
-	background:#DD0000;
-}
-
-cq-comparison-price {
-	float:right;
-	color:#8d949a;
-	font-weight:500;
-}
-
-cq-comparison-item .ciq-close {
-	position:absolute;
-	right:0;
-	top:1px;
-	background-position: -250px -25px;
-	transition: opacity .20s .0s;
-	height: 25px;
-    width: 25px;
-    background-image: url(img/stx-sprite-panels.svg);
-    cursor: pointer;
-
-	& {
-		opacity: 0;
-	}
-}
-cq-comparison-item:hover .ciq-close {opacity: .6;}
-cq-comparison-item .ciq-close:hover,
-cq-comparison-item .ciq-close:active {opacity: 1;}
-
-
-cq-comparison-loader {
-	display:none;
-    position: relative;
-    height: 16px;
-    width: 16px;
-    top:4px;
-	background-image:url(img/loading-spin.svg);
-	background-size:cover;
-    z-index: 1;
-}
-cq-comparison-loader.stx-show{
-	display:inline-block;
 }
 
 cq-attrib-container {

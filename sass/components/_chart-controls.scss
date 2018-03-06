@@ -1,6 +1,6 @@
 $selected-background-color: #e4e6f1;
 
-#chartControls {
+.cq-chart-controls {
     /* Chart Control module */
     position: absolute;
     display: flex !important;
@@ -118,7 +118,7 @@ $selected-background-color: #e4e6f1;
     }
 
     .ciq-ic-indicator-normal {
-        background: url('icons/indicators/ic-indicator-normal-light.svg');
+        background: url('icons/chart-controls/ic-indicator-normal-light.svg');
     }
     .ciq-ic-charttemplate-normal {
         background: url('icons/chart template/ic-charttemplate-normal-light.svg');
@@ -129,7 +129,7 @@ $selected-background-color: #e4e6f1;
         background: url('icons/drawing tools/ic-drawingtools-normal-light.svg');
     }
     .ciq-ic-comparison {
-        background: url('icons/comparison/ic-comparison-normal-light.svg');
+        background: url('icons/chart-controls/ic-comparison-normal-light.svg');
     }
 }
 

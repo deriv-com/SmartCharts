@@ -134,76 +134,9 @@ html, body {
     z-index: 30;
 }
 
-#chartSize, #chartSize span { /* Chart Control element defaults */
-    height: 25px;
-    display: inline-block;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-}
-
-#chartSize { /* Chart size container */
-    margin: 0px auto;
-    position: relative;
-    -webkit-border-radius: 3px;
-    -moz-border-radius: 3px;
-    border-radius: 3px;
-    background: #fafafa;
-    -webkit-box-shadow: 0px 1px 2px rgba(0, 0, 0, .2);
-    -moz-box-shadow: 0px 1px 2px rgba(0, 0, 0, .2);
-    box-shadow: 0px 1px 1px rgba(0, 0, 0, .2);
-}
-
-#chartSize:after { /* Divider between zoom buttons */
-    position: absolute;
-    top: 4px;
-    bottom: 4px;
-    width: 1px;
-    left: 36px;
-    content: "";
-    display: block;
-    background: rgba(0, 0, 0, .2);
-}
-
-#chartSize span { /* Chart size (+) and (-) buttons */
-    background-image: url(img/stx-sprite-panels.svg);
-    width: 35px;
-    cursor: pointer;
-    transition: opacity .25s, transform .2s;
-    -webkit-transition: opacity .25s, -webkit-transform .2s;
-    opacity: .6;
-}
-
-.no-svg #chartSize span { /*Chart size (+) and (-) buttons for non SVG browsers */
-    background-image: url(img/stx-sprite-panels.png);
-}
-
-#chartSize .stx-zoom-out { /* Zoom out */
-    background-position: -45px -25px;
-    -webkit-border-radius: 3px 0 0 3px;
-    -moz-border-radius: 3px 0 0 3px;
-    border-radius: 3px 0 0 3px;
-}
-
-#chartSize .stx-zoom-in { /* Zoom in */
-    background-position: -95px -25px;
-    -webkit-border-radius: 0 3px 3px 0;
-    -moz-border-radius: 0 3px 3px 0;
-    border-radius: 0 3px 3px 0;
-}
-
-#chartSize span:hover,
-#chartSize span:active,
 .stx_jump_today:hover,
 .stx_jump_today:active { /* Make buttons full opacity on hover or hit */
     opacity: 1;
-}
-
-#chartSize span:active { /* Scale up when active */
-    -webkit-transform: scale(1.2, 1.2);
-    -ms-transform: scale(1.2, 1.2);
-    transform: scale(1.2, 1.2);
 }
 
 .stx_jump_today { /* Button  jumping to today's data */
@@ -444,12 +377,12 @@ html, body {
 /* -------- Current Price label (Floating last price on y-axis)-------- */
 
 .stx_current_hr_up { /* 'Up' color for current chart value */
-    background-color: #8cc176;
+    background-color: #4caf50;
     color: #fff;
 }
 
 .stx_current_hr_down { /* 'Down' color for current chart value */
-    background-color: #b82c0c;
+    background-color: #f95454;
     color: #fff;
 }
 
@@ -586,11 +519,11 @@ html, body {
 }
 
 .stx_bar_down { /* Down Bar color */
-    color: #b82c0c;
+    color: #f95454;
 }
 
 .stx_bar_up { /* Up Bar color */
-    color: #8cc176;
+    color: #4caf50;
 }
 
 .stx_baseline_delta_mountain { /* Default color for baseline delta mountain Charts */
@@ -616,12 +549,12 @@ html, body {
 /*.stx_mountain_chart.color {width:24px;}*/
 
 .stx_histogram_down { /* Down Bar color */
-    color: #b82c0c;
+    color: #f95454;
     border-left-color: #000000;
 }
 
 .stx_histogram_up { /* Up Bar color */
-    color: #8cc176;
+    color: #4caf50;
     border-left-color: #000000;
 }
 
@@ -641,29 +574,29 @@ html, body {
 
 /******* Optionally use .stx_candle_shadow_up and .stx_candle_shadow_down to change shadow/wick color for up/down candles
  .stx_candle_shadow_up {
-	color:#8cc176;
+	color:#4caf50;
 }
 .stx_candle_shadow_down {
-	color:#b82c0c;
+	color:#f95454;
 }
 ********/
 
 .stx_candle_down, .stx_line_down { /* Down Candle color */
-    color: #b82c0c;
-    border-left-color: #000000;
+    color: #f95454;
+    border-left-color: transparent;
 }
 
 .stx_candle_up, .stx_line_up { /* Up Candle color */
-    color: #8cc176;
-    border-left-color: #000000;
+    color: #4caf50;
+    border-left-color: transparent;
 }
 
 .stx_hollow_candle_down {
-    color: #b82c0c;
+    color: #f95454;
 }
 
 .stx_hollow_candle_up {
-    color: #8cc176;
+    color: #4caf50;
 }
 
 .stx_hollow_candle_even {
@@ -707,12 +640,12 @@ html, body {
 }
 
 .stx_volume_up { /* Up Volume color */
-    color: #8cc176; /* legacy only. Use study library output "Up Volume" instead */
+    color: #4caf50; /* legacy only. Use study library output "Up Volume" instead */
     border: #000000;
 }
 
 .stx_volume_down { /* Down volume color */
-    color: #b82c0c; /* legacy only. Use study library output "Down Volume" instead */
+    color: #f95454; /* legacy only. Use study library output "Down Volume" instead */
     border: #000000;
 }
 

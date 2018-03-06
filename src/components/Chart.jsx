@@ -15,7 +15,6 @@ import '../Plugin';
 import './Attribution';
 import './Close';
 import './ColorPicker';
-import './ComparisonList';
 import './FibSettingsDialog';
 import './Loader';
 import './Menu';
@@ -33,7 +32,7 @@ import './Undo';
 import './ViewDialog';
 import './Clickable';
 import ChartControls from './ChartControls.jsx';
-import Menu from './Menu.jsx';
+import ComparisonList from './ComparisonList.jsx';
 import SettingsDialog from './SettingsDialog.jsx';
 import Toolbar from './Toolbar.jsx';
 import ChartTitle from './ChartTitle.jsx';
@@ -63,30 +62,12 @@ class Chart extends Component {
                     <div className="ciq-chart">
                         <Toolbar />
                         <div className="cq-top-ui-widgets">
-                            <AssetInformation />
                             <ChartTitle />
-                            <cq-comparison >
-                                <cq-comparison-key
-                                    dangerouslySetInnerHTML={{
-                                        /* TODO: fix this */
-                                        __html: `
-                                <template cq-comparison-item>
-                                    <cq-comparison-item>
-                                        <cq-comparison-swatch></cq-comparison-swatch>
-                                        <cq-comparison-label>AAPL</cq-comparison-label>
-                                        <cq-comparison-price cq-animate></cq-comparison-price>
-                                        <cq-comparison-loader></cq-comparison-loader>
-                                        <div class="stx-btn-ico ciq-close"></div>
-                                    </cq-comparison-item>
-                                </template>
-                                    `,
-                                    }}
-                                />
-                            </cq-comparison>
+                            <AssetInformation />
+                            <ComparisonList />
                         </div>
+                        <ChartControls />
                         <div className="chartContainer primary">
-
-                            <ChartControls />
                             <stx-hu-tooltip>
                                 <stx-hu-tooltip-field field="DT">
                                     <stx-hu-tooltip-field-name>Date/Time</stx-hu-tooltip-field-name>
@@ -97,28 +78,6 @@ class Chart extends Component {
                                     <stx-hu-tooltip-field-value />
                                 </stx-hu-tooltip-field>
                             </stx-hu-tooltip>
-                            <cq-hu-static>
-                                <div>
-                                    <div>Price</div>
-                                    <cq-hu-price />
-                                    <div>Open</div>
-                                    <cq-hu-open />
-                                    <div>Close</div>
-                                    <cq-hu-close />
-                                </div>
-                                <div>
-                                    <div>Vol</div>
-                                    <cq-volume-section>
-                                        <cq-hu-volume />
-                                        <cq-volume-rollup />
-                                    </cq-volume-section>
-                                    <div>High</div>
-                                    <cq-hu-high />
-                                    <div>Low</div>
-                                    <cq-hu-low />
-                                </div>
-                            </cq-hu-static>
-
                         </div>
                     </div>
                 </div>
