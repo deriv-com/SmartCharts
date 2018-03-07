@@ -3,6 +3,7 @@ import '../../sass/components/_icons.scss';
 import Add from '../../sass/icons/add/ic-add-light.svg';
 import AddThin from '../../sass/icons/chart template/ic-add-light.svg';
 import Candle from '../../sass/icons/chart types/ic-candle.svg';
+import Close from '../../sass/icons/notification/ic-close.svg';
 import Comparison from '../../sass/icons/chart-controls/ic-comparison-normal-light.svg';
 import Crosshair from '../../sass/icons/chart-controls/ic-crosshair-normal.svg';
 import Delete from '../../sass/icons/drawing tools/ic-drawingtools-clear-all.svg';
@@ -19,6 +20,7 @@ import OHLC from '../../sass/icons/chart types/ic-ohlc.svg';
 import Spline from '../../sass/icons/chart types/ic-spline.svg';
 import Star from '../../sass/icons/favorite/ic-favorite-normal-light.svg';
 import Template from '../../sass/icons/chart template/ic-charttemplate-normal-light.svg';
+import Warning from '../../sass/icons/notification/ic-warning.svg';
 
 const Wrapper = WrappedComponent => props => {
     const propsCopy = Object.assign({}, props);
@@ -34,6 +36,7 @@ const Wrapper = WrappedComponent => props => {
 export const AddIcon = Wrapper(Add);
 export const AddThinIcon = Wrapper(AddThin);
 export const CandleIcon = Wrapper(Candle);
+export const CloseIcon = Wrapper(Close);
 export const ComparisonIcon = Wrapper(Comparison);
 export const CrosshairIcon = Wrapper(Crosshair);
 export const DeleteIcon= Wrapper(Delete);
@@ -50,3 +53,4 @@ export const OHLCIcon = Wrapper(OHLC);
 export const SplineIcon = Wrapper(Spline);
 export const StarIcon = Wrapper(Star);
 export const TemplateIcon = Wrapper(Template);
+export const WarningIcon = Wrapper(Warning);
