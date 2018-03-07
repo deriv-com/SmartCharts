@@ -73,10 +73,31 @@
             background-color: #f2f3f8;
         }
         &.cq-active-filter {
+            $active-color: #4C5794;
             font-weight: 800;
             color: #4C5794;
-            border-right: 2px solid #4C5794;
+            border-right: 2px solid $active-color;
             background-color: #f2f3f8;
+            .ic-icon {
+                &.ic-active, &.ic-forex, &.ic-commodities, &.ic-volidx {
+                    svg > g > circle { fill: $active-color; }
+                }
+                &.ic-stocks {
+                    svg > g {
+                        > use, > g:last-child { fill: $active-color; }
+                    }
+                }
+                &.ic-indices {
+                    svg > g {
+                        > path   { fill: $active-color;   }
+                        > circle { stroke: $active-color; }
+                    }
+                }
+            }
+        }
+        .ic-icon {
+            display: inline-flex;
+            vertical-align: sub;
         }
     }
     .cq-item, .cq-active-item {
@@ -139,30 +160,6 @@
 
 }
 
-/* Active Symbol Category Filter Icons */
-.cq-symbols-display .cq-categorical-display .cq-lookup-filters .cq-filter {
-    .ciq-item-icon {
-        padding-left: 32px;
-        height: 16px;
-        display: inline-flex;
-        vertical-align: text-bottom;
-    }
-    @mixin category($cat-id) {
-        .ic-category-#{$cat-id} {
-            background: url('icons/active symbols/categories/ic-#{$cat-id}-normal-light.svg') no-repeat left;
-        }
-        &.cq-active-filter .ic-category-#{$cat-id} {
-            background: url('icons/active symbols/categories/ic-#{$cat-id}-active-light.svg') no-repeat left;
-        }
-    }
-    @include category(active);
-    @include category(forex);
-    @include category(indices);
-    @include category(stocks);
-    @include category(commodities);
-    @include category(volidx);
-}
-
 /* Active Symbol Icons */
 .cq-categorical-display .results-panel {
     .ciq-item-icon {
@@ -170,8 +167,7 @@
         height: 23px;
         width: 32px;
         display: inline-block;
-        background: no-repeat center;
-        background-image: url('icons/active symbols/ic-symbol-placeholder.svg');
+        background: url('icons/active symbols/ic-symbol-placeholder.svg') no-repeat center;
     }
 
     @function flag($country) {

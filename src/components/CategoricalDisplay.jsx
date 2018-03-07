@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from 'react';
+import {CategoryDisplayIconMap} from './Icons.jsx';
 
 const CategoricalDisplay = ({
     placeholderText,
@@ -64,15 +65,18 @@ const CategoricalDisplay = ({
                         placeholder={placeholderText}
                     />
                 </div>
-                { filteredItems.map((category, i) =>
-                    <div key={i}
-                        className={`cq-filter ${activeCategoryKey === category.categoryId ? 'cq-active-filter' : ''}`}
-                        onClick={() => handleFilterClick(category)}
-                    >
-                        <span className={`ciq-item-icon ic-category-${category.categoryId}`}/>
-                        {category.categoryName}
-                    </div>
-                )}
+                { filteredItems.map((category, i) => {
+                    const CategoryIcon = CategoryDisplayIconMap[category.categoryId];
+                    const isActive = activeCategoryKey === category.categoryId;
+                    return (
+                        <div key={i}
+                            className={`cq-filter ${isActive ? 'cq-active-filter' : ''}`}
+                            onClick={() => handleFilterClick(category)}
+                        >
+                            <CategoryIcon className={`ic-${category.categoryId}`}/>
+                            {category.categoryName}
+                        </div>);
+                })}
             </div>
             <div className="cq-scroll-panel" ref={setScrollPanel}>
                 <div className="results-panel" ref={setResultsPanel}>

@@ -8,6 +8,13 @@ import Indicator from '../../sass/icons/chart-controls/ic-indicator-normal-light
 import Line from '../../sass/icons/chart types/ic-line.svg';
 import OHLC from '../../sass/icons/chart types/ic-ohlc.svg';
 import Spline from '../../sass/icons/chart types/ic-spline.svg';
+import Active from '../../sass/icons/active symbols/categories/ic-active-normal-light.svg';
+import Commodities from '../../sass/icons/active symbols/categories/ic-commodities-normal-light.svg';
+import Favorite from '../../sass/icons/active symbols/categories/ic-favorite-normal-light.svg';
+import Forex from '../../sass/icons/active symbols/categories/ic-forex-normal-light.svg';
+import Indices from '../../sass/icons/active symbols/categories/ic-indices-normal-light.svg';
+import Stocks from '../../sass/icons/active symbols/categories/ic-stocks-normal-light.svg';
+import Volidx from '../../sass/icons/active symbols/categories/ic-volidx-normal-light.svg';
 
 const Wrapper = WrappedComponent => props => {
     const propsCopy = Object.assign({}, props);
@@ -28,3 +35,14 @@ export const IndicatorIcon = Wrapper(Indicator);
 export const LineIcon = Wrapper(Line);
 export const OHLCIcon = Wrapper(OHLC);
 export const SplineIcon = Wrapper(Spline);
+
+export const CategoryDisplayIconMap = {
+    active: Wrapper(Active),
+    commodities: Wrapper(Commodities),
+    favorite: Wrapper(Favorite),
+    forex: Wrapper(Forex),
+    indices: Wrapper(Indices),
+    stocks: Wrapper(Stocks),
+    volidx: Wrapper(Volidx),
+};
+
