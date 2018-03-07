@@ -16,8 +16,6 @@ class StudyLegend extends Component {
         return (
             <Menu
                 className="ciq-menu ciq-studies collapse"
-                isOpened={isOpened}
-                setOpen={setOpen}
             >
                 <Menu.Title>
                     <IndicatorIcon
@@ -34,7 +32,7 @@ class StudyLegend extends Component {
 
 export default connect(
     ({studies}) => ({
-        isOpened: studies.open,
+        isOpened: studies.menu.open,
         setOpen: studies.setOpen,
         studies: studies.studies,
         clearStudies: studies.clearStudies,
