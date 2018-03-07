@@ -1,0 +1,26 @@
+.cq-notification {
+    position: absolute;
+    right: 10px;
+    top: 20px;
+    height: 32px;;
+    &.warning {
+        border: 1px solid #FDD063;
+        background: #FFF8E2;
+    }
+    border-radius: 2px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    z-index: +3;
+    transition: opacity 0.3s;
+    opacity: 0;
+    pointer-events: none;
+    &.open {
+        opacity: 1;
+        pointer-events: all;
+    }
+
+    .close-icon {
+        cursor: pointer;
+    }
+}

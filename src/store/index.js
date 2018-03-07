@@ -9,6 +9,7 @@ import DrawToolsStore from './DrawToolsStore';
 import ChartTitleStore from './ChartTitleStore';
 import AssetInformationStore from './AssetInformationStore';
 import ComparisonListStore from './ComparisonListStore';
+import NotificationStore from './NotificationStore';
 
 export default class MainStore {
     @observable chart = new ChartStore(this);
@@ -21,4 +22,5 @@ export default class MainStore {
     @observable timeperiod = new TimeperiodStore(this);
     @observable assetInformation = new AssetInformationStore(this);
     @observable comparisonList = new ComparisonListStore(this);
+    @observable notification = new NotificationStore(this);
 }
