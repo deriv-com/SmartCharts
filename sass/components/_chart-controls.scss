@@ -6,6 +6,7 @@ $selected-background-color: #e4e6f1;
     display: flex !important;
     bottom: 37px !important;
     left: 50%;
+    padding: 0 10px;
     transform: translateX(-50%);
     height: 32px;
     width: auto;
@@ -18,6 +19,9 @@ $selected-background-color: #e4e6f1;
 
     z-index: 31;
     transition: background 1s;
+    .cq-menu-btn {
+        padding: 0 5px;
+    }
     > .ciq-period {
         min-width: 11.5em;
     }
@@ -29,24 +33,6 @@ $selected-background-color: #e4e6f1;
         background: transparent;
         box-shadow: none;
         min-width: 6em;
-    }
-    .stxMenuActive {
-        .ciq-title {
-            background-color: $selected-background-color;
-        }
-        >.ciq-icon, .cq-menu-btn > .ciq-icon {
-            border: 2px solid rgba(76,87,148,0.40);
-            box-sizing: border-box;
-            background-position: -2px -2px;
-            border-radius: 2px;
-            &:before {
-                content: " ";
-                width: 18px;
-                height: 18px;
-                border: 1px solid #4C5794;
-                position: absolute;
-            }
-        }
     }
     .ciq-row {
       white-space: nowrap;
@@ -117,9 +103,6 @@ $selected-background-color: #e4e6f1;
         }
     }
 
-    .ciq-ic-indicator-normal {
-        background: url('icons/chart-controls/ic-indicator-normal-light.svg');
-    }
     .ciq-ic-charttemplate-normal {
         background: url('icons/chart template/ic-charttemplate-normal-light.svg');
     }

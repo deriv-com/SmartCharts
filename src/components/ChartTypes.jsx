@@ -5,10 +5,11 @@ import List from './List.jsx';
 import {Switch} from './Form.jsx';
 
 const ChartTypes = ({
-    type,
+    Type,
     setType,
     types,
     Menu,
+    menuOpen,
     TypeList,
     assetInformation,
     setAssetInformation,
@@ -18,8 +19,9 @@ const ChartTypes = ({
     >
         <Menu.Title>
             <div className="ciq-title">
-                <span className={type.icon} />
-                <span className="ciq-description">{type.text}</span>
+                <Type.icon
+                    className={`tooltip ${menuOpen ? 'active' : ''}`}
+                    tooltip-title="Chart types" />
             </div>
         </Menu.Title>
         <Menu.Body>
@@ -31,10 +33,10 @@ const ChartTypes = ({
                 />
             </div>
             <TypeList height={260}>
-                {t => (
+                {T => (
                     <React.Fragment>
-                        <span className={t.icon} />
-                        <span className='ciq-icon-text'>{t.text}</span>
+                        <T.icon  className={`margin ${T.active ? 'active' : ''}`} />
+                        <span className='ciq-icon-text'>{T.text}</span>
                     </React.Fragment>
                 )}
             </TypeList>
@@ -44,15 +46,14 @@ const ChartTypes = ({
 
 export default connect(
     ({chartType, assetInformation: ai}) => ({
-        type: chartType.type,
+        Type: chartType.type,
         setType: chartType.setType,
         types: chartType.types,
-        isOpened: chartType.open,
         setOpen: chartType.setOpen,
         assetInformation: ai.visible,
         setAssetInformation: ai.setVisible,
+        menuOpen: chartType.menu.open,
         Menu: chartType.menu.connect(Menu),
         TypeList: chartType.list.connect(List),
     })
 )(ChartTypes);
-
