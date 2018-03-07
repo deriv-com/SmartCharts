@@ -1,7 +1,7 @@
 .cq-notification {
     position: absolute;
     right: 10px;
-    top: 20px;
+    top: -32px;
     height: 32px;;
     &.warning {
         border: 1px solid #FDD063;
@@ -12,11 +12,13 @@
     justify-content: flex-start;
     align-items: center;
     z-index: +3;
-    transition: opacity 0.3s;
+    transition: opacity 0.3s, top 0.3s;
     opacity: 0;
     pointer-events: none;
+    font-size: 14px;
     &.open {
         opacity: 1;
+        top: 20px;
         pointer-events: all;
     }
 
