@@ -2,6 +2,7 @@ import React, {Component, Fragment} from 'react';
 import { connect } from '../store/Connect';
 import '../../sass/_ciq-settings-dialog.scss';
 import {Switch, ColorPicker, Slider, Line, DropDown} from './Form.jsx';
+import { DeleteIcon, StarIcon } from './Icons.jsx';
 
 const SettingsDialog = ({
     items, // [{ id, title, value, defaultValue, type }]
@@ -93,13 +94,13 @@ const SettingsDialog = ({
             <div className={`titlebar ${!showTabs ? 'no-tabs' : ''}`}>
                 <div className='title'>{title}</div>
                 <div className='icons'>
-                    <span
+                    <DeleteIcon
                         onClick={onDeleteClick}
-                        className='ciq-icon ciq-ic-delete'
+                        className="margin"
                     />
-                    <span
+                    <StarIcon
                         onClick={onStarClick}
-                        className={`ciq-icon ciq-ic-star ${stared ? 'active' : ''}`}
+                        className={`margin ${stared ? 'fill-orange' : ''}`}
                     />
                 </div>
             </div>

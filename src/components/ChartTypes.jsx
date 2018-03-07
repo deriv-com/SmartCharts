@@ -20,7 +20,7 @@ const ChartTypes = ({
         <Menu.Title>
             <div className="ciq-title">
                 <Type.icon
-                    className={`tooltip ${menuOpen ? 'active' : ''}`}
+                    className={`${menuOpen ? 'active' : ''}`}
                     tooltip-title="Chart types" />
             </div>
         </Menu.Title>
