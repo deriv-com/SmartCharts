@@ -54,6 +54,7 @@
     "webpack-dev-server": "^2.9.7"
   },
   "dependencies": {
+    "babel-plugin-inline-react-svg": "^0.5.2",
     "event-emitter-es6": "^1.1.5",
     "html2canvas": "^1.0.0-alpha.9",
     "iscroll": "^5.2.0",

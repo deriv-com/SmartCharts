@@ -1,7 +1,7 @@
 import React, {Component, Fragment} from 'react';
 import { connect } from '../store/Connect';
 import '../../sass/_ciq-settings-dialog.scss';
-import {Switch, ColorPicker, Slider, Line} from './Form.jsx';
+import {Switch, ColorPicker, Slider, Line, DropDown} from './Form.jsx';
 
 const SettingsDialog = ({
     items, // [{ id, title, value, defaultValue, type }]
@@ -57,6 +57,21 @@ const SettingsDialog = ({
                 </div>
             );
         },
+        select: item => (
+            <div key={item.id} className='item'>
+                <div className='title'>
+                    <span>{item.title}</span>
+                    <DropDown
+                        rows={Object.keys(item.options)}
+                        open={false /* TODO */}
+                        title={item.value}
+                        onRowClick={value => onItemChange(item.id, value)}
+                    >
+                        {row => row}
+                    </DropDown>
+                </div>
+            </div>
+        ),
         number: item => (
             <div key={item.id} className='item'>
                 <div className='title'>

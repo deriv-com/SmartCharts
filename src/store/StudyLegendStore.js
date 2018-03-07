@@ -83,7 +83,7 @@ export default class StudyLegendStore {
             title: inp.heading,
             value: study.inputs[inp.name],
             defaultValue: inp.defaultInput,
-            type: inp.type,
+            type: inp.type === 'checkbox' ? 'switch' : inp.type,
             options: inp.options || null,
             ...attributes[inp.name], // {min:1, max: 20}
             category: 'inputs',
@@ -109,7 +109,9 @@ export default class StudyLegendStore {
 
         this.settingsDialog.items = [...inputs, ...outputs, ...parameters];
         this.settingsDialog.title = study.sd.name.toUpperCase();
+        this.settingsDialog.description = "No description yet";
         this.settingsDialog.setOpen(true);
+        console.warn(inputs, outputs, parameters);
     }
     @action.bound deleteStudy(study) {
         CIQ.Studies.removeStudy(this.stx, study);
@@ -128,6 +130,7 @@ export default class StudyLegendStore {
         }
         this.helper.updateStudy(updates);
         this.stx.draw();
+        this.settingsDialog.title = this.helper.sd.name.toUpperCase();
     }
 
     shouldRenderLegend() {

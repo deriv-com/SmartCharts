@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import Menu from './Menu.jsx';
 import CategoricalDisplay from './CategoricalDisplay.jsx';
 import {connect} from '../store/Connect';
+import {IndicatorIcon} from './Icons.jsx';
 
 class StudyLegend extends Component {
     componentWillUnmount() {
@@ -19,7 +20,9 @@ class StudyLegend extends Component {
                 setOpen={setOpen}
             >
                 <Menu.Title>
-                    <span className="ciq-icon ciq-ic-indicator-normal" />
+                    <IndicatorIcon
+                        className={`tooltip ${isOpened ? 'active' : ''}`}
+                        tooltip-title="Studies" />
                 </Menu.Title>
                 <Menu.Body>
                     <StudyCategoricalDisplay />
