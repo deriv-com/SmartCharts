@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 49 (51002) - http://www.bohemiancoding.com/sketch -->
+    <title>ic-warning</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Beta-Page" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Beta-Version" transform="translate(-836.000000, -104.000000)">
+            <g id="Alert/Default/Info-Copy" transform="translate(820.000000, 92.000000)">
+                <g id="ic-warning" transform="translate(16.000000, 12.000000)">
+                    <circle id="Oval" fill="#FFC107" cx="8" cy="8" r="8"></circle>
+                    <g id="Group-2" transform="translate(8.000000, 8.000000) scale(1, -1) translate(-8.000000, -8.000000) translate(6.500000, 4.000000)" fill="#FFFFFF">
+                        <circle id="Oval-2" cx="1.5" cy="1" r="1"></circle>
+                        <rect id="Rectangle" x="0.5" y="3" width="2" height="5" rx="1"></rect>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

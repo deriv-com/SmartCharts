@@ -37,6 +37,7 @@ import SettingsDialog from './SettingsDialog.jsx';
 import Toolbar from './Toolbar.jsx';
 import ChartTitle from './ChartTitle.jsx';
 import AssetInformation from './AssetInformation.jsx';
+import Notification from './Notification.jsx';
 import { MobxProvider, connect } from '../store/Connect';
 
 class Chart extends Component {
@@ -60,6 +61,7 @@ class Chart extends Component {
                 <cq-loader />
                 <div className="ciq-chart-area">
                     <div className="ciq-chart">
+                        <div className='beta-version'>Beta Version 0.1.7</div>
                         <Toolbar />
                         <div className="cq-top-ui-widgets">
                             <ChartTitle />
@@ -218,6 +220,7 @@ class Chart extends Component {
 
                 <DrawToolsSettingsDialog />
                 <StudySettingsDialog />
+                <Notification />
             </cq-context>
         );
     }

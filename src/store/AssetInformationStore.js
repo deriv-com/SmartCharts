@@ -16,7 +16,7 @@ export default class AssetInformationStore {
     get stx() { return this.context.stx; }
 
     onContextReady = () => {
-        this.visible = this.stx.layout.assetInformation || false;
+        this.visible = this.stx.layout.assetInformation || true;
         this.stx.prepend('headsUpHR', this.update);
         this.stx.prepend('createXAxis', this.update);
     }
@@ -42,7 +42,7 @@ export default class AssetInformationStore {
         this.mainStore.chart.saveLayout();
     }
 
-    @observable visible = false;
+    @observable visible = true;
     @observable price = null;
     @observable open = null;
     @observable high = null;
