@@ -155,17 +155,8 @@ export default class CategoricalDisplayStore {
             categoryName: 'Active',
             categoryId: 'active',
             hasSubcategory: false,
-            data: []
+            data: actives,
         };
-        for (const item of actives) {
-            category.data.push({
-                enabled: true,
-                selected: false,
-                display: item.symbolObject.name,
-                itemId: item.symbolObject.symbol,
-                dataObject: item
-            });
-        }
         return category;
     }
 
