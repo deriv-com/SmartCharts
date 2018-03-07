@@ -21,7 +21,7 @@ class StudyLegend extends Component {
             >
                 <Menu.Title>
                     <IndicatorIcon
-                        className={`tooltip ${menuOpen ? 'active' : ''}`}
+                        className={`${menuOpen ? 'active' : ''}`}
                         tooltip-title="Studies" />
                 </Menu.Title>
                 <Menu.Body>

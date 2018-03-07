@@ -4,6 +4,7 @@ import React, { Component } from 'react';
 import contextAware from '../contextAware';
 import { downloadURI } from '../components/ui/utils';
 import UIManager from './ui/UIManager';
+import { TemplateIcon } from './Icons.jsx';
 
 /**
  * Views web component `<cq-views>`.
@@ -196,7 +197,11 @@ class Views extends Component {
         const { views } = this.state;
         return (
             <cq-menu class="ciq-menu ciq-views collapse">
-                <span className="ciq-icon ciq-ic-charttemplate-normal" />
+                <div className="cq-menu-btn">
+                    {/* Todo add active class. */}
+                    <TemplateIcon
+                        tooltip-title="Templates" />
+                </div>
                 <cq-menu-dropdown>
                     <cq-views cq-no-close>
                         <cq-views-content>

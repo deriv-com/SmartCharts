@@ -50,6 +50,15 @@ export default class TimeperiodStore {
         this.menu.setOpen(false);
     }
 
+    @computed get timeUnit_display() {
+        if(!this.timeUnit) return;
+        let temp = this.timeUnit;
+        if(temp.length > 4) {
+            temp = (temp).slice(0,3)
+        }
+        return temp.replace(/(\w)/, (str) => str.toUpperCase());
+    }
+
     @computed get interval_display() {
         if (this.interval % 60 === 0) {
             return this.interval / 60;

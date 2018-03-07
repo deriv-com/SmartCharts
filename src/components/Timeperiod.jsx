@@ -7,6 +7,7 @@ const Timeperiod = ({
     interval,
     timeUnit,
     interval_display,
+    timeUnit_display,
     Menu,
 }) => {
     return (
@@ -14,10 +15,9 @@ const Timeperiod = ({
             className="ciq-period"
         >
             <Menu.Title>
-                <span>
-                    <span className="icon" />
-                    <span className="unit_display">{timeUnit}</span>
+                <span className="tooltip" tooltip-title="Time period">
                     <span className="interval_display">{interval_display}</span>
+                    <span className="unit_display">{timeUnit_display}</span>
                 </span>
             </Menu.Title>
             <Menu.Body>
@@ -113,6 +113,7 @@ export default connect(
         timeUnit: s.timeUnit,
         interval: s.interval,
         interval_display: s.interval_display,
+        timeUnit_display: s.timeUnit_display,
         Menu: s.menu.connect(Menu),
     })
 )(Timeperiod);

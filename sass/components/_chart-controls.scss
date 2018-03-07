@@ -22,9 +22,6 @@ $selected-background-color: #e4e6f1;
     .cq-menu-btn {
         padding: 0 5px;
     }
-    > .ciq-period {
-        min-width: 11.5em;
-    }
     &:hover {
         background: rgba(255, 255, 255, 1);
         transition: background 0.3s;
@@ -101,18 +98,6 @@ $selected-background-color: #e4e6f1;
             bottom: 0em;
             left: -10em;
         }
-    }
-
-    .ciq-ic-charttemplate-normal {
-        background: url('icons/chart template/ic-charttemplate-normal-light.svg');
-    }
-
-    .ciq-ic-draw-tools,
-    .ciq-draw > span {
-        background: url('icons/drawing tools/ic-drawingtools-normal-light.svg');
-    }
-    .ciq-ic-comparison {
-        background: url('icons/chart-controls/ic-comparison-normal-light.svg');
     }
 }
 
