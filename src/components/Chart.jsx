@@ -61,6 +61,7 @@ class Chart extends Component {
                 <cq-loader />
                 <div className="ciq-chart-area">
                     <div className="ciq-chart">
+                        <div className='beta-version'>Beta Version 0.1.7</div>
                         <Toolbar />
                         <div className="cq-top-ui-widgets">
                             <ChartTitle />
