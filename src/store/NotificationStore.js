@@ -7,7 +7,7 @@ export default class NotificationStore {
     }
 
     @observable open = false;
-    @observable text = 'This is Beta version and therefore unexpected issues are possible.';
+    @observable text = 'This product is currently in beta. Unexpected errors may occur.';
     @observable type = 'warning'; // warning|info|error
 
     @action.bound setOpen(value) {
