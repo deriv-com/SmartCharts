@@ -49,7 +49,6 @@ export default connect(
         Type: chartType.type,
         setType: chartType.setType,
         types: chartType.types,
-        isOpened: chartType.open,
         setOpen: chartType.setOpen,
         assetInformation: ai.visible,
         setAssetInformation: ai.setVisible,

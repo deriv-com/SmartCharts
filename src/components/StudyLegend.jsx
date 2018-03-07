@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import Menu from './Menu.jsx';
 import List from './List.jsx';
 import {connect} from '../store/Connect';
+import {IndicatorIcon} from './Icons.jsx';
 
 class StudyLegend extends Component {
     componentWillUnmount() {
@@ -10,7 +11,7 @@ class StudyLegend extends Component {
     }
 
     render() {
-        const {isOpened, setOpen, clearStudies, studies, Menu, StudyList} = this.props;
+        const {isOpened, setOpen, clearStudies, studies, Menu, menuOpen, StudyList} = this.props;
 
         return (
             <Menu
@@ -19,7 +20,9 @@ class StudyLegend extends Component {
                 setOpen={setOpen}
             >
                 <Menu.Title>
-                    <span className="ciq-icon ciq-ic-indicator-normal" />
+                    <IndicatorIcon
+                        className={`tooltip ${menuOpen ? 'active' : ''}`}
+                        tooltip-title="Studies" />
                 </Menu.Title>
                 <Menu.Body>
                     <cq-study-legend cq-no-close>
@@ -63,6 +66,7 @@ export default connect(
         clearStudies: studies.clearStudies,
         cleanUp: studies.cleanUp,
         Menu: studies.menu.connect(Menu),
+        menuOpen: studies.menu.open,
         StudyList: studies.list.connect(List),
     })
 )(StudyLegend);

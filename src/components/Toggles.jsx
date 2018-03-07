@@ -7,7 +7,7 @@ const ChartTypes = ({
     crosshairClass,
 }) => (
     <div
-        className="icon-toggles ciq-toggles"
+        className="icon-toggles ciq-toggles cq-menu-btn"
     >
         <CrosshairIcon
             onClick={toggleCrosshair}
