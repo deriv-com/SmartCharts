@@ -10,22 +10,10 @@
             font-size: 24px;
             padding-left: 16px;
         }
-
-        .ciq-ic-delete {
-            background: url('icons/drawing tools/ic-drawingtools-clear-all.svg');
-        }
-        .ciq-ic-star {
-            background: url('icons/favorite/ic-favorite-normal-light.svg');
-            &.active { background: url('icons/favorite/ic-favorite-active-light.svg'); }
-        }
-
-        .ciq-ic-delete,
-        .ciq-ic-star,
-        .ciq-ic-star.active {
-            width: 40px !important;
-            height: 40px !important;
-            background-repeat: no-repeat;
-            background-position: 50% 50%;
+        .icons {
+            display: flex;
+            align-items: center;
+            height: 50px;
         }
         &.no-tabs {
             border-bottom: 1px solid #E9E9ED;

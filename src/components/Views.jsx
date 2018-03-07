@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 import contextAware from '../contextAware';
 import { downloadURI } from '../components/ui/utils';
 import UIManager from './ui/UIManager';
-import { TemplateIcon } from './Icons.jsx';
+import { TemplateIcon, ListIcon, AddThinIcon, DownloadIcon } from './Icons.jsx';
 
 /**
  * Views web component `<cq-views>`.
@@ -216,21 +216,21 @@ class Views extends Component {
                             onClick={() => {}}
                             className="ciq-row"
                         >
-                            <span className="ciq-icon ciq-ic-templatelist" />
+                            <ListIcon />
                             <span>Template List</span>
                         </div>
                         <div
                             onClick={this.addNew}
                             className="ciq-row"
                         >
-                            <span className="ciq-icon ciq-ic-add" />
+                            <AddThinIcon />
                             <span>Add Template</span>
                         </div>
                         <div
                             onClick={this.downloadChart}
                             className="ciq-row"
                         >
-                            <span className="ciq-icon ciq-ic-download" />
+                            <DownloadIcon />
                             <span>Download Chart</span>
                         </div>
                     </cq-views>
