@@ -8,6 +8,8 @@ import Indicator from '../../sass/icons/chart-controls/ic-indicator-normal-light
 import Line from '../../sass/icons/chart types/ic-line.svg';
 import OHLC from '../../sass/icons/chart types/ic-ohlc.svg';
 import Spline from '../../sass/icons/chart types/ic-spline.svg';
+import Warning from '../../sass/icons/notification/ic-warning.svg';
+import Close from '../../sass/icons/notification/ic-close.svg';
 
 const Wrapper = WrappedComponent => props => {
     const propsCopy = Object.assign({}, props);
@@ -28,3 +30,5 @@ export const IndicatorIcon = Wrapper(Indicator);
 export const LineIcon = Wrapper(Line);
 export const OHLCIcon = Wrapper(OHLC);
 export const SplineIcon = Wrapper(Spline);
+export const WarningIcon = Wrapper(Warning);
+export const CloseIcon = Wrapper(Close);

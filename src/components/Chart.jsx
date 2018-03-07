@@ -37,6 +37,7 @@ import SettingsDialog from './SettingsDialog.jsx';
 import Toolbar from './Toolbar.jsx';
 import ChartTitle from './ChartTitle.jsx';
 import AssetInformation from './AssetInformation.jsx';
+import Notification from './Notification.jsx';
 import { MobxProvider, connect } from '../store/Connect';
 
 class Chart extends Component {
@@ -218,6 +219,7 @@ class Chart extends Component {
 
                 <DrawToolsSettingsDialog />
                 <StudySettingsDialog />
+                <Notification />
             </cq-context>
         );
     }
