@@ -133,10 +133,6 @@ export default class CategoricalDisplayStore {
         this.searchInput = element;
     }
 
-    @action.bound setResultsPanel(element) {
-        this.resultsPanel = element;
-    }
-
     @action.bound setScrollPanel(element) {
         this.scrollPanel = element;
     }
@@ -179,7 +175,6 @@ export default class CategoricalDisplayStore {
         filteredItems: this.filteredItems,
         getItemCount: this.getItemCount,
         setSearchInput: this.setSearchInput,
-        setResultsPanel: this.setResultsPanel,
         handleFilterClick: this.handleFilterClick,
         handleInputClick: this.handleInputClick,
         onSelectItem: this.onSelectItem,
