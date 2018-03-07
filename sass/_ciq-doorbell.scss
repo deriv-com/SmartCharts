@@ -1,0 +1,34 @@
+#doorbell-button {
+    left: 100px;
+    bottom: -30px;
+    transition: bottom 0.2s linear;
+    background: white;
+    color: #4C5794;
+    border: 1px solid #4C5794;
+    box-shadow: 0 0.375em 0.625em 0 rgba(0, 0, 0, 0.14);
+    border-bottom: none;
+    &:hover {
+        bottom: 0;
+    }
+}
+#doorbell form {
+    box-shadow: none;
+    border: 1px solid #4c4c4c;
+
+    input, textarea {
+        outline: 0;
+        &:focus {
+            border: 1px solid #4C5794;
+        }
+    }
+
+    #doorbell-submit-button {
+        color: #4C5794;
+        border: none;
+        background: white;
+        &:hover { background: white; }
+    }
+}
+#doorbell-background {
+    opacity: 0;
+}
