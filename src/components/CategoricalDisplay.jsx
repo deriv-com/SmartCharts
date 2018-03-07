@@ -20,7 +20,7 @@ const CategoricalDisplay = ({
     const renderItem = (item, k) =>
         <div
             className={`cq-item ${item.selected ? 'selected ' : ''}`}
-            onClick={() => onSelectItem(item.dataObject)}
+            onClick={(e) => onSelectItem(item.dataObject, e)}
             key={k}
             disabled={!item.enabled}
         >
@@ -39,7 +39,7 @@ const CategoricalDisplay = ({
                     <span
                         key={`active-opt-${i}`}
                         className={`ic-${opt.id}`}
-                        onClick={() => opt.onClick && opt.onClick(item.dataObject)}
+                        onClick={(e) => opt.onClick && opt.onClick(item.dataObject, e)}
                     >
                         {opt.renderChild && opt.renderChild(item)}
                     </span>
@@ -65,7 +65,7 @@ const CategoricalDisplay = ({
                 { filteredItems.map((category, i) =>
                     <div key={i}
                         className={`cq-filter ${activeCategoryKey === category.categoryId ? 'cq-active-filter' : ''}`}
-                        onClick={() => handleFilterClick(category)}
+                        onClick={(e) => handleFilterClick(category, e)}
                     >
                         <span className={`ciq-item-icon ic-category-${category.categoryId}`}/>
                         {category.categoryName}

@@ -120,13 +120,18 @@
         display: inline-block;
         margin-left: 5px;
     }
-    .ic-delete {
+    .ic-delete, .ic-edit {
         margin-top: 5px;
-        background-image: url('icons/common/ic-delete-light.svg');
         cursor: pointer;
         &:hover {
             background-color: #d1d1d1;
         }
+    }
+    .ic-delete {
+        background-image: url('icons/common/ic-delete-light.svg');
+    }
+    .ic-edit {
+        background-image: url('icons/common/ic-edit-light.svg');
     }
     .ic-cmp-color > span {
         display: inline-block;

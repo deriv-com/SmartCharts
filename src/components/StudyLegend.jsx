@@ -1,7 +1,7 @@
 import CIQ from 'chartiq';
 import React, { Component } from 'react';
 import Menu from './Menu.jsx';
-import List from './List.jsx';
+import CategoricalDisplay from './CategoricalDisplay.jsx';
 import {connect} from '../store/Connect';
 
 class StudyLegend extends Component {
@@ -10,7 +10,7 @@ class StudyLegend extends Component {
     }
 
     render() {
-        const {isOpened, setOpen, clearStudies, studies, Menu, StudyList} = this.props;
+        const {isOpened, setOpen, Menu, StudyCategoricalDisplay} = this.props;
 
         return (
             <Menu
@@ -22,33 +22,7 @@ class StudyLegend extends Component {
                     <span className="ciq-icon ciq-ic-indicator-normal" />
                 </Menu.Title>
                 <Menu.Body>
-                    <cq-study-legend cq-no-close>
-                        {studies.length > 0 &&
-                            <cq-section-dynamic>
-                                <cq-heading>Current Indicators</cq-heading>
-                                <cq-study-legend-content>
-                                    {studies.map((s, i) =>
-                                        <cq-item key={i}>
-                                            <cq-label
-                                                onClick={s.editFunc}
-                                                className="click-to-edit"
-                                            >
-                                                {s.display}
-                                            </cq-label>
-                                            <div
-                                                onClick={s.closeFunc}
-                                                className="ciq-icon ciq-close"
-                                            />
-                                        </cq-item>
-                                    )}
-                                </cq-study-legend-content>
-                                <cq-placeholder>
-                                    <div onClick={clearStudies} className="ciq-btn sm">Clear All</div>
-                                </cq-placeholder>
-                            </cq-section-dynamic>
-                        }
-                    </cq-study-legend>
-                    <StudyList />
+                    <StudyCategoricalDisplay />
                 </Menu.Body>
             </Menu>
         );
@@ -63,6 +37,6 @@ export default connect(
         clearStudies: studies.clearStudies,
         cleanUp: studies.cleanUp,
         Menu: studies.menu.connect(Menu),
-        StudyList: studies.list.connect(List),
+        StudyCategoricalDisplay: studies.categoricalDisplay.connect(CategoricalDisplay),
     })
 )(StudyLegend);
