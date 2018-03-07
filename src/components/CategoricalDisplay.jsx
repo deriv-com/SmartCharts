@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import {CategoryIconMap, SearchIcon} from './Icons.jsx';
+import {CategoryIconMap, ItemIconMap, SearchIcon} from './Icons.jsx';
 
 const CategoricalDisplay = ({
     placeholderText,
@@ -17,7 +17,12 @@ const CategoricalDisplay = ({
     setCategoryElement,
     activeCategoryKey,
 }) => {
-    const renderIcon = (item) => {return item.itemId ? <span className={`ciq-item-icon ic-${item.itemId.toLowerCase()}`} /> : '';};
+    const renderIcon = (item) => {
+        if (!item.itemId) {return '';}
+        const ItemIcon = ItemIconMap[`${item.itemId.toLowerCase()}`];
+        if (!ItemIcon) {return '';}
+        return <ItemIcon className={`ic-${item.itemId}`} />;
+    };
     const renderText = (item) => <span className="ciq-item-display">{item.display}</span>;
 
     const renderItem = (item, k) =>
@@ -74,7 +79,7 @@ const CategoricalDisplay = ({
                             className={`cq-filter ${isActive ? 'cq-active-filter' : ''}`}
                             onClick={() => handleFilterClick(category)}
                         >
-                            <CategoryIcon className={`ic-${category.categoryId}`}/>
+                            {CategoryIcon && <CategoryIcon className={`ic-${category.categoryId}`}/>}
                             {category.categoryName}
                         </div>);
                 })}

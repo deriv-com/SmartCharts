@@ -168,71 +168,27 @@
 
 /* Active Symbol Icons */
 .cq-categorical-display .results-panel {
-    .ciq-item-icon {
-        margin-right: 8px;
-        height: 23px;
-        width: 32px;
+    .ic-icon {
         display: inline-block;
-        background: url('icons/active symbols/ic-symbol-placeholder.svg') no-repeat center;
+        margin-right: 15px;
     }
 
-    @function flag($country) {
-        @return url('icons/flags/#{$country}.svg');
-    }
-
-    @mixin frx($a, $b) {
-        .ic-frx#{$a}#{$b} {
-            background: no-repeat bottom right, no-repeat top left;
-            background-image: flag($b), flag($a);
+    .ic-frx {
+        position: relative;
+        display: inline-block;
+        width: 40px;
+        top: -22px;
+        > span {
+            position: absolute;
+            > span {
+                position: absolute;
+                top: -4px;
+                left: -4px;
+            }
+            > span:last-child {
+                top: 4px;
+                left: 4px
+            }
         }
     }
-
-    @mixin wld($a) {
-        .ic-wld#{$a} {
-            background-image: flag($a);
-        }
-    }
-
-    /* FOREX */
-    /* Major Pairs */
-    @include frx(aud, jpy);
-    @include frx(aud, usd);
-    @include frx(eur, aud);
-    @include frx(eur, chf);
-    @include frx(eur, jpy);
-    @include frx(eur, cad);
-    @include frx(eur, gbp);
-    @include frx(eur, usd);
-    @include frx(gbp, aud);
-    @include frx(gbp, jpy);
-    @include frx(gbp, usd);
-    @include frx(usd, cad);
-    @include frx(usd, chf);
-    @include frx(usd, jpy);
-    /* Minor Pairs */
-    @include frx(aud, cad);
-    @include frx(aud, chf);
-    @include frx(aud, nzd);
-    @include frx(aud, pln);
-    @include frx(eur, nzd);
-    @include frx(gbp, cad);
-    @include frx(gbp, chf);
-    @include frx(gbp, nok);
-    @include frx(gbp, nzd);
-    @include frx(gbp, pln);
-    @include frx(nzd, jpy);
-    @include frx(nzd, usd);
-    @include frx(usd, mxn);
-    @include frx(usd, nok);
-    @include frx(usd, pln);
-    @include frx(usd, sek);
-    /* Smart FX */
-    @include wld(aud);
-    @include wld(eur);
-    @include wld(gbp);
-    @include wld(usd);
-
-    /* INDICES */
-    .ic-spc  { background-image: flag(usd) };
-    .ic-as51 { background-image: flag(aud) };
 }

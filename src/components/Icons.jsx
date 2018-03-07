@@ -19,6 +19,19 @@ import Stocks from '../../sass/icons/active symbols/categories/ic-stocks-normal-
 import Volidx from '../../sass/icons/active symbols/categories/ic-volidx-normal-light.svg';
 import Search from '../../sass/icons/common/ic-search-light.svg';
 
+import AUD from '../../sass/icons/flags/aud.svg';
+import CAD from '../../sass/icons/flags/cad.svg';
+import CHF from '../../sass/icons/flags/chf.svg';
+import EUR from '../../sass/icons/flags/eur.svg';
+import GBP from '../../sass/icons/flags/gbp.svg';
+import JPY from '../../sass/icons/flags/jpy.svg';
+import MXN from '../../sass/icons/flags/mxn.svg';
+import NOK from '../../sass/icons/flags/nok.svg';
+import NZD from '../../sass/icons/flags/nzd.svg';
+import PLN from '../../sass/icons/flags/pln.svg';
+import SEK from '../../sass/icons/flags/sek.svg';
+import USD from '../../sass/icons/flags/usd.svg';
+
 const Wrapper = WrappedComponent => props => {
     const propsCopy = Object.assign({}, props);
     propsCopy.className = `ic-icon ${propsCopy.className ? propsCopy.className : ''}`;
@@ -52,3 +65,69 @@ export const CategoryIconMap = {
     volidx: Wrapper(Volidx),
 };
 
+function frx(a, b) {
+    const A = ItemIconMap[a];
+    const B = ItemIconMap[b];
+    ItemIconMap[`frx${a}${b}`] = props => <span className="ic-frx"><span {...props}><A/><B/></span></span>;
+}
+
+function wld(a) {
+    ItemIconMap[`wld${a}`] = ItemIconMap[a];
+}
+
+export const ItemIconMap = {
+    aud: Wrapper(AUD),
+    cad: Wrapper(CAD),
+    chf: Wrapper(CHF),
+    eur: Wrapper(EUR),
+    gbp: Wrapper(GBP),
+    jpy: Wrapper(JPY),
+    mxn: Wrapper(MXN),
+    nok: Wrapper(NOK),
+    nzd: Wrapper(NZD),
+    pln: Wrapper(PLN),
+    sek: Wrapper(SEK),
+    usd: Wrapper(USD),
+};
+
+window.blabla = ItemIconMap;
+
+/* FOREX */
+/* Major Pairs */
+frx('aud', 'jpy');
+frx('aud', 'usd');
+frx('eur', 'aud');
+frx('eur', 'chf');
+frx('eur', 'jpy');
+frx('eur', 'cad');
+frx('eur', 'gbp');
+frx('eur', 'usd');
+frx('gbp', 'aud');
+frx('gbp', 'jpy');
+frx('gbp', 'usd');
+frx('usd', 'cad');
+frx('usd', 'chf');
+frx('usd', 'jpy');
+/* Minor Pairs */
+frx('aud', 'cad');
+frx('aud', 'chf');
+frx('aud', 'nzd');
+frx('aud', 'pln');
+frx('eur', 'nzd');
+frx('gbp', 'cad');
+frx('gbp', 'chf');
+frx('gbp', 'nok');
+frx('gbp', 'nzd');
+frx('gbp', 'pln');
+frx('nzd', 'jpy');
+frx('nzd', 'usd');
+frx('usd', 'mxn');
+frx('usd', 'nok');
+frx('usd', 'pln');
+frx('usd', 'sek');
+
+/* Smart FX */
+wld('aud');
+wld('eur');
+wld('gbp');
+wld('usd');
