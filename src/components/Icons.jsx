@@ -17,6 +17,7 @@ import Forex from '../../sass/icons/active symbols/categories/ic-forex-normal-li
 import Indices from '../../sass/icons/active symbols/categories/ic-indices-normal-light.svg';
 import Stocks from '../../sass/icons/active symbols/categories/ic-stocks-normal-light.svg';
 import Volidx from '../../sass/icons/active symbols/categories/ic-volidx-normal-light.svg';
+import Search from '../../sass/icons/common/ic-search-light.svg';
 
 const Wrapper = WrappedComponent => props => {
     const propsCopy = Object.assign({}, props);
@@ -39,8 +40,9 @@ export const OHLCIcon = Wrapper(OHLC);
 export const SplineIcon = Wrapper(Spline);
 export const WarningIcon = Wrapper(Warning);
 export const CloseIcon = Wrapper(Close);
+export const SearchIcon = Wrapper(Search);
 
-export const CategoryDisplayIconMap = {
+export const CategoryIconMap = {
     active: Wrapper(Active),
     commodities: Wrapper(Commodities),
     favorite: Wrapper(Favorite),

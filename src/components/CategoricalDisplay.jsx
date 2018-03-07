@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import {CategoryDisplayIconMap} from './Icons.jsx';
+import {CategoryIconMap, SearchIcon} from './Icons.jsx';
 
 const CategoricalDisplay = ({
     placeholderText,
@@ -64,9 +64,10 @@ const CategoricalDisplay = ({
                         autoCapitalize="off"
                         placeholder={placeholderText}
                     />
+                    <SearchIcon />
                 </div>
                 { filteredItems.map((category, i) => {
-                    const CategoryIcon = CategoryDisplayIconMap[category.categoryId];
+                    const CategoryIcon = CategoryIconMap[category.categoryId];
                     const isActive = activeCategoryKey === category.categoryId;
                     return (
                         <div key={i}

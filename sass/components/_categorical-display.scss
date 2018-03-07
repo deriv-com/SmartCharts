@@ -1,4 +1,5 @@
 .cq-categorical-display {
+    $active-color: #4C5794;
     width: 44em;
     padding: 0 !important;
     display: flex;
@@ -18,7 +19,6 @@
     .cq-lookup-input  {
         margin: 1.5em 1.3em 1.1em 1.3em;
         > input {
-            background: url('icons/common/ic-search-light.svg') no-repeat scroll 7px 11px;
             padding-left: 30px;
             line-height: 3em;
             font-size: 1em;
@@ -32,6 +32,13 @@
             &:focus {
                 border-bottom: 1px solid #2A3052;
             }
+        }
+        > .ic-icon {
+            position: absolute;
+            top: 24px;
+        }
+        > input:focus + .ic-icon svg path {
+            fill: $active-color;
         }
     }
     .category {
@@ -73,7 +80,6 @@
             background-color: #f2f3f8;
         }
         &.cq-active-filter {
-            $active-color: #4C5794;
             font-weight: 800;
             color: #4C5794;
             border-right: 2px solid $active-color;
