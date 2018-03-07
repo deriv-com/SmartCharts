@@ -4,9 +4,12 @@
   position: relative;
 
   .ciq-list-item {
-    background: #FFFFFF;
     border: 1px solid #E9E9ED;
-    border-bottom: none;
+    border-top: none;
+    &:first-child {
+      border-top: 1px solid #E9E9ED;
+    }
+    background: #FFFFFF;
     box-sizing: border-box;
     height: 32px;
     line-height: 32px;

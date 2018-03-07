@@ -26,8 +26,8 @@ export default class ChartTitleStore {
     @computed get symbolName() { return this.mainStore.chart.currentActiveSymbol.name; }
     @computed get decimalPlaces() { return this.mainStore.chart.currentActiveSymbol.decimal_places; }
 
-    @action.bound onSelectItem(symbolObj) {
-        this.context.changeSymbol(symbolObj);
+    @action.bound onSelectItem(symbolObject) {
+        this.context.changeSymbol(symbolObject);
         this.menu.setOpen(false);
     }
 

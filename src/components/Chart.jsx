@@ -15,7 +15,6 @@ import '../Plugin';
 import './Attribution';
 import './Close';
 import './ColorPicker';
-import './ComparisonList';
 import './FibSettingsDialog';
 import './Loader';
 import './Menu';
@@ -33,7 +32,7 @@ import './Undo';
 import './ViewDialog';
 import './Clickable';
 import ChartControls from './ChartControls.jsx';
-import Menu from './Menu.jsx';
+import ComparisonList from './ComparisonList.jsx';
 import SettingsDialog from './SettingsDialog.jsx';
 import Toolbar from './Toolbar.jsx';
 import ChartTitle from './ChartTitle.jsx';
@@ -52,7 +51,7 @@ class Chart extends Component {
     }
 
     render() {
-        const { DrawToolsSettingsDialog } = this.props;
+        const { DrawToolsSettingsDialog, StudySettingsDialog } = this.props;
         return (
             <cq-context ref={(root) => { this.root = root; }}>
                 <cq-color-picker>
@@ -65,24 +64,7 @@ class Chart extends Component {
                         <div className="cq-top-ui-widgets">
                             <ChartTitle />
                             <AssetInformation />
-                            <cq-comparison >
-                                <cq-comparison-key
-                                    dangerouslySetInnerHTML={{
-                                        /* TODO: fix this */
-                                        __html: `
-                                <template cq-comparison-item>
-                                    <cq-comparison-item>
-                                        <cq-comparison-swatch></cq-comparison-swatch>
-                                        <cq-comparison-label>AAPL</cq-comparison-label>
-                                        <cq-comparison-price cq-animate></cq-comparison-price>
-                                        <cq-comparison-loader></cq-comparison-loader>
-                                        <div class="stx-btn-ico ciq-close"></div>
-                                    </cq-comparison-item>
-                                </template>
-                                    `,
-                                    }}
-                                />
-                            </cq-comparison>
+                            <ComparisonList />
                         </div>
                         <ChartControls />
                         <div className="chartContainer primary">
@@ -235,15 +217,17 @@ class Chart extends Component {
                 </cq-dialog>
 
                 <DrawToolsSettingsDialog />
+                <StudySettingsDialog />
             </cq-context>
         );
     }
 }
 
 export default connect(
-    ({chart, drawTools}) => ({
+    ({chart, drawTools, studies}) => ({
         contextPromise: chart.contextPromise,
         init: chart.init,
+        StudySettingsDialog : studies.settingsDialog.connect(SettingsDialog),
         DrawToolsSettingsDialog : drawTools.settingsDialog.connect(SettingsDialog),
     })
 )(Chart);

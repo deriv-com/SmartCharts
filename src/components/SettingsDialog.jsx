@@ -1,10 +1,10 @@
 import React, {Component, Fragment} from 'react';
 import { connect } from '../store/Connect';
 import '../../sass/_ciq-settings-dialog.scss';
-import {Switch, ColorPicker, Slider, Line} from './Form.jsx';
+import {Switch, ColorPicker, Slider, Line, DropDown} from './Form.jsx';
 
 const SettingsDialog = ({
-    items,
+    items, // [{ id, title, value, defaultValue, type }]
     title,
     description,
     activeTab,
@@ -16,19 +16,78 @@ const SettingsDialog = ({
     onItemChange,
     Dialog,
 }) => {
-    const getItemValue = item => {
-        if(typeof item.value === 'boolean') {
-            return <Switch
-                value={item.value}
-                onChange={(v) => onItemChange(item.id, v)}
-            />;
-        }
-        if(item.id === 'pattern') {
+    const renderMap = {
+        switch: item => (
+            <div key={item.id} className='item'>
+                <div className='title'>
+                    <span>{item.title}</span>
+                    <Switch
+                        value={item.value}
+                        onChange={(v) => onItemChange(item.id, v)}
+                    />
+                </div>
+            </div>
+        ),
+        colorpicker: item => (
+            <div key={item.id} className='item'>
+                <div className='title'>
+                    <span>{item.title}</span>
+                    <ColorPicker
+                        color={item.value}
+                        setColor={(value) => onItemChange(item.id, value)}
+                    />
+                </div>
+            </div>
+        ),
+        pattern: item => {
             const lineWidth = items.filter(it => it.id === 'lineWidth')[0].value;
-            return `${item.value} ${lineWidth ? (lineWidth+1)/2 : ''}`;
-        }
-        return item.value;
-    }
+            return (
+                <div key={item.id} className='item'>
+                    <div className='title'>
+                        <span>{item.title}</span>
+                        <Line
+                            pattern={item.value}
+                            lineWidth={lineWidth}
+                            setLine={({ pattern, width }) => {
+                                onItemChange('pattern', pattern);
+                                onItemChange('lineWidth', width);
+                            }}
+                        />
+                    </div>
+                </div>
+            );
+        },
+        select: item => (
+            <div key={item.id} className='item'>
+                <div className='title'>
+                    <span>{item.title}</span>
+                    <DropDown
+                        rows={Object.keys(item.options)}
+                        open={false /* TODO */}
+                        title={item.value}
+                        onRowClick={value => onItemChange(item.id, value)}
+                    >
+                        {row => row}
+                    </DropDown>
+                </div>
+            </div>
+        ),
+        number: item => (
+            <div key={item.id} className='item'>
+                <div className='title'>
+                    <span>{item.title}</span>
+                    <Slider
+                        min={item.min || 1}
+                        step={item.step || 1}
+                        max={item.max || 100}
+                        value={item.value}
+                        onChange={val => onItemChange(item.id, val)}
+                    />
+                </div>
+            </div>
+        ),
+        none: () => null,
+    };
     return (
         <Dialog className="cq-dialog cq-settings-dialog">
             <div className={`titlebar ${!showTabs ? 'no-tabs' : ''}`}>
@@ -62,40 +121,20 @@ const SettingsDialog = ({
             { activeTab === 'settings' ?
                 <div className='items' >
                     {items
-                        .filter(item => !/(object|array)/.test(typeof item.value))
-                        .filter(item => item.id !== 'lineWidth')
-                        .map(item => (
-                            <div key={item.id} className='item'>
-                                <div className='title'>
-                                    <span>{item.title}</span>
-                                    <strong>{getItemValue(item)}</strong>
+                        .map(item => {
+                            if(renderMap[item.type]) {
+                                return renderMap[item.type](item);
+                            }
+                            return (
+                                <div key={item.id} className='item'>
+                                    <div className='title'>
+                                        <span>{item.title}</span>
+                                        <strong>{item.type}</strong>
+                                    </div>
                                 </div>
-                                {/nothing-yet/.test(item.id) &&
-                                    <Slider
-                                        onChange={value => onItemChange(item.id, value)}
-                                        className='value'
-                                        value={item.value}
-                                    />
-                                }
-                                {/color/i.test(item.id) &&
-                                    <ColorPicker
-                                        color={item.value}
-                                        setColor={(value) => onItemChange(item.id, value)}
-                                    />
-                                }
-                                {/pattern/.test(item.id) &&
-                                    <Line
-                                        pattern={item.value}
-                                        lineWidth={items.filter(it => it.id === 'lineWidth')[0].value}
-                                        setLine={({ pattern, width }) => {
-                                            onItemChange('pattern', pattern);
-                                            onItemChange('lineWidth', width);
-                                        }}
-                                    />
-                                }
-                                {!/(lineWidth|pattern|color|axisLabel)/i.test(item.id) && <div className='value'>{item.value}</div>}
-                            </div>
-                        ))}
+                            );
+                        })
+                    }
                 </div>
                 :
                 <div className='description'>

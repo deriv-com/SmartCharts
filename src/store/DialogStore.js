@@ -11,7 +11,11 @@ export default class DialogStore {
     @observable open = false;
 
     @action.bound setOpen(val) {
-        this.open = val;
+        if(this.open !== val) {
+            this.open = val;
+            if(this.open) { setTimeout(() => this.register(), 100); }
+            else { this.unregister(); }
+        }
         if(this.open === true) { // close others.
             allDialogs.filter(m => m !== this).forEach(m => m.setOpen(false));
         }
@@ -33,12 +37,12 @@ export default class DialogStore {
         }
     };
 
-    @action.bound init() {
+    @action.bound register() {
         document.addEventListener('click', this.handleClickOutside, false);
         document.addEventListener('keydown', this.closeOnEscape, false);
     }
 
-    @action.bound destroy() {
+    @action.bound unregister() {
         document.removeEventListener('click', this.handleClickOutside);
         document.removeEventListener('keydown', this.closeOnEscape);
     }
@@ -52,8 +56,6 @@ export default class DialogStore {
     connect = connect(() => ({
         open: this.open,
         setOpen: this.setOpen,
-        init: this.init,
-        destroy: this.destroy,
         onTitleClick: this.onTitleClick,
         onContainerClick: this.onContainerClick,
     }))

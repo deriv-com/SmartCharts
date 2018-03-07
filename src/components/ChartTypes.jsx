@@ -32,7 +32,7 @@ const ChartTypes = ({
                     onChange={setAssetInformation}
                 />
             </div>
-            <TypeList height={257}>
+            <TypeList height={260}>
                 {T => (
                     <React.Fragment>
                         <T.icon  className={`margin ${T.active ? 'active' : ''}`} />

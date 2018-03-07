@@ -12,18 +12,16 @@ export const Slider = ({
     onChange,
 }) => {
     return (
-        <Fragment>
-            <div className={`cq-slider ${className}`}>
-                <input
-                    type='range'
-                    value={value}
-                    min={min}
-                    max={max}
-                    step={step}
-                    onChange={e => onChange(+e.target.value)}
-                ></input>
-            </div>
-        </Fragment>
+        <div className={`cq-slider ${className}`}>
+            <input
+                type='range'
+                value={value}
+                min={min}
+                max={max}
+                step={step}
+                onChange={e => onChange(+e.target.value)}
+            ></input>
+        </div>
     );
 };
 
@@ -69,6 +67,29 @@ export const Line = ({
         </div>
     );
 };
+
+export const DropDown = ({
+    open,
+    rows,
+    children,
+    title,
+    onRowClick,
+}) => (
+    <div className='cq-dropdown'>
+        <div className='title'>{title}</div>
+        <div className={`dropdown ${open ? 'active' : ''}`}>
+            {rows.map((row, rowIdx) => (
+                <div
+                    key={rowIdx}
+                    className='row'
+                    onClick={() => onRowClick && onRowClick(row)}
+                >
+                    {children(row)}
+                </div>
+            ))}
+        </div>
+    </div>
+);
 
 export const ColorPicker = ({
     color,

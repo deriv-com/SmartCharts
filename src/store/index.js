@@ -8,6 +8,7 @@ import ComparisonStore from './ComparisonStore';
 import DrawToolsStore from './DrawToolsStore';
 import ChartTitleStore from './ChartTitleStore';
 import AssetInformationStore from './AssetInformationStore';
+import ComparisonListStore from './ComparisonListStore';
 
 export default class MainStore {
     @observable chart = new ChartStore(this);
@@ -19,4 +20,5 @@ export default class MainStore {
     @observable chartTitle = new ChartTitleStore(this);
     @observable timeperiod = new TimeperiodStore(this);
     @observable assetInformation = new AssetInformationStore(this);
+    @observable comparisonList = new ComparisonListStore(this);
 }

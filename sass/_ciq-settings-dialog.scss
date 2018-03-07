@@ -68,13 +68,17 @@
     .items {
         padding: 16px 0;
         .item {
-            height: 60px;
             box-sizing: border-box;
-            padding: 8px 16px;
+            padding: 0 16px;
+            height: 32px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
             .title {
                 font-size: 12px;
                 display: flex;
                 justify-content: space-between;
+                align-items: center;
             }
         }
     }
