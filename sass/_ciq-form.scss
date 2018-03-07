@@ -148,7 +148,46 @@
         color: #666;
     }
 }
+.cq-dropdown {
+    position: relative;
+    height: 18px;
+    width: 80px;
 
+    .title {
+        line-height: 18px;
+        justify-content: center !important;
+        font-weight: bold;
+        border: 1px solid #eaeaea;
+        border-radius: 2px;
+    }
+
+    .dropdown {
+        position: absolute;
+        background: white;
+        top: 20px;
+        right: -5px;
+        z-index: +1;
+        padding: 5px;
+        width: 80px;
+        box-shadow: 0 0.375em 0.625em 0 rgba(0,0,0,.14);
+        display: none;
+        .row {
+            height: 18px;
+            cursor: pointer;
+            &:hover {
+                background: #fafafa;
+                font-weight: bold;
+            }
+        }
+        &:hover {
+            display: block;
+        }
+    }
+
+    .title:hover + .dropdown {
+        display: block;
+    }
+}
 .cq-color-picker {
     position: relative;
     height: 24px;

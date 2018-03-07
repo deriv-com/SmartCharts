@@ -68,6 +68,29 @@ export const Line = ({
     );
 };
 
+export const DropDown = ({
+    open,
+    rows,
+    children,
+    title,
+    onRowClick,
+}) => (
+    <div className='cq-dropdown'>
+        <div className='title'>{title}</div>
+        <div className={`dropdown ${open ? 'active' : ''}`}>
+            {rows.map((row, rowIdx) => (
+                <div
+                    key={rowIdx}
+                    className='row'
+                    onClick={() => onRowClick && onRowClick(row)}
+                >
+                    {children(row)}
+                </div>
+            ))}
+        </div>
+    </div>
+);
+
 export const ColorPicker = ({
     color,
     setColor,
