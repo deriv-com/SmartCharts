@@ -40,7 +40,7 @@ export default class CategoricalDisplayStore {
         let i = 0;
         for (const category of this.filteredItems) {
             const el = this.categoryElements[category.categoryId];
-            if (el === null) {
+            if (!el) {
                 i++;
                 continue;
             }
@@ -72,8 +72,15 @@ export default class CategoricalDisplayStore {
 
         this.scroll.on('scroll', this.updateScrollSpy.bind(this));
 
+        // Select first non-empty category:
         if (this.activeCategoryKey === '' && this.filteredItems.length > 0) {
-            this.activeCategoryKey = this.filteredItems[0].categoryId;
+            for (const category of this.filteredItems) {
+                const el = this.categoryElements[category.categoryId];
+                if (el) {
+                    this.activeCategoryKey = category.categoryId;
+                    break;
+                }
+            }
         }
     }
 
