@@ -112,6 +112,7 @@
     .cq-item, .cq-active-item {
         padding: 10px 20px 0px 20px;
         border-bottom: 1px solid #e9e9ed;
+        height: 30px;
     }
     .cq-item[disabled] {
         pointer-events: none;
