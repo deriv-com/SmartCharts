@@ -19,6 +19,7 @@ import Stocks from '../../sass/icons/active symbols/categories/ic-stocks-normal-
 import Volidx from '../../sass/icons/active symbols/categories/ic-volidx-normal-light.svg';
 import Search from '../../sass/icons/common/ic-search-light.svg';
 
+import SymbolPlaceholder from '../../sass/icons/active symbols/ic-symbol-placeholder.svg';
 import AUD from '../../sass/icons/flags/aud.svg';
 import CAD from '../../sass/icons/flags/cad.svg';
 import CHF from '../../sass/icons/flags/chf.svg';
@@ -55,6 +56,8 @@ export const WarningIcon = Wrapper(Warning);
 export const CloseIcon = Wrapper(Close);
 export const SearchIcon = Wrapper(Search);
 
+export const SymbolPlaceholderIcon = Wrapper(SymbolPlaceholder);
+
 export const CategoryIconMap = {
     active: Wrapper(Active),
     commodities: Wrapper(Commodities),
@@ -65,17 +68,7 @@ export const CategoryIconMap = {
     volidx: Wrapper(Volidx),
 };
 
-function frx(a, b) {
-    const A = ItemIconMap[a];
-    const B = ItemIconMap[b];
-    ItemIconMap[`frx${a}${b}`] = props => <span className="ic-frx"><span {...props}><A/><B/></span></span>;
-}
-
-function wld(a) {
-    ItemIconMap[`wld${a}`] = ItemIconMap[a];
-}
-
-export const ItemIconMap = {
+const FlagIconMap = {
     aud: Wrapper(AUD),
     cad: Wrapper(CAD),
     chf: Wrapper(CHF),
@@ -90,7 +83,23 @@ export const ItemIconMap = {
     usd: Wrapper(USD),
 };
 
-window.blabla = ItemIconMap;
+function frx(a, b) {
+    const A = FlagIconMap[a];
+    const B = FlagIconMap[b];
+    ItemIconMap[`frx${a}${b}`] = props => {
+        let { className, ...p } = props;
+        className = `ic-frx ${className}`;
+        return (
+            <span className={className} {...p}><A/><B/></span>
+        );
+    };
+}
+
+function wld(a) {
+    ItemIconMap[`wld${a}`] = FlagIconMap[a];
+}
+
+export const ItemIconMap = {};
 
 /* FOREX */
 /* Major Pairs */

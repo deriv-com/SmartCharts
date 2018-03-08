@@ -176,19 +176,16 @@
     .ic-frx {
         position: relative;
         display: inline-block;
+        vertical-align: top;
         width: 40px;
-        top: -22px;
         > span {
             position: absolute;
-            > span {
-                position: absolute;
-                top: -4px;
-                left: -4px;
-            }
-            > span:last-child {
-                top: 4px;
-                left: 4px
-            }
+            top: -4px;
+            left: -4px;
+        }
+        > span:last-child {
+            top: 4px;
+            left: 4px
         }
     }
 }

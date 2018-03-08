@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import {CategoryIconMap, ItemIconMap, SearchIcon} from './Icons.jsx';
+import {CategoryIconMap, ItemIconMap, SearchIcon, SymbolPlaceholderIcon} from './Icons.jsx';
 
 const CategoricalDisplay = ({
     placeholderText,
@@ -20,7 +20,7 @@ const CategoricalDisplay = ({
     const renderIcon = (item) => {
         if (!item.itemId) {return '';}
         const ItemIcon = ItemIconMap[`${item.itemId.toLowerCase()}`];
-        if (!ItemIcon) {return '';}
+        if (!ItemIcon) {return <SymbolPlaceholderIcon/>;}
         return <ItemIcon className={`ic-${item.itemId}`} />;
     };
     const renderText = (item) => <span className="ciq-item-display">{item.display}</span>;
