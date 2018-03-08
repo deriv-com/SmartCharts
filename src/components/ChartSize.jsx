@@ -1,5 +1,9 @@
 import React, {PureComponent} from 'react';
 import contextAware from '../contextAware';
+import {
+    MinusIcon as ZoomOut,
+    AddIcon as ZoomIn,
+} from './Icons.jsx';
 
 class ChartSize extends PureComponent {
     onContextReady (context) {
@@ -11,9 +15,9 @@ class ChartSize extends PureComponent {
 
     render () {
         return (
-            <div className="cq-chart-size">
-                <span className='cq-zoom-out' onClick={this.zoomOut} />
-                <span className='cq-zoom-in' onClick={this.zoomIn} />
+            <div className="cq-chart-size cq-menu-btn">
+                <ZoomOut className='cq-zoom-out cq-menu-btn' tooltip-title="Zoom out" onClick={this.zoomOut} />
+                <ZoomIn className='cq-zoom-in cq-menu-btn' tooltip-title="Zoom in" onClick={this.zoomIn} />
             </div>
         );
     }

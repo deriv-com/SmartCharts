@@ -17,17 +17,8 @@
   }
   .ciq-row {
       height: 2.3em !important;
-      .ciq-icon {
+      > span {
           margin: 0 16px 0 6px !important;
       }
   }
-  .ciq-ic-download {
-      background: url('icons/chart template/ic-download-light.svg');
-  }
-  .ciq-ic-templatelist {
-      background: url('icons/chart template/ic-templatelist-light.svg');
-  }
-  .ciq-ic-add {
-       background: url('icons/chart template/ic-add-light.svg');
-   }
 }

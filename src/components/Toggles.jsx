@@ -11,7 +11,7 @@ const ChartTypes = ({
     >
         <CrosshairIcon
             onClick={toggleCrosshair}
-            className={`tooltip ${crosshairClass}`}
+            className={`${crosshairClass}`}
             tooltip-title='Crosshair' />
     </div>
 );
