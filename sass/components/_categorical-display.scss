@@ -88,6 +88,9 @@
                 &.ic-active, &.ic-forex, &.ic-commodities, &.ic-volidx {
                     svg > g > circle { fill: $active-color; }
                 }
+                &.ic-indicators > svg > g circle {
+                    fill: $active-color;
+                }
                 &.ic-stocks {
                     svg > g {
                         > use, > g:last-child { fill: $active-color; }
