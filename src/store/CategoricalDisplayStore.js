@@ -133,10 +133,6 @@ export default class CategoricalDisplayStore {
         this.searchInput = element;
     }
 
-    @action.bound setResultsPanel(element) {
-        this.resultsPanel = element;
-    }
-
     @action.bound setScrollPanel(element) {
         this.scrollPanel = element;
     }
@@ -159,17 +155,8 @@ export default class CategoricalDisplayStore {
             categoryName: 'Active',
             categoryId: 'active',
             hasSubcategory: false,
-            data: []
+            data: actives
         };
-        for (const item of actives) {
-            category.data.push({
-                enabled: true,
-                selected: false,
-                display: item.symbolObject.name,
-                itemId: item.symbolObject.symbol,
-                dataObject: item
-            });
-        }
         return category;
     }
 
@@ -179,15 +166,11 @@ export default class CategoricalDisplayStore {
         filteredItems: this.filteredItems,
         getItemCount: this.getItemCount,
         setSearchInput: this.setSearchInput,
-        setResultsPanel: this.setResultsPanel,
         handleFilterClick: this.handleFilterClick,
-        handleInputClick: this.handleInputClick,
         onSelectItem: this.onSelectItem,
         hasActiveItems: (this.getActiveItems !== undefined),
         activeOptions: this.activeOptions,
         placeholderText: this.placeholderText,
-        scrollId: this.scrollId,
-        init: this.init,
         activeCategoryKey: this.activeCategoryKey,
         setScrollPanel: this.setScrollPanel,
         setCategoryElement: this.setCategoryElement,

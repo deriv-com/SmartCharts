@@ -5,10 +5,8 @@ import {CategoryIconMap, ItemIconMap, SearchIcon,
 const CategoricalDisplay = ({
     placeholderText,
     setSearchInput,
-    setResultsPanel,
     setFilterText,
     handleFilterClick,
-    handleInputClick,
     hasActiveItems,
     filteredItems,
     getItemCount,
@@ -90,7 +88,7 @@ const CategoricalDisplay = ({
                 })}
             </div>
             <div className="cq-scroll-panel" ref={setScrollPanel}>
-                <div className="results-panel" ref={setResultsPanel}>
+                <div className="results-panel">
                     { filteredItems.map((category, i) =>
                         getItemCount(category) > 0 &&
                         <div
