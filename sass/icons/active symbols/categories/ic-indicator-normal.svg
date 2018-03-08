@@ -1,27 +1,21 @@
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="16" height="16" viewBox="0 0 16 16">
-    <defs>
-        <circle id="a" cx="1.5" cy="6.5" r="1.5"/>
-        <circle id="b" cx="4.5" cy="3.5" r="1.5"/>
-        <circle id="c" cx="7.5" cy="6.5" r="1.5"/>
-        <circle id="d" cx="10.5" cy="1.5" r="1.5"/>
-    </defs>
     <g fill="none" fill-rule="evenodd">
         <circle cx="8" cy="8" r="8" fill="#B0B3BF"/>
         <path stroke="#FFF" d="M3.5 10.5l3-3 3 3 3-5.005"/>
         <g transform="translate(2 4)">
-            <use fill="#B0B3BF" xlink:href="#a"/>
+            <circle fill="#B0B3BF" id="a" cx="1.5" cy="6.5" r="1.5"/>
             <circle cx="1.5" cy="6.5" r="1" stroke="#FFF"/>
         </g>
         <g transform="translate(2 4)">
-            <use fill="#B0B3BF" xlink:href="#b"/>
+            <circle fill="#B0B3BF" id="b" cx="4.5" cy="3.5" r="1.5"/>
             <circle cx="4.5" cy="3.5" r="1" stroke="#FFF"/>
         </g>
         <g transform="translate(2 4)">
-            <use fill="#B0B3BF" xlink:href="#c"/>
+            <circle  fill="#B0B3BF" id="c" cx="7.5" cy="6.5" r="1.5"/>
             <circle cx="7.5" cy="6.5" r="1" stroke="#FFF"/>
         </g>
         <g transform="translate(2 4)">
-            <use fill="#B0B3BF" xlink:href="#d"/>
+            <circle fill="#B0B3BF" id="d" cx="10.5" cy="1.5" r="1.5"/>
             <circle cx="10.5" cy="1.5" r="1" stroke="#FFF"/>
         </g>
     </g>
