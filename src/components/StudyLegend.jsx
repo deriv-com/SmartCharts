@@ -1,7 +1,7 @@
 import CIQ from 'chartiq';
 import React, { Component } from 'react';
 import Menu from './Menu.jsx';
-import List from './List.jsx';
+import CategoricalDisplay from './CategoricalDisplay.jsx';
 import {connect} from '../store/Connect';
 import {IndicatorIcon} from './Icons.jsx';
 
@@ -11,7 +11,7 @@ class StudyLegend extends Component {
     }
 
     render() {
-        const {isOpened, setOpen, clearStudies, studies, Menu, menuOpen, StudyList} = this.props;
+        const {isOpened, setOpen, clearStudies, activeStudies, Menu, menuOpen, StudyCategoricalDisplay} = this.props;
 
         return (
             <Menu
@@ -25,33 +25,7 @@ class StudyLegend extends Component {
                         tooltip-title="Studies" />
                 </Menu.Title>
                 <Menu.Body>
-                    <cq-study-legend cq-no-close>
-                        {studies.length > 0 &&
-                            <cq-section-dynamic>
-                                <cq-heading>Current Indicators</cq-heading>
-                                <cq-study-legend-content>
-                                    {studies.map((s, i) =>
-                                        <cq-item key={i}>
-                                            <cq-label
-                                                onClick={s.editFunc}
-                                                className="click-to-edit"
-                                            >
-                                                {s.display}
-                                            </cq-label>
-                                            <div
-                                                onClick={s.closeFunc}
-                                                className="ciq-icon ciq-close"
-                                            />
-                                        </cq-item>
-                                    )}
-                                </cq-study-legend-content>
-                                <cq-placeholder>
-                                    <div onClick={clearStudies} className="ciq-btn sm">Clear All</div>
-                                </cq-placeholder>
-                            </cq-section-dynamic>
-                        }
-                    </cq-study-legend>
-                    <StudyList />
+                    <StudyCategoricalDisplay />
                 </Menu.Body>
             </Menu>
         );
@@ -62,11 +36,11 @@ export default connect(
     ({studies}) => ({
         isOpened: studies.open,
         setOpen: studies.setOpen,
-        studies: studies.studies,
+        activeStudies: studies.activeStudies,
         clearStudies: studies.clearStudies,
         cleanUp: studies.cleanUp,
         Menu: studies.menu.connect(Menu),
         menuOpen: studies.menu.open,
-        StudyList: studies.list.connect(List),
+        StudyCategoricalDisplay: studies.categoricalDisplay.connect(CategoricalDisplay),
     })
 )(StudyLegend);

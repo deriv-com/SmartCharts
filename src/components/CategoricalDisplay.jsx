@@ -27,7 +27,7 @@ const CategoricalDisplay = ({
     const renderItem = (item, k) =>
         <div
             className={`cq-item ${item.selected ? 'selected ' : ''}`}
-            onClick={() => onSelectItem(item.dataObject)}
+            onClick={(e) => onSelectItem(item.dataObject, e)}
             key={k}
             disabled={!item.enabled}
         >
@@ -48,7 +48,7 @@ const CategoricalDisplay = ({
                         <span
                             key={`active-opt-${i}`}
                             className={`ic-${opt.id}`}
-                            onClick={() => opt.onClick && opt.onClick(item.dataObject)}
+                            onClick={(e) => opt.onClick && opt.onClick(item.dataObject, e)}
                         >
                             {ActiveOptionIcon && <ActiveOptionIcon />}
                             {opt.renderChild && opt.renderChild(item)}
@@ -80,7 +80,7 @@ const CategoricalDisplay = ({
                     return (
                         <div key={i}
                             className={`cq-filter ${isActive ? 'cq-active-filter' : ''}`}
-                            onClick={() => handleFilterClick(category)}
+                            onClick={(e) => handleFilterClick(category, e)}
                         >
                             {CategoryIcon && <CategoryIcon className={`ic-${category.categoryId}`}/>}
                             {category.categoryName}

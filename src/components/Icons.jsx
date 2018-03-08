@@ -29,6 +29,8 @@ import Indices from '../../sass/icons/active symbols/categories/ic-indices-norma
 import Stocks from '../../sass/icons/active symbols/categories/ic-stocks-normal-light.svg';
 import Volidx from '../../sass/icons/active symbols/categories/ic-volidx-normal-light.svg';
 import Search from '../../sass/icons/common/ic-search-light.svg';
+import Edit from '../../sass/icons/common/ic-edit.svg';
+import IndicatorCategory from '../../sass/icons/active symbols/categories/ic-indicator-normal.svg';
 
 import SymbolPlaceholder from '../../sass/icons/active symbols/ic-symbol-placeholder.svg';
 import AUD from '../../sass/icons/flags/aud.svg';
@@ -77,6 +79,7 @@ export const StarIcon = Wrapper(Star);
 export const TemplateIcon = Wrapper(Template);
 export const WarningIcon = Wrapper(Warning);
 export const SearchIcon = Wrapper(Search);
+export const EditIcon = Wrapper(Edit);
 
 export const SymbolPlaceholderIcon = Wrapper(SymbolPlaceholder);
 
@@ -88,6 +91,7 @@ export const CategoryIconMap = {
     indices: Wrapper(Indices),
     stocks: Wrapper(Stocks),
     volidx: Wrapper(Volidx),
+    indicators: Wrapper(IndicatorCategory)
 };
 
 const FlagIconMap = {
@@ -165,4 +169,5 @@ wld('usd');
 
 export const ActiveOptionsIconMap = {
     delete: DeleteIcon,
+    edit: EditIcon,
 };

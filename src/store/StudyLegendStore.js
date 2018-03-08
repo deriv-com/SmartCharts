@@ -1,6 +1,6 @@
 import { observable, action, computed, when } from 'mobx';
 import MenuStore from './MenuStore';
-import ListStore from './ListStore';
+import CategoricalDisplayStore from './CategoricalDisplayStore';
 import SettingsDialogStore from './SettingsDialogStore';
 
 export default class StudyLegendStore {
@@ -9,16 +9,16 @@ export default class StudyLegendStore {
         when(() => this.context, this.onContextReady);
 
         this.menu = new MenuStore({getContext: () => this.context});
-        this.list = new ListStore({
-            getIsOpen: () => this.menu.open,
-            getContext: () => this.context,
-            onItemSelected: item => {
-                let sd = CIQ.Studies.addStudy(this.stx, item.id);
-            },
-            getItems: () => Object.keys(CIQ.Studies.studyLibrary).map(key => ({
-                id: key,
-                text: CIQ.Studies.studyLibrary[key].name,
-            })),
+        this.categoricalDisplay = new CategoricalDisplayStore({
+            activeOptions: [
+                { id: 'edit',   onClick: (item, e) => item.editFunc(e)  },
+                { id: 'delete', onClick: (item, e) => item.closeFunc(e) },
+            ],
+            getIsShown: () => this.menu.open,
+            getCategoricalItems: () => this.categorizedStudies,
+            getActiveItems: () => this.activeStudies,
+            onSelectItem: this.onSelectItem.bind(this),
+            placeholderText: '"Mass Index" or "Doji Star"',
         });
         this.settingsDialog = new SettingsDialogStore({
             getContext: () => this.mainStore.chart.context,
@@ -40,13 +40,36 @@ export default class StudyLegendStore {
     injections = [];
     previousStudies = { };
 
-    @observable studies = [];
+    @observable activeStudies = [];
 
     begin() {
         this.stx.callbacks.studyOverlayEdit = study => this.editStudy(study);
         this.stx.callbacks.studyPanelEdit = study => this.editStudy(study);
-        // this.injections.push(this.stx.append('createDataSet', () => this.renderLegend()));
-        // this.renderLegend();
+        this.injections.push(this.stx.append('createDataSet', () => this.renderLegend()));
+        this.renderLegend();
+    }
+
+    get categorizedStudies() {
+        const data = [];
+        Object.keys(CIQ.Studies.studyLibrary).map(studyId => {
+            const study = CIQ.Studies.studyLibrary[studyId];
+            data.push({
+                enabled: true,
+                display: study.name,
+                dataObject: studyId
+            });
+        });
+        const category = {
+            categoryName: 'Indicators',
+            categoryId: 'indicators',
+            hasSubcategory: false,
+            data
+        };
+        return [category];
+    }
+
+    @action.bound onSelectItem(item) {
+        CIQ.Studies.addStudy(this.stx, item);
     }
 
     @action.bound editStudy(study) {
@@ -168,17 +191,19 @@ export default class StudyLegendStore {
                     parameters: sd.parameters,
                 };
                 studyEdit.editPanel(params);
-                this.menu.open = false;
+                this.menu.setOpen(false);
             };
-
             studies.push({
+                enabled: true,
                 display: sd.inputs.display,
-                closeFunc,
-                editFunc,
+                dataObject: {
+                    closeFunc,
+                    editFunc,
+                },
             });
         });
 
-        this.studies = studies;
+        this.activeStudies = studies;
     }
 
     @action.bound cleanUp() {
