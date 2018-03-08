@@ -131,39 +131,34 @@
         display: inline-block;
         vertical-align: super;
     }
+
+    /* Active Options */
+    .cq-active-options {
+        float: right;
+        display: inline-flex;
+        > span {
+            height:24px;
+            width: 24px;
+            margin-left: 2px;
+        }
+        .ic-delete {
+            cursor: pointer;
+        }
+        .ic-cmp-color > span {
+            display: inline-block;
+            width: 13px;
+            border-radius: 15px;
+            height: 2px;
+            vertical-align: super;
+            left: 6px;
+            position: relative;
+        }
+    }
 }
 
 .stxMenuActive .cq-categorical-display {
     opacity: 1;
     height: auto;
-}
-
-/* Active Options */
-.cq-categorical-display .cq-active-options {
-    float: right;
-    > span {
-        height:16px;
-        width: 16px;
-        display: inline-block;
-        margin-left: 5px;
-    }
-    .ic-delete {
-        margin-top: 5px;
-        background-image: url('icons/common/ic-delete-light.svg');
-        cursor: pointer;
-        &:hover {
-            background-color: #d1d1d1;
-        }
-    }
-    .ic-cmp-color > span {
-        display: inline-block;
-        width: 13px;
-        border-radius: 15px;
-        height: 2px;
-        vertical-align: super;
-        margin-bottom: 1px;
-    }
-
 }
 
 /* Active Symbol Icons */

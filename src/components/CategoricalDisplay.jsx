@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react';
-import {CategoryIconMap, ItemIconMap, SearchIcon, SymbolPlaceholderIcon} from './Icons.jsx';
+import {CategoryIconMap, ItemIconMap, SearchIcon,
+    SymbolPlaceholderIcon, ActiveOptionsIconMap } from './Icons.jsx';
 
 const CategoricalDisplay = ({
     placeholderText,
@@ -43,15 +44,19 @@ const CategoricalDisplay = ({
             {renderIcon(item)}{renderText(item)}
             {activeOptions &&
             <span className="cq-active-options">
-                {activeOptions.map((opt, i) =>
-                    <span
-                        key={`active-opt-${i}`}
-                        className={`ic-${opt.id}`}
-                        onClick={() => opt.onClick && opt.onClick(item.dataObject)}
-                    >
-                        {opt.renderChild && opt.renderChild(item)}
-                    </span>
-                )}
+                {activeOptions.map((opt, i) => {
+                    const ActiveOptionIcon = ActiveOptionsIconMap[opt.id];
+                    return (
+                        <span
+                            key={`active-opt-${i}`}
+                            className={`ic-${opt.id}`}
+                            onClick={() => opt.onClick && opt.onClick(item.dataObject)}
+                        >
+                            {ActiveOptionIcon && <ActiveOptionIcon />}
+                            {opt.renderChild && opt.renderChild(item)}
+                        </span>
+                    );
+                })}
             </span>}
         </div>;
 
