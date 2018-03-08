@@ -21,6 +21,30 @@ import Spline from '../../sass/icons/chart types/ic-spline.svg';
 import Star from '../../sass/icons/favorite/ic-favorite-normal-light.svg';
 import Template from '../../sass/icons/chart template/ic-charttemplate-normal-light.svg';
 import Warning from '../../sass/icons/notification/ic-warning.svg';
+import Active from '../../sass/icons/active symbols/categories/ic-active-normal-light.svg';
+import Commodities from '../../sass/icons/active symbols/categories/ic-commodities-normal-light.svg';
+import Favorite from '../../sass/icons/active symbols/categories/ic-favorite-normal-light.svg';
+import Forex from '../../sass/icons/active symbols/categories/ic-forex-normal-light.svg';
+import Indices from '../../sass/icons/active symbols/categories/ic-indices-normal-light.svg';
+import Stocks from '../../sass/icons/active symbols/categories/ic-stocks-normal-light.svg';
+import Volidx from '../../sass/icons/active symbols/categories/ic-volidx-normal-light.svg';
+import Search from '../../sass/icons/common/ic-search-light.svg';
+import Edit from '../../sass/icons/common/ic-edit.svg';
+import IndicatorCategory from '../../sass/icons/active symbols/categories/ic-indicator-normal.svg';
+
+import SymbolPlaceholder from '../../sass/icons/active symbols/ic-symbol-placeholder.svg';
+import AUD from '../../sass/icons/flags/aud.svg';
+import CAD from '../../sass/icons/flags/cad.svg';
+import CHF from '../../sass/icons/flags/chf.svg';
+import EUR from '../../sass/icons/flags/eur.svg';
+import GBP from '../../sass/icons/flags/gbp.svg';
+import JPY from '../../sass/icons/flags/jpy.svg';
+import MXN from '../../sass/icons/flags/mxn.svg';
+import NOK from '../../sass/icons/flags/nok.svg';
+import NZD from '../../sass/icons/flags/nzd.svg';
+import PLN from '../../sass/icons/flags/pln.svg';
+import SEK from '../../sass/icons/flags/sek.svg';
+import USD from '../../sass/icons/flags/usd.svg';
 
 const Wrapper = WrappedComponent => props => {
     const propsCopy = Object.assign({}, props);
@@ -54,3 +78,96 @@ export const SplineIcon = Wrapper(Spline);
 export const StarIcon = Wrapper(Star);
 export const TemplateIcon = Wrapper(Template);
 export const WarningIcon = Wrapper(Warning);
+export const SearchIcon = Wrapper(Search);
+export const EditIcon = Wrapper(Edit);
+
+export const SymbolPlaceholderIcon = Wrapper(SymbolPlaceholder);
+
+export const CategoryIconMap = {
+    active: Wrapper(Active),
+    commodities: Wrapper(Commodities),
+    favorite: Wrapper(Favorite),
+    forex: Wrapper(Forex),
+    indices: Wrapper(Indices),
+    stocks: Wrapper(Stocks),
+    volidx: Wrapper(Volidx),
+    indicators: Wrapper(IndicatorCategory)
+};
+
+const FlagIconMap = {
+    aud: Wrapper(AUD),
+    cad: Wrapper(CAD),
+    chf: Wrapper(CHF),
+    eur: Wrapper(EUR),
+    gbp: Wrapper(GBP),
+    jpy: Wrapper(JPY),
+    mxn: Wrapper(MXN),
+    nok: Wrapper(NOK),
+    nzd: Wrapper(NZD),
+    pln: Wrapper(PLN),
+    sek: Wrapper(SEK),
+    usd: Wrapper(USD),
+};
+
+export const ItemIconMap = {};
+
+function frx(a, b) {
+    const A = FlagIconMap[a];
+    const B = FlagIconMap[b];
+    ItemIconMap[`frx${a}${b}`] = props => {
+        let { className, ...p } = props;
+        className = `ic-frx ${className}`;
+        return (
+            <span className={className} {...p}><A/><B/></span>
+        );
+    };
+}
+
+function wld(a) {
+    ItemIconMap[`wld${a}`] = FlagIconMap[a];
+}
+
+/* FOREX */
+/* Major Pairs */
+frx('aud', 'jpy');
+frx('aud', 'usd');
+frx('eur', 'aud');
+frx('eur', 'chf');
+frx('eur', 'jpy');
+frx('eur', 'cad');
+frx('eur', 'gbp');
+frx('eur', 'usd');
+frx('gbp', 'aud');
+frx('gbp', 'jpy');
+frx('gbp', 'usd');
+frx('usd', 'cad');
+frx('usd', 'chf');
+frx('usd', 'jpy');
+/* Minor Pairs */
+frx('aud', 'cad');
+frx('aud', 'chf');
+frx('aud', 'nzd');
+frx('aud', 'pln');
+frx('eur', 'nzd');
+frx('gbp', 'cad');
+frx('gbp', 'chf');
+frx('gbp', 'nok');
+frx('gbp', 'nzd');
+frx('gbp', 'pln');
+frx('nzd', 'jpy');
+frx('nzd', 'usd');
+frx('usd', 'mxn');
+frx('usd', 'nok');
+frx('usd', 'pln');
+frx('usd', 'sek');
+
+/* Smart FX */
+wld('aud');
+wld('eur');
+wld('gbp');
+wld('usd');
+
+export const ActiveOptionsIconMap = {
+    delete: DeleteIcon,
+    edit: EditIcon,
+};

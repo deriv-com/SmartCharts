@@ -1,12 +1,12 @@
 import React, { Component, Fragment } from 'react';
+import {CategoryIconMap, ItemIconMap, SearchIcon,
+    SymbolPlaceholderIcon, ActiveOptionsIconMap } from './Icons.jsx';
 
 const CategoricalDisplay = ({
     placeholderText,
     setSearchInput,
-    setResultsPanel,
     setFilterText,
     handleFilterClick,
-    handleInputClick,
     hasActiveItems,
     filteredItems,
     getItemCount,
@@ -16,13 +16,18 @@ const CategoricalDisplay = ({
     setCategoryElement,
     activeCategoryKey,
 }) => {
-    const renderIcon = (item) => {return item.itemId ? <span className={`ciq-item-icon ic-${item.itemId.toLowerCase()}`} /> : '';};
+    const renderIcon = (item) => {
+        if (!item.itemId) {return '';}
+        const ItemIcon = ItemIconMap[`${item.itemId.toLowerCase()}`];
+        if (!ItemIcon) {return <SymbolPlaceholderIcon/>;}
+        return <ItemIcon className={`ic-${item.itemId}`} />;
+    };
     const renderText = (item) => <span className="ciq-item-display">{item.display}</span>;
 
     const renderItem = (item, k) =>
         <div
             className={`cq-item ${item.selected ? 'selected ' : ''}`}
-            onClick={() => onSelectItem(item.dataObject)}
+            onClick={(e) => onSelectItem(item.dataObject, e)}
             key={k}
             disabled={!item.enabled}
         >
@@ -37,15 +42,19 @@ const CategoricalDisplay = ({
             {renderIcon(item)}{renderText(item)}
             {activeOptions &&
             <span className="cq-active-options">
-                {activeOptions.map((opt, i) =>
-                    <span
-                        key={`active-opt-${i}`}
-                        className={`ic-${opt.id}`}
-                        onClick={() => opt.onClick && opt.onClick(item.dataObject)}
-                    >
-                        {opt.renderChild && opt.renderChild(item)}
-                    </span>
-                )}
+                {activeOptions.map((opt, i) => {
+                    const ActiveOptionIcon = ActiveOptionsIconMap[opt.id];
+                    return (
+                        <span
+                            key={`active-opt-${i}`}
+                            className={`ic-${opt.id}`}
+                            onClick={(e) => opt.onClick && opt.onClick(item.dataObject, e)}
+                        >
+                            {ActiveOptionIcon && <ActiveOptionIcon />}
+                            {opt.renderChild && opt.renderChild(item)}
+                        </span>
+                    );
+                })}
             </span>}
         </div>;
 
@@ -63,19 +72,23 @@ const CategoricalDisplay = ({
                         autoCapitalize="off"
                         placeholder={placeholderText}
                     />
+                    <SearchIcon />
                 </div>
-                { filteredItems.map((category, i) =>
-                    <div key={i}
-                        className={`cq-filter ${activeCategoryKey === category.categoryId ? 'cq-active-filter' : ''}`}
-                        onClick={() => handleFilterClick(category)}
-                    >
-                        <span className={`ciq-item-icon ic-category-${category.categoryId}`}/>
-                        {category.categoryName}
-                    </div>
-                )}
+                { filteredItems.map((category, i) => {
+                    const CategoryIcon = CategoryIconMap[category.categoryId];
+                    const isActive = activeCategoryKey === category.categoryId;
+                    return (
+                        <div key={i}
+                            className={`cq-filter ${isActive ? 'cq-active-filter' : ''}`}
+                            onClick={(e) => handleFilterClick(category, e)}
+                        >
+                            {CategoryIcon && <CategoryIcon className={`ic-${category.categoryId}`}/>}
+                            {category.categoryName}
+                        </div>);
+                })}
             </div>
             <div className="cq-scroll-panel" ref={setScrollPanel}>
-                <div className="results-panel" ref={setResultsPanel}>
+                <div className="results-panel">
                     { filteredItems.map((category, i) =>
                         getItemCount(category) > 0 &&
                         <div
