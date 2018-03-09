@@ -37,6 +37,7 @@ $soft-corners: 3px !default; // Set to zero to eliminate soft corners
 $nav-height: 45px !default;
 $footer-height: 45px !default;
 
+$active-color: #4C5794;
 
 /* Default (Light) Theme */
 
@@ -118,6 +119,15 @@ $DEFAULT-border-strong:		#999 !default;
 	-o-transform: rotate($degrees);  /* Opera 10.5 */
 	transform: rotate($degrees);
 	zoom: 1;
+}
+
+@mixin triangle-base($width) {
+    content: "";
+    width: 0px;
+    height: 0px;
+    display: block;
+    border-left: $width solid transparent;
+    border-right: $width solid transparent;
 }
 
 @import "ciq-components"; /* include main components */

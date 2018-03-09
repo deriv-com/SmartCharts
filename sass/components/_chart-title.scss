@@ -1,6 +1,6 @@
 
-.stx-chart-panel.stx-show {/* Hide default Chart Title and Icons */
-    display:none;
+.stx-chart-panel.stx-show { /* Hide default Chart Title and Icons */
+    display: none;
 }
 
 .cq-chart-title {
@@ -8,65 +8,92 @@
     z-index: 41;
     margin: 0.3em 1em;
     .cq-symbol-select-btn {
-        padding: 1.1em 1em;
+        padding: 1.1em 2em 0.9em 1em;
+        border-radius: $soft-corners;
         cursor: pointer;
         border: solid 1px #e9e9ed;
-        position:relative;
+        position: relative;
         background: #fff;
-        display:inline-block;
+        display: flex;
+        align-items: center;
         color: #333;
+        &:hover {
+            border: solid 1px $active-color;
+        }
+        > .ic-frx {
+            margin-left: 10px;
+            margin-right: 10px;
+            transform: scale(1.2, 1.2);
+        }
+        > .ic-icon {
+            margin-left: 5px;
+            margin-right: 12px;
+            transform: scale(1.3, 1.3);
+        }
+        .cq-symbol-info {
+            display: flex;
+            flex-direction: column;
+            .cq-market {
+                font-size: 12px;
+                font-weight: bold;
+                line-height: 1.5;
+                width: fit-content;
+                &:after {
+                    float: right;
+                    margin-left: 12px;
+                    margin-top: 7px;
+                    @include triangle-base(4px);
+                    border-top: 5px solid black;
+                }
+            }
+        }
         .cq-symbol, .cq-chart-price {
-            font-family:$heading-font;
-            font-weight:700;
+            .cq-animated-price {
+                padding-left: 18px;
+            }
+            > div {
+                line-height: 1.5;
+            }
+            font-family: $heading-font;
             line-height: 22px;
             font-size: 12px;
             text-align: left;
         }
         .cq-symbol {
-            font-size:28px;
-            float: left;
+            font-size: 16px;
+            font-weight: 700;
         }
         .cq-chart-price {
-            font-family:$base-font;
-            display:inline-block;
-            line-height:13px;
-            font-size:11px;
-            margin-left:7px;
-            font-weight:500;
-            color:$DEFAULT-text-medium;
-            vertical-align:text-bottom;
-            min-width: 7.5em;
+            font-family: $base-font;
+            margin-left: 9px;
+            color: $DEFAULT-text-medium;
+            vertical-align: text-bottom;
         }
-        .cq-chart-price > * {position:relative;}
+        .cq-chart-price > * {
+            position: relative;
+        }
 
         /* Up/Down Arrow indicators */
         .cq-chart-price {
             .cq-change {
-                &:after {
-                    margin-top: 3px;
-                    margin-right: 5px;
-                    content:"";
-                    display: block;
-                    height: 12px;
-                    width: 12px;
-                    float:left;
-                }
                 &.stx-up:after, &.stx-down:after {
-                    width: 0;
-                    height: 0;
-                    border-left: 5px solid transparent;
-                    border-right: 5px solid transparent;
+                    float: left;
+                    margin-top: 5px;
+                    margin-right: 5px;
+                    @include triangle-base(6px);
                 }
                 &.stx-up:after {
-                    border-bottom: 7px solid rgb(76, 175, 80);
+                    border-bottom: 8px solid rgb(76, 175, 80);
                 }
                 &.stx-down:after {
-                    border-top: 7px solid rgb(249, 84, 84);
+                    border-top: 8px solid rgb(249, 84, 84);
                 }
             }
 
-
         }
     }
-
+    &.stxMenuActive .cq-symbol-select-btn {
+        border: solid 1px $active-color;
+        box-shadow: 0 0 0 2px rgba(76,87,148,.4);
+    }
 }

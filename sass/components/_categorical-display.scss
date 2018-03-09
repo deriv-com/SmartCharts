@@ -1,5 +1,4 @@
 .cq-categorical-display {
-    $active-color: #4C5794;
     width: 44em;
     padding: 0 !important;
     display: flex;
@@ -145,7 +144,7 @@
             width: 24px;
             margin-left: 2px;
         }
-        .ic-delete {
+        .ic-delete, .ic-edit {
             cursor: pointer;
         }
         .ic-cmp-color > span {
@@ -171,20 +170,7 @@
         display: inline-block;
         margin-right: 15px;
     }
-
     .ic-frx {
-        position: relative;
-        display: inline-block;
-        vertical-align: top;
-        width: 40px;
-        > span {
-            position: absolute;
-            top: -4px;
-            left: -4px;
-        }
-        > span:last-child {
-            top: 4px;
-            left: 4px
-        }
+        margin-right: 10px;
     }
 }
