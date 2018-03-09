@@ -284,16 +284,13 @@ class ChartStore {
 
         for (const s of symbols) {
             processedSymbols.push({
-                data: {
-                    symbol: s.symbol,
-                    name: s.display_name,
-                    market: s.market,
-                    market_display_name: s.market_display_name,
-                    submarket_display_name: s.submarket_display_name,
-                    exchange_is_open: s.exchange_is_open,
-                    decimal_places: s.pip.length - 2
-                },
-                display: [s.display_name],
+                symbol: s.symbol,
+                name: s.display_name,
+                market: s.market,
+                market_display_name: s.market_display_name,
+                submarket_display_name: s.submarket_display_name,
+                exchange_is_open: s.exchange_is_open,
+                decimal_places: s.pip.length - 2
             });
         }
 
@@ -304,7 +301,7 @@ class ChartStore {
         const orderedSymbols = [];
         for (const o of order) {
             for (const p of processedSymbols) {
-                if (o === p.data.market) {
+                if (o === p.market) {
                     orderedSymbols.push(p);
                 }
             }
@@ -316,7 +313,7 @@ class ChartStore {
         const activeSymbols = this.activeSymbols;
         let categorizedSymbols = [];
         if(activeSymbols.length > 0) {
-            let first = activeSymbols[0].data;
+            let first = activeSymbols[0];
             const getSubcategory = (d) => {
                 return {
                     subcategoryName: d.submarket_display_name,
@@ -333,25 +330,25 @@ class ChartStore {
             };
             let subcategory = getSubcategory(first);
             let category = getCategory(first);
-            for (const { data } of activeSymbols) {
-                if (category.categoryName !== data.market_display_name) {
+            for (const symbol of activeSymbols) {
+                if (category.categoryName !== symbol.market_display_name) {
                     category.data.push(subcategory);
                     categorizedSymbols.push(category);
-                    subcategory = getSubcategory(data);
-                    category = getCategory(data);
+                    subcategory = getSubcategory(symbol);
+                    category = getCategory(symbol);
                 }
-                if (subcategory.subcategoryName !== data.submarket_display_name) {
+                if (subcategory.subcategoryName !== symbol.submarket_display_name) {
                     category.data.push(subcategory);
-                    subcategory = getSubcategory(data);
+                    subcategory = getSubcategory(symbol);
                 }
-                const selected = data.symbol === this.currentActiveSymbol.symbol;
-                const enabled = selected ? false : data.exchange_is_open;
+                const selected = symbol.symbol === this.currentActiveSymbol.symbol;
+                const enabled = selected ? false : symbol.exchange_is_open;
                 subcategory.data.push({
                     enabled,
                     selected,
-                    itemId: data.symbol,
-                    display: data.name,
-                    dataObject: data,
+                    itemId: symbol.symbol,
+                    display: symbol.name,
+                    dataObject: symbol,
                 });
             }
 
