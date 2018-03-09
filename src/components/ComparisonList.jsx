@@ -31,7 +31,7 @@ const ComparisonList = ({
 
 export default connect(
     ({ comparisonList: c }) => ({
-        comparisonSymbols: c.comparisonSymbols.values(),
+        comparisonSymbols: c.comparisonSymbols,
         animatedPrices: c.animatedPrices,
         onDeleteItem: c.onDeleteItem,
     })

@@ -255,10 +255,16 @@ class ChartStore {
 
         $(window).resize(this.resizeScreen.bind(this));
 
-        stxx.append('createDataSet', this.updateComparisons);
+        stxx.append('updateChartData', this.updateComparisons);
     }
 
-    updateComparisons = () => {
+    updateComparisons = (...args) => {
+        /* createDataSet sends more than ten updates per tick.
+            This is to avoid that.
+            Happens only for line chart because of animation
+        */
+        if (!(args[2] && args[2].firstLoop)) return;
+
         let stx = this.context.stx;
         let q = stx.currentQuote();
         const comparisons = [];
