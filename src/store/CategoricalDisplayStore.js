@@ -67,6 +67,7 @@ export default class CategoricalDisplayStore {
         this.scroll = new IScroll(this.scrollPanel, {
             probeType: 2,
             tap: true,
+            click: true,
             mouseWheel: true,
             scrollbars: true,
         });
