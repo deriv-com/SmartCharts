@@ -1,11 +1,10 @@
 import { action, observable, computed } from 'mobx';
 import StreamManager from '../StreamManager';
-import ActiveSymbolDriver from '../ActiveSymbolDriver';
 import ConnectionManager from '../ConnectionManager';
-import MainStore from './index';
 import Feed from '../Feed';
 import PendingPromise from '../utils/PendingPromise';
 import Context from '../components/ui/Context';
+import {stableSort} from './utils';
 
 const connectionManager = new ConnectionManager({
     appId: 1,
@@ -33,22 +32,20 @@ class ChartStore {
         this.mainStore = mainStore;
     }
 
-    driver = new ActiveSymbolDriver();
     contextPromise = new PendingPromise();
+    activeSymbols = [];
     rootNode = null;
     stxx = null;
     id = null;
     @observable context = null;
-    @observable activeSymbols = [];
     @observable currentActiveSymbol = defaultSymbol;
     @observable comparisonSymbols = [];
+    @observable categorizedSymbols = [];
 
     @action.bound setSymbols(symbols) {
         if (symbols && this.context) {
-            this.driver.symbols = symbols.active_symbols;
-            // update lookup with new symbols
-            this.context.setLookupDriver(this.driver);
-            this.activeSymbols = this.driver.symbols;
+            this.activeSymbols = this.processSymbols(symbols.active_symbols);
+            this.categorizedSymbols = this.categorizeActiveSymbols();
         }
     }
 
@@ -148,9 +145,8 @@ class ChartStore {
             });
 
             this.currentActiveSymbol = data;
+            this.categorizedSymbols = this.categorizeActiveSymbols();
         };
-
-        context.setLookupDriver(this.driver);
 
         new CIQ.UI.KeystrokeHub(document.querySelector('body'), context, {
             cb: CIQ.UI.KeystrokeHub.defaultHotKeys,
@@ -278,7 +274,45 @@ class ChartStore {
         this.comparisonSymbols = comparisons;
     }
 
-    @computed get categorizedItems() {
+    processSymbols(symbols) {
+        let processedSymbols = [];
+
+        // Stable sort is required to retain the order of the symbol name
+        stableSort(symbols, (a, b) => {
+            return a.submarket_display_name.localeCompare(b.submarket_display_name);
+        });
+
+        for (const s of symbols) {
+            processedSymbols.push({
+                data: {
+                    symbol: s.symbol,
+                    name: s.display_name,
+                    market: s.market,
+                    market_display_name: s.market_display_name,
+                    submarket_display_name: s.submarket_display_name,
+                    exchange_is_open: s.exchange_is_open,
+                    decimal_places: s.pip.length - 2
+                },
+                display: [s.display_name],
+            });
+        }
+
+
+        // Categorize symbols in order defined by another array; there's probably a more
+        // efficient algo for this, but for just ~100 items it's not worth the effort
+        const order = ['forex', 'indices', 'stocks', 'commodities', 'volidx'];
+        const orderedSymbols = [];
+        for (const o of order) {
+            for (const p of processedSymbols) {
+                if (o === p.data.market) {
+                    orderedSymbols.push(p);
+                }
+            }
+        }
+        return orderedSymbols;
+    }
+
+    categorizeActiveSymbols() {
         const activeSymbols = this.activeSymbols;
         let categorizedSymbols = [];
         if(activeSymbols.length > 0) {
