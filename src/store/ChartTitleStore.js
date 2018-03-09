@@ -23,7 +23,7 @@ export default class ChartTitleStore {
     @observable isVisible = false;
 
     get context() { return this.mainStore.chart.context; }
-    @computed get symbolName() { return this.mainStore.chart.currentActiveSymbol.name; }
+    @computed get currentSymbol() { return this.mainStore.chart.currentActiveSymbol; }
     @computed get decimalPlaces() { return this.mainStore.chart.currentActiveSymbol.decimal_places; }
 
     @action.bound onSelectItem(symbolObject) {

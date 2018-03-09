@@ -115,10 +115,9 @@ function frx(a, b) {
     const A = FlagIconMap[a];
     const B = FlagIconMap[b];
     ItemIconMap[`frx${a}${b}`] = props => {
-        let { className, ...p } = props;
-        className = `ic-frx ${className}`;
+        const className = `ic-frx ic-frx${a}${b}`;
         return (
-            <span className={className} {...p}><A/><B/></span>
+            <span className={className} {...props}><A/><B/></span>
         );
     };
 }

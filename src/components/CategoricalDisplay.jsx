@@ -18,9 +18,8 @@ const CategoricalDisplay = ({
 }) => {
     const renderIcon = (item) => {
         if (!item.itemId) {return '';}
-        const ItemIcon = ItemIconMap[`${item.itemId.toLowerCase()}`];
-        if (!ItemIcon) {return <SymbolPlaceholderIcon/>;}
-        return <ItemIcon className={`ic-${item.itemId}`} />;
+        const ItemIcon = ItemIconMap[item.itemId.toLowerCase()] || SymbolPlaceholderIcon;
+        return <ItemIcon />;
     };
     const renderText = (item) => <span className="ciq-item-display">{item.display}</span>;
 

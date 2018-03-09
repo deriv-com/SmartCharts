@@ -43,7 +43,6 @@
         opacity: 0;
         transition: opacity 0.3s;
         pointer-events: none;
-        border-radius: 5px;
         height: 16px;
         width: 65px;
         line-height: 16px;
@@ -73,5 +72,22 @@
 
     &:hover:after, &:hover:before {
         opacity: 1;
+    }
+}
+
+.ic-frx {
+    position: relative;
+    display: inline-block;
+    vertical-align: top;
+    width: 30px;
+    height: 25px;
+    > span {
+        position: absolute;
+        top: -4px;
+        left: -4px;
+    }
+    > span:last-child {
+        top: 4px;
+        left: 4px
     }
 }
