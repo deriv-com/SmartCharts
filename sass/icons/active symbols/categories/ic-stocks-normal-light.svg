@@ -6,7 +6,7 @@
         <mask id="b" fill="#fff">
             <use xlink:href="#a"/>
         </mask>
-        <use fill="#B0B3BF" xlink:href="#a"/>
+        <circle fill="#B0B3BF" id="a" cx="8" cy="8" r="8"/>
         <g fill="#FFF" mask="url(#b)">
             <path d="M10 8h4v9h-4V8zm1 1v1h2V9h-2zm0 2v1h2v-1h-2z"/>
         </g>
