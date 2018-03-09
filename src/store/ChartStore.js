@@ -259,7 +259,7 @@ class ChartStore {
     }
 
     updateComparisons = (...args) => {
-        /* createDataSet sends more than ten updates per tick.
+        /* createDataSet/updateChartData sends more than ten updates per tick.
             This is to avoid that.
             Happens only for line chart because of animation
         */
