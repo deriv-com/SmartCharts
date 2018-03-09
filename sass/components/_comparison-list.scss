@@ -40,12 +40,10 @@
     }
     .cq-comparison-item .ciq-close {
         transition: opacity .20s .0s;
-        margin-left: 5px;
-        height: $icon-size;
-        width: $icon-size;
-        background: url('icons/common/ic-close-light.svg') no-repeat center;
         cursor: pointer;
         opacity: 0;
+        left: 10px;
+        position: relative;
     }
     .cq-comparison-item:hover .ciq-close {
         opacity: .6;
@@ -66,4 +64,3 @@
         display: inline-flex;
     }
 }
-
