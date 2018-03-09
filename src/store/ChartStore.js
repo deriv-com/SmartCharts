@@ -122,11 +122,27 @@ class ChartStore {
         }
     }
 
+    @action.bound setUITopWidgets(el) {
+        this.uiTopWidgets = el;
+    }
+
     startUI() {
         const stxx = this.stxx;
         stxx.chart.allowScrollPast = false;
         const context = new Context(stxx, this.rootNode);
         new CIQ.UI.Layout(context);
+
+        // Place the UITopWidgets under stx-holder to position it relative to the
+        // Active symbol chart. Note that this causes text input fields inside to
+        // be unresponsive to user feedback
+        // TODO: we may need a more reusable implementation of this.
+        new CIQ.Marker({
+            stx: stxx,
+            node: this.uiTopWidgets,
+            xPositioner:"none",
+            yPositioner:"none",
+            permanent:true
+        });
 
         context.changeSymbol = (data) => {
             if (context.loader) {context.loader.show();}

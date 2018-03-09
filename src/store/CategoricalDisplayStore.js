@@ -159,6 +159,13 @@ export default class CategoricalDisplayStore {
         return count;
     }
 
+    // In case where text input is inside chartContainer, it will not
+    // respond to mouse interaction. This is why we need to manually focus
+    // when user clicks on it.
+    @action.bound handleInputClick() {
+        this.searchInput.focus();
+    }
+
     getActiveCategory(actives) {
         const category = {
             categoryName: 'Active',
@@ -177,6 +184,7 @@ export default class CategoricalDisplayStore {
         setSearchInput: this.setSearchInput,
         handleFilterClick: this.handleFilterClick,
         onSelectItem: this.onSelectItem,
+        handleInputClick: this.handleInputClick,
         hasActiveItems: (this.getActiveItems !== undefined),
         activeOptions: this.activeOptions,
         placeholderText: this.placeholderText,

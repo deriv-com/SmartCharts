@@ -52,7 +52,7 @@ class Chart extends Component {
     }
 
     render() {
-        const { DrawToolsSettingsDialog, StudySettingsDialog } = this.props;
+        const { DrawToolsSettingsDialog, StudySettingsDialog, setUITopWidgets } = this.props;
         return (
             <cq-context ref={(root) => { this.root = root; }}>
                 <cq-color-picker>
@@ -63,7 +63,7 @@ class Chart extends Component {
                     <div className="ciq-chart">
                         <div className='beta-version'>Beta Version 0.1.7</div>
                         <Toolbar />
-                        <div className="cq-top-ui-widgets">
+                        <div className="cq-top-ui-widgets" ref={setUITopWidgets}>
                             <ChartTitle />
                             <AssetInformation />
                             <ComparisonList />
@@ -229,6 +229,7 @@ class Chart extends Component {
 export default connect(
     ({chart, drawTools, studies}) => ({
         contextPromise: chart.contextPromise,
+        setUITopWidgets: chart.setUITopWidgets,
         init: chart.init,
         StudySettingsDialog : studies.settingsDialog.connect(SettingsDialog),
         DrawToolsSettingsDialog : drawTools.settingsDialog.connect(SettingsDialog),

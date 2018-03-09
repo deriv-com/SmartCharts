@@ -15,6 +15,7 @@ const CategoricalDisplay = ({
     setScrollPanel,
     setCategoryElement,
     activeCategoryKey,
+    handleInputClick,
 }) => {
     const renderIcon = (item) => {
         if (!item.itemId) {return '';}
@@ -63,6 +64,7 @@ const CategoricalDisplay = ({
                 <div className="cq-lookup-input">
                     <input
                         ref={setSearchInput}
+                        onClick={handleInputClick}
                         onChange={e => setFilterText(e.target.value)}
                         type="text"
                         spellCheck="off"
