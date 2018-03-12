@@ -94,9 +94,9 @@
                     svg > g > g:last-child { fill: $active-color; }
                 }
                 &.ic-indices {
-                    svg > g {
+                    svg > g > g {
                         > path   { fill: $active-color;   }
-                        > circle { stroke: $active-color; }
+                        > g > circle { stroke: $active-color; }
                     }
                 }
             }
