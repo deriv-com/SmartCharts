@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactSlider from 'react-slider';
 import '../../sass/_ciq-form.scss';
 
 // TODO: Add mobile support.
@@ -12,15 +13,15 @@ export const Slider = ({
     onChange,
 }) => {
     return (
-        <div className={`cq-slider ${className}`}>
-            <input
-                type='range'
-                value={value}
+        <div className='cq-slider'>
+            <ReactSlider
                 min={min}
                 max={max}
                 step={step}
-                onChange={e => onChange(+e.target.value)}
-            ></input>
+                onChange={onChange}
+                withBars
+            />
+            <div className='value'>{value}</div>
         </div>
     );
 };
