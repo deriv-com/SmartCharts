@@ -19,6 +19,7 @@ const DrawTools = ({
             <Menu.Title>
                 <span className="ciq-icon ciq-ic-draw-tools" />
             </Menu.Title>
+
             <Menu.Body>
                 <div className='ciq-bars'>
                     <div onClick={clearDrawings}>

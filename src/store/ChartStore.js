@@ -217,13 +217,13 @@ class ChartStore {
         });
 
         // Floating tooltip on mousehover
-        new CIQ.Tooltip({
-            stx: stxx,
-            ohl: true,
-            volume: false,
-            series: true,
-            studies: true,
-        });
+        // new CIQ.Tooltip({
+        //     stx: stxx,
+        //     ohl: true,
+        //     volume: false,
+        //     series: true,
+        //     studies: true,
+        // });
 
         // Inactivity timer
         new CIQ.InactivityTimer({
