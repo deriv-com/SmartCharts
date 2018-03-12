@@ -263,7 +263,7 @@ class ChartStore {
             This is to avoid that.
             Happens only for line chart because of animation
         */
-        if (!(args[2] && args[2].firstLoop)) return;
+        if (args[2] && !args[2].firstLoop) return;
 
         let stx = this.context.stx;
         let q = stx.currentQuote();
@@ -281,7 +281,9 @@ class ChartStore {
                 });
             }
         }
-        this.comparisonSymbols = comparisons;
+        if (comparisons.length > 0) {
+            this.comparisonSymbols = comparisons;
+        }
     }
 
     @computed get categorizedItems() {
