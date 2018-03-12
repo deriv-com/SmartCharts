@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 49 (51002) - http://www.bohemiancoding.com/sketch -->
+    <title>icons/system/light/template-list/ic-templatelist</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="icons/system/light/template-list/ic-templatelist" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <circle id="Oval" fill="#2A3052" cx="3" cy="5" r="1"></circle>
+        <rect id="Rectangle-2" fill="#2A3052" x="5" y="4.5" width="9" height="1" rx="0.5"></rect>
+        <rect id="Rectangle-2-Copy" fill="#2A3052" x="5" y="7.5" width="9" height="1" rx="0.5"></rect>
+        <rect id="Rectangle-2-Copy-2" fill="#2A3052" x="5" y="10.5" width="9" height="1" rx="0.5"></rect>
+        <circle id="Oval-Copy" fill="#2A3052" cx="3" cy="8" r="1"></circle>
+        <circle id="Oval-Copy-2" fill="#2A3052" cx="3" cy="11" r="1"></circle>
+    </g>
+</svg>

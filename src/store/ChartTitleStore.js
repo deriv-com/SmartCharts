@@ -10,7 +10,7 @@ export default class ChartTitleStore {
         this.menu = new MenuStore({ getContext: () => this.context });
         this.animatedPrice = new AnimatedPriceStore();
         this.categoricalDisplay = new CategoricalDisplayStore({
-            getCategoricalItems: () => this.mainStore.chart.categorizedItems,
+            getCategoricalItems: () => this.mainStore.chart.categorizedSymbols,
             getIsShown: () => this.menu.open,
             onSelectItem: this.onSelectItem.bind(this),
             placeholderText: '"AUD/JPY" or "Apple"',
@@ -23,7 +23,7 @@ export default class ChartTitleStore {
     @observable isVisible = false;
 
     get context() { return this.mainStore.chart.context; }
-    @computed get symbolName() { return this.mainStore.chart.currentActiveSymbol.name; }
+    @computed get currentSymbol() { return this.mainStore.chart.currentActiveSymbol; }
     @computed get decimalPlaces() { return this.mainStore.chart.currentActiveSymbol.decimal_places; }
 
     @action.bound onSelectItem(symbolObject) {

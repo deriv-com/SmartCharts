@@ -16,8 +16,8 @@ export default class ComparisonStore {
         this.mainStore = mainStore;
         this.menu = new MenuStore({getContext: () => this.context});
         this.categoricalDisplay = new CategoricalDisplayStore({
-            getActiveItems: () => this.mainStore.chart.comparisonSymbols,
-            getCategoricalItems: () => this.mainStore.chart.categorizedItems,
+            getActiveItems: () => this.activeComparisons,
+            getCategoricalItems: () => this.mainStore.chart.categorizedSymbols,
             getIsShown: () => this.menu.open,
             activeOptions: [
                 { id: 'cmp-color', renderChild: (item) => <span style={{backgroundColor: item.dataObject.color}} /> },
@@ -29,6 +29,20 @@ export default class ComparisonStore {
     }
 
     get context() { return this.mainStore.chart.context; }
+
+    @computed get activeComparisons() {
+        const result = [];
+        for (const symbol of this.mainStore.chart.comparisonSymbols) {
+            result.push({
+                enabled: true,
+                selected: false,
+                display: symbol.symbolObject.name,
+                itemId: symbol.symbolObject.symbol,
+                dataObject: symbol
+            });
+        }
+        return result;
+    }
 
     @action.bound onDeleteItem({ symbolObject }) {
         this.context.stx.removeSeries(symbolObject.symbol);

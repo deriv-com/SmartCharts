@@ -1,22 +1,36 @@
 .ciq-period {
-    border-left: 1px solid #E9E9ED;
-    border-right: 1px solid #E9E9ED;
-
-    padding: 0;
+    padding: 0 5px!important;
 
     > .cq-menu-btn {
-        margin: 0 12px;
-
+        padding: 0 10px;
+        position: relative;
+        margin: 7px 0;
+        height: 18px;
+        border-left: 1px solid #E9E9ED;
+        border-right: 1px solid #E9E9ED;
         > span {
+            position: relative;
+            top: -3px;
+            width: 48px;
+            height: 24px;
+            line-height: 24px;
             cursor: pointer;
             border-radius: 2px;
-            height: 25px;
             display: inline-block;
+            padding: 0 11px;
+            text-align: center;
+            transition: background .15s ease-in, box-shadow .15s ease-in;
         }
     }
     &.stxMenuActive {
         > div > span {
-            background: #e4e6f1;
+            height: 22px;
+            line-height: 22px;
+            border: 1px solid #4c5794;
+            box-shadow: 0px 0px 0px 2px rgba(76,87,148,.4);
+            background: #f2f3f8;
+            color: #4c5794;
+            padding: 0 10px;
         }
     }
     &:after {
@@ -24,20 +38,9 @@
     }
     .unit_display {
         text-transform: capitalize;
-        margin: 0 15px;
     }
     .interval_display {
-        margin: 0 15px 0 0;
-    }
-    .icon {
-        display: inline-block;
-        width: 8px;
-        height: 8px;
-        margin: 0 0 0 15px;
-        background: url('icons/time interval/ic-timeinterval-light.svg');
-    }
-    &.stxMenuActive .cq-menu-dropdown {
-        visibility: visible;
+        margin: 0 5px 0 0;
     }
     .cq-menu-dropdown {
         padding: 0 !important;
@@ -48,7 +51,6 @@
         left: -8em;
         font-size: 12px;
         font-weight: normal;
-        visibility: hidden;
 
         .timeUnit {
             display: inline-block;

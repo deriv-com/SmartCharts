@@ -50,16 +50,6 @@ class Context {
     }
 
     /**
-     * Sets the lookup driver for this context
-     * @param {CIQ.UI.Lookup.Driver} driver Lookup driver for cq-lookup component
-     * @memberof CIQ.UI.Context
-     */
-    setLookupDriver(driver) {
-        this.lookupDriver = driver;
-    }
-
-
-    /**
      * Attaches a Helper to the context, so that it can be found later on.
      * @param {CIQ.UI.Helper} uiHelper A UI Helper to attach
      * @param {string} helperName The helperName of the element. For instance "Loader"

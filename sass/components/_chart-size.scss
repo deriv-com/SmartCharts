@@ -8,23 +8,11 @@
         display: none;
     }
     > span {
-        background-repeat: no-repeat !important;
-        background-position: 50% 50% !important;
         flex-grow: 1;
-        height: 100%;
         opacity: 1;
-        width: 3em;
+        position: relative;
         cursor: pointer;
         transition: scale .25s;
-        &:active {
-            transform: scale(1.2, 1.2);
-        }
-        &.cq-zoom-out {
-            background-image: url('icons/minus/ic-minus-light.svg');
-        }
-        &.cq-zoom-in {
-            background-image: url('icons/add/ic-add-light.svg');
-        }
     }
 
     .interval-title {
