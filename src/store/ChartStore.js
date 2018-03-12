@@ -217,15 +217,6 @@ class ChartStore {
             filter: true,
         });
 
-        // Floating tooltip on mousehover
-        new CIQ.Tooltip({
-            stx: stxx,
-            ohl: true,
-            volume: false,
-            series: true,
-            studies: true,
-        });
-
         // Inactivity timer
         new CIQ.InactivityTimer({
             stx: stxx,
@@ -264,7 +255,7 @@ class ChartStore {
             This is to avoid that.
             Happens only for line chart because of animation
         */
-        if (args[2] && !args[2].firstLoop) return;
+        if (args[2] && !args[2].firstLoop) {return;}
 
         let stx = this.context.stx;
         let q = stx.currentQuote();

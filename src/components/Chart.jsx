@@ -35,6 +35,7 @@ import ChartControls from './ChartControls.jsx';
 import SettingsDialog from './SettingsDialog.jsx';
 import Toolbar from './Toolbar.jsx';
 import Notification from './Notification.jsx';
+import Crosshair from './Crosshair.jsx';
 import { MobxProvider, connect } from '../store/Connect';
 
 class Chart extends Component {
@@ -61,18 +62,8 @@ class Chart extends Component {
                         <div className='beta-version'>Beta Version 0.1.7</div>
                         <Toolbar />
                         <ChartControls />
-                        <div className="chartContainer primary">
-                            <stx-hu-tooltip>
-                                <stx-hu-tooltip-field field="DT">
-                                    <stx-hu-tooltip-field-name>Date/Time</stx-hu-tooltip-field-name>
-                                    <stx-hu-tooltip-field-value />
-                                </stx-hu-tooltip-field>
-                                <stx-hu-tooltip-field field="Close">
-                                    <stx-hu-tooltip-field-name />
-                                    <stx-hu-tooltip-field-value />
-                                </stx-hu-tooltip-field>
-                            </stx-hu-tooltip>
-                        </div>
+                        <Crosshair />
+                        <div className="chartContainer primary"> </div>
                     </div>
                 </div>
 
