@@ -1,11 +1,6 @@
 import { observable, action, computed, when } from 'mobx';
 import { sameBar } from './utils';
 
-//     stx: stxx,
-//     ohl: true,
-//     volume: false,
-//     series: true,
-//     studies: true,
 class Tooltip extends CIQ.Marker {
     get showOhl() {
         return this.stx.layout.timeUnit !== 'second';

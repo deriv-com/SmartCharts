@@ -777,37 +777,4 @@ html, body {
 
 .stx_market_session.post {
     background-color: rgba(0, 0, 255, 0.2);
-}
-
-/* -------- Heads up tooltip ( hover with cross hairs on )-------- */
-stx-hu-tooltip {
-    position: absolute;
-    left: -50000px;
-    z-index: 30;
-    white-space: nowrap;
-    padding: 6px;
-    border: 2px solid #4ea1fe;
-    background-color: rgba(42, 81, 208, .5);
-    color: white;
-    font-size: 14px;
-    fill: #2a51d0;
-}
-
-stx-hu-tooltip-field {
-    display: table-row;
-}
-
-stx-hu-tooltip-field-name {
-    display: table-cell;
-    font-weight: bold;
-    padding-right: 5px;
-}
-
-stx-hu-tooltip-field-name:after {
-    content: ':';
-}
-
-stx-hu-tooltip-field-value {
-    display: table-cell;
-    text-align: right;
-}
+} 

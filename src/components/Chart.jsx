@@ -71,18 +71,7 @@ class Chart extends Component {
                         </div>
                         <ChartControls />
                         <Crosshair />
-                        <div className="chartContainer primary">
-                            <stx-hu-tooltip>
-                                <stx-hu-tooltip-field field="DT">
-                                    <stx-hu-tooltip-field-name>Date/Time</stx-hu-tooltip-field-name>
-                                    <stx-hu-tooltip-field-value />
-                                </stx-hu-tooltip-field>
-                                <stx-hu-tooltip-field field="Close">
-                                    <stx-hu-tooltip-field-name />
-                                    <stx-hu-tooltip-field-value />
-                                </stx-hu-tooltip-field>
-                            </stx-hu-tooltip>
-                        </div>
+                        <div className="chartContainer primary"> </div>
                     </div>
                 </div>
 

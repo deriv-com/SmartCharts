@@ -11,7 +11,7 @@ export default class StudyLegendStore {
         this.menu = new MenuStore({getContext: () => this.context});
         this.categoricalDisplay = new CategoricalDisplayStore({
             activeOptions: [
-                { id: 'edit',   onClick: (item, e) => item.editFunc(e)  },
+                { id: 'edit', onClick: (item, e) => item.editFunc(e) },
                 { id: 'delete', onClick: (item, e) => item.closeFunc(e) },
             ],
             getIsShown: () => this.menu.open,
