@@ -17,7 +17,7 @@ export default class ComparisonStore {
         this.menu = new MenuStore({getContext: () => this.context});
         this.categoricalDisplay = new CategoricalDisplayStore({
             getActiveItems: () => this.activeComparisons,
-            getCategoricalItems: () => this.mainStore.chart.categorizedItems,
+            getCategoricalItems: () => this.mainStore.chart.categorizedSymbols,
             getIsShown: () => this.menu.open,
             activeOptions: [
                 { id: 'cmp-color', renderChild: (item) => <span style={{backgroundColor: item.dataObject.color}} /> },
