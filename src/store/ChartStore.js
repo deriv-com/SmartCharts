@@ -4,6 +4,7 @@ import ConnectionManager from '../ConnectionManager';
 import Feed from '../Feed';
 import PendingPromise from '../utils/PendingPromise';
 import Context from '../components/ui/Context';
+import React from 'react';
 import {stableSort} from './utils';
 
 const connectionManager = new ConnectionManager({
