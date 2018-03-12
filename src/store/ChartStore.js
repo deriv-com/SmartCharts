@@ -128,7 +128,7 @@ class ChartStore {
         const context = new Context(stxx, this.rootNode);
         new CIQ.UI.Layout(context);
 
-        appendMarker(TopWidgets, stxx, this.mainStore);
+        appendMarker(TopWidgets, this.mainStore);
 
         context.changeSymbol = (data) => {
             if (context.loader) {context.loader.show();}
