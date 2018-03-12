@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from '../store/Connect';
+import { CloseIcon } from './Icons.jsx';
 
 const ComparisonList = ({
     comparisonSymbols,
@@ -10,6 +11,7 @@ const ComparisonList = ({
         <div className="cq-comparison">
             {comparisonSymbols.map((item, i) => {
                 const AnimatedPrice = animatedPrices[i];
+                if(!AnimatedPrice) return;
                 return (
                     <div key={`compare-${i}`} className="cq-comparison-item">
                         <span className="left">
@@ -19,7 +21,7 @@ const ComparisonList = ({
                         <span className="right">
                             <span className={`cq-comparison-loader ${item.price ? '' : 'stx-show'}`} />
                             <AnimatedPrice />
-                            <span className="ciq-close" onClick={() => onDeleteItem(item.symbolObject)}/>
+                            <CloseIcon className="ciq-close" onClick={() => onDeleteItem(item.symbolObject)}/>
                         </span>
                     </div>);
             })}
