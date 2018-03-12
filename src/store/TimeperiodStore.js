@@ -51,10 +51,10 @@ export default class TimeperiodStore {
     }
 
     @computed get timeUnit_display() {
-        if(!this.timeUnit) return;
+        if(!this.timeUnit) {return;}
         let temp = this.timeUnit;
         if(temp.length > 4) {
-            temp = (temp).slice(0,3)
+            temp = (temp).slice(0,3);
         }
         return temp.replace(/(\w)/, (str) => str.toUpperCase());
     }

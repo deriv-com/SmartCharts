@@ -1,0 +1,44 @@
+.cq-crosshair {
+    position: absolute;
+    z-index: 11;
+
+    color: white;
+    padding:  8px;
+    box-sizing: border-box;
+
+    background: rgba(21,33,45,0.88);
+    box-shadow: 0 2px 8px 0 rgba(21,33,45,0.32);
+    border-radius: 4px;
+
+    &:after, &:before {
+        content: "";
+        position: absolute;
+        top: calc(50% - 4px);
+        width: 0;
+        height: 0;
+        border-top: 4px solid transparent;
+        border-bottom: 4px solid transparent;
+        display: none;
+    }
+    &:after {
+        border-right:6px solid rgba(21,33,45,0.88);
+        left: -6px;
+    }
+    &:before {
+        left: 100%;
+        border-left:6px solid rgba(21,33,45,0.88);
+    }
+    &.arrow-left:after { display: block; }
+    &.arrow-right:before { display: block; }
+
+    .row {
+        font-size: 12px;
+        line-height: 18px;
+        span:first-child {
+            padding-right: 5px;
+        }
+        span:last-child {
+            font-weight: bold;
+        }
+    }
+}

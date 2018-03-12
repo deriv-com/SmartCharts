@@ -23,6 +23,7 @@ const DrawTools = ({
                     className={`${menuOpen ? 'active' : ''}`}
                     tooltip-title="Draw tools" />
             </Menu.Title>
+
             <Menu.Body>
                 <div className='ciq-bars'>
                     <div onClick={clearDrawings}>

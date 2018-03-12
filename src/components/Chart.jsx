@@ -38,6 +38,7 @@ import Toolbar from './Toolbar.jsx';
 import ChartTitle from './ChartTitle.jsx';
 import AssetInformation from './AssetInformation.jsx';
 import Notification from './Notification.jsx';
+import Crosshair from './Crosshair.jsx';
 import { MobxProvider, connect } from '../store/Connect';
 
 class Chart extends Component {
@@ -69,18 +70,8 @@ class Chart extends Component {
                             <ComparisonList />
                         </div>
                         <ChartControls />
-                        <div className="chartContainer primary">
-                            <stx-hu-tooltip>
-                                <stx-hu-tooltip-field field="DT">
-                                    <stx-hu-tooltip-field-name>Date/Time</stx-hu-tooltip-field-name>
-                                    <stx-hu-tooltip-field-value />
-                                </stx-hu-tooltip-field>
-                                <stx-hu-tooltip-field field="Close">
-                                    <stx-hu-tooltip-field-name />
-                                    <stx-hu-tooltip-field-value />
-                                </stx-hu-tooltip-field>
-                            </stx-hu-tooltip>
-                        </div>
+                        <Crosshair />
+                        <div className="chartContainer primary"> </div>
                     </div>
                 </div>
 
