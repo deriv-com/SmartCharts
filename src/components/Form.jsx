@@ -92,11 +92,8 @@ export const DropDown = ({
     </div>
 );
 
-export const ColorPicker = ({
-    color,
-    setColor,
-}) => {
-    const colorMap = [
+export class ColorPicker extends React.Component {
+    colorMap = [
         ['#ffffff', '#e1e1e1', '#cccccc', '#b7b7b7', '#a0a0a5', '#898989', '#707070',
             '#626262', '#555555', '#464646', '#363636', '#262626', '#1d1d1d', '#000000'],
         ['#f4977c', '#f7ac84', '#fbc58d', '#fff69e', '#c4de9e', '#85c99e', '#7fcdc7',
@@ -110,24 +107,45 @@ export const ColorPicker = ({
         ['#770001', '#792e03', '#7b4906', '#817a0b', '#41661e', '#005827', '#005951',
             '#003b5c', '#001d40', '#000e35', '#04002c', '#19002b', '#2c002a', '#580028'],
     ];
-    return (
-        <div className='cq-color-picker'>
-            <div className='title' style={{backgroundColor: color}} />
-            <div className='dropdown'>
-                {colorMap.map((row, rowIdx) => (
-                    <div key={rowIdx} className='row'>
-                        {row.map((tileColor, idx) => (
-                            <div
-                                key={idx}
-                                className='tile-color' style={{ backgroundColor: tileColor }}
-                                onClick={() => setColor(tileColor)}
-                            />
-                        ))}
-                    </div>
-                ))}
+    state = { open: false };
+    titleRef = null;
+    onClick = () => this.setState({open: !this.state.open});
+    close = (e) => {
+        if(e.target !== this.titleRef) {
+            this.setState({open: false});
+        }
+    }
+
+    componentDidMount() { document.addEventListener('click', this.close, false); }
+    componentWillUnmount() { document.removeEventListener('click', this.close); }
+
+    render() {
+        const { color, setColor } = this.props;
+        return (
+            <div className='cq-color-picker'>
+                <div
+                    ref={ref => this.titleRef = ref}
+                    className='title'
+                    style={{backgroundColor: color}}
+                    onClick={this.onClick}
+                />
+                <div className={`dropdown ${this.state.open ? 'open' : ''}`}>
+                    {this.colorMap.map((row, rowIdx) => (
+                        <div key={rowIdx} className='row'>
+                            {row.map((tileColor, idx) => (
+                                <div
+                                    key={idx}
+                                    className='tile-color' style={{ backgroundColor: tileColor }}
+                                    onClick={() => setColor(tileColor)}
+                                />
+                            ))}
+                        </div>
+                    ))}
+                </div>
             </div>
-        </div>
-    );
+        );
+    }
+
 };
 
 export const Switch = ({

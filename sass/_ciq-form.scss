@@ -150,21 +150,25 @@
 
     .dropdown {
         position: absolute;
-        top: 24px;
-        right: calc(100% - 40px);
+        top: 30px;
+        right: calc(100% - 24px);
         opacity: 0;
         transition: opacity 0.1s;
         pointer-events: none;
         background: white;
         z-index: +1;
         padding: 5px;
-        width: 240px;
-        box-shadow: 0 0.375em 0.625em 0 rgba(0,0,0,.14);
+        width: 250px;
+        padding: 8px;
+        border: 1px solid #E9E9ED;
+        box-shadow: 0 2px 8px 0 rgba(42,48,82,0.14);
+        border-radius: 4px;
         .row {
             height: 18px;
             width: 100%;
             display: flex;
             justify-content: space-between;
+            margin-top: 2px;
             align-items: center;
             .tile-color {
                 width: 15px;
@@ -173,8 +177,7 @@
             }
         }
     }
-    .title:hover + .dropdown,
-    .dropdown:hover {
+    .dropdown.open {
         opacity: 1;
         pointer-events: all;
     }
