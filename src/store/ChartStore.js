@@ -2,10 +2,12 @@ import { action, observable, computed } from 'mobx';
 import StreamManager from '../StreamManager';
 import ActiveSymbolDriver from '../ActiveSymbolDriver';
 import ConnectionManager from '../ConnectionManager';
-import MainStore from './index';
 import Feed from '../Feed';
 import PendingPromise from '../utils/PendingPromise';
 import Context from '../components/ui/Context';
+import React from 'react';
+import TopWidgets from '../components/TopWidgets.jsx';
+import {appendMarker} from '../utils';
 
 const connectionManager = new ConnectionManager({
     appId: 1,
@@ -132,17 +134,7 @@ class ChartStore {
         const context = new Context(stxx, this.rootNode);
         new CIQ.UI.Layout(context);
 
-        // Place the UITopWidgets under stx-holder to position it relative to the
-        // Active symbol chart. Note that this causes text input fields inside to
-        // be unresponsive to user feedback
-        // TODO: we may need a more reusable implementation of this.
-        new CIQ.Marker({
-            stx: stxx,
-            node: this.uiTopWidgets,
-            xPositioner:"none",
-            yPositioner:"none",
-            permanent:true
-        });
+        appendMarker(TopWidgets, stxx, this.mainStore);
 
         context.changeSymbol = (data) => {
             if (context.loader) {context.loader.show();}

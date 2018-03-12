@@ -32,11 +32,8 @@ import './Undo';
 import './ViewDialog';
 import './Clickable';
 import ChartControls from './ChartControls.jsx';
-import ComparisonList from './ComparisonList.jsx';
 import SettingsDialog from './SettingsDialog.jsx';
 import Toolbar from './Toolbar.jsx';
-import ChartTitle from './ChartTitle.jsx';
-import AssetInformation from './AssetInformation.jsx';
 import Notification from './Notification.jsx';
 import { MobxProvider, connect } from '../store/Connect';
 
@@ -63,11 +60,6 @@ class Chart extends Component {
                     <div className="ciq-chart">
                         <div className='beta-version'>Beta Version 0.1.7</div>
                         <Toolbar />
-                        <div className="cq-top-ui-widgets" ref={setUITopWidgets}>
-                            <ChartTitle />
-                            <AssetInformation />
-                            <ComparisonList />
-                        </div>
                         <ChartControls />
                         <div className="chartContainer primary">
                             <stx-hu-tooltip>
