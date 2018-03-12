@@ -16,7 +16,7 @@
         border-right: 1px solid #e9e9ed;
     }
     .cq-lookup-input  {
-        margin: 1.5em 1.3em 1.1em 1.3em;
+        margin: 1.5em 1.3em 1.3em 1.3em;
         > input {
             padding-left: 30px;
             line-height: 3em;
@@ -57,8 +57,7 @@
     }
     .subcategory {
         font-weight: 500;
-        padding-top: 0.3em;
-        padding-left: 0.5em;
+        padding: 0.5em 0 0.5em 1.2em;
         font-size: 1.1em;
         color: black;
     }
@@ -70,7 +69,7 @@
     }
     .cq-filter {
         padding-left: 1.6em;
-        line-height: 3.4em;
+        line-height: 2.4em;
         text-align: left;
         cursor: pointer;
         box-sizing: border-box;
@@ -103,13 +102,17 @@
         }
         .ic-icon {
             display: inline-flex;
-            vertical-align: sub;
+            vertical-align: middle;
+            width: 16px;
+            height: 16px;
+            margin-bottom: 2px;
+            margin-right: 1.3em;
         }
     }
     .cq-item, .cq-active-item {
-        padding: 10px 20px 0px 20px;
+        padding: 3px 20px 0px 20px;
         border-bottom: 1px solid #e9e9ed;
-        height: 30px;
+        height: 27px;
     }
     .cq-item[disabled] {
         pointer-events: none;
