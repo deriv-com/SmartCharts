@@ -124,7 +124,6 @@ class ChartStore {
         const stxx = this.stxx;
         stxx.chart.allowScrollPast = false;
         const context = new Context(stxx, this.rootNode);
-        context.mainStore = this.mainStore;
         new CIQ.UI.Layout(context);
 
         context.changeSymbol = (data) => {
