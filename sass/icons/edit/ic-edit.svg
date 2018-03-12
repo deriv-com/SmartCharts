@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 49 (51002) - http://www.bohemiancoding.com/sketch -->
+    <title>icons/system/light/edit/ic-edit</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <path d="M10.2109768,3.7863685 L12.2136315,5.78902315 L3.01440069,15 L1,15 L1,12.9855993 L10.2109768,3.7863685 Z M10.9236294,3.0746247 L12.2928932,1.70710704 C12.683486,1.31698296 13.3163236,1.31717294 13.7066821,1.70753145 L14.2924686,2.29331789 C14.6828271,2.68367639 14.683017,3.31651398 14.292893,3.70710678 L12.9253753,5.07637056 L10.9236294,3.0746247 Z" id="path-1"></path>
+    </defs>
+    <g id="icons/system/light/edit/ic-edit" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Combined-Shape-Copy-3">
+            <use fill="#FFFFFF" fill-rule="evenodd" xlink:href="#path-1"></use>
+            <path stroke="#2A3052" stroke-width="1" d="M10.2112023,3.07948722 L12.9205128,5.78879765 L3.22169437,15.5 L0.5,15.5 L0.5,12.7783056 L10.2112023,3.07948722 Z M10.5703017,2.72084581 L11.9395522,1.35334144 C12.5254414,0.768155332 13.4746977,0.768440293 14.0602355,1.35397806 L14.6460219,1.93976449 C15.2315597,2.52530226 15.2318447,3.47455863 14.6466719,4.06043453 L12.9256009,5.78370299 L10.216297,3.07439906 L10.5703017,2.72084581 Z"></path>
+        </g>
+    </g>
+</svg>

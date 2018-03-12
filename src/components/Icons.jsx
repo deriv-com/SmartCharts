@@ -1,38 +1,38 @@
 import React from 'react';
 import '../../sass/components/_icons.scss';
-import Add from '../../sass/icons/add/ic-add-light.svg';
-import AddThin from '../../sass/icons/chart template/ic-add-light.svg';
-import Candle from '../../sass/icons/chart types/ic-candle.svg';
-import Close from '../../sass/icons/notification/ic-close.svg';
-import Comparison from '../../sass/icons/chart-controls/ic-comparison-normal-light.svg';
-import Crosshair from '../../sass/icons/chart-controls/ic-crosshair-normal.svg';
-import Delete from '../../sass/icons/drawing tools/ic-drawingtools-clear-all.svg';
-import Dot from '../../sass/icons/chart types/ic-dot.svg';
-import Download from '../../sass/icons/chart template/ic-download-light.svg';
-import Draw from '../../sass/icons/drawing tools/ic-drawingtools-normal-light.svg';
-import HollowCandle from '../../sass/icons/chart types/ic-hollow-candle.svg';
-import Indicator from '../../sass/icons/chart-controls/ic-indicator-normal-light.svg';
-import Line from '../../sass/icons/chart types/ic-line.svg';
-import List from '../../sass/icons/chart template/ic-templatelist-light.svg';
-import Measure from '../../sass/icons/drawing tools/ic-drawingtools-measure.svg';
-import Minus from '../../sass/icons/minus/ic-minus-light.svg';
-import OHLC from '../../sass/icons/chart types/ic-ohlc.svg';
-import Spline from '../../sass/icons/chart types/ic-spline.svg';
-import Star from '../../sass/icons/favorite/ic-favorite-normal-light.svg';
-import Template from '../../sass/icons/chart template/ic-charttemplate-normal-light.svg';
-import Warning from '../../sass/icons/notification/ic-warning.svg';
-import Active from '../../sass/icons/active symbols/categories/ic-active-normal-light.svg';
-import Commodities from '../../sass/icons/active symbols/categories/ic-commodities-normal-light.svg';
-import Favorite from '../../sass/icons/active symbols/categories/ic-favorite-normal-light.svg';
-import Forex from '../../sass/icons/active symbols/categories/ic-forex-normal-light.svg';
-import Indices from '../../sass/icons/active symbols/categories/ic-indices-normal-light.svg';
-import Stocks from '../../sass/icons/active symbols/categories/ic-stocks-normal-light.svg';
-import Volidx from '../../sass/icons/active symbols/categories/ic-volidx-normal-light.svg';
-import Search from '../../sass/icons/common/ic-search-light.svg';
-import Edit from '../../sass/icons/common/ic-edit.svg';
-import IndicatorCategory from '../../sass/icons/active symbols/categories/ic-indicator-normal.svg';
+import Add from '../../sass/icons/chart settings/zoom-in/ic-zoomin-light.svg';
+import AddThin from '../../sass/icons/add/ic-add.svg';
+import Candle from '../../sass/icons/chart settings/chart types/candle/ic-candle-normal.svg';
+import Close from '../../sass/icons/close/ic-close.svg';
+import Comparison from '../../sass/icons/chart settings/comparison/ic-comparison-normal.svg';
+import Crosshair from '../../sass/icons/chart settings/crosshair/ic-crosshair.svg';
+import Delete from '../../sass/icons/delete/ic-delete.svg';
+import Dot from '../../sass/icons/chart settings/chart types/dot/ic-dot-normal.svg';
+import Download from '../../sass/icons/download/ic-download.svg';
+import Draw from '../../sass/icons/chart settings/drawing tools/ic-drawingtools-normal.svg';
+import HollowCandle from '../../sass/icons/chart settings/chart types/hollow candle/ic-hollowcandle-normal.svg';
+import Indicator from '../../sass/icons/chart settings/indicators/ic-indicator-normal.svg';
+import Line from '../../sass/icons/chart settings/chart types/line/ic-line-normal.svg';
+import List from '../../sass/icons/template-list/ic-templatelist.svg';
+import Measure from '../../sass/icons/measure/ic-measure.svg';
+import Minus from '../../sass/icons/chart settings/zoom-out/ic-zoomout-light.svg';
+import OHLC from '../../sass/icons/chart settings/chart types/ohlc/ic-ohlc-normal.svg';
+import Spline from '../../sass/icons/chart settings/chart types/spline/ic-spline-normal.svg';
+import Star from '../../sass/icons/favorite/ic-favorite-normal.svg';
+import Template from '../../sass/icons/chart settings/chart template/ic-charttemplate-normal.svg';
+import Warning from '../../sass/icons/alert message/warning.svg';
+import Active from '../../sass/icons/sidebar/active/ic-active-normal.svg';
+import Commodities from '../../sass/icons/sidebar/commodities/ic-commodities-normal.svg';
+import Favorite from '../../sass/icons/sidebar/favorite/ic-favorite-normal.svg';
+import Forex from '../../sass/icons/sidebar/forex/ic-forex-normal.svg';
+import Indices from '../../sass/icons/sidebar/indices/ic-indices-normal.svg';
+import Stocks from '../../sass/icons/sidebar/otc/ic-otc-normal.svg';
+import Volidx from '../../sass/icons/sidebar/volatility/ic-volatility-normal.svg';
+import Search from '../../sass/icons/search/ic-search-normal.svg';
+import Edit from '../../sass/icons/edit/ic-edit.svg';
+import IndicatorCategory from '../../sass/icons/sidebar/indicator/ic-indicator-normal.svg';
 
-import SymbolPlaceholder from '../../sass/icons/active symbols/ic-symbol-placeholder.svg';
+import SymbolPlaceholder from '../../sass/icons/placeholder/ic-placeholder.svg';
 import AUD from '../../sass/icons/flags/aud.svg';
 import CAD from '../../sass/icons/flags/cad.svg';
 import CHF from '../../sass/icons/flags/chf.svg';
@@ -47,11 +47,14 @@ import SEK from '../../sass/icons/flags/sek.svg';
 import USD from '../../sass/icons/flags/usd.svg';
 
 const Wrapper = WrappedComponent => props => {
-    const propsCopy = Object.assign({}, props);
-    propsCopy.className = `ic-icon ${propsCopy.className ? propsCopy.className : ''} ${propsCopy['tooltip-title'] ? 'tooltip' : ''}`;
+    let { className, ['tooltip-title']: tooltip, ...p } = props;
+    className = `ic-icon ${className ? className : ''} ${tooltip ? 'tooltip' : ''}`;
 
     return (
-        <span {...propsCopy}>
+        <span
+            className={className}
+            tooltip-title={tooltip}
+            {...p}>
             <WrappedComponent />
         </span>
     );

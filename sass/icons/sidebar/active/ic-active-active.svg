@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 49 (51002) - http://www.bohemiancoding.com/sketch -->
+    <title>icons/system/light/sidebar/active/ic-active-active</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="icons/system/light/sidebar/active/ic-active-active" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <circle id="Oval" fill="#4C5794" cx="8" cy="8" r="8"></circle>
+        <path d="M8.85714286,7 L11.5171573,7 C11.6276142,7 11.7171573,7.08954305 11.7171573,7.2 C11.7171573,7.2530433 11.6960859,7.30391408 11.6585786,7.34142136 L5.73434205,13.265658 C5.65623719,13.3437628 5.52960419,13.3437628 5.45149933,13.265658 C5.39367149,13.2078301 5.3768766,13.1206213 5.40909168,13.0454527 L7.14285714,9 L4.48284271,9 C4.37238576,9 4.28284271,8.91045695 4.28284271,8.8 C4.28284271,8.7469567 4.30391408,8.69608592 4.34142136,8.65857864 L10.265658,2.73434205 C10.3437628,2.65623719 10.4703958,2.65623719 10.5485007,2.73434205 C10.6063285,2.79216989 10.6231234,2.87937874 10.5909083,2.95454726 L8.85714286,7 Z" id="Combined-Shape" fill="#FFFFFF"></path>
+    </g>
+</svg>

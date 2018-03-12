@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 49 (51002) - http://www.bohemiancoding.com/sketch -->
+    <title>icons/system/light/favorite/ic-favorite-active</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="icons/system/light/favorite/ic-favorite-active" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Favorite/Active">
+            <rect id="bg-container" fill="#000000" opacity="0" x="0" y="0" width="16" height="16"></rect>
+            <path d="M8.00015999,12.4721175 L3.95725433,14.513467 C3.2036494,14.8939782 2.7111988,14.5390687 2.85333249,13.7431678 L3.62545877,9.41952037 L0.354679382,6.35749626 C-0.254999813,5.78672943 -0.0557251231,5.22724641 0.776340003,5.11112604 L5.29644594,4.48031438 L7.31789877,0.546530007 C7.69470124,-0.186734517 8.31031037,-0.177604522 8.68242121,0.546530007 L10.703874,4.48031438 L15.22398,5.11112604 C16.0665359,5.22871047 16.2477286,5.79383614 15.6456406,6.35749626 L12.3748612,9.41952037 L13.1469875,13.7431678 C13.2909132,14.5491035 12.7872873,14.8892404 12.0430656,14.513467 L8.00015999,12.4721175 Z" id="Star-Copy" fill="#E98024" fill-rule="nonzero"></path>
+        </g>
+    </g>
+</svg>

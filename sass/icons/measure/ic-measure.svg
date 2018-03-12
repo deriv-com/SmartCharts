@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 49 (51002) - http://www.bohemiancoding.com/sketch -->
+    <title>icons/system/light/measure/ic-measure</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="icons/system/light/measure/ic-measure" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <polygon id="Path-9" stroke="#2A3052" points="1.5 11.5 11.5 1.5 14.5 4.5 4.5 14.5"></polygon>
+        <path d="M3.5,9.5 L5.5,11.5" id="Path-17" stroke="#2A3052"></path>
+        <path d="M5.5,7.5 L6.5,8.5" id="Path-17-Copy" stroke="#2A3052" stroke-linecap="square"></path>
+        <path d="M9.5,3.5 L10.5,4.5" id="Path-17-Copy-3" stroke="#2A3052" stroke-linecap="square"></path>
+        <path d="M7.5,5.5 L9.5,7.5" id="Path-17-Copy-2" stroke="#2A3052"></path>
+    </g>
+</svg>
