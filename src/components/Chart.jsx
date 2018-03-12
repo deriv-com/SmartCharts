@@ -3,6 +3,10 @@ import $ from 'jquery';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import CIQ from 'chartiq'; // eslint-disable-line
+import RenderInsideChart from './RenderInsideChart.jsx';
+import ComparisonList from './ComparisonList.jsx';
+import ChartTitle from './ChartTitle.jsx';
+import AssetInformation from './AssetInformation.jsx';
 
 /* css + scss */
 import '../../css/stx-chart.css';
@@ -60,6 +64,13 @@ class Chart extends Component {
                 <div className="ciq-chart-area">
                     <div className="ciq-chart">
                         <div className='beta-version'>Beta Version 0.1.7</div>
+                        <RenderInsideChart>
+                            <div className="cq-top-ui-widgets">
+                                <ChartTitle />
+                                <AssetInformation />
+                                <ComparisonList />
+                            </div>
+                        </RenderInsideChart>
                         <Toolbar />
                         <ChartControls />
                         <Crosshair />

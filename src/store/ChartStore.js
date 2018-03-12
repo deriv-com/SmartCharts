@@ -5,9 +5,7 @@ import Feed from '../Feed';
 import PendingPromise from '../utils/PendingPromise';
 import Context from '../components/ui/Context';
 import React from 'react';
-import TopWidgets from '../components/TopWidgets.jsx';
 import {stableSort} from './utils';
-import {appendMarker} from '../utils';
 
 const connectionManager = new ConnectionManager({
     appId: 1,
@@ -126,9 +124,8 @@ class ChartStore {
         const stxx = this.stxx;
         stxx.chart.allowScrollPast = false;
         const context = new Context(stxx, this.rootNode);
+        context.mainStore = this.mainStore;
         new CIQ.UI.Layout(context);
-
-        appendMarker(TopWidgets, this.mainStore);
 
         context.changeSymbol = (data) => {
             if (context.loader) {context.loader.show();}
