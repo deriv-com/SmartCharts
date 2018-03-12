@@ -3,6 +3,10 @@ import $ from 'jquery';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import CIQ from 'chartiq'; // eslint-disable-line
+import RenderInsideChart from './RenderInsideChart.jsx';
+import ComparisonList from './ComparisonList.jsx';
+import ChartTitle from './ChartTitle.jsx';
+import AssetInformation from './AssetInformation.jsx';
 
 /* css + scss */
 import '../../css/stx-chart.css';
@@ -32,11 +36,8 @@ import './Undo';
 import './ViewDialog';
 import './Clickable';
 import ChartControls from './ChartControls.jsx';
-import ComparisonList from './ComparisonList.jsx';
 import SettingsDialog from './SettingsDialog.jsx';
 import Toolbar from './Toolbar.jsx';
-import ChartTitle from './ChartTitle.jsx';
-import AssetInformation from './AssetInformation.jsx';
 import Notification from './Notification.jsx';
 import Crosshair from './Crosshair.jsx';
 import { MobxProvider, connect } from '../store/Connect';
@@ -63,12 +64,14 @@ class Chart extends Component {
                 <div className="ciq-chart-area">
                     <div className="ciq-chart">
                         <div className='beta-version'>Beta Version 0.1.7</div>
+                        <RenderInsideChart>
+                            <div className="cq-top-ui-widgets">
+                                <ChartTitle />
+                                <AssetInformation />
+                                <ComparisonList />
+                            </div>
+                        </RenderInsideChart>
                         <Toolbar />
-                        <div className="cq-top-ui-widgets">
-                            <ChartTitle />
-                            <AssetInformation />
-                            <ComparisonList />
-                        </div>
                         <ChartControls />
                         <Crosshair />
                         <div className="chartContainer primary"> </div>
