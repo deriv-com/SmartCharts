@@ -12,6 +12,7 @@ import ComparisonListStore from './ComparisonListStore';
 import NotificationStore from './NotificationStore';
 import DoorbellStore from './DoorbellStore';
 import ViewStore from './ViewStore'
+import CrosshairStore from './CrosshairStore';
 
 export default class MainStore {
     @observable chart = new ChartStore(this);
@@ -27,4 +28,5 @@ export default class MainStore {
     @observable notification = new NotificationStore(this);
     @observable doorbell = new DoorbellStore();
     @observable view = new ViewStore(this);
+    @observable crosshair = new CrosshairStore(this);
 }

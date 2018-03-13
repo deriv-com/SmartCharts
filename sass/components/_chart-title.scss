@@ -8,6 +8,7 @@
     z-index: 41;
     margin: 0.3em 1em;
     .cq-symbol-select-btn {
+        font-family: $base-font;
         padding: 1.1em 2em 0.9em 1em;
         border-radius: $soft-corners;
         cursor: pointer;
@@ -54,7 +55,6 @@
             > div {
                 line-height: 1.5;
             }
-            font-family: $heading-font;
             line-height: 22px;
             font-size: 12px;
             text-align: left;
@@ -64,7 +64,6 @@
             font-weight: 700;
         }
         .cq-chart-price {
-            font-family: $base-font;
             margin-left: 9px;
             color: $DEFAULT-text-medium;
             vertical-align: text-bottom;

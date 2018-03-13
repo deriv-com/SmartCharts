@@ -55,6 +55,7 @@
   },
   "dependencies": {
     "babel-plugin-inline-react-svg": "^0.5.2",
+    "create-react-class": "^15.6.3",
     "event-emitter-es6": "^1.1.5",
     "html2canvas": "^1.0.0-alpha.9",
     "iscroll": "^5.2.0",
@@ -63,7 +64,8 @@
     "object.observe": "^0.2.6",
     "prop-types": "^15.6.0",
     "react": "^16.2.0",
-    "react-dom": "^16.2.0"
+    "react-dom": "^16.2.0",
+    "react-slider": "^0.11.0"
   },
   "peerDependencies": {
     "jquery": "^3.2.1"

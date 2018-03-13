@@ -32,6 +32,7 @@ import Volidx from '../../sass/icons/sidebar/volatility/ic-volatility-normal.svg
 import Search from '../../sass/icons/search/ic-search-normal.svg';
 import Edit from '../../sass/icons/edit/ic-edit.svg';
 import IndicatorCategory from '../../sass/icons/sidebar/indicator/ic-indicator-normal.svg';
+import Arrow from '../../sass/icons/dropdown/ic-dropdown.svg';
 
 import SymbolPlaceholder from '../../sass/icons/placeholder/ic-placeholder.svg';
 import AUD from '../../sass/icons/flags/aud.svg';
@@ -85,6 +86,7 @@ export const TickIcon = Wrapper(Tick);
 export const WarningIcon = Wrapper(Warning);
 export const SearchIcon = Wrapper(Search);
 export const EditIcon = Wrapper(Edit);
+export const ArrowIcon = Wrapper(Arrow);
 
 export const SymbolPlaceholderIcon = Wrapper(SymbolPlaceholder);
 

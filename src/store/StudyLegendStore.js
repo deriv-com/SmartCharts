@@ -11,7 +11,7 @@ export default class StudyLegendStore {
         this.menu = new MenuStore({getContext: () => this.context});
         this.categoricalDisplay = new CategoricalDisplayStore({
             activeOptions: [
-                { id: 'edit',   onClick: (item, e) => item.editFunc(e)  },
+                { id: 'edit', onClick: (item, e) => item.editFunc(e) },
                 { id: 'delete', onClick: (item, e) => item.closeFunc(e) },
             ],
             getIsShown: () => this.menu.open,
@@ -80,7 +80,7 @@ export default class StudyLegendStore {
         const inputs = helper.inputs.map(inp => ({
             id: inp.name,
             title: inp.heading,
-            value: study.inputs[inp.name],
+            value: inp.value,
             defaultValue: inp.defaultInput,
             type: inp.type === 'checkbox' ? 'switch' : inp.type,
             options: inp.options || null,
@@ -110,7 +110,6 @@ export default class StudyLegendStore {
         this.settingsDialog.title = study.sd.name.toUpperCase();
         this.settingsDialog.description = "No description yet";
         this.settingsDialog.setOpen(true);
-        console.warn(inputs, outputs, parameters);
     }
     @action.bound deleteStudy(study) {
         CIQ.Studies.removeStudy(this.stx, study);

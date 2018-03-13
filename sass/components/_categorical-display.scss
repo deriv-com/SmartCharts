@@ -84,21 +84,19 @@
             border-right: 2px solid $active-color;
             background-color: #f2f3f8;
             .ic-icon {
-                &.ic-active, &.ic-forex, &.ic-commodities, &.ic-volidx {
+                &.ic-active, &.ic-forex, &.ic-commodities, &.ic-volidx, &.ic-stocks {
                     svg > g > circle { fill: $active-color; }
                 }
                 &.ic-indicators > svg > g circle {
                     fill: $active-color;
                 }
                 &.ic-stocks {
-                    svg > g {
-                        > use, > g:last-child { fill: $active-color; }
-                    }
+                    svg > g > g:last-child { fill: $active-color; }
                 }
                 &.ic-indices {
-                    svg > g {
+                    svg > g > g {
                         > path   { fill: $active-color;   }
-                        > circle { stroke: $active-color; }
+                        > g > circle { stroke: $active-color; }
                     }
                 }
             }

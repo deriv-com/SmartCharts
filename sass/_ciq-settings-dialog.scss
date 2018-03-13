@@ -34,10 +34,6 @@
             cursor: pointer;
             font-size: 14px;
             &.active { font-weight: bold; }
-            &:first-child {
-                border-right: 1px solid #E9E9ED;
-                padding-right: 1px;
-            }
         }
         .active-border {
             position: absolute;
@@ -59,6 +55,7 @@
             box-sizing: border-box;
             padding: 0 16px;
             height: 32px;
+            margin-bottom: 5px;
             display: flex;
             flex-direction: column;
             justify-content: space-around;

@@ -19,12 +19,15 @@ export default class MenuStore {
     @action.bound setOpen(val) { this.dialog.setOpen(val); }
 
     blurInput() {
+        const stx = this.context.stx;
         if(this.open === false) {
             document.activeElement.blur();
-            this.context.stx.modalEnd();
+            stx.modalEnd();
         } else {
-            this.context.stx.modalBegin();
+            stx.modalBegin();
         }
+
+        stx.allowScroll = stx.allowZoom = !this.open;
     }
 
     @action.bound onTitleClick(e) {
