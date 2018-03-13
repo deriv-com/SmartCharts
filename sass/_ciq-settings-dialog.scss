@@ -34,10 +34,6 @@
             cursor: pointer;
             font-size: 14px;
             &.active { font-weight: bold; }
-            &:first-child {
-                border-right: 1px solid #E9E9ED;
-                padding-right: 1px;
-            }
         }
         .active-border {
             position: absolute;

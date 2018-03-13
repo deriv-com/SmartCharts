@@ -64,7 +64,6 @@ const SettingsDialog = ({
                     <span>{item.title}</span>
                     <DropDown
                         rows={Object.keys(item.options)}
-                        open={false /* TODO */}
                         title={item.value}
                         onRowClick={value => onItemChange(item.id, value)}
                     >
