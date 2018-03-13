@@ -15,7 +15,7 @@ const Timeperiod = ({
             className="ciq-period"
         >
             <Menu.Title>
-                <span className="tooltip" tooltip-title="Time period">
+                <span tooltip-title="Time period">
                     <span className="interval_display">{interval_display}</span>
                     <span className="unit_display">{timeUnit_display}</span>
                 </span>

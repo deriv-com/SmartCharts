@@ -11,6 +11,7 @@ import AssetInformationStore from './AssetInformationStore';
 import ComparisonListStore from './ComparisonListStore';
 import NotificationStore from './NotificationStore';
 import DoorbellStore from './DoorbellStore';
+import ViewStore from './ViewStore'
 import CrosshairStore from './CrosshairStore';
 
 export default class MainStore {
@@ -26,5 +27,6 @@ export default class MainStore {
     @observable comparisonList = new ComparisonListStore(this);
     @observable notification = new NotificationStore(this);
     @observable doorbell = new DoorbellStore();
+    @observable view = new ViewStore(this);
     @observable crosshair = new CrosshairStore(this);
 }

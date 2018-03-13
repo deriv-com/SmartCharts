@@ -20,6 +20,7 @@ import OHLC from '../../sass/icons/chart settings/chart types/ohlc/ic-ohlc-norma
 import Spline from '../../sass/icons/chart settings/chart types/spline/ic-spline-normal.svg';
 import Star from '../../sass/icons/favorite/ic-favorite-normal.svg';
 import Template from '../../sass/icons/chart settings/chart template/ic-charttemplate-normal.svg';
+import Tick from '../../sass/icons/tick/ic-tick.svg';
 import Warning from '../../sass/icons/alert message/warning.svg';
 import Active from '../../sass/icons/sidebar/active/ic-active-normal.svg';
 import Commodities from '../../sass/icons/sidebar/commodities/ic-commodities-normal.svg';
@@ -81,6 +82,7 @@ export const OHLCIcon = Wrapper(OHLC);
 export const SplineIcon = Wrapper(Spline);
 export const StarIcon = Wrapper(Star);
 export const TemplateIcon = Wrapper(Template);
+export const TickIcon = Wrapper(Tick);
 export const WarningIcon = Wrapper(Warning);
 export const SearchIcon = Wrapper(Search);
 export const EditIcon = Wrapper(Edit);
