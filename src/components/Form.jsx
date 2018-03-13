@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactSlider from 'react-slider';
 import '../../sass/_ciq-form.scss';
+import {ArrowIcon} from './Icons.jsx';
 
 // TODO: Add mobile support.
 
@@ -69,28 +70,47 @@ export const Line = ({
     );
 };
 
-export const DropDown = ({
-    open,
-    rows,
-    children,
-    title,
-    onRowClick,
-}) => (
-    <div className='cq-dropdown'>
-        <div className='title'>{title}</div>
-        <div className={`dropdown ${open ? 'active' : ''}`}>
-            {rows.map((row, rowIdx) => (
+export class DropDown extends React.Component {
+    state = { open: false };
+    titleRef = null;
+    onClick = () => this.setState({open: !this.state.open});
+    close = (e) => {
+        if(e.target !== this.titleRef) {
+            this.setState({open: false});
+        }
+    }
+
+    componentDidMount() { document.addEventListener('click', this.close, false); }
+    componentWillUnmount() { document.removeEventListener('click', this.close); }
+    
+    render() {
+        const { rows, children, title, onRowClick } = this.props;
+        const { open } = this.state;
+        return (
+            <div className='cq-dropdown'>
                 <div
-                    key={rowIdx}
-                    className='row'
-                    onClick={() => onRowClick && onRowClick(row)}
+                    className={`title ${open ? 'active' : ''}`}
+                    onClick={this.onClick}
+                    ref={ref => this.titleRef = ref}
                 >
-                    {children(row)}
+                    {title}
+                    <ArrowIcon />
                 </div>
-            ))}
-        </div>
-    </div>
-);
+                <div className={`dropdown ${open ? 'active' : ''}`}>
+                    {rows.map((row, rowIdx) => (
+                        <div
+                            key={rowIdx}
+                            className='row'
+                            onClick={() => onRowClick && onRowClick(row)}
+                        >
+                            {children(row)}
+                        </div>
+                    ))}
+                </div>
+            </div>
+        );
+    }
+};
 
 export class ColorPicker extends React.Component {
     colorMap = [
