@@ -73,7 +73,10 @@ const config = {
         ]),
         new CopyWebpackPlugin([
             { from: './chartiq/splines.js' },
-        ])
+        ]),
+        new CopyWebpackPlugin([
+            { from: './sass/favicons/*.png' },
+        ]),
     ],
     externals: {
         jquery: 'jQuery',

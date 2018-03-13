@@ -1,15 +1,12 @@
 #doorbell-button {
-    left: 100px;
-    bottom: -30px;
-    transition: bottom 0.2s linear;
+    right: 100px;
+    bottom: 0;
     background: white;
     color: #4C5794;
     border: 1px solid #4C5794;
     box-shadow: 0 0.375em 0.625em 0 rgba(0, 0, 0, 0.14);
     border-bottom: none;
-    &:hover {
-        bottom: 0;
-    }
+    padding: 8px;
 }
 #doorbell form {
     box-shadow: none;
