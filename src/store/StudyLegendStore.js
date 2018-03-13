@@ -45,7 +45,7 @@ export default class StudyLegendStore {
         categoryId: 'active',
         hasSubcategory: false,
         emptyDescription: 'There are no active indicators yet.',
-        data: []
+        data: [],
     };
 
     begin() {

@@ -3,7 +3,16 @@ import { connect } from './Connect';
 import IScroll from 'iscroll/build/iscroll-probe';
 
 export default class CategoricalDisplayStore {
-    constructor({ getCategoricalItems, onSelectItem, getIsShown, getActiveCategory, activeOptions, placeholderText }) {
+    constructor({
+        getCategoricalItems,
+        onSelectItem,
+        getIsShown,
+        getActiveCategory,
+        activeOptions,
+        placeholderText,
+        favoritesId,
+        mainStore,
+    }) {
         reaction(getIsShown, () => {
             if (getIsShown()) {
                 // Odd. Why is setTimeout needed here?
@@ -20,15 +29,40 @@ export default class CategoricalDisplayStore {
         this.getActiveCategory = getActiveCategory;
         this.activeOptions = activeOptions;
         this.placeholderText = placeholderText;
+        this.favoritesId = favoritesId;
         this.categoryElements = {};
+        this.mainStore = mainStore;
 
         this.isInit = false;
+
+        if (favoritesId && mainStore) {
+            when(() => this.context, this.initFavorites.bind(this));
+        }
     }
 
     @observable filterText = '';
     @observable placeholderText = '';
     @observable activeCategoryKey = '';
+    @observable favoritesCategory = {
+        categoryName: 'Favorites',
+        categoryId: 'favorite',
+        hasSubcategory: false,
+        emptyDescription: 'There are no favorites yet.',
+        data: [],
+    };
     scrollOffset = 0;
+
+    get context() {
+        return this.mainStore.chart.context;
+    }
+
+    initFavorites() {
+        const layout = this.context.stx.layout;
+        if (!layout.favorites) {layout.favorites = {};}
+        if (!layout.favorites[this.favoritesId]) {layout.favorites[this.favoritesId] = [];}
+        this.favoritesCategory.data = layout.favorites[this.favoritesId];
+
+    }
 
     updateScrollOffset() {
         this.scrollOffset = this.scrollPanel.getBoundingClientRect().top;
@@ -88,6 +122,10 @@ export default class CategoricalDisplayStore {
 
     @computed get filteredItems() {
         let filteredItems = JSON.parse(JSON.stringify(this.getCategoricalItems())); // Deep clone array
+
+        if (this.favoritesId) {
+            filteredItems.unshift(this.favoritesCategory);
+        }
 
         if (this.getActiveCategory) {
             const activeCategory = this.getActiveCategory();
@@ -166,6 +204,12 @@ export default class CategoricalDisplayStore {
         this.searchInput.focus();
     }
 
+    @action.bound onFavoritedItem(item, e) {
+        e.stopPropagation();
+        e.nativeEvent.isHandledByDialog = true; // prevent close dialog
+        console.log('WINNA WINNA CHICKAN DINNA!!');
+    }
+
     connect = connect(() => ({
         filterText: this.filterText,
         setFilterText: this.setFilterText,
@@ -175,11 +219,13 @@ export default class CategoricalDisplayStore {
         handleFilterClick: this.handleFilterClick,
         onSelectItem: this.onSelectItem,
         handleInputClick: this.handleInputClick,
-        hasActiveItems: (this.getActiveItems !== undefined),
+        hasActiveItems: (this.getActiveCategory !== undefined),
         activeOptions: this.activeOptions,
         placeholderText: this.placeholderText,
         activeCategoryKey: this.activeCategoryKey,
         setScrollPanel: this.setScrollPanel,
         setCategoryElement: this.setCategoryElement,
+        onFavoritedItem: this.onFavoritedItem,
+        favoritesId: this.favoritesId,
     }))
 }

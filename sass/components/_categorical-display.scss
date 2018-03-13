@@ -83,7 +83,12 @@
             border-right: 2px solid $active-color;
             background-color: #f2f3f8;
             .ic-icon {
-                &.ic-active, &.ic-forex, &.ic-commodities, &.ic-volidx, &.ic-stocks {
+                &.ic-active,
+                &.ic-forex,
+                &.ic-commodities,
+                &.ic-volidx,
+                &.ic-stocks,
+                &.ic-favorite {
                     svg > g > circle { fill: $active-color; }
                 }
                 &.ic-indicators > svg > g circle {
@@ -110,7 +115,7 @@
         }
     }
     .cq-item, .cq-active-item {
-        padding: 3px 20px 0px 20px;
+        padding: 3px 13px 0px 20px;
         border-bottom: 1px solid #e9e9ed;
         height: 27px;
         > .ic-icon {
@@ -172,6 +177,12 @@
 
 /* Active Symbol Icons */
 .cq-categorical-display .results-panel {
+    .ciq-favorite {
+        float: right;
+        > .ic-icon {
+            margin-right: 0;
+        }
+    }
     .ic-icon {
         display: inline-block;
         margin-right: 15px;
