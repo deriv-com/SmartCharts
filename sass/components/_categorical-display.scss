@@ -113,6 +113,9 @@
         padding: 3px 20px 0px 20px;
         border-bottom: 1px solid #e9e9ed;
         height: 27px;
+        > .ic-icon {
+            vertical-align: super;
+        }
     }
     .cq-item[disabled] {
         pointer-events: none;
@@ -123,7 +126,6 @@
         &.selected {
             background-color: #efefef;
         }
-
     }
     .cq-scroll-panel {
         position: relative;
@@ -133,7 +135,10 @@
     }
     .ciq-item-display {
         display: inline-block;
-        vertical-align: super;
+        vertical-align: top;
+    }
+    .empty-category {
+        padding: 0.2em 1.2em;
     }
 
     /* Active Options */

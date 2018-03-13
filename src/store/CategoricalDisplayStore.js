@@ -3,7 +3,7 @@ import { connect } from './Connect';
 import IScroll from 'iscroll/build/iscroll-probe';
 
 export default class CategoricalDisplayStore {
-    constructor({ getCategoricalItems, onSelectItem, getIsShown, getActiveItems, activeOptions, placeholderText }) {
+    constructor({ getCategoricalItems, onSelectItem, getIsShown, getActiveCategory, activeOptions, placeholderText }) {
         reaction(getIsShown, () => {
             if (getIsShown()) {
                 // Odd. Why is setTimeout needed here?
@@ -17,7 +17,7 @@ export default class CategoricalDisplayStore {
         });
         this.getCategoricalItems = getCategoricalItems;
         this.onSelectItem = onSelectItem;
-        this.getActiveItems = getActiveItems;
+        this.getActiveCategory = getActiveCategory;
         this.activeOptions = activeOptions;
         this.placeholderText = placeholderText;
         this.categoryElements = {};
@@ -89,8 +89,8 @@ export default class CategoricalDisplayStore {
     @computed get filteredItems() {
         let filteredItems = JSON.parse(JSON.stringify(this.getCategoricalItems())); // Deep clone array
 
-        if (this.getActiveItems) {
-            const activeCategory = this.getActiveCategory(this.getActiveItems());
+        if (this.getActiveCategory) {
+            const activeCategory = this.getActiveCategory();
             filteredItems.unshift(activeCategory);
         }
 
@@ -164,16 +164,6 @@ export default class CategoricalDisplayStore {
     // when user clicks on it.
     @action.bound handleInputClick() {
         this.searchInput.focus();
-    }
-
-    getActiveCategory(actives) {
-        const category = {
-            categoryName: 'Active',
-            categoryId: 'active',
-            hasSubcategory: false,
-            data: actives
-        };
-        return category;
     }
 
     connect = connect(() => ({

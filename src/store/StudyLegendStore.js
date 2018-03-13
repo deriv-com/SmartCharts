@@ -16,7 +16,7 @@ export default class StudyLegendStore {
             ],
             getIsShown: () => this.menu.open,
             getCategoricalItems: () => this.categorizedStudies,
-            getActiveItems: () => this.activeStudies,
+            getActiveCategory: () => this.activeStudies,
             onSelectItem: this.onSelectItem.bind(this),
             placeholderText: '"Mass Index" or "Doji Star"',
         });
@@ -40,7 +40,13 @@ export default class StudyLegendStore {
     injections = [];
     previousStudies = { };
 
-    @observable activeStudies = [];
+    @observable activeStudies = {
+        categoryName: 'Active',
+        categoryId: 'active',
+        hasSubcategory: false,
+        emptyDescription: 'There are no active indicators yet.',
+        data: []
+    };
 
     begin() {
         this.stx.callbacks.studyOverlayEdit = study => this.editStudy(study);
@@ -203,7 +209,7 @@ export default class StudyLegendStore {
             });
         });
 
-        this.activeStudies = studies;
+        this.activeStudies.data = studies;
     }
 
     @action.bound cleanUp() {

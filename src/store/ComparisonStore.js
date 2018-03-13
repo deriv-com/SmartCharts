@@ -2,7 +2,6 @@ import { observable, action, computed } from 'mobx';
 import MenuStore from './MenuStore';
 import CategoricalDisplayStore from './CategoricalDisplayStore';
 import React from 'react';
-import { connect } from './Connect';
 
 const swatchColors = [
     '#8ec648', '#00afed', '#ee652e', '#912a8e',
@@ -16,7 +15,7 @@ export default class ComparisonStore {
         this.mainStore = mainStore;
         this.menu = new MenuStore({getContext: () => this.context});
         this.categoricalDisplay = new CategoricalDisplayStore({
-            getActiveItems: () => this.activeComparisons,
+            getActiveCategory: () => this.activeComparisons,
             getCategoricalItems: () => this.mainStore.chart.categorizedSymbols,
             getIsShown: () => this.menu.open,
             activeOptions: [
@@ -41,7 +40,13 @@ export default class ComparisonStore {
                 dataObject: symbol
             });
         }
-        return result;
+        return {
+            categoryName: 'Active',
+            categoryId: 'active',
+            hasSubcategory: false,
+            emptyDescription: 'There are no active comparisons yet.',
+            data: result
+        };
     }
 
     @action.bound onDeleteItem({ symbolObject }) {
