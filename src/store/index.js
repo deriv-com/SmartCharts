@@ -11,6 +11,7 @@ import AssetInformationStore from './AssetInformationStore';
 import ComparisonListStore from './ComparisonListStore';
 import NotificationStore from './NotificationStore';
 import DoorbellStore from './DoorbellStore';
+import ViewStore from './ViewStore'
 
 export default class MainStore {
     @observable chart = new ChartStore(this);
@@ -25,4 +26,5 @@ export default class MainStore {
     @observable comparisonList = new ComparisonListStore(this);
     @observable notification = new NotificationStore(this);
     @observable doorbell = new DoorbellStore();
+    @observable view = new ViewStore(this);
 }
