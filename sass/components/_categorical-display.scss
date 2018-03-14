@@ -69,7 +69,7 @@
     }
     .cq-filter {
         padding-left: 1.6em;
-        line-height: 2.4em;
+        line-height: 2.6em;
         text-align: left;
         cursor: pointer;
         box-sizing: border-box;
@@ -128,11 +128,11 @@
             color: #c5c5c5 !important;
         }
         &.selected {
-            background-color: #efefef;
+            background-color: #f2f3f8;
         }
     }
     .cq-item:not([disabled]):hover {
-        background: #efefef;
+        background: #f2f3f8;
     }
     .cq-scroll-panel {
         position: relative;
