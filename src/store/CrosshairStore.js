@@ -332,11 +332,12 @@ class Tooltip extends CIQ.Marker {
 class CrosshairStore {
     constructor(mainStore) {
         this.mainStore = mainStore;
-        when(() => this.context, this.init);
+        when(() => this.context, this.onContextReady);
     }
 
     get context() { return this.mainStore.chart.context; }
     get stx() { return this.context.stx; }
+
 
     @observable top = 0;
     @observable left = -50000;
@@ -372,6 +373,19 @@ class CrosshairStore {
                 show: this.show,
             });
         }
+    }
+
+    onContextReady = () => {
+        this.crosshair = this.stx.layout.crosshair;
+        this.init();
+    }
+
+    @observable crosshair = false;
+    @action.bound setCrosshair(value) {
+        this.stx.layout.crosshair = value;
+        this.stx.doDisplayCrosshairs();
+        this.mainStore.chart.saveLayout();
+        this.crosshair = value;
     }
 }
 

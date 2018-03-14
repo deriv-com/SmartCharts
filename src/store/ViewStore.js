@@ -22,7 +22,7 @@ export default class ViewStore {
 
     onContextReady = () => {
         const views = CIQ.localStorage.getItem('cq-views');
-        if (views === null) return;
+        if (views === null) {return;}
         this.views = JSON.parse(views);
     }
 
@@ -50,7 +50,7 @@ export default class ViewStore {
             const layout = this.stx.exportLayout();
             this.views.push({name: this.templateName, layout});
             this.updateLocalStorage();
-        };
+        }
         this.templateName = '';
     }
 
@@ -61,22 +61,22 @@ export default class ViewStore {
     }
 
     applyLayout = (idx, e) => {
-        if(e.nativeEvent.is_item_removed) return;
-        if (this.context.loader) this.context.loader.show();
+        if(e.nativeEvent.is_item_removed) {return;}
+        if (this.context.loader) {this.context.loader.show();}
         const stx = this.stx;
 
         const importLayout = () => {
             stx.importLayout(this.views[idx].layout, true, true);
-            if (stx.changeCallback) stx.changeCallback(stx, 'layout');
+            if (stx.changeCallback) {stx.changeCallback(stx, 'layout');}
             stx.dispatch('layout', {
                 stx,
             });
-            if (this.context.loader) this.context.loader.hide();
-        }
+            if (this.context.loader) {this.context.loader.hide();}
+        };
         setTimeout(importLayout, 100);
     }
 
     inputRef = (ref) => {
-        if (ref) ref.focus();
+        if (ref) {ref.focus();}
     }
 }
