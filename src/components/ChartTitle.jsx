@@ -30,7 +30,7 @@ const ChartTitle = ({
                         <AnimatedPrice className="cq-current-price" />
                         <div className={`cq-change ${isPriceUp ? 'stx-up' : 'stx-down'}`}>
                             <span className="cq-todays-change">{todayChange}</span>&nbsp;
-                            <span className="cq-todays-change-pct">({todayChangePercentage})</span>
+                            {/*<span className="cq-todays-change-pct">({todayChangePercentage})</span>*/}
                         </div>
                     </div>
                 </div>}

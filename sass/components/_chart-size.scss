@@ -1,6 +1,7 @@
 .cq-chart-size {
     display: flex;
-    justify-content: space-around;
+    width: 64px;
+    justify-content: space-between;
     align-items: center;
     height: auto;
 
@@ -8,7 +9,6 @@
         display: none;
     }
     > span {
-        flex-grow: 1;
         opacity: 1;
         position: relative;
         cursor: pointer;

@@ -3,7 +3,7 @@
     height: 24px;
     width: 24px;
     line-height: 32px;
-    transition: box-shadow .2s ease-in, background .2s ease-in;
+    transition: background .1s linear;
     border-radius: 2px;
     box-sizing: border-box;
     cursor: pointer;
@@ -19,9 +19,17 @@
             fill: #E98024;
         }
     }
+    &.ic-clear {
+        background: #4b5794;
+        &.fill svg path {
+            fill: #ffffff;
+        }
+        &.stroke svg path {
+            stroke: #ffffff;
+        }
+    }
     &.active {
         border: 1px solid #4c5794;
-        box-shadow: 0px 0px 0px 2px rgba(76,87,148,.4);
         background: #f2f3f8;
 
         svg {
@@ -46,10 +54,10 @@
         height: 16px;
         width: 65px;
         line-height: 16px;
-        top: 32px;
+        bottom: 32px;
         color: #fff;
         content: attr(tooltip-title);
-        left: 10%;
+        left: -100%;
         padding: 6px;
         z-index: 98;
         background: rgba(21,33,45,0.88);
@@ -63,8 +71,8 @@
         pointer-events: none;
         border: solid;
         border-color: rgba(21,33,45,0.88) transparent;
-        border-width: 0px 4px 4px 4px;
-        top: 28px;
+        border-width: 4px 4px 0px 4px;
+        bottom: 28px;
         content: "";
         left: 40%;
         z-index: 99;

@@ -43,13 +43,13 @@ cq-context {
 	@import "components/line";
 	@import "components/chart-types";
 	@import "components/chart-controls";
-	@import "components/chart-templates";
 	@import "components/chart-title";
 	@import "components/timeperiod";
 	@import "components/toggles";
 	@import "components/categorical-display";
 	@import "components/chart-size";
 	@import "components/comparison-list";
+	@import "components/view";
 }
 
 /* --------------------------------------------------------- FIELDS, SELECTS, INPUTS --------------------------------------------------------- */

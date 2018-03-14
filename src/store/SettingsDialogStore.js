@@ -41,6 +41,15 @@ export default class SettingsDialogStore {
     @action.bound onTabClick(id) {
         this.activeTab = id;
     }
+    @action.bound onResetClick() {
+        const items = this.items.map(item => {
+            const clone = JSON.parse(JSON.stringify(item));
+            clone.value = clone.defaultValue;
+            return clone;
+        });
+        this.items = items;
+        this.onChanged(items);
+    }
     @action.bound onItemChange(id, newValue) {
         const items = this.items.map(item => {
             const clone = JSON.parse(JSON.stringify(item));
@@ -59,9 +68,11 @@ export default class SettingsDialogStore {
             activeTab: this.activeTab,
             showTabs: this.showTabs,
             stared: this.stared,
+            setOpen: this.setOpen,
             onTabClick: this.onTabClick,
             onDeleteClick: this.onDeleteClick,
             onStarClick: this.onStarClick,
+            onResetClick: this.onResetClick,
             onItemChange: this.onItemChange,
             Dialog: this.dialog.connect(Dialog),
         })

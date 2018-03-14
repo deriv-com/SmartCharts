@@ -1,4 +1,6 @@
 .cq-settings-dialog {
+    display: flex;
+    flex-direction: column;
     // background: rgba(255, 255, 255, 0.95) !important;
     .titlebar {
         height: 40x;
@@ -34,10 +36,6 @@
             cursor: pointer;
             font-size: 14px;
             &.active { font-weight: bold; }
-            &:first-child {
-                border-right: 1px solid #E9E9ED;
-                padding-right: 1px;
-            }
         }
         .active-border {
             position: absolute;
@@ -55,6 +53,8 @@
 
     .items {
         padding: 16px 0;
+        flex-grow: 1;
+        overflow: scroll;
         .item {
             box-sizing: border-box;
             padding: 0 16px;
@@ -72,7 +72,23 @@
         }
     }
 
+    .buttons {
+        display: flex;
+        justify-content: flex-end;
+        border-top: 1px solid #E9E9ED;
+        > div {
+            width: 90px;
+            height: 40px;
+            line-height: 40px;
+            text-align: center;
+            cursor: pointer;
+            color: #4C5794;
+            font-size: 14px;
+        }
+    }
+
     .description {
+        flex-grow: 1;
         padding: 16px;
         font-size: 12px;
         line-height: 18px;

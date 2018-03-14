@@ -1,8 +1,7 @@
 import React from 'react';
 import ReactSlider from 'react-slider';
 import '../../sass/_ciq-form.scss';
-
-// TODO: Add mobile support.
+import {ArrowIcon} from './Icons.jsx';
 
 export const Slider = ({
     min = 1,
@@ -19,6 +18,7 @@ export const Slider = ({
                 max={max}
                 step={step}
                 onChange={onChange}
+                value={value}
                 withBars
             />
             <div className='value'>{value}</div>
@@ -26,12 +26,50 @@ export const Slider = ({
     );
 };
 
-export const Line = ({
-    pattern,
-    lineWidth,
-    setLine,
-}) => {
-    const patterns = [
+export class DropDown extends React.Component {
+    state = { open: false };
+    titleRef = null;
+    onClick = () => this.setState({open: !this.state.open});
+    close = (e) => {
+        if(e.target !== this.titleRef) {
+            this.setState({open: false});
+        }
+    }
+
+    componentDidMount() { document.addEventListener('click', this.close, false); }
+    componentWillUnmount() { document.removeEventListener('click', this.close); }
+    
+    render() {
+        const { rows, children, title, onRowClick } = this.props;
+        const { open } = this.state;
+        return (
+            <div className='cq-dropdown'>
+                <div
+                    className={`title ${open ? 'active' : ''}`}
+                    onClick={this.onClick}
+                    ref={ref => this.titleRef = ref}
+                >
+                    {title}
+                    <ArrowIcon />
+                </div>
+                <div className={`dropdown ${open ? 'active' : ''}`}>
+                    {rows.map((row, rowIdx) => (
+                        <div
+                            key={rowIdx}
+                            className='row'
+                            onClick={() => onRowClick && onRowClick(row)}
+                        >
+                            {children(row)}
+                        </div>
+                    ))}
+                </div>
+            </div>
+        );
+    }
+};
+
+export class Pattern extends React.Component {
+    patterns = [
         {width: 1, pattern: 'solid'},
         {width: 3, pattern: 'solid'},
         {width: 5, pattern: 'solid'},
@@ -43,54 +81,26 @@ export const Line = ({
         {width: 5, pattern: 'dashed'},
         {width: 0, pattern: 'none'},
     ];
-    return (
-        <div className='cq-line'>
-            <div className='title'>
-                {pattern !== 'none' ?
-                    <span className={`option ${pattern}-${lineWidth}`}></span> :
-                    <span className='none'>None</span>
-                }
-            </div>
-            <div className='dropdown'>
-                { patterns.map((p, idx) => (
-                    <div
-                        key={idx}
-                        onClick={() => setLine(p)}
-                        className='parent'
-                    >
-                        {p.pattern !== 'none' ?
-                            <span className={`option ${p.pattern}-${p.width}`}></span> :
-                            <span className='none'>None</span>
-                        }
-                    </div>
-                ))}
-            </div>
-        </div>
-    );
-};
+    render()  {
+        const { pattern, lineWidth, onChange } = this.props;
+        const title = pattern !== 'none' ?
+            <span className={`option ${pattern}-${lineWidth}`}></span> :
+            <span className='none'>None</span>;
 
-export const DropDown = ({
-    open,
-    rows,
-    children,
-    title,
-    onRowClick,
-}) => (
-    <div className='cq-dropdown'>
-        <div className='title'>{title}</div>
-        <div className={`dropdown ${open ? 'active' : ''}`}>
-            {rows.map((row, rowIdx) => (
-                <div
-                    key={rowIdx}
-                    className='row'
-                    onClick={() => onRowClick && onRowClick(row)}
-                >
-                    {children(row)}
-                </div>
-            ))}
-        </div>
-    </div>
-);
+        return(
+            <DropDown
+                rows={this.patterns}
+                title={title}
+                onRowClick={onChange}
+            >
+                {p => p.pattern !== 'none' ?
+                        <span className={`option ${p.pattern}-${p.width}`}></span> :
+                        <span className='none'>None</span>
+                }
+            </DropDown>
+        );
+    }
+}
 
 export class ColorPicker extends React.Component {
     colorMap = [
