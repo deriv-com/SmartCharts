@@ -10,7 +10,7 @@ import AssetInformationStore from './AssetInformationStore';
 import ComparisonListStore from './ComparisonListStore';
 import NotificationStore from './NotificationStore';
 import DoorbellStore from './DoorbellStore';
-import ViewStore from './ViewStore'
+import ViewStore from './ViewStore';
 import CrosshairStore from './CrosshairStore';
 
 export default class MainStore {
