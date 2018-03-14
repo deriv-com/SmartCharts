@@ -13,7 +13,7 @@ class Dialog extends Component {
 
         return (
             <div
-                style={{display: open ? 'block' : 'none'}}
+                style={{display: open ? null : 'none'}}
                 className={className || 'cq-dialog'}
                 onClick={onContainerClick}
             >

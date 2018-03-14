@@ -1,19 +1,21 @@
-import React, {Component, Fragment} from 'react';
+import React, { Component, Fragment } from 'react';
 import { connect } from '../store/Connect';
-import '../../sass/_ciq-settings-dialog.scss';
-import {Switch, ColorPicker, Slider, Line, DropDown} from './Form.jsx';
+import { Switch, ColorPicker, Slider, Pattern, DropDown } from './Form.jsx';
 import { DeleteIcon, StarIcon } from './Icons.jsx';
+import '../../sass/_ciq-settings-dialog.scss';
 
 const SettingsDialog = ({
     items, // [{ id, title, value, defaultValue, type }]
     title,
     description,
     activeTab,
+    setOpen,
     showTabs,
     onTabClick,
     stared,
     onDeleteClick,
     onStarClick,
+    onResetClick,
     onItemChange,
     Dialog,
 }) => {
@@ -46,12 +48,12 @@ const SettingsDialog = ({
                 <div key={item.id} className='item'>
                     <div className='title'>
                         <span>{item.title}</span>
-                        <Line
+                        <Pattern
                             pattern={item.value}
                             lineWidth={lineWidth}
-                            setLine={({ pattern, width }) => {
-                                onItemChange('pattern', pattern);
-                                onItemChange('lineWidth', width);
+                            onChange={v => {
+                                onItemChange('pattern', v.pattern);
+                                onItemChange('lineWidth', v.width);
                             }}
                         />
                     </div>
@@ -119,23 +121,35 @@ const SettingsDialog = ({
             }
 
             { activeTab === 'settings' ?
-                <div className='items' >
-                    {items
-                        .map(item => {
-                            if(renderMap[item.type]) {
-                                return renderMap[item.type](item);
-                            }
-                            return (
-                                <div key={item.id} className='item'>
-                                    <div className='title'>
-                                        <span>{item.title}</span>
-                                        <strong>{item.type}</strong>
+                <React.Fragment>
+                    <div className='items' >
+                        {items
+                            .map(item => {
+                                if(renderMap[item.type]) {
+                                    return renderMap[item.type](item);
+                                }
+                                return (
+                                    <div key={item.id} className='item'>
+                                        <div className='title'>
+                                            <span>{item.title}</span>
+                                            <strong>{item.type}</strong>
+                                        </div>
                                     </div>
-                                </div>
-                            );
-                        })
-                    }
-                </div>
+                                );
+                            })
+                        }
+                    </div>
+                    <div className='buttons'>
+                        <div
+                            className='reset'
+                            onClick={onResetClick}
+                        >RESET</div>
+                        <div
+                            className='done'
+                            onClick={() => setOpen(false)}
+                        >DONE</div>
+                    </div>
+                </React.Fragment>
                 :
                 <div className='description'>
                     {description}

@@ -3,8 +3,6 @@ import ReactSlider from 'react-slider';
 import '../../sass/_ciq-form.scss';
 import {ArrowIcon} from './Icons.jsx';
 
-// TODO: Add mobile support.
-
 export const Slider = ({
     min = 1,
     max = 10,
@@ -20,52 +18,10 @@ export const Slider = ({
                 max={max}
                 step={step}
                 onChange={onChange}
+                value={value}
                 withBars
             />
             <div className='value'>{value}</div>
-        </div>
-    );
-};
-
-export const Line = ({
-    pattern,
-    lineWidth,
-    setLine,
-}) => {
-    const patterns = [
-        {width: 1, pattern: 'solid'},
-        {width: 3, pattern: 'solid'},
-        {width: 5, pattern: 'solid'},
-        {width: 1, pattern: 'dotted'},
-        {width: 3, pattern: 'dotted'},
-        {width: 5, pattern: 'dotted'},
-        {width: 1, pattern: 'dashed'},
-        {width: 3, pattern: 'dashed'},
-        {width: 5, pattern: 'dashed'},
-        {width: 0, pattern: 'none'},
-    ];
-    return (
-        <div className='cq-line'>
-            <div className='title'>
-                {pattern !== 'none' ?
-                    <span className={`option ${pattern}-${lineWidth}`}></span> :
-                    <span className='none'>None</span>
-                }
-            </div>
-            <div className='dropdown'>
-                { patterns.map((p, idx) => (
-                    <div
-                        key={idx}
-                        onClick={() => setLine(p)}
-                        className='parent'
-                    >
-                        {p.pattern !== 'none' ?
-                            <span className={`option ${p.pattern}-${p.width}`}></span> :
-                            <span className='none'>None</span>
-                        }
-                    </div>
-                ))}
-            </div>
         </div>
     );
 };
@@ -111,6 +67,40 @@ export class DropDown extends React.Component {
         );
     }
 };
+
+export class Pattern extends React.Component {
+    patterns = [
+        {width: 1, pattern: 'solid'},
+        {width: 3, pattern: 'solid'},
+        {width: 5, pattern: 'solid'},
+        {width: 1, pattern: 'dotted'},
+        {width: 3, pattern: 'dotted'},
+        {width: 5, pattern: 'dotted'},
+        {width: 1, pattern: 'dashed'},
+        {width: 3, pattern: 'dashed'},
+        {width: 5, pattern: 'dashed'},
+        {width: 0, pattern: 'none'},
+    ];
+    render()  {
+        const { pattern, lineWidth, onChange } = this.props;
+        const title = pattern !== 'none' ?
+            <span className={`option ${pattern}-${lineWidth}`}></span> :
+            <span className='none'>None</span>;
+
+        return(
+            <DropDown
+                rows={this.patterns}
+                title={title}
+                onRowClick={onChange}
+            >
+                {p => p.pattern !== 'none' ?
+                        <span className={`option ${p.pattern}-${p.width}`}></span> :
+                        <span className='none'>None</span>
+                }
+            </DropDown>
+        );
+    }
+}
 
 export class ColorPicker extends React.Component {
     colorMap = [
