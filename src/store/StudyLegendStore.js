@@ -11,8 +11,8 @@ export default class StudyLegendStore {
         this.menu = new MenuStore({getContext: () => this.context});
         this.categoricalDisplay = new CategoricalDisplayStore({
             activeOptions: [
-                { id: 'edit', onClick: (item, e) => item.editFunc(e) },
-                { id: 'delete', onClick: (item, e) => item.closeFunc(e) },
+                { id: 'edit', onClick: (item) => this.editStudy(item) },
+                { id: 'delete', onClick: (item) => this.deleteStudy(item) },
             ],
             getIsShown: () => this.menu.open,
             getCategoricalItems: () => this.categorizedStudies,
@@ -122,7 +122,17 @@ export default class StudyLegendStore {
         this.settingsDialog.setOpen(true);
     }
     @action.bound deleteStudy(study) {
-        CIQ.Studies.removeStudy(this.stx, study);
+        const sd = study.sd;
+        if (!sd.permanent) {
+            // Need to run this in the nextTick because the study legend can be removed by this click
+            // causing the underlying chart to receive the mousedown (on IE win7)
+            setTimeout(
+                () => {
+                    CIQ.Studies.removeStudy(this.stx, sd);
+                    this.renderLegend();
+                }, 0
+            );
+        }
     }
     @action.bound starStudy(study) {
         console.error('STAR STUDY NOT IMPLEMENTED YET', study);
@@ -173,41 +183,15 @@ export default class StudyLegendStore {
             let sd = stx.layout.studies[id];
             if (sd.customLegend) { return; }
 
-            let closeFunc;
-            if (!sd.permanent) {
-                // Need to run this in the nextTick because the study legend can be removed by this click
-                // causing the underlying chart to receive the mousedown (on IE win7)
-                closeFunc = (e) => setTimeout(
-                    () => {
-                        CIQ.Studies.removeStudy(this.stx, sd);
-                        this.renderLegend();
-                    }, 0
-                );
-
-            }
-
-            const editFunc = (e) => {
-                const stx = this.stx;
-                if (!sd.editFunction) { return; }
-                e.stopPropagation();
-
-                let studyEdit = this.context.getAdvertised('StudyEdit');
-                let params = {
+            studies.push({
+                enabled: true,
+                display: sd.inputs.display,
+                dataObject: {
                     stx,
                     sd,
                     inputs: sd.inputs,
                     outputs: sd.outputs,
                     parameters: sd.parameters,
-                };
-                studyEdit.editPanel(params);
-                this.menu.setOpen(false);
-            };
-            studies.push({
-                enabled: true,
-                display: sd.inputs.display,
-                dataObject: {
-                    closeFunc,
-                    editFunc,
                 },
             });
         });
