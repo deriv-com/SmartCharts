@@ -37,63 +37,6 @@
     }
 }
 
-.cq-line {
-    position: relative;
-    height: 18px;
-    .parent,
-    .title {
-        height: 18px;
-        line-height: 18px;
-        display: flex;
-        flex-direction: column;
-        justify-content: center !important;
-        cursor: pointer;
-    }
-    .parent:hover { background: #EFEFEF; }
-
-    /*Centers the span inside of its parent so the hover effect looks good*/
-    .option {
-        display: block;
-        width: 60px;
-        height: 0px;
-        padding: 0px;
-        border-top-color: #666;
-        border-radius:0;
-    }
-    /* Line style types */
-    .solid-1 { border-top-style: solid; border-top-width: 1px;}
-    .dotted-1 { border-top-style: dotted; border-top-width: 1px;}
-    .dashed-1 { border-top-style: dashed; border-top-width: 1px;}
-    .solid-3 { border-top-style: solid; border-top-width: 2px;}
-    .dotted-3 { border-top-style: dotted; border-top-width: 2px;}
-    .dashed-3 { border-top-style: dashed; border-top-width: 2px;}
-    .solid-5 { border-top-style: solid; border-top-width: 3px;}
-    .dotted-5 { border-top-style: dotted; border-top-width: 3px;}
-    .dashed-5 { border-top-style: dashed; border-top-width: 3px;}
-
-    .dropdown {
-        position: relative;
-        opacity: 0;
-        transition: opacity 0.1s;
-        pointer-events: none;
-        background: white;
-        box-shadow: 0 0.375em 0.625em 0 rgba(0,0,0,.14);
-        z-index: +1;
-        .option {
-            margin: 0 20px;
-        }
-    }
-    .title:hover + .dropdown,
-    .dropdown:hover {
-        opacity: 1;
-        pointer-events: all;
-    }
-    .none {
-        text-align: center;
-        font-style: italic;
-        color: #666;
-    }
-}
 .cq-dropdown {
     position: relative;
     height: 32px;
@@ -149,6 +92,26 @@
 		transition: opacity 0.3s, top 0.2s;
     }
 }
+
+// Pattern
+.cq-dropdown {
+    .option {
+        display: inline-block;
+        width: 100%;
+        pointer-events: none;
+    }
+    /* Line style types */
+    .solid-1 { border-top-style: solid; border-top-width: 1px;}
+    .dotted-1 { border-top-style: dotted; border-top-width: 1px;}
+    .dashed-1 { border-top-style: dashed; border-top-width: 1px;}
+    .solid-3 { border-top-style: solid; border-top-width: 2px;}
+    .dotted-3 { border-top-style: dotted; border-top-width: 2px;}
+    .dashed-3 { border-top-style: dashed; border-top-width: 2px;}
+    .solid-5 { border-top-style: solid; border-top-width: 3px;}
+    .dotted-5 { border-top-style: dotted; border-top-width: 3px;}
+    .dashed-5 { border-top-style: dashed; border-top-width: 3px;}
+}
+
 .cq-color-picker {
     position: relative;
     height: 24px;

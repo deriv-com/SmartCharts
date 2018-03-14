@@ -1,8 +1,8 @@
-import React, {Component, Fragment} from 'react';
+import React, { Component, Fragment } from 'react';
 import { connect } from '../store/Connect';
-import '../../sass/_ciq-settings-dialog.scss';
-import {Switch, ColorPicker, Slider, Line, DropDown} from './Form.jsx';
+import { Switch, ColorPicker, Slider, Pattern, DropDown } from './Form.jsx';
 import { DeleteIcon, StarIcon } from './Icons.jsx';
+import '../../sass/_ciq-settings-dialog.scss';
 
 const SettingsDialog = ({
     items, // [{ id, title, value, defaultValue, type }]
@@ -46,12 +46,12 @@ const SettingsDialog = ({
                 <div key={item.id} className='item'>
                     <div className='title'>
                         <span>{item.title}</span>
-                        <Line
+                        <Pattern
                             pattern={item.value}
                             lineWidth={lineWidth}
-                            setLine={({ pattern, width }) => {
-                                onItemChange('pattern', pattern);
-                                onItemChange('lineWidth', width);
+                            onChange={v => {
+                                onItemChange('pattern', v.pattern);
+                                onItemChange('lineWidth', v.width);
                             }}
                         />
                     </div>
