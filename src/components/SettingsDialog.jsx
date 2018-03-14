@@ -9,11 +9,13 @@ const SettingsDialog = ({
     title,
     description,
     activeTab,
+    setOpen,
     showTabs,
     onTabClick,
     stared,
     onDeleteClick,
     onStarClick,
+    onResetClick,
     onItemChange,
     Dialog,
 }) => {
@@ -119,23 +121,35 @@ const SettingsDialog = ({
             }
 
             { activeTab === 'settings' ?
-                <div className='items' >
-                    {items
-                        .map(item => {
-                            if(renderMap[item.type]) {
-                                return renderMap[item.type](item);
-                            }
-                            return (
-                                <div key={item.id} className='item'>
-                                    <div className='title'>
-                                        <span>{item.title}</span>
-                                        <strong>{item.type}</strong>
+                <React.Fragment>
+                    <div className='items' >
+                        {items
+                            .map(item => {
+                                if(renderMap[item.type]) {
+                                    return renderMap[item.type](item);
+                                }
+                                return (
+                                    <div key={item.id} className='item'>
+                                        <div className='title'>
+                                            <span>{item.title}</span>
+                                            <strong>{item.type}</strong>
+                                        </div>
                                     </div>
-                                </div>
-                            );
-                        })
-                    }
-                </div>
+                                );
+                            })
+                        }
+                    </div>
+                    <div className='buttons'>
+                        <div
+                            className='reset'
+                            onClick={onResetClick}
+                        >RESET</div>
+                        <div
+                            className='done'
+                            onClick={() => setOpen(false)}
+                        >DONE</div>
+                    </div>
+                </React.Fragment>
                 :
                 <div className='description'>
                     {description}

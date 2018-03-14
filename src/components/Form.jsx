@@ -18,6 +18,7 @@ export const Slider = ({
                 max={max}
                 step={step}
                 onChange={onChange}
+                value={value}
                 withBars
             />
             <div className='value'>{value}</div>
