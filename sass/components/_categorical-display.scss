@@ -123,7 +123,6 @@
         }
     }
     .cq-item[disabled] {
-        pointer-events: none;
         cursor: default;
         &:not(.selected) {
             color: #c5c5c5 !important;
@@ -131,6 +130,9 @@
         &.selected {
             background-color: #efefef;
         }
+    }
+    .cq-item:not([disabled]):hover {
+        background: #efefef;
     }
     .cq-scroll-panel {
         position: relative;
@@ -183,14 +185,9 @@
             margin-right: 0;
 
         }
-        &:hover, &.ciq-active-favorite {
+        &.ciq-active-favorite {
             svg > g > g > path {
                 fill: #E98024;
-            }
-        }
-        &.ciq-active-favorite:hover {
-            svg > g > g > path {
-                fill: #B0B3BF;
             }
         }
     }
