@@ -181,6 +181,17 @@
         float: right;
         > .ic-icon {
             margin-right: 0;
+
+        }
+        &:hover, &.ciq-active-favorite {
+            svg > g > g > path {
+                fill: #E98024;
+            }
+        }
+        &.ciq-active-favorite:hover {
+            svg > g > g > path {
+                fill: #B0B3BF;
+            }
         }
     }
     .ic-icon {

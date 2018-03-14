@@ -1,4 +1,4 @@
-import { action, observable, computed, when, reaction } from 'mobx';
+import { action, observable, computed, when, reaction, toJS } from 'mobx';
 import { connect } from './Connect';
 import IScroll from 'iscroll/build/iscroll-probe';
 
@@ -43,6 +43,7 @@ export default class CategoricalDisplayStore {
     @observable filterText = '';
     @observable placeholderText = '';
     @observable activeCategoryKey = '';
+    @observable favoritesMap = {};
     @observable favoritesCategory = {
         categoryName: 'Favorites',
         categoryId: 'favorite',
@@ -61,7 +62,9 @@ export default class CategoricalDisplayStore {
         if (!layout.favorites) {layout.favorites = {};}
         if (!layout.favorites[this.favoritesId]) {layout.favorites[this.favoritesId] = [];}
         this.favoritesCategory.data = layout.favorites[this.favoritesId];
-
+        for (const fav of this.favoritesCategory.data) {
+            this.favoritesMap[fav.itemId] = true;
+        }
     }
 
     updateScrollOffset() {
@@ -207,7 +210,18 @@ export default class CategoricalDisplayStore {
     @action.bound onFavoritedItem(item, e) {
         e.stopPropagation();
         e.nativeEvent.isHandledByDialog = true; // prevent close dialog
-        console.log('WINNA WINNA CHICKAN DINNA!!');
+        if (this.favoritesMap[item.itemId]) {
+            const idx = this.favoritesCategory.data.indexOf(item);
+            this.favoritesCategory.data.splice(idx, 1);
+            delete this.favoritesMap[item.itemId];
+        } else {
+            this.favoritesCategory.data.push(item);
+            this.favoritesMap[item.itemId] = true;
+        }
+
+        const layout = this.context.stx.layout;
+        layout.favorites[this.favoritesId] = toJS(this.favoritesCategory.data);
+        this.mainStore.chart.saveLayout();
     }
 
     connect = connect(() => ({
@@ -226,6 +240,7 @@ export default class CategoricalDisplayStore {
         setScrollPanel: this.setScrollPanel,
         setCategoryElement: this.setCategoryElement,
         onFavoritedItem: this.onFavoritedItem,
+        favoritesMap: this.favoritesMap,
         favoritesId: this.favoritesId,
     }))
 }

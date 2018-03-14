@@ -18,6 +18,7 @@ const CategoricalDisplay = ({
     handleInputClick,
     onFavoritedItem,
     favoritesId,
+    favoritesMap,
 }) => {
     const renderIcon = (item) => {
         if (!item.itemId) {return '';}
@@ -26,8 +27,8 @@ const CategoricalDisplay = ({
     };
     const renderText = (item) => <span className="ciq-item-display">{item.display}</span>;
     const renderFavorite = (item) => {
-        if (!favoritesId) {return '';}
-        return <span onClick={(e) => onFavoritedItem(item, e)} className="ciq-favorite"><FavoriteIcon /></span>;
+        if (!item.itemId || !favoritesId) {return '';}
+        return <span onClick={(e) => onFavoritedItem(item, e)} className={`ciq-favorite ${favoritesMap[item.itemId] ? 'ciq-active-favorite' : ''}`}><FavoriteIcon /></span>;
     }
 
     const renderItem = (item, k) =>
@@ -111,7 +112,7 @@ const CategoricalDisplay = ({
                                         <div className="subcategory">{subcategory.subcategoryName}</div>
                                         { subcategory.data.map(renderItem)}
                                     </Fragment>
-                                    ) : category.data.map((hasActiveItems) ? renderActiveItem : renderItem)
+                                    ) : category.data.map((category.categoryId === 'active' && hasActiveItems) ? renderActiveItem : renderItem)
                                     }
                                     { getItemCount(category) === 0 && category.emptyDescription &&
                                     <div className="empty-category">{category.emptyDescription}</div>

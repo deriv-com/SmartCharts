@@ -19,6 +19,8 @@ export default class StudyLegendStore {
             getActiveCategory: () => this.activeStudies,
             onSelectItem: this.onSelectItem.bind(this),
             placeholderText: '"Mass Index" or "Doji Star"',
+            favoritesId: 'indicators',
+            mainStore,
         });
         this.settingsDialog = new SettingsDialogStore({
             getContext: () => this.mainStore.chart.context,
@@ -62,7 +64,8 @@ export default class StudyLegendStore {
             data.push({
                 enabled: true,
                 display: study.name,
-                dataObject: studyId
+                dataObject: studyId,
+                itemId: studyId,
             });
         });
         const category = {
