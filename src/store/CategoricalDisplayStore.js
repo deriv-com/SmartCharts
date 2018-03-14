@@ -131,7 +131,7 @@ export default class CategoricalDisplayStore {
         }
 
         if (this.getActiveCategory) {
-            const activeCategory = this.getActiveCategory();
+            const activeCategory = toJS(this.getActiveCategory());
             filteredItems.unshift(activeCategory);
         }
 

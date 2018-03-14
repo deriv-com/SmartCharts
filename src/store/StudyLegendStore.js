@@ -79,6 +79,7 @@ export default class StudyLegendStore {
 
     @action.bound onSelectItem(item) {
         CIQ.Studies.addStudy(this.stx, item);
+        this.menu.setOpen(false);
     }
 
     @action.bound editStudy(study) {
