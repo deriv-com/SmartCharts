@@ -15,9 +15,9 @@ class ChartSize extends PureComponent {
 
     render () {
         return (
-            <div className="cq-chart-size cq-menu-btn">
-                <ZoomOut className='cq-zoom-out cq-menu-btn' tooltip-title="Zoom out" onClick={this.zoomOut} />
-                <ZoomIn className='cq-zoom-in cq-menu-btn' tooltip-title="Zoom in" onClick={this.zoomIn} />
+            <div className="cq-chart-size">
+                <ZoomOut className='cq-zoom-out' tooltip-title="Zoom out" onClick={this.zoomOut} />
+                <ZoomIn className='cq-zoom-in' tooltip-title="Zoom in" onClick={this.zoomIn} />
             </div>
         );
     }
