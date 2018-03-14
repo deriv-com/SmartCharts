@@ -124,10 +124,10 @@ export default class CategoricalDisplayStore {
     }
 
     @computed get filteredItems() {
-        let filteredItems = JSON.parse(JSON.stringify(this.getCategoricalItems())); // Deep clone array
+        let filteredItems = toJS(this.getCategoricalItems());
 
         if (this.favoritesId) {
-            filteredItems.unshift(this.favoritesCategory);
+            filteredItems.unshift(toJS(this.favoritesCategory));
         }
 
         if (this.getActiveCategory) {
@@ -211,8 +211,7 @@ export default class CategoricalDisplayStore {
         e.stopPropagation();
         e.nativeEvent.isHandledByDialog = true; // prevent close dialog
         if (this.favoritesMap[item.itemId]) {
-            const idx = this.favoritesCategory.data.indexOf(item);
-            this.favoritesCategory.data.splice(idx, 1);
+            this.favoritesCategory.data = this.favoritesCategory.data.filter(x => x.itemId !== item.itemId);
             delete this.favoritesMap[item.itemId];
         } else {
             this.favoritesCategory.data.push(item);
@@ -222,6 +221,8 @@ export default class CategoricalDisplayStore {
         const layout = this.context.stx.layout;
         layout.favorites[this.favoritesId] = toJS(this.favoritesCategory.data);
         this.mainStore.chart.saveLayout();
+
+        setTimeout(() => this.scroll.refresh(), 0);
     }
 
     connect = connect(() => ({
