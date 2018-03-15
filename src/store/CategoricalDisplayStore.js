@@ -1,9 +1,18 @@
-import { action, observable, computed, when, reaction } from 'mobx';
+import { action, observable, computed, when, reaction, toJS } from 'mobx';
 import { connect } from './Connect';
 import IScroll from 'iscroll/build/iscroll-probe';
 
 export default class CategoricalDisplayStore {
-    constructor({ getCategoricalItems, onSelectItem, getIsShown, getActiveItems, activeOptions, placeholderText }) {
+    constructor({
+        getCategoricalItems,
+        onSelectItem,
+        getIsShown,
+        getActiveCategory,
+        activeOptions,
+        placeholderText,
+        favoritesId,
+        mainStore,
+    }) {
         reaction(getIsShown, () => {
             if (getIsShown()) {
                 // Odd. Why is setTimeout needed here?
@@ -17,18 +26,46 @@ export default class CategoricalDisplayStore {
         });
         this.getCategoricalItems = getCategoricalItems;
         this.onSelectItem = onSelectItem;
-        this.getActiveItems = getActiveItems;
+        this.getActiveCategory = getActiveCategory;
         this.activeOptions = activeOptions;
         this.placeholderText = placeholderText;
+        this.favoritesId = favoritesId;
         this.categoryElements = {};
+        this.mainStore = mainStore;
 
         this.isInit = false;
+
+        if (favoritesId && mainStore) {
+            when(() => this.context, this.initFavorites.bind(this));
+        }
     }
 
     @observable filterText = '';
     @observable placeholderText = '';
     @observable activeCategoryKey = '';
+    @observable favoritesMap = {};
+    @observable favoritesCategory = {
+        categoryName: 'Favorites',
+        categoryId: 'favorite',
+        hasSubcategory: false,
+        emptyDescription: 'There are no favorites yet.',
+        data: [],
+    };
     scrollOffset = 0;
+
+    get context() {
+        return this.mainStore.chart.context;
+    }
+
+    initFavorites() {
+        const layout = this.context.stx.layout;
+        if (!layout.favorites) {layout.favorites = {};}
+        if (!layout.favorites[this.favoritesId]) {layout.favorites[this.favoritesId] = [];}
+        this.favoritesCategory.data = layout.favorites[this.favoritesId];
+        for (const fav of this.favoritesCategory.data) {
+            this.favoritesMap[fav.itemId] = true;
+        }
+    }
 
     updateScrollOffset() {
         this.scrollOffset = this.scrollPanel.getBoundingClientRect().top;
@@ -87,10 +124,14 @@ export default class CategoricalDisplayStore {
     }
 
     @computed get filteredItems() {
-        let filteredItems = JSON.parse(JSON.stringify(this.getCategoricalItems())); // Deep clone array
+        let filteredItems = toJS(this.getCategoricalItems());
 
-        if (this.getActiveItems) {
-            const activeCategory = this.getActiveCategory(this.getActiveItems());
+        if (this.favoritesId) {
+            filteredItems.unshift(toJS(this.favoritesCategory));
+        }
+
+        if (this.getActiveCategory) {
+            const activeCategory = toJS(this.getActiveCategory());
             filteredItems.unshift(activeCategory);
         }
 
@@ -166,14 +207,22 @@ export default class CategoricalDisplayStore {
         this.searchInput.focus();
     }
 
-    getActiveCategory(actives) {
-        const category = {
-            categoryName: 'Active',
-            categoryId: 'active',
-            hasSubcategory: false,
-            data: actives
-        };
-        return category;
+    @action.bound onFavoritedItem(item, e) {
+        e.stopPropagation();
+        e.nativeEvent.isHandledByDialog = true; // prevent close dialog
+        if (this.favoritesMap[item.itemId]) {
+            this.favoritesCategory.data = this.favoritesCategory.data.filter(x => x.itemId !== item.itemId);
+            delete this.favoritesMap[item.itemId];
+        } else {
+            this.favoritesCategory.data.push(item);
+            this.favoritesMap[item.itemId] = true;
+        }
+
+        const layout = this.context.stx.layout;
+        layout.favorites[this.favoritesId] = toJS(this.favoritesCategory.data);
+        this.mainStore.chart.saveLayout();
+
+        setTimeout(() => this.scroll.refresh(), 0);
     }
 
     connect = connect(() => ({
@@ -185,11 +234,14 @@ export default class CategoricalDisplayStore {
         handleFilterClick: this.handleFilterClick,
         onSelectItem: this.onSelectItem,
         handleInputClick: this.handleInputClick,
-        hasActiveItems: (this.getActiveItems !== undefined),
+        hasActiveItems: (this.getActiveCategory !== undefined),
         activeOptions: this.activeOptions,
         placeholderText: this.placeholderText,
         activeCategoryKey: this.activeCategoryKey,
         setScrollPanel: this.setScrollPanel,
         setCategoryElement: this.setCategoryElement,
+        onFavoritedItem: this.onFavoritedItem,
+        favoritesMap: this.favoritesMap,
+        favoritesId: this.favoritesId,
     }))
 }

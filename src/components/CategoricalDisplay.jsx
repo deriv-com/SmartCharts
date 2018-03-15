@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import {CategoryIconMap, ItemIconMap, SearchIcon,
-    SymbolPlaceholderIcon, ActiveOptionsIconMap } from './Icons.jsx';
+    SymbolPlaceholderIcon, ActiveOptionsIconMap, FavoriteIcon } from './Icons.jsx';
 
 const CategoricalDisplay = ({
     placeholderText,
@@ -16,6 +16,9 @@ const CategoricalDisplay = ({
     setCategoryElement,
     activeCategoryKey,
     handleInputClick,
+    onFavoritedItem,
+    favoritesId,
+    favoritesMap,
 }) => {
     const renderIcon = (item) => {
         if (!item.itemId) {return '';}
@@ -23,15 +26,25 @@ const CategoricalDisplay = ({
         return <ItemIcon />;
     };
     const renderText = (item) => <span className="ciq-item-display">{item.display}</span>;
+    const renderFavorite = (item) => {
+        if (!item.itemId || !favoritesId) {return '';}
+        return <span
+            onClick={(e) => onFavoritedItem(item, e)}
+            className={`ciq-favorite ${favoritesMap[item.itemId] ? 'ciq-active-favorite' : ''}`}>
+            <FavoriteIcon />
+        </span>;
+    }
 
     const renderItem = (item, k) =>
         <div
             className={`cq-item ${item.selected ? 'selected ' : ''}`}
-            onClick={(e) => onSelectItem(item.dataObject, e)}
+            onClick={(e) => item.enabled && onSelectItem(item.dataObject, e)}
             key={k}
             disabled={!item.enabled}
         >
-            {renderIcon(item)}{renderText(item)}
+            {renderIcon(item)}
+            {renderText(item)}
+            {renderFavorite(item)}
         </div>;
 
     const renderActiveItem = (item, k) =>
@@ -39,7 +52,9 @@ const CategoricalDisplay = ({
             className="cq-active-item"
             key={k}
         >
-            {renderIcon(item)}{renderText(item)}
+            {renderIcon(item)}
+            {renderText(item)}
+            {renderFavorite(item)}
             {activeOptions &&
             <span className="cq-active-options">
                 {activeOptions.map((opt, i) => {
@@ -91,24 +106,27 @@ const CategoricalDisplay = ({
             <div className="cq-scroll-panel" ref={setScrollPanel}>
                 <div className="results-panel">
                     { filteredItems.map((category, i) =>
-                        getItemCount(category) > 0 &&
-                        <div
-                            key={`cat-${i}`}
-                            className={`category category-${category.categoryId}`}
-                            ref={(el) => setCategoryElement(el, category.categoryId)}
-                        >
-                            <div className="category-title">{category.categoryName}</div>
-                            <div className="category-content">
-                                { category.hasSubcategory ? category.data.map((subcategory, j) =>
-                                    getItemCount(subcategory) > 0 &&
+                        (getItemCount(category) > 0 || category.emptyDescription) &&
+                            <div
+                                key={`cat-${i}`}
+                                className={`category category-${category.categoryId}`}
+                                ref={(el) => setCategoryElement(el, category.categoryId)}
+                            >
+                                <div className="category-title">{category.categoryName}</div>
+                                <div className="category-content">
+                                    { category.hasSubcategory ? category.data.map((subcategory, j) =>
+                                        getItemCount(subcategory) > 0 &&
                                     <Fragment key={j}>
                                         <div className="subcategory">{subcategory.subcategoryName}</div>
                                         { subcategory.data.map(renderItem)}
                                     </Fragment>
-                                ) : category.data.map((i === 0 && hasActiveItems) ? renderActiveItem : renderItem)
-                                }
+                                    ) : category.data.map((category.categoryId === 'active' && hasActiveItems) ? renderActiveItem : renderItem)
+                                    }
+                                    { getItemCount(category) === 0 && category.emptyDescription &&
+                                    <div className="empty-category">{category.emptyDescription}</div>
+                                    }
+                                </div>
                             </div>
-                        </div>
                     ) }
                 </div>
             </div>

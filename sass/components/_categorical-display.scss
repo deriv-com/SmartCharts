@@ -16,7 +16,7 @@
         border-right: 1px solid #e9e9ed;
     }
     .cq-lookup-input  {
-        margin: 1.5em 1.3em 1.1em 1.3em;
+        margin: 1.5em 1.3em 1.3em 1.3em;
         > input {
             padding-left: 30px;
             line-height: 3em;
@@ -57,8 +57,7 @@
     }
     .subcategory {
         font-weight: 500;
-        padding-top: 0.3em;
-        padding-left: 0.5em;
+        padding: 0.5em 0 0.5em 1.2em;
         font-size: 1.1em;
         color: black;
     }
@@ -70,7 +69,7 @@
     }
     .cq-filter {
         padding-left: 1.6em;
-        line-height: 3.4em;
+        line-height: 2.6em;
         text-align: left;
         cursor: pointer;
         box-sizing: border-box;
@@ -84,7 +83,12 @@
             border-right: 2px solid $active-color;
             background-color: #f2f3f8;
             .ic-icon {
-                &.ic-active, &.ic-forex, &.ic-commodities, &.ic-volidx, &.ic-stocks {
+                &.ic-active,
+                &.ic-forex,
+                &.ic-commodities,
+                &.ic-volidx,
+                &.ic-stocks,
+                &.ic-favorite {
                     svg > g > circle { fill: $active-color; }
                 }
                 &.ic-indicators > svg > g circle {
@@ -103,24 +107,32 @@
         }
         .ic-icon {
             display: inline-flex;
-            vertical-align: sub;
+            vertical-align: middle;
+            width: 16px;
+            height: 16px;
+            margin-bottom: 2px;
+            margin-right: 1.3em;
         }
     }
     .cq-item, .cq-active-item {
-        padding: 10px 20px 0px 20px;
+        padding: 3px 13px 0px 20px;
         border-bottom: 1px solid #e9e9ed;
-        height: 30px;
+        height: 27px;
+        > .ic-icon {
+            vertical-align: super;
+        }
     }
     .cq-item[disabled] {
-        pointer-events: none;
         cursor: default;
         &:not(.selected) {
             color: #c5c5c5 !important;
         }
         &.selected {
-            background-color: #efefef;
+            background-color: #f2f3f8;
         }
-
+    }
+    .cq-item:not([disabled]):hover {
+        background: #f2f3f8;
     }
     .cq-scroll-panel {
         position: relative;
@@ -130,7 +142,10 @@
     }
     .ciq-item-display {
         display: inline-block;
-        vertical-align: super;
+        vertical-align: top;
+    }
+    .empty-category {
+        padding: 0.2em 1.2em;
     }
 
     /* Active Options */
@@ -164,6 +179,18 @@
 
 /* Active Symbol Icons */
 .cq-categorical-display .results-panel {
+    .ciq-favorite {
+        float: right;
+        > .ic-icon {
+            margin-right: 0;
+
+        }
+        &.ciq-active-favorite {
+            svg > g > g > path {
+                fill: #E98024;
+            }
+        }
+    }
     .ic-icon {
         display: inline-block;
         margin-right: 15px;

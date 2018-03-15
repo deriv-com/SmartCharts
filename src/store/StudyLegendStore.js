@@ -11,14 +11,16 @@ export default class StudyLegendStore {
         this.menu = new MenuStore({getContext: () => this.context});
         this.categoricalDisplay = new CategoricalDisplayStore({
             activeOptions: [
-                { id: 'edit', onClick: (item, e) => item.editFunc(e) },
-                { id: 'delete', onClick: (item, e) => item.closeFunc(e) },
+                { id: 'edit', onClick: (item) => this.editStudy(item) },
+                { id: 'delete', onClick: (item) => this.deleteStudy(item) },
             ],
             getIsShown: () => this.menu.open,
             getCategoricalItems: () => this.categorizedStudies,
-            getActiveItems: () => this.activeStudies,
+            getActiveCategory: () => this.activeStudies,
             onSelectItem: this.onSelectItem.bind(this),
             placeholderText: '"Mass Index" or "Doji Star"',
+            favoritesId: 'indicators',
+            mainStore,
         });
         this.settingsDialog = new SettingsDialogStore({
             getContext: () => this.mainStore.chart.context,
@@ -40,7 +42,13 @@ export default class StudyLegendStore {
     injections = [];
     previousStudies = { };
 
-    @observable activeStudies = [];
+    @observable activeStudies = {
+        categoryName: 'Active',
+        categoryId: 'active',
+        hasSubcategory: false,
+        emptyDescription: 'There are no active indicators yet.',
+        data: [],
+    };
 
     begin() {
         this.stx.callbacks.studyOverlayEdit = study => this.editStudy(study);
@@ -56,7 +64,8 @@ export default class StudyLegendStore {
             data.push({
                 enabled: true,
                 display: study.name,
-                dataObject: studyId
+                dataObject: studyId,
+                itemId: studyId,
             });
         });
         const category = {
@@ -70,6 +79,7 @@ export default class StudyLegendStore {
 
     @action.bound onSelectItem(item) {
         CIQ.Studies.addStudy(this.stx, item);
+        this.menu.setOpen(false);
     }
 
     @action.bound editStudy(study) {
@@ -112,12 +122,18 @@ export default class StudyLegendStore {
         this.settingsDialog.setOpen(true);
     }
     @action.bound deleteStudy(study) {
-        CIQ.Studies.removeStudy(this.stx, study);
+        const sd = study.sd;
+        if (!sd.permanent) {
+            // Need to run this in the nextTick because the study legend can be removed by this click
+            // causing the underlying chart to receive the mousedown (on IE win7)
+            setTimeout(
+                () => {
+                    CIQ.Studies.removeStudy(this.stx, sd);
+                    this.renderLegend();
+                }, 0
+            );
+        }
     }
-    @action.bound starStudy(study) {
-        console.error('STAR STUDY NOT IMPLEMENTED YET', study);
-    }
-
     @action.bound updateStudy(study, items) {
         const updates = { };
         for(const {id, category, value} of items) {
@@ -163,46 +179,20 @@ export default class StudyLegendStore {
             let sd = stx.layout.studies[id];
             if (sd.customLegend) { return; }
 
-            let closeFunc;
-            if (!sd.permanent) {
-                // Need to run this in the nextTick because the study legend can be removed by this click
-                // causing the underlying chart to receive the mousedown (on IE win7)
-                closeFunc = (e) => setTimeout(
-                    () => {
-                        CIQ.Studies.removeStudy(this.stx, sd);
-                        this.renderLegend();
-                    }, 0
-                );
-
-            }
-
-            const editFunc = (e) => {
-                const stx = this.stx;
-                if (!sd.editFunction) { return; }
-                e.stopPropagation();
-
-                let studyEdit = this.context.getAdvertised('StudyEdit');
-                let params = {
+            studies.push({
+                enabled: true,
+                display: sd.inputs.display,
+                dataObject: {
                     stx,
                     sd,
                     inputs: sd.inputs,
                     outputs: sd.outputs,
                     parameters: sd.parameters,
-                };
-                studyEdit.editPanel(params);
-                this.menu.setOpen(false);
-            };
-            studies.push({
-                enabled: true,
-                display: sd.inputs.display,
-                dataObject: {
-                    closeFunc,
-                    editFunc,
                 },
             });
         });
 
-        this.activeStudies = studies;
+        this.activeStudies.data = studies;
     }
 
     @action.bound cleanUp() {
