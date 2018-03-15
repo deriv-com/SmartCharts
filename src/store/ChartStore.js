@@ -152,8 +152,6 @@ class ChartStore {
             cb: CIQ.UI.KeystrokeHub.defaultHotKeys,
         });
 
-        new CIQ.UI.StudyEdit(null, context);
-
         const UIStorage = new CIQ.NameValueStore();
 
         this.rootNode.querySelector('cq-redo').pairUp(this.rootNode.querySelector('cq-undo'));
