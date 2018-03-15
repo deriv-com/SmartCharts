@@ -95,10 +95,6 @@ html, body {
     transition: opacity .2s;
 }
 
-.no-svg .stx-btn-panel span { /* Button Icons for non SVG browsers */
-    background-image: url(img/stx-sprite-panels.png);
-}
-
 .stx-btn-panel > span.stx-ico-up {
     background-position: -150px -25px;
 }
@@ -177,10 +173,6 @@ html, body {
     opacity: .6;
 }
 
-.no-svg .stx_jump_today span { /* Button Icons for non SVG browsers */
-    background-image: url(img/stx-sprite-panels.png);
-}
-
 .stx_jump_today:hover span {
     opacity: 1;
 }
@@ -188,8 +180,7 @@ html, body {
 /* --------------------------------------------------------- PANEL CONTROL TEMPLATES --------------------------------------------------------- */
 
 .stx-baseline-handle { /* used for dragging the baseline up and down */
-    background-image: url(img/stx-sprite-ui.svg);
-    background-position: -770px -28px;
+    background: url(img/resize-icon.svg) no-repeat center;
     cursor: ns-resize;
     display: none;
     height: 20px;
@@ -333,12 +324,6 @@ html, body {
 	margin-left: 34px;
 }
 */
-
-.no-svg .overlayEdit.stx-btn span,
-.no-svg #overlayTrashCan.stx-btn span,
-.no-svg #vectorTrashCan.stx-btn span { /* Button Icons for non SVG browsers */
-    background-image: url(img/stx-sprite-panels.png);
-}
 
 #mouseDeleteInstructions {
     margin: 0px;
@@ -777,4 +762,4 @@ html, body {
 
 .stx_market_session.post {
     background-color: rgba(0, 0, 255, 0.2);
-} 
+}
