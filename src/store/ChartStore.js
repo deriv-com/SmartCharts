@@ -269,7 +269,7 @@ class ChartStore {
                 });
             }
         }
-        if (comparisons.length > 0) {
+        if (comparisons.length !== this.comparisonSymbols.length) {
             this.comparisonSymbols = comparisons;
         }
     }
