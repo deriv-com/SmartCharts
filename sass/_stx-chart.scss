@@ -88,7 +88,7 @@ html, body {
 }
 
 .stx-btn-panel span { /* Button Icons */
-    background-image: url(img/stx-sprite-panels.svg);
+    background-image: url('icons/chart/stx-sprite-panels.svg');
     opacity: .6;
     -webkit-transition: opacity .2s;
     -moz-transition: opacity .2s;
@@ -160,14 +160,12 @@ html, body {
 }
 
 .stx_jump_today span {
-    background-image: url(img/stx-sprite-panels.svg);
-    background-repeat: no-repeat;
     display: inline-block;
     line-height: 25px;
     height: 25px;
     width: 30px;
     padding-top: 25px;
-    background-position: -448px -25px;
+    background: url('icons/chart/stx-sprite-panels.svg') no-repeat -448px -25px;
     transition: opacity .25s, transform .2s;
     -webkit-transition: opacity .25s, -webkit-transform .2s;
     opacity: .6;
@@ -180,7 +178,7 @@ html, body {
 /* --------------------------------------------------------- PANEL CONTROL TEMPLATES --------------------------------------------------------- */
 
 .stx-baseline-handle { /* used for dragging the baseline up and down */
-    background: url(img/resize-icon.svg) no-repeat center;
+    background: url('icons/chart/resize-icon.svg') no-repeat center;
     cursor: ns-resize;
     display: none;
     height: 20px;
@@ -195,7 +193,7 @@ html, body {
 }
 
 .stx-drag-chart { /* Use the hand icon when grabbing and moving the chart */
-    cursor: url(img/closedhand.cur), default !important;
+    cursor: url('icons/chart/closedhand.cur'), default !important;
 }
 
 .stx-ico-handle { /* The div that allows users to ajust the panels */
@@ -301,10 +299,8 @@ html, body {
     border-radius: 3px;
     overflow: hidden;
     text-indent: 100px;
-    background: #efefef;
     border: solid #ddd 1px;
-    background-image: url(img/stx-sprite-panels.svg);
-    background-position: -401px -26px;
+    background: #efefef url('icons/chart/stx-sprite-panels.svg') -401px -26px;
 }
 
 .overlayEdit {
