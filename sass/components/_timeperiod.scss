@@ -43,64 +43,62 @@
         margin: 0 5px 0 0;
     }
     .cq-menu-dropdown {
-        padding: 0 !important;
-        width: 27.8em !important;
-        height: 13.4em !important;
-        border: 0 !important;
-        max-height: 200px !important;
-        left: -8em;
+        display: flex;
+        flex-direction: row;
+        width: 296px;;
+        height: 160px;
+        transform: translate(-50%,0);
         font-size: 12px;
         font-weight: normal;
 
         .timeUnit {
-            display: inline-block;
-            float: left;
-            text-align: center;
-            width: 8em;
+            display: flex;
+            flex-direction: column;
+            width: 88px;
             height: 100%;
-            box-shadow: 2px 0px 5px 0px rgba(42, 48, 82, 0.08);
+            border-right: 1px solid #e9e9e9;
 
             span {
                 display: block;
                 height: 40px;
-                width: 100%;
+                padding-left: 16px;
                 line-height: 40px;
-                color: #c2c2c2;
+                font-weight: 300;
+                color: #000;
 
                 &.selected {
+                    background-color: #f2f3f8;
+                    box-shadow: inset -2px 0 0 0 #4c5794;
                     color: #4C5794;
+                    font-weight: 500;
                 }
             }
         }
 
         .interval {
-            display: inline-block;
-            width: 232px;
-            text-align: left;
-            float: left;
-            padding-top: 0.1em;
+            display: flex;
+            flex-direction: column;
+            width: 208px;
 
             .row {
-                height: 2em;
-                line-height: 8px;
-                padding-top: 0.9em;
-                padding-bottom: 0.4em;
-                padding-left: 0.5em;
+                height: 40px;
+                display: flex;
+                flex-direction: row;
+                margin: 0 4px;
+                align-items: center;
+                font-weight: 300;
 
                 span {
                     cursor: pointer;
-                    display: inline-block;
-                    margin: 0 4px;
+                    margin: 0 4px 0 0;
                     width: 24px;
-                    height: 18px;
-                    line-height: 1.5;
+                    height: 24px;
                     text-align: center;
                     color: #2a3052;
 
                     &.selected {
-                        height: 24px;
                         background: #4C5794;
-                        border-radius: 12px;
+                        border-radius: 4px;
                         color: #fff;
                         line-height: 24px;
                     }
