@@ -601,39 +601,6 @@ body .stx-trade-panel ul.stx-account li {
 	margin-left: 0;
 }
 
-/***** TFC dialog close icons ***/
-.stx-btn.stx-ico, .stx-btn.stx-ico:hover, .stx-btn.stx-ico > span .stx-btn.stx-ico:hover > span, .stx-btn.stx-ico:active > span {
-	overflow: hidden;
-	padding: 0px !important;
-	line-height: 0px;
-	border: none;
-	background: none;
-	-webkit-box-shadow: none;
-	-moz-box-shadow: none;
-	box-shadow: none;
-}
-.stx-btn.stx-ico { /* This is the button wrapper and hit area */
-	width: 27px;
-	height: 27px;
-	padding: 0px;
-}
-.stx-btn.stx-ico > span, .stx-btn.stx-ico:hover > span, .stx-btn.stx-ico:active > span { /* Styling of visible area and text hiding */
-	display:initial;
-	position: absolute;
-	left: 0;
-	background-image: url(img/stx-sprite-panels.svg);
-	background-position: -250px -25px;
-	width: 17px;
-	height: 17px;
-	transition: color .25s, border .25s, background-color .25s, box-shadow .25s;
-	-webkit-transition: color .25s, border .25s, background-color .25s, box-shadow .25s;
-	opacity:.7;
-}
-
-.stx-btn.stx-ico:hover > span {
-	opacity:1;
-}
-
 .stx-dialog-container {
     width: 100%;
     top: 0px;
@@ -656,12 +623,6 @@ body .stx-trade-panel ul.stx-account li {
     -webkit-box-shadow: 0 3px 9px 0px rgba(0,0,0,.5);
     -moz-box-shadow: 0 3px 9px 0px rgba(0,0,0,.5);
     box-shadow: 0 3px 9px 0px rgba(0,0,0,.5);
-}
-
-.trade .stx-btn.stx-ico {
-	position: absolute;
-    right: 0;
-    top: 0;
 }
 
 /* ------------------------------------------------------- CHART OVERLAY ELEMENTS ------------------------------------------------------ */

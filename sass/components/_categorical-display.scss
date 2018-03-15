@@ -16,7 +16,7 @@
         border-right: 1px solid #e9e9ed;
     }
     .cq-lookup-input  {
-        margin: 1.5em 1.3em 1.3em 1.3em;
+        margin: 1.5em 1.3em 1.6em 1.3em;
         > input {
             padding-left: 30px;
             line-height: 3em;
@@ -69,7 +69,7 @@
     }
     .cq-filter {
         padding-left: 1.6em;
-        line-height: 2.6em;
+        line-height: 3.4em;
         text-align: left;
         cursor: pointer;
         box-sizing: border-box;
@@ -115,12 +115,9 @@
         }
     }
     .cq-item, .cq-active-item {
-        padding: 3px 13px 0px 20px;
+        padding: 7px 20px 2px 20px;
         border-bottom: 1px solid #e9e9ed;
-        height: 27px;
-        > .ic-icon {
-            vertical-align: super;
-        }
+        height: 30px;
     }
     .cq-item[disabled] {
         cursor: default;

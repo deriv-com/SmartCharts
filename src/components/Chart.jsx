@@ -9,7 +9,6 @@ import ChartTitle from './ChartTitle.jsx';
 import AssetInformation from './AssetInformation.jsx';
 
 /* css + scss */
-import '../../css/stx-chart.css';
 import '../../sass/chartiq.scss';
 import '../../sass/_ciq-custom.scss';
 
