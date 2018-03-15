@@ -134,10 +134,6 @@ export default class StudyLegendStore {
             );
         }
     }
-    @action.bound starStudy(study) {
-        console.error('STAR STUDY NOT IMPLEMENTED YET', study);
-    }
-
     @action.bound updateStudy(study, items) {
         const updates = { };
         for(const {id, category, value} of items) {

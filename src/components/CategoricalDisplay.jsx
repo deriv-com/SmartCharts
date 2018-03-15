@@ -28,17 +28,23 @@ const CategoricalDisplay = ({
     const renderText = (item) => <span className="ciq-item-display">{item.display}</span>;
     const renderFavorite = (item) => {
         if (!item.itemId || !favoritesId) {return '';}
-        return <span onClick={(e) => onFavoritedItem(item, e)} className={`ciq-favorite ${favoritesMap[item.itemId] ? 'ciq-active-favorite' : ''}`}><FavoriteIcon /></span>;
+        return <span
+            onClick={(e) => onFavoritedItem(item, e)}
+            className={`ciq-favorite ${favoritesMap[item.itemId] ? 'ciq-active-favorite' : ''}`}>
+            <FavoriteIcon />
+        </span>;
     }
 
     const renderItem = (item, k) =>
         <div
             className={`cq-item ${item.selected ? 'selected ' : ''}`}
-            onClick={item.enabled ? (e) => onSelectItem(item.dataObject, e) : undefined}
+            onClick={(e) => item.enabled && onSelectItem(item.dataObject, e)}
             key={k}
             disabled={!item.enabled}
         >
-            {renderIcon(item)}{renderText(item)}{renderFavorite(item)}
+            {renderIcon(item)}
+            {renderText(item)}
+            {renderFavorite(item)}
         </div>;
 
     const renderActiveItem = (item, k) =>
@@ -46,7 +52,9 @@ const CategoricalDisplay = ({
             className="cq-active-item"
             key={k}
         >
-            {renderIcon(item)}{renderText(item)}{renderFavorite(item)}
+            {renderIcon(item)}
+            {renderText(item)}
+            {renderFavorite(item)}
             {activeOptions &&
             <span className="cq-active-options">
                 {activeOptions.map((opt, i) => {
