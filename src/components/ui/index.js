@@ -5,10 +5,6 @@ import './jquery-extensions';
 import './UI';
 import UIManager from './UIManager';
 
-import HeadsUp from './HeadsUp';
-import StudyEdit from './StudyEdit';
-import Layout from './Layout';
-import HeadsUpMarker from './HeadsUpMarker';
 import KeystrokeHub from './KeystrokeHub';
 
 /**
@@ -122,8 +118,4 @@ export const claims = [];
     };
 }());
 
-CIQ.Marker.HeadsUp = HeadsUpMarker;
-CIQ.UI.HeadsUp = HeadsUp;
 CIQ.UI.KeystrokeHub = KeystrokeHub;
-CIQ.UI.StudyEdit = StudyEdit;
-CIQ.UI.Layout = Layout;

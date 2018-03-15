@@ -15,7 +15,6 @@ import '../../sass/_ciq-custom.scss';
 import '../AddOns';
 import '../Plugin';
 
-import './Attribution';
 import './Close';
 import './ColorPicker';
 import './FibSettingsDialog';
@@ -76,21 +75,6 @@ class Chart extends Component {
                         <div className="chartContainer primary"> </div>
                     </div>
                 </div>
-
-
-                <cq-attribution
-                    dangerouslySetInnerHTML={{
-                        /* TODO: fix this */
-                        __html: `
-                <template>
-                    <cq-attrib-container>
-                        <cq-attrib-source></cq-attrib-source>&nbsp;
-                        <cq-attrib-quote-type></cq-attrib-quote-type>
-                    </cq-attrib-container>
-                </template>
-                `,
-                    }}
-                />
                 <cq-dialog>
                     <cq-view-dialog>
                         <h4>Save View</h4>

@@ -3,7 +3,7 @@
     height: 24px;
     width: 24px;
     line-height: 32px;
-    transition: background .1s linear;
+    transition: all .2s .15s;
     border-radius: 2px;
     box-sizing: border-box;
     cursor: pointer;
@@ -29,12 +29,8 @@
         }
     }
     &.active {
-        border: 1px solid #4c5794;
+        box-shadow: inset 0 0 0 1px #4c5794;
         background: #f2f3f8;
-
-        svg {
-            top: -1px;
-        }
     }
     &.margin {
         margin: 0 5px;

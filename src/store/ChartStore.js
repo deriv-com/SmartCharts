@@ -124,7 +124,6 @@ class ChartStore {
         const stxx = this.stxx;
         stxx.chart.allowScrollPast = false;
         const context = new Context(stxx, this.rootNode);
-        new CIQ.UI.Layout(context);
 
         context.changeSymbol = (data) => {
             if (context.loader) {context.loader.show();}
@@ -152,8 +151,6 @@ class ChartStore {
         new CIQ.UI.KeystrokeHub(document.querySelector('body'), context, {
             cb: CIQ.UI.KeystrokeHub.defaultHotKeys,
         });
-
-        new CIQ.UI.StudyEdit(null, context);
 
         const UIStorage = new CIQ.NameValueStore();
 
