@@ -140,20 +140,6 @@ cq-context {
 		background:$DEFAULT-accent;
 	}
 }
-.ciq-edit {
-	background-image: url(img/stx-sprite-panels.svg);
-	background-position: -300px -25px;
-	opacity: .5;
-	transition:opacity 0.2s;
-
-	&:hover {opacity: 1;}
-	.ciq-display & {
-		position:absolute;
-		right:40px;
-	}
-}
-
-
 /* Loading */
 cq-loader {
 	display:none;
@@ -257,46 +243,6 @@ cq-loader.stx-show{
 	}
 }
 
-
-/* Icon Buttons */
-.ciq-icon {
-	position:relative;
-	display:inline-block;
-	width:25px;
-	height:25px;
-	cursor:pointer;
-	/* hide text */
-	font: 0/0 a;
-	text-shadow: none;
-	color: transparent;
-
-	&:after {
-		position:absolute;
-		display:inline-block;
-		width:25px;
-		height:25px;
-		content:"";
-		opacity: .5;
-		background-image:url(img/stx-sprite-panels.svg);
-	   -webkit-transition: -webkit-transform .2s;
-		transition: opacity .2s;
-	}
-
-	&:hover:after,
-	&:active:after {
-		opacity: 1;
-	}
-	&:active:after {/* Scale up when active */
-		-webkit-transform: scale(1.2, 1.2);
-		-ms-transform: scale(1.2, 1.2);
-		transform: scale(1.2, 1.2);
-	}
-
-	&.ciq-close:after {background-position: -250px -25px;}
-	&.ciq-edit:after {background-position: -300px -25px;}
-	&.ciq-delete:after {background-position: -400px -25px;}
-}
-
 cq-clickable {
 	display: inline-block;
 }
@@ -318,61 +264,6 @@ cq-scroll .ps-scrollbar-y-rail,
 cq-menu-dropdown .ps-scrollbar-y-rail
 .cq-menu-dropdown .ps-scrollbar-y-rail{
 	z-index:1000000;
-}
-
-cq-close {
-	position: absolute;
-	top: 0px;
-	right: 3px;
-	margin: 0px;
-
-	cq-dialog & {
-		top: 3px;
-	}
-}
-
-cq-close.ciq-tight {
-	top:0px;
-	right:0px;
-}
-
-cq-close {
-	position: absolute;
-	display: inline-block;
-	width: 25px;
-	height: 25px;
-	cursor: pointer;
-	font: 0/0 a;
-	text-shadow: none;
-	color: transparent;
-}
-
-cq-close.ciq-tight {
-	width:20px;
-	height:20px;
-}
-
-cq-close:after {
-	background-position: -253px -25px;
-}
-
-cq-close.ciq-tight:after{
-	background-position: -252px -27px;
-}
-
-cq-close:after {
-	position: absolute;
-	display: inline-block;
-	width: 25px;
-	height: 25px;
-	content: "";
-	opacity: 0.5;
-	filter: alpha(opacity=50);
-	background-image: url(img/stx-sprite-panels.svg);
-	-webkit-transition: -webkit-transform .2s;
-	-webkit-transition: all 0.2s;
-	-moz-transition: all 0.2s;
-	transition: all 0.2s;
 }
 
 
@@ -1928,21 +1819,6 @@ cq-attrib-container cq-attrib-source a {
    color: #000;
 }
 
-
-cq-plus {/* Plus icon image */
-	width: 27px;
-	height: 27px;
-	background-image: url(img/stx-sprite-panels.svg);
-	background-position: -100px -25px;
-	opacity: .5;
-}
-
-cq-item cq-plus {
-	display: inline-block;
-	float: left;
-	margin-left: -8px;
-}
-
 cq-theme-dialog  {
 	width: 440px;
 	& cq-section {
@@ -2007,52 +1883,6 @@ cq-language-name {
 	}
 }
 
-cq-flag {
-	display:inline-block;
-	position:relative;
-	height:14px;
-	width:22px;
-	background-image:url(img/languages.svg);
-	background-repeat:no-repeat;
-	margin-right: 6px;
-	margin-top: 6px;
-	margin-left: 4px;
-	border: solid #ddd 1px;
-	}
-
-cq-flag[cq-lang="en"]{
-	background-position: -55px -30px;
-}
-cq-flag[cq-lang="ar"]{
-	background-position: -103px -30px;
-}
-cq-flag[cq-lang="fr"]{
-	background-position: -151px -30px;
-}
-cq-flag[cq-lang="de"]{
-	background-position: -199px -30px;
-}
-cq-flag[cq-lang="hu"]{
-	background-position: -247px -30px;
-}
-cq-flag[cq-lang="pt"]{
-	background-position: -294px -30px;
-}
-cq-flag[cq-lang="it"]{
-	background-position: -342px -30px;
-}
-cq-flag[cq-lang="ru"]{
-	background-position: -390px -30px;
-}
-cq-flag[cq-lang="es"]{
-	background-position: -438px -30px;
-}
-cq-flag[cq-lang="zh"]{
-	background-position: -486px -30px;
-}
-cq-flag[cq-lang="ja"]{
-	background-position: -534px -30px;
-}
 /* --------------------------------------------------------- CHART SDK --------------------------------------------------------- */
 
 /* Chart */

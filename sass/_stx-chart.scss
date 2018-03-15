@@ -165,7 +165,7 @@ html, body {
     height: 25px;
     width: 30px;
     padding-top: 25px;
-    background: url('icons/chart/stx-sprite-panels.svg') no-repeat -448px -25px;
+    background: url('icons/chart/jump-to-today.svg') no-repeat center;
     transition: opacity .25s, transform .2s;
     -webkit-transition: opacity .25s, -webkit-transform .2s;
     opacity: .6;
@@ -300,7 +300,7 @@ html, body {
     overflow: hidden;
     text-indent: 100px;
     border: solid #ddd 1px;
-    background: #efefef url('icons/chart/stx-sprite-panels.svg') -401px -26px;
+    background: #efefef url('icons/delete/ic-delete.svg') no-repeat center;
 }
 
 .overlayEdit {
