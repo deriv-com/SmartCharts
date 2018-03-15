@@ -56,6 +56,11 @@ class Tooltip extends CIQ.Marker {
             var highPx,
                 lowPx;
 
+            // Do not process anything other than the actual tooltip.
+            if (marker.className !== 'CIQ.Marker.Tooltip') {
+                continue;
+            }
+
             if (quote != 'undefined' && quote && quote.DT) {
                 goodBar = true;
                 if (quote.High) {highPx = stx.pixelFromPrice(quote.High);}

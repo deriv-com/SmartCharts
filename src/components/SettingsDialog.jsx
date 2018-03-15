@@ -99,10 +99,11 @@ const SettingsDialog = ({
                         onClick={onDeleteClick}
                         className="margin"
                     />
-                    <StarIcon
+                    {/* Todo implement starring for dialog */}
+                    { /*<StarIcon
                         onClick={onStarClick}
                         className={`margin ${stared ? 'fill-orange' : ''}`}
-                    />
+                    />*/}
                 </div>
             </div>
 
