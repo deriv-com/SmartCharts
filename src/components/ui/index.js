@@ -5,8 +5,6 @@ import './jquery-extensions';
 import './UI';
 import UIManager from './UIManager';
 
-import HeadsUp from './HeadsUp';
-import HeadsUpMarker from './HeadsUpMarker';
 import KeystrokeHub from './KeystrokeHub';
 
 /**
@@ -120,6 +118,4 @@ export const claims = [];
     };
 }());
 
-CIQ.Marker.HeadsUp = HeadsUpMarker;
-CIQ.UI.HeadsUp = HeadsUp;
 CIQ.UI.KeystrokeHub = KeystrokeHub;
