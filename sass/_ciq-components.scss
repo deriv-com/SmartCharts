@@ -104,7 +104,6 @@ cq-context {
 
 /* Checkboxes / Radio Buttons */
 
-.ciq-checkbox,
 .ciq-radio,
 .ciq-edit {
 	display:inline-block;
@@ -127,17 +126,6 @@ cq-context {
 		position:absolute;
 		display:block;
 		content:"";
-	}
-}
-
-.ciq-checkbox {
-	.ciq-active &.ciq-active span:after {
-		left:1px;
-		bottom:1px;
-		width:12px;
-		height:12px;
-		background-image:url(img/stx-sprite-ui.svg);
-		background-position: -580px -31px;
 	}
 }
 
@@ -643,15 +631,12 @@ cq-heading {
 	font-family:$heading-font;
 }
 
-cq-item .ciq-radio,
-cq-item .ciq-checkbox { /* Float checkboxes/radio buttons in menu items right */
+cq-item .ciq-radio { /* Float checkboxes/radio buttons in menu items right */
 	position:absolute;
 	right:10px;
 }
 cq-item:hover .ciq-radio span,
-cq-item:active .ciq-radio span,
-cq-item:hover .ciq-checkbox span,
-cq-item:active .ciq-checkbox span { /* Float checkboxes/radio buttons in menu items right */
+cq-item:active .ciq-radio span { /* Float checkboxes/radio buttons in menu items right */
 	border:solid 1px $DEFAULT-border-strong;
 }
 
@@ -817,28 +802,6 @@ body:not(.break-sm) .sidenav-toggle {
 	}
 }
 
-.break-sm, .break-md {
-	& .ciq-menu.collapse > span:after {
-		content:"";
-		display:block;
-		width:27px;
-		height:27px;
-		position: static;
-		border-right:none;
-		border-bottom:none;
-		background-image:url(img/stx-sprite-ui.svg);
-		opacity: .85;
-		transition: opacity .20s 0s;
-		@include rotate(0deg);
-	}
-}
-
-.break-sm .ciq-menu.collapse:hover > span:after,
-.break-sm .ciq-menu.collapse.stxMenuActive > span:after,
-.break-sm .ciq-menu.collapse:active > span:after {
-	opacity: 1;
-}
-
 .stx-watch span {background-position: -150px -25px;}
 .stx-trade span {background-position: -200px -25px;}
 .ciq-sidenav span { background-position: -300px -25px; }
@@ -961,18 +924,6 @@ cq-study-legend[cq-marker] {
 	.break-sm & {
 		display:none;
 	}
-}
-
-cq-marker-label:after {
-	content:"";
-	display: inline-block;
-	height: 12px;
-	width: 12px;
-	float:left;
-	margin-left:10px;
-	margin-right:4px;
-	background-image: url(img/stx-sprite-ui.svg);
-	background-position: -731px -31px;
 }
 
 @keyframes hovershow-toggle-animation{
@@ -1128,11 +1079,6 @@ cq-annotation .ciq-btn {/* Menu Triggers in toolbar */
 		border:solid 1px $DEFAULT-accent;
 	}
 }
-
-cq-toolbar .ciq-checkbox {
-	margin: 0 0 0 5px;
-}
-
 
 cq-toolbar-settings > * { /* Line and background color modules */
 	float: left;
