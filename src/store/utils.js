@@ -27,3 +27,26 @@ export function sameBar(bar1, bar2) {
     if (bar1.Volume != bar2.Volume) {return false;}
     return true;
 }
+
+export function findAncestor (el, cls) {
+    while ((el = el.parentElement) && !el.classList.contains(cls)){}
+    return el;
+}
+
+export function downloadFileInBrowser(filename, content, type) {
+    const blob = new Blob([content], { type: type });
+    if (navigator.msSaveBlob) { // IE 10+
+        navigator.msSaveBlob(blob, filename);
+        return;
+    }
+    const link = document.createElement("a");
+    if (link.download !== undefined) { /* Evergreen Browsers */
+        const url = content;
+        link.setAttribute("href", url);
+        link.setAttribute("download", filename);
+        link.style.visibility = "hidden";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+}

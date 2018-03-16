@@ -11,6 +11,13 @@ import '../../sass/_ciq-share.scss';
 const Share = ({
     Menu,
     menuOpen,
+    shareLink,
+    downloadCSV,
+    downloadPNG,
+    copyToClipboard,
+    resetCopyTooltip,
+    copyTooltip,
+    onInputRef,
 }) => {
     return (
         <Menu className="cq-share">
@@ -25,17 +32,26 @@ const Share = ({
                 <div className='body'>
                     <div className='caption1'>Share link</div>
                     <div className='content'>
-                        <input />
-                        <CopyIcon />
+                        <input
+                            ref={onInputRef}
+                            value={shareLink}
+                        />
+                        <CopyIcon
+                            onClick={copyToClipboard}
+                            onMouseOut={resetCopyTooltip}
+                            tooltip-title={copyTooltip}
+                        />
                     </div>
 
                     <div className='caption2'>Download chart</div>
                     <div className='content'>
                         <div
                             className='download-btn'
+                            onClick={downloadPNG}
                         > PNG </div>
                         <div
                             className='download-btn'
+                            onClick={downloadCSV}
                         > CSV </div>
                     </div>
                 </div>
@@ -47,4 +63,11 @@ const Share = ({
 export default connect(({share: s}) => ({
     Menu: s.menu.connect(Menu),
     menuOpen: s.menu.dialog.open,
+    shareLink: s.shareLink,
+    downloadPNG: s.downloadPNG,
+    downloadCSV: s.downloadCSV,
+    copyToClipboard: s.copyToClipboard,
+    onInputRef: s.onInputRef,
+    resetCopyTooltip:  s.resetCopyTooltip,
+    copyTooltip: s.copyTooltip,
 }))(Share);

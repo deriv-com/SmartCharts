@@ -35,7 +35,6 @@ import './ViewDialog';
 import './Clickable';
 import ChartControls from './ChartControls.jsx';
 import SettingsDialog from './SettingsDialog.jsx';
-import Toolbar from './Toolbar.jsx';
 import Notification from './Notification.jsx';
 import Crosshair from './Crosshair.jsx';
 import { MobxProvider, connect } from '../store/Connect';
@@ -69,7 +68,6 @@ class Chart extends Component {
                                 <ComparisonList />
                             </div>
                         </RenderInsideChart>
-                        <Toolbar />
                         <ChartControls />
                         <Crosshair />
                         <div className="chartContainer primary"> </div>

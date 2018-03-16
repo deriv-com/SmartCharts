@@ -41,6 +41,16 @@
                 box-sizing: border-box;
                 position: relative;
                 left: -1px;
+                &:after {
+                    width: auto !important;
+                    left: auto !important;
+                    right: -10px;
+                    white-space: nowrap;
+                    bottom: 36px;
+                }
+                &:before {
+                    bottom: 32px;
+                }
             }
             .download-btn {
                 background: white;
