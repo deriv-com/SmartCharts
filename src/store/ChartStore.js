@@ -154,8 +154,6 @@ class ChartStore {
 
         const UIStorage = new CIQ.NameValueStore();
 
-        this.rootNode.querySelector('cq-redo').pairUp(this.rootNode.querySelector('cq-undo'));
-
         const params = {
             excludedStudies: {
                 Directional: true,
