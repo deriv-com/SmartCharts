@@ -50,6 +50,8 @@ class ChartStore {
         }
     }
 
+    get loader () { return this.mainStore.loader; }
+
     saveLayout() {
         const layoutDat = this.stxx.exportLayout(true);
         const json = JSON.stringify(layoutDat);
@@ -65,7 +67,7 @@ class ChartStore {
             managePeriodicity: true,
             cb: () => {
                 this.restoreDrawings(stx, stx.chart.symbol);
-                if (this.context.loader) {this.context.loader.hide();}
+                if (this.loader) {this.loader.hide();}
             },
         });
     }
@@ -153,8 +155,6 @@ class ChartStore {
         });
 
         const UIStorage = new CIQ.NameValueStore();
-
-        this.rootNode.querySelector('cq-redo').pairUp(this.rootNode.querySelector('cq-undo'));
 
         const params = {
             excludedStudies: {

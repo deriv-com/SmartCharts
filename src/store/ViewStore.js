@@ -19,6 +19,7 @@ export default class ViewStore {
 
     get context () { return this.mainStore.chart.context; }
     get stx () { return this.context.stx; }
+    get loader () { return this.mainStore.loader; }
 
     onContextReady = () => {
         const views = CIQ.localStorage.getItem('cq-views');
@@ -62,7 +63,7 @@ export default class ViewStore {
 
     applyLayout = (idx, e) => {
         if(e.nativeEvent.is_item_removed) {return;}
-        if (this.context.loader) {this.context.loader.show();}
+        if (this.loader) {this.loader.show();}
         const stx = this.stx;
 
         const importLayout = () => {
@@ -71,7 +72,7 @@ export default class ViewStore {
             stx.dispatch('layout', {
                 stx,
             });
-            if (this.context.loader) {this.context.loader.hide();}
+            if (this.loader) {this.loader.hide();}
         };
         setTimeout(importLayout, 100);
     }
