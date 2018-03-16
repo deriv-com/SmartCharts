@@ -8,6 +8,7 @@ export default class ShareStore {
         this.menu = new MenuStore({getContext: () => this.mainStore.chart.context});
 
         when(() => this.context, this.onContextReady);
+        reaction(() => this.menu.open, this.refereshShareLink);
     }
 
     get context() { return this.mainStore.chart.context; }
@@ -19,11 +20,16 @@ export default class ShareStore {
         this.copyTooltip = successful ? 'Copied!' : 'Failed!';
     }
 
-    @computed get shareLink() {
-        if(!this.context) {return '';}
+    @observable shareLink = '';
+    refereshShareLink = () => {
+        if(!this.context) { return; }
+
         const layoutData = this.stx.exportLayout(true);
         const json = JSON.stringify(layoutData);
-        return `https://charts.binary.com?data=${encodeURIComponent(json)}`;
+
+        const origin = window.location.origin === 'http://localhost:8080' ?
+            window.location.origin : 'https://charts.binary.com';
+        this.shareLink = `${origin}#${encodeURIComponent(json)}`;
     }
     @action.bound downloadPNG() {
         this.menu.setOpen(false);
@@ -60,6 +66,7 @@ export default class ShareStore {
 
 
     @action.bound copyToClipboard() {
+        this.refereshShareLink();
         if(!navigator.clipboard) {
             this.onCopyDone(this.copyWithExecCommand());
         } else {

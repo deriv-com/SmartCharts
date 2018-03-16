@@ -51,17 +51,32 @@ class ChartStore {
     }
 
     saveLayout() {
-        const layoutDat = this.stxx.exportLayout(true);
-        const json = JSON.stringify(layoutDat);
+        const layoutData = this.stxx.exportLayout(true);
+        const json = JSON.stringify(layoutData);
         CIQ.localStorageSetItem(`layout-${this.id}`, json);
     }
 
     restoreLayout(stx) {
-        let layoutDat = CIQ.localStorage.getItem(`layout-${this.id}`);
-        if (layoutDat === null) {return;}
-        layoutDat = JSON.parse(layoutDat);
 
-        stx.importLayout(layoutDat, {
+        let layoutData = CIQ.localStorage.getItem(`layout-${this.id}`);
+
+        const checkForQuerystring = window.location.origin === 'https://charts.binary.com' ||
+            window.location.origin === 'http://localhost:8080';
+
+        if(checkForQuerystring) {
+            const [, json] = window.location.href.split('#');
+            if(json) {
+                layoutData = decodeURIComponent(json);
+                window.history.replaceState({}, document.title, "/");
+            }
+        }
+
+        if (layoutData === null) {return;}
+        try {
+            layoutData = JSON.parse(layoutData);
+        } catch(e) { return; }
+
+        stx.importLayout(layoutData, {
             managePeriodicity: true,
             cb: () => {
                 this.restoreDrawings(stx, stx.chart.symbol);
