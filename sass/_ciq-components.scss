@@ -141,6 +141,10 @@ cq-context {
 	}
 }
 /* Loading */
+cq-loader, .cq-comparison-loader {
+	background-image:url('icons/loading/loading-spin.svg');
+	background-size:cover;
+}
 cq-loader {
 	display:none;
     position: absolute;
@@ -150,8 +154,6 @@ cq-loader {
     top: 50%;
     margin-left: -25px;
     margin-top: -25px;
-	background-image:url(img/loading-spin.svg);
-	background-size:cover;
     z-index: 1;
 }
 cq-loader.stx-show{
@@ -1642,8 +1644,6 @@ cq-share-dialog {
 .stx-marker.circle .stx-visual { /* Simple Marker */
     width: 25px;
     height: 25px;
-	background-image:url(img/stx-sprite-markers.svg);
-
 }
 .stx-marker.square .stx-visual:after,
 .stx-marker.circle .stx-visual:after { /* Basic Marker */
@@ -1679,30 +1679,6 @@ cq-share-dialog {
 .stx-marker.circle .stx-visual,
 .stx-marker.circle .stx-visual:after { /* Basic Marker */
 	@include border-radius(50%);
-}
-.stx-marker.news .stx-visual{
-	background-color:#C600D8;
-	background-position: -50px -50px;
-}
-.stx-marker.earningsUp .stx-visual{
-	background-color:#85c730;
-	background-position: -100px -50px;
-}
-.stx-marker.earningsDown .stx-visual{
-	background-color:#ff002a;
-	background-position: -100px -50px;
-}
-.stx-marker.dividend .stx-visual{
-	background-color:#000;
-	background-position: -150px -50px;
-}
-.stx-marker.filing .stx-visual{
-	background-color:#999;
-	background-position: -200px -50px;
-}
-.stx-marker.split .stx-visual{
-	background-color:#16b0c2;
-	background-position: -250px -50px;
 }
 
 .stx-marker.square .stx-marker-expand,

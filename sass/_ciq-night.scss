@@ -11,8 +11,8 @@ $DARK-text:					#fff;
 }
 .ciq-phone .#{$DARK} {background:$DARK-main;}
 
-cq-loader, cq-comparison-loader {
-	.#{$DARK} & {background-image:url(img/loading-spin-white.svg);}
+cq-loader, .cq-comparison-loader {
+	.#{$DARK} & {background-image:url('icons/loading/loading-spin-white.svg');}
 }
 
 .ciq-color, .stx-border-color {/* Swatch / Open Palette Button */
