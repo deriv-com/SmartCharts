@@ -88,15 +88,11 @@ html, body {
 }
 
 .stx-btn-panel span { /* Button Icons */
-    background-image: url(img/stx-sprite-panels.svg);
+    background-image: url('icons/chart/stx-sprite-panels.svg');
     opacity: .6;
     -webkit-transition: opacity .2s;
     -moz-transition: opacity .2s;
     transition: opacity .2s;
-}
-
-.no-svg .stx-btn-panel span { /* Button Icons for non SVG browsers */
-    background-image: url(img/stx-sprite-panels.png);
 }
 
 .stx-btn-panel > span.stx-ico-up {
@@ -164,21 +160,15 @@ html, body {
 }
 
 .stx_jump_today span {
-    background-image: url(img/stx-sprite-panels.svg);
-    background-repeat: no-repeat;
     display: inline-block;
     line-height: 25px;
     height: 25px;
     width: 30px;
     padding-top: 25px;
-    background-position: -448px -25px;
+    background: url('icons/chart/jump-to-today.svg') no-repeat center;
     transition: opacity .25s, transform .2s;
     -webkit-transition: opacity .25s, -webkit-transform .2s;
     opacity: .6;
-}
-
-.no-svg .stx_jump_today span { /* Button Icons for non SVG browsers */
-    background-image: url(img/stx-sprite-panels.png);
 }
 
 .stx_jump_today:hover span {
@@ -188,8 +178,7 @@ html, body {
 /* --------------------------------------------------------- PANEL CONTROL TEMPLATES --------------------------------------------------------- */
 
 .stx-baseline-handle { /* used for dragging the baseline up and down */
-    background-image: url(img/stx-sprite-ui.svg);
-    background-position: -770px -28px;
+    background: url('icons/chart/resize-icon.svg') no-repeat center;
     cursor: ns-resize;
     display: none;
     height: 20px;
@@ -204,7 +193,7 @@ html, body {
 }
 
 .stx-drag-chart { /* Use the hand icon when grabbing and moving the chart */
-    cursor: url(img/closedhand.cur), default !important;
+    cursor: url('icons/chart/closedhand.cur'), default !important;
 }
 
 .stx-ico-handle { /* The div that allows users to ajust the panels */
@@ -310,10 +299,8 @@ html, body {
     border-radius: 3px;
     overflow: hidden;
     text-indent: 100px;
-    background: #efefef;
     border: solid #ddd 1px;
-    background-image: url(img/stx-sprite-panels.svg);
-    background-position: -401px -26px;
+    background: #efefef url('icons/delete/ic-delete.svg') no-repeat center;
 }
 
 .overlayEdit {
@@ -333,12 +320,6 @@ html, body {
 	margin-left: 34px;
 }
 */
-
-.no-svg .overlayEdit.stx-btn span,
-.no-svg #overlayTrashCan.stx-btn span,
-.no-svg #vectorTrashCan.stx-btn span { /* Button Icons for non SVG browsers */
-    background-image: url(img/stx-sprite-panels.png);
-}
 
 #mouseDeleteInstructions {
     margin: 0px;
@@ -777,4 +758,4 @@ html, body {
 
 .stx_market_session.post {
     background-color: rgba(0, 0, 255, 0.2);
-} 
+}
