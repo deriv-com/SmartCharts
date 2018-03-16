@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 49.1 (51147) - http://www.bohemiancoding.com/sketch -->
+    <title>icons/system/dark/copy/ic-copy</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="icons/system/dark/copy/ic-copy" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <path d="M3.5,5 C3.22385763,5 3,5.22385763 3,5.5 L3,13.5 C3,13.7761424 3.22385763,14 3.5,14 L9.5,14 C9.77614237,14 10,13.7761424 10,13.5 L10,5.5 C10,5.22385763 9.77614237,5 9.5,5 L3.5,5 Z M3.5,4 L9.5,4 C10.3284271,4 11,4.67157288 11,5.5 L11,13.5 C11,14.3284271 10.3284271,15 9.5,15 L3.5,15 C2.67157288,15 2,14.3284271 2,13.5 L2,5.5 C2,4.67157288 2.67157288,4 3.5,4 Z M5.5,2 L5.5,1 L12.5,1 C13.3284271,1 14,1.67157288 14,2.5 L14,11.5 L13,11.5 L13,2.5 C13,2.22385763 12.7761424,2 12.5,2 L5.5,2 Z" id="Combined-Shape" fill="#FFFFFF" fill-rule="nonzero"></path>
+    </g>
+</svg>
