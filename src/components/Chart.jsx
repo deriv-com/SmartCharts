@@ -7,6 +7,7 @@ import RenderInsideChart from './RenderInsideChart.jsx';
 import ComparisonList from './ComparisonList.jsx';
 import ChartTitle from './ChartTitle.jsx';
 import AssetInformation from './AssetInformation.jsx';
+import Loader from './Loader.jsx'
 
 /* css + scss */
 import '../../css/stx-chart.css';
@@ -15,16 +16,10 @@ import '../../sass/_ciq-custom.scss';
 
 import '../AddOns';
 import '../Plugin';
+import './ui';
 
-import './Close';
-import './ColorPicker';
-import './Loader';
-import './Menu';
-import './MenuDropDown';
-import './Scroll';
-import './ShowRange';
-import './Swatch';
-import './Clickable';
+/* To do convert this to jsx*/
+// import './Loader';
 import ChartControls from './ChartControls.jsx';
 import SettingsDialog from './SettingsDialog.jsx';
 import Notification from './Notification.jsx';
@@ -46,10 +41,6 @@ class Chart extends Component {
         const { DrawToolsSettingsDialog, StudySettingsDialog } = this.props;
         return (
             <cq-context ref={(root) => { this.root = root; }}>
-                <cq-color-picker>
-                    <cq-colors />
-                </cq-color-picker>
-                <cq-loader />
                 <div className="ciq-chart-area">
                     <div className="ciq-chart">
                         <div className='beta-version'>Beta Version</div>
@@ -63,6 +54,7 @@ class Chart extends Component {
                         <ChartControls />
                         <Crosshair />
                         <div className="chartContainer primary"> </div>
+                        <Loader />
                     </div>
                 </div>
                 <DrawToolsSettingsDialog />

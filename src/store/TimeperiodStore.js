@@ -10,6 +10,7 @@ export default class TimeperiodStore {
     }
 
     get context() { return this.mainStore.chart.context; }
+    get loader() { return this.mainStore.loader; }
 
     @observable timeUnit = null;
     @observable interval = null;
@@ -21,14 +22,14 @@ export default class TimeperiodStore {
     }
 
     @action.bound setPeriodicity(interval, timeUnit) {
-        if (this.context.loader) {
-            this.context.loader.show();
+        if (this.loader) {
+            this.loader.show();
         }
 
         const stx = this.context.stx;
         stx.setPeriodicity({ period: 1, interval, timeUnit }, () => {
-            if (this.context.loader) {
-                this.context.loader.hide();
+            if (this.loader) {
+                this.loader.hide();
             }
 
             const chartType = this.mainStore.chartType;
