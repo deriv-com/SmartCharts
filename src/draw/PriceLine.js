@@ -14,7 +14,7 @@ class PriceLine extends Line {
         lineColor = PriceLine.COLOR_GREEN,
         relative = false,
         visible = true,
-        pipSize = 2,
+        pipSize = 4,
         price,
         draggable = true,
     }) {
