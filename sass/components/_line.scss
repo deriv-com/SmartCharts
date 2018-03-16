@@ -36,6 +36,7 @@
 
 .chart-line {
     position: absolute;
+    z-index: 35;
 
     &.horizontal {
         width: 100%;
