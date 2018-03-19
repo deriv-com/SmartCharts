@@ -13,15 +13,20 @@ class PriceLine extends Component {
             isDragging,
             priceDisplay,
             setDragLine,
-            visible,
+            isVisible,
+            zIndex,
+            uncentered,
+            offScreen,
         } = this.props;
 
         return (
             <div
                 className={`chart-line horizontal ${isDraggable ? 'draggable' : ''} ${isDragging ? 'dragging' : ''} ${className || ''}`}
-                style={{top}}
+                style={{top, zIndex}}
                 ref={setDragLine}
-                hidden={visible ? undefined : 'true'}
+                hidden={isVisible ? undefined : 'true'}
+                uncentered={uncentered ? 'true' : undefined}
+                off-screen={offScreen ? 'true' : undefined}
             >
                 <div
                     className="drag-line"

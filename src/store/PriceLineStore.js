@@ -6,10 +6,14 @@ export default class PriceLineStore {
     _relative = false;
     @observable isDraggable = true;
     @observable isDragging = false;
-    @observable visible = false;
-    @observable pip = 4;
+    @observable isVisible = true;
     @observable top = 0;
     @observable _price = 0;
+    @observable zIndex;
+    @observable offScreen = false;
+    @observable uncentered = false;
+
+    @computed get pip() { return this.mainStore.chart.currentActiveSymbol.decimal_places; };
 
     constructor(mainStore) {
         this.mainStore = mainStore;
@@ -20,18 +24,11 @@ export default class PriceLineStore {
 
     onContextReady = () => {
         this.stx.append('draw', this._draw.bind(this));
-        this.pip = this.mainStore.chart.currentActiveSymbol.decimal_places;
-        setTimeout(() => {
-            // TODO: get the quote only when it is available instead of using a timeout
-            this._price = this.relative ? 0 : this.stx.currentQuote().Close;
-            this.visible = true;
-            this._draw();
-        }, 2000);
     };
 
     init = () => {
         const exitIfNotisDraggable = (e, callback) => {
-            if (this.visible && this.isDraggable) {callback.call(this, e);}
+            if (this.isVisible && this.isDraggable) {callback.call(this, e);}
         };
         CIQ.safeDrag(
             this._line,
@@ -87,7 +84,7 @@ export default class PriceLineStore {
     }
 
     get realPrice() {
-        return this.relative ? (this.stx.currentQuote().Close + this.price) : this.price;
+        return this.relative ? +(this.stx.currentQuote().Close + this.price).toFixed(this.pip) : this.price;
     }
 
     @action.bound setDragLine(el) {
@@ -108,7 +105,7 @@ export default class PriceLineStore {
     _startDrag(e) {
         this._modalBegin();
         this.isDragging = true;
-        this._initialPosition = CIQ.stripPX(this._line.style.top);
+        this._initialPosition = this.top;
     }
 
     _dragLine(e) {
@@ -159,54 +156,29 @@ export default class PriceLineStore {
 
         // keep line on chart even if price is off viewable area:
         if (top < 0) {
-            this._line.setAttribute('uncentered', true);
+            this.uncentered = true;
             if (top < this._line.offsetHeight / 2 * -1) {
-                this._line.setAttribute('off-screen', true);
+                this.offScreen = true;
             }
             top = 0;
         } else if (top + this._line.offsetHeight > this.chart.panel.height) {
-            this._line.setAttribute('uncentered', true);
+            this.uncentered = true;
             if ((top + this._line.offsetHeight) - this.chart.panel.height > this._line.offsetHeight / 2) {
-                this._line.setAttribute('off-screen', true);
+                this.offScreen = true;
             }
             top = this.chart.panel.height - this._line.offsetHeight;
         } else {
-            this._line.removeAttribute('uncentered');
-            this._line.removeAttribute('off-screen');
+            this.uncentered = false;
+            this.offScreen = false;
         }
 
-        this._line.style.top = `${top}px`;
+        this.top = top;
     }
 
     _draw() {
-        if (this.visible) {
+        if (this.isVisible) {
             this._positionAtPrice(this.realPrice);
         }
-    }
-
-    @action.bound positionAtPrice(price) {
-        let top = this._locationFromPrice(price);
-        top -= (this._line.offsetHeight / 2);
-
-        // keep line on chart even if price is off viewable area:
-        if (top < 0) {
-            this._line.setAttribute('uncentered', true);
-            if (top < this._line.offsetHeight / 2 * -1) {
-                this._line.setAttribute('off-screen', true);
-            }
-            top = 0;
-        } else if (top + this._line.offsetHeight > this.chart.panel.height) {
-            this._line.setAttribute('uncentered', true);
-            if ((top + this._line.offsetHeight) - this.chart.panel.height > this._line.offsetHeight / 2) {
-                this._line.setAttribute('off-screen', true);
-            }
-            top = this.chart.panel.height - this._line.offsetHeight;
-        } else {
-            this._line.removeAttribute('uncentered');
-            this._line.removeAttribute('off-screen');
-        }
-
-        this._line.style.top = `${top}px`;
     }
 
     onPriceChanged(callback) {
@@ -215,11 +187,15 @@ export default class PriceLineStore {
 
     connect = connect(() => ({
         priceDisplay: this.priceDisplay,
-        visible: this.visible,
+        isVisible: this.isVisible,
         setDragLine: this.setDragLine,
         className: this.className,
         isDraggable: this.isDraggable,
         isDragging: this.isDragging,
         init: this.init,
+        zIndex: this.zIndex,
+        offScreen: this.offScreen,
+        uncentered: this.uncentered,
+        top: this.top,
     }));
 }

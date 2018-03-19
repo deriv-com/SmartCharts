@@ -2,20 +2,25 @@ import React from 'react';
 import RenderInsideChart from './RenderInsideChart.jsx';
 
 const Barrier = ({
-    visible,
+    barrierColor,
+    isVisible,
     HighPriceLine,
     LowPriceLine,
+    TopShade,
+    BetweenShade,
+    BottomShade,
 }) => {
     return (
-        <RenderInsideChart>
-            <div
-                className="barrier"
-                style={{display: visible ? undefined : 'none'}}
-            >
-                <HighPriceLine />
-                <LowPriceLine />
-            </div>
-        </RenderInsideChart>
+        <div
+            className={`barrier ${barrierColor}`}
+            style={{display: isVisible ? undefined : 'none'}}
+        >
+            <HighPriceLine />
+            <LowPriceLine />
+            <TopShade />
+            <BetweenShade />
+            <BottomShade />
+        </div>
     );
 };
 

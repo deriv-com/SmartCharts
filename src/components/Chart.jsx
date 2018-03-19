@@ -44,7 +44,7 @@ class Chart extends Component {
                 <div className="ciq-chart-area">
                     <div className="ciq-chart">
                         <div className='beta-version'>Beta Version</div>
-                        {Barrier && <Barrier/>}
+                        {Barrier && <RenderInsideChart><Barrier/></RenderInsideChart>}
                         <RenderInsideChart>
                             <div className="cq-top-ui-widgets">
                                 <ChartTitle />
