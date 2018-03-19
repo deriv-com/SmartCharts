@@ -1,0 +1,76 @@
+.cq-share {
+    .cq-menu-dropdown {
+        left: -140px;
+        width: 280px;
+        height: 200px;
+        color: black;
+    }
+
+    .title {
+        height: 40px;
+        line-height: 40px;
+        padding-left: 16px;
+        font-size: 16px;
+        background: white;
+        box-shadow: inset 0 -1px 0 0 #E9E9ED;
+    }
+    .body {
+        background: #FAFAFA;
+        height: 100%;
+        padding: 16px;
+
+        .content {
+            display: flex;
+            input { 
+                line-height: 32px;
+                height: 32px;
+                box-sizing: border-box;
+                outline: none;
+                flex-grow: 1;
+                background: #FFFFFF;
+                border: 1px solid #E9E9ED;
+                border-radius: 4px;
+                padding-left: 4px;
+            }
+            .ic-icon {
+                background: #4C5794;
+                border-radius: 0 4px 4px 0;
+                width: 32px;
+                height: 32px;
+                padding-top: 4px;
+                box-sizing: border-box;
+                position: relative;
+                left: -1px;
+                &:after {
+                    width: auto !important;
+                    left: auto !important;
+                    right: -10px;
+                    white-space: nowrap;
+                    bottom: 36px;
+                }
+                &:before {
+                    bottom: 32px;
+                }
+            }
+            .download-btn {
+                background: white;
+                border: 1px solid #E9E9ED;
+                border-radius: 4px;
+                width: 56px;
+                height: 32px;
+                box-sizing: border-box;
+                text-align: center;
+                line-height: 32px;
+                margin-right: 8px;
+                cursor: pointer;
+                &:hover {
+                    border-color: #4C5794; 
+                }
+            }
+        }
+
+        .caption2 {
+            margin-top: 10px;
+        }
+    }
+}

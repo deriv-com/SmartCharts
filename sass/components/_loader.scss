@@ -1,0 +1,18 @@
+.cq-loader {
+	display:none;
+    position: absolute;
+    height: 50px;
+    width: 50px;
+    left: 50%;
+    top: 50%;
+    margin-left: -25px;
+    margin-top: -25px;
+	background-image:url('icons/loading/loading-spin.svg');
+	background-size:cover;
+    z-index: 1;
+
+    &.show{
+    	display:block;
+    	z-index: 9;
+    }
+}

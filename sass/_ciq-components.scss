@@ -50,6 +50,7 @@ cq-context {
 	@import "components/chart-size";
 	@import "components/comparison-list";
 	@import "components/view";
+	@import "components/loader";
 }
 
 /* --------------------------------------------------------- FIELDS, SELECTS, INPUTS --------------------------------------------------------- */
@@ -141,25 +142,6 @@ cq-context {
 	}
 }
 /* Loading */
-cq-loader, .cq-comparison-loader {
-	background-image:url('icons/loading/loading-spin.svg');
-	background-size:cover;
-}
-cq-loader {
-	display:none;
-    position: absolute;
-    height: 50px;
-    width: 50px;
-    left: 50%;
-    top: 50%;
-    margin-left: -25px;
-    margin-top: -25px;
-    z-index: 1;
-}
-cq-loader.stx-show{
-	display:block;
-	z-index: 9;
-}
 
 
 

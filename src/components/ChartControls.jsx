@@ -7,6 +7,7 @@ import CrosshairToggle from './CrosshairToggle.jsx';
 import Timeperiod from './Timeperiod.jsx';
 import ChartSize from './ChartSize.jsx';
 import DrawTools from './DrawTools.jsx';
+import Share from './Share.jsx';
 
 const ChartControls = () => (
     <div className="cq-chart-controls">
@@ -16,6 +17,7 @@ const ChartControls = () => (
         <Comparison />
         <DrawTools />
         <Views />
+        <Share />
         <Timeperiod />
         <ChartSize />
     </div>
