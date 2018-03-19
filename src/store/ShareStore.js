@@ -14,6 +14,15 @@ export default class ShareStore {
     get context() { return this.mainStore.chart.context; }
     get stx() { return this.context.stx; }
 
+    @computed get timeUnit() { return this.mainStore.timeperiod.timeUnit; }
+    @computed get timeperiodDisplay() { return this.mainStore.timeperiod.display; }
+    @computed get marketDisplayName() {
+        return this.mainStore.chart.currentActiveSymbol.market_display_name;
+    }
+    @computed get decimalPlaces() {
+        return this.mainStore.chart.currentActiveSymbol.decimal_places;
+    }
+
     @observable copyTooltip = 'Copy to clipboard';
     @action.bound resetCopyTooltip() { this.copyTooltip = 'Copy to clipboard'; }
     onCopyDone = (successful) => {
@@ -44,7 +53,39 @@ export default class ShareStore {
         });
     }
     @action.bound downloadCSV() {
-        console.warn('todo csv');
+        const isTick = this.timeUnit === 'tick';
+        const header = `Date,Time,${isTick ? this.marketDisplayName : 'Open,High,Low,Close'}`;
+        const lines = [header];
+        stx.masterData.forEach(row => {
+            const {DT, Open, High, Low, Close} = row;
+
+            const year = DT.getUTCFullYear();
+            const month = DT.getUTCMonth() + 1; //months from 1-12
+            const day = DT.getUTCDate();
+            const hours = DT.getUTCHours();
+            const minutes = DT.getUTCMinutes();
+            // const seconds = DT.getUTCSeconds();
+
+            const date = `${year}-${month > 9 ? month : `0${month}`}-${day > 9 ? day : `0${day}`}`;
+            const time = `${hours > 9 ? hours : `0${hours}`}:${minutes > 9 ? minutes : `0${minutes}`}`;
+            if(isTick && Close) { lines.push(`${date},${time},${Close}`); }
+            if(!isTick && Open && High && Low && Close) {
+                lines.push([
+                    date,
+                    time,
+                    Open.toFixed(this.decimalPlaces),
+                    High.toFixed(this.decimalPlaces),
+                    Low.toFixed(this.decimalPlaces),
+                    Close.toFixed(this.decimalPlaces)
+                ].join(','));
+            }
+        });
+
+        downloadFileInBrowser(
+            `${this.marketDisplayName} (${this.timeperiodDisplay}).csv`,
+            lines.join('\n'),
+            'text/csv;charset=utf-8;',
+        );
     }
 
     copyWithExecCommand() {
@@ -77,3 +118,4 @@ export default class ShareStore {
     onInputRef = (ref) => this.inputRef = ref;
     onContextReady = () => { };
 }
+

@@ -41,7 +41,7 @@ export function downloadFileInBrowser(filename, content, type) {
     }
     const link = document.createElement("a");
     if (link.download !== undefined) { /* Evergreen Browsers */
-        const url = content;
+        const url = type === 'image/png;' ? content : URL.createObjectURL(blob);
         link.setAttribute("href", url);
         link.setAttribute("download", filename);
         link.style.visibility = "hidden";
