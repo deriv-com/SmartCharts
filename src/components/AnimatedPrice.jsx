@@ -8,7 +8,7 @@ const AnimatedPrice = ({
 }) => {
     const classes = `cq-animated-price ${className || ''} ${
         showStable ? 'cq-stable ' : (isIncrease ? 'cq-up' : 'cq-down')
-    }`
+    }`;
     return (<div className={classes}>{price}</div>);
 };
 
