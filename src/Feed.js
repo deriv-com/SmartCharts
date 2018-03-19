@@ -1,8 +1,9 @@
 class Feed {
-    constructor(streamManager, cxx) {
+    constructor(streamManager, cxx, mainStore) {
         this._cxx = cxx;
         this._streamManager = streamManager;
         this._streams = {};
+        this._mainStore = mainStore;
     }
 
     // although not used, subscribe is overriden so that unsubscribe will be called by ChartIQ
@@ -61,8 +62,15 @@ class Feed {
         try {
             const { candles, history } = await stream.response;
             const quotes = candles ? Feed.formatCandles(candles) : Feed.formatHistory(history);
-            const attribution = { message: stream.isMarketClosed ? 'Market is presently closed' : '' };
-            callback({ quotes, attribution });
+
+            if(stream.isMarketClosed) {
+                const message = '[1] market is presently closed.';
+                this._mainStore.notification.addWarning(
+                    message.replace('[1]', symbol)
+                );
+            }
+
+            callback({ quotes });
         } catch (err) {
             this._streams[key].forget();
             delete this._streams[key];
