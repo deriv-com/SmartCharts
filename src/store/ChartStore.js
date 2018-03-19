@@ -50,6 +50,8 @@ class ChartStore {
         }
     }
 
+    get loader () { return this.mainStore.loader; }
+
     saveLayout() {
         const layoutData = this.stxx.exportLayout(true);
         const json = JSON.stringify(layoutData);
@@ -80,7 +82,7 @@ class ChartStore {
             managePeriodicity: true,
             cb: () => {
                 this.restoreDrawings(stx, stx.chart.symbol);
-                if (this.context.loader) {this.context.loader.hide();}
+                if (this.loader) {this.loader.hide();}
             },
         });
     }
