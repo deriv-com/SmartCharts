@@ -4,27 +4,33 @@ import { WarningIcon, CloseIcon, } from '../components/Icons.jsx';
 import '../../sass/_ciq-notification.scss';
 
 const Notification = ({
-    open,
-    setOpen,
-    text,
-    type, /* warning|info|error */
-}) => (
-    <div className={`cq-notification ${type} ${open ? 'open' : ''}`}>
-        <WarningIcon />
-        <div className='text'> {text} </div>
-        <CloseIcon
-            className='close-icon'
-            onClick={() => setOpen(false)}
-        />
-    </div>
-);
+    messages,
+    remove,
+}) => {
+    console.warn(messages);
+    return (
+        <div className='cq-notifications'>
+            {messages.map(({text, type, hide}, inx) => (
+                <div
+                    key={text}
+                    className={`notification ${type} ${hide ? 'hide' : ''}`}
+                >
+                    <WarningIcon />
+                    <div className='text'> {text} </div>
+                    <CloseIcon
+                        className='close-icon'
+                        onClick={() => remove(inx)}
+                    />
+                </div>
+            ))}
+        </div>
+    )
+}
 
 export default connect(
     ({notification: n}) => ({
-        open: n.open,
-        setOpen: n.setOpen,
-        text: n.text,
-        type: n.type
+        messages: n.messages.map(m => ({...m})),
+        remove: n.remove,
     })
 )(Notification);
 
