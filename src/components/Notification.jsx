@@ -6,26 +6,23 @@ import '../../sass/_ciq-notification.scss';
 const Notification = ({
     messages,
     remove,
-}) => {
-    console.warn(messages);
-    return (
-        <div className='cq-notifications'>
-            {messages.map(({text, type, hide}, inx) => (
-                <div
-                    key={text}
-                    className={`notification ${type} ${hide ? 'hide' : ''}`}
-                >
-                    <WarningIcon />
-                    <div className='text'> {text} </div>
-                    <CloseIcon
-                        className='close-icon'
-                        onClick={() => remove(inx)}
-                    />
-                </div>
-            ))}
-        </div>
-    )
-}
+}) => (
+    <div className='cq-notifications'>
+        {messages.map(({text, type, hide}, inx) => (
+            <div
+                key={text}
+                className={`notification ${type} ${hide ? 'hide' : ''}`}
+            >
+                <WarningIcon />
+                <div className='text'> {text} </div>
+                <CloseIcon
+                    className='close-icon'
+                    onClick={() => remove(inx)}
+                />
+            </div>
+        ))}
+    </div>
+);
 
 export default connect(
     ({notification: n}) => ({
