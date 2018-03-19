@@ -66,4 +66,8 @@ export default class TimeperiodStore {
         }
         return +this.interval ? this.interval : 1;
     }
+    @computed get display() {
+        const t = this.timeUnit ? this.timeUnit[0] : '';
+        return this.interval_display + t; // 1d, 1t, 5m, 2h
+    }
 }

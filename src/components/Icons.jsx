@@ -34,6 +34,8 @@ import Search from '../../sass/icons/search/ic-search-normal.svg';
 import Edit from '../../sass/icons/edit/ic-edit.svg';
 import IndicatorCategory from '../../sass/icons/sidebar/indicator/ic-indicator-normal.svg';
 import Arrow from '../../sass/icons/dropdown/ic-dropdown.svg';
+import Copy from '../../sass/icons/share/ic-copy.svg';
+import Share from '../../sass/icons/share/ic-share.svg';
 
 import SymbolPlaceholder from '../../sass/icons/placeholder/ic-placeholder.svg';
 import AUD from '../../sass/icons/flags/aud.svg';
@@ -89,6 +91,8 @@ export const SearchIcon = Wrapper(Search);
 export const EditIcon = Wrapper(Edit);
 export const ArrowIcon = Wrapper(Arrow);
 export const FavoriteIcon = Wrapper(Favorite);
+export const CopyIcon = Wrapper(Copy);
+export const ShareIcon = Wrapper(Share);
 
 export const SymbolPlaceholderIcon = Wrapper(SymbolPlaceholder);
 
