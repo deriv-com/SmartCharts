@@ -146,7 +146,7 @@ class ChartStore {
         const context = new Context(stxx, this.rootNode);
 
         context.changeSymbol = (data) => {
-            if (context.loader) {context.loader.show();}
+            this.loader.show();
 
             // reset comparisons
             for (const field in this.stxx.chart.series) {
@@ -156,7 +156,7 @@ class ChartStore {
             }
 
             this.stxx.newChart(data, null, null, (err) => {
-                if (context.loader) {context.loader.hide();}
+                this.loader.hide();
                 if (err) {
                     /* TODO, symbol not found error */
                     return;
@@ -186,7 +186,7 @@ class ChartStore {
             /* dialogBeforeAddingStudy: {"rsi": true} // here's how to always show a dialog before adding the study */
         };
 
-        if (context.loader) {context.loader.show();}
+        this.loader.show();
 
         this.restorePreferences();
         this.restoreLayout(stxx);
