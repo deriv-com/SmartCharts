@@ -19,7 +19,6 @@ export default class PriceLineStore {
         this.mainStore = mainStore;
         this._emitter = new EventEmitter();
         when(() => this.context, this.onContextReady);
-        window.pls = this;
     }
 
     onContextReady = () => {

@@ -20,7 +20,6 @@ export default class BarrierStore {
     static get BARRIER_CHANGED() { return 'BARRIER_CHANGED'; }
 
     static MARGIN_OFFSET = 13;
-    static MIN_DIFFERENCE_BETWEEN_BARRIERS = 0.01;
     _high_barrier;
     _low_barrier;
 
@@ -39,8 +38,6 @@ export default class BarrierStore {
         this._betweenShade = new ShadeStore('between-shade');
         this._belowShade = new ShadeStore('bottom-shade');
         this._emitter = new EventEmitter();
-
-        window.barrier = this;
     }
 
     get high_barrier() {
@@ -166,15 +163,15 @@ export default class BarrierStore {
             this._drawShadedArea();
         }
 
-        const showBarrier2 =
+        const showLowBarrier =
             this._shadeState === BarrierStore.SHADE_OUTSIDE
             || this._shadeState === BarrierStore.SHADE_BETWEEN
             || this._shadeState === BarrierStore.SHADE_NONE_DOUBLE;
 
-        const wasBarrier2Visible = this._low_barrier.visible;
-        this._low_barrier.visible = showBarrier2;
+        const wasLowBarrierVisible = this._low_barrier.visible;
+        this._low_barrier.visible = showLowBarrier;
 
-        if (showBarrier2 && !wasBarrier2Visible) {
+        if (showLowBarrier && !wasLowBarrierVisible) {
             if (this._low_barrier.realPrice >= this._high_barrier.realPrice) {
                 // fix position if _low_barrier above _high_barrier, since _low_barrier position is not updated when not visible
                 this._low_barrier.price = this._high_barrier.price - this.chart.yAxis.priceTick;

@@ -1,5 +1,4 @@
 import React from 'react';
-import RenderInsideChart from './RenderInsideChart.jsx';
 
 const Barrier = ({
     barrierColor,

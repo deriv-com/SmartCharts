@@ -27,12 +27,12 @@ chart.symbols = active_symbols; // You can set symbols later
 ```js
 const barrier = chart.barrier;
 
-barrier.barrierColor = Barrier.BARRIER_COLOR_RED;    // use either Barrier.BARRIER_COLOR_RED or Barrier.BARRIER_COLOR_GREEN
+barrier.barrierColor = BarrierStore.BARRIER_COLOR_RED;    // use either BarrierStore.BARRIER_COLOR_RED or BarrierStore.BARRIER_COLOR_GREEN
 barrier.visible = true;
 barrier.high_barrier = 9000;                   // set price of high barrier
 barrier.low_barrier = 8900;
 barrier.relative = true; // tweak absolute and relative barrier from here
-barrier.shadeState = Barrier.SHADE_BETWEEN; // use one of 6 presets in Barrier.SHADE_*
+barrier.shadeState = BarrierStore.SHADE_BETWEEN; // use one of 6 presets in BarrierStore.SHADE_*
 barrier.draggable = true;                   // choose whether user can interact with barriers
 
 barrier.onBarrierChanged(({high_barrier, low_barrier}) => {
