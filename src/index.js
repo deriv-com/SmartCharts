@@ -7,7 +7,6 @@ import Chart from './components/Chart.jsx';
 import ConnectionManager from './ConnectionManager';
 import StreamManager from './StreamManager';
 import {TradeEndLine, TradeStartLine} from './draw/DateLine';
-import Barrier from './draw/Barrier';
 import MainStore from './store';
 import {MobxProvider} from './store/Connect';
 
@@ -27,6 +26,10 @@ class BinaryChartiq {
     set symbols(symbols) {
         this.mainStore.chart.setSymbols(symbols);
         // this.render({ symbols: symbols });
+    }
+
+    get barrier() {
+        return this.mainStore.chart.barrier;
     }
 
     constructor({ selector, symbols }) {
@@ -54,11 +57,6 @@ class BinaryChartiq {
     addTradeEndLine() {
         const end = new TradeEndLine({ stx: this.getChartEngine() });
         return end;
-    }
-
-    addBarrier() {
-        const barrier = new Barrier({ stx: this.getChartEngine() });
-        return barrier;
     }
 
     render(props) {

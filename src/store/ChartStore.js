@@ -6,6 +6,8 @@ import PendingPromise from '../utils/PendingPromise';
 import Context from '../components/ui/Context';
 import React from 'react';
 import {stableSort} from './utils';
+import BarrierStore from './BarrierStore';
+import Barrier from '../components/Barrier.jsx';
 
 const connectionManager = new ConnectionManager({
     appId: 1,
@@ -42,6 +44,7 @@ class ChartStore {
     @observable currentActiveSymbol = defaultSymbol;
     @observable comparisonSymbols = [];
     @observable categorizedSymbols = [];
+    @observable barrierJSX;
 
     @action.bound setSymbols(symbols) {
         if (symbols && this.context) {
@@ -143,7 +146,7 @@ class ChartStore {
         const context = new Context(stxx, this.rootNode);
 
         context.changeSymbol = (data) => {
-            if (context.loader) {context.loader.show();}
+            this.loader.show();
 
             // reset comparisons
             for (const field in this.stxx.chart.series) {
@@ -153,7 +156,7 @@ class ChartStore {
             }
 
             this.stxx.newChart(data, null, null, (err) => {
-                if (context.loader) {context.loader.hide();}
+                this.loader.hide();
                 if (err) {
                     /* TODO, symbol not found error */
                     return;
@@ -183,7 +186,7 @@ class ChartStore {
             /* dialogBeforeAddingStudy: {"rsi": true} // here's how to always show a dialog before adding the study */
         };
 
-        if (context.loader) {context.loader.show();}
+        this.loader.show();
 
         this.restorePreferences();
         this.restoreLayout(stxx);
@@ -201,6 +204,9 @@ class ChartStore {
 
         // Optionally set a language for the UI, after it has been initialized, and translate.
         // CIQ.I18N.setLanguage(stxx, "zh");
+
+        this.barrier = new BarrierStore(this.mainStore);
+        this.barrierJSX = this.barrier.connect(Barrier);
     }
 
     @action.bound init(rootNode) {
@@ -284,7 +290,7 @@ class ChartStore {
         if (comparisons.length !== this.comparisonSymbols.length) {
             this.comparisonSymbols = comparisons;
         }
-    }
+    };
 
     processSymbols(symbols) {
         let processedSymbols = [];

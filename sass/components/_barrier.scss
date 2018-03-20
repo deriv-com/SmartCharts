@@ -1,41 +1,19 @@
 @charset "UTF-8";
 
-
-/* Images */
-
-.price-arrow,
-.price-arrow span,
-.price {
-    background: url(img/stx-sprite-trade.png) no-repeat;
-}
-
-@media (-webkit-min-device-pixel-ratio: 2),
-(min-resolution: 192dpi) {
-    .price-arrow,
-    .price-arrow span,
-    .price {
-        background-image: url(img/stx-sprite-trade@2x.png);
-        background-size: 80px 650px;
-    }
-}
-
-
-/*--------------------------------------------------*/
-
-
 /* Drag Lines and Prices */
 
+$red: #f44336;
+$green: #4caf50;
+
 .horizontal {
-    &.chart-line,
-    .drag-price,
-    .price,
-    .price-arrow {
+    &.chart-line {
         height: 23px;
     }
 }
 
 .chart-line {
     position: absolute;
+    z-index: 35;
 
     &.horizontal {
         width: 100%;
@@ -81,15 +59,6 @@
     }
 }
 
-.red .price-arrow {
-    background-position: 0 -360px;
-}
-
-.green .price-arrow {
-    background-position: 0 -390px;
-}
-
-
 /*hover*/
 
 .draggable.horizontal.chart-line:hover .drag-line {
@@ -97,48 +66,48 @@
 }
 
 .drag-price {
+    display: block;
+    background-color: #FFFFFF;
+    height: 25px;
+    border: 1px solid black;
+    border-radius: 5px;
+    top: -1px;
     position: absolute;
     right: 0px;
-    display: block;
-    width: auto;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    -o-user-select: none;
-}
-
-.price-arrow {
-    float: left;
-    position: relative;
-    width: 12px;
-    transition: width .2s;
+    .price {
+        padding-left: 12px;
+        padding-top: 1px;
+        padding-right: 12px;
+        font-size: 14px;
+        width: min-content;
+    }
 }
 
 .red {
-    .price-arrow {
-        background-position: 0 -360px;
+    .drag-price {
+        border-color: $red;
     }
 
     .price {
-        background-position: right -360px;
+        color: $red;
     }
 
     .drag-line {
-        color: #ff7862;
+        color: $red;
     }
 }
 
 .green {
-    .price-arrow {
-        background-position: 0 -390px;
+    .drag-price {
+        border-color: $green;
     }
 
     .price {
-        background-position: right -390px;
+        color: $green;
     }
 
     .drag-line {
-        color: #8cc176;
+        color: $green;
     }
 }
 
@@ -187,7 +156,23 @@
     position: absolute;
     width: 100%;
     right: 0px;
+    opacity: 0.3;
 }
+
+.between-shade {
+    opacity: 0.2;
+}
+
+@mixin createShadeStyle($style-name, $shade-color) {
+    .#{$style-name} {
+        .top-shade     { background-image: linear-gradient(to bottom, transparent 30%, $shade-color); }
+        .between-shade { background-color: $shade-color; }
+        .bottom-shade  { background-image: linear-gradient(to bottom, $shade-color, transparent 70%) }
+    }
+}
+
+@include createShadeStyle('red', $red);
+@include createShadeStyle('green', $green);
 
 $trade-end-color: #e98024;
 $trade-start-color: #a2a2a2;
@@ -230,7 +215,7 @@ $trade-text-distance: 1.6em;
 
             .ic-flag {
                 $icon-diameter: 1.9em;
-                background: url(img/ic-flag.svg) no-repeat;
+                background: url('icons/chart/ic-flag.svg') no-repeat;
                 height: $icon-diameter;
                 width: $icon-diameter;
                 position: inherit;

@@ -23,6 +23,7 @@ import ChartControls from './ChartControls.jsx';
 import SettingsDialog from './SettingsDialog.jsx';
 import Notification from './Notification.jsx';
 import Crosshair from './Crosshair.jsx';
+
 import { MobxProvider, connect } from '../store/Connect';
 
 class Chart extends Component {
@@ -37,12 +38,13 @@ class Chart extends Component {
     }
 
     render() {
-        const { DrawToolsSettingsDialog, StudySettingsDialog } = this.props;
+        const { DrawToolsSettingsDialog, StudySettingsDialog, Barrier } = this.props;
         return (
             <cq-context ref={(root) => { this.root = root; }}>
                 <div className="ciq-chart-area">
                     <div className="ciq-chart">
                         <div className='beta-version'>Beta Version</div>
+                        {Barrier && <RenderInsideChart><Barrier/></RenderInsideChart>}
                         <RenderInsideChart>
                             <div className="cq-top-ui-widgets">
                                 <ChartTitle />
@@ -68,6 +70,7 @@ export default connect(
     ({chart, drawTools, studies}) => ({
         contextPromise: chart.contextPromise,
         init: chart.init,
+        Barrier: chart.barrierJSX,
         StudySettingsDialog : studies.settingsDialog.connect(SettingsDialog),
         DrawToolsSettingsDialog : drawTools.settingsDialog.connect(SettingsDialog),
     })
