@@ -1,4 +1,8 @@
 @charset "UTF-8";
+
+$chart-green: #4caf50;
+$chart-red: #f95454;
+
 /* CSS Document */
 
 html, body {
@@ -358,12 +362,12 @@ html, body {
 /* -------- Current Price label (Floating last price on y-axis)-------- */
 
 .stx_current_hr_up { /* 'Up' color for current chart value */
-    background-color: #4caf50;
+    background-color: $chart-green;
     color: #fff;
 }
 
 .stx_current_hr_down { /* 'Down' color for current chart value */
-    background-color: #f95454;
+    background-color: $chart-red;
     color: #fff;
 }
 
@@ -500,11 +504,11 @@ html, body {
 }
 
 .stx_bar_down { /* Down Bar color */
-    color: #f95454;
+    color: $chart-red;
 }
 
 .stx_bar_up { /* Up Bar color */
-    color: #4caf50;
+    color: $chart-green;
 }
 
 .stx_baseline_delta_mountain { /* Default color for baseline delta mountain Charts */
@@ -530,12 +534,12 @@ html, body {
 /*.stx_mountain_chart.color {width:24px;}*/
 
 .stx_histogram_down { /* Down Bar color */
-    color: #f95454;
+    color: $chart-red;
     border-left-color: #000000;
 }
 
 .stx_histogram_up { /* Up Bar color */
-    color: #4caf50;
+    color: $chart-green;
     border-left-color: #000000;
 }
 
@@ -555,29 +559,29 @@ html, body {
 
 /******* Optionally use .stx_candle_shadow_up and .stx_candle_shadow_down to change shadow/wick color for up/down candles
  .stx_candle_shadow_up {
-	color:#4caf50;
+	color:$chart-green;
 }
 .stx_candle_shadow_down {
-	color:#f95454;
+	color:$chart-red;
 }
 ********/
 
 .stx_candle_down, .stx_line_down { /* Down Candle color */
-    color: #f95454;
+    color: $chart-red;
     border-left-color: transparent;
 }
 
 .stx_candle_up, .stx_line_up { /* Up Candle color */
-    color: #4caf50;
+    color: $chart-green;
     border-left-color: transparent;
 }
 
 .stx_hollow_candle_down {
-    color: #f95454;
+    color: $chart-red;
 }
 
 .stx_hollow_candle_up {
-    color: #4caf50;
+    color: $chart-green;
 }
 
 .stx_hollow_candle_even {
@@ -621,12 +625,12 @@ html, body {
 }
 
 .stx_volume_up { /* Up Volume color */
-    color: #4caf50; /* legacy only. Use study library output "Up Volume" instead */
+    color: $chart-green; /* legacy only. Use study library output "Up Volume" instead */
     border: #000000;
 }
 
 .stx_volume_down { /* Down volume color */
-    color: #f95454; /* legacy only. Use study library output "Down Volume" instead */
+    color: $chart-red; /* legacy only. Use study library output "Down Volume" instead */
     border: #000000;
 }
 
