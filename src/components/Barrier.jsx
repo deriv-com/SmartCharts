@@ -3,7 +3,7 @@ import RenderInsideChart from './RenderInsideChart.jsx';
 
 const Barrier = ({
     barrierColor,
-    isVisible,
+    visible,
     HighPriceLine,
     LowPriceLine,
     TopShade,
@@ -13,7 +13,7 @@ const Barrier = ({
     return (
         <div
             className={`barrier ${barrierColor}`}
-            style={{display: isVisible ? undefined : 'none'}}
+            style={{display: visible ? undefined : 'none'}}
         >
             <HighPriceLine />
             <LowPriceLine />

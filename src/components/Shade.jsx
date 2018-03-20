@@ -4,13 +4,13 @@ const Shade = ({
     isActive,
     top,
     bottom,
-    isVisible,
+    visible,
     className,
 }) => (
     <div
         className={`shade ${isActive ? 'show' : ''} ${className || ''}`}
         style={{top, bottom}}
-        hidden={isVisible ? undefined : 'true'}
+        hidden={visible ? undefined : 'true'}
     />
 );
 

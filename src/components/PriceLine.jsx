@@ -9,11 +9,11 @@ class PriceLine extends Component {
         const {
             top,
             className,
-            isDraggable,
+            draggable,
             isDragging,
             priceDisplay,
             setDragLine,
-            isVisible,
+            visible,
             zIndex,
             uncentered,
             offScreen,
@@ -21,10 +21,10 @@ class PriceLine extends Component {
 
         return (
             <div
-                className={`chart-line horizontal ${isDraggable ? 'draggable' : ''} ${isDragging ? 'dragging' : ''} ${className || ''}`}
+                className={`chart-line horizontal ${draggable ? 'draggable' : ''} ${isDragging ? 'dragging' : ''} ${className || ''}`}
                 style={{top, zIndex}}
                 ref={setDragLine}
-                hidden={isVisible ? undefined : 'true'}
+                hidden={visible ? undefined : 'true'}
                 uncentered={uncentered ? 'true' : undefined}
                 off-screen={offScreen ? 'true' : undefined}
             >

@@ -25,16 +25,10 @@ chart.symbols = active_symbols; // You can set symbols later
 
 ### Barrier Class
 ```js
-const barrier = new Barrier({
-    stx       : stx,                        // chart instance
-    shadeState: Barrier.SHADE_BELOW,        // optional
-    shadeColor: 'rgba(140, 193, 118, 0.3)', // optional
-    visible   : false,                      // optional, defaults to true   
-});
+const barrier = chart.barrier;
 
-barrier.lineColor = Barrier.LINE_COLOR_RED;    // use either Barrier.LINE_COLOR_RED or Barrier.LINE_COLOR_GREEN
-barrier.visible = true;                        // show/hide barrier
-barrier.lineColor = Barrier.LINE_COLOR_GREEN;  // change line color
+barrier.barrierColor = Barrier.BARRIER_COLOR_RED;    // use either Barrier.BARRIER_COLOR_RED or Barrier.BARRIER_COLOR_GREEN
+barrier.visible = true;
 barrier.high_barrier = 9000;                   // set price of high barrier
 barrier.low_barrier = 8900;
 barrier.relative = true; // tweak absolute and relative barrier from here

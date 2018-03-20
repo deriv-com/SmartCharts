@@ -4,9 +4,9 @@ import EventEmitter from 'event-emitter-es6';
 
 export default class PriceLineStore {
     _relative = false;
-    @observable isDraggable = true;
+    @observable draggable = true;
     @observable isDragging = false;
-    @observable isVisible = true;
+    @observable visible = true;
     @observable top = 0;
     @observable _price = 0;
     @observable zIndex;
@@ -28,7 +28,7 @@ export default class PriceLineStore {
 
     init = () => {
         const exitIfNotisDraggable = (e, callback) => {
-            if (this.isVisible && this.isDraggable) {callback.call(this, e);}
+            if (this.visible && this.draggable) {callback.call(this, e);}
         };
         CIQ.safeDrag(
             this._line,
@@ -176,7 +176,7 @@ export default class PriceLineStore {
     }
 
     _draw() {
-        if (this.isVisible) {
+        if (this.visible) {
             this._positionAtPrice(this.realPrice);
         }
     }
@@ -187,10 +187,10 @@ export default class PriceLineStore {
 
     connect = connect(() => ({
         priceDisplay: this.priceDisplay,
-        isVisible: this.isVisible,
+        visible: this.visible,
         setDragLine: this.setDragLine,
         className: this.className,
-        isDraggable: this.isDraggable,
+        draggable: this.draggable,
         isDragging: this.isDragging,
         init: this.init,
         zIndex: this.zIndex,

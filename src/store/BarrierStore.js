@@ -7,8 +7,8 @@ import ShadeStore from './ShadeStore';
 import Shade from '../components/Shade.jsx';
 
 export default class BarrierStore {
-    static get LINE_COLOR_RED() { return 'red'; }
-    static get LINE_COLOR_GREEN() { return 'green'; }
+    static get BARRIER_COLOR_RED() { return 'red'; }
+    static get BARRIER_COLOR_GREEN() { return 'green'; }
 
     static get SHADE_NONE_SINGLE() { return 'SHADE_NONE_SINGLE'; }
     static get SHADE_NONE_DOUBLE() { return 'SHADE_NONE_DOUBLE'; }
@@ -23,7 +23,7 @@ export default class BarrierStore {
     static MIN_DIFFERENCE_BETWEEN_BARRIERS = 0.01;
 
     @observable _visible = false;
-    @observable barrierColor = BarrierStore.LINE_COLOR_RED;
+    @observable barrierColor = BarrierStore.BARRIER_COLOR_RED;
     @observable isBetweenShadeVisible = false;
     @observable isTopShadeVisible = false;
     @observable isBottomShadeVisible = false;
@@ -60,7 +60,7 @@ export default class BarrierStore {
     _setupConstrainBarrierPrices() {
         // barrier 1 cannot go below barrier 2
         this._barrier1.priceConstrainer = (newPrice) => {
-            if (this._barrier2.isVisible) {
+            if (this._barrier2.visible) {
                 if (newPrice < this._barrier2.realPrice) {
                     return this._barrier1.realPrice;
                 }
@@ -109,19 +109,19 @@ export default class BarrierStore {
 
         if (visible) {
             this.shadeState = this.shadeState; // restore barrier state
-            this._barrier1.isVisible = true;
+            this._barrier1.visible = true;
         } else {
             // Also disable visibility of barriers to turn off draw updates
-            this._barrier1.isVisible = false;
-            this._barrier2.isVisible = false;
+            this._barrier1.visible = false;
+            this._barrier2.visible = false;
         }
 
         this._visible = visible;
     }
 
     _onPriceChanged() {
-        const high_barrier = this._barrier1.isVisible ? this._barrier1.price : undefined;
-        const low_barrier = this._barrier2.isVisible ? this._barrier2.price : undefined;
+        const high_barrier = this._barrier1.visible ? this._barrier1.price : undefined;
+        const low_barrier = this._barrier2.visible ? this._barrier2.price : undefined;
 
         this._emitter.emit(BarrierStore.BARRIER_CHANGED, { high_barrier, low_barrier });
 
@@ -144,9 +144,9 @@ export default class BarrierStore {
             || this._shadeState === BarrierStore.SHADE_NONE_DOUBLE;
 
         if (noShade) {
-            this._aboveShade.isVisible = false;
-            this._betweenShade.isVisible = false;
-            this._belowShade.isVisible = false;
+            this._aboveShade.visible = false;
+            this._betweenShade.visible = false;
+            this._belowShade.visible = false;
         } else {
             const aboveShadeEnable =
                 this._shadeState === BarrierStore.SHADE_ABOVE
@@ -157,9 +157,9 @@ export default class BarrierStore {
             const betweenShadeEnable =
                 this._shadeState === BarrierStore.SHADE_BETWEEN;
 
-            this._aboveShade.isVisible = aboveShadeEnable;
-            this._betweenShade.isVisible = betweenShadeEnable;
-            this._belowShade.isVisible = belowShadeEnable;
+            this._aboveShade.visible = aboveShadeEnable;
+            this._betweenShade.visible = betweenShadeEnable;
+            this._belowShade.visible = belowShadeEnable;
 
             this._drawShadedArea();
         }
@@ -169,12 +169,12 @@ export default class BarrierStore {
             || this._shadeState === BarrierStore.SHADE_BETWEEN
             || this._shadeState === BarrierStore.SHADE_NONE_DOUBLE;
 
-        const wasBarrier2Visible = this._barrier2.isVisible;
-        this._barrier2.isVisible = showBarrier2;
+        const wasBarrier2Visible = this._barrier2.visible;
+        this._barrier2.visible = showBarrier2;
 
         if (showBarrier2 && !wasBarrier2Visible) {
             if (this._barrier2.realPrice >= this._barrier1.realPrice) {
-                // fix position if _barrier2 above _barrier1, since _barrier2 position is not updated when not isVisible
+                // fix position if _barrier2 above _barrier1, since _barrier2 position is not updated when not visible
                 this._barrier2.price = this._barrier1.price - this.chart.yAxis.priceTick;
             }
         }
@@ -187,6 +187,15 @@ export default class BarrierStore {
     set relative(value) {
         this._barrier1.relative = value;
         this._barrier2.relative = value;
+    }
+
+    get draggable() {
+        return this._barrier1.draggable;
+    }
+
+    set draggable(value) {
+        this._barrier1.draggable = value;
+        this._barrier2.draggable = value;
     }
 
     _drawShadedArea() {
@@ -202,7 +211,7 @@ export default class BarrierStore {
             this._shadeOutside();
         }
 
-        if (this._barrier2.isVisible && this._isBarriersOffScreen()) {
+        if (this._barrier2.visible && this._isBarriersOffScreen()) {
             const order = (this._barrier1.top === 0) ? null : 101;
             this._barrier1.zIndex = order;
         }
@@ -250,7 +259,7 @@ export default class BarrierStore {
         TopShade: this._aboveShade.connect(Shade),
         BetweenShade: this._betweenShade.connect(Shade),
         BottomShade: this._belowShade.connect(Shade),
-        isVisible: this._visible,
+        visible: this._visible,
         barrierColor: this.barrierColor
     }));
 }

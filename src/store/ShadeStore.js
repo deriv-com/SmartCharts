@@ -4,7 +4,7 @@ import { connect } from './Connect';
 export default class ShadeStore {
     @observable top = 0;
     @observable bottom = 0;
-    @observable isVisible = false;
+    @observable visible = false;
     @observable className;
 
     constructor(shadeName) {
@@ -14,7 +14,7 @@ export default class ShadeStore {
     connect = connect(() => ({
         top: this.top,
         bottom: this.bottom,
-        isVisible: this.isVisible,
+        visible: this.visible,
         className: this.className,
     }));
 }
