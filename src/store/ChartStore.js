@@ -221,7 +221,7 @@ class ChartStore {
         CIQ.Animation(stxx, { stayPut: true });
 
         // connect chart to data
-        stxx.attachQuoteFeed(new Feed(streamManager, stxx), {
+        stxx.attachQuoteFeed(new Feed(streamManager, stxx, this.mainStore), {
             refreshInterval: null,
         });
 
