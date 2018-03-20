@@ -5,6 +5,7 @@ import { MobxProvider } from '../store/Connect';
 import PropTypes from 'prop-types';
 
 // Render given Components under stx-holder to position it relative to the active symbol chart.
+// NOTE: Do NOT place this component as root; props will not update properly.
 class RenderInsideChart extends PureComponent {
     static contextTypes = { promise: PropTypes.object, mobxStores: PropTypes.object };
 
