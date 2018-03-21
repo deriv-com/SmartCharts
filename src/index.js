@@ -2,7 +2,6 @@
 import $ from 'jquery';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import * as html2canvas from 'html2canvas';
 import Chart from './components/Chart.jsx';
 import ConnectionManager from './ConnectionManager';
 import StreamManager from './StreamManager';
@@ -10,9 +9,6 @@ import {TradeEndLine, TradeStartLine} from './draw/DateLine';
 import Barrier from './draw/Barrier';
 import MainStore from './store';
 import {MobxProvider} from './store/Connect';
-
-// chartiq accesses html2canvas from global scope
-window.html2canvas = html2canvas;
 
 class BinaryChartiq {
     static addNewChart(params) {
