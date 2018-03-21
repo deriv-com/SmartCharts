@@ -11,8 +11,8 @@ $DARK-text:					#fff;
 }
 .ciq-phone .#{$DARK} {background:$DARK-main;}
 
-cq-loader, cq-comparison-loader {
-	.#{$DARK} & {background-image:url(img/loading-spin-white.svg);}
+cq-loader, .cq-comparison-loader {
+	.#{$DARK} & {background-image:url('icons/loading/loading-spin-white.svg');}
 }
 
 .ciq-color, .stx-border-color {/* Swatch / Open Palette Button */
@@ -564,3 +564,21 @@ cq-share-button {
 .#{$DARK} cq-study-legend[cq-hovershow] > cq-item:hover {
 	background:lighten( $DARK-main, 3% );
 }
+
+.rightclick_study .overlayEdit {
+	&.stx-btn span {
+		.#{$DARK} & {
+			background-color: $DARK-main;
+			background-position: -301px -52px;
+		}
+	}
+}
+.rightclick_study #overlayTrashCan {
+	&.stx-btn span {
+		.#{$DARK} & {
+			background-color: $DARK-main;
+			background-position: -250px -52px;
+		}
+	}
+}
+
