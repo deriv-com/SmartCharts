@@ -206,12 +206,18 @@
     .ic-frxXAGUSD > svg > g > g > g > path:first-child {
         fill: #E1E1E1;
     }
+    .ic-icon, .ic-frx {
+        height: 32px;
+        width: 32px;
+    }
     .ic-icon {
         display: inline-block;
         margin-right: 15px;
+        > svg {
+            vertical-align: sub;
+        }
     }
     .ic-frx {
         margin-right: 10px;
-        margin-top: 2px;
     }
 }
