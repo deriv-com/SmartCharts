@@ -13,6 +13,7 @@ import Draw from '../../sass/icons/chart settings/drawing tools/ic-drawingtools-
 import HollowCandle from '../../sass/icons/chart settings/chart types/hollow candle/ic-hollowcandle-normal.svg';
 import Indicator from '../../sass/icons/chart settings/indicators/ic-indicator-normal.svg';
 import Line from '../../sass/icons/chart settings/chart types/line/ic-line-normal.svg';
+import BaseLine from '../../sass/icons/chart settings/chart types/baseline/ic-baseline-normal.svg';
 import List from '../../sass/icons/template-list/ic-templatelist.svg';
 import Measure from '../../sass/icons/measure/ic-measure.svg';
 import Minus from '../../sass/icons/chart settings/zoom-out/ic-zoomout-light.svg';
@@ -149,6 +150,7 @@ export const DrawIcon = Wrapper(Draw);
 export const HollowCandleIcon = Wrapper(HollowCandle);
 export const IndicatorIcon = Wrapper(Indicator);
 export const LineIcon = Wrapper(Line);
+export const BaseLineIcon = Wrapper(BaseLine);
 export const ListIcon = Wrapper(List);
 export const MeasureIcon = Wrapper(Measure);
 export const MinusIcon = Wrapper(Minus);

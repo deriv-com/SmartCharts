@@ -154,15 +154,25 @@
         padding: 0.2em 1.2em;
     }
 
+
+}
+
+.stxMenuActive .cq-categorical-display {
+    opacity: 1;
+    height: auto;
+}
+
+/* Active Symbol Icons */
+.cq-categorical-display .results-panel {
     /* Active Options */
     .cq-active-options {
         float: right;
         display: inline-flex;
-        > span {
+        > span, .ic-icon {
             height:24px;
             width: 24px;
-            margin-left: 2px;
         }
+
         .ic-delete, .ic-edit {
             cursor: pointer;
         }
@@ -176,20 +186,12 @@
             position: relative;
         }
     }
-}
-
-.stxMenuActive .cq-categorical-display {
-    opacity: 1;
-    height: auto;
-}
-
-/* Active Symbol Icons */
-.cq-categorical-display .results-panel {
     .ciq-favorite {
         float: right;
         > .ic-icon {
             margin-right: 0;
-
+            width: 24px;
+            height: 24px;
         }
         &.ciq-active-favorite {
             svg > g > g > path {
