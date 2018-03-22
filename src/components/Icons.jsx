@@ -111,10 +111,7 @@ import ProcterAndGamble from '../../sass/icons/active-symbols/otc stocks/ic-proc
 /* Energy */
 import OilUSD from '../../sass/icons/active-symbols/energy/oil usd/ic-oilusd.svg';
 /* Metals */
-import GoldUSD from '../../sass/icons/active-symbols/metals/gold usd/ic-auusd.svg';
-import PalladiumUSD from '../../sass/icons/active-symbols/metals/palladium usd/ic-pdusd.svg';
-import PlatinumUSD from '../../sass/icons/active-symbols/metals/platinum usd/ic-ptusd.svg';
-import SilverUSD from '../../sass/icons/active-symbols/metals/silver usd/ic-agusd.svg';
+import Metal from '../../sass/icons/active-symbols/metals/ic-metal.svg';
 
 /* Volatility Indices */
 import Vol10 from '../../sass/icons/active-symbols/volatility/10 index/ic-10index.svg';
@@ -167,6 +164,7 @@ export const ArrowIcon = Wrapper(Arrow);
 export const FavoriteIcon = Wrapper(Favorite);
 export const CopyIcon = Wrapper(Copy);
 export const ShareIcon = Wrapper(Share);
+export const MetalIcon = Wrapper(Metal);
 
 export const SymbolPlaceholderIcon = Wrapper(SymbolPlaceholder);
 
@@ -270,10 +268,10 @@ export const ItemIconMap = {
     USPG:     Wrapper(ProcterAndGamble),
     /* Commodities */
     frxBROUSD: Wrapper(OilUSD),
-    frxXAUUSD: Wrapper(GoldUSD),
-    frxXPDUSD: Wrapper(PalladiumUSD),
-    frxXPTUSD: Wrapper(PlatinumUSD),
-    frxXAGUSD: Wrapper(SilverUSD),
+    frxXAUUSD: MetalIcon,
+    frxXPDUSD: MetalIcon,
+    frxXPTUSD: MetalIcon,
+    frxXAGUSD: MetalIcon,
     /* Volatility Indices */
     R_10:   Wrapper(Vol10),
     R_25:   Wrapper(Vol25),
@@ -288,9 +286,9 @@ function frx(a, b) {
     const A = FlagIconMap[a];
     const B = FlagIconMap[b];
     ItemIconMap[`frx${a}${b}`] = props => {
-        const className = `ic-frx ic-frx${a}${b}`;
+        const { className, ...p } = props;
         return (
-            <span className={className} {...props}><A/><B/></span>
+            <span className={`ic-frx ${className}`} {...p}><A/><B/></span>
         );
     };
 }

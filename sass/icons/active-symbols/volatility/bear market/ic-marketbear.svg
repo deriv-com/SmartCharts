@@ -4,18 +4,18 @@
     <title>icons/underlying assets/volatility/bear market/ic-marketbear</title>
     <desc>Created with Sketch.</desc>
     <defs>
-        <circle id="path-1" cx="10" cy="10" r="10"></circle>
-        <circle id="path-3" cx="10" cy="10" r="10"></circle>
+        <circle id="bearmarket-path-1" cx="10" cy="10" r="10"></circle>
+        <circle id="bearmarket-path-3" cx="10" cy="10" r="10"></circle>
     </defs>
     <g id="icons/underlying-assets/volatility/bear-market/ic-marketbear" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
         <g id="Group" transform="translate(6.000000, 6.000000)">
             <mask id="mask-2" fill="white">
-                <use xlink:href="#path-1"></use>
+                <use xlink:href="#bearmarket-path-1"></use>
             </mask>
-            <use id="Oval" fill="#D20000" xlink:href="#path-1"></use>
+            <use id="Oval" fill="#D20000" xlink:href="#bearmarket-path-1"></use>
             <path d="M9.71763355,4.29600586 C10.428897,4.22628178 10.9626777,4.16900979 11.3189757,4.12418989 C11.7126026,4.3270536 11.9244168,4.6844746 11.9544184,5.19645289 C14.0918604,7.25437942 15.1605814,8.79469808 15.1605814,9.81740886 C16.1929653,10.6075018 17.147827,11.4406599 18.0251665,12.316883 C18.1516655,12.443224 18.1588318,12.6446252 18.0416246,12.7794668 C17.4445537,13.4663698 16.8326651,13.8098214 16.2059588,13.8098214 C16.2364905,13.9788301 16.2398972,14.1305076 16.2161789,14.2648539 C16.1851711,14.4404733 15.7992768,14.6665447 15.6200697,14.6492972 C14.2665111,14.5190256 13.1558021,14.1169525 11.8409195,13.6505447 C8.04022829,13.1766665 5.14432361,14.3339722 4.81480145,16.7468159 C4.59512001,18.3553784 4.59512001,20.6897731 4.81480145,23.75 C0.932492622,16.2544907 -0.871754815,10.5479771 -0.597940856,6.63045933 C-0.324126897,2.71294152 1.52696728,1.58208941 4.95534168,3.23790301 C6.04294875,3.70032642 6.87578024,3.99575538 7.45383618,4.12418989 C8.03189211,4.2526244 8.78649123,4.30989639 9.71763355,4.29600586 Z" id="Path-3-Copy" fill="#FFFFFF" mask="url(#mask-2)"></path>
             <mask id="mask-4" fill="white">
-                <use xlink:href="#path-3"></use>
+                <use xlink:href="#bearmarket-path-3"></use>
             </mask>
             <circle stroke="#D20000" stroke-width="1.25" cx="10" cy="10" r="9.375"></circle>
         </g>

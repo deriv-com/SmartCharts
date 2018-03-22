@@ -23,7 +23,7 @@ const CategoricalDisplay = ({
     const renderIcon = (item) => {
         if (!item.itemId) {return '';}
         const ItemIcon = ItemIconMap[item.itemId] || SymbolPlaceholderIcon;
-        return <ItemIcon />;
+        return <ItemIcon className={`ic-${item.itemId}`}/>;
     };
     const renderText = (item) => <span className="ciq-item-display">{item.display}</span>;
     const renderFavorite = (item) => {
