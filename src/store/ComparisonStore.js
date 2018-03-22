@@ -2,6 +2,7 @@ import { observable, action, computed } from 'mobx';
 import MenuStore from './MenuStore';
 import CategoricalDisplayStore from './CategoricalDisplayStore';
 import React from 'react';
+import i18n, { i18nConfig }  from 'es2015-i18n-tag';
 
 const swatchColors = [
     '#8ec648', '#00afed', '#ee652e', '#912a8e',
@@ -9,6 +10,14 @@ const swatchColors = [
     '#00a99c', '#0056a4', '#f4932f', '#0073ba',
     '#66308f', '#323390',
 ];
+
+i18nConfig({
+    locales: 'de-DE',
+    translations: {
+        "There are no active comparisons yet.": "Tak ada komparisons la.",
+        "Active": "Tak Aktif la",
+    },
+});
 
 export default class ComparisonStore {
     constructor(mainStore) {
@@ -42,11 +51,13 @@ export default class ComparisonStore {
                 dataObject: symbol
             });
         }
+        const amount = 50;
+        console.log(i18n.translate('Total: ${0}', { value: amount, formatter: 'd', format: 2}));
         return {
-            categoryName: 'Active',
+            categoryName: i18n.translate('Active'),
             categoryId: 'active',
             hasSubcategory: false,
-            emptyDescription: 'There are no active comparisons yet.',
+            emptyDescription: i18n.translate('There are no active comparisons yet.'),
             data: result
         };
     }

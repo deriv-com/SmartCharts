@@ -55,6 +55,15 @@ const config = {
             },
             {
                 test: /\.(js|jsx)$/,
+                loader: './custom_loader/textExtractor',
+                exclude: /node_modules/,
+                options: {
+                    output: path.resolve(__dirname, 'translation'),
+                    method_names: ['translate']
+                },
+            },
+            {
+                test: /\.(js|jsx)$/,
                 // exclude: /node_modules/,
                 loader: 'babel-loader',
             },
