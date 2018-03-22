@@ -50,6 +50,17 @@ import NZD from '../../sass/icons/flags/nzd.svg';
 import PLN from '../../sass/icons/flags/pln.svg';
 import SEK from '../../sass/icons/flags/sek.svg';
 import USD from '../../sass/icons/flags/usd.svg';
+import Belgium from '../../sass/icons/flags/belgium.svg';
+import HongKong from '../../sass/icons/flags/hong kong.svg';
+import Singapore from '../../sass/icons/flags/singapore.svg';
+import Bombay from '../../sass/icons/flags/bombay.svg';
+import Jakarta from '../../sass/icons/flags/jakarta.svg';
+import German from '../../sass/icons/flags/german.svg';
+import Dubai from '../../sass/icons/flags/dubai.svg';
+import Ireland from '../../sass/icons/flags/ireland.svg';
+import French from '../../sass/icons/flags/french.svg';
+import Dutch from '../../sass/icons/flags/dutch.svg';
+import SouthAfrica from '../../sass/icons/flags/south africa.svg';
 
 const Wrapper = WrappedComponent => props => {
     let { className, ['tooltip-title']: tooltip, ...p } = props;
@@ -108,21 +119,49 @@ export const CategoryIconMap = {
 };
 
 const FlagIconMap = {
-    aud: Wrapper(AUD),
-    cad: Wrapper(CAD),
-    chf: Wrapper(CHF),
-    eur: Wrapper(EUR),
-    gbp: Wrapper(GBP),
-    jpy: Wrapper(JPY),
-    mxn: Wrapper(MXN),
-    nok: Wrapper(NOK),
-    nzd: Wrapper(NZD),
-    pln: Wrapper(PLN),
-    sek: Wrapper(SEK),
-    usd: Wrapper(USD),
+    AUD: Wrapper(AUD),
+    CAD: Wrapper(CAD),
+    CHF: Wrapper(CHF),
+    EUR: Wrapper(EUR),
+    GBP: Wrapper(GBP),
+    JPY: Wrapper(JPY),
+    MXN: Wrapper(MXN),
+    NOK: Wrapper(NOK),
+    NZD: Wrapper(NZD),
+    PLN: Wrapper(PLN),
+    SEK: Wrapper(SEK),
+    USD: Wrapper(USD),
+    BOMBAY: Wrapper(Bombay),
+    Dubai: Wrapper(Dubai),
+    HongKong: Wrapper(HongKong),
+    Jakarta: Wrapper(Jakarta),
+    Singapore: Wrapper(Singapore),
+    Belgium: Wrapper(Belgium),
+    Dutch: Wrapper(Dutch),
+    German: Wrapper(German),
+    French: Wrapper(French),
+    Ireland: Wrapper(Ireland),
+    SouthAfrica: Wrapper(SouthAfrica),
 };
 
-export const ItemIconMap = {};
+export const ItemIconMap = {
+    SPC: FlagIconMap.USD,
+    AS51: FlagIconMap.AUD,
+    BSESENSEX30: FlagIconMap.BOMBAY,
+    HSI: FlagIconMap.HongKong,
+    JCI: FlagIconMap.Jakarta,
+    STI: FlagIconMap.Singapore,
+    N225: FlagIconMap.JPY,
+    BFX: FlagIconMap.Belgium,
+    AEX: FlagIconMap.Dutch,
+    DFMGI: FlagIconMap.Dubai,
+    FCHI: FlagIconMap.French,
+    OBX: FlagIconMap.NOK,
+    SSMI: FlagIconMap.CHF,
+    GDAXI: FlagIconMap.German,
+    ISEQ: FlagIconMap.Ireland,
+    TOP40: FlagIconMap.SouthAfrica,
+};
 
 function frx(a, b) {
     const A = FlagIconMap[a];
@@ -135,49 +174,39 @@ function frx(a, b) {
     };
 }
 
-function wld(a) {
-    ItemIconMap[`wld${a}`] = FlagIconMap[a];
-}
-
 /* FOREX */
 /* Major Pairs */
-frx('aud', 'jpy');
-frx('aud', 'usd');
-frx('eur', 'aud');
-frx('eur', 'chf');
-frx('eur', 'jpy');
-frx('eur', 'cad');
-frx('eur', 'gbp');
-frx('eur', 'usd');
-frx('gbp', 'aud');
-frx('gbp', 'jpy');
-frx('gbp', 'usd');
-frx('usd', 'cad');
-frx('usd', 'chf');
-frx('usd', 'jpy');
+frx('AUD', 'JPY');
+frx('AUD', 'USD');
+frx('EUR', 'AUD');
+frx('EUR', 'CHF');
+frx('EUR', 'JPY');
+frx('EUR', 'CAD');
+frx('EUR', 'GBP');
+frx('EUR', 'USD');
+frx('GBP', 'AUD');
+frx('GBP', 'JPY');
+frx('GBP', 'USD');
+frx('USD', 'CAD');
+frx('USD', 'CHF');
+frx('USD', 'JPY');
 /* Minor Pairs */
-frx('aud', 'cad');
-frx('aud', 'chf');
-frx('aud', 'nzd');
-frx('aud', 'pln');
-frx('eur', 'nzd');
-frx('gbp', 'cad');
-frx('gbp', 'chf');
-frx('gbp', 'nok');
-frx('gbp', 'nzd');
-frx('gbp', 'pln');
-frx('nzd', 'jpy');
-frx('nzd', 'usd');
-frx('usd', 'mxn');
-frx('usd', 'nok');
-frx('usd', 'pln');
-frx('usd', 'sek');
-
-/* Smart FX */
-wld('aud');
-wld('eur');
-wld('gbp');
-wld('usd');
+frx('AUD', 'CAD');
+frx('AUD', 'CHF');
+frx('AUD', 'NZD');
+frx('AUD', 'PLN');
+frx('EUR', 'NZD');
+frx('GBP', 'CAD');
+frx('GBP', 'CHF');
+frx('GBP', 'NOK');
+frx('GBP', 'NZD');
+frx('GBP', 'PLN');
+frx('NZD', 'JPY');
+frx('NZD', 'USD');
+frx('USD', 'MXN');
+frx('USD', 'NOK');
+frx('USD', 'PLN');
+frx('USD', 'SEK');
 
 export const ActiveOptionsIconMap = {
     delete: DeleteIcon,

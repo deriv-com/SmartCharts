@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="24px" height="16px" viewBox="0 0 24 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 49.1 (51147) - http://www.bohemiancoding.com/sketch -->
+    <title>icons/flags/bombay</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <rect id="path-1" x="0" y="0" width="24" height="16" rx="2"></rect>
+        <circle id="path-3" cx="12" cy="8" r="2"></circle>
+    </defs>
+    <g id="icons/flags/bombay" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <mask id="mask-2" fill="white">
+            <use xlink:href="#path-1"></use>
+        </mask>
+        <use id="mask" fill="#494C5A" opacity="0" xlink:href="#path-1"></use>
+        <rect id="first" fill="#FFA44A" mask="url(#mask-2)" x="0" y="0" width="24" height="5"></rect>
+        <rect id="third" fill="#1A9F0B" mask="url(#mask-2)" x="0" y="11" width="24" height="5"></rect>
+        <rect id="second" fill="#FFFFFF" mask="url(#mask-2)" x="0" y="5" width="24" height="6"></rect>
+        <g id="Oval" mask="url(#mask-2)">
+            <use fill-opacity="0.15" fill="#181A93" fill-rule="evenodd" xlink:href="#path-3"></use>
+            <circle stroke="#181A93" stroke-width="0.5" cx="12" cy="8" r="1.75"></circle>
+        </g>
+        <circle id="Oval-Copy" fill="#181A93" mask="url(#mask-2)" cx="12" cy="8" r="1"></circle>
+        <rect id="border" stroke-opacity="0.04" stroke="#000000" mask="url(#mask-2)" x="0.5" y="0.5" width="23" height="15" rx="2"></rect>
+    </g>
+</svg>

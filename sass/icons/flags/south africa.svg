@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="24px" height="16px" viewBox="0 0 24 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 49.1 (51147) - http://www.bohemiancoding.com/sketch -->
+    <title>icons/flags/south africa</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <rect id="path-1" x="0" y="0" width="24" height="16" rx="2"></rect>
+        <polygon id="path-3" points="0 0 8 6 24 6 24 10 8 10 0 16"></polygon>
+        <polygon id="path-4" points="-1 4 4 8 -1 12"></polygon>
+    </defs>
+    <g id="icons/flags/south-africa" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <mask id="mask-2" fill="white">
+            <use xlink:href="#path-1"></use>
+        </mask>
+        <g id="mask"></g>
+        <rect id="Rectangle" fill="#072CB4" mask="url(#mask-2)" x="0" y="11" width="24" height="5"></rect>
+        <rect id="Rectangle-Copy" fill="#F44E46" mask="url(#mask-2)" x="0" y="0" width="24" height="5"></rect>
+        <g id="Rectangle-36" mask="url(#mask-2)">
+            <use fill="#06A86E" fill-rule="evenodd" xlink:href="#path-3"></use>
+            <path stroke="#FFFFFF" stroke-width="1" d="M8.16666667,5.5 L24.5,5.5 L24.5,10.5 L8.16666667,10.5 L-0.5,17 L-0.5,-1 L8.16666667,5.5 Z"></path>
+        </g>
+        <g id="Rectangle-2" mask="url(#mask-2)">
+            <use fill="#262626" fill-rule="evenodd" xlink:href="#path-4"></use>
+            <path stroke="#FFBF2E" stroke-width="1" d="M-1.5,2.95968758 L4.80039053,8 L-1.5,13.0403124 L-1.5,2.95968758 Z"></path>
+        </g>
+        <rect id="border" stroke-opacity="0.04" stroke="#000000" mask="url(#mask-2)" x="0.5" y="0.5" width="23" height="15" rx="2"></rect>
+    </g>
+</svg>

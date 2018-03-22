@@ -22,7 +22,7 @@ const CategoricalDisplay = ({
 }) => {
     const renderIcon = (item) => {
         if (!item.itemId) {return '';}
-        const ItemIcon = ItemIconMap[item.itemId.toLowerCase()] || SymbolPlaceholderIcon;
+        const ItemIcon = ItemIconMap[item.itemId] || SymbolPlaceholderIcon;
         return <ItemIcon />;
     };
     const renderText = (item) => <span className="ciq-item-display">{item.display}</span>;
