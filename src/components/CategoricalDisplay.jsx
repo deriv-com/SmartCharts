@@ -33,7 +33,13 @@ const CategoricalDisplay = ({
             className={`ciq-favorite ${favoritesMap[item.itemId] ? 'ciq-active-favorite' : ''}`}>
             <FavoriteIcon />
         </span>;
-    }
+    };
+
+    const renderLeft = (item) =>
+        <div className="left">
+            {renderIcon(item)}
+            {renderText(item)}
+        </div>;
 
     const renderItem = (item, k) =>
         <div
@@ -42,9 +48,10 @@ const CategoricalDisplay = ({
             key={k}
             disabled={!item.enabled}
         >
-            {renderIcon(item)}
-            {renderText(item)}
-            {renderFavorite(item)}
+            {renderLeft(item)}
+            <div className="right">
+                {renderFavorite(item)}
+            </div>
         </div>;
 
     const renderActiveItem = (item, k) =>
@@ -52,25 +59,26 @@ const CategoricalDisplay = ({
             className="cq-active-item"
             key={k}
         >
-            {renderIcon(item)}
-            {renderText(item)}
-            {renderFavorite(item)}
-            {activeOptions &&
-            <span className="cq-active-options">
-                {activeOptions.map((opt, i) => {
-                    const ActiveOptionIcon = ActiveOptionsIconMap[opt.id];
-                    return (
-                        <span
-                            key={`active-opt-${i}`}
-                            className={`ic-${opt.id}`}
-                            onClick={(e) => opt.onClick && opt.onClick(item.dataObject, e)}
-                        >
-                            {ActiveOptionIcon && <ActiveOptionIcon />}
-                            {opt.renderChild && opt.renderChild(item)}
-                        </span>
-                    );
-                })}
-            </span>}
+            {renderLeft(item)}
+            <div className="right">
+                {activeOptions &&
+                <span className="cq-active-options">
+                    {activeOptions.map((opt, i) => {
+                        const ActiveOptionIcon = ActiveOptionsIconMap[opt.id];
+                        return (
+                            <span
+                                key={`active-opt-${i}`}
+                                className={`ic-${opt.id}`}
+                                onClick={(e) => opt.onClick && opt.onClick(item.dataObject, e)}
+                            >
+                                {ActiveOptionIcon && <ActiveOptionIcon />}
+                                {opt.renderChild && opt.renderChild(item)}
+                            </span>
+                        );
+                    })}
+                </span>}
+                {renderFavorite(item)}
+            </div>
         </div>;
 
     return (

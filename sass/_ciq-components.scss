@@ -466,26 +466,6 @@ cq-col {
 	vertical-align: top;
 }
 
-cq-item, .cq-item {
-	position: relative;
-	cursor:pointer;
-	text-overflow: clip;
-	white-space: nowrap;
-}
-
-cq-item, .cq-item, .cq-active-item, cq-heading, cq-placeholder {
-	padding:0 20px;
-	clear: both;
-	display:block;
-}
-
-cq-item:hover,
-cq-item[cq-focused],
-.cq-item[cq-focused]{
-	background: #efefef;
-	color:$DEFAULT-text-strong;
-}
-
 cq-menu-wrap {
 	display:block;
 }

@@ -115,10 +115,22 @@
         }
     }
     .cq-item, .cq-active-item {
-        padding: 7px 20px 2px 20px;
+        padding-left: 20px;
+        padding-right: 20px;
+        display: flex;
         border-bottom: 1px solid #e9e9ed;
-        height: 30px;
+        height: 40px;
+        align-items: center;
+        justify-content: space-between;
+        line-height: initial;
+        .left, .right {
+            display: flex;
+            align-items: center;
+        }
     }
+    .cq-item {
+        cursor: pointer;
+     }
     .cq-item[disabled] {
         cursor: default;
         &:not(.selected) {
@@ -127,9 +139,6 @@
         &.selected {
             background-color: #f2f3f8;
         }
-    }
-    .cq-item:not([disabled]):hover {
-        background: #f2f3f8;
     }
     .cq-scroll-panel {
         position: relative;
@@ -162,7 +171,7 @@
             width: 13px;
             border-radius: 15px;
             height: 2px;
-            vertical-align: super;
+            vertical-align: bottom;
             left: 6px;
             position: relative;
         }
@@ -194,5 +203,6 @@
     }
     .ic-frx {
         margin-right: 10px;
+        margin-top: 2px;
     }
 }
