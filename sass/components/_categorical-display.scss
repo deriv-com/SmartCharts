@@ -190,8 +190,8 @@
         float: right;
         > .ic-icon {
             margin-right: 0;
-            width: 24px;
-            height: 24px;
+            width: $normal-icon-size;
+            height: $normal-icon-size;
         }
         &.ciq-active-favorite {
             svg > g > g > path {
@@ -199,18 +199,10 @@
             }
         }
     }
-    .ic-frxXPDUSD > svg > g > g > g > path:first-child {
-        fill: #E9EAF0;
-    }
-    .ic-frxXPTUSD > svg > g > g > g > path:first-child {
-        fill: #F4F3F3;
-    }
-    .ic-frxXAGUSD > svg > g > g > g > path:first-child {
-        fill: #E1E1E1;
-    }
+
     .ic-icon, .ic-frx {
-        height: 32px;
-        width: 32px;
+        height: $large-icon-size;
+        width: $large-icon-size;
     }
     .ic-icon {
         display: inline-block;
@@ -221,5 +213,8 @@
     }
     .ic-frx {
         margin-right: 10px;
+    }
+    .ic-otc, .ic-wld {
+        margin-right: 15px;
     }
 }
