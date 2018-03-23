@@ -4,13 +4,13 @@
     <title>icons/flags/wallstreet</title>
     <desc>Created with Sketch.</desc>
     <defs>
-        <rect id="path-1" x="0" y="0" width="24" height="16" rx="2"></rect>
+        <rect id="wallstreet-path-1" x="0" y="0" width="24" height="16" rx="2"></rect>
     </defs>
     <g id="icons/flags/wallstreet" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
         <mask id="mask-2" fill="white">
-            <use xlink:href="#path-1"></use>
+            <use xlink:href="#wallstreet-path-1"></use>
         </mask>
-        <use id="mask" fill="#4CAF50" xlink:href="#path-1"></use>
+        <use id="mask" fill="#4CAF50" xlink:href="#wallstreet-path-1"></use>
         <text id="WALL" mask="url(#mask-2)" font-family="Roboto-Bold, Roboto" font-size="5.5" font-weight="bold" fill="#FFFFFF">
             <tspan x="4.5" y="10">WALL</tspan>
         </text>
