@@ -4,6 +4,7 @@ import ListStore from './ListStore';
 import {
     LineIcon,
     DotIcon,
+    BaseLineIcon,
     CandleIcon,
     OHLCIcon,
     HollowCandleIcon,
@@ -56,7 +57,7 @@ export default class ChartTypeStore {
             { id: 'line', text: 'Dot', disabled: false, icon: DotIcon },
             { id: 'colored_line', text: 'Colored Dot', disabled: false, icon: DotIcon },
             { id: 'spline', text: 'Spline', disabled: false, icon: SplineIcon },
-            { id: 'baseline', text: 'Baseline', disabled: false, icon: LineIcon },
+            { id: 'baseline', text: 'Baseline', disabled: false, icon: BaseLineIcon },
             { id: 'candle', text: 'Candle', disabled: isTickSelected, icon: CandleIcon },
             { id: 'colored_bar', text: 'OHLC', disabled: isTickSelected, icon: OHLCIcon },
             { id: 'hollow_candle', text: 'Hollow Candle', disabled: isTickSelected, icon: HollowCandleIcon },

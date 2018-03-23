@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="32px" height="32px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 49.1 (51147) - http://www.bohemiancoding.com/sketch -->
+    <title>icons/underlying assets/energy/oil usd/ic-oilusd</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="icons/underlying-assets/energy/oil-usd/ic-oilusd" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="Rectangle" fill="#5798B4" x="9" y="6" width="14" height="20"></rect>
+        <g id="drop" transform="translate(13.000000, 12.000000)" fill-rule="nonzero">
+            <path d="M5.99016393,5.15 C5.99016393,6.73332812 4.64372131,8 3,8 C1.35627869,8 0.00983606557,6.73332812 0.00983606557,5.15 C0.00983606557,3.56667188 3,0 3,0 C3,0 5.99016393,3.58332812 5.99016393,5.15 Z" id="Shape" fill="#FFC521"></path>
+            <path d="M3,7.25 C1.79344262,7.25 0.796721311,6.31667188 0.796721311,5.15 C0.796721311,5.01667188 0.919131148,4.9 1.05901639,4.9 C1.19890164,4.9 1.32131148,5.01667188 1.32131148,5.15 C1.32131148,6.03332813 2.07322951,6.75 3,6.75 C3.13988525,6.75 3.26229508,6.86667188 3.26229508,7 C3.26229508,7.13332813 3.13988525,7.25 3,7.25 Z" id="Shape" fill="#FFFFFF"></path>
+        </g>
+        <rect id="Rectangle-38" fill="#3B7B96" x="8" y="6" width="16" height="1" rx="0.5"></rect>
+        <rect id="Rectangle-38-Copy" fill="#3B7B96" x="8" y="8" width="16" height="1" rx="0.5"></rect>
+        <rect id="Rectangle-38-Copy-3" fill="#3B7B96" x="8" y="23" width="16" height="1" rx="0.5"></rect>
+        <rect id="Rectangle-38-Copy-2" fill="#3B7B96" x="8" y="25" width="16" height="1" rx="0.5"></rect>
+    </g>
+</svg>

@@ -15,13 +15,13 @@ const ChartTitle = ({
     CategoricalDisplay,
     AnimatedPrice,
 }) => {
-    const SymbolIcon = ItemIconMap[currentSymbol.symbol.toLowerCase()] || SymbolPlaceholderIcon;
+    const SymbolIcon = ItemIconMap[currentSymbol.symbol] || SymbolPlaceholderIcon;
     return (
         <Menu className="cq-chart-title stx-show cq-symbols-display">
             <Menu.Title>
                 {isVisible &&
                 <div className="cq-symbol-select-btn">
-                    {SymbolIcon && <SymbolIcon />}
+                    {SymbolIcon && <SymbolIcon className={`ic-${currentSymbol.symbol}`} />}
                     <div className="cq-symbol-info">
                         <div className="cq-market">{currentSymbol.market_display_name}</div>
                         <div className="cq-symbol">{currentSymbol.name}</div>
