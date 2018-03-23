@@ -13,6 +13,7 @@ import Draw from '../../sass/icons/chart settings/drawing tools/ic-drawingtools-
 import HollowCandle from '../../sass/icons/chart settings/chart types/hollow candle/ic-hollowcandle-normal.svg';
 import Indicator from '../../sass/icons/chart settings/indicators/ic-indicator-normal.svg';
 import Line from '../../sass/icons/chart settings/chart types/line/ic-line-normal.svg';
+import BaseLine from '../../sass/icons/chart settings/chart types/baseline/ic-baseline-normal.svg';
 import List from '../../sass/icons/template-list/ic-templatelist.svg';
 import Measure from '../../sass/icons/measure/ic-measure.svg';
 import Minus from '../../sass/icons/chart settings/zoom-out/ic-zoomout-light.svg';
@@ -51,6 +52,77 @@ import PLN from '../../sass/icons/flags/pln.svg';
 import SEK from '../../sass/icons/flags/sek.svg';
 import USD from '../../sass/icons/flags/usd.svg';
 
+import Belgium from '../../sass/icons/flags/belgium.svg';
+import HongKong from '../../sass/icons/flags/hong kong.svg';
+import Singapore from '../../sass/icons/flags/singapore.svg';
+import Bombay from '../../sass/icons/flags/bombay.svg';
+import Jakarta from '../../sass/icons/flags/jakarta.svg';
+import German from '../../sass/icons/flags/german.svg';
+import Dubai from '../../sass/icons/flags/dubai.svg';
+import Ireland from '../../sass/icons/flags/ireland.svg';
+import French from '../../sass/icons/flags/french.svg';
+import Dutch from '../../sass/icons/flags/dutch.svg';
+import SouthAfrica from '../../sass/icons/flags/south africa.svg';
+
+/* German */
+import Airbus from '../../sass/icons/active-symbols/otc stocks/ic-airbus.svg';
+import Allianz from '../../sass/icons/active-symbols/otc stocks/ic-allianz.svg';
+import BMW from '../../sass/icons/active-symbols/otc stocks/ic-bmw.svg';
+import Daimler from '../../sass/icons/active-symbols/otc stocks/ic-daimler.svg';
+import Deutschebank from '../../sass/icons/active-symbols/otc stocks/ic-deutschebank.svg';
+import Novartis from '../../sass/icons/active-symbols/otc stocks/ic-novartis.svg';
+import SAP from '../../sass/icons/active-symbols/otc stocks/ic-sap.svg';
+import Siemens from '../../sass/icons/active-symbols/otc stocks/ic-siemens.svg';
+/* India */
+import BhartiAirtel from '../../sass/icons/active-symbols/otc stocks/ic-bhartiairtel.svg';
+import MarutiSuzuki from '../../sass/icons/active-symbols/otc stocks/ic-marutisuzuki.svg';
+import RelianceIndustries from '../../sass/icons/active-symbols/otc stocks/ic-relianceindustries.svg';
+import TataSteel from '../../sass/icons/active-symbols/otc stocks/ic-tatasteel.svg';
+/* UK */
+import BP from '../../sass/icons/active-symbols/otc stocks/ic-bp.svg';
+import Barclays from '../../sass/icons/active-symbols/otc stocks/ic-barclays.svg';
+import BritishAmericanTobacco from '../../sass/icons/active-symbols/otc stocks/ic-britishamericantobacco.svg';
+import HSBC from '../../sass/icons/active-symbols/otc stocks/ic-hsbc.svg';
+import LloydsBank from '../../sass/icons/active-symbols/otc stocks/ic-lloydsbank.svg';
+import RioTinto from '../../sass/icons/active-symbols/otc stocks/ic-riotinto.svg';
+import StandardChartered from '../../sass/icons/active-symbols/otc stocks/ic-standardchartered.svg';
+import Tesco from '../../sass/icons/active-symbols/otc stocks/ic-tesco.svg';
+/* US */
+import Alibaba from '../../sass/icons/active-symbols/otc stocks/ic-aibaba.svg';
+import Alphabet from '../../sass/icons/active-symbols/otc stocks/ic-alphabet.svg';
+import Amazon from '../../sass/icons/active-symbols/otc stocks/ic-amazon.svg';
+import AmericanExpress from '../../sass/icons/active-symbols/otc stocks/ic-americanexpress.svg';
+import Apple from '../../sass/icons/active-symbols/otc stocks/ic-apple.svg';
+import BershireHathaway from '../../sass/icons/active-symbols/otc stocks/ic-bershirehathaway.svg';
+import Boeing from '../../sass/icons/active-symbols/otc stocks/ic-boeing.svg';
+import Caterpillar from '../../sass/icons/active-symbols/otc stocks/ic-caterpillar.svg';
+import Citigroup from '../../sass/icons/active-symbols/otc stocks/ic-citigroup.svg';
+import ElectronicArts from '../../sass/icons/active-symbols/otc stocks/ic-electronicarts.svg';
+import ExxonMobil from '../../sass/icons/active-symbols/otc stocks/ic-exxonmobil.svg';
+import Facebook from '../../sass/icons/active-symbols/otc stocks/ic-facebook.svg';
+import GoldmanSachs from '../../sass/icons/active-symbols/otc stocks/ic-goldmansachs.svg';
+import IBM from '../../sass/icons/active-symbols/otc stocks/ic-ibm.svg';
+import JohnsonAndJohnson from '../../sass/icons/active-symbols/otc stocks/ic-johnson-and-johnson.svg';
+import Mastercard from '../../sass/icons/active-symbols/otc stocks/ic-mastercard.svg';
+import McDonalds from '../../sass/icons/active-symbols/otc stocks/ic-mcdonalds.svg';
+import Microsoft from '../../sass/icons/active-symbols/otc stocks/ic-microsoft.svg';
+import PepsiCo from '../../sass/icons/active-symbols/otc stocks/ic-pepsico.svg';
+import ProcterAndGamble from '../../sass/icons/active-symbols/otc stocks/ic-procterandgamble.svg';
+
+/* Energy */
+import OilUSD from '../../sass/icons/active-symbols/energy/oil usd/ic-oilusd.svg';
+/* Metals */
+import Metal from '../../sass/icons/active-symbols/metals/ic-metal.svg';
+
+/* Volatility Indices */
+import Vol10 from '../../sass/icons/active-symbols/volatility/10 index/ic-10index.svg';
+import Vol25 from '../../sass/icons/active-symbols/volatility/25 index/ic-25index.svg';
+import Vol50 from '../../sass/icons/active-symbols/volatility/50 index/ic-50index.svg';
+import Vol75 from '../../sass/icons/active-symbols/volatility/75 index/ic-75index.svg';
+import Vol100 from '../../sass/icons/active-symbols/volatility/100 index/ic-100index.svg';
+import MarketBear from '../../sass/icons/active-symbols/volatility/bear market/ic-marketbear.svg';
+import MarketBull from '../../sass/icons/active-symbols/volatility/bull market/ic-marketbull.svg';
+
 const Wrapper = WrappedComponent => props => {
     let { className, ['tooltip-title']: tooltip, ...p } = props;
     className = `ic-icon ${className ? className : ''} ${tooltip ? 'tooltip' : ''}`;
@@ -78,6 +150,7 @@ export const DrawIcon = Wrapper(Draw);
 export const HollowCandleIcon = Wrapper(HollowCandle);
 export const IndicatorIcon = Wrapper(Indicator);
 export const LineIcon = Wrapper(Line);
+export const BaseLineIcon = Wrapper(BaseLine);
 export const ListIcon = Wrapper(List);
 export const MeasureIcon = Wrapper(Measure);
 export const MinusIcon = Wrapper(Minus);
@@ -93,6 +166,7 @@ export const ArrowIcon = Wrapper(Arrow);
 export const FavoriteIcon = Wrapper(Favorite);
 export const CopyIcon = Wrapper(Copy);
 export const ShareIcon = Wrapper(Share);
+export const MetalIcon = Wrapper(Metal);
 
 export const SymbolPlaceholderIcon = Wrapper(SymbolPlaceholder);
 
@@ -108,76 +182,152 @@ export const CategoryIconMap = {
 };
 
 const FlagIconMap = {
-    aud: Wrapper(AUD),
-    cad: Wrapper(CAD),
-    chf: Wrapper(CHF),
-    eur: Wrapper(EUR),
-    gbp: Wrapper(GBP),
-    jpy: Wrapper(JPY),
-    mxn: Wrapper(MXN),
-    nok: Wrapper(NOK),
-    nzd: Wrapper(NZD),
-    pln: Wrapper(PLN),
-    sek: Wrapper(SEK),
-    usd: Wrapper(USD),
+    AUD: Wrapper(AUD),
+    CAD: Wrapper(CAD),
+    CHF: Wrapper(CHF),
+    EUR: Wrapper(EUR),
+    GBP: Wrapper(GBP),
+    JPY: Wrapper(JPY),
+    MXN: Wrapper(MXN),
+    NOK: Wrapper(NOK),
+    NZD: Wrapper(NZD),
+    PLN: Wrapper(PLN),
+    SEK: Wrapper(SEK),
+    USD: Wrapper(USD),
+    BOMBAY: Wrapper(Bombay),
+    Dubai: Wrapper(Dubai),
+    HongKong: Wrapper(HongKong),
+    Jakarta: Wrapper(Jakarta),
+    Singapore: Wrapper(Singapore),
+    Belgium: Wrapper(Belgium),
+    Dutch: Wrapper(Dutch),
+    German: Wrapper(German),
+    French: Wrapper(French),
+    Ireland: Wrapper(Ireland),
+    SouthAfrica: Wrapper(SouthAfrica),
 };
 
-export const ItemIconMap = {};
+export const ItemIconMap = {
+    SPC: FlagIconMap.USD,
+    AS51: FlagIconMap.AUD,
+    BSESENSEX30: FlagIconMap.BOMBAY,
+    HSI: FlagIconMap.HongKong,
+    JCI: FlagIconMap.Jakarta,
+    STI: FlagIconMap.Singapore,
+    N225: FlagIconMap.JPY,
+    BFX: FlagIconMap.Belgium,
+    AEX: FlagIconMap.Dutch,
+    DFMGI: FlagIconMap.Dubai,
+    FCHI: FlagIconMap.French,
+    OBX: FlagIconMap.NOK,
+    SSMI: FlagIconMap.CHF,
+    GDAXI: FlagIconMap.German,
+    ISEQ: FlagIconMap.Ireland,
+    TOP40: FlagIconMap.SouthAfrica,
+    /* German */
+    DEAIR: Wrapper(Airbus),
+    DEALV: Wrapper(Allianz),
+    DEBMW: Wrapper(BMW),
+    DEDAI: Wrapper(Daimler),
+    DEDBK: Wrapper(Deutschebank),
+    DENOT: Wrapper(Novartis),
+    DESAP: Wrapper(SAP),
+    DESIE: Wrapper(Siemens),
+    /* India */
+    INBHARTIARTL: Wrapper(BhartiAirtel),
+    INMARUTI:     Wrapper(MarutiSuzuki),
+    INRIL:        Wrapper(RelianceIndustries),
+    INTATASTEEL:  Wrapper(TataSteel),
+    /* UK */
+    UKBP:   Wrapper(BP),
+    UKBARC: Wrapper(Barclays),
+    UKBATS: Wrapper(BritishAmericanTobacco),
+    UKHSBA: Wrapper(HSBC),
+    UKLLOY: Wrapper(LloydsBank),
+    UKRIO:  Wrapper(RioTinto),
+    UKSTAN: Wrapper(StandardChartered),
+    UKTSCO: Wrapper(Tesco),
+    /* US */
+    USALIBA:  Wrapper(Alibaba),
+    USGOOG:   Wrapper(Alphabet),
+    USAMZN:   Wrapper(Amazon),
+    USAMX:    Wrapper(AmericanExpress),
+    USAAPL:   Wrapper(Apple),
+    USBRKSHR: Wrapper(BershireHathaway),
+    USBNG:    Wrapper(Boeing),
+    USCAT:    Wrapper(Caterpillar),
+    USCT:     Wrapper(Citigroup),
+    USEA:     Wrapper(ElectronicArts),
+    USXOM:    Wrapper(ExxonMobil),
+    USFB:     Wrapper(Facebook),
+    USGLDSCH: Wrapper(GoldmanSachs),
+    USIBM:    Wrapper(IBM),
+    USJNJ:    Wrapper(JohnsonAndJohnson),
+    USMA:     Wrapper(Mastercard),
+    USMCDON:  Wrapper(McDonalds),
+    USMSFT:   Wrapper(Microsoft),
+    USPEP:    Wrapper(PepsiCo),
+    USPG:     Wrapper(ProcterAndGamble),
+    /* Commodities */
+    frxBROUSD: Wrapper(OilUSD),
+    frxXAUUSD: MetalIcon,
+    frxXPDUSD: MetalIcon,
+    frxXPTUSD: MetalIcon,
+    frxXAGUSD: MetalIcon,
+    /* Volatility Indices */
+    R_10:   Wrapper(Vol10),
+    R_25:   Wrapper(Vol25),
+    R_50:   Wrapper(Vol50),
+    R_75:   Wrapper(Vol75),
+    R_100:  Wrapper(Vol100),
+    RDBEAR: Wrapper(MarketBear),
+    RDBULL: Wrapper(MarketBull),
+};
 
 function frx(a, b) {
     const A = FlagIconMap[a];
     const B = FlagIconMap[b];
     ItemIconMap[`frx${a}${b}`] = props => {
-        const className = `ic-frx ic-frx${a}${b}`;
+        const { className, ...p } = props;
         return (
-            <span className={className} {...props}><A/><B/></span>
+            <span className={`ic-frx ${className}`} {...p}><A/><B/></span>
         );
     };
 }
 
-function wld(a) {
-    ItemIconMap[`wld${a}`] = FlagIconMap[a];
-}
-
 /* FOREX */
 /* Major Pairs */
-frx('aud', 'jpy');
-frx('aud', 'usd');
-frx('eur', 'aud');
-frx('eur', 'chf');
-frx('eur', 'jpy');
-frx('eur', 'cad');
-frx('eur', 'gbp');
-frx('eur', 'usd');
-frx('gbp', 'aud');
-frx('gbp', 'jpy');
-frx('gbp', 'usd');
-frx('usd', 'cad');
-frx('usd', 'chf');
-frx('usd', 'jpy');
+frx('AUD', 'JPY');
+frx('AUD', 'USD');
+frx('EUR', 'AUD');
+frx('EUR', 'CHF');
+frx('EUR', 'JPY');
+frx('EUR', 'CAD');
+frx('EUR', 'GBP');
+frx('EUR', 'USD');
+frx('GBP', 'AUD');
+frx('GBP', 'JPY');
+frx('GBP', 'USD');
+frx('USD', 'CAD');
+frx('USD', 'CHF');
+frx('USD', 'JPY');
 /* Minor Pairs */
-frx('aud', 'cad');
-frx('aud', 'chf');
-frx('aud', 'nzd');
-frx('aud', 'pln');
-frx('eur', 'nzd');
-frx('gbp', 'cad');
-frx('gbp', 'chf');
-frx('gbp', 'nok');
-frx('gbp', 'nzd');
-frx('gbp', 'pln');
-frx('nzd', 'jpy');
-frx('nzd', 'usd');
-frx('usd', 'mxn');
-frx('usd', 'nok');
-frx('usd', 'pln');
-frx('usd', 'sek');
-
-/* Smart FX */
-wld('aud');
-wld('eur');
-wld('gbp');
-wld('usd');
+frx('AUD', 'CAD');
+frx('AUD', 'CHF');
+frx('AUD', 'NZD');
+frx('AUD', 'PLN');
+frx('EUR', 'NZD');
+frx('GBP', 'CAD');
+frx('GBP', 'CHF');
+frx('GBP', 'NOK');
+frx('GBP', 'NZD');
+frx('GBP', 'PLN');
+frx('NZD', 'JPY');
+frx('NZD', 'USD');
+frx('USD', 'MXN');
+frx('USD', 'NOK');
+frx('USD', 'PLN');
+frx('USD', 'SEK');
 
 export const ActiveOptionsIconMap = {
     delete: DeleteIcon,
