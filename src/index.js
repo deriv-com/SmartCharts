@@ -8,6 +8,7 @@ import StreamManager from './StreamManager';
 import {TradeEndLine, TradeStartLine} from './draw/DateLine';
 import MainStore from './store';
 import {MobxProvider} from './store/Connect';
+import './SplinePlotter';
 
 class BinaryChartiq {
     static addNewChart(params) {

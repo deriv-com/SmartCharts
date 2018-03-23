@@ -4,15 +4,17 @@ const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPl
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 
+const production = process.env.NODE_ENV === 'production';
+
 const config = {
     devtool: 'source-map',
     entry: ['babel-polyfill', path.resolve(__dirname, './src/index.js')],
     output: {
         publicPath: '/dist/',
         path: path.resolve(__dirname, 'dist'),
-        filename: 'binarychartiq.js',
+        filename: 'smartcharts.js',
         libraryExport: 'default',
-        library: 'BinaryChartiq',
+        library: 'smartcharts',
         libraryTarget: 'umd',
     },
     module: {
@@ -66,25 +68,60 @@ const config = {
     },
     plugins: [
         new ExtractTextPlugin({
-            filename: 'binarychartiq.css',
+            filename: 'smartcharts.css',
         }),
         new CopyWebpackPlugin([
             { from: './chartiq/chartiq.js' },
-        ]),
-        new CopyWebpackPlugin([
-            { from: './chartiq/splines.js' },
-        ]),
-        new CopyWebpackPlugin([
             { from: './sass/favicons/*.png' },
+            {
+                from: production ?
+                    './node_modules/react/umd/react.production.min.js' :
+                    './node_modules/react/umd/react.development.js',
+                to: 'react.js'
+            },
+            {
+                from: production ?
+                    './node_modules/react-dom/umd/react-dom.production.min.js' :
+                    './node_modules/react-dom/umd/react-dom.development.js',
+                to: 'react-dom.js'
+            },
+            {
+                from: production ?
+                    './node_modules/mobx/lib/mobx.umd.min.js' :
+                    './node_modules/mobx/lib/mobx.umd.js',
+                to: 'mobx.js'
+            },
+            {
+                from: production ?
+                    './node_modules/mobx-react/index.min.js' :
+                    './node_modules/mobx-react/index.js',
+                to: 'mobx-react.js'
+            },
         ]),
     ],
     externals: {
         jquery: 'jQuery',
         chartiq: 'CIQ',
+        mobx: 'mobx',
+        react: {
+            root: 'React',
+            commonjs: 'react',
+            commonjs2: 'react'
+        },
+        'react-dom': {
+            commonjs: 'react-dom',
+            commonjs2: 'react-dom',
+            root: 'ReactDOM',
+        },
+        'mobx-react': {
+            commonjs: 'mobx-react',
+            commonjs2: 'mobx-react',
+            root: 'mobxReact',
+        }
     },
 };
 
-if (process.env.NODE_ENV === 'production') {
+if (production) {
     config.plugins.push(new webpack.DefinePlugin({
         'process.env': {
             NODE_ENV: JSON.stringify('production'),
