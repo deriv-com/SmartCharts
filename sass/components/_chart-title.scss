@@ -27,9 +27,14 @@
             transform: scale(1.2, 1.2);
         }
         > .ic-icon {
+            height: $large-icon-size;
+            width: $large-icon-size;
             margin-left: 5px;
             margin-right: 12px;
             transform: scale(1.3, 1.3);
+            > svg {
+                height: $large-icon-size;
+            }
         }
         .cq-symbol-info {
             display: flex;
