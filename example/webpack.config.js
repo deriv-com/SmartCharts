@@ -4,31 +4,37 @@ const CopyWebpackPlugin = require('copy-webpack-plugin')
 
 const config = {
     devtool: 'source-map',
-    entry: './index.js',
+    entry: './index.jsx',
     output: {
         publicPath: '/dist/',
         path: path.resolve(__dirname, 'dist'),
-        filename: 'bundle.js',
+        filename: 'example-app.js',
     },
     module: {
         rules: [
             {
-                test: /\.(js)$/,
+                test: /\.(js|jsx)$/,
                 exclude: /node_modules/,
                 loader: 'babel-loader',
-                options: { presets: ['env'] },
+                options: { presets: ['env', 'react'] },
             },
         ],
     },
     plugins: [
         new CopyWebpackPlugin([
-            { from: '../dist/*' },
+            { from: '../chartiq/chartiq.js' },
+            { from: '../dist/smartcharts.css' },
         ])
     ],
     externals: {
         jquery: 'jQuery',
         CIQ: 'CIQ',
     },
+    resolve: {
+        alias: {
+            smartcharts: '../dist/smartcharts.js',
+        }
+    }
 };
 
 module.exports = config;

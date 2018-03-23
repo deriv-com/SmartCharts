@@ -1,8 +1,8 @@
-import BinaryChartiq from '../dist/binarychartiq';
-
+import smartcharts from 'smartcharts';
+import React from 'react';
 
 // TODO: addNewChart will need to support multiple charts
-const bchart = BinaryChartiq.addNewChart({
+const bchart = smartcharts.addNewChart({
     selector: '#root',
 });
 
