@@ -13,7 +13,7 @@ export default class PriceLineStore {
     @observable offScreen = false;
     @observable uncentered = false;
 
-    @computed get pip() { return this.mainStore.chart.currentActiveSymbol.decimal_places; };
+    @computed get pip() { return this.mainStore.chart.currentActiveSymbol.decimal_places; }
 
     constructor(mainStore) {
         this.mainStore = mainStore;

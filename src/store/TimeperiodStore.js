@@ -27,6 +27,7 @@ export default class TimeperiodStore {
         }
 
         const stx = this.context.stx;
+        const wasTick = stx.layout.timeUnit === 'second';
         stx.setPeriodicity({ period: 1, interval, timeUnit }, () => {
             if (this.loader) {
                 this.loader.hide();
@@ -35,11 +36,10 @@ export default class TimeperiodStore {
             const chartType = this.mainStore.chartType;
             const isTick = timeUnit === 'second';
             const isCandle = ['candle', 'hollow_condle', 'colored_bar'].indexOf(chartType.type.id) !== -1;
-            const isLine = chartType.type.id == 'mountain';
 
             if (isCandle && isTick) {
                 chartType.setType('mountain');
-            } else if (!isTick && isLine) {
+            } else if (!isTick && wasTick) {
                 chartType.setType('candle');
             }
 
