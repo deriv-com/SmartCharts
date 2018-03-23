@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="24px" height="16px" viewBox="0 0 24 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 49.1 (51147) - http://www.bohemiancoding.com/sketch -->
+    <title>icons/flags/spanish</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <rect id="path-1" x="0" y="0" width="24" height="16" rx="2"></rect>
+    </defs>
+    <g id="icons/flags/spanish" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <mask id="mask-2" fill="white">
+            <use xlink:href="#path-1"></use>
+        </mask>
+        <g id="mask"></g>
+        <rect id="first" fill="#DD172C" mask="url(#mask-2)" x="0" y="0" width="24" height="4"></rect>
+        <rect id="third" fill="#DD172C" mask="url(#mask-2)" x="0" y="12" width="24" height="4"></rect>
+        <rect id="second" fill="#FFD133" mask="url(#mask-2)" x="0" y="4" width="24" height="8"></rect>
+        <g id="Group-20" mask="url(#mask-2)">
+            <g transform="translate(2.000000, 4.000000)">
+                <polygon id="Rectangle-139-Copy" stroke="none" fill="#FFEDB1" fill-rule="evenodd" points="3.33333333 3.33333333 4.66666667 3.33333333 4.66666667 4 3.33333333 4"></polygon>
+                <path d="M2.05389181,3.29950349 L2.22118675,5.30704276 C2.26842017,5.87384379 2.76814424,6.33333333 3.33333333,6.33333333 C3.89937132,6.33333333 4.39839994,5.87200256 4.44547992,5.30704276 L4.61277486,3.29950349 C4.62723547,3.12597611 4.50798852,3 4.32545026,3 L2.34121641,3 C2.16543785,3 2.04000832,3.13290166 2.05389181,3.29950349 Z" id="Rectangle-137" stroke="#A41517" stroke-width="0.666666667" fill="none"></path>
+                <polygon id="Rectangle-139" stroke="none" fill="#A41517" fill-rule="evenodd" points="2 4 4.66666667 4 4.66666667 4.66666667 4 4.66666667 3.33333333 6 2.66666667 4.66666667 2 4.66666667"></polygon>
+                <rect id="Rectangle-135" stroke="none" fill="#A41517" fill-rule="evenodd" x="0" y="2" width="1.33333333" height="4.66666667"></rect>
+                <rect id="Rectangle-135-Copy" stroke="none" fill="#A41517" fill-rule="evenodd" x="5.33333333" y="2" width="1.33333333" height="4.66666667"></rect>
+                <path d="M2,1.33333333 C2,0.9651435 2.30590057,0.666666667 2.6729126,0.666666667 L3.99375407,0.666666667 C4.36539343,0.666666667 4.66666667,0.962576548 4.66666667,1.33333333 L4.66666667,1.6635437 C4.66666667,1.84936338 4.52329508,2 4.33968099,2 L2.32698568,2 C2.14639647,2 2,1.85730998 2,1.6635437 L2,1.33333333 Z" id="Rectangle-138" stroke="none" fill="#A41517" fill-rule="evenodd"></path>
+            </g>
+        </g>
+        <rect id="border" stroke-opacity="0.04" stroke="#000000" mask="url(#mask-2)" x="0.5" y="0.5" width="23" height="15" rx="2"></rect>
+    </g>
+</svg>

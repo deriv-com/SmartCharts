@@ -62,7 +62,9 @@ import Dubai from '../../sass/icons/flags/dubai.svg';
 import Ireland from '../../sass/icons/flags/ireland.svg';
 import French from '../../sass/icons/flags/french.svg';
 import Dutch from '../../sass/icons/flags/dutch.svg';
+import Spanish from '../../sass/icons/flags/spanish.svg';
 import SouthAfrica from '../../sass/icons/flags/south africa.svg';
+import WallStreet from '../../sass/icons/flags/wallstreet.svg';
 
 /* German */
 import Airbus from '../../sass/icons/active-symbols/otc stocks/ic-airbus.svg';
@@ -122,6 +124,9 @@ import Vol75 from '../../sass/icons/active-symbols/volatility/75 index/ic-75inde
 import Vol100 from '../../sass/icons/active-symbols/volatility/100 index/ic-100index.svg';
 import MarketBear from '../../sass/icons/active-symbols/volatility/bear market/ic-marketbear.svg';
 import MarketBull from '../../sass/icons/active-symbols/volatility/bull market/ic-marketbull.svg';
+
+import OTCBadge from '../../sass/icons/active-symbols/ic-otcbadge.svg';
+import SmartFX from '../../sass/icons/active-symbols/ic-smartfx-placeholder.svg';
 
 const Wrapper = WrappedComponent => props => {
     let { className, ['tooltip-title']: tooltip, ...p } = props;
@@ -204,7 +209,9 @@ const FlagIconMap = {
     German: Wrapper(German),
     French: Wrapper(French),
     Ireland: Wrapper(Ireland),
+    Spanish: Wrapper(Spanish),
     SouthAfrica: Wrapper(SouthAfrica),
+    WallStreet: Wrapper(WallStreet),
 };
 
 export const ItemIconMap = {
@@ -284,15 +291,32 @@ export const ItemIconMap = {
     RDBULL: Wrapper(MarketBull),
 };
 
-function frx(a, b) {
-    const A = FlagIconMap[a];
-    const B = FlagIconMap[b];
-    ItemIconMap[`frx${a}${b}`] = props => {
+function createCompositeIcon(A, B, icId) {
+    return props => {
         const { className, ...p } = props;
         return (
-            <span className={`ic-frx ${className}`} {...p}><A/><B/></span>
+            <span className={`${icId} ${className}`} {...p}><A/><B/></span>
         );
     };
+}
+
+function frx(flagA, flagB) {
+    const A = FlagIconMap[flagA];
+    const B = FlagIconMap[flagB];
+    ItemIconMap[`frx${flagA}${flagB}`] = createCompositeIcon(A, B, 'ic-frx');
+}
+
+const OTCBadgeIcon = Wrapper(OTCBadge);
+const SmartFXIcon  = Wrapper(SmartFX);
+
+function otc(flag, symbol) {
+    const FlagIcon = FlagIconMap[flag];
+    ItemIconMap[symbol] = createCompositeIcon(FlagIcon, OTCBadgeIcon, 'ic-otc');
+}
+
+function wld(flag) {
+    const FlagIcon = FlagIconMap[flag];
+    ItemIconMap[`WLD${flag}`] = createCompositeIcon(SmartFXIcon, FlagIcon, 'ic-wld');
 }
 
 /* FOREX */
@@ -328,6 +352,21 @@ frx('USD', 'MXN');
 frx('USD', 'NOK');
 frx('USD', 'PLN');
 frx('USD', 'SEK');
+/* Smart FX */
+wld('AUD');
+wld('EUR');
+wld('GBP');
+wld('USD');
+/* OTC Indicies */
+otc('Dutch', 'OTC_AEX');
+otc('GBP', 'OTC_FTSE');
+otc('EUR', 'OTC_SX5E');
+otc('French', 'OTC_FCHI');
+otc('German', 'OTC_GDAXI');
+otc('JPY', 'OTC_N225');
+otc('Spanish', 'OTC_IBEX35');
+otc('USD', 'OTC_SPC');
+otc('WallStreet', 'OTC_DJI');
 
 export const ActiveOptionsIconMap = {
     delete: DeleteIcon,

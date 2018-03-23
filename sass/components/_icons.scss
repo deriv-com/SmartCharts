@@ -79,20 +79,42 @@
     }
 }
 
-.ic-frx {
+.ic-frx, .ic-otc, .ic-wld {
+    width: 32px;
+    height: 32px;
     position: relative;
     display: inline-block;
     vertical-align: top;
+    > span {
+        position: absolute;
+    }
+}
+
+.ic-frx {
     width: 30px;
     height: 25px;
     > span {
-        position: absolute;
         top: -4px;
         left: -4px;
     }
     > span:last-child {
         top: 4px;
         left: 4px
+    }
+}
+
+.ic-otc {
+    > span:last-child {
+        top: -13px;
+        left: 9px
+    }
+}
+
+.ic-wld {
+    > span:last-child {
+        transform: scale(0.55);
+        top: -9px;
+        left: 7.2px;
     }
 }
 
