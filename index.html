@@ -41,7 +41,7 @@
         const chart = ReactDOM.render(
             e(SmartChart, null,
                 e(Barrier, {
-                    ref: r => window.barrier = r,
+                    ref: function(r) { window.barrier = r; },
                     color: 'green',
                     shade: 'above',
                 }, null),

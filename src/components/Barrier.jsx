@@ -9,9 +9,9 @@ const Barrier = ({
     visible,
     HighPriceLine,
     LowPriceLine,
-    TopShade,
-    BetweenShade,
-    BottomShade,
+    aboveShade,
+    belowShade,
+    betweenShade,
 }) => {
     return (
         <div
@@ -20,9 +20,24 @@ const Barrier = ({
         >
             <HighPriceLine />
             <LowPriceLine />
-            <TopShade />
-            <BetweenShade />
-            <BottomShade />
+            <Shade
+                className='top-shade'
+                top={aboveShade.top}
+                bottom={aboveShade.bottom}
+                visible={aboveShade.visible}
+            />
+            <Shade
+                className='between-shade'
+                top={betweenShade.top}
+                bottom={betweenShade.bottom}
+                visible={betweenShade.visible}
+            />
+            <Shade
+                className='bottom-shade'
+                top={belowShade.top}
+                bottom={belowShade.bottom}
+                visible={belowShade.visible}
+            />
         </div>
     );
 };
@@ -32,10 +47,10 @@ export default connect(
     (store) => ({
         HighPriceLine: store._high_barrier.connect(PriceLine),
         LowPriceLine: store._low_barrier.connect(PriceLine),
-        TopShade: store._aboveShade.connect(Shade),
-        BetweenShade: store._betweenShade.connect(Shade),
-        BottomShade: store._belowShade.connect(Shade),
         visible: store._visible,
+        aboveShade: store.aboveShade.clone(),
+        belowShade: store.belowShade.clone(),
+        betweenShade: store.betweenShade.clone(),
         barrierColor: store.barrierColor
     }), 
     (store, {color, shade}) => {

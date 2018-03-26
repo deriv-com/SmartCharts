@@ -30,9 +30,9 @@ export default class BarrierStore {
         this.mainStore = mainStore;
         when(() => this.context, this.onContextReady);
 
-        this._aboveShade = new ShadeStore('top-shade');
-        this._betweenShade = new ShadeStore('between-shade');
-        this._belowShade = new ShadeStore('bottom-shade');
+        this.aboveShade = new ShadeStore();
+        this.betweenShade = new ShadeStore();
+        this.belowShade = new ShadeStore();
         this._emitter = new EventEmitter();
     }
 
@@ -139,9 +139,9 @@ export default class BarrierStore {
             || this._shadeState === BarrierStore.SHADE_NONE_DOUBLE;
 
         if (noShade) {
-            this._aboveShade.visible = false;
-            this._betweenShade.visible = false;
-            this._belowShade.visible = false;
+            this.aboveShade.visible = false;
+            this.betweenShade.visible = false;
+            this.belowShade.visible = false;
         } else {
             const aboveShadeEnable =
                 this._shadeState === BarrierStore.SHADE_ABOVE
@@ -152,9 +152,9 @@ export default class BarrierStore {
             const betweenShadeEnable =
                 this._shadeState === BarrierStore.SHADE_BETWEEN;
 
-            this._aboveShade.visible = aboveShadeEnable;
-            this._betweenShade.visible = betweenShadeEnable;
-            this._belowShade.visible = belowShadeEnable;
+            this.aboveShade.visible = aboveShadeEnable;
+            this.betweenShade.visible = betweenShadeEnable;
+            this.belowShade.visible = belowShadeEnable;
 
             this._drawShadedArea();
         }
@@ -227,20 +227,20 @@ export default class BarrierStore {
     _shadeBetween() {
         const top = this._calcTopShade(this._high_barrier);
         const bottom = this._calcBottomShade(this._low_barrier);
-        this._betweenShade.top = top;
-        this._betweenShade.bottom = bottom;
+        this.betweenShade.top = top;
+        this.betweenShade.bottom = bottom;
     }
 
     _shadeBelow(barrier = this._high_barrier) {
         const top = this._calcTopShade(barrier);
-        this._belowShade.top = top;
-        this._belowShade.bottom = 0;
+        this.belowShade.top = top;
+        this.belowShade.bottom = 0;
     }
 
     _shadeAbove(barrier = this._high_barrier) {
         const bottom = this._calcBottomShade(barrier);
-        this._aboveShade.top = 0;
-        this._aboveShade.bottom = bottom;
+        this.aboveShade.top = 0;
+        this.aboveShade.bottom = bottom;
     }
 
     _shadeOutside() {
