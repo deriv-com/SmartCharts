@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { inject, Provider } from 'mobx-react';
-import { isBoxedObservable, isObservable, isObservableArray, isObservableMap, toJS } from 'mobx';
+import { isBoxedObservable, isObservable, isObservableArray, isObservableMap, toJS, action } from 'mobx';
 
 const SPECIAL_REACT_KEYS = { children: true, key: true, ref: true };
 
@@ -115,8 +115,10 @@ const connect_v2 = (Store, mapStoresToProps, handleProps) => {
         static childContextTypes = { mobxStores: PropTypes.object};
         getChildContext() { return { mobxStores: this.store }; }
 
+        handlePropsAction = action(handleProps || (() => {}));
+
         componentWillReceiveProps(nextProps) {
-            if(handleProps) { handleProps(this.store, nextProps); }
+            this.handlePropsAction(this.store, nextProps);
         }
         componentWillMount() {
             this.store = new Store(this.context.mobxStores);

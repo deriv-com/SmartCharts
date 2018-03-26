@@ -1,7 +1,6 @@
 import { observable, action, computed, when } from 'mobx';
 import { connect } from './Connect';
 import PriceLineStore from './PriceLineStore';
-import EventEmitter from 'event-emitter-es6';
 import ShadeStore from './ShadeStore';
 
 export default class BarrierStore {
@@ -33,7 +32,6 @@ export default class BarrierStore {
         this.aboveShade = new ShadeStore();
         this.betweenShade = new ShadeStore();
         this.belowShade = new ShadeStore();
-        this._emitter = new EventEmitter();
     }
 
     get high_barrier() {
@@ -114,17 +112,15 @@ export default class BarrierStore {
         this._visible = visible;
     }
 
+    onBarrierChange = null;
+
     _onPriceChanged() {
         const high_barrier = this._high_barrier.visible ? this._high_barrier.price : undefined;
         const low_barrier = this._low_barrier.visible ? this._low_barrier.price : undefined;
 
-        this._emitter.emit(BarrierStore.BARRIER_CHANGED, { high_barrier, low_barrier });
+        if(this.onBarrierChange) {this.onBarrierChange({high: high_barrier, low: low_barrier});}
 
         this._drawShadedArea();
-    }
-
-    onBarrierChanged(callback) {
-        this._emitter.on(BarrierStore.BARRIER_CHANGED, callback);
     }
 
     get shadeState() {
