@@ -1,10 +1,8 @@
 import { observable, action, computed, when } from 'mobx';
 import { connect } from './Connect';
 import PriceLineStore from './PriceLineStore';
-import PriceLine from '../components/PriceLine.jsx';
 import EventEmitter from 'event-emitter-es6';
 import ShadeStore from './ShadeStore';
-import Shade from '../components/Shade.jsx';
 
 export default class BarrierStore {
     static get BARRIER_COLOR_RED() { return 'red'; }
@@ -20,8 +18,6 @@ export default class BarrierStore {
     static get BARRIER_CHANGED() { return 'BARRIER_CHANGED'; }
 
     static MARGIN_OFFSET = 13;
-    _high_barrier;
-    _low_barrier;
 
     @observable _visible = false;
     @observable barrierColor = BarrierStore.BARRIER_COLOR_RED;
@@ -251,14 +247,4 @@ export default class BarrierStore {
         this._shadeAbove(this._high_barrier);
         this._shadeBelow(this._low_barrier);
     }
-
-    connect = connect(() => ({
-        HighPriceLine: this._high_barrier.connect(PriceLine),
-        LowPriceLine: this._low_barrier.connect(PriceLine),
-        TopShade: this._aboveShade.connect(Shade),
-        BetweenShade: this._betweenShade.connect(Shade),
-        BottomShade: this._belowShade.connect(Shade),
-        visible: this._visible,
-        barrierColor: this.barrierColor
-    }));
 }

@@ -12,7 +12,6 @@ class Tooltip extends CIQ.Marker {
         show,
         hide,
     }) {
-        console.warn('iniiiit');
         super({
             stx: stx,
             xPositioner: 'bar',

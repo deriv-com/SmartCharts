@@ -34,19 +34,22 @@
     <script src="./dist/mobx-react.js"></script>
     <script src="./dist/smartcharts.js"></script>
     <script>
-        // TODO: addNewChart will need to support multiple charts
-        const bchart = smartcharts.addNewChart({
-            selector: '#root',
-        });
+        const e = React.createElement;
+        const Barrier = smartcharts.Barrier;
+        const SmartChart = smartcharts.SmartChart;
 
-        bchart.connectionManager.send({
-            active_symbols: 'brief',
-            product_type: 'basic',
-        }).then(function(data) {
-            bchart.symbols = data;
-        });
+        const chart = ReactDOM.render(
+            e(SmartChart, null,
+                e(Barrier, {
+                    ref: r => window.barrier = r,
+                    color: 'green',
+                    shade: 'above',
+                }, null),
+            ),
+            document.getElementById('root')
+        );
 
-        window.chart = bchart;
+        window.chart = chart;
     </script>
 </body>
 
