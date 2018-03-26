@@ -214,7 +214,11 @@ class ChartStore {
 
         const stxx = this.stxx = new CIQ.ChartEngine({
             container: this.rootNode.querySelector('.chartContainer.primary'),
-            controls: {chartControls:null} // hide the default zoom buttons
+            controls: {chartControls:null}, // hide the default zoom buttons
+            preferences: {
+                currentPriceLine: true,
+            },
+            yTolerance: 999999, // disable vertical scrolling
         });
 
         // Animation (using tension requires splines.js)
