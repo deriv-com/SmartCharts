@@ -71,7 +71,7 @@ const config = {
             filename: 'smartcharts.css',
         }),
         new CopyWebpackPlugin([
-            { from: './chartiq/chartiq.js' },
+            { from: './chartiq/chartiq.min.js' },
             { from: './sass/favicons/*.png' },
             {
                 from: production ?
