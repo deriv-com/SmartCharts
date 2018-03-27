@@ -1,6 +1,6 @@
-# BinaryChartIQ
+# SmartCharts
 
-Binary.com charting library based on chartiq.
+Binary.com charting library using chartiq.
 
 ## Commands:
 - use `yarn install` to install dependencies

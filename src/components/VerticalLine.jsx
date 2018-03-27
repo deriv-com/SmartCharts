@@ -1,6 +1,7 @@
 import {connect} from '../store/Connect';
 import VerticalLineStore from '../store/VerticalLineStore';
 import RenderInsideChart from '../components/RenderInsideChart.jsx';
+import React from 'react';
 
 const VerticalLine = ({
     className,
@@ -19,7 +20,7 @@ const VerticalLine = ({
 const TradeStart = ({ left }) => (
     <VerticalLine
         left={left}
-        className='trade-end-line'
+        className='trade-start-line'
     >
         <div className="trade-text">Trade Start</div>
     </VerticalLine>

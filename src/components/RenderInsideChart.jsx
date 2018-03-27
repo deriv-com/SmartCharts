@@ -4,6 +4,20 @@ import ReactDOM from 'react-dom';
 import { MobxProvider } from '../store/Connect';
 import PropTypes from 'prop-types';
 
+class Wrapper extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = { children: null }
+    }
+
+    componentDidMount() {
+        this.setState({children: this.props.children});
+    }
+
+    render() {
+        return this.state.children;
+    }
+}
 // Render given Components under stx-holder to position it relative to the active symbol chart.
 // NOTE: Do NOT place this component as root; props will not update properly.
 class RenderInsideChart extends PureComponent {
@@ -18,9 +32,9 @@ class RenderInsideChart extends PureComponent {
             const marker = stx.chart.panel[at].appendChild(elem);
             ReactDOM.render(
                 <MobxProvider store={this.context.mobxStores}>
-                    <React.Fragment>
+                    <Wrapper ref={r => this.wrapper = r}>
                         {this.props.children}
-                    </React.Fragment>
+                    </Wrapper>
                 </MobxProvider>,
                 marker
             );
@@ -28,6 +42,9 @@ class RenderInsideChart extends PureComponent {
     }
 
     render () {
+        if(this.wrapper) {
+            setTimeout(() => this.wrapper.setState({children: this.props.children}), 0);
+        }
         return (null);
     }
 };

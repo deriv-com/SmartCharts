@@ -49,18 +49,12 @@ class Chart extends Component {
                 <div className="ciq-chart-area">
                     <div className="ciq-chart">
                         <div className='beta-version'>Beta Version</div>
-                        {insideHolder.length ?
-                                <RenderInsideChart at='holder'>
-                                    {insideHolder}
-                                </RenderInsideChart>
-                                : null
-                        }
-                        {insideSubHolder.length ?
-                                <RenderInsideChart at='subholder'>
-                                    {insideSubHolder}
-                                </RenderInsideChart>
-                                : null
-                        }
+                        <RenderInsideChart at='holder'>
+                            {insideHolder}
+                        </RenderInsideChart>
+                        <RenderInsideChart at='subholder'>
+                            {insideSubHolder}
+                        </RenderInsideChart>
                         <RenderInsideChart>
                             <div className="cq-top-ui-widgets">
                                 <ChartTitle />

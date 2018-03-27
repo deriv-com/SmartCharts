@@ -6,7 +6,7 @@ export default class PriceLineStore {
     _relative = false;
     @observable draggable = true;
     @observable isDragging = false;
-    @observable visible = false;
+    @observable visible = true;
     @observable top = 0;
     @observable _price = 0;
     @observable zIndex;
@@ -108,6 +108,7 @@ export default class PriceLineStore {
     }
 
     _dragLine(e) {
+        if(!this._line) { return; }
         const newTop = this._initialPosition + e.displacementY;
         const newCenter = newTop + (this._line.offsetHeight / 2);
         let newPrice = this._priceFromLocation(newCenter);
@@ -175,7 +176,7 @@ export default class PriceLineStore {
     }
 
     _draw() {
-        if (this.visible) {
+        if (this.visible && this._line) {
             this._positionAtPrice(this.realPrice);
         }
     }

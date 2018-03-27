@@ -18,7 +18,6 @@ export default class BarrierStore {
 
     static MARGIN_OFFSET = 13;
 
-    @observable _visible = false;
     @observable barrierColor = BarrierStore.BARRIER_COLOR_RED;
     @observable isBetweenShadeVisible = false;
     @observable isTopShadeVisible = false;
@@ -27,28 +26,36 @@ export default class BarrierStore {
 
     constructor(mainStore) {
         this.mainStore = mainStore;
-        when(() => this.context, this.onContextReady);
+        this._high_barrier = new PriceLineStore(this.mainStore);
+        this._low_barrier = new PriceLineStore(this.mainStore);
+        this._high_barrier.onPriceChanged(this._onPriceChanged.bind(this));
+        this._low_barrier.onPriceChanged(this._onPriceChanged.bind(this));
+
+        this._injectionId = this.stx.append('draw', this._drawShadedArea.bind(this));
+
+        this._setupConstrainBarrierPrices();
+
+        this._listenerId = this.stx.addEventListener('newChart', () => {
+            const price = this.relative ? 0 : this.stx.currentQuote().Close;
+            const distance = this.chart.yAxis.priceTick;
+            this._high_barrier.price = price + distance;
+            this._low_barrier.price = price - distance;
+        });
 
         this.aboveShade = new ShadeStore();
         this.betweenShade = new ShadeStore();
         this.belowShade = new ShadeStore();
     }
 
-    get high_barrier() {
-        return this._high_barrier.price;
+    destructor() {
+        this.stx.removeInjection(this._injectionId);
+        this.stx.removeEventListener(this._listenerId);
     }
 
-    set high_barrier(price) {
-        this._high_barrier.price = price;
-    }
-
-    get low_barrier() {
-        return this._low_barrier.price;
-    }
-
-    set low_barrier(price) {
-        this._low_barrier.price = price;
-    }
+    get high_barrier() { return this._high_barrier.price; }
+    get low_barrier() { return this._low_barrier.price; }
+    set high_barrier(price) { this._high_barrier.price = price; }
+    set low_barrier(price) { this._low_barrier.price = price; }
 
     _setupConstrainBarrierPrices() {
         // barrier 1 cannot go below barrier 2
@@ -75,42 +82,6 @@ export default class BarrierStore {
     get context() { return this.mainStore.chart.context; }
     get stx() { return this.context.stx; }
     get chart() { return this.stx.chart; }
-
-    onContextReady = () => {
-        this._high_barrier = new PriceLineStore(this.mainStore);
-        this._low_barrier = new PriceLineStore(this.mainStore);
-        this._high_barrier.onPriceChanged(this._onPriceChanged.bind(this));
-        this._low_barrier.onPriceChanged(this._onPriceChanged.bind(this));
-        this.stx.append('draw', this._drawShadedArea.bind(this));
-
-        this._setupConstrainBarrierPrices();
-
-        this.stx.addEventListener('newChart', () => {
-            const price = this.relative ? 0 : this.stx.currentQuote().Close;
-            const distance = this.chart.yAxis.priceTick;
-            this._high_barrier.price = price + distance;
-            this._low_barrier.price = price - distance;
-        });
-    };
-
-    get visible() {
-        return this._visible;
-    }
-
-    set visible(visible) {
-        if (this._visible === visible) {return;}
-
-        if (visible) {
-            this.shadeState = this.shadeState; // restore barrier state
-            this._high_barrier.visible = true;
-        } else {
-            // Also disable visibility of barriers to turn off draw updates
-            this._high_barrier.visible = false;
-            this._low_barrier.visible = false;
-        }
-
-        this._visible = visible;
-    }
 
     onBarrierChange = null;
 
@@ -190,8 +161,6 @@ export default class BarrierStore {
     }
 
     _drawShadedArea() {
-        if (!this._visible) {return;}
-
         if (this._shadeState === BarrierStore.SHADE_ABOVE) {
             this._shadeAbove();
         } else if (this._shadeState === BarrierStore.SHADE_BELOW) {
