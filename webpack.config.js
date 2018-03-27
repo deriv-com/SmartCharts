@@ -69,7 +69,7 @@ const config = {
             filename: 'binarychartiq.css',
         }),
         new CopyWebpackPlugin([
-            { from: './chartiq/chartiq.js' },
+            { from: './chartiq/chartiq.min.js' },
         ]),
         new CopyWebpackPlugin([
             { from: './chartiq/splines.js' },
