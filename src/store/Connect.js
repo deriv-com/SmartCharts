@@ -129,6 +129,12 @@ const connect_v2 = (Store, mapStoresToProps, handleProps) => {
             if(handleProps) { handleProps(this.store, this.props); }
         }
 
+        componentWillUnmount() {
+            if(this.store && this.store.destructor) {
+                this.store.destructor();
+            }
+        }
+
         shouldComponentUpdate(nextProps) { return false; }
 
         render() {

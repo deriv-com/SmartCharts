@@ -16,7 +16,6 @@ const Barrier = ({
     return (
         <div
             className={`barrier ${barrierColor}`}
-            style={{display: visible ? undefined : 'none'}}
         >
             <HighPriceLine />
             <LowPriceLine />
@@ -47,7 +46,6 @@ export default connect(
     (store) => ({
         HighPriceLine: store._high_barrier.connect(PriceLine),
         LowPriceLine: store._low_barrier.connect(PriceLine),
-        visible: store._visible,
         aboveShade: store.aboveShade.clone(),
         belowShade: store.belowShade.clone(),
         betweenShade: store.betweenShade.clone(),
