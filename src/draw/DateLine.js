@@ -1,7 +1,6 @@
-import Line from './Line';
-import { createElement } from '../components/ui/utils';
+import { createElement, setHidden } from '../components/ui/utils';
 
-class DateLine extends Line {
+class DateLine {
     constructor({
         stx,
         visible = true,
@@ -10,10 +9,14 @@ class DateLine extends Line {
         draggable = false,
         followsCurrentQuote = false,
     }) {
-        super({
-            stx, visible, pipSize, draggable,
-        });
-        CIQ.appendClassName(this._line, 'vertical');
+        this._stx = stx;
+        this._chart = stx.chart;
+        this._pipSize = pipSize;
+        this._line = createElement(
+            '<div class="chart-line vertical"><div class="drag-line"></div></div>'
+        );
+
+        this._visible = visible;
 
         const holder = this._chart.panel.subholder;
         holder.appendChild(this._line);
@@ -94,11 +97,12 @@ class DateLine extends Line {
     }
 
     get visible() {
-        return super.visible;
+        return this._visible;
     }
 
     set visible(value) {
-        super.visible = value;
+        this._visible = value;
+        setHidden(this._line, !this._visible);
         if (value) {this._draw();}
     }
 

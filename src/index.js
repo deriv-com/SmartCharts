@@ -11,9 +11,10 @@ import {MobxProvider} from './store/Connect';
 import Barrier from './components/Barrier.jsx';
 import './SplinePlotter';
 
-export class SmartChart extends React.Component {
+class SmartChart extends React.Component {
     mainStore = new MainStore();
     get chart() { return this.mainStore.chart; }
+    get stx() { return this.chart.stxx; }
     get connectionManager() { return this.chart.connectionManager; }
 
     async componentDidMount() {
@@ -44,8 +45,16 @@ export class SmartChart extends React.Component {
             </MobxProvider>
         );
     }
+    addTradeStartLine() {
+        const start = new TradeStartLine({ stx: this.stx });
+        return start;
+    }
+    addTradeEndLine() {
+        const end = new TradeEndLine({ stx: this.stx });
+        return end;
+    }
 }
-export { Barrier };
+export { Barrier, SmartChart };
 
 export default {
     SmartChart,
