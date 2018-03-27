@@ -54,9 +54,7 @@ class App extends React.Component {
     followsCurrentQuote?={boolean}
     quote={number}
 />
-
-
-
+```
 
 
 ![](https://bruceoutdoors.files.wordpress.com/2018/01/screen-shot-2018-01-25-at-5-07-39-pm.png)
