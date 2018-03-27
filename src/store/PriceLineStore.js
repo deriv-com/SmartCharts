@@ -6,14 +6,14 @@ export default class PriceLineStore {
     _relative = false;
     @observable draggable = true;
     @observable isDragging = false;
-    @observable visible = true;
+    @observable visible = false;
     @observable top = 0;
     @observable _price = 0;
     @observable zIndex;
     @observable offScreen = false;
     @observable uncentered = false;
 
-    @computed get pip() { return this.mainStore.chart.currentActiveSymbol.decimal_places; };
+    @computed get pip() { return this.mainStore.chart.currentActiveSymbol.decimal_places; }
 
     constructor(mainStore) {
         this.mainStore = mainStore;

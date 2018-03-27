@@ -7,7 +7,6 @@ import Context from '../components/ui/Context';
 import React from 'react';
 import {stableSort} from './utils';
 import BarrierStore from './BarrierStore';
-import Barrier from '../components/Barrier.jsx';
 
 const connectionManager = new ConnectionManager({
     appId: 1,
@@ -46,9 +45,9 @@ class ChartStore {
     @observable categorizedSymbols = [];
     @observable barrierJSX;
 
-    @action.bound setSymbols(symbols) {
-        if (symbols && this.context) {
-            this.activeSymbols = this.processSymbols(symbols.active_symbols);
+    @action.bound setActiveSymbols(activeSymbols) {
+        if (activeSymbols && this.context) {
+            this.activeSymbols = this.processSymbols(activeSymbols);
             this.categorizedSymbols = this.categorizeActiveSymbols();
         }
     }
@@ -204,9 +203,6 @@ class ChartStore {
 
         // Optionally set a language for the UI, after it has been initialized, and translate.
         // CIQ.I18N.setLanguage(stxx, "zh");
-
-        this.barrier = new BarrierStore(this.mainStore);
-        this.barrierJSX = this.barrier.connect(Barrier);
     }
 
     @action.bound init(rootNode) {
@@ -214,7 +210,11 @@ class ChartStore {
 
         const stxx = this.stxx = new CIQ.ChartEngine({
             container: this.rootNode.querySelector('.chartContainer.primary'),
-            controls: {chartControls:null} // hide the default zoom buttons
+            controls: {chartControls:null}, // hide the default zoom buttons
+            preferences: {
+                currentPriceLine: true,
+            },
+            yTolerance: 999999, // disable vertical scrolling
         });
 
         // Animation (using tension requires splines.js)

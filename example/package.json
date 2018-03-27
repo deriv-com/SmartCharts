@@ -5,7 +5,7 @@
   "author": "bruce@binary.com",
   "license": "ISC",
   "scripts": {
-    "build": "webpack --optimize-minimize --progress",
+    "build": "webpack --progress",
     "start": "webpack-dev-server --open  --hot --inline"
   },
   "devDependencies": {

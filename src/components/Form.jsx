@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactSlider from 'react-slider';
+import ReactSlider from './Slider.jsx';
 import '../../sass/_ciq-form.scss';
 import {ArrowIcon} from './Icons.jsx';
 

@@ -87,15 +87,14 @@
                 &.ic-forex,
                 &.ic-commodities,
                 &.ic-volidx,
-                &.ic-stocks,
                 &.ic-favorite {
                     svg > g > circle { fill: $active-color; }
                 }
                 &.ic-indicators > svg > g circle {
                     fill: $active-color;
                 }
-                &.ic-stocks {
-                    svg > g > g:last-child { fill: $active-color; }
+                &.ic-stocks > svg > path:first-child {
+                    fill: $active-color;
                 }
                 &.ic-indices {
                     svg > g > g {
@@ -200,21 +199,19 @@
         }
     }
 
-    .ic-icon, .ic-frx {
-        height: $large-icon-size;
-        width: $large-icon-size;
-    }
-    .ic-icon {
-        display: inline-block;
-        margin-right: 15px;
-        > svg {
-            vertical-align: sub;
+    .left {
+        > .ic-icon, > .ic-frx {
+            height: $large-icon-size;
+            width: $large-icon-size;
         }
-    }
-    .ic-frx {
-        margin-right: 10px;
-    }
-    .ic-otc, .ic-wld {
-        margin-right: 15px;
+        > .ic-icon {
+            display: inline-block;
+            > svg {
+                vertical-align: sub;
+            }
+        }
+        > .ciq-item-display {
+            margin-left: 15px;
+        }
     }
 }

@@ -1,6 +1,7 @@
 import { observable, action, reaction, computed, autorunAsync, when } from 'mobx';
 import MenuStore from './MenuStore';
 import { downloadFileInBrowser, findAncestor } from './utils';
+import html2canvas from 'html2canvas';
 
 export default class ShareStore {
     constructor(mainStore) {
