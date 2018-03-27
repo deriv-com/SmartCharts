@@ -5,7 +5,7 @@ import ReactDOM from 'react-dom';
 import Chart from './components/Chart.jsx';
 import ConnectionManager from './ConnectionManager';
 import StreamManager from './StreamManager';
-import {TradeEndLine, TradeStartLine} from './draw/DateLine';
+import {TradeEndLine, TradeStartLine} from './components/VerticalLine.jsx';
 import MainStore from './store';
 import {MobxProvider} from './store/Connect';
 import Barrier from './components/Barrier.jsx';
@@ -54,11 +54,18 @@ class SmartChart extends React.Component {
         return end;
     }
 }
-export { Barrier, SmartChart };
+export {
+    Barrier,
+    SmartChart,
+    TradeStartLine,
+    TradeEndLine,
+};
 
 export default {
     SmartChart,
     Barrier,
+    TradeStartLine,
+    TradeEndLine,
 };
 
 // class BinaryChartiq {

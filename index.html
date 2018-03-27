@@ -37,6 +37,8 @@
         const e = React.createElement;
         const Barrier = smartcharts.Barrier;
         const SmartChart = smartcharts.SmartChart;
+        const TradeStartLine = smartcharts.TradeStartLine;
+        const TradeEndLine = smartcharts.TradeEndLine;
 
         const chart = ReactDOM.render(
             e(SmartChart, null,
@@ -46,6 +48,10 @@
                     shade: 'above',
                     //onBarrierChange: function(highlow) { console.warn(highlow); },
                 }, null),
+                /*e(TradeStartLine, {
+                    ref: function(r) { window.tradeStartLine = r; },
+                    followsCurrentQuote: true
+                }, null),*/
             ),
             document.getElementById('root')
         );

@@ -39,15 +39,27 @@ class Chart extends Component {
 
     render() {
         const { DrawToolsSettingsDialog, StudySettingsDialog, children } = this.props;
+
+        const array = React.Children.toArray(children);
+        const insideHolder = array.filter(c => !/(TradeStart)|(TradeEnd)/.test(c.type.displayName));
+        const insideSubHolder = array.filter(c => /(TradeStart)|(TradeEnd)/.test(c.type.displayName));
+
         return (
             <cq-context ref={(root) => { this.root = root; }}>
                 <div className="ciq-chart-area">
                     <div className="ciq-chart">
                         <div className='beta-version'>Beta Version</div>
-                        {children && 
-                                <RenderInsideChart>
-                                    {children}
+                        {insideHolder.length ?
+                                <RenderInsideChart at='holder'>
+                                    {insideHolder}
                                 </RenderInsideChart>
+                                : null
+                        }
+                        {insideSubHolder.length ?
+                                <RenderInsideChart at='subholder'>
+                                    {insideSubHolder}
+                                </RenderInsideChart>
+                                : null
                         }
                         <RenderInsideChart>
                             <div className="cq-top-ui-widgets">

@@ -10,10 +10,12 @@ class RenderInsideChart extends PureComponent {
     static contextTypes = { promise: PropTypes.object, mobxStores: PropTypes.object };
 
     componentDidMount() {
+        const at = this.props && this.props.at || 'holder';
+
         this.context.promise.then((context) => {
             const stx = context.stx;
             const elem = createElement(`<div></div>`);
-            const marker = stx.panels.chart.holder.appendChild(elem);
+            const marker = stx.chart.panel[at].appendChild(elem);
             ReactDOM.render(
                 <MobxProvider store={this.context.mobxStores}>
                     <React.Fragment>
