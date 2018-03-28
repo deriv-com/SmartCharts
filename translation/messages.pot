@@ -1,14 +1,14 @@
 
-msgid "undefined"
+msgid "Active"
+msgstr ""
+
+msgid "There are no active indicators yet."
 msgstr ""
 
 msgid "Enter a comma separated list of user names."
 msgstr ""
 
 msgid "Enyaddayadyayays popopo."
-msgstr ""
-
-msgid "Active"
 msgstr ""
 
 msgid "There are no active comparisons yet."

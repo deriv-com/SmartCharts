@@ -25,6 +25,7 @@ import Notification from './Notification.jsx';
 import Crosshair from './Crosshair.jsx';
 
 import { MobxProvider, connect } from '../store/Connect';
+import {t} from '../Translation';
 
 class Chart extends Component {
     static childContextTypes = { promise: PropTypes.object };
@@ -38,8 +39,9 @@ class Chart extends Component {
     }
 
     render() {
-        const { DrawToolsSettingsDialog, StudySettingsDialog, children } = this.props;
+        const { DrawToolsSettingsDialog, StudySettingsDialog, children, lang } = this.props;
 
+        t.setLanguage(lang);
         const array = React.Children.toArray(children);
         const insideHolder = array.filter(c => !/(TradeStart)|(TradeEnd)/.test(c.type.displayName));
         const insideSubHolder = array.filter(c => /(TradeStart)|(TradeEnd)/.test(c.type.displayName));

@@ -2,7 +2,7 @@ import { observable, action, computed } from 'mobx';
 import MenuStore from './MenuStore';
 import CategoricalDisplayStore from './CategoricalDisplayStore';
 import React from 'react';
-import {t} from '../translation';
+import {t} from '../Translation';
 window.t = t;
 const swatchColors = [
     '#8ec648', '#00afed', '#ee652e', '#912a8e',
@@ -24,7 +24,7 @@ export default class ComparisonStore {
                 { id: 'delete', onClick: this.onDeleteItem.bind(this) },
             ],
             onSelectItem: this.onSelectItem.bind(this),
-            placeholderText: '"AUD/JPY" or "Apple"',
+            placeholderText: t.translate('"AUD/JPY" or "Apple"'),
             favoritesId: 'comparisonSymbols',
             mainStore,
         });
@@ -43,9 +43,6 @@ export default class ComparisonStore {
                 dataObject: symbol
             });
         }
-        const amount = 50;
-        console.log(t.translate('Enter a comma separated list of user names.'));
-        console.log(t.translate('Enyaddayadyayays popopo.'));
         return {
             categoryName: t.translate('Active'),
             categoryId: 'active',

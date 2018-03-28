@@ -1,5 +1,4 @@
 // import de from "json-loader!po-loader!../translation/de.po";
-// import en from "json-loader!po-loader!../translation/en.po";
 // import es from "json-loader!po-loader!../translation/es.po";
 // import fr from "json-loader!po-loader!../translation/fr.po";
 // import id from "json-loader!po-loader!../translation/id.po";
@@ -13,11 +12,10 @@
 // import zh_cn from "json-loader!po-loader!../translation/zh_cn.po";
 // import zh_tw from "json-loader!po-loader!../translation/zh_tw.po";
 // This is for testing purpose only.
-import test from "json-loader!po-loader!../translation/test.po";
+import en from "json-loader!po-loader!../translation/en.po";
 
 const lang_map = {
     // de: de,
-    // en: en,
     // es: es,
     // fr: fr,
     // id: id,
@@ -30,7 +28,7 @@ const lang_map = {
     // vi: vi,
     // zh_cn: zh_cn,
     // zh_tw: zh_tw,
-    test: test,
+    en: en,
 };
 
 export class Translation {
@@ -38,7 +36,11 @@ export class Translation {
         this.lang = lang;
     }
     setLanguage(lang) {
-        this.lang = lang;
+        if (lang_map[lang]) {
+            this.lang = lang;
+        } else {
+            console.error('Unsupported language:', lang);
+        }
     }
     /**
      *

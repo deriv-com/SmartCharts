@@ -20,13 +20,19 @@ var parseCode = (source) => {
     })['body'];
 };
 
+function esc(s) {
+    if (!s) return s;
+    return s.replace(/"/g, '\\"');
+}
+
 var extractTextFromFunctions = (...args) => (code_obj) => {
     const textFunctions = estree.filterTreeForMethodsAndFunctionsNamed(...args)(code_obj);
     return _.map(textFunctions, (node) => {
         var strings = node.arguments.slice(0, 2).map((arg) => arg.value);
+        if (!strings[0]) return; // ignore invalid strings
         return {
-            text: strings[0],
-            pluralForm: strings[1],
+            text: esc(strings[0]),
+            pluralForm: esc(strings[1]),
             loc: {
                 line: node.loc.start.line,
                 column: node.loc.start.column
@@ -38,7 +44,7 @@ var extractTextFromFunctions = (...args) => (code_obj) => {
 var formatText = (extracted_obj) => {
     var body = '';
     _.forEach(extracted_obj, (info) => {
-        if (string_map[info.text]) {
+        if (!info || string_map[info.text]) {
             return;
         }
         body = body ? `${body}\n` : '';
@@ -79,6 +85,14 @@ function extractOutPot(source, translationDir) {
     }
 }
 
-const s = fs.readFileSync('./dist/binarychartiq.js').toString();
-extractOutPot(s, './translation/');
+const jsFile = process.argv[2];
+if (jsFile) {
+    console.log('Extracting translations from', jsFile, '...');
+    const s = fs.readFileSync(jsFile).toString();
+    extractOutPot(s, './translation/');
+    console.log('SUCCESS! Translations have been extracted to translations/messages.pot');
+} else {
+    console.error('Please provide the transpiled js file!');
+}
+
 

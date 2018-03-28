@@ -1,3 +1,6 @@
+# There's really no need for en.po since english is the default language.
+# This file is really only use for testing purposes and can be commented out....
+
 #: test
 msgid "Enter a comma separated list of user names."
 msgstr "Eine kommagetrennte Liste von Benutzernamen."

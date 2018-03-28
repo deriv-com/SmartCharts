@@ -9,7 +9,8 @@
     "analyze": "ANALYZE_BUNDLE=true yarn build",
     "watch": "webpack --progress --watch",
     "start": "rimraf dist && webpack-dev-server --open  --hot --inline",
-    "gh-pages": "yarn build && gh-pages --dist '.' --src '{index.html,dist/**,chartiq/jquery.js,css/demo.css}' --add"
+    "gh-pages": "yarn build && gh-pages --dist '.' --src '{index.html,dist/**,chartiq/jquery.js,css/demo.css}' --add",
+    "translations:extract": "yarn build && node scripts/extract-translations.js ./dist/smartcharts.js"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
