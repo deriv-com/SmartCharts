@@ -2,7 +2,7 @@ const webpack = require('webpack');
 const path = require('path');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const CopyWebpackPlugin = require('copy-webpack-plugin')
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 const config = {
     devtool: 'source-map',
@@ -52,15 +52,6 @@ const config = {
                 loader: 'eslint-loader',
                 enforce: 'pre',
                 options: { fix: true },
-            },
-            {
-                test: /\.(js|jsx)$/,
-                loader: './custom_loader/textExtractor',
-                exclude: /node_modules/,
-                options: {
-                    output: path.resolve(__dirname, 'translation'),
-                    method_names: ['translate']
-                },
             },
             {
                 test: /\.(js|jsx)$/,

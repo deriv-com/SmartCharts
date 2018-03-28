@@ -1,92 +1,15 @@
 
+msgid "undefined"
+msgstr ""
 
+msgid "Enter a comma separated list of user names."
+msgstr ""
 
+msgid "Enyaddayadyayays popopo."
+msgstr ""
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#/src/store/ComparisonStore.js 198:30
 msgid "Active"
 msgstr ""
 
-#/src/store/ComparisonStore.js 201:34
 msgid "There are no active comparisons yet."
-msgstr ""
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#/src/store/ComparisonStore.js 198:24
-msgid "Total: ${0}"
 msgstr ""
