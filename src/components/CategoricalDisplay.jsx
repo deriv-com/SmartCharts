@@ -104,8 +104,9 @@ const CategoricalDisplay = ({
                     return (
                         <div key={i}
                             className={`cq-filter ${isActive ? 'cq-active-filter' : ''}`}
-                            onClick={(e) => handleFilterClick(category, e)}
-                        >
+                            // onClick={(e) => handleFilterClick(category, e)}
+                            ref={el => el && el.addEventListener('stxtap', e => handleFilterClick(category, e))}
+                         >
                             {CategoryIcon && <CategoryIcon className={`ic-${category.categoryId}`}/>}
                             {category.categoryName}
                         </div>);

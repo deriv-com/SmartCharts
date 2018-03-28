@@ -17,7 +17,8 @@ class Menu extends Component {
             <div className={`ciq-menu ${className || ''} ${open ? 'stxMenuActive' : ''}`}>
                 <div
                     className="cq-menu-btn"
-                    onClick={onTitleClick}
+                    // onClick={onTitleClick}
+                    ref={el => el && el.addEventListener('stxtap', onTitleClick)}
                 >
                     {first}
                 </div>
