@@ -87,15 +87,14 @@
                 &.ic-forex,
                 &.ic-commodities,
                 &.ic-volidx,
-                &.ic-stocks,
                 &.ic-favorite {
                     svg > g > circle { fill: $active-color; }
                 }
                 &.ic-indicators > svg > g circle {
                     fill: $active-color;
                 }
-                &.ic-stocks {
-                    svg > g > g:last-child { fill: $active-color; }
+                &.ic-stocks > svg > path:first-child {
+                    fill: $active-color;
                 }
                 &.ic-indices {
                     svg > g > g {
@@ -115,10 +114,22 @@
         }
     }
     .cq-item, .cq-active-item {
-        padding: 7px 20px 2px 20px;
+        padding-left: 20px;
+        padding-right: 20px;
+        display: flex;
         border-bottom: 1px solid #e9e9ed;
-        height: 30px;
+        height: 40px;
+        align-items: center;
+        justify-content: space-between;
+        line-height: initial;
+        .left, .right {
+            display: flex;
+            align-items: center;
+        }
     }
+    .cq-item {
+        cursor: pointer;
+     }
     .cq-item[disabled] {
         cursor: default;
         &:not(.selected) {
@@ -127,9 +138,6 @@
         &.selected {
             background-color: #f2f3f8;
         }
-    }
-    .cq-item:not([disabled]):hover {
-        background: #f2f3f8;
     }
     .cq-scroll-panel {
         position: relative;
@@ -145,28 +153,7 @@
         padding: 0.2em 1.2em;
     }
 
-    /* Active Options */
-    .cq-active-options {
-        float: right;
-        display: inline-flex;
-        > span {
-            height:24px;
-            width: 24px;
-            margin-left: 2px;
-        }
-        .ic-delete, .ic-edit {
-            cursor: pointer;
-        }
-        .ic-cmp-color > span {
-            display: inline-block;
-            width: 13px;
-            border-radius: 15px;
-            height: 2px;
-            vertical-align: super;
-            left: 6px;
-            position: relative;
-        }
-    }
+
 }
 
 .stxMenuActive .cq-categorical-display {
@@ -176,11 +163,34 @@
 
 /* Active Symbol Icons */
 .cq-categorical-display .results-panel {
+    /* Active Options */
+    .cq-active-options {
+        float: right;
+        display: inline-flex;
+        > span, .ic-icon {
+            height:24px;
+            width: 24px;
+        }
+
+        .ic-delete, .ic-edit {
+            cursor: pointer;
+        }
+        .ic-cmp-color > span {
+            display: inline-block;
+            width: 13px;
+            border-radius: 15px;
+            height: 2px;
+            vertical-align: bottom;
+            left: 6px;
+            position: relative;
+        }
+    }
     .ciq-favorite {
         float: right;
         > .ic-icon {
             margin-right: 0;
-
+            width: $normal-icon-size;
+            height: $normal-icon-size;
         }
         &.ciq-active-favorite {
             svg > g > g > path {
@@ -188,11 +198,20 @@
             }
         }
     }
-    .ic-icon {
-        display: inline-block;
-        margin-right: 15px;
-    }
-    .ic-frx {
-        margin-right: 10px;
+
+    .left {
+        > .ic-icon, > .ic-frx {
+            height: $large-icon-size;
+            width: $large-icon-size;
+        }
+        > .ic-icon {
+            display: inline-block;
+            > svg {
+                vertical-align: sub;
+            }
+        }
+        > .ciq-item-display {
+            margin-left: 15px;
+        }
     }
 }

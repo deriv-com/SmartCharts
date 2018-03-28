@@ -2,71 +2,87 @@
 import $ from 'jquery';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import * as html2canvas from 'html2canvas';
 import Chart from './components/Chart.jsx';
 import ConnectionManager from './ConnectionManager';
 import StreamManager from './StreamManager';
-import {TradeEndLine, TradeStartLine} from './draw/DateLine';
+import {TradeEndLine, TradeStartLine} from './components/VerticalLine.jsx';
 import MainStore from './store';
 import {MobxProvider} from './store/Connect';
+import Barrier from './components/Barrier.jsx';
+import './SplinePlotter';
 
-// chartiq accesses html2canvas from global scope
-window.html2canvas = html2canvas;
+class SmartChart extends React.Component {
+    mainStore = new MainStore();
+    get chart() { return this.mainStore.chart; }
+    get stx() { return this.chart.stxx; }
+    get connectionManager() { return this.chart.connectionManager; }
 
-class BinaryChartiq {
-    static addNewChart(params) {
-        const chart = new BinaryChartiq(params);
-        return chart;
-    }
-
-    get connectionManager() {
-        return this.mainStore.chart.connectionManager;
-    }
-
-    set symbols(symbols) {
-        this.mainStore.chart.setSymbols(symbols);
-        // this.render({ symbols: symbols });
-    }
-
-    get barrier() {
-        return this.mainStore.chart.barrier;
-    }
-
-    constructor({ selector, symbols }) {
-        this.selector = selector;
-        if (symbols) {this.symbols = symbols;}
-
-        this.mainStore = new MainStore();
-        this.render();
-    }
-
-    getChartEngine() {
-        if (!this._stx) {
-            const context = $$$('cq-context', $$$(this.selector));
-            this._stx = context.CIQ.UI.context.stx;
+    async componentDidMount() {
+        let activeSymbols = this.props && this.props.activeSymbols;
+        if(!activeSymbols) {
+            const data = await this.connectionManager.send({
+                active_symbols: 'brief',
+                product_type: 'basic',
+            });
+            activeSymbols = data.active_symbols;
         }
-
-        return this._stx;
+        this.chart.setActiveSymbols(activeSymbols);
     }
 
-    addTradeStartLine() {
-        const start = new TradeStartLine({ stx: this.getChartEngine() });
-        return start;
+    componentWillReceiveProps({activeSymbols}) {
+        if(activeSymbols && activeSymbols !== this.chart.activeSymbols) {
+            this.chart.setActiveSymbols(activeSymbols);
+        }
     }
 
-    addTradeEndLine() {
-        const end = new TradeEndLine({ stx: this.getChartEngine() });
-        return end;
-    }
-
-    render(props) {
-        ReactDOM.render(
+    render() {
+        const {children} = this.props;
+        return (
             <MobxProvider store={this.mainStore}>
-                <Chart />
-            </MobxProvider>,
-            $$$(this.selector),
+                <Chart>
+                    {children}
+                </Chart>
+            </MobxProvider>
         );
     }
+    addTradeStartLine() {
+        const start = new TradeStartLine({ stx: this.stx });
+        return start;
+    }
+    addTradeEndLine() {
+        const end = new TradeEndLine({ stx: this.stx });
+        return end;
+    }
 }
+export {
+    Barrier,
+    SmartChart,
+    TradeStartLine,
+    TradeEndLine,
+};
 
-export default BinaryChartiq;
+export default {
+    SmartChart,
+    Barrier,
+    TradeStartLine,
+    TradeEndLine,
+};
+
+// class BinaryChartiq {
+//     getChartEngine() {
+//         if (!this._stx) {
+//             const context = $$$('cq-context', $$$(this.selector));
+//             this._stx = context.CIQ.UI.context.stx;
+//         }
+//         return this._stx;
+//     }
+//     addTradeStartLine() {
+//         const start = new TradeStartLine({ stx: this.getChartEngine() });
+//         return start;
+//     }
+//     addTradeEndLine() {
+//         const end = new TradeEndLine({ stx: this.getChartEngine() });
+//         return end;
+//     }
+// }
+

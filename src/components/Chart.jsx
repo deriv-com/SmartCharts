@@ -38,13 +38,23 @@ class Chart extends Component {
     }
 
     render() {
-        const { DrawToolsSettingsDialog, StudySettingsDialog, Barrier } = this.props;
+        const { DrawToolsSettingsDialog, StudySettingsDialog, children } = this.props;
+
+        const array = React.Children.toArray(children);
+        const insideHolder = array.filter(c => !/(TradeStart)|(TradeEnd)/.test(c.type.displayName));
+        const insideSubHolder = array.filter(c => /(TradeStart)|(TradeEnd)/.test(c.type.displayName));
+
         return (
             <cq-context ref={(root) => { this.root = root; }}>
                 <div className="ciq-chart-area">
                     <div className="ciq-chart">
                         <div className='beta-version'>Beta Version</div>
-                        {Barrier && <RenderInsideChart><Barrier/></RenderInsideChart>}
+                        <RenderInsideChart at='holder'>
+                            {insideHolder}
+                        </RenderInsideChart>
+                        <RenderInsideChart at='subholder'>
+                            {insideSubHolder}
+                        </RenderInsideChart>
                         <RenderInsideChart>
                             <div className="cq-top-ui-widgets">
                                 <ChartTitle />
@@ -70,7 +80,6 @@ export default connect(
     ({chart, drawTools, studies}) => ({
         contextPromise: chart.contextPromise,
         init: chart.init,
-        Barrier: chart.barrierJSX,
         StudySettingsDialog : studies.settingsDialog.connect(SettingsDialog),
         DrawToolsSettingsDialog : drawTools.settingsDialog.connect(SettingsDialog),
     })

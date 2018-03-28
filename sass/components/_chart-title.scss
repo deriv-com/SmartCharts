@@ -21,15 +21,15 @@
         &:hover {
             border: solid 1px $active-color;
         }
-        > .ic-frx {
-            margin-left: 10px;
-            margin-right: 10px;
-            transform: scale(1.2, 1.2);
-        }
-        > .ic-icon {
+        > .ic-icon, > .ic-frx, > .ic-wld, > .ic-otc {
+            height: $large-icon-size;
+            width: $large-icon-size;
             margin-left: 5px;
             margin-right: 12px;
-            transform: scale(1.3, 1.3);
+            transform: scale(1.3);
+            > svg {
+                height: $large-icon-size;
+            }
         }
         .cq-symbol-info {
             display: flex;

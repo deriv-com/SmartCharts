@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24" height="16" viewBox="0 0 24 16">
+  <title>dubai</title>
+  <g>
+    <path d="M2,0H22a2,2,0,0,1,2,2V14a2,2,0,0,1-2,2H2a2,2,0,0,1-2-2V2A2,2,0,0,1,2,0" transform="translate(0 0)" fill="#ff323e"/>
+      <path d="M24,0H22a2,2,0,0,1,2,2V0" transform="translate(0 0)" fill="#fff"/>
+      <path d="M21.5,1H6V5H23V2.5A1.5,1.5,0,0,0,21.5,1M22,0h-.5A2.5,2.5,0,0,1,24,2.5V5h0V2a2,2,0,0,0-2-2" transform="translate(0 0)" fill="#12833b"/>
+      <path d="M24,14h0a2,2,0,0,1-2,2h2V14" transform="translate(0 0)" fill="#fff"/>
+      <path d="M23,11H6v4H21.5A1.5,1.5,0,0,0,23,13.5V11m1,0h0v2.5A2.5,2.5,0,0,1,21.5,16H22a2,2,0,0,0,2-2V11" transform="translate(0 0)" fill="#262626"/>
+      <polyline points="24 5 24 5 24 11 24 11 24 5" fill="#fff"/>
+      <polyline points="23 5 6 5 6 11 23 11 23 5" fill="#fff"/>
+      <path d="M6,0H2.5A2.5,2.5,0,0,0,0,2.5v11A2.5,2.5,0,0,0,2.5,16H6V15H2.5A1.5,1.5,0,0,1,1,13.5V2.5A1.5,1.5,0,0,1,2.5,1H6V0" transform="translate(0 0)" fill="#f5303c"/>
+      <path d="M21.5,0H6V1H21.5A1.5,1.5,0,0,1,23,2.5V5h1V2.5A2.5,2.5,0,0,0,21.5,0" transform="translate(0 0)" fill="#117e39"/>
+      <path d="M24,11H23v2.5A1.5,1.5,0,0,1,21.5,15H6v1H21.5A2.5,2.5,0,0,0,24,13.5V11" transform="translate(0 0)" fill="#252525"/>
+      <polyline points="24 5 23 5 23 11 24 11 24 5" fill="#f5f5f5"/>
+  </g>
+</svg>

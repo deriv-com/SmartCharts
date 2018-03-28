@@ -79,19 +79,51 @@
     }
 }
 
-.ic-frx {
+.ic-frx, .ic-otc, .ic-wld {
+    width: 32px;
+    height: 32px;
     position: relative;
     display: inline-block;
     vertical-align: top;
-    width: 30px;
-    height: 25px;
     > span {
         position: absolute;
-        top: -4px;
-        left: -4px;
+    }
+}
+
+.ic-frx {
+    > span:last-child {
+        top: 8px;
+        left: 8px
+    }
+}
+
+.ic-otc {
+    > span {
+        top: 5px;
     }
     > span:last-child {
-        top: 4px;
-        left: 4px
+        top: -8px;
+        left: 9px
     }
+}
+
+.ic-wld {
+    > span:last-child {
+        > svg {
+            width: 12px;
+            height: 8px;
+        }
+        top: -9px;
+        left: 11px;
+    }
+}
+
+.ic-frxXPDUSD > svg > g > g > g > path:first-child {
+    fill: #E9EAF0;
+}
+.ic-frxXPTUSD > svg > g > g > g > path:first-child {
+    fill: #F4F3F3;
+}
+.ic-frxXAGUSD > svg > g > g > g > path:first-child {
+    fill: #E1E1E1;
 }

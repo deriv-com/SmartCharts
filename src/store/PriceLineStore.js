@@ -13,7 +13,7 @@ export default class PriceLineStore {
     @observable offScreen = false;
     @observable uncentered = false;
 
-    @computed get pip() { return this.mainStore.chart.currentActiveSymbol.decimal_places; };
+    @computed get pip() { return this.mainStore.chart.currentActiveSymbol.decimal_places; }
 
     constructor(mainStore) {
         this.mainStore = mainStore;
@@ -108,6 +108,7 @@ export default class PriceLineStore {
     }
 
     _dragLine(e) {
+        if(!this._line) { return; }
         const newTop = this._initialPosition + e.displacementY;
         const newCenter = newTop + (this._line.offsetHeight / 2);
         let newPrice = this._priceFromLocation(newCenter);
@@ -175,7 +176,7 @@ export default class PriceLineStore {
     }
 
     _draw() {
-        if (this.visible) {
+        if (this.visible && this._line) {
             this._positionAtPrice(this.realPrice);
         }
     }

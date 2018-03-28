@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="16" viewBox="0 0 24 16">
+  <title>spanish</title>
+  <path d="M21.5,1H2.5A1.5,1.5,0,0,0,1,2.5V4H23V2.5A1.5,1.5,0,0,0,21.5,1M2.5,0H2A2,2,0,0,0,0,2v.5H0A2.5,2.5,0,0,1,2.5,0M22,0h-.5A2.5,2.5,0,0,1,24,2.5V4h0V2a2,2,0,0,0-2-2" transform="translate(0 0)" fill="#dd172c"/>
+  <polyline points="0 0 24 0 24 4 0 4 0 0" fill="none"/>
+  <path d="M0,12H0v4H24V14a2,2,0,0,1-2,2H2a2,2,0,0,1-2-2V12" transform="translate(0 0)" fill="#fff"/>
+  <path d="M23,12H1v1.5A1.5,1.5,0,0,0,2.5,15h19A1.5,1.5,0,0,0,23,13.5V12m1,0h0v1.5A2.5,2.5,0,0,1,21.5,16H2.5A2.5,2.5,0,0,1,0,13.5H0V14a2,2,0,0,0,2,2H22a2,2,0,0,0,2-2V12" transform="translate(0 0)" fill="#dd172c"/>
+  <polyline points="0 12 24 12 24 16 0 16 0 12" fill="none"/>
+  <polyline points="24 4 24 4 24 12 24 12 24 4" fill="#ffd133"/>
+  <polyline points="23 4 1 4 1 12 23 12 23 4" fill="#ffd133"/>
+  <polyline points="0 4 24 4 24 12 0 12 0 4" fill="none"/>
+  <rect x="5.33" y="7.33" width="1.33" height="0.67" fill="#ffedb1"/>
+  <path d="M4.05,7.3l.17,2a1.12,1.12,0,0,0,2.23,0l.16-2A.26.26,0,0,0,6.33,7h-2A.28.28,0,0,0,4.05,7.3Z" transform="translate(0 0)" fill="none" stroke="#a41517" stroke-width="0.67"/>
+  <polygon points="4 8 6.67 8 6.67 8.67 6 8.67 5.33 10 4.67 8.67 4 8.67 4 8" fill="#a41517"/>
+  <rect x="2" y="6" width="1.33" height="4.67" fill="#a41517"/>
+  <rect x="7.33" y="6" width="1.33" height="4.67" fill="#a41517"/>
+  <path d="M4,5.33a.67.67,0,0,1,.67-.66H6a.66.66,0,0,1,.68.66v.33A.34.34,0,0,1,6.34,6h-2A.33.33,0,0,1,4,5.66Z" transform="translate(0 0)" fill="#a41517"/>
+  <path d="M21.5,0H2.5A2.5,2.5,0,0,0,0,2.5V4H1V2.5A1.5,1.5,0,0,1,2.5,1h19A1.5,1.5,0,0,1,23,2.5V4h1V2.5A2.5,2.5,0,0,0,21.5,0" transform="translate(0 0)" fill="#d4162a"/>
+  <path d="M24,12H23v1.5A1.5,1.5,0,0,1,21.5,15H2.5A1.5,1.5,0,0,1,1,13.5V12H0v1.5A2.5,2.5,0,0,0,2.5,16h19A2.5,2.5,0,0,0,24,13.5V12" transform="translate(0 0)" fill="#d4162a"/>
+  <polyline points="24 4 23 4 23 12 24 12 24 4" fill="#f5c931"/>
+  <polyline points="1 4 0 4 0 12 1 12 1 4" fill="#f5c931"/>
+</svg>
