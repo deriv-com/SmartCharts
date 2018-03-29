@@ -12,7 +12,7 @@ const CrosshairToggle = ({
         <CrosshairIcon
             onClick={toggleCrosshair}
             className={crosshair ? 'active' : ''}
-            tooltip-title='Crosshair' />
+            tooltip-title={t.translate('Crosshair')} />
     </div>
 );
 

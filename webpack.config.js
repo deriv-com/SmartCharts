@@ -67,6 +67,9 @@ const config = {
         ],
     },
     plugins: [
+        new webpack.ProvidePlugin({
+            't': [path.resolve(__dirname, './src/Translation.js'), 't']
+        }),
         new ExtractTextPlugin({
             filename: 'smartcharts.css',
         }),

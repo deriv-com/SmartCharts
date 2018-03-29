@@ -2,8 +2,7 @@ import { observable, action, computed } from 'mobx';
 import MenuStore from './MenuStore';
 import CategoricalDisplayStore from './CategoricalDisplayStore';
 import React from 'react';
-import {t} from '../Translation';
-window.t = t;
+
 const swatchColors = [
     '#8ec648', '#00afed', '#ee652e', '#912a8e',
     '#fff126', '#e9088c', '#ea1d2c', '#00a553',

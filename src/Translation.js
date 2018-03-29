@@ -12,9 +12,10 @@
 // import zh_cn from "../translation/zh_cn.po";
 // import zh_tw from "../translation/zh_tw.po";
 // This is for testing purpose only.
-import en from "../translation/en.po";
+import test from "../translation/test.po";
 
 const lang_map = {
+    en: {}, // default
     // de: de,
     // es: es,
     // fr: fr,
@@ -28,11 +29,11 @@ const lang_map = {
     // vi: vi,
     // zh_cn: zh_cn,
     // zh_tw: zh_tw,
-    en: en,
+    test: test,
 };
 
 export class Translation {
-    constructor(lang) {
+    constructor(lang = 'en') {
         this.lang = lang;
     }
     setLanguage(lang) {
@@ -53,7 +54,6 @@ export class Translation {
      */
     translate(...args) {
         let curr_lang = lang_map[this.lang];
-        if (!curr_lang) curr_lang = lang_map.test;
         const str = args[0];
         let rt_str;
 
@@ -92,5 +92,5 @@ export class Translation {
     }
 }
 
-var trans = new Translation('en');
+var trans = new Translation();
 export const t = trans;

@@ -25,7 +25,6 @@ import Notification from './Notification.jsx';
 import Crosshair from './Crosshair.jsx';
 
 import { MobxProvider, connect } from '../store/Connect';
-import {t} from '../Translation';
 
 class Chart extends Component {
     static childContextTypes = { promise: PropTypes.object };

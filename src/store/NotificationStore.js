@@ -6,7 +6,7 @@ export default class NotificationStore {
 
         setTimeout(() => {
             this.messages.push( {
-                text:  'This product is currently in beta. Unexpected errors may occur.',
+                text:  t.translate('This product is currently in beta. Unexpected errors may occur.'),
                 type: 'warning', // warning|info|error
                 hide: false,
             });

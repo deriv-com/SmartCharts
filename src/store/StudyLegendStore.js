@@ -18,7 +18,7 @@ export default class StudyLegendStore {
             getCategoricalItems: () => this.categorizedStudies,
             getActiveCategory: () => this.activeStudies,
             onSelectItem: this.onSelectItem.bind(this),
-            placeholderText: '"Mass Index" or "Doji Star"',
+            placeholderText: t.translate('"Mass Index" or "Doji Star"'),
             favoritesId: 'indicators',
             mainStore,
         });
@@ -43,10 +43,10 @@ export default class StudyLegendStore {
     previousStudies = { };
 
     @observable activeStudies = {
-        categoryName: 'Active',
+        categoryName: t.translate('Active'),
         categoryId: 'active',
         hasSubcategory: false,
-        emptyDescription: 'There are no active indicators yet.',
+        emptyDescription: t.translate('There are no active indicators yet.'),
         data: [],
     };
 
