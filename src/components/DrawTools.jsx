@@ -21,18 +21,18 @@ const DrawTools = ({
             <Menu.Title>
                 <DrawIcon
                     className={`${menuOpen ? 'active' : ''}`}
-                    tooltip-title="Draw tools" />
+                    tooltip-title={t.translate("Draw tools")} />
             </Menu.Title>
 
             <Menu.Body>
                 <div className='ciq-bars'>
                     <div onClick={clearDrawings}>
                         <DeleteIcon />
-                        Clear All
+                        {t.translate('Clear All')}
                     </div>
                     <div onClick={() => selectTool('measure')}>
                         <MeasureIcon />
-                        Measure
+                        {t.translate('Measure')}
                     </div>
                 </div>
                 <DrawList />

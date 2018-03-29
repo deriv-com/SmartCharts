@@ -2,7 +2,7 @@ const webpack = require('webpack');
 const path = require('path');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const CopyWebpackPlugin = require('copy-webpack-plugin')
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 const production = process.env.NODE_ENV === 'production';
 
@@ -60,9 +60,16 @@ const config = {
                 // exclude: /node_modules/,
                 loader: 'babel-loader',
             },
+            {
+                test: /\.po$/,
+                loader: 'json-loader!po-loader',
+            }
         ],
     },
     plugins: [
+        new webpack.ProvidePlugin({
+            't': [path.resolve(__dirname, './src/Translation.js'), 't']
+        }),
         new ExtractTextPlugin({
             filename: 'smartcharts.css',
         }),

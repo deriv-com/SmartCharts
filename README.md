@@ -35,6 +35,22 @@ class App extends React.Component {
 };
 ```
 
+### Translations
+
+All strings that need to be translated must be inside `t.translate()`:
+
+```js
+t.translate('[currency] [amount] payout if the last tick.', { 
+    currency: 'USD',
+    amount: 43.12
+});
+t.setLanguage('fr'); // components need to be rerendered for changes to take affect
+```
+
+We can then generate the `messages.pot` file for [CrowdIn](https://crowdin.com/project/smartcharts/settings#files) via:
+
+    yarn translations
+
 ### Barrier Component
 ```jsx
 <Barrier

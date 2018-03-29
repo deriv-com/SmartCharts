@@ -1,0 +1,216 @@
+
+msgid "PRICE"
+msgstr ""
+
+msgid "OPEN"
+msgstr ""
+
+msgid "CLOSE"
+msgstr ""
+
+msgid "HIGH"
+msgstr ""
+
+msgid "LOW"
+msgstr ""
+
+msgid "Chart types"
+msgstr ""
+
+msgid "Studies"
+msgstr ""
+
+msgid "Comparison"
+msgstr ""
+
+msgid "Templates"
+msgstr ""
+
+msgid "Template name"
+msgstr ""
+
+msgid "There is no template added by you."
+msgstr ""
+
+msgid "Click + icon to add one."
+msgstr ""
+
+msgid "Crosshair"
+msgstr ""
+
+msgid "Time period"
+msgstr ""
+
+msgid "Tick"
+msgstr ""
+
+msgid "Minute"
+msgstr ""
+
+msgid "Hour"
+msgstr ""
+
+msgid "Day"
+msgstr ""
+
+msgid "Zoom out"
+msgstr ""
+
+msgid "Zoom in"
+msgstr ""
+
+msgid "Draw tools"
+msgstr ""
+
+msgid "Clear All"
+msgstr ""
+
+msgid "Measure"
+msgstr ""
+
+msgid "Share"
+msgstr ""
+
+msgid "Share / Download Chart"
+msgstr ""
+
+msgid "Share link"
+msgstr ""
+
+msgid "Download chart"
+msgstr ""
+
+msgid "Line"
+msgstr ""
+
+msgid "Dot"
+msgstr ""
+
+msgid "Colored Dot"
+msgstr ""
+
+msgid "Spline"
+msgstr ""
+
+msgid "Baseline"
+msgstr ""
+
+msgid "Candle"
+msgstr ""
+
+msgid "OHLC"
+msgstr ""
+
+msgid "Hollow Candle"
+msgstr ""
+
+msgid "\"Mass Index\" or \"Doji Star\""
+msgstr ""
+
+msgid "Active"
+msgstr ""
+
+msgid "There are no active indicators yet."
+msgstr ""
+
+msgid "\"AUD/JPY\" or \"Apple\""
+msgstr ""
+
+msgid "There are no active comparisons yet."
+msgstr ""
+
+msgid "Annotation"
+msgstr ""
+
+msgid "Average Line"
+msgstr ""
+
+msgid "Callout"
+msgstr ""
+
+msgid "Channel"
+msgstr ""
+
+msgid "Continuous"
+msgstr ""
+
+msgid "Crossline"
+msgstr ""
+
+msgid "Doodle"
+msgstr ""
+
+msgid "Ellipse"
+msgstr ""
+
+msgid "Fib Arc"
+msgstr ""
+
+msgid "Fib Fan"
+msgstr ""
+
+msgid "Fib Time Zone"
+msgstr ""
+
+msgid "Gann Fan"
+msgstr ""
+
+msgid "Gartley"
+msgstr ""
+
+msgid "Horizontal"
+msgstr ""
+
+msgid "Pitchfork"
+msgstr ""
+
+msgid "Quadrant Lines"
+msgstr ""
+
+msgid "Ray"
+msgstr ""
+
+msgid "Rectangle"
+msgstr ""
+
+msgid "Regression Line"
+msgstr ""
+
+msgid "Segment"
+msgstr ""
+
+msgid "Shape - Arrow"
+msgstr ""
+
+msgid "Shape - Check"
+msgstr ""
+
+msgid "Shape - Cross"
+msgstr ""
+
+msgid "Shape - Focus"
+msgstr ""
+
+msgid "Shape - Heart"
+msgstr ""
+
+msgid "Shape - Star"
+msgstr ""
+
+msgid "Speed Resistance Arc"
+msgstr ""
+
+msgid "Speed Resistance Line"
+msgstr ""
+
+msgid "Time Cycle"
+msgstr ""
+
+msgid "Tirone Levels"
+msgstr ""
+
+msgid "Vertical"
+msgstr ""
+
+msgid "This product is currently in beta. Unexpected errors may occur."
+msgstr ""
