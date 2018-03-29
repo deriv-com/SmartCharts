@@ -1,6 +1,4 @@
-import $ from 'jquery';
 import CIQ from 'chartiq';
-import '../../../chartiq/webcomponents-lite.min';
 import './jquery-extensions';
 import './UI';
 import UIManager from './UIManager';

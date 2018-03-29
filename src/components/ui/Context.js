@@ -1,5 +1,3 @@
-import $ from 'jquery';
-
 /**
  * UI context helper class. Construct with an {@link CIQ.ChartEngine} object
  * @param {CIQ.ChartEngine} stx The chart object to associate this UI
@@ -14,9 +12,9 @@ class Context {
         this.params = params || {};
         this.stx = stx;
         topNode = this.topNode = $(topNode)[0];
-        this.node = $(this.topNode);
         let storage = Context.assembleContext(topNode);
         this.advertised = {};
+        window.tn = topNode;
         topNode.CIQ.UI.context = this;
         // Search through all of the components that have registered themselves. Call setContext() on each
         // so that they can get their context. This usually initializes and makes the component active.

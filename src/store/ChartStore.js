@@ -245,21 +245,10 @@ class ChartStore {
 
         new CIQ.RangeSlider({ stx: stxx });
 
-        const isWebComponentsSupported = ('registerElement' in document &&
-            'import' in document.createElement('link') &&
-            'content' in document.createElement('template'));
+        this.startUI();
+        this.resizeScreen();
 
-        if (isWebComponentsSupported) {
-            this.startUI();
-            this.resizeScreen();
-        } else {
-            window.addEventListener('WebComponentsReady', () => {
-                this.startUI();
-                this.resizeScreen();
-            });
-        }
-
-        $(window).resize(this.resizeScreen.bind(this));
+        window.addEventListener('resize', this.resizeScreen.bind(this));
 
         stxx.append('updateChartData', this.updateComparisons);
     }
