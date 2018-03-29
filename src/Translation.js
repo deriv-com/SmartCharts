@@ -11,8 +11,6 @@
 // import vi from "../translation/vi.po";
 // import zh_cn from "../translation/zh_cn.po";
 // import zh_tw from "../translation/zh_tw.po";
-// This is for testing purpose only.
-import test from "../translation/test.po";
 
 const lang_map = {
     en: {}, // default
@@ -29,7 +27,6 @@ const lang_map = {
     // vi: vi,
     // zh_cn: zh_cn,
     // zh_tw: zh_tw,
-    test: test,
 };
 
 export class Translation {
