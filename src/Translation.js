@@ -78,12 +78,12 @@ export class Translation {
     }
 
     replace(str, obj) {
-        if (!obj) return str;
+        if (!obj) {return str;}
 
         const prop = Object.keys(obj);
         while (prop.length) {
             const str_var = prop.shift();
-            str = str.replace('[' + str_var + ']', obj[str_var]);
+            str = str.replace(`[${str_var}]`, obj[str_var]);
         }
         return str;
     }

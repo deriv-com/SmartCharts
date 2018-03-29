@@ -7,6 +7,9 @@ import Context from '../components/ui/Context';
 import React from 'react';
 import {stableSort} from './utils';
 import BarrierStore from './BarrierStore';
+import KeystrokeHub from '../components/ui/KeystrokeHub';
+import '../components/ui/Animation';
+// import '../AddOns';
 
 const connectionManager = new ConnectionManager({
     appId: 1,
@@ -167,8 +170,8 @@ class ChartStore {
             this.categorizedSymbols = this.categorizeActiveSymbols();
         };
 
-        new CIQ.UI.KeystrokeHub(document.querySelector('body'), context, {
-            cb: CIQ.UI.KeystrokeHub.defaultHotKeys,
+        new KeystrokeHub(document.querySelector('body'), context, {
+            cb: KeystrokeHub.defaultHotKeys,
         });
 
         const UIStorage = new CIQ.NameValueStore();
@@ -198,7 +201,6 @@ class ChartStore {
 
         this.context = context;
         this.contextPromise.resolve(context);
-        CIQ.UI.begin();
         stxx.setStyle('stx_line_chart', 'color', '#4DAFEE'); // TODO => why is not working in css?
 
         // Optionally set a language for the UI, after it has been initialized, and translate.
@@ -226,16 +228,16 @@ class ChartStore {
         });
 
         // Extended hours trading zones
-        new CIQ.ExtendedHours({
-            stx: stxx,
-            filter: true,
-        });
+        // new CIQ.ExtendedHours({
+        //     stx: stxx,
+        //     filter: true,
+        // });
 
         // Inactivity timer
-        new CIQ.InactivityTimer({
-            stx: stxx,
-            minutes: 30,
-        });
+        // new CIQ.InactivityTimer({
+        //     stx: stxx,
+        //     minutes: 30,
+        // });
 
         stxx.addEventListener('layout', this.saveLayout.bind(this));
         stxx.addEventListener('symbolChange', this.saveLayout.bind(this));
@@ -243,23 +245,10 @@ class ChartStore {
         // stxx.addEventListener('newChart', () => { });
         stxx.addEventListener('preferences', this.savePreferences.bind(this));
 
-        new CIQ.RangeSlider({ stx: stxx });
+        this.startUI();
+        this.resizeScreen();
 
-        const isWebComponentsSupported = ('registerElement' in document &&
-            'import' in document.createElement('link') &&
-            'content' in document.createElement('template'));
-
-        if (isWebComponentsSupported) {
-            this.startUI();
-            this.resizeScreen();
-        } else {
-            window.addEventListener('WebComponentsReady', () => {
-                this.startUI();
-                this.resizeScreen();
-            });
-        }
-
-        $(window).resize(this.resizeScreen.bind(this));
+        window.addEventListener('resize', this.resizeScreen.bind(this));
 
         stxx.append('updateChartData', this.updateComparisons);
     }

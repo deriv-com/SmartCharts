@@ -1,5 +1,3 @@
-import $ from 'jquery';
-
 /**
  * UI context helper class. Construct with an {@link CIQ.ChartEngine} object
  * @param {CIQ.ChartEngine} stx The chart object to associate this UI
@@ -13,8 +11,7 @@ class Context {
     constructor(stx, topNode, params) {
         this.params = params || {};
         this.stx = stx;
-        topNode = this.topNode = $(topNode)[0];
-        this.node = $(this.topNode);
+        this.topNode = topNode;
         let storage = Context.assembleContext(topNode);
         this.advertised = {};
         topNode.CIQ.UI.context = this;
