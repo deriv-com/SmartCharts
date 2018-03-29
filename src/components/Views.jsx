@@ -37,7 +37,7 @@ const Views = ({
                 <div>
                     <TemplateIcon
                         className = {menuOpen ? 'active' : ''}
-                        tooltip-title="Templates" />
+                        tooltip-title={t.translate("Templates")} />
                 </div>
             </Menu.Title>
             <Menu.Body>
@@ -49,7 +49,7 @@ const Views = ({
                                 <input
                                     ref={inputRef}
                                     className="view-input"
-                                    placeholder="Template name"
+                                    placeholder={t.translate("Template name")}
                                     maxLength={20}
                                     onChange={onChange}
                                     onKeyUp={onSubmit}
@@ -79,8 +79,8 @@ const Views = ({
                             />
                         ))
                         : <span className="placeholder">
-                            <p>There is no template added by you.</p>
-                            <p>Click + icon to add one.</p>
+                            <p>{t.translate('There is no template added by you.')}</p>
+                            <p>{t.translate('Click + icon to add one.')}</p>
                         </span>
                     }
                 </div>

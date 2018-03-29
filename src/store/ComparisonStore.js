@@ -23,7 +23,7 @@ export default class ComparisonStore {
                 { id: 'delete', onClick: this.onDeleteItem.bind(this) },
             ],
             onSelectItem: this.onSelectItem.bind(this),
-            placeholderText: '"AUD/JPY" or "Apple"',
+            placeholderText: t.translate('"AUD/JPY" or "Apple"'),
             favoritesId: 'comparisonSymbols',
             mainStore,
         });
@@ -43,10 +43,10 @@ export default class ComparisonStore {
             });
         }
         return {
-            categoryName: 'Active',
+            categoryName: t.translate('Active'),
             categoryId: 'active',
             hasSubcategory: false,
-            emptyDescription: 'There are no active comparisons yet.',
+            emptyDescription: t.translate('There are no active comparisons yet.'),
             data: result
         };
     }

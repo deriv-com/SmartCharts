@@ -53,14 +53,14 @@ export default class ChartTypeStore {
         const isTickSelected = this.mainStore.timeperiod.timeUnit === 'tick';
 
         return [
-            { id: 'mountain', text: 'Line', disabled: false, icon: LineIcon },
-            { id: 'line', text: 'Dot', disabled: false, icon: DotIcon },
-            { id: 'colored_line', text: 'Colored Dot', disabled: false, icon: DotIcon },
-            { id: 'spline', text: 'Spline', disabled: false, icon: SplineIcon },
-            { id: 'baseline', text: 'Baseline', disabled: false, icon: BaseLineIcon },
-            { id: 'candle', text: 'Candle', disabled: isTickSelected, icon: CandleIcon },
-            { id: 'colored_bar', text: 'OHLC', disabled: isTickSelected, icon: OHLCIcon },
-            { id: 'hollow_candle', text: 'Hollow Candle', disabled: isTickSelected, icon: HollowCandleIcon },
+            { id: 'mountain', text: t.translate('Line'), disabled: false, icon: LineIcon },
+            { id: 'line', text: t.translate('Dot'), disabled: false, icon: DotIcon },
+            { id: 'colored_line', text: t.translate('Colored Dot'), disabled: false, icon: DotIcon },
+            { id: 'spline', text: t.translate('Spline'), disabled: false, icon: SplineIcon },
+            { id: 'baseline', text: t.translate('Baseline'), disabled: false, icon: BaseLineIcon },
+            { id: 'candle', text: t.translate('Candle'), disabled: isTickSelected, icon: CandleIcon },
+            { id: 'colored_bar', text: t.translate('OHLC'), disabled: isTickSelected, icon: OHLCIcon },
+            { id: 'hollow_candle', text: t.translate('Hollow Candle'), disabled: isTickSelected, icon: HollowCandleIcon },
         ].map(t => ({ ...t, active: t.id === this.type.id }));
     }
 

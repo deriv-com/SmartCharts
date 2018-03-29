@@ -38,7 +38,7 @@ class SmartChart extends React.Component {
         const {children} = this.props;
         return (
             <MobxProvider store={this.mainStore}>
-                <Chart>
+                <Chart lang="en">
                     {children}
                 </Chart>
             </MobxProvider>

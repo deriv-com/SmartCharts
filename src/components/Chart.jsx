@@ -36,8 +36,9 @@ class Chart extends Component {
     }
 
     render() {
-        const { DrawToolsSettingsDialog, StudySettingsDialog, children } = this.props;
+        const { DrawToolsSettingsDialog, StudySettingsDialog, children, lang } = this.props;
 
+        t.setLanguage(lang);
         const array = React.Children.toArray(children);
         const insideHolder = array.filter(c => !/(TradeStart)|(TradeEnd)/.test(c.type.displayName));
         const insideSubHolder = array.filter(c => /(TradeStart)|(TradeEnd)/.test(c.type.displayName));
