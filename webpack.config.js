@@ -60,6 +60,10 @@ const config = {
                 // exclude: /node_modules/,
                 loader: 'babel-loader',
             },
+            {
+                test: /\.po$/,
+                loader: 'json-loader!po-loader',
+            }
         ],
     },
     plugins: [
