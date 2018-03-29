@@ -96,7 +96,6 @@ const config = {
         ]),
     ],
     externals: {
-        jquery: 'jQuery',
         chartiq: 'CIQ',
         mobx: 'mobx',
         react: {

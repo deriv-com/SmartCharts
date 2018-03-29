@@ -11,10 +11,9 @@ class Context {
     constructor(stx, topNode, params) {
         this.params = params || {};
         this.stx = stx;
-        topNode = this.topNode = $(topNode)[0];
+        this.topNode = topNode;
         let storage = Context.assembleContext(topNode);
         this.advertised = {};
-        window.tn = topNode;
         topNode.CIQ.UI.context = this;
         // Search through all of the components that have registered themselves. Call setContext() on each
         // so that they can get their context. This usually initializes and makes the component active.

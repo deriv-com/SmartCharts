@@ -9,7 +9,7 @@
     "analyze": "ANALYZE_BUNDLE=true yarn build",
     "watch": "webpack --progress --watch",
     "start": "rimraf dist && webpack-dev-server --open  --hot --inline",
-    "gh-pages": "yarn build && gh-pages --dist '.' --src '{index.html,dist/**,chartiq/jquery.js,css/demo.css}' --add"
+    "gh-pages": "yarn build && gh-pages --dist '.' --src '{index.html,dist/**,css/demo.css}' --add"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
@@ -41,7 +41,6 @@
     "file-loader": "^1.1.6",
     "gh-pages": "^1.1.0",
     "image-webpack-loader": "^4.1.0",
-    "jquery": "^3.2.1",
     "node-sass": "^4.7.2",
     "raw-loader": "^0.5.1",
     "rimraf": "^2.6.2",
@@ -67,8 +66,5 @@
     "prop-types": "^15.6.0",
     "react": "^16.2.0",
     "react-dom": "^16.2.0"
-  },
-  "peerDependencies": {
-    "jquery": "^3.2.1"
   }
 }

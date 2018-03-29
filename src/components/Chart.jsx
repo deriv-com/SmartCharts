@@ -12,7 +12,6 @@ import Loader from './Loader.jsx'
 import '../../sass/chartiq.scss';
 import '../../sass/_ciq-custom.scss';
 
-import '../AddOns';
 import '../Plugin';
 import './ui';
 
