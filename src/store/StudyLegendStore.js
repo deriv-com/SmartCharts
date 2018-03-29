@@ -118,7 +118,7 @@ export default class StudyLegendStore {
 
         this.settingsDialog.items = [...inputs, ...outputs, ...parameters];
         this.settingsDialog.title = study.sd.name.toUpperCase();
-        this.settingsDialog.description = "No description yet";
+        this.settingsDialog.description = t.translate("No description yet");
         this.settingsDialog.setOpen(true);
     }
     @action.bound deleteStudy(study) {
