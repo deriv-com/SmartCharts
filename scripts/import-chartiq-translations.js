@@ -1,5 +1,8 @@
-var fs = require('fs');
+// A quick little script that imports ChartIQ's translations (chartiq-translations.csv
+// is taken directly from chartiq's translations.js file) and places them to their
+// respective places in the corresponding po files.
 
+var fs = require('fs');
 
 let languages = ['en','ar','fr','de','hu','it','pt','ru','es','zh_cn','ja'];
 const lang_map = {};
