@@ -10,7 +10,13 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Japanese\n"
 "Language: ja_JP\n"
-"PO-Revision-Date: 2018-03-29 02:31-0400\n"
+"PO-Revision-Date: 2018-03-30 03:26-0400\n"
+
+msgid "Favorites"
+msgstr ""
+
+msgid "There are no favorites yet."
+msgstr ""
 
 msgid "PRICE"
 msgstr ""
@@ -30,8 +36,11 @@ msgstr ""
 msgid "Chart types"
 msgstr ""
 
-msgid "Studies"
+msgid "Toggle Asset Information"
 msgstr ""
+
+msgid "Studies"
+msgstr "スタディ"
 
 msgid "Comparison"
 msgstr ""
@@ -49,7 +58,7 @@ msgid "Click + icon to add one."
 msgstr ""
 
 msgid "Crosshair"
-msgstr ""
+msgstr "十字線"
 
 msgid "Time period"
 msgstr ""
@@ -64,7 +73,7 @@ msgid "Hour"
 msgstr ""
 
 msgid "Day"
-msgstr ""
+msgstr "日中"
 
 msgid "Zoom out"
 msgstr ""
@@ -76,13 +85,13 @@ msgid "Draw tools"
 msgstr ""
 
 msgid "Clear All"
-msgstr ""
+msgstr "全てをクリアする"
 
 msgid "Measure"
-msgstr ""
+msgstr "計測"
 
 msgid "Share"
-msgstr ""
+msgstr "共有"
 
 msgid "Share / Download Chart"
 msgstr ""
@@ -93,8 +102,20 @@ msgstr ""
 msgid "Download chart"
 msgstr ""
 
-msgid "Line"
+msgid "RESET"
 msgstr ""
+
+msgid "DONE"
+msgstr ""
+
+msgid "right-click to delete"
+msgstr "削除するには、右クリック"
+
+msgid "right-click to manage"
+msgstr "管理するために、右クリック"
+
+msgid "Line"
+msgstr "線"
 
 msgid "Dot"
 msgstr ""
@@ -106,18 +127,21 @@ msgid "Spline"
 msgstr ""
 
 msgid "Baseline"
-msgstr ""
+msgstr "ベースライン"
 
 msgid "Candle"
-msgstr ""
+msgstr "ローソク足"
 
 msgid "OHLC"
 msgstr ""
 
 msgid "Hollow Candle"
-msgstr ""
+msgstr "陽線ローソク足"
 
 msgid "\"Mass Index\" or \"Doji Star\""
+msgstr ""
+
+msgid "No description yet"
 msgstr ""
 
 msgid "Active"
@@ -133,98 +157,1070 @@ msgid "There are no active comparisons yet."
 msgstr ""
 
 msgid "Annotation"
-msgstr ""
+msgstr "注釈"
 
 msgid "Average Line"
-msgstr ""
+msgstr "平均線"
 
 msgid "Callout"
-msgstr ""
+msgstr "コールアウト"
 
 msgid "Channel"
-msgstr ""
+msgstr "チャネル"
 
 msgid "Continuous"
-msgstr ""
+msgstr "連続的"
 
 msgid "Crossline"
-msgstr ""
+msgstr "十字線"
 
 msgid "Doodle"
-msgstr ""
+msgstr "フリーフォーム"
 
 msgid "Ellipse"
-msgstr ""
+msgstr "楕円"
 
 msgid "Fib Arc"
-msgstr ""
+msgstr "フィボナッチアーク"
 
 msgid "Fib Fan"
-msgstr ""
+msgstr "フィボナッチファン"
 
 msgid "Fib Time Zone"
-msgstr ""
+msgstr "フィボナッチタイムゾーン"
 
 msgid "Gann Fan"
-msgstr ""
+msgstr "ギャンファン"
 
 msgid "Gartley"
-msgstr ""
+msgstr "ガートレイ"
 
 msgid "Horizontal"
-msgstr ""
+msgstr "水平"
 
 msgid "Pitchfork"
-msgstr ""
+msgstr "ピッチフォーク"
 
 msgid "Quadrant Lines"
-msgstr ""
+msgstr "四分円ライン"
 
 msgid "Ray"
-msgstr ""
+msgstr "線"
 
 msgid "Rectangle"
-msgstr ""
+msgstr "長方形"
 
 msgid "Regression Line"
-msgstr ""
+msgstr "回帰線"
 
 msgid "Segment"
-msgstr ""
+msgstr "区切り"
 
 msgid "Shape - Arrow"
-msgstr ""
+msgstr "形 - 矢印"
 
 msgid "Shape - Check"
-msgstr ""
+msgstr "形 - チェック"
 
 msgid "Shape - Cross"
-msgstr ""
+msgstr "形 - クロス"
 
 msgid "Shape - Focus"
-msgstr ""
+msgstr "形 - フォーカス"
 
 msgid "Shape - Heart"
-msgstr ""
+msgstr "形 - ハート"
 
 msgid "Shape - Star"
-msgstr ""
+msgstr "形 - 星"
 
 msgid "Speed Resistance Arc"
-msgstr ""
+msgstr "スピードレジスタンスアーク"
 
 msgid "Speed Resistance Line"
-msgstr ""
+msgstr "スピードレジスタンスライン"
 
 msgid "Time Cycle"
-msgstr ""
+msgstr "時間サイクル"
 
 msgid "Tirone Levels"
-msgstr ""
+msgstr "タイロンレベル"
 
 msgid "Vertical"
-msgstr ""
+msgstr "縦"
 
 msgid "This product is currently in beta. Unexpected errors may occur."
 msgstr ""
+
+msgid "RSI"
+msgstr "RSI"
+
+msgid "Period"
+msgstr "期間"
+
+msgid "Show Zones"
+msgstr "ゾーンの表示"
+
+msgid "OverBought"
+msgstr "買い持ち"
+
+msgid "OverSold"
+msgstr "売り持ち"
+
+msgid "Moving Average"
+msgstr "移動平均"
+
+msgid "Field"
+msgstr "分野"
+
+msgid "Type"
+msgstr "種類"
+
+msgid "Offset"
+msgstr "相殺"
+
+msgid "Underlay"
+msgstr "アンダーレイ"
+
+msgid "MA"
+msgstr "MA"
+
+msgid "MACD"
+msgstr "MACD"
+
+msgid "Fast MA Period"
+msgstr "速いMA期間"
+
+msgid "Slow MA Period"
+msgstr "遅いMA期間"
+
+msgid "Signal Period"
+msgstr "シグナル期間"
+
+msgid "Signal"
+msgstr "シグナル"
+
+msgid "Increasing Bar"
+msgstr "増加バー"
+
+msgid "Decreasing Bar"
+msgstr "減少バー"
+
+msgid "Stochastics"
+msgstr "ストキャスティクス"
+
+msgid "Smooth"
+msgstr "スムーズ"
+
+msgid "Fast"
+msgstr "速い"
+
+msgid "Slow"
+msgstr "遅い"
+
+msgid "Aroon"
+msgstr "アルーン"
+
+msgid "Aroon Up"
+msgstr "アルーン・アップ"
+
+msgid "Aroon Down"
+msgstr "アルーン・ダウン"
+
+msgid "Aroon Oscillator"
+msgstr "アルーン・オシレーター"
+
+msgid "Linear Reg R2"
+msgstr "線形回帰R2"
+
+msgid "RSquared"
+msgstr "決定係数"
+
+msgid "Linear Reg Forecast"
+msgstr "線形回帰予想"
+
+msgid "Forecast"
+msgstr "予想"
+
+msgid "Linear Reg Intercept"
+msgstr "線形回帰インターセプト"
+
+msgid "Intercept"
+msgstr "インターセプト"
+
+msgid "Time Series Forecast"
+msgstr "時系列予想"
+
+msgid "Vertical Horizontal Filter"
+msgstr "垂直水平フィルター"
+
+msgid "Result"
+msgstr "結果"
+
+msgid "TRIX"
+msgstr "TRIX"
+
+msgid "Standard Deviation"
+msgstr "標準偏差"
+
+msgid "Standard Deviations"
+msgstr "標準偏差"
+
+msgid "Moving Average Type"
+msgstr "移動平均タイプ"
+
+msgid "Trade Volume Index"
+msgstr "取引高指数"
+
+msgid "Min Tick Value"
+msgstr "最小ティックバリュー"
+
+msgid "Swing Index"
+msgstr "スイング指数"
+
+msgid "Limit Move Value"
+msgstr "限定移動値"
+
+msgid "Accumulative Swing Index"
+msgstr "アキューミュレーション・スイング指数"
+
+msgid "Price Rate of Change"
+msgstr "価格変化率"
+
+msgid "Volume Rate of Change"
+msgstr "取引高変化率"
+
+msgid "Momentum Indicator"
+msgstr "モメンタムインジケーター"
+
+msgid "Price Volume Trend"
+msgstr "価格取引高トレンド"
+
+msgid "Positive Volume Index"
+msgstr "ポジティブ取引高指数"
+
+msgid "Index"
+msgstr "指数"
+
+msgid "Negative Volume Index"
+msgstr "ネガティブ取引高指数"
+
+msgid "On Balance Volume"
+msgstr "オンバランス取引高"
+
+msgid "Stochastic Momentum Index"
+msgstr "ストキャスティック・モメンタム指数"
+
+msgid "%K Periods"
+msgstr "%K期間"
+
+msgid "%K Smoothing Periods"
+msgstr "%Kスムージング期間"
+
+msgid "%K Double Smoothing Periods"
+msgstr "%Kダブルスムージング期間"
+
+msgid "%D Periods"
+msgstr "%D期間"
+
+msgid "%D Moving Average Type"
+msgstr "%D移動平均タイプ"
+
+msgid "%K"
+msgstr "%K"
+
+msgid "%D"
+msgstr "%D"
+
+msgid "Historical Volatility"
+msgstr "ヒストリカル・ボラティリティ"
+
+msgid "Days Per Year"
+msgstr "年間あたり日数"
+
+msgid "Pretty Good Oscillator"
+msgstr "プリティ・グッド・オシレーター"
+
+msgid "Ultimate Oscillator"
+msgstr "アルティメット・オシレーター"
+
+msgid "Cycle 1"
+msgstr "サイクル1"
+
+msgid "Cycle 2"
+msgstr "サイクル2"
+
+msgid "Cycle 3"
+msgstr "サイクル3"
+
+msgid "Volume Oscillator"
+msgstr "取引高オシレーター"
+
+msgid "Short Cycle"
+msgstr "短期サイクル"
+
+msgid "Long Cycle"
+msgstr "長期サイクル"
+
+msgid "Points Or Percent"
+msgstr "ポイントまたはパーセント"
+
+msgid "Twiggs Money Flow"
+msgstr "ツウィッグス・マネーフロー"
+
+msgid "Chaikin Money Flow"
+msgstr "チャイキン・マネー・フロー"
+
+msgid "Chaikin Volatility"
+msgstr "チャイキン・ボラティリティ"
+
+msgid "Rate Of Change"
+msgstr "変化率"
+
+msgid "Price Oscillator"
+msgstr "プライス・オシレーター"
+
+msgid "Ease of Movement"
+msgstr "動きやすさ"
+
+msgid "Commodity Channel Index"
+msgstr "コモディティ・チャネル指数"
+
+msgid "Detrended Price Oscillator"
+msgstr "デトレンディッド・プライス・オシレーター"
+
+msgid "True Range"
+msgstr "トゥルー・レンジ"
+
+msgid "Average True Range"
+msgstr "アベレージ・トゥルー・レンジ"
+
+msgid "ATR"
+msgstr "ATR"
+
+msgid "Ehler Fisher Transform"
+msgstr "エーラース・フィッシャー・トランスフォーム"
+
+msgid "EF"
+msgstr "EF"
+
+msgid "EF Trigger"
+msgstr "EFトリガー"
+
+msgid "Schaff Trend Cycle"
+msgstr "シャフ・トレンド・サイクル"
+
+msgid "QStick"
+msgstr "Qスティック"
+
+msgid "Coppock Curve"
+msgstr "コポック指標"
+
+msgid "Short RoC"
+msgstr "短期変化率"
+
+msgid "Long RoC"
+msgstr "長期変化率"
+
+msgid "Chande Momentum Oscillator"
+msgstr "シャンデ・モメンタム・オシレーター"
+
+msgid "Chande Forecast Oscillator"
+msgstr "シャンデ予想オシレーター"
+
+msgid "Intraday Momentum Index"
+msgstr "イントラデイ・モメンタム指数"
+
+msgid "RAVI"
+msgstr "RAVI"
+
+msgid "Random Walk Index"
+msgstr "ランダムウォーク指数"
+
+msgid "Random Walk High"
+msgstr "ランダムウォーク高値"
+
+msgid "Random Walk Low"
+msgstr "ランダムウォーク安値"
+
+msgid "ADX/DMS"
+msgstr "ADX/DMS"
+
+msgid "Smoothing Period"
+msgstr "スムージング期間"
+
+msgid "Series"
+msgstr "シリーズ"
+
+msgid "Shading"
+msgstr "シェーディング"
+
+msgid "Histogram"
+msgstr "ヒストグラム"
+
+msgid "+DI"
+msgstr "+DI"
+
+msgid "-DI"
+msgstr "-DI"
+
+msgid "ADX"
+msgstr "ADX"
+
+msgid "Positive Bar"
+msgstr "ポジティブバー"
+
+msgid "Negative Bar"
+msgstr "ネガティブバー"
+
+msgid "High Low Bands"
+msgstr "ハイ・ロー・バンド"
+
+msgid "Shift Percentage"
+msgstr "シフト割合"
+
+msgid "Channel Fill"
+msgstr "チャネル・フィル"
+
+msgid "High Low Top"
+msgstr "ハイ・ロー・トップ"
+
+msgid "High Low Median"
+msgstr "ハイ・ロー中央値"
+
+msgid "High Low Bottom"
+msgstr "ハイ・ロー・ボトム"
+
+msgid "High Minus Low"
+msgstr "ハイ・マイナス・ロー"
+
+msgid "Median Price"
+msgstr "中央値価格"
+
+msgid "Overlay"
+msgstr "オーバーレイ"
+
+msgid "Moving Average Envelope"
+msgstr "移動平均エンベロープ"
+
+msgid "Shift Type"
+msgstr "シフトタイプ"
+
+msgid "Shift"
+msgstr "シフト"
+
+msgid "MA Env Top"
+msgstr "移動平均エンベロープ・トップ"
+
+msgid "MA Env Median"
+msgstr "移動平均エンベロープ中央値"
+
+msgid "MA Env Bottom"
+msgstr "移動平均エンベロープ・ボトム"
+
+msgid "Fractal Chaos Bands"
+msgstr "フラクタル・カオス・バンド"
+
+msgid "Fractal High"
+msgstr "フラクタル高値"
+
+msgid "Fractal Low"
+msgstr "フラクタル安値"
+
+msgid "Fractal Channel"
+msgstr "フラクタル・チャネル"
+
+msgid "Fractal Chaos Oscillator"
+msgstr "フラクタル・カオス・オシレーター"
+
+msgid "Gopalakrishnan Range Index"
+msgstr "ゴパラクリシュナン・レンジ指数"
+
+msgid "Prime Number Bands"
+msgstr "プライム・ナンバー・バンド"
+
+msgid "Prime Bands Top"
+msgstr "プライム・バンド・トップ"
+
+msgid "Prime Bands Bottom"
+msgstr "プライム・バンド・ボトム"
+
+msgid "Prime Bands Channel"
+msgstr "プライム・バンド・チャネル"
+
+msgid "Prime Number Oscillator"
+msgstr "プライム・ナンバー・オシレーター"
+
+msgid "Tolerance Percentage"
+msgstr "許容率"
+
+msgid "Bollinger Bands"
+msgstr "ボリンジャーバンド"
+
+msgid "Bollinger Bands Top"
+msgstr "ボリンジャーバンド・トップ"
+
+msgid "Bollinger Bands Median"
+msgstr "ボリンジャーバンド中央値"
+
+msgid "Bollinger Bands Bottom"
+msgstr "ボリンジャーバンド・ボトム"
+
+msgid "Donchian Channel"
+msgstr "ドンチャン・チャネル"
+
+msgid "High Period"
+msgstr "高値期間"
+
+msgid "Low Period"
+msgstr "安値期間"
+
+msgid "Donchian High"
+msgstr "ドンチャン高値"
+
+msgid "Donchian Median"
+msgstr "ドンチャン中央値"
+
+msgid "Donchian Low"
+msgstr "ドンチャン安値"
+
+msgid "Highest High Value"
+msgstr "最高値"
+
+msgid "Lowest Low Value"
+msgstr "最安値"
+
+msgid "Mass Index"
+msgstr "マス指数"
+
+msgid "Bulge Threshold"
+msgstr "バルジ閾値"
+
+msgid "Keltner Channel"
+msgstr "ケルトナー・チャネル"
+
+msgid "Keltner Top"
+msgstr "ケルトナー・トップ"
+
+msgid "Keltner Median"
+msgstr "ケルトナー中央値"
+
+msgid "Keltner Bottom"
+msgstr "ケルトナー・ボトム"
+
+msgid "Parabolic SAR"
+msgstr "パラボリックSAR"
+
+msgid "Minimum AF"
+msgstr "最小AF"
+
+msgid "Maximum AF"
+msgstr "最大AF"
+
+msgid "Klinger Volume Oscillator"
+msgstr "クリンガー取引高オシレーター"
+
+msgid "Signal Periods"
+msgstr "シグナル期間"
+
+msgid "Klinger"
+msgstr "クリンガー"
+
+msgid "KlingerSignal"
+msgstr "クリンガーシグナル"
+
+msgid "Elder Ray Index"
+msgstr "エルダー線"
+
+msgid "Elder Bull Power"
+msgstr "エルダー・ブル・パワー"
+
+msgid "Elder Bear Power"
+msgstr "エルダー・ベア・パワー"
+
+msgid "Elder Force Index"
+msgstr "エルダー・フォース指数"
+
+msgid "Linear Reg Slope"
+msgstr "線形回帰傾き"
+
+msgid "Slope"
+msgstr "傾き"
+
+msgid "Center Of Gravity"
+msgstr "重心"
+
+msgid "Typical Price"
+msgstr "標準価格"
+
+msgid "Weighted Close"
+msgstr "加重終値"
+
+msgid "Money Flow Index"
+msgstr "マネーフロー指数"
+
+msgid "Williams %R"
+msgstr "ウィリアムズ %R"
+
+msgid "Accumulation/Distribution"
+msgstr "集積/離散"
+
+msgid "Use Volume"
+msgstr "ボリュームを利用し"
+
+msgid "Volume Chart"
+msgstr "出来高チャート"
+
+msgid "Up Volume"
+msgstr "アップ取引高"
+
+msgid "Down Volume"
+msgstr "ダウン取引高"
+
+msgid "Volume Underlay"
+msgstr "取引高アンダーレイ"
+
+msgid "Valuation Lines"
+msgstr "評価ライン"
+
+msgid "Average Type"
+msgstr "平均タイプ"
+
+msgid "Display Average"
+msgstr "平均を表示する"
+
+msgid "Display 1 Standard Deviation (1σ)"
+msgstr "1標準偏差（1σ）を表示する"
+
+msgid "Display 2 Standard Deviation (2σ)"
+msgstr "2標準偏差（2σ）を表示する"
+
+msgid "Display 3 Standard Deviation (3σ)"
+msgstr "3標準偏差（3σ）を表示する"
+
+msgid "Average"
+msgstr "平均"
+
+msgid "1 Standard Deviation (1σ)"
+msgstr "1標準偏差（1σ）"
+
+msgid "2 Standard Deviation (2σ)"
+msgstr "2標準偏差（2σ）"
+
+msgid "3 Standard Deviation (3σ)"
+msgstr "3標準偏差（3σ）"
+
+msgid "Correlation Coefficient"
+msgstr "相関係数"
+
+msgid "Price Momentum Oscillator"
+msgstr "プライス・モメンタム・オシレーター"
+
+msgid "Double Smoothing Period"
+msgstr "2重平滑期間"
+
+msgid "PMO"
+msgstr "PMO"
+
+msgid "PMOSignal"
+msgstr "PMOSignal"
+
+msgid "Relative Volatility"
+msgstr "相対ボラティリティ"
+
+msgid "STD Period"
+msgstr "STD期間"
+
+msgid "Rel Vol"
+msgstr "相対取引高"
+
+msgid "Awesome Oscillator"
+msgstr "オーサム・オシレーター"
+
+msgid "Market Facilitation Index"
+msgstr "市場簡素化指数"
+
+msgid "Scale Factor"
+msgstr "目盛要素"
+
+msgid "Green"
+msgstr "グリーン"
+
+msgid "Fade"
+msgstr "フェード"
+
+msgid "Fake"
+msgstr "フェイク"
+
+msgid "Squat"
+msgstr "スクワット"
+
+msgid "ATR Bands"
+msgstr "アベレージ・トゥルー・レンジ・バンド"
+
+msgid "ATR Bands Top"
+msgstr "アベレージ・トゥルー・レンジ・バンド・トップ"
+
+msgid "ATR Bands Bottom"
+msgstr "アベレージ・トゥルー・レンジ・バンド・ボトム"
+
+msgid "ATR Bands Channel"
+msgstr "アベレージ・トゥルー・レンジ・バンド・チャネル"
+
+msgid "STARC Bands"
+msgstr "STARC バンド"
+
+msgid "MA Period"
+msgstr "MA 期間"
+
+msgid "Multiplier"
+msgstr "マルチプライヤー"
+
+msgid "STARC Bands Top"
+msgstr "STARC バンド上限"
+
+msgid "STARC Bands Median"
+msgstr "STARC バンド中値"
+
+msgid "STARC Bands Bottom"
+msgstr "STARC バンド下限"
+
+msgid "ATR Trailing Stops"
+msgstr "アベレージ・トゥルー・レンジ・トレーリング・ストップ"
+
+msgid "Plot Type"
+msgstr "プロットタイプ"
+
+msgid "HighLow"
+msgstr "高低"
+
+msgid "Buy Stops"
+msgstr "買い逆指値"
+
+msgid "Sell Stops"
+msgstr "売り逆指値"
+
+msgid "Bollinger %b"
+msgstr "ボリンジャー %b"
+
+msgid "%b"
+msgstr "%b"
+
+msgid "Bollinger Bandwidth"
+msgstr "ボリンジャーバンド幅"
+
+msgid "Bandwidth"
+msgstr "幅"
+
+msgid "Donchian Width"
+msgstr "ドンチャン幅"
+
+msgid "Relative Vigor Index"
+msgstr "相対活性指数"
+
+msgid "Rel Vig"
+msgstr "相対活性"
+
+msgid "RelVigSignal"
+msgstr "相対活性シグナル"
+
+msgid "Elder Impulse System"
+msgstr "エルダー・インパルス・システム"
+
+msgid "Bullish"
+msgstr "強気"
+
+msgid "Bearish"
+msgstr "弱気"
+
+msgid "Neutral"
+msgstr "中立"
+
+msgid "Pivot Points"
+msgstr "ピボットポイント"
+
+msgid "Pivot"
+msgstr "ピボット"
+
+msgid "Resistance 1"
+msgstr "抵抗線1"
+
+msgid "Support 1"
+msgstr "支持線1"
+
+msgid "Resistance 2"
+msgstr "抵抗線2"
+
+msgid "Support 2"
+msgstr "支持線2"
+
+msgid "Resistance 3"
+msgstr "抵抗線3"
+
+msgid "Support 3"
+msgstr "支持線3"
+
+msgid "VWAP"
+msgstr "VWAP"
+
+msgid "Alligator"
+msgstr "アリゲーター"
+
+msgid "Jaw Period"
+msgstr "ワニのアゴ"
+
+msgid "Jaw Offset"
+msgstr "ワニのアゴオフセット"
+
+msgid "Teeth Period"
+msgstr "ワニの歯"
+
+msgid "Teeth Offset"
+msgstr "ワニの歯オフセット"
+
+msgid "Lips Period"
+msgstr "ワニの唇"
+
+msgid "Lips Offset"
+msgstr "ワニの唇オフセット"
+
+msgid "Show Fractals"
+msgstr "ディスプレイフラクタル"
+
+msgid "Jaw"
+msgstr "アゴ"
+
+msgid "Teeth"
+msgstr "歯"
+
+msgid "Lips"
+msgstr "唇"
+
+msgid "Gator Oscillator"
+msgstr "ゲーター・オシレーター"
+
+msgid "Ichimoku Clouds"
+msgstr "一目均衡表"
+
+msgid "Conversion Line Period"
+msgstr "変換ライン期間"
+
+msgid "Base Line Period"
+msgstr "基礎ライン期間"
+
+msgid "Leading Span B Period"
+msgstr "リーディングスパンB期間"
+
+msgid "Lagging Span Period"
+msgstr "ラギングスパン期間"
+
+msgid "Conversion Line"
+msgstr "変換ライン"
+
+msgid "Base Line"
+msgstr "基礎ライン"
+
+msgid "Leading Span A"
+msgstr "リーディングスパンA"
+
+msgid "Leading Span B"
+msgstr "リーディングスパンB"
+
+msgid "Lagging Span"
+msgstr "ラギングスパン"
+
+msgid "Price Relative"
+msgstr "価格指数"
+
+msgid "Comparison Symbol"
+msgstr "比較記号"
+
+msgid "Performance Index"
+msgstr "パフォーマンス指数"
+
+msgid "Gain"
+msgstr "利益"
+
+msgid "Loss"
+msgstr "損失"
+
+msgid "Beta"
+msgstr "Beta"
+
+msgid "Ulcer Index"
+msgstr "アルサー・インデックス"
+
+msgid "Balance of Power"
+msgstr "力のバランス"
+
+msgid "Trend Intensity Index"
+msgstr "トレンドの強弱指数"
+
+msgid "TII"
+msgstr "TII"
+
+msgid "Choppiness Index"
+msgstr "チョピネス・インデックス"
+
+msgid "Disparity Index"
+msgstr "ディスパリティ・インデックス"
+
+msgid "Rainbow Moving Average"
+msgstr "虹色移動平均線"
+
+msgid "SMA1"
+msgstr "SMA1"
+
+msgid "SMA2"
+msgstr "SMA2"
+
+msgid "SMA3"
+msgstr "SMA3"
+
+msgid "SMA4"
+msgstr "SMA4"
+
+msgid "SMA5"
+msgstr "SMA5"
+
+msgid "SMA6"
+msgstr "SMA6"
+
+msgid "SMA7"
+msgstr "SMA7"
+
+msgid "SMA8"
+msgstr "SMA8"
+
+msgid "SMA9"
+msgstr "SMA9"
+
+msgid "SMA10"
+msgstr "SMA10"
+
+msgid "Rainbow Oscillator"
+msgstr "レインボー・オシレーター"
+
+msgid "HHV/LLV Lookback"
+msgstr "HHV/LLV ルックバック"
+
+msgid "Pring's Know Sure Thing"
+msgstr "プリングのKST"
+
+msgid "Lightest Rate of Change Period"
+msgstr "変動期間の最低レート"
+
+msgid "Lightest SMA Period"
+msgstr "最低SMA期間"
+
+msgid "Light Rate of Change Period"
+msgstr "変動期間の低レート"
+
+msgid "Light SMA Period"
+msgstr "低SMA期間"
+
+msgid "Heavy Rate of Change Period"
+msgstr "変動期間の高レート"
+
+msgid "Heavy SMA Period"
+msgstr "高SMA期間"
+
+msgid "Heaviest Rate of Change Period"
+msgstr "変動期間の最高レート"
+
+msgid "Heaviest SMA Period"
+msgstr "最高SMA期間"
+
+msgid "KST"
+msgstr "KST"
+
+msgid "KSTSignal"
+msgstr "KSTSignal"
+
+msgid "Pring's Special K"
+msgstr "プリングの特殊K"
+
+msgid "Interval"
+msgstr "間隔"
+
+msgid "Darvas Box"
+msgstr "ダーバス・ボックス"
+
+msgid "ATH Lookback Period"
+msgstr "ATH後退期間"
+
+msgid "Exit Field"
+msgstr "出口フィールド"
+
+msgid "Ghost Boxes"
+msgstr "ゴースト・ボックス"
+
+msgid "Stop Levels"
+msgstr "ストップ水準"
+
+msgid "Level Offset"
+msgstr "オフセット水準"
+
+msgid "Price Minimum"
+msgstr "最低価格"
+
+msgid "Volume Spike"
+msgstr "出来高スパイク"
+
+msgid "Volume % of Avg"
+msgstr "平均出来高（%）"
+
+msgid "Darvas"
+msgstr "ダーバス"
+
+msgid "Ghost"
+msgstr "ゴースト"
+
+msgid "Levels"
+msgstr "水準"
+
+msgid "Supertrend"
+msgstr "スーパートレンド"
+
+msgid "Uptrend"
+msgstr "上昇トレンド"
+
+msgid "Downtrend"
+msgstr "下降トレンド"
+
+msgid "Volume Profile"
+msgstr "取引高プロフィール"
+
+msgid "Bars Color"
+msgstr "バーカラー"
+
+msgid "Vortex Indicator"
+msgstr "渦巻きインジケーター"
+
+msgid "+VI"
+msgstr "+VI"
+
+msgid "-VI"
+msgstr "-VI"
+
+msgid "ZigZag"
+msgstr "ZigZag"
+
+msgid "Distance(%)"
+msgstr "距離(%)"
+
+msgid "Psychological Line"
+msgstr "心理的ライン"
+
+msgid "Moving Average Deviation"
+msgstr "移動平均線偏差"
+
+msgid "Shinohara Intensity Ratio"
+msgstr "篠原強弱レシオ"
+
+msgid "Strong Ratio"
+msgstr "強い比率"
+
+msgid "Weak Ratio"
+msgstr "弱い比率"
 

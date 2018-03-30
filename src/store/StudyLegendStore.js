@@ -62,13 +62,13 @@ export default class StudyLegendStore {
             const study = CIQ.Studies.studyLibrary[studyId];
             data.push({
                 enabled: true,
-                display: study.name,
+                display: t.translate(study.name),
                 dataObject: studyId,
                 itemId: studyId,
             });
         });
         const category = {
-            categoryName: 'Indicators',
+            categoryName: t.translate('Indicators'),
             categoryId: 'indicators',
             hasSubcategory: false,
             data
@@ -88,7 +88,7 @@ export default class StudyLegendStore {
         const attributes = helper.attributes;
         const inputs = helper.inputs.map(inp => ({
             id: inp.name,
-            title: inp.heading,
+            title: t.translate(inp.heading),
             value: inp.value,
             defaultValue: inp.defaultInput,
             type: inp.type === 'checkbox' ? 'switch' : inp.type,
@@ -98,7 +98,7 @@ export default class StudyLegendStore {
         }));
         const outputs = helper.outputs.map(out => ({
             id: out.name,
-            title: out.heading,
+            title: t.translate(out.heading),
             defaultValue: out.defaultOutput,
             value: out.color,
             type: 'colorpicker',
@@ -106,7 +106,7 @@ export default class StudyLegendStore {
         }));
         const parameters = helper.parameters.map(par => ({
             id: par.name,
-            title: par.heading,
+            title: t.translate(par.heading),
             value: par.value,
             defaultValue: par.defaultValue,
             type: typeof par.defaultValue === 'boolean' ? 'switch' : 'number+colorpicker',
@@ -117,7 +117,7 @@ export default class StudyLegendStore {
 
         this.settingsDialog.items = [...inputs, ...outputs, ...parameters];
         this.settingsDialog.title = study.sd.name.toUpperCase();
-        this.settingsDialog.description = "No description yet";
+        this.settingsDialog.description = t.translate("No description yet");
         this.settingsDialog.stared = !!this.categoricalDisplay.favoritesMap[helper.name];
         this.settingsDialog.setOpen(true);
     }

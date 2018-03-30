@@ -45,10 +45,10 @@ export default class CategoricalDisplayStore {
     @observable activeCategoryKey = '';
     @observable favoritesMap = {};
     @observable favoritesCategory = {
-        categoryName: 'Favorites',
+        categoryName: t.translate('Favorites'),
         categoryId: 'favorite',
         hasSubcategory: false,
-        emptyDescription: 'There are no favorites yet.',
+        emptyDescription: t.translate('There are no favorites yet.'),
         data: [],
     };
     scrollOffset = 0;
