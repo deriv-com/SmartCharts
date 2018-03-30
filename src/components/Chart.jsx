@@ -47,7 +47,6 @@ class Chart extends Component {
             <cq-context ref={(root) => { this.root = root; }}>
                 <div className="ciq-chart-area">
                     <div className="ciq-chart">
-                        <div className='beta-version'>Beta Version</div>
                         <RenderInsideChart at='holder'>
                             {insideHolder}
                         </RenderInsideChart>

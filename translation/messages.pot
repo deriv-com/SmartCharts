@@ -217,6 +217,3 @@ msgstr ""
 
 msgid "Vertical"
 msgstr ""
-
-msgid "This product is currently in beta. Unexpected errors may occur."
-msgstr ""

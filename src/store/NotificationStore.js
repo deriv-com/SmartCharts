@@ -3,14 +3,6 @@ import { observable, action, computed, when } from 'mobx';
 export default class NotificationStore {
     constructor(mainStore) {
         this.mainStore = mainStore;
-
-        setTimeout(() => {
-            this.messages.push( {
-                text:  t.translate('This product is currently in beta. Unexpected errors may occur.'),
-                type: 'warning', // warning|info|error
-                hide: false,
-            });
-        }, 5*1000);
     }
 
     @observable messages = [];
