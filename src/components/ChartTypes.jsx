@@ -26,7 +26,7 @@ const ChartTypes = ({
         </Menu.Title>
         <Menu.Body>
             <div className='ciq-toggle-asset-information'>
-                <div>Toggle Asset Information </div>
+                <div>{t.translate('Toggle Asset Information')}</div>
                 <Switch
                     value={assetInformation}
                     onChange={setAssetInformation}
