@@ -28,7 +28,6 @@ export default class StudyLegendStore {
             onStared: () => this.starStudy(this.helper),
             onChanged: items => this.updateStudy(this.helper.sd, items),
         });
-        window.sls = this;
     }
 
     get context() { return this.mainStore.chart.context; }
@@ -119,7 +118,11 @@ export default class StudyLegendStore {
         this.settingsDialog.items = [...inputs, ...outputs, ...parameters];
         this.settingsDialog.title = study.sd.name.toUpperCase();
         this.settingsDialog.description = "No description yet";
+        this.settingsDialog.stared = !!this.categoricalDisplay.favoritesMap[helper.name];
         this.settingsDialog.setOpen(true);
+    }
+    @action.bound starStudy(study) {
+        this.categoricalDisplay.setFavoriteById(study.name);
     }
     @action.bound deleteStudy(study) {
         const sd = study.sd;
