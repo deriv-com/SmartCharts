@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
-"PO-Revision-Date: 2018-03-30 03:11-0400\n"
+"PO-Revision-Date: 2018-03-30 03:26-0400\n"
 
 msgid "Favorites"
 msgstr ""
@@ -358,7 +358,7 @@ msgid "Result"
 msgstr "结果"
 
 msgid "TRIX"
-msgstr ""
+msgstr "TRIX"
 
 msgid "Standard Deviation"
 msgstr "时序预测"
@@ -427,10 +427,10 @@ msgid "%D Moving Average Type"
 msgstr "%D移动平均线类型"
 
 msgid "%K"
-msgstr ""
+msgstr "%K"
 
 msgid "%D"
-msgstr ""
+msgstr "%D"
 
 msgid "Historical Volatility"
 msgstr "历史波动"
@@ -502,7 +502,7 @@ msgid "Ehler Fisher Transform"
 msgstr "埃勒斯费舍尔变换转化"
 
 msgid "EF"
-msgstr ""
+msgstr "EF"
 
 msgid "EF Trigger"
 msgstr "EF触发器"
@@ -532,7 +532,7 @@ msgid "Intraday Momentum Index"
 msgstr "日内动量指标"
 
 msgid "RAVI"
-msgstr ""
+msgstr "RAVI"
 
 msgid "Random Walk Index"
 msgstr "随机漫步指标"
@@ -904,7 +904,7 @@ msgid "Bollinger %b"
 msgstr "布林%b"
 
 msgid "%b"
-msgstr ""
+msgstr "%b"
 
 msgid "Bollinger Bandwidth"
 msgstr "布林带宽"
@@ -1057,7 +1057,7 @@ msgid "Trend Intensity Index"
 msgstr "趋势强度指数"
 
 msgid "TII"
-msgstr ""
+msgstr "TII"
 
 msgid "Choppiness Index"
 msgstr "翻滚度指数"
