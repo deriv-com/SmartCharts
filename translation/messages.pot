@@ -131,6 +131,9 @@ msgstr ""
 msgid "No description yet"
 msgstr ""
 
+msgid "Indicators"
+msgstr ""
+
 msgid "Active"
 msgstr ""
 
