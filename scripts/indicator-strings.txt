@@ -1,0 +1,624 @@
+RSI
+Period
+RSI
+Show Zones
+OverBought
+OverSold
+Moving Average
+Period
+Field
+Type
+Offset
+Underlay
+MA
+MACD
+Fast MA Period
+Slow MA Period
+Signal Period
+MACD
+Signal
+Increasing Bar
+Decreasing Bar
+Stochastics
+Period
+Smooth
+Fast
+Slow
+Show Zones
+OverBought
+OverSold
+Aroon
+Period
+Aroon Up
+Aroon Down
+Aroon Oscillator
+Period
+Aroon Oscillator
+Linear Reg R2
+Period
+Field
+RSquared
+Linear Reg Forecast
+Period
+Field
+Forecast
+Linear Reg Intercept
+Period
+Field
+Intercept
+Time Series Forecast
+Period
+Field
+Forecast
+Vertical Horizontal Filter
+Period
+Result
+TRIX
+Period
+Result
+Standard Deviation
+Period
+Field
+Standard Deviations
+Moving Average Type
+Result
+Trade Volume Index
+Min Tick Value
+Result
+Swing Index
+Limit Move Value
+Result
+Accumulative Swing Index
+Limit Move Value
+Result
+Price Rate of Change
+Field
+Period
+Result
+Volume Rate of Change
+Period
+Result
+Momentum Indicator
+Period
+Result
+Price Volume Trend
+Field
+Result
+Positive Volume Index
+Field
+Moving Average Type
+Period
+Index
+MA
+Negative Volume Index
+Field
+Moving Average Type
+Period
+Index
+MA
+On Balance Volume
+Result
+Stochastic Momentum Index
+%K Periods
+%K Smoothing Periods
+%K Double Smoothing Periods
+%D Periods
+%D Moving Average Type
+%K
+%D
+Show Zones
+OverBought
+OverSold
+Historical Volatility
+Field
+Period
+Days Per Year
+Standard Deviations
+Result
+Pretty Good Oscillator
+Period
+Result
+Ultimate Oscillator
+Cycle 1
+Cycle 2
+Cycle 3
+Result
+Show Zones
+OverBought
+OverSold
+Volume Oscillator
+Short Cycle
+Long Cycle
+Points Or Percent
+Result
+Twiggs Money Flow
+Period
+Result
+Chaikin Money Flow
+Period
+Result
+Chaikin Volatility
+Period
+Rate Of Change
+Moving Average Type
+Result
+Price Oscillator
+Field
+Long Cycle
+Short Cycle
+Moving Average Type
+Points Or Percent
+Result
+Ease of Movement
+Period
+Moving Average Type
+Result
+Commodity Channel Index
+Period
+Result
+Show Zones
+OverBought
+OverSold
+Detrended Price Oscillator
+Field
+Period
+Moving Average Type
+Result
+True Range
+True Range
+Average True Range
+Period
+ATR
+Ehler Fisher Transform
+Period
+EF
+EF Trigger
+Schaff Trend Cycle
+Field
+Period
+Short Cycle
+Long Cycle
+Moving Average Type
+Result
+Show Zones
+OverBought
+OverSold
+QStick
+Period
+Moving Average Type
+Result
+Coppock Curve
+Field
+Short RoC
+Long RoC
+Period
+Result
+Chande Momentum Oscillator
+Period
+Result
+Show Zones
+OverBought
+OverSold
+Chande Forecast Oscillator
+Field
+Period
+Result
+Intraday Momentum Index
+Period
+Result
+Show Zones
+OverBought
+OverSold
+RAVI
+Field
+Moving Average Type
+Short Cycle
+Long Cycle
+Increasing Bar
+Decreasing Bar
+Show Zones
+OverBought
+OverSold
+Random Walk Index
+Period
+Random Walk High
+Random Walk Low
+ADX/DMS
+Period
+Smoothing Period
+Series
+Shading
+Histogram
++DI
+-DI
+ADX
+Positive Bar
+Negative Bar
+High Low Bands
+Field
+Period
+Shift Percentage
+Channel Fill
+High Low Top
+High Low Median
+High Low Bottom
+High Minus Low
+Result
+Median Price
+Period
+Overlay
+Result
+Moving Average Envelope
+Field
+Period
+Shift Type
+Shift
+Moving Average Type
+Channel Fill
+MA Env Top
+MA Env Median
+MA Env Bottom
+Fractal Chaos Bands
+Channel Fill
+Fractal High
+Fractal Low
+Fractal Channel
+Fractal Chaos Oscillator
+Result
+Gopalakrishnan Range Index
+Period
+Result
+Prime Number Bands
+Channel Fill
+Prime Bands Top
+Prime Bands Bottom
+Prime Bands Channel
+Prime Number Oscillator
+Tolerance Percentage
+Result
+Bollinger Bands
+Field
+Period
+Standard Deviations
+Moving Average Type
+Channel Fill
+Bollinger Bands Top
+Bollinger Bands Median
+Bollinger Bands Bottom
+Donchian Channel
+High Period
+Low Period
+Channel Fill
+Donchian High
+Donchian Median
+Donchian Low
+Highest High Value
+Period
+Result
+Lowest Low Value
+Period
+Result
+Mass Index
+Period
+Bulge Threshold
+Result
+Keltner Channel
+Period
+Shift
+Moving Average Type
+Channel Fill
+Keltner Top
+Keltner Median
+Keltner Bottom
+Parabolic SAR
+Minimum AF
+Maximum AF
+Result
+Klinger Volume Oscillator
+Signal Periods
+Short Cycle
+Long Cycle
+Klinger
+KlingerSignal
+Increasing Bar
+Decreasing Bar
+Elder Ray Index
+Period
+Elder Bull Power
+Elder Bear Power
+Elder Force Index
+Period
+Result
+Linear Reg Slope
+Period
+Field
+Slope
+Center Of Gravity
+Period
+Field
+Result
+Typical Price
+Period
+Overlay
+Result
+Weighted Close
+Period
+Overlay
+Result
+Money Flow Index
+Period
+Result
+Show Zones
+OverBought
+OverSold
+Williams %R
+Period
+Result
+Show Zones
+OverBought
+OverSold
+Accumulation/Distribution
+Use Volume
+Result
+Volume Chart
+Up Volume
+Down Volume
+Volume Underlay
+Up Volume
+Down Volume
+Valuation Lines
+Field
+Average Type
+Display Average
+Display 1 Standard Deviation (1σ)
+Display 2 Standard Deviation (2σ)
+Display 3 Standard Deviation (3σ)
+Average
+1 Standard Deviation (1σ)
+2 Standard Deviation (2σ)
+3 Standard Deviation (3σ)
+Correlation Coefficient
+Period
+Price Momentum Oscillator
+Field
+Smoothing Period
+Double Smoothing Period
+Signal Period
+PMO
+PMOSignal
+Show Zones
+OverBought
+OverSold
+Relative Volatility
+Field
+STD Period
+Smoothing Period
+Rel Vol
+Show Zones
+OverBought
+OverSold
+Awesome Oscillator
+Increasing Bar
+Decreasing Bar
+Market Facilitation Index
+Scale Factor
+Green
+Fade
+Fake
+Squat
+ATR Bands
+Period
+Shift
+Field
+Channel Fill
+ATR Bands Top
+ATR Bands Bottom
+ATR Bands Channel
+STARC Bands
+Period
+MA Period
+Multiplier
+Channel Fill
+STARC Bands Top
+STARC Bands Median
+STARC Bands Bottom
+ATR Trailing Stops
+Multiplier
+Period
+Plot Type
+HighLow
+Buy Stops
+Sell Stops
+Bollinger %b
+Field
+Period
+Standard Deviations
+Moving Average Type
+%b
+Show Zones
+OverBought
+OverSold
+Bollinger Bandwidth
+Field
+Period
+Standard Deviations
+Moving Average Type
+Bandwidth
+Donchian Width
+High Period
+Low Period
+Result
+Relative Vigor Index
+Period
+Rel Vig
+RelVigSignal
+Increasing Bar
+Decreasing Bar
+Elder Impulse System
+Bullish
+Bearish
+Neutral
+Pivot Points
+Type
+Continuous
+Shading
+Pivot
+Resistance 1
+Support 1
+Resistance 2
+Support 2
+Resistance 3
+Support 3
+VWAP
+VWAP
+Alligator
+Jaw Period
+Jaw Offset
+Teeth Period
+Teeth Offset
+Lips Period
+Lips Offset
+Show Fractals
+Jaw
+Teeth
+Lips
+Gator Oscillator
+Jaw Period
+Jaw Offset
+Teeth Period
+Teeth Offset
+Lips Period
+Lips Offset
+Increasing Bar
+Decreasing Bar
+Ichimoku Clouds
+Conversion Line Period
+Base Line Period
+Leading Span B Period
+Lagging Span Period
+Conversion Line
+Base Line
+Leading Span A
+Leading Span B
+Lagging Span
+Price Relative
+Comparison Symbol
+Result
+Performance Index
+Period
+Comparison Symbol
+Result
+Gain
+Loss
+Beta
+Period
+Comparison Symbol
+Result
+Ulcer Index
+Field
+Period
+Result
+Balance of Power
+Period
+Moving Average Type
+Result
+Trend Intensity Index
+Field
+Period
+Signal Period
+TII
+Signal
+Show Zones
+OverBought
+OverSold
+Choppiness Index
+Period
+Result
+Show Zones
+OverBought
+OverSold
+Disparity Index
+Field
+Period
+Moving Average Type
+Result
+Rainbow Moving Average
+Field
+Period
+Underlay
+SMA1
+SMA2
+SMA3
+SMA4
+SMA5
+SMA6
+SMA7
+SMA8
+SMA9
+SMA10
+Rainbow Oscillator
+Field
+Period
+HHV/LLV Lookback
+Positive Bar
+Negative Bar
+Pring's Know Sure Thing
+Field
+Lightest Rate of Change Period
+Lightest SMA Period
+Light Rate of Change Period
+Light SMA Period
+Heavy Rate of Change Period
+Heavy SMA Period
+Heaviest Rate of Change Period
+Heaviest SMA Period
+Signal Period
+KST
+KSTSignal
+Pring's Special K
+Field
+Interval
+Result
+Darvas Box
+ATH Lookback Period
+Exit Field
+Ghost Boxes
+Stop Levels
+Level Offset
+Price Minimum
+Volume Spike
+Volume % of Avg
+Darvas
+Ghost
+Levels
+Supertrend
+Period
+Multiplier
+Uptrend
+Downtrend
+Volume Profile
+Bars Color
+Vortex Indicator
+Period
++VI
+-VI
+Show Zones
+OverBought
+OverSold
+ZigZag
+Distance(%)
+Result
+Psychological Line
+Period
+Result
+Moving Average Deviation
+Field
+Period
+Moving Average Type
+Points Or Percent
+Increasing Bar
+Decreasing Bar
+Shinohara Intensity Ratio
+Period
+Strong Ratio
+Weak Ratio
