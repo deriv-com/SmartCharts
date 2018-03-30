@@ -239,6 +239,7 @@ msgstr ""
 msgid "Vertical"
 msgstr ""
 
+
 # Indicator strings:
 
 msgid "RSI"
