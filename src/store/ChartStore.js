@@ -218,6 +218,12 @@ class ChartStore {
             },
             yTolerance: 999999, // disable vertical scrolling
         });
+        const deleteElement = stxx.chart.panel.holder.parentElement.querySelector('#mouseDeleteText');
+        const manageElement = stxx.chart.panel.holder.parentElement.querySelector('#mouseManageText');
+        deleteElement.textConent = t.translate("right-click to delete");
+        manageElement.textConent = t.translate("right-click to manage");
+
+
 
         // Animation (using tension requires splines.js)
         CIQ.Animation(stxx, { stayPut: true });

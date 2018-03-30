@@ -80,6 +80,12 @@ msgstr ""
 msgid "Download chart"
 msgstr ""
 
+msgid "right-click to delete"
+msgstr ""
+
+msgid "right-click to manage"
+msgstr ""
+
 msgid "Line"
 msgstr ""
 
