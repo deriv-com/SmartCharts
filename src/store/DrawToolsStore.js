@@ -109,7 +109,6 @@ export default class DrawToolsStore {
                 this.settingsDialog.title = formatCamelCase(drawing.name);
                 this.settingsDialog.setOpen(true);
 
-                console.warn(parameters, drawing);
                 return true;
             }
         }
