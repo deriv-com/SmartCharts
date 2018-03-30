@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
-"PO-Revision-Date: 2018-03-30 02:42-0400\n"
+"PO-Revision-Date: 2018-03-30 03:26-0400\n"
 
 msgid "Favorites"
 msgstr ""
@@ -40,7 +40,7 @@ msgid "Toggle Asset Information"
 msgstr ""
 
 msgid "Studies"
-msgstr ""
+msgstr "Моделирование"
 
 msgid "Comparison"
 msgstr ""
@@ -58,7 +58,7 @@ msgid "Click + icon to add one."
 msgstr ""
 
 msgid "Crosshair"
-msgstr ""
+msgstr "Перекрестие"
 
 msgid "Time period"
 msgstr ""
@@ -73,7 +73,7 @@ msgid "Hour"
 msgstr ""
 
 msgid "Day"
-msgstr ""
+msgstr "День"
 
 msgid "Zoom out"
 msgstr ""
@@ -85,13 +85,13 @@ msgid "Draw tools"
 msgstr ""
 
 msgid "Clear All"
-msgstr ""
+msgstr "Очистить все"
 
 msgid "Measure"
-msgstr ""
+msgstr "Измерить"
 
 msgid "Share"
-msgstr ""
+msgstr "Поделиться"
 
 msgid "Share / Download Chart"
 msgstr ""
@@ -109,13 +109,13 @@ msgid "DONE"
 msgstr ""
 
 msgid "right-click to delete"
-msgstr ""
+msgstr "Щелкните правой кнопкой мыши чтобы удалить"
 
 msgid "right-click to manage"
-msgstr ""
+msgstr "Щелкните правой кнопкой мыши чтобы управлять"
 
 msgid "Line"
-msgstr ""
+msgstr "Линия"
 
 msgid "Dot"
 msgstr ""
@@ -127,16 +127,16 @@ msgid "Spline"
 msgstr ""
 
 msgid "Baseline"
-msgstr ""
+msgstr "Основная линия"
 
 msgid "Candle"
-msgstr ""
+msgstr "Свеча"
 
 msgid "OHLC"
 msgstr ""
 
 msgid "Hollow Candle"
-msgstr ""
+msgstr "пустая свеча"
 
 msgid "\"Mass Index\" or \"Doji Star\""
 msgstr ""
@@ -157,1070 +157,1070 @@ msgid "There are no active comparisons yet."
 msgstr ""
 
 msgid "Annotation"
-msgstr ""
+msgstr "Примечание"
 
 msgid "Average Line"
-msgstr ""
+msgstr "Средняя линия"
 
 msgid "Callout"
-msgstr ""
+msgstr "Сноска"
 
 msgid "Channel"
-msgstr ""
+msgstr "Канал"
 
 msgid "Continuous"
-msgstr ""
+msgstr "Непрерывный"
 
 msgid "Crossline"
-msgstr ""
+msgstr "Линия пересечения"
 
 msgid "Doodle"
-msgstr ""
+msgstr "Произвольной формы"
 
 msgid "Ellipse"
-msgstr ""
+msgstr "Эллипс"
 
 msgid "Fib Arc"
-msgstr ""
+msgstr "Дуга Фибоначчи"
 
 msgid "Fib Fan"
-msgstr ""
+msgstr "Веер Фибоначчи"
 
 msgid "Fib Time Zone"
-msgstr ""
+msgstr "Часовой пояс Фибоначчи"
 
 msgid "Gann Fan"
-msgstr ""
+msgstr "Веер Ганна"
 
 msgid "Gartley"
-msgstr ""
+msgstr "Гартли"
 
 msgid "Horizontal"
-msgstr ""
+msgstr "Горизонт."
 
 msgid "Pitchfork"
-msgstr ""
+msgstr "Вилка"
 
 msgid "Quadrant Lines"
-msgstr ""
+msgstr "Перпендикулярные линии"
 
 msgid "Ray"
-msgstr ""
+msgstr "Луч"
 
 msgid "Rectangle"
-msgstr ""
+msgstr "Прямоугольник"
 
 msgid "Regression Line"
-msgstr ""
+msgstr "Регресионная линия"
 
 msgid "Segment"
-msgstr ""
+msgstr "Сегмент"
 
 msgid "Shape - Arrow"
-msgstr ""
+msgstr "Фигура - Стрелка"
 
 msgid "Shape - Check"
-msgstr ""
+msgstr "Фигура - Галочка"
 
 msgid "Shape - Cross"
-msgstr ""
+msgstr "Фигура - Крест"
 
 msgid "Shape - Focus"
-msgstr ""
+msgstr "Фигура - Фокус"
 
 msgid "Shape - Heart"
-msgstr ""
+msgstr "Фигура - Сердце"
 
 msgid "Shape - Star"
-msgstr ""
+msgstr "Фигура - Звезда"
 
 msgid "Speed Resistance Arc"
-msgstr ""
+msgstr "Дуга сопротивления"
 
 msgid "Speed Resistance Line"
-msgstr ""
+msgstr "Линия сопротивления"
 
 msgid "Time Cycle"
-msgstr ""
+msgstr "Временной круг"
 
 msgid "Tirone Levels"
-msgstr ""
+msgstr "Уровни Тирона"
 
 msgid "Vertical"
-msgstr ""
+msgstr "Вертикаль"
 
 msgid "This product is currently in beta. Unexpected errors may occur."
 msgstr ""
 
 msgid "RSI"
-msgstr ""
+msgstr "RSI"
 
 msgid "Period"
-msgstr ""
+msgstr "Период"
 
 msgid "Show Zones"
-msgstr ""
+msgstr "Показать зоны"
 
 msgid "OverBought"
-msgstr ""
+msgstr "OverBought (перекупленность)"
 
 msgid "OverSold"
-msgstr ""
+msgstr "OverSold (перепроданность)"
 
 msgid "Moving Average"
-msgstr ""
+msgstr "Скользящее среднее"
 
 msgid "Field"
-msgstr ""
+msgstr "Поле"
 
 msgid "Type"
-msgstr ""
+msgstr "Тип"
 
 msgid "Offset"
-msgstr ""
+msgstr "Офсет"
 
 msgid "Underlay"
-msgstr ""
+msgstr "Под кривой"
 
 msgid "MA"
-msgstr ""
+msgstr "MA"
 
 msgid "MACD"
-msgstr ""
+msgstr "MACD"
 
 msgid "Fast MA Period"
-msgstr ""
+msgstr "Период быстрой скользящей средней"
 
 msgid "Slow MA Period"
-msgstr ""
+msgstr "Период медленной скользящей средней"
 
 msgid "Signal Period"
-msgstr ""
+msgstr "Период сигнала"
 
 msgid "Signal"
-msgstr ""
+msgstr "Сигнал"
 
 msgid "Increasing Bar"
-msgstr ""
+msgstr "Столбец роста"
 
 msgid "Decreasing Bar"
-msgstr ""
+msgstr "Столбец падения"
 
 msgid "Stochastics"
-msgstr ""
+msgstr "Стохастика"
 
 msgid "Smooth"
-msgstr ""
+msgstr "Плавный"
 
 msgid "Fast"
-msgstr ""
+msgstr "Быстрый"
 
 msgid "Slow"
-msgstr ""
+msgstr "Медленный"
 
 msgid "Aroon"
-msgstr ""
+msgstr "Арун"
 
 msgid "Aroon Up"
-msgstr ""
+msgstr "Арун (вверх)"
 
 msgid "Aroon Down"
-msgstr ""
+msgstr "Арун (вниз)"
 
 msgid "Aroon Oscillator"
-msgstr ""
+msgstr "Осциллятор Арун"
 
 msgid "Linear Reg R2"
-msgstr ""
+msgstr "R2 линейной регрессии"
 
 msgid "RSquared"
-msgstr ""
+msgstr "R-квадрат"
 
 msgid "Linear Reg Forecast"
-msgstr ""
+msgstr "Прогноз линейной регрессии"
 
 msgid "Forecast"
-msgstr ""
+msgstr "Прогноз"
 
 msgid "Linear Reg Intercept"
-msgstr ""
+msgstr "Отрезок линейной регрессии"
 
 msgid "Intercept"
-msgstr ""
+msgstr "Отрезок"
 
 msgid "Time Series Forecast"
-msgstr ""
+msgstr "Временной прогноз"
 
 msgid "Vertical Horizontal Filter"
-msgstr ""
+msgstr "Вертикальный/горизонтальный фильтр"
 
 msgid "Result"
-msgstr ""
+msgstr "Результат"
 
 msgid "TRIX"
-msgstr ""
+msgstr "TRIX"
 
 msgid "Standard Deviation"
-msgstr ""
+msgstr "Среднеквадратичное отклонение"
 
 msgid "Standard Deviations"
-msgstr ""
+msgstr "Среднеквадратичные отклонения"
 
 msgid "Moving Average Type"
-msgstr ""
+msgstr "Тип скользящего среднего"
 
 msgid "Trade Volume Index"
-msgstr ""
+msgstr "Индекс торгового объема"
 
 msgid "Min Tick Value"
-msgstr ""
+msgstr "Минимальное значение тика"
 
 msgid "Swing Index"
-msgstr ""
+msgstr "Индекс колебаний"
 
 msgid "Limit Move Value"
-msgstr ""
+msgstr "Значение сдвига лимита"
 
 msgid "Accumulative Swing Index"
-msgstr ""
+msgstr "Кумулятивный индекс колебаний"
 
 msgid "Price Rate of Change"
-msgstr ""
+msgstr "Скорость изменения цены"
 
 msgid "Volume Rate of Change"
-msgstr ""
+msgstr "Скорость изменения объема"
 
 msgid "Momentum Indicator"
-msgstr ""
+msgstr "Индикатор темпа"
 
 msgid "Price Volume Trend"
-msgstr ""
+msgstr "Тренд цены и объема"
 
 msgid "Positive Volume Index"
-msgstr ""
+msgstr "Индекс положительного объема"
 
 msgid "Index"
-msgstr ""
+msgstr "Индекс"
 
 msgid "Negative Volume Index"
-msgstr ""
+msgstr "Индекс отрицательного объема"
 
 msgid "On Balance Volume"
-msgstr ""
+msgstr "Балансовый объем"
 
 msgid "Stochastic Momentum Index"
-msgstr ""
+msgstr "Индекс стохастического темпа"
 
 msgid "%K Periods"
-msgstr ""
+msgstr "Периоды %K"
 
 msgid "%K Smoothing Periods"
-msgstr ""
+msgstr "Периоды сглаживания %K"
 
 msgid "%K Double Smoothing Periods"
-msgstr ""
+msgstr "Периоды двойного сглаживания %K"
 
 msgid "%D Periods"
-msgstr ""
+msgstr "Периоды %D"
 
 msgid "%D Moving Average Type"
-msgstr ""
+msgstr "Тип скользящего среднего %D"
 
 msgid "%K"
-msgstr ""
+msgstr "%K"
 
 msgid "%D"
-msgstr ""
+msgstr "%D"
 
 msgid "Historical Volatility"
-msgstr ""
+msgstr "Статистика волатильности"
 
 msgid "Days Per Year"
-msgstr ""
+msgstr "Дней в году"
 
 msgid "Pretty Good Oscillator"
-msgstr ""
+msgstr "Осциллятор Pretty Good"
 
 msgid "Ultimate Oscillator"
-msgstr ""
+msgstr "Окончательный осциллятор"
 
 msgid "Cycle 1"
-msgstr ""
+msgstr "Цикл 1"
 
 msgid "Cycle 2"
-msgstr ""
+msgstr "Цикл 2"
 
 msgid "Cycle 3"
-msgstr ""
+msgstr "Цикл 3"
 
 msgid "Volume Oscillator"
-msgstr ""
+msgstr "Объемный осциллятор"
 
 msgid "Short Cycle"
-msgstr ""
+msgstr "Короткий цикл"
 
 msgid "Long Cycle"
-msgstr ""
+msgstr "Длинный цикл"
 
 msgid "Points Or Percent"
-msgstr ""
+msgstr "Пункты или проценты"
 
 msgid "Twiggs Money Flow"
-msgstr ""
+msgstr "Индекс денежных потоков Твиггса"
 
 msgid "Chaikin Money Flow"
-msgstr ""
+msgstr "Денежный поток Чайкина"
 
 msgid "Chaikin Volatility"
-msgstr ""
+msgstr "Волатильность Чайкина"
 
 msgid "Rate Of Change"
-msgstr ""
+msgstr "Скорость изменения"
 
 msgid "Price Oscillator"
-msgstr ""
+msgstr "Ценовой осциллятор"
 
 msgid "Ease of Movement"
-msgstr ""
+msgstr "Легкость движения"
 
 msgid "Commodity Channel Index"
-msgstr ""
+msgstr "Индекс товарного канала"
 
 msgid "Detrended Price Oscillator"
-msgstr ""
+msgstr "Осциллятор бестрендовой цены"
 
 msgid "True Range"
-msgstr ""
+msgstr "Истинный диапазон"
 
 msgid "Average True Range"
-msgstr ""
+msgstr "Средний истинный диапазон (ATR)"
 
 msgid "ATR"
-msgstr ""
+msgstr "ATR"
 
 msgid "Ehler Fisher Transform"
-msgstr ""
+msgstr "Преобразование Фишера"
 
 msgid "EF"
-msgstr ""
+msgstr "EF"
 
 msgid "EF Trigger"
-msgstr ""
+msgstr "Триггер EF"
 
 msgid "Schaff Trend Cycle"
-msgstr ""
+msgstr "Трендовый цикл Шаффа"
 
 msgid "QStick"
-msgstr ""
+msgstr "QStick"
 
 msgid "Coppock Curve"
-msgstr ""
+msgstr "Кривая Коппока"
 
 msgid "Short RoC"
-msgstr ""
+msgstr "Кратковременная скорость изменения"
 
 msgid "Long RoC"
-msgstr ""
+msgstr "Долговременная скорость изменения"
 
 msgid "Chande Momentum Oscillator"
-msgstr ""
+msgstr "Моментум-осциллятор Чанде"
 
 msgid "Chande Forecast Oscillator"
-msgstr ""
+msgstr "Предсказующий осциллятор Чанде"
 
 msgid "Intraday Momentum Index"
-msgstr ""
+msgstr "Индикатор внутридневного импульса"
 
 msgid "RAVI"
-msgstr ""
+msgstr "RAVI"
 
 msgid "Random Walk Index"
-msgstr ""
+msgstr "Индекс случайного блуждания"
 
 msgid "Random Walk High"
-msgstr ""
+msgstr "Случайное блуждание (высокий уровень)"
 
 msgid "Random Walk Low"
-msgstr ""
+msgstr "Случайное блуждание (низкий уровень)"
 
 msgid "ADX/DMS"
-msgstr ""
+msgstr "ADX/DMS"
 
 msgid "Smoothing Period"
-msgstr ""
+msgstr "Период сглаживания"
 
 msgid "Series"
-msgstr ""
+msgstr "Серия"
 
 msgid "Shading"
-msgstr ""
+msgstr "Незначительное понижение"
 
 msgid "Histogram"
-msgstr ""
+msgstr "Гистограмма"
 
 msgid "+DI"
-msgstr ""
+msgstr "+DI"
 
 msgid "-DI"
-msgstr ""
+msgstr "-DI"
 
 msgid "ADX"
-msgstr ""
+msgstr "ADX"
 
 msgid "Positive Bar"
-msgstr ""
+msgstr "Положительная граница"
 
 msgid "Negative Bar"
-msgstr ""
+msgstr "Отрицательная граница"
 
 msgid "High Low Bands"
-msgstr ""
+msgstr "Высокие/низкие полосы"
 
 msgid "Shift Percentage"
-msgstr ""
+msgstr "Процент заполнения"
 
 msgid "Channel Fill"
-msgstr ""
+msgstr "Заполнение канала"
 
 msgid "High Low Top"
-msgstr ""
+msgstr "Высокий/низкий/максимальный"
 
 msgid "High Low Median"
-msgstr ""
+msgstr "Высокий/низкий/медианный"
 
 msgid "High Low Bottom"
-msgstr ""
+msgstr "Высокий/низкий/минимальный"
 
 msgid "High Minus Low"
-msgstr ""
+msgstr "Высокий минус низкий"
 
 msgid "Median Price"
-msgstr ""
+msgstr "Медианная цена"
 
 msgid "Overlay"
-msgstr ""
+msgstr "Основание"
 
 msgid "Moving Average Envelope"
-msgstr ""
+msgstr "Конверт скользящих средних"
 
 msgid "Shift Type"
-msgstr ""
+msgstr "Тип сдвигу"
 
 msgid "Shift"
-msgstr ""
+msgstr "Сдвиг"
 
 msgid "MA Env Top"
-msgstr ""
+msgstr "Конверт скользящих средних (максимальный)"
 
 msgid "MA Env Median"
-msgstr ""
+msgstr "Конверт скользящих средних (медианный)"
 
 msgid "MA Env Bottom"
-msgstr ""
+msgstr "Конверт скользящих средних (минимальный)"
 
 msgid "Fractal Chaos Bands"
-msgstr ""
+msgstr "Полосы фрактала и хаоса"
 
 msgid "Fractal High"
-msgstr ""
+msgstr "Фрактал (высокий)"
 
 msgid "Fractal Low"
-msgstr ""
+msgstr "Фрактал (низкий)"
 
 msgid "Fractal Channel"
-msgstr ""
+msgstr "Канал фракталов"
 
 msgid "Fractal Chaos Oscillator"
-msgstr ""
+msgstr "Осциллятор фракталов и хаоса"
 
 msgid "Gopalakrishnan Range Index"
-msgstr ""
+msgstr "Индекс диапазона Гопалакришнана"
 
 msgid "Prime Number Bands"
-msgstr ""
+msgstr "Полосы простых чисел"
 
 msgid "Prime Bands Top"
-msgstr ""
+msgstr "Полосы простых чисел (верхний уровень)"
 
 msgid "Prime Bands Bottom"
-msgstr ""
+msgstr "Полосы простых чисел (нижний уровень)"
 
 msgid "Prime Bands Channel"
-msgstr ""
+msgstr "Канал полос простых чисел"
 
 msgid "Prime Number Oscillator"
-msgstr ""
+msgstr "Осциллятор простых чисел"
 
 msgid "Tolerance Percentage"
-msgstr ""
+msgstr "Погрешность в процентах"
 
 msgid "Bollinger Bands"
-msgstr ""
+msgstr "Полоса Боллинджера"
 
 msgid "Bollinger Bands Top"
-msgstr ""
+msgstr "Полосы Боллинджера (верхний уровень)"
 
 msgid "Bollinger Bands Median"
-msgstr ""
+msgstr "Полосы Боллинджера (медианный уровень)"
 
 msgid "Bollinger Bands Bottom"
-msgstr ""
+msgstr "Полосы Боллинджера (нижний уровень)"
 
 msgid "Donchian Channel"
-msgstr ""
+msgstr "Канал Дончиана"
 
 msgid "High Period"
-msgstr ""
+msgstr "Высокий период"
 
 msgid "Low Period"
-msgstr ""
+msgstr "Низкий период"
 
 msgid "Donchian High"
-msgstr ""
+msgstr "Канал Дончиана (высокий уровень)"
 
 msgid "Donchian Median"
-msgstr ""
+msgstr "Канал Дончиана (медианный уровень)"
 
 msgid "Donchian Low"
-msgstr ""
+msgstr "Канал Дончиана (низкий уровень)"
 
 msgid "Highest High Value"
-msgstr ""
+msgstr "Максимальное/высокое значение"
 
 msgid "Lowest Low Value"
-msgstr ""
+msgstr "Минимальное/низкое значение"
 
 msgid "Mass Index"
-msgstr ""
+msgstr "Индекс массы"
 
 msgid "Bulge Threshold"
-msgstr ""
+msgstr "Порог повышения"
 
 msgid "Keltner Channel"
-msgstr ""
+msgstr "Канал Кельтнера"
 
 msgid "Keltner Top"
-msgstr ""
+msgstr "Канал Кельтнера (верхний уровень)"
 
 msgid "Keltner Median"
-msgstr ""
+msgstr "Канал Кельтнера (медианный уровень)"
 
 msgid "Keltner Bottom"
-msgstr ""
+msgstr "Канал Кельтнера (нижний уровень)"
 
 msgid "Parabolic SAR"
-msgstr ""
+msgstr "Параболическая система SAR"
 
 msgid "Minimum AF"
-msgstr ""
+msgstr "Мин. AF"
 
 msgid "Maximum AF"
-msgstr ""
+msgstr "Макс. AF"
 
 msgid "Klinger Volume Oscillator"
-msgstr ""
+msgstr "Объемный осциллятор Клингера"
 
 msgid "Signal Periods"
-msgstr ""
+msgstr "Периоды сигнала"
 
 msgid "Klinger"
-msgstr ""
+msgstr "Клингер"
 
 msgid "KlingerSignal"
-msgstr ""
+msgstr "Сигнал Клингера"
 
 msgid "Elder Ray Index"
-msgstr ""
+msgstr "Луч Элдера"
 
 msgid "Elder Bull Power"
-msgstr ""
+msgstr "Сила быков по Элдеру"
 
 msgid "Elder Bear Power"
-msgstr ""
+msgstr "Сила медведей по Элдеру"
 
 msgid "Elder Force Index"
-msgstr ""
+msgstr "Индекс силы Элдера"
 
 msgid "Linear Reg Slope"
-msgstr ""
+msgstr "Наклон линейной регрессии"
 
 msgid "Slope"
-msgstr ""
+msgstr "Наклон"
 
 msgid "Center Of Gravity"
-msgstr ""
+msgstr "Центр тяжести"
 
 msgid "Typical Price"
-msgstr ""
+msgstr "Типичная цена"
 
 msgid "Weighted Close"
-msgstr ""
+msgstr "Взвешенная цена закрытия"
 
 msgid "Money Flow Index"
-msgstr ""
+msgstr "Индекс денежных потоков"
 
 msgid "Williams %R"
-msgstr ""
+msgstr "%R Уильямса"
 
 msgid "Accumulation/Distribution"
-msgstr ""
+msgstr "Индикатор накопления/распределения"
 
 msgid "Use Volume"
-msgstr ""
+msgstr "объем Использование"
 
 msgid "Volume Chart"
-msgstr ""
+msgstr "Схема оборотов"
 
 msgid "Up Volume"
-msgstr ""
+msgstr "Объем повышения"
 
 msgid "Down Volume"
-msgstr ""
+msgstr "объем понижения"
 
 msgid "Volume Underlay"
-msgstr ""
+msgstr "Объем под кривой"
 
 msgid "Valuation Lines"
-msgstr ""
+msgstr "Линии оценки"
 
 msgid "Average Type"
-msgstr ""
+msgstr "Тип среднего"
 
 msgid "Display Average"
-msgstr ""
+msgstr "Отображать среднее"
 
 msgid "Display 1 Standard Deviation (1σ)"
-msgstr ""
+msgstr "Отображать среднеквадратическое отклонение 1 (1σ)"
 
 msgid "Display 2 Standard Deviation (2σ)"
-msgstr ""
+msgstr "Отображать среднеквадратическое отклонение 2 (2σ)"
 
 msgid "Display 3 Standard Deviation (3σ)"
-msgstr ""
+msgstr "Отображать среднеквадратическое отклонение 3 (3σ)"
 
 msgid "Average"
-msgstr ""
+msgstr "Среднее"
 
 msgid "1 Standard Deviation (1σ)"
-msgstr ""
+msgstr "Среднеквадратическое отклонение 1 (1σ)"
 
 msgid "2 Standard Deviation (2σ)"
-msgstr ""
+msgstr "Среднеквадратическое отклонение 2 (2σ)"
 
 msgid "3 Standard Deviation (3σ)"
-msgstr ""
+msgstr "Среднеквадратическое отклонение 3 (3σ)"
 
 msgid "Correlation Coefficient"
-msgstr ""
+msgstr "Коэффициент корреляции"
 
 msgid "Price Momentum Oscillator"
-msgstr ""
+msgstr "Ценовой моментум-осциллятор"
 
 msgid "Double Smoothing Period"
-msgstr ""
+msgstr "Период двойного сглаживания"
 
 msgid "PMO"
-msgstr ""
+msgstr "PMO"
 
 msgid "PMOSignal"
-msgstr ""
+msgstr "PMOSignal"
 
 msgid "Relative Volatility"
-msgstr ""
+msgstr "Относительная волатильность"
 
 msgid "STD Period"
-msgstr ""
+msgstr "Базисный период"
 
 msgid "Rel Vol"
-msgstr ""
+msgstr "Относительная волатильность"
 
 msgid "Awesome Oscillator"
-msgstr ""
+msgstr "Волшебный осциллятор"
 
 msgid "Market Facilitation Index"
-msgstr ""
+msgstr "Индекс облегчения рынка"
 
 msgid "Scale Factor"
-msgstr ""
+msgstr "Фактор масштаба"
 
 msgid "Green"
-msgstr ""
+msgstr "Зеленый"
 
 msgid "Fade"
-msgstr ""
+msgstr "Угасание"
 
 msgid "Fake"
-msgstr ""
+msgstr "Фальсификация"
 
 msgid "Squat"
-msgstr ""
+msgstr "Проседание"
 
 msgid "ATR Bands"
-msgstr ""
+msgstr "Полосы ATR"
 
 msgid "ATR Bands Top"
-msgstr ""
+msgstr "Верхняя граница полос ATR"
 
 msgid "ATR Bands Bottom"
-msgstr ""
+msgstr "Нижняя граница полос ATR"
 
 msgid "ATR Bands Channel"
-msgstr ""
+msgstr "Канал полос ATR"
 
 msgid "STARC Bands"
-msgstr ""
+msgstr "STARC-полосы"
 
 msgid "MA Period"
-msgstr ""
+msgstr "Период скользящей средней"
 
 msgid "Multiplier"
-msgstr ""
+msgstr "Мультипликатор"
 
 msgid "STARC Bands Top"
-msgstr ""
+msgstr "Верхняя STARC-полоса"
 
 msgid "STARC Bands Median"
-msgstr ""
+msgstr "Медиана STARC-полос"
 
 msgid "STARC Bands Bottom"
-msgstr ""
+msgstr "Нижняя STARC-полоса"
 
 msgid "ATR Trailing Stops"
-msgstr ""
+msgstr "Скользящие стопы ATR"
 
 msgid "Plot Type"
-msgstr ""
+msgstr "Тип схемы"
 
 msgid "HighLow"
-msgstr ""
+msgstr "Высокий/низкий"
 
 msgid "Buy Stops"
-msgstr ""
+msgstr "Стопы на покупку"
 
 msgid "Sell Stops"
-msgstr ""
+msgstr "Стопы на продажу"
 
 msgid "Bollinger %b"
-msgstr ""
+msgstr "%b Боллинджера"
 
 msgid "%b"
-msgstr ""
+msgstr "%b"
 
 msgid "Bollinger Bandwidth"
-msgstr ""
+msgstr "Ширина полосы Боллинджера"
 
 msgid "Bandwidth"
-msgstr ""
+msgstr "Ширина полосы"
 
 msgid "Donchian Width"
-msgstr ""
+msgstr "Ширина канала Дончиана"
 
 msgid "Relative Vigor Index"
-msgstr ""
+msgstr "Индекс относительной бодрости"
 
 msgid "Rel Vig"
-msgstr ""
+msgstr "Относительная бодрость"
 
 msgid "RelVigSignal"
-msgstr ""
+msgstr "Сигнал относительной бодрости"
 
 msgid "Elder Impulse System"
-msgstr ""
+msgstr "Импульсная система Элдера"
 
 msgid "Bullish"
-msgstr ""
+msgstr "Бычий"
 
 msgid "Bearish"
-msgstr ""
+msgstr "Медвежий"
 
 msgid "Neutral"
-msgstr ""
+msgstr "Нейтральный"
 
 msgid "Pivot Points"
-msgstr ""
+msgstr "Точки разворота"
 
 msgid "Pivot"
-msgstr ""
+msgstr "Разворот"
 
 msgid "Resistance 1"
-msgstr ""
+msgstr "Устойчивость 1"
 
 msgid "Support 1"
-msgstr ""
+msgstr "Поддержка 1"
 
 msgid "Resistance 2"
-msgstr ""
+msgstr "Устойчивость 2"
 
 msgid "Support 2"
-msgstr ""
+msgstr "Поддержка 2"
 
 msgid "Resistance 3"
-msgstr ""
+msgstr "Устойчивость 3"
 
 msgid "Support 3"
-msgstr ""
+msgstr "Поддержка 3"
 
 msgid "VWAP"
-msgstr ""
+msgstr "VWAP"
 
 msgid "Alligator"
-msgstr ""
+msgstr "Аллигатор"
 
 msgid "Jaw Period"
-msgstr ""
+msgstr "Период усреднения синей линии"
 
 msgid "Jaw Offset"
-msgstr ""
+msgstr "Смещение синей линии"
 
 msgid "Teeth Period"
-msgstr ""
+msgstr "Период усреднения красной линии"
 
 msgid "Teeth Offset"
-msgstr ""
+msgstr "Смещение красной линии"
 
 msgid "Lips Period"
-msgstr ""
+msgstr "Период усреднения зеленой линии"
 
 msgid "Lips Offset"
-msgstr ""
+msgstr "Смещение зеленый линии"
 
 msgid "Show Fractals"
-msgstr ""
+msgstr "Показать фракталы"
 
 msgid "Jaw"
-msgstr ""
+msgstr "Синяя линия (челюсти аллигатора)"
 
 msgid "Teeth"
-msgstr ""
+msgstr "Красная линия (зубы аллигатора)"
 
 msgid "Lips"
-msgstr ""
+msgstr "Зеленая линия (губы аллигатора)"
 
 msgid "Gator Oscillator"
-msgstr ""
+msgstr "Осциллятор Гатор"
 
 msgid "Ichimoku Clouds"
-msgstr ""
+msgstr "Облака Ишимоку"
 
 msgid "Conversion Line Period"
-msgstr ""
+msgstr "Период усреднения конверсионной линии"
 
 msgid "Base Line Period"
-msgstr ""
+msgstr "Период усреднения базовой линии"
 
 msgid "Leading Span B Period"
-msgstr ""
+msgstr "Период опережения B"
 
 msgid "Lagging Span Period"
-msgstr ""
+msgstr "Период отставания"
 
 msgid "Conversion Line"
-msgstr ""
+msgstr "Конверсионная линия"
 
 msgid "Base Line"
-msgstr ""
+msgstr "Базовая линия"
 
 msgid "Leading Span A"
-msgstr ""
+msgstr "Период опережения A"
 
 msgid "Leading Span B"
-msgstr ""
+msgstr "Период опережения B"
 
 msgid "Lagging Span"
-msgstr ""
+msgstr "Период отставания"
 
 msgid "Price Relative"
-msgstr ""
+msgstr "Относительное значение цен"
 
 msgid "Comparison Symbol"
-msgstr ""
+msgstr "Символ сравнения"
 
 msgid "Performance Index"
-msgstr ""
+msgstr "Индекс эффективности"
 
 msgid "Gain"
-msgstr ""
+msgstr "Прибыль"
 
 msgid "Loss"
-msgstr ""
+msgstr "Убыток"
 
 msgid "Beta"
-msgstr ""
+msgstr "Бета-версия"
 
 msgid "Ulcer Index"
-msgstr ""
+msgstr "Индекс Ульцера"
 
 msgid "Balance of Power"
-msgstr ""
+msgstr "Баланс мощности"
 
 msgid "Trend Intensity Index"
-msgstr ""
+msgstr "Индекс интенсивности тренда"
 
 msgid "TII"
-msgstr ""
+msgstr "TII"
 
 msgid "Choppiness Index"
-msgstr ""
+msgstr "Индекс зыбучести"
 
 msgid "Disparity Index"
-msgstr ""
+msgstr "Индекс диспаритета"
 
 msgid "Rainbow Moving Average"
-msgstr ""
+msgstr "Радужная скользящая средняя"
 
 msgid "SMA1"
-msgstr ""
+msgstr "SMA1"
 
 msgid "SMA2"
-msgstr ""
+msgstr "SMA2"
 
 msgid "SMA3"
-msgstr ""
+msgstr "SMA3"
 
 msgid "SMA4"
-msgstr ""
+msgstr "SMA4"
 
 msgid "SMA5"
-msgstr ""
+msgstr "SMA5"
 
 msgid "SMA6"
-msgstr ""
+msgstr "SMA6"
 
 msgid "SMA7"
-msgstr ""
+msgstr "SMA7"
 
 msgid "SMA8"
-msgstr ""
+msgstr "SMA8"
 
 msgid "SMA9"
-msgstr ""
+msgstr "SMA9"
 
 msgid "SMA10"
-msgstr ""
+msgstr "SMA10"
 
 msgid "Rainbow Oscillator"
-msgstr ""
+msgstr "Радужный осциллятор"
 
 msgid "HHV/LLV Lookback"
-msgstr ""
+msgstr "Ретроспективный обзор HHV/LLV"
 
 msgid "Pring's Know Sure Thing"
-msgstr ""
+msgstr "Индикатор Принга “Знать наверняка”"
 
 msgid "Lightest Rate of Change Period"
-msgstr ""
+msgstr "Период легчайшей нормы изменений"
 
 msgid "Lightest SMA Period"
-msgstr ""
+msgstr "Период легчайшей простой скользящей средней"
 
 msgid "Light Rate of Change Period"
-msgstr ""
+msgstr "Период легкой нормы изменений"
 
 msgid "Light SMA Period"
-msgstr ""
+msgstr "Период легкой простой скользящей средней"
 
 msgid "Heavy Rate of Change Period"
-msgstr ""
+msgstr "Период тяжелой нормы изменений"
 
 msgid "Heavy SMA Period"
-msgstr ""
+msgstr "Период тяжелой простой скользящей средней"
 
 msgid "Heaviest Rate of Change Period"
-msgstr ""
+msgstr "Период тяжелейшей нормы изменений"
 
 msgid "Heaviest SMA Period"
-msgstr ""
+msgstr "Период тяжелейшей простой скользящей средней"
 
 msgid "KST"
-msgstr ""
+msgstr "KST"
 
 msgid "KSTSignal"
-msgstr ""
+msgstr "KSTSignal"
 
 msgid "Pring's Special K"
-msgstr ""
+msgstr "Индикатор Принга Special K"
 
 msgid "Interval"
-msgstr ""
+msgstr "Интервал"
 
 msgid "Darvas Box"
-msgstr ""
+msgstr "Область Дарваса"
 
 msgid "ATH Lookback Period"
-msgstr ""
+msgstr "Период ATH"
 
 msgid "Exit Field"
-msgstr ""
+msgstr "Выйти из поля"
 
 msgid "Ghost Boxes"
-msgstr ""
+msgstr "Области Госта"
 
 msgid "Stop Levels"
-msgstr ""
+msgstr "Уровни остановки"
 
 msgid "Level Offset"
-msgstr ""
+msgstr "Смещение уровня"
 
 msgid "Price Minimum"
-msgstr ""
+msgstr "Ценовой минимум"
 
 msgid "Volume Spike"
-msgstr ""
+msgstr "“Шпилька” объема"
 
 msgid "Volume % of Avg"
-msgstr ""
+msgstr "Объем % от среднего"
 
 msgid "Darvas"
-msgstr ""
+msgstr "Дарвас"
 
 msgid "Ghost"
-msgstr ""
+msgstr "Гост"
 
 msgid "Levels"
-msgstr ""
+msgstr "Уровни"
 
 msgid "Supertrend"
-msgstr ""
+msgstr "Супертренд"
 
 msgid "Uptrend"
-msgstr ""
+msgstr "Восходящий тренд"
 
 msgid "Downtrend"
-msgstr ""
+msgstr "Нисходящий тренд"
 
 msgid "Volume Profile"
-msgstr ""
+msgstr "Профиль объемов"
 
 msgid "Bars Color"
-msgstr ""
+msgstr "Цвет столбцов"
 
 msgid "Vortex Indicator"
-msgstr ""
+msgstr "Индикатор Vortex"
 
 msgid "+VI"
-msgstr ""
+msgstr "+VI"
 
 msgid "-VI"
-msgstr ""
+msgstr "-VI"
 
 msgid "ZigZag"
-msgstr ""
+msgstr "Зигзаг"
 
 msgid "Distance(%)"
-msgstr ""
+msgstr "Расстояние (%)"
 
 msgid "Psychological Line"
-msgstr ""
+msgstr "Психологическая линия"
 
 msgid "Moving Average Deviation"
-msgstr ""
+msgstr "Отклонение скользящей средней"
 
 msgid "Shinohara Intensity Ratio"
-msgstr ""
+msgstr "Коэффициент интенсивности Синохара"
 
 msgid "Strong Ratio"
-msgstr ""
+msgstr "Сильное соотношение"
 
 msgid "Weak Ratio"
-msgstr ""
+msgstr "Слабое соотношение"
 
