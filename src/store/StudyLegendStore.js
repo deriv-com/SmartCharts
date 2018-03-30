@@ -68,7 +68,7 @@ export default class StudyLegendStore {
             });
         });
         const category = {
-            categoryName: 'Indicators',
+            categoryName: t.translate('Indicators'),
             categoryId: 'indicators',
             hasSubcategory: false,
             data
