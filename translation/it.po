@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Italian\n"
 "Language: it_IT\n"
-"PO-Revision-Date: 2018-03-30 04:32-0400\n"
+"PO-Revision-Date: 2018-03-30 04:42-0400\n"
 
 msgid "Favorites"
 msgstr ""
@@ -251,9 +251,6 @@ msgstr "Livelli di Tirone"
 
 msgid "Vertical"
 msgstr "Verticale"
-
-msgid "This product is currently in beta. Unexpected errors may occur."
-msgstr ""
 
 msgid "RSI"
 msgstr "RSI"
