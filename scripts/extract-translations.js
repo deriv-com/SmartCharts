@@ -63,7 +63,7 @@ var formatText = (extracted_obj) => {
 };
 
 function getIndicatorStrings() {
-    const s = fs.readFileSync(path.resolve('scripts/indicator-strings.txt')).toString().split('\n');
+    const s = fs.readFileSync(path.resolve('scripts/static-messages.txt')).toString().split('\n');
     let result = [];
     for (const text of s) {
         if (!text || text === '') continue;
