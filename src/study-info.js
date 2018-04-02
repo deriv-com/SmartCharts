@@ -1,4 +1,4 @@
-{
+export default {
     "rsi":  "The Relative Strength Index (RSI) was published by J. Welles Wilder. The current price is normalized as a percentage between 0 and 100. The name of this oscillator is misleading because it does not compare the instrument relative to another instrument or set of instruments, but rather represents the current price relative to other recent pieces within the selected lookback window length.",
 
     "ma":  "The Moving Average (MA) is calculated by adding the price of an instrument over a number of time periods and then dividing the sum by the number of time periods. The SMA is basically the average price of the given time period, with equal weighting given to the price of each period.",
@@ -142,4 +142,4 @@
     "PSY": "",
     "MA Dev": "",
     "Shinohara": ""
-}
+};
