@@ -3,7 +3,6 @@
         width: 25px;
         height: 25px;
     }
-
     .cq-menu-dropdown {
         width: 200px;
         box-sizing: border-box;
@@ -11,18 +10,36 @@
         padding: 5px 16px 16px 16px  !important;
         background: #FAFAFB;
     }
+    .cq-menu-dropdown{
+        padding: 0em !important;
+        .title {
+            height: 40px;
+            line-height: 40px;
+            padding-left: 16px;
+            font-size: 16px;
+            background: white;
+            box-shadow: inset 0 -1px 0 0 #E9E9ED;
 
-    .ciq-bars {
-        height: 45px;
-        display: flex;
-        justify-content: space-around;
-        color: black;
-
-        > div {
-            cursor: pointer;
             display: flex;
-            flex-direction: column;
-            align-items: center;
+            color: black;
+            justify-content: space-between;
+            .ciq-bars-title{
+                // font-size: 1.6em;
+                color: black;
+            }
+            .ciq-bars-buttons{
+                cursor: pointer;
+                display: flex;
+                padding: 6px 6px;
+                > span{
+                    
+                }
+            }
+        }
+        .body {
+            background: #FAFAFA;
+            height: 100%;
+            padding: 16px;
         }
     }
 }
