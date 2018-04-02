@@ -2,6 +2,7 @@ import { observable, action, computed, when } from 'mobx';
 import MenuStore from './MenuStore';
 import CategoricalDisplayStore from './CategoricalDisplayStore';
 import SettingsDialogStore from './SettingsDialogStore';
+import StudyInfo from '../indicator-info.json';
 
 export default class StudyLegendStore {
     constructor(mainStore) {
@@ -58,14 +59,18 @@ export default class StudyLegendStore {
 
     get categorizedStudies() {
         const data = [];
-        Object.keys(CIQ.Studies.studyLibrary).map(studyId => {
-            const study = CIQ.Studies.studyLibrary[studyId];
-            data.push({
-                enabled: true,
-                display: t.translate(study.name),
-                dataObject: studyId,
-                itemId: studyId,
-            });
+        Object.keys(CIQ.Studies.studyLibrary).forEach(studyId => {
+            const description = studyInfo[studyId];
+            if(description !== undefined) {
+                const study = CIQ.Studies.studyLibrary[studyId];
+                data.push({
+                    enabled: true,
+                    display: t.translate(study.name),
+                    dataObject: studyId,
+                    itemId: studyId,
+                    description: description,
+                });
+            }
         });
         const category = {
             categoryName: t.translate('Indicators'),
