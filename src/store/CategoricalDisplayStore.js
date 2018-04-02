@@ -45,10 +45,10 @@ export default class CategoricalDisplayStore {
     @observable activeCategoryKey = '';
     @observable favoritesMap = {};
     @observable favoritesCategory = {
-        categoryName: 'Favorites',
+        categoryName: t.translate('Favorites'),
         categoryId: 'favorite',
         hasSubcategory: false,
-        emptyDescription: 'There are no favorites yet.',
+        emptyDescription: t.translate('There are no favorites yet.'),
         data: [],
     };
     scrollOffset = 0;
@@ -210,6 +210,10 @@ export default class CategoricalDisplayStore {
     @action.bound onFavoritedItem(item, e) {
         e.stopPropagation();
         e.nativeEvent.isHandledByDialog = true; // prevent close dialog
+        this.setFavorite(item);
+        setTimeout(() => this.scroll.refresh(), 0);
+    }
+    setFavorite(item) {
         if (this.favoritesMap[item.itemId]) {
             this.favoritesCategory.data = this.favoritesCategory.data.filter(x => x.itemId !== item.itemId);
             delete this.favoritesMap[item.itemId];
@@ -221,8 +225,22 @@ export default class CategoricalDisplayStore {
         const layout = this.context.stx.layout;
         layout.favorites[this.favoritesId] = toJS(this.favoritesCategory.data);
         this.mainStore.chart.saveLayout();
+    }
 
-        setTimeout(() => this.scroll.refresh(), 0);
+    setFavoriteById(id) {
+        let foundItem = null;
+        for(let category of this.getCategoricalItems()) {
+            for(let item of category.data) {
+                if(item.itemId === id) {
+                    foundItem = item;
+                    break;
+                }
+            }
+            if(foundItem) { break; }
+        }
+        if(foundItem) {
+            this.setFavorite(foundItem);
+        }
     }
 
     connect = connect(() => ({

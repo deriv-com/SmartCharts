@@ -99,11 +99,10 @@ const SettingsDialog = ({
                         onClick={onDeleteClick}
                         className="margin"
                     />
-                    {/* Todo implement starring for dialog */}
-                    { /*<StarIcon
+                    <StarIcon
                         onClick={onStarClick}
                         className={`margin ${stared ? 'fill-orange' : ''}`}
-                    />*/}
+                    />
                 </div>
             </div>
 
@@ -144,11 +143,11 @@ const SettingsDialog = ({
                         <div
                             className='reset'
                             onClick={onResetClick}
-                        >RESET</div>
+                        >{t.translate('RESET')}</div>
                         <div
                             className='done'
                             onClick={() => setOpen(false)}
-                        >DONE</div>
+                        >{t.translate('DONE')}</div>
                     </div>
                 </React.Fragment>
                 :

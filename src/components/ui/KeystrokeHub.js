@@ -2,7 +2,6 @@ import CIQ from 'chartiq';
 import Helper from './Helper';
 import Keystroke from './Keystroke';
 import { claims } from './';
-import UIManager from './UIManager';
 
 /**
  * UI Helper for capturing and handling keystrokes. A helper or ContextTag can
@@ -23,7 +22,6 @@ class KeystrokeHub extends Helper {
         this.node = node;
         this.context = context;
         this.params = params || {};
-        this.uiManager = UIManager.instance;
 
         KeystrokeHub.instance = this;
         let self = this;
@@ -97,7 +95,7 @@ class KeystrokeHub extends Helper {
         case 'escape':
             if (CIQ.ChartEngine.drawingLine) {
                 stx.undo();
-            } else if (hub.uiManager) hub.uiManager.closeMenu();
+            }
             break;
         default:
             return false; // not captured

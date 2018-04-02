@@ -62,6 +62,16 @@ var formatText = (extracted_obj) => {
     return body;
 };
 
+function getIndicatorStrings() {
+    const s = fs.readFileSync(path.resolve('scripts/static-messages.txt')).toString().split('\n');
+    let result = [];
+    for (const text of s) {
+        if (!text || text === '') continue;
+        result.push({ text });
+    }
+    return result;
+}
+
 function extractOutPot(source, translationDir) {
     default_options.output = translationDir;
     var options = _.find(this.loaders, loader => loader.path.indexOf("textExtractor") !== -1);
@@ -69,7 +79,9 @@ function extractOutPot(source, translationDir) {
     var output = options.output;
     var parsed_code = parseCode(source);
     var extracted_text = extractTextFromFunctions(...options.method_names)(parsed_code);
+    var indicator_text = getIndicatorStrings();
     var formatted_text = `\n${formatText(extracted_text)}`;
+    formatted_text += `\n\n# Indicator strings:\n\n${formatText(indicator_text)}`
     try {
         if (file_removed)
         {fs.appendFileSync(`${output}/messages.pot`, formatted_text);}
