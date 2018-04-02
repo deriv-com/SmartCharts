@@ -116,7 +116,6 @@ export default class StudyLegendStore {
             category: 'parameters',
         }));
 
-        console.warn(study);
         const description = StudyInfo[study.sd.type];
         this.settingsDialog.items = [...inputs, ...outputs, ...parameters];
         this.settingsDialog.title = study.sd.name.toUpperCase();
