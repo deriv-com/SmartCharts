@@ -2,6 +2,7 @@ language: node_js
 
 branches:
   only:
+  - dev
   - master
 
 notifications:
@@ -20,11 +21,17 @@ jobs:
   include:
     - stage: test
       script: echo 'No tests are implemented yet...'
-    - stage: deploy
+    - stage: deploy production
       script:
-        - yarn gh-pages -- --repo 'git@github.com:regentmarkets/chartiq.git'
+        - echo 'charts.binary.com' > dist/CNAME
+        - yarn gh-pages --repo 'git@github.com:binary-com/SmartCharts.git'
+    - stage: deploy beta
+      script:
+        - yarn gh-pages --repo 'git@github.com:binary-com/SmartCharts.git' --dest './beta'
 
 stages:
   - test
-  - name: deploy
-    if: not type in (pull_request)
+  - name: deploy production
+    if: not type in (pull_request) AND branch = master
+  - name: deploy beta
+    if: not type in (pull_request) AND branch = dev
