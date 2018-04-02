@@ -94,7 +94,7 @@ export default class DrawToolsStore {
                     pattern: 'pattern',
                     axisLabel: 'switch',
                     font: 'font',
-                    lineWidth: 'none',
+                    lineWidth: 'none', //test
                 };
                 this.settingsDialog.items = Object.keys(parameters)
                     .map(key => ({
