@@ -1,6 +1,6 @@
 import { action, observable, computed, when, reaction, toJS } from 'mobx';
 import { connect } from './Connect';
-import IScroll from 'iscroll/build/iscroll-probe';
+import PerfectScrollbar from 'perfect-scrollbar';
 
 export default class CategoricalDisplayStore {
     constructor({
@@ -19,7 +19,6 @@ export default class CategoricalDisplayStore {
                 setTimeout(() => this.searchInput.focus(), 0);
                 if (!this.isInit) {this.init();}
                 setTimeout(() => {
-                    this.scroll.refresh();
                     this.updateScrollOffset();
                 }, 0);
             }
@@ -104,15 +103,10 @@ export default class CategoricalDisplayStore {
 
     init() {
         this.isInit = true;
-        this.scroll = new IScroll(this.scrollPanel, {
-            probeType: 2,
-            tap: true,
-            click: true,
-            mouseWheel: true,
-            scrollbars: true,
-        });
+        this.scroll = new PerfectScrollbar(this.scrollPanel);
+        window.bobochacha = this.scroll;
 
-        this.scroll.on('scroll', this.updateScrollSpy.bind(this));
+        this.scrollPanel.addEventListener('ps-scroll-y', this.updateScrollSpy.bind(this));
 
         // Select first non-empty category:
         if (this.activeCategoryKey === '' && this.filteredItems.length > 0) {
@@ -184,7 +178,6 @@ export default class CategoricalDisplayStore {
     @action.bound setFilterText(filterText) {
         this.filterText = filterText;
         setTimeout(() => {
-            this.scroll.refresh();
             this.updateScrollSpy();
         }, 0);
     }
@@ -192,8 +185,12 @@ export default class CategoricalDisplayStore {
     @action.bound handleFilterClick(category) {
         const el = this.categoryElements[category.categoryId];
         if (el) {
-            this.activeCategoryKey = category.categoryId;
-            this.scroll.scrollToElement(el, 200);
+            // TODO: Animation
+            this.scroll.element.scrollTop = el.offsetTop;
+            // TODO: the line above caused scroll event to execute, which in turn
+            //       changes this.activeCategoryKey. The hack below is not a pretty
+            //       solution.
+            setTimeout(() => this.activeCategoryKey = category.categoryId, 5);
         }
     }
 
@@ -229,7 +226,6 @@ export default class CategoricalDisplayStore {
         e.stopPropagation();
         e.nativeEvent.isHandledByDialog = true; // prevent close dialog
         this.setFavorite(item);
-        setTimeout(() => this.scroll.refresh(), 0);
     }
     setFavorite(item) {
         if (this.favoritesMap[item.itemId]) {
