@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import {CategoryIconMap, ItemIconMap, SearchIcon,
     SymbolPlaceholderIcon, ActiveOptionsIconMap, FavoriteIcon } from './Icons.jsx';
+import {stxtap} from '../store/utils';
 
 const CategoricalDisplay = ({
     placeholderText,
@@ -86,8 +87,12 @@ const CategoricalDisplay = ({
             <div className="cq-lookup-filters">
                 <div className="cq-lookup-input">
                     <input
-                        ref={setSearchInput}
-                        onClick={handleInputClick}
+                        ref={
+                            el => {
+                                setSearchInput(el);
+                                stxtap(el, handleInputClick);
+                            }
+                        }
                         onChange={e => setFilterText(e.target.value)}
                         type="text"
                         spellCheck="off"
@@ -104,8 +109,7 @@ const CategoricalDisplay = ({
                     return (
                         <div key={i}
                             className={`cq-filter ${isActive ? 'cq-active-filter' : ''}`}
-                            // onClick={(e) => handleFilterClick(category, e)}
-                            ref={el => el && el.addEventListener('stxtap', e => handleFilterClick(category, e))}
+                            ref={el => stxtap(el, e => handleFilterClick(category, e))}
                          >
                             {CategoryIcon && <CategoryIcon className={`ic-${category.categoryId}`}/>}
                             {category.categoryName}

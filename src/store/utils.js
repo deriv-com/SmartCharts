@@ -50,3 +50,10 @@ export function downloadFileInBrowser(filename, content, type) {
         document.body.removeChild(link);
     }
 }
+
+export function stxtap(el, func) {
+    if (el) {
+        CIQ.installTapEvent(el);
+        el.addEventListener('stxtap', func);
+    }
+}

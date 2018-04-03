@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {connect} from '../store/Connect';
+import {stxtap} from '../store/utils';
 
 class Menu extends Component {
     render() {
@@ -18,7 +18,7 @@ class Menu extends Component {
                 <div
                     className="cq-menu-btn"
                     // onClick={onTitleClick}
-                    ref={el => el && el.addEventListener('stxtap', onTitleClick)}
+                    ref={el => stxtap(el, onTitleClick)}
                 >
                     {first}
                 </div>
