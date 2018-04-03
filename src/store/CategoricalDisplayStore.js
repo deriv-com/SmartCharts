@@ -233,7 +233,7 @@ export default class CategoricalDisplayStore {
     }
     setFavorite(item) {
         if (this.favoritesMap[item.itemId]) {
-            this.favoritesCategory.data = this.favoritesCategory.data.filter(x => x && x.itemId !== item.itemId && x !== item.itemId);
+            this.favoritesCategory.data = this.favoritesCategory.data.filter(favItem => favItem && favItem.itemId !== item.itemId && favItem !== item.itemId);
             delete this.favoritesMap[item.itemId];
         } else {
             this.favoritesCategory.data.push(item);
