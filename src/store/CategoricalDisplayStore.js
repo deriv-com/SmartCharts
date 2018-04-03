@@ -127,24 +127,35 @@ export default class CategoricalDisplayStore {
     }
 
     @computed get filteredItems() {
+
         let filteredItems = toJS(this.getCategoricalItems()),
             items = (filteredItems && filteredItems[0]) ? filteredItems[0].data : [];
 
         if (this.favoritesId) {
             const favsCategory = toJS(this.favoritesCategory);
-            let favsCategoryItem = [];
-
-            favsCategory.data.forEach( favItem => {
-                if ( typeof favItem === 'string') {
-                    let itemObj = items.find( item => item.itemId === favItem);
-                    if (itemObj) {
-                        favsCategoryItem.push(itemObj);
-                    }
+            let favsCategoryItem = favsCategory.data.filter( favItem => (typeof favItem !== 'string') );
+            const findFavItem = category =>{
+                if ( category.hasSubcategory ) {
+                    category.data.forEach( subcategory => {
+                        findFavItem(subcategory);
+                    });
                 }else{
-                    favsCategoryItem.push(favItem);
+                    favsCategory.data.forEach( favItem => {
+                        if ( typeof favItem === 'string') {
+                            let itemObj = category.data.find( item => item.itemId === favItem);
+                            if (itemObj) {
+                                favsCategoryItem.push(itemObj);
+                            }
+                        }
+                    });
                 }
+            };
+
+            filteredItems.forEach( category => {
+                findFavItem(category);
             });
-            favsCategory.data = favsCategoryItem.filter(item => item);
+
+            favsCategory.data = favsCategoryItem.filter(favItem => favItem);
             filteredItems.unshift(favsCategory);
         }
 
@@ -241,7 +252,7 @@ export default class CategoricalDisplayStore {
         }
 
         const layout = this.context.stx.layout;
-        layout.favorites[this.favoritesId] = toJS(this.favoritesCategory.data).filter(item => item).map( item => typeof item === 'string' ? item : item.itemId);
+        layout.favorites[this.favoritesId] = toJS(this.favoritesCategory.data).filter(favItem => favItem).map( favItem => typeof favItem === 'string' ? favItem : favItem.itemId);
         this.mainStore.chart.saveLayout();
     }
 
