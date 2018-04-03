@@ -76,6 +76,10 @@ const config = {
         new CopyWebpackPlugin([
             { from: './chartiq/chartiq.min.js' },
             { from: './sass/favicons/*.png' },
+            { 
+                from: './chartiq/mobile-detect.min.js',
+                to: 'mobile-detect.js'
+            },
             {
                 from: production ?
                     './node_modules/react/umd/react.production.min.js' :
