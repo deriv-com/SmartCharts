@@ -61,9 +61,12 @@ export default class CategoricalDisplayStore {
         const layout = this.context.stx.layout;
         if (!layout.favorites) {layout.favorites = {};}
         if (!layout.favorites[this.favoritesId]) {layout.favorites[this.favoritesId] = [];}
+
         this.favoritesCategory.data = layout.favorites[this.favoritesId];
         for (const fav of this.favoritesCategory.data) {
-            this.favoritesMap[fav.itemId] = true;
+            if (fav) {
+                this.favoritesMap[(typeof fav === 'string' ? fav : fav.itemId)] = true;
+            }
         }
     }
 
@@ -124,10 +127,25 @@ export default class CategoricalDisplayStore {
     }
 
     @computed get filteredItems() {
-        let filteredItems = toJS(this.getCategoricalItems());
+        let filteredItems = toJS(this.getCategoricalItems()),
+            items = (filteredItems && filteredItems[0]) ? filteredItems[0].data : [];
 
         if (this.favoritesId) {
-            filteredItems.unshift(toJS(this.favoritesCategory));
+            const favsCategory = toJS(this.favoritesCategory);
+            let favsCategoryItem = [];
+
+            favsCategory.data.forEach( favItem => {
+                if ( typeof favItem === 'string') {
+                    let itemObj = items.find( item => item.itemId === favItem);
+                    if (itemObj) {
+                        favsCategoryItem.push(itemObj);
+                    }
+                }else{
+                    favsCategoryItem.push(favItem);
+                }
+            });
+            favsCategory.data = favsCategoryItem.filter(item => item);
+            filteredItems.unshift(favsCategory);
         }
 
         if (this.getActiveCategory) {
@@ -215,7 +233,7 @@ export default class CategoricalDisplayStore {
     }
     setFavorite(item) {
         if (this.favoritesMap[item.itemId]) {
-            this.favoritesCategory.data = this.favoritesCategory.data.filter(x => x.itemId !== item.itemId);
+            this.favoritesCategory.data = this.favoritesCategory.data.filter(favItem => favItem && favItem.itemId !== item.itemId && favItem !== item.itemId);
             delete this.favoritesMap[item.itemId];
         } else {
             this.favoritesCategory.data.push(item);
@@ -223,7 +241,7 @@ export default class CategoricalDisplayStore {
         }
 
         const layout = this.context.stx.layout;
-        layout.favorites[this.favoritesId] = toJS(this.favoritesCategory.data);
+        layout.favorites[this.favoritesId] = toJS(this.favoritesCategory.data).filter(item => item).map( item => typeof item === 'string' ? item : item.itemId);
         this.mainStore.chart.saveLayout();
     }
 
