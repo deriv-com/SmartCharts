@@ -1,5 +1,4 @@
 /* eslint-disable no-new, react/jsx-indent, react/no-danger, react/jsx-indent-props */
-import $ from 'jquery';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Chart from './components/Chart.jsx';
@@ -39,7 +38,7 @@ class SmartChart extends React.Component {
         const {children} = this.props;
         return (
             <MobxProvider store={this.mainStore}>
-                <Chart>
+                <Chart lang="en">
                     {children}
                 </Chart>
             </MobxProvider>
@@ -67,22 +66,3 @@ export default {
     TradeStartLine,
     TradeEndLine,
 };
-
-// class BinaryChartiq {
-//     getChartEngine() {
-//         if (!this._stx) {
-//             const context = $$$('cq-context', $$$(this.selector));
-//             this._stx = context.CIQ.UI.context.stx;
-//         }
-//         return this._stx;
-//     }
-//     addTradeStartLine() {
-//         const start = new TradeStartLine({ stx: this.getChartEngine() });
-//         return start;
-//     }
-//     addTradeEndLine() {
-//         const end = new TradeEndLine({ stx: this.getChartEngine() });
-//         return end;
-//     }
-// }
-

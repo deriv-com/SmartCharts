@@ -21,12 +21,12 @@ const ChartTypes = ({
             <div className="ciq-title">
                 <Type.icon
                     className={`${menuOpen ? 'active' : ''}`}
-                    tooltip-title="Chart types" />
+                    tooltip-title={t.translate("Chart types")} />
             </div>
         </Menu.Title>
         <Menu.Body>
             <div className='ciq-toggle-asset-information'>
-                <div>Toggle Asset Information </div>
+                <div>{t.translate('Toggle Asset Information')}</div>
                 <Switch
                     value={assetInformation}
                     onChange={setAssetInformation}

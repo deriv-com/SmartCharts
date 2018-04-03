@@ -29,17 +29,6 @@ cq-context {
 		margin: 0.2em 0.5em;
 	}
 
-	.beta-version {
-		background: transparent;
-		z-index: +3;
-		position: absolute;
-		bottom: 32px;
-		left: 20px;
-		pointer-events: none;
-		font-size: 22px;
-		opacity: 0.2;
-	}
-
 	@import "components/barrier";
 	@import "components/chart-types";
 	@import "components/chart-controls";

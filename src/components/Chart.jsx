@@ -1,5 +1,4 @@
 /* eslint-disable no-new, react/jsx-indent, react/no-danger, react/jsx-indent-props */
-import $ from 'jquery';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import CIQ from 'chartiq'; // eslint-disable-line
@@ -13,7 +12,6 @@ import Loader from './Loader.jsx'
 import '../../sass/chartiq.scss';
 import '../../sass/_ciq-custom.scss';
 
-import '../AddOns';
 import '../Plugin';
 import './ui';
 
@@ -38,8 +36,9 @@ class Chart extends Component {
     }
 
     render() {
-        const { DrawToolsSettingsDialog, StudySettingsDialog, children } = this.props;
+        const { DrawToolsSettingsDialog, StudySettingsDialog, children, lang } = this.props;
 
+        t.setLanguage(lang);
         const array = React.Children.toArray(children);
         const insideHolder = array.filter(c => !/(TradeStart)|(TradeEnd)/.test(c.type.displayName));
         const insideSubHolder = array.filter(c => /(TradeStart)|(TradeEnd)/.test(c.type.displayName));
@@ -48,7 +47,6 @@ class Chart extends Component {
             <cq-context ref={(root) => { this.root = root; }}>
                 <div className="ciq-chart-area">
                     <div className="ciq-chart">
-                        <div className='beta-version'>Beta Version</div>
                         <RenderInsideChart at='holder'>
                             {insideHolder}
                         </RenderInsideChart>

@@ -2,6 +2,7 @@ import { observable, action, computed, when } from 'mobx';
 import MenuStore from './MenuStore';
 import CategoricalDisplayStore from './CategoricalDisplayStore';
 import SettingsDialogStore from './SettingsDialogStore';
+import StudyInfo from '../study-info';
 
 export default class StudyLegendStore {
     constructor(mainStore) {
@@ -18,7 +19,7 @@ export default class StudyLegendStore {
             getCategoricalItems: () => this.categorizedStudies,
             getActiveCategory: () => this.activeStudies,
             onSelectItem: this.onSelectItem.bind(this),
-            placeholderText: '"Mass Index" or "Doji Star"',
+            placeholderText: t.translate('"Mass Index" or "Doji Star"'),
             favoritesId: 'indicators',
             mainStore,
         });
@@ -28,7 +29,6 @@ export default class StudyLegendStore {
             onStared: () => this.starStudy(this.helper),
             onChanged: items => this.updateStudy(this.helper.sd, items),
         });
-        window.sls = this;
     }
 
     get context() { return this.mainStore.chart.context; }
@@ -43,10 +43,10 @@ export default class StudyLegendStore {
     previousStudies = { };
 
     @observable activeStudies = {
-        categoryName: 'Active',
+        categoryName: t.translate('Active'),
         categoryId: 'active',
         hasSubcategory: false,
-        emptyDescription: 'There are no active indicators yet.',
+        emptyDescription: t.translate('There are no active indicators yet.'),
         data: [],
     };
 
@@ -59,17 +59,17 @@ export default class StudyLegendStore {
 
     get categorizedStudies() {
         const data = [];
-        Object.keys(CIQ.Studies.studyLibrary).map(studyId => {
+        Object.keys(CIQ.Studies.studyLibrary).forEach(studyId => {
             const study = CIQ.Studies.studyLibrary[studyId];
             data.push({
                 enabled: true,
-                display: study.name,
+                display: t.translate(study.name),
                 dataObject: studyId,
                 itemId: studyId,
             });
         });
         const category = {
-            categoryName: 'Indicators',
+            categoryName: t.translate('Indicators'),
             categoryId: 'indicators',
             hasSubcategory: false,
             data
@@ -89,7 +89,7 @@ export default class StudyLegendStore {
         const attributes = helper.attributes;
         const inputs = helper.inputs.map(inp => ({
             id: inp.name,
-            title: inp.heading,
+            title: t.translate(inp.heading),
             value: inp.value,
             defaultValue: inp.defaultInput,
             type: inp.type === 'checkbox' ? 'switch' : inp.type,
@@ -99,7 +99,7 @@ export default class StudyLegendStore {
         }));
         const outputs = helper.outputs.map(out => ({
             id: out.name,
-            title: out.heading,
+            title: t.translate(out.heading),
             defaultValue: out.defaultOutput,
             value: out.color,
             type: 'colorpicker',
@@ -107,7 +107,7 @@ export default class StudyLegendStore {
         }));
         const parameters = helper.parameters.map(par => ({
             id: par.name,
-            title: par.heading,
+            title: t.translate(par.heading),
             value: par.value,
             defaultValue: par.defaultValue,
             type: typeof par.defaultValue === 'boolean' ? 'switch' : 'number+colorpicker',
@@ -116,10 +116,15 @@ export default class StudyLegendStore {
             category: 'parameters',
         }));
 
+        const description = StudyInfo[study.sd.type];
         this.settingsDialog.items = [...inputs, ...outputs, ...parameters];
         this.settingsDialog.title = study.sd.name.toUpperCase();
-        this.settingsDialog.description = "No description yet";
+        this.settingsDialog.description = description || t.translate("No description yet");
+        this.settingsDialog.stared = !!this.categoricalDisplay.favoritesMap[helper.name];
         this.settingsDialog.setOpen(true);
+    }
+    @action.bound starStudy(study) {
+        this.categoricalDisplay.setFavoriteById(study.name);
     }
     @action.bound deleteStudy(study) {
         const sd = study.sd;

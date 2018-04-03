@@ -15,17 +15,17 @@ const Timeperiod = ({
             className="ciq-period"
         >
             <Menu.Title>
-                <span tooltip-title="Time period">
+                <span tooltip-title={t.translate("Time period")}>
                     <span className="interval_display">{interval_display}</span>
                     <span className="unit_display">{timeUnit_display}</span>
                 </span>
             </Menu.Title>
             <Menu.Body>
                 <div className="timeUnit">
-                    <span className={timeUnit === 'tick' ? 'selected' : ''}>Tick</span>
-                    <span className={timeUnit === 'minute' ? 'selected' : ''}>Minute</span>
-                    <span className={timeUnit === 'hour' ? 'selected' : ''}>Hour</span>
-                    <span className={timeUnit === 'day' ? 'selected' : ''}>Day</span>
+                    <span className={timeUnit === 'tick' ? 'selected' : ''}>{t.translate('Tick')}</span>
+                    <span className={timeUnit === 'minute' ? 'selected' : ''}>{t.translate('Minute')}</span>
+                    <span className={timeUnit === 'hour' ? 'selected' : ''}>{t.translate('Hour')}</span>
+                    <span className={timeUnit === 'day' ? 'selected' : ''}>{t.translate('Day')}</span>
                 </div>
                 <div className="interval">
                     <div className="row">
