@@ -31,20 +31,13 @@ export default class MenuStore {
     }
 
     @action.bound onTitleClick(e) {
-        /* TODO: why stopPropagation() is not working ಠ_ಠ */
         e.stopPropagation();
-        // e.nativeEvent.isHandledByDialog = true;
         this.setOpen(!this.open);
-    }
-
-    @action.bound setMenuButton(el) {
-        el.addEventListener('stxtap', this.onTitleClick);
     }
 
     connect = connect(() => ({
         open: this.open,
         onTitleClick: this.onTitleClick,
-        setMenuButton: this.setMenuButton,
         DropdownDialog: this.dialog.connect(Dialog),
     }))
 }
