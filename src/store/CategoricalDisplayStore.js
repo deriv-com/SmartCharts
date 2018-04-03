@@ -131,23 +131,21 @@ export default class CategoricalDisplayStore {
             items = (filteredItems && filteredItems[0]) ? filteredItems[0].data : [];
 
         if (this.favoritesId) {
-            const oldFavoritesCategory = toJS(this.favoritesCategory);
-            let newFavoritesCategory = [];
+            const favsCategory = toJS(this.favoritesCategory);
+            let favsCategoryItem = [];
 
-            oldFavoritesCategory.data.forEach( favItem => {
+            favsCategory.data.forEach( favItem => {
                 if ( typeof favItem === 'string') {
                     let itemObj = items.find( item => item.itemId === favItem);
                     if (itemObj) {
-                        favItem = itemObj;
-                        newFavoritesCategory.push(itemObj);
+                        favsCategoryItem.push(itemObj);
                     }
                 }else{
-                    newFavoritesCategory.push(favItem);
+                    favsCategoryItem.push(favItem);
                 }
-                // return favItem;
             });
-            oldFavoritesCategory.data = newFavoritesCategory.filter(item => item);
-            filteredItems.unshift(oldFavoritesCategory);
+            favsCategory.data = favsCategoryItem.filter(item => item);
+            filteredItems.unshift(favsCategory);
         }
 
         if (this.getActiveCategory) {
