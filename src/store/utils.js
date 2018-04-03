@@ -52,7 +52,7 @@ export function downloadFileInBrowser(filename, content, type) {
 }
 
 export function stxtap(el, func) {
-    if (el) {
+    if (el && !el.safeClickTouchEvents) {
         CIQ.installTapEvent(el);
         el.addEventListener('stxtap', func);
     }
