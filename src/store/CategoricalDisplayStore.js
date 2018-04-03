@@ -127,9 +127,7 @@ export default class CategoricalDisplayStore {
     }
 
     @computed get filteredItems() {
-
-        let filteredItems = toJS(this.getCategoricalItems()),
-            items = (filteredItems && filteredItems[0]) ? filteredItems[0].data : [];
+        let filteredItems = toJS(this.getCategoricalItems());
 
         if (this.favoritesId) {
             const favsCategory = toJS(this.favoritesCategory);
