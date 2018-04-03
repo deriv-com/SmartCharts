@@ -102,6 +102,21 @@ $selected-background-color: #e4e6f1;
     }
 }
 
+.smartcharts-mobile { 
+    .ciq-chart-area {
+        padding-bottom: 32px;
+    }
+    .ciq-chart {
+        .cq-chart-controls {
+            bottom: 0 !important;
+            left: 0 !important;
+            padding: 0;
+            right: 0;
+            transform: none;
+        }
+    }
+}
+
 .cq-comparison-new > .cq-menu-dropdown {
     left: -14em;
 }
