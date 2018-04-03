@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from '../store/Connect';
 import Menu from './Menu.jsx';
 import List from './List.jsx';
-import { DrawIcon, DeleteIcon, MeasureIcon } from './Icons.jsx';
+import { DrawIcon, ClearIcon, MeasureIcon } from './Icons.jsx';
 import '../../sass/_draw-tools.scss';
 
 const DrawTools = ({
@@ -17,7 +17,7 @@ const DrawTools = ({
     return (
         <Menu
             className="ciq-draw-tools"
-        >
+            >
             <Menu.Title>
                 <DrawIcon
                     className={`${menuOpen ? 'active' : ''}`}
@@ -25,17 +25,20 @@ const DrawTools = ({
             </Menu.Title>
 
             <Menu.Body>
-                <div className='ciq-bars'>
-                    <div onClick={clearDrawings}>
-                        <DeleteIcon />
-                        {t.translate('Clear All')}
-                    </div>
-                    <div onClick={() => selectTool('measure')}>
-                        <MeasureIcon />
-                        {t.translate('Measure')}
+                <div className='title'>
+                    <div className='ciq-bars-title'>{t.translate("Draw tools")}</div>
+                    <div className='ciq-bars-buttons'>
+                        <ClearIcon 
+                            onClick={clearAll} 
+                            tooltip-title={t.translate("Clear All")} />
+                        <MeasureIcon 
+                            onClick={() => selectTool('measure')}
+                            tooltip-title={t.translate("Measure")} />
                     </div>
                 </div>
-                <DrawList />
+                <div className='body'>
+                    <DrawList />
+                </div>
             </Menu.Body>
         </Menu>
     );

@@ -9,7 +9,7 @@
     "analyze": "ANALYZE_BUNDLE=true yarn build",
     "watch": "webpack --progress --watch",
     "start": "rimraf dist && webpack-dev-server --open  --hot --inline",
-    "gh-pages": "yarn build && gh-pages --dist '.' --src '{index.html,dist/**,css/demo.css}' --add",
+    "gh-pages": "yarn build && gh-pages --dist '.' --src '{index.html,dist/**,css/demo.css}'",
     "translations": "yarn build && node scripts/extract-translations.js ./dist/smartcharts.js"
   },
   "devDependencies": {
