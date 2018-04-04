@@ -47,12 +47,13 @@ const CategoricalDisplay = ({
             className={`cq-item ${item.selected ? 'selected ' : ''}`}
             onClick={(e) => item.enabled && onSelectItem(item.dataObject, e)}
             key={k}
+            disabled={!item.enabled}
         >
             {renderLeft(item)}
             <div className="right">
-                {item.enabled ? '' : <div className="closed-market">
+                {(item.dataObject && item.dataObject.exchange_is_open == 0 )?<div className="closed-market">
                     <ClosedMarketIcon />
-                </div>}
+                </div>:''}
                 {renderFavorite(item)}
             </div>
         </div>;
