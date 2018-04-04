@@ -256,36 +256,40 @@ class ChartStore {
 
         window.addEventListener('resize', this.resizeScreen.bind(this));
 
-        stxx.append('updateChartData', this.updateComparisons);
+        stxx.append('createDataSet', this.updateComparisons.bind(this));
     }
 
-    updateComparisons = (...args) => {
-        /* createDataSet/updateChartData sends more than ten updates per tick.
-            This is to avoid that.
-            Happens only for line chart because of animation
-        */
-        if (args[2] && !args[2].firstLoop) {return;}
-
+    @action.bound updateComparisons(...args) {
         let stx = this.context.stx;
-        let q = stx.currentQuote();
-        const comparisons = [];
-        if (q) {
-            for (const s in stx.chart.series) {
-                const d = stx.chart.series[s];
-                const p = d.parameters;
-                const price = d.lastQuote ? d.lastQuote.Close : undefined;
+        const comparisonSymbolsKeys = Object.keys(stx.chart.series);
+        if (comparisonSymbolsKeys.length !== this.comparisonSymbols.length) {
+            const comparisons = [];
+            let q = stx.currentQuote();
+            if (q) {
+                for (const s of comparisonSymbolsKeys) {
+                    const d = stx.chart.series[s];
+                    const p = d.parameters;
+                    const price = d.lastQuote ? d.lastQuote.Close : undefined;
 
-                comparisons.push({
-                    color: p.color,
-                    price,
-                    symbolObject: p.symbolObject,
-                });
+                    comparisons.push({
+                        color: p.color,
+                        price,
+                        symbolObject: p.symbolObject,
+                    });
+                }
             }
-        }
-        if (comparisons.length !== this.comparisonSymbols.length) {
             this.comparisonSymbols = comparisons;
+            return;
         }
-    };
+
+        let i = 0;
+        for (const s of comparisonSymbolsKeys) {
+            const comp = this.comparisonSymbols[i];
+            const d = stx.chart.series[s];
+            comp.price = d.lastQuote ? d.lastQuote.Close : undefined
+            i++;
+        }
+    }
 
     processSymbols(symbols) {
         let processedSymbols = [];
