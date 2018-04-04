@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: German\n"
 "Language: de_DE\n"
-"PO-Revision-Date: 2018-04-04 09:15-0400\n"
+"PO-Revision-Date: 2018-04-04 09:23-0400\n"
 
 msgid "Favorites"
 msgstr "Favoriten"
@@ -34,55 +34,55 @@ msgid "LOW"
 msgstr "TIEF"
 
 msgid "Chart types"
-msgstr ""
+msgstr "Charttypen"
 
 msgid "Toggle Asset Information"
-msgstr ""
+msgstr "Toggle-Anlgen-Informationen"
 
 msgid "Studies"
 msgstr "Studien"
 
 msgid "Comparison"
-msgstr ""
+msgstr "Vergleich"
 
 msgid "Templates"
-msgstr ""
+msgstr "Vorlagen"
 
 msgid "Template name"
-msgstr ""
+msgstr "Vorlagenname"
 
 msgid "There is no template added by you."
-msgstr ""
+msgstr "Es gibt keine von Ihnen hinzugefügte Vorlage."
 
 msgid "Click + icon to add one."
-msgstr ""
+msgstr "Klicken Sie +icon, um eines hinzuzufügen."
 
 msgid "Crosshair"
 msgstr "Fadenkreuz"
 
 msgid "Time period"
-msgstr ""
+msgstr "Zeitraum"
 
 msgid "Tick"
-msgstr ""
+msgstr "Tick"
 
 msgid "Minute"
-msgstr ""
+msgstr "Minute"
 
 msgid "Hour"
-msgstr ""
+msgstr "Stunde"
 
 msgid "Day"
 msgstr "Tag"
 
 msgid "Zoom out"
-msgstr ""
+msgstr "Verkleinern"
 
 msgid "Zoom in"
-msgstr ""
+msgstr "Vergrößern"
 
 msgid "Draw tools"
-msgstr ""
+msgstr "Zeichen-Tools"
 
 msgid "Clear All"
 msgstr "Alle löschen"
@@ -94,19 +94,19 @@ msgid "Share"
 msgstr "Teilen"
 
 msgid "Share / Download Chart"
-msgstr ""
+msgstr "Chart teilen/herunterladen"
 
 msgid "Share link"
-msgstr ""
+msgstr "Link teilen"
 
 msgid "Download chart"
-msgstr ""
+msgstr "Chart herunterladen"
 
 msgid "RESET"
-msgstr ""
+msgstr "Zurücksetzen"
 
 msgid "DONE"
-msgstr ""
+msgstr "ERLEDIGT"
 
 msgid "right-click to delete"
 msgstr "zum Löschen rechts klicken"
@@ -118,13 +118,13 @@ msgid "Line"
 msgstr "Linie"
 
 msgid "Dot"
-msgstr ""
+msgstr "Punkt"
 
 msgid "Colored Dot"
-msgstr ""
+msgstr "Farbiger Punkt"
 
 msgid "Spline"
-msgstr ""
+msgstr "Spline"
 
 msgid "Baseline"
 msgstr "Baseline"
@@ -133,73 +133,73 @@ msgid "Candle"
 msgstr "Kerze"
 
 msgid "OHLC"
-msgstr ""
+msgstr "OHLC"
 
 msgid "Hollow Candle"
 msgstr "Hohlkerze"
 
 msgid "\"Mass Index\" or \"Doji Star\""
-msgstr ""
+msgstr "\"Mass-Index\" oder \"Doji Star\""
 
 msgid "No description yet"
-msgstr ""
+msgstr "Noch keine Beschreibung"
 
 msgid "Indicators"
-msgstr ""
+msgstr "Indikatoren"
 
 msgid "Active"
-msgstr ""
+msgstr "Aktiv"
 
 msgid "There are no active indicators yet."
-msgstr ""
+msgstr "Es gibt noch keine aktiven Indikatoren."
 
 msgid "\"AUD/JPY\" or \"Apple\""
-msgstr ""
+msgstr "\"AUD/JPY\" oder \"Appel\""
 
 msgid "There are no active comparisons yet."
-msgstr ""
+msgstr "Es gibt noch keine aktiven Vergleiche."
 
 msgid "Annotation"
 msgstr "Anmerkung"
 
 msgid "Average Line"
-msgstr ""
+msgstr "Durchschnittslinie"
 
 msgid "Callout"
-msgstr ""
+msgstr "Angabe"
 
 msgid "Channel"
-msgstr ""
+msgstr "Kanal"
 
 msgid "Continuous"
-msgstr ""
+msgstr "Durchgehend"
 
 msgid "Crossline"
-msgstr ""
+msgstr "Kreuzlinie"
 
 msgid "Doodle"
 msgstr ""
 
 msgid "Ellipse"
-msgstr ""
+msgstr "Ellipse"
 
 msgid "Fib Arc"
 msgstr ""
 
 msgid "Fib Fan"
-msgstr ""
+msgstr "Fib Fan"
 
 msgid "Fib Time Zone"
-msgstr ""
+msgstr "Fib Zeitzone"
 
 msgid "Gann Fan"
-msgstr ""
+msgstr "Gann Fan"
 
 msgid "Gartley"
-msgstr ""
+msgstr "Gartley"
 
 msgid "Horizontal"
-msgstr ""
+msgstr "Horizontal"
 
 msgid "Pitchfork"
 msgstr "Gabel-Chart"
@@ -475,10 +475,10 @@ msgid "Chaikin Volatility"
 msgstr ""
 
 msgid "Rate Of Change"
-msgstr ""
+msgstr "Änderungsquote"
 
 msgid "Price Oscillator"
-msgstr ""
+msgstr "Preis-Oszillator"
 
 msgid "Ease of Movement"
 msgstr ""
