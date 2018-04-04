@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: German\n"
 "Language: de_DE\n"
-"PO-Revision-Date: 2018-04-04 09:23-0400\n"
+"PO-Revision-Date: 2018-04-04 09:38-0400\n"
 
 msgid "Favorites"
 msgstr "Favoriten"
@@ -484,142 +484,142 @@ msgid "Ease of Movement"
 msgstr ""
 
 msgid "Commodity Channel Index"
-msgstr ""
+msgstr "Commodity Channel Index"
 
 msgid "Detrended Price Oscillator"
-msgstr ""
+msgstr "Trendbereinigter Preis-Oszillator"
 
 msgid "True Range"
-msgstr ""
+msgstr "True Range"
 
 msgid "Average True Range"
-msgstr ""
+msgstr "Average True Range (ATR)"
 
 msgid "ATR"
-msgstr ""
+msgstr "ATR"
 
 msgid "Ehler Fisher Transform"
-msgstr ""
+msgstr "Ehler Fisher Transform"
 
 msgid "EF"
-msgstr ""
+msgstr "EF"
 
 msgid "EF Trigger"
-msgstr ""
+msgstr "EF Auslöser"
 
 msgid "Schaff Trend Cycle"
-msgstr ""
+msgstr "Schaff Trend-Zyklus"
 
 msgid "QStick"
-msgstr ""
+msgstr "QStick"
 
 msgid "Coppock Curve"
-msgstr ""
+msgstr "Coppock-Indikator"
 
 msgid "Short RoC"
-msgstr ""
+msgstr "Verkauf RoC"
 
 msgid "Long RoC"
-msgstr ""
+msgstr "Kauf RoC"
 
 msgid "Chande Momentum Oscillator"
-msgstr ""
+msgstr "Chande Momentum Oszillator"
 
 msgid "Chande Forecast Oscillator"
-msgstr ""
+msgstr "Chande Forecast Oszillator"
 
 msgid "Intraday Momentum Index"
-msgstr ""
+msgstr "Intraday Momentum Index"
 
 msgid "RAVI"
-msgstr ""
+msgstr "RAVI"
 
 msgid "Random Walk Index"
-msgstr ""
+msgstr "Random Walk Index"
 
 msgid "Random Walk High"
-msgstr ""
+msgstr "Random Walk Hoch"
 
 msgid "Random Walk Low"
-msgstr ""
+msgstr "Random Walk Tief"
 
 msgid "ADX/DMS"
-msgstr ""
+msgstr "ADX/DMS"
 
 msgid "Smoothing Period"
-msgstr ""
+msgstr "Glättungszeitraum"
 
 msgid "Series"
-msgstr ""
+msgstr "Reihen"
 
 msgid "Shading"
-msgstr ""
+msgstr "Schattierung"
 
 msgid "Histogram"
-msgstr ""
+msgstr "Histogramm "
 
 msgid "+DI"
-msgstr ""
+msgstr "+DI"
 
 msgid "-DI"
-msgstr ""
+msgstr "-DI"
 
 msgid "ADX"
-msgstr ""
+msgstr "ADX"
 
 msgid "Positive Bar"
-msgstr ""
+msgstr "Positiver Balken"
 
 msgid "Negative Bar"
-msgstr ""
+msgstr "Negativer Balken"
 
 msgid "High Low Bands"
-msgstr ""
+msgstr "Hoch-Niedrig-Bänder"
 
 msgid "Shift Percentage"
-msgstr ""
+msgstr "Prozentsatz verschieben"
 
 msgid "Channel Fill"
-msgstr ""
+msgstr "Channel Fill"
 
 msgid "High Low Top"
-msgstr ""
+msgstr "Hoch Niedrig Oben"
 
 msgid "High Low Median"
-msgstr ""
+msgstr "Hoch Niedrig Mitte"
 
 msgid "High Low Bottom"
-msgstr ""
+msgstr "Hoch Niedrig Unten"
 
 msgid "High Minus Low"
-msgstr ""
+msgstr "Hoch Minus Niedrig"
 
 msgid "Median Price"
-msgstr ""
+msgstr "Mittlerer Preis"
 
 msgid "Overlay"
-msgstr ""
+msgstr "Überlagern"
 
 msgid "Moving Average Envelope"
-msgstr ""
+msgstr "Moving Average Envelope"
 
 msgid "Shift Type"
-msgstr ""
+msgstr "Verschiebungsart"
 
 msgid "Shift"
-msgstr ""
+msgstr "Verschieben"
 
 msgid "MA Env Top"
-msgstr ""
+msgstr "MA Env Oben"
 
 msgid "MA Env Median"
-msgstr ""
+msgstr "MA Env Mitte"
 
 msgid "MA Env Bottom"
-msgstr ""
+msgstr "MA Env Unten"
 
 msgid "Fractal Chaos Bands"
-msgstr ""
+msgstr "Fractal Chaos Bänder"
 
 msgid "Fractal High"
 msgstr ""
@@ -769,76 +769,76 @@ msgid "Use Volume"
 msgstr ""
 
 msgid "Volume Chart"
-msgstr ""
+msgstr "Volumen-Chart"
 
 msgid "Up Volume"
-msgstr ""
+msgstr "Mehr Volumen"
 
 msgid "Down Volume"
-msgstr ""
+msgstr "Weniger Volumen"
 
 msgid "Volume Underlay"
-msgstr ""
+msgstr "Volumen-Grundlage"
 
 msgid "Valuation Lines"
-msgstr ""
+msgstr "Bewertungslinien"
 
 msgid "Average Type"
-msgstr ""
+msgstr "Durchschnittstyp"
 
 msgid "Display Average"
-msgstr ""
+msgstr "Durchschnitt anzeigen"
 
 msgid "Display 1 Standard Deviation (1σ)"
-msgstr ""
+msgstr "1 Standardabweichung (1σ) anzeigen"
 
 msgid "Display 2 Standard Deviation (2σ)"
-msgstr ""
+msgstr "2 Standardabweichungen (1σ) anzeigen"
 
 msgid "Display 3 Standard Deviation (3σ)"
-msgstr ""
+msgstr "3 Standardabweichungen (1σ) anzeigen"
 
 msgid "Average"
-msgstr ""
+msgstr "Durchschnitt"
 
 msgid "1 Standard Deviation (1σ)"
-msgstr ""
+msgstr "1 Standardabweichung (1σ)"
 
 msgid "2 Standard Deviation (2σ)"
-msgstr ""
+msgstr "2 Standardabweichungen (1σ)"
 
 msgid "3 Standard Deviation (3σ)"
-msgstr ""
+msgstr "3 Standardabweichungen (3σ)"
 
 msgid "Correlation Coefficient"
-msgstr ""
+msgstr "Korrelationskoeffizient"
 
 msgid "Price Momentum Oscillator"
-msgstr ""
+msgstr "Preis-Momentum-Oszillator"
 
 msgid "Double Smoothing Period"
-msgstr ""
+msgstr "Doppelter Glättungszeitraum"
 
 msgid "PMO"
-msgstr ""
+msgstr "PMO"
 
 msgid "PMOSignal"
-msgstr ""
+msgstr "PMOSignal"
 
 msgid "Relative Volatility"
-msgstr ""
+msgstr "Relative Volatilität"
 
 msgid "STD Period"
-msgstr ""
+msgstr "STD Zeitraum"
 
 msgid "Rel Vol"
-msgstr ""
+msgstr "Rel Vol"
 
 msgid "Awesome Oscillator"
-msgstr ""
+msgstr "Awesome Oszillator"
 
 msgid "Market Facilitation Index"
-msgstr ""
+msgstr "Marktindex Erleichterung"
 
 msgid "Scale Factor"
 msgstr ""
