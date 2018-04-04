@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: German\n"
 "Language: de_DE\n"
-"PO-Revision-Date: 2018-04-04 08:52-0400\n"
+"PO-Revision-Date: 2018-04-04 09:05-0400\n"
 
 msgid "Favorites"
 msgstr ""
@@ -109,13 +109,13 @@ msgid "DONE"
 msgstr ""
 
 msgid "right-click to delete"
-msgstr ""
+msgstr "zum Löschen rechts klicken"
 
 msgid "right-click to manage"
-msgstr ""
+msgstr "zum Verwalten rechts klicken"
 
 msgid "Line"
-msgstr ""
+msgstr "Linie"
 
 msgid "Dot"
 msgstr ""
@@ -127,16 +127,16 @@ msgid "Spline"
 msgstr ""
 
 msgid "Baseline"
-msgstr ""
+msgstr "Baseline"
 
 msgid "Candle"
-msgstr ""
+msgstr "Kerze"
 
 msgid "OHLC"
 msgstr ""
 
 msgid "Hollow Candle"
-msgstr ""
+msgstr "Hohlkerze"
 
 msgid "\"Mass Index\" or \"Doji Star\""
 msgstr ""
@@ -160,7 +160,7 @@ msgid "There are no active comparisons yet."
 msgstr ""
 
 msgid "Annotation"
-msgstr ""
+msgstr "Anmerkung"
 
 msgid "Average Line"
 msgstr ""
@@ -202,40 +202,40 @@ msgid "Horizontal"
 msgstr ""
 
 msgid "Pitchfork"
-msgstr ""
+msgstr "Gabel-Chart"
 
 msgid "Quadrant Lines"
-msgstr ""
+msgstr "Quadrant-Linien "
 
 msgid "Ray"
-msgstr ""
+msgstr "Strahl"
 
 msgid "Rectangle"
-msgstr ""
+msgstr "Rechteck"
 
 msgid "Regression Line"
-msgstr ""
+msgstr "Regressionslinie "
 
 msgid "Segment"
-msgstr ""
+msgstr "Segment"
 
 msgid "Shape - Arrow"
-msgstr ""
+msgstr "Form - Pfeil"
 
 msgid "Shape - Check"
-msgstr ""
+msgstr "Form - Karo"
 
 msgid "Shape - Cross"
-msgstr ""
+msgstr "Form - Kreuz"
 
 msgid "Shape - Focus"
-msgstr ""
+msgstr "Form - Fokus"
 
 msgid "Shape - Heart"
-msgstr ""
+msgstr "Form - Herz"
 
 msgid "Shape - Star"
-msgstr ""
+msgstr "Form - Stern"
 
 msgid "Speed Resistance Arc"
 msgstr ""
@@ -250,49 +250,49 @@ msgid "Tirone Levels"
 msgstr ""
 
 msgid "Vertical"
-msgstr ""
+msgstr "Vertikal"
 
 msgid "RSI"
-msgstr ""
+msgstr "RSI"
 
 msgid "Period"
-msgstr ""
+msgstr "Periode"
 
 msgid "Show Zones"
-msgstr ""
+msgstr "Zonen anzeigen"
 
 msgid "OverBought"
-msgstr ""
+msgstr "Überkauft"
 
 msgid "OverSold"
-msgstr ""
+msgstr "Überverkauft"
 
 msgid "Moving Average"
-msgstr ""
+msgstr "Gleitender Mittelwert"
 
 msgid "Field"
-msgstr ""
+msgstr "Feld"
 
 msgid "Type"
-msgstr ""
+msgstr "Art"
 
 msgid "Offset"
-msgstr ""
+msgstr "Ausgleich"
 
 msgid "Underlay"
-msgstr ""
+msgstr "Grundlage"
 
 msgid "MA"
-msgstr ""
+msgstr "MA"
 
 msgid "MACD"
-msgstr ""
+msgstr "MACD"
 
 msgid "Fast MA Period"
-msgstr ""
+msgstr "Schnelle MA-Periode"
 
 msgid "Slow MA Period"
-msgstr ""
+msgstr "Langsame MA-Periode"
 
 msgid "Signal Period"
 msgstr ""
