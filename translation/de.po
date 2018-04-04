@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: German\n"
 "Language: de_DE\n"
-"PO-Revision-Date: 2018-03-30 05:21-0400\n"
+"PO-Revision-Date: 2018-04-04 08:52-0400\n"
 
 msgid "Favorites"
 msgstr ""
@@ -40,7 +40,7 @@ msgid "Toggle Asset Information"
 msgstr ""
 
 msgid "Studies"
-msgstr ""
+msgstr "Studien"
 
 msgid "Comparison"
 msgstr ""
@@ -58,7 +58,7 @@ msgid "Click + icon to add one."
 msgstr ""
 
 msgid "Crosshair"
-msgstr ""
+msgstr "Fadenkreuz"
 
 msgid "Time period"
 msgstr ""
@@ -73,7 +73,7 @@ msgid "Hour"
 msgstr ""
 
 msgid "Day"
-msgstr ""
+msgstr "Tag"
 
 msgid "Zoom out"
 msgstr ""
@@ -85,13 +85,13 @@ msgid "Draw tools"
 msgstr ""
 
 msgid "Clear All"
-msgstr ""
+msgstr "Alle löschen"
 
 msgid "Measure"
-msgstr ""
+msgstr "Messen"
 
 msgid "Share"
-msgstr ""
+msgstr "Teilen"
 
 msgid "Share / Download Chart"
 msgstr ""
