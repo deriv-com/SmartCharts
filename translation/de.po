@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: German\n"
 "Language: de_DE\n"
-"PO-Revision-Date: 2018-04-04 10:05-0400\n"
+"PO-Revision-Date: 2018-04-04 10:13-0400\n"
 
 msgid "Favorites"
 msgstr "Favoriten"
@@ -649,82 +649,82 @@ msgid "Prime Bands Channel"
 msgstr "Prime Bänder Channel"
 
 msgid "Prime Number Oscillator"
-msgstr ""
+msgstr "Primzahl-Oszillator"
 
 msgid "Tolerance Percentage"
-msgstr ""
+msgstr "Toleranzprozentsatz"
 
 msgid "Bollinger Bands"
-msgstr ""
+msgstr "Bollinger-Bänder"
 
 msgid "Bollinger Bands Top"
-msgstr ""
+msgstr "Bollinger-Bänder Oben"
 
 msgid "Bollinger Bands Median"
-msgstr ""
+msgstr "Bollinger-Bänder Mitte"
 
 msgid "Bollinger Bands Bottom"
-msgstr ""
+msgstr "Bollinger-Bänder Unten"
 
 msgid "Donchian Channel"
-msgstr ""
+msgstr "Donchian Channel"
 
 msgid "High Period"
-msgstr ""
+msgstr "Hoher Zeitraum"
 
 msgid "Low Period"
-msgstr ""
+msgstr "Niedr. Zeitraum"
 
 msgid "Donchian High"
-msgstr ""
+msgstr "Donchian Hoch"
 
 msgid "Donchian Median"
-msgstr ""
+msgstr "Donchian Mitte"
 
 msgid "Donchian Low"
-msgstr ""
+msgstr "Donchian Tief"
 
 msgid "Highest High Value"
-msgstr ""
+msgstr "Höchster Hochwert"
 
 msgid "Lowest Low Value"
-msgstr ""
+msgstr "Niedrigster Tiefwert"
 
 msgid "Mass Index"
-msgstr ""
+msgstr "Massenindex"
 
 msgid "Bulge Threshold"
-msgstr ""
+msgstr "Anschwellen des Grenzwerts"
 
 msgid "Keltner Channel"
-msgstr ""
+msgstr "Keltner Channel"
 
 msgid "Keltner Top"
-msgstr ""
+msgstr "Keltner Oben"
 
 msgid "Keltner Median"
-msgstr ""
+msgstr "Keltner Mitte"
 
 msgid "Keltner Bottom"
-msgstr ""
+msgstr "Keltner Unten"
 
 msgid "Parabolic SAR"
-msgstr ""
+msgstr "Parabolisches SAR"
 
 msgid "Minimum AF"
-msgstr ""
+msgstr "Minimum AF"
 
 msgid "Maximum AF"
-msgstr ""
+msgstr "Maximum AF"
 
 msgid "Klinger Volume Oscillator"
-msgstr ""
+msgstr "Klinger Volume Oszillator"
 
 msgid "Signal Periods"
-msgstr ""
+msgstr "Signalperioden"
 
 msgid "Klinger"
-msgstr ""
+msgstr "Klinger"
 
 msgid "KlingerSignal"
 msgstr "KlingerSignal"
@@ -748,7 +748,7 @@ msgid "Slope"
 msgstr "Steigung"
 
 msgid "Center Of Gravity"
-msgstr ""
+msgstr "Schwerpunkt"
 
 msgid "Typical Price"
 msgstr "Typischer Preis"
@@ -1030,46 +1030,46 @@ msgid "Lagging Span"
 msgstr "Lagging Span"
 
 msgid "Price Relative"
-msgstr ""
+msgstr "Relativer Preis"
 
 msgid "Comparison Symbol"
-msgstr ""
+msgstr "Vergleichssymbol"
 
 msgid "Performance Index"
-msgstr ""
+msgstr "Performance-Index"
 
 msgid "Gain"
-msgstr ""
+msgstr "Gewinn"
 
 msgid "Loss"
-msgstr ""
+msgstr "Verlust"
 
 msgid "Beta"
-msgstr ""
+msgstr "Beta"
 
 msgid "Ulcer Index"
-msgstr ""
+msgstr "Ulcer-Index"
 
 msgid "Balance of Power"
-msgstr ""
+msgstr "Kräfteverhältnis"
 
 msgid "Trend Intensity Index"
-msgstr ""
+msgstr "Trendintensitätsindex"
 
 msgid "TII"
-msgstr ""
+msgstr "TII"
 
 msgid "Choppiness Index"
-msgstr ""
+msgstr "Choppiness-Index"
 
 msgid "Disparity Index"
-msgstr ""
+msgstr "Disparitäts-Index"
 
 msgid "Rainbow Moving Average"
-msgstr ""
+msgstr "Rainbow - gleitender Durchschnitt"
 
 msgid "SMA1"
-msgstr ""
+msgstr "SMA1"
 
 msgid "SMA2"
 msgstr "SMA2"
@@ -1159,34 +1159,34 @@ msgid "Stop Levels"
 msgstr ""
 
 msgid "Level Offset"
-msgstr ""
+msgstr "Niveauausgleich"
 
 msgid "Price Minimum"
-msgstr ""
+msgstr "Preisuntergrenze"
 
 msgid "Volume Spike"
-msgstr ""
+msgstr "Volumen Höchstwert"
 
 msgid "Volume % of Avg"
-msgstr ""
+msgstr "Volumen in % des Durchschnitts"
 
 msgid "Darvas"
-msgstr ""
+msgstr "Darvas"
 
 msgid "Ghost"
-msgstr ""
+msgstr "Ghost"
 
 msgid "Levels"
-msgstr ""
+msgstr "Niveaus"
 
 msgid "Supertrend"
-msgstr ""
+msgstr "Supertrend"
 
 msgid "Uptrend"
-msgstr ""
+msgstr "Aufwärtstrend"
 
 msgid "Downtrend"
-msgstr ""
+msgstr "Abwärtstrend"
 
 msgid "Volume Profile"
 msgstr ""
