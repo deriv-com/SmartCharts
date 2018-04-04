@@ -126,6 +126,10 @@
             display: flex;
             align-items: center;
         }
+        .closed-market{
+            width: 32px;
+            object-fit: contain;
+        }
     }
     .cq-item {
         cursor: pointer;
