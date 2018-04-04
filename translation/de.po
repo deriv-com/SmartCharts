@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: German\n"
 "Language: de_DE\n"
-"PO-Revision-Date: 2018-04-04 10:13-0400\n"
+"PO-Revision-Date: 2018-04-04 10:23-0400\n"
 
 msgid "Favorites"
 msgstr "Favoriten"
@@ -184,7 +184,7 @@ msgid "Ellipse"
 msgstr "Ellipse"
 
 msgid "Fib Arc"
-msgstr ""
+msgstr "Fib Arc"
 
 msgid "Fib Fan"
 msgstr "Fib Fan"
@@ -238,10 +238,10 @@ msgid "Shape - Star"
 msgstr "Form - Stern"
 
 msgid "Speed Resistance Arc"
-msgstr ""
+msgstr "Speed Resistance Arc"
 
 msgid "Speed Resistance Line"
-msgstr ""
+msgstr "Speed Resistance Line"
 
 msgid "Time Cycle"
 msgstr "Zeit-Zyklus"
@@ -376,7 +376,7 @@ msgid "Min Tick Value"
 msgstr "Min Tick-Wert"
 
 msgid "Swing Index"
-msgstr ""
+msgstr "Swing Index"
 
 msgid "Limit Move Value"
 msgstr "Limit Move Value"
@@ -406,7 +406,7 @@ msgid "Negative Volume Index"
 msgstr "Negativer Volumenindex"
 
 msgid "On Balance Volume"
-msgstr ""
+msgstr "On Balance Volume"
 
 msgid "Stochastic Momentum Index"
 msgstr "Stochastic Momentum Index"
@@ -481,7 +481,7 @@ msgid "Price Oscillator"
 msgstr "Preis-Oszillator"
 
 msgid "Ease of Movement"
-msgstr ""
+msgstr "Ease of Movement"
 
 msgid "Commodity Channel Index"
 msgstr "Commodity Channel Index"
@@ -1156,7 +1156,7 @@ msgid "Ghost Boxes"
 msgstr "Ghost Boxes"
 
 msgid "Stop Levels"
-msgstr ""
+msgstr "Stopp-Niveaus"
 
 msgid "Level Offset"
 msgstr "Niveauausgleich"
@@ -1189,38 +1189,38 @@ msgid "Downtrend"
 msgstr "Abwärtstrend"
 
 msgid "Volume Profile"
-msgstr ""
+msgstr "Volumen-Profil"
 
 msgid "Bars Color"
-msgstr ""
+msgstr "Balkenfarbe"
 
 msgid "Vortex Indicator"
-msgstr ""
+msgstr "Vortex Indikator"
 
 msgid "+VI"
-msgstr ""
+msgstr "+VI"
 
 msgid "-VI"
-msgstr ""
+msgstr "-VI"
 
 msgid "ZigZag"
-msgstr ""
+msgstr "ZickZack"
 
 msgid "Distance(%)"
-msgstr ""
+msgstr "Distanz(%)"
 
 msgid "Psychological Line"
-msgstr ""
+msgstr "Psychologische Linie"
 
 msgid "Moving Average Deviation"
-msgstr ""
+msgstr "Bewegte durchschnittliche Abweichung"
 
 msgid "Shinohara Intensity Ratio"
-msgstr ""
+msgstr "Shinohara Intensitätsverhältnis"
 
 msgid "Strong Ratio"
 msgstr ""
 
 msgid "Weak Ratio"
-msgstr ""
+msgstr "Schwache Quote"
 
