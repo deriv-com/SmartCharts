@@ -282,6 +282,7 @@ class ChartStore {
             return;
         }
 
+        // Update the comparison prices:
         let i = 0;
         for (const s of comparisonSymbolsKeys) {
             const comp = this.comparisonSymbols[i];
