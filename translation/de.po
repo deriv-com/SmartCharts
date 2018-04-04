@@ -10,28 +10,28 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: German\n"
 "Language: de_DE\n"
-"PO-Revision-Date: 2018-04-04 09:05-0400\n"
+"PO-Revision-Date: 2018-04-04 09:15-0400\n"
 
 msgid "Favorites"
-msgstr ""
+msgstr "Favoriten"
 
 msgid "There are no favorites yet."
-msgstr ""
+msgstr "Noch gibt es keine Favoriten."
 
 msgid "PRICE"
-msgstr ""
+msgstr "PREIS"
 
 msgid "OPEN"
-msgstr ""
+msgstr "OFFEN"
 
 msgid "CLOSE"
-msgstr ""
+msgstr "SCHLIEßEN"
 
 msgid "HIGH"
-msgstr ""
+msgstr "HOCH"
 
 msgid "LOW"
-msgstr ""
+msgstr "TIEF"
 
 msgid "Chart types"
 msgstr ""
@@ -295,31 +295,31 @@ msgid "Slow MA Period"
 msgstr "Langsame MA-Periode"
 
 msgid "Signal Period"
-msgstr ""
+msgstr "Signalperiode"
 
 msgid "Signal"
-msgstr ""
+msgstr "Signal"
 
 msgid "Increasing Bar"
-msgstr ""
+msgstr "Zunehmender Balken"
 
 msgid "Decreasing Bar"
-msgstr ""
+msgstr "Abnehmender Balken"
 
 msgid "Stochastics"
-msgstr ""
+msgstr "Stochastik"
 
 msgid "Smooth"
-msgstr ""
+msgstr "Glatt"
 
 msgid "Fast"
-msgstr ""
+msgstr "Schnell"
 
 msgid "Slow"
-msgstr ""
+msgstr "Langsam"
 
 msgid "Aroon"
-msgstr ""
+msgstr "Aroon"
 
 msgid "Aroon Up"
 msgstr ""
@@ -328,25 +328,25 @@ msgid "Aroon Down"
 msgstr ""
 
 msgid "Aroon Oscillator"
-msgstr ""
+msgstr "Aroon Oszillator"
 
 msgid "Linear Reg R2"
-msgstr ""
+msgstr "Lineare Reg R2"
 
 msgid "RSquared"
-msgstr ""
+msgstr "RSquared"
 
 msgid "Linear Reg Forecast"
-msgstr ""
+msgstr "Lineare Regressionsprognose"
 
 msgid "Forecast"
-msgstr ""
+msgstr "Prognose"
 
 msgid "Linear Reg Intercept"
-msgstr ""
+msgstr "Lineare Regressionsunterbrechung"
 
 msgid "Intercept"
-msgstr ""
+msgstr "Unterbrechung"
 
 msgid "Time Series Forecast"
 msgstr ""
