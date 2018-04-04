@@ -74,6 +74,7 @@ export default class CategoricalDisplayStore {
     }
 
     updateScrollSpy() {
+        if (this.pauseScrollSpy) return;
         if (this.filteredItems.length === 0) {return;}
 
         let i = 0;
@@ -104,7 +105,6 @@ export default class CategoricalDisplayStore {
     init() {
         this.isInit = true;
         this.scroll = new PerfectScrollbar(this.scrollPanel);
-        window.bobochacha = this.scroll;
 
         this.scrollPanel.addEventListener('ps-scroll-y', this.updateScrollSpy.bind(this));
 
@@ -185,12 +185,13 @@ export default class CategoricalDisplayStore {
     @action.bound handleFilterClick(category) {
         const el = this.categoryElements[category.categoryId];
         if (el) {
-            // TODO: Animation
+            // TODO: Scroll animation
+            this.pauseScrollSpy = true;
             this.scroll.element.scrollTop = el.offsetTop;
-            // TODO: the line above caused scroll event to execute, which in turn
-            //       changes this.activeCategoryKey. The hack below is not a pretty
-            //       solution.
-            setTimeout(() => this.activeCategoryKey = category.categoryId, 5);
+            this.activeCategoryKey = category.categoryId;
+            // scrollTop takes some time to take affect, so we need
+            // a slight delay before enabling the scroll spy again
+            setTimeout(() => this.pauseScrollSpy = false, 3);
         }
     }
 
