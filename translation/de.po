@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: German\n"
 "Language: de_DE\n"
-"PO-Revision-Date: 2018-04-04 09:38-0400\n"
+"PO-Revision-Date: 2018-04-04 09:46-0400\n"
 
 msgid "Favorites"
 msgstr "Favoriten"
@@ -841,46 +841,46 @@ msgid "Market Facilitation Index"
 msgstr "Marktindex Erleichterung"
 
 msgid "Scale Factor"
-msgstr ""
+msgstr "Skalierungsfaktor "
 
 msgid "Green"
-msgstr ""
+msgstr "Grün"
 
 msgid "Fade"
-msgstr ""
+msgstr "Schwächer werden"
 
 msgid "Fake"
-msgstr ""
+msgstr "Falsch"
 
 msgid "Squat"
-msgstr ""
+msgstr "Kompakt"
 
 msgid "ATR Bands"
-msgstr ""
+msgstr "ATR Bänder"
 
 msgid "ATR Bands Top"
-msgstr ""
+msgstr "ATR Bänder Oben"
 
 msgid "ATR Bands Bottom"
-msgstr ""
+msgstr "ATR Bänder Unten"
 
 msgid "ATR Bands Channel"
-msgstr ""
+msgstr "ATR Bänder Channel"
 
 msgid "STARC Bands"
-msgstr ""
+msgstr "STARC Bänder"
 
 msgid "MA Period"
-msgstr ""
+msgstr "MA Zeitraum"
 
 msgid "Multiplier"
-msgstr ""
+msgstr "Multiplikator"
 
 msgid "STARC Bands Top"
-msgstr ""
+msgstr "STARC Bänder Oben"
 
 msgid "STARC Bands Median"
-msgstr ""
+msgstr "STARC Bänder Mitte"
 
 msgid "STARC Bands Bottom"
 msgstr ""
@@ -889,46 +889,46 @@ msgid "ATR Trailing Stops"
 msgstr ""
 
 msgid "Plot Type"
-msgstr ""
+msgstr "Darstellungsart"
 
 msgid "HighLow"
 msgstr ""
 
 msgid "Buy Stops"
-msgstr ""
+msgstr "Kauf-Stopps"
 
 msgid "Sell Stops"
-msgstr ""
+msgstr "Verkauf-Stopps"
 
 msgid "Bollinger %b"
-msgstr ""
+msgstr "Bollinger %b"
 
 msgid "%b"
-msgstr ""
+msgstr "%b"
 
 msgid "Bollinger Bandwidth"
-msgstr ""
+msgstr "Bollinger Bandbreite"
 
 msgid "Bandwidth"
-msgstr ""
+msgstr "Bandbreite"
 
 msgid "Donchian Width"
-msgstr ""
+msgstr "Donchian Width"
 
 msgid "Relative Vigor Index"
-msgstr ""
+msgstr "Relative Vigor Index"
 
 msgid "Rel Vig"
-msgstr ""
+msgstr "Rel Vig"
 
 msgid "RelVigSignal"
-msgstr ""
+msgstr "RelVigSignal"
 
 msgid "Elder Impulse System"
-msgstr ""
+msgstr "Elder Impulse System"
 
 msgid "Bullish"
-msgstr ""
+msgstr "Bullisch"
 
 msgid "Bearish"
 msgstr ""
@@ -1072,85 +1072,85 @@ msgid "SMA1"
 msgstr ""
 
 msgid "SMA2"
-msgstr ""
+msgstr "SMA2"
 
 msgid "SMA3"
-msgstr ""
+msgstr "SMA3"
 
 msgid "SMA4"
-msgstr ""
+msgstr "SMA4"
 
 msgid "SMA5"
-msgstr ""
+msgstr "SMA5"
 
 msgid "SMA6"
-msgstr ""
+msgstr "SMA6"
 
 msgid "SMA7"
-msgstr ""
+msgstr "SMA7"
 
 msgid "SMA8"
-msgstr ""
+msgstr "SMA8"
 
 msgid "SMA9"
-msgstr ""
+msgstr "SMA9"
 
 msgid "SMA10"
-msgstr ""
+msgstr "SMA10"
 
 msgid "Rainbow Oscillator"
-msgstr ""
+msgstr "Regenbogen Oszillator"
 
 msgid "HHV/LLV Lookback"
-msgstr ""
+msgstr "HHV/LLV Lookback"
 
 msgid "Pring's Know Sure Thing"
-msgstr ""
+msgstr "Pring's Know Sure Thing"
 
 msgid "Lightest Rate of Change Period"
-msgstr ""
+msgstr "Niedrigster Kurs des Änderungszeitraums"
 
 msgid "Lightest SMA Period"
-msgstr ""
+msgstr "Niedrigster Kurs während des einfachen gleitenden Durchschnittszeitraums"
 
 msgid "Light Rate of Change Period"
-msgstr ""
+msgstr "Niedriger Kurs während des Änderungszeitraums"
 
 msgid "Light SMA Period"
-msgstr ""
+msgstr "Niedriger Kurs während des einfachen gleitenden Durchschnittszeitraums"
 
 msgid "Heavy Rate of Change Period"
-msgstr ""
+msgstr "Hoher Kurs des Änderungszeitraums"
 
 msgid "Heavy SMA Period"
-msgstr ""
+msgstr "Hoher Kurs während des einfachen gleitenden Durchschnittszeitraums"
 
 msgid "Heaviest Rate of Change Period"
-msgstr ""
+msgstr "Höchster Kurs des Änderungszeitraums"
 
 msgid "Heaviest SMA Period"
-msgstr ""
+msgstr "Höchster Kurs während des einfachen gleitenden Durchschnittszeitraums"
 
 msgid "KST"
-msgstr ""
+msgstr "KST"
 
 msgid "KSTSignal"
-msgstr ""
+msgstr "KSTSignal"
 
 msgid "Pring's Special K"
-msgstr ""
+msgstr "Pring's Special K"
 
 msgid "Interval"
-msgstr ""
+msgstr "Intervall"
 
 msgid "Darvas Box"
-msgstr ""
+msgstr "Darvas Box"
 
 msgid "ATH Lookback Period"
-msgstr ""
+msgstr "ATH Lookback Periode"
 
 msgid "Exit Field"
-msgstr ""
+msgstr "Ausstiegsfeld"
 
 msgid "Ghost Boxes"
 msgstr ""
