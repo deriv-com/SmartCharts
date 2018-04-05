@@ -38,9 +38,7 @@ if [ "$TRAVIS_BRANCH" = "dev" ] || [ "$TRAVIS_BRANCH" = "master" ]; then
     if [ "$TRAVIS_BRANCH" = "dev" ]; then
         DEPLOY_DIR=ghpages/beta
     fi
-    CSS_DIR="$DEPLOY_DIR/css"
-    mkdir "$CSS_DIR"
-    cp css/demo.css "$CSS_DIR"
+    cp -R css "$DEPLOY_DIR"
     cp index.html "$DEPLOY_DIR"
 fi
 
