@@ -8,9 +8,12 @@
     "build": "rimraf dist && NODE_ENV='production' webpack --optimize-minimize --progress",
     "analyze": "ANALYZE_BUNDLE=true yarn build",
     "watch": "webpack --progress --watch",
+    "test": "echo 'No unit tests implemented yet! :P'",
     "start": "rimraf dist && webpack-dev-server --open  --hot --inline",
-    "gh-pages": "yarn build && gh-pages --dist '.' --src '{index.html,dist/**,css/demo.css}'",
-    "translations": "yarn build && node scripts/extract-translations.js ./dist/smartcharts.js"
+    "gh-pages": "gh-pages --dist '.' --src '{index.html,dist/**,css/demo.css}'",
+    "translations": "yarn build && node scripts/extract-translations.js ./dist/smartcharts.js",
+    "deploy:production": "yarn build && yarn gh-pages --repo 'git@github.com:binary-com/SmartCharts.git'",
+    "deploy:beta": "yarn deploy:production --dest './beta'"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",

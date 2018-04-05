@@ -1,4 +1,8 @@
 language: node_js
+node_js:
+  - "8"
+matrix:
+  fast_finish: true
 
 branches:
   only:
@@ -8,30 +12,21 @@ branches:
 notifications:
   slack:
     rooms:
-      - binary-group:TI7oyWjkwf9Xx2Rllt2Pr5zY
+      - $SLACK_TOKEN
     on_pull_requests: false
 
-node_js:
-  - "8"
-
-install:
+before_install:
   - yarn install
 
-jobs:
-  include:
-    - stage: test
-      script: echo 'No tests are implemented yet...'
-    - stage: deploy production
-      script:
-        - echo 'charts.binary.com' > dist/CNAME
-        - yarn gh-pages --repo 'git@github.com:binary-com/SmartCharts.git'
-    - stage: deploy beta
-      script:
-        - yarn gh-pages --repo 'git@github.com:binary-com/SmartCharts.git' --dest './beta'
+before_deploy:
+  - bash scripts/prepare-deploy.sh
 
-stages:
-  - test
-  - name: deploy production
-    if: not type in (pull_request) AND branch = master
-  - name: deploy beta
-    if: not type in (pull_request) AND branch = dev
+deploy:
+  provider: pages
+  skip-cleanup: true
+  github-token: $GITHUB_TOKEN
+  local-dir: dist
+  on:
+    branch:
+    - master
+    - dev
