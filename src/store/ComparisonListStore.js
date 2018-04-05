@@ -5,7 +5,7 @@ import AnimatedPrice from '../components/AnimatedPrice.jsx';
 export default class ComparisonListStore {
     constructor(mainStore) {
         this.mainStore = mainStore;
-        reaction(() => this.comparisonSymbols, this.updatePrices);
+        reaction(() => this.comparisonSymbols.map(s => s.price), this.updatePrices);
     }
 
     @observable animatedPrices = [];
