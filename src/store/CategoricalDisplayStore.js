@@ -74,7 +74,7 @@ export default class CategoricalDisplayStore {
     }
 
     updateScrollSpy() {
-        if (this.pauseScrollSpy) return;
+        if (this.pauseScrollSpy) {return;}
         if (this.filteredItems.length === 0) {return;}
 
         let i = 0;
