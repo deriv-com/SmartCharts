@@ -94,10 +94,11 @@ class ChartStore {
 
     saveDrawings(target) {
         const obj = target.stx.exportDrawings();
+        const symbol = target.symbol;
         if (obj.length === 0) {
-            CIQ.localStorage.removeItem(obj.symbol);
+            CIQ.localStorage.removeItem(symbol);
         } else {
-            CIQ.localStorageSetItem(obj.symbol, JSON.stringify(obj));
+            CIQ.localStorageSetItem(symbol, JSON.stringify(obj));
         }
     }
     restoreDrawings(stx, symbol) {
