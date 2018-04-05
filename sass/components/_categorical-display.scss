@@ -127,8 +127,12 @@
             align-items: center;
         }
         .closed-market{
-            width: 32px;
+            border: 1px solid #f44336;
+            color: #f44336;
+            border-radius: 3px;
+            padding: 2px 6px;
             object-fit: contain;
+            font-size: 0.64em;
         }
     }
     .cq-item {
