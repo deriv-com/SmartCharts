@@ -1,6 +1,6 @@
 import { action, observable, computed, when, reaction, toJS } from 'mobx';
 import { connect } from './Connect';
-import IScroll from 'iscroll/build/iscroll-probe';
+import PerfectScrollbar from 'perfect-scrollbar';
 
 export default class CategoricalDisplayStore {
     constructor({
@@ -19,7 +19,6 @@ export default class CategoricalDisplayStore {
                 setTimeout(() => this.searchInput.focus(), 0);
                 if (!this.isInit) {this.init();}
                 setTimeout(() => {
-                    this.scroll.refresh();
                     this.updateScrollOffset();
                 }, 0);
             }
@@ -75,6 +74,7 @@ export default class CategoricalDisplayStore {
     }
 
     updateScrollSpy() {
+        if (this.pauseScrollSpy) {return;}
         if (this.filteredItems.length === 0) {return;}
 
         let i = 0;
@@ -104,15 +104,9 @@ export default class CategoricalDisplayStore {
 
     init() {
         this.isInit = true;
-        this.scroll = new IScroll(this.scrollPanel, {
-            probeType: 2,
-            tap: true,
-            click: true,
-            mouseWheel: true,
-            scrollbars: true,
-        });
+        this.scroll = new PerfectScrollbar(this.scrollPanel);
 
-        this.scroll.on('scroll', this.updateScrollSpy.bind(this));
+        this.scrollPanel.addEventListener('ps-scroll-y', this.updateScrollSpy.bind(this));
 
         // Select first non-empty category:
         if (this.activeCategoryKey === '' && this.filteredItems.length > 0) {
@@ -131,26 +125,32 @@ export default class CategoricalDisplayStore {
 
         if (this.favoritesId) {
             const favsCategory = toJS(this.favoritesCategory);
-            let favsCategoryItem = favsCategory.data.filter( favItem => (typeof favItem !== 'string') );
             const findFavItem = category =>{
+                let foundItems = [];
                 if ( category.hasSubcategory ) {
                     category.data.forEach( subcategory => {
-                        findFavItem(subcategory);
+                        const foundSubItems = findFavItem(subcategory);
+                        foundItems.push(...foundSubItems);
                     });
                 }else{
                     favsCategory.data.forEach( favItem => {
                         if ( typeof favItem === 'string') {
                             let itemObj = category.data.find( item => item.itemId === favItem);
                             if (itemObj) {
-                                favsCategoryItem.push(itemObj);
+                                foundItems.push(itemObj);
                             }
                         }
                     });
                 }
+                return foundItems;
             };
 
-            filteredItems.forEach( category => {
-                findFavItem(category);
+            let favsCategoryItem = favsCategory.data
+                .filter( favItem => (typeof favItem !== 'string') );
+
+            filteredItems.forEach(category => {
+                const foundItems = findFavItem(category);
+                favsCategoryItem.push(...foundItems);
             });
 
             favsCategory.data = favsCategoryItem.filter(favItem => favItem);
@@ -193,7 +193,6 @@ export default class CategoricalDisplayStore {
     @action.bound setFilterText(filterText) {
         this.filterText = filterText;
         setTimeout(() => {
-            this.scroll.refresh();
             this.updateScrollSpy();
         }, 0);
     }
@@ -201,8 +200,13 @@ export default class CategoricalDisplayStore {
     @action.bound handleFilterClick(category) {
         const el = this.categoryElements[category.categoryId];
         if (el) {
+            // TODO: Scroll animation
+            this.pauseScrollSpy = true;
+            this.scroll.element.scrollTop = el.offsetTop;
             this.activeCategoryKey = category.categoryId;
-            this.scroll.scrollToElement(el, 200);
+            // scrollTop takes some time to take affect, so we need
+            // a slight delay before enabling the scroll spy again
+            setTimeout(() => this.pauseScrollSpy = false, 3);
         }
     }
 
@@ -238,11 +242,12 @@ export default class CategoricalDisplayStore {
         e.stopPropagation();
         e.nativeEvent.isHandledByDialog = true; // prevent close dialog
         this.setFavorite(item);
-        setTimeout(() => this.scroll.refresh(), 0);
     }
     setFavorite(item) {
         if (this.favoritesMap[item.itemId]) {
-            this.favoritesCategory.data = this.favoritesCategory.data.filter(favItem => favItem && favItem.itemId !== item.itemId && favItem !== item.itemId);
+            this.favoritesCategory.data = this.favoritesCategory.data
+                .filter(favItem => favItem && favItem.itemId !== item.itemId && favItem !== item.itemId);
+
             delete this.favoritesMap[item.itemId];
         } else {
             this.favoritesCategory.data.push(item);
@@ -250,7 +255,9 @@ export default class CategoricalDisplayStore {
         }
 
         const layout = this.context.stx.layout;
-        layout.favorites[this.favoritesId] = toJS(this.favoritesCategory.data).filter(favItem => favItem).map( favItem => typeof favItem === 'string' ? favItem : favItem.itemId);
+        layout.favorites[this.favoritesId] = toJS(this.favoritesCategory.data)
+            .filter(favItem => favItem)
+            .map( favItem => typeof favItem === 'string' ? favItem : favItem.itemId);
         this.mainStore.chart.saveLayout();
     }
 

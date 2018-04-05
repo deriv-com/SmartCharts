@@ -193,8 +193,10 @@
             height: $normal-icon-size;
         }
         &.ciq-active-favorite {
+            $fav-star-color: #E98024;
             svg > g > g > path {
-                fill: #E98024;
+                fill: $fav-star-color;
+                stroke: $fav-star-color;
             }
         }
     }

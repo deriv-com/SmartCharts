@@ -2,6 +2,8 @@ import { observable, action, computed, when } from 'mobx';
 import MenuStore from './MenuStore';
 import CategoricalDisplayStore from './CategoricalDisplayStore';
 import SettingsDialogStore from './SettingsDialogStore';
+// TODO:
+// import StudyInfo from '../study-info';
 
 export default class StudyLegendStore {
     constructor(mainStore) {
@@ -58,7 +60,7 @@ export default class StudyLegendStore {
 
     get categorizedStudies() {
         const data = [];
-        Object.keys(CIQ.Studies.studyLibrary).map(studyId => {
+        Object.keys(CIQ.Studies.studyLibrary).forEach(studyId => {
             const study = CIQ.Studies.studyLibrary[studyId];
             data.push({
                 enabled: true,
@@ -117,7 +119,10 @@ export default class StudyLegendStore {
 
         this.settingsDialog.items = [...inputs, ...outputs, ...parameters];
         this.settingsDialog.title = study.sd.name.toUpperCase();
-        this.settingsDialog.description = t.translate("No description yet");
+        // TODO:
+        // const description = StudyInfo[study.sd.type];
+        // this.settingsDialog.description = description || t.translate("No description yet");
+        this.settingsDialog.description = '';
         this.settingsDialog.stared = !!this.categoricalDisplay.favoritesMap[helper.name];
         this.settingsDialog.setOpen(true);
     }
