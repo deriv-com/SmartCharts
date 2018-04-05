@@ -266,15 +266,15 @@ class ChartStore {
             const comparisons = [];
             let q = stx.currentQuote();
             if (q) {
-                for (const s of comparisonSymbolsKeys) {
-                    const d = stx.chart.series[s];
-                    const p = d.parameters;
-                    const price = d.lastQuote ? d.lastQuote.Close : undefined;
+                for (const sybl of comparisonSymbolsKeys) {
+                    const srs = stx.chart.series[sybl];
+                    const prm = srs.parameters;
+                    const price = srs.lastQuote ? srs.lastQuote.Close : undefined;
 
                     comparisons.push({
-                        color: p.color,
+                        color: prm.color,
                         price,
-                        symbolObject: p.symbolObject,
+                        symbolObject: prm.symbolObject,
                     });
                 }
             }
@@ -284,10 +284,10 @@ class ChartStore {
 
         // Update the comparison prices:
         let i = 0;
-        for (const s of comparisonSymbolsKeys) {
+        for (const sybl of comparisonSymbolsKeys) {
             const comp = this.comparisonSymbols[i];
-            const d = stx.chart.series[s];
-            comp.price = d.lastQuote ? d.lastQuote.Close : undefined
+            const srs = stx.chart.series[sybl];
+            comp.price = srs.lastQuote ? srs.lastQuote.Close : undefined
             i++;
         }
     }
