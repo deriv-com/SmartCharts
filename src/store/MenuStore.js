@@ -31,9 +31,7 @@ export default class MenuStore {
     }
 
     @action.bound onTitleClick(e) {
-        /* TODO: why stopPropagation() is not working ಠ_ಠ */
-        // e.stopPropagation();
-        e.nativeEvent.isHandledByDialog = true;
+        e.stopPropagation();
         this.setOpen(!this.open);
     }
 
