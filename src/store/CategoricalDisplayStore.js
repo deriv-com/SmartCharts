@@ -204,6 +204,15 @@ export default class CategoricalDisplayStore {
         }, 0);
     }
 
+    @action.bound clearFilterText() {
+        this.filterText = '';
+        this.searchInput.value = '';
+        setTimeout(() => {
+            this.scroll.refresh();
+            this.updateScrollSpy();
+        }, 0);
+    }
+
     @action.bound handleFilterClick(category) {
         const el = this.categoryElements[category.categoryId];
         if (el) {
@@ -284,6 +293,7 @@ export default class CategoricalDisplayStore {
     connect = connect(() => ({
         filterText: this.filterText,
         setFilterText: this.setFilterText,
+        clearFilterText: this.clearFilterText,
         filteredItems: this.filteredItems,
         getItemCount: this.getItemCount,
         setSearchInput: this.setSearchInput,
