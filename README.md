@@ -7,7 +7,6 @@ Binary.com charting library using chartiq.
 - use `yarn start` to launch webpack dev server
 - use `yarn build` to build the project
 - use `yarn analyze` to run webpack-bundle-analyzer
-- use `yarn gh-pages` to deploy demo to gh-pages
 
 ## Quick Start
 ```jsx
@@ -47,9 +46,31 @@ t.translate('[currency] [amount] payout if the last tick.', {
 t.setLanguage('fr'); // components need to be rerendered for changes to take affect
 ```
 
-We can then generate the `messages.pot` file for [CrowdIn](https://crowdin.com/project/smartcharts/settings#files) via:
+Each time a new translation string is added to the code, you need to update the `messages.pot` via:
 
     yarn translations
+
+Once the new `messages.pot` is merged into the `dev` branch, it will automatically be updated in [CrowdIn](https://crowdin.com/project/smartcharts/settings#files). You should expect to see a PR with the title **New Crowdin translations**
+ in a few minutes; this PR will update the `*.po` files.
+ 
+### Contribute
+
+To contribute to SmartCharts, fork this project and checkout the `dev` branch. When adding features or performing bug fixes, it is recommended you make a separate branch off `dev`. Prior to sending pull requests, make sure all unit tests passed:
+
+    yarn test
+
+> Note: When you send pull requests, remember to set the base branch to `dev`.
+
+Once your changes have been merged to `dev`, it will immediately deployed to [charts.binary.com/beta](https://charts.binary.com/beta/). 
+
+### Manual Deployment
+
+> Note: This is usually not required, since Travis will automatically deploy to [charts.binary.com](https://charts.binary.com/) and [charts.binary.com/beta](https://charts.binary.com/beta/) when `master` and `dev` is updated.
+
+The following commands will build and deploy to charts.binary.com (*Make sure you are in the right branch!*); you will need push access to this repository for the commands to work:
+
+    yarn deploy:beta        # charts.binary.com/beta
+    yarn deploy:production  # charts.binary.com
 
 ### Barrier Component
 ```jsx
