@@ -14,9 +14,9 @@ if [ "$TRAVIS_BRANCH" = "master" ]; then
     rm -fR ghpages
     yarn build
     mkdir ghpages
-    mv dist ghpages/dist
+    mv dist ghpages/
     if [ -d beta ]; then
-        mv beta ghpages/beta
+        mv beta ghpages/
     fi
     echo 'charts.binary.com' > ghpages/CNAME
 fi
@@ -28,7 +28,7 @@ if [ "$TRAVIS_BRANCH" = "dev" ]; then
     git clone --branch gh-pages https://github.com/$TRAVIS_REPO_SLUG ghpages --depth 1
     rm -fR ghpages/beta
     mkdir ghpages/beta
-    mv dist ghpages/beta/dist/
+    mv dist ghpages/beta/
 fi
 
 # Do not deploy any other branch aside dev and master
