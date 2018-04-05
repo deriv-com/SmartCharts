@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import {CategoryIconMap, ItemIconMap, SearchIcon,
-    SymbolPlaceholderIcon, ActiveOptionsIconMap, FavoriteIcon } from './Icons.jsx';
+    SymbolPlaceholderIcon, ActiveOptionsIconMap, FavoriteIcon, ClosedMarketIcon } from './Icons.jsx';
 import {stxtap} from '../store/utils';
 
 const CategoricalDisplay = ({
@@ -51,6 +51,9 @@ const CategoricalDisplay = ({
         >
             {renderLeft(item)}
             <div className="right">
+                {(item.dataObject && item.dataObject.exchange_is_open == 0 )?<div className="closed-market">
+                    <ClosedMarketIcon />
+                </div>:''}
                 {renderFavorite(item)}
             </div>
         </div>;
