@@ -12,7 +12,7 @@ branches:
 notifications:
   slack:
     rooms:
-      - $SLACK_TOKEN
+      - binary-group:$SLACK_TOKEN
     on_pull_requests: false
 
 before_install:
