@@ -288,7 +288,7 @@ class ChartStore {
         for (const sybl of comparisonSymbolsKeys) {
             const comp = this.comparisonSymbols[i];
             const srs = stx.chart.series[sybl];
-            comp.price = srs.lastQuote ? srs.lastQuote.Close : undefined
+            comp.price = srs.lastQuote ? srs.lastQuote.Close : undefined;
             i++;
         }
     }

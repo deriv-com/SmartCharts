@@ -6,13 +6,14 @@
   "license": "ISC",
   "scripts": {
     "build": "rimraf dist && NODE_ENV='production' webpack --optimize-minimize --progress",
+    "build-travis": "yarn build && node scripts/update-hashes.js",
     "analyze": "ANALYZE_BUNDLE=true yarn build",
     "watch": "webpack --progress --watch",
     "test": "echo 'No unit tests implemented yet! :P'",
     "start": "rimraf dist && webpack-dev-server --open  --hot --inline",
     "gh-pages": "gh-pages --dist '.' --src '{index.html,dist/**,css/demo.css}'",
     "translations": "yarn build && node scripts/extract-translations.js ./dist/smartcharts.js",
-    "deploy:production": "yarn build && yarn gh-pages --repo 'git@github.com:binary-com/SmartCharts.git'",
+    "deploy:production": "yarn build-travis && yarn gh-pages --repo 'git@github.com:binary-com/SmartCharts.git'",
     "deploy:beta": "yarn deploy:production --dest './beta'"
   },
   "devDependencies": {
@@ -52,6 +53,7 @@
     "jquery": "^3.2.1",
     "json-loader": "^0.5.7",
     "lodash": "^4.17.5",
+    "md5-file": "^4.0.0",
     "mkdirp": "^0.5.1",
     "node-sass": "^4.7.2",
     "path": "^0.12.7",
