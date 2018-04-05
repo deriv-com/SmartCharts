@@ -256,7 +256,7 @@ class ChartStore {
 
         window.addEventListener('resize', this.resizeScreen.bind(this));
 
-        stxx.append('createDataSet', this.updateComparisons.bind(this));
+        stxx.append('createDataSet', this.updateComparisons);
     }
 
     @action.bound updateComparisons(...args) {
