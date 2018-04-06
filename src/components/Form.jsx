@@ -131,12 +131,14 @@ export class ColorPicker extends React.Component {
 
     render() {
         const { color, setColor } = this.props;
+        const backgroundColor = color === 'auto' ? '#000000' : color;
+
         return (
             <div className='cq-color-picker'>
                 <div
                     ref={ref => this.titleRef = ref}
                     className='title'
-                    style={{backgroundColor: color}}
+                    style={{backgroundColor}}
                     onClick={this.onClick}
                 />
                 <div className={`dropdown ${this.state.open ? 'open' : ''}`}>
