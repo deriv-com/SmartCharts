@@ -169,3 +169,48 @@ export const Switch = ({
         <div className='handle' />
     </div>
 );
+
+export class NumberColorPicker extends React.Component {
+    state = {};
+
+    componentWillMount() {
+        this.onChange = this.props.onChange;
+        this.setState({
+            color: this.props.color,
+            value: this.props.value,
+        });
+    }
+
+    onValueChange = value => {
+        this.setState({ value }, () => this.triggerOnChange());
+    };
+
+    onColorChange = color => {
+        this.setState({ color }, () => this.triggerOnChange());
+    };
+
+    triggerOnChange = () => {
+        this.onChange({
+            // the camelcase on the keys is NOT a typo!
+            Color: this.state.color,
+            Value: this.state.value,
+        });
+    };
+
+    render() {
+        const { value, color } = this.state;
+        return (
+            <span>
+                <input
+                    value={value}
+                    onChange={val => this.onValueChange(val.target.value)}
+                    type="number"
+                />
+                <ColorPicker
+                    color={color}
+                    setColor={val => this.onColorChange(val)}
+                />
+            </span>
+        );
+    }
+};
