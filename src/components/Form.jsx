@@ -38,7 +38,7 @@ export class DropDown extends React.Component {
 
     componentDidMount() { document.addEventListener('click', this.close, false); }
     componentWillUnmount() { document.removeEventListener('click', this.close); }
-    
+
     render() {
         const { rows, children, title, onRowClick } = this.props;
         const { open } = this.state;
@@ -131,12 +131,14 @@ export class ColorPicker extends React.Component {
 
     render() {
         const { color, setColor } = this.props;
+        const backgroundColor = color === 'auto' ? '#000000' : color;
+
         return (
             <div className='cq-color-picker'>
                 <div
                     ref={ref => this.titleRef = ref}
                     className='title'
-                    style={{backgroundColor: color}}
+                    style={{backgroundColor}}
                     onClick={this.onClick}
                 />
                 <div className={`dropdown ${this.state.open ? 'open' : ''}`}>
@@ -169,3 +171,72 @@ export const Switch = ({
         <div className='handle' />
     </div>
 );
+
+// NumericInput fires onChange on Enter or onBlur
+export class NumericInput extends React.Component {
+    state = {};
+
+    componentWillMount() {
+        const { value } = this.props;
+        this.setState({
+            originalValue: value,
+            value,
+        });
+    }
+
+    componentWillReceiveProps(newProps) {
+        const { value } = newProps;
+        if (value !== this.state.originalValue) {
+            this.setState({
+                originalValue: value,
+                value,
+            }, this.fireOnChange);
+        }
+    }
+
+    fireOnChange = () => this.props.onChange(this.state.value);
+
+    onUpdateValue = e => {
+        this.setState({ value: e.target.value });
+    };
+
+    fireOnEnter = e => {
+        if (e.key === 'Enter') {
+            this.fireOnChange();
+        }
+    };
+
+    render() {
+        return (
+            <input
+                type="number"
+                value={this.state.value}
+                onBlur={this.fireOnChange}
+                onChange={this.onUpdateValue}
+                onKeyPress={this.fireOnEnter}
+            />
+        );
+    }
+}
+
+export const NumberColorPicker = ({
+    value,
+    onChange,
+}) => {
+    const { Value, Color } = value;
+    const onValueChange = Value => onChange({ Color, Value });
+    const onColorChange = Color => onChange({ Color, Value });
+
+    return (
+        <span>
+            <NumericInput
+                value={Value}
+                onChange={val => onValueChange(val)}
+            />
+            <ColorPicker
+                color={Color}
+                setColor={val => onColorChange(val)}
+            />
+        </span>
+    );
+};

@@ -93,4 +93,19 @@
         font-size: 12px;
         line-height: 18px;
     }
+
+    input[type=number] {
+        display: inline-block;
+        width: 3.2em;
+        vertical-align: bottom;
+        line-height: 2em;
+        border-radius: 3px;
+        margin-right: 5px;
+        padding-left: 6px;
+        border: 1px solid #cccccc;
+    }
+
+    .cq-color-picker {
+        display: inline-block;
+    }
 }

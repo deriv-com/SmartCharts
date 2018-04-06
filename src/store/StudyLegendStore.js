@@ -106,16 +106,37 @@ export default class StudyLegendStore {
             type: 'colorpicker',
             category: 'outputs',
         }));
-        const parameters = helper.parameters.map(par => ({
-            id: par.name,
-            title: t.translate(par.heading),
-            value: par.value,
-            defaultValue: par.defaultValue,
-            type: typeof par.defaultValue === 'boolean' ? 'switch' : 'number+colorpicker',
-            color: par.color,
-            ...attributes[par.name],
-            category: 'parameters',
-        }));
+        const parameters = helper.parameters.map(par => {
+            let shared = {
+                title: t.translate(par.heading),
+                ...attributes[par.name],
+                category: 'parameters',
+            };
+            if (par.defaultValue.constructor === Boolean) {
+                return {
+                    ...shared,
+                    id: par.name + 'Enabled',
+                    value: par.value,
+                    defaultValue: par.defaultValue,
+                    type: 'switch',
+                };
+            } else if (par.defaultValue.constructor === Number) {
+                return {
+                    ...shared,
+                    id: par.name,
+                    type: 'numbercolorpicker',
+                    defaultValue: {
+                        Color: par.defaultColor,
+                        Value: par.defaultValue,
+                    },
+                    value: {
+                        Color: par.color,
+                        Value: par.value,
+                    },
+                };
+            }
+            throw 'Unrecognised parameter!';
+        });
 
         this.settingsDialog.items = [...inputs, ...outputs, ...parameters];
         this.settingsDialog.title = study.sd.name.toUpperCase();
@@ -147,7 +168,13 @@ export default class StudyLegendStore {
         for(const {id, category, value} of items) {
             if(study[category][id] !== value) {
                 updates[category] = updates[category] || { };
-                updates[category][id] = value;
+                if (typeof value === 'object') {
+                    for (const suffix in value) {
+                        updates[category][`${id}${suffix}`] = value[suffix];
+                    }
+                } else {
+                    updates[category][id] = value;
+                }
             }
         }
         this.helper.updateStudy(updates);
