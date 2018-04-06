@@ -198,12 +198,8 @@ export default class CategoricalDisplayStore {
     }
 
     @action.bound clearFilterText() {
-        this.filterText = '';
+        this.setFilterText('');
         this.searchInput.value = '';
-        setTimeout(() => {
-            this.scroll.refresh();
-            this.updateScrollSpy();
-        }, 0);
     }
 
     @action.bound handleFilterClick(category) {

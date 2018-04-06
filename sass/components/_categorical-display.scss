@@ -39,8 +39,6 @@
             @include placeholder {
                 color: #dfdfdf;
             }
-            &:focus {
-            }
         }
         > .ic-icon {
             position: absolute;
@@ -93,8 +91,6 @@
         cursor: pointer;
         box-sizing: border-box;
         transition: background-color 0.3s;
-        &:hover {
-        }
         &.cq-active-filter {
             font-weight: 800;
             color: #4C5794;
