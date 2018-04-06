@@ -30,8 +30,13 @@
             justify-content: flex-start;
             align-items: center;
             &.active {
-                color: white;
-                background-color: #4C5794;
+                color: #4C5794;
+                font-weight: bold;
+                background-color: #F2F3F8;
+                .ic-icon{
+                    box-shadow: none;
+                    background: transparent;
+                }
             }
         }
     }

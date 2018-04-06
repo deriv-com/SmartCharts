@@ -1,12 +1,14 @@
 import React, { Component, Fragment } from 'react';
 import {CategoryIconMap, ItemIconMap, SearchIcon,
-    SymbolPlaceholderIcon, ActiveOptionsIconMap, FavoriteIcon } from './Icons.jsx';
+    SymbolPlaceholderIcon, ActiveOptionsIconMap, FavoriteIcon, CloseIcon } from './Icons.jsx';
 import {stxtap} from '../store/utils';
 
 const CategoricalDisplay = ({
     placeholderText,
     setSearchInput,
+    filterText,
     setFilterText,
+    clearFilterText,
     handleFilterClick,
     hasActiveItems,
     filteredItems,
@@ -85,8 +87,8 @@ const CategoricalDisplay = ({
     return (
         <div className="cq-categorical-display">
             <div className="cq-lookup-filters">
-                <div className="cq-lookup-input">
-                    <input
+                <div className={`cq-lookup-input ${filterText.trim() !== '' ? 'active':''}` }>
+                     <input
                         ref={
                             el => {
                                 setSearchInput(el);
@@ -102,6 +104,7 @@ const CategoricalDisplay = ({
                         placeholder={placeholderText}
                     />
                     <SearchIcon />
+                    <CloseIcon className="icon-reset" onClick={ () =>clearFilterText() } />
                 </div>
                 { filteredItems.map((category, i) => {
                     const CategoryIcon = CategoryIconMap[category.categoryId];
@@ -126,19 +129,24 @@ const CategoricalDisplay = ({
                                 ref={(el) => setCategoryElement(el, category.categoryId)}
                             >
                                 <div className="category-title">{category.categoryName}</div>
-                                <div className="category-content">
-                                    { category.hasSubcategory ? category.data.map((subcategory, j) =>
+                                { category.hasSubcategory 
+                                    ? category.data.map((subcategory, j) =>
                                         getItemCount(subcategory) > 0 &&
-                                    <Fragment key={j}>
-                                        <div className="subcategory">{subcategory.subcategoryName}</div>
-                                        { subcategory.data.map(renderItem)}
-                                    </Fragment>
-                                    ) : category.data.map((category.categoryId === 'active' && hasActiveItems) ? renderActiveItem : renderItem)
-                                    }
-                                    { getItemCount(category) === 0 && category.emptyDescription &&
-                                    <div className="empty-category">{category.emptyDescription}</div>
-                                    }
-                                </div>
+                                        <Fragment key={j}>
+                                            <div className="category-content">
+                                                <div className="subcategory">{subcategory.subcategoryName}</div>
+                                                { subcategory.data.map(renderItem)}
+                                            </div>
+                                        </Fragment>) 
+                                    : category.data.length > 0 && <div className="category-content">
+                                            {category.data.map((category.categoryId === 'active' && hasActiveItems) ? renderActiveItem : renderItem)}
+                                          </div>
+                                }
+                                { getItemCount(category) === 0 && category.emptyDescription &&
+                                    <div className="category-content">
+                                        <div className="empty-category">{category.emptyDescription}</div>
+                                    </div>
+                                }
                             </div>
                     ) }
                 </div>
