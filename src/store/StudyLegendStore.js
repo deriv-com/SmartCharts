@@ -109,7 +109,6 @@ export default class StudyLegendStore {
         const parameters = helper.parameters.map(par => {
             let shared = {
                 title: t.translate(par.heading),
-                defaultValue: par.defaultValue,
                 ...attributes[par.name],
                 category: 'parameters',
             };
@@ -118,6 +117,7 @@ export default class StudyLegendStore {
                     ...shared,
                     id: par.name + 'Enabled',
                     value: par.value,
+                    defaultValue: par.defaultValue,
                     type: 'switch',
                 };
             } else if (par.defaultValue.constructor === Number) {
@@ -125,7 +125,10 @@ export default class StudyLegendStore {
                     ...shared,
                     id: par.name,
                     type: 'numbercolorpicker',
-                    defaultColor: par.defaultColor,
+                    defaultValue: {
+                        Color: par.defaultColor,
+                        Value: par.defaultValue,
+                    },
                     value: {
                         Color: par.color,
                         Value: par.value,

@@ -177,7 +177,21 @@ export class NumericInput extends React.Component {
     state = {};
 
     componentWillMount() {
-        this.setState({ value: this.props.value });
+        const { value } = this.props;
+        this.setState({
+            originalValue: value,
+            value,
+        });
+    }
+
+    componentWillReceiveProps(newProps) {
+        const { value } = newProps;
+        if (value !== this.state.originalValue) {
+            this.setState({
+                originalValue: value,
+                value,
+            }, this.fireOnChange);
+        }
     }
 
     fireOnChange = () => this.props.onChange(this.state.value);
