@@ -21,84 +21,54 @@ const SettingsDialog = ({
 }) => {
     const renderMap = {
         switch: item => (
-            <div key={item.id} className='item'>
-                <div className='title'>
-                    <span>{item.title}</span>
-                    <Switch
-                        value={item.value}
-                        onChange={(v) => onItemChange(item.id, v)}
-                    />
-                </div>
-            </div>
+            <Switch
+                value={item.value}
+                onChange={(v) => onItemChange(item.id, v)}
+            />
         ),
         colorpicker: item => (
-            <div key={item.id} className='item'>
-                <div className='title'>
-                    <span>{item.title}</span>
-                    <ColorPicker
-                        color={item.value}
-                        setColor={(value) => onItemChange(item.id, value)}
-                    />
-                </div>
-            </div>
+            <ColorPicker
+                color={item.value}
+                setColor={(value) => onItemChange(item.id, value)}
+            />
         ),
         pattern: item => {
             const lineWidth = items.filter(it => it.id === 'lineWidth')[0].value;
             return (
-                <div key={item.id} className='item'>
-                    <div className='title'>
-                        <span>{item.title}</span>
-                        <Pattern
-                            pattern={item.value}
-                            lineWidth={lineWidth}
-                            onChange={v => {
-                                onItemChange('pattern', v.pattern);
-                                onItemChange('lineWidth', v.width);
-                            }}
-                        />
-                    </div>
-                </div>
+                <Pattern
+                    pattern={item.value}
+                    lineWidth={lineWidth}
+                    onChange={v => {
+                        onItemChange('pattern', v.pattern);
+                        onItemChange('lineWidth', v.width);
+                    }}
+                />
             );
         },
         select: item => (
-            <div key={item.id} className='item'>
-                <div className='title'>
-                    <span>{item.title}</span>
-                    <DropDown
-                        rows={Object.keys(item.options)}
-                        title={item.value}
-                        onRowClick={value => onItemChange(item.id, value)}
-                    >
-                        {row => row}
-                    </DropDown>
-                </div>
-            </div>
+            <DropDown
+                rows={Object.keys(item.options)}
+                title={item.value}
+                onRowClick={value => onItemChange(item.id, value)}
+            >
+                {row => row}
+            </DropDown>
         ),
         number: item => (
-            <div key={item.id} className='item'>
-                <div className='title'>
-                    <span>{item.title}</span>
-                    <Slider
-                        min={item.min || 1}
-                        step={item.step || 1}
-                        max={item.max || 100}
-                        value={item.value}
-                        onChange={val => onItemChange(item.id, val)}
-                    />
-                </div>
-            </div>
+            <Slider
+                min={item.min || 1}
+                step={item.step || 1}
+                max={item.max || 100}
+                value={item.value}
+                onChange={val => onItemChange(item.id, val)}
+            />
         ),
-        'number+colorpicker': item => (
-            <div key={item.id} className='item'>
-                <div className='title'>
-                    <span>{item.title}</span>
-                    <NumberColorPicker
-                        value={item.value}
-                        color={item.color}
-                        onChange={val => onItemChange(item.id, val)}
-                    />
-                </div>
-            </div>
+        numbercolorpicker: item => (
+            <NumberColorPicker
+                value={item.value}
+                color={item.color}
+                onChange={val => onItemChange(item.id, val)}
+            />
         ),
         none: () => null,
     };
@@ -136,19 +106,17 @@ const SettingsDialog = ({
                 <React.Fragment>
                     <div className='items' >
                         {items
-                            .map(item => {
-                                if(renderMap[item.type]) {
-                                    return renderMap[item.type](item);
-                                }
-                                return (
-                                    <div key={item.id} className='item'>
-                                        <div className='title'>
-                                            <span>{item.title}</span>
-                                            <strong>{item.type}</strong>
-                                        </div>
+                            .map(item => (
+                                <div key={item.id} className='item'>
+                                    <div className='title'>
+                                        <span>{item.title}</span>
+                                        {renderMap[item.type] ?
+                                            renderMap[item.type](item)
+                                            : <strong>{item.type}</strong>
+                                        }
                                     </div>
-                                );
-                            })
+                                </div>
+                            ))
                         }
                     </div>
                     <div className='buttons'>

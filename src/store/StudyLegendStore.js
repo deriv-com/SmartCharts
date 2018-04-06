@@ -124,7 +124,7 @@ export default class StudyLegendStore {
                 return {
                     ...shared,
                     id: par.name,
-                    type: 'number+colorpicker',
+                    type: 'numbercolorpicker',
                     defaultColor: par.defaultColor,
                     color: par.color,
                 };
