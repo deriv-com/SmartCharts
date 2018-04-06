@@ -14,9 +14,11 @@
             fill: #2a3052,
         }
     }
-    &.fill-orange {
-        svg path {
-            fill: #E98024;
+    &.ciq-active-favorite {
+        $fav-star-color: #E98024;
+        svg > g > g > path {
+            fill: $fav-star-color;
+            stroke: $fav-star-color;
         }
     }
     &.ic-clear {
