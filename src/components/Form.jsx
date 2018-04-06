@@ -170,6 +170,39 @@ export const Switch = ({
     </div>
 );
 
+// NumericInput fires onChange on Enter or onBlur
+export class NumericInput extends React.Component {
+    state = {};
+
+    componentWillMount() {
+        this.setState({ value: this.props.value });
+    }
+
+    fireOnChange = () => this.props.onChange(this.state.value);
+
+    onUpdateValue = e => {
+        this.setState({ value: e.target.value });
+    };
+
+    fireOnEnter = e => {
+        if (e.key === 'Enter') {
+            this.fireOnChange();
+        }
+    };
+
+    render() {
+        return (
+            <input
+                type="number"
+                value={this.state.value}
+                onBlur={this.fireOnChange}
+                onChange={this.onUpdateValue}
+                onKeyPress={this.fireOnEnter}
+            />
+        );
+    }
+}
+
 export const NumberColorPicker = ({
     value,
     onChange,
@@ -180,10 +213,9 @@ export const NumberColorPicker = ({
 
     return (
         <span>
-            <input
+            <NumericInput
                 value={Value}
-                onChange={val => onValueChange(val.target.value)}
-                type="number"
+                onChange={val => onValueChange(val)}
             />
             <ColorPicker
                 color={Color}
