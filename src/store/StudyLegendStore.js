@@ -109,7 +109,6 @@ export default class StudyLegendStore {
         const parameters = helper.parameters.map(par => {
             let shared = {
                 title: t.translate(par.heading),
-                value: par.value,
                 defaultValue: par.defaultValue,
                 ...attributes[par.name],
                 category: 'parameters',
@@ -118,6 +117,7 @@ export default class StudyLegendStore {
                 return {
                     ...shared,
                     id: par.name + 'Enabled',
+                    value: par.value,
                     type: 'switch',
                 };
             } else if (par.defaultValue.constructor === Number) {
@@ -126,7 +126,10 @@ export default class StudyLegendStore {
                     id: par.name,
                     type: 'numbercolorpicker',
                     defaultColor: par.defaultColor,
-                    color: par.color,
+                    value: {
+                        Color: par.color,
+                        Value: par.value,
+                    },
                 };
             }
             throw 'Unrecognised parameter!';

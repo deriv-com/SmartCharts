@@ -38,7 +38,7 @@ export class DropDown extends React.Component {
 
     componentDidMount() { document.addEventListener('click', this.close, false); }
     componentWillUnmount() { document.removeEventListener('click', this.close); }
-    
+
     render() {
         const { rows, children, title, onRowClick } = this.props;
         const { open } = this.state;
@@ -170,47 +170,25 @@ export const Switch = ({
     </div>
 );
 
-export class NumberColorPicker extends React.Component {
-    state = {};
+export const NumberColorPicker = ({
+    value,
+    onChange,
+}) => {
+    const { Value, Color } = value;
+    const onValueChange = Value => onChange({ Color, Value });
+    const onColorChange = Color => onChange({ Color, Value });
 
-    componentWillMount() {
-        this.onChange = this.props.onChange;
-        this.setState({
-            color: this.props.color,
-            value: this.props.value,
-        });
-    }
-
-    onValueChange = value => {
-        this.setState({ value }, () => this.triggerOnChange());
-    };
-
-    onColorChange = color => {
-        this.setState({ color }, () => this.triggerOnChange());
-    };
-
-    triggerOnChange = () => {
-        this.onChange({
-            // the camelcase on the keys is NOT a typo!
-            Color: this.state.color,
-            Value: this.state.value,
-        });
-    };
-
-    render() {
-        const { value, color } = this.state;
-        return (
-            <span>
-                <input
-                    value={value}
-                    onChange={val => this.onValueChange(val.target.value)}
-                    type="number"
-                />
-                <ColorPicker
-                    color={color}
-                    setColor={val => this.onColorChange(val)}
-                />
-            </span>
-        );
-    }
+    return (
+        <span>
+            <input
+                value={Value}
+                onChange={val => onValueChange(val.target.value)}
+                type="number"
+            />
+            <ColorPicker
+                color={Color}
+                setColor={val => onColorChange(val)}
+            />
+        </span>
+    );
 };

@@ -66,7 +66,6 @@ const SettingsDialog = ({
         numbercolorpicker: item => (
             <NumberColorPicker
                 value={item.value}
-                color={item.color}
                 onChange={val => onItemChange(item.id, val)}
             />
         ),
