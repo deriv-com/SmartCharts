@@ -193,6 +193,7 @@ export default class CategoricalDisplayStore {
     @action.bound setFilterText(filterText) {
         this.filterText = filterText;
         setTimeout(() => {
+            this.scroll.update();
             this.updateScrollSpy();
         }, 0);
     }
