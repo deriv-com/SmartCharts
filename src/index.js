@@ -37,10 +37,10 @@ class SmartChart extends React.Component {
     }
 
     render() {
-        const {children} = this.props;
+        const {children, isMobile} = this.props;
         return (
             <MobxProvider store={this.mainStore}>
-                <Chart lang="en">
+                <Chart lang="en" isMobile={isMobile}>
                     {children}
                 </Chart>
             </MobxProvider>

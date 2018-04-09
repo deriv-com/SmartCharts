@@ -296,10 +296,6 @@ class ChartStore {
 
     setIsMobile(status) {
         this.isMobile = status;
-
-        if (this.isMobile && this.rootNode) {
-            this.rootNode.setAttribute('class', 'smartcharts-mobile');
-        }
     }
 
     processSymbols(symbols) {
