@@ -264,7 +264,6 @@ export default class CategoricalDisplayStore {
         layout.favorites[this.favoritesId] = toJS(this.favoritesCategory.data)
             .filter(favItem => favItem)
             .map( favItem => typeof favItem === 'string' ? favItem : favItem.itemId);
-
         this.mainStore.chart.saveLayout();
     }
 
