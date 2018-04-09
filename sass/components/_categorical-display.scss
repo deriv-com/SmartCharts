@@ -6,10 +6,8 @@
     border-radius: 3px;
     background-color: $DEFAULT-menu-bg;
     color: $DEFAULT-text-medium;
-    opacity: 0;
     transition: opacity 1s;
     overflow: hidden;
-    height: 0px;
     @include box-shadow (0px, 2px, 4px, rgba(0, 0, 0, .2));
     .cq-lookup-filters {
         width: 40%;
