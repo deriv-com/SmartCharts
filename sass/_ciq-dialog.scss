@@ -10,9 +10,12 @@
     opacity: 0;
     margin-top: 120px;
     box-shadow: 0 0 0.625em 0.025em rgba(0, 0, 0, 0.14);
-    transition: margin-top 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-    	opacity 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    visibility: hidden;
+    transition: visibility 0.1s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0s,
+        margin-top 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.1s,
+    	opacity 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.1s;
     &.open{
+        visibility: visible;
     	margin-top: 0px;
         opacity: 1;
         z-index: 3;
