@@ -7,6 +7,7 @@ export default class SettingsDialogStore {
     @observable items = []; // [{id: '', title: '', value: ''}]
     @observable title = '';
     @observable stared = false;
+    @observable isFavoritable = true;
     @observable description = '';
 
     @observable activeTab = 'settings'; // 'settings' | 'description'
@@ -16,6 +17,7 @@ export default class SettingsDialogStore {
         this.getContext = getContext;
         this.onDeleted = onDeleted;
         this.onStared = onStared;
+        this.isFavoritable = onStared !== undefined;
         this.onChanged = onChanged;
 
         this.dialog = new DialogStore({ getContext });
@@ -69,6 +71,7 @@ export default class SettingsDialogStore {
             showTabs: this.showTabs,
             stared: this.stared,
             setOpen: this.setOpen,
+            isFavoritable: this.isFavoritable,
             onTabClick: this.onTabClick,
             onDeleteClick: this.onDeleteClick,
             onStarClick: this.onStarClick,

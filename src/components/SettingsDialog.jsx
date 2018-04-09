@@ -17,6 +17,7 @@ const SettingsDialog = ({
     onStarClick,
     onResetClick,
     onItemChange,
+    isFavoritable,
     Dialog,
 }) => {
     const renderMap = {
@@ -80,10 +81,11 @@ const SettingsDialog = ({
                         onClick={onDeleteClick}
                         className="margin"
                     />
+                    { isFavoritable &&
                     <StarIcon
                         onClick={onStarClick}
                         className={`margin ${stared ? 'ciq-active-favorite' : ''}`}
-                    />
+                    />}
                 </div>
             </div>
 

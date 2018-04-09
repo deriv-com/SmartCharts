@@ -16,7 +16,6 @@ export default class DrawToolsStore {
         this.settingsDialog = new SettingsDialogStore({
             getContext: () => this.mainStore.chart.context,
             onDeleted: this.onDeleted,
-            onStared: this.onStared,
             onChanged: this.onChanged,
         });
 
@@ -141,11 +140,6 @@ export default class DrawToolsStore {
         }
         this.activeDrawing.highlighted = false;
         this.activeDrawing.adjust();
-    }
-
-    @action.bound onStared(value) {
-        console.warn('onStared not implemented yet.');
-        // TODO: implement favorites.
     }
 
     @action.bound onDeleted() {
