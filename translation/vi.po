@@ -10,52 +10,52 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Vietnamese\n"
 "Language: vi_VN\n"
-"PO-Revision-Date: 2018-03-30 04:42-0400\n"
+"PO-Revision-Date: 2018-04-09 05:33-0400\n"
 
 msgid "Favorites"
-msgstr ""
+msgstr "Yêu thích"
 
 msgid "There are no favorites yet."
-msgstr ""
+msgstr "Không có mục yêu thích nào."
 
 msgid "PRICE"
-msgstr ""
+msgstr "GIÁ"
 
 msgid "OPEN"
-msgstr ""
+msgstr "MỞ"
 
 msgid "CLOSE"
-msgstr ""
+msgstr "ĐÓNG"
 
 msgid "HIGH"
-msgstr ""
+msgstr "CAO"
 
 msgid "LOW"
-msgstr ""
+msgstr "THẤP"
 
 msgid "Chart types"
-msgstr ""
+msgstr "Loại biểu đồ"
 
 msgid "Toggle Asset Information"
-msgstr ""
+msgstr "Bật/Tắt thông tin tài sản"
 
 msgid "Studies"
-msgstr ""
+msgstr "Nghiên cứu"
 
 msgid "Comparison"
-msgstr ""
+msgstr "So sánh"
 
 msgid "Templates"
-msgstr ""
+msgstr "Mẫu"
 
 msgid "Template name"
-msgstr ""
+msgstr "Tên mẫu"
 
 msgid "There is no template added by you."
-msgstr ""
+msgstr "Không có bản mẫu được thêm vào bởi bạn."
 
 msgid "Click + icon to add one."
-msgstr ""
+msgstr "Nhấp vào biểu tượng + để thêm một."
 
 msgid "Crosshair"
 msgstr ""
@@ -64,55 +64,55 @@ msgid "Time period"
 msgstr ""
 
 msgid "Tick"
-msgstr ""
+msgstr "Giây"
 
 msgid "Minute"
-msgstr ""
+msgstr "Phút"
 
 msgid "Hour"
-msgstr ""
+msgstr "Giờ"
 
 msgid "Day"
-msgstr ""
+msgstr "Ngày"
 
 msgid "Zoom out"
-msgstr ""
+msgstr "Thu nhỏ"
 
 msgid "Zoom in"
-msgstr ""
+msgstr "Phóng to"
 
 msgid "Draw tools"
-msgstr ""
+msgstr "Công cụ vẽ"
 
 msgid "Clear All"
-msgstr ""
+msgstr "Xóa tất cả"
 
 msgid "Measure"
-msgstr ""
+msgstr "Đo"
 
 msgid "Share"
-msgstr ""
+msgstr "Chia sẻ"
 
 msgid "Share / Download Chart"
-msgstr ""
+msgstr "Chia sẻ / tải về biểu đồ"
 
 msgid "Share link"
-msgstr ""
+msgstr "Chia sẻ liên kết"
 
 msgid "Download chart"
-msgstr ""
+msgstr "Tải về biểu đồ"
 
 msgid "RESET"
-msgstr ""
+msgstr "THIẾT LẬP LẠI"
 
 msgid "DONE"
-msgstr ""
+msgstr "HOÀN THÀNH"
 
 msgid "right-click to delete"
-msgstr ""
+msgstr "nhấp chuột phải để xóa"
 
 msgid "right-click to manage"
-msgstr ""
+msgstr "nhấp chuột phải để quản lý"
 
 msgid "Line"
 msgstr ""
@@ -127,40 +127,40 @@ msgid "Spline"
 msgstr ""
 
 msgid "Baseline"
-msgstr ""
+msgstr "Đường cơ sở"
 
 msgid "Candle"
-msgstr ""
+msgstr "Nến"
 
 msgid "OHLC"
-msgstr ""
+msgstr "OHLC"
 
 msgid "Hollow Candle"
-msgstr ""
+msgstr "Nến rỗng"
 
 msgid "\"Mass Index\" or \"Doji Star\""
 msgstr ""
 
 msgid "No description yet"
-msgstr ""
+msgstr "Chưa có mô tả nào"
 
 msgid "Indicators"
-msgstr ""
+msgstr "Chỉ số"
 
 msgid "Active"
-msgstr ""
+msgstr "Hoạt động"
 
 msgid "There are no active indicators yet."
-msgstr ""
+msgstr "Chưa có chỉ số hoạt động nào."
 
 msgid "\"AUD/JPY\" or \"Apple\""
-msgstr ""
+msgstr "\"AUD/JPY\" hoặc \"Apple\""
 
 msgid "There are no active comparisons yet."
-msgstr ""
+msgstr "Không có sự so sánh đang hoạt động nào."
 
 msgid "Annotation"
-msgstr ""
+msgstr "Chú thích"
 
 msgid "Average Line"
 msgstr ""
