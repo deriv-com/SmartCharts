@@ -31,7 +31,6 @@ cq-context {
 
 	@import "components/barrier";
 	@import "components/chart-types";
-	@import "components/chart-controls";
 	@import "components/chart-title";
 	@import "components/timeperiod";
 	@import "components/toggles";
@@ -42,6 +41,8 @@ cq-context {
 	@import "components/loader";
 	@import "ciq-perfect-scrollbar";
 }
+
+@import "components/chart-controls";
 
 /* --------------------------------------------------------- FIELDS, SELECTS, INPUTS --------------------------------------------------------- */
 

@@ -47,6 +47,7 @@ class ChartStore {
     @observable comparisonSymbols = [];
     @observable categorizedSymbols = [];
     @observable barrierJSX;
+    @observable isMobile;
 
     @action.bound setActiveSymbols(activeSymbols) {
         if (activeSymbols && this.context) {
@@ -290,6 +291,14 @@ class ChartStore {
             const srs = stx.chart.series[sybl];
             comp.price = srs.lastQuote ? srs.lastQuote.Close : undefined;
             i++;
+        }
+    }
+
+    setIsMobile(status) {
+        this.isMobile = status;
+
+        if (this.isMobile && this.rootNode) {
+            this.rootNode.setAttribute('class', 'smartcharts-mobile');
         }
     }
 
