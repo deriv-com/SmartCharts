@@ -36,7 +36,7 @@ class Chart extends Component {
     }
 
     render() {
-        const { DrawToolsSettingsDialog, StudySettingsDialog, children, lang } = this.props;
+        const { DrawToolsSettingsDialog, StudySettingsDialog, children, lang, isMobile } = this.props;
 
         t.setLanguage(lang);
         const array = React.Children.toArray(children);
@@ -44,7 +44,7 @@ class Chart extends Component {
         const insideSubHolder = array.filter(c => /(TradeStart)|(TradeEnd)/.test(c.type.displayName));
 
         return (
-            <cq-context ref={(root) => { this.root = root; }}>
+            <cq-context ref={(root) => { this.root = root; }} class={isMobile ? 'smartcharts-mobile' : ''}>
                 <div className="ciq-chart-area">
                     <div className="ciq-chart">
                         <RenderInsideChart at='holder'>

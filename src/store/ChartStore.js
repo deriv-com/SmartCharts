@@ -47,6 +47,7 @@ class ChartStore {
     @observable comparisonSymbols = [];
     @observable categorizedSymbols = [];
     @observable barrierJSX;
+    @observable isMobile;
 
     @action.bound setActiveSymbols(activeSymbols) {
         if (activeSymbols && this.context) {
@@ -291,6 +292,10 @@ class ChartStore {
             comp.price = srs.lastQuote ? srs.lastQuote.Close : undefined;
             i++;
         }
+    }
+
+    setIsMobile(status) {
+        this.isMobile = status;
     }
 
     processSymbols(symbols) {

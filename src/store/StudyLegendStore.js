@@ -115,7 +115,7 @@ export default class StudyLegendStore {
             if (par.defaultValue.constructor === Boolean) {
                 return {
                     ...shared,
-                    id: par.name + 'Enabled',
+                    id: `${par.name}Enabled`,
                     value: par.value,
                     defaultValue: par.defaultValue,
                     type: 'switch',
