@@ -192,6 +192,10 @@ class ChartStore {
 
         this.loader.show();
 
+        const studiesStore = this.mainStore.studies;
+        stxx.callbacks.studyOverlayEdit = study => studiesStore.editStudy(study);
+        stxx.callbacks.studyPanelEdit   = study => studiesStore.editStudy(study);
+
         this.restorePreferences();
         this.restoreLayout(stxx);
 
