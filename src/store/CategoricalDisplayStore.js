@@ -92,14 +92,14 @@ export default class CategoricalDisplayStore {
         // get first non-empty category
         let idx = i - 1;
         let id;
-        do {
+        while (idx >= 0) {
             id = this.filteredItems[idx].categoryId;
             if (this.categoryElements[id] !== null) {
                 break;
             }
             idx--;
-        } while (idx >= 0);
-        this.activeCategoryKey = id;
+        }
+        this.activeCategoryKey = id || this.filteredItems[0].categoryId;
     }
 
     init() {

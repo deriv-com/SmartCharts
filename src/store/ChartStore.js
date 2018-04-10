@@ -366,9 +366,8 @@ class ChartStore {
                     subcategory = getSubcategory(symbol);
                 }
                 const selected = symbol.symbol === this.currentActiveSymbol.symbol;
-                const enabled = selected ? false : symbol.exchange_is_open;
                 subcategory.data.push({
-                    enabled,
+                    enabled: true,
                     selected,
                     itemId: symbol.symbol,
                     display: symbol.name,

@@ -48,6 +48,7 @@ const CategoricalDisplay = ({
         <div
             className={`cq-item ${item.selected ? 'selected ' : ''}`}
             onClick={(e) => item.enabled && onSelectItem(item.dataObject, e)}
+            disabled={!item.enabled}
             key={k}
         >
             {renderLeft(item)}
