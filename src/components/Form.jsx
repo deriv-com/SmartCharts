@@ -124,7 +124,7 @@ export class ColorPicker extends React.Component {
         if(e.target !== this.titleRef) {
             this.setState({open: false});
         }
-    }
+    };
 
     componentDidMount() { document.addEventListener('click', this.close, false); }
     componentWillUnmount() { document.removeEventListener('click', this.close); }
@@ -223,6 +223,8 @@ export const NumberColorPicker = ({
     value,
     onChange,
 }) => {
+    // Do NOT rename the variables Value and Color! The keys are also
+    // used as attribute suffixes
     const { Value, Color } = value;
     const onValueChange = Value => onChange({ Color, Value });
     const onColorChange = Color => onChange({ Color, Value });
@@ -240,3 +242,47 @@ export const NumberColorPicker = ({
         </span>
     );
 };
+
+export class Toggle extends React.Component {
+    state = {};
+
+    componentWillMount() {
+        const { active } = this.props;
+        this.setState({
+            originalActive: active,
+            active,
+        });
+    }
+
+    componentWillReceiveProps(newProps) {
+        const { active } = newProps;
+        if (active !== this.state.originalActive) {
+            this.setState({
+                originalActive: active,
+                active,
+            }, this.fireOnChange);
+        }
+    }
+
+    fireOnChange = () => this.props.onChange(this.state.active);
+
+    flipToggle = () => {
+        this.setState({
+            active: !this.state.active
+        }, this.fireOnChange);
+    };
+
+    render() {
+        const { active } = this.state;
+        const { className, children } = this.props;
+        return (
+            <div
+                onClick={this.flipToggle}
+                className={`${className || ''} ${active ? 'active' : ''} icon-toggles ciq-toggles cq-menu-btn`}
+            >
+                {children}
+            </div>
+        );
+    }
+}
+

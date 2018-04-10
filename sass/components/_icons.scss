@@ -30,16 +30,16 @@
             stroke: #ffffff;
         }
     }
-    &.active {
-        box-shadow: inset 0 0 0 1px #4c5794;
-        background: #f2f3f8;
-    }
     &.margin {
         margin: 0 5px;
     }
     svg {
         position: relative;
     }
+}
+.active .ic-icon, .ic-icon.active {
+    box-shadow: inset 0 0 0 1px #4c5794;
+    background: #f2f3f8;
 }
 .tooltip {
     position: relative;
