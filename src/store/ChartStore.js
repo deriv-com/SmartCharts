@@ -147,6 +147,7 @@ class ChartStore {
     startUI() {
         const stxx = this.stxx;
         stxx.chart.allowScrollPast = false;
+        stxx.chart.allowScrollFuture = false;
         const context = new Context(stxx, this.rootNode);
 
         context.changeSymbol = (data) => {
