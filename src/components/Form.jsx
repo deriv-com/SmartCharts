@@ -243,46 +243,20 @@ export const NumberColorPicker = ({
     );
 };
 
-export class Toggle extends React.Component {
-    state = {};
-
-    componentWillMount() {
-        const { active } = this.props;
-        this.setState({
-            originalActive: active,
-            active,
-        });
-    }
-
-    componentWillReceiveProps(newProps) {
-        const { active } = newProps;
-        if (active !== this.state.originalActive) {
-            this.setState({
-                originalActive: active,
-                active,
-            }, this.fireOnChange);
-        }
-    }
-
-    fireOnChange = () => this.props.onChange(this.state.active);
-
-    flipToggle = () => {
-        this.setState({
-            active: !this.state.active
-        }, this.fireOnChange);
-    };
-
-    render() {
-        const { active } = this.state;
-        const { className, children } = this.props;
-        return (
-            <div
-                onClick={this.flipToggle}
-                className={`${className || ''} ${active ? 'active' : ''} cq-toggle`}
-            >
-                {children}
-            </div>
-        );
-    }
-}
+export const Toggle = ({
+    className,
+    children,
+    active,
+    onChange
+}) =>
+{
+    return (
+        <div
+            onClick={() => onChange(!active)}
+            className={`${className || ''} ${active ? 'active' : ''} cq-toggle`}
+        >
+            {children}
+        </div>
+    );
+};
 
