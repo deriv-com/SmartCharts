@@ -186,8 +186,32 @@
     }
 }
 
-.cq-numbercolorpicker {
+.cq-numbercolorpicker, .cq-fontsetting {
     display: inline-flex;
+}
+
+.cq-fontsetting {
+    .cq-text-icon {
+        margin-right: 5px;
+    }
+}
+
+.cq-text-icon {
+    justify-content: space-around;
+    align-items: center;
+    vertical-align: middle;
+    display: inline-flex;
+    font-family: serif;
+    font-size: 15px;
+}
+
+.cq-changefontsize {
+    width: 56px;
+    margin-right: 5px;
+}
+
+.cq-changefontfamily {
+    width: 138px;
 }
 
 .cq-toggle {
@@ -197,6 +221,7 @@
 }
 
 .cq-toggle.active > .ic-icon,
+.cq-toggle.active > .cq-text-icon,
 .ic-icon.active {
     box-shadow: inset 0 0 0 1px #4c5794;
     background: #f2f3f8;
