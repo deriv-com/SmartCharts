@@ -278,7 +278,7 @@ export class Toggle extends React.Component {
         return (
             <div
                 onClick={this.flipToggle}
-                className={`${className || ''} ${active ? 'active' : ''} icon-toggles ciq-toggles cq-menu-btn`}
+                className={`${className || ''} ${active ? 'active' : ''} cq-toggle`}
             >
                 {children}
             </div>
