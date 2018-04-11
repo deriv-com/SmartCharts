@@ -1,4 +1,7 @@
 
+msgid "CLOSED"
+msgstr ""
+
 msgid "Favorites"
 msgstr ""
 
@@ -128,9 +131,6 @@ msgstr ""
 msgid "\"Mass Index\" or \"Doji Star\""
 msgstr ""
 
-msgid "No description yet"
-msgstr ""
-
 msgid "Indicators"
 msgstr ""
 
@@ -168,6 +168,9 @@ msgid "Doodle"
 msgstr ""
 
 msgid "Ellipse"
+msgstr ""
+
+msgid "Fib Retracement"
 msgstr ""
 
 msgid "Fib Arc"
