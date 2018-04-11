@@ -71,14 +71,17 @@ cq-context {
                 height: auto;
                 margin-top: 1;
                 box-shadow: 0 0 0.625em 0.025em rgba(0, 0, 0, 0.14);
-                transition: bottom 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-                            opacity 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+                visibility: hidden;
+                transition: visibility 0.1s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0s,
+                        bottom 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.1s,
+                        opacity 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.1s;
                 .ciq-icon {
                     width: 16px;
                     height: 16px;
                     margin: 0 5px;
                 }
                 &.open{
+                    visibility: visible;
                     bottom: 3.6em;
                     opacity: 1;
                     z-index: 3;
