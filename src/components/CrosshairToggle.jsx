@@ -1,24 +1,24 @@
 import React, { Component } from 'react';
 import {connect} from '../store/Connect';
 import {CrosshairIcon} from './Icons.jsx';
+import {Toggle} from './Form.jsx';
 
 const CrosshairToggle = ({
     toggleCrosshair,
     crosshair,
 }) => (
-    <div
-        className="icon-toggles ciq-toggles cq-menu-btn"
+    <Toggle
+        active={crosshair}
+        onChange={toggleCrosshair}
     >
         <CrosshairIcon
-            onClick={toggleCrosshair}
-            className={crosshair ? 'active' : ''}
             tooltip-title={t.translate('Crosshair')} />
-    </div>
+    </Toggle>
 );
 
 export default connect(
     ({crosshair}) => ({
-        toggleCrosshair: () => crosshair.setCrosshair(!crosshair.crosshair),
+        toggleCrosshair: (active) => crosshair.setCrosshair(active),
         crosshair: crosshair.crosshair,
     })
 )(CrosshairToggle);

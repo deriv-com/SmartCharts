@@ -69,8 +69,7 @@ const SettingsDialog = ({
                 value={item.value}
                 onChange={val => onItemChange(item.id, val)}
             />
-        ),
-        none: () => null,
+        )
     };
     return (
         <Dialog className="cq-dialog cq-settings-dialog">
@@ -107,14 +106,11 @@ const SettingsDialog = ({
                 <React.Fragment>
                     <div className='items' >
                         {items
-                            .map(item => (
+                            .map(item => (renderMap[item.type] &&
                                 <div key={item.id} className='item'>
                                     <div className='title'>
                                         <span>{item.title}</span>
-                                        {renderMap[item.type] ?
-                                            renderMap[item.type](item)
-                                            : <strong>{item.type}</strong>
-                                        }
+                                        {renderMap[item.type](item)}
                                     </div>
                                 </div>
                             ))
