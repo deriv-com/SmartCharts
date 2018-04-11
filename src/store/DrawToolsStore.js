@@ -140,6 +140,7 @@ export default class DrawToolsStore {
         }
         this.activeDrawing.highlighted = false;
         this.activeDrawing.adjust();
+        this.mainStore.chart.saveDrawings();
     }
 
     @action.bound onDeleted() {
