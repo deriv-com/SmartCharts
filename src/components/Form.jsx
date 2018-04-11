@@ -230,7 +230,7 @@ export const NumberColorPicker = ({
     const onColorChange = Color => onChange({ Color, Value });
 
     return (
-        <span>
+        <span className="cq-numbercolorpicker">
             <NumericInput
                 value={Value}
                 onChange={val => onValueChange(val)}
