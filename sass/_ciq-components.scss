@@ -1933,4 +1933,15 @@ cq-language-name {
 
 
 /* -------------------------- custom styles -------------------------------------*/
+
+.cq-chart-unavailable {
+	position: absolute;
+	text-align: center;
+	width: 100%;
+	top: 50%;
+	z-index: 1;
+	font-size: 17px;
+	color: #878787;
+}
+
 // TODO: Check if chartiq theme has a builtin solution.
