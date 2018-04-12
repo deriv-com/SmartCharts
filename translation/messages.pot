@@ -104,6 +104,9 @@ msgstr ""
 msgid "right-click to manage"
 msgstr ""
 
+msgid "[symbol] market is presently closed."
+msgstr ""
+
 msgid "Line"
 msgstr ""
 

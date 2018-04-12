@@ -64,9 +64,8 @@ class Feed {
             const quotes = candles ? Feed.formatCandles(candles) : Feed.formatHistory(history);
 
             if(stream.isMarketClosed) {
-                const message = '[1] market is presently closed.';
                 this._mainStore.notification.addWarning(
-                    message.replace('[1]', symbol)
+                    t.translate('[symbol] market is presently closed.', { symbol })
                 );
             }
 
