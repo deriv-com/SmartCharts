@@ -10,7 +10,10 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Vietnamese\n"
 "Language: vi_VN\n"
-"PO-Revision-Date: 2018-04-09 05:33-0400\n"
+"PO-Revision-Date: 2018-04-11 22:21-0400\n"
+
+msgid "CLOSED"
+msgstr ""
 
 msgid "Favorites"
 msgstr "Yêu thích"
@@ -141,9 +144,6 @@ msgstr "Nến rỗng"
 msgid "\"Mass Index\" or \"Doji Star\""
 msgstr ""
 
-msgid "No description yet"
-msgstr "Chưa có mô tả nào"
-
 msgid "Indicators"
 msgstr "Chỉ số"
 
@@ -181,6 +181,9 @@ msgid "Doodle"
 msgstr ""
 
 msgid "Ellipse"
+msgstr ""
+
+msgid "Fib Retracement"
 msgstr ""
 
 msgid "Fib Arc"
