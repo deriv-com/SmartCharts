@@ -10,7 +10,10 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Portuguese\n"
 "Language: pt_PT\n"
-"PO-Revision-Date: 2018-03-30 05:21-0400\n"
+"PO-Revision-Date: 2018-04-11 22:21-0400\n"
+
+msgid "CLOSED"
+msgstr ""
 
 msgid "Favorites"
 msgstr ""
@@ -141,9 +144,6 @@ msgstr ""
 msgid "\"Mass Index\" or \"Doji Star\""
 msgstr ""
 
-msgid "No description yet"
-msgstr ""
-
 msgid "Indicators"
 msgstr ""
 
@@ -181,6 +181,9 @@ msgid "Doodle"
 msgstr ""
 
 msgid "Ellipse"
+msgstr ""
+
+msgid "Fib Retracement"
 msgstr ""
 
 msgid "Fib Arc"
