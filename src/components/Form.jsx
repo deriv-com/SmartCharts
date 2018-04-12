@@ -40,10 +40,10 @@ export class DropDown extends React.Component {
     componentWillUnmount() { document.removeEventListener('click', this.close); }
 
     render() {
-        const { rows, children, title, onRowClick } = this.props;
+        const { rows, children, title, onRowClick, className } = this.props;
         const { open } = this.state;
         return (
-            <div className='cq-dropdown'>
+            <div className={`${className || ''} cq-dropdown`}>
                 <div
                     className={`title ${open ? 'active' : ''}`}
                     onClick={this.onClick}
@@ -66,7 +66,7 @@ export class DropDown extends React.Component {
             </div>
         );
     }
-};
+}
 
 export class Pattern extends React.Component {
     patterns = [
@@ -81,7 +81,7 @@ export class Pattern extends React.Component {
         {width: 5, pattern: 'dashed'},
         {width: 0, pattern: 'none'},
     ];
-    render()  {
+    render() {
         const { pattern, lineWidth, onChange } = this.props;
         const title = pattern !== 'none' ?
             <span className={`option ${pattern}-${lineWidth}`}></span> :
@@ -94,8 +94,8 @@ export class Pattern extends React.Component {
                 onRowClick={onChange}
             >
                 {p => p.pattern !== 'none' ?
-                        <span className={`option ${p.pattern}-${p.width}`}></span> :
-                        <span className='none'>None</span>
+                    <span className={`option ${p.pattern}-${p.width}`}></span> :
+                    <span className='none'>None</span>
                 }
             </DropDown>
         );
@@ -158,7 +158,7 @@ export class ColorPicker extends React.Component {
         );
     }
 
-};
+}
 
 export const Switch = ({
     value,
@@ -230,7 +230,7 @@ export const NumberColorPicker = ({
     const onColorChange = Color => onChange({ Color, Value });
 
     return (
-        <span>
+        <span className="cq-numbercolorpicker">
             <NumericInput
                 value={Value}
                 onChange={val => onValueChange(val)}
@@ -243,46 +243,74 @@ export const NumberColorPicker = ({
     );
 };
 
-export class Toggle extends React.Component {
-    state = {};
+export const Toggle = ({
+    className,
+    children,
+    active,
+    onChange
+}) =>
+{
+    return (
+        <div
+            onClick={() => onChange(!active)}
+            className={`${className || ''} ${active ? 'active' : ''} cq-toggle`}
+        >
+            {children}
+        </div>
+    );
+};
 
-    componentWillMount() {
-        const { active } = this.props;
-        this.setState({
-            originalActive: active,
-            active,
-        });
-    }
+export const FontSetting = ({
+    onChange,
+    value,
+}) => {
+    const families = [
+        'Default',
+        'Helvetica',
+        'Courier',
+        'Garamond',
+        'Palatino',
+        'Times New Roman',
+    ];
+    const fontSizes = [8, 10, 12, 13, 14, 16, 20, 28, 36, 48, 64];
 
-    componentWillReceiveProps(newProps) {
-        const { active } = newProps;
-        if (active !== this.state.originalActive) {
-            this.setState({
-                originalActive: active,
-                active,
-            }, this.fireOnChange);
-        }
-    }
+    const fireChange = change => onChange({ ...value, ...change });
+    const onFontFamilyChange = family => fireChange({ family });
+    const onFontSizeChange = size => fireChange({ size: `${size}px` });
+    const onBoldChange = isBold => fireChange({ weight: isBold ? 'bold' : undefined });
+    const onItalicChange = isItalic => fireChange({ style: isItalic ? 'italic' : undefined });
+    const {family, style, weight, size } = value;
 
-    fireOnChange = () => this.props.onChange(this.state.active);
-
-    flipToggle = () => {
-        this.setState({
-            active: !this.state.active
-        }, this.fireOnChange);
-    };
-
-    render() {
-        const { active } = this.state;
-        const { className, children } = this.props;
-        return (
-            <div
-                onClick={this.flipToggle}
-                className={`${className || ''} ${active ? 'active' : ''} cq-toggle`}
+    return (
+        <span className="cq-fontsetting">
+            <Toggle
+                onChange={onBoldChange}
+                active={!!weight}
             >
-                {children}
-            </div>
-        );
-    }
-}
-
+                <div className="cq-text-icon"><b>B</b></div>
+            </Toggle>
+            <Toggle
+                active={!!style}
+                onChange={onItalicChange}
+            >
+                <div className="cq-text-icon"><i>i</i></div>
+            </Toggle>
+            <DropDown
+                className='cq-changefontsize'
+                rows={fontSizes}
+                title={size || '13px'}
+                onRowClick={onFontSizeChange}
+            >
+                {p => <span className={`option`}>{p}</span>}
+            </DropDown>
+            <DropDown
+                className='cq-changefontfamily'
+                rows={families}
+                title={family || families[0]}
+                onRowClick={onFontFamilyChange}
+            >
+                {p => <span className={`option`}>{p}</span>}
+            </DropDown>
+        </span>
+    );
+};

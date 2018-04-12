@@ -93,9 +93,9 @@ class ChartStore {
         });
     }
 
-    saveDrawings(target) {
-        const obj = target.stx.exportDrawings();
-        const symbol = target.symbol;
+    saveDrawings() {
+        const obj = this.stxx.exportDrawings();
+        const symbol = this.stxx.chart.symbol;
         if (obj.length === 0) {
             CIQ.localStorage.removeItem(symbol);
         } else {

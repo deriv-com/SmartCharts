@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from '../store/Connect';
-import { Switch, ColorPicker, Slider, Pattern, DropDown, NumberColorPicker } from './Form.jsx';
+import { Switch, ColorPicker, Slider, Pattern, DropDown, NumberColorPicker, FontSetting } from './Form.jsx';
 import { DeleteIcon, StarIcon } from './Icons.jsx';
 import '../../sass/_ciq-settings-dialog.scss';
 
@@ -69,7 +69,13 @@ const SettingsDialog = ({
                 value={item.value}
                 onChange={val => onItemChange(item.id, val)}
             />
-        )
+        ),
+        font: item => (
+            <FontSetting
+                value={item.value}
+                onChange={val => onItemChange(item.id, val)}
+            />
+        ),
     };
     return (
         <Dialog className="cq-dialog cq-settings-dialog">
