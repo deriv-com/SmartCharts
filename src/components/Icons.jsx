@@ -23,10 +23,8 @@ import Spline from '../../sass/icons/chart settings/chart types/spline/ic-spline
 import Star from '../../sass/icons/favorite/ic-favorite-normal.svg';
 import Template from '../../sass/icons/chart settings/chart template/ic-charttemplate-normal.svg';
 import Tick from '../../sass/icons/tick/ic-tick.svg';
-import Warning from '../../sass/icons/alert message/warning.svg';
 import Active from '../../sass/icons/sidebar/active/ic-active-normal.svg';
 import Commodities from '../../sass/icons/sidebar/commodities/ic-commodities-normal.svg';
-import Favorite from '../../sass/icons/favorite/ic-favorite-normal.svg';
 import FavoriteCategory from '../../sass/icons/sidebar/favorite/ic-favorite-normal.svg';
 import Forex from '../../sass/icons/sidebar/forex/ic-forex-normal.svg';
 import Indices from '../../sass/icons/sidebar/indices/ic-indices-normal.svg';
@@ -38,6 +36,11 @@ import IndicatorCategory from '../../sass/icons/sidebar/indicator/ic-indicator-n
 import Arrow from '../../sass/icons/dropdown/ic-dropdown.svg';
 import Copy from '../../sass/icons/share/ic-copy.svg';
 import Share from '../../sass/icons/share/ic-share.svg';
+
+import Warning from '../../sass/icons/alert message/warning.svg';
+import Error from '../../sass/icons/alert message/error.svg';
+import Success from '../../sass/icons/alert message/success.svg';
+import Info from '../../sass/icons/alert message/info.svg';
 
 import SymbolPlaceholder from '../../sass/icons/placeholder/ic-placeholder.svg';
 import AUD from '../../sass/icons/flags/aud.svg';
@@ -166,14 +169,20 @@ export const SplineIcon = Wrapper(Spline);
 export const StarIcon = Wrapper(Star);
 export const TemplateIcon = Wrapper(Template);
 export const TickIcon = Wrapper(Tick);
-export const WarningIcon = Wrapper(Warning);
 export const SearchIcon = Wrapper(Search);
 export const EditIcon = Wrapper(Edit);
 export const ArrowIcon = Wrapper(Arrow);
-export const FavoriteIcon = Wrapper(Favorite);
+export const FavoriteIcon = Wrapper(Star);
 export const CopyIcon = Wrapper(Copy);
 export const ShareIcon = Wrapper(Share);
 export const MetalIcon = Wrapper(Metal);
+
+export const alertIconMap = {
+    info:    Wrapper(Info),
+    success: Wrapper(Success),
+    warning: Wrapper(Warning),
+    error:   Wrapper(Error),
+};
 
 export const SymbolPlaceholderIcon = Wrapper(SymbolPlaceholder);
 

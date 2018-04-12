@@ -107,6 +107,9 @@ msgstr ""
 msgid "[symbol] market is presently closed."
 msgstr ""
 
+msgid "Streaming for [symbol] is not available due to license restrictions"
+msgstr ""
+
 msgid "Line"
 msgstr ""
 

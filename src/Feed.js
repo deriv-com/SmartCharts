@@ -1,3 +1,5 @@
+import NotificationStore from './store/NotificationStore';
+
 class Feed {
     constructor(streamManager, cxx, mainStore) {
         this._cxx = cxx;
@@ -12,8 +14,10 @@ class Feed {
     // Do not call explicitly! Method below is called by ChartIQ when unsubscribing symbols.
     unsubscribe(symObj) {
         const key = this._getStreamKey(symObj);
-        this._streams[key].forget();
-        delete this._streams[key];
+        if (this._streams[key]) {
+            this._streams[key].forget();
+            delete this._streams[key];
+        }
     }
 
     _getStreamKey({ symbol, period, interval }) {
@@ -64,17 +68,27 @@ class Feed {
             const quotes = candles ? Feed.formatCandles(candles) : Feed.formatHistory(history);
 
             if(stream.isMarketClosed) {
-                this._mainStore.notification.addWarning(
+                this._mainStore.notification.notify(
                     t.translate('[symbol] market is presently closed.', { symbol })
                 );
             }
 
             callback({ quotes });
+            this._mainStore.chart.streamingNotAllowed = false;
         } catch (err) {
             this._streams[key].forget();
             delete this._streams[key];
-            console.error(err); // eslint-disable-line
-            callback({ error: err });
+            if (err.response && err.response.error.code === 'StreamingNotAllowed'){
+                this._mainStore.chart.streamingNotAllowed = true;
+                this._mainStore.notification.notify(
+                    t.translate('Streaming for [symbol] is not available due to license restrictions', { symbol }),
+                    NotificationStore.TYPE_ERROR
+                );
+                callback({ quotes: [] });
+            } else {
+                console.error(err);
+                callback({ error: err });
+            }
         }
     }
 

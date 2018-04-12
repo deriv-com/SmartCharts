@@ -44,6 +44,7 @@ class ChartStore {
     id = null;
     @observable context = null;
     @observable currentActiveSymbol = defaultSymbol;
+    @observable streamingNotAllowed = false;
     @observable comparisonSymbols = [];
     @observable categorizedSymbols = [];
     @observable barrierJSX;

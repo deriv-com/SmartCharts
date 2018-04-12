@@ -17,14 +17,15 @@ export default class ChartTitleStore {
         });
     }
 
-    @observable todayChange;
-    @observable todayChangePercentage;
+    @observable todayChange = 0;
+    @observable todayChangePercentage = 0;
     @observable isPriceUp = false;
     @observable isVisible = false;
 
     get context() { return this.mainStore.chart.context; }
     @computed get currentSymbol() { return this.mainStore.chart.currentActiveSymbol; }
     @computed get decimalPlaces() { return this.mainStore.chart.currentActiveSymbol.decimal_places; }
+    @computed get isShowChartPrice() { return !this.mainStore.chart.streamingNotAllowed; }
 
     @action.bound onSelectItem(symbolObject) {
         this.context.changeSymbol(symbolObject);
@@ -32,11 +33,9 @@ export default class ChartTitleStore {
     }
 
     onContextReady = () => {
-        this.context.stx.append('createDataSet', () => {
-            this.update();
-        });
+        this.context.stx.append('createDataSet', this.update.bind(this));
         this.update();
-    }
+    };
 
     update() {
         const stx = this.context.stx;
@@ -44,6 +43,7 @@ export default class ChartTitleStore {
         const previousClose = currentQuote ? currentQuote.iqPrevClose : undefined;
 
         const hasData = (stx.chart.dataSet && stx.chart.dataSet.length) > 0;
+        this.isVisible = hasData || !this.isShowChartPrice;
         if (!hasData) {return;}
 
         let internationalizer = stx.internationalizer;
@@ -82,6 +82,5 @@ export default class ChartTitleStore {
         } else if (todaysChangePct < 0) {
             this.isPriceUp = false;
         }
-        this.isVisible = hasData;
     }
 }

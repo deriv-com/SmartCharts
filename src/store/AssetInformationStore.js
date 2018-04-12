@@ -19,7 +19,7 @@ export default class AssetInformationStore {
         this.visible = this.stx.layout.assetInformation || true;
         this.stx.prepend('headsUpHR', this.update);
         this.stx.prepend('createXAxis', this.update);
-    }
+    };
 
     @action.bound update() {
         const stx = this.context.stx;
