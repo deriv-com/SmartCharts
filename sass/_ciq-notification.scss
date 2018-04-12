@@ -28,7 +28,7 @@
     .notification {
         position: relative;
         margin-top: 4px;
-        height: 32px;;
+        height: 32px;
         animation: cq-slide-down .3s;
         border-radius: 3px;
         display: flex;
@@ -40,16 +40,16 @@
             background: #FFF8E2;
         }
         &.success {
-            border-color: green;
-            background: lightgreen;
+            border-color: #008006;
+            background: #CCEEA1;
         }
         &.info {
-            border-color: blue;
-            background: lightblue;
+            border-color: #009AFA;
+            background: #E0F2FE;
         }
         &.error {
-            border-color: red;
-            background: pink;
+            border-color: #FF3D38;
+            background: #FFEAEE;
         }
         &.hide {
             animation: cq-slide-up .3s forwards;
