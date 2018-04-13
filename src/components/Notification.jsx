@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {connect} from '../store/Connect';
-import { WarningIcon, CloseIcon, } from '../components/Icons.jsx';
+import { alertIconMap, CloseIcon, } from '../components/Icons.jsx';
 import '../../sass/_ciq-notification.scss';
 
 const Notification = ({
@@ -8,19 +8,22 @@ const Notification = ({
     remove,
 }) => (
     <div className='cq-notifications'>
-        {messages.map(({text, type, hide}, inx) => (
-            <div
-                key={text}
-                className={`notification ${type} ${hide ? 'hide' : ''}`}
-            >
-                <WarningIcon />
-                <div className='text'> {text} </div>
-                <CloseIcon
-                    className='close-icon'
-                    onClick={() => remove(inx)}
-                />
-            </div>
-        ))}
+        {messages.map(({text, type, hide}, inx) => {
+            const AlertIcon = alertIconMap[type];
+            return (
+                <div
+                    key={text}
+                    className={`notification ${type} ${hide ? 'hide' : ''}`}
+                >
+                    <AlertIcon />
+                    <div className='text'> {text} </div>
+                    <CloseIcon
+                        className='close-icon'
+                        onClick={() => remove(inx)}
+                    />
+                </div>
+            );
+        })}
     </div>
 );
 

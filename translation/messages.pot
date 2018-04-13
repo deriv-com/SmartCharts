@@ -8,6 +8,9 @@ msgstr ""
 msgid "There are no favorites yet."
 msgstr ""
 
+msgid "Chart data is not available for this symbol."
+msgstr ""
+
 msgid "PRICE"
 msgstr ""
 
@@ -102,6 +105,12 @@ msgid "right-click to delete"
 msgstr ""
 
 msgid "right-click to manage"
+msgstr ""
+
+msgid "[symbol] market is presently closed."
+msgstr ""
+
+msgid "Streaming for [symbol] is not available due to license restrictions"
 msgstr ""
 
 msgid "Line"
