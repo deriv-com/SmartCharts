@@ -25,7 +25,7 @@ export default class ChartTitleStore {
     get context() { return this.mainStore.chart.context; }
     @computed get currentSymbol() { return this.mainStore.chart.currentActiveSymbol; }
     @computed get decimalPlaces() { return this.mainStore.chart.currentActiveSymbol.decimal_places; }
-    @computed get isShowChartPrice() { return !this.mainStore.chart.streamingNotAllowed; }
+    @computed get isShowChartPrice() { return this.mainStore.chart.isChartAvailable; }
 
     @action.bound onSelectItem(symbolObject) {
         this.context.changeSymbol(symbolObject);

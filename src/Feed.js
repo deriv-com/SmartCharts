@@ -74,12 +74,12 @@ class Feed {
             }
 
             callback({ quotes });
-            this._mainStore.chart.streamingNotAllowed = false;
+            this._mainStore.chart.isChartAvailable = true;
         } catch (err) {
             this._streams[key].forget();
             delete this._streams[key];
             if (err.response && err.response.error.code === 'StreamingNotAllowed'){
-                this._mainStore.chart.streamingNotAllowed = true;
+                this._mainStore.chart.isChartAvailable = false;
                 this._mainStore.notification.notify(
                     t.translate('Streaming for [symbol] is not available due to license restrictions', { symbol }),
                     NotificationStore.TYPE_ERROR
