@@ -24,7 +24,7 @@ const CategoricalDisplay = ({
     favoritesId,
     favoritesMap,
     dialogTitle,
-    CloseMenu
+    closeMenu
 }) => {
     /**
      * On mobile mode, this part appear on the top of dialog
@@ -167,7 +167,7 @@ const CategoricalDisplay = ({
                 </div>
             </div>
             <div className="cq-categorical-footer">
-                <button onClick={()=> CloseMenu() }
+                <button onClick={()=> closeMenu() }
                     className="btn-categorical-display-close">
                     {t.translate("Close")}
                 </button>

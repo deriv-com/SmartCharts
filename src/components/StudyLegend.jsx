@@ -27,7 +27,7 @@ class StudyLegend extends Component {
                 <Menu.Body>
                     <StudyCategoricalDisplay 
                         dialogTitle={t.translate("Studies")}
-                        CloseMenu={ () => onCloseMenu() }
+                        closeMenu={ () => onCloseMenu() }
                         />
                 </Menu.Body>
             </Menu>

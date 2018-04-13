@@ -23,7 +23,7 @@ const Comparison = ({
             <Menu.Body>
                 <CategoricalDisplay 
                     dialogTitle={t.translate("Comparison")}
-                    CloseMenu={ () => onCloseMenu() }
+                    closeMenu={ () => onCloseMenu() }
                      />
             </Menu.Body>
         </Menu>

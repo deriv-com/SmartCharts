@@ -39,7 +39,7 @@ export default class CategoricalDisplayStore {
         }
     }
     /* isMobile: fill form the ChartStore */
-    @observable isMobile = false;
+    @computed isMobile = false;
     @observable filterText = '';
     @observable placeholderText = '';
     @observable activeCategoryKey = '';
