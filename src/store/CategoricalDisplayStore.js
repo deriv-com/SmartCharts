@@ -38,8 +38,6 @@ export default class CategoricalDisplayStore {
             when(() => this.context, this.initFavorites.bind(this));
         }
     }
-    /* isMobile: fill form the ChartStore */
-    @computed isMobile = false;
     @observable filterText = '';
     @observable placeholderText = '';
     @observable activeCategoryKey = '';
@@ -104,10 +102,6 @@ export default class CategoricalDisplayStore {
     }
 
     init() {
-        if (this.mainStore) {
-            this.isMobile = this.mainStore.chart.isMobile;
-        }
-
         this.isInit = true;
         this.scroll = new PerfectScrollbar(this.scrollPanel);
 
@@ -124,6 +118,15 @@ export default class CategoricalDisplayStore {
             }
         }
     }
+
+    /* isMobile: fill form the ChartStore */
+    @computed get isMobile(){
+        if (this.mainStore) {
+            return this.mainStore.chart.isMobile;
+        }
+        return false;
+    }
+
 
     @computed get filteredItems() {
         let filteredItems = toJS(this.getCategoricalItems());
