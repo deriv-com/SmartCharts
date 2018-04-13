@@ -1,235 +1,311 @@
-.cq-categorical-display {
-    width: 44em;
-    padding: 0 !important;
-    display: flex;
-    text-align: left;
-    border-radius: 3px;
-    background-color: $DEFAULT-menu-bg;
-    color: $DEFAULT-text-medium;
-    transition: opacity 1s;
-    overflow: hidden;
-    @include box-shadow (0px, 2px, 4px, rgba(0, 0, 0, .2));
-    .cq-lookup-filters {
-        width: 40%;
-        border-right: 1px solid #e9e9ed;
-    }
-    .cq-lookup-input  {
-        margin: 1.5em 1.1em 1.6em 1.3em;
-        border-radius: 4px;
-        border: solid 1px #e9e9ed;
-        position: relative;
-        &.active{
-            @include box-shadow (0px, 0, 2px, #4c5794);
-            border-color: #4c5794;
-            > .icon-reset{
-                right: 2px;
-                opacity: 1;
-            }
-        }
-        > input {
-            padding-left: 34px;
-            line-height: 2.6em;
-            font-size: 1em;
-            border: none;
-            outline: 0;
-            width: calc(100% - 40px);
-            border-radius: 4px;
-            @include placeholder {
-                color: #dfdfdf;
-            }
-        }
-        > .ic-icon {
-            position: absolute;
-            top: 5px;
-            left: 5px;
-        }
-        > .icon-reset{
-            right: -2px;
-            opacity: 0;
-            position: absolute;
-            left: auto;
-            transition: right,opacity 0.2s ease-in-out;
-
-        }
-        > input:focus + .ic-icon svg path {
-            fill: $active-color;
-        }
-    }
-    .category {
-        padding-top: 2em;
-        &:last-child {
-            padding-bottom: 2.5em;
-        }
-    }
-    .category-title {
-        color: #333333;
-    }
-    .category-content {
-        margin: 0.4em 1em 0em 1em;
-        border: 1px solid #e9e9ed;
-        border-radius: 3px;
-        background-color: white;
-    }
-    .subcategory {
-        font-weight: 500;
-        padding: 0.5em 0 0.5em 1.2em;
-        font-size: 1.1em;
-        color: black;
-    }
-    .category-title {
-        display: block;
-        font-size: 1.4em;
-        font-weight: 500;
-        padding: 0.1em 0.7em;
-    }
-    .cq-filter {
-        padding-left: 1.6em;
-        line-height: 3.4em;
+cq-context{
+    .cq-categorical-display {
+        width: 44em;
+        padding: 0 !important;
+        display: flex;
         text-align: left;
-        cursor: pointer;
-        box-sizing: border-box;
-        transition: background-color 0.3s;
-        &.cq-active-filter {
-            font-weight: 800;
-            color: #4C5794;
-            border-right: 2px solid $active-color;
-            background-color: #f2f3f8;
-            .ic-icon {
-                &.ic-active,
-                &.ic-forex,
-                &.ic-commodities,
-                &.ic-volidx,
-                &.ic-favorite {
-                    svg > g > circle { fill: $active-color; }
+        border-radius: 3px;
+        background-color: $DEFAULT-menu-bg;
+        color: $DEFAULT-text-medium;
+        transition: opacity 1s;
+        overflow: hidden;
+        @include box-shadow (0px, 2px, 4px, rgba(0, 0, 0, .2));
+        .cq-lookup-filters {
+            width: 40%;
+            border-right: 1px solid #e9e9ed;
+        }
+        .cq-lookup-input  {
+            margin: 1.5em 1.1em 1.6em 1.3em;
+            border-radius: 4px;
+            border: solid 1px #e9e9ed;
+            position: relative;
+            &.active{
+                @include box-shadow (0px, 0, 2px, #4c5794);
+                border-color: #4c5794;
+                > .icon-reset{
+                    right: 2px;
+                    opacity: 1;
                 }
-                &.ic-indicators > svg > g circle {
-                    fill: $active-color;
+            }
+            > input {
+                padding-left: 34px;
+                line-height: 2.6em;
+                font-size: 1em;
+                border: none;
+                outline: 0;
+                width: calc(100% - 40px);
+                border-radius: 4px;
+                @include placeholder {
+                    color: #dfdfdf;
                 }
-                &.ic-stocks > svg > path:first-child {
-                    fill: $active-color;
-                }
-                &.ic-indices {
-                    svg > g > g {
-                        > path   { fill: $active-color;   }
-                        > g > circle { stroke: $active-color; }
+            }
+            > .ic-icon {
+                position: absolute;
+                top: 5px;
+                left: 5px;
+            }
+            > .icon-reset{
+                right: -2px;
+                opacity: 0;
+                position: absolute;
+                left: auto;
+                transition: right,opacity 0.2s ease-in-out;
+
+            }
+            > input:focus + .ic-icon svg path {
+                fill: $active-color;
+            }
+        }
+        .category {
+            padding-top: 2em;
+            &:last-child {
+                padding-bottom: 2.5em;
+            }
+        }
+        .category-title {
+            color: #333333;
+        }
+        .category-content {
+            margin: 0.4em 1em 0em 1em;
+            border: 1px solid #e9e9ed;
+            border-radius: 3px;
+            background-color: white;
+        }
+        .subcategory {
+            font-weight: 500;
+            padding: 0.5em 0 0.5em 1.2em;
+            font-size: 1.1em;
+            color: black;
+        }
+        .category-title {
+            display: block;
+            font-size: 1.4em;
+            font-weight: 500;
+            padding: 0.1em 0.7em;
+        }
+        .cq-filter {
+            padding-left: 1.6em;
+            line-height: 3.4em;
+            text-align: left;
+            cursor: pointer;
+            box-sizing: border-box;
+            transition: background-color 0.3s;
+            &.cq-active-filter {
+                font-weight: 800;
+                color: #4C5794;
+                border-right: 2px solid $active-color;
+                background-color: #f2f3f8;
+                .ic-icon {
+                    &.ic-active,
+                    &.ic-forex,
+                    &.ic-commodities,
+                    &.ic-volidx,
+                    &.ic-favorite {
+                        svg > g > circle { fill: $active-color; }
+                    }
+                    &.ic-indicators > svg > g circle {
+                        fill: $active-color;
+                    }
+                    &.ic-stocks > svg > path:first-child {
+                        fill: $active-color;
+                    }
+                    &.ic-indices {
+                        svg > g > g {
+                            > path   { fill: $active-color;   }
+                            > g > circle { stroke: $active-color; }
+                        }
                     }
                 }
             }
-        }
-        .ic-icon {
-            display: inline-flex;
-            vertical-align: middle;
-            width: 16px;
-            height: 16px;
-            margin-bottom: 2px;
-            margin-right: 1.3em;
-        }
-    }
-    .cq-item, .cq-active-item {
-        padding-left: 20px;
-        padding-right: 20px;
-        display: flex;
-        border-bottom: 1px solid #e9e9ed;
-        height: 40px;
-        align-items: center;
-        justify-content: space-between;
-        line-height: initial;
-        &:last-child{
-            border-bottom: none;
-        }
-        .left, .right {
-            display: flex;
-            align-items: center;
-        }
-        .closed-market{
-            border: 1px solid #f44336;
-            color: #f44336;
-            border-radius: 3px;
-            padding: 2px 6px;
-            object-fit: contain;
-            font-size: 0.64em;
-        }
-    }
-    .cq-item {
-        cursor: pointer;
-     }
-    .cq-item[disabled] {
-        cursor: default;
-        &:not(.selected) {
-            color: #c5c5c5 !important;
-        }
-        &.selected {
-            background-color: #f2f3f8;
-        }
-    }
-    .cq-scroll-panel {
-        position: relative;
-        height: 500px;
-        width: 60%;
-        background-color: #f4f4f6
-    }
-    .ciq-item-display {
-        display: inline-block;
-        vertical-align: top;
-    }
-    .empty-category {
-        padding: 0.2em 1.2em;
-    }
+            .ic-icon {
+                display: inline-flex;
+                vertical-align: middle;
+                width: 16px;
+                height: 16px;
+                margin-bottom: 2px;
+                margin-right: 1.3em;
+            }
+            .cq-filter-text{
 
-
-}
-
-.stxMenuActive .cq-categorical-display {
-    opacity: 1;
-    height: auto;
-}
-
-/* Active Symbol Icons */
-.cq-categorical-display .results-panel {
-    /* Active Options */
-    .cq-active-options {
-        float: right;
-        display: inline-flex;
-        > span, .ic-icon {
-            height:24px;
-            width: 24px;
-        }
-
-        .ic-delete, .ic-edit {
-            cursor: pointer;
-        }
-        .ic-cmp-color > span {
-            display: inline-block;
-            width: 13px;
-            border-radius: 15px;
-            height: 2px;
-            vertical-align: bottom;
-            left: 6px;
-            position: relative;
-        }
-    }
-    .ciq-favorite {
-        float: right;
-        > .ic-icon {
-            margin-right: 0;
-            width: $normal-icon-size;
-            height: $normal-icon-size;
-        }
-    }
-
-    .left {
-        > .ic-icon, > .ic-frx {
-            height: $large-icon-size;
-            width: $large-icon-size;
-        }
-        > .ic-icon {
-            display: inline-block;
-            > svg {
-                vertical-align: sub;
             }
         }
-        > .ciq-item-display {
-            margin-left: 15px;
+        .cq-item, .cq-active-item {
+            padding-left: 20px;
+            padding-right: 20px;
+            display: flex;
+            border-bottom: 1px solid #e9e9ed;
+            height: 40px;
+            align-items: center;
+            justify-content: space-between;
+            line-height: initial;
+            &:last-child{
+                border-bottom: none;
+            }
+            .left, .right {
+                display: flex;
+                align-items: center;
+            }
+            .closed-market{
+                border: 1px solid #f44336;
+                color: #f44336;
+                border-radius: 3px;
+                padding: 2px 6px;
+                object-fit: contain;
+                font-size: 0.64em;
+            }
+        }
+        .cq-item {
+            cursor: pointer;
+         }
+        .cq-item[disabled] {
+            cursor: default;
+            &:not(.selected) {
+                color: #c5c5c5 !important;
+            }
+            &.selected {
+                background-color: #f2f3f8;
+            }
+        }
+        .cq-scroll-panel {
+            position: relative;
+            height: 500px;
+            width: 60%;
+            background-color: #f4f4f6
+        }
+        .ciq-item-display {
+            display: inline-block;
+            vertical-align: top;
+        }
+        .empty-category {
+            padding: 0.2em 1.2em;
+        }
+        .cq-categorical-footer{
+            width: 100%;
+            height: 3em;
+            display: none;
+            .btn-categorical-display-close{
+                border:none;
+                background: transparent;
+                color: #4c5794;
+                font-weight: bold;
+                padding: 0.78em 1em;
+                width: 100%;
+                box-shadow: none;
+                cursor: pointer;
+            }
+        }
+    }
+
+    .stxMenuActive .cq-categorical-display {
+        opacity: 1;
+        height: auto;
+    }
+
+    /* Active Symbol Icons */
+    .cq-categorical-display .results-panel {
+        /* Active Options */
+        .cq-active-options {
+            float: right;
+            display: inline-flex;
+            > span, .ic-icon {
+                height:24px;
+                width: 24px;
+            }
+
+            .ic-delete, .ic-edit {
+                cursor: pointer;
+            }
+            .ic-cmp-color > span {
+                display: inline-block;
+                width: 13px;
+                border-radius: 15px;
+                height: 2px;
+                vertical-align: bottom;
+                left: 6px;
+                position: relative;
+            }
+        }
+        .ciq-favorite {
+            float: right;
+            > .ic-icon {
+                margin-right: 0;
+                width: $normal-icon-size;
+                height: $normal-icon-size;
+            }
+        }
+
+        .left {
+            > .ic-icon, > .ic-frx {
+                height: $large-icon-size;
+                width: $large-icon-size;
+            }
+            > .ic-icon {
+                display: inline-block;
+                > svg {
+                    vertical-align: sub;
+                }
+            }
+            > .ciq-item-display {
+                margin-left: 15px;
+            }
+        }
+    }
+
+    &.smartcharts-mobile{
+        .cq-mobile-title{
+            background: #fff;
+            .mobile-title{
+                display: block;
+                font-size: 16px;
+                line-height: 40px;
+                font-weight: 400;
+                padding: 0 .7em;
+                color: #000;
+            }
+            .icon-close-menu{
+                position: absolute;
+                top: 4px;
+                right: 8px;
+            }
+        }
+        .cq-categorical-display{
+            flex-direction: column;
+            width: 100%;
+            .cq-lookup-filters {
+                width: 100%;
+                border-right: none;
+                height: 7.8em;
+                border-bottom: 1px solid #e9e9ed;
+            }
+            .cq-lookup-input  {
+                margin: 1.2em 1em 0.5em 1em;
+                border-radius: 4px;
+                border: solid 1px #e9e9ed;
+                position: relative;
+            }
+            .cq-scroll-panel{
+                width: 100%;
+                height: calc( 100vh - 7.8em );
+            }
+            .cq-filter-panel{
+                display: flex;
+                justify-content: space-around;
+                .cq-filter {
+                    border:none;
+                    background: transparent;
+                    padding: 0px 20px;
+                    line-height: 3em;
+                    > .ic-icon{
+                        margin: 0px;
+                    }
+                    &.cq-active-filter{
+                        border-bottom: 2px solid #4c5794;
+                    }
+                    .cq-filter-text{
+                        display: none;
+                    }
+                }
+            }
         }
     }
 }

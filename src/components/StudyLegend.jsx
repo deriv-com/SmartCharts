@@ -11,7 +11,7 @@ class StudyLegend extends Component {
     }
 
     render() {
-        const {isOpened, setOpen, clearStudies, activeStudies, Menu, menuOpen, StudyCategoricalDisplay} = this.props;
+        const {isOpened, setOpen, clearStudies, activeStudies, Menu, menuOpen, StudyCategoricalDisplay, onCloseMenu} = this.props;
 
         return (
             <Menu
@@ -25,7 +25,10 @@ class StudyLegend extends Component {
                         tooltip-title={t.translate("Studies")} />
                 </Menu.Title>
                 <Menu.Body>
-                    <StudyCategoricalDisplay />
+                    <StudyCategoricalDisplay 
+                        dialogTitle={t.translate("Studies")}
+                        CloseMenu={ () => onCloseMenu() }
+                        />
                 </Menu.Body>
             </Menu>
         );
@@ -42,5 +45,6 @@ export default connect(
         Menu: studies.menu.connect(Menu),
         menuOpen: studies.menu.open,
         StudyCategoricalDisplay: studies.categoricalDisplay.connect(CategoricalDisplay),
+        onCloseMenu: studies.menu.onTitleClick,
     })
 )(StudyLegend);

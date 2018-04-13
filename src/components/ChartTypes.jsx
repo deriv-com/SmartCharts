@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {connect} from '../store/Connect';
 import Menu from './Menu.jsx';
 import List from './List.jsx';
+import { CloseIcon } from './Icons.jsx';
 import {Switch} from './Form.jsx';
 
 const ChartTypes = ({
@@ -13,6 +14,8 @@ const ChartTypes = ({
     TypeList,
     assetInformation,
     setAssetInformation,
+    CloseMenu,
+    isMobile
 }) => (
     <Menu
         className="ciq-menu ciq-display collapse ciq-chart-types"
@@ -24,7 +27,10 @@ const ChartTypes = ({
                     tooltip-title={t.translate("Chart types")} />
             </div>
         </Menu.Title>
-        <Menu.Body>
+        <Menu.Body> 
+            {isMobile ? <div className="cq-mobile-title">
+                <div className="mobile-title">{t.translate("Chart types")}</div>
+            </div> : '' }
             <div className='ciq-toggle-asset-information'>
                 <div>{t.translate('Toggle Asset Information')}</div>
                 <Switch
@@ -55,5 +61,7 @@ export default connect(
         menuOpen: chartType.menu.open,
         Menu: chartType.menu.connect(Menu),
         TypeList: chartType.list.connect(List),
+        CloseMenu: chartType.menu.onTitleClick,
+        isMobile: chartType.mainStore.chart.isMobile,
     })
 )(ChartTypes);

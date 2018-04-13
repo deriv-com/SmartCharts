@@ -36,7 +36,7 @@ class Chart extends Component {
     }
 
     render() {
-        const { DrawToolsSettingsDialog, StudySettingsDialog, children, lang, isMobile, isChartAvailable } = this.props;
+        const { DrawToolsSettingsDialog, StudySettingsDialog, children, lang, isMobile } = this.props;
 
         t.setLanguage(lang);
         const array = React.Children.toArray(children);
@@ -55,19 +55,15 @@ class Chart extends Component {
                         </RenderInsideChart>
                         <RenderInsideChart>
                             <div className="cq-top-ui-widgets">
-                                <ChartTitle />
                                 <AssetInformation />
                                 <ComparisonList />
                             </div>
                         </RenderInsideChart>
+                        <ChartTitle />
                         <ChartControls />
                         <Crosshair />
                         <div className="chartContainer primary"> </div>
                         <Loader />
-                        {!isChartAvailable &&
-                        <div className="cq-chart-unavailable">
-                            {t.translate('Chart data is not available for this symbol.')}
-                        </div>}
                     </div>
                 </div>
                 <DrawToolsSettingsDialog />
@@ -84,6 +80,5 @@ export default connect(
         init: chart.init,
         StudySettingsDialog : studies.settingsDialog.connect(SettingsDialog),
         DrawToolsSettingsDialog : drawTools.settingsDialog.connect(SettingsDialog),
-        isChartAvailable: chart.isChartAvailable,
     })
 )(Chart);

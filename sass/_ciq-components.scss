@@ -30,16 +30,16 @@ cq-context {
 	}
 
 	@import "components/barrier";
-	@import "components/chart-types";
 	@import "components/timeperiod";
-	@import "components/categorical-display";
 	@import "components/chart-size";
 	@import "components/comparison-list";
-	@import "components/view";
 	@import "components/loader";
 	@import "ciq-perfect-scrollbar";
 }
 
+@import "components/categorical-display";
+@import "components/view";
+@import "components/chart-types";
 @import "components/chart-title";
 @import "components/chart-controls";
 
@@ -558,7 +558,6 @@ cq-lookup-input {
 
 .ciq-dropdowns,
 .ciq-menu {
-	display:inline-block;
 	@include box-sizing(border-box);
 }
 
@@ -568,7 +567,6 @@ cq-lookup-input {
 	right:0px;
 }
 .ciq-dropdowns {float:left;}
-.ciq-menu {position:relative;}
 
 .break-sm .ciq-menu {
   position: inherit;
