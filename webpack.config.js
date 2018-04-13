@@ -128,7 +128,7 @@ if (production) {
         'process.env': {
             NODE_ENV: JSON.stringify('production'),
         },
-    }),);
+    }));
 }
 
 if (process.env.ANALYZE_BUNDLE) {

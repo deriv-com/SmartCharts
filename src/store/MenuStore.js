@@ -31,7 +31,9 @@ export default class MenuStore {
     }
 
     @action.bound onTitleClick(e) {
-        e.stopPropagation();
+        if (e) {
+            e.stopPropagation();
+        }
         this.setOpen(!this.open);
     }
 

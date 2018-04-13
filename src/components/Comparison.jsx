@@ -8,6 +8,7 @@ const Comparison = ({
     CategoricalDisplay,
     Menu,
     menuOpen,
+    onCloseMenu,
     isMobile
 }) => {
     return (
@@ -20,7 +21,10 @@ const Comparison = ({
                     tooltip-title={t.translate("Comparison")} />
             </Menu.Title>
             <Menu.Body>
-                {isMobile?<CategoricalDisplay />:<CategoricalDisplay />}
+                <CategoricalDisplay 
+                    dialogTitle={t.translate("Comparison")}
+                    closeMenu={ () => onCloseMenu() }
+                     />
             </Menu.Body>
         </Menu>
     );
@@ -31,6 +35,7 @@ export default connect(
         CategoricalDisplay: c.categoricalDisplay.connect(CategoricalDisplay),
         Menu: c.menu.connect(Menu),
         menuOpen: c.menu.open,
+        onCloseMenu: c.menu.onTitleClick,
         isMobile: c.mainStore.chart.isMobile,
     })
 )(Comparison);

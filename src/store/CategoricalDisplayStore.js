@@ -38,7 +38,6 @@ export default class CategoricalDisplayStore {
             when(() => this.context, this.initFavorites.bind(this));
         }
     }
-
     @observable filterText = '';
     @observable placeholderText = '';
     @observable activeCategoryKey = '';
@@ -119,6 +118,15 @@ export default class CategoricalDisplayStore {
             }
         }
     }
+
+    /* isMobile: fill form the ChartStore */
+    @computed get isMobile(){
+        if (this.mainStore) {
+            return this.mainStore.chart.isMobile;
+        }
+        return false;
+    }
+
 
     @computed get filteredItems() {
         let filteredItems = toJS(this.getCategoricalItems());
@@ -205,6 +213,7 @@ export default class CategoricalDisplayStore {
 
     @action.bound handleFilterClick(category) {
         const el = this.categoryElements[category.categoryId];
+
         if (el) {
             // TODO: Scroll animation
             this.pauseScrollSpy = true;
@@ -285,6 +294,7 @@ export default class CategoricalDisplayStore {
     }
 
     connect = connect(() => ({
+        isMobile: this.isMobile,
         filterText: this.filterText,
         setFilterText: this.setFilterText,
         clearFilterText: this.clearFilterText,
@@ -303,5 +313,6 @@ export default class CategoricalDisplayStore {
         onFavoritedItem: this.onFavoritedItem,
         favoritesMap: this.favoritesMap,
         favoritesId: this.favoritesId,
+        CloseUpperMenu: this.CloseUpperMenu,
     }))
 }

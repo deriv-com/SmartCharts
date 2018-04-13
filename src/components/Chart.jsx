@@ -55,17 +55,17 @@ class Chart extends Component {
                         </RenderInsideChart>
                         <RenderInsideChart>
                             <div className="cq-top-ui-widgets">
-                                <ChartTitle />
                                 <AssetInformation />
                                 <ComparisonList />
                             </div>
                         </RenderInsideChart>
+                        <ChartTitle />
                         <ChartControls />
                         <Crosshair />
                         <div className="chartContainer primary"> </div>
                         <Loader />
                         {!isChartAvailable &&
-                        <div className="cq-chart-unavailable">
+                            <div className="cq-chart-unavailable">
                             {t.translate('Chart data is not available for this symbol.')}
                         </div>}
                     </div>
