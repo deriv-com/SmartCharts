@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Vietnamese\n"
 "Language: vi_VN\n"
-"PO-Revision-Date: 2018-04-11 22:21-0400\n"
+"PO-Revision-Date: 2018-04-12 22:01-0400\n"
 
 msgid "CLOSED"
 msgstr ""
@@ -20,6 +20,9 @@ msgstr "Yêu thích"
 
 msgid "There are no favorites yet."
 msgstr "Không có mục yêu thích nào."
+
+msgid "Chart data is not available for this symbol."
+msgstr ""
 
 msgid "PRICE"
 msgstr "GIÁ"
@@ -116,6 +119,12 @@ msgstr "nhấp chuột phải để xóa"
 
 msgid "right-click to manage"
 msgstr "nhấp chuột phải để quản lý"
+
+msgid "[symbol] market is presently closed."
+msgstr ""
+
+msgid "Streaming for [symbol] is not available due to license restrictions"
+msgstr ""
 
 msgid "Line"
 msgstr ""
