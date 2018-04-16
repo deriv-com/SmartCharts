@@ -7,7 +7,9 @@ import { ComparisonIcon } from './Icons.jsx';
 const Comparison = ({
     CategoricalDisplay,
     Menu,
-    menuOpen
+    menuOpen,
+    onCloseMenu,
+    isMobile
 }) => {
     return (
         <Menu
@@ -19,7 +21,10 @@ const Comparison = ({
                     tooltip-title={t.translate("Comparison")} />
             </Menu.Title>
             <Menu.Body>
-                <CategoricalDisplay />
+                <CategoricalDisplay 
+                    dialogTitle={t.translate("Comparison")}
+                    closeMenu={ () => onCloseMenu() }
+                     />
             </Menu.Body>
         </Menu>
     );
@@ -30,5 +35,7 @@ export default connect(
         CategoricalDisplay: c.categoricalDisplay.connect(CategoricalDisplay),
         Menu: c.menu.connect(Menu),
         menuOpen: c.menu.open,
+        onCloseMenu: c.menu.onTitleClick,
+        isMobile: c.mainStore.chart.isMobile,
     })
 )(Comparison);

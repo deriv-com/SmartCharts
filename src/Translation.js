@@ -1,32 +1,22 @@
-// import de from "../translation/de.po";
-// import es from "../translation/es.po";
-// import fr from "../translation/fr.po";
-// import id from "../translation/id.po";
-// import it from "../translation/it.po";
-// import ja from "../translation/ja.po";
-// import pl from "../translation/pl.po";
-// import pt from "../translation/pt.po";
-// import ru from "../translation/ru.po";
-// import th from "../translation/th.po";
-// import vi from "../translation/vi.po";
-// import zh_cn from "../translation/zh_cn.po";
-// import zh_tw from "../translation/zh_tw.po";
+import de from "../translation/de.po";
+import fr from "../translation/fr.po";
+import id from "../translation/id.po";
+import it from "../translation/it.po";
+import ja from "../translation/ja.po";
+import nl from "../translation/nl.po";
+import pl from "../translation/pl.po";
+import pt from "../translation/pt.po";
+import ru from "../translation/ru.po";
+import th from "../translation/th.po";
+import vi from "../translation/vi.po";
+import zh_cn from "../translation/zh_cn.po";
+import zh_tw from "../translation/zh_tw.po";
 
 const lang_map = {
     en: {}, // default
-    // de: de,
-    // es: es,
-    // fr: fr,
-    // id: id,
-    // it: it,
-    // ja: ja,
-    // pl: pl,
-    // pt: pt,
-    // ru: ru,
-    // th: th,
-    // vi: vi,
-    // zh_cn: zh_cn,
-    // zh_tw: zh_tw,
+    de, fr, id, it, ja,
+    nl, pl, pt, ru, th,
+    vi, zh_cn, zh_tw
 };
 
 export class Translation {
@@ -78,12 +68,12 @@ export class Translation {
     }
 
     replace(str, obj) {
-        if (!obj) return str;
+        if (!obj) {return str;}
 
         const prop = Object.keys(obj);
         while (prop.length) {
             const str_var = prop.shift();
-            str = str.replace('[' + str_var + ']', obj[str_var]);
+            str = str.replace(`[${str_var}]`, obj[str_var]);
         }
         return str;
     }

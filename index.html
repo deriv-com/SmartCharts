@@ -26,7 +26,6 @@
 
 <body>
     <div id="root"></div>
-    <script src="./chartiq/jquery.js"></script>
     <script src="./dist/chartiq.min.js"></script>
     <script src="./dist/react.js"></script>
     <script src="./dist/react-dom.js"></script>
@@ -41,7 +40,7 @@
         const TradeEndLine = smartcharts.TradeEndLine;
 
         const chart = ReactDOM.render(
-            e(SmartChart, null,
+            e(SmartChart, { isMobile: true},
                 /*e(Barrier, {
                     ref: function(r) { window.barrier = r; },
                     color: 'green',

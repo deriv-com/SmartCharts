@@ -103,7 +103,6 @@ const config = {
         ]),
     ],
     externals: {
-        jquery: 'jQuery',
         chartiq: 'CIQ',
         mobx: 'mobx',
         react: {
@@ -129,7 +128,7 @@ if (production) {
         'process.env': {
             NODE_ENV: JSON.stringify('production'),
         },
-    }),);
+    }));
 }
 
 if (process.env.ANALYZE_BUNDLE) {

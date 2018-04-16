@@ -7,6 +7,9 @@ import Context from '../components/ui/Context';
 import React from 'react';
 import {stableSort} from './utils';
 import BarrierStore from './BarrierStore';
+import KeystrokeHub from '../components/ui/KeystrokeHub';
+import '../components/ui/Animation';
+// import '../AddOns';
 
 const connectionManager = new ConnectionManager({
     appId: 1,
@@ -41,9 +44,11 @@ class ChartStore {
     id = null;
     @observable context = null;
     @observable currentActiveSymbol = defaultSymbol;
+    @observable isChartAvailable = true;
     @observable comparisonSymbols = [];
     @observable categorizedSymbols = [];
     @observable barrierJSX;
+    @observable isMobile;
 
     @action.bound setActiveSymbols(activeSymbols) {
         if (activeSymbols && this.context) {
@@ -89,12 +94,13 @@ class ChartStore {
         });
     }
 
-    saveDrawings(target) {
-        const obj = target.stx.exportDrawings();
+    saveDrawings() {
+        const obj = this.stxx.exportDrawings();
+        const symbol = this.stxx.chart.symbol;
         if (obj.length === 0) {
-            CIQ.localStorage.removeItem(obj.symbol);
+            CIQ.localStorage.removeItem(symbol);
         } else {
-            CIQ.localStorageSetItem(obj.symbol, JSON.stringify(obj));
+            CIQ.localStorageSetItem(symbol, JSON.stringify(obj));
         }
     }
     restoreDrawings(stx, symbol) {
@@ -142,6 +148,7 @@ class ChartStore {
     startUI() {
         const stxx = this.stxx;
         stxx.chart.allowScrollPast = false;
+        stxx.chart.allowScrollFuture = false;
         const context = new Context(stxx, this.rootNode);
 
         context.changeSymbol = (data) => {
@@ -167,8 +174,8 @@ class ChartStore {
             this.categorizedSymbols = this.categorizeActiveSymbols();
         };
 
-        new CIQ.UI.KeystrokeHub(document.querySelector('body'), context, {
-            cb: CIQ.UI.KeystrokeHub.defaultHotKeys,
+        new KeystrokeHub(document.querySelector('body'), context, {
+            cb: KeystrokeHub.defaultHotKeys,
         });
 
         const UIStorage = new CIQ.NameValueStore();
@@ -187,6 +194,10 @@ class ChartStore {
 
         this.loader.show();
 
+        const studiesStore = this.mainStore.studies;
+        stxx.callbacks.studyOverlayEdit = study => studiesStore.editStudy(study);
+        stxx.callbacks.studyPanelEdit = study => studiesStore.editStudy(study);
+
         this.restorePreferences();
         this.restoreLayout(stxx);
 
@@ -198,7 +209,6 @@ class ChartStore {
 
         this.context = context;
         this.contextPromise.resolve(context);
-        CIQ.UI.begin();
         stxx.setStyle('stx_line_chart', 'color', '#4DAFEE'); // TODO => why is not working in css?
 
         // Optionally set a language for the UI, after it has been initialized, and translate.
@@ -216,6 +226,12 @@ class ChartStore {
             },
             yTolerance: 999999, // disable vertical scrolling
         });
+        const deleteElement = stxx.chart.panel.holder.parentElement.querySelector('#mouseDeleteText');
+        const manageElement = stxx.chart.panel.holder.parentElement.querySelector('#mouseManageText');
+        deleteElement.textConent = t.translate("right-click to delete");
+        manageElement.textConent = t.translate("right-click to manage");
+
+
 
         // Animation (using tension requires splines.js)
         CIQ.Animation(stxx, { stayPut: true });
@@ -226,16 +242,16 @@ class ChartStore {
         });
 
         // Extended hours trading zones
-        new CIQ.ExtendedHours({
-            stx: stxx,
-            filter: true,
-        });
+        // new CIQ.ExtendedHours({
+        //     stx: stxx,
+        //     filter: true,
+        // });
 
         // Inactivity timer
-        new CIQ.InactivityTimer({
-            stx: stxx,
-            minutes: 30,
-        });
+        // new CIQ.InactivityTimer({
+        //     stx: stxx,
+        //     minutes: 30,
+        // });
 
         stxx.addEventListener('layout', this.saveLayout.bind(this));
         stxx.addEventListener('symbolChange', this.saveLayout.bind(this));
@@ -243,54 +259,54 @@ class ChartStore {
         // stxx.addEventListener('newChart', () => { });
         stxx.addEventListener('preferences', this.savePreferences.bind(this));
 
-        new CIQ.RangeSlider({ stx: stxx });
+        this.startUI();
+        this.resizeScreen();
 
-        const isWebComponentsSupported = ('registerElement' in document &&
-            'import' in document.createElement('link') &&
-            'content' in document.createElement('template'));
+        window.addEventListener('resize', this.resizeScreen.bind(this));
 
-        if (isWebComponentsSupported) {
-            this.startUI();
-            this.resizeScreen();
-        } else {
-            window.addEventListener('WebComponentsReady', () => {
-                this.startUI();
-                this.resizeScreen();
-            });
-        }
-
-        $(window).resize(this.resizeScreen.bind(this));
-
-        stxx.append('updateChartData', this.updateComparisons);
+        stxx.append('createDataSet', this.updateComparisons);
     }
 
-    updateComparisons = (...args) => {
-        /* createDataSet/updateChartData sends more than ten updates per tick.
-            This is to avoid that.
-            Happens only for line chart because of animation
-        */
-        if (args[2] && !args[2].firstLoop) {return;}
-
+    @action.bound updateComparisons(...args) {
         let stx = this.context.stx;
-        let q = stx.currentQuote();
-        const comparisons = [];
-        if (q) {
-            for (const s in stx.chart.series) {
-                const d = stx.chart.series[s];
-                const p = d.parameters;
-                const price = d.lastQuote ? d.lastQuote.Close : undefined;
+        const comparisonSymbolsKeys = Object.keys(stx.chart.series);
+        if (comparisonSymbolsKeys.length !== this.comparisonSymbols.length) {
+            const comparisons = [];
+            let q = stx.currentQuote();
+            if (q) {
+                for (const sybl of comparisonSymbolsKeys) {
+                    const srs = stx.chart.series[sybl];
+                    const prm = srs.parameters;
+                    const price = srs.lastQuote ? srs.lastQuote.Close : undefined;
 
-                comparisons.push({
-                    color: p.color,
-                    price,
-                    symbolObject: p.symbolObject,
-                });
+                    comparisons.push({
+                        color: prm.color,
+                        price,
+                        symbolObject: prm.symbolObject,
+                    });
+                }
             }
-        }
-        if (comparisons.length !== this.comparisonSymbols.length) {
             this.comparisonSymbols = comparisons;
+            return;
         }
-    };
+
+        // Update the comparison prices:
+        let i = 0;
+        for (const sybl of comparisonSymbolsKeys) {
+            const comp = this.comparisonSymbols[i];
+            const srs = stx.chart.series[sybl];
+            comp.price = srs.lastQuote ? srs.lastQuote.Close : undefined;
+            i++;
+        }
+    }
+
+    /**
+     * Store the Mobile mode from the chart option with pass to
+     * @param {bool} status if true, measn mobile mode is active
+     */
+    setIsMobile(status) {
+        this.isMobile = status;
+    }
 
     processSymbols(symbols) {
         let processedSymbols = [];
@@ -360,9 +376,8 @@ class ChartStore {
                     subcategory = getSubcategory(symbol);
                 }
                 const selected = symbol.symbol === this.currentActiveSymbol.symbol;
-                const enabled = selected ? false : symbol.exchange_is_open;
                 subcategory.data.push({
-                    enabled,
+                    enabled: true,
                     selected,
                     itemId: symbol.symbol,
                     display: symbol.name,

@@ -2,6 +2,8 @@ import { observable, action, computed, when } from 'mobx';
 import MenuStore from './MenuStore';
 import CategoricalDisplayStore from './CategoricalDisplayStore';
 import SettingsDialogStore from './SettingsDialogStore';
+// TODO:
+// import StudyInfo from '../study-info';
 
 export default class StudyLegendStore {
     constructor(mainStore) {
@@ -28,7 +30,6 @@ export default class StudyLegendStore {
             onStared: () => this.starStudy(this.helper),
             onChanged: items => this.updateStudy(this.helper.sd, items),
         });
-        window.sls = this;
     }
 
     get context() { return this.mainStore.chart.context; }
@@ -59,17 +60,17 @@ export default class StudyLegendStore {
 
     get categorizedStudies() {
         const data = [];
-        Object.keys(CIQ.Studies.studyLibrary).map(studyId => {
+        Object.keys(CIQ.Studies.studyLibrary).forEach(studyId => {
             const study = CIQ.Studies.studyLibrary[studyId];
             data.push({
                 enabled: true,
-                display: study.name,
+                display: t.translate(study.name),
                 dataObject: studyId,
                 itemId: studyId,
             });
         });
         const category = {
-            categoryName: 'Indicators',
+            categoryName: t.translate('Indicators'),
             categoryId: 'indicators',
             hasSubcategory: false,
             data
@@ -89,7 +90,7 @@ export default class StudyLegendStore {
         const attributes = helper.attributes;
         const inputs = helper.inputs.map(inp => ({
             id: inp.name,
-            title: inp.heading,
+            title: t.translate(inp.heading),
             value: inp.value,
             defaultValue: inp.defaultInput,
             type: inp.type === 'checkbox' ? 'switch' : inp.type,
@@ -99,27 +100,55 @@ export default class StudyLegendStore {
         }));
         const outputs = helper.outputs.map(out => ({
             id: out.name,
-            title: out.heading,
+            title: t.translate(out.heading),
             defaultValue: out.defaultOutput,
             value: out.color,
             type: 'colorpicker',
             category: 'outputs',
         }));
-        const parameters = helper.parameters.map(par => ({
-            id: par.name,
-            title: par.heading,
-            value: par.value,
-            defaultValue: par.defaultValue,
-            type: typeof par.defaultValue === 'boolean' ? 'switch' : 'number+colorpicker',
-            color: par.color,
-            ...attributes[par.name],
-            category: 'parameters',
-        }));
+        const parameters = helper.parameters.map(par => {
+            let shared = {
+                title: t.translate(par.heading),
+                ...attributes[par.name],
+                category: 'parameters',
+            };
+            if (par.defaultValue.constructor === Boolean) {
+                return {
+                    ...shared,
+                    id: `${par.name}Enabled`,
+                    value: par.value,
+                    defaultValue: par.defaultValue,
+                    type: 'switch',
+                };
+            } else if (par.defaultValue.constructor === Number) {
+                return {
+                    ...shared,
+                    id: par.name,
+                    type: 'numbercolorpicker',
+                    defaultValue: {
+                        Color: par.defaultColor,
+                        Value: par.defaultValue,
+                    },
+                    value: {
+                        Color: par.color,
+                        Value: par.value,
+                    },
+                };
+            }
+            throw 'Unrecognised parameter!';
+        });
 
         this.settingsDialog.items = [...inputs, ...outputs, ...parameters];
         this.settingsDialog.title = study.sd.name.toUpperCase();
-        this.settingsDialog.description = "No description yet";
+        // TODO:
+        // const description = StudyInfo[study.sd.type];
+        // this.settingsDialog.description = description || t.translate("No description yet");
+        this.settingsDialog.description = '';
+        this.settingsDialog.stared = !!this.categoricalDisplay.favoritesMap[helper.name];
         this.settingsDialog.setOpen(true);
+    }
+    @action.bound starStudy(study) {
+        this.categoricalDisplay.setFavoriteById(study.name);
     }
     @action.bound deleteStudy(study) {
         const sd = study.sd;
@@ -139,7 +168,13 @@ export default class StudyLegendStore {
         for(const {id, category, value} of items) {
             if(study[category][id] !== value) {
                 updates[category] = updates[category] || { };
-                updates[category][id] = value;
+                if (typeof value === 'object') {
+                    for (const suffix in value) {
+                        updates[category][`${id}${suffix}`] = value[suffix];
+                    }
+                } else {
+                    updates[category][id] = value;
+                }
             }
         }
         this.helper.updateStudy(updates);
