@@ -10,451 +10,451 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
-"PO-Revision-Date: 2018-04-12 22:01-0400\n"
+"PO-Revision-Date: 2018-04-16 07:54-0400\n"
 
 msgid "CLOSED"
-msgstr ""
+msgstr "ЗАКРЫТО"
 
 msgid "Favorites"
-msgstr ""
+msgstr "Избранное"
 
 msgid "There are no favorites yet."
-msgstr ""
+msgstr "Нет записей в избранном."
 
 msgid "Chart data is not available for this symbol."
-msgstr ""
+msgstr "График недоступен для данного актива."
 
 msgid "PRICE"
-msgstr ""
+msgstr "ЦЕНА"
 
 msgid "OPEN"
-msgstr ""
+msgstr "ОТКРЫТИЕ"
 
 msgid "CLOSE"
-msgstr ""
+msgstr "ЗАКРЫТИЕ"
 
 msgid "HIGH"
-msgstr ""
+msgstr "МАКС."
 
 msgid "LOW"
-msgstr ""
+msgstr "МИН."
 
 msgid "Chart types"
-msgstr ""
+msgstr "Вид графика"
 
 msgid "Toggle Asset Information"
 msgstr ""
 
 msgid "Studies"
-msgstr ""
+msgstr "Моделирование"
 
 msgid "Comparison"
-msgstr ""
+msgstr "Сравнение"
 
 msgid "Templates"
-msgstr ""
+msgstr "Шаблоны"
 
 msgid "Template name"
-msgstr ""
+msgstr "Название шаблона"
 
 msgid "There is no template added by you."
-msgstr ""
+msgstr "Вы ещё не добавили шаблоны."
 
 msgid "Click + icon to add one."
-msgstr ""
+msgstr "Для добавления нажмите на значок +."
 
 msgid "Crosshair"
-msgstr ""
+msgstr "Перекрестие"
 
 msgid "Time period"
-msgstr ""
+msgstr "Период"
 
 msgid "Tick"
-msgstr ""
+msgstr "Тик"
 
 msgid "Minute"
-msgstr ""
+msgstr "Мин."
 
 msgid "Hour"
-msgstr ""
+msgstr "Час."
 
 msgid "Day"
-msgstr ""
+msgstr "День"
 
 msgid "Zoom out"
-msgstr ""
+msgstr "Уменьшить"
 
 msgid "Zoom in"
-msgstr ""
+msgstr "Увеличить"
 
 msgid "Draw tools"
-msgstr ""
+msgstr "Ср-ва отображения"
 
 msgid "Clear All"
-msgstr ""
+msgstr "Очистить все"
 
 msgid "Measure"
-msgstr ""
+msgstr "Измерить"
 
 msgid "Share"
-msgstr ""
+msgstr "Поделиться"
 
 msgid "Share / Download Chart"
-msgstr ""
+msgstr "Поделиться / загрузить график"
 
 msgid "Share link"
-msgstr ""
+msgstr "Поделиться ссылкой"
 
 msgid "Download chart"
-msgstr ""
+msgstr "Загрузить график"
 
 msgid "RESET"
-msgstr ""
+msgstr "СБРОСИТЬ"
 
 msgid "DONE"
-msgstr ""
+msgstr "ГОТОВО"
 
 msgid "right-click to delete"
-msgstr ""
+msgstr "Щелкните правой кнопкой мыши чтобы удалить"
 
 msgid "right-click to manage"
-msgstr ""
+msgstr "Щелкните правой кнопкой мыши чтобы управлять"
 
 msgid "[symbol] market is presently closed."
-msgstr ""
+msgstr "Рынок [symbol] закрыт в данный момент."
 
 msgid "Streaming for [symbol] is not available due to license restrictions"
-msgstr ""
+msgstr "Потоковые котировки для [symbol] недоступны из-за лицензионных ограничений"
 
 msgid "Line"
-msgstr ""
+msgstr "Линия"
 
 msgid "Dot"
-msgstr ""
+msgstr "Точечный"
 
 msgid "Colored Dot"
-msgstr ""
+msgstr "Цветные точки"
 
 msgid "Spline"
-msgstr ""
+msgstr "Кривая"
 
 msgid "Baseline"
-msgstr ""
+msgstr "Основная линия"
 
 msgid "Candle"
-msgstr ""
+msgstr "Свеча"
 
 msgid "OHLC"
-msgstr ""
+msgstr "OHLC"
 
 msgid "Hollow Candle"
-msgstr ""
+msgstr "пустая свеча"
 
 msgid "\"Mass Index\" or \"Doji Star\""
-msgstr ""
+msgstr "\"Индекс массы\" или \"звезда дожи\""
 
 msgid "Indicators"
-msgstr ""
+msgstr "Индикаторы"
 
 msgid "Active"
-msgstr ""
+msgstr "Активные"
 
 msgid "There are no active indicators yet."
-msgstr ""
+msgstr "Нет активных индикаторов."
 
 msgid "\"AUD/JPY\" or \"Apple\""
-msgstr ""
+msgstr "\"AUD/JPY\" или \"Apple\""
 
 msgid "There are no active comparisons yet."
-msgstr ""
+msgstr "Нет активных сравнений."
 
 msgid "Annotation"
-msgstr ""
+msgstr "Примечание"
 
 msgid "Average Line"
-msgstr ""
+msgstr "Средняя линия"
 
 msgid "Callout"
-msgstr ""
+msgstr "Сноска"
 
 msgid "Channel"
-msgstr ""
+msgstr "Канал"
 
 msgid "Continuous"
-msgstr ""
+msgstr "Непрерывный"
 
 msgid "Crossline"
-msgstr ""
+msgstr "Линия пересечения"
 
 msgid "Doodle"
-msgstr ""
+msgstr "Произвольной формы"
 
 msgid "Ellipse"
-msgstr ""
+msgstr "Эллипс"
 
 msgid "Fib Retracement"
-msgstr ""
+msgstr "Корр. Фибоначчи"
 
 msgid "Fib Arc"
-msgstr ""
+msgstr "Дуга Фибоначчи"
 
 msgid "Fib Fan"
-msgstr ""
+msgstr "Веер Фибоначчи"
 
 msgid "Fib Time Zone"
-msgstr ""
+msgstr "Часовой пояс Фибоначчи"
 
 msgid "Gann Fan"
-msgstr ""
+msgstr "Веер Ганна"
 
 msgid "Gartley"
-msgstr ""
+msgstr "Гартли"
 
 msgid "Horizontal"
-msgstr ""
+msgstr "Горизонт."
 
 msgid "Pitchfork"
-msgstr ""
+msgstr "Вилка"
 
 msgid "Quadrant Lines"
-msgstr ""
+msgstr "Перпендикулярные линии"
 
 msgid "Ray"
-msgstr ""
+msgstr "Луч"
 
 msgid "Rectangle"
-msgstr ""
+msgstr "Прямоугольник"
 
 msgid "Regression Line"
-msgstr ""
+msgstr "Регресионная линия"
 
 msgid "Segment"
-msgstr ""
+msgstr "Сегмент"
 
 msgid "Shape - Arrow"
-msgstr ""
+msgstr "Фигура - Стрелка"
 
 msgid "Shape - Check"
-msgstr ""
+msgstr "Фигура - Галочка"
 
 msgid "Shape - Cross"
-msgstr ""
+msgstr "Фигура - Крест"
 
 msgid "Shape - Focus"
-msgstr ""
+msgstr "Фигура - Фокус"
 
 msgid "Shape - Heart"
-msgstr ""
+msgstr "Фигура - Сердце"
 
 msgid "Shape - Star"
-msgstr ""
+msgstr "Фигура - Звезда"
 
 msgid "Speed Resistance Arc"
-msgstr ""
+msgstr "Дуга сопротивления"
 
 msgid "Speed Resistance Line"
-msgstr ""
+msgstr "Линия сопротивления"
 
 msgid "Time Cycle"
-msgstr ""
+msgstr "Временной круг"
 
 msgid "Tirone Levels"
-msgstr ""
+msgstr "Уровни Тирона"
 
 msgid "Vertical"
-msgstr ""
+msgstr "Вертикаль"
 
 msgid "RSI"
-msgstr ""
+msgstr "RSI"
 
 msgid "Period"
-msgstr ""
+msgstr "Период"
 
 msgid "Show Zones"
-msgstr ""
+msgstr "Показать зоны"
 
 msgid "OverBought"
-msgstr ""
+msgstr "OverBought (перекупленность)"
 
 msgid "OverSold"
-msgstr ""
+msgstr "OverSold (перепроданность)"
 
 msgid "Moving Average"
-msgstr ""
+msgstr "Скользящее среднее"
 
 msgid "Field"
-msgstr ""
+msgstr "Поле"
 
 msgid "Type"
-msgstr ""
+msgstr "Тип"
 
 msgid "Offset"
-msgstr ""
+msgstr "Офсет"
 
 msgid "Underlay"
-msgstr ""
+msgstr "Под кривой"
 
 msgid "MA"
-msgstr ""
+msgstr "MA"
 
 msgid "MACD"
-msgstr ""
+msgstr "MACD"
 
 msgid "Fast MA Period"
-msgstr ""
+msgstr "Период быстрой скользящей средней"
 
 msgid "Slow MA Period"
-msgstr ""
+msgstr "Период медленной скользящей средней"
 
 msgid "Signal Period"
-msgstr ""
+msgstr "Период сигнала"
 
 msgid "Signal"
-msgstr ""
+msgstr "Сигнал"
 
 msgid "Increasing Bar"
-msgstr ""
+msgstr "Столбец роста"
 
 msgid "Decreasing Bar"
-msgstr ""
+msgstr "Столбец падения"
 
 msgid "Stochastics"
-msgstr ""
+msgstr "Стохастика"
 
 msgid "Smooth"
-msgstr ""
+msgstr "Плавный"
 
 msgid "Fast"
-msgstr ""
+msgstr "Быстрый"
 
 msgid "Slow"
-msgstr ""
+msgstr "Медленный"
 
 msgid "Aroon"
-msgstr ""
+msgstr "Арун"
 
 msgid "Aroon Up"
-msgstr ""
+msgstr "Арун (вверх)"
 
 msgid "Aroon Down"
-msgstr ""
+msgstr "Арун (вниз)"
 
 msgid "Aroon Oscillator"
-msgstr ""
+msgstr "Осциллятор Арун"
 
 msgid "Linear Reg R2"
-msgstr ""
+msgstr "R2 линейной регрессии"
 
 msgid "RSquared"
-msgstr ""
+msgstr "R-квадрат"
 
 msgid "Linear Reg Forecast"
-msgstr ""
+msgstr "Прогноз линейной регрессии"
 
 msgid "Forecast"
-msgstr ""
+msgstr "Прогноз"
 
 msgid "Linear Reg Intercept"
-msgstr ""
+msgstr "Отрезок линейной регрессии"
 
 msgid "Intercept"
-msgstr ""
+msgstr "Отрезок"
 
 msgid "Time Series Forecast"
-msgstr ""
+msgstr "Временной прогноз"
 
 msgid "Vertical Horizontal Filter"
-msgstr ""
+msgstr "Вертикальный/горизонтальный фильтр"
 
 msgid "Result"
-msgstr ""
+msgstr "Результат"
 
 msgid "TRIX"
-msgstr ""
+msgstr "TRIX"
 
 msgid "Standard Deviation"
-msgstr ""
+msgstr "Среднеквадратичное отклонение"
 
 msgid "Standard Deviations"
-msgstr ""
+msgstr "Среднеквадратичные отклонения"
 
 msgid "Moving Average Type"
-msgstr ""
+msgstr "Тип скользящего среднего"
 
 msgid "Trade Volume Index"
-msgstr ""
+msgstr "Индекс торгового объема"
 
 msgid "Min Tick Value"
-msgstr ""
+msgstr "Минимальное значение тика"
 
 msgid "Swing Index"
-msgstr ""
+msgstr "Индекс колебаний"
 
 msgid "Limit Move Value"
-msgstr ""
+msgstr "Значение сдвига лимита"
 
 msgid "Accumulative Swing Index"
-msgstr ""
+msgstr "Кумулятивный индекс колебаний"
 
 msgid "Price Rate of Change"
-msgstr ""
+msgstr "Скорость изменения цены"
 
 msgid "Volume Rate of Change"
-msgstr ""
+msgstr "Скорость изменения объема"
 
 msgid "Momentum Indicator"
-msgstr ""
+msgstr "Индикатор темпа"
 
 msgid "Price Volume Trend"
-msgstr ""
+msgstr "Тренд цены и объема"
 
 msgid "Positive Volume Index"
-msgstr ""
+msgstr "Индекс положительного объема"
 
 msgid "Index"
-msgstr ""
+msgstr "Индекс"
 
 msgid "Negative Volume Index"
-msgstr ""
+msgstr "Индекс отрицательного объема"
 
 msgid "On Balance Volume"
-msgstr ""
+msgstr "Балансовый объем"
 
 msgid "Stochastic Momentum Index"
-msgstr ""
+msgstr "Индекс стохастического темпа"
 
 msgid "%K Periods"
-msgstr ""
+msgstr "Периоды %K"
 
 msgid "%K Smoothing Periods"
-msgstr ""
+msgstr "Периоды сглаживания %K"
 
 msgid "%K Double Smoothing Periods"
-msgstr ""
+msgstr "Периоды двойного сглаживания %K"
 
 msgid "%D Periods"
-msgstr ""
+msgstr "Периоды %D"
 
 msgid "%D Moving Average Type"
-msgstr ""
+msgstr "Тип скользящего среднего %D"
 
 msgid "%K"
-msgstr ""
+msgstr "%K"
 
 msgid "%D"
-msgstr ""
+msgstr "%D"
 
 msgid "Historical Volatility"
-msgstr ""
+msgstr "Статистика волатильности"
 
 msgid "Days Per Year"
-msgstr ""
+msgstr "Дней в году"
 
 msgid "Pretty Good Oscillator"
-msgstr ""
+msgstr "Осциллятор Pretty Good"
 
 msgid "Ultimate Oscillator"
-msgstr ""
+msgstr "Окончательный осциллятор"
 
 msgid "Cycle 1"
 msgstr ""
