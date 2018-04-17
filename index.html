@@ -6,7 +6,7 @@
     <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1" />
     <meta name="description" content="Analyse the financial markets using beautiful visualisations and unique trading tools, powered by a fast and intuitive interface." />
     <link rel="stylesheet" type="text/css" href="./dist/smartcharts.css" media="screen" />
-    <link rel="stylesheet" type="text/css" href="./css/demo.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="./css/app.css" media="screen" />
     <title>SmartCharts | Binary.com</title>
 	<link rel="apple-touch-icon" sizes="57x57" href="/dist/sass/favicons/apple-touch-icon-57x57.png"/>
 	<link rel="apple-touch-icon" sizes="114x114" href="/dist/sass/favicons/apple-touch-icon-114x114.png"/>
@@ -33,6 +33,28 @@
     <script src="./dist/mobx-react.js"></script>
     <script src="./dist/smartcharts.js"></script>
     <script>
+        window.doorbellOptions = {
+            id: '7933',
+            appKey: 'GzOM4TFKsSn8CHPEV1qUWXXibdWwNGopCzvxzXUeU7swiNDflHgDTQ1QcRkDCEiM'
+        };
+        (function(w, d, t) {
+            var hasLoaded = false;
+            function l() {
+                if (hasLoaded) { return; }
+                hasLoaded = true;
+                window.doorbellOptions.windowLoaded = true;
+                var g = d.createElement(t);
+                g.id = 'doorbellScript';
+                g.type = 'text/javascript';
+                g.async = true;
+                g.src = `https://embed.doorbell.io/button/${window.doorbellOptions['id']}?t=${new Date().getTime()}`; (d.getElementsByTagName('head')[0] || d.getElementsByTagName('body')[0]).appendChild(g);
+            }
+            if (w.attachEvent) { w.attachEvent('onload', l); }
+            else if (w.addEventListener) { w.addEventListener('load', l, false); }
+            else { l(); }
+            if (d.readyState == 'complete') { l(); }
+        }(window, document, 'script'));
+
         const e = React.createElement;
         const Barrier = smartcharts.Barrier;
         const SmartChart = smartcharts.SmartChart;
