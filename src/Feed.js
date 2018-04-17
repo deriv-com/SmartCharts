@@ -51,7 +51,7 @@ class Feed {
     }
 
     async fetchInitialData(symbol, suggestedStartDate, suggestedEndDate, params, callback) {
-        const { period, interval } = params;
+        const { period, interval, symbolObject } = params;
         const key = this._getStreamKey(params);
 
         const stream = this._streams[key] || this._streamManager.subscribe({
@@ -69,7 +69,7 @@ class Feed {
 
             if(stream.isMarketClosed) {
                 this._mainStore.notification.notify({
-                    text: t.translate('[symbol] market is presently closed.', { symbol }),
+                    text: t.translate('[symbol] market is presently closed.', { symbol: symbolObject.name }),
                     category: 'activesymbol',
                 });
             }
@@ -82,7 +82,7 @@ class Feed {
             if (err.response && err.response.error.code === 'StreamingNotAllowed'){
                 this._mainStore.chart.isChartAvailable = false;
                 this._mainStore.notification.notify({
-                    text: t.translate('Streaming for [symbol] is not available due to license restrictions', { symbol }),
+                    text: t.translate('Streaming for [symbol] is not available due to license restrictions', { symbol: symbolObject.name }),
                     type: NotificationStore.TYPE_ERROR,
                     category: 'activesymbol',
                 });
