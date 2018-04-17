@@ -18,15 +18,6 @@ export default class NotificationStore {
     @action.bound notify({text, type = NotificationStore.TYPE_WARNING, duration = 10, category}) {
         this.messages = this.messages.filter(m => m.text !== text);
         const id = notificationId++;
-        // Remove all notifications of the same category:
-        if (category) {
-            this.messages.map((msg, idx) => {
-                if (msg.category === category) {
-                    this.remove(idx);
-                }
-            });
-        }
-
         this.messages.push( {
             id,
             text,
@@ -37,6 +28,14 @@ export default class NotificationStore {
         if (duration > 0) {
             setTimeout(() => this.removeById(id), duration * 1000);
         }
+    }
+
+    removeByCategory(category) {
+        this.messages.map((msg, idx) => {
+            if (msg.category === category) {
+                this.remove(idx);
+            }
+        });
     }
 
     removeById(id) {

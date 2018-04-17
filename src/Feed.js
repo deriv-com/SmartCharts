@@ -63,6 +63,9 @@ class Feed {
         this._trackStream(stream, isComparisonChart ? symbol : undefined);
         this._streams[key] = stream;
 
+        // Clear all notifications related to active symbols
+        this._mainStore.notification.removeByCategory('activesymbol');
+
         try {
             const { candles, history } = await stream.response;
             const quotes = candles ? Feed.formatCandles(candles) : Feed.formatHistory(history);
