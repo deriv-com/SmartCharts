@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1" />
     <meta name="description" content="Analyse the financial markets using beautiful visualisations and unique trading tools, powered by a fast and intuitive interface." />
-    <link rel="stylesheet" type="text/css" href="./dist/smartcharts.css?2a74600d58070246697c2104f2164160" media="screen" />
+    <link rel="stylesheet" type="text/css" href="./dist/smartcharts.css?c833cc8108881dd3d6eb917cccadf327" media="screen" />
     <link rel="stylesheet" type="text/css" href="./css/demo.css?03826096e6728d2e53e693d28e122617" media="screen" />
     <title>SmartCharts | Binary.com</title>
 	<link rel="apple-touch-icon" sizes="57x57" href="/dist/sass/favicons/apple-touch-icon-57x57.png"/>
@@ -31,7 +31,7 @@
     <script src="./dist/react-dom.js"></script>
     <script src="./dist/mobx.js"></script>
     <script src="./dist/mobx-react.js"></script>
-    <script src="./dist/smartcharts.js?bf28e33022afc6ccc9a4f4aa6ddce277"></script>
+    <script src="./dist/smartcharts.js?914b11793c68ff446aa8e13eb746a536"></script>
     <script>
         const e = React.createElement;
         const Barrier = smartcharts.Barrier;
@@ -40,7 +40,7 @@
         const TradeEndLine = smartcharts.TradeEndLine;
 
         const chart = ReactDOM.render(
-            e(SmartChart, null,
+            e(SmartChart, { isMobile: false},
                 /*e(Barrier, {
                     ref: function(r) { window.barrier = r; },
                     color: 'green',
