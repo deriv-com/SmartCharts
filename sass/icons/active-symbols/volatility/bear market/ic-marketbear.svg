@@ -1,23 +1,20 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg width="32px" height="32px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!-- Generator: Sketch 49.1 (51147) - http://www.bohemiancoding.com/sketch -->
-    <title>icons/underlying assets/volatility/bear market/ic-marketbear</title>
-    <desc>Created with Sketch.</desc>
-    <defs>
-        <circle id="bearmarket-path-1" cx="10" cy="10" r="10"></circle>
-        <circle id="bearmarket-path-3" cx="10" cy="10" r="10"></circle>
-    </defs>
-    <g id="icons/underlying-assets/volatility/bear-market/ic-marketbear" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="Group" transform="translate(6.000000, 6.000000)">
-            <mask id="mask-2" fill="white">
-                <use xlink:href="#bearmarket-path-1"></use>
-            </mask>
-            <use id="Oval" fill="#D20000" xlink:href="#bearmarket-path-1"></use>
-            <path d="M9.71763355,4.29600586 C10.428897,4.22628178 10.9626777,4.16900979 11.3189757,4.12418989 C11.7126026,4.3270536 11.9244168,4.6844746 11.9544184,5.19645289 C14.0918604,7.25437942 15.1605814,8.79469808 15.1605814,9.81740886 C16.1929653,10.6075018 17.147827,11.4406599 18.0251665,12.316883 C18.1516655,12.443224 18.1588318,12.6446252 18.0416246,12.7794668 C17.4445537,13.4663698 16.8326651,13.8098214 16.2059588,13.8098214 C16.2364905,13.9788301 16.2398972,14.1305076 16.2161789,14.2648539 C16.1851711,14.4404733 15.7992768,14.6665447 15.6200697,14.6492972 C14.2665111,14.5190256 13.1558021,14.1169525 11.8409195,13.6505447 C8.04022829,13.1766665 5.14432361,14.3339722 4.81480145,16.7468159 C4.59512001,18.3553784 4.59512001,20.6897731 4.81480145,23.75 C0.932492622,16.2544907 -0.871754815,10.5479771 -0.597940856,6.63045933 C-0.324126897,2.71294152 1.52696728,1.58208941 4.95534168,3.23790301 C6.04294875,3.70032642 6.87578024,3.99575538 7.45383618,4.12418989 C8.03189211,4.2526244 8.78649123,4.30989639 9.71763355,4.29600586 Z" id="Path-3-Copy" fill="#FFFFFF" mask="url(#mask-2)"></path>
-            <mask id="mask-4" fill="white">
-                <use xlink:href="#bearmarket-path-3"></use>
-            </mask>
-            <circle stroke="#D20000" stroke-width="1.25" cx="10" cy="10" r="9.375"></circle>
-        </g>
-    </g>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 16.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="32px" height="32px" viewBox="0 0 32 32" enable-background="new 0 0 32 32" xml:space="preserve">
+<title>icons/underlying assets/volatility/bear market/ic-marketbear</title>
+<desc>Created with Sketch.</desc>
+<g>
+    <path fill="#D20000" d="M16,6c5.523,0,10,4.477,10,10c0,5.523-4.477,10-10,10c-5.523,0-10-4.477-10-10C6,10.477,10.477,6,16,6"/>
+    <path fill="#FFFFFF" d="M9.258,8.615C7.256,10.443,6,13.075,6,16c0,3.564,1.865,6.693,4.673,8.465
+        c0.026-0.645,0.073-1.216,0.142-1.718c0.281-2.058,2.425-3.201,5.406-3.201c0.515,0,1.058,0.034,1.62,0.104
+        c1.315,0.467,2.427,0.869,3.779,0.998l0.021,0.002c0.186,0,0.547-0.217,0.576-0.387c0.023-0.134,0.02-0.285-0.011-0.455
+        c0.626,0,1.237-0.343,1.835-1.029c0.117-0.135,0.111-0.336-0.016-0.463c-0.877-0.877-1.832-1.709-2.865-2.5
+        c0-1.022-1.068-2.563-3.205-4.621c-0.031-0.512-0.242-0.869-0.637-1.072c-0.355,0.045-0.89,0.102-1.602,0.172
+        c-0.092,0.001-0.182,0.002-0.271,0.002c-0.808,0-1.473-0.058-1.994-0.174c-0.578-0.128-1.411-0.424-2.498-0.886
+        C10.338,8.94,9.772,8.732,9.258,8.615"/>
+    <path fill="#D20000" d="M16,26c-5.514,0-10-4.486-10-10c0-5.514,4.486-10,10-10c5.514,0,10,4.486,10,10C26,21.514,21.514,26,16,26
+        z M16,7.25c-4.825,0-8.75,3.925-8.75,8.75s3.925,8.75,8.75,8.75s8.75-3.925,8.75-8.75S20.825,7.25,16,7.25z"/>
+</g>
 </svg>

@@ -1,9 +1,10 @@
 .cq-share {
     .cq-menu-dropdown {
-        left: 114px;
+        left: 50%;
         width: 280px;
         height: 200px;
         color: black;
+        transform: translateX(-50%); 
     }
 
     .title {

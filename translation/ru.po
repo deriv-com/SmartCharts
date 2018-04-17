@@ -24,6 +24,9 @@ msgstr "Нет записей в избранном."
 msgid "Chart data is not available for this symbol."
 msgstr "График недоступен для данного актива."
 
+msgid "Chart data is not available for this symbol."
+msgstr ""
+
 msgid "PRICE"
 msgstr "ЦЕНА"
 
@@ -125,6 +128,12 @@ msgstr "Рынок [symbol] закрыт в данный момент."
 
 msgid "Streaming for [symbol] is not available due to license restrictions"
 msgstr "Потоковые котировки для [symbol] недоступны из-за лицензионных ограничений"
+
+msgid "[symbol] market is presently closed."
+msgstr ""
+
+msgid "Streaming for [symbol] is not available due to license restrictions"
+msgstr ""
 
 msgid "Line"
 msgstr "Линия"

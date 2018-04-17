@@ -55,11 +55,11 @@ class Chart extends Component {
                         </RenderInsideChart>
                         <RenderInsideChart>
                             <div className="cq-top-ui-widgets">
+                               <ChartTitle />
                                 <AssetInformation />
                                 <ComparisonList />
                             </div>
                         </RenderInsideChart>
-                        <ChartTitle />
                         <ChartControls />
                         <Crosshair />
                         <div className="chartContainer primary"> </div>

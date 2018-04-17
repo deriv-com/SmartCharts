@@ -117,11 +117,13 @@ cq-context {
     }
 
     .cq-comparison-new > .cq-menu-dropdown {
-        left: -14em;
+        left: 50%;
+        transform: translateX(-50%);
     }
 
     .ciq-studies > .cq-menu-dropdown {
-        left: -11em;
+        left: 50%;
+        transform: translateX(-50%);
     }
 
     /* Mobile Style */
