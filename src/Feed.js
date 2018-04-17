@@ -68,9 +68,10 @@ class Feed {
             const quotes = candles ? Feed.formatCandles(candles) : Feed.formatHistory(history);
 
             if(stream.isMarketClosed) {
-                this._mainStore.notification.notify(
-                    t.translate('[symbol] market is presently closed.', { symbol })
-                );
+                this._mainStore.notification.notify({
+                    text: t.translate('[symbol] market is presently closed.', { symbol }),
+                    category: 'activesymbol',
+                });
             }
 
             callback({ quotes });
@@ -80,10 +81,11 @@ class Feed {
             delete this._streams[key];
             if (err.response && err.response.error.code === 'StreamingNotAllowed'){
                 this._mainStore.chart.isChartAvailable = false;
-                this._mainStore.notification.notify(
-                    t.translate('Streaming for [symbol] is not available due to license restrictions', { symbol }),
-                    NotificationStore.TYPE_ERROR
-                );
+                this._mainStore.notification.notify({
+                    text: t.translate('Streaming for [symbol] is not available due to license restrictions', { symbol }),
+                    type: NotificationStore.TYPE_ERROR,
+                    category: 'activesymbol',
+                });
                 callback({ quotes: [] });
             } else {
                 console.error(err);

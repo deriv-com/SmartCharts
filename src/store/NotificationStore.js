@@ -15,13 +15,23 @@ export default class NotificationStore {
     @observable messages = [];
 
     // Duration is in seconds; set to < 0 if you want the notification to remain indefinitely
-    @action.bound notify(text, type = NotificationStore.TYPE_WARNING, duration = 10) {
+    @action.bound notify({text, type = NotificationStore.TYPE_WARNING, duration = 10, category}) {
         this.messages = this.messages.filter(m => m.text !== text);
         const id = notificationId++;
+        // Remove all notifications of the same category:
+        if (category) {
+            this.messages.map((msg, idx) => {
+                if (msg.category === category) {
+                    this.remove(idx);
+                }
+            });
+        }
+
         this.messages.push( {
             id,
             text,
             type,
+            category,
             hide: false,
         });
         if (duration > 0) {
