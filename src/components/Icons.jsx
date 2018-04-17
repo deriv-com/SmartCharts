@@ -36,6 +36,14 @@ import IndicatorCategory from '../../sass/icons/sidebar/indicator/ic-indicator-n
 import Arrow from '../../sass/icons/dropdown/ic-dropdown.svg';
 import Copy from '../../sass/icons/share/ic-copy.svg';
 import Share from '../../sass/icons/share/ic-share.svg';
+import ChevronRight from '../../sass/icons/chart settings/setting/ic-chevron-right.svg';
+import PositionLeft from '../../sass/icons/chart settings/setting/ic-position-left.svg';
+import PositionBottom from '../../sass/icons/chart settings/setting/ic-position-bottom.svg';
+import ThemeDark from '../../sass/icons/chart settings/setting/ic-theme-dark.svg';
+import ThemeLight from '../../sass/icons/chart settings/setting/ic-theme-light.svg';
+import Back from '../../sass/icons/back/ic-back.svg';
+
+
 
 import Warning from '../../sass/icons/alert message/warning.svg';
 import Error from '../../sass/icons/alert message/error.svg';
@@ -175,6 +183,16 @@ export const ArrowIcon = Wrapper(Arrow);
 export const FavoriteIcon = Wrapper(Star);
 export const CopyIcon = Wrapper(Copy);
 export const ShareIcon = Wrapper(Share);
+
+export const ChevronRightIcon = Wrapper(ChevronRight);
+export const PositionLeftIcon = Wrapper(PositionLeft);
+export const PositionBottomIcon = Wrapper(PositionBottom);
+export const ThemeDarkIcon = Wrapper(ThemeDark);
+export const ThemeLightIcon = Wrapper(ThemeLight);
+export const BackIcon = Wrapper(Back);
+
+
+
 export const MetalIcon = Wrapper(Metal);
 
 export const alertIconMap = {
@@ -224,6 +242,13 @@ const FlagIconMap = {
     SouthAfrica: Wrapper(SouthAfrica),
     WallStreet: Wrapper(WallStreet),
 };
+
+export const FlagIcons = {
+    USD: Wrapper(USD),
+    German: Wrapper(German),
+    French: Wrapper(French)    
+}
+
 
 export const ItemIconMap = {
     SPC: FlagIconMap.USD,

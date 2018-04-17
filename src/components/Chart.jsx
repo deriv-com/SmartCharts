@@ -39,6 +39,7 @@ class Chart extends Component {
         const { DrawToolsSettingsDialog, StudySettingsDialog, children, lang, isMobile, isChartAvailable } = this.props;
 
         t.setLanguage(lang);
+        
         const array = React.Children.toArray(children);
         const insideHolder = array.filter(c => !/(TradeStart)|(TradeEnd)/.test(c.type.displayName));
         const insideSubHolder = array.filter(c => /(TradeStart)|(TradeEnd)/.test(c.type.displayName));
