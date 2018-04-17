@@ -38,12 +38,12 @@ export class DropDown extends React.Component {
 
     componentDidMount() { document.addEventListener('click', this.close, false); }
     componentWillUnmount() { document.removeEventListener('click', this.close); }
-    
+
     render() {
-        const { rows, children, title, onRowClick } = this.props;
+        const { rows, children, title, onRowClick, className } = this.props;
         const { open } = this.state;
         return (
-            <div className='cq-dropdown'>
+            <div className={`${className || ''} cq-dropdown`}>
                 <div
                     className={`title ${open ? 'active' : ''}`}
                     onClick={this.onClick}
@@ -66,7 +66,7 @@ export class DropDown extends React.Component {
             </div>
         );
     }
-};
+}
 
 export class Pattern extends React.Component {
     patterns = [
@@ -81,7 +81,7 @@ export class Pattern extends React.Component {
         {width: 5, pattern: 'dashed'},
         {width: 0, pattern: 'none'},
     ];
-    render()  {
+    render() {
         const { pattern, lineWidth, onChange } = this.props;
         const title = pattern !== 'none' ?
             <span className={`option ${pattern}-${lineWidth}`}></span> :
@@ -94,8 +94,8 @@ export class Pattern extends React.Component {
                 onRowClick={onChange}
             >
                 {p => p.pattern !== 'none' ?
-                        <span className={`option ${p.pattern}-${p.width}`}></span> :
-                        <span className='none'>None</span>
+                    <span className={`option ${p.pattern}-${p.width}`}></span> :
+                    <span className='none'>None</span>
                 }
             </DropDown>
         );
@@ -124,19 +124,21 @@ export class ColorPicker extends React.Component {
         if(e.target !== this.titleRef) {
             this.setState({open: false});
         }
-    }
+    };
 
     componentDidMount() { document.addEventListener('click', this.close, false); }
     componentWillUnmount() { document.removeEventListener('click', this.close); }
 
     render() {
         const { color, setColor } = this.props;
+        const backgroundColor = color === 'auto' ? '#000000' : color;
+
         return (
             <div className='cq-color-picker'>
                 <div
                     ref={ref => this.titleRef = ref}
                     className='title'
-                    style={{backgroundColor: color}}
+                    style={{backgroundColor}}
                     onClick={this.onClick}
                 />
                 <div className={`dropdown ${this.state.open ? 'open' : ''}`}>
@@ -156,7 +158,7 @@ export class ColorPicker extends React.Component {
         );
     }
 
-};
+}
 
 export const Switch = ({
     value,
@@ -169,3 +171,146 @@ export const Switch = ({
         <div className='handle' />
     </div>
 );
+
+// NumericInput fires onChange on Enter or onBlur
+export class NumericInput extends React.Component {
+    state = {};
+
+    componentWillMount() {
+        const { value } = this.props;
+        this.setState({
+            originalValue: value,
+            value,
+        });
+    }
+
+    componentWillReceiveProps(newProps) {
+        const { value } = newProps;
+        if (value !== this.state.originalValue) {
+            this.setState({
+                originalValue: value,
+                value,
+            }, this.fireOnChange);
+        }
+    }
+
+    fireOnChange = () => this.props.onChange(this.state.value);
+
+    onUpdateValue = e => {
+        this.setState({ value: e.target.value });
+    };
+
+    fireOnEnter = e => {
+        if (e.key === 'Enter') {
+            this.fireOnChange();
+        }
+    };
+
+    render() {
+        return (
+            <input
+                type="number"
+                value={this.state.value}
+                onBlur={this.fireOnChange}
+                onChange={this.onUpdateValue}
+                onKeyPress={this.fireOnEnter}
+            />
+        );
+    }
+}
+
+export const NumberColorPicker = ({
+    value,
+    onChange,
+}) => {
+    // Do NOT rename the variables Value and Color! The keys are also
+    // used as attribute suffixes
+    const { Value, Color } = value;
+    const onValueChange = Value => onChange({ Color, Value });
+    const onColorChange = Color => onChange({ Color, Value });
+
+    return (
+        <span className="cq-numbercolorpicker">
+            <NumericInput
+                value={Value}
+                onChange={val => onValueChange(val)}
+            />
+            <ColorPicker
+                color={Color}
+                setColor={val => onColorChange(val)}
+            />
+        </span>
+    );
+};
+
+export const Toggle = ({
+    className,
+    children,
+    active,
+    onChange
+}) =>
+{
+    return (
+        <div
+            onClick={() => onChange(!active)}
+            className={`${className || ''} ${active ? 'active' : ''} cq-toggle`}
+        >
+            {children}
+        </div>
+    );
+};
+
+export const FontSetting = ({
+    onChange,
+    value,
+}) => {
+    const families = [
+        'Default',
+        'Helvetica',
+        'Courier',
+        'Garamond',
+        'Palatino',
+        'Times New Roman',
+    ];
+    const fontSizes = [8, 10, 12, 13, 14, 16, 20, 28, 36, 48, 64];
+
+    const fireChange = change => onChange({ ...value, ...change });
+    const onFontFamilyChange = family => fireChange({ family });
+    const onFontSizeChange = size => fireChange({ size: `${size}px` });
+    const onBoldChange = isBold => fireChange({ weight: isBold ? 'bold' : undefined });
+    const onItalicChange = isItalic => fireChange({ style: isItalic ? 'italic' : undefined });
+    const {family, style, weight, size } = value;
+
+    return (
+        <span className="cq-fontsetting">
+            <Toggle
+                onChange={onBoldChange}
+                active={!!weight}
+            >
+                <div className="cq-text-icon"><b>B</b></div>
+            </Toggle>
+            <Toggle
+                active={!!style}
+                onChange={onItalicChange}
+            >
+                <div className="cq-text-icon"><i>i</i></div>
+            </Toggle>
+            <DropDown
+                className='cq-changefontsize'
+                rows={fontSizes}
+                title={size || '13px'}
+                onRowClick={onFontSizeChange}
+            >
+                {p => <span className={`option`}>{p}</span>}
+            </DropDown>
+            <DropDown
+                className='cq-changefontfamily'
+                rows={families}
+                title={family || families[0]}
+                onRowClick={onFontFamilyChange}
+            >
+                {p => <span className={`option`}>{p}</span>}
+            </DropDown>
+        </span>
+    );
+};

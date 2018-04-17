@@ -377,12 +377,12 @@ class CrosshairStore {
                 show: this.show,
             });
         }
-    }
+    };
 
     onContextReady = () => {
         this.crosshair = this.stx.layout.crosshair;
         this.init();
-    }
+    };
 
     @observable crosshair = false;
     @action.bound setCrosshair(value) {

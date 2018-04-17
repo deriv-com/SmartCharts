@@ -39,8 +39,14 @@
         }
         .body {
             background: #FAFAFA;
-            height: 100%;
             padding: 16px;
         }
     }
+}
+.smartcharts-mobile{
+    .ciq-draw-tools {
+        .ciq-list{
+            margin: 0px 15px;
+        }
+    }   
 }

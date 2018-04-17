@@ -38,7 +38,6 @@ export default class CategoricalDisplayStore {
             when(() => this.context, this.initFavorites.bind(this));
         }
     }
-
     @observable filterText = '';
     @observable placeholderText = '';
     @observable activeCategoryKey = '';
@@ -92,14 +91,14 @@ export default class CategoricalDisplayStore {
         // get first non-empty category
         let idx = i - 1;
         let id;
-        do {
+        while (idx >= 0) {
             id = this.filteredItems[idx].categoryId;
             if (this.categoryElements[id] !== null) {
                 break;
             }
             idx--;
-        } while (idx >= 0);
-        this.activeCategoryKey = id;
+        }
+        this.activeCategoryKey = id || this.filteredItems[0].categoryId;
     }
 
     init() {
@@ -119,6 +118,15 @@ export default class CategoricalDisplayStore {
             }
         }
     }
+
+    /* isMobile: fill form the ChartStore */
+    @computed get isMobile(){
+        if (this.mainStore) {
+            return this.mainStore.chart.isMobile;
+        }
+        return false;
+    }
+
 
     @computed get filteredItems() {
         let filteredItems = toJS(this.getCategoricalItems());
@@ -193,12 +201,19 @@ export default class CategoricalDisplayStore {
     @action.bound setFilterText(filterText) {
         this.filterText = filterText;
         setTimeout(() => {
+            this.scroll.update();
             this.updateScrollSpy();
         }, 0);
     }
 
+    @action.bound clearFilterText() {
+        this.setFilterText('');
+        this.searchInput.value = '';
+    }
+
     @action.bound handleFilterClick(category) {
         const el = this.categoryElements[category.categoryId];
+
         if (el) {
             // TODO: Scroll animation
             this.pauseScrollSpy = true;
@@ -279,8 +294,10 @@ export default class CategoricalDisplayStore {
     }
 
     connect = connect(() => ({
+        isMobile: this.isMobile,
         filterText: this.filterText,
         setFilterText: this.setFilterText,
+        clearFilterText: this.clearFilterText,
         filteredItems: this.filteredItems,
         getItemCount: this.getItemCount,
         setSearchInput: this.setSearchInput,
@@ -296,5 +313,6 @@ export default class CategoricalDisplayStore {
         onFavoritedItem: this.onFavoritedItem,
         favoritesMap: this.favoritesMap,
         favoritesId: this.favoritesId,
+        CloseUpperMenu: this.CloseUpperMenu,
     }))
 }

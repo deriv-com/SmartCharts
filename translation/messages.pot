@@ -1,8 +1,14 @@
 
+msgid "CLOSED"
+msgstr ""
+
 msgid "Favorites"
 msgstr ""
 
 msgid "There are no favorites yet."
+msgstr ""
+
+msgid "Chart data is not available for this symbol."
 msgstr ""
 
 msgid "PRICE"
@@ -101,6 +107,12 @@ msgstr ""
 msgid "right-click to manage"
 msgstr ""
 
+msgid "[symbol] market is presently closed."
+msgstr ""
+
+msgid "Streaming for [symbol] is not available due to license restrictions"
+msgstr ""
+
 msgid "Line"
 msgstr ""
 
@@ -126,9 +138,6 @@ msgid "Hollow Candle"
 msgstr ""
 
 msgid "\"Mass Index\" or \"Doji Star\""
-msgstr ""
-
-msgid "No description yet"
 msgstr ""
 
 msgid "Indicators"
@@ -168,6 +177,9 @@ msgid "Doodle"
 msgstr ""
 
 msgid "Ellipse"
+msgstr ""
+
+msgid "Fib Retracement"
 msgstr ""
 
 msgid "Fib Arc"

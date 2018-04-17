@@ -30,18 +30,18 @@ cq-context {
 	}
 
 	@import "components/barrier";
-	@import "components/chart-types";
-	@import "components/chart-controls";
-	@import "components/chart-title";
 	@import "components/timeperiod";
-	@import "components/toggles";
-	@import "components/categorical-display";
 	@import "components/chart-size";
 	@import "components/comparison-list";
-	@import "components/view";
 	@import "components/loader";
 	@import "ciq-perfect-scrollbar";
 }
+
+@import "components/categorical-display";
+@import "components/view";
+@import "components/chart-types";
+@import "components/chart-title";
+@import "components/chart-controls";
 
 /* --------------------------------------------------------- FIELDS, SELECTS, INPUTS --------------------------------------------------------- */
 
@@ -411,7 +411,6 @@ cq-menu-dropdown, .cq-menu-dropdown {
 	position:absolute;
 	background:$DEFAULT-menu-bg;
 	color: $DEFAULT-text-medium;
-	height:0px;
 	overflow:hidden;
 	opacity: 0;
 	@include box-shadow (0px, 2px, 4px, rgba(0, 0, 0, .2));
@@ -569,7 +568,7 @@ cq-lookup-input {
 	right:0px;
 }
 .ciq-dropdowns {float:left;}
-.ciq-menu {position:relative;}
+.ciq-menu{position: relative;}
 
 .break-sm .ciq-menu {
   position: inherit;
@@ -1934,4 +1933,15 @@ cq-language-name {
 
 
 /* -------------------------- custom styles -------------------------------------*/
+
+.cq-chart-unavailable {
+	position: absolute;
+	text-align: center;
+	width: 100%;
+	top: 50%;
+	z-index: 1;
+	font-size: 17px;
+	color: #878787;
+}
+
 // TODO: Check if chartiq theme has a builtin solution.

@@ -9,11 +9,13 @@ const ChartTitle = ({
     todayChange,
     todayChangePercentage,
     isVisible,
+    isShowChartPrice,
     isPriceUp,
     currentSymbol,
     Menu,
     CategoricalDisplay,
     AnimatedPrice,
+    onCloseMenu
 }) => {
     const SymbolIcon = ItemIconMap[currentSymbol.symbol] || SymbolPlaceholderIcon;
     return (
@@ -26,17 +28,18 @@ const ChartTitle = ({
                         <div className="cq-market">{currentSymbol.market_display_name}</div>
                         <div className="cq-symbol">{currentSymbol.name}</div>
                     </div>
-                    <div className="cq-chart-price">
-                        <AnimatedPrice className="cq-current-price" />
-                        <div className={`cq-change ${isPriceUp ? 'stx-up' : 'stx-down'}`}>
-                            <span className="cq-todays-change">{todayChange}</span>&nbsp;
-                            {/*<span className="cq-todays-change-pct">({todayChangePercentage})</span>*/}
-                        </div>
-                    </div>
+                    {isShowChartPrice &&
+                     <div className="cq-chart-price">
+                         <AnimatedPrice className="cq-current-price" />
+                         <div className={`cq-change ${isPriceUp ? 'stx-up' : 'stx-down'}`}>
+                             <span className="cq-todays-change">{todayChange}</span>&nbsp;
+                             {/*<span className="cq-todays-change-pct">({todayChangePercentage})</span>*/}
+                         </div>
+                     </div>}
                 </div>}
             </Menu.Title>
             <Menu.Body>
-                <CategoricalDisplay />
+                <CategoricalDisplay  closeMenu={ () => onCloseMenu() } />
             </Menu.Body>
         </Menu>
     );
@@ -48,9 +51,11 @@ export default connect(
         todayChangePercentage: c.todayChangePercentage,
         isPriceUp: c.isPriceUp,
         isVisible: c.isVisible,
+        isShowChartPrice: c.isShowChartPrice,
         currentSymbol: c.currentSymbol,
         Menu: c.menu.connect(Menu),
         CategoricalDisplay: c.categoricalDisplay.connect(CategoricalDisplay),
         AnimatedPrice: c.animatedPrice.connect(AnimatedPrice),
+        onCloseMenu: c.menu.onTitleClick,
     })
 )(ChartTitle);

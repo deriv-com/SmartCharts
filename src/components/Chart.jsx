@@ -36,7 +36,7 @@ class Chart extends Component {
     }
 
     render() {
-        const { DrawToolsSettingsDialog, StudySettingsDialog, children, lang } = this.props;
+        const { DrawToolsSettingsDialog, StudySettingsDialog, children, lang, isMobile, isChartAvailable } = this.props;
 
         t.setLanguage(lang);
         const array = React.Children.toArray(children);
@@ -44,7 +44,7 @@ class Chart extends Component {
         const insideSubHolder = array.filter(c => /(TradeStart)|(TradeEnd)/.test(c.type.displayName));
 
         return (
-            <cq-context ref={(root) => { this.root = root; }}>
+            <cq-context ref={(root) => { this.root = root; }} class={isMobile ? 'smartcharts-mobile' : ''}>
                 <div className="ciq-chart-area">
                     <div className="ciq-chart">
                         <RenderInsideChart at='holder'>
@@ -55,7 +55,7 @@ class Chart extends Component {
                         </RenderInsideChart>
                         <RenderInsideChart>
                             <div className="cq-top-ui-widgets">
-                                <ChartTitle />
+                               <ChartTitle />
                                 <AssetInformation />
                                 <ComparisonList />
                             </div>
@@ -64,6 +64,10 @@ class Chart extends Component {
                         <Crosshair />
                         <div className="chartContainer primary"> </div>
                         <Loader />
+                        {!isChartAvailable &&
+                            <div className="cq-chart-unavailable">
+                            {t.translate('Chart data is not available for this symbol.')}
+                        </div>}
                     </div>
                 </div>
                 <DrawToolsSettingsDialog />
@@ -80,5 +84,6 @@ export default connect(
         init: chart.init,
         StudySettingsDialog : studies.settingsDialog.connect(SettingsDialog),
         DrawToolsSettingsDialog : drawTools.settingsDialog.connect(SettingsDialog),
+        isChartAvailable: chart.isChartAvailable,
     })
 )(Chart);

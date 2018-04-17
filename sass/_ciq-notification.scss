@@ -28,16 +28,28 @@
     .notification {
         position: relative;
         margin-top: 4px;
-        height: 32px;;
+        height: 32px;
         animation: cq-slide-down .3s;
-        border-radius: 2px;
+        border-radius: 3px;
         display: flex;
         justify-content: flex-start;
         align-items: center;
         font-size: 14px;
+        border: 1px solid #FDD063;
         &.warning {
-            border: 1px solid #FDD063;
             background: #FFF8E2;
+        }
+        &.success {
+            border-color: #008006;
+            background: #CCEEA1;
+        }
+        &.info {
+            border-color: #009AFA;
+            background: #E0F2FE;
+        }
+        &.error {
+            border-color: #FF3D38;
+            background: #FFEAEE;
         }
         &.hide {
             animation: cq-slide-up .3s forwards;

@@ -26,6 +26,8 @@ class SmartChart extends React.Component {
             activeSymbols = data.active_symbols;
         }
         this.chart.setActiveSymbols(activeSymbols);
+
+        this.chart.setIsMobile(this.props.isMobile);
     }
 
     componentWillReceiveProps({activeSymbols}) {
@@ -35,10 +37,10 @@ class SmartChart extends React.Component {
     }
 
     render() {
-        const {children} = this.props;
+        const {children, isMobile} = this.props;
         return (
             <MobxProvider store={this.mainStore}>
-                <Chart lang="en">
+                <Chart lang="en" isMobile={isMobile}>
                     {children}
                 </Chart>
             </MobxProvider>

@@ -1,4 +1,4 @@
-.ic-icon {
+.ic-icon, .cq-text-icon {
     display: block;
     height: 24px;
     width: 24px;
@@ -14,9 +14,11 @@
             fill: #2a3052,
         }
     }
-    &.fill-orange {
-        svg path {
-            fill: #E98024;
+    &.ciq-active-favorite {
+        $fav-star-color: #E98024;
+        svg > g > g > path {
+            fill: $fav-star-color;
+            stroke: $fav-star-color;
         }
     }
     &.ic-clear {
@@ -28,10 +30,6 @@
             stroke: #ffffff;
         }
     }
-    &.active {
-        box-shadow: inset 0 0 0 1px #4c5794;
-        background: #f2f3f8;
-    }
     &.margin {
         margin: 0 5px;
     }
@@ -39,6 +37,7 @@
         position: relative;
     }
 }
+
 .tooltip {
     position: relative;
     font-size: 12px;

@@ -69,6 +69,7 @@ export default class SettingsDialogStore {
             showTabs: this.showTabs,
             stared: this.stared,
             setOpen: this.setOpen,
+            isFavoritable: !!this.onStared,
             onTabClick: this.onTabClick,
             onDeleteClick: this.onDeleteClick,
             onStarClick: this.onStarClick,
