@@ -1,5 +1,7 @@
 import { observable, action, computed, when } from 'mobx';
 
+let notificationId = 0;
+
 export default class NotificationStore {
     static get TYPE_ERROR()   { return 'error';   }
     static get TYPE_MESSAGE() { return 'message'; }
@@ -12,13 +14,24 @@ export default class NotificationStore {
 
     @observable messages = [];
 
-    @action.bound notify(text, type = NotificationStore.TYPE_WARNING) {
+    // Duration is in seconds; set to < 0 if you want the notification to remain indefinitely
+    @action.bound notify(text, type = NotificationStore.TYPE_WARNING, duration = 10) {
         this.messages = this.messages.filter(m => m.text !== text);
+        const id = notificationId++;
         this.messages.push( {
+            id,
             text,
             type,
             hide: false,
         });
+        if (duration > 0) {
+            setTimeout(() => this.removeById(id), duration * 1000);
+        }
+    }
+
+    removeById(id) {
+        const inx = this.messages.findIndex(msg => msg.id === id);
+        if(inx !== -1) { this.remove(inx); }
     }
 
     @action.bound remove(inx) {
