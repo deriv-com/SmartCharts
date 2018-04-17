@@ -67,6 +67,61 @@ const ChartSetting = ({
         return <div>Empty</div>
     }
     const renderLanguage = () =>{
+        let languages = [
+            {
+                key: 'usd',
+                name: 'English',
+                icon: <FlagIcons.USD />
+            },{
+                key: 'po',
+                name: 'Português',
+                icon: <FlagIcons.Portugal />
+            },{
+                key: 'de',
+                name: 'Deutsch',
+                icon: <FlagIcons.German />
+            },{
+                key: 'de',
+                name: 'Русский',
+                icon: <FlagIcons.Russia />
+            },{
+                key: 'de',
+                name: 'French',
+                icon: <FlagIcons.French />
+            },{
+                key: 'de',
+                name: 'Thai',
+                icon: <FlagIcons.Thailand />
+            },{
+                key: 'de',
+                name: 'Indonesia',
+                icon: <FlagIcons.Indonesia />
+            },{
+                key: 'de',
+                name: 'Tiếng Việt',
+                icon: <FlagIcons.Vietnam />
+            },{
+                key: 'de',
+                name: 'Italiano',
+                icon: <FlagIcons.Italy />
+            },{
+                key: 'de',
+                name: '简体中文',
+                icon: <FlagIcons.Chinese />
+            },{
+                key: 'de',
+                name: '日本語',
+                icon: <FlagIcons.Japan />
+            },{
+                key: 'de',
+                name: '繁體中文',
+                icon: <FlagIcons.ChineseTraditional />
+            },{
+                key: 'de',
+                name: 'Polish',
+                icon: <FlagIcons.Poland />
+            }
+        ];
         return <div>
             <div className='title'>
                 <BackIcon
@@ -76,39 +131,12 @@ const ChartSetting = ({
             </div>
             <div className='body'>
                 <div className="ciq-list ciq-list-language">
-                    <div className="ciq-list-item" onClick={()=> setLanguage('usd') }>
-                        <FlagIcons.USD />
-                        <span className="ciq-icon-text">{t.translate('English')}</span>
-                    </div>
-                    <div className="ciq-list-item" onClick={()=> setLanguage('de') }>
-                        <FlagIcons.German />
-                        <span className="ciq-icon-text">{t.translate('Deutsch')}</span>
-                    </div>
-                    <div className="ciq-list-item" onClick={()=> setLanguage('fr') }>
-                        <FlagIcons.USD />
-                        <span className="ciq-icon-text">{t.translate('French')}</span>
-                    </div>
-                    <div className="ciq-list-item" onClick={()=> setLanguage('it') }>
-                        <FlagIcons.German />
-                        <span className="ciq-icon-text">{t.translate('Itly')}</span>
-                    </div>
-                    <div className="ciq-list-item" onClick={()=> setLanguage('ja') }>
-                        <FlagIcons.USD />
-                        <span className="ciq-icon-text">{t.translate('Japan')}</span>
-                    </div>
-                    
-                    <div className="ciq-list-item" onClick={()=> setLanguage('usd') }>
-                        <FlagIcons.German />
-                        <span className="ciq-icon-text">{t.translate('Deutsch')}</span>
-                    </div>
-                    <div className="ciq-list-item" onClick={()=> setLanguage('usd') }>
-                        <FlagIcons.USD />
-                        <span className="ciq-icon-text">{t.translate('English')}</span>
-                    </div>
-                    <div className="ciq-list-item" onClick={()=> setLanguage('usd') }>
-                        <FlagIcons.German />
-                        <span className="ciq-icon-text">{t.translate('Deutsch')}</span>
-                    </div>
+                    {languages.map( (language,index) => {
+                        return <div className="ciq-list-item" key={index} onClick={()=> setLanguage(language.key) }>
+                            {language.icon}
+                            <span className="ciq-icon-text">{t.translate(language.name)}</span>
+                        </div>
+                    })}
                 </div>
             </div>
         </div>

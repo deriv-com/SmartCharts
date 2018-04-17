@@ -153,10 +153,6 @@ class ChartStore {
         stxx.chart.allowScrollFuture = false;
         const context = new Context(stxx, this.rootNode);
 
-
-        console.log(this.setting);
-
-
         context.changeSymbol = (data) => {
             this.loader.show();
 

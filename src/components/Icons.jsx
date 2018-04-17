@@ -64,6 +64,16 @@ import PLN from '../../sass/icons/flags/pln.svg';
 import SEK from '../../sass/icons/flags/sek.svg';
 import USD from '../../sass/icons/flags/usd.svg';
 
+
+
+import Portugal from '../../sass/icons/flags/portugal.svg';
+import Russia from '../../sass/icons/flags/russia.svg';
+import Thailand from '../../sass/icons/flags/thailand.svg';
+import Indonesia from '../../sass/icons/flags/indonesia.svg';
+import Vietnam from '../../sass/icons/flags/vietnam.svg';
+import Italy from '../../sass/icons/flags/italy.svg';
+import Chinese from '../../sass/icons/flags/chinese.svg';
+import ChineseTraditional from '../../sass/icons/flags/chinese-traditional.svg';
 import Belgium from '../../sass/icons/flags/belgium.svg';
 import HongKong from '../../sass/icons/flags/hong kong.svg';
 import Singapore from '../../sass/icons/flags/singapore.svg';
@@ -241,12 +251,24 @@ const FlagIconMap = {
     Spanish: Wrapper(Spanish),
     SouthAfrica: Wrapper(SouthAfrica),
     WallStreet: Wrapper(WallStreet),
+
 };
+
 
 export const FlagIcons = {
     USD: Wrapper(USD),
     German: Wrapper(German),
-    French: Wrapper(French)    
+    French: Wrapper(French),
+    Portugal: Wrapper(Portugal),
+    Russia: Wrapper(Russia),
+    Thailand: Wrapper(Thailand),
+    Indonesia: Wrapper(Indonesia),
+    Vietnam: Wrapper(Vietnam),
+    Italy: Wrapper(Italy),
+    Chinese: Wrapper(Chinese),
+    ChineseTraditional: Wrapper(ChineseTraditional),
+    Japan: Wrapper(JPY),
+    Poland: Wrapper(PLN),
 }
 
 
