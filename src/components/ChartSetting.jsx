@@ -69,11 +69,11 @@ const ChartSetting = ({
     const renderLanguage = () =>{
         let languages = [
             {
-                key: 'usd',
+                key: 'en',
                 name: 'English',
                 icon: <FlagIcons.USD />
             },{
-                key: 'po',
+                key: 'pt',
                 name: 'Português',
                 icon: <FlagIcons.Portugal />
             },{
@@ -81,43 +81,43 @@ const ChartSetting = ({
                 name: 'Deutsch',
                 icon: <FlagIcons.German />
             },{
-                key: 'de',
+                key: 'ru',
                 name: 'Русский',
                 icon: <FlagIcons.Russia />
             },{
-                key: 'de',
+                key: 'fr',
                 name: 'French',
                 icon: <FlagIcons.French />
             },{
-                key: 'de',
+                key: 'th',
                 name: 'Thai',
                 icon: <FlagIcons.Thailand />
             },{
-                key: 'de',
+                key: 'id',
                 name: 'Indonesia',
                 icon: <FlagIcons.Indonesia />
             },{
-                key: 'de',
+                key: 'vi',
                 name: 'Tiếng Việt',
                 icon: <FlagIcons.Vietnam />
             },{
-                key: 'de',
+                key: 'it',
                 name: 'Italiano',
                 icon: <FlagIcons.Italy />
             },{
-                key: 'de',
+                key: 'zh_cn',
                 name: '简体中文',
                 icon: <FlagIcons.Chinese />
             },{
-                key: 'de',
+                key: 'ja',
                 name: '日本語',
                 icon: <FlagIcons.Japan />
             },{
-                key: 'de',
+                key: 'zh_tw',
                 name: '繁體中文',
                 icon: <FlagIcons.ChineseTraditional />
             },{
-                key: 'de',
+                key: 'pl',
                 name: 'Polish',
                 icon: <FlagIcons.Poland />
             }

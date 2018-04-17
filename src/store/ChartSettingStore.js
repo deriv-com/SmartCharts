@@ -7,8 +7,6 @@ export default class ChartSettingStore {
         this.menu = new MenuStore({getContext: () => this.mainStore.chart.context});
 
         this.restoreSetting();
-        // when(() => this.context, this.onContextReady);
-        // reaction(() => this.menu.open, this.restoreSetting);
     }
 
     get context() { return this.mainStore.chart.context; }
@@ -53,6 +51,10 @@ export default class ChartSettingStore {
         window.location.reload();
     }
 
+
+    @computed get getLanguage() {
+        return this.language ? this.language : 'en';
+    }
 
     @computed get hasActiveView() {
         return this.view !== '' ? true : false;
