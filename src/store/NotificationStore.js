@@ -30,11 +30,8 @@ export default class NotificationStore {
     }
 
     removeById(id) {
-        this.messages.map((msg, i) => {
-            if (msg.id === id) {
-                this.remove(i);
-            }
-        });
+        const inx = this.messages.findIndex(msg => msg.id === id);
+        if(inx !== -1) { this.remove(inx); }
     }
 
     @action.bound remove(inx) {
