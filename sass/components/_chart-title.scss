@@ -2,18 +2,11 @@ cq-context {
     .stx-chart-panel.stx-show { /* Hide default Chart Title and Icons */
         display: none;
     }
-    .cq-top-ui-widgets{
-        margin: 65px 0 0 0;
-    }
     .cq-chart-title {
-        position: absolute;
-        margin: 0;
-        padding: 0;
         top: 1em;
-        width: auto;
-        z-index: 2;
+        z-index: 41;
+        margin: .2em 0.8em;
         &.stxMenuActive {
-            z-index: 3;
             .cq-menu-btn{
                 .cq-symbol-select-btn{
                     border: solid 1px $active-color;
@@ -23,10 +16,10 @@ cq-context {
         }
         .cq-menu-btn{
             padding: 0 1em 0 0;
-            margin: 0.3em 1em;
+            margin: .2em 0em;
             .cq-symbol-select-btn {
                 font-family: $base-font;
-                padding: 1.1em 2em 0.9em 1em;
+                padding: 0.3em 2em .3em 1em;
                 border-radius: $soft-corners;
                 cursor: pointer;
                 border: solid 1px #e9e9ed;
