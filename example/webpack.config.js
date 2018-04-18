@@ -22,7 +22,7 @@ const config = {
     },
     plugins: [
         new CopyWebpackPlugin([
-            { from: '../chartiq/chartiq.js' },
+            { from: '../dist/chartiq.min.js' },
             { from: '../dist/smartcharts.css' },
         ])
     ],
