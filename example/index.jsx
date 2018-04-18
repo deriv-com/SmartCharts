@@ -20,9 +20,11 @@ class App extends React.Component {
 
     render() {
         return (
-            <SmartChart>
+            <SmartChart
+                onSymbolChange={(symbol) => console.log('Symbol has changed to:', symbol)}
+            >
                 {this.state.barrier ?
-                    <Barrier 
+                    <Barrier
                         color='green'
                         shade='above'
                         onBarrierChange={console.warn.bind(console)}
@@ -47,4 +49,4 @@ class App extends React.Component {
 ReactDOM.render(
     <App />,
     document.getElementById('root')
-); 
+);

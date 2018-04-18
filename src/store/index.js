@@ -9,7 +9,6 @@ import ChartTitleStore from './ChartTitleStore';
 import AssetInformationStore from './AssetInformationStore';
 import ComparisonListStore from './ComparisonListStore';
 import NotificationStore from './NotificationStore';
-import DoorbellStore from './DoorbellStore';
 import ViewStore from './ViewStore';
 import CrosshairStore from './CrosshairStore';
 import ShareStore from './ShareStore';
@@ -26,7 +25,6 @@ export default class MainStore {
     @observable assetInformation = new AssetInformationStore(this);
     @observable comparisonList = new ComparisonListStore(this);
     @observable notification = new NotificationStore(this);
-    @observable doorbell = new DoorbellStore();
     @observable view = new ViewStore(this);
     @observable crosshair = new CrosshairStore(this);
     @observable share = new ShareStore(this);

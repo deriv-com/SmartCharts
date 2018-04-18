@@ -28,11 +28,15 @@ class SmartChart extends React.Component {
         this.chart.setActiveSymbols(activeSymbols);
 
         this.chart.setIsMobile(this.props.isMobile);
+        this.mainStore.chart.onSymbolChange = this.props.onSymbolChange;
     }
 
-    componentWillReceiveProps({activeSymbols}) {
+    componentWillReceiveProps({activeSymbols, onSymbolChange}) {
         if(activeSymbols && activeSymbols !== this.chart.activeSymbols) {
             this.chart.setActiveSymbols(activeSymbols);
+        }
+        if(onSymbolChange && this.mainStore.chart.onSymbolChange !== onSymbolChange) {
+            this.mainStore.chart.onSymbolChange = onSymbolChange;
         }
     }
 
