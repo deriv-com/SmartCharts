@@ -1,12 +1,24 @@
 .cq-chart-setting {
+    .cq-menu-container{
+        opacity: 0;
+        z-index: -9;
+        visibility: hidden;
+        height: 0px;
+        transition: visibility 0s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0s,
+            opacity 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.1s;
+        &.active{
+            visibility: visible;
+            opacity: 1;
+            z-index: 9;
+            height: auto;
+        }
+    }
     .cq-menu-dropdown {
         right: 0px;
         width: 280px;
         height: 200px;
-        // max-height: 180px;
         color: black;
     }
-
     .title {
         height: 40px;
         line-height: 40px;

@@ -110,36 +110,20 @@ export default class ChartSettingStore {
         }));
     }
 
-
-
     @action.bound setLanguage(lng) {
         this.language = lng;
-
         this.saveSetting();
-
         window.location.reload();
     }
 
-
     @computed get getLanguage() {
-
         return this.language ? this.language : 'en';
     }
 
-    @computed get hasActiveView() {
-        return this.view !== '';
-    }
 
-    @action.bound clearView() {
-        this.view = '';
-    }
 
-    @computed get isViewLanguage() {
-        return this.view === 'language';
-    }
-
-    @action.bound onViewLanguage() {
-        this.view = 'language';
+    @action.bound setView(view) {
+        this.view = view ? view : '';
     }
 
 }

@@ -17,10 +17,9 @@ import '../../sass/_ciq-chart-setting.scss';
 const ChartSetting = ({
     Menu,
     menuOpen,
-    hasActiveView,
-    clearView,
-    onViewLanguage,
-    isViewLanguage,
+    languages,
+    setView,
+    view,
     setLanguage
 }) => {
     const renderMain = () => {
@@ -54,7 +53,7 @@ const ChartSetting = ({
                         <div className="ciq-action">
                             <span></span>
                             <ChevronRightIcon 
-                                onClick={ () => onViewLanguage() }
+                                onClick={ () => setView('language') }
                                 />
                         </div>
                     </div>
@@ -62,73 +61,11 @@ const ChartSetting = ({
             </div>
         </div>
     }
-    const renderView = () => {
-        if ( isViewLanguage ) {
-            return <div>{renderLanguage()}</div>;
-        }
-
-        return <div>Empty</div>
-    }
     const renderLanguage = () =>{
-        let languages = [
-            {
-                key: 'en',
-                name: 'English',
-                icon: <FlagIcons.USD />
-            },{
-                key: 'pt',
-                name: 'Português',
-                icon: <FlagIcons.Portugal />
-            },{
-                key: 'de',
-                name: 'Deutsch',
-                icon: <FlagIcons.German />
-            },{
-                key: 'ru',
-                name: 'Русский',
-                icon: <FlagIcons.Russia />
-            },{
-                key: 'fr',
-                name: 'French',
-                icon: <FlagIcons.French />
-            },{
-                key: 'th',
-                name: 'Thai',
-                icon: <FlagIcons.Thailand />
-            },{
-                key: 'id',
-                name: 'Indonesia',
-                icon: <FlagIcons.Indonesia />
-            },{
-                key: 'vi',
-                name: 'Tiếng Việt',
-                icon: <FlagIcons.Vietnam />
-            },{
-                key: 'it',
-                name: 'Italiano',
-                icon: <FlagIcons.Italy />
-            },{
-                key: 'zh_cn',
-                name: '简体中文',
-                icon: <FlagIcons.Chinese />
-            },{
-                key: 'ja',
-                name: '日本語',
-                icon: <FlagIcons.Japan />
-            },{
-                key: 'zh_tw',
-                name: '繁體中文',
-                icon: <FlagIcons.ChineseTraditional />
-            },{
-                key: 'pl',
-                name: 'Polish',
-                icon: <FlagIcons.Poland />
-            }
-        ];
         return <div>
             <div className='title'>
                 <BackIcon
-                    onClick={() => clearView() }
+                    onClick={() => setView() }
                     />
                 {t.translate('Language')}
             </div>
@@ -145,7 +82,17 @@ const ChartSetting = ({
                 </div>
             </div>
         </div>
+    }
+    const renderBody = () => {
+        if ( view == '' ) {
+            return renderMain();
+        }
 
+        if ( view == 'language' ) {
+            return renderLanguage();
+        }
+
+        return <div>Empty</div>
     }
     return (
         <Menu className="cq-chart-setting">
@@ -156,7 +103,15 @@ const ChartSetting = ({
                 />
             </Menu.Title>
             <Menu.Body>
-                {hasActiveView ? renderView() : renderMain()}
+                {/*renderBody()*/}
+
+                <div className={`cq-menu-container ${ view == '' ? 'active': ''}`}>
+                    {renderMain()}
+                </div>
+                <div className={`cq-menu-container ${ view == 'language' ? 'active': ''}`}>
+                    {renderLanguage()}
+                </div>
+
             </Menu.Body>
         </Menu>
     );
@@ -165,9 +120,8 @@ const ChartSetting = ({
 export default connect(({chartSetting: s}) => ({
     Menu: s.menu.connect(Menu),
     menuOpen: s.menu.dialog.open,
-    hasActiveView: s.hasActiveView,
-    clearView: s.clearView,
-    onViewLanguage: s.onViewLanguage,
-    isViewLanguage: s.isViewLanguage,
+    languages: s.languages,
+    setView: s.setView,
+    view: s.view,
     setLanguage: s.setLanguage
 }))(ChartSetting);
