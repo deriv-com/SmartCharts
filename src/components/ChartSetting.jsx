@@ -24,11 +24,14 @@ const ChartSetting = ({
     setLanguage
 }) => {
     const renderMain = () => {
+        let HiddenStyle = {
+            display: 'none'
+        }
         return <div>
             <div className='title'> {t.translate('Settings')} </div>
             <div className='body'>
                 <div className="ciq-list ciq-list-setting">
-                    <div className="ciq-list-item">
+                    <div className="ciq-list-item" style={HiddenStyle}>
                         <span className="ciq-icon-text">{t.translate('Position')}</span>
                         <div className="ciq-action">
                             <PositionLeftIcon 
@@ -37,7 +40,7 @@ const ChartSetting = ({
                             />
                         </div>
                     </div>
-                    <div className="ciq-list-item">
+                    <div className="ciq-list-item" style={HiddenStyle}>
                         <span className="ciq-icon-text">{t.translate('Theme')}</span>
                         <div className="ciq-action">
                             <ThemeDarkIcon 
@@ -130,10 +133,12 @@ const ChartSetting = ({
                 {t.translate('Language')}
             </div>
             <div className='body'>
-                <div className="ciq-list ciq-list-language">
+                <div className="ciq-list-language">
                     {languages.map( (language,index) => {
-                        return <div className="ciq-list-item" key={index} onClick={()=> setLanguage(language.key) }>
-                            {language.icon}
+                        return <div className="ciq-item" key={index} >
+                            <span onClick={()=> setLanguage(language.key) }>
+                                {language.icon}
+                            </span>
                             <span className="ciq-icon-text">{t.translate(language.name)}</span>
                         </div>
                     })}
@@ -151,7 +156,7 @@ const ChartSetting = ({
                 />
             </Menu.Title>
             <Menu.Body>
-                {hasActiveView ? renderView() : renderMain()}                
+                {hasActiveView ? renderView() : renderMain()}
             </Menu.Body>
         </Menu>
     );
