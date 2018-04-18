@@ -1,5 +1,5 @@
 {
-  "name": "SmartCharts",
+  "name": "smartcharts",
   "version": "0.1.0",
   "main": "dist/smartcharts.js",
   "author": "amin@binary.com",
@@ -8,6 +8,7 @@
     "type": "git",
     "url": "git+ssh://git@github.com/binary-com/SmartCharts.git"
   },
+  "homepage": "https://github.com/binary-com/SmartCharts#readme",
   "keywords": [
     "charts",
     "binary.com"
