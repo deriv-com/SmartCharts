@@ -7,13 +7,13 @@ import createReactClass from 'create-react-class';
  * http://stackoverflow.com/questions/5429827/how-can-i-prevent-text-element-selection-with-cursor-drag
  */
 function pauseEvent(e) {
-    if (e.stopPropagation) e.stopPropagation();
-    if (e.preventDefault) e.preventDefault();
+    if (e.stopPropagation) {e.stopPropagation();}
+    if (e.preventDefault) {e.preventDefault();}
     return false;
 }
 
 function stopPropagation(e) {
-    if (e.stopPropagation) e.stopPropagation();
+    if (e.stopPropagation) {e.stopPropagation();}
 }
 
 /**
@@ -94,32 +94,32 @@ var ReactSlider = createReactClass({
         /**
          * Determines whether the slider moves horizontally (from left to right) or vertically (from top to bottom).
          */
-      orientation: PropTypes.oneOf(['horizontal', 'vertical']),
+        orientation: PropTypes.oneOf(['horizontal', 'vertical']),
 
-    /**
+        /**
      * The css class set on the slider node.
      */
-    className: PropTypes.string,
+        className: PropTypes.string,
 
-    /**
+        /**
      * The css class set on each handle node.
      *
      * In addition each handle will receive a numbered css class of the form `${handleClassName}-${i}`,
      * e.g. `handle-0`, `handle-1`, ...
      */
-    handleClassName: PropTypes.string,
+        handleClassName: PropTypes.string,
 
-    /**
+        /**
      * The css class set on the handle that is currently being moved.
      */
-    handleActiveClassName: PropTypes.string,
+        handleActiveClassName: PropTypes.string,
 
-    /**
+        /**
     * If `true` bars between the handles will be rendered.
     */
-    withBars: PropTypes.bool,
+        withBars: PropTypes.bool,
 
-    /**
+        /**
      * The css class set on the bars between the handles.
      * In addition bar fragment will receive a numbered css class of the form `${barClassName}-${i}`,
         * e.g. `bar-0`, `bar-1`, ...
@@ -225,7 +225,7 @@ var ReactSlider = createReactClass({
             this.state.value[i] = this._trimAlignValue(value[i], newProps);
         }
         if (this.state.value.length > value.length)
-            this.state.value.length = value.length;
+        {this.state.value.length = value.length;}
 
         // If an upperBound has not yet been determined (due to the component being hidden
         // during the mount event, or during the last resize), then calculate it now
@@ -242,17 +242,17 @@ var ReactSlider = createReactClass({
     _or: function (value, defaultValue) {
         var count = React.Children.count(this.props.children);
         switch (count) {
-            case 0:
-                return value.length > 0 ? value : defaultValue;
-            case value.length:
-                return value;
-            case defaultValue.length:
-                return defaultValue;
-            default:
-                if (value.length !== count || defaultValue.length !== count) {
-                    console.warn(this.constructor.displayName + ": Number of values does not match number of children.");
-                }
-                return linspace(this.props.min, this.props.max, count);
+        case 0:
+            return value.length > 0 ? value : defaultValue;
+        case value.length:
+            return value;
+        case defaultValue.length:
+            return defaultValue;
+        default:
+            if (value.length !== count || defaultValue.length !== count) {
+                console.warn(`${this.constructor.displayName}: Number of values does not match number of children.`);
+            }
+            return linspace(this.props.min, this.props.max, count);
         }
     },
 
@@ -330,14 +330,14 @@ var ReactSlider = createReactClass({
             willChange: this.state.index >= 0 ? this._posMinKey() : '',
             zIndex: this.state.zIndices.indexOf(i) + 1
         };
-        style[this._posMinKey()] = offset + 'px';
+        style[this._posMinKey()] = `${offset}px`;
         return style;
     },
 
     _buildBarStyle: function (min, max) {
         var obj = {
             position: 'absolute',
-            willChange: this.state.index >= 0 ? this._posMinKey() + ',' + this._posMaxKey() : ''
+            willChange: this.state.index >= 0 ? `${this._posMinKey()},${this._posMaxKey()}` : ''
         };
         obj[this._posMinKey()] = min;
         obj[this._posMaxKey()] = max;
@@ -365,7 +365,7 @@ var ReactSlider = createReactClass({
 
     _calcOffsetFromPosition: function (position) {
         var pixelOffset = position - this.state.sliderStart;
-        if (this.props.invert) pixelOffset = this.state.sliderLength - pixelOffset;
+        if (this.props.invert) {pixelOffset = this.state.sliderLength - pixelOffset;}
         pixelOffset -= (this.state.handleSize / 2);
         return pixelOffset;
     },
@@ -381,7 +381,7 @@ var ReactSlider = createReactClass({
 
         // Prevents the slider from shrinking below `props.minDistance`
         for (var i = 0; i < value.length - 1; i += 1) {
-            if (value[i + 1] - value[i] < this.props.minDistance) return;
+            if (value[i + 1] - value[i] < this.props.minDistance) {return;}
         }
 
         this.setState({value: value}, callback.bind(this, closestIndex));
@@ -389,16 +389,16 @@ var ReactSlider = createReactClass({
 
     _getMousePosition: function (e) {
         return [
-            e['page' + this._axisKey()],
-            e['page' + this._orthogonalAxisKey()]
+            e[`page${this._axisKey()}`],
+            e[`page${this._orthogonalAxisKey()}`]
         ];
     },
 
     _getTouchPosition: function (e) {
         var touch = e.touches[0];
         return [
-            touch['page' + this._axisKey()],
-            touch['page' + this._orthogonalAxisKey()]
+            touch[`page${this._axisKey()}`],
+            touch[`page${this._orthogonalAxisKey()}`]
         ];
     },
 
@@ -406,27 +406,27 @@ var ReactSlider = createReactClass({
         return {
             'keydown': this._onKeyDown,
             'focusout': this._onBlur
-        }
+        };
     },
 
     _getMouseEventMap: function () {
         return {
             'mousemove': this._onMouseMove,
             'mouseup': this._onMouseUp
-        }
+        };
     },
 
     _getTouchEventMap: function () {
         return {
             'touchmove': this._onTouchMove,
             'touchend': this._onTouchEnd
-        }
+        };
     },
 
     // create the `keydown` handler for the i-th handle
     _createOnKeyDown: function (i) {
         return function (e) {
-            if (this.props.disabled) return;
+            if (this.props.disabled) {return;}
             this._start(i);
             this._addHandlers(this._getKeyDownEventMap());
             pauseEvent(e);
@@ -436,7 +436,7 @@ var ReactSlider = createReactClass({
     // create the `mousedown` handler for the i-th handle
     _createOnMouseDown: function (i) {
         return function (e) {
-            if (this.props.disabled) return;
+            if (this.props.disabled) {return;}
             var position = this._getMousePosition(e);
             this._start(i, position[0]);
             this._addHandlers(this._getMouseEventMap());
@@ -447,7 +447,7 @@ var ReactSlider = createReactClass({
     // create the `touchstart` handler for the i-th handle
     _createOnTouchStart: function (i) {
         return function (e) {
-            if (this.props.disabled || e.touches.length > 1) return;
+            if (this.props.disabled || e.touches.length > 1) {return;}
             var position = this._getTouchPosition(e);
             this.startPosition = position;
             this.isScrolling = undefined; // don't know yet if the user is trying to scroll
@@ -471,10 +471,10 @@ var ReactSlider = createReactClass({
 
     _start: function (i, position) {
         var activeEl = document.activeElement;
-        var handleRef = this.refs['handle' + i];
+        var handleRef = this.refs[`handle${i}`];
         // if activeElement is body window will lost focus in IE9
         if (activeEl && activeEl != document.body && activeEl != handleRef) {
-            activeEl.blur && activeEl.blur();
+            if(activeEl.blur) {activeEl.blur();}
         }
 
         this.hasMoved = false;
@@ -518,7 +518,7 @@ var ReactSlider = createReactClass({
     },
 
     _onTouchMove: function (e) {
-        if (e.touches.length > 1) return;
+        if (e.touches.length > 1) {return;}
 
         var position = this._getTouchPosition(e);
 
@@ -542,22 +542,22 @@ var ReactSlider = createReactClass({
     },
 
     _onKeyDown: function (e) {
-        if (e.ctrlKey || e.shiftKey || e.altKey) return;
+        if (e.ctrlKey || e.shiftKey || e.altKey) {return;}
         switch (e.key) {
-            case "ArrowLeft":
-            case "ArrowUp":
-                e.preventDefault();
-                return this._moveDownOneStep();
-            case "ArrowRight":
-            case "ArrowDown":
-                e.preventDefault();
-                return this._moveUpOneStep();
-            case "Home":
-                return this._move(this.props.min);
-            case "End":
-                return this._move(this.props.max);
-            default:
-                return;
+        case "ArrowLeft":
+        case "ArrowUp":
+            e.preventDefault();
+            return this._moveDownOneStep();
+        case "ArrowRight":
+        case "ArrowDown":
+            e.preventDefault();
+            return this._moveUpOneStep();
+        case "Home":
+            return this._move(this.props.min);
+        case "End":
+            return this._move(this.props.max);
+        default:
+
         }
     },
 
@@ -580,7 +580,7 @@ var ReactSlider = createReactClass({
 
     _getDiffPosition: function (position) {
         var diffPosition = position - this.state.startPosition;
-        if (this.props.invert) diffPosition *= -1;
+        if (this.props.invert) {diffPosition *= -1;}
         return diffPosition;
     },
 
@@ -674,32 +674,32 @@ var ReactSlider = createReactClass({
 
     _axisKey: function () {
         var orientation = this.props.orientation;
-        if (orientation === 'horizontal') return 'X';
-        if (orientation === 'vertical') return 'Y';
+        if (orientation === 'horizontal') {return 'X';}
+        if (orientation === 'vertical') {return 'Y';}
     },
 
     _orthogonalAxisKey: function () {
         var orientation = this.props.orientation;
-        if (orientation === 'horizontal') return 'Y';
-        if (orientation === 'vertical') return 'X';
+        if (orientation === 'horizontal') {return 'Y';}
+        if (orientation === 'vertical') {return 'X';}
     },
 
     _posMinKey: function () {
         var orientation = this.props.orientation;
-        if (orientation === 'horizontal') return this.props.invert ? 'right' : 'left';
-        if (orientation === 'vertical') return this.props.invert ? 'bottom' : 'top';
+        if (orientation === 'horizontal') {return this.props.invert ? 'right' : 'left';}
+        if (orientation === 'vertical') {return this.props.invert ? 'bottom' : 'top';}
     },
 
     _posMaxKey: function () {
         var orientation = this.props.orientation;
-        if (orientation === 'horizontal') return this.props.invert ? 'left' : 'right';
-        if (orientation === 'vertical') return this.props.invert ? 'top' : 'bottom';
+        if (orientation === 'horizontal') {return this.props.invert ? 'left' : 'right';}
+        if (orientation === 'vertical') {return this.props.invert ? 'top' : 'bottom';}
     },
 
     _sizeKey: function () {
         var orientation = this.props.orientation;
-        if (orientation === 'horizontal') return 'clientWidth';
-        if (orientation === 'vertical') return 'clientHeight';
+        if (orientation === 'horizontal') {return 'clientWidth';}
+        if (orientation === 'vertical') {return 'clientHeight';}
     },
 
     _trimAlignValue: function (val, props) {
@@ -709,8 +709,8 @@ var ReactSlider = createReactClass({
     _trimValue: function (val, props) {
         props = props || this.props;
 
-        if (val <= props.min) val = props.min;
-        if (val >= props.max) val = props.max;
+        if (val <= props.min) {val = props.min;}
+        if (val >= props.max) {val = props.max;}
 
         return val;
     },
@@ -729,14 +729,14 @@ var ReactSlider = createReactClass({
     },
 
     _renderHandle: function (style, child, i) {
-        var className = this.props.handleClassName + ' ' +
-            (this.props.handleClassName + '-' + i) + ' ' +
-            (this.state.index === i ? this.props.handleActiveClassName : '');
+        var className = `${this.props.handleClassName} ${
+            this.props.handleClassName}-${i} ${
+            this.state.index === i ? this.props.handleActiveClassName : ''}`;
 
         return (
             React.createElement('div', {
-                ref: 'handle' + i,
-                key: 'handle' + i,
+                ref: `handle${i}`,
+                key: `handle${i}`,
                 className: className,
                 style: style,
                 onMouseDown: this._createOnMouseDown(i),
@@ -750,7 +750,7 @@ var ReactSlider = createReactClass({
                 "aria-label": isArray(this.props.ariaLabel) ? this.props.ariaLabel[i] : this.props.ariaLabel,
                 "aria-valuetext": this.props.ariaValuetext,
             },
-                child
+            child
             )
         );
     },
@@ -780,9 +780,9 @@ var ReactSlider = createReactClass({
     _renderBar: function (i, offsetFrom, offsetTo) {
         return (
             React.createElement('div', {
-                key: 'bar' + i,
-                ref: 'bar' + i,
-                className: this.props.barClassName + ' ' + this.props.barClassName + '-' + i,
+                key: `bar${i}`,
+                ref: `bar${i}`,
+                className: `${this.props.barClassName} ${this.props.barClassName}-${i}`,
                 style: this._buildBarStyle(offsetFrom, this.state.upperBound - offsetTo)
             })
         );
@@ -804,7 +804,7 @@ var ReactSlider = createReactClass({
     },
 
     _onSliderMouseDown: function (e) {
-        if (this.props.disabled) return;
+        if (this.props.disabled) {return;}
         this.hasMoved = false;
         if (!this.props.snapDragDisabled) {
             var position = this._getMousePosition(e);
@@ -819,7 +819,7 @@ var ReactSlider = createReactClass({
     },
 
     _onSliderClick: function (e) {
-        if (this.props.disabled) return;
+        if (this.props.disabled) {return;}
 
         if (this.props.onSliderClick && !this.hasMoved) {
             var position = this._getMousePosition(e);
@@ -856,8 +856,8 @@ var ReactSlider = createReactClass({
                 onMouseDown: this._onSliderMouseDown,
                 onClick: this._onSliderClick
             },
-                bars,
-                handles
+            bars,
+            handles
             )
         );
     }

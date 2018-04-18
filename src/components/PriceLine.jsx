@@ -35,7 +35,7 @@ class PriceLine extends Component {
                     <div className="price">{priceDisplay}</div>
                 </div>
             </div>
-        )
+        );
     }
 }
 
