@@ -1,53 +1,43 @@
-/* Used for demo app only. Do not deploy with library! */
+/* Used for app only. Do not deploy with library! */
 
 #root {
-  display: flex;
-
-  /*cq-context {*/
-    /*width: 50%;*/
-  /*}*/
-
-  cq-context#binarychartiq-2 {
-    left: 50%;
-  }
+    display: flex;
 }
 
-/* Doorbell  CSS: */
+/* Doorbell */
 
 #doorbell-button {
-  left: -30px;
-  bottom: 30%;
-  background: #4C5794;
-  color: #fff;
-  border: 1px solid #4C5794;
-  border-bottom: none;
-  padding: 4px 8px;
-  transform: rotate(90deg);
+    left: -30px;
+    bottom: 30%;
+    background: #4C5794;
+    color: #fff;
+    border: 1px solid #4C5794;
+    border-bottom: none;
+    padding: 4px 8px;
+    transform: rotate(90deg);
 }
 
 #doorbell form {
-  box-shadow: none;
-  border: 1px solid #4c4c4c;
-}
-#doorbell form input,  #doorbell form textarea {
-  outline: 0;
-}
+    box-shadow: none;
+    border: 1px solid #4c4c4c;
 
-#doorbell form input:focus, #doorbell form textarea:focus {
-  border: 1px solid #4C5794;
-}
+    input, textarea {
+        outline: 0;
+        &:focus {
+            border: 1px solid #4C5794;
+        }
+    }
 
-#doorbell-submit-button {
-  color: #4C5794;
-  border: none;
-  background: white;
-}
-
-#doorbell-submit-button:hover {
-  color: #4C5794;
-  background: white;
+    #doorbell-submit-button {
+        color: #4C5794;
+        border: none;
+        background: white;
+        &:hover {
+            background: white;
+        }
+    }
 }
 
 #doorbell-background {
-  opacity: 0;
+    opacity: 0;
 }
