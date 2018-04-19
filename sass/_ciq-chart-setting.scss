@@ -38,7 +38,18 @@
         padding: 16px;
         .ciq-list-setting{
             height: auto;
-            .ciq-list-item{
+            overflow-y: auto;
+            position: relative;
+            .ciq-item{
+
+                border: 1px solid #e9e9ed;
+                border-top: none;
+                background: #fff;
+                box-sizing: border-box;
+                font-size: 12px;
+                color: #000;
+                padding-left: 16px;
+
                 display: flex;
                 height: 38px;
                 line-height: 38px;
@@ -63,7 +74,7 @@
             height: auto;
             overflow-y: auto;
             position: relative;
-            .ciq-item{
+            .ciq-list-item{
 
                 border: 1px solid #e9e9ed;
                 border-top: none;

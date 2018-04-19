@@ -29,8 +29,8 @@ const ChartSetting = ({
         return <div>
             <div className='title'> {t.translate('Settings')} </div>
             <div className='body'>
-                <div className="ciq-list ciq-list-setting">
-                    <div className="ciq-list-item" style={HiddenStyle}>
+                <div className="ciq-list-setting">
+                    <div className="ciq-item" style={HiddenStyle}>
                         <span className="ciq-icon-text">{t.translate('Position')}</span>
                         <div className="ciq-action">
                             <PositionLeftIcon 
@@ -39,7 +39,7 @@ const ChartSetting = ({
                             />
                         </div>
                     </div>
-                    <div className="ciq-list-item" style={HiddenStyle}>
+                    <div className="ciq-item" style={HiddenStyle}>
                         <span className="ciq-icon-text">{t.translate('Theme')}</span>
                         <div className="ciq-action">
                             <ThemeDarkIcon 
@@ -48,7 +48,7 @@ const ChartSetting = ({
                             />
                         </div>
                     </div>
-                    <div className="ciq-list-item ciq-list-item-lng">
+                    <div className="ciq-item ciq-list-item-lng">
                         <span className="ciq-icon-text">{t.translate('Language')}</span>
                         <div className="ciq-action">
                             <span></span>
@@ -70,9 +70,9 @@ const ChartSetting = ({
                 {t.translate('Language')}
             </div>
             <div className='body'>
-                <div className="ciq-list-language">
+                <div className="ciq-list ciq-list-language">
                     {languages.map( (language,index) => {
-                        return <div className="ciq-item" key={index} >
+                        return <div className="ciq-list-item" key={index} >
                             <span onClick={()=> setLanguage(language.key) }>
                                 {language.icon}
                             </span>
