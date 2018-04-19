@@ -305,7 +305,7 @@ class ChartStore {
      * @param {bool} status if true, measn mobile mode is active
      */
     setIsMobile(status) {
-        this.isMobile = status;
+        this.isMobile = !status ? CIQ.isMobile : status;
     }
 
     processSymbols(symbols) {
