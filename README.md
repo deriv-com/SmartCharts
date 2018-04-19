@@ -16,6 +16,9 @@ SmartCharts is both the name of the app ([charts.binary.com](https://charts.bina
 > Note: eventhough both `yarn build` and `yarn build:app` outputs `smartcharts.js` and `smartcharts.css`, **they are not the same files**. One outputs a library and the the other outputs an app.
 
 ## Quick Start
+
+To see how to configure smartcharts for your webpack project, refer to `app/webpack.config.js` (_this config is not used in the app development; refer to [this section](#separation-of-app-and-library) for more details_).
+
 ```jsx
 import {
     SmartChart,
@@ -69,6 +72,16 @@ To contribute to SmartCharts, fork this project and checkout the `dev` branch. W
 > Note: When you send pull requests, remember to set the base branch to `dev`.
 
 Once your changes have been merged to `dev`, it will immediately deployed to [charts.binary.com/beta](https://charts.binary.com/beta/). 
+
+### Developer Notes
+
+#### Separation of App and Library
+
+There should be a clear distinction between developing for app and developing for library. Library source code is all inside `src` folder, whereas app source code is inside `app`.
+
+Webpack determines whether to build an app or library depending on whether an environment variable `BUILD_MODE` is set to `app`. Setting this variable switches the entry point of the project, but on the **same** `webpack.config.js` (the one on the root folder). The `webpack.config.js` in the `app` folder is never actually used in this process; what the `webpack.config.js` in the `app` does is offer a guide to how to use the smartcharts library as an npm package. We do it this way to develop the app to have hot reload available when we modify library files.
+
+
 
 ### Manual Deployment
 
