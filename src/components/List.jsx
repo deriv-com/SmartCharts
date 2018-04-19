@@ -10,7 +10,7 @@ const List = ({
     onRootRef,
     children,
 }) => {
-    const hasFunctionAsChildren = (typeof children == 'function');
+    const hasFunctionAsChildren = (typeof children === 'function');
     const renderRow = hasFunctionAsChildren ? children : (item => item.text);
     const itemClassName = (it, idx) => {
         return 'ciq-list-item' +

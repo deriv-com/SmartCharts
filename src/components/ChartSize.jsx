@@ -21,6 +21,6 @@ class ChartSize extends PureComponent {
             </div>
         );
     }
-};
+}
 
 export default contextAware(ChartSize);
