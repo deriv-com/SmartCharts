@@ -5,6 +5,7 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 const production = process.env.NODE_ENV === 'production';
+const isApp = process.env.BUILD_MODE === 'app';
 
 const config = {
     devtool: 'source-map',
@@ -133,6 +134,15 @@ if (production) {
 
 if (process.env.ANALYZE_BUNDLE) {
     config.plugins.push(new BundleAnalyzerPlugin());
+}
+
+if (isApp) {
+    config.entry = ['babel-polyfill', path.resolve(__dirname, './app/index.jsx')];
+    config.resolve = {
+        alias: {
+            smartcharts: path.resolve(__dirname, 'src/'),
+        }
+    };
 }
 
 module.exports = config;

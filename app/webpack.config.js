@@ -8,7 +8,7 @@ const config = {
     output: {
         publicPath: '/dist/',
         path: path.resolve(__dirname, 'dist'),
-        filename: 'example-app.js',
+        filename: 'app.js',
     },
     module: {
         rules: [
