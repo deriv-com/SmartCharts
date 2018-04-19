@@ -1,7 +1,7 @@
 const md5File = require('md5-file')
 const fs = require('fs');
 
-const files = ['./dist/smartcharts.js', './dist/smartcharts.css', './css/demo.css'];
+const files = ['./dist/smartcharts.js', './dist/smartcharts.css', './css/app.css'];
 
 let html = fs.readFileSync('index.html', 'utf-8');
 files.forEach(file => {
@@ -10,4 +10,4 @@ files.forEach(file => {
     html = html.replace(/PLACEHOLDER[^"]*/, `${file}?${hash}`);
 });
 
-fs.writeFileSync('index.html', html, 'utf-8'); 
+fs.writeFileSync('index.html', html, 'utf-8');
