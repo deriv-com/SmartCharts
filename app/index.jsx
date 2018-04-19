@@ -7,6 +7,7 @@ import {
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './app.scss';
+import './doorbell';
 
 class App extends React.Component {
     constructor() {
