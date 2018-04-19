@@ -25,10 +25,10 @@ class StudyLegend extends Component {
                         tooltip-title={t.translate("Studies")} />
                 </Menu.Title>
                 <Menu.Body>
-                    <StudyCategoricalDisplay 
+                    <StudyCategoricalDisplay
                         dialogTitle={t.translate("Studies")}
                         closeMenu={ () => onCloseMenu() }
-                        />
+                    />
                 </Menu.Body>
             </Menu>
         );

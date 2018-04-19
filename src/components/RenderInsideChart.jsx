@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
 class Wrapper extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { children: null }
+        this.state = { children: null };
     }
 
     componentDidMount() {
@@ -47,6 +47,6 @@ class RenderInsideChart extends PureComponent {
         }
         return (null);
     }
-};
+}
 
 export default RenderInsideChart;

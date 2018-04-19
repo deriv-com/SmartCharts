@@ -5,7 +5,7 @@ const Loader = ({
     isActive
 }) => (
     <div className={`cq-loader ${isActive ? 'show' : ''}`}></div>
-)
+);
 
 export default connect(
     ({loader: l}) => ({
