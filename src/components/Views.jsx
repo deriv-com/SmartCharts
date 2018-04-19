@@ -56,8 +56,8 @@ const Views = ({
                                 />
                                 <CloseIcon onClick={cancel} />
                             </span>
-                            : <span className="title">Templates</span>
-                    }
+                            : <span className="title">{t.translate("Templates")}</span>
+                        }
                     <span className="icon">
                         {
                             currentRoute === 'add'
