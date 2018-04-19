@@ -49,7 +49,7 @@ class ChartStore {
     @observable comparisonSymbols = [];
     @observable categorizedSymbols = [];
     @observable barrierJSX;
-    @observable isMobile;
+    isMobile;
 
     @action.bound setActiveSymbols(activeSymbols) {
         if (activeSymbols && this.context) {
