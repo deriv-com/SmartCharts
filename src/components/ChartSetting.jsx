@@ -83,17 +83,6 @@ const ChartSetting = ({
             </div>
         </div>
     }
-    const renderBody = () => {
-        if ( view == '' ) {
-            return renderMain();
-        }
-
-        if ( view == 'language' ) {
-            return renderLanguage();
-        }
-
-        return <div>Empty</div>
-    }
     return (
         <Menu className="cq-chart-setting">
             <Menu.Title>
@@ -103,8 +92,6 @@ const ChartSetting = ({
                 />
             </Menu.Title>
             <Menu.Body>
-                {/*renderBody()*/}
-
                 <div className={`cq-menu-container ${ view == '' ? 'active': ''}`}>
                     {renderMain()}
                 </div>
