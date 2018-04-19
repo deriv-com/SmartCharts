@@ -6,7 +6,7 @@ Binary.com charting library using chartiq.
 - use `yarn install` to install dependencies
 - use `yarn start` to launch webpack dev server
 - use `yarn build` to build the library
-- use `yarn build:app` to build the charts.binary.com app
+- use `yarn build:app` to build the [charts.binary.com](https://charts.binary.com/) app
 - use `yarn analyze` to run webpack-bundle-analyzer
 
 ## Quick Start

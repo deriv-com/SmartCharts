@@ -18,23 +18,28 @@ const config = {
                 loader: 'babel-loader',
                 options: { presets: ['env', 'react'] },
             },
+            {
+                test: /\.(s*)css$/,
+                use: [{
+                    loader: 'css-loader',
+                    options: { sourceMap: true, minimize: true }
+                }, {
+                    loader: 'sass-loader',
+                    options: { sourceMap: true }
+                }],
+            },
         ],
     },
     plugins: [
         new CopyWebpackPlugin([
-            { from: '../dist/chartiq.min.js' },
-            { from: '../dist/smartcharts.css' },
+            { from: './node_modules/@binary-com/smartcharts/dist/chartiq.min.js' },
+            { from: './node_modules/@binary-com/smartcharts/dist/smartcharts.css' },
         ])
     ],
     externals: {
         jquery: 'jQuery',
         CIQ: 'CIQ',
     },
-    resolve: {
-        alias: {
-            smartcharts: '../dist/smartcharts.js',
-        }
-    }
 };
 
 module.exports = config;

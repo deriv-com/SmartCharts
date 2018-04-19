@@ -3,7 +3,7 @@ import {
     Barrier,
     TradeStartLine,
     TradeEndLine
-} from 'smartcharts';
+} from '@binary-com/smartcharts';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './app.scss';

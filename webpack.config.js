@@ -140,7 +140,7 @@ if (isApp) {
     config.entry = ['babel-polyfill', path.resolve(__dirname, './app/index.jsx')];
     config.resolve = {
         alias: {
-            smartcharts: path.resolve(__dirname, 'src/'),
+            '@binary-com/smartcharts': path.resolve(__dirname, 'src/'),
         }
     };
 }
