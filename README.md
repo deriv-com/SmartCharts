@@ -1,6 +1,10 @@
 # SmartCharts
 
-Binary.com charting library using chartiq.
+SmartCharts is both the name of the app ([charts.binary.com](https://charts.binary.com/)) and the charting library. You can install the library to your project via:
+
+    yarn add @binary-com/smartcharts
+
+**Important Note:** the license for the library is tied to the `binary.com` domain name; it will not work in github pages.
 
 ## Commands:
 - use `yarn install` to install dependencies
@@ -8,6 +12,8 @@ Binary.com charting library using chartiq.
 - use `yarn build` to build the library
 - use `yarn build:app` to build the [charts.binary.com](https://charts.binary.com/) app
 - use `yarn analyze` to run webpack-bundle-analyzer
+
+> Note: eventhough both `yarn build` and `yarn build:app` outputs `smartcharts.js` and `smartcharts.css`, **they are not the same files**. One outputs a library and the the other outputs an app.
 
 ## Quick Start
 ```jsx
@@ -65,6 +71,12 @@ To contribute to SmartCharts, fork this project and checkout the `dev` branch. W
 Once your changes have been merged to `dev`, it will immediately deployed to [charts.binary.com/beta](https://charts.binary.com/beta/). 
 
 ### Manual Deployment
+
+#### Deploy to NPM
+
+    yarn build && yarn publish
+
+#### Deploy to [charts.binary.com](https://charts.binary.com/)
 
 > Note: This is usually not required, since Travis will automatically deploy to [charts.binary.com](https://charts.binary.com/) and [charts.binary.com/beta](https://charts.binary.com/beta/) when `master` and `dev` is updated.
 
