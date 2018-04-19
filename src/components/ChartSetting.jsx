@@ -23,14 +23,13 @@ const ChartSetting = ({
     setLanguage
 }) => {
     const renderMain = () => {
-        let HiddenStyle = {
-            display: 'none'
-        }
         return <div>
             <div className='title'> {t.translate('Settings')} </div>
             <div className='body'>
                 <div className="ciq-list-setting">
-                    <div className="ciq-item" style={HiddenStyle}>
+                    {/*
+                        other chart setting option which not use for now
+                    <div className="ciq-item">
                         <span className="ciq-icon-text">{t.translate('Position')}</span>
                         <div className="ciq-action">
                             <PositionLeftIcon 
@@ -39,7 +38,7 @@ const ChartSetting = ({
                             />
                         </div>
                     </div>
-                    <div className="ciq-item" style={HiddenStyle}>
+                    <div className="ciq-item">
                         <span className="ciq-icon-text">{t.translate('Theme')}</span>
                         <div className="ciq-action">
                             <ThemeDarkIcon 
@@ -47,7 +46,7 @@ const ChartSetting = ({
                             <ThemeLightIcon 
                             />
                         </div>
-                    </div>
+                    </div>*/}
                     <div className="ciq-item ciq-list-item-lng">
                         <span className="ciq-icon-text">{t.translate('Language')}</span>
                         <div className="ciq-action">
