@@ -13,7 +13,7 @@ cq-context{
             width: 200px;
             padding: 16px;
             background: #fafafa;
-            box-sizing: border-box;
+            @include box-sizing(border-box);
         }
         .ciq-title {
             display: flex;
@@ -34,7 +34,7 @@ cq-context{
                     background: transparent;
                 }
                 &.active {
-                    color: #4C5794;
+                    color: $active-color;
                     font-weight: bold;
                     background-color: #F2F3F8;
                     .ic-icon{

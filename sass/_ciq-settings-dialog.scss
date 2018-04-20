@@ -1,3 +1,6 @@
+@import "_variables";
+
+
 .cq-settings-dialog {
     display: flex;
     flex-direction: column;
@@ -18,17 +21,17 @@
             height: 50px;
         }
         &.no-tabs {
-            border-bottom: 1px solid #E9E9ED;
+            border-bottom: 1px solid $DEFAULT-border;
         }
     }
 
     .tabs {
         height: 40px;
-        box-sizing: border-box;
         align-items: stretch;
         display: flex;
         position: relative;
-        border-bottom: 1px solid #E9E9ED;
+        border-bottom: 1px solid $DEFAULT-border;
+        @include box-sizing(border-box);
         > div {
             text-align: center;
             line-height: 40px;
@@ -39,12 +42,12 @@
         }
         .active-border {
             position: absolute;
-            background: #4C5794;
+            background: $active-color;
             height: 2px;
             width: calc(50% + 1px);
             bottom: -1px;
             left: 0;
-            transition: left linear 0.1s;
+            @include transition(left linear 0.1s);
             &.second {
                 left: 50%;
             }
@@ -56,7 +59,7 @@
         flex-grow: 1;
         overflow: scroll;
         .item {
-            box-sizing: border-box;
+            @include box-sizing(border-box);
             padding: 0 16px;
             height: 32px;
             margin-bottom: 5px;
@@ -75,14 +78,14 @@
     .buttons {
         display: flex;
         justify-content: flex-end;
-        border-top: 1px solid #E9E9ED;
+        border-top: 1px solid $DEFAULT-border;
         > div {
             width: 90px;
             height: 40px;
             line-height: 40px;
             text-align: center;
             cursor: pointer;
-            color: #4C5794;
+            color: $active-color;
             font-size: 14px;
         }
     }
@@ -98,10 +101,10 @@
         display: inline-block;
         width: 3.2em;
         line-height: 1.9em;
-        border-radius: 3px;
         margin-right: 5px;
         padding-left: 6px;
         border: 1px solid #cccccc;
+        @include border-radius(3px);
     }
 
     .cq-color-picker {

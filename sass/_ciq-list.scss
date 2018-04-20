@@ -1,22 +1,24 @@
+@import "_variables";
+
 .ciq-list {
   height: 250px;
   overflow-y: auto;
   position: relative;
 
   .ciq-list-item {
-    border: 1px solid #E9E9ED;
+    border: 1px solid $DEFAULT-border;
     border-top: none;
     &:first-child {
-      border-top: 1px solid #E9E9ED;
+      border-top: 1px solid $DEFAULT-border;
     }
-    background: #FFFFFF;
-    box-sizing: border-box;
+    background: $DEFAULT-menu-bg;
     height: 32px;
     line-height: 32px;
     font-size: 12px;
     color: black;
     padding-left: 16px;
     cursor: pointer;
+    @include box-sizing(border-box);
     &.selected {
       background: #efefef;
     }

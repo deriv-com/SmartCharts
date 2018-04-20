@@ -66,11 +66,11 @@ $green: #4caf50;
 }
 
 .drag-price {
+    background-color: $DEFAULT-menu-bg;
     display: block;
-    background-color: #FFFFFF;
     height: 25px;
     border: 1px solid black;
-    border-radius: 5px;
+    @include border-radius(5px);
     top: -1px;
     position: absolute;
     right: 0px;
@@ -113,29 +113,35 @@ $green: #4caf50;
 
 /*hover*/
 
-.no-touch .chart-line:hover .price-arrow {
-    width: 20px;
-    height: 23px;
+.no-touch {
+    .price-arrow {
+        span {
+            position: absolute;
+            top: 4px;
+            left: 6px;
+            display: block;
+            width: 15px;
+            height: 15px;
+            background-position: -4px -488px;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+    }
+    .chart-line:hover {
+        .price-arrow {
+            width: 20px;
+            height: 23px;
+            span {
+                opacity: 1;
+            }
+        }
+    }
 }
 
-.no-touch .price-arrow span {
-    position: absolute;
-    top: 4px;
-    left: 6px;
-    display: block;
-    width: 15px;
-    height: 15px;
-    background-position: -4px -488px;
-    opacity: 0;
-    transition: opacity 0.2s;
-}
 
 
 /*hover*/
 
-.no-touch .chart-line:hover .price-arrow span {
-    opacity: 1;
-}
 
 .price {
     color: #000;
@@ -225,7 +231,7 @@ $trade-text-distance: 1.6em;
 
             .circle {
                 $circle-diameter: 1.9em;
-                border-radius: 100%;
+                @include border-radius(100%);
                 width: $circle-diameter;
                 height: $circle-diameter;
                 background-color: $trade-end-color;
