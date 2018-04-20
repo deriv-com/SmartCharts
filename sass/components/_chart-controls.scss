@@ -4,7 +4,7 @@ cq-context {
 
     .cq-chart-controls {
         /* Chart Control module */
-        background: white;
+        background: $DEFAULT-main;
         position: absolute;
         display: flex !important;
         bottom: 37px !important;
@@ -73,8 +73,8 @@ cq-context {
                 visibility: hidden;
                 @include dialog-transition();
                 .ciq-icon {
-                    width: 16px;
-                    height: 16px;
+                    width: $small-icon-size;
+                    height: $small-icon-size;
                     margin: 0 5px;
                 }
                 &.open{
@@ -124,11 +124,11 @@ cq-context {
     /* Mobile Style */
     &.smartcharts-mobile{
         .cq-chart-controls {
+            background: $DEFAULT-main;
             bottom: 0px !important;
             left: 0px !important;
             transform: translateX(-0%) !important;
             width: 100% !important;
-            background: white;
             box-shadow: none;
             justify-content: space-around;
             border-top: 1px solid #d9d9d9;

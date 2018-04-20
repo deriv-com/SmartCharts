@@ -27,6 +27,7 @@ $footer-height: 45px !default;
 $active-color: #4C5794;
 $large-icon-size: 32px;
 $normal-icon-size: 24px;
+$small-icon-size: 16px;
 
 /* Default (Light) Theme */
 
@@ -60,18 +61,9 @@ $DEFAULT-border-strong:		#999 !default;
 
 /* --------- Animation : dialog --------- */
 @mixin dialog-transition {
-  -webkit-transition: visibility 0.1s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0s,
+  @include transition(visibility 0.1s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0s,
       margin-top 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.1s,
-      opacity 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.1s;
-  -moz-transition: visibility 0.1s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0s,
-      margin-top 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.1s,
-      opacity 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.1s;
-  -ms-transition: visibility 0.1s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0s,
-      margin-top 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.1s,
-      opacity 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.1s;
-  transition: visibility 0.1s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0s,
-      margin-top 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.1s,
-      opacity 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.1s;
+      opacity 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.1s);
 }
 
 

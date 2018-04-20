@@ -18,7 +18,7 @@ cq-context {
             padding: 0 1em 0 0;
             margin: .2em 0em;
             .cq-symbol-select-btn {
-                background: $DEFAULT-menu-bg;
+                background: $DEFAULT-main;
                 font-family: $base-font;
                 padding: 0.3em 2em .3em 1em;
                 cursor: pointer;
@@ -57,7 +57,8 @@ cq-context {
                         }
                     }
                 }
-                .cq-symbol, .cq-chart-price {
+                .cq-symbol,
+                .cq-chart-price {
                     .cq-animated-price {
                         padding-left: 16px;
                     }
@@ -146,7 +147,7 @@ cq-context {
                         height: calc( 100vh - 7.8em - 3em );
                     }
                     .cq-categorical-footer{
-                        background: $DEFAULT-menu-bg;
+                        background: $DEFAULT-main;
                         border-top: 1px solid #d9d9d9;
                         display: block;
                     }

@@ -16,13 +16,12 @@
         padding: 0em !important;
         overflow: visible !important;
         .title {
+            background: $DEFAULT-main;
             height: 40px;
             line-height: 40px;
             padding-left: 16px;
             font-size: 16px;
-            background: white;
             box-shadow: inset 0 -1px 0 0 $DEFAULT-border;
-
             display: flex;
             color: black;
             justify-content: space-between;

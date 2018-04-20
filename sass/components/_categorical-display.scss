@@ -4,7 +4,7 @@ cq-context{
         padding: 0 !important;
         display: flex;
         text-align: left;
-        background-color: $DEFAULT-menu-bg;
+        background-color: $DEFAULT-main;
         color: $DEFAULT-text-medium;
         overflow: hidden;
         @include transition(opacity 1s);
@@ -66,9 +66,9 @@ cq-context{
             color: #333333;
         }
         .category-content {
+            background-color: $DEFAULT-main;
             margin: 0.4em 1em 0em 1em;
             border: 1px solid $DEFAULT-border;
-            background-color: white;
             @include border-radius();
         }
         .subcategory {
@@ -120,8 +120,8 @@ cq-context{
             .ic-icon {
                 display: inline-flex;
                 vertical-align: middle;
-                width: 16px;
-                height: 16px;
+                width: $small-icon-size;
+                height: $small-icon-size;
                 margin-bottom: 2px;
                 margin-right: 1.3em;
             }
@@ -184,7 +184,7 @@ cq-context{
             height: 3em;
             display: none;
             .btn-categorical-display-close{
-                border:none;
+                border: none;
                 background: transparent;
                 color: $active-color;
                 font-weight: bold;
@@ -208,8 +208,8 @@ cq-context{
             float: right;
             display: inline-flex;
             > span, .ic-icon {
-                height:24px;
-                width: 24px;
+                height:$normal-icon-size;
+                width: $normal-icon-size;
             }
 
             .ic-delete, .ic-edit {
@@ -253,7 +253,7 @@ cq-context{
 
     &.smartcharts-mobile{
         .cq-mobile-title{
-            background: $DEFAULT-menu-bg;
+            background: $DEFAULT-main;
             .mobile-title{
                 display: block;
                 font-size: 16px;

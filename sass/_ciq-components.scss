@@ -9,7 +9,7 @@ cq-context {
 	overflow: hidden;
 
 	input {
-		@include user-select(none);
+		@include user-select(text);
 		font-weight: 300;
 		color: #071931;
 	}
@@ -51,37 +51,34 @@ cq-context {
 	@include box-sizing(border-box);
 }
 
-.ciq-select {
-	line-height: 25px;
-	height: 27px;
-}
-
 .ciq-select { /* Styled replacement for what might otherwise be a select box input */
 	position: relative;
 	padding-right: 20px;
-	text-align:l eft;
+	text-align: left;
+	line-height: 25px;
+	height: 27px;
 	cursor: pointer;
 	@include user-select(none);
-	& > span:after {
-		content:"";
-		position: absolute;
-		display: inline-block;
-		margin-top: 8px;
-		margin-left: 6px;
-		width: 5px;
-		height: 5px;
-		border-right:solid thin mix(#000, $DEFAULT-bg, 40% );
-		border-bottom:solid thin mix(#000, $DEFAULT-bg, 40% );
-		@include rotate(45deg);
-	}
 	/* the line style select box is actually a border-top that is offset to look like a vertical line */
-	& > span.ciq-line:after {
-		margin-top: -6px;
-		margin-left: 36px;
-	}
 	& > span {
 		display:block;
 		@include text-truncate;
+		&.ciq-line:after {
+			margin-top: -6px;
+			margin-left: 36px;
+		}
+		&:after {
+			content:"";
+			position: absolute;
+			display: inline-block;
+			margin-top: 8px;
+			margin-left: 6px;
+			width: 5px;
+			height: 5px;
+			border-right:solid thin mix(#000, $DEFAULT-bg, 40% );
+			border-bottom:solid thin mix(#000, $DEFAULT-bg, 40% );
+			@include rotate(45deg);
+		}
 	}
 	.break-sm & {
 		position: static;
@@ -122,12 +119,12 @@ cq-context {
 	}
 	.ciq-active & span:after,
 	&.ciq-active span:after {
+		background:$DEFAULT-accent;
 		left:3px;
 		bottom:3px;
 		width:6px;
 		height:6px;
 		@include border-radius(50%);
-		background:$DEFAULT-accent;
 	}
 }
 /* Loading */
@@ -243,12 +240,12 @@ cq-menu-dropdown .ps-scrollbar-y-rail
 /* --------------------------------------------------------- COLOR PICKER --------------------------------------------------------- */
 
 cq-swatch, .ciq-color, .stx-border-color {/* Swatch / Open Palette Button */
+	background-color: $DEFAULT-text;
 	position: relative;
 	height:19px;
 	width:19px;
 	background-clip:content-box;
 	cursor: pointer;
-	background-color: $DEFAULT-text;
 }
 
 cq-swatch {
@@ -257,16 +254,15 @@ cq-swatch {
 }
 
 cq-color-picker {/* This is the actual color picker container */
-	position: absolute;
 	background: $DEFAULT-menu-bg;
+	position: absolute;
 	padding: 0 2px 2px 5px;
 	border: 1px solid #ccc;
-	@include border-radius($soft-corners);
-	@include box-shadow (0px, 2px, 4px, rgba(0, 0, 0, .2));
-	@include box-sizing(border-box);
 	z-index:5;
 	display:none;
-
+	@include border-radius();
+	@include box-shadow (0px, 2px, 4px, rgba(0, 0, 0, .2));
+	@include box-sizing(border-box);
 	&[cq-active]{
 		display:block;
 	}
@@ -292,7 +288,6 @@ cq-color-picker ul { /* The unordered list with all the swatches */
 	& li { /* List item containing each swatch */
 		float: left;
 		margin: 0 3px 3px 0;
-
 		& span { /* The swatches themselves */
 			display: block;
 			width: 13px;
@@ -301,9 +296,10 @@ cq-color-picker ul { /* The unordered list with all the swatches */
 			outline: 0;
 			border: 1px solid transparent;
 			@include transition(border .20s 0s);
-
 			&:hover,
-			&:active {border-color: #000;}
+			&:active {
+				border-color: #000;
+			}
 		}
 	}
 }
@@ -331,7 +327,6 @@ cq-toolbar {
 	padding: 0px 10px;
 	border-bottom:none;
 	visibility:hidden;
-
 	.toolbar-on & {// Show Toolbar
 		height:40px;
 		padding:5px 10px 0;
@@ -344,12 +339,12 @@ cq-toolbar {
 
 /* Chart Area Block */
 .ciq-chart-area {
+	background: $DEFAULT-bg;
 	position:absolute;
 	left:0;
 	right:0;
 	top: 0;
 	bottom: 0;
-	background:$DEFAULT-bg;
 	z-index: 1;
 
 	.break-sm & { /* Remove padding around chart when the app is set to breakpoint-sm*/
@@ -363,9 +358,9 @@ cq-toolbar {
 
 /* Chart Block */
 .ciq-chart {
+	background: $DEFAULT-main;
 	height:100%;
 	width:100%;
-	background: $DEFAULT-main;
 	@include box-shadow (0px, 2px, 5px, rgba(0, 0, 0, .1));
 }
 
@@ -412,10 +407,10 @@ cq-menu-dropdown, .cq-menu-dropdown {
 	color: $DEFAULT-text-medium;
 	overflow:hidden;
 	opacity: 0;
-	z-index:6;
+	z-index: 6;
 	@include box-shadow (0px, 2px, 4px, rgba(0, 0, 0, .2));
 	@include transition( opacity .20s 0s);
-	@include border-radius($soft-corners);
+	@include border-radius();
 	.break-sm & {
 		top:$nav-height;
 		width:auto;
@@ -522,13 +517,10 @@ cq-section-dynamic .ciq-icon { /* Delete button placement for custom item */
 	& input {
 		height:2em;
 		border:none;
-		//background:rbga($DEFAULT-bg,0);
 	}
-
 	.break-sm & {
 		width: 50px;
 	}
-
 	.break-md & {
 		width: 85px;
 	}
@@ -565,20 +557,15 @@ cq-lookup-input {
 	position:absolute;
 	right:0px;
 }
-.ciq-dropdowns {float:left;}
-.ciq-menu{position: relative;}
-
-.break-sm .ciq-menu {
-  position: inherit;
-}
 
 /* Dropdowns */
-
 .ciq-dropdowns {
   margin-right: 5px;
   margin-top: 3px;
+  float:left;
 }
 .ciq-menu {
+	position: relative;
 	color:mix(#000, $DEFAULT-bg, 65% );
 	@include transition(color .20s 0s);
 
@@ -596,19 +583,19 @@ cq-lookup-input {
 			border-bottom:solid 3px $DEFAULT-accent;
 		}
 	}
+	 > span {
+		padding:0 12px 0 0;
+		position:relative;
+		font-weight:400;
+	}
 }
-
+.break-sm .ciq-menu {
+  position: inherit;
+}
 .break-sm, .break-md {
 	& .ciq-menu {
 		padding: 0;
 	}
-}
-
-.ciq-menu > span {
-	padding:0 12px 0 0;
-	position:relative;
-	font-weight:400;
-
 }
 
 /* Panel Toggles */
@@ -658,16 +645,12 @@ body:not(.break-sm) .sidenav-toggle {
 	padding:0;
 }
 .break-sm, .break-md {
-	& .ciq-menu.ciq-views > span:after {background-position: -481px -25px;}
-}
-.break-sm, .break-md {
-	& .ciq-menu.ciq-studies > span:after {background-position: -300px -25px;}
-}
-.break-sm, .break-md {
-	& .ciq-menu.ciq-display > span:after {background-position: -350px -25px;}
-}
-.break-sm, .break-md {
-	& .ciq-menu.stx-markers > span:after {background-position: -100px -25px;}
+	&.ciq-menu{
+		&.ciq-views > span:after {background-position: -481px -25px;}
+		&.ciq-studies > span:after {background-position: -300px -25px;}
+		&.ciq-display > span:after {background-position: -350px -25px;}
+		&.stx-markers > span:after {background-position: -100px -25px;}
+	}
 }
 
 .ciq-HU {
@@ -710,9 +693,7 @@ cq-study-legend  {
 	overflow:hidden;
 	position:relative;
 	padding: 0;
-
 	width: 200px;
-
 	cq-item {
 		@include box-sizing(border-box);
 	}

@@ -14,12 +14,10 @@ $green: #4caf50;
 .chart-line {
     position: absolute;
     z-index: 35;
-
     &.horizontal {
         width: 100%;
         left: 0px;
         font-size: 10px;
-
         .drag-line {
             height: 0px;
             float: left;
@@ -66,7 +64,7 @@ $green: #4caf50;
 }
 
 .drag-price {
-    background-color: $DEFAULT-menu-bg;
+    background-color: $DEFAULT-main;
     display: block;
     height: 25px;
     border: 1px solid black;

@@ -13,7 +13,7 @@
         cursor: pointer;
     }
 	.handle {
-		background-color: white;
+		background-color: $DEFAULT-main;
 		width: 10px;
 		height: 10px;
         border: 2px solid $active-color;
@@ -66,7 +66,7 @@
 
     .dropdown {
         position: absolute;
-        background: white;
+        background: $DEFAULT-main;
         top: 0;
         right: 0;
         opacity: 0;
@@ -129,12 +129,12 @@
     }
 
     .dropdown {
+        background: $DEFAULT-main;
         position: absolute;
         top: 30px;
         right: calc(100% - 24px);
         opacity: 0;
         pointer-events: none;
-        background: white;
         z-index: +1;
         width: 250px;
         padding: 8px;
@@ -169,11 +169,11 @@
     cursor: pointer;
     @include border-radius(8px);
     .handle {
+        background: $DEFAULT-main;
         position: absolute;
         top: 1px;
         width: 14px;
         height: 14px;
-        background: $DEFAULT-menu-bg;
         @include transition(left 0.2s);
         @include border-radius(7px);
     }

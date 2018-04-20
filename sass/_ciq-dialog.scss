@@ -7,7 +7,7 @@
     top: calc(50% - 366px/2);
     position: absolute;
     box-shadow: 0 0.375em 0.625em 0 rgba(0, 0, 0, 0.14);
-    background: white;
+    background: $DEFAULT-main;
     z-index: -3;
     opacity: 0;
     margin-top: 120px;

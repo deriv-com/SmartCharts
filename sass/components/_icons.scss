@@ -2,8 +2,8 @@
 
 .ic-icon, .cq-text-icon {
     display: block;
-    height: 24px;
-    width: 24px;
+    height: $normal-icon-size;
+    width: $normal-icon-size;
     line-height: 32px;
     @include transition(all .2s .15s);
     @include border-radius(2px);
