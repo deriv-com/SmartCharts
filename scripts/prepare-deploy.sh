@@ -33,12 +33,11 @@ fi
 
 # Do not deploy any other branch aside dev and master
 if [ "$TRAVIS_BRANCH" = "dev" ] || [ "$TRAVIS_BRANCH" = "master" ]; then
-    # copy over demo css and index.html
+    # copy over index.html
     DEPLOY_DIR=ghpages
     if [ "$TRAVIS_BRANCH" = "dev" ]; then
         DEPLOY_DIR=ghpages/beta
     fi
-    cp -R css "$DEPLOY_DIR"
     cp index.html "$DEPLOY_DIR"
 fi
 
