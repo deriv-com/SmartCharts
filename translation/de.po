@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: German\n"
 "Language: de_DE\n"
-"PO-Revision-Date: 2018-04-16 10:13-0400\n"
+"PO-Revision-Date: 2018-04-19 10:12-0400\n"
 
 msgid "CLOSED"
 msgstr "GESCHLOSSEN"
@@ -163,7 +163,7 @@ msgid "There are no active indicators yet."
 msgstr "Es gibt noch keine aktiven Indikatoren."
 
 msgid "\"AUD/JPY\" or \"Apple\""
-msgstr "\"AUD/JPY\" oder \"Appel\""
+msgstr "\"AUD/JPY\" oder \"Apple\""
 
 msgid "There are no active comparisons yet."
 msgstr "Es gibt noch keine aktiven Vergleiche."
