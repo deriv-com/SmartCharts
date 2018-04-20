@@ -17,6 +17,7 @@ import '../../sass/_ciq-chart-setting.scss';
 const ChartSetting = ({
     Menu,
     menuOpen,
+    selectedLanguage,
     languages,
     setView,
     view,
@@ -71,8 +72,12 @@ const ChartSetting = ({
             <div className='body'>
                 <div className="ciq-list ciq-list-language">
                     {languages.map( (language,index) => {
-                        return <div className="ciq-list-item" key={index} >
-                            <span onClick={()=> setLanguage(language.key) }>
+                        return <div 
+                            className={`ciq-list-item ${(selectedLanguage == language.key) ? 'selected' : ''}`} 
+                            key={index}
+                            onClick={()=> setLanguage(language.key) }
+                            >
+                            <span>
                                 {language.icon}
                             </span>
                             <span className="ciq-icon-text">{t.translate(language.name)}</span>
@@ -106,6 +111,7 @@ const ChartSetting = ({
 export default connect(({chartSetting: s}) => ({
     Menu: s.menu.connect(Menu),
     menuOpen: s.menu.dialog.open,
+    selectedLanguage: s.language,
     languages: s.languages,
     setView: s.setView,
     view: s.view,

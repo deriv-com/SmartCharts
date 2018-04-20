@@ -75,28 +75,20 @@
             overflow-y: auto;
             position: relative;
             .ciq-list-item{
-
-                border: 1px solid #e9e9ed;
-                border-top: none;
-                background: #fff;
-                box-sizing: border-box;
-                height: 32px;
-                line-height: 32px;
-                font-size: 12px;
-                color: #000;
-                padding-left: 16px;
-                
                 display: inline-block;
                 width: 50%;
                 height: 36px;
                 padding-left: 10px;
-                border-right: none;
-                &:nth-child(1),
+                &:nth-child(2n){
+                    border-left: none;
+                }
                 &:nth-child(2){
                     border-top: 1px solid #e9e9ed;
                 }
-                &:nth-child(2n){
-                    border-right: 1px solid #e9e9ed;
+                &.selected{
+                    background: #f2f3f8;
+                    color: #4C5794;
+                    font-weight: bold;
                 }
                 .ic-icon{
                     cursor: pointer;

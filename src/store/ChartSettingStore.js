@@ -6,7 +6,6 @@ export default class ChartSettingStore {
     constructor(mainStore) {
         this.mainStore = mainStore;
         this.menu = new MenuStore({getContext: () => this.mainStore.chart.context});
-
         this.restoreSetting();
     }
 
@@ -14,7 +13,6 @@ export default class ChartSettingStore {
     get stx() { return this.context.stx; }
 
     onContextReady = () => {};
-
     @observable languages = [
         {
             key: 'en',
