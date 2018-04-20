@@ -37,7 +37,7 @@ const Views = ({
                 <div>
                     <TemplateIcon
                         className = {menuOpen ? 'active' : ''}
-                        tooltip-title={t.translate("Templates")} />
+                        subtitle={t.translate("Templates")} />
                 </div>
             </Menu.Title>
             <Menu.Body>

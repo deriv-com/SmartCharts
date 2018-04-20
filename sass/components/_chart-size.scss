@@ -1,6 +1,5 @@
 .cq-chart-size {
     display: flex;
-    width: 64px;
     justify-content: space-between;
     align-items: center;
     height: auto;
@@ -13,6 +12,7 @@
         position: relative;
         cursor: pointer;
         transition: scale .25s;
+        padding: 0.35em 0.8em !important;
     }
 
     .interval-title {

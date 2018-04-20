@@ -24,7 +24,7 @@ const Share = ({
             <Menu.Title>
                 <ShareIcon
                     className = {menuOpen ? 'active' : ''}
-                    tooltip-title={t.translate("Share")}
+                    subtitle={t.translate("Share")}
                 />
             </Menu.Title>
             <Menu.Body>

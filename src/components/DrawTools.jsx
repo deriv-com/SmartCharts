@@ -21,7 +21,7 @@ const DrawTools = ({
             <Menu.Title>
                 <DrawIcon
                     className={`${menuOpen ? 'active' : ''}`}
-                    tooltip-title={t.translate("Draw tools")} />
+                    subtitle={t.translate("Draw tools")} />
             </Menu.Title>
 
             <Menu.Body>

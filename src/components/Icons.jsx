@@ -146,35 +146,53 @@ const Wrapper = WrappedComponent => props => {
     );
 };
 
+const  WrapIconWithSubtitle= WrappedComponent => props => {
+    let { className, ['subtitle']: subtitle, ...p } = props;
+    className = `ic-icon ic-icon-with-sub ${className ? className : ''} `;
+
+    return (
+        <span
+            className={className}
+            subtitle={subtitle}
+            {...p}>
+            <WrappedComponent />
+            <br/>
+            <span>{subtitle}</span>
+        </span>
+    );
+};
+
 export const AddIcon = Wrapper(Add);
+export const ZoomInIcon = WrapIconWithSubtitle(Add);
 export const AddThinIcon = Wrapper(AddThin);
-export const CandleIcon = Wrapper(Candle);
+export const CandleIcon = WrapIconWithSubtitle(Candle);
 export const CloseIcon = Wrapper(Close);
-export const ComparisonIcon = Wrapper(Comparison);
-export const CrosshairIcon = Wrapper(Crosshair);
+export const ComparisonIcon = WrapIconWithSubtitle(Comparison);
+export const CrosshairIcon = WrapIconWithSubtitle(Crosshair);
 export const DeleteIcon= Wrapper(Delete);
 export const ClearIcon= Wrapper(Clear);
 export const DotIcon = Wrapper(Dot);
 export const DownloadIcon = Wrapper(Download);
-export const DrawIcon = Wrapper(Draw);
+export const DrawIcon = WrapIconWithSubtitle(Draw);
 export const HollowCandleIcon = Wrapper(HollowCandle);
-export const IndicatorIcon = Wrapper(Indicator);
+export const IndicatorIcon = WrapIconWithSubtitle(Indicator);
 export const LineIcon = Wrapper(Line);
 export const BaseLineIcon = Wrapper(BaseLine);
 export const ListIcon = Wrapper(List);
 export const MeasureIcon = Wrapper(Measure);
 export const MinusIcon = Wrapper(Minus);
+export const ZoomOutIcon = WrapIconWithSubtitle(Minus);
 export const OHLCIcon = Wrapper(OHLC);
 export const SplineIcon = Wrapper(Spline);
 export const StarIcon = Wrapper(Star);
-export const TemplateIcon = Wrapper(Template);
+export const TemplateIcon = WrapIconWithSubtitle(Template);
 export const TickIcon = Wrapper(Tick);
 export const SearchIcon = Wrapper(Search);
 export const EditIcon = Wrapper(Edit);
 export const ArrowIcon = Wrapper(Arrow);
 export const FavoriteIcon = Wrapper(Star);
 export const CopyIcon = Wrapper(Copy);
-export const ShareIcon = Wrapper(Share);
+export const ShareIcon = WrapIconWithSubtitle(Share);
 export const MetalIcon = Wrapper(Metal);
 
 export const alertIconMap = {

@@ -18,7 +18,7 @@ const Comparison = ({
             <Menu.Title>
                 <ComparisonIcon
                     className={`${menuOpen ? 'active' : ''}`}
-                    tooltip-title={t.translate("Comparison")} />
+                    subtitle={t.translate("Comparison")} />
             </Menu.Title>
             <Menu.Body>
                 <CategoricalDisplay

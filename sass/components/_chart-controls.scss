@@ -7,12 +7,16 @@ cq-context {
         background: white;
         position: absolute;
         display: flex !important;
-        bottom: 37px !important;
+        bottom: 0px !important;
         left: 50%;
         padding: 0 10px;
         transform: translateX(-50%);
-        height: 32px;
-        width: auto;
+        height: 49px;
+        width: 100%;
+
+        flex-wrap: wrap; /* Optional. only if you want the items to wrap */
+        justify-content: center; /* For horizontal alignment */
+        align-items: center; /* For vertical alignment */
 
         /* background: */
         background: rgba(255, 255, 255, 0.8);
@@ -49,7 +53,7 @@ cq-context {
         }
         .ciq-menu {
             line-height: 2.1em;
-            padding: 0.35em 0.2em;
+            padding: 0.35em 0.8em;
             > span {
                 margin: 0;
                 padding: 0;
@@ -106,7 +110,14 @@ cq-context {
                 width: 200px;
             }
         }
-
+        .cq-toggle {
+            padding: 0.35em 0.8em;
+            color: #575757;
+            &:hover,
+            &.active {
+            color: #000 !important;
+            }
+        }
         cq-comparison-add {
             cq-comparison-lookup-frame {
                 position: absolute;

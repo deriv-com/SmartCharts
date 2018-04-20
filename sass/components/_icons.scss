@@ -37,7 +37,11 @@
         position: relative;
     }
 }
-
+.ic-icon-with-sub{
+    height: auto !important;
+    width: auto !important;
+    line-height: 15px;
+}
 .tooltip {
     position: relative;
     font-size: 12px;
