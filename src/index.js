@@ -42,7 +42,7 @@ class SmartChart extends React.Component {
 
         return (
             <MobxProvider store={this.mainStore}>
-                <Chart lang="en" isMobile={CIQ.isMobile}>
+                <Chart lang="en" isMobile={isMobile}>
                     {children}
                 </Chart>
             </MobxProvider>
