@@ -10,16 +10,6 @@ import './app.scss';
 import './doorbell';
 
 class App extends React.Component {
-    constructor() {
-        super();
-        this.state = {
-            barrier: true,
-            tradeLines: true
-        };
-        // setInterval(() => this.setState({barrier: !this.state.barrier}), 3000);
-        // setInterval(() => this.setState({tradeLines: !this.state.tradeLines}), 2500);
-    }
-
     render() {
         return (
             <SmartChart
