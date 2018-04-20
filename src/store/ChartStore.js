@@ -304,14 +304,6 @@ class ChartStore {
         }
     }
 
-    /**
-     * Store the Mobile mode from the chart option with pass to
-     * @param {bool} status if true, measn mobile mode is active
-     */
-    setIsMobile(status) {
-        this.isMobile = status;
-    }
-
     processSymbols(symbols) {
         let processedSymbols = [];
 
