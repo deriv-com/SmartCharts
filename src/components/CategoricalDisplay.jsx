@@ -129,7 +129,7 @@ const CategoricalDisplay = ({
                                 ref={el => stxtap(el, e => handleFilterClick(category, e))}
                             >
                                 {CategoryIcon && <CategoryIcon className={`ic-${category.categoryId}`}/>}
-                                <span className="cq-filter-text">{category.categoryName}</span>
+                                <span className="cq-filter-text">{t.translate(category.categoryName)}</span>
                             </div>);
                     })}
                 </div>
@@ -143,13 +143,13 @@ const CategoricalDisplay = ({
                                 className={`category category-${category.categoryId}`}
                                 ref={(el) => setCategoryElement(el, category.categoryId)}
                             >
-                                <div className="category-title">{category.categoryName}</div>
+                                <div className="category-title">{t.translate(category.categoryName)}</div>
                                 { category.hasSubcategory
                                     ? category.data.map((subcategory, j) =>
                                         getItemCount(subcategory) > 0 &&
                                         <Fragment key={j}>
                                             <div className="category-content">
-                                                <div className="subcategory">{subcategory.subcategoryName}</div>
+                                                <div className="subcategory">{t.translate(subcategory.subcategoryName)}</div>
                                                 { subcategory.data.map(renderItem)}
                                             </div>
                                         </Fragment>)
@@ -159,7 +159,7 @@ const CategoricalDisplay = ({
                                 }
                                 { getItemCount(category) === 0 && category.emptyDescription &&
                                     <div className="category-content">
-                                        <div className="empty-category">{category.emptyDescription}</div>
+                                        <div className="empty-category">{t.translate(category.emptyDescription)}</div>
                                     </div>
                                 }
                             </div>
