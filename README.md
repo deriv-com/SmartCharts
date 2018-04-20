@@ -79,7 +79,7 @@ Once your changes have been merged to `dev`, it will immediately deployed to [ch
 
 There should be a clear distinction between developing for app and developing for library. Library source code is all inside `src` folder, whereas app source code is inside `app`.
 
-Webpack determines whether to build an app or library depending on whether an environment variable `BUILD_MODE` is set to `app`. Setting this variable switches the entry point of the project, but on the **same** `webpack.config.js` (the one on the root folder). The `webpack.config.js` in the `app` folder is never actually used in this process; what the `webpack.config.js` in the `app` does is offer a guide to how to use the smartcharts library as an npm package. We do it this way to develop the app to have hot reload available when we modify library files.
+Webpack determines whether to build an app or library depending on whether an environment variable `BUILD_MODE` is set to `app`. Setting this variable switches the entry point of the project, but on the **same** `webpack.config.js` (the one on the root folder). The `webpack.config.js` and `index.html` in the `app` folder is never actually used in this process; they serve as a guide to how to use the smartcharts library as an npm package. We do it this way to develop the app to have hot reload available when we modify library files.
 
 
 
