@@ -36,9 +36,10 @@ class Chart extends Component {
     }
 
     render() {
-        const { DrawToolsSettingsDialog, StudySettingsDialog, children, lang, isMobile, isChartAvailable } = this.props;
+        const { DrawToolsSettingsDialog, StudySettingsDialog, children, lang, isMobile, isChartAvailable, setting } = this.props;
 
-        t.setLanguage(lang);
+        t.setLanguage( (setting && setting.language) ? setting.language : lang );
+        
         const array = React.Children.toArray(children);
         const insideHolder = array.filter(c => !/(TradeStart)|(TradeEnd)/.test(c.type.displayName));
         const insideSubHolder = array.filter(c => /(TradeStart)|(TradeEnd)/.test(c.type.displayName));
@@ -77,7 +78,7 @@ class Chart extends Component {
         );
     }
 }
-
+ 
 export default connect(
     ({chart, drawTools, studies}) => ({
         contextPromise: chart.contextPromise,
@@ -85,5 +86,6 @@ export default connect(
         StudySettingsDialog : studies.settingsDialog.connect(SettingsDialog),
         DrawToolsSettingsDialog : drawTools.settingsDialog.connect(SettingsDialog),
         isChartAvailable: chart.isChartAvailable,
+        setting: chart.setting
     })
 )(Chart);

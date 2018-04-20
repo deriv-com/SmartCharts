@@ -7,6 +7,7 @@ import Context from '../components/ui/Context';
 import React from 'react';
 import {stableSort} from './utils';
 import BarrierStore from './BarrierStore';
+import ChartSettingStore from './ChartSettingStore';
 import KeystrokeHub from '../components/ui/KeystrokeHub';
 import '../components/ui/Animation';
 // import '../AddOns';
@@ -35,6 +36,7 @@ class ChartStore {
     constructor(mainStore) {
         this.id = ++ChartStore._id_counter;
         this.mainStore = mainStore;
+        this.setting = new ChartSettingStore();
     }
 
     onSymbolChange = null;
