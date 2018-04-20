@@ -153,6 +153,11 @@ class ChartStore {
         stxx.chart.allowScrollFuture = false;
         const context = new Context(stxx, this.rootNode);
 
+        // Put some margin so chart doesn't get blocked by chart title
+        // TODO: this will need to be removed if chart title is moved out of chart area
+        stxx.chart.yAxis.initialMarginTop = 125;
+        stxx.calculateYAxisMargins(stxx.chart.panel.yAxis);
+
         context.changeSymbol = (data) => {
             this.loader.show();
 
