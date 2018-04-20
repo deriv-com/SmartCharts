@@ -39,6 +39,7 @@ class ChartStore {
         this.setting = new ChartSettingStore();
     }
 
+    onSymbolChange = null;
     contextPromise = new PendingPromise();
     activeSymbols = [];
     rootNode = null;
@@ -256,7 +257,10 @@ class ChartStore {
         // });
 
         stxx.addEventListener('layout', this.saveLayout.bind(this));
-        stxx.addEventListener('symbolChange', this.saveLayout.bind(this));
+        stxx.addEventListener('symbolChange', (evt) => {
+            if (this.onSymbolChange) { this.onSymbolChange(evt.symbolObject); }
+            this.saveLayout.bind(this);
+        });
         stxx.addEventListener('drawing', this.saveDrawings.bind(this));
         // stxx.addEventListener('newChart', () => { });
         stxx.addEventListener('preferences', this.savePreferences.bind(this));

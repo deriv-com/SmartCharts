@@ -32,9 +32,9 @@ const CategoricalDisplay = ({
      */
     const renderMobileTitle = ()=>{
         return isMobile ? <div className="cq-mobile-title">
-                <div className="mobile-title">{dialogTitle}</div>
-            </div> : ''
-    }
+            <div className="mobile-title">{dialogTitle}</div>
+        </div> : '';
+    };
     const renderIcon = (item) => {
         if (!item.itemId) {return '';}
         const ItemIcon = ItemIconMap[item.itemId] || SymbolPlaceholderIcon;
@@ -44,9 +44,9 @@ const CategoricalDisplay = ({
     const renderFavorite = (item) => {
         if (!item.itemId || !favoritesId) {return '';}
         return <FavoriteIcon
-                onClick={(e) => onFavoritedItem(item, e)}
-                className={`ciq-favorite ${favoritesMap[item.itemId] ? 'ciq-active-favorite' : ''}`}
-             />;
+            onClick={(e) => onFavoritedItem(item, e)}
+            className={`ciq-favorite ${favoritesMap[item.itemId] ? 'ciq-active-favorite' : ''}`}
+        />;
     };
 
     const renderLeft = (item) =>
@@ -101,7 +101,7 @@ const CategoricalDisplay = ({
             {renderMobileTitle()}
             <div className="cq-lookup-filters">
                 <div className={`cq-lookup-input ${filterText.trim() !== '' ? 'active':''}` }>
-                     <input
+                    <input
                         ref={
                             el => {
                                 setSearchInput(el);
@@ -129,7 +129,7 @@ const CategoricalDisplay = ({
                             ref={el => stxtap(el, e => handleFilterClick(category, e))}
                          >
                             {CategoryIcon && <CategoryIcon className={`ic-${category.categoryId}`}/>}
-                            <span className="cq-filter-text">{category.categoryName}</span>
+                            <span className="cq-filter-text">{t.translate(category.categoryName)}</span>
                         </div>);
                     })}
                 </div>
@@ -143,23 +143,23 @@ const CategoricalDisplay = ({
                                 className={`category category-${category.categoryId}`}
                                 ref={(el) => setCategoryElement(el, category.categoryId)}
                             >
-                                <div className="category-title">{category.categoryName}</div>
+                                <div className="category-title">{t.translate(category.categoryName)}</div>
                                 { category.hasSubcategory 
                                     ? category.data.map((subcategory, j) =>
                                         getItemCount(subcategory) > 0 &&
                                         <Fragment key={j}>
                                             <div className="category-content">
-                                                <div className="subcategory">{subcategory.subcategoryName}</div>
+                                                <div className="subcategory">{t.translate(subcategory.subcategoryName)}</div>
                                                 { subcategory.data.map(renderItem)}
                                             </div>
-                                        </Fragment>) 
+                                        </Fragment>)
                                     : category.data.length > 0 && <div className="category-content">
-                                            {category.data.map((category.categoryId === 'active' && hasActiveItems) ? renderActiveItem : renderItem)}
-                                          </div>
+                                        {category.data.map((category.categoryId === 'active' && hasActiveItems) ? renderActiveItem : renderItem)}
+                                    </div>
                                 }
                                 { getItemCount(category) === 0 && category.emptyDescription &&
                                     <div className="category-content">
-                                        <div className="empty-category">{category.emptyDescription}</div>
+                                        <div className="empty-category">{t.translate(category.emptyDescription)}</div>
                                     </div>
                                 }
                             </div>

@@ -21,10 +21,10 @@ const Comparison = ({
                     tooltip-title={t.translate("Comparison")} />
             </Menu.Title>
             <Menu.Body>
-                <CategoricalDisplay 
+                <CategoricalDisplay
                     dialogTitle={t.translate("Comparison")}
                     closeMenu={ () => onCloseMenu() }
-                     />
+                />
             </Menu.Body>
         </Menu>
     );
