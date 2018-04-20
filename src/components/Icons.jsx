@@ -207,6 +207,7 @@ export const TemplateIcon = WrapIconWithSubtitle(Template);
 export const TickIcon = Wrapper(Tick);
 export const SearchIcon = Wrapper(Search);
 export const EditIcon = Wrapper(Edit);
+export const SettingIcon = WrapIconWithSubtitle(Edit);
 export const ArrowIcon = Wrapper(Arrow);
 export const FavoriteIcon = Wrapper(Star);
 export const CopyIcon = Wrapper(Copy);

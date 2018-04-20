@@ -2,7 +2,7 @@ import React from 'react';
 import Menu from './Menu.jsx';
 import { connect } from '../store/Connect';
 import {
-    EditIcon,
+    SettingIcon,
     PositionLeftIcon,
     PositionBottomIcon,
     ThemeDarkIcon,
@@ -88,9 +88,9 @@ const ChartSetting = ({
     return (
         <Menu className="cq-chart-setting">
             <Menu.Title>
-                <EditIcon
+                <SettingIcon
                     className = {menuOpen ? 'active' : ''}
-                    tooltip-title={t.translate('Settings')}
+                    subtitle={t.translate('Settings')}
                 />
             </Menu.Title>
             <Menu.Body>
