@@ -28,9 +28,7 @@ const ChartSetting = ({
             <div className='title'> {t.translate('Settings')} </div>
             <div className='body'>
                 <div className="ciq-list-setting">
-                    {/*
-                        other chart setting option which not use for now
-                    <div className="ciq-item">
+                    {/*<div className="ciq-item">
                         <span className="ciq-icon-text">{t.translate('Position')}</span>
                         <div className="ciq-action">
                             <PositionLeftIcon 
