@@ -78,7 +78,7 @@ const ChartSetting = ({
                             <span>
                                 {language.icon}
                             </span>
-                            <span className="ciq-icon-text">{t.translate(language.name)}</span>
+                            <span className="ciq-icon-text">{language.name}</span>
                         </div>
                     })}
                 </div>
