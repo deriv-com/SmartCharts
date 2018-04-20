@@ -14,7 +14,7 @@ class App extends React.Component {
         return (
             <SmartChart
                 onSymbolChange={(symbol) => console.log('Symbol has changed to:', symbol)}
-                isMobile={false}
+                isMobile={CIQ.isMobile}
             >
             </SmartChart>
         );
