@@ -51,7 +51,7 @@ class Feed {
     }
 
     async fetchInitialData(symbol, suggestedStartDate, suggestedEndDate, params, callback) {
-        const { period, interval } = params;
+        const { period, interval, symbolObject } = params;
         const key = this._getStreamKey(params);
 
         const stream = this._streams[key] || this._streamManager.subscribe({
@@ -63,14 +63,18 @@ class Feed {
         this._trackStream(stream, isComparisonChart ? symbol : undefined);
         this._streams[key] = stream;
 
+        // Clear all notifications related to active symbols
+        this._mainStore.notification.removeByCategory('activesymbol');
+
         try {
             const { candles, history } = await stream.response;
             const quotes = candles ? Feed.formatCandles(candles) : Feed.formatHistory(history);
 
             if(stream.isMarketClosed) {
-                this._mainStore.notification.notify(
-                    t.translate('[symbol] market is presently closed.', { symbol })
-                );
+                this._mainStore.notification.notify({
+                    text: t.translate('[symbol] market is presently closed.', { symbol: symbolObject.name }),
+                    category: 'activesymbol',
+                });
             }
 
             callback({ quotes });
@@ -80,10 +84,11 @@ class Feed {
             delete this._streams[key];
             if (err.response && err.response.error.code === 'StreamingNotAllowed'){
                 this._mainStore.chart.isChartAvailable = false;
-                this._mainStore.notification.notify(
-                    t.translate('Streaming for [symbol] is not available due to license restrictions', { symbol }),
-                    NotificationStore.TYPE_ERROR
-                );
+                this._mainStore.notification.notify({
+                    text: t.translate('Streaming for [symbol] is not available due to license restrictions', { symbol: symbolObject.name }),
+                    type: NotificationStore.TYPE_ERROR,
+                    category: 'activesymbol',
+                });
                 callback({ quotes: [] });
             } else {
                 console.error(err);

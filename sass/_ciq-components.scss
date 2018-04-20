@@ -558,6 +558,7 @@ cq-lookup-input {
 
 .ciq-dropdowns,
 .ciq-menu {
+	display:inline-block;
 	@include box-sizing(border-box);
 }
 
@@ -567,6 +568,7 @@ cq-lookup-input {
 	right:0px;
 }
 .ciq-dropdowns {float:left;}
+.ciq-menu{position: relative;}
 
 .break-sm .ciq-menu {
   position: inherit;

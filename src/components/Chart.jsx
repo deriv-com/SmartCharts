@@ -6,7 +6,7 @@ import RenderInsideChart from './RenderInsideChart.jsx';
 import ComparisonList from './ComparisonList.jsx';
 import ChartTitle from './ChartTitle.jsx';
 import AssetInformation from './AssetInformation.jsx';
-import Loader from './Loader.jsx'
+import Loader from './Loader.jsx';
 
 /* css + scss */
 import '../../sass/chartiq.scss';
@@ -56,19 +56,19 @@ class Chart extends Component {
                         </RenderInsideChart>
                         <RenderInsideChart>
                             <div className="cq-top-ui-widgets">
+                                <ChartTitle />
                                 <AssetInformation />
                                 <ComparisonList />
                             </div>
                         </RenderInsideChart>
-                        <ChartTitle />
                         <ChartControls />
                         <Crosshair />
                         <div className="chartContainer primary"> </div>
                         <Loader />
                         {!isChartAvailable &&
                             <div className="cq-chart-unavailable">
-                            {t.translate('Chart data is not available for this symbol.')}
-                        </div>}
+                                {t.translate('Chart data is not available for this symbol.')}
+                            </div>}
                     </div>
                 </div>
                 <DrawToolsSettingsDialog />

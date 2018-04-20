@@ -35,7 +35,7 @@ const ChartTitle = ({
                              <span className="cq-todays-change">{todayChange}</span>&nbsp;
                              {/*<span className="cq-todays-change-pct">({todayChangePercentage})</span>*/}
                          </div>
--                    </div>}
+                     </div>}
                 </div>}
             </Menu.Title>
             <Menu.Body>

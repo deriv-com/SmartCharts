@@ -27,7 +27,7 @@ const ChartTypes = ({
                     tooltip-title={t.translate("Chart types")} />
             </div>
         </Menu.Title>
-        <Menu.Body> 
+        <Menu.Body>
             {isMobile ? <div className="cq-mobile-title">
                 <div className="mobile-title">{t.translate("Chart types")}</div>
             </div> : '' }

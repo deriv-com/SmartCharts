@@ -10,16 +10,19 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: German\n"
 "Language: de_DE\n"
-"PO-Revision-Date: 2018-04-11 22:20-0400\n"
+"PO-Revision-Date: 2018-04-16 10:13-0400\n"
 
 msgid "CLOSED"
-msgstr ""
+msgstr "GESCHLOSSEN"
 
 msgid "Favorites"
 msgstr "Favoriten"
 
 msgid "There are no favorites yet."
 msgstr "Noch gibt es keine Favoriten."
+
+msgid "Chart data is not available for this symbol."
+msgstr "Chart-Daten sind für dieses Symbol nicht verfügbar."
 
 msgid "PRICE"
 msgstr "PREIS"
@@ -117,6 +120,12 @@ msgstr "zum Löschen rechts klicken"
 msgid "right-click to manage"
 msgstr "zum Verwalten rechts klicken"
 
+msgid "[symbol] market is presently closed."
+msgstr "[symbol] Markt ist derzeit geschlossen."
+
+msgid "Streaming for [symbol] is not available due to license restrictions"
+msgstr "Streaming für [symbol] ist auf Grund von Lizenzeinschränkungen nicht verfügbar"
+
 msgid "Line"
 msgstr "Linie"
 
@@ -184,7 +193,7 @@ msgid "Ellipse"
 msgstr "Ellipse"
 
 msgid "Fib Retracement"
-msgstr ""
+msgstr "Fib Retracement"
 
 msgid "Fib Arc"
 msgstr "Fib Arc"

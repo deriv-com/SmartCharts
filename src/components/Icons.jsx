@@ -139,11 +139,11 @@ import OilUSD from '../../sass/icons/active-symbols/energy/oil usd/ic-oilusd.svg
 import Metal from '../../sass/icons/active-symbols/metals/ic-metal.svg';
 
 /* Volatility Indices */
-import Vol10 from '../../sass/icons/active-symbols/volatility/10 index/ic-10index.svg';
-import Vol25 from '../../sass/icons/active-symbols/volatility/25 index/ic-25index.svg';
-import Vol50 from '../../sass/icons/active-symbols/volatility/50 index/ic-50index.svg';
-import Vol75 from '../../sass/icons/active-symbols/volatility/75 index/ic-75index.svg';
-import Vol100 from '../../sass/icons/active-symbols/volatility/100 index/ic-100index.svg';
+import Vol10 from '../../sass/icons/active-symbols/volatility/10 index/ic-10-index.svg';
+import Vol25 from '../../sass/icons/active-symbols/volatility/25 index/ic-25-index.svg';
+import Vol50 from '../../sass/icons/active-symbols/volatility/50 index/ic-50-index.svg';
+import Vol75 from '../../sass/icons/active-symbols/volatility/75 index/ic-75-index.svg';
+import Vol100 from '../../sass/icons/active-symbols/volatility/100 index/ic-100-index.svg';
 import MarketBear from '../../sass/icons/active-symbols/volatility/bear market/ic-marketbear.svg';
 import MarketBull from '../../sass/icons/active-symbols/volatility/bull market/ic-marketbull.svg';
 
