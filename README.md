@@ -20,25 +20,15 @@ SmartCharts is both the name of the app ([charts.binary.com](https://charts.bina
 To see how to configure smartcharts for your webpack project, refer to `app/webpack.config.js` (_this config is not used in the app development; refer to [this section](#separation-of-app-and-library) for more details_).
 
 ```jsx
-import {
-    SmartChart,
-    Barrier,
-    TradeStartLine,
-    TradeEndLine
-} from 'smartcharts';
+import { SmartChart } from 'smartcharts';
 
 class App extends React.Component {
     render() {
         return (
-            <SmartChart>
-                <Barrier 
-                    color='green'
-                    shade='above'
-                    onBarrierChange={console.warn.bind(console)}
-                />
-                <TradeEndLine followsCurrentQuote />
-                <TradeStartLine quote={(new Date).getTime() | 0} />
-            </SmartChart>
+            <SmartChart
+                onSymbolChange={(symbol) => console.log('Symbol has changed to:', symbol)}
+                activeSymbols={/* Pass symbols from https://developers.binary.com/api/#active_symbols */}
+            />
         );
     }
 };
@@ -98,27 +88,4 @@ The following commands will build and deploy to charts.binary.com (*Make sure yo
     yarn deploy:beta        # charts.binary.com/beta
     yarn deploy:production  # charts.binary.com
 
-### Barrier Component
-```jsx
-<Barrier
-    color?='red|green'
-    shade?='above|below|between|outside|single_none|double_none'
-    high?={number}
-    low?={number}
-    relative?={boolean}
-    draggable?={boolean}
-    onBarrierChange?={({high,low}) => any}
-/>
-```
-
-### TradeStartLine (& TradeEndLine)
-```jsx
-<TradeStartLine
-    followsCurrentQuote?={boolean}
-    quote={number}
-/>
-```
-
-
-![](https://bruceoutdoors.files.wordpress.com/2018/01/screen-shot-2018-01-25-at-5-07-39-pm.png)
 
