@@ -29,10 +29,15 @@ export default class ShareStore {
     onCopyDone = (successful) => {
         this.copyTooltip = successful ? 'Copied!' : 'Failed!';
     }
+    @observable loading = false;
+    bitly_url = 'https://api-ssl.bitly.com/v3/shorten';
+    access_token = '837c0c4f99fcfbaca55ef9073726ef1f6a5c9349';
+
 
     @observable shareLink = '';
     refereshShareLink = () => {
-        if(!this.context) { return; }
+        let self = this;
+        if(!this.context || !this.menu.dialog.open ) { return; }
 
         const layoutData = this.stx.exportLayout(true);
         const json = JSON.stringify(layoutData);
@@ -40,6 +45,19 @@ export default class ShareStore {
         const origin = window.location.origin === 'http://localhost:8080' ?
             window.location.origin : 'https://charts.binary.com';
         this.shareLink = `${origin}#${encodeURIComponent(json)}`;
+
+
+        this.loading = true;
+
+        fetch(`${this.bitly_url}?access_token=${this.access_token}&longUrl=${encodeURIComponent(this.shareLink)}`)
+            .then( response => {
+                return response.json();
+            })
+            .then( response =>  {
+                self.shareLink = response.data.url;
+                self.loading = false;
+            });
+
     }
     @action.bound downloadPNG() {
         this.menu.setOpen(false);
@@ -108,7 +126,6 @@ export default class ShareStore {
 
 
     @action.bound copyToClipboard() {
-        this.refereshShareLink();
         if(!navigator.clipboard) {
             this.onCopyDone(this.copyWithExecCommand());
         } else {
