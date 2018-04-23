@@ -19,7 +19,7 @@ const Timeperiod = ({
                     <span className="interval_display">{interval_display}</span>
                     <span className="unit_display">{timeUnit_display}</span>
                     <br/>
-                    <span>{t.translate("Interval")}</span>
+                    <span className='ic-subtitle'>{t.translate("Interval")}</span>
                 </span>
             </Menu.Title>
             <Menu.Body>

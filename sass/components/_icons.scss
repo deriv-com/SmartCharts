@@ -136,3 +136,15 @@
 .ic-frxXAGUSD > svg > g > g > g > path:first-child {
     fill: #E1E1E1;
 }
+
+.smartcharts-mobile {
+    .cq-chart-controls .ciq-menu {
+        padding: 0px;
+    }
+    br , .ic-subtitle  { 
+        display: none;
+    }
+    .ciq-period>.cq-menu-btn>.bt-priod {
+        padding-top: 10px;
+    }
+}
