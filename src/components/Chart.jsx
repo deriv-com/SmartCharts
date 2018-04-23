@@ -36,7 +36,16 @@ class Chart extends Component {
     }
 
     render() {
-        const { DrawToolsSettingsDialog, StudySettingsDialog, children, lang, isMobile, isChartAvailable, setting } = this.props;
+        const {
+            DrawToolsSettingsDialog,
+            StudySettingsDialog,
+            children,
+            lang,
+            isMobile,
+            isChartAvailable,
+            setting,
+            chartPanelTop,
+        } = this.props;
 
         t.setLanguage( (setting && setting.language) ? setting.language : lang );
 
@@ -54,13 +63,11 @@ class Chart extends Component {
                         <RenderInsideChart at='subholder'>
                             {insideSubHolder}
                         </RenderInsideChart>
-                        <RenderInsideChart>
-                            <div className="cq-top-ui-widgets">
-                                <ChartTitle />
-                                <AssetInformation />
-                                <ComparisonList />
-                            </div>
-                        </RenderInsideChart>
+                        <div className="cq-top-ui-widgets" style={{top: chartPanelTop}}>
+                            <ChartTitle />
+                            <AssetInformation />
+                            <ComparisonList />
+                        </div>
                         <ChartControls />
                         <Crosshair />
                         <div className="chartContainer primary"> </div>
@@ -86,6 +93,7 @@ export default connect(
         StudySettingsDialog : studies.settingsDialog.connect(SettingsDialog),
         DrawToolsSettingsDialog : drawTools.settingsDialog.connect(SettingsDialog),
         isChartAvailable: chart.isChartAvailable,
-        setting: chart.setting
+        setting: chart.setting,
+        chartPanelTop: chart.chartPanelTop,
     })
 )(Chart);
