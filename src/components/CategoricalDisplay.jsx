@@ -1,7 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import {CategoryIconMap, ItemIconMap, SearchIcon,
     SymbolPlaceholderIcon, ActiveOptionsIconMap, FavoriteIcon, CloseIcon } from './Icons.jsx';
-import {stxtap} from '../store/utils';
 
 const CategoricalDisplay = ({
     isMobile,
@@ -19,7 +18,6 @@ const CategoricalDisplay = ({
     setScrollPanel,
     setCategoryElement,
     activeCategoryKey,
-    handleInputClick,
     onFavoritedItem,
     favoritesId,
     favoritesMap,
@@ -102,12 +100,7 @@ const CategoricalDisplay = ({
             <div className="cq-lookup-filters">
                 <div className={`cq-lookup-input ${filterText.trim() !== '' ? 'active':''}` }>
                     <input
-                        ref={
-                            el => {
-                                setSearchInput(el);
-                                stxtap(el, handleInputClick);
-                            }
-                        }
+                        ref={ el =>  setSearchInput(el)}
                         onChange={e => setFilterText(e.target.value)}
                         type="text"
                         spellCheck="off"
@@ -120,17 +113,17 @@ const CategoricalDisplay = ({
                     <CloseIcon className="icon-reset" onClick={ () =>clearFilterText() } />
                 </div>
                 <div className="cq-filter-panel">
-                { filteredItems.map((category, i) => {
-                    const CategoryIcon = CategoryIconMap[category.categoryId];
-                    const isActive = activeCategoryKey === category.categoryId;
-                    return (
-                        <div key={i}
-                            className={`cq-filter ${isActive ? 'cq-active-filter' : ''}`}
-                            ref={el => stxtap(el, e => handleFilterClick(category, e))}
-                         >
-                            {CategoryIcon && <CategoryIcon className={`ic-${category.categoryId}`}/>}
-                            <span className="cq-filter-text">{t.translate(category.categoryName)}</span>
-                        </div>);
+                    { filteredItems.map((category, i) => {
+                        const CategoryIcon = CategoryIconMap[category.categoryId];
+                        const isActive = activeCategoryKey === category.categoryId;
+                        return (
+                            <div key={i}
+                                className={`cq-filter ${isActive ? 'cq-active-filter' : ''}`}
+                                onClick={e => handleFilterClick(category, e)}
+                            >
+                                {CategoryIcon && <CategoryIcon className={`ic-${category.categoryId}`}/>}
+                                <span className="cq-filter-text">{t.translate(category.categoryName)}</span>
+                            </div>);
                     })}
                 </div>
             </div>
@@ -144,7 +137,7 @@ const CategoricalDisplay = ({
                                 ref={(el) => setCategoryElement(el, category.categoryId)}
                             >
                                 <div className="category-title">{t.translate(category.categoryName)}</div>
-                                { category.hasSubcategory 
+                                { category.hasSubcategory
                                     ? category.data.map((subcategory, j) =>
                                         getItemCount(subcategory) > 0 &&
                                         <Fragment key={j}>
