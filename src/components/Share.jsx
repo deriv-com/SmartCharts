@@ -12,6 +12,8 @@ const Share = ({
     Menu,
     menuOpen,
     loading,
+    urlGenerated,
+    refereshShareLink,
     shareLink,
     downloadCSV,
     downloadPNG,
@@ -37,7 +39,16 @@ const Share = ({
                         style={{display: (loading ? 'block' : 'none')}}
                         ></div>
                     <div className='content'
-                        style={{display: (loading ? 'none' : 'flex')}}
+                        style={{display: ((!loading && !urlGenerated) ? 'flex' : 'none' )}}>
+                        <div 
+                            className='download-btn'
+                            onClick={refereshShareLink}
+                            >
+                            {t.translate('Retry')}
+                        </div>
+                    </div>
+                    <div className='content'
+                        style={{display: ((!loading && urlGenerated) ? 'flex' : 'none' )}}
                         >
                         <input
                             ref={onInputRef}
@@ -71,6 +82,8 @@ export default connect(({share: s}) => ({
     Menu: s.menu.connect(Menu),
     menuOpen: s.menu.dialog.open,
     loading: s.loading,
+    urlGenerated: s.urlGenerated,
+    refereshShareLink: s.refereshShareLink,
     shareLink: s.shareLink,
     downloadPNG: s.downloadPNG,
     downloadCSV: s.downloadCSV,

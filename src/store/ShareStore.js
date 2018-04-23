@@ -29,9 +29,10 @@ export default class ShareStore {
     onCopyDone = (successful) => {
         this.copyTooltip = successful ? 'Copied!' : 'Failed!';
     }
+    bitlyUrl = 'https://api-ssl.bitly.com/v3/shorten';
+    accessToken = '837c0c4f99fcfbaca55ef9073726ef1f6a5c9349';
     @observable loading = false;
-    bitly_url = 'https://api-ssl.bitly.com/v3/shorten';
-    access_token = '837c0c4f99fcfbaca55ef9073726ef1f6a5c9349';
+    @observable urlGenerated = false;
 
 
     @observable shareLink = '';
@@ -49,13 +50,18 @@ export default class ShareStore {
 
         this.loading = true;
 
-        fetch(`${this.bitly_url}?access_token=${this.access_token}&longUrl=${encodeURIComponent(this.shareLink)}`)
+        fetch(`${this.bitlyUrl}?access_token=${this.accessToken}&longUrl=${encodeURIComponent(this.shareLink)}`)
             .then( response => {
                 return response.json();
             })
             .then( response =>  {
                 self.shareLink = response.data.url;
                 self.loading = false;
+                self.urlGenerated = true;
+            })
+            .catch(error => {
+                self.loading = false;
+                self.urlGenerated = false;
             });
 
     }
