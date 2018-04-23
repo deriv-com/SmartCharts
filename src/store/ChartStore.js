@@ -7,6 +7,7 @@ import Context from '../components/ui/Context';
 import React from 'react';
 import {stableSort} from './utils';
 import BarrierStore from './BarrierStore';
+import ChartSettingStore from './ChartSettingStore';
 import KeystrokeHub from '../components/ui/KeystrokeHub';
 import '../components/ui/Animation';
 // import '../AddOns';
@@ -35,8 +36,10 @@ class ChartStore {
     constructor(mainStore) {
         this.id = ++ChartStore._id_counter;
         this.mainStore = mainStore;
+        this.setting = new ChartSettingStore();
     }
 
+    onSymbolChange = null;
     contextPromise = new PendingPromise();
     activeSymbols = [];
     rootNode = null;
@@ -48,7 +51,7 @@ class ChartStore {
     @observable comparisonSymbols = [];
     @observable categorizedSymbols = [];
     @observable barrierJSX;
-    @observable isMobile;
+    @observable chartPanelTop = '0px';
 
     @action.bound setActiveSymbols(activeSymbols) {
         if (activeSymbols && this.context) {
@@ -66,7 +69,6 @@ class ChartStore {
     }
 
     restoreLayout(stx) {
-
         let layoutData = CIQ.localStorage.getItem(`layout-${this.id}`);
 
         const checkForQuerystring = window.location.origin === 'https://charts.binary.com' ||
@@ -103,6 +105,7 @@ class ChartStore {
             CIQ.localStorageSetItem(symbol, JSON.stringify(obj));
         }
     }
+
     restoreDrawings(stx, symbol) {
         let memory = CIQ.localStorage.getItem(symbol);
         if (memory !== null) {
@@ -150,6 +153,10 @@ class ChartStore {
         stxx.chart.allowScrollPast = false;
         stxx.chart.allowScrollFuture = false;
         const context = new Context(stxx, this.rootNode);
+
+        // Put some margin so chart doesn't get blocked by chart title
+        stxx.chart.yAxis.initialMarginTop = 125;
+        stxx.calculateYAxisMargins(stxx.chart.panel.yAxis);
 
         context.changeSymbol = (data) => {
             this.loader.show();
@@ -231,8 +238,6 @@ class ChartStore {
         deleteElement.textConent = t.translate("right-click to delete");
         manageElement.textConent = t.translate("right-click to manage");
 
-
-
         // Animation (using tension requires splines.js)
         CIQ.Animation(stxx, { stayPut: true });
 
@@ -253,14 +258,22 @@ class ChartStore {
         //     minutes: 30,
         // });
 
-        stxx.addEventListener('layout', this.saveLayout.bind(this));
-        stxx.addEventListener('symbolChange', this.saveLayout.bind(this));
+        const holderStyle = stxx.chart.panel.holder.style;
+        stxx.addEventListener('layout', () => {
+            this.saveLayout();
+            this.chartPanelTop = holderStyle.top;
+        });
+        stxx.addEventListener('symbolChange', (evt) => {
+            if (this.onSymbolChange) { this.onSymbolChange(evt.symbolObject); }
+            this.saveLayout.bind(this);
+        });
         stxx.addEventListener('drawing', this.saveDrawings.bind(this));
         // stxx.addEventListener('newChart', () => { });
         stxx.addEventListener('preferences', this.savePreferences.bind(this));
 
         this.startUI();
         this.resizeScreen();
+        this.chartPanelTop = holderStyle.top;
 
         window.addEventListener('resize', this.resizeScreen.bind(this));
 
@@ -298,14 +311,6 @@ class ChartStore {
             comp.price = srs.lastQuote ? srs.lastQuote.Close : undefined;
             i++;
         }
-    }
-
-    /**
-     * Store the Mobile mode from the chart option with pass to
-     * @param {bool} status if true, measn mobile mode is active
-     */
-    setIsMobile(status) {
-        this.isMobile = status;
     }
 
     processSymbols(symbols) {

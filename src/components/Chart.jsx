@@ -6,7 +6,7 @@ import RenderInsideChart from './RenderInsideChart.jsx';
 import ComparisonList from './ComparisonList.jsx';
 import ChartTitle from './ChartTitle.jsx';
 import AssetInformation from './AssetInformation.jsx';
-import Loader from './Loader.jsx'
+import Loader from './Loader.jsx';
 
 /* css + scss */
 import '../../sass/chartiq.scss';
@@ -36,9 +36,19 @@ class Chart extends Component {
     }
 
     render() {
-        const { DrawToolsSettingsDialog, StudySettingsDialog, children, lang, isMobile, isChartAvailable } = this.props;
+        const {
+            DrawToolsSettingsDialog,
+            StudySettingsDialog,
+            children,
+            lang,
+            isMobile,
+            isChartAvailable,
+            setting,
+            chartPanelTop,
+        } = this.props;
 
-        t.setLanguage(lang);
+        t.setLanguage( (setting && setting.language) ? setting.language : lang );
+        
         const array = React.Children.toArray(children);
         const insideHolder = array.filter(c => !/(TradeStart)|(TradeEnd)/.test(c.type.displayName));
         const insideSubHolder = array.filter(c => /(TradeStart)|(TradeEnd)/.test(c.type.displayName));
@@ -53,21 +63,19 @@ class Chart extends Component {
                         <RenderInsideChart at='subholder'>
                             {insideSubHolder}
                         </RenderInsideChart>
-                        <RenderInsideChart>
-                            <div className="cq-top-ui-widgets">
-                               <ChartTitle />
-                                <AssetInformation />
-                                <ComparisonList />
-                            </div>
-                        </RenderInsideChart>
+                        <div className="cq-top-ui-widgets" style={{top: chartPanelTop}}>
+                            <ChartTitle />
+                            <AssetInformation />
+                            <ComparisonList />
+                        </div>
                         <ChartControls />
                         <Crosshair />
                         <div className="chartContainer primary"> </div>
                         <Loader />
                         {!isChartAvailable &&
                             <div className="cq-chart-unavailable">
-                            {t.translate('Chart data is not available for this symbol.')}
-                        </div>}
+                                {t.translate('Chart data is not available for this symbol.')}
+                            </div>}
                     </div>
                 </div>
                 <DrawToolsSettingsDialog />
@@ -85,5 +93,7 @@ export default connect(
         StudySettingsDialog : studies.settingsDialog.connect(SettingsDialog),
         DrawToolsSettingsDialog : drawTools.settingsDialog.connect(SettingsDialog),
         isChartAvailable: chart.isChartAvailable,
+        setting: chart.setting,
+        chartPanelTop: chart.chartPanelTop,
     })
 )(Chart);

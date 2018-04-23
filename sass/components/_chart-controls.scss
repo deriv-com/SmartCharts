@@ -117,13 +117,11 @@ cq-context {
     }
 
     .cq-comparison-new > .cq-menu-dropdown {
-        left: 50%;
-        transform: translateX(-50%);
+        left: -13em;
     }
 
     .ciq-studies > .cq-menu-dropdown {
-        left: 50%;
-        transform: translateX(-50%);
+        left: -9.8em;
     }
 
     /* Mobile Style */
@@ -139,16 +137,23 @@ cq-context {
             border-top: 1px solid #d9d9d9;
             .ciq-menu {
                 cq-menu-dropdown, .cq-menu-dropdown {
-                    height: calc( 100vh - 32px ) ;
-                    left: 0px;
-                    width: 100%;
-                    box-shadow: none !important;
-                    padding: 0px;
+                    padding: 0;
                     transition: none;
                     transform: none;
                     &.open{
                         margin: 0px;
-                        bottom: 32px;
+                    }
+                }
+                &.ciq-studies,
+                &.cq-comparison-new{
+                    cq-menu-dropdown, .cq-menu-dropdown {
+                        height: calc( 100vh - 32px ) ;
+                        left: 0px;
+                        width: 100%;
+                        box-shadow: none !important;
+                        &.open{
+                            bottom: 32px;
+                        }
                     }
                 }
             }
