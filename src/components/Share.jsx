@@ -23,8 +23,8 @@ const Share = ({
         <Menu className="cq-share">
             <Menu.Title>
                 <ShareIcon
-                    className = {menuOpen ? 'active' : ''}
-                    subtitle={t.translate("Share")}
+                    className = {`ic-icon-with-sub ${menuOpen ? 'active' : ''}`}
+                    tooltip-title={t.translate("Share")}
                 />
             </Menu.Title>
             <Menu.Body>

@@ -152,7 +152,7 @@ import SmartFX from '../../sass/icons/active-symbols/ic-smartfx-placeholder.svg'
 
 const Wrapper = WrappedComponent => props => {
     let { className, ['tooltip-title']: tooltip, ...p } = props;
-    className = `ic-icon ${className ? className : ''} ${tooltip ? 'tooltip' : ''}`;
+    className = `ic-icon ${className ? className : ''}`;
 
     return (
         <span
@@ -160,58 +160,44 @@ const Wrapper = WrappedComponent => props => {
             tooltip-title={tooltip}
             {...p}>
             <WrappedComponent />
-        </span>
-    );
-};
-
-const  WrapIconWithSubtitle= WrappedComponent => props => {
-    let { className, ['subtitle']: subtitle, ...p } = props;
-    className = `ic-icon ic-icon-with-sub ${className ? className : ''} `;
-
-    return (
-        <span
-            className={className}
-            subtitle={subtitle}
-            {...p}>
-            <WrappedComponent />
             <br/>
-            <span>{subtitle}</span>
+            <span className='ic-subtitle'>{tooltip}</span>
         </span>
     );
 };
 
 export const AddIcon = Wrapper(Add);
-export const ZoomInIcon = WrapIconWithSubtitle(Add);
+export const ZoomInIcon = Wrapper(Add);
 export const AddThinIcon = Wrapper(AddThin);
-export const CandleIcon = WrapIconWithSubtitle(Candle);
+export const CandleIcon = Wrapper(Candle);
 export const CloseIcon = Wrapper(Close);
-export const ComparisonIcon = WrapIconWithSubtitle(Comparison);
-export const CrosshairIcon = WrapIconWithSubtitle(Crosshair);
+export const ComparisonIcon = Wrapper(Comparison);
+export const CrosshairIcon = Wrapper(Crosshair);
 export const DeleteIcon= Wrapper(Delete);
 export const ClearIcon= Wrapper(Clear);
 export const DotIcon = Wrapper(Dot);
 export const DownloadIcon = Wrapper(Download);
-export const DrawIcon = WrapIconWithSubtitle(Draw);
+export const DrawIcon = Wrapper(Draw);
 export const HollowCandleIcon = Wrapper(HollowCandle);
-export const IndicatorIcon = WrapIconWithSubtitle(Indicator);
+export const IndicatorIcon = Wrapper(Indicator);
 export const LineIcon = Wrapper(Line);
 export const BaseLineIcon = Wrapper(BaseLine);
 export const ListIcon = Wrapper(List);
 export const MeasureIcon = Wrapper(Measure);
 export const MinusIcon = Wrapper(Minus);
-export const ZoomOutIcon = WrapIconWithSubtitle(Minus);
+export const ZoomOutIcon = Wrapper(Minus);
 export const OHLCIcon = Wrapper(OHLC);
 export const SplineIcon = Wrapper(Spline);
 export const StarIcon = Wrapper(Star);
-export const TemplateIcon = WrapIconWithSubtitle(Template);
+export const TemplateIcon = Wrapper(Template);
 export const TickIcon = Wrapper(Tick);
 export const SearchIcon = Wrapper(Search);
 export const EditIcon = Wrapper(Edit);
-export const SettingIcon = WrapIconWithSubtitle(Edit);
+export const SettingIcon = Wrapper(Edit);
 export const ArrowIcon = Wrapper(Arrow);
 export const FavoriteIcon = Wrapper(Star);
 export const CopyIcon = Wrapper(Copy);
-export const ShareIcon = WrapIconWithSubtitle(Share);
+export const ShareIcon = Wrapper(Share);
 
 
 export const ChevronRightIcon = Wrapper(ChevronRight);

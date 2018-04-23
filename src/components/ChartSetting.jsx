@@ -89,8 +89,8 @@ const ChartSetting = ({
         <Menu className="cq-chart-setting">
             <Menu.Title>
                 <SettingIcon
-                    className = {menuOpen ? 'active' : ''}
-                    subtitle={t.translate('Settings')}
+                    className = {`ic-icon-with-sub ${menuOpen ? 'active' : ''}`}
+                    tooltip-title={t.translate('Settings')}
                 />
             </Menu.Title>
             <Menu.Body>

@@ -20,8 +20,8 @@ const DrawTools = ({
         >
             <Menu.Title>
                 <DrawIcon
-                    className={`${menuOpen ? 'active' : ''}`}
-                    subtitle={t.translate("Draw tools")} />
+                    className={`ic-icon-with-sub ${menuOpen ? 'active' : ''}`}
+                    tooltip-title={t.translate("Draw tools")} />
             </Menu.Title>
 
             <Menu.Body>

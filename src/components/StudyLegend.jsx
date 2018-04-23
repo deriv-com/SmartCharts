@@ -21,8 +21,8 @@ class StudyLegend extends Component {
             >
                 <Menu.Title>
                     <IndicatorIcon
-                        className={`${menuOpen ? 'active' : ''}`}
-                        subtitle={t.translate("Studies")} />
+                        className={`ic-icon-with-sub ${menuOpen ? 'active' : ''}`}
+                        tooltip-title={t.translate("Studies")} />
                 </Menu.Title>
                 <Menu.Body>
                     <StudyCategoricalDisplay

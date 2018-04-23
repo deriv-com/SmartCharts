@@ -36,11 +36,17 @@
     svg {
         position: relative;
     }
+    br , .ic-subtitle  { 
+        display: none;
+    }
 }
 .ic-icon-with-sub{
     height: auto !important;
     width: auto !important;
     line-height: 15px;
+    br , .ic-subtitle  { 
+        display: inline;
+    }
 }
 .tooltip {
     position: relative;
