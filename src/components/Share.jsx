@@ -3,7 +3,7 @@ import Menu from './Menu.jsx';
 import { connect } from '../store/Connect';
 import {
     ShareIcon,
-    CopyIcon,
+    CopyIcon
 } from './Icons.jsx';
 import '../../sass/_ciq-share.scss';
 
@@ -11,6 +11,9 @@ import '../../sass/_ciq-share.scss';
 const Share = ({
     Menu,
     menuOpen,
+    loading,
+    urlGenerated,
+    refereshShareLink,
     shareLink,
     downloadCSV,
     downloadPNG,
@@ -30,8 +33,23 @@ const Share = ({
             <Menu.Body>
                 <div className='title'> {t.translate('Share / Download Chart')} </div>
                 <div className='body'>
+
                     <div className='caption1'>{t.translate('Share link')}</div>
-                    <div className='content'>
+                    <div className="loading"
+                        style={{display: (loading ? 'block' : 'none')}}
+                    ></div>
+                    <div className='content'
+                        style={{display: ((!loading && !urlGenerated) ? 'flex' : 'none' )}}>
+                        <div
+                            className='download-btn'
+                            onClick={refereshShareLink}
+                        >
+                            {t.translate('Retry')}
+                        </div>
+                    </div>
+                    <div className='content'
+                        style={{display: ((!loading && urlGenerated) ? 'flex' : 'none' )}}
+                    >
                         <input
                             ref={onInputRef}
                             value={shareLink}
@@ -63,6 +81,9 @@ const Share = ({
 export default connect(({share: s}) => ({
     Menu: s.menu.connect(Menu),
     menuOpen: s.menu.dialog.open,
+    loading: s.loading,
+    urlGenerated: s.urlGenerated,
+    refereshShareLink: s.refereshShareLink,
     shareLink: s.shareLink,
     downloadPNG: s.downloadPNG,
     downloadCSV: s.downloadCSV,
