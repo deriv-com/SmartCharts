@@ -1,7 +1,7 @@
 const md5File = require('md5-file')
 const fs = require('fs');
 
-const files = ['./dist/smartcharts.js', './dist/smartcharts.css'];
+const files = ['./dist/smartcharts.js', './dist/smartcharts.css', './dist/chartiq.min.js'];
 
 let html = fs.readFileSync('index.html', 'utf-8');
 files.forEach(file => {

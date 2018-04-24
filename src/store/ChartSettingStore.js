@@ -77,7 +77,7 @@ export default class ChartSettingStore {
 
 
         try {
-            let setting_string = CIQ.localStorage.getItem('setting'),
+            let setting_string = CIQ.localStorage.getItem('smartchart-setting'),
                 setting = JSON.parse(setting_string !== '' ? setting_string : '{}');
 
             /**
@@ -101,7 +101,7 @@ export default class ChartSettingStore {
     }
 
     saveSetting() {
-        CIQ.localStorageSetItem(`setting`, JSON.stringify({
+        CIQ.localStorageSetItem(`smartchart-setting`, JSON.stringify({
             language: this.language,
             position: this.position,
             theme: this.theme

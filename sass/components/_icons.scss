@@ -1,11 +1,13 @@
+@import "../_variables";
+
 .ic-icon, .cq-text-icon {
     display: block;
-    height: 24px;
-    width: 24px;
+    height: $normal-icon-size;
+    width: $normal-icon-size;
     line-height: 32px;
-    transition: all .2s .15s;
-    border-radius: 2px;
-    box-sizing: border-box;
+    @include transition(all .2s .15s);
+    @include border-radius(2px);
+    @include box-sizing(border-box);
     cursor: pointer;
     text-align: center;
 
@@ -54,7 +56,6 @@
     &:after {
         position: absolute;
         opacity: 0;
-        transition: opacity 0.3s;
         pointer-events: none;
         height: 16px;
         width: 65px;
@@ -67,12 +68,13 @@
         z-index: 98;
         background: rgba(21,33,45,0.88);
         box-shadow: 0 2px 8px 0 rgba(21,33,45,0.32);
-        border-radius: 4px;
+        @include transition(opacity 0.3s);
+        @include border-radius(4px);
     }
     &:before {
         position: absolute;
         opacity: 0;
-        transition: opacity 0.3s;
+        @include transition(opacity 0.3s);
         pointer-events: none;
         border: solid;
         border-color: rgba(21,33,45,0.88) transparent;

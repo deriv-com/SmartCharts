@@ -18,7 +18,12 @@
         font-size: 12px;
         height: 18px;
         opacity: 1;
-        transition: background .20s 0s, padding .20s 0s, opacity .20s .20s, height .20s .40s, font-size .0s .40s, margin .2s .40s;
+        @include transition(background .20s 0s,
+                padding .20s 0s,
+                opacity .20s .20s,
+                height .20s .40s,
+                font-size .0s .40s,
+                margin .2s .40s);
         &, .left, .right {
             display: flex;
             align-items: center;
@@ -28,9 +33,9 @@
             margin-left: 1.5em;
         }
         &:hover {
-            background: white;
-            @include border-radius($soft-corners);
+            background: $DEFAULT-main;
             box-shadow: 0 2px 8px 0 rgba(42, 48, 82, 0.14);
+            @include border-radius($soft-corners);
         }
     }
     .cq-comparison-swatch {
@@ -39,7 +44,7 @@
         height: $icon-size;
     }
     .cq-comparison-item .ciq-close {
-        transition: opacity .20s .0s;
+        @include transition(opacity .20s .0s);
         cursor: pointer;
         opacity: 0;
         left: 10px;

@@ -29,10 +29,16 @@ export default class ShareStore {
     onCopyDone = (successful) => {
         this.copyTooltip = successful ? 'Copied!' : 'Failed!';
     }
+    bitlyUrl = 'https://api-ssl.bitly.com/v3/shorten';
+    accessToken = '837c0c4f99fcfbaca55ef9073726ef1f6a5c9349';
+    @observable loading = false;
+    @observable urlGenerated = false;
+
 
     @observable shareLink = '';
     refereshShareLink = () => {
-        if(!this.context) { return; }
+        let self = this;
+        if(!this.context || !this.menu.dialog.open ) { return; }
 
         const layoutData = this.stx.exportLayout(true);
         const json = JSON.stringify(layoutData);
@@ -40,6 +46,24 @@ export default class ShareStore {
         const origin = window.location.origin === 'http://localhost:8080' ?
             window.location.origin : 'https://charts.binary.com';
         this.shareLink = `${origin}#${encodeURIComponent(json)}`;
+
+
+        this.loading = true;
+
+        fetch(`${this.bitlyUrl}?access_token=${this.accessToken}&longUrl=${encodeURIComponent(this.shareLink)}`)
+            .then( response => {
+                return response.json();
+            })
+            .then( response =>  {
+                self.shareLink = response.data.url;
+                self.loading = false;
+                self.urlGenerated = true;
+            })
+            .catch(error => {
+                self.loading = false;
+                self.urlGenerated = false;
+            });
+
     }
     @action.bound downloadPNG() {
         this.menu.setOpen(false);
@@ -108,7 +132,6 @@ export default class ShareStore {
 
 
     @action.bound copyToClipboard() {
-        this.refereshShareLink();
         if(!navigator.clipboard) {
             this.onCopyDone(this.copyWithExecCommand());
         } else {
