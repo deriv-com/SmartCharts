@@ -9,11 +9,7 @@ cq-context {
 	overflow: hidden;
 
 	input {
-		-webkit-user-select: text;
-		   -moz-user-select: text;
-			-ms-user-select: text;
-				user-select: text;
-
+		@include user-select(text);
 		font-weight: 300;
 		color: #071931;
 	}
@@ -55,37 +51,34 @@ cq-context {
 	@include box-sizing(border-box);
 }
 
-.ciq-select {
+.ciq-select { /* Styled replacement for what might otherwise be a select box input */
+	position: relative;
+	padding-right: 20px;
+	text-align: left;
 	line-height: 25px;
 	height: 27px;
-}
-
-.ciq-select { /* Styled replacement for what might otherwise be a select box input */
-	position:relative;
-	padding-right:20px;
-	text-align:left;
+	cursor: pointer;
 	@include user-select(none);
-	cursor:pointer;
-	& > span:after {
-		content:"";
-		position: absolute;
-		display: inline-block;
-		margin-top: 8px;
-		margin-left: 6px;
-		width: 5px;
-		height: 5px;
-		border-right:solid thin mix(#000, $DEFAULT-bg, 40% );
-		border-bottom:solid thin mix(#000, $DEFAULT-bg, 40% );
-		@include rotate(45deg);
-	}
 	/* the line style select box is actually a border-top that is offset to look like a vertical line */
-	& > span.ciq-line:after {
-		margin-top: -6px;
-		margin-left: 36px;
-	}
 	& > span {
 		display:block;
 		@include text-truncate;
+		&.ciq-line:after {
+			margin-top: -6px;
+			margin-left: 36px;
+		}
+		&:after {
+			content:"";
+			position: absolute;
+			display: inline-block;
+			margin-top: 8px;
+			margin-left: 6px;
+			width: 5px;
+			height: 5px;
+			border-right:solid thin mix($DEFAULT-text-strong, $DEFAULT-bg, 40% );
+			border-bottom:solid thin mix($DEFAULT-text-strong, $DEFAULT-bg, 40% );
+			@include rotate(45deg);
+		}
 	}
 	.break-sm & {
 		position: static;
@@ -120,15 +113,18 @@ cq-context {
 	}
 }
 
-.ciq-radio span {border-radius:50%;}
 .ciq-radio {
-	.ciq-active & span:after, &.ciq-active span:after {
+	span {
+		@include border-radius(50%);
+	}
+	.ciq-active & span:after,
+	&.ciq-active span:after {
+		background:$DEFAULT-accent;
 		left:3px;
 		bottom:3px;
 		width:6px;
 		height:6px;
-		border-radius:50%;
-		background:$DEFAULT-accent;
+		@include border-radius(50%);
 	}
 }
 /* Loading */
@@ -139,7 +135,7 @@ cq-context {
 
 /* Basic Buttons */
 .ciq-btn, #annotationCancel, #annotationSave {
-	background:#fff;
+	background: $DEFAULT-menu-bg;
 	font-size:$font-size-button;
 	font-weight:700;
 	text-transform:uppercase;
@@ -151,8 +147,8 @@ cq-context {
 	padding:0 10px;
 	cursor:pointer;
 	border:none;
+	@include transition( all .2s 0s, opacity .2s 0s);
 	@include box-sizing(border-box);
-	transition: all .2s 0s, opacity .2s 0s;
 	@include border-radius($soft-corners);
 	@include box-shadow(0, 1px, 2px, rgba(0, 0, 0, .2));
 
@@ -165,7 +161,7 @@ cq-context {
 	&:active  {
 	    border:none;
 		color:darken( $DEFAULT-accent, 8% );
-		transition: all 0s 0s;
+		@include transition( all 0s 0s);
 		@include box-shadow(inset 0, 1px, 2px, rgba(0, 0, 0, .2));
 	}
 
@@ -195,7 +191,7 @@ cq-context {
     position: relative;
     transform: translateZ(0px);
     vertical-align: middle;
-	transition: all .20s ease-in 0s;
+	@include transition(all .20s ease-in 0s)
 
 	&:before {
 		background:rgba(255,255,255,.2);
@@ -208,7 +204,7 @@ cq-context {
 		transform: scale(0);
 		z-index: -1;
 		@include border-radius(100%);
-		transition: all .20s ease-in 0s;
+		@include transition(all .20s ease-in 0s)
 	}
 
 	&:focus:before,
@@ -244,30 +240,29 @@ cq-menu-dropdown .ps-scrollbar-y-rail
 /* --------------------------------------------------------- COLOR PICKER --------------------------------------------------------- */
 
 cq-swatch, .ciq-color, .stx-border-color {/* Swatch / Open Palette Button */
+	background-color: $DEFAULT-text;
 	position: relative;
 	height:19px;
 	width:19px;
 	background-clip:content-box;
 	cursor: pointer;
-	background-color: $DEFAULT-text;
 }
 
 cq-swatch {
 	display: block;
-	box-sizing: border-box;
+	@include box-sizing(border-box);
 }
 
 cq-color-picker {/* This is the actual color picker container */
+	background: $DEFAULT-menu-bg;
 	position: absolute;
-	background: #FFF;
 	padding: 0 2px 2px 5px;
 	border: 1px solid #ccc;
-	@include border-radius($soft-corners);
-	@include box-shadow (0px, 2px, 4px, rgba(0, 0, 0, .2));
-	@include box-sizing(border-box);
 	z-index:5;
 	display:none;
-
+	@include border-radius();
+	@include box-shadow (0px, 2px, 4px, rgba(0, 0, 0, .2));
+	@include box-sizing(border-box);
 	&[cq-active]{
 		display:block;
 	}
@@ -293,7 +288,6 @@ cq-color-picker ul { /* The unordered list with all the swatches */
 	& li { /* List item containing each swatch */
 		float: left;
 		margin: 0 3px 3px 0;
-
 		& span { /* The swatches themselves */
 			display: block;
 			width: 13px;
@@ -301,10 +295,11 @@ cq-color-picker ul { /* The unordered list with all the swatches */
 			text-decoration: none;
 			outline: 0;
 			border: 1px solid transparent;
-			transition: border .20s 0s;
-
+			@include transition(border .20s 0s);
 			&:hover,
-			&:active {border-color: #000;}
+			&:active {
+				border-color: $DEFAULT-text-strong;
+			}
 		}
 	}
 }
@@ -332,7 +327,6 @@ cq-toolbar {
 	padding: 0px 10px;
 	border-bottom:none;
 	visibility:hidden;
-
 	.toolbar-on & {// Show Toolbar
 		height:40px;
 		padding:5px 10px 0;
@@ -340,17 +334,17 @@ cq-toolbar {
 		z-index:2;
 		visibility: visible;
 	}
-	transition: height .20s 0s, padding .20s 0s;
+	@include transition(height .20s 0s, padding .20s 0s);
 }
 
 /* Chart Area Block */
 .ciq-chart-area {
+	background: $DEFAULT-bg;
 	position:absolute;
 	left:0;
 	right:0;
 	top: 0;
 	bottom: 0;
-	background:$DEFAULT-bg;
 	z-index: 1;
 
 	.break-sm & { /* Remove padding around chart when the app is set to breakpoint-sm*/
@@ -364,9 +358,9 @@ cq-toolbar {
 
 /* Chart Block */
 .ciq-chart {
+	background: $DEFAULT-main;
 	height:100%;
 	width:100%;
-	background: $DEFAULT-main;
 	@include box-shadow (0px, 2px, 5px, rgba(0, 0, 0, .1));
 }
 
@@ -383,7 +377,7 @@ cq-side-panel {
 	right:0;
 	top:$nav-height;
 	bottom:$footer-height;
-	transition: width .20s 0s;
+	@include transition(width .20s 0s);
 	overflow:hidden;
 	z-index: 1;
 }
@@ -413,11 +407,10 @@ cq-menu-dropdown, .cq-menu-dropdown {
 	color: $DEFAULT-text-medium;
 	overflow:hidden;
 	opacity: 0;
+	z-index: 6;
 	@include box-shadow (0px, 2px, 4px, rgba(0, 0, 0, .2));
-	transition: opacity .20s 0s;
-	z-index:6;
-	@include border-radius($soft-corners);
-
+	@include transition( opacity .20s 0s);
+	@include border-radius();
 	.break-sm & {
 		top:$nav-height;
 		width:auto;
@@ -524,13 +517,10 @@ cq-section-dynamic .ciq-icon { /* Delete button placement for custom item */
 	& input {
 		height:2em;
 		border:none;
-		//background:rbga($DEFAULT-bg,0);
 	}
-
 	.break-sm & {
 		width: 50px;
 	}
-
 	.break-md & {
 		width: 85px;
 	}
@@ -550,7 +540,7 @@ cq-lookup-input {
 		width: 100%;
 		@include box-sizing(border-box);
 		@include border-radius($soft-corners);
-		transition: background .60s 0s;
+		@include transition( background .60s 0s);
 	}
 }
 
@@ -581,14 +571,15 @@ cq-context {
 }
 
 /* Dropdowns */
-
 .ciq-dropdowns {
   margin-right: 5px;
   margin-top: 3px;
+  float:left;
 }
 .ciq-menu {
-	color:mix(#000, $DEFAULT-bg, 65% );
-	transition: color .20s 0s;
+	position: relative;
+	color:mix($DEFAULT-text-strong, $DEFAULT-bg, 65% );
+	@include transition(color .20s 0s);
 
 	&:hover {
 		& {color:$DEFAULT-text;}
@@ -604,19 +595,19 @@ cq-context {
 			border-bottom:solid 3px $DEFAULT-accent;
 		}
 	}
+	 > span {
+		padding:0 12px 0 0;
+		position:relative;
+		font-weight:400;
+	}
 }
-
+.break-sm .ciq-menu {
+  position: inherit;
+}
 .break-sm, .break-md {
 	& .ciq-menu {
 		padding: 0;
 	}
-}
-
-.ciq-menu > span {
-	padding:0 12px 0 0;
-	position:relative;
-	font-weight:400;
-
 }
 
 /* Panel Toggles */
@@ -666,16 +657,12 @@ body:not(.break-sm) .sidenav-toggle {
 	padding:0;
 }
 .break-sm, .break-md {
-	& .ciq-menu.ciq-views > span:after {background-position: -481px -25px;}
-}
-.break-sm, .break-md {
-	& .ciq-menu.ciq-studies > span:after {background-position: -300px -25px;}
-}
-.break-sm, .break-md {
-	& .ciq-menu.ciq-display > span:after {background-position: -350px -25px;}
-}
-.break-sm, .break-md {
-	& .ciq-menu.stx-markers > span:after {background-position: -100px -25px;}
+	&.ciq-menu{
+		&.ciq-views > span:after {background-position: -481px -25px;}
+		&.ciq-studies > span:after {background-position: -300px -25px;}
+		&.ciq-display > span:after {background-position: -350px -25px;}
+		&.stx-markers > span:after {background-position: -100px -25px;}
+	}
 }
 
 .ciq-HU {
@@ -718,9 +705,7 @@ cq-study-legend  {
 	overflow:hidden;
 	position:relative;
 	padding: 0;
-
 	width: 200px;
-
 	cq-item {
 		@include box-sizing(border-box);
 	}
@@ -752,7 +737,7 @@ cq-study-legend cq-section-dynamic {/* Current studies container - height is set
 /* Code below is for study names beneath the comparison element */
 cq-study-legend[cq-marker] > cq-item:hover {
 	background-color:#fafafa;
-	border-radius:1px;
+	@include border-radius(1px);
 	box-shadow:0px 1px 1px rgba(0,0,0,0.2);
 }
 
@@ -767,7 +752,7 @@ cq-study-legend[cq-marker] > cq-item > cq-label {
 
 cq-study-legend[cq-marker] {
 	height:15px;
-	color:black;
+	color:$DEFAULT-text-strong;
 	margin:5px 0 0 10px;
 	z-index:2;
 
@@ -823,7 +808,7 @@ cq-study-legend[cq-marker]:hover {
 
 cq-study-legend[cq-marker] cq-item {
 	opacity: 0;
-	transition: opacity .20s .50s, background-color 0.25s ease-in-out;
+	@include transition(opacity .20s .50s, background-color 0.25s ease-in-out);
 }
 
 cq-study-legend[cq-marker]:hover cq-item {
@@ -874,7 +859,7 @@ cq-toolbar .ciq-heading { /* Background and line color headings */
 	font-size: 11px;
 	text-transform: uppercase;
 	font-family:$heading-font;
-	color:mix(#000, $DEFAULT-main, 40% );
+	color:mix($DEFAULT-text-strong, $DEFAULT-main, 40% );
 }
 
 cq-toolbar .ciq-select {/* Menu Triggers in toolbar */
@@ -908,7 +893,7 @@ cq-annotation .ciq-btn {/* Menu Triggers in toolbar */
 	font-weight:300;
 	text-align:center;
 	@include box-shadow(0, 0, 0, rgba(0, 0, 0, 0));
-	color:mix(#000, $DEFAULT-main, 70% );
+	color:mix($DEFAULT-text-strong, $DEFAULT-main, 70% );
 	border:solid 1px transparent;
 
 	&:hover {
@@ -995,10 +980,10 @@ cq-hu-dynamic { /* HU Container Box */
 	left:200px;
 	top:0px;
 	z-index:31;
-  &.stx-show {
-  	display:block;
-  }
-	transition: left .10s 0s, top .10s 0s, right .10s 0s, bottom .10s 0s;
+	@include transition(left .10s 0s, top .10s 0s, right .10s 0s, bottom .10s 0s);
+	&.stx-show {
+		display:block;
+	}
 }
 /*
 There are two svg images. The first is a simple square (for static display). The second has a callout.
@@ -1052,7 +1037,7 @@ cq-hu-dynamic cq-hu-date {
 cq-hu-dynamic cq-hu-price {
 	font-size:24px;
 	font-weight:700;
-	color:#000;
+	color:$DEFAULT-text-strong;
 	line-height:24px;
 }
 
@@ -1136,7 +1121,7 @@ cq-hu-static {
 	display: block;
 	font-weight:500;
 	font-family:$heading-font;
-	background:#fff;
+	background: $DEFAULT-menu-bg;
     padding-left: 15px;
 
 	.break-sm & {display: none;}
@@ -1149,7 +1134,7 @@ cq-hu-static {
 		display:table-cell;
 		width: 53px;
 		font-size:11px;
-		color:#000;
+		color:$DEFAULT-text-strong;
 		line-height: 16px;
 		white-space: nowrap;
 		overflow: hidden;
@@ -1227,10 +1212,10 @@ cq-hu-static {
 
     background: rgba(21,33,45,0.88);
     box-shadow: 0 2px 8px 0 rgba(21,33,45,0.32);
-    border-radius: 6px;
+    @include border-radius(6px);
     height: 34px;
     line-height: 34px;
-    box-sizing: border-box;
+    @include box-sizing(border-box);
     &:before {
         position: absolute;
         pointer-events: none;
@@ -1246,14 +1231,14 @@ cq-hu-static {
 #mStickyInterior {
     position: absolute;
     top: -30px;
-    color: black;
+    color: $DEFAULT-text-strong;
 	padding: 0;
 }
 
 /* --------------------------------------------------------- FOOTER --------------------------------------------------------- */
 
 .ciq-footer {
-	color:mix(#000, $DEFAULT-bg, 65% );
+	color:mix($DEFAULT-text-strong, $DEFAULT-bg, 65% );
 }
 
 .ciq-footer > .ciq-btn {/* Share button */
@@ -1308,7 +1293,7 @@ cq-dialog-overlay {/* Overlay for dialog placement */
 	overflow:hidden;
 	opacity:0;
 	/*background: rgba(#151f28, .4);*/
-	transition: opacity .20s 0s;
+	@include transition(opacity .20s 0s);
 	&[cq-active]{
 		opacity: 1;
 		top: 0;
@@ -1518,14 +1503,14 @@ cq-study-context {
 
 cq-share-button {
 	float: left;
-	box-sizing: border-box;
+	@include box-sizing(border-box);
 	display: inline-block;
 	line-height: 40px;
 	cursor: pointer;
-  color:mix(#000, $DEFAULT-bg, 65% );
+  	color: mix($DEFAULT-text-strong, $DEFAULT-bg, 65% );
 	position: relative;
 	padding: 0 10px;
-	transition: color .20s 0s;
+	@include transition( color .20s 0s );
 	&:hover {
 		& {color:$DEFAULT-text;}
 	}
@@ -1550,7 +1535,7 @@ cq-share-dialog {
 	border: 1px;
 	border-color: #ddd;
 	border-style: solid;
-	border-radius: 1px;
+	@include border-radius(1px);
   box-shadow: inset 0 0 3px #cfcfcf;
   font-size: inherit;
   margin: 16px;
@@ -1612,7 +1597,7 @@ cq-share-dialog {
     height: 25px;
     width: 25px;
 	opacity: 0;
-	transition: opacity .20s 0s, border .20s 0s, width .20s 0s, height .20s 0s, top .20s 0s, left .20s 0s;
+	@include transition( opacity .20s 0s, border .20s 0s, width .20s 0s, height .20s 0s, top .20s 0s, left .20s 0s );
 	@include box-sizing(border-box);
 }
 .stx-marker.square .stx-visual:hover:after,
@@ -1646,7 +1631,7 @@ cq-share-dialog {
 	text-align:left;
 	background:rgba(255, 255, 255, 0.85);
 	opacity: 0;
-	transition: opacity .50s 0s;
+	@include transition(opacity .50s 0s);
 }
 .stx-marker.highlight.square .stx-marker-expand,
 .stx-marker.highlight.circle .stx-marker-expand {
@@ -1683,14 +1668,14 @@ cq-share-dialog {
 }
 .stx-marker.callout .stx-marker-expand {
 	max-height: 0;
-	transition: max-height 0s 0s;
+	@include transition( max-height 0s 0s );
 }
 .stx-marker.callout.highlight .stx-marker-expand {
 	width: 200px;
 	max-height:200px;
 	padding:0 10px 8px;
 	@include box-sizing(border-box);
-	transition: max-height .50s 0s;
+	@include transition( max-height .50s 0s );
 }
 .stx-marker.callout .stx-marker-content:after { /* Basic Marker */
 	position:absolute;
@@ -1701,7 +1686,7 @@ cq-share-dialog {
 	content:"";
 	display:block;
 	opacity: .15;
-	transition: opacity .20s 0s, top .20s 0s, bottom .20s 0s, left .20s 0s, right .20s 0s;
+	@include transition( opacity .20s 0s, top .20s 0s, bottom .20s 0s, left .20s 0s, right .20s 0s);
 	@include box-sizing(border-box);
     border: 1px solid $DEFAULT-text;
 }
@@ -1721,7 +1706,7 @@ cq-share-dialog {
 }
 
 .cq-stable {
-	transition: all 1s ease-out 0s;
+	@include transition(all 1s ease-out 0s);
 }
 
 .cq-down {
@@ -1749,7 +1734,7 @@ cq-attrib-container cq-attrib-quote-type {
 }
 
 cq-attrib-container cq-attrib-source a {
-   color: #000;
+   color: $DEFAULT-text-strong;
 }
 
 cq-theme-dialog  {
@@ -1830,8 +1815,7 @@ cq-language-name {
 /* -------- Axis tabs and current Prices -------- */
 
 .stx-float-price, .stx-float-date {
-	border-radius: 0;
-	-webkit-border-radius: 0;
+	@include border-radius(0px);
 }
 
 #crossY, .stx_crosshair_y {
@@ -1845,7 +1829,7 @@ cq-language-name {
 
 .stx-btn-panel {
 	opacity:0;
-	transition: opacity .5s;
+	@include transition(opacity .5s);
 	background-color: $DEFAULT-main;
 }
 
@@ -1855,7 +1839,7 @@ cq-language-name {
 
 .stx-holder:hover .stx-btn-panel {
 	opacity: 1;
-	transition: opacity .5s, height .3s;
+	@include transition(opacity .5s, height .3s);
 }
 
 .stx-ico-handle {

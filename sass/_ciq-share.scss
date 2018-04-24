@@ -1,19 +1,21 @@
+@import "_variables";
+
 .cq-share {
     .cq-menu-dropdown {
         left: 50%;
         width: 280px;
         height: 200px;
-        color: black;
+        color: $DEFAULT-text-strong;
         transform: translateX(-50%); 
     }
 
     .title {
+        background: $DEFAULT-main;
         height: 40px;
         line-height: 40px;
         padding-left: 16px;
         font-size: 16px;
-        background: white;
-        box-shadow: inset 0 -1px 0 0 #E9E9ED;
+        box-shadow: inset 0 -1px 0 0 $DEFAULT-border;
     }
     .body {
         background: #FAFAFA;
@@ -30,25 +32,25 @@
         .content {
             display: flex;
             input { 
+                background: $DEFAULT-main;
                 line-height: 32px;
                 height: 32px;
-                box-sizing: border-box;
                 outline: none;
                 flex-grow: 1;
-                background: #FFFFFF;
-                border: 1px solid #E9E9ED;
-                border-radius: 4px;
+                border: 1px solid $DEFAULT-border;
                 padding-left: 4px;
+                @include box-sizing(border-box);
+                @include border-radius(4px);
             }
             .ic-icon {
-                background: #4C5794;
-                border-radius: 0 4px 4px 0;
+                background: $active-color;
                 width: 32px;
                 height: 32px;
                 padding-top: 4px;
-                box-sizing: border-box;
                 position: relative;
                 left: -1px;
+                @include border-radius(0 4px 4px 0);
+                @include box-sizing(border-box);
                 &:after {
                     width: auto !important;
                     left: auto !important;
@@ -61,18 +63,18 @@
                 }
             }
             .download-btn {
-                background: white;
-                border: 1px solid #E9E9ED;
-                border-radius: 4px;
+                background: $DEFAULT-main;
+                border: 1px solid $DEFAULT-border;
                 width: 56px;
                 height: 32px;
-                box-sizing: border-box;
                 text-align: center;
                 line-height: 32px;
                 margin-right: 8px;
                 cursor: pointer;
+                @include border-radius(4px);
+                @include box-sizing(border-box);
                 &:hover {
-                    border-color: #4C5794; 
+                    border-color: $active-color; 
                 }
             }
         }

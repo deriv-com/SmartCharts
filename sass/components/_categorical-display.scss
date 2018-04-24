@@ -4,24 +4,24 @@ cq-context{
         padding: 0 !important;
         display: flex;
         text-align: left;
-        border-radius: 3px;
-        background-color: $DEFAULT-menu-bg;
+        background-color: $DEFAULT-main;
         color: $DEFAULT-text-medium;
-        transition: opacity 1s;
         overflow: hidden;
+        @include transition(opacity 1s);
+        @include border-radius();
         @include box-shadow (0px, 2px, 4px, rgba(0, 0, 0, .2));
         .cq-lookup-filters {
             width: 40%;
-            border-right: 1px solid #e9e9ed;
+            border-right: 1px solid $DEFAULT-border;
         }
         .cq-lookup-input  {
             margin: 1.5em 1.1em 1.6em 1.3em;
-            border-radius: 4px;
-            border: solid 1px #e9e9ed;
+            border: solid 1px $DEFAULT-border;
             position: relative;
+            @include border-radius();
             &.active{
-                @include box-shadow (0px, 0, 2px, #4c5794);
-                border-color: #4c5794;
+                border-color: $active-color;
+                @include box-shadow (0px, 0, 2px, $active-color);
                 > .icon-reset{
                     right: 2px;
                     opacity: 1;
@@ -34,7 +34,7 @@ cq-context{
                 border: none;
                 outline: 0;
                 width: calc(100% - 40px);
-                border-radius: 4px;
+                @include border-radius();
                 @include placeholder {
                     color: #dfdfdf;
                 }
@@ -45,11 +45,11 @@ cq-context{
                 left: 5px;
             }
             > .icon-reset{
+                position: absolute;
                 right: -2px;
                 opacity: 0;
-                position: absolute;
                 left: auto;
-                transition: right,opacity 0.2s ease-in-out;
+                @include transition(right,opacity 0.2s ease-in-out);
 
             }
             > input:focus + .ic-icon svg path {
@@ -66,16 +66,16 @@ cq-context{
             color: #333333;
         }
         .category-content {
+            background-color: $DEFAULT-main;
             margin: 0.4em 1em 0em 1em;
-            border: 1px solid #e9e9ed;
-            border-radius: 3px;
-            background-color: white;
+            border: 1px solid $DEFAULT-border;
+            @include border-radius();
         }
         .subcategory {
             font-weight: 500;
             padding: 0.5em 0 0.5em 1.2em;
             font-size: 1.1em;
-            color: black;
+            color: $DEFAULT-text-strong;
         }
         .category-title {
             display: block;
@@ -88,11 +88,11 @@ cq-context{
             line-height: 3.4em;
             text-align: left;
             cursor: pointer;
-            box-sizing: border-box;
-            transition: background-color 0.3s;
+            @include transition(background-color 0.3s)
+            @include box-sizing(border-box);
             &.cq-active-filter {
                 font-weight: 800;
-                color: #4C5794;
+                color: $active-color;
                 border-right: 2px solid $active-color;
                 background-color: #f2f3f8;
                 .ic-icon {
@@ -120,8 +120,8 @@ cq-context{
             .ic-icon {
                 display: inline-flex;
                 vertical-align: middle;
-                width: 16px;
-                height: 16px;
+                width: $small-icon-size;
+                height: $small-icon-size;
                 margin-bottom: 2px;
                 margin-right: 1.3em;
             }
@@ -133,7 +133,7 @@ cq-context{
             padding-left: 20px;
             padding-right: 20px;
             display: flex;
-            border-bottom: 1px solid #e9e9ed;
+            border-bottom: 1px solid $DEFAULT-border;
             height: 40px;
             align-items: center;
             justify-content: space-between;
@@ -148,10 +148,10 @@ cq-context{
             .closed-market{
                 border: 1px solid #f44336;
                 color: #f44336;
-                border-radius: 3px;
                 padding: 2px 6px;
                 object-fit: contain;
                 font-size: 0.64em;
+                @include border-radius();
             }
         }
         .cq-item {
@@ -184,14 +184,14 @@ cq-context{
             height: 3em;
             display: none;
             .btn-categorical-display-close{
-                border:none;
+                border: none;
                 background: transparent;
-                color: #4c5794;
+                color: $active-color;
                 font-weight: bold;
                 padding: 0.78em 1em;
                 width: 100%;
-                box-shadow: none;
                 cursor: pointer;
+                @include box-shadow(0,0,0,#fff);
             }
         }
     }
@@ -208,8 +208,8 @@ cq-context{
             float: right;
             display: inline-flex;
             > span, .ic-icon {
-                height:24px;
-                width: 24px;
+                height:$normal-icon-size;
+                width: $normal-icon-size;
             }
 
             .ic-delete, .ic-edit {
@@ -218,11 +218,11 @@ cq-context{
             .ic-cmp-color > span {
                 display: inline-block;
                 width: 13px;
-                border-radius: 15px;
                 height: 2px;
                 vertical-align: bottom;
                 left: 6px;
                 position: relative;
+                @include border-radius(15px);
             }
         }
         .ciq-favorite {
@@ -253,14 +253,14 @@ cq-context{
 
     &.smartcharts-mobile{
         .cq-mobile-title{
-            background: #fff;
+            background: $DEFAULT-main;
             .mobile-title{
                 display: block;
                 font-size: 16px;
                 line-height: 40px;
                 font-weight: 400;
                 padding: 0 .7em;
-                color: #000;
+                color: $DEFAULT-text-strong;
             }
             .icon-close-menu{
                 position: absolute;
@@ -275,13 +275,13 @@ cq-context{
                 width: 100%;
                 border-right: none;
                 height: 7.8em;
-                border-bottom: 1px solid #e9e9ed;
+                border-bottom: 1px solid $DEFAULT-border;
             }
             .cq-lookup-input  {
                 margin: 1.2em 1em 0.5em 1em;
-                border-radius: 4px;
-                border: solid 1px #e9e9ed;
+                border: solid 1px $DEFAULT-border;
                 position: relative;
+                @include border-radius();
             }
             .cq-scroll-panel{
                 width: 100%;
@@ -299,7 +299,7 @@ cq-context{
                         margin: 0px;
                     }
                     &.cq-active-filter{
-                        border-bottom: 2px solid #4c5794;
+                        border-bottom: 2px solid $active-color;
                     }
                     .cq-filter-text{
                         display: none;

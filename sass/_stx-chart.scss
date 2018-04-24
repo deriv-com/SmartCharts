@@ -12,7 +12,7 @@ html, body {
 
 .chartContainer, #chartContainer { /* DIV that the canvas expands to. #chartContainer is only for backward compatibility with older libraries. */
     display: block;
-    font-family: Roboto, Helvetica, sans-serif;
+    font-family: $base-font;
     font-size: 12px;
     position: relative; /* chart container must be relative for internal DOM elements to be correct */
 }
@@ -37,16 +37,11 @@ html, body {
     text-align: center;
     overflow: visible;
     background-repeat: no-repeat;
-    -webkit-border-radius: 3px;
-    -moz-border-radius: 3px;
-    border-radius: 3px;
+    @include border-radius(3px);
     -webkit-transition: color .25s, border .25s, box-shadow .25s;
     -moz-transition: color .25s, border .25s, box-shadow .25s;
     transition: color .25s, border .25s, box-shadow .25s;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
+    @include user-select(none);
 }
 
 .stx-btn:hover { /* Button Hover State */
@@ -150,9 +145,7 @@ html, body {
     width: 30px;
     padding: 0px;
     margin-bottom: 17px;
-    -webkit-border-radius: 3px;
-    -moz-border-radius: 3px;
-    border-radius: 3px;
+    @include border-radius(3px);
     background: #fafafa;
     -webkit-box-shadow: 0px 1px 2px rgba(0, 0, 0, .2);
     -moz-box-shadow: 0px 1px 2px rgba(0, 0, 0, .2);
@@ -224,10 +217,7 @@ html, body {
 }
 
 .stx-panel-control * {
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
+    @include user-select(none);
 }
 
 .stx-panel-control.stx-show {
@@ -258,7 +248,7 @@ html, body {
 #mSticky, #showMeasure { /* These are the small divs that come up when you hover over a drawing or study overlay */
     display: none;
     background: #efefef;
-    border-radius: 3px;
+    @include border-radius(3px);
     color: #666;
     font-size: 11px;
     /*text-transform: capitalize;*/
@@ -298,9 +288,7 @@ html, body {
     margin: 0 0 0 5px;
     width: 23px;
     height: 23px;
-    -webkit-border-radius: 3px;
-    -moz-border-radius: 3px;
-    border-radius: 3px;
+    @include border-radius(3px);
     overflow: hidden;
     text-indent: 100px;
     border: solid #ddd 1px;
@@ -392,9 +380,7 @@ html, body {
     font-size: 10px;
     font-family: Helvetica;
     z-index: 30;
-    -webkit-border-radius: 3px;
-    -moz-border-radius: 3px;
-    border-radius: 3px;
+    @include border-radius(3px);
     color: #fff;
     padding: 1px 6px;
     text-align: center;
@@ -496,7 +482,7 @@ html, body {
 
 /* Default color for line and bar Charts */
 .stx_line_chart, .stx_bar_chart {
-    color: #000;
+    color: $DEFAULT-text-strong;
 }
 
 .stx_bar_down { /* Down Bar color */
@@ -531,17 +517,17 @@ html, body {
 
 .stx_histogram_down { /* Down Bar color */
     color: $chart-red;
-    border-left-color: #000000;
+    border-left-color: $DEFAULT-text-strong;
 }
 
 .stx_histogram_up { /* Up Bar color */
     color: $chart-green;
-    border-left-color: #000000;
+    border-left-color: $DEFAULT-text-strong;
 }
 
 .stx_histogram_even { /* Even Bar color */
     color: #999999;
-    border-left-color: #000000;
+    border-left-color: $DEFAULT-text-strong;
 }
 
 .stx_highlight_vector { /* change the color and weight of drawings and study overlays on hover */
@@ -622,12 +608,12 @@ html, body {
 
 .stx_volume_up { /* Up Volume color */
     color: $chart-green; /* legacy only. Use study library output "Up Volume" instead */
-    border: #000000;
+    border: $DEFAULT-text-strong;
 }
 
 .stx_volume_down { /* Down volume color */
     color: $chart-red; /* legacy only. Use study library output "Down Volume" instead */
-    border: #000000;
+    border: $DEFAULT-text-strong;
 }
 
 /* Volume underlay styles */
@@ -661,7 +647,7 @@ html, body {
 }
 
 .stx_histogram { /* Default color for histograms */
-    color: #000000;
+    color: $DEFAULT-text-strong;
     opacity: .2;
 }
 
@@ -701,7 +687,7 @@ html, body {
     -moz-box-shadow: 0px 1px 2px rgba(0, 0, 0, .2);
     box-shadow: 0px 1px 2px rgba(0, 0, 0, .2);
     z-index: 50;
-    background-color: #ffffff;
+    background-color: $DEFAULT-menu-bg;
 }
 
 #annotationCancel, .stx_annotation_cancel {
@@ -724,7 +710,7 @@ html, body {
 .stx_share {
     font-size: 14px;
     font-family: georgia;
-    color: #000000;
+    color: $DEFAULT-text-strong;
     width: 1px;
 }
 
