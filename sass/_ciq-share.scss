@@ -20,6 +20,13 @@
         height: 100%;
         padding: 16px;
 
+        .loading{
+            background: transparent url('./icons/loading/loading-ellipsis.svg') no-repeat scroll center center;
+            height: 26px;
+            width: 100%;
+            display: block;
+        }
+
         .content {
             display: flex;
             input { 
