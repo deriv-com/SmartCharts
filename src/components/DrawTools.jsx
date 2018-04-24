@@ -29,9 +29,11 @@ const DrawTools = ({
                     <div className='ciq-bars-title'>{t.translate("Draw tools")}</div>
                     <div className='ciq-bars-buttons'>
                         <ClearIcon
+                            className='tooltip'
                             onClick={clearAll}
                             tooltip-title={t.translate("Clear All")} />
                         <MeasureIcon
+                            className='tooltip'
                             onClick={() => selectTool('measure')}
                             tooltip-title={t.translate("Measure")} />
                     </div>
