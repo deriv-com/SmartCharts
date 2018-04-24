@@ -27,7 +27,7 @@ const getLanguageStorage = function(){
 
 const connectionManager = new ConnectionManager({
     appId: 1,
-    language: getLanguageStorage() || 'en',
+    language: getLanguageStorage(),
     endpoint: 'wss://frontend.binaryws.com/websockets/v3',
 });
 const streamManager = new StreamManager(connectionManager);
