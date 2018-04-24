@@ -1,7 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import {CategoryIconMap, ItemIconMap, SearchIcon,
     SymbolPlaceholderIcon, ActiveOptionsIconMap, FavoriteIcon, CloseIcon } from './Icons.jsx';
-import {stxtap} from '../store/utils';
 
 const CategoricalDisplay = ({
     isMobile,
@@ -19,7 +18,6 @@ const CategoricalDisplay = ({
     setScrollPanel,
     setCategoryElement,
     activeCategoryKey,
-    handleInputClick,
     onFavoritedItem,
     favoritesId,
     favoritesMap,
@@ -102,12 +100,7 @@ const CategoricalDisplay = ({
             <div className="cq-lookup-filters">
                 <div className={`cq-lookup-input ${filterText.trim() !== '' ? 'active':''}` }>
                     <input
-                        ref={
-                            el => {
-                                setSearchInput(el);
-                                stxtap(el, handleInputClick);
-                            }
-                        }
+                        ref={ el =>  setSearchInput(el)}
                         onChange={e => setFilterText(e.target.value)}
                         type="text"
                         spellCheck="off"
@@ -126,7 +119,7 @@ const CategoricalDisplay = ({
                         return (
                             <div key={i}
                                 className={`cq-filter ${isActive ? 'cq-active-filter' : ''}`}
-                                ref={el => stxtap(el, e => handleFilterClick(category, e))}
+                                onClick={e => handleFilterClick(category, e)}
                             >
                                 {CategoryIcon && <CategoryIcon className={`ic-${category.categoryId}`}/>}
                                 <span className="cq-filter-text">{t.translate(category.categoryName)}</span>
