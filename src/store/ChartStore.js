@@ -13,6 +13,13 @@ import '../components/ui/Animation';
 // import '../AddOns';
 
 
+const localChartSetting = new ChartSettingStore();
+const connectionManager = new ConnectionManager({
+    appId: 1,
+    language: localChartSetting.language ? localChartSetting.language : 'en',
+    endpoint: 'wss://frontend.binaryws.com/websockets/v3',
+});
+const streamManager = new StreamManager(connectionManager);
 const defaultSymbol = {
     symbol: 'R_100',
     name: "Volatility 100 Index",
@@ -22,27 +29,19 @@ const defaultSymbol = {
 };
 
 class ChartStore {
-    get connectionManager() { return this._connectionManager; }
-    get streamManager() { return this._streamManager; }
+    get connectionManager() { return connectionManager; }
+    get streamManager() { return streamManager; }
 
     static _id_counter = 0;
 
     constructor(mainStore) {
-        this.setting = new ChartSettingStore();
 
-        this._connectionManager = new ConnectionManager({
-            appId: 1,
-            language: this.setting.language ? this.setting.language : 'en',
-            endpoint: 'wss://frontend.binaryws.com/websockets/v3',
-        });
-        this._streamManager = new StreamManager(this._connectionManager);
 
         this.id = ++ChartStore._id_counter;
         this.mainStore = mainStore;
+        this.setting = new ChartSettingStore();
     }
 
-    _connectionManager = null;
-    _streamManager = null;
     onSymbolChange = null;
     contextPromise = new PendingPromise();
     activeSymbols = [];
@@ -248,7 +247,7 @@ class ChartStore {
         CIQ.Animation(stxx, { stayPut: true });
 
         // connect chart to data
-        stxx.attachQuoteFeed(new Feed(this._streamManager, stxx, this.mainStore), {
+        stxx.attachQuoteFeed(new Feed(streamManager, stxx, this.mainStore), {
             refreshInterval: null,
         });
 
