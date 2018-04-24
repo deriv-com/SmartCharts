@@ -121,7 +121,7 @@
     .title {
         height: 100%;
         width: 100%;
-        background-color: black;
+        background-color: $DEFAULT-text-strong;
         border: 2px solid rgba(0,0,0,0.09);
         @include border-radius(2px);
         @include box-sizing(border-box);

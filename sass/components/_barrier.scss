@@ -67,7 +67,7 @@ $green: #4caf50;
     background-color: $DEFAULT-main;
     display: block;
     height: 25px;
-    border: 1px solid black;
+    border: 1px solid $DEFAULT-text-strong;
     @include border-radius(5px);
     top: -1px;
     position: absolute;
@@ -142,7 +142,7 @@ $green: #4caf50;
 
 
 .price {
-    color: #000;
+    color: $DEFAULT-text-strong;
     display: block;
     float: left;
     width: 45px;

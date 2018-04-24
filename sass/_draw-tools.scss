@@ -23,11 +23,11 @@
             font-size: 16px;
             box-shadow: inset 0 -1px 0 0 $DEFAULT-border;
             display: flex;
-            color: black;
+            color: $DEFAULT-text-strong;
             justify-content: space-between;
             .ciq-bars-title{
                 // font-size: 1.6em;
-                color: black;
+                color: $DEFAULT-text-strong;
             }
             .ciq-bars-buttons{
                 cursor: pointer;

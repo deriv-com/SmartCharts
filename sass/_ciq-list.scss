@@ -11,7 +11,7 @@
         height: 32px;
         line-height: 32px;
         font-size: 12px;
-        color: black;
+        color: $DEFAULT-text-strong;
         padding-left: 16px;
         cursor: pointer;
         @include box-sizing(border-box);

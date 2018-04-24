@@ -52,7 +52,7 @@ cq-context {
                             float: right;
                             margin-left: 12px;
                             margin-top: 7px;
-                            border-top: 5px solid black;
+                            border-top: 5px solid $DEFAULT-text-strong;
                             @include triangle-base(4px);
                         }
                     }

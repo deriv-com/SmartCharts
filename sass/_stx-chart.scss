@@ -482,7 +482,7 @@ html, body {
 
 /* Default color for line and bar Charts */
 .stx_line_chart, .stx_bar_chart {
-    color: #000;
+    color: $DEFAULT-text-strong;
 }
 
 .stx_bar_down { /* Down Bar color */
@@ -517,17 +517,17 @@ html, body {
 
 .stx_histogram_down { /* Down Bar color */
     color: $chart-red;
-    border-left-color: #000000;
+    border-left-color: $DEFAULT-text-strong;
 }
 
 .stx_histogram_up { /* Up Bar color */
     color: $chart-green;
-    border-left-color: #000000;
+    border-left-color: $DEFAULT-text-strong;
 }
 
 .stx_histogram_even { /* Even Bar color */
     color: #999999;
-    border-left-color: #000000;
+    border-left-color: $DEFAULT-text-strong;
 }
 
 .stx_highlight_vector { /* change the color and weight of drawings and study overlays on hover */
@@ -608,12 +608,12 @@ html, body {
 
 .stx_volume_up { /* Up Volume color */
     color: $chart-green; /* legacy only. Use study library output "Up Volume" instead */
-    border: #000000;
+    border: $DEFAULT-text-strong;
 }
 
 .stx_volume_down { /* Down volume color */
     color: $chart-red; /* legacy only. Use study library output "Down Volume" instead */
-    border: #000000;
+    border: $DEFAULT-text-strong;
 }
 
 /* Volume underlay styles */
@@ -647,7 +647,7 @@ html, body {
 }
 
 .stx_histogram { /* Default color for histograms */
-    color: #000000;
+    color: $DEFAULT-text-strong;
     opacity: .2;
 }
 
@@ -710,7 +710,7 @@ html, body {
 .stx_share {
     font-size: 14px;
     font-family: georgia;
-    color: #000000;
+    color: $DEFAULT-text-strong;
     width: 1px;
 }
 

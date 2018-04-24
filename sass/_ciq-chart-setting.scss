@@ -17,7 +17,7 @@
         right: 0px;
         width: 280px;
         height: 200px;
-        color: black;
+        color: $DEFAULT-text-strong;
     }
     .title {
         height: 40px;
@@ -44,7 +44,7 @@
 
                 border: 1px solid #e9e9ed;
                 border-top: none;
-                background: #fff;
+                background: $DEFAULT-main;
                 box-sizing: border-box;
                 font-size: 12px;
                 color: #000;

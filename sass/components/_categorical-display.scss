@@ -75,7 +75,7 @@ cq-context{
             font-weight: 500;
             padding: 0.5em 0 0.5em 1.2em;
             font-size: 1.1em;
-            color: black;
+            color: $DEFAULT-text-strong;
         }
         .category-title {
             display: block;
@@ -260,7 +260,7 @@ cq-context{
                 line-height: 40px;
                 font-weight: 400;
                 padding: 0 .7em;
-                color: #000;
+                color: $DEFAULT-text-strong;
             }
             .icon-close-menu{
                 position: absolute;
