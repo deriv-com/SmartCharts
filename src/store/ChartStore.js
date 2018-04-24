@@ -12,13 +12,25 @@ import KeystrokeHub from '../components/ui/KeystrokeHub';
 import '../components/ui/Animation';
 // import '../AddOns';
 
+
+const getLanguageStorage = function(){
+    let default_language = 'en';
+    try {
+        let setting_string = CIQ.localStorage.getItem('smartchart-setting'),
+            setting = JSON.parse(setting_string !== '' ? setting_string : '{}');
+
+        return setting.language || default_language;
+    } catch (e) {
+        return default_language;
+    }
+};
+
 const connectionManager = new ConnectionManager({
     appId: 1,
-    language: 'en',
+    language: getLanguageStorage(),
     endpoint: 'wss://frontend.binaryws.com/websockets/v3',
 });
 const streamManager = new StreamManager(connectionManager);
-
 const defaultSymbol = {
     symbol: 'R_100',
     name: "Volatility 100 Index",
@@ -34,6 +46,8 @@ class ChartStore {
     static _id_counter = 0;
 
     constructor(mainStore) {
+
+
         this.id = ++ChartStore._id_counter;
         this.mainStore = mainStore;
         this.setting = new ChartSettingStore();
