@@ -10,10 +10,13 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
-"PO-Revision-Date: 2018-04-16 07:54-0400\n"
+"PO-Revision-Date: 2018-04-22 23:10-0400\n"
 
 msgid "CLOSED"
 msgstr "ЗАКРЫТО"
+
+msgid "Close"
+msgstr ""
 
 msgid "Favorites"
 msgstr "Избранное"
@@ -23,9 +26,6 @@ msgstr "Нет записей в избранном."
 
 msgid "Chart data is not available for this symbol."
 msgstr "График недоступен для данного актива."
-
-msgid "Chart data is not available for this symbol."
-msgstr ""
 
 msgid "PRICE"
 msgstr "ЦЕНА"
@@ -99,6 +99,18 @@ msgstr "Очистить все"
 msgid "Measure"
 msgstr "Измерить"
 
+msgid "Settings"
+msgstr ""
+
+msgid "Position"
+msgstr ""
+
+msgid "Theme"
+msgstr ""
+
+msgid "Language"
+msgstr ""
+
 msgid "Share"
 msgstr "Поделиться"
 
@@ -128,12 +140,6 @@ msgstr "Рынок [symbol] закрыт в данный момент."
 
 msgid "Streaming for [symbol] is not available due to license restrictions"
 msgstr "Потоковые котировки для [symbol] недоступны из-за лицензионных ограничений"
-
-msgid "[symbol] market is presently closed."
-msgstr ""
-
-msgid "Streaming for [symbol] is not available due to license restrictions"
-msgstr ""
 
 msgid "Line"
 msgstr "Линия"

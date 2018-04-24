@@ -2,6 +2,9 @@
 msgid "CLOSED"
 msgstr ""
 
+msgid "Close"
+msgstr ""
+
 msgid "Favorites"
 msgstr ""
 
@@ -81,6 +84,18 @@ msgid "Clear All"
 msgstr ""
 
 msgid "Measure"
+msgstr ""
+
+msgid "Settings"
+msgstr ""
+
+msgid "Position"
+msgstr ""
+
+msgid "Theme"
+msgstr ""
+
+msgid "Language"
 msgstr ""
 
 msgid "Share"

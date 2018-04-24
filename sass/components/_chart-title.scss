@@ -122,15 +122,18 @@ cq-context {
         .cq-top-ui-widgets{
             width: 100%;
             padding: 0px;
+            margin: 0px;
             .cq-menu-btn{
                 padding: 0px;
                 margin: .4em .5em;
+                margin: 0px;
             }
         }
         .cq-chart-title{
             width: 100%;
             display: block;
             top: 0em;
+            margin: 0px;
             .cq-menu-btn {
                 padding: 0px;
                 margin: .3em 0.4em;
@@ -139,12 +142,14 @@ cq-context {
                 width: 100%;
                 margin: 0px;
                 top: 0px;
+                left: 0px;
                 &.open{
                     margin: 0px;
+                    bottom: auto;
                 }
                 .cq-categorical-display{
                     .cq-scroll-panel{
-                        height: calc( 100vh - 7.8em - 3em );
+                        height: calc( 100vh - 7.8em - 6em );
                     }
                     .cq-categorical-footer{
                         background: $DEFAULT-main;

@@ -7,6 +7,7 @@ import CrosshairToggle from './CrosshairToggle.jsx';
 import Timeperiod from './Timeperiod.jsx';
 import ChartSize from './ChartSize.jsx';
 import DrawTools from './DrawTools.jsx';
+import ChartSetting from './ChartSetting.jsx';
 import Share from './Share.jsx';
 
 const ChartControls = () => (
@@ -20,6 +21,7 @@ const ChartControls = () => (
         <Share />
         <Timeperiod />
         <ChartSize />
+        <ChartSetting />
     </div>
 );
 

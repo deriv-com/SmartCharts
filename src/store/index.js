@@ -12,6 +12,7 @@ import NotificationStore from './NotificationStore';
 import ViewStore from './ViewStore';
 import CrosshairStore from './CrosshairStore';
 import ShareStore from './ShareStore';
+import ChartSettingStore from './ChartSettingStore';
 import LoaderStore from './LoaderStore';
 
 export default class MainStore {
@@ -28,5 +29,6 @@ export default class MainStore {
     @observable view = new ViewStore(this);
     @observable crosshair = new CrosshairStore(this);
     @observable share = new ShareStore(this);
+    @observable chartSetting = new ChartSettingStore(this);
     @observable loader = new LoaderStore();
 }

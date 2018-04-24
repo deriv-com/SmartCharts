@@ -545,17 +545,29 @@ cq-lookup-input {
 }
 
 /* Menus/Panel Toggles */
+cq-context {
+	.ciq-dropdowns,
+	.ciq-menu {
+		display:inline-block;
+		@include box-sizing(border-box);
+	}
 
-.ciq-dropdowns,
-.ciq-menu {
-	display:inline-block;
-	@include box-sizing(border-box);
-}
+	.ciq-menu-section {float:right;}
+	.break-sm .ciq-menu-section {
+		position:absolute;
+		right:0px;
+	}
+	.ciq-dropdowns {float:left;}
+	.ciq-menu{position: relative;}
 
-.ciq-menu-section {float:right;}
-.break-sm .ciq-menu-section {
-	position:absolute;
-	right:0px;
+	.break-sm .ciq-menu {
+		position: inherit;
+	}
+
+    /* Mobile Style */
+    &.smartcharts-mobile{
+		.ciq-menu{position: unset;}
+	}
 }
 
 /* Dropdowns */
