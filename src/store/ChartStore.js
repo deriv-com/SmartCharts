@@ -13,10 +13,21 @@ import '../components/ui/Animation';
 // import '../AddOns';
 
 
-const localChartSetting = new ChartSettingStore();
+const getLanguageStorage = function(){
+    let default_language = 'en';
+    try {
+        let setting_string = CIQ.localStorage.getItem('smartchart-setting'),
+            setting = JSON.parse(setting_string !== '' ? setting_string : '{}');
+
+        return setting.language || default_language;
+    } catch (e) {
+        return default_language;
+    }
+};
+
 const connectionManager = new ConnectionManager({
     appId: 1,
-    language: localChartSetting.language ? localChartSetting.language : 'en',
+    language: getLanguageStorage() || 'en',
     endpoint: 'wss://frontend.binaryws.com/websockets/v3',
 });
 const streamManager = new StreamManager(connectionManager);
