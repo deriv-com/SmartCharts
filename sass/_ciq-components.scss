@@ -346,7 +346,7 @@ cq-toolbar {
 	top: 0;
 	bottom: 0;
 	z-index: 1;
-
+	padding-bottom: 50px;
 	.break-sm & { /* Remove padding around chart when the app is set to breakpoint-sm*/
 		padding:0px;
 	}

@@ -48,7 +48,7 @@ class Chart extends Component {
         } = this.props;
 
         t.setLanguage( (setting && setting.language) ? setting.language : lang );
-        
+
         const array = React.Children.toArray(children);
         const insideHolder = array.filter(c => !/(TradeStart)|(TradeEnd)/.test(c.type.displayName));
         const insideSubHolder = array.filter(c => /(TradeStart)|(TradeEnd)/.test(c.type.displayName));
