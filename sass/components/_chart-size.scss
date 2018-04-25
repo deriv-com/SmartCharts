@@ -1,24 +1,32 @@
-.cq-chart-size {
-    display: flex;
-    width: 64px;
-    justify-content: space-between;
-    align-items: center;
-    height: auto;
+cq-context {
+    .cq-chart-size {
+        display: flex;
+        width: 64px;
+        justify-content: space-between;
+        align-items: center;
+        height: auto;
 
-    &:after {
-        display: none;
-    }
-    > span {
-        opacity: 1;
-        position: relative;
-        cursor: pointer;
-        transition: scale .25s;
-    }
+        &:after {
+            display: none;
+        }
+        > span {
+            opacity: 1;
+            position: relative;
+            cursor: pointer;
+            transition: scale .25s;
+        }
 
-    .interval-title {
-        white-space: nowrap;
-        width: auto;
-        line-height: 25px;
-        display: none; /* TODO */
+        .interval-title {
+            white-space: nowrap;
+            width: auto;
+            line-height: 25px;
+            display: none; /* TODO */
+        }
+    }
+    /* Mobile Style */
+    &.smartcharts-mobile {
+        .cq-chart-size {
+            width: 45px;
+        }
     }
 }

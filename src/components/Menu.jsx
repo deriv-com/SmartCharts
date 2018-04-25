@@ -22,9 +22,11 @@ class Menu extends Component {
                 >
                     {first}
                 </div>
-                <DropdownDialog className='cq-menu-dropdown'>
-                    {rest}
-                </DropdownDialog>
+                <div className="cq-menu-overlay">
+                    <DropdownDialog className='cq-menu-dropdown'>
+                        {rest}
+                    </DropdownDialog>
+                </div>
             </div>
         );
     }

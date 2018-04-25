@@ -21,18 +21,18 @@ cq-context {
 
 	.cq-top-ui-widgets {
 		position: absolute;
-		z-index: 40;
+		z-index: 2;
 		margin: 0.2em 0.5em;
 	}
 
 	@import "components/barrier";
-	@import "components/timeperiod";
-	@import "components/chart-size";
 	@import "components/comparison-list";
 	@import "components/loader";
 	@import "ciq-perfect-scrollbar";
 }
 
+@import "components/timeperiod";
+@import "components/chart-size";
 @import "components/categorical-display";
 @import "components/view";
 @import "components/chart-types";
