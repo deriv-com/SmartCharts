@@ -21,12 +21,12 @@ const Share = ({
     resetCopyTooltip,
     copyTooltip,
     onInputRef,
-}) => { 
+}) => {
     return (
         <Menu className="cq-share">
             <Menu.Title>
                 <ShareIcon
-                    className = {menuOpen ? 'active' : ''}
+                    className = {`ic-icon-with-sub ${menuOpen ? 'active' : ''}`}
                     tooltip-title={t.translate("Share")}
                 />
             </Menu.Title>
@@ -37,24 +37,25 @@ const Share = ({
                     <div className='caption1'>{t.translate('Share link')}</div>
                     <div className="loading"
                         style={{display: (loading ? 'block' : 'none')}}
-                        ></div>
+                    ></div>
                     <div className='content'
                         style={{display: ((!loading && !urlGenerated) ? 'flex' : 'none' )}}>
-                        <div 
+                        <div
                             className='download-btn'
                             onClick={refereshShareLink}
-                            >
+                        >
                             {t.translate('Retry')}
                         </div>
                     </div>
                     <div className='content'
                         style={{display: ((!loading && urlGenerated) ? 'flex' : 'none' )}}
-                        >
+                    >
                         <input
                             ref={onInputRef}
                             value={shareLink}
                         />
                         <CopyIcon
+                            className='tooltip'
                             onClick={copyToClipboard}
                             onMouseOut={resetCopyTooltip}
                             tooltip-title={copyTooltip}

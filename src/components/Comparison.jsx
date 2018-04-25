@@ -17,7 +17,7 @@ const Comparison = ({
         >
             <Menu.Title>
                 <ComparisonIcon
-                    className={`${menuOpen ? 'active' : ''}`}
+                    className={`ic-icon-with-sub ${menuOpen ? 'active' : ''}`}
                     tooltip-title={t.translate("Comparison")} />
             </Menu.Title>
             <Menu.Body>

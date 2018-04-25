@@ -38,8 +38,18 @@
     svg {
         position: relative;
     }
+    br , .ic-subtitle  { 
+        display: none;
+    }
 }
-
+.ic-icon-with-sub{
+    height: auto !important;
+    width: auto !important;
+    line-height: 15px;
+    br , .ic-subtitle  { 
+        display: inline;
+    }
+}
 .tooltip {
     position: relative;
     font-size: 12px;
@@ -127,4 +137,16 @@
 }
 .ic-frxXAGUSD > svg > g > g > g > path:first-child {
     fill: #E1E1E1;
+}
+
+.smartcharts-mobile {
+    .cq-chart-controls .ciq-menu {
+        padding: 0px;
+    }
+    br , .ic-subtitle  { 
+        display: none;
+    }
+    .ciq-period>.cq-menu-btn>.bt-priod {
+        padding-top: 10px;
+    }
 }
