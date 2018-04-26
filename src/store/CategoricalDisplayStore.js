@@ -16,7 +16,9 @@ export default class CategoricalDisplayStore {
         reaction(getIsShown, () => {
             if (getIsShown()) {
                 // Odd. Why is setTimeout needed here?
-                setTimeout(() => this.searchInput.focus(), 0);
+                if (!this.isMobile) {
+                    setTimeout(() => this.searchInput.focus(), 0);
+                }
                 if (!this.isInit) {this.init();}
                 setTimeout(() => {
                     this.updateScrollOffset();

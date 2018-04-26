@@ -10,9 +10,11 @@ import DrawTools from './DrawTools.jsx';
 import ChartSetting from './ChartSetting.jsx';
 import Share from './Share.jsx';
 
-const ChartControls = () => (
+const ChartControls = ({
+    isMobile
+}) => (
     <div className="cq-chart-controls">
-        <CrosshairToggle />
+        {isMobile ? '' : <CrosshairToggle />}
         <ChartTypes />
         <StudyLegend />
         <Comparison />

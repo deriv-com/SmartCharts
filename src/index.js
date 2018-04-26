@@ -36,6 +36,11 @@ class SmartChart extends React.Component {
             this.mainStore.chart.onSymbolChange = onSymbolChange;
         }
     }
+    componentWillMount() {
+        if ( this.mainStore && this.mainStore.chart) {
+            this.mainStore.chart.setIsMobile(this.props.isMobile);
+        }
+    }
 
     render() {
         const {children, isMobile} = this.props;

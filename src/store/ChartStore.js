@@ -66,6 +66,7 @@ class ChartStore {
     @observable categorizedSymbols = [];
     @observable barrierJSX;
     @observable chartPanelTop = '0px';
+    isMobile = false;
 
     @action.bound setActiveSymbols(activeSymbols) {
         if (activeSymbols && this.context) {
@@ -410,6 +411,11 @@ class ChartStore {
 
         return categorizedSymbols;
     }
+
+    @action.bound setIsMobile(status) {
+        this.isMobile = typeof status !== undefined ? status : false;
+    }
+
 }
 
 export default ChartStore;
