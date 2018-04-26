@@ -27,7 +27,7 @@ The sample app should be running in http://localhost:8080.
 Refer to library usage inside `app/index.jsx`:
 
 ```jsx
-import { SmartChart } from 'smartcharts';
+import { SmartChart } from '@binary-com/smartcharts';
 
 class App extends React.Component {
     render() {
