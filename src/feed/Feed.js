@@ -1,4 +1,5 @@
-import NotificationStore from './store/NotificationStore';
+import NotificationStore from '../store/NotificationStore';
+import {TickHistoryFormatter} from './TickHistoryFormatter';
 
 class Feed {
     constructor(streamManager, cxx, mainStore) {
@@ -25,17 +26,8 @@ class Feed {
     }
 
     _trackStream(stream, comparison_chart_symbol) {
-        stream.onStream(({ tick, ohlc }) => {
-            const quotes = ohlc ? [{
-                DT: new Date(+ohlc.open_time * 1000),
-                Open: +ohlc.open,
-                High: +ohlc.high,
-                Low: +ohlc.low,
-                Close: +ohlc.close,
-            }] : [{
-                DT: new Date(+tick.epoch * 1000),
-                Close: +tick.quote,
-            }];
+        stream.onStream((response) => {
+            const quotes = [TickHistoryFormatter.formatTick(response)];
 
             if (comparison_chart_symbol) {
                 CIQ.addMemberToMasterdata({
@@ -67,8 +59,8 @@ class Feed {
         this._mainStore.notification.removeByCategory('activesymbol');
 
         try {
-            const { candles, history } = await stream.response;
-            const quotes = candles ? Feed.formatCandles(candles) : Feed.formatHistory(history);
+            const response = await stream.response;
+            const quotes = TickHistoryFormatter.formatHistory(response);
 
             if(stream.isMarketClosed) {
                 this._mainStore.notification.notify({
@@ -107,13 +99,13 @@ class Feed {
         let result = { quotes: [] };
         if (end > startLimit) {
             try {
-                const { candles, history } = await this._streamManager.historicalData({
+                const response = await this._streamManager.historicalData({
                     symbol,
                     granularity: Feed.calculateGranularity(period, interval),
                     start: Math.max(start, startLimit),
                     end,
                 });
-                result.quotes = candles ? Feed.formatCandles(candles) : Feed.formatHistory(history);
+                result.quotes = TickHistoryFormatter.formatHistory(response);
             } catch (err) {
                 console.error(err); // eslint-disable-line
                 result.quotes = { error: err };
@@ -131,24 +123,6 @@ class Feed {
         };
 
         return toSeconds[interval] * period;
-    }
-    static formatCandles(candles) {
-        const quotes = candles.map(c => ({
-            DT: new Date(+c.epoch * 1000),
-            Open: +c.open,
-            High: +c.high,
-            Low: +c.low,
-            Close: +c.close,
-        }));
-        return quotes;
-    }
-    static formatHistory(history) {
-        const { times, prices } = history;
-        const quotes = prices.map((p, idx) => ({
-            DT: +times[idx] * 1000,
-            Close: +p,
-        }));
-        return quotes;
     }
 }
 

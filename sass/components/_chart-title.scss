@@ -123,6 +123,7 @@ cq-context {
             width: 100%;
             padding: 0px;
             margin: 0px;
+            z-index: 3;
             .cq-menu-btn{
                 padding: 0px;
                 margin: .4em .5em;
@@ -149,7 +150,7 @@ cq-context {
                 }
                 .cq-categorical-display{
                     .cq-scroll-panel{
-                        height: calc( 100vh - 7.8em - 6em );
+                        height: calc( 100vh - 11em );
                     }
                     .cq-categorical-footer{
                         background: $DEFAULT-main;

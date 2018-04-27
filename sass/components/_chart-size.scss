@@ -1,24 +1,31 @@
-.cq-chart-size {
-    display: flex !important;
-    justify-content: space-between;
-    align-items: center;
-    height: auto;
+cq-context {
+    .cq-chart-size {
+        display: flex;
+        width: 64px;
+        justify-content: space-between;
+        align-items: center;
+        height: auto;
 
-    &:after {
-        display: none;
+        &:after {
+            display: none;
+        }
+        > span {
+            opacity: 1;
+            position: relative;
+            cursor: pointer;
+            transition: scale .25s;
+        }
+        .interval-title {
+            white-space: nowrap;
+            width: auto;
+            line-height: 25px;
+            display: none; /* TODO */
+        }
     }
-    > span {
-        opacity: 1;
-        position: relative;
-        cursor: pointer;
-        transition: scale .25s;
-        padding: 0.35em 0.8em !important;
-    }
-
-    .interval-title {
-        white-space: nowrap;
-        width: auto;
-        line-height: 25px;
-        display: none; /* TODO */
+    /* Mobile Style */
+    &.smartcharts-mobile {
+        .cq-chart-size {
+            width: 45px;
+        }
     }
 }
