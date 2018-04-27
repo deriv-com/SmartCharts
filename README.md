@@ -85,8 +85,6 @@ To contribute to SmartCharts, fork this project and checkout the `dev` branch. W
 
     yarn test
 
-> Note: When you send pull requests, remember to set the base branch to `dev`.
-
 Once your changes have been merged to `dev`, it will immediately deployed to [charts.binary.com/beta](https://charts.binary.com/beta/). 
 
 ### Developer Notes
@@ -114,13 +112,15 @@ The following commands will build and deploy to charts.binary.com (*Make sure yo
     yarn deploy:beta        # charts.binary.com/beta
     yarn deploy:production  # charts.binary.com
 
-
-
 #### Deploy to Github Pages
-You can deploy the chart on your binary sub-domain as well, just follow bellow tips:
 
--  add a file with named `CNAME`  in your project directory with your domain name, Ex: `developer.binary.sx`
-- run `yarn build-travis  && yarn gh-pages`
+As ChartIQ license is tied to the `binary.com` domain name, we provide developers with a `binary.sx` to test out the library on their Github Pages.
 
-Now you should be able to see the chart on your domain (`developer.binary.sx` )
-Note: this script modify `index.html` (put hashing on script) as well; do not push those changes to git!
+Assuming you have a `binary.sx` subdomain pointed to your `github.io` page, you can deploy the SmartCharts app by doing the following:
+
+ 1.  add a file with named `CNAME`  in your project directory with your site name, Ex: `developer.binary.sx`
+ 2. run `yarn build-travis  && yarn gh-pages`
+
+Now you should be able to see your SmartCharts app on (`developer.binary.sx` )
+
+> Note: `yarn build-travis` will add hashing inside `index.html`; **do not push those changes to git!**
