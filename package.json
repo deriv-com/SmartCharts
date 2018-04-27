@@ -21,7 +21,7 @@
     "watch": "webpack --progress --watch",
     "test": "jest",
     "start": "rimraf dist && cross-env BUILD_MODE='app' webpack-dev-server --open  --hot --inline",
-    "gh-pages": "gh-pages --dist '.' --src '{index.html,dist/**,css/app.css}'",
+    "gh-pages": "gh-pages --dist '.' --src '{index.html,dist/**,CNAME}'",
     "translations": "yarn build && node scripts/extract-translations.js ./dist/smartcharts.js",
     "deploy:production": "yarn build-travis && echo 'charts.binary.com' > dist/CNAME  && yarn gh-pages --repo 'git@github.com:binary-com/SmartCharts.git'",
     "deploy:beta": "yarn build-travis && yarn gh-pages --repo 'git@github.com:binary-com/SmartCharts.git' --dest './beta'"

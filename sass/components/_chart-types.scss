@@ -54,19 +54,5 @@ cq-context{
                 margin: 0px 15px;
             }
         }
-        .ciq-menu {
-            cq-menu-dropdown, .cq-menu-dropdown {
-                height: auto;
-                left: 2%;
-                width: 96%;
-                padding: 0 0 8px 0;
-                transition: none;
-                transform: none;
-                &.open{
-                    margin: 0px;
-                    bottom: 43px;
-                }
-            }
-        }
     }
 }

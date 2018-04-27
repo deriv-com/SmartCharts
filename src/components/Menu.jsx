@@ -2,6 +2,13 @@ import React, { Component } from 'react';
 import {stxtap} from '../store/utils';
 
 class Menu extends Component {
+
+    onOverlayClick(e) {
+        if (e.target.className === 'cq-menu-overlay') {
+            this.props.setOpen(false);
+        }
+    }
+
     render() {
         const {
             open,
@@ -13,18 +20,23 @@ class Menu extends Component {
         const first = React.Children.map(children, (child, i) => i === 0 ? child : null);
         const rest  = React.Children.map(children, (child, i) => i !== 0 ? child : null);
 
+
         return (
             <div className={`ciq-menu ${className || ''} ${open ? 'stxMenuActive' : ''}`}>
                 <div
                     className="cq-menu-btn"
-                    // onClick={onTitleClick}
                     ref={el => stxtap(el, onTitleClick)}
                 >
                     {first}
                 </div>
-                <DropdownDialog className='cq-menu-dropdown'>
-                    {rest}
-                </DropdownDialog>
+                <div 
+                    className="cq-menu-overlay"
+                    onClick={this.onOverlayClick.bind(this)}
+                    >
+                    <DropdownDialog className='cq-menu-dropdown'>
+                        {rest}
+                    </DropdownDialog>
+                </div>
             </div>
         );
     }
