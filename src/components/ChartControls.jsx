@@ -44,9 +44,13 @@ export default connect(
     chartSetting }) => ({
         isMobile: chart.isMobile,
         hasOpenMenu: ( 
-            chartType.menu.open || studies.menu.open ||
-            comparison.menu.open || drawTools.menu.open ||
-            view.menu.open || share.menu.open || timeperiod.menu.open ||
+            chartType.menu.open ||
+            studies.menu.open ||
+            comparison.menu.open ||
+            drawTools.menu.open ||
+            view.menu.open ||
+            share.menu.open ||
+            timeperiod.menu.open ||
             chartSetting.menu.open
         )
     })

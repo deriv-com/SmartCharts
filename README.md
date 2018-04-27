@@ -109,18 +109,18 @@ Webpack determines whether to build an app or library depending on whether an en
 
 > Note: This is usually not required, since Travis will automatically deploy to [charts.binary.com](https://charts.binary.com/) and [charts.binary.com/beta](https://charts.binary.com/beta/) when `master` and `dev` is 
 
-#### Deploy to Github Pages
-> You can deploy the chart on your binary sub-domain as well, just follow bellow tips:
-> - add a file with named `CNAME`  in your project directory with your domain name, Ex: `developer.binary.sx` 
-> - make sure you have below script in `scripts` section in the `package.json`
-> `"gh-pages": "gh-pages --dist '.' --src '{index.html,dist/**,CNAME}'",`
-> - run `yarn build-travis  && yarn gh-pages`
->  Now you should be able to see the chart on your domain (`developer.binary.sx` )
->  Note: this script modify `index.html` (put hashing on script) as well; do not push those changes to git!
-
 The following commands will build and deploy to charts.binary.com (*Make sure you are in the right branch!*); you will need push access to this repository for the commands to work:
 
     yarn deploy:beta        # charts.binary.com/beta
     yarn deploy:production  # charts.binary.com
 
 
+
+#### Deploy to Github Pages
+You can deploy the chart on your binary sub-domain as well, just follow bellow tips:
+
+-  add a file with named `CNAME`  in your project directory with your domain name, Ex: `developer.binary.sx`
+- run `yarn build-travis  && yarn gh-pages`
+
+Now you should be able to see the chart on your domain (`developer.binary.sx` )
+Note: this script modify `index.html` (put hashing on script) as well; do not push those changes to git!
