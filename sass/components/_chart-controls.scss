@@ -163,6 +163,13 @@ cq-context {
                     }
                 }
             }
+            .bt-priod ,.cq-toggle , .cq-menu-btn , .cq-chart-size>span
+            {
+                 padding: 0 !important;
+            }
+            .ic-priod {
+                padding : 6px 0px !important; 
+            }
         }
     }
 }
