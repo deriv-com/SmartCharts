@@ -22,7 +22,10 @@ class Menu extends Component {
                 >
                     {first}
                 </div>
-                <div className="cq-menu-overlay">
+                <div 
+                    className="cq-menu-overlay"
+                    ref={el => stxtap(el, onTitleClick)}
+                    >
                     <DropdownDialog className='cq-menu-dropdown'>
                         {rest}
                     </DropdownDialog>
