@@ -12,15 +12,16 @@ const Timeperiod = ({
 }) => {
     return (
         <Menu
-            className="ciq-period"
-        >
+            className="ciq-period">
             <Menu.Title>
-                <span className="bt-priod" tooltip-title={t.translate("Time period")}>
-                    <span className="interval_display">{interval_display}</span>
-                    <span className="unit_display">{timeUnit_display}</span>
+                <div className="bt-priod">
+                    <span className="ic-priod">
+                        <span className="interval_display">{interval_display}</span>
+                        <span className="unit_display">{timeUnit_display}</span>
+                    </span>
                     <br/>
                     <span className='ic-subtitle'>{t.translate("Interval")}</span>
-                </span>
+                </div>
             </Menu.Title>
             <Menu.Body>
                 <div className="timeUnit">
