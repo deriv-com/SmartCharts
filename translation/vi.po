@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Vietnamese\n"
 "Language: vi_VN\n"
-"PO-Revision-Date: 2018-04-27 00:00-0400\n"
+"PO-Revision-Date: 2018-04-27 00:19-0400\n"
 
 msgid "CLOSED"
 msgstr "ĐÃ ĐÓNG"
@@ -142,7 +142,7 @@ msgid "Streaming for [symbol] is not available due to license restrictions"
 msgstr "Truyền cho [symbol] không khả dụng do các hạn chế cấp phép"
 
 msgid "Line"
-msgstr "Đường kẻ"
+msgstr "Dòng kẻ"
 
 msgid "Dot"
 msgstr "Dấu chấm"
@@ -166,7 +166,7 @@ msgid "Hollow Candle"
 msgstr ""
 
 msgid "\"Mass Index\" or \"Doji Star\""
-msgstr ""
+msgstr "\"Mass Index\" hay \"Doji Star\""
 
 msgid "Indicators"
 msgstr "Chỉ số"
@@ -205,7 +205,7 @@ msgid "Doodle"
 msgstr ""
 
 msgid "Ellipse"
-msgstr ""
+msgstr "Hình elíp"
 
 msgid "Fib Retracement"
 msgstr ""
@@ -226,7 +226,7 @@ msgid "Gartley"
 msgstr ""
 
 msgid "Horizontal"
-msgstr ""
+msgstr "Theo chiều ngang"
 
 msgid "Pitchfork"
 msgstr ""
@@ -277,7 +277,7 @@ msgid "Tirone Levels"
 msgstr ""
 
 msgid "Vertical"
-msgstr "Theo chiều thẳng đứng"
+msgstr "Theo chiều dọc"
 
 msgid "RSI"
 msgstr ""
@@ -529,19 +529,19 @@ msgid "Ehler Fisher Transform"
 msgstr ""
 
 msgid "EF"
-msgstr ""
+msgstr "EF"
 
 msgid "EF Trigger"
 msgstr "Kích hoạt EF"
 
 msgid "Schaff Trend Cycle"
-msgstr ""
+msgstr "Chu kỳ xu hướng Schaff"
 
 msgid "QStick"
 msgstr ""
 
 msgid "Coppock Curve"
-msgstr ""
+msgstr "Đường cong Coppock"
 
 msgid "Short RoC"
 msgstr "RoC ngắn"
@@ -559,7 +559,7 @@ msgid "Intraday Momentum Index"
 msgstr ""
 
 msgid "RAVI"
-msgstr ""
+msgstr "RAVI"
 
 msgid "Random Walk Index"
 msgstr ""
@@ -583,7 +583,7 @@ msgid "Shading"
 msgstr ""
 
 msgid "Histogram"
-msgstr ""
+msgstr "Đồ thị Histogram"
 
 msgid "+DI"
 msgstr "+ DI"
@@ -778,7 +778,7 @@ msgid "Center Of Gravity"
 msgstr ""
 
 msgid "Typical Price"
-msgstr ""
+msgstr "Giá điển hình"
 
 msgid "Weighted Close"
 msgstr ""
@@ -808,13 +808,13 @@ msgid "Volume Underlay"
 msgstr ""
 
 msgid "Valuation Lines"
-msgstr ""
+msgstr "Xác định giá trị dòng"
 
 msgid "Average Type"
-msgstr ""
+msgstr "Loại trung bình"
 
 msgid "Display Average"
-msgstr ""
+msgstr "Hiển thị trung bình"
 
 msgid "Display 1 Standard Deviation (1σ)"
 msgstr "Hiển thị độ lệch chuẩn 1 (1σ)"
@@ -826,28 +826,28 @@ msgid "Display 3 Standard Deviation (3σ)"
 msgstr "Hiển thị độ lệch chuẩn 3 (3σ)"
 
 msgid "Average"
-msgstr ""
+msgstr "Trung bình"
 
 msgid "1 Standard Deviation (1σ)"
-msgstr ""
+msgstr "Độ lệch chuẩn 1 (1σ)"
 
 msgid "2 Standard Deviation (2σ)"
-msgstr ""
+msgstr "Độ lệch chuẩn 2 (2σ)"
 
 msgid "3 Standard Deviation (3σ)"
-msgstr ""
+msgstr "Độ lệch chuẩn 3 (3σ)"
 
 msgid "Correlation Coefficient"
-msgstr ""
+msgstr "Hệ số tương quan"
 
 msgid "Price Momentum Oscillator"
-msgstr ""
+msgstr "Chỉ số tốc độ thay đổi giá"
 
 msgid "Double Smoothing Period"
-msgstr ""
+msgstr "Tăng gấp đôi khoảng thời gian làm mịn"
 
 msgid "PMO"
-msgstr ""
+msgstr "PMO"
 
 msgid "PMOSignal"
 msgstr ""
