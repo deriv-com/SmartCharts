@@ -409,11 +409,6 @@ class ChartStore {
 
         return categorizedSymbols;
     }
-
-    @action.bound setIsMobile(status) {
-        this.isMobile = typeof status !== undefined ? status : false;
-    }
-
 }
 
 export default ChartStore;

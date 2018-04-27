@@ -25,6 +25,7 @@ class SmartChart extends React.Component {
             });
             activeSymbols = data.active_symbols;
         }
+        this.mainStore.chart.isMobile = this.props.isMobile || false;
         this.chart.setActiveSymbols(activeSymbols);
         this.mainStore.chart.onSymbolChange = this.props.onSymbolChange;
     }
@@ -34,11 +35,6 @@ class SmartChart extends React.Component {
         }
         if(onSymbolChange && this.mainStore.chart.onSymbolChange !== onSymbolChange) {
             this.mainStore.chart.onSymbolChange = onSymbolChange;
-        }
-    }
-    componentWillMount() {
-        if ( this.mainStore && this.mainStore.chart) {
-            this.mainStore.chart.setIsMobile(this.props.isMobile);
         }
     }
 

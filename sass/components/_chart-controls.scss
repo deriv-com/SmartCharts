@@ -167,7 +167,7 @@ cq-context {
                     padding: 0em;
                     opacity: 0;
                     visibility: hidden;
-                    @include transition(visibility 0.1s ease-in-out, opacity 0.5s ease-in-out 0.2s);
+                    @include transition(visibility 0s ease-in-out, opacity 0.2s ease-in-out 0.2s);
                 }
                 cq-menu-dropdown,
                 .cq-menu-dropdown {
@@ -180,7 +180,7 @@ cq-context {
                     border-radius: 0px !important;
                     bottom: 0em;
                     transform: translateY(150%);
-                    @include transition(transform 0.4s ease-in-out 0.3s);
+                    @include transition(transform 0.2s ease-in-out 0.2s);
                     &.open{
                         transform: translateY(0%);
                         margin: 0px;
