@@ -11,25 +11,43 @@ import DrawTools from './DrawTools.jsx';
 import ChartSetting from './ChartSetting.jsx';
 import Share from './Share.jsx';
 
-const ChartControls = ({
-    isMobile
-}) => (
-    <div className="cq-chart-controls">
-        {isMobile ? '' : <CrosshairToggle />}
-        <ChartTypes />
-        <StudyLegend />
-        <Comparison />
-        <DrawTools />
-        <Views />
-        <Share />
-        <Timeperiod />
-        <ChartSize />
-        <ChartSetting />
-    </div>
-);
+class ChartControls extends Component {
+    render(){
+        const { isMobile , hasOpenMenu } = this.props;
+
+        return (
+            <div className={`cq-chart-controls ${hasOpenMenu ? ' active' : ''}`}>
+                {isMobile ? '' : <CrosshairToggle />}
+                <ChartTypes /> 
+                <StudyLegend />
+                <Comparison />
+                <DrawTools />
+                <Views />
+                <Share />
+                <Timeperiod />
+                <ChartSize />
+                <ChartSetting />
+            </div>
+        ) 
+    }
+}
 
 export default connect(
-    ({chart}) => ({
-        isMobile: chart.isMobile
+    ({chart,
+    chartType,
+    studies,
+    comparison,
+    drawTools,
+    view,
+    share,
+    timeperiod,
+    chartSetting }) => ({
+        isMobile: chart.isMobile,
+        hasOpenMenu: ( 
+            chartType.menu.open || studies.menu.open ||
+            comparison.menu.open || drawTools.menu.open ||
+            view.menu.open || share.menu.open || timeperiod.menu.open ||
+            chartSetting.menu.open
+        )
     })
 )(ChartControls);
