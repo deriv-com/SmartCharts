@@ -221,9 +221,31 @@
     align-items: center;
 }
 
+.cq-toggle ,
+.ic-icon {
+    width: 24px;
+    height: 24px;
+    svg {
+        padding:5px;
+    }
+}
 .cq-toggle.active > .ic-icon,
 .cq-toggle.active > .cq-text-icon,
 .ic-icon.active {
-    box-shadow: inset 0 0 0 1px $active-color;
-    background: #f2f3f8;
+    color: #4C5794;
+    font-weight: bold;
+    svg {
+        box-shadow: inset 0 0 0 1px $active-color;
+        border-radius: 4px;
+        background: #f2f3f8;
+    }
+}
+
+.cq-toggle:hover > .ic-icon,
+.cq-toggle:hover > .cq-text-icon,
+.ic-icon:hover {
+    svg {
+        border-radius: 4px;
+        background: #f2f3f8;
+    }
 }

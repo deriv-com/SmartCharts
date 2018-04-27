@@ -63,7 +63,9 @@ cq-context {
                 transform: rotate(225deg); /* 180 + 45 */
                 display: none;
             }
-
+            &:hover{
+                color: #575757 !important;
+            }
             cq-separator {
                 margin: 0;
             }
@@ -110,10 +112,6 @@ cq-context {
         .cq-toggle {
             padding: 0.35em 0.8em;
             color: #575757;
-            &:hover,
-            &.active {
-            color: #000 !important;
-            }
         }
         cq-comparison-add {
             cq-comparison-lookup-frame {
