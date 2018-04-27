@@ -222,7 +222,8 @@
 }
 
 .cq-toggle ,
-.ic-icon {
+.cq-menu-btn .ic-icon ,
+.cq-chart-size .ic-icon{
     width: 24px;
     height: 24px;
     svg {
@@ -231,7 +232,7 @@
 }
 .cq-toggle.active > .ic-icon,
 .cq-toggle.active > .cq-text-icon,
-.ic-icon.active {
+.cq-menu-btn .ic-icon.active {
     color: #4C5794;
     font-weight: bold;
     svg {
@@ -243,7 +244,8 @@
 
 .cq-toggle:hover > .ic-icon,
 .cq-toggle:hover > .cq-text-icon,
-.ic-icon:hover {
+.cq-menu-btn .ic-icon:hover,
+.cq-chart-size .ic-icon:hover {
     svg {
         border-radius: 4px;
         background: #f2f3f8;
