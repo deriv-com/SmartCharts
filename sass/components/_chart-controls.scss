@@ -71,7 +71,7 @@ cq-context {
             }
 
             cq-menu-dropdown, .cq-menu-dropdown {
-                bottom: -1.6em;
+                bottom: 2.6em;
                 z-index: -3;
                 height: auto;
                 margin-top: 1;
@@ -85,7 +85,7 @@ cq-context {
                 }
                 &.open{
                     visibility: visible;
-                    bottom: 3.6em;
+                    bottom: 5em;
                     opacity: 1;
                     z-index: 3;
                 }
