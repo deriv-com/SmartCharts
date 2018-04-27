@@ -46,8 +46,6 @@ class ChartStore {
     static _id_counter = 0;
 
     constructor(mainStore) {
-
-
         this.id = ++ChartStore._id_counter;
         this.mainStore = mainStore;
         this.setting = new ChartSettingStore();
@@ -66,6 +64,7 @@ class ChartStore {
     @observable categorizedSymbols = [];
     @observable barrierJSX;
     @observable chartPanelTop = '0px';
+    @observable isMobile = false;
 
     @action.bound setActiveSymbols(activeSymbols) {
         if (activeSymbols && this.context) {

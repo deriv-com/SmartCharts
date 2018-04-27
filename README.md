@@ -115,3 +115,12 @@ The following commands will build and deploy to charts.binary.com (*Make sure yo
     yarn deploy:production  # charts.binary.com
 
 
+
+#### Deploy to Github Pages
+You can deploy the chart on your binary sub-domain as well, just follow bellow tips:
+
+-  add a file with named `CNAME`  in your project directory with your domain name, Ex: `developer.binary.sx`
+- run `yarn build-travis  && yarn gh-pages`
+
+Now you should be able to see the chart on your domain (`developer.binary.sx` )
+Note: this script modify `index.html` (put hashing on script) as well; do not push those changes to git!
