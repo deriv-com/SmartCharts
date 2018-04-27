@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from '../store/Connect';
 import ChartTypes from './ChartTypes.jsx';
 import StudyLegend from './StudyLegend.jsx';
 import Comparison from './Comparison.jsx';
@@ -27,4 +28,8 @@ const ChartControls = ({
     </div>
 );
 
-export default ChartControls;
+export default connect(
+    ({chart}) => ({
+        isMobile: chart.isMobile
+    })
+)(ChartControls);

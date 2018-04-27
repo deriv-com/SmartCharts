@@ -68,7 +68,7 @@ class Chart extends Component {
                             <AssetInformation />
                             <ComparisonList />
                         </div>
-                        <ChartControls isMobile={isMobile} />
+                        <ChartControls />
                         <Crosshair />
                         <div className="chartContainer primary"> </div>
                         <Loader />
