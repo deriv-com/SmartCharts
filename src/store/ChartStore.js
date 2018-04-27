@@ -1,7 +1,7 @@
 import { action, observable, computed } from 'mobx';
 import StreamManager from '../StreamManager';
 import ConnectionManager from '../ConnectionManager';
-import Feed from '../Feed';
+import Feed from '../feed';
 import PendingPromise from '../utils/PendingPromise';
 import Context from '../components/ui/Context';
 import React from 'react';
