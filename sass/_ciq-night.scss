@@ -582,3 +582,51 @@ cq-share-button {
 	}
 }
 
+
+.#{$DARK} .cq-chart-controls{
+	background: $DARK-bg;
+	.ciq-menu {
+		.cq-menu-overlay {
+			background: rgba(255,255,255,.3);
+			.cq-menu-dropdown,
+			cq-menu-dropdown{
+				background: $DARK-main;
+				.title{
+					background: $DARK-bg;
+					color: $DARK-text;
+				}
+				.body{
+					background: transparent;
+					
+					.ciq-list-setting{
+						.ciq-list-item {
+							background: rgba(100,100,100,0.5);
+							border-color: #444;
+						}						
+					}
+					.ciq-list {
+						.ciq-list-item {
+							background: rgba(100,100,100,0.5);
+							border-color: #444;
+						}
+					}
+				}
+			}
+		}
+	}
+}
+.#{$DARK} .ic-icon{
+	path,
+	g{
+		fill: #dedede !important;
+	}
+}
+.#{$DARK} .cq-chart-title{
+	.cq-menu-btn{
+		.cq-symbol-select-btn{
+			background: $DARK-bg;
+			border-color: #000;
+			color: #dedede;
+		}
+	}
+}

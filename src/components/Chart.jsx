@@ -42,6 +42,7 @@ class Chart extends Component {
             children,
             lang,
             isMobile,
+            theme,
             isChartAvailable,
             setting,
             chartPanelTop,
@@ -54,7 +55,8 @@ class Chart extends Component {
         const insideSubHolder = array.filter(c => /(TradeStart)|(TradeEnd)/.test(c.type.displayName));
 
         return (
-            <cq-context ref={(root) => { this.root = root; }} class={isMobile ? 'smartcharts-mobile' : ''}>
+            <cq-context ref={(root) => { this.root = root; }} 
+                class={(isMobile ? 'smartcharts-mobile' : '') + (theme ? ' ciq-night' : '')}>
                 <div className="ciq-chart-area">
                     <div className="ciq-chart">
                         <RenderInsideChart at='holder'>
