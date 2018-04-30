@@ -1,7 +1,6 @@
 import { action, observable, computed } from 'mobx';
 import StreamManager from '../StreamManager';
 import ConnectionManager from '../ConnectionManager';
-import Feed from '../feed';
 import PendingPromise from '../utils/PendingPromise';
 import Context from '../components/ui/Context';
 import React from 'react';
@@ -10,6 +9,7 @@ import BarrierStore from './BarrierStore';
 import ChartSettingStore from './ChartSettingStore';
 import KeystrokeHub from '../components/ui/KeystrokeHub';
 import '../components/ui/Animation';
+import { BinaryAPI, Feed } from '../feed';
 // import '../AddOns';
 
 
@@ -230,13 +230,16 @@ class ChartStore {
         this.context = context;
         this.contextPromise.resolve(context);
         stxx.setStyle('stx_line_chart', 'color', '#4DAFEE'); // TODO => why is not working in css?
-
-        // Optionally set a language for the UI, after it has been initialized, and translate.
-        // CIQ.I18N.setLanguage(stxx, "zh");
     }
 
-    @action.bound init(rootNode) {
+    @action.bound init(rootNode, props) {
         this.rootNode = rootNode;
+
+        const { requestAPI, requestSubscribe, requestForget } = props;
+        const api = new BinaryAPI(requestAPI, requestSubscribe, requestForget);
+        api.getActiveSymbols().then(({ active_symbols }) => {
+            this.setActiveSymbols(active_symbols);
+        });
 
         const stxx = this.stxx = new CIQ.ChartEngine({
             container: this.rootNode.querySelector('.chartContainer.primary'),
