@@ -23,6 +23,8 @@ class App extends React.Component {
                 onSymbolChange={(symbol) => console.log('Symbol has changed to:', symbol)}
                 isMobile={CIQ.isMobile}
                 requestAPI={connectionManager.send.bind(connectionManager)}
+                requestSubscribe={connectionManager.subscribe.bind(connectionManager)}
+                requestForget={connectionManager.forget.bind(connectionManager)}
             >
             </SmartChart>
         );

@@ -2,9 +2,9 @@ import NotificationStore from '../store/NotificationStore';
 import {TickHistoryFormatter} from './TickHistoryFormatter';
 
 class Feed {
-    constructor(streamManager, cxx, mainStore) {
+    constructor(binaryApi, cxx, mainStore) {
         this._cxx = cxx;
-        this._streamManager = streamManager;
+        this._binaryApi = binaryApi;
         this._streams = {};
         this._mainStore = mainStore;
     }
@@ -16,7 +16,7 @@ class Feed {
     unsubscribe(symObj) {
         const key = this._getStreamKey(symObj);
         if (this._streams[key]) {
-            this._streams[key].forget();
+            this._binaryApi.forget(this._streams[key]);
             delete this._streams[key];
         }
     }
@@ -25,49 +25,54 @@ class Feed {
         return JSON.stringify({ symbol, period, interval });
     }
 
-    _trackStream(stream, comparison_chart_symbol) {
-        stream.onStream((response) => {
-            const quotes = [TickHistoryFormatter.formatTick(response)];
-
-            if (comparison_chart_symbol) {
-                CIQ.addMemberToMasterdata({
-                    stx: this._cxx,
-                    label: comparison_chart_symbol,
-                    data: quotes,
-                    createObject: true,
-                });
-            } else {
-                this._cxx.updateChartData(quotes);
-            }
-        });
-    }
-
     async fetchInitialData(symbol, suggestedStartDate, suggestedEndDate, params, callback) {
         const { period, interval, symbolObject } = params;
         const key = this._getStreamKey(params);
+        const isComparisonChart = this._cxx.chart.symbol !== symbol;
+        const comparison_chart_symbol = isComparisonChart ? symbol : undefined;
 
-        const stream = this._streams[key] || this._streamManager.subscribe({
-            symbol,
-            granularity: Feed.calculateGranularity(period, interval),
+        let hasHistory = false;
+        let cb = undefined;
+        const history = await new Promise((resolve) => {
+            cb = response => {
+                if (hasHistory) {
+                    const quotes = [TickHistoryFormatter.formatTick(response)];
+
+                    if (comparison_chart_symbol) {
+                        CIQ.addMemberToMasterdata({
+                            stx: this._cxx,
+                            label: comparison_chart_symbol,
+                            data: quotes,
+                            createObject: true,
+                        });
+                    } else {
+                        this._cxx.updateChartData(quotes);
+                    }
+                }
+                resolve(response);
+                hasHistory = true;
+            };
+            this._binaryApi.subscribe({
+                symbol,
+                granularity: Feed.calculateGranularity(period, interval),
+            }, cb, 20000);
         });
 
-        const isComparisonChart = this._cxx.chart.symbol !== symbol;
-        this._trackStream(stream, isComparisonChart ? symbol : undefined);
-        this._streams[key] = stream;
+        this._streams[key] = cb;
 
         // Clear all notifications related to active symbols
         this._mainStore.notification.removeByCategory('activesymbol');
 
         try {
-            const response = await stream.response;
+            const response = history;
             const quotes = TickHistoryFormatter.formatHistory(response);
 
-            if(stream.isMarketClosed) {
-                this._mainStore.notification.notify({
-                    text: t.translate('[symbol] market is presently closed.', { symbol: symbolObject.name }),
-                    category: 'activesymbol',
-                });
-            }
+            // if(stream.isMarketClosed) {
+            //     this._mainStore.notification.notify({
+            //         text: t.translate('[symbol] market is presently closed.', { symbol: symbolObject.name }),
+            //         category: 'activesymbol',
+            //     });
+            // }
 
             callback({ quotes });
             this._mainStore.chart.isChartAvailable = true;

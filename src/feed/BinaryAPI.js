@@ -1,8 +1,8 @@
 export default class BinaryAPI {
     constructor(requestAPI, requestSubscribe, requestForget) {
         this.requestAPI = requestAPI;
-        this.requestSubscribe = requestSubscribe;
-        this.requestForget = requestForget;
+        this.subscribe = requestSubscribe;
+        this.forget = requestForget;
     }
 
     async getActiveSymbols() {
@@ -10,5 +10,27 @@ export default class BinaryAPI {
             active_symbols: 'brief',
             product_type: 'basic',
         });
+    }
+
+    async getTradingTimes() {
+        return this.requestAPI({
+            trading_times: 'today',
+        });
+    }
+
+    async getTickHistory() {
+        return this.requestAPI({
+
+        });
+    }
+
+    async subscribeTickHistory() {
+        return this.requestSubscribe({
+
+        });
+    }
+
+    async forget(callback) {
+        this.requestForget(callback);
     }
 }

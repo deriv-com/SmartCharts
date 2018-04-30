@@ -1,6 +1,6 @@
 import { action, observable, computed } from 'mobx';
-import StreamManager from '../StreamManager';
-import ConnectionManager from '../ConnectionManager';
+import StreamManager from '../../app/connection/StreamManager';
+import ConnectionManager from '../../app/connection/ConnectionManager';
 import PendingPromise from '../utils/PendingPromise';
 import Context from '../components/ui/Context';
 import React from 'react';
@@ -258,7 +258,7 @@ class ChartStore {
         CIQ.Animation(stxx, { stayPut: true });
 
         // connect chart to data
-        stxx.attachQuoteFeed(new Feed(streamManager, stxx, this.mainStore), {
+        stxx.attachQuoteFeed(new Feed(api, stxx, this.mainStore), {
             refreshInterval: null,
         });
 

@@ -1,5 +1,6 @@
 import EventEmitter from 'event-emitter-es6';
 import PendingPromise from './PendingPromise';
+import StreamManager from './StreamManager';
 
 class ConnectionManager extends EventEmitter {
     static get EVENT_CONNECTION_CLOSE() { return 'CONNECTION_CLOSE'; }
@@ -10,7 +11,9 @@ class ConnectionManager extends EventEmitter {
         this._counterReqId = 1;
         this._initialize();
         this._pendingRequests = { };
+        this._callbacks = {};
         this._autoReconnect = true;
+        this._streamManager = new StreamManager(this);
     }
     _initialize() {
         this._websocket = new WebSocket(this._url);
@@ -64,7 +67,8 @@ class ConnectionManager extends EventEmitter {
             }
         }, timeout);
     }
-    async send(data, timeout = 20000) {
+
+    async send(data, timeout) {
         const req = Object.assign({}, data);
         req.req_id = this._counterReqId++;
         await this._connectionOpened;
@@ -75,6 +79,25 @@ class ConnectionManager extends EventEmitter {
             this._timeoutRequest(req.req_id, timeout);
         }
         return this._pendingRequests[req.req_id];
+    }
+
+    async subscribe(input, callback) {
+        const stream = this._streamManager.subscribe(input);
+        stream.onStream(tickResponse => {
+            if (!this._callbacks[callback]) {
+                this._callbacks[callback] = stream;
+            }
+            callback(tickResponse);
+        });
+        const historyResponse = await stream.response;
+
+        callback(historyResponse);
+    }
+
+    async forget(callback) {
+        const stream = this._callbacks[callback];
+        stream.forget();
+        delete this._callbacks[callback];
     }
 
     destroy() {
