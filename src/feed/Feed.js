@@ -40,6 +40,8 @@ class Feed {
         const tickHistoryPromise = new PendingPromise();
         let hasHistory = false;
         const processTick = resp => {
+            // We assume that 1st response is the history, and subsequent
+            // responses are tick stream data.
             if (hasHistory) {
                 const quotes = [TickHistoryFormatter.formatTick(resp)];
 
