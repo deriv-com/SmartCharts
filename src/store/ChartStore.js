@@ -281,7 +281,7 @@ class ChartStore {
         });
         stxx.addEventListener('symbolChange', (evt) => {
             if (this.onSymbolChange) { this.onSymbolChange(evt.symbolObject); }
-            this.saveLayout.bind(this);
+            this.saveLayout();
         });
         stxx.addEventListener('drawing', this.saveDrawings.bind(this));
         // stxx.addEventListener('newChart', () => { });
