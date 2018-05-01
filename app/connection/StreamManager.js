@@ -9,7 +9,6 @@ class StreamManager {
     static get MSG_OHLC() { return 'ohlc'; }
     constructor(connection, defaultCount = 1000) {
         this._connection = connection;
-        this._defaultCount = defaultCount;
         this._emitters = { };
         this._streamIds = { };
         this._subscriptionData = { };
@@ -168,23 +167,6 @@ class StreamManager {
             return this._handleExistingStream({ symbol, granularity });
         }
         return this._handleNewStream({ symbol, granularity });
-    }
-    historicalData({
-        symbol, granularity, start, end,
-    }) {
-        const req = {
-            ticks_history: symbol,
-            end,
-            start,
-            adjust_start_time: 1,
-            granularity,
-            style: granularity ? 'candles' : 'ticks',
-        };
-        return this._connection.send(req);
-    }
-    static buildFor({ appId, endpoint, language = 'en' }) {
-        const connectionManager = new ConnectionManager({ appId, endpoint, language });
-        return new StreamManager(connectionManager);
     }
 }
 

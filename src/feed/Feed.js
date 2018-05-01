@@ -1,6 +1,5 @@
 import NotificationStore from '../store/NotificationStore';
 import {TickHistoryFormatter} from './TickHistoryFormatter';
-import Subscription from '../../app/connection/Subscription';
 
 class Feed {
     constructor(binaryApi, cxx, mainStore) {

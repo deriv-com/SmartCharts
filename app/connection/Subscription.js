@@ -24,21 +24,8 @@ export default class Subscription {
             style: this._granularity ? 'candles' : 'ticks',
             granularity: this._granularity,
         };
-        const handleNoStream = (code) => {
-            if (/^(MarketIsClosed|NoRealtimeQuotes)$/.test(code)) {
-                this._isMarketClosed = true;
-                delete req.subscribe;
-                return this._connection.send(
-                    req,
-                    Subscription.DEFAULT_TIMEOUT,
-                );
-            }
-        };
         this._response = this._connection
-            .send(req, Subscription.DEFAULT_TIMEOUT)
-            .then((data) => {
-                return data;
-            });
+            .send(req, Subscription.DEFAULT_TIMEOUT);
     }
 
     get response() {

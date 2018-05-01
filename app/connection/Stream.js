@@ -37,10 +37,6 @@ export default class Stream {
         return this._subscription.response;
     }
 
-    get isMarketClosed() {
-        return this._subscription.isMarketClosed;
-    }
-
     forget() {
         for (const event of Object.keys(this._callbacks)) {
             for (const callback of this._callbacks[event]) {
