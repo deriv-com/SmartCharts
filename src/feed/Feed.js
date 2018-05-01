@@ -1,5 +1,6 @@
 import NotificationStore from '../store/NotificationStore';
 import {TickHistoryFormatter} from './TickHistoryFormatter';
+import Subscription from '../../app/connection/Subscription';
 
 class Feed {
     constructor(binaryApi, cxx, mainStore) {
@@ -29,15 +30,20 @@ class Feed {
         const { period, interval, symbolObject } = params;
         const key = this._getStreamKey(params);
         const isComparisonChart = this._cxx.chart.symbol !== symbol;
-        const comparison_chart_symbol = isComparisonChart ? symbol : undefined;
+        const comparisonChartSymbol = isComparisonChart ? symbol : undefined;
+
+        const dataRequest = {
+            symbol,
+            granularity: Feed.calculateGranularity(period, interval)
+        };
 
         let cb = undefined;
-        const history = await new Promise((resolve) => {
+        let response = await new Promise((resolve) => {
             const processTick = (comparisonSymbol) => {
                 let hasHistory = false;
-                return response => {
+                return resp => {
                     if (hasHistory) {
-                        const quotes = [TickHistoryFormatter.formatTick(response)];
+                        const quotes = [TickHistoryFormatter.formatTick(resp)];
 
                         if (comparisonSymbol) {
                             CIQ.addMemberToMasterdata({
@@ -49,51 +55,48 @@ class Feed {
                         } else {
                             this._cxx.updateChartData(quotes);
                         }
+                        return;
                     }
-                    resolve(response);
+                    resolve(resp);
                     hasHistory = true;
                 };
             };
-            cb = processTick(comparison_chart_symbol);
-            this._binaryApi.subscribe({
-                symbol,
-                granularity: Feed.calculateGranularity(period, interval),
-            }, cb, 20000);
-        });
+            cb = processTick(comparisonChartSymbol);
 
-        this._streams[key] = cb;
+            this._binaryApi.subscribeTickHistory(dataRequest, cb);
+        });
 
         // Clear all notifications related to active symbols
         this._mainStore.notification.removeByCategory('activesymbol');
 
-        try {
-            const response = history;
-            const quotes = TickHistoryFormatter.formatHistory(response);
-
-            // if(stream.isMarketClosed) {
-            //     this._mainStore.notification.notify({
-            //         text: t.translate('[symbol] market is presently closed.', { symbol: symbolObject.name }),
-            //         category: 'activesymbol',
-            //     });
-            // }
-
-            callback({ quotes });
-            this._mainStore.chart.isChartAvailable = true;
-        } catch (err) {
-            this._streams[key].forget();
-            delete this._streams[key];
-            if (err.response && err.response.error.code === 'StreamingNotAllowed'){
-                this._mainStore.chart.isChartAvailable = false;
+        if (response.error) {
+            const errorCode = response.error.code;
+            if (/^(MarketIsClosed|NoRealtimeQuotes)$/.test(errorCode)) {
+                response = await this._binaryApi.getTickHistory(dataRequest);
+                this._mainStore.notification.notify({
+                    text: t.translate('[symbol] market is presently closed.', { symbol: symbolObject.name }),
+                    category: 'activesymbol',
+                });
+            } else if (errorCode === 'StreamingNotAllowed') {
+                if (!isComparisonChart) {
+                    this._mainStore.chart.isChartAvailable = false;
+                }
                 this._mainStore.notification.notify({
                     text: t.translate('Streaming for [symbol] is not available due to license restrictions', { symbol: symbolObject.name }),
                     type: NotificationStore.TYPE_ERROR,
                     category: 'activesymbol',
                 });
                 callback({ quotes: [] });
-            } else {
-                console.error(err);
-                callback({ error: err });
+                return;
             }
+        } else {
+            this._streams[key] = cb;
+        }
+
+        const quotes = TickHistoryFormatter.formatHistory(response);
+        callback({ quotes });
+        if (!isComparisonChart) {
+            this._mainStore.chart.isChartAvailable = true;
         }
     }
 
@@ -107,7 +110,7 @@ class Feed {
         let result = { quotes: [] };
         if (end > startLimit) {
             try {
-                const response = await this._streamManager.historicalData({
+                const response = await this._binaryApi.getTickHistory({
                     symbol,
                     granularity: Feed.calculateGranularity(period, interval),
                     start: Math.max(start, startLimit),

@@ -110,8 +110,8 @@ class StreamManager {
         const emitter = new EventEmitter();
         this._emitters[key] = emitter;
 
-        subscription.response.then(() => {
-            if (subscription.isMarketClosed) {
+        subscription.response.then(response => {
+            if (response.error) {
                 this._clearEmitter(key);
             }
         });

@@ -12,7 +12,6 @@ export default class Subscription {
         this._symbol = symbol;
         this._granularity = granularity;
         this._response = response;
-        this._isMarketClosed = false;
     }
 
     subscribe() {
@@ -37,33 +36,13 @@ export default class Subscription {
         };
         this._response = this._connection
             .send(req, Subscription.DEFAULT_TIMEOUT)
-            .catch((up) => {
-                const result = handleNoStream(up.code);
-                if (result) {
-                    return result;
-                }
-                throw up;
-            })
             .then((data) => {
-                if (data.error) {
-                    const result = handleNoStream(data.error.code);
-                    if (result) {
-                        return result;
-                    }
-                    const up = new Error(data.error.message);
-                    up.response = data;
-                    throw up;
-                }
                 return data;
             });
     }
 
     get response() {
         return this._response;
-    }
-
-    get isMarketClosed() {
-        return this._isMarketClosed;
     }
 
     static cloneResponseData(data) {
