@@ -280,7 +280,10 @@ class ChartStore {
             this.chartPanelTop = holderStyle.top;
         });
         stxx.addEventListener('symbolChange', (evt) => {
-            if (this.onSymbolChange) { this.onSymbolChange(evt.symbolObject); }
+            const isComparisonChart = evt.stx.chart.symbol !== evt.symbolObject.symbol;
+            if (this.onSymbolChange && !isComparisonChart) {
+                this.onSymbolChange(evt.symbolObject);
+            }
             this.saveLayout();
         });
         stxx.addEventListener('drawing', this.saveDrawings.bind(this));

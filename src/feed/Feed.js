@@ -6,7 +6,7 @@ class Feed {
     constructor(binaryApi, cxx, mainStore) {
         this._cxx = cxx;
         this._binaryApi = binaryApi;
-        this._streams = {};
+        this._callbacks = {};
         this._mainStore = mainStore;
     }
 
@@ -16,9 +16,9 @@ class Feed {
     // Do not call explicitly! Method below is called by ChartIQ when unsubscribing symbols.
     unsubscribe(symObj) {
         const key = this._getStreamKey(symObj);
-        if (this._streams[key]) {
-            this._binaryApi.forget(this._streams[key]);
-            delete this._streams[key];
+        if (this._callbacks[key]) {
+            this._binaryApi.forget(this._callbacks[key]);
+            delete this._callbacks[key];
         }
     }
 
@@ -72,6 +72,7 @@ class Feed {
         if (response.error) {
             const errorCode = response.error.code;
             if (/^(MarketIsClosed|NoRealtimeQuotes)$/.test(errorCode)) {
+                // Although market is closed, we display the past tick history data
                 response = await this._binaryApi.getTickHistory(dataRequest);
                 this._mainStore.notification.notify({
                     text: t.translate('[symbol] market is presently closed.', { symbol: symbolObject.name }),
@@ -90,7 +91,7 @@ class Feed {
                 return;
             }
         } else {
-            this._streams[key] = cb;
+            this._callbacks[key] = cb;
         }
 
         const quotes = TickHistoryFormatter.formatHistory(response);

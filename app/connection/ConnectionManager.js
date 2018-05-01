@@ -84,13 +84,9 @@ class ConnectionManager extends EventEmitter {
     async subscribe(input, callback) {
         const { ticks_history: symbol , granularity } = input
         const stream = this._streamManager.subscribe({ symbol, granularity });
-        stream.onStream(tickResponse => {
-            if (!this._callbacks.get(callback)) {
-                this._callbacks.set(callback, stream);
-            }
-            callback(tickResponse);
-        });
+        stream.onStream(tickResponse => callback(tickResponse));
         const historyResponse = await stream.response;
+        this._callbacks.set(callback, stream);
 
         callback(historyResponse);
     }
