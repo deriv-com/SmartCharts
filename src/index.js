@@ -2,19 +2,17 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Chart from './components/Chart.jsx';
-import ConnectionManager from '../app/connection/ConnectionManager';
-import StreamManager from '../app/connection/StreamManager';
 import {TradeEndLine, TradeStartLine} from './components/VerticalLine.jsx';
 import MainStore from './store';
 import {MobxProvider} from './store/Connect';
 import Barrier from './components/Barrier.jsx';
 import './SplinePlotter';
+import PendingPromise from './utils/PendingPromise';
 
 class SmartChart extends React.Component {
     mainStore = new MainStore();
     get chart() { return this.mainStore.chart; }
     get stx() { return this.chart.stxx; }
-    get connectionManager() { return this.chart.connectionManager; }
 
     async componentDidMount() {
         this.mainStore.chart.isMobile = this.props.isMobile || false;
@@ -46,16 +44,19 @@ class SmartChart extends React.Component {
         return end;
     }
 }
+
 export {
     Barrier,
     SmartChart,
     TradeStartLine,
     TradeEndLine,
+    PendingPromise,
 };
 
 export default {
-    SmartChart,
     Barrier,
+    SmartChart,
     TradeStartLine,
     TradeEndLine,
+    PendingPromise,
 };

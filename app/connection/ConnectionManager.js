@@ -1,5 +1,5 @@
 import EventEmitter from 'event-emitter-es6';
-import PendingPromise from './PendingPromise';
+import { PendingPromise } from '@binary-com/smartcharts';
 import StreamManager from './StreamManager';
 
 class ConnectionManager extends EventEmitter {

@@ -1,6 +1,4 @@
 import { action, observable, computed } from 'mobx';
-import StreamManager from '../../app/connection/StreamManager';
-import ConnectionManager from '../../app/connection/ConnectionManager';
 import PendingPromise from '../utils/PendingPromise';
 import Context from '../components/ui/Context';
 import React from 'react';
@@ -12,25 +10,6 @@ import '../components/ui/Animation';
 import { BinaryAPI, Feed } from '../feed';
 // import '../AddOns';
 
-
-const getLanguageStorage = function(){
-    let default_language = 'en';
-    try {
-        let setting_string = CIQ.localStorage.getItem('smartchart-setting'),
-            setting = JSON.parse(setting_string !== '' ? setting_string : '{}');
-
-        return setting.language || default_language;
-    } catch (e) {
-        return default_language;
-    }
-};
-
-const connectionManager = new ConnectionManager({
-    appId: 1,
-    language: getLanguageStorage(),
-    endpoint: 'wss://frontend.binaryws.com/websockets/v3',
-});
-const streamManager = new StreamManager(connectionManager);
 const defaultSymbol = {
     symbol: 'R_100',
     name: "Volatility 100 Index",
@@ -40,9 +19,6 @@ const defaultSymbol = {
 };
 
 class ChartStore {
-    get connectionManager() { return connectionManager; }
-    get streamManager() { return streamManager; }
-
     static _id_counter = 0;
 
     constructor(mainStore) {

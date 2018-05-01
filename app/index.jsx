@@ -10,9 +10,21 @@ import './app.scss';
 import './doorbell';
 import ConnectionManager from './connection/ConnectionManager';
 
+const getLanguageStorage = function(){
+    let default_language = 'en';
+    try {
+        let setting_string = CIQ.localStorage.getItem('smartchart-setting'),
+            setting = JSON.parse(setting_string !== '' ? setting_string : '{}');
+
+        return setting.language || default_language;
+    } catch (e) {
+        return default_language;
+    }
+};
+
 const connectionManager = new ConnectionManager({
     appId: 1,
-    language: 'en',
+    language: getLanguageStorage(),
     endpoint: 'wss://frontend.binaryws.com/websockets/v3',
 });
 
