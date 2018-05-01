@@ -27,7 +27,7 @@ export default class ComparisonListStore {
         }
     };
 
-    updatePrices = () => {
+    @action.bound updatePrices() {
         this.syncAnimatedPricesWithComparisons();
         this.comparisonSymbols.map((item, i) => {
             const animatedPrice = this.animatedPriceStore[i];
