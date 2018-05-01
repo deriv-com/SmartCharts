@@ -11,7 +11,7 @@ class ConnectionManager extends EventEmitter {
         this._counterReqId = 1;
         this._initialize();
         this._pendingRequests = { };
-        this._callbacks = {};
+        this._callbacks = new Map();
         this._autoReconnect = true;
         this._streamManager = new StreamManager(this);
     }
@@ -84,8 +84,8 @@ class ConnectionManager extends EventEmitter {
     async subscribe(input, callback) {
         const stream = this._streamManager.subscribe(input);
         stream.onStream(tickResponse => {
-            if (!this._callbacks[callback]) {
-                this._callbacks[callback] = stream;
+            if (!this._callbacks.get(callback)) {
+                this._callbacks.set(callback, stream);
             }
             callback(tickResponse);
         });
@@ -95,9 +95,9 @@ class ConnectionManager extends EventEmitter {
     }
 
     async forget(callback) {
-        const stream = this._callbacks[callback];
+        const stream = this._callbacks.get(callback);
         stream.forget();
-        delete this._callbacks[callback];
+        this._callbacks.delete(callback);
     }
 
     destroy() {

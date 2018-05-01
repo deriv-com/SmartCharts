@@ -31,27 +31,30 @@ class Feed {
         const isComparisonChart = this._cxx.chart.symbol !== symbol;
         const comparison_chart_symbol = isComparisonChart ? symbol : undefined;
 
-        let hasHistory = false;
         let cb = undefined;
         const history = await new Promise((resolve) => {
-            cb = response => {
-                if (hasHistory) {
-                    const quotes = [TickHistoryFormatter.formatTick(response)];
+            const processTick = (comparisonSymbol) => {
+                let hasHistory = false;
+                return response => {
+                    if (hasHistory) {
+                        const quotes = [TickHistoryFormatter.formatTick(response)];
 
-                    if (comparison_chart_symbol) {
-                        CIQ.addMemberToMasterdata({
-                            stx: this._cxx,
-                            label: comparison_chart_symbol,
-                            data: quotes,
-                            createObject: true,
-                        });
-                    } else {
-                        this._cxx.updateChartData(quotes);
+                        if (comparisonSymbol) {
+                            CIQ.addMemberToMasterdata({
+                                stx: this._cxx,
+                                label: comparisonSymbol,
+                                data: quotes,
+                                createObject: true,
+                            });
+                        } else {
+                            this._cxx.updateChartData(quotes);
+                        }
                     }
-                }
-                resolve(response);
-                hasHistory = true;
+                    resolve(response);
+                    hasHistory = true;
+                };
             };
+            cb = processTick(comparison_chart_symbol);
             this._binaryApi.subscribe({
                 symbol,
                 granularity: Feed.calculateGranularity(period, interval),
