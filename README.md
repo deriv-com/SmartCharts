@@ -34,12 +34,19 @@ class App extends React.Component {
         return (
             <SmartChart
                 onSymbolChange={(symbol) => console.log('Symbol has changed to:', symbol)}
-                activeSymbols={/* Pass symbols from https://developers.binary.com/api/#active_symbols */}
+                requestSubscribe={({ symbol, granularity, ... }, cb) => {}}   // Passes the whole req object
+                requestForget={({ symbol, granularity }, cb) => {}}         // cb is exactly the same reference passed to subscribe
+                // for active_symbols, trading_times, ... (NOT streaming)
+                requestAPI={({...}) => Promise} // whole request object, shouldn't contain req_id
             />
         );
     }
 };
 ```
+
+SmartCharts expects library user to provide `requestSubscribe`, `requestForget` and `requestAPI`. `requestSubscribe` and `requestForget` handles streaming data (which in this case is just `tick_history`), whereas `requestAPI` accept single calls.
+
+The job of loading the active symbols or trading times or stream data from cache or retrieving from websocket is therefore NOT the responsibility of SmartCharts but the host application. SmartCharts simply makes the requests and expect a response in return.
 
 Some important notes on your webpack.config.js (refer to `app/webpack.config.js`):
 

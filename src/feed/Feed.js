@@ -1,5 +1,6 @@
 import NotificationStore from '../store/NotificationStore';
 import {TickHistoryFormatter} from './TickHistoryFormatter';
+import PendingPromise from '../utils/PendingPromise';
 
 class Feed {
     constructor(binaryApi, cxx, mainStore) {
@@ -36,45 +37,41 @@ class Feed {
             granularity: Feed.calculateGranularity(period, interval)
         };
 
-        let cb = undefined;
-        let response = await new Promise((resolve) => {
-            const processTick = (comparisonSymbol) => {
-                let hasHistory = false;
-                return resp => {
-                    if (hasHistory) {
-                        const quotes = [TickHistoryFormatter.formatTick(resp)];
+        const tickHistoryPromise = new PendingPromise();
+        let hasHistory = false;
+        const processTick = resp => {
+            if (hasHistory) {
+                const quotes = [TickHistoryFormatter.formatTick(resp)];
 
-                        if (comparisonSymbol) {
-                            CIQ.addMemberToMasterdata({
-                                stx: this._cxx,
-                                label: comparisonSymbol,
-                                data: quotes,
-                                createObject: true,
-                            });
-                        } else {
-                            this._cxx.updateChartData(quotes);
-                        }
-                        return;
-                    }
-                    resolve(resp);
-                    hasHistory = true;
-                };
-            };
-            cb = processTick(comparisonChartSymbol);
-
-            this._binaryApi.subscribeTickHistory(dataRequest, cb);
-        });
+                if (comparisonChartSymbol) {
+                    CIQ.addMemberToMasterdata({
+                        stx: this._cxx,
+                        label: comparisonChartSymbol,
+                        data: quotes,
+                        createObject: true,
+                    });
+                } else {
+                    this._cxx.updateChartData(quotes);
+                }
+                return;
+            }
+            tickHistoryPromise.resolve(resp);
+            hasHistory = true;
+        };
+        this._binaryApi.subscribeTickHistory(dataRequest, processTick);
+        let response = await tickHistoryPromise;
 
         // Clear all notifications related to active symbols
         this._mainStore.notification.removeByCategory('activesymbol');
 
         if (response.error) {
             const errorCode = response.error.code;
+            const tParams = { symbol: symbolObject.name };
             if (/^(MarketIsClosed|NoRealtimeQuotes)$/.test(errorCode)) {
                 // Although market is closed, we display the past tick history data
                 response = await this._binaryApi.getTickHistory(dataRequest);
                 this._mainStore.notification.notify({
-                    text: t.translate('[symbol] market is presently closed.', { symbol: symbolObject.name }),
+                    text: t.translate('[symbol] market is presently closed.', tParams),
                     category: 'activesymbol',
                 });
             } else if (errorCode === 'StreamingNotAllowed') {
@@ -82,7 +79,7 @@ class Feed {
                     this._mainStore.chart.isChartAvailable = false;
                 }
                 this._mainStore.notification.notify({
-                    text: t.translate('Streaming for [symbol] is not available due to license restrictions', { symbol: symbolObject.name }),
+                    text: t.translate('Streaming for [symbol] is not available due to license restrictions', tParams),
                     type: NotificationStore.TYPE_ERROR,
                     category: 'activesymbol',
                 });
@@ -90,7 +87,7 @@ class Feed {
                 return;
             }
         } else {
-            this._callbacks[key] = cb;
+            this._callbacks[key] = processTick;
         }
 
         const quotes = TickHistoryFormatter.formatHistory(response);
