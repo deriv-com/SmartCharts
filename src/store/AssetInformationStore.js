@@ -16,7 +16,8 @@ export default class AssetInformationStore {
     get stx() { return this.context.stx; }
 
     onContextReady = () => {
-        this.visible = this.stx.layout.assetInformation || true;
+        const visible = this.stx.layout.assetInformation;
+        this.visible = visible !== undefined ? visible : true;
         this.stx.prepend('headsUpHR', this.update);
         this.stx.prepend('createXAxis', this.update);
     };
