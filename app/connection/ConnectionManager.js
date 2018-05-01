@@ -17,7 +17,6 @@ class ConnectionManager extends EventEmitter {
     }
     _initialize() {
         this._websocket = new WebSocket(this._url);
-        window.ws = this._websocket;
 
         this._websocket.addEventListener('open', this._onopen.bind(this));
         this._websocket.addEventListener('close', this._onclose.bind(this));

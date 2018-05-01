@@ -8,6 +8,7 @@ import ChartSettingStore from './ChartSettingStore';
 import KeystrokeHub from '../components/ui/KeystrokeHub';
 import '../components/ui/Animation';
 import { BinaryAPI, Feed } from '../feed';
+import {createObjectFromLocalStorage} from '../utils';
 // import '../AddOns';
 
 const defaultSymbol = {
@@ -58,7 +59,7 @@ class ChartStore {
     }
 
     restoreLayout(stx) {
-        let layoutData = CIQ.localStorage.getItem(`layout-${this.id}`);
+        let layoutData = createObjectFromLocalStorage(`layout-${this.id}`);
 
         const checkForQuerystring = window.location.origin === 'https://charts.binary.com' ||
             window.location.origin === 'http://localhost:8080';
@@ -71,10 +72,7 @@ class ChartStore {
             }
         }
 
-        if (layoutData === null) {return;}
-        try {
-            layoutData = JSON.parse(layoutData);
-        } catch(e) { return; }
+        if (!layoutData) {return;}
 
         stx.importLayout(layoutData, {
             managePeriodicity: true,
@@ -96,26 +94,23 @@ class ChartStore {
     }
 
     restoreDrawings(stx, symbol) {
-        let memory = CIQ.localStorage.getItem(symbol);
-        if (memory !== null) {
-            let parsed = JSON.parse(memory);
-            if (parsed) {
-                stx.importDrawings(parsed);
-                stx.draw();
-            }
+        let drawings = createObjectFromLocalStorage(symbol);
+        if (drawings) {
+            stx.importDrawings(drawings);
+            stx.draw();
         }
     }
 
     restorePreferences() {
-        const pref = CIQ.localStorage.getItem(`preferences-${this.id}`);
+        const pref = createObjectFromLocalStorage(`preferences-${this.id}`);
         if (pref) {
-            stxx.importPreferences(JSON.parse(pref));
+            this.stxx.importPreferences(pref);
         }
     }
     savePreferences() {
         CIQ.localStorageSetItem(
             `preferences-${this.id}`,
-            JSON.stringify(stxx.exportPreferences()),
+            JSON.stringify(this.stxx.exportPreferences()),
         );
     }
 
