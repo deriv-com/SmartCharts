@@ -28,7 +28,7 @@ cq-context {
     &.stxMenuActive {
         .bt-priod {
              color: $active-color;
-             font-weight: bold;
+             text-shadow: -.5px 0 0 #4c5794  !important;
          } 
         .ic-priod {
              box-shadow: inset 0 0 0 1px $active-color;
