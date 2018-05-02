@@ -181,7 +181,7 @@ class StreamManager {
         callback(historyResponse);
     }
 
-    async forget(callback) {
+    forget(callback) {
         const stream = this._callbacks.get(callback);
         stream.forget();
         this._callbacks.delete(callback);

@@ -3,13 +3,7 @@ export default class BinaryAPI {
     constructor(requestAPI, requestSubscribe, requestForget) {
         this.requestAPI = requestAPI;
         this.requestSubscribe = requestSubscribe;
-        this.forget = requestForget;
-
-        this.sharedStreamHistoryInput = {
-            end: 'latest',
-            count: BinaryAPI.DEFAULT_COUNT,
-            adjust_start_time: 1,
-        };
+        this.requestForget = requestForget;
     }
 
     async getActiveSymbols() {
@@ -25,18 +19,12 @@ export default class BinaryAPI {
         });
     }
 
-    _getSharedTickHistoryInput({ symbol, granularity }) {
-        return {
+    async getTickHistory({ start, end, symbol, granularity }) {
+        const req = {
             ticks_history: symbol,
             granularity,
             style: granularity ? 'candles' : 'ticks'
         };
-    }
-
-    async getTickHistory(input) {
-        const { start, end } = input;
-
-        const req = this._getSharedTickHistoryInput(input);
 
         if (start && end) {
             return this.requestAPI({
@@ -49,16 +37,25 @@ export default class BinaryAPI {
 
         return this.requestAPI({
             ...req,
-            ...this.sharedStreamHistoryInput,
+            end: 'latest',
+            count: BinaryAPI.DEFAULT_COUNT,
+            adjust_start_time: 1,
         });
     }
 
-    subscribeTickHistory(input, callback) {
-        const req = this._getSharedTickHistoryInput(input);
+    subscribeTickHistory({ symbol, granularity }, callback) {
         this.requestSubscribe({
-            ...req,
-            ...this.sharedStreamHistoryInput,
+            ticks_history: symbol,
+            granularity,
+            style: granularity ? 'candles' : 'ticks',
+            end: 'latest',
+            count: BinaryAPI.DEFAULT_COUNT,
+            adjust_start_time: 1,
             subscribe: 1,
         }, callback);
+    }
+
+    forget(callback) {
+        return this.requestForget(callback);
     }
 }
