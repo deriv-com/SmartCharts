@@ -19,7 +19,6 @@ const ComparisonList = ({
                             <span className="cq-comparison-label">{item.symbolObject.name}</span>
                         </span>
                         <span className="right">
-                            <span className={`cq-comparison-loader ${item.price ? '' : 'stx-show'}`} />
                             <AnimatedPrice />
                             <CloseIcon className="ciq-close" onClick={() => onDeleteItem(item.symbolObject)}/>
                         </span>

@@ -58,9 +58,10 @@
         opacity: 1;
     }
     .cq-comparison-loader {
+        $loader-icon-size: 16px;
         display: none;
-        height: $icon-size;
-        width: $icon-size;
+        height: $loader-icon-size;
+        width: $loader-icon-size;
         margin-left: 10px;
     }
     .cq-comparison-loader.stx-show {
