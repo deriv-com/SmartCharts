@@ -18,7 +18,7 @@ class ChartControls extends Component {
         return (
             <div className={`cq-chart-controls ${hasOpenMenu ? ' active' : ''}`}>
                 {isMobile ? '' : <CrosshairToggle />}
-                <ChartTypes /> 
+                <ChartTypes />
                 <StudyLegend />
                 <Comparison />
                 <DrawTools />
@@ -28,22 +28,22 @@ class ChartControls extends Component {
                 <ChartSize />
                 <ChartSetting />
             </div>
-        ) 
+        );
     }
 }
 
 export default connect(
     ({chart,
-    chartType,
-    studies,
-    comparison,
-    drawTools,
-    view,
-    share,
-    timeperiod,
-    chartSetting }) => ({
+        chartType,
+        studies,
+        comparison,
+        drawTools,
+        view,
+        share,
+        timeperiod,
+        chartSetting }) => ({
         isMobile: chart.isMobile,
-        hasOpenMenu: ( 
+        hasOpenMenu: (
             chartType.menu.open ||
             studies.menu.open ||
             comparison.menu.open ||

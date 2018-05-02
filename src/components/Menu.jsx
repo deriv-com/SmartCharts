@@ -29,10 +29,10 @@ class Menu extends Component {
                 >
                     {first}
                 </div>
-                <div 
+                <div
                     className="cq-menu-overlay"
                     onClick={this.onOverlayClick.bind(this)}
-                    >
+                >
                     <DropdownDialog className='cq-menu-dropdown'>
                         {rest}
                     </DropdownDialog>
