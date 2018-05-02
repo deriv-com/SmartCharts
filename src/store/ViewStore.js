@@ -1,4 +1,5 @@
 import { observable, action, computed, when } from 'mobx';
+import {createObjectFromLocalStorage} from '../utils';
 import MenuStore from './MenuStore';
 
 export default class ViewStore {
@@ -22,9 +23,8 @@ export default class ViewStore {
     get loader () { return this.mainStore.loader; }
 
     onContextReady = () => {
-        const views = CIQ.localStorage.getItem('cq-views');
-        if (views === null) {return;}
-        this.views = JSON.parse(views);
+        const views = createObjectFromLocalStorage('cq-views');
+        if (views) {this.views = views;}
     }
 
     updateLocalStorage = () => {

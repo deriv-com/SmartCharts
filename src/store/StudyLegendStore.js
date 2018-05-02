@@ -36,9 +36,8 @@ export default class StudyLegendStore {
     get stx() { return this.context.stx; }
 
     onContextReady = () => {
-        window.stx = this.stx;
         this.begin();
-    }
+    };
 
     injections = [];
     previousStudies = { };

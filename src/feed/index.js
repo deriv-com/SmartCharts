@@ -1,3 +1,7 @@
 import Feed from './Feed';
+import BinaryAPI from './BinaryAPI';
 
-export default Feed;
+export {
+    Feed,
+    BinaryAPI,
+};

@@ -2,48 +2,34 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Chart from './components/Chart.jsx';
-import ConnectionManager from './ConnectionManager';
-import StreamManager from './StreamManager';
 import {TradeEndLine, TradeStartLine} from './components/VerticalLine.jsx';
 import MainStore from './store';
 import {MobxProvider} from './store/Connect';
 import Barrier from './components/Barrier.jsx';
 import './SplinePlotter';
+import PendingPromise from './utils/PendingPromise';
 
 class SmartChart extends React.Component {
     mainStore = new MainStore();
     get chart() { return this.mainStore.chart; }
     get stx() { return this.chart.stxx; }
-    get connectionManager() { return this.chart.connectionManager; }
 
     async componentDidMount() {
-        let activeSymbols = this.props && this.props.activeSymbols;
-        if(!activeSymbols) {
-            const data = await this.connectionManager.send({
-                active_symbols: 'brief',
-                product_type: 'basic',
-            });
-            activeSymbols = data.active_symbols;
-        }
         this.mainStore.chart.isMobile = this.props.isMobile || false;
-        this.chart.setActiveSymbols(activeSymbols);
         this.mainStore.chart.onSymbolChange = this.props.onSymbolChange;
     }
-    componentWillReceiveProps({activeSymbols, onSymbolChange}) {
-        if(activeSymbols && activeSymbols !== this.chart.activeSymbols) {
-            this.chart.setActiveSymbols(activeSymbols);
-        }
+    componentWillReceiveProps({onSymbolChange}) {
         if(onSymbolChange && this.mainStore.chart.onSymbolChange !== onSymbolChange) {
             this.mainStore.chart.onSymbolChange = onSymbolChange;
         }
     }
 
     render() {
-        const {children, isMobile} = this.props;
+        const {children, ...props } = this.props;
 
         return (
             <MobxProvider store={this.mainStore}>
-                <Chart lang="en" isMobile={isMobile}>
+                <Chart lang="en" {...props} >
                     {children}
                 </Chart>
             </MobxProvider>
@@ -58,16 +44,19 @@ class SmartChart extends React.Component {
         return end;
     }
 }
+
 export {
     Barrier,
     SmartChart,
     TradeStartLine,
     TradeEndLine,
+    PendingPromise,
 };
 
 export default {
-    SmartChart,
     Barrier,
+    SmartChart,
     TradeStartLine,
     TradeEndLine,
+    PendingPromise,
 };
