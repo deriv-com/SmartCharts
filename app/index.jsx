@@ -8,7 +8,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './app.scss';
 import './doorbell';
-import ConnectionManager from './connection/ConnectionManager';
+import { ConnectionManager, StreamManager } from './connection';
 
 const getLanguageStorage = function(){
     let default_language = 'en';
@@ -28,6 +28,8 @@ const connectionManager = new ConnectionManager({
     endpoint: 'wss://frontend.binaryws.com/websockets/v3',
 });
 
+const streamManager = new StreamManager(connectionManager);
+
 class App extends React.Component {
     render() {
         return (
@@ -35,8 +37,8 @@ class App extends React.Component {
                 onSymbolChange={(symbol) => console.log('Symbol has changed to:', symbol)}
                 isMobile={CIQ.isMobile}
                 requestAPI={connectionManager.send.bind(connectionManager)}
-                requestSubscribe={connectionManager.subscribe.bind(connectionManager)}
-                requestForget={connectionManager.forget.bind(connectionManager)}
+                requestSubscribe={streamManager.subscribe.bind(streamManager)}
+                requestForget={streamManager.forget.bind(streamManager)}
             >
             </SmartChart>
         );

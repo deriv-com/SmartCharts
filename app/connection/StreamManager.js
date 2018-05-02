@@ -14,6 +14,7 @@ class StreamManager {
         this._subscriptionData = { };
         this._inProgress = { };
         this._initialize();
+        this._callbacks = new Map();
     }
     _initialize() {
         for (const msgType of [StreamManager.MSG_TICK, StreamManager.MSG_OHLC]) {
@@ -161,12 +162,29 @@ class StreamManager {
         const stream = new Stream(subscription, emitter);
         return stream;
     }
-    subscribe({ symbol, granularity = 0 }) {
+
+    _getStream({ symbol, granularity = 0 }) {
         const key = `${symbol}-${granularity}`;
         if (this._emitters[key]) {
             return this._handleExistingStream({ symbol, granularity });
         }
         return this._handleNewStream({ symbol, granularity });
+    }
+
+    async subscribe(input, callback) {
+        const { ticks_history: symbol , granularity } = input
+        const stream = this._getStream({ symbol, granularity });
+        stream.onStream(tickResponse => callback(tickResponse));
+        const historyResponse = await stream.response;
+        this._callbacks.set(callback, stream);
+
+        callback(historyResponse);
+    }
+
+    async forget(callback) {
+        const stream = this._callbacks.get(callback);
+        stream.forget();
+        this._callbacks.delete(callback);
     }
 }
 

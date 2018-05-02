@@ -11,9 +11,7 @@ class ConnectionManager extends EventEmitter {
         this._counterReqId = 1;
         this._initialize();
         this._pendingRequests = { };
-        this._callbacks = new Map();
         this._autoReconnect = true;
-        this._streamManager = new StreamManager(this);
     }
     _initialize() {
         this._websocket = new WebSocket(this._url);
@@ -78,22 +76,6 @@ class ConnectionManager extends EventEmitter {
             this._timeoutRequest(req.req_id, timeout);
         }
         return this._pendingRequests[req.req_id];
-    }
-
-    async subscribe(input, callback) {
-        const { ticks_history: symbol , granularity } = input
-        const stream = this._streamManager.subscribe({ symbol, granularity });
-        stream.onStream(tickResponse => callback(tickResponse));
-        const historyResponse = await stream.response;
-        this._callbacks.set(callback, stream);
-
-        callback(historyResponse);
-    }
-
-    async forget(callback) {
-        const stream = this._callbacks.get(callback);
-        stream.forget();
-        this._callbacks.delete(callback);
     }
 
     destroy() {
