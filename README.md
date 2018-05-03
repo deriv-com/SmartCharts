@@ -17,7 +17,7 @@ SmartCharts is both the name of the app ([charts.binary.com](https://charts.bina
 
 ## Usage 
 
-#### Quick Start
+### Quick Start
 
 In the `app` folder, we provide a working webpack project that uses the smartcharts library. Simply `cd` to that directory and run:
 
@@ -69,7 +69,7 @@ externals: {
 }
 ```
 
-#### Customising Components
+### Customising Components
 
 We offer library users full control on deciding which of the top widgets and chart control buttons to be displayed by overriding the render methods themselves. To do this you pass in a function to `chartControlsWidgets` or `topWidgets`.
 
@@ -94,7 +94,7 @@ const App = () => (
 );
 ```
 
-Here are the following components:
+Here are the following components you can import:
  - Top widgets:
     - `<ChartTitle />`
     - `<AssetInformation />`
@@ -121,13 +121,13 @@ Once your changes have been merged to `dev`, it will immediately deployed to [ch
 
 ## Developer Notes
 
-#### Separation of App and Library
+### Separation of App and Library
 
 There should be a clear distinction between developing for app and developing for library. Library source code is all inside `src` folder, whereas app source code is inside `app`.
 
 Webpack determines whether to build an app or library depending on whether an environment variable `BUILD_MODE` is set to `app`. Setting this variable switches the entry point of the project, but on the **same** `webpack.config.js` (the one on the root folder). The `webpack.config.js` and `index.html` in the `app` folder is never actually used in this process; they serve as a guide to how to use the smartcharts library as an npm package. We do it this way to develop the app to have hot reload available when we modify library files.
 
-#### Translations
+### Translations
 
 All strings that need to be translated must be inside `t.translate()`:
 
@@ -148,11 +148,11 @@ Once the new `messages.pot` is merged into the `dev` branch, it will automatical
 
 ## Manual Deployment
 
-#### Deploy to NPM
+### Deploy to NPM
 
     yarn build && yarn publish
 
-#### Deploy to [charts.binary.com](https://charts.binary.com/)
+### Deploy to [charts.binary.com](https://charts.binary.com/)
 
 > Note: This is usually not required, since Travis will automatically deploy to [charts.binary.com](https://charts.binary.com/) and [charts.binary.com/beta](https://charts.binary.com/beta/) when `master` and `dev` is updated.
 
@@ -161,7 +161,7 @@ The following commands will build and deploy to charts.binary.com (*Make sure yo
     yarn deploy:beta        # charts.binary.com/beta
     yarn deploy:production  # charts.binary.com
 
-#### Deploy to Github Pages
+### Deploy to Github Pages
 
 As ChartIQ license is tied to the `binary.com` domain name, we provide developers with a `binary.sx` to test out the library on their Github Pages.
 
