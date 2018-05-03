@@ -46,7 +46,7 @@ class App extends React.Component {
 };
 ```
 
-SmartCharts expects library user to provide `requestSubscribe`, `requestForget` and `requestAPI`. `requestSubscribe` and `requestForget` handles streaming data (which in this case is just `tick_history`), whereas `requestAPI` accept single calls.
+SmartCharts expects library user to provide `requestSubscribe`, `requestForget` and `requestAPI`. Refer to [API](#api) for more details.
 
 The job of loading the active symbols or trading times or stream data from cache or retrieving from websocket is therefore NOT the responsibility of SmartCharts but the host application. SmartCharts simply makes the requests and expect a response in return.
 
@@ -68,6 +68,21 @@ externals: {
     CIQ: 'CIQ'
 }
 ```
+
+### API
+
+> Note: Props will take precedence over values set by the library.
+
+Props marked with `*` are **mandatory**:
+
+| Props | Description |
+--------|--------------
+requestAPI* | SmartCharts will make single API calls by passing the request input directly to this method, and expects a `Promise` to be returned.
+requestSubscribe* | SmartCharts will make streaming calls will be made via this method. SmartCharts expects `requestSubscribe` to have 2 parameters `(request, callback) => {}`: the `request` input and a `callback` in which response will be passed to for each time a response is available. Keep track of this `callback` as SmartCharts will pass this to you to forget the subscription (via `requestForget`).
+requestForget* | When SmartCharts no longer needs a subscription (made via `requestSubscribe`), it will call this method (passing in the `callback` passed from `requestSubscribe`) to halt the subscription.
+lang | Sets the language.
+chartControlsWidgets | Render function for chart control widgets. Refer to [Customising Components](#customising-components).
+topWidgets | Render function for top widgets. Refer to [Customising Components](#customising-components).
 
 ### Customising Components
 

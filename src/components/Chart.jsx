@@ -56,7 +56,8 @@ class Chart extends Component {
             topWidgets,
         } = this.props;
 
-        t.setLanguage( (setting && setting.language) ? setting.language : lang );
+        const currentLang = lang || ((setting && setting.language) ? setting.language : 'en');
+        t.setLanguage(currentLang);
 
         const array = React.Children.toArray(children);
         const insideHolder = array.filter(c => !/(TradeStart)|(TradeEnd)/.test(c.type.displayName));
