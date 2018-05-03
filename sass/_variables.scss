@@ -29,7 +29,9 @@ $large-icon-size: 32px;
 $normal-icon-size: 24px;
 $small-icon-size: 16px;
 
-/* Default (Light) Theme */
+/******************************\
+      Default (Light) Theme 
+\******************************/
 $DEFAULT-main:				#fff !default;
 $DEFAULT-accent: 			#398dff !default;
 $DEFAULT-bg:				#f8f8f8 !default;
@@ -44,9 +46,66 @@ $DEFAULT-border:          #e9e9ed !default;
 $DEFAULT-border-subtle:		#ddd !default;
 $DEFAULT-border-medium:		#ccc !default;
 $DEFAULT-border-strong:		#999 !default;
+/* CHART */
+$DEFAULT-chart-grid:      #f3f3f3 !default;
+$DEFAULT-chart-text:      #cccccc !default;
+$DEFAULT-chart-bg:        #fff !default;
+/* CHART CONTROL */
+$control-text:      #575757 !default;
+$control-text-active: #4b5794 !default;
+$control-active:    #4b5794 !default;
+$control-bg-active: rgba(76, 87, 148, 0.2) !default;
+$control-grid:      #fafafb !default;
+
+/* CHART DIALOG */
+$dialog-head:       #FFFFFF !default;
+$dialog-body:       #FAFAFA !default;
 
 
-/* Default (Dark) Theme */
+
+
+
+/******************************\
+      Default (Dark) Theme 
+\******************************/
+$DEFAULT-main:          #1c2a35;
+$DEFAULT-bg:            #151f28;
+$DEFAULT-hu-bg:         #1C2A35;
+$DEFAULT-text:         #fff;
+$DEFAULT-accent:        #999;
+$DEFAULT-menu-bg:       #1C2A35;
+$DEFAULT-submenu-bg:    #1C2A35;
+$DEFAULT-text-subtle:   #aaa;
+$DEFAULT-text-medium:   #888;
+$DEFAULT-text-strong:   #888;
+$DEFAULT-border:          #1c2a35;
+$DEFAULT-border-subtle:   #999;
+$DEFAULT-border-medium:   #999;
+$DEFAULT-border-strong:   #999;
+/* CHART */
+$DEFAULT-chart-grid:      mix(#fff, #1c2a35, 10%);
+$DEFAULT-chart-text:      mix(#fff, #1c2a35, 50%);
+$DEFAULT-chart-bg:        mix(#fff, #1c2a35, 10%);
+/* CHART CONTROL */
+$control-text:          #575757;
+$control-active:        #4b5794;
+$control-text-active:   #4b5794;
+$control-bg-active:     rgba(76, 87, 148, 0.2);
+$control-grid:          #fafafb;
+$control-dialog-head:   mix(#fff, #1c2a35, 3%);
+$control-dialog-body:   mix(#fff, #1c2a35, 7%);
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

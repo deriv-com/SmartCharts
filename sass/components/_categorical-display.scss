@@ -4,7 +4,6 @@ cq-context{
         padding: 0 !important;
         display: flex;
         text-align: left;
-        background-color: $DEFAULT-main;
         color: $DEFAULT-text-medium;
         overflow: hidden;
         @include transition(opacity 1s);
@@ -62,9 +61,6 @@ cq-context{
                 padding-bottom: 2.5em;
             }
         }
-        .category-title {
-            color: #333333;
-        }
         .category-content {
             background-color: $DEFAULT-main;
             margin: 0.4em 1em 0em 1em;
@@ -94,7 +90,7 @@ cq-context{
                 font-weight: 800;
                 color: $active-color;
                 border-right: 2px solid $active-color;
-                background-color: #f2f3f8;
+                background-color: rgba($active-color, 0.3);
                 .ic-icon {
                     &.ic-active,
                     &.ic-forex,
@@ -170,7 +166,6 @@ cq-context{
             position: relative;
             height: 500px;
             width: 60%;
-            background-color: #f4f4f6
         }
         .ciq-item-display {
             display: inline-block;

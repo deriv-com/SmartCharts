@@ -19,7 +19,7 @@
             border-top: 1px solid $DEFAULT-border;
         }
         &.selected {
-            background: #efefef;
+            background-color: rgba($active-color, 0.4);
         }
         &.disabled {
             pointer-events: none;

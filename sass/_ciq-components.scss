@@ -1,6 +1,8 @@
 
+
 /* to allow style to color the background of the chart */
 cq-context {
+	background: $DEFAULT-main;
 	position: absolute;
 	height: 100%;
 	width: 100%;
@@ -9,9 +11,14 @@ cq-context {
 	overflow: hidden;
 
 	input {
+        background: $DEFAULT-main;
 		@include user-select(text);
 		font-weight: 300;
-		color: #071931;
+		color: $DEFAULT-text;
+		&::placeholder,
+		&::-moz-placeholder {
+			color: rgba($DEFAULT-text, 0.2);
+		}
 	}
 
 	div, li, span, a {
@@ -40,9 +47,7 @@ cq-context {
 @import "components/chart-controls";
 
 /* --------------------------------------------------------- FIELDS, SELECTS, INPUTS --------------------------------------------------------- */
-
 /* Inputs */
-
 .stx-textarea,
 .ciq-select {
 	border: $DEFAULT-border-subtle solid 1px;
@@ -401,10 +406,11 @@ cq-side-panel[cq-active] {
 
 /* --------------------------------------------------------- Menus --------------------------------------------------------- */
 
-cq-menu-dropdown, .cq-menu-dropdown {
-	position:absolute;
-	background:$DEFAULT-menu-bg;
-	color: $DEFAULT-text-medium;
+cq-menu-dropdown,
+.cq-menu-dropdown {
+	background: $control-dialog-body;
+	position: absolute;
+	color: $control-text;
 	overflow:hidden;
 	opacity: 0;
 	z-index: 6;
@@ -428,6 +434,25 @@ cq-menu-dropdown, .cq-menu-dropdown {
 
 	&[cq-lift] {
 		width:auto;
+	}
+	.title{
+		background: $control-dialog-head;
+		> .ic-icon {
+			color: $control-text
+			svg, path, g{
+				fill: $control-text;
+				color: $control-text;
+			}
+		}
+	}
+	.body{
+
+	}
+	.cq-categorical-display{
+		.cq-lookup-filters{
+			background: $control-dialog-head;
+		}
+		.cq-scroll-panel{}
 	}
 }
 
@@ -578,24 +603,47 @@ cq-context {
 }
 .ciq-menu {
 	position: relative;
-	color:mix($DEFAULT-text-strong, $DEFAULT-bg, 65% );
+	color: $control-text;
 	@include transition(color .20s 0s);
-
 	&:hover {
-		& {color:$DEFAULT-text;}
+		& {
+			color: $control-text-active;
+		}
 	}
 	&:active {
-		color:$DEFAULT-text;
+		color:$control-text-active;
 	}
-
-	&.stxMenuActive {
-		color:$DEFAULT-text;
-
+	&.stxMenuActive,
+	&:hover {
+		color: $control-text-active;
 		.break-sm & {
 			border-bottom:solid 3px $DEFAULT-accent;
 		}
+		.cq-menu-btn{
+			> .ic-icon {
+				background: $control-bg-active;
+				svg , path, g{
+					fill: $control-text-active;
+					color: $control-active;
+				}
+				.ic-subtitle{
+					font-weight: 500;
+					fill: $control-text-active;
+				}
+			}
+		}
 	}
-	 > span {
+	.cq-menu-btn{
+		padding: 0 5px;
+		> .ic-icon {
+			padding: .35em .8em;
+			svg, path, g{
+				fill: $control-text;
+				color: $control-text;
+			}
+	    }
+	}
+	> span {
 		padding:0 12px 0 0;
 		position:relative;
 		font-weight:400;

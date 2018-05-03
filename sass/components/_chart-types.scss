@@ -12,7 +12,6 @@ cq-context{
         .cq-menu-dropdown {
             width: 200px;
             padding: 16px;
-            background: #fafafa;
             @include box-sizing(border-box);
         }
         .ciq-title {
@@ -36,7 +35,7 @@ cq-context{
                 &.active {
                     color: $active-color;
                     font-weight: bold;
-                    background-color: #F2F3F8;
+                    background-color: rgba($active-color, 0.4);
                     .ic-icon{
                         box-shadow: none;
                         background: transparent;

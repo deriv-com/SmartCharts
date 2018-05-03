@@ -39,7 +39,7 @@ const Views = ({
                     tooltip-title={t.translate("Templates")} />
             </Menu.Title>
             <Menu.Body>
-                <div className="dropdown-title">
+                <div className="title">
 
                     {
                         currentRoute === 'add'
@@ -54,7 +54,7 @@ const Views = ({
                                 />
                                 <CloseIcon onClick={cancel} />
                             </span>
-                            : <span className="title">{t.translate("Templates")}</span>
+                            : t.translate('Templates')
                     }
                     <span className="icon">
                         {

@@ -19,6 +19,10 @@ cq-context {
             margin: .2em 0em;
             .cq-symbol-select-btn {
                 background: $DEFAULT-main;
+                // border-color: $DEFAULT-bg;
+                color: $DEFAULT-text-subtle;
+
+                // background: $DEFAULT-main;
                 font-family: $base-font;
                 padding: 0.3em 2em .3em 1em;
                 cursor: pointer;
@@ -26,7 +30,7 @@ cq-context {
                 position: relative;
                 display: flex;
                 align-items: center;
-                color: #333;
+                // color: #333;
                 @include border-radius();
                 &:hover {
                     border: solid 1px $active-color;

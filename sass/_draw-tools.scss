@@ -5,14 +5,12 @@
         width: 200px;
         bottom: 3.6em;
         padding: 5px 16px 16px 16px !important;
-        background: #FAFAFB;
         @include box-sizing(border-box);
     }
     .cq-menu-dropdown{
         padding: 0em !important;
         overflow: visible !important;
         .title {
-            background: $DEFAULT-main;
             height: 40px;
             line-height: 40px;
             padding-left: 16px;
@@ -23,7 +21,7 @@
             justify-content: space-between;
             .ciq-bars-title{
                 // font-size: 1.6em;
-                color: $DEFAULT-text-strong;
+                // color: $DEFAULT-text-strong;
             }
             .ciq-bars-buttons{
                 cursor: pointer;
@@ -32,7 +30,6 @@
             }
         }
         .body {
-            background: #FAFAFA;
             padding: 16px;
         }
     }

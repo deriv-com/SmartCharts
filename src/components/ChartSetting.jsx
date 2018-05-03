@@ -27,7 +27,7 @@ const ChartSetting = ({
         return <div>
             <div className='title'> {t.translate('Settings')} </div>
             <div className='body'>
-                <div className="ciq-list-setting">
+                <div className="ciq-list ciq-list-setting">
                     {/*<div className="ciq-item">
                         <span className="ciq-icon-text">{t.translate('Position')}</span>
                         <div className="ciq-action">
@@ -46,7 +46,7 @@ const ChartSetting = ({
                             />
                         </div>
                     </div>*/}
-                    <div className="ciq-item ciq-list-item-lng">
+                    <div className="ciq-list-item">
                         <span className="ciq-icon-text">{t.translate('Language')}</span>
                         <div className="ciq-action">
                             <span></span>

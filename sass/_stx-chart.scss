@@ -745,3 +745,65 @@ html, body {
 .stx_market_session.post {
     background-color: rgba(0, 0, 255, 0.2);
 }
+
+
+
+.stx_grid { /* Default Grid lines */
+    background: $DEFAULT-chart-bg;
+    width: 1px;
+}
+.stx_grid_border {/* Default Grid borders */
+    opacity: 0;
+}
+.stx_grid_dark {/* Default Grid dividers */
+    color: $DEFAULT-chart-grid;
+    opacity: 1;
+}
+.stx_yaxis, .stx_xaxis, .stx_xaxis_dark {
+    color: $DEFAULT-chart-grid;
+    font-size: 10px;
+    font-family: Roboto;
+}
+
+
+
+
+
+// .stx-float-date { background-color: $DEFAULT-main; color:mix(#fff, $DEFAULT-text, 30%);}
+// .stx-float-price { background-color: $DEFAULT-main; color:mix(#fff, $DEFAULT-text, 30%);}
+
+// .stx_xaxis {color:mix(#fff, $DEFAULT-bg, 75%);}
+// .stx_xaxis_dark {color: $DEFAULT-text;}
+// .stx_yaxis {color:mix(#fff, $DEFAULT-bg, 75%);}
+
+// .stx_crosshair {background-color:rgba(255,255,255,.4);}
+// .stx_crosshair_drawing {background-color:rgba(255,255,255,.9);}
+
+// .stx_panel_border{color:#666;}
+// .stx_panel_drag {color:#ccc;}
+
+.stx_grid {color: $DEFAULT-chart-grid}
+.stx_grid_dark {color: $DEFAULT-chart-grid}
+
+// .stx_line_chart {color:#fff;}
+// .stx_bar_chart {color:#fff;}
+
+// .stx_candle_shadow, .stx_bar_even {color:#ccc;}
+
+// .stx_candle_down, .stx_line_down, .stx_histogram_down { border-left-color: #e34621; }
+// .stx_candle_up, .stx_line_up, .stx_histogram_up { border-left-color: #b8dea8; }
+
+// .stx_histogram_even{border-left-color:#cccccc;}
+
+// .stx_hollow_candle_even{color:#cccccc;}
+
+// .stx_baseline{color:#ccc;}
+
+// .stx_mountain_chart {/* Default color for mountain Charts */
+//     background-color: rgba(0,156,255,.5);   /* background color for mountain */
+//     color: rgba(0,102,255,.01);             /* Optional gradient */
+//     border: #009cff;    /* Optional line color */
+//     width: 2px;                 /* Optional line width */
+// }
+
+

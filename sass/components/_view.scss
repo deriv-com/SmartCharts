@@ -1,34 +1,31 @@
 cq-context{
     .views {
         .cq-menu-dropdown {
-            background: #fafafa;
             width: 280px;
             height: 200px;
             transform: translate(-50%);
             left: 50%;
-
-            .dropdown-title {
+            .title {
                 display: flex;
                 align-items: center;
-                justify-content: center;
+                // justify-content: center;
                 flex-direction: row;
                 height: 40px;
                 @include box-sizing(border-box);
-                border-bottom: 1px solid #ebebef;
                 padding: 5px 10px;
-                background: #fff;
-
-                .title, .add {
+                .icon {
                     display: flex;
                     flex: 8 0 0;
+                    justify-content: flex-end
                 }
-                .title {
-                    font-size: 16px;
-                    font-weight: 400;
-                    color: #252525;
-                }
+                // .title {
+                //     font-size: 16px;
+                //     font-weight: 400;
+                //     color: #252525;
+                // }
                 .add {
                     margin-bottom: 1px;
+                    display: flex;
                     .ic-icon {
                         flex: 1 0 0;
                         position: relative;
@@ -45,13 +42,6 @@ cq-context{
                     border: none;
                     outline: none;
                     border-bottom: 1px solid #4b5794;
-
-                    &::placeholder {
-                        color: #bbbbbf;
-                    }
-                }
-                .icon {
-                    flex: 1 0 0;
                 }
             }
             .content {
