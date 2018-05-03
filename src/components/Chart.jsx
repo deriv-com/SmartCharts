@@ -61,7 +61,7 @@ class Chart extends Component {
         const array = React.Children.toArray(children);
         const insideHolder = array.filter(c => !/(TradeStart)|(TradeEnd)/.test(c.type.displayName));
         const insideSubHolder = array.filter(c => /(TradeStart)|(TradeEnd)/.test(c.type.displayName));
-        const displayedTopWidgets = topWidgets || defaultTopWidgets;
+        const renderTopWidgets = topWidgets || defaultTopWidgets;
 
         return (
             <cq-context ref={(root) => { this.root = root; }} class={isMobile ? 'smartcharts-mobile' : ''}>
@@ -74,7 +74,7 @@ class Chart extends Component {
                             {insideSubHolder}
                         </RenderInsideChart>
                         <div className="cq-top-ui-widgets" style={{top: chartPanelTop}}>
-                            { displayedTopWidgets() }
+                            { renderTopWidgets() }
                         </div>
                         <ChartControls widgets={chartControlsWidgets} />
                         <Crosshair />
