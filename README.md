@@ -78,7 +78,7 @@ Props marked with `*` are **mandatory**:
 | Props | Description |
 --------|--------------
 requestAPI* | SmartCharts will make single API calls by passing the request input directly to this method, and expects a `Promise` to be returned.
-requestSubscribe* | SmartCharts will make streaming calls will be made via this method. SmartCharts expects `requestSubscribe` to have 2 parameters `(request, callback) => {}`: the `request` input and a `callback` in which response will be passed to for each time a response is available. Keep track of this `callback` as SmartCharts will pass this to you to forget the subscription (via `requestForget`).
+requestSubscribe* | SmartCharts will make streaming calls via this method. `requestSubscribe` expects 2 parameters `(request, callback) => {}`: the `request` input and a `callback` in which response will be passed to for each time a response is available. Keep track of this `callback` as SmartCharts will pass this to you to forget the subscription (via `requestForget`).
 requestForget* | When SmartCharts no longer needs a subscription (made via `requestSubscribe`), it will call this method (passing in the `callback` passed from `requestSubscribe`) to halt the subscription.
 lang | Sets the language.
 chartControlsWidgets | Render function for chart control widgets. Refer to [Customising Components](#customising-components).
