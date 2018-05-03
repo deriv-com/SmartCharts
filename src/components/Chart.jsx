@@ -1,6 +1,6 @@
 /* eslint-disable no-new, react/jsx-indent, react/no-danger, react/jsx-indent-props */
 import PropTypes from 'prop-types';
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import CIQ from 'chartiq'; // eslint-disable-line
 import RenderInsideChart from './RenderInsideChart.jsx';
 import ComparisonList from './ComparisonList.jsx';
@@ -21,8 +21,15 @@ import ChartControls from './ChartControls.jsx';
 import SettingsDialog from './SettingsDialog.jsx';
 import Notification from './Notification.jsx';
 import Crosshair from './Crosshair.jsx';
+import { connect } from '../store/Connect';
 
-import { MobxProvider, connect } from '../store/Connect';
+const defaultTopWidgets = () => (
+    <Fragment>
+        <ChartTitle />
+        <AssetInformation />
+        <ComparisonList />
+    </Fragment>
+);
 
 class Chart extends Component {
     static childContextTypes = { promise: PropTypes.object };
@@ -45,6 +52,8 @@ class Chart extends Component {
             isChartAvailable,
             setting,
             chartPanelTop,
+            chartControlsWidgets,
+            topWidgets,
         } = this.props;
 
         t.setLanguage( (setting && setting.language) ? setting.language : lang );
@@ -52,6 +61,7 @@ class Chart extends Component {
         const array = React.Children.toArray(children);
         const insideHolder = array.filter(c => !/(TradeStart)|(TradeEnd)/.test(c.type.displayName));
         const insideSubHolder = array.filter(c => /(TradeStart)|(TradeEnd)/.test(c.type.displayName));
+        const displayedTopWidgets = topWidgets || defaultTopWidgets;
 
         return (
             <cq-context ref={(root) => { this.root = root; }} class={isMobile ? 'smartcharts-mobile' : ''}>
@@ -64,11 +74,9 @@ class Chart extends Component {
                             {insideSubHolder}
                         </RenderInsideChart>
                         <div className="cq-top-ui-widgets" style={{top: chartPanelTop}}>
-                            <ChartTitle />
-                            <AssetInformation />
-                            <ComparisonList />
+                            { displayedTopWidgets() }
                         </div>
-                        <ChartControls />
+                        <ChartControls widgets={chartControlsWidgets} />
                         <Crosshair />
                         <div className="chartContainer primary"> </div>
                         <Loader />

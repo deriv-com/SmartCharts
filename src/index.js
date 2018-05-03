@@ -1,62 +1,63 @@
 /* eslint-disable no-new, react/jsx-indent, react/no-danger, react/jsx-indent-props */
 import React from 'react';
-import ReactDOM from 'react-dom';
-import Chart from './components/Chart.jsx';
 import {TradeEndLine, TradeStartLine} from './components/VerticalLine.jsx';
-import MainStore from './store';
-import {MobxProvider} from './store/Connect';
 import Barrier from './components/Barrier.jsx';
-import './SplinePlotter';
 import PendingPromise from './utils/PendingPromise';
+import ChartTypes from './components/ChartTypes.jsx';
+import StudyLegend from './components/StudyLegend.jsx';
+import Comparison from './components/Comparison.jsx';
+import Views from './components/Views.jsx';
+import CrosshairToggle from './components/CrosshairToggle.jsx';
+import Timeperiod from './components/Timeperiod.jsx';
+import ChartSize from './components/ChartSize.jsx';
+import DrawTools from './components/DrawTools.jsx';
+import ChartSetting from './components/ChartSetting.jsx';
+import Share from './components/Share.jsx';
+import SmartChart from './components/SmartChart.jsx';
+import ComparisonList from './components/ComparisonList.jsx';
+import ChartTitle from './components/ChartTitle.jsx';
+import AssetInformation from './components/AssetInformation.jsx';
 
-class SmartChart extends React.Component {
-    mainStore = new MainStore();
-    get chart() { return this.mainStore.chart; }
-    get stx() { return this.chart.stxx; }
-
-    async componentDidMount() {
-        this.mainStore.chart.isMobile = this.props.isMobile || false;
-        this.mainStore.chart.onSymbolChange = this.props.onSymbolChange;
-    }
-    componentWillReceiveProps({onSymbolChange}) {
-        if(onSymbolChange && this.mainStore.chart.onSymbolChange !== onSymbolChange) {
-            this.mainStore.chart.onSymbolChange = onSymbolChange;
-        }
-    }
-
-    render() {
-        const {children, ...props } = this.props;
-
-        return (
-            <MobxProvider store={this.mainStore}>
-                <Chart lang="en" {...props} >
-                    {children}
-                </Chart>
-            </MobxProvider>
-        );
-    }
-    addTradeStartLine() {
-        const start = new TradeStartLine({ stx: this.stx });
-        return start;
-    }
-    addTradeEndLine() {
-        const end = new TradeEndLine({ stx: this.stx });
-        return end;
-    }
-}
+import './SplinePlotter';
 
 export {
+    AssetInformation,
     Barrier,
-    SmartChart,
-    TradeStartLine,
-    TradeEndLine,
+    ChartSetting,
+    ChartSize,
+    ChartTitle,
+    ChartTypes,
+    Comparison,
+    ComparisonList,
+    CrosshairToggle,
+    DrawTools,
     PendingPromise,
+    Share,
+    SmartChart,
+    StudyLegend,
+    Timeperiod,
+    TradeEndLine,
+    TradeStartLine,
+    Views,
 };
 
 export default {
+    AssetInformation,
     Barrier,
-    SmartChart,
-    TradeStartLine,
-    TradeEndLine,
+    ChartSetting,
+    ChartSize,
+    ChartTitle,
+    ChartTypes,
+    Comparison,
+    ComparisonList,
+    CrosshairToggle,
+    DrawTools,
     PendingPromise,
+    Share,
+    SmartChart,
+    StudyLegend,
+    Timeperiod,
+    TradeEndLine,
+    TradeStartLine,
+    Views,
 };

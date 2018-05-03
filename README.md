@@ -15,7 +15,9 @@ SmartCharts is both the name of the app ([charts.binary.com](https://charts.bina
 
 > Note: eventhough both `yarn build` and `yarn build:app` outputs `smartcharts.js` and `smartcharts.css`, **they are not the same files**. One outputs a library and the the other outputs an app.
 
-## Quick Start
+## Usage 
+
+#### Quick Start
 
 In the `app` folder, we provide a working webpack project that uses the smartcharts library. Simply `cd` to that directory and run:
 
@@ -67,7 +69,65 @@ externals: {
 }
 ```
 
-### Translations
+#### Customising Components
+
+We offer library users full control on deciding which of the top widgets and chart control buttons to be displayed by overriding the render methods themselves. To do this you pass in a function to `chartControlsWidgets` or `topWidgets`.
+
+For example, we want to remove all the chart control buttons, and for top widgets to just show the comparison list (refer `app/index.jsx`):
+
+```jsx
+import { ComparisonList } from '@binary-com/smartcharts';
+
+const renderTopWidgets = () => (
+    <React.Fragment>
+        <div>Hi I just replaced the top widgets!</div>
+        <ComparisonList />
+    </React.Fragment>
+);
+
+const App = () => (
+    <SmartChart
+        topWidgets={renderTopWidgets}
+        chartControlsWidgets={()=>{}}
+    >
+    </SmartChart>
+);
+```
+
+Here are the following components:
+ - Top widgets:
+    - `<ChartTitle />`
+    - `<AssetInformation />`
+    - `<ComparisonList />`
+ - Chart controls:
+    - `<CrosshairToggle />`
+    - `<ChartTypes />`
+    - `<StudyLegend />`
+    - `<Comparison />`
+    - `<DrawTools />`
+    - `<Views />`
+    - `<Share />`
+    - `<Timeperiod />`
+    - `<ChartSize />`
+    - `<ChartSetting />`
+ 
+## Contribute
+
+To contribute to SmartCharts, fork this project and checkout the `dev` branch. When adding features or performing bug fixes, it is recommended you make a separate branch off `dev`. Prior to sending pull requests, make sure all unit tests passed:
+
+    yarn test
+
+Once your changes have been merged to `dev`, it will immediately deployed to [charts.binary.com/beta](https://charts.binary.com/beta/). 
+
+## Developer Notes
+
+#### Separation of App and Library
+
+There should be a clear distinction between developing for app and developing for library. Library source code is all inside `src` folder, whereas app source code is inside `app`.
+
+Webpack determines whether to build an app or library depending on whether an environment variable `BUILD_MODE` is set to `app`. Setting this variable switches the entry point of the project, but on the **same** `webpack.config.js` (the one on the root folder). The `webpack.config.js` and `index.html` in the `app` folder is never actually used in this process; they serve as a guide to how to use the smartcharts library as an npm package. We do it this way to develop the app to have hot reload available when we modify library files.
+
+#### Translations
 
 All strings that need to be translated must be inside `t.translate()`:
 
@@ -85,26 +145,8 @@ Each time a new translation string is added to the code, you need to update the 
 
 Once the new `messages.pot` is merged into the `dev` branch, it will automatically be updated in [CrowdIn](https://crowdin.com/project/smartcharts/settings#files). You should expect to see a PR with the title **New Crowdin translations**
  in a few minutes; this PR will update the `*.po` files.
- 
-### Contribute
 
-To contribute to SmartCharts, fork this project and checkout the `dev` branch. When adding features or performing bug fixes, it is recommended you make a separate branch off `dev`. Prior to sending pull requests, make sure all unit tests passed:
-
-    yarn test
-
-Once your changes have been merged to `dev`, it will immediately deployed to [charts.binary.com/beta](https://charts.binary.com/beta/). 
-
-### Developer Notes
-
-#### Separation of App and Library
-
-There should be a clear distinction between developing for app and developing for library. Library source code is all inside `src` folder, whereas app source code is inside `app`.
-
-Webpack determines whether to build an app or library depending on whether an environment variable `BUILD_MODE` is set to `app`. Setting this variable switches the entry point of the project, but on the **same** `webpack.config.js` (the one on the root folder). The `webpack.config.js` and `index.html` in the `app` folder is never actually used in this process; they serve as a guide to how to use the smartcharts library as an npm package. We do it this way to develop the app to have hot reload available when we modify library files.
-
-
-
-### Manual Deployment
+## Manual Deployment
 
 #### Deploy to NPM
 
