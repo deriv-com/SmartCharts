@@ -1,7 +1,7 @@
 cq-context {
     .cq-chart-size {
-        display: flex;
-        width: 64px;
+        display: flex !important;
+        width: auto;
         justify-content: space-between;
         align-items: center;
         height: auto;
@@ -20,6 +20,9 @@ cq-context {
             width: auto;
             line-height: 25px;
             display: none; /* TODO */
+        }
+        .cq-zoom-out{
+            padding-right:2.8em !important;
         }
     }
     /* Mobile Style */

@@ -1,28 +1,40 @@
 cq-context {
-    .ciq-period {
-        padding: 0 5px!important;
-        line-height: 1.5em !important;
-        > .cq-menu-btn {
-            padding: 0 5px;
-            > .bt-priod {
-                display: block;
-                height: 34px;
-                line-height: 15px;
-                transition: all .2s .15s;
-                border-radius: 2px;
-                box-sizing: border-box;
-                cursor: pointer;
-                text-align: center;
-                padding-top:5px;
-            }
+  .ciq-period {
+    padding: 0 5px!important;
+    line-height: 1.5em !important;
+    > .cq-menu-btn {
+        padding: 0 5px;
+        > .bt-priod {
+            display: block;
+            height: auto;
+            line-height: 2em;
+            transition: all .2s .15s;
+            border-radius: 2px;
+            box-sizing: border-box;
+            cursor: pointer;
+            text-align: center;
+            padding-top:5px;
         }
-        &.stxMenuActive {
-            > div > span {
-                height: 22px;
-                line-height: 15px;
-                box-shadow: inset 0 0 0 1px #4c5794;
+        &:hover {
+           .ic-priod{ 
+                border-radius: 4px;
                 background: #f2f3f8;
-                color: $active-color;
+           }
+        }
+    }
+    .ic-priod {
+        padding:6px 10px;
+    }
+    &.stxMenuActive {
+        .bt-priod {
+             color: $active-color;
+             text-shadow: -.5px 0 0 #4c5794  !important;
+         } 
+        .ic-priod {
+             box-shadow: inset 0 0 0 1px $active-color;
+             border-radius: 4px;
+             background: #f2f3f8;
+             font-weight: normal !important;
             }
         }
         &:after {

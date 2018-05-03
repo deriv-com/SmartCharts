@@ -10,10 +10,10 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Vietnamese\n"
 "Language: vi_VN\n"
-"PO-Revision-Date: 2018-04-22 23:10-0400\n"
+"PO-Revision-Date: 2018-04-27 00:19-0400\n"
 
 msgid "CLOSED"
-msgstr ""
+msgstr "ĐÃ ĐÓNG"
 
 msgid "Close"
 msgstr ""
@@ -25,7 +25,7 @@ msgid "There are no favorites yet."
 msgstr "Không có mục yêu thích nào."
 
 msgid "Chart data is not available for this symbol."
-msgstr ""
+msgstr "Biểu đồ dữ liệu không khả dụng cho ký hiệu này."
 
 msgid "PRICE"
 msgstr "GIÁ"
@@ -70,7 +70,7 @@ msgid "Crosshair"
 msgstr ""
 
 msgid "Time period"
-msgstr ""
+msgstr "Thời hạn"
 
 msgid "Tick"
 msgstr "Giây"
@@ -136,19 +136,19 @@ msgid "right-click to manage"
 msgstr "nhấp chuột phải để quản lý"
 
 msgid "[symbol] market is presently closed."
-msgstr ""
+msgstr "[symbol] thị trường hiện đã đóng cửa."
 
 msgid "Streaming for [symbol] is not available due to license restrictions"
-msgstr ""
+msgstr "Truyền cho [symbol] không khả dụng do các hạn chế cấp phép"
 
 msgid "Line"
-msgstr ""
+msgstr "Dòng kẻ"
 
 msgid "Dot"
-msgstr ""
+msgstr "Dấu chấm"
 
 msgid "Colored Dot"
-msgstr ""
+msgstr "Dấu chấm màu"
 
 msgid "Spline"
 msgstr ""
@@ -163,10 +163,10 @@ msgid "OHLC"
 msgstr "OHLC"
 
 msgid "Hollow Candle"
-msgstr "Nến rỗng"
+msgstr ""
 
 msgid "\"Mass Index\" or \"Doji Star\""
-msgstr ""
+msgstr "\"Mass Index\" hay \"Doji Star\""
 
 msgid "Indicators"
 msgstr "Chỉ số"
@@ -187,7 +187,7 @@ msgid "Annotation"
 msgstr "Chú thích"
 
 msgid "Average Line"
-msgstr ""
+msgstr "Đường trung bình"
 
 msgid "Callout"
 msgstr ""
@@ -196,16 +196,16 @@ msgid "Channel"
 msgstr ""
 
 msgid "Continuous"
-msgstr ""
+msgstr "Liên tục"
 
 msgid "Crossline"
-msgstr ""
+msgstr "Đường giao nhau"
 
 msgid "Doodle"
 msgstr ""
 
 msgid "Ellipse"
-msgstr ""
+msgstr "Hình elíp"
 
 msgid "Fib Retracement"
 msgstr ""
@@ -226,7 +226,7 @@ msgid "Gartley"
 msgstr ""
 
 msgid "Horizontal"
-msgstr ""
+msgstr "Theo chiều ngang"
 
 msgid "Pitchfork"
 msgstr ""
@@ -247,22 +247,22 @@ msgid "Segment"
 msgstr ""
 
 msgid "Shape - Arrow"
-msgstr ""
+msgstr "Hình dạng - mũi tên"
 
 msgid "Shape - Check"
-msgstr ""
+msgstr "Hình dạng - Dấu tích"
 
 msgid "Shape - Cross"
-msgstr ""
+msgstr "Hình dạng - Chữ thập"
 
 msgid "Shape - Focus"
-msgstr ""
+msgstr "Hình dạng - Tập trung"
 
 msgid "Shape - Heart"
-msgstr ""
+msgstr "Hình dạng - Trái tim"
 
 msgid "Shape - Star"
-msgstr ""
+msgstr "Hình dạng - Ngôi sao"
 
 msgid "Speed Resistance Arc"
 msgstr ""
@@ -271,28 +271,28 @@ msgid "Speed Resistance Line"
 msgstr ""
 
 msgid "Time Cycle"
-msgstr ""
+msgstr "Chu kỳ thời gian"
 
 msgid "Tirone Levels"
 msgstr ""
 
 msgid "Vertical"
-msgstr ""
+msgstr "Theo chiều dọc"
 
 msgid "RSI"
 msgstr ""
 
 msgid "Period"
-msgstr ""
+msgstr "Khoảng thời gian"
 
 msgid "Show Zones"
-msgstr ""
+msgstr "Khu vực Hiển thị"
 
 msgid "OverBought"
-msgstr ""
+msgstr "Mua quá"
 
 msgid "OverSold"
-msgstr ""
+msgstr "Bán quá"
 
 msgid "Moving Average"
 msgstr ""
@@ -301,7 +301,7 @@ msgid "Field"
 msgstr ""
 
 msgid "Type"
-msgstr ""
+msgstr "Loại"
 
 msgid "Offset"
 msgstr ""
@@ -310,10 +310,10 @@ msgid "Underlay"
 msgstr ""
 
 msgid "MA"
-msgstr ""
+msgstr "MA"
 
 msgid "MACD"
-msgstr ""
+msgstr "MACD"
 
 msgid "Fast MA Period"
 msgstr ""
@@ -472,37 +472,37 @@ msgid "Ultimate Oscillator"
 msgstr ""
 
 msgid "Cycle 1"
-msgstr ""
+msgstr "Chu kỳ 1"
 
 msgid "Cycle 2"
-msgstr ""
+msgstr "Chu kỳ 2"
 
 msgid "Cycle 3"
-msgstr ""
+msgstr "Chu kỳ 3"
 
 msgid "Volume Oscillator"
 msgstr ""
 
 msgid "Short Cycle"
-msgstr ""
+msgstr "Chu kỳ ngắn"
 
 msgid "Long Cycle"
-msgstr ""
+msgstr "Chu kỳ dài"
 
 msgid "Points Or Percent"
-msgstr ""
+msgstr "Điểm hoặc phần trăm"
 
 msgid "Twiggs Money Flow"
-msgstr ""
+msgstr "Chỉ số dòng tiền Twiggs"
 
 msgid "Chaikin Money Flow"
-msgstr ""
+msgstr "Chỉ số dòng tiền Chaikin"
 
 msgid "Chaikin Volatility"
-msgstr ""
+msgstr "Chỉ số biến động Chaikin"
 
 msgid "Rate Of Change"
-msgstr ""
+msgstr "Tỷ giá hối đoái"
 
 msgid "Price Oscillator"
 msgstr ""
@@ -523,31 +523,31 @@ msgid "Average True Range"
 msgstr ""
 
 msgid "ATR"
-msgstr ""
+msgstr "ATR"
 
 msgid "Ehler Fisher Transform"
 msgstr ""
 
 msgid "EF"
-msgstr ""
+msgstr "EF"
 
 msgid "EF Trigger"
-msgstr ""
+msgstr "Kích hoạt EF"
 
 msgid "Schaff Trend Cycle"
-msgstr ""
+msgstr "Chu kỳ xu hướng Schaff"
 
 msgid "QStick"
 msgstr ""
 
 msgid "Coppock Curve"
-msgstr ""
+msgstr "Đường cong Coppock"
 
 msgid "Short RoC"
-msgstr ""
+msgstr "RoC ngắn"
 
 msgid "Long RoC"
-msgstr ""
+msgstr "RoC dài"
 
 msgid "Chande Momentum Oscillator"
 msgstr ""
@@ -559,7 +559,7 @@ msgid "Intraday Momentum Index"
 msgstr ""
 
 msgid "RAVI"
-msgstr ""
+msgstr "RAVI"
 
 msgid "Random Walk Index"
 msgstr ""
@@ -571,7 +571,7 @@ msgid "Random Walk Low"
 msgstr ""
 
 msgid "ADX/DMS"
-msgstr ""
+msgstr "ADX/DMS"
 
 msgid "Smoothing Period"
 msgstr ""
@@ -583,16 +583,16 @@ msgid "Shading"
 msgstr ""
 
 msgid "Histogram"
-msgstr ""
+msgstr "Đồ thị Histogram"
 
 msgid "+DI"
-msgstr ""
+msgstr "+ DI"
 
 msgid "-DI"
-msgstr ""
+msgstr "-DI"
 
 msgid "ADX"
-msgstr ""
+msgstr "ADX"
 
 msgid "Positive Bar"
 msgstr ""
@@ -778,13 +778,13 @@ msgid "Center Of Gravity"
 msgstr ""
 
 msgid "Typical Price"
-msgstr ""
+msgstr "Giá điển hình"
 
 msgid "Weighted Close"
 msgstr ""
 
 msgid "Money Flow Index"
-msgstr ""
+msgstr "Chỉ số dòng tiền"
 
 msgid "Williams %R"
 msgstr ""
@@ -796,7 +796,7 @@ msgid "Use Volume"
 msgstr ""
 
 msgid "Volume Chart"
-msgstr ""
+msgstr "Bảng khối lượng"
 
 msgid "Up Volume"
 msgstr ""
@@ -808,52 +808,52 @@ msgid "Volume Underlay"
 msgstr ""
 
 msgid "Valuation Lines"
-msgstr ""
+msgstr "Xác định giá trị dòng"
 
 msgid "Average Type"
-msgstr ""
+msgstr "Loại trung bình"
 
 msgid "Display Average"
-msgstr ""
+msgstr "Hiển thị trung bình"
 
 msgid "Display 1 Standard Deviation (1σ)"
-msgstr ""
+msgstr "Hiển thị độ lệch chuẩn 1 (1σ)"
 
 msgid "Display 2 Standard Deviation (2σ)"
-msgstr ""
+msgstr "Hiển thị độ lệch chuẩn 1 (1σ)"
 
 msgid "Display 3 Standard Deviation (3σ)"
-msgstr ""
+msgstr "Hiển thị độ lệch chuẩn 3 (3σ)"
 
 msgid "Average"
-msgstr ""
+msgstr "Trung bình"
 
 msgid "1 Standard Deviation (1σ)"
-msgstr ""
+msgstr "Độ lệch chuẩn 1 (1σ)"
 
 msgid "2 Standard Deviation (2σ)"
-msgstr ""
+msgstr "Độ lệch chuẩn 2 (2σ)"
 
 msgid "3 Standard Deviation (3σ)"
-msgstr ""
+msgstr "Độ lệch chuẩn 3 (3σ)"
 
 msgid "Correlation Coefficient"
-msgstr ""
+msgstr "Hệ số tương quan"
 
 msgid "Price Momentum Oscillator"
-msgstr ""
+msgstr "Chỉ số tốc độ thay đổi giá"
 
 msgid "Double Smoothing Period"
-msgstr ""
+msgstr "Tăng gấp đôi khoảng thời gian làm mịn"
 
 msgid "PMO"
-msgstr ""
+msgstr "PMO"
 
 msgid "PMOSignal"
 msgstr ""
 
 msgid "Relative Volatility"
-msgstr ""
+msgstr "Biến động tương đối"
 
 msgid "STD Period"
 msgstr ""
@@ -862,7 +862,7 @@ msgid "Rel Vol"
 msgstr ""
 
 msgid "Awesome Oscillator"
-msgstr ""
+msgstr "Dao động tuyệt vời"
 
 msgid "Market Facilitation Index"
 msgstr ""

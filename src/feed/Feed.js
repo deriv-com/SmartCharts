@@ -1,11 +1,12 @@
 import NotificationStore from '../store/NotificationStore';
 import {TickHistoryFormatter} from './TickHistoryFormatter';
+import PendingPromise from '../utils/PendingPromise';
 
 class Feed {
-    constructor(streamManager, cxx, mainStore) {
+    constructor(binaryApi, cxx, mainStore) {
         this._cxx = cxx;
-        this._streamManager = streamManager;
-        this._streams = {};
+        this._binaryApi = binaryApi;
+        this._callbacks = {};
         this._mainStore = mainStore;
     }
 
@@ -15,9 +16,9 @@ class Feed {
     // Do not call explicitly! Method below is called by ChartIQ when unsubscribing symbols.
     unsubscribe(symObj) {
         const key = this._getStreamKey(symObj);
-        if (this._streams[key]) {
-            this._streams[key].forget();
-            delete this._streams[key];
+        if (this._callbacks[key]) {
+            this._binaryApi.forget(this._callbacks[key]);
+            delete this._callbacks[key];
         }
     }
 
@@ -25,67 +26,76 @@ class Feed {
         return JSON.stringify({ symbol, period, interval });
     }
 
-    _trackStream(stream, comparison_chart_symbol) {
-        stream.onStream((response) => {
-            const quotes = [TickHistoryFormatter.formatTick(response)];
-
-            if (comparison_chart_symbol) {
-                CIQ.addMemberToMasterdata({
-                    stx: this._cxx,
-                    label: comparison_chart_symbol,
-                    data: quotes,
-                    createObject: true,
-                });
-            } else {
-                this._cxx.updateChartData(quotes);
-            }
-        });
-    }
-
     async fetchInitialData(symbol, suggestedStartDate, suggestedEndDate, params, callback) {
         const { period, interval, symbolObject } = params;
         const key = this._getStreamKey(params);
-
-        const stream = this._streams[key] || this._streamManager.subscribe({
-            symbol,
-            granularity: Feed.calculateGranularity(period, interval),
-        });
-
         const isComparisonChart = this._cxx.chart.symbol !== symbol;
-        this._trackStream(stream, isComparisonChart ? symbol : undefined);
-        this._streams[key] = stream;
+        const comparisonChartSymbol = isComparisonChart ? symbol : undefined;
+
+        const dataRequest = {
+            symbol,
+            granularity: Feed.calculateGranularity(period, interval)
+        };
+
+        const tickHistoryPromise = new PendingPromise();
+        let hasHistory = false;
+        const processTick = resp => {
+            // We assume that 1st response is the history, and subsequent
+            // responses are tick stream data.
+            if (hasHistory) {
+                const quotes = [TickHistoryFormatter.formatTick(resp)];
+
+                if (comparisonChartSymbol) {
+                    CIQ.addMemberToMasterdata({
+                        stx: this._cxx,
+                        label: comparisonChartSymbol,
+                        data: quotes,
+                        createObject: true,
+                    });
+                } else {
+                    this._cxx.updateChartData(quotes);
+                }
+                return;
+            }
+            tickHistoryPromise.resolve(resp);
+            hasHistory = true;
+        };
+        this._binaryApi.subscribeTickHistory(dataRequest, processTick);
+        let response = await tickHistoryPromise;
 
         // Clear all notifications related to active symbols
         this._mainStore.notification.removeByCategory('activesymbol');
 
-        try {
-            const response = await stream.response;
-            const quotes = TickHistoryFormatter.formatHistory(response);
-
-            if(stream.isMarketClosed) {
+        if (response.error) {
+            const errorCode = response.error.code;
+            const tParams = { symbol: symbolObject.name };
+            if (/^(MarketIsClosed|NoRealtimeQuotes)$/.test(errorCode)) {
+                // Although market is closed, we display the past tick history data
+                response = await this._binaryApi.getTickHistory(dataRequest);
                 this._mainStore.notification.notify({
-                    text: t.translate('[symbol] market is presently closed.', { symbol: symbolObject.name }),
+                    text: t.translate('[symbol] market is presently closed.', tParams),
                     category: 'activesymbol',
                 });
-            }
-
-            callback({ quotes });
-            this._mainStore.chart.isChartAvailable = true;
-        } catch (err) {
-            this._streams[key].forget();
-            delete this._streams[key];
-            if (err.response && err.response.error.code === 'StreamingNotAllowed'){
-                this._mainStore.chart.isChartAvailable = false;
+            } else if (errorCode === 'StreamingNotAllowed') {
+                if (!isComparisonChart) {
+                    this._mainStore.chart.isChartAvailable = false;
+                }
                 this._mainStore.notification.notify({
-                    text: t.translate('Streaming for [symbol] is not available due to license restrictions', { symbol: symbolObject.name }),
+                    text: t.translate('Streaming for [symbol] is not available due to license restrictions', tParams),
                     type: NotificationStore.TYPE_ERROR,
                     category: 'activesymbol',
                 });
                 callback({ quotes: [] });
-            } else {
-                console.error(err);
-                callback({ error: err });
+                return;
             }
+        } else {
+            this._callbacks[key] = processTick;
+        }
+
+        const quotes = TickHistoryFormatter.formatHistory(response);
+        callback({ quotes });
+        if (!isComparisonChart) {
+            this._mainStore.chart.isChartAvailable = true;
         }
     }
 
@@ -99,7 +109,7 @@ class Feed {
         let result = { quotes: [] };
         if (end > startLimit) {
             try {
-                const response = await this._streamManager.historicalData({
+                const response = await this._binaryApi.getTickHistory({
                     symbol,
                     granularity: Feed.calculateGranularity(period, interval),
                     start: Math.max(start, startLimit),

@@ -32,7 +32,7 @@ class Chart extends Component {
     }
 
     componentDidMount() {
-        this.props.init(this.root);
+        this.props.init(this.root, this.props);
     }
 
     render() {

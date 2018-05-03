@@ -78,7 +78,7 @@ cq-context {
                 }
                 &.open{
                     visibility: visible;
-                    bottom: 3.6em;
+                    bottom: 5em;
                     opacity: 1;
                     z-index: 3;
                 }
@@ -103,12 +103,8 @@ cq-context {
             }
         }
         .cq-toggle {
-            padding: 0.35em 0.8em;
+            padding: 0.35em 2.6em;
             color: #575757;
-            &:hover,
-            &.active {
-            color: #000 !important;
-            }
         }
         cq-comparison-add {
             cq-comparison-lookup-frame {
@@ -198,6 +194,13 @@ cq-context {
                         box-shadow: none !important;
                     }
                 }
+            }
+            .bt-priod ,.cq-toggle , .cq-menu-btn , .cq-chart-size>span
+            {
+                 padding: 0 !important;
+            }
+            .ic-priod {
+                padding : 6px 0px !important; 
             }
         }
     }

@@ -1,172 +1,23 @@
 /* eslint-disable-camelcase */
 import EventEmitter from 'event-emitter-es6';
 import ConnectionManager from './ConnectionManager';
-
-class Subscription {
-    static get DEFAULT_COUNT() { return 1000; }
-    static get DEFAULT_TIMEOUT() { return 20 * 1000; }
-
-    constructor({ symbol, granularity }, { connection, response = null }) {
-        this._connection = connection;
-        this._symbol = symbol;
-        this._granularity = granularity;
-        this._response = response;
-        this._isMarketClosed = false;
-    }
-    subscribe() {
-        const req = {
-            ticks_history: this._symbol,
-            end: 'latest',
-            count: Subscription.DEFAULT_COUNT,
-            adjust_start_time: 1,
-            subscribe: 1,
-            style: this._granularity ? 'candles' : 'ticks',
-            granularity: this._granularity,
-        };
-        const handleNoStream = (code) => {
-            if (/^(MarketIsClosed|NoRealtimeQuotes)$/.test(code)) {
-                this._isMarketClosed = true;
-                delete req.subscribe;
-                return this._connection.send(
-                    req,
-                    Subscription.DEFAULT_TIMEOUT,
-                );
-            }
-        };
-        this._response = this._connection
-            .send(req, Subscription.DEFAULT_TIMEOUT)
-            .catch((up) => {
-                const result = handleNoStream(up.code);
-                if (result) {return result;}
-                throw up;
-            })
-            .then((data) => {
-                if (data.error) {
-                    const result = handleNoStream(data.error.code);
-                    if (result) {return result;}
-                    const up = new Error(data.error.message);
-                    up.response = data;
-                    throw up;
-                }
-                return data;
-            });
-    }
-    get response() {
-        return this._response;
-    }
-    get isMarketClosed() {
-        return this._isMarketClosed;
-    }
-
-    static cloneResponseData(data) {
-        const clone = {
-            echo_req: Object.assign({}, data.echo_req),
-        };
-
-        if (data.history) {
-            const prices = data.history.prices.slice(0);
-            const times = data.history.times.slice(0);
-            clone.history = { prices, times };
-        } else if (data.candles) {
-            clone.candles = data.candles.slice(0);
-        }
-        return clone;
-    }
-    static diffResponseData(perv, now) {
-        const diff = {
-            echo_req: Object.assign({}, now.echo_req),
-        };
-        if (perv.history && now.history) {
-            const epoch = perv.history.times[perv.history.times.length - 1];
-            const index = now.history.times.indexOf(epoch);
-
-            diff.history = { times: [], prices: [] };
-            if (index !== -1) {
-                diff.history.times = now.history.times.slice(index + 1);
-                diff.history.prices = now.history.prices.slice(index + 1);
-            }
-        }
-        if (perv.candles && now.candles) {
-            const findIndex = (array, predicate) => {
-                for (let idx = 0; idx < array.length; ++idx) {
-                    if (predicate(array[idx])) {
-                        return idx;
-                    }
-                }
-                return -1;
-            };
-            const epoch = perv.candles[perv.candles.length - 1].epoch;
-            const index = findIndex(now.candles, candle => candle.epoch === epoch);
-
-            diff.candles = [];
-            if (index !== -1) {
-                diff.candles = now.candles.slice(index);
-            }
-        }
-        return diff;
-    }
-}
-
-export class Stream {
-    static get EVENT_STREAM() { return 'EVENT_STREAM'; }
-    static get EVENT_DISCONNECT() { return 'EVENT_DISCONNECT'; }
-    static get EVENT_RECONNECT() { return 'EVENT_RECONNECT'; }
-    static get EVENT_REMEMBER_STREAM() { return 'EVENT_REMEMBER_STREAM'; }
-    static get EVENT_FORGET_STREAM() { return 'EVENT_FORGET_STREAM'; }
-    constructor(
-        subscription,
-        emitter,
-    ) {
-        this._subscription = subscription;
-        this._emitter = emitter;
-        this._callbacks = {
-            [Stream.EVENT_STREAM]: [],
-            [Stream.EVENT_RECONNECT]: [],
-            [Stream.EVENT_DISCONNECT]: [],
-        };
-        this._emitter.emit(Stream.EVENT_REMEMBER_STREAM);
-    }
-    get response() {
-        return this._subscription.response;
-    }
-    get isMarketClosed() {
-        return this._subscription.isMarketClosed;
-    }
-    forget() {
-        for (const event of Object.keys(this._callbacks)) {
-            for (const callback of this._callbacks[event]) {
-                this._emitter.off(event, callback);
-            }
-            this._callbacks[event] = [];
-        }
-        this._emitter.emit(Stream.EVENT_FORGET_STREAM);
-    }
-    onStream(callback) {
-        this._callbacks[Stream.EVENT_STREAM].push(callback);
-        this._emitter.on(Stream.EVENT_STREAM, callback);
-    }
-    onDisconnect(callback) {
-        this._callbacks[Stream.EVENT_DISCONNECT].push(callback);
-        this._emitter.on(Stream.EVENT_DISCONNECT, callback);
-    }
-    onReconnect(callback) {
-        this._callbacks[Stream.EVENT_RECONNECT].push(callback);
-        this._emitter.on(Stream.EVENT_RECONNECT, callback);
-    }
-}
+import Subscription from './Subscription';
+import Stream from './Stream';
 
 class StreamManager {
+    static get MSG_TICK() { return 'tick'; }
+    static get MSG_OHLC() { return 'ohlc'; }
     constructor(connection, defaultCount = 1000) {
         this._connection = connection;
-        this._defaultCount = defaultCount;
         this._emitters = { };
         this._streamIds = { };
         this._subscriptionData = { };
         this._inProgress = { };
         this._initialize();
+        this._callbacks = new Map();
     }
     _initialize() {
-        for (const msgType of [ConnectionManager.MSG_TICK, ConnectionManager.MSG_OHLC]) {
+        for (const msgType of [StreamManager.MSG_TICK, StreamManager.MSG_OHLC]) {
             this._connection.on(msgType, (data) => {
                 const { ticks_history: symbol, granularity } = data.echo_req;
                 const key = `${symbol}-${granularity}`;
@@ -259,8 +110,8 @@ class StreamManager {
         const emitter = new EventEmitter();
         this._emitters[key] = emitter;
 
-        subscription.response.then(() => {
-            if (subscription.isMarketClosed) {
+        subscription.response.then(response => {
+            if (response.error) {
                 this._clearEmitter(key);
             }
         });
@@ -311,29 +162,29 @@ class StreamManager {
         const stream = new Stream(subscription, emitter);
         return stream;
     }
-    subscribe({ symbol, granularity = 0 }) {
+
+    _getStream({ symbol, granularity = 0 }) {
         const key = `${symbol}-${granularity}`;
         if (this._emitters[key]) {
             return this._handleExistingStream({ symbol, granularity });
         }
         return this._handleNewStream({ symbol, granularity });
     }
-    historicalData({
-        symbol, granularity, start, end,
-    }) {
-        const req = {
-            ticks_history: symbol,
-            end,
-            start,
-            adjust_start_time: 1,
-            granularity,
-            style: granularity ? 'candles' : 'ticks',
-        };
-        return this._connection.send(req);
+
+    async subscribe(input, callback) {
+        const { ticks_history: symbol , granularity } = input;
+        const stream = this._getStream({ symbol, granularity });
+        stream.onStream(tickResponse => callback(tickResponse));
+        const historyResponse = await stream.response;
+        this._callbacks.set(callback, stream);
+
+        callback(historyResponse);
     }
-    static buildFor({ appId, endpoint, language = 'en' }) {
-        const connectionManager = new ConnectionManager({ appId, endpoint, language });
-        return new StreamManager(connectionManager);
+
+    forget(callback) {
+        const stream = this._callbacks.get(callback);
+        stream.forget();
+        this._callbacks.delete(callback);
     }
 }
 
