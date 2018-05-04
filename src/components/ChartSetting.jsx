@@ -1,8 +1,8 @@
 import React from 'react';
 import Menu from './Menu.jsx';
 import { connect } from '../store/Connect';
-import { 
-    EditIcon,
+import {
+    SettingIcon,
     PositionLeftIcon,
     PositionBottomIcon,
     ThemeDarkIcon,
@@ -31,18 +31,18 @@ const ChartSetting = ({
                     {/*<div className="ciq-item">
                         <span className="ciq-icon-text">{t.translate('Position')}</span>
                         <div className="ciq-action">
-                            <PositionLeftIcon 
+                            <PositionLeftIcon
                             />
-                            <PositionBottomIcon 
+                            <PositionBottomIcon
                             />
                         </div>
                     </div>
                     <div className="ciq-item">
                         <span className="ciq-icon-text">{t.translate('Theme')}</span>
                         <div className="ciq-action">
-                            <ThemeDarkIcon 
+                            <ThemeDarkIcon
                             />
-                            <ThemeLightIcon 
+                            <ThemeLightIcon
                             />
                         </div>
                     </div>*/}
@@ -50,54 +50,54 @@ const ChartSetting = ({
                         <span className="ciq-icon-text">{t.translate('Language')}</span>
                         <div className="ciq-action">
                             <span></span>
-                            <ChevronRightIcon 
+                            <ChevronRightIcon
                                 onClick={ () => setView('language') }
-                                />
+                            />
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    }
+        </div>;
+    };
     const renderLanguage = () =>{
         return <div>
             <div className='title'>
                 <BackIcon
                     onClick={() => setView() }
-                    />
+                />
                 {t.translate('Language')}
             </div>
             <div className='body'>
                 <div className="ciq-list ciq-list-language">
                     {languages.map( (language,index) => {
-                        return <div 
-                            className={`ciq-list-item ${(selectedLanguage == language.key) ? 'selected' : ''}`} 
+                        return <div
+                            className={`ciq-list-item ${(selectedLanguage == language.key) ? 'selected' : ''}`}
                             key={index}
                             onClick={()=> setLanguage(language.key) }
-                            >
+                        >
                             <span>
                                 {language.icon}
                             </span>
                             <span className="ciq-icon-text">{language.name}</span>
-                        </div>
+                        </div>;
                     })}
                 </div>
             </div>
-        </div>
-    }
+        </div>;
+    };
     return (
         <Menu className="cq-chart-setting">
             <Menu.Title>
-                <EditIcon
-                    className = {menuOpen ? 'active' : ''}
+                <SettingIcon
+                    className = {`ic-icon-with-sub ${menuOpen ? 'active' : ''}`}
                     tooltip-title={t.translate('Settings')}
                 />
             </Menu.Title>
             <Menu.Body>
-                <div className={`cq-menu-container ${ view == '' ? 'active': ''}`}>
+                <div className={`cq-menu-container ${view == '' ? 'active': ''}`}>
                     {renderMain()}
                 </div>
-                <div className={`cq-menu-container ${ view == 'language' ? 'active': ''}`}>
+                <div className={`cq-menu-container ${view == 'language' ? 'active': ''}`}>
                     {renderLanguage()}
                 </div>
 

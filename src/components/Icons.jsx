@@ -152,7 +152,7 @@ import SmartFX from '../../sass/icons/active-symbols/ic-smartfx-placeholder.svg'
 
 const Wrapper = WrappedComponent => props => {
     let { className, ['tooltip-title']: tooltip, ...p } = props;
-    className = `ic-icon ${className ? className : ''} ${tooltip ? 'tooltip' : ''}`;
+    className = `ic-icon ${className ? className : ''}`;
 
     return (
         <span
@@ -160,11 +160,14 @@ const Wrapper = WrappedComponent => props => {
             tooltip-title={tooltip}
             {...p}>
             <WrappedComponent />
+            <br/>
+            <span className='ic-subtitle'>{tooltip}</span>
         </span>
     );
 };
 
 export const AddIcon = Wrapper(Add);
+export const ZoomInIcon = Wrapper(Add);
 export const AddThinIcon = Wrapper(AddThin);
 export const CandleIcon = Wrapper(Candle);
 export const CloseIcon = Wrapper(Close);
@@ -182,6 +185,7 @@ export const BaseLineIcon = Wrapper(BaseLine);
 export const ListIcon = Wrapper(List);
 export const MeasureIcon = Wrapper(Measure);
 export const MinusIcon = Wrapper(Minus);
+export const ZoomOutIcon = Wrapper(Minus);
 export const OHLCIcon = Wrapper(OHLC);
 export const SplineIcon = Wrapper(Spline);
 export const StarIcon = Wrapper(Star);
@@ -189,10 +193,12 @@ export const TemplateIcon = Wrapper(Template);
 export const TickIcon = Wrapper(Tick);
 export const SearchIcon = Wrapper(Search);
 export const EditIcon = Wrapper(Edit);
+export const SettingIcon = Wrapper(Edit);
 export const ArrowIcon = Wrapper(Arrow);
 export const FavoriteIcon = Wrapper(Star);
 export const CopyIcon = Wrapper(Copy);
 export const ShareIcon = Wrapper(Share);
+
 
 export const ChevronRightIcon = Wrapper(ChevronRight);
 export const PositionLeftIcon = Wrapper(PositionLeft);
@@ -200,7 +206,6 @@ export const PositionBottomIcon = Wrapper(PositionBottom);
 export const ThemeDarkIcon = Wrapper(ThemeDark);
 export const ThemeLightIcon = Wrapper(ThemeLight);
 export const BackIcon = Wrapper(Back);
-
 
 
 export const MetalIcon = Wrapper(Metal);
@@ -269,7 +274,7 @@ export const FlagIcons = {
     ChineseTraditional: Wrapper(ChineseTraditional),
     Japan: Wrapper(JPY),
     Poland: Wrapper(PLN),
-}
+};
 
 
 export const ItemIconMap = {

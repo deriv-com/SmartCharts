@@ -1,5 +1,6 @@
 import { observable, action, reaction, computed, autorunAsync, when } from 'mobx';
 import MenuStore from './MenuStore';
+import {createObjectFromLocalStorage} from '../utils';
 import { FlagIcons } from './../components/Icons.jsx';
 
 export default class ChartSettingStore {
@@ -74,18 +75,15 @@ export default class ChartSettingStore {
     @observable theme = '';
 
     restoreSetting() {
+        const setting = createObjectFromLocalStorage('smartchart-setting');
 
-
-        try {
-            let setting_string = CIQ.localStorage.getItem('setting'),
-                setting = JSON.parse(setting_string !== '' ? setting_string : '{}');
-
+        if (setting) {
             /**
              * Language
              * check language in the list
              * if not exits set default that is `en`
              */
-            let language = this.languages.find(item => item.key == setting.language );
+            let language = this.languages.find(item => item.key === setting.language );
             if ( language ) {
                 this.language = setting.language;
             } else {
@@ -93,7 +91,7 @@ export default class ChartSettingStore {
             }
             this.position = setting.position === 'bottom' ? 'bottom' : 'left';
             this.theme = setting.theme === 'light' ? 'light' : 'dark';
-        } catch (e) {
+        } else {
             this.language = 'en';
             this.position = 'bottom';
             this.theme = 'light';
@@ -101,7 +99,7 @@ export default class ChartSettingStore {
     }
 
     saveSetting() {
-        CIQ.localStorageSetItem(`setting`, JSON.stringify({
+        CIQ.localStorageSetItem(`smartchart-setting`, JSON.stringify({
             language: this.language,
             position: this.position,
             theme: this.theme

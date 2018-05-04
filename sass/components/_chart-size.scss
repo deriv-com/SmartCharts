@@ -1,24 +1,34 @@
-.cq-chart-size {
-    display: flex;
-    width: 64px;
-    justify-content: space-between;
-    align-items: center;
-    height: auto;
-
-    &:after {
-        display: none;
-    }
-    > span {
-        opacity: 1;
-        position: relative;
-        cursor: pointer;
-        transition: scale .25s;
-    }
-
-    .interval-title {
-        white-space: nowrap;
+cq-context {
+    .cq-chart-size {
+        display: flex !important;
         width: auto;
-        line-height: 25px;
-        display: none; /* TODO */
+        justify-content: space-between;
+        align-items: center;
+        height: auto;
+
+        &:after {
+            display: none;
+        }
+        > span {
+            opacity: 1;
+            position: relative;
+            cursor: pointer;
+            transition: scale .25s;
+        }
+        .interval-title {
+            white-space: nowrap;
+            width: auto;
+            line-height: 25px;
+            display: none; /* TODO */
+        }
+        .cq-zoom-out{
+            padding-right:2.8em !important;
+        }
+    }
+    /* Mobile Style */
+    &.smartcharts-mobile {
+        .cq-chart-size {
+            width: 45px;
+        }
     }
 }

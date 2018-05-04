@@ -18,23 +18,22 @@ cq-context {
             padding: 0 1em 0 0;
             margin: .2em 0em;
             .cq-symbol-select-btn {
+                background: $DEFAULT-main;
                 font-family: $base-font;
                 padding: 0.3em 2em .3em 1em;
-                border-radius: $soft-corners;
                 cursor: pointer;
-                border: solid 1px #e9e9ed;
+                border: solid 1px $DEFAULT-border;
                 position: relative;
-                background: #fff;
                 display: flex;
                 align-items: center;
                 color: #333;
+                @include border-radius();
                 &:hover {
                     border: solid 1px $active-color;
                 }
                 > .ic-icon, > .ic-frx, > .ic-wld, > .ic-otc {
                     height: $large-icon-size;
                     width: $large-icon-size;
-                    margin-left: 5px;
                     margin-right: 12px;
                     transform: scale(1.3);
                     > svg {
@@ -53,12 +52,13 @@ cq-context {
                             float: right;
                             margin-left: 12px;
                             margin-top: 7px;
+                            border-top: 5px solid $DEFAULT-text-strong;
                             @include triangle-base(4px);
-                            border-top: 5px solid black;
                         }
                     }
                 }
-                .cq-symbol, .cq-chart-price {
+                .cq-symbol,
+                .cq-chart-price {
                     .cq-animated-price {
                         padding-left: 16px;
                     }
@@ -107,9 +107,7 @@ cq-context {
             margin-top: -35px;
             box-shadow: 0 0 0.625em 0.025em rgba(0, 0, 0, 0.14);
             visibility: hidden;
-            transition: visibility 0.1s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0s,
-                        margin-top 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.1s,
-                        opacity 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.1s;
+            @include dialog-transition();
             &.open{
                 margin-top:5px;
                 visibility: visible;
@@ -125,6 +123,7 @@ cq-context {
             width: 100%;
             padding: 0px;
             margin: 0px;
+            z-index: 3;
             .cq-menu-btn{
                 padding: 0px;
                 margin: .4em .5em;
@@ -151,10 +150,10 @@ cq-context {
                 }
                 .cq-categorical-display{
                     .cq-scroll-panel{
-                        height: calc( 100vh - 7.8em - 6em );
+                        height: calc( 100vh - 11em );
                     }
                     .cq-categorical-footer{
-                        background: #fff;
+                        background: $DEFAULT-main;
                         border-top: 1px solid #d9d9d9;
                         display: block;
                     }

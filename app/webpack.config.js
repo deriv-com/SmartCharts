@@ -42,7 +42,6 @@ const config = {
         new ExtractTextPlugin("styles.css"),
     ],
     externals: {
-        jquery: 'jQuery',
         CIQ: 'CIQ',
     },
 };

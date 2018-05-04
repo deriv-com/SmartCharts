@@ -1,10 +1,8 @@
 import EventEmitter from 'event-emitter-es6';
-import PendingPromise from './utils/PendingPromise';
+import { PendingPromise } from '@binary-com/smartcharts';
+import StreamManager from './StreamManager';
 
 class ConnectionManager extends EventEmitter {
-    static get MSG_TICK_HISTORY() { return 'tick_history'; }
-    static get MSG_TICK() { return 'tick'; }
-    static get MSG_OHLC() { return 'ohlc'; }
     static get EVENT_CONNECTION_CLOSE() { return 'CONNECTION_CLOSE'; }
     static get EVENT_CONNECTION_REOPEN() { return 'CONNECTION_REOPEN'; }
     constructor({ appId, endpoint, language }) {
@@ -17,7 +15,6 @@ class ConnectionManager extends EventEmitter {
     }
     _initialize() {
         this._websocket = new WebSocket(this._url);
-        window.ws = this._websocket;
 
         this._websocket.addEventListener('open', this._onopen.bind(this));
         this._websocket.addEventListener('close', this._onclose.bind(this));
@@ -67,6 +64,7 @@ class ConnectionManager extends EventEmitter {
             }
         }, timeout);
     }
+
     async send(data, timeout) {
         const req = Object.assign({}, data);
         req.req_id = this._counterReqId++;

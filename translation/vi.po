@@ -163,7 +163,7 @@ msgid "OHLC"
 msgstr "OHLC"
 
 msgid "Hollow Candle"
-msgstr "Nến rỗng"
+msgstr ""
 
 msgid "\"Mass Index\" or \"Doji Star\""
 msgstr "\"Mass Index\" hay \"Doji Star\""

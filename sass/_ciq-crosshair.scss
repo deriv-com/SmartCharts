@@ -1,3 +1,5 @@
+@import "_variables";
+
 .cq-crosshair {
     position: absolute;
     z-index: 11;
@@ -8,9 +10,10 @@
 
     background: rgba(21,33,45,0.88);
     box-shadow: 0 2px 8px 0 rgba(21,33,45,0.32);
-    border-radius: 4px;
+    @include border-radius(4px);
 
-    &:after, &:before {
+    &:after,
+    &:before {
         content: "";
         position: absolute;
         top: calc(50% - 4px);

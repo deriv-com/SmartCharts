@@ -1,31 +1,32 @@
-.ciq-list {
-  height: 250px;
-  overflow-y: auto;
-  position: relative;
+@import "_variables";
 
-  .ciq-list-item {
-    border: 1px solid #E9E9ED;
-    border-top: none;
-    &:first-child {
-      border-top: 1px solid #E9E9ED;
+.ciq-list {
+    height: 250px;
+    overflow-y: auto;
+    position: relative;
+    .ciq-list-item {
+        border: 1px solid $DEFAULT-border;
+        border-top: none;
+        background: $DEFAULT-main;
+        height: 32px;
+        line-height: 32px;
+        font-size: 12px;
+        color: $DEFAULT-text-strong;
+        padding-left: 16px;
+        cursor: pointer;
+        @include box-sizing(border-box);
+        &:first-child {
+            border-top: 1px solid $DEFAULT-border;
+        }
+        &.selected {
+            background: #efefef;
+        }
+        &.disabled {
+            pointer-events: none;
+            >* {
+                opacity: 0.2;
+                cursor: auto;
+            }
+        }
     }
-    background: #FFFFFF;
-    box-sizing: border-box;
-    height: 32px;
-    line-height: 32px;
-    font-size: 12px;
-    color: black;
-    padding-left: 16px;
-    cursor: pointer;
-    &.selected {
-      background: #efefef;
-    }
-    &.disabled {
-      pointer-events: none;
-      > * {
-        opacity: 0.2;
-        cursor: auto;
-      }
-    }
-  }
 }

@@ -28,7 +28,10 @@ export default class ChartTitleStore {
     @computed get isShowChartPrice() { return this.mainStore.chart.isChartAvailable; }
 
     @action.bound onSelectItem(symbolObject) {
-        this.context.changeSymbol(symbolObject);
+        const currentSymbol = this.mainStore.chart.stxx.chart.symbol;
+        if (symbolObject.symbol !== currentSymbol) {
+            this.context.changeSymbol(symbolObject);
+        }
         this.menu.setOpen(false);
     }
 

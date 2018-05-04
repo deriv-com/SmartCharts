@@ -1,3 +1,5 @@
+@import "_variables";
+
 @keyframes cq-slide-down {
     0%   {
         top: -32px;
@@ -30,12 +32,12 @@
         margin-top: 4px;
         height: 32px;
         animation: cq-slide-down .3s;
-        border-radius: 3px;
         display: flex;
         justify-content: flex-start;
         align-items: center;
         font-size: 14px;
         border: 1px solid #FDD063;
+        @include border-radius(3px);
         &.warning {
             background: #FFF8E2;
         }

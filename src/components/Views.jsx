@@ -34,11 +34,9 @@ const Views = ({
     return (
         <Menu className="views">
             <Menu.Title className="cq-menu-btn">
-                <div>
-                    <TemplateIcon
-                        className = {menuOpen ? 'active' : ''}
-                        tooltip-title={t.translate("Templates")} />
-                </div>
+                <TemplateIcon
+                    className = {`ic-icon-with-sub ${menuOpen ? 'active' : ''}`}
+                    tooltip-title={t.translate("Templates")} />
             </Menu.Title>
             <Menu.Body>
                 <div className="dropdown-title">
@@ -57,7 +55,7 @@ const Views = ({
                                 <CloseIcon onClick={cancel} />
                             </span>
                             : <span className="title">{t.translate("Templates")}</span>
-                        }
+                    }
                     <span className="icon">
                         {
                             currentRoute === 'add'

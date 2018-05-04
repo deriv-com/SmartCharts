@@ -36,9 +36,8 @@ export default class StudyLegendStore {
     get stx() { return this.context.stx; }
 
     onContextReady = () => {
-        window.stx = this.stx;
         this.begin();
-    }
+    };
 
     injections = [];
     previousStudies = { };
@@ -178,6 +177,7 @@ export default class StudyLegendStore {
             }
         }
         this.helper.updateStudy(updates);
+        this.updateActiveStudies();
         this.stx.draw();
         this.settingsDialog.title = this.helper.sd.name.toUpperCase();
     }
@@ -208,6 +208,10 @@ export default class StudyLegendStore {
     renderLegend() {
         if(!this.shouldRenderLegend()) {return;}
 
+        this.updateActiveStudies();
+    }
+
+    updateActiveStudies() {
         const stx = this.stx;
         const studies = [];
         Object.keys(stx.layout.studies).forEach(id => {
