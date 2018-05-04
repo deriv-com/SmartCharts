@@ -1,5 +1,7 @@
 # SmartCharts
 
+[![npm (scoped)](https://img.shields.io/npm/v/@binary-com/smartcharts.svg)](https://www.npmjs.com/package/@binary-com/smartcharts) [![Build Status](https://travis-ci.org/binary-com/SmartCharts.svg?branch=dev)](https://travis-ci.org/binary-com/SmartCharts)
+
 SmartCharts is both the name of the app ([charts.binary.com](https://charts.binary.com/)) and the charting library. You can install the library to your project via:
 
     yarn add @binary-com/smartcharts
@@ -15,7 +17,9 @@ SmartCharts is both the name of the app ([charts.binary.com](https://charts.bina
 
 > Note: eventhough both `yarn build` and `yarn build:app` outputs `smartcharts.js` and `smartcharts.css`, **they are not the same files**. One outputs a library and the the other outputs an app.
 
-## Quick Start
+## Usage 
+
+### Quick Start
 
 In the `app` folder, we provide a working webpack project that uses the smartcharts library. Simply `cd` to that directory and run:
 
@@ -44,7 +48,7 @@ class App extends React.Component {
 };
 ```
 
-SmartCharts expects library user to provide `requestSubscribe`, `requestForget` and `requestAPI`. `requestSubscribe` and `requestForget` handles streaming data (which in this case is just `tick_history`), whereas `requestAPI` accept single calls.
+SmartCharts expects library user to provide `requestSubscribe`, `requestForget` and `requestAPI`. Refer to [API](#api) for more details.
 
 The job of loading the active symbols or trading times or stream data from cache or retrieving from websocket is therefore NOT the responsibility of SmartCharts but the host application. SmartCharts simply makes the requests and expect a response in return.
 
@@ -67,6 +71,79 @@ externals: {
 }
 ```
 
+### API
+
+> Note: Props will take precedence over values set by the library.
+
+Props marked with `*` are **mandatory**:
+
+| Props | Description |
+--------|--------------
+requestAPI* | SmartCharts will make single API calls by passing the request input directly to this method, and expects a `Promise` to be returned.
+requestSubscribe* | SmartCharts will make streaming calls via this method. `requestSubscribe` expects 2 parameters `(request, callback) => {}`: the `request` input and a `callback` in which response will be passed to for each time a response is available. Keep track of this `callback` as SmartCharts will pass this to you to forget the subscription (via `requestForget`).
+requestForget* | When SmartCharts no longer needs a subscription (made via `requestSubscribe`), it will call this method (passing in the `callback` passed from `requestSubscribe`) to halt the subscription.
+lang | Sets the language.
+chartControlsWidgets | Render function for chart control widgets. Refer to [Customising Components](#customising-components).
+topWidgets | Render function for top widgets. Refer to [Customising Components](#customising-components).
+
+### Customising Components
+
+We offer library users full control on deciding which of the top widgets and chart control buttons to be displayed by overriding the render methods themselves. To do this you pass in a function to `chartControlsWidgets` or `topWidgets`.
+
+For example, we want to remove all the chart control buttons, and for top widgets to just show the comparison list (refer `app/index.jsx`):
+
+```jsx
+import { ComparisonList } from '@binary-com/smartcharts';
+
+const renderTopWidgets = () => (
+    <React.Fragment>
+        <div>Hi I just replaced the top widgets!</div>
+        <ComparisonList />
+    </React.Fragment>
+);
+
+const App = () => (
+    <SmartChart
+        topWidgets={renderTopWidgets}
+        chartControlsWidgets={()=>{}}
+    >
+    </SmartChart>
+);
+```
+
+Here are the following components you can import:
+ - Top widgets:
+    - `<ChartTitle />`
+    - `<AssetInformation />`
+    - `<ComparisonList />`
+ - Chart controls:
+    - `<CrosshairToggle />`
+    - `<ChartTypes />`
+    - `<StudyLegend />`
+    - `<Comparison />`
+    - `<DrawTools />`
+    - `<Views />`
+    - `<Share />`
+    - `<Timeperiod />`
+    - `<ChartSize />`
+    - `<ChartSetting />`
+ 
+## Contribute
+
+To contribute to SmartCharts, fork this project and checkout the `dev` branch. When adding features or performing bug fixes, it is recommended you make a separate branch off `dev`. Prior to sending pull requests, make sure all unit tests passed:
+
+    yarn test
+
+Once your changes have been merged to `dev`, it will immediately deployed to [charts.binary.com/beta](https://charts.binary.com/beta/). 
+
+## Developer Notes
+
+### Separation of App and Library
+
+There should be a clear distinction between developing for app and developing for library. Library source code is all inside `src` folder, whereas app source code is inside `app`.
+
+Webpack determines whether to build an app or library depending on whether an environment variable `BUILD_MODE` is set to `app`. Setting this variable switches the entry point of the project, but on the **same** `webpack.config.js` (the one on the root folder). The `webpack.config.js` and `index.html` in the `app` folder is never actually used in this process; they serve as a guide to how to use the smartcharts library as an npm package. We do it this way to develop the app to have hot reload available when we modify library files.
+
 ### Translations
 
 All strings that need to be translated must be inside `t.translate()`:
@@ -85,32 +162,14 @@ Each time a new translation string is added to the code, you need to update the 
 
 Once the new `messages.pot` is merged into the `dev` branch, it will automatically be updated in [CrowdIn](https://crowdin.com/project/smartcharts/settings#files). You should expect to see a PR with the title **New Crowdin translations**
  in a few minutes; this PR will update the `*.po` files.
- 
-### Contribute
 
-To contribute to SmartCharts, fork this project and checkout the `dev` branch. When adding features or performing bug fixes, it is recommended you make a separate branch off `dev`. Prior to sending pull requests, make sure all unit tests passed:
+## Manual Deployment
 
-    yarn test
-
-Once your changes have been merged to `dev`, it will immediately deployed to [charts.binary.com/beta](https://charts.binary.com/beta/). 
-
-### Developer Notes
-
-#### Separation of App and Library
-
-There should be a clear distinction between developing for app and developing for library. Library source code is all inside `src` folder, whereas app source code is inside `app`.
-
-Webpack determines whether to build an app or library depending on whether an environment variable `BUILD_MODE` is set to `app`. Setting this variable switches the entry point of the project, but on the **same** `webpack.config.js` (the one on the root folder). The `webpack.config.js` and `index.html` in the `app` folder is never actually used in this process; they serve as a guide to how to use the smartcharts library as an npm package. We do it this way to develop the app to have hot reload available when we modify library files.
-
-
-
-### Manual Deployment
-
-#### Deploy to NPM
+### Deploy to NPM
 
     yarn build && yarn publish
 
-#### Deploy to [charts.binary.com](https://charts.binary.com/)
+### Deploy to [charts.binary.com](https://charts.binary.com/)
 
 > Note: This is usually not required, since Travis will automatically deploy to [charts.binary.com](https://charts.binary.com/) and [charts.binary.com/beta](https://charts.binary.com/beta/) when `master` and `dev` is updated.
 
@@ -119,7 +178,7 @@ The following commands will build and deploy to charts.binary.com (*Make sure yo
     yarn deploy:beta        # charts.binary.com/beta
     yarn deploy:production  # charts.binary.com
 
-#### Deploy to Github Pages
+### Deploy to Github Pages
 
 As ChartIQ license is tied to the `binary.com` domain name, we provide developers with a `binary.sx` to test out the library on their Github Pages.
 

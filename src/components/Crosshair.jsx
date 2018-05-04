@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import {connect} from '../store/Connect';
 import '../../sass/_ciq-crosshair.scss';
 

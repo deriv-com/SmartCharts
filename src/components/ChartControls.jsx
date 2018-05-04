@@ -8,29 +8,35 @@ import CrosshairToggle from './CrosshairToggle.jsx';
 import Timeperiod from './Timeperiod.jsx';
 import ChartSize from './ChartSize.jsx';
 import DrawTools from './DrawTools.jsx';
-import ChartSetting from './ChartSetting.jsx';
 import Share from './Share.jsx';
 
-class ChartControls extends Component {
-    render(){
-        const { isMobile , hasOpenMenu } = this.props;
+const renderDefaultControls = (isMobile) => (
+    <React.Fragment>
+        {isMobile ? '' : <CrosshairToggle />}
+        <ChartTypes />
+        <StudyLegend />
+        <Comparison />
+        <DrawTools />
+        <Views />
+        <Share />
+        <Timeperiod />
+        <ChartSize />
+    </React.Fragment>
+);
 
-        return (
-            <div className={`cq-chart-controls ${hasOpenMenu ? ' active' : ''}`}>
-                {isMobile ? '' : <CrosshairToggle />}
-                <ChartTypes />
-                <StudyLegend />
-                <Comparison />
-                <DrawTools />
-                <Views />
-                <Share />
-                <Timeperiod />
-                <ChartSize />
-                <ChartSetting />
-            </div>
-        );
-    }
-}
+const ChartControls = ({
+    isMobile,
+    hasOpenMenu,
+    widgets,
+}) => {
+    const controls =  widgets || renderDefaultControls(isMobile);
+
+    return (
+        <div className={`cq-chart-controls ${hasOpenMenu ? ' active' : ''}`}>
+            { controls() }
+        </div>
+    );
+};
 
 export default connect(
     ({chart,
