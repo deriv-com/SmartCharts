@@ -3,23 +3,32 @@
     padding: 0 !important;
     display: flex;
     text-align: left;
-    color: $DEFAULT-text-medium;
     overflow: hidden;
+    @include themify($themes) {
+        color: themed('defaultTextMedium');
+        border-top: 1px solid themed('defaultBorder');
+    }
     @include transition(opacity 1s);
     @include border-radius();
     @include box-shadow (0px, 2px, 4px, rgba(0, 0, 0, .2));
     .cq-lookup-filters {
         width: 40%;
-        border-right: 1px solid $DEFAULT-border;
+        @include themify($themes) {
+            border-right: 1px solid themed('defaultBorder');
+        }
     }
     .cq-lookup-input  {
         margin: 1.5em 1.1em 1.6em 1.3em;
-        border: solid 1px $DEFAULT-border;
         position: relative;
+        @include themify($themes) {
+            border: 1px solid themed('defaultBorder');
+        }
         @include border-radius();
         &.active{
-            border-color: $active-color;
-            @include box-shadow (0px, 0, 2px, $active-color);
+            @include themify($themes) {
+                border-color: themed('activeColor');
+                @include box-shadow (0px, 0, 2px, themed('activeColor'));
+            }
             > .icon-reset{
                 right: 2px;
                 opacity: 1;
@@ -49,7 +58,9 @@
 
         }
         > input:focus + .ic-icon svg path {
-            fill: $active-color;
+            @include themify($themes) {
+                fill: themed('activeColor');
+            }
         }
     }
     .category {
@@ -59,16 +70,20 @@
         }
     }
     .category-content {
-        background-color: $DEFAULT-main;
         margin: 0.4em 1em 0em 1em;
-        border: 1px solid $DEFAULT-border;
+        @include themify($themes) {
+            background-color: themed('defaultMain');
+            border: 1px solid themed('defaultBorder');
+        }
         @include border-radius();
     }
     .subcategory {
         font-weight: 500;
         padding: 0.5em 0 0.5em 1.2em;
         font-size: 1.1em;
-        color: $DEFAULT-text-strong;
+        @include themify($themes) {
+            color: themed('defaultTextStrong');
+        }
     }
     .category-title {
         display: block;
@@ -96,18 +111,34 @@
                 &.ic-commodities,
                 &.ic-volidx,
                 &.ic-favorite {
-                    svg > g > circle { fill: $active-color; }
+                    svg > g > circle {
+                        @include themify($themes) {
+                            fill: themed('activeColor');
+                        }
+                    }
                 }
                 &.ic-indicators > svg > g circle {
-                    fill: $active-color;
+                    @include themify($themes) {
+                        fill: themed('activeColor');
+                    }
                 }
                 &.ic-stocks > svg > path:first-child {
-                    fill: $active-color;
+                    @include themify($themes) {
+                        fill: themed('activeColor');
+                    }
                 }
                 &.ic-indices {
                     svg > g > g {
-                        > path   { fill: $active-color;   }
-                        > g > circle { stroke: $active-color; }
+                        > path   {
+                            @include themify($themes) {
+                                fill: themed('activeColor');
+                            }
+                        }
+                        > g > circle {
+                            @include themify($themes) {
+                                fill: themed('strokeColor');
+                            }
+                        }
                     }
                 }
             }
@@ -128,11 +159,13 @@
         padding-left: 20px;
         padding-right: 20px;
         display: flex;
-        border-bottom: 1px solid $DEFAULT-border;
         height: 40px;
         align-items: center;
         justify-content: space-between;
         line-height: initial;
+        @include themify($themes) {
+            border-bottom: 1px solid themed('defaultBorder');
+        }
         &:last-child{
             border-bottom: none;
         }
@@ -180,12 +213,14 @@
         .btn-categorical-display-close{
             border: none;
             background: transparent;
-            color: $active-color;
             font-weight: bold;
             padding: 0.78em 1em;
             width: 100%;
             cursor: pointer;
-            @include box-shadow(0,0,0,#fff);
+            @include themify($themes) {
+                color: themed('activeColor');
+                @include box-shadow(0,0,0,themed('defaultMain'));
+            }
         }
     }
 }
@@ -247,14 +282,18 @@
 
 .smartcharts-mobile{
     .cq-mobile-title{
-        background: $DEFAULT-main;
+        @include themify($themes) {
+            background: themed('defaultMain');
+        }
         .mobile-title{
             display: block;
             font-size: 16px;
             line-height: 40px;
             font-weight: 400;
             padding: 0 .7em;
-            color: $DEFAULT-text-strong;
+            @include themify($themes) {
+                color: themed('defaultTextStrong');
+            }
         }
         .icon-close-menu{
             position: absolute;
@@ -269,12 +308,16 @@
             width: 100%;
             border-right: none;
             height: 7.8em;
-            border-bottom: 1px solid $DEFAULT-border;
+            @include themify($themes) {
+                border-bottom: 1px solid themed('defaultBorder');
+            }
         }
         .cq-lookup-input  {
             margin: 1.2em 1em 0.5em 1em;
-            border: solid 1px $DEFAULT-border;
             position: relative;
+            @include themify($themes) {
+                border: 1px solid themed('defaultBorder');
+            }
             @include border-radius();
         }
         .cq-scroll-panel{
@@ -293,7 +336,9 @@
                     margin: 0px;
                 }
                 &.cq-active-filter{
-                    border-bottom: 2px solid $active-color;
+                    @include themify($themes) {
+                        border-bottom: 2px solid themed('activeColor');
+                    }
                 }
                 .cq-filter-text{
                     display: none;

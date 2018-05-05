@@ -16,7 +16,7 @@
 		@include box-sizing(border-box);
 		@include themify($themes) {
 			border: themed('listBorder');
-			color: themed('defaultTextStrong');
+			//color: themed('defaultTextStrong');
 			background: themed('defaultMain');
 		}
 		&:first-child {

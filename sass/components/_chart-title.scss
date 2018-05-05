@@ -111,6 +111,16 @@
         z-index: -3;
         margin-top: -35px;
         box-shadow: 0 0 0.625em 0.025em rgba(0, 0, 0, 0.14);
+        bottom: auto !important;
+        visibility: hidden;
+        @include dialog-transition();
+        &.open{
+            margin-top:5px;
+            bottom: auto !important;
+            visibility: visible;
+            opacity: 1;
+            z-index: 3;
+        }
     }
 }
 

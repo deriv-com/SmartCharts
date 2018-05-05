@@ -84,7 +84,9 @@
         justify-content: space-around;
         border: none;
         padding: 0 0.7em;
-        border-top: 1px solid #d9d9d9;
+        @include themify($themes) {
+            border-top: 1px solid themed('defaultBorder');
+        }
         &.active{
             z-index: 5;
         }

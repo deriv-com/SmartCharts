@@ -16,7 +16,8 @@
 			}
 		}
 		.cq-menu-btn{
-			> .ic-icon {
+			> .ic-icon,
+			> .cq-toggle {
 				&.active{
 					svg {
 						border-radius: 4px;
@@ -25,17 +26,11 @@
 							background: themed('controlBgActive');
 						}
 					}
-				}
-				svg , path, g{
-					@include themify($themes) {
-						color: themed('controlTextActive');
-						fill: themed('controlTextActive');
-					}
-				}
-				.ic-subtitle{
-					font-weight: 500;
-					@include themify($themes) {
-						fill: themed('controlTextActive');
+					.ic-subtitle{
+						font-weight: 500;
+						@include themify($themes) {
+							color: themed('controlTextActive');
+						}
 					}
 				}
 			}
@@ -43,8 +38,24 @@
 	}
 	.cq-menu-btn{
 		padding: 0 5px;
-		> .ic-icon {
+		> .ic-icon,
+		> .cq-toggle {
 			padding: .35em .5em;
+			&.active{
+				svg {
+					border-radius: 4px;
+					@include themify($themes) {
+						box-shadow: inset 0 0 0 1px themed('activeColor');
+						background: themed('controlBgActive');
+					}
+				}
+				.ic-subtitle{
+					font-weight: 500;
+					@include themify($themes) {
+						color: themed('controlTextActive');
+					}
+				}
+			}
 			svg, path, g{
 				@include themify($themes) {
 					color: themed('controlText');
@@ -110,17 +121,18 @@
 		}
 		.title{
 			@include themify($themes) {
+				color: themed('controlTitleText');
 				background: themed('controlDialogHead');
 				border-bottom: 1px solid themed('defaultBorder');
 			}
 			> .ic-icon {
 				@include themify($themes) {
-					color: themed('controlText');
+					color: themed('controlTitleText');
 				}
 				svg, path, g{
 					@include themify($themes) {
-						color: themed('controlText');
-						fill: themed('controlText');
+						color: themed('controlTitleText');
+						fill: themed('controlTitleText');
 					}
 				}
 			}
