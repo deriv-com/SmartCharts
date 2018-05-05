@@ -4,10 +4,10 @@
     <title>icons/system/light/chart settings/crosshair/ic-crosshair</title>
     <desc>Created with Sketch.</desc>
     <defs></defs>
-    <g id="icons/system/light/chart-settings/crosshair/ic-crosshair" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+    <g id="icons/system/light/chart-settings/crosshair/ic-crosshair" stroke-width="1">
         <g id="ic-crosshair">
-            <rect id="Rectangle-Copy" fill="#D8D8D8" opacity="0" x="0" y="0" width="16" height="16"></rect>
-            <path d="M7.5,2 L8.5,2 L8.5,6 L7.5,6 L7.5,2 Z M7.5,10 L8.5,10 L8.5,14 L7.5,14 L7.5,10 Z M10,7.5 L14,7.5 L14,8.5 L10,8.5 L10,7.5 Z M2,7.5 L6,7.5 L6,8.5 L2,8.5 L2,7.5 Z" id="Combined-Shape" fill="#2A3052"></path>
+            <rect id="Rectangle-Copy" opacity="0" x="0" y="0" width="16" height="16"></rect>
+            <path d="M7.5,2 L8.5,2 L8.5,6 L7.5,6 L7.5,2 Z M7.5,10 L8.5,10 L8.5,14 L7.5,14 L7.5,10 Z M10,7.5 L14,7.5 L14,8.5 L10,8.5 L10,7.5 Z M2,7.5 L6,7.5 L6,8.5 L2,8.5 L2,7.5 Z" id="Combined-Shape"></path>
         </g>
     </g>
 </svg>

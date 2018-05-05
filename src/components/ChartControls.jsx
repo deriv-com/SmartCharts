@@ -10,6 +10,8 @@ import ChartSize from './ChartSize.jsx';
 import DrawTools from './DrawTools.jsx';
 import ChartSetting from './ChartSetting.jsx';
 import Share from './Share.jsx';
+import '../../sass/components/_chart-controls.scss';
+
 
 class ChartControls extends Component {
     render(){

@@ -106,6 +106,10 @@ export default class ChartSettingStore {
         }));
     }
 
+    @action.bound setView(view) {
+        this.view = view ? view : '';
+    }
+
     @action.bound setLanguage(lng) {
         this.language = lng;
         this.saveSetting();
@@ -116,10 +120,13 @@ export default class ChartSettingStore {
         return this.language ? this.language : 'en';
     }
 
+    @action.bound setTheme(value) {
+        this.theme = value ? 'dark' : 'light';
+        this.saveSetting();
+    }
 
-
-    @action.bound setView(view) {
-        this.view = view ? view : '';
+    @computed get isDarkTheme() {
+        return this.theme === 'dark';
     }
 
 }

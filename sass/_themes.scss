@@ -1,0 +1,84 @@
+
+$themes: (
+  light: (
+    activeColor:            #4C5794,
+    defaultMain:            #fff,
+    defaultAccent:          #398dff,
+    defaultBg:              #f8f8f8,
+    defaultMenuBg:          #fff,
+    defaultSubmenuBg:       #f3f3f3,
+    defaultHuBg:            #ffffff,
+    defaultText:            #000,
+    defaultTextActive:      #4C5794,
+    defaultTextSubtle:      #999,
+    defaultTextMedium:      #666,
+    defaultTextStrong:      #000,
+    defaultBorder:          #e9e9ed,
+    defaultBorderSubtle:    #ddd,
+    defaultBorderMedium:    #ccc,
+    defaultBorderStrong:    #999,
+    chartGrid:              #f3f3f3,
+    chartText:              #cccccc,
+    chartBg:                #fff,
+    listBgActive:           #f2f3f8,
+    listBorder:             1px solid #e9e9ed,
+    controlText:            #575757,
+    controlTextActive:      #4b5794,
+    controlActive:          #4b5794,
+    controlBgActive:        rgba(76, 87, 148, 0.2),
+    controlGrid:            #fafafb,
+    controlDialogHead:      #FFFFFF,
+    controlDialogBody:      #FAFAFA,
+    controlTitleBg:         #FAFAFA,
+  ),
+  dark: (
+    activeColor:            #4C5794,
+    defaultMain:            #1c2a35,
+    defaultAccent:          #151f28,
+    defaultBg:              #1C2A35,
+    defaultMenuBg:          #1c2a35,
+    defaultSubmenuBg:       #f3f3f3,
+    defaultHuBg:            #1c2a35,
+    defaultText:            #000,
+    defaultTextSubtle:      #999,
+    defaultTextMedium:      #666,
+    defaultTextStrong:      #000,
+    defaultBorder:          #e9e9ed,
+    defaultBorderSubtle:    #ddd,
+    defaultBorderMedium:    #ccc,
+    defaultBorderStrong:    #999,
+    chartGrid:              mix(#fff, #1c2a35, 10%),
+    chartText:              mix(#fff, #1c2a35, 50%),
+    chartBg:                mix(#fff, #1c2a35, 10%),
+    listBgActive:           #f2f3f8,
+    controlText:            #575757,
+    controlActive:          #4b5794,
+    controlTextActive:      #4b5794,
+    controlBgActive:        rgba(76, 87, 148, 0.2),
+    controlGrid:            #fafafb,
+    controlDialogHead:      mix(#fff, #1c2a35, 3%),
+    controlDialogBody:      mix(#fff, #1c2a35, 7%),
+    controlTitleBg:         mix(#fff, #1c2a35, 10%),
+  ),
+);
+
+
+
+@mixin themify($themes: $themes) {
+  @each $theme, $map in $themes {
+
+    .smartcharts-#{$theme} & {
+      $theme-map: () !global;
+      @each $key, $submap in $map {
+        $value: map-get(map-get($themes, $theme), '#{$key}');
+        $theme-map: map-merge($theme-map, ($key: $value)) !global;
+      }
+      @content;
+      $theme-map: null !global;
+    }
+  }
+}
+@function themed($key) {
+  @return map-get($theme-map, $key);
+}
+

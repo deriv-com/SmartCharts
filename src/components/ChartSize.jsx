@@ -4,6 +4,7 @@ import {
     ZoomInIcon,
     ZoomOutIcon,
 } from './Icons.jsx';
+import '../../sass/components/_chart-size.scss';
 
 class ChartSize extends PureComponent {
     onContextReady (context) {

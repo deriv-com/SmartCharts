@@ -8,6 +8,7 @@ import {
     TickIcon,
     DeleteIcon
 } from './Icons.jsx';
+import '../../sass/components/_view.scss';
 
 const ViewItem = ({
     view,

@@ -9,8 +9,7 @@ import AssetInformation from './AssetInformation.jsx';
 import Loader from './Loader.jsx';
 
 /* css + scss */
-import '../../sass/chartiq.scss';
-import '../../sass/_ciq-custom.scss';
+import '../../sass/app.scss';
 
 import '../Plugin';
 import './ui';
@@ -42,7 +41,6 @@ class Chart extends Component {
             children,
             lang,
             isMobile,
-            theme,
             isChartAvailable,
             setting,
             chartPanelTop,
@@ -53,9 +51,15 @@ class Chart extends Component {
         const array = React.Children.toArray(children);
         const insideHolder = array.filter(c => !/(TradeStart)|(TradeEnd)/.test(c.type.displayName));
         const insideSubHolder = array.filter(c => /(TradeStart)|(TradeEnd)/.test(c.type.displayName));
+        const contextClassName = () =>{
+            let className = '';
+            className += isMobile ? 'smartcharts-mobile' : '';
+            className += (setting.theme === 'light') ? ' smartcharts-light' : ` smartcharts-${setting.theme}`;
+            return className;
+        }
 
         return (
-            <cq-context ref={(root) => { this.root = root; }} class={isMobile ? 'smartcharts-mobile' : ''}>
+            <cq-context ref={(root) => { this.root = root; }} class={contextClassName()}>
                 <div className="ciq-chart-area">
                     <div className="ciq-chart">
                         <RenderInsideChart at='holder'>
@@ -88,13 +92,13 @@ class Chart extends Component {
 }
 
 export default connect(
-    ({chart, drawTools, studies}) => ({
+    ({chart, drawTools, studies, chartSetting}) => ({
         contextPromise: chart.contextPromise,
         init: chart.init,
         StudySettingsDialog : studies.settingsDialog.connect(SettingsDialog),
         DrawToolsSettingsDialog : drawTools.settingsDialog.connect(SettingsDialog),
         isChartAvailable: chart.isChartAvailable,
-        setting: chart.setting,
         chartPanelTop: chart.chartPanelTop,
+        setting: chartSetting
     })
 )(Chart);

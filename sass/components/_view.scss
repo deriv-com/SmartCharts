@@ -1,97 +1,88 @@
-cq-context{
-    .views {
-        .cq-menu-dropdown {
-            width: 280px;
-            height: 200px;
-            transform: translate(-50%);
-            left: 50%;
-            .title {
-                display: flex;
-                align-items: center;
-                // justify-content: center;
-                flex-direction: row;
-                height: 40px;
-                @include box-sizing(border-box);
-                padding: 5px 10px;
-                .icon {
-                    display: flex;
-                    flex: 8 0 0;
-                    justify-content: flex-end
-                }
-                // .title {
-                //     font-size: 16px;
-                //     font-weight: 400;
-                //     color: #252525;
-                // }
-                .add {
-                    margin-bottom: 1px;
-                    display: flex;
-                    .ic-icon {
-                        flex: 1 0 0;
-                        position: relative;
-                        right: 20px;
-                    }
-                }
-                .view-input {
-                    flex: 8 0 0;
-                    font-size: 12px;
-                    font-weight: normal;
-                    width: 100%;
-                    padding: 0 30px 0 0;
-                    line-height: 24px;
-                    border: none;
-                    outline: none;
-                    border-bottom: 1px solid #4b5794;
-                }
-            }
-            .content {
-                display: block;
-                height: 135px;
-                overflow: scroll;
-                padding: 16px;
-                .placeholder {
-                    p {
-                        height: 20px;
-                        font-size: 12px;
-                        margin: 0;
-                        text-align: center;
-                        color: #aeaeaf;
-                    }
-                }
-                .view {
-                    background: $DEFAULT-main;
-                    display: flex;
-                    padding: 5px 16px;
-                    border: 1px solid $DEFAULT-border;
-                    border-bottom: 0;
-                    cursor: pointer;
-
-                    &:last-child {
-                        border-bottom: 1px solid $DEFAULT-border;
-                    }
-                    .name {
-                        flex: 1 0 0;
-                        color: $DEFAULT-text-strong;
-                    }
-                    .ic-icon {
-                        opacity: 0;
-                        flex: 0 0 0;
-                        transition: opacity 0.15s .2s;
-                    }
-                    &:hover .ic-icon {
-                        opacity: 1;
-                    }
-                }
-            }
-        }
-    }
-    &.smartcharts-mobile{
-        .cq-menu-dropdown {
-            .dropdown-title {
-                .icon {
-                    flex: none;
-                }
-            }
-        }
-    }
+.views {
+	.cq-menu-dropdown {
+		width: 280px;
+		height: 200px;
+		transform: translate(-50%);
+		left: 50%;
+		.title {
+			display: flex;
+			align-items: center;
+			flex-direction: row;
+			height: 40px;
+			padding: 5px 10px;
+			@include box-sizing(border-box);
+			.icon {
+				display: flex;
+				flex: 8 0 0;
+				justify-content: flex-end
+			}
+			.add {
+				margin-bottom: 1px;
+				display: flex;
+				.ic-icon {
+					flex: 1 0 0;
+					position: relative;
+					right: 20px;
+				}
+			}
+			.view-input {
+				flex: 8 0 0;
+				font-size: 12px;
+				font-weight: normal;
+				width: 100%;
+				padding: 0 30px 0 0;
+				line-height: 24px;
+				border: none;
+				outline: none;
+				border-bottom: 1px solid #4b5794;
+			}
+		}
+		.content {
+			display: block;
+			height: 135px;
+			overflow: scroll;
+			padding: 16px;
+			.placeholder {
+				p {
+					height: 20px;
+					font-size: 12px;
+					margin: 0;
+					text-align: center;
+					color: #aeaeaf;
+				}
+			}
+			.view {
+				display: flex;
+				padding: 5px 16px;
+				border-bottom: 0;
+				cursor: pointer;
+				background: $DEFAULT-main;
+				border: 1px solid $DEFAULT-border;
+				&:last-child {
+					border-bottom: 1px solid $DEFAULT-border;
+				}
+				.name {
+					flex: 1 0 0;
+					color: $DEFAULT-text-strong;
+				}
+				.ic-icon {
+					opacity: 0;
+					flex: 0 0 0;
+					transition: opacity 0.15s .2s;
+				}
+				&:hover .ic-icon {
+					opacity: 1;
+				}
+			}
+		}
+	}
+}
+.smartcharts-mobile{
+	.cq-menu-dropdown {
+		.dropdown-title {
+			.icon {
+				flex: none;
+			}
+		}
+	}
 }

@@ -1,165 +1,159 @@
-cq-context {
-    .stx-chart-panel.stx-show { /* Hide default Chart Title and Icons */
-        display: none;
-    }
-    .cq-chart-title {
-        top: 1em;
-        z-index: 41;
-        margin: .2em 0.8em;
-        &.stxMenuActive {
-            .cq-menu-btn{
-                .cq-symbol-select-btn{
-                    border: solid 1px $active-color;
-                    box-shadow: 0 0 0 2px rgba(76,87,148,.4);
-                }
-            }
-        }
+.cq-chart-title {
+    top: 1em;
+    z-index: 41;
+    margin: .2em 0.8em;
+    &.stxMenuActive {
         .cq-menu-btn{
-            padding: 0 1em 0 0;
-            margin: .2em 0em;
-            .cq-symbol-select-btn {
-                background: $DEFAULT-main;
-                // border-color: $DEFAULT-bg;
-                color: $DEFAULT-text-subtle;
-
-                // background: $DEFAULT-main;
-                font-family: $base-font;
-                padding: 0.3em 2em .3em 1em;
-                cursor: pointer;
-                border: solid 1px $DEFAULT-border;
-                position: relative;
-                display: flex;
-                align-items: center;
-                // color: #333;
-                @include border-radius();
-                &:hover {
-                    border: solid 1px $active-color;
+            .cq-symbol-select-btn{
+                @include themify($themes) {
+                    border: 1px solid themed('activeColor');
                 }
-                > .ic-icon, > .ic-frx, > .ic-wld, > .ic-otc {
-                    height: $large-icon-size;
-                    width: $large-icon-size;
-                    margin-right: 12px;
-                    transform: scale(1.3);
-                    > svg {
-                        height: $large-icon-size;
-                    }
-                }
-                .cq-symbol-info {
-                    display: flex;
-                    flex-direction: column;
-                    .cq-market {
-                        font-size: 12px;
-                        font-weight: bold;
-                        line-height: 1.5;
-                        width: fit-content;
-                        &:after {
-                            float: right;
-                            margin-left: 12px;
-                            margin-top: 7px;
-                            border-top: 5px solid $DEFAULT-text-strong;
-                            @include triangle-base(4px);
-                        }
-                    }
-                }
-                .cq-symbol,
-                .cq-chart-price {
-                    .cq-animated-price {
-                        padding-left: 16px;
-                    }
-                    > div {
-                        line-height: 1.5;
-                    }
-                    line-height: 22px;
-                    font-size: 12px;
-                    text-align: left;
-                }
-                .cq-symbol {
-                    font-size: 16px;
-                    font-weight: 700;
-                }
-                .cq-chart-price {
-                    margin-left: 9px;
-                    color: $DEFAULT-text-medium;
-                    vertical-align: text-bottom;
-                }
-                .cq-chart-price > * {
-                    position: relative;
-                }
-
-                /* Up/Down Arrow indicators */
-                .cq-chart-price {
-                    .cq-change {
-                        &.stx-up:after, &.stx-down:after {
-                            float: left;
-                            margin-top: 5px;
-                            margin-right: 5px;
-                            @include triangle-base(6px);
-                        }
-                        &.stx-up:after {
-                            border-bottom: 8px solid rgb(76, 175, 80);
-                        }
-                        &.stx-down:after {
-                            border-top: 8px solid rgb(249, 84, 84);
-                        }
-                    }
-
-                }
-            }
-        }
-        .cq-menu-dropdown {
-            z-index: -3;
-            margin-top: -35px;
-            box-shadow: 0 0 0.625em 0.025em rgba(0, 0, 0, 0.14);
-            visibility: hidden;
-            @include dialog-transition();
-            &.open{
-                margin-top:5px;
-                visibility: visible;
-                opacity: 1;
-                z-index: 3;
+                box-shadow: 0 0 0 2px rgba(76,87,148,.4);
             }
         }
     }
+    .cq-menu-btn{
+        padding: 0 1em 0 0;
+        margin: .2em 0em;
+        .cq-symbol-select-btn {
+            font-family: $base-font;
+            padding: 0.3em 2em .3em 1em;
+            cursor: pointer;
+            position: relative;
+            display: flex;
+            align-items: center;
+            @include themify($themes) {
+                background: themed('controlTitleBg');
+                color: themed('defaultTextSubtle');
+                border: solid 1px themed('defaultBorder');
+            }
+            @include border-radius();
+            &:hover {
+                @include themify($themes) {
+                    border: solid 1px themed('activeColor');
+                }
+            }
+            > .ic-icon, > .ic-frx, > .ic-wld, > .ic-otc {
+                height: $large-icon-size;
+                width: $large-icon-size;
+                margin-right: 12px;
+                transform: scale(1.3);
+                > svg {
+                    height: $large-icon-size;
+                }
+            }
+            .cq-symbol-info {
+                display: flex;
+                flex-direction: column;
+                .cq-market {
+                    font-size: 12px;
+                    font-weight: bold;
+                    line-height: 1.5;
+                    width: fit-content;
+                    &:after {
+                        float: right;
+                        margin-left: 12px;
+                        margin-top: 7px;
+                        @include themify($themes) {
+                            border-top: 5px solid themed('defaultTextStrong');
+                        }
+                        @include triangle-base(4px);
+                    }
+                }
+            }
+            .cq-symbol,
+            .cq-chart-price {
+                .cq-animated-price {
+                    padding-left: 16px;
+                }
+                > div {
+                    line-height: 1.5;
+                }
+                line-height: 22px;
+                font-size: 12px;
+                text-align: left;
+            }
+            .cq-symbol {
+                font-size: 16px;
+                font-weight: 700;
+            }
+            .cq-chart-price {
+                margin-left: 9px;
+                @include themify($themes) {
+                    color: themed('defaultTextMedium');
+                }
+                vertical-align: text-bottom;
+            }
+            .cq-chart-price > * {
+                position: relative;
+            }
 
-    /* Mobile Style */
-    &.smartcharts-mobile{
-        .cq-top-ui-widgets{
-            width: 100%;
-            padding: 0px;
-            margin: 0px;
-            z-index: 3;
-            .cq-menu-btn{
-                padding: 0px;
-                margin: .4em .5em;
-                margin: 0px;
+            /* Up/Down Arrow indicators */
+            .cq-chart-price {
+                .cq-change {
+                    &.stx-up:after, &.stx-down:after {
+                        float: left;
+                        margin-top: 5px;
+                        margin-right: 5px;
+                        @include triangle-base(6px);
+                    }
+                    &.stx-up:after {
+                        border-bottom: 8px solid rgb(76, 175, 80);
+                    }
+                    &.stx-down:after {
+                        border-top: 8px solid rgb(249, 84, 84);
+                    }
+                }
             }
         }
-        .cq-chart-title{
-            width: 100%;
-            display: block;
-            top: 0em;
+    }
+    .cq-menu-dropdown {
+        z-index: -3;
+        margin-top: -35px;
+        box-shadow: 0 0 0.625em 0.025em rgba(0, 0, 0, 0.14);
+    }
+}
+
+/* Mobile Style */
+.smartcharts-mobile{
+    .cq-top-ui-widgets{
+        width: 100%;
+        padding: 0px;
+        margin: 0px;
+        z-index: 3;
+        .cq-menu-btn{
+            padding: 0px;
+            margin: .4em .5em;
             margin: 0px;
-            .cq-menu-btn {
-                padding: 0px;
-                margin: .3em 0.4em;
-            }
-            .cq-menu-dropdown{
-                width: 100%;
+        }
+    }
+    .cq-chart-title{
+        width: 100%;
+        display: block;
+        top: 0em;
+        margin: 0px;
+        .cq-menu-btn {
+            padding: 0px;
+            margin: .3em 0.4em;
+        }
+        .cq-menu-dropdown{
+            width: 100%;
+            margin: 0px;
+            top: 0px;
+            left: 0px;
+            &.open{
                 margin: 0px;
-                top: 0px;
-                left: 0px;
-                &.open{
-                    margin: 0px;
-                    bottom: auto;
+                bottom: auto;
+            }
+            .cq-categorical-display{
+                .cq-scroll-panel{
+                    height: calc( 100vh - 11em );
                 }
-                .cq-categorical-display{
-                    .cq-scroll-panel{
-                        height: calc( 100vh - 11em );
-                    }
-                    .cq-categorical-footer{
-                        background: $DEFAULT-main;
-                        border-top: 1px solid #d9d9d9;
-                        display: block;
+                .cq-categorical-footer{
+                    display: block;
+                    @include themify($themes) {
+                        background: themed('defaultMain');
+                        border-top: 1px solid themed('defaultBorder');
                     }
                 }
             }

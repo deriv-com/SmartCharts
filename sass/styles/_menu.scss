@@ -1,0 +1,141 @@
+.ciq-menu {
+	position: relative;
+	@include themify($themes) {color: themed('controlText');}
+	@include transition(color .20s 0s);
+	&:active{
+		& {
+			@include themify($themes) {color: themed('controlTextActive');}
+		}
+	}
+	&.stxMenuActive,
+	&:hover {
+		@include themify($themes) {color: themed('controlTextActive');}
+		.break-sm & {
+			@include themify($themes) {
+				border-bottom: solid 3px themed('defaultAccent');
+			}
+		}
+		.cq-menu-btn{
+			> .ic-icon {
+				&.active{
+					svg {
+						border-radius: 4px;
+						@include themify($themes) {
+							box-shadow: inset 0 0 0 1px themed('activeColor');
+							background: themed('controlBgActive');
+						}
+					}
+				}
+				svg , path, g{
+					@include themify($themes) {
+						color: themed('controlTextActive');
+						fill: themed('controlTextActive');
+					}
+				}
+				.ic-subtitle{
+					font-weight: 500;
+					@include themify($themes) {
+						fill: themed('controlTextActive');
+					}
+				}
+			}
+		}
+	}
+	.cq-menu-btn{
+		padding: 0 5px;
+		> .ic-icon {
+			padding: .35em .5em;
+			svg, path, g{
+				@include themify($themes) {
+					color: themed('controlText');
+					fill: themed('controlText');
+				}
+			}
+		}
+	}
+	> span {
+		padding:0 12px 0 0;
+		position:relative;
+		font-weight:400;
+	}
+
+
+
+
+
+
+
+	cq-menu-dropdown,
+	.cq-menu-dropdown {
+		position: absolute;
+		overflow: hidden;
+		opacity: 0;
+		bottom: -1.6em;
+		z-index: -3;
+		height: auto;
+		margin-top: 1;
+        visibility: hidden;
+		@include themify($themes) {
+			background: themed('controlDialogBody');
+			color: themed('controlText');
+		}
+		@include box-shadow (0px, 2px, 4px, rgba(0, 0, 0, .2));
+		@include transition( opacity .20s 0s);
+		@include border-radius();
+        @include dialog-transition();
+        &.open{
+            visibility: visible;
+            margin-top:5px;
+            opacity: 1;
+            z-index: 3;
+            bottom: 5em;
+        }
+		.break-sm & {
+			top: $nav-height;
+			width:auto;
+			left:0;
+			right:0;
+			@include border-radius(0px);
+		}
+		/* cq-menu can be once removed from the menu button but no further. Anything further is a sub-menu */
+		.stxMenuActive > &,
+		.stxMenuActive > * > & {
+			opacity: 1;
+			height:auto;
+			margin-top:5px;
+		}
+
+		&[cq-lift] {
+			width:auto;
+		}
+		.title{
+			@include themify($themes) {
+				background: themed('controlDialogHead');
+				border-bottom: 1px solid themed('defaultBorder');
+			}
+			> .ic-icon {
+				@include themify($themes) {
+					color: themed('controlText');
+				}
+				svg, path, g{
+					@include themify($themes) {
+						color: themed('controlText');
+						fill: themed('controlText');
+					}
+				}
+			}
+		}
+		.body{
+
+		}
+		.cq-categorical-display{
+			.cq-lookup-filters{
+				@include themify($themes) {
+					background: themed('controlDialogHead');
+				}
+			}
+			.cq-scroll-panel{}
+		}
+	}
+
+}

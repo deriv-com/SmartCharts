@@ -1,17 +1,16 @@
 import React from 'react';
 import Menu from './Menu.jsx';
 import { connect } from '../store/Connect';
+import {Switch} from './Form.jsx';
 import {
     SettingIcon,
     PositionLeftIcon,
     PositionBottomIcon,
-    ThemeDarkIcon,
-    ThemeLightIcon,
     ChevronRightIcon,
     BackIcon,
     FlagIcons
 } from './Icons.jsx';
-import '../../sass/_ciq-chart-setting.scss';
+import '../../sass/components/_ciq-chart-setting.scss';
 
 
 const ChartSetting = ({
@@ -21,7 +20,9 @@ const ChartSetting = ({
     languages,
     setView,
     view,
-    setLanguage
+    setLanguage,
+    isDarkTheme,
+    setTheme
 }) => {
     const renderMain = () => {
         return <div>
@@ -37,15 +38,16 @@ const ChartSetting = ({
                             />
                         </div>
                     </div>
-                    <div className="ciq-item">
+                    */}
+                    <div className="ciq-list-item">
                         <span className="ciq-icon-text">{t.translate('Theme')}</span>
                         <div className="ciq-action">
-                            <ThemeDarkIcon
-                            />
-                            <ThemeLightIcon
-                            />
+                            <Switch
+                                value={isDarkTheme}
+                                onChange={setTheme}
+                                />
                         </div>
-                    </div>*/}
+                    </div>
                     <div className="ciq-list-item">
                         <span className="ciq-icon-text">{t.translate('Language')}</span>
                         <div className="ciq-action">
@@ -113,5 +115,7 @@ export default connect(({chartSetting: s}) => ({
     languages: s.languages,
     setView: s.setView,
     view: s.view,
-    setLanguage: s.setLanguage
+    setLanguage: s.setLanguage,
+    isDarkTheme: s.isDarkTheme,
+    setTheme: s.setTheme,
 }))(ChartSetting);

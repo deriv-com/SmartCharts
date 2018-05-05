@@ -1,4 +1,3 @@
-@import "_variables";
 
 .cq-slider {
 	width: 150px;
@@ -228,19 +227,5 @@
     height: 24px;
     svg {
         padding:5px;
-    }
-}
-.cq-toggle.active > .ic-icon,
-.cq-toggle.active > .cq-text-icon,
-.ic-icon.active {
-
-}
-.cq-menu-btn .ic-icon.active {
-    color: #4C5794;
-    text-shadow: -.5px 0 0 #4c5794  !important;
-    svg {
-        box-shadow: inset 0 0 0 1px $active-color;
-        border-radius: 4px;
-        background: #f2f3f8;
     }
 }

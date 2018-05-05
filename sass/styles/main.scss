@@ -1,51 +1,3 @@
-
-
-/* to allow style to color the background of the chart */
-cq-context {
-	background: $DEFAULT-main;
-	position: absolute;
-	height: 100%;
-	width: 100%;
-	font-family: $base-font;
-	font-size: $font-size-base;
-	overflow: hidden;
-
-	input {
-        background: $DEFAULT-main;
-		@include user-select(text);
-		font-weight: 300;
-		color: $DEFAULT-text;
-		&::placeholder,
-		&::-moz-placeholder {
-			color: rgba($DEFAULT-text, 0.2);
-		}
-	}
-
-	div, li, span, a {
-		-webkit-tap-highlight-color: rgba(0,0,0,0); /* eliminated annoying flash when tapping screen on ipads */
-		-webkit-tap-highlight-color: transparent; /* For some Androids */
-	}
-
-	.cq-top-ui-widgets {
-		position: absolute;
-		z-index: 2;
-		margin: 0.2em 0.5em;
-	}
-
-	@import "components/barrier";
-	@import "components/comparison-list";
-	@import "components/loader";
-	@import "ciq-perfect-scrollbar";
-}
-
-@import "components/timeperiod";
-@import "components/chart-size";
-@import "components/categorical-display";
-@import "components/view";
-@import "components/chart-types";
-@import "components/chart-title";
-@import "components/chart-controls";
-
 /* --------------------------------------------------------- FIELDS, SELECTS, INPUTS --------------------------------------------------------- */
 /* Inputs */
 .stx-textarea,
@@ -145,8 +97,8 @@ cq-context {
 	font-weight:700;
 	text-transform:uppercase;
 	color:$DEFAULT-accent;
-    display: inline-block;
-    position: relative;
+	display: inline-block;
+	position: relative;
 	line-height:27px;
 	height:27px;
 	padding:0 10px;
@@ -158,13 +110,13 @@ cq-context {
 	@include box-shadow(0, 1px, 2px, rgba(0, 0, 0, .2));
 
 	&:hover {
-	    border:none;
+		border:none;
 		color:darken( $DEFAULT-accent, 8% );
 		@include box-shadow(0, 1px, 2px, rgba(0, 0, 0, .3));
 	}
 	&:active,
 	&:active  {
-	    border:none;
+		border:none;
 		color:darken( $DEFAULT-accent, 8% );
 		@include transition( all 0s 0s);
 		@include box-shadow(inset 0, 1px, 2px, rgba(0, 0, 0, .2));
@@ -175,7 +127,9 @@ cq-context {
 		background:$DEFAULT-accent;
 		color:#fff;
 		&:hover,
-		&:active {color:#fff; background:darken( $DEFAULT-accent, 5% );}
+		&:active {
+			color:#fff;
+			background:darken( $DEFAULT-accent, 5% );}
 		}
 
 	&.ciq-simple {
@@ -191,11 +145,11 @@ cq-context {
 	position:absolute;
 }
 .ciq-btn.fancy { /* Defaults */
-    display: inline-block;
-    overflow: hidden;
-    position: relative;
-    transform: translateZ(0px);
-    vertical-align: middle;
+	display: inline-block;
+	overflow: hidden;
+	position: relative;
+	transform: translateZ(0px);
+	vertical-align: middle;
 	@include transition(all .20s ease-in 0s)
 
 	&:before {
@@ -361,21 +315,6 @@ cq-toolbar {
 	}
 }
 
-/* Chart Block */
-.ciq-chart {
-	background: $DEFAULT-main;
-	height:100%;
-	width:100%;
-	@include box-shadow (0px, 2px, 5px, rgba(0, 0, 0, .1));
-}
-
-/* The Chart */
-.chartContainer {
-	background: $DEFAULT-main;
-	color: $DEFAULT-text;
-	z-index:1;
-}
-
 cq-side-panel {
 	position:absolute;
 	width:0px;
@@ -406,55 +345,6 @@ cq-side-panel[cq-active] {
 
 /* --------------------------------------------------------- Menus --------------------------------------------------------- */
 
-cq-menu-dropdown,
-.cq-menu-dropdown {
-	background: $control-dialog-body;
-	position: absolute;
-	color: $control-text;
-	overflow:hidden;
-	opacity: 0;
-	z-index: 6;
-	@include box-shadow (0px, 2px, 4px, rgba(0, 0, 0, .2));
-	@include transition( opacity .20s 0s);
-	@include border-radius();
-	.break-sm & {
-		top:$nav-height;
-		width:auto;
-		left:0;
-		right:0;
-		@include border-radius(0px);
-	}
-	/* cq-menu can be once removed from the menu button but no further. Anything further is a sub-menu */
-	.stxMenuActive > &,
-	.stxMenuActive > * > & {
-		opacity: 1;
-		height:auto;
-		margin-top:5px;
-	}
-
-	&[cq-lift] {
-		width:auto;
-	}
-	.title{
-		background: $control-dialog-head;
-		> .ic-icon {
-			color: $control-text
-			svg, path, g{
-				fill: $control-text;
-				color: $control-text;
-			}
-		}
-	}
-	.body{
-
-	}
-	.cq-categorical-display{
-		.cq-lookup-filters{
-			background: $control-dialog-head;
-		}
-		.cq-scroll-panel{}
-	}
-}
 
 cq-separator{
 	border-top: 1px solid $DEFAULT-border-medium;
@@ -514,8 +404,8 @@ cq-section-dynamic cq-item {
 
 cq-section-dynamic cq-heading,
 cq-section-dynamic > div {
-    border-top: none;
-    padding-top: 10px;
+	border-top: none;
+	padding-top: 10px;
 }
 cq-section-dynamic .ciq-icon { /* Delete button placement for custom item */
 	/*float: right;*/   /* Not working properly for firefox */
@@ -571,6 +461,38 @@ cq-lookup-input {
 
 /* Menus/Panel Toggles */
 cq-context {
+	position: absolute;
+	height: 100%;
+	width: 100%;
+	font-family: $base-font;
+	font-size: $font-size-base;
+	overflow: hidden;
+    @include themify($themes) {
+        background: themed('defaultMain');
+    }
+	input {
+		font-weight: 300;
+		@include themify($themes) {
+			color: themed('defaultText');
+			background: themed('defaultMain');
+		}
+		@include user-select(text);
+		&::placeholder,
+		&::-moz-placeholder {
+			@include themify($themes) {
+				color: rgba(themed('defaultText'), 0.2);
+			}
+		}
+	}
+	div, li, span, a {
+		-webkit-tap-highlight-color: rgba(0,0,0,0); /* eliminated annoying flash when tapping screen on ipads */
+		-webkit-tap-highlight-color: transparent; /* For some Androids */
+	}
+	.cq-top-ui-widgets {
+		position: absolute;
+		z-index: 2;
+		margin: 0.2em 0.5em;
+	}
 	.ciq-dropdowns,
 	.ciq-menu {
 		display:inline-block;
@@ -589,8 +511,8 @@ cq-context {
 		position: inherit;
 	}
 
-    /* Mobile Style */
-    &.smartcharts-mobile{
+	/* Mobile Style */
+	&.smartcharts-mobile{
 		.ciq-menu{position: unset;}
 	}
 }
@@ -601,54 +523,8 @@ cq-context {
   margin-top: 3px;
   float:left;
 }
-.ciq-menu {
-	position: relative;
-	color: $control-text;
-	@include transition(color .20s 0s);
-	&:hover {
-		& {
-			color: $control-text-active;
-		}
-	}
-	&:active {
-		color:$control-text-active;
-	}
-	&.stxMenuActive,
-	&:hover {
-		color: $control-text-active;
-		.break-sm & {
-			border-bottom:solid 3px $DEFAULT-accent;
-		}
-		.cq-menu-btn{
-			> .ic-icon {
-				background: $control-bg-active;
-				svg , path, g{
-					fill: $control-text-active;
-					color: $control-active;
-				}
-				.ic-subtitle{
-					font-weight: 500;
-					fill: $control-text-active;
-				}
-			}
-		}
-	}
-	.cq-menu-btn{
-		padding: 0 5px;
-		> .ic-icon {
-			padding: .35em .8em;
-			svg, path, g{
-				fill: $control-text;
-				color: $control-text;
-			}
-	    }
-	}
-	> span {
-		padding:0 12px 0 0;
-		position:relative;
-		font-weight:400;
-	}
-}
+@import "menu";
+
 .break-sm .ciq-menu {
   position: inherit;
 }
@@ -677,11 +553,11 @@ body:not(.break-sm) .sidenav-toggle {
 		width:27px;
 		height:27px;
 		margin:auto;
-		@include box-sizing(border-box);
 		border:solid 1px transparent;
 		font: 0/0 a; /* hide text */
 		text-shadow: none;
 		color: transparent;
+		@include box-sizing(border-box);
 	}
 }
 
@@ -725,7 +601,7 @@ body:not(.break-sm) .sidenav-toggle {
 
 
 .ciq-search cq-menu-dropdown > ul { /* Remove Vertical Padding */
-    padding: 0;
+	padding: 0;
 }
 
 /* Period Menu */
@@ -1043,13 +919,13 @@ cq-hu-dynamic svg {
 }
 
 cq-hu-dynamic.stx-right svg {
-    -moz-transform: scaleX(-1);
-    -o-transform: scaleX(-1);
-    -webkit-transform: scaleX(-1);
-    -ms-transform: scaleX(-1);
-    transform: scaleX(-1);
-    -ms-filter: "FlipH";
-    filter: FlipH;
+	-moz-transform: scaleX(-1);
+	-o-transform: scaleX(-1);
+	-webkit-transform: scaleX(-1);
+	-ms-transform: scaleX(-1);
+	transform: scaleX(-1);
+	-ms-filter: "FlipH";
+	filter: FlipH;
 }
 
 cq-hu-dynamic .ciq-hu-bg { /* HU BG Image Fill */
@@ -1170,7 +1046,7 @@ cq-hu-static {
 	font-weight:500;
 	font-family:$heading-font;
 	background: $DEFAULT-menu-bg;
-    padding-left: 15px;
+	padding-left: 15px;
 
 	.break-sm & {display: none;}
 
@@ -1200,15 +1076,15 @@ cq-hu-static {
 	}
 
 	.break-sm & div {
-    	width: 55px;
+		width: 55px;
 	}
 
 	.break-sm & {
-	    top: initial;
-	    bottom: 20px;
-	    left: 20px;
-	    display: block;
-	    padding-left: 0px;
+		top: initial;
+		bottom: 20px;
+		left: 20px;
+		display: block;
+		padding-left: 0px;
 	}
 
 	.break-sm & div > * {
@@ -1245,41 +1121,41 @@ cq-hu-static {
 	}
 
 	.break-sm & cq-hu-price:before {
-	    content: "P:";
+		content: "P:";
 	}
 
 	.break-sm & cq-volume-section:before {
-	    content: "V:";
+		content: "V:";
 	}
 }
 
 #mSticky {
-    font-size: 12px;
-    color: #fff;
-    padding: 0 5px;
+	font-size: 12px;
+	color: #fff;
+	padding: 0 5px;
 
-    background: rgba(21,33,45,0.88);
-    box-shadow: 0 2px 8px 0 rgba(21,33,45,0.32);
-    @include border-radius(6px);
-    height: 34px;
-    line-height: 34px;
-    @include box-sizing(border-box);
-    &:before {
-        position: absolute;
-        pointer-events: none;
-        border: solid;
-        border-color: rgba(21,33,45,0.88) transparent;
-        border-width: 4px 4px 0px 4px;
-        top: 34px;
-        content: "";
-        left: calc(50% - 4px);
-    }
+	background: rgba(21,33,45,0.88);
+	box-shadow: 0 2px 8px 0 rgba(21,33,45,0.32);
+	@include border-radius(6px);
+	height: 34px;
+	line-height: 34px;
+	@include box-sizing(border-box);
+	&:before {
+		position: absolute;
+		pointer-events: none;
+		border: solid;
+		border-color: rgba(21,33,45,0.88) transparent;
+		border-width: 4px 4px 0px 4px;
+		top: 34px;
+		content: "";
+		left: calc(50% - 4px);
+	}
 }
 
 #mStickyInterior {
-    position: absolute;
-    top: -30px;
-    color: $DEFAULT-text-strong;
+	position: absolute;
+	top: -30px;
+	color: $DEFAULT-text-strong;
 	padding: 0;
 }
 
@@ -1340,7 +1216,6 @@ cq-dialog-overlay {/* Overlay for dialog placement */
 	height:0;
 	overflow:hidden;
 	opacity:0;
-	/*background: rgba(#151f28, .4);*/
 	@include transition(opacity .20s 0s);
 	&[cq-active]{
 		opacity: 1;
@@ -1359,41 +1234,44 @@ cq-dialog {
 	text-align: left;
 	padding: 30px 10px;
 	min-width:260px;
-	background:$DEFAULT-menu-bg;
-	color: $DEFAULT-text-medium;
+	z-index:3;
+	@include themify($themes) {
+		background: themed('defaultMenuBg');
+		color: themed('defaultTextMedium');
+	}
 	@include box-shadow (0px, 2px, 4px, rgba(0, 0, 0, .2));
 	@include border-radius($soft-corners);
 	@include box-sizing(border-box);
-	z-index:3;
-}
+	&[cq-active] {
+		display: inline-block;
+	}
+	h4 {
+		display: block;
+		font-size: 14px;
+		font-weight: 400;
+		margin: 0 0 5px 0;
+		text-align:center;
+		@include themify($themes) {
+			color: themed('defaultTextStrong');
+		}
+	}
 
-cq-dialog[cq-active] {
-	display: inline-block;
-}
-
-cq-dialog h4 {
-	display: block;
-	font-size: 14px;
-	font-weight: 400;
-	margin: 0 0 5px 0;
-	color:$DEFAULT-text-strong;
-	text-align:center;
-}
-
-cq-dialog hr {
-	border: none;
-	height: 2px;
-	color:  $DEFAULT-border-medium;
-	background: $DEFAULT-border-medium;
-	margin: 4px 0px 8px 0px;
-	padding: 0px;
-}
-
-cq-dialog .ciq-close {/* Dialog close button */
-	position: absolute;
-	top: 3px;
-	right: 3px;
-	margin: 0px;
+	hr {
+		border: none;
+		height: 2px;
+		margin: 4px 0px 8px 0px;
+		padding: 0px;
+		@include themify($themes) {
+			background: themed('defaultBorderMedium');
+			color: themed('defaultBorderMedium');
+		}
+	}
+	.ciq-close {/* Dialog close button */
+		position: absolute;
+		top: 3px;
+		right: 3px;
+		margin: 0px;
+	}
 }
 
 .ciq-dialog-cntrls {
@@ -1526,17 +1404,18 @@ cq-study-context {
 		cursor:pointer;
 		clear: both;
 		line-height:27px;
-		color:$DEFAULT-text-medium;
+		@include themify($themes) {
+			color: themed('defaultTextMedium');
+		}
 	}
 	& div:hover { /* Menu item hover state */
-		background: #efefef;
-		color:$DEFAULT-text-strong;
+		@include themify($themes) {
+			background: themed('defaultTextStrong');
+			color: themed('defaultTextStrong');
+		}
 	}
-
-
 	.ciq-btn {
 		width: 65px;
-
 		&:first-child {
 			float: left;
 			border-top-right-radius: 0;
@@ -1555,7 +1434,7 @@ cq-share-button {
 	display: inline-block;
 	line-height: 40px;
 	cursor: pointer;
-  	color: mix($DEFAULT-text-strong, $DEFAULT-bg, 65% );
+	color: mix($DEFAULT-text-strong, $DEFAULT-bg, 65% );
 	position: relative;
 	padding: 0 10px;
 	@include transition( color .20s 0s );
@@ -1603,7 +1482,7 @@ cq-share-dialog {
 .stx-marker { /* Basic Marker */
 	position:absolute;
 	display:inline-block;
-    cursor: pointer;
+	cursor: pointer;
 	text-align:center;
 	color:$DEFAULT-text-strong;
 }
@@ -1617,8 +1496,8 @@ cq-share-dialog {
 .stx-marker p {font-size:$font-size-button;}
 
 .stx-marker .stx-marker-expand {
-    width: 0;
-    max-height: 0;
+	width: 0;
+	max-height: 0;
 	overflow:hidden;
 	z-index:1;
 }
@@ -1627,13 +1506,13 @@ cq-share-dialog {
 	display:inline-block;
 	height:60px;
 	left:50%;
-    border-left: 1px dotted rgba(0, 0, 0, 0.3);
+	border-left: 1px dotted rgba(0, 0, 0, 0.3);
 }
 
 .stx-marker.square .stx-visual,
 .stx-marker.circle .stx-visual { /* Simple Marker */
-    width: 25px;
-    height: 25px;
+	width: 25px;
+	height: 25px;
 }
 .stx-marker.square .stx-visual:after,
 .stx-marker.circle .stx-visual:after { /* Basic Marker */
@@ -1642,29 +1521,29 @@ cq-share-dialog {
 	left:0;
 	content:"";
 	display:block;
-    height: 25px;
-    width: 25px;
+	height: 25px;
+	width: 25px;
 	opacity: 0;
 	@include transition( opacity .20s 0s, border .20s 0s, width .20s 0s, height .20s 0s, top .20s 0s, left .20s 0s );
 	@include box-sizing(border-box);
 }
 .stx-marker.square .stx-visual:hover:after,
 .stx-marker.circle .stx-visual:hover:after {
-    height: 35px;
-    width: 35px;
+	height: 35px;
+	width: 35px;
 	top:-5px;
 	left:-5px;
 	opacity: .2;
-    border: 1px solid $DEFAULT-text;
+	border: 1px solid $DEFAULT-text;
 }
 .stx-marker.square.highlight .stx-visual:after,
 .stx-marker.circle.highlight .stx-visual:after {
-    height: 35px;
-    width: 35px;
+	height: 35px;
+	width: 35px;
 	top:-5px;
 	left:-5px;
 	opacity: .1;
-    border: 5px solid $DEFAULT-text;
+	border: 5px solid $DEFAULT-text;
 }
 .stx-marker.circle .stx-visual,
 .stx-marker.circle .stx-visual:after { /* Basic Marker */
@@ -1736,238 +1615,17 @@ cq-share-dialog {
 	opacity: .15;
 	@include transition( opacity .20s 0s, top .20s 0s, bottom .20s 0s, left .20s 0s, right .20s 0s);
 	@include box-sizing(border-box);
-    border: 1px solid $DEFAULT-text;
+	border: 1px solid $DEFAULT-text;
 }
 .stx-marker.callout.highlight .stx-marker-content:after {
 	top:-5px;
 	left:-5px;
 	bottom:-5px;
 	right:-5px;
-    border: 5px solid $DEFAULT-text;
+	border: 5px solid $DEFAULT-text;
 }
 
 
-/* --------------------------------------------------------- CHART AREA ELEMENTS --------------------------------------------------------- */
-
-.stx-panel-control {
-	top:0px; /* too much space by default in stx-chart.css */
-}
-
-.cq-stable {
-	@include transition(all 1s ease-out 0s);
-}
-
-.cq-down {
-	color: #ff002a;
-}
-
-.cq-up {
-	color: #85c730;
-}
-
-cq-attrib-container {
-   position: absolute;
-   background:rgba(250,250,250,.9);
-   color: rgba(0,0,0,.4);
-   left: 30px;
-   bottom: 5px;
-   margin: 0;
-   font-size: 10px;
-   padding: 0 5px;
-}
-
-cq-attrib-container cq-attrib-source,
-cq-attrib-container cq-attrib-quote-type {
-   padding: 2px 0;
-}
-
-cq-attrib-container cq-attrib-source a {
-   color: $DEFAULT-text-strong;
-}
-
-cq-theme-dialog  {
-	width: 440px;
-	& cq-section {
-		display:inline-block;
-		vertical-align:top;
-		margin-top: 15px;
-		&:first-of-type {
-			border-right:dashed 1px rgba(0,0,0,.5);
-			padding-right: 5px;
-		}
-		&:last-of-type {
-			padding-left: 5px;
-		}
-	}
-	& cq-action {
-		display:flex;
-		justify-content:center;
-		height:30px;
-		margin-top:10px;
-		& input {
-			width:200px;
-			padding-left:10px;
-		}
-		& div.ciq-btn {
-			position:absolute;
-			right:40px;
-		}
-	}
-}
-
-cq-theme-dialog cq-placeholder {
-	width:150px;
-}
-cq-theme-piece {
-	display:block;
-	float:right;
-	& cq-swatch {
-		margin-left:5px;
-		margin-top:3px;
-	}
-}
-
-/* language dialog */
-cq-languages {
-	& > div {
-		margin-left: 70px;
-	}
-}
-
-cq-language-name {
-	display:inline-block;
-	text-align: center;
-	vertical-align:top;
-	cq-dialog & {
-		height: 27px;
-		line-height: 27px;
-		font-size: 14px;
-		cursor: pointer;
-		&:hover{
-			background-color:#F0F0F0;
-		}
-	}
-}
-
-/* --------------------------------------------------------- CHART SDK --------------------------------------------------------- */
-
-/* Chart */
-
-.stx_mountain_chart {/* Default color for mountain Charts */
-	color: rgba(0,156,255,.01);	/* background color for mountain */
-	background-color: rgba(0,102,255,.5);				/* Optional gradient */
-	border: #009cff;	/* Optional line color */
-	width: 2px;					/* Optional line width */
-}
-
-/* -------- Axis tabs and current Prices -------- */
-
-.stx-float-price, .stx-float-date {
-	@include border-radius(0px);
-}
-
-#crossY, .stx_crosshair_y {
-	margin-top: 0px;
-}
-
-.stx_annotation {
-	background: transparent;
-	border: solid $DEFAULT-accent 1px;
-}
-
-.stx-btn-panel {
-	opacity:0;
-	@include transition(opacity .5s);
-	background-color: $DEFAULT-main;
-}
-
-.break-sm .stx-btn-panel {
-	display: none;
-}
-
-.stx-holder:hover .stx-btn-panel {
-	opacity: 1;
-	@include transition(opacity .5s, height .3s);
-}
-
-.stx-ico-handle {
-	background-color: $DEFAULT-border-subtle;
-	opacity: 0;
-}
-
-.stx-ico-handle:hover {
-	opacity: .3;
-}
-
-.stx-ico-handle.stx-grab {
-	background-color: $DEFAULT-accent;
-	opacity: .3;
-	height:2px;
-}
-/* hide the default panel drag */
-.stx_panel_drag {
-	color: transparent;
-}
-
-.stx_xaxis, .stx_yaxis, .stx_watermark {
-	font-family: $base-font;
-}
-
-.stx_line_chart {
-	width: 2px;
-}
-
-.stx_market_session.divider {
-	background-color: rgba(0,0,0,0);
-	width: 1px;
-}
-.stx_market_session.pre {
-	background-color: rgba(71,218,223,0.3);
-
-}
-.stx_market_session.post {
-	background-color: rgba(21,118,135,0.3);
-}
-
-.sidenav.active {
-  display:flex;
-}
-.sidenav {
-    height: 250px;
-    width: 40px;
-    position: fixed;
-    z-index: 2;
-    right: 0;
-		border-left:1px solid $DEFAULT-border-subtle;
-    display: none;
-    flex-direction: column;
-    align-items: center;
-    align-content: center;
-    padding: 0;
-}
-
-.ciq-menu > span.icons-on {
-    margin-top: -3px;
-}
-
-.sidenav cq-tooltip {
-	left: auto;
-	right:10px;
-}
-
-.break-sm .sidenav {
-    top: 45px;
-}
-
-.break-sm ciq-sidenav {
-	display: block;
-}
-
-.stx_range_slider.shading {
-	background-color: rgba(128,128,128,0.3);
-	border: solid 2px rgba(0,144,183,1);
-	width: 5px;
-}
 
 
 /* -------------------------- custom styles -------------------------------------*/
