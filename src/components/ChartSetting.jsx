@@ -40,7 +40,7 @@ const ChartSetting = ({
                     </div>
                     */}
                     <div className="ciq-list-item">
-                        <span className="ciq-icon-text">{t.translate('Theme')}</span>
+                        <span className="ciq-icon-text">{t.translate('Dark Mode')}</span>
                         <div className="ciq-action">
                             <Switch
                                 value={isDarkTheme}

@@ -1,5 +1,5 @@
 {
-  "name": "smartcharts",
+  "name": "@binary-com/smartcharts",
   "version": "0.1.0",
   "main": "dist/smartcharts.js",
   "author": "amin@binary.com",

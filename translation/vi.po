@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Vietnamese\n"
 "Language: vi_VN\n"
-"PO-Revision-Date: 2018-04-27 00:19-0400\n"
+"PO-Revision-Date: 2018-05-03 06:21-0400\n"
 
 msgid "CLOSED"
 msgstr "ĐÃ ĐÓNG"
@@ -151,7 +151,7 @@ msgid "Colored Dot"
 msgstr "Dấu chấm màu"
 
 msgid "Spline"
-msgstr ""
+msgstr "Chốt"
 
 msgid "Baseline"
 msgstr "Đường cơ sở"
@@ -190,10 +190,10 @@ msgid "Average Line"
 msgstr "Đường trung bình"
 
 msgid "Callout"
-msgstr ""
+msgstr "Chú thích"
 
 msgid "Channel"
-msgstr ""
+msgstr "Kênh"
 
 msgid "Continuous"
 msgstr "Liên tục"
@@ -208,22 +208,22 @@ msgid "Ellipse"
 msgstr "Hình elíp"
 
 msgid "Fib Retracement"
-msgstr ""
+msgstr "Hồi qui Fibonacci"
 
 msgid "Fib Arc"
-msgstr ""
+msgstr "Đường cung Fibonacci"
 
 msgid "Fib Fan"
-msgstr ""
+msgstr "Cánh quạt Fibonacci"
 
 msgid "Fib Time Zone"
-msgstr ""
+msgstr "Múi giờ Fibonacci"
 
 msgid "Gann Fan"
-msgstr ""
+msgstr "Cánh quạt Gann"
 
 msgid "Gartley"
-msgstr ""
+msgstr "Gartley"
 
 msgid "Horizontal"
 msgstr "Theo chiều ngang"
@@ -238,13 +238,13 @@ msgid "Ray"
 msgstr ""
 
 msgid "Rectangle"
-msgstr ""
+msgstr "Hình chữ nhật"
 
 msgid "Regression Line"
-msgstr ""
+msgstr "Hồi qui tuyến"
 
 msgid "Segment"
-msgstr ""
+msgstr "Phân khúc"
 
 msgid "Shape - Arrow"
 msgstr "Hình dạng - mũi tên"
@@ -265,10 +265,10 @@ msgid "Shape - Star"
 msgstr "Hình dạng - Ngôi sao"
 
 msgid "Speed Resistance Arc"
-msgstr ""
+msgstr "Đường cung kháng tốc"
 
 msgid "Speed Resistance Line"
-msgstr ""
+msgstr "Tuyến kháng tốc"
 
 msgid "Time Cycle"
 msgstr "Chu kỳ thời gian"
@@ -280,7 +280,7 @@ msgid "Vertical"
 msgstr "Theo chiều dọc"
 
 msgid "RSI"
-msgstr ""
+msgstr "RSI"
 
 msgid "Period"
 msgstr "Khoảng thời gian"
@@ -295,7 +295,7 @@ msgid "OverSold"
 msgstr "Bán quá"
 
 msgid "Moving Average"
-msgstr ""
+msgstr "Số trung bình động"
 
 msgid "Field"
 msgstr ""
@@ -316,10 +316,10 @@ msgid "MACD"
 msgstr "MACD"
 
 msgid "Fast MA Period"
-msgstr ""
+msgstr "Giai đoạn MA nhanh"
 
 msgid "Slow MA Period"
-msgstr ""
+msgstr "Giai đoạn MA chậm"
 
 msgid "Signal Period"
 msgstr ""
@@ -469,7 +469,7 @@ msgid "Pretty Good Oscillator"
 msgstr ""
 
 msgid "Ultimate Oscillator"
-msgstr ""
+msgstr "Chỉ số giao động tột bậc"
 
 msgid "Cycle 1"
 msgstr "Chu kỳ 1"
@@ -481,7 +481,7 @@ msgid "Cycle 3"
 msgstr "Chu kỳ 3"
 
 msgid "Volume Oscillator"
-msgstr ""
+msgstr "Chỉ số dao động khối lượng"
 
 msgid "Short Cycle"
 msgstr "Chu kỳ ngắn"
@@ -505,7 +505,7 @@ msgid "Rate Of Change"
 msgstr "Tỷ giá hối đoái"
 
 msgid "Price Oscillator"
-msgstr ""
+msgstr "Chỉ số dao động giá"
 
 msgid "Ease of Movement"
 msgstr ""
@@ -538,7 +538,7 @@ msgid "Schaff Trend Cycle"
 msgstr "Chu kỳ xu hướng Schaff"
 
 msgid "QStick"
-msgstr ""
+msgstr "QStick"
 
 msgid "Coppock Curve"
 msgstr "Đường cong Coppock"
@@ -595,16 +595,16 @@ msgid "ADX"
 msgstr "ADX"
 
 msgid "Positive Bar"
-msgstr ""
+msgstr "Thanh dương"
 
 msgid "Negative Bar"
-msgstr ""
+msgstr "Thanh âm"
 
 msgid "High Low Bands"
-msgstr ""
+msgstr "Dải cao thấp"
 
 msgid "Shift Percentage"
-msgstr ""
+msgstr "Tỷ lệ phần trăm thay đổi"
 
 msgid "Channel Fill"
 msgstr ""

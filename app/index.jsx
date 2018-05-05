@@ -2,7 +2,17 @@ import {
     SmartChart,
     Barrier,
     TradeStartLine,
-    TradeEndLine
+    TradeEndLine,
+    ChartTypes,
+    StudyLegend,
+    Comparison,
+    Views,
+    CrosshairToggle,
+    Timeperiod,
+    ChartSize,
+    DrawTools,
+    ChartSetting,
+    Share,
 } from '@binary-com/smartcharts';
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -30,21 +40,32 @@ const connectionManager = new ConnectionManager({
 
 const streamManager = new StreamManager(connectionManager);
 
-class App extends React.Component {
-    render() {
-        return (
-            <SmartChart
-                onSymbolChange={(symbol) => console.log('Symbol has changed to:', symbol)}
-                isMobile={CIQ.isMobile}
-                requestAPI={connectionManager.send.bind(connectionManager)}
-                requestSubscribe={streamManager.subscribe.bind(streamManager)}
-                requestForget={streamManager.forget.bind(streamManager)}
-            >
-            </SmartChart>
-        );
-    }
+const renderControls = () => (
+    <React.Fragment>
+        {CIQ.isMobile ? '' : <CrosshairToggle />}
+        <ChartTypes />
+        <StudyLegend />
+        <Comparison />
+        <DrawTools />
+        <Views />
+        <Share />
+        <Timeperiod />
+        <ChartSize />
+        <ChartSetting />
+    </React.Fragment>
+);
 
-}
+const App = () => (
+    <SmartChart
+        onSymbolChange={(symbol) => console.log('Symbol has changed to:', symbol)}
+        isMobile={CIQ.isMobile}
+        chartControlsWidgets={renderControls}
+        requestAPI={connectionManager.send.bind(connectionManager)}
+        requestSubscribe={streamManager.subscribe.bind(streamManager)}
+        requestForget={streamManager.forget.bind(streamManager)}
+    >
+    </SmartChart>
+);
 
 ReactDOM.render(
     <App />,

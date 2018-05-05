@@ -14,7 +14,6 @@
     box-shadow: 0 2px 2px 0 rgba(0,0,0,0.12);
     z-index: 2;
     @include themify($themes) {background: themed('defaultMain');}
-    @include transition(background 1s)
     @include border-radius(2px);
     @include box-sizing(border-box);
     .ciq-menu {

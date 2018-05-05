@@ -23,7 +23,7 @@
             display: flex;
             align-items: center;
             @include themify($themes) {
-                background: themed('controlTitleBg');
+                background: themed('defaultMain');
                 color: themed('defaultTextSubtle');
                 border: solid 1px themed('defaultBorder');
             }

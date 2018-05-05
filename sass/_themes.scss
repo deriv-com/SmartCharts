@@ -29,7 +29,6 @@ $themes: (
     controlGrid:            #fafafb,
     controlDialogHead:      #FFFFFF,
     controlDialogBody:      #FAFAFA,
-    controlTitleBg:         #FAFAFA,
   ),
   dark: (
     activeColor:            #4C5794,
@@ -58,7 +57,6 @@ $themes: (
     controlGrid:            #fafafb,
     controlDialogHead:      mix(#fff, #1c2a35, 3%),
     controlDialogBody:      mix(#fff, #1c2a35, 7%),
-    controlTitleBg:         mix(#fff, #1c2a35, 10%),
   ),
 );
 
