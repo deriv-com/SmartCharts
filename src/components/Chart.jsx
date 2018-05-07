@@ -15,8 +15,6 @@ import '../../sass/_ciq-custom.scss';
 import '../Plugin';
 import './ui';
 
-/* To do convert this to jsx*/
-// import './Loader';
 import ChartControls from './ChartControls.jsx';
 import SettingsDialog from './SettingsDialog.jsx';
 import Notification from './Notification.jsx';
