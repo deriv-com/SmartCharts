@@ -42,6 +42,10 @@ class Chart extends Component {
         this.props.init(this.root, this.props);
     }
 
+    componentWillUnmount() {
+        this.props.destroy();
+    }
+
     render() {
         const {
             DrawToolsSettingsDialog,
@@ -99,6 +103,7 @@ export default connect(
     ({chart, drawTools, studies}) => ({
         contextPromise: chart.contextPromise,
         init: chart.init,
+        destroy: chart.destroy,
         StudySettingsDialog : studies.settingsDialog.connect(SettingsDialog),
         DrawToolsSettingsDialog : drawTools.settingsDialog.connect(SettingsDialog),
         isChartAvailable: chart.isChartAvailable,
