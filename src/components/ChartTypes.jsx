@@ -21,13 +21,11 @@ const ChartTypes = ({
         className="ciq-menu ciq-display collapse ciq-chart-types"
     >
         <Menu.Title>
-            <div className="ciq-title">
-                <Type.icon
-                    className={`${menuOpen ? 'active' : ''}`}
-                    tooltip-title={t.translate("Chart types")} />
-            </div>
+            <Type.icon
+                className={`ic-icon-with-sub ${menuOpen ? 'active' : ''}`}
+                tooltip-title={t.translate("Chart types")} />
         </Menu.Title>
-        <Menu.Body> 
+        <Menu.Body>
             {isMobile ? <div className="cq-mobile-title">
                 <div className="mobile-title">{t.translate("Chart types")}</div>
             </div> : '' }

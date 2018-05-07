@@ -1,3 +1,8 @@
+cq-loader, .cq-comparison-loader {
+    background-image:url('icons/loading/loading-spin.svg');
+    background-size:cover;
+}
+
 .cq-loader {
 	display:none;
     position: absolute;
@@ -7,10 +12,7 @@
     top: 50%;
     margin-left: -25px;
     margin-top: -25px;
-	background-image:url('icons/loading/loading-spin.svg');
-	background-size:cover;
     z-index: 1;
-
     &.show{
     	display:block;
     	z-index: 9;

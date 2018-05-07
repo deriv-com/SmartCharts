@@ -18,7 +18,7 @@ const ViewItem = ({
         <span className="name">{view.name}</span>
         <DeleteIcon onClick={remove}/>
     </div>
-)
+);
 
 const Views = ({
     Menu,
@@ -34,17 +34,15 @@ const Views = ({
     return (
         <Menu className="views">
             <Menu.Title className="cq-menu-btn">
-                <div>
-                    <TemplateIcon
-                        className = {menuOpen ? 'active' : ''}
-                        tooltip-title={t.translate("Templates")} />
-                </div>
+                <TemplateIcon
+                    className = {`ic-icon-with-sub ${menuOpen ? 'active' : ''}`}
+                    tooltip-title={t.translate("Templates")} />
             </Menu.Title>
             <Menu.Body>
                 <div className="dropdown-title">
 
-                        {
-                            currentRoute === 'add'
+                    {
+                        currentRoute === 'add'
                             ? <span className="add">
                                 <input
                                     ref={inputRef}
@@ -56,32 +54,32 @@ const Views = ({
                                 />
                                 <CloseIcon onClick={cancel} />
                             </span>
-                            : <span className="title">Templates</span>
-                        }
+                            : <span className="title">{t.translate("Templates")}</span>
+                    }
                     <span className="icon">
                         {
                             currentRoute === 'add'
                             //TODO: change this to tick icon.
-                            ? <TickIcon className="ic-clear stroke" onClick={add}/>
-                            : <AddIcon className="ic-clear fill" onClick={main}/>
+                                ? <TickIcon className="ic-clear stroke" onClick={add}/>
+                                : <AddIcon className="ic-clear fill" onClick={main}/>
                         }
                     </span>
                 </div>
                 <div className='content'>
                     {
                         views.length
-                        ? views.map((view, i) => (
-                            <ViewItem
-                                view={view}
-                                key={i}
-                                onClick={applyLayout.bind(null, i)}
-                                remove={remove.bind(null, i)}
-                            />
-                        ))
-                        : <span className="placeholder">
-                            <p>{t.translate('There is no template added by you.')}</p>
-                            <p>{t.translate('Click + icon to add one.')}</p>
-                        </span>
+                            ? views.map((view, i) => (
+                                <ViewItem
+                                    view={view}
+                                    key={i}
+                                    onClick={applyLayout.bind(null, i)}
+                                    remove={remove.bind(null, i)}
+                                />
+                            ))
+                            : <span className="placeholder">
+                                <p>{t.translate('There is no template added by you.')}</p>
+                                <p>{t.translate('Click + icon to add one.')}</p>
+                            </span>
                     }
                 </div>
             </Menu.Body>

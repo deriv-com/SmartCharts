@@ -1,22 +1,15 @@
 import { action, observable, computed } from 'mobx';
-import StreamManager from '../StreamManager';
-import ConnectionManager from '../ConnectionManager';
-import Feed from '../Feed';
 import PendingPromise from '../utils/PendingPromise';
 import Context from '../components/ui/Context';
 import React from 'react';
 import {stableSort} from './utils';
 import BarrierStore from './BarrierStore';
+import ChartSettingStore from './ChartSettingStore';
 import KeystrokeHub from '../components/ui/KeystrokeHub';
 import '../components/ui/Animation';
+import { BinaryAPI, Feed } from '../feed';
+import {createObjectFromLocalStorage} from '../utils';
 // import '../AddOns';
-
-const connectionManager = new ConnectionManager({
-    appId: 1,
-    language: 'en',
-    endpoint: 'wss://frontend.binaryws.com/websockets/v3',
-});
-const streamManager = new StreamManager(connectionManager);
 
 const defaultSymbol = {
     symbol: 'R_100',
@@ -27,16 +20,15 @@ const defaultSymbol = {
 };
 
 class ChartStore {
-    get connectionManager() { return connectionManager; }
-    get streamManager() { return streamManager; }
-
     static _id_counter = 0;
 
     constructor(mainStore) {
         this.id = ++ChartStore._id_counter;
         this.mainStore = mainStore;
+        this.setting = new ChartSettingStore();
     }
 
+    onSymbolChange = null;
     contextPromise = new PendingPromise();
     activeSymbols = [];
     rootNode = null;
@@ -48,7 +40,8 @@ class ChartStore {
     @observable comparisonSymbols = [];
     @observable categorizedSymbols = [];
     @observable barrierJSX;
-    @observable isMobile;
+    @observable chartPanelTop = '0px';
+    @observable isMobile = false;
 
     @action.bound setActiveSymbols(activeSymbols) {
         if (activeSymbols && this.context) {
@@ -66,8 +59,7 @@ class ChartStore {
     }
 
     restoreLayout(stx) {
-
-        let layoutData = CIQ.localStorage.getItem(`layout-${this.id}`);
+        let layoutData = createObjectFromLocalStorage(`layout-${this.id}`);
 
         const checkForQuerystring = window.location.origin === 'https://charts.binary.com' ||
             window.location.origin === 'http://localhost:8080';
@@ -80,10 +72,7 @@ class ChartStore {
             }
         }
 
-        if (layoutData === null) {return;}
-        try {
-            layoutData = JSON.parse(layoutData);
-        } catch(e) { return; }
+        if (!layoutData) {return;}
 
         stx.importLayout(layoutData, {
             managePeriodicity: true,
@@ -103,27 +92,25 @@ class ChartStore {
             CIQ.localStorageSetItem(symbol, JSON.stringify(obj));
         }
     }
+
     restoreDrawings(stx, symbol) {
-        let memory = CIQ.localStorage.getItem(symbol);
-        if (memory !== null) {
-            let parsed = JSON.parse(memory);
-            if (parsed) {
-                stx.importDrawings(parsed);
-                stx.draw();
-            }
+        let drawings = createObjectFromLocalStorage(symbol);
+        if (drawings) {
+            stx.importDrawings(drawings);
+            stx.draw();
         }
     }
 
     restorePreferences() {
-        const pref = CIQ.localStorage.getItem(`preferences-${this.id}`);
+        const pref = createObjectFromLocalStorage(`preferences-${this.id}`);
         if (pref) {
-            stxx.importPreferences(JSON.parse(pref));
+            this.stxx.importPreferences(pref);
         }
     }
     savePreferences() {
         CIQ.localStorageSetItem(
             `preferences-${this.id}`,
-            JSON.stringify(stxx.exportPreferences()),
+            JSON.stringify(this.stxx.exportPreferences()),
         );
     }
 
@@ -150,6 +137,10 @@ class ChartStore {
         stxx.chart.allowScrollPast = false;
         stxx.chart.allowScrollFuture = false;
         const context = new Context(stxx, this.rootNode);
+
+        // Put some margin so chart doesn't get blocked by chart title
+        stxx.chart.yAxis.initialMarginTop = 125;
+        stxx.calculateYAxisMargins(stxx.chart.panel.yAxis);
 
         context.changeSymbol = (data) => {
             this.loader.show();
@@ -210,13 +201,16 @@ class ChartStore {
         this.context = context;
         this.contextPromise.resolve(context);
         stxx.setStyle('stx_line_chart', 'color', '#4DAFEE'); // TODO => why is not working in css?
-
-        // Optionally set a language for the UI, after it has been initialized, and translate.
-        // CIQ.I18N.setLanguage(stxx, "zh");
     }
 
-    @action.bound init(rootNode) {
+    @action.bound init(rootNode, props) {
         this.rootNode = rootNode;
+
+        const { requestAPI, requestSubscribe, requestForget } = props;
+        const api = new BinaryAPI(requestAPI, requestSubscribe, requestForget);
+        api.getActiveSymbols().then(({ active_symbols }) => {
+            this.setActiveSymbols(active_symbols);
+        });
 
         const stxx = this.stxx = new CIQ.ChartEngine({
             container: this.rootNode.querySelector('.chartContainer.primary'),
@@ -231,13 +225,11 @@ class ChartStore {
         deleteElement.textConent = t.translate("right-click to delete");
         manageElement.textConent = t.translate("right-click to manage");
 
-
-
         // Animation (using tension requires splines.js)
         CIQ.Animation(stxx, { stayPut: true });
 
         // connect chart to data
-        stxx.attachQuoteFeed(new Feed(streamManager, stxx, this.mainStore), {
+        stxx.attachQuoteFeed(new Feed(api, stxx, this.mainStore), {
             refreshInterval: null,
         });
 
@@ -253,14 +245,25 @@ class ChartStore {
         //     minutes: 30,
         // });
 
-        stxx.addEventListener('layout', this.saveLayout.bind(this));
-        stxx.addEventListener('symbolChange', this.saveLayout.bind(this));
+        const holderStyle = stxx.chart.panel.holder.style;
+        stxx.addEventListener('layout', () => {
+            this.saveLayout();
+            this.chartPanelTop = holderStyle.top;
+        });
+        stxx.addEventListener('symbolChange', (evt) => {
+            const isComparisonChart = evt.stx.chart.symbol !== evt.symbolObject.symbol;
+            if (this.onSymbolChange && !isComparisonChart) {
+                this.onSymbolChange(evt.symbolObject);
+            }
+            this.saveLayout();
+        });
         stxx.addEventListener('drawing', this.saveDrawings.bind(this));
         // stxx.addEventListener('newChart', () => { });
         stxx.addEventListener('preferences', this.savePreferences.bind(this));
 
         this.startUI();
         this.resizeScreen();
+        this.chartPanelTop = holderStyle.top;
 
         window.addEventListener('resize', this.resizeScreen.bind(this));
 
@@ -298,14 +301,6 @@ class ChartStore {
             comp.price = srs.lastQuote ? srs.lastQuote.Close : undefined;
             i++;
         }
-    }
-
-    /**
-     * Store the Mobile mode from the chart option with pass to
-     * @param {bool} status if true, measn mobile mode is active
-     */
-    setIsMobile(status) {
-        this.isMobile = status;
     }
 
     processSymbols(symbols) {

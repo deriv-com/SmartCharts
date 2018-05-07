@@ -17,14 +17,14 @@ const Comparison = ({
         >
             <Menu.Title>
                 <ComparisonIcon
-                    className={`${menuOpen ? 'active' : ''}`}
+                    className={`ic-icon-with-sub ${menuOpen ? 'active' : ''}`}
                     tooltip-title={t.translate("Comparison")} />
             </Menu.Title>
             <Menu.Body>
-                <CategoricalDisplay 
+                <CategoricalDisplay
                     dialogTitle={t.translate("Comparison")}
                     closeMenu={ () => onCloseMenu() }
-                     />
+                />
             </Menu.Body>
         </Menu>
     );

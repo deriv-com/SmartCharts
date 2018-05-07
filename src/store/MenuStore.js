@@ -38,6 +38,7 @@ export default class MenuStore {
     }
 
     connect = connect(() => ({
+        setOpen: this.setOpen,
         open: this.open,
         onTitleClick: this.onTitleClick,
         DropdownDialog: this.dialog.connect(Dialog),

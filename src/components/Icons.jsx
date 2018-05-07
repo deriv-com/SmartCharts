@@ -36,6 +36,14 @@ import IndicatorCategory from '../../sass/icons/sidebar/indicator/ic-indicator-n
 import Arrow from '../../sass/icons/dropdown/ic-dropdown.svg';
 import Copy from '../../sass/icons/share/ic-copy.svg';
 import Share from '../../sass/icons/share/ic-share.svg';
+import ChevronRight from '../../sass/icons/chart settings/setting/ic-chevron-right.svg';
+import PositionLeft from '../../sass/icons/chart settings/setting/ic-position-left.svg';
+import PositionBottom from '../../sass/icons/chart settings/setting/ic-position-bottom.svg';
+import ThemeDark from '../../sass/icons/chart settings/setting/ic-theme-dark.svg';
+import ThemeLight from '../../sass/icons/chart settings/setting/ic-theme-light.svg';
+import Back from '../../sass/icons/back/ic-back.svg';
+
+
 
 import Warning from '../../sass/icons/alert message/warning.svg';
 import Error from '../../sass/icons/alert message/error.svg';
@@ -56,6 +64,16 @@ import PLN from '../../sass/icons/flags/pln.svg';
 import SEK from '../../sass/icons/flags/sek.svg';
 import USD from '../../sass/icons/flags/usd.svg';
 
+
+
+import Portugal from '../../sass/icons/flags/portugal.svg';
+import Russia from '../../sass/icons/flags/russia.svg';
+import Thailand from '../../sass/icons/flags/thailand.svg';
+import Indonesia from '../../sass/icons/flags/indonesia.svg';
+import Vietnam from '../../sass/icons/flags/vietnam.svg';
+import Italy from '../../sass/icons/flags/italy.svg';
+import Chinese from '../../sass/icons/flags/chinese.svg';
+import ChineseTraditional from '../../sass/icons/flags/chinese-traditional.svg';
 import Belgium from '../../sass/icons/flags/belgium.svg';
 import HongKong from '../../sass/icons/flags/hong kong.svg';
 import Singapore from '../../sass/icons/flags/singapore.svg';
@@ -134,7 +152,7 @@ import SmartFX from '../../sass/icons/active-symbols/ic-smartfx-placeholder.svg'
 
 const Wrapper = WrappedComponent => props => {
     let { className, ['tooltip-title']: tooltip, ...p } = props;
-    className = `ic-icon ${className ? className : ''} ${tooltip ? 'tooltip' : ''}`;
+    className = `ic-icon ${className ? className : ''}`;
 
     return (
         <span
@@ -142,11 +160,14 @@ const Wrapper = WrappedComponent => props => {
             tooltip-title={tooltip}
             {...p}>
             <WrappedComponent />
+            <br/>
+            <span className='ic-subtitle'>{tooltip}</span>
         </span>
     );
 };
 
 export const AddIcon = Wrapper(Add);
+export const ZoomInIcon = Wrapper(Add);
 export const AddThinIcon = Wrapper(AddThin);
 export const CandleIcon = Wrapper(Candle);
 export const CloseIcon = Wrapper(Close);
@@ -164,6 +185,7 @@ export const BaseLineIcon = Wrapper(BaseLine);
 export const ListIcon = Wrapper(List);
 export const MeasureIcon = Wrapper(Measure);
 export const MinusIcon = Wrapper(Minus);
+export const ZoomOutIcon = Wrapper(Minus);
 export const OHLCIcon = Wrapper(OHLC);
 export const SplineIcon = Wrapper(Spline);
 export const StarIcon = Wrapper(Star);
@@ -171,10 +193,21 @@ export const TemplateIcon = Wrapper(Template);
 export const TickIcon = Wrapper(Tick);
 export const SearchIcon = Wrapper(Search);
 export const EditIcon = Wrapper(Edit);
+export const SettingIcon = Wrapper(Edit);
 export const ArrowIcon = Wrapper(Arrow);
 export const FavoriteIcon = Wrapper(Star);
 export const CopyIcon = Wrapper(Copy);
 export const ShareIcon = Wrapper(Share);
+
+
+export const ChevronRightIcon = Wrapper(ChevronRight);
+export const PositionLeftIcon = Wrapper(PositionLeft);
+export const PositionBottomIcon = Wrapper(PositionBottom);
+export const ThemeDarkIcon = Wrapper(ThemeDark);
+export const ThemeLightIcon = Wrapper(ThemeLight);
+export const BackIcon = Wrapper(Back);
+
+
 export const MetalIcon = Wrapper(Metal);
 
 export const alertIconMap = {
@@ -223,7 +256,26 @@ const FlagIconMap = {
     Spanish: Wrapper(Spanish),
     SouthAfrica: Wrapper(SouthAfrica),
     WallStreet: Wrapper(WallStreet),
+
 };
+
+
+export const FlagIcons = {
+    USD: Wrapper(USD),
+    German: Wrapper(German),
+    French: Wrapper(French),
+    Portugal: Wrapper(Portugal),
+    Russia: Wrapper(Russia),
+    Thailand: Wrapper(Thailand),
+    Indonesia: Wrapper(Indonesia),
+    Vietnam: Wrapper(Vietnam),
+    Italy: Wrapper(Italy),
+    Chinese: Wrapper(Chinese),
+    ChineseTraditional: Wrapper(ChineseTraditional),
+    Japan: Wrapper(JPY),
+    Poland: Wrapper(PLN),
+};
+
 
 export const ItemIconMap = {
     SPC: FlagIconMap.USD,

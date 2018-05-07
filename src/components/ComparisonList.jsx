@@ -11,7 +11,7 @@ const ComparisonList = ({
         <div className="cq-comparison">
             {comparisonSymbols.map((item, i) => {
                 const AnimatedPrice = animatedPrices[i];
-                if(!AnimatedPrice) return;
+                if(!AnimatedPrice) {return;}
                 return (
                     <div key={`compare-${i}`} className="cq-comparison-item">
                         <span className="left">
@@ -19,7 +19,6 @@ const ComparisonList = ({
                             <span className="cq-comparison-label">{item.symbolObject.name}</span>
                         </span>
                         <span className="right">
-                            <span className={`cq-comparison-loader ${item.price ? '' : 'stx-show'}`} />
                             <AnimatedPrice />
                             <CloseIcon className="ciq-close" onClick={() => onDeleteItem(item.symbolObject)}/>
                         </span>

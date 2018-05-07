@@ -17,10 +17,10 @@ const DrawTools = ({
     return (
         <Menu
             className="ciq-draw-tools"
-            >
+        >
             <Menu.Title>
                 <DrawIcon
-                    className={`${menuOpen ? 'active' : ''}`}
+                    className={`ic-icon-with-sub ${menuOpen ? 'active' : ''}`}
                     tooltip-title={t.translate("Draw tools")} />
             </Menu.Title>
 
@@ -28,10 +28,12 @@ const DrawTools = ({
                 <div className='title'>
                     <div className='ciq-bars-title'>{t.translate("Draw tools")}</div>
                     <div className='ciq-bars-buttons'>
-                        <ClearIcon 
-                            onClick={clearAll} 
+                        <ClearIcon
+                            className='tooltip'
+                            onClick={clearAll}
                             tooltip-title={t.translate("Clear All")} />
-                        <MeasureIcon 
+                        <MeasureIcon
+                            className='tooltip'
                             onClick={() => selectTool('measure')}
                             tooltip-title={t.translate("Measure")} />
                     </div>

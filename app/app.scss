@@ -1,3 +1,11 @@
+/* Used for app only. Do not deploy with library! */
+
+#root {
+    display: flex;
+}
+
+/* Doorbell */
+
 #doorbell-button {
     left: -30px;
     bottom: 30%;
@@ -7,7 +15,9 @@
     border-bottom: none;
     padding: 4px 8px;
     transform: rotate(90deg);
+    max-width: 80px;
 }
+
 #doorbell form {
     box-shadow: none;
     border: 1px solid #4c4c4c;
@@ -23,9 +33,12 @@
         color: #4C5794;
         border: none;
         background: white;
-        &:hover { background: white; }
+        &:hover {
+            background: white;
+        }
     }
 }
+
 #doorbell-background {
     opacity: 0;
 }
