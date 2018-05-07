@@ -29,7 +29,7 @@
     "webpack-dev-server": "^2.9.7"
   },
   "dependencies": {
-    "@binary-com/smartcharts": "^0.0.0",
+    "@binary-com/smartcharts": "^0.1.0",
     "event-emitter-es6": "^1.1.5"
   },
   "peerDependencies": {

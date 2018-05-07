@@ -9,7 +9,7 @@ const isApp = process.env.BUILD_MODE === 'app';
 
 const config = {
     devtool: 'source-map',
-    entry: ['babel-polyfill', path.resolve(__dirname, './src/index.js')],
+    entry: path.resolve(__dirname, './src/index.js'),
     output: {
         publicPath: '/dist/',
         path: path.resolve(__dirname, 'dist'),
@@ -112,7 +112,7 @@ if (process.env.ANALYZE_BUNDLE) {
 }
 
 if (isApp) {
-    config.entry = ['babel-polyfill', path.resolve(__dirname, './app/index.jsx')];
+    config.entry = path.resolve(__dirname, './app/index.jsx');
     config.resolve = {
         alias: {
             '@binary-com/smartcharts': path.resolve(__dirname, 'src/'),
