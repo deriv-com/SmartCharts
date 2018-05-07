@@ -17,8 +17,12 @@ class ChartSize extends PureComponent {
     render () {
         return (
             <div className="ciq-menu cq-chart-size">
-                <ZoomOutIcon className='ic-icon-with-sub cq-zoom-out' tooltip-title={t.translate("Zoom out")} onClick={this.zoomOut} />
-                <ZoomInIcon className='ic-icon-with-sub cq-zoom-in' tooltip-title={t.translate("Zoom in")} onClick={this.zoomIn} />
+                <div className="cq-menu-btn">
+                    <ZoomOutIcon className='ic-icon-with-sub cq-zoom-out' tooltip-title={t.translate("Zoom out")} onClick={this.zoomOut} />
+                </div>
+                <div className="cq-menu-btn">
+                    <ZoomInIcon className='ic-icon-with-sub cq-zoom-in' tooltip-title={t.translate("Zoom in")} onClick={this.zoomIn} />
+                </div>
             </div>
         );
     }

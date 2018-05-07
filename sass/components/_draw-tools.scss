@@ -16,12 +16,14 @@
             font-size: 16px;
             display: flex;
             justify-content: space-between;
-            box-shadow: inset 0 -1px 0 0 $DEFAULT-border;
-            color: $DEFAULT-text-strong;
+            @include themify($themes) {
+                color: themed('defaultTextStrong');
+            }
             .ciq-bars-buttons{
                 cursor: pointer;
                 display: flex;
                 padding: 6px 6px;
+                @include svg-icon-color('controlText');
             }
         }
         .body {

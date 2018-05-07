@@ -23,6 +23,7 @@
 					flex: 1 0 0;
 					position: relative;
 					right: 20px;
+					@include svg-icon-color('controlText');
 				}
 			}
 			.view-input {
@@ -35,6 +36,10 @@
 				border: none;
 				outline: none;
 				border-bottom: 1px solid #4b5794;
+				@include themify($themes) {
+					color: themed('controlText');
+					background-color: themed('defaultMain');
+				}
 			}
 		}
 		.content {
@@ -42,6 +47,34 @@
 			height: 135px;
 			overflow: scroll;
 			padding: 16px;
+			.ciq-list{
+				.ciq-list-item{
+					align-items: center;
+					justify-content: flex-start;
+					display: flex;
+					&:hover{
+						@include themify($themes) {
+							color: themed('defaultTextActive');
+							background-color: themed('listBgActive');
+						}
+						.ic-icon{
+							opacity: 1;
+							@include themify($themes) {color: themed('controlTextActive');}
+							@include svg-icon-color('controlTextActive');
+						}
+					}
+					.ciq-list-item-text{
+						width: calc( 100% - 40px );
+					}
+					.ic-icon{
+						justify-content: flex-end;
+						width: 40px;
+						opacity: 0;
+						transition: opacity 0.15s .2s;
+						@include svg-icon-color('controlText');
+					}
+				}
+			}
 			.placeholder {
 				p {
 					height: 20px;
@@ -49,29 +82,6 @@
 					margin: 0;
 					text-align: center;
 					color: #aeaeaf;
-				}
-			}
-			.view {
-				display: flex;
-				padding: 5px 16px;
-				border-bottom: 0;
-				cursor: pointer;
-				background: $DEFAULT-main;
-				border: 1px solid $DEFAULT-border;
-				&:last-child {
-					border-bottom: 1px solid $DEFAULT-border;
-				}
-				.name {
-					flex: 1 0 0;
-					color: $DEFAULT-text-strong;
-				}
-				.ic-icon {
-					opacity: 0;
-					flex: 0 0 0;
-					transition: opacity 0.15s .2s;
-				}
-				&:hover .ic-icon {
-					opacity: 1;
 				}
 			}
 		}

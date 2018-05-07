@@ -20,10 +20,12 @@
     .cq-lookup-input  {
         margin: 1.5em 1.1em 1.6em 1.3em;
         position: relative;
-        @include themify($themes) {
-            border: 1px solid themed('defaultBorder');
-        }
         @include border-radius();
+        @include themify($themes) {
+            color: themed('controlText');
+            border: 1px solid themed('defaultBorder');
+            background-color: themed('defaultMain');
+        }
         &.active{
             @include themify($themes) {
                 border-color: themed('activeColor');
@@ -32,6 +34,7 @@
             > .icon-reset{
                 right: 2px;
                 opacity: 1;
+                @include svg-icon-color('controlText');
             }
         }
         > input {
@@ -41,8 +44,16 @@
             border: none;
             outline: 0;
             width: calc(100% - 40px);
+            background-color: transparent;
             @include border-radius();
-            @include placeholder {color: #dfdfdf;}
+            @include placeholder {
+                @include themify($themes) {
+                    color: themed('controlText');
+                }
+            }
+            @include themify($themes) {
+                color: themed('controlText');
+            }
         }
         > .ic-icon {
             position: absolute;

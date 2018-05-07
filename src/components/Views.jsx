@@ -15,8 +15,8 @@ const ViewItem = ({
     remove,
     onClick,
 }) => (
-    <div className="view" onClick={onClick}>
-        <span className="name">{view.name}</span>
+    <div className="ciq-list-item" onClick={onClick}>
+        <span className="ciq-list-item-text">{view.name}</span>
         <DeleteIcon onClick={remove}/>
     </div>
 );
@@ -67,6 +67,7 @@ const Views = ({
                     </span>
                 </div>
                 <div className='content'>
+                    <div className="ciq-list">
                     {
                         views.length
                             ? views.map((view, i) => (
@@ -82,6 +83,7 @@ const Views = ({
                                 <p>{t.translate('Click + icon to add one.')}</p>
                             </span>
                     }
+                    </div>
                 </div>
             </Menu.Body>
         </Menu>

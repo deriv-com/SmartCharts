@@ -304,8 +304,10 @@ cq-toolbar {
 	right:0;
 	top: 0;
 	bottom: 0;
+	margin: 0px;
 	z-index: 1;
 	padding-bottom: 50px;
+	padding: 0px;
 	.break-sm & { /* Remove padding around chart when the app is set to breakpoint-sm*/
 		padding:0px;
 	}
@@ -474,7 +476,7 @@ cq-context {
 		font-weight: 300;
 		@include themify($themes) {
 			color: themed('defaultText');
-			background: themed('defaultMain');
+			background-color: themed('defaultMain');
 		}
 		@include user-select(text);
 		&::placeholder,

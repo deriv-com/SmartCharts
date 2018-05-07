@@ -7,9 +7,7 @@
 			@include themify($themes) {color: themed('controlTextActive');}
 		}
 	}
-	&.stxMenuActive,
-	&:hover {
-		@include themify($themes) {color: themed('controlTextActive');}
+	&.stxMenuActive{
 		.break-sm & {
 			@include themify($themes) {
 				border-bottom: solid 3px themed('defaultAccent');
@@ -18,26 +16,61 @@
 		.cq-menu-btn{
 			> .ic-icon,
 			> .cq-toggle {
-				&.active{
-					svg {
-						border-radius: 4px;
-						@include themify($themes) {
-							box-shadow: inset 0 0 0 1px themed('activeColor');
-							background: themed('controlBgActive');
-						}
+				@include themify($themes) {color: themed('controlTextActive');}
+				svg {
+					border-radius: 4px;
+					@include themify($themes) {
+						box-shadow: inset 0 0 0 1px themed('activeColor');
+						background: themed('controlBgActive');
 					}
-					.ic-subtitle{
-						font-weight: 500;
-						@include themify($themes) {
-							color: themed('controlTextActive');
-						}
+				}
+				@include svg-icon-color('activeColor');
+				.ic-subtitle{
+					font-weight: 500;
+					@include themify($themes) {
+						color: themed('controlTextActive');
 					}
 				}
 			}
 		}
+		// > .ic-icon,
+		// > .cq-toggle {
+		// 	svg {
+		// 		border-radius: 4px;
+		// 		@include themify($themes) {
+		// 			box-shadow: inset 0 0 0 1px themed('activeColor');
+		// 			background: themed('controlBgActive');
+		// 		}
+		// 	}
+		// 	@include themify($themes) {color: themed('controlTextActive');}
+		// 	@include svg-icon-color('controlText');
+		// 	&:hover{
+		// 		@include svg-icon-color('activeText');
+		// 	}
+		// }
 	}
 	.cq-menu-btn{
 		padding: 0 5px;
+		&:hover{
+			> .ic-icon,
+			> .cq-toggle {
+				@include themify($themes) {color: themed('controlTextActive');}
+				@include svg-icon-color('activeColor');
+				svg {
+					@include border-radius(4px);
+					@include themify($themes) {
+						box-shadow: inset 0 0 0 1px themed('activeColor');
+						background: themed('controlBgActive');
+					}
+				}
+				.ic-subtitle{
+					font-weight: 500;
+					@include themify($themes) {
+						color: themed('controlTextActive');
+					}
+				}
+			}
+		}
 		> .ic-icon,
 		> .cq-toggle {
 			padding: .35em .5em;
@@ -56,24 +89,18 @@
 					}
 				}
 			}
-			svg, path, g{
-				@include themify($themes) {
-					color: themed('controlText');
-					fill: themed('controlText');
-				}
-			}
+			@include svg-icon-color('controlText');
 		}
+	}
+	> .ic-icon,
+	> .cq-toggle {
+		@include svg-icon-color('controlText');
 	}
 	> span {
 		padding:0 12px 0 0;
 		position:relative;
 		font-weight:400;
 	}
-
-
-
-
-
 
 
 	cq-menu-dropdown,

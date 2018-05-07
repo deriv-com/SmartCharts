@@ -124,6 +124,18 @@ $control-title-bg:        #FAFAFA !default;
 
 
 
+
+@mixin svg-icon-color($color) {
+    svg, path, g{
+      @include themify($themes) {
+        color: themed($color);
+        fill: themed($color);
+      }
+    }
+}
+
+
+
 /* --------- CSS Properties --------- */
 
 @mixin text-truncate {

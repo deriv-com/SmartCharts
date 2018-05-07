@@ -1,25 +1,36 @@
 
 .cq-chart-setting {
-    .cq-menu-container{
-        opacity: 0;
-        z-index: -9;
-        visibility: hidden;
-        height: 0px;
-        transition: visibility 0s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0s,
-            opacity 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.1s;
-        &.active{
-            visibility: visible;
-            opacity: 1;
-            z-index: 9;
-            height: auto;
+    &.stxMenuActive{
+        .cq-menu-dropdown {
+            right: 0px;
+            width: 280px;
+            height: 200px;
+            .cq-menu-container{
+                opacity: 0;
+                z-index: -9;
+                visibility: hidden;
+                height: 0px;
+                transition: visibility 0s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0s,
+                    opacity 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.1s;
+                &.active{
+                    visibility: visible;
+                    opacity: 1;
+                    z-index: 9;
+                    height: auto;
+                }
+            }
         }
     }
     .cq-menu-dropdown {
-        right: 0px;
-        width: 280px;
-        height: 200px;
+        height: 0px;
         @include themify($themes) {
             color: themed('defaultTextStrong');
+        }
+        .cq-menu-container{
+            height: 0px;
+            &.active{
+                height: 0px;
+            }
         }
     }
     .title {
@@ -31,12 +42,7 @@
             display: inline-block;
             position: relative;
             top: 3px;
-            svg, path, g{
-                @include themify($themes) {
-                    color: themed('controlText');
-                    fill: themed('controlText');
-                }
-            }
+            @include svg-icon-color('controlText');
         }
     }
     .body {
