@@ -50,7 +50,7 @@ const renderControls = () => (
         <Views />
         <Share />
         <Timeperiod />
-        <ChartSize />
+        {CIQ.isMobile ? '' : <ChartSize />}
         <ChartSetting />
     </React.Fragment>
 );
