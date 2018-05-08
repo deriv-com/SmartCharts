@@ -95,7 +95,8 @@ const config = {
             commonjs: 'mobx-react',
             commonjs2: 'mobx-react',
             root: 'mobxReact',
-        }
+        },
+        'perfect-scrollbar': 'PerfectScrollbar',
     },
 };
 
@@ -120,6 +121,7 @@ if (isApp) {
     };
     config.plugins.push(new CopyWebpackPlugin([
         { from: './sass/favicons/*.png' },
+        { from: './node_modules/perfect-scrollbar/dist/perfect-scrollbar.min.js' },
         {
             from: production ?
                 './node_modules/react/umd/react.production.min.js' :
