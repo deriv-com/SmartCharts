@@ -48,6 +48,7 @@ class Chart extends Component {
             children,
             lang,
             isMobile,
+            theme,
             isChartAvailable,
             setting,
             chartPanelTop,
@@ -63,9 +64,12 @@ class Chart extends Component {
         const insideSubHolder = array.filter(c => /(TradeStart)|(TradeEnd)/.test(c.type.displayName));
         const renderTopWidgets = topWidgets || defaultTopWidgets;
         const contextClassName = () =>{
-            let className = '';
+            let className = '',
+            settingTheme = ( setting && setting.theme === 'light' ) ? ' smartcharts-light' : ` smartcharts-${setting.theme}`,
+            defaultTheme = ( theme === 'light' ? ' smartcharts-light' : ` smartcharts-${theme}` );
+
             className += isMobile ? 'smartcharts-mobile' : '';
-            className += (setting.theme === 'light') ? ' smartcharts-light' : ` smartcharts-${setting.theme}`;
+            className += (typeof theme === 'string' ) ? defaultTheme : settingTheme ;
             return className;
         }
 

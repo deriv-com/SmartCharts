@@ -113,7 +113,7 @@
             font-weight: 800;
             @include themify($themes) {
                 color: themed('defaultTextActive');
-                border-right: 2px solid themed('defaultTextActive');
+                border-right: 2px solid themed('activeColor');
                 background-color: themed('listBgActive');
             }
             .ic-icon {

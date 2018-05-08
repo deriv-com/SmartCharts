@@ -22,16 +22,16 @@
             position: relative;
             display: flex;
             align-items: center;
-            @include themify($themes) {
-                background: themed('defaultMain');
-                color: themed('defaultTextSubtle');
-                border: solid 1px themed('defaultBorder');
-            }
-            @include border-radius();
             &:hover {
                 @include themify($themes) {
                     border: solid 1px themed('activeColor');
                 }
+            }
+            @include border-radius();
+            @include themify($themes) {
+                background: themed('controlTitlebg');
+                color: themed('defaultTextSubtle');
+                border: solid 1px themed('defaultBorder');
             }
             > .ic-icon, > .ic-frx, > .ic-wld, > .ic-otc {
                 height: $large-icon-size;

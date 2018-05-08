@@ -122,6 +122,7 @@ export default class ChartSettingStore {
 
     @action.bound setTheme(value) {
         this.theme = value ? 'dark' : 'light';
+        this.mainStore.chart.stxx.clearStyles();
         this.saveSetting();
     }
 
