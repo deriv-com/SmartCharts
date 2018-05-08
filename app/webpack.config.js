@@ -1,7 +1,7 @@
 const webpack = require('webpack');
 const path = require('path');
 const CopyWebpackPlugin = require('copy-webpack-plugin')
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 const config = {
     devtool: 'source-map',
@@ -21,16 +21,17 @@ const config = {
             },
             {
                 test: /\.(s*)css$/,
-                use: ['css-hot-loader'].concat(ExtractTextPlugin.extract({
-                    fallback: 'style-loader',
-                    use: [{
+                use: [
+                    MiniCssExtractPlugin.loader,
+                    {
                         loader: 'css-loader',
                         options: { sourceMap: true, minimize: true }
-                    }, {
+                    },
+                    {
                         loader: 'sass-loader',
                         options: { sourceMap: true }
-                    }],
-                })),
+                    }
+                ],
             },
         ],
     },
@@ -39,7 +40,7 @@ const config = {
             { from: './node_modules/@binary-com/smartcharts/dist/chartiq.min.js' },
             { from: './node_modules/@binary-com/smartcharts/dist/smartcharts.css' },
         ]),
-        new ExtractTextPlugin("styles.css"),
+        new MiniCssExtractPlugin({ filename: "styles.css" }),
     ],
     externals: {
         CIQ: 'CIQ',

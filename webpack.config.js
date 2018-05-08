@@ -1,7 +1,7 @@
 const webpack = require('webpack');
 const path = require('path');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 const production = process.env.NODE_ENV === 'production';
@@ -22,16 +22,16 @@ const config = {
         rules: [
             {
                 test: /\.(s*)css$/,
-                use: ['css-hot-loader'].concat(ExtractTextPlugin.extract({
-                    fallback: 'style-loader',
-                    use: [{
+                use: [
+                    'css-hot-loader',
+                    MiniCssExtractPlugin.loader,
+                    {
                         loader: 'css-loader',
                         options: { sourceMap: true, minimize: true }
                     }, {
                         loader: 'sass-loader',
                         options: { sourceMap: true }
                     }],
-                })),
             },
             {
                 test: /\.(png|cur|jp(e*)g|svg)$/,
@@ -71,9 +71,7 @@ const config = {
         new webpack.ProvidePlugin({
             't': [path.resolve(__dirname, './src/Translation.js'), 't']
         }),
-        new ExtractTextPlugin({
-            filename: 'smartcharts.css',
-        }),
+        new MiniCssExtractPlugin({filename: 'smartcharts.css'}),
         new CopyWebpackPlugin([
             { from: './chartiq/chartiq.min.js' },
         ]),
