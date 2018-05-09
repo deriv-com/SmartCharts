@@ -21,7 +21,7 @@ const ChartSetting = ({
     setView,
     view,
     setLanguage,
-    isDarkTheme,
+    theme,
     setTheme
 }) => {
     const renderMain = () => {
@@ -43,7 +43,7 @@ const ChartSetting = ({
                         <span className="ciq-icon-text">{t.translate('Dark Mode')}</span>
                         <div className="ciq-action">
                             <Switch
-                                value={isDarkTheme}
+                                value={(theme == 'dark')}
                                 onChange={setTheme}
                                 />
                         </div>
@@ -116,6 +116,6 @@ export default connect(({chartSetting: s}) => ({
     setView: s.setView,
     view: s.view,
     setLanguage: s.setLanguage,
-    isDarkTheme: s.isDarkTheme,
+    theme: s.theme,
     setTheme: s.setTheme,
 }))(ChartSetting);

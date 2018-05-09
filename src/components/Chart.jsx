@@ -63,13 +63,12 @@ class Chart extends Component {
         const insideHolder = array.filter(c => !/(TradeStart)|(TradeEnd)/.test(c.type.displayName));
         const insideSubHolder = array.filter(c => /(TradeStart)|(TradeEnd)/.test(c.type.displayName));
         const renderTopWidgets = topWidgets || defaultTopWidgets;
-        const contextClassName = () =>{
-            let className = '',
-            settingTheme = ( setting && setting.theme === 'light' ) ? ' smartcharts-light' : ` smartcharts-${setting.theme}`,
-            defaultTheme = ( theme === 'light' ? ' smartcharts-light' : ` smartcharts-${theme}` );
 
+        const contextClassName = () => {
+            let className = '';
             className += isMobile ? 'smartcharts-mobile' : '';
-            className += (typeof theme === 'string' ) ? defaultTheme : settingTheme ;
+            className += (typeof theme === 'string' ) ? ` smartcharts-${theme}` 
+                        : ` smartcharts-${ (setting && setting.theme) ? setting.theme : 'light'}`;
             return className;
         }
 

@@ -125,11 +125,6 @@ export default class ChartSettingStore {
         this.mainStore.chart.stxx.clearStyles();
         this.saveSetting();
     }
-
-    @computed get isDarkTheme() {
-        return this.theme === 'dark';
-    }
-
 }
 
 
