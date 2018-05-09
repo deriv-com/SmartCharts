@@ -24,7 +24,7 @@ export default class ComparisonStore {
             ],
             onSelectItem: this.onSelectItem.bind(this),
             placeholderText: t.translate('"AUD/JPY" or "Apple"'),
-            favoritesId: 'comparisonSymbols',
+            favoritesId: 'chartTitle&Comparison',
             mainStore,
         });
     }
