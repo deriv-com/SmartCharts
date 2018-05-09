@@ -22,7 +22,7 @@ const renderDefaultControls = (isMobile) => (
         <Views />
         <Share />
         <Timeperiod />
-        <ChartSize />
+        {isMobile ? '' : <ChartSize />}
     </React.Fragment>
 );
 

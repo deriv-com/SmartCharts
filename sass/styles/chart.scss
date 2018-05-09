@@ -893,7 +893,9 @@ cq-attrib-container cq-attrib-quote-type {
 }
 
 cq-attrib-container cq-attrib-source a {
-   color: $DEFAULT-text-strong;
+    @include themify($themes) {
+        color: themed('defaultTextStrong');
+    }
 }
 
 cq-theme-dialog  {
@@ -986,13 +988,17 @@ cq-language-name {
 
 .stx_annotation {
     background: transparent;
-    border: solid $DEFAULT-accent 1px;
+    @include themify($themes) {
+        border: solid themed('defaultAccent') 1px;
+    }
 }
 
 .stx-btn-panel {
     opacity:0;
     @include transition(opacity .5s);
-    background-color: $DEFAULT-main;
+    @include themify($themes) {
+        background-color: themed('defaultMain');
+    }
 }
 
 .break-sm .stx-btn-panel {
@@ -1005,8 +1011,10 @@ cq-language-name {
 }
 
 .stx-ico-handle {
-    background-color: $DEFAULT-border-subtle;
     opacity: 0;
+    @include themify($themes) {
+        background-color: themed('defaultBorderSubtle');
+    }
 }
 
 .stx-ico-handle:hover {
@@ -1014,9 +1022,11 @@ cq-language-name {
 }
 
 .stx-ico-handle.stx-grab {
-    background-color: $DEFAULT-accent;
     opacity: .3;
     height:2px;
+    @include themify($themes) {
+        background-color: themed('defaultAccent');
+    }
 }
 /* hide the default panel drag */
 .stx_panel_drag {
@@ -1052,7 +1062,9 @@ cq-language-name {
     position: fixed;
     z-index: 2;
     right: 0;
-    border-left:1px solid $DEFAULT-border-subtle;
+    @include themify($themes) {
+        border-left:1px solid themed('defaultBorderSubtle');
+    }
     display: none;
     flex-direction: column;
     align-items: center;

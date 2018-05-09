@@ -33,21 +33,7 @@
 				}
 			}
 		}
-		// > .ic-icon,
-		// > .cq-toggle {
-		// 	svg {
-		// 		border-radius: 4px;
-		// 		@include themify($themes) {
-		// 			box-shadow: inset 0 0 0 1px themed('activeColor');
-		// 			background: themed('controlBgActive');
-		// 		}
-		// 	}
-		// 	@include themify($themes) {color: themed('controlTextActive');}
-		// 	@include svg-icon-color('controlText');
-		// 	&:hover{
-		// 		@include svg-icon-color('activeText');
-		// 	}
-		// }
+
 	}
 	.cq-menu-btn{
 		padding: 0 5px;

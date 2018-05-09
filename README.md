@@ -183,11 +183,27 @@ The following commands will build and deploy to charts.binary.com (*Make sure yo
 
 As ChartIQ license is tied to the `binary.com` domain name, we provide developers with a `binary.sx` to test out the library on their Github Pages.
 
-Assuming you have a `binary.sx` subdomain pointed to your `github.io` page, you can deploy the SmartCharts app by doing the following:
+For each feature/fix you want to add we recommend you deploy an instance of SmartCharts for it (e.g. `brucebinary.binary.sx/featureA`, `brucebinary.binary.sx/featureB`). To deploy SmartCharts to your github pages, you first need to setup your `gh-pages` branch:
 
- 1.  add a file with named `CNAME`  in your project directory with your site name, Ex: `developer.binary.sx`
- 2. run `yarn build-travis  && yarn gh-pages`
+ 1. Make sure you have a `binary.sx` subdomain pointed to your `github.io` page first (e.g. `brucebinary.binary.sx -> brucebinary.github.io`). 
+ 2. In your `gh-pages` branch, add a `CNAME` in your project root folder, and push that file to your branch, for example:
+ 
+ ```bash
+ git checkout -b gh-pages origin/gh-pages # if you already checkout from remote execute: git checkout gh-pages
+ echo 'brucebinary.binary.sx' > CNAME # substitute with your domain
+ git add --all
+ git commit -m 'add CNAME'
+ git push origin gh-pages
+ ```
+ 
+Here on, to deploy a folder (e.g. `myfoldername`):
 
-Now you should be able to see your SmartCharts app on (`developer.binary.sx` )
+    yarn build-travis && yarn gh-pages:folder myfoldername
+
+Now you should be able to see your SmartCharts app on `brucebinary.binary.sx/myfoldername`.
+
+Alternatively you can deploy directly to the domain itself (note that this **erases all folders**; could be useful for cleanup). In our example, the following command will deploy to `brucebinary.binary.sx`:
+
+    yarn build-travis && yarn gh-pages
 
 > Note: `yarn build-travis` will add hashing inside `index.html`; **do not push those changes to git!**
