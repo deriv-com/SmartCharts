@@ -45,10 +45,10 @@ export default class ShareStore {
 
         const origin = (window.location.origin === 'http://127.0.0.1:8080' || window.location.origin === 'http://localhost:8080') ?
             window.location.origin : 'https://charts.binary.com';
-        this.shareLink = `${origin}#${encodeURIComponent(json)}`;
+        this.shareLink = `${encodeURIComponent(origin)}#${encodeURIComponent(json)}`;
 
         this.loading = true;
-        fetch(`${this.bitlyUrl}?access_token=${this.accessToken}&longUrl=${encodeURIComponent(this.shareLink)}`)
+        fetch(`${this.bitlyUrl}?access_token=${this.accessToken}&longUrl=${this.shareLink}`)
             .then( response => {
                 return response.json();
             })
