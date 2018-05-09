@@ -30,7 +30,7 @@
             @include border-radius();
             @include themify($themes) {
                 background: themed('controlTitlebg');
-                color: themed('defaultTextSubtle');
+                color: themed('defaultTextStrong');
                 border: solid 1px themed('defaultBorder');
             }
             > .ic-icon, > .ic-frx, > .ic-wld, > .ic-otc {
