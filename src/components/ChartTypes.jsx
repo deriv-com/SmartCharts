@@ -1,8 +1,7 @@
-import React, { Component } from 'react';
+import React from 'react';
 import {connect} from '../store/Connect';
 import Menu from './Menu.jsx';
 import List from './List.jsx';
-import { CloseIcon } from './Icons.jsx';
 import {Switch} from './Form.jsx';
 
 const ChartTypes = ({

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { connect } from '../store/Connect';
 import ChartTypes from './ChartTypes.jsx';
 import StudyLegend from './StudyLegend.jsx';
