@@ -7,7 +7,6 @@ import {
     PositionBottomIcon,
     ThemeDarkIcon,
     ThemeLightIcon,
-    ChevronRightIcon,
     BackIcon,
     FlagIcons
 } from './Icons.jsx';
@@ -46,13 +45,11 @@ const ChartSetting = ({
                             />
                         </div>
                     </div>*/}
-                    <div className="ciq-item ciq-list-item-lng">
+                    <div className="ciq-item ciq-list-item-lng" 
+                        onClick={ () => setView('language') }>
                         <span className="ciq-icon-text">{t.translate('Language')}</span>
                         <div className="ciq-action">
-                            <span></span>
-                            <ChevronRightIcon
-                                onClick={ () => setView('language') }
-                            />
+                            {selectedLanguage.icon}
                         </div>
                     </div>
                 </div>
@@ -71,7 +68,7 @@ const ChartSetting = ({
                 <div className="ciq-list ciq-list-language">
                     {languages.map( (language,index) => {
                         return <div
-                            className={`ciq-list-item ${(selectedLanguage == language.key) ? 'selected' : ''}`}
+                            className={`ciq-list-item ${(selectedLanguage.key == language.key) ? 'selected' : ''}`}
                             key={index}
                             onClick={()=> setLanguage(language.key) }
                         >

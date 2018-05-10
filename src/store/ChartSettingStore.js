@@ -73,6 +73,11 @@ export default class ChartSettingStore {
     @observable language = '';
     @observable position = '';
     @observable theme = '';
+    defaultLanguage = {
+        key: 'en',
+        name: 'English',
+        icon: <FlagIcons.USD />
+    };
 
     restoreSetting() {
         const setting = createObjectFromLocalStorage('smartchart-setting');
@@ -85,14 +90,14 @@ export default class ChartSettingStore {
              */
             let language = this.languages.find(item => item.key === setting.language );
             if ( language ) {
-                this.language = setting.language;
+                this.language = language;
             } else {
-                this.language = 'en';
+                this.language = this.defaultLanguage;
             }
             this.position = setting.position === 'bottom' ? 'bottom' : 'left';
             this.theme = setting.theme === 'light' ? 'light' : 'dark';
         } else {
-            this.language = 'en';
+            this.language = this.defaultLanguage;
             this.position = 'bottom';
             this.theme = 'light';
         }
@@ -100,7 +105,7 @@ export default class ChartSettingStore {
 
     saveSetting() {
         CIQ.localStorageSetItem(`smartchart-setting`, JSON.stringify({
-            language: this.language,
+            language: this.language.key,
             position: this.position,
             theme: this.theme
         }));
@@ -113,7 +118,7 @@ export default class ChartSettingStore {
     }
 
     @computed get getLanguage() {
-        return this.language ? this.language : 'en';
+        return this.language ? this.language : this.defaultLanguage;
     }
 
 
