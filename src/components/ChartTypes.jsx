@@ -4,6 +4,7 @@ import Menu from './Menu.jsx';
 import List from './List.jsx';
 import { CloseIcon } from './Icons.jsx';
 import {Switch} from './Form.jsx';
+import '../../sass/components/_chart-types.scss';
 
 const ChartTypes = ({
     Type,

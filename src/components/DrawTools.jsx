@@ -3,7 +3,7 @@ import { connect } from '../store/Connect';
 import Menu from './Menu.jsx';
 import List from './List.jsx';
 import { DrawIcon, ClearIcon, MeasureIcon } from './Icons.jsx';
-import '../../sass/_draw-tools.scss';
+import '../../sass/components/_draw-tools.scss';
 
 const DrawTools = ({
     clearAll,

@@ -7,14 +7,18 @@ const CrosshairToggle = ({
     toggleCrosshair,
     crosshair,
 }) => (
-    <Toggle
-        active={crosshair}
-        onChange={toggleCrosshair}
-    >
-        <CrosshairIcon
-            className='ic-icon-with-sub'
-            tooltip-title={t.translate('Crosshair')} />
-    </Toggle>
+    <div className="ciq-menu">
+        <div className="cq-menu-btn">
+            <Toggle
+                active={crosshair}
+                onChange={toggleCrosshair}
+                >
+                <CrosshairIcon
+                    className='ic-icon-with-sub'
+                    tooltip-title={t.translate('Crosshair')} />
+            </Toggle>
+        </div>
+    </div>
 );
 
 export default connect(

@@ -29,7 +29,13 @@ const config = {
                         options: { sourceMap: true, minimize: true }
                     }, {
                         loader: 'sass-loader',
-                        options: { sourceMap: true }
+                        options: {
+                            sourceMap: true,
+                            data: '@import "sass/_variables.scss";@import "sass/_themes.scss";',
+                            includePaths: [
+                                path.resolve(__dirname, './src')
+                            ]
+                        }
                     }],
                 })),
             },

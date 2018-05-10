@@ -1,6 +1,6 @@
 import React from 'react';
 import {connect} from '../store/Connect';
-import '../../sass/_ciq-crosshair.scss';
+import '../../sass/components/_ciq-crosshair.scss';
 
 const Crosshair = ({
     left,
