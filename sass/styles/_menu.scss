@@ -99,14 +99,16 @@
 		height: auto;
 		margin-top: 1;
         visibility: hidden;
-		@include themify($themes) {
-			background: themed('controlDialogBody');
-			color: themed('controlText');
-		}
+        transform: translateX( -50% );
+        left: 50%;
 		@include box-shadow (0px, 2px, 4px, rgba(0, 0, 0, .2));
 		@include transition( opacity .20s 0s);
 		@include border-radius();
         @include dialog-transition();
+		@include themify($themes) {
+			background: themed('controlDialogBody');
+			color: themed('controlText');
+		}
         &.open{
             visibility: visible;
             margin-top:5px;
