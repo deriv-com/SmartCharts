@@ -23,7 +23,7 @@
                 cursor: pointer;
                 display: flex;
                 padding: 6px 6px;
-                @include svg-icon-color('controlText');
+                @include svg-icon-stroke('controlText');
             }
         }
         .body {
