@@ -111,6 +111,10 @@ export default class ChartSettingStore {
         }));
     }
 
+    @action.bound setView(view) {
+        this.view = view ? view : '';
+    }
+
     @action.bound setLanguage(lng) {
         this.language = lng;
         this.saveSetting();
@@ -121,12 +125,11 @@ export default class ChartSettingStore {
         return this.language ? this.language : this.defaultLanguage;
     }
 
-
-
-    @action.bound setView(view) {
-        this.view = view ? view : '';
+    @action.bound setTheme(value) {
+        this.theme = value ? 'dark' : 'light';
+        this.mainStore.chart.stxx.clearStyles();
+        this.saveSetting();
     }
-
 }
 
 

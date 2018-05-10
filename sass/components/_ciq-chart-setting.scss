@@ -1,79 +1,78 @@
-@import "_variables";
 
 .cq-chart-setting {
-    .cq-menu-container{
-        opacity: 0;
-        z-index: -9;
-        visibility: hidden;
-        height: 0px;
-        transition: visibility 0s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0s,
-            opacity 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.1s;
-        &.active{
-            visibility: visible;
-            opacity: 1;
-            z-index: 9;
-            height: auto;
+    &.stxMenuActive{
+        .cq-menu-dropdown {
+            right: 0px;
+            width: 280px;
+            height: 200px;
+            .cq-menu-container{
+                opacity: 0;
+                z-index: -9;
+                visibility: hidden;
+                height: 0px;
+                transition: visibility 0s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0s,
+                    opacity 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.1s;
+                &.active{
+                    visibility: visible;
+                    opacity: 1;
+                    z-index: 9;
+                    height: auto;
+                }
+            }
         }
     }
     .cq-menu-dropdown {
-        right: 0px;
-        width: 280px;
-        height: 200px;
-        color: $DEFAULT-text-strong;
+        height: 0px;
+        @include themify($themes) {
+            color: themed('defaultTextStrong');
+        }
+        .cq-menu-container{
+            height: 0px;
+            &.active{
+                height: 0px;
+            }
+        }
     }
     .title {
         height: 40px;
         line-height: 40px;
         padding-left: 16px;
         font-size: 16px;
-        background: white;
-        box-shadow: inset 0 -1px 0 0 #E9E9ED;
         .ic-icon{
             display: inline-block;
             position: relative;
             top: 3px;
+            @include svg-icon-color('controlText');
         }
     }
     .body {
-        background: #FAFAFA;
         height: 100%;
         padding: 16px;
         .ciq-list-setting{
             height: auto;
-            overflow-y: auto;
-            position: relative;
-            .ciq-item{
-
-                border: 1px solid #e9e9ed;
-                border-top: none;
-                background: $DEFAULT-main;
-                box-sizing: border-box;
-                font-size: 12px;
-                color: #000;
-                padding-left: 16px;
-
-                display: flex;
+            .ciq-list-item{
                 height: 38px;
                 line-height: 38px;
                 &.ciq-list-item-lng{
                     cursor: pointer;
                 }
-                .ciq-icon-text{
+                .ciq-icon-text {
                     width: calc( 100% - 60px );
                 }
-                .ciq-action{
+                .ciq-action {
                     width: 50px;
                     height: 25px;
                     display: flex;
                     padding: 6px 0;
                     justify-content: flex-end;
                 }
+                .cq-switch {
+                    margin: 6px 0 0 0;
+                }
             }
         }
         .ciq-list-language{
             height: auto;
-            overflow-y: auto;
-            position: relative;
             .ciq-list-item{
                 display: inline-block;
                 width: 50%;
@@ -83,12 +82,9 @@
                     border-left: none;
                 }
                 &:nth-child(2){
-                    border-top: 1px solid #e9e9ed;
-                }
-                &.selected{
-                    background: #f2f3f8;
-                    color: #4C5794;
-                    font-weight: bold;
+                    @include themify($themes) {
+                        border-top: themed('listBorder');
+                    }
                 }
                 .ic-icon{
                     cursor: pointer;

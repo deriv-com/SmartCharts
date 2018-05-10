@@ -1,6 +1,8 @@
 import React, { Component, Fragment } from 'react';
 import {CategoryIconMap, ItemIconMap, SearchIcon,
     SymbolPlaceholderIcon, ActiveOptionsIconMap, FavoriteIcon, CloseIcon } from './Icons.jsx';
+import '../../sass/components/_categorical-display.scss';
+
 
 const CategoricalDisplay = ({
     isMobile,

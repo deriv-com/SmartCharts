@@ -1,5 +1,5 @@
 import React from 'react';
-import '../../sass/_ciq-list.scss';
+import '../../sass/components/_ciq-list.scss';
 
 const List = ({
     height,

@@ -1,6 +1,7 @@
 import React from 'react';
 import Menu from './Menu.jsx';
 import { connect } from '../store/Connect';
+import {Switch} from './Form.jsx';
 import {
     SettingIcon,
     PositionLeftIcon,
@@ -10,7 +11,7 @@ import {
     BackIcon,
     FlagIcons
 } from './Icons.jsx';
-import '../../sass/_ciq-chart-setting.scss';
+import '../../sass/components/_ciq-chart-setting.scss';
 
 
 const ChartSetting = ({
@@ -20,13 +21,15 @@ const ChartSetting = ({
     languages,
     setView,
     view,
-    setLanguage
+    setLanguage,
+    theme,
+    setTheme
 }) => {
     const renderMain = () => {
         return <div>
             <div className='title'> {t.translate('Settings')} </div>
             <div className='body'>
-                <div className="ciq-list-setting">
+                <div className="ciq-list ciq-list-setting">
                     {/*<div className="ciq-item">
                         <span className="ciq-icon-text">{t.translate('Position')}</span>
                         <div className="ciq-action">
@@ -36,16 +39,17 @@ const ChartSetting = ({
                             />
                         </div>
                     </div>
-                    <div className="ciq-item">
-                        <span className="ciq-icon-text">{t.translate('Theme')}</span>
+                    */}
+                    <div className="ciq-list-item">
+                        <span className="ciq-icon-text">{t.translate('Dark Mode')}</span>
                         <div className="ciq-action">
-                            <ThemeDarkIcon
-                            />
-                            <ThemeLightIcon
-                            />
+                            <Switch
+                                value={(theme == 'dark')}
+                                onChange={setTheme}
+                                />
                         </div>
-                    </div>*/}
-                    <div className="ciq-item ciq-list-item-lng" 
+                    </div>
+                    <div className="ciq-list-item ciq-list-item-lng" 
                         onClick={ () => setView('language') }>
                         <span className="ciq-icon-text">{t.translate('Language')}</span>
                         <div className="ciq-action">
@@ -71,10 +75,8 @@ const ChartSetting = ({
                             className={`ciq-list-item ${(selectedLanguage.key == language.key) ? 'selected' : ''}`}
                             key={index}
                             onClick={()=> setLanguage(language.key) }
-                        >
-                            <span>
-                                {language.icon}
-                            </span>
+                            >
+                            <span>{language.icon}</span>
                             <span className="ciq-icon-text">{language.name}</span>
                         </div>;
                     })}
@@ -110,5 +112,7 @@ export default connect(({chartSetting: s}) => ({
     languages: s.languages,
     setView: s.setView,
     view: s.view,
-    setLanguage: s.setLanguage
+    setLanguage: s.setLanguage,
+    theme: s.theme,
+    setTheme: s.setTheme,
 }))(ChartSetting);
