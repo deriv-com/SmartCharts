@@ -43,8 +43,7 @@ export default class ShareStore {
         const layoutData = this.stx.exportLayout(true);
         const json = JSON.stringify(layoutData);
 
-        const origin = (window.location.origin === 'http://127.0.0.1:8080' || window.location.origin === 'http://localhost:8080') ?
-            window.location.origin : 'https://charts.binary.com';
+        const origin = window.location.origin;
         this.shareLink = `${encodeURIComponent(origin)}#${encodeURIComponent(json)}`;
 
         this.loading = true;
