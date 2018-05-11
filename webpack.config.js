@@ -1,7 +1,7 @@
 const webpack = require('webpack');
 const path = require('path');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 const production = process.env.NODE_ENV === 'production';
@@ -9,7 +9,7 @@ const isApp = process.env.BUILD_MODE === 'app';
 
 const config = {
     devtool: 'source-map',
-    entry: ['babel-polyfill', path.resolve(__dirname, './src/index.js')],
+    entry: path.resolve(__dirname, './src/index.js'),
     output: {
         publicPath: '/dist/',
         path: path.resolve(__dirname, 'dist'),
@@ -22,9 +22,10 @@ const config = {
         rules: [
             {
                 test: /\.(s*)css$/,
-                use: ['css-hot-loader'].concat(ExtractTextPlugin.extract({
-                    fallback: 'style-loader',
-                    use: [{
+                use: [
+                    'css-hot-loader',
+                    MiniCssExtractPlugin.loader,
+                    {
                         loader: 'css-loader',
                         options: { sourceMap: true, minimize: true }
                     }, {
@@ -37,7 +38,6 @@ const config = {
                             ]
                         }
                     }],
-                })),
             },
             {
                 test: /\.(png|cur|jp(e*)g|svg)$/,
@@ -77,9 +77,7 @@ const config = {
         new webpack.ProvidePlugin({
             't': [path.resolve(__dirname, './src/Translation.js'), 't']
         }),
-        new ExtractTextPlugin({
-            filename: 'smartcharts.css',
-        }),
+        new MiniCssExtractPlugin({filename: 'smartcharts.css'}),
         new CopyWebpackPlugin([
             { from: './chartiq/chartiq.min.js' },
         ]),
@@ -101,7 +99,9 @@ const config = {
             commonjs: 'mobx-react',
             commonjs2: 'mobx-react',
             root: 'mobxReact',
-        }
+        },
+        'perfect-scrollbar': 'perfect-scrollbar',
+        'babel-polyfill': 'babel-polyfill',
     },
 };
 
@@ -118,7 +118,7 @@ if (process.env.ANALYZE_BUNDLE) {
 }
 
 if (isApp) {
-    config.entry = ['babel-polyfill', path.resolve(__dirname, './app/index.jsx')];
+    config.entry = path.resolve(__dirname, './app/index.jsx');
     config.resolve = {
         alias: {
             '@binary-com/smartcharts': path.resolve(__dirname, 'src/'),
@@ -126,6 +126,8 @@ if (isApp) {
     };
     config.plugins.push(new CopyWebpackPlugin([
         { from: './sass/favicons/*.png' },
+        { from: './node_modules/perfect-scrollbar/dist/perfect-scrollbar.min.js' },
+        { from: './node_modules/babel-polyfill/dist/polyfill.min.js', to: 'babel-polyfill.min.js' },
         {
             from: production ?
                 './node_modules/react/umd/react.production.min.js' :

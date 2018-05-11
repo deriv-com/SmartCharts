@@ -121,7 +121,7 @@ class ChartStore {
         containerNode.style.height = `${ciqHeight}px`;
     }
 
-    resizeScreen() {
+    resizeScreen = () => {
         if (!this.context) { return; }
         this.updateHeight();
         this.stxx.resizeChart();
@@ -263,7 +263,7 @@ class ChartStore {
         this.resizeScreen();
         this.chartPanelTop = holderStyle.top;
 
-        window.addEventListener('resize', this.resizeScreen.bind(this));
+        window.addEventListener('resize', this.resizeScreen, false);
 
         stxx.append('createDataSet', this.updateComparisons);
     }
@@ -299,6 +299,12 @@ class ChartStore {
             comp.price = srs.lastQuote ? srs.lastQuote.Close : undefined;
             i++;
         }
+    }
+
+    @action.bound destroy() {
+        window.removeEventListener('resize', this.resizeScreen, false);
+        this.stxx.destroy();
+        this.stxx = null;
     }
 
     processSymbols(symbols) {
