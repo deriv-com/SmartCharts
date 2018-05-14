@@ -4,6 +4,7 @@ import Menu from './Menu.jsx';
 import CategoricalDisplay from './CategoricalDisplay.jsx';
 import AnimatedPrice from './AnimatedPrice.jsx';
 import {ItemIconMap, SymbolPlaceholderIcon} from './Icons.jsx';
+import '../../sass/components/_chart-title.scss';
 
 const ChartTitle = ({
     todayChange,

@@ -1,17 +1,15 @@
-@import "_variables";
 
 .cq-crosshair {
     position: absolute;
     z-index: 11;
-
-    color: white;
     padding:  8px;
     box-sizing: border-box;
 
+    color: white;
     background: rgba(21,33,45,0.88);
     box-shadow: 0 2px 8px 0 rgba(21,33,45,0.32);
-    @include border-radius(4px);
 
+    @include border-radius(4px);
     &:after,
     &:before {
         content: "";

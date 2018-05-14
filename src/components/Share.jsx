@@ -5,7 +5,7 @@ import {
     ShareIcon,
     CopyIcon
 } from './Icons.jsx';
-import '../../sass/_ciq-share.scss';
+import '../../sass/components/_ciq-share.scss';
 
 
 const Share = ({
