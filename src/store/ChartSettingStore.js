@@ -6,6 +6,7 @@ import { FlagIcons } from './../components/Icons.jsx';
 
 export default class ChartSettingStore {
     constructor(mainStore) {
+        this.defaultLanguage = this.languages[0];
         this.mainStore = mainStore;
         this.menu = new MenuStore({getContext: () => this.mainStore.chart.context});
         this.restoreSetting();
@@ -15,7 +16,7 @@ export default class ChartSettingStore {
     get stx() { return this.context.stx; }
 
     onContextReady = () => {};
-    @observable languages = [
+    languages = [
         {
             key: 'en',
             name: 'English',
@@ -70,15 +71,11 @@ export default class ChartSettingStore {
             icon: <FlagIcons.Poland />
         }
     ];
+    defaultLanguage = {};
     @observable view = '';
     @observable language = '';
     @observable position = '';
     @observable theme = '';
-    defaultLanguage = {
-        key: 'en',
-        name: 'English',
-        icon: <FlagIcons.USD />
-    };
 
     restoreSetting() {
         const setting = createObjectFromLocalStorage('smartchart-setting');
