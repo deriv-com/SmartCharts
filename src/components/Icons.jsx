@@ -88,7 +88,9 @@ import Spanish from '../../sass/icons/flags/spanish.svg';
 import SouthAfrica from '../../sass/icons/flags/south africa.svg';
 import WallStreet from '../../sass/icons/flags/wallstreet.svg';
 
-/* German */
+/** OTC STOCKS **/
+/*
+// German
 import Airbus from '../../sass/icons/active-symbols/otc stocks/ic-airbus.svg';
 import Allianz from '../../sass/icons/active-symbols/otc stocks/ic-allianz.svg';
 import BMW from '../../sass/icons/active-symbols/otc stocks/ic-bmw.svg';
@@ -97,12 +99,12 @@ import Deutschebank from '../../sass/icons/active-symbols/otc stocks/ic-deutsche
 import Novartis from '../../sass/icons/active-symbols/otc stocks/ic-novartis.svg';
 import SAP from '../../sass/icons/active-symbols/otc stocks/ic-sap.svg';
 import Siemens from '../../sass/icons/active-symbols/otc stocks/ic-siemens.svg';
-/* India */
+// India
 import BhartiAirtel from '../../sass/icons/active-symbols/otc stocks/ic-bhartiairtel.svg';
 import MarutiSuzuki from '../../sass/icons/active-symbols/otc stocks/ic-marutisuzuki.svg';
 import RelianceIndustries from '../../sass/icons/active-symbols/otc stocks/ic-relianceindustries.svg';
 import TataSteel from '../../sass/icons/active-symbols/otc stocks/ic-tatasteel.svg';
-/* UK */
+// UK
 import BP from '../../sass/icons/active-symbols/otc stocks/ic-bp.svg';
 import Barclays from '../../sass/icons/active-symbols/otc stocks/ic-barclays.svg';
 import BritishAmericanTobacco from '../../sass/icons/active-symbols/otc stocks/ic-britishamericantobacco.svg';
@@ -111,7 +113,7 @@ import LloydsBank from '../../sass/icons/active-symbols/otc stocks/ic-lloydsbank
 import RioTinto from '../../sass/icons/active-symbols/otc stocks/ic-riotinto.svg';
 import StandardChartered from '../../sass/icons/active-symbols/otc stocks/ic-standardchartered.svg';
 import Tesco from '../../sass/icons/active-symbols/otc stocks/ic-tesco.svg';
-/* US */
+// US
 import Alibaba from '../../sass/icons/active-symbols/otc stocks/ic-aibaba.svg';
 import Alphabet from '../../sass/icons/active-symbols/otc stocks/ic-alphabet.svg';
 import Amazon from '../../sass/icons/active-symbols/otc stocks/ic-amazon.svg';
@@ -132,6 +134,7 @@ import McDonalds from '../../sass/icons/active-symbols/otc stocks/ic-mcdonalds.s
 import Microsoft from '../../sass/icons/active-symbols/otc stocks/ic-microsoft.svg';
 import PepsiCo from '../../sass/icons/active-symbols/otc stocks/ic-pepsico.svg';
 import ProcterAndGamble from '../../sass/icons/active-symbols/otc stocks/ic-procterandgamble.svg';
+*/
 
 /* Energy */
 import OilUSD from '../../sass/icons/active-symbols/energy/oil usd/ic-oilusd.svg';
