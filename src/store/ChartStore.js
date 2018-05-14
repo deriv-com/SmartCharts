@@ -130,77 +130,6 @@ class ChartStore {
         }
     }
 
-    startUI() {
-        const stxx = this.stxx;
-        stxx.chart.allowScrollPast = false;
-        stxx.chart.allowScrollFuture = false;
-        const context = new Context(stxx, this.rootNode);
-
-        // Put some margin so chart doesn't get blocked by chart title
-        stxx.chart.yAxis.initialMarginTop = 125;
-        stxx.calculateYAxisMargins(stxx.chart.panel.yAxis);
-
-        context.changeSymbol = (data) => {
-            this.loader.show();
-
-            // reset comparisons
-            for (const field in this.stxx.chart.series) {
-                if (stxx.chart.series[field].parameters.bucket !== 'study') {
-                    this.stxx.removeSeries(field);
-                }
-            }
-
-            this.stxx.newChart(data, null, null, (err) => {
-                this.loader.hide();
-                if (err) {
-                    /* TODO, symbol not found error */
-                    return;
-                }
-                this.restoreDrawings(this.stxx, this.stxx.chart.symbol);
-            });
-
-            this.currentActiveSymbol = data;
-            this.categorizedSymbols = this.categorizeActiveSymbols();
-        };
-
-        new KeystrokeHub(document.querySelector('body'), context, {
-            cb: KeystrokeHub.defaultHotKeys,
-        });
-
-        const UIStorage = new CIQ.NameValueStore();
-
-        const params = {
-            excludedStudies: {
-                Directional: true,
-                Gopala: true,
-                vchart: true,
-            },
-            alwaysDisplayDialog: {
-                ma: true,
-            },
-            /* dialogBeforeAddingStudy: {"rsi": true} // here's how to always show a dialog before adding the study */
-        };
-
-        this.loader.show();
-
-        const studiesStore = this.mainStore.studies;
-        stxx.callbacks.studyOverlayEdit = study => studiesStore.editStudy(study);
-        stxx.callbacks.studyPanelEdit = study => studiesStore.editStudy(study);
-
-        this.restorePreferences();
-        this.restoreLayout(stxx);
-
-        if (stxx.chart.symbol) {
-            this.currentActiveSymbol = stxx.chart.symbolObject;
-        } else {
-            context.changeSymbol(defaultSymbol);
-        }
-
-        this.context = context;
-        this.contextPromise.resolve(context);
-        stxx.setStyle('stx_line_chart', 'color', '#4DAFEE'); // TODO => why is not working in css?
-    }
-
     @action.bound init(rootNode, props) {
         this.rootNode = rootNode;
 
@@ -216,8 +145,13 @@ class ChartStore {
             preferences: {
                 currentPriceLine: true,
             },
+            chart: {
+                allowScrollPast: false,
+                allowScrollFuture: false,
+            },
             yTolerance: 999999, // disable vertical scrolling
         });
+
         const deleteElement = stxx.chart.panel.holder.parentElement.querySelector('#mouseDeleteText');
         const manageElement = stxx.chart.panel.holder.parentElement.querySelector('#mouseManageText');
         deleteElement.textConent = t.translate("right-click to delete");
@@ -259,13 +193,76 @@ class ChartStore {
         // stxx.addEventListener('newChart', () => { });
         stxx.addEventListener('preferences', this.savePreferences.bind(this));
 
-        this.startUI();
+        const context = new Context(stxx, this.rootNode);
+
+        // Put some margin so chart doesn't get blocked by chart title
+        stxx.chart.yAxis.initialMarginTop = 125;
+        stxx.calculateYAxisMargins(stxx.chart.panel.yAxis);
+
+        new KeystrokeHub(document.querySelector('body'), context, {
+            cb: KeystrokeHub.defaultHotKeys,
+        });
+
+        const UIStorage = new CIQ.NameValueStore();
+
+        const params = {
+            excludedStudies: {
+                Directional: true,
+                Gopala: true,
+                vchart: true,
+            },
+            alwaysDisplayDialog: {
+                ma: true,
+            },
+            /* dialogBeforeAddingStudy: {"rsi": true} // here's how to always show a dialog before adding the study */
+        };
+
+        this.loader.show();
+
+        const studiesStore = this.mainStore.studies;
+        stxx.callbacks.studyOverlayEdit = study => studiesStore.editStudy(study);
+        stxx.callbacks.studyPanelEdit = study => studiesStore.editStudy(study);
+
+        this.restorePreferences();
+        this.restoreLayout(stxx);
+
+        if (stxx.chart.symbol) {
+            this.currentActiveSymbol = stxx.chart.symbolObject;
+        } else {
+            this.changeSymbol(defaultSymbol);
+        }
+
+        this.context = context;
+        this.contextPromise.resolve(context);
         this.resizeScreen();
         this.chartPanelTop = holderStyle.top;
 
         window.addEventListener('resize', this.resizeScreen, false);
 
         stxx.append('createDataSet', this.updateComparisons);
+    }
+
+    @action.bound changeSymbol(symbolObj) {
+        this.loader.show();
+
+        // reset comparisons
+        for (const field in this.stxx.chart.series) {
+            if (stxx.chart.series[field].parameters.bucket !== 'study') {
+                this.stxx.removeSeries(field);
+            }
+        }
+
+        this.stxx.newChart(symbolObj, null, null, (err) => {
+            this.loader.hide();
+            if (err) {
+                /* TODO, symbol not found error */
+                return;
+            }
+            this.restoreDrawings(this.stxx, this.stxx.chart.symbol);
+        });
+
+        this.currentActiveSymbol = symbolObj;
+        this.categorizedSymbols = this.categorizeActiveSymbols();
     }
 
     @action.bound updateComparisons(...args) {
