@@ -128,16 +128,13 @@ class ChartStore {
         if (this.stxx.slider) {
             this.stxx.slider.display(this.stxx.layout.rangeSlider);
         }
-    }
+    };
 
     @action.bound init(rootNode, props) {
         this.rootNode = rootNode;
 
-        const { requestAPI, requestSubscribe, requestForget } = props;
+        const { symbol, requestAPI, requestSubscribe, requestForget } = props;
         const api = new BinaryAPI(requestAPI, requestSubscribe, requestForget);
-        api.getActiveSymbols().then(({ active_symbols }) => {
-            this.setActiveSymbols(active_symbols);
-        });
 
         const stxx = this.stxx = new CIQ.ChartEngine({
             container: this.rootNode.querySelector('.chartContainer.primary'),
@@ -226,11 +223,17 @@ class ChartStore {
         this.restorePreferences();
         this.restoreLayout(stxx);
 
-        if (stxx.chart.symbol) {
-            this.currentActiveSymbol = stxx.chart.symbolObject;
-        } else {
-            this.changeSymbol(defaultSymbol);
-        }
+        api.getActiveSymbols().then(({ active_symbols }) => {
+            this.setActiveSymbols(active_symbols);
+            if (symbol) {
+                this.changeSymbol(symbol);
+            } else if (stxx.chart.symbol) {
+                this.currentActiveSymbol = stxx.chart.symbolObject;
+            } else {
+                this.changeSymbol(defaultSymbol);
+            }
+        });
+
 
         this.context = context;
         this.contextPromise.resolve(context);
@@ -243,6 +246,10 @@ class ChartStore {
     }
 
     @action.bound changeSymbol(symbolObj) {
+        if (typeof symbolObj === 'string') {
+            symbolObj = this.activeSymbols.find(s => s.symbol === symbolObj);
+        }
+
         this.loader.show();
 
         // reset comparisons
@@ -302,6 +309,15 @@ class ChartStore {
         window.removeEventListener('resize', this.resizeScreen, false);
         this.stxx.destroy();
         this.stxx = null;
+    }
+
+    @action.bound onReceiveProps(nextProps) {
+        if (!this.context) return;
+
+        const { symbol } = nextProps;
+        if (symbol && this.activeSymbols.length > 0 && this.currentActiveSymbol.symbol !== symbol) {
+            this.changeSymbol(symbol);
+        }
     }
 
     processSymbols(symbols) {

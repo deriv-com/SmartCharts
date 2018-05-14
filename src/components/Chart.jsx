@@ -39,6 +39,10 @@ class Chart extends Component {
         this.props.init(this.root, this.props);
     }
 
+    componentWillReceiveProps(nextProps) {
+        this.props.onReceiveProps(nextProps);
+    }
+
     componentWillUnmount() {
         this.props.destroy();
     }
@@ -69,7 +73,7 @@ class Chart extends Component {
         const contextClassName = () => {
             let className = '';
             className += isMobile ? 'smartcharts-mobile' : '';
-            className += (typeof theme === 'string' ) ? ` smartcharts-${theme}` 
+            className += (typeof theme === 'string' ) ? ` smartcharts-${theme}`
                         : ` smartcharts-${ (setting && setting.theme) ? setting.theme : 'light'}`;
             return className;
         }
@@ -114,6 +118,7 @@ export default connect(
         DrawToolsSettingsDialog : drawTools.settingsDialog.connect(SettingsDialog),
         isChartAvailable: chart.isChartAvailable,
         chartPanelTop: chart.chartPanelTop,
-        setting: chartSetting
+        setting: chartSetting,
+        onReceiveProps: chart.onReceiveProps,
     })
 )(Chart);
