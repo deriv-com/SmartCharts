@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: German\n"
 "Language: de_DE\n"
-"PO-Revision-Date: 2018-04-23 08:05-0400\n"
+"PO-Revision-Date: 2018-05-11 09:31-0400\n"
 
 msgid "CLOSED"
 msgstr "GESCHLOSSEN"
@@ -202,7 +202,7 @@ msgid "Crossline"
 msgstr "Kreuzlinie"
 
 msgid "Doodle"
-msgstr ""
+msgstr "Freiform"
 
 msgid "Ellipse"
 msgstr "Ellipse"
@@ -1246,7 +1246,7 @@ msgid "Shinohara Intensity Ratio"
 msgstr "Shinohara Intensitätsverhältnis"
 
 msgid "Strong Ratio"
-msgstr ""
+msgstr "Hohe Quote"
 
 msgid "Weak Ratio"
 msgstr "Schwache Quote"

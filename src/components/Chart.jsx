@@ -14,8 +14,6 @@ import '../../sass/app.scss';
 import '../Plugin';
 import './ui';
 
-/* To do convert this to jsx*/
-// import './Loader';
 import ChartControls from './ChartControls.jsx';
 import SettingsDialog from './SettingsDialog.jsx';
 import Notification from './Notification.jsx';
@@ -39,6 +37,10 @@ class Chart extends Component {
 
     componentDidMount() {
         this.props.init(this.root, this.props);
+    }
+
+    componentWillUnmount() {
+        this.props.destroy();
     }
 
     render() {
@@ -107,6 +109,7 @@ export default connect(
     ({chart, drawTools, studies, chartSetting}) => ({
         contextPromise: chart.contextPromise,
         init: chart.init,
+        destroy: chart.destroy,
         StudySettingsDialog : studies.settingsDialog.connect(SettingsDialog),
         DrawToolsSettingsDialog : drawTools.settingsDialog.connect(SettingsDialog),
         isChartAvailable: chart.isChartAvailable,

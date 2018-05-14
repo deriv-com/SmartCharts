@@ -1,5 +1,6 @@
 import { observable, action, reaction, computed, autorunAsync, when } from 'mobx';
 import MenuStore from './MenuStore';
+import React from 'react';
 import {createObjectFromLocalStorage} from '../utils';
 import { FlagIcons } from './../components/Icons.jsx';
 
