@@ -31,6 +31,7 @@ export default class ListStore {
     }
 
     onRootRef = (root) => {
+        if (!root) return;
         this.root = root;
         root.addEventListener(CIQ.wheelEvent, (e) => {
             e.stopPropagation();
