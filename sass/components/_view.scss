@@ -2,6 +2,8 @@
 	.cq-menu-dropdown {
 		width: 280px;
 		height: 200px;
+		transform: translate(-50%);
+		left: 50%;
 		.title {
 			display: flex;
 			align-items: center;
