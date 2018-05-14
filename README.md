@@ -152,7 +152,7 @@ We organise the development in [Trello](https://trello.com/b/XqoTcSma/smartchart
      - **Test Link**: Link to github pages that has the changes; this is for QA to verify. Refer to [this section](#deploy-to-github-pages) for instructions on how to deploy.
  6. If reviewer requests changes, he will place the card back to the `In Development` list. This back and forth continues until the reviewer passes the PR by marking it as `approved` in Github.
  7. Reviewer places the reviewed card into `QA` list.
- 8. Once QA passes the changes, QA will place the card from `QA` to `Ready`. This card is now ready to be merged to `dev`.
+ 8. If the card fails QA check, QA can comment on the card on what failed, and place the card back to `In Development` list. If QA passes the changes, QA will place the card from `QA` to `Ready`; this card is now ready to be merged to `dev`. 
  9. Once the card is merged to `dev`, it is placed in `Deployed to BETA` list.
  10. When is it time to take all changes in `beta` and deploy in production, manager will merge `dev` into `master`, and place all cards in `Deployed to BETA` to `Released`.
   
