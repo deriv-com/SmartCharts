@@ -72,7 +72,7 @@ class ChartStore {
                 }catch(e){
                     console.error(e);
                 }
-                window.history.replaceState({}, document.title, "/");
+                window.history.replaceState({}, document.title, window.location.pathname);
             }
         }
 

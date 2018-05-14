@@ -51,7 +51,7 @@ export default class ShareStore {
                 });
             };
 
-        const origin = window.location.origin;
+        const origin = window.location.href;
         this.shareLink = fixedEncodeURIComponent(`${origin}#${json}`);
 
         this.shortUrlFailed = false;
