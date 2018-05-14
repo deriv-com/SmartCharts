@@ -297,7 +297,8 @@ export const ItemIconMap = {
     GDAXI: FlagIconMap.German,
     ISEQ: FlagIconMap.Ireland,
     TOP40: FlagIconMap.SouthAfrica,
-    /* German */
+    /*
+    // German
     DEAIR: Wrapper(Airbus),
     DEALV: Wrapper(Allianz),
     DEBMW: Wrapper(BMW),
@@ -306,12 +307,12 @@ export const ItemIconMap = {
     DENOT: Wrapper(Novartis),
     DESAP: Wrapper(SAP),
     DESIE: Wrapper(Siemens),
-    /* India */
+    // India
     INBHARTIARTL: Wrapper(BhartiAirtel),
     INMARUTI:     Wrapper(MarutiSuzuki),
     INRIL:        Wrapper(RelianceIndustries),
     INTATASTEEL:  Wrapper(TataSteel),
-    /* UK */
+    // UK
     UKBP:   Wrapper(BP),
     UKBARC: Wrapper(Barclays),
     UKBATS: Wrapper(BritishAmericanTobacco),
@@ -320,7 +321,7 @@ export const ItemIconMap = {
     UKRIO:  Wrapper(RioTinto),
     UKSTAN: Wrapper(StandardChartered),
     UKTSCO: Wrapper(Tesco),
-    /* US */
+    // US
     USALIBA:  Wrapper(Alibaba),
     USGOOG:   Wrapper(Alphabet),
     USAMZN:   Wrapper(Amazon),
@@ -341,6 +342,7 @@ export const ItemIconMap = {
     USMSFT:   Wrapper(Microsoft),
     USPEP:    Wrapper(PepsiCo),
     USPG:     Wrapper(ProcterAndGamble),
+    */
     /* Commodities */
     frxBROUSD: Wrapper(OilUSD),
     frxXAUUSD: MetalIcon,
