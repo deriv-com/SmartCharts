@@ -3,6 +3,7 @@ import {connect} from '../store/Connect';
 import Menu from './Menu.jsx';
 import List from './List.jsx';
 import {Switch} from './Form.jsx';
+import '../../sass/components/_chart-types.scss';
 
 const ChartTypes = ({
     Type,

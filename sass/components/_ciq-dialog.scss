@@ -1,4 +1,3 @@
-@import "_variables";
 
 .cq-dialog {
     width: 344px;
@@ -6,13 +5,14 @@
     left: calc(50% - 344px/2);
     top: calc(50% - 366px/2);
     position: absolute;
-    box-shadow: 0 0.375em 0.625em 0 rgba(0, 0, 0, 0.14);
-    background: $DEFAULT-main;
-    z-index: -3;
     opacity: 0;
     margin-top: 120px;
     box-shadow: 0 0 0.625em 0.025em rgba(0, 0, 0, 0.14);
     visibility: hidden;
+    z-index: -3;
+    @include themify($themes) {
+        background: themed('defaultMain');
+    }
     @include dialog-transition();
     &.open{
         visibility: visible;

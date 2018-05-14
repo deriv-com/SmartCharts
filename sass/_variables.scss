@@ -18,9 +18,6 @@ $soft-corners: 3px !default; // Set to zero to eliminate soft corners
 
 
 /* --------- COLOR :: Border --------- */
-
-
-
 $nav-height: 45px !default;
 $footer-height: 45px !default;
 
@@ -28,30 +25,6 @@ $active-color: #4C5794;
 $large-icon-size: 32px;
 $normal-icon-size: 24px;
 $small-icon-size: 16px;
-
-/* Default (Light) Theme */
-
-$DEFAULT-main:				#fff !default;
-$DEFAULT-accent: 			#398dff !default;
-$DEFAULT-bg:				#f8f8f8 !default;
-$DEFAULT-menu-bg:			#fff !default;
-$DEFAULT-submenu-bg:		#f3f3f3 !default;
-$DEFAULT-hu-bg:				#ffffff !default;
-$DEFAULT-text:				#000 !default;
-$DEFAULT-text-subtle:		#999 !default;
-$DEFAULT-text-medium:		#666 !default;
-$DEFAULT-text-strong:		#000 !default;
-$DEFAULT-border:          #e9e9ed !default;
-$DEFAULT-border-subtle:		#ddd !default;
-$DEFAULT-border-medium:		#ccc !default;
-$DEFAULT-border-strong:		#999 !default;
-
-
-
-
-
-
-
 
 
 
@@ -64,6 +37,26 @@ $DEFAULT-border-strong:		#999 !default;
   @include transition(visibility 0.1s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0s,
       margin-top 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.1s,
       opacity 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.1s);
+}
+
+
+
+
+
+@mixin svg-icon-color($color) {
+    svg, path, g{
+      @include themify($themes) {
+        color: themed($color);
+        fill: themed($color);
+      }
+    }
+}
+@mixin svg-icon-stroke($color) {
+    path{
+      @include themify($themes) {
+        stroke: themed($color);
+      }
+    }
 }
 
 

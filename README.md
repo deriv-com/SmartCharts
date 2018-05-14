@@ -85,6 +85,7 @@ requestForget* | When SmartCharts no longer needs a subscription (made via `requ
 lang | Sets the language.
 chartControlsWidgets | Render function for chart control widgets. Refer to [Customising Components](#customising-components).
 topWidgets | Render function for top widgets. Refer to [Customising Components](#customising-components).
+theme | Sets the chart theme. themes are (`dark\|light`), and default is `light`.
 
 ### Customising Components
 

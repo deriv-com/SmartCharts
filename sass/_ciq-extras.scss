@@ -124,7 +124,9 @@ $footer-height: 45px;
 	margin-left: 5px;
   	opacity: 1;
 	&.stx-btn span {
-		background-color: $DEFAULT-main;
+	    @include themify($themes) {
+	        background-color: themed('defaultMain');
+	    }
 		border:none;
 		background-position: -301px -26px;
 		width: 23px;
@@ -134,7 +136,9 @@ $footer-height: 45px;
 	margin-top: -4px;
 	margin-left: 34px;
 	&.stx-btn span {
-		background-color: $DEFAULT-main;
+	    @include themify($themes) {
+	        background-color: themed('defaultMain');
+	    }
 		border:none;
 		background-position: -250px -26px;
 		width: 24px;

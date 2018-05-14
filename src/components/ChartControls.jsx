@@ -9,6 +9,8 @@ import Timeperiod from './Timeperiod.jsx';
 import ChartSize from './ChartSize.jsx';
 import DrawTools from './DrawTools.jsx';
 import Share from './Share.jsx';
+import '../../sass/components/_chart-controls.scss';
+
 
 const renderDefaultControls = (isMobile) => (
     <React.Fragment>
