@@ -6,10 +6,7 @@ import {
     SettingIcon,
     PositionLeftIcon,
     PositionBottomIcon,
-    ThemeDarkIcon,
-    ThemeLightIcon,
-    BackIcon,
-    FlagIcons
+    BackIcon
 } from './Icons.jsx';
 import '../../sass/components/_ciq-chart-setting.scss';
 
