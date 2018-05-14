@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Indonesian\n"
 "Language: id_ID\n"
-"PO-Revision-Date: 2018-04-22 23:40-0400\n"
+"PO-Revision-Date: 2018-05-09 06:06-0400\n"
 
 msgid "CLOSED"
 msgstr "TUTUP"
@@ -19,85 +19,85 @@ msgid "Close"
 msgstr "Tutup"
 
 msgid "Favorites"
-msgstr ""
+msgstr "Favorit"
 
 msgid "There are no favorites yet."
-msgstr ""
+msgstr "Favorit belum tersedia."
 
 msgid "Chart data is not available for this symbol."
-msgstr ""
+msgstr "Data chart tidak tersedia untuk simbol ini."
 
 msgid "PRICE"
-msgstr ""
+msgstr "HARGA"
 
 msgid "OPEN"
-msgstr ""
+msgstr "OPEN"
 
 msgid "CLOSE"
-msgstr ""
+msgstr "CLOSE"
 
 msgid "HIGH"
-msgstr ""
+msgstr "HIGH"
 
 msgid "LOW"
-msgstr ""
+msgstr "LOW"
 
 msgid "Chart types"
-msgstr ""
+msgstr "Jenis chart"
 
 msgid "Toggle Asset Information"
-msgstr ""
+msgstr "Informasi Aset Toggle"
 
 msgid "Studies"
-msgstr ""
+msgstr "Studi"
 
 msgid "Comparison"
-msgstr ""
+msgstr "Perbandingan"
 
 msgid "Templates"
-msgstr ""
+msgstr "Pola"
 
 msgid "Template name"
-msgstr ""
+msgstr "Nama pola"
 
 msgid "There is no template added by you."
-msgstr ""
+msgstr "Tidak terdapat pola yang Anda tambahkan."
 
 msgid "Click + icon to add one."
-msgstr ""
+msgstr "Klik + ikon untuk menambahkan."
 
 msgid "Crosshair"
-msgstr ""
+msgstr "Crosshair"
 
 msgid "Time period"
-msgstr ""
+msgstr "Jangka waktu"
 
 msgid "Tick"
-msgstr ""
+msgstr "Tik"
 
 msgid "Minute"
-msgstr ""
+msgstr "Menit"
 
 msgid "Hour"
-msgstr ""
+msgstr "Jam"
 
 msgid "Day"
-msgstr ""
+msgstr "Hari"
 
 msgid "Zoom out"
-msgstr ""
+msgstr "Perkecil"
 
 msgid "Zoom in"
-msgstr ""
+msgstr "Perbesar"
 
 msgid "Draw tools"
-msgstr ""
+msgstr "Alat gambar"
 
 msgid "Clear All"
-msgstr ""
+msgstr "Hapus Semua"
 
 msgid "Measure"
-msgstr ""
+msgstr "Mengukur"
 
 msgid "Settings"
 msgstr "Pengaturan"
@@ -112,1142 +112,1142 @@ msgid "Language"
 msgstr "Bahasa"
 
 msgid "Share"
-msgstr ""
+msgstr "Bagikan"
 
 msgid "Share / Download Chart"
-msgstr ""
+msgstr "Bagikan / Unduh Chart"
 
 msgid "Share link"
-msgstr ""
+msgstr "Bagikan link"
 
 msgid "Download chart"
-msgstr ""
+msgstr "Unduh chart"
 
 msgid "RESET"
-msgstr ""
+msgstr "ULANG"
 
 msgid "DONE"
-msgstr ""
+msgstr "SELESAI"
 
 msgid "right-click to delete"
-msgstr ""
+msgstr "klik kanan untuk menghapus"
 
 msgid "right-click to manage"
-msgstr ""
+msgstr "klik kanan untuk mengelola"
 
 msgid "[symbol] market is presently closed."
-msgstr ""
+msgstr "[symbol] pasar saat ini ditutup."
 
 msgid "Streaming for [symbol] is not available due to license restrictions"
-msgstr ""
+msgstr "Streaming untuk [symbol] tidak tersedia berhubung batasan lisensi"
 
 msgid "Line"
-msgstr ""
+msgstr "Garis"
 
 msgid "Dot"
-msgstr ""
+msgstr "Titik"
 
 msgid "Colored Dot"
-msgstr ""
+msgstr "Titik Berwarna"
 
 msgid "Spline"
-msgstr ""
+msgstr "Spline"
 
 msgid "Baseline"
-msgstr ""
+msgstr "Baseline"
 
 msgid "Candle"
-msgstr ""
+msgstr "Candle"
 
 msgid "OHLC"
-msgstr ""
+msgstr "OHLC"
 
 msgid "Hollow Candle"
-msgstr ""
+msgstr "Hollow Candle"
 
 msgid "\"Mass Index\" or \"Doji Star\""
-msgstr ""
+msgstr "\"Mass Index\" atau \"Doji Star\""
 
 msgid "Indicators"
-msgstr ""
+msgstr "Indikator"
 
 msgid "Active"
-msgstr ""
+msgstr "Aktif"
 
 msgid "There are no active indicators yet."
-msgstr ""
+msgstr "Belum tersedia indikator aktif."
 
 msgid "\"AUD/JPY\" or \"Apple\""
-msgstr ""
+msgstr "\"AUD/JPY\" atau \"Apple\""
 
 msgid "There are no active comparisons yet."
-msgstr ""
+msgstr "Belum tersedia perbandingan aktif."
 
 msgid "Annotation"
-msgstr ""
+msgstr "Anotasi"
 
 msgid "Average Line"
-msgstr ""
+msgstr "Garis Rata-Rata"
 
 msgid "Callout"
-msgstr ""
+msgstr "Callout"
 
 msgid "Channel"
-msgstr ""
+msgstr "Kanal"
 
 msgid "Continuous"
-msgstr ""
+msgstr "Continuous"
 
 msgid "Crossline"
-msgstr ""
+msgstr "Crossline"
 
 msgid "Doodle"
-msgstr ""
+msgstr "Doodle"
 
 msgid "Ellipse"
-msgstr ""
+msgstr "Ellipse"
 
 msgid "Fib Retracement"
 msgstr "Fib Retracement"
 
 msgid "Fib Arc"
-msgstr ""
+msgstr "Fib Arc"
 
 msgid "Fib Fan"
-msgstr ""
+msgstr "Fib Fan"
 
 msgid "Fib Time Zone"
-msgstr ""
+msgstr "Zona Waktu Fib"
 
 msgid "Gann Fan"
-msgstr ""
+msgstr "Kipas Gann"
 
 msgid "Gartley"
-msgstr ""
+msgstr "Gartley"
 
 msgid "Horizontal"
-msgstr ""
+msgstr "Horizontal"
 
 msgid "Pitchfork"
-msgstr ""
+msgstr "Pitchfork"
 
 msgid "Quadrant Lines"
-msgstr ""
+msgstr "Garis Kuadran"
 
 msgid "Ray"
-msgstr ""
+msgstr "Ray"
 
 msgid "Rectangle"
-msgstr ""
+msgstr "Persegi"
 
 msgid "Regression Line"
-msgstr ""
+msgstr "Garis Regresi"
 
 msgid "Segment"
-msgstr ""
+msgstr "Segmen"
 
 msgid "Shape - Arrow"
-msgstr ""
+msgstr "Bentuk - Panah"
 
 msgid "Shape - Check"
-msgstr ""
+msgstr "Bentuk - Cek"
 
 msgid "Shape - Cross"
-msgstr ""
+msgstr "Bentuk - Silang"
 
 msgid "Shape - Focus"
-msgstr ""
+msgstr "Bentuk - Fokus"
 
 msgid "Shape - Heart"
-msgstr ""
+msgstr "Bentuk - Hati"
 
 msgid "Shape - Star"
-msgstr ""
+msgstr "Bentuk - Bintang"
 
 msgid "Speed Resistance Arc"
-msgstr ""
+msgstr "Perlawanan Panah Kecepatan"
 
 msgid "Speed Resistance Line"
-msgstr ""
+msgstr "Perlawanan Garis Kecepatan"
 
 msgid "Time Cycle"
-msgstr ""
+msgstr "Siklus Waktu"
 
 msgid "Tirone Levels"
-msgstr ""
+msgstr "Tingkat Tirone"
 
 msgid "Vertical"
-msgstr ""
+msgstr "Vertikal"
 
 msgid "RSI"
-msgstr ""
+msgstr "RSI"
 
 msgid "Period"
-msgstr ""
+msgstr "Periode"
 
 msgid "Show Zones"
-msgstr ""
+msgstr "Tampilkan Zona"
 
 msgid "OverBought"
-msgstr ""
+msgstr "OverBought"
 
 msgid "OverSold"
-msgstr ""
+msgstr "OverSold"
 
 msgid "Moving Average"
-msgstr ""
+msgstr "Moving Average"
 
 msgid "Field"
-msgstr ""
+msgstr "Bidang"
 
 msgid "Type"
-msgstr ""
+msgstr "Tipe"
 
 msgid "Offset"
-msgstr ""
+msgstr "Offset"
 
 msgid "Underlay"
-msgstr ""
+msgstr "Underlay"
 
 msgid "MA"
-msgstr ""
+msgstr "MA"
 
 msgid "MACD"
-msgstr ""
+msgstr "MACD"
 
 msgid "Fast MA Period"
-msgstr ""
+msgstr "Periode MA Cepat"
 
 msgid "Slow MA Period"
-msgstr ""
+msgstr "Periode MA Lambat"
 
 msgid "Signal Period"
-msgstr ""
+msgstr "Periode Sinyal"
 
 msgid "Signal"
-msgstr ""
+msgstr "Signal"
 
 msgid "Increasing Bar"
-msgstr ""
+msgstr "Peningkatan Bar"
 
 msgid "Decreasing Bar"
-msgstr ""
+msgstr "Penurunan Bar"
 
 msgid "Stochastics"
-msgstr ""
+msgstr "Stochastics"
 
 msgid "Smooth"
-msgstr ""
+msgstr "Halus"
 
 msgid "Fast"
-msgstr ""
+msgstr "Cepat"
 
 msgid "Slow"
-msgstr ""
+msgstr "Lambat"
 
 msgid "Aroon"
-msgstr ""
+msgstr "Aroon"
 
 msgid "Aroon Up"
-msgstr ""
+msgstr "Aroon Up"
 
 msgid "Aroon Down"
-msgstr ""
+msgstr "Aroon Down"
 
 msgid "Aroon Oscillator"
-msgstr ""
+msgstr "Aroon Oscillator"
 
 msgid "Linear Reg R2"
-msgstr ""
+msgstr "Linear Reg R2"
 
 msgid "RSquared"
-msgstr ""
+msgstr "RSquared"
 
 msgid "Linear Reg Forecast"
-msgstr ""
+msgstr "Linear Reg Forecast"
 
 msgid "Forecast"
-msgstr ""
+msgstr "Prediksi"
 
 msgid "Linear Reg Intercept"
-msgstr ""
+msgstr "Linear Reg Intercept"
 
 msgid "Intercept"
-msgstr ""
+msgstr "Intercept"
 
 msgid "Time Series Forecast"
-msgstr ""
+msgstr "Prediksi Time Series"
 
 msgid "Vertical Horizontal Filter"
-msgstr ""
+msgstr "Vertical Horizontal Filter"
 
 msgid "Result"
-msgstr ""
+msgstr "Hasil"
 
 msgid "TRIX"
-msgstr ""
+msgstr "TRIX"
 
 msgid "Standard Deviation"
-msgstr ""
+msgstr "Standar Deviasi"
 
 msgid "Standard Deviations"
-msgstr ""
+msgstr "Standar Deviasi"
 
 msgid "Moving Average Type"
-msgstr ""
+msgstr "Tipe Moving Average"
 
 msgid "Trade Volume Index"
-msgstr ""
+msgstr "Indeks Volume Trading"
 
 msgid "Min Tick Value"
-msgstr ""
+msgstr "Nilai Tick Min"
 
 msgid "Swing Index"
-msgstr ""
+msgstr "Indeks Swing"
 
 msgid "Limit Move Value"
-msgstr ""
+msgstr "Nilai Batas Gerak"
 
 msgid "Accumulative Swing Index"
-msgstr ""
+msgstr "Indeks Swing Akumulatif"
 
 msgid "Price Rate of Change"
-msgstr ""
+msgstr "Price Rate of Change"
 
 msgid "Volume Rate of Change"
-msgstr ""
+msgstr "Volume Rate of Change"
 
 msgid "Momentum Indicator"
-msgstr ""
+msgstr "Indikator Momentum"
 
 msgid "Price Volume Trend"
-msgstr ""
+msgstr "Tren Volume Harga"
 
 msgid "Positive Volume Index"
-msgstr ""
+msgstr "Indeks Volume Positif"
 
 msgid "Index"
-msgstr ""
+msgstr "Indeks"
 
 msgid "Negative Volume Index"
-msgstr ""
+msgstr "Indeks Volume Negatif"
 
 msgid "On Balance Volume"
-msgstr ""
+msgstr "Pada Sisa Volume"
 
 msgid "Stochastic Momentum Index"
-msgstr ""
+msgstr "Indeks Momentum Stochastic"
 
 msgid "%K Periods"
-msgstr ""
+msgstr "Periode %K"
 
 msgid "%K Smoothing Periods"
-msgstr ""
+msgstr "Periode Smoothing %K"
 
 msgid "%K Double Smoothing Periods"
-msgstr ""
+msgstr "Periode Double Smoothing %K"
 
 msgid "%D Periods"
-msgstr ""
+msgstr "Periode %D"
 
 msgid "%D Moving Average Type"
-msgstr ""
+msgstr "%D Tipe Moving Average"
 
 msgid "%K"
-msgstr ""
+msgstr "%K"
 
 msgid "%D"
-msgstr ""
+msgstr "%D"
 
 msgid "Historical Volatility"
-msgstr ""
+msgstr "Volatilitas Historis"
 
 msgid "Days Per Year"
-msgstr ""
+msgstr "Hari Per Tahun"
 
 msgid "Pretty Good Oscillator"
-msgstr ""
+msgstr "Osilator Cukup Bagus"
 
 msgid "Ultimate Oscillator"
-msgstr ""
+msgstr "Osilator Terakhir"
 
 msgid "Cycle 1"
-msgstr ""
+msgstr "Siklus 1"
 
 msgid "Cycle 2"
-msgstr ""
+msgstr "Siklus 2"
 
 msgid "Cycle 3"
-msgstr ""
+msgstr "Siklus 3"
 
 msgid "Volume Oscillator"
-msgstr ""
+msgstr "Volume Osilator"
 
 msgid "Short Cycle"
-msgstr ""
+msgstr "Siklus Pendek"
 
 msgid "Long Cycle"
-msgstr ""
+msgstr "Siklus Panjang"
 
 msgid "Points Or Percent"
-msgstr ""
+msgstr "Poin atau Persentase"
 
 msgid "Twiggs Money Flow"
-msgstr ""
+msgstr "Arus Uang Twiggs"
 
 msgid "Chaikin Money Flow"
-msgstr ""
+msgstr "Arus Uang Chaikin"
 
 msgid "Chaikin Volatility"
-msgstr ""
+msgstr "Volatilitas Chaikin"
 
 msgid "Rate Of Change"
-msgstr ""
+msgstr "Rate of Change"
 
 msgid "Price Oscillator"
-msgstr ""
+msgstr "Harga Osilator"
 
 msgid "Ease of Movement"
-msgstr ""
+msgstr "Kemudahan Pergerakan"
 
 msgid "Commodity Channel Index"
-msgstr ""
+msgstr "Indeks Saluran Komoditas"
 
 msgid "Detrended Price Oscillator"
-msgstr ""
+msgstr "Harga Detrended Oscillator"
 
 msgid "True Range"
-msgstr ""
+msgstr "Rentang Sebenarnya"
 
 msgid "Average True Range"
-msgstr ""
+msgstr "Rata-rata Rentang Sebenarnya"
 
 msgid "ATR"
-msgstr ""
+msgstr "ATR"
 
 msgid "Ehler Fisher Transform"
-msgstr ""
+msgstr "Mengubah Ehler Fisher"
 
 msgid "EF"
-msgstr ""
+msgstr "EF"
 
 msgid "EF Trigger"
-msgstr ""
+msgstr "Pemicu EF"
 
 msgid "Schaff Trend Cycle"
-msgstr ""
+msgstr "Siklus Tren Schaff"
 
 msgid "QStick"
-msgstr ""
+msgstr "QStick"
 
 msgid "Coppock Curve"
-msgstr ""
+msgstr "Kurva Coppock"
 
 msgid "Short RoC"
-msgstr ""
+msgstr "RoC Pendek"
 
 msgid "Long RoC"
-msgstr ""
+msgstr "RoC Panjang"
 
 msgid "Chande Momentum Oscillator"
-msgstr ""
+msgstr "Osilator Chande Momentum"
 
 msgid "Chande Forecast Oscillator"
-msgstr ""
+msgstr "Osilator Prakiraan Chande"
 
 msgid "Intraday Momentum Index"
-msgstr ""
+msgstr "Indeks Momentum Intraday"
 
 msgid "RAVI"
-msgstr ""
+msgstr "RAVI"
 
 msgid "Random Walk Index"
-msgstr ""
+msgstr "Indeks Random Walk"
 
 msgid "Random Walk High"
-msgstr ""
+msgstr "Random Walk Tinggi"
 
 msgid "Random Walk Low"
-msgstr ""
+msgstr "Random Walk Rendah"
 
 msgid "ADX/DMS"
-msgstr ""
+msgstr "ADX/DMS"
 
 msgid "Smoothing Period"
-msgstr ""
+msgstr "Periode Smoothing"
 
 msgid "Series"
-msgstr ""
+msgstr "Seri"
 
 msgid "Shading"
-msgstr ""
+msgstr "Shading"
 
 msgid "Histogram"
-msgstr ""
+msgstr "Histogram"
 
 msgid "+DI"
-msgstr ""
+msgstr "+DI"
 
 msgid "-DI"
-msgstr ""
+msgstr "-DI"
 
 msgid "ADX"
-msgstr ""
+msgstr "ADX"
 
 msgid "Positive Bar"
-msgstr ""
+msgstr "Bar Positif"
 
 msgid "Negative Bar"
-msgstr ""
+msgstr "Bar Negatif"
 
 msgid "High Low Bands"
-msgstr ""
+msgstr "Band Tinggi Rendah"
 
 msgid "Shift Percentage"
-msgstr ""
+msgstr "Perubahan Persentase"
 
 msgid "Channel Fill"
-msgstr ""
+msgstr "Channel Fill"
 
 msgid "High Low Top"
-msgstr ""
+msgstr "Tinggi Rendah Atas"
 
 msgid "High Low Median"
-msgstr ""
+msgstr "Tinggi Rendah Median"
 
 msgid "High Low Bottom"
-msgstr ""
+msgstr "Tinggi Rendah Bawah"
 
 msgid "High Minus Low"
-msgstr ""
+msgstr "Tinggi Minus Rendah"
 
 msgid "Median Price"
-msgstr ""
+msgstr "Harga Median"
 
 msgid "Overlay"
-msgstr ""
+msgstr "Overlay"
 
 msgid "Moving Average Envelope"
-msgstr ""
+msgstr "Amplop Moving Average"
 
 msgid "Shift Type"
-msgstr ""
+msgstr "Tipe Shift"
 
 msgid "Shift"
-msgstr ""
+msgstr "Shift"
 
 msgid "MA Env Top"
-msgstr ""
+msgstr "MA Env Atas"
 
 msgid "MA Env Median"
-msgstr ""
+msgstr "MA Env Tengah"
 
 msgid "MA Env Bottom"
-msgstr ""
+msgstr "MA Env Bawah"
 
 msgid "Fractal Chaos Bands"
-msgstr ""
+msgstr "Band Chaos Fraktal"
 
 msgid "Fractal High"
-msgstr ""
+msgstr "Fraktal Tinggi"
 
 msgid "Fractal Low"
-msgstr ""
+msgstr "Fraktal Rendah"
 
 msgid "Fractal Channel"
-msgstr ""
+msgstr "Saluran Fraktal"
 
 msgid "Fractal Chaos Oscillator"
-msgstr ""
+msgstr "Oskilator Chaos Fraktal"
 
 msgid "Gopalakrishnan Range Index"
-msgstr ""
+msgstr "Indeks Range Gopalakrishnan"
 
 msgid "Prime Number Bands"
-msgstr ""
+msgstr "Prime Number Band"
 
 msgid "Prime Bands Top"
-msgstr ""
+msgstr "Prime Band Atas"
 
 msgid "Prime Bands Bottom"
-msgstr ""
+msgstr "Prime Band Bawah"
 
 msgid "Prime Bands Channel"
-msgstr ""
+msgstr "Saluran Prime Band"
 
 msgid "Prime Number Oscillator"
-msgstr ""
+msgstr "Prime Number Oscillator"
 
 msgid "Tolerance Percentage"
-msgstr ""
+msgstr "Tolerance Percentage"
 
 msgid "Bollinger Bands"
-msgstr ""
+msgstr "Bollinger Band"
 
 msgid "Bollinger Bands Top"
-msgstr ""
+msgstr "Bollinger Band Atas"
 
 msgid "Bollinger Bands Median"
-msgstr ""
+msgstr "Bollinger Band Tengah"
 
 msgid "Bollinger Bands Bottom"
-msgstr ""
+msgstr "Bollinger Band Bawah"
 
 msgid "Donchian Channel"
-msgstr ""
+msgstr "Donchian Channel"
 
 msgid "High Period"
-msgstr ""
+msgstr "High Period"
 
 msgid "Low Period"
-msgstr ""
+msgstr "Low Period"
 
 msgid "Donchian High"
-msgstr ""
+msgstr "Donchian High"
 
 msgid "Donchian Median"
-msgstr ""
+msgstr "Donchian Median"
 
 msgid "Donchian Low"
-msgstr ""
+msgstr "Donchian Low"
 
 msgid "Highest High Value"
-msgstr ""
+msgstr "Highest High Value"
 
 msgid "Lowest Low Value"
-msgstr ""
+msgstr "Lowest Low Value"
 
 msgid "Mass Index"
-msgstr ""
+msgstr "Indeks Mass"
 
 msgid "Bulge Threshold"
-msgstr ""
+msgstr "Bulge Threshold"
 
 msgid "Keltner Channel"
-msgstr ""
+msgstr "Saluran Keltner"
 
 msgid "Keltner Top"
-msgstr ""
+msgstr "Keltner Atas"
 
 msgid "Keltner Median"
-msgstr ""
+msgstr "Keltner Tengah"
 
 msgid "Keltner Bottom"
-msgstr ""
+msgstr "Keltner Bawah"
 
 msgid "Parabolic SAR"
-msgstr ""
+msgstr "Parabolic SAR"
 
 msgid "Minimum AF"
-msgstr ""
+msgstr "Minimum AF"
 
 msgid "Maximum AF"
-msgstr ""
+msgstr "Maximum AF"
 
 msgid "Klinger Volume Oscillator"
-msgstr ""
+msgstr "Klinger Volume Oscillator"
 
 msgid "Signal Periods"
-msgstr ""
+msgstr "Signal Periods"
 
 msgid "Klinger"
-msgstr ""
+msgstr "Klinger"
 
 msgid "KlingerSignal"
-msgstr ""
+msgstr "KlingerSignal"
 
 msgid "Elder Ray Index"
-msgstr ""
+msgstr "Indeks Elder Ray"
 
 msgid "Elder Bull Power"
-msgstr ""
+msgstr "Elder Bull Power"
 
 msgid "Elder Bear Power"
-msgstr ""
+msgstr "Elder Bear Power"
 
 msgid "Elder Force Index"
-msgstr ""
+msgstr "Indeks Elder Force"
 
 msgid "Linear Reg Slope"
-msgstr ""
+msgstr "Linear Reg Slope"
 
 msgid "Slope"
-msgstr ""
+msgstr "Slope"
 
 msgid "Center Of Gravity"
-msgstr ""
+msgstr "Pusat Grafitasi"
 
 msgid "Typical Price"
-msgstr ""
+msgstr "Harga Tipikal"
 
 msgid "Weighted Close"
-msgstr ""
+msgstr "Close Tertimbang"
 
 msgid "Money Flow Index"
-msgstr ""
+msgstr "Indeks Money Flow"
 
 msgid "Williams %R"
-msgstr ""
+msgstr "Williams %R"
 
 msgid "Accumulation/Distribution"
-msgstr ""
+msgstr "Akumulasi/Distribusi"
 
 msgid "Use Volume"
-msgstr ""
+msgstr "Volume Digunakan"
 
 msgid "Volume Chart"
-msgstr ""
+msgstr "Volume Chart"
 
 msgid "Up Volume"
-msgstr ""
+msgstr "Volume Atas"
 
 msgid "Down Volume"
-msgstr ""
+msgstr "Volume Bawah"
 
 msgid "Volume Underlay"
-msgstr ""
+msgstr "Volume Underlay"
 
 msgid "Valuation Lines"
-msgstr ""
+msgstr "Garis Penilaian"
 
 msgid "Average Type"
-msgstr ""
+msgstr "Tipe Rata-Rata"
 
 msgid "Display Average"
-msgstr ""
+msgstr "Rata-rata Tampilan"
 
 msgid "Display 1 Standard Deviation (1σ)"
-msgstr ""
+msgstr "Tampilan 1 Standar Deviasi (1σ)"
 
 msgid "Display 2 Standard Deviation (2σ)"
-msgstr ""
+msgstr "Tampilan 2 Standar Deviasi (2σ)"
 
 msgid "Display 3 Standard Deviation (3σ)"
-msgstr ""
+msgstr "Tampilan 3 Standar Deviasi (3σ)"
 
 msgid "Average"
-msgstr ""
+msgstr "Rata-rata"
 
 msgid "1 Standard Deviation (1σ)"
-msgstr ""
+msgstr "1 Standar Deviasi (1σ)"
 
 msgid "2 Standard Deviation (2σ)"
-msgstr ""
+msgstr "2 Standar Deviasi (2σ)"
 
 msgid "3 Standard Deviation (3σ)"
-msgstr ""
+msgstr "3 Standar Deviasi (3σ)"
 
 msgid "Correlation Coefficient"
-msgstr ""
+msgstr "Kofisien Korelasi"
 
 msgid "Price Momentum Oscillator"
-msgstr ""
+msgstr "Osilator Harga Momentum"
 
 msgid "Double Smoothing Period"
-msgstr ""
+msgstr "Periode Smoothing Dobel"
 
 msgid "PMO"
-msgstr ""
+msgstr "PMO"
 
 msgid "PMOSignal"
-msgstr ""
+msgstr "PMOSignal"
 
 msgid "Relative Volatility"
-msgstr ""
+msgstr "Volatilitas Relatif"
 
 msgid "STD Period"
-msgstr ""
+msgstr "Periode STD"
 
 msgid "Rel Vol"
-msgstr ""
+msgstr "Rel Vol"
 
 msgid "Awesome Oscillator"
-msgstr ""
+msgstr "Osilator Luar Biasa"
 
 msgid "Market Facilitation Index"
-msgstr ""
+msgstr "Indeks Fasilitasi Pasar"
 
 msgid "Scale Factor"
-msgstr ""
+msgstr "Faktor Skala"
 
 msgid "Green"
-msgstr ""
+msgstr "Hijau"
 
 msgid "Fade"
-msgstr ""
+msgstr "Pudar"
 
 msgid "Fake"
-msgstr ""
+msgstr "Palsu"
 
 msgid "Squat"
-msgstr ""
+msgstr "Squat"
 
 msgid "ATR Bands"
-msgstr ""
+msgstr "ATR Band"
 
 msgid "ATR Bands Top"
-msgstr ""
+msgstr "ATR Band Atas"
 
 msgid "ATR Bands Bottom"
-msgstr ""
+msgstr "ATR Band Bawah"
 
 msgid "ATR Bands Channel"
-msgstr ""
+msgstr "Saluran ATR Band"
 
 msgid "STARC Bands"
-msgstr ""
+msgstr "STARC Band"
 
 msgid "MA Period"
-msgstr ""
+msgstr "MA Period"
 
 msgid "Multiplier"
-msgstr ""
+msgstr "Multiplier"
 
 msgid "STARC Bands Top"
-msgstr ""
+msgstr "STARC Band Atas"
 
 msgid "STARC Bands Median"
-msgstr ""
+msgstr "STARC Band Tengah"
 
 msgid "STARC Bands Bottom"
-msgstr ""
+msgstr "STARC Band Bawah"
 
 msgid "ATR Trailing Stops"
-msgstr ""
+msgstr "ATR Trailing Stops"
 
 msgid "Plot Type"
-msgstr ""
+msgstr "Plot Type"
 
 msgid "HighLow"
-msgstr ""
+msgstr "HighLow"
 
 msgid "Buy Stops"
-msgstr ""
+msgstr "Buy Stops"
 
 msgid "Sell Stops"
-msgstr ""
+msgstr "Sell Stops"
 
 msgid "Bollinger %b"
-msgstr ""
+msgstr "Bollinger %b"
 
 msgid "%b"
-msgstr ""
+msgstr "%b"
 
 msgid "Bollinger Bandwidth"
-msgstr ""
+msgstr "Bollinger Bandwidth"
 
 msgid "Bandwidth"
-msgstr ""
+msgstr "Bandwidth"
 
 msgid "Donchian Width"
-msgstr ""
+msgstr "Donchian Width"
 
 msgid "Relative Vigor Index"
-msgstr ""
+msgstr "Indeks Relative Vigor"
 
 msgid "Rel Vig"
-msgstr ""
+msgstr "Rel Vig"
 
 msgid "RelVigSignal"
-msgstr ""
+msgstr "RelVigSignal"
 
 msgid "Elder Impulse System"
-msgstr ""
+msgstr "Elder Impulse System"
 
 msgid "Bullish"
-msgstr ""
+msgstr "Bullish"
 
 msgid "Bearish"
-msgstr ""
+msgstr "Bearish"
 
 msgid "Neutral"
-msgstr ""
+msgstr "Neutral"
 
 msgid "Pivot Points"
-msgstr ""
+msgstr "Pivot Points"
 
 msgid "Pivot"
-msgstr ""
+msgstr "Pivot"
 
 msgid "Resistance 1"
-msgstr ""
+msgstr "Resistance 1"
 
 msgid "Support 1"
-msgstr ""
+msgstr "Support 1"
 
 msgid "Resistance 2"
-msgstr ""
+msgstr "Resistance 2"
 
 msgid "Support 2"
-msgstr ""
+msgstr "Support 2"
 
 msgid "Resistance 3"
-msgstr ""
+msgstr "Resistance 3"
 
 msgid "Support 3"
-msgstr ""
+msgstr "Support 3"
 
 msgid "VWAP"
-msgstr ""
+msgstr "VWAP"
 
 msgid "Alligator"
-msgstr ""
+msgstr "Alligator"
 
 msgid "Jaw Period"
-msgstr ""
+msgstr "Jaw Period"
 
 msgid "Jaw Offset"
-msgstr ""
+msgstr "Jaw Offset"
 
 msgid "Teeth Period"
-msgstr ""
+msgstr "Teeth Period"
 
 msgid "Teeth Offset"
-msgstr ""
+msgstr "Teeth Offset"
 
 msgid "Lips Period"
-msgstr ""
+msgstr "Lips Period"
 
 msgid "Lips Offset"
-msgstr ""
+msgstr "Lips Offset"
 
 msgid "Show Fractals"
-msgstr ""
+msgstr "Tampilkan Fraktal"
 
 msgid "Jaw"
-msgstr ""
+msgstr "Jaw"
 
 msgid "Teeth"
-msgstr ""
+msgstr "Teeth"
 
 msgid "Lips"
-msgstr ""
+msgstr "Lips"
 
 msgid "Gator Oscillator"
-msgstr ""
+msgstr "Gator Oscillator"
 
 msgid "Ichimoku Clouds"
-msgstr ""
+msgstr "Ichimoku Clouds"
 
 msgid "Conversion Line Period"
-msgstr ""
+msgstr "Conversion Line Period"
 
 msgid "Base Line Period"
-msgstr ""
+msgstr "Base Line Period"
 
 msgid "Leading Span B Period"
-msgstr ""
+msgstr "Leading Span B Period"
 
 msgid "Lagging Span Period"
-msgstr ""
+msgstr "Lagging Span Period"
 
 msgid "Conversion Line"
-msgstr ""
+msgstr "Conversion Line"
 
 msgid "Base Line"
-msgstr ""
+msgstr "Base Line"
 
 msgid "Leading Span A"
-msgstr ""
+msgstr "Leading Span A"
 
 msgid "Leading Span B"
-msgstr ""
+msgstr "Leading Span B"
 
 msgid "Lagging Span"
-msgstr ""
+msgstr "Lagging Span"
 
 msgid "Price Relative"
-msgstr ""
+msgstr "Price Relative"
 
 msgid "Comparison Symbol"
-msgstr ""
+msgstr "Simbol Perbandingan"
 
 msgid "Performance Index"
-msgstr ""
+msgstr "Indeks Kinerja"
 
 msgid "Gain"
-msgstr ""
+msgstr "Untung"
 
 msgid "Loss"
-msgstr ""
+msgstr "Rugi"
 
 msgid "Beta"
-msgstr ""
+msgstr "Beta"
 
 msgid "Ulcer Index"
-msgstr ""
+msgstr "Indeks Ulcer"
 
 msgid "Balance of Power"
-msgstr ""
+msgstr "Keseimbangan Kekuatan"
 
 msgid "Trend Intensity Index"
-msgstr ""
+msgstr "Indeks Intensitas Tren"
 
 msgid "TII"
-msgstr ""
+msgstr "TII"
 
 msgid "Choppiness Index"
-msgstr ""
+msgstr "Indeks Choppiness"
 
 msgid "Disparity Index"
-msgstr ""
+msgstr "Indeks Disparitas"
 
 msgid "Rainbow Moving Average"
-msgstr ""
+msgstr "Rainbow Moving Average"
 
 msgid "SMA1"
-msgstr ""
+msgstr "SMA1"
 
 msgid "SMA2"
-msgstr ""
+msgstr "SMA2"
 
 msgid "SMA3"
-msgstr ""
+msgstr "SMA3"
 
 msgid "SMA4"
-msgstr ""
+msgstr "SMA4"
 
 msgid "SMA5"
-msgstr ""
+msgstr "SMA5"
 
 msgid "SMA6"
-msgstr ""
+msgstr "SMA6"
 
 msgid "SMA7"
-msgstr ""
+msgstr "SMA7"
 
 msgid "SMA8"
-msgstr ""
+msgstr "SMA8"
 
 msgid "SMA9"
-msgstr ""
+msgstr "SMA9"
 
 msgid "SMA10"
-msgstr ""
+msgstr "SMA10"
 
 msgid "Rainbow Oscillator"
-msgstr ""
+msgstr "Rainbow Oscillator"
 
 msgid "HHV/LLV Lookback"
-msgstr ""
+msgstr "HHV/LLV Lookback"
 
 msgid "Pring's Know Sure Thing"
-msgstr ""
+msgstr "Pring's Know Sure Thing"
 
 msgid "Lightest Rate of Change Period"
-msgstr ""
+msgstr "Lightest Rate of Change Period"
 
 msgid "Lightest SMA Period"
-msgstr ""
+msgstr "Lightest SMA Period"
 
 msgid "Light Rate of Change Period"
-msgstr ""
+msgstr "Light Rate of Change Period"
 
 msgid "Light SMA Period"
-msgstr ""
+msgstr "Light SMA Period"
 
 msgid "Heavy Rate of Change Period"
-msgstr ""
+msgstr "Heavy Rate of Change Period"
 
 msgid "Heavy SMA Period"
-msgstr ""
+msgstr "Heavy SMA Period"
 
 msgid "Heaviest Rate of Change Period"
-msgstr ""
+msgstr "Heaviest Rate of Change Period"
 
 msgid "Heaviest SMA Period"
-msgstr ""
+msgstr "Heaviest SMA Period"
 
 msgid "KST"
-msgstr ""
+msgstr "KST"
 
 msgid "KSTSignal"
-msgstr ""
+msgstr "KSTSignal"
 
 msgid "Pring's Special K"
-msgstr ""
+msgstr "Pring's Special K"
 
 msgid "Interval"
-msgstr ""
+msgstr "Interval"
 
 msgid "Darvas Box"
-msgstr ""
+msgstr "Darvas Box"
 
 msgid "ATH Lookback Period"
-msgstr ""
+msgstr "ATH Lookback Period"
 
 msgid "Exit Field"
-msgstr ""
+msgstr "Exit Field"
 
 msgid "Ghost Boxes"
-msgstr ""
+msgstr "Ghost Boxes"
 
 msgid "Stop Levels"
-msgstr ""
+msgstr "Stop Levels"
 
 msgid "Level Offset"
-msgstr ""
+msgstr "Level Offset"
 
 msgid "Price Minimum"
-msgstr ""
+msgstr "Harga Minimum"
 
 msgid "Volume Spike"
-msgstr ""
+msgstr "Volume Spike"
 
 msgid "Volume % of Avg"
-msgstr ""
+msgstr "Volume % of Avg"
 
 msgid "Darvas"
-msgstr ""
+msgstr "Darvas"
 
 msgid "Ghost"
-msgstr ""
+msgstr "Ghost"
 
 msgid "Levels"
-msgstr ""
+msgstr "Level"
 
 msgid "Supertrend"
-msgstr ""
+msgstr "Supertrend"
 
 msgid "Uptrend"
-msgstr ""
+msgstr "Uptrend"
 
 msgid "Downtrend"
-msgstr ""
+msgstr "Downtrend"
 
 msgid "Volume Profile"
-msgstr ""
+msgstr "Profil Volume"
 
 msgid "Bars Color"
-msgstr ""
+msgstr "Warna Bar"
 
 msgid "Vortex Indicator"
-msgstr ""
+msgstr "Indikator Vortex"
 
 msgid "+VI"
-msgstr ""
+msgstr "+VI"
 
 msgid "-VI"
-msgstr ""
+msgstr "-VI"
 
 msgid "ZigZag"
-msgstr ""
+msgstr "ZigZag"
 
 msgid "Distance(%)"
-msgstr ""
+msgstr "Jarak(%)"
 
 msgid "Psychological Line"
-msgstr ""
+msgstr "Garis Psikologis"
 
 msgid "Moving Average Deviation"
-msgstr ""
+msgstr "Deviasi Moving Average"
 
 msgid "Shinohara Intensity Ratio"
-msgstr ""
+msgstr "Rasio Intensitas Shinohara"
 
 msgid "Strong Ratio"
-msgstr ""
+msgstr "Rasio Kuat"
 
 msgid "Weak Ratio"
-msgstr ""
+msgstr "Rasio Lemah"
 
