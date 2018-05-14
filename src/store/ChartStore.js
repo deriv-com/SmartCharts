@@ -61,13 +61,17 @@ class ChartStore {
     restoreLayout(stx) {
         let layoutData = createObjectFromLocalStorage(`layout-${this.id}`);
 
-        const checkForQuerystring = window.location.origin === 'https://charts.binary.com' ||
-            window.location.origin === 'http://localhost:8080';
 
-        if(checkForQuerystring) {
-            const [, json] = window.location.href.split('#');
-            if(json) {
-                layoutData = decodeURIComponent(json);
+        const configParams = window.location.href.split('#');
+        if (configParams.length > 1) {
+            const sharedParams = configParams.slice(1, configParams.length).join('#');
+            if(sharedParams) {
+                layoutData = decodeURI(sharedParams);
+                try {
+                    layoutData = JSON.parse(layoutData);
+                }catch(e){
+                    console.error(e);
+                }
                 window.history.replaceState({}, document.title, "/");
             }
         }
