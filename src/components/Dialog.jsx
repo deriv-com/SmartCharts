@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {connect} from '../store/Connect';
-import '../../sass/_ciq-dialog.scss';
+import '../../sass/components/_ciq-dialog.scss';
 
 class Dialog extends Component {
     render() {

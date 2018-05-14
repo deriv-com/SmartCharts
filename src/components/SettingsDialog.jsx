@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import { connect } from '../store/Connect';
 import { Switch, ColorPicker, Slider, Pattern, DropDown, NumberColorPicker, FontSetting } from './Form.jsx';
 import { DeleteIcon, StarIcon } from './Icons.jsx';
-import '../../sass/_ciq-settings-dialog.scss';
+import '../../sass/components/_ciq-settings-dialog.scss';
 
 const SettingsDialog = ({
     items, // [{ id, title, value, defaultValue, type }]

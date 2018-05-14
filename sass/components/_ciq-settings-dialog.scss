@@ -1,16 +1,13 @@
-@import "_variables";
 
 
 .cq-settings-dialog {
     display: flex;
     flex-direction: column;
-    // background: rgba(255, 255, 255, 0.95) !important;
     .titlebar {
         height: 40x;
         display: flex;
         justify-content: space-between;
         align-items: center;
-
         .title {
             font-size: 24px;
             padding-left: 16px;
@@ -21,7 +18,9 @@
             height: 50px;
         }
         &.no-tabs {
-            border-bottom: 1px solid $DEFAULT-border;
+            @include themify($themes) {
+                border-bottom: 1px solid themed('defaultBorder');
+            }
         }
     }
 
@@ -30,7 +29,9 @@
         align-items: stretch;
         display: flex;
         position: relative;
-        border-bottom: 1px solid $DEFAULT-border;
+        @include themify($themes) {
+            border-bottom: 1px solid themed('defaultBorder');
+        }
         @include box-sizing(border-box);
         > div {
             text-align: center;
@@ -42,11 +43,13 @@
         }
         .active-border {
             position: absolute;
-            background: $active-color;
             height: 2px;
             width: calc(50% + 1px);
             bottom: -1px;
             left: 0;
+            @include themify($themes) {
+                background: themed('activeColor');
+            }
             @include transition(left linear 0.1s);
             &.second {
                 left: 50%;
@@ -78,32 +81,36 @@
     .buttons {
         display: flex;
         justify-content: flex-end;
-        border-top: 1px solid $DEFAULT-border;
+        @include themify($themes) {
+            border-top: 1px solid themed('defaultBorder');
+        }
         > div {
             width: 90px;
             height: 40px;
             line-height: 40px;
             text-align: center;
             cursor: pointer;
-            color: $active-color;
             font-size: 14px;
+            @include themify($themes) {
+                color: themed('activeColor');
+            }
         }
     }
-
     .description {
         flex-grow: 1;
         padding: 16px;
         font-size: 12px;
         line-height: 18px;
     }
-
     input[type=number] {
         display: inline-block;
         width: 3.2em;
         line-height: 1.9em;
         margin-right: 5px;
         padding-left: 6px;
-        border: 1px solid #cccccc;
+        @include themify($themes) {
+            border: 1px solid themed('defaultBorderMedium');
+        }
         @include border-radius(3px);
     }
 
