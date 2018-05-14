@@ -33,8 +33,10 @@ export default class CategoricalDisplayStore {
         this.favoritesId = favoritesId;
         this.categoryElements = {};
         this.mainStore = mainStore;
-
         this.isInit = false;
+        reaction(() => this.mainStore.favoriteSessionStore.favoritesChangeTrigger,
+            ()=>{this.updateFavorites();}
+        );
 
         if (favoritesId && mainStore) {
             when(() => this.context, this.initFavorites.bind(this));
@@ -68,6 +70,11 @@ export default class CategoricalDisplayStore {
                 this.favoritesMap[(typeof fav === 'string' ? fav : fav.itemId)] = true;
             }
         }
+    }
+
+    updateFavorites() {
+        this.favoritesMap={};
+        this.initFavorites();
     }
 
     updateScrollOffset() {
@@ -268,7 +275,7 @@ export default class CategoricalDisplayStore {
         layout.favorites[this.favoritesId] = toJS(this.favoritesCategory.data)
             .filter(favItem => favItem)
             .map( favItem => typeof favItem === 'string' ? favItem : favItem.itemId);
-
+        this.mainStore.favoriteSessionStore.favoritesChangeTrigger=!this.mainStore.favoriteSessionStore.favoritesChangeTrigger;
         this.mainStore.chart.saveLayout();
     }
 
