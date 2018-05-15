@@ -71,7 +71,7 @@ const ChartSetting = ({
                         return <div
                             className={`ciq-list-item ${(selectedLanguage.key == language.key) ? 'selected' : ''}`}
                             key={index}
-                            onClick={()=> setLanguage(language.key) }
+                            onClick={()=> setLanguage(language) }
                             >
                             <span>{language.icon}</span>
                             <span className="ciq-icon-text">{language.name}</span>
