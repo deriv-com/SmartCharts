@@ -10,13 +10,13 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Vietnamese\n"
 "Language: vi_VN\n"
-"PO-Revision-Date: 2018-05-11 06:51-0400\n"
+"PO-Revision-Date: 2018-05-14 23:13-0400\n"
 
 msgid "CLOSED"
 msgstr "ĐÃ ĐÓNG"
 
 msgid "Close"
-msgstr ""
+msgstr "Đóng"
 
 msgid "Favorites"
 msgstr "Yêu thích"
@@ -100,16 +100,16 @@ msgid "Measure"
 msgstr "Đo"
 
 msgid "Settings"
-msgstr ""
+msgstr "Cài đặt"
 
 msgid "Position"
-msgstr ""
+msgstr "Vị trí"
 
 msgid "Theme"
-msgstr ""
+msgstr "Chủ đề"
 
 msgid "Language"
-msgstr ""
+msgstr "Ngôn ngữ"
 
 msgid "Share"
 msgstr "Chia sẻ"
@@ -229,13 +229,13 @@ msgid "Horizontal"
 msgstr "Theo chiều ngang"
 
 msgid "Pitchfork"
-msgstr ""
+msgstr "Pitchfork"
 
 msgid "Quadrant Lines"
 msgstr ""
 
 msgid "Ray"
-msgstr ""
+msgstr "Ray"
 
 msgid "Rectangle"
 msgstr "Hình chữ nhật"
@@ -274,7 +274,7 @@ msgid "Time Cycle"
 msgstr "Chu kỳ thời gian"
 
 msgid "Tirone Levels"
-msgstr ""
+msgstr "Cấp độ Tirone"
 
 msgid "Vertical"
 msgstr "Theo chiều dọc"
@@ -283,7 +283,7 @@ msgid "RSI"
 msgstr "RSI"
 
 msgid "Period"
-msgstr "Khoảng thời gian"
+msgstr "Giai đoạn"
 
 msgid "Show Zones"
 msgstr "Khu vực Hiển thị"
@@ -298,7 +298,7 @@ msgid "Moving Average"
 msgstr "Số trung bình động"
 
 msgid "Field"
-msgstr ""
+msgstr "Lĩnh vực"
 
 msgid "Type"
 msgstr "Loại"
@@ -322,121 +322,121 @@ msgid "Slow MA Period"
 msgstr "Giai đoạn MA chậm"
 
 msgid "Signal Period"
-msgstr ""
+msgstr "Thời lượng tín hiệu"
 
 msgid "Signal"
-msgstr ""
+msgstr "Tín hiệu"
 
 msgid "Increasing Bar"
-msgstr ""
+msgstr "Thanh tăng"
 
 msgid "Decreasing Bar"
-msgstr ""
+msgstr "Thanh giảm"
 
 msgid "Stochastics"
-msgstr ""
+msgstr "Ngẫu nhiên"
 
 msgid "Smooth"
-msgstr ""
+msgstr "Mượt"
 
 msgid "Fast"
-msgstr ""
+msgstr "Nhanh"
 
 msgid "Slow"
-msgstr ""
+msgstr "Chậm"
 
 msgid "Aroon"
-msgstr ""
+msgstr "Aroon"
 
 msgid "Aroon Up"
-msgstr ""
+msgstr "Aroon Tăng"
 
 msgid "Aroon Down"
-msgstr ""
+msgstr "Aroon giảm"
 
 msgid "Aroon Oscillator"
-msgstr ""
+msgstr "Chỉ số dao động Aroon"
 
 msgid "Linear Reg R2"
-msgstr ""
+msgstr "Tuyến tính Reg R2"
 
 msgid "RSquared"
-msgstr ""
+msgstr "RSquared"
 
 msgid "Linear Reg Forecast"
-msgstr ""
+msgstr "Dự đoán tuyến tính Reg"
 
 msgid "Forecast"
-msgstr ""
+msgstr "Dự đoán"
 
 msgid "Linear Reg Intercept"
-msgstr ""
+msgstr "Giao điểm tuyến tính Reg"
 
 msgid "Intercept"
-msgstr ""
+msgstr "Giao điểm"
 
 msgid "Time Series Forecast"
-msgstr ""
+msgstr "Dự đoán dòng thời gian"
 
 msgid "Vertical Horizontal Filter"
-msgstr ""
+msgstr "Bộ lọc dọc ngang"
 
 msgid "Result"
-msgstr ""
+msgstr "Kết quả"
 
 msgid "TRIX"
-msgstr ""
+msgstr "TRIX"
 
 msgid "Standard Deviation"
-msgstr ""
+msgstr "Độ lệch chuẩn"
 
 msgid "Standard Deviations"
-msgstr ""
+msgstr "Độ lệch chuẩn"
 
 msgid "Moving Average Type"
-msgstr ""
+msgstr "Loại di chuyển trung bình"
 
 msgid "Trade Volume Index"
-msgstr ""
+msgstr "Chỉ số khối lượng giao dịch"
 
 msgid "Min Tick Value"
-msgstr ""
+msgstr "Giá trị Tick tối thiểu"
 
 msgid "Swing Index"
-msgstr ""
+msgstr "Chỉ số giao động"
 
 msgid "Limit Move Value"
-msgstr ""
+msgstr "Giá trị giới hạn chuyển động"
 
 msgid "Accumulative Swing Index"
-msgstr ""
+msgstr "Chỉ số tích lũy giao động"
 
 msgid "Price Rate of Change"
-msgstr ""
+msgstr "Tỉ lệ thay đổi giá"
 
 msgid "Volume Rate of Change"
-msgstr ""
+msgstr "Khối lượng mức độ thay đổi"
 
 msgid "Momentum Indicator"
-msgstr ""
+msgstr "Chỉ số quán tính"
 
 msgid "Price Volume Trend"
-msgstr ""
+msgstr "Xu hướng khối lượng giá"
 
 msgid "Positive Volume Index"
-msgstr ""
+msgstr "Chỉ số khối lượng dương"
 
 msgid "Index"
-msgstr ""
+msgstr "Chỉ số"
 
 msgid "Negative Volume Index"
-msgstr ""
+msgstr "Chỉ số khối lương âm"
 
 msgid "On Balance Volume"
-msgstr ""
+msgstr "Khối lượng cân bằng"
 
 msgid "Stochastic Momentum Index"
-msgstr ""
+msgstr "Chỉ số quán tính ngẫu nhiên"
 
 msgid "%K Periods"
 msgstr ""
@@ -844,7 +844,7 @@ msgid "Price Momentum Oscillator"
 msgstr "Chỉ số tốc độ thay đổi giá"
 
 msgid "Double Smoothing Period"
-msgstr "Tăng gấp đôi khoảng thời gian làm mịn"
+msgstr "Tăng gấp đôi thời gian làm mịn"
 
 msgid "PMO"
 msgstr "PMO"
