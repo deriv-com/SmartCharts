@@ -144,7 +144,7 @@ Once your changes have been merged to `dev`, it will immediately deployed to [ch
 We organise the development in Trello. Here is the standard workflow of how a feature/bug fix is added:
 
  1. When an issue/feature is raised, it is added to `Backlog` list. For each card added, it should have a "QA Checklist" (Add checklist to card) for QA to verify that the feature/bug fix has been successfully implemented.
- 2. In a meeting, if issue/feature is set to be completed for next release, it will be labeled as `Next Release` and placed in `Bugs/Todo` list.
+ 2. In a meeting, if feature/bug fix is set to be completed for next release, it will be labeled as `Next Release` and placed in `Bugs/Todo` list.
  3. Cards are assigned to developers by adding them to the card; manager gets added to every card.
  4. If a developer is actively working on a card, he places the card in `In Development`; otherwise it should be placed back into `Bugs/Todo` list.
  5. Once the feature/bug fix is implemented, the developer needs put 2 things in the card before placing his card in `Review` list.:
