@@ -14,8 +14,10 @@ import CrosshairStore from './CrosshairStore';
 import ShareStore from './ShareStore';
 import ChartSettingStore from './ChartSettingStore';
 import LoaderStore from './LoaderStore';
+import FavoriteSessionStore from './FavoriteSessionStore';
 
 export default class MainStore {
+    @observable favoriteSessionStore = new FavoriteSessionStore();
     @observable chart = new ChartStore(this);
     @observable chartType = new ChartTypeStore(this);
     @observable studies = new StudyLegendStore(this);

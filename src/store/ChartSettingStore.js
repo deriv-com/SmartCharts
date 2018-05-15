@@ -1,10 +1,12 @@
 import { observable, action, reaction, computed, autorunAsync, when } from 'mobx';
 import MenuStore from './MenuStore';
+import React from 'react';
 import {createObjectFromLocalStorage} from '../utils';
 import { FlagIcons } from './../components/Icons.jsx';
 
 export default class ChartSettingStore {
     constructor(mainStore) {
+        this.defaultLanguage = this.languages[0];
         this.mainStore = mainStore;
         this.menu = new MenuStore({getContext: () => this.mainStore.chart.context});
         this.restoreSetting();
@@ -14,7 +16,7 @@ export default class ChartSettingStore {
     get stx() { return this.context.stx; }
 
     onContextReady = () => {};
-    @observable languages = [
+    languages = [
         {
             key: 'en',
             name: 'English',
@@ -69,6 +71,7 @@ export default class ChartSettingStore {
             icon: <FlagIcons.Poland />
         }
     ];
+    defaultLanguage = {};
     @observable view = '';
     @observable language = '';
     @observable position = '';
@@ -85,14 +88,14 @@ export default class ChartSettingStore {
              */
             let language = this.languages.find(item => item.key === setting.language );
             if ( language ) {
-                this.language = setting.language;
+                this.language = language;
             } else {
-                this.language = 'en';
+                this.language = this.defaultLanguage;
             }
             this.position = setting.position === 'bottom' ? 'bottom' : 'left';
             this.theme = setting.theme === 'light' ? 'light' : 'dark';
         } else {
-            this.language = 'en';
+            this.language = this.defaultLanguage;
             this.position = 'bottom';
             this.theme = 'light';
         }
@@ -100,10 +103,14 @@ export default class ChartSettingStore {
 
     saveSetting() {
         CIQ.localStorageSetItem(`smartchart-setting`, JSON.stringify({
-            language: this.language,
+            language: this.language.key,
             position: this.position,
             theme: this.theme
         }));
+    }
+
+    @action.bound setView(view) {
+        this.view = view ? view : '';
     }
 
     @action.bound setLanguage(lng) {
@@ -113,15 +120,14 @@ export default class ChartSettingStore {
     }
 
     @computed get getLanguage() {
-        return this.language ? this.language : 'en';
+        return this.language ? this.language : this.defaultLanguage;
     }
 
-
-
-    @action.bound setView(view) {
-        this.view = view ? view : '';
+    @action.bound setTheme(value) {
+        this.theme = value ? 'dark' : 'light';
+        this.mainStore.chart.stxx.clearStyles();
+        this.saveSetting();
     }
-
 }
 
 

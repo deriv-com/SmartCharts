@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactSlider from './Slider.jsx';
-import '../../sass/_ciq-form.scss';
 import {ArrowIcon} from './Icons.jsx';
+import '../../sass/components/_ciq-form.scss';
 
 export const Slider = ({
     min = 1,

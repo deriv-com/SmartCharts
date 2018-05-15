@@ -64,14 +64,16 @@ $green: #4caf50;
 }
 
 .drag-price {
-    background-color: $DEFAULT-main;
     display: block;
     height: 25px;
-    border: 1px solid $DEFAULT-text-strong;
-    @include border-radius(5px);
     top: -1px;
     position: absolute;
     right: 0px;
+    @include border-radius(5px);
+    @include themify($themes) {
+        background-color: themed('defaultMain');
+        border: 1px solid themed('defaultTextStrong');
+    }
     .price {
         padding-left: 12px;
         padding-top: 1px;
@@ -142,12 +144,14 @@ $green: #4caf50;
 
 
 .price {
-    color: $DEFAULT-text-strong;
     display: block;
     float: left;
     width: 45px;
     line-height: 23px;
     overflow: hidden;
+    @include themify($themes) {
+        color: themed('defaultTextStrong');
+    }
 }
 
 

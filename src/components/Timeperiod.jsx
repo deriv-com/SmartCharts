@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from '../store/Connect';
 import Menu from './Menu.jsx';
+import '../../sass/components/_timeperiod.scss';
 
 const Timeperiod = ({
     setPeriodicity,

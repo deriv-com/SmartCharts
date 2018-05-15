@@ -1,38 +1,32 @@
-@import "_variables";
 
 .ciq-draw-tools {
     .cq-menu-dropdown {
         width: 200px;
         bottom: 3.6em;
         padding: 5px 16px 16px 16px !important;
-        background: #FAFAFB;
         @include box-sizing(border-box);
     }
     .cq-menu-dropdown{
         padding: 0em !important;
         overflow: visible !important;
         .title {
-            background: $DEFAULT-main;
             height: 40px;
             line-height: 40px;
             padding-left: 16px;
             font-size: 16px;
-            box-shadow: inset 0 -1px 0 0 $DEFAULT-border;
             display: flex;
-            color: $DEFAULT-text-strong;
             justify-content: space-between;
-            .ciq-bars-title{
-                // font-size: 1.6em;
-                color: $DEFAULT-text-strong;
+            @include themify($themes) {
+                color: themed('defaultTextStrong');
             }
             .ciq-bars-buttons{
                 cursor: pointer;
                 display: flex;
                 padding: 6px 6px;
+                @include svg-icon-stroke('controlText');
             }
         }
         .body {
-            background: #FAFAFA;
             padding: 16px;
         }
     }

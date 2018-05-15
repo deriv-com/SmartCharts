@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { connect } from '../store/Connect';
 import ChartTypes from './ChartTypes.jsx';
 import StudyLegend from './StudyLegend.jsx';
@@ -9,6 +9,8 @@ import Timeperiod from './Timeperiod.jsx';
 import ChartSize from './ChartSize.jsx';
 import DrawTools from './DrawTools.jsx';
 import Share from './Share.jsx';
+import '../../sass/components/_chart-controls.scss';
+
 
 const renderDefaultControls = (isMobile) => (
     <React.Fragment>
@@ -20,7 +22,7 @@ const renderDefaultControls = (isMobile) => (
         <Views />
         <Share />
         <Timeperiod />
-        <ChartSize />
+        {isMobile ? '' : <ChartSize />}
     </React.Fragment>
 );
 

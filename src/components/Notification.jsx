@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {connect} from '../store/Connect';
 import { alertIconMap, CloseIcon, } from '../components/Icons.jsx';
-import '../../sass/_ciq-notification.scss';
+import '../../sass/components/_ciq-notification.scss';
 
 const Notification = ({
     messages,

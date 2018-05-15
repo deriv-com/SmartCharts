@@ -14,6 +14,8 @@ export default class ChartTitleStore {
             getIsShown: () => this.menu.open,
             onSelectItem: this.onSelectItem.bind(this),
             placeholderText: '"AUD/JPY" or "Apple"',
+            favoritesId: 'chartTitle&Comparison',
+            mainStore,
         });
     }
 
