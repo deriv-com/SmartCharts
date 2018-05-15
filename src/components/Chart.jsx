@@ -53,7 +53,7 @@ class Chart extends Component {
             StudySettingsDialog,
             children,
             lang,
-            isMobile = true,
+            isMobile = false,
             theme,
             isChartAvailable,
             setting,
