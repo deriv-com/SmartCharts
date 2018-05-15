@@ -137,7 +137,7 @@ export default class StudyLegendStore {
             throw 'Unrecognised parameter!';
         });
 
-        this.settingsDialog.items = [...inputs, ...outputs, ...parameters];
+        this.settingsDialog.items = [...outputs, ...inputs,...parameters];
         this.settingsDialog.title = study.sd.name.toUpperCase();
         // TODO:
         // const description = StudyInfo[study.sd.type];
