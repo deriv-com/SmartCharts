@@ -58,7 +58,7 @@ class Chart extends Component {
             topWidgets,
         } = this.props;
 
-        const currentLang = lang || ((setting && setting.language) ? setting.language : 'en');
+        const currentLang = lang || ((setting && setting.language) ? setting.language.key : 'en');
         t.setLanguage(currentLang);
 
         const array = React.Children.toArray(children);
