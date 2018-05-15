@@ -94,9 +94,8 @@ class ChartStore {
 
     updateHeight() {
         const ciqNode = this.rootNode.querySelector('.ciq-chart');
-        let ciqHeight = ciqNode.offsetHeight;
-        ciqHeight += ciqNode.classList.contains('toolbar-on') ? -45 : 0;
-
+        const chartControls = ciqNode.querySelector('.cq-chart-controls');
+        let ciqHeight = ciqNode.offsetHeight - chartControls.offsetHeight;
         const containerNode = this.rootNode.querySelector('.chartContainer.primary');
         containerNode.style.height = `${ciqHeight}px`;
     }
