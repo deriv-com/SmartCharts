@@ -53,7 +53,7 @@ class Chart extends Component {
             StudySettingsDialog,
             children,
             lang,
-            isMobile,
+            isMobile = true,
             theme,
             isChartAvailable,
             setting,
@@ -72,11 +72,11 @@ class Chart extends Component {
 
         const contextClassName = () => {
             let className = '';
-            className += (isMobile === undefined || isMobile) ? 'smartcharts-mobile' : '';
+            className += isMobile ? 'smartcharts-mobile' : '';
             className += (typeof theme === 'string' ) ? ` smartcharts-${theme}`
                         : ` smartcharts-${ (setting && setting.theme) ? setting.theme : 'light'}`;
             return className;
-        }
+        };
 
         return (
             <cq-context ref={(root) => { this.root = root; }} class={contextClassName()}>

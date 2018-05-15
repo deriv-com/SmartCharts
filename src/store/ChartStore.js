@@ -250,6 +250,10 @@ class ChartStore {
             symbolObj = this.activeSymbols.find(s => s.symbol === symbolObj);
         }
 
+        if (symbolObj.symbol === this.currentActiveSymbol.symbol) {
+            return;
+        }
+
         this.loader.show();
 
         // reset comparisons
