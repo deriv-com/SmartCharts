@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Vietnamese\n"
 "Language: vi_VN\n"
-"PO-Revision-Date: 2018-05-14 23:13-0400\n"
+"PO-Revision-Date: 2018-05-14 23:20-0400\n"
 
 msgid "CLOSED"
 msgstr "ĐÃ ĐÓNG"
@@ -307,7 +307,7 @@ msgid "Offset"
 msgstr ""
 
 msgid "Underlay"
-msgstr ""
+msgstr "Lớp lót"
 
 msgid "MA"
 msgstr "MA"
@@ -394,7 +394,7 @@ msgid "Standard Deviations"
 msgstr "Độ lệch chuẩn"
 
 msgid "Moving Average Type"
-msgstr "Loại di chuyển trung bình"
+msgstr "Loại chuyển động trung bình"
 
 msgid "Trade Volume Index"
 msgstr "Chỉ số khối lượng giao dịch"
@@ -439,34 +439,34 @@ msgid "Stochastic Momentum Index"
 msgstr "Chỉ số quán tính ngẫu nhiên"
 
 msgid "%K Periods"
-msgstr ""
+msgstr "Giai đoạn %K"
 
 msgid "%K Smoothing Periods"
-msgstr ""
+msgstr "Giai đoạn làm mượt %K"
 
 msgid "%K Double Smoothing Periods"
-msgstr ""
+msgstr "Tăng gấp đôi thời lượng làm mượt %K"
 
 msgid "%D Periods"
-msgstr ""
+msgstr "Giai đoạn %D"
 
 msgid "%D Moving Average Type"
-msgstr ""
+msgstr "Loại chuyển động trung bình %D"
 
 msgid "%K"
-msgstr ""
+msgstr "%K"
 
 msgid "%D"
-msgstr ""
+msgstr "%D"
 
 msgid "Historical Volatility"
-msgstr ""
+msgstr "Lịch sử biến động"
 
 msgid "Days Per Year"
-msgstr ""
+msgstr "Ngày / năm"
 
 msgid "Pretty Good Oscillator"
-msgstr ""
+msgstr "Giao động khá tốt"
 
 msgid "Ultimate Oscillator"
 msgstr "Chỉ số giao động tột bậc"
@@ -511,7 +511,7 @@ msgid "Ease of Movement"
 msgstr ""
 
 msgid "Commodity Channel Index"
-msgstr ""
+msgstr "Chỉ số kênh hàng hóa"
 
 msgid "Detrended Price Oscillator"
 msgstr ""
@@ -562,19 +562,19 @@ msgid "RAVI"
 msgstr "RAVI"
 
 msgid "Random Walk Index"
-msgstr ""
+msgstr "Chỉ số bước ngẫu nhiên"
 
 msgid "Random Walk High"
-msgstr ""
+msgstr "Bước ngẫu nhiên cao"
 
 msgid "Random Walk Low"
-msgstr ""
+msgstr "Bước ngẫu nhiên thấp"
 
 msgid "ADX/DMS"
 msgstr "ADX/DMS"
 
 msgid "Smoothing Period"
-msgstr ""
+msgstr "Thời lượng làm mượt"
 
 msgid "Series"
 msgstr ""
@@ -622,10 +622,10 @@ msgid "High Minus Low"
 msgstr ""
 
 msgid "Median Price"
-msgstr ""
+msgstr "Giá trung bình"
 
 msgid "Overlay"
-msgstr ""
+msgstr "Lớp phủ"
 
 msgid "Moving Average Envelope"
 msgstr ""
@@ -748,7 +748,7 @@ msgid "Klinger Volume Oscillator"
 msgstr ""
 
 msgid "Signal Periods"
-msgstr ""
+msgstr "Thời lượng tín hiệu"
 
 msgid "Klinger"
 msgstr ""
@@ -844,7 +844,7 @@ msgid "Price Momentum Oscillator"
 msgstr "Chỉ số tốc độ thay đổi giá"
 
 msgid "Double Smoothing Period"
-msgstr "Tăng gấp đôi thời gian làm mịn"
+msgstr "Tăng gấp đôi thời lượng làm mượt"
 
 msgid "PMO"
 msgstr "PMO"
