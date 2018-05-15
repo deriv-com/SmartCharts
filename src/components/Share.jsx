@@ -41,7 +41,7 @@ const Share = ({
                     ></div>
                     <div className='content'
                         style={{display: ((!loading && !urlGenerated) ? 'flex' : 'none' )}}>
-                        {shortUrlFailed ? <p>Failed to generate link</p> : <div
+                        {shortUrlFailed ? <p>{t.translate('Failed to generate link')}</p> : <div
                             className='download-btn'
                             onClick={refereshShareLink}
                             >
