@@ -24,6 +24,7 @@ export default class ChartTitleStore {
     @observable isPriceUp = false;
     @observable isVisible = false;
 
+    get chart() { return this.mainStore.chart; }
     get context() { return this.mainStore.chart.context; }
     @computed get currentSymbol() { return this.mainStore.chart.currentActiveSymbol; }
     @computed get decimalPlaces() { return this.mainStore.chart.currentActiveSymbol.decimal_places; }
@@ -32,7 +33,7 @@ export default class ChartTitleStore {
     @action.bound onSelectItem(symbolObject) {
         const currentSymbol = this.mainStore.chart.stxx.chart.symbol;
         if (symbolObject.symbol !== currentSymbol) {
-            this.context.changeSymbol(symbolObject);
+            this.chart.changeSymbol(symbolObject);
         }
         this.menu.setOpen(false);
     }
@@ -43,6 +44,7 @@ export default class ChartTitleStore {
     };
 
     update() {
+        if (!this.currentSymbol) {return;}
         const stx = this.context.stx;
         const currentQuote = stx.currentQuote();
         const previousClose = currentQuote ? currentQuote.iqPrevClose : undefined;
