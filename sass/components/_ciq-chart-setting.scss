@@ -8,12 +8,12 @@
             .cq-menu-container{
                 opacity: 0;
                 z-index: -9;
-                visibility: hidden;
+                pointer-events: none;
                 height: 0px;
-                transition: visibility 0s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0s,
-                    opacity 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.1s;
+                transition: pointer-events 0s ease-in-out 0s,
+                    opacity 0.2s ease-in-out 0.1s;
                 &.active{
-                    visibility: visible;
+                    pointer-events: initial;
                     opacity: 1;
                     z-index: 9;
                     height: auto;

@@ -73,7 +73,7 @@ const ChartSetting = ({
                             key={index}
                             onClick={()=> setLanguage(language) }
                             >
-                            <span>{language.icon}</span>
+                            {language.icon}
                             <span className="ciq-icon-text">{language.name}</span>
                         </div>;
                     })}
