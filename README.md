@@ -82,10 +82,13 @@ Props marked with `*` are **mandatory**:
 requestAPI* | SmartCharts will make single API calls by passing the request input directly to this method, and expects a `Promise` to be returned.
 requestSubscribe* | SmartCharts will make streaming calls via this method. `requestSubscribe` expects 2 parameters `(request, callback) => {}`: the `request` input and a `callback` in which response will be passed to for each time a response is available. Keep track of this `callback` as SmartCharts will pass this to you to forget the subscription (via `requestForget`).
 requestForget* | When SmartCharts no longer needs a subscription (made via `requestSubscribe`), it will call this method (passing in the `callback` passed from `requestSubscribe`) to halt the subscription.
+onSymbolChange | When SmartCharts changes the symbol, it will call this function, passing the symbol object as parameter.
 lang | Sets the language.
 chartControlsWidgets | Render function for chart control widgets. Refer to [Customising Components](#customising-components).
 topWidgets | Render function for top widgets. Refer to [Customising Components](#customising-components).
 theme | Sets the chart theme. themes are (`dark\|light`), and default is `light`.
+initialSymbol | Sets the initial symbol.
+isMobile | Switch between mobile or desktop view. Defaults to `false`.
 
 ### Customising Components
 
