@@ -233,6 +233,7 @@ class ChartStore {
                 this.changeSymbol(initialSymbol);
             } else if (stxx.chart.symbol) {
                 this.currentActiveSymbol = stxx.chart.symbolObject;
+                this.categorizedSymbols = this.categorizeActiveSymbols();
             } else {
                 this.changeSymbol(this.defaultSymbol);
             }
