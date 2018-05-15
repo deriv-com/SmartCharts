@@ -10,14 +10,6 @@ import { BinaryAPI, Feed } from '../feed';
 import {createObjectFromLocalStorage} from '../utils';
 // import '../AddOns';
 
-const defaultSymbol = {
-    symbol: 'R_100',
-    name: "Volatility 100 Index",
-    market_display_name: "Volatility Indices",
-    exchange_is_open: 1,
-    decimal_places: 2
-};
-
 class ChartStore {
     static _id_counter = 0;
 
@@ -32,8 +24,9 @@ class ChartStore {
     rootNode = null;
     stxx = null;
     id = null;
+    defaultSymbol = 'R_100';
     @observable context = null;
-    @observable currentActiveSymbol = defaultSymbol;
+    @observable currentActiveSymbol;
     @observable isChartAvailable = true;
     @observable comparisonSymbols = [];
     @observable categorizedSymbols = [];
@@ -56,20 +49,7 @@ class ChartStore {
         CIQ.localStorageSetItem(`layout-${this.id}`, json);
     }
 
-    restoreLayout(stx) {
-        let layoutData = createObjectFromLocalStorage(`layout-${this.id}`);
-
-        const checkForQuerystring = window.location.origin === 'https://charts.binary.com' ||
-            window.location.origin === 'http://localhost:8080';
-
-        if(checkForQuerystring) {
-            const [, json] = window.location.href.split('#');
-            if(json) {
-                layoutData = decodeURIComponent(json);
-                window.history.replaceState({}, document.title, "/");
-            }
-        }
-
+    restoreLayout(stx, layoutData) {
         if (!layoutData) {return;}
 
         stx.importLayout(layoutData, {
@@ -133,7 +113,7 @@ class ChartStore {
     @action.bound init(rootNode, props) {
         this.rootNode = rootNode;
 
-        const { symbol, requestAPI, requestSubscribe, requestForget } = props;
+        const { initialSymbol, requestAPI, requestSubscribe, requestForget } = props;
         const api = new BinaryAPI(requestAPI, requestSubscribe, requestForget);
 
         const stxx = this.stxx = new CIQ.ChartEngine({
@@ -221,16 +201,41 @@ class ChartStore {
         stxx.callbacks.studyPanelEdit = study => studiesStore.editStudy(study);
 
         this.restorePreferences();
-        this.restoreLayout(stxx);
 
         api.getActiveSymbols().then(({ active_symbols }) => {
+            let layoutData = createObjectFromLocalStorage(`layout-${this.id}`);
+
+            // if initialSymbol is different from local storage layoutData, it takes
+            // precedence over layoutData.symbols. Note that layoutData retrieved
+            // from URL will take precedence over initialSymbol
+            if (initialSymbol && layoutData && layoutData.symbols[0].symbol !== initialSymbol) {
+                // If symbol in layoutData.symbol[0] and initialSymbol are different,
+                // restoreLayout and changeSymbol cannot be executed together or
+                // chartIQ will stream both symbols in the the same chart
+                delete layoutData.symbols;
+            }
+
+            const checkForQuerystring = window.location.origin === 'https://charts.binary.com' ||
+                window.location.origin === 'http://localhost:8080';
+
+            if (checkForQuerystring) {
+                const [, json] = window.location.href.split('#');
+                if(json) {
+                    layoutData = decodeURIComponent(json);
+                    window.history.replaceState({}, document.title, "/");
+                }
+            }
+
+            this.restoreLayout(stxx, layoutData);
+
             this.setActiveSymbols(active_symbols);
-            if (symbol) {
-                this.changeSymbol(symbol);
+
+            if (initialSymbol && !(layoutData && layoutData.symbols)) {
+                this.changeSymbol(initialSymbol);
             } else if (stxx.chart.symbol) {
                 this.currentActiveSymbol = stxx.chart.symbolObject;
             } else {
-                this.changeSymbol(defaultSymbol);
+                this.changeSymbol(this.defaultSymbol);
             }
         });
 
@@ -250,7 +255,8 @@ class ChartStore {
             symbolObj = this.activeSymbols.find(s => s.symbol === symbolObj);
         }
 
-        if (symbolObj.symbol === this.currentActiveSymbol.symbol) {
+        if (this.currentActiveSymbol
+            && symbolObj.symbol === this.currentActiveSymbol.symbol) {
             return;
         }
 
@@ -315,15 +321,6 @@ class ChartStore {
         this.stxx = null;
     }
 
-    @action.bound onReceiveProps(nextProps) {
-        if (!this.context) return;
-
-        const { symbol } = nextProps;
-        if (symbol && this.activeSymbols.length > 0 && this.currentActiveSymbol.symbol !== symbol) {
-            this.changeSymbol(symbol);
-        }
-    }
-
     processSymbols(symbols) {
         let processedSymbols = [];
 
@@ -360,6 +357,8 @@ class ChartStore {
     }
 
     categorizeActiveSymbols() {
+        if (this.activeSymbols.length <= 0 || !this.currentActiveSymbol) {return [];}
+
         const activeSymbols = this.activeSymbols;
         let categorizedSymbols = [];
         if(activeSymbols.length > 0) {

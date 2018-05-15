@@ -44,6 +44,7 @@ export default class ChartTitleStore {
     };
 
     update() {
+        if (!this.currentSymbol) {return;}
         const stx = this.context.stx;
         const currentQuote = stx.currentQuote();
         const previousClose = currentQuote ? currentQuote.iqPrevClose : undefined;

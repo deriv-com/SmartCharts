@@ -39,10 +39,6 @@ class Chart extends Component {
         this.props.init(this.root, this.props);
     }
 
-    componentWillReceiveProps(nextProps) {
-        this.props.onReceiveProps(nextProps);
-    }
-
     componentWillUnmount() {
         this.props.destroy();
     }
@@ -119,6 +115,5 @@ export default connect(
         isChartAvailable: chart.isChartAvailable,
         chartPanelTop: chart.chartPanelTop,
         setting: chartSetting,
-        onReceiveProps: chart.onReceiveProps,
     })
 )(Chart);
