@@ -56,7 +56,7 @@ const Share = ({
                             value={shareLink}
                         />
                         <CopyIcon
-                            className='tooltip'
+                            className='ciq-tooltip'
                             onClick={copyToClipboard}
                             onMouseOut={resetCopyTooltip}
                             tooltip-title={copyTooltip}
