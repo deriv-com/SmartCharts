@@ -100,7 +100,6 @@ const config = {
             commonjs2: 'mobx-react',
             root: 'mobxReact',
         },
-        'perfect-scrollbar': 'PerfectScrollbar',
         'babel-polyfill': 'babel-polyfill',
     },
 };
