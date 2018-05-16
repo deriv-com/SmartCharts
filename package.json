@@ -1,6 +1,6 @@
 {
   "name": "@binary-com/smartcharts",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "main": "dist/smartcharts.js",
   "author": "amin@binary.com",
   "license": "ISC",
@@ -95,13 +95,13 @@
   "dependencies": {
     "event-emitter-es6": "^1.1.5",
     "html2canvas": "^1.0.0-alpha.9",
-    "prop-types": "^15.6.0"
+    "prop-types": "^15.6.0",
+    "perfect-scrollbar": "^1.3.0"
   },
   "peerDependencies": {
     "babel-polyfill": "^6.26.0",
     "mobx": "^4.2.0",
     "mobx-react": "^5.1.2",
-    "perfect-scrollbar": "^1.3.0",
     "react": "^16.2.0",
     "react-dom": "^16.2.0"
   }
