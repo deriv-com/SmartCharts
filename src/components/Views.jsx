@@ -33,7 +33,7 @@ const Views = ({
     inputRef,
 }) => {
     return (
-        <Menu className="views">
+        <Menu className="ciq-views">
             <Menu.Title className="cq-menu-btn">
                 <TemplateIcon
                     className = {`ic-icon-with-sub ${menuOpen ? 'active' : ''}`}
