@@ -33,6 +33,7 @@ export default class ShareStore {
     accessToken = '837c0c4f99fcfbaca55ef9073726ef1f6a5c9349';
     @observable loading = false;
     @observable urlGenerated = false;
+    @observable shortUrlFailed = false;
 
 
     @observable shareLink = '';
@@ -41,21 +42,34 @@ export default class ShareStore {
         if(!this.context || !this.menu.dialog.open ) { return; }
 
         const layoutData = this.stx.exportLayout(true);
-        const json = JSON.stringify(layoutData);
+        layoutData.favorites = [];
 
-        const origin = window.location.origin === 'http://localhost:8080' ?
-            window.location.origin : 'https://charts.binary.com';
-        this.shareLink = `${origin}#${encodeURIComponent(json)}`;
+        const json = JSON.stringify(layoutData),
+            fixedEncodeURIComponent = function (str) {
+                return encodeURIComponent(str).replace(/[!'()*]/g, function(c) {
+                    return `%${c.charCodeAt(0).toString(16)}`;
+                });
+            };
 
+        const origin = window.location.href;
+        this.shareLink = fixedEncodeURIComponent(`${origin}#${json}`);
+
+        this.shortUrlFailed = false;
         this.loading = true;
+
         fetch(`${this.bitlyUrl}?access_token=${this.accessToken}&longUrl=${this.shareLink}`)
             .then( response => {
                 return response.json();
             })
             .then( response =>  {
-                self.shareLink = response.data.url;
+                if (response.status_code == 200 ) {
+                    self.shareLink = response.data.url;
+                    self.urlGenerated = true;
+                }else{
+                    self.shortUrlFailed = true;
+                    self.urlGenerated = false;
+                }
                 self.loading = false;
-                self.urlGenerated = true;
             })
             .catch(error => {
                 self.loading = false;
