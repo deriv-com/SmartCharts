@@ -236,11 +236,11 @@
     align-items: center;
 }
 
-.cq-toggle ,
-.cq-chart-controls .ic-icon {
+.cq-toggle > .ic-icon,
+.cq-chart-controls .ic-icon-with-sub {
     width: 24px;
     height: 24px;
-    svg {
+    > svg {
         padding:5px;
     }
 }
