@@ -112,6 +112,8 @@
         margin-top: -35px;
         box-shadow: 0 0 0.625em 0.025em rgba(0, 0, 0, 0.14);
         bottom: auto !important;
+        left: 5px !important;
+        transform: none !important;
         visibility: hidden;
         @include dialog-transition();
         &.open{

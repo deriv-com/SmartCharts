@@ -1,5 +1,4 @@
 
-
 .cq-settings-dialog {
     display: flex;
     flex-direction: column;
@@ -11,6 +10,7 @@
         .title {
             font-size: 24px;
             padding-left: 16px;
+            padding-bottom: 5px;
         }
         .icons {
             display: flex;
@@ -56,11 +56,11 @@
             }
         }
     }
-
     .items {
         padding: 16px 0;
         flex-grow: 1;
         overflow: scroll;
+        height: 200px;
         .item {
             @include box-sizing(border-box);
             padding: 0 16px;
@@ -77,7 +77,6 @@
             }
         }
     }
-
     .buttons {
         display: flex;
         justify-content: flex-end;

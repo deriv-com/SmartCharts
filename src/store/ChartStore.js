@@ -10,14 +10,6 @@ import { BinaryAPI, Feed } from '../feed';
 import {createObjectFromLocalStorage} from '../utils';
 // import '../AddOns';
 
-const defaultSymbol = {
-    symbol: 'R_100',
-    name: "Volatility 100 Index",
-    market_display_name: "Volatility Indices",
-    exchange_is_open: 1,
-    decimal_places: 2
-};
-
 class ChartStore {
     static _id_counter = 0;
 
@@ -32,8 +24,9 @@ class ChartStore {
     rootNode = null;
     stxx = null;
     id = null;
+    defaultSymbol = 'R_100';
     @observable context = null;
-    @observable currentActiveSymbol = defaultSymbol;
+    @observable currentActiveSymbol;
     @observable isChartAvailable = true;
     @observable comparisonSymbols = [];
     @observable categorizedSymbols = [];
@@ -56,24 +49,7 @@ class ChartStore {
         CIQ.localStorageSetItem(`layout-${this.id}`, json);
     }
 
-    restoreLayout(stx) {
-        let layoutData = createObjectFromLocalStorage(`layout-${this.id}`);
-
-
-        const configParams = window.location.href.split('#');
-        if (configParams.length > 1) {
-            const sharedParams = configParams.slice(1, configParams.length).join('#');
-            if(sharedParams) {
-                layoutData = decodeURI(sharedParams);
-                try {
-                    layoutData = JSON.parse(layoutData);
-                }catch(e){
-                    console.error(e);
-                }
-                window.history.replaceState({}, document.title, window.location.pathname);
-            }
-        }
-
+    restoreLayout(stx, layoutData) {
         if (!layoutData) {return;}
 
         stx.importLayout(layoutData, {
@@ -132,87 +108,13 @@ class ChartStore {
         if (this.stxx.slider) {
             this.stxx.slider.display(this.stxx.layout.rangeSlider);
         }
-    }
-
-    startUI() {
-        const stxx = this.stxx;
-        stxx.chart.allowScrollPast = false;
-        stxx.chart.allowScrollFuture = false;
-        const context = new Context(stxx, this.rootNode);
-
-        // Put some margin so chart doesn't get blocked by chart title
-        stxx.chart.yAxis.initialMarginTop = 125;
-        stxx.calculateYAxisMargins(stxx.chart.panel.yAxis);
-
-        context.changeSymbol = (data) => {
-            this.loader.show();
-
-            // reset comparisons
-            for (const field in this.stxx.chart.series) {
-                if (stxx.chart.series[field].parameters.bucket !== 'study') {
-                    this.stxx.removeSeries(field);
-                }
-            }
-
-            this.stxx.newChart(data, null, null, (err) => {
-                this.loader.hide();
-                if (err) {
-                    /* TODO, symbol not found error */
-                    return;
-                }
-                this.restoreDrawings(this.stxx, this.stxx.chart.symbol);
-            });
-
-            this.currentActiveSymbol = data;
-            this.categorizedSymbols = this.categorizeActiveSymbols();
-        };
-
-        new KeystrokeHub(document.querySelector('body'), context, {
-            cb: KeystrokeHub.defaultHotKeys,
-        });
-
-        const UIStorage = new CIQ.NameValueStore();
-
-        const params = {
-            excludedStudies: {
-                Directional: true,
-                Gopala: true,
-                vchart: true,
-            },
-            alwaysDisplayDialog: {
-                ma: true,
-            },
-            /* dialogBeforeAddingStudy: {"rsi": true} // here's how to always show a dialog before adding the study */
-        };
-
-        this.loader.show();
-
-        const studiesStore = this.mainStore.studies;
-        stxx.callbacks.studyOverlayEdit = study => studiesStore.editStudy(study);
-        stxx.callbacks.studyPanelEdit = study => studiesStore.editStudy(study);
-
-        this.restorePreferences();
-        this.restoreLayout(stxx);
-
-        if (stxx.chart.symbol) {
-            this.currentActiveSymbol = stxx.chart.symbolObject;
-        } else {
-            context.changeSymbol(defaultSymbol);
-        }
-
-        this.context = context;
-        this.contextPromise.resolve(context);
-        stxx.setStyle('stx_line_chart', 'color', '#4DAFEE'); // TODO => why is not working in css?
-    }
+    };
 
     @action.bound init(rootNode, props) {
         this.rootNode = rootNode;
 
-        const { requestAPI, requestSubscribe, requestForget } = props;
+        const { initialSymbol, requestAPI, requestSubscribe, requestForget } = props;
         const api = new BinaryAPI(requestAPI, requestSubscribe, requestForget);
-        api.getActiveSymbols().then(({ active_symbols }) => {
-            this.setActiveSymbols(active_symbols);
-        });
 
         const stxx = this.stxx = new CIQ.ChartEngine({
             container: this.rootNode.querySelector('.chartContainer.primary'),
@@ -220,8 +122,13 @@ class ChartStore {
             preferences: {
                 currentPriceLine: true,
             },
+            chart: {
+                allowScrollPast: false,
+                allowScrollFuture: false,
+            },
             yTolerance: 999999, // disable vertical scrolling
         });
+
         const deleteElement = stxx.chart.panel.holder.parentElement.querySelector('#mouseDeleteText');
         const manageElement = stxx.chart.panel.holder.parentElement.querySelector('#mouseManageText');
         deleteElement.textConent = t.translate("right-click to delete");
@@ -263,13 +170,117 @@ class ChartStore {
         // stxx.addEventListener('newChart', () => { });
         stxx.addEventListener('preferences', this.savePreferences.bind(this));
 
-        this.startUI();
+        const context = new Context(stxx, this.rootNode);
+
+        // Put some margin so chart doesn't get blocked by chart title
+        stxx.chart.yAxis.initialMarginTop = 125;
+        stxx.calculateYAxisMargins(stxx.chart.panel.yAxis);
+
+        new KeystrokeHub(document.querySelector('body'), context, {
+            cb: KeystrokeHub.defaultHotKeys,
+        });
+
+        const UIStorage = new CIQ.NameValueStore();
+
+        const params = {
+            excludedStudies: {
+                Directional: true,
+                Gopala: true,
+                vchart: true,
+            },
+            alwaysDisplayDialog: {
+                ma: true,
+            },
+            /* dialogBeforeAddingStudy: {"rsi": true} // here's how to always show a dialog before adding the study */
+        };
+
+        this.loader.show();
+
+        const studiesStore = this.mainStore.studies;
+        stxx.callbacks.studyOverlayEdit = study => studiesStore.editStudy(study);
+        stxx.callbacks.studyPanelEdit = study => studiesStore.editStudy(study);
+
+        this.restorePreferences();
+
+        api.getActiveSymbols().then(({ active_symbols }) => {
+            let layoutData = createObjectFromLocalStorage(`layout-${this.id}`);
+
+            // if initialSymbol is different from local storage layoutData, it takes
+            // precedence over layoutData.symbols. Note that layoutData retrieved
+            // from URL will take precedence over initialSymbol
+            if (initialSymbol && layoutData && layoutData.symbols[0].symbol !== initialSymbol) {
+                // If symbol in layoutData.symbol[0] and initialSymbol are different,
+                // restoreLayout and changeSymbol cannot be executed together or
+                // chartIQ will stream both symbols in the the same chart
+                delete layoutData.symbols;
+            }
+
+            const checkForQuerystring = window.location.origin === 'https://charts.binary.com' ||
+                window.location.origin === 'http://localhost:8080';
+
+            if (checkForQuerystring) {
+                const [, json] = window.location.href.split('#');
+                if(json) {
+                    layoutData = decodeURIComponent(json);
+                    window.history.replaceState({}, document.title, "/");
+                }
+            }
+
+            this.restoreLayout(stxx, layoutData);
+
+            this.setActiveSymbols(active_symbols);
+
+            if (initialSymbol && !(layoutData && layoutData.symbols)) {
+                this.changeSymbol(initialSymbol);
+            } else if (stxx.chart.symbol) {
+                this.currentActiveSymbol = stxx.chart.symbolObject;
+                this.categorizedSymbols = this.categorizeActiveSymbols();
+            } else {
+                this.changeSymbol(this.defaultSymbol);
+            }
+        });
+
+
+        this.context = context;
+        this.contextPromise.resolve(context);
         this.resizeScreen();
         this.chartPanelTop = holderStyle.top;
 
         window.addEventListener('resize', this.resizeScreen, false);
 
         stxx.append('createDataSet', this.updateComparisons);
+    }
+
+    @action.bound changeSymbol(symbolObj) {
+        if (typeof symbolObj === 'string') {
+            symbolObj = this.activeSymbols.find(s => s.symbol === symbolObj);
+        }
+
+        if (this.currentActiveSymbol
+            && symbolObj.symbol === this.currentActiveSymbol.symbol) {
+            return;
+        }
+
+        this.loader.show();
+
+        // reset comparisons
+        for (const field in this.stxx.chart.series) {
+            if (stxx.chart.series[field].parameters.bucket !== 'study') {
+                this.stxx.removeSeries(field);
+            }
+        }
+
+        this.stxx.newChart(symbolObj, null, null, (err) => {
+            this.loader.hide();
+            if (err) {
+                /* TODO, symbol not found error */
+                return;
+            }
+            this.restoreDrawings(this.stxx, this.stxx.chart.symbol);
+        });
+
+        this.currentActiveSymbol = symbolObj;
+        this.categorizedSymbols = this.categorizeActiveSymbols();
     }
 
     @action.bound updateComparisons(...args) {
@@ -347,6 +358,8 @@ class ChartStore {
     }
 
     categorizeActiveSymbols() {
+        if (this.activeSymbols.length <= 0 || !this.currentActiveSymbol) {return [];}
+
         const activeSymbols = this.activeSymbols;
         let categorizedSymbols = [];
         if(activeSymbols.length > 0) {

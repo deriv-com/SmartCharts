@@ -18,6 +18,8 @@ const ChartTitle = ({
     AnimatedPrice,
     onCloseMenu
 }) => {
+    if (!currentSymbol) return null;
+
     const SymbolIcon = ItemIconMap[currentSymbol.symbol] || SymbolPlaceholderIcon;
     return (
         <Menu className="cq-chart-title stx-show cq-symbols-display">
