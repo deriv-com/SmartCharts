@@ -1,6 +1,6 @@
 {
   "name": "@binary-com/smartcharts",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "main": "dist/smartcharts.js",
   "author": "amin@binary.com",
   "license": "ISC",
