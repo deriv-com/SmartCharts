@@ -93,7 +93,7 @@ export default class ShareStore {
         const isTick = this.timeUnit === 'tick';
         const header = `Date,Time,${isTick ? this.marketDisplayName : 'Open,High,Low,Close'}`;
         const lines = [header];
-        stx.masterData.forEach(row => {
+        this.stx.masterData.forEach(row => {
             const {DT, Open, High, Low, Close} = row;
 
             const year = DT.getUTCFullYear();
