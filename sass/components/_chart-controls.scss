@@ -1,212 +1,151 @@
-$selected-background-color: #e4e6f1;
 
-cq-context {
-
-    .cq-chart-controls {
-        /* Chart Control module */
-        background: $DEFAULT-main;
-        position: absolute;
-        display: flex !important;
-        bottom: 0px !important;
-        left: 50%;
-        padding: 0 10px;
-        transform: translateX(-50%);
-        height: 49px;
-        width: 100%;
-
-        flex-wrap: wrap; /* Optional. only if you want the items to wrap */
-        justify-content: center;
-        align-items: center;
-
-        /* background: */
-        background: rgba(255, 255, 255, 0.8);
-        box-shadow: 0 2px 2px 0 rgba(0,0,0,0.12);
-        z-index: 2;
-        @include transition(background 1s)
-        @include border-radius(2px);
+.cq-chart-controls {
+    position: absolute;
+    display: flex !important;
+    bottom: 0px !important;
+    left: 50%;
+    padding: 0 10px;
+    transform: translateX(-50%);
+    height: 50px;
+    width: 100%;
+    flex-wrap: wrap; /* Optional. only if you want the items to wrap */
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 2px 2px 0 rgba(0,0,0,0.12);
+    z-index: 2;
+    @include themify($themes) {
+        background: themed('defaultMain');
+        border-top: 1px solid themed('defaultBorder');
+    }
+    @include border-radius(2px);
+    @include box-sizing(border-box);
+    .ciq-menu {
+        line-height: 2.1em;
+        > span {
+            margin: 0;
+            padding: 0;
+        }
+        &:after {
+            right: 5px;
+            top: 11px;
+            transform: rotate(225deg); /* 180 + 45 */
+            display: none;
+        }
+        cq-separator {
+            margin: 0;
+        }
+        cq-menu-dropdown,
+        .cq-menu-dropdown {
+            height: auto;
+        }
+    }
+    .ciq-icon {
+        width: 24px;
+        height: 24px;
+        display: inline-block;
         @include box-sizing(border-box);
-        &:hover {
-            background: rgba(255, 255, 255, 1);
-            @include transition(background 0.3s)
+    }
+    .cq-toggle {
+        padding: 0.35em 2.6em;
+        color: #575757;
+    }
+    cq-comparison-add {
+        cq-comparison-lookup-frame {
+            position: absolute;
+            bottom: 0em;
+            left: -10em;
         }
-        #chartSize {
-            background: transparent;
-            box-shadow: none;
-            min-width: 6em;
+    }
+}
+
+.cq-comparison-new > .cq-menu-dropdown {
+    left: -13em;
+}
+
+.ciq-studies > .cq-menu-dropdown {
+    left: -9.8em;
+}
+
+/* Mobile Style */
+.smartcharts-mobile{
+    .cq-chart-controls {
+        left: 0px !important;
+        transform: translateX(-0%) !important;
+        box-shadow: none;
+        justify-content: space-around;
+        border: none;
+        padding: 0 0.7em;
+        @include themify($themes) {
+            border-top: 1px solid themed('defaultBorder');
         }
-        .ciq-row {
-          white-space: nowrap;
-          text-align: left;
-          height: 24px;
-          display: flex;
-          align-items: center;
-          color: $DEFAULT-text-strong;
-          padding: 0.3em 1.8em 0.3em 0.9em;
-          &:hover,
-          &[cq-focused] {
-              background: $selected-background-color;
-          }
+        &.active{
+            z-index: 5;
+        }
+        .cq-menu-btn {
+            padding: 0;
         }
         .ciq-menu {
-            line-height: 2.1em;
-            padding: 0.35em 1.8em;
-            > span {
-                margin: 0;
-                padding: 0;
-            }
-            &:after {
-                right: 5px;
-                top: 11px;
-                transform: rotate(225deg); /* 180 + 45 */
-                display: none;
-            }
-            &:hover{
-                color: #575757 !important;
-            }
-            cq-separator {
-                margin: 0;
-            }
-
-            cq-menu-dropdown, .cq-menu-dropdown {
-                bottom: 2.6em;
-                z-index: -3;
-                height: auto;
-                margin-top: 1;
-                box-shadow: 0 0 0.625em 0.025em rgba(0, 0, 0, 0.14);
-                visibility: hidden;
-                @include dialog-transition();
-                .ciq-icon {
-                    width: $small-icon-size;
-                    height: $small-icon-size;
-                    margin: 0 5px;
+            padding: 0em;
+            .cq-menu-btn{
+                > .ic-icon{
+                    padding: .35em 0em;
                 }
-                &.open{
-                    visibility: visible;
-                    bottom: 5em;
-                    opacity: 1;
-                    z-index: 3;
+                > .bt-priod{
+                    padding: .7em .5em !important;
                 }
             }
-        }
-        .ciq-icon {
-            width: 24px;
-            height: 24px;
-            display: inline-block;
-            @include box-sizing(border-box);
-        }
-        .ciq-views  {
-            cq-item {
-                text-align: left;
-                padding: 0 10px;
-                cq-label {
-                    width: 155px;
-                }
-            }
-            cq-separator {
-                width: 200px;
-            }
-        }
-        .cq-toggle {
-            padding: 0.35em 2.6em;
-            color: #575757;
-        }
-        cq-comparison-add {
-            cq-comparison-lookup-frame {
+            .cq-menu-overlay{
+                background: rgba(0,0,0,.3);
+                width: 100%;
                 position: absolute;
+                height: calc( 100vh - 32px );
+                top: calc( -100vh + 31px );
+                left: 0;
+                padding: 0em;
+                opacity: 0;
+                visibility: hidden;
+                @include transition(visibility 0s ease-in-out, opacity 0.2s ease-in-out 0.2s);
+            }
+            cq-menu-dropdown,
+            .cq-menu-dropdown {
+                height: auto;
+                left: -1px;
+                width: calc( 100% + 2px );
+                padding: 0 0 8px 0;
+                border: none;
+                box-shadow: none;
+                border-radius: 0px !important;
                 bottom: 0em;
-                left: -10em;
+                transform: translateY(150%);
+                @include transition(transform 0.2s ease-in-out 0.2s);
+                &.open{
+                    transform: translateY(0%);
+                    margin: 0px;
+                    bottom: 0em;
+                }
+            }
+            &.stxMenuActive{
+                .cq-menu-overlay {
+                    opacity: 1;
+                    visibility: visible;
+                }
+            }
+            &.ciq-studies,
+            &.cq-comparison-new{
+                cq-menu-dropdown, .cq-menu-dropdown {
+                    height: calc( 100vh - 57px ) ;
+                    left: 0px;
+                    width: 100%;
+                    box-shadow: none !important;
+                }
             }
         }
-    }
-
-    .cq-comparison-new > .cq-menu-dropdown {
-        left: -13em;
-    }
-
-    .ciq-studies > .cq-menu-dropdown {
-        left: -9.8em;
-    }
-
-    /* Mobile Style */
-    &.smartcharts-mobile{
-        .cq-chart-controls {
-            background: $DEFAULT-main;
-            left: 0px !important;
-            transform: translateX(-0%) !important;
-            box-shadow: none;
-            justify-content: space-around;
-            border-top: 1px solid #d9d9d9;
-            border: none;
-            padding: 0 0.7em;
-            &.active{
-                z-index: 5;
-            }
-            .cq-menu-btn {
-                padding: 0;
-            }
-            .ciq-menu {
-                padding: 0em;
-                .cq-menu-btn{
-                    > .ic-icon{
-                        padding: .35em 0.5em;
-                    }
-                    > .bt-priod{
-                        padding: .7em .5em !important;
-                    }
-                }
-                .cq-menu-overlay{
-                    background: rgba(0,0,0,.3);
-                    width: 100%;
-                    position: absolute;
-                    height: calc( 100vh - 32px );
-                    top: calc( -100vh + 31px );
-                    left: 0;
-                    padding: 0em;
-                    opacity: 0;
-                    visibility: hidden;
-                    @include transition(visibility 0s ease-in-out, opacity 0.2s ease-in-out 0.2s);
-                }
-                cq-menu-dropdown,
-                .cq-menu-dropdown {
-                    height: auto;
-                    left: -1px;
-                    width: calc( 100% + 2px );
-                    padding: 0 0 8px 0;
-                    border: none;
-                    box-shadow: none;
-                    border-radius: 0px !important;
-                    bottom: 0em;
-                    transform: translateY(150%);
-                    @include transition(transform 0.2s ease-in-out 0.2s);
-                    &.open{
-                        transform: translateY(0%);
-                        margin: 0px;
-                        bottom: 0em;
-                    }
-                }
-                &.stxMenuActive{
-                    .cq-menu-overlay {
-                        opacity: 1;
-                        visibility: visible;
-                    }
-                }
-                &.ciq-studies,
-                &.cq-comparison-new{
-                    cq-menu-dropdown, .cq-menu-dropdown {
-                        height: calc( 100vh - 57px ) ;
-                        left: 0px;
-                        width: 100%;
-                        box-shadow: none !important;
-                    }
-                }
-            }
-            .bt-priod ,.cq-toggle , .cq-menu-btn , .cq-chart-size>span
-            {
-                 padding: 0 !important;
-            }
-            .ic-priod {
-                padding : 6px 0px !important; 
-            }
+        .bt-priod ,.cq-toggle , .cq-menu-btn , .cq-chart-size>span
+        {
+             padding: 0 !important;
+        }
+        .ic-priod {
+            padding : 6px 0px !important;
         }
     }
 }

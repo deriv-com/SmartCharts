@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {connect} from '../store/Connect';
-import '../../sass/_ciq-asset-information.scss';
+import '../../sass/components/_ciq-asset-information.scss';
 
 const AssetInformation = ({
     price,

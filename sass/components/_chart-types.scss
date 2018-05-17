@@ -1,58 +1,40 @@
-cq-context{
-    .ciq-chart-types {
-        .ciq-toggle-asset-information {
-            font-size: 10px;
-            display: flex;
-            color: $DEFAULT-text-strong;
-            justify-content: space-between;
-            align-items: center;
-            position: relative;
-            top: -5px;
-        }
-        .cq-menu-dropdown {
-            width: 200px;
-            padding: 16px;
-            background: #fafafa;
-            @include box-sizing(border-box);
-        }
-        .ciq-title {
-            display: flex;
-            align-items: center;
-            cursor: pointer;
-            .ciq-icon {
-                background-position: 50% 50%;
-                background-repeat: no-repeat;
-            } 
-        }
-        .ciq-list {
-            .ciq-list-item {
-                padding: 0;
-                display: flex;
-                justify-content: flex-start;
-                align-items: center;
-                &.selected{
-                    background: transparent;
-                }
-                &.active {
-                    color: $active-color;
-                    font-weight: bold;
-                    background-color: #F2F3F8;
-                    .ic-icon{
-                        box-shadow: none;
-                        background: transparent;
-                    }
-                }
-            }
-        }
-    }
-    &.smartcharts-mobile{
-        .ciq-chart-types {
-            .ciq-toggle-asset-information{
-                margin: 15px 15px 0 ;
-            }
-            .ciq-list {
-                margin: 0px 15px;
-            }
-        }
-    }
+.ciq-chart-types {
+	.ciq-toggle-asset-information {
+		font-size: 10px;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		position: relative;
+		top: -5px;
+		@include themify($themes) {color: themed('defaulTextStrong');}
+	}
+	.cq-menu-dropdown {
+		width: 200px;
+		padding: 16px;
+		@include box-sizing(border-box);
+	}
+	.ciq-title {
+		display: flex;
+		align-items: center;
+		cursor: pointer;
+		.ciq-icon {
+			background-position: 50% 50%;
+			background-repeat: no-repeat;
+		} 
+	}
+	.ciq-list {
+		.ciq-list-item {
+			padding: 0;
+		}
+	}
+}
+.smartcharts-mobile{
+	.ciq-chart-types {
+		.ciq-toggle-asset-information{
+			margin: 15px 15px 0 ;
+		}
+		.ciq-list {
+			margin: 0px 15px;
+		}
+	}
 }

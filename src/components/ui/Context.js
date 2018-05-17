@@ -38,15 +38,6 @@ class Context {
     }
 
     /**
-     * Abstract method that should be overridden
-     * @param  {Object} data A symbol data object acceptible for {@link CIQ.ChartEngine#newChart}
-     * @memberof CIQ.UI.Context
-     */
-    changeSymbol(data) {
-        console.log('Please implement CIQ.UI.Context.prototype.changeSymbol');
-    }
-
-    /**
      * Attaches a Helper to the context, so that it can be found later on.
      * @param {CIQ.UI.Helper} uiHelper A UI Helper to attach
      * @param {string} helperName The helperName of the element. For instance "Loader"

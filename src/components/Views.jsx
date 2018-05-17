@@ -8,14 +8,15 @@ import {
     TickIcon,
     DeleteIcon
 } from './Icons.jsx';
+import '../../sass/components/_view.scss';
 
 const ViewItem = ({
     view,
     remove,
     onClick,
 }) => (
-    <div className="view" onClick={onClick}>
-        <span className="name">{view.name}</span>
+    <div className="ciq-list-item" onClick={onClick}>
+        <span className="ciq-list-item-text">{view.name}</span>
         <DeleteIcon onClick={remove}/>
     </div>
 );
@@ -32,14 +33,14 @@ const Views = ({
     inputRef,
 }) => {
     return (
-        <Menu className="views">
+        <Menu className="ciq-views">
             <Menu.Title className="cq-menu-btn">
                 <TemplateIcon
                     className = {`ic-icon-with-sub ${menuOpen ? 'active' : ''}`}
                     tooltip-title={t.translate("Templates")} />
             </Menu.Title>
             <Menu.Body>
-                <div className="dropdown-title">
+                <div className="title">
 
                     {
                         currentRoute === 'add'
@@ -54,7 +55,7 @@ const Views = ({
                                 />
                                 <CloseIcon onClick={cancel} />
                             </span>
-                            : <span className="title">{t.translate("Templates")}</span>
+                            : t.translate('Templates')
                     }
                     <span className="icon">
                         {
@@ -66,6 +67,7 @@ const Views = ({
                     </span>
                 </div>
                 <div className='content'>
+                    <div className="ciq-list">
                     {
                         views.length
                             ? views.map((view, i) => (
@@ -81,6 +83,7 @@ const Views = ({
                                 <p>{t.translate('Click + icon to add one.')}</p>
                             </span>
                     }
+                    </div>
                 </div>
             </Menu.Body>
         </Menu>

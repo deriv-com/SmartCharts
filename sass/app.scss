@@ -25,10 +25,17 @@ for building additional themes.
 
 @import url('https://fonts.googleapis.com/css?family=Roboto:400,700,500,100,300,400italic|Roboto+Condensed:400,700,300');
 
-@import "_variables";
+@import "styles/chart";
 
-@import "stx-chart";
-@import "ciq-components"; /* include main components */
-//@import "ciq-night"; /* Night theme. Use this as a base if you wish to design your own themes. */
+@import "styles/main";
+
+@import "components/barrier";
+
+@import "components/loader";
+
+@import "styles/ciq-perfect-scrollbar";
+
+
 @import "ciq-extras"; /* Plugins and other pieces */
 // Add an import for your overrides here and then recompile the SASS
+
