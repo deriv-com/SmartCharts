@@ -122,9 +122,9 @@ class ChartStore {
                 currentPriceLine: true,
             },
             chart: {
-                allowScrollPast: false,
                 allowScrollFuture: false,
             },
+            minimumLeftBars: 15,
             yTolerance: 999999, // disable vertical scrolling
         });
 
