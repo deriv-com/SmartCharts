@@ -233,6 +233,7 @@ class ChartStore {
                 this.changeSymbol(initialSymbol);
             } else if (stxx.chart.symbol) {
                 this.currentActiveSymbol = stxx.chart.symbolObject;
+                stxx.chart.yAxis.decimalPlaces = stxx.chart.symbolObject.decimal_places;
                 this.categorizedSymbols = this.categorizeActiveSymbols();
             } else {
                 this.changeSymbol(this.defaultSymbol);
@@ -278,6 +279,7 @@ class ChartStore {
             this.restoreDrawings(this.stxx, this.stxx.chart.symbol);
         });
 
+        this.stxx.chart.yAxis.decimalPlaces = symbolObj.decimal_places;
         this.currentActiveSymbol = symbolObj;
         this.categorizedSymbols = this.categorizeActiveSymbols();
     }
