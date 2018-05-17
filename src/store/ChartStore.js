@@ -264,7 +264,7 @@ class ChartStore {
 
         // reset comparisons
         for (const field in this.stxx.chart.series) {
-            if (stxx.chart.series[field].parameters.bucket !== 'study') {
+            if (this.stxx.chart.series[field].parameters.bucket !== 'study') {
                 this.stxx.removeSeries(field);
             }
         }
