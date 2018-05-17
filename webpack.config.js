@@ -27,7 +27,7 @@ const config = {
                     MiniCssExtractPlugin.loader,
                     {
                         loader: 'css-loader',
-                        options: { sourceMap: true, minimize: true }
+                        options: { sourceMap: true }
                     }, {
                         loader: 'sass-loader',
                         options: {

@@ -159,7 +159,18 @@ We organise the development in Trello. Here is the standard workflow of how a fe
  8. If the card fails QA check, QA can comment on the card on what failed, and place the card back to `In Development` list. If QA passes the changes, QA will place the card from `QA` to `Ready`; this card is now ready to be merged to `dev`. 
  9. Once the card is merged to `dev`, it is placed in `Deployed to BETA` list.
  10. When it is time to take all changes in `beta` and deploy in production, manager will merge `dev` into `master`, and place all cards in `Deployed to BETA` to `Released`.
-  
+
+### Debugging NPM Package
+
+Some issues only show up for library users, so it is helpful to test the NPM package before deploying it to library users. To do this we provide an environment in the `app` folder, with its own `package.json`, `webpack.config.js` and `index.html`. Calling `yarn install` and `yarn start` in the `app` folder builds the SmartCharts library *from the NPM library*.
+
+Now to test whether your change affect the NPM library, execute:
+
+    yarn watch --output-path './app/node_modules/@binary-com/smartcharts/dist'
+
+Now each time you make any change, it will overwrite the SmartCharts library inside the `node_modules` folder. 
+
+> Note: We do not recommend this method of developing unless you are testing the NPM package, as it is very slow for development purposes.
 
 ### Separation of App and Library
 
