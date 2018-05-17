@@ -129,6 +129,16 @@ class Feed {
         callback(result);
     }
 
+    unsubscribeAll() {
+        for (const key in this._callbacks) {
+            const { symbol, period, interval } = JSON.parse(key);
+            this._binaryApi.forget({
+                symbol,
+                granularity: Feed.calculateGranularity(period, interval)
+            }, this._callbacks[key]);
+        }
+    }
+
     static calculateGranularity(period, interval) {
         const toSeconds = {
             second: 0,

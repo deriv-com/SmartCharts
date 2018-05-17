@@ -137,7 +137,8 @@ class ChartStore {
         CIQ.Animation(stxx, { stayPut: true });
 
         // connect chart to data
-        stxx.attachQuoteFeed(new Feed(api, stxx, this.mainStore), {
+        this.feed = new Feed(api, stxx, this.mainStore);
+        stxx.attachQuoteFeed(this.feed, {
             refreshInterval: null,
         });
 
@@ -317,6 +318,8 @@ class ChartStore {
 
     @action.bound destroy() {
         window.removeEventListener('resize', this.resizeScreen, false);
+        this.feed.unsubscribeAll();
+        this.feed = null;
         this.stxx.destroy();
         this.stxx = null;
     }
