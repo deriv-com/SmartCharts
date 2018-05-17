@@ -34,8 +34,8 @@ $small-icon-size: 16px;
 
 /* --------- Animation : dialog --------- */
 @mixin dialog-transition {
-  @include transition(visibility 0.1s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0s,
-      margin-top 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.1s,
+  @include transition(pointer-events 0.1s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0s,
+      transform 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.1s,
       opacity 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.1s);
 }
 

@@ -11,6 +11,7 @@ import {
     FlagIcons
 } from './Icons.jsx';
 import '../../sass/components/_ciq-chart-setting.scss';
+import { CSSTransition } from 'react-transition-group';
 
 
 const ChartSetting = ({
@@ -96,12 +97,24 @@ const ChartSetting = ({
                 />
             </Menu.Title>
             <Menu.Body>
-                <div className={`cq-menu-container ${view == '' ? 'active': ''}`}>
+
+                <CSSTransition
+                    in={view === ''}
+                    timeout={300}
+                    classNames="cq-menu-container"
+                    unmountOnExit
+                    >
                     {renderMain()}
-                </div>
-                <div className={`cq-menu-container ${view == 'language' ? 'active': ''}`}>
+                </CSSTransition>
+
+                <CSSTransition
+                    in={view === 'language'}
+                    timeout={300}
+                    classNames="cq-menu-container"
+                    unmountOnExit
+                    >
                     {renderLanguage()}
-                </div>
+                </CSSTransition>
 
             </Menu.Body>
         </Menu>
