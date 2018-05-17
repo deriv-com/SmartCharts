@@ -4,7 +4,8 @@
 
 SmartCharts is both the name of the app ([charts.binary.com](https://charts.binary.com/)) and the charting library. You can install the library to your project via:
 
-    yarn add @binary-com/smartcharts
+    yarn add @binary-com/smartcharts      # Release
+    yarn add @binary-com/smartcharts@beta # Beta
 
 **Important Note:** the license for the library is tied to the `binary.com` domain name; it will not work in github pages.
 
@@ -189,7 +190,13 @@ Once the new `messages.pot` is merged into the `dev` branch, it will automatical
 
 ### Deploy to NPM
 
+To publish to production:
+
     yarn build && yarn publish
+
+To publish to beta:
+
+    yarn build && yarn publish --tag beta
 
 ### Deploy to [charts.binary.com](https://charts.binary.com/)
 
