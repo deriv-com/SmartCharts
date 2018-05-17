@@ -35,10 +35,8 @@ class ChartStore {
     @observable isMobile = false;
 
     @action.bound setActiveSymbols(activeSymbols) {
-        if (activeSymbols && this.context) {
-            this.activeSymbols = this.processSymbols(activeSymbols);
-            this.categorizedSymbols = this.categorizeActiveSymbols();
-        }
+        this.activeSymbols = this.processSymbols(activeSymbols);
+        this.categorizedSymbols = this.categorizeActiveSymbols();
     }
 
     get loader () { return this.mainStore.loader; }
