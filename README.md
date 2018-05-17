@@ -38,8 +38,8 @@ class App extends React.Component {
         return (
             <SmartChart
                 onSymbolChange={(symbol) => console.log('Symbol has changed to:', symbol)}
-                requestSubscribe={({ symbol, granularity, ... }, cb) => {}}   // Passes the whole req object
-                requestForget={({ symbol, granularity }, cb) => {}}         // cb is exactly the same reference passed to subscribe
+                requestSubscribe={({ tick_history, granularity, ... }, cb) => {}}   // Passes the whole request object
+                requestForget={({ tick_history, granularity, ... }, cb) => {}}      // request object and cb is exactly the same reference passed to subscribe
                 // for active_symbols, trading_times, ... (NOT streaming)
                 requestAPI={({...}) => Promise} // whole request object, shouldn't contain req_id
             />
@@ -81,7 +81,7 @@ Props marked with `*` are **mandatory**:
 --------|--------------
 requestAPI* | SmartCharts will make single API calls by passing the request input directly to this method, and expects a `Promise` to be returned.
 requestSubscribe* | SmartCharts will make streaming calls via this method. `requestSubscribe` expects 2 parameters `(request, callback) => {}`: the `request` input and a `callback` in which response will be passed to for each time a response is available. Keep track of this `callback` as SmartCharts will pass this to you to forget the subscription (via `requestForget`).
-requestForget* | When SmartCharts no longer needs a subscription (made via `requestSubscribe`), it will call this method (passing in the `callback` passed from `requestSubscribe`) to halt the subscription.
+requestForget* | When SmartCharts no longer needs a subscription (made via `requestSubscribe`), it will call this method (passing in `request` and `callback` passed from `requestSubscribe`) to halt the subscription.
 onSymbolChange | When SmartCharts changes the symbol, it will call this function, passing the symbol object as parameter.
 lang | Sets the language.
 chartControlsWidgets | Render function for chart control widgets. Refer to [Customising Components](#customising-components).
