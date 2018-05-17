@@ -240,13 +240,12 @@ class ChartStore {
             } else {
                 this.changeSymbol(this.defaultSymbol);
             }
+
+            this.context = context;
+            this.contextPromise.resolve(this.context );
+            this.resizeScreen();
+            this.chartPanelTop = holderStyle.top;
         });
-
-
-        this.context = context;
-        this.contextPromise.resolve(context);
-        this.resizeScreen();
-        this.chartPanelTop = holderStyle.top;
 
         window.addEventListener('resize', this.resizeScreen, false);
 
