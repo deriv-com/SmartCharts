@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"Plural-Forms: nplurals=4; plural=((n == 1) ? 0 : ((n%10 >= 2 && n%10 <=4 && (n%100 < 12 || n%100 > 14)) ? 1 : ((n%10 == 0 || n%10 == 1 || (n%10 >= 5 && n%10 <=9)) || (n%100 >= 12 && n%100 <= 14)) ? 2 : 3));\n"
+"Plural-Forms: nplurals=4; plural=(n==1 ? 0 : (n%10>=2 && n%10<=4) && (n%100<12 || n%100>14) ? 1 : n!=1 && (n%10>=0 && n%10<=1) || (n%10>=5 && n%10<=9) || (n%100>=12 && n%100<=14) ? 2 : 3);\n"
 "X-Generator: crowdin.com\n"
 "X-Crowdin-Project: smartcharts\n"
 "X-Crowdin-Language: pl\n"
@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Polish\n"
 "Language: pl_PL\n"
-"PO-Revision-Date: 2018-04-22 23:10-0400\n"
+"PO-Revision-Date: 2018-05-18 01:15-0400\n"
 
 msgid "CLOSED"
 msgstr ""
@@ -19,22 +19,22 @@ msgid "Close"
 msgstr ""
 
 msgid "Favorites"
-msgstr ""
+msgstr "Ulubione"
 
 msgid "There are no favorites yet."
-msgstr ""
+msgstr "Brak ulubionych."
 
 msgid "Chart data is not available for this symbol."
 msgstr ""
 
 msgid "PRICE"
-msgstr ""
+msgstr "CENA"
 
 msgid "OPEN"
-msgstr ""
+msgstr "OTWÓRZ"
 
 msgid "CLOSE"
-msgstr ""
+msgstr "ZAMKNIJ"
 
 msgid "HIGH"
 msgstr ""
@@ -43,7 +43,7 @@ msgid "LOW"
 msgstr ""
 
 msgid "Chart types"
-msgstr ""
+msgstr "Rodzaje wykresów"
 
 msgid "Toggle Asset Information"
 msgstr ""
@@ -52,16 +52,16 @@ msgid "Studies"
 msgstr ""
 
 msgid "Comparison"
-msgstr ""
+msgstr "Porównania"
 
 msgid "Templates"
-msgstr ""
+msgstr "Szablony"
 
 msgid "Template name"
-msgstr ""
+msgstr "Nazwa szablonu"
 
 msgid "There is no template added by you."
-msgstr ""
+msgstr "Nie dodałeś/-aś jeszcze żadnych szablonów."
 
 msgid "Click + icon to add one."
 msgstr ""
@@ -70,19 +70,19 @@ msgid "Crosshair"
 msgstr ""
 
 msgid "Time period"
-msgstr ""
+msgstr "Okres czasu"
 
 msgid "Tick"
-msgstr ""
+msgstr "Zmiana ceny"
 
 msgid "Minute"
-msgstr ""
+msgstr "Minuta"
 
 msgid "Hour"
-msgstr ""
+msgstr "Godzina"
 
 msgid "Day"
-msgstr ""
+msgstr "Dzień"
 
 msgid "Zoom out"
 msgstr ""
@@ -91,10 +91,10 @@ msgid "Zoom in"
 msgstr ""
 
 msgid "Draw tools"
-msgstr ""
+msgstr "Narzędzia do rysowania"
 
 msgid "Clear All"
-msgstr ""
+msgstr "Wyczyść wszystko"
 
 msgid "Measure"
 msgstr ""
@@ -115,7 +115,7 @@ msgid "Share"
 msgstr ""
 
 msgid "Share / Download Chart"
-msgstr ""
+msgstr "Udostępnij/pobierz wykres"
 
 msgid "Share link"
 msgstr ""
@@ -124,13 +124,13 @@ msgid "Download chart"
 msgstr ""
 
 msgid "RESET"
-msgstr ""
+msgstr "RESET"
 
 msgid "DONE"
-msgstr ""
+msgstr "GOTOWE"
 
 msgid "right-click to delete"
-msgstr ""
+msgstr "kliknij prawym przyciskiem, aby usunąć"
 
 msgid "right-click to manage"
 msgstr ""
@@ -142,13 +142,13 @@ msgid "Streaming for [symbol] is not available due to license restrictions"
 msgstr ""
 
 msgid "Line"
-msgstr ""
+msgstr "Linia"
 
 msgid "Dot"
-msgstr ""
+msgstr "Kropka"
 
 msgid "Colored Dot"
-msgstr ""
+msgstr "Kolorowa kropka"
 
 msgid "Spline"
 msgstr ""
@@ -157,10 +157,10 @@ msgid "Baseline"
 msgstr ""
 
 msgid "Candle"
-msgstr ""
+msgstr "Świeca"
 
 msgid "OHLC"
-msgstr ""
+msgstr "OHLC"
 
 msgid "Hollow Candle"
 msgstr ""
@@ -169,10 +169,10 @@ msgid "\"Mass Index\" or \"Doji Star\""
 msgstr ""
 
 msgid "Indicators"
-msgstr ""
+msgstr "Wskaźniki"
 
 msgid "Active"
-msgstr ""
+msgstr "Aktywne"
 
 msgid "There are no active indicators yet."
 msgstr ""
@@ -247,19 +247,19 @@ msgid "Segment"
 msgstr ""
 
 msgid "Shape - Arrow"
-msgstr ""
+msgstr "Kształt - strzałka"
 
 msgid "Shape - Check"
 msgstr ""
 
 msgid "Shape - Cross"
-msgstr ""
+msgstr "Kształt - krzyżyk"
 
 msgid "Shape - Focus"
 msgstr ""
 
 msgid "Shape - Heart"
-msgstr ""
+msgstr "Kształt - serce"
 
 msgid "Shape - Star"
 msgstr ""
@@ -283,7 +283,7 @@ msgid "RSI"
 msgstr ""
 
 msgid "Period"
-msgstr ""
+msgstr "Okres"
 
 msgid "Show Zones"
 msgstr ""
@@ -301,7 +301,7 @@ msgid "Field"
 msgstr ""
 
 msgid "Type"
-msgstr ""
+msgstr "Typ"
 
 msgid "Offset"
 msgstr ""
@@ -313,13 +313,13 @@ msgid "MA"
 msgstr ""
 
 msgid "MACD"
-msgstr ""
+msgstr "MACD"
 
 msgid "Fast MA Period"
-msgstr ""
+msgstr "Okres szybkiej MA"
 
 msgid "Slow MA Period"
-msgstr ""
+msgstr "Okres wolnej MA"
 
 msgid "Signal Period"
 msgstr ""
@@ -382,10 +382,10 @@ msgid "Vertical Horizontal Filter"
 msgstr ""
 
 msgid "Result"
-msgstr ""
+msgstr "Wynik"
 
 msgid "TRIX"
-msgstr ""
+msgstr "TRIX"
 
 msgid "Standard Deviation"
 msgstr ""
@@ -427,7 +427,7 @@ msgid "Positive Volume Index"
 msgstr ""
 
 msgid "Index"
-msgstr ""
+msgstr "Indeks"
 
 msgid "Negative Volume Index"
 msgstr ""
@@ -454,16 +454,16 @@ msgid "%D Moving Average Type"
 msgstr ""
 
 msgid "%K"
-msgstr ""
+msgstr "%K"
 
 msgid "%D"
-msgstr ""
+msgstr "%D"
 
 msgid "Historical Volatility"
 msgstr ""
 
 msgid "Days Per Year"
-msgstr ""
+msgstr "Dni w roku"
 
 msgid "Pretty Good Oscillator"
 msgstr ""
@@ -559,7 +559,7 @@ msgid "Intraday Momentum Index"
 msgstr ""
 
 msgid "RAVI"
-msgstr ""
+msgstr "RAVI"
 
 msgid "Random Walk Index"
 msgstr ""
@@ -571,7 +571,7 @@ msgid "Random Walk Low"
 msgstr ""
 
 msgid "ADX/DMS"
-msgstr ""
+msgstr "ADX/DMS"
 
 msgid "Smoothing Period"
 msgstr ""
@@ -787,7 +787,7 @@ msgid "Money Flow Index"
 msgstr ""
 
 msgid "Williams %R"
-msgstr ""
+msgstr "Williams %R"
 
 msgid "Accumulation/Distribution"
 msgstr ""
@@ -826,16 +826,16 @@ msgid "Display 3 Standard Deviation (3σ)"
 msgstr ""
 
 msgid "Average"
-msgstr ""
+msgstr "Średnia"
 
 msgid "1 Standard Deviation (1σ)"
-msgstr ""
+msgstr "1 odchylenie standardowe (1σ)"
 
 msgid "2 Standard Deviation (2σ)"
-msgstr ""
+msgstr "2 odchylenia standardowe (2σ)"
 
 msgid "3 Standard Deviation (3σ)"
-msgstr ""
+msgstr "3 odchylenia standardowe (3σ)"
 
 msgid "Correlation Coefficient"
 msgstr ""
@@ -871,7 +871,7 @@ msgid "Scale Factor"
 msgstr ""
 
 msgid "Green"
-msgstr ""
+msgstr "Zielony"
 
 msgid "Fade"
 msgstr ""
@@ -1069,10 +1069,10 @@ msgid "Gain"
 msgstr ""
 
 msgid "Loss"
-msgstr ""
+msgstr "Strata"
 
 msgid "Beta"
-msgstr ""
+msgstr "Beta"
 
 msgid "Ulcer Index"
 msgstr ""
@@ -1096,34 +1096,34 @@ msgid "Rainbow Moving Average"
 msgstr ""
 
 msgid "SMA1"
-msgstr ""
+msgstr "SMA1"
 
 msgid "SMA2"
-msgstr ""
+msgstr "SMA2"
 
 msgid "SMA3"
-msgstr ""
+msgstr "SMA3"
 
 msgid "SMA4"
-msgstr ""
+msgstr "SMA4"
 
 msgid "SMA5"
-msgstr ""
+msgstr "SMA5"
 
 msgid "SMA6"
-msgstr ""
+msgstr "SMA6"
 
 msgid "SMA7"
-msgstr ""
+msgstr "SMA7"
 
 msgid "SMA8"
-msgstr ""
+msgstr "SMA8"
 
 msgid "SMA9"
-msgstr ""
+msgstr "SMA9"
 
 msgid "SMA10"
-msgstr ""
+msgstr "SMA10"
 
 msgid "Rainbow Oscillator"
 msgstr ""
@@ -1204,7 +1204,7 @@ msgid "Ghost"
 msgstr ""
 
 msgid "Levels"
-msgstr ""
+msgstr "Poziomy"
 
 msgid "Supertrend"
 msgstr ""
