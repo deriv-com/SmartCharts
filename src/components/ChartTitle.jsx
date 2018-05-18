@@ -18,7 +18,7 @@ const ChartTitle = ({
     AnimatedPrice,
     onCloseMenu
 }) => {
-    if (!currentSymbol) return null;
+    if (!currentSymbol) {return null;}
 
     const SymbolIcon = ItemIconMap[currentSymbol.symbol] || SymbolPlaceholderIcon;
     return (

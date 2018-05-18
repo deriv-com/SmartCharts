@@ -70,7 +70,7 @@ class Chart extends Component {
             let className = '';
             className += isMobile ? 'smartcharts-mobile' : '';
             className += (typeof theme === 'string' ) ? ` smartcharts-${theme}`
-                        : ` smartcharts-${ (setting && setting.theme) ? setting.theme : 'light'}`;
+                : ` smartcharts-${(setting && setting.theme) ? setting.theme : 'light'}`;
             return className;
         };
 

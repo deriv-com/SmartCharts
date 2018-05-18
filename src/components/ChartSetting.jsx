@@ -43,10 +43,10 @@ const ChartSetting = ({
                             <Switch
                                 value={(theme == 'dark')}
                                 onChange={setTheme}
-                                />
+                            />
                         </div>
                     </div>
-                    <div className="ciq-list-item ciq-list-item-lng" 
+                    <div className="ciq-list-item ciq-list-item-lng"
                         onClick={ () => setView('language') }>
                         <span className="ciq-icon-text">{t.translate('Language')}</span>
                         <div className="ciq-action">
@@ -72,7 +72,7 @@ const ChartSetting = ({
                             className={`ciq-list-item ${(selectedLanguage.key == language.key) ? 'selected' : ''}`}
                             key={index}
                             onClick={()=> setLanguage(language) }
-                            >
+                        >
                             {language.icon}
                             <span className="ciq-icon-text">{language.name}</span>
                         </div>;

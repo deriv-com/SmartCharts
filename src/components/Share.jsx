@@ -44,7 +44,7 @@ const Share = ({
                         {shortUrlFailed ? <p>{t.translate('Failed to generate link')}</p> : <div
                             className='download-btn'
                             onClick={refereshShareLink}
-                            >
+                        >
                             {t.translate('Retry')}
                         </div>}
                     </div>
