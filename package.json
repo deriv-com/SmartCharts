@@ -14,11 +14,11 @@
     "binary.com"
   ],
   "scripts": {
-    "build": "rimraf dist && cross-env webpack --mode=production --optimize-minimize --progress",
+    "build": "rimraf dist && webpack --mode=production --optimize-minimize --progress",
     "build:app": "cross-env BUILD_MODE='app' yarn build",
     "build-travis": "yarn build:app && node scripts/update-hashes.js",
     "analyze": "cross-env ANALYZE_BUNDLE=true yarn build",
-    "watch": "webpack --progress --watch",
+    "watch": "webpack --mode=development --progress --watch",
     "test": "jest",
     "start": "rimraf dist && cross-env BUILD_MODE='app' webpack-dev-server --mode=development --open  --hot --inline",
     "gh-pages": "gh-pages --dist '.' --src '{index.html,dist/**,CNAME}'",
