@@ -784,7 +784,7 @@ html, body {
 }
 .stx_yaxis, .stx_xaxis, .stx_xaxis_dark {
     @include themify($themes) {
-        color: themed('chartGrid');
+        color: themed('chartText');
     }
     font-size: 10px;
     font-family: Roboto;
