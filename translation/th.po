@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Thai\n"
 "Language: th_TH\n"
-"PO-Revision-Date: 2018-05-18 01:15-0400\n"
+"PO-Revision-Date: 2018-05-18 01:30-0400\n"
 
 msgid "CLOSED"
 msgstr "ปิด"
@@ -193,10 +193,10 @@ msgid "Callout"
 msgstr ""
 
 msgid "Channel"
-msgstr ""
+msgstr "ช่อง"
 
 msgid "Continuous"
-msgstr ""
+msgstr "ต่อเนื่อง"
 
 msgid "Crossline"
 msgstr ""
@@ -340,7 +340,7 @@ msgid "Smooth"
 msgstr ""
 
 msgid "Fast"
-msgstr ""
+msgstr "เร็ว"
 
 msgid "Slow"
 msgstr "ช้า"
@@ -583,7 +583,7 @@ msgid "Shading"
 msgstr ""
 
 msgid "Histogram"
-msgstr ""
+msgstr "ฮิสโตแกรม"
 
 msgid "+DI"
 msgstr "+DI"
@@ -595,10 +595,10 @@ msgid "ADX"
 msgstr "ADX"
 
 msgid "Positive Bar"
-msgstr ""
+msgstr "บาร์เชิงบวก"
 
 msgid "Negative Bar"
-msgstr ""
+msgstr "แท่งด้านลบ"
 
 msgid "High Low Bands"
 msgstr ""
@@ -712,10 +712,10 @@ msgid "Donchian Low"
 msgstr ""
 
 msgid "Highest High Value"
-msgstr ""
+msgstr "ค่าสูงสุด"
 
 msgid "Lowest Low Value"
-msgstr ""
+msgstr "ค่าต่ำสุด"
 
 msgid "Mass Index"
 msgstr "ดัชนีมวล"
@@ -739,7 +739,7 @@ msgid "Parabolic SAR"
 msgstr ""
 
 msgid "Minimum AF"
-msgstr ""
+msgstr "ค่าต่ำสุด AF"
 
 msgid "Maximum AF"
 msgstr ""
