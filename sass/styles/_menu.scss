@@ -21,7 +21,7 @@
 					border-radius: 4px;
 					@include themify($themes) {
 						box-shadow: inset 0 0 0 1px themed('activeColor');
-						background: themed('controlBgActive');
+						background: themed('defaultBgActive');
 					}
 				}
 				@include svg-icon-color('activeColor');
@@ -40,20 +40,9 @@
 		&:hover{
 			> .ic-icon,
 			> .cq-toggle {
-				@include themify($themes) {color: themed('controlTextActive');}
-				@include svg-icon-color('activeColor');
 				svg {
 					@include border-radius(4px);
-					@include themify($themes) {
-						box-shadow: inset 0 0 0 1px themed('activeColor');
-						background: themed('controlBgActive');
-					}
-				}
-				.ic-subtitle{
-					font-weight: 500;
-					@include themify($themes) {
-						color: themed('controlTextActive');
-					}
+					@include themify($themes) {background: themed('defaultBgActive');}
 				}
 			}
 		}
@@ -67,7 +56,7 @@
 					border-radius: 4px;
 					@include themify($themes) {
 						box-shadow: inset 0 0 0 1px themed('activeColor');
-						background: themed('controlBgActive');
+						background: themed('defaultBgActive');
 					}
 				}
 				.ic-subtitle{
