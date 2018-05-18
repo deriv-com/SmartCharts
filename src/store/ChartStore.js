@@ -122,11 +122,6 @@ class ChartStore {
                 currentPriceLine: true,
             },
             chart: {
-                xAxis: {
-                    futureTicksInterval: 1/60,
-                    timeUnit: CIQ.SECOND,
-                    timeUnitMultiplier: 1,
-                },
                 yAxis: {
                     // Put some top margin so chart doesn't get blocked by chart title
                     initialMarginTop: 125,
