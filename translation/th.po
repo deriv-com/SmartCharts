@@ -10,184 +10,184 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Thai\n"
 "Language: th_TH\n"
-"PO-Revision-Date: 2018-04-22 23:10-0400\n"
+"PO-Revision-Date: 2018-05-18 01:15-0400\n"
 
 msgid "CLOSED"
-msgstr ""
+msgstr "ปิด"
 
 msgid "Close"
-msgstr ""
+msgstr "ปิด"
 
 msgid "Favorites"
-msgstr ""
+msgstr "รายการโปรด"
 
 msgid "There are no favorites yet."
-msgstr ""
+msgstr "ยังไม่มีรายการโปรด"
 
 msgid "Chart data is not available for this symbol."
-msgstr ""
+msgstr "ไม่มีข้อมูลแผนภูมิสำหรับสัญลักษณ์นี้"
 
 msgid "PRICE"
-msgstr ""
+msgstr "ราคา"
 
 msgid "OPEN"
-msgstr ""
+msgstr "เปิด"
 
 msgid "CLOSE"
-msgstr ""
+msgstr "ปิด"
 
 msgid "HIGH"
-msgstr ""
+msgstr "สูง"
 
 msgid "LOW"
-msgstr ""
+msgstr "ต่ำ"
 
 msgid "Chart types"
-msgstr ""
+msgstr "ชนิดแผนภูมิ"
 
 msgid "Toggle Asset Information"
-msgstr ""
+msgstr "สลับข้อมูลสินทรัพย์"
 
 msgid "Studies"
-msgstr ""
+msgstr "การศึกษา"
 
 msgid "Comparison"
-msgstr ""
+msgstr "การเปรียบเทียบ"
 
 msgid "Templates"
-msgstr ""
+msgstr "แม่แบบ"
 
 msgid "Template name"
-msgstr ""
+msgstr "ชื่อแม่แบบ"
 
 msgid "There is no template added by you."
-msgstr ""
+msgstr "ท่านยังไม่ได้เพิ่มแม่แบบ"
 
 msgid "Click + icon to add one."
-msgstr ""
+msgstr "คลิกปุ่ม + เพื่อเพิ่ม"
 
 msgid "Crosshair"
-msgstr ""
+msgstr "Crosshair"
 
 msgid "Time period"
-msgstr ""
+msgstr "ช่วงเวลา"
 
 msgid "Tick"
-msgstr ""
+msgstr "ช่วงห่างของราคา"
 
 msgid "Minute"
-msgstr ""
+msgstr "นาที"
 
 msgid "Hour"
-msgstr ""
+msgstr "ชั่วโมง"
 
 msgid "Day"
-msgstr ""
+msgstr "วัน"
 
 msgid "Zoom out"
-msgstr ""
+msgstr "ขยายออก"
 
 msgid "Zoom in"
-msgstr ""
+msgstr "ย่อลง"
 
 msgid "Draw tools"
-msgstr ""
+msgstr "เครื่องมือวาดภาพ"
 
 msgid "Clear All"
-msgstr ""
+msgstr "ล้างทั้งหมด"
 
 msgid "Measure"
-msgstr ""
+msgstr "วัด"
 
 msgid "Settings"
-msgstr ""
+msgstr "การตั้งค่า"
 
 msgid "Position"
-msgstr ""
+msgstr "ตำแหน่ง"
 
 msgid "Theme"
-msgstr ""
+msgstr "ธีม"
 
 msgid "Language"
-msgstr ""
+msgstr "ภาษา"
 
 msgid "Share"
-msgstr ""
+msgstr "หุ้น"
 
 msgid "Share / Download Chart"
-msgstr ""
+msgstr "แบ่งปัน/ดาวน์โหลดแผนภูมิ"
 
 msgid "Share link"
-msgstr ""
+msgstr "แบ่งปันลิงค์"
 
 msgid "Download chart"
-msgstr ""
+msgstr "ดาวน์โหลดแผนภูมิ"
 
 msgid "RESET"
-msgstr ""
+msgstr "ตั้งค่าใหม่"
 
 msgid "DONE"
-msgstr ""
+msgstr "เสร็จสิ้น"
 
 msgid "right-click to delete"
-msgstr ""
+msgstr "คลิกขวาเพื่อลบ"
 
 msgid "right-click to manage"
-msgstr ""
+msgstr "คลิกขวาเพื่อจัดการ"
 
 msgid "[symbol] market is presently closed."
-msgstr ""
+msgstr "[symbol] ตลาดปิดขณะนี้"
 
 msgid "Streaming for [symbol] is not available due to license restrictions"
-msgstr ""
+msgstr "การสตรีมสำหรับ [symbol] ไม่พร้อมใช้งานเนื่องจากข้อจำกัดสิทธิ์การใช้งาน"
 
 msgid "Line"
-msgstr ""
+msgstr "เส้น"
 
 msgid "Dot"
-msgstr ""
+msgstr "จุด"
 
 msgid "Colored Dot"
-msgstr ""
+msgstr "จุดสี"
 
 msgid "Spline"
-msgstr ""
+msgstr "เส้นโค้ง"
 
 msgid "Baseline"
-msgstr ""
+msgstr "เส้นฐาน"
 
 msgid "Candle"
-msgstr ""
+msgstr "เทียน"
 
 msgid "OHLC"
-msgstr ""
+msgstr "OHLC"
 
 msgid "Hollow Candle"
-msgstr ""
+msgstr "เทียนกลวง"
 
 msgid "\"Mass Index\" or \"Doji Star\""
-msgstr ""
+msgstr "\"ดัชนีมวล\" หรือ \"Doji Star\""
 
 msgid "Indicators"
-msgstr ""
+msgstr "ตัวชี้วัด"
 
 msgid "Active"
-msgstr ""
+msgstr "ใช้งานอยู่"
 
 msgid "There are no active indicators yet."
-msgstr ""
+msgstr "ยังไม่มีตัวชี้วัดที่ใช้งาน"
 
 msgid "\"AUD/JPY\" or \"Apple\""
-msgstr ""
+msgstr "\"AUD/JPY\" หรือ \"Apple\""
 
 msgid "There are no active comparisons yet."
-msgstr ""
+msgstr "ยังไม่มีตัวเปรียบเทียบที่ใช้งาน"
 
 msgid "Annotation"
-msgstr ""
+msgstr "คำอธิบายประกอบ"
 
 msgid "Average Line"
-msgstr ""
+msgstr "เส้นค่าเฉลี่ย"
 
 msgid "Callout"
 msgstr ""
@@ -202,7 +202,7 @@ msgid "Crossline"
 msgstr ""
 
 msgid "Doodle"
-msgstr ""
+msgstr "Doodle"
 
 msgid "Ellipse"
 msgstr ""
@@ -226,7 +226,7 @@ msgid "Gartley"
 msgstr ""
 
 msgid "Horizontal"
-msgstr ""
+msgstr "แนวนอน"
 
 msgid "Pitchfork"
 msgstr ""
@@ -238,16 +238,16 @@ msgid "Ray"
 msgstr ""
 
 msgid "Rectangle"
-msgstr ""
+msgstr "สี่เหลี่ยมผืนผ้า"
 
 msgid "Regression Line"
-msgstr ""
+msgstr "เส้นถดถอย"
 
 msgid "Segment"
-msgstr ""
+msgstr "กลุ่ม"
 
 msgid "Shape - Arrow"
-msgstr ""
+msgstr "รูปร่าง - ลูกศร"
 
 msgid "Shape - Check"
 msgstr ""
@@ -259,10 +259,10 @@ msgid "Shape - Focus"
 msgstr ""
 
 msgid "Shape - Heart"
-msgstr ""
+msgstr "รูปร่าง - หัวใจ"
 
 msgid "Shape - Star"
-msgstr ""
+msgstr "รูปร่าง - ดาว"
 
 msgid "Speed Resistance Arc"
 msgstr ""
@@ -271,49 +271,49 @@ msgid "Speed Resistance Line"
 msgstr ""
 
 msgid "Time Cycle"
-msgstr ""
+msgstr "รอบเวลา"
 
 msgid "Tirone Levels"
 msgstr ""
 
 msgid "Vertical"
-msgstr ""
+msgstr "แนวตั้ง"
 
 msgid "RSI"
-msgstr ""
+msgstr "RSI"
 
 msgid "Period"
-msgstr ""
+msgstr "ระยะเวลา "
 
 msgid "Show Zones"
-msgstr ""
+msgstr "แสดงพื้นที่"
 
 msgid "OverBought"
-msgstr ""
+msgstr "ซื้อมากเกินไป"
 
 msgid "OverSold"
-msgstr ""
+msgstr "ขายมากเกินไป"
 
 msgid "Moving Average"
-msgstr ""
+msgstr "ค่าเฉลี่ยเคลื่อนที่"
 
 msgid "Field"
 msgstr ""
 
 msgid "Type"
-msgstr ""
+msgstr "ประเภท"
 
 msgid "Offset"
-msgstr ""
+msgstr "ออฟเซ็ท"
 
 msgid "Underlay"
 msgstr ""
 
 msgid "MA"
-msgstr ""
+msgstr "MA"
 
 msgid "MACD"
-msgstr ""
+msgstr "MACD"
 
 msgid "Fast MA Period"
 msgstr ""
@@ -325,7 +325,7 @@ msgid "Signal Period"
 msgstr ""
 
 msgid "Signal"
-msgstr ""
+msgstr "สัญญาณ"
 
 msgid "Increasing Bar"
 msgstr ""
@@ -343,94 +343,94 @@ msgid "Fast"
 msgstr ""
 
 msgid "Slow"
-msgstr ""
+msgstr "ช้า"
 
 msgid "Aroon"
-msgstr ""
+msgstr "Aroon"
 
 msgid "Aroon Up"
-msgstr ""
+msgstr "Aroon ขึ้น"
 
 msgid "Aroon Down"
-msgstr ""
+msgstr "Aroon ลง"
 
 msgid "Aroon Oscillator"
-msgstr ""
+msgstr "Aroon Oscillator"
 
 msgid "Linear Reg R2"
-msgstr ""
+msgstr "Linear Reg R2"
 
 msgid "RSquared"
-msgstr ""
+msgstr "RSquared"
 
 msgid "Linear Reg Forecast"
-msgstr ""
+msgstr "การพยากรณ์ Linear Reg"
 
 msgid "Forecast"
-msgstr ""
+msgstr "การคาดการณ์"
 
 msgid "Linear Reg Intercept"
-msgstr ""
+msgstr "การตัดกันของ Linear Reg"
 
 msgid "Intercept"
-msgstr ""
+msgstr "การตัดกัน"
 
 msgid "Time Series Forecast"
-msgstr ""
+msgstr "การพยากรณ์อนุกรมเวลา"
 
 msgid "Vertical Horizontal Filter"
-msgstr ""
+msgstr "Vertical Horizontal Filter"
 
 msgid "Result"
-msgstr ""
+msgstr "ผลลัพธ์"
 
 msgid "TRIX"
-msgstr ""
+msgstr "TRIX"
 
 msgid "Standard Deviation"
-msgstr ""
+msgstr "ส่วนเบี่ยงเบนมาตรฐาน"
 
 msgid "Standard Deviations"
-msgstr ""
+msgstr "ส่วนเบี่ยงเบนมาตรฐาน"
 
 msgid "Moving Average Type"
-msgstr ""
+msgstr "ประเภทค่าเฉลี่ยเคลื่อนที่"
 
 msgid "Trade Volume Index"
-msgstr ""
+msgstr "ดัชนีปริมาณการค้า"
 
 msgid "Min Tick Value"
-msgstr ""
+msgstr "ค่าช่วงราคาต่ำสุด"
 
 msgid "Swing Index"
-msgstr ""
+msgstr "ดัชนีแกว่ง"
 
 msgid "Limit Move Value"
 msgstr ""
 
 msgid "Accumulative Swing Index"
-msgstr ""
+msgstr "ดัชนีแกว่งสะสม"
 
 msgid "Price Rate of Change"
-msgstr ""
+msgstr "อัตราราคาของการเปลี่ยนแปลง"
 
 msgid "Volume Rate of Change"
 msgstr ""
 
 msgid "Momentum Indicator"
-msgstr ""
+msgstr "ตัวชี้วัดโมเมนตัม"
 
 msgid "Price Volume Trend"
-msgstr ""
+msgstr "แนวโน้มปริมาณราคา"
 
 msgid "Positive Volume Index"
-msgstr ""
+msgstr "ดัชนีปริมาณค่าบวก"
 
 msgid "Index"
-msgstr ""
+msgstr "ดัชนี"
 
 msgid "Negative Volume Index"
-msgstr ""
+msgstr "ดัชนีปริมาณค่าลบ"
 
 msgid "On Balance Volume"
 msgstr ""
@@ -439,7 +439,7 @@ msgid "Stochastic Momentum Index"
 msgstr ""
 
 msgid "%K Periods"
-msgstr ""
+msgstr "ระยะเวลา %K"
 
 msgid "%K Smoothing Periods"
 msgstr ""
@@ -448,22 +448,22 @@ msgid "%K Double Smoothing Periods"
 msgstr ""
 
 msgid "%D Periods"
-msgstr ""
+msgstr "ระยะเวลา %D"
 
 msgid "%D Moving Average Type"
-msgstr ""
+msgstr "ประเภทค่าเฉลี่ยเคลื่อนที่%D"
 
 msgid "%K"
-msgstr ""
+msgstr "%K"
 
 msgid "%D"
-msgstr ""
+msgstr "%D"
 
 msgid "Historical Volatility"
-msgstr ""
+msgstr "ความผันผวนในอดีต"
 
 msgid "Days Per Year"
-msgstr ""
+msgstr "จำนวนวันต่อปี"
 
 msgid "Pretty Good Oscillator"
 msgstr ""
@@ -472,25 +472,25 @@ msgid "Ultimate Oscillator"
 msgstr ""
 
 msgid "Cycle 1"
-msgstr ""
+msgstr "รอบ 1"
 
 msgid "Cycle 2"
-msgstr ""
+msgstr "รอบ 2"
 
 msgid "Cycle 3"
-msgstr ""
+msgstr "รอบ 3"
 
 msgid "Volume Oscillator"
 msgstr ""
 
 msgid "Short Cycle"
-msgstr ""
+msgstr "รอบสั้น"
 
 msgid "Long Cycle"
-msgstr ""
+msgstr "รอบยาว"
 
 msgid "Points Or Percent"
-msgstr ""
+msgstr "คะแนนหรือร้อยละ"
 
 msgid "Twiggs Money Flow"
 msgstr ""
@@ -523,13 +523,13 @@ msgid "Average True Range"
 msgstr ""
 
 msgid "ATR"
-msgstr ""
+msgstr "ATR"
 
 msgid "Ehler Fisher Transform"
 msgstr ""
 
 msgid "EF"
-msgstr ""
+msgstr "EF"
 
 msgid "EF Trigger"
 msgstr ""
@@ -559,7 +559,7 @@ msgid "Intraday Momentum Index"
 msgstr ""
 
 msgid "RAVI"
-msgstr ""
+msgstr "RAVI"
 
 msgid "Random Walk Index"
 msgstr ""
@@ -571,7 +571,7 @@ msgid "Random Walk Low"
 msgstr ""
 
 msgid "ADX/DMS"
-msgstr ""
+msgstr "ADX/DMS"
 
 msgid "Smoothing Period"
 msgstr ""
@@ -586,13 +586,13 @@ msgid "Histogram"
 msgstr ""
 
 msgid "+DI"
-msgstr ""
+msgstr "+DI"
 
 msgid "-DI"
-msgstr ""
+msgstr "-DI"
 
 msgid "ADX"
-msgstr ""
+msgstr "ADX"
 
 msgid "Positive Bar"
 msgstr ""
@@ -622,10 +622,10 @@ msgid "High Minus Low"
 msgstr ""
 
 msgid "Median Price"
-msgstr ""
+msgstr "ราคากลาง"
 
 msgid "Overlay"
-msgstr ""
+msgstr "ซ้อนทับ"
 
 msgid "Moving Average Envelope"
 msgstr ""
@@ -697,10 +697,10 @@ msgid "Donchian Channel"
 msgstr ""
 
 msgid "High Period"
-msgstr ""
+msgstr "ระยะเวลาสูง"
 
 msgid "Low Period"
-msgstr ""
+msgstr "ระยะเวลาต่ำ"
 
 msgid "Donchian High"
 msgstr ""
@@ -718,7 +718,7 @@ msgid "Lowest Low Value"
 msgstr ""
 
 msgid "Mass Index"
-msgstr ""
+msgstr "ดัชนีมวล"
 
 msgid "Bulge Threshold"
 msgstr ""
@@ -826,19 +826,19 @@ msgid "Display 3 Standard Deviation (3σ)"
 msgstr ""
 
 msgid "Average"
-msgstr ""
+msgstr "ค่าเฉลี่ย"
 
 msgid "1 Standard Deviation (1σ)"
-msgstr ""
+msgstr "1 ส่วนเบี่ยงเบนมาตรฐาน (1σ)"
 
 msgid "2 Standard Deviation (2σ)"
-msgstr ""
+msgstr "2 ส่วนเบี่ยงเบนมาตรฐาน (2σ)"
 
 msgid "3 Standard Deviation (3σ)"
-msgstr ""
+msgstr "3 ส่วนเบี่ยงเบนมาตรฐาน (3σ)"
 
 msgid "Correlation Coefficient"
-msgstr ""
+msgstr "สัมประสิทธิ์สหสัมพันธ์"
 
 msgid "Price Momentum Oscillator"
 msgstr ""
@@ -847,16 +847,16 @@ msgid "Double Smoothing Period"
 msgstr ""
 
 msgid "PMO"
-msgstr ""
+msgstr "PMO"
 
 msgid "PMOSignal"
-msgstr ""
+msgstr "PMOSignal"
 
 msgid "Relative Volatility"
-msgstr ""
+msgstr "ความผันผวนเทียบเคียง"
 
 msgid "STD Period"
-msgstr ""
+msgstr "ระยะเวลา STD"
 
 msgid "Rel Vol"
 msgstr ""
@@ -901,7 +901,7 @@ msgid "MA Period"
 msgstr ""
 
 msgid "Multiplier"
-msgstr ""
+msgstr "ตัวคูณ"
 
 msgid "STARC Bands Top"
 msgstr ""
@@ -928,10 +928,10 @@ msgid "Sell Stops"
 msgstr ""
 
 msgid "Bollinger %b"
-msgstr ""
+msgstr "Bollinger %b"
 
 msgid "%b"
-msgstr ""
+msgstr "%b"
 
 msgid "Bollinger Bandwidth"
 msgstr ""
@@ -961,7 +961,7 @@ msgid "Bearish"
 msgstr ""
 
 msgid "Neutral"
-msgstr ""
+msgstr "เป็นกลาง"
 
 msgid "Pivot Points"
 msgstr ""
@@ -988,7 +988,7 @@ msgid "Support 3"
 msgstr ""
 
 msgid "VWAP"
-msgstr ""
+msgstr "VWAP"
 
 msgid "Alligator"
 msgstr ""
@@ -1066,10 +1066,10 @@ msgid "Performance Index"
 msgstr ""
 
 msgid "Gain"
-msgstr ""
+msgstr "กำไร"
 
 msgid "Loss"
-msgstr ""
+msgstr "ขาดทุน"
 
 msgid "Beta"
 msgstr ""
@@ -1084,7 +1084,7 @@ msgid "Trend Intensity Index"
 msgstr ""
 
 msgid "TII"
-msgstr ""
+msgstr "TII"
 
 msgid "Choppiness Index"
 msgstr ""
@@ -1096,34 +1096,34 @@ msgid "Rainbow Moving Average"
 msgstr ""
 
 msgid "SMA1"
-msgstr ""
+msgstr "SMA1"
 
 msgid "SMA2"
-msgstr ""
+msgstr "SMA2"
 
 msgid "SMA3"
-msgstr ""
+msgstr "SMA3"
 
 msgid "SMA4"
-msgstr ""
+msgstr "SMA4"
 
 msgid "SMA5"
-msgstr ""
+msgstr "SMA5"
 
 msgid "SMA6"
-msgstr ""
+msgstr "SMA6"
 
 msgid "SMA7"
-msgstr ""
+msgstr "SMA7"
 
 msgid "SMA8"
-msgstr ""
+msgstr "SMA8"
 
 msgid "SMA9"
-msgstr ""
+msgstr "SMA9"
 
 msgid "SMA10"
-msgstr ""
+msgstr "SMA10"
 
 msgid "Rainbow Oscillator"
 msgstr ""
@@ -1159,7 +1159,7 @@ msgid "Heaviest SMA Period"
 msgstr ""
 
 msgid "KST"
-msgstr ""
+msgstr "KST"
 
 msgid "KSTSignal"
 msgstr ""
@@ -1186,7 +1186,7 @@ msgid "Stop Levels"
 msgstr ""
 
 msgid "Level Offset"
-msgstr ""
+msgstr "ระดับออฟเซ็ต"
 
 msgid "Price Minimum"
 msgstr ""
@@ -1204,16 +1204,16 @@ msgid "Ghost"
 msgstr ""
 
 msgid "Levels"
-msgstr ""
+msgstr "ระดับต่างๆ"
 
 msgid "Supertrend"
 msgstr ""
 
 msgid "Uptrend"
-msgstr ""
+msgstr "ขาขึ้น"
 
 msgid "Downtrend"
-msgstr ""
+msgstr "ขาลง"
 
 msgid "Volume Profile"
 msgstr ""
@@ -1225,10 +1225,10 @@ msgid "Vortex Indicator"
 msgstr ""
 
 msgid "+VI"
-msgstr ""
+msgstr "+VI"
 
 msgid "-VI"
-msgstr ""
+msgstr "-VI"
 
 msgid "ZigZag"
 msgstr ""
@@ -1246,8 +1246,8 @@ msgid "Shinohara Intensity Ratio"
 msgstr ""
 
 msgid "Strong Ratio"
-msgstr ""
+msgstr "อัตราส่วนความแข็งแรง"
 
 msgid "Weak Ratio"
-msgstr ""
+msgstr "อัตราส่วนความอ่อนแอ"
 
