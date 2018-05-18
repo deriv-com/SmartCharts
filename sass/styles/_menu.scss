@@ -57,9 +57,11 @@
 				}
 			}
 		}
+		> .ic-icon{
+			padding: .35em .5em;
+		}
 		> .ic-icon,
 		> .cq-toggle {
-			padding: .35em .5em;
 			&.active{
 				svg {
 					border-radius: 4px;
