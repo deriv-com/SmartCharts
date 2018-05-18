@@ -53,6 +53,7 @@ class ChartStore {
         stx.importLayout(layoutData, {
             managePeriodicity: true,
             cb: () => {
+                if (layoutData.tension) {stx.chart.tension = layoutData.tension;}
                 this.restoreDrawings(stx, stx.chart.symbol);
                 if (this.loader) {this.loader.hide();}
             },
