@@ -27,7 +27,7 @@ const config = {
                     MiniCssExtractPlugin.loader,
                     {
                         loader: 'css-loader',
-                        options: { sourceMap: true, minimize: true }
+                        options: { sourceMap: true }
                     }, {
                         loader: 'sass-loader',
                         options: {
@@ -100,7 +100,6 @@ const config = {
             commonjs2: 'mobx-react',
             root: 'mobxReact',
         },
-        'perfect-scrollbar': 'PerfectScrollbar',
         'babel-polyfill': 'babel-polyfill',
     },
 };

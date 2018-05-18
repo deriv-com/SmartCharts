@@ -374,24 +374,6 @@ html, body {
     color: #fff;
 }
 
-/* -------- Axis Styles -------- */
-
-.stx_xaxis { /* x-axis date styles */
-    font-size: 12px;
-    font-family: Helvetica;
-    color: #666;
-}
-
-.stx_xaxis_dark { /* x-axis date divider styles */
-    color: #444444;
-}
-
-.stx_yaxis { /* y-axis price styles */
-    font-size: 10px;
-    font-family: Helvetica;
-    color: #333;
-}
-
 /* -------- Crosshairs lines and labels-------- */
 
 .stx-float-date { /* Crosshair Floating x-axis date label*/
@@ -808,23 +790,6 @@ html, body {
     font-family: Roboto;
 }
 
-
-
-
-
-// .stx-float-date { background-color: $DEFAULT-main; color:mix(#fff, $DEFAULT-text, 30%);}
-// .stx-float-price { background-color: $DEFAULT-main; color:mix(#fff, $DEFAULT-text, 30%);}
-
-// .stx_xaxis {color:mix(#fff, $DEFAULT-bg, 75%);}
-// .stx_xaxis_dark {color: $DEFAULT-text;}
-// .stx_yaxis {color:mix(#fff, $DEFAULT-bg, 75%);}
-
-// .stx_crosshair {background-color:rgba(255,255,255,.4);}
-// .stx_crosshair_drawing {background-color:rgba(255,255,255,.9);}
-
-// .stx_panel_border{color:#666;}
-// .stx_panel_drag {color:#ccc;}
-
 .stx_grid {
     @include themify($themes) {
         color: themed('chartGrid');
@@ -1074,11 +1039,6 @@ cq-language-name {
 
 .ciq-menu > span.icons-on {
     margin-top: -3px;
-}
-
-.sidenav cq-tooltip {
-    left: auto;
-    right:10px;
 }
 
 .break-sm .sidenav {

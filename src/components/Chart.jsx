@@ -49,7 +49,7 @@ class Chart extends Component {
             StudySettingsDialog,
             children,
             lang,
-            isMobile,
+            isMobile = false,
             theme,
             isChartAvailable,
             setting,
@@ -69,10 +69,10 @@ class Chart extends Component {
         const contextClassName = () => {
             let className = '';
             className += isMobile ? 'smartcharts-mobile' : '';
-            className += (typeof theme === 'string' ) ? ` smartcharts-${theme}` 
+            className += (typeof theme === 'string' ) ? ` smartcharts-${theme}`
                         : ` smartcharts-${ (setting && setting.theme) ? setting.theme : 'light'}`;
             return className;
-        }
+        };
 
         return (
             <cq-context ref={(root) => { this.root = root; }} class={contextClassName()}>
@@ -114,6 +114,6 @@ export default connect(
         DrawToolsSettingsDialog : drawTools.settingsDialog.connect(SettingsDialog),
         isChartAvailable: chart.isChartAvailable,
         chartPanelTop: chart.chartPanelTop,
-        setting: chartSetting
+        setting: chartSetting,
     })
 )(Chart);

@@ -45,18 +45,6 @@
         display: inline-block;
         @include box-sizing(border-box);
     }
-    .ciq-views  {
-        cq-item {
-            text-align: left;
-            padding: 0 10px;
-            cq-label {
-                width: 155px;
-            }
-        }
-        cq-separator {
-            width: 200px;
-        }
-    }
     .cq-toggle {
         padding: 0.35em 2.6em;
         color: #575757;
@@ -157,7 +145,7 @@
              padding: 0 !important;
         }
         .ic-priod {
-            padding : 6px 0px !important; 
+            padding : 6px 0px !important;
         }
     }
 }
