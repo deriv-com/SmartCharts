@@ -108,22 +108,16 @@
         }
     }
     .cq-menu-dropdown {
-        // margin-top: -35px;
         box-shadow: 0 0 0.625em 0.025em rgba(0, 0, 0, 0.14);
         bottom: auto !important;
         left: 5px !important;
-        // transform: none !important;
-        // visibility: hidden;
         bottom: auto !important;
-        @include dialog-transition();
         margin-top:5px;
-        // visibility: visible;
-
         z-index: -3;
         opacity: 0;
         pointer-events: none;
         transform: translateX(0) translateY( -50% );
-
+        @include dialog-transition();
         &.cq-menu-dropdown-enter-done{
             opacity: 1;
             pointer-events: initial;
