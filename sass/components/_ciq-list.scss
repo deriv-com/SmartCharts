@@ -21,11 +21,16 @@
 		&:first-child {
 			@include themify($themes) {border-top: themed('listBorder');}
 		}
-		&.selected{
+		&.active {
 			font-weight: bold;
 			@include themify($themes) {
 				color: themed('defaultTextActive');
 				background-color: themed('listBgActive');
+			}
+		}
+		&.selected {
+			@include themify($themes) {
+				background-color: themed('listBgSelected');
 			}
 		}
 		&.disabled {
