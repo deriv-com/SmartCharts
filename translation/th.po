@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Thai\n"
 "Language: th_TH\n"
-"PO-Revision-Date: 2018-05-18 12:21-0400\n"
+"PO-Revision-Date: 2018-05-18 12:31-0400\n"
 
 msgid "Favorites"
 msgstr "รายการโปรด"
@@ -262,7 +262,7 @@ msgid "Baseline"
 msgstr "เส้นฐาน"
 
 msgid "Candle"
-msgstr "เทียน"
+msgstr "แท่งเทียน"
 
 msgid "OHLC"
 msgstr "OHLC"
@@ -451,7 +451,7 @@ msgid "%D Periods"
 msgstr "ระยะเวลา %D"
 
 msgid "%D Moving Average Type"
-msgstr "ประเภทค่าเฉลี่ยเคลื่อนที่%D"
+msgstr "ประเภทค่าเฉลี่ยเคลื่อนที่ %D"
 
 msgid "%K"
 msgstr "%K"
@@ -541,7 +541,7 @@ msgid "QStick"
 msgstr "QStick"
 
 msgid "Coppock Curve"
-msgstr ""
+msgstr "Coppock Curve"
 
 msgid "Short RoC"
 msgstr "Short RoC"
@@ -580,7 +580,7 @@ msgid "Series"
 msgstr ""
 
 msgid "Shading"
-msgstr ""
+msgstr "แรเงา"
 
 msgid "Histogram"
 msgstr "ฮิสโตแกรม"
@@ -607,13 +607,13 @@ msgid "Shift Percentage"
 msgstr ""
 
 msgid "Channel Fill"
-msgstr ""
+msgstr "ช่องเติม"
 
 msgid "High Low Top"
 msgstr ""
 
 msgid "High Low Median"
-msgstr ""
+msgstr "ค่ามัธยฐานสูงต่ำ"
 
 msgid "High Low Bottom"
 msgstr ""
@@ -628,7 +628,7 @@ msgid "Overlay"
 msgstr "ซ้อนทับ"
 
 msgid "Moving Average Envelope"
-msgstr ""
+msgstr "Moving Average Envelope"
 
 msgid "Shift Type"
 msgstr ""
@@ -745,7 +745,7 @@ msgid "Maximum AF"
 msgstr "ค่าสูงสุด AF"
 
 msgid "Klinger Volume Oscillator"
-msgstr ""
+msgstr "Klinger Volume Oscillator"
 
 msgid "Signal Periods"
 msgstr "ช่วงสัญญาณ"
@@ -793,7 +793,7 @@ msgid "Accumulation/Distribution"
 msgstr ""
 
 msgid "Use Volume"
-msgstr ""
+msgstr "ใช้ข้อมูลปริมาณ"
 
 msgid "Volume Chart"
 msgstr "แผนภูมิแสดงปริมาณ"
@@ -1087,10 +1087,10 @@ msgid "TII"
 msgstr "TII"
 
 msgid "Choppiness Index"
-msgstr ""
+msgstr "ดัชนี Choppiness"
 
 msgid "Disparity Index"
-msgstr ""
+msgstr "ดัชนี Disparity"
 
 msgid "Rainbow Moving Average"
 msgstr "Rainbow Moving Average"
