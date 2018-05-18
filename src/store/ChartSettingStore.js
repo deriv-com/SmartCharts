@@ -76,6 +76,7 @@ export default class ChartSettingStore {
     @observable language = '';
     @observable position = '';
     @observable theme = '';
+    @observable scaleCountdownVisibility = false;
 
     restoreSetting() {
         const setting = createObjectFromLocalStorage('smartchart-setting');
@@ -127,6 +128,10 @@ export default class ChartSettingStore {
         this.theme = value ? 'dark' : 'light';
         this.mainStore.chart.stxx.clearStyles();
         this.saveSetting();
+    }
+
+    @action.bound showScaleCountdown(value){
+        this.scaleCountdownVisibility = value;
     }
 }
 
