@@ -68,6 +68,38 @@
             left: -10em;
         }
     }
+    .ciq-menu{    
+        cq-menu-dropdown,
+        .cq-menu-dropdown {
+            opacity: 0;
+            z-index: -3;
+            transform: translateX( -50% ) translateY( 100% );
+            left: 50%;
+            pointer-events: none;
+            @include transition( opacity .20s 0s);
+            @include dialog-transition();
+            &.cq-menu-dropdown-enter-done{
+                pointer-events: initial;
+                opacity: 1;
+                z-index: 3;
+                transform: translateX( -50% ) translateY( 0% );
+            }
+            &.cq-menu-dropdown-enter.cq-menu-dropdown-enter-active{
+                pointer-events: initial;
+                transform: translateX( -50% ) translateY( 0% );
+                opacity: 1;
+                z-index: -3;
+            }
+            &.cq-menu-dropdown-exit.cq-menu-dropdown-exit-active{
+                @include dialog-transition();
+                opacity: 0;
+                z-index: -3;
+            }
+            &.cq-menu-dropdown-exit-done{
+                transform: translateX( -50% ) translateY( 100% );
+            }
+        }
+    }
 }
 
 .cq-comparison-new > .cq-menu-dropdown {
