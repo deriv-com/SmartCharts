@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Thai\n"
 "Language: th_TH\n"
-"PO-Revision-Date: 2018-05-18 12:31-0400\n"
+"PO-Revision-Date: 2018-05-18 12:40-0400\n"
 
 msgid "Favorites"
 msgstr "รายการโปรด"
@@ -40,7 +40,7 @@ msgid "LOW"
 msgstr "ต่ำ"
 
 msgid "Share"
-msgstr "หุ้น"
+msgstr "แชร์"
 
 msgid "Share / Download Chart"
 msgstr "แบ่งปัน/ดาวน์โหลดแผนภูมิ"
@@ -100,13 +100,13 @@ msgid "There is no template added by you."
 msgstr "ท่านยังไม่ได้เพิ่มแม่แบบ"
 
 msgid "Click + icon to add one."
-msgstr "คลิกปุ่ม + เพื่อเพิ่ม"
+msgstr "คลิกปุ่ม + เพื่อเพิ่ม 1 รายการ"
 
 msgid "Comparison"
 msgstr "การเปรียบเทียบ"
 
 msgid "Indicators"
-msgstr "ตัวชี้วัด"
+msgstr "ดัชนี"
 
 msgid "Chart types"
 msgstr "ชนิดแผนภูมิ"
@@ -127,7 +127,7 @@ msgid "RESET"
 msgstr "ตั้งค่าใหม่"
 
 msgid "DONE"
-msgstr "เสร็จสิ้น"
+msgstr "แล้วเสร็จ"
 
 msgid "[symbol] market is presently closed."
 msgstr "[symbol] ตลาดปิดขณะนี้"
@@ -784,10 +784,10 @@ msgid "Weighted Close"
 msgstr ""
 
 msgid "Money Flow Index"
-msgstr ""
+msgstr "ดัชนี Money Flow "
 
 msgid "Williams %R"
-msgstr ""
+msgstr "Williams %R"
 
 msgid "Accumulation/Distribution"
 msgstr ""
@@ -1024,10 +1024,10 @@ msgid "Lips"
 msgstr "ริมฝีปาก"
 
 msgid "Gator Oscillator"
-msgstr ""
+msgstr "Gator Oscillator"
 
 msgid "Ichimoku Clouds"
-msgstr ""
+msgstr "Ichimoku Clouds"
 
 msgid "Conversion Line Period"
 msgstr ""
@@ -1042,7 +1042,7 @@ msgid "Lagging Span Period"
 msgstr ""
 
 msgid "Conversion Line"
-msgstr ""
+msgstr "เส้นแปลง"
 
 msgid "Base Line"
 msgstr ""
