@@ -10,13 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Italian\n"
 "Language: it_IT\n"
-"PO-Revision-Date: 2018-05-18 01:15-0400\n"
-
-msgid "CLOSED"
-msgstr ""
-
-msgid "Close"
-msgstr ""
+"PO-Revision-Date: 2018-05-18 06:21-0400\n"
 
 msgid "Favorites"
 msgstr ""
@@ -24,7 +18,10 @@ msgstr ""
 msgid "There are no favorites yet."
 msgstr ""
 
-msgid "Chart data is not available for this symbol."
+msgid "CLOSED"
+msgstr ""
+
+msgid "Close"
 msgstr ""
 
 msgid "PRICE"
@@ -42,35 +39,41 @@ msgstr ""
 msgid "LOW"
 msgstr ""
 
-msgid "Chart types"
+msgid "Share"
+msgstr "Condividi"
+
+msgid "Share / Download Chart"
 msgstr ""
 
-msgid "Toggle Asset Information"
+msgid "Share link"
 msgstr ""
 
-msgid "Studies"
-msgstr "Studi"
-
-msgid "Comparison"
+msgid "Failed to generate link"
 msgstr ""
 
-msgid "Templates"
+msgid "Retry"
 msgstr ""
 
-msgid "Template name"
+msgid "Download chart"
 msgstr ""
 
-msgid "There is no template added by you."
+msgid "Draw tools"
 msgstr ""
 
-msgid "Click + icon to add one."
+msgid "Clear All"
+msgstr "Cancella tutto"
+
+msgid "Measure"
+msgstr "Misura"
+
+msgid "Zoom out"
 msgstr ""
 
-msgid "Crosshair"
-msgstr "Mirino"
-
-msgid "Time period"
+msgid "Zoom in"
 msgstr ""
+
+msgid "Interval"
+msgstr "Intervallo"
 
 msgid "Tick"
 msgstr ""
@@ -84,43 +87,40 @@ msgstr ""
 msgid "Day"
 msgstr "Giorno"
 
-msgid "Zoom out"
+msgid "Crosshair"
+msgstr "Mirino"
+
+msgid "Templates"
 msgstr ""
 
-msgid "Zoom in"
+msgid "Template name"
 msgstr ""
 
-msgid "Draw tools"
+msgid "There is no template added by you."
 msgstr ""
 
-msgid "Clear All"
-msgstr "Cancella tutto"
+msgid "Click + icon to add one."
+msgstr ""
 
-msgid "Measure"
-msgstr "Misura"
+msgid "Comparison"
+msgstr ""
+
+msgid "Indicators"
+msgstr ""
+
+msgid "Chart types"
+msgstr ""
+
+msgid "Toggle Asset Information"
+msgstr ""
 
 msgid "Settings"
 msgstr ""
 
-msgid "Position"
-msgstr ""
-
-msgid "Theme"
+msgid "Dark Mode"
 msgstr ""
 
 msgid "Language"
-msgstr ""
-
-msgid "Share"
-msgstr "Condividi"
-
-msgid "Share / Download Chart"
-msgstr ""
-
-msgid "Share link"
-msgstr ""
-
-msgid "Download chart"
 msgstr ""
 
 msgid "RESET"
@@ -129,58 +129,13 @@ msgstr ""
 msgid "DONE"
 msgstr ""
 
-msgid "right-click to delete"
-msgstr "destro del mouse per cancellare"
-
-msgid "right-click to manage"
-msgstr "destro del mouse per gestire"
-
 msgid "[symbol] market is presently closed."
 msgstr ""
 
 msgid "Streaming for [symbol] is not available due to license restrictions"
 msgstr ""
 
-msgid "Line"
-msgstr "Linea"
-
-msgid "Dot"
-msgstr ""
-
-msgid "Colored Dot"
-msgstr ""
-
-msgid "Spline"
-msgstr ""
-
-msgid "Baseline"
-msgstr "Linea di base"
-
-msgid "Candle"
-msgstr "Candela"
-
-msgid "OHLC"
-msgstr ""
-
-msgid "Hollow Candle"
-msgstr "Candela Vuote"
-
-msgid "\"Mass Index\" or \"Doji Star\""
-msgstr ""
-
-msgid "Indicators"
-msgstr ""
-
-msgid "Active"
-msgstr ""
-
-msgid "There are no active indicators yet."
-msgstr ""
-
-msgid "\"AUD/JPY\" or \"Apple\""
-msgstr ""
-
-msgid "There are no active comparisons yet."
+msgid "Search..."
 msgstr ""
 
 msgid "Annotation"
@@ -227,6 +182,9 @@ msgstr "Gartley"
 
 msgid "Horizontal"
 msgstr "Orizzontale"
+
+msgid "Line"
+msgstr "Linea"
 
 msgid "Pitchfork"
 msgstr "Pitchfork"
@@ -278,6 +236,48 @@ msgstr "Livelli di Tirone"
 
 msgid "Vertical"
 msgstr "Verticale"
+
+msgid "Active"
+msgstr ""
+
+msgid "There are no active comparisons yet."
+msgstr ""
+
+msgid "\"Mass Index\" or \"Doji Star\""
+msgstr ""
+
+msgid "There are no active indicators yet."
+msgstr ""
+
+msgid "Dot"
+msgstr ""
+
+msgid "Colored Dot"
+msgstr ""
+
+msgid "Spline"
+msgstr ""
+
+msgid "Baseline"
+msgstr "Linea di base"
+
+msgid "Candle"
+msgstr "Candela"
+
+msgid "OHLC"
+msgstr ""
+
+msgid "Hollow Candle"
+msgstr "Candela Vuote"
+
+msgid "right-click to delete"
+msgstr "destro del mouse per cancellare"
+
+msgid "right-click to manage"
+msgstr "destro del mouse per gestire"
+
+msgid "Chart data is not available for this symbol."
+msgstr ""
 
 msgid "RSI"
 msgstr "RSI"
@@ -1166,9 +1166,6 @@ msgstr "Segnale KST"
 
 msgid "Pring's Special K"
 msgstr "Indicatore Special K di Pring"
-
-msgid "Interval"
-msgstr "Intervallo"
 
 msgid "Darvas Box"
 msgstr "Scatole di Darvas"

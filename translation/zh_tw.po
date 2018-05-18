@@ -10,13 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Chinese Traditional\n"
 "Language: zh_TW\n"
-"PO-Revision-Date: 2018-05-18 01:15-0400\n"
-
-msgid "CLOSED"
-msgstr "已關閉"
-
-msgid "Close"
-msgstr ""
+"PO-Revision-Date: 2018-05-18 06:21-0400\n"
 
 msgid "Favorites"
 msgstr "我的最愛"
@@ -24,8 +18,11 @@ msgstr "我的最愛"
 msgid "There are no favorites yet."
 msgstr "還沒有偏好。"
 
-msgid "Chart data is not available for this symbol."
-msgstr "此符號不可用於圖表資料。"
+msgid "CLOSED"
+msgstr "已關閉"
+
+msgid "Close"
+msgstr ""
 
 msgid "PRICE"
 msgstr "價格"
@@ -42,35 +39,41 @@ msgstr "高"
 msgid "LOW"
 msgstr "低"
 
-msgid "Chart types"
-msgstr "圖表類型"
+msgid "Share"
+msgstr "共享"
 
-msgid "Toggle Asset Information"
-msgstr "切換資產資訊"
+msgid "Share / Download Chart"
+msgstr "共用/下載圖表"
 
-msgid "Studies"
-msgstr "研究"
+msgid "Share link"
+msgstr "共用連結"
 
-msgid "Comparison"
-msgstr "比較"
+msgid "Failed to generate link"
+msgstr ""
 
-msgid "Templates"
-msgstr "範本"
+msgid "Retry"
+msgstr ""
 
-msgid "Template name"
-msgstr "範本名稱"
+msgid "Download chart"
+msgstr "下載圖表"
 
-msgid "There is no template added by you."
-msgstr "沒有您添加的範本。"
+msgid "Draw tools"
+msgstr "繪圖工具"
 
-msgid "Click + icon to add one."
-msgstr "按一下 + 圖示增加一個。"
+msgid "Clear All"
+msgstr "全部清除"
 
-msgid "Crosshair"
-msgstr "交叉線"
+msgid "Measure"
+msgstr "測量"
 
-msgid "Time period"
-msgstr "期限"
+msgid "Zoom out"
+msgstr "縮小"
+
+msgid "Zoom in"
+msgstr "放大"
+
+msgid "Interval"
+msgstr ""
 
 msgid "Tick"
 msgstr "跳動點"
@@ -84,44 +87,41 @@ msgstr "小時"
 msgid "Day"
 msgstr "天"
 
-msgid "Zoom out"
-msgstr "縮小"
+msgid "Crosshair"
+msgstr "交叉線"
 
-msgid "Zoom in"
-msgstr "放大"
+msgid "Templates"
+msgstr "範本"
 
-msgid "Draw tools"
-msgstr "繪圖工具"
+msgid "Template name"
+msgstr "範本名稱"
 
-msgid "Clear All"
-msgstr "全部清除"
+msgid "There is no template added by you."
+msgstr "沒有您添加的範本。"
 
-msgid "Measure"
-msgstr "測量"
+msgid "Click + icon to add one."
+msgstr "按一下 + 圖示增加一個。"
+
+msgid "Comparison"
+msgstr "比較"
+
+msgid "Indicators"
+msgstr "指標"
+
+msgid "Chart types"
+msgstr "圖表類型"
+
+msgid "Toggle Asset Information"
+msgstr "切換資產資訊"
 
 msgid "Settings"
 msgstr ""
 
-msgid "Position"
-msgstr ""
-
-msgid "Theme"
+msgid "Dark Mode"
 msgstr ""
 
 msgid "Language"
 msgstr ""
-
-msgid "Share"
-msgstr "共享"
-
-msgid "Share / Download Chart"
-msgstr "共用/下載圖表"
-
-msgid "Share link"
-msgstr "共用連結"
-
-msgid "Download chart"
-msgstr "下載圖表"
 
 msgid "RESET"
 msgstr "重置"
@@ -129,59 +129,14 @@ msgstr "重置"
 msgid "DONE"
 msgstr "已完成"
 
-msgid "right-click to delete"
-msgstr "按右鍵刪除"
-
-msgid "right-click to manage"
-msgstr "按右鍵管理"
-
 msgid "[symbol] market is presently closed."
 msgstr "[symbol] 市場目前已關閉。"
 
 msgid "Streaming for [symbol] is not available due to license restrictions"
 msgstr "由於許可限制, [symbol] 串流不可用"
 
-msgid "Line"
-msgstr "列"
-
-msgid "Dot"
-msgstr "點"
-
-msgid "Colored Dot"
-msgstr "彩色點"
-
-msgid "Spline"
-msgstr "Spline法"
-
-msgid "Baseline"
-msgstr "基線"
-
-msgid "Candle"
-msgstr "蠟燭線"
-
-msgid "OHLC"
-msgstr "OHLC條形圖"
-
-msgid "Hollow Candle"
-msgstr "空心蠟燭線"
-
-msgid "\"Mass Index\" or \"Doji Star\""
-msgstr "\"質量指數\" 或 \"十字星\""
-
-msgid "Indicators"
-msgstr "指標"
-
-msgid "Active"
-msgstr "活躍"
-
-msgid "There are no active indicators yet."
-msgstr "還沒有任何激活指標."
-
-msgid "\"AUD/JPY\" or \"Apple\""
-msgstr "\"澳元/日元\" 或 \"蘋果\""
-
-msgid "There are no active comparisons yet."
-msgstr "還沒有任何激活比較."
+msgid "Search..."
+msgstr ""
 
 msgid "Annotation"
 msgstr "注釋"
@@ -227,6 +182,9 @@ msgstr "Gartley形態"
 
 msgid "Horizontal"
 msgstr "水平"
+
+msgid "Line"
+msgstr "列"
 
 msgid "Pitchfork"
 msgstr "叉子"
@@ -278,6 +236,48 @@ msgstr "泰隆水平線"
 
 msgid "Vertical"
 msgstr "垂直"
+
+msgid "Active"
+msgstr "活躍"
+
+msgid "There are no active comparisons yet."
+msgstr "還沒有任何激活比較."
+
+msgid "\"Mass Index\" or \"Doji Star\""
+msgstr "\"質量指數\" 或 \"十字星\""
+
+msgid "There are no active indicators yet."
+msgstr "還沒有任何激活指標."
+
+msgid "Dot"
+msgstr "點"
+
+msgid "Colored Dot"
+msgstr "彩色點"
+
+msgid "Spline"
+msgstr "Spline法"
+
+msgid "Baseline"
+msgstr "基線"
+
+msgid "Candle"
+msgstr "蠟燭線"
+
+msgid "OHLC"
+msgstr "OHLC條形圖"
+
+msgid "Hollow Candle"
+msgstr "空心蠟燭線"
+
+msgid "right-click to delete"
+msgstr "按右鍵刪除"
+
+msgid "right-click to manage"
+msgstr "按右鍵管理"
+
+msgid "Chart data is not available for this symbol."
+msgstr "此符號不可用於圖表資料。"
 
 msgid "RSI"
 msgstr "相對強弱指數"
@@ -1165,9 +1165,6 @@ msgid "KSTSignal"
 msgstr ""
 
 msgid "Pring's Special K"
-msgstr ""
-
-msgid "Interval"
 msgstr ""
 
 msgid "Darvas Box"

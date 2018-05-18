@@ -10,13 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Thai\n"
 "Language: th_TH\n"
-"PO-Revision-Date: 2018-05-18 02:00-0400\n"
-
-msgid "CLOSED"
-msgstr "ปิด"
-
-msgid "Close"
-msgstr "ปิด"
+"PO-Revision-Date: 2018-05-18 06:21-0400\n"
 
 msgid "Favorites"
 msgstr "รายการโปรด"
@@ -24,8 +18,11 @@ msgstr "รายการโปรด"
 msgid "There are no favorites yet."
 msgstr "ยังไม่มีรายการโปรด"
 
-msgid "Chart data is not available for this symbol."
-msgstr "ไม่มีข้อมูลแผนภูมิสำหรับสัญลักษณ์นี้"
+msgid "CLOSED"
+msgstr "ปิด"
+
+msgid "Close"
+msgstr "ปิด"
 
 msgid "PRICE"
 msgstr "ราคา"
@@ -42,35 +39,41 @@ msgstr "สูง"
 msgid "LOW"
 msgstr "ต่ำ"
 
-msgid "Chart types"
-msgstr "ชนิดแผนภูมิ"
+msgid "Share"
+msgstr "หุ้น"
 
-msgid "Toggle Asset Information"
-msgstr "สลับข้อมูลสินทรัพย์"
+msgid "Share / Download Chart"
+msgstr "แบ่งปัน/ดาวน์โหลดแผนภูมิ"
 
-msgid "Studies"
-msgstr "การศึกษา"
+msgid "Share link"
+msgstr "แบ่งปันลิงค์"
 
-msgid "Comparison"
-msgstr "การเปรียบเทียบ"
+msgid "Failed to generate link"
+msgstr ""
 
-msgid "Templates"
-msgstr "แม่แบบ"
+msgid "Retry"
+msgstr ""
 
-msgid "Template name"
-msgstr "ชื่อแม่แบบ"
+msgid "Download chart"
+msgstr "ดาวน์โหลดแผนภูมิ"
 
-msgid "There is no template added by you."
-msgstr "ท่านยังไม่ได้เพิ่มแม่แบบ"
+msgid "Draw tools"
+msgstr "เครื่องมือวาดภาพ"
 
-msgid "Click + icon to add one."
-msgstr "คลิกปุ่ม + เพื่อเพิ่ม"
+msgid "Clear All"
+msgstr "ล้างทั้งหมด"
 
-msgid "Crosshair"
-msgstr "Crosshair"
+msgid "Measure"
+msgstr "วัด"
 
-msgid "Time period"
-msgstr "ช่วงเวลา"
+msgid "Zoom out"
+msgstr "ขยายออก"
+
+msgid "Zoom in"
+msgstr "ย่อลง"
+
+msgid "Interval"
+msgstr ""
 
 msgid "Tick"
 msgstr "ช่วงห่างของราคา"
@@ -84,44 +87,41 @@ msgstr "ชั่วโมง"
 msgid "Day"
 msgstr "วัน"
 
-msgid "Zoom out"
-msgstr "ขยายออก"
+msgid "Crosshair"
+msgstr "Crosshair"
 
-msgid "Zoom in"
-msgstr "ย่อลง"
+msgid "Templates"
+msgstr "แม่แบบ"
 
-msgid "Draw tools"
-msgstr "เครื่องมือวาดภาพ"
+msgid "Template name"
+msgstr "ชื่อแม่แบบ"
 
-msgid "Clear All"
-msgstr "ล้างทั้งหมด"
+msgid "There is no template added by you."
+msgstr "ท่านยังไม่ได้เพิ่มแม่แบบ"
 
-msgid "Measure"
-msgstr "วัด"
+msgid "Click + icon to add one."
+msgstr "คลิกปุ่ม + เพื่อเพิ่ม"
+
+msgid "Comparison"
+msgstr "การเปรียบเทียบ"
+
+msgid "Indicators"
+msgstr "ตัวชี้วัด"
+
+msgid "Chart types"
+msgstr "ชนิดแผนภูมิ"
+
+msgid "Toggle Asset Information"
+msgstr "สลับข้อมูลสินทรัพย์"
 
 msgid "Settings"
 msgstr "การตั้งค่า"
 
-msgid "Position"
-msgstr "ตำแหน่ง"
-
-msgid "Theme"
-msgstr "ธีม"
+msgid "Dark Mode"
+msgstr ""
 
 msgid "Language"
 msgstr "ภาษา"
-
-msgid "Share"
-msgstr "หุ้น"
-
-msgid "Share / Download Chart"
-msgstr "แบ่งปัน/ดาวน์โหลดแผนภูมิ"
-
-msgid "Share link"
-msgstr "แบ่งปันลิงค์"
-
-msgid "Download chart"
-msgstr "ดาวน์โหลดแผนภูมิ"
 
 msgid "RESET"
 msgstr "ตั้งค่าใหม่"
@@ -129,59 +129,14 @@ msgstr "ตั้งค่าใหม่"
 msgid "DONE"
 msgstr "เสร็จสิ้น"
 
-msgid "right-click to delete"
-msgstr "คลิกขวาเพื่อลบ"
-
-msgid "right-click to manage"
-msgstr "คลิกขวาเพื่อจัดการ"
-
 msgid "[symbol] market is presently closed."
 msgstr "[symbol] ตลาดปิดขณะนี้"
 
 msgid "Streaming for [symbol] is not available due to license restrictions"
 msgstr "การสตรีมสำหรับ [symbol] ไม่พร้อมใช้งานเนื่องจากข้อจำกัดสิทธิ์การใช้งาน"
 
-msgid "Line"
-msgstr "เส้น"
-
-msgid "Dot"
-msgstr "จุด"
-
-msgid "Colored Dot"
-msgstr "จุดสี"
-
-msgid "Spline"
-msgstr "เส้นโค้ง"
-
-msgid "Baseline"
-msgstr "เส้นฐาน"
-
-msgid "Candle"
-msgstr "เทียน"
-
-msgid "OHLC"
-msgstr "OHLC"
-
-msgid "Hollow Candle"
-msgstr "เทียนกลวง"
-
-msgid "\"Mass Index\" or \"Doji Star\""
-msgstr "\"ดัชนีมวล\" หรือ \"Doji Star\""
-
-msgid "Indicators"
-msgstr "ตัวชี้วัด"
-
-msgid "Active"
-msgstr "ใช้งานอยู่"
-
-msgid "There are no active indicators yet."
-msgstr "ยังไม่มีตัวชี้วัดที่ใช้งาน"
-
-msgid "\"AUD/JPY\" or \"Apple\""
-msgstr "\"AUD/JPY\" หรือ \"Apple\""
-
-msgid "There are no active comparisons yet."
-msgstr "ยังไม่มีตัวเปรียบเทียบที่ใช้งาน"
+msgid "Search..."
+msgstr ""
 
 msgid "Annotation"
 msgstr "คำอธิบายประกอบ"
@@ -227,6 +182,9 @@ msgstr ""
 
 msgid "Horizontal"
 msgstr "แนวนอน"
+
+msgid "Line"
+msgstr "เส้น"
 
 msgid "Pitchfork"
 msgstr ""
@@ -278,6 +236,48 @@ msgstr ""
 
 msgid "Vertical"
 msgstr "แนวตั้ง"
+
+msgid "Active"
+msgstr "ใช้งานอยู่"
+
+msgid "There are no active comparisons yet."
+msgstr "ยังไม่มีตัวเปรียบเทียบที่ใช้งาน"
+
+msgid "\"Mass Index\" or \"Doji Star\""
+msgstr "\"ดัชนีมวล\" หรือ \"Doji Star\""
+
+msgid "There are no active indicators yet."
+msgstr "ยังไม่มีตัวชี้วัดที่ใช้งาน"
+
+msgid "Dot"
+msgstr "จุด"
+
+msgid "Colored Dot"
+msgstr "จุดสี"
+
+msgid "Spline"
+msgstr "เส้นโค้ง"
+
+msgid "Baseline"
+msgstr "เส้นฐาน"
+
+msgid "Candle"
+msgstr "เทียน"
+
+msgid "OHLC"
+msgstr "OHLC"
+
+msgid "Hollow Candle"
+msgstr "เทียนกลวง"
+
+msgid "right-click to delete"
+msgstr "คลิกขวาเพื่อลบ"
+
+msgid "right-click to manage"
+msgstr "คลิกขวาเพื่อจัดการ"
+
+msgid "Chart data is not available for this symbol."
+msgstr "ไม่มีข้อมูลแผนภูมิสำหรับสัญลักษณ์นี้"
 
 msgid "RSI"
 msgstr "RSI"
@@ -1165,9 +1165,6 @@ msgid "KSTSignal"
 msgstr ""
 
 msgid "Pring's Special K"
-msgstr ""
-
-msgid "Interval"
 msgstr ""
 
 msgid "Darvas Box"
