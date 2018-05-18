@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Thai\n"
 "Language: th_TH\n"
-"PO-Revision-Date: 2018-05-18 12:50-0400\n"
+"PO-Revision-Date: 2018-05-18 13:00-0400\n"
 
 msgid "Favorites"
 msgstr "รายการโปรด"
@@ -193,7 +193,7 @@ msgid "Quadrant Lines"
 msgstr "เส้นควอทแดรนท์"
 
 msgid "Ray"
-msgstr "เรย์"
+msgstr "Ray"
 
 msgid "Rectangle"
 msgstr "สี่เหลี่ยมผืนผ้า"
@@ -223,10 +223,10 @@ msgid "Shape - Star"
 msgstr "รูปร่าง - ดาว"
 
 msgid "Speed Resistance Arc"
-msgstr ""
+msgstr "Speed Resistance Arc"
 
 msgid "Speed Resistance Line"
-msgstr ""
+msgstr "Speed Resistance Line"
 
 msgid "Time Cycle"
 msgstr "รอบเวลา"
@@ -298,7 +298,7 @@ msgid "Moving Average"
 msgstr "ค่าเฉลี่ยเคลื่อนที่"
 
 msgid "Field"
-msgstr ""
+msgstr "ฟิลด์"
 
 msgid "Type"
 msgstr "ประเภท"
@@ -307,7 +307,7 @@ msgid "Offset"
 msgstr "ออฟเซ็ท"
 
 msgid "Underlay"
-msgstr ""
+msgstr "Underlay"
 
 msgid "MA"
 msgstr "MA"
@@ -322,22 +322,22 @@ msgid "Slow MA Period"
 msgstr "ระยะเวลา MA ช้า"
 
 msgid "Signal Period"
-msgstr ""
+msgstr "ช่วงสัญญาณ"
 
 msgid "Signal"
 msgstr "สัญญาณ"
 
 msgid "Increasing Bar"
-msgstr ""
+msgstr "เพิ่มบาร์"
 
 msgid "Decreasing Bar"
-msgstr ""
+msgstr "ลดบาร์"
 
 msgid "Stochastics"
 msgstr "Stochastics"
 
 msgid "Smooth"
-msgstr ""
+msgstr "Smooth"
 
 msgid "Fast"
 msgstr "เร็ว"
@@ -724,16 +724,16 @@ msgid "Bulge Threshold"
 msgstr ""
 
 msgid "Keltner Channel"
-msgstr ""
+msgstr "ช่อง Keltner "
 
 msgid "Keltner Top"
-msgstr ""
+msgstr "Keltner สูง"
 
 msgid "Keltner Median"
-msgstr ""
+msgstr "Keltner ค่ากลาง"
 
 msgid "Keltner Bottom"
-msgstr ""
+msgstr "Keltner ต่ำ"
 
 msgid "Parabolic SAR"
 msgstr "Parabolic SAR"
@@ -799,7 +799,7 @@ msgid "Volume Chart"
 msgstr "แผนภูมิแสดงปริมาณ"
 
 msgid "Up Volume"
-msgstr ""
+msgstr "เพิ่มปริมาณ"
 
 msgid "Down Volume"
 msgstr "ปริมาณลดลง"
@@ -841,7 +841,7 @@ msgid "Correlation Coefficient"
 msgstr "สัมประสิทธิ์สหสัมพันธ์"
 
 msgid "Price Momentum Oscillator"
-msgstr ""
+msgstr "Price Momentum Oscillator"
 
 msgid "Double Smoothing Period"
 msgstr ""
