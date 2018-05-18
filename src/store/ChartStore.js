@@ -126,6 +126,11 @@ class ChartStore {
                     futureTicksInterval: 1/60,
                     timeUnit: CIQ.SECOND,
                     timeUnitMultiplier: 1,
+                },
+                yAxis: {
+                    // Put some top margin so chart doesn't get blocked by chart title
+                    initialMarginTop: 125,
+                    initialMarginBottom: 10,
                 }
             },
             minimumLeftBars: 15,
@@ -176,10 +181,6 @@ class ChartStore {
         stxx.addEventListener('preferences', this.savePreferences.bind(this));
 
         const context = new Context(stxx, this.rootNode);
-
-        // Put some margin so chart doesn't get blocked by chart title
-        stxx.chart.yAxis.initialMarginTop = 125;
-        stxx.calculateYAxisMargins(stxx.chart.panel.yAxis);
 
         new KeystrokeHub(document.querySelector('body'), context, {
             cb: KeystrokeHub.defaultHotKeys,
