@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Thai\n"
 "Language: th_TH\n"
-"PO-Revision-Date: 2018-05-18 01:40-0400\n"
+"PO-Revision-Date: 2018-05-18 01:51-0400\n"
 
 msgid "CLOSED"
 msgstr "ปิด"
@@ -802,28 +802,28 @@ msgid "Up Volume"
 msgstr ""
 
 msgid "Down Volume"
-msgstr ""
+msgstr "ปริมาณลดลง"
 
 msgid "Volume Underlay"
 msgstr ""
 
 msgid "Valuation Lines"
-msgstr ""
+msgstr "เส้นมูลค่า"
 
 msgid "Average Type"
 msgstr ""
 
 msgid "Display Average"
-msgstr ""
+msgstr "แสดงค่าเฉลี่ย"
 
 msgid "Display 1 Standard Deviation (1σ)"
-msgstr ""
+msgstr "แสดงค่าเบี่ยงเบนมาตรฐาน 1 (1σ)"
 
 msgid "Display 2 Standard Deviation (2σ)"
-msgstr ""
+msgstr "แสดงค่าเบี่ยงเบนมาตรฐาน 2 (2σ)"
 
 msgid "Display 3 Standard Deviation (3σ)"
-msgstr ""
+msgstr "แสดงค่าเบี่ยงเบนมาตรฐาน 3 (3σ)"
 
 msgid "Average"
 msgstr "ค่าเฉลี่ย"
@@ -871,13 +871,13 @@ msgid "Scale Factor"
 msgstr ""
 
 msgid "Green"
-msgstr ""
+msgstr "สีเขียว"
 
 msgid "Fade"
-msgstr ""
+msgstr "จางหายไป"
 
 msgid "Fake"
-msgstr ""
+msgstr "ปลอม"
 
 msgid "Squat"
 msgstr ""
@@ -898,7 +898,7 @@ msgid "STARC Bands"
 msgstr ""
 
 msgid "MA Period"
-msgstr ""
+msgstr "ช่วงเวลา MA"
 
 msgid "Multiplier"
 msgstr "ตัวคูณ"
@@ -1018,10 +1018,10 @@ msgid "Jaw"
 msgstr ""
 
 msgid "Teeth"
-msgstr ""
+msgstr "ฟัน"
 
 msgid "Lips"
-msgstr ""
+msgstr "ริมฝีปาก"
 
 msgid "Gator Oscillator"
 msgstr ""
@@ -1072,7 +1072,7 @@ msgid "Loss"
 msgstr "ขาดทุน"
 
 msgid "Beta"
-msgstr ""
+msgstr "เบต้า"
 
 msgid "Ulcer Index"
 msgstr ""
@@ -1183,7 +1183,7 @@ msgid "Ghost Boxes"
 msgstr ""
 
 msgid "Stop Levels"
-msgstr ""
+msgstr "ระดับหยุด"
 
 msgid "Level Offset"
 msgstr "ระดับออฟเซ็ต"
