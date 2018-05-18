@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Thai\n"
 "Language: th_TH\n"
-"PO-Revision-Date: 2018-05-18 12:11-0400\n"
+"PO-Revision-Date: 2018-05-18 12:21-0400\n"
 
 msgid "Favorites"
 msgstr "รายการโปรด"
@@ -316,10 +316,10 @@ msgid "MACD"
 msgstr "MACD"
 
 msgid "Fast MA Period"
-msgstr ""
+msgstr "ระยะเวลา MA เร็ว"
 
 msgid "Slow MA Period"
-msgstr ""
+msgstr "ระยะเวลา MA ช้า"
 
 msgid "Signal Period"
 msgstr ""
@@ -334,7 +334,7 @@ msgid "Decreasing Bar"
 msgstr ""
 
 msgid "Stochastics"
-msgstr ""
+msgstr "Stochastics"
 
 msgid "Smooth"
 msgstr ""
@@ -436,7 +436,7 @@ msgid "On Balance Volume"
 msgstr ""
 
 msgid "Stochastic Momentum Index"
-msgstr ""
+msgstr "ดัชนี Stochastic Momentum"
 
 msgid "%K Periods"
 msgstr "ระยะเวลา %K"
@@ -466,10 +466,10 @@ msgid "Days Per Year"
 msgstr "จำนวนวันต่อปี"
 
 msgid "Pretty Good Oscillator"
-msgstr ""
+msgstr "Pretty Good Oscillator"
 
 msgid "Ultimate Oscillator"
-msgstr ""
+msgstr "Ultimate Oscillator"
 
 msgid "Cycle 1"
 msgstr "รอบ 1"
@@ -481,7 +481,7 @@ msgid "Cycle 3"
 msgstr "รอบ 3"
 
 msgid "Volume Oscillator"
-msgstr ""
+msgstr "Volume Oscillator"
 
 msgid "Short Cycle"
 msgstr "รอบสั้น"
@@ -502,19 +502,19 @@ msgid "Chaikin Volatility"
 msgstr ""
 
 msgid "Rate Of Change"
-msgstr ""
+msgstr "Rate Of Change"
 
 msgid "Price Oscillator"
-msgstr ""
+msgstr "Price Oscillator"
 
 msgid "Ease of Movement"
-msgstr ""
+msgstr "ความง่ายของการเคลื่อนตัว"
 
 msgid "Commodity Channel Index"
-msgstr ""
+msgstr "Commodity Channel Index"
 
 msgid "Detrended Price Oscillator"
-msgstr ""
+msgstr "Detrended Price Oscillator"
 
 msgid "True Range"
 msgstr ""
@@ -538,16 +538,16 @@ msgid "Schaff Trend Cycle"
 msgstr "Schaff Trend Cycle"
 
 msgid "QStick"
-msgstr ""
+msgstr "QStick"
 
 msgid "Coppock Curve"
 msgstr ""
 
 msgid "Short RoC"
-msgstr ""
+msgstr "Short RoC"
 
 msgid "Long RoC"
-msgstr ""
+msgstr "Long RoC"
 
 msgid "Chande Momentum Oscillator"
 msgstr ""
@@ -562,13 +562,13 @@ msgid "RAVI"
 msgstr "RAVI"
 
 msgid "Random Walk Index"
-msgstr ""
+msgstr "ดัชนี Random Walk"
 
 msgid "Random Walk High"
-msgstr ""
+msgstr "Random Walk สูง"
 
 msgid "Random Walk Low"
-msgstr ""
+msgstr "Random Walk ต่ำ"
 
 msgid "ADX/DMS"
 msgstr "ADX/DMS"
@@ -712,10 +712,10 @@ msgid "Donchian Low"
 msgstr "Donchian ต่ำ"
 
 msgid "Highest High Value"
-msgstr "ค่าสูงสุด"
+msgstr "ค่าสูงสูงที่สุด"
 
 msgid "Lowest Low Value"
-msgstr "ค่าต่ำสุด"
+msgstr "ค่าต่ำค่ำที่สุด"
 
 msgid "Mass Index"
 msgstr "ดัชนีมวล"
@@ -859,13 +859,13 @@ msgid "STD Period"
 msgstr "ระยะเวลา STD"
 
 msgid "Rel Vol"
-msgstr ""
+msgstr "Rel Vol"
 
 msgid "Awesome Oscillator"
-msgstr ""
+msgstr "Awesome Oscillator"
 
 msgid "Market Facilitation Index"
-msgstr ""
+msgstr "ดัชนี Market Facilitation"
 
 msgid "Scale Factor"
 msgstr ""
@@ -916,7 +916,7 @@ msgid "ATR Trailing Stops"
 msgstr ""
 
 msgid "Plot Type"
-msgstr ""
+msgstr "ประเภทการวาด"
 
 msgid "HighLow"
 msgstr "HighLow"
@@ -937,19 +937,19 @@ msgid "Bollinger Bandwidth"
 msgstr "Bollinger Bandwidth"
 
 msgid "Bandwidth"
-msgstr ""
+msgstr "แบนวิดท์"
 
 msgid "Donchian Width"
-msgstr ""
+msgstr "Donchian กว้าง"
 
 msgid "Relative Vigor Index"
-msgstr ""
+msgstr "ดัชนี Relative Vigor"
 
 msgid "Rel Vig"
-msgstr ""
+msgstr "Rel Vig"
 
 msgid "RelVigSignal"
-msgstr ""
+msgstr "RelVigSignal"
 
 msgid "Elder Impulse System"
 msgstr ""
@@ -1081,7 +1081,7 @@ msgid "Balance of Power"
 msgstr ""
 
 msgid "Trend Intensity Index"
-msgstr ""
+msgstr "ดัชนี Trend Intensity"
 
 msgid "TII"
 msgstr "TII"
