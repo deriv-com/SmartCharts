@@ -181,7 +181,7 @@ class StreamManager {
         callback(historyResponse);
     }
 
-    forget(callback) {
+    forget(symbolRequest, callback) {
         const stream = this._callbacks.get(callback);
         stream.forget();
         this._callbacks.delete(callback);

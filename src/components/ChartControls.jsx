@@ -12,19 +12,21 @@ import Share from './Share.jsx';
 import '../../sass/components/_chart-controls.scss';
 
 
-const renderDefaultControls = (isMobile) => (
-    <React.Fragment>
-        {isMobile ? '' : <CrosshairToggle />}
-        <ChartTypes />
-        <StudyLegend />
-        <Comparison />
-        <DrawTools />
-        <Views />
-        <Share />
-        <Timeperiod />
-        {isMobile ? '' : <ChartSize />}
-    </React.Fragment>
-);
+const renderDefaultControls = (isMobile) => {
+    return () => (
+        <React.Fragment>
+            {isMobile ? '' : <CrosshairToggle />}
+            <ChartTypes />
+            <StudyLegend />
+            <Comparison />
+            <DrawTools />
+            <Views />
+            <Share />
+            <Timeperiod />
+            {isMobile ? '' : <ChartSize />}
+        </React.Fragment>
+    );
+};
 
 const ChartControls = ({
     isMobile,

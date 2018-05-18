@@ -13,6 +13,7 @@ const Share = ({
     menuOpen,
     loading,
     urlGenerated,
+    shortUrlFailed,
     refereshShareLink,
     shareLink,
     downloadCSV,
@@ -40,12 +41,12 @@ const Share = ({
                     ></div>
                     <div className='content'
                         style={{display: ((!loading && !urlGenerated) ? 'flex' : 'none' )}}>
-                        <div
+                        {shortUrlFailed ? <p>{t.translate('Failed to generate link')}</p> : <div
                             className='download-btn'
                             onClick={refereshShareLink}
-                        >
+                            >
                             {t.translate('Retry')}
-                        </div>
+                        </div>}
                     </div>
                     <div className='content'
                         style={{display: ((!loading && urlGenerated) ? 'flex' : 'none' )}}
@@ -55,7 +56,7 @@ const Share = ({
                             value={shareLink}
                         />
                         <CopyIcon
-                            className='tooltip'
+                            className='ciq-tooltip'
                             onClick={copyToClipboard}
                             onMouseOut={resetCopyTooltip}
                             tooltip-title={copyTooltip}
@@ -84,6 +85,7 @@ export default connect(({share: s}) => ({
     menuOpen: s.menu.dialog.open,
     loading: s.loading,
     urlGenerated: s.urlGenerated,
+    shortUrlFailed: s.shortUrlFailed,
     refereshShareLink: s.refereshShareLink,
     shareLink: s.shareLink,
     downloadPNG: s.downloadPNG,

@@ -6,9 +6,7 @@ import {
     SettingIcon,
     PositionLeftIcon,
     PositionBottomIcon,
-    ChevronRightIcon,
-    BackIcon,
-    FlagIcons
+    BackIcon
 } from './Icons.jsx';
 import '../../sass/components/_ciq-chart-setting.scss';
 import { CSSTransition } from 'react-transition-group';
@@ -49,13 +47,11 @@ const ChartSetting = ({
                                 />
                         </div>
                     </div>
-                    <div className="ciq-list-item">
+                    <div className="ciq-list-item ciq-list-item-lng" 
+                        onClick={ () => setView('language') }>
                         <span className="ciq-icon-text">{t.translate('Language')}</span>
                         <div className="ciq-action">
-                            <span></span>
-                            <ChevronRightIcon
-                                onClick={ () => setView('language') }
-                            />
+                            {selectedLanguage.icon}
                         </div>
                     </div>
                 </div>
@@ -74,13 +70,11 @@ const ChartSetting = ({
                 <div className="ciq-list ciq-list-language">
                     {languages.map( (language,index) => {
                         return <div
-                            className={`ciq-list-item ${(selectedLanguage == language.key) ? 'selected' : ''}`}
+                            className={`ciq-list-item ${(selectedLanguage.key == language.key) ? 'selected' : ''}`}
                             key={index}
-                            onClick={()=> setLanguage(language.key) }
-                        >
-                            <span>
-                                {language.icon}
-                            </span>
+                            onClick={()=> setLanguage(language) }
+                            >
+                            {language.icon}
                             <span className="ciq-icon-text">{language.name}</span>
                         </div>;
                     })}

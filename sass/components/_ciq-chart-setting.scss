@@ -7,16 +7,6 @@
             height: 200px;
             .cq-menu-container{
                 transition: opacity 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.1s;
-                // opacity: 0;
-                // z-index: -9;
-                // visibility: hidden;
-                // height: 0px;
-                // &.active{
-                //     visibility: visible;
-                //     opacity: 1;
-                //     z-index: 9;
-                //     height: auto;
-                // }
             }
             .cq-menu-container-enter {
                 opacity: 0.01;
@@ -70,9 +60,9 @@
             .ciq-list-item{
                 height: 38px;
                 line-height: 38px;
+                cursor: default;
                 &.ciq-list-item-lng{
-                    .ciq-action{
-                    }
+                    cursor: pointer;
                 }
                 .ciq-icon-text {
                     width: calc( 100% - 60px );

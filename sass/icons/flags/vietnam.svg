@@ -1,13 +1,12 @@
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24" height="16" viewBox="0 0 24 16">
-    <defs>
-        <rect id="a" width="24" height="16" rx="2"/>
-    </defs>
-    <g fill="none" fill-rule="evenodd">
-        <mask id="b" fill="#fff">
-            <use xlink:href="#a"/>
-        </mask>
-        <use fill="#EA403F" xlink:href="#a"/>
-        <path fill="#FFFE4E" d="M12 10.45l-2.939 2.095 1.084-3.442-2.9-2.148 3.609-.033L12 3.5l1.146 3.422 3.61.033-2.901 2.148 1.084 3.442z" mask="url(#b)"/>
-        <rect width="23" height="15" x=".5" y=".5" stroke="#000" stroke-opacity=".04" mask="url(#b)" rx="2"/>
+<svg  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24" height="16" viewBox="0 0 24 16">
+  <title>vietnam</title>
+  <g>
+    <path d="M2,0H22a2,2,0,0,1,2,2V14a2,2,0,0,1-2,2H2a2,2,0,0,1-2-2V2A2,2,0,0,1,2,0" transform="translate(0 0)" fill="#ea403f"/>
+    <g>
+      <polyline points="12 3.5 10.85 6.92 7.25 6.96 10.14 9.1 9.06 12.54 12 10.45 14.94 12.54 13.86 9.1 16.76 6.96 13.15 6.92 12 3.5" fill="#fffe4e"/>
     </g>
+    <g>
+      <path d="M2.5,1h19A1.5,1.5,0,0,1,23,2.5v11A1.5,1.5,0,0,1,21.5,15H2.5A1.5,1.5,0,0,1,1,13.5V2.5A1.5,1.5,0,0,1,2.5,1h0m19-1H2.5A2.5,2.5,0,0,0,0,2.5v11A2.5,2.5,0,0,0,2.5,16h19A2.5,2.5,0,0,0,24,13.5V2.5A2.5,2.5,0,0,0,21.5,0" transform="translate(0 0)" fill="#e13d3d"/>
+    </g>
+  </g>
 </svg>
