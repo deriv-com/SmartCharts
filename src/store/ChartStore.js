@@ -325,6 +325,8 @@ class ChartStore {
 
     @action.bound destroy() {
         window.removeEventListener('resize', this.resizeScreen, false);
+        // Destroying the chart does not unsubscribe the streams;
+        // we need to manually unsubscribe them.
         this.feed.unsubscribeAll();
         this.feed = null;
         this.stxx.destroy();
