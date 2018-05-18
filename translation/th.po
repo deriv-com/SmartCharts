@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Thai\n"
 "Language: th_TH\n"
-"PO-Revision-Date: 2018-05-18 12:02-0400\n"
+"PO-Revision-Date: 2018-05-18 12:11-0400\n"
 
 msgid "Favorites"
 msgstr "รายการโปรด"
@@ -73,7 +73,7 @@ msgid "Zoom in"
 msgstr "ย่อลง"
 
 msgid "Interval"
-msgstr ""
+msgstr "ช่วง"
 
 msgid "Tick"
 msgstr "ช่วงห่างของราคา"
@@ -118,7 +118,7 @@ msgid "Settings"
 msgstr "การตั้งค่า"
 
 msgid "Dark Mode"
-msgstr ""
+msgstr "รูปแบบโทนมืด"
 
 msgid "Language"
 msgstr "ภาษา"
@@ -136,7 +136,7 @@ msgid "Streaming for [symbol] is not available due to license restrictions"
 msgstr "การสตรีมสำหรับ [symbol] ไม่พร้อมใช้งานเนื่องจากข้อจำกัดสิทธิ์การใช้งาน"
 
 msgid "Search..."
-msgstr ""
+msgstr "ค้นหา..."
 
 msgid "Annotation"
 msgstr "คำอธิบายประกอบ"
@@ -145,7 +145,7 @@ msgid "Average Line"
 msgstr "เส้นค่าเฉลี่ย"
 
 msgid "Callout"
-msgstr ""
+msgstr "คำบรรยายภาพ"
 
 msgid "Channel"
 msgstr "ช่อง"
@@ -154,31 +154,31 @@ msgid "Continuous"
 msgstr "ต่อเนื่อง"
 
 msgid "Crossline"
-msgstr ""
+msgstr "Crossline"
 
 msgid "Doodle"
 msgstr "Doodle"
 
 msgid "Ellipse"
-msgstr ""
+msgstr "วงรี"
 
 msgid "Fib Retracement"
-msgstr ""
+msgstr "Fib Retracement"
 
 msgid "Fib Arc"
-msgstr ""
+msgstr "Fib Arc"
 
 msgid "Fib Fan"
-msgstr ""
+msgstr "Fib Fan"
 
 msgid "Fib Time Zone"
-msgstr ""
+msgstr "Fib Time Zone"
 
 msgid "Gann Fan"
-msgstr ""
+msgstr "Gann Fan"
 
 msgid "Gartley"
-msgstr ""
+msgstr "Gartley"
 
 msgid "Horizontal"
 msgstr "แนวนอน"
@@ -187,13 +187,13 @@ msgid "Line"
 msgstr "เส้น"
 
 msgid "Pitchfork"
-msgstr ""
+msgstr "Pitchfork"
 
 msgid "Quadrant Lines"
-msgstr ""
+msgstr "เส้นควอทแดรนท์"
 
 msgid "Ray"
-msgstr ""
+msgstr "เรย์"
 
 msgid "Rectangle"
 msgstr "สี่เหลี่ยมผืนผ้า"
@@ -208,13 +208,13 @@ msgid "Shape - Arrow"
 msgstr "รูปร่าง - ลูกศร"
 
 msgid "Shape - Check"
-msgstr ""
+msgstr "รูปร่าง - เลือก"
 
 msgid "Shape - Cross"
-msgstr ""
+msgstr "รูปร่าง - กากบาท"
 
 msgid "Shape - Focus"
-msgstr ""
+msgstr "รูปร่าง - โฟกัส"
 
 msgid "Shape - Heart"
 msgstr "รูปร่าง - หัวใจ"
@@ -232,7 +232,7 @@ msgid "Time Cycle"
 msgstr "รอบเวลา"
 
 msgid "Tirone Levels"
-msgstr ""
+msgstr "ระดับ Tirone"
 
 msgid "Vertical"
 msgstr "แนวตั้ง"
@@ -406,7 +406,7 @@ msgid "Swing Index"
 msgstr "ดัชนีแกว่ง"
 
 msgid "Limit Move Value"
-msgstr ""
+msgstr "Limit Move Value"
 
 msgid "Accumulative Swing Index"
 msgstr "ดัชนีแกว่งสะสม"
@@ -520,22 +520,22 @@ msgid "True Range"
 msgstr ""
 
 msgid "Average True Range"
-msgstr ""
+msgstr "Average True Range"
 
 msgid "ATR"
 msgstr "ATR"
 
 msgid "Ehler Fisher Transform"
-msgstr ""
+msgstr "Ehler Fisher Transform"
 
 msgid "EF"
 msgstr "EF"
 
 msgid "EF Trigger"
-msgstr ""
+msgstr "EF Trigger"
 
 msgid "Schaff Trend Cycle"
-msgstr ""
+msgstr "Schaff Trend Cycle"
 
 msgid "QStick"
 msgstr ""
@@ -637,22 +637,22 @@ msgid "Shift"
 msgstr ""
 
 msgid "MA Env Top"
-msgstr ""
+msgstr "MA Env Top"
 
 msgid "MA Env Median"
-msgstr ""
+msgstr "MA Env Median"
 
 msgid "MA Env Bottom"
-msgstr ""
+msgstr "MA Env Bottom"
 
 msgid "Fractal Chaos Bands"
-msgstr ""
+msgstr "Fractal Chaos Bands"
 
 msgid "Fractal High"
-msgstr ""
+msgstr "Fractal สูง"
 
 msgid "Fractal Low"
-msgstr ""
+msgstr "Fractal ต่ำ"
 
 msgid "Fractal Channel"
 msgstr ""
@@ -682,16 +682,16 @@ msgid "Tolerance Percentage"
 msgstr ""
 
 msgid "Bollinger Bands"
-msgstr ""
+msgstr "Bollinger Bands"
 
 msgid "Bollinger Bands Top"
-msgstr ""
+msgstr "Bollinger Bands ค่าสูงสุด"
 
 msgid "Bollinger Bands Median"
-msgstr ""
+msgstr "Bollinger Bands ค่ากลาง"
 
 msgid "Bollinger Bands Bottom"
-msgstr ""
+msgstr "Bollinger Bands ค่าต่ำสุด"
 
 msgid "Donchian Channel"
 msgstr ""
@@ -703,13 +703,13 @@ msgid "Low Period"
 msgstr "ระยะเวลาต่ำ"
 
 msgid "Donchian High"
-msgstr ""
+msgstr "Donchian สูง"
 
 msgid "Donchian Median"
-msgstr ""
+msgstr "Donchian ค่ากลาง"
 
 msgid "Donchian Low"
-msgstr ""
+msgstr "Donchian ต่ำ"
 
 msgid "Highest High Value"
 msgstr "ค่าสูงสุด"
@@ -796,7 +796,7 @@ msgid "Use Volume"
 msgstr ""
 
 msgid "Volume Chart"
-msgstr ""
+msgstr "แผนภูมิแสดงปริมาณ"
 
 msgid "Up Volume"
 msgstr ""
@@ -811,7 +811,7 @@ msgid "Valuation Lines"
 msgstr "เส้นมูลค่า"
 
 msgid "Average Type"
-msgstr ""
+msgstr "ประเภทค่าเฉลี่ย"
 
 msgid "Display Average"
 msgstr "แสดงค่าเฉลี่ย"
@@ -919,7 +919,7 @@ msgid "Plot Type"
 msgstr ""
 
 msgid "HighLow"
-msgstr ""
+msgstr "HighLow"
 
 msgid "Buy Stops"
 msgstr ""
@@ -934,7 +934,7 @@ msgid "%b"
 msgstr "%b"
 
 msgid "Bollinger Bandwidth"
-msgstr ""
+msgstr "Bollinger Bandwidth"
 
 msgid "Bandwidth"
 msgstr ""
@@ -955,10 +955,10 @@ msgid "Elder Impulse System"
 msgstr ""
 
 msgid "Bullish"
-msgstr ""
+msgstr "Bullish"
 
 msgid "Bearish"
-msgstr ""
+msgstr "Bearish"
 
 msgid "Neutral"
 msgstr "เป็นกลาง"
@@ -1048,22 +1048,22 @@ msgid "Base Line"
 msgstr ""
 
 msgid "Leading Span A"
-msgstr ""
+msgstr "Leading Span A"
 
 msgid "Leading Span B"
-msgstr ""
+msgstr "Leading Span B"
 
 msgid "Lagging Span"
-msgstr ""
+msgstr "Lagging Span"
 
 msgid "Price Relative"
-msgstr ""
+msgstr "ความสัมพันธ์ราคา"
 
 msgid "Comparison Symbol"
-msgstr ""
+msgstr "สัญลักษณ์เปรียบเทียบ"
 
 msgid "Performance Index"
-msgstr ""
+msgstr "ดัชนีผลการดำเนินงาน"
 
 msgid "Gain"
 msgstr "กำไร"
@@ -1075,7 +1075,7 @@ msgid "Beta"
 msgstr "เบต้า"
 
 msgid "Ulcer Index"
-msgstr ""
+msgstr "ดัชนี Ulcer"
 
 msgid "Balance of Power"
 msgstr ""
@@ -1093,7 +1093,7 @@ msgid "Disparity Index"
 msgstr ""
 
 msgid "Rainbow Moving Average"
-msgstr ""
+msgstr "Rainbow Moving Average"
 
 msgid "SMA1"
 msgstr "SMA1"
@@ -1126,10 +1126,10 @@ msgid "SMA10"
 msgstr "SMA10"
 
 msgid "Rainbow Oscillator"
-msgstr ""
+msgstr "Rainbow Oscillator"
 
 msgid "HHV/LLV Lookback"
-msgstr ""
+msgstr "HHV/LLV Lookback"
 
 msgid "Pring's Know Sure Thing"
 msgstr ""
@@ -1162,10 +1162,10 @@ msgid "KST"
 msgstr "KST"
 
 msgid "KSTSignal"
-msgstr ""
+msgstr "KSTSignal"
 
 msgid "Pring's Special K"
-msgstr ""
+msgstr "Pring's Special K"
 
 msgid "Darvas Box"
 msgstr ""
@@ -1216,7 +1216,7 @@ msgid "Volume Profile"
 msgstr "โพรไฟล์ปริมาณ"
 
 msgid "Bars Color"
-msgstr ""
+msgstr "สีแถบ"
 
 msgid "Vortex Indicator"
 msgstr "ดัชนี Vortex"
@@ -1231,16 +1231,16 @@ msgid "ZigZag"
 msgstr "ซิกแซก"
 
 msgid "Distance(%)"
-msgstr ""
+msgstr "ระยะทาง(%)"
 
 msgid "Psychological Line"
-msgstr ""
+msgstr "Psychological Line"
 
 msgid "Moving Average Deviation"
 msgstr "ส่วนเบี่ยงเบนค่าเฉลี่ยเคลื่อนที่"
 
 msgid "Shinohara Intensity Ratio"
-msgstr ""
+msgstr "Shinohara Intensity Ratio"
 
 msgid "Strong Ratio"
 msgstr "อัตราส่วนความแข็งแรง"
