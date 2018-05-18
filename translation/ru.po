@@ -10,13 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
-"PO-Revision-Date: 2018-05-18 01:15-0400\n"
-
-msgid "CLOSED"
-msgstr "ЗАКРЫТО"
-
-msgid "Close"
-msgstr ""
+"PO-Revision-Date: 2018-05-18 06:21-0400\n"
 
 msgid "Favorites"
 msgstr "Избранное"
@@ -24,8 +18,11 @@ msgstr "Избранное"
 msgid "There are no favorites yet."
 msgstr "Нет записей в избранном."
 
-msgid "Chart data is not available for this symbol."
-msgstr "График недоступен для данного актива."
+msgid "CLOSED"
+msgstr "ЗАКРЫТО"
+
+msgid "Close"
+msgstr ""
 
 msgid "PRICE"
 msgstr "ЦЕНА"
@@ -42,35 +39,41 @@ msgstr "МАКС."
 msgid "LOW"
 msgstr "МИН."
 
-msgid "Chart types"
-msgstr "Вид графика"
+msgid "Share"
+msgstr "Поделиться"
 
-msgid "Toggle Asset Information"
-msgstr "Информация об активе Toggle"
+msgid "Share / Download Chart"
+msgstr "Поделиться / загрузить график"
 
-msgid "Studies"
-msgstr "Моделирование"
+msgid "Share link"
+msgstr "Поделиться ссылкой"
 
-msgid "Comparison"
-msgstr "Сравнение"
+msgid "Failed to generate link"
+msgstr ""
 
-msgid "Templates"
-msgstr "Шаблоны"
+msgid "Retry"
+msgstr ""
 
-msgid "Template name"
-msgstr "Название шаблона"
+msgid "Download chart"
+msgstr "Загрузить график"
 
-msgid "There is no template added by you."
-msgstr "Вы ещё не добавили шаблоны."
+msgid "Draw tools"
+msgstr "Ср-ва отображения"
 
-msgid "Click + icon to add one."
-msgstr "Для добавления нажмите на значок +."
+msgid "Clear All"
+msgstr "Очистить все"
 
-msgid "Crosshair"
-msgstr "Перекрестие"
+msgid "Measure"
+msgstr "Измерить"
 
-msgid "Time period"
-msgstr "Период"
+msgid "Zoom out"
+msgstr "Уменьшить"
+
+msgid "Zoom in"
+msgstr "Увеличить"
+
+msgid "Interval"
+msgstr "Интервал"
 
 msgid "Tick"
 msgstr "Тик"
@@ -84,44 +87,41 @@ msgstr "Час."
 msgid "Day"
 msgstr "День"
 
-msgid "Zoom out"
-msgstr "Уменьшить"
+msgid "Crosshair"
+msgstr "Перекрестие"
 
-msgid "Zoom in"
-msgstr "Увеличить"
+msgid "Templates"
+msgstr "Шаблоны"
 
-msgid "Draw tools"
-msgstr "Ср-ва отображения"
+msgid "Template name"
+msgstr "Название шаблона"
 
-msgid "Clear All"
-msgstr "Очистить все"
+msgid "There is no template added by you."
+msgstr "Вы ещё не добавили шаблоны."
 
-msgid "Measure"
-msgstr "Измерить"
+msgid "Click + icon to add one."
+msgstr "Для добавления нажмите на значок +."
+
+msgid "Comparison"
+msgstr "Сравнение"
+
+msgid "Indicators"
+msgstr "Индикаторы"
+
+msgid "Chart types"
+msgstr "Вид графика"
+
+msgid "Toggle Asset Information"
+msgstr "Информация об активе Toggle"
 
 msgid "Settings"
 msgstr ""
 
-msgid "Position"
-msgstr ""
-
-msgid "Theme"
+msgid "Dark Mode"
 msgstr ""
 
 msgid "Language"
 msgstr ""
-
-msgid "Share"
-msgstr "Поделиться"
-
-msgid "Share / Download Chart"
-msgstr "Поделиться / загрузить график"
-
-msgid "Share link"
-msgstr "Поделиться ссылкой"
-
-msgid "Download chart"
-msgstr "Загрузить график"
 
 msgid "RESET"
 msgstr "СБРОСИТЬ"
@@ -129,59 +129,14 @@ msgstr "СБРОСИТЬ"
 msgid "DONE"
 msgstr "ГОТОВО"
 
-msgid "right-click to delete"
-msgstr "Щелкните правой кнопкой мыши чтобы удалить"
-
-msgid "right-click to manage"
-msgstr "Щелкните правой кнопкой мыши чтобы управлять"
-
 msgid "[symbol] market is presently closed."
 msgstr "Рынок [symbol] закрыт в данный момент."
 
 msgid "Streaming for [symbol] is not available due to license restrictions"
 msgstr "Потоковые котировки для [symbol] недоступны из-за лицензионных ограничений"
 
-msgid "Line"
-msgstr "Линия"
-
-msgid "Dot"
-msgstr "Точечный"
-
-msgid "Colored Dot"
-msgstr "Цветные точки"
-
-msgid "Spline"
-msgstr "Кривая"
-
-msgid "Baseline"
-msgstr "Основная линия"
-
-msgid "Candle"
-msgstr "Свеча"
-
-msgid "OHLC"
-msgstr "OHLC"
-
-msgid "Hollow Candle"
-msgstr "пустая свеча"
-
-msgid "\"Mass Index\" or \"Doji Star\""
-msgstr "\"Индекс массы\" или \"звезда дожи\""
-
-msgid "Indicators"
-msgstr "Индикаторы"
-
-msgid "Active"
-msgstr "Активные"
-
-msgid "There are no active indicators yet."
-msgstr "Нет активных индикаторов."
-
-msgid "\"AUD/JPY\" or \"Apple\""
-msgstr "\"AUD/JPY\" или \"Apple\""
-
-msgid "There are no active comparisons yet."
-msgstr "Нет активных сравнений."
+msgid "Search..."
+msgstr ""
 
 msgid "Annotation"
 msgstr "Примечание"
@@ -227,6 +182,9 @@ msgstr "Гартли"
 
 msgid "Horizontal"
 msgstr "Горизонт."
+
+msgid "Line"
+msgstr "Линия"
 
 msgid "Pitchfork"
 msgstr "Вилка"
@@ -278,6 +236,48 @@ msgstr "Уровни Тирона"
 
 msgid "Vertical"
 msgstr "Вертикаль"
+
+msgid "Active"
+msgstr "Активные"
+
+msgid "There are no active comparisons yet."
+msgstr "Нет активных сравнений."
+
+msgid "\"Mass Index\" or \"Doji Star\""
+msgstr "\"Индекс массы\" или \"звезда дожи\""
+
+msgid "There are no active indicators yet."
+msgstr "Нет активных индикаторов."
+
+msgid "Dot"
+msgstr "Точечный"
+
+msgid "Colored Dot"
+msgstr "Цветные точки"
+
+msgid "Spline"
+msgstr "Кривая"
+
+msgid "Baseline"
+msgstr "Основная линия"
+
+msgid "Candle"
+msgstr "Свеча"
+
+msgid "OHLC"
+msgstr "OHLC"
+
+msgid "Hollow Candle"
+msgstr "пустая свеча"
+
+msgid "right-click to delete"
+msgstr "Щелкните правой кнопкой мыши чтобы удалить"
+
+msgid "right-click to manage"
+msgstr "Щелкните правой кнопкой мыши чтобы управлять"
+
+msgid "Chart data is not available for this symbol."
+msgstr "График недоступен для данного актива."
 
 msgid "RSI"
 msgstr "RSI"
@@ -1166,9 +1166,6 @@ msgstr "KSTSignal"
 
 msgid "Pring's Special K"
 msgstr "Индикатор Принга Special K"
-
-msgid "Interval"
-msgstr "Интервал"
 
 msgid "Darvas Box"
 msgstr "Область Дарваса"
