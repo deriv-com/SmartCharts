@@ -122,9 +122,14 @@ class ChartStore {
                 currentPriceLine: true,
             },
             chart: {
-                allowScrollFuture: false,
+                xAxis: {
+                    futureTicksInterval: 1/60,
+                    timeUnit: CIQ.SECOND,
+                    timeUnitMultiplier: 1,
+                }
             },
             minimumLeftBars: 15,
+            minimumZoomTicks: 20,
             yTolerance: 999999, // disable vertical scrolling
         });
 
