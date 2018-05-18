@@ -29,9 +29,10 @@ export default class ChartTypeStore {
     get stx() { return this.context.stx; }
 
     onContextReady = () => {
-        const type = this.types.find(t => t.id === this.stx.layout.chartType);
-        this.type = type;
-    }
+        const typeIdx = this.types.findIndex(t => t.id === this.stx.layout.chartType);
+        this.list.selectedIdx = typeIdx;
+        this.type = this.types[typeIdx];
+    };
 
     @action.bound setType(type) {
         if(typeof type === 'string') {
