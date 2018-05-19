@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Polish\n"
 "Language: pl_PL\n"
-"PO-Revision-Date: 2018-05-18 06:21-0400\n"
+"PO-Revision-Date: 2018-05-19 11:30-0400\n"
 
 msgid "Favorites"
 msgstr "Ulubione"
@@ -19,10 +19,10 @@ msgid "There are no favorites yet."
 msgstr "Brak ulubionych."
 
 msgid "CLOSED"
-msgstr ""
+msgstr "ZAMKNIĘTE"
 
 msgid "Close"
-msgstr ""
+msgstr "Zamknij"
 
 msgid "PRICE"
 msgstr "CENA"
@@ -34,28 +34,28 @@ msgid "CLOSE"
 msgstr "ZAMKNIJ"
 
 msgid "HIGH"
-msgstr ""
+msgstr "WYSOKIE"
 
 msgid "LOW"
-msgstr ""
+msgstr "NISKIE"
 
 msgid "Share"
-msgstr ""
+msgstr "Udostępnij"
 
 msgid "Share / Download Chart"
 msgstr "Udostępnij/pobierz wykres"
 
 msgid "Share link"
-msgstr ""
+msgstr "Łącze do udostępniania"
 
 msgid "Failed to generate link"
-msgstr ""
+msgstr "Nie udało się wygenerować łącza"
 
 msgid "Retry"
-msgstr ""
+msgstr "Spróbuj ponownie"
 
 msgid "Download chart"
-msgstr ""
+msgstr "Pobierz wykres"
 
 msgid "Draw tools"
 msgstr "Narzędzia do rysowania"
@@ -67,10 +67,10 @@ msgid "Measure"
 msgstr ""
 
 msgid "Zoom out"
-msgstr ""
+msgstr "Pomniejsz"
 
 msgid "Zoom in"
-msgstr ""
+msgstr "Powiększ"
 
 msgid "Interval"
 msgstr ""
@@ -115,10 +115,10 @@ msgid "Toggle Asset Information"
 msgstr ""
 
 msgid "Settings"
-msgstr ""
+msgstr "Ustawienia"
 
 msgid "Dark Mode"
-msgstr ""
+msgstr "Tryb ciemny"
 
 msgid "Language"
 msgstr ""
