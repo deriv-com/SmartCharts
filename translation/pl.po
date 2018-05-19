@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Polish\n"
 "Language: pl_PL\n"
-"PO-Revision-Date: 2018-05-19 11:30-0400\n"
+"PO-Revision-Date: 2018-05-19 11:40-0400\n"
 
 msgid "Favorites"
 msgstr "Ulubione"
@@ -121,7 +121,7 @@ msgid "Dark Mode"
 msgstr "Tryb ciemny"
 
 msgid "Language"
-msgstr ""
+msgstr "Język"
 
 msgid "RESET"
 msgstr "RESET"
@@ -130,16 +130,16 @@ msgid "DONE"
 msgstr "GOTOWE"
 
 msgid "[symbol] market is presently closed."
-msgstr ""
+msgstr "Rynek [symbol] jest obecnie zamknięty."
 
 msgid "Streaming for [symbol] is not available due to license restrictions"
 msgstr ""
 
 msgid "Search..."
-msgstr ""
+msgstr "Wyszukaj..."
 
 msgid "Annotation"
-msgstr ""
+msgstr "Adnotacja"
 
 msgid "Average Line"
 msgstr ""
@@ -148,7 +148,7 @@ msgid "Callout"
 msgstr ""
 
 msgid "Channel"
-msgstr ""
+msgstr "Kanał"
 
 msgid "Continuous"
 msgstr ""
@@ -208,7 +208,7 @@ msgid "Shape - Arrow"
 msgstr "Kształt - strzałka"
 
 msgid "Shape - Check"
-msgstr ""
+msgstr "Kształt – haczyk"
 
 msgid "Shape - Cross"
 msgstr "Kształt - krzyżyk"
