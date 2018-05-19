@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Polish\n"
 "Language: pl_PL\n"
-"PO-Revision-Date: 2018-05-19 11:51-0400\n"
+"PO-Revision-Date: 2018-05-19 12:00-0400\n"
 
 msgid "Favorites"
 msgstr "Ulubione"
@@ -523,7 +523,7 @@ msgid "Average True Range"
 msgstr ""
 
 msgid "ATR"
-msgstr ""
+msgstr "ATR"
 
 msgid "Ehler Fisher Transform"
 msgstr ""
@@ -586,13 +586,13 @@ msgid "Histogram"
 msgstr ""
 
 msgid "+DI"
-msgstr ""
+msgstr "+DI"
 
 msgid "-DI"
-msgstr ""
+msgstr "-DI"
 
 msgid "ADX"
-msgstr ""
+msgstr "ADX"
 
 msgid "Positive Bar"
 msgstr ""
@@ -847,7 +847,7 @@ msgid "Double Smoothing Period"
 msgstr ""
 
 msgid "PMO"
-msgstr ""
+msgstr "PMO"
 
 msgid "PMOSignal"
 msgstr ""
@@ -862,7 +862,7 @@ msgid "Rel Vol"
 msgstr ""
 
 msgid "Awesome Oscillator"
-msgstr ""
+msgstr "Oscylator Awesome"
 
 msgid "Market Facilitation Index"
 msgstr ""
