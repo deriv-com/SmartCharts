@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Polish\n"
 "Language: pl_PL\n"
-"PO-Revision-Date: 2018-05-19 12:00-0400\n"
+"PO-Revision-Date: 2018-05-19 12:11-0400\n"
 
 msgid "Favorites"
 msgstr "Ulubione"
@@ -625,7 +625,7 @@ msgid "Median Price"
 msgstr ""
 
 msgid "Overlay"
-msgstr ""
+msgstr "Nakładka"
 
 msgid "Moving Average Envelope"
 msgstr ""
@@ -1015,13 +1015,13 @@ msgid "Show Fractals"
 msgstr ""
 
 msgid "Jaw"
-msgstr ""
+msgstr "Szczęka"
 
 msgid "Teeth"
-msgstr ""
+msgstr "Ząb"
 
 msgid "Lips"
-msgstr ""
+msgstr "Usta"
 
 msgid "Gator Oscillator"
 msgstr ""
@@ -1198,7 +1198,7 @@ msgid "Darvas"
 msgstr ""
 
 msgid "Ghost"
-msgstr ""
+msgstr "Duch"
 
 msgid "Levels"
 msgstr "Poziomy"
@@ -1222,16 +1222,16 @@ msgid "Vortex Indicator"
 msgstr ""
 
 msgid "+VI"
-msgstr ""
+msgstr "+VI"
 
 msgid "-VI"
-msgstr ""
+msgstr "-VI"
 
 msgid "ZigZag"
 msgstr ""
 
 msgid "Distance(%)"
-msgstr ""
+msgstr "Odległość(%)"
 
 msgid "Psychological Line"
 msgstr ""
