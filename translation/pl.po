@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Polish\n"
 "Language: pl_PL\n"
-"PO-Revision-Date: 2018-05-19 11:40-0400\n"
+"PO-Revision-Date: 2018-05-19 11:51-0400\n"
 
 msgid "Favorites"
 msgstr "Ulubione"
@@ -220,7 +220,7 @@ msgid "Shape - Heart"
 msgstr "Kształt - serce"
 
 msgid "Shape - Star"
-msgstr ""
+msgstr "Kształt – gwiazda"
 
 msgid "Speed Resistance Arc"
 msgstr ""
@@ -310,7 +310,7 @@ msgid "Underlay"
 msgstr ""
 
 msgid "MA"
-msgstr ""
+msgstr "MA"
 
 msgid "MACD"
 msgstr "MACD"
@@ -346,10 +346,10 @@ msgid "Slow"
 msgstr ""
 
 msgid "Aroon"
-msgstr ""
+msgstr "Aroon"
 
 msgid "Aroon Up"
-msgstr ""
+msgstr "Aroon Up"
 
 msgid "Aroon Down"
 msgstr ""
@@ -472,22 +472,22 @@ msgid "Ultimate Oscillator"
 msgstr ""
 
 msgid "Cycle 1"
-msgstr ""
+msgstr "Cykl 1"
 
 msgid "Cycle 2"
-msgstr ""
+msgstr "Cykl 2"
 
 msgid "Cycle 3"
-msgstr ""
+msgstr "Cykl 3"
 
 msgid "Volume Oscillator"
 msgstr ""
 
 msgid "Short Cycle"
-msgstr ""
+msgstr "Krótki cykl"
 
 msgid "Long Cycle"
-msgstr ""
+msgstr "Długi cykl"
 
 msgid "Points Or Percent"
 msgstr ""
