@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Polish\n"
 "Language: pl_PL\n"
-"PO-Revision-Date: 2018-05-20 17:40-0400\n"
+"PO-Revision-Date: 2018-05-20 17:51-0400\n"
 
 msgid "Favorites"
 msgstr "Ulubione"
@@ -577,13 +577,13 @@ msgid "Smoothing Period"
 msgstr ""
 
 msgid "Series"
-msgstr ""
+msgstr "Serie"
 
 msgid "Shading"
 msgstr ""
 
 msgid "Histogram"
-msgstr ""
+msgstr "Histogram"
 
 msgid "+DI"
 msgstr "+DI"
@@ -631,10 +631,10 @@ msgid "Moving Average Envelope"
 msgstr ""
 
 msgid "Shift Type"
-msgstr ""
+msgstr "Rodzaj przesunięcia"
 
 msgid "Shift"
-msgstr ""
+msgstr "Przesunięcie"
 
 msgid "MA Env Top"
 msgstr ""
@@ -682,25 +682,25 @@ msgid "Tolerance Percentage"
 msgstr ""
 
 msgid "Bollinger Bands"
-msgstr ""
+msgstr "Wstęga Bollingera"
 
 msgid "Bollinger Bands Top"
-msgstr ""
+msgstr "Góra wstęgi Bollingera"
 
 msgid "Bollinger Bands Median"
-msgstr ""
+msgstr "Środek wstęgi Bollingera"
 
 msgid "Bollinger Bands Bottom"
-msgstr ""
+msgstr "Dół wstęgi Bollingera"
 
 msgid "Donchian Channel"
-msgstr ""
+msgstr "Kanał Donchiana"
 
 msgid "High Period"
-msgstr ""
+msgstr "Okres wysoki"
 
 msgid "Low Period"
-msgstr ""
+msgstr "Okres niski"
 
 msgid "Donchian High"
 msgstr ""
@@ -745,16 +745,16 @@ msgid "Maximum AF"
 msgstr ""
 
 msgid "Klinger Volume Oscillator"
-msgstr ""
+msgstr "Oscylator wolumenowy Klingera"
 
 msgid "Signal Periods"
 msgstr ""
 
 msgid "Klinger"
-msgstr ""
+msgstr "Klinger"
 
 msgid "KlingerSignal"
-msgstr ""
+msgstr "Sygnał Klingera"
 
 msgid "Elder Ray Index"
 msgstr ""
@@ -778,7 +778,7 @@ msgid "Center Of Gravity"
 msgstr ""
 
 msgid "Typical Price"
-msgstr ""
+msgstr "Typowa cena"
 
 msgid "Weighted Close"
 msgstr ""
@@ -823,7 +823,7 @@ msgid "Display 2 Standard Deviation (2σ)"
 msgstr ""
 
 msgid "Display 3 Standard Deviation (3σ)"
-msgstr ""
+msgstr "Wyświetl 3 odchylenia standardowe (3σ)"
 
 msgid "Average"
 msgstr "Średnia"
@@ -898,10 +898,10 @@ msgid "STARC Bands"
 msgstr ""
 
 msgid "MA Period"
-msgstr ""
+msgstr "Okres MA"
 
 msgid "Multiplier"
-msgstr ""
+msgstr "Mnożnik"
 
 msgid "STARC Bands Top"
 msgstr ""
@@ -928,16 +928,16 @@ msgid "Sell Stops"
 msgstr ""
 
 msgid "Bollinger %b"
-msgstr ""
+msgstr "Bollinger %b"
 
 msgid "%b"
-msgstr ""
+msgstr "%b"
 
 msgid "Bollinger Bandwidth"
-msgstr ""
+msgstr "Szerokość wstęgi Bollingera"
 
 msgid "Bandwidth"
-msgstr ""
+msgstr "Szerokość wstęgi"
 
 msgid "Donchian Width"
 msgstr ""
@@ -955,13 +955,13 @@ msgid "Elder Impulse System"
 msgstr ""
 
 msgid "Bullish"
-msgstr ""
+msgstr "Zwyżkowe"
 
 msgid "Bearish"
-msgstr ""
+msgstr "Zniżkowe"
 
 msgid "Neutral"
-msgstr ""
+msgstr "Neutralne"
 
 msgid "Pivot Points"
 msgstr ""
@@ -988,10 +988,10 @@ msgid "Support 3"
 msgstr ""
 
 msgid "VWAP"
-msgstr ""
+msgstr "VWAP"
 
 msgid "Alligator"
-msgstr ""
+msgstr "Aligator"
 
 msgid "Jaw Period"
 msgstr ""
@@ -1045,7 +1045,7 @@ msgid "Conversion Line"
 msgstr ""
 
 msgid "Base Line"
-msgstr ""
+msgstr "Linia bazowa"
 
 msgid "Leading Span A"
 msgstr ""
@@ -1060,10 +1060,10 @@ msgid "Price Relative"
 msgstr ""
 
 msgid "Comparison Symbol"
-msgstr ""
+msgstr "Symbol porównania"
 
 msgid "Performance Index"
-msgstr ""
+msgstr "Wskaźnik efektywności"
 
 msgid "Gain"
 msgstr ""
@@ -1075,19 +1075,19 @@ msgid "Beta"
 msgstr "Beta"
 
 msgid "Ulcer Index"
-msgstr ""
+msgstr "Wskaźnik Ulcera"
 
 msgid "Balance of Power"
-msgstr ""
+msgstr "Wskaźnik BOP (Balance of Power)"
 
 msgid "Trend Intensity Index"
 msgstr ""
 
 msgid "TII"
-msgstr ""
+msgstr "TII"
 
 msgid "Choppiness Index"
-msgstr ""
+msgstr "Indeks CHOP (Choppiness Index)"
 
 msgid "Disparity Index"
 msgstr ""
@@ -1159,7 +1159,7 @@ msgid "Heaviest SMA Period"
 msgstr ""
 
 msgid "KST"
-msgstr ""
+msgstr "KST"
 
 msgid "KSTSignal"
 msgstr ""
@@ -1186,7 +1186,7 @@ msgid "Level Offset"
 msgstr ""
 
 msgid "Price Minimum"
-msgstr ""
+msgstr "Minimum ceny"
 
 msgid "Volume Spike"
 msgstr ""
@@ -1219,7 +1219,7 @@ msgid "Bars Color"
 msgstr ""
 
 msgid "Vortex Indicator"
-msgstr ""
+msgstr "Wskaźnik Vortex"
 
 msgid "+VI"
 msgstr "+VI"
