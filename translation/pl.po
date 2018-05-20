@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Polish\n"
 "Language: pl_PL\n"
-"PO-Revision-Date: 2018-05-19 12:11-0400\n"
+"PO-Revision-Date: 2018-05-20 17:25-0400\n"
 
 msgid "Favorites"
 msgstr "Ulubione"
@@ -280,13 +280,13 @@ msgid "Chart data is not available for this symbol."
 msgstr ""
 
 msgid "RSI"
-msgstr ""
+msgstr "RSI"
 
 msgid "Period"
 msgstr "Okres"
 
 msgid "Show Zones"
-msgstr ""
+msgstr "Pokaż strefy"
 
 msgid "OverBought"
 msgstr ""
