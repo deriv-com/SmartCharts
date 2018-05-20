@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Polish\n"
 "Language: pl_PL\n"
-"PO-Revision-Date: 2018-05-20 17:25-0400\n"
+"PO-Revision-Date: 2018-05-20 17:30-0400\n"
 
 msgid "Favorites"
 msgstr "Ulubione"
@@ -64,7 +64,7 @@ msgid "Clear All"
 msgstr "Wyczyść wszystko"
 
 msgid "Measure"
-msgstr ""
+msgstr "Środek"
 
 msgid "Zoom out"
 msgstr "Pomniejsz"
@@ -73,7 +73,7 @@ msgid "Zoom in"
 msgstr "Powiększ"
 
 msgid "Interval"
-msgstr ""
+msgstr "Odstęp"
 
 msgid "Tick"
 msgstr "Zmiana ceny"
@@ -88,7 +88,7 @@ msgid "Day"
 msgstr "Dzień"
 
 msgid "Crosshair"
-msgstr ""
+msgstr "Krzyżyk"
 
 msgid "Templates"
 msgstr "Szablony"
@@ -112,7 +112,7 @@ msgid "Chart types"
 msgstr "Rodzaje wykresów"
 
 msgid "Toggle Asset Information"
-msgstr ""
+msgstr "Przełącz na widok informacji o aktywach"
 
 msgid "Settings"
 msgstr "Ustawienia"
@@ -289,16 +289,16 @@ msgid "Show Zones"
 msgstr "Pokaż strefy"
 
 msgid "OverBought"
-msgstr ""
+msgstr "Wykupione"
 
 msgid "OverSold"
-msgstr ""
+msgstr "Wyprzedane"
 
 msgid "Moving Average"
-msgstr ""
+msgstr "Średnia ruchoma"
 
 msgid "Field"
-msgstr ""
+msgstr "Pole"
 
 msgid "Type"
 msgstr "Typ"
