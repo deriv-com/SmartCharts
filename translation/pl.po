@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Polish\n"
 "Language: pl_PL\n"
-"PO-Revision-Date: 2018-05-20 17:30-0400\n"
+"PO-Revision-Date: 2018-05-20 17:40-0400\n"
 
 msgid "Favorites"
 msgstr "Ulubione"
@@ -160,7 +160,7 @@ msgid "Doodle"
 msgstr ""
 
 msgid "Ellipse"
-msgstr ""
+msgstr "Elipsa"
 
 msgid "Fib Retracement"
 msgstr ""
@@ -325,7 +325,7 @@ msgid "Signal Period"
 msgstr ""
 
 msgid "Signal"
-msgstr ""
+msgstr "Sygnał"
 
 msgid "Increasing Bar"
 msgstr ""
@@ -337,13 +337,13 @@ msgid "Stochastics"
 msgstr ""
 
 msgid "Smooth"
-msgstr ""
+msgstr "Gładka"
 
 msgid "Fast"
 msgstr ""
 
 msgid "Slow"
-msgstr ""
+msgstr "Wolna"
 
 msgid "Aroon"
 msgstr "Aroon"
@@ -355,7 +355,7 @@ msgid "Aroon Down"
 msgstr ""
 
 msgid "Aroon Oscillator"
-msgstr ""
+msgstr "Oscylator Aroon"
 
 msgid "Linear Reg R2"
 msgstr ""
@@ -367,7 +367,7 @@ msgid "Linear Reg Forecast"
 msgstr ""
 
 msgid "Forecast"
-msgstr ""
+msgstr "Prognoza"
 
 msgid "Linear Reg Intercept"
 msgstr ""
@@ -388,22 +388,22 @@ msgid "TRIX"
 msgstr "TRIX"
 
 msgid "Standard Deviation"
-msgstr ""
+msgstr "Odchylenie standardowe"
 
 msgid "Standard Deviations"
-msgstr ""
+msgstr "Odchylenia standardowe"
 
 msgid "Moving Average Type"
-msgstr ""
+msgstr "Rodzaj średniej kroczącej"
 
 msgid "Trade Volume Index"
 msgstr ""
 
 msgid "Min Tick Value"
-msgstr ""
+msgstr "Wartość najmniejszej zmiany ceny"
 
 msgid "Swing Index"
-msgstr ""
+msgstr "Indeks wahań"
 
 msgid "Limit Move Value"
 msgstr ""
@@ -418,7 +418,7 @@ msgid "Volume Rate of Change"
 msgstr ""
 
 msgid "Momentum Indicator"
-msgstr ""
+msgstr "Wskaźnik wykupienia (momentum)"
 
 msgid "Price Volume Trend"
 msgstr ""
@@ -439,7 +439,7 @@ msgid "Stochastic Momentum Index"
 msgstr ""
 
 msgid "%K Periods"
-msgstr ""
+msgstr "Okresy %K"
 
 msgid "%K Smoothing Periods"
 msgstr ""
@@ -448,7 +448,7 @@ msgid "%K Double Smoothing Periods"
 msgstr ""
 
 msgid "%D Periods"
-msgstr ""
+msgstr "Okresy %D"
 
 msgid "%D Moving Average Type"
 msgstr ""
@@ -481,7 +481,7 @@ msgid "Cycle 3"
 msgstr "Cykl 3"
 
 msgid "Volume Oscillator"
-msgstr ""
+msgstr "Oscylator wolumenowy"
 
 msgid "Short Cycle"
 msgstr "Krótki cykl"
@@ -490,7 +490,7 @@ msgid "Long Cycle"
 msgstr "Długi cykl"
 
 msgid "Points Or Percent"
-msgstr ""
+msgstr "Punkty lub procenty"
 
 msgid "Twiggs Money Flow"
 msgstr ""
@@ -517,10 +517,10 @@ msgid "Detrended Price Oscillator"
 msgstr ""
 
 msgid "True Range"
-msgstr ""
+msgstr "Rzeczywisty zasięg"
 
 msgid "Average True Range"
-msgstr ""
+msgstr "Średnia rzeczywistego zasięgu"
 
 msgid "ATR"
 msgstr "ATR"
