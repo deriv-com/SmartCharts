@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Polish\n"
 "Language: pl_PL\n"
-"PO-Revision-Date: 2018-05-20 17:51-0400\n"
+"PO-Revision-Date: 2018-05-20 18:00-0400\n"
 
 msgid "Favorites"
 msgstr "Ulubione"
@@ -100,7 +100,7 @@ msgid "There is no template added by you."
 msgstr "Nie dodałeś/-aś jeszcze żadnych szablonów."
 
 msgid "Click + icon to add one."
-msgstr ""
+msgstr "Kliknij ikonę +, aby dodać."
 
 msgid "Comparison"
 msgstr "Porównania"
@@ -181,7 +181,7 @@ msgid "Gartley"
 msgstr ""
 
 msgid "Horizontal"
-msgstr ""
+msgstr "Pozioma"
 
 msgid "Line"
 msgstr "Linia"
@@ -196,13 +196,13 @@ msgid "Ray"
 msgstr ""
 
 msgid "Rectangle"
-msgstr ""
+msgstr "Prostokąt"
 
 msgid "Regression Line"
-msgstr ""
+msgstr "Linia regresji"
 
 msgid "Segment"
-msgstr ""
+msgstr "Segment"
 
 msgid "Shape - Arrow"
 msgstr "Kształt - strzałka"
@@ -235,7 +235,7 @@ msgid "Tirone Levels"
 msgstr ""
 
 msgid "Vertical"
-msgstr ""
+msgstr "Pionowa"
 
 msgid "Active"
 msgstr "Aktywne"
@@ -259,7 +259,7 @@ msgid "Spline"
 msgstr ""
 
 msgid "Baseline"
-msgstr ""
+msgstr "Linia bazowa"
 
 msgid "Candle"
 msgstr "Świeca"
@@ -412,16 +412,16 @@ msgid "Accumulative Swing Index"
 msgstr ""
 
 msgid "Price Rate of Change"
-msgstr ""
+msgstr "Wskaźnik zmiany ceny"
 
 msgid "Volume Rate of Change"
-msgstr ""
+msgstr "Wskaźnik zmiany wolumenu"
 
 msgid "Momentum Indicator"
 msgstr "Wskaźnik wykupienia (momentum)"
 
 msgid "Price Volume Trend"
-msgstr ""
+msgstr "Trend wolumenu ceny"
 
 msgid "Positive Volume Index"
 msgstr ""
@@ -502,10 +502,10 @@ msgid "Chaikin Volatility"
 msgstr ""
 
 msgid "Rate Of Change"
-msgstr ""
+msgstr "Wskaźnik zmian"
 
 msgid "Price Oscillator"
-msgstr ""
+msgstr "Oscylator cenowy"
 
 msgid "Ease of Movement"
 msgstr ""
@@ -529,7 +529,7 @@ msgid "Ehler Fisher Transform"
 msgstr ""
 
 msgid "EF"
-msgstr ""
+msgstr "EF"
 
 msgid "EF Trigger"
 msgstr ""
@@ -544,10 +544,10 @@ msgid "Coppock Curve"
 msgstr ""
 
 msgid "Short RoC"
-msgstr ""
+msgstr "Krótki RoC"
 
 msgid "Long RoC"
-msgstr ""
+msgstr "Długi RoC"
 
 msgid "Chande Momentum Oscillator"
 msgstr ""
@@ -1204,13 +1204,13 @@ msgid "Levels"
 msgstr "Poziomy"
 
 msgid "Supertrend"
-msgstr ""
+msgstr "Super-trend"
 
 msgid "Uptrend"
-msgstr ""
+msgstr "Trend zwyżkowy"
 
 msgid "Downtrend"
-msgstr ""
+msgstr "Trend zniżkowy"
 
 msgid "Volume Profile"
 msgstr ""
@@ -1234,10 +1234,10 @@ msgid "Distance(%)"
 msgstr "Odległość(%)"
 
 msgid "Psychological Line"
-msgstr ""
+msgstr "Linia psychologiczna"
 
 msgid "Moving Average Deviation"
-msgstr ""
+msgstr "Odchylenie średniej kroczącej"
 
 msgid "Shinohara Intensity Ratio"
 msgstr ""
