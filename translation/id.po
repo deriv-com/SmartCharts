@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Indonesian\n"
 "Language: id_ID\n"
-"PO-Revision-Date: 2018-05-21 04:46-0400\n"
+"PO-Revision-Date: 2018-05-21 06:01-0400\n"
 
 msgid "Favorites"
 msgstr "Favorit"
@@ -42,7 +42,7 @@ msgstr "LOW"
 msgid "Share"
 msgstr "Bagikan"
 
-msgid "Download Chart"
+msgid "Share / Download Chart"
 msgstr ""
 
 msgid "Share link"
