@@ -9,9 +9,7 @@ export default class ShareStore {
         this.menu = new MenuStore({getContext: () => this.mainStore.chart.context});
 
         when(() => this.context, this.onContextReady);
-
-        // TODO: Currently share link doesn't work for charts with many indicators and comparisons
-        // reaction(() => this.menu.open, this.refereshShareLink);
+        reaction(() => this.menu.open, this.refereshShareLink);
     }
 
     get context() { return this.mainStore.chart.context; }
