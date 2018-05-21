@@ -29,7 +29,7 @@ msgstr ""
 msgid "Share"
 msgstr ""
 
-msgid "Share / Download Chart"
+msgid "Download Chart"
 msgstr ""
 
 msgid "Share link"
