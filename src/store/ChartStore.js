@@ -240,12 +240,14 @@ class ChartStore {
                 this.chartPanelTop = holderStyle.top;
             };
             const configParams = window.location.href.split('#');
-            if (configParams.length > 1) {
-                const [url, encodedJsonPart] = configParams;
+            const href = window.location.href;
+            if (href.indexOf('#') !== -1) {
+                const encodedJsonPart = href.split('#').slice(1).join('#');
+                const url = href.split('#')[0];
                 const hash = url.split('?')[1];
 
                 window.history.replaceState({}, document.title, window.location.pathname);
-                const promise = this.mainStore.share.expandBitlyAsync(hash, decodeURI(encodedJsonPart));
+                const promise = this.mainStore.share.expandBitlyAsync(hash, decodeURIComponent(encodedJsonPart));
                 promise.then(encodedJson => {
                     layoutData = JSON.parse(encodedJson);
                     doTheRest();

@@ -53,7 +53,7 @@ export default class ShareStore {
         const json = JSON.stringify(layoutData);
 
         const origin = window.location.href;
-        const encodedJson = this.fixedEncodeURIComponent(json);
+        const encodedJson = encodeURIComponent(json); // this.fixedEncodeURIComponent(json);
 
         const parts = json.match(/.{1,1800}/g);
 
@@ -88,7 +88,8 @@ export default class ShareStore {
         let origin = window.location.href;
         origin = origin.replace('localhost', '127.0.0.1'); // make it work on localhost
 
-        const shareLink = this.fixedEncodeURIComponent(`${origin}?${hash}#${payload}`);
+        //const shareLink = this.fixedEncodeURIComponent(`${origin}?${hash}#${payload}`);
+        const shareLink = encodeURIComponent(`${origin}?${hash}#${payload}`);
 
         return fetch(`${this.bitlyUrl}/shorten?access_token=${this.accessToken}&longUrl=${shareLink}`)
             .then(response => response.json())
@@ -103,16 +104,17 @@ export default class ShareStore {
         if(hash === 'NONE') {
             return Promise.resolve(payload);
         }
-        const bitlyLink = `https://bit.ly/${hash}`;
+        const bitlyLink = `${window.location.protocol}//bit.ly/${hash}`;
         return fetch(`${this.bitlyUrl}/expand?access_token=${this.accessToken}&shortUrl=${bitlyLink}`)
             .then(response => response.json())
             .then(response =>  {
                 if (response.status_code == 200 ) {
-                    const configParams = response.data.expand[0].long_url.split('#');
-                    const [url, encodedJsonPart] = configParams;
+                    const href = response.data.expand[0].long_url;
+                    const encodedJsonPart = href.split('#').slice(1).join('#');
+                    const url = href.split('#')[0];
                     const hash = url.split('?')[1];
 
-                    payload = encodedJsonPart + payload;
+                    payload = decodeURIComponent(encodedJsonPart) + payload;
 
                     if(hash == 'NONE') {
                         return payload;
