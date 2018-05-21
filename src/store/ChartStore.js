@@ -218,38 +218,41 @@ class ChartStore {
                 delete layoutData.symbols;
             }
 
+            const doTheRest = () => {
+
+                this.restoreLayout(stxx, layoutData);
+
+                this.setActiveSymbols(active_symbols);
+
+                if (initialSymbol && !(layoutData && layoutData.symbols)) {
+                    this.changeSymbol(initialSymbol);
+                } else if (stxx.chart.symbol) {
+                    this.currentActiveSymbol = stxx.chart.symbolObject;
+                    stxx.chart.yAxis.decimalPlaces = stxx.chart.symbolObject.decimal_places;
+                    this.categorizedSymbols = this.categorizeActiveSymbols();
+                } else {
+                    this.changeSymbol(this.defaultSymbol);
+                }
+
+                this.context = context;
+                this.contextPromise.resolve(this.context );
+                this.resizeScreen();
+                this.chartPanelTop = holderStyle.top;
+            };
             const configParams = window.location.href.split('#');
             if (configParams.length > 1) {
-                const sharedParams = configParams.slice(1, configParams.length).join('#');
-                if(sharedParams) {
-                    layoutData = decodeURI(sharedParams);
-                    try {
-                        layoutData = JSON.parse(layoutData);
-                    }catch(e){
-                        console.error(e);
-                    }
-                    window.history.replaceState({}, document.title, window.location.pathname);
-                }
-            }
+                const [url, encodedJsonPart] = configParams;
+                const hash = url.split('?')[1];
 
-            this.restoreLayout(stxx, layoutData);
-
-            this.setActiveSymbols(active_symbols);
-
-            if (initialSymbol && !(layoutData && layoutData.symbols)) {
-                this.changeSymbol(initialSymbol);
-            } else if (stxx.chart.symbol) {
-                this.currentActiveSymbol = stxx.chart.symbolObject;
-                stxx.chart.yAxis.decimalPlaces = stxx.chart.symbolObject.decimal_places;
-                this.categorizedSymbols = this.categorizeActiveSymbols();
+                window.history.replaceState({}, document.title, window.location.pathname);
+                const promise = this.mainStore.share.expandBitlyAsync(hash, decodeURI(encodedJsonPart));
+                promise.then(encodedJson => {
+                    layoutData = JSON.parse(encodedJson);
+                    doTheRest();
+                }).catch(() => doTheRest());
             } else {
-                this.changeSymbol(this.defaultSymbol);
+                doTheRest();
             }
-
-            this.context = context;
-            this.contextPromise.resolve(this.context );
-            this.resizeScreen();
-            this.chartPanelTop = holderStyle.top;
         });
 
         window.addEventListener('resize', this.resizeScreen, false);

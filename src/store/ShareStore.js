@@ -29,7 +29,7 @@ export default class ShareStore {
     onCopyDone = (successful) => {
         this.copyTooltip = successful ? 'Copied!' : 'Failed!';
     }
-    bitlyUrl = 'https://api-ssl.bitly.com/v3/shorten';
+    bitlyUrl = 'https://api-ssl.bitly.com/v3';
     accessToken = '837c0c4f99fcfbaca55ef9073726ef1f6a5c9349';
     @observable loading = false;
     @observable urlGenerated = false;
@@ -37,6 +37,12 @@ export default class ShareStore {
 
 
     @observable shareLink = '';
+
+    fixedEncodeURIComponent(str) {
+        return encodeURIComponent(str).replace(/[!'()*]/g, function(c) {
+            return `%${c.charCodeAt(0).toString(16)}`;
+        });
+    }
     refereshShareLink = () => {
         let self = this;
         if(!this.context || !this.menu.dialog.open ) { return; }
@@ -44,36 +50,76 @@ export default class ShareStore {
         const layoutData = this.stx.exportLayout(true);
         layoutData.favorites = [];
 
-        const json = JSON.stringify(layoutData),
-            fixedEncodeURIComponent = function (str) {
-                return encodeURIComponent(str).replace(/[!'()*]/g, function(c) {
-                    return `%${c.charCodeAt(0).toString(16)}`;
-                });
-            };
+        const json = JSON.stringify(layoutData);
 
         const origin = window.location.href;
-        this.shareLink = fixedEncodeURIComponent(`${origin}#${json}`);
+        const encodedJson = this.fixedEncodeURIComponent(json);
+
+        const parts = json.match(/.{1,1800}/g);
+
 
         this.shortUrlFailed = false;
         this.loading = true;
+        this.shareLink = '';
 
-        fetch(`${this.bitlyUrl}?access_token=${this.accessToken}&longUrl=${this.shareLink}`)
-            .then( response => {
-                return response.json();
-            })
-            .then( response =>  {
-                if (response.status_code == 200 ) {
-                    self.shareLink = response.data.url;
+        let hashPromise = Promise.resolve('NONE');
+        parts.forEach(part => {
+            hashPromise = hashPromise.then(hash => this.shortenBitlyAsync(part, hash));
+        });
+
+        hashPromise
+            .then(hash => {
+                if (hash) {
+                    self.shareLink = `https://bit.ly/${hash}`;
                     self.urlGenerated = true;
-                }else{
+                } else {
                     self.shortUrlFailed = true;
                     self.urlGenerated = false;
                 }
                 self.loading = false;
+
             })
             .catch(error => {
                 self.loading = false;
                 self.urlGenerated = false;
+            });
+    }
+    shortenBitlyAsync(payload, hash) {
+        let origin = window.location.href;
+        origin = origin.replace('localhost', '127.0.0.1'); // make it work on localhost
+
+        const shareLink = this.fixedEncodeURIComponent(`${origin}?${hash}#${payload}`);
+
+        return fetch(`${this.bitlyUrl}/shorten?access_token=${this.accessToken}&longUrl=${shareLink}`)
+            .then(response => response.json())
+            .then(response =>  {
+                if (response.status_code == 200 ) {
+                    return response.data.url.split('bit.ly/')[1];
+                }
+                return null;
+            });
+    }
+    expandBitlyAsync(hash, payload) {
+        if(hash === 'NONE') {
+            return Promise.resolve(payload);
+        }
+        const bitlyLink = `https://bit.ly/${hash}`;
+        return fetch(`${this.bitlyUrl}/expand?access_token=${this.accessToken}&shortUrl=${bitlyLink}`)
+            .then(response => response.json())
+            .then(response =>  {
+                if (response.status_code == 200 ) {
+                    const configParams = response.data.expand[0].long_url.split('#');
+                    const [url, encodedJsonPart] = configParams;
+                    const hash = url.split('?')[1];
+
+                    payload = encodedJsonPart + payload;
+
+                    if(hash == 'NONE') {
+                        return payload;
+                    }
+                    return this.expandBitlyAsync(hash, payload);
+                }
+                return null;
             });
 
     }
