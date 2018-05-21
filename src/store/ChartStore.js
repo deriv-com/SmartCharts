@@ -218,17 +218,17 @@ class ChartStore {
                 delete layoutData.symbols;
             }
 
+            const checkForQuerystring =
+                window.location.origin === 'https://charts.binary.com' ||
+                window.location.origin.startsWith('http://localhost:808');
             const configParams = window.location.href.split('#');
-            if (configParams.length > 1) {
+            if (configParams.length > 1 && checkForQuerystring) {
                 const sharedParams = configParams.slice(1, configParams.length).join('#');
                 if(sharedParams) {
-                    layoutData = decodeURI(sharedParams);
                     try {
-                        layoutData = JSON.parse(layoutData);
-                    }catch(e){
-                        console.error(e);
-                    }
-                    window.history.replaceState({}, document.title, window.location.pathname);
+                        layoutData = JSON.parse(decodeURI(sharedParams));
+                        window.history.replaceState({}, document.title, window.location.pathname);
+                    } catch(e) { /* Can't parse the URL? Doesn't matter... (: */ }
                 }
             }
 
@@ -291,6 +291,7 @@ class ChartStore {
     }
 
     @action.bound updateComparisons(...args) {
+        if (!this.context) {return;}
         let stx = this.context.stx;
         const comparisonSymbolsKeys = Object.keys(stx.chart.series);
         if (comparisonSymbolsKeys.length !== this.comparisonSymbols.length) {
