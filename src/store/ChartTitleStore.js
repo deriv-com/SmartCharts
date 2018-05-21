@@ -13,7 +13,7 @@ export default class ChartTitleStore {
             getCategoricalItems: () => this.mainStore.chart.categorizedSymbols,
             getIsShown: () => this.menu.open,
             onSelectItem: this.onSelectItem.bind(this),
-            placeholderText: '"AUD/JPY" or "Apple"',
+            placeholderText: t.translate('Search...'),
             favoritesId: 'chartTitle&Comparison',
             mainStore,
         });

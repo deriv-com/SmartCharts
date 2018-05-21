@@ -29,9 +29,12 @@ export default class ChartTypeStore {
     get stx() { return this.context.stx; }
 
     onContextReady = () => {
-        const type = this.types.find(t => t.id === this.stx.layout.chartType);
-        this.type = type;
-    }
+        // We assume that if tension is set, spline is enabled
+        const chartType = this.stx.layout.tension ? 'spline' : this.stx.layout.chartType;
+        const typeIdx = this.types.findIndex(t => t.id === chartType);
+        this.list.selectedIdx = typeIdx;
+        this.type = this.types[typeIdx];
+    };
 
     @action.bound setType(type) {
         if(typeof type === 'string') {
@@ -39,11 +42,12 @@ export default class ChartTypeStore {
         }
         if (type.id === 'spline') {
             // Spline is just a line with tension
+            this.stx.chart.tension = this.stx.layout.tension = 0.5;
             this.stx.setChartType('mountain');
-            this.stx.chart.tension = 0.5;
         } else {
-            this.stx.setChartType(type.id);
             this.stx.chart.tension = 0;
+            delete this.stx.layout.tension;
+            this.stx.setChartType(type.id);
         }
         this.type = type;
         this.menu.setOpen(false);
@@ -53,13 +57,13 @@ export default class ChartTypeStore {
         const isTickSelected = this.mainStore.timeperiod.timeUnit === 'tick';
 
         return [
-            { id: 'mountain', text: t.translate('Line'), disabled: false, icon: LineIcon },
-            { id: 'line', text: t.translate('Dot'), disabled: false, icon: DotIcon },
-            { id: 'colored_line', text: t.translate('Colored Dot'), disabled: false, icon: DotIcon },
-            { id: 'spline', text: t.translate('Spline'), disabled: false, icon: SplineIcon },
-            { id: 'baseline', text: t.translate('Baseline'), disabled: false, icon: BaseLineIcon },
-            { id: 'candle', text: t.translate('Candle'), disabled: isTickSelected, icon: CandleIcon },
-            { id: 'colored_bar', text: t.translate('OHLC'), disabled: isTickSelected, icon: OHLCIcon },
+            { id: 'mountain',      text: t.translate('Line'),          disabled: false,          icon: LineIcon         },
+            { id: 'line',          text: t.translate('Dot'),           disabled: false,          icon: DotIcon          },
+            { id: 'colored_line',  text: t.translate('Colored Dot'),   disabled: false,          icon: DotIcon          },
+            { id: 'spline',        text: t.translate('Spline'),        disabled: false,          icon: SplineIcon       },
+            { id: 'baseline',      text: t.translate('Baseline'),      disabled: false,          icon: BaseLineIcon     },
+            { id: 'candle',        text: t.translate('Candle'),        disabled: isTickSelected, icon: CandleIcon       },
+            { id: 'colored_bar',   text: t.translate('OHLC'),          disabled: isTickSelected, icon: OHLCIcon         },
             { id: 'hollow_candle', text: t.translate('Hollow Candle'), disabled: isTickSelected, icon: HollowCandleIcon },
         ].map(t => ({ ...t, active: t.id === this.type.id }));
     }
