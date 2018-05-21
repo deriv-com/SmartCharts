@@ -32,7 +32,7 @@ const Share = ({
                 />
             </Menu.Title>
             <Menu.Body>
-                <div className='title'> {t.translate('Share / Download Chart')} </div>
+                <div className='title'> {t.translate('Download Chart')} </div>
                 <div className='body'>
 
                     {/*
