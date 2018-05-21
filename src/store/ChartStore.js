@@ -121,6 +121,9 @@ class ChartStore {
                 currentPriceLine: true,
             },
             chart: {
+                xAxis: {
+                    timeUnitMultiplier: 1, // Make gaps between time intervals consistent
+                },
                 yAxis: {
                     // Put some top margin so chart doesn't get blocked by chart title
                     initialMarginTop: 125,
