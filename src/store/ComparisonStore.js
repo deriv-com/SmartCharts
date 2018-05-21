@@ -23,7 +23,7 @@ export default class ComparisonStore {
                 { id: 'delete', onClick: this.onDeleteItem.bind(this) },
             ],
             onSelectItem: this.onSelectItem.bind(this),
-            placeholderText: t.translate('"AUD/JPY" or "Apple"'),
+            placeholderText: t.translate('Search...'),
             favoritesId: 'chartTitle&Comparison',
             mainStore,
         });

@@ -10,772 +10,772 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Chinese Traditional\n"
 "Language: zh_TW\n"
-"PO-Revision-Date: 2018-04-22 23:10-0400\n"
+"PO-Revision-Date: 2018-05-18 06:21-0400\n"
+
+msgid "Favorites"
+msgstr "我的最愛"
+
+msgid "There are no favorites yet."
+msgstr "還沒有偏好。"
 
 msgid "CLOSED"
-msgstr ""
+msgstr "已關閉"
 
 msgid "Close"
 msgstr ""
 
-msgid "Favorites"
-msgstr ""
-
-msgid "There are no favorites yet."
-msgstr ""
-
-msgid "Chart data is not available for this symbol."
-msgstr ""
-
 msgid "PRICE"
-msgstr ""
+msgstr "價格"
 
 msgid "OPEN"
-msgstr ""
+msgstr "開盤"
 
 msgid "CLOSE"
-msgstr ""
+msgstr "收盤"
 
 msgid "HIGH"
-msgstr ""
+msgstr "高"
 
 msgid "LOW"
+msgstr "低"
+
+msgid "Share"
+msgstr "共享"
+
+msgid "Share / Download Chart"
+msgstr "共用/下載圖表"
+
+msgid "Share link"
+msgstr "共用連結"
+
+msgid "Failed to generate link"
 msgstr ""
 
-msgid "Chart types"
+msgid "Retry"
 msgstr ""
 
-msgid "Toggle Asset Information"
-msgstr ""
+msgid "Download chart"
+msgstr "下載圖表"
 
-msgid "Studies"
-msgstr ""
+msgid "Draw tools"
+msgstr "繪圖工具"
 
-msgid "Comparison"
-msgstr ""
+msgid "Clear All"
+msgstr "全部清除"
 
-msgid "Templates"
-msgstr ""
+msgid "Measure"
+msgstr "測量"
 
-msgid "Template name"
-msgstr ""
+msgid "Zoom out"
+msgstr "縮小"
 
-msgid "There is no template added by you."
-msgstr ""
+msgid "Zoom in"
+msgstr "放大"
 
-msgid "Click + icon to add one."
-msgstr ""
-
-msgid "Crosshair"
-msgstr ""
-
-msgid "Time period"
+msgid "Interval"
 msgstr ""
 
 msgid "Tick"
-msgstr ""
+msgstr "跳動點"
 
 msgid "Minute"
-msgstr ""
+msgstr "分鐘"
 
 msgid "Hour"
-msgstr ""
+msgstr "小時"
 
 msgid "Day"
-msgstr ""
+msgstr "天"
 
-msgid "Zoom out"
-msgstr ""
+msgid "Crosshair"
+msgstr "交叉線"
 
-msgid "Zoom in"
-msgstr ""
+msgid "Templates"
+msgstr "範本"
 
-msgid "Draw tools"
-msgstr ""
+msgid "Template name"
+msgstr "範本名稱"
 
-msgid "Clear All"
-msgstr ""
+msgid "There is no template added by you."
+msgstr "沒有您添加的範本。"
 
-msgid "Measure"
-msgstr ""
+msgid "Click + icon to add one."
+msgstr "按一下 + 圖示增加一個。"
+
+msgid "Comparison"
+msgstr "比較"
+
+msgid "Indicators"
+msgstr "指標"
+
+msgid "Chart types"
+msgstr "圖表類型"
+
+msgid "Toggle Asset Information"
+msgstr "切換資產資訊"
 
 msgid "Settings"
 msgstr ""
 
-msgid "Position"
-msgstr ""
-
-msgid "Theme"
+msgid "Dark Mode"
 msgstr ""
 
 msgid "Language"
 msgstr ""
 
-msgid "Share"
-msgstr ""
-
-msgid "Share / Download Chart"
-msgstr ""
-
-msgid "Share link"
-msgstr ""
-
-msgid "Download chart"
-msgstr ""
-
 msgid "RESET"
-msgstr ""
+msgstr "重置"
 
 msgid "DONE"
-msgstr ""
-
-msgid "right-click to delete"
-msgstr ""
-
-msgid "right-click to manage"
-msgstr ""
+msgstr "已完成"
 
 msgid "[symbol] market is presently closed."
-msgstr ""
+msgstr "[symbol] 市場目前已關閉。"
 
 msgid "Streaming for [symbol] is not available due to license restrictions"
-msgstr ""
+msgstr "由於許可限制, [symbol] 串流不可用"
 
-msgid "Line"
-msgstr ""
-
-msgid "Dot"
-msgstr ""
-
-msgid "Colored Dot"
-msgstr ""
-
-msgid "Spline"
-msgstr ""
-
-msgid "Baseline"
-msgstr ""
-
-msgid "Candle"
-msgstr ""
-
-msgid "OHLC"
-msgstr ""
-
-msgid "Hollow Candle"
-msgstr ""
-
-msgid "\"Mass Index\" or \"Doji Star\""
-msgstr ""
-
-msgid "Indicators"
-msgstr ""
-
-msgid "Active"
-msgstr ""
-
-msgid "There are no active indicators yet."
-msgstr ""
-
-msgid "\"AUD/JPY\" or \"Apple\""
-msgstr ""
-
-msgid "There are no active comparisons yet."
+msgid "Search..."
 msgstr ""
 
 msgid "Annotation"
-msgstr ""
+msgstr "注釋"
 
 msgid "Average Line"
-msgstr ""
+msgstr "平均線"
 
 msgid "Callout"
-msgstr ""
+msgstr "賣出"
 
 msgid "Channel"
-msgstr ""
+msgstr "通道"
 
 msgid "Continuous"
-msgstr ""
+msgstr "連續線"
 
 msgid "Crossline"
-msgstr ""
+msgstr "十字線"
 
 msgid "Doodle"
-msgstr ""
+msgstr "自由形式"
 
 msgid "Ellipse"
-msgstr ""
+msgstr "橢圓"
 
 msgid "Fib Retracement"
-msgstr ""
+msgstr "Fib 回調線"
 
 msgid "Fib Arc"
-msgstr ""
+msgstr "Fib 弧形圖"
 
 msgid "Fib Fan"
-msgstr ""
+msgstr "Fib 扇形圖"
 
 msgid "Fib Time Zone"
-msgstr ""
+msgstr "Fib 時區"
 
 msgid "Gann Fan"
-msgstr ""
+msgstr "江恩扇形線"
 
 msgid "Gartley"
-msgstr ""
+msgstr "Gartley形態"
 
 msgid "Horizontal"
-msgstr ""
+msgstr "水平"
+
+msgid "Line"
+msgstr "列"
 
 msgid "Pitchfork"
-msgstr ""
+msgstr "叉子"
 
 msgid "Quadrant Lines"
-msgstr ""
+msgstr "四等分線"
 
 msgid "Ray"
-msgstr ""
+msgstr "射線"
 
 msgid "Rectangle"
-msgstr ""
+msgstr "矩形"
 
 msgid "Regression Line"
-msgstr ""
+msgstr "迴歸線"
 
 msgid "Segment"
-msgstr ""
+msgstr "段"
 
 msgid "Shape - Arrow"
-msgstr ""
+msgstr "形狀-箭頭"
 
 msgid "Shape - Check"
-msgstr ""
+msgstr "形狀-打勾"
 
 msgid "Shape - Cross"
-msgstr ""
+msgstr "形狀-十字"
 
 msgid "Shape - Focus"
-msgstr ""
+msgstr "形狀-焦點"
 
 msgid "Shape - Heart"
-msgstr ""
+msgstr "形狀-心形"
 
 msgid "Shape - Star"
-msgstr ""
+msgstr "形狀-星形"
 
 msgid "Speed Resistance Arc"
-msgstr ""
+msgstr "速阻弧線"
 
 msgid "Speed Resistance Line"
-msgstr ""
+msgstr "速阻線"
 
 msgid "Time Cycle"
-msgstr ""
+msgstr "時間週期"
 
 msgid "Tirone Levels"
-msgstr ""
+msgstr "泰隆水平線"
 
 msgid "Vertical"
-msgstr ""
+msgstr "垂直"
+
+msgid "Active"
+msgstr "活躍"
+
+msgid "There are no active comparisons yet."
+msgstr "還沒有任何激活比較."
+
+msgid "\"Mass Index\" or \"Doji Star\""
+msgstr "\"質量指數\" 或 \"十字星\""
+
+msgid "There are no active indicators yet."
+msgstr "還沒有任何激活指標."
+
+msgid "Dot"
+msgstr "點"
+
+msgid "Colored Dot"
+msgstr "彩色點"
+
+msgid "Spline"
+msgstr "Spline法"
+
+msgid "Baseline"
+msgstr "基線"
+
+msgid "Candle"
+msgstr "蠟燭線"
+
+msgid "OHLC"
+msgstr "OHLC條形圖"
+
+msgid "Hollow Candle"
+msgstr "空心蠟燭線"
+
+msgid "right-click to delete"
+msgstr "按右鍵刪除"
+
+msgid "right-click to manage"
+msgstr "按右鍵管理"
+
+msgid "Chart data is not available for this symbol."
+msgstr "此符號不可用於圖表資料。"
 
 msgid "RSI"
-msgstr ""
+msgstr "相對強弱指數"
 
 msgid "Period"
-msgstr ""
+msgstr "期間"
 
 msgid "Show Zones"
-msgstr ""
+msgstr "顯示區域"
 
 msgid "OverBought"
-msgstr ""
+msgstr "超買"
 
 msgid "OverSold"
-msgstr ""
+msgstr "超賣"
 
 msgid "Moving Average"
-msgstr ""
+msgstr "移動平均線"
 
 msgid "Field"
-msgstr ""
+msgstr "領域"
 
 msgid "Type"
-msgstr ""
+msgstr "類型"
 
 msgid "Offset"
-msgstr ""
+msgstr "抵消"
 
 msgid "Underlay"
-msgstr ""
+msgstr "基礎"
 
 msgid "MA"
-msgstr ""
+msgstr "移動平均數"
 
 msgid "MACD"
-msgstr ""
+msgstr "指數平滑異同移動平均線"
 
 msgid "Fast MA Period"
-msgstr ""
+msgstr "快速移動平均週期"
 
 msgid "Slow MA Period"
-msgstr ""
+msgstr "慢速移動平均週期"
 
 msgid "Signal Period"
-msgstr ""
+msgstr "信號週期"
 
 msgid "Signal"
-msgstr ""
+msgstr "信號"
 
 msgid "Increasing Bar"
-msgstr ""
+msgstr "增加條形線"
 
 msgid "Decreasing Bar"
-msgstr ""
+msgstr "遞減條形線"
 
 msgid "Stochastics"
-msgstr ""
+msgstr "隨機指標"
 
 msgid "Smooth"
-msgstr ""
+msgstr "平滑"
 
 msgid "Fast"
-msgstr ""
+msgstr "快速"
 
 msgid "Slow"
-msgstr ""
+msgstr "慢"
 
 msgid "Aroon"
-msgstr ""
+msgstr "阿隆指標"
 
 msgid "Aroon Up"
-msgstr ""
+msgstr "阿隆上漲"
 
 msgid "Aroon Down"
-msgstr ""
+msgstr "阿隆下跌"
 
 msgid "Aroon Oscillator"
-msgstr ""
+msgstr "阿隆振盪器"
 
 msgid "Linear Reg R2"
-msgstr ""
+msgstr "線性回歸 R2"
 
 msgid "RSquared"
-msgstr ""
+msgstr "R平方"
 
 msgid "Linear Reg Forecast"
-msgstr ""
+msgstr "線性回歸預測"
 
 msgid "Forecast"
-msgstr ""
+msgstr "預測"
 
 msgid "Linear Reg Intercept"
-msgstr ""
+msgstr "線性回歸截距"
 
 msgid "Intercept"
-msgstr ""
+msgstr "截距"
 
 msgid "Time Series Forecast"
-msgstr ""
+msgstr "時間序列預測"
 
 msgid "Vertical Horizontal Filter"
-msgstr ""
+msgstr "垂直水準篩檢程式"
 
 msgid "Result"
-msgstr ""
+msgstr "結果"
 
 msgid "TRIX"
-msgstr ""
+msgstr "三重指數平滑移動平均線(TRIX)"
 
 msgid "Standard Deviation"
-msgstr ""
+msgstr "標準差"
 
 msgid "Standard Deviations"
-msgstr ""
+msgstr "標準差"
 
 msgid "Moving Average Type"
-msgstr ""
+msgstr "移動平均類型"
 
 msgid "Trade Volume Index"
-msgstr ""
+msgstr "交易量指數"
 
 msgid "Min Tick Value"
-msgstr ""
+msgstr "最小跳動值"
 
 msgid "Swing Index"
-msgstr ""
+msgstr "搖擺指數"
 
 msgid "Limit Move Value"
-msgstr ""
+msgstr "限制移動值"
 
 msgid "Accumulative Swing Index"
-msgstr ""
+msgstr "累計擺動指數"
 
 msgid "Price Rate of Change"
-msgstr ""
+msgstr "價格變化率"
 
 msgid "Volume Rate of Change"
-msgstr ""
+msgstr "成交量變化率"
 
 msgid "Momentum Indicator"
-msgstr ""
+msgstr "動量指標"
 
 msgid "Price Volume Trend"
-msgstr ""
+msgstr "價格成交量趨勢"
 
 msgid "Positive Volume Index"
-msgstr ""
+msgstr "正成交量指標"
 
 msgid "Index"
-msgstr ""
+msgstr "指數"
 
 msgid "Negative Volume Index"
-msgstr ""
+msgstr "負成交量指標"
 
 msgid "On Balance Volume"
-msgstr ""
+msgstr "能量潮"
 
 msgid "Stochastic Momentum Index"
-msgstr ""
+msgstr "隨機動量指標"
 
 msgid "%K Periods"
-msgstr ""
+msgstr "%K 周期"
 
 msgid "%K Smoothing Periods"
-msgstr ""
+msgstr "%K平滑週期"
 
 msgid "%K Double Smoothing Periods"
-msgstr ""
+msgstr "%K 雙平滑週期"
 
 msgid "%D Periods"
-msgstr ""
+msgstr "%D 周期"
 
 msgid "%D Moving Average Type"
-msgstr ""
+msgstr "%D移動平均類型"
 
 msgid "%K"
-msgstr ""
+msgstr "%K"
 
 msgid "%D"
-msgstr ""
+msgstr "%D"
 
 msgid "Historical Volatility"
-msgstr ""
+msgstr "歷史波動性"
 
 msgid "Days Per Year"
-msgstr ""
+msgstr "每年天數"
 
 msgid "Pretty Good Oscillator"
-msgstr ""
+msgstr "相當好的振盪器"
 
 msgid "Ultimate Oscillator"
-msgstr ""
+msgstr "終值震盪指標"
 
 msgid "Cycle 1"
-msgstr ""
+msgstr "週期1"
 
 msgid "Cycle 2"
-msgstr ""
+msgstr "週期2"
 
 msgid "Cycle 3"
-msgstr ""
+msgstr "週期3"
 
 msgid "Volume Oscillator"
-msgstr ""
+msgstr "容積振盪器"
 
 msgid "Short Cycle"
-msgstr ""
+msgstr "短週期"
 
 msgid "Long Cycle"
-msgstr ""
+msgstr "長週期"
 
 msgid "Points Or Percent"
-msgstr ""
+msgstr "點或百分比"
 
 msgid "Twiggs Money Flow"
-msgstr ""
+msgstr "特威格斯資金流動"
 
 msgid "Chaikin Money Flow"
-msgstr ""
+msgstr "查金資金流動"
 
 msgid "Chaikin Volatility"
-msgstr ""
+msgstr "查金波動性"
 
 msgid "Rate Of Change"
-msgstr ""
+msgstr "變動率"
 
 msgid "Price Oscillator"
-msgstr ""
+msgstr "價格振盪器"
 
 msgid "Ease of Movement"
-msgstr ""
+msgstr "簡易波動指標"
 
 msgid "Commodity Channel Index"
-msgstr ""
+msgstr "順勢指標"
 
 msgid "Detrended Price Oscillator"
-msgstr ""
+msgstr "去趨勢價格振盪器"
 
 msgid "True Range"
-msgstr ""
+msgstr "真實範圍"
 
 msgid "Average True Range"
-msgstr ""
+msgstr "平均真實波動範圍"
 
 msgid "ATR"
-msgstr ""
+msgstr "ATR"
 
 msgid "Ehler Fisher Transform"
-msgstr ""
+msgstr "埃樂費舍爾變換轉化"
 
 msgid "EF"
-msgstr ""
+msgstr "EF"
 
 msgid "EF Trigger"
-msgstr ""
+msgstr "EF 觸發器"
 
 msgid "Schaff Trend Cycle"
-msgstr ""
+msgstr "沙夫趨勢週期"
 
 msgid "QStick"
-msgstr ""
+msgstr "量化蠟燭線"
 
 msgid "Coppock Curve"
-msgstr ""
+msgstr "估波曲線"
 
 msgid "Short RoC"
-msgstr ""
+msgstr "做空變化率"
 
 msgid "Long RoC"
-msgstr ""
+msgstr "做多變化率"
 
 msgid "Chande Momentum Oscillator"
-msgstr ""
+msgstr "錢德動量震盪指標"
 
 msgid "Chande Forecast Oscillator"
-msgstr ""
+msgstr "錢德預測震盪指標"
 
 msgid "Intraday Momentum Index"
-msgstr ""
+msgstr "日內動量指數"
 
 msgid "RAVI"
-msgstr ""
+msgstr "RAVI"
 
 msgid "Random Walk Index"
-msgstr ""
+msgstr "隨機漫步指標"
 
 msgid "Random Walk High"
-msgstr ""
+msgstr "隨機漫步最高點"
 
 msgid "Random Walk Low"
-msgstr ""
+msgstr "隨機漫步最低點"
 
 msgid "ADX/DMS"
-msgstr ""
+msgstr "自動數據交換系統/數據庫管理系統"
 
 msgid "Smoothing Period"
-msgstr ""
+msgstr "平滑週期"
 
 msgid "Series"
-msgstr ""
+msgstr "系列"
 
 msgid "Shading"
-msgstr ""
+msgstr "陰影"
 
 msgid "Histogram"
-msgstr ""
+msgstr "長條圖"
 
 msgid "+DI"
-msgstr ""
+msgstr "上升方向線"
 
 msgid "-DI"
-msgstr ""
+msgstr "下降方向線"
 
 msgid "ADX"
-msgstr ""
+msgstr "趨向平均值"
 
 msgid "Positive Bar"
-msgstr ""
+msgstr "正柱"
 
 msgid "Negative Bar"
-msgstr ""
+msgstr "負柱"
 
 msgid "High Low Bands"
-msgstr ""
+msgstr "最高價最低價帶"
 
 msgid "Shift Percentage"
-msgstr ""
+msgstr "變換百分比"
 
 msgid "Channel Fill"
-msgstr ""
+msgstr "通道填充"
 
 msgid "High Low Top"
-msgstr ""
+msgstr "最高的最低價頂部"
 
 msgid "High Low Median"
-msgstr ""
+msgstr "最高的最低價中位"
 
 msgid "High Low Bottom"
-msgstr ""
+msgstr "最高的最低價底部"
 
 msgid "High Minus Low"
-msgstr ""
+msgstr "最高價減最低價"
 
 msgid "Median Price"
-msgstr ""
+msgstr "中間價位指數"
 
 msgid "Overlay"
-msgstr ""
+msgstr "覆蓋圖"
 
 msgid "Moving Average Envelope"
-msgstr ""
+msgstr "移動平均線通道"
 
 msgid "Shift Type"
-msgstr ""
+msgstr "轉換類型"
 
 msgid "Shift"
-msgstr ""
+msgstr "轉換"
 
 msgid "MA Env Top"
-msgstr ""
+msgstr "移動平均線通道頂部"
 
 msgid "MA Env Median"
-msgstr ""
+msgstr "移動平均線通道中位"
 
 msgid "MA Env Bottom"
-msgstr ""
+msgstr "移動平均線通道底部"
 
 msgid "Fractal Chaos Bands"
-msgstr ""
+msgstr "分形混沌帶"
 
 msgid "Fractal High"
-msgstr ""
+msgstr "分形最高點"
 
 msgid "Fractal Low"
-msgstr ""
+msgstr "分形最低點"
 
 msgid "Fractal Channel"
-msgstr ""
+msgstr "分形通道"
 
 msgid "Fractal Chaos Oscillator"
-msgstr ""
+msgstr "分形混沌擺動指標"
 
 msgid "Gopalakrishnan Range Index"
-msgstr ""
+msgstr "高帕拉克里施南範圍指標"
 
 msgid "Prime Number Bands"
-msgstr ""
+msgstr "質數通道"
 
 msgid "Prime Bands Top"
-msgstr ""
+msgstr "質數通道頂部"
 
 msgid "Prime Bands Bottom"
-msgstr ""
+msgstr "質數通道底部"
 
 msgid "Prime Bands Channel"
-msgstr ""
+msgstr "質數帶通道"
 
 msgid "Prime Number Oscillator"
-msgstr ""
+msgstr "質數震盪指標"
 
 msgid "Tolerance Percentage"
-msgstr ""
+msgstr "容忍百分比"
 
 msgid "Bollinger Bands"
-msgstr ""
+msgstr "布林通道"
 
 msgid "Bollinger Bands Top"
-msgstr ""
+msgstr "布林通道頂部"
 
 msgid "Bollinger Bands Median"
-msgstr ""
+msgstr "布林通道中位"
 
 msgid "Bollinger Bands Bottom"
-msgstr ""
+msgstr "布林通道底部"
 
 msgid "Donchian Channel"
-msgstr ""
+msgstr "唐奇安通道"
 
 msgid "High Period"
-msgstr ""
+msgstr "高位期間"
 
 msgid "Low Period"
-msgstr ""
+msgstr "低位期間"
 
 msgid "Donchian High"
-msgstr ""
+msgstr "唐奇安高點"
 
 msgid "Donchian Median"
-msgstr ""
+msgstr "唐奇安中位"
 
 msgid "Donchian Low"
-msgstr ""
+msgstr "唐奇安低點"
 
 msgid "Highest High Value"
-msgstr ""
+msgstr "最高最高價"
 
 msgid "Lowest Low Value"
-msgstr ""
+msgstr "最低最低價"
 
 msgid "Mass Index"
-msgstr ""
+msgstr "梅斯指標"
 
 msgid "Bulge Threshold"
-msgstr ""
+msgstr "突出部門檻"
 
 msgid "Keltner Channel"
-msgstr ""
+msgstr "肯特納通道"
 
 msgid "Keltner Top"
-msgstr ""
+msgstr "肯特納頂部"
 
 msgid "Keltner Median"
-msgstr ""
+msgstr "肯特納中位"
 
 msgid "Keltner Bottom"
-msgstr ""
+msgstr "肯特納底部"
 
 msgid "Parabolic SAR"
-msgstr ""
+msgstr "拋物線轉向指標"
 
 msgid "Minimum AF"
-msgstr ""
+msgstr "最小 AF"
 
 msgid "Maximum AF"
-msgstr ""
+msgstr "最大 AF"
 
 msgid "Klinger Volume Oscillator"
-msgstr ""
+msgstr "克林格成交量擺動指標"
 
 msgid "Signal Periods"
-msgstr ""
+msgstr "信號週期"
 
 msgid "Klinger"
-msgstr ""
+msgstr "克林格"
 
 msgid "KlingerSignal"
-msgstr ""
+msgstr "KlingerSignal"
 
 msgid "Elder Ray Index"
-msgstr ""
+msgstr "愛耳德射線指標"
 
 msgid "Elder Bull Power"
-msgstr ""
+msgstr "愛耳德多頭力量指標"
 
 msgid "Elder Bear Power"
-msgstr ""
+msgstr "愛耳德空頭力量指標"
 
 msgid "Elder Force Index"
-msgstr ""
+msgstr "愛耳德強力指數指標"
 
 msgid "Linear Reg Slope"
-msgstr ""
+msgstr "線性回歸斜率"
 
 msgid "Slope"
-msgstr ""
+msgstr "斜率"
 
 msgid "Center Of Gravity"
-msgstr ""
+msgstr "重心指標"
 
 msgid "Typical Price"
 msgstr ""
@@ -1165,9 +1165,6 @@ msgid "KSTSignal"
 msgstr ""
 
 msgid "Pring's Special K"
-msgstr ""
-
-msgid "Interval"
 msgstr ""
 
 msgid "Darvas Box"

@@ -10,13 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Italian\n"
 "Language: it_IT\n"
-"PO-Revision-Date: 2018-04-22 23:10-0400\n"
-
-msgid "CLOSED"
-msgstr ""
-
-msgid "Close"
-msgstr ""
+"PO-Revision-Date: 2018-05-18 06:21-0400\n"
 
 msgid "Favorites"
 msgstr ""
@@ -24,7 +18,10 @@ msgstr ""
 msgid "There are no favorites yet."
 msgstr ""
 
-msgid "Chart data is not available for this symbol."
+msgid "CLOSED"
+msgstr ""
+
+msgid "Close"
 msgstr ""
 
 msgid "PRICE"
@@ -42,17 +39,56 @@ msgstr ""
 msgid "LOW"
 msgstr ""
 
-msgid "Chart types"
+msgid "Share"
+msgstr "Condividi"
+
+msgid "Share / Download Chart"
 msgstr ""
 
-msgid "Toggle Asset Information"
+msgid "Share link"
 msgstr ""
 
-msgid "Studies"
+msgid "Failed to generate link"
 msgstr ""
 
-msgid "Comparison"
+msgid "Retry"
 msgstr ""
+
+msgid "Download chart"
+msgstr ""
+
+msgid "Draw tools"
+msgstr ""
+
+msgid "Clear All"
+msgstr "Cancella tutto"
+
+msgid "Measure"
+msgstr "Misura"
+
+msgid "Zoom out"
+msgstr ""
+
+msgid "Zoom in"
+msgstr ""
+
+msgid "Interval"
+msgstr "Intervallo"
+
+msgid "Tick"
+msgstr ""
+
+msgid "Minute"
+msgstr ""
+
+msgid "Hour"
+msgstr ""
+
+msgid "Day"
+msgstr "Giorno"
+
+msgid "Crosshair"
+msgstr "Mirino"
 
 msgid "Templates"
 msgstr ""
@@ -66,61 +102,25 @@ msgstr ""
 msgid "Click + icon to add one."
 msgstr ""
 
-msgid "Crosshair"
+msgid "Comparison"
 msgstr ""
 
-msgid "Time period"
+msgid "Indicators"
 msgstr ""
 
-msgid "Tick"
+msgid "Chart types"
 msgstr ""
 
-msgid "Minute"
-msgstr ""
-
-msgid "Hour"
-msgstr ""
-
-msgid "Day"
-msgstr ""
-
-msgid "Zoom out"
-msgstr ""
-
-msgid "Zoom in"
-msgstr ""
-
-msgid "Draw tools"
-msgstr ""
-
-msgid "Clear All"
-msgstr ""
-
-msgid "Measure"
+msgid "Toggle Asset Information"
 msgstr ""
 
 msgid "Settings"
 msgstr ""
 
-msgid "Position"
-msgstr ""
-
-msgid "Theme"
+msgid "Dark Mode"
 msgstr ""
 
 msgid "Language"
-msgstr ""
-
-msgid "Share"
-msgstr ""
-
-msgid "Share / Download Chart"
-msgstr ""
-
-msgid "Share link"
-msgstr ""
-
-msgid "Download chart"
 msgstr ""
 
 msgid "RESET"
@@ -129,19 +129,124 @@ msgstr ""
 msgid "DONE"
 msgstr ""
 
-msgid "right-click to delete"
-msgstr ""
-
-msgid "right-click to manage"
-msgstr ""
-
 msgid "[symbol] market is presently closed."
 msgstr ""
 
 msgid "Streaming for [symbol] is not available due to license restrictions"
 msgstr ""
 
+msgid "Search..."
+msgstr ""
+
+msgid "Annotation"
+msgstr "Annotazione"
+
+msgid "Average Line"
+msgstr "Linea della media"
+
+msgid "Callout"
+msgstr "Fumetto"
+
+msgid "Channel"
+msgstr "Canale"
+
+msgid "Continuous"
+msgstr "Continuo"
+
+msgid "Crossline"
+msgstr "Crossline"
+
+msgid "Doodle"
+msgstr "Formato libero"
+
+msgid "Ellipse"
+msgstr "Ellisse"
+
+msgid "Fib Retracement"
+msgstr ""
+
+msgid "Fib Arc"
+msgstr "Arco Fib"
+
+msgid "Fib Fan"
+msgstr "Ventaglio Fib"
+
+msgid "Fib Time Zone"
+msgstr "Zona temporale Fib"
+
+msgid "Gann Fan"
+msgstr "Ventaglio Gann"
+
+msgid "Gartley"
+msgstr "Gartley"
+
+msgid "Horizontal"
+msgstr "Orizzontale"
+
 msgid "Line"
+msgstr "Linea"
+
+msgid "Pitchfork"
+msgstr "Pitchfork"
+
+msgid "Quadrant Lines"
+msgstr "Linee quadranti"
+
+msgid "Ray"
+msgstr "Raggio"
+
+msgid "Rectangle"
+msgstr "Rettangolo"
+
+msgid "Regression Line"
+msgstr "Linea di regressione"
+
+msgid "Segment"
+msgstr "Segmento"
+
+msgid "Shape - Arrow"
+msgstr "Forma - Freccia"
+
+msgid "Shape - Check"
+msgstr "Forma - Spunta"
+
+msgid "Shape - Cross"
+msgstr "Forma - Croce"
+
+msgid "Shape - Focus"
+msgstr "Forma - Focus"
+
+msgid "Shape - Heart"
+msgstr "Forma - Cuore"
+
+msgid "Shape - Star"
+msgstr "Forma - Stella"
+
+msgid "Speed Resistance Arc"
+msgstr "Arco di resistenza della velocità"
+
+msgid "Speed Resistance Line"
+msgstr "Linea di resistenza della velocità"
+
+msgid "Time Cycle"
+msgstr "Ciclo temporale"
+
+msgid "Tirone Levels"
+msgstr "Livelli di Tirone"
+
+msgid "Vertical"
+msgstr "Verticale"
+
+msgid "Active"
+msgstr ""
+
+msgid "There are no active comparisons yet."
+msgstr ""
+
+msgid "\"Mass Index\" or \"Doji Star\""
+msgstr ""
+
+msgid "There are no active indicators yet."
 msgstr ""
 
 msgid "Dot"
@@ -154,1100 +259,992 @@ msgid "Spline"
 msgstr ""
 
 msgid "Baseline"
-msgstr ""
+msgstr "Linea di base"
 
 msgid "Candle"
-msgstr ""
+msgstr "Candela"
 
 msgid "OHLC"
 msgstr ""
 
 msgid "Hollow Candle"
-msgstr ""
+msgstr "Candela Vuote"
 
-msgid "\"Mass Index\" or \"Doji Star\""
-msgstr ""
+msgid "right-click to delete"
+msgstr "destro del mouse per cancellare"
 
-msgid "Indicators"
-msgstr ""
+msgid "right-click to manage"
+msgstr "destro del mouse per gestire"
 
-msgid "Active"
-msgstr ""
-
-msgid "There are no active indicators yet."
-msgstr ""
-
-msgid "\"AUD/JPY\" or \"Apple\""
-msgstr ""
-
-msgid "There are no active comparisons yet."
-msgstr ""
-
-msgid "Annotation"
-msgstr ""
-
-msgid "Average Line"
-msgstr ""
-
-msgid "Callout"
-msgstr ""
-
-msgid "Channel"
-msgstr ""
-
-msgid "Continuous"
-msgstr ""
-
-msgid "Crossline"
-msgstr ""
-
-msgid "Doodle"
-msgstr ""
-
-msgid "Ellipse"
-msgstr ""
-
-msgid "Fib Retracement"
-msgstr ""
-
-msgid "Fib Arc"
-msgstr ""
-
-msgid "Fib Fan"
-msgstr ""
-
-msgid "Fib Time Zone"
-msgstr ""
-
-msgid "Gann Fan"
-msgstr ""
-
-msgid "Gartley"
-msgstr ""
-
-msgid "Horizontal"
-msgstr ""
-
-msgid "Pitchfork"
-msgstr ""
-
-msgid "Quadrant Lines"
-msgstr ""
-
-msgid "Ray"
-msgstr ""
-
-msgid "Rectangle"
-msgstr ""
-
-msgid "Regression Line"
-msgstr ""
-
-msgid "Segment"
-msgstr ""
-
-msgid "Shape - Arrow"
-msgstr ""
-
-msgid "Shape - Check"
-msgstr ""
-
-msgid "Shape - Cross"
-msgstr ""
-
-msgid "Shape - Focus"
-msgstr ""
-
-msgid "Shape - Heart"
-msgstr ""
-
-msgid "Shape - Star"
-msgstr ""
-
-msgid "Speed Resistance Arc"
-msgstr ""
-
-msgid "Speed Resistance Line"
-msgstr ""
-
-msgid "Time Cycle"
-msgstr ""
-
-msgid "Tirone Levels"
-msgstr ""
-
-msgid "Vertical"
+msgid "Chart data is not available for this symbol."
 msgstr ""
 
 msgid "RSI"
-msgstr ""
+msgstr "RSI"
 
 msgid "Period"
-msgstr ""
+msgstr "Periodo"
 
 msgid "Show Zones"
-msgstr ""
+msgstr "Mostra Zone"
 
 msgid "OverBought"
-msgstr ""
+msgstr "Ipercomprato"
 
 msgid "OverSold"
-msgstr ""
+msgstr "Ipervenduto"
 
 msgid "Moving Average"
-msgstr ""
+msgstr "Media mobile"
 
 msgid "Field"
-msgstr ""
+msgstr "Campo"
 
 msgid "Type"
-msgstr ""
+msgstr "Tipologia"
 
 msgid "Offset"
-msgstr ""
+msgstr "Compensazione"
 
 msgid "Underlay"
-msgstr ""
+msgstr "Substrato"
 
 msgid "MA"
-msgstr ""
+msgstr "Media mobile"
 
 msgid "MACD"
-msgstr ""
+msgstr "MACD"
 
 msgid "Fast MA Period"
-msgstr ""
+msgstr "Periodo di media mobile veloce"
 
 msgid "Slow MA Period"
-msgstr ""
+msgstr "Periodo di media mobile lento"
 
 msgid "Signal Period"
-msgstr ""
+msgstr "Periodo di segnale"
 
 msgid "Signal"
-msgstr ""
+msgstr "Segnale"
 
 msgid "Increasing Bar"
-msgstr ""
+msgstr "Barra crescente"
 
 msgid "Decreasing Bar"
-msgstr ""
+msgstr "Barra decrescente"
 
 msgid "Stochastics"
-msgstr ""
+msgstr "Stocastici"
 
 msgid "Smooth"
-msgstr ""
+msgstr "Smooth"
 
 msgid "Fast"
-msgstr ""
+msgstr "Fast"
 
 msgid "Slow"
-msgstr ""
+msgstr "Slow"
 
 msgid "Aroon"
-msgstr ""
+msgstr "Aroon"
 
 msgid "Aroon Up"
-msgstr ""
+msgstr "Aroon Up"
 
 msgid "Aroon Down"
-msgstr ""
+msgstr "Aroon Down"
 
 msgid "Aroon Oscillator"
-msgstr ""
+msgstr "Oscillatore Aroon"
 
 msgid "Linear Reg R2"
-msgstr ""
+msgstr "Linear Reg R2"
 
 msgid "RSquared"
-msgstr ""
+msgstr "RSquared"
 
 msgid "Linear Reg Forecast"
-msgstr ""
+msgstr "Previsione nella regressione lineare"
 
 msgid "Forecast"
-msgstr ""
+msgstr "Forecast"
 
 msgid "Linear Reg Intercept"
-msgstr ""
+msgstr "Linear Reg Intercept"
 
 msgid "Intercept"
-msgstr ""
+msgstr "Intercept"
 
 msgid "Time Series Forecast"
-msgstr ""
+msgstr "Previsione su serie temporali"
 
 msgid "Vertical Horizontal Filter"
-msgstr ""
+msgstr "Filtro verticale orizzontale"
 
 msgid "Result"
-msgstr ""
+msgstr "Risultato"
 
 msgid "TRIX"
-msgstr ""
+msgstr "TRIX"
 
 msgid "Standard Deviation"
-msgstr ""
+msgstr "Deviazione standard"
 
 msgid "Standard Deviations"
-msgstr ""
+msgstr "Deviazione standard"
 
 msgid "Moving Average Type"
-msgstr ""
+msgstr "Tipologia media mobile"
 
 msgid "Trade Volume Index"
-msgstr ""
+msgstr "Indice Trade Volume"
 
 msgid "Min Tick Value"
-msgstr ""
+msgstr "Min Tick Value"
 
 msgid "Swing Index"
-msgstr ""
+msgstr "Indice Swing"
 
 msgid "Limit Move Value"
-msgstr ""
+msgstr "Limit Move Value"
 
 msgid "Accumulative Swing Index"
-msgstr ""
+msgstr "Indice Accumulative Swing"
 
 msgid "Price Rate of Change"
-msgstr ""
+msgstr "Tasso di variazione del prezzo"
 
 msgid "Volume Rate of Change"
-msgstr ""
+msgstr "Tasso di variazione del volume"
 
 msgid "Momentum Indicator"
-msgstr ""
+msgstr "Indicatore di momentum"
 
 msgid "Price Volume Trend"
-msgstr ""
+msgstr "Price Volume Trend"
 
 msgid "Positive Volume Index"
-msgstr ""
+msgstr "Indice Positive Volume"
 
 msgid "Index"
-msgstr ""
+msgstr "Indice"
 
 msgid "Negative Volume Index"
-msgstr ""
+msgstr "Indice Negative Volume"
 
 msgid "On Balance Volume"
-msgstr ""
+msgstr "On Balance Volume"
 
 msgid "Stochastic Momentum Index"
-msgstr ""
+msgstr "Indice Stochastic Momentum"
 
 msgid "%K Periods"
-msgstr ""
+msgstr "%K Periodi"
 
 msgid "%K Smoothing Periods"
-msgstr ""
+msgstr "%K periodi di lisciatura"
 
 msgid "%K Double Smoothing Periods"
-msgstr ""
+msgstr "%K Periodi Double Smoothing"
 
 msgid "%D Periods"
-msgstr ""
+msgstr "%D Periodi"
 
 msgid "%D Moving Average Type"
-msgstr ""
+msgstr "%D Tipologia media mobile"
 
 msgid "%K"
-msgstr ""
+msgstr "%K"
 
 msgid "%D"
-msgstr ""
+msgstr "%D"
 
 msgid "Historical Volatility"
-msgstr ""
+msgstr "Volatilità storica"
 
 msgid "Days Per Year"
-msgstr ""
+msgstr "giorni l'anno"
 
 msgid "Pretty Good Oscillator"
-msgstr ""
+msgstr "Oscillatore Pretty Good"
 
 msgid "Ultimate Oscillator"
-msgstr ""
+msgstr "Oscillatore Ultimate"
 
 msgid "Cycle 1"
-msgstr ""
+msgstr "Ciclo 1"
 
 msgid "Cycle 2"
-msgstr ""
+msgstr "Ciclo 2"
 
 msgid "Cycle 3"
-msgstr ""
+msgstr "Ciclo 3"
 
 msgid "Volume Oscillator"
-msgstr ""
+msgstr "Oscillatore Volume"
 
 msgid "Short Cycle"
-msgstr ""
+msgstr "Ciclo corto"
 
 msgid "Long Cycle"
-msgstr ""
+msgstr "Ciclo Lungo"
 
 msgid "Points Or Percent"
-msgstr ""
+msgstr "Punti o percentuale"
 
 msgid "Twiggs Money Flow"
-msgstr ""
+msgstr "Twiggs Money Flow"
 
 msgid "Chaikin Money Flow"
-msgstr ""
+msgstr "Chaikin Money Flow"
 
 msgid "Chaikin Volatility"
-msgstr ""
+msgstr "Volatilità di Chaikin"
 
 msgid "Rate Of Change"
-msgstr ""
+msgstr "Tasso di variazione"
 
 msgid "Price Oscillator"
-msgstr ""
+msgstr "Oscillatore Price"
 
 msgid "Ease of Movement"
-msgstr ""
+msgstr "Ease of Movement"
 
 msgid "Commodity Channel Index"
-msgstr ""
+msgstr "Indice Commodity Channel"
 
 msgid "Detrended Price Oscillator"
-msgstr ""
+msgstr "Oscillatore Detrended Price"
 
 msgid "True Range"
-msgstr ""
+msgstr "True Range"
 
 msgid "Average True Range"
-msgstr ""
+msgstr "Average True Range"
 
 msgid "ATR"
-msgstr ""
+msgstr "ATR"
 
 msgid "Ehler Fisher Transform"
-msgstr ""
+msgstr "Ehler Fisher Transform"
 
 msgid "EF"
-msgstr ""
+msgstr "EF"
 
 msgid "EF Trigger"
-msgstr ""
+msgstr "EF Trigger"
 
 msgid "Schaff Trend Cycle"
-msgstr ""
+msgstr "Schaff Trend Cycle"
 
 msgid "QStick"
-msgstr ""
+msgstr "QStick"
 
 msgid "Coppock Curve"
-msgstr ""
+msgstr "Coppock Curve"
 
 msgid "Short RoC"
-msgstr ""
+msgstr "RoC corto"
 
 msgid "Long RoC"
-msgstr ""
+msgstr "RoC lungo"
 
 msgid "Chande Momentum Oscillator"
-msgstr ""
+msgstr "Oscillatore Chande Momentum"
 
 msgid "Chande Forecast Oscillator"
-msgstr ""
+msgstr "Oscillatore Chande Forecast"
 
 msgid "Intraday Momentum Index"
-msgstr ""
+msgstr "Indice Intraday Momentum"
 
 msgid "RAVI"
-msgstr ""
+msgstr "RAVI"
 
 msgid "Random Walk Index"
-msgstr ""
+msgstr "Indice Random Walk"
 
 msgid "Random Walk High"
-msgstr ""
+msgstr "Random Walk High"
 
 msgid "Random Walk Low"
-msgstr ""
+msgstr "Random Walk Low"
 
 msgid "ADX/DMS"
-msgstr ""
+msgstr "ADX/DMS"
 
 msgid "Smoothing Period"
-msgstr ""
+msgstr "Periodo di lisciatura"
 
 msgid "Series"
-msgstr ""
+msgstr "Serie"
 
 msgid "Shading"
-msgstr ""
+msgstr "Gradazione"
 
 msgid "Histogram"
-msgstr ""
+msgstr "Istogramma"
 
 msgid "+DI"
-msgstr ""
+msgstr "+DI"
 
 msgid "-DI"
-msgstr ""
+msgstr "-DI"
 
 msgid "ADX"
-msgstr ""
+msgstr "ADX"
 
 msgid "Positive Bar"
-msgstr ""
+msgstr "Barra positiva"
 
 msgid "Negative Bar"
-msgstr ""
+msgstr "Barra negativa"
 
 msgid "High Low Bands"
-msgstr ""
+msgstr "Bande High Low"
 
 msgid "Shift Percentage"
-msgstr ""
+msgstr "Percentuale di variazione"
 
 msgid "Channel Fill"
-msgstr ""
+msgstr "Channel Fill"
 
 msgid "High Low Top"
-msgstr ""
+msgstr "High Low top"
 
 msgid "High Low Median"
-msgstr ""
+msgstr "High Low median"
 
 msgid "High Low Bottom"
-msgstr ""
+msgstr "High Low bottom"
 
 msgid "High Minus Low"
-msgstr ""
+msgstr "High Minus Low"
 
 msgid "Median Price"
-msgstr ""
+msgstr "Median Price"
 
 msgid "Overlay"
-msgstr ""
+msgstr "Soprastante"
 
 msgid "Moving Average Envelope"
-msgstr ""
+msgstr "Moving Average Envelope"
 
 msgid "Shift Type"
-msgstr ""
+msgstr "Shift Type"
 
 msgid "Shift"
-msgstr ""
+msgstr "Shift"
 
 msgid "MA Env Top"
-msgstr ""
+msgstr "MA Env top"
 
 msgid "MA Env Median"
-msgstr ""
+msgstr "MA Env median"
 
 msgid "MA Env Bottom"
-msgstr ""
+msgstr "MA Env bottom"
 
 msgid "Fractal Chaos Bands"
-msgstr ""
+msgstr "Bande Fractal Chaos"
 
 msgid "Fractal High"
-msgstr ""
+msgstr "Fractal High"
 
 msgid "Fractal Low"
-msgstr ""
+msgstr "Fractal Low"
 
 msgid "Fractal Channel"
-msgstr ""
+msgstr "Fractal Channel"
 
 msgid "Fractal Chaos Oscillator"
-msgstr ""
+msgstr "Oscillatore Fractal Chaos"
 
 msgid "Gopalakrishnan Range Index"
-msgstr ""
+msgstr "Indice Gopalakrishnan Range"
 
 msgid "Prime Number Bands"
-msgstr ""
+msgstr "Prime Number Bands"
 
 msgid "Prime Bands Top"
-msgstr ""
+msgstr "Bande Prime Top"
 
 msgid "Prime Bands Bottom"
-msgstr ""
+msgstr "Bande Prime Bottom"
 
 msgid "Prime Bands Channel"
-msgstr ""
+msgstr "Bande Prime Channel"
 
 msgid "Prime Number Oscillator"
-msgstr ""
+msgstr "Oscillatore Prime Number"
 
 msgid "Tolerance Percentage"
-msgstr ""
+msgstr "Percentuale di tolleranza"
 
 msgid "Bollinger Bands"
-msgstr ""
+msgstr "Bande di Bollinger"
 
 msgid "Bollinger Bands Top"
-msgstr ""
+msgstr "Bande di Bollinger Top"
 
 msgid "Bollinger Bands Median"
-msgstr ""
+msgstr "Bande di Bollinger Median"
 
 msgid "Bollinger Bands Bottom"
-msgstr ""
+msgstr "Bande di Bollinger Bottom"
 
 msgid "Donchian Channel"
-msgstr ""
+msgstr "Donchian Channel"
 
 msgid "High Period"
-msgstr ""
+msgstr "Periodo High"
 
 msgid "Low Period"
-msgstr ""
+msgstr "Periodo Low"
 
 msgid "Donchian High"
-msgstr ""
+msgstr "Donchian High"
 
 msgid "Donchian Median"
-msgstr ""
+msgstr "Donchian Median"
 
 msgid "Donchian Low"
-msgstr ""
+msgstr "Donchian Low"
 
 msgid "Highest High Value"
-msgstr ""
+msgstr "Valore Highest Highe"
 
 msgid "Lowest Low Value"
-msgstr ""
+msgstr "Lowest Low Value"
 
 msgid "Mass Index"
-msgstr ""
+msgstr "Indice Mass"
 
 msgid "Bulge Threshold"
-msgstr ""
+msgstr "Bulge Threshold"
 
 msgid "Keltner Channel"
-msgstr ""
+msgstr "Keltner Channel"
 
 msgid "Keltner Top"
-msgstr ""
+msgstr "Keltner Top"
 
 msgid "Keltner Median"
-msgstr ""
+msgstr "Keltner Median"
 
 msgid "Keltner Bottom"
-msgstr ""
+msgstr "Keltner Bottom"
 
 msgid "Parabolic SAR"
-msgstr ""
+msgstr "Parabolic SAR"
 
 msgid "Minimum AF"
-msgstr ""
+msgstr "Minimum AF"
 
 msgid "Maximum AF"
-msgstr ""
+msgstr "Maximum AF"
 
 msgid "Klinger Volume Oscillator"
-msgstr ""
+msgstr "Oscillatore Klinger Volume"
 
 msgid "Signal Periods"
-msgstr ""
+msgstr "Periodo di segnale"
 
 msgid "Klinger"
-msgstr ""
+msgstr "Klinger"
 
 msgid "KlingerSignal"
-msgstr ""
+msgstr "Segnale Klinger"
 
 msgid "Elder Ray Index"
-msgstr ""
+msgstr "Elder Ray"
 
 msgid "Elder Bull Power"
-msgstr ""
+msgstr "Elder Power rialzista"
 
 msgid "Elder Bear Power"
-msgstr ""
+msgstr "Elder Power ribassista"
 
 msgid "Elder Force Index"
-msgstr ""
+msgstr "Indice Elder Force"
 
 msgid "Linear Reg Slope"
-msgstr ""
+msgstr "Linear Reg Slope"
 
 msgid "Slope"
-msgstr ""
+msgstr "Slope"
 
 msgid "Center Of Gravity"
-msgstr ""
+msgstr "Center Of Gravity"
 
 msgid "Typical Price"
-msgstr ""
+msgstr "Typical Price"
 
 msgid "Weighted Close"
-msgstr ""
+msgstr "Chiusura ponderata"
 
 msgid "Money Flow Index"
-msgstr ""
+msgstr "Money Flow Index"
 
 msgid "Williams %R"
-msgstr ""
+msgstr "Williams %R"
 
 msgid "Accumulation/Distribution"
-msgstr ""
+msgstr "Accumulation Distribution"
 
 msgid "Use Volume"
-msgstr ""
+msgstr "Utilizzare Volume"
 
 msgid "Volume Chart"
-msgstr ""
+msgstr "Grafico volumi"
 
 msgid "Up Volume"
-msgstr ""
+msgstr "Up Volume"
 
 msgid "Down Volume"
-msgstr ""
+msgstr "Down Volume"
 
 msgid "Volume Underlay"
-msgstr ""
+msgstr "Volume Underlay"
 
 msgid "Valuation Lines"
-msgstr ""
+msgstr "Linee di valutazione"
 
 msgid "Average Type"
-msgstr ""
+msgstr "Tipo di media"
 
 msgid "Display Average"
-msgstr ""
+msgstr "Mostra media"
 
 msgid "Display 1 Standard Deviation (1σ)"
-msgstr ""
+msgstr "Mostra 1 deviazione standard (1σ)"
 
 msgid "Display 2 Standard Deviation (2σ)"
-msgstr ""
+msgstr "Mostra 2 deviazione standard (2σ)"
 
 msgid "Display 3 Standard Deviation (3σ)"
-msgstr ""
+msgstr "Mostra 3 deviazione standard (3σ)"
 
 msgid "Average"
-msgstr ""
+msgstr "Media"
 
 msgid "1 Standard Deviation (1σ)"
-msgstr ""
+msgstr "1 deviazione standard (1σ)"
 
 msgid "2 Standard Deviation (2σ)"
-msgstr ""
+msgstr "2 deviazione standard (2σ)"
 
 msgid "3 Standard Deviation (3σ)"
-msgstr ""
+msgstr "3 deviazione standard (3σ)"
 
 msgid "Correlation Coefficient"
-msgstr ""
+msgstr "Coefficiente di correlazione"
 
 msgid "Price Momentum Oscillator"
-msgstr ""
+msgstr "Oscillatore Price Momentum"
 
 msgid "Double Smoothing Period"
-msgstr ""
+msgstr "Doppio periodi di lisciatura"
 
 msgid "PMO"
-msgstr ""
+msgstr "PMO"
 
 msgid "PMOSignal"
-msgstr ""
+msgstr "Segnale PMO"
 
 msgid "Relative Volatility"
-msgstr ""
+msgstr "Volatilità relativa"
 
 msgid "STD Period"
-msgstr ""
+msgstr "STD Period"
 
 msgid "Rel Vol"
-msgstr ""
+msgstr "Rel Vol"
 
 msgid "Awesome Oscillator"
-msgstr ""
+msgstr "Oscillatore Awesome"
 
 msgid "Market Facilitation Index"
-msgstr ""
+msgstr "Indice Market Facilitation"
 
 msgid "Scale Factor"
-msgstr ""
+msgstr "Fattore di scala"
 
 msgid "Green"
-msgstr ""
+msgstr "verde"
 
 msgid "Fade"
-msgstr ""
+msgstr "Fade"
 
 msgid "Fake"
-msgstr ""
+msgstr "Fake"
 
 msgid "Squat"
-msgstr ""
+msgstr "Squat"
 
 msgid "ATR Bands"
-msgstr ""
+msgstr "Bande ATR"
 
 msgid "ATR Bands Top"
-msgstr ""
+msgstr "Bande ATR top"
 
 msgid "ATR Bands Bottom"
-msgstr ""
+msgstr "Bande ATR bottom"
 
 msgid "ATR Bands Channel"
-msgstr ""
+msgstr "Bande ATR Channel"
 
 msgid "STARC Bands"
-msgstr ""
+msgstr "Bande di STARC"
 
 msgid "MA Period"
-msgstr ""
+msgstr "Periodo MA (media mobile)"
 
 msgid "Multiplier"
-msgstr ""
+msgstr "Moltiplicatore"
 
 msgid "STARC Bands Top"
-msgstr ""
+msgstr "Bande STARC superiori"
 
 msgid "STARC Bands Median"
-msgstr ""
+msgstr "Bande STARC mediane"
 
 msgid "STARC Bands Bottom"
-msgstr ""
+msgstr "Bande STARC inferiori"
 
 msgid "ATR Trailing Stops"
-msgstr ""
+msgstr "ATR Trailing Stop"
 
 msgid "Plot Type"
-msgstr ""
+msgstr "Tipo di tracciato"
 
 msgid "HighLow"
-msgstr ""
+msgstr "HighLow"
 
 msgid "Buy Stops"
-msgstr ""
+msgstr "Ordini stop di acquisto (Buy Stops)"
 
 msgid "Sell Stops"
-msgstr ""
+msgstr "Ordini stop di vendita (Sell Stops)"
 
 msgid "Bollinger %b"
-msgstr ""
+msgstr "Bollinger %b"
 
 msgid "%b"
-msgstr ""
+msgstr "%b"
 
 msgid "Bollinger Bandwidth"
-msgstr ""
+msgstr "Ampiezza Banda di Bollinger"
 
 msgid "Bandwidth"
-msgstr ""
+msgstr "Ampiezza della banda"
 
 msgid "Donchian Width"
-msgstr ""
+msgstr "Ampiezza di Donchian"
 
 msgid "Relative Vigor Index"
-msgstr ""
+msgstr "Indice Relative Vigor"
 
 msgid "Rel Vig"
-msgstr ""
+msgstr "Rel Vig"
 
 msgid "RelVigSignal"
-msgstr ""
+msgstr "RelVigSignal"
 
 msgid "Elder Impulse System"
-msgstr ""
+msgstr "Sistema impulsi di Elder"
 
 msgid "Bullish"
-msgstr ""
+msgstr "Al rialzo"
 
 msgid "Bearish"
-msgstr ""
+msgstr "Al ribasso"
 
 msgid "Neutral"
-msgstr ""
+msgstr "Neutrale"
 
 msgid "Pivot Points"
-msgstr ""
+msgstr "Punti pivot"
 
 msgid "Pivot"
-msgstr ""
+msgstr "Pivot"
 
 msgid "Resistance 1"
-msgstr ""
+msgstr "Resistenza 1"
 
 msgid "Support 1"
-msgstr ""
+msgstr "Supporto 1"
 
 msgid "Resistance 2"
-msgstr ""
+msgstr "Resistenza 2"
 
 msgid "Support 2"
-msgstr ""
+msgstr "Supporto 2"
 
 msgid "Resistance 3"
-msgstr ""
+msgstr "Resistenza 3"
 
 msgid "Support 3"
-msgstr ""
+msgstr "Supporto 3"
 
 msgid "VWAP"
-msgstr ""
+msgstr "VWAP"
 
 msgid "Alligator"
-msgstr ""
+msgstr "Alligator"
 
 msgid "Jaw Period"
-msgstr ""
+msgstr "Periodo Jaw"
 
 msgid "Jaw Offset"
-msgstr ""
+msgstr "Compensazione Jaw"
 
 msgid "Teeth Period"
-msgstr ""
+msgstr "Periodo Teeth"
 
 msgid "Teeth Offset"
-msgstr ""
+msgstr "Compensazione Teeth"
 
 msgid "Lips Period"
-msgstr ""
+msgstr "Periodo Lips"
 
 msgid "Lips Offset"
-msgstr ""
+msgstr "Compensazione Lips"
 
 msgid "Show Fractals"
-msgstr ""
+msgstr "Mostra frattali"
 
 msgid "Jaw"
-msgstr ""
+msgstr "Jaw"
 
 msgid "Teeth"
-msgstr ""
+msgstr "Teeth"
 
 msgid "Lips"
-msgstr ""
+msgstr "Lips"
 
 msgid "Gator Oscillator"
-msgstr ""
+msgstr "Oscillatore Gator"
 
 msgid "Ichimoku Clouds"
-msgstr ""
+msgstr "Ichimoku Clouds"
 
 msgid "Conversion Line Period"
-msgstr ""
+msgstr "Periodo della linea di conversione"
 
 msgid "Base Line Period"
-msgstr ""
+msgstr "Periodi della linea di base"
 
 msgid "Leading Span B Period"
-msgstr ""
+msgstr "Periodo Leading Span B"
 
 msgid "Lagging Span Period"
-msgstr ""
+msgstr "Periodo Lagging Span"
 
 msgid "Conversion Line"
-msgstr ""
+msgstr "Linea di conversione"
 
 msgid "Base Line"
-msgstr ""
+msgstr "Linea di base"
 
 msgid "Leading Span A"
-msgstr ""
+msgstr "Leading Span A"
 
 msgid "Leading Span B"
-msgstr ""
+msgstr "Leading Span B"
 
 msgid "Lagging Span"
-msgstr ""
+msgstr "Lagging Span"
 
 msgid "Price Relative"
-msgstr ""
+msgstr "Price Relative"
 
 msgid "Comparison Symbol"
-msgstr ""
+msgstr "Simbolo di confronto"
 
 msgid "Performance Index"
-msgstr ""
+msgstr "Indice di Performance"
 
 msgid "Gain"
-msgstr ""
+msgstr "Guadagno"
 
 msgid "Loss"
-msgstr ""
+msgstr "Perdita"
 
 msgid "Beta"
-msgstr ""
+msgstr "Beta"
 
 msgid "Ulcer Index"
-msgstr ""
+msgstr "Indice dell'ulcera"
 
 msgid "Balance of Power"
-msgstr ""
+msgstr "Equilibrio di potenza"
 
 msgid "Trend Intensity Index"
-msgstr ""
+msgstr "Indice di intensità della tendenza"
 
 msgid "TII"
-msgstr ""
+msgstr "TII"
 
 msgid "Choppiness Index"
-msgstr ""
+msgstr "Indice choppiness"
 
 msgid "Disparity Index"
-msgstr ""
+msgstr "Indice disparità"
 
 msgid "Rainbow Moving Average"
-msgstr ""
+msgstr "Grafico media mobile ad arcobaleno"
 
 msgid "SMA1"
-msgstr ""
+msgstr "SMA1"
 
 msgid "SMA2"
-msgstr ""
+msgstr "SMA2"
 
 msgid "SMA3"
-msgstr ""
+msgstr "SMA3"
 
 msgid "SMA4"
-msgstr ""
+msgstr "SMA4"
 
 msgid "SMA5"
-msgstr ""
+msgstr "SMA5"
 
 msgid "SMA6"
-msgstr ""
+msgstr "SMA6"
 
 msgid "SMA7"
-msgstr ""
+msgstr "SMA7"
 
 msgid "SMA8"
-msgstr ""
+msgstr "SMA8"
 
 msgid "SMA9"
-msgstr ""
+msgstr "SMA9"
 
 msgid "SMA10"
-msgstr ""
+msgstr "SMA10"
 
 msgid "Rainbow Oscillator"
-msgstr ""
+msgstr "Oscillatore arcobaleno"
 
 msgid "HHV/LLV Lookback"
-msgstr ""
+msgstr "Loookback HHV/LLV"
 
 msgid "Pring's Know Sure Thing"
-msgstr ""
+msgstr "Indicatore Know Sure Thing di Pring"
 
 msgid "Lightest Rate of Change Period"
-msgstr ""
+msgstr "Periodo con il tasso di variazione più leggero"
 
 msgid "Lightest SMA Period"
-msgstr ""
+msgstr "Periodo con la SMA più leggera"
 
 msgid "Light Rate of Change Period"
-msgstr ""
+msgstr "Periodo con tasso di variazione leggero"
 
 msgid "Light SMA Period"
-msgstr ""
+msgstr "Periodo con SMA leggera"
 
 msgid "Heavy Rate of Change Period"
-msgstr ""
+msgstr "Periodo con tasso di variazione pesante"
 
 msgid "Heavy SMA Period"
-msgstr ""
+msgstr "Periodo con SMA pesante"
 
 msgid "Heaviest Rate of Change Period"
-msgstr ""
+msgstr "Periodo con il tasso di variazione più pesante"
 
 msgid "Heaviest SMA Period"
-msgstr ""
+msgstr "Periodo con SMA più pesante"
 
 msgid "KST"
-msgstr ""
+msgstr "KST"
 
 msgid "KSTSignal"
-msgstr ""
+msgstr "Segnale KST"
 
 msgid "Pring's Special K"
-msgstr ""
-
-msgid "Interval"
-msgstr ""
+msgstr "Indicatore Special K di Pring"
 
 msgid "Darvas Box"
-msgstr ""
+msgstr "Scatole di Darvas"
 
 msgid "ATH Lookback Period"
-msgstr ""
+msgstr "Periodo di lookback ATH"
 
 msgid "Exit Field"
-msgstr ""
+msgstr "Campo di uscita"
 
 msgid "Ghost Boxes"
-msgstr ""
+msgstr "Ghost Box"
 
 msgid "Stop Levels"
-msgstr ""
+msgstr "Livelli di stop"
 
 msgid "Level Offset"
-msgstr ""
+msgstr "Offset livello"
 
 msgid "Price Minimum"
-msgstr ""
+msgstr "Minimo del prezzo"
 
 msgid "Volume Spike"
-msgstr ""
+msgstr "Spike dei volumi"
 
 msgid "Volume % of Avg"
-msgstr ""
+msgstr "% di volume della media"
 
 msgid "Darvas"
-msgstr ""
+msgstr "Darvas"
 
 msgid "Ghost"
-msgstr ""
+msgstr "Ghost"
 
 msgid "Levels"
-msgstr ""
+msgstr "Livelli"
 
 msgid "Supertrend"
-msgstr ""
+msgstr "Supertrend"
 
 msgid "Uptrend"
-msgstr ""
+msgstr "Uptrend"
 
 msgid "Downtrend"
-msgstr ""
+msgstr "Downtrend"
 
 msgid "Volume Profile"
-msgstr ""
+msgstr "Profilo Volume"
 
 msgid "Bars Color"
-msgstr ""
+msgstr "Colore delle barre"
 
 msgid "Vortex Indicator"
-msgstr ""
+msgstr "Indicatore di vortice"
 
 msgid "+VI"
-msgstr ""
+msgstr "+VI"
 
 msgid "-VI"
-msgstr ""
+msgstr "-VI"
 
 msgid "ZigZag"
-msgstr ""
+msgstr "ZigZag"
 
 msgid "Distance(%)"
-msgstr ""
+msgstr "Distanza (%)"
 
 msgid "Psychological Line"
-msgstr ""
+msgstr "Soglia psicologica"
 
 msgid "Moving Average Deviation"
-msgstr ""
+msgstr "Deviazione della media mobile"
 
 msgid "Shinohara Intensity Ratio"
-msgstr ""
+msgstr "Rapporto di intensità Shinohara"
 
 msgid "Strong Ratio"
-msgstr ""
+msgstr "Rapporto forte"
 
 msgid "Weak Ratio"
-msgstr ""
+msgstr "Rapporto debole"
 
