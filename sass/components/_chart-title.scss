@@ -116,13 +116,13 @@
         z-index: -3;
         opacity: 0;
         pointer-events: none;
-        transform: translateX(0) translateY( -50% );
+        transform: translateX(0) translateY( -10% );
         @include dialog-transition();
         &.cq-menu-dropdown-enter-done{
             opacity: 1;
             pointer-events: initial;
             transform: translateX(0) translateY( 0% );
-            z-index: 3;
+            z-index: 6;
         }
         &.cq-menu-dropdown-enter.cq-menu-dropdown-enter-active{
             opacity: 1;
@@ -135,7 +135,7 @@
             z-index: -3;
         }
         &.cq-menu-dropdown-exit-done{
-            transform: translateX(0) translateY( -50% );
+            transform: translateX(0) translateY( -10% );
         }
     }
 }
