@@ -35,10 +35,8 @@ class ChartStore {
     @observable isMobile = false;
 
     @action.bound setActiveSymbols(activeSymbols) {
-        if (activeSymbols && this.context) {
-            this.activeSymbols = this.processSymbols(activeSymbols);
-            this.categorizedSymbols = this.categorizeActiveSymbols();
-        }
+        this.activeSymbols = this.processSymbols(activeSymbols);
+        this.categorizedSymbols = this.categorizeActiveSymbols();
     }
 
     get loader () { return this.mainStore.loader; }
@@ -55,6 +53,7 @@ class ChartStore {
         stx.importLayout(layoutData, {
             managePeriodicity: true,
             cb: () => {
+                if (layoutData.tension) {stx.chart.tension = layoutData.tension;}
                 this.restoreDrawings(stx, stx.chart.symbol);
                 if (this.loader) {this.loader.hide();}
             },
@@ -214,14 +213,17 @@ class ChartStore {
                 delete layoutData.symbols;
             }
 
-            const checkForQuerystring = window.location.origin === 'https://charts.binary.com' ||
-                window.location.origin === 'http://localhost:8080';
-
-            if (checkForQuerystring) {
-                const [, json] = window.location.href.split('#');
-                if(json) {
-                    layoutData = decodeURIComponent(json);
-                    window.history.replaceState({}, document.title, "/");
+            const configParams = window.location.href.split('#');
+            if (configParams.length > 1) {
+                const sharedParams = configParams.slice(1, configParams.length).join('#');
+                if(sharedParams) {
+                    layoutData = decodeURI(sharedParams);
+                    try {
+                        layoutData = JSON.parse(layoutData);
+                    }catch(e){
+                        console.error(e);
+                    }
+                    window.history.replaceState({}, document.title, window.location.pathname);
                 }
             }
 
@@ -233,17 +235,17 @@ class ChartStore {
                 this.changeSymbol(initialSymbol);
             } else if (stxx.chart.symbol) {
                 this.currentActiveSymbol = stxx.chart.symbolObject;
+                stxx.chart.yAxis.decimalPlaces = stxx.chart.symbolObject.decimal_places;
                 this.categorizedSymbols = this.categorizeActiveSymbols();
             } else {
                 this.changeSymbol(this.defaultSymbol);
             }
+
+            this.context = context;
+            this.contextPromise.resolve(this.context );
+            this.resizeScreen();
+            this.chartPanelTop = holderStyle.top;
         });
-
-
-        this.context = context;
-        this.contextPromise.resolve(context);
-        this.resizeScreen();
-        this.chartPanelTop = holderStyle.top;
 
         window.addEventListener('resize', this.resizeScreen, false);
 
@@ -264,7 +266,7 @@ class ChartStore {
 
         // reset comparisons
         for (const field in this.stxx.chart.series) {
-            if (stxx.chart.series[field].parameters.bucket !== 'study') {
+            if (this.stxx.chart.series[field].parameters.bucket !== 'study') {
                 this.stxx.removeSeries(field);
             }
         }
@@ -278,6 +280,7 @@ class ChartStore {
             this.restoreDrawings(this.stxx, this.stxx.chart.symbol);
         });
 
+        this.stxx.chart.yAxis.decimalPlaces = symbolObj.decimal_places;
         this.currentActiveSymbol = symbolObj;
         this.categorizedSymbols = this.categorizeActiveSymbols();
     }

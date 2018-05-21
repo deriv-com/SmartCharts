@@ -10,13 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: German\n"
 "Language: de_DE\n"
-"PO-Revision-Date: 2018-05-11 09:31-0400\n"
-
-msgid "CLOSED"
-msgstr "GESCHLOSSEN"
-
-msgid "Close"
-msgstr "Schluss"
+"PO-Revision-Date: 2018-05-18 06:21-0400\n"
 
 msgid "Favorites"
 msgstr "Favoriten"
@@ -24,8 +18,11 @@ msgstr "Favoriten"
 msgid "There are no favorites yet."
 msgstr "Noch gibt es keine Favoriten."
 
-msgid "Chart data is not available for this symbol."
-msgstr "Chart-Daten sind für dieses Symbol nicht verfügbar."
+msgid "CLOSED"
+msgstr "GESCHLOSSEN"
+
+msgid "Close"
+msgstr "Schluss"
 
 msgid "PRICE"
 msgstr "PREIS"
@@ -42,35 +39,41 @@ msgstr "HOCH"
 msgid "LOW"
 msgstr "TIEF"
 
-msgid "Chart types"
-msgstr "Charttypen"
+msgid "Share"
+msgstr "Teilen"
 
-msgid "Toggle Asset Information"
-msgstr "Toggle-Anlgen-Informationen"
+msgid "Share / Download Chart"
+msgstr "Chart teilen/herunterladen"
 
-msgid "Studies"
-msgstr "Studien"
+msgid "Share link"
+msgstr "Link teilen"
 
-msgid "Comparison"
-msgstr "Vergleich"
+msgid "Failed to generate link"
+msgstr ""
 
-msgid "Templates"
-msgstr "Vorlagen"
+msgid "Retry"
+msgstr ""
 
-msgid "Template name"
-msgstr "Vorlagenname"
+msgid "Download chart"
+msgstr "Chart herunterladen"
 
-msgid "There is no template added by you."
-msgstr "Es gibt keine von Ihnen hinzugefügte Vorlage."
+msgid "Draw tools"
+msgstr "Zeichen-Tools"
 
-msgid "Click + icon to add one."
-msgstr "Klicken Sie +icon, um eines hinzuzufügen."
+msgid "Clear All"
+msgstr "Alle löschen"
 
-msgid "Crosshair"
-msgstr "Fadenkreuz"
+msgid "Measure"
+msgstr "Messen"
 
-msgid "Time period"
-msgstr "Zeitraum"
+msgid "Zoom out"
+msgstr "Verkleinern"
+
+msgid "Zoom in"
+msgstr "Vergrößern"
+
+msgid "Interval"
+msgstr "Intervall"
 
 msgid "Tick"
 msgstr "Tick"
@@ -84,44 +87,41 @@ msgstr "Stunde"
 msgid "Day"
 msgstr "Tag"
 
-msgid "Zoom out"
-msgstr "Verkleinern"
+msgid "Crosshair"
+msgstr "Fadenkreuz"
 
-msgid "Zoom in"
-msgstr "Vergrößern"
+msgid "Templates"
+msgstr "Vorlagen"
 
-msgid "Draw tools"
-msgstr "Zeichen-Tools"
+msgid "Template name"
+msgstr "Vorlagenname"
 
-msgid "Clear All"
-msgstr "Alle löschen"
+msgid "There is no template added by you."
+msgstr "Es gibt keine von Ihnen hinzugefügte Vorlage."
 
-msgid "Measure"
-msgstr "Messen"
+msgid "Click + icon to add one."
+msgstr "Klicken Sie +icon, um eines hinzuzufügen."
+
+msgid "Comparison"
+msgstr "Vergleich"
+
+msgid "Indicators"
+msgstr "Indikatoren"
+
+msgid "Chart types"
+msgstr "Charttypen"
+
+msgid "Toggle Asset Information"
+msgstr "Toggle-Anlgen-Informationen"
 
 msgid "Settings"
 msgstr "Einstellungen"
 
-msgid "Position"
-msgstr "Position"
-
-msgid "Theme"
-msgstr "Thema"
+msgid "Dark Mode"
+msgstr ""
 
 msgid "Language"
 msgstr "Sprache"
-
-msgid "Share"
-msgstr "Teilen"
-
-msgid "Share / Download Chart"
-msgstr "Chart teilen/herunterladen"
-
-msgid "Share link"
-msgstr "Link teilen"
-
-msgid "Download chart"
-msgstr "Chart herunterladen"
 
 msgid "RESET"
 msgstr "Zurücksetzen"
@@ -129,59 +129,14 @@ msgstr "Zurücksetzen"
 msgid "DONE"
 msgstr "ERLEDIGT"
 
-msgid "right-click to delete"
-msgstr "zum Löschen rechts klicken"
-
-msgid "right-click to manage"
-msgstr "zum Verwalten rechts klicken"
-
 msgid "[symbol] market is presently closed."
 msgstr "[symbol] Markt ist derzeit geschlossen."
 
 msgid "Streaming for [symbol] is not available due to license restrictions"
 msgstr "Streaming für [symbol] ist auf Grund von Lizenzeinschränkungen nicht verfügbar"
 
-msgid "Line"
-msgstr "Linie"
-
-msgid "Dot"
-msgstr "Punkt"
-
-msgid "Colored Dot"
-msgstr "Farbiger Punkt"
-
-msgid "Spline"
-msgstr "Spline"
-
-msgid "Baseline"
-msgstr "Baseline"
-
-msgid "Candle"
-msgstr "Kerze"
-
-msgid "OHLC"
-msgstr "OHLC"
-
-msgid "Hollow Candle"
-msgstr "Hohlkerze"
-
-msgid "\"Mass Index\" or \"Doji Star\""
-msgstr "\"Mass-Index\" oder \"Doji Star\""
-
-msgid "Indicators"
-msgstr "Indikatoren"
-
-msgid "Active"
-msgstr "Aktiv"
-
-msgid "There are no active indicators yet."
-msgstr "Es gibt noch keine aktiven Indikatoren."
-
-msgid "\"AUD/JPY\" or \"Apple\""
-msgstr "\"AUD/JPY\" oder \"Apple\""
-
-msgid "There are no active comparisons yet."
-msgstr "Es gibt noch keine aktiven Vergleiche."
+msgid "Search..."
+msgstr ""
 
 msgid "Annotation"
 msgstr "Anmerkung"
@@ -227,6 +182,9 @@ msgstr "Gartley"
 
 msgid "Horizontal"
 msgstr "Horizontal"
+
+msgid "Line"
+msgstr "Linie"
 
 msgid "Pitchfork"
 msgstr "Gabel-Chart"
@@ -278,6 +236,48 @@ msgstr "Tirone Levels"
 
 msgid "Vertical"
 msgstr "Vertikal"
+
+msgid "Active"
+msgstr "Aktiv"
+
+msgid "There are no active comparisons yet."
+msgstr "Es gibt noch keine aktiven Vergleiche."
+
+msgid "\"Mass Index\" or \"Doji Star\""
+msgstr "\"Mass-Index\" oder \"Doji Star\""
+
+msgid "There are no active indicators yet."
+msgstr "Es gibt noch keine aktiven Indikatoren."
+
+msgid "Dot"
+msgstr "Punkt"
+
+msgid "Colored Dot"
+msgstr "Farbiger Punkt"
+
+msgid "Spline"
+msgstr "Spline"
+
+msgid "Baseline"
+msgstr "Baseline"
+
+msgid "Candle"
+msgstr "Kerze"
+
+msgid "OHLC"
+msgstr "OHLC"
+
+msgid "Hollow Candle"
+msgstr "Hohlkerze"
+
+msgid "right-click to delete"
+msgstr "zum Löschen rechts klicken"
+
+msgid "right-click to manage"
+msgstr "zum Verwalten rechts klicken"
+
+msgid "Chart data is not available for this symbol."
+msgstr "Chart-Daten sind für dieses Symbol nicht verfügbar."
 
 msgid "RSI"
 msgstr "RSI"
@@ -1166,9 +1166,6 @@ msgstr "KSTSignal"
 
 msgid "Pring's Special K"
 msgstr "Pring's Special K"
-
-msgid "Interval"
-msgstr "Intervall"
 
 msgid "Darvas Box"
 msgstr "Darvas Box"
