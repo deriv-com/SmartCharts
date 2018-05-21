@@ -61,7 +61,7 @@
         .cq-menu-dropdown {
             opacity: 0;
             z-index: -3;
-            transform: translateX( -50% ) translateY( 20% );
+            transform: translateX( -50% ) translateY( 5em );
             left: 50%;
             pointer-events: none;
             @include transition( opacity .20s 0s);
@@ -70,11 +70,11 @@
                 pointer-events: initial;
                 opacity: 1;
                 z-index: 6;
-                transform: translateX( -50% ) translateY( 0% );
+                transform: translateX( -50% ) translateY( 0em );
             }
             &.cq-menu-dropdown-enter.cq-menu-dropdown-enter-active{
                 pointer-events: initial;
-                transform: translateX( -50% ) translateY( 0% );
+                transform: translateX( -50% ) translateY( 0em );
                 opacity: 1;
                 z-index: -3;
             }
@@ -84,7 +84,7 @@
                 z-index: -3;
             }
             &.cq-menu-dropdown-exit-done{
-                transform: translateX( -50% ) translateY( 20% );
+                transform: translateX( -50% ) translateY( 5em );
             }
         }
     }

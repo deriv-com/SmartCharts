@@ -116,18 +116,18 @@
         z-index: -3;
         opacity: 0;
         pointer-events: none;
-        transform: translateX(0) translateY( -10% );
+        transform: translateX(0) translateY( -3em );
         @include dialog-transition();
         &.cq-menu-dropdown-enter-done{
             opacity: 1;
             pointer-events: initial;
-            transform: translateX(0) translateY( 0% );
+            transform: translateX(0) translateY( 0em );
             z-index: 6;
         }
         &.cq-menu-dropdown-enter.cq-menu-dropdown-enter-active{
             opacity: 1;
             pointer-events: initial;
-            transform: translateX(0) translateY( 0% );
+            transform: translateX(0) translateY( 0em );
         }
         &.cq-menu-dropdown-exit.cq-menu-dropdown-exit-active{
             @include dialog-transition();
@@ -135,7 +135,7 @@
             z-index: -3;
         }
         &.cq-menu-dropdown-exit-done{
-            transform: translateX(0) translateY( -10% );
+            transform: translateX(0) translateY( -3em );
         }
     }
 }
