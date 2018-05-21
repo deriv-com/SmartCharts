@@ -10,13 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Polish\n"
 "Language: pl_PL\n"
-"PO-Revision-Date: 2018-05-18 01:15-0400\n"
-
-msgid "CLOSED"
-msgstr ""
-
-msgid "Close"
-msgstr ""
+"PO-Revision-Date: 2018-05-18 06:21-0400\n"
 
 msgid "Favorites"
 msgstr "Ulubione"
@@ -24,7 +18,10 @@ msgstr "Ulubione"
 msgid "There are no favorites yet."
 msgstr "Brak ulubionych."
 
-msgid "Chart data is not available for this symbol."
+msgid "CLOSED"
+msgstr ""
+
+msgid "Close"
 msgstr ""
 
 msgid "PRICE"
@@ -42,35 +39,41 @@ msgstr ""
 msgid "LOW"
 msgstr ""
 
-msgid "Chart types"
-msgstr "Rodzaje wykresów"
-
-msgid "Toggle Asset Information"
+msgid "Share"
 msgstr ""
 
-msgid "Studies"
+msgid "Share / Download Chart"
+msgstr "Udostępnij/pobierz wykres"
+
+msgid "Share link"
 msgstr ""
 
-msgid "Comparison"
-msgstr "Porównania"
-
-msgid "Templates"
-msgstr "Szablony"
-
-msgid "Template name"
-msgstr "Nazwa szablonu"
-
-msgid "There is no template added by you."
-msgstr "Nie dodałeś/-aś jeszcze żadnych szablonów."
-
-msgid "Click + icon to add one."
+msgid "Failed to generate link"
 msgstr ""
 
-msgid "Crosshair"
+msgid "Retry"
 msgstr ""
 
-msgid "Time period"
-msgstr "Okres czasu"
+msgid "Download chart"
+msgstr ""
+
+msgid "Draw tools"
+msgstr "Narzędzia do rysowania"
+
+msgid "Clear All"
+msgstr "Wyczyść wszystko"
+
+msgid "Measure"
+msgstr ""
+
+msgid "Zoom out"
+msgstr ""
+
+msgid "Zoom in"
+msgstr ""
+
+msgid "Interval"
+msgstr ""
 
 msgid "Tick"
 msgstr "Zmiana ceny"
@@ -84,43 +87,40 @@ msgstr "Godzina"
 msgid "Day"
 msgstr "Dzień"
 
-msgid "Zoom out"
+msgid "Crosshair"
 msgstr ""
 
-msgid "Zoom in"
+msgid "Templates"
+msgstr "Szablony"
+
+msgid "Template name"
+msgstr "Nazwa szablonu"
+
+msgid "There is no template added by you."
+msgstr "Nie dodałeś/-aś jeszcze żadnych szablonów."
+
+msgid "Click + icon to add one."
 msgstr ""
 
-msgid "Draw tools"
-msgstr "Narzędzia do rysowania"
+msgid "Comparison"
+msgstr "Porównania"
 
-msgid "Clear All"
-msgstr "Wyczyść wszystko"
+msgid "Indicators"
+msgstr "Wskaźniki"
 
-msgid "Measure"
+msgid "Chart types"
+msgstr "Rodzaje wykresów"
+
+msgid "Toggle Asset Information"
 msgstr ""
 
 msgid "Settings"
 msgstr ""
 
-msgid "Position"
-msgstr ""
-
-msgid "Theme"
+msgid "Dark Mode"
 msgstr ""
 
 msgid "Language"
-msgstr ""
-
-msgid "Share"
-msgstr ""
-
-msgid "Share / Download Chart"
-msgstr "Udostępnij/pobierz wykres"
-
-msgid "Share link"
-msgstr ""
-
-msgid "Download chart"
 msgstr ""
 
 msgid "RESET"
@@ -129,58 +129,13 @@ msgstr "RESET"
 msgid "DONE"
 msgstr "GOTOWE"
 
-msgid "right-click to delete"
-msgstr "kliknij prawym przyciskiem, aby usunąć"
-
-msgid "right-click to manage"
-msgstr ""
-
 msgid "[symbol] market is presently closed."
 msgstr ""
 
 msgid "Streaming for [symbol] is not available due to license restrictions"
 msgstr ""
 
-msgid "Line"
-msgstr "Linia"
-
-msgid "Dot"
-msgstr "Kropka"
-
-msgid "Colored Dot"
-msgstr "Kolorowa kropka"
-
-msgid "Spline"
-msgstr ""
-
-msgid "Baseline"
-msgstr ""
-
-msgid "Candle"
-msgstr "Świeca"
-
-msgid "OHLC"
-msgstr "OHLC"
-
-msgid "Hollow Candle"
-msgstr ""
-
-msgid "\"Mass Index\" or \"Doji Star\""
-msgstr ""
-
-msgid "Indicators"
-msgstr "Wskaźniki"
-
-msgid "Active"
-msgstr "Aktywne"
-
-msgid "There are no active indicators yet."
-msgstr ""
-
-msgid "\"AUD/JPY\" or \"Apple\""
-msgstr ""
-
-msgid "There are no active comparisons yet."
+msgid "Search..."
 msgstr ""
 
 msgid "Annotation"
@@ -227,6 +182,9 @@ msgstr ""
 
 msgid "Horizontal"
 msgstr ""
+
+msgid "Line"
+msgstr "Linia"
 
 msgid "Pitchfork"
 msgstr ""
@@ -277,6 +235,48 @@ msgid "Tirone Levels"
 msgstr ""
 
 msgid "Vertical"
+msgstr ""
+
+msgid "Active"
+msgstr "Aktywne"
+
+msgid "There are no active comparisons yet."
+msgstr ""
+
+msgid "\"Mass Index\" or \"Doji Star\""
+msgstr ""
+
+msgid "There are no active indicators yet."
+msgstr ""
+
+msgid "Dot"
+msgstr "Kropka"
+
+msgid "Colored Dot"
+msgstr "Kolorowa kropka"
+
+msgid "Spline"
+msgstr ""
+
+msgid "Baseline"
+msgstr ""
+
+msgid "Candle"
+msgstr "Świeca"
+
+msgid "OHLC"
+msgstr "OHLC"
+
+msgid "Hollow Candle"
+msgstr ""
+
+msgid "right-click to delete"
+msgstr "kliknij prawym przyciskiem, aby usunąć"
+
+msgid "right-click to manage"
+msgstr ""
+
+msgid "Chart data is not available for this symbol."
 msgstr ""
 
 msgid "RSI"
@@ -1165,9 +1165,6 @@ msgid "KSTSignal"
 msgstr ""
 
 msgid "Pring's Special K"
-msgstr ""
-
-msgid "Interval"
 msgstr ""
 
 msgid "Darvas Box"

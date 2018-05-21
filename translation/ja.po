@@ -10,13 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Japanese\n"
 "Language: ja_JP\n"
-"PO-Revision-Date: 2018-05-18 01:15-0400\n"
-
-msgid "CLOSED"
-msgstr ""
-
-msgid "Close"
-msgstr ""
+"PO-Revision-Date: 2018-05-18 06:21-0400\n"
 
 msgid "Favorites"
 msgstr ""
@@ -24,7 +18,10 @@ msgstr ""
 msgid "There are no favorites yet."
 msgstr ""
 
-msgid "Chart data is not available for this symbol."
+msgid "CLOSED"
+msgstr ""
+
+msgid "Close"
 msgstr ""
 
 msgid "PRICE"
@@ -42,35 +39,41 @@ msgstr ""
 msgid "LOW"
 msgstr ""
 
-msgid "Chart types"
+msgid "Share"
+msgstr "共有"
+
+msgid "Share / Download Chart"
 msgstr ""
 
-msgid "Toggle Asset Information"
+msgid "Share link"
 msgstr ""
 
-msgid "Studies"
-msgstr "スタディ"
-
-msgid "Comparison"
+msgid "Failed to generate link"
 msgstr ""
 
-msgid "Templates"
+msgid "Retry"
 msgstr ""
 
-msgid "Template name"
+msgid "Download chart"
 msgstr ""
 
-msgid "There is no template added by you."
+msgid "Draw tools"
 msgstr ""
 
-msgid "Click + icon to add one."
+msgid "Clear All"
+msgstr "全てをクリアする"
+
+msgid "Measure"
+msgstr "計測"
+
+msgid "Zoom out"
 msgstr ""
 
-msgid "Crosshair"
-msgstr "十字線"
-
-msgid "Time period"
+msgid "Zoom in"
 msgstr ""
+
+msgid "Interval"
+msgstr "間隔"
 
 msgid "Tick"
 msgstr ""
@@ -84,43 +87,40 @@ msgstr ""
 msgid "Day"
 msgstr "日中"
 
-msgid "Zoom out"
+msgid "Crosshair"
+msgstr "十字線"
+
+msgid "Templates"
 msgstr ""
 
-msgid "Zoom in"
+msgid "Template name"
 msgstr ""
 
-msgid "Draw tools"
+msgid "There is no template added by you."
 msgstr ""
 
-msgid "Clear All"
-msgstr "全てをクリアする"
+msgid "Click + icon to add one."
+msgstr ""
 
-msgid "Measure"
-msgstr "計測"
+msgid "Comparison"
+msgstr ""
+
+msgid "Indicators"
+msgstr ""
+
+msgid "Chart types"
+msgstr ""
+
+msgid "Toggle Asset Information"
+msgstr ""
 
 msgid "Settings"
 msgstr ""
 
-msgid "Position"
-msgstr ""
-
-msgid "Theme"
+msgid "Dark Mode"
 msgstr ""
 
 msgid "Language"
-msgstr ""
-
-msgid "Share"
-msgstr "共有"
-
-msgid "Share / Download Chart"
-msgstr ""
-
-msgid "Share link"
-msgstr ""
-
-msgid "Download chart"
 msgstr ""
 
 msgid "RESET"
@@ -129,58 +129,13 @@ msgstr ""
 msgid "DONE"
 msgstr ""
 
-msgid "right-click to delete"
-msgstr "削除するには、右クリック"
-
-msgid "right-click to manage"
-msgstr "管理するために、右クリック"
-
 msgid "[symbol] market is presently closed."
 msgstr ""
 
 msgid "Streaming for [symbol] is not available due to license restrictions"
 msgstr ""
 
-msgid "Line"
-msgstr "線"
-
-msgid "Dot"
-msgstr ""
-
-msgid "Colored Dot"
-msgstr ""
-
-msgid "Spline"
-msgstr ""
-
-msgid "Baseline"
-msgstr "ベースライン"
-
-msgid "Candle"
-msgstr "ローソク足"
-
-msgid "OHLC"
-msgstr ""
-
-msgid "Hollow Candle"
-msgstr "陽線ローソク足"
-
-msgid "\"Mass Index\" or \"Doji Star\""
-msgstr ""
-
-msgid "Indicators"
-msgstr ""
-
-msgid "Active"
-msgstr ""
-
-msgid "There are no active indicators yet."
-msgstr ""
-
-msgid "\"AUD/JPY\" or \"Apple\""
-msgstr ""
-
-msgid "There are no active comparisons yet."
+msgid "Search..."
 msgstr ""
 
 msgid "Annotation"
@@ -227,6 +182,9 @@ msgstr "ガートレイ"
 
 msgid "Horizontal"
 msgstr "水平"
+
+msgid "Line"
+msgstr "線"
 
 msgid "Pitchfork"
 msgstr "ピッチフォーク"
@@ -278,6 +236,48 @@ msgstr "タイロンレベル"
 
 msgid "Vertical"
 msgstr "縦"
+
+msgid "Active"
+msgstr ""
+
+msgid "There are no active comparisons yet."
+msgstr ""
+
+msgid "\"Mass Index\" or \"Doji Star\""
+msgstr ""
+
+msgid "There are no active indicators yet."
+msgstr ""
+
+msgid "Dot"
+msgstr ""
+
+msgid "Colored Dot"
+msgstr ""
+
+msgid "Spline"
+msgstr ""
+
+msgid "Baseline"
+msgstr "ベースライン"
+
+msgid "Candle"
+msgstr "ローソク足"
+
+msgid "OHLC"
+msgstr ""
+
+msgid "Hollow Candle"
+msgstr "陽線ローソク足"
+
+msgid "right-click to delete"
+msgstr "削除するには、右クリック"
+
+msgid "right-click to manage"
+msgstr "管理するために、右クリック"
+
+msgid "Chart data is not available for this symbol."
+msgstr ""
 
 msgid "RSI"
 msgstr "RSI"
@@ -1166,9 +1166,6 @@ msgstr "KSTSignal"
 
 msgid "Pring's Special K"
 msgstr "プリングの特殊K"
-
-msgid "Interval"
-msgstr "間隔"
 
 msgid "Darvas Box"
 msgstr "ダーバス・ボックス"

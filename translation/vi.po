@@ -10,13 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Vietnamese\n"
 "Language: vi_VN\n"
-"PO-Revision-Date: 2018-05-18 01:15-0400\n"
-
-msgid "CLOSED"
-msgstr "ĐÃ ĐÓNG"
-
-msgid "Close"
-msgstr "Đóng"
+"PO-Revision-Date: 2018-05-18 06:21-0400\n"
 
 msgid "Favorites"
 msgstr "Yêu thích"
@@ -24,8 +18,11 @@ msgstr "Yêu thích"
 msgid "There are no favorites yet."
 msgstr "Không có mục yêu thích nào."
 
-msgid "Chart data is not available for this symbol."
-msgstr "Biểu đồ dữ liệu không khả dụng cho ký hiệu này."
+msgid "CLOSED"
+msgstr "ĐÃ ĐÓNG"
+
+msgid "Close"
+msgstr "Đóng"
 
 msgid "PRICE"
 msgstr "GIÁ"
@@ -42,35 +39,41 @@ msgstr "CAO"
 msgid "LOW"
 msgstr "THẤP"
 
-msgid "Chart types"
-msgstr "Loại biểu đồ"
+msgid "Share"
+msgstr "Chia sẻ"
 
-msgid "Toggle Asset Information"
-msgstr "Bật/Tắt thông tin tài sản"
+msgid "Share / Download Chart"
+msgstr "Chia sẻ / tải về biểu đồ"
 
-msgid "Studies"
-msgstr "Nghiên cứu"
+msgid "Share link"
+msgstr "Chia sẻ liên kết"
 
-msgid "Comparison"
-msgstr "So sánh"
+msgid "Failed to generate link"
+msgstr ""
 
-msgid "Templates"
-msgstr "Mẫu"
+msgid "Retry"
+msgstr ""
 
-msgid "Template name"
-msgstr "Tên mẫu"
+msgid "Download chart"
+msgstr "Tải về biểu đồ"
 
-msgid "There is no template added by you."
-msgstr "Không có bản mẫu được thêm vào bởi bạn."
+msgid "Draw tools"
+msgstr "Công cụ vẽ"
 
-msgid "Click + icon to add one."
-msgstr "Nhấp vào biểu tượng + để thêm một."
+msgid "Clear All"
+msgstr "Xóa tất cả"
 
-msgid "Crosshair"
-msgstr "Chữ thập"
+msgid "Measure"
+msgstr "Đo"
 
-msgid "Time period"
-msgstr "Thời hạn"
+msgid "Zoom out"
+msgstr "Thu nhỏ"
+
+msgid "Zoom in"
+msgstr "Phóng to"
+
+msgid "Interval"
+msgstr ""
 
 msgid "Tick"
 msgstr "Giây"
@@ -84,44 +87,41 @@ msgstr "Giờ"
 msgid "Day"
 msgstr "Ngày"
 
-msgid "Zoom out"
-msgstr "Thu nhỏ"
+msgid "Crosshair"
+msgstr "Chữ thập"
 
-msgid "Zoom in"
-msgstr "Phóng to"
+msgid "Templates"
+msgstr "Mẫu"
 
-msgid "Draw tools"
-msgstr "Công cụ vẽ"
+msgid "Template name"
+msgstr "Tên mẫu"
 
-msgid "Clear All"
-msgstr "Xóa tất cả"
+msgid "There is no template added by you."
+msgstr "Không có bản mẫu được thêm vào bởi bạn."
 
-msgid "Measure"
-msgstr "Đo"
+msgid "Click + icon to add one."
+msgstr "Nhấp vào biểu tượng + để thêm một."
+
+msgid "Comparison"
+msgstr "So sánh"
+
+msgid "Indicators"
+msgstr "Chỉ số"
+
+msgid "Chart types"
+msgstr "Loại biểu đồ"
+
+msgid "Toggle Asset Information"
+msgstr "Bật/Tắt thông tin tài sản"
 
 msgid "Settings"
 msgstr "Cài đặt"
 
-msgid "Position"
-msgstr "Vị trí"
-
-msgid "Theme"
-msgstr "Chủ đề"
+msgid "Dark Mode"
+msgstr ""
 
 msgid "Language"
 msgstr "Ngôn ngữ"
-
-msgid "Share"
-msgstr "Chia sẻ"
-
-msgid "Share / Download Chart"
-msgstr "Chia sẻ / tải về biểu đồ"
-
-msgid "Share link"
-msgstr "Chia sẻ liên kết"
-
-msgid "Download chart"
-msgstr "Tải về biểu đồ"
 
 msgid "RESET"
 msgstr "THIẾT LẬP LẠI"
@@ -129,59 +129,14 @@ msgstr "THIẾT LẬP LẠI"
 msgid "DONE"
 msgstr "HOÀN THÀNH"
 
-msgid "right-click to delete"
-msgstr "nhấp chuột phải để xóa"
-
-msgid "right-click to manage"
-msgstr "nhấp chuột phải để quản lý"
-
 msgid "[symbol] market is presently closed."
 msgstr "[symbol] thị trường hiện đã đóng cửa."
 
 msgid "Streaming for [symbol] is not available due to license restrictions"
 msgstr "Truyền cho [symbol] không khả dụng do các hạn chế cấp phép"
 
-msgid "Line"
-msgstr "Dòng kẻ"
-
-msgid "Dot"
-msgstr "Dấu chấm"
-
-msgid "Colored Dot"
-msgstr "Dấu chấm màu"
-
-msgid "Spline"
-msgstr "Chốt"
-
-msgid "Baseline"
-msgstr "Đường cơ sở"
-
-msgid "Candle"
-msgstr "Nến"
-
-msgid "OHLC"
-msgstr "OHLC"
-
-msgid "Hollow Candle"
-msgstr "Nến rỗng"
-
-msgid "\"Mass Index\" or \"Doji Star\""
-msgstr "\"Mass Index\" hay \"Doji Star\""
-
-msgid "Indicators"
-msgstr "Chỉ số"
-
-msgid "Active"
-msgstr "Hoạt động"
-
-msgid "There are no active indicators yet."
-msgstr "Chưa có chỉ số hoạt động nào."
-
-msgid "\"AUD/JPY\" or \"Apple\""
-msgstr "\"AUD/JPY\" hoặc \"Apple\""
-
-msgid "There are no active comparisons yet."
-msgstr "Không có sự so sánh đang hoạt động nào."
+msgid "Search..."
+msgstr ""
 
 msgid "Annotation"
 msgstr "Chú thích"
@@ -227,6 +182,9 @@ msgstr "Gartley"
 
 msgid "Horizontal"
 msgstr "Theo chiều ngang"
+
+msgid "Line"
+msgstr "Dòng kẻ"
 
 msgid "Pitchfork"
 msgstr "Pitchfork"
@@ -278,6 +236,48 @@ msgstr "Cấp độ Tirone"
 
 msgid "Vertical"
 msgstr "Theo chiều dọc"
+
+msgid "Active"
+msgstr "Hoạt động"
+
+msgid "There are no active comparisons yet."
+msgstr "Không có sự so sánh đang hoạt động nào."
+
+msgid "\"Mass Index\" or \"Doji Star\""
+msgstr "\"Mass Index\" hay \"Doji Star\""
+
+msgid "There are no active indicators yet."
+msgstr "Chưa có chỉ số hoạt động nào."
+
+msgid "Dot"
+msgstr "Dấu chấm"
+
+msgid "Colored Dot"
+msgstr "Dấu chấm màu"
+
+msgid "Spline"
+msgstr "Chốt"
+
+msgid "Baseline"
+msgstr "Đường cơ sở"
+
+msgid "Candle"
+msgstr "Nến"
+
+msgid "OHLC"
+msgstr "OHLC"
+
+msgid "Hollow Candle"
+msgstr "Nến rỗng"
+
+msgid "right-click to delete"
+msgstr "nhấp chuột phải để xóa"
+
+msgid "right-click to manage"
+msgstr "nhấp chuột phải để quản lý"
+
+msgid "Chart data is not available for this symbol."
+msgstr "Biểu đồ dữ liệu không khả dụng cho ký hiệu này."
 
 msgid "RSI"
 msgstr "RSI"
@@ -1165,9 +1165,6 @@ msgid "KSTSignal"
 msgstr ""
 
 msgid "Pring's Special K"
-msgstr ""
-
-msgid "Interval"
 msgstr ""
 
 msgid "Darvas Box"
