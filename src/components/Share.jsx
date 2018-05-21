@@ -35,6 +35,7 @@ const Share = ({
                 <div className='title'> {t.translate('Share / Download Chart')} </div>
                 <div className='body'>
 
+                    {/*
                     <div className='caption1'>{t.translate('Share link')}</div>
                     <div className="loading"
                         style={{display: (loading ? 'block' : 'none')}}
@@ -64,6 +65,7 @@ const Share = ({
                     </div>
 
                     <div className='caption2'>{t.translate('Download chart')}</div>
+                    */}
                     <div className='content'>
                         <div
                             className='download-btn'
