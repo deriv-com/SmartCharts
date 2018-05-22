@@ -1,5 +1,5 @@
 import { observable, action, computed, when } from 'mobx';
-import { getTimeUnit } from './utils';
+import { getTimeUnit, getIntervalInSeconds  } from './utils';
 import MenuStore from './MenuStore';
 
 export default class TimeperiodStore {
@@ -14,11 +14,37 @@ export default class TimeperiodStore {
 
     @observable timeUnit = null;
     @observable interval = null;
+    @observable remain = 0;
 
     onContextReady = () => {
         const { timeUnit, interval } = this.context.stx.layout;
         this.timeUnit = getTimeUnit({ timeUnit, interval });
         this.interval = interval;
+
+        const stx = this.context.stx;
+
+        stx.append('draw', () => {
+            stx.createYAxisLabel(stx.chart.panel, this.remain, this.remainLableY, "black" , "white");
+        });
+
+        const displayMilliseconds = (ms) => {
+            const totalSec = ms / 1000;
+            if (totalSec <= 0) { return null; }
+            const padNum = (n) => (`0${n}`).slice(-2);
+            const seconds = padNum(Math.trunc((totalSec) % 60));
+            const minutes = padNum(Math.trunc((totalSec/60) % 60));
+            let hours = Math.trunc((totalSec / 3600) % 24);
+            hours = hours ? `${hours}:` : '';
+            return `${hours}${minutes}:${seconds}`;
+        };
+
+        setInterval(() => {
+            var dataSet = stx.chart.dataSet;
+            if(dataSet && dataSet.length != 0 ){
+                let diff = new Date() - dataSet[dataSet.length-1].DT;
+                this.remain = displayMilliseconds((getIntervalInSeconds(stx.layout) * 1000) - diff);
+            }
+        }, 1000);
     }
 
     @action.bound setPeriodicity(interval, timeUnit) {
@@ -49,6 +75,13 @@ export default class TimeperiodStore {
         this.timeUnit = getTimeUnit(stx.layout);
         this.interval = stx.layout.interval;
         this.menu.setOpen(false);
+    }
+
+    @computed get remainLableY(){
+        var stx = this.context.stx;
+        var dataSet = stx.chart.dataSet;
+        var price = dataSet[dataSet.length-1].Close;
+        return stx.pixelFromPrice(price, stx.chart.panel) + 18;
     }
 
     @computed get timeUnit_display() {
