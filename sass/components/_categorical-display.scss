@@ -223,13 +223,16 @@
     }
     .cq-categorical-footer{
         width: 100%;
-        height: 3em;
+        height: 4em;
         display: none;
+        @include themify($themes) {
+            border-top: 1px solid themed('defaultBorder');
+        }
         .btn-categorical-display-close{
             border: none;
             background: transparent;
             font-weight: bold;
-            padding: 0.78em 1em;
+            padding: 1.3em 1em;
             width: 100%;
             cursor: pointer;
             @include themify($themes) {
@@ -307,13 +310,17 @@
             font-weight: 400;
             padding: 0 .7em;
             @include themify($themes) {
-                color: themed('defaultTextStrong');
+                color: themed('defaultText');
             }
         }
         .icon-close-menu{
             position: absolute;
-            top: 4px;
-            right: 8px;
+            top: 5px;
+            right: 5px;
+            cursor: pointer;
+            height: 30px;
+            width: 30px;
+            line-height: 36px;
         }
     }
     .cq-categorical-display{

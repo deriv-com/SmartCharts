@@ -42,7 +42,10 @@ const ChartTitle = ({
                 </div>}
             </Menu.Title>
             <Menu.Body>
-                <CategoricalDisplay  closeMenu={ () => onCloseMenu() } />
+                <CategoricalDisplay
+                    dialogTitle={t.translate("Underlying Assets")}
+                    closeMenu={ () => onCloseMenu() }
+                    />
             </Menu.Body>
         </Menu>
     );

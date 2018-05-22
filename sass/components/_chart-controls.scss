@@ -137,8 +137,8 @@
             &.ciq-studies,
             &.cq-comparison-new{
                 cq-menu-dropdown, .cq-menu-dropdown {
-                    height: calc( 100vh - 57px ) ;
-                    left: 0px;
+                    height: calc( 100vh - 47px ) ;
+                    left: 0px !important;
                     width: 100%;
                     box-shadow: none !important;
                 }
