@@ -76,8 +76,8 @@
         transform: translateX(-0%) !important;
         box-shadow: none;
         justify-content: space-around;
-        border: none;
         padding: 0 0.7em;
+        height: 40px;
         @include themify($themes) {
             border-top: 1px solid themed('defaultBorder');
         }
