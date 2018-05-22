@@ -2,6 +2,9 @@
 .cq-settings-dialog {
     display: flex;
     flex-direction: column;
+    .ciq-standalone-num-input > input[type=number] {
+        width: 5.5em;
+    }
     .titlebar {
         height: 40x;
         display: flex;

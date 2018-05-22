@@ -13,6 +13,7 @@ const ChartTypes = ({
     TypeList,
     assetInformation,
     setAssetInformation,
+    showAggregateDialog,
     CloseMenu,
     isMobile
 }) => (
@@ -42,7 +43,10 @@ const ChartTypes = ({
                             <T.icon  className={`margin ${T.active ? 'active' : ''}`} />
                             <span className='ciq-icon-text'>{T.text}</span>
                         </span>
-                        {T.settingsOnClick && <span className="ciq-aggregate-setting">
+                        {T.settingsOnClick && <span
+                            className="ciq-aggregate-setting"
+                            onClick={() => showAggregateDialog(T.id)}
+                        >
                             <SettingIcon />
                         </span>}
                     </React.Fragment>
@@ -58,6 +62,7 @@ export default connect(
         setOpen: chartType.setOpen,
         assetInformation: ai.visible,
         setAssetInformation: ai.setVisible,
+        showAggregateDialog: chartType.showAggregateDialog,
         menuOpen: chartType.menu.open,
         Menu: chartType.menu.connect(Menu),
         TypeList: chartType.list.connect(List),

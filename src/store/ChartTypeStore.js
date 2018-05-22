@@ -16,6 +16,7 @@ import {
     RenkoIcon,
     SplineIcon,
 } from '../components/Icons.jsx';
+import SettingsDialogStore from './SettingsDialogStore';
 
 const aggregates = {
     heikinashi: true,
@@ -77,6 +78,11 @@ export default class ChartTypeStore {
             onItemSelected: item => this.setType(item),
             getItems: () => this.types,
         });
+
+        this.settingsDialog = new SettingsDialogStore({
+            getContext: () => this.mainStore.chart.context,
+            onChanged: items => this.updateAggregate(items),
+        });
     }
 
     get context() { return this.mainStore.chart.context; }
@@ -100,6 +106,10 @@ export default class ChartTypeStore {
         if(typeof type === 'string') {
             type = this.types.filter(t => t.id === type)[0];
         }
+        if (type === this.type) {
+            this.menu.setOpen(false);
+            return;
+        }
         if (type.id === 'spline') {
             // Spline is just a line with tension
             this.stx.chart.tension = this.stx.layout.tension = 0.5;
@@ -116,6 +126,30 @@ export default class ChartTypeStore {
         this.type = type;
         this.menu.setOpen(false);
     }
+
+    @action.bound showAggregateDialog(aggregateId) {
+        if (aggregateId !== this.type) {
+            this.setType(aggregateId);
+        }
+        const aggregate = aggregates[aggregateId];
+        this.settingsDialog.title = aggregate.title;
+        const inputs = aggregate.inputs.map(({ id, ...agg }) => {
+            const name = (id === 'box' || id === 'reversal') ? `pandf.${id}` : id;
+            const value = this.stx.chart.defaultChartStyleConfig[name];
+            return {
+                id: name,
+                value,
+                defaultValue: value,
+                ...agg,
+            };
+        });
+        this.settingsDialog.items = inputs;
+        this.settingsDialog.setOpen(true);
+    }
+
+    updateAggregate = (items) => {
+        console.log(items); // TODO: implement this!
+    };
 
     @computed get types() {
         const isTickSelected = this.mainStore.timeperiod.timeUnit === 'tick';

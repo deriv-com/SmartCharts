@@ -74,13 +74,15 @@ const SettingsDialog = ({
             />
         ),
         numericinput: item => (
-            <NumericInput
-                value={item.value}
-                onChange={val => onItemChange(item.id, val)}
-                min={item.min}
-                step={item.step}
-                max={item.max}
-            />
+            <span className="ciq-standalone-num-input">
+                <NumericInput
+                    value={item.value}
+                    onChange={val => onItemChange(item.id, val)}
+                    min={item.min}
+                    step={item.step}
+                    max={item.max}
+                />
+            </span>
         ),
         numbercolorpicker: item => (
             <NumberColorPicker
@@ -100,10 +102,10 @@ const SettingsDialog = ({
             <div className={`titlebar ${!showTabs ? 'no-tabs' : ''}`}>
                 <div className='title'>{title}</div>
                 <div className='icons'>
-                    <DeleteIcon
+                    { onDeleteClick && <DeleteIcon
                         onClick={onDeleteClick}
                         className="margin"
-                    />
+                    />}
                     { isFavoritable &&
                     <StarIcon
                         onClick={onStarClick}
