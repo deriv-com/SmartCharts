@@ -8,12 +8,13 @@ const Crosshair = ({
     top,
     rows,
     setRootRef,
+    showInfo
 }) => (
     <div
         ref={setRootRef}
-        className={`cq-crosshair ${left === 'auto' ? 'arrow-right' : 'arrow-left'}`}
+        className={`cq-crosshair ${showInfo ? 'active' : '' }  ${left === 'auto' ? 'arrow-right' : 'arrow-left'}`}
         style={{left, top, right}}
-    >
+        >
         {rows.map(row => (
             <div className='row' key={row.name}>
                 <span>{row.name !== 'DT' ? `${row.name}:` : row.value}</span>
@@ -24,11 +25,12 @@ const Crosshair = ({
 );
 
 export default connect(
-    ({crosshair: c}) => ({
+    ({crosshair: c, chartSetting: s}) => ({
         right: c.right,
         left: c.left,
         top: c.top,
         rows: c.rows,
         setRootRef: c.setRootRef,
+        showInfo: s.crosshair
     })
 )(Crosshair);

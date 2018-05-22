@@ -76,6 +76,8 @@ export default class ChartSettingStore {
     @observable language = '';
     @observable position = '';
     @observable theme = '';
+    @observable crosshair = false;
+
 
     restoreSetting() {
         const setting = createObjectFromLocalStorage('smartchart-setting');
@@ -94,10 +96,12 @@ export default class ChartSettingStore {
             }
             this.position = setting.position === 'bottom' ? 'bottom' : 'left';
             this.theme = setting.theme === 'light' ? 'light' : 'dark';
+            this.crosshair = setting.crosshair;
         } else {
             this.language = this.defaultLanguage;
             this.position = 'bottom';
             this.theme = 'light';
+            this.crosshair = false;
         }
     }
 
@@ -126,6 +130,10 @@ export default class ChartSettingStore {
     @action.bound setTheme(value) {
         this.theme = value ? 'dark' : 'light';
         this.mainStore.chart.stxx.clearStyles();
+        this.saveSetting();
+    }
+    @action.bound setCrosshair(value){
+        this.crosshair =  value;
         this.saveSetting();
     }
 }

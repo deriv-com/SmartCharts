@@ -20,7 +20,9 @@ const ChartSetting = ({
     view,
     setLanguage,
     theme,
-    setTheme
+    setTheme,
+    crosshair,
+    setCrosshair
 }) => {
     const renderMain = () => {
         return <div>
@@ -43,6 +45,15 @@ const ChartSetting = ({
                             <Switch
                                 value={(theme == 'dark')}
                                 onChange={setTheme}
+                                />
+                        </div>
+                    </div>
+                    <div className="ciq-list-item">
+                        <span className="ciq-icon-text">{t.translate('Crosshair Information')}</span>
+                        <div className="ciq-action">
+                            <Switch
+                                value={crosshair}
+                                onChange={setCrosshair}
                                 />
                         </div>
                     </div>
@@ -112,4 +123,6 @@ export default connect(({chartSetting: s}) => ({
     setLanguage: s.setLanguage,
     theme: s.theme,
     setTheme: s.setTheme,
+    crosshair: s.crosshair,
+    setCrosshair: s.setCrosshair
 }))(ChartSetting);

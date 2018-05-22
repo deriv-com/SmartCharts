@@ -8,6 +8,12 @@
     color: white;
     background: rgba(21,33,45,0.88);
     box-shadow: 0 2px 8px 0 rgba(21,33,45,0.32);
+    pointer-events: none;
+    opacity: 0;
+    &.active{
+        pointer-events: initial;
+        opacity: 1;
+    }
 
     @include border-radius(4px);
     &:after,
