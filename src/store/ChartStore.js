@@ -218,7 +218,7 @@ class ChartStore {
                 delete layoutData.symbols;
             }
 
-            const doTheRest = () => {
+            const onLayoutDataReady = () => {
 
                 this.restoreLayout(stxx, layoutData);
 
@@ -239,7 +239,6 @@ class ChartStore {
                 this.resizeScreen();
                 this.chartPanelTop = holderStyle.top;
             };
-            const configParams = window.location.href.split('#');
             const href = window.location.href;
             if (href.indexOf('#') !== -1) {
                 const encodedJsonPart = href.split('#').slice(1).join('#');
@@ -250,10 +249,10 @@ class ChartStore {
                 const promise = this.mainStore.share.expandBitlyAsync(hash, decodeURIComponent(encodedJsonPart));
                 promise.then(encodedJson => {
                     layoutData = JSON.parse(encodedJson);
-                    doTheRest();
-                }).catch(() => doTheRest());
+                    onLayoutDataReady();
+                }).catch(() => onLayoutDataReady());
             } else {
-                doTheRest();
+                onLayoutDataReady();
             }
         });
 

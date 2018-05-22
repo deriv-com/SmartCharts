@@ -53,7 +53,7 @@ export default class ShareStore {
         const json = JSON.stringify(layoutData);
 
         const origin = window.location.href;
-        const encodedJson = encodeURIComponent(json); // this.fixedEncodeURIComponent(json);
+        const encodedJson = encodeURIComponent(json);
 
         const parts = json.match(/.{1,1800}/g);
 
@@ -88,7 +88,6 @@ export default class ShareStore {
         let origin = window.location.href;
         origin = origin.replace('localhost', '127.0.0.1'); // make it work on localhost
 
-        //const shareLink = this.fixedEncodeURIComponent(`${origin}?${hash}#${payload}`);
         const shareLink = encodeURIComponent(`${origin}?${hash}#${payload}`);
 
         return fetch(`${this.bitlyUrl}/shorten?access_token=${this.accessToken}&longUrl=${shareLink}`)
@@ -108,7 +107,7 @@ export default class ShareStore {
         return fetch(`${this.bitlyUrl}/expand?access_token=${this.accessToken}&shortUrl=${bitlyLink}`)
             .then(response => response.json())
             .then(response =>  {
-                if (response.status_code == 200 ) {
+                if (response.status_code === 200 ) {
                     const href = response.data.expand[0].long_url;
                     const encodedJsonPart = href.split('#').slice(1).join('#');
                     const url = href.split('#')[0];
