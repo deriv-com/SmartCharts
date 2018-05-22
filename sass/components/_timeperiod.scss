@@ -14,20 +14,27 @@
 			text-align: center;
 			padding-top: 5px;
 			.ic-priod {
+				@include border-radius(4px);
 				padding: 6px 10px;
 			}
 		}
 	}
-	&.stxMenuActive,
 	&:hover {
+		.ic-priod {
+			@include themify($themes) {
+				background: themed('defaultBgActive');
+			}
+		}
+	}
+	&.stxMenuActive {
 		.bt-priod {
+			font-weight: 500;
 			@include themify($themes) {color: themed('controlTextActive');}
 		}
 		.ic-priod {
-			@include border-radius(4px);
 			@include themify($themes) {
 				box-shadow: inset 0 0 0 1px themed('activeColor');
-				background: themed('controlBgActive');
+				background: themed('defaultBgActive');
 			}
 		}
 	}

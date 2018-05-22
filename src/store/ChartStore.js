@@ -219,7 +219,6 @@ class ChartStore {
             }
 
             const onLayoutDataReady = () => {
-
                 this.restoreLayout(stxx, layoutData);
 
                 this.setActiveSymbols(active_symbols);
@@ -295,6 +294,7 @@ class ChartStore {
     }
 
     @action.bound updateComparisons(...args) {
+        if (!this.context) {return;}
         let stx = this.context.stx;
         const comparisonSymbolsKeys = Object.keys(stx.chart.series);
         if (comparisonSymbolsKeys.length !== this.comparisonSymbols.length) {
