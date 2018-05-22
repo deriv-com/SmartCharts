@@ -4,11 +4,10 @@ import Menu from './Menu.jsx';
 import List from './List.jsx';
 import {Switch} from './Form.jsx';
 import '../../sass/components/_chart-types.scss';
+import {SettingIcon} from './Icons.jsx';
 
 const ChartTypes = ({
     Type,
-    setType,
-    types,
     Menu,
     menuOpen,
     TypeList,
@@ -39,8 +38,13 @@ const ChartTypes = ({
             <TypeList height={260}>
                 {T => (
                     <React.Fragment>
-                        <T.icon  className={`margin ${T.active ? 'active' : ''}`} />
-                        <span className='ciq-icon-text'>{T.text}</span>
+                        <span className="left">
+                            <T.icon  className={`margin ${T.active ? 'active' : ''}`} />
+                            <span className='ciq-icon-text'>{T.text}</span>
+                        </span>
+                        {T.settingsOnClick && <span className="ciq-aggregate-setting">
+                            <SettingIcon />
+                        </span>}
                     </React.Fragment>
                 )}
             </TypeList>
@@ -51,8 +55,6 @@ const ChartTypes = ({
 export default connect(
     ({chartType, assetInformation: ai}) => ({
         Type: chartType.type,
-        setType: chartType.setType,
-        types: chartType.types,
         setOpen: chartType.setOpen,
         assetInformation: ai.visible,
         setAssetInformation: ai.setVisible,

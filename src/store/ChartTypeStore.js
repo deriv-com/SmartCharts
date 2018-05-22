@@ -24,6 +24,7 @@ const aggregates = {
         inputs: [{
             id: 'kagi',
             title: t.translate('Reversal Percentage'),
+            type: 'numericinput',
         }]
     },
     renko: {
@@ -31,6 +32,7 @@ const aggregates = {
         inputs: [{
             id: 'renko',
             title: t.translate('Range'),
+            type: 'numericinput',
         }]
     },
     linebreak: {
@@ -38,6 +40,7 @@ const aggregates = {
         inputs: [{
             id: 'priceLines',
             title: t.translate('Price Lines'),
+            type: 'numericinput',
         }]
     },
     rangebars: {
@@ -45,6 +48,7 @@ const aggregates = {
         inputs: [{
             id: 'range',
             title: t.translate('Range'),
+            type: 'numericinput',
         }]
     },
     pandf: {
@@ -52,9 +56,11 @@ const aggregates = {
         inputs: [{
             id: 'box',
             title: t.translate('Box Size'),
+            type: 'numericinput',
         }, {
             id: 'reversal',
             title: t.translate('Reversal'),
+            type: 'numericinput',
         }]
     }
 };
@@ -124,11 +130,11 @@ export default class ChartTypeStore {
             { id: 'colored_bar',   text: t.translate('OHLC'),           disabled: isTickSelected, icon: OHLCIcon         },
             { id: 'hollow_candle', text: t.translate('Hollow Candle'),  disabled: isTickSelected, icon: HollowCandleIcon },
             { id: 'heikinashi',    text: t.translate('Heikin Ashi'),    disabled: isTickSelected, icon: HeikinAshiIcon   },
-            { id: 'kagi',          text: t.translate('Kagi'),           disabled: isTickSelected, icon: KagiIcon         },
-            { id: 'linebreak',     text: t.translate('LineBreak'),      disabled: isTickSelected, icon: LineBreakIcon    },
-            { id: 'renko',         text: t.translate('Renko'),          disabled: isTickSelected, icon: RenkoIcon        },
-            { id: 'rangebars',     text: t.translate('Range Bars'),     disabled: isTickSelected, icon: RangeBarsIcon    },
-            { id: 'pandf',         text: t.translate('Point & Figure'), disabled: isTickSelected, icon: PointFigureIcon  },
+            { id: 'kagi',          text: t.translate('Kagi'),           disabled: isTickSelected, icon: KagiIcon,        settingsOnClick: true },
+            { id: 'linebreak',     text: t.translate('Line Break'),     disabled: isTickSelected, icon: LineBreakIcon,   settingsOnClick: true },
+            { id: 'renko',         text: t.translate('Renko'),          disabled: isTickSelected, icon: RenkoIcon,       settingsOnClick: true },
+            { id: 'rangebars',     text: t.translate('Range Bars'),     disabled: isTickSelected, icon: RangeBarsIcon,   settingsOnClick: true },
+            { id: 'pandf',         text: t.translate('Point & Figure'), disabled: isTickSelected, icon: PointFigureIcon, settingsOnClick: true },
         ].map(t => ({ ...t, active: t.id === this.type.id }));
     }
 

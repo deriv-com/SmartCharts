@@ -207,6 +207,7 @@ export class NumericInput extends React.Component {
     };
 
     render() {
+        const { min, max, step } = this.props;
         return (
             <input
                 type="number"
@@ -214,6 +215,9 @@ export class NumericInput extends React.Component {
                 onBlur={this.fireOnChange}
                 onChange={this.onUpdateValue}
                 onKeyPress={this.fireOnEnter}
+                min={min}
+                max={max}
+                step={step}
             />
         );
     }

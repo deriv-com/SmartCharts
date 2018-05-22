@@ -1,6 +1,15 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from '../store/Connect';
-import { Switch, ColorPicker, Slider, Pattern, DropDown, NumberColorPicker, FontSetting } from './Form.jsx';
+import {
+    Switch,
+    NumericInput,
+    ColorPicker,
+    Slider,
+    Pattern,
+    DropDown,
+    NumberColorPicker,
+    FontSetting,
+} from './Form.jsx';
 import { DeleteIcon, StarIcon } from './Icons.jsx';
 import '../../sass/components/_ciq-settings-dialog.scss';
 
@@ -62,6 +71,15 @@ const SettingsDialog = ({
                 max={item.max || 100}
                 value={item.value}
                 onChange={val => onItemChange(item.id, val)}
+            />
+        ),
+        numericinput: item => (
+            <NumericInput
+                value={item.value}
+                onChange={val => onItemChange(item.id, val)}
+                min={item.min}
+                step={item.step}
+                max={item.max}
             />
         ),
         numbercolorpicker: item => (
