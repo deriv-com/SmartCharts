@@ -111,7 +111,7 @@ class ChartStore {
     @action.bound init(rootNode, props) {
         this.rootNode = rootNode;
 
-        const { initialSymbol, requestAPI, requestSubscribe, requestForget } = props;
+        const { onSymbolChange, initialSymbol, requestAPI, requestSubscribe, requestForget } = props;
         const api = new BinaryAPI(requestAPI, requestSubscribe, requestForget);
 
         const stxx = this.stxx = new CIQ.ChartEngine({
@@ -242,6 +242,7 @@ class ChartStore {
                 this.currentActiveSymbol = stxx.chart.symbolObject;
                 stxx.chart.yAxis.decimalPlaces = stxx.chart.symbolObject.decimal_places;
                 this.categorizedSymbols = this.categorizeActiveSymbols();
+                if (onSymbolChange) {onSymbolChange(this.currentActiveSymbol);}
             } else {
                 this.changeSymbol(this.defaultSymbol);
             }
