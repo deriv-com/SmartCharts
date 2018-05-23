@@ -74,7 +74,7 @@ const SettingsDialog = ({
             />
         ),
         numericinput: item => (
-            <span className="ciq-standalone-num-input">
+            <span className="ciq-num-input">
                 <NumericInput
                     value={item.value}
                     onChange={val => onItemChange(item.id, val)}
