@@ -43,8 +43,18 @@ export default class BinaryAPI {
         });
     }
 
-    subscribeTickHistory({ symbol, granularity }, callback) {
-        this.requestSubscribe({
+    subscribeTickHistory(params, callback) {
+        const request = BinaryAPI.createSymbolRequest(params);
+        this.requestSubscribe(request, callback);
+    }
+
+    forget(params, callback) {
+        const request = BinaryAPI.createSymbolRequest(params);
+        return this.requestForget(request, callback);
+    }
+
+    static createSymbolRequest({ symbol, granularity }) {
+        return {
             ticks_history: symbol,
             granularity,
             style: granularity ? 'candles' : 'ticks',
@@ -52,10 +62,6 @@ export default class BinaryAPI {
             count: BinaryAPI.DEFAULT_COUNT,
             adjust_start_time: 1,
             subscribe: 1,
-        }, callback);
-    }
-
-    forget(callback) {
-        return this.requestForget(callback);
+        };
     }
 }

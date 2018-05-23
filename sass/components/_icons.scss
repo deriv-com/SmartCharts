@@ -10,7 +10,6 @@
     @include box-sizing(border-box);
     cursor: pointer;
     text-align: center;
-
     &.brand-blue {
         svg path {
             fill: #2a3052,
@@ -38,7 +37,7 @@
     svg {
         position: relative;
     }
-    br , .ic-subtitle  { 
+    br , .ic-subtitle  {
         display: none;
     }
 }
@@ -46,11 +45,11 @@
     height: auto !important;
     width: auto !important;
     line-height: 15px;
-    br , .ic-subtitle  { 
+    br , .ic-subtitle  {
         display: inline;
     }
 }
-.tooltip {
+.ciq-tooltip {
     position: relative;
     font-size: 12px;
     &:after {
@@ -143,7 +142,7 @@
     .cq-chart-controls .ciq-menu {
         padding: 0px;
     }
-    br , .ic-subtitle  { 
+    br , .ic-subtitle  {
         display: none;
     }
 }

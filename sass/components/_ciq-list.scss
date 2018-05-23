@@ -1,0 +1,44 @@
+
+.ciq-list {
+	height: 250px;
+	overflow-y: auto;
+	position: relative;
+	.ciq-list-item {
+		cursor: pointer;
+		line-height: 32px;
+		font-size: 12px;
+		height: 32px;
+		padding: 0 0 0 16px;
+		display: flex;
+		border-top: none;
+		align-items: center;
+		justify-content: flex-start;
+		@include box-sizing(border-box);
+		@include themify($themes) {
+			border: themed('listBorder');
+			background: themed('defaultMain');
+		}
+		&:first-child {
+			@include themify($themes) {border-top: themed('listBorder');}
+		}
+		&.active {
+			font-weight: bold;
+			@include themify($themes) {
+				color: themed('defaultTextActive');
+				background-color: themed('listBgActive');
+			}
+		}
+		&.selected {
+			@include themify($themes) {
+				background-color: themed('listBgSelected');
+			}
+		}
+		&.disabled {
+			pointer-events: none;
+			>* {
+				opacity: 0.2;
+				cursor: auto;
+			}
+		}
+	}
+}

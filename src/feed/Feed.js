@@ -14,10 +14,14 @@ class Feed {
     subscribe() {}
 
     // Do not call explicitly! Method below is called by ChartIQ when unsubscribing symbols.
-    unsubscribe(symObj) {
-        const key = this._getStreamKey(symObj);
+    unsubscribe(params) {
+        const key = this._getStreamKey(params);
         if (this._callbacks[key]) {
-            this._binaryApi.forget(this._callbacks[key]);
+            const { symbolObject, period, interval } = params;
+            this._binaryApi.forget({
+                symbol: symbolObject.symbol,
+                granularity: Feed.calculateGranularity(period, interval)
+            }, this._callbacks[key]);
             delete this._callbacks[key];
         }
     }
@@ -123,6 +127,16 @@ class Feed {
         }
 
         callback(result);
+    }
+
+    unsubscribeAll() {
+        for (const key in this._callbacks) {
+            const { symbol, period, interval } = JSON.parse(key);
+            this._binaryApi.forget({
+                symbol,
+                granularity: Feed.calculateGranularity(period, interval)
+            }, this._callbacks[key]);
+        }
     }
 
     static calculateGranularity(period, interval) {

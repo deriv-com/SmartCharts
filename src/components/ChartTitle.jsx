@@ -4,6 +4,7 @@ import Menu from './Menu.jsx';
 import CategoricalDisplay from './CategoricalDisplay.jsx';
 import AnimatedPrice from './AnimatedPrice.jsx';
 import {ItemIconMap, SymbolPlaceholderIcon} from './Icons.jsx';
+import '../../sass/components/_chart-title.scss';
 
 const ChartTitle = ({
     todayChange,
@@ -17,6 +18,8 @@ const ChartTitle = ({
     AnimatedPrice,
     onCloseMenu
 }) => {
+    if (!currentSymbol) return null;
+
     const SymbolIcon = ItemIconMap[currentSymbol.symbol] || SymbolPlaceholderIcon;
     return (
         <Menu className="cq-chart-title stx-show cq-symbols-display">

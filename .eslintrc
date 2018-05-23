@@ -11,6 +11,10 @@
         "es6": true,
         "node": true
     },
+    "ecmaFeatures": {
+        "jsx": true,
+        "experimentalObjectRestSpread": true
+    },
     "plugins": [
         "react"
     ],
@@ -24,6 +28,7 @@
     "rules": {
         "react/prop-types": 0,
         "react/jsx-indent": 0,
+        "react/jsx-uses-vars": 1,
         "jsx-a11y/click-events-have-key-events": 0,
         "no-lonely-if": 1,
         "no-labels": 1,

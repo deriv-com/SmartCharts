@@ -1,309 +1,362 @@
-cq-context{
-    .cq-categorical-display {
-        width: 44em;
-        padding: 0 !important;
-        display: flex;
-        text-align: left;
-        background-color: $DEFAULT-main;
-        color: $DEFAULT-text-medium;
-        overflow: hidden;
-        @include transition(opacity 1s);
-        @include border-radius();
-        @include box-shadow (0px, 2px, 4px, rgba(0, 0, 0, .2));
-        .cq-lookup-filters {
-            width: 40%;
-            border-right: 1px solid $DEFAULT-border;
+.cq-categorical-display {
+    width: 632px;
+    padding: 0 !important;
+    display: flex;
+    text-align: left;
+    overflow: hidden;
+    @include themify($themes) {
+        color: themed('defaultTextMedium');
+        border-top: 1px solid themed('defaultBorder');
+    }
+    @include transition(opacity 1s);
+    @include border-radius();
+    @include box-shadow (0px, 2px, 4px, rgba(0, 0, 0, .2));
+    .cq-lookup-filters {
+        width: 34%;
+        @include themify($themes) {
+            border-right: 1px solid themed('defaultBorder');
         }
-        .cq-lookup-input  {
-            margin: 1.5em 1.1em 1.6em 1.3em;
-            border: solid 1px $DEFAULT-border;
-            position: relative;
-            @include border-radius();
-            &.active{
-                border-color: $active-color;
-                @include box-shadow (0px, 0, 2px, $active-color);
-                > .icon-reset{
-                    right: 2px;
-                    opacity: 1;
-                }
-            }
-            > input {
-                padding-left: 34px;
-                line-height: 2.6em;
-                font-size: 1em;
-                border: none;
-                outline: 0;
-                width: calc(100% - 40px);
-                @include border-radius();
-                @include placeholder {
-                    color: #dfdfdf;
-                }
-            }
-            > .ic-icon {
-                position: absolute;
-                top: 5px;
-                left: 5px;
+    }
+    .cq-lookup-input  {
+        margin: 1.5em 1.1em 1.6em 1.3em;
+        position: relative;
+        @include border-radius();
+        @include themify($themes) {
+            color: themed('controlText');
+            border: 1px solid themed('defaultBorder');
+            background-color: themed('defaultMain');
+        }
+        &.active{
+            @include themify($themes) {
+                border-color: themed('activeColor');
+                @include box-shadow (0px, 0, 2px, themed('activeColor'));
             }
             > .icon-reset{
-                position: absolute;
-                right: -2px;
-                opacity: 0;
-                left: auto;
-                @include transition(right,opacity 0.2s ease-in-out);
-
-            }
-            > input:focus + .ic-icon svg path {
-                fill: $active-color;
+                right: 2px;
+                opacity: 1;
+                @include svg-icon-color('controlText');
             }
         }
-        .category {
-            padding-top: 2em;
-            &:last-child {
-                padding-bottom: 2.5em;
-            }
-        }
-        .category-title {
-            color: #333333;
-        }
-        .category-content {
-            background-color: $DEFAULT-main;
-            margin: 0.4em 1em 0em 1em;
-            border: 1px solid $DEFAULT-border;
+        > input {
+            padding-left: 34px;
+            line-height: 2.6em;
+            font-size: 1em;
+            border: none;
+            outline: 0;
+            width: calc(100% - 40px);
+            background-color: transparent;
             @include border-radius();
+            @include placeholder {
+                @include themify($themes) {
+                    color: themed('controlText');
+                }
+            }
+            @include themify($themes) {
+                color: themed('controlText');
+            }
         }
-        .subcategory {
-            font-weight: 500;
-            padding: 0.5em 0 0.5em 1.2em;
-            font-size: 1.1em;
-            color: $DEFAULT-text-strong;
+        > .ic-icon {
+            position: absolute;
+            top: 5px;
+            left: 5px;
         }
-        .category-title {
-            display: block;
-            font-size: 1.4em;
-            font-weight: 500;
-            padding: 0.1em 0.7em;
+        > .icon-reset{
+            position: absolute;
+            right: -2px;
+            opacity: 0;
+            left: auto;
+            @include transition(right,opacity 0.2s ease-in-out);
+
         }
-        .cq-filter {
-            padding-left: 1.6em;
-            line-height: 3.4em;
-            text-align: left;
-            cursor: pointer;
-            @include transition(background-color 0.3s)
-            @include box-sizing(border-box);
-            &.cq-active-filter {
-                font-weight: 800;
-                color: $active-color;
-                border-right: 2px solid $active-color;
-                background-color: #f2f3f8;
-                .ic-icon {
-                    &.ic-active,
-                    &.ic-forex,
-                    &.ic-commodities,
-                    &.ic-volidx,
-                    &.ic-favorite {
-                        svg > g > circle { fill: $active-color; }
+        > input:focus + .ic-icon svg path {
+            @include themify($themes) {
+                fill: themed('activeColor');
+            }
+        }
+    }
+    .category {
+        padding-top: 2em;
+        &:last-child {
+            padding-bottom: 2.5em;
+        }
+    }
+    .category-content {
+        margin: 0.4em 1em 0em 1em;
+        @include themify($themes) {
+            background-color: themed('defaultMain');
+            border: 1px solid themed('defaultBorder');
+        }
+        @include border-radius();
+    }
+    .subcategory {
+        font-weight: 500;
+        padding: 0.5em 0 0.5em 1.2em;
+        font-size: 1.1em;
+        @include themify($themes) {
+            color: themed('defaultTextStrong');
+        }
+    }
+    .category-title {
+        display: block;
+        font-size: 1.4em;
+        font-weight: 500;
+        padding: 0.1em 0.7em;
+    }
+    .cq-filter {
+        padding-left: 1.6em;
+        line-height: 3.4em;
+        text-align: left;
+        cursor: pointer;
+        @include transition(background-color 0.3s);
+        @include box-sizing(border-box);
+        &:hover, &.cq-active-filter {
+            @include themify($themes) {
+                color: themed('defaultTextActive');
+            }
+            .ic-icon {
+                &.ic-active,
+                &.ic-forex,
+                &.ic-commodities,
+                &.ic-volidx,
+                &.ic-favorite {
+                    svg > g > circle {
+                        @include themify($themes) {
+                            fill: themed('activeColor');
+                        }
                     }
-                    &.ic-indicators > svg > g circle {
-                        fill: $active-color;
+                }
+                &.ic-indicators > svg > g circle {
+                    @include themify($themes) {
+                        fill: themed('activeColor');
                     }
-                    &.ic-stocks > svg > path:first-child {
-                        fill: $active-color;
+                }
+                &.ic-stocks > svg > path:first-child {
+                    @include themify($themes) {
+                        fill: themed('activeColor');
                     }
-                    &.ic-indices {
-                        svg > g > g {
-                            > path   { fill: $active-color;   }
-                            > g > circle { stroke: $active-color; }
+                }
+                &.ic-indices {
+                    svg > g > g {
+                        > path   {
+                            @include themify($themes) {
+                                fill: themed('activeColor');
+                            }
+                        }
+                        > g > circle {
+                            @include themify($themes) {
+                                fill: themed('strokeColor');
+                            }
                         }
                     }
                 }
             }
-            .ic-icon {
-                display: inline-flex;
-                vertical-align: middle;
-                width: $small-icon-size;
-                height: $small-icon-size;
-                margin-bottom: 2px;
-                margin-right: 1.3em;
-            }
-            .cq-filter-text{
-
+        }
+        &.cq-active-filter {
+            font-weight: 800;
+            @include themify($themes) {
+                border-right: 2px solid themed('activeColor');
+                background-color: themed('listBgActive');
             }
         }
-        .cq-item, .cq-active-item {
-            padding-left: 20px;
-            padding-right: 20px;
-            display: flex;
-            border-bottom: 1px solid $DEFAULT-border;
-            height: 40px;
-            align-items: center;
-            justify-content: space-between;
-            line-height: initial;
-            &:last-child{
-                border-bottom: none;
-            }
-            .left, .right {
-                display: flex;
-                align-items: center;
-            }
-            .closed-market{
-                border: 1px solid #f44336;
-                color: #f44336;
-                padding: 2px 6px;
-                object-fit: contain;
-                font-size: 0.64em;
-                @include border-radius();
-            }
-        }
-        .cq-item {
-            cursor: pointer;
-         }
-        .cq-item[disabled] {
-            cursor: default;
-            &:not(.selected) {
-                color: #c5c5c5 !important;
-            }
-            &.selected {
-                background-color: #f2f3f8;
-            }
-        }
-        .cq-scroll-panel {
-            position: relative;
-            height: 500px;
-            width: 60%;
-            background-color: #f4f4f6
-        }
-        .ciq-item-display {
-            display: inline-block;
-            vertical-align: top;
-        }
-        .empty-category {
-            padding: 0.2em 1.2em;
-        }
-        .cq-categorical-footer{
-            width: 100%;
-            height: 3em;
-            display: none;
-            .btn-categorical-display-close{
-                border: none;
-                background: transparent;
-                color: $active-color;
-                font-weight: bold;
-                padding: 0.78em 1em;
-                width: 100%;
-                cursor: pointer;
-                @include box-shadow(0,0,0,#fff);
-            }
-        }
-    }
-
-    .stxMenuActive .cq-categorical-display {
-        opacity: 1;
-        height: auto;
-    }
-
-    /* Active Symbol Icons */
-    .cq-categorical-display .results-panel {
-        /* Active Options */
-        .cq-active-options {
-            float: right;
+        .ic-icon {
             display: inline-flex;
-            > span, .ic-icon {
-                height:$normal-icon-size;
-                width: $normal-icon-size;
-            }
-
-            .ic-delete, .ic-edit {
-                cursor: pointer;
-            }
-            .ic-cmp-color > span {
-                display: inline-block;
-                width: 13px;
-                height: 2px;
-                vertical-align: bottom;
-                left: 6px;
-                position: relative;
-                @include border-radius(15px);
-            }
+            vertical-align: middle;
+            width: $small-icon-size;
+            height: $small-icon-size;
+            margin-bottom: 2px;
+            margin-right: 1.3em;
         }
-        .ciq-favorite {
-            float: right;
-            > .ic-icon {
-                margin-right: 0;
-                width: $normal-icon-size;
-                height: $normal-icon-size;
-            }
-        }
+        .cq-filter-text{
 
-        .left {
-            > .ic-icon, > .ic-frx {
-                height: $large-icon-size;
-                width: $large-icon-size;
-            }
-            > .ic-icon {
-                display: inline-block;
-                > svg {
-                    vertical-align: sub;
-                }
-            }
-            > .ciq-item-display {
-                margin-left: 15px;
+        }
+    }
+    .cq-item, .cq-active-item {
+        padding-left: 20px;
+        padding-right: 20px;
+        display: flex;
+        height: 40px;
+        align-items: center;
+        justify-content: space-between;
+        line-height: initial;
+        @include themify($themes) {
+            border-bottom: 1px solid themed('defaultBorder');
+        }
+        &:last-child{
+            border-bottom: none;
+        }
+        .left, .right {
+            display: flex;
+            align-items: center;
+        }
+        .closed-market{
+            border: 1px solid #f44336;
+            color: #f44336;
+            padding: 2px 6px;
+            object-fit: contain;
+            font-size: 0.64em;
+            @include border-radius();
+        }
+    }
+    .cq-item {
+        cursor: pointer;
+     }
+    .cq-item[disabled] {
+        cursor: default;
+        &:not(.selected) {
+            color: #c5c5c5 !important;
+        }
+        &.selected {
+            background-color: #f2f3f8;
+        }
+    }
+    .cq-scroll-panel {
+        position: relative;
+        height: 500px;
+        width: 66%;
+    }
+    .ciq-item-display {
+        display: inline-block;
+        vertical-align: top;
+    }
+    .empty-category {
+        padding: 0.2em 1.2em;
+    }
+    .cq-categorical-footer{
+        width: 100%;
+        height: 3em;
+        display: none;
+        .btn-categorical-display-close{
+            border: none;
+            background: transparent;
+            font-weight: bold;
+            padding: 0.78em 1em;
+            width: 100%;
+            cursor: pointer;
+            @include themify($themes) {
+                color: themed('activeColor');
+                @include box-shadow(0,0,0,themed('defaultMain'));
             }
         }
     }
+}
 
-    &.smartcharts-mobile{
-        .cq-mobile-title{
-            background: $DEFAULT-main;
-            .mobile-title{
-                display: block;
-                font-size: 16px;
-                line-height: 40px;
-                font-weight: 400;
-                padding: 0 .7em;
-                color: $DEFAULT-text-strong;
-            }
-            .icon-close-menu{
-                position: absolute;
-                top: 4px;
-                right: 8px;
+.stxMenuActive .cq-categorical-display {
+    opacity: 1;
+    height: auto;
+}
+
+/* Active Symbol Icons */
+.cq-categorical-display .results-panel {
+    /* Active Options */
+    .cq-active-options {
+        float: right;
+        display: inline-flex;
+        > span, .ic-icon {
+            height:$normal-icon-size;
+            width: $normal-icon-size;
+        }
+
+        .ic-delete, .ic-edit {
+            cursor: pointer;
+        }
+        .ic-cmp-color > span {
+            display: inline-block;
+            width: 13px;
+            height: 2px;
+            vertical-align: bottom;
+            left: 6px;
+            position: relative;
+            @include border-radius(15px);
+        }
+    }
+    .ciq-favorite {
+        float: right;
+        > .ic-icon {
+            margin-right: 0;
+            width: $normal-icon-size;
+            height: $normal-icon-size;
+        }
+    }
+
+    .left {
+        > .ic-icon, > .ic-frx {
+            height: $large-icon-size;
+            width: $large-icon-size;
+        }
+        > .ic-icon {
+            display: inline-block;
+            > svg {
+                vertical-align: sub;
             }
         }
-        .cq-categorical-display{
-            flex-direction: column;
+        > .ciq-item-display {
+            margin-left: 15px;
+        }
+    }
+}
+
+.smartcharts-mobile{
+    .cq-mobile-title{
+        @include themify($themes) {
+            background: themed('defaultMain');
+        }
+        .mobile-title{
+            display: block;
+            font-size: 16px;
+            line-height: 40px;
+            font-weight: 400;
+            padding: 0 .7em;
+            @include themify($themes) {
+                color: themed('defaultTextStrong');
+            }
+        }
+        .icon-close-menu{
+            position: absolute;
+            top: 4px;
+            right: 8px;
+        }
+    }
+    .cq-categorical-display{
+        flex-direction: column;
+        width: 100%;
+        .cq-lookup-filters {
             width: 100%;
-            .cq-lookup-filters {
-                width: 100%;
-                border-right: none;
-                height: 7.8em;
-                border-bottom: 1px solid $DEFAULT-border;
+            border-right: none;
+            height: 7.8em;
+            @include themify($themes) {
+                border-bottom: 1px solid themed('defaultBorder');
             }
-            .cq-lookup-input  {
-                margin: 1.2em 1em 0.5em 1em;
-                border: solid 1px $DEFAULT-border;
-                position: relative;
-                @include border-radius();
+        }
+        .cq-lookup-input  {
+            margin: 1.2em 1em 0.5em 1em;
+            position: relative;
+            @include themify($themes) {
+                border: 1px solid themed('defaultBorder');
             }
-            .cq-scroll-panel{
-                width: 100%;
-                height: calc( 100vh - 7.8em );
-            }
-            .cq-filter-panel{
-                display: flex;
-                justify-content: space-around;
-                .cq-filter {
-                    border:none;
-                    background: transparent;
-                    padding: 0px 20px;
-                    line-height: 3em;
-                    > .ic-icon{
-                        margin: 0px;
+            @include border-radius();
+        }
+        .cq-scroll-panel{
+            width: 100%;
+            height: calc( 100vh - 7.8em );
+        }
+        .cq-filter-panel{
+            display: flex;
+            justify-content: space-around;
+            .cq-filter {
+                border:none;
+                background: transparent;
+                padding: 0px 20px;
+                line-height: 3em;
+                > .ic-icon{
+                    margin: 0px;
+                }
+                &.cq-active-filter{
+                    @include themify($themes) {
+                        border-bottom: 2px solid themed('activeColor');
                     }
-                    &.cq-active-filter{
-                        border-bottom: 2px solid $active-color;
-                    }
-                    .cq-filter-text{
-                        display: none;
-                    }
+                }
+                .cq-filter-text{
+                    display: none;
                 }
             }
         }

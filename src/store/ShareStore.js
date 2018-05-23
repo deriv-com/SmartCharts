@@ -29,37 +29,98 @@ export default class ShareStore {
     onCopyDone = (successful) => {
         this.copyTooltip = successful ? 'Copied!' : 'Failed!';
     }
-    bitlyUrl = 'https://api-ssl.bitly.com/v3/shorten';
+    bitlyUrl = 'https://api-ssl.bitly.com/v3';
     accessToken = '837c0c4f99fcfbaca55ef9073726ef1f6a5c9349';
     @observable loading = false;
     @observable urlGenerated = false;
+    @observable shortUrlFailed = false;
 
 
     @observable shareLink = '';
+
+    fixedEncodeURIComponent(str) {
+        return encodeURIComponent(str).replace(/[!'()*]/g, function(c) {
+            return `%${c.charCodeAt(0).toString(16)}`;
+        });
+    }
     refereshShareLink = () => {
         let self = this;
         if(!this.context || !this.menu.dialog.open ) { return; }
 
         const layoutData = this.stx.exportLayout(true);
+        layoutData.favorites = [];
+
         const json = JSON.stringify(layoutData);
 
-        const origin = window.location.origin === 'http://localhost:8080' ?
-            window.location.origin : 'https://charts.binary.com';
-        this.shareLink = `${origin}#${encodeURIComponent(json)}`;
+        const origin = window.location.href;
+        const encodedJson = encodeURIComponent(json);
 
+        const parts = json.match(/.{1,1800}/g);
+
+
+        this.shortUrlFailed = false;
         this.loading = true;
-        fetch(`${this.bitlyUrl}?access_token=${this.accessToken}&longUrl=${this.shareLink}`)
-            .then( response => {
-                return response.json();
-            })
-            .then( response =>  {
-                self.shareLink = response.data.url;
+        this.shareLink = '';
+
+        let hashPromise = Promise.resolve('NONE');
+        parts.forEach(part => {
+            hashPromise = hashPromise.then(hash => this.shortenBitlyAsync(part, hash));
+        });
+
+        hashPromise
+            .then(hash => {
+                if (hash) {
+                    self.shareLink = `https://bit.ly/${hash}`;
+                    self.urlGenerated = true;
+                } else {
+                    self.shortUrlFailed = true;
+                    self.urlGenerated = false;
+                }
                 self.loading = false;
-                self.urlGenerated = true;
+
             })
             .catch(error => {
                 self.loading = false;
                 self.urlGenerated = false;
+            });
+    }
+    shortenBitlyAsync(payload, hash) {
+        let origin = window.location.href;
+        origin = origin.replace('localhost', '127.0.0.1'); // make it work on localhost
+
+        const shareLink = encodeURIComponent(`${origin}?${hash}#${payload}`);
+
+        return fetch(`${this.bitlyUrl}/shorten?access_token=${this.accessToken}&longUrl=${shareLink}`)
+            .then(response => response.json())
+            .then(response =>  {
+                if (response.status_code == 200 ) {
+                    return response.data.url.split('bit.ly/')[1];
+                }
+                return null;
+            });
+    }
+    expandBitlyAsync(hash, payload) {
+        if(hash === 'NONE') {
+            return Promise.resolve(payload);
+        }
+        const bitlyLink = `${window.location.protocol}//bit.ly/${hash}`;
+        return fetch(`${this.bitlyUrl}/expand?access_token=${this.accessToken}&shortUrl=${bitlyLink}`)
+            .then(response => response.json())
+            .then(response =>  {
+                if (response.status_code === 200 ) {
+                    const href = response.data.expand[0].long_url;
+                    const encodedJsonPart = href.split('#').slice(1).join('#');
+                    const url = href.split('#')[0];
+                    const hash = url.split('?')[1];
+
+                    payload = decodeURIComponent(encodedJsonPart) + payload;
+
+                    if(hash == 'NONE') {
+                        return payload;
+                    }
+                    return this.expandBitlyAsync(hash, payload);
+                }
+                return null;
             });
 
     }
@@ -79,7 +140,7 @@ export default class ShareStore {
         const isTick = this.timeUnit === 'tick';
         const header = `Date,Time,${isTick ? this.marketDisplayName : 'Open,High,Low,Close'}`;
         const lines = [header];
-        stx.masterData.forEach(row => {
+        this.stx.masterData.forEach(row => {
             const {DT, Open, High, Low, Close} = row;
 
             const year = DT.getUTCFullYear();

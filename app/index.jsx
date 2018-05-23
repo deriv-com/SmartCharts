@@ -33,9 +33,9 @@ const getLanguageStorage = function(){
 };
 
 const connectionManager = new ConnectionManager({
-    appId: 1,
+    appId: 12812,
     language: getLanguageStorage(),
-    endpoint: 'wss://frontend.binaryws.com/websockets/v3',
+    endpoint: 'wss://ws.binaryws.com/websockets/v3',
 });
 
 const streamManager = new StreamManager(connectionManager);
@@ -50,7 +50,7 @@ const renderControls = () => (
         <Views />
         <Share />
         <Timeperiod />
-        <ChartSize />
+        {CIQ.isMobile ? '' : <ChartSize />}
         <ChartSetting />
     </React.Fragment>
 );

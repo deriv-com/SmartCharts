@@ -172,7 +172,7 @@ class StreamManager {
     }
 
     async subscribe(input, callback) {
-        const { ticks_history: symbol , granularity } = input
+        const { ticks_history: symbol , granularity } = input;
         const stream = this._getStream({ symbol, granularity });
         stream.onStream(tickResponse => callback(tickResponse));
         const historyResponse = await stream.response;
@@ -181,7 +181,7 @@ class StreamManager {
         callback(historyResponse);
     }
 
-    forget(callback) {
+    forget(symbolRequest, callback) {
         const stream = this._callbacks.get(callback);
         stream.forget();
         this._callbacks.delete(callback);

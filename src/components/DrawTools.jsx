@@ -3,7 +3,7 @@ import { connect } from '../store/Connect';
 import Menu from './Menu.jsx';
 import List from './List.jsx';
 import { DrawIcon, ClearIcon, MeasureIcon } from './Icons.jsx';
-import '../../sass/_draw-tools.scss';
+import '../../sass/components/_draw-tools.scss';
 
 const DrawTools = ({
     clearAll,
@@ -29,11 +29,11 @@ const DrawTools = ({
                     <div className='ciq-bars-title'>{t.translate("Draw tools")}</div>
                     <div className='ciq-bars-buttons'>
                         <ClearIcon
-                            className='tooltip'
+                            className='ciq-tooltip'
                             onClick={clearAll}
                             tooltip-title={t.translate("Clear All")} />
                         <MeasureIcon
-                            className='tooltip'
+                            className='ciq-tooltip'
                             onClick={() => selectTool('measure')}
                             tooltip-title={t.translate("Measure")} />
                     </div>

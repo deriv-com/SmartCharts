@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from '../store/Connect';
 import { CloseIcon } from './Icons.jsx';
+import '../../sass/components/_comparison-list.scss';
 
 const ComparisonList = ({
     comparisonSymbols,

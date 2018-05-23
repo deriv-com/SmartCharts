@@ -1,34 +1,31 @@
-cq-context {
-    .cq-chart-size {
-        display: flex !important;
-        width: auto;
-        justify-content: space-between;
-        align-items: center;
-        height: auto;
-
-        &:after {
-            display: none;
-        }
-        > span {
-            opacity: 1;
-            position: relative;
-            cursor: pointer;
-            transition: scale .25s;
-        }
-        .interval-title {
-            white-space: nowrap;
-            width: auto;
-            line-height: 25px;
-            display: none; /* TODO */
-        }
-        .cq-zoom-out{
-            padding-right:2.8em !important;
-        }
+.cq-chart-size {
+    display: flex !important;
+    justify-content: center;
+    align-items: center;
+    height: auto;
+    width: 180px !important;
+    &:after {
+        display: none;
     }
-    /* Mobile Style */
-    &.smartcharts-mobile {
-        .cq-chart-size {
-            width: 45px;
-        }
+    > span {
+        opacity: 1;
+        position: relative;
+        cursor: pointer;
+        transition: scale .25s;
+    }
+    > .cq-menu-btn{
+        width: 78px;
+    }
+    .interval-title {
+        white-space: nowrap;
+        width: auto;
+        line-height: 25px;
+        display: none; /* TODO */
+    }
+}
+/* Mobile Style */
+.smartcharts-mobile {
+    .cq-chart-size {
+        width: 45px;
     }
 }

@@ -1,124 +1,130 @@
-cq-context {
-  .ciq-period {
-    padding: 0 5px!important;
-    line-height: 1.5em !important;
-    > .cq-menu-btn {
-        padding: 0 5px;
-        > .bt-priod {
-            display: block;
-            height: auto;
-            line-height: 2em;
-            transition: all .2s .15s;
-            border-radius: 2px;
-            box-sizing: border-box;
-            cursor: pointer;
-            text-align: center;
-            padding-top:5px;
-        }
-        &:hover {
-           .ic-priod{ 
-                border-radius: 4px;
-                background: #f2f3f8;
-           }
-        }
-    }
-    .ic-priod {
-        padding:6px 10px;
-    }
-    &.stxMenuActive {
-        .bt-priod {
-             color: $active-color;
-             text-shadow: -.5px 0 0 #4c5794  !important;
-         } 
-        .ic-priod {
-             box-shadow: inset 0 0 0 1px $active-color;
-             border-radius: 4px;
-             background: #f2f3f8;
-             font-weight: normal !important;
-            }
-        }
-        &:after {
-            display: none;
-        }
-        .unit_display {
-            text-transform: capitalize;
-        }
-        .interval_display {
-            margin: 0 5px 0 0;
-        }
-        .cq-menu-dropdown {
-            display: flex;
-            flex-direction: row;
-            width: 296px;;
-            height: 160px;
-            transform: translate(-50%,0);
-            font-size: 12px;
-            font-weight: normal;
+.ciq-period {
+	padding: 0 5px!important;
+	line-height: 1.5em !important;
+	>.cq-menu-btn {
+		padding: 0 5px;
+		>.bt-priod {
+			display: block;
+			height: auto;
+			line-height: 2em;
+			transition: all .2s .15s;
+			border-radius: 2px;
+			box-sizing: border-box;
+			cursor: pointer;
+			text-align: center;
+			padding-top: 5px;
+			.ic-priod {
+				@include border-radius(4px);
+				padding: 6px 10px;
+			}
+		}
+	}
+	&:hover {
+		.ic-priod {
+			@include themify($themes) {
+				background: themed('defaultBgActive');
+			}
+		}
+	}
+	&.stxMenuActive {
+		.bt-priod {
+			font-weight: 500;
+			@include themify($themes) {color: themed('controlTextActive');}
+		}
+		.ic-priod {
+			@include themify($themes) {
+				box-shadow: inset 0 0 0 1px themed('activeColor');
+				background: themed('defaultBgActive');
+			}
+		}
+	}
+	&:after {
+		display: none;
+	}
+	.unit_display {
+		text-transform: capitalize;
+	}
+	.interval_display {
+		margin: 0 5px 0 0;
+	}
+	.cq-menu-dropdown {
+		display: flex;
+		flex-direction: row;
+		width: 296px;
+		;
+		height: 160px;
+		transform: translate(-50%, 0);
+		font-size: 12px;
+		font-weight: normal;
 
-            .timeUnit {
-                display: flex;
-                flex-direction: column;
-                width: 88px;
-                height: 100%;
-                border-right: 1px solid #e9e9e9;
-                span {
-                    display: block;
-                    height: 40px;
-                    padding-left: 16px;
-                    line-height: 40px;
-                    font-weight: 300;
-                    color: $DEFAULT-text-strong;
-                    &.selected {
-                        background-color: #f2f3f8;
-                        box-shadow: inset -2px 0 0 0 $active-color;
-                        color: $active-color;
-                        font-weight: 500;
-                    }
-                }
-            }
+		.timeUnit {
+			display: flex;
+			flex-direction: column;
+			width: 88px;
+			height: 100%;
+			@include themify($themes) {border-right: 1px solid themed('controlText');}
+			span {
+				display: block;
+				height: 40px;
+				padding-left: 16px;
+				line-height: 40px;
+				font-weight: 300;
+				@include themify($themes) {color: themed('controlText');}
+				&.selected {
+					@include themify($themes) {
+						box-shadow: inset 0 0 0 1px themed('activeColor');
+						background: themed('controlBgActive');
+					}
+					font-weight: 500;
+				}
+			}
+		}
 
-            .interval {
-                display: flex;
-                flex-direction: column;
-                width: 208px;
+		.interval {
+			display: flex;
+			flex-direction: column;
+			width: 208px;
 
-                .row {
-                    height: 40px;
-                    display: flex;
-                    flex-direction: row;
-                    margin: 0 4px;
-                    align-items: center;
-                    font-weight: 300;
+			.row {
+				height: 40px;
+				display: flex;
+				flex-direction: row;
+				margin: 0 4px;
+				align-items: center;
+				font-weight: 300;
 
-                    span {
-                        cursor: pointer;
-                        margin: 0 4px 0 0;
-                        width: 24px;
-                        height: 24px;
-                        text-align: center;
-                        color: #2a3052;
+				span {
+					cursor: pointer;
+					margin: 0 4px 0 0;
+					width: 24px;
+					height: 24px;
+					text-align: center;
+					@include themify($themes) {color: themed('controlText');}
+					&.selected {
+						@include border-radius(4px);
+						@include themify($themes) {
+							box-shadow: inset 0 0 0 1px themed('activeColor');
+							background: themed('controlBgActive');
+						}
+						line-height: 24px;
+					}
+				}
+			}
+		}
+	}
+}
 
-                        &.selected {
-                            background: $active-color;
-                            @include border-radius(4px);
-                            color: #fff;
-                            line-height: 24px;
-                        }
-                    }
-                }
-            }
-        }
-    }
-    /* Mobile Style */
-    &.smartcharts-mobile{
-        .ciq-period {
-            padding: 0 5px !important;
-            > .cq-menu-btn {
-                padding: 0 10px;
-                > span {
-                    padding: 0 2px;
-                }
-            }
-        }
-    }
+
+/* Mobile Style */
+
+.smartcharts-mobile {
+	.ciq-period {
+		padding: 0 5px !important;
+		>.cq-menu-btn {
+			padding: 0 10px;
+			>span {
+				padding: 0 2px;
+			}
+		}
+	}
 }
