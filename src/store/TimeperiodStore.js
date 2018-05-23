@@ -24,11 +24,7 @@ export default class TimeperiodStore {
 
         const stx = this.context.stx;
 
-        stx.append('draw', () => {
-            stx.yaxisLabelStyle = "rect";
-            stx.createYAxisLabel(stx.chart.panel, this.remain, this.remainLabelY, "black" , "white");
-            stx.yaxisLabelStyle = "roundRectArrow";
-        });
+        this.showScaleCountdown();
 
         const displayMilliseconds = (ms) => {
             const totalSec = ms / 1000;
@@ -48,6 +44,20 @@ export default class TimeperiodStore {
                 this.remain = displayMilliseconds((getIntervalInSeconds(stx.layout) * 1000) - diff);
             }
         }, 1000);
+    }
+
+    showScaleCountdown = () => {
+        var stx = this.context.stx;
+        if(this.mainStore.chartSetting.scaleCountdown) {
+            this._injectionId = stx.append('draw', () => {
+                stx.yaxisLabelStyle = "rect";
+                stx.createYAxisLabel(stx.chart.panel, this.remain, this.remainLabelY, "black" , "white");
+                stx.yaxisLabelStyle = "roundRectArrow";
+            });
+        }
+        else {
+            stx.removeInjection(this._injectionId);
+        }
     }
 
     @action.bound setPeriodicity(interval, timeUnit) {

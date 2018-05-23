@@ -76,7 +76,7 @@ export default class ChartSettingStore {
     @observable language = '';
     @observable position = '';
     @observable theme = '';
-    @observable scaleCountdownVisibility = false;
+    @observable scaleCountdown = false;
 
     restoreSetting() {
         const setting = createObjectFromLocalStorage('smartchart-setting');
@@ -95,10 +95,12 @@ export default class ChartSettingStore {
             }
             this.position = setting.position === 'bottom' ? 'bottom' : 'left';
             this.theme = setting.theme === 'light' ? 'light' : 'dark';
+            this.scaleCountdown = setting.scaleCountdown;
         } else {
             this.language = this.defaultLanguage;
             this.position = 'bottom';
             this.theme = 'light';
+            this.scaleCountdown = false;
         }
     }
 
@@ -106,7 +108,8 @@ export default class ChartSettingStore {
         CIQ.localStorageSetItem(`smartchart-setting`, JSON.stringify({
             language: this.language.key,
             position: this.position,
-            theme: this.theme
+            theme: this.theme,
+            scaleCountdown :this.scaleCountdown
         }));
     }
 
@@ -131,7 +134,9 @@ export default class ChartSettingStore {
     }
 
     @action.bound showScaleCountdown(value){
-        this.scaleCountdownVisibility = value;
+        this.scaleCountdown = value;
+        this.mainStore.timeperiod.showScaleCountdown();
+        this.saveSetting();
     }
 }
 

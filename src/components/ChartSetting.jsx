@@ -21,7 +21,7 @@ const ChartSetting = ({
     setLanguage,
     theme,
     setTheme,
-    scaleCountdownVisibility,
+    scaleCountdown,
     showScaleCountdown,
 
 }) => {
@@ -53,7 +53,7 @@ const ChartSetting = ({
                         <span className="ciq-icon-text">{t.translate('Scale Countdown')}</span>
                         <div className="ciq-action">
                             <Switch
-                                value={scaleCountdownVisibility}
+                                value={scaleCountdown}
                                 onChange={showScaleCountdown}
                             />
                         </div>
@@ -124,6 +124,6 @@ export default connect(({chartSetting: s}) => ({
     setLanguage: s.setLanguage,
     theme: s.theme,
     setTheme: s.setTheme,
-    scaleCountdownVisibility: s.scaleCountdownVisibility,
+    scaleCountdown: s.scaleCountdown,
     showScaleCountdown: s.showScaleCountdown,
 }))(ChartSetting);
