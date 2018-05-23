@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
-"PO-Revision-Date: 2018-05-21 06:01-0400\n"
+"PO-Revision-Date: 2018-05-22 20:40-0400\n"
 
 msgid "Favorites"
 msgstr "Избранное"
@@ -22,7 +22,7 @@ msgid "CLOSED"
 msgstr "ЗАКРЫТО"
 
 msgid "Close"
-msgstr ""
+msgstr "Закрыть"
 
 msgid "PRICE"
 msgstr "ЦЕНА"
@@ -43,16 +43,16 @@ msgid "Share"
 msgstr "Поделиться"
 
 msgid "Share / Download Chart"
-msgstr ""
+msgstr "Поделиться / загрузить график"
 
 msgid "Share link"
 msgstr "Поделиться ссылкой"
 
 msgid "Failed to generate link"
-msgstr ""
+msgstr "Не удалось создать ссылку"
 
 msgid "Retry"
-msgstr ""
+msgstr "Попробовать снова"
 
 msgid "Download chart"
 msgstr "Загрузить график"
@@ -115,13 +115,13 @@ msgid "Toggle Asset Information"
 msgstr "Информация об активе Toggle"
 
 msgid "Settings"
-msgstr ""
+msgstr "Настройки"
 
 msgid "Dark Mode"
-msgstr ""
+msgstr "Тёмный режим"
 
 msgid "Language"
-msgstr ""
+msgstr "Язык"
 
 msgid "RESET"
 msgstr "СБРОСИТЬ"
@@ -136,7 +136,7 @@ msgid "Streaming for [symbol] is not available due to license restrictions"
 msgstr "Потоковые котировки для [symbol] недоступны из-за лицензионных ограничений"
 
 msgid "Search..."
-msgstr ""
+msgstr "Поиск..."
 
 msgid "Annotation"
 msgstr "Примечание"
