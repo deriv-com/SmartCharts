@@ -1,6 +1,7 @@
 import { observable, action, computed, when } from 'mobx';
 import { getTimeUnit, getIntervalInSeconds  } from './utils';
 import MenuStore from './MenuStore';
+import { strictEqual } from 'assert';
 
 export default class TimeperiodStore {
     constructor(mainStore) {
@@ -14,7 +15,7 @@ export default class TimeperiodStore {
 
     @observable timeUnit = null;
     @observable interval = null;
-    @observable remain = 0;
+    @observable remain = "00:00";
 
     onContextReady = () => {
         const { timeUnit, interval } = this.context.stx.layout;
@@ -24,7 +25,9 @@ export default class TimeperiodStore {
         const stx = this.context.stx;
 
         stx.append('draw', () => {
-            stx.createYAxisLabel(stx.chart.panel, this.remain, this.remainLableY, "black" , "white");
+            stx.yaxisLabelStyle = "rect";
+            stx.createYAxisLabel(stx.chart.panel, this.remain, this.remainLabelY, "black" , "white");
+            stx.yaxisLabelStyle = "roundRectArrow";
         });
 
         const displayMilliseconds = (ms) => {
@@ -77,7 +80,7 @@ export default class TimeperiodStore {
         this.menu.setOpen(false);
     }
 
-    @computed get remainLableY(){
+    @computed get remainLabelY(){
         var stx = this.context.stx;
         var dataSet = stx.chart.dataSet;
         var price = dataSet[dataSet.length-1].Close;
