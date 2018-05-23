@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Italian\n"
 "Language: it_IT\n"
-"PO-Revision-Date: 2018-05-23 06:14-0400\n"
+"PO-Revision-Date: 2018-05-23 06:32-0400\n"
 
 msgid "Favorites"
 msgstr "Preferiti"
@@ -241,7 +241,7 @@ msgid "Active"
 msgstr "Attivo"
 
 msgid "There are no active comparisons yet."
-msgstr ""
+msgstr "Non ci sono ancora confronti attivi."
 
 msgid "\"Mass Index\" or \"Doji Star\""
 msgstr ""
@@ -250,13 +250,13 @@ msgid "There are no active indicators yet."
 msgstr ""
 
 msgid "Dot"
-msgstr ""
+msgstr "Punto"
 
 msgid "Colored Dot"
-msgstr ""
+msgstr "Punto colorato"
 
 msgid "Spline"
-msgstr ""
+msgstr "Spline"
 
 msgid "Baseline"
 msgstr "Linea di base"
@@ -265,7 +265,7 @@ msgid "Candle"
 msgstr "Candela"
 
 msgid "OHLC"
-msgstr ""
+msgstr "OHLC"
 
 msgid "Hollow Candle"
 msgstr "Candela Vuote"
@@ -277,7 +277,7 @@ msgid "right-click to manage"
 msgstr "destro del mouse per gestire"
 
 msgid "Chart data is not available for this symbol."
-msgstr ""
+msgstr "I dati del grafico non sono disponibili per questo simbolo."
 
 msgid "RSI"
 msgstr "RSI"
