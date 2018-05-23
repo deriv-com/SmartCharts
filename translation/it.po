@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Italian\n"
 "Language: it_IT\n"
-"PO-Revision-Date: 2018-05-23 05:31-0400\n"
+"PO-Revision-Date: 2018-05-23 05:51-0400\n"
 
 msgid "Favorites"
 msgstr "Preferiti"
@@ -112,10 +112,10 @@ msgid "Chart types"
 msgstr "Tipologie di grafico"
 
 msgid "Toggle Asset Information"
-msgstr ""
+msgstr "Attiva/Disattiva le informazioni sull'asset"
 
 msgid "Settings"
-msgstr ""
+msgstr "Impostazioni"
 
 msgid "Dark Mode"
 msgstr ""
