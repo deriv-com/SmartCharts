@@ -158,7 +158,7 @@ export default class ChartTypeStore {
             const defaultValue = this.stx.chart.defaultChartStyleConfig[id];
             return {
                 id: name,
-                value: (value !== null) ? value : defaultValue,
+                value: (value != undefined) ? value : defaultValue,
                 defaultValue,
                 ...agg,
             };
