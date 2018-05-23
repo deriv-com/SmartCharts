@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Italian\n"
 "Language: it_IT\n"
-"PO-Revision-Date: 2018-05-23 06:41-0400\n"
+"PO-Revision-Date: 2018-05-23 07:02-0400\n"
 
 msgid "Favorites"
 msgstr "Preferiti"
@@ -133,7 +133,7 @@ msgid "[symbol] market is presently closed."
 msgstr "[symbol] Il mercato è chiuso al momento."
 
 msgid "Streaming for [symbol] is not available due to license restrictions"
-msgstr ""
+msgstr "[symbol] in streaming non è disponibile a causa delle limitazioni della licenza"
 
 msgid "Search..."
 msgstr "Cerca..."
@@ -244,7 +244,7 @@ msgid "There are no active comparisons yet."
 msgstr "Non risulta ancora nessun confronto attivo."
 
 msgid "\"Mass Index\" or \"Doji Star\""
-msgstr ""
+msgstr "\"Indice di massa\" o \"Doji Star\""
 
 msgid "There are no active indicators yet."
 msgstr "Non risulta ancora nessun indicatore attivo."
