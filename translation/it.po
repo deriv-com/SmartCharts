@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Italian\n"
 "Language: it_IT\n"
-"PO-Revision-Date: 2018-05-23 04:42-0400\n"
+"PO-Revision-Date: 2018-05-23 05:51-0400\n"
 
 msgid "Favorites"
 msgstr "Preferiti"
@@ -79,10 +79,10 @@ msgid "Tick"
 msgstr "Tick"
 
 msgid "Minute"
-msgstr ""
+msgstr "Minuto"
 
 msgid "Hour"
-msgstr ""
+msgstr "Ora"
 
 msgid "Day"
 msgstr "Giorno"
@@ -91,31 +91,31 @@ msgid "Crosshair"
 msgstr "Mirino"
 
 msgid "Templates"
-msgstr ""
+msgstr "Modelli"
 
 msgid "Template name"
-msgstr ""
+msgstr "Nome del modello"
 
 msgid "There is no template added by you."
-msgstr ""
+msgstr "Non risulta alcun modello aggiunto da te."
 
 msgid "Click + icon to add one."
-msgstr ""
+msgstr "Fai clic sull'icona per aggiungerne uno."
 
 msgid "Comparison"
-msgstr ""
+msgstr "Confronto"
 
 msgid "Indicators"
-msgstr ""
+msgstr "Indicatori"
 
 msgid "Chart types"
-msgstr ""
+msgstr "Tipologie di grafico"
 
 msgid "Toggle Asset Information"
-msgstr ""
+msgstr "Attiva/Disattiva le informazioni sull'asset"
 
 msgid "Settings"
-msgstr ""
+msgstr "Impostazioni"
 
 msgid "Dark Mode"
 msgstr ""
