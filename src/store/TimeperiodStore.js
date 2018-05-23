@@ -52,7 +52,7 @@ export default class TimeperiodStore {
         if(this.mainStore.chartSetting.scaleCountdown) {
             this._injectionId = stx.append('draw', () => {
                 stx.yaxisLabelStyle = "rect";
-                stx.createYAxisLabel(stx.chart.panel, this.remain, this.remainLabelY, "black" , "white");
+                stx.createYAxisLabel(stx.chart.panel, this.remain, this.remainLabelY, "#15212d" , "#FFFFFF");
                 stx.yaxisLabelStyle = "roundRectArrow";
             });
         }
