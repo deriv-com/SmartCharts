@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Italian\n"
 "Language: it_IT\n"
-"PO-Revision-Date: 2018-05-23 04:33-0400\n"
+"PO-Revision-Date: 2018-05-23 04:42-0400\n"
 
 msgid "Favorites"
 msgstr "Preferiti"
@@ -76,7 +76,7 @@ msgid "Interval"
 msgstr "Intervallo"
 
 msgid "Tick"
-msgstr ""
+msgstr "Tick"
 
 msgid "Minute"
 msgstr ""
