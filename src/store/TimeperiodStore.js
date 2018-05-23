@@ -42,6 +42,7 @@ export default class TimeperiodStore {
             if(dataSet && dataSet.length != 0 ){
                 let diff = new Date() - dataSet[dataSet.length-1].DT;
                 this.remain = displayMilliseconds((getIntervalInSeconds(stx.layout) * 1000) - diff);
+                this.remain = this.remain ? this.remain : "00:00";
             }
         }, 1000);
     }
