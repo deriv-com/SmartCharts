@@ -56,6 +56,7 @@ class Chart extends Component {
             chartPanelTop,
             chartControlsWidgets,
             topWidgets,
+            showCandleCountdown = false,
         } = this.props;
 
         const currentLang = lang || ((setting && setting.language) ? setting.language.key : 'en');
@@ -73,6 +74,12 @@ class Chart extends Component {
                 : ` smartcharts-${(setting && setting.theme) ? setting.theme : 'light'}`;
             return className;
         };
+
+        CIQ.localStorageSetItem(`smartchart-setting`, JSON.stringify({
+            language: currentLang ,
+            theme: (typeof theme === 'string' ) ? theme : ((setting && setting.theme) ? setting.theme : 'light'),
+            candleCountdown :showCandleCountdown || ((setting && setting.candleCountdown) ? setting.candleCountdown : false)
+        }));
 
         return (
             <cq-context ref={(root) => { this.root = root; }} class={contextClassName()}>
