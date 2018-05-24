@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Vietnamese\n"
 "Language: vi_VN\n"
-"PO-Revision-Date: 2018-05-24 02:32-0400\n"
+"PO-Revision-Date: 2018-05-24 02:41-0400\n"
 
 msgid "Favorites"
 msgstr "Yêu thích"
@@ -43,16 +43,16 @@ msgid "Share"
 msgstr "Chia sẻ"
 
 msgid "Share / Download Chart"
-msgstr "Chia sẽ / Tải Biểu Đồ"
+msgstr "Chia sẽ / Tải Về Biểu Đồ"
 
 msgid "Share link"
 msgstr "Chia sẻ liên kết"
 
 msgid "Failed to generate link"
-msgstr ""
+msgstr "Không thể tạo liên kết"
 
 msgid "Retry"
-msgstr ""
+msgstr "Thử lại"
 
 msgid "Download chart"
 msgstr "Tải về biểu đồ"
@@ -73,7 +73,7 @@ msgid "Zoom in"
 msgstr "Phóng to"
 
 msgid "Interval"
-msgstr ""
+msgstr "Khoảng Thời Gian"
 
 msgid "Tick"
 msgstr "Giây"
@@ -136,7 +136,7 @@ msgid "Streaming for [symbol] is not available due to license restrictions"
 msgstr "Truyền cho [symbol] không khả dụng do các hạn chế cấp phép"
 
 msgid "Search..."
-msgstr ""
+msgstr "Tìm kiếm..."
 
 msgid "Annotation"
 msgstr "Chú thích"
@@ -754,10 +754,10 @@ msgid "Klinger"
 msgstr "Klinger"
 
 msgid "KlingerSignal"
-msgstr ""
+msgstr "KlingerSignal"
 
 msgid "Elder Ray Index"
-msgstr ""
+msgstr "Chỉ số Elder Ray"
 
 msgid "Elder Bull Power"
 msgstr ""
@@ -766,7 +766,7 @@ msgid "Elder Bear Power"
 msgstr ""
 
 msgid "Elder Force Index"
-msgstr ""
+msgstr "Chỉ số Elder Force"
 
 msgid "Linear Reg Slope"
 msgstr "Tuyến tính dốc Reg"
@@ -871,7 +871,7 @@ msgid "Scale Factor"
 msgstr ""
 
 msgid "Green"
-msgstr ""
+msgstr "Xanh lục"
 
 msgid "Fade"
 msgstr ""
@@ -898,7 +898,7 @@ msgid "STARC Bands"
 msgstr ""
 
 msgid "MA Period"
-msgstr ""
+msgstr "Giai đoạn MA"
 
 msgid "Multiplier"
 msgstr ""
@@ -919,7 +919,7 @@ msgid "Plot Type"
 msgstr ""
 
 msgid "HighLow"
-msgstr ""
+msgstr "Cao Thấp"
 
 msgid "Buy Stops"
 msgstr ""
@@ -931,7 +931,7 @@ msgid "Bollinger %b"
 msgstr ""
 
 msgid "%b"
-msgstr ""
+msgstr "%b"
 
 msgid "Bollinger Bandwidth"
 msgstr ""
@@ -973,22 +973,22 @@ msgid "Resistance 1"
 msgstr ""
 
 msgid "Support 1"
-msgstr ""
+msgstr "Hỗ trợ 1"
 
 msgid "Resistance 2"
 msgstr ""
 
 msgid "Support 2"
-msgstr ""
+msgstr "Hỗ trợ 2"
 
 msgid "Resistance 3"
 msgstr ""
 
 msgid "Support 3"
-msgstr ""
+msgstr "Hỗ trợ 3"
 
 msgid "VWAP"
-msgstr ""
+msgstr "VWAP"
 
 msgid "Alligator"
 msgstr ""
@@ -1087,7 +1087,7 @@ msgid "TII"
 msgstr "TII"
 
 msgid "Choppiness Index"
-msgstr "Chỉ số độ dồi dào"
+msgstr "Chỉ số Choppiness"
 
 msgid "Disparity Index"
 msgstr "Chỉ số chênh lệch"
@@ -1201,16 +1201,16 @@ msgid "Ghost"
 msgstr ""
 
 msgid "Levels"
-msgstr ""
+msgstr "Cấp độ"
 
 msgid "Supertrend"
 msgstr ""
 
 msgid "Uptrend"
-msgstr ""
+msgstr "Xu hướng lên"
 
 msgid "Downtrend"
-msgstr ""
+msgstr "Xu hướng xuống"
 
 msgid "Volume Profile"
 msgstr ""
