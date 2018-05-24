@@ -194,7 +194,17 @@ export class NumericInput extends React.Component {
         }
     }
 
-    fireOnChange = () => this.props.onChange(this.state.value);
+    fireOnChange = () => {
+        const { min, max, onChange } = this.props;
+        const setAndChange = val => this.setState({ value: val }, () => onChange(this.state.value));
+        if (max !== undefined && this.state.value > max) {
+            setAndChange(max);
+        } else if (min !== undefined && this.state.value < min) {
+            setAndChange(min);
+        } else {
+            onChange(this.state.value);
+        }
+    };
 
     onUpdateValue = e => {
         this.setState({ value: e.target.value });
@@ -207,6 +217,7 @@ export class NumericInput extends React.Component {
     };
 
     render() {
+        const { min, max, step } = this.props;
         return (
             <input
                 type="number"
@@ -214,6 +225,9 @@ export class NumericInput extends React.Component {
                 onBlur={this.fireOnChange}
                 onChange={this.onUpdateValue}
                 onKeyPress={this.fireOnEnter}
+                min={min}
+                max={max}
+                step={step}
             />
         );
     }
