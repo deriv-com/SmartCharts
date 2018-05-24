@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Vietnamese\n"
 "Language: vi_VN\n"
-"PO-Revision-Date: 2018-05-21 06:02-0400\n"
+"PO-Revision-Date: 2018-05-24 02:32-0400\n"
 
 msgid "Favorites"
 msgstr "Yêu thích"
@@ -43,7 +43,7 @@ msgid "Share"
 msgstr "Chia sẻ"
 
 msgid "Share / Download Chart"
-msgstr ""
+msgstr "Chia sẽ / Tải Biểu Đồ"
 
 msgid "Share link"
 msgstr "Chia sẻ liên kết"
@@ -514,7 +514,7 @@ msgid "Commodity Channel Index"
 msgstr "Chỉ số kênh hàng hóa"
 
 msgid "Detrended Price Oscillator"
-msgstr "Chỉ số dao động giá đã bị gỡ xu thế"
+msgstr "Chỉ số dao động giá đã hết xu thế"
 
 msgid "True Range"
 msgstr "Chỉ số biến động giá"
@@ -550,10 +550,10 @@ msgid "Long RoC"
 msgstr "RoC dài"
 
 msgid "Chande Momentum Oscillator"
-msgstr "Chỉ số tốc độ thay đổi giá Chande"
+msgstr "Chỉ số dao động quán tính Chande"
 
 msgid "Chande Forecast Oscillator"
-msgstr "Chỉ báo dự đoán giao động Chande"
+msgstr "Chỉ số dự đoán giao động Chande"
 
 msgid "Intraday Momentum Index"
 msgstr "Chỉ số tốc độ thay đổi giá Intraday"
@@ -577,7 +577,7 @@ msgid "Smoothing Period"
 msgstr "Thời lượng làm mượt"
 
 msgid "Series"
-msgstr "Series"
+msgstr "Sê-ri"
 
 msgid "Shading"
 msgstr "Bóng"
@@ -610,16 +610,16 @@ msgid "Channel Fill"
 msgstr "Điền vào kênh"
 
 msgid "High Low Top"
-msgstr "Top cao thấp"
+msgstr "Đỉnh Thấp Cao"
 
 msgid "High Low Median"
-msgstr "Trung bình thấp cao"
+msgstr "Trung Bình Thấp Cao"
 
 msgid "High Low Bottom"
-msgstr "Cao thấp dưới"
+msgstr "Đáy Thấp Cao"
 
 msgid "High Minus Low"
-msgstr "Cao trừ thấp"
+msgstr "Thấp Âm Cao"
 
 msgid "Median Price"
 msgstr "Giá trung bình"
@@ -634,16 +634,16 @@ msgid "Shift Type"
 msgstr "Loại Thay đổi"
 
 msgid "Shift"
-msgstr "Sự thay đổi"
+msgstr "Thay đổi"
 
 msgid "MA Env Top"
-msgstr "MA Env Top"
+msgstr "Đỉnh ĐMA Env"
 
 msgid "MA Env Median"
-msgstr "MA Env Median"
+msgstr "Trung Bình MA Env"
 
 msgid "MA Env Bottom"
-msgstr "MA Env Bottom"
+msgstr "Đáy MA Env"
 
 msgid "Fractal Chaos Bands"
 msgstr "Fractal Chaos Bands"
@@ -712,10 +712,10 @@ msgid "Donchian Low"
 msgstr "Donchian thấp"
 
 msgid "Highest High Value"
-msgstr "Giá trị cao cao nhất"
+msgstr "Giá Trị Cao cao nhất"
 
 msgid "Lowest Low Value"
-msgstr "Giá trị thấp nhất thấp"
+msgstr "Giá Trị Thấp nhất thấp"
 
 msgid "Mass Index"
 msgstr "Chỉ số khối lượng"
@@ -994,19 +994,19 @@ msgid "Alligator"
 msgstr ""
 
 msgid "Jaw Period"
-msgstr ""
+msgstr "Giai đoạn hàm"
 
 msgid "Jaw Offset"
 msgstr ""
 
 msgid "Teeth Period"
-msgstr "Giai đoạn Teeth"
+msgstr "Giai đoạn răng"
 
 msgid "Teeth Offset"
 msgstr "Teeth Offset"
 
 msgid "Lips Period"
-msgstr "Giai đoạn Lips"
+msgstr "Giai đoạn môi"
 
 msgid "Lips Offset"
 msgstr "Lips Offset"
@@ -1024,7 +1024,7 @@ msgid "Lips"
 msgstr "Môi"
 
 msgid "Gator Oscillator"
-msgstr "Gator Oscillator"
+msgstr "Chỉ số dao động Gator"
 
 msgid "Ichimoku Clouds"
 msgstr "Ichimoku Clouds"
@@ -1126,7 +1126,7 @@ msgid "SMA10"
 msgstr "SMA10"
 
 msgid "Rainbow Oscillator"
-msgstr "Gator Oscillator"
+msgstr "Chỉ số dao động Rainbow"
 
 msgid "HHV/LLV Lookback"
 msgstr "HHV/LLV Lookback"
