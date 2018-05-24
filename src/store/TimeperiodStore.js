@@ -1,7 +1,11 @@
 import { observable, action, computed, when, reaction } from 'mobx';
 import { getTimeUnit, getIntervalInSeconds  } from './utils';
 import MenuStore from './MenuStore';
-import { strictEqual } from 'assert';
+import {chartTypes} from './ChartTypeStore';
+
+const notCandles = chartTypes
+    .filter(t => !t.candleOnly)
+    .map(t => t.id);
 
 export default class TimeperiodStore {
     constructor(mainStore) {
@@ -47,7 +51,7 @@ export default class TimeperiodStore {
                 this.remain = this.remain ? this.remain : "00:00";
             }
         }, 1000);
-    }
+    };
 
     showCandleCountdown = () => {
         var stx = this.context.stx;
@@ -81,7 +85,7 @@ export default class TimeperiodStore {
 
             const chartType = this.mainStore.chartType;
             const isTick = timeUnit === 'second';
-            const isCandle = ['candle', 'hollow_condle', 'colored_bar'].indexOf(chartType.type.id) !== -1;
+            const isCandle = notCandles.indexOf(chartType.type.id) === -1;
 
             if (isCandle && isTick) {
                 chartType.setType('mountain');

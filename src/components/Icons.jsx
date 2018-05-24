@@ -1,25 +1,34 @@
 import React from 'react';
 import '../../sass/components/_icons.scss';
+
+// Chart types:
+import BaseLine from '../../sass/icons/chart settings/chart types/baseline/ic-baseline-normal.svg';
+import Candle from '../../sass/icons/chart settings/chart types/candle/ic-candle-normal.svg';
+import Dot from '../../sass/icons/chart settings/chart types/dot/ic-dot-normal.svg';
+import HeikinAshi from '../../sass/icons/chart settings/chart types/ic-heikin-ashi-normal.svg';
+import HollowCandle from '../../sass/icons/chart settings/chart types/hollow candle/ic-hollowcandle-normal.svg';
+import Kagi from '../../sass/icons/chart settings/chart types/ic-kagi-normal.svg';
+import Line from '../../sass/icons/chart settings/chart types/line/ic-line-normal.svg';
+import LineBreak from '../../sass/icons/chart settings/chart types/ic-linebreak-normal.svg';
+import OHLC from '../../sass/icons/chart settings/chart types/ohlc/ic-ohlc-normal.svg';
+import PointFigure from '../../sass/icons/chart settings/chart types/ic-pointfigure-normal.svg';
+import RangeBars from '../../sass/icons/chart settings/chart types/ic-rangebars-normal.svg';
+import Renko from '../../sass/icons/chart settings/chart types/ic-renko-normal.svg';
+import Spline from '../../sass/icons/chart settings/chart types/spline/ic-spline-normal.svg';
+
 import Add from '../../sass/icons/chart settings/zoom-in/ic-zoomin-light.svg';
 import AddThin from '../../sass/icons/add/ic-add.svg';
-import Candle from '../../sass/icons/chart settings/chart types/candle/ic-candle-normal.svg';
 import Close from '../../sass/icons/close/ic-close.svg';
 import Comparison from '../../sass/icons/chart settings/comparison/ic-comparison-normal.svg';
 import Crosshair from '../../sass/icons/chart settings/crosshair/ic-crosshair.svg';
 import Delete from '../../sass/icons/delete/ic-delete.svg';
 import Clear from '../../sass/icons/clear/ic-clear.svg';
-import Dot from '../../sass/icons/chart settings/chart types/dot/ic-dot-normal.svg';
 import Download from '../../sass/icons/download/ic-download.svg';
 import Draw from '../../sass/icons/chart settings/drawing tools/ic-drawingtools-normal.svg';
-import HollowCandle from '../../sass/icons/chart settings/chart types/hollow candle/ic-hollowcandle-normal.svg';
 import Indicator from '../../sass/icons/chart settings/indicators/ic-indicator-normal.svg';
-import Line from '../../sass/icons/chart settings/chart types/line/ic-line-normal.svg';
-import BaseLine from '../../sass/icons/chart settings/chart types/baseline/ic-baseline-normal.svg';
 import List from '../../sass/icons/template-list/ic-templatelist.svg';
 import Measure from '../../sass/icons/measure/ic-measure.svg';
 import Minus from '../../sass/icons/chart settings/zoom-out/ic-zoomout-light.svg';
-import OHLC from '../../sass/icons/chart settings/chart types/ohlc/ic-ohlc-normal.svg';
-import Spline from '../../sass/icons/chart settings/chart types/spline/ic-spline-normal.svg';
 import Star from '../../sass/icons/favorite/ic-favorite-normal.svg';
 import Template from '../../sass/icons/chart settings/chart template/ic-charttemplate-normal.svg';
 import Tick from '../../sass/icons/tick/ic-tick.svg';
@@ -169,27 +178,35 @@ const Wrapper = WrappedComponent => props => {
     );
 };
 
+// Chart Types:
+export const BaseLineIcon = Wrapper(BaseLine);
+export const CandleIcon = Wrapper(Candle);
+export const DotIcon = Wrapper(Dot);
+export const HeikinAshiIcon = Wrapper(HeikinAshi);
+export const HollowCandleIcon = Wrapper(HollowCandle);
+export const KagiIcon = Wrapper(Kagi);
+export const LineBreakIcon = Wrapper(LineBreak);
+export const LineIcon = Wrapper(Line);
+export const OHLCIcon = Wrapper(OHLC);
+export const PointFigureIcon = Wrapper(PointFigure);
+export const RangeBarsIcon = Wrapper(RangeBars);
+export const RenkoIcon = Wrapper(Renko);
+
 export const AddIcon = Wrapper(Add);
 export const ZoomInIcon = Wrapper(Add);
 export const AddThinIcon = Wrapper(AddThin);
-export const CandleIcon = Wrapper(Candle);
 export const CloseIcon = Wrapper(Close);
 export const ComparisonIcon = Wrapper(Comparison);
 export const CrosshairIcon = Wrapper(Crosshair);
 export const DeleteIcon= Wrapper(Delete);
 export const ClearIcon= Wrapper(Clear);
-export const DotIcon = Wrapper(Dot);
 export const DownloadIcon = Wrapper(Download);
 export const DrawIcon = Wrapper(Draw);
-export const HollowCandleIcon = Wrapper(HollowCandle);
 export const IndicatorIcon = Wrapper(Indicator);
-export const LineIcon = Wrapper(Line);
-export const BaseLineIcon = Wrapper(BaseLine);
 export const ListIcon = Wrapper(List);
 export const MeasureIcon = Wrapper(Measure);
 export const MinusIcon = Wrapper(Minus);
 export const ZoomOutIcon = Wrapper(Minus);
-export const OHLCIcon = Wrapper(OHLC);
 export const SplineIcon = Wrapper(Spline);
 export const StarIcon = Wrapper(Star);
 export const TemplateIcon = Wrapper(Template);

@@ -20,11 +20,31 @@
 		.ciq-icon {
 			background-position: 50% 50%;
 			background-repeat: no-repeat;
-		} 
+		}
 	}
 	.ciq-list {
 		.ciq-list-item {
 			padding: 0;
+			justify-content: space-between;
+			> .left {
+				display: inline-flex;
+				align-items: center;
+			}
+			> .ciq-aggregate-setting {
+				margin-right: 5px;
+				> .ic-icon {
+					> svg > path {
+						@include themify($themes) {
+							fill: themed('defaultTextMedium');
+						}
+					}
+					&:hover > svg > path {
+						@include themify($themes) {
+							fill: themed('activeColor');
+						}
+					}
+				}
+			}
 		}
 	}
 }

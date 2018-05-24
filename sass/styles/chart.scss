@@ -584,33 +584,33 @@ html, body {
 }
 
 .stx_baseline_down { /* under area color */
-    color: #eb242b;
+    color: $chart-red;
     width: 2px;
 }
 
 .stx_baseline_up { /* over area color */
-    color: #49ba59;
+    color: $chart-green;
     width: 2px;
 }
 
 .stx_kagi_down { /* Kagi chart width and color for downtrend */
-    color: #FF0000;
+    color: $chart-red;
     width: 1px;
 }
 
 .stx_kagi_up { /* Kagi chart width and color for uptrend */
-    color: #00FF00;
+    color: $chart-green;
     width: 3px;
 }
 
 .stx_pandf_down { /* P&F chart color, padding, width for downtrend */
-    color: #FF0000;
+    color: $chart-red;
     padding: 2px 0px 2px 0px;
     width: 2px;
 }
 
 .stx_pandf_up { /* P&F chart color, padding, width for uptrend */
-    color: #00FF00;
+    color: $chart-green;
     padding: 2px 0px 2px 0px;
     width: 2px;
 }
@@ -834,11 +834,11 @@ html, body {
 }
 
 .cq-down {
-    color: #ff002a;
+    color: $chart-red;
 }
 
 .cq-up {
-    color: #85c730;
+    color: $chart-green;
 }
 
 cq-attrib-container {
