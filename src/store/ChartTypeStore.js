@@ -59,6 +59,9 @@ const aggregates = {
             id: 'priceLines',
             title: t.translate('Price Lines'),
             type: 'numericinput',
+            max: 10,
+            step: 1,
+            min: 1,
         }]
     },
     rangebars: {
