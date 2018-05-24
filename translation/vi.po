@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Vietnamese\n"
 "Language: vi_VN\n"
-"PO-Revision-Date: 2018-05-24 09:37-0400\n"
+"PO-Revision-Date: 2018-05-24 09:38-0400\n"
 
 msgid "Favorites"
 msgstr "Yêu thích"
@@ -925,7 +925,7 @@ msgid "ATR Trailing Stops"
 msgstr "ATR Trailing dừng"
 
 msgid "Plot Type"
-msgstr ""
+msgstr "Loại sơ đồ"
 
 msgid "HighLow"
 msgstr "Cao Thấp"
