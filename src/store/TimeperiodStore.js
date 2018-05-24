@@ -1,4 +1,4 @@
-import { observable, action, computed, when } from 'mobx';
+import { observable, action, computed, when, reaction } from 'mobx';
 import { getTimeUnit, getIntervalInSeconds  } from './utils';
 import MenuStore from './MenuStore';
 import { strictEqual } from 'assert';
@@ -26,6 +26,8 @@ export default class TimeperiodStore {
 
         this.showScaleCountdown();
 
+        reaction(() => this.timeUnit , () => { this.showScaleCountdown(); });
+
         const displayMilliseconds = (ms) => {
             const totalSec = ms / 1000;
             if (totalSec <= 0) { return null; }
@@ -49,15 +51,19 @@ export default class TimeperiodStore {
 
     showScaleCountdown = () => {
         var stx = this.context.stx;
-        if(this.mainStore.chartSetting.scaleCountdown) {
-            this._injectionId = stx.append('draw', () => {
-                stx.yaxisLabelStyle = "rect";
-                stx.createYAxisLabel(stx.chart.panel, this.remain, this.remainLabelY, "#15212d" , "#FFFFFF");
-                stx.yaxisLabelStyle = "roundRectArrow";
-            });
+        var isTick = this.timeUnit == 'tick';
+        if(this.mainStore.chartSetting.scaleCountdown && !isTick ) {
+            if(!this._injectionId){
+                this._injectionId = stx.append('draw', () => {
+                    stx.yaxisLabelStyle = "rect";
+                    stx.createYAxisLabel(stx.chart.panel, this.remain, this.remainLabelY, "#15212d" , "#FFFFFF");
+                    stx.yaxisLabelStyle = "roundRectArrow";
+                });
+            }
         }
-        else {
+        else if(this._injectionId) {
             stx.removeInjection(this._injectionId);
+            this._injectionId=undefined;
         }
     }
 
