@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Vietnamese\n"
 "Language: vi_VN\n"
-"PO-Revision-Date: 2018-05-24 09:45-0400\n"
+"PO-Revision-Date: 2018-05-24 09:58-0400\n"
 
 msgid "Favorites"
 msgstr "Yêu thích"
@@ -1006,7 +1006,7 @@ msgid "Jaw Period"
 msgstr "Giai đoạn hàm"
 
 msgid "Jaw Offset"
-msgstr ""
+msgstr "Jaw Offset"
 
 msgid "Teeth Period"
 msgstr "Giai đoạn răng"
@@ -1159,13 +1159,13 @@ msgid "Heavy Rate of Change Period"
 msgstr "Giai đoạn thay đổi tỷ lệ lớn"
 
 msgid "Heavy SMA Period"
-msgstr ""
+msgstr "Giai đoạn nặng SMA"
 
 msgid "Heaviest Rate of Change Period"
-msgstr ""
+msgstr "Giai đoạn thay đổi tỷ lệ mạnh nhất"
 
 msgid "Heaviest SMA Period"
-msgstr ""
+msgstr "Giai đoạn SMA mạnh nhất"
 
 msgid "KST"
 msgstr "KST"
@@ -1174,16 +1174,16 @@ msgid "KSTSignal"
 msgstr "KSTSignal"
 
 msgid "Pring's Special K"
-msgstr ""
+msgstr "Pring's Special K"
 
 msgid "Darvas Box"
 msgstr "Hộp Darvas"
 
 msgid "ATH Lookback Period"
-msgstr ""
+msgstr "Khoảng ATH Lookback"
 
 msgid "Exit Field"
-msgstr ""
+msgstr "Thoát khỏi trường"
 
 msgid "Ghost Boxes"
 msgstr "Hộp Ghost"
@@ -1192,16 +1192,16 @@ msgid "Stop Levels"
 msgstr "Mức Dừng"
 
 msgid "Level Offset"
-msgstr ""
+msgstr "Cấp bù đắp"
 
 msgid "Price Minimum"
 msgstr "Tối thiểu giá"
 
 msgid "Volume Spike"
-msgstr ""
+msgstr "Tăng đột biến khối lượng"
 
 msgid "Volume % of Avg"
-msgstr ""
+msgstr "Khối lượng % của Avg"
 
 msgid "Darvas"
 msgstr "Darvas"
@@ -1222,13 +1222,13 @@ msgid "Downtrend"
 msgstr "Xu hướng xuống"
 
 msgid "Volume Profile"
-msgstr ""
+msgstr "Khối lượng hồ sơ"
 
 msgid "Bars Color"
-msgstr ""
+msgstr "Màu các thanh"
 
 msgid "Vortex Indicator"
-msgstr ""
+msgstr "Chỉ số Vortex"
 
 msgid "+VI"
 msgstr "+VI"
@@ -1243,17 +1243,17 @@ msgid "Distance(%)"
 msgstr "Khoảng cách(%)"
 
 msgid "Psychological Line"
-msgstr ""
+msgstr "Dòng Psychological"
 
 msgid "Moving Average Deviation"
-msgstr ""
+msgstr "Moving Average Deviation"
 
 msgid "Shinohara Intensity Ratio"
-msgstr ""
+msgstr "Tỷ lệ cường độ Shinohara"
 
 msgid "Strong Ratio"
-msgstr ""
+msgstr "Tỷ lệ mạnh"
 
 msgid "Weak Ratio"
-msgstr ""
+msgstr "Tỷ lệ yếu"
 
