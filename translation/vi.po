@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Vietnamese\n"
 "Language: vi_VN\n"
-"PO-Revision-Date: 2018-05-24 09:38-0400\n"
+"PO-Revision-Date: 2018-05-24 09:45-0400\n"
 
 msgid "Favorites"
 msgstr "Yêu thích"
@@ -931,67 +931,67 @@ msgid "HighLow"
 msgstr "Cao Thấp"
 
 msgid "Buy Stops"
-msgstr ""
+msgstr "Mua Stops"
 
 msgid "Sell Stops"
-msgstr ""
+msgstr "Bán Stops"
 
 msgid "Bollinger %b"
-msgstr ""
+msgstr "Bollinger %b"
 
 msgid "%b"
 msgstr "%b"
 
 msgid "Bollinger Bandwidth"
-msgstr ""
+msgstr "Băng thông Bollinger"
 
 msgid "Bandwidth"
-msgstr ""
+msgstr "Băng thông"
 
 msgid "Donchian Width"
-msgstr ""
+msgstr "Chiều rộng Donchian"
 
 msgid "Relative Vigor Index"
-msgstr ""
+msgstr "Chỉ số tương đối Vigor"
 
 msgid "Rel Vig"
-msgstr ""
+msgstr "Rel Vig"
 
 msgid "RelVigSignal"
-msgstr ""
+msgstr "RelVigSignal"
 
 msgid "Elder Impulse System"
-msgstr ""
+msgstr "Hệ thống Elder Impulse"
 
 msgid "Bullish"
-msgstr ""
+msgstr "Hướng tăng"
 
 msgid "Bearish"
-msgstr ""
+msgstr "Hướng giảm"
 
 msgid "Neutral"
-msgstr ""
+msgstr "Trung lập"
 
 msgid "Pivot Points"
-msgstr ""
+msgstr "Pivot Points"
 
 msgid "Pivot"
-msgstr ""
+msgstr "Pivot"
 
 msgid "Resistance 1"
-msgstr ""
+msgstr "Resistance 1"
 
 msgid "Support 1"
 msgstr "Hỗ trợ 1"
 
 msgid "Resistance 2"
-msgstr ""
+msgstr "Resistance 2"
 
 msgid "Support 2"
 msgstr "Hỗ trợ 2"
 
 msgid "Resistance 3"
-msgstr ""
+msgstr "Resistance 3"
 
 msgid "Support 3"
 msgstr "Hỗ trợ 3"
@@ -1000,7 +1000,7 @@ msgid "VWAP"
 msgstr "VWAP"
 
 msgid "Alligator"
-msgstr ""
+msgstr "Alligator"
 
 msgid "Jaw Period"
 msgstr "Giai đoạn hàm"
