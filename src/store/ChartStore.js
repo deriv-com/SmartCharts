@@ -8,6 +8,7 @@ import KeystrokeHub from '../components/ui/KeystrokeHub';
 import '../components/ui/Animation';
 import { BinaryAPI, Feed } from '../feed';
 import {createObjectFromLocalStorage} from '../utils';
+import ResizeObserver from 'resize-observer-polyfill';
 // import '../AddOns';
 
 class ChartStore {
@@ -218,42 +219,46 @@ class ChartStore {
                 delete layoutData.symbols;
             }
 
-            const checkForQuerystring =
-                window.location.origin === 'https://charts.binary.com' ||
-                window.location.origin.startsWith('http://localhost:808');
-            const configParams = window.location.href.split('#');
-            if (configParams.length > 1 && checkForQuerystring) {
-                const sharedParams = configParams.slice(1, configParams.length).join('#');
-                if(sharedParams) {
-                    try {
-                        layoutData = JSON.parse(decodeURI(sharedParams));
-                        window.history.replaceState({}, document.title, window.location.pathname);
-                    } catch(e) { /* Can't parse the URL? Doesn't matter... (: */ }
+            const onLayoutDataReady = () => {
+                this.restoreLayout(stxx, layoutData);
+
+                this.setActiveSymbols(active_symbols);
+
+                if (initialSymbol && !(layoutData && layoutData.symbols)) {
+                    this.changeSymbol(initialSymbol);
+                } else if (stxx.chart.symbol) {
+                    this.currentActiveSymbol = stxx.chart.symbolObject;
+                    stxx.chart.yAxis.decimalPlaces = stxx.chart.symbolObject.decimal_places;
+                    this.categorizedSymbols = this.categorizeActiveSymbols();
+                    if (onSymbolChange) {onSymbolChange(this.currentActiveSymbol);}
+                } else {
+                    this.changeSymbol(this.defaultSymbol);
                 }
-            }
 
-            this.restoreLayout(stxx, layoutData);
+                this.context = context;
+                this.contextPromise.resolve(this.context );
+                this.resizeScreen();
+                this.chartPanelTop = holderStyle.top;
+            };
+            const href = window.location.href;
+            if (href.indexOf('#') !== -1) {
+                const encodedJsonPart = href.split('#').slice(1).join('#');
+                const url = href.split('#')[0];
+                const hash = url.split('?')[1];
 
-            this.setActiveSymbols(active_symbols);
-
-            if (initialSymbol && !(layoutData && layoutData.symbols)) {
-                this.changeSymbol(initialSymbol);
-            } else if (stxx.chart.symbol) {
-                this.currentActiveSymbol = stxx.chart.symbolObject;
-                stxx.chart.yAxis.decimalPlaces = stxx.chart.symbolObject.decimal_places;
-                this.categorizedSymbols = this.categorizeActiveSymbols();
-                if (onSymbolChange) {onSymbolChange(this.currentActiveSymbol);}
+                window.history.replaceState({}, document.title, window.location.pathname);
+                const promise = this.mainStore.share.expandBitlyAsync(hash, decodeURIComponent(encodedJsonPart));
+                promise.then(encodedJson => {
+                    layoutData = JSON.parse(encodedJson);
+                    onLayoutDataReady();
+                }).catch(() => onLayoutDataReady());
             } else {
-                this.changeSymbol(this.defaultSymbol);
+                onLayoutDataReady();
             }
-
-            this.context = context;
-            this.contextPromise.resolve(this.context );
-            this.resizeScreen();
-            this.chartPanelTop = holderStyle.top;
         });
 
-        window.addEventListener('resize', this.resizeScreen, false);
+        this.resizeObserver = new ResizeObserver(() => this.resizeScreen());
+        this.resizeObserver.observe(rootNode);
 
         stxx.append('createDataSet', this.updateComparisons);
     }
@@ -326,7 +331,7 @@ class ChartStore {
     }
 
     @action.bound destroy() {
-        window.removeEventListener('resize', this.resizeScreen, false);
+        this.resizeObserver.disconnect();
         // Destroying the chart does not unsubscribe the streams;
         // we need to manually unsubscribe them.
         this.feed.unsubscribeAll();

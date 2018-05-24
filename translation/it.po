@@ -10,55 +10,55 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Italian\n"
 "Language: it_IT\n"
-"PO-Revision-Date: 2018-05-18 06:21-0400\n"
+"PO-Revision-Date: 2018-05-23 07:02-0400\n"
 
 msgid "Favorites"
-msgstr ""
+msgstr "Preferiti"
 
 msgid "There are no favorites yet."
-msgstr ""
+msgstr "Non sono ancora stati aggiunti preferiti."
 
 msgid "CLOSED"
-msgstr ""
+msgstr "CHIUSO"
 
 msgid "Close"
-msgstr ""
+msgstr "Chiusura"
 
 msgid "PRICE"
-msgstr ""
+msgstr "PREZZO"
 
 msgid "OPEN"
-msgstr ""
+msgstr "APERTURA"
 
 msgid "CLOSE"
-msgstr ""
+msgstr "CHIUSURA"
 
 msgid "HIGH"
-msgstr ""
+msgstr "ALTO"
 
 msgid "LOW"
-msgstr ""
+msgstr "BASSO"
 
 msgid "Share"
 msgstr "Condividi"
 
 msgid "Share / Download Chart"
-msgstr ""
+msgstr "Condividi / Scarica grafico"
 
 msgid "Share link"
-msgstr ""
+msgstr "Condividi link"
 
 msgid "Failed to generate link"
-msgstr ""
+msgstr "Creazione link non riuscita"
 
 msgid "Retry"
-msgstr ""
+msgstr "Riprova"
 
 msgid "Download chart"
-msgstr ""
+msgstr "Scarica grafico"
 
 msgid "Draw tools"
-msgstr ""
+msgstr "Strumenti disegno"
 
 msgid "Clear All"
 msgstr "Cancella tutto"
@@ -67,22 +67,22 @@ msgid "Measure"
 msgstr "Misura"
 
 msgid "Zoom out"
-msgstr ""
+msgstr "Zoom indietro"
 
 msgid "Zoom in"
-msgstr ""
+msgstr "Zoom avanti"
 
 msgid "Interval"
 msgstr "Intervallo"
 
 msgid "Tick"
-msgstr ""
+msgstr "Tick"
 
 msgid "Minute"
-msgstr ""
+msgstr "Minuto"
 
 msgid "Hour"
-msgstr ""
+msgstr "Ora"
 
 msgid "Day"
 msgstr "Giorno"
@@ -91,52 +91,52 @@ msgid "Crosshair"
 msgstr "Mirino"
 
 msgid "Templates"
-msgstr ""
+msgstr "Modelli"
 
 msgid "Template name"
-msgstr ""
+msgstr "Nome del modello"
 
 msgid "There is no template added by you."
-msgstr ""
+msgstr "Non risulta alcun modello aggiunto da te."
 
 msgid "Click + icon to add one."
-msgstr ""
+msgstr "Fai clic sull'icona per aggiungerne uno."
 
 msgid "Comparison"
-msgstr ""
+msgstr "Confronto"
 
 msgid "Indicators"
-msgstr ""
+msgstr "Indicatori"
 
 msgid "Chart types"
-msgstr ""
+msgstr "Tipologie di grafico"
 
 msgid "Toggle Asset Information"
-msgstr ""
+msgstr "Attiva/Disattiva le informazioni sull'asset"
 
 msgid "Settings"
-msgstr ""
+msgstr "Impostazioni"
 
 msgid "Dark Mode"
-msgstr ""
+msgstr "Modalità scura"
 
 msgid "Language"
-msgstr ""
+msgstr "Lingua"
 
 msgid "RESET"
-msgstr ""
+msgstr "REIMPOSTA"
 
 msgid "DONE"
-msgstr ""
+msgstr "ESEGUITO"
 
 msgid "[symbol] market is presently closed."
-msgstr ""
+msgstr "[symbol] Il mercato è chiuso al momento."
 
 msgid "Streaming for [symbol] is not available due to license restrictions"
-msgstr ""
+msgstr "[symbol] in streaming non è disponibile a causa delle limitazioni della licenza"
 
 msgid "Search..."
-msgstr ""
+msgstr "Cerca..."
 
 msgid "Annotation"
 msgstr "Annotazione"
@@ -163,7 +163,7 @@ msgid "Ellipse"
 msgstr "Ellisse"
 
 msgid "Fib Retracement"
-msgstr ""
+msgstr "Ritracciamento Fib"
 
 msgid "Fib Arc"
 msgstr "Arco Fib"
@@ -238,25 +238,25 @@ msgid "Vertical"
 msgstr "Verticale"
 
 msgid "Active"
-msgstr ""
+msgstr "Attivo"
 
 msgid "There are no active comparisons yet."
-msgstr ""
+msgstr "Non risulta ancora nessun confronto attivo."
 
 msgid "\"Mass Index\" or \"Doji Star\""
-msgstr ""
+msgstr "\"Indice di massa\" o \"Doji Star\""
 
 msgid "There are no active indicators yet."
-msgstr ""
+msgstr "Non risulta ancora nessun indicatore attivo."
 
 msgid "Dot"
-msgstr ""
+msgstr "Punto"
 
 msgid "Colored Dot"
-msgstr ""
+msgstr "Punto colorato"
 
 msgid "Spline"
-msgstr ""
+msgstr "Spline"
 
 msgid "Baseline"
 msgstr "Linea di base"
@@ -265,7 +265,7 @@ msgid "Candle"
 msgstr "Candela"
 
 msgid "OHLC"
-msgstr ""
+msgstr "OHLC"
 
 msgid "Hollow Candle"
 msgstr "Candela Vuote"
@@ -277,7 +277,7 @@ msgid "right-click to manage"
 msgstr "destro del mouse per gestire"
 
 msgid "Chart data is not available for this symbol."
-msgstr ""
+msgstr "I dati del grafico non sono disponibili per questo simbolo."
 
 msgid "RSI"
 msgstr "RSI"
