@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Vietnamese\n"
 "Language: vi_VN\n"
-"PO-Revision-Date: 2018-05-24 09:34-0400\n"
+"PO-Revision-Date: 2018-05-24 09:37-0400\n"
 
 msgid "Favorites"
 msgstr "Yêu thích"
@@ -922,7 +922,7 @@ msgid "STARC Bands Bottom"
 msgstr "Các dải STARC Bottom"
 
 msgid "ATR Trailing Stops"
-msgstr ""
+msgstr "ATR Trailing dừng"
 
 msgid "Plot Type"
 msgstr ""
