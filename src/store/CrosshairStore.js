@@ -302,7 +302,7 @@ class Tooltip extends CIQ.Marker {
                 } else if (dsField.constructor == Date) {
                     if (name == 'DT' && stx.controls.floatDate && stx.controls.floatDate.innerHTML) {
                         if (CIQ.ChartEngine.hideDates()) {
-                            fieldValue = 'N/A';
+                            continue;
                         } else {
                             fieldValue = stx.controls.floatDate.innerHTML;
                         }
@@ -320,11 +320,6 @@ class Tooltip extends CIQ.Marker {
                 rows.push({
                     name: fieldName.toUpperCase(),
                     value: fieldValue,
-                });
-            } else {
-                rows.push({
-                    name: fieldName.toUpperCase(),
-                    value: 'n/a',
                 });
             }
         }
