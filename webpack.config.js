@@ -100,6 +100,16 @@ const config = {
             commonjs2: 'mobx-react',
             root: 'mobxReact',
         },
+        'perfect-scrollbar': {
+            commonjs: 'mobx-react',
+            commonjs2: 'mobx-react',
+            root: 'PerfectScrollbar',
+        },
+        'resize-observer-polyfill': {
+            commonjs: 'resize-observer-polyfill',
+            commonjs2: 'resize-observer-polyfill',
+            root: 'ResizeObserver',
+        },
         'babel-polyfill': 'babel-polyfill',
     },
 };
@@ -151,6 +161,10 @@ if (isApp) {
                 './node_modules/mobx-react/index.js',
             to: 'mobx-react.js'
         },
+        {
+            from: './node_modules/resize-observer-polyfill/dist/ResizeObserver.js',
+            to: 'ResizeObserver.js',
+        }
     ]));
 }
 

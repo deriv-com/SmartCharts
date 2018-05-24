@@ -8,6 +8,7 @@ import KeystrokeHub from '../components/ui/KeystrokeHub';
 import '../components/ui/Animation';
 import { BinaryAPI, Feed } from '../feed';
 import {createObjectFromLocalStorage} from '../utils';
+import ResizeObserver from 'resize-observer-polyfill';
 
 // import '../AddOns';
 
@@ -265,7 +266,8 @@ class ChartStore {
             }
         });
 
-        window.addEventListener('resize', this.resizeScreen, false);
+        this.resizeObserver = new ResizeObserver(() => this.resizeScreen());
+        this.resizeObserver.observe(rootNode);
 
         stxx.append('createDataSet', this.updateComparisons);
     }
@@ -338,7 +340,7 @@ class ChartStore {
     }
 
     @action.bound destroy() {
-        window.removeEventListener('resize', this.resizeScreen, false);
+        this.resizeObserver.disconnect();
         // Destroying the chart does not unsubscribe the streams;
         // we need to manually unsubscribe them.
         this.feed.unsubscribeAll();
