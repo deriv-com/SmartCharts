@@ -78,8 +78,6 @@
 		position:relative;
 		font-weight:400;
 	}
-
-
 	cq-menu-dropdown,
 	.cq-menu-dropdown {
 		position: absolute;
@@ -89,9 +87,9 @@
 		z-index: -3;
 		height: auto;
 		margin-top: 1;
-    visibility: hidden;
-    transform: translateX( -50% );
-    left: 50%;
+	    visibility: hidden;
+	    transform: translateX( -50% );
+	    left: 50%;
 		@include themify($themes) {
 			background: themed('controlDialogBody');
 			color: themed('controlText');
@@ -99,8 +97,8 @@
 		@include box-shadow (0px, 2px, 4px, rgba(0, 0, 0, .2));
 		@include transition( opacity .20s 0s);
 		@include border-radius();
-    @include dialog-transition();
-    &.open{
+    	@include dialog-transition();
+    	&.open{
             visibility: visible;
             margin-top:5px;
             opacity: 1;
@@ -143,8 +141,31 @@
 				}
 			}
 		}
-		.body{
-
+		.cq-mobile-title{
+			@include themify($themes) {
+				color: themed('controlTitleText');
+				background: themed('controlDialogHead');
+				border-bottom: 1px solid themed('defaultBorder');
+			}
+			.mobile-title{
+				display: block;
+				font-size: 16px;
+				line-height: 40px;
+				font-weight: 400;
+				padding: 0em .7em;
+				@include themify($themes) {
+				    color: themed('defaultText');
+				}
+			}
+			.icon-close-menu{
+			    position: absolute;
+			    top: 5px;
+			    right: 5px;
+			    cursor: pointer;
+			    height: 30px;
+			    width: 30px;
+			    line-height: 36px;
+			}
 		}
 		.cq-categorical-display{
 			.cq-lookup-filters{
@@ -155,5 +176,8 @@
 			.cq-scroll-panel{}
 		}
 	}
+}
+
+.smartcharts-mobile{
 
 }

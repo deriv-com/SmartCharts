@@ -162,12 +162,6 @@ const CategoricalDisplay = ({
                     ) }
                 </div>
             </div>
-            <div className="cq-categorical-footer">
-                <button onClick={()=> {closeMenu();} }
-                    className="btn-categorical-display-close">
-                    {t.translate("Close")}
-                </button>
-            </div>
         </div>
     );
 };

@@ -6,7 +6,8 @@ import {
     SettingIcon,
     PositionLeftIcon,
     PositionBottomIcon,
-    BackIcon
+    BackIcon,
+    CloseIcon
 } from './Icons.jsx';
 import '../../sass/components/_ciq-chart-setting.scss';
 
@@ -20,11 +21,15 @@ const ChartSetting = ({
     view,
     setLanguage,
     theme,
-    setTheme
+    setTheme,
+    closeMenu
 }) => {
     const renderMain = () => {
         return <div>
-            <div className='title'> {t.translate('Settings')} </div>
+            <div className='title'>
+                <div className="title-text"> {t.translate('Settings')} </div>
+                <CloseIcon className="icon-close-menu" onClick={ () => closeMenu() } />
+            </div>
             <div className='body'>
                 <div className="ciq-list ciq-list-setting">
                     {/*<div className="ciq-item">
@@ -112,4 +117,5 @@ export default connect(({chartSetting: s}) => ({
     setLanguage: s.setLanguage,
     theme: s.theme,
     setTheme: s.setTheme,
+    closeMenu: s.menu.onTitleClick,
 }))(ChartSetting);

@@ -2,6 +2,7 @@ import React from 'react';
 import {connect} from '../store/Connect';
 import Menu from './Menu.jsx';
 import List from './List.jsx';
+import { CloseIcon } from './Icons.jsx';
 import {Switch} from './Form.jsx';
 import '../../sass/components/_chart-types.scss';
 
@@ -14,7 +15,7 @@ const ChartTypes = ({
     TypeList,
     assetInformation,
     setAssetInformation,
-    CloseMenu,
+    closeMenu,
     isMobile
 }) => (
     <Menu
@@ -28,6 +29,7 @@ const ChartTypes = ({
         <Menu.Body>
             {isMobile ? <div className="cq-mobile-title">
                 <div className="mobile-title">{t.translate("Chart types")}</div>
+                <CloseIcon className="icon-close-menu" onClick={ () => closeMenu() } />
             </div> : '' }
             <div className='ciq-toggle-asset-information'>
                 <div>{t.translate('Toggle Asset Information')}</div>
@@ -59,7 +61,7 @@ export default connect(
         menuOpen: chartType.menu.open,
         Menu: chartType.menu.connect(Menu),
         TypeList: chartType.list.connect(List),
-        CloseMenu: chartType.menu.onTitleClick,
+        closeMenu: chartType.menu.onTitleClick,
         isMobile: chartType.mainStore.chart.isMobile,
     })
 )(ChartTypes);
