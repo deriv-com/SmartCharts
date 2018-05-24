@@ -24,9 +24,9 @@ export default class TimeperiodStore {
 
         const stx = this.context.stx;
 
-        this.showScaleCountdown();
+        this.showCandleCountdown();
 
-        reaction(() => this.timeUnit , () => { this.showScaleCountdown(); });
+        reaction(() => this.timeUnit , () => { this.showCandleCountdown(); });
 
         const displayMilliseconds = (ms) => {
             const totalSec = ms / 1000;
@@ -49,10 +49,10 @@ export default class TimeperiodStore {
         }, 1000);
     }
 
-    showScaleCountdown = () => {
+    showCandleCountdown = () => {
         var stx = this.context.stx;
         var isTick = this.timeUnit == 'tick';
-        if(this.mainStore.chartSetting.scaleCountdown && !isTick ) {
+        if(this.mainStore.chartSetting.candleCountdown && !isTick ) {
             if(!this._injectionId){
                 this._injectionId = stx.append('draw', () => {
                     stx.yaxisLabelStyle = "rect";
