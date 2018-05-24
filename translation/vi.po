@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Vietnamese\n"
 "Language: vi_VN\n"
-"PO-Revision-Date: 2018-05-24 02:41-0400\n"
+"PO-Revision-Date: 2018-05-24 02:54-0400\n"
 
 msgid "Favorites"
 msgstr "Yêu thích"
@@ -1159,16 +1159,16 @@ msgid "Heaviest SMA Period"
 msgstr ""
 
 msgid "KST"
-msgstr ""
+msgstr "KST"
 
 msgid "KSTSignal"
-msgstr ""
+msgstr "KSTSignal"
 
 msgid "Pring's Special K"
 msgstr ""
 
 msgid "Darvas Box"
-msgstr ""
+msgstr "Hộp Darvas"
 
 msgid "ATH Lookback Period"
 msgstr ""
@@ -1177,16 +1177,16 @@ msgid "Exit Field"
 msgstr ""
 
 msgid "Ghost Boxes"
-msgstr ""
+msgstr "Hộp Ghost"
 
 msgid "Stop Levels"
-msgstr ""
+msgstr "Mức Dừng"
 
 msgid "Level Offset"
 msgstr ""
 
 msgid "Price Minimum"
-msgstr ""
+msgstr "Tối thiểu giá"
 
 msgid "Volume Spike"
 msgstr ""
@@ -1195,16 +1195,16 @@ msgid "Volume % of Avg"
 msgstr ""
 
 msgid "Darvas"
-msgstr ""
+msgstr "Darvas"
 
 msgid "Ghost"
-msgstr ""
+msgstr "Ghost"
 
 msgid "Levels"
-msgstr "Cấp độ"
+msgstr "Mức độ"
 
 msgid "Supertrend"
-msgstr ""
+msgstr "Siêu xu hướng"
 
 msgid "Uptrend"
 msgstr "Xu hướng lên"
@@ -1222,16 +1222,16 @@ msgid "Vortex Indicator"
 msgstr ""
 
 msgid "+VI"
-msgstr ""
+msgstr "+VI"
 
 msgid "-VI"
-msgstr ""
+msgstr "-VI"
 
 msgid "ZigZag"
-msgstr ""
+msgstr "Zích-zắc"
 
 msgid "Distance(%)"
-msgstr ""
+msgstr "Khoảng cách(%)"
 
 msgid "Psychological Line"
 msgstr ""
