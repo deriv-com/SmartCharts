@@ -8,7 +8,6 @@ import KeystrokeHub from '../components/ui/KeystrokeHub';
 import '../components/ui/Animation';
 import { BinaryAPI, Feed } from '../feed';
 import {createObjectFromLocalStorage} from '../utils';
-import {shareOrigin} from './ShareStore';
 
 // import '../AddOns';
 
@@ -113,8 +112,16 @@ class ChartStore {
     @action.bound init(rootNode, props) {
         this.rootNode = rootNode;
 
-        const { onSymbolChange, initialSymbol, requestAPI, requestSubscribe, requestForget } = props;
+        const {
+            onSymbolChange,
+            initialSymbol,
+            requestAPI,
+            requestSubscribe,
+            requestForget,
+            shareOrigin = 'https://charts.binary.com',
+        } = props;
         const api = new BinaryAPI(requestAPI, requestSubscribe, requestForget);
+        this.mainStore.share.shareOrigin = shareOrigin;
 
         const stxx = this.stxx = new CIQ.ChartEngine({
             container: this.rootNode.querySelector('.chartContainer.primary'),
