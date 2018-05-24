@@ -28,10 +28,11 @@ export default class ShareStore {
         return this.mainStore.chart.currentActiveSymbol.decimal_places;
     }
 
-    @observable copyTooltip = 'Copy to clipboard';
-    @action.bound resetCopyTooltip() { this.copyTooltip = 'Copy to clipboard'; }
+    defaultCopyTooltipText = t.translate('Copy to clipboard');
+    @observable copyTooltip = this.defaultCopyTooltipText;
+    @action.bound resetCopyTooltip() { this.copyTooltip = this.defaultCopyTooltipText; }
     onCopyDone = (successful) => {
-        this.copyTooltip = successful ? 'Copied!' : 'Failed!';
+        this.copyTooltip = successful ? t.translate('Copied!') : t.translate('Failed!');
     }
     bitlyUrl = 'https://api-ssl.bitly.com/v3';
     accessToken = '837c0c4f99fcfbaca55ef9073726ef1f6a5c9349';
