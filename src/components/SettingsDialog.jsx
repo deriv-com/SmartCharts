@@ -1,6 +1,15 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from '../store/Connect';
-import { Switch, ColorPicker, Slider, Pattern, DropDown, NumberColorPicker, FontSetting } from './Form.jsx';
+import {
+    Switch,
+    NumericInput,
+    ColorPicker,
+    Slider,
+    Pattern,
+    DropDown,
+    NumberColorPicker,
+    FontSetting,
+} from './Form.jsx';
 import { DeleteIcon, StarIcon } from './Icons.jsx';
 import '../../sass/components/_ciq-settings-dialog.scss';
 
@@ -64,6 +73,17 @@ const SettingsDialog = ({
                 onChange={val => onItemChange(item.id, val)}
             />
         ),
+        numericinput: item => (
+            <span className="ciq-num-input">
+                <NumericInput
+                    value={item.value}
+                    onChange={val => onItemChange(item.id, val)}
+                    min={item.min}
+                    step={item.step}
+                    max={item.max}
+                />
+            </span>
+        ),
         numbercolorpicker: item => (
             <NumberColorPicker
                 value={item.value}
@@ -82,10 +102,10 @@ const SettingsDialog = ({
             <div className={`titlebar ${!showTabs ? 'no-tabs' : ''}`}>
                 <div className='title'>{title}</div>
                 <div className='icons'>
-                    <DeleteIcon
+                    { onDeleteClick && <DeleteIcon
                         onClick={onDeleteClick}
                         className="margin"
-                    />
+                    />}
                     { isFavoritable &&
                     <StarIcon
                         onClick={onStarClick}
