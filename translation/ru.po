@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
-"PO-Revision-Date: 2018-05-22 20:40-0400\n"
+"PO-Revision-Date: 2018-05-24 03:20-0400\n"
 
 msgid "Favorites"
 msgstr "Избранное"
@@ -22,7 +22,7 @@ msgid "CLOSED"
 msgstr "ЗАКРЫТО"
 
 msgid "Close"
-msgstr "Закрыть"
+msgstr "Закрытие"
 
 msgid "PRICE"
 msgstr "ЦЕНА"
@@ -631,7 +631,7 @@ msgid "Moving Average Envelope"
 msgstr "Конверт скользящих средних"
 
 msgid "Shift Type"
-msgstr "Тип сдвигу"
+msgstr "Тип сдвига"
 
 msgid "Shift"
 msgstr "Сдвиг"
@@ -682,7 +682,7 @@ msgid "Tolerance Percentage"
 msgstr "Погрешность в процентах"
 
 msgid "Bollinger Bands"
-msgstr "Полоса Боллинджера"
+msgstr "Полосы Боллинджера"
 
 msgid "Bollinger Bands Top"
 msgstr "Полосы Боллинджера (верхний уровень)"
