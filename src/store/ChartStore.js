@@ -8,6 +8,8 @@ import KeystrokeHub from '../components/ui/KeystrokeHub';
 import '../components/ui/Animation';
 import { BinaryAPI, Feed } from '../feed';
 import {createObjectFromLocalStorage} from '../utils';
+import {shareOrigin} from './ShareStore';
+
 // import '../AddOns';
 
 class ChartStore {
@@ -240,7 +242,7 @@ class ChartStore {
                 this.chartPanelTop = holderStyle.top;
             };
             const href = window.location.href;
-            if (href.indexOf('#') !== -1) {
+            if (href.startsWith(shareOrigin) && href.indexOf('#') !== -1) {
                 const encodedJsonPart = href.split('#').slice(1).join('#');
                 const url = href.split('#')[0];
                 const hash = url.split('?')[1];

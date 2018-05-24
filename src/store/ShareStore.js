@@ -3,6 +3,10 @@ import MenuStore from './MenuStore';
 import { downloadFileInBrowser, findAncestor } from './utils';
 import html2canvas from 'html2canvas';
 
+// Change origin to localhost/gh-pages link accordingly if you are developing this feature
+// Note that it'll work for soft folders as well.
+export const shareOrigin = 'https://charts.binary.com';
+
 export default class ShareStore {
     constructor(mainStore) {
         this.mainStore = mainStore;
@@ -51,12 +55,7 @@ export default class ShareStore {
         layoutData.favorites = [];
 
         const json = JSON.stringify(layoutData);
-
-        const origin = window.location.href;
-        const encodedJson = encodeURIComponent(json);
-
         const parts = json.match(/.{1,1800}/g);
-
 
         this.shortUrlFailed = false;
         this.loading = true;
@@ -85,7 +84,8 @@ export default class ShareStore {
             });
     }
     shortenBitlyAsync(payload, hash) {
-        let origin = window.location.href;
+        const href = window.location.href;
+        let origin = href.startsWith(shareOrigin) ? href : shareOrigin;
         origin = origin.replace('localhost', '127.0.0.1'); // make it work on localhost
 
         const shareLink = encodeURIComponent(`${origin}?${hash}#${payload}`);
