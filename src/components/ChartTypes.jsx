@@ -12,8 +12,6 @@ const ChartTypes = ({
     Menu,
     menuOpen,
     TypeList,
-    assetInformation,
-    setAssetInformation,
     CloseMenu,
     isMobile
 }) => (
@@ -29,13 +27,6 @@ const ChartTypes = ({
             {isMobile ? <div className="cq-mobile-title">
                 <div className="mobile-title">{t.translate("Chart types")}</div>
             </div> : '' }
-            <div className='ciq-toggle-asset-information'>
-                <div>{t.translate('Toggle Asset Information')}</div>
-                <Switch
-                    value={assetInformation}
-                    onChange={setAssetInformation}
-                />
-            </div>
             <TypeList height={260}>
                 {T => (
                     <React.Fragment>
@@ -54,8 +45,6 @@ export default connect(
         setType: chartType.setType,
         types: chartType.types,
         setOpen: chartType.setOpen,
-        assetInformation: ai.visible,
-        setAssetInformation: ai.setVisible,
         menuOpen: chartType.menu.open,
         Menu: chartType.menu.connect(Menu),
         TypeList: chartType.list.connect(List),
