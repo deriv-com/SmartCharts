@@ -196,10 +196,11 @@ export class NumericInput extends React.Component {
 
     fireOnChange = () => {
         const { min, max, onChange } = this.props;
+        const setAndChange = val => this.setState({ value: val }, () => onChange(this.state.value));
         if (max !== undefined && this.state.value > max) {
-            this.setState({ value: max });
+            setAndChange(max);
         } else if (min !== undefined && this.state.value < min) {
-            this.setState({ value: min });
+            setAndChange(min);
         } else {
             onChange(this.state.value);
         }
