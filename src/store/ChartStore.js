@@ -9,6 +9,7 @@ import '../components/ui/Animation';
 import { BinaryAPI, Feed } from '../feed';
 import {createObjectFromLocalStorage} from '../utils';
 import ResizeObserver from 'resize-observer-polyfill';
+
 // import '../AddOns';
 
 class ChartStore {
@@ -112,8 +113,16 @@ class ChartStore {
     @action.bound init(rootNode, props) {
         this.rootNode = rootNode;
 
-        const { onSymbolChange, initialSymbol, requestAPI, requestSubscribe, requestForget } = props;
+        const {
+            onSymbolChange,
+            initialSymbol,
+            requestAPI,
+            requestSubscribe,
+            requestForget,
+            shareOrigin = 'https://charts.binary.com',
+        } = props;
         const api = new BinaryAPI(requestAPI, requestSubscribe, requestForget);
+        this.mainStore.share.shareOrigin = shareOrigin;
 
         const stxx = this.stxx = new CIQ.ChartEngine({
             container: this.rootNode.querySelector('.chartContainer.primary'),
@@ -241,7 +250,7 @@ class ChartStore {
                 this.chartPanelTop = holderStyle.top;
             };
             const href = window.location.href;
-            if (href.indexOf('#') !== -1) {
+            if (href.startsWith(shareOrigin) && href.indexOf('#') !== -1) {
                 const encodedJsonPart = href.split('#').slice(1).join('#');
                 const url = href.split('#')[0];
                 const hash = url.split('?')[1];
