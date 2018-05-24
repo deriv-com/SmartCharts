@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Italian\n"
 "Language: it_IT\n"
-"PO-Revision-Date: 2018-05-23 05:51-0400\n"
+"PO-Revision-Date: 2018-05-23 07:02-0400\n"
 
 msgid "Favorites"
 msgstr "Preferiti"
@@ -118,25 +118,25 @@ msgid "Settings"
 msgstr "Impostazioni"
 
 msgid "Dark Mode"
-msgstr ""
+msgstr "Modalità scura"
 
 msgid "Language"
-msgstr ""
+msgstr "Lingua"
 
 msgid "RESET"
-msgstr ""
+msgstr "REIMPOSTA"
 
 msgid "DONE"
-msgstr ""
+msgstr "ESEGUITO"
 
 msgid "[symbol] market is presently closed."
-msgstr ""
+msgstr "[symbol] Il mercato è chiuso al momento."
 
 msgid "Streaming for [symbol] is not available due to license restrictions"
-msgstr ""
+msgstr "[symbol] in streaming non è disponibile a causa delle limitazioni della licenza"
 
 msgid "Search..."
-msgstr ""
+msgstr "Cerca..."
 
 msgid "Annotation"
 msgstr "Annotazione"
@@ -163,7 +163,7 @@ msgid "Ellipse"
 msgstr "Ellisse"
 
 msgid "Fib Retracement"
-msgstr ""
+msgstr "Ritracciamento Fib"
 
 msgid "Fib Arc"
 msgstr "Arco Fib"
@@ -238,25 +238,25 @@ msgid "Vertical"
 msgstr "Verticale"
 
 msgid "Active"
-msgstr ""
+msgstr "Attivo"
 
 msgid "There are no active comparisons yet."
-msgstr ""
+msgstr "Non risulta ancora nessun confronto attivo."
 
 msgid "\"Mass Index\" or \"Doji Star\""
-msgstr ""
+msgstr "\"Indice di massa\" o \"Doji Star\""
 
 msgid "There are no active indicators yet."
-msgstr ""
+msgstr "Non risulta ancora nessun indicatore attivo."
 
 msgid "Dot"
-msgstr ""
+msgstr "Punto"
 
 msgid "Colored Dot"
-msgstr ""
+msgstr "Punto colorato"
 
 msgid "Spline"
-msgstr ""
+msgstr "Spline"
 
 msgid "Baseline"
 msgstr "Linea di base"
@@ -265,7 +265,7 @@ msgid "Candle"
 msgstr "Candela"
 
 msgid "OHLC"
-msgstr ""
+msgstr "OHLC"
 
 msgid "Hollow Candle"
 msgstr "Candela Vuote"
@@ -277,7 +277,7 @@ msgid "right-click to manage"
 msgstr "destro del mouse per gestire"
 
 msgid "Chart data is not available for this symbol."
-msgstr ""
+msgstr "I dati del grafico non sono disponibili per questo simbolo."
 
 msgid "RSI"
 msgstr "RSI"
