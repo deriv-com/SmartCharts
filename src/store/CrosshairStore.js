@@ -381,7 +381,7 @@ class CrosshairStore {
     };
 
     @action.bound toggleState() {
-        this.state = (this.state == 2) ? 0 : (this.state+1);
+        this.state = (this.state + 1) % 3;
         this.stx.layout.crosshair = this.state;
         this.stx.doDisplayCrosshairs();
         this.mainStore.chart.saveLayout();
