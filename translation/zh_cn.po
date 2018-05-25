@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
-"PO-Revision-Date: 2018-05-25 03:14-0400\n"
+"PO-Revision-Date: 2018-05-25 03:41-0400\n"
 
 msgid "Favorites"
 msgstr "收藏夹"
@@ -904,7 +904,7 @@ msgid "ATR Bands Channel"
 msgstr "斯塔克带顶部值"
 
 msgid "STARC Bands"
-msgstr "标准差"
+msgstr "斯塔克帶"
 
 msgid "MA Period"
 msgstr "MA期间"
@@ -913,13 +913,13 @@ msgid "Multiplier"
 msgstr "乘数"
 
 msgid "STARC Bands Top"
-msgstr "斯塔克带底部值"
+msgstr "斯塔克带顶部值"
 
 msgid "STARC Bands Median"
-msgstr "ATR带通道"
+msgstr "斯塔克带中间值"
 
 msgid "STARC Bands Bottom"
-msgstr "斯塔克带中间值"
+msgstr "斯塔克带底部值"
 
 msgid "ATR Trailing Stops"
 msgstr "ATR追踪止损"
