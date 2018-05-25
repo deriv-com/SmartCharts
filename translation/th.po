@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Thai\n"
 "Language: th_TH\n"
-"PO-Revision-Date: 2018-05-25 06:36-0400\n"
+"PO-Revision-Date: 2018-05-25 06:46-0400\n"
 
 msgid "Favorites"
 msgstr "รายการโปรด"
@@ -814,7 +814,7 @@ msgid "Down Volume"
 msgstr "ปริมาณลดลง"
 
 msgid "Volume Underlay"
-msgstr ""
+msgstr "Volume Underlay"
 
 msgid "Valuation Lines"
 msgstr "เส้นมูลค่า"
@@ -877,7 +877,7 @@ msgid "Market Facilitation Index"
 msgstr "ดัชนี Market Facilitation"
 
 msgid "Scale Factor"
-msgstr ""
+msgstr "Scale Factor"
 
 msgid "Green"
 msgstr "สีเขียว"
@@ -889,7 +889,7 @@ msgid "Fake"
 msgstr "ปลอม"
 
 msgid "Squat"
-msgstr ""
+msgstr "Squat"
 
 msgid "ATR Bands"
 msgstr "ATR Bands"
@@ -973,7 +973,7 @@ msgid "Neutral"
 msgstr "เป็นกลาง"
 
 msgid "Pivot Points"
-msgstr ""
+msgstr "Pivot Points"
 
 msgid "Pivot"
 msgstr "Pivot"
@@ -1054,7 +1054,7 @@ msgid "Conversion Line"
 msgstr "เส้นแปลง"
 
 msgid "Base Line"
-msgstr ""
+msgstr "เส้นฐาน"
 
 msgid "Leading Span A"
 msgstr "Leading Span A"
