@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Vietnamese\n"
 "Language: vi_VN\n"
-"PO-Revision-Date: 2018-05-24 02:54-0400\n"
+"PO-Revision-Date: 2018-05-24 09:58-0400\n"
 
 msgid "Favorites"
 msgstr "Yêu thích"
@@ -114,11 +114,20 @@ msgstr "Loại biểu đồ"
 msgid "Toggle Asset Information"
 msgstr "Bật/Tắt thông tin tài sản"
 
+msgid "Copy to clipboard"
+msgstr "Sao chép vào clipboard"
+
+msgid "Copied!"
+msgstr "Đã sao chép!"
+
+msgid "Failed!"
+msgstr "Thất bại!"
+
 msgid "Settings"
 msgstr "Cài đặt"
 
 msgid "Dark Mode"
-msgstr ""
+msgstr "Chế độ tối"
 
 msgid "Language"
 msgstr "Ngôn ngữ"
@@ -760,10 +769,10 @@ msgid "Elder Ray Index"
 msgstr "Chỉ số Elder Ray"
 
 msgid "Elder Bull Power"
-msgstr ""
+msgstr "Elder Bull Power"
 
 msgid "Elder Bear Power"
-msgstr ""
+msgstr "Elder Bear Power"
 
 msgid "Elder Force Index"
 msgstr "Chỉ số Elder Force"
@@ -865,124 +874,124 @@ msgid "Awesome Oscillator"
 msgstr "Dao động tuyệt vời"
 
 msgid "Market Facilitation Index"
-msgstr ""
+msgstr "Chỉ số thị trường thuận lợi"
 
 msgid "Scale Factor"
-msgstr ""
+msgstr "Yếu tố quy mô"
 
 msgid "Green"
 msgstr "Xanh lục"
 
 msgid "Fade"
-msgstr ""
+msgstr "Mờ dần"
 
 msgid "Fake"
-msgstr ""
+msgstr "Giả mạo"
 
 msgid "Squat"
-msgstr ""
+msgstr "Ngồi xổm"
 
 msgid "ATR Bands"
-msgstr ""
+msgstr "Các dải ATR"
 
 msgid "ATR Bands Top"
-msgstr ""
+msgstr "Các dải ATR Top"
 
 msgid "ATR Bands Bottom"
-msgstr ""
+msgstr "Các dải ATR Bottom"
 
 msgid "ATR Bands Channel"
-msgstr ""
+msgstr "Các dải ATR Channel"
 
 msgid "STARC Bands"
-msgstr ""
+msgstr "Các dải STARC"
 
 msgid "MA Period"
 msgstr "Giai đoạn MA"
 
 msgid "Multiplier"
-msgstr ""
+msgstr "Số nhân"
 
 msgid "STARC Bands Top"
-msgstr ""
+msgstr "Các dải STARC Top"
 
 msgid "STARC Bands Median"
-msgstr ""
+msgstr "Các dải STARC Median"
 
 msgid "STARC Bands Bottom"
-msgstr ""
+msgstr "Các dải STARC Bottom"
 
 msgid "ATR Trailing Stops"
-msgstr ""
+msgstr "ATR Trailing dừng"
 
 msgid "Plot Type"
-msgstr ""
+msgstr "Loại sơ đồ"
 
 msgid "HighLow"
 msgstr "Cao Thấp"
 
 msgid "Buy Stops"
-msgstr ""
+msgstr "Mua Stops"
 
 msgid "Sell Stops"
-msgstr ""
+msgstr "Bán Stops"
 
 msgid "Bollinger %b"
-msgstr ""
+msgstr "Bollinger %b"
 
 msgid "%b"
 msgstr "%b"
 
 msgid "Bollinger Bandwidth"
-msgstr ""
+msgstr "Băng thông Bollinger"
 
 msgid "Bandwidth"
-msgstr ""
+msgstr "Băng thông"
 
 msgid "Donchian Width"
-msgstr ""
+msgstr "Chiều rộng Donchian"
 
 msgid "Relative Vigor Index"
-msgstr ""
+msgstr "Chỉ số tương đối Vigor"
 
 msgid "Rel Vig"
-msgstr ""
+msgstr "Rel Vig"
 
 msgid "RelVigSignal"
-msgstr ""
+msgstr "RelVigSignal"
 
 msgid "Elder Impulse System"
-msgstr ""
+msgstr "Hệ thống Elder Impulse"
 
 msgid "Bullish"
-msgstr ""
+msgstr "Hướng tăng"
 
 msgid "Bearish"
-msgstr ""
+msgstr "Hướng giảm"
 
 msgid "Neutral"
-msgstr ""
+msgstr "Trung lập"
 
 msgid "Pivot Points"
-msgstr ""
+msgstr "Pivot Points"
 
 msgid "Pivot"
-msgstr ""
+msgstr "Pivot"
 
 msgid "Resistance 1"
-msgstr ""
+msgstr "Resistance 1"
 
 msgid "Support 1"
 msgstr "Hỗ trợ 1"
 
 msgid "Resistance 2"
-msgstr ""
+msgstr "Resistance 2"
 
 msgid "Support 2"
 msgstr "Hỗ trợ 2"
 
 msgid "Resistance 3"
-msgstr ""
+msgstr "Resistance 3"
 
 msgid "Support 3"
 msgstr "Hỗ trợ 3"
@@ -991,13 +1000,13 @@ msgid "VWAP"
 msgstr "VWAP"
 
 msgid "Alligator"
-msgstr ""
+msgstr "Alligator"
 
 msgid "Jaw Period"
 msgstr "Giai đoạn hàm"
 
 msgid "Jaw Offset"
-msgstr ""
+msgstr "Jaw Offset"
 
 msgid "Teeth Period"
 msgstr "Giai đoạn răng"
@@ -1150,13 +1159,13 @@ msgid "Heavy Rate of Change Period"
 msgstr "Giai đoạn thay đổi tỷ lệ lớn"
 
 msgid "Heavy SMA Period"
-msgstr ""
+msgstr "Giai đoạn nặng SMA"
 
 msgid "Heaviest Rate of Change Period"
-msgstr ""
+msgstr "Giai đoạn thay đổi tỷ lệ mạnh nhất"
 
 msgid "Heaviest SMA Period"
-msgstr ""
+msgstr "Giai đoạn SMA mạnh nhất"
 
 msgid "KST"
 msgstr "KST"
@@ -1165,16 +1174,16 @@ msgid "KSTSignal"
 msgstr "KSTSignal"
 
 msgid "Pring's Special K"
-msgstr ""
+msgstr "Pring's Special K"
 
 msgid "Darvas Box"
 msgstr "Hộp Darvas"
 
 msgid "ATH Lookback Period"
-msgstr ""
+msgstr "Khoảng ATH Lookback"
 
 msgid "Exit Field"
-msgstr ""
+msgstr "Thoát khỏi trường"
 
 msgid "Ghost Boxes"
 msgstr "Hộp Ghost"
@@ -1183,16 +1192,16 @@ msgid "Stop Levels"
 msgstr "Mức Dừng"
 
 msgid "Level Offset"
-msgstr ""
+msgstr "Cấp bù đắp"
 
 msgid "Price Minimum"
 msgstr "Tối thiểu giá"
 
 msgid "Volume Spike"
-msgstr ""
+msgstr "Tăng đột biến khối lượng"
 
 msgid "Volume % of Avg"
-msgstr ""
+msgstr "Khối lượng % của Avg"
 
 msgid "Darvas"
 msgstr "Darvas"
@@ -1213,13 +1222,13 @@ msgid "Downtrend"
 msgstr "Xu hướng xuống"
 
 msgid "Volume Profile"
-msgstr ""
+msgstr "Khối lượng hồ sơ"
 
 msgid "Bars Color"
-msgstr ""
+msgstr "Màu các thanh"
 
 msgid "Vortex Indicator"
-msgstr ""
+msgstr "Chỉ số Vortex"
 
 msgid "+VI"
 msgstr "+VI"
@@ -1234,17 +1243,17 @@ msgid "Distance(%)"
 msgstr "Khoảng cách(%)"
 
 msgid "Psychological Line"
-msgstr ""
+msgstr "Dòng Psychological"
 
 msgid "Moving Average Deviation"
-msgstr ""
+msgstr "Moving Average Deviation"
 
 msgid "Shinohara Intensity Ratio"
-msgstr ""
+msgstr "Tỷ lệ cường độ Shinohara"
 
 msgid "Strong Ratio"
-msgstr ""
+msgstr "Tỷ lệ mạnh"
 
 msgid "Weak Ratio"
-msgstr ""
+msgstr "Tỷ lệ yếu"
 
