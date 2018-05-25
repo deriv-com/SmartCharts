@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Chinese Traditional\n"
 "Language: zh_TW\n"
-"PO-Revision-Date: 2018-05-25 03:00-0400\n"
+"PO-Revision-Date: 2018-05-25 03:14-0400\n"
 
 msgid "Favorites"
 msgstr "我的最愛"
@@ -850,55 +850,55 @@ msgid "Correlation Coefficient"
 msgstr "相關係數"
 
 msgid "Price Momentum Oscillator"
-msgstr ""
+msgstr "價格勢頭震盪指標"
 
 msgid "Double Smoothing Period"
-msgstr ""
+msgstr "雙平滑期間"
 
 msgid "PMO"
-msgstr ""
+msgstr "價格動量震盪指標"
 
 msgid "PMOSignal"
-msgstr ""
+msgstr "PMO信號"
 
 msgid "Relative Volatility"
-msgstr ""
+msgstr "相對波幅"
 
 msgid "STD Period"
-msgstr ""
+msgstr "標準周期"
 
 msgid "Rel Vol"
-msgstr ""
+msgstr "相對波幅"
 
 msgid "Awesome Oscillator"
-msgstr ""
+msgstr "Ao震盪指標"
 
 msgid "Market Facilitation Index"
-msgstr ""
+msgstr "市場促進指數指標"
 
 msgid "Scale Factor"
-msgstr ""
+msgstr "比例係數"
 
 msgid "Green"
-msgstr ""
+msgstr "綠色"
 
 msgid "Fade"
-msgstr ""
+msgstr "衰退"
 
 msgid "Fake"
-msgstr ""
+msgstr "偽裝"
 
 msgid "Squat"
-msgstr ""
+msgstr "蟄伏"
 
 msgid "ATR Bands"
-msgstr ""
+msgstr "ATR帶"
 
 msgid "ATR Bands Top"
-msgstr ""
+msgstr "ATR帶頂部"
 
 msgid "ATR Bands Bottom"
-msgstr ""
+msgstr "ATR帶底部"
 
 msgid "ATR Bands Channel"
 msgstr ""
@@ -1051,37 +1051,37 @@ msgid "Lagging Span Period"
 msgstr ""
 
 msgid "Conversion Line"
-msgstr ""
+msgstr "轉換線"
 
 msgid "Base Line"
-msgstr ""
+msgstr "基線"
 
 msgid "Leading Span A"
-msgstr ""
+msgstr "領先擴展 A"
 
 msgid "Leading Span B"
-msgstr ""
+msgstr "領先擴展 B"
 
 msgid "Lagging Span"
-msgstr ""
+msgstr "滯後擴展"
 
 msgid "Price Relative"
-msgstr ""
+msgstr "價格相對指標"
 
 msgid "Comparison Symbol"
-msgstr ""
+msgstr "比較代碼"
 
 msgid "Performance Index"
-msgstr ""
+msgstr "性能指標"
 
 msgid "Gain"
-msgstr ""
+msgstr "利潤"
 
 msgid "Loss"
-msgstr ""
+msgstr "損失"
 
 msgid "Beta"
-msgstr ""
+msgstr "測試"
 
 msgid "Ulcer Index"
 msgstr ""
