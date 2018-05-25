@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Spanish\n"
 "Language: es_ES\n"
-"PO-Revision-Date: 2018-05-21 06:02-0400\n"
+"PO-Revision-Date: 2018-05-24 05:08-0400\n"
 
 msgid "Favorites"
 msgstr ""
@@ -112,6 +112,15 @@ msgid "Chart types"
 msgstr ""
 
 msgid "Toggle Asset Information"
+msgstr ""
+
+msgid "Copy to clipboard"
+msgstr ""
+
+msgid "Copied!"
+msgstr ""
+
+msgid "Failed!"
 msgstr ""
 
 msgid "Settings"

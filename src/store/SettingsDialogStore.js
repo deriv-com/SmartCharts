@@ -71,7 +71,7 @@ export default class SettingsDialogStore {
             setOpen: this.setOpen,
             isFavoritable: !!this.onStared,
             onTabClick: this.onTabClick,
-            onDeleteClick: this.onDeleteClick,
+            onDeleteClick: this.onDeleted ? this.onDeleteClick : undefined,
             onStarClick: this.onStarClick,
             onResetClick: this.onResetClick,
             onItemChange: this.onItemChange,

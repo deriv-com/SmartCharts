@@ -24,10 +24,11 @@ export default class ShareStore {
         return this.mainStore.chart.currentActiveSymbol.decimal_places;
     }
 
-    @observable copyTooltip = 'Copy to clipboard';
-    @action.bound resetCopyTooltip() { this.copyTooltip = 'Copy to clipboard'; }
+    defaultCopyTooltipText = t.translate('Copy to clipboard');
+    @observable copyTooltip = this.defaultCopyTooltipText;
+    @action.bound resetCopyTooltip() { this.copyTooltip = this.defaultCopyTooltipText; }
     onCopyDone = (successful) => {
-        this.copyTooltip = successful ? 'Copied!' : 'Failed!';
+        this.copyTooltip = successful ? t.translate('Copied!') : t.translate('Failed!');
     }
     bitlyUrl = 'https://api-ssl.bitly.com/v3';
     accessToken = '837c0c4f99fcfbaca55ef9073726ef1f6a5c9349';
@@ -51,12 +52,7 @@ export default class ShareStore {
         layoutData.favorites = [];
 
         const json = JSON.stringify(layoutData);
-
-        const origin = window.location.href;
-        const encodedJson = encodeURIComponent(json);
-
         const parts = json.match(/.{1,1800}/g);
-
 
         this.shortUrlFailed = false;
         this.loading = true;
@@ -85,7 +81,8 @@ export default class ShareStore {
             });
     }
     shortenBitlyAsync(payload, hash) {
-        let origin = window.location.href;
+        const href = window.location.href;
+        let origin = (this.shareOrigin && href.startsWith(this.shareOrigin)) ? href : this.shareOrigin;
         origin = origin.replace('localhost', '127.0.0.1'); // make it work on localhost
 
         const shareLink = encodeURIComponent(`${origin}?${hash}#${payload}`);
