@@ -8,7 +8,7 @@ const CrosshairToggle = ({
     crosshair,
     state
 }) => {
-    const CrosshairIcon = [CrosshairOffIcon, CrosshairOnIcon, CrosshairTooltipIcon][state || 0 ];
+    const CrosshairIcon = [CrosshairOffIcon, CrosshairOnIcon, CrosshairTooltipIcon][state];
     return (
         <div className="ciq-menu">
             <div className="cq-menu-btn">
@@ -29,6 +29,6 @@ const CrosshairToggle = ({
 export default connect(
     ({crosshair}) => ({
         toggleState: () => crosshair.toggleState(),
-        state: crosshair.state
+        state: ( typeof crosshair.state !== 'number') ? 0 : crosshair.state 
     })
 )(CrosshairToggle);

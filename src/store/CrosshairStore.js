@@ -377,6 +377,7 @@ class CrosshairStore {
 
     onContextReady = () => {
         this.state = this.stx.layout.crosshair;
+        this.state = ( typeof this.state !== 'number') ? 0 : this.state;
         this.init();
     };
 
