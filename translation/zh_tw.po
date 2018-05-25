@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Chinese Traditional\n"
 "Language: zh_TW\n"
-"PO-Revision-Date: 2018-05-25 03:26-0400\n"
+"PO-Revision-Date: 2018-05-25 03:31-0400\n"
 
 msgid "Favorites"
 msgstr "我的最愛"
@@ -1177,49 +1177,49 @@ msgid "Pring's Special K"
 msgstr "普林格特殊K線"
 
 msgid "Darvas Box"
-msgstr ""
+msgstr "股票箱理論"
 
 msgid "ATH Lookback Period"
-msgstr ""
+msgstr "ATH 回顧周期"
 
 msgid "Exit Field"
-msgstr ""
+msgstr "退出領域"
 
 msgid "Ghost Boxes"
-msgstr ""
+msgstr "幽靈盒"
 
 msgid "Stop Levels"
-msgstr ""
+msgstr "止位"
 
 msgid "Level Offset"
-msgstr ""
+msgstr "位移"
 
 msgid "Price Minimum"
-msgstr ""
+msgstr "最低價"
 
 msgid "Volume Spike"
-msgstr ""
+msgstr "柱狀成交量"
 
 msgid "Volume % of Avg"
-msgstr ""
+msgstr "平均成交量%"
 
 msgid "Darvas"
-msgstr ""
+msgstr "達瓦斯"
 
 msgid "Ghost"
-msgstr ""
+msgstr "幽靈"
 
 msgid "Levels"
-msgstr ""
+msgstr "水平"
 
 msgid "Supertrend"
-msgstr ""
+msgstr "超級趨勢"
 
 msgid "Uptrend"
-msgstr ""
+msgstr "上升趨勢"
 
 msgid "Downtrend"
-msgstr ""
+msgstr "下降趨勢"
 
 msgid "Volume Profile"
 msgstr ""
