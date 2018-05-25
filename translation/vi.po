@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Vietnamese\n"
 "Language: vi_VN\n"
-"PO-Revision-Date: 2018-05-25 02:30-0400\n"
+"PO-Revision-Date: 2018-05-25 02:44-0400\n"
 
 msgid "Favorites"
 msgstr "Yêu thích"
@@ -892,19 +892,19 @@ msgid "Squat"
 msgstr "Cúi xuống"
 
 msgid "ATR Bands"
-msgstr "Các dải ATR"
+msgstr "Dải ATR"
 
 msgid "ATR Bands Top"
-msgstr "Các dải ATR Top"
+msgstr "Đỉnh dải ATR"
 
 msgid "ATR Bands Bottom"
-msgstr "Các dải ATR Bottom"
+msgstr "Đáy dải ATR"
 
 msgid "ATR Bands Channel"
-msgstr "Các dải ATR Channel"
+msgstr "Kênh dải ATR"
 
 msgid "STARC Bands"
-msgstr "Các dải STARC"
+msgstr "Dải STARC"
 
 msgid "MA Period"
 msgstr "Giai đoạn MA"
@@ -913,16 +913,16 @@ msgid "Multiplier"
 msgstr "Số nhân"
 
 msgid "STARC Bands Top"
-msgstr "Các dải STARC Top"
+msgstr "Đỉnh dải STARC"
 
 msgid "STARC Bands Median"
 msgstr "Trung bình dải STARC"
 
 msgid "STARC Bands Bottom"
-msgstr "Các dải STARC Bottom"
+msgstr "Đáy dải STARC"
 
 msgid "ATR Trailing Stops"
-msgstr "ATR Trailing dừng"
+msgstr "Điểm dừng tra cứu ATR"
 
 msgid "Plot Type"
 msgstr "Loại sơ đồ"
@@ -931,10 +931,10 @@ msgid "HighLow"
 msgstr "Cao Thấp"
 
 msgid "Buy Stops"
-msgstr "Mua Stops"
+msgstr "Ngừng mua"
 
 msgid "Sell Stops"
-msgstr "Bán Stops"
+msgstr "Ngừng bán"
 
 msgid "Bollinger %b"
 msgstr "Bollinger %b"
@@ -973,25 +973,25 @@ msgid "Neutral"
 msgstr "Trung lập"
 
 msgid "Pivot Points"
-msgstr "Pivot Points"
+msgstr "Điểm trục"
 
 msgid "Pivot"
-msgstr "Pivot"
+msgstr "Trục"
 
 msgid "Resistance 1"
-msgstr "Resistance 1"
+msgstr "Đối kháng 1"
 
 msgid "Support 1"
 msgstr "Hỗ trợ 1"
 
 msgid "Resistance 2"
-msgstr "Resistance 2"
+msgstr "Đối kháng 2"
 
 msgid "Support 2"
 msgstr "Hỗ trợ 2"
 
 msgid "Resistance 3"
-msgstr "Resistance 3"
+msgstr "Đối kháng 3"
 
 msgid "Support 3"
 msgstr "Hỗ trợ 3"
@@ -1006,19 +1006,19 @@ msgid "Jaw Period"
 msgstr "Giai đoạn hàm"
 
 msgid "Jaw Offset"
-msgstr "Jaw Offset"
+msgstr "Offset hàm"
 
 msgid "Teeth Period"
 msgstr "Giai đoạn răng"
 
 msgid "Teeth Offset"
-msgstr "Teeth Offset"
+msgstr "Offset răng"
 
 msgid "Lips Period"
 msgstr "Giai đoạn môi"
 
 msgid "Lips Offset"
-msgstr "Lips Offset"
+msgstr "Offset môi"
 
 msgid "Show Fractals"
 msgstr "Hiển thị Fractals"
@@ -1039,37 +1039,37 @@ msgid "Ichimoku Clouds"
 msgstr "Ichimoku Clouds"
 
 msgid "Conversion Line Period"
-msgstr "Thời gian Conversion Line"
+msgstr "Chu kỳ dòng"
 
 msgid "Base Line Period"
-msgstr "Thời lượng Base Line"
+msgstr "Chu kỳ cơ bản"
 
 msgid "Leading Span B Period"
-msgstr "Thời lượng Leading Span B"
+msgstr "Chu kỳ mở rộng hàng đầu B"
 
 msgid "Lagging Span Period"
-msgstr "Thời lượng Lagging Span"
+msgstr "Chu kỳ mở rộng trễ"
 
 msgid "Conversion Line"
 msgstr "Dòng chuyển đổi"
 
 msgid "Base Line"
-msgstr "Dòng căn cứ"
+msgstr "Dòng cơ bản"
 
 msgid "Leading Span A"
-msgstr "Leading Span A"
+msgstr "Mở rộng hàng đầu A"
 
 msgid "Leading Span B"
-msgstr "Leading Span B"
+msgstr "Mở rộng hàng đầu B"
 
 msgid "Lagging Span"
-msgstr "Lagging Span"
+msgstr "Mở rộng trễ"
 
 msgid "Price Relative"
 msgstr "Giá tương đối"
 
 msgid "Comparison Symbol"
-msgstr "Comparison Symbol"
+msgstr "Ký hiệu so sánh"
 
 msgid "Performance Index"
 msgstr "Chỉ số hiệu suất"
@@ -1141,7 +1141,7 @@ msgid "HHV/LLV Lookback"
 msgstr "HHV/LLV Lookback"
 
 msgid "Pring's Know Sure Thing"
-msgstr "Pring's Know Sure Thing"
+msgstr "Pring biết điều chắc chắn"
 
 msgid "Lightest Rate of Change Period"
 msgstr "Giai đoạn thay đổi tỷ lệ nhỏ nhất"
@@ -1159,10 +1159,10 @@ msgid "Heavy Rate of Change Period"
 msgstr "Giai đoạn thay đổi tỷ lệ lớn"
 
 msgid "Heavy SMA Period"
-msgstr "Giai đoạn nặng SMA"
+msgstr "Chu kỳ SMA nặng"
 
 msgid "Heaviest Rate of Change Period"
-msgstr "Giai đoạn thay đổi tỷ lệ mạnh nhất"
+msgstr "Chu kỳ thay đổi tỷ lệ nặng nhất"
 
 msgid "Heaviest SMA Period"
 msgstr "Giai đoạn SMA mạnh nhất"
