@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Vietnamese\n"
 "Language: vi_VN\n"
-"PO-Revision-Date: 2018-05-24 09:58-0400\n"
+"PO-Revision-Date: 2018-05-25 02:20-0400\n"
 
 msgid "Favorites"
 msgstr "Yêu thích"
@@ -565,7 +565,7 @@ msgid "Chande Forecast Oscillator"
 msgstr "Chỉ số dự đoán giao động Chande"
 
 msgid "Intraday Momentum Index"
-msgstr "Chỉ số tốc độ thay đổi giá Intraday"
+msgstr "Chỉ số quán tính thay đổi giá Intraday"
 
 msgid "RAVI"
 msgstr "RAVI"
@@ -637,7 +637,7 @@ msgid "Overlay"
 msgstr "Lớp phủ"
 
 msgid "Moving Average Envelope"
-msgstr "Moving Average Envelope"
+msgstr "Đường viên di chuyển trung bình"
 
 msgid "Shift Type"
 msgstr "Loại Thay đổi"
@@ -655,46 +655,46 @@ msgid "MA Env Bottom"
 msgstr "Đáy MA Env"
 
 msgid "Fractal Chaos Bands"
-msgstr "Fractal Chaos Bands"
+msgstr "Dải Fractal hỗn loạn"
 
 msgid "Fractal High"
 msgstr "Fractal cao"
 
 msgid "Fractal Low"
-msgstr "Fractal thấp"
+msgstr "Fractal Thấp"
 
 msgid "Fractal Channel"
-msgstr "Fractal Channel"
+msgstr "Kênh Fractal"
 
 msgid "Fractal Chaos Oscillator"
-msgstr "Fractal Chaos Oscillator"
+msgstr "Dao động Fractal hỗn loạn"
 
 msgid "Gopalakrishnan Range Index"
-msgstr "Chỉ số Gopalakrishnan Range"
+msgstr "Phạm vi chỉ số Gopalakrishnan"
 
 msgid "Prime Number Bands"
 msgstr "Prime Number Bands"
 
 msgid "Prime Bands Top"
-msgstr "Prime Bands Top"
+msgstr "Đỉnh dải chủ yếu"
 
 msgid "Prime Bands Bottom"
-msgstr "Prime Bands Bottom"
+msgstr "Đáy dải chủ yếu"
 
 msgid "Prime Bands Channel"
-msgstr "Prime Bands Channel"
+msgstr "Kênh dải chủ yếu"
 
 msgid "Prime Number Oscillator"
-msgstr "Prime Number Oscillator"
+msgstr "Dao động số chủ yếu"
 
 msgid "Tolerance Percentage"
 msgstr "Phần trăm chấp nhận"
 
 msgid "Bollinger Bands"
-msgstr "Bollinger Bands"
+msgstr "Dải Bollinger"
 
 msgid "Bollinger Bands Top"
-msgstr "Bollinger Bands Top"
+msgstr "Đỉnh dải Bollinger"
 
 msgid "Bollinger Bands Median"
 msgstr "Bollinger Bands Median"
