@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: German\n"
 "Language: de_DE\n"
-"PO-Revision-Date: 2018-05-18 06:21-0400\n"
+"PO-Revision-Date: 2018-05-24 05:08-0400\n"
 
 msgid "Favorites"
 msgstr "Favoriten"
@@ -49,10 +49,10 @@ msgid "Share link"
 msgstr "Link teilen"
 
 msgid "Failed to generate link"
-msgstr ""
+msgstr "Generieren des Links ist fehlgeschlagen"
 
 msgid "Retry"
-msgstr ""
+msgstr "Wiederholen"
 
 msgid "Download chart"
 msgstr "Chart herunterladen"
@@ -114,11 +114,20 @@ msgstr "Charttypen"
 msgid "Toggle Asset Information"
 msgstr "Toggle-Anlgen-Informationen"
 
+msgid "Copy to clipboard"
+msgstr ""
+
+msgid "Copied!"
+msgstr ""
+
+msgid "Failed!"
+msgstr ""
+
 msgid "Settings"
 msgstr "Einstellungen"
 
 msgid "Dark Mode"
-msgstr ""
+msgstr "Dark Modus"
 
 msgid "Language"
 msgstr "Sprache"
@@ -136,7 +145,7 @@ msgid "Streaming for [symbol] is not available due to license restrictions"
 msgstr "Streaming für [symbol] ist auf Grund von Lizenzeinschränkungen nicht verfügbar"
 
 msgid "Search..."
-msgstr ""
+msgstr "Suche..."
 
 msgid "Annotation"
 msgstr "Anmerkung"

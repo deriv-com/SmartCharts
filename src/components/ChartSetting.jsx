@@ -23,6 +23,8 @@ const ChartSetting = ({
     theme,
     setTheme,
     closeMenu
+    assetInformation,
+    setAssetInformation
 }) => {
     const renderMain = () => {
         return <div>
@@ -48,6 +50,15 @@ const ChartSetting = ({
                             <Switch
                                 value={(theme == 'dark')}
                                 onChange={setTheme}
+                                />
+                        </div>
+                    </div>
+                    <div className="ciq-list-item">
+                        <span className="ciq-icon-text">{t.translate('Asset Information')}</span>
+                        <div className="ciq-action">
+                            <Switch
+                                value={assetInformation}
+                                onChange={setAssetInformation}
                                 />
                         </div>
                     </div>
@@ -107,7 +118,7 @@ const ChartSetting = ({
     );
 };
 
-export default connect(({chartSetting: s}) => ({
+export default connect(({chartSetting: s,assetInformation: ai}) => ({
     Menu: s.menu.connect(Menu),
     menuOpen: s.menu.dialog.open,
     selectedLanguage: s.language,
@@ -118,4 +129,6 @@ export default connect(({chartSetting: s}) => ({
     theme: s.theme,
     setTheme: s.setTheme,
     closeMenu: s.menu.onTitleClick,
+    assetInformation: ai.visible,
+    setAssetInformation: ai.setVisible,
 }))(ChartSetting);

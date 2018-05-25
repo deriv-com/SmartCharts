@@ -5,16 +5,16 @@ import List from './List.jsx';
 import { CloseIcon } from './Icons.jsx';
 import {Switch} from './Form.jsx';
 import '../../sass/components/_chart-types.scss';
+import {SettingIcon} from './Icons.jsx';
 
 const ChartTypes = ({
     Type,
-    setType,
-    types,
     Menu,
     menuOpen,
     TypeList,
     assetInformation,
     setAssetInformation,
+    showAggregateDialog,
     closeMenu,
     isMobile
 }) => (
@@ -31,18 +31,19 @@ const ChartTypes = ({
                 <div className="mobile-title">{t.translate("Chart types")}</div>
                 <CloseIcon className="icon-close-menu" onClick={ () => closeMenu() } />
             </div> : '' }
-            <div className='ciq-toggle-asset-information'>
-                <div>{t.translate('Toggle Asset Information')}</div>
-                <Switch
-                    value={assetInformation}
-                    onChange={setAssetInformation}
-                />
-            </div>
             <TypeList height={260}>
                 {T => (
                     <React.Fragment>
-                        <T.icon  className={`margin ${T.active ? 'active' : ''}`} />
-                        <span className='ciq-icon-text'>{T.text}</span>
+                        <span className="left">
+                            <T.icon  className={`margin ${T.active ? 'active' : ''}`} />
+                            <span className='ciq-icon-text'>{T.text}</span>
+                        </span>
+                        {T.settingsOnClick && <span
+                            className="ciq-aggregate-setting"
+                            onClick={() => showAggregateDialog(T.id)}
+                        >
+                            <SettingIcon />
+                        </span>}
                     </React.Fragment>
                 )}
             </TypeList>
@@ -53,11 +54,8 @@ const ChartTypes = ({
 export default connect(
     ({chartType, assetInformation: ai}) => ({
         Type: chartType.type,
-        setType: chartType.setType,
-        types: chartType.types,
         setOpen: chartType.setOpen,
-        assetInformation: ai.visible,
-        setAssetInformation: ai.setVisible,
+        showAggregateDialog: chartType.showAggregateDialog,
         menuOpen: chartType.menu.open,
         Menu: chartType.menu.connect(Menu),
         TypeList: chartType.list.connect(List),

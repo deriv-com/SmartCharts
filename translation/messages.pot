@@ -101,6 +101,15 @@ msgstr ""
 msgid "Toggle Asset Information"
 msgstr ""
 
+msgid "Copy to clipboard"
+msgstr ""
+
+msgid "Copied!"
+msgstr ""
+
+msgid "Failed!"
+msgstr ""
+
 msgid "Settings"
 msgstr ""
 

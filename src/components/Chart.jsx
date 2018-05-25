@@ -55,6 +55,7 @@ class Chart extends Component {
             setting,
             chartPanelTop,
             chartControlsWidgets,
+            AggregateChartSettingsDialog,
             topWidgets,
         } = this.props;
 
@@ -107,12 +108,13 @@ class Chart extends Component {
 }
 
 export default connect(
-    ({chart, drawTools, studies, chartSetting}) => ({
+    ({chart, drawTools, studies, chartSetting, chartType }) => ({
         contextPromise: chart.contextPromise,
         init: chart.init,
         destroy: chart.destroy,
         StudySettingsDialog : studies.settingsDialog.connect(SettingsDialog),
         DrawToolsSettingsDialog : drawTools.settingsDialog.connect(SettingsDialog),
+        AggregateChartSettingsDialog : chartType.settingsDialog.connect(SettingsDialog),
         isChartAvailable: chart.isChartAvailable,
         chartPanelTop: chart.chartPanelTop,
         setting: chartSetting,

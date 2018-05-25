@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
-"PO-Revision-Date: 2018-05-18 06:21-0400\n"
+"PO-Revision-Date: 2018-05-24 05:08-0400\n"
 
 msgid "Favorites"
 msgstr "Избранное"
@@ -22,7 +22,7 @@ msgid "CLOSED"
 msgstr "ЗАКРЫТО"
 
 msgid "Close"
-msgstr ""
+msgstr "Закрытие"
 
 msgid "PRICE"
 msgstr "ЦЕНА"
@@ -49,10 +49,10 @@ msgid "Share link"
 msgstr "Поделиться ссылкой"
 
 msgid "Failed to generate link"
-msgstr ""
+msgstr "Не удалось создать ссылку"
 
 msgid "Retry"
-msgstr ""
+msgstr "Попробовать снова"
 
 msgid "Download chart"
 msgstr "Загрузить график"
@@ -114,14 +114,23 @@ msgstr "Вид графика"
 msgid "Toggle Asset Information"
 msgstr "Информация об активе Toggle"
 
-msgid "Settings"
+msgid "Copy to clipboard"
 msgstr ""
+
+msgid "Copied!"
+msgstr ""
+
+msgid "Failed!"
+msgstr ""
+
+msgid "Settings"
+msgstr "Настройки"
 
 msgid "Dark Mode"
-msgstr ""
+msgstr "Тёмный режим"
 
 msgid "Language"
-msgstr ""
+msgstr "Язык"
 
 msgid "RESET"
 msgstr "СБРОСИТЬ"
@@ -136,7 +145,7 @@ msgid "Streaming for [symbol] is not available due to license restrictions"
 msgstr "Потоковые котировки для [symbol] недоступны из-за лицензионных ограничений"
 
 msgid "Search..."
-msgstr ""
+msgstr "Поиск..."
 
 msgid "Annotation"
 msgstr "Примечание"
@@ -595,10 +604,10 @@ msgid "ADX"
 msgstr "ADX"
 
 msgid "Positive Bar"
-msgstr "Положительная граница"
+msgstr "Положительный столбец"
 
 msgid "Negative Bar"
-msgstr "Отрицательная граница"
+msgstr "Отрицательная столбец"
 
 msgid "High Low Bands"
 msgstr "Высокие/низкие полосы"
@@ -631,7 +640,7 @@ msgid "Moving Average Envelope"
 msgstr "Конверт скользящих средних"
 
 msgid "Shift Type"
-msgstr "Тип сдвигу"
+msgstr "Тип сдвига"
 
 msgid "Shift"
 msgstr "Сдвиг"
@@ -682,7 +691,7 @@ msgid "Tolerance Percentage"
 msgstr "Погрешность в процентах"
 
 msgid "Bollinger Bands"
-msgstr "Полоса Боллинджера"
+msgstr "Полосы Боллинджера"
 
 msgid "Bollinger Bands Top"
 msgstr "Полосы Боллинджера (верхний уровень)"
@@ -970,19 +979,19 @@ msgid "Pivot"
 msgstr "Разворот"
 
 msgid "Resistance 1"
-msgstr "Устойчивость 1"
+msgstr "Сопротивление 1"
 
 msgid "Support 1"
 msgstr "Поддержка 1"
 
 msgid "Resistance 2"
-msgstr "Устойчивость 2"
+msgstr "Сопротивление 2"
 
 msgid "Support 2"
 msgstr "Поддержка 2"
 
 msgid "Resistance 3"
-msgstr "Устойчивость 3"
+msgstr "Сопротивление 3"
 
 msgid "Support 3"
 msgstr "Поддержка 3"
@@ -1078,7 +1087,7 @@ msgid "Ulcer Index"
 msgstr "Индекс Ульцера"
 
 msgid "Balance of Power"
-msgstr "Баланс мощности"
+msgstr "Баланс сил"
 
 msgid "Trend Intensity Index"
 msgstr "Индекс интенсивности тренда"
@@ -1087,7 +1096,7 @@ msgid "TII"
 msgstr "TII"
 
 msgid "Choppiness Index"
-msgstr "Индекс зыбучести"
+msgstr "Индекс переменчивости"
 
 msgid "Disparity Index"
 msgstr "Индекс диспаритета"
