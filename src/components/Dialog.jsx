@@ -9,13 +9,20 @@ class Dialog extends Component {
             children,
             onContainerClick,
             className,
+            isMobile
         } = this.props;
+
+        const inner_style = ( isMobile && open) ? {
+            height: (window.innerHeight - 48 )+'px',
+            width: window.innerWidth+'px'
+        } : {};
 
         return (
             <div
                 className={(className || 'cq-dialog') + (open ? ' open' : '')}
                 onClick={onContainerClick}
-            >
+                style={inner_style}
+                >
                 {children}
             </div>
         );

@@ -22,7 +22,7 @@ const ChartSetting = ({
     setLanguage,
     theme,
     setTheme,
-    closeMenu
+    closeMenu,
     assetInformation,
     setAssetInformation
 }) => {

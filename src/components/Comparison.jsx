@@ -14,7 +14,8 @@ const Comparison = ({
     return (
         <Menu
             className="cq-comparison-new cq-symbols-display"
-        >
+            isMobile={isMobile}
+            >
             <Menu.Title>
                 <ComparisonIcon
                     className={`ic-icon-with-sub ${menuOpen ? 'active' : ''}`}
@@ -36,6 +37,6 @@ export default connect(
         Menu: c.menu.connect(Menu),
         menuOpen: c.menu.open,
         onCloseMenu: c.menu.onTitleClick,
-        isMobile: c.mainStore.chart.isMobile,
+        isMobile: c.categoricalDisplay.isMobile,
     })
 )(Comparison);

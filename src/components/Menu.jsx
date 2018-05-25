@@ -16,10 +16,10 @@ class Menu extends Component {
             children,
             onTitleClick,
             DropdownDialog,
+            isMobile
         } = this.props;
         const first = React.Children.map(children, (child, i) => i === 0 ? child : null);
         const rest  = React.Children.map(children, (child, i) => i !== 0 ? child : null);
-
 
         return (
             <div className={`ciq-menu ${className || ''} ${open ? 'stxMenuActive' : ''}`}>
@@ -32,8 +32,11 @@ class Menu extends Component {
                 <div
                     className="cq-menu-overlay"
                     onClick={this.onOverlayClick.bind(this)}
-                >
-                    <DropdownDialog className='cq-menu-dropdown'>
+                    >
+                    <DropdownDialog
+                        className='cq-menu-dropdown'
+                        isMobile={isMobile}
+                        >
                         {rest}
                     </DropdownDialog>
                 </div>
