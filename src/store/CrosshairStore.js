@@ -344,6 +344,7 @@ class CrosshairStore {
     @observable rows = [];
     tooltip = null;
     node = null;
+    @observable state = 0;
 
     @action.bound setRows(rows) { this.rows = rows; }
     @action.bound hide() {
@@ -375,16 +376,15 @@ class CrosshairStore {
     };
 
     onContextReady = () => {
-        this.crosshair = this.stx.layout.crosshair;
+        this.state = this.stx.layout.crosshair;
         this.init();
     };
 
-    @observable crosshair = false;
-    @action.bound setCrosshair(value) {
-        this.stx.layout.crosshair = value;
+    @action.bound toggleState() {
+        this.state = (this.state == 2) ? 0 : (this.state+1);
+        this.stx.layout.crosshair = this.state;
         this.stx.doDisplayCrosshairs();
         this.mainStore.chart.saveLayout();
-        this.crosshair = value;
     }
 }
 

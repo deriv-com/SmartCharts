@@ -8,11 +8,11 @@ const Crosshair = ({
     top,
     rows,
     setRootRef,
-    showInfo
+    state
 }) => (
     <div
         ref={setRootRef}
-        className={`cq-crosshair ${showInfo ? 'active' : '' }  ${left === 'auto' ? 'arrow-right' : 'arrow-left'}`}
+        className={`cq-crosshair ${(state == 2) ? 'active' : '' }  ${left === 'auto' ? 'arrow-right' : 'arrow-left'}`}
         style={{left, top, right}}
         >
         {rows.map(row => (
@@ -31,6 +31,6 @@ export default connect(
         top: c.top,
         rows: c.rows,
         setRootRef: c.setRootRef,
-        showInfo: s.crosshair
+        state: c.state
     })
 )(Crosshair);

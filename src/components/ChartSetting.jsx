@@ -21,8 +21,6 @@ const ChartSetting = ({
     setLanguage,
     theme,
     setTheme,
-    crosshair,
-    setCrosshair,
     assetInformation,
     setAssetInformation
 }) => {
@@ -51,13 +49,6 @@ const ChartSetting = ({
                         </div>
                     </div>
                     <div className="ciq-list-item">
-                        <span className="ciq-icon-text">{t.translate('Crosshair Information')}</span>
-                        <div className="ciq-action">
-                            <Switch
-                                value={crosshair}
-                                onChange={setCrosshair}
-                                />
-                        </div>
                         <span className="ciq-icon-text">{t.translate('Asset Information')}</span>
                         <div className="ciq-action">
                             <Switch
@@ -132,8 +123,6 @@ export default connect(({chartSetting: s,assetInformation: ai}) => ({
     setLanguage: s.setLanguage,
     theme: s.theme,
     setTheme: s.setTheme,
-    crosshair: s.crosshair,
-    setCrosshair: s.setCrosshair,
     assetInformation: ai.visible,
     setAssetInformation: ai.setVisible
 }))(ChartSetting);
