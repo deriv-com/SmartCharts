@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
-"PO-Revision-Date: 2018-05-24 05:07-0400\n"
+"PO-Revision-Date: 2018-05-25 00:30-0400\n"
 
 msgid "Favorites"
 msgstr "收藏夹"
@@ -43,16 +43,16 @@ msgid "Share"
 msgstr "分享此图"
 
 msgid "Share / Download Chart"
-msgstr ""
+msgstr "共享/下载图表"
 
 msgid "Share link"
 msgstr "共享链接"
 
 msgid "Failed to generate link"
-msgstr ""
+msgstr "未能生成链接"
 
 msgid "Retry"
-msgstr ""
+msgstr "重试"
 
 msgid "Download chart"
 msgstr "下载图表"
@@ -115,19 +115,19 @@ msgid "Toggle Asset Information"
 msgstr "切换资产信息"
 
 msgid "Copy to clipboard"
-msgstr ""
+msgstr "复制到剪贴板"
 
 msgid "Copied!"
-msgstr ""
+msgstr "已复制！"
 
 msgid "Failed!"
-msgstr ""
+msgstr "失败!"
 
 msgid "Settings"
 msgstr "设置"
 
 msgid "Dark Mode"
-msgstr ""
+msgstr "暗模式"
 
 msgid "Language"
 msgstr "语言"
@@ -145,7 +145,7 @@ msgid "Streaming for [symbol] is not available due to license restrictions"
 msgstr "由于许可限制, [symbol] 串流不可用"
 
 msgid "Search..."
-msgstr ""
+msgstr "搜索..."
 
 msgid "Annotation"
 msgstr "注释"
