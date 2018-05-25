@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Chinese Traditional\n"
 "Language: zh_TW\n"
-"PO-Revision-Date: 2018-05-25 03:14-0400\n"
+"PO-Revision-Date: 2018-05-25 03:26-0400\n"
 
 msgid "Favorites"
 msgstr "我的最愛"
@@ -1084,97 +1084,97 @@ msgid "Beta"
 msgstr "測試"
 
 msgid "Ulcer Index"
-msgstr ""
+msgstr "終極波動指數"
 
 msgid "Balance of Power"
-msgstr ""
+msgstr "力量的均衡"
 
 msgid "Trend Intensity Index"
-msgstr ""
+msgstr "趨勢強度指數"
 
 msgid "TII"
-msgstr ""
+msgstr "TII"
 
 msgid "Choppiness Index"
-msgstr ""
+msgstr "翻滾度指數"
 
 msgid "Disparity Index"
-msgstr ""
+msgstr "差異指數"
 
 msgid "Rainbow Moving Average"
-msgstr ""
+msgstr "彩虹移動平均值"
 
 msgid "SMA1"
-msgstr ""
+msgstr "簡單移動平均線1"
 
 msgid "SMA2"
-msgstr ""
+msgstr "簡單移動平均線2"
 
 msgid "SMA3"
-msgstr ""
+msgstr "簡單移動平均線3"
 
 msgid "SMA4"
-msgstr ""
+msgstr "簡單移動平均線4"
 
 msgid "SMA5"
-msgstr ""
+msgstr "簡單移動平均線5"
 
 msgid "SMA6"
-msgstr ""
+msgstr "簡單移動平均線6"
 
 msgid "SMA7"
-msgstr ""
+msgstr "簡單移動平均線7"
 
 msgid "SMA8"
-msgstr ""
+msgstr "簡單移動平均線8"
 
 msgid "SMA9"
-msgstr ""
+msgstr "簡單移動平均線9"
 
 msgid "SMA10"
-msgstr ""
+msgstr "簡單移動平均線10"
 
 msgid "Rainbow Oscillator"
-msgstr ""
+msgstr "彩虹震盪指標"
 
 msgid "HHV/LLV Lookback"
-msgstr ""
+msgstr "HHV/LLV回顧"
 
 msgid "Pring's Know Sure Thing"
-msgstr ""
+msgstr "普林格確然指標"
 
 msgid "Lightest Rate of Change Period"
-msgstr ""
+msgstr "變化率最小期間"
 
 msgid "Lightest SMA Period"
-msgstr ""
+msgstr "最小SMA期間"
 
 msgid "Light Rate of Change Period"
-msgstr ""
+msgstr "變化率小期間"
 
 msgid "Light SMA Period"
-msgstr ""
+msgstr "小SMA期間"
 
 msgid "Heavy Rate of Change Period"
-msgstr ""
+msgstr "變化率大期間"
 
 msgid "Heavy SMA Period"
-msgstr ""
+msgstr "大SMA期間"
 
 msgid "Heaviest Rate of Change Period"
-msgstr ""
+msgstr "變化率最大期間"
 
 msgid "Heaviest SMA Period"
-msgstr ""
+msgstr "最大SMA期間"
 
 msgid "KST"
-msgstr ""
+msgstr "完全肯定指標"
 
 msgid "KSTSignal"
-msgstr ""
+msgstr "KST信號"
 
 msgid "Pring's Special K"
-msgstr ""
+msgstr "普林格特殊K線"
 
 msgid "Darvas Box"
 msgstr ""
