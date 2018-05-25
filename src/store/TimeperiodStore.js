@@ -26,11 +26,43 @@ export default class TimeperiodStore {
         this.timeUnit = getTimeUnit({ timeUnit, interval });
         this.interval = interval;
 
-        const stx = this.context.stx;
-
-
+        this.showCandleCountdown();
 
         reaction(() => this.timeUnit , () => { this.showCandleCountdown(); });
+
+    };
+
+    countdownInterval = null;
+    showCandleCountdown = () => {
+        const stx = this.context.stx;
+        var isTick = this.timeUnit == 'tick';
+        if(this.mainStore.chartSetting.candleCountdown && !isTick ) {
+            if(!this._injectionId){
+                this._injectionId = stx.append('draw', () => {
+                    stx.yaxisLabelStyle = "rect";
+                    stx.createYAxisLabel(stx.chart.panel, this.remain, this.remainLabelY, "#15212d" , "#FFFFFF");
+                    stx.yaxisLabelStyle = "roundRectArrow";
+                });
+            }
+
+            if(!this.countdownInterval) {
+                this.countdownInterval = setInterval(() => {
+                    var dataSet = stx.chart.dataSet;
+                    if(dataSet && dataSet.length != 0 ){
+                        let diff = new Date() - dataSet[dataSet.length-1].DT;
+                        this.remain = displayMilliseconds((getIntervalInSeconds(stx.layout) * 1000) - diff);
+                        this.remain = this.remain ? this.remain : "00:00";
+                    }
+                }, 1000);
+            }
+        }
+        else {
+            if(this.countdownInterval) { clearInterval(this.countdownInterval); }
+            if(this._injectionId)  { stx.removeInjection(this._injectionId); }
+            this._injectionId=undefined;
+            this.countdownInterval=undefined;
+        }
+        stx.draw();
 
         const displayMilliseconds = (ms) => {
             const totalSec = ms / 1000;
@@ -42,35 +74,6 @@ export default class TimeperiodStore {
             hours = hours ? `${hours}:` : '';
             return `${hours}${minutes}:${seconds}`;
         };
-
-        setInterval(() => {
-            var dataSet = stx.chart.dataSet;
-            if(dataSet && dataSet.length != 0 ){
-                let diff = new Date() - dataSet[dataSet.length-1].DT;
-                this.remain = displayMilliseconds((getIntervalInSeconds(stx.layout) * 1000) - diff);
-                this.remain = this.remain ? this.remain : "00:00";
-                this.showCandleCountdown();
-            }
-        }, 1000);
-    };
-
-    showCandleCountdown = () => {
-        var stx = this.context.stx;
-        var isTick = this.timeUnit == 'tick';
-        if(this.mainStore.chartSetting.candleCountdown && !isTick ) {
-            if(!this._injectionId){
-                this._injectionId = stx.append('draw', () => {
-                    stx.yaxisLabelStyle = "rect";
-                    stx.createYAxisLabel(stx.chart.panel, this.remain, this.remainLabelY, "#15212d" , "#FFFFFF");
-                    stx.yaxisLabelStyle = "roundRectArrow";
-                });
-            }
-        }
-        else if(this._injectionId) {
-            stx.removeInjection(this._injectionId);
-            this._injectionId=undefined;
-        }
-        stx.draw();
     }
 
     @action.bound setPeriodicity(interval, timeUnit) {
