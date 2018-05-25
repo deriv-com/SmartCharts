@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Chinese Traditional\n"
 "Language: zh_TW\n"
-"PO-Revision-Date: 2018-05-25 03:41-0400\n"
+"PO-Revision-Date: 2018-05-25 03:50-0400\n"
 
 msgid "Favorites"
 msgstr "我的最愛"
@@ -937,82 +937,82 @@ msgid "Sell Stops"
 msgstr "止損賣單"
 
 msgid "Bollinger %b"
-msgstr ""
+msgstr "布林%b"
 
 msgid "%b"
-msgstr ""
+msgstr "%b"
 
 msgid "Bollinger Bandwidth"
-msgstr ""
+msgstr "布林帶寬"
 
 msgid "Bandwidth"
-msgstr ""
+msgstr "帶寬"
 
 msgid "Donchian Width"
-msgstr ""
+msgstr "唐奇安通道"
 
 msgid "Relative Vigor Index"
-msgstr ""
+msgstr "相對能量指數指標"
 
 msgid "Rel Vig"
-msgstr ""
+msgstr "相對能量指數指標"
 
 msgid "RelVigSignal"
-msgstr ""
+msgstr "相對能量信號"
 
 msgid "Elder Impulse System"
-msgstr ""
+msgstr "愛耳德射線指標"
 
 msgid "Bullish"
-msgstr ""
+msgstr "看漲"
 
 msgid "Bearish"
-msgstr ""
+msgstr "看跌"
 
 msgid "Neutral"
-msgstr ""
+msgstr "中立"
 
 msgid "Pivot Points"
-msgstr ""
+msgstr "軸心點"
 
 msgid "Pivot"
-msgstr ""
+msgstr "軸心"
 
 msgid "Resistance 1"
-msgstr ""
+msgstr "阻力1"
 
 msgid "Support 1"
-msgstr ""
+msgstr "支撐1"
 
 msgid "Resistance 2"
-msgstr ""
+msgstr "阻力2"
 
 msgid "Support 2"
-msgstr ""
+msgstr "支撐2"
 
 msgid "Resistance 3"
-msgstr ""
+msgstr "阻力3"
 
 msgid "Support 3"
-msgstr ""
+msgstr "支撐3"
 
 msgid "VWAP"
-msgstr ""
+msgstr "成交量加權平均價"
 
 msgid "Alligator"
-msgstr ""
+msgstr "鱷魚指標"
 
 msgid "Jaw Period"
-msgstr ""
+msgstr "頜週期"
 
 msgid "Jaw Offset"
-msgstr ""
+msgstr "頜抵銷"
 
 msgid "Teeth Period"
-msgstr ""
+msgstr "牙周期"
 
 msgid "Teeth Offset"
-msgstr ""
+msgstr "牙抵銷"
 
 msgid "Lips Period"
 msgstr ""
