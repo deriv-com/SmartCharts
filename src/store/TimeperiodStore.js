@@ -28,7 +28,7 @@ export default class TimeperiodStore {
 
         const stx = this.context.stx;
 
-        this.showCandleCountdown();
+
 
         reaction(() => this.timeUnit , () => { this.showCandleCountdown(); });
 
@@ -49,6 +49,7 @@ export default class TimeperiodStore {
                 let diff = new Date() - dataSet[dataSet.length-1].DT;
                 this.remain = displayMilliseconds((getIntervalInSeconds(stx.layout) * 1000) - diff);
                 this.remain = this.remain ? this.remain : "00:00";
+                this.showCandleCountdown();
             }
         }, 1000);
     };
