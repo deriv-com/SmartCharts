@@ -1,3 +1,4 @@
+
 .cq-categorical-display {
     width: 632px;
     padding: 0 !important;
@@ -47,7 +48,8 @@
             @include border-radius();
             @include placeholder {
                 @include themify($themes) {
-                    color: themed('controlText');
+                    opacity: 0.8;
+                    color: themed('defaultTextSubtle');
                 }
             }
             @include themify($themes) {

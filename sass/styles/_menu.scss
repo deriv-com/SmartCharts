@@ -179,5 +179,11 @@
 }
 
 .smartcharts-mobile{
-
+	.ciq-menu {
+		position: initial;
+		&.stxMenuActive{
+			z-index: 9;
+		}
+	}
 }
+
