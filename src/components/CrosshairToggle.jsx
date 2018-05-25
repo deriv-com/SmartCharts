@@ -8,7 +8,7 @@ const CrosshairToggle = ({
     crosshair,
     state
 }) => {
-    const CrosshairIcon = [CrosshairOffIcon, CrosshairOnIcon, CrosshairTooltipIcon][state];
+    const CrosshairIcon = [CrosshairOffIcon, CrosshairOnIcon, CrosshairTooltipIcon][state || 0 ];
     return (
         <div className="ciq-menu">
             <div className="cq-menu-btn">
