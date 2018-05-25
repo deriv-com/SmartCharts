@@ -10,14 +10,16 @@ const Dialog = ({
     isMobile,
     isFullscreen
 }) => {
-    const inner_style = ( isMobile && open ) ? {
-        height: (window.innerHeight - (isFullscreen ? 0 : 47) )+'px',
+    const chartControlHeight = 47, // height of chart control panel
+    inner_style = ( isMobile && open ) ? {
+        // reduce chart control panel height except in full screen mode
+        height: (window.innerHeight - (isFullscreen ? 0 : chartControlHeight) )+'px',
         width: window.innerWidth+'px'
     } : {};
 
     return (
         <div
-            className={(className || 'cq-dialog') + (open ? ' open' : '')}
+            className={`${className || 'cq-dialog'} ${open ? ' open' : ''}`}
             onClick={onContainerClick}
             style={inner_style}
             >
