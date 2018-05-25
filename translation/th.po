@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Thai\n"
 "Language: th_TH\n"
-"PO-Revision-Date: 2018-05-24 05:08-0400\n"
+"PO-Revision-Date: 2018-05-25 06:21-0400\n"
 
 msgid "Favorites"
 msgstr "รายการโปรด"
@@ -43,7 +43,7 @@ msgid "Share"
 msgstr "แชร์"
 
 msgid "Share / Download Chart"
-msgstr ""
+msgstr "แบ่งปัน / ดาวน์โหลดแผนภูมิ"
 
 msgid "Share link"
 msgstr "แบ่งปันลิงค์"
@@ -115,13 +115,13 @@ msgid "Toggle Asset Information"
 msgstr "สลับข้อมูลสินทรัพย์"
 
 msgid "Copy to clipboard"
-msgstr ""
+msgstr "คัดลอกลงคลิปบอร์ด"
 
 msgid "Copied!"
-msgstr ""
+msgstr "คัดลอก!"
 
 msgid "Failed!"
-msgstr ""
+msgstr "ล้มเหลว!"
 
 msgid "Settings"
 msgstr "การตั้งค่า"
@@ -424,7 +424,7 @@ msgid "Price Rate of Change"
 msgstr "อัตราราคาของการเปลี่ยนแปลง"
 
 msgid "Volume Rate of Change"
-msgstr ""
+msgstr "อัตราปริมาณเปลี่ยนแปลง"
 
 msgid "Momentum Indicator"
 msgstr "ตัวชี้วัดโมเมนตัม"
@@ -862,7 +862,7 @@ msgid "PMOSignal"
 msgstr "PMOSignal"
 
 msgid "Relative Volatility"
-msgstr "ความผันผวนเทียบเคียง"
+msgstr "ความผันผวนเชิงสัมพันธ์"
 
 msgid "STD Period"
 msgstr "ระยะเวลา STD"
