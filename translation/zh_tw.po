@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Chinese Traditional\n"
 "Language: zh_TW\n"
-"PO-Revision-Date: 2018-05-25 03:31-0400\n"
+"PO-Revision-Date: 2018-05-25 03:41-0400\n"
 
 msgid "Favorites"
 msgstr "我的最愛"
@@ -901,40 +901,40 @@ msgid "ATR Bands Bottom"
 msgstr "ATR帶底部"
 
 msgid "ATR Bands Channel"
-msgstr ""
+msgstr "斯塔克帶頂部值"
 
 msgid "STARC Bands"
-msgstr ""
+msgstr "斯塔克帶"
 
 msgid "MA Period"
-msgstr ""
+msgstr "MA 期間"
 
 msgid "Multiplier"
-msgstr ""
+msgstr "乘數"
 
 msgid "STARC Bands Top"
-msgstr ""
+msgstr "斯塔克带顶部值"
 
 msgid "STARC Bands Median"
-msgstr ""
+msgstr "斯塔克带中間值"
 
 msgid "STARC Bands Bottom"
-msgstr ""
+msgstr "斯塔克带底部值"
 
 msgid "ATR Trailing Stops"
-msgstr ""
+msgstr "ATR 追蹤止損"
 
 msgid "Plot Type"
-msgstr ""
+msgstr "作圖類型"
 
 msgid "HighLow"
-msgstr ""
+msgstr "最高價最低價"
 
 msgid "Buy Stops"
-msgstr ""
+msgstr "止損買單"
 
 msgid "Sell Stops"
-msgstr ""
+msgstr "止損賣單"
 
 msgid "Bollinger %b"
 msgstr ""
@@ -1222,31 +1222,31 @@ msgid "Downtrend"
 msgstr "下降趨勢"
 
 msgid "Volume Profile"
-msgstr ""
+msgstr "成交量特點"
 
 msgid "Bars Color"
-msgstr ""
+msgstr "柱線顏色"
 
 msgid "Vortex Indicator"
-msgstr ""
+msgstr "漩渦指示器"
 
 msgid "+VI"
-msgstr ""
+msgstr "正成交量指標"
 
 msgid "-VI"
-msgstr ""
+msgstr "負成交量指標"
 
 msgid "ZigZag"
-msgstr ""
+msgstr "鋸齒狀"
 
 msgid "Distance(%)"
-msgstr ""
+msgstr "差距(%)"
 
 msgid "Psychological Line"
-msgstr ""
+msgstr "心理線"
 
 msgid "Moving Average Deviation"
-msgstr ""
+msgstr "移動平均偏差"
 
 msgid "Shinohara Intensity Ratio"
 msgstr ""
