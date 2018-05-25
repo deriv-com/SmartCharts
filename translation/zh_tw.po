@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Chinese Traditional\n"
 "Language: zh_TW\n"
-"PO-Revision-Date: 2018-05-24 05:08-0400\n"
+"PO-Revision-Date: 2018-05-25 02:51-0400\n"
 
 msgid "Favorites"
 msgstr "我的最愛"
@@ -22,7 +22,7 @@ msgid "CLOSED"
 msgstr "已關閉"
 
 msgid "Close"
-msgstr ""
+msgstr "收盤"
 
 msgid "PRICE"
 msgstr "價格"
@@ -43,16 +43,16 @@ msgid "Share"
 msgstr "共享"
 
 msgid "Share / Download Chart"
-msgstr ""
+msgstr "共用/下載圖表"
 
 msgid "Share link"
 msgstr "共用連結"
 
 msgid "Failed to generate link"
-msgstr ""
+msgstr "未能產生連結"
 
 msgid "Retry"
-msgstr ""
+msgstr "重試"
 
 msgid "Download chart"
 msgstr "下載圖表"
@@ -73,7 +73,7 @@ msgid "Zoom in"
 msgstr "放大"
 
 msgid "Interval"
-msgstr ""
+msgstr "間隔"
 
 msgid "Tick"
 msgstr "跳動點"
@@ -115,22 +115,22 @@ msgid "Toggle Asset Information"
 msgstr "切換資產資訊"
 
 msgid "Copy to clipboard"
-msgstr ""
+msgstr "複製到剪貼板"
 
 msgid "Copied!"
-msgstr ""
+msgstr "已複製！"
 
 msgid "Failed!"
-msgstr ""
+msgstr "失敗！"
 
 msgid "Settings"
-msgstr ""
+msgstr "設定"
 
 msgid "Dark Mode"
-msgstr ""
+msgstr "暗模式"
 
 msgid "Language"
-msgstr ""
+msgstr "語言"
 
 msgid "RESET"
 msgstr "重置"
@@ -145,7 +145,7 @@ msgid "Streaming for [symbol] is not available due to license restrictions"
 msgstr "由於許可限制, [symbol] 串流不可用"
 
 msgid "Search..."
-msgstr ""
+msgstr "搜索..."
 
 msgid "Annotation"
 msgstr "注釋"
@@ -787,10 +787,10 @@ msgid "Center Of Gravity"
 msgstr "重心指標"
 
 msgid "Typical Price"
-msgstr ""
+msgstr "典型價格"
 
 msgid "Weighted Close"
-msgstr ""
+msgstr "權重收盤價"
 
 msgid "Money Flow Index"
 msgstr ""
