@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Vietnamese\n"
 "Language: vi_VN\n"
-"PO-Revision-Date: 2018-05-25 02:44-0400\n"
+"PO-Revision-Date: 2018-05-25 02:51-0400\n"
 
 msgid "Favorites"
 msgstr "Yêu thích"
@@ -907,7 +907,7 @@ msgid "STARC Bands"
 msgstr "Dải STARC"
 
 msgid "MA Period"
-msgstr "Giai đoạn MA"
+msgstr "Giai đoạn STD"
 
 msgid "Multiplier"
 msgstr "Số nhân"
@@ -1045,10 +1045,10 @@ msgid "Base Line Period"
 msgstr "Chu kỳ cơ bản"
 
 msgid "Leading Span B Period"
-msgstr "Chu kỳ mở rộng hàng đầu B"
+msgstr "Giai đoạn mở rộng hàng đầu B"
 
 msgid "Lagging Span Period"
-msgstr "Chu kỳ mở rộng trễ"
+msgstr "Giai đoạn mở rộng trễ"
 
 msgid "Conversion Line"
 msgstr "Dòng chuyển đổi"
@@ -1159,13 +1159,13 @@ msgid "Heavy Rate of Change Period"
 msgstr "Giai đoạn thay đổi tỷ lệ lớn"
 
 msgid "Heavy SMA Period"
-msgstr "Chu kỳ SMA nặng"
+msgstr "Giai đoạn SMA nặng"
 
 msgid "Heaviest Rate of Change Period"
-msgstr "Chu kỳ thay đổi tỷ lệ nặng nhất"
+msgstr "Giai đoạn thay đổi tỷ lệ nặng nhất"
 
 msgid "Heaviest SMA Period"
-msgstr "Giai đoạn SMA mạnh nhất"
+msgstr "Giai đoạn SMA nặng nhất"
 
 msgid "KST"
 msgstr "KST"
@@ -1174,13 +1174,13 @@ msgid "KSTSignal"
 msgstr "KSTSignal"
 
 msgid "Pring's Special K"
-msgstr "Pring's Special K"
+msgstr "K đặc biệt của Pring"
 
 msgid "Darvas Box"
 msgstr "Hộp Darvas"
 
 msgid "ATH Lookback Period"
-msgstr "Khoảng ATH Lookback"
+msgstr "Giai đoạn Lookback ATH"
 
 msgid "Exit Field"
 msgstr "Thoát khỏi trường"
@@ -1192,7 +1192,7 @@ msgid "Stop Levels"
 msgstr "Mức Dừng"
 
 msgid "Level Offset"
-msgstr "Cấp bù đắp"
+msgstr "Mức độ dịch chuyển"
 
 msgid "Price Minimum"
 msgstr "Tối thiểu giá"
@@ -1243,10 +1243,10 @@ msgid "Distance(%)"
 msgstr "Khoảng cách(%)"
 
 msgid "Psychological Line"
-msgstr "Dòng Psychological"
+msgstr "Dòng tâm lý"
 
 msgid "Moving Average Deviation"
-msgstr "Moving Average Deviation"
+msgstr "Độ lệch di chuyển trung bình"
 
 msgid "Shinohara Intensity Ratio"
 msgstr "Tỷ lệ cường độ Shinohara"
