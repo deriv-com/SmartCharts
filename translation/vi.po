@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Vietnamese\n"
 "Language: vi_VN\n"
-"PO-Revision-Date: 2018-05-25 02:20-0400\n"
+"PO-Revision-Date: 2018-05-25 02:30-0400\n"
 
 msgid "Favorites"
 msgstr "Yêu thích"
@@ -697,28 +697,28 @@ msgid "Bollinger Bands Top"
 msgstr "Đỉnh dải Bollinger"
 
 msgid "Bollinger Bands Median"
-msgstr "Bollinger Bands Median"
+msgstr "Trung bình dải Bollinger"
 
 msgid "Bollinger Bands Bottom"
-msgstr "Bollinger Bands Bottom"
+msgstr "Đáy dải Bollinger"
 
 msgid "Donchian Channel"
 msgstr "Kênh Donchian"
 
 msgid "High Period"
-msgstr "Thời điểm cao"
+msgstr "Giai đoạn cao"
 
 msgid "Low Period"
 msgstr "Giai đoạn thấp"
 
 msgid "Donchian High"
-msgstr "Donchian cao"
+msgstr "Cao Donchian"
 
 msgid "Donchian Median"
-msgstr "Donchian trung bình"
+msgstr "Trung bình Donchian"
 
 msgid "Donchian Low"
-msgstr "Donchian thấp"
+msgstr "Thấp Donchian"
 
 msgid "Highest High Value"
 msgstr "Giá Trị Cao cao nhất"
@@ -733,16 +733,16 @@ msgid "Bulge Threshold"
 msgstr "Phình ngưỡng"
 
 msgid "Keltner Channel"
-msgstr "Keltner Channel"
+msgstr "Kênh Keltner"
 
 msgid "Keltner Top"
-msgstr "Keltner đầu"
+msgstr "Đỉnh Keltner"
 
 msgid "Keltner Median"
-msgstr "Keltner giữa"
+msgstr "Trung bình Keltner"
 
 msgid "Keltner Bottom"
-msgstr "Keltner dưới"
+msgstr "Đáy Keltner"
 
 msgid "Parabolic SAR"
 msgstr "Parabolic SAR"
@@ -754,7 +754,7 @@ msgid "Maximum AF"
 msgstr "AF Tối đa"
 
 msgid "Klinger Volume Oscillator"
-msgstr "Klinger Volume Oscillator"
+msgstr "Chỉ số dao động khối lượng Klinger"
 
 msgid "Signal Periods"
 msgstr "Thời lượng tín hiệu"
@@ -769,10 +769,10 @@ msgid "Elder Ray Index"
 msgstr "Chỉ số Elder Ray"
 
 msgid "Elder Bull Power"
-msgstr "Elder Bull Power"
+msgstr "Chỉ số sức mạnh Elder Bull"
 
 msgid "Elder Bear Power"
-msgstr "Elder Bear Power"
+msgstr "Chỉ số sức mạnh Elder Bear"
 
 msgid "Elder Force Index"
 msgstr "Chỉ số Elder Force"
@@ -874,7 +874,7 @@ msgid "Awesome Oscillator"
 msgstr "Dao động tuyệt vời"
 
 msgid "Market Facilitation Index"
-msgstr "Chỉ số thị trường thuận lợi"
+msgstr "Chỉ số thuận lợi thị trường"
 
 msgid "Scale Factor"
 msgstr "Yếu tố quy mô"
@@ -889,7 +889,7 @@ msgid "Fake"
 msgstr "Giả mạo"
 
 msgid "Squat"
-msgstr "Ngồi xổm"
+msgstr "Cúi xuống"
 
 msgid "ATR Bands"
 msgstr "Các dải ATR"
@@ -916,7 +916,7 @@ msgid "STARC Bands Top"
 msgstr "Các dải STARC Top"
 
 msgid "STARC Bands Median"
-msgstr "Các dải STARC Median"
+msgstr "Trung bình dải STARC"
 
 msgid "STARC Bands Bottom"
 msgstr "Các dải STARC Bottom"
@@ -1198,7 +1198,7 @@ msgid "Price Minimum"
 msgstr "Tối thiểu giá"
 
 msgid "Volume Spike"
-msgstr "Tăng đột biến khối lượng"
+msgstr "Đột biến khối lượng"
 
 msgid "Volume % of Avg"
 msgstr "Khối lượng % của Avg"
@@ -1222,7 +1222,7 @@ msgid "Downtrend"
 msgstr "Xu hướng xuống"
 
 msgid "Volume Profile"
-msgstr "Khối lượng hồ sơ"
+msgstr "Hồ sơ khối lượng"
 
 msgid "Bars Color"
 msgstr "Màu các thanh"
