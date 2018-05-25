@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Chinese Traditional\n"
 "Language: zh_TW\n"
-"PO-Revision-Date: 2018-05-25 02:51-0400\n"
+"PO-Revision-Date: 2018-05-25 03:00-0400\n"
 
 msgid "Favorites"
 msgstr "我的最愛"
@@ -793,61 +793,61 @@ msgid "Weighted Close"
 msgstr "權重收盤價"
 
 msgid "Money Flow Index"
-msgstr ""
+msgstr "資金流量指標"
 
 msgid "Williams %R"
-msgstr ""
+msgstr "威廉指標"
 
 msgid "Accumulation/Distribution"
-msgstr ""
+msgstr "威廉多空力度線"
 
 msgid "Use Volume"
-msgstr ""
+msgstr "利用卷"
 
 msgid "Volume Chart"
-msgstr ""
+msgstr "十字過濾線"
 
 msgid "Up Volume"
-msgstr ""
+msgstr "上升成交量"
 
 msgid "Down Volume"
-msgstr ""
+msgstr "下降成交量"
 
 msgid "Volume Underlay"
-msgstr ""
+msgstr "成交量下置"
 
 msgid "Valuation Lines"
-msgstr ""
+msgstr "價值線"
 
 msgid "Average Type"
-msgstr ""
+msgstr "平均型"
 
 msgid "Display Average"
-msgstr ""
+msgstr "顯示平均值"
 
 msgid "Display 1 Standard Deviation (1σ)"
-msgstr ""
+msgstr "顯示1標準偏差 (1σ)"
 
 msgid "Display 2 Standard Deviation (2σ)"
-msgstr ""
+msgstr "顯示2標準偏差 (2σ)"
 
 msgid "Display 3 Standard Deviation (3σ)"
-msgstr ""
+msgstr "顯示3標準偏差 (3σ)"
 
 msgid "Average"
-msgstr ""
+msgstr "平均"
 
 msgid "1 Standard Deviation (1σ)"
-msgstr ""
+msgstr "1標準偏差 (1σ)"
 
 msgid "2 Standard Deviation (2σ)"
-msgstr ""
+msgstr "2標準偏差 (2σ)"
 
 msgid "3 Standard Deviation (3σ)"
-msgstr ""
+msgstr "3標準偏差 (3σ)"
 
 msgid "Correlation Coefficient"
-msgstr ""
+msgstr "相關係數"
 
 msgid "Price Momentum Oscillator"
 msgstr ""
