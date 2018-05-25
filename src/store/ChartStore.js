@@ -229,25 +229,59 @@ class ChartStore {
             }
 
             const onLayoutDataReady = () => {
-                this.restoreLayout(stxx, layoutData);
 
-                this.setActiveSymbols(active_symbols);
+                const timeToEpochGMT = (time_stirng) =>{
+                    let today = new Date(),
+                        time = time_stirng.split(':');
+                    return Date.UTC( today.getUTCFullYear() , today.getUTCMonth() , today.getUTCDate() , time[0], time[1], time[2]);
+                };
 
-                if (initialSymbol && !(layoutData && layoutData.symbols)) {
-                    this.changeSymbol(initialSymbol);
-                } else if (stxx.chart.symbol) {
-                    this.currentActiveSymbol = stxx.chart.symbolObject;
-                    stxx.chart.yAxis.decimalPlaces = stxx.chart.symbolObject.decimal_places;
-                    this.categorizedSymbols = this.categorizeActiveSymbols();
-                    if (onSymbolChange) {onSymbolChange(this.currentActiveSymbol);}
-                } else {
-                    this.changeSymbol(this.defaultSymbol);
-                }
 
-                this.context = context;
-                this.contextPromise.resolve(this.context );
-                this.resizeScreen();
-                this.chartPanelTop = holderStyle.top;
+                api.getTradingTimes().then( data => {
+                    data.trading_times.markets.forEach( market => {
+                        market.submarkets.forEach( submarket => {
+                            submarket.symbols.forEach( symbol => {
+                                let foundSymbol = active_symbols.find( item => item.symbol == symbol.symbol );
+                                if (foundSymbol) {
+                                    let openTimes = [];
+                                    for (var i = 0; i <= symbol.times.open.length; i++) {
+                                        if (symbol.times.open[i] && symbol.times.close[i]) {
+                                            openTimes.push({
+                                                from: timeToEpochGMT(symbol.times.open[i]),
+                                                to: timeToEpochGMT(symbol.times.close[i])
+                                            });
+                                        }
+                                    }
+                                    foundSymbol['open_times'] = openTimes;
+                                    // just use to be a validation, It should remove after
+                                    // merging codes
+                                    foundSymbol['times'] = symbol.times;
+                                }
+                            });
+                        });
+                    });
+
+
+                    this.restoreLayout(stxx, layoutData);
+
+                    this.setActiveSymbols(active_symbols);
+
+                    if (initialSymbol && !(layoutData && layoutData.symbols)) {
+                        this.changeSymbol(initialSymbol);
+                    } else if (stxx.chart.symbol) {
+                        this.currentActiveSymbol = stxx.chart.symbolObject;
+                        stxx.chart.yAxis.decimalPlaces = stxx.chart.symbolObject.decimal_places;
+                        this.categorizedSymbols = this.categorizeActiveSymbols();
+                        if (onSymbolChange) {onSymbolChange(this.currentActiveSymbol);}
+                    } else {
+                        this.changeSymbol(this.defaultSymbol);
+                    }
+
+                    this.context = context;
+                    this.contextPromise.resolve(this.context );
+                    this.resizeScreen();
+                    this.chartPanelTop = holderStyle.top;
+                });
             };
             const href = window.location.href;
             if (href.startsWith(shareOrigin) && href.indexOf('#') !== -1) {
