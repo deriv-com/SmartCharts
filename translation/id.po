@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Indonesian\n"
 "Language: id_ID\n"
-"PO-Revision-Date: 2018-05-18 06:21-0400\n"
+"PO-Revision-Date: 2018-05-24 05:33-0400\n"
 
 msgid "Favorites"
 msgstr "Favorit"
@@ -43,16 +43,16 @@ msgid "Share"
 msgstr "Bagikan"
 
 msgid "Share / Download Chart"
-msgstr "Bagikan / Unduh Chart"
+msgstr "Bagikan / Download Chart"
 
 msgid "Share link"
 msgstr "Bagikan link"
 
 msgid "Failed to generate link"
-msgstr ""
+msgstr "Gagal menghasilkan link"
 
 msgid "Retry"
-msgstr ""
+msgstr "Mencoba kembali"
 
 msgid "Download chart"
 msgstr "Unduh chart"
@@ -114,11 +114,20 @@ msgstr "Jenis chart"
 msgid "Toggle Asset Information"
 msgstr "Informasi Aset Toggle"
 
+msgid "Copy to clipboard"
+msgstr "Salin ke clipboard"
+
+msgid "Copied!"
+msgstr "Tersalin!"
+
+msgid "Failed!"
+msgstr "Gagal!"
+
 msgid "Settings"
 msgstr "Pengaturan"
 
 msgid "Dark Mode"
-msgstr ""
+msgstr "Dark Mode"
 
 msgid "Language"
 msgstr "Bahasa"
@@ -136,7 +145,7 @@ msgid "Streaming for [symbol] is not available due to license restrictions"
 msgstr "Streaming untuk [symbol] tidak tersedia berhubung batasan lisensi"
 
 msgid "Search..."
-msgstr ""
+msgstr "Cari..."
 
 msgid "Annotation"
 msgstr "Anotasi"

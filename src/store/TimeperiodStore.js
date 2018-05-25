@@ -1,6 +1,11 @@
 import { observable, action, computed, when } from 'mobx';
 import { getTimeUnit } from './utils';
 import MenuStore from './MenuStore';
+import {chartTypes} from './ChartTypeStore';
+
+const notCandles = chartTypes
+    .filter(t => !t.candleOnly)
+    .map(t => t.id);
 
 export default class TimeperiodStore {
     constructor(mainStore) {
@@ -19,7 +24,7 @@ export default class TimeperiodStore {
         const { timeUnit, interval } = this.context.stx.layout;
         this.timeUnit = getTimeUnit({ timeUnit, interval });
         this.interval = interval;
-    }
+    };
 
     @action.bound setPeriodicity(interval, timeUnit) {
         if (this.loader) {
@@ -35,7 +40,7 @@ export default class TimeperiodStore {
 
             const chartType = this.mainStore.chartType;
             const isTick = timeUnit === 'second';
-            const isCandle = ['candle', 'hollow_condle', 'colored_bar'].indexOf(chartType.type.id) !== -1;
+            const isCandle = notCandles.indexOf(chartType.type.id) === -1;
 
             if (isCandle && isTick) {
                 chartType.setType('mountain');

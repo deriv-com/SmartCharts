@@ -8,6 +8,8 @@ import KeystrokeHub from '../components/ui/KeystrokeHub';
 import '../components/ui/Animation';
 import { BinaryAPI, Feed } from '../feed';
 import {createObjectFromLocalStorage} from '../utils';
+import ResizeObserver from 'resize-observer-polyfill';
+
 // import '../AddOns';
 
 class ChartStore {
@@ -111,8 +113,16 @@ class ChartStore {
     @action.bound init(rootNode, props) {
         this.rootNode = rootNode;
 
-        const { initialSymbol, requestAPI, requestSubscribe, requestForget } = props;
+        const {
+            onSymbolChange,
+            initialSymbol,
+            requestAPI,
+            requestSubscribe,
+            requestForget,
+            shareOrigin = 'https://charts.binary.com',
+        } = props;
         const api = new BinaryAPI(requestAPI, requestSubscribe, requestForget);
+        this.mainStore.share.shareOrigin = shareOrigin;
 
         const stxx = this.stxx = new CIQ.ChartEngine({
             container: this.rootNode.querySelector('.chartContainer.primary'),
@@ -121,9 +131,17 @@ class ChartStore {
                 currentPriceLine: true,
             },
             chart: {
-                allowScrollPast: false,
-                allowScrollFuture: false,
+                xAxis: {
+                    timeUnitMultiplier: 1, // Make gaps between time intervals consistent
+                },
+                yAxis: {
+                    // Put some top margin so chart doesn't get blocked by chart title
+                    initialMarginTop: 125,
+                    initialMarginBottom: 10,
+                }
             },
+            minimumLeftBars: 15,
+            minimumZoomTicks: 20,
             yTolerance: 999999, // disable vertical scrolling
         });
 
@@ -136,7 +154,8 @@ class ChartStore {
         CIQ.Animation(stxx, { stayPut: true });
 
         // connect chart to data
-        stxx.attachQuoteFeed(new Feed(api, stxx, this.mainStore), {
+        this.feed = new Feed(api, stxx, this.mainStore);
+        stxx.attachQuoteFeed(this.feed, {
             refreshInterval: null,
         });
 
@@ -169,10 +188,6 @@ class ChartStore {
         stxx.addEventListener('preferences', this.savePreferences.bind(this));
 
         const context = new Context(stxx, this.rootNode);
-
-        // Put some margin so chart doesn't get blocked by chart title
-        stxx.chart.yAxis.initialMarginTop = 125;
-        stxx.calculateYAxisMargins(stxx.chart.panel.yAxis);
 
         new KeystrokeHub(document.querySelector('body'), context, {
             cb: KeystrokeHub.defaultHotKeys,
@@ -213,41 +228,46 @@ class ChartStore {
                 delete layoutData.symbols;
             }
 
-            const configParams = window.location.href.split('#');
-            if (configParams.length > 1) {
-                const sharedParams = configParams.slice(1, configParams.length).join('#');
-                if(sharedParams) {
-                    layoutData = decodeURI(sharedParams);
-                    try {
-                        layoutData = JSON.parse(layoutData);
-                    }catch(e){
-                        console.error(e);
-                    }
-                    window.history.replaceState({}, document.title, window.location.pathname);
+            const onLayoutDataReady = () => {
+                this.restoreLayout(stxx, layoutData);
+
+                this.setActiveSymbols(active_symbols);
+
+                if (initialSymbol && !(layoutData && layoutData.symbols)) {
+                    this.changeSymbol(initialSymbol);
+                } else if (stxx.chart.symbol) {
+                    this.currentActiveSymbol = stxx.chart.symbolObject;
+                    stxx.chart.yAxis.decimalPlaces = stxx.chart.symbolObject.decimal_places;
+                    this.categorizedSymbols = this.categorizeActiveSymbols();
+                    if (onSymbolChange) {onSymbolChange(this.currentActiveSymbol);}
+                } else {
+                    this.changeSymbol(this.defaultSymbol);
                 }
-            }
 
-            this.restoreLayout(stxx, layoutData);
+                this.context = context;
+                this.contextPromise.resolve(this.context );
+                this.resizeScreen();
+                this.chartPanelTop = holderStyle.top;
+            };
+            const href = window.location.href;
+            if (href.startsWith(shareOrigin) && href.indexOf('#') !== -1) {
+                const encodedJsonPart = href.split('#').slice(1).join('#');
+                const url = href.split('#')[0];
+                const hash = url.split('?')[1];
 
-            this.setActiveSymbols(active_symbols);
-
-            if (initialSymbol && !(layoutData && layoutData.symbols)) {
-                this.changeSymbol(initialSymbol);
-            } else if (stxx.chart.symbol) {
-                this.currentActiveSymbol = stxx.chart.symbolObject;
-                stxx.chart.yAxis.decimalPlaces = stxx.chart.symbolObject.decimal_places;
-                this.categorizedSymbols = this.categorizeActiveSymbols();
+                window.history.replaceState({}, document.title, window.location.pathname);
+                const promise = this.mainStore.share.expandBitlyAsync(hash, decodeURIComponent(encodedJsonPart));
+                promise.then(encodedJson => {
+                    layoutData = JSON.parse(encodedJson);
+                    onLayoutDataReady();
+                }).catch(() => onLayoutDataReady());
             } else {
-                this.changeSymbol(this.defaultSymbol);
+                onLayoutDataReady();
             }
-
-            this.context = context;
-            this.contextPromise.resolve(this.context );
-            this.resizeScreen();
-            this.chartPanelTop = holderStyle.top;
         });
 
-        window.addEventListener('resize', this.resizeScreen, false);
+        this.resizeObserver = new ResizeObserver(() => this.resizeScreen());
+        this.resizeObserver.observe(rootNode);
 
         stxx.append('createDataSet', this.updateComparisons);
     }
@@ -286,6 +306,7 @@ class ChartStore {
     }
 
     @action.bound updateComparisons(...args) {
+        if (!this.context) {return;}
         let stx = this.context.stx;
         const comparisonSymbolsKeys = Object.keys(stx.chart.series);
         if (comparisonSymbolsKeys.length !== this.comparisonSymbols.length) {
@@ -319,7 +340,11 @@ class ChartStore {
     }
 
     @action.bound destroy() {
-        window.removeEventListener('resize', this.resizeScreen, false);
+        this.resizeObserver.disconnect();
+        // Destroying the chart does not unsubscribe the streams;
+        // we need to manually unsubscribe them.
+        this.feed.unsubscribeAll();
+        this.feed = null;
         this.stxx.destroy();
         this.stxx = null;
     }
