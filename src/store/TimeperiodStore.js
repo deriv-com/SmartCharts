@@ -70,6 +70,7 @@ export default class TimeperiodStore {
             stx.removeInjection(this._injectionId);
             this._injectionId=undefined;
         }
+        stx.draw();
     }
 
     @action.bound setPeriodicity(interval, timeUnit) {
