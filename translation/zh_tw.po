@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Chinese Traditional\n"
 "Language: zh_TW\n"
-"PO-Revision-Date: 2018-05-25 03:50-0400\n"
+"PO-Revision-Date: 2018-05-25 04:00-0400\n"
 
 msgid "Favorites"
 msgstr "我的最愛"
@@ -1015,40 +1015,40 @@ msgid "Teeth Offset"
 msgstr "牙抵銷"
 
 msgid "Lips Period"
-msgstr ""
+msgstr "唇周期"
 
 msgid "Lips Offset"
-msgstr ""
+msgstr "唇抵銷"
 
 msgid "Show Fractals"
-msgstr ""
+msgstr "顯示分形"
 
 msgid "Jaw"
-msgstr ""
+msgstr "頜"
 
 msgid "Teeth"
-msgstr ""
+msgstr "牙"
 
 msgid "Lips"
-msgstr ""
+msgstr "唇"
 
 msgid "Gator Oscillator"
-msgstr ""
+msgstr "鱷魚震盪指標"
 
 msgid "Ichimoku Clouds"
-msgstr ""
+msgstr "一目均衡表"
 
 msgid "Conversion Line Period"
-msgstr ""
+msgstr "轉換線周期"
 
 msgid "Base Line Period"
-msgstr ""
+msgstr "基礎線周期"
 
 msgid "Leading Span B Period"
-msgstr ""
+msgstr "領先擴展B周期"
 
 msgid "Lagging Span Period"
-msgstr ""
+msgstr "滯後擴展周期"
 
 msgid "Conversion Line"
 msgstr "轉換線"
@@ -1249,11 +1249,11 @@ msgid "Moving Average Deviation"
 msgstr "移動平均偏差"
 
 msgid "Shinohara Intensity Ratio"
-msgstr ""
+msgstr "篠原強度比"
 
 msgid "Strong Ratio"
-msgstr ""
+msgstr "強比例"
 
 msgid "Weak Ratio"
-msgstr ""
+msgstr "弱比例"
 
