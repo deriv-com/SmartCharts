@@ -26,6 +26,7 @@ const ChartTitle = ({
         <Menu 
             className="cq-chart-title stx-show cq-symbols-display"
             isMobile={isMobile}
+            isFullscreen={true}
             >
             <Menu.Title>
                 {isVisible &&

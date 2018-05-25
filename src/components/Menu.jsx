@@ -16,7 +16,8 @@ class Menu extends Component {
             children,
             onTitleClick,
             DropdownDialog,
-            isMobile
+            isMobile,
+            isFullscreen
         } = this.props;
         const first = React.Children.map(children, (child, i) => i === 0 ? child : null);
         const rest  = React.Children.map(children, (child, i) => i !== 0 ? child : null);
@@ -36,6 +37,7 @@ class Menu extends Component {
                     <DropdownDialog
                         className='cq-menu-dropdown'
                         isMobile={isMobile}
+                        isFullscreen={isFullscreen}
                         >
                         {rest}
                     </DropdownDialog>
