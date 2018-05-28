@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Italian\n"
 "Language: it_IT\n"
-"PO-Revision-Date: 2018-05-24 05:08-0400\n"
+"PO-Revision-Date: 2018-05-28 09:01-0400\n"
 
 msgid "Favorites"
 msgstr "Preferiti"
@@ -115,7 +115,7 @@ msgid "Toggle Asset Information"
 msgstr "Attiva/Disattiva le informazioni sull'asset"
 
 msgid "Copy to clipboard"
-msgstr ""
+msgstr "Copia negli Appunti"
 
 msgid "Copied!"
 msgstr ""
