@@ -25,7 +25,7 @@ const Crosshair = ({
 );
 
 export default connect(
-    ({crosshair: c, chartSetting: s}) => ({
+    ({crosshair: c}) => ({
         right: c.right,
         left: c.left,
         top: c.top,
