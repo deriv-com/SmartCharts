@@ -17,33 +17,34 @@ class Menu extends Component {
             children,
             onTitleClick,
             DropdownDialog,
+            isMobile,
+            isFullscreen
         } = this.props;
         const first = React.Children.map(children, (child, i) => i === 0 ? child : null);
         const rest  = React.Children.map(children, (child, i) => i !== 0 ? child : null);
-
 
         return (
             <div className={`ciq-menu ${className || ''} ${open ? 'stxMenuActive' : ''}`}>
                 <div
                     className="cq-menu-btn"
                     ref={el => stxtap(el, onTitleClick)}
-                >
+                    >
                     {first}
                 </div>
-                    <div
-                        onClick={this.onOverlayClick.bind(this)}
-                        className="cq-menu-overlay"
+                <div
+                    onClick={this.onOverlayClick.bind(this)}
+                    className="cq-menu-overlay"
+                    >
+                    <CSSTransition
+                        in={open}
+                        timeout={0}
+                        classNames="cq-menu-dropdown"
                         >
-                        <CSSTransition
-                            in={open}
-                            timeout={0}
-                            classNames="cq-menu-dropdown"
-                            >
-                            <DropdownDialog className='cq-menu-dropdown'>
-                                {rest}
-                            </DropdownDialog>
-                        </CSSTransition>
-                    </div>
+                        <DropdownDialog className='cq-menu-dropdown'>
+                            {rest}
+                        </DropdownDialog>
+                    </CSSTransition>
+                </div>
             </div>
         );
     }

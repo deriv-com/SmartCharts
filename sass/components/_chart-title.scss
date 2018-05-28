@@ -29,7 +29,7 @@
             }
             @include border-radius();
             @include themify($themes) {
-                background: themed('controlTitlebg');
+                background: themed('defaultMain');
                 color: themed('defaultTextStrong');
                 border: solid 1px themed('defaultBorder');
             }
@@ -159,11 +159,11 @@
         }
         .cq-menu-dropdown{
             width: 100%;
-            margin: 0px;
-            top: 0px;
-            left: 0px;
-            @include transition(none !important);
             z-index: 4 !important;
+            margin: 0px !important;
+            top: 0px !important;
+            left: 0px !important;
+            @include transition(none !important);
             &.open{
                 margin: 0px;
                 bottom: auto;

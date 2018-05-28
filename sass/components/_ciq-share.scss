@@ -9,8 +9,28 @@
     .title {
         height: 40px;
         line-height: 40px;
-        padding-left: 16px;
         font-size: 16px;
+        display: flex;
+        .title-text{
+            display: block;
+            font-size: 16px;
+            line-height: 40px;
+            font-weight: 400;
+            padding: 0 .7em;
+            @include themify($themes) {
+                color: themed('defaultText');
+            }
+        }
+        .icon-close-menu{
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            cursor: pointer;
+            height: 30px;
+            width: 30px;
+            pointer-events: none;
+            opacity: 0;
+        }
     }
     .body {
         height: 100%;
@@ -82,6 +102,17 @@
 
         .caption2 {
             margin-top: 10px;
+        }
+    }
+}
+/* Mobile Style */
+.smartcharts-mobile {
+    .cq-share {
+        .title {
+            .icon-close-menu{
+                pointer-events: initial;
+                opacity: 1;
+            }
         }
     }
 }

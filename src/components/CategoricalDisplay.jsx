@@ -33,6 +33,7 @@ const CategoricalDisplay = ({
     const renderMobileTitle = ()=>{
         return isMobile ? <div className="cq-mobile-title">
             <div className="mobile-title">{dialogTitle}</div>
+            <CloseIcon className="icon-close-menu" onClick={ () => closeMenu() } />
         </div> : '';
     };
     const renderIcon = (item) => {
@@ -160,12 +161,6 @@ const CategoricalDisplay = ({
                             </div>
                     ) }
                 </div>
-            </div>
-            <div className="cq-categorical-footer">
-                <button onClick={()=> {closeMenu();} }
-                    className="btn-categorical-display-close">
-                    {t.translate("Close")}
-                </button>
             </div>
         </div>
     );
