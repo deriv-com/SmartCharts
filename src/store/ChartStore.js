@@ -27,6 +27,9 @@ class ChartStore {
     stxx = null;
     id = null;
     defaultSymbol = 'R_100';
+    chartNode = null;
+    chartControlsNode = null;
+    chartContainerNode = null;
     @observable context = null;
     @observable currentActiveSymbol;
     @observable isChartAvailable = true;
@@ -34,6 +37,8 @@ class ChartStore {
     @observable categorizedSymbols = [];
     @observable barrierJSX;
     @observable chartPanelTop = '0px';
+    @observable chartHeight;
+    @observable chartContainerHeight;
     @observable isMobile = false;
 
     @action.bound setActiveSymbols(activeSymbols) {
@@ -93,17 +98,11 @@ class ChartStore {
         );
     }
 
-    updateHeight() {
-        const ciqNode = this.rootNode.querySelector('.ciq-chart');
-        const chartControls = ciqNode.querySelector('.cq-chart-controls');
-        let ciqHeight = ciqNode.offsetHeight - chartControls.offsetHeight;
-        const containerNode = this.rootNode.querySelector('.chartContainer.primary');
-        containerNode.style.height = `${ciqHeight}px`;
-    }
-
     resizeScreen = () => {
         if (!this.context) { return; }
-        this.updateHeight();
+        this.chartHeight = this.chartNode.offsetHeight;
+        this.chartContainerHeight = this.chartHeight - this.chartControlsNode.offsetHeight;
+        this.chartContainerNode.style.height = `${this.chartContainerHeight}px`;
         this.stxx.resizeChart();
         if (this.stxx.slider) {
             this.stxx.slider.display(this.stxx.layout.rangeSlider);
@@ -112,6 +111,9 @@ class ChartStore {
 
     @action.bound init(rootNode, props) {
         this.rootNode = rootNode;
+        this.chartNode = this.rootNode.querySelector('.ciq-chart');
+        this.chartControlsNode = this.chartNode.querySelector('.cq-chart-controls');
+        this.chartContainerNode = this.rootNode.querySelector('.chartContainer.primary');
 
         const {
             onSymbolChange,

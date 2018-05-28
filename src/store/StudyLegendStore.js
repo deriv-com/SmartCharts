@@ -10,7 +10,7 @@ export default class StudyLegendStore {
         this.mainStore = mainStore;
         when(() => this.context, this.onContextReady);
 
-        this.menu = new MenuStore({getContext: () => this.context});
+        this.menu = new MenuStore(mainStore);
         this.categoricalDisplay = new CategoricalDisplayStore({
             activeOptions: [
                 { id: 'edit', onClick: (item) => this.editStudy(item) },
@@ -25,6 +25,7 @@ export default class StudyLegendStore {
             mainStore,
         });
         this.settingsDialog = new SettingsDialogStore({
+            mainStore,
             getContext: () => this.mainStore.chart.context,
             onDeleted: () => this.deleteStudy(this.helper),
             onStared: () => this.starStudy(this.helper),

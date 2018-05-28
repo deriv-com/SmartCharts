@@ -86,7 +86,6 @@
 		bottom: -1.6em;
 		z-index: -3;
 		height: auto;
-		margin-top: 1;
 	    visibility: hidden;
 	    transform: translateX( -50% );
 	    left: 50%;
@@ -147,24 +146,25 @@
 				background: themed('controlDialogHead');
 				border-bottom: 1px solid themed('defaultBorder');
 			}
+			padding-top: 1.2em;
 			.mobile-title{
-				display: block;
-				font-size: 16px;
-				line-height: 40px;
+				display: inline-block;
+				font-size: 14px;
+				line-height: 30px;
 				font-weight: 400;
-				padding: 0em .7em;
+				padding: 0em .9em;
 				@include themify($themes) {
 				    color: themed('defaultText');
 				}
 			}
 			.icon-close-menu{
-			    position: absolute;
-			    top: 5px;
+				position: relative;
+				float: right;
+			    top: 3px;
 			    right: 5px;
 			    cursor: pointer;
 			    height: 30px;
 			    width: 30px;
-			    line-height: 36px;
 			}
 		}
 		.cq-categorical-display{

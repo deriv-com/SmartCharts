@@ -6,9 +6,9 @@ import Dialog from '../components/Dialog.jsx';
 const allMenues = [];
 
 export default class MenuStore {
-    constructor({getContext}) {
-        this.getContext = getContext;
-        this.dialog = new DialogStore();
+    constructor(mainStore) {
+        this.getContext = () => mainStore.chart.context;
+        this.dialog = new DialogStore(mainStore);
         reaction(() => this.open, () => this.blurInput());
         allMenues.push(this);
     }

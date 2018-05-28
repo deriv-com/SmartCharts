@@ -5,7 +5,7 @@ import MenuStore from './MenuStore';
 export default class ViewStore {
     constructor (mainStore) {
         this.mainStore = mainStore;
-        this.menu = new MenuStore({getContext: () => this.mainStore.chart.context});
+        this.menu = new MenuStore(mainStore);
         when(() => this.context, this.onContextReady);
     }
 

@@ -8,7 +8,7 @@ export default class ChartSettingStore {
     constructor(mainStore) {
         this.defaultLanguage = this.languages[0];
         this.mainStore = mainStore;
-        this.menu = new MenuStore({getContext: () => this.mainStore.chart.context});
+        this.menu = new MenuStore(mainStore);
         this.restoreSetting();
     }
 

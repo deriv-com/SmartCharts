@@ -110,7 +110,6 @@
                 visibility: hidden;
                 @include transition(visibility 0s ease-in-out, opacity 0.2s ease-in-out 0.2s);
             }
-            cq-menu-dropdown,
             .cq-menu-dropdown {
                 height: auto;
                 left: -1px;
@@ -123,7 +122,7 @@
                 transform: translateY(150%);
                 @include transition(transform 0.2s ease-in-out 0.2s);
                 &.open{
-                    transform: translateY(0%);
+                    transform: translateY(1.5%);
                     margin: 0px;
                     bottom: 0em;
                 }
@@ -133,10 +132,13 @@
                     opacity: 1;
                     visibility: visible;
                 }
+                .cq-categorical-display {
+                    height: calc(100% + 8px);
+                }
             }
             &.ciq-studies,
             &.cq-comparison-new{
-                cq-menu-dropdown, .cq-menu-dropdown {
+                .cq-menu-dropdown {
                     height: calc( 100vh - 47px ) ;
                     left: 0px !important;
                     width: 100%;

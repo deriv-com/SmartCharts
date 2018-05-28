@@ -263,7 +263,7 @@
 
 .stxMenuActive .cq-categorical-display {
     opacity: 1;
-    height: auto;
+    height: 100%;
 }
 
 /* Active Symbol Icons */
@@ -338,7 +338,6 @@
         }
         .cq-scroll-panel{
             width: 100%;
-            height: calc( 100vh - 13em );
         }
         .cq-filter-panel{
             display: flex;

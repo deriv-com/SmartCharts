@@ -19,10 +19,13 @@ export default class CategoricalDisplayStore {
                 if (!this.isMobile) {
                     setTimeout(() => this.searchInput.focus(), 0);
                 }
+                this.onOpen();
                 if (!this.isInit) {this.init();}
                 setTimeout(() => {
                     this.updateScrollOffset();
                 }, 0);
+            } else {
+                this.onClose();
             }
         });
         this.getCategoricalItems = getCategoricalItems;
@@ -54,6 +57,7 @@ export default class CategoricalDisplayStore {
         data: [],
     };
     scrollOffset = 0;
+    scrollTop = undefined;
 
     get context() {
         return this.mainStore.chart.context;
@@ -112,9 +116,8 @@ export default class CategoricalDisplayStore {
 
     init() {
         this.isInit = true;
-        this.scroll = new PerfectScrollbar(this.scrollPanel);
 
-        this.scrollPanel.addEventListener('ps-scroll-y', this.updateScrollSpy.bind(this));
+
 
         // Select first non-empty category:
         if (this.activeCategoryKey === '' && this.filteredItems.length > 0) {
@@ -316,4 +319,18 @@ export default class CategoricalDisplayStore {
         favoritesId: this.favoritesId,
         CloseUpperMenu: this.CloseUpperMenu,
     }))
+
+    onOpen() {
+        this.scroll = new PerfectScrollbar(this.scrollPanel);
+        if (this.scrollTop) {
+            this.scrollPanel.scrollTop = this.scrollTop;
+        }
+        this.scrollPanel.addEventListener('ps-scroll-y', this.updateScrollSpy.bind(this));
+    }
+
+    onClose() {
+        this.scrollTop = this.scrollPanel.scrollTop;
+        this.scroll.destroy();
+        this.scroll = null;
+    }
 }

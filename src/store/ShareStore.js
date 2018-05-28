@@ -6,7 +6,7 @@ import html2canvas from 'html2canvas';
 export default class ShareStore {
     constructor(mainStore) {
         this.mainStore = mainStore;
-        this.menu = new MenuStore({getContext: () => this.mainStore.chart.context});
+        this.menu = new MenuStore(mainStore);
 
         when(() => this.context, this.onContextReady);
         reaction(() => this.menu.open, this.refereshShareLink);

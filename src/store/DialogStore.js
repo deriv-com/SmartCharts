@@ -4,7 +4,8 @@ import { connect } from './Connect';
 const allDialogs = [];
 
 export default class DialogStore {
-    constructor() {
+    constructor(mainStore) {
+        this.mainStore = mainStore;
         allDialogs.push(this);
     }
 
@@ -53,10 +54,14 @@ export default class DialogStore {
         e.nativeEvent.isHandledByDialog = true;
     }
 
-    connect = connect(() => ({
-        open: this.open,
-        setOpen: this.setOpen,
-        onTitleClick: this.onTitleClick,
-        onContainerClick: this.onContainerClick,
-    }))
+    connect = connect(() => {
+        return {
+            open: this.open,
+            setOpen: this.setOpen,
+            onTitleClick: this.onTitleClick,
+            onContainerClick: this.onContainerClick,
+            chartHeight: this.mainStore.chart.chartHeight,
+            chartContainerHeight: this.mainStore.chart.chartContainerHeight,
+        };
+    })
 }
