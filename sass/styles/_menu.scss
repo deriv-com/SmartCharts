@@ -158,8 +158,8 @@
 				}
 			}
 			.icon-close-menu{
-				position: relative;
-				float: right;
+			    position: relative;
+			    float: right;
 			    top: 3px;
 			    right: 5px;
 			    cursor: pointer;
@@ -173,7 +173,6 @@
 					background: themed('controlDialogHead');
 				}
 			}
-			.cq-scroll-panel{}
 		}
 	}
 }

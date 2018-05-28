@@ -101,7 +101,6 @@ export default class ChartTypeStore {
 
         this.settingsDialog = new SettingsDialogStore({
             mainStore,
-            getContext: () => this.mainStore.chart.context,
             onChanged: items => this.updateAggregate(items),
         });
     }

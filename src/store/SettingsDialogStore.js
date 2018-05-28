@@ -12,8 +12,8 @@ export default class SettingsDialogStore {
     @observable activeTab = 'settings'; // 'settings' | 'description'
     @computed get showTabs() { return !!this.description; }
 
-    constructor({ mainStore, getContext, onDeleted, onStared, onChanged }) {
-        this.getContext = getContext;
+    constructor({ mainStore, onDeleted, onStared, onChanged }) {
+        this.mainStore = mainStore;
         this.onDeleted = onDeleted;
         this.onStared = onStared;
         this.onChanged = onChanged;
@@ -21,7 +21,7 @@ export default class SettingsDialogStore {
         this.dialog = new DialogStore(mainStore);
     }
 
-    get context() { return this.getContext(); }
+    get context() { return this.mainStore.chart.context; }
     get stx() { return this.context.stx; }
 
     @computed get open() { return this.dialog.open; }

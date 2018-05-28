@@ -26,7 +26,6 @@ export default class StudyLegendStore {
         });
         this.settingsDialog = new SettingsDialogStore({
             mainStore,
-            getContext: () => this.mainStore.chart.context,
             onDeleted: () => this.deleteStudy(this.helper),
             onStared: () => this.starStudy(this.helper),
             onChanged: items => this.updateStudy(this.helper.sd, items),

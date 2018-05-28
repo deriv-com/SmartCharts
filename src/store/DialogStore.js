@@ -54,14 +54,12 @@ export default class DialogStore {
         e.nativeEvent.isHandledByDialog = true;
     }
 
-    connect = connect(() => {
-        return {
-            open: this.open,
-            setOpen: this.setOpen,
-            onTitleClick: this.onTitleClick,
-            onContainerClick: this.onContainerClick,
-            chartHeight: this.mainStore.chart.chartHeight,
-            chartContainerHeight: this.mainStore.chart.chartContainerHeight,
-        };
-    })
+    connect = connect(() => ({
+        open: this.open,
+        setOpen: this.setOpen,
+        onTitleClick: this.onTitleClick,
+        onContainerClick: this.onContainerClick,
+        chartHeight: this.mainStore.chart.chartHeight,
+        chartContainerHeight: this.mainStore.chart.chartContainerHeight,
+    }));
 }

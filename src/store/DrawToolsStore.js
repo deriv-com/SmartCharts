@@ -15,7 +15,6 @@ export default class DrawToolsStore {
         this.menu = new MenuStore(mainStore);
         this.settingsDialog = new SettingsDialogStore({
             mainStore,
-            getContext: () => this.mainStore.chart.context,
             onDeleted: this.onDeleted,
             onChanged: this.onChanged,
         });
