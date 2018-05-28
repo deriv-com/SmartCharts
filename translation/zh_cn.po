@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
-"PO-Revision-Date: 2018-05-25 00:30-0400\n"
+"PO-Revision-Date: 2018-05-25 03:41-0400\n"
 
 msgid "Favorites"
 msgstr "收藏夹"
@@ -868,7 +868,7 @@ msgid "STD Period"
 msgstr "标准周期"
 
 msgid "Rel Vol"
-msgstr "相关成交量"
+msgstr "相对波幅"
 
 msgid "Awesome Oscillator"
 msgstr "AO震荡指标"
@@ -904,7 +904,7 @@ msgid "ATR Bands Channel"
 msgstr "斯塔克带顶部值"
 
 msgid "STARC Bands"
-msgstr "标准差"
+msgstr "斯塔克帶"
 
 msgid "MA Period"
 msgstr "MA期间"
@@ -913,13 +913,13 @@ msgid "Multiplier"
 msgstr "乘数"
 
 msgid "STARC Bands Top"
-msgstr "斯塔克带底部值"
+msgstr "斯塔克带顶部值"
 
 msgid "STARC Bands Median"
-msgstr "ATR带通道"
+msgstr "斯塔克带中间值"
 
 msgid "STARC Bands Bottom"
-msgstr "斯塔克带中间值"
+msgstr "斯塔克带底部值"
 
 msgid "ATR Trailing Stops"
 msgstr "ATR追踪止损"
@@ -1039,7 +1039,7 @@ msgid "Ichimoku Clouds"
 msgstr "一目均衡表"
 
 msgid "Conversion Line Period"
-msgstr "对话线周期"
+msgstr "转换线周期"
 
 msgid "Base Line Period"
 msgstr "基础线周期"
@@ -1051,7 +1051,7 @@ msgid "Lagging Span Period"
 msgstr "滞后扩展周期"
 
 msgid "Conversion Line"
-msgstr "对话线"
+msgstr "转换线"
 
 msgid "Base Line"
 msgstr "基础线"
