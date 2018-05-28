@@ -75,12 +75,6 @@
                 z-index: 6;
                 transform: translateX( -50% ) translateY( 0em );
             }
-            &.cq-menu-dropdown-enter.cq-menu-dropdown-enter-active{
-                pointer-events: initial;
-                transform: translateX( -50% ) translateY( 0em );
-                opacity: 1;
-                z-index: -3;
-            }
             &.cq-menu-dropdown-exit.cq-menu-dropdown-exit-active{
                 @include dialog-transition();
                 opacity: 0;
