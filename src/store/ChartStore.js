@@ -72,11 +72,11 @@ class ChartStore {
         }
     }
 
-    restoreDrawings(stx, symbol) {
-        let drawings = createObjectFromLocalStorage(symbol);
+    restoreDrawings() {
+        let drawings = createObjectFromLocalStorage(this.stxx.chart.symbol);
         if (drawings) {
-            stx.importDrawings(drawings);
-            stx.draw();
+            this.stxx.importDrawings(drawings);
+            this.stxx.draw();
         }
     }
 
@@ -297,7 +297,7 @@ class ChartStore {
                 /* TODO, symbol not found error */
                 return;
             }
-            this.restoreDrawings(this.stxx, this.stxx.chart.symbol);
+            this.restoreDrawings();
         });
 
         this.stxx.chart.yAxis.decimalPlaces = symbolObj.decimal_places;
