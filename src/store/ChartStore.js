@@ -399,10 +399,10 @@ class ChartStore {
                 market_display_name: s.market_display_name,
                 submarket_display_name: s.submarket_display_name,
                 exchange_is_open: s.exchange_is_open,
-                decimal_places: s.pip.length - 2
+                decimal_places: s.pip.length - 2,
+                open_times: s.open_times
             });
         }
-
 
         // Categorize symbols in order defined by another array; there's probably a more
         // efficient algo for this, but for just ~100 items it's not worth the effort

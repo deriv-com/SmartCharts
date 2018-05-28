@@ -48,6 +48,27 @@ const CategoricalDisplay = ({
             className={`ciq-favorite ${favoritesMap[item.itemId] ? 'ciq-active-favorite' : ''}`}
         />;
     };
+    const renderClosed = (item)=>{
+        let isOpen,
+        today = new Date(),
+        today_utc = Date.UTC(
+            today.getUTCFullYear(),
+            today.getUTCMonth(),
+            today.getUTCDate(),
+            today.getHours(),
+            today.getMinutes(),
+            today.getSeconds()
+        );
+
+        if ( item.dataObject.open_times && item.dataObject.open_times.length) {
+            isOpen = item.dataObject
+            .open_times.find( open_time => {
+                return ( open_time.from <= today_utc && open_time.to >= today_utc);
+            });
+            return isOpen ? '' : <span className="closed-market">{t.translate("CLOSED")}</span>;
+        }
+        return '';
+    }
 
     const renderLeft = (item) =>
         <div className="left">
@@ -61,10 +82,10 @@ const CategoricalDisplay = ({
             onClick={(e) => item.enabled && onSelectItem(item.dataObject, e)}
             disabled={!item.enabled}
             key={k}
-        >
+            >
             {renderLeft(item)}
             <div className="right">
-                {(item.dataObject && item.dataObject.exchange_is_open == 0 )?<span className="closed-market">{t.translate("CLOSED")}</span>:''}
+                {renderClosed(item)}
                 {renderFavorite(item)}
             </div>
         </div>;
