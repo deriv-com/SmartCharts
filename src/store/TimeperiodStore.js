@@ -116,11 +116,13 @@ export default class TimeperiodStore {
     }
 
     @computed get remainLabelY(){
-        var stx = this.context.stx;
-        var dataSet = stx.chart.dataSet;
-        var price = dataSet[dataSet.length-1].Close;
-        var x = stx.pixelFromPrice(price, stx.chart.panel);
-        x = x > stx.chart.panel.bottom - 60 ? x - 18 : x + 18;
+        const stx = this.context.stx;
+        const dataSet = stx.chart.dataSet;
+        const price = dataSet[dataSet.length-1].Close;
+        let x = stx.pixelFromPrice(price, stx.chart.panel);
+        const currentPriceLabelHeight = 18;
+        const maxRequiredSpaceForLabels = 60;
+        x = x > stx.chart.panel.bottom - maxRequiredSpaceForLabels ? x - currentPriceLabelHeight : x + currentPriceLabelHeight;
         return x;
     }
 
