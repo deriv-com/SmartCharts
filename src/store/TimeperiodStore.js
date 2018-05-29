@@ -19,7 +19,7 @@ export default class TimeperiodStore {
 
     @observable timeUnit = null;
     @observable interval = null;
-    @observable remain = "00:00";
+    @observable remain = null;
 
     onContextReady = () => {
         const { timeUnit, interval } = this.context.stx.layout;
@@ -29,13 +29,20 @@ export default class TimeperiodStore {
         this.showCandleCountdown();
 
         reaction(() => this.timeUnit , () => { this.showCandleCountdown(); });
+        reaction(() => this.interval , () => { this.showCandleCountdown(); });
 
     };
 
     countdownInterval = null;
-    showCandleCountdown = () => {
+    showCandleCountdown = (callFromSettings = false) => {
         const stx = this.context.stx;
         var isTick = this.timeUnit == 'tick';
+        this.remain = null;
+        if(this.countdownInterval) { clearInterval(this.countdownInterval); }
+        if(this._injectionId)  { stx.removeInjection(this._injectionId); }
+        this._injectionId = undefined;
+        this.countdownInterval = undefined;
+        stx.draw();
 
         const displayMilliseconds = (ms) => {
             const totalSec = ms / 1000;
@@ -53,20 +60,22 @@ export default class TimeperiodStore {
             if(dataSet && dataSet.length != 0 ){
                 let diff = new Date() - dataSet[dataSet.length-1].DT;
                 this.remain = displayMilliseconds((getIntervalInSeconds(stx.layout) * 1000) - diff);
-                this.remain = this.remain ? this.remain : "00:00";
+                stx.draw();
             }
         };
 
         if(this.mainStore.chartSetting.candleCountdown && !isTick ) {
             if(!this._injectionId){
                 this._injectionId = stx.append('draw', () => {
-                    stx.yaxisLabelStyle = "rect";
-                    stx.createYAxisLabel(stx.chart.panel, this.remain, this.remainLabelY, "#15212d" , "#FFFFFF");
-                    stx.yaxisLabelStyle = "roundRectArrow";
+                    if(this.remain){
+                        stx.yaxisLabelStyle = "rect";
+                        stx.createYAxisLabel(stx.chart.panel, this.remain, this.remainLabelY, "#15212d" , "#FFFFFF");
+                        stx.yaxisLabelStyle = "roundRectArrow";
+                    }
                 });
             }
 
-            setRemain();
+            if(callFromSettings) { setRemain(); }
 
             if(!this.countdownInterval) {
                 this.countdownInterval = setInterval(() => {
@@ -74,15 +83,6 @@ export default class TimeperiodStore {
                 }, 1000);
             }
         }
-        else {
-            if(this.countdownInterval) { clearInterval(this.countdownInterval); }
-            if(this._injectionId)  { stx.removeInjection(this._injectionId); }
-            this._injectionId=undefined;
-            this.countdownInterval=undefined;
-        }
-
-        stx.draw();
-
     }
 
     @action.bound setPeriodicity(interval, timeUnit) {

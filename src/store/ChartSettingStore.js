@@ -135,7 +135,7 @@ export default class ChartSettingStore {
 
     @action.bound showCandleCountdown(value){
         this.candleCountdown = value;
-        this.mainStore.timeperiod.showCandleCountdown();
+        this.mainStore.timeperiod.showCandleCountdown(value);
         this.saveSetting();
     }
 }
