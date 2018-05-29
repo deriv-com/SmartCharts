@@ -119,7 +119,9 @@ export default class TimeperiodStore {
         var stx = this.context.stx;
         var dataSet = stx.chart.dataSet;
         var price = dataSet[dataSet.length-1].Close;
-        return stx.pixelFromPrice(price, stx.chart.panel) + 18;
+        var x = stx.pixelFromPrice(price, stx.chart.panel);
+        x = x > stx.chart.panel.bottom - 60 ? x - 18 : x + 18;
+        return x;
     }
 
     @computed get timeUnit_display() {
