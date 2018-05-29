@@ -6,7 +6,8 @@ import {
     SettingIcon,
     PositionLeftIcon,
     PositionBottomIcon,
-    BackIcon
+    BackIcon,
+    CloseIcon
 } from './Icons.jsx';
 import '../../sass/components/_ciq-chart-setting.scss';
 
@@ -23,12 +24,16 @@ const ChartSetting = ({
     setTheme,
     candleCountdown,
     showCandleCountdown,
+    closeMenu,
     assetInformation,
     setAssetInformation
 }) => {
     const renderMain = () => {
         return <div>
-            <div className='title'> {t.translate('Settings')} </div>
+            <div className='title'>
+                <div className="title-text"> {t.translate('Settings')} </div>
+                <CloseIcon className="icon-close-menu" onClick={ () => closeMenu() } />
+            </div>
             <div className='body'>
                 <div className="ciq-list ciq-list-setting">
                     {/*<div className="ciq-item">
@@ -136,6 +141,7 @@ export default connect(({chartSetting: s,assetInformation: ai}) => ({
     setTheme: s.setTheme,
     candleCountdown: s.candleCountdown,
     showCandleCountdown: s.showCandleCountdown,
+    closeMenu: s.menu.onTitleClick,
     assetInformation: ai.visible,
     setAssetInformation: ai.setVisible,
 }))(ChartSetting);

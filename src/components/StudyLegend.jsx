@@ -11,13 +11,14 @@ class StudyLegend extends Component {
     }
 
     render() {
-        const {isOpened, setOpen, clearStudies, activeStudies, Menu, menuOpen, StudyCategoricalDisplay, onCloseMenu} = this.props;
+        const {isOpened, setOpen, clearStudies, activeStudies, Menu, menuOpen, StudyCategoricalDisplay, onCloseMenu, isMobile} = this.props;
 
         return (
             <Menu
                 className="ciq-menu ciq-studies collapse"
                 isOpened={isOpened}
                 setOpen={setOpen}
+                isMobile={isMobile}
             >
                 <Menu.Title>
                     <IndicatorIcon
@@ -36,15 +37,16 @@ class StudyLegend extends Component {
 }
 
 export default connect(
-    ({studies}) => ({
-        isOpened: studies.open,
-        setOpen: studies.setOpen,
-        activeStudies: studies.activeStudies,
-        clearStudies: studies.clearStudies,
-        cleanUp: studies.cleanUp,
-        Menu: studies.menu.connect(Menu),
-        menuOpen: studies.menu.open,
-        StudyCategoricalDisplay: studies.categoricalDisplay.connect(CategoricalDisplay),
-        onCloseMenu: studies.menu.onTitleClick,
+    ({studies: st}) => ({
+        isOpened: st.open,
+        setOpen: st.setOpen,
+        activeStudies: st.activeStudies,
+        clearStudies: st.clearStudies,
+        cleanUp: st.cleanUp,
+        Menu: st.menu.connect(Menu),
+        menuOpen: st.menu.open,
+        StudyCategoricalDisplay: st.categoricalDisplay.connect(CategoricalDisplay),
+        onCloseMenu: st.menu.onTitleClick,
+        isMobile: st.categoricalDisplay.isMobile
     })
 )(StudyLegend);
