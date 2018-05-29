@@ -86,11 +86,6 @@
 		height: auto;
         margin-top: 5px;
         bottom: 5em;
-	    visibility: hidden;
-	    transform: translateX( -50% );
-	    left: 50%;
-    	@include dialog-transition();
-		@include transition( opacity .20s 0s);
 		@include box-shadow (0px, 2px, 4px, rgba(0, 0, 0, .2));
 		@include border-radius();
 		@include themify($themes) {
