@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 
 import React from 'react';
+import { CSSTransition } from 'react-transition-group';
 import Menu from './Menu.jsx';
 import { connect } from '../store/Connect';
 import { Switch } from './Form.jsx';
@@ -104,12 +105,24 @@ const ChartSetting = ({
                 />
             </Menu.Title>
             <Menu.Body>
-                <div className={`cq-menu-container ${view == '' ? 'active' : ''}`}>
+
+                <CSSTransition
+                    in={view === ''}
+                    timeout={300}
+                    classNames="cq-menu-container"
+                    unmountOnExit
+                >
                     {renderMain()}
-                </div>
-                <div className={`cq-menu-container ${view == 'language' ? 'active' : ''}`}>
+                </CSSTransition>
+
+                <CSSTransition
+                    in={view === 'language'}
+                    timeout={300}
+                    classNames="cq-menu-container"
+                    unmountOnExit
+                >
                     {renderLanguage()}
-                </div>
+                </CSSTransition>
 
             </Menu.Body>
         </Menu>

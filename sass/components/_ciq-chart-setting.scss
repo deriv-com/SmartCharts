@@ -6,23 +6,30 @@
             width: 280px;
             height: 200px;
             .cq-menu-container{
+                transition: opacity 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.1s;
+            }
+            .cq-menu-container-enter {
+                opacity: 0.01;
+                z-index: 0;
+                height: auto;
+            }
+            .cq-menu-container-enter-done {
+                opacity: 1;
+                z-index: 9;
+                height: auto;
+            }
+            .cq-menu-container-exit {
+                opacity: 1;
+            }
+            .cq-menu-container-exit-active {
                 opacity: 0;
-                z-index: -9;
-                pointer-events: none;
-                height: 0px;
-                transition: pointer-events 0s ease-in-out 0s,
-                    opacity 0.2s ease-in-out 0.1s;
-                &.active{
-                    pointer-events: initial;
-                    opacity: 1;
-                    z-index: 9;
-                    height: auto;
-                }
+                height: 0;
             }
         }
     }
     .cq-menu-dropdown {
         height: 0px;
+        width: 280px;
         @include themify($themes) {
             color: themed('defaultTextStrong');
         }
