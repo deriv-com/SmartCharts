@@ -59,7 +59,7 @@
             left: -10em;
         }
     }
-    .ciq-menu{    
+    .ciq-menu{
         cq-menu-dropdown,
         .cq-menu-dropdown {
             opacity: 0;
@@ -149,7 +149,7 @@
                 z-index: 4 !important;
                 @include transition(none !important);
                 &.open{
-                    transform: translateY(1.5%);
+                    transform: translateY(0);
                     margin: 0px;
                     bottom: 0em;
                 }
