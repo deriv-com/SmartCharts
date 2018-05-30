@@ -31,14 +31,15 @@ const ChartSetting = ({
     assetInformation,
     setAssetInformation,
 }) => {
-    const renderMain = () => (<div>
-        <div className="title">
-            <div className="title-text"> {t.translate('Settings')} </div>
-            <CloseIcon className="icon-close-menu" onClick={() => closeMenu()} />
-        </div>
-        <div className="body">
-            <div className="ciq-list ciq-list-setting">
-                {/* <div className="ciq-item">
+    const renderMain = () => (
+        <div>
+            <div className="title">
+                <div className="title-text"> {t.translate('Settings')} </div>
+                <CloseIcon className="icon-close-menu" onClick={() => closeMenu()} />
+            </div>
+            <div className="body">
+                <div className="ciq-list ciq-list-setting">
+                    {/* <div className="ciq-item">
                         <span className="ciq-icon-text">{t.translate('Position')}</span>
                         <div className="ciq-action">
                             <PositionLeftIcon
@@ -48,65 +49,67 @@ const ChartSetting = ({
                         </div>
                     </div>
                     */}
-                <div className="ciq-list-item">
-                    <span className="ciq-icon-text">{t.translate('Dark Mode')}</span>
-                    <div className="ciq-action">
-                        <Switch
-                            value={(theme == 'dark')}
-                            onChange={setTheme}
-                        />
+                    <div className="ciq-list-item">
+                        <span className="ciq-icon-text">{t.translate('Dark Mode')}</span>
+                        <div className="ciq-action">
+                            <Switch
+                                value={(theme == 'dark')}
+                                onChange={setTheme}
+                            />
+                        </div>
                     </div>
-                </div>
-                <div className="ciq-list-item">
-                    <span className="ciq-icon-text">{t.translate('Candle Countdown')}</span>
-                    <div className="ciq-action">
-                        <Switch
-                            value={candleCountdown}
-                            onChange={showCandleCountdown}
-                        />
+                    <div className="ciq-list-item">
+                        <span className="ciq-icon-text">{t.translate('Candle Countdown')}</span>
+                        <div className="ciq-action">
+                            <Switch
+                                value={candleCountdown}
+                                onChange={showCandleCountdown}
+                            />
+                        </div>
                     </div>
-                </div>
-                <div className="ciq-list-item">
-                    <span className="ciq-icon-text">{t.translate('Asset Information')}</span>
-                    <div className="ciq-action">
-                        <Switch
-                            value={assetInformation}
-                            onChange={setAssetInformation}
-                        />
+                    <div className="ciq-list-item">
+                        <span className="ciq-icon-text">{t.translate('Asset Information')}</span>
+                        <div className="ciq-action">
+                            <Switch
+                                value={assetInformation}
+                                onChange={setAssetInformation}
+                            />
+                        </div>
                     </div>
-                </div>
-                <div
-                    className="ciq-list-item ciq-list-item-lng"
-                    onClick={() => setView('language')}
-                >
-                    <span className="ciq-icon-text">{t.translate('Language')}</span>
-                    <div className="ciq-action">
-                        {selectedLanguage.icon}
+                    <div
+                        className="ciq-list-item ciq-list-item-lng"
+                        onClick={() => setView('language')}
+                    >
+                        <span className="ciq-icon-text">{t.translate('Language')}</span>
+                        <div className="ciq-action">
+                            {selectedLanguage.icon}
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-                              </div>);
-    const renderLanguage = () => (<div>
-        <div className="title">
-            <BackIcon
-                onClick={() => setView()}
-            />
-            {t.translate('Language')}
-        </div>
-        <div className="body">
-            <div className="ciq-list ciq-list-language">
-                {languages.map((language, index) => (<div
-                    className={`ciq-list-item ${(selectedLanguage.key == language.key) ? 'selected' : ''}`}
-                    key={index}
-                    onClick={() => setLanguage(language)}
-                >
-                    {language.icon}
-                    <span className="ciq-icon-text">{language.name}</span>
-                                                     </div>))}
+        </div>);
+    const renderLanguage = () => (
+        <div>
+            <div className="title">
+                <BackIcon
+                    onClick={() => setView()}
+                />
+                {t.translate('Language')}
             </div>
-        </div>
-                                  </div>);
+            <div className="body">
+                <div className="ciq-list ciq-list-language">
+                    {languages.map((language, index) => (
+                        <div
+                            className={`ciq-list-item ${(selectedLanguage.key == language.key) ? 'selected' : ''}`}
+                            key={index}
+                            onClick={() => setLanguage(language)}
+                        >
+                            {language.icon}
+                            <span className="ciq-icon-text">{language.name}</span>
+                        </div>))}
+                </div>
+            </div>
+        </div>);
     return (
         <Menu className="cq-chart-setting">
             <Menu.Title>

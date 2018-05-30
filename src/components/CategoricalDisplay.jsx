@@ -33,10 +33,11 @@ const CategoricalDisplay = ({
      * On mobile mode, this part appear on the top of dialog
      * @return HTML
      */
-    const renderMobileTitle = () => (isMobile ? <div className="cq-mobile-title">
-        <div className="mobile-title">{dialogTitle}</div>
-        <CloseIcon className="icon-close-menu" onClick={() => closeMenu()} />
-                                                </div> : '');
+    const renderMobileTitle = () => (isMobile ?
+        <div className="cq-mobile-title">
+            <div className="mobile-title">{dialogTitle}</div>
+            <CloseIcon className="icon-close-menu" onClick={() => closeMenu()} />
+        </div> : '');
     const renderIcon = (item) => {
         if (!item.itemId) { return ''; }
         const ItemIcon = ItemIconMap[item.itemId] || SymbolPlaceholderIcon;
@@ -51,14 +52,14 @@ const CategoricalDisplay = ({
         />);
     };
 
-    const renderLeft = item =>
-        (<div className="left">
+    const renderLeft = item => (
+        <div className="left">
             {renderIcon(item)}
             {renderText(item)}
-         </div>);
+        </div>);
 
-    const renderItem = (item, k) =>
-        (<div
+    const renderItem = (item, k) => (
+        <div
             className={`cq-item ${item.selected ? 'selected ' : ''}`}
             onClick={e => item.enabled && onSelectItem(item.dataObject, e)}
             disabled={!item.enabled}
@@ -69,10 +70,10 @@ const CategoricalDisplay = ({
                 {(item.dataObject && item.dataObject.exchange_is_open == 0) ? <span className="closed-market">{t.translate('CLOSED')}</span> : ''}
                 {renderFavorite(item)}
             </div>
-         </div>);
+        </div>);
 
-    const renderActiveItem = (item, k) =>
-        (<div
+    const renderActiveItem = (item, k) => (
+        <div
             className="cq-active-item"
             key={k}
         >
@@ -96,7 +97,7 @@ const CategoricalDisplay = ({
                 </span>}
                 {renderFavorite(item)}
             </div>
-         </div>);
+        </div>);
 
     return (
         <div className="cq-categorical-display">
