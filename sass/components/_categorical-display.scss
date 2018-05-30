@@ -1,3 +1,4 @@
+
 .cq-categorical-display {
     width: 632px;
     padding: 0 !important;
@@ -32,9 +33,8 @@
                 @include box-shadow (0px, 0, 2px, themed('activeColor'));
             }
             > .icon-reset{
-                right: 2px;
+                right: 4px;
                 opacity: 1;
-                @include svg-icon-color('controlText');
             }
         }
         > input {
@@ -48,7 +48,8 @@
             @include border-radius();
             @include placeholder {
                 @include themify($themes) {
-                    color: themed('controlText');
+                    opacity: 0.8;
+                    color: themed('defaultTextSubtle');
                 }
             }
             @include themify($themes) {
@@ -62,11 +63,24 @@
         }
         > .icon-reset{
             position: absolute;
-            right: -2px;
+            right: 0px;
             opacity: 0;
             left: auto;
+            height: 18px;
+            width: 18px;
+            line-height: 26px;
+            font-size: 9px;
+            top: 7px;
+            @include border-radius(50%);
             @include transition(right,opacity 0.2s ease-in-out);
-
+            @include svg-icon-color('defaultMain');
+            @include themify($themes) {
+                background: themed('defaultTextSubtle');
+            }
+            > svg {
+                width: 14px !important;
+                height: 14px !important;
+            }
         }
         > input:focus + .ic-icon svg path {
             @include themify($themes) {
@@ -109,7 +123,8 @@
         cursor: pointer;
         @include transition(background-color 0.3s);
         @include box-sizing(border-box);
-        &:hover, &.cq-active-filter {
+        &:hover,
+        &.cq-active-filter {
             @include themify($themes) {
                 color: themed('defaultTextActive');
             }
@@ -153,8 +168,9 @@
         }
         &.cq-active-filter {
             font-weight: 800;
+            border-right: 2px solid;
             @include themify($themes) {
-                border-right: 2px solid themed('activeColor');
+                border-color: themed('activeColor') !important;
                 background-color: themed('listBgActive');
             }
         }
@@ -167,7 +183,6 @@
             margin-right: 1.3em;
         }
         .cq-filter-text{
-
         }
     }
     .cq-item, .cq-active-item {
@@ -219,17 +234,20 @@
         vertical-align: top;
     }
     .empty-category {
-        padding: 0.2em 1.2em;
+        padding: 0.9em 1.2em;
     }
     .cq-categorical-footer{
         width: 100%;
-        height: 3em;
+        height: 4em;
         display: none;
+        @include themify($themes) {
+            border-top: 1px solid themed('defaultBorder');
+        }
         .btn-categorical-display-close{
             border: none;
             background: transparent;
             font-weight: bold;
-            padding: 0.78em 1em;
+            padding: 1.3em 1em;
             width: 100%;
             cursor: pointer;
             @include themify($themes) {
@@ -237,6 +255,9 @@
                 @include box-shadow(0,0,0,themed('defaultMain'));
             }
         }
+    }
+    .cq-mobile-title{
+        border-bottom: none !important;
     }
 }
 
@@ -296,33 +317,13 @@
 }
 
 .smartcharts-mobile{
-    .cq-mobile-title{
-        @include themify($themes) {
-            background: themed('defaultMain');
-        }
-        .mobile-title{
-            display: block;
-            font-size: 16px;
-            line-height: 40px;
-            font-weight: 400;
-            padding: 0 .7em;
-            @include themify($themes) {
-                color: themed('defaultTextStrong');
-            }
-        }
-        .icon-close-menu{
-            position: absolute;
-            top: 4px;
-            right: 8px;
-        }
-    }
     .cq-categorical-display{
         flex-direction: column;
         width: 100%;
         .cq-lookup-filters {
             width: 100%;
             border-right: none;
-            height: 7.8em;
+            height: 7.75em;
             @include themify($themes) {
                 border-bottom: 1px solid themed('defaultBorder');
             }
@@ -330,30 +331,32 @@
         .cq-lookup-input  {
             margin: 1.2em 1em 0.5em 1em;
             position: relative;
+            @include border-radius();
             @include themify($themes) {
                 border: 1px solid themed('defaultBorder');
             }
-            @include border-radius();
         }
         .cq-scroll-panel{
             width: 100%;
-            height: calc( 100vh - 7.8em );
+            height: calc( 100vh - 13em );
         }
         .cq-filter-panel{
             display: flex;
             justify-content: space-around;
+            border-bottom: 1px solid transparent;
+            @include themify($themes) {
+                border-bottom-color: themed('defaultBorder');
+            }
             .cq-filter {
-                border:none;
+                border-right: none;
                 background: transparent;
                 padding: 0px 20px;
                 line-height: 3em;
+                &.cq-active-filter {
+                    border-bottom: 2px solid;
+                }
                 > .ic-icon{
                     margin: 0px;
-                }
-                &.cq-active-filter{
-                    @include themify($themes) {
-                        border-bottom: 2px solid themed('activeColor');
-                    }
                 }
                 .cq-filter-text{
                     display: none;
