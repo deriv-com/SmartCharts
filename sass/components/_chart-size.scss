@@ -23,6 +23,13 @@
         display: none; /* TODO */
     }
 }
+.cq-chart-control-left{
+    .cq-chart-size {
+        width: 100px;
+        flex-flow: column;
+    }
+}
+
 /* Mobile Style */
 .smartcharts-mobile {
     .cq-chart-size {

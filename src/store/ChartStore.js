@@ -9,6 +9,7 @@ import '../components/ui/Animation';
 import { BinaryAPI, Feed } from '../feed';
 import {createObjectFromLocalStorage} from '../utils';
 import ResizeObserver from 'resize-observer-polyfill';
+import ChartSettingStore from './ChartSettingStore';
 
 // import '../AddOns';
 
@@ -18,6 +19,7 @@ class ChartStore {
     constructor(mainStore) {
         this.id = ++ChartStore._id_counter;
         this.mainStore = mainStore;
+        this.chartSettingStore = new ChartSettingStore(mainStore);
     }
 
     onSymbolChange = null;
@@ -35,6 +37,7 @@ class ChartStore {
     @observable barrierJSX;
     @observable chartPanelTop = '0px';
     @observable isMobile = false;
+    chartSettingStore = null;
 
     @action.bound setActiveSymbols(activeSymbols) {
         this.activeSymbols = this.processSymbols(activeSymbols);
@@ -93,12 +96,14 @@ class ChartStore {
         );
     }
 
-    updateHeight() {
+    updateHeight(position) {
         const ciqNode = this.rootNode.querySelector('.ciq-chart');
         const chartControls = ciqNode.querySelector('.cq-chart-controls');
-        let ciqHeight = ciqNode.offsetHeight - chartControls.offsetHeight;
         const containerNode = this.rootNode.querySelector('.chartContainer.primary');
-        containerNode.style.height = `${ciqHeight}px`;
+        const panelPosition = position ? position : this.chartSettingStore.position;
+        // height of chart control panel
+        const offsetHeight = (panelPosition == 'left') ? 0 : 50;
+        containerNode.style.height = `${ciqNode.offsetHeight - offsetHeight}px`;
     }
 
     resizeScreen = () => {

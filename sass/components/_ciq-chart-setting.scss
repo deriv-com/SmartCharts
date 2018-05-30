@@ -23,9 +23,6 @@
     }
     .cq-menu-dropdown {
         height: 0px;
-        @include themify($themes) {
-            color: themed('defaultTextStrong');
-        }
         .cq-menu-container{
             height: 0px;
             &.active{
@@ -71,6 +68,26 @@
                 &.ciq-list-item-lng{
                     cursor: pointer;
                 }
+                &.ciq-list-item-position{
+                    .ciq-action{
+                        .ic-icon{ 
+                            rect{
+                                @include themify($themes) {stroke: themed('defaultBorder');}
+                            }
+                            path{
+                                @include themify($themes) {fill: themed('defaultBorder');}
+                            }
+                            &.active{
+                                rect{
+                                    @include themify($themes) {stroke: themed('activeColor');}
+                                }
+                                path{
+                                    @include themify($themes) {fill: themed('activeColor');}
+                                }
+                            }
+                        }
+                    }
+                }
                 .ciq-icon-text {
                     width: calc( 100% - 60px );
                 }
@@ -112,6 +129,24 @@
         }
     }
 }
+.cq-chart-control-left {
+    .cq-chart-setting {
+        .cq-menu-dropdown {
+            transform: translateX(4.5em) translateY(0%) !important;
+            @include themify($themes) {
+                color: themed('defaultTextStrong');
+            }
+            &.cq-menu-dropdown-enter-done,
+            &.open{ // class open should be removed after `dialog-animation` merged
+                transform: translateX(4.5em) translateY(0%) !important;
+            }
+            &.cq-menu-dropdown-exit-done{
+                transform: translateX(.5em) translateY(0%) !important;
+            }
+        }
+    }
+}
+
 /* Mobile Style */
 .smartcharts-mobile {
     .cq-chart-setting {

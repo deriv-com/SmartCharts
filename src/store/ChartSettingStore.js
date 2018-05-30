@@ -1,5 +1,6 @@
 import { observable, action, reaction, computed, autorunAsync, when } from 'mobx';
 import MenuStore from './MenuStore';
+import ChartStore from './ChartStore';
 import React from 'react';
 import {createObjectFromLocalStorage} from '../utils';
 import { FlagIcons } from './../components/Icons.jsx';
@@ -9,6 +10,7 @@ export default class ChartSettingStore {
         this.defaultLanguage = this.languages[0];
         this.mainStore = mainStore;
         this.menu = new MenuStore({getContext: () => this.mainStore.chart.context});
+        // this.chart = new ChartStore({getContext: () => this.mainStore.chart.context});
         this.restoreSetting();
     }
 
@@ -108,7 +110,6 @@ export default class ChartSettingStore {
             theme: this.theme
         }));
     }
-
     @action.bound setView(view) {
         this.view = view ? view : '';
     }
@@ -128,6 +129,14 @@ export default class ChartSettingStore {
         this.mainStore.chart.stxx.clearStyles();
         this.saveSetting();
     }
+
+    @action.bound setPosition(value) {
+        this.position = value;
+        this.mainStore.chart.stxx.clearStyles();
+        this.saveSetting();
+        this.mainStore.chart.updateHeight(value);
+    }
+
 }
 
 

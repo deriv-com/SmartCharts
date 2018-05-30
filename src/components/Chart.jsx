@@ -59,6 +59,7 @@ class Chart extends Component {
             topWidgets,
         } = this.props;
 
+
         const currentLang = lang || ((setting && setting.language) ? setting.language.key : 'en');
         t.setLanguage(currentLang);
 
@@ -76,7 +77,7 @@ class Chart extends Component {
 
         return (
             <cq-context ref={(root) => { this.root = root; }} class={contextClassName()}>
-                <div className={isMobile ? 'smartcharts-mobile' : ''}>
+                <div className={`${isMobile ? 'smartcharts-mobile' : ''} cq-chart-control-${((setting && setting.position) ? setting.position : 'bottom')}`}>
                     <div className="ciq-chart-area">
                         <div className="ciq-chart">
                             <RenderInsideChart at='holder'>

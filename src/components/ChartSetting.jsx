@@ -17,6 +17,8 @@ const ChartSetting = ({
     menuOpen,
     selectedLanguage,
     languages,
+    position,
+    setPosition,
     setView,
     view,
     setLanguage,
@@ -34,16 +36,19 @@ const ChartSetting = ({
             </div>
             <div className='body'>
                 <div className="ciq-list ciq-list-setting">
-                    {/*<div className="ciq-item">
+                    <div className="ciq-list-item ciq-list-item-position">
                         <span className="ciq-icon-text">{t.translate('Position')}</span>
                         <div className="ciq-action">
                             <PositionLeftIcon
+                            onClick={() => setPosition('left')}
+                            className={`${position == 'left' ? 'active' : ''}`}
                             />
                             <PositionBottomIcon
+                            onClick={() => setPosition('bottom')}
+                            className={`${position == 'bottom' ? 'active' : ''}`}
                             />
                         </div>
                     </div>
-                    */}
                     <div className="ciq-list-item">
                         <span className="ciq-icon-text">{t.translate('Dark Mode')}</span>
                         <div className="ciq-action">
@@ -123,6 +128,8 @@ export default connect(({chartSetting: s,assetInformation: ai}) => ({
     menuOpen: s.menu.dialog.open,
     selectedLanguage: s.language,
     languages: s.languages,
+    position: s.position,
+    setPosition: s.setPosition,
     setView: s.setView,
     view: s.view,
     setLanguage: s.setLanguage,
