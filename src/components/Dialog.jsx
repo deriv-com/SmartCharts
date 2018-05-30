@@ -1,11 +1,10 @@
-import React, { Component } from 'react';
-import {connect} from '../store/Connect';
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+import React  from 'react';
 import '../../sass/components/_ciq-dialog.scss';
 
 const Dialog = ({
     open,
     children,
-    height,
     onContainerClick,
     className,
     isMobile,
@@ -13,10 +12,10 @@ const Dialog = ({
     chartContainerHeight,
     chartHeight,
 }) => {
-    const inner_style = ( isMobile && open ) ? {
+    const inner_style = (isMobile && open) ? {
         // reduce chart control panel height except in full screen mode
         height: `${isFullscreen ? chartHeight : chartContainerHeight}px`,
-        width: window.innerWidth+'px'
+        width: `${window.innerWidth}px`,
     } : {};
 
     return (

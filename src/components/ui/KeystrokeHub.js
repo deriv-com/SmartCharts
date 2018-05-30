@@ -1,3 +1,4 @@
+/* eslint-disable prefer-destructuring */
 import CIQ from 'chartiq';
 import Helper from './Helper';
 import Keystroke from './Keystroke';
@@ -24,7 +25,7 @@ class KeystrokeHub extends Helper {
         this.params = params || {};
 
         KeystrokeHub.instance = this;
-        let self = this;
+        const self = this;
 
         function handler() {
             return (...args) => {
@@ -41,7 +42,7 @@ class KeystrokeHub extends Helper {
      * @return {boolean}     Return true if you captured the key
      */
     static defaultHotKeys(key, hub) {
-        let stx = hub.context.stx;
+        const stx = hub.context.stx;
         let push = 1;
         switch (key) {
         case 'up':
@@ -64,7 +65,7 @@ class KeystrokeHub extends Helper {
                 stx.zoomOut();
             } else {
                 push = 1;
-                if (stx.shift || hub.capsLock) {push = Math.max(5, 5 * (8 - Math.round(stx.layout.candleWidth)));}
+                if (stx.shift || hub.capsLock) { push = Math.max(5, 5 * (8 - Math.round(stx.layout.candleWidth))); }
                 if (stx.chart.scroll + push >= stx.chart.dataSet.length) { push = stx.chart.dataSet.length - stx.chart.scroll; }
                 stx.chart.scroll += push;
                 stx.draw();
@@ -76,7 +77,7 @@ class KeystrokeHub extends Helper {
                 stx.zoomIn();
             } else {
                 push = 1;
-                if (stx.shift || hub.capsLock) {push = Math.max(5, 5 * (8 - Math.round(stx.layout.candleWidth)));}
+                if (stx.shift || hub.capsLock) { push = Math.max(5, 5 * (8 - Math.round(stx.layout.candleWidth))); }
                 stx.chart.scroll -= push;
                 stx.draw();
                 stx.headsUpHR();
@@ -122,10 +123,10 @@ class KeystrokeHub extends Helper {
      */
     processKeyStrokeClaims(hub, key, e, keystroke) {
         for (let i = claims.length - 1; i > -1; i--) {
-            let helper = claims[i].helper;
-            let response = helper.keyStroke(hub, key, e, keystroke);
+            const helper = claims[i].helper;
+            const response = helper.keyStroke(hub, key, e, keystroke);
             if (response) {
-                if (!response.allowDefault) {e.preventDefault();}
+                if (!response.allowDefault) { e.preventDefault(); }
                 return true;
             }
         }
@@ -152,9 +153,9 @@ class KeystrokeHub extends Helper {
      * @private
      */
     handler(obj) {
-        let stx = this.context.stx;
-        if (stx.editingAnnotation) {return;}
-        let e = obj.e,
+        const stx = this.context.stx;
+        if (stx.editingAnnotation) { return; }
+        const e = obj.e,
             key = obj.key,
             keystroke = obj.keystroke,
             targetTagName = obj.e.target.tagName;
@@ -176,17 +177,17 @@ class KeystrokeHub extends Helper {
             break;
         }
         if (!CIQ.ChartEngine.drawingLine) {
-            if (this.processKeyStrokeClaims(this, key, e, keystroke)) {return;}
+            if (this.processKeyStrokeClaims(this, key, e, keystroke)) { return; }
         }
 
         if (key !== 'escape') {
-            if (this.context.isModal()) {return;}
+            if (this.context.isModal()) { return; }
         }
 
-        if (targetTagName === 'INPUT' || targetTagName === 'TEXTAREA') {return;} // target is not the chart
+        if (targetTagName === 'INPUT' || targetTagName === 'TEXTAREA') { return; } // target is not the chart
 
         if (this.params.cb) {
-            if (this.params.cb(key, this)) {e.preventDefault();}
+            if (this.params.cb(key, this)) { e.preventDefault(); }
         }
     }
 }

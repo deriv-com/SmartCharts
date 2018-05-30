@@ -1,4 +1,4 @@
-import { observable, action, computed, reaction } from 'mobx';
+import { action, computed, reaction } from 'mobx';
 import { connect } from './Connect';
 import DialogStore from './DialogStore';
 import Dialog from '../components/Dialog.jsx';
@@ -20,7 +20,7 @@ export default class MenuStore {
 
     blurInput() {
         const stx = this.context.stx;
-        if(this.open === false) {
+        if (this.open === false) {
             document.activeElement.blur();
             stx.modalEnd();
         } else {
