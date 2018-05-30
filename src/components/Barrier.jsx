@@ -6,7 +6,6 @@ import Shade from './Shade.jsx';
 
 const Barrier = ({
     barrierColor,
-    visible,
     HighPriceLine,
     LowPriceLine,
     aboveShade,

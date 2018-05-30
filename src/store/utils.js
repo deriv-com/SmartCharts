@@ -29,7 +29,7 @@ export function sameBar(bar1, bar2) {
 }
 
 export function findAncestor(el, cls) {
-    while ((el = el.parentElement) && !el.classList.contains(cls)) {} // eslint-disable-line no-cond-assign
+    while ((el = el.parentElement) && !el.classList.contains(cls)) {} // eslint-disable-line no-cond-assign,no-empty
     return el;
 }
 

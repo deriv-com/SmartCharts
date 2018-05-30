@@ -1,5 +1,5 @@
 import html2canvas from 'html2canvas';
-import { observable, action, reaction, computed, autorunAsync, when } from 'mobx';
+import { observable, action, reaction, computed, when } from 'mobx';
 import MenuStore from './MenuStore';
 import { downloadFileInBrowser, findAncestor } from './utils';
 
@@ -72,7 +72,7 @@ export default class ShareStore {
                 }
                 self.loading = false;
             })
-            .catch((error) => {
+            .catch(() => {
                 self.loading = false;
                 self.urlGenerated = false;
             });
@@ -174,7 +174,7 @@ export default class ShareStore {
         let successful = false;
         try {
             successful = document.execCommand('copy');
-        } catch (e) { }
+        } catch (e) { } // eslint-disable-line no-empty
         return successful;
     }
     copyWithNavigator() {

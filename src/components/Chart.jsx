@@ -1,7 +1,6 @@
 /* eslint-disable no-new, react/jsx-indent, react/no-danger, react/jsx-indent-props */
 import PropTypes from 'prop-types';
 import React, { Component, Fragment } from 'react';
-import CIQ from 'chartiq'; // eslint-disable-line
 import RenderInsideChart from './RenderInsideChart.jsx';
 import ComparisonList from './ComparisonList.jsx';
 import ChartTitle from './ChartTitle.jsx';
@@ -99,6 +98,7 @@ class Chart extends Component {
                         </div>
                     </div>
                     <DrawToolsSettingsDialog />
+                    <AggregateChartSettingsDialog />
                     <StudySettingsDialog />
                     <Notification />
                 </div>

@@ -1,5 +1,5 @@
-/* eslint-disable jsx-a11y/no-static-element-interactions react/no-array-index-key */
-import React, { Component, Fragment } from 'react';
+/* eslint-disable react/no-array-index-key */
+import React, { Fragment } from 'react';
 import {
     CategoryIconMap, ItemIconMap, SearchIcon,
     SymbolPlaceholderIcon, ActiveOptionsIconMap, FavoriteIcon, CloseIcon,
