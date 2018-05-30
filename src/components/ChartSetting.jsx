@@ -130,5 +130,5 @@ export default connect(({chartSetting: s,assetInformation: ai}) => ({
     setTheme: s.setTheme,
     closeMenu: s.menu.onTitleClick,
     assetInformation: ai.visible,
-    setAssetInformation: ai.setVisible,
+    setAssetInformation: ai.setVisible
 }))(ChartSetting);
