@@ -1,4 +1,4 @@
-import { // eslint-disable-line import/no-extraneous-dependencies
+import { // eslint-disable-line import/no-extraneous-dependencies,import/no-unresolved
     SmartChart,
     // Barrier,
     // TradeStartLine,
