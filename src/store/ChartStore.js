@@ -72,7 +72,7 @@ class ChartStore {
     }
 
     restoreDrawings(stx, symbol) {
-        let drawings = createObjectFromLocalStorage(symbol);
+        const drawings = createObjectFromLocalStorage(symbol);
         if (drawings) {
             stx.importDrawings(drawings);
             stx.draw();
@@ -95,7 +95,7 @@ class ChartStore {
     updateHeight() {
         const ciqNode = this.rootNode.querySelector('.ciq-chart');
         const chartControls = ciqNode.querySelector('.cq-chart-controls');
-        let ciqHeight = ciqNode.offsetHeight - chartControls.offsetHeight;
+        const ciqHeight = ciqNode.offsetHeight - chartControls.offsetHeight;
         const containerNode = this.rootNode.querySelector('.chartContainer.primary');
         containerNode.style.height = `${ciqHeight}px`;
     }
@@ -188,7 +188,7 @@ class ChartStore {
 
         const context = new Context(stxx, this.rootNode);
 
-        new KeystrokeHub(document.querySelector('body'), context, {
+        new KeystrokeHub(document.querySelector('body'), context, { // eslint-disable-line no-new
             cb: KeystrokeHub.defaultHotKeys,
         });
 
@@ -307,11 +307,11 @@ class ChartStore {
 
     @action.bound updateComparisons() {
         if (!this.context) { return; }
-        let stx = this.context.stx;
+        const stx = this.context.stx;
         const comparisonSymbolsKeys = Object.keys(stx.chart.series);
         if (comparisonSymbolsKeys.length !== this.comparisonSymbols.length) {
             const comparisons = [];
-            let q = stx.currentQuote();
+            const q = stx.currentQuote();
             if (q) {
                 for (const sybl of comparisonSymbolsKeys) {
                     const srs = stx.chart.series[sybl];
@@ -350,7 +350,7 @@ class ChartStore {
     }
 
     processSymbols(symbols) {
-        let processedSymbols = [];
+        const processedSymbols = [];
 
         // Stable sort is required to retain the order of the symbol name
         stableSort(symbols, (a, b) => a.submarket_display_name.localeCompare(b.submarket_display_name));
@@ -386,9 +386,9 @@ class ChartStore {
         if (this.activeSymbols.length <= 0 || !this.currentActiveSymbol) { return []; }
 
         const activeSymbols = this.activeSymbols;
-        let categorizedSymbols = [];
+        const categorizedSymbols = [];
         if (activeSymbols.length > 0) {
-            let first = activeSymbols[0];
+            const first = activeSymbols[0];
             const getSubcategory = d => ({
                 subcategoryName: d.submarket_display_name,
                 data: [],

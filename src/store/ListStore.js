@@ -42,10 +42,10 @@ export default class ListStore {
 
     scrollToElement(item) {
         const root = this.root;
-        let bottom = root.clientHeight;
-        let scrolled = root.scrollTop;
+        const bottom = root.clientHeight;
+        const scrolled = root.scrollTop;
 
-        let itemBottom = item.offsetTop + item.clientHeight;
+        const itemBottom = item.offsetTop + item.clientHeight;
         if (item.offsetTop > scrolled && itemBottom < bottom + scrolled) { return; }
         root.scrollTop = Math.max(itemBottom - bottom, 0);
     }

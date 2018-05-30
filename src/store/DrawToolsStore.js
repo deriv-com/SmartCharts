@@ -84,7 +84,7 @@ export default class DrawToolsStore {
     onRightClick = () => {
         for (const drawing of this.stx.drawingObjects) {
             if (drawing.highlighted && !drawing.permanent) {
-                let dontDeleteMe = drawing.abort(); // eslint-disable-line no-unused-vars
+                const dontDeleteMe = drawing.abort(); // eslint-disable-line no-unused-vars
                 const parameters = CIQ.Drawing.getDrawingParameters(this.stx, drawing.name);
 
                 const typeMap = {
@@ -130,7 +130,7 @@ export default class DrawToolsStore {
     }
 
     @action.bound selectTool(id) {
-        let stx = this.context.stx;
+        const stx = this.context.stx;
         stx.clearMeasure(); // TODO remove this line
         stx.changeVectorType(id);
         this.menu.setOpen(false);

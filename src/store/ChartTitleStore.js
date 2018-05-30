@@ -53,7 +53,7 @@ export default class ChartTitleStore {
         this.isVisible = hasData || !this.isShowChartPrice;
         if (!hasData) { return; }
 
-        let internationalizer = stx.internationalizer;
+        const internationalizer = stx.internationalizer;
         let priceChanged = false;
 
         let todaysChange = 0;
@@ -61,7 +61,7 @@ export default class ChartTitleStore {
         let currentPrice = currentQuote ? currentQuote.Close : '';
         if (currentPrice) {
             currentPrice = currentPrice.toFixed(this.decimalPlaces);
-            let oldPrice = this.animatedPrice.price;
+            const oldPrice = this.animatedPrice.price;
             if (oldPrice !== currentPrice) {
                 priceChanged = true;
             }

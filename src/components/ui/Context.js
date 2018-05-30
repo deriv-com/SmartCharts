@@ -12,7 +12,7 @@ class Context {
         this.params = params || {};
         this.stx = stx;
         this.topNode = topNode;
-        let storage = Context.assembleContext(topNode);
+        const storage = Context.assembleContext(topNode);
         this.advertised = {};
         topNode.CIQ.UI.context = this;
         // Search through all of the components that have registered themselves. Call setContext() on each

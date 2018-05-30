@@ -35,7 +35,7 @@ export default class TimeperiodStore {
     countdownInterval = null;
     showCandleCountdown = (callFromSettings = false) => {
         const stx = this.context.stx;
-        let isTick = this.timeUnit == 'tick';
+        const isTick = this.timeUnit == 'tick';
         this.remain = null;
         if (this.countdownInterval) { clearInterval(this.countdownInterval); }
         if (this._injectionId)  { stx.removeInjection(this._injectionId); }
@@ -55,9 +55,9 @@ export default class TimeperiodStore {
         };
 
         const setRemain = () => {
-            let dataSet = stx.chart.dataSet;
+            const dataSet = stx.chart.dataSet;
             if (dataSet && dataSet.length != 0) {
-                let diff = new Date() - dataSet[dataSet.length - 1].DT;
+                const diff = new Date() - dataSet[dataSet.length - 1].DT;
                 this.remain = displayMilliseconds((getIntervalInSeconds(stx.layout) * 1000) - diff);
                 stx.draw();
             }

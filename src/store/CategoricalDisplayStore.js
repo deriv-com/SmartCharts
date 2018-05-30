@@ -139,12 +139,12 @@ export default class CategoricalDisplayStore {
 
 
     @computed get filteredItems() {
-        let filteredItems = toJS(this.getCategoricalItems());
+        const filteredItems = toJS(this.getCategoricalItems());
 
         if (this.favoritesId) {
             const favsCategory = toJS(this.favoritesCategory);
             const findFavItem = (category) => {
-                let foundItems = [];
+                const foundItems = [];
                 if (category.hasSubcategory) {
                     category.data.forEach((subcategory) => {
                         const foundSubItems = findFavItem(subcategory);
@@ -153,7 +153,7 @@ export default class CategoricalDisplayStore {
                 } else {
                     favsCategory.data.forEach((favItem) => {
                         if (typeof favItem === 'string') {
-                            let itemObj = category.data.find(item => item.itemId === favItem);
+                            const itemObj = category.data.find(item => item.itemId === favItem);
                             if (itemObj) {
                                 foundItems.push(itemObj);
                             }
@@ -163,7 +163,7 @@ export default class CategoricalDisplayStore {
                 return foundItems;
             };
 
-            let favsCategoryItem = favsCategory.data
+            const favsCategoryItem = favsCategory.data
                 .filter(favItem => (typeof favItem !== 'string'));
 
             filteredItems.forEach((category) => {
@@ -280,8 +280,8 @@ export default class CategoricalDisplayStore {
 
     setFavoriteById(id) {
         let foundItem = null;
-        for (let category of this.getCategoricalItems()) {
-            for (let item of category.data) {
+        for (const category of this.getCategoricalItems()) {
+            for (const item of category.data) {
                 if (item.itemId === id) {
                     foundItem = item;
                     break;

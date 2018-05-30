@@ -106,7 +106,7 @@ export default class StudyLegendStore {
             category: 'outputs',
         }));
         const parameters = helper.parameters.map((par) => {
-            let shared = {
+            const shared = {
                 title: t.translate(par.heading),
                 ...attributes[par.name],
                 category: 'parameters',
@@ -213,7 +213,7 @@ export default class StudyLegendStore {
         const stx = this.stx;
         const studies = [];
         Object.keys(stx.layout.studies).forEach((id) => {
-            let sd = stx.layout.studies[id];
+            const sd = stx.layout.studies[id];
             if (sd.customLegend) { return; }
 
             studies.push({

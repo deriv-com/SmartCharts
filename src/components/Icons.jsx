@@ -163,7 +163,7 @@ import OTCBadge from '../../sass/icons/active-symbols/ic-otcbadge.svg';
 import SmartFX from '../../sass/icons/active-symbols/ic-smartfx-placeholder.svg';
 
 const Wrapper = WrappedComponent => (props) => {
-    let { className, 'tooltip-title': tooltip, ...p } = props;
+    let { className, 'tooltip-title': tooltip, ...p } = props; // eslint-disable-line prefer-const
     className = `ic-icon ${className || ''}`;
 
     return (

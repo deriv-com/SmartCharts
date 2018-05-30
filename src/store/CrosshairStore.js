@@ -44,12 +44,12 @@ class Tooltip extends CIQ.Marker {
 
     static placementFunction(params) {
         const showOverBarOnly = false;
-        let offset = 30;
-        let stx = params.stx;
+        const offset = 30;
+        const stx = params.stx;
         for (let i = 0; i < params.arr.length; i++) {
-            let marker = params.arr[i];
-            let bar = stx.barFromPixel(stx.cx);
-            let quote = stx.chart.dataSegment[bar];
+            const marker = params.arr[i];
+            const bar = stx.barFromPixel(stx.cx);
+            const quote = stx.chart.dataSegment[bar];
             let goodBar;
             let overBar = true;
             let highPx,
@@ -189,21 +189,21 @@ class Tooltip extends CIQ.Marker {
             dupMap.Volume = 1;
         }
         if (this.showSeries) {
-            let renderers = stx.chart.seriesRenderers;
-            for (let renderer in renderers) {
-                let rendererToDisplay = renderers[renderer];
+            const renderers = stx.chart.seriesRenderers;
+            for (const renderer in renderers) {
+                const rendererToDisplay = renderers[renderer];
                 panel = stx.panels[rendererToDisplay.params.panel];
                 yAxis = rendererToDisplay.params.yAxis;
                 if (!yAxis && rendererToDisplay.params.shareYAxis) { yAxis = panel.yAxis; }
                 for (let id = 0; id < rendererToDisplay.seriesParams.length; id++) {
-                    let seriesParams = rendererToDisplay.seriesParams[id];
+                    const seriesParams = rendererToDisplay.seriesParams[id];
                     // if a series has a symbol and a field then it maybe a object chain
                     let sKey = seriesParams.symbol;
-                    let subField = seriesParams.field;
+                    const subField = seriesParams.field;
                     if (!sKey) {
                         sKey = subField;
                     } else if (subField && sKey != subField) { sKey = CIQ.createObjectChainNames(sKey, subField)[0]; }
-                    let display = seriesParams.display || seriesParams.symbol || seriesParams.field;
+                    const display = seriesParams.display || seriesParams.symbol || seriesParams.field;
                     if (sKey && !dupMap[display]) {
                         fields.push({
                             member: sKey,
@@ -217,10 +217,10 @@ class Tooltip extends CIQ.Marker {
             }
         }
         if (this.showStudies) {
-            for (let study in stx.layout.studies) {
+            for (const study in stx.layout.studies) {
                 panel = stx.panels[stx.layout.studies[study].panel];
                 yAxis = panel.yAxis; // after 4377 is merged: stx.getYAxisByName(panel, study);
-                for (let output in stx.layout.studies[study].outputMap) {
+                for (const output in stx.layout.studies[study].outputMap) {
                     if (output && !dupMap[output]) {
                         fields.push({
                             member: output,
@@ -256,9 +256,9 @@ class Tooltip extends CIQ.Marker {
         }
         const rows = [];
         for (let f = 0; f < fields.length; f++) {
-            let obj = fields[f];
-            let name = obj.member;
-            let displayName = obj.display;
+            const obj = fields[f];
+            const name = obj.member;
+            const displayName = obj.display;
             panel = obj.panel;
             yAxis = obj.yAxis;
             let labelDecimalPlaces = null;
@@ -278,12 +278,12 @@ class Tooltip extends CIQ.Marker {
             }
             let dsField = null;
             // account for object chains
-            let tuple = CIQ.existsInObjectChain(data, name);
+            const tuple = CIQ.existsInObjectChain(data, name);
             if (tuple) {
                 dsField = tuple.obj[tuple.member];
             } else if (name == 'Change') { dsField = data.Close - data.iqPrevClose; }
 
-            let fieldName = displayName.replace(/^(Result )(.*)/, '$2');
+            const fieldName = displayName.replace(/^(Result )(.*)/, '$2');
             if ((dsField || dsField === 0) &&
                 (name == 'DT' || typeof dsField !== 'object' || dsField.Close || dsField.Close === 0)
             ) {
@@ -376,7 +376,7 @@ class CrosshairStore {
     };
 
     onContextReady = () => {
-        let storedState = this.stx.layout.crosshair;
+        const storedState = this.stx.layout.crosshair;
         this.state = (typeof storedState !== 'number') ? 0 : storedState;
         this.init();
     };

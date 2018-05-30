@@ -135,14 +135,14 @@ export default class PriceLineStore {
         // snap the limit price to the desired interval if one defined
         let minTick = this.chart.yAxis.minimumPriceTick;
         if (!minTick) { minTick = 0.00000001; } // maximum # places
-        let numToRoundTo = 1 / minTick;
+        const numToRoundTo = 1 / minTick;
         price = Math.round(price * numToRoundTo) / numToRoundTo;
 
         return price;
     }
 
     _priceFromLocation(y) {
-        let price = this.stx.valueFromPixel(
+        const price = this.stx.valueFromPixel(
             y + this.chart.panel.top,
             this.chart.panel,
         );
@@ -157,7 +157,7 @@ export default class PriceLineStore {
         // keep line on chart even if price is off viewable area:
         if (top < 0) {
             this.uncentered = true;
-            if (top < this._line.offsetHeight / 2 * -1) {
+            if (top < -(this._line.offsetHeight / 2)) {
                 this.offScreen = true;
             }
             top = 0;

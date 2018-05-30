@@ -1,4 +1,4 @@
-/* eslint-disable no-restricted-properties */
+/* eslint-disable no-restricted-properties,no-restricted-globals,prefer-const */
 
 window.SplinePlotter.plotSpline = function (points, tension, context, colorPatternChanges) {
     function getControlPoints(i) {

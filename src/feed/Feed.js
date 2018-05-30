@@ -110,7 +110,7 @@ class Feed {
         const startLimit = now - (2.8 * 365 * 24 * 60 * 60);
         const { period, interval } = params;
 
-        let result = { quotes: [] };
+        const result = { quotes: [] };
         if (end > startLimit) {
             try {
                 const response = await this._binaryApi.getTickHistory({

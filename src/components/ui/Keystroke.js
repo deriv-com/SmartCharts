@@ -34,7 +34,7 @@ class Keystroke {
     // Note that CIQ.isAndroid is false when the user requests "desktop site" and so some input boxes won't work
     // in that situation. There is no workaround other than to always treat 229 as a false value (it is a swedish character)
     androidWorkaroundKeyup(e) {
-        let newValue = e.target.value;
+        const newValue = e.target.value;
         let key;
         if (newValue.length > this.downValue.length) {
             key = newValue.charCodeAt(newValue.length - 1);
@@ -56,7 +56,7 @@ class Keystroke {
     // but we don't process the stroke until the keyup event is fired. This ensures that our handlers
     // will always have the right key (capitalized) and that input field value will be up to date.
     keyup(e) {
-        let key = e.which;
+        const key = e.which;
         if (this.implementAndroidWorkaround) {
             this.androidWorkaroundKeyup(e);
             this.implementAndroidWorkaround = false;
@@ -94,7 +94,7 @@ class Keystroke {
         }
         if (!this.ctrl) { if ((key !== 91 && key >= 48 && key <= 222) || key === 32) { return; } } // handled by keypress
 
-        switch (key) {
+        switch (key) { // eslint-disable-line default-case
         case 91:
             this.cmd = true;
             return;
@@ -140,7 +140,7 @@ class Keystroke {
      */
     keypress(e) {
         if (this.noKeyCapture) { return; }
-        let key = e.which;
+        const key = e.which;
         if (key < 32 || key > 222) { return; } // handled by keydown
         this.key = key;
     }
@@ -150,7 +150,7 @@ class Keystroke {
      * @memberof CIQ.UI.Keystroke
      */
     initialize() {
-        let self = this;
+        const self = this;
         this.node.addEventListener('keyup', (e) => {
             self.keyup(e);
         });

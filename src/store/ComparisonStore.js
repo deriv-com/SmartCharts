@@ -62,12 +62,11 @@ export default class ComparisonStore {
                 series.parameters.error = true;
             }
         }
-        let color = 'auto',
-            pattern = null,
-            width = 1;
-        color = this.getSwatchColor();
-        let stx = context.stx;
-        let params = {
+        const pattern = null;
+        const width = 1;
+        const color = this.getSwatchColor() || 'auto';
+        const stx = context.stx;
+        const params = {
             symbolObject,
             isComparison: true,
             color,
@@ -80,7 +79,7 @@ export default class ComparisonStore {
         };
 
         // don't allow symbol if same as main chart, comparison already exists, or just white space
-        let exists = stx.getSeries({
+        const exists = stx.getSeries({
             symbolObject,
         });
         for (let i = 0; i < exists.length; i++) {
@@ -97,12 +96,12 @@ export default class ComparisonStore {
     }
 
     getSwatchColor() {
-        let stx = this.context.stx;
+        const stx = this.context.stx;
         let selectedColor = '';
 
-        let usedColors = {};
-        for (let s in stx.chart.series) {
-            let series = stx.chart.series[s];
+        const usedColors = {};
+        for (const s in stx.chart.series) {
+            const series = stx.chart.series[s];
             if (!series.parameters.isComparison) { continue; }
             usedColors[series.parameters.color] = true;
         }

@@ -43,7 +43,7 @@ export default class ShareStore {
         return encodeURIComponent(str).replace(/[!'()*]/g, c => `%${c.charCodeAt(0).toString(16)}`);
     }
     refereshShareLink = () => {
-        let self = this;
+        const self = this;
         if (!this.context || !this.menu.dialog.open) { return; }
 
         const layoutData = this.stx.exportLayout(true);

@@ -24,10 +24,10 @@ export const getIntervalInSeconds = ({ timeUnit, interval }) => {
 };
 
 export function stableSort(arr, compare = (a, b) => a < b) {
-    let original = arr.slice(0);
+    const original = arr.slice(0);
 
     arr.sort((a, b) => {
-        let result = compare(a, b);
+        const result = compare(a, b);
         return result === 0 ? original.indexOf(a) - original.indexOf(b) : result;
     });
 

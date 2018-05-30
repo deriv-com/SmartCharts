@@ -50,7 +50,7 @@ export class Translation {
      *
      */
     translate(...args) {
-        let curr_lang = lang_map[this.lang];
+        const curr_lang = lang_map[this.lang];
         const str = args[0];
         let rt_str;
 
@@ -89,5 +89,5 @@ export class Translation {
     }
 }
 
-let trans = new Translation();
+const trans = new Translation();
 export const t = trans;

@@ -4,7 +4,7 @@ export function getParents(el, parentSelector = 'body') {
 
     if (!parentElement) { return []; }
 
-    let parents = [];
+    const parents = [];
     let p = el.parentNode;
 
     while (p !== parentElement) {
@@ -29,7 +29,7 @@ export function createElement(html) {
 
 // Auxiliary function that enables multiple inheritence with es6 classes: https://stackoverflow.com/a/45332959/1471258
 export function aggregation(baseClass, ...mixins) {
-    let copyProps = (target, source) => { // this function copies all properties and symbols, filtering out some special ones
+    const copyProps = (target, source) => { // this function copies all properties and symbols, filtering out some special ones
         Object.getOwnPropertyNames(source)
             .concat(Object.getOwnPropertySymbols(source))
             .forEach((prop) => {

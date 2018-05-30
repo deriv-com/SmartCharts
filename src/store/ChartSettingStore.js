@@ -87,7 +87,7 @@ export default class ChartSettingStore {
              * check language in the list
              * if not exits set default that is `en`
              */
-            let language = this.languages.find(item => item.key === setting.language);
+            const language = this.languages.find(item => item.key === setting.language);
             if (language) {
                 this.language = language;
             } else {
