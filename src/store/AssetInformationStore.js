@@ -27,9 +27,11 @@ export default class AssetInformationStore {
         const bar = stx.barFromPixel(stx.cx);
         const prices = stx.chart.xaxis[bar];
 
-        if(!prices) { return; }
+        if (!prices) { return; }
 
-        const {Open, High, Low, Close} = prices.data || { };
+        const {
+            Open, High, Low, Close,
+        } = prices.data || { };
         this.open = (Open && !this.isTick) ? Open.toFixed(this.decimalPlaces) : null;
         this.high = (High && !this.isTick) ? High.toFixed(this.decimalPlaces) : null;
         this.low = (Low && !this.isTick) ? Low.toFixed(this.decimalPlaces) : null;

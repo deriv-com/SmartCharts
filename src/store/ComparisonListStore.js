@@ -1,4 +1,4 @@
-import { observable, action, computed, reaction } from 'mobx';
+import { observable, action, reaction } from 'mobx';
 import AnimatedPriceStore from './AnimatedPriceStore';
 import AnimatedPrice from '../components/AnimatedPrice.jsx';
 

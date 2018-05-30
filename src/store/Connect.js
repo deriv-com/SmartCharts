@@ -1,3 +1,4 @@
+/* eslint-disable no-use-before-define,react/no-multi-comp,react/sort-comp,no-unused-vars */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { inject, Provider } from 'mobx-react';
@@ -62,7 +63,7 @@ const unboxProps = (props) => {
 };
 
 export const connect = (...args) => {
-    if(args.length > 1) {
+    if (args.length > 1) {
         return connect_v2(...args);
     }
     const mapStoresToProps = args[0];
@@ -98,9 +99,9 @@ export const connect = (...args) => {
         UnboxedComponent.displayName = `unbox-${wrappedDisplayName}`;
 
         // let sub components like Menu.Body or List.Item work.
-        Object.keys(WrappedComponent).forEach(key => {
+        Object.keys(WrappedComponent).forEach((key) => {
             const SubComponent = WrappedComponent[key];
-            if(!/^childContextTypes$/.test(key) && typeof SubComponent === 'function') {
+            if (!/^childContextTypes$/.test(key) && typeof SubComponent === 'function') {
                 InjectedComponent[key] = SubComponent;
             }
         });
@@ -112,7 +113,7 @@ export const connect = (...args) => {
 const connect_v2 = (Store, mapStoresToProps, handleProps) => {
     class UnboxedComponent extends Component {
         static contextTypes = { mobxStores: PropTypes.object };
-        static childContextTypes = { mobxStores: PropTypes.object};
+        static childContextTypes = { mobxStores: PropTypes.object };
         getChildContext() { return { mobxStores: this.store }; }
 
         handlePropsAction = action(handleProps || (() => {}));
@@ -126,11 +127,11 @@ const connect_v2 = (Store, mapStoresToProps, handleProps) => {
             this.injectedComponent.displayName = `inject-${UnboxedComponent.displayName}`;
         }
         componentDidMount() {
-            if(handleProps) { handleProps(this.store, this.props); }
+            if (handleProps) { handleProps(this.store, this.props); }
         }
 
         componentWillUnmount() {
-            if(this.store && this.store.destructor) {
+            if (this.store && this.store.destructor) {
                 this.store.destructor();
             }
         }
@@ -163,9 +164,9 @@ const connect_v2 = (Store, mapStoresToProps, handleProps) => {
         UnboxedComponent.displayName = `unbox-${wrappedDisplayName}`;
 
         // let sub components like Menu.Body or List.Item work.
-        Object.keys(WrappedComponent).forEach(key => {
+        Object.keys(WrappedComponent).forEach((key) => {
             const SubComponent = WrappedComponent[key];
-            if(!/^childContextTypes$/.test(key) && typeof SubComponent === 'function') {
+            if (!/^childContextTypes$/.test(key) && typeof SubComponent === 'function') {
                 UnboxedComponent[key] = SubComponent;
             }
         });

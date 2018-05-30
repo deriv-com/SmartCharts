@@ -1,7 +1,7 @@
 import { observable, action, computed, when, reaction } from 'mobx';
 import { getTimeUnit, getIntervalInSeconds  } from './utils';
 import MenuStore from './MenuStore';
-import {chartTypes} from './ChartTypeStore';
+import { chartTypes } from './ChartTypeStore';
 
 const notCandles = chartTypes
     .filter(t => !t.candleOnly)
@@ -11,7 +11,7 @@ export default class TimeperiodStore {
     constructor(mainStore) {
         this.mainStore = mainStore;
         when(() => this.context, this.onContextReady);
-        this.menu = new MenuStore({getContext: () => this.context});
+        this.menu = new MenuStore({ getContext: () => this.context });
     }
 
     get context() { return this.mainStore.chart.context; }
@@ -28,18 +28,17 @@ export default class TimeperiodStore {
 
         this.showCandleCountdown();
 
-        reaction(() => this.timeUnit , () => { this.showCandleCountdown(); });
-        reaction(() => this.interval , () => { this.showCandleCountdown(); });
-
+        reaction(() => this.timeUnit, () => { this.showCandleCountdown(); });
+        reaction(() => this.interval, () => { this.showCandleCountdown(); });
     };
 
     countdownInterval = null;
     showCandleCountdown = (callFromSettings = false) => {
         const stx = this.context.stx;
-        var isTick = this.timeUnit == 'tick';
+        const isTick = this.timeUnit == 'tick';
         this.remain = null;
-        if(this.countdownInterval) { clearInterval(this.countdownInterval); }
-        if(this._injectionId)  { stx.removeInjection(this._injectionId); }
+        if (this.countdownInterval) { clearInterval(this.countdownInterval); }
+        if (this._injectionId)  { stx.removeInjection(this._injectionId); }
         this._injectionId = undefined;
         this.countdownInterval = undefined;
         stx.draw();
@@ -47,37 +46,37 @@ export default class TimeperiodStore {
         const displayMilliseconds = (ms) => {
             const totalSec = ms / 1000;
             if (totalSec <= 0) { return null; }
-            const padNum = (n) => (`0${n}`).slice(-2);
+            const padNum = n => (`0${n}`).slice(-2);
             const seconds = padNum(Math.trunc((totalSec) % 60));
-            const minutes = padNum(Math.trunc((totalSec/60) % 60));
+            const minutes = padNum(Math.trunc((totalSec / 60) % 60));
             let hours = Math.trunc((totalSec / 3600) % 24);
             hours = hours ? `${hours}:` : '';
             return `${hours}${minutes}:${seconds}`;
         };
 
         const setRemain = () => {
-            var dataSet = stx.chart.dataSet;
-            if(dataSet && dataSet.length != 0 ){
-                let diff = new Date() - dataSet[dataSet.length-1].DT;
+            const dataSet = stx.chart.dataSet;
+            if (dataSet && dataSet.length != 0) {
+                const diff = new Date() - dataSet[dataSet.length - 1].DT;
                 this.remain = displayMilliseconds((getIntervalInSeconds(stx.layout) * 1000) - diff);
                 stx.draw();
             }
         };
 
-        if(this.mainStore.chartSetting.candleCountdown && !isTick ) {
-            if(!this._injectionId){
+        if (this.mainStore.chartSetting.candleCountdown && !isTick) {
+            if (!this._injectionId) {
                 this._injectionId = stx.append('draw', () => {
-                    if(this.remain){
-                        stx.yaxisLabelStyle = "rect";
-                        stx.createYAxisLabel(stx.chart.panel, this.remain, this.remainLabelY, "#15212d" , "#FFFFFF");
-                        stx.yaxisLabelStyle = "roundRectArrow";
+                    if (this.remain) {
+                        stx.yaxisLabelStyle = 'rect';
+                        stx.createYAxisLabel(stx.chart.panel, this.remain, this.remainLabelY, '#15212d', '#FFFFFF');
+                        stx.yaxisLabelStyle = 'roundRectArrow';
                     }
                 });
             }
 
-            if(callFromSettings) { setRemain(); }
+            if (callFromSettings) { setRemain(); }
 
-            if(!this.countdownInterval) {
+            if (!this.countdownInterval) {
                 this.countdownInterval = setInterval(() => {
                     setRemain();
                 }, 1000);
@@ -115,10 +114,10 @@ export default class TimeperiodStore {
         this.menu.setOpen(false);
     }
 
-    @computed get remainLabelY(){
+    @computed get remainLabelY() {
         const stx = this.context.stx;
         const dataSet = stx.chart.dataSet;
-        const price = dataSet[dataSet.length-1].Close;
+        const price = dataSet[dataSet.length - 1].Close;
         let x = stx.pixelFromPrice(price, stx.chart.panel);
         const currentPriceLabelHeight = 18;
         const maxRequiredSpaceForLabels = 60;
@@ -127,12 +126,12 @@ export default class TimeperiodStore {
     }
 
     @computed get timeUnit_display() {
-        if(!this.timeUnit) {return;}
+        if (!this.timeUnit) { return; }
         let temp = this.timeUnit;
-        if(temp.length > 4) {
-            temp = (temp).slice(0,3);
+        if (temp.length > 4) {
+            temp = (temp).slice(0, 3);
         }
-        return temp.replace(/(\w)/, (str) => str.toUpperCase());
+        return temp.replace(/(\w)/, str => str.toUpperCase());
     }
 
     @computed get interval_display() {
