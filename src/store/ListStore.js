@@ -1,4 +1,4 @@
-import { observable, action, computed, reaction, autorunAsync } from 'mobx';
+import { observable, action, reaction } from 'mobx';
 import { connect } from './Connect';
 import KeystrokeHub from '../components/ui/KeystrokeHub';
 
@@ -50,7 +50,7 @@ export default class ListStore {
         root.scrollTop = Math.max(itemBottom - bottom, 0);
     }
 
-    keyStroke(hub, key, e) {
+    keyStroke(hub, key /* , e */) {
         if (['up', 'down', 'enter', 32].indexOf(key) === -1) {
             return false;
         }

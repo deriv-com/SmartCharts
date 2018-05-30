@@ -7,9 +7,7 @@ import '../../sass/components/_draw-tools.scss';
 
 const DrawTools = ({
     clearAll,
-    noTool,
     selectTool,
-    clearDrawings,
     Menu,
     menuOpen,
     DrawList,
@@ -49,9 +47,7 @@ const DrawTools = ({
 
 export default connect(({ drawTools: dt }) => ({
     clearAll: dt.clearAll,
-    noTool: dt.noTool,
     selectTool: dt.selectTool,
-    clearDrawings: dt.clearDrawings,
     Menu: dt.menu.connect(Menu),
     menuOpen: dt.menu.open,
     DrawList: dt.list.connect(List),

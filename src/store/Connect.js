@@ -1,4 +1,4 @@
-/* eslint-disable no-use-before-define,react/no-multi-comp,react/sort-comp */
+/* eslint-disable no-use-before-define,react/no-multi-comp,react/sort-comp,no-unused-vars */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { inject, Provider } from 'mobx-react';

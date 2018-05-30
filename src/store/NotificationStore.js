@@ -1,4 +1,4 @@
-import { observable, action, computed, when } from 'mobx';
+import { observable, action } from 'mobx';
 
 let notificationId = 0;
 

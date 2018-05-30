@@ -7,7 +7,7 @@ import Stream from './Stream';
 class StreamManager {
     static get MSG_TICK() { return 'tick'; }
     static get MSG_OHLC() { return 'ohlc'; }
-    constructor(connection, defaultCount = 1000) {
+    constructor(connection) {
         this._connection = connection;
         this._emitters = { };
         this._streamIds = { };

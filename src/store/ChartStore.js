@@ -1,10 +1,9 @@
-import React from 'react';
 import ResizeObserver from 'resize-observer-polyfill';
-import { action, observable, computed } from 'mobx';
+import { action, observable } from 'mobx';
 import PendingPromise from '../utils/PendingPromise';
 import Context from '../components/ui/Context';
 import { stableSort } from './utils';
-import BarrierStore from './BarrierStore';
+// import BarrierStore from './BarrierStore';
 import KeystrokeHub from '../components/ui/KeystrokeHub';
 import '../components/ui/Animation';
 import { BinaryAPI, Feed } from '../feed';
@@ -193,9 +192,10 @@ class ChartStore {
             cb: KeystrokeHub.defaultHotKeys,
         });
 
-        const UIStorage = new CIQ.NameValueStore();
+        const UIStorage = new CIQ.NameValueStore(); // eslint-disable-line no-unused-vars
 
-        const params = {
+        // TODO: excluded studies
+        const params = { // eslint-disable-line no-unused-vars
             excludedStudies: {
                 Directional: true,
                 Gopala: true,
@@ -305,7 +305,7 @@ class ChartStore {
         this.categorizedSymbols = this.categorizeActiveSymbols();
     }
 
-    @action.bound updateComparisons(...args) {
+    @action.bound updateComparisons() {
         if (!this.context) { return; }
         let stx = this.context.stx;
         const comparisonSymbolsKeys = Object.keys(stx.chart.series);

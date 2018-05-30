@@ -1,4 +1,5 @@
 /* TAKEN OUT OF ADDONS.JS */
+/* eslint-disable no-unused-vars,eqeqeq,no-shadow,no-alert */
 
 import CIQ from 'chartiq';
 

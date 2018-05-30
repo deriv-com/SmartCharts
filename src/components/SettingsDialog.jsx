@@ -1,5 +1,4 @@
-import React, { Component, Fragment } from 'react';
-import { connect } from '../store/Connect';
+import React from 'react';
 import {
     Switch,
     NumericInput,

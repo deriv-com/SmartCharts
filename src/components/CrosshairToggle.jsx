@@ -1,11 +1,10 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { connect } from '../store/Connect';
 import { CrosshairOffIcon, CrosshairOnIcon, CrosshairTooltipIcon } from './Icons.jsx';
 import { Toggle } from './Form.jsx';
 
 const CrosshairToggle = ({
     toggleState,
-    crosshair,
     state,
 }) => {
     const CrosshairIcon = [CrosshairOffIcon, CrosshairOnIcon, CrosshairTooltipIcon][state];

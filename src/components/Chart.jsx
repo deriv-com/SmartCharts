@@ -76,7 +76,7 @@ class Chart extends Component {
 
         CIQ.localStorageSetItem('smartchart-setting', JSON.stringify({
             language: currentLang,
-            theme: (typeof theme === 'string') ? theme : ((setting && setting.theme) ? setting.theme : 'light'),
+            theme: (typeof theme === 'string') ? theme : ((setting && setting.theme) ? setting.theme : 'light'), // eslint-disable-line no-nested-ternary
             candleCountdown :showCandleCountdown || ((setting && setting.candleCountdown) ? setting.candleCountdown : false),
         }));
 

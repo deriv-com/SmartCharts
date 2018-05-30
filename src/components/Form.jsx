@@ -9,7 +9,6 @@ export const Slider = ({
     max = 10,
     step = 1,
     value,
-    className = '',
     onChange,
 }) => (
     <div className="cq-slider">

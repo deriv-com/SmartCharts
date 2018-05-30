@@ -1,5 +1,4 @@
 /* eslint-disable no-new, react/jsx-indent, react/no-danger, react/jsx-indent-props */
-import React from 'react';
 import 'babel-polyfill';
 
 import { TradeEndLine, TradeStartLine } from './components/VerticalLine.jsx';

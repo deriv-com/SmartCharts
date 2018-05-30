@@ -101,7 +101,7 @@ export default class PriceLineStore {
         this.stx.editingAnnotation = false;
     }
 
-    _startDrag(e) {
+    _startDrag() {
         this._modalBegin();
         this.isDragging = true;
         this._initialPosition = this.top;
@@ -119,7 +119,7 @@ export default class PriceLineStore {
         this.price = this._snapPrice(newPrice);
     }
 
-    _endDrag(e) {
+    _endDrag() {
         this._modalEnd();
         this.isDragging = false;
     }

@@ -1,4 +1,4 @@
-import { observable, action, computed, when } from 'mobx';
+import { observable, action, when } from 'mobx';
 import MenuStore from './MenuStore';
 import CategoricalDisplayStore from './CategoricalDisplayStore';
 import SettingsDialogStore from './SettingsDialogStore';

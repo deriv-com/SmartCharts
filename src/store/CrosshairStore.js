@@ -1,4 +1,4 @@
-import { observable, action, computed, when } from 'mobx';
+import { observable, action, when } from 'mobx';
 import { sameBar } from './utils';
 
 class Tooltip extends CIQ.Marker {

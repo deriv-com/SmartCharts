@@ -1,8 +1,8 @@
 import {
     SmartChart,
-    Barrier,
-    TradeStartLine,
-    TradeEndLine,
+    // Barrier,
+    // TradeStartLine,
+    // TradeEndLine,
     ChartTypes,
     StudyLegend,
     Comparison,

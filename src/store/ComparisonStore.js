@@ -1,5 +1,5 @@
 import React from 'react';
-import { observable, action, computed } from 'mobx';
+import { action, computed } from 'mobx';
 import MenuStore from './MenuStore';
 import CategoricalDisplayStore from './CategoricalDisplayStore';
 

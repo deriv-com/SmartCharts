@@ -11,7 +11,13 @@ class StudyLegend extends Component {
 
     render() {
         const {
-            isOpened, setOpen, clearStudies, activeStudies, Menu, menuOpen, StudyCategoricalDisplay, onCloseMenu, isMobile,
+            isOpened,
+            setOpen,
+            Menu,
+            menuOpen,
+            StudyCategoricalDisplay,
+            onCloseMenu,
+            isMobile,
         } = this.props;
 
         return (
@@ -41,8 +47,6 @@ class StudyLegend extends Component {
 export default connect(({ studies: st }) => ({
     isOpened: st.open,
     setOpen: st.setOpen,
-    activeStudies: st.activeStudies,
-    clearStudies: st.clearStudies,
     cleanUp: st.cleanUp,
     Menu: st.menu.connect(Menu),
     menuOpen: st.menu.open,

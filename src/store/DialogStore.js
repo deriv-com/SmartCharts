@@ -1,4 +1,4 @@
-import { observable, action, computed, reaction } from 'mobx';
+import { observable, action } from 'mobx';
 import { connect } from './Connect';
 
 const allDialogs = [];

@@ -4,7 +4,6 @@ import { connect } from '../store/Connect';
 import Menu from './Menu.jsx';
 import List from './List.jsx';
 import { CloseIcon, SettingIcon } from './Icons.jsx';
-import { Switch } from './Form.jsx';
 import '../../sass/components/_chart-types.scss';
 
 const ChartTypes = ({
@@ -12,8 +11,6 @@ const ChartTypes = ({
     Menu,
     menuOpen,
     TypeList,
-    assetInformation,
-    setAssetInformation,
     showAggregateDialog,
     closeMenu,
     isMobile,
@@ -54,7 +51,7 @@ const ChartTypes = ({
     </Menu>
 );
 
-export default connect(({ chartType, assetInformation: ai }) => ({
+export default connect(({ chartType }) => ({
     Type: chartType.type,
     setOpen: chartType.setOpen,
     showAggregateDialog: chartType.showAggregateDialog,

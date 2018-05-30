@@ -1,6 +1,5 @@
 import EventEmitter from 'event-emitter-es6';
 import { PendingPromise } from '@binary-com/smartcharts';
-import StreamManager from './StreamManager';
 
 class ConnectionManager extends EventEmitter {
     static get EVENT_CONNECTION_CLOSE() { return 'CONNECTION_CLOSE'; }

@@ -1,4 +1,4 @@
-import { observable, action, computed, reaction } from 'mobx';
+import { action, computed, reaction } from 'mobx';
 import { connect } from './Connect';
 import DialogStore from './DialogStore';
 import Dialog from '../components/Dialog.jsx';

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { connect } from '../store/Connect';
 import { alertIconMap, CloseIcon } from '../components/Icons.jsx';
 import '../../sass/components/_ciq-notification.scss';

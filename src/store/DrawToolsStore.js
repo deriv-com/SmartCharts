@@ -1,4 +1,4 @@
-import { observable, action, reaction, computed, autorunAsync, when } from 'mobx';
+import { action, reaction, when } from 'mobx';
 import MenuStore from './MenuStore';
 import ListStore from './ListStore';
 import SettingsDialogStore from './SettingsDialogStore';
@@ -84,7 +84,7 @@ export default class DrawToolsStore {
     onRightClick = () => {
         for (const drawing of this.stx.drawingObjects) {
             if (drawing.highlighted && !drawing.permanent) {
-                let dontDeleteMe = drawing.abort();
+                let dontDeleteMe = drawing.abort(); // eslint-disable-line no-unused-vars
                 const parameters = CIQ.Drawing.getDrawingParameters(this.stx, drawing.name);
 
                 const typeMap = {
