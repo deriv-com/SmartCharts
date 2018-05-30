@@ -55,8 +55,7 @@ const config = {
                 test: /\.(js|jsx)$/,
                 exclude: [
                     /node_modules/,
-                    /chartiq\//,
-                    /src\/components\//,
+                    /\\chartiq/,
                 ],
                 loader: 'eslint-loader',
                 enforce: 'pre',

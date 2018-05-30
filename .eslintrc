@@ -3,17 +3,14 @@
     "extends": [
         "eslint:recommended",
         "plugin:import/errors",
-        "plugin:import/warnings"
+        "plugin:import/warnings",
+        "airbnb"
     ],
     "env": {
         "browser": true,
         "commonjs": true,
         "es6": true,
         "node": true
-    },
-    "ecmaFeatures": {
-        "jsx": true,
-        "experimentalObjectRestSpread": true
     },
     "plugins": [
         "react"
@@ -23,11 +20,18 @@
         "sourceType": "module"
     },
     "settings": {
-        "import/resolver": "webpack"
+        "import/resolver": {
+            "webpack": { "config": "webpack.config.js" }
+        }
+    },
+    "globals": {
+        "CIQ": false,
+        "t": false
     },
     "rules": {
         "react/prop-types": 0,
         "react/jsx-indent": 0,
+        "react/jsx-indent-props": ["error", 4],
         "react/jsx-uses-vars": 1,
         "jsx-a11y/click-events-have-key-events": 0,
         "no-lonely-if": 1,
