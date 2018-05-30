@@ -302,7 +302,7 @@ class Tooltip extends CIQ.Marker {
                 } else if (dsField.constructor == Date) {
                     if (name == 'DT' && stx.controls.floatDate && stx.controls.floatDate.innerHTML) {
                         if (CIQ.ChartEngine.hideDates()) {
-                            fieldValue = 'N/A';
+                            continue;
                         } else {
                             fieldValue = stx.controls.floatDate.innerHTML;
                         }
@@ -320,11 +320,6 @@ class Tooltip extends CIQ.Marker {
                 rows.push({
                     name: fieldName.toUpperCase(),
                     value: fieldValue,
-                });
-            } else {
-                rows.push({
-                    name: fieldName.toUpperCase(),
-                    value: 'n/a',
                 });
             }
         }
@@ -349,6 +344,7 @@ class CrosshairStore {
     @observable rows = [];
     tooltip = null;
     node = null;
+    @observable state = 0;
 
     @action.bound setRows(rows) { this.rows = rows; }
     @action.bound hide() {
@@ -380,16 +376,16 @@ class CrosshairStore {
     };
 
     onContextReady = () => {
-        this.crosshair = this.stx.layout.crosshair;
+        let storedState = this.stx.layout.crosshair;
+        this.state = (typeof storedState !== 'number') ? 0 : storedState;
         this.init();
     };
 
-    @observable crosshair = false;
-    @action.bound setCrosshair(value) {
-        this.stx.layout.crosshair = value;
+    @action.bound toggleState() {
+        this.state = (this.state + 1) % 3;
+        this.stx.layout.crosshair = this.state;
         this.stx.doDisplayCrosshairs();
         this.mainStore.chart.saveLayout();
-        this.crosshair = value;
     }
 }
 
