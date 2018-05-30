@@ -23,6 +23,9 @@
     }
     .cq-menu-dropdown {
         height: 0px;
+        @include themify($themes) {
+            color: themed('defaultTextStrong');
+        }
         .cq-menu-container{
             height: 0px;
             &.active{
@@ -133,9 +136,6 @@
     .cq-chart-setting {
         .cq-menu-dropdown {
             transform: translateX(4.5em) translateY(0%) !important;
-            @include themify($themes) {
-                color: themed('defaultTextStrong');
-            }
             &.cq-menu-dropdown-enter-done,
             &.open{ // class open should be removed after `dialog-animation` merged
                 transform: translateX(4.5em) translateY(0%) !important;

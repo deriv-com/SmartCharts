@@ -62,7 +62,8 @@ class Chart extends Component {
 
         const currentLang = lang || ((setting && setting.language) ? setting.language.key : 'en');
         t.setLanguage(currentLang);
-
+        const currentPosition = `cq-chart-control-${(setting && setting.position) ? setting.position : 'bottom'}`;
+        const currentMode = `${isMobile ? 'smartcharts-mobile' : ''}`;
         const array = React.Children.toArray(children);
         const insideHolder = array.filter(c => !/(TradeStart)|(TradeEnd)/.test(c.type.displayName));
         const insideSubHolder = array.filter(c => /(TradeStart)|(TradeEnd)/.test(c.type.displayName));
@@ -77,7 +78,7 @@ class Chart extends Component {
 
         return (
             <cq-context ref={(root) => { this.root = root; }} class={contextClassName()}>
-                <div className={`${isMobile ? 'smartcharts-mobile' : ''} cq-chart-control-${((setting && setting.position) ? setting.position : 'bottom')}`}>
+                <div className={`${currentMode} ${currentPosition}`}>
                     <div className="ciq-chart-area">
                         <div className="ciq-chart">
                             <RenderInsideChart at='holder'>
