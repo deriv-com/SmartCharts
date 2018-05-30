@@ -8,7 +8,6 @@ import '../../sass/components/_chart-title.scss';
 
 const ChartTitle = ({
     todayChange,
-    todayChangePercentage,
     isVisible,
     isShowChartPrice,
     isPriceUp,
@@ -41,7 +40,6 @@ const ChartTitle = ({
                          <AnimatedPrice className="cq-current-price" />
                          <div className={`cq-change ${isPriceUp ? 'stx-up' : 'stx-down'}`}>
                              <span className="cq-todays-change">{todayChange}</span>&nbsp;
-                             {/* <span className="cq-todays-change-pct">({todayChangePercentage})</span> */}
                          </div>
                      </div>}
                 </div>}
@@ -58,7 +56,6 @@ const ChartTitle = ({
 
 export default connect(({ chartTitle: c }) => ({
     todayChange: c.todayChange,
-    todayChangePercentage: c.todayChangePercentage,
     isPriceUp: c.isPriceUp,
     isVisible: c.isVisible,
     isShowChartPrice: c.isShowChartPrice,

@@ -52,7 +52,6 @@
         "no-restricted-globals": 0,
         "guard-for-in": 1,
         "no-nested-ternary": 1,
-        "import/prefer-default-export": 1,
         "import/no-unresolved": 0,
         "import/no-mutable-exports": 1,
         "import/no-extraneous-dependencies": 0,

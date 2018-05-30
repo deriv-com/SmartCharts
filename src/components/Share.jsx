@@ -39,52 +39,59 @@ const Share = ({
                     className="icon-close-menu"
                     onClick={() => closeMenu()}
                 />
-            </div>
-            <div className="body">
-                <div className="caption1">{t.translate('Share link')}</div>
-                <div
-                    className="loading"
-                    style={{ display: (loading ? 'block' : 'none') }}
-                />
-                <div
-                    className="content"
-                    style={{ display: ((!loading && !urlGenerated) ? 'flex' : 'none') }}
-                >
-                    {shortUrlFailed ? <p>{t.translate('Failed to generate link')}</p> :
-                        <div
-                            className="download-btn"
-                            onClick={refereshShareLink}
-                        >
-                            {t.translate('Retry')}
-                        </div>}
-                </div>
-                <div
-                    className="content"
-                    style={{ display: ((!loading && urlGenerated) ? 'flex' : 'none') }}
-                >
-                    <input
-                        ref={onInputRef}
-                        value={shareLink}
-                    />
-                    <CopyIcon // eslint-disable-line jsx-a11y/mouse-events-have-key-events
-                        className="ciq-tooltip"
-                        onClick={copyToClipboard}
-                        onMouseOut={resetCopyTooltip}
-                        tooltip-title={copyTooltip}
+                <div className="title">
+                    <div className="title-text">{t.translate('Share / Download Chart')}</div>
+                    <CloseIcon
+                        className="icon-close-menu"
+                        onClick={() => closeMenu()}
                     />
                 </div>
-
-                <div className="caption2">{t.translate('Download chart')}</div>
-                <div className="content">
+                <div className="body">
+                    <div className="caption1">{t.translate('Share link')}</div>
                     <div
-                        className="download-btn"
-                        onClick={downloadPNG}
-                    > PNG
+                        className="loading"
+                        style={{ display: (loading ? 'block' : 'none') }}
+                    />
+                    <div
+                        className="content"
+                        style={{ display: ((!loading && !urlGenerated) ? 'flex' : 'none') }}
+                    >
+                        {shortUrlFailed ? <p>{t.translate('Failed to generate link')}</p> :
+                            <div
+                                className="download-btn"
+                                onClick={refereshShareLink}
+                            >
+                                {t.translate('Retry')}
+                            </div>}
                     </div>
                     <div
-                        className="download-btn"
-                        onClick={downloadCSV}
-                    > CSV
+                        className="content"
+                        style={{ display: ((!loading && urlGenerated) ? 'flex' : 'none') }}
+                    >
+                        <input
+                            ref={onInputRef}
+                            value={shareLink}
+                        />
+                        <CopyIcon // eslint-disable-line jsx-a11y/mouse-events-have-key-events
+                            className="ciq-tooltip"
+                            onClick={copyToClipboard}
+                            onMouseOut={resetCopyTooltip}
+                            tooltip-title={copyTooltip}
+                        />
+                    </div>
+
+                    <div className="caption2">{t.translate('Download chart')}</div>
+                    <div className="content">
+                        <div
+                            className="download-btn"
+                            onClick={downloadPNG}
+                        > PNG
+                        </div>
+                        <div
+                            className="download-btn"
+                            onClick={downloadCSV}
+                        > CSV
+                        </div>
                     </div>
                 </div>
             </div>

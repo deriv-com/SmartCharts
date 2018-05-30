@@ -25,9 +25,7 @@ const Views = ({
     Menu,
     menuOpen,
     views,
-    routes: {
-        current: currentRoute, add, main, cancel,
-    },
+    routes: { current: currentRoute, add, main, cancel },
     onChange,
     onSubmit,
     applyLayout,

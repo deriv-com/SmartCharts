@@ -1,6 +1,5 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
-import React, { Component } from 'react';
-import { connect } from '../store/Connect';
+import React  from 'react';
 import '../../sass/components/_ciq-dialog.scss';
 
 const chartControlHeight = 47;

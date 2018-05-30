@@ -7,8 +7,8 @@ import { connect } from '../store/Connect';
 import { Switch } from './Form.jsx';
 import {
     SettingIcon,
-    PositionLeftIcon,
-    PositionBottomIcon,
+    // PositionLeftIcon,
+    // PositionBottomIcon,
     BackIcon,
     CloseIcon,
 } from './Icons.jsx';
@@ -25,6 +25,8 @@ const ChartSetting = ({
     setLanguage,
     theme,
     setTheme,
+    candleCountdown,
+    showCandleCountdown,
     closeMenu,
     assetInformation,
     setAssetInformation,
@@ -52,6 +54,15 @@ const ChartSetting = ({
                         <Switch
                             value={(theme == 'dark')}
                             onChange={setTheme}
+                        />
+                    </div>
+                </div>
+                <div className="ciq-list-item">
+                    <span className="ciq-icon-text">{t.translate('Candle Countdown')}</span>
+                    <div className="ciq-action">
+                        <Switch
+                            value={candleCountdown}
+                            onChange={showCandleCountdown}
                         />
                     </div>
                 </div>
@@ -139,6 +150,8 @@ export default connect(({ chartSetting: s, assetInformation: ai }) => ({
     setLanguage: s.setLanguage,
     theme: s.theme,
     setTheme: s.setTheme,
+    candleCountdown: s.candleCountdown,
+    showCandleCountdown: s.showCandleCountdown,
     closeMenu: s.menu.onTitleClick,
     assetInformation: ai.visible,
     setAssetInformation: ai.setVisible,

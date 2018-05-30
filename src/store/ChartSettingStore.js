@@ -1,5 +1,5 @@
 import React from 'react';
-import { observable, action, reaction, computed, autorunAsync, when } from 'mobx';
+import { observable, action, computed } from 'mobx';
 import MenuStore from './MenuStore';
 import { createObjectFromLocalStorage } from '../utils';
 import { FlagIcons } from './../components/Icons.jsx';
@@ -76,6 +76,7 @@ export default class ChartSettingStore {
     @observable language = '';
     @observable position = '';
     @observable theme = '';
+    @observable candleCountdown = false;
 
     restoreSetting() {
         const setting = createObjectFromLocalStorage('smartchart-setting');
@@ -94,10 +95,12 @@ export default class ChartSettingStore {
             }
             this.position = setting.position === 'bottom' ? 'bottom' : 'left';
             this.theme = setting.theme === 'light' ? 'light' : 'dark';
+            this.candleCountdown = setting.candleCountdown;
         } else {
             this.language = this.defaultLanguage;
             this.position = 'bottom';
             this.theme = 'light';
+            this.candleCountdown = false;
         }
     }
 
@@ -106,6 +109,7 @@ export default class ChartSettingStore {
             language: this.language.key,
             position: this.position,
             theme: this.theme,
+            candleCountdown :this.candleCountdown,
         }));
     }
 
@@ -126,6 +130,12 @@ export default class ChartSettingStore {
     @action.bound setTheme(value) {
         this.theme = value ? 'dark' : 'light';
         this.stx.clearStyles();
+        this.saveSetting();
+    }
+
+    @action.bound showCandleCountdown(value) {
+        this.candleCountdown = value;
+        this.mainStore.timeperiod.showCandleCountdown(value);
         this.saveSetting();
     }
 }

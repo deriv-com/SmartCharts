@@ -1,4 +1,4 @@
-import { observable, computed, reaction } from 'mobx';
+import { observable } from 'mobx';
 
 export default class VerticalLineStore {
     get stx() { return this.mainStore.chart.stxx; }

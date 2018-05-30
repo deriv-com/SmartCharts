@@ -39,7 +39,11 @@ class Menu extends Component {
                         timeout={0}
                         classNames="cq-menu-dropdown"
                     >
-                        <DropdownDialog className="cq-menu-dropdown">
+                        <DropdownDialog
+                            className="cq-menu-dropdown"
+                            isMobile={isMobile}
+                            isFullscreen={isFullscreen}
+                        >
                             {rest}
                         </DropdownDialog>
                     </CSSTransition>

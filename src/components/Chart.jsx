@@ -56,6 +56,7 @@ class Chart extends Component {
             chartControlsWidgets,
             AggregateChartSettingsDialog,
             topWidgets,
+            showCandleCountdown = false,
         } = this.props;
 
         const currentLang = lang || ((setting && setting.language) ? setting.language.key : 'en');
@@ -72,6 +73,12 @@ class Chart extends Component {
                 : ` smartcharts-${(setting && setting.theme) ? setting.theme : 'light'}`;
             return className;
         };
+
+        CIQ.localStorageSetItem('smartchart-setting', JSON.stringify({
+            language: currentLang,
+            theme: (typeof theme === 'string') ? theme : ((setting && setting.theme) ? setting.theme : 'light'),
+            candleCountdown :showCandleCountdown || ((setting && setting.candleCountdown) ? setting.candleCountdown : false),
+        }));
 
         return (
             <cq-context ref={(root) => { this.root = root; }} class={contextClassName()}>
@@ -107,15 +114,13 @@ class Chart extends Component {
     }
 }
 
-export default connect(({
-    chart, drawTools, studies, chartSetting, chartType,
-}) => ({
+export default connect(({ chart, drawTools, studies, chartSetting, chartType }) => ({
     contextPromise: chart.contextPromise,
     init: chart.init,
     destroy: chart.destroy,
-    StudySettingsDialog: studies.settingsDialog.connect(SettingsDialog),
-    DrawToolsSettingsDialog: drawTools.settingsDialog.connect(SettingsDialog),
-    AggregateChartSettingsDialog: chartType.settingsDialog.connect(SettingsDialog),
+    StudySettingsDialog : studies.settingsDialog.connect(SettingsDialog),
+    DrawToolsSettingsDialog : drawTools.settingsDialog.connect(SettingsDialog),
+    AggregateChartSettingsDialog : chartType.settingsDialog.connect(SettingsDialog),
     isChartAvailable: chart.isChartAvailable,
     chartPanelTop: chart.chartPanelTop,
     setting: chartSetting,
