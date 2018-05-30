@@ -69,7 +69,6 @@ class Chart extends Component {
 
         const contextClassName = () => {
             let className = '';
-            className += isMobile ? 'smartcharts-mobile' : '';
             className += (typeof theme === 'string' ) ? ` smartcharts-${theme}`
                         : ` smartcharts-${ (setting && setting.theme) ? setting.theme : 'light'}`;
             return className;
@@ -77,31 +76,32 @@ class Chart extends Component {
 
         return (
             <cq-context ref={(root) => { this.root = root; }} class={contextClassName()}>
-                <div className="ciq-chart-area">
-                    <div className="ciq-chart">
-                        <RenderInsideChart at='holder'>
-                            {insideHolder}
-                        </RenderInsideChart>
-                        <RenderInsideChart at='subholder'>
-                            {insideSubHolder}
-                        </RenderInsideChart>
-                        <div className="cq-top-ui-widgets" style={{top: chartPanelTop}}>
-                            { renderTopWidgets() }
+                <div className={isMobile ? 'smartcharts-mobile' : ''}>
+                    <div className="ciq-chart-area">
+                        <div className="ciq-chart">
+                            <RenderInsideChart at='holder'>
+                                {insideHolder}
+                            </RenderInsideChart>
+                            <RenderInsideChart at='subholder'>
+                                {insideSubHolder}
+                            </RenderInsideChart>
+                            <div className="cq-top-ui-widgets" style={{top: chartPanelTop}}>
+                                { renderTopWidgets() }
+                            </div>
+                            <ChartControls widgets={chartControlsWidgets} />
+                            <Crosshair />
+                            <div className="chartContainer primary"> </div>
+                            <Loader />
+                            {!isChartAvailable &&
+                                <div className="cq-chart-unavailable">
+                                    {t.translate('Chart data is not available for this symbol.')}
+                                </div>}
                         </div>
-                        <ChartControls widgets={chartControlsWidgets} />
-                        <Crosshair />
-                        <div className="chartContainer primary"> </div>
-                        <Loader />
-                        {!isChartAvailable &&
-                            <div className="cq-chart-unavailable">
-                                {t.translate('Chart data is not available for this symbol.')}
-                            </div>}
                     </div>
+                    <DrawToolsSettingsDialog />
+                    <StudySettingsDialog />
+                    <Notification />
                 </div>
-                <DrawToolsSettingsDialog />
-                <StudySettingsDialog />
-                <AggregateChartSettingsDialog />
-                <Notification />
             </cq-context>
         );
     }
