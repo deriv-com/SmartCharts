@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import {connect} from '../store/Connect';
-import {CrosshairIcon} from './Icons.jsx';
-import {Toggle} from './Form.jsx';
+import { connect } from '../store/Connect';
+import { CrosshairIcon } from './Icons.jsx';
+import { Toggle } from './Form.jsx';
 
 const CrosshairToggle = ({
     toggleCrosshair,
@@ -12,18 +12,17 @@ const CrosshairToggle = ({
             <Toggle
                 active={crosshair}
                 onChange={toggleCrosshair}
-                >
+            >
                 <CrosshairIcon
-                    className='ic-icon-with-sub'
-                    tooltip-title={t.translate('Crosshair')} />
+                    className="ic-icon-with-sub"
+                    tooltip-title={t.translate('Crosshair')}
+                />
             </Toggle>
         </div>
     </div>
 );
 
-export default connect(
-    ({crosshair}) => ({
-        toggleCrosshair: (active) => crosshair.setCrosshair(active),
-        crosshair: crosshair.crosshair,
-    })
-)(CrosshairToggle);
+export default connect(({ crosshair }) => ({
+    toggleCrosshair: active => crosshair.setCrosshair(active),
+    crosshair: crosshair.crosshair,
+}))(CrosshairToggle);

@@ -69,8 +69,8 @@ class Chart extends Component {
 
         const contextClassName = () => {
             let className = '';
-            className += (typeof theme === 'string' ) ? ` smartcharts-${theme}`
-                        : ` smartcharts-${ (setting && setting.theme) ? setting.theme : 'light'}`;
+            className += (typeof theme === 'string') ? ` smartcharts-${theme}`
+                : ` smartcharts-${(setting && setting.theme) ? setting.theme : 'light'}`;
             return className;
         };
 
@@ -79,18 +79,18 @@ class Chart extends Component {
                 <div className={isMobile ? 'smartcharts-mobile' : ''}>
                     <div className="ciq-chart-area">
                         <div className="ciq-chart">
-                            <RenderInsideChart at='holder'>
+                            <RenderInsideChart at="holder">
                                 {insideHolder}
                             </RenderInsideChart>
-                            <RenderInsideChart at='subholder'>
+                            <RenderInsideChart at="subholder">
                                 {insideSubHolder}
                             </RenderInsideChart>
-                            <div className="cq-top-ui-widgets" style={{top: chartPanelTop}}>
+                            <div className="cq-top-ui-widgets" style={{ top: chartPanelTop }}>
                                 { renderTopWidgets() }
                             </div>
                             <ChartControls widgets={chartControlsWidgets} />
                             <Crosshair />
-                            <div className="chartContainer primary"> </div>
+                            <div className="chartContainer primary" />
                             <Loader />
                             {!isChartAvailable &&
                                 <div className="cq-chart-unavailable">
@@ -107,16 +107,16 @@ class Chart extends Component {
     }
 }
 
-export default connect(
-    ({chart, drawTools, studies, chartSetting, chartType }) => ({
-        contextPromise: chart.contextPromise,
-        init: chart.init,
-        destroy: chart.destroy,
-        StudySettingsDialog : studies.settingsDialog.connect(SettingsDialog),
-        DrawToolsSettingsDialog : drawTools.settingsDialog.connect(SettingsDialog),
-        AggregateChartSettingsDialog : chartType.settingsDialog.connect(SettingsDialog),
-        isChartAvailable: chart.isChartAvailable,
-        chartPanelTop: chart.chartPanelTop,
-        setting: chartSetting,
-    })
-)(Chart);
+export default connect(({
+    chart, drawTools, studies, chartSetting, chartType,
+}) => ({
+    contextPromise: chart.contextPromise,
+    init: chart.init,
+    destroy: chart.destroy,
+    StudySettingsDialog: studies.settingsDialog.connect(SettingsDialog),
+    DrawToolsSettingsDialog: drawTools.settingsDialog.connect(SettingsDialog),
+    AggregateChartSettingsDialog: chartType.settingsDialog.connect(SettingsDialog),
+    isChartAvailable: chart.isChartAvailable,
+    chartPanelTop: chart.chartPanelTop,
+    setting: chartSetting,
+}))(Chart);

@@ -6,7 +6,7 @@ import Dialog from '../components/Dialog.jsx';
 const allMenues = [];
 
 export default class MenuStore {
-    constructor({getContext}) {
+    constructor({ getContext }) {
         this.getContext = getContext;
         this.dialog = new DialogStore();
         reaction(() => this.open, () => this.blurInput());
@@ -20,7 +20,7 @@ export default class MenuStore {
 
     blurInput() {
         const stx = this.context.stx;
-        if(this.open === false) {
+        if (this.open === false) {
             document.activeElement.blur();
             stx.modalEnd();
         } else {

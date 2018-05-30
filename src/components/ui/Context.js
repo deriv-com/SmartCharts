@@ -31,9 +31,9 @@ class Context {
      * @private
      */
     static assembleContext(contextElement) {
-        if (!contextElement.CIQ) {contextElement.CIQ = {};} // claim our namespace
-        if (!contextElement.CIQ.UI) {contextElement.CIQ.UI = {};}
-        if (!contextElement.CIQ.UI.Components) {contextElement.CIQ.UI.Components = [];}
+        if (!contextElement.CIQ) { contextElement.CIQ = {}; } // claim our namespace
+        if (!contextElement.CIQ.UI) { contextElement.CIQ.UI = {}; }
+        if (!contextElement.CIQ.UI.Components) { contextElement.CIQ.UI.Components = []; }
         return contextElement.CIQ.UI;
     }
 

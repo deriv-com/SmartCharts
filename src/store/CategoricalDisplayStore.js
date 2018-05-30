@@ -1,6 +1,6 @@
+import PerfectScrollbar from 'perfect-scrollbar';
 import { action, observable, computed, when, reaction, toJS } from 'mobx';
 import { connect } from './Connect';
-import PerfectScrollbar from 'perfect-scrollbar';
 
 export default class CategoricalDisplayStore {
     constructor({
@@ -19,7 +19,7 @@ export default class CategoricalDisplayStore {
                 if (!this.isMobile) {
                     setTimeout(() => this.searchInput.focus(), 0);
                 }
-                if (!this.isInit) {this.init();}
+                if (!this.isInit) { this.init(); }
                 setTimeout(() => {
                     this.updateScrollOffset();
                 }, 0);
@@ -34,8 +34,9 @@ export default class CategoricalDisplayStore {
         this.categoryElements = {};
         this.mainStore = mainStore;
         this.isInit = false;
-        reaction(() => this.mainStore.favoriteSessionStore.favoritesChangeTrigger,
-            ()=>{this.updateFavorites();}
+        reaction(
+            () => this.mainStore.favoriteSessionStore.favoritesChangeTrigger,
+            () => { this.updateFavorites(); },
         );
 
         if (favoritesId && mainStore) {
@@ -61,8 +62,8 @@ export default class CategoricalDisplayStore {
 
     initFavorites() {
         const layout = this.context.stx.layout;
-        if (!layout.favorites) {layout.favorites = {};}
-        if (!layout.favorites[this.favoritesId]) {layout.favorites[this.favoritesId] = [];}
+        if (!layout.favorites) { layout.favorites = {}; }
+        if (!layout.favorites[this.favoritesId]) { layout.favorites[this.favoritesId] = []; }
 
         this.favoritesCategory.data = layout.favorites[this.favoritesId];
         for (const fav of this.favoritesCategory.data) {
@@ -73,7 +74,7 @@ export default class CategoricalDisplayStore {
     }
 
     updateFavorites() {
-        this.favoritesMap={};
+        this.favoritesMap = {};
         this.initFavorites();
     }
 
@@ -82,8 +83,8 @@ export default class CategoricalDisplayStore {
     }
 
     updateScrollSpy() {
-        if (this.pauseScrollSpy) {return;}
-        if (this.filteredItems.length === 0) {return;}
+        if (this.pauseScrollSpy) { return; }
+        if (this.filteredItems.length === 0) { return; }
 
         let i = 0;
         for (const category of this.filteredItems) {
@@ -94,7 +95,7 @@ export default class CategoricalDisplayStore {
             }
             const r = el.getBoundingClientRect();
             const top = r.top - this.scrollOffset;
-            if (top > 0) {break;}
+            if (top > 0) { break; }
             i++;
         }
         // get first non-empty category
@@ -129,7 +130,7 @@ export default class CategoricalDisplayStore {
     }
 
     /* isMobile: fill form the ChartStore */
-    @computed get isMobile(){
+    @computed get isMobile() {
         if (this.mainStore) {
             return this.mainStore.chart.isMobile;
         }
@@ -142,17 +143,17 @@ export default class CategoricalDisplayStore {
 
         if (this.favoritesId) {
             const favsCategory = toJS(this.favoritesCategory);
-            const findFavItem = category =>{
+            const findFavItem = (category) => {
                 let foundItems = [];
-                if ( category.hasSubcategory ) {
-                    category.data.forEach( subcategory => {
+                if (category.hasSubcategory) {
+                    category.data.forEach((subcategory) => {
                         const foundSubItems = findFavItem(subcategory);
                         foundItems.push(...foundSubItems);
                     });
-                }else{
-                    favsCategory.data.forEach( favItem => {
-                        if ( typeof favItem === 'string') {
-                            let itemObj = category.data.find( item => item.itemId === favItem);
+                } else {
+                    favsCategory.data.forEach((favItem) => {
+                        if (typeof favItem === 'string') {
+                            let itemObj = category.data.find(item => item.itemId === favItem);
                             if (itemObj) {
                                 foundItems.push(itemObj);
                             }
@@ -163,9 +164,9 @@ export default class CategoricalDisplayStore {
             };
 
             let favsCategoryItem = favsCategory.data
-                .filter( favItem => (typeof favItem !== 'string') );
+                .filter(favItem => (typeof favItem !== 'string'));
 
-            filteredItems.forEach(category => {
+            filteredItems.forEach((category) => {
                 const foundItems = findFavItem(category);
                 favsCategoryItem.push(...foundItems);
             });
@@ -184,10 +185,8 @@ export default class CategoricalDisplayStore {
         }
 
         const reg = RegExp(this.filterText, 'i');
-        const filterCategory = c => {
-            c.data = c.data.filter(item => {
-                return reg.test(item.display);
-            });
+        const filterCategory = (c) => {
+            c.data = c.data.filter(item => reg.test(item.display));
         };
 
         for (const category of filteredItems) {
@@ -230,7 +229,7 @@ export default class CategoricalDisplayStore {
             this.activeCategoryKey = category.categoryId;
             // scrollTop takes some time to take affect, so we need
             // a slight delay before enabling the scroll spy again
-            setTimeout(() => this.pauseScrollSpy = false, 3);
+            setTimeout(() => { this.pauseScrollSpy = false; }, 3);
         }
     }
 
@@ -274,23 +273,23 @@ export default class CategoricalDisplayStore {
         const layout = this.context.stx.layout;
         layout.favorites[this.favoritesId] = toJS(this.favoritesCategory.data)
             .filter(favItem => favItem)
-            .map( favItem => typeof favItem === 'string' ? favItem : favItem.itemId);
-        this.mainStore.favoriteSessionStore.favoritesChangeTrigger=!this.mainStore.favoriteSessionStore.favoritesChangeTrigger;
+            .map(favItem => (typeof favItem === 'string' ? favItem : favItem.itemId));
+        this.mainStore.favoriteSessionStore.favoritesChangeTrigger = !this.mainStore.favoriteSessionStore.favoritesChangeTrigger;
         this.mainStore.chart.saveLayout();
     }
 
     setFavoriteById(id) {
         let foundItem = null;
-        for(let category of this.getCategoricalItems()) {
-            for(let item of category.data) {
-                if(item.itemId === id) {
+        for (let category of this.getCategoricalItems()) {
+            for (let item of category.data) {
+                if (item.itemId === id) {
                     foundItem = item;
                     break;
                 }
             }
-            if(foundItem) { break; }
+            if (foundItem) { break; }
         }
-        if(foundItem) {
+        if (foundItem) {
             this.setFavorite(foundItem);
         }
     }

@@ -2,14 +2,14 @@
 export function getParents(el, parentSelector = 'body') {
     const parentElement = document.querySelector(parentSelector);
 
-    if (!parentElement) {return [];}
+    if (!parentElement) { return []; }
 
     let parents = [];
     let p = el.parentNode;
 
     while (p !== parentElement) {
         // if parentElement is not in hierarchy
-        if (p === null) {return [];}
+        if (p === null) { return []; }
 
         parents.push(p);
         p = p.parentNode;

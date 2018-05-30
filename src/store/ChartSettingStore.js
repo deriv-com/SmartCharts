@@ -1,14 +1,14 @@
+import React from 'react';
 import { observable, action, reaction, computed, autorunAsync, when } from 'mobx';
 import MenuStore from './MenuStore';
-import React from 'react';
-import {createObjectFromLocalStorage} from '../utils';
+import { createObjectFromLocalStorage } from '../utils';
 import { FlagIcons } from './../components/Icons.jsx';
 
 export default class ChartSettingStore {
     constructor(mainStore) {
         this.defaultLanguage = this.languages[0];
         this.mainStore = mainStore;
-        this.menu = new MenuStore({getContext: () => this.mainStore.chart.context});
+        this.menu = new MenuStore({ getContext: () => this.mainStore.chart.context });
         this.restoreSetting();
     }
 
@@ -20,56 +20,56 @@ export default class ChartSettingStore {
         {
             key: 'en',
             name: 'English',
-            icon: <FlagIcons.USD />
-        },{
+            icon: <FlagIcons.USD />,
+        }, {
             key: 'pt',
             name: 'Português',
-            icon: <FlagIcons.Portugal />
-        },{
+            icon: <FlagIcons.Portugal />,
+        }, {
             key: 'de',
             name: 'Deutsch',
-            icon: <FlagIcons.German />
-        },{
+            icon: <FlagIcons.German />,
+        }, {
             key: 'ru',
             name: 'Русский',
-            icon: <FlagIcons.Russia />
-        },{
+            icon: <FlagIcons.Russia />,
+        }, {
             key: 'fr',
             name: 'French',
-            icon: <FlagIcons.French />
-        },{
+            icon: <FlagIcons.French />,
+        }, {
             key: 'th',
             name: 'Thai',
-            icon: <FlagIcons.Thailand />
-        },{
+            icon: <FlagIcons.Thailand />,
+        }, {
             key: 'id',
             name: 'Indonesia',
-            icon: <FlagIcons.Indonesia />
-        },{
+            icon: <FlagIcons.Indonesia />,
+        }, {
             key: 'vi',
             name: 'Tiếng Việt',
-            icon: <FlagIcons.Vietnam />
-        },{
+            icon: <FlagIcons.Vietnam />,
+        }, {
             key: 'it',
             name: 'Italiano',
-            icon: <FlagIcons.Italy />
-        },{
+            icon: <FlagIcons.Italy />,
+        }, {
             key: 'zh_cn',
             name: '简体中文',
-            icon: <FlagIcons.Chinese />
-        },{
+            icon: <FlagIcons.Chinese />,
+        }, {
             key: 'ja',
             name: '日本語',
-            icon: <FlagIcons.Japan />
-        },{
+            icon: <FlagIcons.Japan />,
+        }, {
             key: 'zh_tw',
             name: '繁體中文',
-            icon: <FlagIcons.ChineseTraditional />
-        },{
+            icon: <FlagIcons.ChineseTraditional />,
+        }, {
             key: 'pl',
             name: 'Polish',
-            icon: <FlagIcons.Poland />
-        }
+            icon: <FlagIcons.Poland />,
+        },
     ];
     defaultLanguage = {};
     @observable view = '';
@@ -86,8 +86,8 @@ export default class ChartSettingStore {
              * check language in the list
              * if not exits set default that is `en`
              */
-            let language = this.languages.find(item => item.key === setting.language );
-            if ( language ) {
+            let language = this.languages.find(item => item.key === setting.language);
+            if (language) {
                 this.language = language;
             } else {
                 this.language = this.defaultLanguage;
@@ -102,15 +102,15 @@ export default class ChartSettingStore {
     }
 
     saveSetting() {
-        CIQ.localStorageSetItem(`smartchart-setting`, JSON.stringify({
+        CIQ.localStorageSetItem('smartchart-setting', JSON.stringify({
             language: this.language.key,
             position: this.position,
-            theme: this.theme
+            theme: this.theme,
         }));
     }
 
     @action.bound setView(view) {
-        this.view = view ? view : '';
+        this.view = view || '';
     }
 
     @action.bound setLanguage(lng) {
@@ -125,9 +125,8 @@ export default class ChartSettingStore {
 
     @action.bound setTheme(value) {
         this.theme = value ? 'dark' : 'light';
-        this.mainStore.chart.stxx.clearStyles();
+        this.stx.clearStyles();
         this.saveSetting();
     }
 }
-
 

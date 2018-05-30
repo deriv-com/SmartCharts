@@ -1,7 +1,7 @@
 import { observable, action, computed, when } from 'mobx';
 import { getTimeUnit } from './utils';
 import MenuStore from './MenuStore';
-import {chartTypes} from './ChartTypeStore';
+import { chartTypes } from './ChartTypeStore';
 
 const notCandles = chartTypes
     .filter(t => !t.candleOnly)
@@ -11,7 +11,7 @@ export default class TimeperiodStore {
     constructor(mainStore) {
         this.mainStore = mainStore;
         when(() => this.context, this.onContextReady);
-        this.menu = new MenuStore({getContext: () => this.context});
+        this.menu = new MenuStore({ getContext: () => this.context });
     }
 
     get context() { return this.mainStore.chart.context; }
@@ -57,12 +57,12 @@ export default class TimeperiodStore {
     }
 
     @computed get timeUnit_display() {
-        if(!this.timeUnit) {return;}
+        if (!this.timeUnit) { return; }
         let temp = this.timeUnit;
-        if(temp.length > 4) {
-            temp = (temp).slice(0,3);
+        if (temp.length > 4) {
+            temp = (temp).slice(0, 3);
         }
-        return temp.replace(/(\w)/, (str) => str.toUpperCase());
+        return temp.replace(/(\w)/, str => str.toUpperCase());
     }
 
     @computed get interval_display() {

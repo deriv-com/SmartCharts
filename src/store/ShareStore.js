@@ -1,12 +1,12 @@
+import html2canvas from 'html2canvas';
 import { observable, action, reaction, computed, autorunAsync, when } from 'mobx';
 import MenuStore from './MenuStore';
 import { downloadFileInBrowser, findAncestor } from './utils';
-import html2canvas from 'html2canvas';
 
 export default class ShareStore {
     constructor(mainStore) {
         this.mainStore = mainStore;
-        this.menu = new MenuStore({getContext: () => this.mainStore.chart.context});
+        this.menu = new MenuStore({ getContext: () => this.mainStore.chart.context });
 
         when(() => this.context, this.onContextReady);
         reaction(() => this.menu.open, this.refereshShareLink);
@@ -40,13 +40,11 @@ export default class ShareStore {
     @observable shareLink = '';
 
     fixedEncodeURIComponent(str) {
-        return encodeURIComponent(str).replace(/[!'()*]/g, function(c) {
-            return `%${c.charCodeAt(0).toString(16)}`;
-        });
+        return encodeURIComponent(str).replace(/[!'()*]/g, c => `%${c.charCodeAt(0).toString(16)}`);
     }
     refereshShareLink = () => {
         let self = this;
-        if(!this.context || !this.menu.dialog.open ) { return; }
+        if (!this.context || !this.menu.dialog.open) { return; }
 
         const layoutData = this.stx.exportLayout(true);
         layoutData.favorites = [];
@@ -59,12 +57,12 @@ export default class ShareStore {
         this.shareLink = '';
 
         let hashPromise = Promise.resolve('NONE');
-        parts.forEach(part => {
+        parts.forEach((part) => {
             hashPromise = hashPromise.then(hash => this.shortenBitlyAsync(part, hash));
         });
 
         hashPromise
-            .then(hash => {
+            .then((hash) => {
                 if (hash) {
                     self.shareLink = `https://bit.ly/${hash}`;
                     self.urlGenerated = true;
@@ -73,9 +71,8 @@ export default class ShareStore {
                     self.urlGenerated = false;
                 }
                 self.loading = false;
-
             })
-            .catch(error => {
+            .catch((error) => {
                 self.loading = false;
                 self.urlGenerated = false;
             });
@@ -89,22 +86,22 @@ export default class ShareStore {
 
         return fetch(`${this.bitlyUrl}/shorten?access_token=${this.accessToken}&longUrl=${shareLink}`)
             .then(response => response.json())
-            .then(response =>  {
-                if (response.status_code == 200 ) {
+            .then((response) =>  {
+                if (response.status_code == 200) {
                     return response.data.url.split('bit.ly/')[1];
                 }
                 return null;
             });
     }
     expandBitlyAsync(hash, payload) {
-        if(hash === 'NONE') {
+        if (hash === 'NONE') {
             return Promise.resolve(payload);
         }
         const bitlyLink = `${window.location.protocol}//bit.ly/${hash}`;
         return fetch(`${this.bitlyUrl}/expand?access_token=${this.accessToken}&shortUrl=${bitlyLink}`)
             .then(response => response.json())
-            .then(response =>  {
-                if (response.status_code === 200 ) {
+            .then((response) =>  {
+                if (response.status_code === 200) {
                     const href = response.data.expand[0].long_url;
                     const encodedJsonPart = href.split('#').slice(1).join('#');
                     const url = href.split('#')[0];
@@ -112,20 +109,19 @@ export default class ShareStore {
 
                     payload = decodeURIComponent(encodedJsonPart) + payload;
 
-                    if(hash == 'NONE') {
+                    if (hash == 'NONE') {
                         return payload;
                     }
                     return this.expandBitlyAsync(hash, payload);
                 }
                 return null;
             });
-
     }
     @action.bound downloadPNG() {
         this.menu.setOpen(false);
         const root = findAncestor(this.stx.container, 'ciq-chart-area');
         html2canvas(root).then((canvas) => {
-            const content = canvas.toDataURL("image/png");
+            const content = canvas.toDataURL('image/png');
             downloadFileInBrowser(
                 `${new Date().toUTCString()}.png`,
                 content,
@@ -137,11 +133,13 @@ export default class ShareStore {
         const isTick = this.timeUnit === 'tick';
         const header = `Date,Time,${isTick ? this.marketDisplayName : 'Open,High,Low,Close'}`;
         const lines = [header];
-        this.stx.masterData.forEach(row => {
-            const {DT, Open, High, Low, Close} = row;
+        this.stx.masterData.forEach((row) => {
+            const {
+                DT, Open, High, Low, Close,
+            } = row;
 
             const year = DT.getUTCFullYear();
-            const month = DT.getUTCMonth() + 1; //months from 1-12
+            const month = DT.getUTCMonth() + 1; // months from 1-12
             const day = DT.getUTCDate();
             const hours = DT.getUTCHours();
             const minutes = DT.getUTCMinutes();
@@ -149,15 +147,15 @@ export default class ShareStore {
 
             const date = `${year}-${month > 9 ? month : `0${month}`}-${day > 9 ? day : `0${day}`}`;
             const time = `${hours > 9 ? hours : `0${hours}`}:${minutes > 9 ? minutes : `0${minutes}`}`;
-            if(isTick && Close) { lines.push(`${date},${time},${Close}`); }
-            if(!isTick && Open && High && Low && Close) {
+            if (isTick && Close) { lines.push(`${date},${time},${Close}`); }
+            if (!isTick && Open && High && Low && Close) {
                 lines.push([
                     date,
                     time,
                     Open.toFixed(this.decimalPlaces),
                     High.toFixed(this.decimalPlaces),
                     Low.toFixed(this.decimalPlaces),
-                    Close.toFixed(this.decimalPlaces)
+                    Close.toFixed(this.decimalPlaces),
                 ].join(','));
             }
         });
@@ -188,14 +186,14 @@ export default class ShareStore {
 
 
     @action.bound copyToClipboard() {
-        if(!navigator.clipboard) {
+        if (!navigator.clipboard) {
             this.onCopyDone(this.copyWithExecCommand());
         } else {
             this.copyWithNavigator().then(this.onCopyDone);
         }
     }
 
-    onInputRef = (ref) => this.inputRef = ref;
+    onInputRef = (ref) => { this.inputRef = ref; }
     onContextReady = () => { };
 }
 

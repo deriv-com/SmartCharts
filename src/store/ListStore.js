@@ -3,7 +3,9 @@ import { connect } from './Connect';
 import KeystrokeHub from '../components/ui/KeystrokeHub';
 
 export default class ListStore {
-    constructor({ getIsOpen, getContext, getItems, onItemSelected }) {
+    constructor({
+        getIsOpen, getContext, getItems, onItemSelected,
+    }) {
         this.getIsOpen = getIsOpen;
         this.getContext = getContext;
         this.getItems = getItems; // items : [{id: '', text: '', disabled?: false, active?: false}]
@@ -17,11 +19,10 @@ export default class ListStore {
 
     claimKeyboard = () => {
         const kh = KeystrokeHub.instance;
-        if(kh) {
+        if (kh) {
             const isOpen = this.getIsOpen();
 
-            if(isOpen) { kh.addClaim(this); }
-            else { kh.removeClaim(this); }
+            if (isOpen) { kh.addClaim(this); } else { kh.removeClaim(this); }
         }
     };
 
@@ -31,13 +32,13 @@ export default class ListStore {
     }
 
     onRootRef = (root) => {
-        if (!root) {return;}
+        if (!root) { return; }
         this.root = root;
         root.addEventListener(CIQ.wheelEvent, (e) => {
             e.stopPropagation();
         });
     };
-    onItemRef = (idx, ref) => this.itemRefs[idx] = ref;
+    onItemRef = (idx, ref) => { this.itemRefs[idx] = ref; };
 
     scrollToElement(item) {
         const root = this.root;
@@ -45,7 +46,7 @@ export default class ListStore {
         let scrolled = root.scrollTop;
 
         let itemBottom = item.offsetTop + item.clientHeight;
-        if(item.offsetTop > scrolled && itemBottom < bottom + scrolled) { return; }
+        if (item.offsetTop > scrolled && itemBottom < bottom + scrolled) { return; }
         root.scrollTop = Math.max(itemBottom - bottom, 0);
     }
 
@@ -55,7 +56,7 @@ export default class ListStore {
         }
         if (key === 32 || key === 'enter') {
             const item = this.getItems()[this.selectedIdx];
-            if(!item.disabled) {
+            if (!item.disabled) {
                 this.onItemSelected(item);
             }
         }

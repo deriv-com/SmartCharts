@@ -13,47 +13,46 @@ const DrawTools = ({
     Menu,
     menuOpen,
     DrawList,
-}) => {
-    return (
-        <Menu
-            className="ciq-draw-tools"
-        >
-            <Menu.Title>
-                <DrawIcon
-                    className={`ic-icon-with-sub ${menuOpen ? 'active' : ''}`}
-                    tooltip-title={t.translate("Draw tools")} />
-            </Menu.Title>
+}) => (
+    <Menu
+        className="ciq-draw-tools"
+    >
+        <Menu.Title>
+            <DrawIcon
+                className={`ic-icon-with-sub ${menuOpen ? 'active' : ''}`}
+                tooltip-title={t.translate('Draw tools')}
+            />
+        </Menu.Title>
 
-            <Menu.Body>
-                <div className='title'>
-                    <div className='ciq-bars-title'>{t.translate("Draw tools")}</div>
-                    <div className='ciq-bars-buttons'>
-                        <ClearIcon
-                            className='ciq-tooltip'
-                            onClick={clearAll}
-                            tooltip-title={t.translate("Clear All")} />
-                        <MeasureIcon
-                            className='ciq-tooltip'
-                            onClick={() => selectTool('measure')}
-                            tooltip-title={t.translate("Measure")} />
-                    </div>
+        <Menu.Body>
+            <div className="title">
+                <div className="ciq-bars-title">{t.translate('Draw tools')}</div>
+                <div className="ciq-bars-buttons">
+                    <ClearIcon
+                        className="ciq-tooltip"
+                        onClick={clearAll}
+                        tooltip-title={t.translate('Clear All')}
+                    />
+                    <MeasureIcon
+                        className="ciq-tooltip"
+                        onClick={() => selectTool('measure')}
+                        tooltip-title={t.translate('Measure')}
+                    />
                 </div>
-                <div className='body'>
-                    <DrawList />
-                </div>
-            </Menu.Body>
-        </Menu>
-    );
-};
+            </div>
+            <div className="body">
+                <DrawList />
+            </div>
+        </Menu.Body>
+    </Menu>
+);
 
-export default connect(
-    ({ drawTools: dt }) => ({
-        clearAll: dt.clearAll,
-        noTool: dt.noTool,
-        selectTool: dt.selectTool,
-        clearDrawings: dt.clearDrawings,
-        Menu: dt.menu.connect(Menu),
-        menuOpen: dt.menu.open,
-        DrawList: dt.list.connect(List),
-    })
-)(DrawTools);
+export default connect(({ drawTools: dt }) => ({
+    clearAll: dt.clearAll,
+    noTool: dt.noTool,
+    selectTool: dt.selectTool,
+    clearDrawings: dt.clearDrawings,
+    Menu: dt.menu.connect(Menu),
+    menuOpen: dt.menu.open,
+    DrawList: dt.list.connect(List),
+}))(DrawTools);

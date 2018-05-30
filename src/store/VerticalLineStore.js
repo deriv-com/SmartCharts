@@ -1,4 +1,4 @@
-import {observable, computed, reaction} from 'mobx';
+import { observable, computed, reaction } from 'mobx';
 
 export default class VerticalLineStore {
     get stx() { return this.mainStore.chart.stxx; }
@@ -25,7 +25,7 @@ export default class VerticalLineStore {
     set epoch(epoch) {
         if (epoch) {
             this.date = CIQ.yyyymmddhhmmssmmm(new Date(epoch * 1000));
-        } else if(this.stx.currentQuote()) {
+        } else if (this.stx.currentQuote()) {
             this.date = this.stx.currentQuote().Date;
         }
         this._draw();
@@ -54,11 +54,11 @@ export default class VerticalLineStore {
     }
     _updateNowPosition() {
         const currentQuote = this.stx.currentQuote();
-        if (!currentQuote) {return;}
+        if (!currentQuote) { return; }
 
         const date = currentQuote.Date;
         let left = this._pixelFromDate(date);
-        if (this.chart.lastTickOffset) {left += this.chart.lastTickOffset;}
+        if (this.chart.lastTickOffset) { left += this.chart.lastTickOffset; }
         left -= (this._offsetWidth / 2);
 
         // to prevent jitter, only update position when difference is noticeable

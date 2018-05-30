@@ -110,7 +110,7 @@ class StreamManager {
         const emitter = new EventEmitter();
         this._emitters[key] = emitter;
 
-        subscription.response.then(response => {
+        subscription.response.then((response) => {
             if (response.error) {
                 this._clearEmitter(key);
             }
@@ -172,7 +172,7 @@ class StreamManager {
     }
 
     async subscribe(input, callback) {
-        const { ticks_history: symbol , granularity } = input;
+        const { ticks_history: symbol, granularity } = input;
         const stream = this._getStream({ symbol, granularity });
         stream.onStream(tickResponse => callback(tickResponse));
         const historyResponse = await stream.response;

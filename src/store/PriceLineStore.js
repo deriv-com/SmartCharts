@@ -1,6 +1,6 @@
+import EventEmitter from 'event-emitter-es6';
 import { action, computed, observable, when } from 'mobx';
 import { connect } from './Connect';
-import EventEmitter from 'event-emitter-es6';
 
 export default class PriceLineStore {
     _relative = false;
@@ -27,7 +27,7 @@ export default class PriceLineStore {
 
     init = () => {
         const exitIfNotisDraggable = (e, callback) => {
-            if (this.visible && this.draggable) {callback.call(this, e);}
+            if (this.visible && this.draggable) { callback.call(this, e); }
         };
         CIQ.safeDrag(
             this._line,
@@ -56,7 +56,7 @@ export default class PriceLineStore {
     }
 
     set relative(value) {
-        if (this._relative === value) {return;}
+        if (this._relative === value) { return; }
 
         this._relative = value;
         const currentPrice = this.stx.currentQuote().Close;
@@ -91,7 +91,7 @@ export default class PriceLineStore {
     }
 
     _modalBegin() {
-        if (this.stx.grabbingScreen) {return;}
+        if (this.stx.grabbingScreen) { return; }
         this.stx.editingAnnotation = true;
         this.stx.modalBegin();
     }
@@ -108,13 +108,13 @@ export default class PriceLineStore {
     }
 
     _dragLine(e) {
-        if(!this._line) { return; }
+        if (!this._line) { return; }
         const newTop = this._initialPosition + e.displacementY;
         const newCenter = newTop + (this._line.offsetHeight / 2);
         let newPrice = this._priceFromLocation(newCenter);
 
-        if (this._priceConstrainer) {newPrice = this._priceConstrainer(newPrice);}
-        if (this.relative) {newPrice -= this.stx.currentQuote().Close;}
+        if (this._priceConstrainer) { newPrice = this._priceConstrainer(newPrice); }
+        if (this.relative) { newPrice -= this.stx.currentQuote().Close; }
 
         this.price = this._snapPrice(newPrice);
     }
@@ -134,7 +134,7 @@ export default class PriceLineStore {
     _snapPrice(price) {
         // snap the limit price to the desired interval if one defined
         let minTick = this.chart.yAxis.minimumPriceTick;
-        if (!minTick) {minTick = 0.00000001;} // maximum # places
+        if (!minTick) { minTick = 0.00000001; } // maximum # places
         let numToRoundTo = 1 / minTick;
         price = Math.round(price * numToRoundTo) / numToRoundTo;
 

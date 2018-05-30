@@ -13,9 +13,9 @@ class Tooltip extends CIQ.Marker {
         hide,
     }) {
         super({
-            stx: stx,
+            stx,
             xPositioner: 'bar',
-            node: node,
+            node,
             chartContainer: true,
             label: 'tooltip',
         });
@@ -44,15 +44,15 @@ class Tooltip extends CIQ.Marker {
 
     static placementFunction(params) {
         const showOverBarOnly = false;
-        var offset = 30;
-        var stx = params.stx;
-        for (var i = 0; i < params.arr.length; i++) {
-            var marker = params.arr[i];
-            var bar = stx.barFromPixel(stx.cx);
-            var quote = stx.chart.dataSegment[bar];
-            var goodBar;
-            var overBar = true;
-            var highPx,
+        let offset = 30;
+        let stx = params.stx;
+        for (let i = 0; i < params.arr.length; i++) {
+            let marker = params.arr[i];
+            let bar = stx.barFromPixel(stx.cx);
+            let quote = stx.chart.dataSegment[bar];
+            let goodBar;
+            let overBar = true;
+            let highPx,
                 lowPx;
 
             // Do not process anything other than the actual tooltip.
@@ -62,15 +62,15 @@ class Tooltip extends CIQ.Marker {
 
             if (quote != 'undefined' && quote && quote.DT) {
                 goodBar = true;
-                if (quote.High) {highPx = stx.pixelFromPrice(quote.High);}
-                if (quote.Low) {lowPx = stx.pixelFromPrice(quote.Low);}
+                if (quote.High) { highPx = stx.pixelFromPrice(quote.High); }
+                if (quote.Low) { lowPx = stx.pixelFromPrice(quote.Low); }
                 if (!stx.highLowBars[stx.layout.chartType]) {
                     if (quote.Close) {
                         highPx = stx.pixelFromPrice(quote.Close) - 15;
                         lowPx = stx.pixelFromPrice(quote.Close) + 15;
                     }
                 }
-                if (showOverBarOnly && !(stx.cy >= highPx && stx.cy <= lowPx)) {overBar = false;}
+                if (showOverBarOnly && !(stx.cy >= highPx && stx.cy <= lowPx)) { overBar = false; }
             }
 
             if (
@@ -91,7 +91,7 @@ class Tooltip extends CIQ.Marker {
                 marker.lastBar = { };
                 return;
             }
-            if (sameBar(stx.chart.dataSegment[bar], marker.lastBar) && bar != stx.chart.dataSegment.length - 1) {return;}
+            if (sameBar(stx.chart.dataSegment[bar], marker.lastBar) && bar != stx.chart.dataSegment.length - 1) { return; }
 
             marker.lastBar = stx.chart.dataSegment[bar];
 
@@ -108,7 +108,7 @@ class Tooltip extends CIQ.Marker {
             marker.show({
                 left,
                 right,
-                top
+                top,
             });
         }
         stx.doDisplayCrosshairs();
@@ -131,7 +131,7 @@ class Tooltip extends CIQ.Marker {
             stx.positionMarkers();
             return;
         }
-        if (sameBar(data, lastBar) && bar != stx.chart.dataSegment.length - 1) {return;}
+        if (sameBar(data, lastBar) && bar != stx.chart.dataSegment.length - 1) { return; }
 
         let panel = stx.chart.panel;
         let yAxis = panel.yAxis;
@@ -140,42 +140,42 @@ class Tooltip extends CIQ.Marker {
         fields.push({
             member: 'DT',
             display: 'DT',
-            panel: panel,
-            yAxis: yAxis
+            panel,
+            yAxis,
         });
         dupMap.DT = dupMap.Close = 1;
         if (this.showChange && CIQ.ChartEngine.isDailyInterval(stx.layout.interval)) {
             fields.push({
                 member: 'Change',
                 display: 'Change',
-                panel: panel,
-                yAxis: yAxis
+                panel,
+                yAxis,
             });
         }
         if (this.showOhl) {
             fields.push({
                 member: 'Open',
                 display: 'Open',
-                panel: panel,
-                yAxis: yAxis
+                panel,
+                yAxis,
             });
             fields.push({
                 member: 'Close',
                 display: 'Close',
-                panel: panel,
-                yAxis: yAxis
+                panel,
+                yAxis,
             });
             fields.push({
                 member: 'High',
                 display: 'High',
-                panel: panel,
-                yAxis: yAxis
+                panel,
+                yAxis,
             });
             fields.push({
                 member: 'Low',
                 display: 'Low',
-                panel: panel,
-                yAxis: yAxis
+                panel,
+                yAxis,
             });
             dupMap.Open = dupMap.High = dupMap.Low = 1;
         }
@@ -184,32 +184,32 @@ class Tooltip extends CIQ.Marker {
                 member: 'Volume',
                 display: 'Volume',
                 panel: null,
-                yAxis: null
+                yAxis: null,
             }); // null yAxis use raw value
             dupMap.Volume = 1;
         }
         if (this.showSeries) {
-            var renderers = stx.chart.seriesRenderers;
-            for (var renderer in renderers) {
-                var rendererToDisplay = renderers[renderer];
+            let renderers = stx.chart.seriesRenderers;
+            for (let renderer in renderers) {
+                let rendererToDisplay = renderers[renderer];
                 panel = stx.panels[rendererToDisplay.params.panel];
                 yAxis = rendererToDisplay.params.yAxis;
-                if (!yAxis && rendererToDisplay.params.shareYAxis) {yAxis = panel.yAxis;}
-                for (var id = 0; id < rendererToDisplay.seriesParams.length; id++) {
-                    var seriesParams = rendererToDisplay.seriesParams[id];
+                if (!yAxis && rendererToDisplay.params.shareYAxis) { yAxis = panel.yAxis; }
+                for (let id = 0; id < rendererToDisplay.seriesParams.length; id++) {
+                    let seriesParams = rendererToDisplay.seriesParams[id];
                     // if a series has a symbol and a field then it maybe a object chain
-                    var sKey = seriesParams.symbol;
-                    var subField = seriesParams.field;
+                    let sKey = seriesParams.symbol;
+                    let subField = seriesParams.field;
                     if (!sKey) {
                         sKey = subField;
-                    } else if (subField && sKey != subField) {sKey = CIQ.createObjectChainNames(sKey, subField)[0];}
-                    var display = seriesParams.display || seriesParams.symbol || seriesParams.field;
+                    } else if (subField && sKey != subField) { sKey = CIQ.createObjectChainNames(sKey, subField)[0]; }
+                    let display = seriesParams.display || seriesParams.symbol || seriesParams.field;
                     if (sKey && !dupMap[display]) {
                         fields.push({
                             member: sKey,
-                            display: display,
-                            panel: panel,
-                            yAxis: yAxis
+                            display,
+                            panel,
+                            yAxis,
                         });
                         dupMap[display] = 1;
                     }
@@ -217,16 +217,16 @@ class Tooltip extends CIQ.Marker {
             }
         }
         if (this.showStudies) {
-            for (var study in stx.layout.studies) {
+            for (let study in stx.layout.studies) {
                 panel = stx.panels[stx.layout.studies[study].panel];
                 yAxis = panel.yAxis; // after 4377 is merged: stx.getYAxisByName(panel, study);
-                for (var output in stx.layout.studies[study].outputMap) {
+                for (let output in stx.layout.studies[study].outputMap) {
                     if (output && !dupMap[output]) {
                         fields.push({
                             member: output,
                             display: output,
-                            panel: panel,
-                            yAxis: yAxis
+                            panel,
+                            yAxis,
                         });
                         dupMap[output] = 1;
                     }
@@ -235,60 +235,60 @@ class Tooltip extends CIQ.Marker {
                     fields.push({
                         member: `${study}_hist`,
                         display: `${study}_hist`,
-                        panel: panel,
-                        yAxis: yAxis
+                        panel,
+                        yAxis,
                     });
                     fields.push({
                         member: `${study}_hist1`,
                         display: `${study}_hist1`,
-                        panel: panel,
-                        yAxis: yAxis
+                        panel,
+                        yAxis,
                     });
                     fields.push({
                         member: `${study}_hist2`,
                         display: `${study}_hist2`,
-                        panel: panel,
-                        yAxis: yAxis
+                        panel,
+                        yAxis,
                     });
                     dupMap[`${study}_hist`] = 1;
                 }
             }
         }
         const rows = [];
-        for (var f = 0; f < fields.length; f++) {
-            var obj = fields[f];
-            var name = obj.member;
-            var displayName = obj.display;
+        for (let f = 0; f < fields.length; f++) {
+            let obj = fields[f];
+            let name = obj.member;
+            let displayName = obj.display;
             panel = obj.panel;
             yAxis = obj.yAxis;
-            var labelDecimalPlaces = null;
+            let labelDecimalPlaces = null;
             if (yAxis) {
                 if (panel !== panel.chart.panel) {
                     // If a study panel, use yAxis settings to determine decimal places
                     if (yAxis.decimalPlaces || yAxis.decimalPlaces === 0) {
                         labelDecimalPlaces = yAxis.decimalPlaces;
-                    } else if (yAxis.maxDecimalPlaces || yAxis.maxDecimalPlaces === 0) {labelDecimalPlaces = yAxis.maxDecimalPlaces;}
+                    } else if (yAxis.maxDecimalPlaces || yAxis.maxDecimalPlaces === 0) { labelDecimalPlaces = yAxis.maxDecimalPlaces; }
                 } else {
                     // If a chart panel, then always display at least the number of decimal places as calculated by masterData (panel.chart.decimalPlaces)
                     // but if we are zoomed to high granularity then expand all the way out to the y-axis significant digits (panel.yAxis.printDecimalPlaces)
                     labelDecimalPlaces = Math.max(yAxis.printDecimalPlaces, panel.chart.decimalPlaces);
-                    //	... and never display more decimal places than the symbol is supposed to be quoting at
-                    if (yAxis.maxDecimalPlaces || yAxis.maxDecimalPlaces === 0) {labelDecimalPlaces = Math.min(labelDecimalPlaces, yAxis.maxDecimalPlaces);}
+                    // ... and never display more decimal places than the symbol is supposed to be quoting at
+                    if (yAxis.maxDecimalPlaces || yAxis.maxDecimalPlaces === 0) { labelDecimalPlaces = Math.min(labelDecimalPlaces, yAxis.maxDecimalPlaces); }
                 }
             }
-            var dsField = null;
+            let dsField = null;
             // account for object chains
-            var tuple = CIQ.existsInObjectChain(data, name);
+            let tuple = CIQ.existsInObjectChain(data, name);
             if (tuple) {
                 dsField = tuple.obj[tuple.member];
-            } else if (name == 'Change') {dsField = data.Close - data.iqPrevClose;}
+            } else if (name == 'Change') { dsField = data.Close - data.iqPrevClose; }
 
-            var fieldName = displayName.replace(/^(Result )(.*)/, '$2');
+            let fieldName = displayName.replace(/^(Result )(.*)/, '$2');
             if ((dsField || dsField === 0) &&
                 (name == 'DT' || typeof dsField !== 'object' || dsField.Close || dsField.Close === 0)
             ) {
-                var fieldValue = '';
-                if (dsField.Close || dsField.Close === 0) {dsField = dsField.Close;}
+                let fieldValue = '';
+                if (dsField.Close || dsField.Close === 0) { dsField = dsField.Close; }
                 if (dsField.constructor == Number) {
                     if (!yAxis) { // raw value
                         fieldValue = dsField;
@@ -356,7 +356,7 @@ class CrosshairStore {
         this.left = -50000;
         this.right = 'auto';
     }
-    @action.bound show({top, left, right}) {
+    @action.bound show({ top, left, right }) {
         this.top = top;
         this.left = left;
         this.right = right;
@@ -368,7 +368,7 @@ class CrosshairStore {
     };
 
     init = () => {
-        if(!this.tooltip && this.context && this.node) {
+        if (!this.tooltip && this.context && this.node) {
             this.tooltip = new Tooltip({
                 stx: this.stx,
                 node: this.node,

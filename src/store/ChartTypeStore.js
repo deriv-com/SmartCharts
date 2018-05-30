@@ -19,20 +19,48 @@ import {
 import SettingsDialogStore from './SettingsDialogStore';
 
 export const chartTypes = [
-    { id: 'mountain',      text: t.translate('Line'),           candleOnly: false, icon: LineIcon         },
-    { id: 'line',          text: t.translate('Dot'),            candleOnly: false, icon: DotIcon          },
-    { id: 'colored_line',  text: t.translate('Colored Dot'),    candleOnly: false, icon: DotIcon          },
-    { id: 'spline',        text: t.translate('Spline'),         candleOnly: false, icon: SplineIcon       },
-    { id: 'baseline',      text: t.translate('Baseline'),       candleOnly: false, icon: BaseLineIcon     },
-    { id: 'candle',        text: t.translate('Candle'),         candleOnly: true,  icon: CandleIcon       },
-    { id: 'colored_bar',   text: t.translate('OHLC'),           candleOnly: true,  icon: OHLCIcon         },
-    { id: 'hollow_candle', text: t.translate('Hollow Candle'),  candleOnly: true,  icon: HollowCandleIcon },
-    { id: 'heikinashi',    text: t.translate('Heikin Ashi'),    candleOnly: true,  icon: HeikinAshiIcon   },
-    { id: 'kagi',          text: t.translate('Kagi'),           candleOnly: true,  icon: KagiIcon,        settingsOnClick: true },
-    { id: 'linebreak',     text: t.translate('Line Break'),     candleOnly: true,  icon: LineBreakIcon,   settingsOnClick: true },
-    { id: 'renko',         text: t.translate('Renko'),          candleOnly: true,  icon: RenkoIcon,       settingsOnClick: true },
-    { id: 'rangebars',     text: t.translate('Range Bars'),     candleOnly: true,  icon: RangeBarsIcon,   settingsOnClick: true },
-    { id: 'pandf',         text: t.translate('Point & Figure'), candleOnly: true,  icon: PointFigureIcon, settingsOnClick: true },
+    {
+        id: 'mountain',      text: t.translate('Line'),           candleOnly: false, icon: LineIcon,
+    },
+    {
+        id: 'line',          text: t.translate('Dot'),            candleOnly: false, icon: DotIcon,
+    },
+    {
+        id: 'colored_line',  text: t.translate('Colored Dot'),    candleOnly: false, icon: DotIcon,
+    },
+    {
+        id: 'spline',        text: t.translate('Spline'),         candleOnly: false, icon: SplineIcon,
+    },
+    {
+        id: 'baseline',      text: t.translate('Baseline'),       candleOnly: false, icon: BaseLineIcon,
+    },
+    {
+        id: 'candle',        text: t.translate('Candle'),         candleOnly: true,  icon: CandleIcon,
+    },
+    {
+        id: 'colored_bar',   text: t.translate('OHLC'),           candleOnly: true,  icon: OHLCIcon,
+    },
+    {
+        id: 'hollow_candle', text: t.translate('Hollow Candle'),  candleOnly: true,  icon: HollowCandleIcon,
+    },
+    {
+        id: 'heikinashi',    text: t.translate('Heikin Ashi'),    candleOnly: true,  icon: HeikinAshiIcon,
+    },
+    {
+        id: 'kagi',          text: t.translate('Kagi'),           candleOnly: true,  icon: KagiIcon,        settingsOnClick: true,
+    },
+    {
+        id: 'linebreak',     text: t.translate('Line Break'),     candleOnly: true,  icon: LineBreakIcon,   settingsOnClick: true,
+    },
+    {
+        id: 'renko',         text: t.translate('Renko'),          candleOnly: true,  icon: RenkoIcon,       settingsOnClick: true,
+    },
+    {
+        id: 'rangebars',     text: t.translate('Range Bars'),     candleOnly: true,  icon: RangeBarsIcon,   settingsOnClick: true,
+    },
+    {
+        id: 'pandf',         text: t.translate('Point & Figure'), candleOnly: true,  icon: PointFigureIcon, settingsOnClick: true,
+    },
 ];
 
 const aggregates = {
@@ -43,7 +71,7 @@ const aggregates = {
             id: 'kagi',
             title: t.translate('Reversal Percentage'),
             type: 'numericinput',
-        }]
+        }],
     },
     renko: {
         title: t.translate('Renko'),
@@ -51,7 +79,7 @@ const aggregates = {
             id: 'renko',
             title: t.translate('Range'),
             type: 'numericinput',
-        }]
+        }],
     },
     linebreak: {
         title: t.translate('Line Break'),
@@ -62,7 +90,7 @@ const aggregates = {
             max: 10,
             step: 1,
             min: 1,
-        }]
+        }],
     },
     rangebars: {
         title: t.translate('Range Bars'),
@@ -70,7 +98,7 @@ const aggregates = {
             id: 'range',
             title: t.translate('Range'),
             type: 'numericinput',
-        }]
+        }],
     },
     pandf: {
         title: t.translate('Point & Figure'),
@@ -82,15 +110,15 @@ const aggregates = {
             id: 'reversal',
             title: t.translate('Reversal'),
             type: 'numericinput',
-        }]
-    }
+        }],
+    },
 };
 
 export default class ChartTypeStore {
     constructor(mainStore) {
         this.mainStore = mainStore;
         when(() => this.context, this.onContextReady);
-        this.menu = new MenuStore({getContext: () => this.context});
+        this.menu = new MenuStore({ getContext: () => this.context });
 
         this.list = new ListStore({
             getIsOpen: () => this.menu.open,
@@ -123,7 +151,7 @@ export default class ChartTypeStore {
     };
 
     @action.bound setType(type) {
-        if(typeof type === 'string') {
+        if (typeof type === 'string') {
             type = this.types.filter(t => t.id === type)[0];
         }
         if (type.id === this.type.id) {
@@ -175,7 +203,7 @@ export default class ChartTypeStore {
             const tuple = CIQ.deriveFromObjectChain(this.stx.layout, id);
             tuple.obj[tuple.member] = value;
         }
-        this.stx.changeOccurred("layout");
+        this.stx.changeOccurred('layout');
         this.stx.createDataSet();
         this.stx.draw();
     };

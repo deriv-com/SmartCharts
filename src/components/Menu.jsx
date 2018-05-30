@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
-import {stxtap} from '../store/utils';
+import { stxtap } from '../store/utils';
 
 class Menu extends Component {
-
-    onOverlayClick(e) {
+    onOverlayClick = (e) => {
         if (e.target.className === 'cq-menu-overlay') {
             this.props.setOpen(false);
         }
-    }
+    };
 
     render() {
         const {
@@ -17,10 +16,10 @@ class Menu extends Component {
             onTitleClick,
             DropdownDialog,
             isMobile,
-            isFullscreen
+            isFullscreen,
         } = this.props;
-        const first = React.Children.map(children, (child, i) => i === 0 ? child : null);
-        const rest  = React.Children.map(children, (child, i) => i !== 0 ? child : null);
+        const first = React.Children.map(children, (child, i) => (i === 0 ? child : null));
+        const rest  = React.Children.map(children, (child, i) => (i !== 0 ? child : null));
 
         return (
             <div className={`ciq-menu ${className || ''} ${open ? 'stxMenuActive' : ''}`}>
@@ -32,13 +31,13 @@ class Menu extends Component {
                 </div>
                 <div
                     className="cq-menu-overlay"
-                    onClick={this.onOverlayClick.bind(this)}
-                    >
+                    onClick={this.onOverlayClick}
+                >
                     <DropdownDialog
-                        className='cq-menu-dropdown'
+                        className="cq-menu-dropdown"
                         isMobile={isMobile}
                         isFullscreen={isFullscreen}
-                        >
+                    >
                         {rest}
                     </DropdownDialog>
                 </div>
@@ -47,7 +46,7 @@ class Menu extends Component {
     }
 }
 
-Menu.Title = ({children}) => children;
-Menu.Body  = ({children}) => children;
+Menu.Title = ({ children }) => children;
+Menu.Body  = ({ children }) => children;
 
 export default Menu;

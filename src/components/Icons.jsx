@@ -53,7 +53,6 @@ import ThemeLight from '../../sass/icons/chart settings/setting/ic-theme-light.s
 import Back from '../../sass/icons/back/ic-back.svg';
 
 
-
 import Warning from '../../sass/icons/alert message/warning.svg';
 import Error from '../../sass/icons/alert message/error.svg';
 import Success from '../../sass/icons/alert message/success.svg';
@@ -72,7 +71,6 @@ import NZD from '../../sass/icons/flags/nzd.svg';
 import PLN from '../../sass/icons/flags/pln.svg';
 import SEK from '../../sass/icons/flags/sek.svg';
 import USD from '../../sass/icons/flags/usd.svg';
-
 
 
 import Portugal from '../../sass/icons/flags/portugal.svg';
@@ -97,7 +95,7 @@ import Spanish from '../../sass/icons/flags/spanish.svg';
 import SouthAfrica from '../../sass/icons/flags/south africa.svg';
 import WallStreet from '../../sass/icons/flags/wallstreet.svg';
 
-/** OTC STOCKS **/
+/** OTC STOCKS * */
 /*
 // German
 import Airbus from '../../sass/icons/active-symbols/otc stocks/ic-airbus.svg';
@@ -162,18 +160,19 @@ import MarketBull from '../../sass/icons/active-symbols/volatility/bull market/i
 import OTCBadge from '../../sass/icons/active-symbols/ic-otcbadge.svg';
 import SmartFX from '../../sass/icons/active-symbols/ic-smartfx-placeholder.svg';
 
-const Wrapper = WrappedComponent => props => {
-    let { className, ['tooltip-title']: tooltip, ...p } = props;
-    className = `ic-icon ${className ? className : ''}`;
+const Wrapper = WrappedComponent => (props) => {
+    let { className, 'tooltip-title': tooltip, ...p } = props;
+    className = `ic-icon ${className || ''}`;
 
     return (
         <span
             className={className}
             tooltip-title={tooltip}
-            {...p}>
+            {...p}
+        >
             <WrappedComponent />
-            <br/>
-            <span className='ic-subtitle'>{tooltip}</span>
+            <br />
+            <span className="ic-subtitle">{tooltip}</span>
         </span>
     );
 };
@@ -198,8 +197,8 @@ export const AddThinIcon = Wrapper(AddThin);
 export const CloseIcon = Wrapper(Close);
 export const ComparisonIcon = Wrapper(Comparison);
 export const CrosshairIcon = Wrapper(Crosshair);
-export const DeleteIcon= Wrapper(Delete);
-export const ClearIcon= Wrapper(Clear);
+export const DeleteIcon = Wrapper(Delete);
+export const ClearIcon = Wrapper(Clear);
 export const DownloadIcon = Wrapper(Download);
 export const DrawIcon = Wrapper(Draw);
 export const IndicatorIcon = Wrapper(Indicator);
@@ -231,10 +230,10 @@ export const BackIcon = Wrapper(Back);
 export const MetalIcon = Wrapper(Metal);
 
 export const alertIconMap = {
-    info:    Wrapper(Info),
+    info: Wrapper(Info),
     success: Wrapper(Success),
     warning: Wrapper(Warning),
-    error:   Wrapper(Error),
+    error: Wrapper(Error),
 };
 
 export const SymbolPlaceholderIcon = Wrapper(SymbolPlaceholder);
@@ -247,7 +246,7 @@ export const CategoryIconMap = {
     indices: Wrapper(Indices),
     stocks: Wrapper(Stocks),
     volidx: Wrapper(Volidx),
-    indicators: Wrapper(IndicatorCategory)
+    indicators: Wrapper(IndicatorCategory),
 };
 
 const FlagIconMap = {
@@ -367,20 +366,20 @@ export const ItemIconMap = {
     frxXPTUSD: MetalIcon,
     frxXAGUSD: MetalIcon,
     /* Volatility Indices */
-    R_10:   Wrapper(Vol10),
-    R_25:   Wrapper(Vol25),
-    R_50:   Wrapper(Vol50),
-    R_75:   Wrapper(Vol75),
-    R_100:  Wrapper(Vol100),
+    R_10: Wrapper(Vol10),
+    R_25: Wrapper(Vol25),
+    R_50: Wrapper(Vol50),
+    R_75: Wrapper(Vol75),
+    R_100: Wrapper(Vol100),
     RDBEAR: Wrapper(MarketBear),
     RDBULL: Wrapper(MarketBull),
 };
 
 function createCompositeIcon(A, B, icId) {
-    return props => {
+    return (props) => {
         const { className, ...p } = props;
         return (
-            <span className={`${icId} ${className}`} {...p}><A/><B/></span>
+            <span className={`${icId} ${className}`} {...p}><A /><B /></span>
         );
     };
 }

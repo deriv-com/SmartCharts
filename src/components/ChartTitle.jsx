@@ -3,7 +3,7 @@ import { connect } from '../store/Connect';
 import Menu from './Menu.jsx';
 import CategoricalDisplay from './CategoricalDisplay.jsx';
 import AnimatedPrice from './AnimatedPrice.jsx';
-import {ItemIconMap, SymbolPlaceholderIcon} from './Icons.jsx';
+import { ItemIconMap, SymbolPlaceholderIcon } from './Icons.jsx';
 import '../../sass/components/_chart-title.scss';
 
 const ChartTitle = ({
@@ -17,17 +17,17 @@ const ChartTitle = ({
     CategoricalDisplay,
     AnimatedPrice,
     onCloseMenu,
-    isMobile
+    isMobile,
 }) => {
-    if (!currentSymbol) return null;
+    if (!currentSymbol) { return null; }
 
     const SymbolIcon = ItemIconMap[currentSymbol.symbol] || SymbolPlaceholderIcon;
     return (
-        <Menu 
+        <Menu
             className="cq-chart-title stx-show cq-symbols-display"
             isMobile={isMobile}
-            isFullscreen={true}
-            >
+            isFullscreen
+        >
             <Menu.Title>
                 {isVisible &&
                 <div className="cq-symbol-select-btn">
@@ -41,33 +41,31 @@ const ChartTitle = ({
                          <AnimatedPrice className="cq-current-price" />
                          <div className={`cq-change ${isPriceUp ? 'stx-up' : 'stx-down'}`}>
                              <span className="cq-todays-change">{todayChange}</span>&nbsp;
-                             {/*<span className="cq-todays-change-pct">({todayChangePercentage})</span>*/}
+                             {/* <span className="cq-todays-change-pct">({todayChangePercentage})</span> */}
                          </div>
                      </div>}
                 </div>}
             </Menu.Title>
             <Menu.Body>
                 <CategoricalDisplay
-                    dialogTitle={t.translate("Underlying Assets")}
-                    closeMenu={ () => onCloseMenu() }
-                    />
+                    dialogTitle={t.translate('Underlying Assets')}
+                    closeMenu={() => onCloseMenu()}
+                />
             </Menu.Body>
         </Menu>
     );
 };
 
-export default connect(
-    ({ chartTitle: c }) => ({
-        todayChange: c.todayChange,
-        todayChangePercentage: c.todayChangePercentage,
-        isPriceUp: c.isPriceUp,
-        isVisible: c.isVisible,
-        isShowChartPrice: c.isShowChartPrice,
-        currentSymbol: c.currentSymbol,
-        Menu: c.menu.connect(Menu),
-        CategoricalDisplay: c.categoricalDisplay.connect(CategoricalDisplay),
-        AnimatedPrice: c.animatedPrice.connect(AnimatedPrice),
-        onCloseMenu: c.menu.onTitleClick,
-        isMobile: c.categoricalDisplay.isMobile
-    })
-)(ChartTitle);
+export default connect(({ chartTitle: c }) => ({
+    todayChange: c.todayChange,
+    todayChangePercentage: c.todayChangePercentage,
+    isPriceUp: c.isPriceUp,
+    isVisible: c.isVisible,
+    isShowChartPrice: c.isShowChartPrice,
+    currentSymbol: c.currentSymbol,
+    Menu: c.menu.connect(Menu),
+    CategoricalDisplay: c.categoricalDisplay.connect(CategoricalDisplay),
+    AnimatedPrice: c.animatedPrice.connect(AnimatedPrice),
+    onCloseMenu: c.menu.onTitleClick,
+    isMobile: c.categoricalDisplay.isMobile,
+}))(ChartTitle);

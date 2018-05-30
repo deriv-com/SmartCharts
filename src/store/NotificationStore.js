@@ -15,10 +15,12 @@ export default class NotificationStore {
     @observable messages = [];
 
     // Duration is in seconds; set to < 0 if you want the notification to remain indefinitely
-    @action.bound notify({text, type = NotificationStore.TYPE_WARNING, duration = 10, category}) {
+    @action.bound notify({
+        text, type = NotificationStore.TYPE_WARNING, duration = 10, category,
+    }) {
         this.messages = this.messages.filter(m => m.text !== text);
         const id = notificationId++;
-        this.messages.push( {
+        this.messages.push({
             id,
             text,
             type,
@@ -31,7 +33,7 @@ export default class NotificationStore {
     }
 
     removeByCategory(category) {
-        this.messages.map((msg, idx) => {
+        this.messages.map((msg, idx) => { // eslint-disable-line array-callback-return
             if (msg.category === category) {
                 this.remove(idx);
             }
@@ -40,7 +42,7 @@ export default class NotificationStore {
 
     removeById(id) {
         const inx = this.messages.findIndex(msg => msg.id === id);
-        if(inx !== -1) { this.remove(inx); }
+        if (inx !== -1) { this.remove(inx); }
     }
 
     @action.bound remove(inx) {
