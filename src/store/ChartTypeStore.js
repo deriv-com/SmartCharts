@@ -19,48 +19,20 @@ import {
 import SettingsDialogStore from './SettingsDialogStore';
 
 export const chartTypes = [
-    {
-        id: 'mountain',      text: t.translate('Line'),           candleOnly: false, icon: LineIcon,
-    },
-    {
-        id: 'line',          text: t.translate('Dot'),            candleOnly: false, icon: DotIcon,
-    },
-    {
-        id: 'colored_line',  text: t.translate('Colored Dot'),    candleOnly: false, icon: DotIcon,
-    },
-    {
-        id: 'spline',        text: t.translate('Spline'),         candleOnly: false, icon: SplineIcon,
-    },
-    {
-        id: 'baseline',      text: t.translate('Baseline'),       candleOnly: false, icon: BaseLineIcon,
-    },
-    {
-        id: 'candle',        text: t.translate('Candle'),         candleOnly: true,  icon: CandleIcon,
-    },
-    {
-        id: 'colored_bar',   text: t.translate('OHLC'),           candleOnly: true,  icon: OHLCIcon,
-    },
-    {
-        id: 'hollow_candle', text: t.translate('Hollow Candle'),  candleOnly: true,  icon: HollowCandleIcon,
-    },
-    {
-        id: 'heikinashi',    text: t.translate('Heikin Ashi'),    candleOnly: true,  icon: HeikinAshiIcon,
-    },
-    {
-        id: 'kagi',          text: t.translate('Kagi'),           candleOnly: true,  icon: KagiIcon,        settingsOnClick: true,
-    },
-    {
-        id: 'linebreak',     text: t.translate('Line Break'),     candleOnly: true,  icon: LineBreakIcon,   settingsOnClick: true,
-    },
-    {
-        id: 'renko',         text: t.translate('Renko'),          candleOnly: true,  icon: RenkoIcon,       settingsOnClick: true,
-    },
-    {
-        id: 'rangebars',     text: t.translate('Range Bars'),     candleOnly: true,  icon: RangeBarsIcon,   settingsOnClick: true,
-    },
-    {
-        id: 'pandf',         text: t.translate('Point & Figure'), candleOnly: true,  icon: PointFigureIcon, settingsOnClick: true,
-    },
+    { id: 'mountain',      text: t.translate('Line'),           candleOnly: false, icon: LineIcon         },
+    { id: 'line',          text: t.translate('Dot'),            candleOnly: false, icon: DotIcon          },
+    { id: 'colored_line',  text: t.translate('Colored Dot'),    candleOnly: false, icon: DotIcon          },
+    { id: 'spline',        text: t.translate('Spline'),         candleOnly: false, icon: SplineIcon       },
+    { id: 'baseline',      text: t.translate('Baseline'),       candleOnly: false, icon: BaseLineIcon     },
+    { id: 'candle',        text: t.translate('Candle'),         candleOnly: true,  icon: CandleIcon       },
+    { id: 'colored_bar',   text: t.translate('OHLC'),           candleOnly: true,  icon: OHLCIcon         },
+    { id: 'hollow_candle', text: t.translate('Hollow Candle'),  candleOnly: true,  icon: HollowCandleIcon },
+    { id: 'heikinashi',    text: t.translate('Heikin Ashi'),    candleOnly: true,  icon: HeikinAshiIcon   },
+    { id: 'kagi',          text: t.translate('Kagi'),           candleOnly: true,  icon: KagiIcon,        settingsOnClick: true },
+    { id: 'linebreak',     text: t.translate('Line Break'),     candleOnly: true,  icon: LineBreakIcon,   settingsOnClick: true },
+    { id: 'renko',         text: t.translate('Renko'),          candleOnly: true,  icon: RenkoIcon,       settingsOnClick: true },
+    { id: 'rangebars',     text: t.translate('Range Bars'),     candleOnly: true,  icon: RangeBarsIcon,   settingsOnClick: true },
+    { id: 'pandf',         text: t.translate('Point & Figure'), candleOnly: true,  icon: PointFigureIcon, settingsOnClick: true },
 ];
 
 const aggregates = {
