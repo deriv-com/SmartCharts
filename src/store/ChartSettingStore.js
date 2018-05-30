@@ -77,6 +77,7 @@ export default class ChartSettingStore {
     @observable position = '';
     @observable theme = '';
 
+
     restoreSetting() {
         const setting = createObjectFromLocalStorage('smartchart-setting');
 
