@@ -1,9 +1,11 @@
-import { observable, action, computed, reaction, autorunAsync } from 'mobx';
+import { observable, action, reaction } from 'mobx';
 import { connect } from './Connect';
 import KeystrokeHub from '../components/ui/KeystrokeHub';
 
 export default class ListStore {
-    constructor({ getIsOpen, getContext, getItems, onItemSelected }) {
+    constructor({
+        getIsOpen, getContext, getItems, onItemSelected,
+    }) {
         this.getIsOpen = getIsOpen;
         this.getContext = getContext;
         this.getItems = getItems; // items : [{id: '', text: '', disabled?: false, active?: false}]
@@ -17,11 +19,10 @@ export default class ListStore {
 
     claimKeyboard = () => {
         const kh = KeystrokeHub.instance;
-        if(kh) {
+        if (kh) {
             const isOpen = this.getIsOpen();
 
-            if(isOpen) { kh.addClaim(this); }
-            else { kh.removeClaim(this); }
+            if (isOpen) { kh.addClaim(this); } else { kh.removeClaim(this); }
         }
     };
 
@@ -31,31 +32,31 @@ export default class ListStore {
     }
 
     onRootRef = (root) => {
-        if (!root) {return;}
+        if (!root) { return; }
         this.root = root;
         root.addEventListener(CIQ.wheelEvent, (e) => {
             e.stopPropagation();
         });
     };
-    onItemRef = (idx, ref) => this.itemRefs[idx] = ref;
+    onItemRef = (idx, ref) => { this.itemRefs[idx] = ref; };
 
     scrollToElement(item) {
         const root = this.root;
-        let bottom = root.clientHeight;
-        let scrolled = root.scrollTop;
+        const bottom = root.clientHeight;
+        const scrolled = root.scrollTop;
 
-        let itemBottom = item.offsetTop + item.clientHeight;
-        if(item.offsetTop > scrolled && itemBottom < bottom + scrolled) { return; }
+        const itemBottom = item.offsetTop + item.clientHeight;
+        if (item.offsetTop > scrolled && itemBottom < bottom + scrolled) { return; }
         root.scrollTop = Math.max(itemBottom - bottom, 0);
     }
 
-    keyStroke(hub, key, e) {
+    keyStroke(hub, key /* , e */) {
         if (['up', 'down', 'enter', 32].indexOf(key) === -1) {
             return false;
         }
         if (key === 32 || key === 'enter') {
             const item = this.getItems()[this.selectedIdx];
-            if(!item.disabled) {
+            if (!item.disabled) {
                 this.onItemSelected(item);
             }
         }
