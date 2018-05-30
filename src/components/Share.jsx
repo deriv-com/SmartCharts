@@ -3,7 +3,8 @@ import Menu from './Menu.jsx';
 import { connect } from '../store/Connect';
 import {
     ShareIcon,
-    CopyIcon
+    CopyIcon,
+    CloseIcon
 } from './Icons.jsx';
 import '../../sass/components/_ciq-share.scss';
 
@@ -22,6 +23,7 @@ const Share = ({
     resetCopyTooltip,
     copyTooltip,
     onInputRef,
+    closeMenu
 }) => {
     return (
         <Menu className="cq-share">
@@ -32,9 +34,13 @@ const Share = ({
                 />
             </Menu.Title>
             <Menu.Body>
-                <div className='title'> {t.translate('Share / Download Chart')} </div>
+                <div className='title'>
+                    <div className="title-text">{t.translate('Share / Download Chart')}</div>
+                    <CloseIcon className="icon-close-menu"
+                        onClick={ () => closeMenu() }
+                        />
+                </div>
                 <div className='body'>
-
                     <div className='caption1'>{t.translate('Share link')}</div>
                     <div className="loading"
                         style={{display: (loading ? 'block' : 'none')}}
@@ -94,4 +100,5 @@ export default connect(({share: s}) => ({
     onInputRef: s.onInputRef,
     resetCopyTooltip:  s.resetCopyTooltip,
     copyTooltip: s.copyTooltip,
+    closeMenu: s.menu.onTitleClick,
 }))(Share);
