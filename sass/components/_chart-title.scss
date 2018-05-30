@@ -29,7 +29,7 @@
             }
             @include border-radius();
             @include themify($themes) {
-                background: themed('defaultMain');
+                background: themed('controlTitlebg');
                 color: themed('defaultTextStrong');
                 border: solid 1px themed('defaultBorder');
             }
@@ -108,20 +108,28 @@
         }
     }
     .cq-menu-dropdown {
-        z-index: -3;
-        margin-top: -35px;
         box-shadow: 0 0 0.625em 0.025em rgba(0, 0, 0, 0.14);
-        bottom: auto !important;
         left: 5px !important;
-        transform: none !important;
-        visibility: hidden;
+        bottom: auto !important;
+        margin-top:5px;
+        z-index: -3;
+        opacity: 0;
+        pointer-events: none;
+        transform: translateX(0) translateY( -3em );
         @include dialog-transition();
-        &.open{
-            margin-top:5px;
-            bottom: auto !important;
-            visibility: visible;
+        &.cq-menu-dropdown-enter-done{
             opacity: 1;
-            z-index: 3;
+            pointer-events: initial;
+            transform: translateX(0) translateY( 0em );
+            z-index: 6;
+        }
+        &.cq-menu-dropdown-exit.cq-menu-dropdown-exit-active{
+            @include dialog-transition();
+        }
+        &.cq-menu-dropdown-exit-done{
+            opacity: 0;
+            z-index: -3;
+            transform: translateX(0) translateY( -3em );
         }
     }
 }
@@ -153,6 +161,8 @@
             margin: 0px !important;
             top: 0px !important;
             left: 0px !important;
+            z-index: 4 !important;
+            @include transition(none !important);
             &.open{
                 margin: 0px;
                 bottom: auto;

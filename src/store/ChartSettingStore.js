@@ -76,6 +76,7 @@ export default class ChartSettingStore {
     @observable language = '';
     @observable position = '';
     @observable theme = '';
+    @observable candleCountdown = false;
 
 
     restoreSetting() {
@@ -95,10 +96,12 @@ export default class ChartSettingStore {
             }
             this.position = setting.position === 'bottom' ? 'bottom' : 'left';
             this.theme = setting.theme === 'light' ? 'light' : 'dark';
+            this.candleCountdown = setting.candleCountdown;
         } else {
             this.language = this.defaultLanguage;
             this.position = 'bottom';
             this.theme = 'light';
+            this.candleCountdown = false;
         }
     }
 
@@ -106,7 +109,8 @@ export default class ChartSettingStore {
         CIQ.localStorageSetItem(`smartchart-setting`, JSON.stringify({
             language: this.language.key,
             position: this.position,
-            theme: this.theme
+            theme: this.theme,
+            candleCountdown :this.candleCountdown
         }));
     }
 
@@ -127,6 +131,12 @@ export default class ChartSettingStore {
     @action.bound setTheme(value) {
         this.theme = value ? 'dark' : 'light';
         this.mainStore.chart.stxx.clearStyles();
+        this.saveSetting();
+    }
+
+    @action.bound showCandleCountdown(value){
+        this.candleCountdown = value;
+        this.mainStore.timeperiod.showCandleCountdown(value);
         this.saveSetting();
     }
 }

@@ -10,6 +10,7 @@ import {
     CloseIcon
 } from './Icons.jsx';
 import '../../sass/components/_ciq-chart-setting.scss';
+import { CSSTransition } from 'react-transition-group';
 
 
 const ChartSetting = ({
@@ -22,6 +23,8 @@ const ChartSetting = ({
     setLanguage,
     theme,
     setTheme,
+    candleCountdown,
+    showCandleCountdown,
     closeMenu,
     assetInformation,
     setAssetInformation
@@ -50,6 +53,15 @@ const ChartSetting = ({
                             <Switch
                                 value={(theme == 'dark')}
                                 onChange={setTheme}
+                            />
+                        </div>
+                    </div>
+                    <div className="ciq-list-item">
+                        <span className="ciq-icon-text">{t.translate('Candle Countdown')}</span>
+                        <div className="ciq-action">
+                            <Switch
+                                value={candleCountdown}
+                                onChange={showCandleCountdown}
                             />
                         </div>
                     </div>
@@ -106,12 +118,24 @@ const ChartSetting = ({
                 />
             </Menu.Title>
             <Menu.Body>
-                <div className={`cq-menu-container ${view == '' ? 'active': ''}`}>
+
+                <CSSTransition
+                    in={view === ''}
+                    timeout={300}
+                    classNames="cq-menu-container"
+                    unmountOnExit
+                >
                     {renderMain()}
-                </div>
-                <div className={`cq-menu-container ${view == 'language' ? 'active': ''}`}>
+                </CSSTransition>
+
+                <CSSTransition
+                    in={view === 'language'}
+                    timeout={300}
+                    classNames="cq-menu-container"
+                    unmountOnExit
+                >
                     {renderLanguage()}
-                </div>
+                </CSSTransition>
 
             </Menu.Body>
         </Menu>
@@ -128,6 +152,8 @@ export default connect(({chartSetting: s,assetInformation: ai}) => ({
     setLanguage: s.setLanguage,
     theme: s.theme,
     setTheme: s.setTheme,
+    candleCountdown: s.candleCountdown,
+    showCandleCountdown: s.showCandleCountdown,
     closeMenu: s.menu.onTitleClick,
     assetInformation: ai.visible,
     setAssetInformation: ai.setVisible

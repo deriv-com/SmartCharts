@@ -9,6 +9,20 @@ export const getTimeUnit = ({ timeUnit, interval }) => {
     return timeUnit;
 };
 
+export const getIntervalInSeconds = ({ timeUnit, interval }) => {
+    let unit = timeUnit;
+    let interv = interval;
+    if (interv === 'day') {
+        unit = 86400;
+        interv = 1;
+    } else if (timeUnit === 'minute') {
+        unit = 60;
+    } else if (timeUnit === 'second') {
+        unit = 1;
+    }
+    return unit * interv;
+};
+
 export function stableSort(arr, compare = (a, b) => a < b) {
     var original = arr.slice(0);
 

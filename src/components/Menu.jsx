@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import {stxtap} from '../store/utils';
+import { CSSTransition } from 'react-transition-group';
 
 class Menu extends Component {
 
@@ -31,16 +32,22 @@ class Menu extends Component {
                     {first}
                 </div>
                 <div
-                    className="cq-menu-overlay"
                     onClick={this.onOverlayClick.bind(this)}
+                    className="cq-menu-overlay"
                 >
-                    <DropdownDialog
-                        className='cq-menu-dropdown'
-                        isMobile={isMobile}
-                        isFullscreen={isFullscreen}
+                    <CSSTransition
+                        in={open}
+                        timeout={0}
+                        classNames="cq-menu-dropdown"
                     >
-                        {rest}
-                    </DropdownDialog>
+                        <DropdownDialog
+                            className='cq-menu-dropdown'
+                            isMobile={isMobile}
+                            isFullscreen={isFullscreen}
+                        >
+                            {rest}
+                        </DropdownDialog>
+                    </CSSTransition>
                 </div>
             </div>
         );
