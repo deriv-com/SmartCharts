@@ -60,6 +60,7 @@ const config = {
                 ],
                 loader: 'eslint-loader',
                 enforce: 'pre',
+                options: { fix: true },
             },
             {
                 test: /\.(js|jsx)$/,

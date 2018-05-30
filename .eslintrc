@@ -63,6 +63,8 @@
         "one-var": 0,
         "no-mixed-operators": 0,
         "max-len": 0,
+        "prefer-const": 1,
+        "import/no-extraneous-dependencies": ["error", {"packageDir": "./"}],
         "no-underscore-dangle": 0,
         "prefer-destructuring": 1,
         "no-this-before-super": 1,

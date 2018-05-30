@@ -8,7 +8,7 @@ window.doorbellOptions = {
         if (hasLoaded) { return; }
         hasLoaded = true;
         window.doorbellOptions.windowLoaded = true;
-        let g = d.createElement(t);
+        const g = d.createElement(t);
         g.id = 'doorbellScript';
         g.type = 'text/javascript';
         g.async = true;

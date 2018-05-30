@@ -1,4 +1,4 @@
-import {
+import { // eslint-disable-line import/no-extraneous-dependencies
     SmartChart,
     // Barrier,
     // TradeStartLine,
@@ -21,7 +21,7 @@ import './doorbell';
 import { ConnectionManager, StreamManager } from './connection';
 
 const getLanguageStorage = function () {
-    let default_language = 'en';
+    const default_language = 'en';
     try {
         let setting_string = CIQ.localStorage.getItem('smartchart-setting'),
             setting = JSON.parse(setting_string !== '' ? setting_string : '{}');
