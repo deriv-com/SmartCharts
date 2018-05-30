@@ -38,7 +38,7 @@ const Share = ({
                     <div className="title-text">{t.translate('Share / Download Chart')}</div>
                     <CloseIcon className="icon-close-menu"
                         onClick={ () => closeMenu() }
-                        />
+                    />
                 </div>
                 <div className='body'>
                     <div className='caption1'>{t.translate('Share link')}</div>
@@ -50,7 +50,7 @@ const Share = ({
                         {shortUrlFailed ? <p>{t.translate('Failed to generate link')}</p> : <div
                             className='download-btn'
                             onClick={refereshShareLink}
-                            >
+                        >
                             {t.translate('Retry')}
                         </div>}
                     </div>

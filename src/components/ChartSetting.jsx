@@ -23,6 +23,8 @@ const ChartSetting = ({
     setLanguage,
     theme,
     setTheme,
+    candleCountdown,
+    showCandleCountdown,
     closeMenu,
     assetInformation,
     setAssetInformation
@@ -51,7 +53,16 @@ const ChartSetting = ({
                             <Switch
                                 value={(theme == 'dark')}
                                 onChange={setTheme}
-                                />
+                            />
+                        </div>
+                    </div>
+                    <div className="ciq-list-item">
+                        <span className="ciq-icon-text">{t.translate('Candle Countdown')}</span>
+                        <div className="ciq-action">
+                            <Switch
+                                value={candleCountdown}
+                                onChange={showCandleCountdown}
+                            />
                         </div>
                     </div>
                     <div className="ciq-list-item">
@@ -60,10 +71,10 @@ const ChartSetting = ({
                             <Switch
                                 value={assetInformation}
                                 onChange={setAssetInformation}
-                                />
+                            />
                         </div>
                     </div>
-                    <div className="ciq-list-item ciq-list-item-lng" 
+                    <div className="ciq-list-item ciq-list-item-lng"
                         onClick={ () => setView('language') }>
                         <span className="ciq-icon-text">{t.translate('Language')}</span>
                         <div className="ciq-action">
@@ -89,7 +100,7 @@ const ChartSetting = ({
                             className={`ciq-list-item ${(selectedLanguage.key == language.key) ? 'selected' : ''}`}
                             key={index}
                             onClick={()=> setLanguage(language) }
-                            >
+                        >
                             {language.icon}
                             <span className="ciq-icon-text">{language.name}</span>
                         </div>;
@@ -141,6 +152,8 @@ export default connect(({chartSetting: s,assetInformation: ai}) => ({
     setLanguage: s.setLanguage,
     theme: s.theme,
     setTheme: s.setTheme,
+    candleCountdown: s.candleCountdown,
+    showCandleCountdown: s.showCandleCountdown,
     closeMenu: s.menu.onTitleClick,
     assetInformation: ai.visible,
     setAssetInformation: ai.setVisible

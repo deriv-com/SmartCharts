@@ -19,7 +19,7 @@ class StudyLegend extends Component {
                 isOpened={isOpened}
                 setOpen={setOpen}
                 isMobile={isMobile}
-                >
+            >
                 <Menu.Title>
                     <IndicatorIcon
                         className={`ic-icon-with-sub ${menuOpen ? 'active' : ''}`}

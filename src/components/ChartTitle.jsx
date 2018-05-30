@@ -19,15 +19,15 @@ const ChartTitle = ({
     onCloseMenu,
     isMobile
 }) => {
-    if (!currentSymbol) return null;
+    if (!currentSymbol) {return null;}
 
     const SymbolIcon = ItemIconMap[currentSymbol.symbol] || SymbolPlaceholderIcon;
     return (
-        <Menu 
+        <Menu
             className="cq-chart-title stx-show cq-symbols-display"
             isMobile={isMobile}
             isFullscreen={true}
-            >
+        >
             <Menu.Title>
                 {isVisible &&
                 <div className="cq-symbol-select-btn">
@@ -50,7 +50,7 @@ const ChartTitle = ({
                 <CategoricalDisplay
                     dialogTitle={t.translate("Underlying Assets")}
                     closeMenu={ () => onCloseMenu() }
-                    />
+                />
             </Menu.Body>
         </Menu>
     );

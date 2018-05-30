@@ -15,7 +15,7 @@ const Comparison = ({
         <Menu
             className="cq-comparison-new cq-symbols-display"
             isMobile={isMobile}
-            >
+        >
             <Menu.Title>
                 <ComparisonIcon
                     className={`ic-icon-with-sub ${menuOpen ? 'active' : ''}`}
