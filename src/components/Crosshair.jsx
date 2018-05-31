@@ -14,7 +14,8 @@ const Crosshair = ({
         ref={setRootRef}
         className={`cq-crosshair ${(state == 2) ? 'active' : ''}  ${left === 'auto' ? 'arrow-right' : 'arrow-left'}`}
         style={{ left, top, right }}
-    >
+        >
+
         {rows.map(row => (
             <div className="row" key={row.name}>
                 <span>{row.name !== 'DT' ? `${row.name}:` : row.value}</span>

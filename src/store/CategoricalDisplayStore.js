@@ -90,6 +90,7 @@ export default class CategoricalDisplayStore {
             if (top > 0) { break; }
             i++;
         }
+        
         // get first non-empty category
         let idx = i - 1;
         let id;
