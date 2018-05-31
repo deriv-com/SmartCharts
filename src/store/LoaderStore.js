@@ -1,13 +1,13 @@
-import {observable, action} from 'mobx';
+import { observable, action } from 'mobx';
 
 export default class LoaderStore {
     @observable isActive = false;
 
-    @action.bound show () {
+    @action.bound show() {
         this.isActive = true;
     }
 
-    @action.bound hide () {
+    @action.bound hide() {
         this.isActive = false;
     }
 }

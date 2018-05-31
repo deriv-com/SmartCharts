@@ -19,11 +19,13 @@ export default class BinaryAPI {
         });
     }
 
-    async getTickHistory({ start, end, symbol, granularity }) {
+    async getTickHistory({
+        start, end, symbol, granularity,
+    }) {
         const req = {
             ticks_history: symbol,
             granularity,
-            style: granularity ? 'candles' : 'ticks'
+            style: granularity ? 'candles' : 'ticks',
         };
 
         if (start && end) {
