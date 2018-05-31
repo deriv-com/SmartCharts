@@ -62,21 +62,14 @@
     .ciq-menu{
         cq-menu-dropdown,
         .cq-menu-dropdown {
-            opacity: 0;
-            z-index: -3;
             transform: translateX( -50% ) translateY( 5em );
             left: 50%;
-            pointer-events: none;
-            @include transition( opacity .20s 0s);
-            @include dialog-transition();
-            &.cq-menu-dropdown-enter-done{
-                pointer-events: initial;
+            &.cq-menu-dropdown-enter-done, &.cq-menu-dropdown-enter-active{
                 opacity: 1;
                 z-index: 6;
                 transform: translateX( -50% ) translateY( 0em );
             }
-            &.cq-menu-dropdown-exit.cq-menu-dropdown-exit-active{
-                @include dialog-transition();
+            &.cq-menu-dropdown-exit-active{
                 opacity: 0;
                 z-index: -3;
             }

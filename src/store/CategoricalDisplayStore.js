@@ -13,7 +13,7 @@ export default class CategoricalDisplayStore {
         favoritesId,
         mainStore,
     }) {
-        reaction(getIsShown, () => {
+        reaction(() => this.scrollPanel, () => {
             if (getIsShown()) {
                 // Odd. Why is setTimeout needed here?
                 if (!this.isMobile) {
@@ -46,6 +46,7 @@ export default class CategoricalDisplayStore {
             when(() => this.context, this.initFavorites.bind(this));
         }
     }
+    @observable scrollPanel;
     @observable filterText = '';
     @observable placeholderText = '';
     @observable activeCategoryKey = '';
@@ -113,6 +114,7 @@ export default class CategoricalDisplayStore {
             idx--;
         }
         this.activeCategoryKey = id || this.filteredItems[0].categoryId;
+        this.scrollTop = this.scrollPanel.scrollTop;
     }
 
     init() {
@@ -327,7 +329,6 @@ export default class CategoricalDisplayStore {
     }
 
     onClose() {
-        this.scrollTop = this.scrollPanel.scrollTop;
         this.scroll.destroy();
         this.scroll = null;
     }
