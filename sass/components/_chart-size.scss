@@ -26,7 +26,11 @@
 .cq-chart-control-left{
     .cq-chart-size {
         width: 100px;
+        height: 120px !important;
         flex-flow: column;
+        > .cq-menu-btn{
+            height: 60px;
+        }
     }
 }
 

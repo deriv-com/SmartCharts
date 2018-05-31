@@ -1,8 +1,8 @@
-import React, {PureComponent} from 'react';
-import { createElement } from './ui/utils';
+import React, { PureComponent } from 'react';
 import ReactDOM from 'react-dom';
-import { MobxProvider } from '../store/Connect';
 import PropTypes from 'prop-types';
+import { createElement } from './ui/utils';
+import { MobxProvider } from '../store/Connect';
 
 class Wrapper extends React.Component {
     constructor(props) {
@@ -11,7 +11,7 @@ class Wrapper extends React.Component {
     }
 
     componentDidMount() {
-        this.setState({children: this.props.children});
+        this.setState({ children: this.props.children }); // eslint-disable-line react/no-did-mount-set-state
     }
 
     render() {
@@ -28,22 +28,22 @@ class RenderInsideChart extends PureComponent {
 
         this.context.promise.then((context) => {
             const stx = context.stx;
-            const elem = createElement(`<div></div>`);
+            const elem = createElement('<div></div>');
             const marker = stx.chart.panel[at].appendChild(elem);
             ReactDOM.render(
                 <MobxProvider store={this.context.mobxStores}>
-                    <Wrapper ref={r => this.wrapper = r}>
+                    <Wrapper ref={(r) => { this.wrapper = r; }}>
                         {this.props.children}
                     </Wrapper>
                 </MobxProvider>,
-                marker
+                marker,
             );
         });
     }
 
-    render () {
-        if(this.wrapper) {
-            setTimeout(() => this.wrapper.setState({children: this.props.children}), 0);
+    render() {
+        if (this.wrapper) {
+            setTimeout(() => this.wrapper.setState({ children: this.props.children }), 0);
         }
         return (null);
     }

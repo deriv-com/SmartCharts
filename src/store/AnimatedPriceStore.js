@@ -12,8 +12,7 @@ export default class AnimatedPriceStore {
         const oldVal = +this.oldPrice;
         const newVal = +this.price;
         let isIncrease = false;
-        if (newVal > oldVal) {isIncrease = true;}
-        else if (newVal === oldVal) {
+        if (newVal > oldVal) { isIncrease = true; } else if (newVal === oldVal) {
             this.setShowStable(true);
             return false;
         }
@@ -31,6 +30,6 @@ export default class AnimatedPriceStore {
         price: this.price,
         showStable: this.showStable,
         isIncrease: this.isIncrease,
-        className: this.className
+        className: this.className,
     }));
 }

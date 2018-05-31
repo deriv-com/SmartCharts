@@ -74,7 +74,7 @@
 				@include themify($themes) {color: themed('controlText');}
 				&.selected {
 					@include themify($themes) {
-						box-shadow: inset 0 0 0 1px themed('activeColor');
+						border-right: 2px solid themed('activeColor');
 						background: themed('controlBgActive');
 					}
 					font-weight: 500;
@@ -116,6 +116,17 @@
 	}
 }
 
+.cq-chart-control-left{
+	.ciq-period {
+		>.cq-menu-btn {
+			>.bt-priod {
+				.ic-priod {
+					padding: 6px 20px;
+				}
+			}
+		}
+	}
+}
 
 /* Mobile Style */
 .smartcharts-mobile {
