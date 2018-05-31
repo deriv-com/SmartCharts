@@ -62,7 +62,7 @@
     .ciq-menu{
         cq-menu-dropdown,
         .cq-menu-dropdown {
-            transform: translateX( -50% ) translateY( 5em );
+            transform: translateX( -50% ) translateY( 3em );
             left: 50%;
             &.cq-menu-dropdown-enter-done, &.cq-menu-dropdown-enter-active{
                 opacity: 1;
@@ -72,9 +72,6 @@
             &.cq-menu-dropdown-exit-active{
                 opacity: 0;
                 z-index: -3;
-            }
-            &.cq-menu-dropdown-exit-done{
-                transform: translateX( -50% ) translateY( 5em );
             }
         }
     }
@@ -127,7 +124,7 @@
                 padding: 0em;
                 opacity: 0;
                 visibility: hidden;
-                @include transition(visibility 0s ease-in-out, opacity 0.2s ease-in-out 0.2s);
+                @include transition(opacity 150 ease-out);
             }
             .cq-menu-dropdown {
                 height: auto;
