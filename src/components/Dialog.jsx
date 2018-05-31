@@ -15,7 +15,6 @@ const Dialog = ({
     const inner_style = (isMobile && open) ? {
         // reduce chart control panel height except in full screen mode
         height: `${isFullscreen ? chartHeight : chartContainerHeight}px`,
-        width: `${window.innerWidth}px`,
     } : {};
 
     return (
