@@ -20,7 +20,6 @@ export default class ChartTitleStore {
     }
 
     @observable todayChange = 0;
-    @observable todayChangePercentage = 0;
     @observable isPriceUp = false;
     @observable isVisible = false;
 
@@ -39,52 +38,36 @@ export default class ChartTitleStore {
     }
 
     onContextReady = () => {
-        this.context.stx.append('createDataSet', this.update.bind(this));
+        this.context.stx.append('createDataSet', this.update);
         this.update();
     };
 
-    update() {
+    update = () => {
         if (!this.currentSymbol) { return; }
-        const stx = this.context.stx;
-        const currentQuote = stx.currentQuote();
-        const previousClose = currentQuote ? currentQuote.iqPrevClose : undefined;
-
+        const { stx } = this.context;
         const hasData = (stx.chart.dataSet && stx.chart.dataSet.length) > 0;
+
         this.isVisible = hasData || !this.isShowChartPrice;
         if (!hasData) { return; }
 
-        const internationalizer = stx.internationalizer;
-        let priceChanged = false;
-
-        let todaysChange = 0;
-        let todaysChangePct = 0;
+        const currentQuote = stx.currentQuote();
         let currentPrice = currentQuote ? currentQuote.Close : '';
         if (currentPrice) {
             currentPrice = currentPrice.toFixed(this.decimalPlaces);
             const oldPrice = this.animatedPrice.price;
             if (oldPrice !== currentPrice) {
-                priceChanged = true;
-            }
-            this.animatedPrice.setPrice(currentPrice);
-        }
-
-        if (priceChanged) {
-            if (currentQuote && previousClose) {
-                todaysChange = CIQ.fixPrice(currentQuote.Close - previousClose);
-                todaysChangePct = todaysChange / previousClose * 100;
-                if (internationalizer) {
-                    this.todayChangePercentage = internationalizer.percent2.format(todaysChangePct / 100);
-                } else {
-                    this.todayChangePercentage = `${todaysChangePct.toFixed(2)}%`;
+                this.animatedPrice.setPrice(currentPrice);
+                const previousClose = currentQuote ? currentQuote.iqPrevClose : undefined;
+                if (currentQuote && previousClose) {
+                    const todaysChange = currentQuote.Close - previousClose;
+                    if (todaysChange > 0) {
+                        this.isPriceUp = true;
+                    } else if (todaysChange < 0) {
+                        this.isPriceUp = false;
+                    }
+                    this.todayChange = Math.abs(todaysChange).toFixed(this.decimalPlaces);
                 }
             }
-            this.todayChange = Math.abs(todaysChange).toFixed(this.decimalPlaces);
-        }
-
-        if (todaysChangePct > 0) {
-            this.isPriceUp = true;
-        } else if (todaysChangePct < 0) {
-            this.isPriceUp = false;
         }
     }
 }

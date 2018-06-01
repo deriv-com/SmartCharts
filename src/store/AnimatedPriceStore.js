@@ -7,12 +7,14 @@ export default class AnimatedPriceStore {
     @observable isIncrease = false;
     oldPrice = '';
 
-    @action.bound setPrice(val) {
+    setPrice(val) {
         this.price = val;
         const oldVal = +this.oldPrice;
         const newVal = +this.price;
         let isIncrease = false;
-        if (newVal > oldVal) { isIncrease = true; } else if (newVal === oldVal) {
+        if (newVal > oldVal) {
+            isIncrease = true;
+        } else if (newVal === oldVal) {
             this.setShowStable(true);
             return false;
         }
