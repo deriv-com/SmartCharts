@@ -34,10 +34,6 @@
             transform: rotate(225deg); /* 180 + 45 */
             display: none;
         }
-        cq-separator {
-            margin: 0;
-        }
-        cq-menu-dropdown,
         .cq-menu-dropdown {
             height: auto;
         }
@@ -51,13 +47,6 @@
     .cq-toggle {
         padding: 0.35em 2.6em;
         color: #575757;
-    }
-    cq-comparison-add {
-        cq-comparison-lookup-frame {
-            position: absolute;
-            bottom: 0em;
-            left: -10em;
-        }
     }
     .ciq-menu{
         cq-menu-dropdown,
@@ -130,7 +119,7 @@
                 height: auto;
                 left: -1px;
                 width: calc( 100% + 2px );
-                padding: 0 0 8px 0;
+                padding: 0;
                 border: none;
                 box-shadow: none;
                 border-radius: 0px !important;
@@ -148,9 +137,6 @@
                 .cq-menu-overlay {
                     opacity: 1;
                     visibility: visible;
-                }
-                .cq-categorical-display {
-                    height: calc(100% + 8px);
                 }
             }
             &.ciq-studies,
