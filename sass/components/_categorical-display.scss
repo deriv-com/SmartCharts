@@ -123,7 +123,7 @@
         cursor: pointer;
         @include transition(background-color 0.3s);
         @include box-sizing(border-box);
-        &:hover,
+        &.cq-hover-style:hover,
         &.cq-active-filter {
             @include themify($themes) {
                 color: themed('defaultTextActive');
