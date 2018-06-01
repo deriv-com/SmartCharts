@@ -34,6 +34,22 @@ const ChartSetting = ({
     setAssetInformation,
     isMobile,
 }) => {
+    const renderPosition = () => (
+        <div>
+            <div className="ciq-list-item ciq-list-item-position">
+                <span className="ciq-icon-text">{t.translate('Position')}</span>
+                <div className="ciq-action">
+                    <PositionBottomIcon
+                        onClick={() => setPosition('bottom')}
+                        className={`${position === 'bottom' ? 'active' : ''}`}
+                    />
+                    <PositionLeftIcon
+                        onClick={() => setPosition('left')}
+                        className={`${position === 'left' ? 'active' : ''}`}
+                    />
+                </div>
+            </div>
+        </div>);
     const renderMain = () => (
         <div>
             <div className="title">
@@ -42,24 +58,12 @@ const ChartSetting = ({
             </div>
             <div className="body">
                 <div className="ciq-list ciq-list-setting">
-                    {!isMobile ? <div className="ciq-list-item ciq-list-item-position">
-                        <span className="ciq-icon-text">{t.translate('Position')}</span>
-                        <div className="ciq-action">
-                            <PositionBottomIcon
-                                onClick={() => setPosition('bottom')}
-                                className={`${position == 'bottom' ? 'active' : ''}`}
-                            />
-                            <PositionLeftIcon
-                                onClick={() => setPosition('left')}
-                                className={`${position == 'left' ? 'active' : ''}`}
-                            />
-                        </div>
-                    </div> : ''}
+                    {!isMobile ? renderPosition() : ''}
                     <div className="ciq-list-item">
                         <span className="ciq-icon-text">{t.translate('Dark Mode')}</span>
                         <div className="ciq-action">
                             <Switch
-                                value={(theme == 'dark')}
+                                value={(theme === 'dark')}
                                 onChange={setTheme}
                             />
                         </div>
@@ -106,7 +110,7 @@ const ChartSetting = ({
                 <div className="ciq-list ciq-list-language">
                     {languages.map((language, index) => (
                         <div
-                            className={`ciq-list-item ${(selectedLanguage.key == language.key) ? 'selected' : ''}`}
+                            className={`ciq-list-item ${(selectedLanguage.key === language.key) ? 'selected' : ''}`}
                             key={index}
                             onClick={() => setLanguage(language)}
                         >
