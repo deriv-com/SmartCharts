@@ -32,6 +32,7 @@ const ChartSetting = ({
     closeMenu,
     assetInformation,
     setAssetInformation,
+    isMobile,
 }) => {
     const renderMain = () => (
         <div>
@@ -41,7 +42,7 @@ const ChartSetting = ({
             </div>
             <div className="body">
                 <div className="ciq-list ciq-list-setting">
-                    <div className="ciq-list-item ciq-list-item-position">
+                    {!isMobile ? <div className="ciq-list-item ciq-list-item-position">
                         <span className="ciq-icon-text">{t.translate('Position')}</span>
                         <div className="ciq-action">
                             <PositionBottomIcon
@@ -53,7 +54,7 @@ const ChartSetting = ({
                                 className={`${position == 'left' ? 'active' : ''}`}
                             />
                         </div>
-                    </div>
+                    </div> : ''}
                     <div className="ciq-list-item">
                         <span className="ciq-icon-text">{t.translate('Dark Mode')}</span>
                         <div className="ciq-action">
@@ -148,7 +149,7 @@ const ChartSetting = ({
     );
 };
 
-export default connect(({ chartSetting: s, assetInformation: ai }) => ({
+export default connect(({ chartSetting: s, assetInformation: ai, chart: c }) => ({
     Menu: s.menu.connect(Menu),
     menuOpen: s.menu.dialog.open,
     selectedLanguage: s.language,
@@ -165,4 +166,5 @@ export default connect(({ chartSetting: s, assetInformation: ai }) => ({
     closeMenu: s.menu.onTitleClick,
     assetInformation: ai.visible,
     setAssetInformation: ai.setVisible,
+    isMobile: c.isMobile,
 }))(ChartSetting);

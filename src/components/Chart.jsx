@@ -59,10 +59,9 @@ class Chart extends Component {
             showCandleCountdown = false,
         } = this.props;
 
-
         const currentLang = lang || ((setting && setting.language) ? setting.language.key : 'en');
         t.setLanguage(currentLang);
-        const currentPosition = `cq-chart-control-${(setting && setting.position) ? setting.position : 'bottom'}`;
+        const currentPosition = `cq-chart-control-${(setting && setting.position && !isMobile) ? setting.position : 'bottom'}`;
         const currentMode = `${isMobile ? 'smartcharts-mobile' : ''}`;
         const array = React.Children.toArray(children);
         const insideHolder = array.filter(c => !/(TradeStart)|(TradeEnd)/.test(c.type.displayName));
