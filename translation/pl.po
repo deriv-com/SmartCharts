@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Polish\n"
 "Language: pl_PL\n"
-"PO-Revision-Date: 2018-06-02 19:11-0400\n"
+"PO-Revision-Date: 2018-06-02 19:21-0400\n"
 
 msgid "Favorites"
 msgstr "Ulubione"
@@ -853,16 +853,16 @@ msgid "Price Momentum Oscillator"
 msgstr "Oscylator impetu ceny"
 
 msgid "Double Smoothing Period"
-msgstr ""
+msgstr "Podwójny okres wygładzenia"
 
 msgid "PMO"
 msgstr "PMO"
 
 msgid "PMOSignal"
-msgstr ""
+msgstr "SygnałPMO"
 
 msgid "Relative Volatility"
-msgstr ""
+msgstr "Zmienność względna"
 
 msgid "STD Period"
 msgstr ""
@@ -874,10 +874,10 @@ msgid "Awesome Oscillator"
 msgstr "Oscylator Awesome"
 
 msgid "Market Facilitation Index"
-msgstr ""
+msgstr "Wskaźnik MFI (Market Facilitation Index)"
 
 msgid "Scale Factor"
-msgstr ""
+msgstr "Czynnik skali"
 
 msgid "Green"
 msgstr "Zielony"
@@ -979,22 +979,22 @@ msgid "Pivot"
 msgstr "Pivot"
 
 msgid "Resistance 1"
-msgstr ""
+msgstr "Opór 1"
 
 msgid "Support 1"
-msgstr ""
+msgstr "Wsparcie 1"
 
 msgid "Resistance 2"
-msgstr ""
+msgstr "Opór 2"
 
 msgid "Support 2"
-msgstr ""
+msgstr "Wsparcie 2"
 
 msgid "Resistance 3"
-msgstr ""
+msgstr "Opór 3"
 
 msgid "Support 3"
-msgstr ""
+msgstr "Wsparcie 3"
 
 msgid "VWAP"
 msgstr "VWAP"
