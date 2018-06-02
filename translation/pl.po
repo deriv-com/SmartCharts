@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Polish\n"
 "Language: pl_PL\n"
-"PO-Revision-Date: 2018-06-02 17:40-0400\n"
+"PO-Revision-Date: 2018-06-02 17:51-0400\n"
 
 msgid "Favorites"
 msgstr "Ulubione"
@@ -913,13 +913,13 @@ msgid "Multiplier"
 msgstr "Mnożnik"
 
 msgid "STARC Bands Top"
-msgstr ""
+msgstr "Góra wstęg STARC"
 
 msgid "STARC Bands Median"
-msgstr ""
+msgstr "Średnia wstęg STARC"
 
 msgid "STARC Bands Bottom"
-msgstr ""
+msgstr "Dół wstęg STARC"
 
 msgid "ATR Trailing Stops"
 msgstr ""
@@ -952,16 +952,16 @@ msgid "Donchian Width"
 msgstr "Szerokość kanału Donchiana"
 
 msgid "Relative Vigor Index"
-msgstr "Indeks RVI"
+msgstr "Wskaźnik zmienności względnej"
 
 msgid "Rel Vig"
-msgstr ""
+msgstr "Zmienność względna"
 
 msgid "RelVigSignal"
-msgstr ""
+msgstr "SygnałZmiennościWzg"
 
 msgid "Elder Impulse System"
-msgstr ""
+msgstr "Wskaźnik starszego impulsu"
 
 msgid "Bullish"
 msgstr "Zwyżkowe"
