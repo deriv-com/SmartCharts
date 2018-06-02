@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Polish\n"
 "Language: pl_PL\n"
-"PO-Revision-Date: 2018-06-02 18:31-0400\n"
+"PO-Revision-Date: 2018-06-02 18:41-0400\n"
 
 msgid "Favorites"
 msgstr "Ulubione"
@@ -550,7 +550,7 @@ msgid "QStick"
 msgstr "QStick"
 
 msgid "Coppock Curve"
-msgstr ""
+msgstr "Krzywa Coppocka"
 
 msgid "Short RoC"
 msgstr "Krótki RoC"
@@ -631,7 +631,7 @@ msgid "High Minus Low"
 msgstr ""
 
 msgid "Median Price"
-msgstr ""
+msgstr "Mediana ceny"
 
 msgid "Overlay"
 msgstr "Nakładka"
@@ -646,13 +646,13 @@ msgid "Shift"
 msgstr "Przesunięcie"
 
 msgid "MA Env Top"
-msgstr ""
+msgstr "Góra MA Env"
 
 msgid "MA Env Median"
-msgstr ""
+msgstr "Mediana MA Env"
 
 msgid "MA Env Bottom"
-msgstr ""
+msgstr "Dół MA Env"
 
 msgid "Fractal Chaos Bands"
 msgstr ""
