@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Polish\n"
 "Language: pl_PL\n"
-"PO-Revision-Date: 2018-06-02 13:11-0400\n"
+"PO-Revision-Date: 2018-06-02 13:21-0400\n"
 
 msgid "Favorites"
 msgstr "Ulubione"
@@ -163,7 +163,7 @@ msgid "Continuous"
 msgstr "Ciągła"
 
 msgid "Crossline"
-msgstr ""
+msgstr "Linia krzyżowa"
 
 msgid "Doodle"
 msgstr "Doodle"
@@ -223,7 +223,7 @@ msgid "Shape - Cross"
 msgstr "Kształt - krzyżyk"
 
 msgid "Shape - Focus"
-msgstr ""
+msgstr "Kształt – dwa groty"
 
 msgid "Shape - Heart"
 msgstr "Kształt - serce"
