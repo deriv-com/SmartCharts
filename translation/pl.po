@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Polish\n"
 "Language: pl_PL\n"
-"PO-Revision-Date: 2018-06-02 14:51-0400\n"
+"PO-Revision-Date: 2018-06-02 15:10-0400\n"
 
 msgid "Favorites"
 msgstr "Ulubione"
@@ -184,10 +184,10 @@ msgid "Fib Time Zone"
 msgstr "Strefa czasowa Fibonacciego"
 
 msgid "Gann Fan"
-msgstr ""
+msgstr "Wachlarz Ganna"
 
 msgid "Gartley"
-msgstr ""
+msgstr "Formacja Gartleya"
 
 msgid "Horizontal"
 msgstr "Linia pozioma"
@@ -199,10 +199,10 @@ msgid "Pitchfork"
 msgstr "Widły"
 
 msgid "Quadrant Lines"
-msgstr ""
+msgstr "Cztery linie"
 
 msgid "Ray"
-msgstr ""
+msgstr "Promień"
 
 msgid "Rectangle"
 msgstr "Prostokąt"
@@ -232,16 +232,16 @@ msgid "Shape - Star"
 msgstr "Kształt – gwiazda"
 
 msgid "Speed Resistance Arc"
-msgstr ""
+msgstr "Łuk odporności na prędkość"
 
 msgid "Speed Resistance Line"
-msgstr ""
+msgstr "Linia odporności na prędkość"
 
 msgid "Time Cycle"
-msgstr ""
+msgstr "Cykl czasu"
 
 msgid "Tirone Levels"
-msgstr ""
+msgstr "Poziomy Tirone"
 
 msgid "Vertical"
 msgstr "Linia pionowa"
@@ -250,10 +250,10 @@ msgid "Active"
 msgstr "Aktywne"
 
 msgid "There are no active comparisons yet."
-msgstr ""
+msgstr "Nie ma jeszcze żadnych aktywnych porównań."
 
 msgid "\"Mass Index\" or \"Doji Star\""
-msgstr ""
+msgstr "„Indeks masowy” lub „Gwiazda Doji”"
 
 msgid "There are no active indicators yet."
 msgstr "Nie ma jeszcze żadnych aktywnych wskaźników."
