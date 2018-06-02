@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Polish\n"
 "Language: pl_PL\n"
-"PO-Revision-Date: 2018-06-02 15:40-0400\n"
+"PO-Revision-Date: 2018-06-02 17:00-0400\n"
 
 msgid "Favorites"
 msgstr "Ulubione"
@@ -1201,7 +1201,7 @@ msgid "Volume Spike"
 msgstr ""
 
 msgid "Volume % of Avg"
-msgstr ""
+msgstr "% wolumenu średniej"
 
 msgid "Darvas"
 msgstr ""
