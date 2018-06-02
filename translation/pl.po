@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Polish\n"
 "Language: pl_PL\n"
-"PO-Revision-Date: 2018-06-02 13:21-0400\n"
+"PO-Revision-Date: 2018-06-02 13:31-0400\n"
 
 msgid "Favorites"
 msgstr "Ulubione"
@@ -175,13 +175,13 @@ msgid "Fib Retracement"
 msgstr ""
 
 msgid "Fib Arc"
-msgstr ""
+msgstr "Łuk Fibonacciego"
 
 msgid "Fib Fan"
 msgstr ""
 
 msgid "Fib Time Zone"
-msgstr ""
+msgstr "Strefa czasowa Fibonacciego"
 
 msgid "Gann Fan"
 msgstr ""
@@ -190,7 +190,7 @@ msgid "Gartley"
 msgstr ""
 
 msgid "Horizontal"
-msgstr "Pozioma"
+msgstr "Linia pozioma"
 
 msgid "Line"
 msgstr "Linia"
@@ -244,7 +244,7 @@ msgid "Tirone Levels"
 msgstr ""
 
 msgid "Vertical"
-msgstr "Pionowa"
+msgstr "Linia pionowa"
 
 msgid "Active"
 msgstr "Aktywne"
