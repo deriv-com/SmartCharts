@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Polish\n"
 "Language: pl_PL\n"
-"PO-Revision-Date: 2018-06-02 17:10-0400\n"
+"PO-Revision-Date: 2018-06-02 17:20-0400\n"
 
 msgid "Favorites"
 msgstr "Ulubione"
@@ -1147,25 +1147,25 @@ msgid "Lightest Rate of Change Period"
 msgstr ""
 
 msgid "Lightest SMA Period"
-msgstr ""
+msgstr "Najlżejszy okres średniej SMA"
 
 msgid "Light Rate of Change Period"
 msgstr ""
 
 msgid "Light SMA Period"
-msgstr ""
+msgstr "Lekki okres średniej SMA"
 
 msgid "Heavy Rate of Change Period"
 msgstr ""
 
 msgid "Heavy SMA Period"
-msgstr ""
+msgstr "Ciężki okres średniej SMA"
 
 msgid "Heaviest Rate of Change Period"
 msgstr ""
 
 msgid "Heaviest SMA Period"
-msgstr ""
+msgstr "Najcięższy okres średniej SMA"
 
 msgid "KST"
 msgstr "KST"
@@ -1177,7 +1177,7 @@ msgid "Pring's Special K"
 msgstr ""
 
 msgid "Darvas Box"
-msgstr ""
+msgstr "Ramki Darvasa"
 
 msgid "ATH Lookback Period"
 msgstr ""
@@ -1198,13 +1198,13 @@ msgid "Price Minimum"
 msgstr "Minimum ceny"
 
 msgid "Volume Spike"
-msgstr ""
+msgstr "Szczyt wolumenu"
 
 msgid "Volume % of Avg"
 msgstr "% wolumenu średniej"
 
 msgid "Darvas"
-msgstr ""
+msgstr "Darvas"
 
 msgid "Ghost"
 msgstr "Duch"
@@ -1222,10 +1222,10 @@ msgid "Downtrend"
 msgstr "Trend zniżkowy"
 
 msgid "Volume Profile"
-msgstr ""
+msgstr "Profil wolumenu"
 
 msgid "Bars Color"
-msgstr ""
+msgstr "Kolor słupków"
 
 msgid "Vortex Indicator"
 msgstr "Wskaźnik Vortex"
