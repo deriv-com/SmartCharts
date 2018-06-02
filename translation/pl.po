@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Polish\n"
 "Language: pl_PL\n"
-"PO-Revision-Date: 2018-06-02 17:30-0400\n"
+"PO-Revision-Date: 2018-06-02 17:40-0400\n"
 
 msgid "Favorites"
 msgstr "Ulubione"
@@ -904,7 +904,7 @@ msgid "ATR Bands Channel"
 msgstr ""
 
 msgid "STARC Bands"
-msgstr ""
+msgstr "Wstęgi STARC"
 
 msgid "MA Period"
 msgstr "Okres MA"
@@ -928,13 +928,13 @@ msgid "Plot Type"
 msgstr ""
 
 msgid "HighLow"
-msgstr ""
+msgstr "WysokiNiski"
 
 msgid "Buy Stops"
-msgstr ""
+msgstr "Stop kupna"
 
 msgid "Sell Stops"
-msgstr ""
+msgstr "Stop sprzedaży"
 
 msgid "Bollinger %b"
 msgstr "Bollinger %b"
@@ -949,10 +949,10 @@ msgid "Bandwidth"
 msgstr "Szerokość wstęgi"
 
 msgid "Donchian Width"
-msgstr ""
+msgstr "Szerokość kanału Donchiana"
 
 msgid "Relative Vigor Index"
-msgstr ""
+msgstr "Indeks RVI"
 
 msgid "Rel Vig"
 msgstr ""
@@ -973,10 +973,10 @@ msgid "Neutral"
 msgstr "Neutralne"
 
 msgid "Pivot Points"
-msgstr ""
+msgstr "Punkty Pivota"
 
 msgid "Pivot"
-msgstr ""
+msgstr "Pivot"
 
 msgid "Resistance 1"
 msgstr ""
@@ -1138,7 +1138,7 @@ msgid "Rainbow Oscillator"
 msgstr "Oscylator tęczowy"
 
 msgid "HHV/LLV Lookback"
-msgstr ""
+msgstr "HHV/LLV Lookback"
 
 msgid "Pring's Know Sure Thing"
 msgstr ""
@@ -1180,7 +1180,7 @@ msgid "Darvas Box"
 msgstr "Ramki Darvasa"
 
 msgid "ATH Lookback Period"
-msgstr ""
+msgstr "Okres ATH Lookback"
 
 msgid "Exit Field"
 msgstr ""
