@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Polish\n"
 "Language: pl_PL\n"
-"PO-Revision-Date: 2018-06-02 17:51-0400\n"
+"PO-Revision-Date: 2018-06-02 18:02-0400\n"
 
 msgid "Favorites"
 msgstr "Ulubione"
@@ -460,7 +460,7 @@ msgid "%D Periods"
 msgstr "Okresy %D"
 
 msgid "%D Moving Average Type"
-msgstr ""
+msgstr "Rodzaj średniej kroczącej %D"
 
 msgid "%K"
 msgstr "%K"
@@ -469,7 +469,7 @@ msgid "%D"
 msgstr "%D"
 
 msgid "Historical Volatility"
-msgstr ""
+msgstr "Zmienność w przeszłości"
 
 msgid "Days Per Year"
 msgstr "Dni w roku"
@@ -805,16 +805,16 @@ msgid "Use Volume"
 msgstr ""
 
 msgid "Volume Chart"
-msgstr ""
+msgstr "Wykres wolumenu"
 
 msgid "Up Volume"
-msgstr ""
+msgstr "Dół wolumenu"
 
 msgid "Down Volume"
-msgstr ""
+msgstr "Góra wolumenu"
 
 msgid "Volume Underlay"
-msgstr ""
+msgstr "Podkładka wolumenu"
 
 msgid "Valuation Lines"
 msgstr ""
@@ -922,7 +922,7 @@ msgid "STARC Bands Bottom"
 msgstr "Dół wstęg STARC"
 
 msgid "ATR Trailing Stops"
-msgstr ""
+msgstr "Zlecenia Trailing Stop ATR"
 
 msgid "Plot Type"
 msgstr ""
