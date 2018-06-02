@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Polish\n"
 "Language: pl_PL\n"
-"PO-Revision-Date: 2018-05-24 05:08-0400\n"
+"PO-Revision-Date: 2018-06-02 13:00-0400\n"
 
 msgid "Favorites"
 msgstr "Ulubione"
@@ -43,7 +43,7 @@ msgid "Share"
 msgstr "Udostępnij"
 
 msgid "Share / Download Chart"
-msgstr ""
+msgstr "Udostępnij/pobierz wykres"
 
 msgid "Share link"
 msgstr "Łącze do udostępniania"
@@ -115,13 +115,13 @@ msgid "Toggle Asset Information"
 msgstr "Przełącz na widok informacji o aktywach"
 
 msgid "Copy to clipboard"
-msgstr ""
+msgstr "Kopiuj do schowka"
 
 msgid "Copied!"
-msgstr ""
+msgstr "Skopiowane!"
 
 msgid "Failed!"
-msgstr ""
+msgstr "Nie udało się!"
 
 msgid "Settings"
 msgstr "Ustawienia"
@@ -142,7 +142,7 @@ msgid "[symbol] market is presently closed."
 msgstr "Rynek [symbol] jest obecnie zamknięty."
 
 msgid "Streaming for [symbol] is not available due to license restrictions"
-msgstr ""
+msgstr "Z powodu ograniczeń licencyjnych przesyłanie strumieniowe w przypadku [symbol] jest niedostępne"
 
 msgid "Search..."
 msgstr "Wyszukaj..."
@@ -151,7 +151,7 @@ msgid "Annotation"
 msgstr "Adnotacja"
 
 msgid "Average Line"
-msgstr ""
+msgstr "Linia średniej"
 
 msgid "Callout"
 msgstr ""
@@ -166,7 +166,7 @@ msgid "Crossline"
 msgstr ""
 
 msgid "Doodle"
-msgstr ""
+msgstr "Doodle"
 
 msgid "Ellipse"
 msgstr "Elipsa"
