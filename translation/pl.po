@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Polish\n"
 "Language: pl_PL\n"
-"PO-Revision-Date: 2018-06-02 18:21-0400\n"
+"PO-Revision-Date: 2018-06-02 18:31-0400\n"
 
 msgid "Favorites"
 msgstr "Ulubione"
@@ -478,7 +478,7 @@ msgid "Pretty Good Oscillator"
 msgstr ""
 
 msgid "Ultimate Oscillator"
-msgstr ""
+msgstr "Oscylator Ultimate"
 
 msgid "Cycle 1"
 msgstr "Cykl 1"
@@ -547,7 +547,7 @@ msgid "Schaff Trend Cycle"
 msgstr ""
 
 msgid "QStick"
-msgstr ""
+msgstr "QStick"
 
 msgid "Coppock Curve"
 msgstr ""
@@ -793,7 +793,7 @@ msgid "Weighted Close"
 msgstr ""
 
 msgid "Money Flow Index"
-msgstr ""
+msgstr "Indeks przepływu pieniędzy"
 
 msgid "Williams %R"
 msgstr "Williams %R"
@@ -802,7 +802,7 @@ msgid "Accumulation/Distribution"
 msgstr ""
 
 msgid "Use Volume"
-msgstr ""
+msgstr "Użyj wolumenu"
 
 msgid "Volume Chart"
 msgstr "Wykres wolumenu"
@@ -820,16 +820,16 @@ msgid "Valuation Lines"
 msgstr ""
 
 msgid "Average Type"
-msgstr ""
+msgstr "Rodzaj średniej"
 
 msgid "Display Average"
-msgstr ""
+msgstr "Pokaż średnią"
 
 msgid "Display 1 Standard Deviation (1σ)"
-msgstr ""
+msgstr "Wyświetl 1 odchylenie standardowe (1σ)"
 
 msgid "Display 2 Standard Deviation (2σ)"
-msgstr ""
+msgstr "Wyświetl 2 odchylenia standardowe (2σ)"
 
 msgid "Display 3 Standard Deviation (3σ)"
 msgstr "Wyświetl 3 odchylenia standardowe (3σ)"
@@ -1045,10 +1045,10 @@ msgid "Base Line Period"
 msgstr "Okres linii bazowej"
 
 msgid "Leading Span B Period"
-msgstr ""
+msgstr "Okres linii opóźnienia B"
 
 msgid "Lagging Span Period"
-msgstr ""
+msgstr "Okres linii opóźnienia"
 
 msgid "Conversion Line"
 msgstr "Linia konwersji"
@@ -1057,13 +1057,13 @@ msgid "Base Line"
 msgstr "Linia bazowa"
 
 msgid "Leading Span A"
-msgstr ""
+msgstr "Linia opóźnienia A"
 
 msgid "Leading Span B"
-msgstr ""
+msgstr "Linia opóźnienia B"
 
 msgid "Lagging Span"
-msgstr ""
+msgstr "Linia opóźnienia"
 
 msgid "Price Relative"
 msgstr "Cena względna"
