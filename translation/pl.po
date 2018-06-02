@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Polish\n"
 "Language: pl_PL\n"
-"PO-Revision-Date: 2018-06-02 13:00-0400\n"
+"PO-Revision-Date: 2018-06-02 13:11-0400\n"
 
 msgid "Favorites"
 msgstr "Ulubione"
@@ -160,7 +160,7 @@ msgid "Channel"
 msgstr "Kanał"
 
 msgid "Continuous"
-msgstr ""
+msgstr "Ciągła"
 
 msgid "Crossline"
 msgstr ""
@@ -196,7 +196,7 @@ msgid "Line"
 msgstr "Linia"
 
 msgid "Pitchfork"
-msgstr ""
+msgstr "Widły"
 
 msgid "Quadrant Lines"
 msgstr ""
