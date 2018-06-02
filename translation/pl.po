@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Polish\n"
 "Language: pl_PL\n"
-"PO-Revision-Date: 2018-06-02 18:51-0400\n"
+"PO-Revision-Date: 2018-06-02 19:01-0400\n"
 
 msgid "Favorites"
 msgstr "Ulubione"
@@ -427,7 +427,7 @@ msgid "Volume Rate of Change"
 msgstr "Wskaźnik zmiany wolumenu"
 
 msgid "Momentum Indicator"
-msgstr "Wskaźnik wykupienia (momentum)"
+msgstr "Wskaźnik impetu (momentum)"
 
 msgid "Price Volume Trend"
 msgstr "Trend wolumenu ceny"
@@ -445,7 +445,7 @@ msgid "On Balance Volume"
 msgstr "Wolumen zbilansowany"
 
 msgid "Stochastic Momentum Index"
-msgstr ""
+msgstr "Wskaźnik stochastyczny impetu"
 
 msgid "%K Periods"
 msgstr "Okresy %K"
@@ -505,7 +505,7 @@ msgid "Twiggs Money Flow"
 msgstr ""
 
 msgid "Chaikin Money Flow"
-msgstr ""
+msgstr "Przepływy pieniężne Chaikin"
 
 msgid "Chaikin Volatility"
 msgstr "Wskaźnik zmienności Chaikina"
@@ -559,13 +559,13 @@ msgid "Long RoC"
 msgstr "Długi RoC"
 
 msgid "Chande Momentum Oscillator"
-msgstr ""
+msgstr "Oscylator impetu Chande'a"
 
 msgid "Chande Forecast Oscillator"
 msgstr ""
 
 msgid "Intraday Momentum Index"
-msgstr ""
+msgstr "Śróddzienny wskaźnik impetu"
 
 msgid "RAVI"
 msgstr "RAVI"
@@ -721,10 +721,10 @@ msgid "Donchian Low"
 msgstr ""
 
 msgid "Highest High Value"
-msgstr ""
+msgstr "Najwyższa wysoka wartość"
 
 msgid "Lowest Low Value"
-msgstr ""
+msgstr "Najniższa niska wartość"
 
 msgid "Mass Index"
 msgstr "Indeks masowy\n"
@@ -850,7 +850,7 @@ msgid "Correlation Coefficient"
 msgstr ""
 
 msgid "Price Momentum Oscillator"
-msgstr ""
+msgstr "Oscylator impetu ceny"
 
 msgid "Double Smoothing Period"
 msgstr ""
