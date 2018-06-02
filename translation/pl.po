@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Polish\n"
 "Language: pl_PL\n"
-"PO-Revision-Date: 2018-06-02 18:11-0400\n"
+"PO-Revision-Date: 2018-06-02 18:21-0400\n"
 
 msgid "Favorites"
 msgstr "Ulubione"
@@ -1033,16 +1033,16 @@ msgid "Lips"
 msgstr "Usta"
 
 msgid "Gator Oscillator"
-msgstr ""
+msgstr "Oscylator Gator"
 
 msgid "Ichimoku Clouds"
-msgstr ""
+msgstr "Chmury Ichimoku"
 
 msgid "Conversion Line Period"
-msgstr ""
+msgstr "Okres linii konwersji"
 
 msgid "Base Line Period"
-msgstr ""
+msgstr "Okres linii bazowej"
 
 msgid "Leading Span B Period"
 msgstr ""
@@ -1051,7 +1051,7 @@ msgid "Lagging Span Period"
 msgstr ""
 
 msgid "Conversion Line"
-msgstr ""
+msgstr "Linia konwersji"
 
 msgid "Base Line"
 msgstr "Linia bazowa"
@@ -1066,7 +1066,7 @@ msgid "Lagging Span"
 msgstr ""
 
 msgid "Price Relative"
-msgstr ""
+msgstr "Cena względna"
 
 msgid "Comparison Symbol"
 msgstr "Symbol porównania"
@@ -1090,7 +1090,7 @@ msgid "Balance of Power"
 msgstr "Wskaźnik BOP (Balance of Power)"
 
 msgid "Trend Intensity Index"
-msgstr ""
+msgstr "Wskaźnik intensywności trendu"
 
 msgid "TII"
 msgstr "TII"
@@ -1099,10 +1099,10 @@ msgid "Choppiness Index"
 msgstr "Indeks CHOP (Choppiness Index)"
 
 msgid "Disparity Index"
-msgstr ""
+msgstr "Indeks rozbieżności"
 
 msgid "Rainbow Moving Average"
-msgstr ""
+msgstr "Tęczowa średnia krocząca"
 
 msgid "SMA1"
 msgstr "SMA1"
@@ -1141,7 +1141,7 @@ msgid "HHV/LLV Lookback"
 msgstr "HHV/LLV Lookback"
 
 msgid "Pring's Know Sure Thing"
-msgstr ""
+msgstr "KST (Know Sure Thing) Pringa"
 
 msgid "Lightest Rate of Change Period"
 msgstr ""
@@ -1171,10 +1171,10 @@ msgid "KST"
 msgstr "KST"
 
 msgid "KSTSignal"
-msgstr ""
+msgstr "SygnałKST"
 
 msgid "Pring's Special K"
-msgstr ""
+msgstr "Specjalna K Pringa"
 
 msgid "Darvas Box"
 msgstr "Ramki Darvasa"
