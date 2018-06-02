@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Polish\n"
 "Language: pl_PL\n"
-"PO-Revision-Date: 2018-06-02 19:01-0400\n"
+"PO-Revision-Date: 2018-06-02 19:11-0400\n"
 
 msgid "Favorites"
 msgstr "Ulubione"
@@ -451,10 +451,10 @@ msgid "%K Periods"
 msgstr "Okresy %K"
 
 msgid "%K Smoothing Periods"
-msgstr ""
+msgstr "Okresy wygładzenia %K"
 
 msgid "%K Double Smoothing Periods"
-msgstr ""
+msgstr "Podwójne okresy wygładzenia %K"
 
 msgid "%D Periods"
 msgstr "Okresy %D"
@@ -571,19 +571,19 @@ msgid "RAVI"
 msgstr "RAVI"
 
 msgid "Random Walk Index"
-msgstr ""
+msgstr "Indeks RWI (Random Walk Index)"
 
 msgid "Random Walk High"
-msgstr ""
+msgstr "Wysoka wartość RWI"
 
 msgid "Random Walk Low"
-msgstr ""
+msgstr "Niska wartość RWI"
 
 msgid "ADX/DMS"
 msgstr "ADX/DMS"
 
 msgid "Smoothing Period"
-msgstr ""
+msgstr "Okres wygładzenia"
 
 msgid "Series"
 msgstr "Serie"
@@ -604,16 +604,16 @@ msgid "ADX"
 msgstr "ADX"
 
 msgid "Positive Bar"
-msgstr ""
+msgstr "Dodatni słupek"
 
 msgid "Negative Bar"
-msgstr ""
+msgstr "Ujemny słupek"
 
 msgid "High Low Bands"
 msgstr ""
 
 msgid "Shift Percentage"
-msgstr ""
+msgstr "Procent przesunięcia"
 
 msgid "Channel Fill"
 msgstr ""
@@ -637,7 +637,7 @@ msgid "Overlay"
 msgstr "Nakładka"
 
 msgid "Moving Average Envelope"
-msgstr ""
+msgstr "Średnia krocząca Envelope"
 
 msgid "Shift Type"
 msgstr "Rodzaj przesunięcia"
@@ -892,13 +892,13 @@ msgid "Squat"
 msgstr ""
 
 msgid "ATR Bands"
-msgstr ""
+msgstr "Wstęgi ATR"
 
 msgid "ATR Bands Top"
-msgstr ""
+msgstr "Góra wstęg ATR"
 
 msgid "ATR Bands Bottom"
-msgstr ""
+msgstr "Dół wstęg ATR"
 
 msgid "ATR Bands Channel"
 msgstr "Kanał wstęg ATR"
