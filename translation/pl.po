@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Polish\n"
 "Language: pl_PL\n"
-"PO-Revision-Date: 2018-06-02 14:41-0400\n"
+"PO-Revision-Date: 2018-06-02 14:51-0400\n"
 
 msgid "Favorites"
 msgstr "Ulubione"
@@ -745,13 +745,13 @@ msgid "Keltner Bottom"
 msgstr ""
 
 msgid "Parabolic SAR"
-msgstr ""
+msgstr "Paraboliczny wskaźnik SAR"
 
 msgid "Minimum AF"
-msgstr ""
+msgstr "Minimalny AF"
 
 msgid "Maximum AF"
-msgstr ""
+msgstr "Maksymalny AF"
 
 msgid "Klinger Volume Oscillator"
 msgstr "Oscylator wolumenowy Klingera"
