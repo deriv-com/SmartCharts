@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Polish\n"
 "Language: pl_PL\n"
-"PO-Revision-Date: 2018-06-02 19:21-0400\n"
+"PO-Revision-Date: 2018-06-02 19:30-0400\n"
 
 msgid "Favorites"
 msgstr "Ulubione"
@@ -523,7 +523,7 @@ msgid "Commodity Channel Index"
 msgstr ""
 
 msgid "Detrended Price Oscillator"
-msgstr ""
+msgstr "Beztrendowy oscylator cenowy"
 
 msgid "True Range"
 msgstr "Rzeczywisty zasięg"
@@ -712,13 +712,13 @@ msgid "Low Period"
 msgstr "Okres niski"
 
 msgid "Donchian High"
-msgstr ""
+msgstr "Wysoka wartość kanału Donchiana"
 
 msgid "Donchian Median"
-msgstr ""
+msgstr "Mediana kanału Donchiana"
 
 msgid "Donchian Low"
-msgstr ""
+msgstr "Niska wartość kanału Donchiana"
 
 msgid "Highest High Value"
 msgstr "Najwyższa wysoka wartość"
@@ -865,10 +865,10 @@ msgid "Relative Volatility"
 msgstr "Zmienność względna"
 
 msgid "STD Period"
-msgstr ""
+msgstr "Okres STD"
 
 msgid "Rel Vol"
-msgstr ""
+msgstr "Rel Vol"
 
 msgid "Awesome Oscillator"
 msgstr "Oscylator Awesome"
