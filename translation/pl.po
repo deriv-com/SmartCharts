@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Polish\n"
 "Language: pl_PL\n"
-"PO-Revision-Date: 2018-06-02 19:30-0400\n"
+"PO-Revision-Date: 2018-06-03 09:49-0400\n"
 
 msgid "Favorites"
 msgstr "Ulubione"
@@ -379,13 +379,13 @@ msgid "Forecast"
 msgstr "Prognoza"
 
 msgid "Linear Reg Intercept"
-msgstr ""
+msgstr "Przejęcie regresji liniowej"
 
 msgid "Intercept"
 msgstr "Przejęcie"
 
 msgid "Time Series Forecast"
-msgstr ""
+msgstr "Prognoza szeregów czasowych"
 
 msgid "Vertical Horizontal Filter"
 msgstr "Filtr pionowo-poziomy"
@@ -415,7 +415,7 @@ msgid "Swing Index"
 msgstr "Indeks wahań"
 
 msgid "Limit Move Value"
-msgstr ""
+msgstr "Wartość limitowanego ruchu"
 
 msgid "Accumulative Swing Index"
 msgstr "Skumulowany indeks wahań"
@@ -475,7 +475,7 @@ msgid "Days Per Year"
 msgstr "Dni w roku"
 
 msgid "Pretty Good Oscillator"
-msgstr ""
+msgstr "Oscylator Pretty Good"
 
 msgid "Ultimate Oscillator"
 msgstr "Oscylator Ultimate"
@@ -502,7 +502,7 @@ msgid "Points Or Percent"
 msgstr "Punkty lub procenty"
 
 msgid "Twiggs Money Flow"
-msgstr ""
+msgstr "Przepływy pieniężne Twiggsa"
 
 msgid "Chaikin Money Flow"
 msgstr "Przepływy pieniężne Chaikin"
@@ -517,10 +517,10 @@ msgid "Price Oscillator"
 msgstr "Oscylator cenowy"
 
 msgid "Ease of Movement"
-msgstr ""
+msgstr "Swoboda ruchu"
 
 msgid "Commodity Channel Index"
-msgstr ""
+msgstr "Wskaźnik kanału towaru (CCI)"
 
 msgid "Detrended Price Oscillator"
 msgstr "Beztrendowy oscylator cenowy"
