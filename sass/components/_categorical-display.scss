@@ -336,9 +336,19 @@
                 border: 1px solid themed('defaultBorder');
             }
         }
-        .cq-scroll-panel{
+        .category {
+            padding-top: 1em;
+            &:last-child {	
+                padding-bottom :10em;
+                height: calc( 100vh - 13em );
+            }
+        }
+        .cq-scroll-panel {
             width: 100%;
-            height: calc( 100vh - 17em );
+            height: calc( 100vh - 13em );
+        }
+        .cq-item, .cq-active-item {
+            height: 40px;
         }
         .cq-filter-panel{
             display: flex;
