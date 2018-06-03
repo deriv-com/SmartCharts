@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Thai\n"
 "Language: th_TH\n"
-"PO-Revision-Date: 2018-05-25 06:46-0400\n"
+"PO-Revision-Date: 2018-06-02 06:41-0400\n"
 
 msgid "Favorites"
 msgstr "รายการโปรด"
@@ -52,7 +52,7 @@ msgid "Failed to generate link"
 msgstr "ไม่สามารถสร้างลิงค์"
 
 msgid "Retry"
-msgstr "ลองอีกครั้ง"
+msgstr "ลองใหม่อีกครั้ง"
 
 msgid "Download chart"
 msgstr "ดาวน์โหลดแผนภูมิ"
@@ -520,7 +520,7 @@ msgid "Ease of Movement"
 msgstr "ความง่ายของการเคลื่อนตัว"
 
 msgid "Commodity Channel Index"
-msgstr "Commodity Channel Index"
+msgstr "ดัชนี Commodity Channel"
 
 msgid "Detrended Price Oscillator"
 msgstr "Detrended Price Oscillator"
@@ -736,13 +736,13 @@ msgid "Keltner Channel"
 msgstr "ช่อง Keltner "
 
 msgid "Keltner Top"
-msgstr "Keltner สูง"
+msgstr "Keltner สูงสุด"
 
 msgid "Keltner Median"
 msgstr "Keltner ค่ากลาง"
 
 msgid "Keltner Bottom"
-msgstr "Keltner ต่ำ"
+msgstr "Keltner ต่ำสุด"
 
 msgid "Parabolic SAR"
 msgstr "Parabolic SAR"
