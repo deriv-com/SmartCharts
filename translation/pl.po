@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Polish\n"
 "Language: pl_PL\n"
-"PO-Revision-Date: 2018-06-03 09:49-0400\n"
+"PO-Revision-Date: 2018-06-03 09:50-0400\n"
 
 msgid "Favorites"
 msgstr "Ulubione"
@@ -535,7 +535,7 @@ msgid "ATR"
 msgstr "ATR"
 
 msgid "Ehler Fisher Transform"
-msgstr ""
+msgstr "Transformata Fishera"
 
 msgid "EF"
 msgstr "EF"
