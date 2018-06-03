@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Polish\n"
 "Language: pl_PL\n"
-"PO-Revision-Date: 2018-06-03 09:50-0400\n"
+"PO-Revision-Date: 2018-06-03 10:00-0400\n"
 
 msgid "Favorites"
 msgstr "Ulubione"
@@ -757,7 +757,7 @@ msgid "Klinger Volume Oscillator"
 msgstr "Oscylator wolumenowy Klingera"
 
 msgid "Signal Periods"
-msgstr ""
+msgstr "Okresy sygnału"
 
 msgid "Klinger"
 msgstr "Klinger"
@@ -766,7 +766,7 @@ msgid "KlingerSignal"
 msgstr "Sygnał Klingera"
 
 msgid "Elder Ray Index"
-msgstr ""
+msgstr "Wskaźnik Elder Ray"
 
 msgid "Elder Bull Power"
 msgstr ""
@@ -1186,7 +1186,7 @@ msgid "Exit Field"
 msgstr ""
 
 msgid "Ghost Boxes"
-msgstr ""
+msgstr "Ramki Ghost"
 
 msgid "Stop Levels"
 msgstr "Poziomy Stop"
