@@ -110,9 +110,7 @@ class ChartStore {
     }
     resizeScreen = () => {
         if (!this.context) { return; }
-        this.chartHeight = this.chartNode.offsetHeight;
-        this.chartContainerHeight = this.chartHeight - this.chartControlsNode.offsetHeight;
-        this.chartContainerNode.style.height = `${this.chartContainerHeight}px`;
+        this.updateHeight();
         this.stxx.resizeChart();
         if (this.stxx.slider) {
             this.stxx.slider.display(this.stxx.layout.rangeSlider);
