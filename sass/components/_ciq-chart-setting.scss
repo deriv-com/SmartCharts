@@ -163,14 +163,8 @@
 .cq-chart-control-left {
     .cq-chart-setting {
         .cq-menu-dropdown {
-            transform: translateX(4.5em) translateY(0%) !important;
-            &.cq-menu-dropdown-enter-done,
-            &.open{ // class open should be removed after `dialog-animation` merged
-                transform: translateX(4.5em) translateY(0%) !important;
-            }
-            &.cq-menu-dropdown-exit-done{
-                transform: translateX(.5em) translateY(0%) !important;
-            }
+            top: auto !important;
+            bottom: 1em !important;
         }
     }
 }
