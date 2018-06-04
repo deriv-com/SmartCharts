@@ -20,9 +20,6 @@ export default class CategoricalDisplayStore {
                     setTimeout(() => this.searchInput.focus(), 0);
                 }
                 if (!this.isInit) { this.init(); }
-                setTimeout(() => {
-                    this.updateScrollOffset();
-                }, 0);
             }
         });
         this.getCategoricalItems = getCategoricalItems;
@@ -54,7 +51,6 @@ export default class CategoricalDisplayStore {
         emptyDescription: t.translate('There are no favorites yet.'),
         data: [],
     };
-    scrollOffset = 0;
 
     get context() {
         return this.mainStore.chart.context;
@@ -78,10 +74,6 @@ export default class CategoricalDisplayStore {
         this.initFavorites();
     }
 
-    updateScrollOffset() {
-        this.scrollOffset = this.scrollPanel.getBoundingClientRect().top;
-    }
-
     updateScrollSpy() {
         if (this.pauseScrollSpy) { return; }
         if (this.filteredItems.length === 0) { return; }
@@ -94,10 +86,11 @@ export default class CategoricalDisplayStore {
                 continue;
             }
             const r = el.getBoundingClientRect();
-            const top = r.top - this.scrollOffset;
+            const top = r.top - this.scrollPanel.getBoundingClientRect().top;
             if (top > 0) { break; }
             i++;
         }
+        
         // get first non-empty category
         let idx = i - 1;
         let id;

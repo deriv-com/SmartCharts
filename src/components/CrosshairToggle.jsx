@@ -28,4 +28,4 @@ const CrosshairToggle = ({
 export default connect(({ crosshair }) => ({
     toggleState: () => crosshair.toggleState(),
     state: (typeof crosshair.state !== 'number') ? 0 : crosshair.state,
-}))(CrosshairToggle);
+})) (CrosshairToggle);
