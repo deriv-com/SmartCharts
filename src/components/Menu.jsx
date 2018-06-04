@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
-import {stxtap} from '../store/utils';
+import { CSSTransition } from 'react-transition-group';
+import { stxtap } from '../store/utils';
 
 class Menu extends Component {
-
-    onOverlayClick(e) {
+    onOverlayClick = (e) => {
         if (e.target.className === 'cq-menu-overlay') {
             this.props.setOpen(false);
         }
-    }
+    };
 
     render() {
         const {
@@ -16,10 +16,11 @@ class Menu extends Component {
             children,
             onTitleClick,
             DropdownDialog,
+            isMobile,
+            isFullscreen,
         } = this.props;
-        const first = React.Children.map(children, (child, i) => i === 0 ? child : null);
-        const rest  = React.Children.map(children, (child, i) => i !== 0 ? child : null);
-
+        const first = React.Children.map(children, (child, i) => (i === 0 ? child : null));
+        const rest  = React.Children.map(children, (child, i) => (i !== 0 ? child : null));
 
         return (
             <div className={`ciq-menu ${className || ''} ${open ? 'stxMenuActive' : ''}`}>
@@ -31,18 +32,29 @@ class Menu extends Component {
                 </div>
                 <div
                     className="cq-menu-overlay"
-                    onClick={this.onOverlayClick.bind(this)}
+                    onClick={this.onOverlayClick}
                 >
-                    <DropdownDialog className='cq-menu-dropdown'>
-                        {rest}
-                    </DropdownDialog>
+                    <CSSTransition
+                        in={open}
+                        timeout={150}
+                        classNames="cq-menu-dropdown"
+                        unmountOnExit
+                    >
+                        <DropdownDialog
+                            className="cq-menu-dropdown"
+                            isMobile={isMobile}
+                            isFullscreen={isFullscreen}
+                        >
+                            {rest}
+                        </DropdownDialog>
+                    </CSSTransition>
                 </div>
             </div>
         );
     }
 }
 
-Menu.Title = ({children}) => children;
-Menu.Body  = ({children}) => children;
+Menu.Title = ({ children }) => children;
+Menu.Body  = ({ children }) => children;
 
 export default Menu;

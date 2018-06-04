@@ -1215,7 +1215,8 @@ cq-hu-static {
 	top: -30px;
 	padding: 0;
 	@include themify($themes) {
-		fill: themed('defaultTextStrong');
+		font-weight: 500;
+		color: themed('defaultTextStrong');
 	}
 }
 

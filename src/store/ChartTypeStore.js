@@ -43,7 +43,7 @@ const aggregates = {
             id: 'kagi',
             title: t.translate('Reversal Percentage'),
             type: 'numericinput',
-        }]
+        }],
     },
     renko: {
         title: t.translate('Renko'),
@@ -51,7 +51,7 @@ const aggregates = {
             id: 'renko',
             title: t.translate('Range'),
             type: 'numericinput',
-        }]
+        }],
     },
     linebreak: {
         title: t.translate('Line Break'),
@@ -62,7 +62,7 @@ const aggregates = {
             max: 10,
             step: 1,
             min: 1,
-        }]
+        }],
     },
     rangebars: {
         title: t.translate('Range Bars'),
@@ -70,7 +70,7 @@ const aggregates = {
             id: 'range',
             title: t.translate('Range'),
             type: 'numericinput',
-        }]
+        }],
     },
     pandf: {
         title: t.translate('Point & Figure'),
@@ -82,15 +82,15 @@ const aggregates = {
             id: 'reversal',
             title: t.translate('Reversal'),
             type: 'numericinput',
-        }]
-    }
+        }],
+    },
 };
 
 export default class ChartTypeStore {
     constructor(mainStore) {
         this.mainStore = mainStore;
         when(() => this.context, this.onContextReady);
-        this.menu = new MenuStore({getContext: () => this.context});
+        this.menu = new MenuStore(mainStore);
 
         this.list = new ListStore({
             getIsOpen: () => this.menu.open,
@@ -100,7 +100,7 @@ export default class ChartTypeStore {
         });
 
         this.settingsDialog = new SettingsDialogStore({
-            getContext: () => this.mainStore.chart.context,
+            mainStore,
             onChanged: items => this.updateAggregate(items),
         });
     }
@@ -123,7 +123,7 @@ export default class ChartTypeStore {
     };
 
     @action.bound setType(type) {
-        if(typeof type === 'string') {
+        if (typeof type === 'string') {
             type = this.types.filter(t => t.id === type)[0];
         }
         if (type.id === this.type.id) {
@@ -175,7 +175,7 @@ export default class ChartTypeStore {
             const tuple = CIQ.deriveFromObjectChain(this.stx.layout, id);
             tuple.obj[tuple.member] = value;
         }
-        this.stx.changeOccurred("layout");
+        this.stx.changeOccurred('layout');
         this.stx.createDataSet();
         this.stx.draw();
     };

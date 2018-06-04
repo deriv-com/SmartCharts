@@ -7,7 +7,7 @@ export default class ChartTitleStore {
     constructor(mainStore) {
         this.mainStore = mainStore;
         when(() => this.context, this.onContextReady);
-        this.menu = new MenuStore({ getContext: () => this.context });
+        this.menu = new MenuStore(mainStore);
         this.animatedPrice = new AnimatedPriceStore();
         this.categoricalDisplay = new CategoricalDisplayStore({
             getCategoricalItems: () => this.mainStore.chart.categorizedSymbols,
@@ -44,16 +44,16 @@ export default class ChartTitleStore {
     };
 
     update() {
-        if (!this.currentSymbol) {return;}
+        if (!this.currentSymbol) { return; }
         const stx = this.context.stx;
         const currentQuote = stx.currentQuote();
         const previousClose = currentQuote ? currentQuote.iqPrevClose : undefined;
 
         const hasData = (stx.chart.dataSet && stx.chart.dataSet.length) > 0;
         this.isVisible = hasData || !this.isShowChartPrice;
-        if (!hasData) {return;}
+        if (!hasData) { return; }
 
-        let internationalizer = stx.internationalizer;
+        const internationalizer = stx.internationalizer;
         let priceChanged = false;
 
         let todaysChange = 0;
@@ -61,7 +61,7 @@ export default class ChartTitleStore {
         let currentPrice = currentQuote ? currentQuote.Close : '';
         if (currentPrice) {
             currentPrice = currentPrice.toFixed(this.decimalPlaces);
-            let oldPrice = this.animatedPrice.price;
+            const oldPrice = this.animatedPrice.price;
             if (oldPrice !== currentPrice) {
                 priceChanged = true;
             }
@@ -69,9 +69,6 @@ export default class ChartTitleStore {
         }
 
         if (priceChanged) {
-            // Default to iqPrevClose if the developer hasn't set previousClose
-            let previousClose = previousClose || (currentQuote ? currentQuote.iqPrevClose : null);
-
             if (currentQuote && previousClose) {
                 todaysChange = CIQ.fixPrice(currentQuote.Close - previousClose);
                 todaysChangePct = todaysChange / previousClose * 100;

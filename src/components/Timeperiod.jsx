@@ -1,6 +1,8 @@
+/* eslint-disable jsx-a11y/no-static-element-interactions */
 import React from 'react';
 import { connect } from '../store/Connect';
 import Menu from './Menu.jsx';
+import { CloseIcon } from './Icons.jsx';
 import '../../sass/components/_timeperiod.scss';
 
 const Timeperiod = ({
@@ -10,21 +12,29 @@ const Timeperiod = ({
     interval_display,
     timeUnit_display,
     Menu,
-}) => {
-    return (
-        <Menu
-            className="ciq-period">
-            <Menu.Title>
-                <div className="bt-priod">
-                    <span className="ic-priod">
-                        <span className="interval_display">{interval_display}</span>
-                        <span className="unit_display">{timeUnit_display}</span>
-                    </span>
-                    <br/>
-                    <span className='ic-subtitle'>{t.translate("Interval")}</span>
-                </div>
-            </Menu.Title>
-            <Menu.Body>
+    closeMenu,
+    isMobile,
+}) => (
+    <Menu
+        className="ciq-period"
+    >
+        <Menu.Title>
+            <div className="bt-priod">
+                <span className="ic-priod">
+                    <span className="interval_display">{interval_display}</span>
+                    <span className="unit_display">{timeUnit_display}</span>
+                </span>
+                <br />
+                <span className="ic-subtitle">{t.translate('Interval')}</span>
+            </div>
+        </Menu.Title>
+        <Menu.Body>
+            {isMobile ?
+                <div className="cq-mobile-title">
+                    <div className="mobile-title">{t.translate('Interval')}</div>
+                    <CloseIcon className="icon-close-menu" onClick={() => closeMenu()} />
+                </div> : '' }
+            <div className="cq-interval">
                 <div className="timeUnit">
                     <span className={timeUnit === 'tick' ? 'selected' : ''}>{t.translate('Tick')}</span>
                     <span className={timeUnit === 'minute' ? 'selected' : ''}>{t.translate('Minute')}</span>
@@ -106,18 +116,18 @@ const Timeperiod = ({
                         </span>
                     </div>
                 </div>
-            </Menu.Body>
-        </Menu>
-    );
-};
+            </div>
+        </Menu.Body>
+    </Menu>
+);
 
-export default connect(
-    ({ timeperiod: s }) => ({
-        setPeriodicity: s.setPeriodicity,
-        timeUnit: s.timeUnit,
-        interval: s.interval,
-        interval_display: s.interval_display,
-        timeUnit_display: s.timeUnit_display,
-        Menu: s.menu.connect(Menu),
-    })
-)(Timeperiod);
+export default connect(({ timeperiod: s }) => ({
+    setPeriodicity: s.setPeriodicity,
+    timeUnit: s.timeUnit,
+    interval: s.interval,
+    interval_display: s.interval_display,
+    timeUnit_display: s.timeUnit_display,
+    Menu: s.menu.connect(Menu),
+    closeMenu: s.menu.onTitleClick,
+    isMobile: s.mainStore.chart.isMobile,
+}))(Timeperiod);

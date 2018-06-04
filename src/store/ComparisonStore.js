@@ -1,7 +1,7 @@
-import { observable, action, computed } from 'mobx';
+import React from 'react';
+import { action, computed } from 'mobx';
 import MenuStore from './MenuStore';
 import CategoricalDisplayStore from './CategoricalDisplayStore';
-import React from 'react';
 
 const swatchColors = [
     '#8ec648', '#00afed', '#ee652e', '#912a8e',
@@ -13,13 +13,13 @@ const swatchColors = [
 export default class ComparisonStore {
     constructor(mainStore) {
         this.mainStore = mainStore;
-        this.menu = new MenuStore({getContext: () => this.context});
+        this.menu = new MenuStore(mainStore);
         this.categoricalDisplay = new CategoricalDisplayStore({
             getActiveCategory: () => this.activeComparisons,
             getCategoricalItems: () => this.mainStore.chart.categorizedSymbols,
             getIsShown: () => this.menu.open,
             activeOptions: [
-                { id: 'cmp-color', renderChild: (item) => <span style={{backgroundColor: item.dataObject.color}} /> },
+                { id: 'cmp-color', renderChild: item => <span style={{ backgroundColor: item.dataObject.color }} /> },
                 { id: 'delete', onClick: this.onDeleteItem.bind(this) },
             ],
             onSelectItem: this.onSelectItem.bind(this),
@@ -39,7 +39,7 @@ export default class ComparisonStore {
                 selected: false,
                 display: symbol.symbolObject.name,
                 itemId: symbol.symbolObject.symbol,
-                dataObject: symbol
+                dataObject: symbol,
             });
         }
         return {
@@ -47,7 +47,7 @@ export default class ComparisonStore {
             categoryId: 'active',
             hasSubcategory: false,
             emptyDescription: t.translate('There are no active comparisons yet.'),
-            data: result
+            data: result,
         };
     }
 
@@ -62,12 +62,11 @@ export default class ComparisonStore {
                 series.parameters.error = true;
             }
         }
-        let color = 'auto',
-            pattern = null,
-            width = 1;
-        color = this.getSwatchColor();
-        let stx = context.stx;
-        let params = {
+        const pattern = null;
+        const width = 1;
+        const color = this.getSwatchColor() || 'auto';
+        const stx = context.stx;
+        const params = {
             symbolObject,
             isComparison: true,
             color,
@@ -80,11 +79,11 @@ export default class ComparisonStore {
         };
 
         // don't allow symbol if same as main chart, comparison already exists, or just white space
-        let exists = stx.getSeries({
+        const exists = stx.getSeries({
             symbolObject,
         });
         for (let i = 0; i < exists.length; i++) {
-            if (exists[i].parameters.isComparison) {return;}
+            if (exists[i].parameters.isComparison) { return; }
         }
 
         // don't allow symbol if same as main chart or just white space
@@ -97,13 +96,13 @@ export default class ComparisonStore {
     }
 
     getSwatchColor() {
-        let stx = this.context.stx;
+        const stx = this.context.stx;
         let selectedColor = '';
 
-        let usedColors = {};
-        for (let s in stx.chart.series) {
-            let series = stx.chart.series[s];
-            if (!series.parameters.isComparison) {continue;}
+        const usedColors = {};
+        for (const s in stx.chart.series) {
+            const series = stx.chart.series[s];
+            if (!series.parameters.isComparison) { continue; }
             usedColors[series.parameters.color] = true;
         }
 

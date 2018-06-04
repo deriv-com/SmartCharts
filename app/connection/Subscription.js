@@ -42,7 +42,7 @@ export default class Subscription {
             const times = data.history.times.slice(0);
             clone.history = {
                 prices,
-                times
+                times,
             };
         } else if (data.candles) {
             clone.candles = data.candles.slice(0);
@@ -60,7 +60,7 @@ export default class Subscription {
 
             diff.history = {
                 times: [],
-                prices: []
+                prices: [],
             };
             if (index !== -1) {
                 diff.history.times = now.history.times.slice(index + 1);

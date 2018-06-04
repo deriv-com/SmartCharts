@@ -6,23 +6,30 @@
             width: 280px;
             height: 200px;
             .cq-menu-container{
+                transition: opacity 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.1s;
+            }
+            .cq-menu-container-enter {
+                opacity: 0.01;
+                z-index: 0;
+                height: auto;
+            }
+            .cq-menu-container-enter-done {
+                opacity: 1;
+                z-index: 9;
+                height: auto;
+            }
+            .cq-menu-container-exit {
+                opacity: 1;
+            }
+            .cq-menu-container-exit-active {
                 opacity: 0;
-                z-index: -9;
-                pointer-events: none;
-                height: 0px;
-                transition: pointer-events 0s ease-in-out 0s,
-                    opacity 0.2s ease-in-out 0.1s;
-                &.active{
-                    pointer-events: initial;
-                    opacity: 1;
-                    z-index: 9;
-                    height: auto;
-                }
+                height: 0;
             }
         }
     }
     .cq-menu-dropdown {
         height: 0px;
+        width: 280px;
         @include themify($themes) {
             color: themed('defaultTextStrong');
         }
@@ -36,13 +43,27 @@
     .title {
         height: 40px;
         line-height: 40px;
-        padding-left: 16px;
         font-size: 16px;
-        .ic-icon{
-            display: inline-block;
-            position: relative;
-            top: 3px;
-            @include svg-icon-color('controlText');
+        display: flex;
+        .title-text{
+            display: block;
+            font-size: 16px;
+            line-height: 40px;
+            font-weight: 400;
+            padding: 0 .7em;
+            @include themify($themes) {
+                color: themed('defaultText');
+            }
+        }
+        .icon-close-menu{
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            cursor: pointer;
+            height: 30px;
+            width: 30px;
+            pointer-events: none;
+            opacity: 0;
         }
     }
     .body {
@@ -94,6 +115,17 @@
                     position: relative;
                     top: 3px;
                 }
+            }
+        }
+    }
+}
+/* Mobile Style */
+.smartcharts-mobile {
+    .cq-chart-setting {
+        .title {
+            .icon-close-menu{
+                pointer-events: initial;
+                opacity: 1;
             }
         }
     }

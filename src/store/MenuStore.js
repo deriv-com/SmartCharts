@@ -1,4 +1,4 @@
-import { observable, action, computed, reaction } from 'mobx';
+import { action, computed, reaction } from 'mobx';
 import { connect } from './Connect';
 import DialogStore from './DialogStore';
 import Dialog from '../components/Dialog.jsx';
@@ -6,9 +6,9 @@ import Dialog from '../components/Dialog.jsx';
 const allMenues = [];
 
 export default class MenuStore {
-    constructor({getContext}) {
-        this.getContext = getContext;
-        this.dialog = new DialogStore();
+    constructor(mainStore) {
+        this.getContext = () => mainStore.chart.context;
+        this.dialog = new DialogStore(mainStore);
         reaction(() => this.open, () => this.blurInput());
         allMenues.push(this);
     }
@@ -20,7 +20,7 @@ export default class MenuStore {
 
     blurInput() {
         const stx = this.context.stx;
-        if(this.open === false) {
+        if (this.open === false) {
             document.activeElement.blur();
             stx.modalEnd();
         } else {

@@ -1,38 +1,37 @@
-import { observable, action, computed, reaction } from 'mobx';
+import { observable, action } from 'mobx';
 import { connect } from './Connect';
 
 const allDialogs = [];
 
 export default class DialogStore {
-    constructor() {
+    constructor(mainStore) {
+        this.mainStore = mainStore;
         allDialogs.push(this);
     }
 
     @observable open = false;
 
     @action.bound setOpen(val) {
-        if(this.open !== val) {
+        if (this.open !== val) {
             this.open = val;
-            if(this.open) { setTimeout(() => this.register(), 100); }
-            else { this.unregister(); }
+            if (this.open) { setTimeout(() => this.register(), 100); } else { this.unregister(); }
         }
-        if(this.open === true) { // close others.
+        if (this.open === true) { // close others.
             allDialogs.filter(m => m !== this).forEach(m => m.setOpen(false));
         }
     }
 
     handleClickOutside = (e) => {
         let isRightClick = false;
-        if ("which" in e) { isRightClick = e.which == 3; }
-        else if ("button" in e) { isRightClick = e.button == 2; }
+        if ('which' in e) { isRightClick = e.which == 3; } else if ('button' in e) { isRightClick = e.button == 2; }
 
-        if(!e.isHandledByDialog && !isRightClick) {
+        if (!e.isHandledByDialog && !isRightClick) {
             this.setOpen(false);
         }
     };
     closeOnEscape = (e) => {
         const ESCAPE = 27;
-        if(e.keyCode === ESCAPE) {
+        if (e.keyCode === ESCAPE) {
             this.setOpen(false);
         }
     };
@@ -58,5 +57,7 @@ export default class DialogStore {
         setOpen: this.setOpen,
         onTitleClick: this.onTitleClick,
         onContainerClick: this.onContainerClick,
-    }))
+        chartHeight: this.mainStore.chart.chartHeight,
+        chartContainerHeight: this.mainStore.chart.chartContainerHeight,
+    }));
 }

@@ -1,7 +1,7 @@
 const webpack = require('webpack');
 const path = require('path');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 const production = process.env.NODE_ENV === 'production';
@@ -27,16 +27,16 @@ const config = {
                     MiniCssExtractPlugin.loader,
                     {
                         loader: 'css-loader',
-                        options: { sourceMap: true }
+                        options: { sourceMap: true },
                     }, {
                         loader: 'sass-loader',
                         options: {
                             sourceMap: true,
                             data: '@import "sass/_variables.scss";@import "sass/_themes.scss";',
                             includePaths: [
-                                path.resolve(__dirname, './src')
-                            ]
-                        }
+                                path.resolve(__dirname, './src'),
+                            ],
+                        },
                     }],
             },
             {
@@ -55,8 +55,8 @@ const config = {
                 test: /\.(js|jsx)$/,
                 exclude: [
                     /node_modules/,
-                    /chartiq\//,
-                    /src\/components\//,
+                    /\\chartiq/,
+                    /\\scripts/,
                 ],
                 loader: 'eslint-loader',
                 enforce: 'pre',
@@ -70,14 +70,14 @@ const config = {
             {
                 test: /\.po$/,
                 loader: 'json-loader!po-loader',
-            }
+            },
         ],
     },
     plugins: [
         new webpack.ProvidePlugin({
-            't': [path.resolve(__dirname, './src/Translation.js'), 't']
+            t: [path.resolve(__dirname, './src/Translation.js'), 't'],
         }),
-        new MiniCssExtractPlugin({filename: 'smartcharts.css'}),
+        new MiniCssExtractPlugin({ filename: 'smartcharts.css' }),
         new CopyWebpackPlugin([
             { from: './chartiq/chartiq.min.js' },
         ]),
@@ -88,7 +88,7 @@ const config = {
         react: {
             root: 'React',
             commonjs: 'react',
-            commonjs2: 'react'
+            commonjs2: 'react',
         },
         'react-dom': {
             commonjs: 'react-dom',
@@ -99,16 +99,6 @@ const config = {
             commonjs: 'mobx-react',
             commonjs2: 'mobx-react',
             root: 'mobxReact',
-        },
-        'perfect-scrollbar': {
-            commonjs: 'mobx-react',
-            commonjs2: 'mobx-react',
-            root: 'PerfectScrollbar',
-        },
-        'resize-observer-polyfill': {
-            commonjs: 'resize-observer-polyfill',
-            commonjs2: 'resize-observer-polyfill',
-            root: 'ResizeObserver',
         },
         'babel-polyfill': 'babel-polyfill',
     },
@@ -131,40 +121,35 @@ if (isApp) {
     config.resolve = {
         alias: {
             '@binary-com/smartcharts': path.resolve(__dirname, 'src/'),
-        }
+        },
     };
     config.plugins.push(new CopyWebpackPlugin([
         { from: './sass/favicons/*.png' },
-        { from: './node_modules/perfect-scrollbar/dist/perfect-scrollbar.min.js' },
         { from: './node_modules/babel-polyfill/dist/polyfill.min.js', to: 'babel-polyfill.min.js' },
         {
             from: production ?
                 './node_modules/react/umd/react.production.min.js' :
                 './node_modules/react/umd/react.development.js',
-            to: 'react.js'
+            to: 'react.js',
         },
         {
             from: production ?
                 './node_modules/react-dom/umd/react-dom.production.min.js' :
                 './node_modules/react-dom/umd/react-dom.development.js',
-            to: 'react-dom.js'
+            to: 'react-dom.js',
         },
         {
             from: production ?
                 './node_modules/mobx/lib/mobx.umd.min.js' :
                 './node_modules/mobx/lib/mobx.umd.js',
-            to: 'mobx.js'
+            to: 'mobx.js',
         },
         {
             from: production ?
                 './node_modules/mobx-react/index.min.js' :
                 './node_modules/mobx-react/index.js',
-            to: 'mobx-react.js'
+            to: 'mobx-react.js',
         },
-        {
-            from: './node_modules/resize-observer-polyfill/dist/ResizeObserver.js',
-            to: 'ResizeObserver.js',
-        }
     ]));
 }
 

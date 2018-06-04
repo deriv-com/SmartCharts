@@ -1,4 +1,4 @@
-import { observable, action, computed, when } from 'mobx';
+import { observable, action, when } from 'mobx';
 import MenuStore from './MenuStore';
 import CategoricalDisplayStore from './CategoricalDisplayStore';
 import SettingsDialogStore from './SettingsDialogStore';
@@ -10,11 +10,11 @@ export default class StudyLegendStore {
         this.mainStore = mainStore;
         when(() => this.context, this.onContextReady);
 
-        this.menu = new MenuStore({getContext: () => this.context});
+        this.menu = new MenuStore(mainStore);
         this.categoricalDisplay = new CategoricalDisplayStore({
             activeOptions: [
-                { id: 'edit', onClick: (item) => this.editStudy(item) },
-                { id: 'delete', onClick: (item) => this.deleteStudy(item) },
+                { id: 'edit', onClick: item => this.editStudy(item) },
+                { id: 'delete', onClick: item => this.deleteStudy(item) },
             ],
             getIsShown: () => this.menu.open,
             getCategoricalItems: () => this.categorizedStudies,
@@ -25,7 +25,7 @@ export default class StudyLegendStore {
             mainStore,
         });
         this.settingsDialog = new SettingsDialogStore({
-            getContext: () => this.mainStore.chart.context,
+            mainStore,
             onDeleted: () => this.deleteStudy(this.helper),
             onStared: () => this.starStudy(this.helper),
             onChanged: items => this.updateStudy(this.helper.sd, items),
@@ -59,7 +59,7 @@ export default class StudyLegendStore {
 
     get categorizedStudies() {
         const data = [];
-        Object.keys(CIQ.Studies.studyLibrary).forEach(studyId => {
+        Object.keys(CIQ.Studies.studyLibrary).forEach((studyId) => {
             const study = CIQ.Studies.studyLibrary[studyId];
             data.push({
                 enabled: true,
@@ -72,7 +72,7 @@ export default class StudyLegendStore {
             categoryName: t.translate('Indicators'),
             categoryId: 'indicators',
             hasSubcategory: false,
-            data
+            data,
         };
         return [category];
     }
@@ -105,8 +105,8 @@ export default class StudyLegendStore {
             type: 'colorpicker',
             category: 'outputs',
         }));
-        const parameters = helper.parameters.map(par => {
-            let shared = {
+        const parameters = helper.parameters.map((par) => {
+            const shared = {
                 title: t.translate(par.heading),
                 ...attributes[par.name],
                 category: 'parameters',
@@ -134,10 +134,10 @@ export default class StudyLegendStore {
                     },
                 };
             }
-            throw 'Unrecognised parameter!';
+            throw new Error('Unrecognised parameter!');
         });
 
-        this.settingsDialog.items = [...outputs, ...inputs,...parameters];
+        this.settingsDialog.items = [...outputs, ...inputs, ...parameters];
         this.settingsDialog.title = study.sd.name.toUpperCase();
         // TODO:
         // const description = StudyInfo[study.sd.type];
@@ -154,18 +154,16 @@ export default class StudyLegendStore {
         if (!sd.permanent) {
             // Need to run this in the nextTick because the study legend can be removed by this click
             // causing the underlying chart to receive the mousedown (on IE win7)
-            setTimeout(
-                () => {
-                    CIQ.Studies.removeStudy(this.stx, sd);
-                    this.renderLegend();
-                }, 0
-            );
+            setTimeout(() => {
+                CIQ.Studies.removeStudy(this.stx, sd);
+                this.renderLegend();
+            }, 0);
         }
     }
     @action.bound updateStudy(study, items) {
         const updates = { };
-        for(const {id, category, value} of items) {
-            if(study[category][id] !== value) {
+        for (const { id, category, value } of items) {
+            if (study[category][id] !== value) {
                 updates[category] = updates[category] || { };
                 if (typeof value === 'object') {
                     for (const suffix in value) {
@@ -206,7 +204,7 @@ export default class StudyLegendStore {
      * Gets called continually in the draw animation loop.
      * Be careful not to render unnecessarily. */
     renderLegend() {
-        if(!this.shouldRenderLegend()) {return;}
+        if (!this.shouldRenderLegend()) { return; }
 
         this.updateActiveStudies();
     }
@@ -214,8 +212,8 @@ export default class StudyLegendStore {
     updateActiveStudies() {
         const stx = this.stx;
         const studies = [];
-        Object.keys(stx.layout.studies).forEach(id => {
-            let sd = stx.layout.studies[id];
+        Object.keys(stx.layout.studies).forEach((id) => {
+            const sd = stx.layout.studies[id];
             if (sd.customLegend) { return; }
 
             studies.push({
