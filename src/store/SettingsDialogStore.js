@@ -13,17 +13,17 @@ export default class SettingsDialogStore {
     @computed get showTabs() { return !!this.description; }
 
     constructor({
-        getContext, onDeleted, onStared, onChanged,
+        mainStore, getContext, onDeleted, onStared, onChanged,
     }) {
         this.getContext = getContext;
         this.onDeleted = onDeleted;
         this.onStared = onStared;
         this.onChanged = onChanged;
 
-        this.dialog = new DialogStore({ getContext });
+        this.dialog = new DialogStore(mainStore);
     }
 
-    get context() { return this.getContext(); }
+    get context() { return this.mainStore.chart.context; }
     get stx() { return this.context.stx; }
 
     @computed get open() { return this.dialog.open; }

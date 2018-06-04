@@ -30,12 +30,13 @@ const ChartControls = ({
     isMobile,
     hasOpenMenu,
     widgets,
+    context,
 }) => {
     const controls =  widgets || renderDefaultControls(isMobile);
 
     return (
         <div className={`cq-chart-controls ${hasOpenMenu ? ' active' : ''}`}>
-            { controls() }
+            { context ? controls() : null }
         </div>
     );
 };
@@ -50,6 +51,7 @@ export default connect(({ chart,
     timeperiod,
     chartSetting }) => ({
     isMobile: chart.isMobile,
+    context: chart.context,
     hasOpenMenu: (
         chartType.menu.open ||
             studies.menu.open ||

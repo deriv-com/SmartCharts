@@ -2,7 +2,6 @@
 import React  from 'react';
 import '../../sass/components/_ciq-dialog.scss';
 
-const chartControlHeight = 47;
 const Dialog = ({
     open,
     children,
@@ -10,11 +9,12 @@ const Dialog = ({
     className,
     isMobile,
     isFullscreen,
+    chartContainerHeight,
+    chartHeight,
 }) => {
     const inner_style = (isMobile && open) ? {
         // reduce chart control panel height except in full screen mode
-        height: `${window.innerHeight - (isFullscreen ? 0 : chartControlHeight)}px`,
-        width: `${window.innerWidth}px`,
+        height: `${isFullscreen ? chartHeight : chartContainerHeight}px`,
     } : {};
 
     return (
