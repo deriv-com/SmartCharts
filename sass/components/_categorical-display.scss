@@ -324,7 +324,7 @@
         .cq-lookup-filters {
             width: 100%;
             border-right: none;
-            height: 7.75em;
+            height: auto;
             @include themify($themes) {
                 border-bottom: 1px solid themed('defaultBorder');
             }
@@ -347,10 +347,6 @@
         .cq-filter-panel{
             display: flex;
             justify-content: space-around;
-            border-bottom: 1px solid transparent;
-            @include themify($themes) {
-                border-bottom-color: themed('defaultBorder');
-            }
             .cq-filter {
                 border-right: none;
                 background: transparent;
