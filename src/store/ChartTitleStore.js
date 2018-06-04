@@ -20,7 +20,6 @@ export default class ChartTitleStore {
     }
 
     @observable todayChange = 0;
-    @observable isPriceUp = false;
     @observable isVisible = false;
 
     get chart() { return this.mainStore.chart; }
@@ -42,7 +41,7 @@ export default class ChartTitleStore {
         this.update();
     };
 
-    @action.bound async update(quote) {
+    @action.bound update(quote) {
         if (!this.currentSymbol) { return; }
 
         this.isVisible = quote || !this.isShowChartPrice;
@@ -55,13 +54,7 @@ export default class ChartTitleStore {
             if (oldPrice !== currentPrice) {
                 this.animatedPrice.setPrice(currentPrice);
                 if (oldPrice) {
-                    const todaysChange = currentPrice - oldPrice;
-                    if (todaysChange > 0) {
-                        this.isPriceUp = true;
-                    } else if (todaysChange < 0) {
-                        this.isPriceUp = false;
-                    }
-                    this.todayChange = Math.abs(todaysChange).toFixed(this.decimalPlaces);
+                    this.todayChange = Math.abs(currentPrice - oldPrice).toFixed(this.decimalPlaces);
                 }
             }
         }

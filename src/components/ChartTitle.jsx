@@ -56,7 +56,7 @@ const ChartTitle = ({
 
 export default connect(({ chartTitle: c }) => ({
     todayChange: c.todayChange,
-    isPriceUp: c.isPriceUp,
+    isPriceUp: c.animatedPrice.isIncrease,
     isVisible: c.isVisible,
     isShowChartPrice: c.isShowChartPrice,
     currentSymbol: c.currentSymbol,

@@ -17,12 +17,10 @@ export default class AnimatedPriceStore {
             return;
         }
         this.price = val;
+        this.oldPrice = this.price;
         this.setShowStable(false);
         setTimeout(() => this.setShowStable(true), 0);
-        if (this.isIncrease !== isIncrease) {
-            this.oldPrice = this.price;
-            this.isIncrease = isIncrease;
-        }
+        this.isIncrease = isIncrease;
     }
 
     @action.bound setShowStable(val) {
