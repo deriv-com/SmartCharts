@@ -2,13 +2,11 @@ import React from 'react';
 import { connect } from '../store/Connect';
 
 const Loader = ({
-    isActive
+    isActive,
 }) => (
-    <div className={`cq-loader ${isActive ? 'show' : ''}`}></div>
+    <div className={`cq-loader ${isActive ? 'show' : ''}`} />
 );
 
-export default connect(
-    ({loader: l}) => ({
-        isActive: l.isActive
-    })
-)(Loader);
+export default connect(({ loader: l }) => ({
+    isActive: l.isActive,
+}))(Loader);

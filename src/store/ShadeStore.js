@@ -1,5 +1,4 @@
 import { observable } from 'mobx';
-import { connect } from './Connect';
 
 export default class ShadeStore {
     @observable top = 0;

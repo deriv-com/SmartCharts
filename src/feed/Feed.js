@@ -1,5 +1,5 @@
 import NotificationStore from '../store/NotificationStore';
-import {TickHistoryFormatter} from './TickHistoryFormatter';
+import { TickHistoryFormatter } from './TickHistoryFormatter';
 import PendingPromise from '../utils/PendingPromise';
 
 class Feed {
@@ -20,7 +20,7 @@ class Feed {
             const { symbolObject, period, interval } = params;
             this._binaryApi.forget({
                 symbol: symbolObject.symbol,
-                granularity: Feed.calculateGranularity(period, interval)
+                granularity: Feed.calculateGranularity(period, interval),
             }, this._callbacks[key]);
             delete this._callbacks[key];
         }
@@ -38,12 +38,12 @@ class Feed {
 
         const dataRequest = {
             symbol,
-            granularity: Feed.calculateGranularity(period, interval)
+            granularity: Feed.calculateGranularity(period, interval),
         };
 
         const tickHistoryPromise = new PendingPromise();
         let hasHistory = false;
-        const processTick = resp => {
+        const processTick = (resp) => {
             // We assume that 1st response is the history, and subsequent
             // responses are tick stream data.
             if (hasHistory) {
@@ -110,7 +110,7 @@ class Feed {
         const startLimit = now - (2.8 * 365 * 24 * 60 * 60);
         const { period, interval } = params;
 
-        let result = { quotes: [] };
+        const result = { quotes: [] };
         if (end > startLimit) {
             try {
                 const response = await this._binaryApi.getTickHistory({
@@ -134,7 +134,7 @@ class Feed {
             const { symbol, period, interval } = JSON.parse(key);
             this._binaryApi.forget({
                 symbol,
-                granularity: Feed.calculateGranularity(period, interval)
+                granularity: Feed.calculateGranularity(period, interval),
             }, this._callbacks[key]);
         }
     }

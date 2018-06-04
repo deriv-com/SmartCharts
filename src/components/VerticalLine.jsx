@@ -1,18 +1,17 @@
-import {connect} from '../store/Connect';
-import VerticalLineStore from '../store/VerticalLineStore';
-import RenderInsideChart from '../components/RenderInsideChart.jsx';
 import React from 'react';
+import { connect } from '../store/Connect';
+import VerticalLineStore from '../store/VerticalLineStore';
 
 const VerticalLine = ({
     className,
     children,
-    left
+    left,
 }) => (
     <div
-        style={{left: left}}
+        style={{ left }}
         className={`chart-line vertical ${className || ''}`}
     >
-        <div className="drag-line"></div>
+        <div className="drag-line" />
         {children}
     </div>
 );
@@ -20,7 +19,7 @@ const VerticalLine = ({
 const TradeStart = ({ left }) => (
     <VerticalLine
         left={left}
-        className='trade-start-line'
+        className="trade-start-line"
     >
         <div className="trade-text">Trade Start</div>
     </VerticalLine>
@@ -29,34 +28,34 @@ const TradeStart = ({ left }) => (
 const TradeEnd = ({ left }) => (
     <VerticalLine
         left={left}
-        className='trade-end-line'
+        className="trade-end-line"
     >
         <div className="trade-text">Trade End</div>
         <div className="trade-end-flag">
-            <div className="circle"></div>
-            <div className="ic-flag"></div>
+            <div className="circle" />
+            <div className="ic-flag" />
         </div>
     </VerticalLine>
 );
 
 export const TradeStartLine = connect(
     VerticalLineStore,
-    (store) => ({
-        left: store.left
+    store => ({
+        left: store.left,
     }),
-    (store, {epoch, followsCurrentQuote}) => {
+    (store, { epoch, followsCurrentQuote }) => {
         store.epoch = epoch;
         store.followsCurrentQuote = followsCurrentQuote;
-    }
+    },
 )(TradeStart);
 
 export const TradeEndLine = connect(
     VerticalLineStore,
-    (store) => ({
-        left: store.left
+    store => ({
+        left: store.left,
     }),
-    (store, {epoch, followsCurrentQuote}) => {
+    (store, { epoch, followsCurrentQuote }) => {
         store.epoch = epoch;
         store.followsCurrentQuote = followsCurrentQuote;
-    }
+    },
 )(TradeEnd);

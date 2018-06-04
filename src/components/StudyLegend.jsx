@@ -1,9 +1,8 @@
-import CIQ from 'chartiq';
 import React, { Component } from 'react';
 import Menu from './Menu.jsx';
 import CategoricalDisplay from './CategoricalDisplay.jsx';
-import {connect} from '../store/Connect';
-import {IndicatorIcon} from './Icons.jsx';
+import { connect } from '../store/Connect';
+import { IndicatorIcon } from './Icons.jsx';
 
 class StudyLegend extends Component {
     componentWillUnmount() {
@@ -11,23 +10,33 @@ class StudyLegend extends Component {
     }
 
     render() {
-        const {isOpened, setOpen, clearStudies, activeStudies, Menu, menuOpen, StudyCategoricalDisplay, onCloseMenu} = this.props;
+        const {
+            isOpened,
+            setOpen,
+            Menu,
+            menuOpen,
+            StudyCategoricalDisplay,
+            onCloseMenu,
+            isMobile,
+        } = this.props;
 
         return (
             <Menu
                 className="ciq-menu ciq-studies collapse"
                 isOpened={isOpened}
                 setOpen={setOpen}
+                isMobile={isMobile}
             >
                 <Menu.Title>
                     <IndicatorIcon
                         className={`ic-icon-with-sub ${menuOpen ? 'active' : ''}`}
-                        tooltip-title={t.translate("Indicators")} />
+                        tooltip-title={t.translate('Indicators')}
+                    />
                 </Menu.Title>
                 <Menu.Body>
                     <StudyCategoricalDisplay
-                        dialogTitle={t.translate("Indicators")}
-                        closeMenu={ () => onCloseMenu() }
+                        dialogTitle={t.translate('Indicators')}
+                        closeMenu={() => onCloseMenu()}
                     />
                 </Menu.Body>
             </Menu>
@@ -35,16 +44,13 @@ class StudyLegend extends Component {
     }
 }
 
-export default connect(
-    ({studies}) => ({
-        isOpened: studies.open,
-        setOpen: studies.setOpen,
-        activeStudies: studies.activeStudies,
-        clearStudies: studies.clearStudies,
-        cleanUp: studies.cleanUp,
-        Menu: studies.menu.connect(Menu),
-        menuOpen: studies.menu.open,
-        StudyCategoricalDisplay: studies.categoricalDisplay.connect(CategoricalDisplay),
-        onCloseMenu: studies.menu.onTitleClick,
-    })
-)(StudyLegend);
+export default connect(({ studies: st }) => ({
+    isOpened: st.open,
+    setOpen: st.setOpen,
+    cleanUp: st.cleanUp,
+    Menu: st.menu.connect(Menu),
+    menuOpen: st.menu.open,
+    StudyCategoricalDisplay: st.categoricalDisplay.connect(CategoricalDisplay),
+    onCloseMenu: st.menu.onTitleClick,
+    isMobile: st.categoricalDisplay.isMobile,
+}))(StudyLegend);

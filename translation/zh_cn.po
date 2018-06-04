@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
-"PO-Revision-Date: 2018-05-24 05:07-0400\n"
+"PO-Revision-Date: 2018-05-25 03:41-0400\n"
 
 msgid "Favorites"
 msgstr "收藏夹"
@@ -43,16 +43,16 @@ msgid "Share"
 msgstr "分享此图"
 
 msgid "Share / Download Chart"
-msgstr ""
+msgstr "共享/下载图表"
 
 msgid "Share link"
 msgstr "共享链接"
 
 msgid "Failed to generate link"
-msgstr ""
+msgstr "未能生成链接"
 
 msgid "Retry"
-msgstr ""
+msgstr "重试"
 
 msgid "Download chart"
 msgstr "下载图表"
@@ -115,19 +115,19 @@ msgid "Toggle Asset Information"
 msgstr "切换资产信息"
 
 msgid "Copy to clipboard"
-msgstr ""
+msgstr "复制到剪贴板"
 
 msgid "Copied!"
-msgstr ""
+msgstr "已复制！"
 
 msgid "Failed!"
-msgstr ""
+msgstr "失败!"
 
 msgid "Settings"
 msgstr "设置"
 
 msgid "Dark Mode"
-msgstr ""
+msgstr "暗模式"
 
 msgid "Language"
 msgstr "语言"
@@ -145,7 +145,7 @@ msgid "Streaming for [symbol] is not available due to license restrictions"
 msgstr "由于许可限制, [symbol] 串流不可用"
 
 msgid "Search..."
-msgstr ""
+msgstr "搜索..."
 
 msgid "Annotation"
 msgstr "注释"
@@ -868,7 +868,7 @@ msgid "STD Period"
 msgstr "标准周期"
 
 msgid "Rel Vol"
-msgstr "相关成交量"
+msgstr "相对波幅"
 
 msgid "Awesome Oscillator"
 msgstr "AO震荡指标"
@@ -904,7 +904,7 @@ msgid "ATR Bands Channel"
 msgstr "斯塔克带顶部值"
 
 msgid "STARC Bands"
-msgstr "标准差"
+msgstr "斯塔克帶"
 
 msgid "MA Period"
 msgstr "MA期间"
@@ -913,13 +913,13 @@ msgid "Multiplier"
 msgstr "乘数"
 
 msgid "STARC Bands Top"
-msgstr "斯塔克带底部值"
+msgstr "斯塔克带顶部值"
 
 msgid "STARC Bands Median"
-msgstr "ATR带通道"
+msgstr "斯塔克带中间值"
 
 msgid "STARC Bands Bottom"
-msgstr "斯塔克带中间值"
+msgstr "斯塔克带底部值"
 
 msgid "ATR Trailing Stops"
 msgstr "ATR追踪止损"
@@ -1039,7 +1039,7 @@ msgid "Ichimoku Clouds"
 msgstr "一目均衡表"
 
 msgid "Conversion Line Period"
-msgstr "对话线周期"
+msgstr "转换线周期"
 
 msgid "Base Line Period"
 msgstr "基础线周期"
@@ -1051,7 +1051,7 @@ msgid "Lagging Span Period"
 msgstr "滞后扩展周期"
 
 msgid "Conversion Line"
-msgstr "对话线"
+msgstr "转换线"
 
 msgid "Base Line"
 msgstr "基础线"

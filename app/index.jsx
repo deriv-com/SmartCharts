@@ -1,8 +1,8 @@
-import {
+import { // eslint-disable-line import/no-extraneous-dependencies,import/no-unresolved
     SmartChart,
-    Barrier,
-    TradeStartLine,
-    TradeEndLine,
+    // Barrier,
+    // TradeStartLine,
+    // TradeEndLine,
     ChartTypes,
     StudyLegend,
     Comparison,
@@ -13,15 +13,15 @@ import {
     DrawTools,
     ChartSetting,
     Share,
-} from '@binary-com/smartcharts';
+} from '@binary-com/smartcharts'; // eslint-disable-line import/no-unresolved
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './app.scss';
 import './doorbell';
 import { ConnectionManager, StreamManager } from './connection';
 
-const getLanguageStorage = function(){
-    let default_language = 'en';
+const getLanguageStorage = function () {
+    const default_language = 'en';
     try {
         let setting_string = CIQ.localStorage.getItem('smartchart-setting'),
             setting = JSON.parse(setting_string !== '' ? setting_string : '{}');
@@ -55,20 +55,24 @@ const renderControls = () => (
     </React.Fragment>
 );
 
+const requestAPI = connectionManager.send.bind(connectionManager);
+const requestSubscribe = streamManager.subscribe.bind(streamManager);
+const requestForget = streamManager.forget.bind(streamManager);
+const shareOrigin = window.location.href.split('?')[0];
+
 const App = () => (
     <SmartChart
-        onSymbolChange={(symbol) => console.log('Symbol has changed to:', symbol)}
+        onSymbolChange={symbol => console.log('Symbol has changed to:', symbol)}
         isMobile={CIQ.isMobile}
         chartControlsWidgets={renderControls}
-        requestAPI={connectionManager.send.bind(connectionManager)}
-        requestSubscribe={streamManager.subscribe.bind(streamManager)}
-        requestForget={streamManager.forget.bind(streamManager)}
-        shareOrigin={window.location.href.split('?')[0]}
-    >
-    </SmartChart>
+        requestAPI={requestAPI}
+        requestSubscribe={requestSubscribe}
+        requestForget={requestForget}
+        shareOrigin={shareOrigin}
+    />
 );
 
 ReactDOM.render(
     <App />,
-    document.getElementById('root')
+    document.getElementById('root'),
 );
