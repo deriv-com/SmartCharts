@@ -12,7 +12,7 @@ class Feed {
         this._binaryApi = binaryApi;
         this._callbacks = {};
         this._mainStore = mainStore;
-        this._emitter = new EventEmitter();
+        this._emitter = new EventEmitter({ emitDelay: 0 });
     }
 
     // although not used, subscribe is overridden so that unsubscribe will be called by ChartIQ
