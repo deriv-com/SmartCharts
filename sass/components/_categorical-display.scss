@@ -226,7 +226,7 @@
     }
     .cq-scroll-panel {
         position: relative;
-        height: 500px;
+        height: calc(67vh - 8em);
         width: 66%;
     }
     .ciq-item-display {
@@ -257,13 +257,14 @@
         }
     }
     .cq-mobile-title{
+        padding-top: 0.9em !important;
         border-bottom: none !important;
     }
 }
 
 .stxMenuActive .cq-categorical-display {
     opacity: 1;
-    height: auto;
+    height: 100%;
 }
 
 /* Active Symbol Icons */
@@ -323,7 +324,7 @@
         .cq-lookup-filters {
             width: 100%;
             border-right: none;
-            height: 7.75em;
+            height: auto;
             @include themify($themes) {
                 border-bottom: 1px solid themed('defaultBorder');
             }
@@ -336,16 +337,9 @@
                 border: 1px solid themed('defaultBorder');
             }
         }
-        .category {
-            padding-top: 1em;
-            &:last-child {	
-                padding-bottom :10em;
-                height: calc( 100vh - 13em );
-            }
-        }
-        .cq-scroll-panel {
+        .cq-scroll-panel{
+            height: 100%;
             width: 100%;
-            height: calc( 100vh - 13em );
         }
         .cq-item, .cq-active-item {
             height: 40px;
@@ -353,10 +347,6 @@
         .cq-filter-panel{
             display: flex;
             justify-content: space-around;
-            border-bottom: 1px solid transparent;
-            @include themify($themes) {
-                border-bottom-color: themed('defaultBorder');
-            }
             .cq-filter {
                 border-right: none;
                 background: transparent;
