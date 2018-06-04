@@ -291,7 +291,7 @@ class ChartStore {
                 this.chartPanelTop = holderStyle.top;
 
                 updateActiveSymbols();
-                setInterval(updateActiveSymbols, 60 * 1000);
+                setInterval(updateActiveSymbols, 10 * 60 * 1000);
             };
             const href = window.location.href;
             if (href.startsWith(shareOrigin) && href.indexOf('#') !== -1) {
