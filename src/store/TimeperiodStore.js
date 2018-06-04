@@ -6,6 +6,9 @@ import { chartTypes } from './ChartTypeStore';
 const notCandles = chartTypes
     .filter(t => !t.candleOnly)
     .map(t => t.id);
+   
+ const aggregateCharts  = chartTypes
+    .filter(t => t.settingsOnClick);
 
 export default class TimeperiodStore {
     constructor(mainStore) {
@@ -36,6 +39,7 @@ export default class TimeperiodStore {
     showCountdown = (callFromSettings = false) => {
         const stx = this.context.stx;
         const isTick = this.timeUnit == 'tick';
+        const hasCountdown = !aggregateCharts.some(t => t.id === stx.layout.aggregationType);
         this.remain = null;
         if (this.countdownInterval) { clearInterval(this.countdownInterval); }
         if (this._injectionId)  { stx.removeInjection(this._injectionId); }
@@ -63,7 +67,7 @@ export default class TimeperiodStore {
             }
         };
 
-        if (this.mainStore.chartSetting.countdown && !isTick) {
+        if (this.mainStore.chartSetting.countdown && !isTick && hasCountdown) {
             if (!this._injectionId) {
                 this._injectionId = stx.append('draw', () => {
                     if (this.remain) {

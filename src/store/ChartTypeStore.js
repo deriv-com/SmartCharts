@@ -145,6 +145,7 @@ export default class ChartTypeStore {
         }
         this.list.selectedIdx = this.types.findIndex(t => t.id === type.id);
         this.type = type;
+        this.mainStore.timeperiod.showCountdown(true);
         this.menu.setOpen(false);
     }
 
