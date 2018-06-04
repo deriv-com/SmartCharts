@@ -13,16 +13,16 @@ export default class CategoricalDisplayStore {
         favoritesId,
         mainStore,
     }) {
-        reaction(getIsShown, () => {
+        reaction(() => this.scrollPanel, () => {
             if (getIsShown()) {
                 // Odd. Why is setTimeout needed here?
                 if (!this.isMobile) {
                     setTimeout(() => this.searchInput.focus(), 0);
                 }
+                this.onOpen();
                 if (!this.isInit) { this.init(); }
-                setTimeout(() => {
-                    this.updateScrollOffset();
-                }, 0);
+            } else {
+                this.onClose();
             }
         });
         this.getCategoricalItems = getCategoricalItems;
@@ -43,6 +43,7 @@ export default class CategoricalDisplayStore {
             when(() => this.context, this.initFavorites.bind(this));
         }
     }
+    @observable scrollPanel;
     @observable filterText = '';
     @observable placeholderText = '';
     @observable activeCategoryKey = '';
@@ -55,6 +56,7 @@ export default class CategoricalDisplayStore {
         data: [],
     };
     scrollOffset = 0;
+    scrollTop = undefined;
 
     get context() {
         return this.mainStore.chart.context;
@@ -78,10 +80,6 @@ export default class CategoricalDisplayStore {
         this.initFavorites();
     }
 
-    updateScrollOffset() {
-        this.scrollOffset = this.scrollPanel.getBoundingClientRect().top;
-    }
-
     updateScrollSpy() {
         if (this.pauseScrollSpy) { return; }
         if (this.filteredItems.length === 0) { return; }
@@ -94,10 +92,11 @@ export default class CategoricalDisplayStore {
                 continue;
             }
             const r = el.getBoundingClientRect();
-            const top = r.top - this.scrollOffset;
+            const top = r.top - this.scrollPanel.getBoundingClientRect().top;
             if (top > 0) { break; }
             i++;
         }
+
         // get first non-empty category
         let idx = i - 1;
         let id;
@@ -109,13 +108,12 @@ export default class CategoricalDisplayStore {
             idx--;
         }
         this.activeCategoryKey = id || this.filteredItems[0].categoryId;
+        this.scrollTop = this.scrollPanel.scrollTop;
     }
 
     init() {
         this.isInit = true;
-        this.scroll = new PerfectScrollbar(this.scrollPanel);
 
-        this.scrollPanel.addEventListener('ps-scroll-y', this.updateScrollSpy.bind(this));
 
         // Select first non-empty category:
         if (this.activeCategoryKey === '' && this.filteredItems.length > 0) {
@@ -315,4 +313,17 @@ export default class CategoricalDisplayStore {
         favoritesId: this.favoritesId,
         CloseUpperMenu: this.CloseUpperMenu,
     }))
+
+    onOpen() {
+        this.scroll = new PerfectScrollbar(this.scrollPanel);
+        if (this.scrollTop) {
+            this.scrollPanel.scrollTop = this.scrollTop;
+        }
+        this.scrollPanel.addEventListener('ps-scroll-y', this.updateScrollSpy.bind(this));
+    }
+
+    onClose() {
+        this.scroll.destroy();
+        this.scroll = null;
+    }
 }

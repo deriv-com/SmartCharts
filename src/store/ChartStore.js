@@ -28,6 +28,9 @@ class ChartStore {
     stxx = null;
     id = null;
     defaultSymbol = 'R_100';
+    chartNode = null;
+    chartControlsNode = null;
+    chartContainerNode = null;
     @observable context = null;
     @observable currentActiveSymbol;
     @observable isChartAvailable = true;
@@ -35,6 +38,8 @@ class ChartStore {
     @observable categorizedSymbols = [];
     @observable barrierJSX;
     @observable chartPanelTop = '0px';
+    @observable chartHeight;
+    @observable chartContainerHeight;
     @observable isMobile = false;
     chartSettingStore = null;
 
@@ -74,11 +79,11 @@ class ChartStore {
         }
     }
 
-    restoreDrawings(stx, symbol) {
-        const drawings = createObjectFromLocalStorage(symbol);
+    restoreDrawings() {
+        const drawings = createObjectFromLocalStorage(this.stxx.chart.symbol);
         if (drawings) {
-            stx.importDrawings(drawings);
-            stx.draw();
+            this.stxx.importDrawings(drawings);
+            this.stxx.draw();
         }
     }
 
@@ -103,10 +108,11 @@ class ChartStore {
         const offsetHeight = (panelPosition == 'left') ? 0 : 50;
         containerNode.style.height = `${ciqNode.offsetHeight - offsetHeight}px`;
     }
-
     resizeScreen = () => {
         if (!this.context) { return; }
-        this.updateHeight();
+        this.chartHeight = this.chartNode.offsetHeight;
+        this.chartContainerHeight = this.chartHeight - this.chartControlsNode.offsetHeight;
+        this.chartContainerNode.style.height = `${this.chartContainerHeight}px`;
         this.stxx.resizeChart();
         if (this.stxx.slider) {
             this.stxx.slider.display(this.stxx.layout.rangeSlider);
@@ -115,6 +121,9 @@ class ChartStore {
 
     @action.bound init(rootNode, props) {
         this.rootNode = rootNode;
+        this.chartNode = this.rootNode.querySelector('.ciq-chart');
+        this.chartControlsNode = this.chartNode.querySelector('.cq-chart-controls');
+        this.chartContainerNode = this.rootNode.querySelector('.chartContainer.primary');
 
         const {
             onSymbolChange,
@@ -154,7 +163,7 @@ class ChartStore {
         manageElement.textConent = t.translate('right-click to manage');
 
         // Animation (using tension requires splines.js)
-        // CIQ.Animation(stxx, { stayPut: true });
+        CIQ.Animation(stxx, { stayPut: true });
 
         // connect chart to data
         this.feed = new Feed(api, stxx, this.mainStore);
@@ -301,7 +310,7 @@ class ChartStore {
                 /* TODO, symbol not found error */
                 return;
             }
-            this.restoreDrawings(this.stxx, this.stxx.chart.symbol);
+            this.restoreDrawings();
         });
 
         this.stxx.chart.yAxis.decimalPlaces = symbolObj.decimal_places;

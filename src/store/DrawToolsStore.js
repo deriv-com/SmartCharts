@@ -12,9 +12,9 @@ const formatCamelCase = (s) => {
 export default class DrawToolsStore {
     constructor(mainStore) {
         this.mainStore = mainStore;
-        this.menu = new MenuStore({ getContext: () => this.mainStore.chart.context });
+        this.menu = new MenuStore(mainStore);
         this.settingsDialog = new SettingsDialogStore({
-            getContext: () => this.mainStore.chart.context,
+            mainStore,
             onDeleted: this.onDeleted,
             onChanged: this.onChanged,
         });
