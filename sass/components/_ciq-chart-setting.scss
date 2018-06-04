@@ -5,26 +5,6 @@
             right: 0px;
             width: 280px;
             height: 200px;
-            .cq-menu-container{
-                transition: opacity 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.1s;
-            }
-            .cq-menu-container-enter {
-                opacity: 0.01;
-                z-index: 0;
-                height: auto;
-            }
-            .cq-menu-container-enter-done {
-                opacity: 1;
-                z-index: 9;
-                height: auto;
-            }
-            .cq-menu-container-exit {
-                opacity: 1;
-            }
-            .cq-menu-container-exit-active {
-                opacity: 0;
-                height: 0;
-            }
         }
     }
     .cq-menu-dropdown {
@@ -67,8 +47,10 @@
         }
     }
     .body {
-        height: 100%;
+        // height: 100%;
         padding: 16px;
+        transition: height 500ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        min-height: 190px;
         .ciq-list-setting{
             height: auto;
             .ciq-list-item{
@@ -135,6 +117,45 @@
                     position: relative;
                     top: 3px;
                 }
+            }
+        }
+    }
+    .cq-setting-container{
+        @include transition( height 250ms ease-out);
+        height: 265px;
+        width: 280px;
+        position: relative;
+        &.container-language{
+            height: 350px;
+        }
+        .cq-setting-main,
+        .cq-setting-language{
+            width: 280px;
+            position: absolute;
+            top: 0px;
+            @include transition(
+              transform 250ms ease-out,
+              opacity 0.17s ease-out
+          );
+        }
+        .cq-setting-main{
+            transform: translateX(-100%);
+            &.animate-enter-active,&.animate-enter-done{
+                transform: translateX(0);
+                opacity: 1;
+            }
+            &.animate-exit-active,&.animate-exit-done{
+                transform: translateX(-100%);
+            }
+        }
+        .cq-setting-language{
+            transform: translateX(100%);
+            &.animate-enter-active,&.animate-enter-done{
+                transform: translateX(0);
+                opacity: 1;
+            }
+            &.animate-exit-active,&.animate-exit-done{
+                transform: translateX(100%);
             }
         }
     }

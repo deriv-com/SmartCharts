@@ -129,25 +129,25 @@ const ChartSetting = ({
                 />
             </Menu.Title>
             <Menu.Body>
+                <div className={`cq-setting-container container-${view === '' ? 'main' : view}`}>
+                    <CSSTransition
+                        in={view === ''}
+                        timeout={250}
+                        classNames="cq-setting-main animate"
+                        unmountOnExit
+                    >
+                        {renderMain()}
+                    </CSSTransition>
 
-                <CSSTransition
-                    in={view === ''}
-                    timeout={300}
-                    classNames="cq-menu-container"
-                    unmountOnExit
-                >
-                    {renderMain()}
-                </CSSTransition>
-
-                <CSSTransition
-                    in={view === 'language'}
-                    timeout={300}
-                    classNames="cq-menu-container"
-                    unmountOnExit
-                >
-                    {renderLanguage()}
-                </CSSTransition>
-
+                    <CSSTransition
+                        in={view === 'language'}
+                        timeout={250}
+                        classNames="cq-setting-language animate"
+                        unmountOnExit
+                    >
+                        {renderLanguage()}
+                    </CSSTransition>
+                </div>
             </Menu.Body>
         </Menu>
     );

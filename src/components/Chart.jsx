@@ -56,6 +56,7 @@ class Chart extends Component {
             chartControlsWidgets,
             AggregateChartSettingsDialog,
             topWidgets,
+            showCandleCountdown = false,
         } = this.props;
 
         const currentLang = lang || ((setting && setting.language) ? setting.language.key : 'en');
@@ -67,15 +68,23 @@ class Chart extends Component {
         const insideSubHolder = array.filter(c => /(TradeStart)|(TradeEnd)/.test(c.type.displayName));
         const renderTopWidgets = topWidgets || defaultTopWidgets;
 
-        const contextClassName = () => {
-            let className = '';
-            className += (typeof theme === 'string') ? ` smartcharts-${theme}`
-                : ` smartcharts-${(setting && setting.theme) ? setting.theme : 'light'}`;
-            return className;
-        };
+
+        const defaultTheme = (setting && setting.theme) ? setting.theme : 'light';
+        const defaultCandleCountdown = (setting && setting.candleCountdown) ? setting.candleCountdown : false;
+
+        // TO DO : this part should move the ChartSetting Store
+        CIQ.localStorageSetItem('smartchart-setting', JSON.stringify({
+            position: ((setting && setting.position && !isMobile) ? setting.position : 'bottom'),
+            language: currentLang,
+            theme: (typeof theme === 'string') ? theme : defaultTheme,
+            candleCountdown: showCandleCountdown || defaultCandleCountdown,
+        }));
 
         return (
-            <cq-context ref={(root) => { this.root = root; }} class={contextClassName()}>
+            <cq-context
+                ref={(root) => { this.root = root; }}
+                class={`smartcharts-${(typeof theme === 'string') ? theme : defaultTheme}`}
+            >
                 <div className={`${currentMode} ${currentPosition}`}>
                     <div className="ciq-chart-area">
                         <div className="ciq-chart">
