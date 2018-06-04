@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Polish\n"
 "Language: pl_PL\n"
-"PO-Revision-Date: 2018-06-02 19:30-0400\n"
+"PO-Revision-Date: 2018-06-03 10:21-0400\n"
 
 msgid "Favorites"
 msgstr "Ulubione"
@@ -379,13 +379,13 @@ msgid "Forecast"
 msgstr "Prognoza"
 
 msgid "Linear Reg Intercept"
-msgstr ""
+msgstr "Przejęcie regresji liniowej"
 
 msgid "Intercept"
 msgstr "Przejęcie"
 
 msgid "Time Series Forecast"
-msgstr ""
+msgstr "Prognoza szeregów czasowych"
 
 msgid "Vertical Horizontal Filter"
 msgstr "Filtr pionowo-poziomy"
@@ -415,7 +415,7 @@ msgid "Swing Index"
 msgstr "Indeks wahań"
 
 msgid "Limit Move Value"
-msgstr ""
+msgstr "Wartość limitowanego ruchu"
 
 msgid "Accumulative Swing Index"
 msgstr "Skumulowany indeks wahań"
@@ -475,7 +475,7 @@ msgid "Days Per Year"
 msgstr "Dni w roku"
 
 msgid "Pretty Good Oscillator"
-msgstr ""
+msgstr "Oscylator Pretty Good"
 
 msgid "Ultimate Oscillator"
 msgstr "Oscylator Ultimate"
@@ -502,7 +502,7 @@ msgid "Points Or Percent"
 msgstr "Punkty lub procenty"
 
 msgid "Twiggs Money Flow"
-msgstr ""
+msgstr "Przepływy pieniężne Twiggsa"
 
 msgid "Chaikin Money Flow"
 msgstr "Przepływy pieniężne Chaikin"
@@ -517,10 +517,10 @@ msgid "Price Oscillator"
 msgstr "Oscylator cenowy"
 
 msgid "Ease of Movement"
-msgstr ""
+msgstr "Swoboda ruchu"
 
 msgid "Commodity Channel Index"
-msgstr ""
+msgstr "Wskaźnik kanału towaru (CCI)"
 
 msgid "Detrended Price Oscillator"
 msgstr "Beztrendowy oscylator cenowy"
@@ -535,16 +535,16 @@ msgid "ATR"
 msgstr "ATR"
 
 msgid "Ehler Fisher Transform"
-msgstr ""
+msgstr "Transformata Fishera"
 
 msgid "EF"
 msgstr "EF"
 
 msgid "EF Trigger"
-msgstr ""
+msgstr "Aktywacja EF"
 
 msgid "Schaff Trend Cycle"
-msgstr ""
+msgstr "Cykl trendów Schaffa"
 
 msgid "QStick"
 msgstr "QStick"
@@ -562,7 +562,7 @@ msgid "Chande Momentum Oscillator"
 msgstr "Oscylator impetu Chande'a"
 
 msgid "Chande Forecast Oscillator"
-msgstr ""
+msgstr "Oscylator prognozy Chande'a"
 
 msgid "Intraday Momentum Index"
 msgstr "Śróddzienny wskaźnik impetu"
@@ -619,16 +619,16 @@ msgid "Channel Fill"
 msgstr ""
 
 msgid "High Low Top"
-msgstr ""
+msgstr "Wysoki Niski Góra"
 
 msgid "High Low Median"
-msgstr ""
+msgstr "Wysoki Niski Mediana"
 
 msgid "High Low Bottom"
-msgstr ""
+msgstr "Wysoki Niski Dół"
 
 msgid "High Minus Low"
-msgstr ""
+msgstr "Wysoki Minus Niski"
 
 msgid "Median Price"
 msgstr "Mediana ceny"
@@ -757,7 +757,7 @@ msgid "Klinger Volume Oscillator"
 msgstr "Oscylator wolumenowy Klingera"
 
 msgid "Signal Periods"
-msgstr ""
+msgstr "Okresy sygnału"
 
 msgid "Klinger"
 msgstr "Klinger"
@@ -766,16 +766,16 @@ msgid "KlingerSignal"
 msgstr "Sygnał Klingera"
 
 msgid "Elder Ray Index"
-msgstr ""
+msgstr "Wskaźnik Elder Ray"
 
 msgid "Elder Bull Power"
-msgstr ""
+msgstr "Wskaźnik Eldera – siła byka"
 
 msgid "Elder Bear Power"
-msgstr ""
+msgstr "Wskaźnik Eldera – siła niedźwiedzia"
 
 msgid "Elder Force Index"
-msgstr ""
+msgstr "Wskaźnik EFI (Elder Force Index)"
 
 msgid "Linear Reg Slope"
 msgstr ""
@@ -1144,25 +1144,25 @@ msgid "Pring's Know Sure Thing"
 msgstr "KST (Know Sure Thing) Pringa"
 
 msgid "Lightest Rate of Change Period"
-msgstr ""
+msgstr "Najlżejszy wskaźnik zmiany interwału czasowego"
 
 msgid "Lightest SMA Period"
 msgstr "Najlżejszy okres średniej SMA"
 
 msgid "Light Rate of Change Period"
-msgstr ""
+msgstr "Lekki wskaźnik zmiany interwału czasowego"
 
 msgid "Light SMA Period"
 msgstr "Lekki okres średniej SMA"
 
 msgid "Heavy Rate of Change Period"
-msgstr ""
+msgstr "Ciężki wskaźnik zmiany interwału czasowego"
 
 msgid "Heavy SMA Period"
 msgstr "Ciężki okres średniej SMA"
 
 msgid "Heaviest Rate of Change Period"
-msgstr ""
+msgstr "Najcięższy wskaźnik zmiany interwału czasowego"
 
 msgid "Heaviest SMA Period"
 msgstr "Najcięższy okres średniej SMA"
@@ -1183,10 +1183,10 @@ msgid "ATH Lookback Period"
 msgstr "Okres ATH Lookback"
 
 msgid "Exit Field"
-msgstr ""
+msgstr "Pole wyjścia"
 
 msgid "Ghost Boxes"
-msgstr ""
+msgstr "Ramki Ghost"
 
 msgid "Stop Levels"
 msgstr "Poziomy Stop"
