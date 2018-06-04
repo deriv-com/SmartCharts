@@ -269,7 +269,7 @@ class ChartStore {
         this.resizeObserver = new ResizeObserver(() => this.resizeScreen());
         this.resizeObserver.observe(rootNode);
 
-        this.feed.onComparisonDataUpdate(this.updateComparisons.bind(this));
+        this.feed.onComparisonDataUpdate(this.updateComparisons);
     }
 
     @action.bound changeSymbol(symbolObj) {

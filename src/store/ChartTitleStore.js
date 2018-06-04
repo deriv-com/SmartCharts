@@ -37,7 +37,7 @@ export default class ChartTitleStore {
     }
 
     onContextReady = () => {
-        this.mainStore.chart.feed.onMasterDataUpdate(this.update.bind(this));
+        this.mainStore.chart.feed.onMasterDataUpdate(this.update);
         this.update();
     };
 
