@@ -300,7 +300,7 @@ function actionFieldDecorator(name) {
                 return undefined;
             },
             set: function (value) {
-                addHiddenFinalProp(this, prop, action(name, value));
+                addHiddenProp(this, prop, action(name, value));
             }
         });
     };
@@ -710,7 +710,7 @@ var ComputedValue = /** @class */ (function () {
     ComputedValue.prototype.get = function () {
         if (this.isComputing)
             fail$1("Cycle detected in computation " + this.name + ": " + this.derivation);
-        if (globalState.inBatch === 0) {
+        if (globalState.inBatch === 0 && this.observers.length === 0) {
             if (shouldCompute(this)) {
                 this.warnAboutUntrackedRead();
                 startBatch(); // See perf test 'computed memoization'
@@ -1012,17 +1012,17 @@ var ObservableObjectAdministration = /** @class */ (function () {
         this.values = {};
     }
     ObservableObjectAdministration.prototype.read = function (owner, key) {
-        if (this.target !== owner) {
+        if (process.env.NODE_ENV === "production" && this.target !== owner) {
             this.illegalAccess(owner, key);
-            return;
+            if (!this.values[key])
+                return undefined;
         }
         return this.values[key].get();
     };
     ObservableObjectAdministration.prototype.write = function (owner, key, newValue) {
         var instance = this.target;
-        if (instance !== owner) {
+        if (process.env.NODE_ENV === "production" && instance !== owner) {
             this.illegalAccess(owner, key);
-            return;
         }
         var observable = this.values[key];
         if (observable instanceof ComputedValue) {
@@ -1125,7 +1125,7 @@ var ObservableObjectAdministration = /** @class */ (function () {
          *
          * When using decorate, the property will always be redeclared as own property on the actual instance
          */
-        return fail$1("Property '" + propName + "' of '" + owner + "' was accessed through the prototype chain. Use 'decorate' instead to declare the prop or access it statically through it's owner");
+        console.warn("Property '" + propName + "' of '" + owner + "' was accessed through the prototype chain. Use 'decorate' instead to declare the prop or access it statically through it's owner");
     };
     /**
      * Observes this object. Triggers for the events 'add', 'update' and 'delete'.
@@ -1348,7 +1348,7 @@ var computedDecorator = createPropDecorator(false, function (instance, propertyN
     // Optimization: faster on decorator target or instance? Assuming target
     // Optimization: find out if declaring on instance isn't just faster. (also makes the property descriptor simpler). But, more memory usage..
     var options = decoratorArgs[0] || {};
-    defineComputedProperty(instance, propertyName, __assign({}, options, { get: get, set: set }));
+    defineComputedProperty(instance, propertyName, __assign({ get: get, set: set }, options));
 });
 var computedStructDecorator = computedDecorator({ equals: comparer.structural });
 /**
@@ -3230,6 +3230,7 @@ function shouldCompute(derivation) {
                     }
                     // if ComputedValue `obj` actually changed it will be computed and propagated to its observers.
                     // and `derivation` is an observer of `obj`
+                    // invariantShouldCompute(derivation)
                     if (derivation.dependenciesState === exports.IDerivationState.STALE) {
                         untrackedEnd(prevUntracked);
                         return true;
@@ -3242,6 +3243,15 @@ function shouldCompute(derivation) {
         }
     }
 }
+// function invariantShouldCompute(derivation: IDerivation) {
+//     const newDepState = (derivation as any).dependenciesState
+//     if (
+//         process.env.NODE_ENV === "production" &&
+//         (newDepState === IDerivationState.POSSIBLY_STALE ||
+//             newDepState === IDerivationState.NOT_TRACKING)
+//     )
+//         fail("Illegal dependency state")
+// }
 function isComputingDerivation() {
     return globalState.trackingDerivation !== null; // filter out actions inside computations
 }
@@ -3686,6 +3696,19 @@ function values(obj) {
     return fail$1(process.env.NODE_ENV !== "production" &&
         "'values()' can only be used on observable objects, arrays and maps");
 }
+function entries(obj) {
+    if (isObservableObject(obj)) {
+        return keys(obj).map(function (key) { return [key, obj[key]]; });
+    }
+    if (isObservableMap(obj)) {
+        return keys(obj).map(function (key) { return [key, obj.get(key)]; });
+    }
+    if (isObservableArray(obj)) {
+        return obj.map(function (key, index) { return [index, key]; });
+    }
+    return fail$1(process.env.NODE_ENV !== "production" &&
+        "'entries()' can only be used on observable objects, arrays and maps");
+}
 function set(obj, key, value) {
     if (arguments.length === 2) {
         startBatch();
@@ -4115,6 +4138,7 @@ exports.isAction = isAction;
 exports.runInAction = runInAction;
 exports.keys = keys;
 exports.values = values;
+exports.entries = entries;
 exports.set = set;
 exports.remove = remove;
 exports.has = has$1;
