@@ -26,14 +26,14 @@ export default class TimeperiodStore {
         this.timeUnit = getTimeUnit({ timeUnit, interval });
         this.interval = interval;
 
-        this.showCandleCountdown();
+        this.showCountdown();
 
-        reaction(() => this.timeUnit, () => { this.showCandleCountdown(); });
-        reaction(() => this.interval, () => { this.showCandleCountdown(); });
+        reaction(() => this.timeUnit, () => { this.showCountdown(); });
+        reaction(() => this.interval, () => { this.showCountdown(); });
     };
 
     countdownInterval = null;
-    showCandleCountdown = (callFromSettings = false) => {
+    showCountdown = (callFromSettings = false) => {
         const stx = this.context.stx;
         const isTick = this.timeUnit == 'tick';
         this.remain = null;
@@ -63,7 +63,7 @@ export default class TimeperiodStore {
             }
         };
 
-        if (this.mainStore.chartSetting.candleCountdown && !isTick) {
+        if (this.mainStore.chartSetting.countdown && !isTick) {
             if (!this._injectionId) {
                 this._injectionId = stx.append('draw', () => {
                     if (this.remain) {
