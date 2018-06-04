@@ -150,7 +150,7 @@ class ChartStore {
         manageElement.textConent = t.translate('right-click to manage');
 
         // Animation (using tension requires splines.js)
-        // CIQ.Animation(stxx, { stayPut: true });
+        CIQ.Animation(stxx, { stayPut: true });
 
         // connect chart to data
         this.feed = new Feed(api, stxx, this.mainStore);
@@ -269,7 +269,7 @@ class ChartStore {
         this.resizeObserver = new ResizeObserver(() => this.resizeScreen());
         this.resizeObserver.observe(rootNode);
 
-        stxx.append('createDataSet', this.updateComparisons);
+        this.feed.onComparisonDataUpdate(this.updateComparisons.bind(this));
     }
 
     @action.bound changeSymbol(symbolObj) {

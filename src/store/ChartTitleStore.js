@@ -38,28 +38,24 @@ export default class ChartTitleStore {
     }
 
     onContextReady = () => {
-        this.context.stx.append('createDataSet', this.update);
+        this.mainStore.chart.feed.onMasterDataUpdate(this.update.bind(this));
         this.update();
     };
 
-    update = () => {
+    @action.bound async update(quote) {
         if (!this.currentSymbol) { return; }
-        const { stx } = this.context;
-        const hasData = (stx.chart.dataSet && stx.chart.dataSet.length) > 0;
 
-        this.isVisible = hasData || !this.isShowChartPrice;
-        if (!hasData) { return; }
+        this.isVisible = quote || !this.isShowChartPrice;
+        if (!this.isVisible) { return; }
 
-        const currentQuote = stx.currentQuote();
-        let currentPrice = currentQuote ? currentQuote.Close : '';
+        let currentPrice = quote.Close;
         if (currentPrice) {
             currentPrice = currentPrice.toFixed(this.decimalPlaces);
             const oldPrice = this.animatedPrice.price;
             if (oldPrice !== currentPrice) {
                 this.animatedPrice.setPrice(currentPrice);
-                const previousClose = currentQuote ? currentQuote.iqPrevClose : undefined;
-                if (currentQuote && previousClose) {
-                    const todaysChange = currentQuote.Close - previousClose;
+                if (oldPrice) {
+                    const todaysChange = currentPrice - oldPrice;
                     if (todaysChange > 0) {
                         this.isPriceUp = true;
                     } else if (todaysChange < 0) {

@@ -1,16 +1,21 @@
+import EventEmitter from 'event-emitter-es6';
 import NotificationStore from '../store/NotificationStore';
 import { TickHistoryFormatter } from './TickHistoryFormatter';
 import PendingPromise from '../utils/PendingPromise';
 
 class Feed {
+    static get EVENT_MASTER_DATA_UPDATE() { return 'EVENT_MASTER_DATA_UPDATE'; }
+    static get EVENT_COMPARISON_DATA_UPDATE() { return 'EVENT_COMPARISON_DATA_UPDATE'; }
+
     constructor(binaryApi, cxx, mainStore) {
         this._cxx = cxx;
         this._binaryApi = binaryApi;
         this._callbacks = {};
         this._mainStore = mainStore;
+        this._emitter = new EventEmitter();
     }
 
-    // although not used, subscribe is overriden so that unsubscribe will be called by ChartIQ
+    // although not used, subscribe is overridden so that unsubscribe will be called by ChartIQ
     subscribe() {}
 
     // Do not call explicitly! Method below is called by ChartIQ when unsubscribing symbols.
@@ -56,8 +61,10 @@ class Feed {
                         data: quotes,
                         createObject: true,
                     });
+                    this._emitter.emit(Feed.EVENT_COMPARISON_DATA_UPDATE);
                 } else {
                     this._cxx.updateChartData(quotes);
+                    this._emitter.emit(Feed.EVENT_MASTER_DATA_UPDATE, quotes[0]);
                 }
                 return;
             }
@@ -97,9 +104,13 @@ class Feed {
         }
 
         const quotes = TickHistoryFormatter.formatHistory(response);
+
         callback({ quotes });
         if (!isComparisonChart) {
+            this._emitter.emit(Feed.EVENT_MASTER_DATA_UPDATE, quotes[quotes.length - 1]);
             this._mainStore.chart.isChartAvailable = true;
+        } else {
+            this._emitter.emit(Feed.EVENT_COMPARISON_DATA_UPDATE);
         }
     }
 
@@ -121,7 +132,7 @@ class Feed {
                 });
                 result.quotes = TickHistoryFormatter.formatHistory(response);
             } catch (err) {
-                console.error(err); // eslint-disable-line
+                console.error(err);
                 result.quotes = { error: err };
             }
         }
@@ -147,6 +158,14 @@ class Feed {
         };
 
         return toSeconds[interval] * period;
+    }
+
+    onMasterDataUpdate(callback) {
+        this._emitter.on(Feed.EVENT_MASTER_DATA_UPDATE, callback);
+    }
+
+    onComparisonDataUpdate(callback) {
+        this._emitter.on(Feed.EVENT_COMPARISON_DATA_UPDATE, callback);
     }
 }
 
