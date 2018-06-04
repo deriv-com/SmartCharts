@@ -18,13 +18,13 @@ export default class AnimatedPriceStore {
         }
         this.price = val;
         this.oldPrice = this.price;
-        this.setShowStable(false);
-        setTimeout(() => this.setShowStable(true), 0);
+        this.showStable = false;
+        setTimeout(this.enableShowStable, 150);
         this.isIncrease = isIncrease;
     }
 
-    @action.bound setShowStable(val) {
-        this.showStable = val;
+    @action.bound enableShowStable() {
+        this.showStable = true;
     }
 
     connect = connect(() => ({
