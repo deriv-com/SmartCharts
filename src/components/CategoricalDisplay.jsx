@@ -124,7 +124,7 @@ const CategoricalDisplay = ({
                         return (
                             <div
                                 key={i}
-                                className={`cq-filter ${isActive ? 'cq-active-filter' : ''} ${!isMobile ? 'cq-hover-style' :''}`}
+                                className={`cq-filter ${isActive ? 'cq-active-filter' : ''} ${!isMobile ? 'cq-hover-style' : ''}`}
                                 onClick={e => handleFilterClick(category, e)}
                             >
                                 {CategoryIcon && <CategoryIcon className={`ic-${category.categoryId}`} />}

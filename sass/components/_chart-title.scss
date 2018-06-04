@@ -112,24 +112,13 @@
         left: 5px !important;
         bottom: auto !important;
         margin-top:5px;
-        z-index: -3;
-        opacity: 0;
-        pointer-events: none;
         transform: translateX(0) translateY( -3em );
-        @include dialog-transition();
-        &.cq-menu-dropdown-enter-done{
+        &.cq-menu-dropdown-enter-done, &.cq-menu-dropdown-enter-active {
             opacity: 1;
-            pointer-events: initial;
             transform: translateX(0) translateY( 0em );
+        }
+        &.cq-menu-dropdown-enter-done {
             z-index: 6;
-        }
-        &.cq-menu-dropdown-exit.cq-menu-dropdown-exit-active{
-            @include dialog-transition();
-        }
-        &.cq-menu-dropdown-exit-done{
-            opacity: 0;
-            z-index: -3;
-            transform: translateX(0) translateY( -3em );
         }
     }
 }
