@@ -3,7 +3,6 @@ import { connect } from './Connect';
 
 export default class AnimatedPriceStore {
     @observable price = '';
-    @observable showStable = true;
     @observable isIncrease = false;
     oldPrice = '';
 
@@ -18,18 +17,11 @@ export default class AnimatedPriceStore {
         }
         this.price = val;
         this.oldPrice = this.price;
-        this.showStable = false;
-        setTimeout(this.enableShowStable, 150);
         this.isIncrease = isIncrease;
-    }
-
-    @action.bound enableShowStable() {
-        this.showStable = true;
     }
 
     connect = connect(() => ({
         price: this.price,
-        showStable: this.showStable,
         isIncrease: this.isIncrease,
         className: this.className,
     }));

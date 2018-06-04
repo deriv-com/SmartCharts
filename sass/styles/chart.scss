@@ -829,10 +829,6 @@ html, body {
     top:0px; /* too much space by default in stx-chart.css */
 }
 
-.cq-stable {
-    @include transition(all 1s ease-out 0s);
-}
-
 .cq-down {
     color: $chart-red;
 }
