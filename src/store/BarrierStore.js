@@ -1,5 +1,4 @@
-import { observable, action, computed, when } from 'mobx';
-import { connect } from './Connect';
+import { observable } from 'mobx';
 import PriceLineStore from './PriceLineStore';
 import ShadeStore from './ShadeStore';
 
@@ -89,7 +88,7 @@ export default class BarrierStore {
         const high_barrier = this._high_barrier.visible ? this._high_barrier.price : undefined;
         const low_barrier = this._low_barrier.visible ? this._low_barrier.price : undefined;
 
-        if(this.onBarrierChange) {this.onBarrierChange({high: high_barrier, low: low_barrier});}
+        if (this.onBarrierChange) { this.onBarrierChange({ high: high_barrier, low: low_barrier }); }
 
         this._drawShadedArea();
     }

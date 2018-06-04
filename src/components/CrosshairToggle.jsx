@@ -1,12 +1,11 @@
-import React, { Component } from 'react';
-import {connect} from '../store/Connect';
-import {CrosshairOffIcon, CrosshairOnIcon, CrosshairTooltipIcon} from './Icons.jsx';
-import {Toggle} from './Form.jsx';
+import React from 'react';
+import { connect } from '../store/Connect';
+import { CrosshairOffIcon, CrosshairOnIcon, CrosshairTooltipIcon } from './Icons.jsx';
+import { Toggle } from './Form.jsx';
 
 const CrosshairToggle = ({
     toggleState,
-    crosshair,
-    state
+    state,
 }) => {
     const CrosshairIcon = [CrosshairOffIcon, CrosshairOnIcon, CrosshairTooltipIcon][state];
     return (
@@ -15,20 +14,18 @@ const CrosshairToggle = ({
                 <Toggle
                     active={state != 0}
                     onChange={toggleState}
-                    >
+                >
                     <CrosshairIcon
-                        className='ic-icon-with-sub'
+                        className="ic-icon-with-sub"
                         tooltip-title={t.translate('Crosshair')}
-                    /> 
+                    />
                 </Toggle>
             </div>
         </div>
-        )
+    );
 };
 
-export default connect(
-    ({crosshair}) => ({
-        toggleState: () => crosshair.toggleState(),
-        state: ( typeof crosshair.state !== 'number') ? 0 : crosshair.state 
-    })
-)(CrosshairToggle);
+export default connect(({ crosshair }) => ({
+    toggleState: () => crosshair.toggleState(),
+    state: (typeof crosshair.state !== 'number') ? 0 : crosshair.state,
+})) (CrosshairToggle);

@@ -1,8 +1,7 @@
 /* eslint-disable no-new, react/jsx-indent, react/no-danger, react/jsx-indent-props */
-import React from 'react';
 import 'babel-polyfill';
 
-import {TradeEndLine, TradeStartLine} from './components/VerticalLine.jsx';
+import { TradeEndLine, TradeStartLine } from './components/VerticalLine.jsx';
 import Barrier from './components/Barrier.jsx';
 import PendingPromise from './utils/PendingPromise';
 import ChartTypes from './components/ChartTypes.jsx';

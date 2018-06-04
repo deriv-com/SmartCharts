@@ -1,6 +1,7 @@
+/* eslint-disable react/sort-comp,react/no-multi-comp */
 import React from 'react';
 import ReactSlider from './Slider.jsx';
-import {ArrowIcon} from './Icons.jsx';
+import { ArrowIcon } from './Icons.jsx';
 import '../../sass/components/_ciq-form.scss';
 
 export const Slider = ({
@@ -8,31 +9,28 @@ export const Slider = ({
     max = 10,
     step = 1,
     value,
-    className = '',
     onChange,
-}) => {
-    return (
-        <div className='cq-slider'>
-            <ReactSlider
-                min={min}
-                max={max}
-                step={step}
-                onChange={onChange}
-                value={value}
-                withBars
-            />
-            <div className='value'>{value}</div>
-        </div>
-    );
-};
+}) => (
+    <div className="cq-slider">
+        <ReactSlider
+            min={min}
+            max={max}
+            step={step}
+            onChange={onChange}
+            value={value}
+            withBars
+        />
+        <div className="value">{value}</div>
+    </div>
+);
 
 export class DropDown extends React.Component {
     state = { open: false };
     titleRef = null;
-    onClick = () => this.setState({open: !this.state.open});
+    onClick = () => this.setState({ open: !this.state.open });
     close = (e) => {
-        if(e.target !== this.titleRef) {
-            this.setState({open: false});
+        if (e.target !== this.titleRef) {
+            this.setState({ open: false });
         }
     }
 
@@ -40,14 +38,16 @@ export class DropDown extends React.Component {
     componentWillUnmount() { document.removeEventListener('click', this.close); }
 
     render() {
-        const { rows, children, title, onRowClick, className } = this.props;
+        const {
+            rows, children, title, onRowClick, className,
+        } = this.props;
         const { open } = this.state;
         return (
             <div className={`${className || ''} cq-dropdown`}>
                 <div
                     className={`title ${open ? 'active' : ''}`}
                     onClick={this.onClick}
-                    ref={ref => this.titleRef = ref}
+                    ref={(ref) => { this.titleRef = ref; }}
                 >
                     {title}
                     <ArrowIcon />
@@ -56,7 +56,7 @@ export class DropDown extends React.Component {
                     {rows.map((row, rowIdx) => (
                         <div
                             key={rowIdx}
-                            className='row'
+                            className="row"
                             onClick={() => onRowClick && onRowClick(row)}
                         >
                             {children(row)}
@@ -70,32 +70,32 @@ export class DropDown extends React.Component {
 
 export class Pattern extends React.Component {
     patterns = [
-        {width: 1, pattern: 'solid'},
-        {width: 3, pattern: 'solid'},
-        {width: 5, pattern: 'solid'},
-        {width: 1, pattern: 'dotted'},
-        {width: 3, pattern: 'dotted'},
-        {width: 5, pattern: 'dotted'},
-        {width: 1, pattern: 'dashed'},
-        {width: 3, pattern: 'dashed'},
-        {width: 5, pattern: 'dashed'},
-        {width: 0, pattern: 'none'},
+        { width: 1, pattern: 'solid' },
+        { width: 3, pattern: 'solid' },
+        { width: 5, pattern: 'solid' },
+        { width: 1, pattern: 'dotted' },
+        { width: 3, pattern: 'dotted' },
+        { width: 5, pattern: 'dotted' },
+        { width: 1, pattern: 'dashed' },
+        { width: 3, pattern: 'dashed' },
+        { width: 5, pattern: 'dashed' },
+        { width: 0, pattern: 'none' },
     ];
     render() {
         const { pattern, lineWidth, onChange } = this.props;
         const title = pattern !== 'none' ?
-            <span className={`option ${pattern}-${lineWidth}`}></span> :
-            <span className='none'>None</span>;
+            <span className={`option ${pattern}-${lineWidth}`} /> :
+            <span className="none">None</span>;
 
-        return(
+        return (
             <DropDown
                 rows={this.patterns}
                 title={title}
                 onRowClick={onChange}
             >
-                {p => p.pattern !== 'none' ?
-                    <span className={`option ${p.pattern}-${p.width}`}></span> :
-                    <span className='none'>None</span>
+                {p => (p.pattern !== 'none' ?
+                    <span className={`option ${p.pattern}-${p.width}`} /> :
+                    <span className="none">None</span>)
                 }
             </DropDown>
         );
@@ -119,10 +119,10 @@ export class ColorPicker extends React.Component {
     ];
     state = { open: false };
     titleRef = null;
-    onClick = () => this.setState({open: !this.state.open});
+    onClick = () => this.setState({ open: !this.state.open });
     close = (e) => {
-        if(e.target !== this.titleRef) {
-            this.setState({open: false});
+        if (e.target !== this.titleRef) {
+            this.setState({ open: false });
         }
     };
 
@@ -134,20 +134,21 @@ export class ColorPicker extends React.Component {
         const backgroundColor = color === 'auto' ? '#000000' : color;
 
         return (
-            <div className='cq-color-picker'>
+            <div className="cq-color-picker">
                 <div
-                    ref={ref => this.titleRef = ref}
-                    className='title'
-                    style={{backgroundColor}}
+                    ref={(ref) => { this.titleRef = ref; }}
+                    className="title"
+                    style={{ backgroundColor }}
                     onClick={this.onClick}
                 />
                 <div className={`dropdown ${this.state.open ? 'open' : ''}`}>
                     {this.colorMap.map((row, rowIdx) => (
-                        <div key={rowIdx} className='row'>
+                        <div key={rowIdx} className="row">
                             {row.map((tileColor, idx) => (
                                 <div
                                     key={idx}
-                                    className='tile-color' style={{ backgroundColor: tileColor }}
+                                    className="tile-color"
+                                    style={{ backgroundColor: tileColor }}
                                     onClick={() => setColor(tileColor)}
                                 />
                             ))}
@@ -157,7 +158,6 @@ export class ColorPicker extends React.Component {
             </div>
         );
     }
-
 }
 
 export const Switch = ({
@@ -168,7 +168,7 @@ export const Switch = ({
         className={`cq-switch ${value ? 'on' : 'off'}`}
         onClick={() => onChange(!value)}
     >
-        <div className='handle' />
+        <div className="handle" />
     </div>
 );
 
@@ -206,11 +206,11 @@ export class NumericInput extends React.Component {
         }
     };
 
-    onUpdateValue = e => {
+    onUpdateValue = (e) => {
         this.setState({ value: e.target.value });
     };
 
-    fireOnEnter = e => {
+    fireOnEnter = (e) => {
         if (e.key === 'Enter') {
             this.fireOnChange();
         }
@@ -261,18 +261,15 @@ export const Toggle = ({
     className,
     children,
     active,
-    onChange
-}) =>
-{
-    return (
-        <div
-            onClick={() => onChange(!active)}
-            className={`${className || ''} ${active ? 'active' : ''} cq-toggle`}
-        >
-            {children}
-        </div>
-    );
-};
+    onChange,
+}) => (
+    <div
+        onClick={() => onChange(!active)}
+        className={`${className || ''} ${active ? 'active' : ''} cq-toggle`}
+    >
+        {children}
+    </div>
+);
 
 export const FontSetting = ({
     onChange,
@@ -293,7 +290,9 @@ export const FontSetting = ({
     const onFontSizeChange = size => fireChange({ size: `${size}px` });
     const onBoldChange = isBold => fireChange({ weight: isBold ? 'bold' : undefined });
     const onItalicChange = isItalic => fireChange({ style: isItalic ? 'italic' : undefined });
-    const {family, style, weight, size } = value;
+    const {
+        family, style, weight, size,
+    } = value;
 
     return (
         <span className="cq-fontsetting">
@@ -310,20 +309,20 @@ export const FontSetting = ({
                 <div className="cq-text-icon"><i>i</i></div>
             </Toggle>
             <DropDown
-                className='cq-changefontsize'
+                className="cq-changefontsize"
                 rows={fontSizes}
                 title={size || '13px'}
                 onRowClick={onFontSizeChange}
             >
-                {p => <span className={`option`}>{p}</span>}
+                {p => <span className="option">{p}</span>}
             </DropDown>
             <DropDown
-                className='cq-changefontfamily'
+                className="cq-changefontfamily"
                 rows={families}
                 title={family || families[0]}
                 onRowClick={onFontFamilyChange}
             >
-                {p => <span className={`option`}>{p}</span>}
+                {p => <span className="option">{p}</span>}
             </DropDown>
         </span>
     );

@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import {connect} from '../store/Connect';
+import React from 'react';
+import { connect } from '../store/Connect';
 import '../../sass/components/_ciq-asset-information.scss';
 
 const AssetInformation = ({
@@ -21,14 +21,12 @@ const AssetInformation = ({
     </div>
 );
 
-export default connect(
-    ({assetInformation: ai}) => ({
-        price: ai.price,
-        open: ai.open,
-        close: ai.close,
-        high: ai.high,
-        low: ai.low,
-        visible: ai.visible,
-    })
-)(AssetInformation);
+export default connect(({ assetInformation: ai }) => ({
+    price: ai.price,
+    open: ai.open,
+    close: ai.close,
+    high: ai.high,
+    low: ai.low,
+    visible: ai.visible,
+}))(AssetInformation);
 

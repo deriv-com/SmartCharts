@@ -7,7 +7,7 @@ const AnimatedPrice = ({
     className,
 }) => {
     const classes = `cq-animated-price ${className || ''} ${
-        showStable ? 'cq-stable ' : (isIncrease ? 'cq-up' : 'cq-down')
+        showStable ? 'cq-stable ' : (isIncrease ? 'cq-up' : 'cq-down') // eslint-disable-line no-nested-ternary
     }`;
     return (
         <React.Fragment>

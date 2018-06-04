@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 
 class PriceLine extends Component {
     componentDidMount() {
@@ -22,7 +22,7 @@ class PriceLine extends Component {
         return (
             <div
                 className={`chart-line horizontal ${draggable ? 'draggable' : ''} ${isDragging ? 'dragging' : ''} ${className || ''}`}
-                style={{top, zIndex}}
+                style={{ top, zIndex }}
                 ref={setDragLine}
                 hidden={visible ? undefined : 'true'}
                 uncentered={uncentered ? 'true' : undefined}

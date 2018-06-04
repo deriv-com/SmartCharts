@@ -12,16 +12,14 @@ const List = ({
 }) => {
     const hasFunctionAsChildren = (typeof children === 'function');
     const renderRow = hasFunctionAsChildren ? children : (item => item.text);
-    const itemClassName = (it, idx) => {
-        return 'ciq-list-item' +
+    const itemClassName = (it, idx) => 'ciq-list-item' +
                ` ${idx === selectedIdx ? 'selected' : ''}` +
                ` ${it.disabled ? 'disabled' : ''}` +
                ` ${it.active ? 'active' : ''}`;
-    };
     return (
         <div
-            className='ciq-list'
-            style={height && {height: `${height}px`}}
+            className="ciq-list"
+            style={height && { height: `${height}px` }}
             ref={onRootRef}
         >
             {items.map((it, idx) => (
