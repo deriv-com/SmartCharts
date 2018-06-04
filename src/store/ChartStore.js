@@ -229,25 +229,67 @@ class ChartStore {
             }
 
             const onLayoutDataReady = () => {
-                this.restoreLayout(stxx, layoutData);
+                const today_utc = Date.UTC(
+                        (new Date()).getUTCFullYear(),
+                        (new Date()).getUTCMonth(),
+                        (new Date()).getUTCDate(),
+                        (new Date()).getHours(),
+                        (new Date()).getMinutes(),
+                        (new Date()).getSeconds(),
+                    ),
+                    timeToEpochGMT = (time_stirng) => {
+                        let today = new Date(),
+                            time = time_stirng.split(':');
+                        return Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate(), time[0], time[1], time[2]);
+                    },
+                    updateActiveSymbols = () => {
+                        api.getTradingTimes().then((data) => {
+                            data.trading_times.markets.forEach((market) => {
+                                market.submarkets.forEach((submarket) => {
+                                    submarket.symbols.forEach((symbol) => {
+                                        const foundSymbol = active_symbols.find(item => item.symbol === symbol.symbol);
+                                        if (foundSymbol) {
+                                            let isOpen = false;
+                                            for (let i = 0; i <= symbol.times.open.length; i++) {
+                                                if (
+                                                    symbol.times.open[i] &&
+                                                symbol.times.close[i] &&
+                                                today_utc >= timeToEpochGMT(symbol.times.open[i]) &&
+                                                today_utc <= timeToEpochGMT(symbol.times.close[i])
+                                                ) {
+                                                    isOpen = true;
+                                                }
+                                            }
+                                            foundSymbol.is_open = isOpen;
+                                        }
+                                    });
+                                });
+                            });
 
-                this.setActiveSymbols(active_symbols);
 
-                if (initialSymbol && !(layoutData && layoutData.symbols)) {
-                    this.changeSymbol(initialSymbol);
-                } else if (stxx.chart.symbol) {
-                    this.currentActiveSymbol = stxx.chart.symbolObject;
-                    stxx.chart.yAxis.decimalPlaces = stxx.chart.symbolObject.decimal_places;
-                    this.categorizedSymbols = this.categorizeActiveSymbols();
-                    if (onSymbolChange) { onSymbolChange(this.currentActiveSymbol); }
-                } else {
-                    this.changeSymbol(this.defaultSymbol);
-                }
+                            this.restoreLayout(stxx, layoutData);
 
+                            this.setActiveSymbols(active_symbols);
+
+                            if (initialSymbol && !(layoutData && layoutData.symbols)) {
+                                this.changeSymbol(initialSymbol);
+                            } else if (stxx.chart.symbol) {
+                                this.currentActiveSymbol = stxx.chart.symbolObject;
+                                stxx.chart.yAxis.decimalPlaces = stxx.chart.symbolObject.decimal_places;
+                                this.categorizedSymbols = this.categorizeActiveSymbols();
+                                if (onSymbolChange) { onSymbolChange(this.currentActiveSymbol); }
+                            } else {
+                                this.changeSymbol(this.defaultSymbol);
+                            }
+                        });
+                    };
                 this.context = context;
                 this.contextPromise.resolve(this.context);
                 this.resizeScreen();
                 this.chartPanelTop = holderStyle.top;
+
+                updateActiveSymbols();
+                setInterval(updateActiveSymbols, 60 * 1000);
             };
             const href = window.location.href;
             if (href.startsWith(shareOrigin) && href.indexOf('#') !== -1) {
@@ -362,8 +404,8 @@ class ChartStore {
                 market: s.market,
                 market_display_name: s.market_display_name,
                 submarket_display_name: s.submarket_display_name,
-                exchange_is_open: s.exchange_is_open,
                 decimal_places: s.pip.length - 2,
+                is_open: s.is_open,
             });
         }
 

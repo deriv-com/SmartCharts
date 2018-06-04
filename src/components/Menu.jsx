@@ -34,10 +34,11 @@ class Menu extends Component {
                     className="cq-menu-overlay"
                     onClick={this.onOverlayClick}
                 >
-                <CSSTransition
+                    <CSSTransition
                         in={open}
                         timeout={0}
-                        classNames="cq-menu-dropdown">
+                        classNames="cq-menu-dropdown"
+                    >
 
                         <DropdownDialog
                             className="cq-menu-dropdown"
@@ -46,7 +47,7 @@ class Menu extends Component {
                         >
                             {rest}
                         </DropdownDialog>
-                </CSSTransition>
+                    </CSSTransition>
                 </div>
             </div>
         );
