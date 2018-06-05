@@ -26,6 +26,9 @@ class ChartStore {
     stxx = null;
     id = null;
     defaultSymbol = 'R_100';
+    chartNode = null;
+    chartControlsNode = null;
+    chartContainerNode = null;
     @observable context = null;
     @observable currentActiveSymbol;
     @observable isChartAvailable = true;
@@ -33,6 +36,8 @@ class ChartStore {
     @observable categorizedSymbols = [];
     @observable barrierJSX;
     @observable chartPanelTop = '0px';
+    @observable chartHeight;
+    @observable chartContainerHeight;
     @observable isMobile = false;
 
     @action.bound setActiveSymbols(activeSymbols) {
@@ -71,11 +76,11 @@ class ChartStore {
         }
     }
 
-    restoreDrawings(stx, symbol) {
-        const drawings = createObjectFromLocalStorage(symbol);
+    restoreDrawings() {
+        const drawings = createObjectFromLocalStorage(this.stxx.chart.symbol);
         if (drawings) {
-            stx.importDrawings(drawings);
-            stx.draw();
+            this.stxx.importDrawings(drawings);
+            this.stxx.draw();
         }
     }
 
@@ -92,14 +97,14 @@ class ChartStore {
         );
     }
 
-    updateHeight() {
+    updateHeight(position) {
         const ciqNode = this.rootNode.querySelector('.ciq-chart');
-        const chartControls = ciqNode.querySelector('.cq-chart-controls');
-        const ciqHeight = ciqNode.offsetHeight - chartControls.offsetHeight;
         const containerNode = this.rootNode.querySelector('.chartContainer.primary');
-        containerNode.style.height = `${ciqHeight}px`;
+        const panelPosition = position || this.mainStore.chartSetting.position;
+        // height of chart control panel
+        const offsetHeight = (panelPosition == 'left') ? 0 : 50;
+        containerNode.style.height = `${ciqNode.offsetHeight - offsetHeight}px`;
     }
-
     resizeScreen = () => {
         if (!this.context) { return; }
         this.updateHeight();
@@ -111,6 +116,9 @@ class ChartStore {
 
     @action.bound init(rootNode, props) {
         this.rootNode = rootNode;
+        this.chartNode = this.rootNode.querySelector('.ciq-chart');
+        this.chartControlsNode = this.chartNode.querySelector('.cq-chart-controls');
+        this.chartContainerNode = this.rootNode.querySelector('.chartContainer.primary');
 
         const {
             onSymbolChange,
@@ -150,7 +158,7 @@ class ChartStore {
         manageElement.textConent = t.translate('right-click to manage');
 
         // Animation (using tension requires splines.js)
-        // CIQ.Animation(stxx, { stayPut: true });
+        CIQ.Animation(stxx, { stayPut: true });
 
         // connect chart to data
         this.feed = new Feed(api, stxx, this.mainStore);
@@ -297,7 +305,7 @@ class ChartStore {
                 /* TODO, symbol not found error */
                 return;
             }
-            this.restoreDrawings(this.stxx, this.stxx.chart.symbol);
+            this.restoreDrawings();
         });
 
         this.stxx.chart.yAxis.decimalPlaces = symbolObj.decimal_places;

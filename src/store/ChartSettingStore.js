@@ -8,7 +8,7 @@ export default class ChartSettingStore {
     constructor(mainStore) {
         this.defaultLanguage = this.languages[0];
         this.mainStore = mainStore;
-        this.menu = new MenuStore({ getContext: () => this.mainStore.chart.context });
+        this.menu = new MenuStore(mainStore);
         this.restoreSetting();
     }
 
@@ -76,7 +76,7 @@ export default class ChartSettingStore {
     @observable language = '';
     @observable position = '';
     @observable theme = '';
-    @observable candleCountdown = false;
+    @observable countdown = false;
 
     restoreSetting() {
         const setting = createObjectFromLocalStorage('smartchart-setting');
@@ -95,12 +95,12 @@ export default class ChartSettingStore {
             }
             this.position = setting.position === 'bottom' ? 'bottom' : 'left';
             this.theme = setting.theme === 'light' ? 'light' : 'dark';
-            this.candleCountdown = setting.candleCountdown;
+            this.countdown = setting.countdown;
         } else {
             this.language = this.defaultLanguage;
             this.position = 'bottom';
             this.theme = 'light';
-            this.candleCountdown = false;
+            this.countdown = false;
         }
     }
 
@@ -109,10 +109,9 @@ export default class ChartSettingStore {
             language: this.language.key,
             position: this.position,
             theme: this.theme,
-            candleCountdown :this.candleCountdown,
+            countdown :this.countdown,
         }));
     }
-
     @action.bound setView(view) {
         this.view = view || '';
     }
@@ -132,7 +131,13 @@ export default class ChartSettingStore {
         this.stx.clearStyles();
         this.saveSetting();
     }
-
+    @action.bound setPosition(value) {
+        this.position = value;
+        this.mainStore.chart.stxx.clearStyles();
+        this.saveSetting();
+        this.mainStore.chart.updateHeight(value);
+        this.menu.setOpen(false);
+    }
     @action.bound showCandleCountdown(value) {
         this.candleCountdown = value;
         this.mainStore.timeperiod.showCandleCountdown(value);
