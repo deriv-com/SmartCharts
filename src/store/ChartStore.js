@@ -283,13 +283,13 @@ class ChartStore {
     initialRouting() {
         let timer;
         window.addEventListener('hashchange', () => {
-            const hash = window.location.hash.replace('#', '');
-            if (hash === '') {
-                clearTimeout(timer);
-                timer = setTimeout(() => {
+            clearTimeout(timer);
+            timer = setTimeout(() => {
+                const hash = window.location.hash.replace('#', '');
+                if (hash === '') {
                     this.mainStore.dialog.closeAll();
-                }, 300);
-            }
+                }
+            }, 300);
         }, false);
     }
 
