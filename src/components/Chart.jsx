@@ -56,7 +56,7 @@ class Chart extends Component {
             chartControlsWidgets,
             AggregateChartSettingsDialog,
             topWidgets,
-            showCandleCountdown = false,
+            showCountdown = false,
         } = this.props;
 
         const currentLang = lang || ((setting && setting.language) ? setting.language.key : 'en');
@@ -77,7 +77,7 @@ class Chart extends Component {
         CIQ.localStorageSetItem('smartchart-setting', JSON.stringify({
             language: currentLang,
             theme: (typeof theme === 'string') ? theme : ((setting && setting.theme) ? setting.theme : 'light'), // eslint-disable-line no-nested-ternary
-            candleCountdown :showCandleCountdown || ((setting && setting.candleCountdown) ? setting.candleCountdown : false),
+            countdown :showCountdown || ((setting && setting.countdown) ? setting.countdown : false),
         }));
 
         return (

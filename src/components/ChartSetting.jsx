@@ -25,8 +25,8 @@ const ChartSetting = ({
     setLanguage,
     theme,
     setTheme,
-    candleCountdown,
-    showCandleCountdown,
+    countdown,
+    showCountdown,
     closeMenu,
     assetInformation,
     setAssetInformation,
@@ -59,11 +59,11 @@ const ChartSetting = ({
                         </div>
                     </div>
                     <div className="ciq-list-item">
-                        <span className="ciq-icon-text">{t.translate('Candle Countdown')}</span>
+                        <span className="ciq-icon-text">{t.translate('Countdown')}</span>
                         <div className="ciq-action">
                             <Switch
-                                value={candleCountdown}
-                                onChange={showCandleCountdown}
+                                value={countdown}
+                                onChange={showCountdown}
                             />
                         </div>
                     </div>
@@ -153,8 +153,8 @@ export default connect(({ chartSetting: s, assetInformation: ai }) => ({
     setLanguage: s.setLanguage,
     theme: s.theme,
     setTheme: s.setTheme,
-    candleCountdown: s.candleCountdown,
-    showCandleCountdown: s.showCandleCountdown,
+    countdown: s.countdown,
+    showCountdown: s.showCountdown,
     closeMenu: s.menu.onTitleClick,
     assetInformation: ai.visible,
     setAssetInformation: ai.setVisible,
