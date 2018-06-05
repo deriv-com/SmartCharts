@@ -97,11 +97,17 @@ class ChartStore {
         );
     }
 
+    updateHeight(position) {
+        const ciqNode = this.rootNode.querySelector('.ciq-chart');
+        const containerNode = this.rootNode.querySelector('.chartContainer.primary');
+        const panelPosition = position || this.mainStore.chartSetting.position;
+        // height of chart control panel
+        const offsetHeight = (panelPosition == 'left') ? 0 : 50;
+        containerNode.style.height = `${ciqNode.offsetHeight - offsetHeight}px`;
+    }
     resizeScreen = () => {
         if (!this.context) { return; }
-        this.chartHeight = this.chartNode.offsetHeight;
-        this.chartContainerHeight = this.chartHeight - this.chartControlsNode.offsetHeight;
-        this.chartContainerNode.style.height = `${this.chartContainerHeight}px`;
+        this.updateHeight();
         this.stxx.resizeChart();
         if (this.stxx.slider) {
             this.stxx.slider.display(this.stxx.layout.rangeSlider);

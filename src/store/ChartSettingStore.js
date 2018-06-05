@@ -112,7 +112,6 @@ export default class ChartSettingStore {
             countdown :this.countdown,
         }));
     }
-
     @action.bound setView(view) {
         this.view = view || '';
     }
@@ -132,10 +131,16 @@ export default class ChartSettingStore {
         this.stx.clearStyles();
         this.saveSetting();
     }
-
-    @action.bound showCountdown(value) {
-        this.countdown = value;
-        this.mainStore.timeperiod.showCountdown(value);
+    @action.bound setPosition(value) {
+        this.position = value;
+        this.mainStore.chart.stxx.clearStyles();
+        this.saveSetting();
+        this.mainStore.chart.updateHeight(value);
+        this.menu.setOpen(false);
+    }
+    @action.bound showCandleCountdown(value) {
+        this.candleCountdown = value;
+        this.mainStore.timeperiod.showCandleCountdown(value);
         this.saveSetting();
     }
 }

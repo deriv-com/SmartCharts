@@ -7,8 +7,8 @@ import { connect } from '../store/Connect';
 import { Switch } from './Form.jsx';
 import {
     SettingIcon,
-    // PositionLeftIcon,
-    // PositionBottomIcon,
+    PositionLeftIcon,
+    PositionBottomIcon,
     BackIcon,
     CloseIcon,
 } from './Icons.jsx';
@@ -20,6 +20,8 @@ const ChartSetting = ({
     menuOpen,
     selectedLanguage,
     languages,
+    position,
+    setPosition,
     setView,
     view,
     setLanguage,
@@ -30,7 +32,24 @@ const ChartSetting = ({
     closeMenu,
     assetInformation,
     setAssetInformation,
+    isMobile,
 }) => {
+    const renderPosition = () => (
+        <div>
+            <div className="ciq-list-item ciq-list-item-position">
+                <span className="ciq-icon-text">{t.translate('Position')}</span>
+                <div className="ciq-action">
+                    <PositionBottomIcon
+                        onClick={() => setPosition('bottom')}
+                        className={`${position === 'bottom' ? 'active' : ''}`}
+                    />
+                    <PositionLeftIcon
+                        onClick={() => setPosition('left')}
+                        className={`${position === 'left' ? 'active' : ''}`}
+                    />
+                </div>
+            </div>
+        </div>);
     const renderMain = () => (
         <div>
             <div className="title">
@@ -39,21 +58,12 @@ const ChartSetting = ({
             </div>
             <div className="body">
                 <div className="ciq-list ciq-list-setting">
-                    {/* <div className="ciq-item">
-                        <span className="ciq-icon-text">{t.translate('Position')}</span>
-                        <div className="ciq-action">
-                            <PositionLeftIcon
-                            />
-                            <PositionBottomIcon
-                            />
-                        </div>
-                    </div>
-                    */}
+                    {!isMobile ? renderPosition() : ''}
                     <div className="ciq-list-item">
                         <span className="ciq-icon-text">{t.translate('Dark Mode')}</span>
                         <div className="ciq-action">
                             <Switch
-                                value={(theme == 'dark')}
+                                value={(theme === 'dark')}
                                 onChange={setTheme}
                             />
                         </div>
@@ -100,7 +110,7 @@ const ChartSetting = ({
                 <div className="ciq-list ciq-list-language">
                     {languages.map((language, index) => (
                         <div
-                            className={`ciq-list-item ${(selectedLanguage.key == language.key) ? 'selected' : ''}`}
+                            className={`ciq-list-item ${(selectedLanguage.key === language.key) ? 'selected' : ''}`}
                             key={index}
                             onClick={() => setLanguage(language)}
                         >
@@ -119,35 +129,37 @@ const ChartSetting = ({
                 />
             </Menu.Title>
             <Menu.Body>
+                <div className={`cq-setting-container container-${view === '' ? 'main' : view}`}>
+                    <CSSTransition
+                        in={view === ''}
+                        timeout={250}
+                        classNames="cq-setting-main animate"
+                        unmountOnExit
+                    >
+                        {renderMain()}
+                    </CSSTransition>
 
-                <CSSTransition
-                    in={view === ''}
-                    timeout={300}
-                    classNames="cq-menu-container"
-                    unmountOnExit
-                >
-                    {renderMain()}
-                </CSSTransition>
-
-                <CSSTransition
-                    in={view === 'language'}
-                    timeout={300}
-                    classNames="cq-menu-container"
-                    unmountOnExit
-                >
-                    {renderLanguage()}
-                </CSSTransition>
-
+                    <CSSTransition
+                        in={view === 'language'}
+                        timeout={250}
+                        classNames="cq-setting-language animate"
+                        unmountOnExit
+                    >
+                        {renderLanguage()}
+                    </CSSTransition>
+                </div>
             </Menu.Body>
         </Menu>
     );
 };
 
-export default connect(({ chartSetting: s, assetInformation: ai }) => ({
+export default connect(({ chartSetting: s, assetInformation: ai, chart: c }) => ({
     Menu: s.menu.connect(Menu),
     menuOpen: s.menu.dialog.open,
     selectedLanguage: s.language,
     languages: s.languages,
+    position: s.position,
+    setPosition: s.setPosition,
     setView: s.setView,
     view: s.view,
     setLanguage: s.setLanguage,
@@ -158,4 +170,5 @@ export default connect(({ chartSetting: s, assetInformation: ai }) => ({
     closeMenu: s.menu.onTitleClick,
     assetInformation: ai.visible,
     setAssetInformation: ai.setVisible,
+    isMobile: c.isMobile,
 }))(ChartSetting);
