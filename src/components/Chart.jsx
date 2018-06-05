@@ -56,7 +56,7 @@ class Chart extends Component {
             chartControlsWidgets,
             AggregateChartSettingsDialog,
             topWidgets,
-            showCandleCountdown = false,
+            showCountdown = false,
         } = this.props;
 
         const currentLang = lang || ((setting && setting.language) ? setting.language.key : 'en');
@@ -77,7 +77,7 @@ class Chart extends Component {
             position: ((setting && setting.position && !isMobile) ? setting.position : 'bottom'),
             language: currentLang,
             theme: (typeof theme === 'string') ? theme : defaultTheme,
-            candleCountdown: showCandleCountdown || defaultCandleCountdown,
+            candleCountdown: showCountdown || defaultCandleCountdown,
         }));
 
         return (

@@ -76,7 +76,7 @@ export default class ChartSettingStore {
     @observable language = '';
     @observable position = '';
     @observable theme = '';
-    @observable candleCountdown = false;
+    @observable countdown = false;
 
     restoreSetting() {
         const setting = createObjectFromLocalStorage('smartchart-setting');
@@ -95,12 +95,12 @@ export default class ChartSettingStore {
             }
             this.position = setting.position === 'bottom' ? 'bottom' : 'left';
             this.theme = setting.theme === 'light' ? 'light' : 'dark';
-            this.candleCountdown = setting.candleCountdown;
+            this.countdown = setting.countdown;
         } else {
             this.language = this.defaultLanguage;
             this.position = 'bottom';
             this.theme = 'light';
-            this.candleCountdown = false;
+            this.countdown = false;
         }
     }
 
@@ -109,7 +109,7 @@ export default class ChartSettingStore {
             language: this.language.key,
             position: this.position,
             theme: this.theme,
-            candleCountdown :this.candleCountdown,
+            countdown :this.countdown,
         }));
     }
     @action.bound setView(view) {
