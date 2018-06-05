@@ -240,9 +240,8 @@ class ChartStore {
                         (new Date()).getSeconds(),
                     ),
                     timeToEpochGMT = (time_stirng) => {
-                        let today = new Date(),
-                            time = time_stirng.split(':');
-                        return Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate(), time[0], time[1], time[2]);
+                        const dateStr = new Date().toISOString().substring(0, 11);
+                        return new Date(`${dateStr}${time_stirng}Z`).getTime();
                     },
                     updateActiveSymbols = () => {
                         api.getTradingTimes().then((data) => {
@@ -262,29 +261,29 @@ class ChartStore {
                                                     isOpen = true;
                                                 }
                                             }
-                                            foundSymbol.is_open = isOpen;
+                                            foundSymbol.exchange_is_open = isOpen;
                                         }
                                     });
                                 });
                             });
-
-
-                            this.restoreLayout(stxx, layoutData);
-
-                            this.setActiveSymbols(active_symbols);
-
-                            if (initialSymbol && !(layoutData && layoutData.symbols)) {
-                                this.changeSymbol(initialSymbol);
-                            } else if (stxx.chart.symbol) {
-                                this.currentActiveSymbol = stxx.chart.symbolObject;
-                                stxx.chart.yAxis.decimalPlaces = stxx.chart.symbolObject.decimal_places;
-                                this.categorizedSymbols = this.categorizeActiveSymbols();
-                                if (onSymbolChange) { onSymbolChange(this.currentActiveSymbol); }
-                            } else {
-                                this.changeSymbol(this.defaultSymbol);
-                            }
                         });
                     };
+
+                this.restoreLayout(stxx, layoutData);
+
+                this.setActiveSymbols(active_symbols);
+
+                if (initialSymbol && !(layoutData && layoutData.symbols)) {
+                    this.changeSymbol(initialSymbol);
+                } else if (stxx.chart.symbol) {
+                    this.currentActiveSymbol = stxx.chart.symbolObject;
+                    stxx.chart.yAxis.decimalPlaces = stxx.chart.symbolObject.decimal_places;
+                    this.categorizedSymbols = this.categorizeActiveSymbols();
+                    if (onSymbolChange) { onSymbolChange(this.currentActiveSymbol); }
+                } else {
+                    this.changeSymbol(this.defaultSymbol);
+                }
+
                 this.context = context;
                 this.contextPromise.resolve(this.context);
                 this.resizeScreen();
@@ -406,8 +405,8 @@ class ChartStore {
                 market: s.market,
                 market_display_name: s.market_display_name,
                 submarket_display_name: s.submarket_display_name,
+                exchange_is_open: s.exchange_is_open,
                 decimal_places: s.pip.length - 2,
-                is_open: s.is_open,
             });
         }
 
