@@ -8,7 +8,6 @@ import KeystrokeHub from '../components/ui/KeystrokeHub';
 import '../components/ui/Animation';
 import { BinaryAPI, Feed } from '../feed';
 import { createObjectFromLocalStorage } from '../utils';
-import ChartSettingStore from './ChartSettingStore';
 
 // import '../AddOns';
 
@@ -18,7 +17,6 @@ class ChartStore {
     constructor(mainStore) {
         this.id = ++ChartStore._id_counter;
         this.mainStore = mainStore;
-        this.chartSettingStore = new ChartSettingStore(mainStore);
     }
 
     onSymbolChange = null;
@@ -41,7 +39,6 @@ class ChartStore {
     @observable chartHeight;
     @observable chartContainerHeight;
     @observable isMobile = false;
-    chartSettingStore = null;
 
     @action.bound setActiveSymbols(activeSymbols) {
         this.activeSymbols = this.processSymbols(activeSymbols);
@@ -103,7 +100,7 @@ class ChartStore {
     updateHeight(position) {
         const ciqNode = this.rootNode.querySelector('.ciq-chart');
         const containerNode = this.rootNode.querySelector('.chartContainer.primary');
-        const panelPosition = position || this.chartSettingStore.position;
+        const panelPosition = position || this.mainStore.chartSetting.position;
         // height of chart control panel
         const offsetHeight = (panelPosition == 'left') ? 0 : 50;
         containerNode.style.height = `${ciqNode.offsetHeight - offsetHeight}px`;
