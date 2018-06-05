@@ -138,11 +138,6 @@ export default class ChartSettingStore {
         this.mainStore.chart.updateHeight(value);
         this.menu.setOpen(false);
     }
-    @action setCandleCountdown(value) {
-        this.candleCountdown = value;
-        this.mainStore.timeperiod.showCandleCountdown(value);
-        this.saveSetting();
-    }
     @action.bound showCandleCountdown(value) {
         this.candleCountdown = value;
         this.mainStore.timeperiod.showCandleCountdown(value);
