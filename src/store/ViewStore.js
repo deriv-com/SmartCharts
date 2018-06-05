@@ -6,6 +6,7 @@ export default class ViewStore {
     constructor(mainStore) {
         this.mainStore = mainStore;
         this.menu = new MenuStore(mainStore);
+        this.menu.setTag('templates');
         when(() => this.context, this.onContextReady);
     }
 

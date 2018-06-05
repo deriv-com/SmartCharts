@@ -119,6 +119,7 @@ class ChartStore {
         this.chartNode = this.rootNode.querySelector('.ciq-chart');
         this.chartControlsNode = this.chartNode.querySelector('.cq-chart-controls');
         this.chartContainerNode = this.rootNode.querySelector('.chartContainer.primary');
+        this.initialRouting();
 
         const {
             onSymbolChange,
@@ -278,6 +279,18 @@ class ChartStore {
         this.resizeObserver.observe(rootNode);
 
         stxx.append('createDataSet', this.updateComparisons);
+    }
+    initialRouting() {
+        let timer;
+        window.addEventListener('hashchange', () => {
+            const hash = window.location.hash.replace('#', '');
+            if (hash === '') {
+                clearTimeout(timer);
+                timer = setTimeout(() => {
+                    this.mainStore.dialog.closeAll();
+                }, 300);
+            }
+        }, false);
     }
 
     @action.bound changeSymbol(symbolObj) {

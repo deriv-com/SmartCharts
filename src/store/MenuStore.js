@@ -1,20 +1,18 @@
-import { action, computed, reaction } from 'mobx';
+import { action, computed, reaction, observable } from 'mobx';
 import { connect } from './Connect';
 import DialogStore from './DialogStore';
 import Dialog from '../components/Dialog.jsx';
-
-const allMenues = [];
 
 export default class MenuStore {
     constructor(mainStore) {
         this.getContext = () => mainStore.chart.context;
         this.dialog = new DialogStore(mainStore);
         reaction(() => this.open, () => this.blurInput());
-        allMenues.push(this);
     }
 
     get context() { return this.getContext(); }
 
+    @observable tag = '';
     @computed get open() { return this.dialog.open; }
     @action.bound setOpen(val) { this.dialog.setOpen(val); }
 
@@ -30,10 +28,20 @@ export default class MenuStore {
         stx.allowScroll = stx.allowZoom = !this.open;
     }
 
+    @action.bound setTag(tag) { this.tag = tag; }
+
+
     @action.bound onTitleClick(e) {
         if (e) {
             e.stopPropagation();
         }
+        if (!this.open && this.tag) {
+            window.location.hash = '';
+            window.location.hash = this.tag;
+        } else if (this.open && this.tag) {
+            window.location.hash = '';
+        }
+
         this.setOpen(!this.open);
     }
 

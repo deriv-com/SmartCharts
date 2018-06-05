@@ -8,6 +8,7 @@ export default class ChartTitleStore {
         this.mainStore = mainStore;
         when(() => this.context, this.onContextReady);
         this.menu = new MenuStore(mainStore);
+        this.menu.setTag('chart-title');
         this.animatedPrice = new AnimatedPriceStore();
         this.categoricalDisplay = new CategoricalDisplayStore({
             getCategoricalItems: () => this.mainStore.chart.categorizedSymbols,

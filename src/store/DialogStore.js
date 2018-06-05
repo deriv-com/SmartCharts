@@ -52,6 +52,11 @@ export default class DialogStore {
         e.nativeEvent.isHandledByDialog = true;
     }
 
+    @action.bound closeAll() {
+        allDialogs.forEach(m => m.setOpen(false));
+    }
+
+
     connect = connect(() => ({
         open: this.open,
         setOpen: this.setOpen,

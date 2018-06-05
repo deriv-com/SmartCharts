@@ -9,6 +9,7 @@ export default class ChartSettingStore {
         this.defaultLanguage = this.languages[0];
         this.mainStore = mainStore;
         this.menu = new MenuStore(mainStore);
+        this.menu.setTag('setting');
         this.restoreSetting();
     }
 

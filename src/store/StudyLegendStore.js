@@ -11,6 +11,7 @@ export default class StudyLegendStore {
         when(() => this.context, this.onContextReady);
 
         this.menu = new MenuStore(mainStore);
+        this.menu.setTag('indicators');
         this.categoricalDisplay = new CategoricalDisplayStore({
             activeOptions: [
                 { id: 'edit', onClick: item => this.editStudy(item) },

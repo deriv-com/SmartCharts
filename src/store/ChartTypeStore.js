@@ -92,6 +92,8 @@ export default class ChartTypeStore {
         when(() => this.context, this.onContextReady);
         this.menu = new MenuStore(mainStore);
 
+        this.menu.setTag('chart-title');
+
         this.list = new ListStore({
             getIsOpen: () => this.menu.open,
             getContext: () => this.context,
