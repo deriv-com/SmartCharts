@@ -277,7 +277,7 @@ class ChartStore {
         this.resizeObserver = new ResizeObserver(() => this.resizeScreen());
         this.resizeObserver.observe(rootNode);
 
-        stxx.append('createDataSet', this.updateComparisons);
+        this.feed.onComparisonDataUpdate(this.updateComparisons);
     }
 
     @action.bound changeSymbol(symbolObj) {
@@ -293,6 +293,7 @@ class ChartStore {
         this.loader.show();
 
         // reset comparisons
+        this.comparisonSymbols = [];
         for (const field in this.stxx.chart.series) {
             if (this.stxx.chart.series[field].parameters.bucket !== 'study') {
                 this.stxx.removeSeries(field);
