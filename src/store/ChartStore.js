@@ -133,9 +133,10 @@ class ChartStore {
             },
             chart: {
                 xAxis: {
-                    timeUnitMultiplier: 1, // Make gaps between time intervals consistent
+                    idealTickSizePixels: 50, // put labels every 50 pixels as long as they do not overlap
                 },
                 yAxis: {
+                    goldenRatioYAxis: false, // don't try to match the x grid line spacing with the y gridline spacing.
                     // Put some top margin so chart doesn't get blocked by chart title
                     initialMarginTop: 125,
                     initialMarginBottom: 10,
@@ -145,6 +146,7 @@ class ChartStore {
             minimumZoomTicks: 20,
             yTolerance: 999999, // disable vertical scrolling
         });
+        window.stxx = stxx;
 
         const deleteElement = stxx.chart.panel.holder.parentElement.querySelector('#mouseDeleteText');
         const manageElement = stxx.chart.panel.holder.parentElement.querySelector('#mouseManageText');
