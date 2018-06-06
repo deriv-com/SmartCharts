@@ -19,7 +19,7 @@ export default class ChartTitleStore {
         });
     }
 
-    @observable todayChange = 0;
+    @observable todayChange = null;
     @observable isVisible = false;
 
     get chart() { return this.mainStore.chart; }
@@ -37,7 +37,7 @@ export default class ChartTitleStore {
     }
 
     onContextReady = () => {
-        this.mainStore.chart.feed.onMasterDataUpdate(this.update);
+        this.chart.feed.onMasterDataUpdate(this.update);
         this.update();
     };
 
@@ -50,7 +50,7 @@ export default class ChartTitleStore {
         let currentPrice = quote.Close;
         if (currentPrice) {
             currentPrice = currentPrice.toFixed(this.decimalPlaces);
-            const oldPrice = this.animatedPrice.price;
+            const oldPrice = quote.prevClose || this.animatedPrice.price;
             if (oldPrice !== currentPrice) {
                 this.animatedPrice.setPrice(currentPrice);
                 if (oldPrice) {

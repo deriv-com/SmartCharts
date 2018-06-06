@@ -107,7 +107,10 @@ class Feed {
 
         callback({ quotes });
         if (!isComparisonChart) {
-            this._emitter.emit(Feed.EVENT_MASTER_DATA_UPDATE, quotes[quotes.length - 1]);
+            this._emitter.emit(Feed.EVENT_MASTER_DATA_UPDATE, {
+                ...quotes[quotes.length - 1],
+                prevClose: quotes[quotes.length - 2].Close,
+            });
             this._mainStore.chart.isChartAvailable = true;
         } else {
             this._emitter.emit(Feed.EVENT_COMPARISON_DATA_UPDATE);
