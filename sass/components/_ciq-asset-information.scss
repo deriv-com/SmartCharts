@@ -31,3 +31,15 @@
         }
     }
 }
+.smartcharts-mobile {
+    .ciq-asset-information {
+        left: 2px;
+        flex-wrap: wrap;
+        > div{
+            font-size: 12px;
+            div:first-child {
+                padding: 0px 5px;
+            }
+        }
+    }
+}
