@@ -64,6 +64,7 @@
             .cq-symbol,
             .cq-chart-price {
                 .cq-animated-price {
+                    @include transition(color 300ms ease-out);
                     padding-left: 16px;
                 }
                 > div {

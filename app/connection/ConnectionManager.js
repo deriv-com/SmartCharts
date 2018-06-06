@@ -5,7 +5,7 @@ class ConnectionManager extends EventEmitter {
     static get EVENT_CONNECTION_CLOSE() { return 'CONNECTION_CLOSE'; }
     static get EVENT_CONNECTION_REOPEN() { return 'CONNECTION_REOPEN'; }
     constructor({ appId, endpoint, language }) {
-        super();
+        super({ emitDelay: 0 });
         this._url = `${endpoint}?l=${language}&app_id=${appId}`;
         this._counterReqId = 1;
         this._initialize();
