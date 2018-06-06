@@ -55,6 +55,9 @@
                 color: themed('defaultText');
             }
         }
+        > .ic-icon {
+            line-height: 44px;
+        }
         .icon-close-menu{
             position: absolute;
             top: 5px;
@@ -64,6 +67,7 @@
             width: 30px;
             pointer-events: none;
             opacity: 0;
+            line-height: 35px;
         }
     }
     .body {

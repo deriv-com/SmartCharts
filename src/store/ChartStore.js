@@ -29,6 +29,8 @@ class ChartStore {
     chartNode = null;
     chartControlsNode = null;
     chartContainerNode = null;
+    tradeTimes = [];
+    tradeTimesCapture = null;
     @observable context = null;
     @observable currentActiveSymbol;
     @observable isChartAvailable = true;
@@ -231,45 +233,11 @@ class ChartStore {
             }
 
             const onLayoutDataReady = () => {
-                const today_utc = Date.UTC(
-                        (new Date()).getUTCFullYear(),
-                        (new Date()).getUTCMonth(),
-                        (new Date()).getUTCDate(),
-                        (new Date()).getHours(),
-                        (new Date()).getMinutes(),
-                        (new Date()).getSeconds(),
-                    ),
-                    timeToEpochGMT = (time_stirng) => {
-                        const dateStr = new Date().toISOString().substring(0, 11);
-                        return new Date(`${dateStr}${time_stirng}Z`).getTime();
-                    },
-                    updateActiveSymbols = () => {
-                        api.getTradingTimes().then((data) => {
-                            data.trading_times.markets.forEach((market) => {
-                                market.submarkets.forEach((submarket) => {
-                                    submarket.symbols.forEach((symbol) => {
-                                        const foundSymbol = active_symbols.find(item => item.symbol === symbol.symbol);
-                                        if (foundSymbol) {
-                                            let isOpen = false;
-                                            for (let i = 0; i <= symbol.times.open.length; i++) {
-                                                if (
-                                                    symbol.times.open[i] &&
-                                                symbol.times.close[i] &&
-                                                today_utc >= timeToEpochGMT(symbol.times.open[i]) &&
-                                                today_utc <= timeToEpochGMT(symbol.times.close[i])
-                                                ) {
-                                                    isOpen = true;
-                                                }
-                                            }
-                                            foundSymbol.exchange_is_open = isOpen;
-                                        }
-                                    });
-                                });
-                            });
-                        });
-                    };
-
                 this.restoreLayout(stxx, layoutData);
+
+                active_symbols.forEach((x) => {
+                    x.exchange_is_open = false;
+                });
 
                 this.setActiveSymbols(active_symbols);
 
@@ -289,8 +257,11 @@ class ChartStore {
                 this.resizeScreen();
                 this.chartPanelTop = holderStyle.top;
 
-                updateActiveSymbols();
-                setInterval(updateActiveSymbols, 10 * 60 * 1000);
+
+                this.updateMarketClosedStatus(api);
+                setInterval(() => {
+                    this.updateMarketClosedStatus(api);
+                }, 30 * 1000);
             };
             const href = window.location.href;
             if (href.startsWith(shareOrigin) && href.indexOf('#') !== -1) {
@@ -314,6 +285,53 @@ class ChartStore {
 
         stxx.append('createDataSet', this.updateComparisons);
     }
+
+
+    updateMarketClosedStatus(api) {
+        const today_utc = new Date().getTime();
+        const timeToEpochGMT = (time_stirng) => {
+            const dateStr = new Date().toISOString().substring(0, 11);
+            return new Date(`${dateStr}${time_stirng}Z`).getTime();
+        };
+
+        /**
+         * Get tradeTimes if not loaded yet
+         * OR update the active symbols by comapring open time
+         */
+
+        if (this.tradeTimes.length && this.tradeTimesCapture.getDate() === (new Date()).getDate()) {
+            this.tradeTimes.forEach((market) => {
+                market.submarkets.forEach((submarket) => {
+                    submarket.symbols.forEach((symbol) => {
+                        const foundSymbol = this.activeSymbols.find(item => item.symbol === symbol.symbol);
+                        if (foundSymbol) {
+                            let isOpen = false;
+                            for (let i = 0; i <= symbol.times.open.length; i++) {
+                                if (
+                                    symbol.times.open[i] &&
+                            symbol.times.close[i] &&
+                            today_utc >= timeToEpochGMT(symbol.times.open[i]) &&
+                            today_utc <= timeToEpochGMT(symbol.times.close[i])
+                                ) {
+                                    isOpen = true;
+                                }
+                            }
+                            foundSymbol.exchange_is_open = isOpen;
+                        }
+                    });
+                });
+            });
+
+            this.setActiveSymbols(this.activeSymbols);
+        } else {
+            api.getTradingTimes().then((data) => {
+                this.tradeTimesCapture = new Date();
+                this.tradeTimes = data.trading_times.markets;
+                this.updateMarketClosedStatus(api);
+            });
+        }
+    }
+
 
     @action.bound changeSymbol(symbolObj) {
         if (typeof symbolObj === 'string') {
@@ -406,6 +424,7 @@ class ChartStore {
                 market_display_name: s.market_display_name,
                 submarket_display_name: s.submarket_display_name,
                 exchange_is_open: s.exchange_is_open,
+                pip: s.pip,
                 decimal_places: s.pip.length - 2,
             });
         }
@@ -422,6 +441,7 @@ class ChartStore {
                 }
             }
         }
+
         return orderedSymbols;
     }
 
