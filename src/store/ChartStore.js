@@ -287,6 +287,7 @@ class ChartStore {
         this.loader.show();
 
         // reset comparisons
+        this.comparisonSymbols = [];
         for (const field in this.stxx.chart.series) {
             if (this.stxx.chart.series[field].parameters.bucket !== 'study') {
                 this.stxx.removeSeries(field);
