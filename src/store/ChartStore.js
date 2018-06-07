@@ -8,7 +8,6 @@ import KeystrokeHub from '../components/ui/KeystrokeHub';
 import '../components/ui/Animation';
 import { BinaryAPI, Feed } from '../feed';
 import { createObjectFromLocalStorage } from '../utils';
-import RoutingStore from './RoutingStore';
 
 // import '../AddOns';
 
@@ -18,7 +17,6 @@ class ChartStore {
     constructor(mainStore) {
         this.id = ++ChartStore._id_counter;
         this.mainStore = mainStore;
-        this.routingStore = new RoutingStore();
     }
 
     onSymbolChange = null;
@@ -49,7 +47,9 @@ class ChartStore {
     }
 
     get loader() { return this.mainStore.loader; }
-
+    get routingStore() {
+        return this.mainStore.routing;
+    }
     saveLayout() {
         const layoutData = this.stxx.exportLayout(true);
         const json = JSON.stringify(layoutData);
