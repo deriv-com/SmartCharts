@@ -12,6 +12,7 @@ class ConnectionManager extends EventEmitter {
         this._pendingRequests = { };
         this._autoReconnect = true;
         this._pingInterval = undefined;
+        this._has_heartbeat = true;
     }
     _initialize() {
         this._websocket = new WebSocket(this._url);
@@ -24,6 +25,7 @@ class ConnectionManager extends EventEmitter {
     }
     _onopen() {
         this._connectionOpened.resolve();
+        clearInterval(this._pingInterval);
         this._pingInterval = setInterval(()=>{
             this._pingPong();
         },5000)
@@ -35,12 +37,6 @@ class ConnectionManager extends EventEmitter {
         Object.keys(this._pendingRequests).forEach(req_id => this._pendingRequests[req_id]
             .reject('Connection Error'));
         this._pendingRequests = { };
-        if (this._autoReconnect) {
-            this._initialize();
-            this._connectionOpened.then(() => {
-                this.emit(ConnectionManager.EVENT_CONNECTION_REOPEN);
-            });
-        }
         this.emit(ConnectionManager.EVENT_CONNECTION_CLOSE);
     }
     _onmessage(message) {
@@ -50,9 +46,8 @@ class ConnectionManager extends EventEmitter {
             this._pendingRequests[req_id].resolve(data);
             delete this._pendingRequests[req_id];
         }
-        if ( msg_type === 'ping' && data.ping !=='pong')  {
-            console.warn('Server disconnected!');
-            clearInterval(this._pingInterval);
+        if ( msg_type === 'ping' && data.ping ==='pong')  {
+            this._has_heartbeat = true;
         }
         this.emit(msg_type, data);
     }
@@ -73,7 +68,15 @@ class ConnectionManager extends EventEmitter {
     }
 
     _pingPong(){
+        if(this._autoReconnect && !this._has_heartbeat) { 
+            console.error('Server disconnected!');
+            this._initialize();
+            this._connectionOpened.then(() => {
+                this.emit(ConnectionManager.EVENT_CONNECTION_REOPEN);
+            });
+        }
         const data = { ping : 1 };
+        this._has_heartbeat = false;
         this.send(data);
     }
 
