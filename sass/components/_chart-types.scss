@@ -48,6 +48,15 @@
 		}
 	}
 }
+.cq-chart-control-left{
+	.ciq-chart-types{
+		.cq-menu-dropdown{
+			transform: translateX(4.5em) translateY(0%) !important;
+			bottom: auto !important;
+			top: -1em;
+		}
+	}
+}
 .smartcharts-mobile{
 	.ciq-chart-types {
 		.ciq-toggle-asset-information{

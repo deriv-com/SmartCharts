@@ -564,6 +564,11 @@ cq-context {
 	&.smartcharts-mobile{
 		.ciq-menu{position: unset;}
 	}
+	.cq-chart-control-left{
+		.cq-top-ui-widgets {
+			left: 90px;
+		}
+	}
 }
 
 /* Dropdowns */

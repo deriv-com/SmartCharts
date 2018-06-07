@@ -2,22 +2,14 @@
 .cq-chart-controls {
     position: absolute;
     display: flex !important;
-    bottom: 0px !important;
-    left: 50%;
-    padding: 0 5px;
-    transform: translateX(-50%);
-    height: 50px;
-    width: 100%;
     box-shadow: 0 2px 2px 0 rgba(0,0,0,0.12);
     z-index: 2;
-
     flex-wrap: wrap; /* Optional. only if you want the items to wrap */
     justify-content: center;
     align-items: center;
 
     @include themify($themes) {
         background: themed('defaultMain');
-        border-top: 1px solid themed('defaultBorder');
     }
     @include border-radius(2px);
     @include box-sizing(border-box);
@@ -65,6 +57,67 @@
         }
     }
 }
+
+.cq-chart-control-bottom{
+    .cq-chart-controls {
+        bottom: 0px;
+        left: 50%;
+        transform: translateX(-50%);
+        height: 50px;
+        width: 100%;
+        padding: 0 5px;
+        @include themify($themes) {
+            border-top: 1px solid themed('defaultBorder');
+        }
+    }
+}
+.cq-chart-control-left{
+    .cq-chart-controls {
+        left: 0px;
+        bottom: 50%;
+        transform: translateY(50%);
+        height: 100%;
+        width: 90px;
+        padding: 5px 0;
+        flex-flow: column;
+        @include themify($themes) {
+            border-right: 1px solid themed('defaultBorder');
+        }
+        .ciq-menu{
+            height: 60px;
+            cq-menu-dropdown,
+            .cq-menu-dropdown {
+                opacity: 0;
+                z-index: -3;
+                transform: translateX(.5em) translateY(0) !important;
+                left: 50%;
+                bottom: auto;
+                top: -1em;
+                pointer-events: none;
+                @include box-shadow (0px, 0, 4px, rgba(0, 0, 0, .2));
+                @include transition( opacity .20s 0s);
+                @include dialog-transition();
+                &.cq-menu-dropdown-enter-done,
+                &.open{ // class open should be removed after `dialog-animation` merged
+                    pointer-events: initial;
+                    opacity: 1;
+                    z-index: 6;
+                    transform: translateX(4.5em) translateY(0) !important;
+                }
+                &.cq-menu-dropdown-exit.cq-menu-dropdown-exit-active,
+                &.cq-menu-dropdown-exit-done{
+                    @include dialog-transition();
+                    opacity: 0;
+                    z-index: -3;
+                    transform: translateX(.5em) translateY(0) !important;
+                }
+            }
+        }
+    }
+}
+
+ 
+
 
 .cq-comparison-new > .cq-menu-dropdown {
     left: -13em;

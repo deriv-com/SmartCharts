@@ -107,7 +107,7 @@ class StreamManager {
         }
     }
     _setupEmitter(key, subscription) {
-        const emitter = new EventEmitter();
+        const emitter = new EventEmitter({ emitDelay: 0 });
         this._emitters[key] = emitter;
 
         subscription.response.then((response) => {
