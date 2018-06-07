@@ -7,7 +7,7 @@ const allDialogs = [];
 export default class DialogStore {
     constructor(mainStore) {
         this.mainStore = mainStore;
-        this.routingStore = new RoutingStore(mainStore);
+        this.routingStore = new RoutingStore();
         this.routingStore.registerDialog(this);
         allDialogs.push(this);
     }
