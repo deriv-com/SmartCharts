@@ -4,15 +4,17 @@ import DialogStore from './DialogStore';
 import Dialog from '../components/Dialog.jsx';
 
 export default class MenuStore {
-    constructor(mainStore) {
+    constructor(mainStore, options) {
+        this.mainStore = mainStore;
         this.getContext = () => mainStore.chart.context;
         this.dialog = new DialogStore(mainStore);
         reaction(() => this.open, () => this.blurInput());
+        if (options && options.route) { this.route = options.route; }
     }
 
     get context() { return this.getContext(); }
 
-    @observable tag = '';
+    @observable route = '';
     @computed get open() { return this.dialog.open; }
     @action.bound setOpen(val) { this.dialog.setOpen(val); }
 
@@ -28,18 +30,17 @@ export default class MenuStore {
         stx.allowScroll = stx.allowZoom = !this.open;
     }
 
-    @action.bound setTag(tag) { this.tag = tag; }
-
 
     @action.bound onTitleClick(e) {
+        const enableRouting = this.mainStore.chart.enableRouting;
         if (e) {
             e.stopPropagation();
         }
-        if (!this.open && this.tag) {
-            window.location.hash = '';
-            window.location.hash = this.tag;
-        } else if (this.open && this.tag) {
-            window.location.hash = '';
+        if (enableRouting && !this.open && this.route) {
+            window.history.replaceState({ urlPath:'#' }, '', '#');
+            window.history.pushState({ urlPath:`#${this.route}` }, '', `#${this.route}`);
+        } else if (enableRouting && this.open && this.route) {
+            window.history.replaceState({ urlPath:'#' }, '', '#');
         }
 
         this.setOpen(!this.open);

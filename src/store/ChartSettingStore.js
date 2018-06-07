@@ -8,8 +8,7 @@ export default class ChartSettingStore {
     constructor(mainStore) {
         this.defaultLanguage = this.languages[0];
         this.mainStore = mainStore;
-        this.menu = new MenuStore(mainStore);
-        this.menu.setTag('setting');
+        this.menu = new MenuStore(mainStore, { route: 'setting' });
         this.restoreSetting();
     }
 

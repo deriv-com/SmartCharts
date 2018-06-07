@@ -6,9 +6,7 @@ import { downloadFileInBrowser, findAncestor } from './utils';
 export default class ShareStore {
     constructor(mainStore) {
         this.mainStore = mainStore;
-        this.menu = new MenuStore(mainStore);
-        this.menu.setTag('share');
-
+        this.menu = new MenuStore(mainStore, { route:'share' });
         when(() => this.context, this.onContextReady);
         reaction(() => this.menu.open, this.refereshShareLink);
     }

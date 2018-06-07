@@ -64,6 +64,7 @@ const App = () => (
     <SmartChart
         onSymbolChange={symbol => console.log('Symbol has changed to:', symbol)}
         isMobile={CIQ.isMobile}
+        enableRouting
         chartControlsWidgets={renderControls}
         requestAPI={requestAPI}
         requestSubscribe={requestSubscribe}

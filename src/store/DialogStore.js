@@ -1,11 +1,14 @@
 import { observable, action } from 'mobx';
 import { connect } from './Connect';
+import RoutingStore from './RoutingStore';
 
 const allDialogs = [];
 
 export default class DialogStore {
     constructor(mainStore) {
         this.mainStore = mainStore;
+        this.routingStore = new RoutingStore(mainStore);
+        this.routingStore.registerDialog(this);
         allDialogs.push(this);
     }
 
@@ -51,11 +54,6 @@ export default class DialogStore {
         // e.stopPropagation();
         e.nativeEvent.isHandledByDialog = true;
     }
-
-    @action.bound closeAll() {
-        allDialogs.forEach(m => m.setOpen(false));
-    }
-
 
     connect = connect(() => ({
         open: this.open,

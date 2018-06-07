@@ -5,8 +5,7 @@ import MenuStore from './MenuStore';
 export default class ViewStore {
     constructor(mainStore) {
         this.mainStore = mainStore;
-        this.menu = new MenuStore(mainStore);
-        this.menu.setTag('templates');
+        this.menu = new MenuStore(mainStore, { route: 'templates' });
         when(() => this.context, this.onContextReady);
     }
 

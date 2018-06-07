@@ -67,8 +67,6 @@ class Chart extends Component {
         const insideHolder = array.filter(c => !/(TradeStart)|(TradeEnd)/.test(c.type.displayName));
         const insideSubHolder = array.filter(c => /(TradeStart)|(TradeEnd)/.test(c.type.displayName));
         const renderTopWidgets = topWidgets || defaultTopWidgets;
-
-
         const defaultTheme = (setting && setting.theme) ? setting.theme : 'light';
         const defaultCandleCountdown = (setting && setting.candleCountdown) ? setting.candleCountdown : false;
 

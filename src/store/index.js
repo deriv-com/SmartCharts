@@ -17,6 +17,7 @@ import LoaderStore from './LoaderStore';
 import FavoriteSessionStore from './FavoriteSessionStore';
 import ChartSizeStore from './ChartSizeStore';
 import DialogStore from './DialogStore';
+import RoutingStore from './RoutingStore';
 
 export default class MainStore {
     @observable favoriteSessionStore = new FavoriteSessionStore();
@@ -37,4 +38,5 @@ export default class MainStore {
     @observable loader = new LoaderStore();
     @observable chartSize = new ChartSizeStore(this);
     @observable dialog = new DialogStore(this);
+    @observable routing = new RoutingStore(this);
 }

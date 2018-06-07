@@ -8,6 +8,7 @@ import KeystrokeHub from '../components/ui/KeystrokeHub';
 import '../components/ui/Animation';
 import { BinaryAPI, Feed } from '../feed';
 import { createObjectFromLocalStorage } from '../utils';
+import RoutingStore from './RoutingStore';
 
 // import '../AddOns';
 
@@ -17,6 +18,7 @@ class ChartStore {
     constructor(mainStore) {
         this.id = ++ChartStore._id_counter;
         this.mainStore = mainStore;
+        this.routingStore = new RoutingStore();
     }
 
     onSymbolChange = null;
@@ -26,6 +28,7 @@ class ChartStore {
     stxx = null;
     id = null;
     defaultSymbol = 'R_100';
+    enableRouting = null;
     chartNode = null;
     chartControlsNode = null;
     chartContainerNode = null;
@@ -119,7 +122,6 @@ class ChartStore {
         this.chartNode = this.rootNode.querySelector('.ciq-chart');
         this.chartControlsNode = this.chartNode.querySelector('.cq-chart-controls');
         this.chartContainerNode = this.rootNode.querySelector('.chartContainer.primary');
-        this.initialRouting();
 
         const {
             onSymbolChange,
@@ -128,6 +130,7 @@ class ChartStore {
             requestSubscribe,
             requestForget,
             shareOrigin = 'https://charts.binary.com',
+            enableRouting,
         } = props;
         const api = new BinaryAPI(requestAPI, requestSubscribe, requestForget);
         this.mainStore.share.shareOrigin = shareOrigin;
@@ -166,6 +169,11 @@ class ChartStore {
         stxx.attachQuoteFeed(this.feed, {
             refreshInterval: null,
         });
+
+        this.enableRouting = enableRouting;
+        if (this.enableRouting) {
+            this.routingStore.handleRouting();
+        }
 
         // Extended hours trading zones
         // new CIQ.ExtendedHours({
@@ -280,19 +288,6 @@ class ChartStore {
 
         stxx.append('createDataSet', this.updateComparisons);
     }
-    initialRouting() {
-        let timer;
-        window.addEventListener('hashchange', () => {
-            clearTimeout(timer);
-            timer = setTimeout(() => {
-                const hash = window.location.hash.replace('#', '');
-                if (hash === '') {
-                    this.mainStore.dialog.closeAll();
-                }
-            }, 300);
-        }, false);
-    }
-
     @action.bound changeSymbol(symbolObj) {
         if (typeof symbolObj === 'string') {
             symbolObj = this.activeSymbols.find(s => s.symbol === symbolObj);
