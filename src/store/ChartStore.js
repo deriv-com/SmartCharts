@@ -258,7 +258,7 @@ class ChartStore {
                 this.updateMarketClosedStatus(api);
                 setInterval(() => {
                     this.updateMarketClosedStatus(api);
-                }, 30 * 1000);
+                }, 10 * 60 * 1000);
             };
             const href = window.location.href;
             if (href.startsWith(shareOrigin) && href.indexOf('#') !== -1) {
