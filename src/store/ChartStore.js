@@ -234,11 +234,6 @@ class ChartStore {
 
             const onLayoutDataReady = () => {
                 this.restoreLayout(stxx, layoutData);
-
-                active_symbols.forEach((x) => {
-                    x.exchange_is_open = false;
-                });
-
                 this.setActiveSymbols(active_symbols);
 
                 if (initialSymbol && !(layoutData && layoutData.symbols)) {
@@ -257,7 +252,9 @@ class ChartStore {
                 this.resizeScreen();
                 this.chartPanelTop = holderStyle.top;
 
-
+                /**
+                 * Updating market close status each 10 minute
+                 */
                 this.updateMarketClosedStatus(api);
                 setInterval(() => {
                     this.updateMarketClosedStatus(api);
@@ -287,17 +284,17 @@ class ChartStore {
     }
 
 
-    updateMarketClosedStatus(api) {
-        const today_utc = new Date().getTime();
-        const timeToEpochGMT = (time_stirng) => {
-            const dateStr = new Date().toISOString().substring(0, 11);
-            return new Date(`${dateStr}${time_stirng}Z`).getTime();
+    /**
+     * Get tradeTimes if not loaded yet
+     * OR update the active symbols by comapring open time
+     */
+    @action.bound updateMarketClosedStatus(api) {
+        const todayUtc = (new Date()).getTime();
+        const timeToEpochGMT = (hour) => {
+            let today = new Date(),
+                time = hour.split(':');
+            return Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate(), time[0], time[1], time[2]);
         };
-
-        /**
-         * Get tradeTimes if not loaded yet
-         * OR update the active symbols by comapring open time
-         */
 
         if (this.tradeTimes.length && this.tradeTimesCapture.getDate() === (new Date()).getDate()) {
             this.tradeTimes.forEach((market) => {
@@ -310,8 +307,8 @@ class ChartStore {
                                 if (
                                     symbol.times.open[i] &&
                             symbol.times.close[i] &&
-                            today_utc >= timeToEpochGMT(symbol.times.open[i]) &&
-                            today_utc <= timeToEpochGMT(symbol.times.close[i])
+                            todayUtc >= timeToEpochGMT(symbol.times.open[i]) &&
+                            todayUtc <= timeToEpochGMT(symbol.times.close[i])
                                 ) {
                                     isOpen = true;
                                 }
@@ -322,7 +319,7 @@ class ChartStore {
                 });
             });
 
-            this.setActiveSymbols(this.activeSymbols);
+            this.categorizedSymbols = this.categorizeActiveSymbols();
         } else {
             api.getTradingTimes().then((data) => {
                 this.tradeTimesCapture = new Date();
@@ -424,7 +421,6 @@ class ChartStore {
                 market_display_name: s.market_display_name,
                 submarket_display_name: s.submarket_display_name,
                 exchange_is_open: s.exchange_is_open,
-                pip: s.pip,
                 decimal_places: s.pip.length - 2,
             });
         }
