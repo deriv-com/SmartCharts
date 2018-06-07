@@ -3,6 +3,7 @@ const path = require('path');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const SVGSpritemapPlugin = require('svg-spritemap-webpack-plugin');
 
 const production = process.env.NODE_ENV === 'production';
 const isApp = process.env.BUILD_MODE === 'app';
@@ -74,6 +75,14 @@ const config = {
         ],
     },
     plugins: [
+        new SVGSpritemapPlugin({
+            src: path.resolve(__dirname, './sass/icons/sidebar/**/*.svg'),
+            prefix: '',
+            filename: 'smartcharts-spritemap.svg',
+            // svgo: {
+            //     cleanupIDs: true,
+            // },
+        }),
         new webpack.ProvidePlugin({
             t: [path.resolve(__dirname, './src/Translation.js'), 't'],
         }),
@@ -117,7 +126,7 @@ if (process.env.ANALYZE_BUNDLE) {
 }
 
 if (isApp) {
-    config.entry = path.resolve(__dirname, './app/index.jsx');
+    config.entry = path.resolve(__dirname, './app/css-demo.jsx');
     config.resolve = {
         alias: {
             '@binary-com/smartcharts': path.resolve(__dirname, 'src/'),
