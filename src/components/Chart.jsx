@@ -68,14 +68,14 @@ class Chart extends Component {
         const insideSubHolder = array.filter(c => /(TradeStart)|(TradeEnd)/.test(c.type.displayName));
         const renderTopWidgets = topWidgets || defaultTopWidgets;
         const defaultTheme = (setting && setting.theme) ? setting.theme : 'light';
-        const defaultCandleCountdown = (setting && setting.candleCountdown) ? setting.candleCountdown : false;
+        const defaultCandleCountdown = (setting && setting.countdown) ? setting.countdown : false;
 
         // TO DO : this part should move the ChartSetting Store
         CIQ.localStorageSetItem('smartchart-setting', JSON.stringify({
             position: ((setting && setting.position && !isMobile) ? setting.position : 'bottom'),
             language: currentLang,
             theme: (typeof theme === 'string') ? theme : defaultTheme,
-            candleCountdown: showCountdown || defaultCandleCountdown,
+            countdown: showCountdown || defaultCandleCountdown,
         }));
 
         return (

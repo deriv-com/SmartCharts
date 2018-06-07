@@ -138,9 +138,9 @@ export default class ChartSettingStore {
         this.mainStore.chart.updateHeight(value);
         this.menu.setOpen(false);
     }
-    @action.bound showCandleCountdown(value) {
-        this.candleCountdown = value;
-        this.mainStore.timeperiod.showCandleCountdown(value);
+    @action.bound showCountdown(value) {
+        this.countdown = value;
+        this.mainStore.timeperiod.showCountdown(value);
         this.saveSetting();
     }
 }
