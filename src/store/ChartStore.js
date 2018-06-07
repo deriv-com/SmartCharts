@@ -291,10 +291,10 @@ class ChartStore {
     @action.bound updateMarketClosedStatus(api) {
         const todayUtc = (new Date()).getTime();
         const timeToEpochGMT = (hour) => {
-            let today = new Date(),
-                time = hour.split(':');
-            return Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate(), time[0], time[1], time[2]);
+            const dateStr = new Date().toISOString().substring(0, 11);
+            return new Date(`${dateStr}${hour}Z`).getTime();
         };
+
 
         if (this.tradeTimes.length && this.tradeTimesCapture.getDate() === (new Date()).getDate()) {
             this.tradeTimes.forEach((market) => {
