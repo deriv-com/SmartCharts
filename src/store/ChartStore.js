@@ -192,13 +192,7 @@ class ChartStore {
             this.saveLayout();
             this.chartPanelTop = holderStyle.top;
         });
-        stxx.addEventListener('symbolChange', (evt) => {
-            const isComparisonChart = evt.stx.chart.symbol !== evt.symbolObject.symbol;
-            if (this.onSymbolChange && !isComparisonChart) {
-                this.onSymbolChange(evt.symbolObject);
-            }
-            this.saveLayout();
-        });
+        stxx.addEventListener('symbolChange', this.saveLayout.bind(this));
         stxx.addEventListener('drawing', this.saveDrawings.bind(this));
         // stxx.addEventListener('newChart', () => { });
         stxx.addEventListener('preferences', this.savePreferences.bind(this));
@@ -286,7 +280,7 @@ class ChartStore {
         this.resizeObserver = new ResizeObserver(() => this.resizeScreen());
         this.resizeObserver.observe(rootNode);
 
-        stxx.append('createDataSet', this.updateComparisons);
+        this.feed.onComparisonDataUpdate(this.updateComparisons);
     }
     @action.bound changeSymbol(symbolObj) {
         if (typeof symbolObj === 'string') {
@@ -298,9 +292,14 @@ class ChartStore {
             return;
         }
 
+        if (this.onSymbolChange) {
+            this.onSymbolChange(symbolObj);
+        }
+
         this.loader.show();
 
         // reset comparisons
+        this.comparisonSymbols = [];
         for (const field in this.stxx.chart.series) {
             if (this.stxx.chart.series[field].parameters.bucket !== 'study') {
                 this.stxx.removeSeries(field);

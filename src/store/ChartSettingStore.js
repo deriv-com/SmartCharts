@@ -93,8 +93,8 @@ export default class ChartSettingStore {
             } else {
                 this.language = this.defaultLanguage;
             }
-            this.position = setting.position === 'bottom' ? 'bottom' : 'left';
-            this.theme = setting.theme === 'light' ? 'light' : 'dark';
+            this.position = setting.position || 'bottom';
+            this.theme = setting.theme || 'light';
             this.countdown = setting.countdown;
         } else {
             this.language = this.defaultLanguage;
