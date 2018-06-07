@@ -11,6 +11,7 @@ class ConnectionManager extends EventEmitter {
         this._initialize();
         this._pendingRequests = { };
         this._autoReconnect = true;
+        this._pingInterval = undefined;
     }
     _initialize() {
         this._websocket = new WebSocket(this._url);
@@ -23,6 +24,9 @@ class ConnectionManager extends EventEmitter {
     }
     _onopen() {
         this._connectionOpened.resolve();
+        this._pingInterval = setInterval(()=>{
+            this._pingPong();
+        },5000)
     }
     _onclose() {
         if (this._connectionOpened.isPending) {
@@ -46,6 +50,10 @@ class ConnectionManager extends EventEmitter {
             this._pendingRequests[req_id].resolve(data);
             delete this._pendingRequests[req_id];
         }
+        if ( msg_type === 'ping' && data.ping !=='pong')  {
+            console.warn('Server disconnected!');
+            clearInterval(this._pingInterval);
+        }
         this.emit(msg_type, data);
     }
     _assertConnected() {
@@ -62,6 +70,11 @@ class ConnectionManager extends EventEmitter {
                 delete this._pendingRequests[req_id];
             }
         }, timeout);
+    }
+
+    _pingPong(){
+        const data = { ping : 1 };
+        this.send(data);
     }
 
     async send(data, timeout) {
