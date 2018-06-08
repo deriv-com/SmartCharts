@@ -1,7 +1,8 @@
-import html2canvas from 'html2canvas';
 import { observable, action, reaction, computed, when } from 'mobx';
 import MenuStore from './MenuStore';
 import { downloadFileInBrowser, findAncestor } from './utils';
+
+const html2canvasCDN = 'https://cdn.jsdelivr.net/npm/html2canvas-fixes@0.5.6/dist/html2canvas.min.js';
 
 export default class ShareStore {
     constructor(mainStore) {
@@ -78,7 +79,7 @@ export default class ShareStore {
             });
     }
     shortenBitlyAsync(payload, hash) {
-        const href = window.location.href;
+        const { href } = window.location;
         let origin = (this.shareOrigin && href.startsWith(this.shareOrigin)) ? href : this.shareOrigin;
         origin = origin.replace('localhost', '127.0.0.1'); // make it work on localhost
 
@@ -87,7 +88,7 @@ export default class ShareStore {
         return fetch(`${this.bitlyUrl}/shorten?access_token=${this.accessToken}&longUrl=${shareLink}`)
             .then(response => response.json())
             .then((response) =>  {
-                if (response.status_code == 200) {
+                if (response.status_code === 200) {
                     return response.data.url.split('bit.ly/')[1];
                 }
                 return null;
@@ -109,7 +110,7 @@ export default class ShareStore {
 
                     payload = decodeURIComponent(encodedJsonPart) + payload;
 
-                    if (hash == 'NONE') {
+                    if (hash === 'NONE') {
                         return payload;
                     }
                     return this.expandBitlyAsync(hash, payload);
@@ -120,15 +121,18 @@ export default class ShareStore {
     @action.bound downloadPNG() {
         this.menu.setOpen(false);
         const root = findAncestor(this.stx.container, 'ciq-chart-area');
-        html2canvas(root).then((canvas) => {
-            const content = canvas.toDataURL('image/png');
-            downloadFileInBrowser(
-                `${new Date().toUTCString()}.png`,
-                content,
-                'image/png;',
-            );
+        CIQ.loadScript(html2canvasCDN, () => {
+            html2canvas(root).then((canvas) => { // eslint-disable-line no-undef
+                const content = canvas.toDataURL('image/png');
+                downloadFileInBrowser(
+                    `${new Date().toUTCString()}.png`,
+                    content,
+                    'image/png;',
+                );
+            });
         });
     }
+
     @action.bound downloadCSV() {
         const isTick = this.timeUnit === 'tick';
         const header = `Date,Time,${isTick ? this.marketDisplayName : 'Open,High,Low,Close'}`;
