@@ -13,6 +13,9 @@ export default class MenuStore {
     }
 
     get context() { return this.getContext(); }
+    get routingStore() {
+        return this.mainStore.routing;
+    }
 
     @observable route = '';
     @computed get open() { return this.dialog.open; }
@@ -32,18 +35,14 @@ export default class MenuStore {
 
 
     @action.bound onTitleClick(e) {
-        const enableRouting = this.mainStore.chart.enableRouting;
         if (e) {
             e.stopPropagation();
         }
-        if (enableRouting && !this.open && this.route) {
-            window.history.replaceState({ urlPath:'#' }, '', '#');
-            window.history.pushState({ urlPath:`#${this.route}` }, '', `#${this.route}`);
-        } else if (enableRouting && this.open && this.route) {
-            window.history.replaceState({ urlPath:'#' }, '', '#');
-        }
-
         this.setOpen(!this.open);
+        /**
+         *  Update the url hash by considering the dialog `route` and `open`
+         */
+        this.routingStore.updateRoute(this.route, this.open);
     }
 
     connect = connect(() => ({
