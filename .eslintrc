@@ -44,7 +44,7 @@
         "jsx-a11y/click-events-have-key-events": 0,
         "no-lonely-if": 1,
         "func-names": 0,
-        "guard-for-in": 1,
+        "guard-for-in": 0,
         "import/extensions": 0,
         "class-methods-use-this": 0,
         "eqeqeq": 1,
