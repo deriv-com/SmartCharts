@@ -1,8 +1,10 @@
 import { observable, action, reaction, computed, when } from 'mobx';
 import MenuStore from './MenuStore';
 import { downloadFileInBrowser, findAncestor } from './utils';
+import { loadScript } from '../utils';
 
-const html2canvasCDN = 'https://cdn.jsdelivr.net/npm/html2canvas-fixes@0.5.6/dist/html2canvas.min.js';
+const html2canvasCDN = 'https://html2canvas.hertzen.com/dist/html2canvas.min.js';
+setTimeout(() => loadScript(html2canvasCDN), 2000);
 
 export default class ShareStore {
     constructor(mainStore) {
@@ -121,15 +123,13 @@ export default class ShareStore {
     @action.bound downloadPNG() {
         this.menu.setOpen(false);
         const root = findAncestor(this.stx.container, 'ciq-chart-area');
-        CIQ.loadScript(html2canvasCDN, () => {
-            html2canvas(root).then((canvas) => { // eslint-disable-line no-undef
-                const content = canvas.toDataURL('image/png');
-                downloadFileInBrowser(
-                    `${new Date().toUTCString()}.png`,
-                    content,
-                    'image/png;',
-                );
-            });
+        html2canvas(root).then((canvas) => { // eslint-disable-line no-undef
+            const content = canvas.toDataURL('image/png');
+            downloadFileInBrowser(
+                `${new Date().toUTCString()}.png`,
+                content,
+                'image/png;',
+            );
         });
     }
 
