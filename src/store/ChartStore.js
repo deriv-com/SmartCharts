@@ -134,6 +134,7 @@ class ChartStore {
             chart: {
                 xAxis: {
                     idealTickSizePixels: 50, // put labels every 50 pixels as long as they do not overlap
+                    timeUnitMultiplier: 1, // try to put labels every 1 unit as long as they do not overlap
                 },
                 yAxis: {
                     goldenRatioYAxis: false, // don't try to match the x grid line spacing with the y gridline spacing.
@@ -146,6 +147,29 @@ class ChartStore {
             minimumZoomTicks: 20,
             yTolerance: 999999, // disable vertical scrolling
         });
+
+        // This injection below makes width of each grid column consistent:
+        stxx.prepend('createXAxis', function (chart) {
+            const axisRepresentation = this.createTickXAxisWithDates(chart);
+            let i = axisRepresentation.length;
+            while (i--) {
+                if (axisRepresentation[i].grid === 'boundary') {
+                    if (axisRepresentation[i + 1]) axisRepresentation[i + 1].text = axisRepresentation[i].text;
+                    axisRepresentation.splice(i, 1);
+                }
+            }
+            this.headsUpHR();
+
+            // for 4+ hour periodicity force a time unit of HOUR instead of the DAY default
+            if (this.layout.periodicity === 1 && this.layout.interval >= 240) {
+                stxx.chart.xAxis.timeUnit = CIQ.HOUR;
+            } else {
+                stxx.chart.xAxis.timeUnit = null;
+            }
+
+            return axisRepresentation;
+        });
+
         window.stxx = stxx;
 
         const deleteElement = stxx.chart.panel.holder.parentElement.querySelector('#mouseDeleteText');
