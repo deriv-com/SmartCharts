@@ -39,7 +39,7 @@ const ChartTitle = ({
                      <div className="cq-chart-price">
                          <AnimatedPrice className="cq-current-price" />
                          <div className={`cq-change ${isPriceUp ? 'stx-up' : 'stx-down'}`}>
-                             <span className="cq-todays-change">{todayChange}</span>&nbsp;
+                             <span className="cq-todays-change">{todayChange || 0}</span>&nbsp;
                          </div>
                      </div>}
                 </div>}
@@ -56,7 +56,7 @@ const ChartTitle = ({
 
 export default connect(({ chartTitle: c }) => ({
     todayChange: c.todayChange,
-    isPriceUp: c.isPriceUp,
+    isPriceUp: c.animatedPrice.isIncrease,
     isVisible: c.isVisible,
     isShowChartPrice: c.isShowChartPrice,
     currentSymbol: c.currentSymbol,
