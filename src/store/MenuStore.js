@@ -19,7 +19,13 @@ export default class MenuStore {
 
     @observable route = '';
     @computed get open() { return this.dialog.open; }
-    @action.bound setOpen(val) { this.dialog.setOpen(val); }
+    @action.bound setOpen(val) {
+        this.dialog.setOpen(val);
+        /**
+         *  Update the url hash by considering the dialog `route` and `open`
+         */
+        this.routingStore.updateRoute(this.route, val);
+    }
 
     blurInput() {
         const stx = this.context.stx;
@@ -39,10 +45,6 @@ export default class MenuStore {
             e.stopPropagation();
         }
         this.setOpen(!this.open);
-        /**
-         *  Update the url hash by considering the dialog `route` and `open`
-         */
-        this.routingStore.updateRoute(this.route, this.open);
     }
 
     connect = connect(() => ({
