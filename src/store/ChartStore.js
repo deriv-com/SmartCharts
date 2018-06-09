@@ -304,13 +304,13 @@ class ChartStore {
                         if (foundSymbol) {
                             let isOpen = false;
                             for (let i = 0; i <= symbol.times.open.length; i++) {
+                                const { open, close } = symbol.times;
                                 if (
-                                    symbol.times.open[i] &&
-                            symbol.times.close[i] &&
-                            todayUtc >= timeToEpochGMT(symbol.times.open[i]) &&
-                            todayUtc <= timeToEpochGMT(symbol.times.close[i])
+                                    todayUtc >= timeToEpochGMT(open[i]) &&
+                                    todayUtc <= timeToEpochGMT(close[i])
                                 ) {
                                     isOpen = true;
+                                    break;
                                 }
                             }
                             foundSymbol.exchange_is_open = isOpen;
