@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Polish\n"
 "Language: pl_PL\n"
-"PO-Revision-Date: 2018-06-08 04:22-0400\n"
+"PO-Revision-Date: 2018-06-09 07:20-0400\n"
 
 msgid "Favorites"
 msgstr "Ulubione"
@@ -37,7 +37,7 @@ msgid "LOW"
 msgstr "NISKIE"
 
 msgid "Underlying Assets"
-msgstr ""
+msgstr "Aktywa bazowe"
 
 msgid "Share"
 msgstr "Udostępnij"
@@ -136,10 +136,10 @@ msgid "Hollow Candle"
 msgstr "Świeca pusta"
 
 msgid "Heikin Ashi"
-msgstr ""
+msgstr "Heikin Ashi"
 
 msgid "Kagi"
-msgstr ""
+msgstr "Kagi"
 
 msgid "Line Break"
 msgstr ""
