@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Polish\n"
 "Language: pl_PL\n"
-"PO-Revision-Date: 2018-06-09 07:30-0400\n"
+"PO-Revision-Date: 2018-06-09 07:40-0400\n"
 
 msgid "Favorites"
 msgstr "Ulubione"
@@ -142,10 +142,10 @@ msgid "Kagi"
 msgstr "Kagi"
 
 msgid "Line Break"
-msgstr ""
+msgstr "Podział linii"
 
 msgid "Renko"
-msgstr ""
+msgstr "Renko"
 
 msgid "Range Bars"
 msgstr "Słupki zakresu"
@@ -163,10 +163,10 @@ msgid "Price Lines"
 msgstr "Linie ceny"
 
 msgid "Box Size"
-msgstr ""
+msgstr "Rozmiar ramki"
 
 msgid "Reversal"
-msgstr ""
+msgstr "Odwrotność"
 
 msgid "RESET"
 msgstr "RESET"
@@ -187,7 +187,7 @@ msgid "Countdown"
 msgstr ""
 
 msgid "Asset Information"
-msgstr ""
+msgstr "Informacje o aktywach"
 
 msgid "Language"
 msgstr "Język"
@@ -655,7 +655,7 @@ msgid "Shift Percentage"
 msgstr "Procent przesunięcia"
 
 msgid "Channel Fill"
-msgstr ""
+msgstr "Channel Fill"
 
 msgid "High Low Top"
 msgstr "Wysoki Niski Góra"
@@ -697,22 +697,22 @@ msgid "Fractal Chaos Bands"
 msgstr "Wskaźnik Fractal Chaos Bands"
 
 msgid "Fractal High"
-msgstr ""
+msgstr "Fractal High"
 
 msgid "Fractal Low"
-msgstr ""
+msgstr "Fraktal Low"
 
 msgid "Fractal Channel"
-msgstr ""
+msgstr "Fractal Channel"
 
 msgid "Fractal Chaos Oscillator"
-msgstr ""
+msgstr "Oscylator Fractal Chaos"
 
 msgid "Gopalakrishnan Range Index"
 msgstr "Indeks Gopalakrishnan Range"
 
 msgid "Prime Number Bands"
-msgstr ""
+msgstr "Wstęgi liczb pierwszych"
 
 msgid "Prime Bands Top"
 msgstr ""
@@ -724,7 +724,7 @@ msgid "Prime Bands Channel"
 msgstr ""
 
 msgid "Prime Number Oscillator"
-msgstr ""
+msgstr "Prime Number Oscillator (Oscylator liczb pierwszych)"
 
 msgid "Tolerance Percentage"
 msgstr "Margines tolerancji"
@@ -1042,25 +1042,25 @@ msgid "Alligator"
 msgstr "Aligator"
 
 msgid "Jaw Period"
-msgstr ""
+msgstr "Jaw Period"
 
 msgid "Jaw Offset"
-msgstr ""
+msgstr "Jaw Offset"
 
 msgid "Teeth Period"
-msgstr ""
+msgstr "Teeth Period"
 
 msgid "Teeth Offset"
-msgstr ""
+msgstr "Teeth Offset"
 
 msgid "Lips Period"
-msgstr ""
+msgstr "Lips Period"
 
 msgid "Lips Offset"
-msgstr ""
+msgstr "Lips Offset"
 
 msgid "Show Fractals"
-msgstr ""
+msgstr "Pokaż fraktale"
 
 msgid "Jaw"
 msgstr "Szczęka"
@@ -1231,7 +1231,7 @@ msgid "Stop Levels"
 msgstr "Poziomy Stop"
 
 msgid "Level Offset"
-msgstr ""
+msgstr "Poziom wyrównania"
 
 msgid "Price Minimum"
 msgstr "Minimum ceny"
