@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Polish\n"
 "Language: pl_PL\n"
-"PO-Revision-Date: 2018-06-09 07:20-0400\n"
+"PO-Revision-Date: 2018-06-09 07:30-0400\n"
 
 msgid "Favorites"
 msgstr "Ulubione"
@@ -121,7 +121,7 @@ msgid "Colored Dot"
 msgstr "Kolorowa kropka"
 
 msgid "Spline"
-msgstr ""
+msgstr "Funkcja sklejana"
 
 msgid "Baseline"
 msgstr "Linia bazowa"
@@ -148,19 +148,19 @@ msgid "Renko"
 msgstr ""
 
 msgid "Range Bars"
-msgstr ""
+msgstr "Słupki zakresu"
 
 msgid "Point & Figure"
-msgstr ""
+msgstr "Punkt i figura"
 
 msgid "Reversal Percentage"
-msgstr ""
+msgstr "Procent odwrotny"
 
 msgid "Range"
-msgstr ""
+msgstr "Zakres"
 
 msgid "Price Lines"
-msgstr ""
+msgstr "Linie ceny"
 
 msgid "Box Size"
 msgstr ""
@@ -178,7 +178,7 @@ msgid "Settings"
 msgstr "Ustawienia"
 
 msgid "Position"
-msgstr ""
+msgstr "Pozycja"
 
 msgid "Dark Mode"
 msgstr "Tryb ciemny"
@@ -649,7 +649,7 @@ msgid "Negative Bar"
 msgstr "Ujemny słupek"
 
 msgid "High Low Bands"
-msgstr ""
+msgstr "Wysokie niskie wstęgi"
 
 msgid "Shift Percentage"
 msgstr "Procent przesunięcia"
@@ -694,7 +694,7 @@ msgid "MA Env Bottom"
 msgstr "Dół MA Env"
 
 msgid "Fractal Chaos Bands"
-msgstr ""
+msgstr "Wskaźnik Fractal Chaos Bands"
 
 msgid "Fractal High"
 msgstr ""
@@ -709,7 +709,7 @@ msgid "Fractal Chaos Oscillator"
 msgstr ""
 
 msgid "Gopalakrishnan Range Index"
-msgstr ""
+msgstr "Indeks Gopalakrishnan Range"
 
 msgid "Prime Number Bands"
 msgstr ""
@@ -964,7 +964,7 @@ msgid "ATR Trailing Stops"
 msgstr "Zlecenia Trailing Stop ATR"
 
 msgid "Plot Type"
-msgstr ""
+msgstr "Rodzaj motywu"
 
 msgid "HighLow"
 msgstr "WysokiNiski"
