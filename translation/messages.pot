@@ -8,9 +8,6 @@ msgstr ""
 msgid "CLOSED"
 msgstr ""
 
-msgid "Close"
-msgstr ""
-
 msgid "PRICE"
 msgstr ""
 
@@ -24,6 +21,9 @@ msgid "HIGH"
 msgstr ""
 
 msgid "LOW"
+msgstr ""
+
+msgid "Underlying Assets"
 msgstr ""
 
 msgid "Share"
@@ -98,7 +98,91 @@ msgstr ""
 msgid "Chart types"
 msgstr ""
 
-msgid "Toggle Asset Information"
+msgid "Line"
+msgstr ""
+
+msgid "Dot"
+msgstr ""
+
+msgid "Colored Dot"
+msgstr ""
+
+msgid "Spline"
+msgstr ""
+
+msgid "Baseline"
+msgstr ""
+
+msgid "Candle"
+msgstr ""
+
+msgid "OHLC"
+msgstr ""
+
+msgid "Hollow Candle"
+msgstr ""
+
+msgid "Heikin Ashi"
+msgstr ""
+
+msgid "Kagi"
+msgstr ""
+
+msgid "Line Break"
+msgstr ""
+
+msgid "Renko"
+msgstr ""
+
+msgid "Range Bars"
+msgstr ""
+
+msgid "Point & Figure"
+msgstr ""
+
+msgid "Reversal Percentage"
+msgstr ""
+
+msgid "Range"
+msgstr ""
+
+msgid "Price Lines"
+msgstr ""
+
+msgid "Box Size"
+msgstr ""
+
+msgid "Reversal"
+msgstr ""
+
+msgid "RESET"
+msgstr ""
+
+msgid "DONE"
+msgstr ""
+
+msgid "Settings"
+msgstr ""
+
+msgid "Position"
+msgstr ""
+
+msgid "Dark Mode"
+msgstr ""
+
+msgid "Countdown"
+msgstr ""
+
+msgid "Asset Information"
+msgstr ""
+
+msgid "Language"
+msgstr ""
+
+msgid "[symbol] market is presently closed."
+msgstr ""
+
+msgid "Streaming for [symbol] is not available due to license restrictions"
 msgstr ""
 
 msgid "Copy to clipboard"
@@ -108,27 +192,6 @@ msgid "Copied!"
 msgstr ""
 
 msgid "Failed!"
-msgstr ""
-
-msgid "Settings"
-msgstr ""
-
-msgid "Dark Mode"
-msgstr ""
-
-msgid "Language"
-msgstr ""
-
-msgid "RESET"
-msgstr ""
-
-msgid "DONE"
-msgstr ""
-
-msgid "[symbol] market is presently closed."
-msgstr ""
-
-msgid "Streaming for [symbol] is not available due to license restrictions"
 msgstr ""
 
 msgid "Search..."
@@ -177,9 +240,6 @@ msgid "Gartley"
 msgstr ""
 
 msgid "Horizontal"
-msgstr ""
-
-msgid "Line"
 msgstr ""
 
 msgid "Pitchfork"
@@ -243,27 +303,6 @@ msgid "\"Mass Index\" or \"Doji Star\""
 msgstr ""
 
 msgid "There are no active indicators yet."
-msgstr ""
-
-msgid "Dot"
-msgstr ""
-
-msgid "Colored Dot"
-msgstr ""
-
-msgid "Spline"
-msgstr ""
-
-msgid "Baseline"
-msgstr ""
-
-msgid "Candle"
-msgstr ""
-
-msgid "OHLC"
-msgstr ""
-
-msgid "Hollow Candle"
 msgstr ""
 
 msgid "right-click to delete"
