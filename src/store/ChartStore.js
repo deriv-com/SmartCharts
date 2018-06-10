@@ -40,6 +40,22 @@ class ChartStore {
     @observable chartHeight;
     @observable chartContainerHeight;
 
+
+    @action.bound setContext(context) {
+        this.context = context;
+    }
+    @action.bound setCurrentActiveSymbol(currentActiveSymbol) {
+        this.currentActiveSymbol = currentActiveSymbol;
+    }
+    @action.bound setCategorizedSymbols() {
+        this.categorizedSymbols = this.categorizeActiveSymbols();
+    }
+    @action.bound setChartPanelTop(chartPanelTop) {
+        this.chartPanelTop = chartPanelTop;
+    }
+    @action.bound setChartAvailable(isChartAvailable) {
+        this.isChartAvailable = isChartAvailable;
+    }
     @action.bound setActiveSymbols(activeSymbols) {
         this.activeSymbols = this.processSymbols(activeSymbols);
         this.setCategorizedSymbols();
@@ -181,7 +197,7 @@ class ChartStore {
         const holderStyle = stxx.chart.panel.holder.style;
         stxx.addEventListener('layout', () => {
             this.saveLayout();
-            this.chartPanelTop = holderStyle.top;
+            this.setChartPanelTop(holderStyle.top);
         });
         stxx.addEventListener('symbolChange', this.saveLayout.bind(this));
         stxx.addEventListener('drawing', this.saveDrawings.bind(this));
@@ -249,7 +265,7 @@ class ChartStore {
                 this.setContext(context);
                 this.contextPromise.resolve(this.context);
                 this.resizeScreen();
-                this.chartPanelTop = holderStyle.top;
+                this.setChartPanelTop(holderStyle.top);
             };
             const href = window.location.href;
             if (href.startsWith(shareOrigin) && href.indexOf('#') !== -1) {
@@ -273,17 +289,6 @@ class ChartStore {
 
         this.feed.onComparisonDataUpdate(this.updateComparisons);
     }
-
-    @action.bound setContext(context) {
-        this.context = context;
-    }
-    @action.bound setCurrentActiveSymbol(currentActiveSymbol) {
-        this.currentActiveSymbol = currentActiveSymbol;
-    }
-    @action.bound setCategorizedSymbols() {
-        this.categorizedSymbols = this.categorizeActiveSymbols();
-    }
-
     @action.bound changeSymbol(symbolObj) {
         if (typeof symbolObj === 'string') {
             symbolObj = this.activeSymbols.find(s => s.symbol === symbolObj);
