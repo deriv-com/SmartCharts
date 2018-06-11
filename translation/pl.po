@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Polish\n"
 "Language: pl_PL\n"
-"PO-Revision-Date: 2018-06-03 10:21-0400\n"
+"PO-Revision-Date: 2018-06-09 07:40-0400\n"
 
 msgid "Favorites"
 msgstr "Ulubione"
@@ -20,9 +20,6 @@ msgstr "Brak ulubionych."
 
 msgid "CLOSED"
 msgstr "ZAMKNIĘTE"
-
-msgid "Close"
-msgstr "Zamknij"
 
 msgid "PRICE"
 msgstr "CENA"
@@ -38,6 +35,9 @@ msgstr "WYSOKIE"
 
 msgid "LOW"
 msgstr "NISKIE"
+
+msgid "Underlying Assets"
+msgstr "Aktywa bazowe"
 
 msgid "Share"
 msgstr "Udostępnij"
@@ -111,8 +111,92 @@ msgstr "Wskaźniki"
 msgid "Chart types"
 msgstr "Rodzaje wykresów"
 
-msgid "Toggle Asset Information"
-msgstr "Przełącz na widok informacji o aktywach"
+msgid "Line"
+msgstr "Linia"
+
+msgid "Dot"
+msgstr "Kropka"
+
+msgid "Colored Dot"
+msgstr "Kolorowa kropka"
+
+msgid "Spline"
+msgstr "Funkcja sklejana"
+
+msgid "Baseline"
+msgstr "Linia bazowa"
+
+msgid "Candle"
+msgstr "Świeca"
+
+msgid "OHLC"
+msgstr "OHLC"
+
+msgid "Hollow Candle"
+msgstr "Świeca pusta"
+
+msgid "Heikin Ashi"
+msgstr "Heikin Ashi"
+
+msgid "Kagi"
+msgstr "Kagi"
+
+msgid "Line Break"
+msgstr "Podział linii"
+
+msgid "Renko"
+msgstr "Renko"
+
+msgid "Range Bars"
+msgstr "Słupki zakresu"
+
+msgid "Point & Figure"
+msgstr "Punkt i figura"
+
+msgid "Reversal Percentage"
+msgstr "Procent odwrotny"
+
+msgid "Range"
+msgstr "Zakres"
+
+msgid "Price Lines"
+msgstr "Linie ceny"
+
+msgid "Box Size"
+msgstr "Rozmiar ramki"
+
+msgid "Reversal"
+msgstr "Odwrotność"
+
+msgid "RESET"
+msgstr "RESET"
+
+msgid "DONE"
+msgstr "GOTOWE"
+
+msgid "Settings"
+msgstr "Ustawienia"
+
+msgid "Position"
+msgstr "Pozycja"
+
+msgid "Dark Mode"
+msgstr "Tryb ciemny"
+
+msgid "Countdown"
+msgstr ""
+
+msgid "Asset Information"
+msgstr "Informacje o aktywach"
+
+msgid "Language"
+msgstr "Język"
+
+msgid "[symbol] market is presently closed."
+msgstr "Rynek [symbol] jest obecnie zamknięty."
+
+msgid "Streaming for [symbol] is not available due to license restrictions"
+msgstr "Z powodu ograniczeń licencyjnych przesyłanie strumieniowe w przypadku [symbol] jest niedostępne"
 
 msgid "Copy to clipboard"
 msgstr "Kopiuj do schowka"
@@ -122,27 +206,6 @@ msgstr "Skopiowane!"
 
 msgid "Failed!"
 msgstr "Nie udało się!"
-
-msgid "Settings"
-msgstr "Ustawienia"
-
-msgid "Dark Mode"
-msgstr "Tryb ciemny"
-
-msgid "Language"
-msgstr "Język"
-
-msgid "RESET"
-msgstr "RESET"
-
-msgid "DONE"
-msgstr "GOTOWE"
-
-msgid "[symbol] market is presently closed."
-msgstr "Rynek [symbol] jest obecnie zamknięty."
-
-msgid "Streaming for [symbol] is not available due to license restrictions"
-msgstr "Z powodu ograniczeń licencyjnych przesyłanie strumieniowe w przypadku [symbol] jest niedostępne"
 
 msgid "Search..."
 msgstr "Wyszukaj..."
@@ -191,9 +254,6 @@ msgstr "Formacja Gartleya"
 
 msgid "Horizontal"
 msgstr "Linia pozioma"
-
-msgid "Line"
-msgstr "Linia"
 
 msgid "Pitchfork"
 msgstr "Widły"
@@ -257,27 +317,6 @@ msgstr "„Indeks masowy” lub „Gwiazda Doji”"
 
 msgid "There are no active indicators yet."
 msgstr "Nie ma jeszcze żadnych aktywnych wskaźników."
-
-msgid "Dot"
-msgstr "Kropka"
-
-msgid "Colored Dot"
-msgstr "Kolorowa kropka"
-
-msgid "Spline"
-msgstr ""
-
-msgid "Baseline"
-msgstr "Linia bazowa"
-
-msgid "Candle"
-msgstr "Świeca"
-
-msgid "OHLC"
-msgstr "OHLC"
-
-msgid "Hollow Candle"
-msgstr "Świeca pusta"
 
 msgid "right-click to delete"
 msgstr "kliknij prawym przyciskiem, aby usunąć"
@@ -610,13 +649,13 @@ msgid "Negative Bar"
 msgstr "Ujemny słupek"
 
 msgid "High Low Bands"
-msgstr ""
+msgstr "Wysokie niskie wstęgi"
 
 msgid "Shift Percentage"
 msgstr "Procent przesunięcia"
 
 msgid "Channel Fill"
-msgstr ""
+msgstr "Channel Fill"
 
 msgid "High Low Top"
 msgstr "Wysoki Niski Góra"
@@ -655,25 +694,25 @@ msgid "MA Env Bottom"
 msgstr "Dół MA Env"
 
 msgid "Fractal Chaos Bands"
-msgstr ""
+msgstr "Wskaźnik Fractal Chaos Bands"
 
 msgid "Fractal High"
-msgstr ""
+msgstr "Fractal High"
 
 msgid "Fractal Low"
-msgstr ""
+msgstr "Fraktal Low"
 
 msgid "Fractal Channel"
-msgstr ""
+msgstr "Fractal Channel"
 
 msgid "Fractal Chaos Oscillator"
-msgstr ""
+msgstr "Oscylator Fractal Chaos"
 
 msgid "Gopalakrishnan Range Index"
-msgstr ""
+msgstr "Indeks Gopalakrishnan Range"
 
 msgid "Prime Number Bands"
-msgstr ""
+msgstr "Wstęgi liczb pierwszych"
 
 msgid "Prime Bands Top"
 msgstr ""
@@ -685,7 +724,7 @@ msgid "Prime Bands Channel"
 msgstr ""
 
 msgid "Prime Number Oscillator"
-msgstr ""
+msgstr "Prime Number Oscillator (Oscylator liczb pierwszych)"
 
 msgid "Tolerance Percentage"
 msgstr "Margines tolerancji"
@@ -925,7 +964,7 @@ msgid "ATR Trailing Stops"
 msgstr "Zlecenia Trailing Stop ATR"
 
 msgid "Plot Type"
-msgstr ""
+msgstr "Rodzaj motywu"
 
 msgid "HighLow"
 msgstr "WysokiNiski"
@@ -1003,25 +1042,25 @@ msgid "Alligator"
 msgstr "Aligator"
 
 msgid "Jaw Period"
-msgstr ""
+msgstr "Jaw Period"
 
 msgid "Jaw Offset"
-msgstr ""
+msgstr "Jaw Offset"
 
 msgid "Teeth Period"
-msgstr ""
+msgstr "Teeth Period"
 
 msgid "Teeth Offset"
-msgstr ""
+msgstr "Teeth Offset"
 
 msgid "Lips Period"
-msgstr ""
+msgstr "Lips Period"
 
 msgid "Lips Offset"
-msgstr ""
+msgstr "Lips Offset"
 
 msgid "Show Fractals"
-msgstr ""
+msgstr "Pokaż fraktale"
 
 msgid "Jaw"
 msgstr "Szczęka"
@@ -1192,7 +1231,7 @@ msgid "Stop Levels"
 msgstr "Poziomy Stop"
 
 msgid "Level Offset"
-msgstr ""
+msgstr "Poziom wyrównania"
 
 msgid "Price Minimum"
 msgstr "Minimum ceny"
