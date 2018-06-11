@@ -36,7 +36,7 @@ export default class TimeperiodStore {
     };
 
     countdownInterval = null;
-    showCountdown = (callFromSettings = false) => {
+    @action.bound showCountdown = (callFromSettings = false) => {
         const stx = this.context.stx;
         const isTick = this.timeUnit == 'tick';
         const hasCountdown = !aggregateCharts.some(t => t.id === stx.layout.aggregationType);
@@ -62,7 +62,7 @@ export default class TimeperiodStore {
             const dataSet = stx.chart.dataSet;
             if (dataSet && dataSet.length != 0) {
                 const diff = new Date() - dataSet[dataSet.length - 1].DT;
-                this.remain = displayMilliseconds((getIntervalInSeconds(stx.layout) * 1000) - diff);
+                this.setRemain(displayMilliseconds((getIntervalInSeconds(stx.layout) * 1000) - diff));
                 stx.draw();
             }
         };
@@ -86,6 +86,9 @@ export default class TimeperiodStore {
                 }, 1000);
             }
         }
+    }
+    @action.bound setRemain(remain) {
+        this.remain = remain;
     }
 
     @action.bound setPeriodicity(interval, timeUnit) {

@@ -27,7 +27,7 @@ export default class ShareStore {
     defaultCopyTooltipText = t.translate('Copy to clipboard');
     @observable copyTooltip = this.defaultCopyTooltipText;
     @action.bound resetCopyTooltip() { this.copyTooltip = this.defaultCopyTooltipText; }
-    onCopyDone = (successful) => {
+    @action.bound onCopyDone = (successful) => {
         this.copyTooltip = successful ? t.translate('Copied!') : t.translate('Failed!');
     }
     bitlyUrl = 'https://api-ssl.bitly.com/v3';
@@ -35,14 +35,25 @@ export default class ShareStore {
     @observable loading = false;
     @observable urlGenerated = false;
     @observable shortUrlFailed = false;
-
-
     @observable shareLink = '';
+
+    @action.bound setLoading(enable) {
+        this.loading = enable;
+    }
+    @action.bound setUrlGenerated(enable) {
+        this.urlGenerated = enable;
+    }
+    @action.bound setShortUrlFailed(enable) {
+        this.shortUrlFailed = enable;
+    }
+    @action.bound setShareLink(url) {
+        this.shareLink = url;
+    }
 
     fixedEncodeURIComponent(str) {
         return encodeURIComponent(str).replace(/[!'()*]/g, c => `%${c.charCodeAt(0).toString(16)}`);
     }
-    refereshShareLink = () => {
+    @action.bound refereshShareLink = () => {
         const self = this;
         if (!this.context || !this.menu.dialog.open) { return; }
 
@@ -52,9 +63,9 @@ export default class ShareStore {
         const json = JSON.stringify(layoutData);
         const parts = json.match(/.{1,1800}/g);
 
-        this.shortUrlFailed = false;
-        this.loading = true;
-        this.shareLink = '';
+        this.setShortUrlFailed(false);
+        this.setLoading(true);
+        this.setShareLink('');
 
         let hashPromise = Promise.resolve('NONE');
         parts.forEach((part) => {
@@ -64,17 +75,17 @@ export default class ShareStore {
         hashPromise
             .then((hash) => {
                 if (hash) {
-                    self.shareLink = `https://bit.ly/${hash}`;
-                    self.urlGenerated = true;
+                    self.setShareLink(`https://bit.ly/${hash}`);
+                    self.setUrlGenerated(true);
                 } else {
-                    self.shortUrlFailed = true;
-                    self.urlGenerated = false;
+                    self.setShortUrlFailed(true);
+                    self.setUrlGenerated(false);
                 }
-                self.loading = false;
+                self.setLoading(false);
             })
             .catch(() => {
-                self.loading = false;
-                self.urlGenerated = false;
+                self.setLoading(false);
+                self.setUrlGenerated(false);
             });
     }
     shortenBitlyAsync(payload, hash) {

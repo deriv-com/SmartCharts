@@ -29,6 +29,7 @@ class ChartStore {
     chartNode = null;
     chartControlsNode = null;
     chartContainerNode = null;
+    isMobile = false;
     @observable context = null;
     @observable currentActiveSymbol;
     @observable isChartAvailable = true;
@@ -38,11 +39,26 @@ class ChartStore {
     @observable chartPanelTop = '0px';
     @observable chartHeight;
     @observable chartContainerHeight;
-    @observable isMobile = false;
 
+
+    @action.bound setContext(context) {
+        this.context = context;
+    }
+    @action.bound setCurrentActiveSymbol(currentActiveSymbol) {
+        this.currentActiveSymbol = currentActiveSymbol;
+    }
+    @action.bound setCategorizedSymbols() {
+        this.categorizedSymbols = this.categorizeActiveSymbols();
+    }
+    @action.bound setChartPanelTop(chartPanelTop) {
+        this.chartPanelTop = chartPanelTop;
+    }
+    @action.bound setChartAvailable(isChartAvailable) {
+        this.isChartAvailable = isChartAvailable;
+    }
     @action.bound setActiveSymbols(activeSymbols) {
         this.activeSymbols = this.processSymbols(activeSymbols);
-        this.categorizedSymbols = this.categorizeActiveSymbols();
+        this.setCategorizedSymbols();
     }
 
     get loader() { return this.mainStore.loader; }
@@ -181,7 +197,7 @@ class ChartStore {
         const holderStyle = stxx.chart.panel.holder.style;
         stxx.addEventListener('layout', () => {
             this.saveLayout();
-            this.chartPanelTop = holderStyle.top;
+            this.setChartPanelTop(holderStyle.top);
         });
         stxx.addEventListener('symbolChange', this.saveLayout.bind(this));
         stxx.addEventListener('drawing', this.saveDrawings.bind(this));
@@ -238,18 +254,18 @@ class ChartStore {
                 if (initialSymbol && !(layoutData && layoutData.symbols)) {
                     this.changeSymbol(initialSymbol);
                 } else if (stxx.chart.symbol) {
-                    this.currentActiveSymbol = stxx.chart.symbolObject;
+                    this.setCurrentActiveSymbol(stxx.chart.symbolObject);
                     stxx.chart.yAxis.decimalPlaces = stxx.chart.symbolObject.decimal_places;
-                    this.categorizedSymbols = this.categorizeActiveSymbols();
+                    this.setCategorizedSymbols();
                     if (onSymbolChange) { onSymbolChange(this.currentActiveSymbol); }
                 } else {
                     this.changeSymbol(this.defaultSymbol);
                 }
 
-                this.context = context;
+                this.setContext(context);
                 this.contextPromise.resolve(this.context);
                 this.resizeScreen();
-                this.chartPanelTop = holderStyle.top;
+                this.setChartPanelTop(holderStyle.top);
             };
             const href = window.location.href;
             if (href.startsWith(shareOrigin) && href.indexOf('#') !== -1) {
@@ -273,7 +289,6 @@ class ChartStore {
 
         this.feed.onComparisonDataUpdate(this.updateComparisons);
     }
-
     @action.bound changeSymbol(symbolObj) {
         if (typeof symbolObj === 'string') {
             symbolObj = this.activeSymbols.find(s => s.symbol === symbolObj);
@@ -309,7 +324,7 @@ class ChartStore {
 
         this.stxx.chart.yAxis.decimalPlaces = symbolObj.decimal_places;
         this.currentActiveSymbol = symbolObj;
-        this.categorizedSymbols = this.categorizeActiveSymbols();
+        this.setCategorizedSymbols();
     }
 
     @action.bound updateComparisons() {
