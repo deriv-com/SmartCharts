@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Thai\n"
 "Language: th_TH\n"
-"PO-Revision-Date: 2018-06-03 13:11-0400\n"
+"PO-Revision-Date: 2018-06-09 08:40-0400\n"
 
 msgid "Favorites"
 msgstr "รายการโปรด"
@@ -19,9 +19,6 @@ msgid "There are no favorites yet."
 msgstr "ยังไม่มีรายการโปรด"
 
 msgid "CLOSED"
-msgstr "ปิด"
-
-msgid "Close"
 msgstr "ปิด"
 
 msgid "PRICE"
@@ -38,6 +35,9 @@ msgstr "สูง"
 
 msgid "LOW"
 msgstr "ต่ำ"
+
+msgid "Underlying Assets"
+msgstr "ผลิตภัณฑ์อ้างอิง"
 
 msgid "Share"
 msgstr "แชร์"
@@ -111,8 +111,92 @@ msgstr "ดัชนี"
 msgid "Chart types"
 msgstr "ชนิดแผนภูมิ"
 
-msgid "Toggle Asset Information"
-msgstr "สลับข้อมูลสินทรัพย์"
+msgid "Line"
+msgstr "เส้น"
+
+msgid "Dot"
+msgstr "จุด"
+
+msgid "Colored Dot"
+msgstr "จุดสี"
+
+msgid "Spline"
+msgstr "เส้นโค้ง"
+
+msgid "Baseline"
+msgstr "เส้นฐาน"
+
+msgid "Candle"
+msgstr "แท่งเทียน"
+
+msgid "OHLC"
+msgstr "OHLC"
+
+msgid "Hollow Candle"
+msgstr "เทียนกลวง"
+
+msgid "Heikin Ashi"
+msgstr "Heikin Ashi"
+
+msgid "Kagi"
+msgstr "Kagi"
+
+msgid "Line Break"
+msgstr "เส้นแบ่งบรรทัด"
+
+msgid "Renko"
+msgstr "Renko"
+
+msgid "Range Bars"
+msgstr "ช่วงบาร์"
+
+msgid "Point & Figure"
+msgstr "จุดและตัวเลข"
+
+msgid "Reversal Percentage"
+msgstr "ร้อยละของกลับตัว"
+
+msgid "Range"
+msgstr "ช่วง"
+
+msgid "Price Lines"
+msgstr "เส้นราคา"
+
+msgid "Box Size"
+msgstr "ขนาดกล่อง"
+
+msgid "Reversal"
+msgstr "กลับตัว"
+
+msgid "RESET"
+msgstr "ตั้งค่าใหม่"
+
+msgid "DONE"
+msgstr "แล้วเสร็จ"
+
+msgid "Settings"
+msgstr "การตั้งค่า"
+
+msgid "Position"
+msgstr "ตำแหน่ง"
+
+msgid "Dark Mode"
+msgstr "รูปแบบโทนมืด"
+
+msgid "Countdown"
+msgstr "นับถอยหลัง"
+
+msgid "Asset Information"
+msgstr "ข้อมูลสินทรัพย์"
+
+msgid "Language"
+msgstr "ภาษา"
+
+msgid "[symbol] market is presently closed."
+msgstr "[symbol] ตลาดปิดขณะนี้"
+
+msgid "Streaming for [symbol] is not available due to license restrictions"
+msgstr "การสตรีมสำหรับ [symbol] ไม่พร้อมใช้งาน เนื่องจากข้อจำกัดสิทธิ์การใช้งาน"
 
 msgid "Copy to clipboard"
 msgstr "คัดลอกลงคลิปบอร์ด"
@@ -122,27 +206,6 @@ msgstr "คัดลอก!"
 
 msgid "Failed!"
 msgstr "ล้มเหลว!"
-
-msgid "Settings"
-msgstr "การตั้งค่า"
-
-msgid "Dark Mode"
-msgstr "รูปแบบโทนมืด"
-
-msgid "Language"
-msgstr "ภาษา"
-
-msgid "RESET"
-msgstr "ตั้งค่าใหม่"
-
-msgid "DONE"
-msgstr "แล้วเสร็จ"
-
-msgid "[symbol] market is presently closed."
-msgstr "[symbol] ตลาดปิดขณะนี้"
-
-msgid "Streaming for [symbol] is not available due to license restrictions"
-msgstr "การสตรีมสำหรับ [symbol] ไม่พร้อมใช้งาน เนื่องจากข้อจำกัดสิทธิ์การใช้งาน"
 
 msgid "Search..."
 msgstr "ค้นหา..."
@@ -191,9 +254,6 @@ msgstr "Gartley"
 
 msgid "Horizontal"
 msgstr "แนวนอน"
-
-msgid "Line"
-msgstr "เส้น"
 
 msgid "Pitchfork"
 msgstr "Pitchfork"
@@ -257,27 +317,6 @@ msgstr "\"ดัชนีมวล\" หรือ \"Doji Star\""
 
 msgid "There are no active indicators yet."
 msgstr "ยังไม่มีตัวชี้วัดที่ใช้งาน"
-
-msgid "Dot"
-msgstr "จุด"
-
-msgid "Colored Dot"
-msgstr "จุดสี"
-
-msgid "Spline"
-msgstr "เส้นโค้ง"
-
-msgid "Baseline"
-msgstr "เส้นฐาน"
-
-msgid "Candle"
-msgstr "แท่งเทียน"
-
-msgid "OHLC"
-msgstr "OHLC"
-
-msgid "Hollow Candle"
-msgstr "เทียนกลวง"
 
 msgid "right-click to delete"
 msgstr "คลิกขวาเพื่อลบ"
