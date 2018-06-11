@@ -219,6 +219,7 @@ export default class StudyLegendStore {
             studies.push({
                 enabled: true,
                 display: sd.inputs.display,
+                itemId: sd.type,
                 dataObject: {
                     stx,
                     sd,

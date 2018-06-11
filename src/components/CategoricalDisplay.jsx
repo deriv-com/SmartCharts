@@ -24,7 +24,6 @@ const CategoricalDisplay = ({
     setCategoryElement,
     activeCategoryKey,
     onFavoritedItem,
-    favoritesId,
     favoritesMap,
     dialogTitle,
     closeMenu,
@@ -44,13 +43,10 @@ const CategoricalDisplay = ({
         return <ItemIcon className={`ic-${item.itemId}`} />;
     };
     const renderText = item => <span className="ciq-item-display">{item.display}</span>;
-    const renderFavorite = (item) => {
-        if (!item.itemId || !favoritesId) { return ''; }
-        return (<FavoriteIcon
-            onClick={e => onFavoritedItem(item, e)}
-            className={`ciq-favorite ${favoritesMap[item.itemId] ? 'ciq-active-favorite' : ''}`}
-        />);
-    };
+    const renderFavorite = item => (<FavoriteIcon
+        onClick={e => onFavoritedItem(item, e)}
+        className={`ciq-favorite ${favoritesMap[item.itemId] ? 'ciq-active-favorite' : ''}`}
+    />);
 
     const renderLeft = item => (
         <div className="left">
