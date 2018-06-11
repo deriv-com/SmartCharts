@@ -36,8 +36,9 @@ class Menu extends Component {
                 >
                     <CSSTransition
                         in={open}
-                        timeout={0}
+                        timeout={150}
                         classNames="cq-menu-dropdown"
+                        unmountOnExit
                     >
                         <DropdownDialog
                             className="cq-menu-dropdown"

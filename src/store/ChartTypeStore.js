@@ -90,7 +90,7 @@ export default class ChartTypeStore {
     constructor(mainStore) {
         this.mainStore = mainStore;
         when(() => this.context, this.onContextReady);
-        this.menu = new MenuStore({ getContext: () => this.context });
+        this.menu = new MenuStore(mainStore);
 
         this.list = new ListStore({
             getIsOpen: () => this.menu.open,
@@ -100,7 +100,7 @@ export default class ChartTypeStore {
         });
 
         this.settingsDialog = new SettingsDialogStore({
-            getContext: () => this.mainStore.chart.context,
+            mainStore,
             onChanged: items => this.updateAggregate(items),
         });
     }
@@ -145,6 +145,7 @@ export default class ChartTypeStore {
         }
         this.list.selectedIdx = this.types.findIndex(t => t.id === type.id);
         this.type = type;
+        this.mainStore.timeperiod.showCountdown(true);
         this.menu.setOpen(false);
     }
 

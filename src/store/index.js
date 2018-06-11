@@ -15,6 +15,7 @@ import ShareStore from './ShareStore';
 import ChartSettingStore from './ChartSettingStore';
 import LoaderStore from './LoaderStore';
 import FavoriteSessionStore from './FavoriteSessionStore';
+import ChartSizeStore from './ChartSizeStore';
 
 export default class MainStore {
     @observable favoriteSessionStore = new FavoriteSessionStore();
@@ -33,4 +34,5 @@ export default class MainStore {
     @observable share = new ShareStore(this);
     @observable chartSetting = new ChartSettingStore(this);
     @observable loader = new LoaderStore();
+    @observable chartSize = new ChartSizeStore(this);
 }

@@ -7,7 +7,7 @@ export default class ChartTitleStore {
     constructor(mainStore) {
         this.mainStore = mainStore;
         when(() => this.context, this.onContextReady);
-        this.menu = new MenuStore({ getContext: () => this.context });
+        this.menu = new MenuStore(mainStore);
         this.animatedPrice = new AnimatedPriceStore();
         this.categoricalDisplay = new CategoricalDisplayStore({
             getCategoricalItems: () => this.mainStore.chart.categorizedSymbols,
@@ -19,9 +19,7 @@ export default class ChartTitleStore {
         });
     }
 
-    @observable todayChange = 0;
-    @observable todayChangePercentage = 0;
-    @observable isPriceUp = false;
+    @observable todayChange = null;
     @observable isVisible = false;
 
     get chart() { return this.mainStore.chart; }
@@ -39,52 +37,26 @@ export default class ChartTitleStore {
     }
 
     onContextReady = () => {
-        this.context.stx.append('createDataSet', this.update.bind(this));
+        this.chart.feed.onMasterDataUpdate(this.update);
         this.update();
     };
 
-    update() {
+    @action.bound update(quote) {
         if (!this.currentSymbol) { return; }
-        const stx = this.context.stx;
-        const currentQuote = stx.currentQuote();
-        const previousClose = currentQuote ? currentQuote.iqPrevClose : undefined;
 
-        const hasData = (stx.chart.dataSet && stx.chart.dataSet.length) > 0;
-        this.isVisible = hasData || !this.isShowChartPrice;
-        if (!hasData) { return; }
+        this.isVisible = quote || !this.isShowChartPrice;
+        if (!this.isVisible) { return; }
 
-        const internationalizer = stx.internationalizer;
-        let priceChanged = false;
-
-        let todaysChange = 0;
-        let todaysChangePct = 0;
-        let currentPrice = currentQuote ? currentQuote.Close : '';
+        let currentPrice = quote.Close;
         if (currentPrice) {
             currentPrice = currentPrice.toFixed(this.decimalPlaces);
-            const oldPrice = this.animatedPrice.price;
+            const oldPrice = quote.prevClose || this.animatedPrice.price;
             if (oldPrice !== currentPrice) {
-                priceChanged = true;
-            }
-            this.animatedPrice.setPrice(currentPrice);
-        }
-
-        if (priceChanged) {
-            if (currentQuote && previousClose) {
-                todaysChange = CIQ.fixPrice(currentQuote.Close - previousClose);
-                todaysChangePct = todaysChange / previousClose * 100;
-                if (internationalizer) {
-                    this.todayChangePercentage = internationalizer.percent2.format(todaysChangePct / 100);
-                } else {
-                    this.todayChangePercentage = `${todaysChangePct.toFixed(2)}%`;
+                this.animatedPrice.setPrice(currentPrice);
+                if (oldPrice) {
+                    this.todayChange = Math.abs(currentPrice - oldPrice).toFixed(this.decimalPlaces);
                 }
             }
-            this.todayChange = Math.abs(todaysChange).toFixed(this.decimalPlaces);
-        }
-
-        if (todaysChangePct > 0) {
-            this.isPriceUp = true;
-        } else if (todaysChangePct < 0) {
-            this.isPriceUp = false;
         }
     }
 }

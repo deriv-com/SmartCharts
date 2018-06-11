@@ -123,7 +123,7 @@
         cursor: pointer;
         @include transition(background-color 0.3s);
         @include box-sizing(border-box);
-        &:hover,
+        &.cq-hover-style:hover,
         &.cq-active-filter {
             @include themify($themes) {
                 color: themed('defaultTextActive');
@@ -189,7 +189,7 @@
         padding-left: 20px;
         padding-right: 20px;
         display: flex;
-        height: 40px;
+        height: 50px;
         align-items: center;
         justify-content: space-between;
         line-height: initial;
@@ -226,7 +226,7 @@
     }
     .cq-scroll-panel {
         position: relative;
-        height: 500px;
+        height: calc(67vh - 8em);
         width: 66%;
     }
     .ciq-item-display {
@@ -257,13 +257,14 @@
         }
     }
     .cq-mobile-title{
+        padding-top: 0.9em !important;
         border-bottom: none !important;
     }
 }
 
 .stxMenuActive .cq-categorical-display {
     opacity: 1;
-    height: auto;
+    height: 100%;
 }
 
 /* Active Symbol Icons */
@@ -323,7 +324,7 @@
         .cq-lookup-filters {
             width: 100%;
             border-right: none;
-            height: 7.75em;
+            height: auto;
             @include themify($themes) {
                 border-bottom: 1px solid themed('defaultBorder');
             }
@@ -337,16 +338,15 @@
             }
         }
         .cq-scroll-panel{
+            height: 100%;
             width: 100%;
-            height: calc( 100vh - 13em );
+        }
+        .cq-item, .cq-active-item {
+            height: 40px;
         }
         .cq-filter-panel{
             display: flex;
             justify-content: space-around;
-            border-bottom: 1px solid transparent;
-            @include themify($themes) {
-                border-bottom-color: themed('defaultBorder');
-            }
             .cq-filter {
                 border-right: none;
                 background: transparent;
