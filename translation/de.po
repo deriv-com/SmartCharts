@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: German\n"
 "Language: de_DE\n"
-"PO-Revision-Date: 2018-06-08 04:22-0400\n"
+"PO-Revision-Date: 2018-06-11 07:21-0400\n"
 
 msgid "Favorites"
 msgstr "Favoriten"
@@ -37,7 +37,7 @@ msgid "LOW"
 msgstr "TIEF"
 
 msgid "Underlying Assets"
-msgstr ""
+msgstr "Basiswert"
 
 msgid "Share"
 msgstr "Teilen"
@@ -136,16 +136,16 @@ msgid "Hollow Candle"
 msgstr "Hohlkerze"
 
 msgid "Heikin Ashi"
-msgstr ""
+msgstr "Heikin Ashi"
 
 msgid "Kagi"
-msgstr ""
+msgstr "Kagi"
 
 msgid "Line Break"
-msgstr ""
+msgstr "Zeilenumbruch"
 
 msgid "Renko"
-msgstr ""
+msgstr "Renko"
 
 msgid "Range Bars"
 msgstr ""
@@ -154,19 +154,19 @@ msgid "Point & Figure"
 msgstr ""
 
 msgid "Reversal Percentage"
-msgstr ""
+msgstr "Prozentsatz der Umkehrung"
 
 msgid "Range"
-msgstr ""
+msgstr "Reichweite"
 
 msgid "Price Lines"
-msgstr ""
+msgstr "Preislinien"
 
 msgid "Box Size"
-msgstr ""
+msgstr "Boxgröße"
 
 msgid "Reversal"
-msgstr ""
+msgstr "Umkehrung"
 
 msgid "RESET"
 msgstr "Zurücksetzen"
@@ -178,13 +178,13 @@ msgid "Settings"
 msgstr "Einstellungen"
 
 msgid "Position"
-msgstr ""
+msgstr "Position"
 
 msgid "Dark Mode"
 msgstr "Dark Modus"
 
 msgid "Countdown"
-msgstr ""
+msgstr "Countdown"
 
 msgid "Asset Information"
 msgstr ""
