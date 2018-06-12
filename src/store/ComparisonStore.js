@@ -20,7 +20,7 @@ export default class ComparisonStore {
             getIsShown: () => this.menu.open,
             activeOptions: [
                 { id: 'cmp-color', renderChild: item => <span style={{ backgroundColor: item.dataObject.color }} /> },
-                { id: 'delete', onClick: this.onDeleteItem.bind(this) },
+                { id: 'delete', onClick: this.onDeleteItem },
             ],
             onSelectItem: this.onSelectItem.bind(this),
             placeholderText: t.translate('Search...'),
@@ -52,7 +52,7 @@ export default class ComparisonStore {
     }
 
     @action.bound onDeleteItem({ symbolObject }) {
-        this.context.stx.removeSeries(symbolObject.symbol);
+        this.mainStore.chart.removeComparison(symbolObject);
     }
 
     @action.bound onSelectItem(symbolObject) {
@@ -96,7 +96,7 @@ export default class ComparisonStore {
     }
 
     getSwatchColor() {
-        const stx = this.context.stx;
+        const { stx } = this.context;
         let selectedColor = '';
 
         const usedColors = {};

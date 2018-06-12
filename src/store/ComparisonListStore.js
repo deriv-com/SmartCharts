@@ -36,6 +36,6 @@ export default class ComparisonListStore {
     }
 
     @action.bound onDeleteItem(symbolObject) {
-        this.context.stx.removeSeries(symbolObject.symbol);
+        this.mainStore.chart.removeComparison(symbolObject);
     }
 }
