@@ -2,6 +2,7 @@ import { observable, action, reaction, computed, when } from 'mobx';
 import MenuStore from './MenuStore';
 import { downloadFileInBrowser, findAncestor } from './utils';
 import { loadScript } from '../utils';
+import PendingPromise from '../utils/PendingPromise';
 
 const html2canvasCDN = 'https://charts.binary.com/dist/html2canvas.min.js';
 
@@ -119,15 +120,27 @@ export default class ShareStore {
                 return null;
             });
     }
+
+    loadHtml2Canvas() {
+        if (this._promise_html2canas) {
+            return this._promise_html2canvas;
+        }
+        this._promise_html2canvas = new PendingPromise();
+        loadScript(html2canvasCDN, () => this._promise_html2canvas.resolve());
+        return this._promise_html2canvas;
+    }
+
     @action.bound downloadPNG() {
         const root = findAncestor(this.stx.container, 'ciq-chart-area');
         // hide share dialog when rendering PNG:
         this.shareDropdownStyle = document.querySelector('.cq-share .cq-menu-dropdown').style;
         this.isLoadingPNG = true;
-        loadScript(html2canvasCDN, () => {
-            this.shareDropdownStyle.display = 'none';
-            window.html2canvas(root).then(this._onCanvasReady);
-        });
+        this.loadHtml2Canvas()
+            .then(() => window.html2canvas(root))
+            .then(() => {
+                this.shareDropdownStyle.display = 'none';
+                window.html2canvas(root).then(this._onCanvasReady);
+            });
     }
 
     @action.bound _onCanvasReady(canvas) {
