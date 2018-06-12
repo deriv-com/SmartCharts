@@ -2,14 +2,13 @@ import { observable, action } from 'mobx';
 import { connect } from './Connect';
 import RoutingStore from './RoutingStore';
 
-const allDialogs = [];
+let activeDialog;
 
 export default class DialogStore {
     constructor(mainStore) {
         this.mainStore = mainStore;
         this.routingStore = new RoutingStore();
         this.routingStore.registerDialog(this);
-        allDialogs.push(this);
     }
 
     @observable open = false;
@@ -19,8 +18,11 @@ export default class DialogStore {
             this.open = val;
             if (this.open) { setTimeout(() => this.register(), 100); } else { this.unregister(); }
         }
-        if (this.open === true) { // close others.
-            allDialogs.filter(m => m !== this).forEach(m => m.setOpen(false));
+        if (this.open === true) { // close active dialog.
+            if (activeDialog) { activeDialog.setOpen(false); }
+            activeDialog = this;
+        } else {
+            activeDialog = undefined;
         }
     }
 

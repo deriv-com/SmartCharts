@@ -282,6 +282,10 @@ class ChartStore {
 
         this.feed.onComparisonDataUpdate(this.updateComparisons);
     }
+    removeComparison(symbolObj) {
+        this.context.stx.removeSeries(symbolObj.symbol);
+        this.updateComparisons();
+    }
     @action.bound changeSymbol(symbolObj) {
         if (typeof symbolObj === 'string') {
             symbolObj = this.activeSymbols.find(s => s.symbol === symbolObj);

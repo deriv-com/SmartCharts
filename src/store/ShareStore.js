@@ -1,7 +1,10 @@
-import html2canvas from 'html2canvas';
 import { observable, action, reaction, computed, when } from 'mobx';
 import MenuStore from './MenuStore';
 import { downloadFileInBrowser, findAncestor } from './utils';
+import { loadScript } from '../utils';
+import PendingPromise from '../utils/PendingPromise';
+
+const html2canvasCDN = 'https://charts.binary.com/dist/html2canvas.min.js';
 
 export default class ShareStore {
     constructor(mainStore) {
@@ -34,7 +37,7 @@ export default class ShareStore {
     @observable loading = false;
     @observable urlGenerated = false;
     @observable shortUrlFailed = false;
-
+    @observable isLoadingPNG = false;
 
     @observable shareLink = '';
 
@@ -77,7 +80,7 @@ export default class ShareStore {
             });
     }
     shortenBitlyAsync(payload, hash) {
-        const href = window.location.href;
+        const { href } = window.location;
         let origin = (this.shareOrigin && href.startsWith(this.shareOrigin)) ? href : this.shareOrigin;
         origin = origin.replace('localhost', '127.0.0.1'); // make it work on localhost
 
@@ -86,7 +89,7 @@ export default class ShareStore {
         return fetch(`${this.bitlyUrl}/shorten?access_token=${this.accessToken}&longUrl=${shareLink}`)
             .then(response => response.json())
             .then((response) =>  {
-                if (response.status_code == 200) {
+                if (response.status_code === 200) {
                     return response.data.url.split('bit.ly/')[1];
                 }
                 return null;
@@ -108,7 +111,7 @@ export default class ShareStore {
 
                     payload = decodeURIComponent(encodedJsonPart) + payload;
 
-                    if (hash == 'NONE') {
+                    if (hash === 'NONE') {
                         return payload;
                     }
                     return this.expandBitlyAsync(hash, payload);
@@ -116,18 +119,40 @@ export default class ShareStore {
                 return null;
             });
     }
-    @action.bound downloadPNG() {
-        this.menu.setOpen(false);
-        const root = findAncestor(this.stx.container, 'ciq-chart-area');
-        html2canvas(root).then((canvas) => {
-            const content = canvas.toDataURL('image/png');
-            downloadFileInBrowser(
-                `${new Date().toUTCString()}.png`,
-                content,
-                'image/png;',
-            );
-        });
+
+    loadHtml2Canvas() {
+        if (this._promise_html2canas) {
+            return this._promise_html2canvas;
+        }
+        this._promise_html2canvas = new PendingPromise();
+        loadScript(html2canvasCDN, () => this._promise_html2canvas.resolve());
+        return this._promise_html2canvas;
     }
+
+    @action.bound downloadPNG() {
+        const root = findAncestor(this.stx.container, 'ciq-chart-area');
+        // hide share dialog when rendering PNG:
+        this.shareDropdownStyle = document.querySelector('.cq-share .cq-menu-dropdown').style;
+        this.isLoadingPNG = true;
+        this.loadHtml2Canvas()
+            .then(() => window.html2canvas(root))
+            .then(() => {
+                this.shareDropdownStyle.display = 'none';
+                window.html2canvas(root).then(this._onCanvasReady);
+            });
+    }
+
+    @action.bound _onCanvasReady(canvas) {
+        const content = canvas.toDataURL('image/png');
+        downloadFileInBrowser(
+            `${new Date().toUTCString()}.png`,
+            content,
+            'image/png;',
+        );
+        this.shareDropdownStyle.display = null;
+        this.isLoadingPNG = false;
+    }
+
     @action.bound downloadCSV() {
         const isTick = this.timeUnit === 'tick';
         const header = `Date,Time,${isTick ? this.marketDisplayName : 'Open,High,Low,Close'}`;
