@@ -15,8 +15,6 @@ export default class BarrierStore {
 
     static get BARRIER_CHANGED() { return 'BARRIER_CHANGED'; }
 
-    static MARGIN_OFFSET = 13;
-
     @observable barrierColor = BarrierStore.BARRIER_COLOR_RED;
     @observable isBetweenShadeVisible = false;
     @observable isTopShadeVisible = false;
@@ -187,23 +185,17 @@ export default class BarrierStore {
     }
 
     _calcBottomShade(barrier) {
-        return this.chart.panel.height - barrier.top - BarrierStore.MARGIN_OFFSET;
-    }
-
-    _calcTopShade(barrier) {
-        return barrier.top + BarrierStore.MARGIN_OFFSET;
+        return this.chart.panel.height - barrier.top;
     }
 
     _shadeBetween() {
-        const top = this._calcTopShade(this._high_barrier);
         const bottom = this._calcBottomShade(this._low_barrier);
-        this.betweenShade.top = top;
+        this.betweenShade.top = this._high_barrier.top;
         this.betweenShade.bottom = bottom;
     }
 
     _shadeBelow(barrier = this._high_barrier) {
-        const top = this._calcTopShade(barrier);
-        this.belowShade.top = top;
+        this.belowShade.top = barrier.top;
         this.belowShade.bottom = 0;
     }
 

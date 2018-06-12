@@ -55,8 +55,8 @@ export default connect(
         if (shade) { store.shadeState = `SHADE_${shade}`.toUpperCase(); }
         if (high) { store.high_barrier = high; }
         if (low) { store.low_barrier = low; }
-        if (relative) { store.relative = relative; }
-        if (draggable) { store.draggable = draggable; }
+        if (relative !== undefined) { store.relative = relative; }
+        if (draggable !== undefined) { store.draggable = draggable; }
         if (onBarrierChange) { store.onBarrierChange = onBarrierChange; }
     },
 )(Barrier);

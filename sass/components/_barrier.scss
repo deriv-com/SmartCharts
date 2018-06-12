@@ -5,11 +5,6 @@
 $red: #f44336;
 $green: #4caf50;
 
-.horizontal {
-    &.chart-line {
-        height: 23px;
-    }
-}
 
 .chart-line {
     position: absolute;
@@ -19,11 +14,11 @@ $green: #4caf50;
         left: 0px;
         font-size: 10px;
         .drag-line {
-            height: 0px;
+            height: 2px;
             float: left;
             width: 100%;
             margin-left: -10px;
-            margin-top: 11px;
+            position: relative;
             border-top: 2px dashed;
         }
     }
@@ -66,7 +61,7 @@ $green: #4caf50;
 .drag-price {
     display: block;
     height: 25px;
-    top: -1px;
+    top: -11px;
     position: absolute;
     right: 0px;
     @include border-radius(5px);
