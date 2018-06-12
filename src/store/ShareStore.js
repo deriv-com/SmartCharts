@@ -3,7 +3,7 @@ import MenuStore from './MenuStore';
 import { downloadFileInBrowser, findAncestor } from './utils';
 import { loadScript } from '../utils';
 
-const html2canvasCDN = 'https://html2canvas.hertzen.com/dist/html2canvas.min.js';
+const html2canvasCDN = 'https://charts.binary.com/dist/html2canvas.min.js';
 setTimeout(() => loadScript(html2canvasCDN), 2000);
 
 export default class ShareStore {
