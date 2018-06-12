@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Chinese Traditional\n"
 "Language: zh_TW\n"
-"PO-Revision-Date: 2018-05-25 04:00-0400\n"
+"PO-Revision-Date: 2018-06-08 04:22-0400\n"
 
 msgid "Favorites"
 msgstr "我的最愛"
@@ -20,9 +20,6 @@ msgstr "還沒有偏好。"
 
 msgid "CLOSED"
 msgstr "已關閉"
-
-msgid "Close"
-msgstr "收盤"
 
 msgid "PRICE"
 msgstr "價格"
@@ -38,6 +35,9 @@ msgstr "高"
 
 msgid "LOW"
 msgstr "低"
+
+msgid "Underlying Assets"
+msgstr ""
 
 msgid "Share"
 msgstr "共享"
@@ -111,8 +111,92 @@ msgstr "指標"
 msgid "Chart types"
 msgstr "圖表類型"
 
-msgid "Toggle Asset Information"
-msgstr "切換資產資訊"
+msgid "Line"
+msgstr "列"
+
+msgid "Dot"
+msgstr "點"
+
+msgid "Colored Dot"
+msgstr "彩色點"
+
+msgid "Spline"
+msgstr "Spline法"
+
+msgid "Baseline"
+msgstr "基線"
+
+msgid "Candle"
+msgstr "蠟燭線"
+
+msgid "OHLC"
+msgstr "OHLC條形圖"
+
+msgid "Hollow Candle"
+msgstr "空心蠟燭線"
+
+msgid "Heikin Ashi"
+msgstr ""
+
+msgid "Kagi"
+msgstr ""
+
+msgid "Line Break"
+msgstr ""
+
+msgid "Renko"
+msgstr ""
+
+msgid "Range Bars"
+msgstr ""
+
+msgid "Point & Figure"
+msgstr ""
+
+msgid "Reversal Percentage"
+msgstr ""
+
+msgid "Range"
+msgstr ""
+
+msgid "Price Lines"
+msgstr ""
+
+msgid "Box Size"
+msgstr ""
+
+msgid "Reversal"
+msgstr ""
+
+msgid "RESET"
+msgstr "重置"
+
+msgid "DONE"
+msgstr "已完成"
+
+msgid "Settings"
+msgstr "設定"
+
+msgid "Position"
+msgstr ""
+
+msgid "Dark Mode"
+msgstr "暗模式"
+
+msgid "Countdown"
+msgstr ""
+
+msgid "Asset Information"
+msgstr ""
+
+msgid "Language"
+msgstr "語言"
+
+msgid "[symbol] market is presently closed."
+msgstr "[symbol] 市場目前已關閉。"
+
+msgid "Streaming for [symbol] is not available due to license restrictions"
+msgstr "由於許可限制, [symbol] 串流不可用"
 
 msgid "Copy to clipboard"
 msgstr "複製到剪貼板"
@@ -122,27 +206,6 @@ msgstr "已複製！"
 
 msgid "Failed!"
 msgstr "失敗！"
-
-msgid "Settings"
-msgstr "設定"
-
-msgid "Dark Mode"
-msgstr "暗模式"
-
-msgid "Language"
-msgstr "語言"
-
-msgid "RESET"
-msgstr "重置"
-
-msgid "DONE"
-msgstr "已完成"
-
-msgid "[symbol] market is presently closed."
-msgstr "[symbol] 市場目前已關閉。"
-
-msgid "Streaming for [symbol] is not available due to license restrictions"
-msgstr "由於許可限制, [symbol] 串流不可用"
 
 msgid "Search..."
 msgstr "搜索..."
@@ -191,9 +254,6 @@ msgstr "Gartley形態"
 
 msgid "Horizontal"
 msgstr "水平"
-
-msgid "Line"
-msgstr "列"
 
 msgid "Pitchfork"
 msgstr "叉子"
@@ -257,27 +317,6 @@ msgstr "\"質量指數\" 或 \"十字星\""
 
 msgid "There are no active indicators yet."
 msgstr "還沒有任何激活指標."
-
-msgid "Dot"
-msgstr "點"
-
-msgid "Colored Dot"
-msgstr "彩色點"
-
-msgid "Spline"
-msgstr "Spline法"
-
-msgid "Baseline"
-msgstr "基線"
-
-msgid "Candle"
-msgstr "蠟燭線"
-
-msgid "OHLC"
-msgstr "OHLC條形圖"
-
-msgid "Hollow Candle"
-msgstr "空心蠟燭線"
 
 msgid "right-click to delete"
 msgstr "按右鍵刪除"
