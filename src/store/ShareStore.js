@@ -4,7 +4,6 @@ import { downloadFileInBrowser, findAncestor } from './utils';
 import { loadScript } from '../utils';
 
 const html2canvasCDN = 'https://charts.binary.com/dist/html2canvas.min.js';
-setTimeout(() => loadScript(html2canvasCDN), 2000);
 
 export default class ShareStore {
     constructor(mainStore) {
@@ -38,7 +37,7 @@ export default class ShareStore {
     @observable loading = false;
     @observable urlGenerated = false;
     @observable shortUrlFailed = false;
-
+    @observable isLoadingPNG = false;
 
     @observable shareLink = '';
 
@@ -121,16 +120,25 @@ export default class ShareStore {
             });
     }
     @action.bound downloadPNG() {
-        this.menu.setOpen(false);
         const root = findAncestor(this.stx.container, 'ciq-chart-area');
-        html2canvas(root).then((canvas) => { // eslint-disable-line no-undef
-            const content = canvas.toDataURL('image/png');
-            downloadFileInBrowser(
-                `${new Date().toUTCString()}.png`,
-                content,
-                'image/png;',
-            );
+        // hide share dialog when rendering PNG:
+        this.shareDropdownStyle = document.querySelector('.cq-share .cq-menu-dropdown').style;
+        this.isLoadingPNG = true;
+        loadScript(html2canvasCDN, () => {
+            this.shareDropdownStyle.display = 'none';
+            window.html2canvas(root).then(this._onCanvasReady);
         });
+    }
+
+    @action.bound _onCanvasReady(canvas) {
+        const content = canvas.toDataURL('image/png');
+        downloadFileInBrowser(
+            `${new Date().toUTCString()}.png`,
+            content,
+            'image/png;',
+        );
+        this.shareDropdownStyle.display = null;
+        this.isLoadingPNG = false;
     }
 
     @action.bound downloadCSV() {
