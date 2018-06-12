@@ -30,7 +30,7 @@ export default class ShareStore {
     defaultCopyTooltipText = t.translate('Copy to clipboard');
     @observable copyTooltip = this.defaultCopyTooltipText;
     @action.bound resetCopyTooltip() { this.copyTooltip = this.defaultCopyTooltipText; }
-    onCopyDone = (successful) => {
+    @action.bound onCopyDone(successful) {
         this.copyTooltip = successful ? t.translate('Copied!') : t.translate('Failed!');
     }
     bitlyUrl = 'https://api-ssl.bitly.com/v3';
@@ -42,10 +42,7 @@ export default class ShareStore {
 
     @observable shareLink = '';
 
-    fixedEncodeURIComponent(str) {
-        return encodeURIComponent(str).replace(/[!'()*]/g, c => `%${c.charCodeAt(0).toString(16)}`);
-    }
-    refereshShareLink = () => {
+    @action.bound refereshShareLink = () => {
         const self = this;
         if (!this.context || !this.menu.dialog.open) { return; }
 
@@ -67,19 +64,23 @@ export default class ShareStore {
         hashPromise
             .then((hash) => {
                 if (hash) {
-                    self.shareLink = `https://bit.ly/${hash}`;
-                    self.urlGenerated = true;
+                    self.updateShareLinkStatus(false, true, `https://bit.ly/${hash}`);
                 } else {
                     self.shortUrlFailed = true;
-                    self.urlGenerated = false;
+                    self.updateShareLinkStatus(false, false, '');
                 }
-                self.loading = false;
             })
             .catch(() => {
-                self.loading = false;
-                self.urlGenerated = false;
+                self.updateShareLinkStatus(false, false, '');
             });
     }
+
+    @action.bound updateShareLinkStatus(loading, urlGenerated, shareLink) {
+        this.loading = loading;
+        this.urlGenerated = urlGenerated;
+        this.shareLink = shareLink;
+    }
+
     shortenBitlyAsync(payload, hash) {
         const { href } = window.location;
         let origin = (this.shareOrigin && href.startsWith(this.shareOrigin)) ? href : this.shareOrigin;

@@ -76,7 +76,7 @@ export default class CategoricalDisplayStore {
         this.initFavorites();
     }
 
-    updateScrollSpy() {
+    @action.bound updateScrollSpy() {
         if (this.pauseScrollSpy) { return; }
         if (this.filteredItems.length === 0) { return; }
 
@@ -107,7 +107,7 @@ export default class CategoricalDisplayStore {
         this.scrollTop = this.scrollPanel.scrollTop;
     }
 
-    init() {
+    @action.bound init() {
         this.isInit = true;
         this.scroll = new PerfectScrollbar(this.scrollPanel);
 
