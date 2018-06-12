@@ -21,8 +21,12 @@ export default class PriceLineStore {
         when(() => this.context, this.onContextReady);
     }
 
+    destructor() {
+        this.stx.removeInjection(this._injectionId);
+    }
+
     onContextReady = () => {
-        this.stx.append('draw', this._draw.bind(this));
+        this._injectionId = this.stx.append('draw', this._draw.bind(this));
     };
 
     init = () => {
@@ -88,6 +92,7 @@ export default class PriceLineStore {
 
     @action.bound setDragLine(el) {
         this._line = el;
+        if (this._line) { this._draw(); }
     }
 
     _modalBegin() {
@@ -150,7 +155,7 @@ export default class PriceLineStore {
         return this._snapPrice(price);
     }
 
-    _positionAtPrice(price) {
+    @action.bound _positionAtPrice(price) {
         let top = this._locationFromPrice(price);
         top -= (this._line.offsetHeight / 2);
 
@@ -172,7 +177,7 @@ export default class PriceLineStore {
             this.offScreen = false;
         }
 
-        this.top = top;
+        this.top = top | 0;
     }
 
     _draw() {

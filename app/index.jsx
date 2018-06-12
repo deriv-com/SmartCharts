@@ -23,7 +23,7 @@ import { ConnectionManager, StreamManager } from './connection';
 const getLanguageStorage = function () {
     const default_language = 'en';
     try {
-        let setting_string = CIQ.localStorage.getItem('smartchart-setting'),
+        const setting_string = CIQ.localStorage.getItem('smartchart-setting'),
             setting = JSON.parse(setting_string !== '' ? setting_string : '{}');
 
         return setting.language || default_language;

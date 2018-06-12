@@ -1,4 +1,4 @@
-import { observable } from 'mobx';
+import { observable, action } from 'mobx';
 import PriceLineStore from './PriceLineStore';
 import ShadeStore from './ShadeStore';
 
@@ -34,21 +34,27 @@ export default class BarrierStore {
 
         this._setupConstrainBarrierPrices();
 
-        this._listenerId = this.stx.addEventListener('newChart', () => {
-            const price = this.relative ? 0 : this.stx.currentQuote().Close;
-            const distance = this.chart.yAxis.priceTick;
-            this._high_barrier.price = price + distance;
-            this._low_barrier.price = price - distance;
-        });
+        this._listenerId = this.stx.addEventListener('newChart', this.init);
 
         this.aboveShade = new ShadeStore();
         this.betweenShade = new ShadeStore();
         this.belowShade = new ShadeStore();
+
+        if (this.context) { this.init(); }
+    }
+
+    @action.bound init() {
+        const price = this.relative ? 0 : this.stx.currentQuote().Close;
+        const distance = this.chart.yAxis.priceTick;
+        this._high_barrier.price = price + distance;
+        this._low_barrier.price = price - distance;
     }
 
     destructor() {
         this.stx.removeInjection(this._injectionId);
         this.stx.removeEventListener(this._listenerId);
+        this._high_barrier.destructor();
+        this._low_barrier.destructor();
     }
 
     get high_barrier() { return this._high_barrier.price; }
