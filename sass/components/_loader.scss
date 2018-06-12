@@ -1,4 +1,4 @@
-.cq-loader, .cq-comparison-loader {
+.cq-loader, .cq-comparison-loader, .cq-loading {
     background-image:url('icons/loading/loading-spin.svg');
     background-size:cover;
 }
@@ -17,4 +17,14 @@
     	display:block;
     	z-index: 9;
     }
+}
+
+.download-btn > .cq-loading {
+    height: 12px;
+    width: 12px;
+    display: inline-block;
+    vertical-align: middle;
+    background-size: contain;
+    margin-bottom: 2px;
+    margin-left: 1px;
 }
