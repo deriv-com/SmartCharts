@@ -19,6 +19,7 @@ export default class BarrierStore {
     @observable isBetweenShadeVisible = false;
     @observable isTopShadeVisible = false;
     @observable isBottomShadeVisible = false;
+    @observable hidePriceLines = false;
     _shadeState = BarrierStore.SHADE_NONE_SINGLE;
 
     constructor(mainStore) {
@@ -95,6 +96,10 @@ export default class BarrierStore {
         if (this.onBarrierChange) { this.onBarrierChange({ high: high_barrier, low: low_barrier }); }
 
         this._drawShadedArea();
+    }
+
+    @action.bound setHidePriceLines(val) {
+        this.hidePriceLines = !!val;
     }
 
     get shadeState() {

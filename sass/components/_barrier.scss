@@ -58,6 +58,10 @@ $green: #4caf50;
     border-top-style: solid;
 }
 
+.hide-pricelines > .chart-line.horizontal {
+    display: none;
+}
+
 .drag-price {
     display: block;
     height: 25px;
