@@ -17,7 +17,6 @@ import Renko from '../../sass/icons/chart settings/chart types/ic-renko-normal.s
 import Spline from '../../sass/icons/chart settings/chart types/spline/ic-spline-normal.svg';
 
 import Add from '../../sass/icons/chart settings/zoom-in/ic-zoomin-light.svg';
-import AddThin from '../../sass/icons/add/ic-add.svg';
 import Close from '../../sass/icons/close/ic-close.svg';
 import Comparison from '../../sass/icons/chart settings/comparison/ic-comparison-normal.svg';
 import CrosshairOff from '../../sass/icons/chart settings/crosshair/ic-crosshair-off.svg';
@@ -25,10 +24,8 @@ import CrosshairOn from '../../sass/icons/chart settings/crosshair/ic-crosshair-
 import CrosshairTooltip from '../../sass/icons/chart settings/crosshair/ic-crosshair-tooltip.svg';
 import Delete from '../../sass/icons/delete/ic-delete.svg';
 import Clear from '../../sass/icons/clear/ic-clear.svg';
-import Download from '../../sass/icons/download/ic-download.svg';
 import Draw from '../../sass/icons/chart settings/drawing tools/ic-drawingtools-normal.svg';
 import Indicator from '../../sass/icons/chart settings/indicators/ic-indicator-normal.svg';
-import List from '../../sass/icons/template-list/ic-templatelist.svg';
 import Measure from '../../sass/icons/measure/ic-measure.svg';
 import Minus from '../../sass/icons/chart settings/zoom-out/ic-zoomout-light.svg';
 import Star from '../../sass/icons/favorite/ic-favorite-normal.svg';
@@ -47,11 +44,8 @@ import IndicatorCategory from '../../sass/icons/sidebar/indicator/ic-indicator-n
 import Arrow from '../../sass/icons/dropdown/ic-dropdown.svg';
 import Copy from '../../sass/icons/share/ic-copy.svg';
 import Share from '../../sass/icons/share/ic-share.svg';
-import ChevronRight from '../../sass/icons/chart settings/setting/ic-chevron-right.svg';
 import PositionLeft from '../../sass/icons/chart settings/setting/ic-position-left.svg';
 import PositionBottom from '../../sass/icons/chart settings/setting/ic-position-bottom.svg';
-import ThemeDark from '../../sass/icons/chart settings/setting/ic-theme-dark.svg';
-import ThemeLight from '../../sass/icons/chart settings/setting/ic-theme-light.svg';
 import Back from '../../sass/icons/back/ic-back.svg';
 
 
@@ -195,7 +189,6 @@ export const RenkoIcon = Wrapper(Renko);
 
 export const AddIcon = Wrapper(Add);
 export const ZoomInIcon = Wrapper(Add);
-export const AddThinIcon = Wrapper(AddThin);
 export const CloseIcon = Wrapper(Close);
 export const ComparisonIcon = Wrapper(Comparison);
 export const CrosshairOffIcon = Wrapper(CrosshairOff);
@@ -203,12 +196,9 @@ export const CrosshairOnIcon = Wrapper(CrosshairOn);
 export const CrosshairTooltipIcon = Wrapper(CrosshairTooltip);
 export const DeleteIcon = Wrapper(Delete);
 export const ClearIcon = Wrapper(Clear);
-export const DownloadIcon = Wrapper(Download);
 export const DrawIcon = Wrapper(Draw);
 export const IndicatorIcon = Wrapper(Indicator);
-export const ListIcon = Wrapper(List);
 export const MeasureIcon = Wrapper(Measure);
-export const MinusIcon = Wrapper(Minus);
 export const ZoomOutIcon = Wrapper(Minus);
 export const SplineIcon = Wrapper(Spline);
 export const StarIcon = Wrapper(Star);
@@ -223,11 +213,8 @@ export const CopyIcon = Wrapper(Copy);
 export const ShareIcon = Wrapper(Share);
 
 
-export const ChevronRightIcon = Wrapper(ChevronRight);
 export const PositionLeftIcon = Wrapper(PositionLeft);
 export const PositionBottomIcon = Wrapper(PositionBottom);
-export const ThemeDarkIcon = Wrapper(ThemeDark);
-export const ThemeLightIcon = Wrapper(ThemeLight);
 export const BackIcon = Wrapper(Back);
 
 
