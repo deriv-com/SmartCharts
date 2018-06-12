@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
-"PO-Revision-Date: 2018-05-24 16:51-0400\n"
+"PO-Revision-Date: 2018-06-08 04:22-0400\n"
 
 msgid "Favorites"
 msgstr "Избранное"
@@ -20,9 +20,6 @@ msgstr "Нет записей в избранном."
 
 msgid "CLOSED"
 msgstr "ЗАКРЫТО"
-
-msgid "Close"
-msgstr "Закрытие"
 
 msgid "PRICE"
 msgstr "ЦЕНА"
@@ -38,6 +35,9 @@ msgstr "МАКС."
 
 msgid "LOW"
 msgstr "МИН."
+
+msgid "Underlying Assets"
+msgstr ""
 
 msgid "Share"
 msgstr "Поделиться"
@@ -111,8 +111,92 @@ msgstr "Индикаторы"
 msgid "Chart types"
 msgstr "Вид графика"
 
-msgid "Toggle Asset Information"
-msgstr "Информация об активе Toggle"
+msgid "Line"
+msgstr "Линия"
+
+msgid "Dot"
+msgstr "Точечный"
+
+msgid "Colored Dot"
+msgstr "Цветные точки"
+
+msgid "Spline"
+msgstr "Кривая"
+
+msgid "Baseline"
+msgstr "Основная линия"
+
+msgid "Candle"
+msgstr "Свеча"
+
+msgid "OHLC"
+msgstr "OHLC"
+
+msgid "Hollow Candle"
+msgstr "пустая свеча"
+
+msgid "Heikin Ashi"
+msgstr ""
+
+msgid "Kagi"
+msgstr ""
+
+msgid "Line Break"
+msgstr ""
+
+msgid "Renko"
+msgstr ""
+
+msgid "Range Bars"
+msgstr ""
+
+msgid "Point & Figure"
+msgstr ""
+
+msgid "Reversal Percentage"
+msgstr ""
+
+msgid "Range"
+msgstr ""
+
+msgid "Price Lines"
+msgstr ""
+
+msgid "Box Size"
+msgstr ""
+
+msgid "Reversal"
+msgstr ""
+
+msgid "RESET"
+msgstr "СБРОСИТЬ"
+
+msgid "DONE"
+msgstr "ГОТОВО"
+
+msgid "Settings"
+msgstr "Настройки"
+
+msgid "Position"
+msgstr ""
+
+msgid "Dark Mode"
+msgstr "Тёмный режим"
+
+msgid "Countdown"
+msgstr ""
+
+msgid "Asset Information"
+msgstr ""
+
+msgid "Language"
+msgstr "Язык"
+
+msgid "[symbol] market is presently closed."
+msgstr "Рынок [symbol] закрыт в данный момент."
+
+msgid "Streaming for [symbol] is not available due to license restrictions"
+msgstr "Потоковые котировки для [symbol] недоступны из-за лицензионных ограничений"
 
 msgid "Copy to clipboard"
 msgstr "Копировать в буфер"
@@ -122,27 +206,6 @@ msgstr "Скопировано!"
 
 msgid "Failed!"
 msgstr "Ошибка!"
-
-msgid "Settings"
-msgstr "Настройки"
-
-msgid "Dark Mode"
-msgstr "Тёмный режим"
-
-msgid "Language"
-msgstr "Язык"
-
-msgid "RESET"
-msgstr "СБРОСИТЬ"
-
-msgid "DONE"
-msgstr "ГОТОВО"
-
-msgid "[symbol] market is presently closed."
-msgstr "Рынок [symbol] закрыт в данный момент."
-
-msgid "Streaming for [symbol] is not available due to license restrictions"
-msgstr "Потоковые котировки для [symbol] недоступны из-за лицензионных ограничений"
 
 msgid "Search..."
 msgstr "Поиск..."
@@ -191,9 +254,6 @@ msgstr "Гартли"
 
 msgid "Horizontal"
 msgstr "Горизонт."
-
-msgid "Line"
-msgstr "Линия"
 
 msgid "Pitchfork"
 msgstr "Вилка"
@@ -257,27 +317,6 @@ msgstr "\"Индекс массы\" или \"звезда дожи\""
 
 msgid "There are no active indicators yet."
 msgstr "Нет активных индикаторов."
-
-msgid "Dot"
-msgstr "Точечный"
-
-msgid "Colored Dot"
-msgstr "Цветные точки"
-
-msgid "Spline"
-msgstr "Кривая"
-
-msgid "Baseline"
-msgstr "Основная линия"
-
-msgid "Candle"
-msgstr "Свеча"
-
-msgid "OHLC"
-msgstr "OHLC"
-
-msgid "Hollow Candle"
-msgstr "пустая свеча"
 
 msgid "right-click to delete"
 msgstr "Щелкните правой кнопкой мыши чтобы удалить"

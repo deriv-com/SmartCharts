@@ -162,7 +162,7 @@ export default class ChartTypeStore {
             const defaultValue = this.stx.chart.defaultChartStyleConfig[id];
             return {
                 id: name,
-                value: (value != undefined) ? value : defaultValue,
+                value: (value != undefined) ? value : defaultValue, // eslint-disable-line eqeqeq
                 defaultValue,
                 ...agg,
             };
