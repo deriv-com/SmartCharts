@@ -126,9 +126,16 @@ class ChartStore {
             requestAPI,
             requestSubscribe,
             requestForget,
+            requestReload,
             shareOrigin = 'https://charts.binary.com',
         } = props;
+
+        requestReload(() => {
+            //clear and init chart
+        });
+
         const api = new BinaryAPI(requestAPI, requestSubscribe, requestForget);
+     
         this.mainStore.share.shareOrigin = shareOrigin;
 
         const stxx = this.stxx = new CIQ.ChartEngine({
