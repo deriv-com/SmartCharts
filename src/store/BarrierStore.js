@@ -106,6 +106,11 @@ export default class BarrierStore {
         return this._shadeState;
     }
 
+    @action.bound setBarrier({ high, low }) {
+        if (high !== undefined) { this._high_barrier.price = high; }
+        if (low  !== undefined) { this._low_barrier.price = low; }
+    }
+
     set shadeState(shadeState) {
         this._shadeState = shadeState;
 

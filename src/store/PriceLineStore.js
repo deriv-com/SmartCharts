@@ -63,13 +63,10 @@ export default class PriceLineStore {
         if (this._relative === value) { return; }
 
         this._relative = value;
-        const currentPrice = this.stx.currentQuote().Close;
-
-        if (this._relative) {
-            this._price -= currentPrice; // absolute to relative
-        } else {
-            this._price += currentPrice; // relative to absolute
-        }
+        // convert between relative and absolute
+        let currentPrice = this.stx.currentQuote().Close;
+        if (this._relative) { currentPrice = -currentPrice; }
+        this.price = +(this._price + currentPrice).toFixed(this.pip);
     }
 
     get context() { return this.mainStore.chart.context; }

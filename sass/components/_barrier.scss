@@ -11,8 +11,17 @@ $green: #4caf50;
     z-index: 35;
     &.horizontal {
         width: 100%;
-        left: 0px;
+        left: 0;
         font-size: 10px;
+        &.draggable > .draggable-area {
+            &:hover {
+                background: rgba(0, 0, 0, 0.05);
+            }
+            height: 20px;
+            top: -8px;
+            position: absolute;
+            width: 100%;
+        }
         .drag-line {
             height: 2px;
             float: left;
@@ -41,15 +50,8 @@ $green: #4caf50;
 /*hover*/
 
 .draggable.chart-line:hover {
-    background: rgba(0, 0, 0, 0.05);
-
-    &.horizontal {
-        cursor: ns-resize;
-    }
-
-    &.vertical {
-        cursor: ew-resize;
-    }
+    &.horizontal { cursor: ns-resize; }
+    &.vertical   { cursor: ew-resize; }
 }
 
 /*hover*/
