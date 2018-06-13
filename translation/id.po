@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Indonesian\n"
 "Language: id_ID\n"
-"PO-Revision-Date: 2018-06-08 04:22-0400\n"
+"PO-Revision-Date: 2018-06-11 23:10-0400\n"
 
 msgid "Favorites"
 msgstr "Favorit"
@@ -37,7 +37,7 @@ msgid "LOW"
 msgstr "LOW"
 
 msgid "Underlying Assets"
-msgstr ""
+msgstr "Aset Dasar"
 
 msgid "Share"
 msgstr "Bagikan"
@@ -136,37 +136,37 @@ msgid "Hollow Candle"
 msgstr "Hollow Candle"
 
 msgid "Heikin Ashi"
-msgstr ""
+msgstr "Heikin Ashi"
 
 msgid "Kagi"
-msgstr ""
+msgstr "Kagi"
 
 msgid "Line Break"
-msgstr ""
+msgstr "Line Break"
 
 msgid "Renko"
-msgstr ""
+msgstr "Renko"
 
 msgid "Range Bars"
-msgstr ""
+msgstr "Range Bars"
 
 msgid "Point & Figure"
-msgstr ""
+msgstr "Point & Figure"
 
 msgid "Reversal Percentage"
-msgstr ""
+msgstr "Persentase Pembalikan"
 
 msgid "Range"
-msgstr ""
+msgstr "Rentang"
 
 msgid "Price Lines"
-msgstr ""
+msgstr "Price Lines"
 
 msgid "Box Size"
-msgstr ""
+msgstr "Box Size"
 
 msgid "Reversal"
-msgstr ""
+msgstr "Reversal"
 
 msgid "RESET"
 msgstr "ULANG"
@@ -178,16 +178,16 @@ msgid "Settings"
 msgstr "Pengaturan"
 
 msgid "Position"
-msgstr ""
+msgstr "Posisi"
 
 msgid "Dark Mode"
 msgstr "Dark Mode"
 
 msgid "Countdown"
-msgstr ""
+msgstr "Hitung mundur"
 
 msgid "Asset Information"
-msgstr ""
+msgstr "Informasi Aset"
 
 msgid "Language"
 msgstr "Bahasa"
