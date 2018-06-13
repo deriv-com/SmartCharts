@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Chinese Traditional\n"
 "Language: zh_TW\n"
-"PO-Revision-Date: 2018-06-13 00:11-0400\n"
+"PO-Revision-Date: 2018-06-13 00:21-0400\n"
 
 msgid "Favorites"
 msgstr "我的最愛"
@@ -154,19 +154,19 @@ msgid "Point & Figure"
 msgstr "點數圖"
 
 msgid "Reversal Percentage"
-msgstr ""
+msgstr "反向百分率"
 
 msgid "Range"
-msgstr ""
+msgstr "範圍"
 
 msgid "Price Lines"
-msgstr ""
+msgstr "價格線"
 
 msgid "Box Size"
-msgstr ""
+msgstr "箱尺寸"
 
 msgid "Reversal"
-msgstr ""
+msgstr "反向"
 
 msgid "RESET"
 msgstr "重置"
@@ -178,16 +178,16 @@ msgid "Settings"
 msgstr "設定"
 
 msgid "Position"
-msgstr ""
+msgstr "頭寸"
 
 msgid "Dark Mode"
 msgstr "暗模式"
 
 msgid "Countdown"
-msgstr ""
+msgstr "倒計時"
 
 msgid "Asset Information"
-msgstr ""
+msgstr "資產資訊"
 
 msgid "Language"
 msgstr "語言"
