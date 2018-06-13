@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Chinese Traditional\n"
 "Language: zh_TW\n"
-"PO-Revision-Date: 2018-06-08 04:22-0400\n"
+"PO-Revision-Date: 2018-06-13 00:11-0400\n"
 
 msgid "Favorites"
 msgstr "我的最愛"
@@ -37,7 +37,7 @@ msgid "LOW"
 msgstr "低"
 
 msgid "Underlying Assets"
-msgstr ""
+msgstr "標的資產"
 
 msgid "Share"
 msgstr "共享"
@@ -136,22 +136,22 @@ msgid "Hollow Candle"
 msgstr "空心蠟燭線"
 
 msgid "Heikin Ashi"
-msgstr ""
+msgstr "Heikin Ashi燭圖"
 
 msgid "Kagi"
-msgstr ""
+msgstr "Kagi圖指標"
 
 msgid "Line Break"
-msgstr ""
+msgstr "線中斷圖"
 
 msgid "Renko"
-msgstr ""
+msgstr "磚形圖"
 
 msgid "Range Bars"
-msgstr ""
+msgstr "範圍欄圖"
 
 msgid "Point & Figure"
-msgstr ""
+msgstr "點數圖"
 
 msgid "Reversal Percentage"
 msgstr ""
