@@ -92,6 +92,34 @@ initialSymbol | Sets the initial symbol.
 isMobile | Switch between mobile or desktop view. Defaults to `false`.
 shareOrigin | Sets the origin of the generated share link. Defaults to `https://charts.binary.com`.
 showCountdown | Show Countdown. Defaults to `false`.
+barrier | Draw chart barriers. Refer to here for usage details
+
+#### Barrier
+
+`barrier` props accepts an array of barrier configurations:
+
+```jsx
+<SmartChart
+    barrier={[{
+        color:'green',
+        shade:'above',
+        disablePriceLines: false, // default false
+        onChange:console.warn.bind(console),
+    }]}
+/>
+```
+
+| Attribute | Description |
+--------|--------------
+color | Barrier shade color
+shade | Shade type; choose between `NONE_SINGLE`, `NONE_DOUBLE`, `ABOVE`, `BELOW`, `OUTSIDE` or `BETWEEN`. Defaults to `NONE_SINGLE`
+disablePriceLines | hide/show the price lines. Defaults to `false`
+onChange | When price of high or low barrier changes (including when switched toggling `relative` or setting `high\|low`), `onChange` will pass the high and low barriers as `{ high, low }`.
+relative | Toggle between relative and absolute barriers. Defaults to `false`.
+draggable | Toggles whether users can drag the price lines and change the barrier directly from the chart. Defaults to `true`.
+high | Sets the price of the high barrier.
+low | Sets the price of the low barrier.
+
 
 ### Customising Components
 

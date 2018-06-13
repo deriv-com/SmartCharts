@@ -15,7 +15,7 @@ export default class BarrierStore {
 
     static get BARRIER_CHANGED() { return 'BARRIER_CHANGED'; }
 
-    @observable barrierColor = BarrierStore.BARRIER_COLOR_RED;
+    @observable barrierColor = BarrierStore.BARRIER_COLOR_GREEN;
     @observable isBetweenShadeVisible = false;
     @observable isTopShadeVisible = false;
     @observable isBottomShadeVisible = false;
@@ -87,14 +87,23 @@ export default class BarrierStore {
     get stx() { return this.context.stx; }
     get chart() { return this.stx.chart; }
 
-    onBarrierChange = null;
+    _onBarrierChange = null;
 
-    _onPriceChanged() {
+    set onBarrierChange(callback) {
+        this._onBarrierChange = callback;
+        // Immediately fire current barrier values
+        if (callback) { this._fireOnBarrierChange(); }
+    }
+
+    _fireOnBarrierChange() {
         const high_barrier = this._high_barrier.visible ? this._high_barrier.price : undefined;
         const low_barrier = this._low_barrier.visible ? this._low_barrier.price : undefined;
 
-        if (this.onBarrierChange) { this.onBarrierChange({ high: high_barrier, low: low_barrier }); }
+        if (this._onBarrierChange) { this._onBarrierChange({ high: high_barrier, low: low_barrier }); }
+    }
 
+    _onPriceChanged() {
+        this._fireOnBarrierChange();
         this._drawShadedArea();
     }
 
@@ -104,11 +113,6 @@ export default class BarrierStore {
 
     get shadeState() {
         return this._shadeState;
-    }
-
-    @action.bound setBarrier({ high, low }) {
-        if (high !== undefined) { this._high_barrier.price = high; }
-        if (low  !== undefined) { this._low_barrier.price = low; }
     }
 
     set shadeState(shadeState) {

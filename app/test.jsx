@@ -83,7 +83,9 @@ class App extends React.Component {
     };
 
     handleBarrierTypeChange = (evt) => {
-        this.setState({ barrierType: evt.target.value });
+        const { value: barrierType } = evt.target;
+        const nextState = (barrierType === '') ? { highLow : {} } : {};
+        this.setState({ ...nextState, barrierType });
     };
 
     render() {
@@ -93,7 +95,8 @@ class App extends React.Component {
             onBarrierChange: this.handleBarrierChange,
             relative,
             hidePriceLines: disablePriceLines,
-            barrier: high !== undefined ? { high, low } : undefined,
+            high,
+            low,
         }] : [];
         return (
             <div className="grid">
@@ -121,7 +124,9 @@ class App extends React.Component {
                             <option value="OUTSIDE">OUTSIDE</option>
                             <option value="">disable</option>
                         </select>
-                        &nbsp;<b>low:</b> <input id="low" type="number" value={low} onChange={this.onHighLowChange} />, <b>high:</b> <input id="high" type="number" value={high} onChange={this.onHighLowChange} />;
+                        &nbsp;
+                        <b>low:</b> <input id="low" type="number" value={low === undefined ? '' : low} onChange={this.onHighLowChange} />,
+                        <b>high:</b> <input id="high" type="number" value={high === undefined ? '' : high} onChange={this.onHighLowChange} />;
                         No PriceLine: <input type="checkbox" onChange={this.onPriceLineDisableChange} />
                         Relative: <input type="checkbox" onChange={this.onRelativeChange} />
                     </label>
