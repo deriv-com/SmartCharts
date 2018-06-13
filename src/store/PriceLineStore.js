@@ -79,10 +79,6 @@ export default class PriceLineStore {
         this._priceConstrainer = value;
     }
 
-    @computed get priceDisplay() {
-        return this.price.toFixed(this.pip);
-    }
-
     get realPrice() {
         return this.relative ? +(this.stx.currentQuote().Close + this.price).toFixed(this.pip) : this.price;
     }
@@ -178,7 +174,7 @@ export default class PriceLineStore {
     }
 
     connect = connect(() => ({
-        priceDisplay: this.priceDisplay,
+        priceDisplay: this._price,
         visible: this.visible,
         setDragLine: this.setDragLine,
         className: this.className,
