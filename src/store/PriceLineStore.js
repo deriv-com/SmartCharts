@@ -121,7 +121,7 @@ export default class PriceLineStore {
         if (this._priceConstrainer) { newPrice = this._priceConstrainer(newPrice); }
         if (this.relative) { newPrice -= this.stx.currentQuote().Close; }
 
-        this.price = this._snapPrice(newPrice);
+        this.price = newPrice;
     }
 
     @action.bound _endDrag() {
@@ -136,23 +136,13 @@ export default class PriceLineStore {
         );
     }
 
-    _snapPrice(price) {
-        // snap the limit price to the desired interval if one defined
-        let minTick = this.chart.yAxis.minimumPriceTick;
-        if (!minTick) { minTick = 0.00000001; } // maximum # places
-        const numToRoundTo = 1 / minTick;
-        price = Math.round(price * numToRoundTo) / numToRoundTo;
-
-        return price;
-    }
-
     _priceFromLocation(y) {
         const price = this.stx.valueFromPixel(
             y + this.chart.panel.top,
             this.chart.panel,
         );
 
-        return this._snapPrice(price);
+        return price;
     }
 
     @action.bound _positionAtPrice(price) {
