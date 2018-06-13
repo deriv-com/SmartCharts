@@ -17,7 +17,7 @@ export default class PriceLineStore {
 
     constructor(mainStore) {
         this.mainStore = mainStore;
-        this._emitter = new EventEmitter();
+        this._emitter = new EventEmitter({ emitDelay: 0 });
         when(() => this.context, this.onContextReady);
     }
 
