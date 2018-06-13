@@ -92,9 +92,9 @@ initialSymbol | Sets the initial symbol.
 isMobile | Switch between mobile or desktop view. Defaults to `false`.
 shareOrigin | Sets the origin of the generated share link. Defaults to `https://charts.binary.com`.
 showCountdown | Show Countdown. Defaults to `false`.
-barrier | Draw chart barriers. Refer to here for usage details
+barrier | Draw chart barriers. Refer to [Barrier API](#barrier-api) for usage details
 
-#### Barrier
+#### Barrier API
 
 `barrier` props accepts an array of barrier configurations:
 
