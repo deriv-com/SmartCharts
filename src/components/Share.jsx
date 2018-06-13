@@ -24,6 +24,7 @@ const Share = ({
     copyTooltip,
     onInputRef,
     closeMenu,
+    isLoadingPNG,
 }) => (
     <Menu className="cq-share">
         <Menu.Title>
@@ -79,7 +80,7 @@ const Share = ({
                     <div
                         className="download-btn"
                         onClick={downloadPNG}
-                    > PNG
+                    > PNG {isLoadingPNG && <span className="cq-loading" />}
                     </div>
                     <div
                         className="download-btn"
@@ -107,4 +108,5 @@ export default connect(({ share: s }) => ({
     resetCopyTooltip: s.resetCopyTooltip,
     copyTooltip: s.copyTooltip,
     closeMenu: s.menu.onTitleClick,
+    isLoadingPNG: s.isLoadingPNG,
 }))(Share);

@@ -97,11 +97,17 @@ class ChartStore {
         );
     }
 
+    updateHeight(position) {
+        const ciqNode = this.rootNode.querySelector('.ciq-chart');
+        const containerNode = this.rootNode.querySelector('.chartContainer.primary');
+        const panelPosition = position || this.mainStore.chartSetting.position;
+        // height of chart control panel
+        const offsetHeight = (panelPosition == 'left') ? 0 : 50;
+        containerNode.style.height = `${ciqNode.offsetHeight - offsetHeight}px`;
+    }
     resizeScreen = () => {
         if (!this.context) { return; }
-        this.chartHeight = this.chartNode.offsetHeight;
-        this.chartContainerHeight = this.chartHeight - this.chartControlsNode.offsetHeight;
-        this.chartContainerNode.style.height = `${this.chartContainerHeight}px`;
+        this.updateHeight();
         this.stxx.resizeChart();
         if (this.stxx.slider) {
             this.stxx.slider.display(this.stxx.layout.rangeSlider);
@@ -203,13 +209,7 @@ class ChartStore {
             this.saveLayout();
             this.chartPanelTop = holderStyle.top;
         });
-        stxx.addEventListener('symbolChange', (evt) => {
-            const isComparisonChart = evt.stx.chart.symbol !== evt.symbolObject.symbol;
-            if (this.onSymbolChange && !isComparisonChart) {
-                this.onSymbolChange(evt.symbolObject);
-            }
-            this.saveLayout();
-        });
+        stxx.addEventListener('symbolChange', this.saveLayout.bind(this));
         stxx.addEventListener('drawing', this.saveDrawings.bind(this));
         // stxx.addEventListener('newChart', () => { });
         stxx.addEventListener('preferences', this.savePreferences.bind(this));
@@ -297,7 +297,12 @@ class ChartStore {
         this.resizeObserver = new ResizeObserver(() => this.resizeScreen());
         this.resizeObserver.observe(rootNode);
 
-        stxx.append('createDataSet', this.updateComparisons);
+        this.feed.onComparisonDataUpdate(this.updateComparisons);
+    }
+
+    removeComparison(symbolObj) {
+        this.context.stx.removeSeries(symbolObj.symbol);
+        this.updateComparisons();
     }
 
     @action.bound changeSymbol(symbolObj) {
@@ -310,9 +315,14 @@ class ChartStore {
             return;
         }
 
+        if (this.onSymbolChange) {
+            this.onSymbolChange(symbolObj);
+        }
+
         this.loader.show();
 
         // reset comparisons
+        this.comparisonSymbols = [];
         for (const field in this.stxx.chart.series) {
             if (this.stxx.chart.series[field].parameters.bucket !== 'study') {
                 this.stxx.removeSeries(field);
