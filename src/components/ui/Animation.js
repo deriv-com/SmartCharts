@@ -257,6 +257,68 @@ CIQ.Animation = function (stx, animationParameters, easeMachine) {
         }
     });
 
+    stx.prepend('renderYAxis', function (chart) {
+        if (this.grabbingScreen) return;
+
+        let panel = chart.panel;
+        let arr = panel.yaxisRHS.concat(panel.yaxisLHS);
+
+        function closure(self) {
+            return function (values) {
+                chart.animatedLow = values.low;
+                chart.animatedHigh = values.high;
+                self.draw();
+            };
+        }
+        let i;
+        for (i = 0; i < arr.length; i++) {
+            let yAxis = arr[i];
+            let low = null,
+                high = null;
+            if (panel.yAxis === yAxis) {
+                // initialize prev values
+                if (!chart.prevLowValue && chart.prevLowValue !== 0) {
+                    chart.prevLowValue = chart.animatedLow = chart.lowValue;
+                }
+                if (!chart.prevHighValue && chart.prevHighValue !== 0) {
+                    chart.prevHighValue = chart.animatedHigh = chart.highValue;
+                }
+
+                // check for a change, if so we will spin off an animation
+                if (!scrollAnimator.running) chart.animatingVerticalScroll = false;
+                if (chart.prevLowValue >= chart.lowValue && chart.prevHighValue <= chart.highValue) {
+                    if (chart.animatingVerticalScroll) {
+                        chart.highValue = chart.animatedHigh;
+                        chart.lowValue = chart.animatedLow;
+                    }
+                    return;
+                }
+                if (yAxis.priceFormatter == CIQ.Comparison.priceFormat) return;  // too difficult to animate y-axis change when it changes on every tick due to percentage axis on comparison
+
+                if (scrollAnimator.running) scrollAnimator.stop();
+                let prevLow = chart.prevLowValue; let prevHigh = chart.prevHighValue;
+                chart.prevLowValue = chart.lowValue;
+                chart.prevHighValue = chart.highValue;
+                chart.animatingVerticalScroll = true;
+                scrollAnimator.run(closure(this), { low: prevLow, high: prevHigh }, { low:chart.lowValue, high:chart.highValue });
+
+                low = chart.animatedLow;
+                high = chart.animatedHigh;
+            }
+            this.calculateYAxisRange(panel, yAxis, low, high);
+        }
+
+        let parameters = {};
+
+        for (i = 0; i < arr.length; i++) {
+            parameters.yAxis = arr[i];
+            this.createYAxis(panel, parameters);
+            this.drawYAxis(panel, parameters);
+        }
+        this.drawPanels();
+        return true; // bypass original kernel code
+    });
+
     stx.append('draw', function () {
         if (filterSession) { return; }
         if (this.chart.dataSet && this.chart.dataSet.length && this.mainSeriesRenderer && this.mainSeriesRenderer.supportsAnimation) {
