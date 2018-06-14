@@ -39,11 +39,10 @@ export default class ShareStore {
     @observable urlGenerated = false;
     @observable shortUrlFailed = false;
     @observable isLoadingPNG = false;
-
     @observable shareLink = '';
 
-    @action.bound refereshShareLink = () => {
-        const self = this;
+
+    @action refereshShareLink = () => {
         if (!this.context || !this.menu.dialog.open) { return; }
 
         const layoutData = this.stx.exportLayout(true);
@@ -62,23 +61,22 @@ export default class ShareStore {
         });
 
         hashPromise
-            .then((hash) => {
-                if (hash) {
-                    self.updateShareLinkStatus(false, true, `https://bit.ly/${hash}`);
-                } else {
-                    self.shortUrlFailed = true;
-                    self.updateShareLinkStatus(false, false, '');
-                }
-            })
-            .catch(() => {
-                self.updateShareLinkStatus(false, false, '');
-            });
+            .then(this.onHashSuccess)
+            .catch(this.onHashFail);
     }
-
-    @action.bound updateShareLinkStatus(loading, urlGenerated, shareLink) {
-        this.loading = loading;
-        this.urlGenerated = urlGenerated;
-        this.shareLink = shareLink;
+    @action.bound onHashSuccess(hash) {
+        if (hash) {
+            this.loading = false;
+            this.urlGenerated = true;
+            this.shareLink = `https://bit.ly/${hash}`;
+        } else {
+            this.shortUrlFailed = true;
+            this.onHashFail();
+        }
+    }
+    @action.bound onHashFail() {
+        this.loading = false;
+        this.urlGenerated = false;
     }
 
     shortenBitlyAsync(payload, hash) {

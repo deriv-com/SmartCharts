@@ -22,7 +22,7 @@ export default class TimeperiodStore {
 
     @observable timeUnit = null;
     @observable interval = null;
-    @observable remain = null;
+    remain = null;
 
     onContextReady = () => {
         const { timeUnit, interval } = this.context.stx.layout;
@@ -47,6 +47,26 @@ export default class TimeperiodStore {
         this.countdownInterval = undefined;
         stx.draw();
 
+        const displayMilliseconds = (ms) => {
+            const totalSec = ms / 1000;
+            if (totalSec <= 0) { return null; }
+            const padNum = n => (`0${n}`).slice(-2);
+            const seconds = padNum(Math.trunc((totalSec) % 60));
+            const minutes = padNum(Math.trunc((totalSec / 60) % 60));
+            let hours = Math.trunc((totalSec / 3600) % 24);
+            hours = hours ? `${hours}:` : '';
+            return `${hours}${minutes}:${seconds}`;
+        };
+
+        const setRemain = () => {
+            const dataSet = stx.chart.dataSet;
+            if (dataSet && dataSet.length != 0) {
+                const diff = new Date() - dataSet[dataSet.length - 1].DT;
+                this.remain = displayMilliseconds((getIntervalInSeconds(stx.layout) * 1000) - diff);
+                stx.draw();
+            }
+        };
+
         if (this.mainStore.chartSetting.countdown && !isTick && hasCountdown) {
             if (!this._injectionId) {
                 this._injectionId = stx.append('draw', () => {
@@ -58,33 +78,13 @@ export default class TimeperiodStore {
                 });
             }
 
-            if (callFromSettings) { this.setRemain(); }
+            if (callFromSettings) { setRemain(); }
 
             if (!this.countdownInterval) {
                 this.countdownInterval = setInterval(() => {
-                    this.setRemain();
+                    setRemain();
                 }, 1000);
             }
-        }
-    }
-
-    @action.bound setRemain() {
-        const stx = this.context.stx;
-        const dataSet = stx.chart.dataSet;
-        const displayMilliseconds = (ms) => {
-            const totalSec = ms / 1000;
-            if (totalSec <= 0) { return null; }
-            const padNum = n => (`0${n}`).slice(-2);
-            const seconds = padNum(Math.trunc((totalSec) % 60));
-            const minutes = padNum(Math.trunc((totalSec / 60) % 60));
-            let hours = Math.trunc((totalSec / 3600) % 24);
-            hours = hours ? `${hours}:` : '';
-            return `${hours}${minutes}:${seconds}`;
-        };
-        if (dataSet && dataSet.length != 0) {
-            const diff = new Date() - dataSet[dataSet.length - 1].DT;
-            this.remain = displayMilliseconds((getIntervalInSeconds(stx.layout) * 1000) - diff);
-            stx.draw();
         }
     }
 
