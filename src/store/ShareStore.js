@@ -42,7 +42,7 @@ export default class ShareStore {
     @observable shareLink = '';
 
 
-    @action refereshShareLink = () => {
+    @action.bound refereshShareLink() {
         if (!this.context || !this.menu.dialog.open) { return; }
 
         const layoutData = this.stx.exportLayout(true);
