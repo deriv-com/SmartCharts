@@ -12,7 +12,7 @@ import { // eslint-disable-line import/no-extraneous-dependencies
     DrawTools,
     ChartSetting,
     Share,
-} from '@binary-com/smartcharts';
+} from '@binary-com/smartcharts'; // eslint-disable-line import/no-unresolved
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './test.scss';
