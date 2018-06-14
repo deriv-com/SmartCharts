@@ -60,6 +60,6 @@ export default connect(
         if (relative !== undefined) { store.relative = relative; }
         if (draggable !== undefined) { store.draggable = draggable; }
         if (onBarrierChange) { store.onBarrierChange = onBarrierChange; }
-        store.setHidePriceLines(hidePriceLines);
+        store.hidePriceLines = !!hidePriceLines;
     },
 )(Barrier);

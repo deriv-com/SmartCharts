@@ -107,10 +107,6 @@ export default class BarrierStore {
         this._drawShadedArea();
     }
 
-    @action.bound setHidePriceLines(val) {
-        this.hidePriceLines = !!val;
-    }
-
     get shadeState() {
         return this._shadeState;
     }
