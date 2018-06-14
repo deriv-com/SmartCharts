@@ -90,7 +90,7 @@ class App extends React.Component {
 
     render() {
         const { barrierType, highLow : { high, low }, disablePriceLines, relative } = this.state;
-        const barrier = barrierType ? [{
+        const barriers = barrierType ? [{
             shade: barrierType,
             onBarrierChange: this.handleBarrierChange,
             relative,
@@ -109,7 +109,7 @@ class App extends React.Component {
                         requestSubscribe={requestSubscribe}
                         requestForget={requestForget}
                         shareOrigin={shareOrigin}
-                        barrier={barrier}
+                        barriers={barriers}
                     />
                 </div>
                 <div className="bottom-blob">

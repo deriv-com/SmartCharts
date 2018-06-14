@@ -53,7 +53,7 @@ class Chart extends Component {
             theme,
             isChartAvailable,
             setting,
-            barrier,
+            barriers,
             chartPanelTop,
             chartControlsWidgets,
             AggregateChartSettingsDialog,
@@ -89,9 +89,9 @@ class Chart extends Component {
                 <div className={`${currentMode} ${currentPosition}`}>
                     <div className="ciq-chart-area">
                         <div className="ciq-chart">
-                            {barrier &&
+                            {barriers &&
                             <RenderInsideChart at="holder">
-                                {barrier.map((barr, idx) => (
+                                {barriers.map((barr, idx) => (
                                     <Barrier
                                         key={idx}
                                         {...barr}
