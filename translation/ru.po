@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
-"PO-Revision-Date: 2018-06-08 04:22-0400\n"
+"PO-Revision-Date: 2018-06-13 21:10-0400\n"
 
 msgid "Favorites"
 msgstr "Избранное"
@@ -37,7 +37,7 @@ msgid "LOW"
 msgstr "МИН."
 
 msgid "Underlying Assets"
-msgstr ""
+msgstr "Основные активы"
 
 msgid "Share"
 msgstr "Поделиться"
@@ -136,19 +136,19 @@ msgid "Hollow Candle"
 msgstr "пустая свеча"
 
 msgid "Heikin Ashi"
-msgstr ""
+msgstr "Хейкен Аши"
 
 msgid "Kagi"
-msgstr ""
+msgstr "Каги"
 
 msgid "Line Break"
-msgstr ""
+msgstr "Разрыв линии"
 
 msgid "Renko"
-msgstr ""
+msgstr "Ренко"
 
 msgid "Range Bars"
-msgstr ""
+msgstr "Range Bars"
 
 msgid "Point & Figure"
 msgstr ""
