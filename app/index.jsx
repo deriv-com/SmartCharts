@@ -59,6 +59,7 @@ const requestAPI = connectionManager.send.bind(connectionManager);
 const requestSubscribe = streamManager.subscribe.bind(streamManager);
 const requestForget = streamManager.forget.bind(streamManager);
 const shareOrigin = window.location.href.split('?')[0];
+const requestReload = streamManager.reloadChart.bind(streamManager);
 
 const App = () => (
     <SmartChart
@@ -68,6 +69,7 @@ const App = () => (
         requestAPI={requestAPI}
         requestSubscribe={requestSubscribe}
         requestForget={requestForget}
+        requestReload={requestReload}
         shareOrigin={shareOrigin}
     />
 );

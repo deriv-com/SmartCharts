@@ -36,12 +36,8 @@ class StreamManager {
             }
         });
         this._connection.on(ConnectionManager.EVENT_CONNECTION_REOPEN, () => {
-            for (const key of Object.keys(this._subscriptionData)) {
-                const data = this._subscriptionData[key];
-                const { ticks_history: symbol, granularity } = data.echo_req;
-                const subscription = new Subscription({ symbol, granularity }, { connection: this._connection });
-                subscription.subscribe();
-                this._inProgress[key] = this._trackSubscription(subscription);
+           if (this.reloadChart) {
+               this.reloadChart();
             }
         });
     }
@@ -185,6 +181,11 @@ class StreamManager {
         const stream = this._callbacks.get(callback);
         stream.forget();
         this._callbacks.delete(callback);
+    }
+
+    reloadChart(callback)
+    {
+        this.reloadChart = callback;
     }
 }
 
