@@ -21,6 +21,7 @@ export default class DialogStore {
         } else {
             activeDialog = undefined;
         }
+        console.log(val, this.open, activeDialog);
     }
 
     handleClickOutside = (e) => {
