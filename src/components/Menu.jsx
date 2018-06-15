@@ -38,7 +38,6 @@ class Menu extends Component {
                         in={open}
                         timeout={150}
                         classNames="cq-menu-dropdown"
-                        unmountOnExit
                     >
                         <DropdownDialog
                             className="cq-menu-dropdown"

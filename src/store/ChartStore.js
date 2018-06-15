@@ -283,7 +283,6 @@ class ChartStore {
         this.feed.onComparisonDataUpdate(this.updateComparisons);
     }
 
-
     /**
      * Get tradeTimes if not loaded yet
      * OR update the active symbols by comapring open time
@@ -329,6 +328,11 @@ class ChartStore {
         }
     }
 
+
+    removeComparison(symbolObj) {
+        this.context.stx.removeSeries(symbolObj.symbol);
+        this.updateComparisons();
+    }
 
     @action.bound changeSymbol(symbolObj) {
         if (typeof symbolObj === 'string') {

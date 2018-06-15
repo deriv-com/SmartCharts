@@ -109,6 +109,7 @@
                     @include dialog-transition();
                     opacity: 0;
                     z-index: -3;
+                    display: none;
                     transform: translateX(.5em) translateY(0) !important;
                 }
             }
@@ -116,7 +117,7 @@
     }
 }
 
- 
+
 
 
 .cq-comparison-new > .cq-menu-dropdown {
