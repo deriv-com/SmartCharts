@@ -60,7 +60,7 @@ class Tooltip extends CIQ.Marker {
                 continue;
             }
 
-            if (quote != 'undefined' && quote && quote.DT) {
+            if (quote !== undefined && quote && quote.DT) {
                 goodBar = true;
                 if (quote.High) { highPx = stx.pixelFromPrice(quote.High); }
                 if (quote.Low) { lowPx = stx.pixelFromPrice(quote.Low); }
@@ -74,8 +74,8 @@ class Tooltip extends CIQ.Marker {
             }
 
             if (
-                (stx.controls.crossX && stx.controls.crossX.style.display == 'none') ||
-                (stx.controls.crossY && stx.controls.crossY.style.display == 'none') ||
+                (stx.controls.crossX && stx.controls.crossX.style.display === 'none') ||
+                (stx.controls.crossY && stx.controls.crossY.style.display === 'none') ||
                 !(CIQ.ChartEngine.insideChart &&
                     stx.layout.crosshair &&
                     stx.displayCrosshairs &&
@@ -91,7 +91,7 @@ class Tooltip extends CIQ.Marker {
                 marker.lastBar = { };
                 return;
             }
-            if (sameBar(stx.chart.dataSegment[bar], marker.lastBar) && bar != stx.chart.dataSegment.length - 1) { return; }
+            if (sameBar(stx.chart.dataSegment[bar], marker.lastBar) && bar !== stx.chart.dataSegment.length - 1) { return; }
 
             marker.lastBar = stx.chart.dataSegment[bar];
 
@@ -119,8 +119,8 @@ class Tooltip extends CIQ.Marker {
         const lastBar = this.lastBar;
         // crosshairs are not on
         if (
-            (stx.controls.crossX && stx.controls.crossX.style.display == 'none') ||
-            (stx.controls.crossY && stx.controls.crossY.style.display == 'none')
+            (stx.controls.crossX && stx.controls.crossX.style.display === 'none') ||
+            (stx.controls.crossY && stx.controls.crossY.style.display === 'none')
         ) {
             return;
         }
@@ -131,10 +131,10 @@ class Tooltip extends CIQ.Marker {
             stx.positionMarkers();
             return;
         }
-        if (sameBar(data, lastBar) && bar != stx.chart.dataSegment.length - 1) { return; }
+        if (sameBar(data, lastBar) && bar !== stx.chart.dataSegment.length - 1) { return; }
 
-        let panel = stx.chart.panel;
-        let yAxis = panel.yAxis;
+        let { panel } = stx.chart;
+        let { yAxis } = panel;
         const dupMap = {};
         const fields = [];
         fields.push({
@@ -202,7 +202,7 @@ class Tooltip extends CIQ.Marker {
                     const subField = seriesParams.field;
                     if (!sKey) {
                         sKey = subField;
-                    } else if (subField && sKey != subField) { sKey = CIQ.createObjectChainNames(sKey, subField)[0]; }
+                    } else if (subField && sKey !== subField) { sKey = CIQ.createObjectChainNames(sKey, subField)[0]; }
                     const display = seriesParams.display || seriesParams.symbol || seriesParams.field;
                     if (sKey && !dupMap[display]) {
                         fields.push({
@@ -281,26 +281,26 @@ class Tooltip extends CIQ.Marker {
             const tuple = CIQ.existsInObjectChain(data, name);
             if (tuple) {
                 dsField = tuple.obj[tuple.member];
-            } else if (name == 'Change') { dsField = data.Close - data.iqPrevClose; }
+            } else if (name === 'Change') { dsField = data.Close - data.iqPrevClose; }
 
             const fieldName = displayName.replace(/^(Result )(.*)/, '$2');
             if ((dsField || dsField === 0) &&
-                (name == 'DT' || typeof dsField !== 'object' || dsField.Close || dsField.Close === 0)
+                (name === 'DT' || typeof dsField !== 'object' || dsField.Close || dsField.Close === 0)
             ) {
                 let fieldValue = '';
                 if (dsField.Close || dsField.Close === 0) { dsField = dsField.Close; }
-                if (dsField.constructor == Number) {
+                if (dsField.constructor === Number) {
                     if (!yAxis) { // raw value
                         fieldValue = dsField;
                     } else if (yAxis.originalPriceFormatter && yAxis.originalPriceFormatter.func) { // in comparison mode with custom formatter
                         fieldValue = yAxis.originalPriceFormatter.func(stx, panel, dsField, labelDecimalPlaces);
-                    } else if (yAxis.priceFormatter && yAxis.priceFormatter != CIQ.Comparison.priceFormat) { // using custom formatter
+                    } else if (yAxis.priceFormatter && yAxis.priceFormatter !== CIQ.Comparison.priceFormat) { // using custom formatter
                         fieldValue = yAxis.priceFormatter(stx, panel, dsField, labelDecimalPlaces);
                     } else {
                         fieldValue = stx.formatYAxisPrice(dsField, panel, labelDecimalPlaces, yAxis);
                     }
-                } else if (dsField.constructor == Date) {
-                    if (name == 'DT' && stx.controls.floatDate && stx.controls.floatDate.innerHTML) {
+                } else if (dsField.constructor === Date) {
+                    if (name === 'DT' && stx.controls.floatDate && stx.controls.floatDate.innerHTML) {
                         if (CIQ.ChartEngine.hideDates()) {
                             continue;
                         } else {
