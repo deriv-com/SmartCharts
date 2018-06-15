@@ -30,7 +30,7 @@ export default class BarrierStore {
         this._high_barrier.onPriceChanged(this._onPriceChanged.bind(this));
         this._low_barrier.onPriceChanged(this._onPriceChanged.bind(this));
 
-        this._injectionId = this.stx.append('draw', this._drawShadedArea.bind(this));
+        this._injectionId = this.stx.append('draw', this._drawShadedArea);
 
         this._setupConstrainBarrierPrices();
 
@@ -179,7 +179,7 @@ export default class BarrierStore {
         this._low_barrier.draggable = value;
     }
 
-    _drawShadedArea() {
+    @action.bound _drawShadedArea() {
         if (this._shadeState === BarrierStore.SHADE_ABOVE) {
             this._shadeAbove();
         } else if (this._shadeState === BarrierStore.SHADE_BELOW) {

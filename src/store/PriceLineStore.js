@@ -105,7 +105,7 @@ export default class PriceLineStore {
         this._initialPosition = this.top;
     }
 
-    _dragLine(e) {
+    @action.bound _dragLine(e) {
         if (!this._line) { return; }
         const newTop = this._initialPosition + e.displacementY;
         const newCenter = newTop + (this._line.offsetHeight / 2);
