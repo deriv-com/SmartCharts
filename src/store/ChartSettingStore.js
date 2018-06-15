@@ -78,7 +78,7 @@ export default class ChartSettingStore {
     @observable theme = '';
     @observable countdown = false;
 
-    restoreSetting() {
+    @action.bound restoreSetting() {
         const setting = createObjectFromLocalStorage('smartchart-setting');
 
         if (setting) {
