@@ -1,13 +1,14 @@
 import { observable, action, computed, when, reaction } from 'mobx';
 import { getTimeUnit, getIntervalInSeconds  } from './utils';
 import MenuStore from './MenuStore';
-import { chartTypes } from './ChartTypeStore';
+import { getChartTypes } from './ChartTypeStore';
 
+const chartTypes = getChartTypes();
 const notCandles = chartTypes
     .filter(t => !t.candleOnly)
     .map(t => t.id);
 
-const aggregateCharts  = chartTypes
+const aggregateCharts = chartTypes
     .filter(t => t.settingsOnClick);
 
 export default class TimeperiodStore {
