@@ -117,6 +117,7 @@ export default class BarrierStore {
     }
 
     set shadeState(shadeState) {
+        if (this._shadeState === shadeState) { return; }
         this._shadeState = shadeState;
 
         const noShade =

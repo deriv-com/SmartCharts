@@ -1,3 +1,4 @@
+import { configure } from 'mobx';
 import { // eslint-disable-line import/no-extraneous-dependencies
     SmartChart,
     // TradeStartLine,
@@ -19,6 +20,7 @@ import './test.scss';
 import './doorbell';
 import { ConnectionManager, StreamManager } from './connection';
 
+configure({ enforceActions: true });
 const getLanguageStorage = function () {
     const default_language = 'en';
     try {
