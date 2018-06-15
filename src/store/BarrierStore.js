@@ -20,6 +20,7 @@ export default class BarrierStore {
     @observable isTopShadeVisible = false;
     @observable isBottomShadeVisible = false;
     @observable hidePriceLines = false;
+    @observable lineStyle = undefined;
     _shadeState = BarrierStore.SHADE_NONE_SINGLE;
 
     constructor(mainStore) {
@@ -90,9 +91,13 @@ export default class BarrierStore {
     _onBarrierChange = null;
 
     set onBarrierChange(callback) {
-        this._onBarrierChange = callback;
-        // Immediately fire current barrier values
-        if (callback) { this._fireOnBarrierChange(); }
+        if (this._onBarrierChange !== callback) {
+            this._onBarrierChange = callback;
+            // Immediately fire current barrier values
+            if (callback) {
+                this._fireOnBarrierChange();
+            }
+        }
     }
 
     _fireOnBarrierChange() {

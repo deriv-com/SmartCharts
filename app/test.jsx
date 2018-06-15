@@ -94,6 +94,8 @@ class App extends React.Component {
             shade: barrierType,
             onBarrierChange: this.handleBarrierChange,
             relative,
+            // draggable: false,
+            lineStyle: 'dotted',
             hidePriceLines: disablePriceLines,
             high,
             low,

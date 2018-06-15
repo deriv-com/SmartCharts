@@ -112,8 +112,9 @@ barriers | Draw chart barriers. Refer to [Barriers API](#barriers-api) for usage
 | Attribute | Description |
 --------|--------------
 color | Barrier shade color
-shade | Shade type; choose between `NONE_SINGLE`, `NONE_DOUBLE`, `ABOVE`, `BELOW`, `OUTSIDE` or `BETWEEN`. Defaults to `NONE_SINGLE`
-disablePriceLines | hide/show the price lines. Defaults to `false`
+shade | Shade type; choose between `NONE_SINGLE`, `NONE_DOUBLE`, `ABOVE`, `BELOW`, `OUTSIDE` or `BETWEEN`. Defaults to `NONE_SINGLE`.
+disablePriceLines | hide/show the price lines. Defaults to `false`.
+lineStyle | Sets the style of the price lines; choose between `dotted`, `dashed`, or `solid`. Defaults to `dashed`.
 onChange | When price of high or low barrier changes (including when switched toggling `relative` or setting `high\|low`), `onChange` will pass the high and low barriers as `{ high, low }`.
 relative | Toggle between relative and absolute barriers. Defaults to `false`.
 draggable | Toggles whether users can drag the price lines and change the barrier directly from the chart. Defaults to `true`.
