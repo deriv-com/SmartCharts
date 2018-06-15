@@ -12,7 +12,7 @@ export default class ShareStore {
         this.menu = new MenuStore(mainStore);
 
         when(() => this.context, this.onContextReady);
-        reaction(() => this.menu.open, this.refereshShareLink);
+        reaction(() => this.menu.open, this.refreshShareLink);
     }
 
     get context() { return this.mainStore.chart.context; }
@@ -42,7 +42,7 @@ export default class ShareStore {
     @observable shareLink = '';
 
 
-    @action.bound refereshShareLink() {
+    @action.bound refreshShareLink() {
         if (!this.context || !this.menu.dialog.open) { return; }
 
         const layoutData = this.stx.exportLayout(true);
