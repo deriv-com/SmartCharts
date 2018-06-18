@@ -127,7 +127,7 @@ const connect_v2 = (Store, mapStoresToProps, handleProps) => {
             this.injectedComponent.displayName = `inject-${UnboxedComponent.displayName}`;
         }
         componentDidMount() {
-            if (handleProps) { handleProps(this.store, this.props); }
+            if (handleProps) { this.handlePropsAction(this.store, this.props); }
         }
 
         componentWillUnmount() {
