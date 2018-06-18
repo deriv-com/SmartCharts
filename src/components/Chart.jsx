@@ -41,49 +41,35 @@ class Chart extends Component {
     componentWillUnmount() {
         this.props.destroy();
     }
-
+    
     render() {
         const {
             DrawToolsSettingsDialog,
             StudySettingsDialog,
             children,
-            lang,
             isMobile = false,
-            theme,
             isChartAvailable,
-            setting,
+            settings,
+            chartProps,
             chartPanelTop,
             chartControlsWidgets,
             AggregateChartSettingsDialog,
-            topWidgets,
-            showCountdown = false,
+            topWidgets
         } = this.props;
 
-        const currentLang = lang || ((setting && setting.language) ? setting.language.key : 'en');
+        const currentLang = (chartProps && chartProps.language) ? chartProps.language : 'en';
         t.setLanguage(currentLang);
-        const currentPosition = `cq-chart-control-${(setting && setting.position && !isMobile) ? setting.position : 'bottom'}`;
+        const currentPosition = `cq-chart-control-${(chartProps && chartProps.position && !isMobile) ? chartProps.position : 'bottom'}`;
         const currentMode = `${isMobile ? 'smartcharts-mobile' : ''}`;
         const array = React.Children.toArray(children);
         const insideHolder = array.filter(c => !/(TradeStart)|(TradeEnd)/.test(c.type.displayName));
         const insideSubHolder = array.filter(c => /(TradeStart)|(TradeEnd)/.test(c.type.displayName));
         const renderTopWidgets = topWidgets || defaultTopWidgets;
 
-
-        const defaultTheme = (setting && setting.theme) ? setting.theme : 'light';
-        const defaultCandleCountdown = (setting && setting.countdown) ? setting.countdown : false;
-
-        // TO DO : this part should move the ChartSetting Store
-        CIQ.localStorageSetItem('smartchart-setting', JSON.stringify({
-            position: ((setting && setting.position && !isMobile) ? setting.position : 'bottom'),
-            language: currentLang,
-            theme: (typeof theme === 'string') ? theme : defaultTheme,
-            countdown: showCountdown || defaultCandleCountdown,
-        }));
-
         return (
             <cq-context
                 ref={(root) => { this.root = root; }}
-                class={`smartcharts-${(typeof theme === 'string') ? theme : defaultTheme}`}
+                class={`smartcharts-${chartProps.theme}`}
             >
                 <div className={`${currentMode} ${currentPosition}`}>
                     <div className="ciq-chart-area">
@@ -117,7 +103,7 @@ class Chart extends Component {
     }
 }
 
-export default connect(({ chart, drawTools, studies, chartSetting, chartType }) => ({
+export default connect(({ chart, drawTools, studies, chartProps, chartType }) => ({
     contextPromise: chart.contextPromise,
     init: chart.init,
     destroy: chart.destroy,
@@ -126,5 +112,5 @@ export default connect(({ chart, drawTools, studies, chartSetting, chartType }) 
     AggregateChartSettingsDialog : chartType.settingsDialog.connect(SettingsDialog),
     isChartAvailable: chart.isChartAvailable,
     chartPanelTop: chart.chartPanelTop,
-    setting: chartSetting,
+    chartProps: chartProps
 }))(Chart);

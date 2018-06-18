@@ -1,8 +1,8 @@
 import React from 'react';
 import { observable, action, computed } from 'mobx';
-import MenuStore from './MenuStore';
-import { createObjectFromLocalStorage } from '../utils';
-import { FlagIcons } from './../components/Icons.jsx';
+import MenuStore from '@binary-com/smartcharts/store/MenuStore';
+import { createObjectFromLocalStorage } from '@binary-com/smartcharts/utils';
+import { FlagIcons } from '@binary-com/smartcharts/components/Icons.jsx';
 
 export default class ChartSettingStore {
     constructor(mainStore) {
@@ -14,8 +14,9 @@ export default class ChartSettingStore {
 
     get context() { return this.mainStore.chart.context; }
     get stx() { return this.context.stx; }
-
+  
     onContextReady = () => {};
+   
     languages = [
         {
             key: 'en',
@@ -71,16 +72,20 @@ export default class ChartSettingStore {
             icon: <FlagIcons.Poland />,
         },
     ];
+
     defaultLanguage = {};
     @observable view = '';
     @observable language = '';
     @observable position = '';
-    @observable theme = '';
+    @observable theme= '';
     @observable countdown = false;
+    @observable isMobile = false;
+    @observable assetInformation = false;
 
-    @action.bound restoreSetting() {
+    restoreSetting() {
         const setting = createObjectFromLocalStorage('smartchart-setting');
-
+        this.isMobile = this.mainStore.chart.isMobile;
+        this.view = '';
         if (setting) {
             /**
              * Language
@@ -96,11 +101,14 @@ export default class ChartSettingStore {
             this.position = setting.position || 'bottom';
             this.theme = setting.theme || 'light';
             this.countdown = setting.countdown;
+            this.assetInformation = this.mainStore.assetInformation.visible;
+
         } else {
             this.language = this.defaultLanguage;
             this.position = 'bottom';
             this.theme = 'light';
             this.countdown = false;
+            this.assetInformation = true;
         }
     }
 
@@ -112,14 +120,15 @@ export default class ChartSettingStore {
             countdown :this.countdown,
         }));
     }
+
     @action.bound setView(view) {
         this.view = view || '';
     }
 
     @action.bound setLanguage(lng) {
         this.language = lng;
+        this.mainStore.chartProps.setLanguage(lng);
         this.saveSetting();
-        window.location.reload();
     }
 
     @computed get getLanguage() {
@@ -128,19 +137,26 @@ export default class ChartSettingStore {
 
     @action.bound setTheme(value) {
         this.theme = value ? 'dark' : 'light';
-        this.stx.clearStyles();
+        this.mainStore.chartProps.setTheme(value);
         this.saveSetting();
     }
+
     @action.bound setPosition(value) {
         this.position = value;
-        this.mainStore.chart.stxx.clearStyles();
+        this.mainStore.chartProps.setPosition(value);
         this.saveSetting();
-        this.mainStore.chart.updateHeight(value);
         this.menu.setOpen(false);
     }
-    @action.bound showCountdown(value) {
+
+    @action.bound setCountdown(value) {
         this.countdown = value;
-        this.mainStore.timeperiod.showCountdown(value);
+        this.mainStore.chartProps.setCountdown(value);
+        this.saveSetting();
+    }
+
+    @action.bound setAssetInformation(value) {
+        this.assetInformation = value;
+        this.mainStore.chartProps.setAssetInformation(value);
         this.saveSetting();
     }
 }

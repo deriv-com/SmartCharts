@@ -2,17 +2,18 @@
 
 import React from 'react';
 import { CSSTransition } from 'react-transition-group';
-import Menu from './Menu.jsx';
-import { connect } from '../store/Connect';
-import { Switch } from './Form.jsx';
+import Menu from '@binary-com/smartcharts/components/Menu.jsx';
+import { connect } from '@binary-com/smartcharts/store/Connect';
+import { Switch } from '@binary-com/smartcharts/components/Form.jsx';
+import ChartSettingStore from '../store/ChartSettingStore';
 import {
     SettingIcon,
     PositionLeftIcon,
     PositionBottomIcon,
     BackIcon,
     CloseIcon,
-} from './Icons.jsx';
-import '../../sass/components/_ciq-chart-setting.scss';
+} from '@binary-com/smartcharts/components/Icons.jsx';
+import '../sass/components/_ciq-chart-setting.scss';
 
 
 const ChartSetting = ({
@@ -28,7 +29,7 @@ const ChartSetting = ({
     theme,
     setTheme,
     countdown,
-    showCountdown,
+    setCountdown,
     closeMenu,
     assetInformation,
     setAssetInformation,
@@ -73,7 +74,7 @@ const ChartSetting = ({
                         <div className="ciq-action">
                             <Switch
                                 value={countdown}
-                                onChange={showCountdown}
+                                onChange={setCountdown}
                             />
                         </div>
                     </div>
@@ -153,22 +154,30 @@ const ChartSetting = ({
     );
 };
 
-export default connect(({ chartSetting: s, assetInformation: ai, chart: c }) => ({
-    Menu: s.menu.connect(Menu),
-    menuOpen: s.menu.dialog.open,
-    selectedLanguage: s.language,
-    languages: s.languages,
-    position: s.position,
-    setPosition: s.setPosition,
-    setView: s.setView,
-    view: s.view,
-    setLanguage: s.setLanguage,
-    theme: s.theme,
-    setTheme: s.setTheme,
-    countdown: s.countdown,
-    showCountdown: s.showCountdown,
-    closeMenu: s.menu.onTitleClick,
-    assetInformation: ai.visible,
-    setAssetInformation: ai.setVisible,
-    isMobile: c.isMobile,
-}))(ChartSetting);
+export default connect(
+    ChartSettingStore,
+    store => ({
+        Menu: store.menu.connect(Menu),
+        menuOpen: store.menu.dialog.open,
+        selectedLanguage: store.language,
+        languages: store.languages,
+        position: store.position,
+        setPosition: store.setPosition,
+        setView: store.setView,
+        view: store.view,
+        setLanguage: store.setLanguage,
+        theme: store.theme,
+        setTheme: store.setTheme,
+        countdown: store.countdown,
+        setCountdown: store.setCountdown,
+        closeMenu: store.menu.onTitleClick,
+        assetInformation: store.assetInformation,
+        setAssetInformation: store.setAssetInformation,
+        isMobile: store.isMobile,
+    }),
+    (store, {
+        
+    }) => {
+        
+    },
+)(ChartSetting);

@@ -11,33 +11,34 @@ import { // eslint-disable-line import/no-extraneous-dependencies,import/no-unre
     Timeperiod,
     ChartSize,
     DrawTools,
-    ChartSetting,
-    Share,
+    Share
 } from '@binary-com/smartcharts'; // eslint-disable-line import/no-unresolved
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { configure } from 'mobx';
+import ChartSetting from './components/ChartSetting.jsx'
 import './app.scss';
 import './doorbell';
 import { ConnectionManager, StreamManager } from './connection';
 
 configure({ enforceActions: true });
 
-const getLanguageStorage = function () {
-    const default_language = 'en';
+const getLocalStorage = function () {
+    const default_setting =  { language : 'en' , position : 'bottom' , theme : 'light' , countdown : 'false'};
     try {
         let setting_string = CIQ.localStorage.getItem('smartchart-setting'),
             setting = JSON.parse(setting_string !== '' ? setting_string : '{}');
-
-        return setting.language || default_language;
+        return setting;
     } catch (e) {
-        return default_language;
+        return default_setting;
     }
 };
 
+const settings = getLocalStorage();
+
 const connectionManager = new ConnectionManager({
     appId: 12812,
-    language: getLanguageStorage(),
+    language: settings.language,
     endpoint: 'wss://ws.binaryws.com/websockets/v3',
 });
 
@@ -62,17 +63,17 @@ const requestAPI = connectionManager.send.bind(connectionManager);
 const requestSubscribe = streamManager.subscribe.bind(streamManager);
 const requestForget = streamManager.forget.bind(streamManager);
 const shareOrigin = window.location.href.split('?')[0];
-
 const App = () => (
-    <SmartChart
-        onSymbolChange={symbol => console.log('Symbol has changed to:', symbol)}
-        isMobile={CIQ.isMobile}
-        chartControlsWidgets={renderControls}
-        requestAPI={requestAPI}
-        requestSubscribe={requestSubscribe}
-        requestForget={requestForget}
-        shareOrigin={shareOrigin}
-    />
+        <SmartChart
+            onSymbolChange={symbol => console.log('Symbol has changed to:', symbol)}
+            isMobile={CIQ.isMobile}
+            chartControlsWidgets={renderControls}
+            requestAPI={requestAPI}
+            requestSubscribe={requestSubscribe}
+            requestForget={requestForget}
+            shareOrigin={shareOrigin}
+            settings={settings}
+        />
 );
 
 ReactDOM.render(

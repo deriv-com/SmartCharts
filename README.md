@@ -91,7 +91,6 @@ theme | Sets the chart theme. themes are (`dark\|light`), and default is `light`
 initialSymbol | Sets the initial symbol.
 isMobile | Switch between mobile or desktop view. Defaults to `false`.
 shareOrigin | Sets the origin of the generated share link. Defaults to `https://charts.binary.com`.
-showCountdown | Show Countdown. Defaults to `false`.
 
 ### Customising Components
 
