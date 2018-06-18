@@ -132,9 +132,6 @@ export default class TimeperiodStore {
 
     @computed get timeUnit_display() {
         if (!this.timeUnit) { return; }
-        if (this.timeUnit === 'minute') {
-            return t.translate('Min');
-        }
         // Convert to camel case:
         return t.translate(this.timeUnit.replace(/(\w)/, str => str.toUpperCase()));
     }

@@ -311,9 +311,6 @@ msgstr ""
 msgid "right-click to manage"
 msgstr ""
 
-msgid "Min"
-msgstr ""
-
 msgid "Chart data is not available for this symbol."
 msgstr ""
 
