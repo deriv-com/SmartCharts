@@ -14,7 +14,7 @@
     @include border-radius(2px);
     @include box-sizing(border-box);
     .ciq-menu {
-        width: 90px;
+        width: 100px;
         line-height: 2.1em;
         > span {
             margin: 0;
@@ -77,7 +77,7 @@
         bottom: 50%;
         transform: translateY(50%);
         height: 100%;
-        width: 90px;
+        width: 100px;
         padding: 5px 0;
         flex-flow: column;
         @include themify($themes) {
@@ -209,6 +209,30 @@
         }
         .ic-priod {
             padding : 6px 0px !important;
+        }
+    }
+}
+@media only screen and (min-width: 850px) {
+    .cq-chart-controls {
+        .ciq-menu {
+            width: 80px;
+            .cq-menu-btn {
+                > .ic-icon{
+                    padding: .35em 0em;
+                }
+            }
+        }
+    }
+}
+@media only screen and (min-width: 1200px) {
+    .cq-chart-controls {
+        .ciq-menu {
+            width: 100px;
+            .cq-menu-btn {
+                > .ic-icon{
+                    padding: .35em 0.5em;
+                }
+            }
         }
     }
 }
