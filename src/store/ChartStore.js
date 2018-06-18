@@ -40,7 +40,7 @@ class ChartStore {
     @observable chartPanelTop = '0px';
     @observable chartHeight;
     @observable chartContainerHeight;
-    @observable isMobile = false;
+    isMobile = false;
 
     @action.bound setActiveSymbols(activeSymbols) {
         this.activeSymbols = this.processSymbols(activeSymbols);
@@ -183,7 +183,7 @@ class ChartStore {
         const holderStyle = stxx.chart.panel.holder.style;
         stxx.addEventListener('layout', () => {
             this.saveLayout();
-            this.chartPanelTop = holderStyle.top;
+            this.setChartPanelTop(holderStyle.top);
         });
         stxx.addEventListener('symbolChange', this.saveLayout.bind(this));
         stxx.addEventListener('drawing', this.saveDrawings.bind(this));
@@ -239,19 +239,13 @@ class ChartStore {
                 if (initialSymbol && !(layoutData && layoutData.symbols)) {
                     this.changeSymbol(initialSymbol);
                 } else if (stxx.chart.symbol) {
-                    this.currentActiveSymbol = stxx.chart.symbolObject;
-                    stxx.chart.yAxis.decimalPlaces = stxx.chart.symbolObject.decimal_places;
-                    this.categorizedSymbols = this.categorizeActiveSymbols();
+                    this.setCurrentActiveSymbols(stxx);
                     if (onSymbolChange) { onSymbolChange(this.currentActiveSymbol); }
                 } else {
                     this.changeSymbol(this.defaultSymbol);
                 }
 
-                this.context = context;
-                this.contextPromise.resolve(this.context);
-                this.resizeScreen();
-                this.chartPanelTop = holderStyle.top;
-
+                this.setLayoutData(context, holderStyle.top);
                 /**
                  * Updating market close status each 10 minute
                  */
@@ -332,6 +326,25 @@ class ChartStore {
     removeComparison(symbolObj) {
         this.context.stx.removeSeries(symbolObj.symbol);
         this.updateComparisons();
+    }
+    @action.bound setLayoutData(context, top) {
+        this.context = context;
+        this.contextPromise.resolve(this.context);
+        this.resizeScreen();
+        this.setChartPanelTop(top);
+    }
+
+    @action.bound setCurrentActiveSymbols(stxx) {
+        this.currentActiveSymbol = stxx.chart.symbolObject;
+        stxx.chart.yAxis.decimalPlaces = stxx.chart.symbolObject.decimal_places;
+        this.categorizedSymbols = this.categorizeActiveSymbols();
+    }
+    @action.bound setChartAvailability(status) {
+        this.isChartAvailable = status;
+    }
+
+    @action.bound setChartPanelTop(top) {
+        this.chartPanelTop = top;
     }
 
     @action.bound changeSymbol(symbolObj) {

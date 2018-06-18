@@ -22,7 +22,7 @@ export default class TimeperiodStore {
 
     @observable timeUnit = null;
     @observable interval = null;
-    @observable remain = null;
+    remain = null;
 
     onContextReady = () => {
         const { timeUnit, interval } = this.context.stx.layout;

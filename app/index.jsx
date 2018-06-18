@@ -16,14 +16,17 @@ import { // eslint-disable-line import/no-extraneous-dependencies,import/no-unre
 } from '@binary-com/smartcharts'; // eslint-disable-line import/no-unresolved
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { configure } from 'mobx';
 import './app.scss';
 import './doorbell';
 import { ConnectionManager, StreamManager } from './connection';
 
+configure({ enforceActions: true });
+
 const getLanguageStorage = function () {
     const default_language = 'en';
     try {
-        let setting_string = CIQ.localStorage.getItem('smartchart-setting'),
+        const setting_string = CIQ.localStorage.getItem('smartchart-setting'),
             setting = JSON.parse(setting_string !== '' ? setting_string : '{}');
 
         return setting.language || default_language;

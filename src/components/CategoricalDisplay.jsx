@@ -66,8 +66,9 @@ const CategoricalDisplay = ({
             key={k}
         >
             {renderLeft(item)}
+
             <div className="right">
-                {(item.dataObject && item.dataObject.exchange_is_open) ? '' : <span className="closed-market">{t.translate('CLOSED')}</span>}
+                {(item.dataObject && (item.dataObject.exchange_is_open === undefined || item.dataObject.exchange_is_open)) ? '' : <span className="closed-market">{t.translate('CLOSED')}</span>}
                 {renderFavorite(item)}
             </div>
         </div>);
