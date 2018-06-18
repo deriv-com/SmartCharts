@@ -58,26 +58,30 @@
 			width: 100%;
 			display: flex;
 			flex-direction: row;
+			@include themify($themes) {background: themed('defaultMain');}
 		}
 		.timeUnit {
 			display: flex;
 			flex-direction: column;
 			width: 88px;
 			height: 100%;
-			@include themify($themes) {border-right: 1px solid themed('controlText');}
 			span {
 				display: block;
 				height: 40px;
 				padding-left: 16px;
 				line-height: 40px;
 				font-weight: 300;
-				@include themify($themes) {color: themed('controlText');}
+				@include themify($themes) {
+					color: themed('controlText');
+					border-right: 1px solid themed('controlText');
+				}
 				&.selected {
+					font-weight: 500;
 					@include themify($themes) {
 						border-right: 2px solid themed('activeColor');
 						background: themed('controlBgActive');
+						color: themed('activeColor');
 					}
-					font-weight: 500;
 				}
 			}
 		}
@@ -101,12 +105,13 @@
 					text-align: center;
 					@include themify($themes) {color: themed('controlText');}
 					&.selected {
+						line-height: 24px;
 						@include border-radius(4px);
 						@include themify($themes) {
 							box-shadow: inset 0 0 0 1px themed('activeColor');
-							background: themed('controlBgActive');
+							background: themed('activeColor');
+							color: themed('defaultMain');
 						}
-						line-height: 24px;
 					}
 				}
 			}
