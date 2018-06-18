@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Italian\n"
 "Language: it_IT\n"
-"PO-Revision-Date: 2018-06-18 03:41-0400\n"
+"PO-Revision-Date: 2018-06-18 03:51-0400\n"
 
 msgid "Favorites"
 msgstr "Preferiti"
@@ -148,7 +148,7 @@ msgid "Renko"
 msgstr "Renko"
 
 msgid "Range Bars"
-msgstr ""
+msgstr "Range Bars"
 
 msgid "Point & Figure"
 msgstr ""
@@ -157,7 +157,7 @@ msgid "Reversal Percentage"
 msgstr ""
 
 msgid "Range"
-msgstr ""
+msgstr "Intervallo"
 
 msgid "Price Lines"
 msgstr ""
