@@ -2,8 +2,7 @@ import { observable, action } from 'mobx';
 import { connect } from './Connect';
 
 let activeDialog;
-let validOperation = true;
-
+let timer;
 export default class DialogStore {
     constructor(mainStore) {
         this.mainStore = mainStore;
@@ -12,24 +11,37 @@ export default class DialogStore {
     @observable open = false;
 
     @action.bound setOpen(val) {
-        if (this.open !== val && validOperation) {
-            if (val === true) {
-                validOperation = false;
-                setTimeout(() => {
-                    if (val === true) { // close active dialog.
-                        if (activeDialog) { activeDialog.setClose(); }
-                        activeDialog = this;
-                    } else {
-                        activeDialog = undefined;
-                    }
-                    this.open = val;
-                    if (this.open) { setTimeout(() => this.register(), 100); } else { this.unregister(); }
-                    validOperation = true;
-                }, 300);
-            } else {
-                this.setClose();
-            }
+        if (this.open !== val && val === true) {
+            clearTimeout(timer);
+            timer = setTimeout(() => {
+                this.open = val;
+                if (this.open) { setTimeout(() => this.register(), 100); } else { this.unregister(); }
+                if (activeDialog) { activeDialog.setClose(); }
+                activeDialog = this;
+            }, 100);
+        } else if (this.open !== val && val === false) {
+            this.setClose();
         }
+
+        // if (this.open !== val) {
+        //     if (val === true) {
+        //         clearTimeout(timer);
+        //         validOperation = false;
+        //         timer = setTimeout(() => {
+        //             if (val === true) { // close active dialog.
+        //                 if (activeDialog) { activeDialog.setClose(); }
+        //                 activeDialog = this;
+        //             } else {
+        //                 activeDialog = undefined;
+        //             }
+        //             this.open = val;
+        //             if (this.open) { setTimeout(() => this.register(), 100); } else { this.unregister(); }
+        //             validOperation = true;
+        //         }, 50);
+        //     } else {
+        //         this.setClose();
+        //     }
+        // }
     }
     @action.bound setClose() {
         this.open = false;
