@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Italian\n"
 "Language: it_IT\n"
-"PO-Revision-Date: 2018-06-18 03:31-0400\n"
+"PO-Revision-Date: 2018-06-18 03:41-0400\n"
 
 msgid "Favorites"
 msgstr "Preferiti"
@@ -142,10 +142,10 @@ msgid "Kagi"
 msgstr "Kagi"
 
 msgid "Line Break"
-msgstr ""
+msgstr "Interruzione di riga"
 
 msgid "Renko"
-msgstr ""
+msgstr "Renko"
 
 msgid "Range Bars"
 msgstr ""
