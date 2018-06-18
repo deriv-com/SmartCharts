@@ -132,11 +132,11 @@ export default class TimeperiodStore {
 
     @computed get timeUnit_display() {
         if (!this.timeUnit) { return; }
-        let temp = this.timeUnit;
-        if (temp.length > 4) {
-            temp = (temp).slice(0, 3);
+        if (this.timeUnit === 'minute') {
+            return t.translate('Min');
         }
-        return temp.replace(/(\w)/, str => str.toUpperCase());
+        // Convert to camel case:
+        return t.translate(this.timeUnit.replace(/(\w)/, str => str.toUpperCase()));
     }
 
     @computed get interval_display() {
