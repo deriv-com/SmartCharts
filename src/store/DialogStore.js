@@ -2,6 +2,7 @@ import { observable, action } from 'mobx';
 import { connect } from './Connect';
 
 let activeDialog;
+let validOperation = true;
 
 export default class DialogStore {
     constructor(mainStore) {
@@ -11,18 +12,29 @@ export default class DialogStore {
     @observable open = false;
 
     @action.bound setOpen(val) {
-        if (this.open !== val) {
-            this.open = val;
-            setTimeout(() => {
-                if (this.open === true) { // close active dialog.
-                    if (activeDialog) { activeDialog.setOpen(false); }
-                    activeDialog = this;
-                } else {
-                    activeDialog = undefined;
-                }
-                if (this.open) { setTimeout(() => this.register(), 100); } else { this.unregister(); }
-            }, 200);
+        if (this.open !== val && validOperation) {
+            if (val === true) {
+                validOperation = false;
+                setTimeout(() => {
+                    if (val === true) { // close active dialog.
+                        if (activeDialog) { activeDialog.setClose(); }
+                        activeDialog = this;
+                    } else {
+                        activeDialog = undefined;
+                    }
+                    this.open = val;
+                    if (this.open) { setTimeout(() => this.register(), 100); } else { this.unregister(); }
+                    validOperation = true;
+                }, 300);
+            } else {
+                this.setClose();
+            }
         }
+    }
+    @action.bound setClose() {
+        this.open = false;
+        this.unregister();
+        activeDialog = undefined;
     }
 
     handleClickOutside = (e) => {
