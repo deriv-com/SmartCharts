@@ -13,15 +13,16 @@ export default class DialogStore {
     @action.bound setOpen(val) {
         if (this.open !== val) {
             this.open = val;
-            if (this.open) { setTimeout(() => this.register(), 100); } else { this.unregister(); }
+            setTimeout(() => {
+                if (this.open === true) { // close active dialog.
+                    if (activeDialog) { activeDialog.setOpen(false); }
+                    activeDialog = this;
+                } else {
+                    activeDialog = undefined;
+                }
+                if (this.open) { setTimeout(() => this.register(), 100); } else { this.unregister(); }
+            }, 200);
         }
-        if (this.open === true) { // close active dialog.
-            if (activeDialog) { activeDialog.setOpen(false); }
-            activeDialog = this;
-        } else {
-            activeDialog = undefined;
-        }
-        console.log(val, this.open, activeDialog);
     }
 
     handleClickOutside = (e) => {
