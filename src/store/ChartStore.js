@@ -153,7 +153,7 @@ class ChartStore {
         });
 
         // Monkey patch a custom positionMarkers function because the default selects only
-        // the static placementFunction from CrosshairStore
+        // the static placementFunction from CrosshairStore; this causes other markers not to get placed.
         stxx.positionMarkers = function () {
             const self = this;
             if (!self.markerHelper) return;
