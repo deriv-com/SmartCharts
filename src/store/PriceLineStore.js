@@ -17,12 +17,16 @@ export default class PriceLineStore {
 
     constructor(mainStore) {
         this.mainStore = mainStore;
-        this._emitter = new EventEmitter();
+        this._emitter = new EventEmitter({ emitDelay: 0 });
         when(() => this.context, this.onContextReady);
     }
 
+    destructor() {
+        this.stx.removeInjection(this._injectionId);
+    }
+
     onContextReady = () => {
-        this.stx.append('draw', this._draw.bind(this));
+        this._injectionId = this.stx.append('draw', this._draw.bind(this));
     };
 
     init = () => {
@@ -59,13 +63,10 @@ export default class PriceLineStore {
         if (this._relative === value) { return; }
 
         this._relative = value;
-        const currentPrice = this.stx.currentQuote().Close;
-
-        if (this._relative) {
-            this._price -= currentPrice; // absolute to relative
-        } else {
-            this._price += currentPrice; // relative to absolute
-        }
+        // convert between relative and absolute
+        let currentPrice = this.stx.currentQuote().Close;
+        if (this._relative) { currentPrice = -currentPrice; }
+        this.price = +(this._price + currentPrice).toFixed(this.pip);
     }
 
     get context() { return this.mainStore.chart.context; }
@@ -78,16 +79,13 @@ export default class PriceLineStore {
         this._priceConstrainer = value;
     }
 
-    @computed get priceDisplay() {
-        return this.price.toFixed(this.pip);
-    }
-
     get realPrice() {
         return this.relative ? +(this.stx.currentQuote().Close + this.price).toFixed(this.pip) : this.price;
     }
 
     @action.bound setDragLine(el) {
         this._line = el;
+        if (this._line) { this._draw(); }
     }
 
     _modalBegin() {
@@ -101,13 +99,13 @@ export default class PriceLineStore {
         this.stx.editingAnnotation = false;
     }
 
-    _startDrag() {
+    @action.bound _startDrag() {
         this._modalBegin();
         this.isDragging = true;
         this._initialPosition = this.top;
     }
 
-    _dragLine(e) {
+    @action.bound _dragLine(e) {
         if (!this._line) { return; }
         const newTop = this._initialPosition + e.displacementY;
         const newCenter = newTop + (this._line.offsetHeight / 2);
@@ -116,10 +114,10 @@ export default class PriceLineStore {
         if (this._priceConstrainer) { newPrice = this._priceConstrainer(newPrice); }
         if (this.relative) { newPrice -= this.stx.currentQuote().Close; }
 
-        this.price = this._snapPrice(newPrice);
+        this.price = newPrice;
     }
 
-    _endDrag() {
+    @action.bound _endDrag() {
         this._modalEnd();
         this.isDragging = false;
     }
@@ -131,26 +129,16 @@ export default class PriceLineStore {
         );
     }
 
-    _snapPrice(price) {
-        // snap the limit price to the desired interval if one defined
-        let minTick = this.chart.yAxis.minimumPriceTick;
-        if (!minTick) { minTick = 0.00000001; } // maximum # places
-        const numToRoundTo = 1 / minTick;
-        price = Math.round(price * numToRoundTo) / numToRoundTo;
-
-        return price;
-    }
-
     _priceFromLocation(y) {
         const price = this.stx.valueFromPixel(
             y + this.chart.panel.top,
             this.chart.panel,
         );
 
-        return this._snapPrice(price);
+        return price;
     }
 
-    _positionAtPrice(price) {
+    @action.bound _positionAtPrice(price) {
         let top = this._locationFromPrice(price);
         top -= (this._line.offsetHeight / 2);
 
@@ -172,7 +160,7 @@ export default class PriceLineStore {
             this.offScreen = false;
         }
 
-        this.top = top;
+        this.top = top | 0;
     }
 
     _draw() {
@@ -186,7 +174,7 @@ export default class PriceLineStore {
     }
 
     connect = connect(() => ({
-        priceDisplay: this.priceDisplay,
+        priceDisplay: this._price,
         visible: this.visible,
         setDragLine: this.setDragLine,
         className: this.className,
