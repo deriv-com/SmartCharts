@@ -32,16 +32,12 @@ class Tooltip extends CIQ.Marker {
         this.showSeries = true;
         this.showStudies = true;
 
-        CIQ.ChartEngine.prototype.append('undisplayCrosshairs', () => {
-            this.hide();
-            this.lastBar = {};
-        });
-        CIQ.ChartEngine.prototype.append('deleteHighlighted', function () {
+        this.stx.append('deleteHighlighted', function () {
             this.lastBar = {};
             this.headsUpHR();
         });
-        CIQ.ChartEngine.prototype.append('headsUpHR', this.renderFunction);
-        CIQ.ChartEngine.prototype.append('createDataSegment', this.renderFunction);
+        this.stx.append('headsUpHR', this.renderFunction);
+        this.stx.append('createDataSegment', this.renderFunction);
     }
 
     // Position the crosshair tooltip
