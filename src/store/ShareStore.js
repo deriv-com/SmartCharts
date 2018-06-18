@@ -11,7 +11,7 @@ export default class ShareStore {
         this.mainStore = mainStore;
         this.menu = new MenuStore(mainStore, { route:'share' });
         when(() => this.context, this.onContextReady);
-        reaction(() => this.menu.open, this.refereshShareLink);
+        reaction(() => this.menu.open, this.refreshShareLink);
     }
 
     get context() { return this.mainStore.chart.context; }
@@ -29,7 +29,7 @@ export default class ShareStore {
     defaultCopyTooltipText = t.translate('Copy to clipboard');
     @observable copyTooltip = this.defaultCopyTooltipText;
     @action.bound resetCopyTooltip() { this.copyTooltip = this.defaultCopyTooltipText; }
-    onCopyDone = (successful) => {
+    @action.bound onCopyDone(successful) {
         this.copyTooltip = successful ? t.translate('Copied!') : t.translate('Failed!');
     }
     bitlyUrl = 'https://api-ssl.bitly.com/v3';
@@ -38,14 +38,10 @@ export default class ShareStore {
     @observable urlGenerated = false;
     @observable shortUrlFailed = false;
     @observable isLoadingPNG = false;
-
     @observable shareLink = '';
 
-    fixedEncodeURIComponent(str) {
-        return encodeURIComponent(str).replace(/[!'()*]/g, c => `%${c.charCodeAt(0).toString(16)}`);
-    }
-    refereshShareLink = () => {
-        const self = this;
+
+    @action.bound refreshShareLink() {
         if (!this.context || !this.menu.dialog.open) { return; }
 
         const layoutData = this.stx.exportLayout(true);
@@ -64,21 +60,24 @@ export default class ShareStore {
         });
 
         hashPromise
-            .then((hash) => {
-                if (hash) {
-                    self.shareLink = `https://bit.ly/${hash}`;
-                    self.urlGenerated = true;
-                } else {
-                    self.shortUrlFailed = true;
-                    self.urlGenerated = false;
-                }
-                self.loading = false;
-            })
-            .catch(() => {
-                self.loading = false;
-                self.urlGenerated = false;
-            });
+            .then(this.onHashSuccess)
+            .catch(this.onHashFail);
     }
+    @action.bound onHashSuccess(hash) {
+        if (hash) {
+            this.loading = false;
+            this.urlGenerated = true;
+            this.shareLink = `https://bit.ly/${hash}`;
+        } else {
+            this.shortUrlFailed = true;
+            this.onHashFail();
+        }
+    }
+    @action.bound onHashFail() {
+        this.loading = false;
+        this.urlGenerated = false;
+    }
+
     shortenBitlyAsync(payload, hash) {
         const { href } = window.location;
         let origin = (this.shareOrigin && href.startsWith(this.shareOrigin)) ? href : this.shareOrigin;
