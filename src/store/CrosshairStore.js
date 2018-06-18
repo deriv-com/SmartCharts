@@ -1,10 +1,11 @@
-import { observable, action, when } from 'mobx';
+import { action, observable, when } from 'mobx';
 import { sameBar } from './utils';
 
 class Tooltip extends CIQ.Marker {
     get showOhl() {
         return this.stx.layout.timeUnit !== 'second';
     }
+
     constructor({
         stx,
         node,
@@ -19,11 +20,12 @@ class Tooltip extends CIQ.Marker {
             chartContainer: true,
             label: 'tooltip',
         });
+
         this.stx = stx;
         this.setRows = setRows;
         this.show = show;
         this.hide = hide;
-        this.lastBar = { };
+        this.lastBar = {};
 
         this.className = 'CIQ.Marker.Tooltip';
         this.showChange = false;
@@ -32,89 +34,25 @@ class Tooltip extends CIQ.Marker {
 
         CIQ.ChartEngine.prototype.append('undisplayCrosshairs', () => {
             this.hide();
-            this.lastBar = { };
+            this.lastBar = {};
         });
         CIQ.ChartEngine.prototype.append('deleteHighlighted', function () {
-            this.lastBar = { };
+            this.lastBar = {};
             this.headsUpHR();
         });
         CIQ.ChartEngine.prototype.append('headsUpHR', this.renderFunction);
         CIQ.ChartEngine.prototype.append('createDataSegment', this.renderFunction);
     }
 
-    static placementFunction(params) {
-        const showOverBarOnly = false;
-        const offset = 30;
-        const stx = params.stx;
-        for (let i = 0; i < params.arr.length; i++) {
-            const marker = params.arr[i];
-            const bar = stx.barFromPixel(stx.cx);
-            const quote = stx.chart.dataSegment[bar];
-            let goodBar;
-            let overBar = true;
-            let highPx,
-                lowPx;
+    // Position the crosshair tooltip
+    static placementFunction() {
 
-            // Do not process anything other than the actual tooltip.
-            if (marker.className !== 'CIQ.Marker.Tooltip') {
-                continue;
-            }
-
-            if (quote !== undefined && quote && quote.DT) {
-                goodBar = true;
-                if (quote.High) { highPx = stx.pixelFromPrice(quote.High); }
-                if (quote.Low) { lowPx = stx.pixelFromPrice(quote.Low); }
-                if (!stx.highLowBars[stx.layout.chartType]) {
-                    if (quote.Close) {
-                        highPx = stx.pixelFromPrice(quote.Close) - 15;
-                        lowPx = stx.pixelFromPrice(quote.Close) + 15;
-                    }
-                }
-                if (showOverBarOnly && !(stx.cy >= highPx && stx.cy <= lowPx)) { overBar = false; }
-            }
-
-            if (
-                (stx.controls.crossX && stx.controls.crossX.style.display === 'none') ||
-                (stx.controls.crossY && stx.controls.crossY.style.display === 'none') ||
-                !(CIQ.ChartEngine.insideChart &&
-                    stx.layout.crosshair &&
-                    stx.displayCrosshairs &&
-                    !stx.overXAxis &&
-                    !stx.overYAxis &&
-                    !stx.openDialog &&
-                    !stx.activeDrawing &&
-                    !stx.grabbingScreen &&
-                    goodBar &&
-                    overBar)
-            ) {
-                marker.hide();
-                marker.lastBar = { };
-                return;
-            }
-            if (sameBar(stx.chart.dataSegment[bar], marker.lastBar) && bar !== stx.chart.dataSegment.length - 1) { return; }
-
-            marker.lastBar = stx.chart.dataSegment[bar];
-
-            let left = null,
-                right = null;
-            if (parseInt(getComputedStyle(marker.node).width, 10) + offset < CIQ.ChartEngine.crosshairX) {
-                left = 'auto';
-                right = Math.round(stx.container.clientWidth - stx.pixelFromBar(bar) + offset);
-            } else {
-                left = Math.round(stx.pixelFromBar(bar) + offset);
-                right = 'auto';
-            }
-            const top = Math.round(CIQ.ChartEngine.crosshairY - stx.top - parseInt(getComputedStyle(marker.node).height, 10) / 2);
-            marker.show({
-                left,
-                right,
-                top,
-            });
-        }
-        stx.doDisplayCrosshairs();
     }
 
-    renderFunction = () => {
+    @action.bound renderFunction() {
+        // if no tooltip exists, then skip
+        if (this.state !== 2) return;
+
         const stx = this.stx;
         const lastBar = this.lastBar;
         // crosshairs are not on
@@ -128,10 +66,12 @@ class Tooltip extends CIQ.Marker {
         const bar = stx.barFromPixel(stx.cx);
         const data = stx.chart.dataSegment[bar];
         if (!data) {
-            stx.positionMarkers();
+            this.hide();
             return;
         }
-        if (sameBar(data, lastBar) && bar !== stx.chart.dataSegment.length - 1) { return; }
+        if (sameBar(data, lastBar) && bar !== stx.chart.dataSegment.length - 1) {
+            return;
+        }
 
         let { panel } = stx.chart;
         let { yAxis } = panel;
@@ -194,7 +134,9 @@ class Tooltip extends CIQ.Marker {
                 const rendererToDisplay = renderers[renderer];
                 panel = stx.panels[rendererToDisplay.params.panel];
                 yAxis = rendererToDisplay.params.yAxis;
-                if (!yAxis && rendererToDisplay.params.shareYAxis) { yAxis = panel.yAxis; }
+                if (!yAxis && rendererToDisplay.params.shareYAxis) {
+                    yAxis = panel.yAxis;
+                }
                 for (let id = 0; id < rendererToDisplay.seriesParams.length; id++) {
                     const seriesParams = rendererToDisplay.seriesParams[id];
                     // if a series has a symbol and a field then it maybe a object chain
@@ -202,7 +144,9 @@ class Tooltip extends CIQ.Marker {
                     const subField = seriesParams.field;
                     if (!sKey) {
                         sKey = subField;
-                    } else if (subField && sKey !== subField) { sKey = CIQ.createObjectChainNames(sKey, subField)[0]; }
+                    } else if (subField && sKey !== subField) {
+                        sKey = CIQ.createObjectChainNames(sKey, subField)[0];
+                    }
                     const display = seriesParams.display || seriesParams.symbol || seriesParams.field;
                     if (sKey && !dupMap[display]) {
                         fields.push({
@@ -267,13 +211,17 @@ class Tooltip extends CIQ.Marker {
                     // If a study panel, use yAxis settings to determine decimal places
                     if (yAxis.decimalPlaces || yAxis.decimalPlaces === 0) {
                         labelDecimalPlaces = yAxis.decimalPlaces;
-                    } else if (yAxis.maxDecimalPlaces || yAxis.maxDecimalPlaces === 0) { labelDecimalPlaces = yAxis.maxDecimalPlaces; }
+                    } else if (yAxis.maxDecimalPlaces || yAxis.maxDecimalPlaces === 0) {
+                        labelDecimalPlaces = yAxis.maxDecimalPlaces;
+                    }
                 } else {
                     // If a chart panel, then always display at least the number of decimal places as calculated by masterData (panel.chart.decimalPlaces)
                     // but if we are zoomed to high granularity then expand all the way out to the y-axis significant digits (panel.yAxis.printDecimalPlaces)
                     labelDecimalPlaces = Math.max(yAxis.printDecimalPlaces, panel.chart.decimalPlaces);
                     // ... and never display more decimal places than the symbol is supposed to be quoting at
-                    if (yAxis.maxDecimalPlaces || yAxis.maxDecimalPlaces === 0) { labelDecimalPlaces = Math.min(labelDecimalPlaces, yAxis.maxDecimalPlaces); }
+                    if (yAxis.maxDecimalPlaces || yAxis.maxDecimalPlaces === 0) {
+                        labelDecimalPlaces = Math.min(labelDecimalPlaces, yAxis.maxDecimalPlaces);
+                    }
                 }
             }
             let dsField = null;
@@ -281,14 +229,18 @@ class Tooltip extends CIQ.Marker {
             const tuple = CIQ.existsInObjectChain(data, name);
             if (tuple) {
                 dsField = tuple.obj[tuple.member];
-            } else if (name === 'Change') { dsField = data.Close - data.iqPrevClose; }
+            } else if (name === 'Change') {
+                dsField = data.Close - data.iqPrevClose;
+            }
 
             const fieldName = displayName.replace(/^(Result )(.*)/, '$2');
             if ((dsField || dsField === 0) &&
                 (name === 'DT' || typeof dsField !== 'object' || dsField.Close || dsField.Close === 0)
             ) {
                 let fieldValue = '';
-                if (dsField.Close || dsField.Close === 0) { dsField = dsField.Close; }
+                if (dsField.Close || dsField.Close === 0) {
+                    dsField = dsField.Close;
+                }
                 if (dsField.constructor === Number) {
                     if (!yAxis) { // raw value
                         fieldValue = dsField;
@@ -324,7 +276,73 @@ class Tooltip extends CIQ.Marker {
             }
         }
         this.setRows(rows);
-        this.render();
+
+        const showOverBarOnly = false;
+        const offset = 30;
+        const marker = this;
+
+        const quote = stx.chart.dataSegment[bar];
+        let goodBar;
+        let overBar = true;
+        let highPx,
+            lowPx;
+
+
+        if (quote !== undefined && quote && quote.DT) {
+            goodBar = true;
+            if (quote.High) {
+                highPx = stx.pixelFromPrice(quote.High);
+            }
+            if (quote.Low) {
+                lowPx = stx.pixelFromPrice(quote.Low);
+            }
+            if (!stx.highLowBars[stx.layout.chartType]) {
+                if (quote.Close) {
+                    highPx = stx.pixelFromPrice(quote.Close) - 15;
+                    lowPx = stx.pixelFromPrice(quote.Close) + 15;
+                }
+            }
+            if (showOverBarOnly && !(stx.cy >= highPx && stx.cy <= lowPx)) {
+                overBar = false;
+            }
+        }
+
+        if (!(CIQ.ChartEngine.insideChart &&
+                stx.layout.crosshair &&
+                stx.displayCrosshairs &&
+                !stx.overXAxis &&
+                !stx.overYAxis &&
+                !stx.openDialog &&
+                !stx.activeDrawing &&
+                !stx.grabbingScreen &&
+                goodBar &&
+                overBar)
+        ) {
+            marker.hide();
+            marker.lastBar = {};
+            return;
+        }
+        if (sameBar(stx.chart.dataSegment[bar], marker.lastBar) && bar !== stx.chart.dataSegment.length - 1) {
+            return;
+        }
+
+        marker.lastBar = stx.chart.dataSegment[bar];
+
+        let left = null,
+            right = null;
+        if (marker.node.offsetWidth + offset < CIQ.ChartEngine.crosshairX) {
+            left = 'auto';
+            right = (stx.container.clientWidth - stx.pixelFromBar(bar) + offset) | 0;
+        } else {
+            left = (stx.pixelFromBar(bar) + offset) | 0;
+            right = 'auto';
+        }
+        const top = (CIQ.ChartEngine.crosshairY - stx.top - (marker.node.offsetHeight >> 1)) | 0;
+        marker.show({
+            left,
+            right,
+            top,
+        });
     }
 }
 
@@ -334,8 +352,13 @@ class CrosshairStore {
         when(() => this.context, this.onContextReady);
     }
 
-    get context() { return this.mainStore.chart.context; }
-    get stx() { return this.context.stx; }
+    get context() {
+        return this.mainStore.chart.context;
+    }
+
+    get stx() {
+        return this.context.stx;
+    }
 
 
     @observable top = 0;
@@ -346,12 +369,16 @@ class CrosshairStore {
     node = null;
     @observable state = 0;
 
-    @action.bound setRows(rows) { this.rows = rows; }
+    @action.bound setRows(rows) {
+        this.rows = rows;
+    }
+
     @action.bound hide() {
         this.top = 0;
         this.left = -50000;
         this.right = 'auto';
     }
+
     @action.bound show({ top, left, right }) {
         this.top = top;
         this.left = left;
@@ -372,6 +399,7 @@ class CrosshairStore {
                 hide: this.hide,
                 show: this.show,
             });
+            this.tooltip.state = this.state;
         }
     };
 
@@ -383,6 +411,7 @@ class CrosshairStore {
 
     @action.bound toggleState() {
         this.state = (this.state + 1) % 3;
+        this.tooltip.state = this.state;
         this.stx.layout.crosshair = this.state;
         this.stx.doDisplayCrosshairs();
         this.mainStore.chart.saveLayout();
