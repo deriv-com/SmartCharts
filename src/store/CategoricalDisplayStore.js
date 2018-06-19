@@ -180,7 +180,7 @@ export default class CategoricalDisplayStore {
             return filteredItems;
         }
 
-        const reg = RegExp(this.filterText, 'i');
+        const reg = RegExp(this.filterText.trim(), 'i');
         const filterCategory = (c) => {
             c.data = c.data.filter(item => reg.test(item.display) || (item.dataObject && reg.test(item.dataObject.symbol)));
         };
