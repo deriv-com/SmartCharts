@@ -2,7 +2,7 @@ import React from 'react';
 import { observable, action, computed } from 'mobx';
 import MenuStore from '@binary-com/smartcharts/store/MenuStore';
 import { createObjectFromLocalStorage } from '@binary-com/smartcharts/utils';
-import { FlagIcons } from '@binary-com/smartcharts/components/Icons.jsx';
+import { FlagIcons } from '../components/Icons.jsx';
 
 export default class ChartSettingStore {
     constructor(mainStore) {

@@ -12,7 +12,7 @@ import {
     PositionBottomIcon,
     BackIcon,
     CloseIcon,
-} from '@binary-com/smartcharts/components/Icons.jsx';
+} from './Icons.jsx';
 import '../sass/components/_ciq-chart-setting.scss';
 
 

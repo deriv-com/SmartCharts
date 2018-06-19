@@ -6,6 +6,14 @@
     "plugins": [
         "transform-decorators-legacy",
         "transform-class-properties",
-        "transform-object-rest-spread"
+        "transform-object-rest-spread",
+        ["inline-react-svg", {
+            "svgo": {
+                "plugins": [
+                    { "cleanupIDs": false },
+                    { "removeTitle": true }
+                ]
+            }
+        }]
     ]
 }
