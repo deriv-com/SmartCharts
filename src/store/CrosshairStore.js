@@ -1,48 +1,66 @@
 import { action, observable, when } from 'mobx';
 import { sameBar } from './utils';
 
-class Tooltip extends CIQ.Marker {
+class CrosshairStore {
+    constructor(mainStore) {
+        this.mainStore = mainStore;
+        when(() => this.context, this.onContextReady);
+
+        this.lastBar = {};
+
+        this.showChange = false;
+        this.showSeries = true;
+        this.showStudies = true;
+    }
+
     get showOhl() {
         return this.stx.layout.timeUnit !== 'second';
     }
 
-    constructor({
-        stx,
-        node,
-        setRows,
-        show,
-        hide,
-    }) {
-        super({
-            stx,
-            xPositioner: 'bar',
-            node,
-            chartContainer: true,
-            label: 'tooltip',
-        });
-
-        this.stx = stx;
-        this.setRows = setRows;
-        this.show = show;
-        this.hide = hide;
-        this.lastBar = {};
-
-        this.className = 'CIQ.Marker.Tooltip';
-        this.showChange = false;
-        this.showSeries = true;
-        this.showStudies = true;
-
-        this.stx.append('deleteHighlighted', function () {
-            this.lastBar = {};
-            this.headsUpHR();
-        });
-        this.stx.append('headsUpHR', this.renderFunction);
-        this.stx.append('createDataSegment', this.renderFunction);
+    get context() {
+        return this.mainStore.chart.context;
     }
 
-    // Position the crosshair tooltip
-    static placementFunction() {
+    get stx() {
+        return this.context.stx;
+    }
 
+
+    @observable top = 0;
+    @observable left = -50000;
+    @observable right = 'auto';
+    @observable rows = [];
+    tooltip = null;
+    node = null;
+    @observable state = 0;
+
+    setRows = (rows) => {
+        this.rows = rows;
+    };
+
+    hide = () => {
+        this.top = 0;
+        this.left = -50000;
+        this.right = 'auto';
+    };
+
+    setRootRef = (ref) => {
+        this.node = ref;
+    };
+
+    onContextReady = () => {
+        const storedState = this.stx.layout.crosshair;
+        this.state = (typeof storedState !== 'number') ? 0 : storedState;
+        this.stx.append('headsUpHR', this.renderFunction);
+        this.stx.append('createDataSegment', this.renderFunction);
+    };
+
+    @action.bound toggleState() {
+        this.state = (this.state + 1) % 3;
+        this.tooltip.state = this.state;
+        this.stx.layout.crosshair = this.state;
+        this.stx.doDisplayCrosshairs();
+        this.mainStore.chart.saveLayout();
     }
 
     @action.bound renderFunction() {
@@ -304,15 +322,15 @@ class Tooltip extends CIQ.Marker {
         }
 
         if (!(CIQ.ChartEngine.insideChart &&
-                stx.layout.crosshair &&
-                stx.displayCrosshairs &&
-                !stx.overXAxis &&
-                !stx.overYAxis &&
-                !stx.openDialog &&
-                !stx.activeDrawing &&
-                !stx.grabbingScreen &&
-                goodBar &&
-                overBar)
+            stx.layout.crosshair &&
+            stx.displayCrosshairs &&
+            !stx.overXAxis &&
+            !stx.overYAxis &&
+            !stx.openDialog &&
+            !stx.activeDrawing &&
+            !stx.grabbingScreen &&
+            goodBar &&
+            overBar)
         ) {
             marker.hide();
             marker.lastBar = {};
@@ -334,83 +352,9 @@ class Tooltip extends CIQ.Marker {
             right = 'auto';
         }
         const top = (CIQ.ChartEngine.crosshairY - stx.top - (marker.node.offsetHeight >> 1)) | 0;
-        marker.show({
-            left,
-            right,
-            top,
-        });
-    }
-}
-
-class CrosshairStore {
-    constructor(mainStore) {
-        this.mainStore = mainStore;
-        when(() => this.context, this.onContextReady);
-    }
-
-    get context() {
-        return this.mainStore.chart.context;
-    }
-
-    get stx() {
-        return this.context.stx;
-    }
-
-
-    @observable top = 0;
-    @observable left = -50000;
-    @observable right = 'auto';
-    @observable rows = [];
-    tooltip = null;
-    node = null;
-    @observable state = 0;
-
-    @action.bound setRows(rows) {
-        this.rows = rows;
-    }
-
-    @action.bound hide() {
-        this.top = 0;
-        this.left = -50000;
-        this.right = 'auto';
-    }
-
-    @action.bound show({ top, left, right }) {
         this.top = top;
         this.left = left;
         this.right = right;
-    }
-
-    setRootRef = (ref) => {
-        this.node = ref;
-        this.init();
-    };
-
-    init = () => {
-        if (!this.tooltip && this.context && this.node) {
-            this.tooltip = new Tooltip({
-                stx: this.stx,
-                node: this.node,
-                setRows: this.setRows,
-                hide: this.hide,
-                show: this.show,
-            });
-            this.tooltip.state = this.state;
-        }
-    };
-
-    onContextReady = () => {
-        const storedState = this.stx.layout.crosshair;
-        this.state = (typeof storedState !== 'number') ? 0 : storedState;
-        this.init();
-    };
-
-    @action.bound toggleState() {
-        this.state = (this.state + 1) % 3;
-        this.tooltip.state = this.state;
-        this.stx.layout.crosshair = this.state;
-        this.stx.doDisplayCrosshairs();
-        this.mainStore.chart.saveLayout();
     }
 }
 

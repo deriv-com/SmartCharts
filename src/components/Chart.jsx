@@ -105,8 +105,9 @@ class Chart extends Component {
                                 { renderTopWidgets() }
                             </div>
                             <ChartControls widgets={chartControlsWidgets} />
-                            <Crosshair />
-                            <div className="chartContainer primary" />
+                            <div className="chartContainer primary">
+                                <Crosshair />
+                            </div>
                             <Loader />
                             {!isChartAvailable &&
                                 <div className="cq-chart-unavailable">

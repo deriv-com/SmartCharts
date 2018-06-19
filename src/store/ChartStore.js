@@ -152,54 +152,6 @@ class ChartStore {
             yTolerance: 999999, // disable vertical scrolling
         });
 
-        // Monkey patch a custom positionMarkers function because the default selects only
-        // the static placementFunction from CrosshairStore; this causes other markers not to get placed.
-        stxx.positionMarkers = function () {
-            const self = this;
-            if (!self.markerHelper) return;
-
-            function draw(...args) {
-                if (self.runPrepend('positionMarkers', args)) return;
-                self.markerTimeout = null;
-                const ciqMarker = self.markerHelper.classMap['CIQ.Marker'];
-                for (const panelName in ciqMarker) {
-                    const arr = ciqMarker[panelName];
-                    const panel = self.panels[panelName];
-
-                    const markerCategories = {};
-                    for (const el of arr) {
-                        if (!markerCategories[el.className]) markerCategories[el.className] = [];
-                        markerCategories[el.className].push(el);
-                    }
-
-                    for (const category in markerCategories) {
-                        const params = {
-                            stx : self,
-                            arr : markerCategories[category],
-                            panel,
-                        };
-                        params.firstTick = panel.chart.dataSet.length - panel.chart.scroll;
-                        params.lastTick = params.firstTick + panel.chart.dataSegment.length;
-
-
-                        const fn = params.arr[0].constructor.placementFunction; // Some magic, this gets the static member "placementFunction" of the class (not the instance)
-                        if (fn) {
-                            (fn)(params);
-                        } else {
-                            self.defaultMarkerPlacement(params);
-                        }
-                    }
-                }
-                self.runAppend('positionMarkers', args);
-            }
-
-            if (this.markerDelay || this.markerDelay === 0) {
-                if (!this.markerTimeout) this.markerTimeout = setTimeout(draw, this.markerDelay);
-            } else {
-                draw();
-            }
-        };
-
         window.stxx = stxx;
 
         const deleteElement = stxx.chart.panel.holder.parentElement.querySelector('#mouseDeleteText');
