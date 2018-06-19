@@ -68,7 +68,6 @@ class CrosshairStore {
         if (this.state !== 2) return;
 
         const stx = this.stx;
-        const lastBar = this.lastBar;
         // crosshairs are not on
         if (
             (stx.controls.crossX && stx.controls.crossX.style.display === 'none') ||
@@ -83,11 +82,61 @@ class CrosshairStore {
             this.hide();
             return;
         }
-        if (sameBar(data, lastBar) && bar !== stx.chart.dataSegment.length - 1) {
+
+        const showOverBarOnly = false;
+
+        let goodBar;
+        let overBar = true;
+        let highPx,
+            lowPx;
+
+
+        if (data !== undefined && data && data.DT) {
+            goodBar = true;
+            if (data.High) {
+                highPx = stx.pixelFromPrice(data.High);
+            }
+            if (data.Low) {
+                lowPx = stx.pixelFromPrice(data.Low);
+            }
+            if (!stx.highLowBars[stx.layout.chartType]) {
+                if (data.Close) {
+                    highPx = stx.pixelFromPrice(data.Close) - 15;
+                    lowPx = stx.pixelFromPrice(data.Close) + 15;
+                }
+            }
+            if (showOverBarOnly && !(stx.cy >= highPx && stx.cy <= lowPx)) {
+                overBar = false;
+            }
+        }
+
+        if (!(CIQ.ChartEngine.insideChart &&
+            stx.layout.crosshair &&
+            stx.displayCrosshairs &&
+            !stx.overXAxis &&
+            !stx.overYAxis &&
+            !stx.openDialog &&
+            !stx.activeDrawing &&
+            !stx.grabbingScreen &&
+            goodBar &&
+            overBar)
+        ) {
+            this.hide();
+            this.lastBar = {};
             return;
         }
 
-        let { panel } = stx.chart;
+        if (!(sameBar(data, this.lastBar) && bar !== stx.chart.dataSegment.length - 1)) {
+            this.updateRows(data);
+            this.lastBar = data;
+        }
+
+        this.updateTooltipPosition();
+    }
+
+    updateRows(data) {
+        const stx = this.stx;
+        let { panel } = this.stx.chart;
         let { yAxis } = panel;
         const dupMap = {};
         const fields = [];
@@ -289,69 +338,22 @@ class CrosshairStore {
                 });
             }
         }
+
         this.setRows(rows);
+    }
 
-        const showOverBarOnly = false;
+    updateTooltipPosition() {
         const offset = 30;
-        const marker = this;
-
-        const quote = stx.chart.dataSegment[bar];
-        let goodBar;
-        let overBar = true;
-        let highPx,
-            lowPx;
-
-
-        if (quote !== undefined && quote && quote.DT) {
-            goodBar = true;
-            if (quote.High) {
-                highPx = stx.pixelFromPrice(quote.High);
-            }
-            if (quote.Low) {
-                lowPx = stx.pixelFromPrice(quote.Low);
-            }
-            if (!stx.highLowBars[stx.layout.chartType]) {
-                if (quote.Close) {
-                    highPx = stx.pixelFromPrice(quote.Close) - 15;
-                    lowPx = stx.pixelFromPrice(quote.Close) + 15;
-                }
-            }
-            if (showOverBarOnly && !(stx.cy >= highPx && stx.cy <= lowPx)) {
-                overBar = false;
-            }
-        }
-
-        if (!(CIQ.ChartEngine.insideChart &&
-            stx.layout.crosshair &&
-            stx.displayCrosshairs &&
-            !stx.overXAxis &&
-            !stx.overYAxis &&
-            !stx.openDialog &&
-            !stx.activeDrawing &&
-            !stx.grabbingScreen &&
-            goodBar &&
-            overBar)
-        ) {
-            marker.hide();
-            marker.lastBar = {};
-            return;
-        }
-        if (sameBar(stx.chart.dataSegment[bar], marker.lastBar) && bar !== stx.chart.dataSegment.length - 1) {
-            return;
-        }
-
-        marker.lastBar = stx.chart.dataSegment[bar];
-
         let left = null,
             right = null;
-        if (marker.node.offsetWidth + offset < CIQ.ChartEngine.crosshairX) {
+        if (this.node.offsetWidth + offset < CIQ.ChartEngine.crosshairX) {
             left = 'auto';
-            right = (stx.container.clientWidth - stx.pixelFromBar(bar) + offset) | 0;
+            right = (this.stx.container.clientWidth - this.stx.cx + offset) | 0;
         } else {
-            left = (stx.pixelFromBar(bar) + offset) | 0;
+            left = (this.stx.cx + offset) | 0;
             right = 'auto';
         }
-        const top = (CIQ.ChartEngine.crosshairY - stx.top - (marker.node.offsetHeight >> 1)) | 0;
+        const top = (CIQ.ChartEngine.crosshairY - this.stx.top - (this.node.offsetHeight >> 1)) | 0;
         this.top = top;
         this.left = left;
         this.right = right;
