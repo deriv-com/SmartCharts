@@ -1,0 +1,147 @@
+.ic-icon, .cq-text-icon {
+    $normal-icon-size :24px;
+    display: block;
+    height: $normal-icon-size;
+    width: $normal-icon-size;
+    line-height: 32px;
+    @include transition(all .2s .15s);
+    @include border-radius(2px);
+    @include box-sizing(border-box);
+    cursor: pointer;
+    text-align: center;
+    &.brand-blue {
+        svg path {
+            fill: #2a3052,
+        }
+    }
+    &.ciq-active-favorite {
+        $fav-star-color: #E98024;
+        svg > g > g > path {
+            fill: $fav-star-color;
+            stroke: $fav-star-color;
+        }
+    }
+    &.ic-clear {
+        background: #4b5794;
+        &.fill svg path {
+            fill: #ffffff;
+        }
+        &.stroke svg path {
+            stroke: #ffffff;
+        }
+    }
+    &.margin {
+        margin: 0 5px;
+    }
+    svg {
+        position: relative;
+    }
+    br , .ic-subtitle  {
+        display: none;
+    }
+}
+.ic-icon-with-sub{
+    height: auto !important;
+    width: auto !important;
+    line-height: 15px;
+    br , .ic-subtitle  {
+        display: inline;
+    }
+}
+.ciq-tooltip {
+    position: relative;
+    font-size: 12px;
+    &:after {
+        position: absolute;
+        opacity: 0;
+        pointer-events: none;
+        height: 16px;
+        width: 65px;
+        line-height: 16px;
+        bottom: 32px;
+        color: #fff;
+        content: attr(tooltip-title);
+        left: -100%;
+        padding: 6px;
+        z-index: 98;
+        background: rgba(21,33,45,0.88);
+        box-shadow: 0 2px 8px 0 rgba(21,33,45,0.32);
+        @include transition(opacity 0.3s);
+        @include border-radius(4px);
+    }
+    &:before {
+        position: absolute;
+        opacity: 0;
+        @include transition(opacity 0.3s);
+        pointer-events: none;
+        border: solid;
+        border-color: rgba(21,33,45,0.88) transparent;
+        border-width: 4px 4px 0px 4px;
+        bottom: 28px;
+        content: "";
+        left: 40%;
+        z-index: 99;
+    }
+
+    &:hover:after, &:hover:before {
+        opacity: 1;
+    }
+}
+
+.ic-frx, .ic-otc, .ic-wld {
+    width: 32px;
+    height: 32px;
+    position: relative;
+    display: inline-block;
+    vertical-align: top;
+    > span {
+        position: absolute;
+    }
+}
+
+.ic-frx {
+    > span:last-child {
+        top: 8px;
+        left: 8px
+    }
+}
+
+.ic-otc {
+    > span {
+        top: 5px;
+    }
+    > span:last-child {
+        top: -8px;
+        left: 9px
+    }
+}
+
+.ic-wld {
+    > span:last-child {
+        > svg {
+            width: 12px;
+            height: 8px;
+        }
+        top: -9px;
+        left: 11px;
+    }
+}
+
+.ic-frxXPDUSD > svg > g > g > g > path:first-child {
+    fill: #E9EAF0;
+}
+.ic-frxXPTUSD > svg > g > g > g > path:first-child {
+    fill: #F4F3F3;
+}
+.ic-frxXAGUSD > svg > g > g > g > path:first-child {
+    fill: #E1E1E1;
+}
+
+.smartcharts-mobile {
+    .cq-chart-controls .ciq-menu {
+        padding: 0px;
+    }
+    br , .ic-subtitle  {
+        display: none;
+    }
+}

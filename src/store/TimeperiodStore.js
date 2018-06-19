@@ -67,7 +67,7 @@ export default class TimeperiodStore {
             }
         };
 
-        if (this.mainStore.chartSetting.countdown && !isTick && hasCountdown) {
+        if (this.mainStore.chartProps.countdown && !isTick && hasCountdown) {
             if (!this._injectionId) {
                 this._injectionId = stx.append('draw', () => {
                     if (this.remain) {

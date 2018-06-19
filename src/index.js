@@ -12,7 +12,6 @@ import CrosshairToggle from './components/CrosshairToggle.jsx';
 import Timeperiod from './components/Timeperiod.jsx';
 import ChartSize from './components/ChartSize.jsx';
 import DrawTools from './components/DrawTools.jsx';
-import ChartSetting from './components/ChartSetting.jsx';
 import Share from './components/Share.jsx';
 import SmartChart from './components/SmartChart.jsx';
 import ComparisonList from './components/ComparisonList.jsx';
@@ -24,7 +23,6 @@ import './SplinePlotter';
 export {
     AssetInformation,
     Barrier,
-    ChartSetting,
     ChartSize,
     ChartTitle,
     ChartTypes,
@@ -45,7 +43,6 @@ export {
 export default {
     AssetInformation,
     Barrier,
-    ChartSetting,
     ChartSize,
     ChartTitle,
     ChartTypes,

@@ -17,7 +17,6 @@ const config = {
                 test: /\.(js|jsx)$/,
                 exclude: /node_modules/,
                 loader: 'babel-loader',
-                options: { presets: ['env', 'react'] },
             },
             {
                 test: /\.(s*)css$/,
@@ -45,6 +44,10 @@ const config = {
     externals: {
         CIQ: 'CIQ',
     },
+    // query: {
+    //     presets: ['es2015', 'react'],
+    //     plugins: ['transform-decorators-legacy', 'transform-class-properties']
+    //   },
 };
 
 module.exports = config;

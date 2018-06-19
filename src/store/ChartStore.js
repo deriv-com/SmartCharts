@@ -29,6 +29,7 @@ class ChartStore {
     chartNode = null;
     chartControlsNode = null;
     chartContainerNode = null;
+    settings = null;
     @observable context = null;
     @observable currentActiveSymbol;
     @observable isChartAvailable = true;
@@ -100,7 +101,7 @@ class ChartStore {
     updateHeight(position) {
         const ciqNode = this.rootNode.querySelector('.ciq-chart');
         const containerNode = this.rootNode.querySelector('.chartContainer.primary');
-        const panelPosition = position || this.mainStore.chartSetting.position;
+        const panelPosition = position || this.mainStore.chartProps.position;
         // height of chart control panel
         const offsetHeight = (panelPosition == 'left') ? 0 : 50;
         containerNode.style.height = `${ciqNode.offsetHeight - offsetHeight}px`;
@@ -119,7 +120,7 @@ class ChartStore {
         this.chartNode = this.rootNode.querySelector('.ciq-chart');
         this.chartControlsNode = this.chartNode.querySelector('.cq-chart-controls');
         this.chartContainerNode = this.rootNode.querySelector('.chartContainer.primary');
-
+        this.settings = props.settings;
         const {
             onSymbolChange,
             initialSymbol,
@@ -278,6 +279,9 @@ class ChartStore {
         this.contextPromise.resolve(this.context);
         this.resizeScreen();
         this.setChartPanelTop(top);
+        this.mainStore.chartProps.restoreSetting();
+        
+
     }
 
     @action.bound setCurrentActiveSymbols(stxx) {

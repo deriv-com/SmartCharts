@@ -48,8 +48,8 @@ export default connect(({ chart,
     drawTools,
     view,
     share,
-    timeperiod,
-    chartSetting }) => ({
+    timeperiod
+    }) => ({
     isMobile: chart.isMobile,
     context: chart.context,
     hasOpenMenu: (
@@ -59,7 +59,6 @@ export default connect(({ chart,
             drawTools.menu.open ||
             view.menu.open ||
             share.menu.open ||
-            timeperiod.menu.open ||
-            chartSetting.menu.open
+            timeperiod.menu.open 
     ),
 }))(ChartControls);
