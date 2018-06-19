@@ -179,6 +179,7 @@ class ChartStore {
         // });
 
         const holderStyle = stxx.chart.panel.holder.style;
+        stxx.append('deleteHighlighted', this.updateComparisons);
         stxx.addEventListener('layout', () => {
             this.saveLayout();
             this.setChartPanelTop(holderStyle.top);
