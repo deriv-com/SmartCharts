@@ -5,12 +5,6 @@ class CrosshairStore {
     constructor(mainStore) {
         this.mainStore = mainStore;
         when(() => this.context, this.onContextReady);
-
-        this.lastBar = {};
-
-        this.showChange = false;
-        this.showSeries = true;
-        this.showStudies = true;
     }
 
     get showOhl() {
@@ -30,9 +24,12 @@ class CrosshairStore {
     @observable left = -50000;
     @observable right = 'auto';
     @observable rows = [];
-    tooltip = null;
-    node = null;
     @observable state = 0;
+    node = null;
+    lastBar = {};
+    showChange = false;
+    showSeries = true;
+    showStudies = true;
 
     setRows = (rows) => {
         this.rows = rows;
@@ -57,7 +54,6 @@ class CrosshairStore {
 
     @action.bound toggleState() {
         this.state = (this.state + 1) % 3;
-        this.tooltip.state = this.state;
         this.stx.layout.crosshair = this.state;
         this.stx.doDisplayCrosshairs();
         this.mainStore.chart.saveLayout();
@@ -67,11 +63,11 @@ class CrosshairStore {
         // if no tooltip exists, then skip
         if (this.state !== 2) return;
 
-        const stx = this.stx;
+        const { stx } = this;
+        const { crossX, crossY } = stx.controls;
         // crosshairs are not on
-        if (
-            (stx.controls.crossX && stx.controls.crossX.style.display === 'none') ||
-            (stx.controls.crossY && stx.controls.crossY.style.display === 'none')
+        if ((crossX && crossX.style.display === 'none') ||
+            (crossY && crossY.style.display === 'none')
         ) {
             return;
         }
@@ -135,68 +131,45 @@ class CrosshairStore {
     }
 
     updateRows(data) {
-        const stx = this.stx;
-        let { panel } = this.stx.chart;
-        let { yAxis } = panel;
+        const { stx } = this;
         const dupMap = {};
         const fields = [];
-        fields.push({
-            member: 'DT',
-            display: 'DT',
-            panel,
-            yAxis,
-        });
-        dupMap.DT = dupMap.Close = 1;
-        if (this.showChange && CIQ.ChartEngine.isDailyInterval(stx.layout.interval)) {
+        { // Access main chart panel and yAxis in this scope:
+            const { panel } = stx.chart;
+            const { yAxis } = panel;
             fields.push({
-                member: 'Change',
-                display: 'Change',
+                member: 'DT',
+                display: 'DT',
                 panel,
                 yAxis,
             });
-        }
-        if (this.showOhl) {
-            fields.push({
-                member: 'Open',
-                display: 'Open',
-                panel,
-                yAxis,
-            });
-            fields.push({
-                member: 'Close',
-                display: 'Close',
-                panel,
-                yAxis,
-            });
-            fields.push({
-                member: 'High',
-                display: 'High',
-                panel,
-                yAxis,
-            });
-            fields.push({
-                member: 'Low',
-                display: 'Low',
-                panel,
-                yAxis,
-            });
-            dupMap.Open = dupMap.High = dupMap.Low = 1;
-        }
-        if (this.showVolume) {
-            fields.push({
-                member: 'Volume',
-                display: 'Volume',
-                panel: null,
-                yAxis: null,
-            }); // null yAxis use raw value
-            dupMap.Volume = 1;
+            dupMap.DT = dupMap.Close = 1;
+            if (this.showChange && CIQ.ChartEngine.isDailyInterval(stx.layout.interval)) {
+                fields.push({
+                    member: 'Change',
+                    display: 'Change',
+                    panel,
+                    yAxis,
+                });
+            }
+            if (this.showOhl) {
+                for (const el of ['Open', 'Close', 'High', 'Low']) {
+                    fields.push({
+                        member: el,
+                        display: el,
+                        panel,
+                        yAxis,
+                    });
+                }
+                dupMap.Open = dupMap.High = dupMap.Low = 1;
+            }
         }
         if (this.showSeries) {
             const renderers = stx.chart.seriesRenderers;
             for (const renderer in renderers) {
                 const rendererToDisplay = renderers[renderer];
-                panel = stx.panels[rendererToDisplay.params.panel];
-                yAxis = rendererToDisplay.params.yAxis;
+                const panel = stx.panels[rendererToDisplay.params.panel];
+                let { yAxis } = rendererToDisplay.params;
                 if (!yAxis && rendererToDisplay.params.shareYAxis) {
                     yAxis = panel.yAxis;
                 }
@@ -224,10 +197,11 @@ class CrosshairStore {
             }
         }
         if (this.showStudies) {
-            for (const study in stx.layout.studies) {
-                panel = stx.panels[stx.layout.studies[study].panel];
-                yAxis = panel.yAxis; // after 4377 is merged: stx.getYAxisByName(panel, study);
-                for (const output in stx.layout.studies[study].outputMap) {
+            const { studies } = stx.layout;
+            for (const study in studies) {
+                const panel = stx.panels[studies[study].panel];
+                const yAxis = panel.yAxis;
+                for (const output in studies[study].outputMap) {
                     if (output && !dupMap[output]) {
                         fields.push({
                             member: output,
@@ -238,36 +212,35 @@ class CrosshairStore {
                         dupMap[output] = 1;
                     }
                 }
-                if (!dupMap[`${study}_hist`]) {
+                const hist = `${study}_hist`;
+                if (!dupMap[hist]) {
                     fields.push({
-                        member: `${study}_hist`,
-                        display: `${study}_hist`,
+                        member: hist,
+                        display: hist,
+                        panel,
+                        yAxis,
+                    });
+                    const hist1 = `${study}_hist1`;
+                    const hist2 = `${study}_hist2`;
+                    fields.push({
+                        member: hist1,
+                        display: hist1,
                         panel,
                         yAxis,
                     });
                     fields.push({
-                        member: `${study}_hist1`,
-                        display: `${study}_hist1`,
+                        member: hist2,
+                        display: hist2,
                         panel,
                         yAxis,
                     });
-                    fields.push({
-                        member: `${study}_hist2`,
-                        display: `${study}_hist2`,
-                        panel,
-                        yAxis,
-                    });
-                    dupMap[`${study}_hist`] = 1;
+                    dupMap[hist] = 1;
                 }
             }
         }
         const rows = [];
-        for (let f = 0; f < fields.length; f++) {
-            const obj = fields[f];
-            const name = obj.member;
-            const displayName = obj.display;
-            panel = obj.panel;
-            yAxis = obj.yAxis;
+        for (const obj of fields) {
+            const { member: name, display: displayName, panel, yAxis } = obj;
             let labelDecimalPlaces = null;
             if (yAxis) {
                 if (panel !== panel.chart.panel) {
@@ -315,17 +288,17 @@ class CrosshairStore {
                         fieldValue = stx.formatYAxisPrice(dsField, panel, labelDecimalPlaces, yAxis);
                     }
                 } else if (dsField.constructor === Date) {
-                    if (name === 'DT' && stx.controls.floatDate && stx.controls.floatDate.innerHTML) {
+                    const { floatDate } = stx.controls;
+                    if (name === 'DT' && floatDate && floatDate.innerHTML) {
                         if (CIQ.ChartEngine.hideDates()) {
                             continue;
                         } else {
-                            fieldValue = stx.controls.floatDate.innerHTML;
+                            fieldValue = floatDate.innerHTML;
                         }
                     } else {
                         fieldValue = CIQ.yyyymmdd(dsField);
                         if (!CIQ.ChartEngine.isDailyInterval(stx.layout.interval)) {
-                            fieldValue += ` ${dsField.toTimeString()
-                                .substr(0, 8)}`;
+                            fieldValue += ` ${dsField.toTimeString().substr(0, 8)}`;
                         }
                     }
                 } else {
