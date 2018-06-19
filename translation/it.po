@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Italian\n"
 "Language: it_IT\n"
-"PO-Revision-Date: 2018-06-08 04:22-0400\n"
+"PO-Revision-Date: 2018-06-18T10:11:13+0000\n"
 
 msgid "Favorites"
 msgstr "Preferiti"
@@ -37,7 +37,7 @@ msgid "LOW"
 msgstr "BASSO"
 
 msgid "Underlying Assets"
-msgstr ""
+msgstr "Asset sottostanti"
 
 msgid "Share"
 msgstr "Condividi"
@@ -136,37 +136,37 @@ msgid "Hollow Candle"
 msgstr "Candela Vuote"
 
 msgid "Heikin Ashi"
-msgstr ""
+msgstr "Heikin Ashi"
 
 msgid "Kagi"
-msgstr ""
+msgstr "Kagi"
 
 msgid "Line Break"
-msgstr ""
+msgstr "Interruzione di riga"
 
 msgid "Renko"
-msgstr ""
+msgstr "Renko"
 
 msgid "Range Bars"
-msgstr ""
+msgstr "Range Bars"
 
 msgid "Point & Figure"
-msgstr ""
+msgstr "Punto e figura"
 
 msgid "Reversal Percentage"
-msgstr ""
+msgstr "Formula inversa della percentuale"
 
 msgid "Range"
-msgstr ""
+msgstr "Intervallo"
 
 msgid "Price Lines"
-msgstr ""
+msgstr "Linee dei prezzi"
 
 msgid "Box Size"
-msgstr ""
+msgstr "Box size"
 
 msgid "Reversal"
-msgstr ""
+msgstr "Inversione"
 
 msgid "RESET"
 msgstr "REIMPOSTA"
@@ -178,16 +178,16 @@ msgid "Settings"
 msgstr "Impostazioni"
 
 msgid "Position"
-msgstr ""
+msgstr "Posizione"
 
 msgid "Dark Mode"
 msgstr "Modalità scura"
 
 msgid "Countdown"
-msgstr ""
+msgstr "Conto alla rovescia"
 
 msgid "Asset Information"
-msgstr ""
+msgstr "Informazioni sull'asset"
 
 msgid "Language"
 msgstr "Lingua"
