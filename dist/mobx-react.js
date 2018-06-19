@@ -600,6 +600,8 @@ function inject() /* fn(stores, nextProps) or ...storeNames */{
     }
 }
 
+var mobxAdminProperty = mobx.$mobx || "$mobx";
+
 /**
  * dev tool support
  */
@@ -612,6 +614,35 @@ var warnedAboutObserverInjectDeprecation = false;
 // WeakMap<Node, Object>;
 var componentByNodeRegistry = typeof WeakMap !== "undefined" ? new WeakMap() : undefined;
 var renderReporter = new EventEmitter();
+
+function createSymbol(name) {
+    if (typeof Symbol === "function") {
+        return Symbol(name);
+    }
+    return "$mobxReactProp$" + name + Math.random();
+}
+
+var skipRenderKey = createSymbol("skipRender");
+var isForcingUpdateKey = createSymbol("isForcingUpdate");
+
+/**
+ * Helper to set `prop` to `this` as non-enumerable (hidden prop)
+ * @param target
+ * @param prop
+ * @param value
+ */
+function setHiddenProp(target, prop, value) {
+    if (!Object.hasOwnProperty(target, prop)) {
+        Object.defineProperty(target, prop, {
+            enumerable: false,
+            configurable: true,
+            writeable: true,
+            value: value
+        });
+    } else {
+        target[prop] = value;
+    }
+}
 
 function findDOMNode$2(component) {
     if (reactDom.findDOMNode) {
@@ -708,29 +739,6 @@ function makeComponentReactive(render) {
 
     if (isUsingStaticRendering === true) return render.call(this);
 
-    function makePropertyObservableReference(propName) {
-        var valueHolder = this[propName];
-        var atom = mobx.createAtom("reactive " + propName);
-        Object.defineProperty(this, propName, {
-            configurable: true,
-            enumerable: true,
-            get: function get$$1() {
-                atom.reportObserved();
-                return valueHolder;
-            },
-            set: function set$$1(v) {
-                if (!isForcingUpdate && !shallowEqual(valueHolder, v)) {
-                    valueHolder = v;
-                    skipRender = true;
-                    atom.reportChanged();
-                    skipRender = false;
-                } else {
-                    valueHolder = v;
-                }
-            }
-        });
-    }
-
     function reactiveRender() {
         var _this = this;
 
@@ -759,22 +767,17 @@ function makeComponentReactive(render) {
 
     // Generate friendly name for debugging
     var initialName = this.displayName || this.name || this.constructor && (this.constructor.displayName || this.constructor.name) || "<component>";
-    var rootNodeID = this._reactInternalInstance && this._reactInternalInstance._rootNodeID || this._reactInternalFiber && this._reactInternalFiber._debugID;
+    var rootNodeID = this._reactInternalInstance && this._reactInternalInstance._rootNodeID || this._reactInternalInstance && this._reactInternalInstance._debugID || this._reactInternalFiber && this._reactInternalFiber._debugID;
     /**
      * If props are shallowly modified, react will render anyway,
      * so atom.reportChanged() should not result in yet another re-render
      */
-    var skipRender = false;
+    setHiddenProp(this, skipRenderKey, false);
     /**
      * forceUpdate will re-assign this.props. We don't want that to cause a loop,
      * so detect these changes
      */
-    var isForcingUpdate = false;
-
-    // make this.props an observable reference, see #124
-    makePropertyObservableReference.call(this, "props");
-    // make state an observable reference
-    makePropertyObservableReference.call(this, "state");
+    setHiddenProp(this, isForcingUpdateKey, false);
 
     // wire up reactive render
     var baseRender = render.bind(this);
@@ -793,18 +796,18 @@ function makeComponentReactive(render) {
                 // However, people also claim this migth happen during unit tests..
                 var hasError = true;
                 try {
-                    isForcingUpdate = true;
-                    if (!skipRender) React.Component.prototype.forceUpdate.call(_this2);
+                    setHiddenProp(_this2, isForcingUpdateKey, true);
+                    if (!_this2[skipRenderKey]) React.Component.prototype.forceUpdate.call(_this2);
                     hasError = false;
                 } finally {
-                    isForcingUpdate = false;
+                    setHiddenProp(_this2, isForcingUpdateKey, false);
                     if (hasError) reaction.dispose();
                 }
             }
         }
     });
     reaction.reactComponent = this;
-    reactiveRender.$mobx = reaction;
+    reactiveRender[mobxAdminProperty] = reaction;
     this.render = reactiveRender;
     return reactiveRender.call(this);
 }
@@ -815,7 +818,7 @@ function makeComponentReactive(render) {
 var reactiveMixin = {
     componentWillUnmount: function componentWillUnmount() {
         if (isUsingStaticRendering === true) return;
-        this.render.$mobx && this.render.$mobx.dispose();
+        this.render[mobxAdminProperty] && this.render[mobxAdminProperty].dispose();
         this.__$mobxIsUnmounted = true;
         if (isDevtoolsEnabled) {
             var node = findDOMNode$2(this);
@@ -856,11 +859,41 @@ var reactiveMixin = {
         // so we return true here if props are shallowly modified.
         return !shallowEqual(this.props, nextProps);
     }
+};
 
-    /**
-     * Observer function / decorator
-     */
-};function observer(arg1, arg2) {
+function makeObservableProp(target, propName) {
+    var valueHolderKey = createSymbol(propName + " value holder");
+    var atomHolderKey = createSymbol(propName + " atom holder");
+    function getAtom() {
+        if (!this[atomHolderKey]) {
+            setHiddenProp(this, atomHolderKey, mobx.createAtom("reactive " + propName));
+        }
+        return this[atomHolderKey];
+    }
+    Object.defineProperty(target, propName, {
+        configurable: true,
+        enumerable: true,
+        get: function get$$1() {
+            getAtom.call(this).reportObserved();
+            return this[valueHolderKey];
+        },
+        set: function set$$1(v) {
+            if (!this[isForcingUpdateKey] && !shallowEqual(this[valueHolderKey], v)) {
+                setHiddenProp(this, valueHolderKey, v);
+                setHiddenProp(this, skipRenderKey, true);
+                getAtom.call(this).reportChanged();
+                setHiddenProp(this, skipRenderKey, false);
+            } else {
+                setHiddenProp(this, valueHolderKey, v);
+            }
+        }
+    });
+}
+
+/**
+ * Observer function / decorator
+ */
+function observer(arg1, arg2) {
     if (typeof arg1 === "string") {
         throw new Error("Store names should be provided as array");
     }
@@ -922,6 +955,8 @@ var reactiveMixin = {
     var target = componentClass.prototype || componentClass;
     mixinLifecycleEvents(target);
     componentClass.isMobXReactObserver = true;
+    makeObservableProp(target, "props");
+    makeObservableProp(target, "state");
     var baseRender = target.render;
     target.render = function () {
         return makeComponentReactive.call(this, baseRender);
@@ -936,8 +971,10 @@ function mixinLifecycleEvents(target) {
     if (!target.shouldComponentUpdate) {
         target.shouldComponentUpdate = reactiveMixin.shouldComponentUpdate;
     } else {
-        // TODO: make throw in next major
-        console.warn("Use `shouldComponentUpdate` in an `observer` based component breaks the behavior of `observer` and might lead to unexpected results. Manually implementing `sCU` should not be needed when using mobx-react.");
+        if (target.shouldComponentUpdate !== reactiveMixin.shouldComponentUpdate) {
+            // TODO: make throw in next major
+            console.warn("Use `shouldComponentUpdate` in an `observer` based component breaks the behavior of `observer` and might lead to unexpected results. Manually implementing `sCU` should not be needed when using mobx-react.");
+        }
     }
 }
 

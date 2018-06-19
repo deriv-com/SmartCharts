@@ -4108,7 +4108,10 @@ if (process.env.NODE_ENV !== "production" &&
         });
     });
 }
+// forward compatibility with mobx, so that packages can easily support mobx 4 & 5
+var $mobx = "$mobx";
 
+exports.$mobx = $mobx;
 exports.Reaction = Reaction;
 exports.untracked = untracked;
 exports.createAtom = createAtom;
