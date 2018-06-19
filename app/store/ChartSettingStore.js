@@ -157,7 +157,6 @@ export default class ChartSettingStore {
     @action.bound setAssetInformation(value) {
         this.assetInformation = value;
         this.mainStore.chartProps.setAssetInformation(value);
-        this.saveSetting();
     }
 }
 
