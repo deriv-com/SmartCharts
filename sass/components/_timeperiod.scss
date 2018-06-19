@@ -74,7 +74,7 @@
 				@include themify($themes) {color: themed('controlText');}
 				&.selected {
 					@include themify($themes) {
-						box-shadow: inset 0 0 0 1px themed('activeColor');
+						border-right: 2px solid themed('activeColor');
 						background: themed('controlBgActive');
 					}
 					font-weight: 500;
@@ -86,7 +86,6 @@
 			display: flex;
 			flex-direction: column;
 			width: 208px;
-
 			.row {
 				height: 40px;
 				display: flex;
@@ -94,7 +93,6 @@
 				margin: 0 4px;
 				align-items: center;
 				font-weight: 300;
-
 				span {
 					cursor: pointer;
 					margin: 0 4px 0 0;
@@ -116,15 +114,28 @@
 	}
 }
 
+.cq-chart-control-left{
+	.ciq-period {
+		>.cq-menu-btn {
+			>.bt-priod {
+				.ic-priod {
+					padding: 6px 20px;
+				}
+			}
+		}
+	}
+}
 
 /* Mobile Style */
 .smartcharts-mobile {
 	.ciq-period {
-		padding: 0 5px !important;
+		padding: 0 !important;
 		>.cq-menu-btn {
-			padding: 0 10px;
-			>span {
-				padding: 0 2px;
+			padding: 0 !important;
+			.bt-priod{
+				>span {
+					padding: 5px 5px !important;
+				}
 			}
 		}
 	}

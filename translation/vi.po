@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Vietnamese\n"
 "Language: vi_VN\n"
-"PO-Revision-Date: 2018-05-25 02:51-0400\n"
+"PO-Revision-Date: 2018-06-19T03:00:25+0000\n"
 
 msgid "Favorites"
 msgstr "Yêu thích"
@@ -20,9 +20,6 @@ msgstr "Không có mục yêu thích nào."
 
 msgid "CLOSED"
 msgstr "ĐÃ ĐÓNG"
-
-msgid "Close"
-msgstr "Đóng"
 
 msgid "PRICE"
 msgstr "GIÁ"
@@ -38,6 +35,9 @@ msgstr "CAO"
 
 msgid "LOW"
 msgstr "THẤP"
+
+msgid "Underlying Assets"
+msgstr "Tài sản cơ sở"
 
 msgid "Share"
 msgstr "Chia sẻ"
@@ -111,8 +111,92 @@ msgstr "Chỉ số"
 msgid "Chart types"
 msgstr "Loại biểu đồ"
 
-msgid "Toggle Asset Information"
-msgstr "Bật/Tắt thông tin tài sản"
+msgid "Line"
+msgstr "Dòng kẻ"
+
+msgid "Dot"
+msgstr "Dấu chấm"
+
+msgid "Colored Dot"
+msgstr "Dấu chấm màu"
+
+msgid "Spline"
+msgstr "Chốt"
+
+msgid "Baseline"
+msgstr "Đường cơ sở"
+
+msgid "Candle"
+msgstr "Nến"
+
+msgid "OHLC"
+msgstr "OHLC"
+
+msgid "Hollow Candle"
+msgstr "Nến rỗng"
+
+msgid "Heikin Ashi"
+msgstr "Heikin Ashi"
+
+msgid "Kagi"
+msgstr "Kagi"
+
+msgid "Line Break"
+msgstr "Ngắt dòng"
+
+msgid "Renko"
+msgstr "Renko"
+
+msgid "Range Bars"
+msgstr "Phạm vi các cột"
+
+msgid "Point & Figure"
+msgstr "Điểm & hình"
+
+msgid "Reversal Percentage"
+msgstr "Tỷ lệ phần trăm đảo ngược"
+
+msgid "Range"
+msgstr "Phạm vi"
+
+msgid "Price Lines"
+msgstr "Dòng giá"
+
+msgid "Box Size"
+msgstr "Kích thước hộp"
+
+msgid "Reversal"
+msgstr "Đảo ngược"
+
+msgid "RESET"
+msgstr "THIẾT LẬP LẠI"
+
+msgid "DONE"
+msgstr "HOÀN THÀNH"
+
+msgid "Settings"
+msgstr "Cài đặt"
+
+msgid "Position"
+msgstr "Phiên"
+
+msgid "Dark Mode"
+msgstr "Chế độ tối"
+
+msgid "Countdown"
+msgstr "Đếm ngược"
+
+msgid "Asset Information"
+msgstr "Thông tin tài sản"
+
+msgid "Language"
+msgstr "Ngôn ngữ"
+
+msgid "[symbol] market is presently closed."
+msgstr "[symbol] thị trường hiện đã đóng cửa."
+
+msgid "Streaming for [symbol] is not available due to license restrictions"
+msgstr "Truyền cho [symbol] không khả dụng do các hạn chế cấp phép"
 
 msgid "Copy to clipboard"
 msgstr "Sao chép vào clipboard"
@@ -122,27 +206,6 @@ msgstr "Đã sao chép!"
 
 msgid "Failed!"
 msgstr "Thất bại!"
-
-msgid "Settings"
-msgstr "Cài đặt"
-
-msgid "Dark Mode"
-msgstr "Chế độ tối"
-
-msgid "Language"
-msgstr "Ngôn ngữ"
-
-msgid "RESET"
-msgstr "THIẾT LẬP LẠI"
-
-msgid "DONE"
-msgstr "HOÀN THÀNH"
-
-msgid "[symbol] market is presently closed."
-msgstr "[symbol] thị trường hiện đã đóng cửa."
-
-msgid "Streaming for [symbol] is not available due to license restrictions"
-msgstr "Truyền cho [symbol] không khả dụng do các hạn chế cấp phép"
 
 msgid "Search..."
 msgstr "Tìm kiếm..."
@@ -191,9 +254,6 @@ msgstr "Gartley"
 
 msgid "Horizontal"
 msgstr "Theo chiều ngang"
-
-msgid "Line"
-msgstr "Dòng kẻ"
 
 msgid "Pitchfork"
 msgstr "Pitchfork"
@@ -257,27 +317,6 @@ msgstr "\"Mass Index\" hay \"Doji Star\""
 
 msgid "There are no active indicators yet."
 msgstr "Chưa có chỉ số hoạt động nào."
-
-msgid "Dot"
-msgstr "Dấu chấm"
-
-msgid "Colored Dot"
-msgstr "Dấu chấm màu"
-
-msgid "Spline"
-msgstr "Chốt"
-
-msgid "Baseline"
-msgstr "Đường cơ sở"
-
-msgid "Candle"
-msgstr "Nến"
-
-msgid "OHLC"
-msgstr "OHLC"
-
-msgid "Hollow Candle"
-msgstr "Nến rỗng"
 
 msgid "right-click to delete"
 msgstr "nhấp chuột phải để xóa"

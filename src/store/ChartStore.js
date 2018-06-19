@@ -38,7 +38,7 @@ class ChartStore {
     @observable chartPanelTop = '0px';
     @observable chartHeight;
     @observable chartContainerHeight;
-    @observable isMobile = false;
+    isMobile = false;
 
     @action.bound setActiveSymbols(activeSymbols) {
         this.activeSymbols = this.processSymbols(activeSymbols);
@@ -97,11 +97,17 @@ class ChartStore {
         );
     }
 
+    updateHeight(position) {
+        const ciqNode = this.rootNode.querySelector('.ciq-chart');
+        const containerNode = this.rootNode.querySelector('.chartContainer.primary');
+        const panelPosition = position || this.mainStore.chartSetting.position;
+        // height of chart control panel
+        const offsetHeight = (panelPosition == 'left') ? 0 : 50;
+        containerNode.style.height = `${ciqNode.offsetHeight - offsetHeight}px`;
+    }
     resizeScreen = () => {
         if (!this.context) { return; }
-        this.chartHeight = this.chartNode.offsetHeight;
-        this.chartContainerHeight = this.chartHeight - this.chartControlsNode.offsetHeight;
-        this.chartContainerNode.style.height = `${this.chartContainerHeight}px`;
+        this.updateHeight();
         this.stxx.resizeChart();
         if (this.stxx.slider) {
             this.stxx.slider.display(this.stxx.layout.rangeSlider);
@@ -175,15 +181,9 @@ class ChartStore {
         const holderStyle = stxx.chart.panel.holder.style;
         stxx.addEventListener('layout', () => {
             this.saveLayout();
-            this.chartPanelTop = holderStyle.top;
+            this.setChartPanelTop(holderStyle.top);
         });
-        stxx.addEventListener('symbolChange', (evt) => {
-            const isComparisonChart = evt.stx.chart.symbol !== evt.symbolObject.symbol;
-            if (this.onSymbolChange && !isComparisonChart) {
-                this.onSymbolChange(evt.symbolObject);
-            }
-            this.saveLayout();
-        });
+        stxx.addEventListener('symbolChange', this.saveLayout.bind(this));
         stxx.addEventListener('drawing', this.saveDrawings.bind(this));
         // stxx.addEventListener('newChart', () => { });
         stxx.addEventListener('preferences', this.savePreferences.bind(this));
@@ -238,18 +238,12 @@ class ChartStore {
                 if (initialSymbol && !(layoutData && layoutData.symbols)) {
                     this.changeSymbol(initialSymbol);
                 } else if (stxx.chart.symbol) {
-                    this.currentActiveSymbol = stxx.chart.symbolObject;
-                    stxx.chart.yAxis.decimalPlaces = stxx.chart.symbolObject.decimal_places;
-                    this.categorizedSymbols = this.categorizeActiveSymbols();
+                    this.setCurrentActiveSymbols(stxx);
                     if (onSymbolChange) { onSymbolChange(this.currentActiveSymbol); }
                 } else {
                     this.changeSymbol(this.defaultSymbol);
                 }
-
-                this.context = context;
-                this.contextPromise.resolve(this.context);
-                this.resizeScreen();
-                this.chartPanelTop = holderStyle.top;
+                this.setLayoutData(context, holderStyle.top);
             };
             const href = window.location.href;
             if (href.startsWith(shareOrigin) && href.indexOf('#') !== -1) {
@@ -271,7 +265,31 @@ class ChartStore {
         this.resizeObserver = new ResizeObserver(() => this.resizeScreen());
         this.resizeObserver.observe(rootNode);
 
-        stxx.append('createDataSet', this.updateComparisons);
+        this.feed.onComparisonDataUpdate(this.updateComparisons);
+    }
+
+    removeComparison(symbolObj) {
+        this.context.stx.removeSeries(symbolObj.symbol);
+        this.updateComparisons();
+    }
+    @action.bound setLayoutData(context, top) {
+        this.context = context;
+        this.contextPromise.resolve(this.context);
+        this.resizeScreen();
+        this.setChartPanelTop(top);
+    }
+
+    @action.bound setCurrentActiveSymbols(stxx) {
+        this.currentActiveSymbol = stxx.chart.symbolObject;
+        stxx.chart.yAxis.decimalPlaces = stxx.chart.symbolObject.decimal_places;
+        this.categorizedSymbols = this.categorizeActiveSymbols();
+    }
+    @action.bound setChartAvailability(status) {
+        this.isChartAvailable = status;
+    }
+
+    @action.bound setChartPanelTop(top) {
+        this.chartPanelTop = top;
     }
 
     @action.bound changeSymbol(symbolObj) {
@@ -284,9 +302,14 @@ class ChartStore {
             return;
         }
 
+        if (this.onSymbolChange) {
+            this.onSymbolChange(symbolObj);
+        }
+
         this.loader.show();
 
         // reset comparisons
+        this.comparisonSymbols = [];
         for (const field in this.stxx.chart.series) {
             if (this.stxx.chart.series[field].parameters.bucket !== 'study') {
                 this.stxx.removeSeries(field);

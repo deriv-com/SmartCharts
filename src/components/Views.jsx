@@ -74,8 +74,8 @@ const Views = ({
                                 <ViewItem
                                     view={view}
                                     key={i}
-                                    onClick={() => applyLayout(i)}
-                                    remove={() => remove(i)}
+                                    onClick={e => applyLayout(i, e)}
+                                    remove={e => remove(i, e)}
                                 />
                             ))
                             :

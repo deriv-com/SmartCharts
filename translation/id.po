@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Indonesian\n"
 "Language: id_ID\n"
-"PO-Revision-Date: 2018-05-24 05:33-0400\n"
+"PO-Revision-Date: 2018-06-11 23:10-0400\n"
 
 msgid "Favorites"
 msgstr "Favorit"
@@ -20,9 +20,6 @@ msgstr "Favorit belum tersedia."
 
 msgid "CLOSED"
 msgstr "TUTUP"
-
-msgid "Close"
-msgstr "Tutup"
 
 msgid "PRICE"
 msgstr "HARGA"
@@ -38,6 +35,9 @@ msgstr "HIGH"
 
 msgid "LOW"
 msgstr "LOW"
+
+msgid "Underlying Assets"
+msgstr "Aset Dasar"
 
 msgid "Share"
 msgstr "Bagikan"
@@ -111,8 +111,92 @@ msgstr "Indikator"
 msgid "Chart types"
 msgstr "Jenis chart"
 
-msgid "Toggle Asset Information"
-msgstr "Informasi Aset Toggle"
+msgid "Line"
+msgstr "Garis"
+
+msgid "Dot"
+msgstr "Titik"
+
+msgid "Colored Dot"
+msgstr "Titik Berwarna"
+
+msgid "Spline"
+msgstr "Spline"
+
+msgid "Baseline"
+msgstr "Baseline"
+
+msgid "Candle"
+msgstr "Candle"
+
+msgid "OHLC"
+msgstr "OHLC"
+
+msgid "Hollow Candle"
+msgstr "Hollow Candle"
+
+msgid "Heikin Ashi"
+msgstr "Heikin Ashi"
+
+msgid "Kagi"
+msgstr "Kagi"
+
+msgid "Line Break"
+msgstr "Line Break"
+
+msgid "Renko"
+msgstr "Renko"
+
+msgid "Range Bars"
+msgstr "Range Bars"
+
+msgid "Point & Figure"
+msgstr "Point & Figure"
+
+msgid "Reversal Percentage"
+msgstr "Persentase Pembalikan"
+
+msgid "Range"
+msgstr "Rentang"
+
+msgid "Price Lines"
+msgstr "Price Lines"
+
+msgid "Box Size"
+msgstr "Box Size"
+
+msgid "Reversal"
+msgstr "Reversal"
+
+msgid "RESET"
+msgstr "ULANG"
+
+msgid "DONE"
+msgstr "SELESAI"
+
+msgid "Settings"
+msgstr "Pengaturan"
+
+msgid "Position"
+msgstr "Posisi"
+
+msgid "Dark Mode"
+msgstr "Dark Mode"
+
+msgid "Countdown"
+msgstr "Hitung mundur"
+
+msgid "Asset Information"
+msgstr "Informasi Aset"
+
+msgid "Language"
+msgstr "Bahasa"
+
+msgid "[symbol] market is presently closed."
+msgstr "[symbol] pasar saat ini ditutup."
+
+msgid "Streaming for [symbol] is not available due to license restrictions"
+msgstr "Streaming untuk [symbol] tidak tersedia berhubung batasan lisensi"
 
 msgid "Copy to clipboard"
 msgstr "Salin ke clipboard"
@@ -122,27 +206,6 @@ msgstr "Tersalin!"
 
 msgid "Failed!"
 msgstr "Gagal!"
-
-msgid "Settings"
-msgstr "Pengaturan"
-
-msgid "Dark Mode"
-msgstr "Dark Mode"
-
-msgid "Language"
-msgstr "Bahasa"
-
-msgid "RESET"
-msgstr "ULANG"
-
-msgid "DONE"
-msgstr "SELESAI"
-
-msgid "[symbol] market is presently closed."
-msgstr "[symbol] pasar saat ini ditutup."
-
-msgid "Streaming for [symbol] is not available due to license restrictions"
-msgstr "Streaming untuk [symbol] tidak tersedia berhubung batasan lisensi"
 
 msgid "Search..."
 msgstr "Cari..."
@@ -191,9 +254,6 @@ msgstr "Gartley"
 
 msgid "Horizontal"
 msgstr "Horizontal"
-
-msgid "Line"
-msgstr "Garis"
 
 msgid "Pitchfork"
 msgstr "Pitchfork"
@@ -257,27 +317,6 @@ msgstr "\"Mass Index\" atau \"Doji Star\""
 
 msgid "There are no active indicators yet."
 msgstr "Belum tersedia indikator aktif."
-
-msgid "Dot"
-msgstr "Titik"
-
-msgid "Colored Dot"
-msgstr "Titik Berwarna"
-
-msgid "Spline"
-msgstr "Spline"
-
-msgid "Baseline"
-msgstr "Baseline"
-
-msgid "Candle"
-msgstr "Candle"
-
-msgid "OHLC"
-msgstr "OHLC"
-
-msgid "Hollow Candle"
-msgstr "Hollow Candle"
 
 msgid "right-click to delete"
 msgstr "klik kanan untuk menghapus"

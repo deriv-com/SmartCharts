@@ -1,7 +1,10 @@
-import html2canvas from 'html2canvas';
 import { observable, action, reaction, computed, when } from 'mobx';
 import MenuStore from './MenuStore';
 import { downloadFileInBrowser, findAncestor } from './utils';
+import { loadScript } from '../utils';
+import PendingPromise from '../utils/PendingPromise';
+
+const html2canvasCDN = 'https://charts.binary.com/dist/html2canvas.min.js';
 
 export default class ShareStore {
     constructor(mainStore) {
@@ -9,7 +12,7 @@ export default class ShareStore {
         this.menu = new MenuStore(mainStore);
 
         when(() => this.context, this.onContextReady);
-        reaction(() => this.menu.open, this.refereshShareLink);
+        reaction(() => this.menu.open, this.refreshShareLink);
     }
 
     get context() { return this.mainStore.chart.context; }
@@ -27,7 +30,7 @@ export default class ShareStore {
     defaultCopyTooltipText = t.translate('Copy to clipboard');
     @observable copyTooltip = this.defaultCopyTooltipText;
     @action.bound resetCopyTooltip() { this.copyTooltip = this.defaultCopyTooltipText; }
-    onCopyDone = (successful) => {
+    @action.bound onCopyDone(successful) {
         this.copyTooltip = successful ? t.translate('Copied!') : t.translate('Failed!');
     }
     bitlyUrl = 'https://api-ssl.bitly.com/v3';
@@ -35,15 +38,11 @@ export default class ShareStore {
     @observable loading = false;
     @observable urlGenerated = false;
     @observable shortUrlFailed = false;
-
-
+    @observable isLoadingPNG = false;
     @observable shareLink = '';
 
-    fixedEncodeURIComponent(str) {
-        return encodeURIComponent(str).replace(/[!'()*]/g, c => `%${c.charCodeAt(0).toString(16)}`);
-    }
-    refereshShareLink = () => {
-        const self = this;
+
+    @action.bound refreshShareLink() {
         if (!this.context || !this.menu.dialog.open) { return; }
 
         const layoutData = this.stx.exportLayout(true);
@@ -62,23 +61,26 @@ export default class ShareStore {
         });
 
         hashPromise
-            .then((hash) => {
-                if (hash) {
-                    self.shareLink = `https://bit.ly/${hash}`;
-                    self.urlGenerated = true;
-                } else {
-                    self.shortUrlFailed = true;
-                    self.urlGenerated = false;
-                }
-                self.loading = false;
-            })
-            .catch(() => {
-                self.loading = false;
-                self.urlGenerated = false;
-            });
+            .then(this.onHashSuccess)
+            .catch(this.onHashFail);
     }
+    @action.bound onHashSuccess(hash) {
+        if (hash) {
+            this.loading = false;
+            this.urlGenerated = true;
+            this.shareLink = `https://bit.ly/${hash}`;
+        } else {
+            this.shortUrlFailed = true;
+            this.onHashFail();
+        }
+    }
+    @action.bound onHashFail() {
+        this.loading = false;
+        this.urlGenerated = false;
+    }
+
     shortenBitlyAsync(payload, hash) {
-        const href = window.location.href;
+        const { href } = window.location;
         let origin = (this.shareOrigin && href.startsWith(this.shareOrigin)) ? href : this.shareOrigin;
         origin = origin.replace('localhost', '127.0.0.1'); // make it work on localhost
 
@@ -87,7 +89,7 @@ export default class ShareStore {
         return fetch(`${this.bitlyUrl}/shorten?access_token=${this.accessToken}&longUrl=${shareLink}`)
             .then(response => response.json())
             .then((response) =>  {
-                if (response.status_code == 200) {
+                if (response.status_code === 200) {
                     return response.data.url.split('bit.ly/')[1];
                 }
                 return null;
@@ -109,7 +111,7 @@ export default class ShareStore {
 
                     payload = decodeURIComponent(encodedJsonPart) + payload;
 
-                    if (hash == 'NONE') {
+                    if (hash === 'NONE') {
                         return payload;
                     }
                     return this.expandBitlyAsync(hash, payload);
@@ -117,18 +119,40 @@ export default class ShareStore {
                 return null;
             });
     }
-    @action.bound downloadPNG() {
-        this.menu.setOpen(false);
-        const root = findAncestor(this.stx.container, 'ciq-chart-area');
-        html2canvas(root).then((canvas) => {
-            const content = canvas.toDataURL('image/png');
-            downloadFileInBrowser(
-                `${new Date().toUTCString()}.png`,
-                content,
-                'image/png;',
-            );
-        });
+
+    loadHtml2Canvas() {
+        if (this._promise_html2canas) {
+            return this._promise_html2canvas;
+        }
+        this._promise_html2canvas = new PendingPromise();
+        loadScript(html2canvasCDN, () => this._promise_html2canvas.resolve());
+        return this._promise_html2canvas;
     }
+
+    @action.bound downloadPNG() {
+        const root = findAncestor(this.stx.container, 'ciq-chart-area');
+        // hide share dialog when rendering PNG:
+        this.shareDropdownStyle = document.querySelector('.cq-share .cq-menu-dropdown').style;
+        this.isLoadingPNG = true;
+        this.loadHtml2Canvas()
+            .then(() => window.html2canvas(root))
+            .then(() => {
+                this.shareDropdownStyle.display = 'none';
+                window.html2canvas(root).then(this._onCanvasReady);
+            });
+    }
+
+    @action.bound _onCanvasReady(canvas) {
+        const content = canvas.toDataURL('image/png');
+        downloadFileInBrowser(
+            `${new Date().toUTCString()}.png`,
+            content,
+            'image/png;',
+        );
+        this.shareDropdownStyle.display = null;
+        this.isLoadingPNG = false;
+    }
+
     @action.bound downloadCSV() {
         const isTick = this.timeUnit === 'tick';
         const header = `Date,Time,${isTick ? this.marketDisplayName : 'Open,High,Low,Close'}`;

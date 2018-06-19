@@ -17,6 +17,7 @@ class PriceLine extends Component {
             zIndex,
             uncentered,
             offScreen,
+            lineStyle,
         } = this.props;
 
         return (
@@ -28,9 +29,8 @@ class PriceLine extends Component {
                 uncentered={uncentered ? 'true' : undefined}
                 off-screen={offScreen ? 'true' : undefined}
             >
-                <div
-                    className="drag-line"
-                />
+                <div className="drag-line" style={{ borderTopStyle: lineStyle }} />
+                <div className="draggable-area" />
                 <div className="drag-price">
                     <div className="price">{priceDisplay}</div>
                 </div>

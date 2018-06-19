@@ -10,12 +10,14 @@
 		height: 32px;
 		padding: 0 0 0 16px;
 		display: flex;
-		border-top: none;
 		align-items: center;
 		justify-content: flex-start;
+		border-bottom: none;
 		@include box-sizing(border-box);
 		@include themify($themes) {
-			border: themed('listBorder');
+			border-left: themed('listBorder');
+			border-right: themed('listBorder');
+			border-bottom: themed('listBorder');
 			background: themed('defaultMain');
 		}
 		&:first-child {

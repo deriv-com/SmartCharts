@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Italian\n"
 "Language: it_IT\n"
-"PO-Revision-Date: 2018-05-28 09:11-0400\n"
+"PO-Revision-Date: 2018-06-18T10:11:13+0000\n"
 
 msgid "Favorites"
 msgstr "Preferiti"
@@ -20,9 +20,6 @@ msgstr "Non sono ancora stati aggiunti preferiti."
 
 msgid "CLOSED"
 msgstr "CHIUSO"
-
-msgid "Close"
-msgstr "Chiusura"
 
 msgid "PRICE"
 msgstr "PREZZO"
@@ -38,6 +35,9 @@ msgstr "ALTO"
 
 msgid "LOW"
 msgstr "BASSO"
+
+msgid "Underlying Assets"
+msgstr "Asset sottostanti"
 
 msgid "Share"
 msgstr "Condividi"
@@ -111,8 +111,92 @@ msgstr "Indicatori"
 msgid "Chart types"
 msgstr "Tipologie di grafico"
 
-msgid "Toggle Asset Information"
-msgstr "Attiva/Disattiva le informazioni sull'asset"
+msgid "Line"
+msgstr "Linea"
+
+msgid "Dot"
+msgstr "Punto"
+
+msgid "Colored Dot"
+msgstr "Punto colorato"
+
+msgid "Spline"
+msgstr "Spline"
+
+msgid "Baseline"
+msgstr "Linea di base"
+
+msgid "Candle"
+msgstr "Candela"
+
+msgid "OHLC"
+msgstr "OHLC"
+
+msgid "Hollow Candle"
+msgstr "Candela Vuote"
+
+msgid "Heikin Ashi"
+msgstr "Heikin Ashi"
+
+msgid "Kagi"
+msgstr "Kagi"
+
+msgid "Line Break"
+msgstr "Interruzione di riga"
+
+msgid "Renko"
+msgstr "Renko"
+
+msgid "Range Bars"
+msgstr "Range Bars"
+
+msgid "Point & Figure"
+msgstr "Punto e figura"
+
+msgid "Reversal Percentage"
+msgstr "Formula inversa della percentuale"
+
+msgid "Range"
+msgstr "Intervallo"
+
+msgid "Price Lines"
+msgstr "Linee dei prezzi"
+
+msgid "Box Size"
+msgstr "Box size"
+
+msgid "Reversal"
+msgstr "Inversione"
+
+msgid "RESET"
+msgstr "REIMPOSTA"
+
+msgid "DONE"
+msgstr "ESEGUITO"
+
+msgid "Settings"
+msgstr "Impostazioni"
+
+msgid "Position"
+msgstr "Posizione"
+
+msgid "Dark Mode"
+msgstr "Modalità scura"
+
+msgid "Countdown"
+msgstr "Conto alla rovescia"
+
+msgid "Asset Information"
+msgstr "Informazioni sull'asset"
+
+msgid "Language"
+msgstr "Lingua"
+
+msgid "[symbol] market is presently closed."
+msgstr "[symbol] Il mercato è chiuso al momento."
+
+msgid "Streaming for [symbol] is not available due to license restrictions"
+msgstr "[symbol] in streaming non è disponibile a causa delle limitazioni della licenza"
 
 msgid "Copy to clipboard"
 msgstr "Copia negli Appunti"
@@ -122,27 +206,6 @@ msgstr "Copia eseguita!"
 
 msgid "Failed!"
 msgstr "Operazione non riuscita."
-
-msgid "Settings"
-msgstr "Impostazioni"
-
-msgid "Dark Mode"
-msgstr "Modalità scura"
-
-msgid "Language"
-msgstr "Lingua"
-
-msgid "RESET"
-msgstr "REIMPOSTA"
-
-msgid "DONE"
-msgstr "ESEGUITO"
-
-msgid "[symbol] market is presently closed."
-msgstr "[symbol] Il mercato è chiuso al momento."
-
-msgid "Streaming for [symbol] is not available due to license restrictions"
-msgstr "[symbol] in streaming non è disponibile a causa delle limitazioni della licenza"
 
 msgid "Search..."
 msgstr "Cerca..."
@@ -191,9 +254,6 @@ msgstr "Gartley"
 
 msgid "Horizontal"
 msgstr "Orizzontale"
-
-msgid "Line"
-msgstr "Linea"
 
 msgid "Pitchfork"
 msgstr "Pitchfork"
@@ -257,27 +317,6 @@ msgstr "\"Indice di massa\" o \"Doji Star\""
 
 msgid "There are no active indicators yet."
 msgstr "Non risulta ancora nessun indicatore attivo."
-
-msgid "Dot"
-msgstr "Punto"
-
-msgid "Colored Dot"
-msgstr "Punto colorato"
-
-msgid "Spline"
-msgstr "Spline"
-
-msgid "Baseline"
-msgstr "Linea di base"
-
-msgid "Candle"
-msgstr "Candela"
-
-msgid "OHLC"
-msgstr "OHLC"
-
-msgid "Hollow Candle"
-msgstr "Candela Vuote"
 
 msgid "right-click to delete"
 msgstr "destro del mouse per cancellare"
