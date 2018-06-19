@@ -26,7 +26,7 @@ configure({ enforceActions: true });
 const getLocalStorage = function () {
     const default_setting =  { language : 'en' , position : 'bottom' , theme : 'light' , countdown : 'false'};
     try {
-        let setting_string = CIQ.localStorage.getItem('smartchart-setting'),
+        const setting_string = CIQ.localStorage.getItem('smartchart-setting'),
             setting = JSON.parse(setting_string !== '' ? setting_string : '{}');
         return setting;
     } catch (e) {

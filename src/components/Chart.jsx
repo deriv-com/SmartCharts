@@ -6,6 +6,7 @@ import ComparisonList from './ComparisonList.jsx';
 import ChartTitle from './ChartTitle.jsx';
 import AssetInformation from './AssetInformation.jsx';
 import Loader from './Loader.jsx';
+import Barrier from './Barrier.jsx';
 
 /* css + scss */
 import '../../sass/app.scss';
@@ -51,6 +52,7 @@ class Chart extends Component {
             isChartAvailable,
             settings,
             chartProps,
+            barriers,
             chartPanelTop,
             chartControlsWidgets,
             AggregateChartSettingsDialog,
@@ -62,7 +64,6 @@ class Chart extends Component {
         const currentPosition = `cq-chart-control-${(chartProps && chartProps.position && !isMobile) ? chartProps.position : 'bottom'}`;
         const currentMode = `${isMobile ? 'smartcharts-mobile' : ''}`;
         const array = React.Children.toArray(children);
-        const insideHolder = array.filter(c => !/(TradeStart)|(TradeEnd)/.test(c.type.displayName));
         const insideSubHolder = array.filter(c => /(TradeStart)|(TradeEnd)/.test(c.type.displayName));
         const renderTopWidgets = topWidgets || defaultTopWidgets;
 
@@ -74,9 +75,15 @@ class Chart extends Component {
                 <div className={`${currentMode} ${currentPosition}`}>
                     <div className="ciq-chart-area">
                         <div className="ciq-chart">
+                            {barriers &&
                             <RenderInsideChart at="holder">
-                                {insideHolder}
-                            </RenderInsideChart>
+                                {barriers.map((barr, idx) => (
+                                    <Barrier
+                                        key={idx}
+                                        {...barr}
+                                    />
+                                ))}
+                            </RenderInsideChart>}
                             <RenderInsideChart at="subholder">
                                 {insideSubHolder}
                             </RenderInsideChart>
