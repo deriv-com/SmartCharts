@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Italian\n"
 "Language: it_IT\n"
-"PO-Revision-Date: 2018-06-20T13:41:30+0000\n"
+"PO-Revision-Date: 2018-06-20T14:11:31+0000\n"
 
 msgid "Favorites"
 msgstr "Preferiti"
@@ -334,7 +334,7 @@ msgid "Period"
 msgstr "Periodo"
 
 msgid "Show Zones"
-msgstr "Mostra Zone"
+msgstr "Mostra zone"
 
 msgid "OverBought"
 msgstr "Ipercomprato"
