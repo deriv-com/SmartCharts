@@ -1,6 +1,9 @@
 import React from 'react';
 import Menu from './Menu.jsx';
 import { connect } from '../store/Connect';
+import Dialog from './Dialog.jsx';
+import { alertIconMap } from '../components/Icons.jsx';
+
 import {
     CloseIcon,
     TemplateIcon,
@@ -23,9 +26,12 @@ const ViewItem = ({
 
 const Views = ({
     Menu,
+    Dialog,
     menuOpen,
     views,
     routes: { current: currentRoute, add, main, cancel },
+    onOverwrite,
+    setOpen,
     onChange,
     onSubmit,
     applyLayout,
@@ -40,8 +46,29 @@ const Views = ({
             />
         </Menu.Title>
         <Menu.Body>
+            <Dialog className="cq-dialog cq-view-dialog">
+                <div>
+                    <div className="dlg-content">
+                        <alertIconMap.warning/>
+                        <span>
+                            {t.translate('Template already exist. would you like to overwrite it?')}
+                        </span>
+                    </div>
+                    <div className="dlg-buttons">
+                        <div
+                            className="cancel"
+                            onClick={() =>setOpen(false)}
+                            >{t.translate('CANCEL')}
+                        </div>
+                        <div
+                            className="overwrite"
+                            onClick={onOverwrite}
+                            >{t.translate('OVERWRITE')}
+                        </div>
+                    </div>
+                </div>
+            </Dialog>
             <div className="title">
-
                 {
                     currentRoute === 'add' ?
                         <span className="add">
@@ -92,8 +119,11 @@ const Views = ({
 
 export default connect(({ view: s }) => ({
     Menu: s.menu.connect(Menu),
+    Dialog: s.dialog.connect(Dialog),
     views: s.views,
     routes: s.routes,
+    onOverwrite: s.onOverwrite,
+    setOpen: s.setOpen,
     onChange: s.onChange,
     remove: s.remove,
     onSubmit: s.onSubmit,

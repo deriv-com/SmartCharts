@@ -1,11 +1,13 @@
 import { observable, action, when } from 'mobx';
 import { createObjectFromLocalStorage } from '../utils';
 import MenuStore from './MenuStore';
+import DialogStore from './DialogStore';
 
 export default class ViewStore {
     constructor(mainStore) {
         this.mainStore = mainStore;
         this.menu = new MenuStore(mainStore);
+        this.dialog = new DialogStore(mainStore);
         when(() => this.context, this.onContextReady);
     }
 
@@ -15,7 +17,7 @@ export default class ViewStore {
         current: 'main',
         add: () => this.saveViews(),
         main: () => this.updateRoute('add'),
-        cancel: () => this.updateRoute('main'),
+        cancel: () => {this.updateRoute('main');this.dialog.setOpen(false,false)},
     };
 
     get context() { return this.mainStore.chart.context; }
@@ -46,19 +48,39 @@ export default class ViewStore {
     }
 
     @action.bound saveViews() {
-        this.updateRoute('main');
-        if (this.templateName.length > 0) {
+        if (this.views.some(x=>x.name.toLowerCase() === this.templateName.toLowerCase())){
+            this.dialog.setOpen(true , false);
+        }
+        else if (this.templateName.length > 0) {
+            this.updateRoute('main');
             const layout = this.stx.exportLayout();
             this.views.push({ name: this.templateName, layout });
             this.updateLocalStorage();
+            this.templateName = '';
         }
+    }
+
+    @action.bound onOverwrite() {
+        if (this.templateName.length > 0) {
+            const layout = this.stx.exportLayout();
+            var templateIndex = this.views.findIndex(x => x.name.toLowerCase() === this.templateName.toLowerCase());
+            this.views[templateIndex].layout = layout;
+            this.views[templateIndex].name = this.templateName;
+            this.updateLocalStorage();
+        }
+        this.updateRoute('main');
         this.templateName = '';
+        this.dialog.setOpen(false , false);
     }
 
     @action.bound remove(idx, e) {
         this.views.splice(idx, 1);
         e.nativeEvent.is_item_removed = true;
         this.updateLocalStorage();
+    }
+
+    @action.bound setOpen(value) {
+        return this.dialog.setOpen(value);
     }
 
     applyLayout = (idx, e) => {
