@@ -32,7 +32,7 @@ export default class NotificationStore {
         }
     }
 
-    removeByCategory(category) {
+    @action.bound removeByCategory(category) {
         this.messages.map((msg, idx) => { // eslint-disable-line array-callback-return
             if (msg.category === category) {
                 this.remove(idx);
@@ -40,7 +40,7 @@ export default class NotificationStore {
         });
     }
 
-    removeById(id) {
+    @action.bound removeById(id) {
         const inx = this.messages.findIndex(msg => msg.id === id);
         if (inx !== -1) { this.remove(inx); }
     }
@@ -48,7 +48,11 @@ export default class NotificationStore {
     @action.bound remove(inx) {
         this.messages[inx].hide = true;
         setTimeout(() => {
-            this.messages.splice(inx, 1);
+            this.deleteMessage(inx);
         }, 300);
+    }
+
+    @action.bound deleteMessage(inx) {
+        this.messages.splice(inx, 1);
     }
 }

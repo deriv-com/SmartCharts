@@ -15,7 +15,7 @@ const Share = ({
     loading,
     urlGenerated,
     shortUrlFailed,
-    refereshShareLink,
+    refreshShareLink,
     shareLink,
     downloadCSV,
     downloadPNG,
@@ -54,7 +54,7 @@ const Share = ({
                     {shortUrlFailed ? <p>{t.translate('Failed to generate link')}</p> :
                         <div
                             className="download-btn"
-                            onClick={refereshShareLink}
+                            onClick={refreshShareLink}
                         >
                             {t.translate('Retry')}
                         </div>}
@@ -99,7 +99,7 @@ export default connect(({ share: s }) => ({
     loading: s.loading,
     urlGenerated: s.urlGenerated,
     shortUrlFailed: s.shortUrlFailed,
-    refereshShareLink: s.refereshShareLink,
+    refreshShareLink: s.refreshShareLink,
     shareLink: s.shareLink,
     downloadPNG: s.downloadPNG,
     downloadCSV: s.downloadCSV,

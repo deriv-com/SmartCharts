@@ -1,0 +1,71 @@
+/* Used for app only. Do not deploy with library! */
+
+#root {
+    display: flex;
+}
+
+
+
+.grid {
+    position: relative;
+    display: grid;
+    grid-template-rows: 1fr auto auto;
+    grid-template-columns: repeat(12,[col-start] 1fr);
+    width: 100%;
+    height: 100vh;
+    .chart-instance {
+        position: relative;
+        grid-column: col-start/span 12;
+    }
+    .bottom-blob {
+        font-family: sans-serif;
+        grid-column: col-start/span 12;
+        background-color: #dfdfdf;
+        text-align: center;
+        line-height: 100px;
+        transition: line-height 0.5s;
+        vertical-align: middle;
+        input[type="number"] {
+            width: 60px;
+        }
+    }
+}
+
+/* Doorbell */
+
+#doorbell-button {
+    left: -30px;
+    bottom: 30%;
+    background: #4C5794;
+    color: #fff;
+    border: 1px solid #4C5794;
+    border-bottom: none;
+    padding: 4px 8px;
+    transform: rotate(90deg);
+    max-width: 80px;
+}
+
+#doorbell form {
+    box-shadow: none;
+    border: 1px solid #4c4c4c;
+
+    input, textarea {
+        outline: 0;
+        &:focus {
+            border: 1px solid #4C5794;
+        }
+    }
+
+    #doorbell-submit-button {
+        color: #4C5794;
+        border: none;
+        background: white;
+        &:hover {
+            background: white;
+        }
+    }
+}
+
+#doorbell-background {
+    opacity: 0;
+}

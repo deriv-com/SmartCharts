@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Vietnamese\n"
 "Language: vi_VN\n"
-"PO-Revision-Date: 2018-06-08 04:23-0400\n"
+"PO-Revision-Date: 2018-06-19T03:00:25+0000\n"
 
 msgid "Favorites"
 msgstr "Yêu thích"
@@ -37,7 +37,7 @@ msgid "LOW"
 msgstr "THẤP"
 
 msgid "Underlying Assets"
-msgstr ""
+msgstr "Tài sản cơ sở"
 
 msgid "Share"
 msgstr "Chia sẻ"
@@ -136,37 +136,37 @@ msgid "Hollow Candle"
 msgstr "Nến rỗng"
 
 msgid "Heikin Ashi"
-msgstr ""
+msgstr "Heikin Ashi"
 
 msgid "Kagi"
-msgstr ""
+msgstr "Kagi"
 
 msgid "Line Break"
-msgstr ""
+msgstr "Ngắt dòng"
 
 msgid "Renko"
-msgstr ""
+msgstr "Renko"
 
 msgid "Range Bars"
-msgstr ""
+msgstr "Phạm vi các cột"
 
 msgid "Point & Figure"
-msgstr ""
+msgstr "Điểm & hình"
 
 msgid "Reversal Percentage"
-msgstr ""
+msgstr "Tỷ lệ phần trăm đảo ngược"
 
 msgid "Range"
-msgstr ""
+msgstr "Phạm vi"
 
 msgid "Price Lines"
-msgstr ""
+msgstr "Dòng giá"
 
 msgid "Box Size"
-msgstr ""
+msgstr "Kích thước hộp"
 
 msgid "Reversal"
-msgstr ""
+msgstr "Đảo ngược"
 
 msgid "RESET"
 msgstr "THIẾT LẬP LẠI"
@@ -178,16 +178,16 @@ msgid "Settings"
 msgstr "Cài đặt"
 
 msgid "Position"
-msgstr ""
+msgstr "Phiên"
 
 msgid "Dark Mode"
 msgstr "Chế độ tối"
 
 msgid "Countdown"
-msgstr ""
+msgstr "Đếm ngược"
 
 msgid "Asset Information"
-msgstr ""
+msgstr "Thông tin tài sản"
 
 msgid "Language"
 msgstr "Ngôn ngữ"
