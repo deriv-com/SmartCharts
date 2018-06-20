@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Italian\n"
 "Language: it_IT\n"
-"PO-Revision-Date: 2018-06-20T15:11:41+0000\n"
+"PO-Revision-Date: 2018-06-20T15:32:45+0000\n"
 
 msgid "Favorites"
 msgstr "Preferiti"
@@ -760,10 +760,10 @@ msgid "Donchian Low"
 msgstr "Donchian Low"
 
 msgid "Highest High Value"
-msgstr "Valore Highest Highe"
+msgstr "Valore massimo più alto"
 
 msgid "Lowest Low Value"
-msgstr "Lowest Low Value"
+msgstr "Valore minimo più basso"
 
 msgid "Mass Index"
 msgstr "Indice Mass"
@@ -772,7 +772,7 @@ msgid "Bulge Threshold"
 msgstr "Bulge Threshold"
 
 msgid "Keltner Channel"
-msgstr "Keltner Channel"
+msgstr "Canale di Keltner"
 
 msgid "Keltner Top"
 msgstr "Keltner Top"
@@ -796,7 +796,7 @@ msgid "Klinger Volume Oscillator"
 msgstr "Oscillatore Klinger Volume"
 
 msgid "Signal Periods"
-msgstr "Periodo di segnale"
+msgstr "Periodi di segnale"
 
 msgid "Klinger"
 msgstr "Klinger"
@@ -805,7 +805,7 @@ msgid "KlingerSignal"
 msgstr "Segnale Klinger"
 
 msgid "Elder Ray Index"
-msgstr "Elder Ray"
+msgstr "Indice Elder Ray"
 
 msgid "Elder Bull Power"
 msgstr "Elder Power rialzista"
@@ -820,7 +820,7 @@ msgid "Linear Reg Slope"
 msgstr "Linear Reg Slope"
 
 msgid "Slope"
-msgstr "Slope"
+msgstr "Pendenza"
 
 msgid "Center Of Gravity"
 msgstr "Center Of Gravity"
@@ -841,7 +841,7 @@ msgid "Accumulation/Distribution"
 msgstr "Accumulation Distribution"
 
 msgid "Use Volume"
-msgstr "Utilizzare Volume"
+msgstr "Utilizzare volume"
 
 msgid "Volume Chart"
 msgstr "Grafico volumi"
@@ -868,10 +868,10 @@ msgid "Display 1 Standard Deviation (1σ)"
 msgstr "Mostra 1 deviazione standard (1σ)"
 
 msgid "Display 2 Standard Deviation (2σ)"
-msgstr "Mostra 2 deviazione standard (2σ)"
+msgstr "Mostra 2 deviazioni standard (2σ)"
 
 msgid "Display 3 Standard Deviation (3σ)"
-msgstr "Mostra 3 deviazione standard (3σ)"
+msgstr "Mostra 3 deviazioni standard (3σ)"
 
 msgid "Average"
 msgstr "Media"
@@ -880,10 +880,10 @@ msgid "1 Standard Deviation (1σ)"
 msgstr "1 deviazione standard (1σ)"
 
 msgid "2 Standard Deviation (2σ)"
-msgstr "2 deviazione standard (2σ)"
+msgstr "2 deviazioni standard (2σ)"
 
 msgid "3 Standard Deviation (3σ)"
-msgstr "3 deviazione standard (3σ)"
+msgstr "3 deviazioni standard (3σ)"
 
 msgid "Correlation Coefficient"
 msgstr "Coefficiente di correlazione"
@@ -904,7 +904,7 @@ msgid "Relative Volatility"
 msgstr "Volatilità relativa"
 
 msgid "STD Period"
-msgstr "STD Period"
+msgstr "Periodo STD"
 
 msgid "Rel Vol"
 msgstr "Rel Vol"
@@ -1135,7 +1135,7 @@ msgid "TII"
 msgstr "TII"
 
 msgid "Choppiness Index"
-msgstr "Indice choppiness"
+msgstr "Indice Choppiness"
 
 msgid "Disparity Index"
 msgstr "Indice disparità"
@@ -1177,7 +1177,7 @@ msgid "Rainbow Oscillator"
 msgstr "Oscillatore arcobaleno"
 
 msgid "HHV/LLV Lookback"
-msgstr "Loookback HHV/LLV"
+msgstr "Lookback HHV/LLV"
 
 msgid "Pring's Know Sure Thing"
 msgstr "Indicatore Know Sure Thing di Pring"
@@ -1186,7 +1186,7 @@ msgid "Lightest Rate of Change Period"
 msgstr "Periodo con il tasso di variazione più leggero"
 
 msgid "Lightest SMA Period"
-msgstr "Periodo con la SMA più leggera"
+msgstr "Periodo con SMA più leggera"
 
 msgid "Light Rate of Change Period"
 msgstr "Periodo con tasso di variazione leggero"
@@ -1216,7 +1216,7 @@ msgid "Pring's Special K"
 msgstr "Indicatore Special K di Pring"
 
 msgid "Darvas Box"
-msgstr "Scatole di Darvas"
+msgstr "Scatola di Darvas"
 
 msgid "ATH Lookback Period"
 msgstr "Periodo di lookback ATH"
