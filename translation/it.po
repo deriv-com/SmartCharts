@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Italian\n"
 "Language: it_IT\n"
-"PO-Revision-Date: 2018-06-20T15:32:45+0000\n"
+"PO-Revision-Date: 2018-06-20T15:41:03+0000\n"
 
 msgid "Favorites"
 msgstr "Preferiti"
@@ -751,13 +751,13 @@ msgid "Low Period"
 msgstr "Periodo Low"
 
 msgid "Donchian High"
-msgstr "Donchian High"
+msgstr "Donchian elevato"
 
 msgid "Donchian Median"
-msgstr "Donchian Median"
+msgstr "Donchian mediano"
 
 msgid "Donchian Low"
-msgstr "Donchian Low"
+msgstr "Donchian basso"
 
 msgid "Highest High Value"
 msgstr "Valore massimo più alto"
@@ -775,13 +775,13 @@ msgid "Keltner Channel"
 msgstr "Canale di Keltner"
 
 msgid "Keltner Top"
-msgstr "Keltner Top"
+msgstr "Keltner superiore"
 
 msgid "Keltner Median"
-msgstr "Keltner Median"
+msgstr "Keltner mediano"
 
 msgid "Keltner Bottom"
-msgstr "Keltner Bottom"
+msgstr "Keltner inferiore"
 
 msgid "Parabolic SAR"
 msgstr "Parabolic SAR"
@@ -934,10 +934,10 @@ msgid "ATR Bands"
 msgstr "Bande ATR"
 
 msgid "ATR Bands Top"
-msgstr "Bande ATR top"
+msgstr "Bande ATR superiori"
 
 msgid "ATR Bands Bottom"
-msgstr "Bande ATR bottom"
+msgstr "Bande ATR inferiori"
 
 msgid "ATR Bands Channel"
 msgstr "Bande ATR Channel"
@@ -967,7 +967,7 @@ msgid "Plot Type"
 msgstr "Tipo di tracciato"
 
 msgid "HighLow"
-msgstr "HighLow"
+msgstr "MassimoMinimo"
 
 msgid "Buy Stops"
 msgstr "Ordini stop di acquisto (Buy Stops)"
@@ -982,7 +982,7 @@ msgid "%b"
 msgstr "%b"
 
 msgid "Bollinger Bandwidth"
-msgstr "Ampiezza Banda di Bollinger"
+msgstr "Ampiezza della banda di Bollinger"
 
 msgid "Bandwidth"
 msgstr "Ampiezza della banda"
@@ -997,7 +997,7 @@ msgid "Rel Vig"
 msgstr "Rel Vig"
 
 msgid "RelVigSignal"
-msgstr "RelVigSignal"
+msgstr "Segnale RelVig"
 
 msgid "Elder Impulse System"
 msgstr "Sistema impulsi di Elder"
@@ -1225,7 +1225,7 @@ msgid "Exit Field"
 msgstr "Campo di uscita"
 
 msgid "Ghost Boxes"
-msgstr "Ghost Box"
+msgstr "Scatole di Ghost"
 
 msgid "Stop Levels"
 msgstr "Livelli di stop"
