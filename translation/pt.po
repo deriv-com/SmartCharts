@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Portuguese\n"
 "Language: pt_PT\n"
-"PO-Revision-Date: 2018-06-20T09:51:31+0000\n"
+"PO-Revision-Date: 2018-06-20T10:01:36+0000\n"
 
 msgid "Favorites"
 msgstr "Favoritos"
@@ -151,22 +151,22 @@ msgid "Range Bars"
 msgstr "Barras de intervalo"
 
 msgid "Point & Figure"
-msgstr ""
+msgstr "Point & Figure"
 
 msgid "Reversal Percentage"
-msgstr ""
+msgstr "Percentual de reversão"
 
 msgid "Range"
-msgstr ""
+msgstr "Intervalo"
 
 msgid "Price Lines"
-msgstr ""
+msgstr "Linhas de preço"
 
 msgid "Box Size"
-msgstr ""
+msgstr "Tamanho da caixa"
 
 msgid "Reversal"
-msgstr ""
+msgstr "Inversão"
 
 msgid "RESET"
 msgstr "REINICIAR"
@@ -178,16 +178,16 @@ msgid "Settings"
 msgstr "Configurações"
 
 msgid "Position"
-msgstr ""
+msgstr "Posição"
 
 msgid "Dark Mode"
-msgstr ""
+msgstr "Modo escuro"
 
 msgid "Countdown"
-msgstr ""
+msgstr "Contagem regressiva"
 
 msgid "Asset Information"
-msgstr ""
+msgstr "Informações do ativo"
 
 msgid "Language"
 msgstr "Idioma"
@@ -199,16 +199,16 @@ msgid "Streaming for [symbol] is not available due to license restrictions"
 msgstr "Transmissão ao vivo do [symbol] não está disponível devido a restrições de licença"
 
 msgid "Copy to clipboard"
-msgstr ""
+msgstr "Copiar para área de transferência"
 
 msgid "Copied!"
-msgstr ""
+msgstr "Copiado!"
 
 msgid "Failed!"
-msgstr ""
+msgstr "Falhou!"
 
 msgid "Search..."
-msgstr ""
+msgstr "Pesquisar..."
 
 msgid "Annotation"
 msgstr "Anotação"
