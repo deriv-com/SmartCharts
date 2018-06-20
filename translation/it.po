@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Italian\n"
 "Language: it_IT\n"
-"PO-Revision-Date: 2018-06-20T15:03:15+0000\n"
+"PO-Revision-Date: 2018-06-20T15:11:41+0000\n"
 
 msgid "Favorites"
 msgstr "Preferiti"
@@ -496,10 +496,10 @@ msgid "%K Double Smoothing Periods"
 msgstr "%K Periodi Double Smoothing"
 
 msgid "%D Periods"
-msgstr "%D Periodi"
+msgstr "%D periodi"
 
 msgid "%D Moving Average Type"
-msgstr "%D Tipologia media mobile"
+msgstr "%D tipologia media mobile"
 
 msgid "%K"
 msgstr "%K"
@@ -511,7 +511,7 @@ msgid "Historical Volatility"
 msgstr "Volatilità storica"
 
 msgid "Days Per Year"
-msgstr "giorni l'anno"
+msgstr "Giorni all'anno"
 
 msgid "Pretty Good Oscillator"
 msgstr "Oscillatore Pretty Good"
@@ -712,7 +712,7 @@ msgid "Gopalakrishnan Range Index"
 msgstr "Indice Gopalakrishnan Range"
 
 msgid "Prime Number Bands"
-msgstr "Prime Number Bands"
+msgstr "Bande Prime Number"
 
 msgid "Prime Bands Top"
 msgstr "Bande Prime Top"
@@ -742,7 +742,7 @@ msgid "Bollinger Bands Bottom"
 msgstr "Bande di Bollinger Bottom"
 
 msgid "Donchian Channel"
-msgstr "Donchian Channel"
+msgstr "Canale Donchian"
 
 msgid "High Period"
 msgstr "Periodo High"
