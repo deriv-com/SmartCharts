@@ -18,73 +18,77 @@ import {
 } from '../components/Icons.jsx';
 import SettingsDialogStore from './SettingsDialogStore';
 
-export const chartTypes = [
-    { id: 'mountain',      text: t.translate('Line'),           candleOnly: false, icon: LineIcon         },
-    { id: 'line',          text: t.translate('Dot'),            candleOnly: false, icon: DotIcon          },
-    { id: 'colored_line',  text: t.translate('Colored Dot'),    candleOnly: false, icon: DotIcon          },
-    { id: 'spline',        text: t.translate('Spline'),         candleOnly: false, icon: SplineIcon       },
-    { id: 'baseline',      text: t.translate('Baseline'),       candleOnly: false, icon: BaseLineIcon     },
-    { id: 'candle',        text: t.translate('Candle'),         candleOnly: true,  icon: CandleIcon       },
-    { id: 'colored_bar',   text: t.translate('OHLC'),           candleOnly: true,  icon: OHLCIcon         },
-    { id: 'hollow_candle', text: t.translate('Hollow Candle'),  candleOnly: true,  icon: HollowCandleIcon },
-    { id: 'heikinashi',    text: t.translate('Heikin Ashi'),    candleOnly: true,  icon: HeikinAshiIcon   },
-    { id: 'kagi',          text: t.translate('Kagi'),           candleOnly: true,  icon: KagiIcon,        settingsOnClick: true },
-    { id: 'linebreak',     text: t.translate('Line Break'),     candleOnly: true,  icon: LineBreakIcon,   settingsOnClick: true },
-    { id: 'renko',         text: t.translate('Renko'),          candleOnly: true,  icon: RenkoIcon,       settingsOnClick: true },
-    { id: 'rangebars',     text: t.translate('Range Bars'),     candleOnly: true,  icon: RangeBarsIcon,   settingsOnClick: true },
-    { id: 'pandf',         text: t.translate('Point & Figure'), candleOnly: true,  icon: PointFigureIcon, settingsOnClick: true },
-];
+export function getChartTypes() {
+    return [
+        { id: 'mountain',      text: t.translate('Line'),           candleOnly: false, icon: LineIcon         },
+        { id: 'line',          text: t.translate('Dot'),            candleOnly: false, icon: DotIcon          },
+        { id: 'colored_line',  text: t.translate('Colored Dot'),    candleOnly: false, icon: DotIcon          },
+        { id: 'spline',        text: t.translate('Spline'),         candleOnly: false, icon: SplineIcon       },
+        { id: 'baseline',      text: t.translate('Baseline'),       candleOnly: false, icon: BaseLineIcon     },
+        { id: 'candle',        text: t.translate('Candle'),         candleOnly: true,  icon: CandleIcon       },
+        { id: 'colored_bar',   text: t.translate('OHLC'),           candleOnly: true,  icon: OHLCIcon         },
+        { id: 'hollow_candle', text: t.translate('Hollow Candle'),  candleOnly: true,  icon: HollowCandleIcon },
+        { id: 'heikinashi',    text: t.translate('Heikin Ashi'),    candleOnly: true,  icon: HeikinAshiIcon   },
+        { id: 'kagi',          text: t.translate('Kagi'),           candleOnly: true,  icon: KagiIcon,        settingsOnClick: true },
+        { id: 'linebreak',     text: t.translate('Line Break'),     candleOnly: true,  icon: LineBreakIcon,   settingsOnClick: true },
+        { id: 'renko',         text: t.translate('Renko'),          candleOnly: true,  icon: RenkoIcon,       settingsOnClick: true },
+        { id: 'rangebars',     text: t.translate('Range Bars'),     candleOnly: true,  icon: RangeBarsIcon,   settingsOnClick: true },
+        { id: 'pandf',         text: t.translate('Point & Figure'), candleOnly: true,  icon: PointFigureIcon, settingsOnClick: true },
+    ];
+}
 
-const aggregates = {
-    heikinashi: true,
-    kagi: {
-        title: t.translate('Kagi'),
-        inputs: [{
-            id: 'kagi',
-            title: t.translate('Reversal Percentage'),
-            type: 'numericinput',
-        }],
-    },
-    renko: {
-        title: t.translate('Renko'),
-        inputs: [{
-            id: 'renko',
-            title: t.translate('Range'),
-            type: 'numericinput',
-        }],
-    },
-    linebreak: {
-        title: t.translate('Line Break'),
-        inputs: [{
-            id: 'priceLines',
-            title: t.translate('Price Lines'),
-            type: 'numericinput',
-            max: 10,
-            step: 1,
-            min: 1,
-        }],
-    },
-    rangebars: {
-        title: t.translate('Range Bars'),
-        inputs: [{
-            id: 'range',
-            title: t.translate('Range'),
-            type: 'numericinput',
-        }],
-    },
-    pandf: {
-        title: t.translate('Point & Figure'),
-        inputs: [{
-            id: 'box',
-            title: t.translate('Box Size'),
-            type: 'numericinput',
-        }, {
-            id: 'reversal',
-            title: t.translate('Reversal'),
-            type: 'numericinput',
-        }],
-    },
-};
+function getAggregates() {
+    return {
+        heikinashi: true,
+        kagi: {
+            title: t.translate('Kagi'),
+            inputs: [{
+                id: 'kagi',
+                title: t.translate('Reversal Percentage'),
+                type: 'numericinput',
+            }],
+        },
+        renko: {
+            title: t.translate('Renko'),
+            inputs: [{
+                id: 'renko',
+                title: t.translate('Range'),
+                type: 'numericinput',
+            }],
+        },
+        linebreak: {
+            title: t.translate('Line Break'),
+            inputs: [{
+                id: 'priceLines',
+                title: t.translate('Price Lines'),
+                type: 'numericinput',
+                max: 10,
+                step: 1,
+                min: 1,
+            }],
+        },
+        rangebars: {
+            title: t.translate('Range Bars'),
+            inputs: [{
+                id: 'range',
+                title: t.translate('Range'),
+                type: 'numericinput',
+            }],
+        },
+        pandf: {
+            title: t.translate('Point & Figure'),
+            inputs: [{
+                id: 'box',
+                title: t.translate('Box Size'),
+                type: 'numericinput',
+            }, {
+                id: 'reversal',
+                title: t.translate('Reversal'),
+                type: 'numericinput',
+            }],
+        },
+    };
+}
 
 export default class ChartTypeStore {
     constructor(mainStore) {
@@ -109,17 +113,20 @@ export default class ChartTypeStore {
     get stx() { return this.context.stx; }
 
     onContextReady = () => {
+        this.aggregates = getAggregates();
+        this.chartTypes = getChartTypes();
+
         let chartType;
         if (this.stx.layout.tension) { // We assume that if tension is set, spline is enabled
             chartType = 'spline';
-        } else if (aggregates[this.stx.layout.aggregationType]) {
+        } else if (this.aggregates[this.stx.layout.aggregationType]) {
             chartType = this.stx.layout.aggregationType;
         } else {
             chartType = this.stx.layout.chartType;
         }
-        const typeIdx = this.types.findIndex(t => t.id === chartType);
+        const typeIdx = this.chartTypes.findIndex(t => t.id === chartType);
         this.list.selectedIdx = typeIdx;
-        this.type = this.types[typeIdx];
+        this.type = this.chartTypes[typeIdx];
     };
 
     @action.bound setType(type) {
@@ -137,7 +144,7 @@ export default class ChartTypeStore {
         } else {
             this.stx.chart.tension = 0;
             delete this.stx.layout.tension;
-            if (aggregates[type.id]) {
+            if (this.aggregates[type.id]) {
                 this.stx.setAggregationType(type.id);
             } else {
                 this.stx.setChartType(type.id);
@@ -153,7 +160,7 @@ export default class ChartTypeStore {
         if (aggregateId !== this.type.id) {
             this.setType(aggregateId);
         }
-        const aggregate = aggregates[aggregateId];
+        const aggregate = this.aggregates[aggregateId];
         this.settingsDialog.title = aggregate.title;
         const inputs = aggregate.inputs.map(({ id, ...agg }) => {
             const name = (id === 'box' || id === 'reversal') ? `pandf.${id}` : id;
@@ -184,12 +191,12 @@ export default class ChartTypeStore {
     @computed get types() {
         const isTickSelected = this.mainStore.timeperiod.timeUnit === 'tick';
 
-        return chartTypes.map(t => ({
+        return this.chartTypes.map(t => ({
             ...t,
             active: t.id === this.type.id,
             disabled: t.candleOnly ? isTickSelected : false,
         }));
     }
 
-    @observable type = chartTypes[0];
+    @observable type;
 }

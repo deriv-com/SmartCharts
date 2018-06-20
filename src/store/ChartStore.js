@@ -98,27 +98,25 @@ class ChartStore {
     }
 
     updateHeight(position) {
-        const ciqNode = this.rootNode.querySelector('.ciq-chart');
-        const containerNode = this.rootNode.querySelector('.chartContainer.primary');
         const panelPosition = position || this.mainStore.chartSetting.position;
-        // height of chart control panel
-        const offsetHeight = (panelPosition == 'left') ? 0 : 50;
-        containerNode.style.height = `${ciqNode.offsetHeight - offsetHeight}px`;
+        const offsetHeight = (panelPosition === 'left') ? 0 : this.chartControlsNode.offsetHeight;
+        this.chartHeight = this.chartNode.offsetHeight;
+        this.chartContainerHeight = this.chartHeight - offsetHeight;
     }
-    resizeScreen = () => {
+
+    @action.bound resizeScreen() {
         if (!this.context) { return; }
         this.updateHeight();
         this.stxx.resizeChart();
         if (this.stxx.slider) {
             this.stxx.slider.display(this.stxx.layout.rangeSlider);
         }
-    };
+    }
 
     @action.bound init(rootNode, props) {
         this.rootNode = rootNode;
         this.chartNode = this.rootNode.querySelector('.ciq-chart');
         this.chartControlsNode = this.chartNode.querySelector('.cq-chart-controls');
-        this.chartContainerNode = this.rootNode.querySelector('.chartContainer.primary');
 
         const {
             onSymbolChange,
@@ -126,10 +124,13 @@ class ChartStore {
             requestAPI,
             requestSubscribe,
             requestForget,
+            isMobile,
             shareOrigin = 'https://charts.binary.com',
         } = props;
         const api = new BinaryAPI(requestAPI, requestSubscribe, requestForget);
         this.mainStore.share.shareOrigin = shareOrigin;
+        this.isMobile = isMobile;
+        this.onSymbolChange = onSymbolChange;
 
         const stxx = this.stxx = new CIQ.ChartEngine({
             container: this.rootNode.querySelector('.chartContainer.primary'),
@@ -179,9 +180,10 @@ class ChartStore {
         // });
 
         const holderStyle = stxx.chart.panel.holder.style;
+        stxx.append('deleteHighlighted', this.updateComparisons);
         stxx.addEventListener('layout', () => {
             this.saveLayout();
-            this.chartPanelTop = holderStyle.top;
+            this.setChartPanelTop(holderStyle.top);
         });
         stxx.addEventListener('symbolChange', this.saveLayout.bind(this));
         stxx.addEventListener('drawing', this.saveDrawings.bind(this));
@@ -238,18 +240,12 @@ class ChartStore {
                 if (initialSymbol && !(layoutData && layoutData.symbols)) {
                     this.changeSymbol(initialSymbol);
                 } else if (stxx.chart.symbol) {
-                    this.currentActiveSymbol = stxx.chart.symbolObject;
-                    stxx.chart.yAxis.decimalPlaces = stxx.chart.symbolObject.decimal_places;
-                    this.categorizedSymbols = this.categorizeActiveSymbols();
-                    if (onSymbolChange) { onSymbolChange(this.currentActiveSymbol); }
+                    this.setCurrentActiveSymbols(stxx);
+                    if (this.onSymbolChange) { this.onSymbolChange(this.currentActiveSymbol); }
                 } else {
                     this.changeSymbol(this.defaultSymbol);
                 }
-
-                this.context = context;
-                this.contextPromise.resolve(this.context);
-                this.resizeScreen();
-                this.chartPanelTop = holderStyle.top;
+                this.setLayoutData(context, holderStyle.top);
             };
             const href = window.location.href;
             if (href.startsWith(shareOrigin) && href.indexOf('#') !== -1) {
@@ -268,7 +264,7 @@ class ChartStore {
             }
         });
 
-        this.resizeObserver = new ResizeObserver(() => this.resizeScreen());
+        this.resizeObserver = new ResizeObserver(this.resizeScreen);
         this.resizeObserver.observe(rootNode);
 
         this.feed.onComparisonDataUpdate(this.updateComparisons);
@@ -277,6 +273,25 @@ class ChartStore {
     removeComparison(symbolObj) {
         this.context.stx.removeSeries(symbolObj.symbol);
         this.updateComparisons();
+    }
+    @action.bound setLayoutData(context, top) {
+        this.context = context;
+        this.contextPromise.resolve(this.context);
+        this.resizeScreen();
+        this.setChartPanelTop(top);
+    }
+
+    @action.bound setCurrentActiveSymbols(stxx) {
+        this.currentActiveSymbol = stxx.chart.symbolObject;
+        stxx.chart.yAxis.decimalPlaces = stxx.chart.symbolObject.decimal_places;
+        this.categorizedSymbols = this.categorizeActiveSymbols();
+    }
+    @action.bound setChartAvailability(status) {
+        this.isChartAvailable = status;
+    }
+
+    @action.bound setChartPanelTop(top) {
+        this.chartPanelTop = top;
     }
 
     @action.bound changeSymbol(symbolObj) {
