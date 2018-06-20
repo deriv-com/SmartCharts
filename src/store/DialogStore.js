@@ -2,7 +2,7 @@ import { observable, action } from 'mobx';
 import { connect } from './Connect';
 
 let activeDialog;
-let timer;
+let allowed = true;
 export default class DialogStore {
     constructor(mainStore) {
         this.mainStore = mainStore;
@@ -11,37 +11,19 @@ export default class DialogStore {
     @observable open = false;
 
     @action.bound setOpen(val) {
-        if (this.open !== val && val === true) {
-            clearTimeout(timer);
-            timer = setTimeout(() => {
-                this.open = val;
-                if (this.open) { setTimeout(() => this.register(), 100); } else { this.unregister(); }
-                if (activeDialog) { activeDialog.setClose(); }
-                activeDialog = this;
-            }, 100);
-        } else if (this.open !== val && val === false) {
+        if (this.open !== val && val === true && allowed) {
+            this.open = val;
+            if (this.open) { setTimeout(() => this.register(), 100); } else { this.unregister(); }
+            if (activeDialog) { activeDialog.setClose(); }
+            activeDialog = this;
+            allowed = false;
+
+            setTimeout(() => {
+                allowed = true;
+            }, 300);
+        } else if (this.open !== val && val === false && allowed) {
             this.setClose();
         }
-
-        // if (this.open !== val) {
-        //     if (val === true) {
-        //         clearTimeout(timer);
-        //         validOperation = false;
-        //         timer = setTimeout(() => {
-        //             if (val === true) { // close active dialog.
-        //                 if (activeDialog) { activeDialog.setClose(); }
-        //                 activeDialog = this;
-        //             } else {
-        //                 activeDialog = undefined;
-        //             }
-        //             this.open = val;
-        //             if (this.open) { setTimeout(() => this.register(), 100); } else { this.unregister(); }
-        //             validOperation = true;
-        //         }, 50);
-        //     } else {
-        //         this.setClose();
-        //     }
-        // }
     }
     @action.bound setClose() {
         this.open = false;
