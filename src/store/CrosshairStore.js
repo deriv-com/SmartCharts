@@ -31,10 +31,6 @@ class CrosshairStore {
     showSeries = true;
     showStudies = true;
 
-    setRows = (rows) => {
-        this.rows = rows;
-    };
-
     hide = () => {
         this.top = 0;
         this.left = -50000;
@@ -48,8 +44,8 @@ class CrosshairStore {
     onContextReady = () => {
         const storedState = this.stx.layout.crosshair;
         this.state = (typeof storedState !== 'number') ? 0 : storedState;
-        this.stx.append('headsUpHR', this.renderFunction);
-        this.stx.append('createDataSegment', this.renderFunction);
+        this.stx.append('headsUpHR', this.renderCrosshairTooltip);
+        this.stx.append('createDataSegment', this.renderCrosshairTooltip);
     };
 
     @action.bound toggleState() {
@@ -59,7 +55,7 @@ class CrosshairStore {
         this.mainStore.chart.saveLayout();
     }
 
-    @action.bound renderFunction() {
+    @action.bound renderCrosshairTooltip() {
         // if no tooltip exists, then skip
         if (this.state !== 2) return;
 
@@ -312,7 +308,7 @@ class CrosshairStore {
             }
         }
 
-        this.setRows(rows);
+        this.rows = rows;
     }
 
     updateTooltipPosition() {
