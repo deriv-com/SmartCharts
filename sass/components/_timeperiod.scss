@@ -145,3 +145,22 @@
 		}
 	}
 }
+
+@media only screen and (min-width: 480px) {
+    .ciq-period{
+        width: 70px !important;
+        top: -5px;
+    }
+}
+@media only screen and (min-width: 900px) {
+    .ciq-period{
+        width: 80px !important;
+        top: 0px;
+    }
+}
+@media only screen and (min-width: 1100px) {
+    .ciq-period{
+        width: 100px !important;
+        top: 0px;
+    }
+}

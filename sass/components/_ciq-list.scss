@@ -2,6 +2,9 @@
 	max-height: 260px;
 	overflow-y: auto;
 	position: relative;
+	&.ps{
+		padding-right: 11px;
+	}
 	.ciq-list-item {
 		cursor: pointer;
 		line-height: 32px;

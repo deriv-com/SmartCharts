@@ -212,25 +212,38 @@
         }
     }
 }
-@media only screen and (min-width: 850px) {
+@media only screen and (min-width: 480px) {
     .cq-chart-controls {
         .ciq-menu {
-            width: 80px;
+            width: 47px;
             .cq-menu-btn {
                 > .ic-icon{
                     padding: .35em 0em;
+                }
+                .ic-subtitle{
+                    display: none;
                 }
             }
         }
     }
 }
-@media only screen and (min-width: 1200px) {
+@media only screen and (min-width: 900px) {
+    .cq-chart-controls {
+        .ciq-menu {
+            width: 70px;
+        }
+    }
+}
+@media only screen and (min-width: 1100px) {
     .cq-chart-controls {
         .ciq-menu {
             width: 100px;
             .cq-menu-btn {
                 > .ic-icon{
                     padding: .35em 0.5em;
+                }
+                .ic-subtitle{
+                    display: block;
                 }
             }
         }

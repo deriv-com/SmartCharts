@@ -1,4 +1,5 @@
 import { observable, action, reaction } from 'mobx';
+import PerfectScrollbar from 'perfect-scrollbar';
 import { connect } from './Connect';
 import KeystrokeHub from '../components/ui/KeystrokeHub';
 
@@ -33,6 +34,7 @@ export default class ListStore {
 
     onRootRef = (root) => {
         if (!root) { return; }
+        this.scroll = new PerfectScrollbar(root);
         this.root = root;
         root.addEventListener(CIQ.wheelEvent, (e) => {
             e.stopPropagation();

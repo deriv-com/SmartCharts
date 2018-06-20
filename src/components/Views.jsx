@@ -23,6 +23,7 @@ const ViewItem = ({
 
 const Views = ({
     Menu,
+    setScrollPanel,
     menuOpen,
     views,
     routes: { current: currentRoute, add, main, cancel },
@@ -67,7 +68,7 @@ const Views = ({
                 </span>
             </div>
             <div className="content">
-                <div className="ciq-list">
+                <div className="ciq-list" ref={setScrollPanel}>
                     {
                         views.length
                             ? views.map((view, i) => (
@@ -92,6 +93,7 @@ const Views = ({
 
 export default connect(({ view: s }) => ({
     Menu: s.menu.connect(Menu),
+    setScrollPanel: s.setScrollPanel,
     views: s.views,
     routes: s.routes,
     onChange: s.onChange,
