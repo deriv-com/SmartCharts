@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Italian\n"
 "Language: it_IT\n"
-"PO-Revision-Date: 2018-06-20T14:30:39+0000\n"
+"PO-Revision-Date: 2018-06-20T14:46:53+0000\n"
 
 msgid "Favorites"
 msgstr "Preferiti"
@@ -187,7 +187,7 @@ msgid "Countdown"
 msgstr "Conto alla rovescia"
 
 msgid "Asset Information"
-msgstr ""
+msgstr "Informazioni sull'asset"
 
 msgid "Language"
 msgstr "Lingua"
@@ -205,7 +205,7 @@ msgid "Copied!"
 msgstr "Copia eseguita!"
 
 msgid "Failed!"
-msgstr "Operazione non riuscita."
+msgstr "Operazione non riuscita!"
 
 msgid "Search..."
 msgstr "Cerca..."
@@ -229,7 +229,7 @@ msgid "Crossline"
 msgstr "Crossline"
 
 msgid "Doodle"
-msgstr "Formato libero"
+msgstr "Mano libera"
 
 msgid "Ellipse"
 msgstr "Ellisse"
@@ -412,13 +412,13 @@ msgid "RSquared"
 msgstr "RSquared"
 
 msgid "Linear Reg Forecast"
-msgstr "Previsione nella regressione lineare"
+msgstr "Previsione di regressione lineare"
 
 msgid "Forecast"
-msgstr "Forecast"
+msgstr "Previsione"
 
 msgid "Linear Reg Intercept"
-msgstr "Linear Reg Intercept"
+msgstr "Blocco regressione lineare"
 
 msgid "Intercept"
 msgstr "Intercept"
@@ -535,7 +535,7 @@ msgid "Short Cycle"
 msgstr "Ciclo corto"
 
 msgid "Long Cycle"
-msgstr "Ciclo Lungo"
+msgstr "Ciclo lungo"
 
 msgid "Points Or Percent"
 msgstr "Punti o percentuale"
