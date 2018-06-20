@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Italian\n"
 "Language: it_IT\n"
-"PO-Revision-Date: 2018-06-20T15:51:49+0000\n"
+"PO-Revision-Date: 2018-06-20T16:01:40+0000\n"
 
 msgid "Favorites"
 msgstr "Preferiti"
@@ -655,7 +655,7 @@ msgid "Shift Percentage"
 msgstr "Percentuale di variazione"
 
 msgid "Channel Fill"
-msgstr "Channel Fill"
+msgstr "Canale di Fill"
 
 msgid "High Low Top"
 msgstr "High Low top"
@@ -670,7 +670,7 @@ msgid "High Minus Low"
 msgstr "High Minus Low"
 
 msgid "Median Price"
-msgstr "Median Price"
+msgstr "Prezzo medio"
 
 msgid "Overlay"
 msgstr "Soprastante"
@@ -838,7 +838,7 @@ msgid "Williams %R"
 msgstr "Williams %R"
 
 msgid "Accumulation/Distribution"
-msgstr "Accumulation Distribution"
+msgstr "Accumulazione/Distribuzione"
 
 msgid "Use Volume"
 msgstr "Utilizzare volume"
@@ -1255,10 +1255,10 @@ msgid "Supertrend"
 msgstr "Supertrend"
 
 msgid "Uptrend"
-msgstr "Uptrend"
+msgstr "Trend ascendente"
 
 msgid "Downtrend"
-msgstr "Downtrend"
+msgstr "Trend discendente"
 
 msgid "Volume Profile"
 msgstr "Profilo Volume"
