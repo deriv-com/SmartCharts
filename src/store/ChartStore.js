@@ -38,7 +38,7 @@ class ChartStore {
     @observable chartPanelTop = '0px';
     @observable chartHeight;
     @observable chartContainerHeight;
-    isMobile = false;
+    @observable isMobile = false;
 
     @action.bound setActiveSymbols(activeSymbols) {
         this.activeSymbols = this.processSymbols(activeSymbols);
@@ -123,10 +123,13 @@ class ChartStore {
             requestAPI,
             requestSubscribe,
             requestForget,
+            isMobile,
             shareOrigin = 'https://charts.binary.com',
         } = props;
         const api = new BinaryAPI(requestAPI, requestSubscribe, requestForget);
         this.mainStore.share.shareOrigin = shareOrigin;
+        this.isMobile = isMobile;
+        this.onSymbolChange = onSymbolChange;
 
         const stxx = this.stxx = new CIQ.ChartEngine({
             container: this.rootNode.querySelector('.chartContainer.primary'),
@@ -237,7 +240,7 @@ class ChartStore {
                     this.changeSymbol(initialSymbol);
                 } else if (stxx.chart.symbol) {
                     this.setCurrentActiveSymbols(stxx);
-                    if (onSymbolChange) { onSymbolChange(this.currentActiveSymbol); }
+                    if (this.onSymbolChange) { this.onSymbolChange(this.currentActiveSymbol); }
                 } else {
                     this.changeSymbol(this.defaultSymbol);
                 }
