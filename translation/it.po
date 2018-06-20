@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Italian\n"
 "Language: it_IT\n"
-"PO-Revision-Date: 2018-06-20T15:41:03+0000\n"
+"PO-Revision-Date: 2018-06-20T15:51:49+0000\n"
 
 msgid "Favorites"
 msgstr "Preferiti"
@@ -445,7 +445,7 @@ msgid "Moving Average Type"
 msgstr "Tipologia media mobile"
 
 msgid "Trade Volume Index"
-msgstr "Indice volume di scambio"
+msgstr "Indice Trade Volume"
 
 msgid "Min Tick Value"
 msgstr "Valore tick min"
@@ -589,7 +589,7 @@ msgid "QStick"
 msgstr "QStick"
 
 msgid "Coppock Curve"
-msgstr "Coppock Curve"
+msgstr "Curva di Coppock"
 
 msgid "Short RoC"
 msgstr "RoC corto"
@@ -649,7 +649,7 @@ msgid "Negative Bar"
 msgstr "Barra negativa"
 
 msgid "High Low Bands"
-msgstr "Bande High Low"
+msgstr "Bande massimo minimo"
 
 msgid "Shift Percentage"
 msgstr "Percentuale di variazione"
