@@ -98,27 +98,24 @@ class ChartStore {
     }
 
     updateHeight(position) {
-        const ciqNode = this.rootNode.querySelector('.ciq-chart');
-        const containerNode = this.rootNode.querySelector('.chartContainer.primary');
         const panelPosition = position || this.mainStore.chartSetting.position;
-        // height of chart control panel
-        const offsetHeight = (panelPosition == 'left') ? 0 : 50;
-        containerNode.style.height = `${ciqNode.offsetHeight - offsetHeight}px`;
+        const offsetHeight = (panelPosition === 'left') ? 0 : this.chartControlsNode.offsetHeight;
+        this.chartContainerHeight = this.chartNode.offsetHeight - offsetHeight;
     }
-    resizeScreen = () => {
+
+    @action.bound resizeScreen() {
         if (!this.context) { return; }
         this.updateHeight();
         this.stxx.resizeChart();
         if (this.stxx.slider) {
             this.stxx.slider.display(this.stxx.layout.rangeSlider);
         }
-    };
+    }
 
     @action.bound init(rootNode, props) {
         this.rootNode = rootNode;
         this.chartNode = this.rootNode.querySelector('.ciq-chart');
         this.chartControlsNode = this.chartNode.querySelector('.cq-chart-controls');
-        this.chartContainerNode = this.rootNode.querySelector('.chartContainer.primary');
 
         const {
             onSymbolChange,
@@ -263,7 +260,7 @@ class ChartStore {
             }
         });
 
-        this.resizeObserver = new ResizeObserver(() => this.resizeScreen());
+        this.resizeObserver = new ResizeObserver(this.resizeScreen);
         this.resizeObserver.observe(rootNode);
 
         this.feed.onComparisonDataUpdate(this.updateComparisons);
