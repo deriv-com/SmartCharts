@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Portuguese\n"
 "Language: pt_PT\n"
-"PO-Revision-Date: 2018-06-08 04:22-0400\n"
+"PO-Revision-Date: 2018-06-20T09:51:31+0000\n"
 
 msgid "Favorites"
 msgstr "Favoritos"
@@ -37,22 +37,22 @@ msgid "LOW"
 msgstr "BAIXO"
 
 msgid "Underlying Assets"
-msgstr ""
+msgstr "Ativos subjacentes"
 
 msgid "Share"
 msgstr "Partilhar"
 
 msgid "Share / Download Chart"
-msgstr ""
+msgstr "Compartilhar / Baixar gráfico"
 
 msgid "Share link"
 msgstr "Compartilhar o link"
 
 msgid "Failed to generate link"
-msgstr ""
+msgstr "Falha ao gerar link"
 
 msgid "Retry"
-msgstr ""
+msgstr "Tentar novamente"
 
 msgid "Download chart"
 msgstr "Baixar gráfico"
@@ -136,19 +136,19 @@ msgid "Hollow Candle"
 msgstr "Vela vazia"
 
 msgid "Heikin Ashi"
-msgstr ""
+msgstr "Heikin Ashi"
 
 msgid "Kagi"
-msgstr ""
+msgstr "Kagi"
 
 msgid "Line Break"
-msgstr ""
+msgstr "Quebra de linha"
 
 msgid "Renko"
-msgstr ""
+msgstr "Renko"
 
 msgid "Range Bars"
-msgstr ""
+msgstr "Barras de intervalo"
 
 msgid "Point & Figure"
 msgstr ""
