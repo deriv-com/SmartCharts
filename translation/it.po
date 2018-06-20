@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Italian\n"
 "Language: it_IT\n"
-"PO-Revision-Date: 2018-06-20T14:11:31+0000\n"
+"PO-Revision-Date: 2018-06-20T14:30:39+0000\n"
 
 msgid "Favorites"
 msgstr "Preferiti"
@@ -187,7 +187,7 @@ msgid "Countdown"
 msgstr "Conto alla rovescia"
 
 msgid "Asset Information"
-msgstr "Informazioni sull'asset"
+msgstr ""
 
 msgid "Language"
 msgstr "Lingua"
@@ -388,10 +388,10 @@ msgid "Smooth"
 msgstr "Smooth"
 
 msgid "Fast"
-msgstr "Fast"
+msgstr "Rapido"
 
 msgid "Slow"
-msgstr "Slow"
+msgstr "Lento"
 
 msgid "Aroon"
 msgstr "Aroon"
