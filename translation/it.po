@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Italian\n"
 "Language: it_IT\n"
-"PO-Revision-Date: 2018-06-20T14:46:53+0000\n"
+"PO-Revision-Date: 2018-06-20T15:03:15+0000\n"
 
 msgid "Favorites"
 msgstr "Preferiti"
@@ -418,7 +418,7 @@ msgid "Forecast"
 msgstr "Previsione"
 
 msgid "Linear Reg Intercept"
-msgstr "Blocco regressione lineare"
+msgstr "Linear Reg Intercept"
 
 msgid "Intercept"
 msgstr "Intercept"
@@ -439,22 +439,22 @@ msgid "Standard Deviation"
 msgstr "Deviazione standard"
 
 msgid "Standard Deviations"
-msgstr "Deviazione standard"
+msgstr "Deviazioni standard"
 
 msgid "Moving Average Type"
 msgstr "Tipologia media mobile"
 
 msgid "Trade Volume Index"
-msgstr "Indice Trade Volume"
+msgstr "Indice volume di scambio"
 
 msgid "Min Tick Value"
-msgstr "Min Tick Value"
+msgstr "Valore tick min"
 
 msgid "Swing Index"
 msgstr "Indice Swing"
 
 msgid "Limit Move Value"
-msgstr "Limit Move Value"
+msgstr "Valore Limit Move"
 
 msgid "Accumulative Swing Index"
 msgstr "Indice Accumulative Swing"
@@ -487,7 +487,7 @@ msgid "Stochastic Momentum Index"
 msgstr "Indice Stochastic Momentum"
 
 msgid "%K Periods"
-msgstr "%K Periodi"
+msgstr "%K periodi"
 
 msgid "%K Smoothing Periods"
 msgstr "%K periodi di lisciatura"
