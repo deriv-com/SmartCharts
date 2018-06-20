@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Italian\n"
 "Language: it_IT\n"
-"PO-Revision-Date: 2018-06-18T10:11:13+0000\n"
+"PO-Revision-Date: 2018-06-20T13:41:30+0000\n"
 
 msgid "Favorites"
 msgstr "Preferiti"
@@ -133,7 +133,7 @@ msgid "OHLC"
 msgstr "OHLC"
 
 msgid "Hollow Candle"
-msgstr "Candela Vuote"
+msgstr "Candela vuota"
 
 msgid "Heikin Ashi"
 msgstr "Heikin Ashi"
