@@ -81,7 +81,7 @@ export default class DrawToolsStore {
         }
     };
 
-    onRightClick = () => {
+    @action.bound onRightClick() {
         for (const drawing of this.stx.drawingObjects) {
             if (drawing.highlighted && !drawing.permanent) {
                 const dontDeleteMe = drawing.abort(); // eslint-disable-line no-unused-vars
@@ -115,7 +115,7 @@ export default class DrawToolsStore {
             }
         }
         return false;
-    };
+    }
 
     noTool = () => {
         const count = this.stx.drawingObjects.length;

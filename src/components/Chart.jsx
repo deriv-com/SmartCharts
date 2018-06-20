@@ -6,6 +6,7 @@ import ComparisonList from './ComparisonList.jsx';
 import ChartTitle from './ChartTitle.jsx';
 import AssetInformation from './AssetInformation.jsx';
 import Loader from './Loader.jsx';
+import Barrier from './Barrier.jsx';
 
 /* css + scss */
 import '../../sass/app.scss';
@@ -52,11 +53,13 @@ class Chart extends Component {
             theme,
             isChartAvailable,
             setting,
+            barriers,
             chartPanelTop,
             chartControlsWidgets,
             AggregateChartSettingsDialog,
             topWidgets,
             showCountdown = false,
+            chartContainerHeight,
         } = this.props;
 
         const currentLang = lang || ((setting && setting.language) ? setting.language.key : 'en');
@@ -64,7 +67,6 @@ class Chart extends Component {
         const currentPosition = `cq-chart-control-${(setting && setting.position && !isMobile) ? setting.position : 'bottom'}`;
         const currentMode = `${isMobile ? 'smartcharts-mobile' : ''}`;
         const array = React.Children.toArray(children);
-        const insideHolder = array.filter(c => !/(TradeStart)|(TradeEnd)/.test(c.type.displayName));
         const insideSubHolder = array.filter(c => /(TradeStart)|(TradeEnd)/.test(c.type.displayName));
         const renderTopWidgets = topWidgets || defaultTopWidgets;
 
@@ -88,9 +90,15 @@ class Chart extends Component {
                 <div className={`${currentMode} ${currentPosition}`}>
                     <div className="ciq-chart-area">
                         <div className="ciq-chart">
+                            {barriers &&
                             <RenderInsideChart at="holder">
-                                {insideHolder}
-                            </RenderInsideChart>
+                                {barriers.map((barr, idx) => (
+                                    <Barrier
+                                        key={idx}
+                                        {...barr}
+                                    />
+                                ))}
+                            </RenderInsideChart>}
                             <RenderInsideChart at="subholder">
                                 {insideSubHolder}
                             </RenderInsideChart>
@@ -98,8 +106,9 @@ class Chart extends Component {
                                 { renderTopWidgets() }
                             </div>
                             <ChartControls widgets={chartControlsWidgets} />
-                            <Crosshair />
-                            <div className="chartContainer primary" />
+                            <div className="chartContainer primary" style={{ height: chartContainerHeight }}>
+                                <Crosshair />
+                            </div>
                             <Loader />
                             {!isChartAvailable &&
                                 <div className="cq-chart-unavailable">
@@ -127,4 +136,5 @@ export default connect(({ chart, drawTools, studies, chartSetting, chartType }) 
     isChartAvailable: chart.isChartAvailable,
     chartPanelTop: chart.chartPanelTop,
     setting: chartSetting,
+    chartContainerHeight: chart.chartContainerHeight,
 }))(Chart);
