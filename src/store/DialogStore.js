@@ -61,5 +61,6 @@ export default class DialogStore {
         onContainerClick: this.onContainerClick,
         chartHeight: this.mainStore.chart.chartHeight,
         chartContainerHeight: this.mainStore.chart.chartContainerHeight,
+        isMobile: this.mainStore.chart.isMobile,
     }));
 }
