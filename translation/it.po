@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Italian\n"
 "Language: it_IT\n"
-"PO-Revision-Date: 2018-06-21T11:51:50+0000\n"
+"PO-Revision-Date: 2018-06-21T21:41:07+0000\n"
 
 msgid "Favorites"
 msgstr "Preferiti"
@@ -1231,7 +1231,7 @@ msgid "Stop Levels"
 msgstr "Livelli di stop"
 
 msgid "Level Offset"
-msgstr "Offset livello"
+msgstr "Livello offset"
 
 msgid "Price Minimum"
 msgstr "Minimo del prezzo"
