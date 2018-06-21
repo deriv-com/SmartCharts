@@ -180,9 +180,12 @@ export default class CategoricalDisplayStore {
             return filteredItems;
         }
 
-        const reg = RegExp(this.filterText.trim(), 'i');
+
+        const match_string = this.filterText.split(' ').filter(x => x !== '').map(text => text.trim()).join('|');
+        const reg = RegExp(`(${match_string})`, 'i');
+        const hasSearchString = text => reg.exec(text) !== null;
         const filterCategory = (c) => {
-            c.data = c.data.filter(item => reg.test(item.display) || (item.dataObject && reg.test(item.dataObject.symbol)));
+            c.data = c.data.filter(item => hasSearchString(item.display) || (item.dataObject && hasSearchString(item.dataObject.symbol)));
         };
 
         for (const category of filteredItems) {
