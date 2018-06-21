@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Italian\n"
 "Language: it_IT\n"
-"PO-Revision-Date: 2018-06-18T10:11:13+0000\n"
+"PO-Revision-Date: 2018-06-20T16:01:40+0000\n"
 
 msgid "Favorites"
 msgstr "Preferiti"
@@ -133,7 +133,7 @@ msgid "OHLC"
 msgstr "OHLC"
 
 msgid "Hollow Candle"
-msgstr "Candela Vuote"
+msgstr "Candela vuota"
 
 msgid "Heikin Ashi"
 msgstr "Heikin Ashi"
@@ -205,7 +205,7 @@ msgid "Copied!"
 msgstr "Copia eseguita!"
 
 msgid "Failed!"
-msgstr "Operazione non riuscita."
+msgstr "Operazione non riuscita!"
 
 msgid "Search..."
 msgstr "Cerca..."
@@ -229,7 +229,7 @@ msgid "Crossline"
 msgstr "Crossline"
 
 msgid "Doodle"
-msgstr "Formato libero"
+msgstr "Mano libera"
 
 msgid "Ellipse"
 msgstr "Ellisse"
@@ -334,7 +334,7 @@ msgid "Period"
 msgstr "Periodo"
 
 msgid "Show Zones"
-msgstr "Mostra Zone"
+msgstr "Mostra zone"
 
 msgid "OverBought"
 msgstr "Ipercomprato"
@@ -388,10 +388,10 @@ msgid "Smooth"
 msgstr "Smooth"
 
 msgid "Fast"
-msgstr "Fast"
+msgstr "Rapido"
 
 msgid "Slow"
-msgstr "Slow"
+msgstr "Lento"
 
 msgid "Aroon"
 msgstr "Aroon"
@@ -412,10 +412,10 @@ msgid "RSquared"
 msgstr "RSquared"
 
 msgid "Linear Reg Forecast"
-msgstr "Previsione nella regressione lineare"
+msgstr "Previsione di regressione lineare"
 
 msgid "Forecast"
-msgstr "Forecast"
+msgstr "Previsione"
 
 msgid "Linear Reg Intercept"
 msgstr "Linear Reg Intercept"
@@ -439,7 +439,7 @@ msgid "Standard Deviation"
 msgstr "Deviazione standard"
 
 msgid "Standard Deviations"
-msgstr "Deviazione standard"
+msgstr "Deviazioni standard"
 
 msgid "Moving Average Type"
 msgstr "Tipologia media mobile"
@@ -448,13 +448,13 @@ msgid "Trade Volume Index"
 msgstr "Indice Trade Volume"
 
 msgid "Min Tick Value"
-msgstr "Min Tick Value"
+msgstr "Valore tick min"
 
 msgid "Swing Index"
 msgstr "Indice Swing"
 
 msgid "Limit Move Value"
-msgstr "Limit Move Value"
+msgstr "Valore Limit Move"
 
 msgid "Accumulative Swing Index"
 msgstr "Indice Accumulative Swing"
@@ -487,7 +487,7 @@ msgid "Stochastic Momentum Index"
 msgstr "Indice Stochastic Momentum"
 
 msgid "%K Periods"
-msgstr "%K Periodi"
+msgstr "%K periodi"
 
 msgid "%K Smoothing Periods"
 msgstr "%K periodi di lisciatura"
@@ -496,10 +496,10 @@ msgid "%K Double Smoothing Periods"
 msgstr "%K Periodi Double Smoothing"
 
 msgid "%D Periods"
-msgstr "%D Periodi"
+msgstr "%D periodi"
 
 msgid "%D Moving Average Type"
-msgstr "%D Tipologia media mobile"
+msgstr "%D tipologia media mobile"
 
 msgid "%K"
 msgstr "%K"
@@ -511,7 +511,7 @@ msgid "Historical Volatility"
 msgstr "Volatilità storica"
 
 msgid "Days Per Year"
-msgstr "giorni l'anno"
+msgstr "Giorni all'anno"
 
 msgid "Pretty Good Oscillator"
 msgstr "Oscillatore Pretty Good"
@@ -535,7 +535,7 @@ msgid "Short Cycle"
 msgstr "Ciclo corto"
 
 msgid "Long Cycle"
-msgstr "Ciclo Lungo"
+msgstr "Ciclo lungo"
 
 msgid "Points Or Percent"
 msgstr "Punti o percentuale"
@@ -589,7 +589,7 @@ msgid "QStick"
 msgstr "QStick"
 
 msgid "Coppock Curve"
-msgstr "Coppock Curve"
+msgstr "Curva di Coppock"
 
 msgid "Short RoC"
 msgstr "RoC corto"
@@ -649,13 +649,13 @@ msgid "Negative Bar"
 msgstr "Barra negativa"
 
 msgid "High Low Bands"
-msgstr "Bande High Low"
+msgstr "Bande massimo minimo"
 
 msgid "Shift Percentage"
 msgstr "Percentuale di variazione"
 
 msgid "Channel Fill"
-msgstr "Channel Fill"
+msgstr "Canale di Fill"
 
 msgid "High Low Top"
 msgstr "High Low top"
@@ -670,7 +670,7 @@ msgid "High Minus Low"
 msgstr "High Minus Low"
 
 msgid "Median Price"
-msgstr "Median Price"
+msgstr "Prezzo medio"
 
 msgid "Overlay"
 msgstr "Soprastante"
@@ -712,7 +712,7 @@ msgid "Gopalakrishnan Range Index"
 msgstr "Indice Gopalakrishnan Range"
 
 msgid "Prime Number Bands"
-msgstr "Prime Number Bands"
+msgstr "Bande Prime Number"
 
 msgid "Prime Bands Top"
 msgstr "Bande Prime Top"
@@ -742,7 +742,7 @@ msgid "Bollinger Bands Bottom"
 msgstr "Bande di Bollinger Bottom"
 
 msgid "Donchian Channel"
-msgstr "Donchian Channel"
+msgstr "Canale Donchian"
 
 msgid "High Period"
 msgstr "Periodo High"
@@ -751,19 +751,19 @@ msgid "Low Period"
 msgstr "Periodo Low"
 
 msgid "Donchian High"
-msgstr "Donchian High"
+msgstr "Donchian elevato"
 
 msgid "Donchian Median"
-msgstr "Donchian Median"
+msgstr "Donchian mediano"
 
 msgid "Donchian Low"
-msgstr "Donchian Low"
+msgstr "Donchian basso"
 
 msgid "Highest High Value"
-msgstr "Valore Highest Highe"
+msgstr "Valore massimo più alto"
 
 msgid "Lowest Low Value"
-msgstr "Lowest Low Value"
+msgstr "Valore minimo più basso"
 
 msgid "Mass Index"
 msgstr "Indice Mass"
@@ -772,16 +772,16 @@ msgid "Bulge Threshold"
 msgstr "Bulge Threshold"
 
 msgid "Keltner Channel"
-msgstr "Keltner Channel"
+msgstr "Canale di Keltner"
 
 msgid "Keltner Top"
-msgstr "Keltner Top"
+msgstr "Keltner superiore"
 
 msgid "Keltner Median"
-msgstr "Keltner Median"
+msgstr "Keltner mediano"
 
 msgid "Keltner Bottom"
-msgstr "Keltner Bottom"
+msgstr "Keltner inferiore"
 
 msgid "Parabolic SAR"
 msgstr "Parabolic SAR"
@@ -796,7 +796,7 @@ msgid "Klinger Volume Oscillator"
 msgstr "Oscillatore Klinger Volume"
 
 msgid "Signal Periods"
-msgstr "Periodo di segnale"
+msgstr "Periodi di segnale"
 
 msgid "Klinger"
 msgstr "Klinger"
@@ -805,7 +805,7 @@ msgid "KlingerSignal"
 msgstr "Segnale Klinger"
 
 msgid "Elder Ray Index"
-msgstr "Elder Ray"
+msgstr "Indice Elder Ray"
 
 msgid "Elder Bull Power"
 msgstr "Elder Power rialzista"
@@ -820,7 +820,7 @@ msgid "Linear Reg Slope"
 msgstr "Linear Reg Slope"
 
 msgid "Slope"
-msgstr "Slope"
+msgstr "Pendenza"
 
 msgid "Center Of Gravity"
 msgstr "Center Of Gravity"
@@ -838,10 +838,10 @@ msgid "Williams %R"
 msgstr "Williams %R"
 
 msgid "Accumulation/Distribution"
-msgstr "Accumulation Distribution"
+msgstr "Accumulazione/Distribuzione"
 
 msgid "Use Volume"
-msgstr "Utilizzare Volume"
+msgstr "Utilizzare volume"
 
 msgid "Volume Chart"
 msgstr "Grafico volumi"
@@ -868,10 +868,10 @@ msgid "Display 1 Standard Deviation (1σ)"
 msgstr "Mostra 1 deviazione standard (1σ)"
 
 msgid "Display 2 Standard Deviation (2σ)"
-msgstr "Mostra 2 deviazione standard (2σ)"
+msgstr "Mostra 2 deviazioni standard (2σ)"
 
 msgid "Display 3 Standard Deviation (3σ)"
-msgstr "Mostra 3 deviazione standard (3σ)"
+msgstr "Mostra 3 deviazioni standard (3σ)"
 
 msgid "Average"
 msgstr "Media"
@@ -880,10 +880,10 @@ msgid "1 Standard Deviation (1σ)"
 msgstr "1 deviazione standard (1σ)"
 
 msgid "2 Standard Deviation (2σ)"
-msgstr "2 deviazione standard (2σ)"
+msgstr "2 deviazioni standard (2σ)"
 
 msgid "3 Standard Deviation (3σ)"
-msgstr "3 deviazione standard (3σ)"
+msgstr "3 deviazioni standard (3σ)"
 
 msgid "Correlation Coefficient"
 msgstr "Coefficiente di correlazione"
@@ -904,7 +904,7 @@ msgid "Relative Volatility"
 msgstr "Volatilità relativa"
 
 msgid "STD Period"
-msgstr "STD Period"
+msgstr "Periodo STD"
 
 msgid "Rel Vol"
 msgstr "Rel Vol"
@@ -934,10 +934,10 @@ msgid "ATR Bands"
 msgstr "Bande ATR"
 
 msgid "ATR Bands Top"
-msgstr "Bande ATR top"
+msgstr "Bande ATR superiori"
 
 msgid "ATR Bands Bottom"
-msgstr "Bande ATR bottom"
+msgstr "Bande ATR inferiori"
 
 msgid "ATR Bands Channel"
 msgstr "Bande ATR Channel"
@@ -967,7 +967,7 @@ msgid "Plot Type"
 msgstr "Tipo di tracciato"
 
 msgid "HighLow"
-msgstr "HighLow"
+msgstr "MassimoMinimo"
 
 msgid "Buy Stops"
 msgstr "Ordini stop di acquisto (Buy Stops)"
@@ -982,7 +982,7 @@ msgid "%b"
 msgstr "%b"
 
 msgid "Bollinger Bandwidth"
-msgstr "Ampiezza Banda di Bollinger"
+msgstr "Ampiezza della banda di Bollinger"
 
 msgid "Bandwidth"
 msgstr "Ampiezza della banda"
@@ -997,7 +997,7 @@ msgid "Rel Vig"
 msgstr "Rel Vig"
 
 msgid "RelVigSignal"
-msgstr "RelVigSignal"
+msgstr "Segnale RelVig"
 
 msgid "Elder Impulse System"
 msgstr "Sistema impulsi di Elder"
@@ -1135,7 +1135,7 @@ msgid "TII"
 msgstr "TII"
 
 msgid "Choppiness Index"
-msgstr "Indice choppiness"
+msgstr "Indice Choppiness"
 
 msgid "Disparity Index"
 msgstr "Indice disparità"
@@ -1177,7 +1177,7 @@ msgid "Rainbow Oscillator"
 msgstr "Oscillatore arcobaleno"
 
 msgid "HHV/LLV Lookback"
-msgstr "Loookback HHV/LLV"
+msgstr "Lookback HHV/LLV"
 
 msgid "Pring's Know Sure Thing"
 msgstr "Indicatore Know Sure Thing di Pring"
@@ -1186,7 +1186,7 @@ msgid "Lightest Rate of Change Period"
 msgstr "Periodo con il tasso di variazione più leggero"
 
 msgid "Lightest SMA Period"
-msgstr "Periodo con la SMA più leggera"
+msgstr "Periodo con SMA più leggera"
 
 msgid "Light Rate of Change Period"
 msgstr "Periodo con tasso di variazione leggero"
@@ -1216,7 +1216,7 @@ msgid "Pring's Special K"
 msgstr "Indicatore Special K di Pring"
 
 msgid "Darvas Box"
-msgstr "Scatole di Darvas"
+msgstr "Scatola di Darvas"
 
 msgid "ATH Lookback Period"
 msgstr "Periodo di lookback ATH"
@@ -1225,7 +1225,7 @@ msgid "Exit Field"
 msgstr "Campo di uscita"
 
 msgid "Ghost Boxes"
-msgstr "Ghost Box"
+msgstr "Scatole di Ghost"
 
 msgid "Stop Levels"
 msgstr "Livelli di stop"
@@ -1255,10 +1255,10 @@ msgid "Supertrend"
 msgstr "Supertrend"
 
 msgid "Uptrend"
-msgstr "Uptrend"
+msgstr "Trend ascendente"
 
 msgid "Downtrend"
-msgstr "Downtrend"
+msgstr "Trend discendente"
 
 msgid "Volume Profile"
 msgstr "Profilo Volume"
