@@ -34,12 +34,11 @@ export function stableSort(arr, compare = (a, b) => a < b) {
     return arr;
 }
 export function sameBar(bar1, bar2) {
-    if (!bar1 || !bar2) { return false; }
-    if (+bar1.DT != +bar2.DT) { return false; }
-    if (bar1.Close != bar2.Close) { return false; }
-    if (bar1.Open != bar2.Open) { return false; }
-    if (bar1.Volume != bar2.Volume) { return false; }
-    return true;
+    return !((!bar1 || !bar2)
+        || (+bar1.DT !== +bar2.DT)
+        || (bar1.Close !== bar2.Close)
+        || (bar1.Open !== bar2.Open)
+        || (bar1.Volume !== bar2.Volume));
 }
 
 export function findAncestor(el, cls) {
