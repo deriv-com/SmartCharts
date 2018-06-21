@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Italian\n"
 "Language: it_IT\n"
-"PO-Revision-Date: 2018-06-21T11:39:23+0000\n"
+"PO-Revision-Date: 2018-06-21T11:51:50+0000\n"
 
 msgid "Favorites"
 msgstr "Preferiti"
@@ -649,7 +649,7 @@ msgid "Negative Bar"
 msgstr "Barra negativa"
 
 msgid "High Low Bands"
-msgstr "Bande massimo minimo"
+msgstr "Bande di massimo minimo"
 
 msgid "Shift Percentage"
 msgstr "Percentuale di variazione"
@@ -658,16 +658,16 @@ msgid "Channel Fill"
 msgstr "Canale di Fill"
 
 msgid "High Low Top"
-msgstr "High Low top"
+msgstr "Massimo minimo superiore"
 
 msgid "High Low Median"
-msgstr "High Low median"
+msgstr "Massimo minimo mediano"
 
 msgid "High Low Bottom"
-msgstr "High Low bottom"
+msgstr "Massimo minimo inferiore"
 
 msgid "High Minus Low"
-msgstr "High Minus Low"
+msgstr "Massimo meno minimo"
 
 msgid "Median Price"
 msgstr "Prezzo medio"
@@ -745,10 +745,10 @@ msgid "Donchian Channel"
 msgstr "Canale Donchian"
 
 msgid "High Period"
-msgstr "Periodo High"
+msgstr "Periodo massimo"
 
 msgid "Low Period"
-msgstr "Periodo Minimo"
+msgstr "Periodo minimo"
 
 msgid "Donchian High"
 msgstr "Donchian elevato"
@@ -769,7 +769,7 @@ msgid "Mass Index"
 msgstr "Indice Mass"
 
 msgid "Bulge Threshold"
-msgstr "Bulge Threshold"
+msgstr "Limite Bulge"
 
 msgid "Keltner Channel"
 msgstr "Canale di Keltner"
@@ -787,10 +787,10 @@ msgid "Parabolic SAR"
 msgstr "SAR parabolico"
 
 msgid "Minimum AF"
-msgstr "Minimum AF"
+msgstr "AF minimo"
 
 msgid "Maximum AF"
-msgstr "Maximum AF"
+msgstr "AF massimo"
 
 msgid "Klinger Volume Oscillator"
 msgstr "Oscillatore Klinger Volume"
