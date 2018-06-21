@@ -7,7 +7,7 @@ export default class ViewStore {
     constructor(mainStore) {
         this.mainStore = mainStore;
         this.menu = new MenuStore(mainStore);
-        this.dialog = new DialogStore(mainStore);
+        this.overwritePrompt = new DialogStore(mainStore);
         when(() => this.context, this.onContextReady);
     }
 
@@ -17,7 +17,8 @@ export default class ViewStore {
         current: 'main',
         add: () => this.saveViews(),
         main: () => this.updateRoute('add'),
-        cancel: () => {this.updateRoute('main');this.dialog.setOpen(false,false)},
+        cancel: () => this.updateRoute('main'),
+        overwrite: () => this.overwrite()
     };
 
     get context() { return this.mainStore.chart.context; }
@@ -49,7 +50,8 @@ export default class ViewStore {
 
     @action.bound saveViews() {
         if (this.views.some(x=>x.name.toLowerCase() === this.templateName.toLowerCase())){
-            this.dialog.setOpen(true , false);
+            this.overwritePrompt.setOpen(true , false);
+            this.updateRoute('overwrite');
         }
         else if (this.templateName.length > 0) {
             this.updateRoute('main');
@@ -60,17 +62,15 @@ export default class ViewStore {
         }
     }
 
-    @action.bound onOverwrite() {
-        if (this.templateName.length > 0) {
-            const layout = this.stx.exportLayout();
-            var templateIndex = this.views.findIndex(x => x.name.toLowerCase() === this.templateName.toLowerCase());
-            this.views[templateIndex].layout = layout;
-            this.views[templateIndex].name = this.templateName;
-            this.updateLocalStorage();
-        }
+    @action.bound overwrite() {
+        const layout = this.stx.exportLayout();
+        var templateIndex = this.views.findIndex(x => x.name.toLowerCase() === this.templateName.toLowerCase());
+        this.views[templateIndex].layout = layout;
+        this.views[templateIndex].name = this.templateName;
+        this.updateLocalStorage();
         this.updateRoute('main');
         this.templateName = '';
-        this.dialog.setOpen(false , false);
+        this.overwritePrompt.setOpen(false , false);
     }
 
     @action.bound remove(idx, e) {
@@ -80,7 +80,8 @@ export default class ViewStore {
     }
 
     @action.bound setOpen(value) {
-        return this.dialog.setOpen(value);
+        this.updateRoute('add');
+        return this.overwritePrompt.setOpen(value);
     }
 
     applyLayout = (idx, e) => {
