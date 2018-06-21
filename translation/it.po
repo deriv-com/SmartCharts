@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Italian\n"
 "Language: it_IT\n"
-"PO-Revision-Date: 2018-06-21T11:32:33+0000\n"
+"PO-Revision-Date: 2018-06-21T11:39:23+0000\n"
 
 msgid "Favorites"
 msgstr "Preferiti"
@@ -679,7 +679,7 @@ msgid "Moving Average Envelope"
 msgstr "Media mobile envelope"
 
 msgid "Shift Type"
-msgstr "Shift Type"
+msgstr "Tipologia di Shift"
 
 msgid "Shift"
 msgstr "Shift"
@@ -784,7 +784,7 @@ msgid "Keltner Bottom"
 msgstr "Keltner inferiore"
 
 msgid "Parabolic SAR"
-msgstr "Parabolic SAR"
+msgstr "SAR parabolico"
 
 msgid "Minimum AF"
 msgstr "Minimum AF"
