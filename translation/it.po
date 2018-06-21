@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Italian\n"
 "Language: it_IT\n"
-"PO-Revision-Date: 2018-06-18T09:53:22+0000\n"
+"PO-Revision-Date: 2018-06-18T10:11:13+0000\n"
 
 msgid "Favorites"
 msgstr "Preferiti"
@@ -166,7 +166,7 @@ msgid "Box Size"
 msgstr "Box size"
 
 msgid "Reversal"
-msgstr ""
+msgstr "Inversione"
 
 msgid "RESET"
 msgstr "REIMPOSTA"

@@ -1,13 +1,14 @@
 import { observable, action, computed, when, reaction } from 'mobx';
 import { getTimeUnit, getIntervalInSeconds  } from './utils';
 import MenuStore from './MenuStore';
-import { chartTypes } from './ChartTypeStore';
+import { getChartTypes } from './ChartTypeStore';
 
+const chartTypes = getChartTypes();
 const notCandles = chartTypes
     .filter(t => !t.candleOnly)
     .map(t => t.id);
 
-const aggregateCharts  = chartTypes
+const aggregateCharts = chartTypes
     .filter(t => t.settingsOnClick);
 
 export default class TimeperiodStore {
@@ -131,11 +132,8 @@ export default class TimeperiodStore {
 
     @computed get timeUnit_display() {
         if (!this.timeUnit) { return; }
-        let temp = this.timeUnit;
-        if (temp.length > 4) {
-            temp = (temp).slice(0, 3);
-        }
-        return temp.replace(/(\w)/, str => str.toUpperCase());
+        // Convert to camel case:
+        return t.translate(this.timeUnit.replace(/(\w)/, str => str.toUpperCase()));
     }
 
     @computed get interval_display() {

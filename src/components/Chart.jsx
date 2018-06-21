@@ -59,6 +59,7 @@ class Chart extends Component {
             AggregateChartSettingsDialog,
             topWidgets,
             showCountdown = false,
+            chartContainerHeight,
         } = this.props;
 
         const currentLang = lang || ((setting && setting.language) ? setting.language.key : 'en');
@@ -105,8 +106,9 @@ class Chart extends Component {
                                 { renderTopWidgets() }
                             </div>
                             <ChartControls widgets={chartControlsWidgets} />
-                            <Crosshair />
-                            <div className="chartContainer primary" />
+                            <div className="chartContainer primary" style={{ height: chartContainerHeight }}>
+                                <Crosshair />
+                            </div>
                             <Loader />
                             {!isChartAvailable &&
                                 <div className="cq-chart-unavailable">
@@ -134,4 +136,5 @@ export default connect(({ chart, drawTools, studies, chartSetting, chartType }) 
     isChartAvailable: chart.isChartAvailable,
     chartPanelTop: chart.chartPanelTop,
     setting: chartSetting,
+    chartContainerHeight: chart.chartContainerHeight,
 }))(Chart);
