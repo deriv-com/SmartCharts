@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Italian\n"
 "Language: it_IT\n"
-"PO-Revision-Date: 2018-06-22T13:41:57+0000\n"
+"PO-Revision-Date: 2018-06-22T14:14:43+0000\n"
 
 msgid "Favorites"
 msgstr "Preferiti"
@@ -193,7 +193,7 @@ msgid "Language"
 msgstr "Lingua"
 
 msgid "[symbol] market is presently closed."
-msgstr "[symbol] Il mercato è chiuso al momento."
+msgstr "Il mercato di [symbol] è momentaneamente chiuso."
 
 msgid "Streaming for [symbol] is not available due to license restrictions"
 msgstr "[symbol] in streaming non è disponibile a causa delle limitazioni della licenza"
