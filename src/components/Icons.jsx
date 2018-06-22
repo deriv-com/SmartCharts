@@ -53,6 +53,7 @@ import Warning from '../../sass/icons/alert message/warning.svg';
 import Error from '../../sass/icons/alert message/error.svg';
 import Success from '../../sass/icons/alert message/success.svg';
 import Info from '../../sass/icons/alert message/info.svg';
+import ArrowDown from '../../sass/icons/confirm dialog/ic-arrow-down.svg';
 
 import SymbolPlaceholder from '../../sass/icons/placeholder/ic-placeholder.svg';
 import AUD from '../../sass/icons/flags/aud.svg';
@@ -226,6 +227,8 @@ export const alertIconMap = {
     warning: Wrapper(Warning),
     error: Wrapper(Error),
 };
+
+export const ArrowDownIcon = Wrapper(ArrowDown);
 
 export const SymbolPlaceholderIcon = Wrapper(SymbolPlaceholder);
 

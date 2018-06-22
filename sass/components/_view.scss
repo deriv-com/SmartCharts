@@ -1,4 +1,5 @@
 .ciq-views {
+	position: relative;
 	.cq-menu-dropdown {
 		width: 280px;
 		height: 200px;
@@ -89,25 +90,38 @@
 			}
 		}
 	}
-}
+
 	.cq-view-prompt
 	{
-		background: #0b1838 !important;
-		opacity: .7 !important;
+		background: white !important;
 		width: 340px;
 		height: 80px !important;
 		border-radius: 5px;
-		color: white;
+		color: black;
 		&.open{
 			position: absolute;
-			bottom: 23em;
+			bottom: 23.5em;
 			top: inherit;
+		}
+		>.ic-icon
+		{
+			@include transition(none !important);
+			position: absolute;
+			left: 84%;
+			top: 100%;
+			line-height: 0;
+			width: 10px;
+			height: 10px;
+			>svg
+			{
+			filter: drop-shadow(0px 0px 0px rgba(0,0,0,0.14));
+			}
 		}
 	}
 	.cq-view-prompt .dlg-content
 	{
 		text-align: center;
-		padding-top: 10px;
+		padding-top: 16px;
 		justify-content:center;
 		>.ic-icon
 		{
@@ -124,17 +138,22 @@
 	{
 		display:flex;
 		justify-content: flex-end;
-		margin-top: 10px;
-		margin-right: 10px;
+		margin-top: 16px;
+		margin-right: 16px;
+		font-weight: bold;
 		>div{
 			width: 90px;
 			height: 40px;
 			text-align: center;
 			cursor: pointer;
 			font-size: 12px;
+		}
 	}
-	}
+}
 .smartcharts-mobile{
+	.ciq-views {
+		position: static;
+	}
 	.cq-menu-dropdown {
 		.dropdown-title {
 			.icon {

@@ -8,7 +8,8 @@ import {
     AddIcon,
     TickIcon,
     DeleteIcon,
-    alertIconMap
+    alertIconMap,
+    ArrowDownIcon
 } from './Icons.jsx';
 import '../../sass/components/_view.scss';
 
@@ -36,9 +37,8 @@ const Views = ({
     remove,
     inputRef,
 }) => (
-    <div>
+    <div className="ciq-views">
         <OverwritePrompt className="cq-dialog cq-view-prompt">
-            <div>
                 <div className="dlg-content">
                     <alertIconMap.warning/>
                     <span>
@@ -57,9 +57,9 @@ const Views = ({
                         >{t.translate('OVERWRITE')}
                     </div>
                 </div>
-            </div>
+                <ArrowDownIcon/>
         </OverwritePrompt>
-        <Menu className="ciq-views">
+        <Menu>
             <Menu.Title className="cq-menu-btn">
                 <TemplateIcon
                     className={`ic-icon-with-sub ${menuOpen ? 'active' : ''}`}
