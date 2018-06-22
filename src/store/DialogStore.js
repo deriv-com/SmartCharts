@@ -10,12 +10,12 @@ export default class DialogStore {
 
     @observable open = false;
 
-    @action.bound setOpen(val , closeActiveDialog = true) {
+    @action.bound setOpen(val , isParentDialog = true) {
         if (this.open !== val) {
             this.open = val;
             if (this.open) { setTimeout(() => this.register(), 100); } else { this.unregister(); }
         }
-        if(closeActiveDialog) { 
+        if(isParentDialog) { 
             if (this.open === true) { // close active dialog.
                 if (activeDialog) { activeDialog.setOpen(false); }
                 activeDialog = this;
