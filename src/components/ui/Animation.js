@@ -1,8 +1,6 @@
 /* TAKEN OUT OF ADDONS.JS */
 /* eslint-disable no-unused-vars,eqeqeq,no-shadow,no-alert,no-restricted-globals,prefer-const,prefer-destructuring */
 
-import CIQ from 'chartiq';
-
 /**
  * Add-On that animates the chart.
  *
@@ -15,7 +13,7 @@ import CIQ from 'chartiq';
  *
  * The following chart types are supported: line, mountain, baseline_delta
  *
- * Example <iframe width="800" height="500" scrolling="no" seamless="seamless" align="top" style="float:top" src="http://jsfiddle.net/chartiq/q1qdp8yj/embedded/result,js,html/" allowfullscreen="allowfullscreen" frameborder="1"></iframe>
+ * Example <iframe width="800" height="500" scrolling="no" seamless="seamless" align="top" style="float:top" src="http://jsfiddle.net/chartiq/6fqw652z/embedded/result,js,html/" allowfullscreen="allowfullscreen" frameborder="1"></iframe>
  *
  * @param {CIQ.ChartEngine} stx The chart object
  * @param {object} animationParameters Configuration parameters
@@ -41,7 +39,7 @@ CIQ.Animation = function (stx, animationParameters, easeMachine) {
     };
     animationParameters = CIQ.extend(params, animationParameters);
 
-    if (params.tension) { stx.chart.tension = animationParameters.tension; }
+    if (params.tension) stx.chart.tension = animationParameters.tension;
     stx.tickAnimator = easeMachine || new CIQ.EaseMachine(Math.easeOutCubic, 1000);
     let scrollAnimator = new CIQ.EaseMachine(Math.easeInOutCubic, 1000);
 
@@ -67,8 +65,9 @@ CIQ.Animation = function (stx, animationParameters, easeMachine) {
         if (!chart) {
             chart = self.chart;
         }
-        if (!chart || !chart.defaultChartStyleConfig || chart.defaultChartStyleConfig == 'none') { return; }
-        if (params && params.animationEntry) { return; }
+        if (!chart || !chart.defaultChartStyleConfig || chart.defaultChartStyleConfig == 'none') return;
+
+        if (params !== undefined && params.animationEntry) return;
 
         function completeLastBar(value) {
             for (let md = chart.masterData.length - 1; md >= 0; md--) {
@@ -83,7 +82,7 @@ CIQ.Animation = function (stx, animationParameters, easeMachine) {
         function unanimateScroll() {
             if (chart.animatingHorizontalScroll) {
                 chart.animatingHorizontalScroll = false;
-                self.micropixels = self.nextMicroPixels = self.previousMicroPixels; // <-- Reset self.nextMicroPixels here
+                self.micropixels = self.nextMicroPixels = self.previousMicroPixels;  // <-- Reset self.nextMicroPixels here
                 chart.lastTickOffset = 0;
             }
             if (chart.closePendingAnimation !== null) {
@@ -172,25 +171,24 @@ CIQ.Animation = function (stx, animationParameters, easeMachine) {
 
         if (supportedChartType) {
             let quote = appendQuotes[appendQuotes.length - 1];
-            this.prevQuote = this.currentQuote(); // <---- prevQuote logic has been changed to prevent forward/back jitter when more than one tick comes in between animations
+            this.prevQuote = this.currentQuote();  // <---- prevQuote logic has been changed to prevent forward/back jitter when more than one tick comes in between animations
             let chartJustAdvanced = false; // When advancing, we need special logic to deal with the open
-            if (period == 1 && appendQuotes.length == 2) { // Don't do this if consolidating
+            if (period == 1 && appendQuotes.length == 2) {  // Don't do this if consolidating
                 this.prevQuote = appendQuotes[0];
                 completeLastBar(this.prevQuote.Close);
                 appendQuotes.splice(1, 1);
             }
             if (!quote || !this.prevQuote) { return false; }
 
-            let dataZone = this.dataZone;
             if (this.extendedHours && chart.market.market_def) {
                 // Filter out unwanted sessions
                 let dtToFilter = quote.DT;
                 if (CIQ.ChartEngine.isDailyInterval(interval)) {
                     filterSession = !chart.market.isMarketDate(dtToFilter);
                 } else if (!nextBoundary || nextBoundary <= dtToFilter) {
-                    let session = chart.market.getSession(dtToFilter, dataZone);
+                    let session = chart.market.getSession(dtToFilter);
                     filterSession = (session !== '' && (!this.layout.marketSessions || !this.layout.marketSessions[session]));
-                    nextBoundary = chart.market[filterSession ? 'getNextOpen' : 'getNextClose'](dtToFilter, dataZone, dataZone);
+                    nextBoundary = chart.market[filterSession ? 'getNextOpen' : 'getNextClose'](dtToFilter);
                 }
                 if (filterSession) {
                     this.draw();
@@ -255,68 +253,6 @@ CIQ.Animation = function (stx, animationParameters, easeMachine) {
             });
             return true; // bypass default behavior in favor of animation
         }
-    });
-
-    stx.prepend('renderYAxis', function (chart) {
-        if (this.grabbingScreen) return;
-
-        let panel = chart.panel;
-        let arr = panel.yaxisRHS.concat(panel.yaxisLHS);
-
-        function closure(self) {
-            return function (values) {
-                chart.animatedLow = values.low;
-                chart.animatedHigh = values.high;
-                self.draw();
-            };
-        }
-        let i;
-        for (i = 0; i < arr.length; i++) {
-            let yAxis = arr[i];
-            let low = null,
-                high = null;
-            if (panel.yAxis === yAxis) {
-                // initialize prev values
-                if (!chart.prevLowValue && chart.prevLowValue !== 0) {
-                    chart.prevLowValue = chart.animatedLow = chart.lowValue;
-                }
-                if (!chart.prevHighValue && chart.prevHighValue !== 0) {
-                    chart.prevHighValue = chart.animatedHigh = chart.highValue;
-                }
-
-                // check for a change, if so we will spin off an animation
-                if (!scrollAnimator.running) chart.animatingVerticalScroll = false;
-                if (chart.prevLowValue >= chart.lowValue && chart.prevHighValue <= chart.highValue) {
-                    if (chart.animatingVerticalScroll) {
-                        chart.highValue = chart.animatedHigh;
-                        chart.lowValue = chart.animatedLow;
-                    }
-                    return;
-                }
-                if (yAxis.priceFormatter == CIQ.Comparison.priceFormat) return;  // too difficult to animate y-axis change when it changes on every tick due to percentage axis on comparison
-
-                if (scrollAnimator.running) scrollAnimator.stop();
-                let prevLow = chart.prevLowValue; let prevHigh = chart.prevHighValue;
-                chart.prevLowValue = chart.lowValue;
-                chart.prevHighValue = chart.highValue;
-                chart.animatingVerticalScroll = true;
-                scrollAnimator.run(closure(this), { low: prevLow, high: prevHigh }, { low:chart.lowValue, high:chart.highValue });
-
-                low = chart.animatedLow;
-                high = chart.animatedHigh;
-            }
-            this.calculateYAxisRange(panel, yAxis, low, high);
-        }
-
-        let parameters = {};
-
-        for (i = 0; i < arr.length; i++) {
-            parameters.yAxis = arr[i];
-            this.createYAxis(panel, parameters);
-            this.drawYAxis(panel, parameters);
-        }
-        this.drawPanels();
-        return true; // bypass original kernel code
     });
 
     stx.append('draw', function () {
