@@ -5,25 +5,29 @@
 $red: #f44336;
 $green: #4caf50;
 
-.horizontal {
-    &.chart-line {
-        height: 23px;
-    }
-}
 
 .chart-line {
     position: absolute;
     z-index: 35;
     &.horizontal {
         width: 100%;
-        left: 0px;
+        left: 0;
         font-size: 10px;
+        &.draggable > .draggable-area {
+            &:hover {
+                background: rgba(0, 0, 0, 0.05);
+            }
+            height: 20px;
+            top: -8px;
+            position: absolute;
+            width: 100%;
+        }
         .drag-line {
-            height: 0px;
+            height: 2px;
             float: left;
             width: 100%;
             margin-left: -10px;
-            margin-top: 11px;
+            position: relative;
             border-top: 2px dashed;
         }
     }
@@ -46,27 +50,20 @@ $green: #4caf50;
 /*hover*/
 
 .draggable.chart-line:hover {
-    background: rgba(0, 0, 0, 0.05);
-
-    &.horizontal {
-        cursor: ns-resize;
-    }
-
-    &.vertical {
-        cursor: ew-resize;
-    }
+    &.horizontal { cursor: ns-resize; }
+    &.vertical   { cursor: ew-resize; }
 }
 
 /*hover*/
 
-.draggable.horizontal.chart-line:hover .drag-line {
-    border-top-style: solid;
+.hide-pricelines > .chart-line.horizontal {
+    display: none;
 }
 
 .drag-price {
     display: block;
     height: 25px;
-    top: -1px;
+    top: -11px;
     position: absolute;
     right: 0px;
     @include border-radius(5px);

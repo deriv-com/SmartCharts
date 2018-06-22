@@ -87,7 +87,7 @@ class Feed {
                 });
             } else if (errorCode === 'StreamingNotAllowed') {
                 if (!isComparisonChart) {
-                    this._mainStore.chart.isChartAvailable = false;
+                    this._mainStore.chart.setChartAvailability(false);
                 }
                 this._mainStore.notification.notify({
                     text: t.translate('Streaming for [symbol] is not available due to license restrictions', tParams),
@@ -109,7 +109,7 @@ class Feed {
                 ...quotes[quotes.length - 1],
                 prevClose: quotes[quotes.length - 2].Close,
             });
-            this._mainStore.chart.isChartAvailable = true;
+            this._mainStore.chart.setChartAvailability(true);
         } else {
             this._emitter.emit(Feed.EVENT_COMPARISON_DATA_UPDATE);
         }

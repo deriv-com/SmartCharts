@@ -11,12 +11,14 @@ const Barrier = ({
     aboveShade,
     belowShade,
     betweenShade,
+    hidePriceLines,
+    lineStyle,
 }) => (
     <div
-        className={`barrier ${barrierColor}`}
+        className={`barrier ${barrierColor} ${hidePriceLines ? 'hide-pricelines' : ''}`}
     >
-        <HighPriceLine />
-        <LowPriceLine />
+        <HighPriceLine lineStyle={lineStyle} />
+        <LowPriceLine lineStyle={lineStyle} />
         <Shade
             className="top-shade"
             top={aboveShade.top}
@@ -47,16 +49,20 @@ export default connect(
         belowShade: store.belowShade.clone(),
         betweenShade: store.betweenShade.clone(),
         barrierColor: store.barrierColor,
+        hidePriceLines: store.hidePriceLines,
+        lineStyle: store.lineStyle,
     }),
     (store, {
-        color, shade, high, low, relative, draggable, onBarrierChange,
+        color, shade, high, low, relative, draggable, onBarrierChange, hidePriceLines, lineStyle,
     }) => {
         if (color) { store.barrierColor = color; }
         if (shade) { store.shadeState = `SHADE_${shade}`.toUpperCase(); }
-        if (high) { store.high_barrier = high; }
-        if (low) { store.low_barrier = low; }
-        if (relative) { store.relative = relative; }
-        if (draggable) { store.draggable = draggable; }
+        if (high !== undefined) { store.high_barrier = high; }
+        if (low !== undefined) { store.low_barrier = low; }
+        if (relative !== undefined) { store.relative = relative; }
+        if (draggable !== undefined) { store.draggable = draggable; }
         if (onBarrierChange) { store.onBarrierChange = onBarrierChange; }
+        store.lineStyle = lineStyle;
+        store.hidePriceLines = !!hidePriceLines;
     },
 )(Barrier);
