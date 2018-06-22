@@ -98,11 +98,9 @@
 		height: 80px !important;
 		border-radius: 5px;
 		color: black;
-		&.open{
-			position: absolute;
-			bottom: 23.5em;
-			top: inherit;
-		}
+		position: absolute;
+		bottom: 23.5em;
+		top: inherit;
 		>.ic-icon
 		{
 			@include transition(none !important);
@@ -153,6 +151,10 @@
 .smartcharts-mobile{
 	.ciq-views {
 		position: static;
+	.cq-view-prompt
+		{
+			bottom: 21.5em;
+		}
 	}
 	.cq-menu-dropdown {
 		.dropdown-title {
