@@ -99,7 +99,7 @@ class ChartStore {
 
     updateHeight(position) {
         const panelPosition = position || this.mainStore.chartSetting.position;
-        const offsetHeight = (panelPosition === 'left') ? 0 : 50;
+        const offsetHeight = (panelPosition === 'left') ? 0 : this.chartControlsNode.offsetHeight;
         this.chartHeight = this.chartNode.offsetHeight;
         this.chartContainerHeight = this.chartHeight - offsetHeight;
     }

@@ -135,7 +135,9 @@ export default class ChartSettingStore {
         this.position = value;
         this.mainStore.chart.stxx.clearStyles();
         this.saveSetting();
-        this.mainStore.chart.updateHeight(value);
+        setTimeout(() => {
+            this.mainStore.chart.resizeScreen();
+        }, 10);
         this.menu.setOpen(false);
     }
     @action.bound showCountdown(value) {
