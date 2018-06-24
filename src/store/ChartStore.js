@@ -260,12 +260,16 @@ class ChartStore {
                 const url = href.split('#')[0];
                 const hash = url.split('?')[1];
 
-                window.history.replaceState({}, document.title, window.location.pathname);
-                const promise = this.mainStore.share.expandBitlyAsync(hash, decodeURIComponent(encodedJsonPart));
-                promise.then((encodedJson) => {
-                    layoutData = JSON.parse(encodedJson);
+                if (hash) {
+                    window.history.replaceState({}, document.title, window.location.pathname);
+                    const promise = this.mainStore.share.expandBitlyAsync(hash, decodeURIComponent(encodedJsonPart));
+                    promise.then((encodedJson) => {
+                        layoutData = JSON.parse(encodedJson);
+                        onLayoutDataReady();
+                    }).catch(() => onLayoutDataReady());
+                } else {
                     onLayoutDataReady();
-                }).catch(() => onLayoutDataReady());
+                }
             } else {
                 onLayoutDataReady();
             }
