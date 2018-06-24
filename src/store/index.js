@@ -35,4 +35,5 @@ export default class MainStore {
     chartSetting = new ChartSettingStore(this);
     loader = new LoaderStore();
     chartSize = new ChartSizeStore(this);
+    routing = new RoutingStore(this);
 }
