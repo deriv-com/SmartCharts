@@ -1,8 +1,9 @@
 import { observable, action } from 'mobx';
 import { connect } from './Connect';
+import { debounce } from '../utils';
 
 let activeDialog;
-let allowed = true;
+
 export default class DialogStore {
     constructor(mainStore) {
         this.mainStore = mainStore;
@@ -10,22 +11,24 @@ export default class DialogStore {
 
     @observable open = false;
 
-    @action.bound setOpen(val) {
-        if (this.open !== val && val === true && allowed) {
+    setOpen = debounce((val) => {
+        this.openDialog(val);
+    }, 200);
+
+    @action.bound openDialog(val) {
+        if (this.open !== val) {
             this.open = val;
             if (this.open) { setTimeout(() => this.register(), 100); } else { this.unregister(); }
-            if (activeDialog) { activeDialog.setClose(); }
-            activeDialog = this;
-            allowed = false;
 
-            setTimeout(() => {
-                allowed = true;
-            }, 300);
-        } else if (this.open !== val && val === false && allowed) {
-            this.setClose();
+            if (val === true) { // close active dialog.
+                if (activeDialog) { activeDialog.closeDialog(); }
+                activeDialog = this;
+            } else {
+                activeDialog = undefined;
+            }
         }
     }
-    @action.bound setClose() {
+    @action.bound closeDialog() {
         this.open = false;
         this.unregister();
         activeDialog = undefined;

@@ -1,3 +1,4 @@
+/* eslint-disable prefer-rest-params */
 export function createObjectFromLocalStorage(key) {
     const val = CIQ.localStorage.getItem(key);
     const isValid = val !== null;
@@ -27,4 +28,18 @@ export function loadScript(scriptName, cb) {
     script.src = scriptName;
     const s = document.getElementsByTagName('script')[0];
     s.parentNode.insertBefore(script, s.nextSibling);
+}
+
+
+export function debounce(callback, wait, context = this) {
+    let timeout = null;
+    let callbackArgs = null;
+
+    const later = () => callback.apply(context, callbackArgs);
+
+    return function () {
+        callbackArgs = arguments;
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
 }
