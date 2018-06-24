@@ -30,16 +30,17 @@ class ChartStore {
     chartNode = null;
     chartControlsNode = null;
     chartContainerNode = null;
+    holderStyle;
     @observable context = null;
     @observable currentActiveSymbol;
     @observable isChartAvailable = true;
     @observable comparisonSymbols = [];
     @observable categorizedSymbols = [];
     @observable barrierJSX;
-    @observable chartPanelTop = '0px';
+    @observable chartPanelTop = 0;
     @observable chartHeight;
     @observable chartContainerHeight;
-    isMobile = false;
+    @observable isMobile = false;
 
     @action.bound setActiveSymbols(activeSymbols) {
         this.activeSymbols = this.processSymbols(activeSymbols);
@@ -101,27 +102,25 @@ class ChartStore {
     }
 
     updateHeight(position) {
-        const ciqNode = this.rootNode.querySelector('.ciq-chart');
-        const containerNode = this.rootNode.querySelector('.chartContainer.primary');
         const panelPosition = position || this.mainStore.chartSetting.position;
-        // height of chart control panel
-        const offsetHeight = (panelPosition == 'left') ? 0 : 50;
-        containerNode.style.height = `${ciqNode.offsetHeight - offsetHeight}px`;
+        const offsetHeight = (panelPosition === 'left') ? 0 : this.chartControlsNode.offsetHeight;
+        this.chartHeight = this.chartNode.offsetHeight;
+        this.chartContainerHeight = this.chartHeight - offsetHeight;
     }
-    resizeScreen = () => {
+
+    @action.bound resizeScreen() {
         if (!this.context) { return; }
         this.updateHeight();
         this.stxx.resizeChart();
         if (this.stxx.slider) {
             this.stxx.slider.display(this.stxx.layout.rangeSlider);
         }
-    };
+    }
 
     @action.bound init(rootNode, props) {
         this.rootNode = rootNode;
         this.chartNode = this.rootNode.querySelector('.ciq-chart');
         this.chartControlsNode = this.chartNode.querySelector('.cq-chart-controls');
-        this.chartContainerNode = this.rootNode.querySelector('.chartContainer.primary');
 
         const {
             onSymbolChange,
@@ -129,11 +128,14 @@ class ChartStore {
             requestAPI,
             requestSubscribe,
             requestForget,
+            isMobile,
             shareOrigin = 'https://charts.binary.com',
             enableRouting,
         } = props;
         const api = new BinaryAPI(requestAPI, requestSubscribe, requestForget);
         this.mainStore.share.shareOrigin = shareOrigin;
+        this.isMobile = isMobile;
+        this.onSymbolChange = onSymbolChange;
 
         const stxx = this.stxx = new CIQ.ChartEngine({
             container: this.rootNode.querySelector('.chartContainer.primary'),
@@ -187,14 +189,16 @@ class ChartStore {
         //     minutes: 30,
         // });
 
-        const holderStyle = stxx.chart.panel.holder.style;
+        this.holderStyle = stxx.chart.panel.holder.style;
+
+        stxx.append('deleteHighlighted', this.updateComparisons);
         stxx.addEventListener('layout', () => {
             this.saveLayout();
-            this.setChartPanelTop(holderStyle.top);
+            this.updateChartPanelTop();
         });
         stxx.addEventListener('symbolChange', this.saveLayout.bind(this));
         stxx.addEventListener('drawing', this.saveDrawings.bind(this));
-        // stxx.addEventListener('newChart', () => { });
+        stxx.addEventListener('newChart', this.updateChartPanelTop);
         stxx.addEventListener('preferences', this.savePreferences.bind(this));
 
         const context = new Context(stxx, this.rootNode);
@@ -248,11 +252,11 @@ class ChartStore {
                     this.changeSymbol(initialSymbol);
                 } else if (stxx.chart.symbol) {
                     this.setCurrentActiveSymbols(stxx);
-                    if (onSymbolChange) { onSymbolChange(this.currentActiveSymbol); }
+                    if (this.onSymbolChange) { this.onSymbolChange(this.currentActiveSymbol); }
                 } else {
                     this.changeSymbol(this.defaultSymbol);
                 }
-                this.setLayoutData(context, holderStyle.top);
+                this.setLayoutData(context);
             };
             const href = window.location.href;
             if (href.startsWith(shareOrigin) && href.indexOf('#') !== -1) {
@@ -275,7 +279,7 @@ class ChartStore {
             }
         });
 
-        this.resizeObserver = new ResizeObserver(() => this.resizeScreen());
+        this.resizeObserver = new ResizeObserver(this.resizeScreen);
         this.resizeObserver.observe(rootNode);
 
         this.feed.onComparisonDataUpdate(this.updateComparisons);
@@ -284,11 +288,16 @@ class ChartStore {
         this.context.stx.removeSeries(symbolObj.symbol);
         this.updateComparisons();
     }
-    @action.bound setLayoutData(context, top) {
+    @action.bound setLayoutData(context) {
         this.context = context;
         this.contextPromise.resolve(this.context);
         this.resizeScreen();
-        this.setChartPanelTop(top);
+        this.updateChartPanelTop();
+    }
+
+    @action.bound updateChartPanelTop() {
+        if (this.holderStyle === undefined) { return; }
+        this.chartPanelTop = this.holderStyle.top;
     }
 
     @action.bound setCurrentActiveSymbols(stxx) {
@@ -298,10 +307,6 @@ class ChartStore {
     }
     @action.bound setChartAvailability(status) {
         this.isChartAvailable = status;
-    }
-
-    @action.bound setChartPanelTop(top) {
-        this.chartPanelTop = top;
     }
 
     @action.bound changeSymbol(symbolObj) {

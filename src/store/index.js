@@ -1,4 +1,3 @@
-import { observable } from 'mobx';
 import TimeperiodStore from './TimeperiodStore';
 import ChartStore from './ChartStore';
 import ChartTypeStore from './ChartTypeStore';
@@ -19,22 +18,21 @@ import ChartSizeStore from './ChartSizeStore';
 import RoutingStore from './RoutingStore';
 
 export default class MainStore {
-    @observable favoriteSessionStore = new FavoriteSessionStore();
-    @observable chart = new ChartStore(this);
-    @observable chartType = new ChartTypeStore(this);
-    @observable studies = new StudyLegendStore(this);
-    @observable comparison = new ComparisonStore(this);
-    @observable drawTools = new DrawToolsStore(this);
-    @observable chartTitle = new ChartTitleStore(this);
-    @observable timeperiod = new TimeperiodStore(this);
-    @observable assetInformation = new AssetInformationStore(this);
-    @observable comparisonList = new ComparisonListStore(this);
-    @observable notification = new NotificationStore(this);
-    @observable view = new ViewStore(this);
-    @observable crosshair = new CrosshairStore(this);
-    @observable share = new ShareStore(this);
-    @observable chartSetting = new ChartSettingStore(this);
-    @observable loader = new LoaderStore();
-    @observable chartSize = new ChartSizeStore(this);
-    @observable routing = new RoutingStore(this);
+    favoriteSessionStore = new FavoriteSessionStore();
+    chart = new ChartStore(this);
+    chartType = new ChartTypeStore(this);
+    studies = new StudyLegendStore(this);
+    comparison = new ComparisonStore(this);
+    drawTools = new DrawToolsStore(this);
+    chartTitle = new ChartTitleStore(this);
+    timeperiod = new TimeperiodStore(this);
+    assetInformation = new AssetInformationStore(this);
+    comparisonList = new ComparisonListStore(this);
+    notification = new NotificationStore(this);
+    view = new ViewStore(this);
+    crosshair = new CrosshairStore(this);
+    share = new ShareStore(this);
+    chartSetting = new ChartSettingStore(this);
+    loader = new LoaderStore();
+    chartSize = new ChartSizeStore(this);
 }
