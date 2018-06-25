@@ -53,7 +53,7 @@ export default connect(
         lineStyle: store.lineStyle,
     }),
     (store, {
-        color, shade, high, low, relative, draggable, onBarrierChange, hidePriceLines, lineStyle,
+        color, shade, high, low, relative, draggable, onChange, hidePriceLines, lineStyle,
     }) => {
         if (color) { store.barrierColor = color; }
         if (shade) { store.shadeState = `SHADE_${shade}`.toUpperCase(); }
@@ -61,7 +61,7 @@ export default connect(
         if (low !== undefined) { store.low_barrier = low; }
         if (relative !== undefined) { store.relative = relative; }
         if (draggable !== undefined) { store.draggable = draggable; }
-        if (onBarrierChange) { store.onBarrierChange = onBarrierChange; }
+        if (onChange) { store.onBarrierChange = onChange; }
         store.lineStyle = lineStyle;
         store.hidePriceLines = !!hidePriceLines;
     },
