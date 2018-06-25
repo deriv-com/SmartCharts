@@ -58,17 +58,13 @@ export default class ChartSettingStore {
             name: '简体中文',
             icon: <FlagIcons.Chinese />,
         }, {
-            key: 'ja',
-            name: '日本語',
-            icon: <FlagIcons.Japan />,
+            key: 'pl',
+            name: 'Polish',
+            icon: <FlagIcons.Poland />,
         }, {
             key: 'zh_tw',
             name: '繁體中文',
             icon: <FlagIcons.ChineseTraditional />,
-        }, {
-            key: 'pl',
-            name: 'Polish',
-            icon: <FlagIcons.Poland />,
         },
     ];
     defaultLanguage = {};
