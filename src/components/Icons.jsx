@@ -282,7 +282,6 @@ export const FlagIcons = {
     Italy: Wrapper(Italy),
     Chinese: Wrapper(Chinese),
     ChineseTraditional: Wrapper(ChineseTraditional),
-    Japan: Wrapper(JPY),
     Poland: Wrapper(PLN),
 };
 
