@@ -90,68 +90,15 @@
 			}
 		}
 	}
-
-	.cq-view-prompt
+	.cq-alert-dialog
 	{
-		background: white !important;
-		width: 340px;
-		height: 80px !important;
-		border-radius: 5px;
-		color: black;
-		position: absolute;
-		bottom: 23.5em;
-		top: inherit;
-		>.ic-icon
-		{
-			@include transition(none !important);
-			position: absolute;
-			left: 84%;
-			top: 100%;
-			line-height: 0;
-			width: 10px;
-			height: 10px;
-			>svg
-			{
-			filter: drop-shadow(0px 0px 0px rgba(0,0,0,0.14));
-			}
-		}
-	}
-	.cq-view-prompt .dlg-content
-	{
-		text-align: center;
-		padding-top: 16px;
-		justify-content:center;
-		>.ic-icon
-		{
-			@include transition(none !important);
-			padding-right :5px;
-			display: inline-block;
-		}
-		>span{
-			display: inline-block;
-			vertical-align:  middle;
-		}
-	}
-	.cq-view-prompt .dlg-buttons
-	{
-		display:flex;
-		justify-content: flex-end;
-		margin-top: 16px;
-		margin-right: 16px;
-		font-weight: bold;
-		>div{
-			width: 90px;
-			height: 40px;
-			text-align: center;
-			cursor: pointer;
-			font-size: 12px;
-		}
+		bottom: 23em;
 	}
 }
 .smartcharts-mobile{
 	.ciq-views {
 		position: static;
-	.cq-view-prompt
+	.cq-alert-dialog
 		{
 			bottom: 21.5em;
 		}

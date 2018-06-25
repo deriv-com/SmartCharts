@@ -1,13 +1,13 @@
 import { observable, action, when } from 'mobx';
 import { createObjectFromLocalStorage } from '../utils';
 import MenuStore from './MenuStore';
-import DialogStore from './DialogStore';
+import AlertDialogStore from './AlertDialogStore';
 
 export default class ViewStore {
     constructor(mainStore) {
         this.mainStore = mainStore;
         this.menu = new MenuStore(mainStore);
-        this.overwritePrompt = new DialogStore(mainStore);
+        this.overwriteAlert = new AlertDialogStore(mainStore);
         when(() => this.context, this.onContextReady);
     }
 
@@ -50,7 +50,7 @@ export default class ViewStore {
 
     @action.bound saveViews() {
         if (this.views.some(x=>x.name.toLowerCase() === this.templateName.toLowerCase())){
-            this.overwritePrompt.setOpen(true , false);
+            this.overwriteAlert.setOpen(true);
             this.updateRoute('overwrite');
         }
         else if (this.templateName.length > 0) {
@@ -70,18 +70,13 @@ export default class ViewStore {
         this.updateLocalStorage();
         this.updateRoute('main');
         this.templateName = '';
-        this.overwritePrompt.setOpen(false , false);
+        this.overwriteAlert.setOpen(false);
     }
 
     @action.bound remove(idx, e) {
         this.views.splice(idx, 1);
         e.nativeEvent.is_item_removed = true;
         this.updateLocalStorage();
-    }
-
-    @action.bound setOpen(value) {
-        this.updateRoute('add');
-        return this.overwritePrompt.setOpen(value);
     }
 
     applyLayout = (idx, e) => {

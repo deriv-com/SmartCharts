@@ -1,7 +1,7 @@
 import React from 'react';
 import Menu from './Menu.jsx';
 import { connect } from '../store/Connect';
-import Dialog from './Dialog.jsx';
+import AlertDialog from './AlertDialog.jsx';
 import {
     CloseIcon,
     TemplateIcon,
@@ -26,7 +26,7 @@ const ViewItem = ({
 
 const Views = ({
     Menu,
-    OverwritePrompt,
+    OverwriteAlert,
     menuOpen,
     views,
     routes: { current: currentRoute, add, main, overwrite, cancel },
@@ -38,27 +38,12 @@ const Views = ({
     inputRef,
 }) => (
     <div className="ciq-views">
-        <OverwritePrompt className="cq-dialog cq-view-prompt">
-                <div className="dlg-content">
-                    <alertIconMap.warning/>
-                    <span>
-                        {t.translate('Template already exist. would you like to overwrite it?')}
-                    </span>
-                </div>
-                <div className="dlg-buttons">
-                    <div
-                        className="cancel"
-                        onClick={() =>setOpen(false)}
-                        >{t.translate('CANCEL')}
-                    </div>
-                    <div
-                        className="overwrite"
-                        onClick={overwrite}
-                        >{t.translate('OVERWRITE')}
-                    </div>
-                </div>
-                <ArrowDownIcon/>
-        </OverwritePrompt>
+        <OverwriteAlert
+            alertTitle={t.translate('Template already exist. would you like to overwrite it?')}
+            closeDisplay={t.translate('CANCEL')}
+            sureDisplay={t.translate('OVERWRITE')} 
+            onSure={overwrite}>
+        </OverwriteAlert>
         <Menu>
             <Menu.Title className="cq-menu-btn">
                 <TemplateIcon
@@ -119,7 +104,7 @@ const Views = ({
 
 export default connect(({ view: s }) => ({
     Menu: s.menu.connect(Menu),
-    OverwritePrompt: s.overwritePrompt.connect(Dialog),
+    OverwriteAlert: s.overwriteAlert.connect(AlertDialog),
     views: s.views,
     routes: s.routes,
     onOverwrite: s.onOverwrite,
