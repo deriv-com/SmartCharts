@@ -29,13 +29,14 @@ class ChartStore {
     chartNode = null;
     chartControlsNode = null;
     chartContainerNode = null;
+    holderStyle;
     @observable context = null;
     @observable currentActiveSymbol;
     @observable isChartAvailable = true;
     @observable comparisonSymbols = [];
     @observable categorizedSymbols = [];
     @observable barrierJSX;
-    @observable chartPanelTop = '0px';
+    @observable chartPanelTop = 0;
     @observable chartHeight;
     @observable chartContainerHeight;
     @observable isMobile = false;
@@ -203,15 +204,16 @@ class ChartStore {
         //     minutes: 30,
         // });
 
-        const holderStyle = stxx.chart.panel.holder.style;
+        this.holderStyle = stxx.chart.panel.holder.style;
+
         stxx.append('deleteHighlighted', this.updateComparisons);
         stxx.addEventListener('layout', () => {
             this.saveLayout();
-            this.setChartPanelTop(holderStyle.top);
+            this.updateChartPanelTop();
         });
         stxx.addEventListener('symbolChange', this.saveLayout.bind(this));
         stxx.addEventListener('drawing', this.saveDrawings.bind(this));
-        // stxx.addEventListener('newChart', () => { });
+        stxx.addEventListener('newChart', this.updateChartPanelTop);
         stxx.addEventListener('preferences', this.savePreferences.bind(this));
 
         const context = new Context(stxx, this.rootNode);
@@ -269,7 +271,7 @@ class ChartStore {
                 } else {
                     this.changeSymbol(this.defaultSymbol);
                 }
-                this.setLayoutData(context, holderStyle.top);
+                this.setLayoutData(context);
             };
             const href = window.location.href;
             if (href.startsWith(shareOrigin) && href.indexOf('#') !== -1) {
@@ -298,11 +300,16 @@ class ChartStore {
         this.context.stx.removeSeries(symbolObj.symbol);
         this.updateComparisons();
     }
-    @action.bound setLayoutData(context, top) {
+    @action.bound setLayoutData(context) {
         this.context = context;
         this.contextPromise.resolve(this.context);
         this.resizeScreen();
-        this.setChartPanelTop(top);
+        this.updateChartPanelTop();
+    }
+
+    @action.bound updateChartPanelTop() {
+        if (this.holderStyle === undefined) { return; }
+        this.chartPanelTop = this.holderStyle.top;
     }
 
     @action.bound setCurrentActiveSymbols(stxx) {
@@ -312,10 +319,6 @@ class ChartStore {
     }
     @action.bound setChartAvailability(status) {
         this.isChartAvailable = status;
-    }
-
-    @action.bound setChartPanelTop(top) {
-        this.chartPanelTop = top;
     }
 
     @action.bound changeSymbol(symbolObj) {

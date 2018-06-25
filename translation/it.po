@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Italian\n"
 "Language: it_IT\n"
-"PO-Revision-Date: 2018-06-21T21:41:07+0000\n"
+"PO-Revision-Date: 2018-06-22T14:14:43+0000\n"
 
 msgid "Favorites"
 msgstr "Preferiti"
@@ -31,10 +31,10 @@ msgid "CLOSE"
 msgstr "CHIUSURA"
 
 msgid "HIGH"
-msgstr "ALTO"
+msgstr "MASSIMO"
 
 msgid "LOW"
-msgstr "BASSO"
+msgstr "MINIMO"
 
 msgid "Underlying Assets"
 msgstr "Asset sottostanti"
@@ -142,7 +142,7 @@ msgid "Kagi"
 msgstr "Kagi"
 
 msgid "Line Break"
-msgstr "Interruzione di riga"
+msgstr "Line Break"
 
 msgid "Renko"
 msgstr "Renko"
@@ -163,10 +163,10 @@ msgid "Price Lines"
 msgstr "Linee dei prezzi"
 
 msgid "Box Size"
-msgstr "Box size"
+msgstr "Unità di escursione"
 
 msgid "Reversal"
-msgstr "Inversione"
+msgstr "Reversal"
 
 msgid "RESET"
 msgstr "REIMPOSTA"
@@ -193,7 +193,7 @@ msgid "Language"
 msgstr "Lingua"
 
 msgid "[symbol] market is presently closed."
-msgstr "[symbol] Il mercato è chiuso al momento."
+msgstr "Il mercato di [symbol] è momentaneamente chiuso."
 
 msgid "Streaming for [symbol] is not available due to license restrictions"
 msgstr "[symbol] in streaming non è disponibile a causa delle limitazioni della licenza"

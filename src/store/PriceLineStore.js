@@ -43,13 +43,19 @@ export default class PriceLineStore {
 
     static get EVENT_PRICE_CHANGED() { return 'EVENT_PRICE_CHANGED'; }
 
+    @computed get priceDisplay() {
+        let display = this._price.toFixed(this.pip);
+        if (this.relative && this._price > 0) { display = `+${display}`; }
+        return display;
+    }
+
     get price() {
         return this._price;
     }
 
     set price(value) {
         if (value !== this._price) {
-            this._price = +value.toFixed(this.pip);
+            this._price = value;
             this._draw();
             this._emitter.emit(PriceLineStore.EVENT_PRICE_CHANGED, this._price);
         }
@@ -66,7 +72,7 @@ export default class PriceLineStore {
         // convert between relative and absolute
         let currentPrice = this.stx.currentQuote().Close;
         if (this._relative) { currentPrice = -currentPrice; }
-        this.price = +(this._price + currentPrice).toFixed(this.pip);
+        this.price = this._price + currentPrice;
     }
 
     get context() { return this.mainStore.chart.context; }
@@ -80,7 +86,7 @@ export default class PriceLineStore {
     }
 
     get realPrice() {
-        return this.relative ? +(this.stx.currentQuote().Close + this.price).toFixed(this.pip) : this.price;
+        return this.relative ? this.stx.currentQuote().Close + this._price : this._price;
     }
 
     @action.bound setDragLine(el) {
@@ -174,7 +180,7 @@ export default class PriceLineStore {
     }
 
     connect = connect(() => ({
-        priceDisplay: this._price,
+        priceDisplay: this.priceDisplay,
         visible: this.visible,
         setDragLine: this.setDragLine,
         className: this.className,
