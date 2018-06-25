@@ -111,7 +111,8 @@ barriers | Draw chart barriers. Refer to [Barriers API](#barriers-api) for usage
 
 | Attribute | Description |
 --------|--------------
-color | Barrier shade color
+shadeColor | Barrier shade color; choose between `green` and `red`. Defaults to `green`.
+color | Price line color. Defaults to `#000`.
 shade | Shade type; choose between `NONE_SINGLE`, `NONE_DOUBLE`, `ABOVE`, `BELOW`, `OUTSIDE` or `BETWEEN`. Defaults to `NONE_SINGLE`.
 hidePriceLines | hide/show the price lines. Defaults to `false`.
 lineStyle | Sets the style of the price lines; choose between `dotted`, `dashed`, or `solid`. Defaults to `dashed`.

@@ -28,7 +28,8 @@ $green: #4caf50;
             width: 100%;
             margin-left: -10px;
             position: relative;
-            border-top: 2px dashed;
+            border-color: inherit;
+            border-top-width: 2px;
         }
     }
 
@@ -67,44 +68,13 @@ $green: #4caf50;
     position: absolute;
     right: 0px;
     @include border-radius(5px);
-    @include themify($themes) {
-        background-color: themed('defaultMain');
-        border: 1px solid themed('defaultTextStrong');
-    }
+    border-style: solid;
+    border-width: 1px;
+    border-color: inherit;
     .price {
-        padding-left: 12px;
-        padding-top: 1px;
-        padding-right: 12px;
+        padding: 1px 12px;
         font-size: 14px;
         width: min-content;
-    }
-}
-
-.red {
-    .drag-price {
-        border-color: $red;
-    }
-
-    .price {
-        color: $red;
-    }
-
-    .drag-line {
-        color: $red;
-    }
-}
-
-.green {
-    .drag-price {
-        border-color: $green;
-    }
-
-    .price {
-        color: $green;
-    }
-
-    .drag-line {
-        color: $green;
     }
 }
 
@@ -141,13 +111,24 @@ $green: #4caf50;
 
 
 .price {
+    font-weight: 300;
     display: block;
     float: left;
     width: 45px;
     line-height: 23px;
     overflow: hidden;
-    @include themify($themes) {
-        color: themed('defaultTextStrong');
+
+}
+
+.draggable .price {
+    padding: 1px 18px;
+    &::after {
+        content: '≡';
+        font-size: 25px;
+        position: absolute;
+        right: 1px;
+        top: -1px;
+        transform: scaleX(0.8)
     }
 }
 

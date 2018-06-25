@@ -63,7 +63,6 @@ const shareOrigin = window.location.href.split('?')[0];
 
 class App extends React.Component {
     state = {
-        barrierType: 'NONE_SINGLE',
         highLow: {},
         draggable: true,
     };
@@ -99,6 +98,8 @@ class App extends React.Component {
         const { barrierType, highLow : { high, low }, hidePriceLines, draggable, relative } = this.state;
         const barriers = barrierType ? [{
             shade: barrierType,
+            shadeColor: 'red',
+            color: '#f44336',
             onChange: this.handleBarrierChange,
             relative,
             draggable,
