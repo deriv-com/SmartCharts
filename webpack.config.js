@@ -117,7 +117,7 @@ if (process.env.ANALYZE_BUNDLE) {
 }
 
 if (isApp) {
-    config.entry = path.resolve(__dirname, './app/test.jsx');
+    config.entry = path.resolve(__dirname, './app/index.jsx');
     config.resolve = {
         alias: {
             '@binary-com/smartcharts': path.resolve(__dirname, 'src/'),
