@@ -157,11 +157,16 @@ $green: #4caf50;
 
 /* shade */
 
+.shade.hidden {
+    opacity: 0;
+}
+
 .shade {
     position: absolute;
     width: 100%;
     right: 0px;
     opacity: 0.3;
+    @include transition(opacity 0.1s ease-out);
 }
 
 .between-shade {
