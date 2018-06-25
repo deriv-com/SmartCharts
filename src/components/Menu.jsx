@@ -3,12 +3,6 @@ import { CSSTransition } from 'react-transition-group';
 import { stxtap } from '../store/utils';
 
 class Menu extends Component {
-    onOverlayClick = (e) => {
-        if (e.target.className === 'cq-menu-overlay') {
-            this.props.setOpen(false);
-        }
-    };
-
     render() {
         const {
             open,
@@ -32,7 +26,6 @@ class Menu extends Component {
                 </div>
                 <div
                     className="cq-menu-overlay"
-                    onClick={this.onOverlayClick}
                 >
                     <CSSTransition
                         in={open}

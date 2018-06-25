@@ -58,6 +58,7 @@ class Chart extends Component {
             chartControlsWidgets,
             AggregateChartSettingsDialog,
             topWidgets,
+            hasOpenMenu,
             showCountdown = false,
             chartContainerHeight,
         } = this.props;
@@ -85,7 +86,7 @@ class Chart extends Component {
         return (
             <cq-context
                 ref={(root) => { this.root = root; }}
-                class={`smartcharts-${(typeof theme === 'string') ? theme : defaultTheme}`}
+                class={`smartcharts-${(typeof theme === 'string') ? theme : defaultTheme} ${isMobile && hasOpenMenu ? 'cq-dialog-context':''}`}
             >
                 <div className={`${currentMode} ${currentPosition}`}>
                     <div className="ciq-chart-area">
@@ -126,7 +127,8 @@ class Chart extends Component {
     }
 }
 
-export default connect(({ chart, drawTools, studies, chartSetting, chartType }) => ({
+export default connect(({ chart, drawTools, studies, chartSetting,
+    chartTitle, chartType, comparison, view, share, timeperiod }) => ({
     contextPromise: chart.contextPromise,
     init: chart.init,
     destroy: chart.destroy,
@@ -137,4 +139,15 @@ export default connect(({ chart, drawTools, studies, chartSetting, chartType }) 
     chartPanelTop: chart.chartPanelTop,
     setting: chartSetting,
     chartContainerHeight: chart.chartContainerHeight,
+     hasOpenMenu: (
+        chartTitle.menu.open ||
+        chartType.menu.open ||
+        studies.menu.open ||
+        comparison.menu.open ||
+        drawTools.menu.open ||
+        view.menu.open ||
+        share.menu.open ||
+        timeperiod.menu.open ||
+        chartSetting.menu.open
+    ),
 }))(Chart);

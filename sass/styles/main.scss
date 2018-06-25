@@ -516,6 +516,14 @@ cq-context {
 	font-family: $base-font;
 	font-size: $font-size-base;
 	overflow: hidden;
+	&.cq-dialog-context{
+		position: fixed !important;
+        top: 0px !important;
+     	bottom: 0px !important;
+     	height: 100vh !important;
+     	width: 100vw !important;
+     	z-index: 9999 !important;
+ 	}
     @include themify($themes) {
         background: themed('defaultMain');
     }
