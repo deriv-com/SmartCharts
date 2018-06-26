@@ -10,10 +10,10 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: French\n"
 "Language: fr_FR\n"
-"PO-Revision-Date: 2018-06-08 04:22-0400\n"
+"PO-Revision-Date: 2018-06-20T08:51:39+0000\n"
 
 msgid "Favorites"
-msgstr ""
+msgstr "Favoris"
 
 msgid "There are no favorites yet."
 msgstr ""
@@ -25,16 +25,16 @@ msgid "PRICE"
 msgstr ""
 
 msgid "OPEN"
-msgstr ""
+msgstr "OUVERTURE"
 
 msgid "CLOSE"
-msgstr ""
+msgstr "FERMETURE"
 
 msgid "HIGH"
-msgstr ""
+msgstr "PLUS HAUT"
 
 msgid "LOW"
-msgstr ""
+msgstr "PLUS BAS"
 
 msgid "Underlying Assets"
 msgstr ""
@@ -76,13 +76,13 @@ msgid "Interval"
 msgstr "Intervalle"
 
 msgid "Tick"
-msgstr ""
+msgstr "Tick"
 
 msgid "Minute"
-msgstr ""
+msgstr "Minute"
 
 msgid "Hour"
-msgstr ""
+msgstr "Heure"
 
 msgid "Day"
 msgstr "Jour"
@@ -94,7 +94,7 @@ msgid "Templates"
 msgstr ""
 
 msgid "Template name"
-msgstr ""
+msgstr "Nom du modèle"
 
 msgid "There is no template added by you."
 msgstr ""
@@ -106,7 +106,7 @@ msgid "Comparison"
 msgstr ""
 
 msgid "Indicators"
-msgstr ""
+msgstr "Indicateurs"
 
 msgid "Chart types"
 msgstr ""
@@ -115,13 +115,13 @@ msgid "Line"
 msgstr "Ligne"
 
 msgid "Dot"
-msgstr ""
+msgstr "Point"
 
 msgid "Colored Dot"
 msgstr ""
 
 msgid "Spline"
-msgstr ""
+msgstr "Spline"
 
 msgid "Baseline"
 msgstr "Ligne de base"
@@ -130,7 +130,7 @@ msgid "Candle"
 msgstr "Bougie"
 
 msgid "OHLC"
-msgstr ""
+msgstr "OHLC"
 
 msgid "Hollow Candle"
 msgstr "Bougie creuse"
@@ -175,7 +175,7 @@ msgid "DONE"
 msgstr ""
 
 msgid "Settings"
-msgstr ""
+msgstr "Paramètres"
 
 msgid "Position"
 msgstr ""
@@ -190,7 +190,7 @@ msgid "Asset Information"
 msgstr ""
 
 msgid "Language"
-msgstr ""
+msgstr "Langue"
 
 msgid "[symbol] market is presently closed."
 msgstr ""
@@ -205,10 +205,10 @@ msgid "Copied!"
 msgstr ""
 
 msgid "Failed!"
-msgstr ""
+msgstr "Échec!"
 
 msgid "Search..."
-msgstr ""
+msgstr "Rechercher..."
 
 msgid "Annotation"
 msgstr "Annotation"
@@ -307,7 +307,7 @@ msgid "Vertical"
 msgstr "Vertical"
 
 msgid "Active"
-msgstr ""
+msgstr "Actif"
 
 msgid "There are no active comparisons yet."
 msgstr ""

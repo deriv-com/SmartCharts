@@ -1,4 +1,3 @@
-/* eslint-disable prefer-rest-params */
 /* eslint no-use-before-define: ["error", { "functions": false }] */
 
 export function createObjectFromLocalStorage(key) {
