@@ -1,6 +1,7 @@
 import { observable, action } from 'mobx';
+import debounce from 'lodash.debounce';
 import { connect } from './Connect';
-import { debounce } from '../utils';
+
 
 let activeDialog;
 
@@ -18,25 +19,20 @@ export default class DialogStore {
     @action.bound openDialog(val) {
         if (this.open !== val) {
             this.open = val;
-            if (this.open) { setTimeout(() => this.register(), 100); } else { this.unregister(); }
+            if (this.open) { this.register(); } else { this.unregister(); }
 
             if (val === true) { // close active dialog.
-                if (activeDialog) { activeDialog.closeDialog(); }
+                if (activeDialog) { activeDialog.openDialog(false); }
                 activeDialog = this;
             } else {
                 activeDialog = undefined;
             }
         }
     }
-    @action.bound closeDialog() {
-        this.open = false;
-        this.unregister();
-        activeDialog = undefined;
-    }
 
     handleClickOutside = (e) => {
         let isRightClick = false;
-        if ('which' in e) { isRightClick = e.which == 3; } else if ('button' in e) { isRightClick = e.button == 2; }
+        if ('which' in e) { isRightClick = e.which === 3; } else if ('button' in e) { isRightClick = e.button === 2; }
 
         if (!e.isHandledByDialog && !isRightClick) {
             this.setOpen(false);
