@@ -44,6 +44,11 @@ export default class ViewStore {
         }
     }
 
+    @action.bound overwriteAlertClose() {
+        this.updateRoute('add');
+        return this.overwriteAlert.setOpen(false);
+    }
+
     @action.bound updateRoute(name) {
         this.routes.current = name;
     }

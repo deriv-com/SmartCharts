@@ -30,7 +30,7 @@ const Views = ({
     menuOpen,
     views,
     routes: { current: currentRoute, add, main, overwrite, cancel },
-    setOpen,
+    overwriteAlertClose,
     onChange,
     onSubmit,
     applyLayout,
@@ -42,7 +42,8 @@ const Views = ({
             alertTitle={t.translate('Template already exist. would you like to overwrite it?')}
             closeDisplay={t.translate('CANCEL')}
             sureDisplay={t.translate('OVERWRITE')} 
-            onSure={overwrite}>
+            onSure={overwrite}
+            onClose={overwriteAlertClose}>
         </OverwriteAlert>
         <Menu>
             <Menu.Title className="cq-menu-btn">
@@ -108,7 +109,7 @@ export default connect(({ view: s }) => ({
     views: s.views,
     routes: s.routes,
     onOverwrite: s.onOverwrite,
-    setOpen: s.setOpen,
+    overwriteAlertClose: s.overwriteAlertClose,
     onChange: s.onChange,
     remove: s.remove,
     onSubmit: s.onSubmit,
