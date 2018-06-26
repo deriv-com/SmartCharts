@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
-"PO-Revision-Date: 2018-06-25 09:39\n"
+"PO-Revision-Date: 2018-06-26 00:01\n"
 
 msgid "Favorites"
 msgstr "Избранное"
@@ -841,7 +841,7 @@ msgid "Accumulation/Distribution"
 msgstr "Индикатор накопления/распределения"
 
 msgid "Use Volume"
-msgstr "объем Использование"
+msgstr "Использовать объем"
 
 msgid "Volume Chart"
 msgstr "График объемов"
@@ -925,7 +925,7 @@ msgid "Fade"
 msgstr "Угасание"
 
 msgid "Fake"
-msgstr "Фальсификация"
+msgstr "Ложный"
 
 msgid "Squat"
 msgstr "Проседание"
