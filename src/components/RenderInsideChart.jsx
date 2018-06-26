@@ -16,10 +16,11 @@ class RenderInsideChart extends PureComponent {
             const nodeName = `${inChartPrefix}${at}`;
             // reuse existing node when possible:
             let elem = context.topNode.querySelector(`.${nodeName}`);
-            if (!elem) { elem = createElement(`<div class="${nodeName}"></div>`); }
-            const stx = context.stx;
-            const marker = stx.chart.panel[at].appendChild(elem);
-            this.marker = marker;
+            if (!elem) {
+                elem = createElement(`<div class="${nodeName}"></div>`);
+                context.stx.chart.panel[at].appendChild(elem);
+            }
+            this.marker = elem;
             this.forceUpdate(); // force render to be called after setting marker
         });
     }
