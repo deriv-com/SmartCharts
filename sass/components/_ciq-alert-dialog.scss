@@ -3,9 +3,9 @@
 {
 	background: white !important;
 	width: 340px;
-	height: 80px !important;
+	height: 90px !important;
 	border-radius: 5px;
-	color: black;
+	color: #333333;
 	position: absolute;
 	top: inherit !important;
 	>.ic-icon
@@ -31,7 +31,6 @@
 		{
 			@include transition(none !important);
 			padding-right :5px;
-			display: inline-block;
 		}
 		>span{
 			display: inline-block;
@@ -42,15 +41,15 @@
 	{
 		display:flex;
 		justify-content: flex-end;
-		margin-top: 16px;
-		margin-right: 16px;
+		margin-top: 20px;
+		margin-right: 10px;
 		font-weight: bold;
 		>div{
 			width: 90px;
 			height: 40px;
+			color: #2a3052;
 			text-align: center;
 			cursor: pointer;
-			font-size: 12px;
 		}
 	}
 }	
