@@ -58,17 +58,13 @@ export default class ChartSettingStore {
             name: '简体中文',
             icon: <FlagIcons.Chinese />,
         }, {
-            key: 'ja',
-            name: '日本語',
-            icon: <FlagIcons.Japan />,
+            key: 'pl',
+            name: 'Polish',
+            icon: <FlagIcons.Poland />,
         }, {
             key: 'zh_tw',
             name: '繁體中文',
             icon: <FlagIcons.ChineseTraditional />,
-        }, {
-            key: 'pl',
-            name: 'Polish',
-            icon: <FlagIcons.Poland />,
         },
     ];
     defaultLanguage = {};
@@ -135,7 +131,15 @@ export default class ChartSettingStore {
         this.position = value;
         this.mainStore.chart.stxx.clearStyles();
         this.saveSetting();
-        this.mainStore.chart.updateHeight(value);
+
+        /**
+        * Chart should fix its height & width after the position changed,
+        * for that purpose we stay some 10 ms so that position varaible update
+        * on chart context then ask chart to update itself hight & width
+        */
+        setTimeout(() => {
+            this.mainStore.chart.resizeScreen();
+        }, 10);
         this.menu.setOpen(false);
     }
     @action.bound showCountdown(value) {
