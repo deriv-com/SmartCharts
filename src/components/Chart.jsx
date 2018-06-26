@@ -106,7 +106,7 @@ class Chart extends Component {
                             <div className="cq-top-ui-widgets" style={{ top: chartPanelTop }}>
                                 { renderTopWidgets() }
                             </div>
-                            <ChartControls widgets={chartControlsWidgets} />
+                            <ChartControls widgets={chartControlsWidgets} hasOpenMenu={hasOpenMenu}/>
                             <div className="chartContainer primary" style={{ height: chartContainerHeight }}>
                                 <Crosshair />
                             </div>
