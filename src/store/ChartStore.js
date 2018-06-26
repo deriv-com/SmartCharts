@@ -249,7 +249,7 @@ class ChartStore {
                     this.changeSymbol(this.defaultSymbol);
                 }
 
-                this.setLayoutData(context, holderStyle.top);
+                this.setLayoutData(context);
                 /**
                  * Updating market close status each 10 minute
                  */
@@ -257,7 +257,6 @@ class ChartStore {
                 setInterval(() => {
                     this.updateMarketClosedStatus(api);
                 }, 10 * 60 * 1000);
-
             };
             const href = window.location.href;
             if (href.startsWith(shareOrigin) && href.indexOf('#') !== -1) {
