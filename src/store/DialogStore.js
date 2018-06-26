@@ -58,9 +58,6 @@ export default class DialogStore {
         open: this.open,
         setOpen: this.setOpen,
         onTitleClick: this.onTitleClick,
-        onContainerClick: this.onContainerClick,
-        chartHeight: this.mainStore.chart.chartHeight,
-        chartContainerHeight: this.mainStore.chart.chartContainerHeight,
-        isMobile: this.mainStore.chart.isMobile,
+        onContainerClick: this.onContainerClick
     }));
 }

@@ -16,7 +16,6 @@ const ChartTitle = ({
     CategoricalDisplay,
     AnimatedPrice,
     onCloseMenu,
-    isMobile,
 }) => {
     if (!currentSymbol) { return null; }
 
@@ -24,8 +23,7 @@ const ChartTitle = ({
     return (
         <Menu
             className="cq-chart-title stx-show cq-symbols-display"
-            isMobile={isMobile}
-            isFullscreen
+
         >
             <Menu.Title>
                 {isVisible &&
@@ -64,5 +62,4 @@ export default connect(({ chartTitle: c }) => ({
     CategoricalDisplay: c.categoricalDisplay.connect(CategoricalDisplay),
     AnimatedPrice: c.animatedPrice.connect(AnimatedPrice),
     onCloseMenu: c.menu.onTitleClick,
-    isMobile: c.categoricalDisplay.isMobile,
 }))(ChartTitle);
