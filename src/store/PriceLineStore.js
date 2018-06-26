@@ -2,6 +2,9 @@ import EventEmitter from 'event-emitter-es6';
 import { action, computed, observable, when } from 'mobx';
 import { connect } from './Connect';
 
+const LINE_OFFSET_HEIGHT = 4;
+const LINE_OFFSET_HEIGHT_HALF = LINE_OFFSET_HEIGHT >> 1;
+
 export default class PriceLineStore {
     _relative = false;
     @observable draggable = true;
@@ -114,7 +117,7 @@ export default class PriceLineStore {
     @action.bound _dragLine(e) {
         if (!this._line) { return; }
         const newTop = this._initialPosition + e.displacementY;
-        const newCenter = newTop + (this._line.offsetHeight / 2);
+        const newCenter = newTop + LINE_OFFSET_HEIGHT_HALF;
         let newPrice = this._priceFromLocation(newCenter);
 
         if (this._priceConstrainer) { newPrice = this._priceConstrainer(newPrice); }
@@ -144,23 +147,23 @@ export default class PriceLineStore {
         return price;
     }
 
-    @action.bound _positionAtPrice(price) {
-        let top = this._locationFromPrice(price);
-        top -= (this._line.offsetHeight / 2);
+    @action.bound _updateTop() {
+        let top = this._locationFromPrice(this.realPrice);
+        top -= LINE_OFFSET_HEIGHT_HALF;
 
         // keep line on chart even if price is off viewable area:
         if (top < 0) {
             this.uncentered = true;
-            if (top < -(this._line.offsetHeight / 2)) {
+            if (top < -LINE_OFFSET_HEIGHT_HALF) {
                 this.offScreen = true;
             }
             top = 0;
-        } else if (top + this._line.offsetHeight > this.chart.panel.height) {
+        } else if (top + LINE_OFFSET_HEIGHT > this.chart.panel.height) {
             this.uncentered = true;
-            if ((top + this._line.offsetHeight) - this.chart.panel.height > this._line.offsetHeight / 2) {
+            if ((top + LINE_OFFSET_HEIGHT) - this.chart.panel.height > LINE_OFFSET_HEIGHT_HALF) {
                 this.offScreen = true;
             }
-            top = this.chart.panel.height - this._line.offsetHeight;
+            top = this.chart.panel.height - LINE_OFFSET_HEIGHT;
         } else {
             this.uncentered = false;
             this.offScreen = false;
@@ -171,7 +174,7 @@ export default class PriceLineStore {
 
     _draw() {
         if (this.visible && this._line) {
-            this._positionAtPrice(this.realPrice);
+            this._updateTop();
         }
     }
 

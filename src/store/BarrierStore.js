@@ -21,6 +21,7 @@ export default class BarrierStore {
     @observable isBottomShadeVisible = false;
     @observable hidePriceLines = false;
     @observable lineStyle = undefined;
+    @observable isInitialized = false;
     _shadeState;
 
     constructor(mainStore) {
@@ -42,14 +43,18 @@ export default class BarrierStore {
 
         this.shadeState = BarrierStore.SHADE_NONE_SINGLE;
 
-        if (this.context) { this.init(); }
+        if (this.context && this.stx.currentQuote()) { this.init(); }
     }
 
     @action.bound init() {
+        this.isInitialized = true;
         const price = this.relative ? 0 : this.stx.currentQuote().Close;
         const distance = this.chart.yAxis.priceTick;
         this._high_barrier.price = price + distance;
         this._low_barrier.price = price - distance;
+        this._high_barrier._updateTop();
+        this._low_barrier._updateTop();
+        this._drawShadedArea();
     }
 
     destructor() {
@@ -155,7 +160,7 @@ export default class BarrierStore {
         const wasLowBarrierVisible = this._low_barrier.visible;
         this._low_barrier.visible = showLowBarrier;
 
-        if (showLowBarrier && !wasLowBarrierVisible) {
+        if (this.isInitialized && showLowBarrier && !wasLowBarrierVisible) {
             if (this._low_barrier.realPrice >= this._high_barrier.realPrice) {
                 // fix position if _low_barrier above _high_barrier, since _low_barrier position is not updated when not visible
                 this._low_barrier.price = this._high_barrier.price - this.chart.yAxis.priceTick;
@@ -182,6 +187,8 @@ export default class BarrierStore {
     }
 
     @action.bound _drawShadedArea() {
+        if (!this.isInitialized) { return; }
+
         if (this._shadeState === BarrierStore.SHADE_ABOVE) {
             this._shadeAbove();
         } else if (this._shadeState === BarrierStore.SHADE_BELOW) {

@@ -3,6 +3,7 @@ import { connect } from '../store/Connect';
 import BarrierStore from '../store/BarrierStore';
 import PriceLine from './PriceLine.jsx';
 import Shade from './Shade.jsx';
+import { isValidProp } from '../store/utils';
 
 const Barrier = ({
     shadeColor,
@@ -14,7 +15,8 @@ const Barrier = ({
     betweenShade,
     hidePriceLines,
     lineStyle,
-}) => (
+    isInitialized,
+}) => (isInitialized &&
     <div
         className={`barrier ${shadeColor} ${hidePriceLines ? 'hide-pricelines' : ''}`}
     >
@@ -53,6 +55,7 @@ export default connect(
         color: store.color,
         hidePriceLines: store.hidePriceLines,
         lineStyle: store.lineStyle,
+        isInitialized: store.isInitialized,
     }),
     (store, {
         color, shadeColor, shade, high, low, relative, draggable, onChange, hidePriceLines, lineStyle,
@@ -60,8 +63,8 @@ export default connect(
         if (color) { store.color = color; }
         if (shadeColor) { store.shadeColor = shadeColor; }
         if (shade) { store.shadeState = `SHADE_${shade}`.toUpperCase(); }
-        if (high !== undefined) { store.high_barrier = high; }
-        if (low !== undefined) { store.low_barrier = low; }
+        if (isValidProp(high)) { store.high_barrier = high; }
+        if (isValidProp(low)) { store.low_barrier = low; }
         if (relative !== undefined) { store.relative = relative; }
         if (draggable !== undefined) { store.draggable = draggable; }
         if (onChange) { store.onBarrierChange = onChange; }
