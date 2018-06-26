@@ -1,13 +1,13 @@
 
 .cq-alert-dialog
 {
-	background: white !important;
-	width: 340px;
 	height: 90px !important;
 	border-radius: 5px;
-	color: #333333;
-	position: absolute;
+	@include themify($themes) {
+		color: themed('controlText');
+	}
 	top: inherit !important;
+	@include box-shadow (0, 2px, 8px, 0px, rgba(42, 48, 82, 0.14) !important);
 	>.ic-icon
 	{
 		@include transition(none !important);
@@ -47,7 +47,9 @@
 		>div{
 			width: 90px;
 			height: 40px;
-			color: #2a3052;
+			@include themify($themes) {
+                color: themed('activeColor');
+            }
 			text-align: center;
 			cursor: pointer;
 		}
