@@ -20,16 +20,16 @@ class RenderInsideChart extends PureComponent {
                 elem = createElement(`<div class="${nodeName}"></div>`);
                 context.stx.chart.panel[at].appendChild(elem);
             }
-            this.marker = elem;
-            this.forceUpdate(); // force render to be called after setting marker
+            this.container = elem;
+            this.forceUpdate(); // force render to be called after getting the container
         });
     }
 
     render() {
-        if (this.marker) {
+        if (this.container) {
             return ReactDOM.createPortal(
                 this.props.children,
-                this.marker,
+                this.container,
             );
         }
         return (null);
