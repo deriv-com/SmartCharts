@@ -13,7 +13,7 @@ export default class DialogStore {
 
     setOpen = debounce((val) => {
         this.openDialog(val);
-    }, 200);
+    }, 300, { leading: true, trailing: false });
 
     @action.bound openDialog(val) {
         if (this.open !== val) {
