@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
-"PO-Revision-Date: 2018-06-13 21:20-0400\n"
+"PO-Revision-Date: 2018-06-20T16:01:42+0000\n"
 
 msgid "Favorites"
 msgstr "Избранное"
@@ -148,7 +148,7 @@ msgid "Renko"
 msgstr "Ренко"
 
 msgid "Range Bars"
-msgstr "Range Bars"
+msgstr "Столбцы"
 
 msgid "Point & Figure"
 msgstr "Крестики-нолики"

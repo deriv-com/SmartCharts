@@ -7,9 +7,8 @@ const Shade = ({
     className,
 }) => (
     <div
-        className={`shade ${className || ''}`}
+        className={`shade ${className || ''} ${visible ? '' : 'hidden'}`}
         style={{ top, bottom }}
-        hidden={visible ? undefined : 'true'}
     />
 );
 
