@@ -1,4 +1,5 @@
 import React from 'react';
+import { action } from 'mobx';
 import { connect } from '../store/Connect';
 import BarrierStore from '../store/BarrierStore';
 import PriceLine from './PriceLine.jsx';
@@ -60,15 +61,17 @@ export default connect(
     (store, {
         color, shadeColor, shade, high, low, relative, draggable, onChange, hidePriceLines, lineStyle,
     }) => {
-        if (color) { store.color = color; }
-        if (shadeColor) { store.shadeColor = shadeColor; }
-        if (shade) { store.shadeState = `SHADE_${shade}`.toUpperCase(); }
-        if (isValidProp(high)) { store.high_barrier = high; }
-        if (isValidProp(low)) { store.low_barrier = low; }
-        if (relative !== undefined) { store.relative = relative; }
-        if (draggable !== undefined) { store.draggable = draggable; }
-        if (onChange) { store.onBarrierChange = onChange; }
-        store.lineStyle = lineStyle;
-        store.hidePriceLines = !!hidePriceLines;
+        store.initializePromise.then(action(() => {
+            if (color) { store.color = color; }
+            if (shadeColor) { store.shadeColor = shadeColor; }
+            if (shade) { store.shadeState = `SHADE_${shade}`.toUpperCase(); }
+            if (isValidProp(high)) { store.high_barrier = high; }
+            if (isValidProp(low)) { store.low_barrier = low; }
+            if (relative !== undefined) { store.relative = relative; }
+            if (draggable !== undefined) { store.draggable = draggable; }
+            if (onChange) { store.onBarrierChange = onChange; }
+            store.lineStyle = lineStyle;
+            store.hidePriceLines = !!hidePriceLines;
+        }));
     },
 )(Barrier);

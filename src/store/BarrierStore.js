@@ -1,6 +1,7 @@
 import { observable, action } from 'mobx';
 import PriceLineStore from './PriceLineStore';
 import ShadeStore from './ShadeStore';
+import PendingPromise from '../utils/PendingPromise';
 
 export default class BarrierStore {
     static get SHADE_COLOR_RED() { return 'red'; }
@@ -22,6 +23,7 @@ export default class BarrierStore {
     @observable hidePriceLines = false;
     @observable lineStyle = undefined;
     @observable isInitialized = false;
+    @observable initializePromise = new PendingPromise();
     _shadeState;
 
     constructor(mainStore) {
@@ -48,6 +50,15 @@ export default class BarrierStore {
 
     @action.bound init() {
         this.isInitialized = true;
+        this.initializePromise.resolve();
+
+        // This is not all that important; binary-static sets
+        // the high and low barriers. In the event it causes any
+        // issues, feel free to comment this out.
+        this.setDefaultBarrier();
+    }
+
+    setDefaultBarrier() {
         const price = this.relative ? 0 : this.stx.currentQuote().Close;
         const distance = this.chart.yAxis.priceTick;
         this._high_barrier.price = price + distance;
