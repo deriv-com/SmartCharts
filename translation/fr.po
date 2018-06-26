@@ -10,19 +10,19 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: French\n"
 "Language: fr_FR\n"
-"PO-Revision-Date: 2018-06-20T08:51:39+0000\n"
+"PO-Revision-Date: 2018-06-26 15:01\n"
 
 msgid "Favorites"
 msgstr "Favoris"
 
 msgid "There are no favorites yet."
-msgstr ""
+msgstr "Il n’y a pas encore de favoris."
 
 msgid "CLOSED"
-msgstr ""
+msgstr "FERMETURE"
 
 msgid "PRICE"
-msgstr ""
+msgstr "PRIX"
 
 msgid "OPEN"
 msgstr "OUVERTURE"
@@ -37,28 +37,28 @@ msgid "LOW"
 msgstr "PLUS BAS"
 
 msgid "Underlying Assets"
-msgstr ""
+msgstr "Actifs sous-jacents"
 
 msgid "Share"
 msgstr "Partager"
 
 msgid "Share / Download Chart"
-msgstr ""
+msgstr "Partager / Télécharger le tableau"
 
 msgid "Share link"
-msgstr ""
+msgstr "Partager le lien"
 
 msgid "Failed to generate link"
-msgstr ""
+msgstr "Échec à la création de lien"
 
 msgid "Retry"
-msgstr ""
+msgstr "Réessayer"
 
 msgid "Download chart"
-msgstr ""
+msgstr "Télécharger le tableau"
 
 msgid "Draw tools"
-msgstr ""
+msgstr "Créer des d'outils"
 
 msgid "Clear All"
 msgstr "Suprimez tout"
@@ -67,7 +67,7 @@ msgid "Measure"
 msgstr "Mesure"
 
 msgid "Zoom out"
-msgstr ""
+msgstr "Effectuer un zoom arrière"
 
 msgid "Zoom in"
 msgstr ""
