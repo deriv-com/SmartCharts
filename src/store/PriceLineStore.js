@@ -149,7 +149,6 @@ export default class PriceLineStore {
 
     @action.bound _updateTop() {
         let top = this._locationFromPrice(this.realPrice);
-        top -= LINE_OFFSET_HEIGHT_HALF;
 
         // keep line on chart even if price is off viewable area:
         if (top < 0) {
