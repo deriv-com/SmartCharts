@@ -58,10 +58,9 @@ export default class BarrierStore {
         this.isInitialized = true;
         this.initializePromise.resolve();
 
-        // This is not all that important; binary-static sets
-        // the high and low barriers. In the event it causes any
-        // issues, feel free to comment this out.
-        this.setDefaultBarrier();
+        // Enable this to test barriers; high low values are mandatory
+        // for library user to provide
+        // this.setDefaultBarrier();
     }
 
     setDefaultBarrier() {
@@ -117,10 +116,6 @@ export default class BarrierStore {
     set onBarrierChange(callback) {
         if (this._onBarrierChange !== callback) {
             this._onBarrierChange = callback;
-            // Immediately fire current barrier values
-            if (callback) {
-                this._fireOnBarrierChange();
-            }
         }
     }
 

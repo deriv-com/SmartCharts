@@ -154,6 +154,8 @@ export default class PriceLineStore {
     }
 
     @action.bound _updateTop() {
+        if (this.stx.currentQuote() === null) { return; }
+
         let top = this._locationFromPrice(this.realPrice);
 
         // keep line on chart even if price is off viewable area:
