@@ -1,8 +1,5 @@
 import React from 'react';
-import {
-    alertIconMap,
-    ArrowDownIcon
-} from './Icons.jsx';
+import { alertIconMap } from './Icons.jsx';
 import '../../sass/components/_ciq-alert-dialog.scss';
 
 const AlertDialog = ({
@@ -30,7 +27,6 @@ const AlertDialog = ({
                 >{sureDisplay}
             </div>
         </div>
-        <ArrowDownIcon/>
     </Dialog>
 );
 

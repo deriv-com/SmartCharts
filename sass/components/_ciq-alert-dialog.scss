@@ -8,20 +8,6 @@
 	}
 	top: inherit !important;
 	@include box-shadow (0, 2px, 8px, 0px, rgba(42, 48, 82, 0.14) !important);
-	>.ic-icon
-	{
-		@include transition(none !important);
-		position: absolute;
-		left: 84%;
-		top: 100%;
-		line-height: 0;
-		width: 10px;
-		height: 10px;
-		>svg
-		{
-			filter: drop-shadow(0px 0px 0px rgba(0,0,0,0.14));
-		}
-	}
     .alrt-title
 	{
 		text-align: center;
@@ -54,5 +40,16 @@
 			cursor: pointer;
 		}
 	}
+	:after{
+		content: "";
+		position: absolute;
+		bottom: -10px; 
+		left: 83%; 
+		border-left: 5px solid transparent; 
+		border-right: 5px solid transparent; 
+		@include themify($themes) {
+			border-top: 10px solid themed('defaultMain');
+		}
+	 }
 }	
     

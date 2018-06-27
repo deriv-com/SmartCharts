@@ -8,8 +8,6 @@ import {
     AddIcon,
     TickIcon,
     DeleteIcon,
-    alertIconMap,
-    ArrowDownIcon
 } from './Icons.jsx';
 import '../../sass/components/_view.scss';
 
