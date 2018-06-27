@@ -3,8 +3,8 @@ import PriceLineStore from './PriceLineStore';
 import ShadeStore from './ShadeStore';
 
 export default class BarrierStore {
-    static get BARRIER_COLOR_RED() { return 'red'; }
-    static get BARRIER_COLOR_GREEN() { return 'green'; }
+    static get SHADE_COLOR_RED() { return 'red'; }
+    static get SHADE_COLOR_GREEN() { return 'green'; }
 
     static get SHADE_NONE_SINGLE() { return 'SHADE_NONE_SINGLE'; }
     static get SHADE_NONE_DOUBLE() { return 'SHADE_NONE_DOUBLE'; }
@@ -15,7 +15,7 @@ export default class BarrierStore {
 
     static get BARRIER_CHANGED() { return 'BARRIER_CHANGED'; }
 
-    @observable barrierColor = BarrierStore.BARRIER_COLOR_GREEN;
+    @observable shadeColor = BarrierStore.SHADE_COLOR_GREEN;
     @observable isBetweenShadeVisible = false;
     @observable isTopShadeVisible = false;
     @observable isBottomShadeVisible = false;
