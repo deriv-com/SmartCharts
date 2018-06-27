@@ -178,7 +178,7 @@ CIQ.Animation = function (stx, animationParameters, easeMachine) {
                 completeLastBar(this.prevQuote.Close);
                 appendQuotes.splice(1, 1);
             }
-            if (!quote || !this.prevQuote) { return false; }
+            if (!quote || !quote.Close || !this.prevQuote || !this.prevQuote.Close) return false;
 
             if (this.extendedHours && chart.market.market_def) {
                 // Filter out unwanted sessions
