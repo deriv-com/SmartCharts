@@ -45,6 +45,7 @@ export default class PriceLineStore {
     };
 
     static get EVENT_PRICE_CHANGED() { return 'EVENT_PRICE_CHANGED'; }
+    static get EVENT_DRAG_RELEASED() { return 'EVENT_DRAG_RELEASED'; }
 
     @computed get priceDisplay() {
         let display = this._price.toFixed(this.pip);
@@ -112,6 +113,7 @@ export default class PriceLineStore {
         this._modalBegin();
         this.isDragging = true;
         this._initialPosition = this.top;
+        this._startDragPrice = this._price;
     }
 
     @action.bound _dragLine(e) {
@@ -129,6 +131,10 @@ export default class PriceLineStore {
     @action.bound _endDrag() {
         this._modalEnd();
         this.isDragging = false;
+
+        if (this._startDragPrice.toFixed(this.pip) !== this._price.toFixed(this.pip)) {
+            this._emitter.emit(PriceLineStore.EVENT_DRAG_RELEASED, this._price);
+        }
     }
 
     _locationFromPrice(p) {
@@ -179,6 +185,10 @@ export default class PriceLineStore {
 
     onPriceChanged(callback) {
         this._emitter.on(PriceLineStore.EVENT_PRICE_CHANGED, callback);
+    }
+
+    onDragReleased(callback) {
+        this._emitter.on(PriceLineStore.EVENT_DRAG_RELEASED, callback);
     }
 
     connect = connect(() => ({

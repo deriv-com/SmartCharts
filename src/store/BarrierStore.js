@@ -1,4 +1,4 @@
-import { observable, action } from 'mobx';
+import { observable, action, computed } from 'mobx';
 import PriceLineStore from './PriceLineStore';
 import ShadeStore from './ShadeStore';
 import PendingPromise from '../utils/PendingPromise';
@@ -26,12 +26,18 @@ export default class BarrierStore {
     @observable initializePromise = new PendingPromise();
     _shadeState;
 
+    @computed get pip() { return this.mainStore.chart.currentActiveSymbol.decimal_places; }
+
     constructor(mainStore) {
         this.mainStore = mainStore;
         this._high_barrier = new PriceLineStore(this.mainStore);
         this._low_barrier = new PriceLineStore(this.mainStore);
-        this._high_barrier.onPriceChanged(this._onPriceChanged.bind(this));
-        this._low_barrier.onPriceChanged(this._onPriceChanged.bind(this));
+
+        this._high_barrier.onPriceChanged(this._drawShadedArea);
+        this._low_barrier.onPriceChanged(this._drawShadedArea);
+
+        this._high_barrier.onDragReleased(this._fireOnBarrierChange);
+        this._low_barrier.onDragReleased(this._fireOnBarrierChange);
 
         this._injectionId = this.stx.append('draw', this._drawShadedArea);
 
@@ -118,17 +124,12 @@ export default class BarrierStore {
         }
     }
 
-    _fireOnBarrierChange() {
-        const high_barrier = this._high_barrier.visible ? this._high_barrier.price : undefined;
-        const low_barrier = this._low_barrier.visible ? this._low_barrier.price : undefined;
+    _fireOnBarrierChange = () => {
+        const high = this._high_barrier.visible ? +this._high_barrier.price.toFixed(this.pip) : undefined;
+        const low  = this._low_barrier.visible  ? +this._low_barrier.price.toFixed(this.pip)  : undefined;
 
-        if (this._onBarrierChange) { this._onBarrierChange({ high: high_barrier, low: low_barrier }); }
-    }
-
-    _onPriceChanged() {
-        this._fireOnBarrierChange();
-        this._drawShadedArea();
-    }
+        if (this._onBarrierChange) { this._onBarrierChange({ high, low }); }
+    };
 
     get shadeState() {
         return this._shadeState;
