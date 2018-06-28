@@ -10,55 +10,55 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: French\n"
 "Language: fr_FR\n"
-"PO-Revision-Date: 2018-06-08 04:22-0400\n"
+"PO-Revision-Date: 2018-06-26 15:21\n"
 
 msgid "Favorites"
-msgstr ""
+msgstr "Favoris"
 
 msgid "There are no favorites yet."
-msgstr ""
+msgstr "Il n’y a pas encore de favoris."
 
 msgid "CLOSED"
-msgstr ""
+msgstr "FERMETURE"
 
 msgid "PRICE"
-msgstr ""
+msgstr "PRIX"
 
 msgid "OPEN"
-msgstr ""
+msgstr "OUVERTURE"
 
 msgid "CLOSE"
-msgstr ""
+msgstr "FERMETURE"
 
 msgid "HIGH"
-msgstr ""
+msgstr "PLUS HAUT"
 
 msgid "LOW"
-msgstr ""
+msgstr "PLUS BAS"
 
 msgid "Underlying Assets"
-msgstr ""
+msgstr "Actifs sous-jacents"
 
 msgid "Share"
 msgstr "Partager"
 
 msgid "Share / Download Chart"
-msgstr ""
+msgstr "Partager / Télécharger le tableau"
 
 msgid "Share link"
-msgstr ""
+msgstr "Partager le lien"
 
 msgid "Failed to generate link"
-msgstr ""
+msgstr "Échec à la création de lien"
 
 msgid "Retry"
-msgstr ""
+msgstr "Réessayer"
 
 msgid "Download chart"
-msgstr ""
+msgstr "Télécharger le tableau"
 
 msgid "Draw tools"
-msgstr ""
+msgstr "Créer des d'outils"
 
 msgid "Clear All"
 msgstr "Suprimez tout"
@@ -67,22 +67,22 @@ msgid "Measure"
 msgstr "Mesure"
 
 msgid "Zoom out"
-msgstr ""
+msgstr "Effectuer un zoom arrière"
 
 msgid "Zoom in"
-msgstr ""
+msgstr "Effectuer un zoom avant"
 
 msgid "Interval"
 msgstr "Intervalle"
 
 msgid "Tick"
-msgstr ""
+msgstr "Tick"
 
 msgid "Minute"
-msgstr ""
+msgstr "Minute"
 
 msgid "Hour"
-msgstr ""
+msgstr "Heure"
 
 msgid "Day"
 msgstr "Jour"
@@ -91,37 +91,37 @@ msgid "Crosshair"
 msgstr "Crosshair"
 
 msgid "Templates"
-msgstr ""
+msgstr "Modèles"
 
 msgid "Template name"
-msgstr ""
+msgstr "Nom du modèle"
 
 msgid "There is no template added by you."
-msgstr ""
+msgstr "Il n’y a aucun modèle ajouté par vous."
 
 msgid "Click + icon to add one."
-msgstr ""
+msgstr "Cliquez sur l'icône + afin d’en ajouter un."
 
 msgid "Comparison"
-msgstr ""
+msgstr "Comparaison"
 
 msgid "Indicators"
-msgstr ""
+msgstr "Indicateurs"
 
 msgid "Chart types"
-msgstr ""
+msgstr "Types de graphique"
 
 msgid "Line"
 msgstr "Ligne"
 
 msgid "Dot"
-msgstr ""
+msgstr "Point"
 
 msgid "Colored Dot"
-msgstr ""
+msgstr "Point coloré"
 
 msgid "Spline"
-msgstr ""
+msgstr "Spline"
 
 msgid "Baseline"
 msgstr "Ligne de base"
@@ -130,85 +130,85 @@ msgid "Candle"
 msgstr "Bougie"
 
 msgid "OHLC"
-msgstr ""
+msgstr "OHLC"
 
 msgid "Hollow Candle"
 msgstr "Bougie creuse"
 
 msgid "Heikin Ashi"
-msgstr ""
+msgstr "Heikin Ashi"
 
 msgid "Kagi"
-msgstr ""
+msgstr "Kagi"
 
 msgid "Line Break"
-msgstr ""
+msgstr "Saut de ligne"
 
 msgid "Renko"
-msgstr ""
+msgstr "Renko"
 
 msgid "Range Bars"
-msgstr ""
+msgstr "Amplitude"
 
 msgid "Point & Figure"
-msgstr ""
+msgstr "Point & Figure"
 
 msgid "Reversal Percentage"
-msgstr ""
+msgstr "Pourcentage de renversement"
 
 msgid "Range"
-msgstr ""
+msgstr "Gamme"
 
 msgid "Price Lines"
-msgstr ""
+msgstr "Lignes de prix"
 
 msgid "Box Size"
-msgstr ""
+msgstr "Taille de la boîte"
 
 msgid "Reversal"
-msgstr ""
+msgstr "Renversement"
 
 msgid "RESET"
-msgstr ""
+msgstr "REINITIALISATION"
 
 msgid "DONE"
-msgstr ""
+msgstr "FAIT"
 
 msgid "Settings"
-msgstr ""
+msgstr "Paramètres"
 
 msgid "Position"
-msgstr ""
+msgstr "Position"
 
 msgid "Dark Mode"
-msgstr ""
+msgstr "Mode Sombre"
 
 msgid "Countdown"
-msgstr ""
+msgstr "Compte à rebours"
 
 msgid "Asset Information"
-msgstr ""
+msgstr "Informations sur les actifs"
 
 msgid "Language"
-msgstr ""
+msgstr "Langue"
 
 msgid "[symbol] market is presently closed."
-msgstr ""
+msgstr "Le marché [symbol] est actuellement fermé."
 
 msgid "Streaming for [symbol] is not available due to license restrictions"
-msgstr ""
+msgstr "Diffusion en continu pour [symbol] n’est pas disponible en raison de restrictions de licence"
 
 msgid "Copy to clipboard"
-msgstr ""
+msgstr "Copier dans le Presse-papiers"
 
 msgid "Copied!"
-msgstr ""
+msgstr "Copié!"
 
 msgid "Failed!"
-msgstr ""
+msgstr "Échec!"
 
 msgid "Search..."
-msgstr ""
+msgstr "Rechercher..."
 
 msgid "Annotation"
 msgstr "Annotation"
@@ -235,7 +235,7 @@ msgid "Ellipse"
 msgstr "Ellipse"
 
 msgid "Fib Retracement"
-msgstr ""
+msgstr "Retracement Fibonacci"
 
 msgid "Fib Arc"
 msgstr "Arc Fib"
@@ -307,16 +307,16 @@ msgid "Vertical"
 msgstr "Vertical"
 
 msgid "Active"
-msgstr ""
+msgstr "Actif"
 
 msgid "There are no active comparisons yet."
-msgstr ""
+msgstr "Il n'y a pas encore de comparisons actives."
 
 msgid "\"Mass Index\" or \"Doji Star\""
-msgstr ""
+msgstr "« Indice de masse » ou « Etoile Doji »"
 
 msgid "There are no active indicators yet."
-msgstr ""
+msgstr "Il n’y a encore aucun indicateur actif."
 
 msgid "right-click to delete"
 msgstr "Faites un clic droit pour supprimer"
@@ -325,7 +325,7 @@ msgid "right-click to manage"
 msgstr "Faites un clic droit pour gérer"
 
 msgid "Chart data is not available for this symbol."
-msgstr ""
+msgstr "L'information graphique n'est pas disponible pour ce symbole."
 
 msgid "RSI"
 msgstr "RSI"

@@ -103,7 +103,7 @@ barriers | Draw chart barriers. Refer to [Barriers API](#barriers-api) for usage
     barriers={[{
         color:'green',
         shade:'above',
-        disablePriceLines: false, // default false
+        hidePriceLines: false, // default false
         onChange:console.warn.bind(console),
     }]}
 />
@@ -111,9 +111,10 @@ barriers | Draw chart barriers. Refer to [Barriers API](#barriers-api) for usage
 
 | Attribute | Description |
 --------|--------------
-color | Barrier shade color
+shadeColor | Barrier shade color; choose between `green` and `red`. Defaults to `green`.
+color | Price line color. Defaults to `#000`.
 shade | Shade type; choose between `NONE_SINGLE`, `NONE_DOUBLE`, `ABOVE`, `BELOW`, `OUTSIDE` or `BETWEEN`. Defaults to `NONE_SINGLE`.
-disablePriceLines | hide/show the price lines. Defaults to `false`.
+hidePriceLines | hide/show the price lines. Defaults to `false`.
 lineStyle | Sets the style of the price lines; choose between `dotted`, `dashed`, or `solid`. Defaults to `dashed`.
 onChange | When price of high or low barrier changes (including when switched toggling `relative` or setting `high\|low`), `onChange` will pass the high and low barriers as `{ high, low }`.
 relative | Toggle between relative and absolute barriers. Defaults to `false`.
