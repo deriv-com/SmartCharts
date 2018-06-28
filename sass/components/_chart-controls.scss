@@ -191,12 +191,13 @@
                 .cq-menu-overlay {
                     opacity: 1;
                     visibility: visible;
+                    cursor: pointer;
                 }
             }
             &.ciq-studies,
             &.cq-comparison-new{
                 .cq-menu-dropdown {
-                    height: calc( 100vh - 40px ) ;
+                    height:80% ;
                     left: 0px !important;
                     width: 100%;
                     box-shadow: none !important;
