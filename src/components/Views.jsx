@@ -1,4 +1,5 @@
 import React from 'react';
+import PerfectScrollbar from 'react-perfect-scrollbar';
 import Menu from './Menu.jsx';
 import { connect } from '../store/Connect';
 import {
@@ -23,7 +24,6 @@ const ViewItem = ({
 
 const Views = ({
     Menu,
-    setScrollPanel,
     menuOpen,
     views,
     routes: { current: currentRoute, add, main, cancel },
@@ -68,7 +68,7 @@ const Views = ({
                 </span>
             </div>
             <div className="content">
-                <div className="ciq-list" ref={setScrollPanel}>
+                <PerfectScrollbar className="ciq-list" >
                     {
                         views.length
                             ? views.map((view, i) => (
@@ -85,7 +85,7 @@ const Views = ({
                                 <p>{t.translate('Click + icon to add one.')}</p>
                             </span>
                     }
-                </div>
+                </PerfectScrollbar>
             </div>
         </Menu.Body>
     </Menu>
@@ -93,7 +93,6 @@ const Views = ({
 
 export default connect(({ view: s }) => ({
     Menu: s.menu.connect(Menu),
-    setScrollPanel: s.setScrollPanel,
     views: s.views,
     routes: s.routes,
     onChange: s.onChange,

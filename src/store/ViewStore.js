@@ -1,4 +1,3 @@
-import PerfectScrollbar from 'perfect-scrollbar';
 import { observable, action, when } from 'mobx';
 import { createObjectFromLocalStorage } from '../utils';
 import MenuStore from './MenuStore';
@@ -26,10 +25,6 @@ export default class ViewStore {
     onContextReady = () => {
         const views = createObjectFromLocalStorage('cq-views');
         if (views) { this.views = views; }
-
-        setTimeout(() => {
-            this.scroll = new PerfectScrollbar(this.scrollPanel);
-        }, 100);
     }
 
     updateLocalStorage = () => {
@@ -64,10 +59,6 @@ export default class ViewStore {
         this.views.splice(idx, 1);
         e.nativeEvent.is_item_removed = true;
         this.updateLocalStorage();
-    }
-
-    @action.bound setScrollPanel(element) {
-        this.scrollPanel = element;
     }
 
     @action.bound applyLayout = (idx, e) => {

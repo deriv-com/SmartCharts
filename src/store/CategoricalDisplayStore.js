@@ -1,4 +1,3 @@
-import PerfectScrollbar from 'perfect-scrollbar';
 import { action, observable, computed, when, reaction, toJS } from 'mobx';
 import { connect } from './Connect';
 
@@ -80,6 +79,7 @@ export default class CategoricalDisplayStore {
         if (this.pauseScrollSpy) { return; }
         if (this.filteredItems.length === 0) { return; }
 
+
         let i = 0;
         for (const category of this.filteredItems) {
             const el = this.categoryElements[category.categoryId];
@@ -88,7 +88,7 @@ export default class CategoricalDisplayStore {
                 continue;
             }
             const r = el.getBoundingClientRect();
-            const top = r.top - this.scrollPanel.getBoundingClientRect().top;
+            const top = r.top - this.scrollPanel.scrollTop;
             if (top > 0) { break; }
             i++;
         }
@@ -103,16 +103,13 @@ export default class CategoricalDisplayStore {
             }
             idx--;
         }
+
         this.activeCategoryKey = id || this.filteredItems[0].categoryId;
         this.scrollTop = this.scrollPanel.scrollTop;
     }
 
     @action.bound init() {
         this.isInit = true;
-        this.scroll = new PerfectScrollbar(this.scrollPanel);
-
-        this.scrollPanel.addEventListener('ps-scroll-y', this.updateScrollSpy.bind(this));
-
         // Select first non-empty category:
         if (this.activeCategoryKey === '' && this.filteredItems.length > 0) {
             for (const category of this.filteredItems) {
@@ -205,7 +202,6 @@ export default class CategoricalDisplayStore {
     @action.bound setFilterText(filterText) {
         this.filterText = filterText;
         setTimeout(() => {
-            this.scroll.update();
             this.updateScrollSpy();
         }, 0);
     }
@@ -221,7 +217,7 @@ export default class CategoricalDisplayStore {
         if (el) {
             // TODO: Scroll animation
             this.pauseScrollSpy = true;
-            this.scroll.element.scrollTop = el.offsetTop;
+            this.scrollPanel.scrollTop = el.offsetTop;
             this.activeCategoryKey = category.categoryId;
             // scrollTop takes some time to take affect, so we need
             // a slight delay before enabling the scroll spy again
@@ -234,7 +230,7 @@ export default class CategoricalDisplayStore {
     }
 
     @action.bound setScrollPanel(element) {
-        this.scrollPanel = element;
+        this.scrollPanel = element._container;
     }
 
     @action.bound getItemCount(category) {
@@ -310,5 +306,6 @@ export default class CategoricalDisplayStore {
         favoritesMap: this.favoritesMap,
         favoritesId: this.favoritesId,
         CloseUpperMenu: this.CloseUpperMenu,
+        updateScrollSpy: this.updateScrollSpy,
     }))
 }

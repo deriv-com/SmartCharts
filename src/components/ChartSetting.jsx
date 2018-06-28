@@ -35,19 +35,17 @@ const ChartSetting = ({
     isMobile,
 }) => {
     const renderPosition = () => (
-        <div>
-            <div className="ciq-list-item ciq-list-item-position">
-                <span className="ciq-icon-text">{t.translate('Position')}</span>
-                <div className="ciq-action">
-                    <PositionBottomIcon
-                        onClick={() => setPosition('bottom')}
-                        className={`${position === 'bottom' ? 'active' : ''}`}
-                    />
-                    <PositionLeftIcon
-                        onClick={() => setPosition('left')}
-                        className={`${position === 'left' ? 'active' : ''}`}
-                    />
-                </div>
+        <div className="ciq-list-item ciq-list-item-position">
+            <span className="ciq-icon-text">{t.translate('Position')}</span>
+            <div className="ciq-action">
+                <PositionBottomIcon
+                    onClick={() => setPosition('bottom')}
+                    className={`${position === 'bottom' ? 'active' : ''}`}
+                />
+                <PositionLeftIcon
+                    onClick={() => setPosition('left')}
+                    className={`${position === 'left' ? 'active' : ''}`}
+                />
             </div>
         </div>);
     const renderMain = () => (

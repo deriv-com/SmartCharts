@@ -1,4 +1,5 @@
 import React from 'react';
+import PerfectScrollbar from 'react-perfect-scrollbar';
 import '../../sass/components/_ciq-list.scss';
 
 const List = ({
@@ -17,10 +18,10 @@ const List = ({
                ` ${it.disabled ? 'disabled' : ''}` +
                ` ${it.active ? 'active' : ''}`;
     return (
-        <div
+        <PerfectScrollbar
+            ref={onRootRef}
             className="ciq-list"
             style={height && { height: `${height}px` }}
-            ref={onRootRef}
         >
             {items.map((it, idx) => (
                 <div
@@ -32,7 +33,7 @@ const List = ({
                     {renderRow(it)}
                 </div>
             ))}
-        </div>
+        </PerfectScrollbar>
     );
 };
 

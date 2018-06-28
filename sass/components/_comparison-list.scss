@@ -48,8 +48,11 @@
         @include transition(opacity .20s .0s);
         cursor: pointer;
         opacity: 0;
-        left: 10px;
+        left: 7px;
         position: relative;
+        width: 16px;
+        height: 16px;
+        line-height: 20px;
     }
     .cq-comparison-item:hover .ciq-close {
         opacity: .6;
