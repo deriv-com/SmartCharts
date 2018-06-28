@@ -181,9 +181,9 @@ export default class CategoricalDisplayStore {
         }
 
 
+        const queries = this.filterText.split(' ').filter(x => x !== '').map(b => b.toLowerCase().trim());
         // regex to check all separate words by comma, should exist in the string
-        const reg = RegExp(`.*(${this.filterText.split(' ').filter(x => x !== '').map(text => text.trim()).join(')+.*(')})+`, 'i');
-        const hasSearchString = text => reg.exec(text) !== null;
+        const hasSearchString = text => queries.reduce((a, b) => text.toLowerCase().includes(b) && a, true);
         const filterCategory = (c) => {
             c.data = c.data.filter(item => hasSearchString(item.display) || (item.dataObject && hasSearchString(item.dataObject.symbol)));
         };
