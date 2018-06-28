@@ -109,6 +109,8 @@ barriers | Draw chart barriers. Refer to [Barriers API](#barriers-api) for usage
 />
 ```
 
+Attributes marked with `*` are **mandatory**:
+
 | Attribute | Description |
 --------|--------------
 shadeColor | Barrier shade color; choose between `green` and `red`. Defaults to `green`.
@@ -119,8 +121,8 @@ lineStyle | Sets the style of the price lines; choose between `dotted`, `dashed`
 onChange | When price of high or low barrier changes (including when switched toggling `relative` or setting `high\|low`), `onChange` will pass the high and low barriers as `{ high, low }`.
 relative | Toggle between relative and absolute barriers. Defaults to `false`.
 draggable | Toggles whether users can drag the price lines and change the barrier directly from the chart. Defaults to `true`.
-high | Sets the price of the high barrier.
-low | Sets the price of the low barrier.
+high* | Sets the price of the high barrier.
+low* | Sets the price of the low barrier.
 
 
 ### Customising Components
