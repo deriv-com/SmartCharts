@@ -21,7 +21,7 @@ export default class BarrierStore {
     @observable isBottomShadeVisible = false;
     @observable hidePriceLines = false;
     @observable lineStyle = undefined;
-    _shadeState = BarrierStore.SHADE_NONE_SINGLE;
+    _shadeState;
 
     constructor(mainStore) {
         this.mainStore = mainStore;
@@ -39,6 +39,8 @@ export default class BarrierStore {
         this.aboveShade = new ShadeStore();
         this.betweenShade = new ShadeStore();
         this.belowShade = new ShadeStore();
+
+        this.shadeState = BarrierStore.SHADE_NONE_SINGLE;
 
         if (this.context) { this.init(); }
     }
