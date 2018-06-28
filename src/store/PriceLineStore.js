@@ -2,6 +2,9 @@ import EventEmitter from 'event-emitter-es6';
 import { action, computed, observable, when } from 'mobx';
 import { connect } from './Connect';
 
+const LINE_OFFSET_HEIGHT = 4;
+const LINE_OFFSET_HEIGHT_HALF = LINE_OFFSET_HEIGHT >> 1;
+
 export default class PriceLineStore {
     _relative = false;
     @observable draggable = true;
@@ -42,6 +45,7 @@ export default class PriceLineStore {
     };
 
     static get EVENT_PRICE_CHANGED() { return 'EVENT_PRICE_CHANGED'; }
+    static get EVENT_DRAG_RELEASED() { return 'EVENT_DRAG_RELEASED'; }
 
     @computed get priceDisplay() {
         let display = this._price.toFixed(this.pip);
@@ -109,12 +113,13 @@ export default class PriceLineStore {
         this._modalBegin();
         this.isDragging = true;
         this._initialPosition = this.top;
+        this._startDragPrice = this._price;
     }
 
     @action.bound _dragLine(e) {
         if (!this._line) { return; }
         const newTop = this._initialPosition + e.displacementY;
-        const newCenter = newTop + (this._line.offsetHeight / 2);
+        const newCenter = newTop + LINE_OFFSET_HEIGHT_HALF;
         let newPrice = this._priceFromLocation(newCenter);
 
         if (this._priceConstrainer) { newPrice = this._priceConstrainer(newPrice); }
@@ -126,6 +131,10 @@ export default class PriceLineStore {
     @action.bound _endDrag() {
         this._modalEnd();
         this.isDragging = false;
+
+        if (this._startDragPrice.toFixed(this.pip) !== this._price.toFixed(this.pip)) {
+            this._emitter.emit(PriceLineStore.EVENT_DRAG_RELEASED, this._price);
+        }
     }
 
     _locationFromPrice(p) {
@@ -144,23 +153,24 @@ export default class PriceLineStore {
         return price;
     }
 
-    @action.bound _positionAtPrice(price) {
-        let top = this._locationFromPrice(price);
-        top -= (this._line.offsetHeight / 2);
+    @action.bound _updateTop() {
+        if (this.stx.currentQuote() === null) { return; }
+
+        let top = this._locationFromPrice(this.realPrice);
 
         // keep line on chart even if price is off viewable area:
         if (top < 0) {
             this.uncentered = true;
-            if (top < -(this._line.offsetHeight / 2)) {
+            if (top < -LINE_OFFSET_HEIGHT_HALF) {
                 this.offScreen = true;
             }
             top = 0;
-        } else if (top + this._line.offsetHeight > this.chart.panel.height) {
+        } else if (top + LINE_OFFSET_HEIGHT > this.chart.panel.height) {
             this.uncentered = true;
-            if ((top + this._line.offsetHeight) - this.chart.panel.height > this._line.offsetHeight / 2) {
+            if ((top + LINE_OFFSET_HEIGHT) - this.chart.panel.height > LINE_OFFSET_HEIGHT_HALF) {
                 this.offScreen = true;
             }
-            top = this.chart.panel.height - this._line.offsetHeight;
+            top = this.chart.panel.height - LINE_OFFSET_HEIGHT;
         } else {
             this.uncentered = false;
             this.offScreen = false;
@@ -171,12 +181,16 @@ export default class PriceLineStore {
 
     _draw() {
         if (this.visible && this._line) {
-            this._positionAtPrice(this.realPrice);
+            this._updateTop();
         }
     }
 
     onPriceChanged(callback) {
         this._emitter.on(PriceLineStore.EVENT_PRICE_CHANGED, callback);
+    }
+
+    onDragReleased(callback) {
+        this._emitter.on(PriceLineStore.EVENT_DRAG_RELEASED, callback);
     }
 
     connect = connect(() => ({
