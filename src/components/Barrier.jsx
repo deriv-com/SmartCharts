@@ -5,7 +5,8 @@ import PriceLine from './PriceLine.jsx';
 import Shade from './Shade.jsx';
 
 const Barrier = ({
-    barrierColor,
+    shadeColor,
+    color = '#000',
     HighPriceLine,
     LowPriceLine,
     aboveShade,
@@ -15,10 +16,10 @@ const Barrier = ({
     lineStyle,
 }) => (
     <div
-        className={`barrier ${barrierColor} ${hidePriceLines ? 'hide-pricelines' : ''}`}
+        className={`barrier ${shadeColor} ${hidePriceLines ? 'hide-pricelines' : ''}`}
     >
-        <HighPriceLine lineStyle={lineStyle} />
-        <LowPriceLine lineStyle={lineStyle} />
+        <HighPriceLine lineStyle={lineStyle} color={color} />
+        <LowPriceLine  lineStyle={lineStyle} color={color} />
         <Shade
             className="top-shade"
             top={aboveShade.top}
@@ -48,20 +49,22 @@ export default connect(
         aboveShade: store.aboveShade.clone(),
         belowShade: store.belowShade.clone(),
         betweenShade: store.betweenShade.clone(),
-        barrierColor: store.barrierColor,
+        shadeColor: store.shadeColor,
+        color: store.color,
         hidePriceLines: store.hidePriceLines,
         lineStyle: store.lineStyle,
     }),
     (store, {
-        color, shade, high, low, relative, draggable, onBarrierChange, hidePriceLines, lineStyle,
+        color, shadeColor, shade, high, low, relative, draggable, onChange, hidePriceLines, lineStyle,
     }) => {
-        if (color) { store.barrierColor = color; }
+        if (color) { store.color = color; }
+        if (shadeColor) { store.shadeColor = shadeColor; }
         if (shade) { store.shadeState = `SHADE_${shade}`.toUpperCase(); }
         if (high !== undefined) { store.high_barrier = high; }
         if (low !== undefined) { store.low_barrier = low; }
         if (relative !== undefined) { store.relative = relative; }
         if (draggable !== undefined) { store.draggable = draggable; }
-        if (onBarrierChange) { store.onBarrierChange = onBarrierChange; }
+        if (onChange) { store.onBarrierChange = onChange; }
         store.lineStyle = lineStyle;
         store.hidePriceLines = !!hidePriceLines;
     },
