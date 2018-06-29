@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: French\n"
 "Language: fr_FR\n"
-"PO-Revision-Date: 2018-06-29 14:31\n"
+"PO-Revision-Date: 2018-06-29 14:41\n"
 
 msgid "Favorites"
 msgstr "Favoris"
@@ -292,13 +292,13 @@ msgid "Shape - Star"
 msgstr "Forme - Étoile"
 
 msgid "Speed Resistance Arc"
-msgstr "Arc de résistance de la vitesse"
+msgstr "Arc de Résistance Vitesse"
 
 msgid "Speed Resistance Line"
-msgstr "Ligne de résistance de la vitesse"
+msgstr "Ligne de Résistance Vitesse"
 
 msgid "Time Cycle"
-msgstr "Temps de cycle"
+msgstr "Temps de Cycle"
 
 msgid "Tirone Levels"
 msgstr "Niveaux  Tirone"
@@ -466,40 +466,40 @@ msgid "Volume Rate of Change"
 msgstr "Volume Taux de change"
 
 msgid "Momentum Indicator"
-msgstr "Indicateur de dynamique"
+msgstr "Indicateur de Momentum"
 
 msgid "Price Volume Trend"
-msgstr "Tendance du volume et des prix"
+msgstr "Tendance de Volume de Prix"
 
 msgid "Positive Volume Index"
-msgstr "Indice de volume positif"
+msgstr "Indice de Volume Positif"
 
 msgid "Index"
 msgstr "Indice"
 
 msgid "Negative Volume Index"
-msgstr "Indice de volume négatif"
+msgstr "Indice de Volume Négatif"
 
 msgid "On Balance Volume"
-msgstr "Sur le volume du solde"
+msgstr "Sur le Volume du Solde"
 
 msgid "Stochastic Momentum Index"
-msgstr "Indice de dynamique stochastique"
+msgstr "Indice de Momentum Stochastique"
 
 msgid "%K Periods"
 msgstr "%K Périodes"
 
 msgid "%K Smoothing Periods"
-msgstr "Périodes de lissage en % K"
+msgstr "Périodes de Lissage en % K"
 
 msgid "%K Double Smoothing Periods"
-msgstr "Périodes doubles de lissage en % K"
+msgstr "Périodes de doubles lissage en % K"
 
 msgid "%D Periods"
 msgstr "%D Périodes"
 
 msgid "%D Moving Average Type"
-msgstr "Type de moyenne mobile en % D"
+msgstr "Type de Moyenne Mobile en %D"
 
 msgid "%K"
 msgstr "%K"
