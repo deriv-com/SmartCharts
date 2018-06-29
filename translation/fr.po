@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: French\n"
 "Language: fr_FR\n"
-"PO-Revision-Date: 2018-06-29 11:21\n"
+"PO-Revision-Date: 2018-06-29 11:34\n"
 
 msgid "Favorites"
 msgstr "Favoris"
@@ -118,7 +118,7 @@ msgid "Dot"
 msgstr "Point"
 
 msgid "Colored Dot"
-msgstr "Point coloré"
+msgstr "Point Coloré"
 
 msgid "Spline"
 msgstr "Spline"
@@ -133,7 +133,7 @@ msgid "OHLC"
 msgstr "OHLC"
 
 msgid "Hollow Candle"
-msgstr "Bougie creuse"
+msgstr "Bougie Creuse"
 
 msgid "Heikin Ashi"
 msgstr "Heikin Ashi"
@@ -142,7 +142,7 @@ msgid "Kagi"
 msgstr "Kagi"
 
 msgid "Line Break"
-msgstr "Saut de ligne"
+msgstr "Line Break"
 
 msgid "Renko"
 msgstr "Renko"
@@ -154,7 +154,7 @@ msgid "Point & Figure"
 msgstr "Point & Figure"
 
 msgid "Reversal Percentage"
-msgstr "Pourcentage de renversement"
+msgstr "Pourcentage de Renversement"
 
 msgid "Range"
 msgstr "Gamme"
@@ -319,10 +319,10 @@ msgid "There are no active indicators yet."
 msgstr "Il n’y a encore aucun indicateur actif."
 
 msgid "right-click to delete"
-msgstr "Faites un clic droit pour supprimer"
+msgstr "cliquez droit pour supprimer"
 
 msgid "right-click to manage"
-msgstr "Faites un clic droit pour gérer"
+msgstr "cliquez droit pour gérer"
 
 msgid "Chart data is not available for this symbol."
 msgstr "L'information graphique n'est pas disponible pour ce symbole."
@@ -364,10 +364,10 @@ msgid "MACD"
 msgstr "MACD"
 
 msgid "Fast MA Period"
-msgstr "Période rapide de la moyenne mobile"
+msgstr "Période de la moyenne mobile rapide"
 
 msgid "Slow MA Period"
-msgstr "Période lente de la moyenne mobile"
+msgstr "Période de la moyenne mobile lente"
 
 msgid "Signal Period"
 msgstr "Période du signal"
@@ -385,7 +385,7 @@ msgid "Stochastics"
 msgstr "Stochastique"
 
 msgid "Smooth"
-msgstr "Smooth"
+msgstr "Lisse"
 
 msgid "Fast"
 msgstr "Rapide"
