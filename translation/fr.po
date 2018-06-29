@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: French\n"
 "Language: fr_FR\n"
-"PO-Revision-Date: 2018-06-29 13:31\n"
+"PO-Revision-Date: 2018-06-29 13:41\n"
 
 msgid "Favorites"
 msgstr "Favoris"
@@ -706,37 +706,37 @@ msgid "Fractal Channel"
 msgstr "Canal Fractal"
 
 msgid "Fractal Chaos Oscillator"
-msgstr "Oscillateur chaos fractal"
+msgstr "Oscillateur Chaos Fractal"
 
 msgid "Gopalakrishnan Range Index"
-msgstr "Indice d'intervalle Gopalakrishnan"
+msgstr "Indice d'Intervalle Gopalakrishnan"
 
 msgid "Prime Number Bands"
-msgstr "Bandes des nombres premiers"
+msgstr "Bandes des Nombres Premiers"
 
 msgid "Prime Bands Top"
-msgstr "Bandes premières Haut"
+msgstr "Bandes Premières Hautes"
 
 msgid "Prime Bands Bottom"
-msgstr "Bandes premières Bas"
+msgstr "Bandes Premières Basses"
 
 msgid "Prime Bands Channel"
-msgstr "Bandes premières Canal"
+msgstr "Bandes Premières du Canal"
 
 msgid "Prime Number Oscillator"
-msgstr "Oscillateur des nombres premiers"
+msgstr "Oscillateur de Nombres Premiers"
 
 msgid "Tolerance Percentage"
-msgstr "Pourcentage de tolérance"
+msgstr "Pourcentage de Tolérance"
 
 msgid "Bollinger Bands"
 msgstr "Bandes de Bollinger"
 
 msgid "Bollinger Bands Top"
-msgstr "Bandes de Bollinger Haut"
+msgstr "Bandes de Bollinger Hautes"
 
 msgid "Bollinger Bands Median"
-msgstr "Bandes de Bollinger Médian"
+msgstr "Bandes de Bollinger Médianes"
 
 msgid "Bollinger Bands Bottom"
 msgstr "Bandes de Bollinger Bas"
