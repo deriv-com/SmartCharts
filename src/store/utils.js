@@ -1,3 +1,7 @@
+export function isValidProp(p) {
+    return p !== undefined && !isNaN(p); // eslint-disable-line no-restricted-globals
+}
+
 export const getTimeUnit = ({ timeUnit, interval }) => {
     if (timeUnit === null && interval === 'day') {
         return 'day';
