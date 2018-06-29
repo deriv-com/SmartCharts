@@ -7,6 +7,7 @@ import ChartTitle from './ChartTitle.jsx';
 import AssetInformation from './AssetInformation.jsx';
 import Loader from './Loader.jsx';
 import Barrier from './Barrier.jsx';
+import Marker from './Marker.jsx';
 
 /* css + scss */
 import '../../sass/app.scss';
@@ -54,6 +55,10 @@ class Chart extends Component {
             isChartAvailable,
             setting,
             barriers,
+            markers = [{
+                x: new Date(2018, 4, 20),
+                // y: 1100,
+            }],
             chartPanelTop,
             chartControlsWidgets,
             AggregateChartSettingsDialog,
@@ -101,6 +106,12 @@ class Chart extends Component {
                             </RenderInsideChart>}
                             <RenderInsideChart at="subholder">
                                 {insideSubHolder}
+                                {markers.map((mark, idx) => (
+                                    <Marker
+                                        key={idx}
+                                        {...mark}
+                                    />
+                                ))}
                             </RenderInsideChart>
                             <div className="cq-top-ui-widgets" style={{ top: chartPanelTop }}>
                                 { renderTopWidgets() }
