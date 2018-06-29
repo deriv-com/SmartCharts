@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: French\n"
 "Language: fr_FR\n"
-"PO-Revision-Date: 2018-06-29 14:41\n"
+"PO-Revision-Date: 2018-06-29 15:05\n"
 
 msgid "Favorites"
 msgstr "Favoris"
@@ -808,16 +808,16 @@ msgid "Elder Ray Index"
 msgstr "Elder Ray"
 
 msgid "Elder Bull Power"
-msgstr "Marge haussière Elder"
+msgstr "Puissance Haussière Elder"
 
 msgid "Elder Bear Power"
-msgstr "Marge baissière Elder"
+msgstr "Puissance Baissière Elder"
 
 msgid "Elder Force Index"
-msgstr "Indice Elder Force"
+msgstr "Indice de Force Elder"
 
 msgid "Linear Reg Slope"
-msgstr "Pente linéaire de l'indice Reg"
+msgstr "Pente Linéaire Reg"
 
 msgid "Slope"
 msgstr "Pente"
@@ -826,43 +826,43 @@ msgid "Center Of Gravity"
 msgstr "Centre de gravité"
 
 msgid "Typical Price"
-msgstr "Prix type"
+msgstr "Prix Typique"
 
 msgid "Weighted Close"
-msgstr "Clôture pondéré"
+msgstr "Clôture Pondéré"
 
 msgid "Money Flow Index"
-msgstr "Indicateur des flux monétaires"
+msgstr "Indicateur des Flux Monétaires"
 
 msgid "Williams %R"
 msgstr "Williams %R"
 
 msgid "Accumulation/Distribution"
-msgstr "Distribution/Accumulation"
+msgstr "Accumulation/Distribution"
 
 msgid "Use Volume"
-msgstr "Utiliser Volume"
+msgstr "Volume d’Utilisation"
 
 msgid "Volume Chart"
-msgstr "Graphique des volumes"
+msgstr "Graphique des Volumes"
 
 msgid "Up Volume"
-msgstr "Volume augmenté"
+msgstr "Volume Augmenté"
 
 msgid "Down Volume"
-msgstr "Volume baissé"
+msgstr "Volume Diminué"
 
 msgid "Volume Underlay"
-msgstr "Volume intégré"
+msgstr "Couche de Volume"
 
 msgid "Valuation Lines"
-msgstr "Directives d'évaluation"
+msgstr "Directives d'Evaluation"
 
 msgid "Average Type"
-msgstr "Type de moyenne"
+msgstr "Type Moyen"
 
 msgid "Display Average"
-msgstr "Afficher moyenne"
+msgstr "Afficher la Moyenne"
 
 msgid "Display 1 Standard Deviation (1σ)"
 msgstr "Afficher 1 Écart-type (1σ)"
@@ -886,13 +886,13 @@ msgid "3 Standard Deviation (3σ)"
 msgstr "3 Écart-type (3σ)"
 
 msgid "Correlation Coefficient"
-msgstr "Coefficient de corrélation"
+msgstr "Coefficient de Corrélation"
 
 msgid "Price Momentum Oscillator"
-msgstr "Oscillateur de dynamique de prix"
+msgstr "Oscillateur de Momentum de Prix"
 
 msgid "Double Smoothing Period"
-msgstr "Période double de lissage"
+msgstr "Période de Double Lissage"
 
 msgid "PMO"
 msgstr "PMO"
@@ -901,22 +901,22 @@ msgid "PMOSignal"
 msgstr "Signal PMO"
 
 msgid "Relative Volatility"
-msgstr "Volatilité relative"
+msgstr "Volatilité Relative"
 
 msgid "STD Period"
-msgstr "Période type"
+msgstr "Période STD"
 
 msgid "Rel Vol"
-msgstr "Volatilité relative"
+msgstr "Volatilité Relative"
 
 msgid "Awesome Oscillator"
-msgstr "Oscillateur impressionnant"
+msgstr "Oscillateur Génial"
 
 msgid "Market Facilitation Index"
-msgstr "Indice de facilitation du marché"
+msgstr "Indice de Facilitation du Marché"
 
 msgid "Scale Factor"
-msgstr "Facteur d'échelle"
+msgstr "Facteur d'Echelle"
 
 msgid "Green"
 msgstr "Vert"
@@ -931,34 +931,34 @@ msgid "Squat"
 msgstr "Squat"
 
 msgid "ATR Bands"
-msgstr "Bandes GMR"
+msgstr "Bandes ATR"
 
 msgid "ATR Bands Top"
-msgstr "Bandes GMR Haut"
+msgstr "Bandes ATR Hautes"
 
 msgid "ATR Bands Bottom"
-msgstr "Bandes GMR Bas"
+msgstr "Bandes ATR Basses"
 
 msgid "ATR Bands Channel"
-msgstr "Bandes GMR Canal"
+msgstr "Canal de Bandes ATR"
 
 msgid "STARC Bands"
 msgstr "Bandes STARC"
 
 msgid "MA Period"
-msgstr "Période moyenne mobile"
+msgstr "Période Moyenne Mobile"
 
 msgid "Multiplier"
 msgstr "Multiplicateur"
 
 msgid "STARC Bands Top"
-msgstr "Bandes STARC Haut"
+msgstr "Bandes STARC Hautes"
 
 msgid "STARC Bands Median"
-msgstr "Bandes STARC Milieu"
+msgstr "Bandes STARC Médianes"
 
 msgid "STARC Bands Bottom"
-msgstr "Bandes STARC Bas"
+msgstr "Bandes STARC Basses"
 
 msgid "ATR Trailing Stops"
 msgstr "Arrêts des négociations GMR"
