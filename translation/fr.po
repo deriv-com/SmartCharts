@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: French\n"
 "Language: fr_FR\n"
-"PO-Revision-Date: 2018-06-29 11:34\n"
+"PO-Revision-Date: 2018-06-29 11:41\n"
 
 msgid "Favorites"
 msgstr "Favoris"
@@ -412,13 +412,13 @@ msgid "RSquared"
 msgstr "RSquared"
 
 msgid "Linear Reg Forecast"
-msgstr "Progression linéaire de l'indice Reg"
+msgstr "Prévision linéaire Reg"
 
 msgid "Forecast"
 msgstr "Prévision"
 
 msgid "Linear Reg Intercept"
-msgstr "Ordonnée linéaire de l'indice Reg"
+msgstr "Ordonnée linéaire Reg"
 
 msgid "Intercept"
 msgstr "Ordonnée"
@@ -427,7 +427,7 @@ msgid "Time Series Forecast"
 msgstr "Prévision des séries chronologiques"
 
 msgid "Vertical Horizontal Filter"
-msgstr "Filtre horizontal et vertical"
+msgstr "Filtre Horizontal et Vertical"
 
 msgid "Result"
 msgstr "Résultat"
@@ -442,19 +442,19 @@ msgid "Standard Deviations"
 msgstr "Écarts types"
 
 msgid "Moving Average Type"
-msgstr "Type de moyenne mobile"
+msgstr "Type de Moyenne Mobile"
 
 msgid "Trade Volume Index"
-msgstr "Indice de volume de transactions"
+msgstr "Indice de Volume de Transactions"
 
 msgid "Min Tick Value"
-msgstr "Valeur minimale de l'unité"
+msgstr "Valeur Minimale du Tick"
 
 msgid "Swing Index"
 msgstr "Indice Swing"
 
 msgid "Limit Move Value"
-msgstr "Valeur limite du mouvement"
+msgstr "Valeur Limite du Mouvement"
 
 msgid "Accumulative Swing Index"
 msgstr "Indice Accumulative Swing"
