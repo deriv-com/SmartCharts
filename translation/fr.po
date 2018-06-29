@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: French\n"
 "Language: fr_FR\n"
-"PO-Revision-Date: 2018-06-26 15:21\n"
+"PO-Revision-Date: 2018-06-29 11:18\n"
 
 msgid "Favorites"
 msgstr "Favoris"
@@ -19,7 +19,7 @@ msgid "There are no favorites yet."
 msgstr "Il n’y a pas encore de favoris."
 
 msgid "CLOSED"
-msgstr "FERMETURE"
+msgstr "FERMÉ"
 
 msgid "PRICE"
 msgstr "PRIX"
@@ -28,7 +28,7 @@ msgid "OPEN"
 msgstr "OUVERTURE"
 
 msgid "CLOSE"
-msgstr "FERMETURE"
+msgstr "CLOTURE"
 
 msgid "HIGH"
 msgstr "PLUS HAUT"
@@ -43,13 +43,13 @@ msgid "Share"
 msgstr "Partager"
 
 msgid "Share / Download Chart"
-msgstr "Partager / Télécharger le tableau"
+msgstr "Partager / Télécharger le Graphique"
 
 msgid "Share link"
 msgstr "Partager le lien"
 
 msgid "Failed to generate link"
-msgstr "Échec à la création de lien"
+msgstr "Échec de la création du lien"
 
 msgid "Retry"
 msgstr "Réessayer"
