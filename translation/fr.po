@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: French\n"
 "Language: fr_FR\n"
-"PO-Revision-Date: 2018-06-29 11:54\n"
+"PO-Revision-Date: 2018-06-29 13:21\n"
 
 msgid "Favorites"
 msgstr "Favoris"
@@ -625,10 +625,10 @@ msgid "Smoothing Period"
 msgstr "Période de lissage"
 
 msgid "Series"
-msgstr "Série"
+msgstr "Séries"
 
 msgid "Shading"
-msgstr "Nuance"
+msgstr "Nuancage"
 
 msgid "Histogram"
 msgstr "Histogramme"
@@ -649,13 +649,13 @@ msgid "Negative Bar"
 msgstr "Barre négative"
 
 msgid "High Low Bands"
-msgstr "Valeurs élevées et faibles"
+msgstr "Bandes Hautes et Basses"
 
 msgid "Shift Percentage"
 msgstr "Pourcentage de déplacement"
 
 msgid "Channel Fill"
-msgstr "Canal de Fill"
+msgstr "Canal de Remplissage"
 
 msgid "High Low Top"
 msgstr "Élevé Faible Haut"
