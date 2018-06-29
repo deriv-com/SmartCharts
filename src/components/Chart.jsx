@@ -90,15 +90,14 @@ class Chart extends Component {
                 <div className={`${currentMode} ${currentPosition}`}>
                     <div className="ciq-chart-area">
                         <div className="ciq-chart">
-                            {barriers &&
                             <RenderInsideChart at="holder">
-                                {barriers.map((barr, idx) => (
+                                {barriers && barriers.length > 0 && barriers.map((barr, idx) => (
                                     <Barrier
-                                        key={idx}
+                                        key={`barrier-${idx}`}
                                         {...barr}
                                     />
                                 ))}
-                            </RenderInsideChart>}
+                            </RenderInsideChart>
                             <RenderInsideChart at="subholder">
                                 {insideSubHolder}
                             </RenderInsideChart>
