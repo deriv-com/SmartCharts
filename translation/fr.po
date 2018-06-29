@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: French\n"
 "Language: fr_FR\n"
-"PO-Revision-Date: 2018-06-29 13:41\n"
+"PO-Revision-Date: 2018-06-29 13:51\n"
 
 msgid "Favorites"
 msgstr "Favoris"
@@ -187,7 +187,7 @@ msgid "Countdown"
 msgstr "Compte à rebours"
 
 msgid "Asset Information"
-msgstr "Informations sur les actifs"
+msgstr "Informations sur l'actif"
 
 msgid "Language"
 msgstr "Langue"
@@ -745,10 +745,10 @@ msgid "Donchian Channel"
 msgstr "Canal de Donchian"
 
 msgid "High Period"
-msgstr "Période élevée"
+msgstr "Période Haute"
 
 msgid "Low Period"
-msgstr "Période creuse"
+msgstr "Période Basse"
 
 msgid "Donchian High"
 msgstr "Donchian Élevé"
