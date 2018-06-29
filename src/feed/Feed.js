@@ -81,6 +81,8 @@ class Feed {
             const errorMessage = response.error.message;
             const errorCode = response.error.code;
             const tParams = { symbol: symbolObject.name };
+            console.log(errorCode);
+            console.log(errorMessage);
             if (errorCode === 'MarketIsClosed') {
                 // Although market is closed, we display the past tick history data
                 response = await this._binaryApi.getTickHistory(dataRequest);

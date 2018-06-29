@@ -286,9 +286,11 @@ class ChartStore {
      * OR update the active symbols by comapring open time
      */
     @action.bound updateMarketClosedStatus(api) {
-        const todayUtc = (new Date()).getTime();
-        const timeToEpochGMT = (hour) => {
-            const dateStr = new Date().toISOString().substring(0, 11);
+        const nowUtc = (new Date()).getTime();
+        const toEpochGMT = (hour, crossDay) => {
+            const currentDate = new Date();
+            currentDate.setDate(currentDate.getDate() + (crossDay || 0));
+            const dateStr = currentDate.toISOString().substring(0, 11);
             return new Date(`${dateStr}${hour}Z`).getTime();
         };
 
@@ -302,12 +304,20 @@ class ChartStore {
                             let isOpen = false;
                             for (let i = 0; i <= symbol.times.open.length; i++) {
                                 const { open, close } = symbol.times;
-                                if (
-                                    todayUtc >= timeToEpochGMT(open[i]) &&
-                                    todayUtc <= timeToEpochGMT(close[i])
-                                ) {
-                                    isOpen = true;
-                                    break;
+                                if (open.length && close.length) {
+                                    const openTime = toEpochGMT(open[i]);
+                                    const closeTime = toEpochGMT(close[i]);
+
+                                    // If open time is cross day, then should check time till tomorrow
+                                    // and yesterday till now
+                                    if (
+                                        (openTime > closeTime && nowUtc >= toEpochGMT(open[i], -1) && nowUtc <= closeTime) ||
+                                            (openTime > closeTime && nowUtc >= toEpochGMT(open[i]) && nowUtc <= toEpochGMT(close[i], 1)) ||
+                                            (nowUtc >= openTime && nowUtc <= closeTime)
+                                    ) {
+                                        isOpen = true;
+                                        break;
+                                    }
                                 }
                             }
                             foundSymbol.exchange_is_open = isOpen;
