@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: French\n"
 "Language: fr_FR\n"
-"PO-Revision-Date: 2018-06-29 13:21\n"
+"PO-Revision-Date: 2018-06-29 13:31\n"
 
 msgid "Favorites"
 msgstr "Favoris"
@@ -667,34 +667,34 @@ msgid "High Low Bottom"
 msgstr "Élevé Faible Bas"
 
 msgid "High Minus Low"
-msgstr "Élevé Négatif Faible"
+msgstr "Élevé Moins Faible"
 
 msgid "Median Price"
 msgstr "Prix médian"
 
 msgid "Overlay"
-msgstr "Sus-jacent"
+msgstr "Couche"
 
 msgid "Moving Average Envelope"
-msgstr "Enveloppe de moyenne mobile"
+msgstr "Enveloppe de Moyenne Mobile"
 
 msgid "Shift Type"
-msgstr "Type de déplacement"
+msgstr "Type de Déplacement"
 
 msgid "Shift"
 msgstr "Déplacement"
 
 msgid "MA Env Top"
-msgstr "Enveloppe de la moyenne mobile Haut"
+msgstr "Enveloppe de la Moyenne Mobile Haute"
 
 msgid "MA Env Median"
-msgstr "Enveloppe de la moyenne mobile Médian"
+msgstr "Enveloppe de la Moyenne Mobile Médiane"
 
 msgid "MA Env Bottom"
-msgstr "Enveloppe de la moyenne mobile Bas"
+msgstr "Enveloppe de la Moyenne Mobile Basse"
 
 msgid "Fractal Chaos Bands"
-msgstr "Valeurs chaos fractal"
+msgstr "Bandes de chaos fractal"
 
 msgid "Fractal High"
 msgstr "Fractal Élevé"
@@ -703,7 +703,7 @@ msgid "Fractal Low"
 msgstr "Fractal Faible"
 
 msgid "Fractal Channel"
-msgstr "Fractal Canal"
+msgstr "Canal Fractal"
 
 msgid "Fractal Chaos Oscillator"
 msgstr "Oscillateur chaos fractal"
