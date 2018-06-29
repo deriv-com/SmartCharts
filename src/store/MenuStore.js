@@ -42,5 +42,6 @@ export default class MenuStore {
         open: this.open,
         onTitleClick: this.onTitleClick,
         DropdownDialog: this.dialog.connect(Dialog),
+        isMobile:this.dialog.mainStore.chart.isMobile
     }))
 }
