@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: French\n"
 "Language: fr_FR\n"
-"PO-Revision-Date: 2018-06-30 10:00\n"
+"PO-Revision-Date: 2018-06-30 10:10\n"
 
 msgid "Favorites"
 msgstr "Favoris"
@@ -1045,22 +1045,22 @@ msgid "Jaw Period"
 msgstr "Période Mâchoire"
 
 msgid "Jaw Offset"
-msgstr "Compensation mâchoire"
+msgstr "Compensation Mâchoire"
 
 msgid "Teeth Period"
-msgstr "Période dents"
+msgstr "Période Dents"
 
 msgid "Teeth Offset"
-msgstr "Compensation dents"
+msgstr "Compensation Dents"
 
 msgid "Lips Period"
-msgstr "Période lèvres"
+msgstr "Période Lèvres"
 
 msgid "Lips Offset"
-msgstr "Compensation lèvres"
+msgstr "Compensation Lèvres"
 
 msgid "Show Fractals"
-msgstr "Afficher fractales"
+msgstr "Afficher Fractales"
 
 msgid "Jaw"
 msgstr "Mâchoire"
@@ -1078,13 +1078,13 @@ msgid "Ichimoku Clouds"
 msgstr "Ichimoku Clouds"
 
 msgid "Conversion Line Period"
-msgstr "Phase de transformation des valeurs"
+msgstr "Période de Ligne de Conversion"
 
 msgid "Base Line Period"
-msgstr "Phase de référence"
+msgstr "Période de Référence"
 
 msgid "Leading Span B Period"
-msgstr "Phase principale et échelonnée B"
+msgstr "Période d'Envergure Principal B"
 
 msgid "Lagging Span Period"
 msgstr "Phase retardée et échelonnée"
