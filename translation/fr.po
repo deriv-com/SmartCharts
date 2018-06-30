@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: French\n"
 "Language: fr_FR\n"
-"PO-Revision-Date: 2018-06-30 09:50\n"
+"PO-Revision-Date: 2018-06-30 10:00\n"
 
 msgid "Favorites"
 msgstr "Favoris"
@@ -970,10 +970,10 @@ msgid "HighLow"
 msgstr "Élevé Faible"
 
 msgid "Buy Stops"
-msgstr "Arrêts des achats"
+msgstr "Acheter les Stops"
 
 msgid "Sell Stops"
-msgstr "Arrêts des ventes"
+msgstr "Vendre les Stops"
 
 msgid "Bollinger %b"
 msgstr "Bollinger %b"
@@ -985,19 +985,19 @@ msgid "Bollinger Bandwidth"
 msgstr "Bande passante de Bollinger"
 
 msgid "Bandwidth"
-msgstr "Bandes passantes"
+msgstr "Bande passante"
 
 msgid "Donchian Width"
-msgstr "Valeur de Donchian"
+msgstr "Largeur de Donchian"
 
 msgid "Relative Vigor Index"
-msgstr "Indice de vigueur relative"
+msgstr "Indice de Vigueur Relative"
 
 msgid "Rel Vig"
-msgstr "Vigueur relative"
+msgstr "Vigueur Relative"
 
 msgid "RelVigSignal"
-msgstr "Signal/Vigueur relative"
+msgstr "Signal/Vigueur Relative"
 
 msgid "Elder Impulse System"
 msgstr "Système Impulse Elder"
@@ -1012,7 +1012,7 @@ msgid "Neutral"
 msgstr "Neutre"
 
 msgid "Pivot Points"
-msgstr "Points pivots"
+msgstr "Points Pivots"
 
 msgid "Pivot"
 msgstr "Pivot"
@@ -1042,7 +1042,7 @@ msgid "Alligator"
 msgstr "Alligator"
 
 msgid "Jaw Period"
-msgstr "Période mâchoire"
+msgstr "Période Mâchoire"
 
 msgid "Jaw Offset"
 msgstr "Compensation mâchoire"
