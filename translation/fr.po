@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: French\n"
 "Language: fr_FR\n"
-"PO-Revision-Date: 2018-06-30 10:20\n"
+"PO-Revision-Date: 2018-06-30 10:30\n"
 
 msgid "Favorites"
 msgstr "Favoris"
@@ -598,13 +598,13 @@ msgid "Long RoC"
 msgstr "RDC à long terme"
 
 msgid "Chande Momentum Oscillator"
-msgstr "Oscillateur de dynamique de Chande"
+msgstr "Oscillateur de Momentum de Chande"
 
 msgid "Chande Forecast Oscillator"
-msgstr "Indicateur de prévision de Chande"
+msgstr "Oscillateur de prévision de Chande"
 
 msgid "Intraday Momentum Index"
-msgstr "Indice de dynamique intrajournalier"
+msgstr "Indice de Momentum intrajournalier"
 
 msgid "RAVI"
 msgstr "RAVI"
@@ -760,10 +760,10 @@ msgid "Donchian Low"
 msgstr "Donchian Faible"
 
 msgid "Highest High Value"
-msgstr "Valeur élevée plus élevée"
+msgstr "Valeur élevée la plus élevée"
 
 msgid "Lowest Low Value"
-msgstr "Valeur faible plus faible"
+msgstr "Valeur faible la plus faible"
 
 msgid "Mass Index"
 msgstr "Indice de masse"
@@ -775,7 +775,7 @@ msgid "Keltner Channel"
 msgstr "Canal de Keltner"
 
 msgid "Keltner Top"
-msgstr "Keltner Haut"
+msgstr "Keltner Top"
 
 msgid "Keltner Median"
 msgstr "Keltner Médian"
@@ -787,7 +787,7 @@ msgid "Parabolic SAR"
 msgstr "Parabolique SAR"
 
 msgid "Minimum AF"
-msgstr "Fréquence audio minimale"
+msgstr "AF minimale"
 
 msgid "Maximum AF"
 msgstr "Fréquence audio maximale"
@@ -805,7 +805,7 @@ msgid "KlingerSignal"
 msgstr "Signal Klinger"
 
 msgid "Elder Ray Index"
-msgstr "Elder Ray"
+msgstr "Indice Elder Ray"
 
 msgid "Elder Bull Power"
 msgstr "Puissance Haussière Elder"
@@ -1108,7 +1108,7 @@ msgid "Price Relative"
 msgstr "Prix relatif"
 
 msgid "Comparison Symbol"
-msgstr "Comparaison des symboles"
+msgstr "Comparaison symbole"
 
 msgid "Performance Index"
 msgstr "Indice de performance"
@@ -1129,7 +1129,7 @@ msgid "Balance of Power"
 msgstr "Équilibre des forces"
 
 msgid "Trend Intensity Index"
-msgstr "Indice d'ntensité de la tendance "
+msgstr "Indice d'intensité de la tendance"
 
 msgid "TII"
 msgstr "TII"
