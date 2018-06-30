@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: French\n"
 "Language: fr_FR\n"
-"PO-Revision-Date: 2018-06-30 10:10\n"
+"PO-Revision-Date: 2018-06-30 10:20\n"
 
 msgid "Favorites"
 msgstr "Favoris"
@@ -514,7 +514,7 @@ msgid "Days Per Year"
 msgstr "Jours par an"
 
 msgid "Pretty Good Oscillator"
-msgstr "Oscillateur très bon"
+msgstr "Oscillateur assez bon"
 
 msgid "Ultimate Oscillator"
 msgstr "Oscillateur principal"
@@ -1084,13 +1084,13 @@ msgid "Base Line Period"
 msgstr "Période de Référence"
 
 msgid "Leading Span B Period"
-msgstr "Période d'Envergure Principal B"
+msgstr "Phase principale et échelonnée B"
 
 msgid "Lagging Span Period"
 msgstr "Phase retardée et échelonnée"
 
 msgid "Conversion Line"
-msgstr "Transformation des valeurs"
+msgstr "Ligne de Conversion"
 
 msgid "Base Line"
 msgstr "Référence"
@@ -1261,13 +1261,13 @@ msgid "Downtrend"
 msgstr "Tendance à la baisse"
 
 msgid "Volume Profile"
-msgstr "Volume Profil"
+msgstr "Profile Volume"
 
 msgid "Bars Color"
 msgstr "Couleur des barres"
 
 msgid "Vortex Indicator"
-msgstr "Indicateur de Vortex"
+msgstr "Indicateur Vortex"
 
 msgid "+VI"
 msgstr "+VI"
@@ -1279,7 +1279,7 @@ msgid "ZigZag"
 msgstr "ZigZag"
 
 msgid "Distance(%)"
-msgstr "Distance (%)"
+msgstr "Distance(%)"
 
 msgid "Psychological Line"
 msgstr "Seuil psychologique"
@@ -1288,11 +1288,11 @@ msgid "Moving Average Deviation"
 msgstr "Déviation moyenne mobile"
 
 msgid "Shinohara Intensity Ratio"
-msgstr "Rapport d'intensité Shinohara"
+msgstr "Ratio d'intensité Shinohara"
 
 msgid "Strong Ratio"
-msgstr "Rapport fort"
+msgstr "Ratio fort"
 
 msgid "Weak Ratio"
-msgstr "Faible rapport"
+msgstr "Faible Ratio"
 
