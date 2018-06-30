@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: French\n"
 "Language: fr_FR\n"
-"PO-Revision-Date: 2018-06-29 15:05\n"
+"PO-Revision-Date: 2018-06-30 09:50\n"
 
 msgid "Favorites"
 msgstr "Favoris"
@@ -961,10 +961,10 @@ msgid "STARC Bands Bottom"
 msgstr "Bandes STARC Basses"
 
 msgid "ATR Trailing Stops"
-msgstr "Arrêts des négociations GMR"
+msgstr "Stops Suiveurs ATR"
 
 msgid "Plot Type"
-msgstr "Type de tracé"
+msgstr "Type de Tracé"
 
 msgid "HighLow"
 msgstr "Élevé Faible"
