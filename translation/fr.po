@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: French\n"
 "Language: fr_FR\n"
-"PO-Revision-Date: 2018-06-30 10:30\n"
+"PO-Revision-Date: 2018-06-30 10:40\n"
 
 msgid "Favorites"
 msgstr "Favoris"
@@ -1135,7 +1135,7 @@ msgid "TII"
 msgstr "TII"
 
 msgid "Choppiness Index"
-msgstr "Indice Choppiness"
+msgstr "Indice de volatilité"
 
 msgid "Disparity Index"
 msgstr "Indice de disparité"
@@ -1177,7 +1177,7 @@ msgid "Rainbow Oscillator"
 msgstr "Oscillateur arc-en-ciel"
 
 msgid "HHV/LLV Lookback"
-msgstr "HHV/LLV rétroviseur"
+msgstr "HHV/LLV retracage"
 
 msgid "Pring's Know Sure Thing"
 msgstr "Know Sure Thing de Pring"
@@ -1198,7 +1198,7 @@ msgid "Heavy Rate of Change Period"
 msgstr "Taux lourd de période de transition"
 
 msgid "Heavy SMA Period"
-msgstr "Période de moyenne mobile simple lourd"
+msgstr "Période de moyenne mobile simple lourde"
 
 msgid "Heaviest Rate of Change Period"
 msgstr "Taux le plus lourd de période de transition"
@@ -1219,19 +1219,19 @@ msgid "Darvas Box"
 msgstr "Boîte Darvas"
 
 msgid "ATH Lookback Period"
-msgstr "Période lookback ATH"
+msgstr "Période retracage ATH"
 
 msgid "Exit Field"
-msgstr "Sortir du champ"
+msgstr "Champ de Sortie"
 
 msgid "Ghost Boxes"
-msgstr "Boîtes à fantôme"
+msgstr "Boîtes fantômes"
 
 msgid "Stop Levels"
 msgstr "Nveaux d'arrêt"
 
 msgid "Level Offset"
-msgstr "Décalage de niveau"
+msgstr "Compensation de niveau"
 
 msgid "Price Minimum"
 msgstr "Prix minimum"
