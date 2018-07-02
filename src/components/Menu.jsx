@@ -24,7 +24,7 @@ class Menu extends Component {
                     {first}
                 </div>
                 <div
-                    className="cq-menu-overlay" style={{height: menuHeight -31 + 'px' , top : -menuHeight + 31 +'px'}} 
+                    className="cq-menu-overlay" style={{height: menuHeight + 'px' , top : -menuHeight + 31 +'px'}} 
                 >
                     <CSSTransition
                         in={open}
