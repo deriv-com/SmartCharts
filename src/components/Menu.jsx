@@ -14,7 +14,6 @@ class Menu extends Component {
         } = this.props;
         const first = React.Children.map(children, (child, i) => (i === 0 ? child : null));
         const rest  = React.Children.map(children, (child, i) => (i !== 0 ? child : null));
-        const menuHeight = isMobile ? window.innerHeight : '100vh';
         return (
             <div className={`ciq-menu ${className || ''} ${open ? 'stxMenuActive' : ''}`}>
                 <div
@@ -24,7 +23,7 @@ class Menu extends Component {
                     {first}
                 </div>
                 <div
-                    className="cq-menu-overlay" style={{height: menuHeight + 'px' , top : -menuHeight + 31 +'px'}} 
+                    className="cq-menu-overlay" style={ isMobile ? { height: window.innerHeight + 'px' , top : -window.innerHeight + 31 + 'px'} : {}} 
                 >
                     <CSSTransition
                         in={open}
