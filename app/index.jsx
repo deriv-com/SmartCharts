@@ -56,8 +56,21 @@ const renderControls = () => (
     </React.Fragment>
 );
 
-const renderMarkers = () => (
-    <React.Fragment>
+const requestAPI = connectionManager.send.bind(connectionManager);
+const requestSubscribe = streamManager.subscribe.bind(streamManager);
+const requestForget = streamManager.forget.bind(streamManager);
+const shareOrigin = window.location.href.split('?')[0];
+
+const App = () => (
+    <SmartChart
+        onSymbolChange={symbol => console.log('Symbol has changed to:', symbol)}
+        isMobile={CIQ.isMobile}
+        chartControlsWidgets={renderControls}
+        requestAPI={requestAPI}
+        requestSubscribe={requestSubscribe}
+        requestForget={requestForget}
+        shareOrigin={shareOrigin}
+    >
         <Marker
             x={new Date(2018, 5, 20)}
             yPositioner="none"
@@ -80,28 +93,11 @@ const renderMarkers = () => (
         </Marker>
         <Marker
             x={new Date(2018, 5, 25)}
+            y={7000}
         >
             <div className="ciq-spot" />
         </Marker>
-    </React.Fragment>
-);
-
-const requestAPI = connectionManager.send.bind(connectionManager);
-const requestSubscribe = streamManager.subscribe.bind(streamManager);
-const requestForget = streamManager.forget.bind(streamManager);
-const shareOrigin = window.location.href.split('?')[0];
-
-const App = () => (
-    <SmartChart
-        onSymbolChange={symbol => console.log('Symbol has changed to:', symbol)}
-        isMobile={CIQ.isMobile}
-        chartControlsWidgets={renderControls}
-        requestAPI={requestAPI}
-        requestSubscribe={requestSubscribe}
-        requestForget={requestForget}
-        shareOrigin={shareOrigin}
-        markers={renderMarkers}
-    />
+    </SmartChart>
 );
 
 ReactDOM.render(

@@ -53,7 +53,7 @@ class Chart extends Component {
             isChartAvailable,
             setting,
             barriers = [],
-            markers = () => {},
+            children,
             chartPanelTop,
             chartControlsWidgets,
             AggregateChartSettingsDialog,
@@ -97,7 +97,7 @@ class Chart extends Component {
                                 ))}
                             </RenderInsideChart>
                             <RenderInsideChart at="subholder">
-                                {markers()}
+                                {children}
                             </RenderInsideChart>
                             <div className="cq-top-ui-widgets" style={{ top: chartPanelTop }}>
                                 { renderTopWidgets() }
