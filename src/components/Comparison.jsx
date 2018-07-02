@@ -10,6 +10,7 @@ const Comparison = ({
     menuOpen,
     onCloseMenu,
     isMobile,
+    activeComparisonsNo,
 }) => (
     <Menu
         className="cq-comparison-new cq-symbols-display"
@@ -20,6 +21,7 @@ const Comparison = ({
                 className={`ic-icon-with-sub ${menuOpen ? 'active' : ''}`}
                 tooltip-title={t.translate('Comparison')}
             />
+            {activeComparisonsNo ? <span className="budget">{activeComparisonsNo}</span> : ''}
         </Menu.Title>
         <Menu.Body>
             <CategoricalDisplay
@@ -36,4 +38,5 @@ export default connect(({ comparison: c }) => ({
     menuOpen: c.menu.open,
     onCloseMenu: c.menu.onTitleClick,
     isMobile: c.categoricalDisplay.isMobile,
+    activeComparisonsNo: c.mainStore.chart.comparisonSymbols.length,
 }))(Comparison);

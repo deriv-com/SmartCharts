@@ -18,6 +18,7 @@ class StudyLegend extends Component {
             StudyCategoricalDisplay,
             onCloseMenu,
             isMobile,
+            activeStudiesNo,
         } = this.props;
 
         return (
@@ -32,6 +33,7 @@ class StudyLegend extends Component {
                         className={`ic-icon-with-sub ${menuOpen ? 'active' : ''}`}
                         tooltip-title={t.translate('Indicators')}
                     />
+                    {activeStudiesNo ? <span className="budget">{activeStudiesNo}</span> : ''}
                 </Menu.Title>
                 <Menu.Body>
                     <StudyCategoricalDisplay
@@ -53,4 +55,5 @@ export default connect(({ studies: st }) => ({
     StudyCategoricalDisplay: st.categoricalDisplay.connect(CategoricalDisplay),
     onCloseMenu: st.menu.onTitleClick,
     isMobile: st.categoricalDisplay.isMobile,
+    activeStudiesNo: st.activeStudies.data.length,
 }))(StudyLegend);

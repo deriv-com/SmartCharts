@@ -29,6 +29,17 @@
         .cq-menu-dropdown {
             height: auto;
         }
+        .budget{
+            background: red;
+            color: #fff;
+            padding: 3px 4px;
+            border-radius: 50%;
+            font-size: 10px;
+            position: absolute;
+            top: 3px;
+            line-height: 9px;
+            right: 20px;
+        }
     }
     .ciq-icon {
         width: 24px;
@@ -224,6 +235,9 @@
                     display: none;
                 }
             }
+            .budget{
+                right: 3px;
+            }
         }
     }
 }
@@ -231,6 +245,9 @@
     .cq-chart-controls {
         .ciq-menu {
             width: 70px;
+            .budget{
+                right: 13px;
+            }
         }
     }
 }
@@ -245,6 +262,9 @@
                 .ic-subtitle{
                     display: block;
                 }
+            }
+            .budget{
+                right: 29px;
             }
         }
     }

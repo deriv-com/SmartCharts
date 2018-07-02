@@ -41,7 +41,6 @@ export default class StudyLegendStore {
 
     injections = [];
     previousStudies = { };
-
     @observable activeStudies = {
         categoryName: t.translate('Active'),
         categoryId: 'active',
