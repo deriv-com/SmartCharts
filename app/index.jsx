@@ -1,11 +1,9 @@
 import { // eslint-disable-line import/no-extraneous-dependencies,import/no-unresolved
     SmartChart,
-    // Barrier,
-    // TradeStartLine,
-    // TradeEndLine,
     ChartTypes,
     StudyLegend,
     Comparison,
+    Marker,
     Views,
     CrosshairToggle,
     Timeperiod,
@@ -58,6 +56,36 @@ const renderControls = () => (
     </React.Fragment>
 );
 
+const renderMarkers = () => (
+    <React.Fragment>
+        <Marker
+            x={new Date(2018, 5, 20)}
+            yPositioner="none"
+            className="chart-line vertical trade-start-line"
+        >
+            <div className="drag-line" />
+            <div className="trade-text">Trade Start</div>
+        </Marker>
+        <Marker
+            x={new Date(2018, 6, 20)}
+            yPositioner="none"
+            className="chart-line vertical trade-end-line"
+        >
+            <div className="drag-line" />
+            <div className="trade-text">Trade End</div>
+            <div className="trade-end-flag">
+                <div className="circle" />
+                <div className="ic-flag" />
+            </div>
+        </Marker>
+        <Marker
+            x={new Date(2018, 5, 25)}
+        >
+            <div className="ciq-spot" />
+        </Marker>
+    </React.Fragment>
+);
+
 const requestAPI = connectionManager.send.bind(connectionManager);
 const requestSubscribe = streamManager.subscribe.bind(streamManager);
 const requestForget = streamManager.forget.bind(streamManager);
@@ -72,6 +100,7 @@ const App = () => (
         requestSubscribe={requestSubscribe}
         requestForget={requestForget}
         shareOrigin={shareOrigin}
+        markers={renderMarkers}
     />
 );
 

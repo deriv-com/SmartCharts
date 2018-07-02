@@ -71,6 +71,8 @@ export default class MarkerStore {
         this.left = left;
 
         // Y axis positioning logic
+        if (this.yPositioner === 'none') { return; }
+
         let val;
         const showsHighs = this.stx.chart.highLowBars || this.stx.highLowBars[this.stx.layout.chartType];
         let plotField = this.chart.defaultPlotField;
@@ -85,31 +87,29 @@ export default class MarkerStore {
                 }
             }
         }
-        if (this.yPositioner !== 'none') {
-            const height = this.panel.yAxis.bottom;
-            let bottom = 0;
+        const height = this.panel.yAxis.bottom;
+        let bottom = 0;
 
-            if (this.yPositioner === 'value' && this.y) {
-                bottom = height - this.stx.pixelFromPrice(this.y, this.panel, this.yAxis);
-            } else if (this.yPositioner === 'under_candle' && quote) {
-                val = quote[plotField];
-                if (showsHighs) val = this.stx.getBarBounds(quote).low;
-                bottom = height - this.stx.pixelFromPrice(val, this.panel, this.yAxis);
-            } else if (this.yPositioner === 'on_candle' && quote) {
-                val = quote[plotField];
-                if (showsHighs) val = (quote.Low + quote.High) / 2;
-                bottom = height - this.stx.pixelFromPrice(val, this.panel, this.yAxis);
-            } else if (this.yPositioner === 'top') {
-                bottom = height;
-            } else if (quote) {
-                // above_candle
-                val = quote[plotField];
-                if (showsHighs) val = this.stx.getBarBounds(quote).high;
-                bottom = height - this.stx.pixelFromPrice(val, this.panel, this.yAxis);
-            }
-
-            this.bottom = bottom;
+        if (this.yPositioner === 'value' && this.y) {
+            bottom = height - this.stx.pixelFromPrice(this.y, this.panel, this.yAxis);
+        } else if (this.yPositioner === 'under_candle' && quote) {
+            val = quote[plotField];
+            if (showsHighs) val = this.stx.getBarBounds(quote).low;
+            bottom = height - this.stx.pixelFromPrice(val, this.panel, this.yAxis);
+        } else if (this.yPositioner === 'on_candle' && quote) {
+            val = quote[plotField];
+            if (showsHighs) val = (quote.Low + quote.High) / 2;
+            bottom = height - this.stx.pixelFromPrice(val, this.panel, this.yAxis);
+        } else if (this.yPositioner === 'top') {
+            bottom = height;
+        } else if (quote) {
+            // above_candle
+            val = quote[plotField];
+            if (showsHighs) val = this.stx.getBarBounds(quote).high;
+            bottom = height - this.stx.pixelFromPrice(val, this.panel, this.yAxis);
         }
+
+        this.bottom = bottom | 0;
     }
 
     @action.bound updateMarkerTick() {
