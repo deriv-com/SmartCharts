@@ -47,3 +47,6 @@
 {
     height: calc(var(--view-height) - 39px) !important;
 }
+.smartcharts-mobile .cq-top-ui-widgets.open{
+    z-index: 3 !important;
+}

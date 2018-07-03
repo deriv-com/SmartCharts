@@ -59,6 +59,7 @@ class Chart extends Component {
             AggregateChartSettingsDialog,
             topWidgets,
             hasOpenMenu,
+            hasTitleOpenMenu,
             showCountdown = false,
             chartContainerHeight,
         } = this.props;
@@ -103,7 +104,8 @@ class Chart extends Component {
                             <RenderInsideChart at="subholder">
                                 {insideSubHolder}
                             </RenderInsideChart>
-                            <div className="cq-top-ui-widgets" style={isMobile && hasOpenMenu ? {} : { top: chartPanelTop}}>
+                            <div className={`cq-top-ui-widgets ${isMobile && hasTitleOpenMenu ? 'open':''}`}
+                                 style={isMobile && hasOpenMenu ? {} : { top: chartPanelTop}}>
                                 { renderTopWidgets() }
                             </div>
                             <ChartControls widgets={chartControlsWidgets} hasOpenMenu={hasOpenMenu}/>
@@ -139,7 +141,7 @@ export default connect(({ chart, drawTools, studies, chartSetting,
     chartPanelTop: chart.chartPanelTop,
     setting: chartSetting,
     chartContainerHeight: chart.chartContainerHeight,
-     hasOpenMenu: (
+    hasOpenMenu: (
         chartTitle.menu.open ||
         chartType.menu.open ||
         studies.menu.open ||
@@ -150,4 +152,5 @@ export default connect(({ chart, drawTools, studies, chartSetting,
         timeperiod.menu.open ||
         chartSetting.menu.open
     ),
+    hasTitleOpenMenu: chartTitle.menu.open
 }))(Chart);
