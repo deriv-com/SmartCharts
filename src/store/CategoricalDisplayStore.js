@@ -53,6 +53,7 @@ export default class CategoricalDisplayStore {
         data: [],
     };
     scrollTop = undefined;
+    lastFilteredItems = [];
 
     get context() {
         return this.mainStore.chart.context;
@@ -177,14 +178,17 @@ export default class CategoricalDisplayStore {
         }
 
         if (this.filterText === '') {
+            this.lastFilteredItems = [];
             return filteredItems;
         }
 
+        let searchHasResult = false;
         const queries = this.filterText.split(' ').filter(x => x !== '').map(b => b.toLowerCase().trim());
         // regex to check all separate words by comma, should exist in the string
         const hasSearchString = text => queries.reduce((a, b) => text.toLowerCase().includes(b) && a, true);
         const filterCategory = (c) => {
             c.data = c.data.filter(item => hasSearchString(item.display || (typeof item.dataObject === 'object' && item.dataObject.symbol)));
+            if (c.data.length) { searchHasResult = true; }
         };
 
         for (const category of filteredItems) {
@@ -197,7 +201,11 @@ export default class CategoricalDisplayStore {
             }
         }
 
-        return filteredItems;
+        if (searchHasResult) {
+            this.lastFilteredItems = filteredItems;
+        }
+
+        return this.lastFilteredItems;
     }
 
     @action.bound setCategoryElement(element, id) {
