@@ -27,7 +27,7 @@
     display: none;
     opacity: 0;
     @include transition( background-color .2s linear, opacity .2s linear);
-    width: 15px;
+    width: 9px !important;
     /* there must be 'right' or 'left' for ps__rail-y */
     right: 0;
     /* please don't change 'position' */
@@ -75,7 +75,7 @@
     background-color: #aaa;
     @include border-radius(6px);
     @include transition(background-color .2s linear, width .2s ease-in-out);
-    width: 6px;
+    width: 6px !important;
     /* there must be 'right' for ps__thumb-y */
     right: 2px;
     /* please don't change 'position' */
