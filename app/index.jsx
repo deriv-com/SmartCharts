@@ -63,8 +63,6 @@ const requestSubscribe = streamManager.subscribe.bind(streamManager);
 const requestForget = streamManager.forget.bind(streamManager);
 const shareOrigin = window.location.href.split('?')[0];
 
-document.getElementById('root').style.setProperty('--view-height', window.innerHeight +'px');
-
 const App = () => (
     <SmartChart
         onSymbolChange={symbol => console.log('Symbol has changed to:', symbol)}

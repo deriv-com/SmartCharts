@@ -71,9 +71,10 @@ class Chart extends Component {
         const insideSubHolder = array.filter(c => /(TradeStart)|(TradeEnd)/.test(c.type.displayName));
         const renderTopWidgets = topWidgets || defaultTopWidgets;
 
-
         const defaultTheme = (setting && setting.theme) ? setting.theme : 'light';
         const defaultCandleCountdown = (setting && setting.countdown) ? setting.countdown : false;
+
+        document.getElementById('root').style.setProperty('--view-height', window.innerHeight +'px');
 
         // TO DO : this part should move the ChartSetting Store
         CIQ.localStorageSetItem('smartchart-setting', JSON.stringify({

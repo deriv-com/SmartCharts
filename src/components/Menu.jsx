@@ -22,9 +22,7 @@ class Menu extends Component {
                 >
                     {first}
                 </div>
-                <div
-                    className="cq-menu-overlay" style={ isMobile ? { height: window.innerHeight + 'px' , top : -window.innerHeight + 31 + 'px'} : {}} 
-                >
+                <div className="cq-menu-overlay">
                     <CSSTransition
                         in={open}
                         timeout={150}
