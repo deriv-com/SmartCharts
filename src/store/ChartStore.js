@@ -24,6 +24,7 @@ class ChartStore {
     activeSymbols = [];
     rootNode = null;
     stxx = null;
+    api = null;
     id = null;
     defaultSymbol = 'R_100';
     chartNode = null;
@@ -254,9 +255,7 @@ class ChartStore {
                  * Updating market close status each 10 minute
                  */
                 this.updateMarketClosedStatus();
-                setInterval(() => {
-                    this.updateMarketClosedStatus();
-                }, 10 * 60 * 1000);
+                setInterval(this.updateMarketClosedStatus, 10 * 60 * 1000);
             };
             const href = window.location.href;
             if (href.startsWith(shareOrigin) && href.indexOf('#') !== -1) {
