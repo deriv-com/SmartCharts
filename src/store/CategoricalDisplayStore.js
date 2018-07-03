@@ -200,11 +200,10 @@ export default class CategoricalDisplayStore {
                 filterCategory(category);
             }
         }
-
         if (searchHasResult) {
             this.lastFilteredItems = filteredItems;
+            return filteredItems;
         }
-
         return this.lastFilteredItems;
     }
 
