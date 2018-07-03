@@ -130,7 +130,7 @@ class ChartStore {
             isMobile,
             shareOrigin = 'https://charts.binary.com',
         } = props;
-        const api = new BinaryAPI(requestAPI, requestSubscribe, requestForget);
+        this.api = new BinaryAPI(requestAPI, requestSubscribe, requestForget);
         this.mainStore.share.shareOrigin = shareOrigin;
         this.isMobile = isMobile;
         this.onSymbolChange = onSymbolChange;
@@ -165,7 +165,7 @@ class ChartStore {
         CIQ.Animation(stxx, { stayPut: true });
 
         // connect chart to data
-        this.feed = new Feed(api, stxx, this.mainStore);
+        this.feed = new Feed(this.api, stxx, this.mainStore);
         stxx.attachQuoteFeed(this.feed, {
             refreshInterval: null,
         });
@@ -223,7 +223,7 @@ class ChartStore {
 
         this.restorePreferences();
 
-        api.getActiveSymbols().then(({ active_symbols }) => {
+        this.api.getActiveSymbols().then(({ active_symbols }) => {
             let layoutData = createObjectFromLocalStorage(`layout-${this.id}`);
 
             // if initialSymbol is different from local storage layoutData, it takes
@@ -253,9 +253,9 @@ class ChartStore {
                 /**
                  * Updating market close status each 10 minute
                  */
-                this.updateMarketClosedStatus(api);
+                this.updateMarketClosedStatus();
                 setInterval(() => {
-                    this.updateMarketClosedStatus(api);
+                    this.updateMarketClosedStatus();
                 }, 10 * 60 * 1000);
             };
             const href = window.location.href;
@@ -285,7 +285,7 @@ class ChartStore {
      * Get tradeTimes if not loaded yet
      * OR update the active symbols by comapring open time
      */
-    @action.bound updateMarketClosedStatus(api) {
+    @action.bound updateMarketClosedStatus() {
         const nowUtc = (new Date()).getTime();
         const toEpochGMT = (hour, crossDay) => {
             const currentDate = new Date();
@@ -328,10 +328,10 @@ class ChartStore {
 
             this.categorizedSymbols = this.categorizeActiveSymbols();
         } else {
-            api.getTradingTimes().then((data) => {
+            this.api.getTradingTimes().then((data) => {
                 this.tradeTimesCapture = new Date();
                 this.tradeTimes = data.trading_times.markets;
-                this.updateMarketClosedStatus(api);
+                this.updateMarketClosedStatus();
             });
         }
     }

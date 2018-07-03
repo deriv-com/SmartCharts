@@ -104,7 +104,7 @@ class Feed {
             } else {
                 response = await this._binaryApi.getTickHistory(dataRequest);
                 this._mainStore.notification.notify({
-                    text: t.translate(errorMessage),
+                    text: errorMessage,
                     category: 'activesymbol',
                 });
             }
@@ -144,7 +144,6 @@ class Feed {
                 });
                 result.quotes = TickHistoryFormatter.formatHistory(response);
             } catch (err) {
-                console.error(err);
                 result.quotes = { error: err };
             }
         }
