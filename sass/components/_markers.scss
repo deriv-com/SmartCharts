@@ -1,8 +1,15 @@
+.stx-marker.marker-enter-done .ciq-spot {
+    bottom: -7px;
+    opacity: 1;
+}
+
 .ciq-spot {
+    transition: bottom 100ms ease-out, opacity 100ms ease-out;
     width: 14px;
     height: 14px;
     left: -7px;
-    bottom: -7px;
+    bottom: 50px;
+    opacity: 0;
     position: relative;
     background-color: #4caf50;
     border-radius: 20px;

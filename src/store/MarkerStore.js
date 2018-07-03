@@ -22,11 +22,29 @@ export default class MarkerStore {
 
         this._listenerId = this.stx.addEventListener('newChart', this.updateMarkerTick);
         this._injectionId = this.stx.prepend('positionMarkers', this.updatePosition);
+
+        if (this.stx.currentQuote() !== null) {
+            this.updateMarkerTick();
+        }
     }
 
     destructor() {
         this.stx.removeInjection(this._injectionId);
         this.stx.removeEventListener(this._listenerId);
+    }
+
+    setX(val) {
+        if (val !== undefined && this.x !== val) {
+            this.x = val;
+            this.updateMarkerTick();
+        }
+    }
+
+    setXPositioner(val) {
+        if (val !== undefined && this.xPositioner !== val) {
+            this.xPositioner = val;
+            this.updateMarkerTick();
+        }
     }
 
     // The update function here is more efficient than ChartIQ's default implementation
@@ -107,6 +125,11 @@ export default class MarkerStore {
             val = quote[plotField];
             if (showsHighs) val = this.stx.getBarBounds(quote).high;
             bottom = height - this.stx.pixelFromPrice(val, this.panel, this.yAxis);
+        }
+
+        if (bottom < 0 || bottom > height) {
+            this.hideMarker();
+            return;
         }
 
         this.bottom = bottom | 0;

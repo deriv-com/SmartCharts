@@ -25,9 +25,9 @@ export default connect(
     (store, {
         yPositioner, xPositioner, x, y, children, className,
     }) => {
+        store.setX(x);
+        store.setXPositioner(xPositioner);
         if (yPositioner) { store.yPositioner = yPositioner; }
-        if (xPositioner) { store.xPositioner = xPositioner; }
-        if (x) { store.x = x; }
         if (y) { store.y = y; }
         store.children = children;
         store.className = className;
