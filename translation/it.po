@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Italian\n"
 "Language: it_IT\n"
-"PO-Revision-Date: 2018-06-20T16:01:40+0000\n"
+"PO-Revision-Date: 2018-06-22T14:14:43+0000\n"
 
 msgid "Favorites"
 msgstr "Preferiti"
@@ -31,10 +31,10 @@ msgid "CLOSE"
 msgstr "CHIUSURA"
 
 msgid "HIGH"
-msgstr "ALTO"
+msgstr "MASSIMO"
 
 msgid "LOW"
-msgstr "BASSO"
+msgstr "MINIMO"
 
 msgid "Underlying Assets"
 msgstr "Asset sottostanti"
@@ -142,7 +142,7 @@ msgid "Kagi"
 msgstr "Kagi"
 
 msgid "Line Break"
-msgstr "Interruzione di riga"
+msgstr "Line Break"
 
 msgid "Renko"
 msgstr "Renko"
@@ -163,10 +163,10 @@ msgid "Price Lines"
 msgstr "Linee dei prezzi"
 
 msgid "Box Size"
-msgstr "Box size"
+msgstr "Unità di escursione"
 
 msgid "Reversal"
-msgstr "Inversione"
+msgstr "Reversal"
 
 msgid "RESET"
 msgstr "REIMPOSTA"
@@ -193,7 +193,7 @@ msgid "Language"
 msgstr "Lingua"
 
 msgid "[symbol] market is presently closed."
-msgstr "[symbol] Il mercato è chiuso al momento."
+msgstr "Il mercato di [symbol] è momentaneamente chiuso."
 
 msgid "Streaming for [symbol] is not available due to license restrictions"
 msgstr "[symbol] in streaming non è disponibile a causa delle limitazioni della licenza"
@@ -493,7 +493,7 @@ msgid "%K Smoothing Periods"
 msgstr "%K periodi di lisciatura"
 
 msgid "%K Double Smoothing Periods"
-msgstr "%K Periodi Double Smoothing"
+msgstr "%K Doppi periodi di lisciatura"
 
 msgid "%D Periods"
 msgstr "%D periodi"
@@ -583,7 +583,7 @@ msgid "EF Trigger"
 msgstr "EF Trigger"
 
 msgid "Schaff Trend Cycle"
-msgstr "Schaff Trend Cycle"
+msgstr "Ciclo di Schaff Trend"
 
 msgid "QStick"
 msgstr "QStick"
@@ -649,7 +649,7 @@ msgid "Negative Bar"
 msgstr "Barra negativa"
 
 msgid "High Low Bands"
-msgstr "Bande massimo minimo"
+msgstr "Bande di massimo minimo"
 
 msgid "Shift Percentage"
 msgstr "Percentuale di variazione"
@@ -658,16 +658,16 @@ msgid "Channel Fill"
 msgstr "Canale di Fill"
 
 msgid "High Low Top"
-msgstr "High Low top"
+msgstr "Massimo minimo superiore"
 
 msgid "High Low Median"
-msgstr "High Low median"
+msgstr "Massimo minimo mediano"
 
 msgid "High Low Bottom"
-msgstr "High Low bottom"
+msgstr "Massimo minimo inferiore"
 
 msgid "High Minus Low"
-msgstr "High Minus Low"
+msgstr "Massimo meno minimo"
 
 msgid "Median Price"
 msgstr "Prezzo medio"
@@ -676,16 +676,16 @@ msgid "Overlay"
 msgstr "Soprastante"
 
 msgid "Moving Average Envelope"
-msgstr "Moving Average Envelope"
+msgstr "Media mobile envelope"
 
 msgid "Shift Type"
-msgstr "Shift Type"
+msgstr "Tipologia di Shift"
 
 msgid "Shift"
 msgstr "Shift"
 
 msgid "MA Env Top"
-msgstr "MA Env top"
+msgstr "MA Env superiore"
 
 msgid "MA Env Median"
 msgstr "MA Env median"
@@ -745,10 +745,10 @@ msgid "Donchian Channel"
 msgstr "Canale Donchian"
 
 msgid "High Period"
-msgstr "Periodo High"
+msgstr "Periodo massimo"
 
 msgid "Low Period"
-msgstr "Periodo Low"
+msgstr "Periodo minimo"
 
 msgid "Donchian High"
 msgstr "Donchian elevato"
@@ -769,7 +769,7 @@ msgid "Mass Index"
 msgstr "Indice Mass"
 
 msgid "Bulge Threshold"
-msgstr "Bulge Threshold"
+msgstr "Limite Bulge"
 
 msgid "Keltner Channel"
 msgstr "Canale di Keltner"
@@ -784,13 +784,13 @@ msgid "Keltner Bottom"
 msgstr "Keltner inferiore"
 
 msgid "Parabolic SAR"
-msgstr "Parabolic SAR"
+msgstr "SAR parabolico"
 
 msgid "Minimum AF"
-msgstr "Minimum AF"
+msgstr "AF minimo"
 
 msgid "Maximum AF"
-msgstr "Maximum AF"
+msgstr "AF massimo"
 
 msgid "Klinger Volume Oscillator"
 msgstr "Oscillatore Klinger Volume"
@@ -832,7 +832,7 @@ msgid "Weighted Close"
 msgstr "Chiusura ponderata"
 
 msgid "Money Flow Index"
-msgstr "Money Flow Index"
+msgstr "Indice Money Flow"
 
 msgid "Williams %R"
 msgstr "Williams %R"
@@ -892,7 +892,7 @@ msgid "Price Momentum Oscillator"
 msgstr "Oscillatore Price Momentum"
 
 msgid "Double Smoothing Period"
-msgstr "Doppio periodi di lisciatura"
+msgstr "Doppio periodo di lisciatura"
 
 msgid "PMO"
 msgstr "PMO"
@@ -1231,7 +1231,7 @@ msgid "Stop Levels"
 msgstr "Livelli di stop"
 
 msgid "Level Offset"
-msgstr "Offset livello"
+msgstr "Livello offset"
 
 msgid "Price Minimum"
 msgstr "Minimo del prezzo"
