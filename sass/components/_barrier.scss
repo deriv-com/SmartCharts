@@ -13,6 +13,9 @@ $green: #4caf50;
         width: 100%;
         left: 0;
         font-size: 10px;
+        &:hover {
+            z-index: 105;
+        }
         &.draggable > .draggable-area {
             &:hover {
                 background: rgba(0, 0, 0, 0.05);
