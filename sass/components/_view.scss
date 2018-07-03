@@ -90,18 +90,41 @@
 			}
 		}
 	}
-	.cq-alert-dialog
-	{
+	.ovrwrit-alrt {
 		bottom: 23.5em;
+		.ovrwrit-alrt-title {
+			text-align: center;
+			.ic-icon {
+				width: 100%;
+				>svg {
+					width: 24px;
+					height: 24px;
+				}
+			}
+			>span {
+				display: inline-block;
+				text-align: center;
+			}
+		}
+		.ovrwrit-alrt-buttons {
+			display:flex;
+			justify-content: flex-end;
+			margin-top: 16px;
+			font-weight: bold;
+			>div{
+				width: 90px;
+				@include themify($themes) {
+					color: themed('controlDialogButton');
+				}
+				text-align: center;
+				cursor: pointer;
+			}
+		}
 	}
 }
 .smartcharts-mobile{
 	.ciq-views {
 		position: static;
-	.cq-alert-dialog
-		{
-			bottom: 21.5em;
-		}
 	}
 	.cq-menu-dropdown {
 		.dropdown-title {

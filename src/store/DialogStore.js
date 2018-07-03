@@ -16,7 +16,7 @@ export default class DialogStore {
         this.openDialog(val , isParentDialog );
     }, 300, { leading: true, trailing: false });
 
-    @action.bound openDialog(val) {
+    @action.bound openDialog(val , isParentDialog) {
         if (this.open !== val) {
             this.open = val;
             if (this.open) { this.register(); } else { this.unregister(); }

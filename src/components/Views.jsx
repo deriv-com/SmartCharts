@@ -1,13 +1,13 @@
 import React from 'react';
 import Menu from './Menu.jsx';
 import { connect } from '../store/Connect';
-import AlertDialog from './AlertDialog.jsx';
 import {
     CloseIcon,
     TemplateIcon,
     AddIcon,
     TickIcon,
     DeleteIcon,
+    alertIconMap
 } from './Icons.jsx';
 import '../../sass/components/_view.scss';
 
@@ -24,11 +24,9 @@ const ViewItem = ({
 
 const Views = ({
     Menu,
-    OverwriteAlert,
     menuOpen,
     views,
-    routes: { current: currentRoute, add, main, overwrite, cancel },
-    overwriteAlertClose,
+    routes: { current: currentRoute, add, main, overwrite, cancel , cancelOverwrite },
     onChange,
     onSubmit,
     applyLayout,
@@ -36,13 +34,13 @@ const Views = ({
     inputRef,
 }) => (
     <div className="ciq-views">
-        <OverwriteAlert
+        {/* <OverwriteAlert
             alertTitle={t.translate('Template already exist. would you like to overwrite it?')}
             closeDisplay={t.translate('CANCEL')}
             sureDisplay={t.translate('OVERWRITE')} 
             onSure={overwrite}
             onClose={overwriteAlertClose}>
-        </OverwriteAlert>
+        </OverwriteAlert> */}
         <Menu>
             <Menu.Title className="cq-menu-btn">
                 <TemplateIcon
@@ -77,24 +75,47 @@ const Views = ({
                     </span>
                 </div>
                 <div className="content">
-                    <div className="ciq-list">
-                        {
-                            views.length
-                                ? views.map((view, i) => (
-                                    <ViewItem
-                                        view={view}
-                                        key={i}
-                                        onClick={e => applyLayout(i, e)}
-                                        remove={e => remove(i, e)}
-                                    />
-                                ))
-                                :
-                                <span className="placeholder">
-                                    <p>{t.translate('There is no template added by you.')}</p>
-                                    <p>{t.translate('Click + icon to add one.')}</p>
-                                </span>
-                        }
-                    </div>
+                    {
+                        currentRoute !== 'overwrite' ?
+                            <div className="ciq-list">
+                                {
+                                    views.length
+                                        ? views.map((view, i) => (
+                                            <ViewItem
+                                                view={view}
+                                                key={i}
+                                                onClick={e => applyLayout(i, e)}
+                                                remove={e => remove(i, e)}
+                                            />
+                                        ))
+                                        :
+                                        <span className="placeholder">
+                                            <p>{t.translate('There is no template added by you.')}</p>
+                                            <p>{t.translate('Click + icon to add one.')}</p>
+                                        </span>
+                                }
+                            </div>
+                        :
+                            <div className='ovrwrit-alrt'>
+                                <div className="ovrwrit-alrt-title">
+                                    <alertIconMap.warning/>
+                                    <span>
+                                        {t.translate('Template already exist.')}
+                                    </span>
+                                    <span>
+                                        {t.translate('Would you like to overwrite it?')}
+                                    </span>
+                                </div>
+                                <div className="ovrwrit-alrt-buttons">
+                                    <div onClick={cancelOverwrite}>
+                                        {t.translate('CANCEL')}
+                                    </div>
+                                    <div onClick={overwrite}>
+                                        {t.translate('OVERWRITE')} 
+                                    </div>
+                                </div>
+                            </div>
+                    }
                 </div>
             </Menu.Body>
         </Menu>
@@ -103,11 +124,10 @@ const Views = ({
 
 export default connect(({ view: s }) => ({
     Menu: s.menu.connect(Menu),
-    OverwriteAlert: s.overwriteAlert.connect(AlertDialog),
     views: s.views,
     routes: s.routes,
     onOverwrite: s.onOverwrite,
-    overwriteAlertClose: s.overwriteAlertClose,
+    onCancel: s.onCancel,
     onChange: s.onChange,
     remove: s.remove,
     onSubmit: s.onSubmit,

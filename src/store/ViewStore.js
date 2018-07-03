@@ -1,13 +1,11 @@
 import { observable, action, when } from 'mobx';
 import { createObjectFromLocalStorage } from '../utils';
 import MenuStore from './MenuStore';
-import AlertDialogStore from './AlertDialogStore';
 
 export default class ViewStore {
     constructor(mainStore) {
         this.mainStore = mainStore;
         this.menu = new MenuStore(mainStore);
-        this.overwriteAlert = new AlertDialogStore(mainStore);
         when(() => this.context, this.onContextReady);
     }
 
@@ -18,7 +16,8 @@ export default class ViewStore {
         add: () => this.saveViews(),
         main: () => this.updateRoute('add'),
         cancel: () => this.updateRoute('main'),
-        overwrite: () => this.overwrite()
+        overwrite: () => this.overwrite(),
+        cancelOverwrite: () => this.cancelOverwrite()
     };
 
     get context() { return this.mainStore.chart.context; }
@@ -44,9 +43,9 @@ export default class ViewStore {
         }
     }
 
-    @action.bound overwriteAlertClose() {
+    @action.bound cancelOverwrite() {
         this.updateRoute('add');
-        return this.overwriteAlert.setOpen(false);
+        //?return this.overwriteAlert.setOpen(false);
     }
 
     @action.bound updateRoute(name) {
@@ -55,7 +54,7 @@ export default class ViewStore {
 
     @action.bound saveViews() {
         if (this.views.some(x=>x.name.toLowerCase() === this.templateName.toLowerCase())){
-            this.overwriteAlert.setOpen(true);
+            //?this.overwriteAlert.setOpen(true);
             this.updateRoute('overwrite');
         }
         else if (this.templateName.length > 0) {
@@ -75,7 +74,7 @@ export default class ViewStore {
         this.updateLocalStorage();
         this.updateRoute('main');
         this.templateName = '';
-        this.overwriteAlert.setOpen(false);
+        //?this.overwriteAlert.setOpen(false);
     }
 
     @action.bound remove(idx, e) {
