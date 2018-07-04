@@ -66,7 +66,7 @@
         "prefer-const": 1,
         "import/no-extraneous-dependencies": ["error", {"packageDir": "./"}],
         "no-underscore-dangle": 0,
-        "prefer-destructuring": 1,
+        "prefer-destructuring": 0,
         "no-this-before-super": 1,
         "no-unused-expressions": 2,
         "semi": 2,

@@ -1,7 +1,7 @@
 import { observable, action, computed } from 'mobx';
 import { connect } from './Connect';
-import DialogStore from './DialogStore';
 import Dialog from '../components/Dialog.jsx';
+import MenuStore from './MenuStore';
 
 export default class SettingsDialogStore {
     @observable items = []; // [{id: '', title: '', value: ''}]
@@ -19,21 +19,20 @@ export default class SettingsDialogStore {
         this.onDeleted = onDeleted;
         this.onStared = onStared;
         this.onChanged = onChanged;
-
-        this.dialog = new DialogStore(mainStore);
+        this.menu = new MenuStore(mainStore, { route:'indicator-setting' });
     }
 
     get context() { return this.mainStore.chart.context; }
     get stx() { return this.context.stx; }
 
-    @computed get open() { return this.dialog.open; }
+    @computed get open() { return this.menu.open; }
     @action.bound setOpen(value) {
-        return this.dialog.setOpen(value);
+        return this.menu.setOpen(value);
     }
 
     @action.bound onDeleteClick() {
         this.onDeleted();
-        this.dialog.setOpen(false);
+        this.menu.setOpen(false);
     }
 
     @action.bound onStarClick() {
@@ -76,6 +75,6 @@ export default class SettingsDialogStore {
         onStarClick: this.onStarClick,
         onResetClick: this.onResetClick,
         onItemChange: this.onItemChange,
-        Dialog: this.dialog.connect(Dialog),
+        Dialog: this.menu.dialog.connect(Dialog),
     }));
 }
