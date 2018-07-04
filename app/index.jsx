@@ -18,6 +18,13 @@ import './app.scss';
 import './doorbell';
 import { ConnectionManager, StreamManager } from './connection';
 
+if (window.location.host.endsWith('binary.com')) {
+    window._trackJs = { token: '346262e7ffef497d85874322fff3bbf8', application: 'smartcharts' };
+    const s = document.createElement('script');
+    s.src = 'https://cdn.trackjs.com/releases/current/tracker.js';
+    document.body.appendChild(s);
+}
+
 configure({ enforceActions: true });
 
 const getLanguageStorage = function () {
@@ -64,6 +71,7 @@ const App = () => (
     <SmartChart
         onSymbolChange={symbol => console.log('Symbol has changed to:', symbol)}
         isMobile={CIQ.isMobile}
+        enableRouting
         chartControlsWidgets={renderControls}
         requestAPI={requestAPI}
         requestSubscribe={requestSubscribe}

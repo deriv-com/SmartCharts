@@ -55,7 +55,7 @@ export class Translation {
         if (typeof args[1] === 'string') { // Plural conversion
             const replacer = args[2];
             const prop = Object.keys(replacer);
-            if (replacer[prop[0]] == 0 || replacer[prop[0]] > 1) {
+            if (replacer[prop[0]] === 0 || replacer[prop[0]] > 1) {
                 if (curr_lang[str] && curr_lang[str][2]) {
                     rt_str = curr_lang[str][2];
                 } else {

@@ -93,6 +93,7 @@ isMobile | Switch between mobile or desktop view. Defaults to `false`.
 shareOrigin | Sets the origin of the generated share link. Defaults to `https://charts.binary.com`.
 showCountdown | Show Countdown. Defaults to `false`.
 barriers | Draw chart barriers. Refer to [Barriers API](#barriers-api) for usage details
+enableRouting | Enable routing for dialogs. Defaults to `false`
 
 #### Barriers API
 
