@@ -12,7 +12,7 @@ const CrosshairToggle = ({
         <div className="ciq-menu">
             <div className="cq-menu-btn">
                 <Toggle
-                    active={state != 0}
+                    active={state !== 0}
                     onChange={toggleState}
                 >
                     <CrosshairIcon
