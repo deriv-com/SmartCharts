@@ -15,7 +15,7 @@ export default class TimeperiodStore {
     constructor(mainStore) {
         this.mainStore = mainStore;
         when(() => this.context, this.onContextReady);
-        this.menu = new MenuStore(mainStore);
+        this.menu = new MenuStore(mainStore, { route:'time-period' });
     }
 
     get context() { return this.mainStore.chart.context; }

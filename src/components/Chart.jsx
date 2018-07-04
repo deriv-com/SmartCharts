@@ -69,8 +69,6 @@ class Chart extends Component {
         const array = React.Children.toArray(children);
         const insideSubHolder = array.filter(c => /(TradeStart)|(TradeEnd)/.test(c.type.displayName));
         const renderTopWidgets = topWidgets || defaultTopWidgets;
-
-
         const defaultTheme = (setting && setting.theme) ? setting.theme : 'light';
         const defaultCandleCountdown = (setting && setting.countdown) ? setting.countdown : false;
 
