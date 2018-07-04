@@ -121,19 +121,19 @@ html, body {
 }
 
 .stx-btn-panel > span.stx-ico-up {
-    background-position: -150px -25px;
+    background-position: -154px -29px;
 }
 
 .stx-btn-panel > span.stx-ico-down {
-    background-position: -200px -25px;
+    background-position: -203px -28px;
 }
 
 .stx-btn-panel > span.stx-ico-close {
-    background-position: -250px -25px;
+    background-position: -252px -28px;
 }
 
 .stx-btn-panel > span.stx-ico-edit {
-    background-position: -300px -25px;
+    background-position: -303px -29px;
 }
 
 .stx-btn-panel > span.stx-ico-focus {
@@ -249,7 +249,6 @@ html, body {
 .stx-panel-control.stx-show {
     display: inline-block;
 }
-
 .stx-panel-title { /* Panel/Chart Titles */
     margin: 5px 10px;
     float: left;
@@ -1060,4 +1059,26 @@ cq-language-name {
 .stx-chart-panel.stx-show { /* Hide default Chart Title and Icons */
     display: none;
 }
+.smartcharts-mobile{
+    .stx-panel-control{
+        margin: 5px;
+        @include border-radius(3px);
+        @include themify($themes) {
+            background: themed('defaultMain');
+            border: 1px solid themed('borderColor');
+        }
+        .stx-panel-title{
+            box-shadow: none;
+            margin: 5px;
+            @include themify($themes) {
+                border-right: 1px solid themed('borderColor');
+            }
+        }
+        .stx-btn-panel{
+            opacity: 1;
+        }
+    }
+}
+
+
 

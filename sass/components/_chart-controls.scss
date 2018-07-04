@@ -26,6 +26,9 @@
             transform: rotate(225deg); /* 180 + 45 */
             display: none;
         }
+        .cq-menu-btn{
+            position: relative;
+        }
         .cq-menu-dropdown {
             height: auto;
         }
@@ -197,6 +200,9 @@
                     margin: 0px;
                     bottom: 0em;
                 }
+            }
+            .budget{
+                right: -6px;
             }
             &.stxMenuActive{
                 .cq-menu-overlay {
