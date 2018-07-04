@@ -58,6 +58,8 @@ class Chart extends Component {
             chartControlsWidgets,
             AggregateChartSettingsDialog,
             topWidgets,
+            hasOpenMenu,
+            hasTitleOpenMenu,
             showCountdown = false,
             chartContainerHeight,
         } = this.props;
@@ -70,9 +72,10 @@ class Chart extends Component {
         const insideSubHolder = array.filter(c => /(TradeStart)|(TradeEnd)/.test(c.type.displayName));
         const renderTopWidgets = topWidgets || defaultTopWidgets;
 
-
         const defaultTheme = (setting && setting.theme) ? setting.theme : 'light';
         const defaultCandleCountdown = (setting && setting.countdown) ? setting.countdown : false;
+
+        document.getElementById('root').style.setProperty('--view-height', `${window.innerHeight}px`);
 
         // TO DO : this part should move the ChartSetting Store
         CIQ.localStorageSetItem('smartchart-setting', JSON.stringify({
@@ -85,7 +88,7 @@ class Chart extends Component {
         return (
             <cq-context
                 ref={(root) => { this.root = root; }}
-                class={`smartcharts-${(typeof theme === 'string') ? theme : defaultTheme}`}
+                class={`smartcharts-${(typeof theme === 'string') ? theme : defaultTheme} ${isMobile && hasOpenMenu ? 'cq-dialog-context' : ''}`}
             >
                 <div className={`${currentMode} ${currentPosition}`}>
                     <div className="ciq-chart-area">
@@ -101,10 +104,13 @@ class Chart extends Component {
                             <RenderInsideChart at="subholder">
                                 {insideSubHolder}
                             </RenderInsideChart>
-                            <div className="cq-top-ui-widgets" style={{ top: chartPanelTop }}>
+                            <div
+                                className={`cq-top-ui-widgets ${isMobile && hasTitleOpenMenu ? 'open' : ''}`}
+                                style={isMobile && hasTitleOpenMenu ? {} : { top: chartPanelTop }}
+                            >
                                 { renderTopWidgets() }
                             </div>
-                            <ChartControls widgets={chartControlsWidgets} />
+                            <ChartControls widgets={chartControlsWidgets} hasOpenMenu={hasOpenMenu} />
                             <div className="chartContainer primary" style={{ height: chartContainerHeight }}>
                                 <Crosshair />
                             </div>
@@ -125,7 +131,8 @@ class Chart extends Component {
     }
 }
 
-export default connect(({ chart, drawTools, studies, chartSetting, chartType }) => ({
+export default connect(({ chart, drawTools, studies, chartSetting,
+    chartTitle, chartType, comparison, view, share, timeperiod }) => ({
     contextPromise: chart.contextPromise,
     init: chart.init,
     destroy: chart.destroy,
@@ -136,4 +143,16 @@ export default connect(({ chart, drawTools, studies, chartSetting, chartType }) 
     chartPanelTop: chart.chartPanelTop,
     setting: chartSetting,
     chartContainerHeight: chart.chartContainerHeight,
+    hasOpenMenu: (
+        chartTitle.menu.open ||
+        chartType.menu.open ||
+        studies.menu.open ||
+        comparison.menu.open ||
+        drawTools.menu.open ||
+        view.menu.open ||
+        share.menu.open ||
+        timeperiod.menu.open ||
+        chartSetting.menu.open
+    ),
+    hasTitleOpenMenu: chartTitle.menu.open,
 }))(Chart);

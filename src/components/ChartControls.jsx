@@ -41,25 +41,7 @@ const ChartControls = ({
     );
 };
 
-export default connect(({ chart,
-    chartType,
-    studies,
-    comparison,
-    drawTools,
-    view,
-    share,
-    timeperiod,
-    chartSetting }) => ({
+export default connect(({ chart }) => ({
     isMobile: chart.isMobile,
     context: chart.context,
-    hasOpenMenu: (
-        chartType.menu.open ||
-            studies.menu.open ||
-            comparison.menu.open ||
-            drawTools.menu.open ||
-            view.menu.open ||
-            share.menu.open ||
-            timeperiod.menu.open ||
-            chartSetting.menu.open
-    ),
 }))(ChartControls);

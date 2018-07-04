@@ -102,7 +102,7 @@ class ChartStore {
         const panelPosition = position || this.mainStore.chartSetting.position;
         const offsetHeight = (panelPosition === 'left') ? 0 : this.chartControlsNode.offsetHeight;
         this.chartHeight = this.chartNode.offsetHeight;
-        this.chartContainerHeight = this.chartHeight - offsetHeight;
+        this.chartContainerHeight = this.isMobile && this.chartContainerHeight ? this.chartContainerHeight : this.chartHeight - offsetHeight;
     }
 
     @action.bound resizeScreen() {

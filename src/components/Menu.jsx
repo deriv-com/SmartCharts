@@ -3,12 +3,6 @@ import { CSSTransition } from 'react-transition-group';
 import { stxtap } from '../store/utils';
 
 class Menu extends Component {
-    onOverlayClick = (e) => {
-        if (e.target.className === 'cq-menu-overlay') {
-            this.props.setOpen(false);
-        }
-    };
-
     render() {
         const {
             open,
@@ -17,10 +11,10 @@ class Menu extends Component {
             onTitleClick,
             DropdownDialog,
             isMobile,
-            isFullscreen,
         } = this.props;
         const first = React.Children.map(children, (child, i) => (i === 0 ? child : null));
         const rest  = React.Children.map(children, (child, i) => (i !== 0 ? child : null));
+        const menuOverLayStyle = isMobile ? { height: `${window.innerHeight}px`, top : `${-window.innerHeight + 31}px` } : {};
 
         return (
             <div className={`ciq-menu ${className || ''} ${open ? 'stxMenuActive' : ''}`}>
@@ -30,10 +24,7 @@ class Menu extends Component {
                 >
                     {first}
                 </div>
-                <div
-                    className="cq-menu-overlay"
-                    onClick={this.onOverlayClick}
-                >
+                <div className="cq-menu-overlay" style={menuOverLayStyle}>
                     <CSSTransition
                         in={open}
                         timeout={150}
@@ -41,8 +32,6 @@ class Menu extends Component {
                     >
                         <DropdownDialog
                             className="cq-menu-dropdown"
-                            isMobile={isMobile}
-                            isFullscreen={isFullscreen}
                         >
                             {rest}
                         </DropdownDialog>

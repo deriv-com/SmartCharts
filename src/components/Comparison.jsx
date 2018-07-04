@@ -9,11 +9,9 @@ const Comparison = ({
     Menu,
     menuOpen,
     onCloseMenu,
-    isMobile,
 }) => (
     <Menu
         className="cq-comparison-new cq-symbols-display"
-        isMobile={isMobile}
     >
         <Menu.Title>
             <ComparisonIcon
@@ -35,5 +33,4 @@ export default connect(({ comparison: c }) => ({
     Menu: c.menu.connect(Menu),
     menuOpen: c.menu.open,
     onCloseMenu: c.menu.onTitleClick,
-    isMobile: c.categoricalDisplay.isMobile,
 }))(Comparison);

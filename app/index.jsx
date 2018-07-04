@@ -70,6 +70,17 @@ const requestSubscribe = streamManager.subscribe.bind(streamManager);
 const requestForget = streamManager.forget.bind(streamManager);
 const shareOrigin = window.location.href.split('?')[0];
 
+
+// Update menu height to show chartControl on top of dialog in mobile devices.
+const style = '.smartcharts-mobile .cq-chart-controls .ciq-menu .cq-menu-overlay';
+const cssRulesList = document.styleSheets[0] && document.styleSheets[0].cssRules;
+for (let i = 0; i < cssRulesList.length; i++) {
+    if (cssRulesList[i].selectorText === style) {
+        cssRulesList[i].style.cssText += `;height:${window.innerHeight - 31}px !important;`;
+        break;
+    }
+}
+
 const App = () => (
     <SmartChart
         onSymbolChange={symbol => console.log('Symbol has changed to:', symbol)}

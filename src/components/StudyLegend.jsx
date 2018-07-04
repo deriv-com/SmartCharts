@@ -17,7 +17,6 @@ class StudyLegend extends Component {
             menuOpen,
             StudyCategoricalDisplay,
             onCloseMenu,
-            isMobile,
         } = this.props;
 
         return (
@@ -25,7 +24,6 @@ class StudyLegend extends Component {
                 className="ciq-menu ciq-studies collapse"
                 isOpened={isOpened}
                 setOpen={setOpen}
-                isMobile={isMobile}
             >
                 <Menu.Title>
                     <IndicatorIcon
@@ -52,5 +50,4 @@ export default connect(({ studies: st }) => ({
     menuOpen: st.menu.open,
     StudyCategoricalDisplay: st.categoricalDisplay.connect(CategoricalDisplay),
     onCloseMenu: st.menu.onTitleClick,
-    isMobile: st.categoricalDisplay.isMobile,
 }))(StudyLegend);

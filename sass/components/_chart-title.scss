@@ -136,6 +136,9 @@
             margin: .4em .5em;
             margin: 0px;
         }
+        &.open{
+            z-index: 6 !important;
+        }
     }
     .cq-chart-title{
         width: 100%;

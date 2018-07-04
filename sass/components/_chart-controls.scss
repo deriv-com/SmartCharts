@@ -137,6 +137,7 @@
         justify-content: space-around;
         padding: 0 0.7em;
         height: 40px;
+        z-index: 9;
         @include themify($themes) {
             border-top: 1px solid themed('defaultBorder');
         }
@@ -161,8 +162,6 @@
                 background: rgba(0,0,0,.3);
                 width: 100%;
                 position: absolute;
-                height: calc( 100vh - 32px );
-                top: calc( -100vh + 31px );
                 left: 0;
                 padding: 0em;
                 opacity: 0;
@@ -191,12 +190,13 @@
                 .cq-menu-overlay {
                     opacity: 1;
                     visibility: visible;
+                    cursor: pointer;
                 }
             }
             &.ciq-studies,
             &.cq-comparison-new{
                 .cq-menu-dropdown {
-                    height: calc( 100vh - 47px ) ;
+                    height:100% ;
                     left: 0px !important;
                     width: 100%;
                     box-shadow: none !important;
