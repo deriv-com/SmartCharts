@@ -10,11 +10,11 @@ class Menu extends Component {
             children,
             onTitleClick,
             DropdownDialog,
-            isMobile
+            isMobile,
         } = this.props;
         const first = React.Children.map(children, (child, i) => (i === 0 ? child : null));
         const rest  = React.Children.map(children, (child, i) => (i !== 0 ? child : null));
-        const menuOverLayStyle = isMobile ? { height: window.innerHeight + 'px' , top : -window.innerHeight + 31 + 'px'} : {}
+        const menuOverLayStyle = isMobile ? { height: `${window.innerHeight}px`, top : `${-window.innerHeight + 31}px` } : {};
 
         return (
             <div className={`ciq-menu ${className || ''} ${open ? 'stxMenuActive' : ''}`}>

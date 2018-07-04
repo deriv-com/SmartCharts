@@ -75,7 +75,7 @@ class Chart extends Component {
         const defaultTheme = (setting && setting.theme) ? setting.theme : 'light';
         const defaultCandleCountdown = (setting && setting.countdown) ? setting.countdown : false;
 
-        document.getElementById('root').style.setProperty('--view-height', window.innerHeight +'px');
+        document.getElementById('root').style.setProperty('--view-height', `${window.innerHeight}px`);
 
         // TO DO : this part should move the ChartSetting Store
         CIQ.localStorageSetItem('smartchart-setting', JSON.stringify({
@@ -88,7 +88,7 @@ class Chart extends Component {
         return (
             <cq-context
                 ref={(root) => { this.root = root; }}
-                class={`smartcharts-${(typeof theme === 'string') ? theme : defaultTheme} ${isMobile && hasOpenMenu ? 'cq-dialog-context':''}`}
+                class={`smartcharts-${(typeof theme === 'string') ? theme : defaultTheme} ${isMobile && hasOpenMenu ? 'cq-dialog-context' : ''}`}
             >
                 <div className={`${currentMode} ${currentPosition}`}>
                     <div className="ciq-chart-area">
@@ -104,11 +104,13 @@ class Chart extends Component {
                             <RenderInsideChart at="subholder">
                                 {insideSubHolder}
                             </RenderInsideChart>
-                            <div className={`cq-top-ui-widgets ${isMobile && hasTitleOpenMenu ? 'open':''}`}
-                                 style={isMobile && hasTitleOpenMenu ? {} : { top: chartPanelTop}}>
+                            <div
+                                className={`cq-top-ui-widgets ${isMobile && hasTitleOpenMenu ? 'open' : ''}`}
+                                style={isMobile && hasTitleOpenMenu ? {} : { top: chartPanelTop }}
+                            >
                                 { renderTopWidgets() }
                             </div>
-                            <ChartControls widgets={chartControlsWidgets} hasOpenMenu={hasOpenMenu}/>
+                            <ChartControls widgets={chartControlsWidgets} hasOpenMenu={hasOpenMenu} />
                             <div className="chartContainer primary" style={{ height: chartContainerHeight }}>
                                 <Crosshair />
                             </div>
@@ -152,5 +154,5 @@ export default connect(({ chart, drawTools, studies, chartSetting,
         timeperiod.menu.open ||
         chartSetting.menu.open
     ),
-    hasTitleOpenMenu: chartTitle.menu.open
+    hasTitleOpenMenu: chartTitle.menu.open,
 }))(Chart);

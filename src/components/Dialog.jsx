@@ -6,16 +6,14 @@ const Dialog = ({
     open,
     children,
     onContainerClick,
-    className
-}) => {
-    return (
-        <div
-            className={`${className || 'cq-dialog'} ${open ? ' open' : ''}`}
-            onClick={onContainerClick}
-        >
-            {children}
-        </div>
-    );
-};
+    className,
+}) => (
+    <div
+        className={`${className || 'cq-dialog'} ${open ? ' open' : ''}`}
+        onClick={onContainerClick}
+    >
+        {children}
+    </div>
+);
 
 export default Dialog;

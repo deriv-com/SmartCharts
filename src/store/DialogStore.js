@@ -65,6 +65,6 @@ export default class DialogStore {
         open: this.open,
         setOpen: this.setOpen,
         onTitleClick: this.onTitleClick,
-        onContainerClick: this.onContainerClick
+        onContainerClick: this.onContainerClick,
     }));
 }
