@@ -30,8 +30,6 @@ class ChartStore {
     chartNode = null;
     chartControlsNode = null;
     chartContainerNode = null;
-    tradeTimes = [];
-    tradeTimesCapture = null;
     holderStyle;
     @observable context = null;
     @observable currentActiveSymbol;
@@ -254,8 +252,8 @@ class ChartStore {
                 /**
                  * Updating market close status each 10 minute
                  */
-                this.updateMarketClosedStatus();
-                setInterval(this.updateMarketClosedStatus, 10 * 60 * 1000);
+                this.onMarketClosedStatus();
+                setInterval(this.onMarketClosedStatus, 10 * 60 * 1000);
             };
             const href = window.location.href;
             if (href.startsWith(shareOrigin) && href.indexOf('#') !== -1) {
@@ -284,7 +282,13 @@ class ChartStore {
      * Get tradeTimes if not loaded yet
      * OR update the active symbols by comapring open time
      */
-    @action.bound updateMarketClosedStatus() {
+    onMarketClosedStatus() {
+        this.api.getTradingTimes()
+            .then(this.updateMarketClosedStatus)
+            .catch(data => console.warn(data.error));
+    }
+
+    @action.bound updateMarketClosedStatus(response) {
         const nowUtc = (new Date()).getTime();
         const toEpochGMT = (hour, crossDay) => {
             const currentDate = new Date();
@@ -292,47 +296,37 @@ class ChartStore {
             const dateStr = currentDate.toISOString().substring(0, 11);
             return new Date(`${dateStr}${hour}Z`).getTime();
         };
+        response.trading_times.markets.forEach((market) => {
+            market.submarkets.forEach((submarket) => {
+                submarket.symbols.forEach((symbol) => {
+                    const foundSymbol = this.activeSymbols.find(item => item.symbol === symbol.symbol);
+                    if (foundSymbol) {
+                        let isOpen = false;
+                        for (let i = 0; i <= symbol.times.open.length; i++) {
+                            const { open, close } = symbol.times;
+                            if (open.length && close.length) {
+                                const openTime = toEpochGMT(open[i]);
+                                const closeTime = toEpochGMT(close[i]);
 
-
-        if (this.tradeTimes.length && this.tradeTimesCapture.getDate() === (new Date()).getDate()) {
-            this.tradeTimes.forEach((market) => {
-                market.submarkets.forEach((submarket) => {
-                    submarket.symbols.forEach((symbol) => {
-                        const foundSymbol = this.activeSymbols.find(item => item.symbol === symbol.symbol);
-                        if (foundSymbol) {
-                            let isOpen = false;
-                            for (let i = 0; i <= symbol.times.open.length; i++) {
-                                const { open, close } = symbol.times;
-                                if (open.length && close.length) {
-                                    const openTime = toEpochGMT(open[i]);
-                                    const closeTime = toEpochGMT(close[i]);
-
-                                    // If open time is cross day, then should check time till tomorrow
-                                    // and yesterday till now
-                                    if (
-                                        (openTime > closeTime && nowUtc >= toEpochGMT(open[i], -1) && nowUtc <= closeTime) ||
-                                            (openTime > closeTime && nowUtc >= toEpochGMT(open[i]) && nowUtc <= toEpochGMT(close[i], 1)) ||
-                                            (nowUtc >= openTime && nowUtc <= closeTime)
-                                    ) {
-                                        isOpen = true;
-                                        break;
-                                    }
+                                // If open time is cross day, then should check time till tomorrow
+                                // and yesterday till now
+                                if (
+                                    (openTime > closeTime && nowUtc >= toEpochGMT(open[i], -1) && nowUtc <= closeTime) ||
+                                        (openTime > closeTime && nowUtc >= toEpochGMT(open[i]) && nowUtc <= toEpochGMT(close[i], 1)) ||
+                                        (nowUtc >= openTime && nowUtc <= closeTime)
+                                ) {
+                                    isOpen = true;
+                                    break;
                                 }
                             }
-                            foundSymbol.exchange_is_open = isOpen;
                         }
-                    });
+                        foundSymbol.exchange_is_open = isOpen;
+                    }
                 });
             });
+        });
 
-            this.categorizedSymbols = this.categorizeActiveSymbols();
-        } else {
-            this.api.getTradingTimes().then((data) => {
-                this.tradeTimesCapture = new Date();
-                this.tradeTimes = data.trading_times.markets;
-                this.updateMarketClosedStatus();
-            });
-        }
+        this.categorizedSymbols = this.categorizeActiveSymbols();
     }
 
 
