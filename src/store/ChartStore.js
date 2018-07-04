@@ -284,8 +284,7 @@ class ChartStore {
      */
     onMarketClosedStatus() {
         this.api.getTradingTimes()
-            .then(this.updateMarketClosedStatus)
-            .catch(data => console.warn(data.error));
+            .then(this.updateMarketClosedStatus);
     }
 
     @action.bound updateMarketClosedStatus(response) {

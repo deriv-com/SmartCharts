@@ -81,8 +81,6 @@ class Feed {
             const errorMessage = response.error.message;
             const errorCode = response.error.code;
             const tParams = { symbol: symbolObject.name };
-            console.log(errorCode);
-            console.log(errorMessage);
             if (errorCode === 'MarketIsClosed') {
                 // Although market is closed, we display the past tick history data
                 response = await this._binaryApi.getTickHistory(dataRequest);
@@ -101,12 +99,19 @@ class Feed {
                 });
                 callback({ quotes: [] });
                 return;
-            } else {
+            } if (errorCode === 'NoRealtimeQuotes') {
                 response = await this._binaryApi.getTickHistory(dataRequest);
                 this._mainStore.notification.notify({
                     text: errorMessage,
                     category: 'activesymbol',
                 });
+            } else {
+                this._mainStore.notification.notify({
+                    text: errorMessage,
+                    category: 'activesymbol',
+                });
+                callback({ quotes: [] });
+                return;
             }
         } else {
             this._callbacks[key] = processTick;
@@ -144,6 +149,7 @@ class Feed {
                 });
                 result.quotes = TickHistoryFormatter.formatHistory(response);
             } catch (err) {
+                console.error(err);
                 result.quotes = { error: err };
             }
         }
