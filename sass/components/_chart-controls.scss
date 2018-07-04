@@ -159,8 +159,6 @@
                 }
             }
             .cq-menu-overlay{
-                height: var(--view-height);
-                top: calc(-1 * var(--view-height) + 39px);
                 background: rgba(0,0,0,.3);
                 width: 100%;
                 position: absolute;

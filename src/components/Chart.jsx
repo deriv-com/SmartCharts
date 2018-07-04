@@ -105,7 +105,7 @@ class Chart extends Component {
                                 {insideSubHolder}
                             </RenderInsideChart>
                             <div className={`cq-top-ui-widgets ${isMobile && hasTitleOpenMenu ? 'open':''}`}
-                                 style={isMobile && hasOpenMenu ? {} : { top: chartPanelTop}}>
+                                 style={isMobile && hasTitleOpenMenu ? {} : { top: chartPanelTop}}>
                                 { renderTopWidgets() }
                             </div>
                             <ChartControls widgets={chartControlsWidgets} hasOpenMenu={hasOpenMenu}/>
