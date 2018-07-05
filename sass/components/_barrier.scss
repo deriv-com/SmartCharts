@@ -13,6 +13,9 @@ $green: #4caf50;
         width: 100%;
         left: 0;
         font-size: 10px;
+        &:hover {
+            z-index: 105;
+        }
         &.draggable > .draggable-area {
             &:hover {
                 background: rgba(0, 0, 0, 0.05);
@@ -30,20 +33,6 @@ $green: #4caf50;
             position: relative;
             border-color: inherit;
             border-top-width: 2px;
-        }
-    }
-
-    &.vertical {
-        height: 100%;
-        top: 0px;
-
-        .drag-line {
-            border-image: linear-gradient(to top, black 80%, transparent) 1 100%;
-            height: 100%;
-            width: 10px;
-            border-left: 2px dashed;
-            left: 200px;
-            margin-left: 10px;
         }
     }
 }
@@ -164,64 +153,3 @@ $green: #4caf50;
 
 @include createShadeStyle('red', $red);
 @include createShadeStyle('green', $green);
-
-$trade-end-color: #e98024;
-$trade-start-color: #a2a2a2;
-$trade-text-distance: 1.6em;
-
-/* Trade Start and End */
-.chart-line.vertical {
-    .trade-text {
-        top: 1em;
-        position: absolute;
-        font-size: 0.9em;
-    }
-
-    &.trade-start-line {
-        .drag-line {
-            border-image: linear-gradient(to top, $trade-start-color 80%, transparent) 1 100%;
-        }
-
-        .trade-text {
-            text-align: right;
-            right: $trade-text-distance;
-            color: $trade-start-color;
-        }
-    }
-
-    &.trade-end-line {
-        .drag-line {
-            border-image: linear-gradient(to top, $trade-end-color 80%, transparent) 1 100%;
-        }
-
-        .trade-text {
-            text-align: left;
-            left: $trade-text-distance;
-            color: $trade-end-color;
-        }
-
-        .trade-end-flag {
-            bottom: 1.9em;
-            position: absolute;
-
-            .ic-flag {
-                $icon-diameter: 1.9em;
-                background: url('icons/chart/ic-flag.svg') no-repeat;
-                height: $icon-diameter;
-                width: $icon-diameter;
-                position: inherit;
-                left: -0.07em;
-                top: 0.07em;
-            }
-
-            .circle {
-                $circle-diameter: 1.9em;
-                @include border-radius(100%);
-                width: $circle-diameter;
-                height: $circle-diameter;
-                background-color: $trade-end-color;
-                position: inherit;
-            }
-        }
-    }
-}

@@ -15,6 +15,7 @@ import ChartSettingStore from './ChartSettingStore';
 import LoaderStore from './LoaderStore';
 import FavoriteSessionStore from './FavoriteSessionStore';
 import ChartSizeStore from './ChartSizeStore';
+import RoutingStore from './RoutingStore';
 
 export default class MainStore {
     favoriteSessionStore = new FavoriteSessionStore();
@@ -34,4 +35,5 @@ export default class MainStore {
     chartSetting = new ChartSettingStore(this);
     loader = new LoaderStore();
     chartSize = new ChartSizeStore(this);
+    routing = new RoutingStore(this);
 }
