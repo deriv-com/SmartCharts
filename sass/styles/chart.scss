@@ -1065,7 +1065,7 @@ cq-language-name {
         @include border-radius(3px);
         @include themify($themes) {
             background: themed('defaultMain');
-            border: 1px solid themed('borderColor');
+            border: 1px solid themed('defaultBorder');
         }
         .stx-panel-title{
             box-shadow: none;

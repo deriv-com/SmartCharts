@@ -73,7 +73,7 @@
 				font-weight: 300;
 				@include themify($themes) {
 					color: themed('controlText');
-					border-right: 1px solid themed('borderColor');
+					border-right: 1px solid themed('defaultBorder');
 				}
 				&.selected {
 					font-weight: 500;

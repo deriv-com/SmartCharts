@@ -67,6 +67,7 @@ class Chart extends Component {
         t.setLanguage(currentLang);
         const currentPosition = `cq-chart-control-${(setting && setting.position && !isMobile) ? setting.position : 'bottom'}`;
         const currentMode = `${isMobile ? 'smartcharts-mobile' : ''}`;
+        const currentWidth =  !isMobile ? `smartcharts-${containerWidth}` : '';
         const renderTopWidgets = topWidgets || defaultTopWidgets;
         const defaultTheme = (setting && setting.theme) ? setting.theme : 'light';
         const defaultCandleCountdown = (setting && setting.countdown) ? setting.countdown : false;
@@ -82,7 +83,7 @@ class Chart extends Component {
         return (
             <cq-context
                 ref={(root) => { this.root = root; }}
-                class={`smartcharts-${(typeof theme === 'string') ? theme : defaultTheme} smartcharts-${containerWidth}`}
+                class={`smartcharts-${(typeof theme === 'string') ? theme : defaultTheme} ${currentWidth}`}
             >
                 <div className={`${currentMode} ${currentPosition}`}>
                     <div className="ciq-chart-area">
