@@ -93,6 +93,7 @@ isMobile | Switch between mobile or desktop view. Defaults to `false`.
 shareOrigin | Sets the origin of the generated share link. Defaults to `https://charts.binary.com`.
 showCountdown | Show Countdown. Defaults to `false`.
 barriers | Draw chart barriers. Refer to [Barriers API](#barriers-api) for usage details
+enableRouting | Enable routing for dialogs. Defaults to `false`
 
 #### Barriers API
 
@@ -103,23 +104,54 @@ barriers | Draw chart barriers. Refer to [Barriers API](#barriers-api) for usage
     barriers={[{
         color:'green',
         shade:'above',
-        disablePriceLines: false, // default false
+        hidePriceLines: false, // default false
         onChange:console.warn.bind(console),
     }]}
 />
 ```
 
+Attributes marked with `*` are **mandatory**:
+
 | Attribute | Description |
 --------|--------------
-color | Barrier shade color
+shadeColor | Barrier shade color; choose between `green` and `red`. Defaults to `green`.
+color | Price line color. Defaults to `#000`.
 shade | Shade type; choose between `NONE_SINGLE`, `NONE_DOUBLE`, `ABOVE`, `BELOW`, `OUTSIDE` or `BETWEEN`. Defaults to `NONE_SINGLE`.
-disablePriceLines | hide/show the price lines. Defaults to `false`.
+hidePriceLines | hide/show the price lines. Defaults to `false`.
 lineStyle | Sets the style of the price lines; choose between `dotted`, `dashed`, or `solid`. Defaults to `dashed`.
 onChange | When price of high or low barrier changes (including when switched toggling `relative` or setting `high\|low`), `onChange` will pass the high and low barriers as `{ high, low }`.
 relative | Toggle between relative and absolute barriers. Defaults to `false`.
 draggable | Toggles whether users can drag the price lines and change the barrier directly from the chart. Defaults to `true`.
-high | Sets the price of the high barrier.
-low | Sets the price of the low barrier.
+high* | Sets the price of the high barrier.
+low* | Sets the price of the low barrier.
+
+#### Marker API
+
+Markers provide a way for developers to place DOM elements inside the chart that are positioned based on date, values or tick location. Unlike [CharIQ's Markers](http://documentation.chartiq.com/tutorial-Markers.html#main), we only allow markers to be placed on the main chart. Also note that this Marker implementation does not factor the width and height of the marker; this is expensive to calculate, so we expect you to offset this in CSS.
+
+```jsx
+<SmartChart>
+    <Marker
+        x={new Date(2018, 5, 20)}
+        yPositioner="none"
+        className="chart-line vertical trade-start-line"
+    >
+        {/* Place marker content here */}
+        <div className="drag-line" />
+        <div className="trade-text">Trade Start</div>
+    </Marker>
+</SmartChart>
+```
+
+| Attribute | Description |
+--------|--------------
+className | Adds custom class name to marker. All markers have class name `stx-marker`.
+x | x position of the chart; depends on `xPositioner`.
+xPositioner | Determines x position. Choose between `date` or `none`. Defaults to `date`.
+y | y position of the chart; depends on `yPositioner`.
+yPositioner | Determines y position. Choose between `value` or `none`. Defaults to `value`.
+
+There are more options for `xPositioner` and `yPositioner` in [ChartIQ docs](http://documentation.chartiq.com/CIQ.Marker.html#main). What we document here is the most common use case.
 
 
 ### Customising Components

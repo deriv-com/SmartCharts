@@ -47,9 +47,9 @@ window.SplinePlotter.plotSpline = function (points, tension, context, colorPatte
     let colorPatternIndex = 0;
 
     function seeIfStrokeNeeded(i) {
-        if (colorPatternIndex == colorPatternChanges.length) { return; }
+        if (colorPatternIndex === colorPatternChanges.length) { return; }
         let colorPatternChange = colorPatternChanges[colorPatternIndex];
-        if (colorPatternChange.coord[0] == points[i] && colorPatternChange.coord[1] == points[i + 1]) {
+        if (colorPatternChange.coord[0] === points[i] && colorPatternChange.coord[1] === points[i + 1]) {
             context.stroke();
             context.strokeStyle = colorPatternChange.color;
             context.setLineDash(colorPatternChange.pattern);
