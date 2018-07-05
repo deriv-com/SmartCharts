@@ -10,7 +10,7 @@ export default class StudyLegendStore {
         this.mainStore = mainStore;
         when(() => this.context, this.onContextReady);
 
-        this.menu = new MenuStore(mainStore);
+        this.menu = new MenuStore(mainStore, { route:'indicators' });
         this.categoricalDisplay = new CategoricalDisplayStore({
             activeOptions: [
                 { id: 'edit', onClick: item => this.editStudy(item) },
@@ -51,8 +51,8 @@ export default class StudyLegendStore {
     };
 
     begin() {
-        this.stx.callbacks.studyOverlayEdit = study => this.editStudy(study);
-        this.stx.callbacks.studyPanelEdit = study => this.editStudy(study);
+        this.stx.callbacks.studyOverlayEdit = this.editStudy;
+        this.stx.callbacks.studyPanelEdit = this.editStudy;
         this.injections.push(this.stx.append('createDataSet', () => this.renderLegend()));
         this.renderLegend();
     }

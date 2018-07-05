@@ -1,4 +1,4 @@
-import { observable, action } from 'mobx';
+import { observable, action, when } from 'mobx';
 import debounce from 'lodash.debounce';
 import { connect } from './Connect';
 
@@ -8,10 +8,16 @@ let activeDialog;
 export default class DialogStore {
     constructor(mainStore) {
         this.mainStore = mainStore;
+        when(() => this.context, () => {
+            this.routingStore.registerDialog(this);
+        });
     }
 
+    get context() { return this.mainStore.chart.context; }
+    get routingStore() {
+        return this.mainStore.routing;
+    }
     @observable open = false;
-
     setOpen = debounce((val) => {
         this.openDialog(val);
     }, 300, { leading: true, trailing: false });

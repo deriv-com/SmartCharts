@@ -94,7 +94,7 @@ export default class ChartTypeStore {
     constructor(mainStore) {
         this.mainStore = mainStore;
         when(() => this.context, this.onContextReady);
-        this.menu = new MenuStore(mainStore);
+        this.menu = new MenuStore(mainStore, { route:'chart-type' });
 
         this.list = new ListStore({
             getIsOpen: () => this.menu.open,
