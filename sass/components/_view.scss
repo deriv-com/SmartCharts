@@ -1,5 +1,4 @@
 .ciq-views {
-	position: relative;
 	.cq-menu-dropdown {
 		width: 280px;
 		height: 200px;
@@ -130,9 +129,6 @@
 	}
 }
 .smartcharts-mobile{
-	.ciq-views {
-		position: static;
-	}
 	.cq-menu-dropdown {
 		.dropdown-title {
 			.icon {
