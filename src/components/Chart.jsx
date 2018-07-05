@@ -47,13 +47,13 @@ class Chart extends Component {
         const {
             DrawToolsSettingsDialog,
             StudySettingsDialog,
-            children,
             lang,
             isMobile = false,
             theme,
             isChartAvailable,
             setting,
-            barriers,
+            barriers = [],
+            children,
             chartPanelTop,
             chartControlsWidgets,
             AggregateChartSettingsDialog,
@@ -66,11 +66,7 @@ class Chart extends Component {
         t.setLanguage(currentLang);
         const currentPosition = `cq-chart-control-${(setting && setting.position && !isMobile) ? setting.position : 'bottom'}`;
         const currentMode = `${isMobile ? 'smartcharts-mobile' : ''}`;
-        const array = React.Children.toArray(children);
-        const insideSubHolder = array.filter(c => /(TradeStart)|(TradeEnd)/.test(c.type.displayName));
         const renderTopWidgets = topWidgets || defaultTopWidgets;
-
-
         const defaultTheme = (setting && setting.theme) ? setting.theme : 'light';
         const defaultCandleCountdown = (setting && setting.countdown) ? setting.countdown : false;
 
@@ -90,17 +86,16 @@ class Chart extends Component {
                 <div className={`${currentMode} ${currentPosition}`}>
                     <div className="ciq-chart-area">
                         <div className="ciq-chart">
-                            {barriers &&
                             <RenderInsideChart at="holder">
                                 {barriers.map((barr, idx) => (
                                     <Barrier
-                                        key={idx}
+                                        key={`barrier-${idx}`}
                                         {...barr}
                                     />
                                 ))}
-                            </RenderInsideChart>}
+                            </RenderInsideChart>
                             <RenderInsideChart at="subholder">
-                                {insideSubHolder}
+                                {children}
                             </RenderInsideChart>
                             <div className="cq-top-ui-widgets" style={{ top: chartPanelTop }}>
                                 { renderTopWidgets() }

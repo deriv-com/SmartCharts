@@ -2,7 +2,6 @@ import de from '../translation/de.po';
 import fr from '../translation/fr.po';
 import id from '../translation/id.po';
 import it from '../translation/it.po';
-import ja from '../translation/ja.po';
 import nl from '../translation/nl.po';
 import pl from '../translation/pl.po';
 import pt from '../translation/pt.po';
@@ -18,7 +17,6 @@ const lang_map = {
     fr,
     id,
     it,
-    ja,
     nl,
     pl,
     pt,
@@ -57,7 +55,7 @@ export class Translation {
         if (typeof args[1] === 'string') { // Plural conversion
             const replacer = args[2];
             const prop = Object.keys(replacer);
-            if (replacer[prop[0]] == 0 || replacer[prop[0]] > 1) {
+            if (replacer[prop[0]] === 0 || replacer[prop[0]] > 1) {
                 if (curr_lang[str] && curr_lang[str][2]) {
                     rt_str = curr_lang[str][2];
                 } else {

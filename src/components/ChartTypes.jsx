@@ -23,7 +23,7 @@ const ChartTypes = ({
             <Menu.Title>
                 <Type.icon
                     className={`ic-icon-with-sub ${menuOpen ? 'active' : ''}`}
-                    tooltip-title={t.translate('Chart types')}
+                    tooltip-title={t.translate(Type.text)}
                 />
             </Menu.Title>
             <Menu.Body>
