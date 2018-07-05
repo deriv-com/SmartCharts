@@ -78,6 +78,7 @@ class Chart extends Component {
             countdown: showCountdown || defaultCandleCountdown,
         }));
 
+
         return (
             <cq-context
                 ref={(root) => { this.root = root; }}

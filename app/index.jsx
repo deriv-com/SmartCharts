@@ -67,9 +67,21 @@ const requestSubscribe = streamManager.subscribe.bind(streamManager);
 const requestForget = streamManager.forget.bind(streamManager);
 const shareOrigin = window.location.href.split('?')[0];
 
+/**
+* 'warning' | 'error' | 'message' | 'success',
+*/
+const DummyMessage = (level, message, error_code) => {
+    console.log({
+        error_code,
+        message,
+        level,
+    });
+};
+
 const App = () => (
     <SmartChart
         onSymbolChange={symbol => console.log('Symbol has changed to:', symbol)}
+        onMessage={DummyMessage}
         isMobile={CIQ.isMobile}
         enableRouting
         chartControlsWidgets={renderControls}

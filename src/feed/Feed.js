@@ -83,7 +83,7 @@ class Feed {
             if (/^(MarketIsClosed|NoRealtimeQuotes)$/.test(errorCode)) {
                 // Although market is closed, we display the past tick history data
                 response = await this._binaryApi.getTickHistory(dataRequest);
-                this._mainStore.notification.notify({
+                this._mainStore.chart.notify({
                     text: t.translate('[symbol] market is presently closed.', tParams),
                     category: 'activesymbol',
                 });
@@ -91,7 +91,7 @@ class Feed {
                 if (!isComparisonChart) {
                     this._mainStore.chart.setChartAvailability(false);
                 }
-                this._mainStore.notification.notify({
+                this._mainStore.chart.notify({
                     text: t.translate('Streaming for [symbol] is not available due to license restrictions', tParams),
                     type: NotificationStore.TYPE_ERROR,
                     category: 'activesymbol',
