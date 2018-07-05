@@ -1,20 +1,21 @@
 import { observable, action, computed, when, reaction } from 'mobx';
 import { getTimeUnit, getIntervalInSeconds  } from './utils';
 import MenuStore from './MenuStore';
-import { chartTypes } from './ChartTypeStore';
+import { getChartTypes } from './ChartTypeStore';
 
+const chartTypes = getChartTypes();
 const notCandles = chartTypes
     .filter(t => !t.candleOnly)
     .map(t => t.id);
 
-const aggregateCharts  = chartTypes
+const aggregateCharts = chartTypes
     .filter(t => t.settingsOnClick);
 
 export default class TimeperiodStore {
     constructor(mainStore) {
         this.mainStore = mainStore;
         when(() => this.context, this.onContextReady);
-        this.menu = new MenuStore(mainStore);
+        this.menu = new MenuStore(mainStore, { route:'time-period' });
     }
 
     get context() { return this.mainStore.chart.context; }
@@ -38,7 +39,7 @@ export default class TimeperiodStore {
     countdownInterval = null;
     showCountdown = (callFromSettings = false) => {
         const stx = this.context.stx;
-        const isTick = this.timeUnit == 'tick';
+        const isTick = this.timeUnit === 'tick';
         const hasCountdown = !aggregateCharts.some(t => t.id === stx.layout.aggregationType);
         this.remain = null;
         if (this.countdownInterval) { clearInterval(this.countdownInterval); }
@@ -60,7 +61,7 @@ export default class TimeperiodStore {
 
         const setRemain = () => {
             const dataSet = stx.chart.dataSet;
-            if (dataSet && dataSet.length != 0) {
+            if (dataSet && dataSet.length !== 0) {
                 const diff = new Date() - dataSet[dataSet.length - 1].DT;
                 this.remain = displayMilliseconds((getIntervalInSeconds(stx.layout) * 1000) - diff);
                 stx.draw();
@@ -131,11 +132,8 @@ export default class TimeperiodStore {
 
     @computed get timeUnit_display() {
         if (!this.timeUnit) { return; }
-        let temp = this.timeUnit;
-        if (temp.length > 4) {
-            temp = (temp).slice(0, 3);
-        }
-        return temp.replace(/(\w)/, str => str.toUpperCase());
+        // Convert to camel case:
+        return t.translate(this.timeUnit.replace(/(\w)/, str => str.toUpperCase()));
     }
 
     @computed get interval_display() {

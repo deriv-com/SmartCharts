@@ -63,12 +63,12 @@ const shareOrigin = window.location.href.split('?')[0];
 
 class App extends React.Component {
     state = {
-        barrierType: undefined,
         highLow: {},
+        draggable: true,
     };
 
     onPriceLineDisableChange = (evt) => {
-        this.setState({ disablePriceLines: evt.target.checked });
+        this.setState({ hidePriceLines: evt.target.checked });
     };
 
 
@@ -78,6 +78,10 @@ class App extends React.Component {
 
     onRelativeChange = (evt) => {
         this.setState({ relative: evt.target.checked });
+    };
+
+    onDraggableChange = (evt) => {
+        this.setState({ draggable: evt.target.checked });
     };
 
     handleBarrierChange = (evt) => {
@@ -91,14 +95,16 @@ class App extends React.Component {
     };
 
     render() {
-        const { barrierType, highLow : { high, low }, disablePriceLines, relative } = this.state;
+        const { barrierType, highLow : { high, low }, hidePriceLines, draggable, relative } = this.state;
         const barriers = barrierType ? [{
             shade: barrierType,
-            onBarrierChange: this.handleBarrierChange,
+            shadeColor: 'red',
+            color: '#f44336',
+            onChange: this.handleBarrierChange,
             relative,
-            // draggable: false,
+            draggable,
             lineStyle: 'dotted',
-            hidePriceLines: disablePriceLines,
+            hidePriceLines,
             high,
             low,
         }] : [];
@@ -131,8 +137,9 @@ class App extends React.Component {
                         &nbsp;
                         <b>low:</b> <input id="low" type="number" value={low === undefined ? '' : low} onChange={this.onHighLowChange} />,
                         <b>high:</b> <input id="high" type="number" value={high === undefined ? '' : high} onChange={this.onHighLowChange} />;
-                        No PriceLine: <input type="checkbox" onChange={this.onPriceLineDisableChange} />
-                        Relative: <input type="checkbox" onChange={this.onRelativeChange} />
+                        No PriceLine: <input type="checkbox" checked={hidePriceLines === undefined ? '' : hidePriceLines} onChange={this.onPriceLineDisableChange} />
+                        Relative: <input type="checkbox" checked={relative === undefined ? '' : relative} onChange={this.onRelativeChange} />
+                        Draggable: <input type="checkbox" checked={draggable === undefined ? '' : draggable} onChange={this.onDraggableChange} />
                     </label>
                 </div>
             </div>

@@ -12,7 +12,7 @@ const formatCamelCase = (s) => {
 export default class DrawToolsStore {
     constructor(mainStore) {
         this.mainStore = mainStore;
-        this.menu = new MenuStore(mainStore);
+        this.menu = new MenuStore(mainStore, { route: 'draw-tool' });
         this.settingsDialog = new SettingsDialogStore({
             mainStore,
             onDeleted: this.onDeleted,
@@ -81,7 +81,7 @@ export default class DrawToolsStore {
         }
     };
 
-    onRightClick = () => {
+    @action.bound onRightClick() {
         for (const drawing of this.stx.drawingObjects) {
             if (drawing.highlighted && !drawing.permanent) {
                 const dontDeleteMe = drawing.abort(); // eslint-disable-line no-unused-vars
@@ -115,7 +115,7 @@ export default class DrawToolsStore {
             }
         }
         return false;
-    };
+    }
 
     noTool = () => {
         const count = this.stx.drawingObjects.length;

@@ -1,11 +1,14 @@
 import React from 'react';
+import { action } from 'mobx';
 import { connect } from '../store/Connect';
 import BarrierStore from '../store/BarrierStore';
 import PriceLine from './PriceLine.jsx';
 import Shade from './Shade.jsx';
+import { isValidProp } from '../store/utils';
 
 const Barrier = ({
-    barrierColor,
+    shadeColor,
+    color = '#000',
     HighPriceLine,
     LowPriceLine,
     aboveShade,
@@ -13,12 +16,13 @@ const Barrier = ({
     betweenShade,
     hidePriceLines,
     lineStyle,
-}) => (
+    isInitialized,
+}) => (isInitialized &&
     <div
-        className={`barrier ${barrierColor} ${hidePriceLines ? 'hide-pricelines' : ''}`}
+        className={`barrier ${shadeColor} ${hidePriceLines ? 'hide-pricelines' : ''}`}
     >
-        <HighPriceLine lineStyle={lineStyle} />
-        <LowPriceLine lineStyle={lineStyle} />
+        <HighPriceLine lineStyle={lineStyle} color={color} />
+        <LowPriceLine  lineStyle={lineStyle} color={color} />
         <Shade
             className="top-shade"
             top={aboveShade.top}
@@ -48,21 +52,26 @@ export default connect(
         aboveShade: store.aboveShade.clone(),
         belowShade: store.belowShade.clone(),
         betweenShade: store.betweenShade.clone(),
-        barrierColor: store.barrierColor,
+        shadeColor: store.shadeColor,
+        color: store.color,
         hidePriceLines: store.hidePriceLines,
         lineStyle: store.lineStyle,
+        isInitialized: store.isInitialized,
     }),
     (store, {
-        color, shade, high, low, relative, draggable, onBarrierChange, hidePriceLines, lineStyle,
+        color, shadeColor, shade, high, low, relative, draggable, onChange, hidePriceLines, lineStyle,
     }) => {
-        if (color) { store.barrierColor = color; }
-        if (shade) { store.shadeState = `SHADE_${shade}`.toUpperCase(); }
-        if (high !== undefined) { store.high_barrier = high; }
-        if (low !== undefined) { store.low_barrier = low; }
-        if (relative !== undefined) { store.relative = relative; }
-        if (draggable !== undefined) { store.draggable = draggable; }
-        if (onBarrierChange) { store.onBarrierChange = onBarrierChange; }
-        store.lineStyle = lineStyle;
-        store.hidePriceLines = !!hidePriceLines;
+        store.initializePromise.then(action(() => {
+            if (color) { store.color = color; }
+            if (shadeColor) { store.shadeColor = shadeColor; }
+            if (shade) { store.shadeState = `SHADE_${shade}`.toUpperCase(); }
+            if (isValidProp(high)) { store.high_barrier = high; }
+            if (isValidProp(low)) { store.low_barrier = low; }
+            if (relative !== undefined) { store.relative = relative; }
+            if (draggable !== undefined) { store.draggable = draggable; }
+            if (onChange) { store.onBarrierChange = onChange; }
+            store.lineStyle = lineStyle;
+            store.hidePriceLines = !!hidePriceLines;
+        }));
     },
 )(Barrier);
