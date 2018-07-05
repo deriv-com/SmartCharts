@@ -43,6 +43,7 @@ export default class AssetInformationStore {
         this.visible = value;
         this.stx.layout.assetInformation = value;
         this.mainStore.chart.saveLayout();
+        this.mainStore.chartSetting.saveSetting();
     }
 
     @observable visible = true;

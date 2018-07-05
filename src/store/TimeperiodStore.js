@@ -32,12 +32,14 @@ export default class TimeperiodStore {
 
         this.showCountdown();
 
-        reaction(() => this.timeUnit, () => { this.showCountdown(); });
-        reaction(() => this.interval, () => { this.showCountdown(); });
+        reaction(() => this.timeUnit, this.showCountdown);
+        reaction(() => this.interval, this.showCountdown);
     };
 
     countdownInterval = null;
     showCountdown = (callFromSettings = false) => {
+        if (!this.context) { return; }
+
         const stx = this.context.stx;
         const isTick = this.timeUnit === 'tick';
         const hasCountdown = !aggregateCharts.some(t => t.id === stx.layout.aggregationType);
@@ -82,12 +84,10 @@ export default class TimeperiodStore {
             if (callFromSettings) { setRemain(); }
 
             if (!this.countdownInterval) {
-                this.countdownInterval = setInterval(() => {
-                    setRemain();
-                }, 1000);
+                this.countdownInterval = setInterval(setRemain, 1000);
             }
         }
-    }
+    };
 
     @action.bound setPeriodicity(interval, timeUnit) {
         if (this.loader) {

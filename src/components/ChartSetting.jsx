@@ -64,7 +64,7 @@ const ChartSetting = ({
                         <div className="ciq-action">
                             <Switch
                                 value={(theme === 'dark')}
-                                onChange={setTheme}
+                                onChange={checked => setTheme(checked ? 'dark' : 'light')}
                             />
                         </div>
                     </div>
@@ -112,7 +112,7 @@ const ChartSetting = ({
                         <div
                             className={`ciq-list-item ${(selectedLanguage.key === language.key) ? 'selected' : ''}`}
                             key={index}
-                            onClick={() => setLanguage(language)}
+                            onClick={() => setLanguage(language.key)}
                         >
                             {language.icon}
                             <span className="ciq-icon-text">{language.name}</span>
