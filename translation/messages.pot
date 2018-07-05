@@ -80,22 +80,28 @@ msgstr ""
 msgid "Templates"
 msgstr ""
 
-msgid "Template already exist. would you like to overwrite it?"
-msgstr ""
-
-msgid "CANCEL"
-msgstr ""
-
-msgid "OVERWRITE"
-msgstr ""
-
 msgid "Template name"
+msgstr ""
+
+msgid "Add New"
 msgstr ""
 
 msgid "There is no template added by you."
 msgstr ""
 
 msgid "Click + icon to add one."
+msgstr ""
+
+msgid " is already exist."
+msgstr ""
+
+msgid "Would you like to overwrite it?"
+msgstr ""
+
+msgid "CANCEL"
+msgstr ""
+
+msgid "OVERWRITE"
 msgstr ""
 
 msgid "Comparison"
