@@ -16,7 +16,7 @@ export default class AssetInformationStore {
     get stx() { return this.context.stx; }
 
     onContextReady = () => {
-        const visible = this.stx.layout.assetInformation;
+        const visible = this.mainStore.chartSetting.assetInformation;
         this.visible = visible !== undefined ? visible : true;
         this.stx.prepend('headsUpHR', this.update);
         this.stx.prepend('createXAxis', this.update);
@@ -40,9 +40,8 @@ export default class AssetInformationStore {
     }
 
     @action.bound setVisible(value) {
+        if (this.visible === value) { return; }
         this.visible = value;
-        this.stx.layout.assetInformation = value;
-        this.mainStore.chart.saveLayout();
         this.mainStore.chartSetting.saveSetting();
     }
 
