@@ -112,32 +112,24 @@ html, body {
     transform: scale(1.2, 1.2);
 }
 
-.stx-btn-panel span { /* Button Icons */
-    background-image: url('icons/chart/stx-sprite-panels.svg');
-    opacity: .6;
-    -webkit-transition: opacity .2s;
-    -moz-transition: opacity .2s;
-    transition: opacity .2s;
-}
-
 .stx-btn-panel > span.stx-ico-up {
-    background-position: -154px -29px;
+    background: url('./icons/chart/ic-up.svg') no-repeat center;
 }
 
 .stx-btn-panel > span.stx-ico-down {
-    background-position: -203px -28px;
+    background: url('./icons/chart/ic-down.svg') no-repeat center;
 }
 
 .stx-btn-panel > span.stx-ico-close {
-    background-position: -252px -28px;
+    background: url('./icons/delete/ic-delete.svg') no-repeat center;
 }
 
 .stx-btn-panel > span.stx-ico-edit {
-    background-position: -303px -29px;
+    background: url('./icons/chart/ic-settings.svg') no-repeat center;
 }
 
 .stx-btn-panel > span.stx-ico-focus {
-    background-position: -350px -25px;
+    background: url('./icons/chart/ic-maximize.svg') no-repeat center;
 }
 
 /* --------------------------------------------------------- CHART CONTROLS --------------------------------------------------------- */
@@ -240,6 +232,22 @@ html, body {
     overflow: hidden;
     z-index: 30;
     display: none;
+    margin: 5px;
+    @include border-radius(3px);
+    @include themify($themes) {
+        background: themed('defaultMain');
+        border: 1px solid themed('defaultBorder');
+    }
+    .stx-panel-title{
+        box-shadow: none;
+        margin: 5px;
+        @include themify($themes) {
+            border-right: 1px solid themed('defaultBorder');
+        }
+    }
+    .stx-btn-panel{
+        opacity: 1;
+    }
 }
 
 .stx-panel-control * {
@@ -1059,26 +1067,3 @@ cq-language-name {
 .stx-chart-panel.stx-show { /* Hide default Chart Title and Icons */
     display: none;
 }
-.smartcharts-mobile{
-    .stx-panel-control{
-        margin: 5px;
-        @include border-radius(3px);
-        @include themify($themes) {
-            background: themed('defaultMain');
-            border: 1px solid themed('defaultBorder');
-        }
-        .stx-panel-title{
-            box-shadow: none;
-            margin: 5px;
-            @include themify($themes) {
-                border-right: 1px solid themed('borderColor');
-            }
-        }
-        .stx-btn-panel{
-            opacity: 1;
-        }
-    }
-}
-
-
-
