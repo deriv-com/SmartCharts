@@ -146,19 +146,19 @@
 	}
 }
 
-@media only screen and (min-width: 480px) {
+.smartcharts-480 {
     .ciq-period{
         width: 70px !important;
         top: -5px;
     }
 }
-@media only screen and (min-width: 900px) {
+.smartcharts-900 {
     .ciq-period{
         width: 80px !important;
         top: 0px;
     }
 }
-@media only screen and (min-width: 1100px) {
+.smartcharts-1100 {
     .ciq-period{
         width: 100px !important;
         top: 0px;

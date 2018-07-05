@@ -31,6 +31,7 @@ class ChartStore {
     chartControlsNode = null;
     chartContainerNode = null;
     holderStyle;
+    @observable containerWidth = null;
     @observable context = null;
     @observable currentActiveSymbol;
     @observable isChartAvailable = true;
@@ -112,6 +113,18 @@ class ChartStore {
         if (!this.context) { return; }
         this.updateHeight();
         this.stxx.resizeChart();
+
+        if (this.rootNode.clientWidth > 1100) {
+            this.containerWidth = 1100;
+        } else if (this.rootNode.clientWidth > 900) {
+            this.containerWidth = 900;
+        } else if (this.rootNode.clientWidth > 480) {
+            this.containerWidth = 480;
+        } else {
+            this.containerWidth = 1100;
+        }
+
+
         if (this.stxx.slider) {
             this.stxx.slider.display(this.stxx.layout.rangeSlider);
         }

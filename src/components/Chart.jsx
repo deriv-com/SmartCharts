@@ -60,6 +60,7 @@ class Chart extends Component {
             topWidgets,
             showCountdown = false,
             chartContainerHeight,
+            containerWidth,
         } = this.props;
 
         const currentLang = lang || ((setting && setting.language) ? setting.language.key : 'en');
@@ -81,7 +82,7 @@ class Chart extends Component {
         return (
             <cq-context
                 ref={(root) => { this.root = root; }}
-                class={`smartcharts-${(typeof theme === 'string') ? theme : defaultTheme}`}
+                class={`smartcharts-${(typeof theme === 'string') ? theme : defaultTheme} smartcharts-${containerWidth}`}
             >
                 <div className={`${currentMode} ${currentPosition}`}>
                     <div className="ciq-chart-area">
@@ -132,4 +133,5 @@ export default connect(({ chart, drawTools, studies, chartSetting, chartType }) 
     chartPanelTop: chart.chartPanelTop,
     setting: chartSetting,
     chartContainerHeight: chart.chartContainerHeight,
+    containerWidth: chart.containerWidth,
 }))(Chart);
