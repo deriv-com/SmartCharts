@@ -8,50 +8,53 @@
 		.title {
 			display: flex;
 			align-items: center;
-			flex-direction: row;
-			height: 40px;
-			padding: 5px 10px;
+			height: 32px;
+			padding: 0 0 0 14px;
+			@include themify($themes) {
+				border: 1px solid themed(defaultBorder);
+			}
 			@include box-sizing(border-box);
 			.icon {
 				display: flex;
-				flex: 8 0 0;
-				justify-content: flex-end
-			}
-			.add {
-				margin-bottom: 1px;
-				display: flex;
-				.ic-icon {
-					flex: 1 0 0;
-					position: relative;
-					right: 20px;
+				justify-content: flex-end;
+				.tick-icon {
+					@include svg-icon-stroke('controlText');
+				}
+				.add-icon{
 					@include svg-icon-color('controlText');
 				}
 			}
-			.view-input {
+			.add {
+				display: flex;
+				flex-grow: 8;
+				.ic-icon {
+					@include svg-icon-color('controlText');
+				}
+			}
+			.add-new {
 				flex: 8 0 0;
+				cursor: pointer;
+			}
+			.view-input {
 				font-size: 12px;
 				font-weight: normal;
 				width: 100%;
-				padding: 0 30px 0 0;
-				line-height: 24px;
+				padding: 0 30px 0 5px;
 				border: none;
 				outline: none;
-				border-bottom: 1px solid #4b5794;
 				@include themify($themes) {
 					color: themed('controlText');
 					background-color: themed('defaultMain');
 				}
 			}
-			.readonly{
-				pointer-events: none;
-			}
 		}
 		.content {
 			display: block;
-			height: 135px;
+			height: 145px;
 			overflow: scroll;
 			padding: 16px;
 			.ciq-list{
+				height: auto;
 				.ciq-list-item{
 					align-items: center;
 					justify-content: flex-start;
@@ -76,6 +79,10 @@
 						opacity: 0;
 						transition: opacity 0.15s .2s;
 						@include svg-icon-color('controlText');
+					}
+					&:first-child
+					{
+						border-top: none;
 					}
 				}
 			}

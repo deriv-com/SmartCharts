@@ -15,9 +15,9 @@ export default class ViewStore {
         current: 'main',
         add: () => this.saveViews(),
         main: () => this.updateRoute('add'),
-        cancel: () => this.updateRoute('main'),
+        cancel: () => this.onCancel(),
         overwrite: () => this.overwrite(),
-        cancelOverwrite: () => this.cancelOverwrite()
+        cancelOverwrite: () => this.cancelOverwrite(),
     };
 
     get context() { return this.mainStore.chart.context; }
@@ -43,9 +43,13 @@ export default class ViewStore {
         }
     }
 
+    @action.bound onCancel() {
+        this.templateName = '';
+        this.updateRoute('main');
+    }
+
     @action.bound cancelOverwrite() {
         this.updateRoute('add');
-        //?return this.overwriteAlert.setOpen(false);
     }
 
     @action.bound updateRoute(name) {
@@ -53,11 +57,9 @@ export default class ViewStore {
     }
 
     @action.bound saveViews() {
-        if (this.views.some(x=>x.name.toLowerCase() === this.templateName.toLowerCase())){
-            //?this.overwriteAlert.setOpen(true);
+        if (this.views.some(x => x.name.toLowerCase() === this.templateName.toLowerCase())) {
             this.updateRoute('overwrite');
-        }
-        else if (this.templateName.length > 0) {
+        } else if (this.templateName.length > 0) {
             this.updateRoute('main');
             const layout = this.stx.exportLayout();
             this.views.push({ name: this.templateName, layout });
@@ -68,13 +70,12 @@ export default class ViewStore {
 
     @action.bound overwrite() {
         const layout = this.stx.exportLayout();
-        var templateIndex = this.views.findIndex(x => x.name.toLowerCase() === this.templateName.toLowerCase());
+        const templateIndex = this.views.findIndex(x => x.name.toLowerCase() === this.templateName.toLowerCase());
         this.views[templateIndex].layout = layout;
         this.views[templateIndex].name = this.templateName;
         this.updateLocalStorage();
         this.updateRoute('main');
         this.templateName = '';
-        //?this.overwriteAlert.setOpen(false);
     }
 
     @action.bound remove(idx, e) {
@@ -100,6 +101,9 @@ export default class ViewStore {
     }
 
     inputRef = (ref) => {
-        if (ref) { ref.focus(); }
+        if (ref) {
+            ref.value = this.templateName;
+            ref.focus();
+        }
     }
 }

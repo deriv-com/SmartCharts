@@ -12,11 +12,11 @@ export default class DialogStore {
 
     @observable open = false;
 
-    setOpen = debounce((val , isParentDialog = true) => {
-        this.openDialog(val , isParentDialog );
+    setOpen = debounce((val, isParentDialog = true) => {
+        this.openDialog(val, isParentDialog);
     }, 300, { leading: true, trailing: false });
 
-    @action.bound openDialog(val , isParentDialog) {
+    @action.bound openDialog(val, isParentDialog) {
         if (this.open !== val) {
             this.open = val;
             if (this.open) { this.register(); } else { this.unregister(); }
@@ -29,7 +29,7 @@ export default class DialogStore {
                     activeDialog = undefined;
                 }
             }
-       }
+        }
     }
 
     handleClickOutside = (e) => {

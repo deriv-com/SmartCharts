@@ -2,12 +2,12 @@ import React from 'react';
 import Menu from './Menu.jsx';
 import { connect } from '../store/Connect';
 import {
-    CloseIcon,
+    BackIcon,
     TemplateIcon,
     AddIcon,
     TickIcon,
     DeleteIcon,
-    alertIconMap
+    alertIconMap,
 } from './Icons.jsx';
 import '../../sass/components/_view.scss';
 
@@ -26,21 +26,15 @@ const Views = ({
     Menu,
     menuOpen,
     views,
-    routes: { current: currentRoute, add, main, overwrite, cancel , cancelOverwrite },
+    routes: { current: currentRoute, add, main, overwrite, cancel, cancelOverwrite },
     onChange,
     onSubmit,
     applyLayout,
     remove,
     inputRef,
+    templateName,
 }) => (
     <div className="ciq-views">
-        {/* <OverwriteAlert
-            alertTitle={t.translate('Template already exist. would you like to overwrite it?')}
-            closeDisplay={t.translate('CANCEL')}
-            sureDisplay={t.translate('OVERWRITE')} 
-            onSure={overwrite}
-            onClose={overwriteAlertClose}>
-        </OverwriteAlert> */}
         <Menu>
             <Menu.Title className="cq-menu-btn">
                 <TemplateIcon
@@ -49,58 +43,59 @@ const Views = ({
                 />
             </Menu.Title>
             <Menu.Body>
-                <div className="title">
-                    {
-                        currentRoute === 'add' || currentRoute === 'overwrite' ?
-                            <span className={`add ${currentRoute === 'overwrite' ? 'readonly' :''}`}>
-                                <input
-                                    ref={inputRef}
-                                    className="view-input"
-                                    placeholder={t.translate('Template name')}
-                                    maxLength={20}
-                                    onChange={onChange}
-                                    onKeyUp={onSubmit}
-                                />
-                                <CloseIcon onClick={cancel} />
-                            </span>
-                            : t.translate('Templates')
-                    }
-                    <span className="icon">
-                        {
-                            currentRoute === 'add' || currentRoute === 'overwrite'
-                                // TODO: change this to tick icon.
-                                ? <TickIcon className="ic-clear stroke" onClick={add} />
-                                : <AddIcon className="ic-clear fill" onClick={main} />
-                        }
-                    </span>
-                </div>
                 <div className="content">
                     {
                         currentRoute !== 'overwrite' ?
-                            <div className="ciq-list">
-                                {
-                                    views.length
-                                        ? views.map((view, i) => (
-                                            <ViewItem
-                                                view={view}
-                                                key={i}
-                                                onClick={e => applyLayout(i, e)}
-                                                remove={e => remove(i, e)}
-                                            />
-                                        ))
-                                        :
-                                        <span className="placeholder">
-                                            <p>{t.translate('There is no template added by you.')}</p>
-                                            <p>{t.translate('Click + icon to add one.')}</p>
-                                        </span>
-                                }
+                            <div>
+                                <div className="title">
+                                    {
+                                        currentRoute === 'add' ?
+                                            <span className="add">
+                                                <BackIcon onClick={cancel} />
+                                                <input
+                                                    ref={inputRef}
+                                                    className="view-input"
+                                                    placeholder={t.translate('Template name')}
+                                                    maxLength={20}
+                                                    onChange={onChange}
+                                                    onKeyUp={onSubmit}
+                                                />
+                                            </span>
+                                            : <span className="add-new" onClick={main}> {t.translate('Add New')} </span>
+                                    }
+                                    <span className="icon">
+                                        {
+                                            currentRoute === 'add'
+                                                ? <TickIcon className="tick-icon" onClick={add} />
+                                                : <AddIcon className="add-icon" onClick={main} />
+                                        }
+                                    </span>
+                                </div>
+                                <div className="ciq-list">
+                                    {
+                                        views.length
+                                            ? views.map((view, i) => (
+                                                <ViewItem
+                                                    view={view}
+                                                    key={i}
+                                                    onClick={e => applyLayout(i, e)}
+                                                    remove={e => remove(i, e)}
+                                                />
+                                            ))
+                                            :
+                                            <span className="placeholder">
+                                                <p>{t.translate('There is no template added by you.')}</p>
+                                                <p>{t.translate('Click + icon to add one.')}</p>
+                                            </span>
+                                    }
+                                </div>
                             </div>
-                        :
-                            <div className='ovrwrit-alrt'>
+                            :
+                            <div className="ovrwrit-alrt">
                                 <div className="ovrwrit-alrt-title">
-                                    <alertIconMap.warning/>
+                                    <alertIconMap.warning />
                                     <span>
-                                        {t.translate('Template already exist.')}
+                                        {templateName + t.translate(' is already exist.')}
                                     </span>
                                     <span>
                                         {t.translate('Would you like to overwrite it?')}
@@ -111,7 +106,7 @@ const Views = ({
                                         {t.translate('CANCEL')}
                                     </div>
                                     <div onClick={overwrite}>
-                                        {t.translate('OVERWRITE')} 
+                                        {t.translate('OVERWRITE')}
                                     </div>
                                 </div>
                             </div>
@@ -119,7 +114,7 @@ const Views = ({
                 </div>
             </Menu.Body>
         </Menu>
-   </div>
+    </div>
 );
 
 export default connect(({ view: s }) => ({
@@ -134,4 +129,5 @@ export default connect(({ view: s }) => ({
     applyLayout: s.applyLayout,
     menuOpen: s.menu.dialog.open,
     inputRef: s.inputRef,
+    templateName :s.templateName,
 }))(Views);
