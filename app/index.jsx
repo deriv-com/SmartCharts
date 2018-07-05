@@ -1,8 +1,5 @@
 import { // eslint-disable-line import/no-extraneous-dependencies,import/no-unresolved
     SmartChart,
-    // Barrier,
-    // TradeStartLine,
-    // TradeEndLine,
     ChartTypes,
     StudyLegend,
     Comparison,
