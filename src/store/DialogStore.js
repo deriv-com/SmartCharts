@@ -12,22 +12,20 @@ export default class DialogStore {
 
     @observable open = false;
 
-    setOpen = debounce((val, isParentDialog = true) => {
-        this.openDialog(val, isParentDialog);
+    setOpen = debounce((val) => {
+        this.openDialog(val);
     }, 300, { leading: true, trailing: false });
 
-    @action.bound openDialog(val, isParentDialog) {
+    @action.bound openDialog(val) {
         if (this.open !== val) {
             this.open = val;
             if (this.open) { this.register(); } else { this.unregister(); }
 
-            if (isParentDialog) {
-                if (val === true) { // close active dialog.
-                    if (activeDialog) { activeDialog.openDialog(false); }
-                    activeDialog = this;
-                } else {
-                    activeDialog = undefined;
-                }
+            if (val === true) { // close active dialog.
+                if (activeDialog) { activeDialog.openDialog(false); }
+                activeDialog = this;
+            } else {
+                activeDialog = undefined;
             }
         }
     }
