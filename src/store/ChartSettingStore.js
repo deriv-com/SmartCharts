@@ -82,6 +82,8 @@ export default class ChartSettingStore {
         if (language  !== undefined) { this.setLanguage(language); }
 
         if (assetInformation !== undefined) {
+            // asset information cannot be set without context, so we store its
+            // value here for AssetInformationStore to access in onContextReady
             this.assetInformation = assetInformation;
             if (this.context) {
                 this.mainStore.assetInformation.setVisible(assetInformation);
