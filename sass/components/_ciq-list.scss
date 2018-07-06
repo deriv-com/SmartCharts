@@ -30,11 +30,6 @@
 				background-color: themed('listBgActive');
 			}
 		}
-		&.selected {
-			@include themify($themes) {
-				background-color: themed('listBgSelected');
-			}
-		}
 		&.disabled {
 			pointer-events: none;
 			>* {
