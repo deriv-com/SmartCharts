@@ -52,6 +52,7 @@ export default class CategoricalDisplayStore {
         emptyDescription: t.translate('There are no favorites yet.'),
         data: [],
     };
+    @observable hideLookupFilter = false;
     scrollTop = undefined;
 
     get context() {
@@ -104,6 +105,7 @@ export default class CategoricalDisplayStore {
             idx--;
         }
         this.activeCategoryKey = id || this.filteredItems[0].categoryId;
+        this.hideLookupFilter = this.scrollTop < this.scrollPanel.scrollTop;
         this.scrollTop = this.scrollPanel.scrollTop;
     }
 
@@ -310,5 +312,6 @@ export default class CategoricalDisplayStore {
         favoritesMap: this.favoritesMap,
         favoritesId: this.favoritesId,
         CloseUpperMenu: this.CloseUpperMenu,
+        hideLookupFilter: this.hideLookupFilter,
     }))
 }
