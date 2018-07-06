@@ -1,5 +1,4 @@
 import EventEmitter from 'event-emitter-es6';
-import NotificationStore from '../store/NotificationStore';
 import { TickHistoryFormatter } from './TickHistoryFormatter';
 import PendingPromise from '../utils/PendingPromise';
 
@@ -75,7 +74,7 @@ class Feed {
         let response = await tickHistoryPromise;
 
         // Clear all notifications related to active symbols
-        this._mainStore.notification.removeByCategory('activesymbol');
+        // this._mainStore.notification.removeByCategory('activesymbol');
 
         if (response.error) {
             const errorCode = response.error.code;
@@ -93,7 +92,7 @@ class Feed {
                 }
                 this._mainStore.chart.notify({
                     text: t.translate('Streaming for [symbol] is not available due to license restrictions', tParams),
-                    type: NotificationStore.TYPE_ERROR,
+                    type: 'error',
                     category: 'activesymbol',
                 });
                 callback({ quotes: [] });

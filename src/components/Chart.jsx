@@ -16,7 +16,6 @@ import './ui';
 
 import ChartControls from './ChartControls.jsx';
 import SettingsDialog from './SettingsDialog.jsx';
-import Notification from './Notification.jsx';
 import Crosshair from './Crosshair.jsx';
 import { connect } from '../store/Connect';
 
@@ -25,7 +24,6 @@ const defaultTopWidgets = () => (
         <ChartTitle />
         <AssetInformation />
         <ComparisonList />
-        <Notification />
     </Fragment>
 );
 

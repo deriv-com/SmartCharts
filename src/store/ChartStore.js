@@ -52,9 +52,6 @@ class ChartStore {
     get routingStore() {
         return this.mainStore.routing;
     }
-    get notificationStore() {
-        return this.mainStore.notification;
-    }
     saveLayout() {
         const layoutData = this.stxx.exportLayout(true);
         const json = JSON.stringify(layoutData);
@@ -113,11 +110,7 @@ class ChartStore {
     }
 
     notify(message) {
-        if (this.messaging) {
-            this.messaging(message);
-        } else {
-            this.notificationStore.notify(message);
-        }
+        this.messaging(message);
     }
 
     @action.bound resizeScreen() {
