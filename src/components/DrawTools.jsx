@@ -32,6 +32,7 @@ const DrawTools = ({
                         tooltip-title={t.translate('Clear All')}
                     />
                     <MeasureIcon
+                        style={{ display: 'none' /* TODO: measurement tool doesn't show measurement */ }}
                         className="ciq-tooltip"
                         onClick={() => selectTool('measure')}
                         tooltip-title={t.translate('Measure')}

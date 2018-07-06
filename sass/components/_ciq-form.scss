@@ -8,8 +8,8 @@
     .slider {
         width: 120px;
         height: 10px;
-        display: relative;
         cursor: pointer;
+        touch-action: manipulation;
     }
 	.handle {
         width: 10px;
