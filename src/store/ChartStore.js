@@ -8,6 +8,7 @@ import KeystrokeHub from '../components/ui/KeystrokeHub';
 import '../components/ui/Animation';
 import { BinaryAPI, Feed } from '../feed';
 import { createObjectFromLocalStorage } from '../utils';
+import { RangeSlider } from './RangeSlider';
 
 // import '../AddOns';
 
@@ -112,8 +113,8 @@ class ChartStore {
         if (!this.context) { return; }
         this.updateHeight();
         this.stxx.resizeChart();
-        if (this.stxx.slider) {
-            this.stxx.slider.display(this.stxx.layout.rangeSlider);
+        if (this.stxx.slider) { // TODO: updating slider should be affected by chart settings
+            this.stxx.slider.display(true);
         }
     }
 
@@ -155,6 +156,12 @@ class ChartStore {
             minimumZoomTicks: 20,
             yTolerance: 999999, // disable vertical scrolling
         });
+        window.stxx = stxx;
+        this.slider = new RangeSlider({
+            stx: stxx,
+            height:95,
+        });
+        this.slider.display(true);
 
         const deleteElement = stxx.chart.panel.holder.parentElement.querySelector('#mouseDeleteText');
         const manageElement = stxx.chart.panel.holder.parentElement.querySelector('#mouseManageText');
