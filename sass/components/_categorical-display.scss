@@ -325,14 +325,13 @@
             width: 100%;
             border-right: none;
             height: 100px;
-            transition: height .2s ease-in;
+            @include transition(height .2s ease-in);
             @include themify($themes) {
                 border-bottom: 1px solid themed('defaultBorder');
             }
             &.hide{
                 height: 0;
-                transition: height .2s ease-out;
-                overflow: hidden;
+                @include transition(height .2s ease-out);
             }
         }
        
