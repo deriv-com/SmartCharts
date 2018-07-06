@@ -10,6 +10,9 @@ import { // eslint-disable-line import/no-extraneous-dependencies,import/no-unre
     DrawTools,
     ChartSetting,
     Share,
+    ChartTitle,
+    AssetInformation,
+    ComparisonList,
 } from '@binary-com/smartcharts'; // eslint-disable-line import/no-unresolved
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -17,6 +20,7 @@ import { configure } from 'mobx';
 import './app.scss';
 import './doorbell';
 import { ConnectionManager, StreamManager } from './connection';
+import Notification from './libs/Notification.jsx';
 
 if (window.location.host.endsWith('binary.com')) {
     window._trackJs = { token: '346262e7ffef497d85874322fff3bbf8', application: 'smartcharts' };
@@ -46,7 +50,6 @@ const connectionManager = new ConnectionManager({
 });
 
 const streamManager = new StreamManager(connectionManager);
-
 const renderControls = () => (
     <React.Fragment>
         {CIQ.isMobile ? '' : <CrosshairToggle />}
@@ -61,29 +64,42 @@ const renderControls = () => (
         <ChartSetting />
     </React.Fragment>
 );
-
 const requestAPI = connectionManager.send.bind(connectionManager);
 const requestSubscribe = streamManager.subscribe.bind(streamManager);
 const requestForget = streamManager.forget.bind(streamManager);
 const shareOrigin = window.location.href.split('?')[0];
+function Notifier() {
+    this.messages = [];
+    this.notify = (message) => {
+        message.id = (new Date()).getTime();
+        /**
+         * 'warning' | 'error' | 'message' | 'success',
+         */
+        message.type = message.type || 'warning';
+        message.hide = false;
 
-/**
-* 'warning' | 'error' | 'message' | 'success',
-*/
-const DummyMessage = (level, message, error_code) => {
-    console.log({
-        error_code,
-        message,
-        level,
-    });
-};
-
+        this.messages.push(message);
+    };
+    this.remove = (id) => {
+        this.messages = this.messages.filter(item => item.id !== id);
+    };
+}
+const n = new Notifier();
+const renderTopWidgets = () => (
+    <React.Fragment>
+        <ChartTitle />
+        <AssetInformation />
+        <ComparisonList />
+        <Notification notifier={n} />
+    </React.Fragment>
+);
 const App = () => (
     <SmartChart
         onSymbolChange={symbol => console.log('Symbol has changed to:', symbol)}
-        onMessage={DummyMessage}
+        onMessage={n.notify}
         isMobile={CIQ.isMobile}
         enableRouting
+        topWidgets={renderTopWidgets}
         chartControlsWidgets={renderControls}
         requestAPI={requestAPI}
         requestSubscribe={requestSubscribe}
@@ -91,7 +107,6 @@ const App = () => (
         shareOrigin={shareOrigin}
     />
 );
-
 ReactDOM.render(
     <App />,
     document.getElementById('root'),

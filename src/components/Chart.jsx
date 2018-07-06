@@ -25,6 +25,7 @@ const defaultTopWidgets = () => (
         <ChartTitle />
         <AssetInformation />
         <ComparisonList />
+        <Notification />
     </Fragment>
 );
 
@@ -115,7 +116,6 @@ class Chart extends Component {
                     <DrawToolsSettingsDialog />
                     <AggregateChartSettingsDialog />
                     <StudySettingsDialog />
-                    <Notification />
                 </div>
             </cq-context>
         );
