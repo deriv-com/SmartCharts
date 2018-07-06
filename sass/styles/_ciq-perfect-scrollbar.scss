@@ -94,17 +94,6 @@
     width: 11px;
 }
 
-.cq-scroll-panel{
-    .ps__thumb-y {
-        opacity: 0;
-    }
-    &.ps--scrolling-y{
-        .ps__thumb-y {
-            opacity: 1 !important;
-        }   
-    }   
-}
-
 /* MS supports */
 @supports (-ms-overflow-style: none) {
     .ps {
