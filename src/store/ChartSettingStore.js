@@ -66,7 +66,7 @@ export default class ChartSettingStore {
     ];
     defaultLanguage = {};
     onSettingsChange;
-    assetInformation = true;
+    @observable assetInformation = true;
     @observable view = '';
     @observable language = this.languages[0];
     @observable position = 'bottom';
@@ -76,19 +76,11 @@ export default class ChartSettingStore {
     @action.bound setSettings(settings) {
         if (settings === undefined) { return; }
         const { theme, position, countdown, language, assetInformation } = settings;
-        if (theme     !== undefined) { this.setTheme(theme); }
-        if (position  !== undefined) { this.setPosition(position); }
-        if (countdown !== undefined) { this.showCountdown(countdown); }
-        if (language  !== undefined) { this.setLanguage(language); }
-
-        if (assetInformation !== undefined) {
-            // asset information cannot be set without context, so we store its
-            // value here for AssetInformationStore to access in onContextReady
-            this.assetInformation = assetInformation;
-            if (this.context) {
-                this.mainStore.assetInformation.setVisible(assetInformation);
-            }
-        }
+        if (theme            !== undefined) { this.setTheme(theme); }
+        if (position         !== undefined) { this.setPosition(position); }
+        if (countdown        !== undefined) { this.showCountdown(countdown); }
+        if (language         !== undefined) { this.setLanguage(language); }
+        if (assetInformation !== undefined) { this.setAssetInformation(assetInformation); }
     }
 
     saveSetting() {
@@ -98,7 +90,7 @@ export default class ChartSettingStore {
                 position: this.position,
                 theme: this.theme,
                 countdown: this.countdown,
-                assetInformation: this.mainStore.assetInformation.visible,
+                assetInformation: this.assetInformation,
             });
         }
     }
@@ -136,6 +128,12 @@ export default class ChartSettingStore {
             this.mainStore.chart.resizeScreen();
         }, 10);
         this.menu.setOpen(false);
+    }
+
+    @action.bound setAssetInformation(value) {
+        if (this.assetInformation === value) { return; }
+        this.assetInformation = value;
+        this.saveSetting();
     }
 
     @action.bound showCountdown(value) {
