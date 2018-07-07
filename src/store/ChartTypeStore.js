@@ -97,7 +97,6 @@ export default class ChartTypeStore {
         this.menu = new MenuStore(mainStore, { route:'chart-type' });
 
         this.list = new ListStore({
-            getIsOpen: () => this.menu.open,
             getContext: () => this.context,
             onItemSelected: item => this.setType(item),
             getItems: () => this.types,
