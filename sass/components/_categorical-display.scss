@@ -321,17 +321,20 @@
     .cq-categorical-display{
         flex-direction: column;
         width: 100%;
+        display: inline;
         .cq-lookup-filters {
             width: 100%;
             border-right: none;
-            height: 100px;
-            @include transition(height .2s ease-in);
+            height: auto;
+            max-height: 200px;
+            overflow: hidden;
+            @include transition(max-height .2s ease-in);
             @include themify($themes) {
                 border-bottom: 1px solid themed('defaultBorder');
             }
             &.hide{
-                height: 0;
-                @include transition(height .2s ease-out);
+                max-height: 0;
+                @include transition(max-height .2s ease-out);
             }
         }
        

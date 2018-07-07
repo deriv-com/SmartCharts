@@ -105,7 +105,7 @@ export default class CategoricalDisplayStore {
             idx--;
         }
         this.activeCategoryKey = id || this.filteredItems[0].categoryId;
-        this.hideLookupFilter = this.scrollTop < this.scrollPanel.scrollTop;
+        this.hideLookupFilter = !this.scrollTop || (this.scrollTop < this.scrollPanel.scrollTop);
         this.scrollTop = this.scrollPanel.scrollTop;
     }
 
