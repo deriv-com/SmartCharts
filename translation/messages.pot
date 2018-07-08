@@ -86,12 +86,6 @@ msgstr ""
 msgid "Add New"
 msgstr ""
 
-msgid "There is no template added by you."
-msgstr ""
-
-msgid "Click + icon to add one."
-msgstr ""
-
 msgid " is already exist."
 msgstr ""
 

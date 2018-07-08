@@ -82,20 +82,14 @@ const Views = ({
                                 </div>
                                 <div className="ciq-list">
                                     {
-                                        views.length
-                                            ? views.map((view, i) => (
-                                                <ViewItem
-                                                    view={view}
-                                                    key={i}
-                                                    onClick={e => applyLayout(i, e)}
-                                                    remove={e => remove(i, e)}
-                                                />
-                                            ))
-                                            :
-                                            <span className="placeholder">
-                                                <p>{t.translate('There is no template added by you.')}</p>
-                                                <p>{t.translate('Click + icon to add one.')}</p>
-                                            </span>
+                                        views.map((view, i) => (
+                                            <ViewItem
+                                                view={view}
+                                                key={i}
+                                                onClick={e => applyLayout(i, e)}
+                                                remove={e => remove(i, e)}
+                                            />
+                                        ))
                                     }
                                 </div>
                             </div>
