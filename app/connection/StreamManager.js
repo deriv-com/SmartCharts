@@ -13,6 +13,7 @@ class StreamManager {
         this._streamIds = { };
         this._subscriptionData = { };
         this._inProgress = { };
+        this._beingForgotten = { };
         this._initialize();
         this._callbacks = new Map();
     }
@@ -24,7 +25,7 @@ class StreamManager {
                 if (this._emitters[key]) {
                     this._streamIds[key] = data[msgType].id;
                     this._emitters[key].emit(Stream.EVENT_STREAM, data);
-                } else {
+                } else if (this._beingForgotten[key] === undefined) {
                     console.error(`LEAKING STREAM ON ${msgType} => symbol: ${symbol}, granularity: ${granularity}`); // eslint-disable-line
                 }
             });
@@ -93,7 +94,11 @@ class StreamManager {
         if (this._streamIds[key]) {
             const id = this._streamIds[key];
             delete this._streamIds[key];
-            this._connection.send({ forget: id });
+            this._beingForgotten[key] = true;
+            this._connection.send({ forget: id })
+                .then(() => {
+                    delete this._beingForgotten[key];
+                });
         }
         if (this._subscriptionData[key]) {
             delete this._subscriptionData[key];
