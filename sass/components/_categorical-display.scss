@@ -338,9 +338,6 @@
                 max-height: 0;
                 @include transition(max-height .2s ease-out);
             }
-            .cq-scroll-panel .category:last-child {	
-                padding-bottom :5em;
-            }
         }
         .cq-lookup-input  {
             margin: 1.2em 1em 0.5em 1em;
