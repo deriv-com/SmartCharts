@@ -54,7 +54,7 @@ export default class CategoricalDisplayStore {
     };
     @observable hideLookupFilter = false;
     scrollTop = undefined;
-
+    autoHideLookupFilter = true;
     get context() {
         return this.mainStore.chart.context;
     }
@@ -105,8 +105,16 @@ export default class CategoricalDisplayStore {
             idx--;
         }
         this.activeCategoryKey = id || this.filteredItems[0].categoryId;
-        this.hideLookupFilter = !this.scrollTop || (this.scrollTop < this.scrollPanel.scrollTop);
         this.scrollTop = this.scrollPanel.scrollTop;
+    }
+
+    @action.bound scrollUp() {
+        this.hideLookupFilter = false;
+    }
+
+    @action.bound scrollDown() {
+        this.hideLookupFilter = this.autoHideLookupFilter;
+        this.autoHideLookupFilter = true;
     }
 
     @action.bound init() {
@@ -114,6 +122,8 @@ export default class CategoricalDisplayStore {
         this.scroll = new PerfectScrollbar(this.scrollPanel);
 
         this.scrollPanel.addEventListener('ps-scroll-y', this.updateScrollSpy.bind(this));
+        this.scrollPanel.addEventListener('ps-scroll-up', this.scrollUp.bind(this));
+        this.scrollPanel.addEventListener('ps-scroll-down', this.scrollDown.bind(this));
 
         // Select first non-empty category:
         if (this.activeCategoryKey === '' && this.filteredItems.length > 0) {
@@ -206,6 +216,7 @@ export default class CategoricalDisplayStore {
 
     @action.bound setFilterText(filterText) {
         this.filterText = filterText;
+        this.autoHideLookupFilter = false;
         setTimeout(() => {
             this.scroll.update();
             this.updateScrollSpy();
@@ -223,6 +234,7 @@ export default class CategoricalDisplayStore {
         if (el) {
             // TODO: Scroll animation
             this.pauseScrollSpy = true;
+            this.autoHideLookupFilter = false;
             this.scroll.element.scrollTop = el.offsetTop;
             this.activeCategoryKey = category.categoryId;
             // scrollTop takes some time to take affect, so we need

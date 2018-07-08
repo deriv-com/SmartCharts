@@ -103,7 +103,7 @@ const CategoricalDisplay = ({
     return (
         <div className={`cq-categorical-display ${hideLookupFilter ? 'hide-lookup-filters' : ''}`}>
             {renderMobileTitle()}
-            <div className="cq-lookup-filters" >
+            <div className="cq-lookup-filters">
                 <div className={`cq-lookup-input ${filterText.trim() !== '' ? 'active' : ''}`}>
                     <input
                         ref={el =>  setSearchInput(el)}
