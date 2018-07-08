@@ -43,6 +43,9 @@
 			.icon {
 				display: flex;
 				justify-content: flex-end;
+				&.hide{
+					display: none;
+				}
 				.tick-icon {
 					@include svg-icon-stroke('controlText');
 				}
