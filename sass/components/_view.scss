@@ -136,7 +136,9 @@
 		.ovrwrit-alrt-buttons {
 			display:flex;
 			justify-content: flex-end;
-			margin-top: 16px;
+			position: absolute;
+			bottom: 25px;
+			right: 30px;
 			font-weight: bold;
 			>div{
 				width: 90px;
