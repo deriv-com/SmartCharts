@@ -97,6 +97,7 @@ export default class ViewStore {
 
     inputRef = (ref) => {
         if (ref) {
+            ref.value = this.templateName;
             ref.focus();
         }
     }
