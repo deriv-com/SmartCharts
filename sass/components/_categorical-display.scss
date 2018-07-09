@@ -332,7 +332,7 @@
             @include themify($themes) {
                 border-bottom: 1px solid themed('defaultBorder');
             }
-            &.hide {
+            &.scroll-down {
                 max-height: 0;
                 @include transition(max-height .2s ease-out);
             }
