@@ -23,102 +23,114 @@ const ViewItem = ({
     </div>
 );
 
-const Views = ({
-    Menu,
-    menuOpen,
-    views,
-    routes: { current: currentRoute, add, main, overwrite, cancel },
-    onChange,
-    onSubmit,
-    applyLayout,
-    remove,
-    inputRef,
-    templateName,
-    closeMenu,
-}) => (
-    <div className="ciq-views">
-        <Menu>
-            <Menu.Title className="cq-menu-btn">
-                <TemplateIcon
-                    className={`ic-icon-with-sub ${menuOpen ? 'active' : ''}`}
-                    tooltip-title={t.translate('Templates')}
-                />
-            </Menu.Title>
-            <Menu.Body>
-                <div className="title">
-                    <div className="title-text">{t.translate('Templates')}</div>
-                    <CloseIcon
-                        className="icon-close-menu"
-                        onClick={() => closeMenu()}
-                    />
-                </div>
-                <div className="content">
-                    {
-                        currentRoute !== 'overwrite' ?
-                            <div>
-                                <div className="template-name">
-                                    {
-                                        currentRoute === 'add' ?
-                                            <span className="add">
-                                                <BackIcon onClick={cancel} />
-                                                <input
-                                                    ref={inputRef}
-                                                    className="view-input"
-                                                    placeholder={t.translate('Template name')}
-                                                    maxLength={20}
-                                                    onChange={onChange}
-                                                    onKeyUp={onSubmit}
-                                                />
+class Views extends React.Component {
+    state = { value : '' };
+
+    render() {
+        const { Menu,
+            menuOpen,
+            views,
+            routes: { current: currentRoute, add, main, overwrite, cancel },
+            onChange,
+            onSubmit,
+            applyLayout,
+            remove,
+            inputRef,
+            closeMenu,
+        } = this.props;
+
+        this.handleChange = (e) => {
+            this.setState({ value: e.target.value });
+            onChange(e);
+        };
+
+        return (
+            <div className="ciq-views">
+                <Menu>
+                    <Menu.Title className="cq-menu-btn">
+                        <TemplateIcon
+                            className={`ic-icon-with-sub ${menuOpen ? 'active' : ''}`}
+                            tooltip-title={t.translate('Templates')}
+                        />
+                    </Menu.Title>
+                    <Menu.Body>
+                        <div className="title">
+                            <div className="title-text">{t.translate('Templates')}</div>
+                            <CloseIcon
+                                className="icon-close-menu"
+                                onClick={() => closeMenu()}
+                            />
+                        </div>
+                        <div className="content">
+                            {
+                                currentRoute !== 'overwrite' ?
+                                    <div>
+                                        <div className="template-name">
+                                            {
+                                                currentRoute === 'add' ?
+                                                    <span className="add">
+                                                        <BackIcon onClick={cancel} />
+                                                        <input
+                                                            ref={inputRef}
+                                                            className="view-input"
+                                                            value={this.state.value}
+                                                            onChange={this.handleChange}
+                                                            placeholder={t.translate('Template name')}
+                                                            maxLength={20}
+                                                            onKeyUp={onSubmit}
+                                                        />
+                                                    </span>
+                                                    : <span className="add-new" onClick={main}> {t.translate('Add New')} </span>
+                                            }
+                                            <span className={`icon ${!this.state.value ? 'hide' : ''}`}>
+                                                {
+                                                    currentRoute === 'add'
+                                                        ? <TickIcon className="tick-icon" onClick={add} />
+                                                        : <AddIcon className="add-icon" onClick={main} />
+                                                }
                                             </span>
-                                            : <span className="add-new" onClick={main}> {t.translate('Add New')} </span>
-                                    }
-                                    <span className={`icon ${!templateName ? 'hide' : ''}`}>
-                                        {
-                                            currentRoute === 'add'
-                                                ? <TickIcon className="tick-icon" onClick={add} />
-                                                : <AddIcon className="add-icon" onClick={main} />
-                                        }
-                                    </span>
-                                </div>
-                                <div className="ciq-list">
-                                    {
-                                        views.map((view, i) => (
-                                            <ViewItem
-                                                view={view}
-                                                key={i}
-                                                onClick={e => applyLayout(i, e)}
-                                                remove={e => remove(i, e)}
-                                            />
-                                        ))
-                                    }
-                                </div>
-                            </div>
-                            :
-                            <div className="ovrwrit-alrt">
-                                <div className="ovrwrit-alrt-title">
-                                    <alertIconMap.warning />
-                                    <span>
-                                        {templateName + t.translate(' is already exist.')}
-                                    </span>
-                                    <span>
-                                        {t.translate('Would you like to overwrite it?')}
-                                    </span>
-                                </div>
-                                <div className="ovrwrit-alrt-buttons">
-                                    <div onClick={main}>
-                                        {t.translate('CANCEL')}
+                                        </div>
+                                        <div className="ciq-list">
+                                            {
+                                                views.map((view, i) => (
+                                                    <ViewItem
+                                                        view={view}
+                                                        key={i}
+                                                        onClick={e => applyLayout(i, e)}
+                                                        remove={e => remove(i, e)}
+                                                    />
+                                                ))
+                                            }
+                                        </div>
                                     </div>
-                                    <div onClick={overwrite}>
-                                        {t.translate('OVERWRITE')}
+                                    :
+                                    <div className="ovrwrit-alrt">
+                                        <div className="ovrwrit-alrt-title">
+                                            <alertIconMap.warning />
+                                            <span>
+                                                {this.state.value + t.translate(' is already exist.')}
+                                            </span>
+                                            <span>
+                                                {t.translate('Would you like to overwrite it?')}
+                                            </span>
+                                        </div>
+                                        <div className="ovrwrit-alrt-buttons">
+                                            <div onClick={main}>
+                                                {t.translate('CANCEL')}
+                                            </div>
+                                            <div onClick={overwrite}>
+                                                {t.translate('OVERWRITE')}
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                            </div>
-                    }
-                </div>
-            </Menu.Body>
-        </Menu>
-    </div>
-);
+                            }
+                        </div>
+                    </Menu.Body>
+                </Menu>
+            </div>
+        );
+    }
+}
 
 export default connect(({ view: s }) => ({
     Menu: s.menu.connect(Menu),
@@ -132,6 +144,5 @@ export default connect(({ view: s }) => ({
     applyLayout: s.applyLayout,
     menuOpen: s.menu.dialog.open,
     inputRef: s.inputRef,
-    templateName :s.templateName,
     closeMenu: s.menu.onTitleClick,
 }))(Views);
