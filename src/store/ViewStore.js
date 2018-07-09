@@ -17,7 +17,6 @@ export default class ViewStore {
         main: () => this.updateRoute('add'),
         cancel: () => this.onCancel(),
         overwrite: () => this.overwrite(),
-        cancelOverwrite: () => this.cancelOverwrite(),
     };
 
     get context() { return this.mainStore.chart.context; }
@@ -46,10 +45,6 @@ export default class ViewStore {
     @action.bound onCancel() {
         this.templateName = '';
         this.updateRoute('main');
-    }
-
-    @action.bound cancelOverwrite() {
-        this.updateRoute('add');
     }
 
     @action.bound updateRoute(name) {

@@ -27,7 +27,7 @@ const Views = ({
     Menu,
     menuOpen,
     views,
-    routes: { current: currentRoute, add, main, overwrite, cancel, cancelOverwrite },
+    routes: { current: currentRoute, add, main, overwrite, cancel },
     onChange,
     onSubmit,
     applyLayout,
@@ -105,7 +105,7 @@ const Views = ({
                                     </span>
                                 </div>
                                 <div className="ovrwrit-alrt-buttons">
-                                    <div onClick={cancelOverwrite}>
+                                    <div onClick={main}>
                                         {t.translate('CANCEL')}
                                     </div>
                                     <div onClick={overwrite}>
