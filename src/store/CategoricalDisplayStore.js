@@ -52,9 +52,9 @@ export default class CategoricalDisplayStore {
         emptyDescription: t.translate('There are no favorites yet.'),
         data: [],
     };
-    @observable hideLookupFilter = false;
+    @observable isScrollingDown = false;
     scrollTop = undefined;
-    autoHideLookupFilter = true;
+    isUserScrolling = true;
     get context() {
         return this.mainStore.chart.context;
     }
@@ -109,12 +109,13 @@ export default class CategoricalDisplayStore {
     }
 
     @action.bound scrollUp() {
-        this.hideLookupFilter = false;
+        this.isScrollingDown = false;
     }
 
     @action.bound scrollDown() {
-        this.hideLookupFilter = this.autoHideLookupFilter;
-        this.autoHideLookupFilter = true;
+        // This only affects when scrolling by mouse not by code
+        this.isScrollingDown = this.isUserScrolling && true;
+        this.isUserScrolling = true;
     }
 
     @action.bound init() {
@@ -216,7 +217,7 @@ export default class CategoricalDisplayStore {
 
     @action.bound setFilterText(filterText) {
         this.filterText = filterText;
-        this.autoHideLookupFilter = false;
+        this.isUserScrolling = false;
         setTimeout(() => {
             this.scroll.update();
             this.updateScrollSpy();
@@ -234,7 +235,7 @@ export default class CategoricalDisplayStore {
         if (el) {
             // TODO: Scroll animation
             this.pauseScrollSpy = true;
-            this.autoHideLookupFilter = false;
+            this.isUserScrolling = false;
             this.scroll.element.scrollTop = el.offsetTop;
             this.activeCategoryKey = category.categoryId;
             // scrollTop takes some time to take affect, so we need
@@ -324,6 +325,6 @@ export default class CategoricalDisplayStore {
         favoritesMap: this.favoritesMap,
         favoritesId: this.favoritesId,
         CloseUpperMenu: this.CloseUpperMenu,
-        hideLookupFilter: this.hideLookupFilter,
+        isScrollingDown: this.isScrollingDown,
     }))
 }

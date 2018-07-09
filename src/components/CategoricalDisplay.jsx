@@ -28,7 +28,7 @@ const CategoricalDisplay = ({
     favoritesMap,
     dialogTitle,
     closeMenu,
-    hideLookupFilter,
+    isScrollingDown,
 }) => {
     /**
      * On mobile mode, this part appear on the top of dialog
@@ -103,7 +103,7 @@ const CategoricalDisplay = ({
     return (
         <div className="cq-categorical-display">
             {renderMobileTitle()}
-            <div className={`cq-lookup-filters ${hideLookupFilter ? 'scroll-down' : ''}`}>
+            <div className={`cq-lookup-filters ${isScrollingDown ? 'scroll-down' : ''}`}>
                 <div className={`cq-lookup-input ${filterText.trim() !== '' ? 'active' : ''}`}>
                     <input
                         ref={el =>  setSearchInput(el)}
