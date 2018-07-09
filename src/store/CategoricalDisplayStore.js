@@ -114,7 +114,7 @@ export default class CategoricalDisplayStore {
 
     @action.bound scrollDown() {
         // This only affects when scrolling by mouse not by code
-        this.isScrollingDown = this.isUserScrolling && true;
+        this.isScrollingDown = this.isUserScrolling;
         this.isUserScrolling = true;
     }
 
