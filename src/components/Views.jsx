@@ -64,6 +64,7 @@ const Views = ({
                                                 <input
                                                     ref={inputRef}
                                                     className="view-input"
+                                                    value={templateName}
                                                     placeholder={t.translate('Template name')}
                                                     maxLength={20}
                                                     onChange={onChange}
