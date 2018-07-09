@@ -262,6 +262,9 @@ html, body {
     text-transform: uppercase;
     -webkit-box-shadow: 0px 1px 2px rgba(0, 0, 0, .2);
     -moz-box-shadow: 0px 1px 2px rgba(0, 0, 0, .2);
+    @include themify($themes) {
+        color: themed('IndicateText');
+    }
     /*box-shadow: 0px 1px 1px rgba(0, 0, 0, .2);*/ /* Messes up Android WebView pre-4.3 */
 }
 
@@ -981,7 +984,7 @@ cq-language-name {
 .stx-ico-handle {
     opacity: 0;
     @include themify($themes) {
-        background-color: themed('defaultBorderSubtle');
+        background-color: themed('IndicateDivide');
     }
 }
 

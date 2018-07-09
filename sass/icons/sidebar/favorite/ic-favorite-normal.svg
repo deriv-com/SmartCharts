@@ -1,11 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!-- Generator: Sketch 49 (51002) - http://www.bohemiancoding.com/sketch -->
-    <title>icons/system/light/sidebar/favorite/ic-favorite-normal</title>
-    <desc>Created with Sketch.</desc>
-    <defs></defs>
-    <g id="icons/system/light/sidebar/favorite/ic-favorite-normal" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <circle id="Oval" fill="#B0B3BF" cx="8" cy="8" r="8"></circle>
-        <path d="M8.00009999,10.6533449 L5.47328396,11.9059911 C5.00228087,12.1394866 4.69449925,11.9217012 4.78333281,11.4333075 L5.26591173,8.78016023 L3.22167461,6.90119089 C2.84062512,6.55094761 2.9651718,6.20762848 3.4852125,6.1363728 L6.31027871,5.74928383 L7.57368673,3.33537069 C7.80918827,2.88541291 8.19394398,2.89101541 8.42651325,3.33537069 L9.68992127,5.74928383 L12.5149875,6.1363728 C13.0415849,6.20852688 13.1548304,6.55530854 12.7785254,6.90119089 L10.7342883,8.78016023 L11.2168672,11.4333075 C11.3068208,11.927859 10.9920546,12.1365793 10.526916,11.9059911 L8.00009999,10.6533449 Z" id="Combined-Shape" fill="#FFFFFF" fill-rule="nonzero"></path>
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
+    <g fill="none" fill-rule="evenodd" stroke="#AAACBA">
+        <circle cx="8" cy="8" r="7.5"/>
+        <path fill="#2A3052" fill-rule="nonzero" d="M8 10.653l-2.527 1.253c-.47.233-.779.016-.69-.473l.483-2.653-2.044-1.879c-.381-.35-.257-.693.263-.765L6.31 5.75l1.264-2.414c.235-.45.62-.444.853 0L9.69 5.75l2.825.387c.527.073.64.42.264.765l-2.045 1.88.483 2.652c.09.495-.225.704-.69.473L8 10.653z"/>
     </g>
 </svg>

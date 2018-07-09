@@ -16,10 +16,11 @@
         }
     }
     &.ciq-active-favorite {
-        $fav-star-color: #E98024;
         svg > g > g > path {
-            fill: $fav-star-color;
-            stroke: $fav-star-color;
+            @include themify($themes) {
+                fill: themed('StarIconFav');
+                stroke: themed('StarIconFav') !important;
+            }
         }
     }
     &.ic-clear {

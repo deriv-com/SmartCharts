@@ -17,9 +17,6 @@
             line-height: 40px;
             font-weight: 400;
             padding: 0 .7em;
-            @include themify($themes) {
-                color: themed('defaultText');
-            }
         }
         .icon-close-menu{
             position: absolute;
@@ -50,11 +47,16 @@
                 flex-grow: 1;
                 padding-left: 4px;
                 @include box-sizing(border-box);
-                @include border-radius(4px);
+                @include border-radius(4px 0 0 4px);
                 @include themify($themes) {
-                    color: themed('controlText');
-                    border: 1px solid themed('defaultBorder');
-                    background-color: themed('defaultMain');
+                    color: themed('SharedInputText');
+                    border: 1px solid themed('SharedInputBorder');
+                    background-color: themed('SharedInputBg');
+                }
+                g {
+                    @include themify($themes) {
+                        fill: themed('SharedBtnIcon');
+                    }
                 }
             }
             .ic-icon {
@@ -66,7 +68,10 @@
                 @include border-radius(0 4px 4px 0);
                 @include box-sizing(border-box);
                 @include themify($themes) {
-                    background: themed('activeColor');
+                    border-top: 1px solid themed('SharedInputBorder');
+                    border-right: 1px solid themed('SharedInputBorder');
+                    border-bottom: 1px solid themed('SharedInputBorder');
+                    background: themed('SharedBtnBg');
                 }
                 &:after {
                     width: auto !important;

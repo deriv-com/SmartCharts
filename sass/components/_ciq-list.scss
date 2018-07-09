@@ -15,24 +15,25 @@
 		border-bottom: none;
 		@include box-sizing(border-box);
 		@include themify($themes) {
-			border-left: themed('listBorder');
-			border-right: themed('listBorder');
-			border-bottom: themed('listBorder');
-			background: themed('defaultMain');
+			color: themed('listLiText');
+			background: themed('listLiBg');
+			border-left: 1px solid themed('listLiBorder');
+			border-right: 1px solid themed('listLiBorder');
+			border-bottom: 1px solid themed('listLiBorder');
 		}
 		&:first-child {
-			@include themify($themes) {border-top: themed('listBorder');}
+			@include themify($themes) {border-top: themed('listLiBorder');}
 		}
 		&.active {
 			font-weight: bold;
 			@include themify($themes) {
-				color: themed('defaultTextActive');
-				background-color: themed('listBgActive');
+				color: themed('listActiveLiText');
+				background-color: themed('listActiveLiBg');
 			}
 		}
 		&.disabled {
 			pointer-events: none;
-			>* {
+			> * {
 				opacity: 0.2;
 				cursor: auto;
 			}

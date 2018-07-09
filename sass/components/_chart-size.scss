@@ -1,9 +1,10 @@
-.cq-chart-size {
+.cq-chart-size-menu{
     display: flex !important;
     justify-content: center;
     align-items: center;
     height: auto;
-    width: 180px !important;
+}
+.cq-chart-size {
     &:after {
         display: none;
     }
@@ -12,9 +13,6 @@
         position: relative;
         cursor: pointer;
         transition: scale .25s;
-    }
-    > .cq-menu-btn{
-        width: 78px;
     }
     .interval-title {
         white-space: nowrap;

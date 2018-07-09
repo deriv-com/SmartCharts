@@ -7,7 +7,6 @@
     flex-wrap: wrap; /* Optional. only if you want the items to wrap */
     justify-content: center;
     align-items: center;
-
     @include themify($themes) {
         background: themed('defaultMain');
     }
@@ -67,7 +66,7 @@
         width: 100%;
         padding: 0 5px;
         @include themify($themes) {
-            border-top: 1px solid themed('defaultBorder');
+            border-top: 1px solid themed('menuBorder');
         }
     }
 }

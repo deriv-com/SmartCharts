@@ -3,6 +3,7 @@
     z-index: 41;
     margin: .2em 0.8em;
     &.stxMenuActive {
+        box-shadow: none !important;
         .cq-menu-btn{
             .cq-symbol-select-btn{
                 @include themify($themes) {
@@ -13,7 +14,7 @@
         }
     }
     .cq-menu-btn{
-        padding: 0 1em 0 0;
+        padding: 0 !important;
         margin: .2em 0em;
         .cq-symbol-select-btn {
             font-family: $base-font;
@@ -110,7 +111,7 @@
     }
     .cq-menu-dropdown {
         box-shadow: 0 0 0.625em 0.025em rgba(0, 0, 0, 0.14);
-        left: 5px !important;
+        left: 0px;
         bottom: auto !important;
         margin-top:5px;
         transform: translateX(0) translateY( -3em );

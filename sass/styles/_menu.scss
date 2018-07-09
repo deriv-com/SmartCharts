@@ -8,41 +8,47 @@
 		}
 	}
 	&.stxMenuActive{
+		@include themify($themes) {
+			box-shadow: 0px -2px 0px 0 themed('menuActiveBorder');
+		}
 		.break-sm & {
 			@include themify($themes) {
 				border-bottom: solid 3px themed('defaultAccent');
 			}
 		}
 		.cq-menu-btn{
+			@include themify($themes) {
+				background: themed('menuActiveBg');
+			}
 			> .ic-icon,
 			> .cq-toggle {
-				@include themify($themes) {color: themed('controlTextActive');}
+				@include themify($themes) {color: themed('menuActiveText');}
 				svg {
-					border-radius: 4px;
 					@include themify($themes) {
-						box-shadow: inset 0 0 0 1px themed('activeColor');
-						background: themed('defaultBgActive') !important;
+						box-shadow: inset 0 0 0 1px themed('menuActiveIconBorder');
+						background: themed('menuActiveIconBg');
 					}
 				}
-				@include svg-icon-color('activeColor');
+				@include svg-icon-color('menuActiveIcon');
 				.ic-subtitle{
 					font-weight: 500;
 					@include themify($themes) {
-						color: themed('controlTextActive');
+						color: themed('menuActiveText');
 					}
 				}
 			}
 		}
-
 	}
 	.cq-menu-btn{
 		padding: 0 5px;
 		&:hover{
+			@include themify($themes) {
+				background: themed('menuActiveBg');
+			}
 			> .ic-icon,
 			> .cq-toggle {
 				svg {
-					@include border-radius(4px);
-					@include themify($themes) {background: themed('defaultBgActive');}
+					@include themify($themes) {background: themed('menuIconBg');}
 				}
 			}
 		}
@@ -53,32 +59,42 @@
 		> .cq-toggle {
 			&.active{
 				svg {
-					border-radius: 4px;
 					@include themify($themes) {
-						box-shadow: inset 0 0 0 1px themed('activeColor');
-						background: themed('defaultBgActive') !important;
+						box-shadow: inset 0 0 0 1px themed('menuActiveIconBorder');
+						background: themed('menuActiveIconBg');
 					}
 				}
 				.ic-subtitle{
 					font-weight: 500;
 					@include themify($themes) {
-						color: themed('controlTextActive');
+						color: themed('menuActiveText');
 					}
 				}
 			}
-			@include svg-icon-color('controlText');
+			@include svg-icon-color('menuIcon');
+			svg{@include border-radius(4px);}
+			.ic-subtitle{
+				font-weight: normal;
+				font-style: normal;
+				font-stretch: normal;
+				line-height: normal;
+				letter-spacing: normal;
+				text-align: center;
+				@include themify($themes) {
+					color: themed('menuText');
+				}
+			}
 		}
 	}
 	> .ic-icon,
 	> .cq-toggle {
-		@include svg-icon-color('controlText');
+		@include svg-icon-color('menuIcon');
 	}
 	> span {
 		padding:0 12px 0 0;
 		position:relative;
 		font-weight:400;
 	}
-
 	.cq-menu-dropdown {
 		position: absolute;
 		overflow: hidden;
@@ -92,7 +108,7 @@
 		@include box-shadow (0px, 2px, 4px, rgba(0, 0, 0, .2));
 		@include border-radius();
 		@include themify($themes) {
-			background: themed('controlDialogBody');
+			background: themed('dialogBodyBg');
 			color: themed('controlText');
 		}
     	&.open {
@@ -124,9 +140,9 @@
 		}
 		.title{
 			@include themify($themes) {
-				color: themed('controlTitleText');
-				background: themed('controlDialogHead');
-				border-bottom: 1px solid themed('defaultBorder');
+				color: themed('dialogHeadText');
+				background: themed('dialogHeadBg');
+				border-bottom: 1px solid themed('dialogHeadBorder');
 			}
 			> .ic-icon {
 				@include themify($themes) {
@@ -134,17 +150,17 @@
 				}
 				svg, path, g{
 					@include themify($themes) {
-						color: themed('controlTitleText');
-						fill: themed('controlTitleText');
+						color: themed('dialogHeadIcon');
+						fill: themed('dialogHeadIcon');
 					}
 				}
 			}
 		}
 		.cq-mobile-title{
 			@include themify($themes) {
-				color: themed('controlTitleText');
-				background: themed('controlDialogHead');
-				border-bottom: 1px solid themed('defaultBorder');
+				color: themed('dialogHeadText');
+				background: themed('dialogHeadBg');
+				border-bottom: 1px solid themed('dialogHeadBorder');
 			}
 			padding-top: 0.2em;
 			display: flex;
@@ -163,13 +179,6 @@
 			.icon-close-menu{
 			    margin-right: 6px;
 			    cursor: pointer;
-			}
-		}
-		.cq-categorical-display{
-			.cq-lookup-filters{
-				@include themify($themes) {
-					background: themed('controlDialogHead');
-				}
 			}
 		}
 	}

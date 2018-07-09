@@ -32,37 +32,192 @@ $themes: (
     controlGrid:            #fafafb,
     controlDialogHead:      #FFFFFF,
     controlDialogBody:      #FAFAFA,
+
+
+    /**
+    * Menu
+    */
+    menu:   red,
+    
+    menuBg: #ffffff,
+    menuBorder: #e9e9ed,
+    menuIcon: #AAACBA,
+    menuIconBg: #ffffff,
+    menuIconBorder: #555975,
+    menuText: #AAACBA,
+    
+    menuActiveBg: #ffffff,
+    menuActiveBorder: #e9e9ed,
+    menuActiveIcon: #ffffff,
+    menuActiveIconBg: #ffffff,
+    menuActiveIconBorder: #555975,
+    menuActiveText: #ffffff,
+
+    /**
+    * Dialog
+    */
+    dialog:   blue,
+    dialogHeadBg: #2a3052,
+    dialogHeadText: #ffffff,
+    dialogHeadBorder: #555975,
+    dialogBodyBg: #555975,
+
   ),
   dark: (
     activeColor:            #e2e2e2,
-    defaultMain:            #1c2a35,
+        defaultMain:            #2a3052,
     defaultAccent:          #151f28,
-    defaultBg:              #1C2A35,
+        defaultBg:              #2a3052,
     defaultBgActive:        mix(#fff, #1c2a35, 8%),
     defaultMenuBg:          #1c2a35,
     defaultSubmenuBg:       #f3f3f3,
     defaultHuBg:            #1c2a35,
-    defaultText:            #e7fafb,
-    defaultTextSubtle:      #e7fafb,
+    defaultText:            #AAACBA,
+    defaultTextSubtle:      #AAACBA,
     defaultTextMedium:      rgb(179, 174, 174),
-    defaultTextStrong:      #e7fafb,
-    defaultBorder:          #010103,
+    defaultTextStrong:      #AAACBA,
+        defaultBorder:          rgba(170, 172, 186, 0.3),
     defaultBorderSubtle:    #ddd,
     defaultBorderMedium:    #ccc,
     defaultBorderStrong:    #999,
-    chartGrid:              mix(#fff, #1c2a35, 8%),
+        chartGrid:              rgba(170, 172, 186, 0.1),
     chartText:              mix(#fff, #1c2a35, 50%),
-    chartBg:                mix(#fff, #1c2a35, 10%),
+        chartBg:                #2a3052,
     listBgActive:           #e2e2e2,
     controlText:            rgb(179, 174, 174),
     controlTitleText:       #acacac,
-    controlTitlebg:         mix(#fff, #1c2a35, 7%),
+        controlTitlebg:         #2a3052,
     controlActive:          #e2e2e2,
     controlTextActive:      #e2e2e2,
     controlBgActive:        rgba(76, 87, 148, 0.2),
     controlGrid:            #fafafb,
     controlDialogHead:      mix(#fff, #1c2a35, 3%),
     controlDialogBody:      mix(#fff, #1c2a35, 7%),
+
+
+
+
+    /**
+    * Menu
+    */
+    menu:   red,
+    menuBg: #2a3052,
+    menuBorder: rgba(170, 172, 186, 0.1),
+    menuIcon: #AAACBA,
+    menuIconBg: #555975,
+    menuIconBorder: #555975,
+    menuText: #AAACBA,
+    
+    menuActiveBg: #555975,
+    menuActiveBorder: #fff,
+    menuActiveIcon: #ffffff,
+    menuActiveIconBg: #555975,
+    menuActiveIconBorder: #555975,
+    menuActiveText: #ffffff,
+
+
+    /**
+    * List
+    */
+    list:   blue,
+    listLiBg: #2a3052,
+    listLiText: #AAACBA,
+    listLiBorder: rgba(170, 172, 186, 0.1),
+    listActiveLiBg: #3f4463,
+    listActiveLiText: #ffffff,
+    listActiveLiBorder: #3f4463,
+
+
+    /**
+    * Dialog
+    */
+    dialog:   blue,
+    dialogHeadBg: #2a3052,
+    dialogHeadText: #ffffff,
+    dialogHeadBorder: #555975,
+    dialogHeadIcon: #AAACBA,
+    dialogBodyBg: #555975,
+
+
+    /**
+    * ChartType
+    */
+    ChartTypeListIcon: #AAACBA,
+    ChartTypeActiveListIcon: #ffffff,
+    ChartTypeActiveListBorderRight: #ffffff,
+
+
+    /**
+    * Template
+    */
+    TemplateAddBg: #AAACBA,
+    TemplateAddIcon: #2a3052,
+
+
+    /**
+    * Shared
+    */
+    SharedInput: #AAACBA,
+    SharedInputBg: #3f4463,
+    SharedInputBorder: rgba(21, 33, 45, 0.5),
+    SharedInputText: #AAACBA,
+
+    SharedBtnBg: #3f4463,
+    SharedBtnIcon: #AAACBA,
+
+    /**
+    * Time
+    */
+    Time:   red,
+    TimeBg: #3f4463,
+    TimeUnitBg: #2a3052,
+    TimeUnitItemBorder: #2a3052,
+
+    /**
+    * Asset Information
+    */
+    AssetInfo: red,
+    AssetInfoText: #AAACBA,
+
+
+    /**
+    * Categorical Display
+    */
+    CatDisplay: red,
+    CatDisplayBg: #3f4463,
+    CatDisplayText: #AAACBA,
+    CatDisplayBorder: #555975,
+
+    CatDisplayFilterBg: #2a3052,
+    CatDisplayFilterText: #2a3052,
+    CatDisplayFilterIcon: #AAACBA,
+    CatDisplayFilterInputText: #ffffff,
+    CatDisplayActiveFilterBg: #555975,
+    CatDisplayActiveFilterText: #fff,
+    CatDisplayActiveFilterBorder: #fff,
+    CatDisplayActiveFilterIcon: #ffffff,
+
+    CatDisplayCatTitleText: #ffffff,
+    CatDisplayCatContentBg: #2a3052,
+    CatDisplayCatContentBorder: rgba(170, 172, 186, 0.5),
+    CatDisplayCatContentTitleBg: #2a3052,
+    CatDisplayCatContentTitleText: #AAACBA,
+    CatDisplayCatContentIcon: #AAACBA,
+    CatDisplayCatContentHover: #555975,
+
+    /**
+    * Icon
+    */
+    StarIconFav: #E98024,
+
+
+    /**
+    * Indicators
+    */
+    Indicate: red,
+    IndicateText: #fff,
+    IndicateDivide: red,
+
   ),
 );
 

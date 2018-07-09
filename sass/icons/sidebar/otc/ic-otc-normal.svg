@@ -1,6 +1,19 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
-  <title>ic-otc-normal</title>
-  <path d="M8,0A8,8,0,1,1,0,8,8,8,0,0,1,8,0" transform="translate(0 0)" fill="#b0b3bf"/>
-  <path d="M11,12V11h2v1H11m0-2V9h2v1H11m3-2H10v6.71a7,7,0,0,0,4-3.1V8" transform="translate(0 0)" fill="#fff"/>
-  <path d="M6,13V12H8v1H6M3,11V10H5v1H3m3,0V10H8v1H6M3,9V8H5V9H3M6,9V8H8V9H6M6,3H5V5H3V6H2v5.61A7,7,0,0,0,3,12.9V12H5v1H3.1A7,7,0,0,0,8,15a6.63,6.63,0,0,0,1-.07V6H8V5H6V3" transform="translate(0 0)" fill="#fff"/>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="16" height="16" viewBox="0 0 16 16">
+    <defs>
+        <circle id="a" cx="8" cy="8" r="8"/>
+    </defs>
+    <g fill="none" fill-rule="evenodd">
+        <mask id="b" fill="#fff">
+            <use xlink:href="#a"/>
+        </mask>
+        <g fill="#AAACBA" mask="url(#b)">
+            <path d="M10 8h4v9h-4V8zm1 1v1h2V9h-2zm0 2v1h2v-1h-2z"/>
+        </g>
+        <g fill="#AAACBA" mask="url(#b)">
+            <path d="M6 5h2v1h1v11H2V6h1V5h2V3h1v2zM3 8v1h2V8H3zm3 0v1h2V8H6zm-3 2v1h2v-1H3zm3 0v1h2v-1H6zm-3 2v1h2v-1H3zm3 0v1h2v-1H6z"/>
+        </g>
+        <g fill="#AAACBA" fill-rule="nonzero" mask="url(#b)">
+            <path d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 1 8 0a8 8 0 0 1 0 16z"/>
+        </g>
+    </g>
 </svg>
