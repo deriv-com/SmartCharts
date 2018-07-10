@@ -1,6 +1,6 @@
 import { observable, action, reaction, computed, when } from 'mobx';
 import MenuStore from './MenuStore';
-import { downloadFileInBrowser, findAncestor } from './utils';
+import { downloadFileInBrowser } from './utils';
 import { loadScript } from '../utils';
 import PendingPromise from '../utils/PendingPromise';
 
@@ -217,7 +217,7 @@ export default class ShareStore {
 
     onInputRef = (ref) => { this.inputRef = ref; }
     onContextReady = () => {
-        this.screenshotArea = findAncestor(this.stx.container, 'ciq-chart');
+        this.screenshotArea = this.context.topNode.querySelector('.ciq-chart');
     };
 }
 
