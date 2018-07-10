@@ -64,7 +64,7 @@ const ChartSetting = ({
                         <div className="ciq-action">
                             <Switch
                                 value={(theme === 'dark')}
-                                onChange={setTheme}
+                                onChange={checked => setTheme(checked ? 'dark' : 'light')}
                             />
                         </div>
                     </div>
@@ -112,7 +112,7 @@ const ChartSetting = ({
                         <div
                             className={`ciq-list-item ${(selectedLanguage.key === language.key) ? 'selected' : ''}`}
                             key={index}
-                            onClick={() => setLanguage(language)}
+                            onClick={() => setLanguage(language.key)}
                         >
                             {language.icon}
                             <span className="ciq-icon-text">{language.name}</span>
@@ -153,7 +153,7 @@ const ChartSetting = ({
     );
 };
 
-export default connect(({ chartSetting: s, assetInformation: ai, chart: c }) => ({
+export default connect(({ chartSetting: s, chart: c }) => ({
     Menu: s.menu.connect(Menu),
     menuOpen: s.menu.dialog.open,
     selectedLanguage: s.language,
@@ -168,7 +168,7 @@ export default connect(({ chartSetting: s, assetInformation: ai, chart: c }) => 
     countdown: s.countdown,
     showCountdown: s.showCountdown,
     closeMenu: s.menu.onTitleClick,
-    assetInformation: ai.visible,
-    setAssetInformation: ai.setVisible,
+    assetInformation: s.assetInformation,
+    setAssetInformation: s.setAssetInformation,
     isMobile: c.isMobile,
 }))(ChartSetting);

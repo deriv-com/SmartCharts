@@ -13,19 +13,19 @@ export default class AssetInformationStore {
     }
 
     get context() { return this.mainStore.chart.context; }
+    get visible() { return this.mainStore.chartSetting.assetInformation; }
     get stx() { return this.context.stx; }
 
     onContextReady = () => {
-        const visible = this.stx.layout.assetInformation;
-        this.visible = visible !== undefined ? visible : true;
         this.stx.prepend('headsUpHR', this.update);
         this.stx.prepend('createXAxis', this.update);
     };
 
     @action.bound update() {
-        const stx = this.context.stx;
-        const bar = stx.barFromPixel(stx.cx);
-        const prices = stx.chart.xaxis[bar];
+        if (!this.visible) { return; }
+
+        const bar = this.stx.barFromPixel(this.stx.cx);
+        const prices = this.stx.chart.xaxis[bar];
 
         if (!prices) { return; }
 
@@ -39,13 +39,6 @@ export default class AssetInformationStore {
         this.price = Close ? Close.toFixed(this.decimalPlaces) : null;
     }
 
-    @action.bound setVisible(value) {
-        this.visible = value;
-        this.stx.layout.assetInformation = value;
-        this.mainStore.chart.saveLayout();
-    }
-
-    @observable visible = true;
     @observable price = null;
     @observable open = null;
     @observable high = null;
