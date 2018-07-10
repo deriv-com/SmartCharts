@@ -177,8 +177,16 @@ export default class CategoricalDisplayStore {
             filteredItems.unshift(activeCategory);
         }
 
+        /**
+        * when search bar is empty or it's the first rendering
+        * lastFilteredItems should contain all data
+        */
+        this.lastFilteredItems = !this.lastFilteredItems.length || this.filterText === ''
+            ? filteredItems
+            : this.lastFilteredItems;
+
+
         if (this.filterText === '') {
-            this.lastFilteredItems = [];
             return filteredItems;
         }
 
@@ -200,10 +208,10 @@ export default class CategoricalDisplayStore {
                 filterCategory(category);
             }
         }
-        if (searchHasResult) {
-            this.lastFilteredItems = filteredItems;
-            return filteredItems;
-        }
+
+        /** if any data found, then allow updating lastFilteredItems prop by found data */
+        this.lastFilteredItems = searchHasResult ? filteredItems : this.lastFilteredItems;
+
         return this.lastFilteredItems;
     }
 
