@@ -90,7 +90,6 @@ class Chart extends Component {
                             <div className="cq-top-ui-widgets" style={{ top: chartPanelTop }}>
                                 { renderTopWidgets() }
                             </div>
-                            <ChartControls widgets={chartControlsWidgets} />
                             <div className="chartContainer primary" style={{ height: chartContainerHeight }}>
                                 <Crosshair />
                             </div>
@@ -100,6 +99,7 @@ class Chart extends Component {
                                     {t.translate('Chart data is not available for this symbol.')}
                                 </div>}
                         </div>
+                        <ChartControls widgets={chartControlsWidgets} />
                     </div>
                     <DrawToolsSettingsDialog />
                     <AggregateChartSettingsDialog />
