@@ -21,7 +21,7 @@ const Comparison = ({
                 className={`ic-icon-with-sub ${menuOpen ? 'active' : ''}`}
                 tooltip-title={t.translate('Comparison')}
             />
-            {activeComparisonsNo ? <span className={`budget ${activeComparisonsNo > 9 ? 'x2' : ''}`}>{activeComparisonsNo}</span> : ''}
+            {activeComparisonsNo ? <span className={`notification-badget ${activeComparisonsNo > 9 ? 'x2' : ''}`}>{activeComparisonsNo}</span> : ''}
         </Menu.Title>
         <Menu.Body>
             <CategoricalDisplay
