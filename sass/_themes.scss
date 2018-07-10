@@ -32,6 +32,8 @@ $themes: (
     controlGrid:            #fafafb,
     controlDialogHead:      #FFFFFF,
     controlDialogBody:      #FAFAFA,
+    tooltipBg:              rgba(21,33,45,0.88),
+    tooltipTextColor:       #fff,
   ),
   dark: (
     activeColor:            #e2e2e2,
@@ -63,6 +65,8 @@ $themes: (
     controlGrid:            #fafafb,
     controlDialogHead:      mix(#fff, #1c2a35, 3%),
     controlDialogBody:      mix(#fff, #1c2a35, 7%),
+    tooltipBg:              #1c70cea1,
+    tooltipTextColor:       #fff,
   ),
 );
 
