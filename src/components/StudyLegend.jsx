@@ -33,7 +33,7 @@ class StudyLegend extends Component {
                         className={`ic-icon-with-sub ${menuOpen ? 'active' : ''}`}
                         tooltip-title={t.translate('Indicators')}
                     />
-                    {activeStudiesNo ? <span className="budget">{activeStudiesNo}</span> : ''}
+                    {activeStudiesNo ? <span className={`budget ${activeStudiesNo > 9 ? 'x2' : ''}`}>{activeStudiesNo}</span> : ''}
                 </Menu.Title>
                 <Menu.Body>
                     <StudyCategoricalDisplay
