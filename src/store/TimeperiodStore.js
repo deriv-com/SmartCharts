@@ -73,7 +73,7 @@ export default class TimeperiodStore {
         if (this.mainStore.chartSetting.countdown && !isTick && hasCountdown) {
             if (!this._injectionId) {
                 this._injectionId = stx.append('draw', () => {
-                    if (this.remain) {
+                    if (this.remain && stx.chart.dataSet) {
                         stx.yaxisLabelStyle = 'rect';
                         stx.createYAxisLabel(stx.chart.panel, this.remain, this.remainLabelY, '#15212d', '#FFFFFF');
                         stx.yaxisLabelStyle = 'roundRectArrow';
