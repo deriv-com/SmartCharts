@@ -1,8 +1,7 @@
 export class TickHistoryFormatter {
-    
-    static getUTCDate = function(date) {
+    static getUTCDate = function (date) {
         const UTCdate = date.toISOString();
-        return UTCdate.substring(0, 10).concat(' ' , UTCdate.substring(11, 19));
+        return UTCdate.substring(0, 10).concat(' ', UTCdate.substring(11, 19));
     }
 
     static formatHistory(response) {
@@ -10,7 +9,7 @@ export class TickHistoryFormatter {
         if (history) {
             const { times, prices } = history;
             const quotes = prices.map((p, idx) => ({
-                Date: this.getUTCDate(new Date (+times[idx] * 1000)),
+                Date: this.getUTCDate(new Date(+times[idx] * 1000)),
                 Close: +p,
             }));
             return quotes;
