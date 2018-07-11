@@ -143,6 +143,7 @@ class ChartStore {
             controls: { chartControls: null }, // hide the default zoom buttons
             preferences: {
                 currentPriceLine: true,
+                whitespace : 0,
             },
             chart: {
                 yAxis: {
@@ -156,7 +157,7 @@ class ChartStore {
             yTolerance: 999999, // disable vertical scrolling
         });
 
-        stxx.setTimeZone(null , "UTC");
+        stxx.setTimeZone("Etc/UTC","Etc/UTC");
 
         const deleteElement = stxx.chart.panel.holder.parentElement.querySelector('#mouseDeleteText');
         const manageElement = stxx.chart.panel.holder.parentElement.querySelector('#mouseManageText');
