@@ -28,21 +28,20 @@ const ChartTitle = ({
             isFullscreen
         >
             <Menu.Title>
-                {isVisible &&
                 <div className="cq-symbol-select-btn">
                     {SymbolIcon && <SymbolIcon className={`ic-${currentSymbol.symbol}`} />}
                     <div className="cq-symbol-info">
                         <div className="cq-market">{currentSymbol.market_display_name}</div>
                         <div className="cq-symbol">{currentSymbol.name}</div>
                     </div>
-                    {isShowChartPrice &&
+                    {isVisible && isShowChartPrice &&
                      <div className="cq-chart-price">
                          <AnimatedPrice className="cq-current-price" />
                          <div className={`cq-change ${isPriceUp ? 'stx-up' : 'stx-down'}`}>
                              <span className="cq-todays-change">{todayChange || 0}</span>&nbsp;
                          </div>
                      </div>}
-                </div>}
+                </div>
             </Menu.Title>
             <Menu.Body>
                 <CategoricalDisplay
