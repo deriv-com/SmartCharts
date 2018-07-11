@@ -20,7 +20,6 @@ export default class DrawToolsStore {
         });
 
         this.list = new ListStore({
-            getIsOpen: () => this.menu.open,
             getContext: () => this.context,
             onItemSelected: item => this.selectTool(item.id),
             getItems: () => [

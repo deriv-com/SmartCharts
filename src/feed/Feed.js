@@ -54,11 +54,9 @@ class Feed {
                 const quotes = [TickHistoryFormatter.formatTick(resp)];
 
                 if (comparisonChartSymbol) {
-                    CIQ.addMemberToMasterdata({
-                        stx: this._cxx,
-                        label: comparisonChartSymbol,
-                        data: quotes,
-                        createObject: true,
+                    this._cxx.updateChartData(quotes, null, {
+                        useAsLastSale: true,
+                        secondarySeries: comparisonChartSymbol,
                     });
                     this._emitter.emit(Feed.EVENT_COMPARISON_DATA_UPDATE);
                 } else {

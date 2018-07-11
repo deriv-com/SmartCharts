@@ -9,12 +9,13 @@ import { // eslint-disable-line import/no-extraneous-dependencies,import/no-unre
     ChartSize,
     DrawTools,
     ChartSetting,
+    createObjectFromLocalStorage,
     Share,
     ChartTitle,
     AssetInformation,
     ComparisonList,
 } from '@binary-com/smartcharts'; // eslint-disable-line import/no-unresolved
-import React from 'react';
+import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { configure } from 'mobx';
 import './app.scss';
@@ -69,11 +70,13 @@ const requestSubscribe = streamManager.subscribe.bind(streamManager);
 const requestForget = streamManager.forget.bind(streamManager);
 const shareOrigin = window.location.href.split('?')[0];
 
-
-class App extends React.Component {
-    state = {
-        messages: [],
-    };
+class App extends Component {
+    constructor(props) {
+        super(props);
+        const settings = createObjectFromLocalStorage('smartchart-setting');
+        if (settings) { this.startingLanguage = settings.language; }
+        this.state = { settings, messages: [] };
+    }
     onMessage(message) {
         const messages = this.state.messages;
 
@@ -93,6 +96,17 @@ class App extends React.Component {
             messages,
         });
     }
+    saveSettings = (settings) => {
+        console.log('settings updated:', settings);
+        CIQ.localStorageSetItem('smartchart-setting', JSON.stringify(settings));
+
+        this.setState({ settings });
+
+        if (this.startingLanguage !== settings.language) {
+            window.location.reload();
+        }
+    };
+    startingLanguage = 'en';
     render() {
         const renderTopWidgets = () => (
             <React.Fragment>
@@ -105,7 +119,7 @@ class App extends React.Component {
                 />
             </React.Fragment>
         );
-
+        const { settings } = this.state;
         return (
             <SmartChart
                 onSymbolChange={symbol => console.log('Symbol has changed to:', symbol)}
@@ -118,6 +132,8 @@ class App extends React.Component {
                 requestSubscribe={requestSubscribe}
                 requestForget={requestForget}
                 shareOrigin={shareOrigin}
+                settings={settings}
+                onSettingsChange={this.saveSettings}
             />
         );
     }

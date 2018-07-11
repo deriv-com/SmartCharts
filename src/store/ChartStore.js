@@ -137,9 +137,14 @@ class ChartStore {
             shareOrigin = 'https://charts.binary.com',
             enableRouting,
             onMessage,
+            settings,
+            onSettingsChange,
         } = props;
         const api = new BinaryAPI(requestAPI, requestSubscribe, requestForget);
-        this.mainStore.share.shareOrigin = shareOrigin;
+        const { share, chartSetting } = this.mainStore;
+        share.shareOrigin = shareOrigin;
+        chartSetting.setSettings(settings);
+        chartSetting.onSettingsChange = onSettingsChange;
         this.isMobile = isMobile;
         this.onSymbolChange = onSymbolChange;
 
@@ -153,9 +158,6 @@ class ChartStore {
                 currentPriceLine: true,
             },
             chart: {
-                xAxis: {
-                    timeUnitMultiplier: 1, // Make gaps between time intervals consistent
-                },
                 yAxis: {
                     // Put some top margin so chart doesn't get blocked by chart title
                     initialMarginTop: 125,
