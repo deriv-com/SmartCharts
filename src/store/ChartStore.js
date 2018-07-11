@@ -157,8 +157,6 @@ class ChartStore {
             yTolerance: 999999, // disable vertical scrolling
         });
 
-        stxx.setTimeZone("Etc/UTC","Etc/UTC");
-
         const deleteElement = stxx.chart.panel.holder.parentElement.querySelector('#mouseDeleteText');
         const manageElement = stxx.chart.panel.holder.parentElement.querySelector('#mouseManageText');
         deleteElement.textConent = t.translate('right-click to delete');
