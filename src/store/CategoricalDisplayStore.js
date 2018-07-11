@@ -136,7 +136,7 @@ export default class CategoricalDisplayStore {
 
 
     @computed get filteredItems() {
-        const filteredItems = toJS(this.getCategoricalItems());
+        let filteredItems = toJS(this.getCategoricalItems());
 
         if (this.favoritesId) {
             const favsCategory = toJS(this.favoritesCategory);
@@ -177,18 +177,12 @@ export default class CategoricalDisplayStore {
             filteredItems.unshift(activeCategory);
         }
 
-        /**
-        * when search bar is empty or it's the first rendering
-        * lastFilteredItems should contain all data
-        */
-        this.lastFilteredItems = !this.lastFilteredItems.length || this.filterText === ''
-            ? filteredItems
-            : this.lastFilteredItems;
-
 
         if (this.filterText === '') {
+            this.lastFilteredItems = filteredItems;
             return filteredItems;
         }
+
 
         let searchHasResult = false;
         const queries = this.filterText.split(' ').filter(x => x !== '').map(b => b.toLowerCase().trim());
@@ -209,10 +203,13 @@ export default class CategoricalDisplayStore {
             }
         }
 
-        /** if any data found, then allow updating lastFilteredItems prop by found data */
-        this.lastFilteredItems = searchHasResult ? filteredItems : this.lastFilteredItems;
 
-        return this.lastFilteredItems;
+        if (!searchHasResult) {
+            filteredItems = this.lastFilteredItems;
+        }
+
+        this.lastFilteredItems = filteredItems;
+        return filteredItems;
     }
 
     @action.bound setCategoryElement(element, id) {
