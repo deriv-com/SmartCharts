@@ -53,6 +53,7 @@ export default class CategoricalDisplayStore {
         data: [],
     };
     scrollTop = undefined;
+    lastFilteredItems = [];
 
     get context() {
         return this.mainStore.chart.context;
@@ -135,7 +136,7 @@ export default class CategoricalDisplayStore {
 
 
     @computed get filteredItems() {
-        const filteredItems = toJS(this.getCategoricalItems());
+        let filteredItems = toJS(this.getCategoricalItems());
 
         if (this.favoritesId) {
             const favsCategory = toJS(this.favoritesCategory);
@@ -176,13 +177,20 @@ export default class CategoricalDisplayStore {
             filteredItems.unshift(activeCategory);
         }
 
+
         if (this.filterText === '') {
+            this.lastFilteredItems = filteredItems;
             return filteredItems;
         }
 
-        const reg = RegExp(this.filterText, 'i');
+
+        let searchHasResult = false;
+        const queries = this.filterText.split(' ').filter(x => x !== '').map(b => b.toLowerCase().trim());
+        // regex to check all separate words by comma, should exist in the string
+        const hasSearchString = text => queries.reduce((a, b) => text.toLowerCase().includes(b) && a, true);
         const filterCategory = (c) => {
-            c.data = c.data.filter(item => reg.test(item.display) || (item.dataObject && reg.test(item.dataObject.symbol)));
+            c.data = c.data.filter(item => hasSearchString(item.display || (typeof item.dataObject === 'object' && item.dataObject.symbol)));
+            if (c.data.length) { searchHasResult = true; }
         };
 
         for (const category of filteredItems) {
@@ -195,6 +203,12 @@ export default class CategoricalDisplayStore {
             }
         }
 
+
+        if (!searchHasResult) {
+            filteredItems = this.lastFilteredItems;
+        }
+
+        this.lastFilteredItems = filteredItems;
         return filteredItems;
     }
 

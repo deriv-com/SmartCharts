@@ -138,9 +138,14 @@ class ChartStore {
             isMobile,
             shareOrigin = 'https://charts.binary.com',
             enableRouting,
+            settings,
+            onSettingsChange,
         } = props;
         const api = new BinaryAPI(requestAPI, requestSubscribe, requestForget);
-        this.mainStore.share.shareOrigin = shareOrigin;
+        const { share, chartSetting } = this.mainStore;
+        share.shareOrigin = shareOrigin;
+        chartSetting.setSettings(settings);
+        chartSetting.onSettingsChange = onSettingsChange;
         this.isMobile = isMobile;
         this.onSymbolChange = onSymbolChange;
 
