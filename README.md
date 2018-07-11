@@ -84,15 +84,25 @@ requestAPI* | SmartCharts will make single API calls by passing the request inpu
 requestSubscribe* | SmartCharts will make streaming calls via this method. `requestSubscribe` expects 2 parameters `(request, callback) => {}`: the `request` input and a `callback` in which response will be passed to for each time a response is available. Keep track of this `callback` as SmartCharts will pass this to you to forget the subscription (via `requestForget`).
 requestForget* | When SmartCharts no longer needs a subscription (made via `requestSubscribe`), it will call this method (passing in `request` and `callback` passed from `requestSubscribe`) to halt the subscription.
 onSymbolChange | When SmartCharts changes the symbol, it will call this function, passing the symbol object as parameter.
-lang | Sets the language.
 chartControlsWidgets | Render function for chart control widgets. Refer to [Customising Components](#customising-components).
 topWidgets | Render function for top widgets. Refer to [Customising Components](#customising-components).
-theme | Sets the chart theme. themes are (`dark\|light`), and default is `light`.
 initialSymbol | Sets the initial symbol.
 isMobile | Switch between mobile or desktop view. Defaults to `false`.
 shareOrigin | Sets the origin of the generated share link. Defaults to `https://charts.binary.com`.
-showCountdown | Show Countdown. Defaults to `false`.
+onSettingsChange | Callback that will be fired each time a setting is changed.
+settings | Sets the chart settings. Refer to [Chart Settings](#chart-settings)
 barriers | Draw chart barriers. Refer to [Barriers API](#barriers-api) for usage details
+enableRouting | Enable routing for dialogs. Defaults to `false`
+
+### Chart Settings
+
+| Attribute | Description |
+--------|--------------
+showCountdown | Show Countdown. Defaults to `false`.
+theme | Sets the chart theme. themes are (`dark\|light`), and default is `light`.
+lang | Sets the language. Defaults to `en`.
+position | Sets the position of the chart controls. Choose between `left` and `bottom`. Defaults to `bottom`.
+assetInformation | Show or hide the asset information. Defaults to `true`.
 
 #### Barriers API
 
@@ -123,6 +133,34 @@ relative | Toggle between relative and absolute barriers. Defaults to `false`.
 draggable | Toggles whether users can drag the price lines and change the barrier directly from the chart. Defaults to `true`.
 high* | Sets the price of the high barrier.
 low* | Sets the price of the low barrier.
+
+#### Marker API
+
+Markers provide a way for developers to place DOM elements inside the chart that are positioned based on date, values or tick location. Unlike [CharIQ's Markers](http://documentation.chartiq.com/tutorial-Markers.html#main), we only allow markers to be placed on the main chart. Also note that this Marker implementation does not factor the width and height of the marker; this is expensive to calculate, so we expect you to offset this in CSS.
+
+```jsx
+<SmartChart>
+    <Marker
+        x={new Date(2018, 5, 20)}
+        yPositioner="none"
+        className="chart-line vertical trade-start-line"
+    >
+        {/* Place marker content here */}
+        <div className="drag-line" />
+        <div className="trade-text">Trade Start</div>
+    </Marker>
+</SmartChart>
+```
+
+| Attribute | Description |
+--------|--------------
+className | Adds custom class name to marker. All markers have class name `stx-marker`.
+x | x position of the chart; depends on `xPositioner`.
+xPositioner | Determines x position. Choose between `date` or `none`. Defaults to `date`.
+y | y position of the chart; depends on `yPositioner`.
+yPositioner | Determines y position. Choose between `value` or `none`. Defaults to `value`.
+
+There are more options for `xPositioner` and `yPositioner` in [ChartIQ docs](http://documentation.chartiq.com/CIQ.Marker.html#main). What we document here is the most common use case.
 
 
 ### Customising Components

@@ -55,11 +55,9 @@ class Feed {
                 const quotes = [TickHistoryFormatter.formatTick(resp)];
 
                 if (comparisonChartSymbol) {
-                    CIQ.addMemberToMasterdata({
-                        stx: this._cxx,
-                        label: comparisonChartSymbol,
-                        data: quotes,
-                        createObject: true,
+                    this._cxx.updateChartData(quotes, null, {
+                        useAsLastSale: true,
+                        secondarySeries: comparisonChartSymbol,
                     });
                     this._emitter.emit(Feed.EVENT_COMPARISON_DATA_UPDATE);
                 } else {
@@ -88,15 +86,20 @@ class Feed {
                     category: 'activesymbol',
                 });
             } else if (errorCode === 'StreamingNotAllowed') {
-                if (!isComparisonChart) {
-                    this._mainStore.chart.setChartAvailability(false);
-                }
                 this._mainStore.notification.notify({
                     text: t.translate('Streaming for [symbol] is not available due to license restrictions', tParams),
                     type: NotificationStore.TYPE_ERROR,
                     category: 'activesymbol',
                 });
-                callback({ quotes: [] });
+                let dataCallback = { quotes: [] };
+                if (isComparisonChart) {
+                    // Passing error will prevent the chart from being shown; for
+                    // main chart we still want the chart to be shown, just disabled
+                    dataCallback = { error: errorCode, suppressAlert: true, ...dataCallback };
+                } else {
+                    this._mainStore.chart.setChartAvailability(false);
+                }
+                callback(dataCallback);
                 return;
             }
         } else {

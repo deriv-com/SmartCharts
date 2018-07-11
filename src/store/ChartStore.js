@@ -26,6 +26,7 @@ class ChartStore {
     stxx = null;
     id = null;
     defaultSymbol = 'R_100';
+    enableRouting = null;
     chartNode = null;
     chartControlsNode = null;
     chartContainerNode = null;
@@ -47,7 +48,9 @@ class ChartStore {
     }
 
     get loader() { return this.mainStore.loader; }
-
+    get routingStore() {
+        return this.mainStore.routing;
+    }
     saveLayout() {
         const layoutData = this.stxx.exportLayout(true);
         const json = JSON.stringify(layoutData);
@@ -127,22 +130,26 @@ class ChartStore {
             requestForget,
             isMobile,
             shareOrigin = 'https://charts.binary.com',
+            enableRouting,
+            settings,
+            onSettingsChange,
         } = props;
         const api = new BinaryAPI(requestAPI, requestSubscribe, requestForget);
-        this.mainStore.share.shareOrigin = shareOrigin;
+        const { share, chartSetting } = this.mainStore;
+        share.shareOrigin = shareOrigin;
+        chartSetting.setSettings(settings);
+        chartSetting.onSettingsChange = onSettingsChange;
         this.isMobile = isMobile;
         this.onSymbolChange = onSymbolChange;
 
         const stxx = this.stxx = new CIQ.ChartEngine({
+            markerDelay: null, // disable 25ms delay for placement of markers
             container: this.rootNode.querySelector('.chartContainer.primary'),
             controls: { chartControls: null }, // hide the default zoom buttons
             preferences: {
                 currentPriceLine: true,
             },
             chart: {
-                xAxis: {
-                    timeUnitMultiplier: 1, // Make gaps between time intervals consistent
-                },
                 yAxis: {
                     // Put some top margin so chart doesn't get blocked by chart title
                     initialMarginTop: 125,
@@ -167,6 +174,11 @@ class ChartStore {
         stxx.attachQuoteFeed(this.feed, {
             refreshInterval: null,
         });
+
+        this.enableRouting = enableRouting;
+        if (this.enableRouting) {
+            this.routingStore.handleRouting();
+        }
 
         // Extended hours trading zones
         // new CIQ.ExtendedHours({
@@ -255,12 +267,16 @@ class ChartStore {
                 const url = href.split('#')[0];
                 const hash = url.split('?')[1];
 
-                window.history.replaceState({}, document.title, window.location.pathname);
-                const promise = this.mainStore.share.expandBitlyAsync(hash, decodeURIComponent(encodedJsonPart));
-                promise.then((encodedJson) => {
-                    layoutData = JSON.parse(encodedJson);
+                if (hash) {
+                    window.history.replaceState({}, document.title, window.location.pathname);
+                    const promise = this.mainStore.share.expandBitlyAsync(hash, decodeURIComponent(encodedJsonPart));
+                    promise.then((encodedJson) => {
+                        layoutData = JSON.parse(encodedJson);
+                        onLayoutDataReady();
+                    }).catch(() => onLayoutDataReady());
+                } else {
                     onLayoutDataReady();
-                }).catch(() => onLayoutDataReady());
+                }
             } else {
                 onLayoutDataReady();
             }
@@ -271,7 +287,6 @@ class ChartStore {
 
         this.feed.onComparisonDataUpdate(this.updateComparisons);
     }
-
     removeComparison(symbolObj) {
         this.context.stx.removeSeries(symbolObj.symbol);
         this.updateComparisons();

@@ -39,6 +39,11 @@ class Chart extends Component {
         this.props.init(this.root, this.props);
     }
 
+    componentWillReceiveProps(nextProps) {
+        const { settings, setSettings } = nextProps;
+        setSettings(settings);
+    }
+
     componentWillUnmount() {
         this.props.destroy();
     }
@@ -47,51 +52,32 @@ class Chart extends Component {
         const {
             DrawToolsSettingsDialog,
             StudySettingsDialog,
-            children,
-            lang,
             isMobile = false,
-            theme,
             isChartAvailable,
-            setting,
-            barriers,
+            setting : { position, theme },
+            barriers = [],
+            children,
             chartPanelTop,
             chartControlsWidgets,
             AggregateChartSettingsDialog,
             topWidgets,
-            showCountdown = false,
             chartContainerHeight,
         } = this.props;
 
-        const currentLang = lang || ((setting && setting.language) ? setting.language.key : 'en');
-        t.setLanguage(currentLang);
-        const currentPosition = `cq-chart-control-${(setting && setting.position && !isMobile) ? setting.position : 'bottom'}`;
+        const currentPosition = `cq-chart-control-${(position && !isMobile) ? position : 'bottom'}`;
         const currentMode = `${isMobile ? 'smartcharts-mobile' : ''}`;
-        const array = React.Children.toArray(children);
-        const insideSubHolder = array.filter(c => /(TradeStart)|(TradeEnd)/.test(c.type.displayName));
         const renderTopWidgets = topWidgets || defaultTopWidgets;
-
-
-        const defaultTheme = (setting && setting.theme) ? setting.theme : 'light';
-        const defaultCandleCountdown = (setting && setting.countdown) ? setting.countdown : false;
-
-        // TO DO : this part should move the ChartSetting Store
-        CIQ.localStorageSetItem('smartchart-setting', JSON.stringify({
-            position: ((setting && setting.position && !isMobile) ? setting.position : 'bottom'),
-            language: currentLang,
-            theme: (typeof theme === 'string') ? theme : defaultTheme,
-            countdown: showCountdown || defaultCandleCountdown,
-        }));
 
         return (
             <cq-context
                 ref={(root) => { this.root = root; }}
-                class={`smartcharts-${(typeof theme === 'string') ? theme : defaultTheme}`}
+                class={`smartcharts-${theme}`}
             >
                 <div className={`${currentMode} ${currentPosition}`}>
                     <div className="ciq-chart-area">
                         <div className="ciq-chart">
                             <RenderInsideChart at="holder">
-                                {barriers && barriers.length > 0 && barriers.map((barr, idx) => (
+                                {barriers.map((barr, idx) => (
                                     <Barrier
                                         key={`barrier-${idx}`}
                                         {...barr}
@@ -99,7 +85,7 @@ class Chart extends Component {
                                 ))}
                             </RenderInsideChart>
                             <RenderInsideChart at="subholder">
-                                {insideSubHolder}
+                                {children}
                             </RenderInsideChart>
                             <div className="cq-top-ui-widgets" style={{ top: chartPanelTop }}>
                                 { renderTopWidgets() }
@@ -135,5 +121,6 @@ export default connect(({ chart, drawTools, studies, chartSetting, chartType }) 
     isChartAvailable: chart.isChartAvailable,
     chartPanelTop: chart.chartPanelTop,
     setting: chartSetting,
+    setSettings: chartSetting.setSettings,
     chartContainerHeight: chart.chartContainerHeight,
 }))(Chart);

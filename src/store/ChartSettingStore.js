@@ -1,21 +1,18 @@
 import React from 'react';
-import { observable, action, computed } from 'mobx';
+import { observable, action } from 'mobx';
 import MenuStore from './MenuStore';
-import { createObjectFromLocalStorage } from '../utils';
 import { FlagIcons } from './../components/Icons.jsx';
 
 export default class ChartSettingStore {
     constructor(mainStore) {
         this.defaultLanguage = this.languages[0];
         this.mainStore = mainStore;
-        this.menu = new MenuStore(mainStore);
-        this.restoreSetting();
+        this.menu = new MenuStore(mainStore, { route: 'setting' });
     }
 
     get context() { return this.mainStore.chart.context; }
     get stx() { return this.context.stx; }
 
-    onContextReady = () => {};
     languages = [
         {
             key: 'en',
@@ -68,68 +65,58 @@ export default class ChartSettingStore {
         },
     ];
     defaultLanguage = {};
+    onSettingsChange;
+    @observable assetInformation = true;
     @observable view = '';
-    @observable language = '';
-    @observable position = '';
-    @observable theme = '';
+    @observable language = this.languages[0];
+    @observable position = 'bottom';
+    @observable theme = 'light';
     @observable countdown = false;
 
-    @action.bound restoreSetting() {
-        const setting = createObjectFromLocalStorage('smartchart-setting');
-
-        if (setting) {
-            /**
-             * Language
-             * check language in the list
-             * if not exits set default that is `en`
-             */
-            const language = this.languages.find(item => item.key === setting.language);
-            if (language) {
-                this.language = language;
-            } else {
-                this.language = this.defaultLanguage;
-            }
-            this.position = setting.position || 'bottom';
-            this.theme = setting.theme || 'light';
-            this.countdown = setting.countdown;
-        } else {
-            this.language = this.defaultLanguage;
-            this.position = 'bottom';
-            this.theme = 'light';
-            this.countdown = false;
-        }
+    @action.bound setSettings(settings) {
+        if (settings === undefined) { return; }
+        const { theme, position, countdown, language, assetInformation } = settings;
+        if (theme            !== undefined) { this.setTheme(theme); }
+        if (position         !== undefined) { this.setPosition(position); }
+        if (countdown        !== undefined) { this.showCountdown(countdown); }
+        if (language         !== undefined) { this.setLanguage(language); }
+        if (assetInformation !== undefined) { this.setAssetInformation(assetInformation); }
     }
 
     saveSetting() {
-        CIQ.localStorageSetItem('smartchart-setting', JSON.stringify({
-            language: this.language.key,
-            position: this.position,
-            theme: this.theme,
-            countdown :this.countdown,
-        }));
+        if (this.onSettingsChange) {
+            this.onSettingsChange({
+                language: this.language.key,
+                position: this.position,
+                theme: this.theme,
+                countdown: this.countdown,
+                assetInformation: this.assetInformation,
+            });
+        }
     }
+
     @action.bound setView(view) {
         this.view = view || '';
     }
 
     @action.bound setLanguage(lng) {
-        this.language = lng;
-        this.saveSetting();
-        window.location.reload();
-    }
-
-    @computed get getLanguage() {
-        return this.language ? this.language : this.defaultLanguage;
-    }
-
-    @action.bound setTheme(value) {
-        this.theme = value ? 'dark' : 'light';
-        this.stx.clearStyles();
+        if (lng === this.language.key) { return; }
+        this.language = this.languages.find(item => item.key === lng);
+        t.setLanguage(lng);
         this.saveSetting();
     }
+
+    @action.bound setTheme(theme) {
+        if (this.theme === theme) { return; }
+        this.theme = theme;
+        if (this.context) { this.stx.clearStyles(); }
+        this.saveSetting();
+    }
+
     @action.bound setPosition(value) {
+        if (this.position === value) { return; }
         this.position = value;
-        this.mainStore.chart.stxx.clearStyles();
+        if (this.context) { this.stx.clearStyles(); }
         this.saveSetting();
 
         /**
@@ -142,7 +129,15 @@ export default class ChartSettingStore {
         }, 10);
         this.menu.setOpen(false);
     }
+
+    @action.bound setAssetInformation(value) {
+        if (this.assetInformation === value) { return; }
+        this.assetInformation = value;
+        this.saveSetting();
+    }
+
     @action.bound showCountdown(value) {
+        if (this.countdown === value) { return; }
         this.countdown = value;
         this.mainStore.timeperiod.showCountdown(value);
         this.saveSetting();

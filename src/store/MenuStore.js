@@ -1,22 +1,31 @@
-import { action, computed, reaction } from 'mobx';
+import { action, computed, reaction, observable } from 'mobx';
 import { connect } from './Connect';
 import DialogStore from './DialogStore';
 import Dialog from '../components/Dialog.jsx';
 
-const allMenues = [];
-
 export default class MenuStore {
-    constructor(mainStore) {
+    constructor(mainStore, options) {
+        this.mainStore = mainStore;
         this.getContext = () => mainStore.chart.context;
         this.dialog = new DialogStore(mainStore);
         reaction(() => this.open, () => this.blurInput());
-        allMenues.push(this);
+        if (options && options.route) { this.route = options.route; }
     }
 
     get context() { return this.getContext(); }
+    get routingStore() {
+        return this.mainStore.routing;
+    }
 
+    @observable route = '';
     @computed get open() { return this.dialog.open; }
-    @action.bound setOpen(val) { this.dialog.setOpen(val); }
+    @action.bound setOpen(val) {
+        this.dialog.setOpen(val);
+        /**
+         *  Update the url hash by considering the dialog `route` and `open`
+         */
+        this.routingStore.updateRoute(this.route, val);
+    }
 
     blurInput() {
         const stx = this.context.stx;
@@ -29,6 +38,7 @@ export default class MenuStore {
 
         stx.allowScroll = stx.allowZoom = !this.open;
     }
+
 
     @action.bound onTitleClick(e) {
         if (e) {

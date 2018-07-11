@@ -15,7 +15,7 @@ export default class TimeperiodStore {
     constructor(mainStore) {
         this.mainStore = mainStore;
         when(() => this.context, this.onContextReady);
-        this.menu = new MenuStore(mainStore);
+        this.menu = new MenuStore(mainStore, { route:'time-period' });
     }
 
     get context() { return this.mainStore.chart.context; }
@@ -32,14 +32,16 @@ export default class TimeperiodStore {
 
         this.showCountdown();
 
-        reaction(() => this.timeUnit, () => { this.showCountdown(); });
-        reaction(() => this.interval, () => { this.showCountdown(); });
+        reaction(() => this.timeUnit, this.showCountdown);
+        reaction(() => this.interval, this.showCountdown);
     };
 
     countdownInterval = null;
     showCountdown = (callFromSettings = false) => {
+        if (!this.context) { return; }
+
         const stx = this.context.stx;
-        const isTick = this.timeUnit == 'tick';
+        const isTick = this.timeUnit === 'tick';
         const hasCountdown = !aggregateCharts.some(t => t.id === stx.layout.aggregationType);
         this.remain = null;
         if (this.countdownInterval) { clearInterval(this.countdownInterval); }
@@ -61,7 +63,7 @@ export default class TimeperiodStore {
 
         const setRemain = () => {
             const dataSet = stx.chart.dataSet;
-            if (dataSet && dataSet.length != 0) {
+            if (dataSet && dataSet.length !== 0) {
                 const diff = new Date() - dataSet[dataSet.length - 1].DT;
                 this.remain = displayMilliseconds((getIntervalInSeconds(stx.layout) * 1000) - diff);
                 stx.draw();
@@ -71,7 +73,7 @@ export default class TimeperiodStore {
         if (this.mainStore.chartSetting.countdown && !isTick && hasCountdown) {
             if (!this._injectionId) {
                 this._injectionId = stx.append('draw', () => {
-                    if (this.remain) {
+                    if (this.remain && stx.chart.dataSet) {
                         stx.yaxisLabelStyle = 'rect';
                         stx.createYAxisLabel(stx.chart.panel, this.remain, this.remainLabelY, '#15212d', '#FFFFFF');
                         stx.yaxisLabelStyle = 'roundRectArrow';
@@ -82,12 +84,10 @@ export default class TimeperiodStore {
             if (callFromSettings) { setRemain(); }
 
             if (!this.countdownInterval) {
-                this.countdownInterval = setInterval(() => {
-                    setRemain();
-                }, 1000);
+                this.countdownInterval = setInterval(setRemain, 1000);
             }
         }
-    }
+    };
 
     @action.bound setPeriodicity(interval, timeUnit) {
         if (this.loader) {
