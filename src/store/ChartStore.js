@@ -110,7 +110,7 @@ class ChartStore {
     }
 
     notify(message) {
-        this.messaging(message);
+        if (this.messaging) { this.messaging(message); }
     }
 
     @action.bound resizeScreen() {
