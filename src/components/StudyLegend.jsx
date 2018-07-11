@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import Menu from './Menu.jsx';
 import CategoricalDisplay from './CategoricalDisplay.jsx';
+import NotificationBadge from './NotificationBadge.jsx';
 import { connect } from '../store/Connect';
 import { IndicatorIcon } from './Icons.jsx';
+
 
 class StudyLegend extends Component {
     componentWillUnmount() {
@@ -33,7 +35,7 @@ class StudyLegend extends Component {
                         className={`ic-icon-with-sub ${menuOpen ? 'active' : ''}`}
                         tooltip-title={t.translate('Indicators')}
                     />
-                    {activeStudiesNo ? <span className={`notification-badget ${activeStudiesNo > 9 ? 'x2' : ''}`}>{activeStudiesNo}</span> : ''}
+                    <NotificationBadge badge={activeStudiesNo} />
                 </Menu.Title>
                 <Menu.Body>
                     <StudyCategoricalDisplay
