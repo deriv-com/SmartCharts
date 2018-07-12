@@ -34,7 +34,8 @@
 			display: flex;
 			align-items: center;
 			height: 32px;
-			padding: 0 0 0 14px;
+			padding: 0 0 0 16px;
+			margin: 16px 11px 0 0;
 			@include themify($themes) {
 				border: 1px solid themed(defaultBorder);
 				background: themed('defaultMain');
@@ -82,7 +83,7 @@
 			height: 145px;
 			padding: 0px 5px 0px 16px;
 			.ciq-list{
-				height: 145px;
+				height: 115px;
 				overflow: auto;
 				display: block;
 				.ciq-list-item{
@@ -124,26 +125,28 @@
 		}
 	}
 	.ovrwrit-alrt {
-		bottom: 23.5em;
+		margin: 16px 0 0 -16px;
 		.ovrwrit-alrt-title {
 			text-align: center;
 			.ic-icon {
 				width: 100%;
+				margin-bottom: 10px;
 				>svg {
 					width: 24px;
 					height: 24px;
 				}
 			}
 			>span {
-				display: inline-block;
+				display: block;
 				text-align: center;
+				height: 20px;
 			}
 		}
 		.ovrwrit-alrt-buttons {
 			display:flex;
 			justify-content: flex-end;
 			position: absolute;
-			bottom: 25px;
+			bottom: 16px;
 			right: 30px;
 			font-weight: bold;
 			>div{
