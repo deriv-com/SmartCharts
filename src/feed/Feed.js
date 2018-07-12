@@ -107,6 +107,10 @@ class Feed {
         }
 
         const quotes = TickHistoryFormatter.formatHistory(response);
+        if (!quotes) {
+            console.error('Unexpected response: ', response);
+            return;
+        }
 
         callback({ quotes });
         if (!isComparisonChart) {

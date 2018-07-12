@@ -13,7 +13,7 @@ export default class AssetInformationStore {
     }
 
     get context() { return this.mainStore.chart.context; }
-    get visible() { return this.mainStore.chartSetting.assetInformation; }
+    get visible() { return !this.mainStore.chart.isMobile && this.mainStore.chartSetting.assetInformation; }
     get stx() { return this.context.stx; }
 
     onContextReady = () => {
