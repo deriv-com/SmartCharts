@@ -82,15 +82,20 @@ class Feed {
                     category: 'activesymbol',
                 });
             } else if (errorCode === 'StreamingNotAllowed') {
-                if (!isComparisonChart) {
-                    this._mainStore.chart.setChartAvailability(false);
-                }
                 this._mainStore.chart.notify({
                     text: t.translate('Streaming for [symbol] is not available due to license restrictions', tParams),
                     type: 'error',
                     category: 'activesymbol',
                 });
-                callback({ quotes: [] });
+                let dataCallback = { quotes: [] };
+                if (isComparisonChart) {
+                    // Passing error will prevent the chart from being shown; for
+                    // main chart we still want the chart to be shown, just disabled
+                    dataCallback = { error: errorCode, suppressAlert: true, ...dataCallback };
+                } else {
+                    this._mainStore.chart.setChartAvailability(false);
+                }
+                callback(dataCallback);
                 return;
             }
         } else {
@@ -98,6 +103,10 @@ class Feed {
         }
 
         const quotes = TickHistoryFormatter.formatHistory(response);
+        if (!quotes) {
+            console.error('Unexpected response: ', response);
+            return;
+        }
 
         callback({ quotes });
         if (!isComparisonChart) {
