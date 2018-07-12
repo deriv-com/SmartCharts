@@ -108,13 +108,20 @@ class ChartStore {
         this.chartContainerHeight = this.chartHeight - offsetHeight;
     }
 
-    @action.bound resizeScreen() {
-        if (!this.context) { return; }
-        this.updateHeight();
-        this.stxx.resizeChart();
+    updateCanvas = () => {
         if (this.stxx.slider) {
             this.stxx.slider.display(this.stxx.layout.rangeSlider);
         }
+        this.stxx.resizeChart();
+    };
+
+    @action.bound resizeScreen() {
+        if (!this.context) { return; }
+        this.updateHeight();
+        // Height updates are not immediate, so we must resize the canvas with
+        // a slight delay for it to pick up the correct chartContainer height.
+        // In mobile devices, a longer delay is given as DOM updates are slower.
+        setTimeout(this.updateCanvas, this.isMobile ? 500 : 100);
     }
 
     @action.bound init(rootNode, props) {
