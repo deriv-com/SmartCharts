@@ -71,9 +71,6 @@ class Feed {
         this._binaryApi.subscribeTickHistory(dataRequest, processTick);
         let response = await tickHistoryPromise;
 
-        // Clear all notifications related to active symbols
-        // this._mainStore.notification.removeByCategory('activesymbol');
-
         if (response.error) {
             const errorCode = response.error.code;
             const tParams = { symbol: symbolObject.name };

@@ -110,7 +110,7 @@ class ChartStore {
     }
 
     notify(message) {
-        if (this.messaging) { this.messaging(message); }
+        if (this.onMessage) { this.onMessage(message); }
     }
 
     @action.bound resizeScreen() {
@@ -148,7 +148,8 @@ class ChartStore {
         this.isMobile = isMobile;
         this.onSymbolChange = onSymbolChange;
 
-        this.messaging = onMessage;
+
+        this.onMessage = onMessage;
 
         const stxx = this.stxx = new CIQ.ChartEngine({
             markerDelay: null, // disable 25ms delay for placement of markers

@@ -70,60 +70,55 @@ const requestSubscribe = streamManager.subscribe.bind(streamManager);
 const requestForget = streamManager.forget.bind(streamManager);
 const shareOrigin = window.location.href.split('?')[0];
 
+function Notifier() {
+    this.callback = null;
+    this.notify = (_action, _data) => {
+        if (typeof this.callback === 'function') {
+            this.callback({
+                action: _action,
+                data: _data,
+            });
+        }
+    };
+    this.onCallback = (callback) => {
+        this.callback = callback;
+    };
+}
+
 class App extends Component {
     constructor(props) {
         super(props);
         const settings = createObjectFromLocalStorage('smartchart-setting');
         if (settings) { this.startingLanguage = settings.language; }
-        this.state = { settings, messages: [] };
-    }
-    onMessage(message) {
-        const messages = this.state.messages;
-
-        message.id = (new Date()).getTime();
-        message.type = message.type || 'warning';
-        message.hide = false;
-
-        messages.push(message);
-        this.setState({
-            messages,
-        });
-    }
-    onDestroyMessage(id) {
-        const messages = this.state.messages
-            .filter(x => x.id !== id);
-        this.setState({
-            messages,
-        });
+        this.state = { settings };
     }
     saveSettings = (settings) => {
         console.log('settings updated:', settings);
         CIQ.localStorageSetItem('smartchart-setting', JSON.stringify(settings));
 
         this.setState({ settings });
-
         if (this.startingLanguage !== settings.language) {
             window.location.reload();
         }
     };
     startingLanguage = 'en';
     render() {
+        const n = new Notifier();
         const renderTopWidgets = () => (
             <React.Fragment>
                 <ChartTitle />
                 <AssetInformation />
                 <ComparisonList />
                 <Notification
-                    messages={this.state.messages}
-                    onRemove={id => this.onDestroyMessage(id)}
+                    notifier={n}
                 />
             </React.Fragment>
         );
         const { settings } = this.state;
         return (
             <SmartChart
-                onSymbolChange={symbol => console.log('Symbol has changed to:', symbol)}
-                onMessage={e => this.onMessage(e)}
+                onSymbolChange={(symbol) => { n.notify('removeall'); console.log('Symbol has changed to:', symbol); }}
+                onMessage={e => n.notify('message', e)}
                 isMobile={CIQ.isMobile}
                 enableRouting
                 topWidgets={renderTopWidgets}
