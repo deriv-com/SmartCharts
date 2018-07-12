@@ -1,44 +1,44 @@
 import EventEmitter from 'event-emitter-es6';
+import RobustWebsocket from 'robust-websocket';
 import { PendingPromise } from '@binary-com/smartcharts'; // eslint-disable-line import/no-extraneous-dependencies,import/no-unresolved
 
 class ConnectionManager extends EventEmitter {
     static get EVENT_CONNECTION_CLOSE() { return 'CONNECTION_CLOSE'; }
     static get EVENT_CONNECTION_REOPEN() { return 'CONNECTION_REOPEN'; }
+    openPromises = [];
+
     constructor({ appId, endpoint, language }) {
         super({ emitDelay: 0 });
         this._url = `${endpoint}?l=${language}&app_id=${appId}`;
         this._counterReqId = 1;
         this._initialize();
         this._pendingRequests = { };
-        this._autoReconnect = true;
     }
+
     _initialize() {
-        this._websocket = new WebSocket(this._url);
+        this._websocket = new RobustWebsocket(this._url);
 
         this._websocket.addEventListener('open', this._onopen.bind(this));
         this._websocket.addEventListener('close', this._onclose.bind(this));
-        this._websocket.addEventListener('error', this._onclose.bind(this));
         this._websocket.addEventListener('message', this._onmessage.bind(this));
-        this._connectionOpened = PendingPromise();
     }
+
     _onopen() {
-        this._connectionOpened.resolve();
-    }
-    _onclose() {
-        if (this._connectionOpened.isPending) {
-            this._connectionOpened.reject('Connection Error');
+        for (const promise of this.openPromises) {
+            promise.resolve();
         }
+        this.openPromises.length = 0; // clear array
+        this.emit(ConnectionManager.EVENT_CONNECTION_REOPEN);
+    }
+
+    _onclose() {
         Object.keys(this._pendingRequests).forEach(req_id => this._pendingRequests[req_id]
             .reject('Connection Error'));
         this._pendingRequests = { };
-        if (this._autoReconnect) {
-            this._initialize();
-            this._connectionOpened.then(() => {
-                this.emit(ConnectionManager.EVENT_CONNECTION_REOPEN);
-            });
-        }
         this.emit(ConnectionManager.EVENT_CONNECTION_CLOSE);
+        this.closeTime = new Date();
     }
+
     _onmessage(message) {
         const data = JSON.parse(message.data);
         const { req_id, msg_type } = data;
@@ -48,13 +48,7 @@ class ConnectionManager extends EventEmitter {
         }
         this.emit(msg_type, data);
     }
-    _assertConnected() {
-        ['CONNECTING', 'CLOSING', 'CLOSED'].forEach((state) => {
-            if (this._websocket.readyState === WebSocket[state]) {
-                throw new Error(`Websocket is ${state}`);
-            }
-        });
-    }
+
     _timeoutRequest(req_id, timeout) {
         setTimeout(() => {
             if (this._pendingRequests[req_id] && this._pendingRequests[req_id].isPending) {
@@ -67,8 +61,13 @@ class ConnectionManager extends EventEmitter {
     async send(data, timeout) {
         const req = Object.assign({}, data);
         req.req_id = this._counterReqId++;
-        await this._connectionOpened;
-        this._assertConnected();
+
+        if (this._websocket.readyState !== 1 /* 1 == OPEN */) {
+            const openPromise = new PendingPromise();
+            this.openPromises.push(openPromise);
+            await openPromise;
+        }
+
         this._websocket.send(JSON.stringify(req));
         this._pendingRequests[req.req_id] = PendingPromise(req);
         if (timeout) {
@@ -78,7 +77,6 @@ class ConnectionManager extends EventEmitter {
     }
 
     destroy() {
-        this._autoReconnect = 0;
         this._websocket.close();
     }
 }
