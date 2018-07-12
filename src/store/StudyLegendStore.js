@@ -36,10 +36,12 @@ export default class StudyLegendStore {
     get stx() { return this.context.stx; }
 
     onContextReady = () => {
-        this.begin();
+        this.stx.callbacks.studyOverlayEdit = this.editStudy;
+        this.stx.callbacks.studyPanelEdit = this.editStudy;
+        this.stx.append('createDataSet', this.renderLegend);
+        this.renderLegend();
     };
 
-    injections = [];
     previousStudies = { };
     @observable activeStudies = {
         categoryName: t.translate('Active'),
@@ -48,13 +50,6 @@ export default class StudyLegendStore {
         emptyDescription: t.translate('There are no active indicators yet.'),
         data: [],
     };
-
-    begin() {
-        this.stx.callbacks.studyOverlayEdit = this.editStudy;
-        this.stx.callbacks.studyPanelEdit = this.editStudy;
-        this.injections.push(this.stx.append('createDataSet', () => this.renderLegend()));
-        this.renderLegend();
-    }
 
     get categorizedStudies() {
         const data = [];
@@ -202,11 +197,11 @@ export default class StudyLegendStore {
     /**
      * Gets called continually in the draw animation loop.
      * Be careful not to render unnecessarily. */
-    renderLegend() {
+    renderLegend = () => {
         if (!this.shouldRenderLegend()) { return; }
 
         this.updateActiveStudies();
-    }
+    };
 
     @action.bound updateActiveStudies() {
         const stx = this.stx;
@@ -229,15 +224,6 @@ export default class StudyLegendStore {
         });
 
         this.activeStudies.data = studies;
-    }
-
-    @action.bound cleanUp() {
-        if (this.context && this.injections) {
-            for (const inj of this.injections) {
-                this.stx.removeInjection(inj);
-            }
-            this.injections = [];
-        }
     }
 
     @action.bound clearStudies() {

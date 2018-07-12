@@ -5,7 +5,6 @@ import NotificationBadge from './NotificationBadge.jsx';
 import { connect } from '../store/Connect';
 import { IndicatorIcon } from './Icons.jsx';
 
-
 class StudyLegend extends Component {
     componentWillUnmount() {
         this.props.cleanUp();
@@ -51,7 +50,6 @@ class StudyLegend extends Component {
 export default connect(({ studies: st }) => ({
     isOpened: st.open,
     setOpen: st.setOpen,
-    cleanUp: st.cleanUp,
     Menu: st.menu.connect(Menu),
     menuOpen: st.menu.open,
     StudyCategoricalDisplay: st.categoricalDisplay.connect(CategoricalDisplay),
