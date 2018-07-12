@@ -90,6 +90,7 @@
 					align-items: center;
 					justify-content: flex-start;
 					display: flex;
+					margin-bottom: 0;
 					&:hover{
 						@include themify($themes) {
 							color: themed('defaultTextActive');
@@ -111,14 +112,12 @@
 						transition: opacity 0.15s .2s;
 						@include svg-icon-color('controlText');
 					}
-					&:first-child
-					{
+					&:first-child {
 						border-top: none;
 						margin-top: 0;
 					}
-					&:first-child
-					{
-						margin-bottom: 0;
+					&:last-child {
+						margin-bottom: 16px !important;
 					}
 				}
 			}
