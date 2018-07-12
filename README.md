@@ -98,7 +98,7 @@ enableRouting | Enable routing for dialogs. Defaults to `false`
 
 | Attribute | Description |
 --------|--------------
-showCountdown | Show Countdown. Defaults to `false`.
+countdown | Show Countdown. Defaults to `false`.
 theme | Sets the chart theme. themes are (`dark\|light`), and default is `light`.
 lang | Sets the language. Defaults to `en`.
 position | Sets the position of the chart controls. Choose between `left` and `bottom`. In mobile this is always `bottom`. Defaults to `bottom`.
