@@ -26,7 +26,12 @@ class StreamManager {
                     this._streamIds[key] = data[msgType].id;
                     this._emitters[key].emit(Stream.EVENT_STREAM, data);
                 } else if (this._beingForgotten[key] === undefined) {
-                    console.error(`LEAKING STREAM ON ${msgType} => symbol: ${symbol}, granularity: ${granularity}`); // eslint-disable-line
+                    // There could be the possibility a stream could still enter even though
+                    // it is no longer in used. This is because we can't know the stream ID
+                    // from the initial response; we have to wait for the next tick to retrieve it.
+                    // In such scenario we need to forget these "orphaned" streams:
+                    this._streamIds[key] = data[msgType].id;
+                    this._forgetStream(key);
                 }
             });
         }
@@ -93,11 +98,11 @@ class StreamManager {
         this._clearEmitter(key);
         if (this._streamIds[key]) {
             const id = this._streamIds[key];
-            delete this._streamIds[key];
             this._beingForgotten[key] = true;
             this._connection.send({ forget: id })
                 .then(() => {
                     delete this._beingForgotten[key];
+                    delete this._streamIds[key];
                 });
         }
         if (this._subscriptionData[key]) {
