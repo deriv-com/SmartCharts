@@ -31,6 +31,7 @@ class ChartStore {
     chartControlsNode = null;
     chartContainerNode = null;
     holderStyle;
+    @observable containerWidth = null;
     @observable context = null;
     @observable currentActiveSymbol;
     @observable isChartAvailable = true;
@@ -117,6 +118,19 @@ class ChartStore {
 
     @action.bound resizeScreen() {
         if (!this.context) { return; }
+
+
+        if (this.rootNode.clientWidth > 1100) {
+            this.containerWidth = 1100;
+        } else if (this.rootNode.clientWidth > 900) {
+            this.containerWidth = 900;
+        } else if (this.rootNode.clientWidth > 480) {
+            this.containerWidth = 480;
+        } else {
+            this.containerWidth = 1100;
+        }
+
+
         this.updateHeight();
         // Height updates are not immediate, so we must resize the canvas with
         // a slight delay for it to pick up the correct chartContainer height.

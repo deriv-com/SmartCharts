@@ -1,6 +1,7 @@
 import React from 'react';
 import Menu from './Menu.jsx';
 import CategoricalDisplay from './CategoricalDisplay.jsx';
+import NotificationBadge from './NotificationBadge.jsx';
 import { connect } from '../store/Connect';
 import { IndicatorIcon } from './Icons.jsx';
 
@@ -12,6 +13,7 @@ const StudyLegend = ({
     StudyCategoricalDisplay,
     onCloseMenu,
     isMobile,
+    activeStudiesNo,
 }) => (
     <Menu
         className="ciq-menu ciq-studies collapse"
@@ -24,6 +26,7 @@ const StudyLegend = ({
                 className={`ic-icon-with-sub ${menuOpen ? 'active' : ''}`}
                 tooltip-title={t.translate('Indicators')}
             />
+            <NotificationBadge notificationCount={activeStudiesNo} />
         </Menu.Title>
         <Menu.Body>
             <StudyCategoricalDisplay
@@ -42,4 +45,5 @@ export default connect(({ studies: st }) => ({
     StudyCategoricalDisplay: st.categoricalDisplay.connect(CategoricalDisplay),
     onCloseMenu: st.menu.onTitleClick,
     isMobile: st.categoricalDisplay.isMobile,
+    activeStudiesNo: st.activeStudies.data.length,
 }))(StudyLegend);
