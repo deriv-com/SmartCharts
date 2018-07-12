@@ -2,7 +2,7 @@ import React from 'react';
 import Menu from './Menu.jsx';
 import { connect } from '../store/Connect';
 import CategoricalDisplay from './CategoricalDisplay.jsx';
-import NotificationBadge from './NotificationBadge.jsx';
+import MenuBadge from './MenuBadge.jsx';
 import { ComparisonIcon } from './Icons.jsx';
 
 const Comparison = ({
@@ -22,7 +22,7 @@ const Comparison = ({
                 className={`ic-icon-with-sub ${menuOpen ? 'active' : ''}`}
                 tooltip-title={t.translate('Comparison')}
             />
-            <NotificationBadge badge={activeComparisonsNo} />
+            <MenuBadge badge={activeComparisonsNo} />
         </Menu.Title>
         <Menu.Body>
             <CategoricalDisplay
