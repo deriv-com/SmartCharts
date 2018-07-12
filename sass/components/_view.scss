@@ -80,10 +80,11 @@
 		.content {
 			display: block;
 			height: 145px;
-			overflow: scroll;
-			padding: 16px;
+			padding: 0px 5px 0px 16px;
 			.ciq-list{
-				height: auto;
+				height: 145px;
+				overflow: auto;
+				display: block;
 				.ciq-list-item{
 					align-items: center;
 					justify-content: flex-start;
@@ -112,6 +113,11 @@
 					&:first-child
 					{
 						border-top: none;
+						margin-top: 0;
+					}
+					&:first-child
+					{
+						margin-bottom: 0;
 					}
 				}
 			}

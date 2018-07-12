@@ -1,4 +1,3 @@
-import PerfectScrollbar from 'perfect-scrollbar';
 import { action, observable, computed, when, reaction, toJS } from 'mobx';
 import { connect } from './Connect';
 
@@ -53,6 +52,7 @@ export default class CategoricalDisplayStore {
         data: [],
     };
     scrollTop = undefined;
+    lastFilteredItems = [];
 
     get context() {
         return this.mainStore.chart.context;
@@ -80,6 +80,7 @@ export default class CategoricalDisplayStore {
         if (this.pauseScrollSpy) { return; }
         if (this.filteredItems.length === 0) { return; }
 
+
         let i = 0;
         for (const category of this.filteredItems) {
             const el = this.categoryElements[category.categoryId];
@@ -88,7 +89,7 @@ export default class CategoricalDisplayStore {
                 continue;
             }
             const r = el.getBoundingClientRect();
-            const top = r.top - this.scrollPanel.getBoundingClientRect().top;
+            const top = r.top - this.scrollPanel.scrollTop;
             if (top > 0) { break; }
             i++;
         }
@@ -103,16 +104,13 @@ export default class CategoricalDisplayStore {
             }
             idx--;
         }
+
         this.activeCategoryKey = id || this.filteredItems[0].categoryId;
         this.scrollTop = this.scrollPanel.scrollTop;
     }
 
     @action.bound init() {
         this.isInit = true;
-        this.scroll = new PerfectScrollbar(this.scrollPanel);
-
-        this.scrollPanel.addEventListener('ps-scroll-y', this.updateScrollSpy.bind(this));
-
         // Select first non-empty category:
         if (this.activeCategoryKey === '' && this.filteredItems.length > 0) {
             for (const category of this.filteredItems) {
@@ -135,7 +133,7 @@ export default class CategoricalDisplayStore {
 
 
     @computed get filteredItems() {
-        const filteredItems = toJS(this.getCategoricalItems());
+        let filteredItems = toJS(this.getCategoricalItems());
 
         if (this.favoritesId) {
             const favsCategory = toJS(this.favoritesCategory);
@@ -176,13 +174,20 @@ export default class CategoricalDisplayStore {
             filteredItems.unshift(activeCategory);
         }
 
+
         if (this.filterText === '') {
+            this.lastFilteredItems = filteredItems;
             return filteredItems;
         }
 
-        const reg = RegExp(this.filterText, 'i');
+
+        let searchHasResult = false;
+        const queries = this.filterText.split(' ').filter(x => x !== '').map(b => b.toLowerCase().trim());
+        // regex to check all separate words by comma, should exist in the string
+        const hasSearchString = text => queries.reduce((a, b) => text.toLowerCase().includes(b) && a, true);
         const filterCategory = (c) => {
-            c.data = c.data.filter(item => reg.test(item.display) || (item.dataObject && reg.test(item.dataObject.symbol)));
+            c.data = c.data.filter(item => hasSearchString(item.display || (typeof item.dataObject === 'object' && item.dataObject.symbol)));
+            if (c.data.length) { searchHasResult = true; }
         };
 
         for (const category of filteredItems) {
@@ -195,6 +200,12 @@ export default class CategoricalDisplayStore {
             }
         }
 
+
+        if (!searchHasResult) {
+            filteredItems = this.lastFilteredItems;
+        }
+
+        this.lastFilteredItems = filteredItems;
         return filteredItems;
     }
 
@@ -205,7 +216,6 @@ export default class CategoricalDisplayStore {
     @action.bound setFilterText(filterText) {
         this.filterText = filterText;
         setTimeout(() => {
-            this.scroll.update();
             this.updateScrollSpy();
         }, 0);
     }
@@ -221,7 +231,7 @@ export default class CategoricalDisplayStore {
         if (el) {
             // TODO: Scroll animation
             this.pauseScrollSpy = true;
-            this.scroll.element.scrollTop = el.offsetTop;
+            this.scrollPanel.scrollTop = el.offsetTop;
             this.activeCategoryKey = category.categoryId;
             // scrollTop takes some time to take affect, so we need
             // a slight delay before enabling the scroll spy again
@@ -234,7 +244,7 @@ export default class CategoricalDisplayStore {
     }
 
     @action.bound setScrollPanel(element) {
-        this.scrollPanel = element;
+        this.scrollPanel = element._container;
     }
 
     @action.bound getItemCount(category) {
@@ -310,5 +320,6 @@ export default class CategoricalDisplayStore {
         favoritesMap: this.favoritesMap,
         favoritesId: this.favoritesId,
         CloseUpperMenu: this.CloseUpperMenu,
+        updateScrollSpy: this.updateScrollSpy,
     }))
 }

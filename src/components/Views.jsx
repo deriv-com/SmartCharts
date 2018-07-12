@@ -1,4 +1,5 @@
 import React from 'react';
+import PerfectScrollbar from 'react-perfect-scrollbar';
 import Menu from './Menu.jsx';
 import { connect } from '../store/Connect';
 import {
@@ -81,7 +82,7 @@ const Views = ({
                                         }
                                     </span>
                                 </div>
-                                <div className="ciq-list">
+                                <PerfectScrollbar className="ciq-list">
                                     {
                                         views.map((view, i) => (
                                             <ViewItem
@@ -92,7 +93,7 @@ const Views = ({
                                             />
                                         ))
                                     }
-                                </div>
+                                </PerfectScrollbar >
                             </div>
                             :
                             <div className="ovrwrit-alrt">
