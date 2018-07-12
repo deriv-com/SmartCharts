@@ -42,7 +42,6 @@ export default class StudyLegendStore {
         this.renderLegend();
     };
 
-    injections = [];
     previousStudies = { };
 
     @observable activeStudies = {
