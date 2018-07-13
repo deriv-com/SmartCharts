@@ -10,16 +10,27 @@
 	}
 	.cq-menu-dropdown {
 		width: 200px;
-		padding: 16px;
 		@include box-sizing(border-box);
-	}
-	.ciq-title {
-		display: flex;
-		align-items: center;
-		cursor: pointer;
-		.ciq-icon {
-			background-position: 50% 50%;
-			background-repeat: no-repeat;
+		.title {
+			display: flex;
+			align-items: center;
+			cursor: pointer;
+
+            height: 40px;
+            line-height: 40px;
+            padding-left: 16px;
+            font-size: 16px;
+            display: flex;
+            justify-content: space-between;
+            @include themify($themes) {
+                color: themed('defaultTextStrong');
+            }
+			.ic-icon {
+				margin-right: 7px;
+			}
+		}
+		.body{
+			padding: 0px 5px 0px 16px;
 		}
 	}
 	.ciq-list {

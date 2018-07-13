@@ -1,4 +1,5 @@
 import React from 'react';
+import PerfectScrollbar from 'react-perfect-scrollbar';
 import Menu from './Menu.jsx';
 import { connect } from '../store/Connect';
 import {
@@ -67,7 +68,7 @@ const Views = ({
                 </span>
             </div>
             <div className="content">
-                <div className="ciq-list">
+                <PerfectScrollbar className="ciq-list" >
                     {
                         views.length
                             ? views.map((view, i) => (
@@ -84,7 +85,7 @@ const Views = ({
                                 <p>{t.translate('Click + icon to add one.')}</p>
                             </span>
                     }
-                </div>
+                </PerfectScrollbar>
             </div>
         </Menu.Body>
     </Menu>
