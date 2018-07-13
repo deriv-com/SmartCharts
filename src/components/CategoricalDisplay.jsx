@@ -1,5 +1,6 @@
 /* eslint-disable react/no-array-index-key */
 import React, { Fragment } from 'react';
+import PerfectScrollbar from 'react-perfect-scrollbar';
 import {
     CategoryIconMap, ItemIconMap, SearchIcon,
     SymbolPlaceholderIcon, ActiveOptionsIconMap, FavoriteIcon, CloseIcon,
@@ -28,6 +29,7 @@ const CategoricalDisplay = ({
     favoritesMap,
     dialogTitle,
     closeMenu,
+    updateScrollSpy,
 }) => {
     /**
      * On mobile mode, this part appear on the top of dialog
@@ -133,7 +135,11 @@ const CategoricalDisplay = ({
                     })}
                 </div>
             </div>
-            <div className="cq-scroll-panel" ref={setScrollPanel}>
+            <PerfectScrollbar
+                className="cq-scroll-panel"
+                ref={setScrollPanel}
+                onScrollY={e => updateScrollSpy(e)}
+            >
                 <div className="results-panel">
                     { filteredItems.map((category, i) =>
                         (getItemCount(category) > 0 || category.emptyDescription) &&
@@ -164,7 +170,7 @@ const CategoricalDisplay = ({
                                 }
                             </div>) }
                 </div>
-            </div>
+            </PerfectScrollbar>
         </div>
     );
 };

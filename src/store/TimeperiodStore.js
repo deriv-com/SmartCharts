@@ -32,12 +32,14 @@ export default class TimeperiodStore {
 
         this.showCountdown();
 
-        reaction(() => this.timeUnit, () => { this.showCountdown(); });
-        reaction(() => this.interval, () => { this.showCountdown(); });
+        reaction(() => this.timeUnit, this.showCountdown);
+        reaction(() => this.interval, this.showCountdown);
     };
 
     countdownInterval = null;
     showCountdown = (callFromSettings = false) => {
+        if (!this.context) { return; }
+
         const stx = this.context.stx;
         const isTick = this.timeUnit === 'tick';
         const hasCountdown = !aggregateCharts.some(t => t.id === stx.layout.aggregationType);
@@ -71,7 +73,7 @@ export default class TimeperiodStore {
         if (this.mainStore.chartSetting.countdown && !isTick && hasCountdown) {
             if (!this._injectionId) {
                 this._injectionId = stx.append('draw', () => {
-                    if (this.remain) {
+                    if (this.remain && stx.currentQuote() !== null) {
                         stx.yaxisLabelStyle = 'rect';
                         stx.createYAxisLabel(stx.chart.panel, this.remain, this.remainLabelY, '#15212d', '#FFFFFF');
                         stx.yaxisLabelStyle = 'roundRectArrow';
@@ -82,12 +84,10 @@ export default class TimeperiodStore {
             if (callFromSettings) { setRemain(); }
 
             if (!this.countdownInterval) {
-                this.countdownInterval = setInterval(() => {
-                    setRemain();
-                }, 1000);
+                this.countdownInterval = setInterval(setRemain, 1000);
             }
         }
-    }
+    };
 
     @action.bound setPeriodicity(interval, timeUnit) {
         if (this.loader) {
@@ -121,8 +121,7 @@ export default class TimeperiodStore {
 
     @computed get remainLabelY() {
         const stx = this.context.stx;
-        const dataSet = stx.chart.dataSet;
-        const price = dataSet[dataSet.length - 1].Close;
+        const price = stx.currentQuote().Close;
         let x = stx.pixelFromPrice(price, stx.chart.panel);
         const currentPriceLabelHeight = 18;
         const maxRequiredSpaceForLabels = 60;

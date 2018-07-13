@@ -53,9 +53,11 @@
 		.content {
 			display: block;
 			height: 135px;
-			overflow: scroll;
-			padding: 16px;
+			padding: 0px 5px 0px 16px;
 			.ciq-list{
+				height: 135px;
+				overflow: auto;
+				display: block;
 				.ciq-list-item{
 					align-items: center;
 					justify-content: flex-start;
