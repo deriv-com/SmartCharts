@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Polish\n"
 "Language: pl_PL\n"
-"PO-Revision-Date: 2018-07-15 11:30\n"
+"PO-Revision-Date: 2018-07-15 11:40\n"
 
 msgid "Favorites"
 msgstr "Ulubione"
@@ -721,7 +721,7 @@ msgid "Prime Bands Bottom"
 msgstr "Dół wstęg Prime"
 
 msgid "Prime Bands Channel"
-msgstr ""
+msgstr "Kanał wstęg Prime"
 
 msgid "Prime Number Oscillator"
 msgstr "Prime Number Oscillator (Oscylator liczb pierwszych)"
@@ -769,7 +769,7 @@ msgid "Mass Index"
 msgstr "Indeks masowy\n"
 
 msgid "Bulge Threshold"
-msgstr ""
+msgstr "Próg wypukłości"
 
 msgid "Keltner Channel"
 msgstr "Kanał Keltnera"
