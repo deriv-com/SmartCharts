@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Polish\n"
 "Language: pl_PL\n"
-"PO-Revision-Date: 2018-07-15 12:01\n"
+"PO-Revision-Date: 2018-07-15 12:10\n"
 
 msgid "Favorites"
 msgstr "Ulubione"
@@ -196,7 +196,7 @@ msgid "[symbol] market is presently closed."
 msgstr "Rynek [symbol] jest obecnie zamknięty."
 
 msgid "Streaming for [symbol] is not available due to license restrictions"
-msgstr "Z powodu ograniczeń licencyjnych przesyłanie strumieniowe w przypadku [symbol] jest niedostępne"
+msgstr "Z powodu ograniczeń licencyjnych przesyłanie strumieniowe dla [symbol] jest niedostępne"
 
 msgid "Copy to clipboard"
 msgstr "Kopiuj do schowka"
@@ -700,7 +700,7 @@ msgid "Fractal High"
 msgstr "Fractal High"
 
 msgid "Fractal Low"
-msgstr "Fraktal Low"
+msgstr "Fractal Low"
 
 msgid "Fractal Channel"
 msgstr "Fractal Channel"
@@ -736,7 +736,7 @@ msgid "Bollinger Bands Top"
 msgstr "Góra wstęgi Bollingera"
 
 msgid "Bollinger Bands Median"
-msgstr "Środek wstęgi Bollingera"
+msgstr "Średnia wstęg Bollingera"
 
 msgid "Bollinger Bands Bottom"
 msgstr "Dół wstęgi Bollingera"
@@ -751,13 +751,13 @@ msgid "Low Period"
 msgstr "Okres niski"
 
 msgid "Donchian High"
-msgstr "Wysoka wartość kanału Donchiana"
+msgstr "Wysoka wstęga kanału Donchiana"
 
 msgid "Donchian Median"
-msgstr "Mediana kanału Donchiana"
+msgstr "Średnia wstęga kanału Donchiana"
 
 msgid "Donchian Low"
-msgstr "Niska wartość kanału Donchiana"
+msgstr "Niska wstęga kanału Donchiana"
 
 msgid "Highest High Value"
 msgstr "Najwyższa wysoka wartość"
@@ -847,10 +847,10 @@ msgid "Volume Chart"
 msgstr "Wykres wolumenu"
 
 msgid "Up Volume"
-msgstr "Dół wolumenu"
+msgstr "Wolumen - góra"
 
 msgid "Down Volume"
-msgstr "Góra wolumenu"
+msgstr "Wolumen - dół"
 
 msgid "Volume Underlay"
 msgstr "Podkładka wolumenu"
