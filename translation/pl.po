@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Polish\n"
 "Language: pl_PL\n"
-"PO-Revision-Date: 2018-07-15 11:50\n"
+"PO-Revision-Date: 2018-07-15 12:01\n"
 
 msgid "Favorites"
 msgstr "Ulubione"
@@ -400,7 +400,7 @@ msgid "Aroon Up"
 msgstr "Aroon Up"
 
 msgid "Aroon Down"
-msgstr "Aroon Down (w dół)"
+msgstr "Aroon Down"
 
 msgid "Aroon Oscillator"
 msgstr "Oscylator Aroon"
@@ -448,7 +448,7 @@ msgid "Trade Volume Index"
 msgstr "Indeks wolumenu handlowego"
 
 msgid "Min Tick Value"
-msgstr "Wartość najmniejszej zmiany ceny"
+msgstr "Wartość min. zmiany ceny"
 
 msgid "Swing Index"
 msgstr "Indeks wahań"
@@ -544,7 +544,7 @@ msgid "Twiggs Money Flow"
 msgstr "Przepływy pieniężne Twiggsa"
 
 msgid "Chaikin Money Flow"
-msgstr "Przepływy pieniężne Chaikin"
+msgstr "Przepływy pieniężne Chaikina"
 
 msgid "Chaikin Volatility"
 msgstr "Wskaźnik zmienności Chaikina"
