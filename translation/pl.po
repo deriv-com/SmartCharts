@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Polish\n"
 "Language: pl_PL\n"
-"PO-Revision-Date: 2018-07-15 11:40\n"
+"PO-Revision-Date: 2018-07-15 11:50\n"
 
 msgid "Favorites"
 msgstr "Ulubione"
@@ -25,10 +25,10 @@ msgid "PRICE"
 msgstr "CENA"
 
 msgid "OPEN"
-msgstr "OTWÓRZ"
+msgstr "OTWARCIE"
 
 msgid "CLOSE"
-msgstr "ZAMKNIJ"
+msgstr "ZAMKNIĘCIE"
 
 msgid "HIGH"
 msgstr "WYSOKIE"
@@ -97,7 +97,7 @@ msgid "Template name"
 msgstr "Nazwa szablonu"
 
 msgid "There is no template added by you."
-msgstr "Nie dodałeś/-aś jeszcze żadnych szablonów."
+msgstr "Nie dodano jeszcze szablonów."
 
 msgid "Click + icon to add one."
 msgstr "Kliknij ikonę +, aby dodać."
@@ -169,7 +169,7 @@ msgid "Reversal"
 msgstr "Odwrotność"
 
 msgid "RESET"
-msgstr "RESET"
+msgstr "RESETUJ"
 
 msgid "DONE"
 msgstr "GOTOWE"
@@ -292,10 +292,10 @@ msgid "Shape - Star"
 msgstr "Kształt – gwiazda"
 
 msgid "Speed Resistance Arc"
-msgstr "Łuk odporności na prędkość"
+msgstr "Łuk odporn. na prędkość"
 
 msgid "Speed Resistance Line"
-msgstr "Linia odporności na prędkość"
+msgstr "Linia odporn. na prędkość"
 
 msgid "Time Cycle"
 msgstr "Cykl czasu"
@@ -724,7 +724,7 @@ msgid "Prime Bands Channel"
 msgstr "Kanał wstęg Prime"
 
 msgid "Prime Number Oscillator"
-msgstr "Prime Number Oscillator (Oscylator liczb pierwszych)"
+msgstr "Oscylator liczb pierwszych (Prime Number Oscillator)"
 
 msgid "Tolerance Percentage"
 msgstr "Margines tolerancji"
