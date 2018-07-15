@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Polish\n"
 "Language: pl_PL\n"
-"PO-Revision-Date: 2018-06-09 07:40-0400\n"
+"PO-Revision-Date: 2018-07-15 11:00\n"
 
 msgid "Favorites"
 msgstr "Ulubione"
@@ -184,7 +184,7 @@ msgid "Dark Mode"
 msgstr "Tryb ciemny"
 
 msgid "Countdown"
-msgstr ""
+msgstr "Odliczanie"
 
 msgid "Asset Information"
 msgstr "Informacje o aktywach"
@@ -829,7 +829,7 @@ msgid "Typical Price"
 msgstr "Typowa cena"
 
 msgid "Weighted Close"
-msgstr ""
+msgstr "Zamknięcie ważone"
 
 msgid "Money Flow Index"
 msgstr "Indeks przepływu pieniędzy"
