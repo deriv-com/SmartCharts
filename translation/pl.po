@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Polish\n"
 "Language: pl_PL\n"
-"PO-Revision-Date: 2018-07-15 11:10\n"
+"PO-Revision-Date: 2018-07-15 11:20\n"
 
 msgid "Favorites"
 msgstr "Ulubione"
@@ -178,7 +178,7 @@ msgid "Settings"
 msgstr "Ustawienia"
 
 msgid "Position"
-msgstr "Pozycja"
+msgstr "Orientacja"
 
 msgid "Dark Mode"
 msgstr "Tryb ciemny"
@@ -217,7 +217,7 @@ msgid "Average Line"
 msgstr "Linia średniej"
 
 msgid "Callout"
-msgstr ""
+msgstr "Wezwanie"
 
 msgid "Channel"
 msgstr "Kanał"
@@ -718,7 +718,7 @@ msgid "Prime Bands Top"
 msgstr ""
 
 msgid "Prime Bands Bottom"
-msgstr ""
+msgstr "Orientacja"
 
 msgid "Prime Bands Channel"
 msgstr ""
@@ -817,10 +817,10 @@ msgid "Elder Force Index"
 msgstr "Wskaźnik EFI (Elder Force Index)"
 
 msgid "Linear Reg Slope"
-msgstr ""
+msgstr "Nachylenie regresji liniowej"
 
 msgid "Slope"
-msgstr "Spadek"
+msgstr "Nachylenie"
 
 msgid "Center Of Gravity"
 msgstr "Środek grawitacji"
@@ -838,7 +838,7 @@ msgid "Williams %R"
 msgstr "Williams %R"
 
 msgid "Accumulation/Distribution"
-msgstr ""
+msgstr "Akumulacja/dystrybucja"
 
 msgid "Use Volume"
 msgstr "Użyj wolumenu"
@@ -886,7 +886,7 @@ msgid "3 Standard Deviation (3σ)"
 msgstr "3 odchylenia standardowe (3σ)"
 
 msgid "Correlation Coefficient"
-msgstr ""
+msgstr "Współczynnik korelacji"
 
 msgid "Price Momentum Oscillator"
 msgstr "Oscylator impetu ceny"
