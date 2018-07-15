@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Polish\n"
 "Language: pl_PL\n"
-"PO-Revision-Date: 2018-07-15 12:10\n"
+"PO-Revision-Date: 2018-07-15 12:31\n"
 
 msgid "Favorites"
 msgstr "Ulubione"
@@ -73,7 +73,7 @@ msgid "Zoom in"
 msgstr "Powiększ"
 
 msgid "Interval"
-msgstr "Odstęp"
+msgstr "odstępu"
 
 msgid "Tick"
 msgstr "Zmiana ceny"
@@ -478,7 +478,7 @@ msgid "Index"
 msgstr "Indeks"
 
 msgid "Negative Volume Index"
-msgstr "Wskaźnik ujemnego wolumenu"
+msgstr "Indeks ujemnego wolumenu"
 
 msgid "On Balance Volume"
 msgstr "Wolumen zbilansowany"
@@ -715,10 +715,10 @@ msgid "Prime Number Bands"
 msgstr "Wstęgi liczb pierwszych"
 
 msgid "Prime Bands Top"
-msgstr "Góra wstęg Prime"
+msgstr "Wstęgi Prime - góra"
 
 msgid "Prime Bands Bottom"
-msgstr "Dół wstęg Prime"
+msgstr "Wstęgi Prime - dół"
 
 msgid "Prime Bands Channel"
 msgstr "Kanał wstęg Prime"
@@ -730,16 +730,16 @@ msgid "Tolerance Percentage"
 msgstr "Margines tolerancji"
 
 msgid "Bollinger Bands"
-msgstr "Wstęga Bollingera"
+msgstr "Wstęgi Bollingera"
 
 msgid "Bollinger Bands Top"
-msgstr "Góra wstęgi Bollingera"
+msgstr "Wstęgi Bollingera - góra"
 
 msgid "Bollinger Bands Median"
 msgstr "Średnia wstęg Bollingera"
 
 msgid "Bollinger Bands Bottom"
-msgstr "Dół wstęgi Bollingera"
+msgstr "Wstęgi Bollingera - dół"
 
 msgid "Donchian Channel"
 msgstr "Kanał Donchiana"
@@ -775,13 +775,13 @@ msgid "Keltner Channel"
 msgstr "Kanał Keltnera"
 
 msgid "Keltner Top"
-msgstr "Góra kanału Keltnera"
+msgstr "Kanał Keltnera - góra"
 
 msgid "Keltner Median"
 msgstr "Średnia kanału Keltnera"
 
 msgid "Keltner Bottom"
-msgstr "Dół kanału Keltnera"
+msgstr "Kanał Keltnera - dół"
 
 msgid "Parabolic SAR"
 msgstr "Paraboliczny wskaźnik SAR"
@@ -919,7 +919,7 @@ msgid "Scale Factor"
 msgstr "Czynnik skali"
 
 msgid "Green"
-msgstr "Zielony"
+msgstr "Zielone"
 
 msgid "Fade"
 msgstr "Brązowe"
@@ -934,10 +934,10 @@ msgid "ATR Bands"
 msgstr "Wstęgi ATR"
 
 msgid "ATR Bands Top"
-msgstr "Góra wstęg ATR"
+msgstr "Wstęgi ATR - góra"
 
 msgid "ATR Bands Bottom"
-msgstr "Dół wstęg ATR"
+msgstr "Wstęgi ATR - dół"
 
 msgid "ATR Bands Channel"
 msgstr "Kanał wstęg ATR"
@@ -952,13 +952,13 @@ msgid "Multiplier"
 msgstr "Mnożnik"
 
 msgid "STARC Bands Top"
-msgstr "Góra wstęg STARC"
+msgstr "Wstęgi STARC - góra"
 
 msgid "STARC Bands Median"
 msgstr "Średnia wstęg STARC"
 
 msgid "STARC Bands Bottom"
-msgstr "Dół wstęg STARC"
+msgstr "Wstęgi STARC - dół"
 
 msgid "ATR Trailing Stops"
 msgstr "Zlecenia Trailing Stop ATR"
@@ -1063,13 +1063,13 @@ msgid "Show Fractals"
 msgstr "Pokaż fraktale"
 
 msgid "Jaw"
-msgstr "Szczęka"
+msgstr "Szczęka (Jaw)"
 
 msgid "Teeth"
-msgstr "Ząb"
+msgstr "Ząb (Teeth)"
 
 msgid "Lips"
-msgstr "Usta"
+msgstr "Usta (Lips)"
 
 msgid "Gator Oscillator"
 msgstr "Oscylator Gator"
@@ -1114,7 +1114,7 @@ msgid "Performance Index"
 msgstr "Wskaźnik efektywności"
 
 msgid "Gain"
-msgstr "Zielone"
+msgstr "Zysk"
 
 msgid "Loss"
 msgstr "Strata"
