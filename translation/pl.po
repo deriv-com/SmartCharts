@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Polish\n"
 "Language: pl_PL\n"
-"PO-Revision-Date: 2018-07-15 11:00\n"
+"PO-Revision-Date: 2018-07-15 11:10\n"
 
 msgid "Favorites"
 msgstr "Ulubione"
@@ -820,7 +820,7 @@ msgid "Linear Reg Slope"
 msgstr ""
 
 msgid "Slope"
-msgstr ""
+msgstr "Spadek"
 
 msgid "Center Of Gravity"
 msgstr "Środek grawitacji"
@@ -922,13 +922,13 @@ msgid "Green"
 msgstr "Zielony"
 
 msgid "Fade"
-msgstr ""
+msgstr "Brązowe"
 
 msgid "Fake"
-msgstr ""
+msgstr "Niebieskie"
 
 msgid "Squat"
-msgstr ""
+msgstr "Różowe"
 
 msgid "ATR Bands"
 msgstr "Wstęgi ATR"
@@ -1114,7 +1114,7 @@ msgid "Performance Index"
 msgstr "Wskaźnik efektywności"
 
 msgid "Gain"
-msgstr ""
+msgstr "Zielone"
 
 msgid "Loss"
 msgstr "Strata"
