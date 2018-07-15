@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Polish\n"
 "Language: pl_PL\n"
-"PO-Revision-Date: 2018-07-15 11:20\n"
+"PO-Revision-Date: 2018-07-15 11:30\n"
 
 msgid "Favorites"
 msgstr "Ulubione"
@@ -40,7 +40,7 @@ msgid "Underlying Assets"
 msgstr "Aktywa bazowe"
 
 msgid "Share"
-msgstr "Udostępnij"
+msgstr "Udostępnianie"
 
 msgid "Share / Download Chart"
 msgstr "Udostępnij/pobierz wykres"
@@ -115,10 +115,10 @@ msgid "Line"
 msgstr "Linia"
 
 msgid "Dot"
-msgstr "Kropka"
+msgstr "Kropki"
 
 msgid "Colored Dot"
-msgstr "Kolorowa kropka"
+msgstr "Kolorowe kropki"
 
 msgid "Spline"
 msgstr "Funkcja sklejana"
@@ -715,10 +715,10 @@ msgid "Prime Number Bands"
 msgstr "Wstęgi liczb pierwszych"
 
 msgid "Prime Bands Top"
-msgstr ""
+msgstr "Góra wstęg Prime"
 
 msgid "Prime Bands Bottom"
-msgstr "Orientacja"
+msgstr "Dół wstęg Prime"
 
 msgid "Prime Bands Channel"
 msgstr ""
