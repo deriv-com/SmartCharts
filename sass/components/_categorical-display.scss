@@ -23,13 +23,13 @@
         @include border-radius();
         @include themify($themes) {
             color: themed('CatDisplayText');
-            border: 1px solid themed('defaultBorder');
-            background-color: themed('defaultMain');
+            border: 1px solid themed('CatDisplaySearchBorder');
+            background-color: themed('CatDisplaySearchBg');
         }
         &.active{
             @include themify($themes) {
-                border-color: themed('activeColor');
-                @include box-shadow (0px, 0, 2px, themed('activeColor'));
+                border-color: themed('CatDisplayActiveSearchBorder');
+                @include box-shadow (0px, 0, 2px, themed('CatDisplayActiveSearchBorder'));
             }
             > .icon-reset{
                 right: 4px;
@@ -48,11 +48,11 @@
             @include placeholder {
                 @include themify($themes) {
                     opacity: 0.4;
-                    color: themed('CatDisplayFilterInputText');
+                    color: themed('CatDisplaySearchText');
                 }
             }
             @include themify($themes) {
-                color: themed('CatDisplayFilterInputText');
+                color: themed('CatDisplaySearchText');
             }
         }
         > .ic-icon {
@@ -157,11 +157,6 @@
                                 fill: themed('CatDisplayFilterIcon');
                             }
                         }
-                        > g > circle {
-                            @include themify($themes) {
-                                fill: themed('strokeColor');
-                            }
-                        }
                     }
                 }
             }
@@ -210,7 +205,7 @@
             align-items: center;
         }
         .right{
-            .ic-icon{
+            .ic-icon.ciq-favorite{
                 path {
                     @include themify($themes) {
                         stroke: themed('CatDisplayCatContentIcon');
@@ -260,26 +255,6 @@
         padding: 0.9em 1.2em;
         @include border-radius(3px);
     }
-    .cq-categorical-footer{
-        width: 100%;
-        height: 4em;
-        display: none;
-        @include themify($themes) {
-            border-top: 1px solid themed('defaultBorder');
-        }
-        .btn-categorical-display-close{
-            border: none;
-            background: transparent;
-            font-weight: bold;
-            padding: 1.3em 1em;
-            width: 100%;
-            cursor: pointer;
-            @include themify($themes) {
-                color: themed('activeColor');
-                @include box-shadow(0,0,0,themed('defaultMain'));
-            }
-        }
-    }
     .cq-mobile-title{
         padding-top: 0.9em !important;
         border-bottom: none !important;
@@ -293,7 +268,9 @@
 
 /* Active Symbol Icons */
 .cq-categorical-display .results-panel {
-    /* Active Options */
+    @include themify($themes) {
+        background: themed('CatDisplayBg');
+    }
     .cq-active-options {
         float: right;
         display: inline-flex;
@@ -350,16 +327,11 @@
             border-right: none;
             height: auto;
             @include themify($themes) {
-                border-bottom: 1px solid themed('defaultBorder');
+                border-bottom: 1px solid themed('CatDisplaySearchBorder');
             }
         }
         .cq-lookup-input  {
             margin: 1.2em 1em 0.5em 1em;
-            position: relative;
-            @include border-radius();
-            @include themify($themes) {
-                border: 1px solid themed('defaultBorder');
-            }
         }
         .cq-scroll-panel{
             height: 100%;

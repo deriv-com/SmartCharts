@@ -23,20 +23,20 @@
 		border-bottom: none;
 		@include box-sizing(border-box);
 		@include themify($themes) {
-			color: themed('listLiText');
-			background: themed('listLiBg');
-			border-left: 1px solid themed('listLiBorder');
-			border-right: 1px solid themed('listLiBorder');
-			border-bottom: 1px solid themed('listLiBorder');
+			color: themed('ListLiText');
+			background: themed('ListLiBg');
+			border-left: 1px solid themed('ListLiBorder');
+			border-right: 1px solid themed('ListLiBorder');
+			border-bottom: 1px solid themed('ListLiBorder');
 		}
 		&:first-child {
-			@include themify($themes) {border-top: themed('listLiBorder');}
+			@include themify($themes) {border-top: themed('ListLiBorder');}
 		}
 		&.active {
 			font-weight: bold;
 			@include themify($themes) {
-				color: themed('listActiveLiText');
-				background-color: themed('listActiveLiBg');
+				color: themed('ListActiveLiText');
+				background-color: themed('ListActiveLiBg');
 			}
 		}
 		&.disabled {

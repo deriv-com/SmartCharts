@@ -31,12 +31,12 @@
         display: none;
     }
     &:after {
-        border-right:6px solid rgba(21,33,45,0.88);
+        border-right: 6px solid rgba(21,33,45,0.88);
         left: -6px;
     }
     &:before {
         left: 100%;
-        border-left:6px solid rgba(21,33,45,0.88);
+        border-left: 6px solid rgba(21,33,45,0.88);
     }
     &.arrow-left:after { display: block; }
     &.arrow-right:before { display: block; }

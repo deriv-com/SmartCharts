@@ -108,7 +108,7 @@ const SettingsDialog = ({
                     { isFavoritable &&
                     <StarIcon
                         onClick={onStarClick}
-                        className={`margin ${stared ? 'ciq-active-favorite' : ''}`}
+                        className={`margin icon-favorite ${stared ? 'ciq-active-favorite' : ''}`}
                     />}
                 </div>
             </div>

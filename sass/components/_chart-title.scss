@@ -6,10 +6,10 @@
         box-shadow: none !important;
         .cq-menu-btn{
             .cq-symbol-select-btn{
-                @include themify($themes) {
-                    border: 1px solid themed('activeColor');
-                }
                 box-shadow: 0 0 0 2px rgba(76,87,148,.4);
+                @include themify($themes) {
+                    border: 1px solid themed('menuActiveBorder');
+                }
             }
         }
     }
@@ -25,14 +25,14 @@
             align-items: center;
             &:hover {
                 @include themify($themes) {
-                    border: solid 1px themed('activeColor');
+                    border: solid 1px themed('menuActiveBorder');
                 }
             }
             @include border-radius();
             @include themify($themes) {
-                background: themed('controlTitlebg');
-                color: themed('defaultTextStrong');
-                border: solid 1px themed('defaultBorder');
+                color: themed('ChartTitleText');
+                background: themed('ChartTitleBg');
+                border: solid 1px themed('ChartTitleBorder');
             }
             > .ic-icon, > .ic-frx, > .ic-wld, > .ic-otc {
                 height: $large-icon-size;
@@ -55,10 +55,10 @@
                         float: right;
                         margin-left: 12px;
                         margin-top: 7px;
-                        @include themify($themes) {
-                            border-top: 5px solid themed('defaultTextStrong');
-                        }
                         @include triangle-base(4px);
+                        @include themify($themes) {
+                            border-top: 5px solid themed('ChartTitleBorder');
+                        }
                     }
                 }
             }
@@ -81,10 +81,10 @@
             }
             .cq-chart-price {
                 margin-left: 9px;
-                @include themify($themes) {
-                    color: themed('defaultTextMedium');
-                }
                 vertical-align: text-bottom;
+                @include themify($themes) {
+                    color: themed('ChartTitlePriceText');
+                }
             }
             .cq-chart-price > * {
                 position: relative;
@@ -161,13 +161,6 @@
             .cq-categorical-display{
                 .cq-scroll-panel{
                     height: calc( 100vh - 11em );
-                }
-                .cq-categorical-footer{
-                    display: block;
-                    @include themify($themes) {
-                        background: themed('defaultMain');
-                        border-top: 1px solid themed('defaultBorder');
-                    }
                 }
             }
         }

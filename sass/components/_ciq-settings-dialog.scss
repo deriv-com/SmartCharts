@@ -10,6 +10,16 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
+        @include themify($themes) {
+            color: themed('DialogHeadText');
+        }
+        .icon-favorite{
+            path{
+                @include themify($themes) {
+                    stroke: themed('DialogHeadIcon');
+                }
+            }
+        }
         .title {
             font-size: 24px;
             padding-left: 16px;
@@ -22,7 +32,7 @@
         }
         &.no-tabs {
             @include themify($themes) {
-                border-bottom: 1px solid themed('defaultBorder');
+                border-bottom: 1px solid themed('DialogHeadBorder');
             }
         }
     }
@@ -33,7 +43,7 @@
         display: flex;
         position: relative;
         @include themify($themes) {
-            border-bottom: 1px solid themed('defaultBorder');
+            border-bottom: 1px solid themed('DialogHeadBorder');
         }
         @include box-sizing(border-box);
         > div {
@@ -51,7 +61,7 @@
             bottom: -1px;
             left: 0;
             @include themify($themes) {
-                background: themed('activeColor');
+                background: themed('DialogHeadActiveBorder');
             }
             @include transition(left linear 0.1s);
             &.second {
@@ -64,6 +74,9 @@
         flex-grow: 1;
         overflow: scroll;
         height: 200px;
+        @include themify($themes) {
+            background: themed('DialogSettingBodyBg');
+        }
         .item {
             @include box-sizing(border-box);
             padding: 0 16px;
@@ -77,6 +90,9 @@
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
+                @include themify($themes) {
+                    color: themed('DialogBodyText');
+                }
             }
         }
     }
@@ -84,7 +100,8 @@
         display: flex;
         justify-content: flex-end;
         @include themify($themes) {
-            border-top: 1px solid themed('defaultBorder');
+            border-top: 1px solid themed('DialogFootBorder');
+            background: themed('DialogFootBg');
         }
         > div {
             width: 90px;
@@ -94,7 +111,7 @@
             cursor: pointer;
             font-size: 14px;
             @include themify($themes) {
-                color: themed('activeColor');
+                color: themed('DialogFootText');
             }
         }
     }
@@ -110,13 +127,18 @@
         line-height: 1.9em;
         margin-right: 5px;
         padding-left: 6px;
+        @include border-radius(3px);
         @include themify($themes) {
             border: 1px solid themed('defaultBorderMedium');
         }
-        @include border-radius(3px);
     }
 
     .cq-color-picker {
         display: inline-block;
+        .dropdown{
+            @include themify($themes) {
+                border: 1px solid themed('ColorPickerBorder');
+            }
+        }
     }
 }

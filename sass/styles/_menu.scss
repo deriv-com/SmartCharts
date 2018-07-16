@@ -1,39 +1,39 @@
 .ciq-menu {
 	position: relative;
-	@include themify($themes) {color: themed('controlText');}
+	@include themify($themes) {color: themed('MenuText');}
 	@include transition(color .20s 0s);
 	&:active{
 		& {
-			@include themify($themes) {color: themed('controlTextActive');}
+			@include themify($themes) {color: themed('MenuActiveText');}
 		}
 	}
 	&.stxMenuActive{
 		@include themify($themes) {
-			box-shadow: 0px -2px 0px 0 themed('menuActiveBorder');
+			box-shadow: 0px -2px 0px 0 themed('MenuActiveBorder');
 		}
 		.break-sm & {
 			@include themify($themes) {
-				border-bottom: solid 3px themed('defaultAccent');
+				border-bottom: solid 3px themed('MenuActiveBorder');
 			}
 		}
 		.cq-menu-btn{
 			@include themify($themes) {
-				background: themed('menuActiveBg');
+				background: themed('MenuActiveBg');
 			}
 			> .ic-icon,
 			> .cq-toggle {
-				@include themify($themes) {color: themed('menuActiveText');}
+				@include themify($themes) {color: themed('MenuActiveText');}
 				svg {
 					@include themify($themes) {
-						box-shadow: inset 0 0 0 1px themed('menuActiveIconBorder');
-						background: themed('menuActiveIconBg');
+						box-shadow: inset 0 0 0 1px themed('MenuActiveIconBorder');
+						background: themed('MenuActiveIconBg');
 					}
 				}
-				@include svg-icon-color('menuActiveIcon');
+				@include svg-icon-color('MenuActiveIcon');
 				.ic-subtitle{
 					font-weight: 500;
 					@include themify($themes) {
-						color: themed('menuActiveText');
+						color: themed('MenuActiveText');
 					}
 				}
 			}
@@ -43,12 +43,12 @@
 		padding: 0 5px;
 		&:hover{
 			@include themify($themes) {
-				background: themed('menuActiveBg');
+				background: themed('MenuHoverBg');
 			}
 			> .ic-icon,
 			> .cq-toggle {
 				svg {
-					@include themify($themes) {background: themed('menuIconBg');}
+					@include themify($themes) {background: themed('MenuHoverIconBg');}
 				}
 			}
 		}
@@ -60,18 +60,18 @@
 			&.active{
 				svg {
 					@include themify($themes) {
-						box-shadow: inset 0 0 0 1px themed('menuActiveIconBorder');
-						background: themed('menuActiveIconBg');
+						box-shadow: inset 0 0 0 1px themed('MenuActiveIconBorder');
+						background: themed('MenuActiveIconBg');
 					}
 				}
 				.ic-subtitle{
 					font-weight: 500;
 					@include themify($themes) {
-						color: themed('menuActiveText');
+						color: themed('MenuActiveText');
 					}
 				}
 			}
-			@include svg-icon-color('menuIcon');
+			@include svg-icon-color('MenuIcon');
 			svg{@include border-radius(4px);}
 			.ic-subtitle{
 				font-weight: normal;
@@ -81,14 +81,14 @@
 				letter-spacing: normal;
 				text-align: center;
 				@include themify($themes) {
-					color: themed('menuText');
+					color: themed('MenuText');
 				}
 			}
 		}
 	}
 	> .ic-icon,
 	> .cq-toggle {
-		@include svg-icon-color('menuIcon');
+		@include svg-icon-color('MenuIcon');
 	}
 	> span {
 		padding:0 12px 0 0;
@@ -108,8 +108,8 @@
 		@include box-shadow (0px, 2px, 4px, rgba(0, 0, 0, .2));
 		@include border-radius();
 		@include themify($themes) {
-			background: themed('dialogBodyBg');
-			color: themed('controlText');
+			background: themed('DialogBodyBg');
+			color: themed('DialogBodyText');
 		}
     	&.open {
             visibility: visible;
@@ -140,27 +140,27 @@
 		}
 		.title{
 			@include themify($themes) {
-				color: themed('dialogHeadText');
-				background: themed('dialogHeadBg');
-				border-bottom: 1px solid themed('dialogHeadBorder');
+				color: themed('DialogHeadText');
+				background: themed('DialogHeadBg');
+				border-bottom: 1px solid themed('DialogHeadBorder');
 			}
 			> .ic-icon {
 				@include themify($themes) {
-					color: themed('controlTitleText');
+					color: themed('DialogHeadIcon');
 				}
 				svg, path, g{
 					@include themify($themes) {
-						color: themed('dialogHeadIcon');
-						fill: themed('dialogHeadIcon');
+						color: themed('DialogHeadIcon');
+						fill: themed('DialogHeadIcon');
 					}
 				}
 			}
 		}
 		.cq-mobile-title{
 			@include themify($themes) {
-				color: themed('dialogHeadText');
-				background: themed('dialogHeadBg');
-				border-bottom: 1px solid themed('dialogHeadBorder');
+				color: themed('DialogHeadText');
+				background: themed('DialogHeadBg');
+				border-bottom: 1px solid themed('DialogHeadBorder');
 			}
 			padding-top: 0.2em;
 			display: flex;
@@ -173,12 +173,22 @@
 				font-weight: 400;
 				padding: 0em .9em;
 				@include themify($themes) {
-				    color: themed('defaultText');
+				    color: themed('DefaultText');
 				}
 			}
 			.icon-close-menu{
 			    margin-right: 6px;
 			    cursor: pointer;
+			}
+		}
+	}
+}
+
+.cq-chart-control-left{
+	.ciq-menu {
+		&.stxMenuActive{
+			@include themify($themes) {
+				box-shadow: 2px 0.3px 0px 0 themed('MenuActiveBorder');
 			}
 		}
 	}

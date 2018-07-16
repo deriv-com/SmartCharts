@@ -1,13 +1,4 @@
 .ciq-chart-types {
-	.ciq-toggle-asset-information {
-		font-size: 10px;
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		position: relative;
-		top: -5px;
-		@include themify($themes) {color: themed('defaulTextStrong');}
-	}
 	.cq-menu-dropdown {
 		width: 200px;
 		@include box-sizing(border-box);
@@ -23,7 +14,7 @@
             display: flex;
             justify-content: space-between;
             @include themify($themes) {
-                color: themed('defaultTextStrong');
+                color: themed('ChartTypeText');
             }
 			.ic-icon {
 				margin-right: 7px;

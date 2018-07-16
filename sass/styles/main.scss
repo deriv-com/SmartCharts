@@ -7,7 +7,7 @@
 	@include user-select(text);
 	@include box-sizing(border-box);
     @include themify($themes) {
-        border-left:1px solid themed('defaultBorderSubtle');
+        border-left: 1px solid themed('DefaultBorder');
     }
 }
 
@@ -37,8 +37,8 @@
 			height: 5px;
 			@include rotate(45deg);
 			@include themify($themes) {
-				border-right:solid thin mix(themed('defaultTextStrong'), themed('defaultBg'), 40% );
-				border-bottom:solid thin mix(themed('defaultTextStrong'), themed('defaultBg'), 40% );
+				border-right: solid thin themed('DefaultBorder');
+				border-bottom: solid thin themed('DefaultBorder');
 			}
 		}
 	}
@@ -65,12 +65,12 @@
 		width:12px;
 		height:12px;
 		@include themify($themes) {
-			border: 1px solid themed('defaultBorderMedium');
+			border: 1px solid themed('DefaultBorder');
 		}
 	}
 	&:hover span {
 		@include themify($themes) {
-			border: 1px solid themed('defaultBorderStrong');
+			border: 1px solid themed('DefaultBorder');
 		}
 	}
 
@@ -93,18 +93,18 @@
 		height:6px;
 		@include border-radius(50%);
 		@include themify($themes) {
-			background: themed('defaultAccent');
+			background: themed('DefaultBorder');
 		}
 	}
 }
-/* Loading */
-
 
 
 /* --------------------------------------------------------- BUTTONS --------------------------------------------------------- */
 
 /* Basic Buttons */
-.ciq-btn, #annotationCancel, #annotationSave {
+.ciq-btn,
+#annotationCancel,
+#annotationSave {
 	// font-size:$font-size-button;
 	font-weight:700;
 	text-transform:uppercase;
@@ -120,14 +120,14 @@
 	// @include border-radius($soft-corners);
 	@include box-shadow(0, 1px, 2px, rgba(0, 0, 0, .2));
 	@include themify($themes) {
-		background: themed('defaultMenuBg');
-		color: themed('defaultAccent');
+		background: themed('DefaultBg');
+		color: themed('DefaultBorder');
 	}
 	&:hover {
 		border:none;
 		@include box-shadow(0, 1px, 2px, rgba(0, 0, 0, .3));
 		@include themify($themes) {
-			color:darken(themed('defaultAccent') , 8% );
+			color: themed('DefaultBorder');
 		}
 	}
 	&:active,
@@ -136,7 +136,7 @@
 		@include transition( all 0s 0s);
 		@include box-shadow(inset 0, 1px, 2px, rgba(0, 0, 0, .2));
 		@include themify($themes) {
-			color:darken(themed('defaultAccent') , 8% );
+			color: themed('DefaultBorder');
 		}
 	}
 
@@ -144,27 +144,26 @@
 	&.ciq-primary {
 		color:#fff;
 		@include themify($themes) {
-			background: themed('defaultAccent');
+			background: themed('DefaultBorder');
 		}
 		&:hover,
 		&:active {
 			color:#fff;
 			@include themify($themes) {
-				background: darken(themed('defaultAccent') , 5% );
+				background: themed('DefaultBorder');
 			}
 		}
-
-	&.ciq-simple {
-		border:none;
-		background:transparent;
-		@include box-shadow(0, 0, 0, 0, rgba(0, 0, 0, 0));
-		&:hover,
-		&:active {@include box-shadow(0, 0, 0, 0, rgba(0, 0, 0, 0));}
+		&.ciq-simple {
+			border:none;
+			background:transparent;
+			@include box-shadow(0, 0, 0, 0, rgba(0, 0, 0, 0));
+			&:hover,
+			&:active {@include box-shadow(0, 0, 0, 0, rgba(0, 0, 0, 0));}
+		}
 	}
 }
-}
 #annotationCancel, #annotationSave{
-	position:absolute;
+	position: absolute;
 }
 .ciq-btn.fancy { /* Defaults */
 	display: inline-block;
@@ -174,7 +173,7 @@
 	vertical-align: middle;
 	@include transition(all .20s ease-in 0s);
 	&:before {
-		background:rgba(255,255,255,.2);
+		background: rgba(255,255,255,.2);
 		bottom: 0;
 		content: "";
 		left: 0;
@@ -213,7 +212,7 @@ cq-scroll{
 cq-scroll .ps-scrollbar-y-rail,
 cq-menu-dropdown .ps-scrollbar-y-rail
 .cq-menu-dropdown .ps-scrollbar-y-rail{
-	z-index:1000000;
+	z-index: 1000000;
 }
 
 
@@ -226,7 +225,7 @@ cq-swatch, .ciq-color, .stx-border-color {/* Swatch / Open Palette Button */
 	background-clip:content-box;
 	cursor: pointer;
 	@include themify($themes) {
-		background-color: themed('defaultText');
+		background-color: themed('DefaultText');
 	}
 }
 
@@ -242,7 +241,7 @@ cq-color-picker {/* This is the actual color picker container */
 	z-index:5;
 	display:none;
 	@include themify($themes) {
-		background-color: themed('defaultMenuBg');
+		background-color: themed('DefaultBg');
 	}
 	@include border-radius();
 	@include box-shadow (0px, 2px, 4px, rgba(0, 0, 0, .2));
@@ -255,35 +254,35 @@ cq-color-picker {/* This is the actual color picker container */
 		justify-content: center;
 		margin: 4px;
 	}
-}
-cq-color-picker ul { /* The unordered list with all the swatches */
-	margin: 5px 0 0 0;
-	padding: 0;
-	list-style-type: none;
-	zoom: 1;
-	&:after { /* Fix display in some browsers */
-		content: ".";
-		display: block;
-		height: 0;
-		visibility: hidden;
-		clear: both;
-	}
-
-	& li { /* List item containing each swatch */
-		float: left;
-		margin: 0 3px 3px 0;
-		& span { /* The swatches themselves */
+	ul { /* The unordered list with all the swatches */
+		margin: 5px 0 0 0;
+		padding: 0;
+		list-style-type: none;
+		zoom: 1;
+		&:after { /* Fix display in some browsers */
+			content: ".";
 			display: block;
-			width: 13px;
-			height: 13px;
-			text-decoration: none;
-			outline: 0;
-			border: 1px solid transparent;
-			@include transition(border .20s 0s);
-			&:hover,
-			&:active {
-				@include themify($themes) {
-					border-color: themed('defaultTextStrong');
+			height: 0;
+			visibility: hidden;
+			clear: both;
+		}
+
+		& li { /* List item containing each swatch */
+			float: left;
+			margin: 0 3px 3px 0;
+			& span { /* The swatches themselves */
+				display: block;
+				width: 13px;
+				height: 13px;
+				text-decoration: none;
+				outline: 0;
+				border: 1px solid transparent;
+				@include transition(border .20s 0s);
+				&:hover,
+				&:active {
+					@include themify($themes) {
+						border-color: themed('DefaultText');
+					}
 				}
 			}
 		}
@@ -306,7 +305,7 @@ cq-toolbar,
 .ciq-nav {
 	height:$nav-height;
 	@include themify($themes) {
-		border-bottom:1px solid themed('defaultBorderSubtle');
+		border-bottom:1px solid themed('DefaultBorder');
 	}
 }
 
@@ -321,7 +320,7 @@ cq-toolbar {
 		z-index:2;
 		visibility: visible;
 		@include themify($themes) {
-			border-bottom:1px solid themed('defaultBorderSubtle');
+			border-bottom:1px solid themed('DefaultBorder');
 		}
 	}
 	@include transition(height .20s 0s, padding .20s 0s);
@@ -339,7 +338,7 @@ cq-toolbar {
 	padding-bottom: 50px;
 	padding: 0px;
 	@include themify($themes) {
-		background: themed('defaultBg');
+		background: themed('DefaultBg');
 	}
 	.break-sm & { /* Remove padding around chart when the app is set to breakpoint-sm*/
 		padding:0px;
@@ -359,24 +358,24 @@ cq-side-panel {
 	@include transition(width .20s 0s);
 	overflow:hidden;
 	z-index: 1;
+	&[cq-active] {
+		overflow:visible;
+	}
 }
 
-cq-side-panel[cq-active] {
-	overflow:visible;
-}
 
 
 /* Footer Bar */
 .ciq-footer {
-	position:absolute;
-	height:$footer-height;
-	bottom:0px;
-	width:100%;
+	position: absolute;
+	height: $footer-height;
+	bottom: 0px;
+	width: 100%;
 	padding:0 15px;
-	overflow:hidden;
-	text-align:center;
+	overflow: hidden;
+	text-align: center;
 	@include themify($themes) {
-		border-top: 1px solid themed('defaultBorderSubtle');
+		border-top: 1px solid themed('DefaultBorder');
 	}
 }
 
@@ -385,17 +384,17 @@ cq-side-panel[cq-active] {
 
 cq-separator{
 	@include themify($themes) {
-		border-top: 1px solid themed('defaultBorderMedium');
+		border-top: 1px solid themed('DefaultBorder');
 	}
 	margin: 10px 0 10px 0;
 	display: block;
+	&[cq-partial]{
+		margin-left:10%;
+		width:80%;
+		border-top-style: dashed;
+	}
 }
 
-cq-separator[cq-partial]{
-	margin-left:10%;
-	width:80%;
-	border-top-style: dashed;
-}
 
 cq-col {
 	display: inline-block;
@@ -405,14 +404,15 @@ cq-col {
 cq-menu-wrap {
 	display:block;
 }
-cq-heading { /* Remove hover states for headings, dividers, and nested list parents/special content */
+/* Remove hover states for headings, dividers, and nested list parents/special content */
+cq-heading {
 	background: transparent;
 	cursor: default;
 	white-space: normal;
+	display: block;
 	@include themify($themes) {
-		color: themed('defaultTextMedium');
+		color: themed('ChartText');
 	}
-	display:block;
 }
 
 cq-heading {
@@ -431,7 +431,7 @@ cq-item .ciq-radio { /* Float checkboxes/radio buttons in menu items right */
 cq-item:hover .ciq-radio span,
 cq-item:active .ciq-radio span { /* Float checkboxes/radio buttons in menu items right */
 	@include themify($themes) {
-		border:solid 1px themed('defaultBorderStrong');
+		border:solid 1px themed('DefaultBorder');
 	}
 }
 
@@ -439,21 +439,21 @@ cq-item:active .ciq-radio span { /* Float checkboxes/radio buttons in menu items
 /* User Injected Menu Content */
 cq-section-dynamic{
 	display:block;
-}
-cq-section-dynamic cq-item {
-	/* border-top: 1px dotted $DEFAULT-border-medium; */
-	width: 100%;
+	&cq-item {
+		/* border-top: 1px dotted $DEFAULT-border-medium; */
+		width: 100%;
+	}
+	cq-heading,
+	> div {
+		border-top: none;
+		padding-top: 10px;
+	}
+	.ciq-icon { /* Delete button placement for custom item */
+		/*float: right;*/   /* Not working properly for firefox */
+		margin: 0 -3px 0 0;
+	}
 }
 
-cq-section-dynamic cq-heading,
-cq-section-dynamic > div {
-	border-top: none;
-	padding-top: 10px;
-}
-cq-section-dynamic .ciq-icon { /* Delete button placement for custom item */
-	/*float: right;*/   /* Not working properly for firefox */
-	margin: 0 -3px 0 0;
-}
 
 
 /* --------------------------------------------------------- Navigation --------------------------------------------------------- */
@@ -489,7 +489,7 @@ cq-lookup-input {
 	&:hover input {
 		& {
 			@include themify($themes) {
-				background: darken( themed('defaultMain'), 2% );
+				background: themed('DefaultMain');
 			}
 		}
 	}
@@ -497,7 +497,7 @@ cq-lookup-input {
 	.stxMenuActive & input {
 		height:36px;
 		@include themify($themes) {
-			background: darken( themed('defaultMain'), 1% );
+			background: themed('DefaultMain');
 		}
 	}
 	& input {
@@ -517,19 +517,19 @@ cq-context {
 	font-size: $font-size-base;
 	overflow: hidden;
     @include themify($themes) {
-        background: themed('defaultMain');
+        background: themed('DefaultMain');
     }
 	input {
 		font-weight: 300;
 		@include themify($themes) {
-			color: themed('defaultText');
-			background-color: themed('defaultMain');
+			color: themed('DefaultText');
+			background-color: themed('DefaultMain');
 		}
 		@include user-select(text);
 		&::placeholder,
 		&::-moz-placeholder {
 			@include themify($themes) {
-				color: rgba(themed('defaultText'), 0.2);
+				color: themed('DefaultText')
 			}
 		}
 	}
@@ -621,7 +621,7 @@ body:not(.break-sm) .sidenav-toggle {
 .break-sm, .break-md {
 	& .ciq-menu.collapse:hover > span, .ciq-menu.collapse:active > span {
 		@include themify($themes) {
-			border:solid 1px darken( themed('defaultMain'), 8% );
+			border: 1px solid themed('DefaultMain');
 		}
 	}
 }
@@ -693,54 +693,73 @@ cq-study-legend  {
 		@include text-truncate;
 		width: 105px;
 		float: left;
-	}
-
-}
-
-cq-study-legend cq-label.click-to-edit {
-	width: 140px;
-}
-
-cq-study-legend cq-section-dynamic {/* Current studies container - height is set based on the height of the current studies content */
-	padding-bottom:20px;
-	@include themify($themes) {
-		border-top:1px solid themed('defaultBorderMedium');
-		background:themed('defaultSubmenuBg');
-	}
-	& cq-heading { /* Color heading for current studies to make stand out  */
-		@include themify($themes) {
-			background:themed('defaultAccent');
+		&.click-to-edit {
+			width: 140px;
 		}
 	}
-
-	& .ciq-btn {margin-top:10px;}/* Add space above clear button  */
-}
-
-/* Code below is for study names beneath the comparison element */
-cq-study-legend[cq-marker] > cq-item:hover {
-	background-color:#fafafa;
-	@include border-radius(1px);
-	box-shadow:0px 1px 1px rgba(0,0,0,0.2);
-}
-
-cq-study-legend[cq-marker] > cq-item {
-	padding-left:15px;
-	font-weight:bolder;
-}
-
-cq-study-legend[cq-marker] > cq-item > cq-label {
-	width:130px;
-}
-
-cq-study-legend[cq-marker] {
-	height:15px;
-	margin:5px 0 0 10px;
-	z-index:2;
-	@include themify($themes) {
-		color: themed('defaultTextStrong');
+	cq-section-dynamic {/* Current studies container - height is set based on the height of the current studies content */
+		padding-bottom:20px;
+		@include themify($themes) {
+			border-top: 1px solid themed('DefaultBorder');
+			background: themed('DefaultBg');
+		}
+		& cq-heading { /* Color heading for current studies to make stand out  */
+			@include themify($themes) {
+				background:themed('DefaultBorder');
+			}
+		}
+		& .ciq-btn {margin-top:10px;}/* Add space above clear button  */
 	}
-	.break-sm & {
-		display:none;
+	/* Code below is for study names beneath the comparison element */
+	&[cq-marker] > cq-item:hover {
+		background-color:#fafafa;
+		@include border-radius(1px);
+		box-shadow:0px 1px 1px rgba(0,0,0,0.2);
+	}
+
+	&[cq-marker] > cq-item {
+		padding-left:15px;
+		font-weight:bolder;
+	}
+
+	&[cq-marker] > cq-item > cq-label {
+		width:130px;
+	}
+
+	&[cq-marker] {
+		height:15px;
+		margin:5px 0 0 10px;
+		z-index:2;
+		@include themify($themes) {
+			color: themed('DefaultText');
+		}
+		.break-sm & {
+			display:none;
+		}
+	}
+	&[cq-marker] > cq-marker-label:after {
+		animation: reverse-hovershow-toggle-animation ease-in-out .5s;
+	}
+
+
+	&[cq-marker]:hover > cq-marker-label:after {
+		animation: hovershow-toggle-animation ease-in-out .5s;
+		animation-iteration-count: 1;
+		transform-origin: 50% 50%;
+		animation-fill-mode:forwards;
+	}
+
+	&[cq-marker]:hover {
+		height:auto;
+	}
+
+	&[cq-marker] cq-item {
+		opacity: 0;
+		@include transition(opacity .20s .50s, background-color 0.25s ease-in-out);
+	}
+
+	&[cq-marker]:hover cq-item {
+		opacity: 1;
 	}
 }
 
@@ -759,30 +778,6 @@ cq-study-legend[cq-marker] {
 	100% {
 		transform:  rotate(0deg);
 	}
-}
-cq-study-legend[cq-marker] > cq-marker-label:after {
-	animation: reverse-hovershow-toggle-animation ease-in-out .5s;
-}
-
-
-cq-study-legend[cq-marker]:hover > cq-marker-label:after {
-	animation: hovershow-toggle-animation ease-in-out .5s;
-	animation-iteration-count: 1;
-	transform-origin: 50% 50%;
-	animation-fill-mode:forwards;
-}
-
-cq-study-legend[cq-marker]:hover {
-	height:auto;
-}
-
-cq-study-legend[cq-marker] cq-item {
-	opacity: 0;
-	@include transition(opacity .20s .50s, background-color 0.25s ease-in-out);
-}
-
-cq-study-legend[cq-marker]:hover cq-item {
-	opacity: 1;
 }
 
 cq-marker-label {
@@ -830,7 +825,7 @@ cq-toolbar .ciq-heading { /* Background and line color headings */
 	text-transform: uppercase;
 	font-family:$heading-font;
 	@include themify($themes) {
-		color:mix(themed('defaultTextStrong'), themed('defaultMain'), 40% );
+		color: themed('DefaultText')
 	}
 }
 
@@ -839,7 +834,7 @@ cq-toolbar .ciq-select {/* Menu Triggers in toolbar */
 	&:active,
 	&.stxMenuActive {
 		@include themify($themes) {
-			color: themed('defaultText');
+			color: themed('DefaultText');
 		}
 	}
 }
@@ -863,37 +858,43 @@ cq-undo[cq-active], cq-redo[cq-active]{
 	opacity: 1;
 }
 
-cq-annotation .ciq-btn {/* Menu Triggers in toolbar */
-	font-family:Georgia, "Times New Roman", serif;
-	font-size:$font-size-toolbar;
-	font-weight:300;
-	text-align:center;
-	@include box-shadow(0, 0, 0, rgba(0, 0, 0, 0));
-	border:solid 1px transparent;
-	@include themify($themes) {
-		color:mix(themed('defaultTextStrong'), themed('defaultMain'), 40% );
-	}
-	&:hover {
-		& {
-			@include box-shadow(0, 0, 0, rgba(0, 0, 0, 0));
+cq-annotation {
+	.ciq-btn {/* Menu Triggers in toolbar */
+		font-family: Georgia, "Times New Roman", serif;
+		font-size: $font-size-toolbar;
+		font-weight: 300;
+		text-align: center;
+		border: 1px solid transparent;
+		padding: 0;
+		width: 27px;
+		@include box-shadow(0, 0, 0, rgba(0, 0, 0, 0));
 		@include themify($themes) {
-			color: themed('defaultText');
-			border:solid 1px themed('defaultBorderSubtle');
+			color: themed('DefaultText')
 		}
-		}
-	}
-	&:ciq-active {
-		@include themify($themes) {
-			color: themed('defaultText');
-			border:solid 1px themed('defaultBorderSubtle');
-		}
-	}
+		&:first-child {margin-left:0;} /* Fix aligment by removing left margin from first button */
 
-	&.ciq-active,
-	&.ciq-active:active {
-		@include themify($themes) {
-			color: themed('defaultText');
-			border:solid 1px themed('defaultAccent');
+		&:hover {
+			& {
+				@include box-shadow(0, 0, 0, rgba(0, 0, 0, 0));
+				@include themify($themes) {
+					color: themed('DefaultText');
+					border:solid 1px themed('DefaultBorder');
+				}
+			}
+		}
+		&:ciq-active {
+			@include themify($themes) {
+				color: themed('DefaultText');
+				border:solid 1px themed('DefaultBorder');
+			}
+		}
+
+		&.ciq-active,
+		&.ciq-active:active {
+			@include themify($themes) {
+				color: themed('DefaultText');
+				border: 1px solid themed('DefaultBorder');
+			}
 		}
 	}
 }
@@ -907,35 +908,28 @@ cq-toolbar-settings > * { /* Line and background color modules */
 
 
 
-cq-menu-dropdown.ciq-line-style-menu li {/* Add padding to line li's since line-height doesn't apply */
-	padding-top:13px;
-	padding-bottom:13px;
+cq-menu-dropdown{
+	&.ciq-font-size {
+		width: 65px;
+		.break-sm & {
+			width:auto;
+		}
+		text-align:center;
 	}
-cq-menu-dropdown.ciq-line-style-menu li.ciq-none {/* Center "none" option */
-	text-align: center;
-	padding-top:0;
-	padding-bottom:0;
-}
-
-/*  Annotation Formatting */
-
-cq-annotation .ciq-btn {/* Make formatting buttons square */
-	padding:0;
-	width:27px;
-}
-cq-annotation .ciq-btn:first-child {margin-left:0;} /* Fix aligment by removing left margin from first button */
-
-cq-menu-dropdown.ciq-font-size {
-	width: 65px;
-	.break-sm & {
-		width:auto;
+	&.ciq-font-family {
+		width: 144px;
+		.break-sm & {
+			width:auto;
+		}
 	}
-	text-align:center;
-}
-cq-menu-dropdown.ciq-font-family {
-	width: 144px;
-	.break-sm & {
-		width:auto;
+	&.ciq-line-style-menu li {/* Add padding to line li's since line-height doesn't apply */
+		padding-top:13px;
+		padding-bottom:13px;
+	}
+	&.ciq-line-style-menu li.ciq-none {/* Center "none" option */
+		text-align: center;
+		padding-top:0;
+		padding-bottom:0;
 	}
 }
 
@@ -967,140 +961,136 @@ cq-hu-dynamic { /* HU Container Box */
 	&.stx-show {
 		display:block;
 	}
-}
-/*
-There are two svg images. The first is a simple square (for static display). The second has a callout.
- */
-
-cq-hu-dynamic svg {
-	position:absolute;
-	display:block;
-}
-
-cq-hu-dynamic.stx-right svg {
-	-moz-transform: scaleX(-1);
-	-o-transform: scaleX(-1);
-	-webkit-transform: scaleX(-1);
-	-ms-transform: scaleX(-1);
-	transform: scaleX(-1);
-	-ms-filter: "FlipH";
-	filter: FlipH;
-}
-
-cq-hu-dynamic .ciq-hu-bg { /* HU BG Image Fill */
-	@include box-shadow(0px, 1px, 1px, rgba(0, 0, 0, .2));
-	@include themify($themes) {
-		fill: themed('defaultHuBg');
+	/*
+		There are two svg images. The first is a simple square (for static display). The second has a callout.
+	*/
+	svg {
+		position: absolute;
+		display: block;
 	}
-}
-
-cq-hu-dynamic .ciq-hu-stroke { /* HU BG Image Border */
-	opacity: 0;
-}
-cq-hu-dynamic > div {
-	position:absolute;
-	height:125px;
-	width:215px;
-	right:0;
-	top:0;
-}
-cq-hu-dynamic.above > div {top:0;}
-cq-hu-dynamic.below > div {bottom:0;}
-
-cq-hu-dynamic cq-hu-col1 { /* First Column of HU */
-	position:absolute;
-	left:10px;
-	bottom:10px;
-	width:90px;
-}
-cq-hu-dynamic cq-hu-date {
-	font-family:$base-font;
-	font-size:10px;
-	color:#666;
-	font-weight:300;
-}
-cq-hu-dynamic cq-hu-price {
-	font-size:24px;
-	font-weight:700;
-	line-height:24px;
-	@include themify($themes) {
-		color: themed('defaultTextStrong');
+	&.stx-right svg {
+		-moz-transform: scaleX(-1);
+		-o-transform: scaleX(-1);
+		-webkit-transform: scaleX(-1);
+		-ms-transform: scaleX(-1);
+		transform: scaleX(-1);
+		-ms-filter: "FlipH";
+		filter: FlipH;
 	}
-}
-
-cq-hu-dynamic cq-volume-grouping > div:nth-of-type(1) { /* Volume Heading */
-	display:inline-block;
-	text-transform:uppercase;
-	font-size:11px;
-	margin-top:9px;
-	padding-top:6px;
-	color:#666;
-	border-top:1px solid #666;
-}
-
-cq-hu-dynamic cq-volume-grouping > div:nth-of-type(2) { /* Volume Bar Area */
-	background:#e7e7e7;
-	height:10px;
-	margin:2px 0;
-}
-
-cq-hu-dynamic cq-volume-visual { /* Volume Bar Fill */
-	display:inline-block;
-	background:#ccc;
-	height:inherit;
-	float:left;
-	width:0%;
-}
-
-cq-hu-dynamic cq-volume-grouping > div:nth-of-type(3) {/* Volume Number Text */
-	font-size:16px;
-	color:#333;
-	font-weight:700;
-}
-
-cq-hu-dynamic cq-volume-rollup {
-	font-size:10px;
-	font-weight:500;
-	margin-left:2px;
-}
-
-cq-hu-dynamic cq-hu-col2 {/* Second column of HU */
-	position:absolute;
-	right:15px;
-	bottom:10px;
-	width:90px;
-	list-style:none;
-}
-cq-hu-dynamic cq-hu-col2 > * { /* HU Data Groups */
-	text-align:right;
-	font-weight:700;
-	font-size:14px;
-	color:#333;
-	display:block;
-}
-
-cq-hu-dynamic cq-hu-col2 > div {/* Add heading for HU data */
-	text-transform:uppercase;
-	color:#999;
-	font-weight:500;
-	font-size:11px;
-	padding-top:2px;
-	float:left;
-	&:after {
-		content:":";
+	&.above > div {top:0;}
+	&.below > div {bottom:0;}
+	.ciq-hu-bg { /* HU BG Image Fill */
+		@include box-shadow(0px, 1px, 1px, rgba(0, 0, 0, .2));
+		@include themify($themes) {
+			fill: themed('DefaultBg');
+		}
 	}
+	.ciq-hu-stroke { /* HU BG Image Border */
+		opacity: 0;
+	}
+	
+	> div {
+		position:absolute;
+		height:125px;
+		width:215px;
+		right:0;
+		top:0;
+	}
+
+	cq-hu-col1 { /* First Column of HU */
+		position:absolute;
+		left:10px;
+		bottom:10px;
+		width:90px;
+	}
+	cq-hu-date {
+		font-family:$base-font;
+		font-size:10px;
+		color:#666;
+		font-weight:300;
+	}
+	cq-hu-price {
+		font-size:24px;
+		font-weight:700;
+		line-height:24px;
+		@include themify($themes) {
+			color: themed('DefaultText');
+		}
+	}
+	cq-volume-grouping > div:nth-of-type(1) { /* Volume Heading */
+		display:inline-block;
+		text-transform:uppercase;
+		font-size:11px;
+		margin-top:9px;
+		padding-top:6px;
+		color:#666;
+		border-top:1px solid #666;
+	}
+
+	cq-volume-grouping > div:nth-of-type(2) { /* Volume Bar Area */
+		background:#e7e7e7;
+		height:10px;
+		margin:2px 0;
+	}
+
+	cq-volume-visual { /* Volume Bar Fill */
+		display:inline-block;
+		background:#ccc;
+		height:inherit;
+		float:left;
+		width:0%;
+	}
+
+	cq-volume-grouping > div:nth-of-type(3) {/* Volume Number Text */
+		font-size:16px;
+		color:#333;
+		font-weight:700;
+	}
+
+	cq-volume-rollup {
+		font-size:10px;
+		font-weight:500;
+		margin-left:2px;
+	}
+
+	cq-hu-col2 {/* Second column of HU */
+		position:absolute;
+		right:15px;
+		bottom:10px;
+		width:90px;
+		list-style:none;
+	}
+	cq-hu-col2 > * { /* HU Data Groups */
+		text-align:right;
+		font-weight:700;
+		font-size:14px;
+		color:#333;
+		display:block;
+	}
+
+	cq-hu-col2 > div {/* Add heading for HU data */
+		text-transform:uppercase;
+		color:#999;
+		font-weight:500;
+		font-size:11px;
+		padding-top:2px;
+		float:left;
+		&:after {
+			content:":";
+		}
+	}
+	&.stx-below.stx-left svg {
+	  transform: scaleY(-1);
+	}
+
+	&.stx-below.stx-right svg {
+	  transform: scale(-1, -1);
+	}
+
 }
 
-cq-hu-dynamic.stx-below.stx-left svg {
-  transform: scaleY(-1);
-}
-
-cq-hu-dynamic.stx-below.stx-right svg {
-  transform: scale(-1, -1);
-}
 
 /* Simple Heads Up */
-
 cq-hu-static {
 	position:absolute;
 	top: 10px;
@@ -1110,7 +1100,7 @@ cq-hu-static {
 	padding-left: 15px;
 	font-family:$heading-font;
 	@include themify($themes) {
-		background: themed('defaultMenuBg');
+		background: themed('DialogBodyBg');
 	}
 	.break-sm & {display: none;}
 
@@ -1127,7 +1117,7 @@ cq-hu-static {
 		overflow: hidden;
 		margin-right:3px;
 		@include themify($themes) {
-			color: themed('defaultTextStrong');
+			color: themed('DefaultText');
 		}
 	}
 	> div > div { /* label */
@@ -1224,7 +1214,7 @@ cq-hu-static {
 	padding: 0;
 	@include themify($themes) {
 		font-weight: 500;
-		color: themed('defaultTextStrong');
+		color: themed('DefaultText');
 	}
 }
 
@@ -1232,7 +1222,7 @@ cq-hu-static {
 
 .ciq-footer {
 	@include themify($themes) {
-		color:mix(themed('defaultTextStrong'), themed('defaultBg'), 65% );
+		color: themed('DefaultText')
 	}
 }
 
@@ -1264,14 +1254,14 @@ cq-show-range { /* Set Range Button List Container */
 		&:hover {
 			& {
 				@include themify($themes) {
-					color: themed('defaultText');
+					color: themed('DefaultText');
 				}
 			}
 		}
 		&:active {
 			@include themify($themes) {
-				color: themed('defaultText');
-				border-top:solid 3px themed('defaultAccent');
+				color: themed('DefaultText');
+				border-top: solid 3px themed('DefaultBorder');
 			}
 		}
 	}
@@ -1316,8 +1306,8 @@ cq-dialog {
 	@include border-radius($soft-corners);
 	@include box-sizing(border-box);
 	@include themify($themes) {
-		background: themed('defaultMenuBg');
-		color: themed('defaultTextMedium');
+		background: themed('DialogBodyBg');
+		color: themed('DialogBodyText');
 	}
 	&[cq-active] {
 		display: inline-block;
@@ -1329,7 +1319,7 @@ cq-dialog {
 		margin: 0 0 5px 0;
 		text-align:center;
 		@include themify($themes) {
-			color: themed('defaultTextStrong');
+			color: themed('DefaultText');
 		}
 	}
 
@@ -1339,8 +1329,8 @@ cq-dialog {
 		margin: 4px 0px 8px 0px;
 		padding: 0px;
 		@include themify($themes) {
-			background: themed('defaultBorderMedium');
-			color: themed('defaultBorderMedium');
+			background: themed('DefaultBorder');
+			color: themed('DefaultBorder');
 		}
 	}
 	.ciq-close {/* Dialog close button */
@@ -1470,77 +1460,6 @@ cq-dialog[cq-study-context] {
 	min-width: auto;
 }
 
-/* Context Dialog */
-cq-study-context {
-	min-width: 130px;
-	padding: 0px;
-	display: block;
-
-	div { /* Menu Item */
-		padding:0px 20px;
-		cursor:pointer;
-		clear: both;
-		line-height:27px;
-		@include themify($themes) {
-			color: themed('defaultTextMedium');
-		}
-	}
-	& div:hover { /* Menu item hover state */
-		@include themify($themes) {
-			background: themed('defaultTextStrong');
-			color: themed('defaultTextStrong');
-		}
-	}
-	.ciq-btn {
-		width: 65px;
-		&:first-child {
-			float: left;
-			border-top-right-radius: 0;
-			border-bottom-right-radius: 0;
-		}
-		&:last-child {
-			border-top-left-radius: 0;
-			border-bottom-left-radius: 0;
-		}
-	}
-}
-
-cq-share-button {
-	float: left;
-	@include box-sizing(border-box);
-	display: inline-block;
-	line-height: 40px;
-	cursor: pointer;
-	position: relative;
-	padding: 0 10px;
-	@include transition( color .20s 0s );
-	@include themify($themes) {
-		color: mix( themed('defaultTextStrong'), themed('defaultBg'), 65% );
-	}
-	&:hover {
-		& {
-			@include themify($themes) {
-				color: themed('defaultText');
-			}
-		}
-	}
-	&:active {
-		@include themify($themes) {
-			color: themed('defaultText');
-		}
-	}
-	&.stxMenuActive {
-		@include themify($themes) {
-			color: themed('defaultText');
-		}
-		.break-sm & {
-			@include themify($themes) {
-				border-bottom: solid 3px themed('defaultAccent');
-			}
-		}
-	}
-}
-
 cq-share-dialog {
   width: 320px;
   text-align: center;
@@ -1572,4 +1491,3 @@ cq-share-dialog {
 	color: #878787;
 }
 
-// TODO: Check if chartiq theme has a builtin solution.

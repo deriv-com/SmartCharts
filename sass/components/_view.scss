@@ -31,7 +31,7 @@
 					flex: 1 0 0;
 					position: relative;
 					right: 20px;
-					@include svg-icon-color('controlText');
+					@include svg-icon-color('TemplateText');
 				}
 			}
 			.view-input {
@@ -45,8 +45,8 @@
 				outline: none;
 				border-bottom: 1px solid #4b5794;
 				@include themify($themes) {
-					color: themed('controlText');
-					background-color: themed('defaultMain');
+					color: themed('TemplateText');
+					background-color: themed('DefaultMain');
 				}
 			}
 		}
@@ -64,13 +64,13 @@
 					display: flex;
 					&:hover{
 						@include themify($themes) {
-							color: themed('defaultTextActive');
-							background-color: themed('listBgActive');
+							color: themed('TemplateActiveText');
+							background-color: themed('ListActiveLiBg');
 						}
 						.ic-icon{
 							opacity: 1;
-							@include themify($themes) {color: themed('controlTextActive');}
-							@include svg-icon-color('controlTextActive');
+							@include themify($themes) {color: themed('TemplateActiveText');}
+							@include svg-icon-color('TemplateActiveText');
 						}
 					}
 					.ciq-list-item-text{
@@ -81,7 +81,7 @@
 						width: 40px;
 						opacity: 0;
 						transition: opacity 0.15s .2s;
-						@include svg-icon-color('controlText');
+						@include svg-icon-color('TemplateText');
 					}
 				}
 			}

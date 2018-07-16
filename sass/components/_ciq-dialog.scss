@@ -10,7 +10,7 @@
     visibility: hidden;
     z-index: -3;
     @include themify($themes) {
-        background: themed('defaultMain');
+        background: themed('DialogHeadBg');
     }
     @include dialog-transition();
     &.open{

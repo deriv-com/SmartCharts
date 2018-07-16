@@ -17,13 +17,13 @@
             display: flex;
             justify-content: space-between;
             @include themify($themes) {
-                color: themed('dialogHeadText');
+                color: themed('DialogHeadText');
             }
             .ciq-bars-buttons{
                 cursor: pointer;
                 display: flex;
                 padding: 6px 6px;
-                @include svg-icon-stroke('dialogHeadIcon');
+                @include svg-icon-stroke('DialogHeadIcon');
             }
         }
         .body {

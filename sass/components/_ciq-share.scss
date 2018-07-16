@@ -40,18 +40,22 @@
         }
         .content {
             display: flex;
+            padding: 5px 0;
             input { 
                 line-height: 32px;
                 height: 32px;
                 outline: none;
                 flex-grow: 1;
                 padding-left: 4px;
+                border-right: none;
                 @include box-sizing(border-box);
                 @include border-radius(4px 0 0 4px);
                 @include themify($themes) {
                     color: themed('SharedInputText');
-                    border: 1px solid themed('SharedInputBorder');
                     background-color: themed('SharedInputBg');
+                    border-top: 1px solid themed('SharedInputBorder');
+                    border-left: 1px solid themed('SharedInputBorder');
+                    border-bottom: 1px solid themed('SharedInputBorder');
                 }
                 g {
                     @include themify($themes) {
@@ -86,20 +90,19 @@
             }
             .download-btn {
                 width: 56px;
-                height: 32px;
+                height: 20px;
                 text-align: center;
-                line-height: 32px;
-                margin-right: 8px;
+                line-height: 20px;
                 cursor: pointer;
-                @include border-radius(4px);
+                background: transparent;
+                border: none;
                 @include box-sizing(border-box);
                 @include themify($themes) {
-                    border: 1px solid themed('defaultBorder');
-                    background-color: themed('defaultMain');
+                    color: themed('SharedBtnDownloadText');
                 }
-                &:hover {
+                &:first-child{
                     @include themify($themes) {
-                        border-color: themed('activeColor');
+                        border-right: 1px solid themed('SharedBtnDownloadBorder');
                     }
                 }
             }
@@ -110,6 +113,18 @@
         }
     }
 }
+
+.smartcharts-dark{
+    .cq-share {
+        .body {
+            .loading{
+                background: transparent url('../icons/loading/loading-ellipsis-dark.svg') no-repeat scroll center center;
+            }
+        }
+    }
+}
+
+
 /* Mobile Style */
 .smartcharts-mobile {
     .cq-share {
