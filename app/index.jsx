@@ -22,6 +22,8 @@ import './app.scss';
 import './doorbell';
 import { ConnectionManager, StreamManager } from './connection';
 import Notification from './Notification.jsx';
+import ChartNotifier from './ChartNotifier.js';
+
 
 if (window.location.host.endsWith('binary.com')) {
     window._trackJs = { token: '346262e7ffef497d85874322fff3bbf8', application: 'smartcharts' };
@@ -70,20 +72,6 @@ const requestSubscribe = streamManager.subscribe.bind(streamManager);
 const requestForget = streamManager.forget.bind(streamManager);
 const shareOrigin = window.location.href.split('?')[0];
 
-function Notifier() {
-    this.callback = null;
-    this.notify = (_action, _data) => {
-        if (typeof this.callback === 'function') {
-            this.callback({
-                action: _action,
-                data: _data,
-            });
-        }
-    };
-    this.onCallback = (callback) => {
-        this.callback = callback;
-    };
-}
 
 class App extends Component {
     constructor(props) {
@@ -103,7 +91,7 @@ class App extends Component {
     };
     startingLanguage = 'en';
     render() {
-        const n = new Notifier();
+        const n = new ChartNotifier();
         const renderTopWidgets = () => (
             <React.Fragment>
                 <ChartTitle />
