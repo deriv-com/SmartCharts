@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Thai\n"
 "Language: th_TH\n"
-"PO-Revision-Date: 2018-06-09 08:40-0400\n"
+"PO-Revision-Date: 2018-07-17 03:11\n"
 
 msgid "Favorites"
 msgstr "รายการโปรด"
@@ -323,6 +323,9 @@ msgstr "คลิกขวาเพื่อลบ"
 
 msgid "right-click to manage"
 msgstr "คลิกขวาเพื่อจัดการ"
+
+msgid "tap to manage"
+msgstr ""
 
 msgid "Chart data is not available for this symbol."
 msgstr "ไม่มีข้อมูลแผนภูมิสำหรับสัญลักษณ์นี้"
