@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
-"PO-Revision-Date: 2018-06-13 00:21-0400\n"
+"PO-Revision-Date: 2018-07-17 03:11\n"
 
 msgid "Favorites"
 msgstr "收藏夹"
@@ -323,6 +323,9 @@ msgstr "右键单击鼠标删除"
 
 msgid "right-click to manage"
 msgstr "右键单击管理"
+
+msgid "tap to manage"
+msgstr ""
 
 msgid "Chart data is not available for this symbol."
 msgstr "此符号不可用于图表数据。"
