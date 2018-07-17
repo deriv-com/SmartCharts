@@ -320,6 +320,9 @@ msgstr ""
 msgid "right-click to manage"
 msgstr ""
 
+msgid "tap to manage"
+msgstr ""
+
 msgid "Chart data is not available for this symbol."
 msgstr ""
 
