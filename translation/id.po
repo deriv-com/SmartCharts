@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Indonesian\n"
 "Language: id_ID\n"
-"PO-Revision-Date: 2018-06-11 23:10-0400\n"
+"PO-Revision-Date: 2018-07-17 03:11\n"
 
 msgid "Favorites"
 msgstr "Favorit"
@@ -323,6 +323,9 @@ msgstr "klik kanan untuk menghapus"
 
 msgid "right-click to manage"
 msgstr "klik kanan untuk mengelola"
+
+msgid "tap to manage"
+msgstr ""
 
 msgid "Chart data is not available for this symbol."
 msgstr "Data chart tidak tersedia untuk simbol ini."
