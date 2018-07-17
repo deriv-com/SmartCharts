@@ -1,7 +1,6 @@
 .ciq-menu {
 	position: relative;
 	@include themify($themes) {color: themed('MenuText');}
-	@include transition(color .20s 0s);
 	&:active{
 		& {
 			@include themify($themes) {color: themed('MenuActiveText');}
@@ -104,7 +103,7 @@
 		pointer-events: none;
 		opacity: 0;
 		z-index: -3;
-		@include transition(all 150ms ease-out);
+		@include transition(all 150ms ease-out, background 0s linear);
 		@include box-shadow (0px, 2px, 4px, rgba(0, 0, 0, .2));
 		@include border-radius();
 		@include themify($themes) {
