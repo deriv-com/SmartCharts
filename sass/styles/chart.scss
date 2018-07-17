@@ -20,7 +20,7 @@ html, body {
 
 /* Chart Block */
 .ciq-chart {
-    height:100%;
+    height:auto;
     width:100%;
     @include box-shadow (0px, 2px, 5px, rgba(0, 0, 0, .1));
     @include themify($themes) {
@@ -112,32 +112,24 @@ html, body {
     transform: scale(1.2, 1.2);
 }
 
-.stx-btn-panel span { /* Button Icons */
-    background-image: url('icons/chart/stx-sprite-panels.svg');
-    opacity: .6;
-    -webkit-transition: opacity .2s;
-    -moz-transition: opacity .2s;
-    transition: opacity .2s;
-}
-
 .stx-btn-panel > span.stx-ico-up {
-    background-position: -150px -25px;
+    background: url('./icons/chart/ic-up.svg') no-repeat center;
 }
 
 .stx-btn-panel > span.stx-ico-down {
-    background-position: -200px -25px;
+    background: url('./icons/chart/ic-down.svg') no-repeat center;
 }
 
 .stx-btn-panel > span.stx-ico-close {
-    background-position: -250px -25px;
+    background: url('./icons/delete/ic-delete.svg') no-repeat center;
 }
 
 .stx-btn-panel > span.stx-ico-edit {
-    background-position: -300px -25px;
+    background: url('./icons/chart/ic-settings.svg') no-repeat center;
 }
 
 .stx-btn-panel > span.stx-ico-focus {
-    background-position: -350px -25px;
+    background: url('./icons/chart/ic-maximize.svg') no-repeat center;
 }
 
 /* --------------------------------------------------------- CHART CONTROLS --------------------------------------------------------- */
@@ -240,6 +232,22 @@ html, body {
     overflow: hidden;
     z-index: 30;
     display: none;
+    margin: 5px;
+    @include border-radius(3px);
+    @include themify($themes) {
+        background: themed('defaultMain');
+        border: 1px solid themed('defaultBorder');
+    }
+    .stx-panel-title{
+        box-shadow: none;
+        margin: 5px;
+        @include themify($themes) {
+            border-right: 1px solid themed('defaultBorder');
+        }
+    }
+    .stx-btn-panel{
+        opacity: 1;
+    }
 }
 
 .stx-panel-control * {
@@ -249,7 +257,6 @@ html, body {
 .stx-panel-control.stx-show {
     display: inline-block;
 }
-
 .stx-panel-title { /* Panel/Chart Titles */
     margin: 5px 10px;
     float: left;
@@ -1063,3 +1070,11 @@ cq-language-name {
     display: none;
 }
 
+.ciq-chart.ciq-screenshot .cq-menu-dropdown {
+    /*
+    There is a strange bug where dropdowns get displayed (partially)
+    when html is being rendered to canvas. So we set this to manually
+    hide it when PNG is exported.
+     */
+    display: none !important;
+}
