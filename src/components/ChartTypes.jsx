@@ -23,32 +23,33 @@ const ChartTypes = ({
             <Menu.Title>
                 <Type.icon
                     className={`ic-icon-with-sub ${menuOpen ? 'active' : ''}`}
-                    tooltip-title={t.translate('Chart types')}
+                    tooltip-title={t.translate(Type.text)}
                 />
             </Menu.Title>
             <Menu.Body>
-                {isMobile ?
-                    <div className="cq-mobile-title">
-                        <div className="mobile-title">{t.translate('Chart types')}</div>
-                        <CloseIcon className="icon-close-menu" onClick={() => closeMenu()} />
-                    </div> : '' }
-                <TypeList height={260}>
-                    {T => (
-                        <React.Fragment>
-                            <span className="left">
-                                <T.icon  className={`margin ${T.active ? 'active' : ''}`} />
-                                <span className="ciq-icon-text">{T.text}</span>
-                            </span>
-                            {T.settingsOnClick &&
-                        <span
-                            className="ciq-aggregate-setting"
-                            onClick={() => showAggregateDialog(T.id)}
-                        >
-                            <SettingIcon />
-                        </span>}
-                        </React.Fragment>
-                    )}
-                </TypeList>
+                <div className="title">
+                    <div className="mobile-title">{t.translate('Chart types')}</div>
+                    {isMobile ? <CloseIcon className="icon-close-menu" onClick={() => closeMenu()} /> : '' }
+                </div>
+                <div className="body">
+                    <TypeList height={260}>
+                        {T => (
+                            <React.Fragment>
+                                <span className="left">
+                                    <T.icon  className={`margin ${T.active ? 'active' : ''}`} />
+                                    <span className="ciq-icon-text">{T.text}</span>
+                                </span>
+                                {T.settingsOnClick &&
+                            <span
+                                className="ciq-aggregate-setting"
+                                onClick={() => showAggregateDialog(T.id)}
+                            >
+                                <SettingIcon />
+                            </span>}
+                            </React.Fragment>
+                        )}
+                    </TypeList>
+                </div>
             </Menu.Body>
         </Menu>
     );

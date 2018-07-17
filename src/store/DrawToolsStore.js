@@ -12,7 +12,7 @@ const formatCamelCase = (s) => {
 export default class DrawToolsStore {
     constructor(mainStore) {
         this.mainStore = mainStore;
-        this.menu = new MenuStore(mainStore);
+        this.menu = new MenuStore(mainStore, { route: 'draw-tool' });
         this.settingsDialog = new SettingsDialogStore({
             mainStore,
             onDeleted: this.onDeleted,
@@ -20,7 +20,6 @@ export default class DrawToolsStore {
         });
 
         this.list = new ListStore({
-            getIsOpen: () => this.menu.open,
             getContext: () => this.context,
             onItemSelected: item => this.selectTool(item.id),
             getItems: () => [

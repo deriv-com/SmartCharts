@@ -26,10 +26,12 @@ class ChartStore {
     stxx = null;
     id = null;
     defaultSymbol = 'R_100';
+    enableRouting = null;
     chartNode = null;
     chartControlsNode = null;
     chartContainerNode = null;
     holderStyle;
+    @observable containerWidth = null;
     @observable context = null;
     @observable currentActiveSymbol;
     @observable isChartAvailable = true;
@@ -47,7 +49,9 @@ class ChartStore {
     }
 
     get loader() { return this.mainStore.loader; }
-
+    get routingStore() {
+        return this.mainStore.routing;
+    }
     saveLayout() {
         const layoutData = this.stxx.exportLayout(true);
         const json = JSON.stringify(layoutData);
@@ -105,13 +109,33 @@ class ChartStore {
         this.chartContainerHeight = this.chartHeight - offsetHeight;
     }
 
-    @action.bound resizeScreen() {
-        if (!this.context) { return; }
-        this.updateHeight();
-        this.stxx.resizeChart();
+    updateCanvas = () => {
         if (this.stxx.slider) {
             this.stxx.slider.display(this.stxx.layout.rangeSlider);
         }
+        this.stxx.resizeChart();
+    };
+
+    @action.bound resizeScreen() {
+        if (!this.context) { return; }
+
+
+        if (this.rootNode.clientWidth > 1100) {
+            this.containerWidth = 1100;
+        } else if (this.rootNode.clientWidth > 900) {
+            this.containerWidth = 900;
+        } else if (this.rootNode.clientWidth > 480) {
+            this.containerWidth = 480;
+        } else {
+            this.containerWidth = 1100;
+        }
+
+
+        this.updateHeight();
+        // Height updates are not immediate, so we must resize the canvas with
+        // a slight delay for it to pick up the correct chartContainer height.
+        // In mobile devices, a longer delay is given as DOM updates are slower.
+        setTimeout(this.updateCanvas, this.isMobile ? 500 : 100);
     }
 
     @action.bound init(rootNode, props) {
@@ -127,22 +151,26 @@ class ChartStore {
             requestForget,
             isMobile,
             shareOrigin = 'https://charts.binary.com',
+            enableRouting,
+            settings,
+            onSettingsChange,
         } = props;
         const api = new BinaryAPI(requestAPI, requestSubscribe, requestForget);
-        this.mainStore.share.shareOrigin = shareOrigin;
+        const { share, chartSetting } = this.mainStore;
+        share.shareOrigin = shareOrigin;
+        chartSetting.setSettings(settings);
+        chartSetting.onSettingsChange = onSettingsChange;
         this.isMobile = isMobile;
         this.onSymbolChange = onSymbolChange;
 
         const stxx = this.stxx = new CIQ.ChartEngine({
+            markerDelay: null, // disable 25ms delay for placement of markers
             container: this.rootNode.querySelector('.chartContainer.primary'),
             controls: { chartControls: null }, // hide the default zoom buttons
             preferences: {
                 currentPriceLine: true,
             },
             chart: {
-                xAxis: {
-                    timeUnitMultiplier: 1, // Make gaps between time intervals consistent
-                },
                 yAxis: {
                     // Put some top margin so chart doesn't get blocked by chart title
                     initialMarginTop: 125,
@@ -167,6 +195,11 @@ class ChartStore {
         stxx.attachQuoteFeed(this.feed, {
             refreshInterval: null,
         });
+
+        this.enableRouting = enableRouting;
+        if (this.enableRouting) {
+            this.routingStore.handleRouting();
+        }
 
         // Extended hours trading zones
         // new CIQ.ExtendedHours({
@@ -255,12 +288,16 @@ class ChartStore {
                 const url = href.split('#')[0];
                 const hash = url.split('?')[1];
 
-                window.history.replaceState({}, document.title, window.location.pathname);
-                const promise = this.mainStore.share.expandBitlyAsync(hash, decodeURIComponent(encodedJsonPart));
-                promise.then((encodedJson) => {
-                    layoutData = JSON.parse(encodedJson);
+                if (hash) {
+                    window.history.replaceState({}, document.title, window.location.pathname);
+                    const promise = this.mainStore.share.expandBitlyAsync(hash, decodeURIComponent(encodedJsonPart));
+                    promise.then((encodedJson) => {
+                        layoutData = JSON.parse(encodedJson);
+                        onLayoutDataReady();
+                    }).catch(() => onLayoutDataReady());
+                } else {
                     onLayoutDataReady();
-                }).catch(() => onLayoutDataReady());
+                }
             } else {
                 onLayoutDataReady();
             }
@@ -271,7 +308,6 @@ class ChartStore {
 
         this.feed.onComparisonDataUpdate(this.updateComparisons);
     }
-
     removeComparison(symbolObj) {
         this.context.stx.removeSeries(symbolObj.symbol);
         this.updateComparisons();

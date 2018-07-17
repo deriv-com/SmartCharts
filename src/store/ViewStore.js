@@ -5,10 +5,10 @@ import MenuStore from './MenuStore';
 export default class ViewStore {
     constructor(mainStore) {
         this.mainStore = mainStore;
-        this.menu = new MenuStore(mainStore);
+        this.menu = new MenuStore(mainStore, { route: 'templates' });
         when(() => this.context, this.onContextReady);
     }
-
+    @observable scrollPanel;
     @observable templateName = '';
     @observable views = [];
     @observable routes = {
@@ -61,7 +61,7 @@ export default class ViewStore {
         this.updateLocalStorage();
     }
 
-    applyLayout = (idx, e) => {
+    @action.bound applyLayout = (idx, e) => {
         if (e.nativeEvent.is_item_removed) { return; }
         if (this.loader) { this.loader.show(); }
         const stx = this.stx;
