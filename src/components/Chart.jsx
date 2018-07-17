@@ -62,16 +62,18 @@ class Chart extends Component {
             AggregateChartSettingsDialog,
             topWidgets,
             chartContainerHeight,
+            containerWidth,
         } = this.props;
 
         const currentPosition = `cq-chart-control-${(position && !isMobile) ? position : 'bottom'}`;
         const currentMode = `${isMobile ? 'smartcharts-mobile' : ''}`;
+        const contextWidth =  !isMobile ? `smartcharts-${containerWidth}` : '';
         const renderTopWidgets = topWidgets || defaultTopWidgets;
 
         return (
             <cq-context
                 ref={(root) => { this.root = root; }}
-                class={`smartcharts-${theme}`}
+                class={`smartcharts-${theme} ${contextWidth}`}
             >
                 <div className={`${currentMode} ${currentPosition}`}>
                     <div className="ciq-chart-area">
@@ -123,4 +125,5 @@ export default connect(({ chart, drawTools, studies, chartSetting, chartType }) 
     setting: chartSetting,
     setSettings: chartSetting.setSettings,
     chartContainerHeight: chart.chartContainerHeight,
+    containerWidth: chart.containerWidth,
 }))(Chart);
