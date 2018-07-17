@@ -140,8 +140,8 @@ class ChartStore {
 
     @action.bound init(rootNode, props) {
         this.rootNode = rootNode;
-        this.chartNode = this.rootNode.querySelector('.ciq-chart');
-        this.chartControlsNode = this.chartNode.querySelector('.cq-chart-controls');
+        this.chartNode = this.rootNode.querySelector('.ciq-chart-area');
+        this.chartControlsNode = this.rootNode.querySelector('.cq-chart-controls');
 
         const {
             onSymbolChange,

@@ -20,7 +20,7 @@ html, body {
 
 /* Chart Block */
 .ciq-chart {
-    height:100%;
+    height:auto;
     width:100%;
     @include box-shadow (0px, 2px, 5px, rgba(0, 0, 0, .1));
     @include themify($themes) {
@@ -1066,4 +1066,13 @@ cq-language-name {
 }
 .stx-chart-panel.stx-show { /* Hide default Chart Title and Icons */
     display: none;
+}
+
+.ciq-chart.ciq-screenshot .cq-menu-dropdown {
+    /*
+    There is a strange bug where dropdowns get displayed (partially)
+    when html is being rendered to canvas. So we set this to manually
+    hide it when PNG is exported.
+     */
+    display: none !important;
 }
