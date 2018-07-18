@@ -119,7 +119,8 @@
         margin-right: 5px;
         padding-left: 6px;
         @include themify($themes) {
-            border: 1px solid themed('defaultBorderMedium');
+            border: none;
+            @include box-shadow ( 0 ,0 ,0 ,1px,themed('defaultBorder'));
         }
         @include border-radius(3px);
     }

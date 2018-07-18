@@ -78,6 +78,8 @@
         z-index: +2;
         width: 142px;
         padding: 4px 8px;
+        max-height: 200px;
+        overflow: scroll;
         box-shadow: 0 2px 8px 0 rgba(42,48,82,0.14);
         @include themify($themes) {
             background: themed('defaultMain');
@@ -86,7 +88,6 @@
         @include box-sizing(border-box);
         @include border-radius(4px);
         .row {
-            height: 18px;
             cursor: pointer;
             &:hover {
                 font-weight: bold;
