@@ -16,12 +16,12 @@
         width: 5.5em;
     }
     .titlebar {
-        height: 40x;
+        height: 40px;
         display: flex;
         justify-content: space-between;
         align-items: center;
         .title {
-            font-size: 24px;
+            font-size: 14px;
             padding-left: 16px;
             padding-bottom: 5px;
         }
@@ -140,5 +140,10 @@
     .cq-dialog-active {
         visibility: visible;
         z-index: 1;
+    }
+    .cq-settings-dialog {
+        .items {
+            padding: 5px 0;
+        }
     }
 }
