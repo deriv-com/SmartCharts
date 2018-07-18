@@ -1582,11 +1582,12 @@ cq-share-dialog {
 			top: 0;
 		}
 		.cq-menu-dropdown {
-			height: inherit;
+			height: 100%;
 			width: 100%;
 		}
 	}
 	.cq-menu-overlay {
+		position: relative;
 		background: rgba(0, 0, 0, .3);
 		height: inherit;
 		width: 100%;
