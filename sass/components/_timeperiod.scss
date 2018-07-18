@@ -50,7 +50,6 @@
 	.cq-menu-dropdown {
 		width: 296px;
 		height: 160px;
-		transform: translate(-50%, 0);
 		font-size: 12px;
 		font-weight: normal;
 		.cq-interval{
@@ -142,6 +141,9 @@
 					padding: 5px 5px !important;
 				}
 			}
+		}
+		&.cq-modal-dropdown .cq-menu-dropdown {
+			height: 193px;
 		}
 	}
 }

@@ -138,8 +138,9 @@ class ChartStore {
         setTimeout(this.updateCanvas, this.isMobile ? 500 : 100);
     }
 
-    @action.bound init(rootNode, props) {
+    @action.bound init(rootNode, modalNode, props) {
         this.rootNode = rootNode;
+        this.modalNode = modalNode;
         this.chartNode = this.rootNode.querySelector('.ciq-chart-area');
         this.chartControlsNode = this.rootNode.querySelector('.cq-chart-controls');
 

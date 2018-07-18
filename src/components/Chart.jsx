@@ -36,7 +36,7 @@ class Chart extends Component {
     }
 
     componentDidMount() {
-        this.props.init(this.root, this.props);
+        this.props.init(this.root, this.modalNode, this.props);
     }
 
     componentWillReceiveProps(nextProps) {
@@ -71,44 +71,48 @@ class Chart extends Component {
         const renderTopWidgets = topWidgets || defaultTopWidgets;
 
         return (
-            <cq-context
-                ref={(root) => { this.root = root; }}
-                class={`smartcharts-${theme} ${contextWidth}`}
+            <div
+                className={`smartcharts smartcharts-${theme} ${contextWidth} ${currentMode}`}
+                ref={(modalNode) => { this.modalNode = modalNode; }}
             >
-                <div className={`${currentMode} ${currentPosition}`}>
-                    <div className="ciq-chart-area">
-                        <div className="ciq-chart">
-                            <RenderInsideChart at="holder">
-                                {barriers.map((barr, idx) => (
-                                    <Barrier
-                                        key={`barrier-${idx}`}
-                                        {...barr}
-                                    />
-                                ))}
-                            </RenderInsideChart>
-                            <RenderInsideChart at="subholder">
-                                {children}
-                            </RenderInsideChart>
-                            <div className="cq-top-ui-widgets" style={{ top: chartPanelTop }}>
-                                { renderTopWidgets() }
+                <cq-context
+                    ref={(root) => { this.root = root; }}
+                >
+                    <div className={` ${currentPosition}`}>
+                        <div className="ciq-chart-area">
+                            <div className="ciq-chart">
+                                <RenderInsideChart at="holder">
+                                    {barriers.map((barr, idx) => (
+                                        <Barrier
+                                            key={`barrier-${idx}`}
+                                            {...barr}
+                                        />
+                                    ))}
+                                </RenderInsideChart>
+                                <RenderInsideChart at="subholder">
+                                    {children}
+                                </RenderInsideChart>
+                                <div className="cq-top-ui-widgets" style={{ top: chartPanelTop }}>
+                                    { renderTopWidgets() }
+                                </div>
+                                <div className="chartContainer primary" style={{ height: chartContainerHeight }}>
+                                    <Crosshair />
+                                </div>
+                                <Loader />
+                                {!isChartAvailable &&
+                                    <div className="cq-chart-unavailable">
+                                        {t.translate('Chart data is not available for this symbol.')}
+                                    </div>}
                             </div>
-                            <div className="chartContainer primary" style={{ height: chartContainerHeight }}>
-                                <Crosshair />
-                            </div>
-                            <Loader />
-                            {!isChartAvailable &&
-                                <div className="cq-chart-unavailable">
-                                    {t.translate('Chart data is not available for this symbol.')}
-                                </div>}
+                            <ChartControls widgets={chartControlsWidgets} />
                         </div>
-                        <ChartControls widgets={chartControlsWidgets} />
                     </div>
-                    <DrawToolsSettingsDialog />
-                    <AggregateChartSettingsDialog />
-                    <StudySettingsDialog />
-                    <Notification />
-                </div>
-            </cq-context>
+                </cq-context>
+                <DrawToolsSettingsDialog />
+                <AggregateChartSettingsDialog />
+                <StudySettingsDialog />
+                <Notification />
+            </div>
         );
     }
 }

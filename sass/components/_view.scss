@@ -90,11 +90,16 @@
 	}
 }
 .smartcharts-mobile{
-	.cq-menu-dropdown {
-		.dropdown-title {
-			.icon {
-				flex: none;
+	.ciq-views {
+		.cq-menu-dropdown {
+			.dropdown-title {
+				.icon {
+					flex: none;
+				}
 			}
+		}
+		&.cq-modal-dropdown .cq-menu-dropdown {
+			height: 175px;
 		}
 	}
 }

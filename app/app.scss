@@ -42,3 +42,13 @@
 #doorbell-background {
     opacity: 0;
 }
+
+.smartcharts-mobile {
+    .ciq-period, .cq-share, .ciq-views, .ciq-drawtools,
+    .ciq-studies, .cq-chart-setting, .ciq-draw-tools,
+    .cq-comparison-ne, .ciq-chart-types {
+        .cq-menu-overlay {
+            height: calc(100vh - 40px);
+        }
+    }
+}
