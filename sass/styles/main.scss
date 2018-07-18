@@ -1582,8 +1582,14 @@ cq-share-dialog {
 			top: 0;
 		}
 		.cq-menu-dropdown {
-			height: 100%;
+			height: auto;
 			width: 100%;
+		}
+		&.ciq-studies, &.cq-comparison-new {
+			.cq-menu-dropdown {
+				/* for studies and comparison dropdown, fill screen in mobile */
+				height: 100%;
+			}
 		}
 	}
 	.cq-menu-overlay {

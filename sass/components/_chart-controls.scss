@@ -176,28 +176,12 @@
             .cq-menu-dropdown {
                 height: auto;
                 left: -1px;
-                width: calc( 100% + 2px );
                 padding: 0;
                 border: none;
                 box-shadow: none;
-                bottom: 0em;
-                transform: translateY(150%);
-                z-index: 4 !important;
-                &.open{
-                    transform: translateY(0);
-                    margin: 0px;
-                    bottom: 0em;
-                }
             }
             .notification-badge{
                 left: 15px;
-            }
-            &.ciq-studies,
-            &.cq-comparison-new{
-                .cq-menu-dropdown {
-                    height: calc( 100vh - 47px ) ;
-                    width: 100%;
-                }
             }
         }
         .bt-priod ,.cq-toggle , .cq-menu-btn , .cq-chart-size>span
