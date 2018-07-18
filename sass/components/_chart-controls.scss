@@ -62,9 +62,11 @@
 /* Menu dropdown open/close animation */
 .cq-chart-controls .ciq-menu .cq-menu-dropdown {
     .cq-chart-control-bottom & {
-        transform: translateY(3em);
+        /* the left and translateX 50% centers the dropdowns */
+        left: 50%;
+        transform: translateX(-50%) translateY(3em);
         &.cq-menu-dropdown-enter-done, &.cq-menu-dropdown-enter-active{
-            transform: translateY(0em);
+            transform: translateX(-50%) translateY(0em);
         }
     }
     .cq-chart-control-left & {
@@ -119,30 +121,6 @@
                     @include dialog-transition();
                 }
             }
-        }
-    }
-}
-
-/* Center all menu dialogs when positioned at bottom */
-.smartcharts-desktop .cq-chart-control-bottom {
-    .ciq-chart-types, .ciq-draw-tools {
-        .cq-menu-dropdown {
-            left: -4em;
-        }
-    }
-    .cq-comparison-new, .ciq-studies {
-        .cq-menu-dropdown {
-            left: -22em;
-        }
-    }
-    .ciq-views, .cq-share {
-        .cq-menu-dropdown {
-            left: -7em;
-        }
-    }
-    .ciq-period, .cq-chart-setting {
-        .cq-menu-dropdown {
-            left: -8em;
         }
     }
 }

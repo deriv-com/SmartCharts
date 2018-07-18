@@ -84,7 +84,7 @@
 	position: absolute;
 	overflow: hidden;
 	height: auto;
-	bottom: 0;
+	bottom: 5em;
 	pointer-events: none;
 	opacity: 0;
 	z-index: -3;
@@ -191,6 +191,7 @@
 		height: inherit;
 		.cq-menu-overlay {
 			.cq-menu-dropdown {
+				bottom: 0;
 				box-shadow: none;
 				border-radius: 0;
 				width: 100%;
