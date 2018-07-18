@@ -132,18 +132,6 @@ $footer-height: 45px;
 		width: 23px;
 	}
 }
-.rightclick_study #overlayTrashCan {
-	margin-top: -4px;
-	margin-left: 34px;
-	&.stx-btn span {
-	    @include themify($themes) {
-	        background-color: themed('defaultMain');
-	    }
-		border:none;
-		background-position: -250px -26px;
-		width: 24px;
-	}
-}
 
 /* ------------------------------------------------------- SLEEP MODE ------------------------------------------------------ */
 .ciq-sleeping .chartContainer {

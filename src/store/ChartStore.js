@@ -31,6 +31,7 @@ class ChartStore {
     chartControlsNode = null;
     chartContainerNode = null;
     holderStyle;
+    @observable containerWidth = null;
     @observable context = null;
     @observable currentActiveSymbol;
     @observable isChartAvailable = true;
@@ -117,6 +118,19 @@ class ChartStore {
 
     @action.bound resizeScreen() {
         if (!this.context) { return; }
+
+
+        if (this.rootNode.clientWidth > 1100) {
+            this.containerWidth = 1100;
+        } else if (this.rootNode.clientWidth > 900) {
+            this.containerWidth = 900;
+        } else if (this.rootNode.clientWidth > 480) {
+            this.containerWidth = 480;
+        } else {
+            this.containerWidth = 1100;
+        }
+
+
         this.updateHeight();
         // Height updates are not immediate, so we must resize the canvas with
         // a slight delay for it to pick up the correct chartContainer height.
@@ -126,8 +140,8 @@ class ChartStore {
 
     @action.bound init(rootNode, props) {
         this.rootNode = rootNode;
-        this.chartNode = this.rootNode.querySelector('.ciq-chart');
-        this.chartControlsNode = this.chartNode.querySelector('.cq-chart-controls');
+        this.chartNode = this.rootNode.querySelector('.ciq-chart-area');
+        this.chartControlsNode = this.rootNode.querySelector('.cq-chart-controls');
 
         const {
             onSymbolChange,
@@ -170,8 +184,10 @@ class ChartStore {
 
         const deleteElement = stxx.chart.panel.holder.parentElement.querySelector('#mouseDeleteText');
         const manageElement = stxx.chart.panel.holder.parentElement.querySelector('#mouseManageText');
+        const manageTouchElement = stxx.chart.panel.holder.parentElement.querySelector('#overlayTrashCan');
         deleteElement.textConent = t.translate('right-click to delete');
         manageElement.textConent = t.translate('right-click to manage');
+        manageTouchElement.textContent = t.translate('tap to manage');
 
         // Animation (using tension requires splines.js)
         CIQ.Animation(stxx, { stayPut: true });

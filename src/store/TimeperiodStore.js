@@ -64,7 +64,9 @@ export default class TimeperiodStore {
         const setRemain = () => {
             const dataSet = stx.chart.dataSet;
             if (dataSet && dataSet.length !== 0) {
-                const diff = new Date() - dataSet[dataSet.length - 1].DT;
+                const now = new Date();
+                // Dates are in UTC; we need to do a timezone offset
+                const diff = now - dataSet[dataSet.length - 1].DT + (now.getTimezoneOffset() * 60000);
                 this.remain = displayMilliseconds((getIntervalInSeconds(stx.layout) * 1000) - diff);
                 stx.draw();
             }

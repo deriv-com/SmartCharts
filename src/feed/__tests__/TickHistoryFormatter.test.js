@@ -25,13 +25,13 @@ const historyCandleResponse = {
 };
 const historyCandleResponseResult = [{
     'Close': 272.2381,
-    'DT': 1524809066000
+    'Date': '2018-04-27T06:04:26'
 }, {
     'Close': 272.2038,
-    'DT': 1524809068000
+    'Date': '2018-04-27T06:04:28'
 }, {
     'Close': 272.1995,
-    'DT': 1524809070000
+    'Date': '2018-04-27T06:04:30'
 }];
 
 const historyTicksResponse = {
@@ -70,19 +70,19 @@ const historyTicksResponse = {
 };
 const historyTicksResponseResult = [{
     'Close': 272.123,
-    'DT': new Date('2018-04-27T06:04:00.000Z'),
+    'Date': '2018-04-27T06:04:00',
     'High': 272.3895,
     'Low': 272.0952,
     'Open': 272.3895
 }, {
     'Close': 272.0673,
-    'DT': new Date('2018-04-27T06:05:00.000Z'),
+    'Date': '2018-04-27T06:05:00',
     'High': 272.2343,
     'Low': 271.9868,
     'Open': 272.1483
 }, {
     'Close': 271.7995,
-    'DT': new Date('2018-04-27T06:06:00.000Z'),
+    'Date': '2018-04-27T06:06:00',
     'High': 272.2094,
     'Low': 271.7787,
     'Open': 272.081
@@ -114,7 +114,7 @@ const tickCandleResponse = {
 };
 const tickCandleResponseResult = {
     'Close': 271.808,
-    'DT': new Date('2018-04-27T06:47:00.000Z'),
+    'Date': '2018-04-27T06:47:00',
     'High': 271.9735,
     'Low': 271.7602,
     'Open': 271.9735
@@ -143,7 +143,7 @@ const tickTickResponse = {
 };
 const tickTickResponseResult = {
     'Close': 271.8108,
-    'DT': new Date('2018-04-27T06:54:52.000Z')
+    'Date': '2018-04-27T06:54:52'
 };
 
 test('Test parse history style="candles"', () => {
