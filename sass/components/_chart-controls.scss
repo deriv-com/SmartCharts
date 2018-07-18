@@ -57,19 +57,29 @@
         padding: 0.35em 2.6em;
         color: #575757;
     }
-    .ciq-menu{
-        .cq-menu-dropdown {
-            transform: translateY( 3em );
-            &.cq-menu-dropdown-enter-done, &.cq-menu-dropdown-enter-active{
-                opacity: 1;
-                z-index: 6;
-                transform: translateY( 0em );
-            }
-            &.cq-menu-dropdown-exit-active{
-                opacity: 0;
-                z-index: -3;
-            }
+}
+
+/* Menu dropdown open/close animation */
+.cq-chart-controls .ciq-menu .cq-menu-dropdown {
+    .cq-chart-control-bottom & {
+        transform: translateY(3em);
+        &.cq-menu-dropdown-enter-done, &.cq-menu-dropdown-enter-active{
+            transform: translateY(0em);
         }
+    }
+    .cq-chart-control-left & {
+        transform: translateX(-3em);
+        &.cq-menu-dropdown-enter-done, &.cq-menu-dropdown-enter-active{
+            transform: translateX(0em);
+        }
+    }
+    &.cq-menu-dropdown-exit-active{
+        opacity: 0;
+        z-index: -3;
+    }
+    &.cq-menu-dropdown-enter-done, &.cq-menu-dropdown-enter-active{
+        opacity: 1;
+        z-index: 6;
     }
 }
 
@@ -98,45 +108,43 @@
         .ciq-menu{
             height: 60px;
             .cq-menu-dropdown {
-                opacity: 0;
-                z-index: -3;
-                transform: translateX(.5em) translateY(0) !important;
-                left: 50%;
                 bottom: auto;
+                left: 9em;
                 top: -1em;
-                pointer-events: none;
                 @include box-shadow (0px, 0, 4px, rgba(0, 0, 0, .2));
                 @include transition( opacity .20s 0s);
                 @include dialog-transition();
-                &.cq-menu-dropdown-enter-done,
-                &.open{ // class open should be removed after `dialog-animation` merged
-                    pointer-events: initial;
-                    opacity: 1;
-                    z-index: 6;
-                    transform: translateX(4.5em) translateY(0) !important;
-                }
                 &.cq-menu-dropdown-exit.cq-menu-dropdown-exit-active,
                 &.cq-menu-dropdown-exit-done{
                     @include dialog-transition();
-                    opacity: 0;
-                    z-index: -3;
-                    display: none;
-                    transform: translateX(.5em) translateY(0) !important;
                 }
             }
         }
     }
 }
 
-
-
-
-.cq-comparison-new > .cq-menu-dropdown {
-    left: -13em;
-}
-
-.ciq-studies > .cq-menu-dropdown {
-    left: -9.8em;
+/* Center all menu dialogs when positioned at bottom */
+.smartcharts-desktop .cq-chart-control-bottom {
+    .ciq-chart-types, .ciq-draw-tools {
+        .cq-menu-dropdown {
+            left: -4em;
+        }
+    }
+    .cq-comparison-new, .ciq-studies {
+        .cq-menu-dropdown {
+            left: -22em;
+        }
+    }
+    .ciq-views, .cq-share {
+        .cq-menu-dropdown {
+            left: -7em;
+        }
+    }
+    .ciq-period, .cq-chart-setting {
+        .cq-menu-dropdown {
+            left: -8em;
+        }
+    }
 }
 
 /* Mobile Style */
@@ -201,57 +209,61 @@
         }
     }
 }
-.smartcharts-480 {
-    .cq-chart-controls {
-        .ciq-menu {
-            width: 47px;
-            .cq-menu-btn {
-                > .ic-icon{
-                    padding: .35em 0em;
+
+.smartcharts-desktop .cq-chart-control-bottom {
+    .smartcharts-480 {
+        .cq-chart-controls {
+            .ciq-menu {
+                width: 47px;
+                .cq-menu-btn {
+                    > .ic-icon{
+                        padding: .35em 0em;
+                    }
+                    .ic-subtitle{
+                        display: none;
+                    }
                 }
-                .ic-subtitle{
-                    display: none;
+                .notification-badge{
+                    left: 28px;
                 }
             }
-            .notification-badge{
-                left: 28px;
+        }
+    }
+    .smartcharts-900 {
+        .cq-chart-controls {
+            .ciq-menu {
+                width: 70px;
+                .cq-menu-btn {
+                    > .ic-icon{
+                        padding: .35em 0em;
+                    }
+                    .ic-subtitle{
+                        display: none;
+                    }
+                }
+                .notification-badge{
+                    left: 39px;
+                }
+            }
+        }
+    }
+    .smartcharts-1100 {
+        .cq-chart-controls {
+            .ciq-menu {
+                width: 100px;
+                .cq-menu-btn {
+                    > .ic-icon{
+                        padding: .35em 0.5em;
+                    }
+                    .ic-subtitle{
+                        display: block;
+                    }
+                }
+                .notification-badge{
+                    left: 55px;
+                }
             }
         }
     }
 }
-.smartcharts-900 {
-    .cq-chart-controls {
-        .ciq-menu {
-            width: 70px;
-            .cq-menu-btn {
-                > .ic-icon{
-                    padding: .35em 0em;
-                }
-                .ic-subtitle{
-                    display: none;
-                }
-            }
-            .notification-badge{
-                left: 39px;
-            }
-        }
-    }
-}
-.smartcharts-1100 {
-    .cq-chart-controls {
-        .ciq-menu {
-            width: 100px;
-            .cq-menu-btn {
-                > .ic-icon{
-                    padding: .35em 0.5em;
-                }
-                .ic-subtitle{
-                    display: block;
-                }
-            }
-            .notification-badge{
-                left: 55px;
-            }
-        }
-    }
-}
+

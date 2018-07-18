@@ -120,11 +120,11 @@ class ChartStore {
         if (!this.context) { return; }
 
 
-        if (this.rootNode.clientWidth > 1100) {
+        if (this.modalNode.clientWidth > 1100) {
             this.containerWidth = 1100;
-        } else if (this.rootNode.clientWidth > 900) {
+        } else if (this.modalNode.clientWidth > 900) {
             this.containerWidth = 900;
-        } else if (this.rootNode.clientWidth > 480) {
+        } else if (this.modalNode.clientWidth > 480) {
             this.containerWidth = 480;
         } else {
             this.containerWidth = 1100;
@@ -307,7 +307,7 @@ class ChartStore {
         });
 
         this.resizeObserver = new ResizeObserver(this.resizeScreen);
-        this.resizeObserver.observe(rootNode);
+        this.resizeObserver.observe(modalNode);
 
         this.feed.onComparisonDataUpdate(this.updateComparisons);
     }

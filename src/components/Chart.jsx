@@ -66,13 +66,12 @@ class Chart extends Component {
         } = this.props;
 
         const currentPosition = `cq-chart-control-${(position && !isMobile) ? position : 'bottom'}`;
-        const currentMode = `${isMobile ? 'smartcharts-mobile' : ''}`;
         const contextWidth =  !isMobile ? `smartcharts-${containerWidth}` : '';
         const renderTopWidgets = topWidgets || defaultTopWidgets;
 
         return (
             <div
-                className={`smartcharts smartcharts-${theme} ${contextWidth} ${currentMode}`}
+                className={`smartcharts smartcharts-${theme} ${contextWidth} smartcharts-${isMobile ? 'mobile' : 'desktop'}`}
                 ref={(modalNode) => { this.modalNode = modalNode; }}
             >
                 <cq-context
