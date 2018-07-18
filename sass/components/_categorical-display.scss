@@ -226,7 +226,8 @@
     }
     .cq-scroll-panel {
         position: relative;
-        height: calc(67vh - 8em);
+        height: 53vh;
+        min-height: 320px;
         width: 66%;
     }
     .ciq-item-display {

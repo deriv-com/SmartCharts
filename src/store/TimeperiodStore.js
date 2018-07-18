@@ -64,7 +64,9 @@ export default class TimeperiodStore {
         const setRemain = () => {
             const dataSet = stx.chart.dataSet;
             if (dataSet && dataSet.length !== 0) {
-                const diff = new Date() - dataSet[dataSet.length - 1].DT;
+                const now = new Date();
+                // Dates are in UTC; we need to do a timezone offset
+                const diff = now - dataSet[dataSet.length - 1].DT + (now.getTimezoneOffset() * 60000);
                 this.remain = displayMilliseconds((getIntervalInSeconds(stx.layout) * 1000) - diff);
                 stx.draw();
             }
@@ -73,7 +75,7 @@ export default class TimeperiodStore {
         if (this.mainStore.chartSetting.countdown && !isTick && hasCountdown) {
             if (!this._injectionId) {
                 this._injectionId = stx.append('draw', () => {
-                    if (this.remain && stx.chart.dataSet) {
+                    if (this.remain && stx.currentQuote() !== null) {
                         stx.yaxisLabelStyle = 'rect';
                         stx.createYAxisLabel(stx.chart.panel, this.remain, this.remainLabelY, '#15212d', '#FFFFFF');
                         stx.yaxisLabelStyle = 'roundRectArrow';
@@ -121,8 +123,7 @@ export default class TimeperiodStore {
 
     @computed get remainLabelY() {
         const stx = this.context.stx;
-        const dataSet = stx.chart.dataSet;
-        const price = dataSet[dataSet.length - 1].Close;
+        const price = stx.currentQuote().Close;
         let x = stx.pixelFromPrice(price, stx.chart.panel);
         const currentPriceLabelHeight = 18;
         const maxRequiredSpaceForLabels = 60;
