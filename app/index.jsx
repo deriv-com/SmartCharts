@@ -76,10 +76,19 @@ const shareOrigin = window.location.href.split('?')[0];
 class App extends Component {
     constructor(props) {
         super(props);
+        const notifier = new ChartNotifier();
         const settings = createObjectFromLocalStorage('smartchart-setting');
         if (settings) { this.startingLanguage = settings.language; }
-        this.state = { settings };
+        this.state = { settings, notifier };
     }
+
+    symbolChange = (symbol) => {
+        this.state.notifier.notify('removeByCategory', {
+            category: 'activesymbol',
+        });
+        console.log('Symbol has changed to:', symbol);
+    };
+
     saveSettings = (settings) => {
         console.log('settings updated:', settings);
         CIQ.localStorageSetItem('smartchart-setting', JSON.stringify(settings));
@@ -91,22 +100,21 @@ class App extends Component {
     };
     startingLanguage = 'en';
     render() {
-        const n = new ChartNotifier();
         const renderTopWidgets = () => (
             <React.Fragment>
                 <ChartTitle />
                 <AssetInformation />
                 <ComparisonList />
                 <Notification
-                    notifier={n}
+                    notifier={this.state.notifier}
                 />
             </React.Fragment>
         );
         const { settings } = this.state;
         return (
             <SmartChart
-                onSymbolChange={(symbol) => { n.notify('removeall'); console.log('Symbol has changed to:', symbol); }}
-                onMessage={e => n.notify('message', e)}
+                onSymbolChange={symbol => this.symbolChange(symbol)}
+                onMessage={e => this.state.notifier.notify('message', e)}
                 isMobile={CIQ.isMobile}
                 enableRouting
                 topWidgets={renderTopWidgets}

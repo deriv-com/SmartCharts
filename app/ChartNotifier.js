@@ -1,17 +1,22 @@
 
 
-function ChartNotifier() {
-    this.callback = null;
-    this.notify = (_action, _data) => {
-        if (typeof this.callback === 'function') {
-            this.callback({
-                action: _action,
-                data: _data,
-            });
+export default class ChartNotifier {
+    messageCallback = null;
+    removeByCategoryCallback=null
+
+    notify(_action, _data) {
+        if (_action === 'message') {
+            this.messageCallback(_data);
+        } else if (_action === 'removeByCategory') {
+            this.removeByCategoryCallback(_data);
         }
-    };
-    this.onCallback = (callback) => {
-        this.callback = callback;
-    };
+    }
+
+    message(callback) {
+        this.messageCallback = callback;
+    }
+
+    removeByCategory(callback) {
+        this.removeByCategoryCallback = callback;
+    }
 }
-export default ChartNotifier;

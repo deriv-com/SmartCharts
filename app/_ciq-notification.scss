@@ -34,7 +34,7 @@
         align-items: center;
         font-size: 14px;
         border: 1px solid #FDD063;
-        @include border-radius(3px);
+        border-radius: 3px;
         &.warning {
             background: #FFF8E2;
         }
@@ -54,14 +54,27 @@
             animation: cq-slide-up .3s forwards;
         }
         .close-icon {
+            background: url("./icons/ic-close.svg") no-repeat scroll center center;
             cursor: pointer;
             margin: 0px 5px;
             position: relative;
-            top: 2px;
+            padding: 5px;
         }
-        .ic-icon-img{
-            width: 20px;
-            margin: 0 4px;
+        .ic-icon{
+            position: relative;
+            padding: 0 5px;
+        }
+        .icon-notification-warning{
+            background: url("./icons/warning.svg") no-repeat scroll center center;
+        }
+        .icon-notification-error{
+            background: url("./icons/error.svg") no-repeat scroll center center;
+        }
+        .icon-notification-info{
+            background: url("./icons/info.svg") no-repeat scroll center center;
+        }
+        .icon-notification-success{
+            background: url("./icons/success.svg") no-repeat scroll center center;
         }
     }
 }

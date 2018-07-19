@@ -1,20 +1,6 @@
 import React from 'react';
 import './_ciq-notification.scss';
 
-import CloseIcon from './icons/ic-close.svg';
-import Warning from './icons/warning.svg';
-import Error from './icons/error.svg';
-import Success from './icons/success.svg';
-import Info from './icons/info.svg';
-
-
-const alertIconMaps = {
-    info: Info,
-    success: Success,
-    warning: Warning,
-    error: Error,
-};
-
 class Notification extends React.Component {
     constructor(props) {
         super(props);
@@ -44,6 +30,11 @@ class Notification extends React.Component {
             messages,
         });
 
+        /**
+            message removing has an animation which animate 300ms so,
+            first of all, I set hide=true to start animation then after
+            the animated finish, I remove the message for the store
+        */
         setTimeout(() => {
             messages = messages.filter(x => x.id !== id);
             this.setState({
@@ -57,39 +48,34 @@ class Notification extends React.Component {
         });
     }
 
-    render() {
-        const { notifier } = this.props;
-        notifier.onCallback((e) => {
-            if (e.action === 'message') {
-                this.onMessage(e.data);
-            } else if (e.action === 'removeall') {
-                this.onRemoveAll();
+    removeByCategory(category) {
+        this.state.messages.map((msg) => {
+            if (msg.category === category) {
+                this.onRemove(msg.id);
             }
         });
+    }
+
+    render() {
+        const { notifier } = this.props;
+
+        notifier.message(e => this.onMessage(e));
+        notifier.removeByCategory(e => this.removeByCategory(e));
 
         return (
             <div className="cq-notifications">
-                {this.state.messages.map((message) => {
-                    const AlertIcon = alertIconMaps[message.type];
-                    return (
-                        <div
-                            key={message.id}
-                            className={`notification ${message.type} ${message.hide ? 'hide' : ''}`}
-                        >
-                            <img className="ic-icon-img" src={AlertIcon} alt={message.type} />
-                            <div className="text"> {message.text} </div>
-                            <span
-                                onClick={() => this.onRemove(message.id)}
-                            >
-                                <img
-                                    className="close-icon"
-                                    src={CloseIcon}
-                                    alt="delete icon"
-                                />
-                            </span>
-                        </div>
-                    );
-                })}
+                {this.state.messages.map(message => (
+                    <div
+                        key={message.id}
+                        className={`notification ${message.type} ${message.hide ? 'hide' : ''}`}
+                    >
+                        <span
+                            className={`ic-icon icon-notification-${message.type}`}
+                        />
+                        <div className="text"> {message.text} </div>
+                        <span onClick={() => this.onRemove(message.id)} className="close-icon" />
+                    </div>
+                ))}
             </div>
         );
     }
