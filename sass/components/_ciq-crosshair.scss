@@ -8,8 +8,10 @@
     z-index: 11;
     padding:  8px;
     box-sizing: border-box;
-    color: white;
-    background: rgba(21,33,45,0.88);
+    @include themify($themes) {
+        color: themed('CrosshairText');
+        background: themed('CrosshairBg');
+    }
     box-shadow: 0 2px 8px 0 rgba(21,33,45,0.32);
     pointer-events: none;
     opacity: 0;

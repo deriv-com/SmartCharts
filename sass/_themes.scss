@@ -11,7 +11,7 @@ $themes: (
         * Chart
         */
         ChartBg: #ffffff,
-        ChartBorder: rgba(170, 172, 186, 0.3),
+        ChartBorder: #e9e9ed,
         ChartText: #AAACBA,
         ChartGrid: rgba(170, 172, 186, 0.08),
         ChartIndicateText: #333333,
@@ -205,7 +205,7 @@ $themes: (
 
         CatDisplayFilterBg: #ffffff,
         CatDisplayFilterText: #2a3052,
-        CatDisplayFilterIcon: #AAACBA,
+        CatDisplayFilterIcon: #B0B3BF,
         CatDisplayFilterInputText: #ffffff,
         CatDisplayActiveFilterBg: #f4f4f6,
         CatDisplayActiveFilterText: #2a3052,
@@ -219,6 +219,12 @@ $themes: (
         CatDisplayCatContentTitleText: #333333,
         CatDisplayCatContentIcon: #2a3052,
         CatDisplayCatContentHover: #f4f4f6,
+
+        /**
+        * Crosshair
+        */
+        CrosshairBg: rgba(21, 33, 45, 0.88),
+        CrosshairText: #FFFFFF,
 
 
         /**
@@ -365,7 +371,7 @@ $themes: (
         */
         SwitchText: #ffffff,
         SwitchHandle: #ffffff,
-        SwitchOffBg: #aaacba,
+        SwitchOffBg: rgba(170, 172, 186, 0.3),
         SwitchOnBg: #4CAF50,
 
 
@@ -444,6 +450,13 @@ $themes: (
         CatDisplayCatContentTitleText: #AAACBA,
         CatDisplayCatContentIcon: #AAACBA,
         CatDisplayCatContentHover: #555975,
+
+        /**
+        * Crosshair
+        */
+        CrosshairBg: rgba(255, 255, 255, 0.88),
+        CrosshairText: #2a3052,
+
 
         /**
         * Icon

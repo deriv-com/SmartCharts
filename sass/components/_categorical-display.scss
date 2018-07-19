@@ -133,29 +133,13 @@
                 &.ic-forex,
                 &.ic-commodities,
                 &.ic-volidx,
-                &.ic-favorite {
-                    svg > g > circle {
-                        @include themify($themes) {
-                            fill: themed('CatDisplayFilterIcon');
-                        }
-                    }
-                }
-                &.ic-indicators > svg > g circle {
-                    @include themify($themes) {
-                        fill: themed('CatDisplayFilterIcon');
-                    }
-                }
-                &.ic-stocks > svg > path:first-child {
-                    @include themify($themes) {
-                        fill: themed('CatDisplayFilterIcon');
-                    }
-                }
+                &.ic-favorite,
+                &.ic-indicators,
+                &.ic-stocks,
                 &.ic-indices {
-                    svg > g > g {
-                        > path   {
-                            @include themify($themes) {
-                                fill: themed('CatDisplayFilterIcon');
-                            }
+                    path,rect,circle {
+                        @include themify($themes) {
+                            stroke: themed('CatDisplayActiveFilterIcon');
                         }
                     }
                 }
@@ -177,6 +161,11 @@
             height: $small-icon-size;
             margin-bottom: 2px;
             margin-right: 1.3em;
+            path,rect,circle {
+                @include themify($themes) {
+                    stroke: themed('CatDisplayFilterIcon');
+                }
+            }
         }
         .cq-filter-text{
         }
