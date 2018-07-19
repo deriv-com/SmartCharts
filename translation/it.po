@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Italian\n"
 "Language: it_IT\n"
-"PO-Revision-Date: 2018-06-22T14:14:43+0000\n"
+"PO-Revision-Date: 2018-07-17 03:11\n"
 
 msgid "Favorites"
 msgstr "Preferiti"
@@ -323,6 +323,9 @@ msgstr "destro del mouse per cancellare"
 
 msgid "right-click to manage"
 msgstr "destro del mouse per gestire"
+
+msgid "tap to manage"
+msgstr ""
 
 msgid "Chart data is not available for this symbol."
 msgstr "I dati del grafico non sono disponibili per questo simbolo."

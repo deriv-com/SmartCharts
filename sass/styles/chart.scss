@@ -20,7 +20,7 @@ html, body {
 
 /* Chart Block */
 .ciq-chart {
-    height:100%;
+    height:auto;
     width:100%;
     @include box-shadow (0px, 2px, 5px, rgba(0, 0, 0, .1));
     @include themify($themes) {
@@ -305,7 +305,7 @@ html, body {
     }
 }
 
-#mSticky, #vectorTrashCan, #overlayTrashCan, #showMeasure, .overlayEdit {
+#mSticky, #vectorTrashCan, #showMeasure, .overlayEdit {
     position: absolute;
     z-index: 40;
 }
@@ -318,7 +318,6 @@ html, body {
 }
 
 .overlayEdit.stx-btn,
-#overlayTrashCan.stx-btn,
 #vectorTrashCan.stx-btn { /* Drawing and study info div delete button wrappers for mobile */
     background: none;
     cursor: pointer;
@@ -331,7 +330,6 @@ html, body {
 }
 
 .overlayEdit.stx-btn span,
-#overlayTrashCan.stx-btn span,
 #vectorTrashCan.stx-btn span { /* Drawing and study info div delete button content */
     display: block;
     margin: 0 0 0 5px;
@@ -348,10 +346,6 @@ html, body {
     opacity: 0;
 }
 
-#overlayTrashCan {
-    margin-left: 5px;
-}
-
 /* To enable editing of overlay studies on mobile. You'll need to also implement stxx.callbacks.studyOverlayEdit
 .overlayEdit {
 	margin-left: 5px;
@@ -361,6 +355,14 @@ html, body {
 	margin-left: 34px;
 }
 */
+
+#overlayTrashCan {
+    border: none;
+    @include themify($themes) {
+        color: themed('tooltipTextColor');
+    }
+    font-weight: 300;
+}
 
 #mouseDeleteInstructions {
     margin: 0px;
@@ -1098,4 +1100,13 @@ cq-language-name {
 }
 .stx-chart-panel.stx-show { /* Hide default Chart Title and Icons */
     display: none;
+}
+
+.ciq-chart.ciq-screenshot .cq-menu-dropdown {
+    /*
+    There is a strange bug where dropdowns get displayed (partially)
+    when html is being rendered to canvas. So we set this to manually
+    hide it when PNG is exported.
+     */
+    display: none !important;
 }

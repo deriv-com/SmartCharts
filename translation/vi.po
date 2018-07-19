@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Vietnamese\n"
 "Language: vi_VN\n"
-"PO-Revision-Date: 2018-06-19T03:00:25+0000\n"
+"PO-Revision-Date: 2018-07-17 03:11\n"
 
 msgid "Favorites"
 msgstr "Yêu thích"
@@ -323,6 +323,9 @@ msgstr "nhấp chuột phải để xóa"
 
 msgid "right-click to manage"
 msgstr "nhấp chuột phải để quản lý"
+
+msgid "tap to manage"
+msgstr ""
 
 msgid "Chart data is not available for this symbol."
 msgstr "Biểu đồ dữ liệu không khả dụng cho ký hiệu này."
