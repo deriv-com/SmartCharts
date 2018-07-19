@@ -5,52 +5,64 @@ import Subscription from './Subscription';
 import Stream from './Stream';
 
 class StreamManager {
-    static get MSG_TICK() { return 'tick'; }
-    static get MSG_OHLC() { return 'ohlc'; }
+    _connection;
+    _emitters = { };
+    _streamIds = { };
+    _subscriptionData = { };
+    _inProgress = { };
+    _beingForgotten = { };
+    _callbacks = new Map();
+
     constructor(connection) {
         this._connection = connection;
-        this._emitters = { };
-        this._streamIds = { };
-        this._subscriptionData = { };
-        this._inProgress = { };
-        this._beingForgotten = { };
-        this._initialize();
-        this._callbacks = new Map();
-    }
-    _initialize() {
-        for (const msgType of [StreamManager.MSG_TICK, StreamManager.MSG_OHLC]) {
-            this._connection.on(msgType, (data) => {
-                const { ticks_history: symbol, granularity } = data.echo_req;
-                const key = `${symbol}-${granularity}`;
-                if (this._emitters[key]) {
-                    this._streamIds[key] = data[msgType].id;
-                    this._emitters[key].emit(Stream.EVENT_STREAM, data);
-                } else if (this._beingForgotten[key] === undefined) {
-                    // There could be the possibility a stream could still enter even though
-                    // it is no longer in used. This is because we can't know the stream ID
-                    // from the initial response; we have to wait for the next tick to retrieve it.
-                    // In such scenario we need to forget these "orphaned" streams:
-                    this._streamIds[key] = data[msgType].id;
-                    this._forgetStream(key);
-                }
-            });
+
+        for (const msgType of ['tick', 'ohlc']) {
+            this._connection.on(msgType, this._onTick.bind(this));
         }
-        this._connection.on(ConnectionManager.EVENT_CONNECTION_CLOSE, () => {
-            this._streamIds = { };
-            for (const key of Object.keys(this._emitters)) {
-                this._emitters[key].emit(Stream.EVENT_DISCONNECT);
-            }
-        });
-        this._connection.on(ConnectionManager.EVENT_CONNECTION_REOPEN, () => {
-            for (const key of Object.keys(this._subscriptionData)) {
-                const data = this._subscriptionData[key];
-                const { ticks_history: symbol, granularity } = data.echo_req;
-                const subscription = new Subscription({ symbol, granularity }, { connection: this._connection });
-                subscription.subscribe();
-                this._inProgress[key] = this._trackSubscription(subscription);
-            }
-        });
+        this._connection.on(
+            ConnectionManager.EVENT_CONNECTION_CLOSE,
+            this._onConnectionClosed.bind(this),
+        );
+        this._connection.on(
+            ConnectionManager.EVENT_CONNECTION_REOPEN,
+            this._onConnectionOpened.bind(this),
+        );
     }
+
+    _onTick(data) {
+        const { ticks_history: symbol, granularity } = data.echo_req;
+        const key = `${symbol}-${granularity}`;
+        const updateStreamId = () => { this._streamIds[key] = data[data.msg_type].id; };
+        if (this._emitters[key]) {
+            updateStreamId();
+            this._emitters[key].emit(Stream.EVENT_STREAM, data);
+        } else if (this._beingForgotten[key] === undefined) {
+            // There could be the possibility a stream could still enter even though
+            // it is no longer in used. This is because we can't know the stream ID
+            // from the initial response; we have to wait for the next tick to retrieve it.
+            // In such scenario we need to forget these "orphaned" streams:
+            updateStreamId();
+            this._forgetStream(key);
+        }
+    }
+
+    _onConnectionClosed() {
+        this._streamIds = { };
+        for (const key of Object.keys(this._emitters)) {
+            this._emitters[key].emit(Stream.EVENT_DISCONNECT);
+        }
+    }
+
+    _onConnectionOpened() {
+        for (const key of Object.keys(this._subscriptionData)) {
+            const data = this._subscriptionData[key];
+            const { ticks_history: symbol, granularity } = data.echo_req;
+            const subscription = new Subscription({ symbol, granularity }, { connection: this._connection });
+            subscription.subscribe();
+            this._inProgress[key] = this._trackSubscription(subscription);
+        }
+    }
+
     _trackSubscription(subscription) {
         return subscription.response.then((data) => {
             const { ticks_history: symbol, granularity } = data.echo_req;
@@ -66,6 +78,7 @@ class StreamManager {
             return this._subscriptionData[key];
         });
     }
+
     _trackStream(stream) {
         stream.onStream(({ echo_req, ohlc, tick }) => {
             const { ticks_history: symbol, granularity } = echo_req;
@@ -94,6 +107,7 @@ class StreamManager {
             }
         });
     }
+
     _forgetStream(key) {
         this._clearEmitter(key);
         if (this._streamIds[key]) {
@@ -109,6 +123,7 @@ class StreamManager {
             delete this._subscriptionData[key];
         }
     }
+
     _clearEmitter(key) {
         if (this._emitters[key]) {
             this._emitters[key].off(Stream.EVENT_REMEMBER_STREAM);
@@ -116,6 +131,7 @@ class StreamManager {
             delete this._emitters[key];
         }
     }
+
     _setupEmitter(key, subscription) {
         const emitter = new EventEmitter({ emitDelay: 0 });
         this._emitters[key] = emitter;
@@ -140,6 +156,7 @@ class StreamManager {
 
         return emitter;
     }
+
     _handleNewStream({ symbol, granularity }) {
         const key = `${symbol}-${granularity}`;
         const subscription = new Subscription({ symbol, granularity }, { connection: this._connection });
@@ -151,6 +168,7 @@ class StreamManager {
         this._trackStream(stream);
         return stream;
     }
+
     _handleExistingStream({ symbol, granularity }) {
         const key = `${symbol}-${granularity}`;
         const response = new Promise((resolve, reject) => {

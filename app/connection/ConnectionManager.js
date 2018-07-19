@@ -36,7 +36,6 @@ class ConnectionManager extends EventEmitter {
             .reject('Connection Error'));
         this._pendingRequests = { };
         this.emit(ConnectionManager.EVENT_CONNECTION_CLOSE);
-        this.closeTime = new Date();
     }
 
     _onmessage(message) {
