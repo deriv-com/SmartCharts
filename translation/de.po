@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: German\n"
 "Language: de_DE\n"
-"PO-Revision-Date: 2018-07-17 03:11\n"
+"PO-Revision-Date: 2018-07-17 14:44\n"
 
 msgid "Favorites"
 msgstr "Favoriten"
@@ -325,7 +325,7 @@ msgid "right-click to manage"
 msgstr "zum Verwalten rechts klicken"
 
 msgid "tap to manage"
-msgstr ""
+msgstr "zum verwalten antippen"
 
 msgid "Chart data is not available for this symbol."
 msgstr "Chart-Daten sind für dieses Symbol nicht verfügbar."
