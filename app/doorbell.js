@@ -23,6 +23,9 @@ window.doorbellOptions = {
         }
         alert.className = 'alert alert-success';
     },
+    onError() {
+        console.clear();
+    },
 };
 
 (function (w, d, t) {
