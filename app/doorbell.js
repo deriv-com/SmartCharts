@@ -1,7 +1,30 @@
 window.doorbellOptions = {
     id: '7933',
     appKey: 'GzOM4TFKsSn8CHPEV1qUWXXibdWwNGopCzvxzXUeU7swiNDflHgDTQ1QcRkDCEiM',
+    onSubmit() {
+        const text = document.getElementById('doorbell-feedback').value;
+        const email = document.getElementById('doorbell-email').value;
+        const alert = document.getElementById('doorbell-success');
+        const regx = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        let err;
+        if (!text) {
+            err = 'Your message is required';
+        } else if (text.length < 10) {
+            err = 'Your message is too short';
+        } else if (!email) {
+            err = 'Your email address is required';
+        } else if (!regx.test(String(email).toLowerCase())) {
+            err = 'Invalid email address';
+        }
+        if (err && err.length > 0) {
+            alert.innerHTML = err;
+            alert.className = 'doorbell-error';
+            return false;
+        }
+        alert.className = 'alert alert-success';
+    },
 };
+
 (function (w, d, t) {
     let hasLoaded = false;
     function l() {
