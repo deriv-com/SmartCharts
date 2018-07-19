@@ -29,6 +29,14 @@
         }
     }
 
+    .doorbell-error {
+        border: 1px solid #ebccd1;
+        border-radius: 4px;
+        background-color: #f2dede;
+        color: #a94442;
+        display: block !important;
+    }
+
     #doorbell-submit-button {
         color: #4C5794;
         border: none;
