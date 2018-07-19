@@ -52,7 +52,12 @@ class Feed {
             // We assume that 1st response is the history, and subsequent
             // responses are tick stream data.
             if (hasHistory) {
-                const quotes = [TickHistoryFormatter.formatTick(resp)];
+                let quotes;
+                if (resp.history || resp.candles) {
+                    quotes = TickHistoryFormatter.formatHistory(resp);
+                } else {
+                    quotes = [TickHistoryFormatter.formatTick(resp)];
+                }
 
                 if (comparisonChartSymbol) {
                     this._cxx.updateChartData(quotes, null, {

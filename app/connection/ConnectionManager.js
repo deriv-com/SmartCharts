@@ -32,8 +32,9 @@ class ConnectionManager extends EventEmitter {
     }
 
     _onclose() {
-        Object.keys(this._pendingRequests).forEach(req_id => this._pendingRequests[req_id]
-            .reject('Connection Error'));
+        Object.keys(this._pendingRequests).forEach((req_id) => {
+            this._pendingRequests[req_id].reject('Pending requests are rejected cause connection is closed.');
+        });
         this._pendingRequests = { };
         this.emit(ConnectionManager.EVENT_CONNECTION_CLOSE);
     }
@@ -68,7 +69,7 @@ class ConnectionManager extends EventEmitter {
         }
 
         this._websocket.send(JSON.stringify(req));
-        this._pendingRequests[req.req_id] = PendingPromise(req);
+        this._pendingRequests[req.req_id] = new PendingPromise(req);
         if (timeout) {
             this._timeoutRequest(req.req_id, timeout);
         }

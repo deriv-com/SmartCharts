@@ -6,11 +6,12 @@ import Stream from './Stream';
 
 class StreamManager {
     _connection;
-    _emitters = { };
-    _streamIds = { };
-    _subscriptionData = { };
-    _inProgress = { };
-    _beingForgotten = { };
+    _emitters = {};
+    _streamIds = {};
+    _lastStreamEpoch = {};
+    _subscriptionData = {};
+    _inProgress = {};
+    _beingForgotten = {};
     _callbacks = new Map();
 
     constructor(connection) {
@@ -32,16 +33,24 @@ class StreamManager {
     _onTick(data) {
         const { ticks_history: symbol, granularity } = data.echo_req;
         const key = `${symbol}-${granularity}`;
-        const updateStreamId = () => { this._streamIds[key] = data[data.msg_type].id; };
+
+        const updateActiveStream = () => {
+            const { id, epoch } = data[data.msg_type];
+            this._streamIds[key] = id;
+            // Epoch is updated with each tick so we know from when
+            // to patch up missing ticks when connection recovers
+            this._lastStreamEpoch[key] = epoch;
+        };
+
         if (this._emitters[key]) {
-            updateStreamId();
+            updateActiveStream();
             this._emitters[key].emit(Stream.EVENT_STREAM, data);
         } else if (this._beingForgotten[key] === undefined) {
             // There could be the possibility a stream could still enter even though
             // it is no longer in used. This is because we can't know the stream ID
             // from the initial response; we have to wait for the next tick to retrieve it.
             // In such scenario we need to forget these "orphaned" streams:
-            updateStreamId();
+            updateActiveStream();
             this._forgetStream(key);
         }
     }
@@ -54,12 +63,48 @@ class StreamManager {
     }
 
     _onConnectionOpened() {
+        // For _subscriptionData to have any values, connection must be reopened
         for (const key of Object.keys(this._subscriptionData)) {
             const data = this._subscriptionData[key];
             const { ticks_history: symbol, granularity } = data.echo_req;
             const subscription = new Subscription({ symbol, granularity }, { connection: this._connection });
-            subscription.subscribe();
-            this._inProgress[key] = this._trackSubscription(subscription);
+
+            const replaceTickHistory = () => {
+                subscription.subscribe();
+                subscription.response.then((newTickHistory) => {
+                    this._subscriptionData[key] = Subscription.cloneResponseData(newTickHistory);
+                    this._emitters[key].emit(Stream.EVENT_STREAM, newTickHistory);
+                });
+            };
+
+            if (this._lastStreamEpoch[key]) {
+                const epoch = +this._lastStreamEpoch[key];
+                const elapsedMs = Date.now() - (epoch * 1000);
+                if (elapsedMs >= 300000 /* <= 5 minutes */) {
+                    replaceTickHistory();
+                } else {
+                    // patch up missing tick data
+                    subscription.subscribe(epoch + 1);
+                    subscription.response.then((patchData) => {
+                        if (patchData.history) {
+                            const { prices, times } = data.history;
+                            const { prices: missingPrices, times: missingTimes } = patchData.history;
+                            data.history = {
+                                prices: prices.concat(missingPrices),
+                                times:  times.concat(missingTimes),
+                            };
+                        } else if (data.candles) {
+                            const { candles: missingCandles } = patchData;
+                            data.candles = data.candles.concat(missingCandles);
+                        }
+                        this._emitters[key].emit(Stream.EVENT_STREAM, patchData);
+                    });
+                }
+            } else {
+                // _lastStreamEpoch[key] can be undefined if the first response was not received
+                // before the connection closes
+                replaceTickHistory();
+            }
         }
     }
 
@@ -121,6 +166,7 @@ class StreamManager {
         }
         if (this._subscriptionData[key]) {
             delete this._subscriptionData[key];
+            delete this._lastStreamEpoch[key];
         }
     }
 

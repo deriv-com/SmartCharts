@@ -14,7 +14,7 @@ export default class Subscription {
         this._response = response;
     }
 
-    subscribe() {
+    subscribe(start) {
         const req = {
             ticks_history: this._symbol,
             end: 'latest',
@@ -24,6 +24,13 @@ export default class Subscription {
             style: this._granularity ? 'candles' : 'ticks',
             granularity: this._granularity,
         };
+
+        // Specify a start epoch to define range instead
+        if (start) {
+            delete req.count;
+            req.start = start;
+        }
+
         this._response = this._connection
             .send(req, Subscription.DEFAULT_TIMEOUT);
     }
