@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: German\n"
 "Language: de_DE\n"
-"PO-Revision-Date: 2018-07-17 14:44\n"
+"PO-Revision-Date: 2018-07-19 09:42\n"
 
 msgid "Favorites"
 msgstr "Favoriten"
@@ -96,11 +96,20 @@ msgstr "Vorlagen"
 msgid "Template name"
 msgstr "Vorlagenname"
 
-msgid "There is no template added by you."
-msgstr "Es gibt keine von Ihnen hinzugefügte Vorlage."
+msgid "Add New"
+msgstr ""
 
-msgid "Click + icon to add one."
-msgstr "Klicken Sie +icon, um eines hinzuzufügen."
+msgid " is already exist."
+msgstr ""
+
+msgid "Would you like to overwrite it?"
+msgstr ""
+
+msgid "CANCEL"
+msgstr ""
+
+msgid "OVERWRITE"
+msgstr ""
 
 msgid "Comparison"
 msgstr "Vergleich"
