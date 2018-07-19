@@ -140,8 +140,8 @@ class ChartStore {
 
     @action.bound init(rootNode, props) {
         this.rootNode = rootNode;
-        this.chartNode = this.rootNode.querySelector('.ciq-chart');
-        this.chartControlsNode = this.chartNode.querySelector('.cq-chart-controls');
+        this.chartNode = this.rootNode.querySelector('.ciq-chart-area');
+        this.chartControlsNode = this.rootNode.querySelector('.cq-chart-controls');
 
         const {
             onSymbolChange,
@@ -184,8 +184,10 @@ class ChartStore {
 
         const deleteElement = stxx.chart.panel.holder.parentElement.querySelector('#mouseDeleteText');
         const manageElement = stxx.chart.panel.holder.parentElement.querySelector('#mouseManageText');
+        const manageTouchElement = stxx.chart.panel.holder.parentElement.querySelector('#overlayTrashCan');
         deleteElement.textConent = t.translate('right-click to delete');
         manageElement.textConent = t.translate('right-click to manage');
+        manageTouchElement.textContent = t.translate('tap to manage');
 
         // Animation (using tension requires splines.js)
         CIQ.Animation(stxx, { stayPut: true });
