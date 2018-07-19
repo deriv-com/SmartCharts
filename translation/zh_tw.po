@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Chinese Traditional\n"
 "Language: zh_TW\n"
-"PO-Revision-Date: 2018-07-17 03:11\n"
+"PO-Revision-Date: 2018-07-19 09:42\n"
 
 msgid "Favorites"
 msgstr "我的最愛"
@@ -96,11 +96,20 @@ msgstr "範本"
 msgid "Template name"
 msgstr "範本名稱"
 
-msgid "There is no template added by you."
-msgstr "沒有您添加的範本。"
+msgid "Add New"
+msgstr ""
 
-msgid "Click + icon to add one."
-msgstr "按一下 + 圖示增加一個。"
+msgid " is already exist."
+msgstr ""
+
+msgid "Would you like to overwrite it?"
+msgstr ""
+
+msgid "CANCEL"
+msgstr ""
+
+msgid "OVERWRITE"
+msgstr ""
 
 msgid "Comparison"
 msgstr "比較"
