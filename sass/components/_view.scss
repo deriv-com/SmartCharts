@@ -5,37 +5,73 @@
 		transform: translate(-50%);
 		left: 50%;
 		.title {
+			height: 40px;
+			line-height: 40px;
+			font-size: 16px;
+			display: flex;
+			.title-text{
+				display: block;
+				font-size: 16px;
+				line-height: 40px;
+				font-weight: 400;
+				padding: 0 .7em;
+				@include themify($themes) {
+					color: themed('defaultText');
+				}
+			}
+			.icon-close-menu{
+				position: absolute;
+				top: 5px;
+				right: 5px;
+				cursor: pointer;
+				height: 30px;
+				width: 30px;
+				pointer-events: none;
+				opacity: 0;
+			}
+		}
+		.template-name {
 			display: flex;
 			align-items: center;
-			flex-direction: row;
-			height: 40px;
-			padding: 5px 10px;
+			height: 32px;
+			padding: 0 0 0 16px;
+			margin: 16px 11px 0 0;
+			@include themify($themes) {
+				border: 1px solid themed(defaultBorder);
+				background: themed('defaultMain');
+			}
 			@include box-sizing(border-box);
 			.icon {
 				display: flex;
-				flex: 8 0 0;
-				justify-content: flex-end
-			}
-			.add {
-				margin-bottom: 1px;
-				display: flex;
-				.ic-icon {
-					flex: 1 0 0;
-					position: relative;
-					right: 20px;
+				justify-content: flex-end;
+				&.hide{
+					display: none;
+				}
+				.tick-icon {
+					@include svg-icon-stroke('controlText');
+				}
+				.add-icon{
 					@include svg-icon-color('controlText');
 				}
 			}
-			.view-input {
+			.add {
+				display: flex;
+				flex-grow: 8;
+				.ic-icon {
+					@include svg-icon-color('controlText');
+				}
+			}
+			.add-new {
 				flex: 8 0 0;
+				cursor: pointer;
+			}
+			.view-input {
 				font-size: 12px;
 				font-weight: normal;
 				width: 100%;
-				padding: 0 30px 0 0;
-				line-height: 24px;
+				padding: 0 30px 0 5px;
 				border: none;
 				outline: none;
-				border-bottom: 1px solid #4b5794;
 				@include themify($themes) {
 					color: themed('controlText');
 					background-color: themed('defaultMain');
@@ -44,10 +80,10 @@
 		}
 		.content {
 			display: block;
-			height: 135px;
-			padding: 0px 5px 0px 16px;
+			height: 145px;
+			padding: 0px 5px 16px 16px;
 			.ciq-list{
-				height: 135px;
+				height: 115px;
 				overflow: auto;
 				display: block;
 				.ciq-list-item{
@@ -75,26 +111,70 @@
 						transition: opacity 0.15s .2s;
 						@include svg-icon-color('controlText');
 					}
+					&:first-child {
+						border-top: none;
+						margin-top: 0;
+					}
+					&:nth-last-child(-n+3) {
+						margin-bottom: 0px !important;
+					}
 				}
 			}
-			.placeholder {
-				p {
-					height: 20px;
-					font-size: 12px;
-					margin: 0;
-					text-align: center;
-					color: #aeaeaf;
+		}
+	}
+	.ovrwrit-alrt {
+		margin: 16px 0 0 -16px;
+		.ovrwrit-alrt-title {
+			text-align: center;
+			.ic-icon {
+				width: 100%;
+				margin-bottom: 10px;
+				>svg {
+					width: 24px;
+					height: 24px;
 				}
+			}
+			>span {
+				display: block;
+				text-align: center;
+				height: 20px;
+			}
+		}
+		.ovrwrit-alrt-buttons {
+			display:flex;
+			justify-content: flex-end;
+			position: absolute;
+			bottom: 16px;
+			right: 30px;
+			font-weight: bold;
+			>div{
+				width: 90px;
+				@include themify($themes) {
+					color: themed('controlDialogButton');
+				}
+				text-align: center;
+				cursor: pointer;
 			}
 		}
 	}
 }
 .smartcharts-mobile{
+	.ciq-views {
+        .title {
+            .icon-close-menu{
+                pointer-events: initial;
+                opacity: 1;
+            }
+		}
+	}	
 	.cq-menu-dropdown {
 		.dropdown-title {
 			.icon {
 				flex: none;
 			}
+		}
+		.content .ciq-list .ciq-list-item .ic-icon {
+			opacity: 1;
 		}
 	}
 }
