@@ -40,8 +40,8 @@ const getLanguageStorage = function () {
     }
 };
 
-const appId  = createObjectFromLocalStorage('config.app_id') || 12812;
-const serverUrl  = createObjectFromLocalStorage('config.server_url') || 'wss://ws.binaryws.com/websockets/v3';
+const appId  = CIQ.localStorage.getItem('config.app_id') || 12812;
+const serverUrl  = CIQ.localStorage.getItem('config.server_url') || 'wss://ws.binaryws.com/websockets/v3';
 
 const connectionManager = new ConnectionManager({
     appId,
