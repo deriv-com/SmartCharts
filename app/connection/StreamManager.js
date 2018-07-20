@@ -78,8 +78,9 @@ class StreamManager {
                         const { prices, times } = data.history;
                         const { prices: missingPrices, times: missingTimes } = patchData.history;
                         data.history = {
-                            prices: prices.concat(missingPrices),
-                            times:  times.concat(missingTimes),
+                            // Keep the cached subscription data capped at 1000 ticks
+                            prices: prices.slice(missingPrices.length).concat(missingPrices),
+                            times:  times.slice(missingTimes.length).concat(missingTimes),
                         };
                     } else if (data.candles) {
                         const { candles: missingCandles } = patchData;
