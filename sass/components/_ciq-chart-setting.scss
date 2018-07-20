@@ -1,14 +1,6 @@
 
 .cq-chart-setting {
-    &.stxMenuActive{
-        .cq-menu-dropdown {
-            right: 0px;
-            width: 280px;
-            height: 200px;
-        }
-    }
     .cq-menu-dropdown {
-        height: 0px;
         width: 280px;
         @include themify($themes) {
             color: themed('defaultTextStrong');
@@ -61,7 +53,7 @@
                 }
                 &.ciq-list-item-position{
                     .ciq-action{
-                        .ic-icon{ 
+                        .ic-icon{
                             rect{
                                 @include themify($themes) {stroke: themed('defaultBorder');}
                             }
