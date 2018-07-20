@@ -18,6 +18,7 @@ import ComparisonList from './components/ComparisonList.jsx';
 import ChartTitle from './components/ChartTitle.jsx';
 import AssetInformation from './components/AssetInformation.jsx';
 import Marker from './components/Marker.jsx';
+import { createObjectFromLocalStorage } from './utils';
 
 import './SplinePlotter';
 
@@ -30,6 +31,7 @@ export {
     ChartTypes,
     Comparison,
     ComparisonList,
+    createObjectFromLocalStorage,
     CrosshairToggle,
     DrawTools,
     Marker,
@@ -50,6 +52,7 @@ export default {
     ChartTypes,
     Comparison,
     ComparisonList,
+    createObjectFromLocalStorage,
     CrosshairToggle,
     DrawTools,
     Marker,

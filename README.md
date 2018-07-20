@@ -84,16 +84,25 @@ requestAPI* | SmartCharts will make single API calls by passing the request inpu
 requestSubscribe* | SmartCharts will make streaming calls via this method. `requestSubscribe` expects 2 parameters `(request, callback) => {}`: the `request` input and a `callback` in which response will be passed to for each time a response is available. Keep track of this `callback` as SmartCharts will pass this to you to forget the subscription (via `requestForget`).
 requestForget* | When SmartCharts no longer needs a subscription (made via `requestSubscribe`), it will call this method (passing in `request` and `callback` passed from `requestSubscribe`) to halt the subscription.
 onSymbolChange | When SmartCharts changes the symbol, it will call this function, passing the symbol object as parameter.
-lang | Sets the language.
 chartControlsWidgets | Render function for chart control widgets. Refer to [Customising Components](#customising-components).
 topWidgets | Render function for top widgets. Refer to [Customising Components](#customising-components).
-theme | Sets the chart theme. themes are (`dark\|light`), and default is `light`.
 initialSymbol | Sets the initial symbol.
 isMobile | Switch between mobile or desktop view. Defaults to `false`.
 shareOrigin | Sets the origin of the generated share link. Defaults to `https://charts.binary.com`.
-showCountdown | Show Countdown. Defaults to `false`.
+onSettingsChange | Callback that will be fired each time a setting is changed.
+settings | Sets the chart settings. Refer to [Chart Settings](#chart-settings)
 barriers | Draw chart barriers. Refer to [Barriers API](#barriers-api) for usage details
 enableRouting | Enable routing for dialogs. Defaults to `false`
+
+### Chart Settings
+
+| Attribute | Description |
+--------|--------------
+countdown | Show Countdown. Defaults to `false`.
+theme | Sets the chart theme. themes are (`dark\|light`), and default is `light`.
+lang | Sets the language. Defaults to `en`.
+position | Sets the position of the chart controls. Choose between `left` and `bottom`. In mobile this is always `bottom`. Defaults to `bottom`.
+assetInformation | Show or hide the asset information. In mobile this will be always be `false`. Defaults to `true`.
 
 #### Barriers API
 

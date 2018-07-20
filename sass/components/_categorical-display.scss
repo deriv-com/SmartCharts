@@ -226,7 +226,8 @@
     }
     .cq-scroll-panel {
         position: relative;
-        height: calc(67vh - 8em);
+        height: 53vh;
+        min-height: 320px;
         width: 66%;
     }
     .ciq-item-display {
@@ -257,7 +258,8 @@
         }
     }
     .cq-mobile-title{
-        padding-top: 0.9em !important;
+        padding-top: 16px !important;
+        padding-bottom: 16px !important;
         border-bottom: none !important;
     }
 }
@@ -321,12 +323,20 @@
     .cq-categorical-display{
         flex-direction: column;
         width: 100%;
+        display: inline;
         .cq-lookup-filters {
             width: 100%;
             border-right: none;
             height: auto;
+            max-height: 200px;
+            overflow: hidden;
+            @include transition(max-height .2s ease-in);
             @include themify($themes) {
                 border-bottom: 1px solid themed('defaultBorder');
+            }
+            &.scroll-down {
+                max-height: 0;
+                @include transition(max-height .2s ease-out);
             }
         }
         .cq-lookup-input  {
@@ -340,6 +350,9 @@
         .cq-scroll-panel{
             height: 100%;
             width: 100%;
+            .category:last-child{	
+                padding-bottom :13em;
+            }
         }
         .cq-item, .cq-active-item {
             height: 40px;

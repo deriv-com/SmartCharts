@@ -76,5 +76,6 @@ export default class SettingsDialogStore {
         onResetClick: this.onResetClick,
         onItemChange: this.onItemChange,
         Dialog: this.menu.dialog.connect(Dialog),
+        open: this.open,
     }));
 }

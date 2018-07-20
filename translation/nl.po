@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Dutch\n"
 "Language: nl_NL\n"
-"PO-Revision-Date: 2018-06-08 04:22-0400\n"
+"PO-Revision-Date: 2018-07-19 09:42\n"
 
 msgid "Favorites"
 msgstr ""
@@ -96,10 +96,19 @@ msgstr ""
 msgid "Template name"
 msgstr ""
 
-msgid "There is no template added by you."
+msgid "Add New"
 msgstr ""
 
-msgid "Click + icon to add one."
+msgid " is already exist."
+msgstr ""
+
+msgid "Would you like to overwrite it?"
+msgstr ""
+
+msgid "CANCEL"
+msgstr ""
+
+msgid "OVERWRITE"
 msgstr ""
 
 msgid "Comparison"
@@ -322,6 +331,9 @@ msgid "right-click to delete"
 msgstr ""
 
 msgid "right-click to manage"
+msgstr ""
+
+msgid "tap to manage"
 msgstr ""
 
 msgid "Chart data is not available for this symbol."

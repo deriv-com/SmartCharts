@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Vietnamese\n"
 "Language: vi_VN\n"
-"PO-Revision-Date: 2018-06-19T03:00:25+0000\n"
+"PO-Revision-Date: 2018-07-19 09:43\n"
 
 msgid "Favorites"
 msgstr "Yêu thích"
@@ -96,11 +96,20 @@ msgstr "Mẫu"
 msgid "Template name"
 msgstr "Tên mẫu"
 
-msgid "There is no template added by you."
-msgstr "Không có bản mẫu được thêm vào bởi bạn."
+msgid "Add New"
+msgstr ""
 
-msgid "Click + icon to add one."
-msgstr "Nhấp vào biểu tượng + để thêm một."
+msgid " is already exist."
+msgstr ""
+
+msgid "Would you like to overwrite it?"
+msgstr ""
+
+msgid "CANCEL"
+msgstr ""
+
+msgid "OVERWRITE"
+msgstr ""
 
 msgid "Comparison"
 msgstr "So sánh"
@@ -323,6 +332,9 @@ msgstr "nhấp chuột phải để xóa"
 
 msgid "right-click to manage"
 msgstr "nhấp chuột phải để quản lý"
+
+msgid "tap to manage"
+msgstr ""
 
 msgid "Chart data is not available for this symbol."
 msgstr "Biểu đồ dữ liệu không khả dụng cho ký hiệu này."

@@ -57,11 +57,6 @@ export default class ComparisonStore {
 
     @action.bound onSelectItem(symbolObject) {
         const context = this.context;
-        function cb(err, series) {
-            if (err) {
-                series.parameters.error = true;
-            }
-        }
         const pattern = null;
         const width = 1;
         const color = this.getSwatchColor() || 'auto';
@@ -89,7 +84,13 @@ export default class ComparisonStore {
         // don't allow symbol if same as main chart or just white space
         if (context.stx.chart.symbol.toLowerCase() !== symbolObject.symbol.toLowerCase() &&
             symbolObject.symbol.trim().length > 0) {
-            stx.addSeries(symbolObject.symbol, params, cb);
+            stx.addSeries(symbolObject.symbol, params, (err, series) => {
+                if (err) {
+                    this.mainStore.chart.removeComparison(series.parameters.symbolObject);
+                    series.parameters.error = true;
+                }
+            });
+            this.mainStore.comparisonList.updatePrices();
         }
 
         this.menu.setOpen(false);
