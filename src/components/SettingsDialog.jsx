@@ -27,6 +27,7 @@ const SettingsDialog = ({
     onItemChange,
     isFavoritable,
     Dialog,
+    open,
 }) => {
     const renderMap = {
         switch: item => (
@@ -97,23 +98,24 @@ const SettingsDialog = ({
         ),
     };
     return (
-        <Dialog className="cq-dialog cq-settings-dialog">
-            <div className={`titlebar ${!showTabs ? 'no-tabs' : ''}`}>
-                <div className="title">{title}</div>
-                <div className="icons">
-                    { onDeleteClick && <DeleteIcon
-                        onClick={onDeleteClick}
-                        className="margin"
-                    />}
-                    { isFavoritable &&
+        <div className={`cq-dialog-overlay ${open ? 'cq-dialog-active' : ''}`} >
+            <Dialog className="cq-dialog cq-settings-dialog">
+                <div className={`titlebar ${!showTabs ? 'no-tabs' : ''}`}>
+                    <div className="title">{title}</div>
+                    <div className="icons">
+                        { onDeleteClick && <DeleteIcon
+                            onClick={onDeleteClick}
+                            className="margin"
+                        />}
+                        { isFavoritable &&
                     <StarIcon
                         onClick={onStarClick}
                         className={`margin ciq-favorite ${stared ? 'ciq-active-favorite' : ''}`}
                     />}
+                    </div>
                 </div>
-            </div>
 
-            { showTabs &&
+                { showTabs &&
                 <div className="tabs">
                     <div
                         onClick={() => onTabClick('settings')}
@@ -127,41 +129,42 @@ const SettingsDialog = ({
                     </div>
                     <div className={`active-border ${activeTab === 'settings' ? 'first' : 'second'}`} />
                 </div>
-            }
+                }
 
-            { activeTab === 'settings' ?
-                <React.Fragment>
-                    <div className="items" >
-                        {items
-                            .map(item => (renderMap[item.type] &&
+                { activeTab === 'settings' ?
+                    <React.Fragment>
+                        <div className="items" >
+                            {items
+                                .map(item => (renderMap[item.type] &&
                                 <div key={item.id} className="item">
                                     <div className="title">
                                         <span>{item.title}</span>
                                         {renderMap[item.type](item)}
                                     </div>
                                 </div>
-                            ))
-                        }
-                    </div>
-                    <div className="buttons">
-                        <div
-                            className="reset"
-                            onClick={onResetClick}
-                        >{t.translate('RESET')}
+                                ))
+                            }
                         </div>
-                        <div
-                            className="done"
-                            onClick={() => setOpen(false)}
-                        >{t.translate('DONE')}
+                        <div className="buttons">
+                            <div
+                                className="reset"
+                                onClick={onResetClick}
+                            >{t.translate('RESET')}
+                            </div>
+                            <div
+                                className="done"
+                                onClick={() => setOpen(false)}
+                            >{t.translate('DONE')}
+                            </div>
                         </div>
+                    </React.Fragment>
+                    :
+                    <div className="description">
+                        {description}
                     </div>
-                </React.Fragment>
-                :
-                <div className="description">
-                    {description}
-                </div>
-            }
-        </Dialog>
+                }
+            </Dialog>
+        </div>
     );
 };
 

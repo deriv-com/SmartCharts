@@ -51,7 +51,9 @@ export default class CategoricalDisplayStore {
         emptyDescription: t.translate('There are no favorites yet.'),
         data: [],
     };
+    @observable isScrollingDown = false;
     scrollTop = undefined;
+    isUserScrolling = true;
     lastFilteredItems = [];
 
     get context() {
@@ -107,6 +109,16 @@ export default class CategoricalDisplayStore {
 
         this.activeCategoryKey = id || this.filteredItems[0].categoryId;
         this.scrollTop = this.scrollPanel.scrollTop;
+    }
+
+    @action.bound scrollUp() {
+        this.isScrollingDown = false;
+    }
+
+    @action.bound scrollDown() {
+        // This only affects when scrolling by mouse not by code
+        this.isScrollingDown = this.isUserScrolling;
+        this.isUserScrolling = true;
     }
 
     @action.bound init() {
@@ -215,6 +227,7 @@ export default class CategoricalDisplayStore {
 
     @action.bound setFilterText(filterText) {
         this.filterText = filterText;
+        this.isUserScrolling = false;
         setTimeout(() => {
             this.updateScrollSpy();
         }, 0);
@@ -231,6 +244,7 @@ export default class CategoricalDisplayStore {
         if (el) {
             // TODO: Scroll animation
             this.pauseScrollSpy = true;
+            this.isUserScrolling = false;
             this.scrollPanel.scrollTop = el.offsetTop;
             this.activeCategoryKey = category.categoryId;
             // scrollTop takes some time to take affect, so we need
@@ -320,6 +334,9 @@ export default class CategoricalDisplayStore {
         favoritesMap: this.favoritesMap,
         favoritesId: this.favoritesId,
         CloseUpperMenu: this.CloseUpperMenu,
+        isScrollingDown: this.isScrollingDown,
         updateScrollSpy: this.updateScrollSpy,
+        scrollUp: this.scrollUp,
+        scrollDown: this.scrollDown,
     }))
 }

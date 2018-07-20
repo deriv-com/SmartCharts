@@ -1,12 +1,22 @@
 
+.cq-dialog-overlay {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+    position:  absolute;
+    bottom: 2em;
+}
 .cq-settings-dialog {
     display: flex;
     flex-direction: column;
+    height: auto !important;
     .ciq-num-input > input[type=number] {
         width: 5.5em;
     }
     .titlebar {
-        height: 40x;
+        height: 40px;
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -21,7 +31,7 @@
             }
         }
         .title {
-            font-size: 24px;
+            font-size: 14px;
             padding-left: 16px;
             padding-bottom: 5px;
         }
@@ -80,7 +90,7 @@
         .item {
             @include box-sizing(border-box);
             padding: 0 16px;
-            height: 32px;
+            height: 25px;
             margin-bottom: 5px;
             display: flex;
             flex-direction: column;
@@ -124,12 +134,13 @@
     input[type=number] {
         display: inline-block;
         width: 3.2em;
-        line-height: 1.9em;
+        line-height: 1.6em;
         margin-right: 5px;
         padding-left: 6px;
         @include border-radius(3px);
         @include themify($themes) {
-            border: 1px solid themed('defaultBorderMedium');
+            border: none;
+            @include box-shadow ( 0 ,0 ,0 ,1px,themed('defaultBorder'));
         }
     }
 
@@ -139,6 +150,24 @@
             @include themify($themes) {
                 border: 1px solid themed('ColorPickerBorder');
             }
+        }
+    }
+}
+
+/* Mobile Style */
+.smartcharts-mobile {
+    .cq-dialog-overlay {
+        background: rgba(0, 0, 0, 0.3);
+        visibility: hidden;
+        bottom: 0;
+    }
+    .cq-dialog-active {
+        visibility: visible;
+        z-index: 1;
+    }
+    .cq-settings-dialog {
+        .items {
+            padding: 5px 0;
         }
     }
 }

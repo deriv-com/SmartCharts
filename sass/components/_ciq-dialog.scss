@@ -2,7 +2,8 @@
 .cq-dialog {
     width: 344px;
     left: calc(50% - 344px/2);
-    top: calc(50% - 366px/2);
+    top: auto;
+    border-radius: 5px;
     position: absolute;
     opacity: 0;
     margin-top: 120px;
@@ -18,5 +19,13 @@
     	margin-top: 0px;
         opacity: 1;
         z-index: 3;
+    }
+}
+
+/* Mobile Style */
+.smartcharts-mobile {
+    .cq-dialog {
+        left: 10px;
+        width: calc(100vw - 20px);
     }
 }
