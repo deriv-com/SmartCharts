@@ -5,7 +5,6 @@ import { PendingPromise } from '@binary-com/smartcharts'; // eslint-disable-line
 class ConnectionManager extends EventEmitter {
     static get EVENT_CONNECTION_CLOSE() { return 'CONNECTION_CLOSE'; }
     static get EVENT_CONNECTION_REOPEN() { return 'CONNECTION_REOPEN'; }
-    openPromises = [];
 
     constructor({ appId, endpoint, language }) {
         super({ emitDelay: 0 });
@@ -24,10 +23,10 @@ class ConnectionManager extends EventEmitter {
     }
 
     _onopen() {
-        for (const promise of this.openPromises) {
-            promise.resolve();
+        if (this._connectionOpened) {
+            this._connectionOpened.resolve();
+            this._connectionOpened = undefined;
         }
-        this.openPromises.length = 0; // clear array
         this.emit(ConnectionManager.EVENT_CONNECTION_REOPEN);
         if (!this._pingTimer) {
             this._pingTimer = setInterval(this._pingCheck.bind(this), 15000);
@@ -83,9 +82,10 @@ class ConnectionManager extends EventEmitter {
         req.req_id = this._counterReqId++;
 
         if (this._websocket.readyState !== WebSocket.OPEN) {
-            const openPromise = new PendingPromise();
-            this.openPromises.push(openPromise);
-            await openPromise;
+            if (!this._connectionOpened) {
+                this._connectionOpened = new PendingPromise();
+            }
+            await this._connectionOpened;
         }
 
         this._websocket.send(JSON.stringify(req));
