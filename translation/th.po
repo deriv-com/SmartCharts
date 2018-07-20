@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Thai\n"
 "Language: th_TH\n"
-"PO-Revision-Date: 2018-07-19 09:43\n"
+"PO-Revision-Date: 2018-07-19 10:11\n"
 
 msgid "Favorites"
 msgstr "รายการโปรด"
@@ -97,19 +97,19 @@ msgid "Template name"
 msgstr "ชื่อแม่แบบ"
 
 msgid "Add New"
-msgstr ""
+msgstr "เพิ่มใหม่"
 
 msgid " is already exist."
-msgstr ""
+msgstr "มีอยู่แล้ว"
 
 msgid "Would you like to overwrite it?"
-msgstr ""
+msgstr "ท่านต้องการเขียนทับหรือไม่?"
 
 msgid "CANCEL"
-msgstr ""
+msgstr "ยกเลิก"
 
 msgid "OVERWRITE"
-msgstr ""
+msgstr "เขียนทับ"
 
 msgid "Comparison"
 msgstr "การเปรียบเทียบ"

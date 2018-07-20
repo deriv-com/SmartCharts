@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: German\n"
 "Language: de_DE\n"
-"PO-Revision-Date: 2018-07-19 09:42\n"
+"PO-Revision-Date: 2018-07-19 15:02\n"
 
 msgid "Favorites"
 msgstr "Favoriten"
@@ -97,19 +97,19 @@ msgid "Template name"
 msgstr "Vorlagenname"
 
 msgid "Add New"
-msgstr ""
+msgstr "Neue hinzufügen"
 
 msgid " is already exist."
-msgstr ""
+msgstr " existiert bereits."
 
 msgid "Would you like to overwrite it?"
-msgstr ""
+msgstr "Möchten Sie es überschreiben?"
 
 msgid "CANCEL"
-msgstr ""
+msgstr "ABBRECHEN"
 
 msgid "OVERWRITE"
-msgstr ""
+msgstr "ÜBERSCHREIBEN"
 
 msgid "Comparison"
 msgstr "Vergleich"
@@ -334,7 +334,7 @@ msgid "right-click to manage"
 msgstr "zum Verwalten rechts klicken"
 
 msgid "tap to manage"
-msgstr "zum verwalten antippen"
+msgstr "zum Verwalten antippen"
 
 msgid "Chart data is not available for this symbol."
 msgstr "Chart-Daten sind für dieses Symbol nicht verfügbar."
