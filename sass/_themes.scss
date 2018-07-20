@@ -25,18 +25,13 @@ $themes: (
         MenuIcon: #333333,
         MenuText: #333333,
         MenuBorder: #e9e9ed,
-        MenuIconBg: #555975,
-        MenuIconBorder: #555975,
 
         MenuHoverBg: #f4f4f6,
         MenuHoverIconBg: #f4f4f6,
 
         MenuActiveBg: #f4f4f6,
         MenuActiveText: #333333,
-        MenuActiveIcon: #333333,
-        MenuActiveIconBg: #f4f4f6,
         MenuActiveBorder: #2a3052,
-        MenuActiveIconBorder: #f4f4f6,
 
 
         /**
@@ -201,19 +196,18 @@ $themes: (
         CatDisplayText: #333333,
         CatDisplayBorder: #e9e9ed,
 
-        CatDisplaySearchBg: #fafafb,
         CatDisplaySearchText: #2a3052,
         CatDisplaySearchBorder: #e9e9ed,
         CatDisplayActiveSearchBorder: #b0b3bf,
 
         CatDisplayFilterBg: #ffffff,
-        CatDisplayFilterText: #2a3052,
-        CatDisplayFilterIcon: #B0B3BF,
+        CatDisplayFilterText: #333333,
+        CatDisplayFilterIcon: #333333,
         CatDisplayFilterInputText: #ffffff,
         CatDisplayActiveFilterBg: #f4f4f6,
         CatDisplayActiveFilterText: #2a3052,
-        CatDisplayActiveFilterBorder: #2a3052,
         CatDisplayActiveFilterIcon: #2a3052,
+        CatDisplayActiveFilterBorder: #2a3052,
 
         CatDisplayCatTitleText: #333333,
         CatDisplayCatContentBg: #ffffff,
@@ -260,19 +254,14 @@ $themes: (
         MenuBg: #2a3052,
         MenuBorder: rgba(170, 172, 186, 0.1),
         MenuIcon: #AAACBA,
-        MenuIconBg: #555975,
-        MenuIconBorder: #555975,
         MenuText: #AAACBA,
 
         MenuHoverBg: #555975,
         MenuHoverIconBg: #555975,
 
         MenuActiveBg: #555975,
+        MenuActiveText: #fff1fff,
         MenuActiveBorder: #fff,
-        MenuActiveIcon: #ffffff,
-        MenuActiveIconBg: #555975,
-        MenuActiveIconBorder: #555975,
-        MenuActiveText: #ffffff,
 
 
         /**
@@ -436,7 +425,6 @@ $themes: (
         CatDisplayText: #AAACBA,
         CatDisplayBorder: #555975,
 
-        CatDisplaySearchBg: #2a3052,
         CatDisplaySearchText: #AAACBA,
         CatDisplaySearchBorder: rgba(170, 172, 186, 0.3),
         CatDisplayActiveSearchBorder: #ffffff,

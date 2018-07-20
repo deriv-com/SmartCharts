@@ -16,18 +16,10 @@
 			}
 		}
 		.cq-menu-btn{
-			@include themify($themes) {
-				background: themed('MenuActiveBg');
-			}
+			@include themify($themes) {background: themed('MenuActiveBg');}
 			> .ic-icon,
 			> .cq-toggle {
 				@include themify($themes) {color: themed('MenuActiveText');}
-				svg {
-					@include themify($themes) {
-						box-shadow: inset 0 0 0 1px themed('MenuActiveIconBorder');
-						background: themed('MenuActiveIconBg');
-					}
-				}
 				@include svg-icon-color('MenuActiveIcon');
 				.ic-subtitle{
 					font-weight: 500;
@@ -44,12 +36,6 @@
 			@include themify($themes) {
 				background: themed('MenuHoverBg');
 			}
-			> .ic-icon,
-			> .cq-toggle {
-				svg {
-					@include themify($themes) {background: themed('MenuHoverIconBg');}
-				}
-			}
 		}
 		> .ic-icon{
 			padding: .35em .5em;
@@ -57,12 +43,6 @@
 		> .ic-icon,
 		> .cq-toggle {
 			&.active{
-				svg {
-					@include themify($themes) {
-						box-shadow: inset 0 0 0 1px themed('MenuActiveIconBorder');
-						background: themed('MenuActiveIconBg');
-					}
-				}
 				.ic-subtitle{
 					font-weight: 500;
 					@include themify($themes) {
@@ -71,7 +51,6 @@
 				}
 			}
 			@include svg-icon-color('MenuIcon');
-			svg{@include border-radius(4px);}
 			.ic-subtitle{
 				font-weight: normal;
 				font-style: normal;
@@ -79,9 +58,7 @@
 				line-height: normal;
 				letter-spacing: normal;
 				text-align: center;
-				@include themify($themes) {
-					color: themed('MenuText');
-				}
+				@include themify($themes) {color: themed('MenuText');}
 			}
 		}
 	}
@@ -198,16 +175,6 @@
 		position: initial;
 		&.stxMenuActive{
 			z-index: 9;
-		}
-		.cq-menu-btn{
-			&:hover{
-				> .ic-icon,
-				> .cq-toggle {
-					svg {
-						background: transparent;
-					}
-				}
-			}
 		}
 	}
 }

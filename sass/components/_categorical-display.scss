@@ -24,7 +24,6 @@
         @include themify($themes) {
             color: themed('CatDisplayText');
             border: 1px solid themed('CatDisplaySearchBorder');
-            background-color: themed('CatDisplaySearchBg');
         }
         &.active{
             @include themify($themes) {
