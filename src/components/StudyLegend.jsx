@@ -16,7 +16,7 @@ const StudyLegend = ({
     activeStudiesNo,
 }) => (
     <Menu
-        className="ciq-menu ciq-studies collapse"
+        className="ciq-studies collapse"
         isOpened={isOpened}
         setOpen={setOpen}
         isMobile={isMobile}
