@@ -1008,7 +1008,7 @@ cq-language-name {
     width: 100%;
     overflow: hidden;
     cursor: ns-resize;
-    z-index: 30;
+    z-index: 2;
     @include themify($themes) {
         box-shadow: 0 0 0px 8px themed('ChartBg');
         background: themed('ChartBg');
