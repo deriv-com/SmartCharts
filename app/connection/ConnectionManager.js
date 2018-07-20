@@ -29,9 +29,22 @@ class ConnectionManager extends EventEmitter {
         }
         this.openPromises.length = 0; // clear array
         this.emit(ConnectionManager.EVENT_CONNECTION_REOPEN);
+        this._pingTimer = setInterval(this._pingCheck.bind(this), 15000);
+    }
+
+    _pingCheck() {
+        if (this._websocket.readyState === WebSocket.OPEN) {
+            this.send({ ping: 1 }, 3000)
+                .catch(() => {
+                    // Reset connection if ping gets no pong from server
+                    this._websocket.close();
+                    this._websocket._initialize();
+                });
+        }
     }
 
     _onclose() {
+        clearInterval(this._pingTimer);
         Object.keys(this._pendingRequests).forEach((req_id) => {
             this._pendingRequests[req_id].reject('Pending requests are rejected cause connection is closed.');
         });
@@ -62,7 +75,7 @@ class ConnectionManager extends EventEmitter {
         const req = Object.assign({}, data);
         req.req_id = this._counterReqId++;
 
-        if (this._websocket.readyState !== 1 /* 1 == OPEN */) {
+        if (this._websocket.readyState !== WebSocket.OPEN) {
             const openPromise = new PendingPromise();
             this.openPromises.push(openPromise);
             await openPromise;
