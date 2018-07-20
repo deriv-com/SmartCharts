@@ -349,8 +349,6 @@ class ChartStore {
             this.onSymbolChange(symbolObj);
         }
 
-        this.loader.show();
-
         // reset comparisons
         this.comparisonSymbols = [];
         for (const field in this.stxx.chart.series) {
@@ -359,6 +357,15 @@ class ChartStore {
             }
         }
 
+        this.newChart(symbolObj);
+
+        this.stxx.chart.yAxis.decimalPlaces = symbolObj.decimal_places;
+        this.currentActiveSymbol = symbolObj;
+        this.categorizedSymbols = this.categorizeActiveSymbols();
+    }
+
+    @action.bound newChart(symbolObj) {
+        this.loader.show();
         this.stxx.newChart(symbolObj, null, null, (err) => {
             this.loader.hide();
             if (err) {
@@ -367,10 +374,12 @@ class ChartStore {
             }
             this.restoreDrawings();
         });
+    }
 
-        this.stxx.chart.yAxis.decimalPlaces = symbolObj.decimal_places;
-        this.currentActiveSymbol = symbolObj;
-        this.categorizedSymbols = this.categorizeActiveSymbols();
+    // Makes requests to tick history API that will replace
+    // Existing chart tick/ohlc data
+    @action.bound refreshChart() {
+        this.newChart(this.currentActiveSymbol);
     }
 
     @action.bound updateComparisons() {

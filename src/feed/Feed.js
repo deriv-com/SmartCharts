@@ -53,10 +53,10 @@ class Feed {
             // responses are tick stream data.
             if (hasHistory) {
                 let quotes;
-                if (resp.history || resp.candles) {
-                    quotes = TickHistoryFormatter.formatHistory(resp);
-                } else {
+                if (resp.tick || resp.ohlc) {
                     quotes = [TickHistoryFormatter.formatTick(resp)];
+                } else {
+                    quotes = TickHistoryFormatter.formatHistory(resp);
                 }
 
                 if (comparisonChartSymbol) {

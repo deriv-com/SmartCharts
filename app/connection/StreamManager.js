@@ -69,41 +69,32 @@ class StreamManager {
             const { ticks_history: symbol, granularity } = data.echo_req;
             const subscription = new Subscription({ symbol, granularity }, { connection: this._connection });
 
-            const replaceTickHistory = () => {
+            if (this._lastStreamEpoch[key]) {
+                // patch up missing tick data
+                const epoch = +this._lastStreamEpoch[key];
+                subscription.subscribe(epoch + 1);
+                subscription.response.then((patchData) => {
+                    if (patchData.history) {
+                        const { prices, times } = data.history;
+                        const { prices: missingPrices, times: missingTimes } = patchData.history;
+                        data.history = {
+                            prices: prices.concat(missingPrices),
+                            times:  times.concat(missingTimes),
+                        };
+                    } else if (data.candles) {
+                        const { candles: missingCandles } = patchData;
+                        data.candles = data.candles.concat(missingCandles);
+                    }
+                    this._emitters[key].emit(Stream.EVENT_STREAM, patchData);
+                });
+            } else {
+                // _lastStreamEpoch[key] can be undefined if the first response was not received before
+                // the connection closes; in such scenario we subscribe for the tick history again
                 subscription.subscribe();
                 subscription.response.then((newTickHistory) => {
                     this._subscriptionData[key] = Subscription.cloneResponseData(newTickHistory);
                     this._emitters[key].emit(Stream.EVENT_STREAM, newTickHistory);
                 });
-            };
-
-            if (this._lastStreamEpoch[key]) {
-                const epoch = +this._lastStreamEpoch[key];
-                const elapsedMs = Date.now() - (epoch * 1000);
-                if (elapsedMs >= 300000 /* <= 5 minutes */) {
-                    replaceTickHistory();
-                } else {
-                    // patch up missing tick data
-                    subscription.subscribe(epoch + 1);
-                    subscription.response.then((patchData) => {
-                        if (patchData.history) {
-                            const { prices, times } = data.history;
-                            const { prices: missingPrices, times: missingTimes } = patchData.history;
-                            data.history = {
-                                prices: prices.concat(missingPrices),
-                                times:  times.concat(missingTimes),
-                            };
-                        } else if (data.candles) {
-                            const { candles: missingCandles } = patchData;
-                            data.candles = data.candles.concat(missingCandles);
-                        }
-                        this._emitters[key].emit(Stream.EVENT_STREAM, patchData);
-                    });
-                }
-            } else {
-                // _lastStreamEpoch[key] can be undefined if the first response was not received
-                // before the connection closes
-                replaceTickHistory();
             }
         }
     }
