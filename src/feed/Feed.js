@@ -125,9 +125,10 @@ class Feed {
     }
 
     async fetchPaginationData(symbol, suggestedStartDate, endDate, params, callback) {
-        const start = suggestedStartDate.getTime() / 1000;
-        const end = endDate.getTime() / 1000;
-        const now = (new Date().getTime() / 1000) | 0;
+        const getEpoch = date => (date.getTime() / 1000) - (date.getTimezoneOffset() * 60) | 0;
+        const start = getEpoch(suggestedStartDate);
+        const end   = getEpoch(endDate);
+        const now   = getEpoch(new Date());
         const startLimit = now - (2.8 * 365 * 24 * 60 * 60);
         const { period, interval } = params;
 
