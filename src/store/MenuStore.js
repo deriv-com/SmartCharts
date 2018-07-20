@@ -1,4 +1,4 @@
-import { action, computed, reaction, observable } from 'mobx';
+import { action, computed, reaction, observable, when } from 'mobx';
 import { connect } from './Connect';
 import DialogStore from './DialogStore';
 import Dialog from '../components/Dialog.jsx';
@@ -6,17 +6,23 @@ import Dialog from '../components/Dialog.jsx';
 export default class MenuStore {
     constructor(mainStore, options) {
         this.mainStore = mainStore;
-        this.getContext = () => mainStore.chart.context;
         this.dialog = new DialogStore(mainStore);
         reaction(() => this.open, () => this.blurInput());
+        when(() => this.mainStore.chart.context, this.onContextReady);
         if (options && options.route) { this.route = options.route; }
     }
 
-    get context() { return this.getContext(); }
+    get context() { return this.mainStore.chart.context; }
+
+    onContextReady = () => {
+        this.modalNode = this.mainStore.chart.modalNode;
+    };
+
     get routingStore() {
         return this.mainStore.routing;
     }
 
+    @observable modalNode = null;
     @observable route = '';
     @computed get open() { return this.dialog.open; }
     @action.bound setOpen(val) {
@@ -52,5 +58,7 @@ export default class MenuStore {
         open: this.open,
         onTitleClick: this.onTitleClick,
         DropdownDialog: this.dialog.connect(Dialog),
+        modalNode: this.modalNode,
+        isMobile: this.mainStore.chart.isMobile,
     }))
 }

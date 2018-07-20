@@ -78,98 +78,91 @@
 		position:relative;
 		font-weight:400;
 	}
+}
 
-	.cq-menu-dropdown {
-		position: absolute;
-		overflow: hidden;
-		height: auto;
-        margin-top: 5px;
-        bottom: 5em;
-		pointer-events: none;
-		opacity: 0;
-		z-index: -3;
-		@include transition(all 150ms ease-out);
-		@include box-shadow (0px, 2px, 4px, rgba(0, 0, 0, .2));
-		@include border-radius();
+.cq-menu-dropdown {
+	position: absolute;
+	overflow: hidden;
+	height: auto;
+	bottom: 5em;
+	pointer-events: none;
+	opacity: 0;
+	z-index: -3;
+	@include transition(all 150ms ease-out);
+	@include box-shadow (0px, 2px, 4px, rgba(0, 0, 0, .2));
+	@include border-radius();
+	@include themify($themes) {
+		background-color: themed('controlDialogBody');
+		color: themed('controlText');
+	}
+	&.open {
+		visibility: visible;
+		z-index: 3;
+	}
+	&.cq-menu-dropdown-enter-done {
+		pointer-events: initial;
+	}
+	.break-sm & {
+		top: $nav-height;
+		width:auto;
+		left:0;
+		right:0;
+		@include border-radius(0px);
+	}
+	/* cq-menu can be once removed from the menu button but no further. Anything further is a sub-menu */
+	.stxMenuActive > &,
+	.stxMenuActive > * > & {
+		opacity: 1;
+		height:auto;
+		margin-top:5px;
+	}
+	.title{
 		@include themify($themes) {
-			background: themed('controlDialogBody');
-			color: themed('controlText');
+			color: themed('controlTitleText');
+			background: themed('controlDialogHead');
+			border-bottom: 1px solid themed('defaultBorder');
 		}
-    	&.open {
-            visibility: visible;
-            margin-top:5px;
-            z-index: 3;
-            bottom: 5em;
-        }
-		&.cq-menu-dropdown-enter-done {
-			pointer-events: initial;
-		}
-		.break-sm & {
-			top: $nav-height;
-			width:auto;
-			left:0;
-			right:0;
-			@include border-radius(0px);
-		}
-		/* cq-menu can be once removed from the menu button but no further. Anything further is a sub-menu */
-		.stxMenuActive > &,
-		.stxMenuActive > * > & {
-			opacity: 1;
-			height:auto;
-			margin-top:5px;
-		}
-
-		&[cq-lift] {
-			width:auto;
-		}
-		.title{
+		> .ic-icon {
 			@include themify($themes) {
 				color: themed('controlTitleText');
-				background: themed('controlDialogHead');
-				border-bottom: 1px solid themed('defaultBorder');
 			}
-			> .ic-icon {
+			svg, path, g{
 				@include themify($themes) {
 					color: themed('controlTitleText');
-				}
-				svg, path, g{
-					@include themify($themes) {
-						color: themed('controlTitleText');
-						fill: themed('controlTitleText');
-					}
+					fill: themed('controlTitleText');
 				}
 			}
 		}
-		.cq-mobile-title{
+	}
+	.cq-mobile-title{
+		@include themify($themes) {
+			color: themed('controlTitleText');
+			background: themed('controlDialogHead');
+			border-bottom: 1px solid themed('defaultBorder');
+		}
+		padding-top: 0.2em;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		height: 16px;
+		.mobile-title{
+			font-size: 14px;
+			line-height: 30px;
+			font-weight: 400;
+			padding: 0em .9em;
 			@include themify($themes) {
-				color: themed('controlTitleText');
-				background: themed('controlDialogHead');
-				border-bottom: 1px solid themed('defaultBorder');
-			}
-			padding-top: 0.2em;
-			display: flex;
-			justify-content: space-between;
-			align-items: center;
-			height: 30px;
-			.mobile-title{
-				font-size: 14px;
-				line-height: 30px;
-				font-weight: 400;
-				padding: 0em .9em;
-				@include themify($themes) {
-				    color: themed('defaultText');
-				}
-			}
-			.icon-close-menu{
-			    margin-right: 6px;
-			    cursor: pointer;
+				color: themed('defaultText');
 			}
 		}
-		.cq-categorical-display{
-			.cq-lookup-filters{
-				@include themify($themes) {
-					background: themed('controlDialogHead');
-				}
+		.icon-close-menu{
+			margin-right: 6px;
+			cursor: pointer;
+		}
+	}
+	.cq-categorical-display{
+		.cq-lookup-filters{
+			@include themify($themes) {
+				background: themed('controlDialogHead');
 			}
 		}
 	}
@@ -177,7 +170,6 @@
 
 .smartcharts-mobile{
 	.ciq-menu {
-		position: initial;
 		&.stxMenuActive{
 			z-index: 9;
 		}
@@ -192,5 +184,18 @@
 			}
 		}
 	}
+	.cq-modal-dropdown {
+		height: inherit;
+		.cq-menu-overlay {
+			.cq-menu-dropdown {
+				bottom: 0;
+				box-shadow: none;
+				border-radius: 0;
+				width: 100%;
+				position: absolute;
+			}
+		}
+	}
+
 }
 
