@@ -13,7 +13,7 @@
         @include themify($themes) {
             color: themed('DialogHeadText');
         }
-        .icon-favorite{
+        .ciq-favorite{
             path{
                 @include themify($themes) {
                     stroke: themed('DialogHeadIcon');
