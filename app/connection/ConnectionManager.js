@@ -36,6 +36,7 @@ class ConnectionManager extends EventEmitter {
         if (this._websocket.readyState === WebSocket.OPEN) {
             this.send({ ping: 1 }, 3000)
                 .catch(() => {
+                    console.error('Server unresponsive. Creating new connection...');
                     // Reset connection if ping gets no pong from server
                     this._websocket.close();
                     this._websocket._initialize();
@@ -46,7 +47,7 @@ class ConnectionManager extends EventEmitter {
     _onclose() {
         clearInterval(this._pingTimer);
         Object.keys(this._pendingRequests).forEach((req_id) => {
-            this._pendingRequests[req_id].reject('Pending requests are rejected cause connection is closed.');
+            this._pendingRequests[req_id].reject('Pending requests are rejected as connection is closed.');
         });
         this._pendingRequests = { };
         this.emit(ConnectionManager.EVENT_CONNECTION_CLOSE);
