@@ -29,7 +29,9 @@ class ConnectionManager extends EventEmitter {
         }
         this.openPromises.length = 0; // clear array
         this.emit(ConnectionManager.EVENT_CONNECTION_REOPEN);
-        this._pingTimer = setInterval(this._pingCheck.bind(this), 15000);
+        if (!this._pingTimer) {
+            this._pingTimer = setInterval(this._pingCheck.bind(this), 15000);
+        }
     }
 
     _pingCheck() {
@@ -39,13 +41,17 @@ class ConnectionManager extends EventEmitter {
                     console.error('Server unresponsive. Creating new connection...');
                     // Reset connection if ping gets no pong from server
                     this._websocket.close();
-                    this._websocket._initialize();
+                    this._initialize();
                 });
         }
     }
 
     _onclose() {
-        clearInterval(this._pingTimer);
+        if (!this._pingTimer) {
+            clearInterval(this._pingTimer);
+            this._pingTimer = undefined;
+        }
+
         Object.keys(this._pendingRequests).forEach((req_id) => {
             this._pendingRequests[req_id].reject('Pending requests are rejected as connection is closed.');
         });
