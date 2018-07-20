@@ -40,7 +40,6 @@ const getLanguageStorage = function () {
     }
 };
 
-// const defaultAppId = createObjectFromLocalStorage('config.default_app_id');
 const appId  = createObjectFromLocalStorage('config.app_id') || 12812;
 const serverUrl  = createObjectFromLocalStorage('config.server_url') || 'wss://ws.binaryws.com/websockets/v3';
 
@@ -76,7 +75,6 @@ class App extends Component {
     constructor(props) {
         super(props);
         const settings = createObjectFromLocalStorage('smartchart-setting');
-
         if (settings) { this.startingLanguage = settings.language; }
         this.state = { settings };
     }
