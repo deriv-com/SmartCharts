@@ -18,7 +18,7 @@ const ChartTypes = ({
     if (Type === undefined) return (null);
     return (
         <Menu
-            className="ciq-menu ciq-display collapse ciq-chart-types"
+            className="ciq-display collapse ciq-chart-types"
         >
             <Menu.Title>
                 <Type.icon

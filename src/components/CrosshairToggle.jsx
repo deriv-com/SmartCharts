@@ -9,7 +9,7 @@ const CrosshairToggle = ({
 }) => {
     const CrosshairIcon = [CrosshairOffIcon, CrosshairOnIcon, CrosshairTooltipIcon][state];
     return (
-        <div className={`ciq-menu ${(state !== 0) ? 'stxMenuActive' : ''}`}>
+        <div className={`ciq-menu ${(state !== 0) ? 'crosshair-active' : ''}`}>
             <div className="cq-menu-btn">
                 <Toggle
                     active={state !== 0}

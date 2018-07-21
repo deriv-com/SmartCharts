@@ -509,7 +509,7 @@ cq-lookup-input {
 }
 
 /* Menus/Panel Toggles */
-cq-context {
+.smartcharts {
 	position: absolute;
 	height: 100%;
 	width: 100%;
@@ -561,9 +561,6 @@ cq-context {
 	}
 
 	/* Mobile Style */
-	&.smartcharts-mobile{
-		.ciq-menu{position: unset;}
-	}
 	.smartcharts-mobile {
 		@include user-select(none);
 	}
@@ -1494,3 +1491,45 @@ cq-share-dialog {
 	color: #878787;
 }
 
+.smartcharts-mobile {
+	.cq-modal-dropdown {
+		&.stxMenuActive {
+			z-index: 90;
+			position: fixed;
+			height: 100%;
+			width: 100%;
+			top: 0;
+		}
+		.cq-menu-dropdown {
+			height: auto;
+			width: 100%;
+		}
+		&.ciq-studies, &.cq-comparison-new {
+			.cq-menu-dropdown {
+				/* for studies and comparison dropdown, fill screen in mobile */
+				height: 100%;
+			}
+		}
+	}
+	.cq-menu-overlay {
+		position: relative;
+		background: rgba(0, 0, 0, .3);
+		height: inherit;
+		width: 100%;
+		left: 0;
+		padding: 0;
+		opacity: 0;
+		visibility: hidden;
+		@include transition(opacity 150 ease-out);
+	}
+	.stxMenuActive {
+		.cq-menu-overlay {
+			opacity: 1;
+			visibility: visible;
+		}
+	}
+}
+
+.cq-menu-dropdown {
+	line-height: 2.1em;
+}

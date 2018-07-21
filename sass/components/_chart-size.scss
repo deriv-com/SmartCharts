@@ -1,10 +1,12 @@
-.cq-chart-size-menu{
+.cq-chart-size {
     display: flex !important;
-    justify-content: center;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    flex-basis: max-content;
+    justify-content: flex-start;
     align-items: center;
     height: auto;
-}
-.cq-chart-size {
+    width: auto !important;
     &:after {
         display: none;
     }
@@ -24,5 +26,48 @@
 .cq-chart-control-left{
     .cq-chart-size-menu{
         flex-flow: column;
+    }
+}
+
+
+.smartcharts-desktop{
+    &.smartcharts-480 {
+        .cq-chart-control-bottom{
+            .cq-chart-controls {
+                .cq-chart-size {
+                    .cq-menu-btn {
+                        > .ic-icon{
+                            padding: .35em 0.3em !important;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    &.smartcharts-900 {
+        .cq-chart-control-bottom{
+            .cq-chart-controls {
+                .cq-chart-size {
+                    .cq-menu-btn {
+                        > .ic-icon{
+                            padding: .35em 0.458em !important;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    &.smartcharts-1100 {
+        .cq-chart-control-bottom{
+            .cq-chart-controls {
+                .cq-chart-size {
+                    .cq-menu-btn {
+                        > .ic-icon{
+                            padding: .35em 1.77em !important;
+                        }
+                    }
+                }
+            }
+        }
     }
 }

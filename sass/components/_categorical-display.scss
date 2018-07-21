@@ -5,9 +5,7 @@
     display: flex;
     text-align: left;
     overflow: hidden;
-    @include themify($themes) {
-        color: themed('CatDisplayText');
-    }
+    @include themify($themes) {color: themed('CatDisplayText');}
     @include transition(opacity 1s);
     @include border-radius();
     @include box-shadow (0px, 2px, 4px, rgba(0, 0, 0, .2));
@@ -160,7 +158,7 @@
             height: $small-icon-size;
             margin-bottom: 2px;
             margin-right: 1.3em;
-            path,rect,circle {
+            path, rect, circle {
                 @include themify($themes) {
                     stroke: themed('CatDisplayFilterIcon');
                 }
@@ -335,7 +333,7 @@
             height: 100%;
             width: 100%;
             .category:last-child{	
-                padding-bottom :13em;
+                padding-bottom: 13em;
             }
         }
         .cq-item, .cq-active-item {
