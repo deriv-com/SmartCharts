@@ -48,7 +48,7 @@ class Notification extends React.Component {
         });
     }
 
-    removeByCategory(category) {
+    removeByCategory({ category }) {
         this.state.messages.map((msg) => {
             if (msg.category === category) {
                 this.onRemove(msg.id);
