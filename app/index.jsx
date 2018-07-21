@@ -46,10 +46,13 @@ const getLanguageStorage = function () {
     }
 };
 
+const appId  = CIQ.localStorage.getItem('config.app_id') || 12812;
+const serverUrl  = CIQ.localStorage.getItem('config.server_url') || 'wss://ws.binaryws.com/websockets/v3';
+
 const connectionManager = new ConnectionManager({
-    appId: 12812,
+    appId,
     language: getLanguageStorage(),
-    endpoint: 'wss://ws.binaryws.com/websockets/v3',
+    endpoint: serverUrl,
 });
 
 const streamManager = new StreamManager(connectionManager);
