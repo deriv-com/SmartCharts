@@ -2,6 +2,7 @@ import EventEmitter from 'event-emitter-es6';
 import NotificationStore from '../store/NotificationStore';
 import { TickHistoryFormatter } from './TickHistoryFormatter';
 import PendingPromise from '../utils/PendingPromise';
+import { getUTCEpoch } from '../utils';
 
 class Feed {
     static get EVENT_MASTER_DATA_UPDATE() { return 'EVENT_MASTER_DATA_UPDATE'; }
@@ -125,10 +126,9 @@ class Feed {
     }
 
     async fetchPaginationData(symbol, suggestedStartDate, endDate, params, callback) {
-        const getEpoch = date => (date.getTime() / 1000) - (date.getTimezoneOffset() * 60) | 0;
-        const start = getEpoch(suggestedStartDate);
-        const end   = getEpoch(endDate);
-        const now   = getEpoch(new Date());
+        const start = getUTCEpoch(suggestedStartDate);
+        const end   = getUTCEpoch(endDate);
+        const now   = getUTCEpoch(new Date());
         const startLimit = now - (2.8 * 365 * 24 * 60 * 60);
         const { period, interval } = params;
 

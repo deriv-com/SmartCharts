@@ -1,5 +1,5 @@
 import { action, observable, when } from 'mobx';
-import { sameBar } from './utils';
+import { sameBar } from '../utils';
 
 class CrosshairStore {
     constructor(mainStore) {
