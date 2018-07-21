@@ -6,8 +6,7 @@
 			@include themify($themes) {color: themed('MenuActiveText');}
 		}
 	}
-	&.stxMenuActive,
-	&.crosshair-active{
+	&.stxMenuActive {
 		@include themify($themes) {
 			box-shadow: 0px -2px 0px 0 themed('MenuActiveBorder');
 		}
@@ -167,7 +166,6 @@
 
 .cq-chart-control-left{
 	.ciq-menu {
-		&.crosshair-active,
 		&.stxMenuActive{
 			@include themify($themes) {
 				box-shadow: 2px 0.3px 0px 0 themed('MenuActiveBorder');
@@ -178,7 +176,6 @@
 
 .smartcharts-mobile{
 	.ciq-menu {
-		&.crosshair-active,
 		&.stxMenuActive{
 			z-index: 9;
 		}
