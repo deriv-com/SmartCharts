@@ -132,7 +132,7 @@ export default class StudyLegendStore {
         });
 
         this.settingsDialog.items = [...outputs, ...inputs, ...parameters];
-        this.settingsDialog.title = study.sd.name.toUpperCase();
+        this.settingsDialog.title = study.sd.libraryEntry.name;
         // TODO:
         // const description = StudyInfo[study.sd.type];
         // this.settingsDialog.description = description || t.translate("No description yet");
