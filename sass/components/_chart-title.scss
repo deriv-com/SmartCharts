@@ -112,7 +112,6 @@
         box-shadow: 0 0 0.625em 0.025em rgba(0, 0, 0, 0.14);
         left: 5px !important;
         bottom: auto !important;
-        margin-top:5px;
         transform: translateX(0) translateY( -3em );
         &.cq-menu-dropdown-enter-done, &.cq-menu-dropdown-enter-active {
             opacity: 1;
@@ -125,7 +124,7 @@
 }
 
 /* Mobile Style */
-.smartcharts-mobile{
+.smartcharts.smartcharts-mobile{
     .cq-top-ui-widgets{
         width: 100%;
         padding: 0px;

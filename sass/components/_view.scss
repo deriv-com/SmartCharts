@@ -2,8 +2,6 @@
 	.cq-menu-dropdown {
 		width: 280px;
 		height: 200px;
-		transform: translate(-50%);
-		left: 50%;
 		.title {
 			height: 40px;
 			line-height: 40px;
@@ -58,6 +56,9 @@
 				display: flex;
 				flex-grow: 8;
 				.ic-icon {
+					flex: 1 0 0;
+					position: relative;
+					right: 20px;
 					@include svg-icon-color('controlText');
 				}
 			}
@@ -66,12 +67,14 @@
 				cursor: pointer;
 			}
 			.view-input {
+				flex: 8 0 0;
 				font-size: 12px;
 				font-weight: normal;
 				width: 100%;
 				padding: 0 30px 0 5px;
 				border: none;
 				outline: none;
+				border-bottom: 1px solid #4b5794;
 				@include themify($themes) {
 					color: themed('controlText');
 					background-color: themed('defaultMain');
@@ -166,15 +169,15 @@
                 opacity: 1;
             }
 		}
-	}	
-	.cq-menu-dropdown {
-		.dropdown-title {
-			.icon {
-				flex: none;
+		.cq-menu-dropdown {
+			.dropdown-title {
+				.icon {
+					flex: none;
+				}
 			}
-		}
-		.content .ciq-list .ciq-list-item .ic-icon {
-			opacity: 1;
+			.content .ciq-list .ciq-list-item .ic-icon {
+				opacity: 1;
+			}
 		}
 	}
 }
