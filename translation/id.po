@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Indonesian\n"
 "Language: id_ID\n"
-"PO-Revision-Date: 2018-07-19 09:42\n"
+"PO-Revision-Date: 2018-07-20 09:34\n"
 
 msgid "Favorites"
 msgstr "Favorit"
@@ -97,19 +97,19 @@ msgid "Template name"
 msgstr "Nama pola"
 
 msgid "Add New"
-msgstr ""
+msgstr "Tambah Baru"
 
 msgid " is already exist."
-msgstr ""
+msgstr " sudah tersedia."
 
 msgid "Would you like to overwrite it?"
-msgstr ""
+msgstr "Apakah Anda ingin menggantikannya?"
 
 msgid "CANCEL"
-msgstr ""
+msgstr "BATAL"
 
 msgid "OVERWRITE"
-msgstr ""
+msgstr "MENGGANTI"
 
 msgid "Comparison"
 msgstr "Perbandingan"
@@ -334,7 +334,7 @@ msgid "right-click to manage"
 msgstr "klik kanan untuk mengelola"
 
 msgid "tap to manage"
-msgstr ""
+msgstr "tap untuk mengelola"
 
 msgid "Chart data is not available for this symbol."
 msgstr "Data chart tidak tersedia untuk simbol ini."
