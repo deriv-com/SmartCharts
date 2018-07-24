@@ -21,13 +21,13 @@ function binarySearch(arr, val, cmp = a => a) {
     return -1;
 }
 
-function mergeTicks(a, b) {
+function mergeTicks(master, patch) {
     // detemine which comes first:
     let alpha, omega;
-    if (+getLast(a.times) > +getLast(b.times)) {
-        [alpha, omega] = [b, a];
+    if (+getLast(master.times) > +getLast(patch.times)) {
+        [alpha, omega] = [patch, master];
     } else {
-        [alpha, omega] = [a, b];
+        [alpha, omega] = [master, patch];
     }
 
     const intersect = binarySearch(alpha.times, omega.times[0]);
@@ -46,16 +46,15 @@ function mergeTicks(a, b) {
     };
 }
 
-// with overlapping data, b will _always_ replace a
-function mergeCandles(a, b) {
+function mergeCandles(master, patch) {
     // detemine which comes first:
     let alpha, omega;
-    let isBOmega = true;
-    if (getLast(a).epoch > getLast(b).epoch) {
-        [alpha, omega] = [b, a];
-        isBOmega = false;
+    let isPatchOmega = true;
+    if (getLast(master).epoch > getLast(patch).epoch) {
+        [alpha, omega] = [patch, master];
+        isPatchOmega = false;
     } else {
-        [alpha, omega] = [a, b];
+        [alpha, omega] = [master, patch];
     }
 
     let alphaEnd, omegaStart;
@@ -71,28 +70,24 @@ function mergeCandles(a, b) {
         }
 
         // alpha replaces omega
-        if (isBOmega && intersect === alpha.length - 1) {
-            alphaEnd = alpha.length;
-            omegaStart = intersect - 1;
+        if (isPatchOmega && intersect === alpha.length - 1) {
+            [alphaEnd, omegaStart] = [alpha.length, intersect - 1];
         } else {
-            alphaEnd = alpha.length - 1;
-            omegaStart = intersect;
+            [alphaEnd, omegaStart] = [alpha.length - 1, intersect];
         }
-    } else if (isBOmega && intersect === alpha.length - 1) { // omega replaces alpha
-        alphaEnd = intersect;
-        omegaStart = 0;
+    } else if (isPatchOmega && intersect === alpha.length - 1) { // omega replaces alpha
+        [alphaEnd, omegaStart] = [intersect, 0];
     } else {
-        alphaEnd = intersect + 1;
-        omegaStart = 1;
+        [alphaEnd, omegaStart] = [intersect + 1, 1];
     }
 
     return alpha.slice(0, alphaEnd).concat(omega.slice(omegaStart, omega.length));
 }
 
-export function mergeTickHistory(a, b) {
-    if (Array.isArray(a)) {
-        return mergeCandles(a, b);
+export function mergeTickHistory(master, patch) {
+    if (Array.isArray(master)) {
+        return mergeCandles(master, patch);
     }
-    return mergeTicks(a, b);
+    return mergeTicks(master, patch);
 }
 
