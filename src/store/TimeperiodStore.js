@@ -1,7 +1,7 @@
 import { observable, action, computed, when, reaction } from 'mobx';
-import { getTimeUnit, getIntervalInSeconds  } from './utils';
 import MenuStore from './MenuStore';
 import { getChartTypes } from './ChartTypeStore';
+import { getTimeUnit, getIntervalInSeconds } from '../utils';
 
 const chartTypes = getChartTypes();
 const notCandles = chartTypes
