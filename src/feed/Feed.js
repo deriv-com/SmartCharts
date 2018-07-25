@@ -4,6 +4,8 @@ import { TickHistoryFormatter } from './TickHistoryFormatter';
 import PendingPromise from '../utils/PendingPromise';
 import { getUTCEpoch } from '../utils';
 
+const MAX_TICKS = 1000;
+
 class Feed {
     static get EVENT_MASTER_DATA_UPDATE() { return 'EVENT_MASTER_DATA_UPDATE'; }
     static get EVENT_COMPARISON_DATA_UPDATE() { return 'EVENT_COMPARISON_DATA_UPDATE'; }
@@ -30,6 +32,7 @@ class Feed {
                 symbol,
                 granularity,
             }, this._callbacks[key]);
+            delete this._lastStreamEpoch[key];
             delete this._callbacks[key];
         }
     }
@@ -172,8 +175,8 @@ class Feed {
     _updateChartData(quotes, comparisonChartSymbol) {
         if (comparisonChartSymbol) {
             this._stx.updateChartData(quotes, null, {
-                useAsLastSale: true,
                 secondarySeries: comparisonChartSymbol,
+                noCreateDataSet: true,
             });
             this._emitter.emit(Feed.EVENT_COMPARISON_DATA_UPDATE);
         } else {
@@ -232,11 +235,11 @@ class Feed {
     }
 
     _onConnectionReopened() {
-        const elapsedTime = new Date() - this._connectionClosedDate;
         const keys = Object.keys(this._lastStreamEpoch);
         const granularity = +keys[0].split('-')[1];
-        const isNeedRefreshChart = elapsedTime > 100000;
-        if (isNeedRefreshChart) {
+        const elapsedSeconds = (new Date() - this._connectionClosedDate) / 1000 | 0;
+        const maxIdleSeconds = granularity * MAX_TICKS;
+        if (elapsedSeconds >= maxIdleSeconds) {
             this._callbacks = {}; // We don't need to send forget requests for a new connection
             this._mainStore.chart.refreshChart();
         } else {
