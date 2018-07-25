@@ -1,7 +1,6 @@
 import { observable, action, reaction, computed, when } from 'mobx';
 import MenuStore from './MenuStore';
-import { downloadFileInBrowser } from './utils';
-import { loadScript } from '../utils';
+import { loadScript, downloadFileInBrowser } from '../utils';
 import PendingPromise from '../utils/PendingPromise';
 
 const html2canvasCDN = 'https://charts.binary.com/dist/html2canvas.min.js';

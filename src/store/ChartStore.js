@@ -2,12 +2,10 @@ import ResizeObserver from 'resize-observer-polyfill';
 import { action, observable } from 'mobx';
 import PendingPromise from '../utils/PendingPromise';
 import Context from '../components/ui/Context';
-import { stableSort } from './utils';
-// import BarrierStore from './BarrierStore';
 import KeystrokeHub from '../components/ui/KeystrokeHub';
 import '../components/ui/Animation';
 import { BinaryAPI, Feed } from '../feed';
-import { createObjectFromLocalStorage } from '../utils';
+import { createObjectFromLocalStorage, stableSort } from '../utils';
 
 // import '../AddOns';
 
