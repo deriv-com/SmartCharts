@@ -1,10 +1,8 @@
 
 .cq-share {
     .cq-menu-dropdown {
-        left: 50%;
         width: 280px;
         height: 200px;
-        transform: translateX(-50%); 
     }
     .title {
         height: 40px;
@@ -43,7 +41,7 @@
         }
         .content {
             display: flex;
-            input { 
+            input {
                 line-height: 32px;
                 height: 32px;
                 outline: none;

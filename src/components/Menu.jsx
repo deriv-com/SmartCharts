@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
 import { CSSTransition } from 'react-transition-group';
-import { stxtap } from '../store/utils';
 
 class Menu extends Component {
     onOverlayClick = (e) => {
@@ -18,36 +18,50 @@ class Menu extends Component {
             DropdownDialog,
             isMobile,
             isFullscreen,
+            modalNode,
         } = this.props;
         const first = React.Children.map(children, (child, i) => (i === 0 ? child : null));
         const rest  = React.Children.map(children, (child, i) => (i !== 0 ? child : null));
+
+        const dropdown = (
+            <CSSTransition
+                in={open}
+                timeout={150}
+                classNames="cq-menu-dropdown"
+            >
+                <DropdownDialog
+                    className="cq-menu-dropdown"
+                    isMobile={isMobile}
+                    isFullscreen={isFullscreen}
+                >
+                    {rest}
+                </DropdownDialog>
+            </CSSTransition>);
 
         return (
             <div className={`ciq-menu ${className || ''} ${open ? 'stxMenuActive' : ''}`}>
                 <div
                     className="cq-menu-btn"
-                    ref={el => stxtap(el, onTitleClick)}
+                    onClick={onTitleClick}
                 >
                     {first}
                 </div>
-                <div
-                    className="cq-menu-overlay"
-                    onClick={this.onOverlayClick}
-                >
-                    <CSSTransition
-                        in={open}
-                        timeout={150}
-                        classNames="cq-menu-dropdown"
-                    >
-                        <DropdownDialog
-                            className="cq-menu-dropdown"
-                            isMobile={isMobile}
-                            isFullscreen={isFullscreen}
-                        >
-                            {rest}
-                        </DropdownDialog>
-                    </CSSTransition>
-                </div>
+                {(isMobile && modalNode) &&
+                    ReactDOM.createPortal(
+                        <div className={`cq-modal-dropdown ${className || ''} ${open ? 'stxMenuActive' : ''}`}>
+                            <div
+                                className="cq-menu-overlay"
+                                onClick={this.onOverlayClick}
+                            >
+                                {dropdown}
+                            </div>
+                        </div>,
+                        modalNode,
+                    )
+                }
+                {!isMobile &&
+                    dropdown
+                }
             </div>
         );
     }
