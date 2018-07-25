@@ -20,31 +20,28 @@ class Feed {
     subscribe() {}
 
     // Do not call explicitly! Method below is called by ChartIQ when unsubscribing symbols.
-    unsubscribe(params) {
-        const key = this._getStreamKey(params);
+    unsubscribe({ symbol, period, interval }) {
+        const granularity = Feed.calculateGranularity(period, interval);
+        const key = `${symbol}-${granularity}`;
         if (this._callbacks[key]) {
-            const { symbolObject, period, interval } = params;
             this._binaryApi.forget({
-                symbol: symbolObject.symbol,
-                granularity: Feed.calculateGranularity(period, interval),
+                symbol,
+                granularity,
             }, this._callbacks[key]);
             delete this._callbacks[key];
         }
     }
 
-    _getStreamKey({ symbol, period, interval }) {
-        return JSON.stringify({ symbol, period, interval });
-    }
-
     async fetchInitialData(symbol, suggestedStartDate, suggestedEndDate, params, callback) {
         const { period, interval, symbolObject } = params;
-        const key = this._getStreamKey(params);
+        const granularity = Feed.calculateGranularity(period, interval);
+        const key = `${symbol}-${granularity}`;
         const isComparisonChart = this._cxx.chart.symbol !== symbol;
         const comparisonChartSymbol = isComparisonChart ? symbol : undefined;
 
         const dataRequest = {
             symbol,
-            granularity: Feed.calculateGranularity(period, interval),
+            granularity,
         };
 
         const tickHistoryPromise = new PendingPromise();
