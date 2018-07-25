@@ -16,10 +16,11 @@
         }
     }
     &.ciq-active-favorite {
-        $fav-star-color: #E98024;
         svg > g > g > path {
-            fill: $fav-star-color;
-            stroke: $fav-star-color;
+            @include themify($themes) {
+                fill: themed('StarIconFav');
+                stroke: themed('StarIconFav') !important;
+            }
         }
     }
     &.ic-clear {
@@ -62,30 +63,30 @@
         bottom: 32px;
         content: attr(tooltip-title);
         left: -100%;
-        padding: 6px;
+        padding: 8px;
         z-index: 98;
-        @include themify($themes) {
-            color: themed('tooltipTextColor');
-            background-color: themed('tooltipBg');
-        }
-        box-shadow: 0 2px 8px 0 rgba(21,33,45,0.32);
         @include transition(opacity 0.3s);
         @include border-radius(4px);
+        @include themify($themes) {
+            color: themed('TooltipText');
+            background: themed('TooltipBg');
+            box-shadow: themed('TooltipShadow');
+        }
     }
     &:before {
         position: absolute;
         opacity: 0;
-        @include transition(opacity 0.3s);
         pointer-events: none;
         border: solid;
-        @include themify($themes) {
-            border-color: themed('tooltipBg') transparent;
-        }
         border-width: 4px 4px 0px 4px;
         bottom: 28px;
         content: "";
         left: 40%;
         z-index: 99;
+        @include transition(opacity 0.3s);
+        @include themify($themes) {
+            border-color: themed('TooltipBg') transparent;
+        }
     }
 
     &:hover:after, &:hover:before {

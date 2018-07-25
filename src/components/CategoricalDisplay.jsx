@@ -2,8 +2,7 @@
 import React, { Fragment } from 'react';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import {
-    CategoryIconMap, ItemIconMap, SearchIcon,
-    SymbolPlaceholderIcon, ActiveOptionsIconMap, FavoriteIcon, CloseIcon,
+    CategoryIconMap, ItemIconMap, SearchIcon, ActiveOptionsIconMap, FavoriteIcon, CloseIcon,
 } from './Icons.jsx';
 import '../../sass/components/_categorical-display.scss';
 
@@ -29,7 +28,10 @@ const CategoricalDisplay = ({
     favoritesMap,
     dialogTitle,
     closeMenu,
+    isScrollingDown,
     updateScrollSpy,
+    scrollUp,
+    scrollDown,
 }) => {
     /**
      * On mobile mode, this part appear on the top of dialog
@@ -41,8 +43,8 @@ const CategoricalDisplay = ({
             <CloseIcon className="icon-close-menu" onClick={() => closeMenu()} />
         </div> : '');
     const renderIcon = (item) => {
-        if (!item.itemId) { return ''; }
-        const ItemIcon = ItemIconMap[item.itemId] || SymbolPlaceholderIcon;
+        if (!item.itemId || !ItemIconMap[item.itemId]) { return ''; }
+        const ItemIcon = ItemIconMap[item.itemId];
         return <ItemIcon className={`ic-${item.itemId}`} />;
     };
     const renderText = item => <span className="ciq-item-display">{item.display}</span>;
@@ -104,7 +106,7 @@ const CategoricalDisplay = ({
     return (
         <div className="cq-categorical-display">
             {renderMobileTitle()}
-            <div className="cq-lookup-filters">
+            <div className={`cq-lookup-filters ${isScrollingDown ? 'scroll-down' : ''}`}>
                 <div className={`cq-lookup-input ${filterText.trim() !== '' ? 'active' : ''}`}>
                     <input
                         ref={el =>  setSearchInput(el)}
@@ -139,6 +141,8 @@ const CategoricalDisplay = ({
                 className="cq-scroll-panel"
                 ref={setScrollPanel}
                 onScrollY={e => updateScrollSpy(e)}
+                onScrollUp={scrollUp}
+                onScrollDown={scrollDown}
             >
                 <div className="results-panel">
                     { filteredItems.map((category, i) =>

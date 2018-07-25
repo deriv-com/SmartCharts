@@ -5,17 +5,14 @@
     display: flex;
     text-align: left;
     overflow: hidden;
-    @include themify($themes) {
-        color: themed('defaultTextMedium');
-        border-top: 1px solid themed('defaultBorder');
-    }
+    @include themify($themes) {color: themed('CatDisplayText');}
     @include transition(opacity 1s);
     @include border-radius();
     @include box-shadow (0px, 2px, 4px, rgba(0, 0, 0, .2));
     .cq-lookup-filters {
         width: 34%;
         @include themify($themes) {
-            border-right: 1px solid themed('defaultBorder');
+            background: themed('CatDisplayFilterBg');
         }
     }
     .cq-lookup-input  {
@@ -23,14 +20,12 @@
         position: relative;
         @include border-radius();
         @include themify($themes) {
-            color: themed('controlText');
-            border: 1px solid themed('defaultBorder');
-            background-color: themed('defaultMain');
+            color: themed('CatDisplayText');
+            border: 1px solid themed('CatDisplaySearchBorder');
         }
         &.active{
             @include themify($themes) {
-                border-color: themed('activeColor');
-                @include box-shadow (0px, 0, 2px, themed('activeColor'));
+                border-color: themed('CatDisplayActiveSearchBorder');
             }
             > .icon-reset{
                 right: 4px;
@@ -48,12 +43,12 @@
             @include border-radius();
             @include placeholder {
                 @include themify($themes) {
-                    opacity: 0.8;
-                    color: themed('defaultTextSubtle');
+                    opacity: 0.4;
+                    color: themed('CatDisplaySearchText');
                 }
             }
             @include themify($themes) {
-                color: themed('controlText');
+                color: themed('CatDisplaySearchText');
             }
         }
         > .ic-icon {
@@ -66,25 +61,17 @@
             right: 0px;
             opacity: 0;
             left: auto;
-            height: 18px;
-            width: 18px;
-            line-height: 26px;
+            height: 20px;
+            width: 20px;
+            line-height: 28px;
             font-size: 9px;
             top: 7px;
-            @include border-radius(50%);
             @include transition(right,opacity 0.2s ease-in-out);
-            @include svg-icon-color('defaultMain');
-            @include themify($themes) {
-                background: themed('defaultTextSubtle');
-            }
-            > svg {
-                width: 14px !important;
-                height: 14px !important;
-            }
+            @include svg-icon-color('CatDisplayFilterIcon');
         }
         > input:focus + .ic-icon svg path {
             @include themify($themes) {
-                fill: themed('activeColor');
+                fill: themed('CatDisplayFilterIcon');
             }
         }
     }
@@ -93,21 +80,38 @@
         &:last-child {
             padding-bottom: 2.5em;
         }
+        &.category-active{
+            .category-content{
+                .cq-active-item{
+                    .cq-active-options{
+                        .ic-icon{
+                            path {
+                                @include themify($themes) {
+                                    fill: themed('CatDisplayCatContentIcon');
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
     .category-content {
         margin: 0.4em 1em 0em 1em;
+        @include border-radius(3px);
         @include themify($themes) {
-            background-color: themed('defaultMain');
-            border: 1px solid themed('defaultBorder');
+            background-color: themed('CatDisplayCatContentBg');
+            border: 1px solid themed('CatDisplayCatContentBorder');
         }
-        @include border-radius();
     }
     .subcategory {
         font-weight: 500;
-        padding: 0.5em 0 0.5em 1.2em;
+        padding: 0.9em 0 0.9em 1.2em;
         font-size: 1.1em;
+        @include border-radius(3px 3px 0 0);
         @include themify($themes) {
-            color: themed('defaultTextStrong');
+            border-bottom: 1px solid themed('CatDisplayCatContentBorder');
+            color: themed('CatDisplayCatContentTitleText');
         }
     }
     .category-title {
@@ -115,6 +119,9 @@
         font-size: 1.4em;
         font-weight: 500;
         padding: 0.1em 0.7em;
+        @include themify($themes) {
+            color: themed('CatDisplayCatTitleText');
+        }
     }
     .cq-filter {
         padding-left: 1.6em;
@@ -123,44 +130,33 @@
         cursor: pointer;
         @include transition(background-color 0.3s);
         @include box-sizing(border-box);
-        &.cq-hover-style:hover,
+        &.cq-hover-style:hover{
+            @include themify($themes) {
+                background: themed('CatDisplayActiveFilterBg');
+            }
+        }
         &.cq-active-filter {
             @include themify($themes) {
-                color: themed('defaultTextActive');
+                color: themed('CatDisplayFilterText');
             }
             .ic-icon {
-                &.ic-active,
+                &.ic-active{
+                    path,rect,circle {
+                        @include themify($themes) {
+                            fill: themed('CatDisplayActiveFilterIcon');
+                        }
+                    }
+                }
                 &.ic-forex,
                 &.ic-commodities,
                 &.ic-volidx,
-                &.ic-favorite {
-                    svg > g > circle {
-                        @include themify($themes) {
-                            fill: themed('activeColor');
-                        }
-                    }
-                }
-                &.ic-indicators > svg > g circle {
-                    @include themify($themes) {
-                        fill: themed('activeColor');
-                    }
-                }
-                &.ic-stocks > svg > path:first-child {
-                    @include themify($themes) {
-                        fill: themed('activeColor');
-                    }
-                }
+                &.ic-favorite,
+                &.ic-indicators,
+                &.ic-stocks,
                 &.ic-indices {
-                    svg > g > g {
-                        > path   {
-                            @include themify($themes) {
-                                fill: themed('activeColor');
-                            }
-                        }
-                        > g > circle {
-                            @include themify($themes) {
-                                fill: themed('strokeColor');
-                            }
+                    path,rect,circle {
+                        @include themify($themes) {
+                            stroke: themed('CatDisplayActiveFilterIcon');
                         }
                     }
                 }
@@ -170,8 +166,9 @@
             font-weight: 800;
             border-right: 2px solid;
             @include themify($themes) {
-                border-color: themed('activeColor') !important;
-                background-color: themed('listBgActive');
+                color: themed('CatDisplayActiveFilterText');
+                border-color: themed('CatDisplayActiveFilterBorder');
+                background-color: themed('CatDisplayActiveFilterBg');
             }
         }
         .ic-icon {
@@ -181,11 +178,32 @@
             height: $small-icon-size;
             margin-bottom: 2px;
             margin-right: 1.3em;
+            &.ic-active{
+                path,rect,circle {
+                    @include themify($themes) {
+                        fill: themed('CatDisplayFilterIcon');
+                    }
+                }
+            }
+            &.ic-forex,
+            &.ic-commodities,
+            &.ic-volidx,
+            &.ic-favorite,
+            &.ic-indicators,
+            &.ic-stocks,
+            &.ic-indices {
+                path,rect,circle {
+                    @include themify($themes) {
+                        stroke: themed('CatDisplayFilterIcon');
+                    }
+                }
+            }
         }
         .cq-filter-text{
         }
     }
-    .cq-item, .cq-active-item {
+    .cq-item,
+    .cq-active-item {
         padding-left: 20px;
         padding-right: 20px;
         display: flex;
@@ -194,22 +212,41 @@
         justify-content: space-between;
         line-height: initial;
         @include themify($themes) {
-            border-bottom: 1px solid themed('defaultBorder');
+            border-bottom: 1px solid themed('CatDisplayCatContentBorder');
+        }
+        &:first-child{
+            @include border-radius(3px 3px 0 0);
         }
         &:last-child{
+            @include border-radius(0 0 3px 3px);
             border-bottom: none;
         }
         .left, .right {
             display: flex;
             align-items: center;
         }
+        .right{
+            .ic-icon.ciq-favorite{
+                path {
+                    @include themify($themes) {
+                        stroke: themed('CatDisplayCatContentIcon');
+                    }
+                }
+            }
+        }
         .closed-market{
             border: 1px solid #f44336;
             color: #f44336;
-            padding: 2px 6px;
+            padding: 3px 6px;
             object-fit: contain;
             font-size: 0.64em;
             @include border-radius();
+        }
+        &:hover,
+        &.selected{
+            @include themify($themes) {
+                background: themed('CatDisplayCatContentHover');
+            }
         }
     }
     .cq-item {
@@ -229,6 +266,9 @@
         height: 53vh;
         min-height: 320px;
         width: 66%;
+        @include themify($themes) {
+            border-left: 1px solid themed('CatDisplayBorder');
+        }
     }
     .ciq-item-display {
         display: inline-block;
@@ -236,29 +276,11 @@
     }
     .empty-category {
         padding: 0.9em 1.2em;
-    }
-    .cq-categorical-footer{
-        width: 100%;
-        height: 4em;
-        display: none;
-        @include themify($themes) {
-            border-top: 1px solid themed('defaultBorder');
-        }
-        .btn-categorical-display-close{
-            border: none;
-            background: transparent;
-            font-weight: bold;
-            padding: 1.3em 1em;
-            width: 100%;
-            cursor: pointer;
-            @include themify($themes) {
-                color: themed('activeColor');
-                @include box-shadow(0,0,0,themed('defaultMain'));
-            }
-        }
+        @include border-radius(3px);
     }
     .cq-mobile-title{
-        padding-top: 0.9em !important;
+        padding-top: 16px !important;
+        padding-bottom: 16px !important;
         border-bottom: none !important;
     }
 }
@@ -270,7 +292,9 @@
 
 /* Active Symbol Icons */
 .cq-categorical-display .results-panel {
-    /* Active Options */
+    @include themify($themes) {
+        background: themed('CatDisplayBg');
+    }
     .cq-active-options {
         float: right;
         display: inline-flex;
@@ -322,25 +346,31 @@
     .cq-categorical-display{
         flex-direction: column;
         width: 100%;
+        display: inline;
         .cq-lookup-filters {
             width: 100%;
             border-right: none;
             height: auto;
+            max-height: 200px;
+            overflow: hidden;
+            @include transition(max-height .2s ease-in);
             @include themify($themes) {
-                border-bottom: 1px solid themed('defaultBorder');
+                border-bottom: 1px solid themed('CatDisplaySearchBorder');
+            }
+            &.scroll-down {
+                max-height: 0;
+                @include transition(max-height .2s ease-out);
             }
         }
         .cq-lookup-input  {
             margin: 1.2em 1em 0.5em 1em;
-            position: relative;
-            @include border-radius();
-            @include themify($themes) {
-                border: 1px solid themed('defaultBorder');
-            }
         }
         .cq-scroll-panel{
             height: 100%;
             width: 100%;
+            .category:last-child{	
+                padding-bottom: 13em;
+            }
         }
         .cq-item, .cq-active-item {
             height: 40px;

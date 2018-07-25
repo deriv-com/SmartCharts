@@ -83,10 +83,19 @@ msgstr ""
 msgid "Template name"
 msgstr ""
 
-msgid "There is no template added by you."
+msgid "Add New"
 msgstr ""
 
-msgid "Click + icon to add one."
+msgid " is already exist."
+msgstr ""
+
+msgid "Would you like to overwrite it?"
+msgstr ""
+
+msgid "CANCEL"
+msgstr ""
+
+msgid "OVERWRITE"
 msgstr ""
 
 msgid "Comparison"

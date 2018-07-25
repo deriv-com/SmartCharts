@@ -15,7 +15,8 @@ export default class ViewStore {
         current: 'main',
         add: () => this.saveViews(),
         main: () => this.updateRoute('add'),
-        cancel: () => this.updateRoute('main'),
+        cancel: () => this.onCancel(),
+        overwrite: () => this.overwrite(),
     };
 
     get context() { return this.mainStore.chart.context; }
@@ -41,17 +42,34 @@ export default class ViewStore {
         }
     }
 
+    @action.bound onCancel() {
+        this.templateName = '';
+        this.updateRoute('main');
+    }
+
     @action.bound updateRoute(name) {
         this.routes.current = name;
     }
 
     @action.bound saveViews() {
-        this.updateRoute('main');
-        if (this.templateName.length > 0) {
+        if (this.views.some(x => x.name.toLowerCase() === this.templateName.toLowerCase())) {
+            this.updateRoute('overwrite');
+        } else if (this.templateName.length > 0) {
+            this.updateRoute('main');
             const layout = this.stx.exportLayout();
             this.views.push({ name: this.templateName, layout });
             this.updateLocalStorage();
+            this.templateName = '';
         }
+    }
+
+    @action.bound overwrite() {
+        const layout = this.stx.exportLayout();
+        const templateIndex = this.views.findIndex(x => x.name.toLowerCase() === this.templateName.toLowerCase());
+        this.views[templateIndex].layout = layout;
+        this.views[templateIndex].name = this.templateName;
+        this.updateLocalStorage();
+        this.updateRoute('main');
         this.templateName = '';
     }
 
@@ -78,6 +96,8 @@ export default class ViewStore {
     }
 
     inputRef = (ref) => {
-        if (ref) { ref.focus(); }
+        if (ref) {
+            ref.focus();
+        }
     }
 }

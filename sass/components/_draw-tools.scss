@@ -2,7 +2,6 @@
 .ciq-draw-tools {
     .cq-menu-dropdown {
         width: 200px;
-        bottom: 3.6em;
         padding: 5px 16px 16px 16px !important;
         @include box-sizing(border-box);
     }
@@ -17,13 +16,13 @@
             display: flex;
             justify-content: space-between;
             @include themify($themes) {
-                color: themed('defaultTextStrong');
+                color: themed('DialogHeadText');
             }
             .ciq-bars-buttons{
                 cursor: pointer;
                 display: flex;
                 padding: 6px 6px;
-                @include svg-icon-stroke('controlText');
+                @include svg-icon-stroke('DialogHeadIcon');
             }
         }
         .body {
@@ -36,5 +35,5 @@
         .ciq-list{
             margin: 0px 15px;
         }
-    }   
+    }
 }

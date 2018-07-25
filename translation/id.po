@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Indonesian\n"
 "Language: id_ID\n"
-"PO-Revision-Date: 2018-07-17 03:11\n"
+"PO-Revision-Date: 2018-07-20 09:34\n"
 
 msgid "Favorites"
 msgstr "Favorit"
@@ -96,11 +96,20 @@ msgstr "Pola"
 msgid "Template name"
 msgstr "Nama pola"
 
-msgid "There is no template added by you."
-msgstr "Tidak terdapat pola yang Anda tambahkan."
+msgid "Add New"
+msgstr "Tambah Baru"
 
-msgid "Click + icon to add one."
-msgstr "Klik + ikon untuk menambahkan."
+msgid " is already exist."
+msgstr " sudah tersedia."
+
+msgid "Would you like to overwrite it?"
+msgstr "Apakah Anda ingin menggantikannya?"
+
+msgid "CANCEL"
+msgstr "BATAL"
+
+msgid "OVERWRITE"
+msgstr "MENGGANTI"
 
 msgid "Comparison"
 msgstr "Perbandingan"
@@ -325,7 +334,7 @@ msgid "right-click to manage"
 msgstr "klik kanan untuk mengelola"
 
 msgid "tap to manage"
-msgstr ""
+msgstr "tap untuk mengelola"
 
 msgid "Chart data is not available for this symbol."
 msgstr "Data chart tidak tersedia untuk simbol ini."
