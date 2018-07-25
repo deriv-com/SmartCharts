@@ -122,10 +122,8 @@ class ChartStore {
             this.containerWidth = 1100;
         } else if (this.modalNode.clientWidth > 900) {
             this.containerWidth = 900;
-        } else if (this.modalNode.clientWidth > 480) {
-            this.containerWidth = 480;
         } else {
-            this.containerWidth = 1100;
+            this.containerWidth = 480;
         }
 
 

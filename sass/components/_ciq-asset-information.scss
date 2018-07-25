@@ -1,4 +1,3 @@
-
 .ciq-asset-information {
     position: relative;
     z-index: +1;
@@ -28,6 +27,9 @@
         }
         div:last-child {
             font-weight: bold;
+        }
+        @include themify($themes) {
+            color: themed('AssetInfoText');
         }
     }
 }
