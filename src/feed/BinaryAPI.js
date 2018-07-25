@@ -55,8 +55,8 @@ export default class BinaryAPI {
         return this.requestForget(request, callback);
     }
 
-    static createSymbolRequest({ symbol, granularity }) {
-        return {
+    static createSymbolRequest({ symbol, granularity, start }) {
+        const request = {
             ticks_history: symbol,
             granularity,
             style: granularity ? 'candles' : 'ticks',
@@ -65,5 +65,12 @@ export default class BinaryAPI {
             adjust_start_time: 1,
             subscribe: 1,
         };
+
+        if (start) {
+            delete request.count;
+            request.start = start;
+        }
+
+        return request;
     }
 }

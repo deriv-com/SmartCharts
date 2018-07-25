@@ -27,7 +27,6 @@ class ChartStore {
     enableRouting = null;
     chartNode = null;
     chartControlsNode = null;
-    chartContainerNode = null;
     holderStyle;
     @observable containerWidth = null;
     @observable context = null;
@@ -503,6 +502,12 @@ class ChartStore {
         }
 
         return categorizedSymbols;
+    }
+
+    setConnectionIsOpened = (isOpened) => {
+        if (this.feed) {
+            this.feed.setConnectionOpened(isOpened);
+        }
     }
 }
 

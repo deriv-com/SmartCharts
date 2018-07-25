@@ -8,7 +8,6 @@ class StreamManager {
     _connection;
     _emitters = {};
     _streamIds = {};
-    _lastStreamEpoch = {};
     _subscriptionData = {};
     _inProgress = {};
     _beingForgotten = {};
@@ -34,35 +33,31 @@ class StreamManager {
         const { ticks_history: symbol, granularity } = data.echo_req;
         const key = `${symbol}-${granularity}`;
 
-        const updateActiveStream = () => {
-            const { id, epoch } = data[data.msg_type];
-            this._streamIds[key] = id;
-            // Epoch is updated with each tick so we know from when
-            // to patch up missing ticks when connection recovers
-            this._lastStreamEpoch[key] = epoch;
-        };
-
         if (this._emitters[key]) {
-            updateActiveStream();
+            this._streamIds[key] = data[data.msg_type].id;
             this._emitters[key].emit(Stream.EVENT_STREAM, data);
         } else if (this._beingForgotten[key] === undefined) {
             // There could be the possibility a stream could still enter even though
             // it is no longer in used. This is because we can't know the stream ID
             // from the initial response; we have to wait for the next tick to retrieve it.
             // In such scenario we need to forget these "orphaned" streams:
-            updateActiveStream();
+            this._streamIds[key] = data[data.msg_type].id;
             this._forgetStream(key);
         }
     }
 
     _onConnectionClosed() {
-        this._streamIds = { };
+        this._streamIds = {};
         for (const key of Object.keys(this._emitters)) {
             this._emitters[key].emit(Stream.EVENT_DISCONNECT);
+            this._clearEmitter(key);
         }
     }
 
     _onConnectionOpened() {
+        // pass tick recovery process to chart
+
+        /*
         // For _subscriptionData to have any values, connection must be reopened
         for (const key of Object.keys(this._subscriptionData)) {
             const data = this._subscriptionData[key];
@@ -98,6 +93,7 @@ class StreamManager {
                 });
             }
         }
+        */
     }
 
     _trackSubscription(subscription) {
@@ -158,7 +154,6 @@ class StreamManager {
         }
         if (this._subscriptionData[key]) {
             delete this._subscriptionData[key];
-            delete this._lastStreamEpoch[key];
         }
     }
 
@@ -195,10 +190,10 @@ class StreamManager {
         return emitter;
     }
 
-    _handleNewStream({ symbol, granularity }) {
+    _handleNewStream({ symbol, granularity, start }) {
         const key = `${symbol}-${granularity}`;
         const subscription = new Subscription({ symbol, granularity }, { connection: this._connection });
-        subscription.subscribe();
+        subscription.subscribe(start);
         this._inProgress[key] = this._trackSubscription(subscription, key);
         const emitter = this._setupEmitter(key, subscription);
 
@@ -229,17 +224,17 @@ class StreamManager {
         return stream;
     }
 
-    _getStream({ symbol, granularity = 0 }) {
+    _getStream({ symbol, granularity = 0, start }) {
         const key = `${symbol}-${granularity}`;
         if (this._emitters[key]) {
             return this._handleExistingStream({ symbol, granularity });
         }
-        return this._handleNewStream({ symbol, granularity });
+        return this._handleNewStream({ symbol, granularity, start });
     }
 
     async subscribe(input, callback) {
-        const { ticks_history: symbol, granularity } = input;
-        const stream = this._getStream({ symbol, granularity });
+        const { ticks_history: symbol, granularity, start } = input;
+        const stream = this._getStream({ symbol, granularity, start });
         stream.onStream(tickResponse => callback(tickResponse));
         const historyResponse = await stream.response;
         this._callbacks.set(callback, stream);

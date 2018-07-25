@@ -76,7 +76,15 @@ class App extends Component {
         super(props);
         const settings = createObjectFromLocalStorage('smartchart-setting');
         if (settings) { this.startingLanguage = settings.language; }
-        this.state = { settings };
+        connectionManager.on(
+            ConnectionManager.EVENT_CONNECTION_CLOSE,
+            () => this.setState({ isConnectionOpened: false }),
+        );
+        connectionManager.on(
+            ConnectionManager.EVENT_CONNECTION_REOPEN,
+            () => this.setState({ isConnectionOpened: true }),
+        );
+        this.state = { settings, isConnectionOpened: true };
     }
 
     startingLanguage = 'en';
@@ -94,7 +102,7 @@ class App extends Component {
 
 
     render() {
-        const { settings } = this.state;
+        const { settings, isConnectionOpened } = this.state;
 
         return (
             <SmartChart
@@ -108,6 +116,7 @@ class App extends Component {
                 shareOrigin={shareOrigin}
                 settings={settings}
                 onSettingsChange={this.saveSettings}
+                isConnectionOpened={isConnectionOpened}
             />
         );
     }
