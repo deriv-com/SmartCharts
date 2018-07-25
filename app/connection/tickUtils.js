@@ -32,10 +32,7 @@ function mergeTicks(master, patch) {
 
     const intersect = binarySearch(alpha.times, omega.times[0]);
     if (intersect === -1) {
-        return {
-            prices: alpha.prices.concat(omega.prices),
-            times : alpha.times.concat(omega.times),
-        };
+        throw new Error('Cannot merge tick data with no overlaps!');
     }
 
     // Unlike candles, replacing overlaps with omega or alpha doesn't matter;

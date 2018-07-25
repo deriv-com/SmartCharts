@@ -117,8 +117,8 @@ describe('Test mergeTickHistory (Ticks)', () => {
                 '1532340080',
             ],
         };
-        const merged = mergeTickHistory(partA.history, b);
-        expect(merged).to.deep.equal(fullTickHistoryResponse.history);
+        expect(() => mergeTickHistory(partA.history, b))
+            .to.throw('Cannot merge tick data with no overlaps!');
     });
 
     it('Merge 2 overlapping tick data arrays', () => {
