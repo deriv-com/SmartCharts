@@ -17,8 +17,21 @@ class ConnectionManager extends EventEmitter {
     _initialize() {
         this._websocket = new RobustWebsocket(this._url);
 
-        this._websocket.addEventListener('open', this._onopen.bind(this));
-        this._websocket.addEventListener('close', this._onclose.bind(this));
+        // There's a strange bug where upon reconnection over a short period
+        // the OPEN status precedes CLOSED. To circumvent this we assert that
+        // connection status can only go from OPEN to CLOSE and back again.
+        // ...could be an issue with RobustWebsocket.
+        let isConnectionOpened = false;
+        const onConnectionStatusChanged = () => {
+            isConnectionOpened = !isConnectionOpened;
+            if (isConnectionOpened) {
+                this._onopen();
+            } else {
+                this._onclose();
+            }
+        };
+        this._websocket.addEventListener('open', onConnectionStatusChanged);
+        this._websocket.addEventListener('close', onConnectionStatusChanged);
         this._websocket.addEventListener('message', this._onmessage.bind(this));
     }
 
