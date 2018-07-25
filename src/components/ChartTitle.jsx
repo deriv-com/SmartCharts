@@ -3,7 +3,7 @@ import { connect } from '../store/Connect';
 import Menu from './Menu.jsx';
 import CategoricalDisplay from './CategoricalDisplay.jsx';
 import AnimatedPrice from './AnimatedPrice.jsx';
-import { ItemIconMap, SymbolPlaceholderIcon } from './Icons.jsx';
+import { ItemIconMap, SymbolPlaceholderIcon, ArrowIcon } from './Icons.jsx';
 import '../../sass/components/_chart-title.scss';
 
 const ChartTitle = ({
@@ -41,6 +41,7 @@ const ChartTitle = ({
                              <span className="cq-todays-change">{todayChange || 0}</span>&nbsp;
                          </div>
                      </div>}
+                    <ArrowIcon className="cq-symbol-dropdown" />
                 </div>
             </Menu.Title>
             <Menu.Body>

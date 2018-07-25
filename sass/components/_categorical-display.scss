@@ -26,7 +26,6 @@
         &.active{
             @include themify($themes) {
                 border-color: themed('CatDisplayActiveSearchBorder');
-                @include box-shadow (0px, 0, 2px, themed('CatDisplayActiveSearchBorder'));
             }
             > .icon-reset{
                 right: 4px;
@@ -141,7 +140,13 @@
                 color: themed('CatDisplayFilterText');
             }
             .ic-icon {
-                &.ic-active,
+                &.ic-active{
+                    path,rect,circle {
+                        @include themify($themes) {
+                            fill: themed('CatDisplayActiveFilterIcon');
+                        }
+                    }
+                }
                 &.ic-forex,
                 &.ic-commodities,
                 &.ic-volidx,
@@ -173,9 +178,24 @@
             height: $small-icon-size;
             margin-bottom: 2px;
             margin-right: 1.3em;
-            path, rect, circle {
-                @include themify($themes) {
-                    stroke: themed('CatDisplayFilterIcon');
+            &.ic-active{
+                path,rect,circle {
+                    @include themify($themes) {
+                        fill: themed('CatDisplayFilterIcon');
+                    }
+                }
+            }
+            &.ic-forex,
+            &.ic-commodities,
+            &.ic-volidx,
+            &.ic-favorite,
+            &.ic-indicators,
+            &.ic-stocks,
+            &.ic-indices {
+                path,rect,circle {
+                    @include themify($themes) {
+                        stroke: themed('CatDisplayFilterIcon');
+                    }
                 }
             }
         }

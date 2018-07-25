@@ -9,6 +9,9 @@
                 @include themify($themes) {
                     border: 1px solid themed('menuActiveBorder');
                 }
+                .cq-symbol-dropdown{
+                    transform: rotate(180deg) !important;
+                }
             }
         }
     }
@@ -17,7 +20,7 @@
         margin: .2em 0em;
         .cq-symbol-select-btn {
             font-family: $base-font;
-            padding: 0.3em 2em .3em 1em;
+            padding: 0.3em 0.5em 0.3em 1em;
             cursor: pointer;
             position: relative;
             display: flex;
@@ -50,16 +53,13 @@
                     font-weight: bold;
                     line-height: 1.5;
                     width: fit-content;
-                    &:after {
-                        float: right;
-                        margin-left: 12px;
-                        margin-top: 7px;
-                        @include triangle-base(4px);
-                        @include themify($themes) {
-                            border-top: 5px solid themed('ChartTitleBorder');
-                        }
-                    }
                 }
+            }
+            .cq-symbol-dropdown{
+                margin-right: 0px;
+                width: 24px;
+                margin-left: 12px;
+                transform: scale(1);
             }
             .cq-symbol,
             .cq-chart-price {
