@@ -55,45 +55,7 @@ class StreamManager {
     }
 
     _onConnectionOpened() {
-        // pass tick recovery process to chart
-
-        /*
-        // For _subscriptionData to have any values, connection must be reopened
-        for (const key of Object.keys(this._subscriptionData)) {
-            const data = this._subscriptionData[key];
-            const { ticks_history: symbol, granularity } = data.echo_req;
-            const subscription = new Subscription({ symbol, granularity }, { connection: this._connection });
-
-            if (this._lastStreamEpoch[key]) {
-                // patch up missing tick data
-                const epoch = +this._lastStreamEpoch[key];
-                subscription.subscribe(epoch + 1);
-                subscription.response.then((patchData) => {
-                    if (patchData.history) {
-                        const { prices, times } = data.history;
-                        const { prices: missingPrices, times: missingTimes } = patchData.history;
-                        data.history = {
-                            // Keep the cached subscription data capped at 1000 ticks
-                            prices: prices.slice(missingPrices.length).concat(missingPrices),
-                            times:  times.slice(missingTimes.length).concat(missingTimes),
-                        };
-                    } else if (data.candles) {
-                        const { candles: missingCandles } = patchData;
-                        data.candles = data.candles.concat(missingCandles);
-                    }
-                    this._emitters[key].emit(Stream.EVENT_STREAM, patchData);
-                });
-            } else {
-                // _lastStreamEpoch[key] can be undefined if the first response was not received before
-                // the connection closes; in such scenario we subscribe for the tick history again
-                subscription.subscribe();
-                subscription.response.then((newTickHistory) => {
-                    this._subscriptionData[key] = Subscription.cloneResponseData(newTickHistory);
-                    this._emitters[key].emit(Stream.EVENT_STREAM, newTickHistory);
-                });
-            }
-        }
-        */
+        // TODO: Patch up cached data when connection is reestablished
     }
 
     _trackSubscription(subscription) {

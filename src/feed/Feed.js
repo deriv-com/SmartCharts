@@ -4,8 +4,6 @@ import { TickHistoryFormatter } from './TickHistoryFormatter';
 import PendingPromise from '../utils/PendingPromise';
 import { getUTCEpoch } from '../utils';
 
-const MAX_TICKS = 1000;
-
 class Feed {
     static get EVENT_MASTER_DATA_UPDATE() { return 'EVENT_MASTER_DATA_UPDATE'; }
     static get EVENT_COMPARISON_DATA_UPDATE() { return 'EVENT_COMPARISON_DATA_UPDATE'; }
@@ -57,11 +55,17 @@ class Feed {
     async fetchInitialData(symbol, suggestedStartDate, suggestedEndDate, params, callback) {
         const { period, interval, symbolObject } = params;
         const granularity = Feed.calculateGranularity(period, interval);
-        const key = `${symbol}-${granularity}`;
         const isComparisonChart = this._stx.chart.symbol !== symbol;
+        let start = suggestedStartDate / 1000 | 0;
+        if (isComparisonChart) {
+            // Strange issue where comparison series is offset by timezone...
+            start -= suggestedStartDate.getTimezoneOffset() * 60;
+        }
+        const key = `${symbol}-${granularity}`;
         const comparisonChartSymbol = isComparisonChart ? symbol : undefined;
 
         const dataRequest = {
+            start,
             symbol,
             granularity,
         };
@@ -229,16 +233,13 @@ class Feed {
 
     _onConnectionClosed() {
         this._connectionClosedDate = new Date();
-
-        // Forget calls are not necessary; streams are lost when connection is closed
-        // this._callbacks = {};
     }
 
     _onConnectionReopened() {
         const keys = Object.keys(this._lastStreamEpoch);
         const granularity = +keys[0].split('-')[1];
         const elapsedSeconds = (new Date() - this._connectionClosedDate) / 1000 | 0;
-        const maxIdleSeconds = granularity * MAX_TICKS;
+        const maxIdleSeconds = (granularity || 1) * this._stx.chart.maxTicks;
         if (elapsedSeconds >= maxIdleSeconds) {
             this._callbacks = {}; // We don't need to send forget requests for a new connection
             this._mainStore.chart.refreshChart();
@@ -261,6 +262,7 @@ class Feed {
                 });
             }
         }
+        this._connectionClosedDate = undefined;
     }
 }
 
