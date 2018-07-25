@@ -1,41 +1,41 @@
 .ciq-period {
-	padding: 0 5px!important;
+	padding: 0 ;
 	line-height: 1.5em !important;
-	>.cq-menu-btn {
+	> .cq-menu-btn {
 		padding: 0 5px;
-		>.bt-priod {
+		> .bt-priod {
 			display: block;
 			height: auto;
 			line-height: 2em;
-			transition: all .2s .15s;
 			border-radius: 2px;
 			box-sizing: border-box;
 			cursor: pointer;
 			text-align: center;
 			padding-top: 5px;
+			@include themify($themes) {color: themed('menuText');}
 			.ic-priod {
 				@include border-radius(4px);
-				padding: 6px 10px;
+				padding: 3px 5px;
 			}
 		}
 	}
 	&:hover {
 		.ic-priod {
 			@include themify($themes) {
-				background: themed('defaultBgActive');
+				background: themed('menuActiveBg');
 			}
 		}
-	}
+	} 
 	&.stxMenuActive {
-		.bt-priod {
+		.bt-priod{
 			font-weight: 500;
-			@include themify($themes) {color: themed('controlTextActive');}
 		}
-		.ic-priod {
-			@include themify($themes) {
-				box-shadow: inset 0 0 0 1px themed('activeColor');
-				background: themed('defaultBgActive');
-			}
+		.ic-priod{
+			@include themify($themes) {background: themed('menuActiveBg');}
+		}
+		.ic-subtitle,
+		.ic-priod span {
+			@include themify($themes) {color: themed('MenuActiveText');}
 		}
 	}
 	&:after {
@@ -50,7 +50,6 @@
 	.cq-menu-dropdown {
 		width: 296px;
 		height: 160px;
-		transform: translate(-50%, 0);
 		font-size: 12px;
 		font-weight: normal;
 		.cq-interval{
@@ -58,29 +57,31 @@
 			width: 100%;
 			display: flex;
 			flex-direction: row;
-			@include themify($themes) {background: themed('defaultMain');}
+			@include themify($themes) {background: themed('TimeBg');}
 		}
 		.timeUnit {
 			display: flex;
 			flex-direction: column;
 			width: 88px;
 			height: 100%;
+			@include themify($themes) {background: themed('TimeUnitBg');}
 			span {
+				cursor: pointer;
 				display: block;
 				height: 40px;
 				padding-left: 16px;
 				line-height: 40px;
 				font-weight: 300;
 				@include themify($themes) {
-					color: themed('controlText');
-					border-right: 1px solid themed('defaultBorder');
+					color: themed('TimeUnitColor');
+					border-right: 1px solid themed('TimeUnitItemBorder');
 				}
 				&.selected {
 					font-weight: 500;
 					@include themify($themes) {
-						border-right: 2px solid themed('activeColor');
-						background: themed('defaultBgActive');
-						color: themed('activeColor');
+						color: themed('TimeActiveUnitColor');
+						background: themed('TimeActiveUnitBg');
+						border-right: 2px solid themed('TimeActiveUnitItemBorder');
 					}
 				}
 			}
@@ -99,18 +100,29 @@
 				font-weight: 300;
 				span {
 					cursor: pointer;
-					margin: 0 4px 0 0;
+					margin: 0 3px 0 0;
 					width: 24px;
 					height: 24px;
 					text-align: center;
-					@include themify($themes) {color: themed('controlText');}
+					line-height: 26px;
+					border: 1px solid transparent;
+					@include border-radius(4px);
+					@include themify($themes) {color: themed('TimeItemColor');}
 					&.selected {
-						line-height: 24px;
-						@include border-radius(4px);
+						line-height: 27px;
+						font-weight: bold;
 						@include themify($themes) {
-							box-shadow: inset 0 0 0 1px themed('activeColor');
-							background: themed('activeColor');
-							color: themed('defaultMain');
+							color: themed('TimeActiveItemColor') !important;
+							background: themed('TimeActiveItemBg');
+							border-color: themed('TimeActiveItemBorder');
+						}
+					}
+					&:hover{
+						line-height: 27px;
+						font-weight: bold;
+						@include themify($themes) {
+							color: themed('TimeHoverItemColor');
+							border-color: themed('TimeHoverItemBorder');
 						}
 					}
 				}
@@ -147,20 +159,36 @@
 }
 
 .smartcharts-480 {
-    .ciq-period{
-        width: 70px !important;
-        top: -5px;
-    }
+	.cq-chart-control-bottom {
+		.ciq-period {
+			> .cq-menu-btn {
+				padding: 10px 5px !important;
+			}
+		}
+		.ciq-period{
+		    width: 70px !important;
+		    top: 0px;
+		}
+	}
 }
 .smartcharts-900 {
-    .ciq-period{
-        width: 80px !important;
-        top: 0px;
-    }
+	.cq-chart-control-bottom {
+		.ciq-period {
+			> .cq-menu-btn {
+				padding: 10px 5px !important;
+			}
+		}
+		.ciq-period{
+		    width: 80px !important;
+		    top: 0px;
+		}
+	}
 }
 .smartcharts-1100 {
-    .ciq-period{
-        width: 100px !important;
-        top: 0px;
-    }
+	.cq-chart-control-bottom {
+		.ciq-period{
+		    width: 100px !important;
+		    top: 0px;
+		}
+	}
 }

@@ -15,9 +15,6 @@
 				line-height: 40px;
 				font-weight: 400;
 				padding: 0 .7em;
-				@include themify($themes) {
-					color: themed('defaultText');
-				}
 			}
 			.icon-close-menu{
 				position: absolute;
@@ -36,11 +33,11 @@
 			height: 32px;
 			padding: 0 0 0 16px;
 			margin: 16px 11px 0 0;
-			@include themify($themes) {
-				border: 1px solid themed(defaultBorder);
-				background: themed('defaultMain');
-			}
 			@include box-sizing(border-box);
+			@include themify($themes) {
+				border: 1px solid themed('ListLiBorder');
+				background: themed('ListLiBg');
+			}
 			.icon {
 				display: flex;
 				justify-content: flex-end;
@@ -48,17 +45,17 @@
 					display: none;
 				}
 				.tick-icon {
-					@include svg-icon-stroke('controlText');
+					@include svg-icon-stroke('TemplateAddIcon');
 				}
 				.add-icon{
-					@include svg-icon-color('controlText');
+					@include svg-icon-color('TemplateAddIcon');
 				}
 			}
 			.add {
 				display: flex;
 				flex-grow: 8;
 				.ic-icon {
-					@include svg-icon-color('controlText');
+					@include svg-icon-color('TemplateAddIcon');
 				}
 			}
 			.add-new {
@@ -73,8 +70,8 @@
 				border: none;
 				outline: none;
 				@include themify($themes) {
-					color: themed('controlText');
-					background-color: themed('defaultMain');
+					color: themed('TemplateInputText');
+					background-color: themed('DefaultMain');
 				}
 			}
 		}
@@ -92,13 +89,12 @@
 					display: flex;
 					&:hover{
 						@include themify($themes) {
-							color: themed('defaultTextActive');
-							background-color: themed('listBgActive');
+							color: themed('TemplateActiveIcon');
 						}
 						.ic-icon{
 							opacity: 1;
-							@include themify($themes) {color: themed('controlTextActive');}
-							@include svg-icon-color('controlTextActive');
+							@include themify($themes) {color: themed('TemplateActiveIcon');}
+							@include svg-icon-color('TemplateActiveIcon');
 						}
 					}
 					.ciq-list-item-text{
@@ -109,7 +105,7 @@
 						width: 40px;
 						opacity: 0;
 						transition: opacity 0.15s .2s;
-						@include svg-icon-color('controlText');
+						@include svg-icon-color('TemplateText');
 					}
 					&:first-child {
 						border-top: none;
@@ -149,11 +145,11 @@
 			font-weight: bold;
 			>div{
 				width: 90px;
-				@include themify($themes) {
-					color: themed('controlDialogButton');
-				}
 				text-align: center;
 				cursor: pointer;
+				@include themify($themes) {
+					color: themed('TemplateBtn');
+				}
 			}
 		}
 	}
