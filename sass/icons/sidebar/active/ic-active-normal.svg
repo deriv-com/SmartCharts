@@ -1,3 +1,10 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
-    <path fill-rule="nonzero" d="M11.323 7.753H8.257l1.24-4.49-4.818 4.99h3.029l-1.203 4.49 4.818-4.99zm-1.752-1h2.93a.5.5 0 0 1 .36.847l-7 7.25c-.36.373-.98.02-.842-.48l1.412-5.117H3.5a.5.5 0 0 1-.36-.848l7-7.25c.36-.373.98-.019.842.48L9.571 6.753z"/>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
+    <title>icons/system/dark/sidebar/active/ic-active-active</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="icons/system/dark/sidebar/active/ic-active-active" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <path d="M11.3232165,7.75252279 L8.25719223,7.75252279 L9.49684178,3.26238546 L4.67877814,8.25252279 L7.70758595,8.25252279 L6.50515283,12.7426601 L11.3232165,7.75252279 Z M9.57139761,6.75252279 L12.5009973,6.75252279 C12.9422331,6.75252279 13.167178,7.28239439 12.860698,7.59982005 L5.86069803,14.84982 C5.50077356,15.222599 4.8812021,14.8690793 5.01900099,14.3695583 L6.43059699,9.25252279 L3.5009973,9.25252279 C3.05976154,9.25252279 2.83481663,8.72265119 3.14129657,8.40522553 L10.1412966,1.15522553 C10.501221,0.78244662 11.1207925,1.13596631 10.9829936,1.63548729 L9.57139761,6.75252279 Z" id="Combined-Shape-Copy" fill="#FFFFFF" fill-rule="nonzero"></path>
+    </g>
 </svg>

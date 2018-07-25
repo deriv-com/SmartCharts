@@ -13,6 +13,8 @@ $themes: (
         ChartBg: #ffffff,
         ChartBorder: #e9e9ed,
         ChartText: #AAACBA,
+        ChartCandleBg: #2a3052,
+        ChartCandleText: #ffffff,
         ChartGrid: rgba(170, 172, 186, 0.08),
         ChartIndicateText: #333333,
         ChartIndicateDivide: #e9e9ed,
@@ -57,6 +59,7 @@ $themes: (
         /**
         * Dialog
         */
+        DialogBorder: rgba(170, 172, 186, 0.5),
         DialogHeadBg: #ffffff,
         DialogHeadText: #141414,
         DialogHeadBorder: #e9e9ed,
@@ -223,7 +226,8 @@ $themes: (
         CrosshairBg: rgba(21, 33, 45, 0.88),
         CrosshairText: #FFFFFF,
         CrosshairBorder: rgba(21,33,45,0.88),
-
+        CrosshairAxis: #4A4F6C,
+        CrosshairLabel: #4A4F6C,
 
         /**
         * Icon
@@ -233,7 +237,7 @@ $themes: (
     dark: (
         DefaultMain:            #2a3052,
         DefaultBg:              #2a3052,
-        DefaultText:            red,
+        DefaultText:            #ffffff,
         DefaultBorder:          rgba(170, 172, 186, 0.3),
 
 
@@ -243,6 +247,8 @@ $themes: (
         ChartBg: #2a3052,
         ChartBorder: rgba(170, 172, 186, 0.3),
         ChartText: #AAACBA,
+        ChartCandleBg: #ffffff,
+        ChartCandleText: #2a3052,
         ChartGrid: rgba(170, 172, 186, 0.08),
         ChartIndicateText: #ffffff,
         ChartIndicateDivide: rgba(170, 172, 186, 0.3),
@@ -260,7 +266,8 @@ $themes: (
         MenuHoverIconBg: #555975,
 
         MenuActiveBg: #555975,
-        MenuActiveText: #fff1fff,
+        MenuActiveText: #ffffff,
+        MenuActiveIcon: #ffffff,
         MenuActiveBorder: #fff,
 
 
@@ -278,7 +285,7 @@ $themes: (
         */
         ListLiBg: #2a3052,
         ListLiText: #AAACBA,
-        ListLiBorder: rgba(170, 172, 186, 0.1),
+        ListLiBorder: rgba(170, 172, 186, 0.3),
         ListActiveLiBg: #3f4463,
         ListActiveLiText: #ffffff,
         ListActiveLiBorder: #3f4463,
@@ -287,17 +294,18 @@ $themes: (
         /**
         * Dialog
         */
+        DialogBorder: rgba(170, 172, 186, 0.2),
         DialogHeadBg: #2a3052,
         DialogHeadText: #ffffff,
-        DialogHeadBorder: #555975,
+        DialogHeadBorder: #353b5b,
         DialogHeadIcon: #AAACBA,
         DialogHeadActiveBorder: #ffffff,
-        DialogBodyBg: #555975,
+        DialogBodyBg: #353b5b,
         DialogBodyText: #aaacba,
-        DialogFootBg: #555975,
+        DialogFootBg: #353b5b,
         DialogFootText: #ffffff,
-        DialogFootBorder: #555975,
-        DialogSettingBodyBg: #555975,
+        DialogFootBorder: #353b5b,
+        DialogSettingBodyBg: #353b5b,
 
 
         /**
@@ -322,9 +330,9 @@ $themes: (
         */
         TemplateAddBg: #AAACBA,
         TemplateAddIcon: #AAACBA,
-        TemplateText:  #333333,
+        TemplateText:  #aaacba,
         TemplateInputText:  #d8d8d8,
-        TemplateBtn: #2a3052,
+        TemplateBtn: #ffffff,
         TemplateActiveText: #e2e2e2,
         TemplateActiveIcon: #AAACBA,
 
@@ -396,11 +404,11 @@ $themes: (
         /**
         * Time
         */
-        TimeBg: #3f4463,
+        TimeBg: #353b5b,
         TimeUnitBg: #2a3052,
         TimeUnitColor: #aaacba,
-        TimeUnitItemBorder: #2a3052,
-        TimeActiveUnitBg: #555975,
+        TimeUnitItemBorder: rgba(170, 172, 186, 0.3),
+        TimeActiveUnitBg: #4a4f6c,
         TimeActiveUnitColor: #ffffff,
         TimeActiveUnitItemBorder: #ffffff,
 
@@ -421,7 +429,7 @@ $themes: (
         /**
         * Categorical Display
         */
-        CatDisplayBg: #3F4463,
+        CatDisplayBg: #353b5b,
         CatDisplayText: #AAACBA,
         CatDisplayBorder: #555975,
 
@@ -433,7 +441,7 @@ $themes: (
         CatDisplayFilterText: #2a3052,
         CatDisplayFilterIcon: #AAACBA,
         CatDisplayFilterInputText: #ffffff,
-        CatDisplayActiveFilterBg: #555975,
+        CatDisplayActiveFilterBg: #4a4f6c,
         CatDisplayActiveFilterText: #fff,
         CatDisplayActiveFilterBorder: #fff,
         CatDisplayActiveFilterIcon: #ffffff,
@@ -444,7 +452,7 @@ $themes: (
         CatDisplayCatContentTitleBg: #2a3052,
         CatDisplayCatContentTitleText: #AAACBA,
         CatDisplayCatContentIcon: #AAACBA,
-        CatDisplayCatContentHover: #555975,
+        CatDisplayCatContentHover: #4a4f6c,
 
         /**
         * Crosshair
@@ -452,6 +460,9 @@ $themes: (
         CrosshairBg: rgba(255, 255, 255, 0.88),
         CrosshairText: #2a3052,
         CrosshairBorder: #4a4f6c,
+        CrosshairAxis: #ffffff,
+        CrosshairLabel: #4A4F6C,
+        
 
 
         /**

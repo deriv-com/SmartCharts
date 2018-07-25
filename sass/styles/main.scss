@@ -1182,42 +1182,6 @@ cq-hu-static {
 	}
 }
 
-#mSticky {
-	font-size: 12px;
-	color: #fff;
-	padding: 0 5px;
-	@include themify($themes) {
-		background-color: themed('tooltipBg');
-	}
-	box-shadow: 0 2px 8px 0 rgba(21,33,45,0.32);
-	@include border-radius(6px);
-	height: 34px;
-	line-height: 34px;
-	@include box-sizing(border-box);
-	&:before {
-		position: absolute;
-		pointer-events: none;
-		border: solid;
-		@include themify($themes) {
-			border-color: themed('tooltipBg') transparent;
-		}
-		border-width: 4px 4px 0px 4px;
-		top: 34px;
-		content: "";
-		left: calc(50% - 4px);
-	}
-}
-
-#mStickyInterior {
-	position: absolute;
-	top: -30px;
-	padding: 0;
-	@include themify($themes) {
-		font-weight: 500;
-		color: themed('DefaultText');
-	}
-}
-
 /* --------------------------------------------------------- FOOTER --------------------------------------------------------- */
 
 .ciq-footer {

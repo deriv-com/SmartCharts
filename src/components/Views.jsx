@@ -73,7 +73,7 @@ const Views = ({
                                         </span>
                                         : <span className="add-new" onClick={main}> {t.translate('Add New')} </span>
                                 }
-                                <span className={`icon ${!templateName ? 'hide' : ''}`}>
+                                <span className="icon">
                                     {
                                         currentRoute === 'add'
                                             ? <TickIcon className="tick-icon" onClick={add} />

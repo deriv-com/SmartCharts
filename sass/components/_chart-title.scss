@@ -6,7 +6,6 @@
         box-shadow: none !important;
         .cq-menu-btn{
             .cq-symbol-select-btn{
-                box-shadow: 0 0 0 2px rgba(76,87,148,.4);
                 @include themify($themes) {
                     border: 1px solid themed('menuActiveBorder');
                 }

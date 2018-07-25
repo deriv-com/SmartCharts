@@ -27,15 +27,15 @@
 		}
 	} 
 	&.stxMenuActive {
-		.bt-priod {
+		.bt-priod{
 			font-weight: 500;
-			@include themify($themes) {color: themed('menuActiveText');}
 		}
-		.ic-priod {
-			@include themify($themes) {
-				box-shadow: inset 0 0 0 1px themed('TimeMenuActiveIconBorder');
-				background: themed('menuActiveBg');
-			}
+		.ic-priod{
+			@include themify($themes) {background: themed('menuActiveBg');}
+		}
+		.ic-subtitle,
+		.ic-priod span {
+			@include themify($themes) {color: themed('MenuActiveText');}
 		}
 	}
 	&:after {

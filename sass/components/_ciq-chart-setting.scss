@@ -92,7 +92,7 @@
                 }
                 &:nth-child(2){
                     @include themify($themes) {
-                        border-top: themed('ListLiBorder');
+                        border-top: 1px solid themed('ListLiBorder');
                     }
                 }
                 .ic-icon{

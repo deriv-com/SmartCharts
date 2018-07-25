@@ -88,8 +88,9 @@
 	@include box-shadow (0px, 2px, 4px, rgba(0, 0, 0, .2));
 	@include border-radius();
 	@include themify($themes) {
-		background-color: themed('DialogBodyBg');
 		color: themed('DialogBodyText');
+		border: 1px solid themed('DialogBorder');
+		background-color: themed('DialogBodyBg');
 	}
 	&.open {
 		visibility: visible;

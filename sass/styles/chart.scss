@@ -285,14 +285,75 @@ html, body {
 
 
 /* ------------------------------------------------------- CHART OVERLAY ELEMENTS ------------------------------------------------------ */
+#mSticky{
+    position: absolute;
+    white-space: nowrap;
+    padding: 10px 10px 0 10px;
+    z-index: 40;
+    font-size: 12px;
 
-#mSticky, #showMeasure { /* These are the small divs that come up when you hover over a drawing or study overlay */
-    display: none;
-    @include border-radius(3px);
-    font-size: 11px;
+    @include border-radius(5px);
+    @include themify($themes) {
+        color: themed('TooltipText');
+        background: themed('TooltipBg');
+        box-shadow: 0 0 10px themed('TooltipShadow');
+    }
+    &:before {
+        position: absolute;
+        content: " ";
+        width: 100%;
+        height: 40px;
+        left: 0px;
+        top: 0px;
+        @include border-radius(5px 5px 0 0);
+        @include themify($themes) {
+            background: themed('TooltipBg');
+        }
+    }
+    &:after {
+        position: absolute;
+        pointer-events: none;
+        border: solid;
+        border-width: 4px 4px 0px 4px;
+        top: 100%;
+        content: " ";
+        left: calc(50% - 4px);
+        @include themify($themes) {
+            border-color: themed('TooltipBg') transparent;
+        }
+    }
+
+
+    #mStickyInterior{
+        margin: 0px;
+        text-indent: 30px;
+        width: 20px;
+        height: 20px;
+        line-height: 20px;
+        padding: 0;
+        position: relative;
+        @include border-radius(3px);
+        @include themify($themes) {
+            font-weight: 500;
+            color: themed('DefaultMain') !important;
+        }
+    }
+    #mStickyRightClick{
+        padding: 20px 10px 10px 10px;
+        height: 70px;
+        line-height: 20px;
+        position: relative;
+        top: 14px;
+    }
+}
+
+#showMeasure { /* These are the small divs that come up when you hover over a drawing or study overlay */
     /*text-transform: capitalize;*/
+    display: none;
+    font-size: 11px;
     white-space: nowrap;
     z-index: 40;
+    @include border-radius(3px);
     @include themify($themes) {
         color: themed('TooltipText');
         background: themed('TooltipBg');
@@ -305,12 +366,12 @@ html, body {
     }
 }
 
-#mSticky, #vectorTrashCan, #showMeasure, .overlayEdit {
+#vectorTrashCan, #showMeasure, .overlayEdit {
     position: absolute;
     z-index: 40;
 }
 
-#mStickyInterior, #sMeasure { /* Drawing and study info div contents*/
+#sMeasure { /* Drawing and study info div contents*/
     margin: 0px;
     padding: 5px 10px 5px 10px;
     display: inline-block;
@@ -357,11 +418,11 @@ html, body {
 */
 
 #overlayTrashCan {
+    font-weight: 300;
     border: none;
     @include themify($themes) {
         color: themed('tooltipTextColor');
     }
-    font-weight: 300;
 }
 
 #mouseDeleteInstructions {
@@ -396,29 +457,32 @@ html, body {
 
 /* -------- Current Price label (Floating last price on y-axis)-------- */
 
-.stx_current_hr_up { /* 'Up' color for current chart value */
-    background-color: $chart-green;
-    color: #fff;
-}
-
+.stx_current_hr_up, /* 'Up' color for current chart value */
 .stx_current_hr_down { /* 'Down' color for current chart value */
-    background-color: $chart-red;
-    color: #fff;
+    @include themify($themes) {
+        color: themed('ChartCandleText');
+        background-color: themed('ChartCandleBg');
+    }
 }
 
 /* -------- Crosshairs lines and labels-------- */
 
+.stx-float-price,
+.stx-float-date {
+    @include border-radius(3px);
+    @include themify($themes) {
+        background-color: themed('CrosshairLabel');
+    }
+}
 .stx-float-date { /* Crosshair Floating x-axis date label*/
     position: absolute;
     font-size: 10px;
     font-family: Helvetica;
     z-index: 30;
-    @include border-radius(3px);
     color: #fff;
     padding: 1px 6px;
     text-align: center;
     width: 70px;
-    background-color: #333;
 }
 
 .stx-float-price { /* Corsshair Floating y-axis value label*/
@@ -429,7 +493,9 @@ html, body {
 .stx_crosshair { /* Standard Crosshair lines color */
     position: absolute;
     z-index: 10;
-    background-color: #999;
+    @include themify($themes) {
+        background-color: themed('CrosshairAxis');
+    }
 }
 
 .stx_crosshair_drawing { /* Darker crosshairs lines when drawing */
@@ -968,9 +1034,6 @@ cq-language-name {
 
 /* -------- Axis tabs and current Prices -------- */
 
-.stx-float-price, .stx-float-date {
-    @include border-radius(0px);
-}
 
 #crossY, .stx_crosshair_y {
     margin-top: 0px;
@@ -1008,7 +1071,7 @@ cq-language-name {
     width: 100%;
     overflow: hidden;
     cursor: ns-resize;
-    z-index: 2;
+    z-index: 20;
     @include themify($themes) {
         box-shadow: 0 0 0px 8px themed('ChartBg');
         background: themed('ChartBg');
@@ -1109,4 +1172,11 @@ cq-language-name {
     hide it when PNG is exported.
      */
     display: none !important;
+}
+
+
+
+.ps--active-x > .ps__rail-x,
+.ps--active-y > .ps__rail-y {
+    background-color: transparent !important;
 }
