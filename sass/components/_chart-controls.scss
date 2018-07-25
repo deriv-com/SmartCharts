@@ -7,12 +7,11 @@
     flex-wrap: wrap; /* Optional. only if you want the items to wrap */
     justify-content: center;
     align-items: center;
-
-    @include themify($themes) {
-        background: themed('defaultMain');
-    }
     @include border-radius(2px);
     @include box-sizing(border-box);
+    @include themify($themes) {
+        background: themed('MenuBg');
+    }
     .ciq-menu {
         width: 100px;
         > span {
@@ -92,11 +91,11 @@
         width: 100%;
         padding: 0 5px;
         @include themify($themes) {
-            border-top: 1px solid themed('defaultBorder');
+            border-top: 1px solid themed('MenuBorder');
         }
     }
 }
-.cq-chart-control-left{
+.cq-chart-control-left {
     .cq-chart-controls {
         left: 0px;
         top: 0;
@@ -105,10 +104,10 @@
         padding: 5px 0;
         flex-flow: column;
         @include themify($themes) {
-            border-right: 1px solid themed('defaultBorder');
+            border-right: 1px solid themed('MenuBorder');
         }
         .ciq-menu{
-            height: 60px;
+            cq-menu-dropdown,
             .cq-menu-dropdown {
                 bottom: auto;
                 left: 9em;
@@ -132,7 +131,7 @@
         padding: 0 0.7em;
         height: 40px;
         @include themify($themes) {
-            border-top: 1px solid themed('defaultBorder');
+            border-top: 1px solid themed('MenuBorder');
         }
         &.active{
             z-index: 5;
@@ -167,49 +166,57 @@
              padding: 0 !important;
         }
         .ic-priod {
-            padding : 6px 0px !important;
+            padding: 6px 0px !important;
         }
     }
 }
-
-.smartcharts-desktop .cq-chart-control-bottom {
-    .smartcharts-480 {
-        .cq-chart-controls {
-            .ciq-menu {
-                width: 47px;
-                .cq-menu-btn {
-                    > .ic-icon{
-                        padding: .35em 0em;
-                    }
-                    .ic-subtitle{
-                        display: none;
-                    }
+.smartcharts-desktop{
+    &.smartcharts-480 {
+        .cq-chart-control-bottom{
+            .cq-chart-controls {
+                .cq-toggle {
+                    padding: 0.35em 0.6em;
                 }
-                .notification-badge{
-                    left: 28px;
+                .ciq-menu {
+                    width: 47px;
+                    .cq-menu-btn {
+                        padding: 5px 5px;
+                        > .ic-icon{
+                            padding: .35em 0em;
+                        }
+                        .ic-subtitle{
+                            display: none;
+                        }
+                    }
+                    .notification-badge{
+                        left: 28px;
+                    }
                 }
             }
         }
     }
-    .smartcharts-900 {
-        .cq-chart-controls {
-            .ciq-menu {
-                width: 70px;
-                .cq-menu-btn {
-                    > .ic-icon{
-                        padding: .35em 0em;
+    &.smartcharts-900 {
+        .cq-chart-control-bottom{
+            .cq-chart-controls {
+                .ciq-menu {
+                    width: 70px;
+                    .cq-menu-btn {
+                        padding: 5px 5px;
+                        > .ic-icon{
+                            padding: .35em 0em;
+                        }
+                        .ic-subtitle{
+                            display: none;
+                        }
                     }
-                    .ic-subtitle{
-                        display: none;
+                    .notification-badge{
+                        left: 39px;
                     }
-                }
-                .notification-badge{
-                    left: 39px;
                 }
             }
         }
     }
-    .smartcharts-1100 {
+    &.smartcharts-1100 {
         .cq-chart-controls {
             .ciq-menu {
                 width: 100px;
@@ -228,4 +235,3 @@
         }
     }
 }
-
