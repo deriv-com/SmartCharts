@@ -410,6 +410,8 @@ class ChartStore {
         // we need to manually unsubscribe them.
         this.feed.unsubscribeAll();
         this.feed = null;
+        this.stxx.updateChartData = function () {}; // prevent any data from entering the chart
+        this.stxx.isDestroyed = true;
         this.stxx.destroy();
         this.stxx = null;
     }
