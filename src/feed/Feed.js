@@ -154,10 +154,10 @@ class Feed {
 
     unsubscribeAll() {
         for (const key in this._callbacks) {
-            const { symbol, period, interval } = JSON.parse(key);
+            const [symbol, granularity] = key.split('-');
             this._binaryApi.forget({
                 symbol,
-                granularity: Feed.calculateGranularity(period, interval),
+                granularity,
             }, this._callbacks[key]);
         }
     }
