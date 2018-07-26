@@ -50,6 +50,10 @@ class Feed {
         const tickHistoryPromise = new PendingPromise();
         let hasHistory = false;
         const processTick = (resp) => {
+            if (this._cxx.isDestroyed) {
+                console.error('No data should be coming in when chart is destroyed!');
+                return;
+            }
             // We assume that 1st response is the history, and subsequent
             // responses are tick stream data.
             if (hasHistory) {
