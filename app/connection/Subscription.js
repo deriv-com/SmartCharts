@@ -7,32 +7,15 @@ export default class Subscription {
         return 20 * 1000;
     }
 
-    constructor({ symbol, granularity }, { connection, response = null }) {
+    constructor(request, { connection, response = null }) {
         this._connection = connection;
-        this._symbol = symbol;
-        this._granularity = granularity;
+        this._request = request;
         this._response = response;
     }
 
-    subscribe(start) {
-        const req = {
-            ticks_history: this._symbol,
-            end: 'latest',
-            count: Subscription.DEFAULT_COUNT,
-            adjust_start_time: 1,
-            subscribe: 1,
-            style: this._granularity ? 'candles' : 'ticks',
-            granularity: this._granularity,
-        };
-
-        // Specify a start epoch to define range instead
-        if (start) {
-            delete req.count;
-            req.start = start;
-        }
-
+    subscribe() {
         this._response = this._connection
-            .send(req, Subscription.DEFAULT_TIMEOUT);
+            .send(this._request, Subscription.DEFAULT_TIMEOUT);
     }
 
     get response() {

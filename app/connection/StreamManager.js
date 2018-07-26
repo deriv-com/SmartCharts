@@ -30,8 +30,7 @@ class StreamManager {
     }
 
     _onTick(data) {
-        const { ticks_history: symbol, granularity } = data.echo_req;
-        const key = `${symbol}-${granularity}`;
+        const key = this._getKey(data.echo_req);
 
         if (this._emitters[key]) {
             this._streamIds[key] = data[data.msg_type].id;
@@ -60,8 +59,7 @@ class StreamManager {
 
     _trackSubscription(subscription) {
         return subscription.response.then((data) => {
-            const { ticks_history: symbol, granularity } = data.echo_req;
-            const key = `${symbol}-${granularity}`;
+            const key = this._getKey(data.echo_req);
 
             const shouldSendStreamReconnect = this._subscriptionData[key] && this._emitters[key];
             if (shouldSendStreamReconnect) {
@@ -76,8 +74,7 @@ class StreamManager {
 
     _trackStream(stream) {
         stream.onStream(({ echo_req, ohlc, tick }) => {
-            const { ticks_history: symbol, granularity } = echo_req;
-            const key = `${symbol}-${granularity}`;
+            const key = this._getKey(echo_req);
             if (ohlc) {
                 const candles = this._subscriptionData[key].candles;
                 const {
@@ -152,10 +149,10 @@ class StreamManager {
         return emitter;
     }
 
-    _handleNewStream({ symbol, granularity, start }) {
-        const key = `${symbol}-${granularity}`;
-        const subscription = new Subscription({ symbol, granularity }, { connection: this._connection });
-        subscription.subscribe(start);
+    _handleNewStream(request) {
+        const key = this._getKey(request);
+        const subscription = new Subscription(request, { connection: this._connection });
+        subscription.subscribe();
         this._inProgress[key] = this._trackSubscription(subscription, key);
         const emitter = this._setupEmitter(key, subscription);
 
@@ -164,8 +161,8 @@ class StreamManager {
         return stream;
     }
 
-    _handleExistingStream({ symbol, granularity }) {
-        const key = `${symbol}-${granularity}`;
+    _handleExistingStream(request) {
+        const key = this._getKey(request);
         const response = new Promise((resolve, reject) => {
             const data = this._subscriptionData[key];
             if (data) {
@@ -180,23 +177,22 @@ class StreamManager {
                 }
             }
         });
-        const subscription = new Subscription({ symbol, granularity }, { response, connection: this._connection });
+        const subscription = new Subscription(request, { response, connection: this._connection });
         const emitter = this._emitters[key];
         const stream = new Stream(subscription, emitter);
         return stream;
     }
 
-    _getStream({ symbol, granularity = 0, start }) {
-        const key = `${symbol}-${granularity}`;
+    _getStream(request) {
+        const key = this._getKey(request);
         if (this._emitters[key]) {
-            return this._handleExistingStream({ symbol, granularity });
+            return this._handleExistingStream(request);
         }
-        return this._handleNewStream({ symbol, granularity, start });
+        return this._handleNewStream(request);
     }
 
-    async subscribe(input, callback) {
-        const { ticks_history: symbol, granularity, start } = input;
-        const stream = this._getStream({ symbol, granularity, start });
+    async subscribe(request, callback) {
+        const stream = this._getStream(request);
         stream.onStream(tickResponse => callback(tickResponse));
         const historyResponse = await stream.response;
         this._callbacks.set(callback, stream);
@@ -208,6 +204,10 @@ class StreamManager {
         const stream = this._callbacks.get(callback);
         stream.forget();
         this._callbacks.delete(callback);
+    }
+
+    _getKey({ ticks_history: symbol, granularity }) {
+        return `${symbol}-${granularity}`;
     }
 }
 
