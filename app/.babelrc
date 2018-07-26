@@ -15,6 +15,7 @@
                 "transform-object-rest-spread",
                 "transform-runtime",
                 "transform-async-to-generator",
+                "istanbul",
                 ["inline-react-svg", {
                     "svgo": {
                         "plugins": [
