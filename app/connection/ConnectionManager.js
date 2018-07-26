@@ -25,9 +25,9 @@ class ConnectionManager extends EventEmitter {
         const onConnectionStatusChanged = () => {
             isConnectionOpened = !isConnectionOpened;
             if (isConnectionOpened) {
-                this._onopen();
+                this._onWsOpen();
             } else {
-                this._onclose();
+                this._onWsClosed();
             }
         };
         this._websocket.addEventListener('open', onConnectionStatusChanged);
@@ -35,7 +35,15 @@ class ConnectionManager extends EventEmitter {
         this._websocket.addEventListener('message', this._onmessage.bind(this));
     }
 
-    _onopen() {
+    onOpened(callback) {
+        this.on(ConnectionManager.EVENT_CONNECTION_REOPEN, callback);
+    }
+
+    onClosed(callback) {
+        this.on(ConnectionManager.EVENT_CONNECTION_CLOSE, callback);
+    }
+
+    _onWsOpen() {
         if (this._connectionOpened) {
             this._connectionOpened.resolve();
             this._connectionOpened = undefined;
@@ -58,7 +66,7 @@ class ConnectionManager extends EventEmitter {
         }
     }
 
-    _onclose() {
+    _onWsClosed() {
         if (!this._pingTimer) {
             clearInterval(this._pingTimer);
             this._pingTimer = undefined;

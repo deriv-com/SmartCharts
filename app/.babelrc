@@ -13,6 +13,8 @@
                 "transform-decorators-legacy",
                 "transform-class-properties",
                 "transform-object-rest-spread",
+                "transform-runtime",
+                "transform-async-to-generator",
                 ["inline-react-svg", {
                     "svgo": {
                         "plugins": [

@@ -1,10 +1,10 @@
 /* eslint-disable-camelcase */
 import EventEmitter from 'event-emitter-es6';
-import ConnectionManager from './ConnectionManager';
 import Subscription from './Subscription';
 import Stream from './Stream';
 
 class StreamManager {
+    MAX_CACHE_TICKS = 5000;
     _connection;
     _emitters = {};
     _streamIds = {};
@@ -19,14 +19,8 @@ class StreamManager {
         for (const msgType of ['tick', 'ohlc']) {
             this._connection.on(msgType, this._onTick.bind(this));
         }
-        this._connection.on(
-            ConnectionManager.EVENT_CONNECTION_CLOSE,
-            this._onConnectionClosed.bind(this),
-        );
-        this._connection.on(
-            ConnectionManager.EVENT_CONNECTION_REOPEN,
-            this._onConnectionOpened.bind(this),
-        );
+        this._connection.onClosed(this._onConnectionClosed.bind(this));
+        this._connection.onOpened(this._onConnectionOpened.bind(this));
     }
 
     _onTick(data) {
@@ -87,15 +81,21 @@ class StreamManager {
                     candles[candles.length - 1] = candle;
                 } else {
                     candles.push(candle);
-                    candles.shift();
+
+                    if (candles.length > this.MAX_CACHE_TICKS) {
+                        candles.shift();
+                    }
                 }
             } else if (tick) {
                 const { prices, times } = this._subscriptionData[key].history;
                 const { quote: price, epoch: time } = tick;
                 prices.push(price);
-                prices.shift();
                 times.push(time);
-                times.shift();
+
+                if (prices.length > this.MAX_CACHE_TICKS) {
+                    prices.shift();
+                    times.shift();
+                }
             }
         });
     }
