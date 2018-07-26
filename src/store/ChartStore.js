@@ -2,12 +2,10 @@ import ResizeObserver from 'resize-observer-polyfill';
 import { action, observable } from 'mobx';
 import PendingPromise from '../utils/PendingPromise';
 import Context from '../components/ui/Context';
-import { stableSort } from './utils';
-// import BarrierStore from './BarrierStore';
 import KeystrokeHub from '../components/ui/KeystrokeHub';
 import '../components/ui/Animation';
 import { BinaryAPI, Feed } from '../feed';
-import { createObjectFromLocalStorage } from '../utils';
+import { createObjectFromLocalStorage, stableSort } from '../utils';
 
 // import '../AddOns';
 
@@ -124,10 +122,8 @@ class ChartStore {
             this.containerWidth = 1100;
         } else if (this.modalNode.clientWidth > 900) {
             this.containerWidth = 900;
-        } else if (this.modalNode.clientWidth > 480) {
-            this.containerWidth = 480;
         } else {
-            this.containerWidth = 1100;
+            this.containerWidth = 480;
         }
 
 
@@ -416,6 +412,8 @@ class ChartStore {
         // we need to manually unsubscribe them.
         this.feed.unsubscribeAll();
         this.feed = null;
+        this.stxx.updateChartData = function () {}; // prevent any data from entering the chart
+        this.stxx.isDestroyed = true;
         this.stxx.destroy();
         this.stxx = null;
     }
