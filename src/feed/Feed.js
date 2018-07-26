@@ -39,6 +39,10 @@ class Feed {
         let hasHistory = false;
         const tickHistoryPromise = new PendingPromise();
         const processTickHistory = (resp) => {
+            if (this._stx.isDestroyed) {
+                console.error('No data should be coming in when chart is destroyed!');
+                return;
+            }
             // We assume that 1st response is the history, and subsequent
             // responses are tick stream data.
             if (hasHistory) {
@@ -72,6 +76,7 @@ class Feed {
 
         const [tickHistoryPromise, processTickHistory] = this._getProcessTickHistoryClosure(key, comparisonChartSymbol);
         this._binaryApi.subscribeTickHistory(dataRequest, processTickHistory);
+
         let response = await tickHistoryPromise;
 
         // Clear all notifications related to active symbols
