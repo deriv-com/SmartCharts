@@ -111,6 +111,7 @@ class Chart extends Component {
                 <AggregateChartSettingsDialog />
                 <StudySettingsDialog />
                 <Notification />
+                <div  id="drawing-mouse-pointer" className="drawing-mouse-pointer" />
             </div>
         );
     }

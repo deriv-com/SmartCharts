@@ -69,6 +69,11 @@ export default class DrawToolsStore {
 
     onContextReady = () => {
         document.addEventListener('keydown', this.closeOnEscape, false);
+        document.addEventListener('mousemove', this.onMouseMove);
+
+        const container = document.getElementsByClassName('chartContainer primary')[0];
+        container.addEventListener('touchmove', this.onMouseMove);
+
         this.stx.addEventListener('drawing', this.noTool);
         this.stx.prepend('deleteHighlighted', this.onDeleteHighlighted);
     };
@@ -79,6 +84,18 @@ export default class DrawToolsStore {
             this.stx.changeVectorType('');
         }
     };
+
+    onMouseMove = (e) => {
+        const vectorType = this.stx.currentVectorParameters.vectorType;
+        const img = document.getElementById('drawing-mouse-pointer');
+        if (vectorType) {
+            img.style.display = 'block';
+            img.style.left = `${e.clientX || e.touches[0].clientX}px`;
+            img.style.top = `${(e.clientY || e.touches[0].clientY) - 16}px`;
+        } else {
+            img.style.display = 'none';
+        }
+    }
 
     @action.bound onDeleteHighlighted() {
         for (const drawing of this.stx.drawingObjects) {

@@ -1181,3 +1181,12 @@ cq-language-name {
 .ps--active-y > .ps__rail-y {
     background-color: transparent !important;
 }
+
+.drawing-mouse-pointer {
+    display: none;
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    z-index: 999;
+    background: url('./icons/pencil/ic-pencil.svg') no-repeat center
+}
