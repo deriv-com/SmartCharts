@@ -1,30 +1,3 @@
-import EventEmitter from 'event-emitter-es6';
-import sinon from 'sinon';
-
-export class DummyConnectionManager extends EventEmitter {
-    onOpened() {
-    }
-    onClosed() {
-    }
-
-    sendSpy = sinon.spy();
-    response = null;
-
-    constructor() {
-        super({ emitDelay: 0 });
-    }
-
-    send() {
-        this.sendSpy(this.response);
-        return Promise.resolve(this.response);
-    }
-
-    emitTick(response) {
-        const { tick } = response;
-        this.emit(tick ? 'tick' : 'ohlc', response);
-    }
-}
-
 export const dummyTickData = [
     {
         echo_req: {
@@ -137,6 +110,25 @@ export const dummyTickData = [
         },
     },
 ];
+
+export const dummyErrorResponse = {
+    echo_req: {
+        adjust_start_time: 1,
+        count: 1000,
+        end: 'latest',
+        granularity: 0,
+        req_id: 7,
+        style: 'ticks',
+        subscribe: 1,
+        ticks_history: 'SPC',
+    },
+    error: {
+        code: 'StreamingNotAllowed',
+        message: 'Streaming for this symbol is not available due to license restrictions.',
+    },
+    msg_type: 'ticks_history',
+    req_id: 7,
+};
 
 export const dummyOhlcData = [
     {

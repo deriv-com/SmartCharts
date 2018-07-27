@@ -15,6 +15,8 @@ SmartCharts is both the name of the app ([charts.binary.com](https://charts.bina
 - use `yarn build` to build the library
 - use `yarn build:app` to build the [charts.binary.com](https://charts.binary.com/) app
 - use `yarn analyze` to run webpack-bundle-analyzer
+- use `yarn test` to run unit tests
+- use `yarn coverage` to see test coverage
 
 > Note: eventhough both `yarn build` and `yarn build:app` outputs `smartcharts.js` and `smartcharts.css`, **they are not the same files**. One outputs a library and the the other outputs an app.
 
