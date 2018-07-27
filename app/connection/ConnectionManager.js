@@ -18,13 +18,10 @@ class ConnectionManager extends EventEmitter {
         this._websocket = new RobustWebsocket(this._url);
 
         // There's a strange bug where upon reconnection over a short period
-        // the OPEN status precedes CLOSED. To circumvent this we assert that
-        // connection status can only go from OPEN to CLOSE and back again.
-        // ...could be an issue with RobustWebsocket.
-        let isConnectionOpened = false;
+        // the OPEN status precedes CLOSED. To circumvent this we manually
+        // check the readyState when the event is fired
         const onConnectionStatusChanged = () => {
-            isConnectionOpened = !isConnectionOpened;
-            if (isConnectionOpened) {
+            if (this._websocket.readyState === WebSocket.OPEN) {
                 this._onWsOpen();
             } else {
                 this._onWsClosed();
@@ -56,7 +53,7 @@ class ConnectionManager extends EventEmitter {
 
     _pingCheck() {
         if (this._websocket.readyState === WebSocket.OPEN) {
-            this.send({ ping: 1 }, 3000)
+            this.send({ ping: 1 }, 5000)
                 .catch(() => {
                     console.error('Server unresponsive. Creating new connection...');
                     // Reset connection if ping gets no pong from server

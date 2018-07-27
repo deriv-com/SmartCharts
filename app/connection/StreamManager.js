@@ -140,7 +140,7 @@ class StreamManager {
             tickHistoryResponse = await this._tickHistoryPromises[key];
         }
 
-        callback(StreamManager.cloneTickHistoryResponse(tickHistoryResponse));
+        callback(tickHistoryResponse);
         stream.onStream(callback);
     }
 

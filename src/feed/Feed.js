@@ -49,7 +49,10 @@ class Feed {
                 this._appendTick(resp, key, comparisonChartSymbol);
                 return;
             }
-            this._lastStreamEpoch[key] = Feed.getLatestEpoch(resp);
+            const lastEpoch = Feed.getLatestEpoch(resp);
+            if (lastEpoch) { // on errors, lastEpoch can be undefined
+                this._lastStreamEpoch[key] = lastEpoch;
+            }
             tickHistoryPromise.resolve(resp);
             hasHistory = true;
         };
@@ -201,10 +204,10 @@ class Feed {
     static getLatestEpoch({ candles, history }) {
         if (candles) {
             return candles[candles.length - 1].epoch;
+        } else if (history) {
+            const { times } = history;
+            return times[times.length - 1];
         }
-
-        const { times } = history;
-        return times[times.length - 1];
     }
 
     static calculateGranularity(period, interval) {
@@ -242,6 +245,7 @@ class Feed {
 
     _onConnectionReopened() {
         const keys = Object.keys(this._lastStreamEpoch);
+        if (keys.length === 0) { return; }
         const granularity = +keys[0].split('-')[1];
         const elapsedSeconds = (new Date() - this._connectionClosedDate) / 1000 | 0;
         const maxIdleSeconds = (granularity || 1) * this._stx.chart.maxTicks;
@@ -249,25 +253,28 @@ class Feed {
             this._callbacks = {}; // We don't need to send forget requests for a new connection
             this._mainStore.chart.refreshChart();
         } else {
-            // patch missing data...
             for (const key of keys) {
-                const [symbol] = key.split('-');
-                const comparisonChartSymbol = (this._stx.chart.symbol !== symbol) ? symbol : undefined;
-                const [tickHistoryPromise, processTickHistory] = this._getProcessTickHistoryClosure(key, comparisonChartSymbol);
-                // override the processTickHistory callback with new processTickHistory
-                this._callbacks[key] = processTickHistory;
-                const start = this._lastStreamEpoch[key];
-                this._binaryApi.subscribeTickHistory({
-                    start,
-                    symbol,
-                    granularity,
-                }, processTickHistory);
-                tickHistoryPromise.then((resp) => {
-                    this._appendHistory(resp, key, comparisonChartSymbol);
-                });
+                const startEpoch = this._lastStreamEpoch[key];
+                this._resumeStream(key, startEpoch);
             }
         }
         this._connectionClosedDate = undefined;
+    }
+
+    _resumeStream(key, start) {
+        const [symbol, granularity] = key.split('-');
+        const comparisonChartSymbol = (this._stx.chart.symbol !== symbol) ? symbol : undefined;
+        const [tickHistoryPromise, processTickHistory] = this._getProcessTickHistoryClosure(key, comparisonChartSymbol);
+        // override the processTickHistory callback with new processTickHistory
+        this._callbacks[key] = processTickHistory;
+        this._binaryApi.subscribeTickHistory({
+            start,
+            symbol,
+            granularity,
+        }, processTickHistory);
+        tickHistoryPromise.then((resp) => {
+            this._appendHistory(resp, key, comparisonChartSymbol);
+        });
     }
 }
 
