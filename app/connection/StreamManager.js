@@ -85,7 +85,13 @@ class StreamManager {
     }
 
     _forgetStream(key) {
-        this._destroyStream(key);
+        const stream = this._streams[key];
+        if (stream) {
+            // Note that destroying a stream also removes all subscribed events
+            stream.destroy();
+            delete this._streams[key];
+        }
+
         if (this._streamIds[key]) {
             const id = this._streamIds[key];
             this._beingForgotten[key] = true;
@@ -95,17 +101,9 @@ class StreamManager {
                     delete this._streamIds[key];
                 });
         }
+
         if (this._tickHistoryCache[key]) {
             delete this._tickHistoryCache[key];
-        }
-    }
-
-    _destroyStream(key) {
-        const stream = this._streams[key];
-        if (stream) {
-            // Note that destroying a stream also removes all subscribed events
-            stream.destroy();
-            delete this._streams[key];
         }
     }
 
@@ -119,10 +117,10 @@ class StreamManager {
         subscribePromise.then((response) => {
             this._onReceiveTickHistory(response);
             if (response.error) {
-                this._destroyStream(key);
+                this._forgetStream(key);
             }
         }).catch(() => {
-            this._destroyStream(key);
+            this._forgetStream(key);
         });
 
         stream.onNoSubscriber(() => this._forgetStream(key));
