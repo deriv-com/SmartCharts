@@ -136,7 +136,12 @@ class StreamManager {
         }
 
         let tickHistoryResponse = this._tickHistoryCache[key];
-        if (!tickHistoryResponse) {
+        if (tickHistoryResponse) {
+            // TODO: expand/slice tick data if cached ticks does not fit in date range
+            // If cache data is available, send a copy otherwise we risk
+            // mutating the cache outside of StreamManager
+            tickHistoryResponse = StreamManager.cloneTickHistoryResponse(tickHistoryResponse);
+        } else {
             tickHistoryResponse = await this._tickHistoryPromises[key];
         }
 
