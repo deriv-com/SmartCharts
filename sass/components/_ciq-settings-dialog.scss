@@ -82,15 +82,13 @@
     .items {
         padding: 16px 0;
         flex-grow: 1;
-        overflow: scroll;
-        height: 200px;
         @include themify($themes) {
             background: themed('DialogSettingBodyBg');
         }
         .item {
             @include box-sizing(border-box);
             padding: 0 16px;
-            height: 25px;
+            height: 30px;
             margin-bottom: 5px;
             display: flex;
             flex-direction: column;
@@ -168,6 +166,9 @@
     .cq-settings-dialog {
         .items {
             padding: 5px 0;
+            .item {
+                height: 28px;
+            }
         }
     }
 }
