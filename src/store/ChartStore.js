@@ -160,6 +160,7 @@ class ChartStore {
         this.onSymbolChange = onSymbolChange;
 
         const stxx = this.stxx = new CIQ.ChartEngine({
+            maxMasterDataSize: 5000, // cap size so tick_history requests do not become too large
             markerDelay: null, // disable 25ms delay for placement of markers
             container: this.rootNode.querySelector('.chartContainer.primary'),
             controls: { chartControls: null }, // hide the default zoom buttons

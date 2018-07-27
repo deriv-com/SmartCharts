@@ -1,4 +1,3 @@
-/* eslint-disable-camelcase */
 import Stream from './Stream';
 
 class StreamManager {
