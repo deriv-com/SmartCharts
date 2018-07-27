@@ -48,7 +48,7 @@ class Notification extends React.Component {
         });
     }
 
-    removeByCategory({ category }) {
+    removeByCategory(category) {
         this.state.messages.map((msg) => {
             if (msg.category === category) {
                 this.onRemove(msg.id);
@@ -59,8 +59,8 @@ class Notification extends React.Component {
     render() {
         const { notifier } = this.props;
 
-        notifier.message(e => this.onMessage(e));
-        notifier.removeByCategory(e => this.removeByCategory(e));
+        notifier.setMessageCallback(e => this.onMessage(e));
+        notifier.setRemoveByCategoryCallback(e => this.removeByCategory(e));
 
         return (
             <div className="cq-notifications">

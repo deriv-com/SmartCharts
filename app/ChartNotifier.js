@@ -4,19 +4,19 @@ export default class ChartNotifier {
     messageCallback = null;
     removeByCategoryCallback=null
 
-    notify(_action, _data) {
-        if (_action === 'message') {
-            this.messageCallback(_data);
-        } else if (_action === 'removeByCategory') {
-            this.removeByCategoryCallback(_data);
-        }
+    notify(message) {
+        this.messageCallback(message);
     }
 
-    message(callback) {
+    removeByCategory(category) {
+        this.removeByCategoryCallback(category);
+    }
+
+    setMessageCallback(callback) {
         this.messageCallback = callback;
     }
 
-    removeByCategory(callback) {
+    setRemoveByCategoryCallback(callback) {
         this.removeByCategoryCallback = callback;
     }
 }

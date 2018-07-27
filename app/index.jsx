@@ -86,9 +86,7 @@ class App extends Component {
     }
 
     symbolChange = (symbol) => {
-        this.state.notifier.notify('removeByCategory', {
-            category: 'activesymbol',
-        });
+        this.state.notifier.removeByCategory('activesymbol');
         console.log('Symbol has changed to:', symbol);
     };
 
@@ -117,7 +115,7 @@ class App extends Component {
         return (
             <SmartChart
                 onSymbolChange={symbol => this.symbolChange(symbol)}
-                onMessage={e => this.state.notifier.notify('message', e)}
+                onMessage={e => this.state.notifier.notify(e)}
                 isMobile={CIQ.isMobile}
                 enableRouting
                 topWidgets={renderTopWidgets}
