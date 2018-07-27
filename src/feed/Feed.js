@@ -138,7 +138,7 @@ class Feed {
         const startLimit = now - (2.8 * 365 * 24 * 60 * 60);
         const { period, interval } = params;
 
-        const result = { quotes: [] };
+        let result = { quotes: [] };
         if (end > startLimit) {
             try {
                 const response = await this._binaryApi.getTickHistory({
@@ -150,7 +150,7 @@ class Feed {
                 result.quotes = TickHistoryFormatter.formatHistory(response);
             } catch (err) {
                 console.error(err);
-                result.quotes = { error: err };
+                result = { error: err };
             }
         }
 
