@@ -38,9 +38,9 @@ class StreamManager {
     _onConnectionClosed() {
         // StreamManager simply discards all streams upon disconnection;
         // It is not its responsibility to reestablish the streams upon reconnection.
-        this._streamIds = {};
+        this._streamIds = {}; // set it to blank so that forget requests do not get called
         for (const key of Object.keys(this._streams)) {
-            this._destroyStream(key);
+            this._forgetStream(key);
         }
     }
 
