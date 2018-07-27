@@ -4,7 +4,7 @@ import { connect } from '../store/Connect';
 import BarrierStore from '../store/BarrierStore';
 import PriceLine from './PriceLine.jsx';
 import Shade from './Shade.jsx';
-import { isValidProp } from '../store/utils';
+import { isValidProp } from '../utils';
 
 const Barrier = ({
     shadeColor,

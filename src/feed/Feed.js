@@ -1,6 +1,7 @@
 import EventEmitter from 'event-emitter-es6';
 import { TickHistoryFormatter } from './TickHistoryFormatter';
 import PendingPromise from '../utils/PendingPromise';
+import { getUTCEpoch } from '../utils';
 
 class Feed {
     static get EVENT_MASTER_DATA_UPDATE() { return 'EVENT_MASTER_DATA_UPDATE'; }
@@ -48,6 +49,10 @@ class Feed {
         const tickHistoryPromise = new PendingPromise();
         let hasHistory = false;
         const processTick = (resp) => {
+            if (this._cxx.isDestroyed) {
+                console.error('No data should be coming in when chart is destroyed!');
+                return;
+            }
             // We assume that 1st response is the history, and subsequent
             // responses are tick stream data.
             if (hasHistory) {
@@ -121,9 +126,9 @@ class Feed {
     }
 
     async fetchPaginationData(symbol, suggestedStartDate, endDate, params, callback) {
-        const start = suggestedStartDate.getTime() / 1000;
-        const end = endDate.getTime() / 1000;
-        const now = (new Date().getTime() / 1000) | 0;
+        const start = getUTCEpoch(suggestedStartDate);
+        const end   = getUTCEpoch(endDate);
+        const now   = getUTCEpoch(new Date());
         const startLimit = now - (2.8 * 365 * 24 * 60 * 60);
         const { period, interval } = params;
 

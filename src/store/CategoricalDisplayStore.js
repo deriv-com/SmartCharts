@@ -79,7 +79,7 @@ export default class CategoricalDisplayStore {
     }
 
     @action.bound updateScrollSpy() {
-        if (this.pauseScrollSpy) { return; }
+        if (this.pauseScrollSpy || !this.scrollPanel) { return; }
         if (this.filteredItems.length === 0) { return; }
 
 
@@ -258,7 +258,7 @@ export default class CategoricalDisplayStore {
     }
 
     @action.bound setScrollPanel(element) {
-        this.scrollPanel = element._container;
+        this.scrollPanel = element ? element._container : null;
     }
 
     @action.bound getItemCount(category) {

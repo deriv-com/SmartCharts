@@ -1,75 +1,475 @@
 
 $themes: (
-  light: (
-    activeColor:            #4C5794,
-    defaultMain:            #fff,
-    defaultAccent:          #398dff,
-    defaultBg:              #f8f8f8,
-    defaultBgActive:        #f2f3f8,
-    defaultMenuBg:          #fff,
-    defaultSubmenuBg:       #f3f3f3,
-    defaultHuBg:            #ffffff,
-    defaultText:            #000,
-    defaultTextActive:      #4C5794,
-    defaultTextSubtle:      #999,
-    defaultTextMedium:      #666,
-    defaultTextStrong:      #000,
-    defaultBorder:          #e9e9ed,
-    defaultBorderSubtle:    #ddd,
-    defaultBorderMedium:    #ccc,
-    defaultBorderStrong:    #999,
-    chartGrid:              #f3f3f3,
-    chartText:              #cccccc,
-    chartBg:                #fff,
-    listBgActive:           #f2f3f8,
-    listBorder:             1px solid #e9e9ed,
-    controlText:            #575757,
-    controlTitleText:       #454545,
-    controlTitlebg:         #fff,
-    controlTextActive:      #4b5794,
-    controlActive:          #4b5794,
-    controlBgActive:        rgba(76, 87, 148, 0.2),
-    controlGrid:            #fafafb,
-    controlDialogHead:      #FFFFFF,
-    controlDialogBody:      #FAFAFA,
-    controlDialogButton:    #2a3052,
-    tooltipBg:              rgba(21,33,45,0.88),
-    tooltipTextColor:       #fff,
-  ),
-  dark: (
-    activeColor:            #e2e2e2,
-    defaultMain:            #1c2a35,
-    defaultAccent:          #151f28,
-    defaultBg:              #1C2A35,
-    defaultBgActive:        mix(#fff, #1c2a35, 8%),
-    defaultMenuBg:          #1c2a35,
-    defaultSubmenuBg:       #f3f3f3,
-    defaultHuBg:            #1c2a35,
-    defaultText:            #e7fafb,
-    defaultTextSubtle:      #e7fafb,
-    defaultTextMedium:      rgb(179, 174, 174),
-    defaultTextStrong:      #e7fafb,
-    defaultBorder:          #010103,
-    defaultBorderSubtle:    #ddd,
-    defaultBorderMedium:    #ccc,
-    defaultBorderStrong:    #999,
-    chartGrid:              mix(#fff, #1c2a35, 8%),
-    chartText:              mix(#fff, #1c2a35, 50%),
-    chartBg:                mix(#fff, #1c2a35, 10%),
-    listBgActive:           #e2e2e2,
-    controlText:            rgb(179, 174, 174),
-    controlTitleText:       #acacac,
-    controlTitlebg:         mix(#fff, #1c2a35, 7%),
-    controlActive:          #e2e2e2,
-    controlTextActive:      #e2e2e2,
-    controlBgActive:        rgba(76, 87, 148, 0.2),
-    controlGrid:            #fafafb,
-    controlDialogHead:      mix(#fff, #1c2a35, 3%),
-    controlDialogBody:      mix(#fff, #1c2a35, 7%),
-    controlDialogButton:    #e2e2e2,
-    tooltipBg:              #1c70cea1,
-    tooltipTextColor:       #fff,
-  ),
+    light: (
+        DefaultMain:            #ffffff,
+        DefaultBg:              #ffffff,
+        DefaultText:            #AAACBA,
+        DefaultBorder:          rgba(170, 172, 186, 0.3),
+
+
+        /**
+        * Chart
+        */
+        ChartBg: #ffffff,
+        ChartBorder: #e9e9ed,
+        ChartText: #AAACBA,
+        ChartCandleBg: #2a3052,
+        ChartCandleText: #ffffff,
+        ChartGrid: rgba(170, 172, 186, 0.08),
+        ChartIndicateText: #333333,
+        ChartIndicateDivide: #e9e9ed,
+
+
+        /**
+        * Menu
+        */
+        MenuBg: #ffffff,
+        MenuIcon: #333333,
+        MenuText: #333333,
+        MenuBorder: #e9e9ed,
+
+        MenuHoverBg: #f4f4f6,
+        MenuHoverIconBg: #f4f4f6,
+
+        MenuActiveBg: #f4f4f6,
+        MenuActiveText: #333333,
+        MenuActiveBorder: #2a3052,
+
+
+        /**
+        * Chart Title
+        */
+        ChartTitleBg: #ffffff,
+        ChartTitleText: #2a3052,
+        ChartTitleBorder: #e9e9ed,
+        ChartTitlePriceText: #333333,
+
+
+        /**
+        * List
+        */
+        ListLiBg: #ffffff,
+        ListLiText: #333333,
+        ListLiBorder: #e9e9ed,
+        ListActiveLiBg: #f4f4f6,
+        ListActiveLiText: #2a3052,
+        ListActiveLiBorder: #e9e9ed,
+
+
+        /**
+        * Dialog
+        */
+        DialogBorder: rgba(170, 172, 186, 0.5),
+        DialogHeadBg: #ffffff,
+        DialogHeadText: #141414,
+        DialogHeadBorder: #e9e9ed,
+        DialogHeadIcon: #141414,
+        DialogHeadActiveBorder: #e9e9ed,
+        DialogBodyBg: #fafafb,
+        DialogBodyText: #333333,
+        DialogFootBg: #ffffff,
+        DialogFootText: #333333,
+        DialogFootBorder: #ffffff,
+        DialogSettingBodyBg: #ffffff,
+
+
+        /**
+        * ChartType
+        */
+        ChartTypeText: #333333,
+        ChartTypeListIcon: #333333,
+        ChartTypeActiveListIcon: #2a3052,
+        ChartTypeActiveListBorderRight: #f4f4f6,
+
+
+        /**
+        * Chart Setting
+        */
+        ChartSettingText: #333333,
+        ChartSettingIcon: rgba(170, 172, 186, 0.3),
+        ChartSettingActiveIcon: #2a3052,
+
+
+        /**
+        * Template
+        */
+        TemplateAddBg: #AAACBA,
+        TemplateAddIcon: #2A3052,
+        TemplateText:  #333333,
+        TemplateInputText:  #333333,
+        TemplateBtn: #2a3052,
+        TemplateActiveText: #e2e2e2,
+        TemplateActiveIcon: #333333,
+
+
+        /**
+        * Tooltip
+        */
+        TooltipBg: rgba(21, 33, 45, 0.88),
+        TooltipText: #ffffff,
+        TooltipShadow: rgba(21, 33, 45, 0.32),
+
+
+        /**
+        * Color Picker, Download button
+        */
+        ColorPickerBg: #ffffff,
+        ColorPickerBorder: #e9e9ed,
+
+
+        /**
+        * Dropdown
+        */
+        DropdownText: #333333,
+        DropdownBg: #ffffff,
+        DropdownBorder: #e9e9ed,
+
+
+        /**
+        * Slider
+        */
+        SliderText: #2a3052,
+        SliderHandleBg: #ffffff,
+        SliderHandleBorder: #2a3052,
+        SliderBarBg: #e9e9ed,
+        SliderBarActiveBg: #2a3052,
+
+
+        /**
+        * Switch
+        */
+        SwitchText: #ffffff,
+        SwitchHandle: #ffffff,
+        SwitchOffBg: #e9e9ed,
+        SwitchOnBg: #4CAF50,
+
+
+        /**
+        * ComparisonItem
+        */
+        ComparisonItemText: #333333,
+        ComparisonItemIcon: #2a3052,
+        ComparisonItemHoverBg: #ffffff,
+
+
+
+        /**
+        * Shared
+        */
+        SharedInput: #333333,
+        SharedInputBg: #ffffff,
+        SharedInputBorder: #e9e9ed,
+        SharedInputText: #333333,
+        SharedBtnBg: #2a3052,
+        SharedBtnIcon: #ffffff,
+        SharedBtnDownloadText: #51adf6,
+        SharedBtnDownloadBorder: rgba(170, 172, 186, 0.3),
+
+
+        /**
+        * Time
+        */
+        TimeMenuActiveIconBorder: #f4f4f6,
+        TimeBg: #ffffff,
+        TimeUnitBg: #ffffff,
+        TimeUnitColor: #333333,
+        TimeUnitItemBorder: #e9e9ed,
+        TimeActiveUnitBg: #f4f4f6,
+        TimeActiveUnitColor: #2a3052,
+        TimeActiveUnitItemBorder: #2a3052,
+
+        TimeColor: #2a3052,
+        TimeActiveItemBg: #2a3052,
+        TimeActiveItemColor: #ffffff,
+        TimeActiveItemBorder: #2a3052,
+        TimeHoverItemColor: #2a3052,
+        TimeHoverItemBorder: #2a3052,
+
+
+        /**
+        * Asset Information
+        */
+        AssetInfoText: #333333,
+
+
+        /**
+        * Categorical Display
+        */
+        CatDisplayBg: #fafafb,
+        CatDisplayText: #333333,
+        CatDisplayBorder: #e9e9ed,
+
+        CatDisplaySearchText: #2a3052,
+        CatDisplaySearchBorder: #e9e9ed,
+        CatDisplayActiveSearchBorder: #b0b3bf,
+
+        CatDisplayFilterBg: #ffffff,
+        CatDisplayFilterText: #333333,
+        CatDisplayFilterIcon: #333333,
+        CatDisplayFilterInputText: #ffffff,
+        CatDisplayActiveFilterBg: #f4f4f6,
+        CatDisplayActiveFilterText: #2a3052,
+        CatDisplayActiveFilterIcon: #2a3052,
+        CatDisplayActiveFilterBorder: #2a3052,
+
+        CatDisplayCatTitleText: #333333,
+        CatDisplayCatContentBg: #ffffff,
+        CatDisplayCatContentBorder: #e9e9ed,
+        CatDisplayCatContentTitleBg: #ffffff,
+        CatDisplayCatContentTitleText: #333333,
+        CatDisplayCatContentIcon: #2a3052,
+        CatDisplayCatContentHover: #f4f4f6,
+
+        /**
+        * Crosshair
+        */
+        CrosshairBg: rgba(21, 33, 45, 0.88),
+        CrosshairText: #FFFFFF,
+        CrosshairBorder: rgba(21,33,45,0.88),
+        CrosshairAxis: #4A4F6C,
+        CrosshairLabel: #4A4F6C,
+
+        /**
+        * Icon
+        */
+        StarIconFav: #E98024,
+    ),
+    dark: (
+        DefaultMain:            #2a3052,
+        DefaultBg:              #2a3052,
+        DefaultText:            #ffffff,
+        DefaultBorder:          rgba(170, 172, 186, 0.3),
+
+
+        /**
+        * Chart
+        */
+        ChartBg: #2a3052,
+        ChartBorder: rgba(170, 172, 186, 0.3),
+        ChartText: #AAACBA,
+        ChartCandleBg: #ffffff,
+        ChartCandleText: #2a3052,
+        ChartGrid: rgba(170, 172, 186, 0.08),
+        ChartIndicateText: #ffffff,
+        ChartIndicateDivide: rgba(170, 172, 186, 0.3),
+
+
+        /**
+        * Menu
+        */
+        MenuBg: #2a3052,
+        MenuBorder: rgba(170, 172, 186, 0.1),
+        MenuIcon: #AAACBA,
+        MenuText: #AAACBA,
+
+        MenuHoverBg: #555975,
+        MenuHoverIconBg: #555975,
+
+        MenuActiveBg: #555975,
+        MenuActiveText: #ffffff,
+        MenuActiveIcon: #ffffff,
+        MenuActiveBorder: #fff,
+
+
+        /**
+        * Chart Title
+        */
+        ChartTitleBg: #2a3052,
+        ChartTitleText: #AAACBA,
+        ChartTitleBorder: rgba(170, 172, 186, 0.3),
+        ChartTitlePriceText: rgb(179, 174, 174),
+
+
+        /**
+        * List
+        */
+        ListLiBg: #2a3052,
+        ListLiText: #AAACBA,
+        ListLiBorder: rgba(170, 172, 186, 0.3),
+        ListActiveLiBg: #3f4463,
+        ListActiveLiText: #ffffff,
+        ListActiveLiBorder: #3f4463,
+
+
+        /**
+        * Dialog
+        */
+        DialogBorder: rgba(170, 172, 186, 0.2),
+        DialogHeadBg: #2a3052,
+        DialogHeadText: #ffffff,
+        DialogHeadBorder: #353b5b,
+        DialogHeadIcon: #AAACBA,
+        DialogHeadActiveBorder: #ffffff,
+        DialogBodyBg: #353b5b,
+        DialogBodyText: #aaacba,
+        DialogFootBg: #353b5b,
+        DialogFootText: #ffffff,
+        DialogFootBorder: #353b5b,
+        DialogSettingBodyBg: #353b5b,
+
+
+        /**
+        * ChartType
+        */
+        ChartTypeText: #AAACBA,
+        ChartTypeListIcon: #AAACBA,
+        ChartTypeActiveListIcon: #ffffff,
+        ChartTypeActiveListBorderRight: #ffffff,
+
+
+        /**
+        * Chart Setting
+        */
+        ChartSettingText: #AAACBA,
+        ChartSettingIcon: rgba(170, 172, 186, 0.3),
+        ChartSettingActiveIcon: #e2e2e2,
+
+
+        /**
+        * Template
+        */
+        TemplateAddBg: #AAACBA,
+        TemplateAddIcon: #AAACBA,
+        TemplateText:  #aaacba,
+        TemplateInputText:  #d8d8d8,
+        TemplateBtn: #ffffff,
+        TemplateActiveText: #e2e2e2,
+        TemplateActiveIcon: #AAACBA,
+
+
+        /**
+        * Tooltip
+        */
+        TooltipBg: rgba(255, 255, 255, 0.8),
+        TooltipText: #2a3052,
+        TooltipShadow: rgba(21, 33, 45, 0.32),
+
+
+        /**
+        * Color Picker, Download button
+        */
+        ColorPickerBg: #2a3052,
+        ColorPickerBorder: rgba(170, 172, 186, 0.5),
+
+
+        /**
+        * Dropdown
+        */
+        DropdownText: #ffffff,
+        DropdownBg: #3f4463,
+        DropdownBorder: #7f8397,
+
+
+        /**
+        * Slider
+        */
+        SliderText: #ffffff,
+        SliderHandleBg: #3f4463,
+        SliderHandleBorder: #ffffff,
+        SliderBarBg: #7f8397,
+        SliderBarActiveBg: #ffffff,
+
+
+        /**
+        * Switch
+        */
+        SwitchText: #ffffff,
+        SwitchHandle: #ffffff,
+        SwitchOffBg: rgba(170, 172, 186, 0.3),
+        SwitchOnBg: #4CAF50,
+
+
+        /**
+        * ComparisonItem
+        */
+        ComparisonItemText: #ffffff,
+        ComparisonItemIcon: #AAACBA,
+        ComparisonItemHoverBg: #3f4463,
+
+
+
+        /**
+        * Shared
+        */
+        SharedInput: #AAACBA,
+        SharedInputBg: #2a3052,
+        SharedInputBorder: rgba(170, 172, 186, 0.5),
+        SharedInputText: #AAACBA,
+        SharedBtnBg: #2a3052,
+        SharedBtnIcon: #AAACBA,
+        SharedBtnDownloadText: #51adf6,
+        SharedBtnDownloadBorder: rgba(170, 172, 186, 0.3),
+
+
+        /**
+        * Time
+        */
+        TimeBg: #353b5b,
+        TimeUnitBg: #2a3052,
+        TimeUnitColor: #aaacba,
+        TimeUnitItemBorder: rgba(170, 172, 186, 0.3),
+        TimeActiveUnitBg: #4a4f6c,
+        TimeActiveUnitColor: #ffffff,
+        TimeActiveUnitItemBorder: #ffffff,
+
+        TimeColor: #aaacba,
+        TimeActiveItemBg: #555975,
+        TimeActiveItemColor: #ffffff,
+        TimeActiveItemBorder: #3f4463,
+        TimeHoverItemColor:  #aaacba,
+        TimeHoverItemBorder: #ffffff,
+
+
+        /**
+        * Asset Information
+        */
+        AssetInfoText: #AAACBA,
+
+
+        /**
+        * Categorical Display
+        */
+        CatDisplayBg: #353b5b,
+        CatDisplayText: #AAACBA,
+        CatDisplayBorder: #555975,
+
+        CatDisplaySearchText: #AAACBA,
+        CatDisplaySearchBorder: rgba(170, 172, 186, 0.3),
+        CatDisplayActiveSearchBorder: #ffffff,
+
+        CatDisplayFilterBg: #2a3052,
+        CatDisplayFilterText: #2a3052,
+        CatDisplayFilterIcon: #AAACBA,
+        CatDisplayFilterInputText: #ffffff,
+        CatDisplayActiveFilterBg: #4a4f6c,
+        CatDisplayActiveFilterText: #fff,
+        CatDisplayActiveFilterBorder: #fff,
+        CatDisplayActiveFilterIcon: #ffffff,
+
+        CatDisplayCatTitleText: #ffffff,
+        CatDisplayCatContentBg: #2a3052,
+        CatDisplayCatContentBorder: rgba(170, 172, 186, 0.5),
+        CatDisplayCatContentTitleBg: #2a3052,
+        CatDisplayCatContentTitleText: #AAACBA,
+        CatDisplayCatContentIcon: #AAACBA,
+        CatDisplayCatContentHover: #4a4f6c,
+
+        /**
+        * Crosshair
+        */
+        CrosshairBg: rgba(255, 255, 255, 0.88),
+        CrosshairText: #2a3052,
+        CrosshairBorder: #4a4f6c,
+        CrosshairAxis: #ffffff,
+        CrosshairLabel: #4A4F6C,
+        
+
+
+        /**
+        * Icon
+        */
+        StarIconFav: #E98024,
+    ),
 );
 
 
