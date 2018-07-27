@@ -1,7 +1,6 @@
 import { observable, action, reaction, computed, when } from 'mobx';
 import MenuStore from './MenuStore';
-import { downloadFileInBrowser, findAncestor } from './utils';
-import { loadScript } from '../utils';
+import { loadScript, downloadFileInBrowser } from '../utils';
 import PendingPromise from '../utils/PendingPromise';
 
 const html2canvasCDN = 'https://charts.binary.com/dist/html2canvas.min.js';
@@ -129,15 +128,14 @@ export default class ShareStore {
     }
 
     @action.bound downloadPNG() {
-        const root = findAncestor(this.stx.container, 'ciq-chart-area');
-        // hide share dialog when rendering PNG:
-        this.shareDropdownStyle = document.querySelector('.cq-share .cq-menu-dropdown').style;
         this.isLoadingPNG = true;
         this.loadHtml2Canvas()
-            .then(() => window.html2canvas(root))
+            .then(() => window.html2canvas(this.screenshotArea))
             .then(() => {
-                this.shareDropdownStyle.display = 'none';
-                window.html2canvas(root).then(this._onCanvasReady);
+                // since react rerenders is not immediate, we use CIQ.appendClassName to
+                // immediately append/unappend class name before taking screenshot.
+                CIQ.appendClassName(this.screenshotArea, 'ciq-screenshot');
+                window.html2canvas(this.screenshotArea).then(this._onCanvasReady);
             });
     }
 
@@ -148,8 +146,8 @@ export default class ShareStore {
             content,
             'image/png;',
         );
-        this.shareDropdownStyle.display = null;
         this.isLoadingPNG = false;
+        CIQ.unappendClassName(this.screenshotArea, 'ciq-screenshot');
     }
 
     @action.bound downloadCSV() {
@@ -217,6 +215,8 @@ export default class ShareStore {
     }
 
     onInputRef = (ref) => { this.inputRef = ref; }
-    onContextReady = () => { };
+    onContextReady = () => {
+        this.screenshotArea = this.context.topNode.querySelector('.ciq-chart');
+    };
 }
 

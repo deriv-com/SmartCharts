@@ -7,15 +7,13 @@
     flex-wrap: wrap; /* Optional. only if you want the items to wrap */
     justify-content: center;
     align-items: center;
-
-    @include themify($themes) {
-        background: themed('defaultMain');
-    }
     @include border-radius(2px);
     @include box-sizing(border-box);
+    @include themify($themes) {
+        background: themed('MenuBg');
+    }
     .ciq-menu {
         width: 100px;
-        line-height: 2.1em;
         > span {
             margin: 0;
             padding: 0;
@@ -26,8 +24,26 @@
             transform: rotate(225deg); /* 180 + 45 */
             display: none;
         }
-        .cq-menu-dropdown {
-            height: auto;
+        .cq-menu-btn{
+            position: relative;
+        }
+        .notification-badge {
+            background: #e9e9e9;
+            color: #2a3052;
+            border-radius: 100px;
+            font-size: 10px;
+            position: absolute;
+            top: 4px;
+            line-height: 18px;
+            left: 55px;
+            width: 16px;
+            height:16px;
+            font-family: Roboto;
+            font-weight: bold;
+            text-align: center;
+            &.x2{
+                width: 24px;
+            }
         }
     }
     .ciq-icon {
@@ -40,105 +56,82 @@
         padding: 0.35em 2.6em;
         color: #575757;
     }
-    .ciq-menu{
-        cq-menu-dropdown,
-        .cq-menu-dropdown {
-            transform: translateX( -50% ) translateY( 3em );
-            left: 50%;
-            &.cq-menu-dropdown-enter-done, &.cq-menu-dropdown-enter-active{
-                opacity: 1;
-                z-index: 6;
-                transform: translateX( -50% ) translateY( 0em );
-            }
-            &.cq-menu-dropdown-exit-active{
-                opacity: 0;
-                z-index: -3;
-            }
+}
+
+/* Menu dropdown open/close animation */
+.cq-chart-controls .ciq-menu .cq-menu-dropdown {
+    .cq-chart-control-bottom & {
+        /* the left and translateX 50% centers the dropdowns */
+        left: 50%;
+        transform: translateX(-50%) translateY(3em);
+        &.cq-menu-dropdown-enter-done, &.cq-menu-dropdown-enter-active{
+            transform: translateX(-50%) translateY(0em);
         }
+    }
+    .cq-chart-control-left & {
+        transform: translateX(-3em);
+        &.cq-menu-dropdown-enter-done, &.cq-menu-dropdown-enter-active{
+            transform: translateX(0em);
+        }
+    }
+    &.cq-menu-dropdown-exit-active{
+        opacity: 0;
+        z-index: -3;
+    }
+    &.cq-menu-dropdown-enter-done, &.cq-menu-dropdown-enter-active{
+        opacity: 1;
+        z-index: 6;
     }
 }
 
 .cq-chart-control-bottom{
     .cq-chart-controls {
         bottom: 0px;
-        left: 50%;
-        transform: translateX(-50%);
         height: 50px;
         width: 100%;
         padding: 0 5px;
         @include themify($themes) {
-            border-top: 1px solid themed('defaultBorder');
+            border-top: 1px solid themed('MenuBorder');
         }
     }
 }
-.cq-chart-control-left{
+.cq-chart-control-left {
     .cq-chart-controls {
         left: 0px;
-        bottom: 50%;
-        transform: translateY(50%);
+        top: 0;
         height: 100%;
-        width: 90px;
+        width: 100px;
         padding: 5px 0;
         flex-flow: column;
         @include themify($themes) {
-            border-right: 1px solid themed('defaultBorder');
+            border-right: 1px solid themed('MenuBorder');
         }
         .ciq-menu{
-            height: 60px;
             cq-menu-dropdown,
             .cq-menu-dropdown {
-                opacity: 0;
-                z-index: -3;
-                transform: translateX(.5em) translateY(0) !important;
-                left: 50%;
                 bottom: auto;
+                left: 9em;
                 top: -1em;
-                pointer-events: none;
                 @include box-shadow (0px, 0, 4px, rgba(0, 0, 0, .2));
                 @include transition( opacity .20s 0s);
                 @include dialog-transition();
-                &.cq-menu-dropdown-enter-done,
-                &.open{ // class open should be removed after `dialog-animation` merged
-                    pointer-events: initial;
-                    opacity: 1;
-                    z-index: 6;
-                    transform: translateX(4.5em) translateY(0) !important;
-                }
                 &.cq-menu-dropdown-exit.cq-menu-dropdown-exit-active,
                 &.cq-menu-dropdown-exit-done{
                     @include dialog-transition();
-                    opacity: 0;
-                    z-index: -3;
-                    display: none;
-                    transform: translateX(.5em) translateY(0) !important;
                 }
             }
         }
     }
 }
 
-
-
-
-.cq-comparison-new > .cq-menu-dropdown {
-    left: -13em;
-}
-
-.ciq-studies > .cq-menu-dropdown {
-    left: -9.8em;
-}
-
 /* Mobile Style */
 .smartcharts-mobile{
     .cq-chart-controls {
-        left: 0px !important;
-        transform: translateX(-0%) !important;
-        box-shadow: none;
         justify-content: space-around;
         padding: 0 0.7em;
         height: 40px;
         @include themify($themes) {
-            border-top: 1px solid themed('defaultBorder');
+            border-top: 1px solid themed('MenuBorder');
         }
         &.active{
             z-index: 5;
@@ -157,50 +150,15 @@
                     padding: .7em .5em !important;
                 }
             }
-            .cq-menu-overlay{
-                background: rgba(0,0,0,.3);
-                width: 100%;
-                position: absolute;
-                height: calc( 100vh - 32px );
-                top: calc( -100vh + 31px );
-                left: 0;
-                padding: 0em;
-                opacity: 0;
-                visibility: hidden;
-                @include transition(opacity 150 ease-out);
-            }
             .cq-menu-dropdown {
                 height: auto;
                 left: -1px;
-                width: calc( 100% + 2px );
                 padding: 0;
                 border: none;
                 box-shadow: none;
-                border-radius: 0px !important;
-                bottom: 0em;
-                transform: translateY(150%);
-                z-index: 4 !important;
-                @include transition(none !important);
-                &.open{
-                    transform: translateY(0);
-                    margin: 0px;
-                    bottom: 0em;
-                }
             }
-            &.stxMenuActive{
-                .cq-menu-overlay {
-                    opacity: 1;
-                    visibility: visible;
-                }
-            }
-            &.ciq-studies,
-            &.cq-comparison-new{
-                .cq-menu-dropdown {
-                    height: calc( 100vh - 47px ) ;
-                    left: 0px !important;
-                    width: 100%;
-                    box-shadow: none !important;
-                }
+            .notification-badge{
+                left: 15px;
             }
         }
         .bt-priod ,.cq-toggle , .cq-menu-btn , .cq-chart-size>span
@@ -208,7 +166,72 @@
              padding: 0 !important;
         }
         .ic-priod {
-            padding : 6px 0px !important;
+            padding: 6px 0px !important;
+        }
+    }
+}
+.smartcharts-desktop{
+    &.smartcharts-480 {
+        .cq-chart-control-bottom{
+            .cq-chart-controls {
+                .cq-toggle {
+                    padding: 0.35em 0.6em;
+                }
+                .ciq-menu {
+                    width: 47px;
+                    .cq-menu-btn {
+                        padding: 5px 5px;
+                        > .ic-icon{
+                            padding: .35em 0em;
+                        }
+                        .ic-subtitle{
+                            display: none;
+                        }
+                    }
+                    .notification-badge{
+                        left: 28px;
+                    }
+                }
+            }
+        }
+    }
+    &.smartcharts-900 {
+        .cq-chart-control-bottom{
+            .cq-chart-controls {
+                .ciq-menu {
+                    width: 70px;
+                    .cq-menu-btn {
+                        padding: 5px 5px;
+                        > .ic-icon{
+                            padding: .35em 0em;
+                        }
+                        .ic-subtitle{
+                            display: none;
+                        }
+                    }
+                    .notification-badge{
+                        left: 39px;
+                    }
+                }
+            }
+        }
+    }
+    &.smartcharts-1100 {
+        .cq-chart-controls {
+            .ciq-menu {
+                width: 100px;
+                .cq-menu-btn {
+                    > .ic-icon{
+                        padding: .35em 0.5em;
+                    }
+                    .ic-subtitle{
+                        display: block;
+                    }
+                }
+                .notification-badge{
+                    left: 55px;
+                }
+            }
         }
     }
 }

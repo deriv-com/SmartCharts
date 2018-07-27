@@ -4,7 +4,7 @@ import { connect } from '../store/Connect';
 import BarrierStore from '../store/BarrierStore';
 import PriceLine from './PriceLine.jsx';
 import Shade from './Shade.jsx';
-import { isValidProp } from '../store/utils';
+import { isValidProp } from '../utils';
 
 const Barrier = ({
     shadeColor,
@@ -65,10 +65,10 @@ export default connect(
             if (color) { store.color = color; }
             if (shadeColor) { store.shadeColor = shadeColor; }
             if (shade) { store.shadeState = `SHADE_${shade}`.toUpperCase(); }
-            if (isValidProp(high)) { store.high_barrier = high; }
-            if (isValidProp(low)) { store.low_barrier = low; }
             if (relative !== undefined) { store.relative = relative; }
             if (draggable !== undefined) { store.draggable = draggable; }
+            if (isValidProp(high)) { store.high_barrier = high; }
+            if (isValidProp(low)) { store.low_barrier = low; }
             if (onChange) { store.onBarrierChange = onChange; }
             store.lineStyle = lineStyle;
             store.hidePriceLines = !!hidePriceLines;

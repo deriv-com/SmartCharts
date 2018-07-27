@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Italian\n"
 "Language: it_IT\n"
-"PO-Revision-Date: 2018-06-22T14:14:43+0000\n"
+"PO-Revision-Date: 2018-07-19 09:42\n"
 
 msgid "Favorites"
 msgstr "Preferiti"
@@ -96,11 +96,20 @@ msgstr "Modelli"
 msgid "Template name"
 msgstr "Nome del modello"
 
-msgid "There is no template added by you."
-msgstr "Non risulta alcun modello aggiunto da te."
+msgid "Add New"
+msgstr ""
 
-msgid "Click + icon to add one."
-msgstr "Fai clic sull'icona per aggiungerne uno."
+msgid " is already exist."
+msgstr ""
+
+msgid "Would you like to overwrite it?"
+msgstr ""
+
+msgid "CANCEL"
+msgstr ""
+
+msgid "OVERWRITE"
+msgstr ""
 
 msgid "Comparison"
 msgstr "Confronto"
@@ -323,6 +332,9 @@ msgstr "destro del mouse per cancellare"
 
 msgid "right-click to manage"
 msgstr "destro del mouse per gestire"
+
+msgid "tap to manage"
+msgstr ""
 
 msgid "Chart data is not available for this symbol."
 msgstr "I dati del grafico non sono disponibili per questo simbolo."

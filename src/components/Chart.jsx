@@ -36,7 +36,12 @@ class Chart extends Component {
     }
 
     componentDidMount() {
-        this.props.init(this.root, this.props);
+        this.props.init(this.root, this.modalNode, this.props);
+    }
+
+    componentWillReceiveProps(nextProps) {
+        const { settings, setSettings } = nextProps;
+        setSettings(settings);
     }
 
     componentWillUnmount() {
@@ -47,76 +52,66 @@ class Chart extends Component {
         const {
             DrawToolsSettingsDialog,
             StudySettingsDialog,
-            lang,
             isMobile = false,
-            theme,
             isChartAvailable,
-            setting,
+            setting : { position, theme },
             barriers = [],
             children,
             chartPanelTop,
             chartControlsWidgets,
             AggregateChartSettingsDialog,
             topWidgets,
-            showCountdown = false,
             chartContainerHeight,
+            containerWidth,
         } = this.props;
 
-        const currentLang = lang || ((setting && setting.language) ? setting.language.key : 'en');
-        t.setLanguage(currentLang);
-        const currentPosition = `cq-chart-control-${(setting && setting.position && !isMobile) ? setting.position : 'bottom'}`;
-        const currentMode = `${isMobile ? 'smartcharts-mobile' : ''}`;
+        const currentPosition = `cq-chart-control-${(position && !isMobile) ? position : 'bottom'}`;
+        const contextWidth =  !isMobile ? `smartcharts-${containerWidth}` : '';
         const renderTopWidgets = topWidgets || defaultTopWidgets;
-        const defaultTheme = (setting && setting.theme) ? setting.theme : 'light';
-        const defaultCandleCountdown = (setting && setting.countdown) ? setting.countdown : false;
-
-        // TO DO : this part should move the ChartSetting Store
-        CIQ.localStorageSetItem('smartchart-setting', JSON.stringify({
-            position: ((setting && setting.position && !isMobile) ? setting.position : 'bottom'),
-            language: currentLang,
-            theme: (typeof theme === 'string') ? theme : defaultTheme,
-            countdown: showCountdown || defaultCandleCountdown,
-        }));
 
         return (
-            <cq-context
-                ref={(root) => { this.root = root; }}
-                class={`smartcharts-${(typeof theme === 'string') ? theme : defaultTheme}`}
+            <div
+                className={`smartcharts smartcharts-${theme} ${contextWidth} smartcharts-${isMobile ? 'mobile' : 'desktop'}`}
+                ref={(modalNode) => { this.modalNode = modalNode; }}
             >
-                <div className={`${currentMode} ${currentPosition}`}>
-                    <div className="ciq-chart-area">
-                        <div className="ciq-chart">
-                            <RenderInsideChart at="holder">
-                                {barriers.map((barr, idx) => (
-                                    <Barrier
-                                        key={`barrier-${idx}`}
-                                        {...barr}
-                                    />
-                                ))}
-                            </RenderInsideChart>
-                            <RenderInsideChart at="subholder">
-                                {children}
-                            </RenderInsideChart>
-                            <div className="cq-top-ui-widgets" style={{ top: chartPanelTop }}>
-                                { renderTopWidgets() }
+                <cq-context
+                    ref={(root) => { this.root = root; }}
+                >
+                    <div className={` ${currentPosition}`}>
+                        <div className="ciq-chart-area">
+                            <div className="ciq-chart">
+                                <RenderInsideChart at="holder">
+                                    {barriers.map((barr, idx) => (
+                                        <Barrier
+                                            key={`barrier-${idx}`}
+                                            {...barr}
+                                        />
+                                    ))}
+                                </RenderInsideChart>
+                                <RenderInsideChart at="subholder">
+                                    {children}
+                                </RenderInsideChart>
+                                <div className="cq-top-ui-widgets" style={{ top: chartPanelTop }}>
+                                    { renderTopWidgets() }
+                                </div>
+                                <div className="chartContainer primary" style={{ height: chartContainerHeight }}>
+                                    <Crosshair />
+                                </div>
+                                <Loader />
+                                {!isChartAvailable &&
+                                    <div className="cq-chart-unavailable">
+                                        {t.translate('Chart data is not available for this symbol.')}
+                                    </div>}
                             </div>
                             <ChartControls widgets={chartControlsWidgets} />
-                            <div className="chartContainer primary" style={{ height: chartContainerHeight }}>
-                                <Crosshair />
-                            </div>
-                            <Loader />
-                            {!isChartAvailable &&
-                                <div className="cq-chart-unavailable">
-                                    {t.translate('Chart data is not available for this symbol.')}
-                                </div>}
                         </div>
                     </div>
-                    <DrawToolsSettingsDialog />
-                    <AggregateChartSettingsDialog />
-                    <StudySettingsDialog />
-                    <Notification />
-                </div>
-            </cq-context>
+                </cq-context>
+                <DrawToolsSettingsDialog />
+                <AggregateChartSettingsDialog />
+                <StudySettingsDialog />
+                <Notification />
+            </div>
         );
     }
 }
@@ -131,5 +126,7 @@ export default connect(({ chart, drawTools, studies, chartSetting, chartType }) 
     isChartAvailable: chart.isChartAvailable,
     chartPanelTop: chart.chartPanelTop,
     setting: chartSetting,
+    setSettings: chartSetting.setSettings,
     chartContainerHeight: chart.chartContainerHeight,
+    containerWidth: chart.containerWidth,
 }))(Chart);

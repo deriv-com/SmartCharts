@@ -2,12 +2,10 @@ import ResizeObserver from 'resize-observer-polyfill';
 import { action, observable } from 'mobx';
 import PendingPromise from '../utils/PendingPromise';
 import Context from '../components/ui/Context';
-import { stableSort } from './utils';
-// import BarrierStore from './BarrierStore';
 import KeystrokeHub from '../components/ui/KeystrokeHub';
 import '../components/ui/Animation';
 import { BinaryAPI, Feed } from '../feed';
-import { createObjectFromLocalStorage } from '../utils';
+import { createObjectFromLocalStorage, stableSort } from '../utils';
 
 // import '../AddOns';
 
@@ -32,6 +30,7 @@ class ChartStore {
     chartControlsNode = null;
     chartContainerNode = null;
     holderStyle;
+    @observable containerWidth = null;
     @observable context = null;
     @observable currentActiveSymbol;
     @observable isChartAvailable = true;
@@ -109,19 +108,38 @@ class ChartStore {
         this.chartContainerHeight = this.chartHeight - offsetHeight;
     }
 
-    @action.bound resizeScreen() {
-        if (!this.context) { return; }
-        this.updateHeight();
-        this.stxx.resizeChart();
+    updateCanvas = () => {
         if (this.stxx.slider) {
             this.stxx.slider.display(this.stxx.layout.rangeSlider);
         }
+        this.stxx.resizeChart();
+    };
+
+    @action.bound resizeScreen() {
+        if (!this.context) { return; }
+
+
+        if (this.modalNode.clientWidth > 1100) {
+            this.containerWidth = 1100;
+        } else if (this.modalNode.clientWidth > 900) {
+            this.containerWidth = 900;
+        } else {
+            this.containerWidth = 480;
+        }
+
+
+        this.updateHeight();
+        // Height updates are not immediate, so we must resize the canvas with
+        // a slight delay for it to pick up the correct chartContainer height.
+        // In mobile devices, a longer delay is given as DOM updates are slower.
+        setTimeout(this.updateCanvas, this.isMobile ? 500 : 100);
     }
 
-    @action.bound init(rootNode, props) {
+    @action.bound init(rootNode, modalNode, props) {
         this.rootNode = rootNode;
-        this.chartNode = this.rootNode.querySelector('.ciq-chart');
-        this.chartControlsNode = this.chartNode.querySelector('.cq-chart-controls');
+        this.modalNode = modalNode;
+        this.chartNode = this.rootNode.querySelector('.ciq-chart-area');
+        this.chartControlsNode = this.rootNode.querySelector('.cq-chart-controls');
 
         const {
             onSymbolChange,
@@ -132,9 +150,14 @@ class ChartStore {
             isMobile,
             shareOrigin = 'https://charts.binary.com',
             enableRouting,
+            settings,
+            onSettingsChange,
         } = props;
         this.api = new BinaryAPI(requestAPI, requestSubscribe, requestForget);
-        this.mainStore.share.shareOrigin = shareOrigin;
+        const { share, chartSetting } = this.mainStore;
+        share.shareOrigin = shareOrigin;
+        chartSetting.setSettings(settings);
+        chartSetting.onSettingsChange = onSettingsChange;
         this.isMobile = isMobile;
         this.onSymbolChange = onSymbolChange;
 
@@ -159,8 +182,10 @@ class ChartStore {
 
         const deleteElement = stxx.chart.panel.holder.parentElement.querySelector('#mouseDeleteText');
         const manageElement = stxx.chart.panel.holder.parentElement.querySelector('#mouseManageText');
+        const manageTouchElement = stxx.chart.panel.holder.parentElement.querySelector('#overlayTrashCan');
         deleteElement.textConent = t.translate('right-click to delete');
         manageElement.textConent = t.translate('right-click to manage');
+        manageTouchElement.textContent = t.translate('tap to manage');
 
         // Animation (using tension requires splines.js)
         CIQ.Animation(stxx, { stayPut: true });
@@ -284,7 +309,7 @@ class ChartStore {
         });
 
         this.resizeObserver = new ResizeObserver(this.resizeScreen);
-        this.resizeObserver.observe(rootNode);
+        this.resizeObserver.observe(modalNode);
 
         this.feed.onComparisonDataUpdate(this.updateComparisons);
     }
@@ -442,6 +467,8 @@ class ChartStore {
         // we need to manually unsubscribe them.
         this.feed.unsubscribeAll();
         this.feed = null;
+        this.stxx.updateChartData = function () {}; // prevent any data from entering the chart
+        this.stxx.isDestroyed = true;
         this.stxx.destroy();
         this.stxx = null;
     }

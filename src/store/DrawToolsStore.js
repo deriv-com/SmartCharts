@@ -20,7 +20,6 @@ export default class DrawToolsStore {
         });
 
         this.list = new ListStore({
-            getIsOpen: () => this.menu.open,
             getContext: () => this.context,
             onItemSelected: item => this.selectTool(item.id),
             getItems: () => [
@@ -71,7 +70,7 @@ export default class DrawToolsStore {
     onContextReady = () => {
         document.addEventListener('keydown', this.closeOnEscape, false);
         this.stx.addEventListener('drawing', this.noTool);
-        this.stx.prepend('rightClickHighlighted', this.onRightClick);
+        this.stx.prepend('deleteHighlighted', this.onDeleteHighlighted);
     };
 
     closeOnEscape = (e) => {
@@ -81,40 +80,43 @@ export default class DrawToolsStore {
         }
     };
 
-    @action.bound onRightClick() {
+    @action.bound onDeleteHighlighted() {
         for (const drawing of this.stx.drawingObjects) {
             if (drawing.highlighted && !drawing.permanent) {
-                const dontDeleteMe = drawing.abort(); // eslint-disable-line no-unused-vars
-                const parameters = CIQ.Drawing.getDrawingParameters(this.stx, drawing.name);
-
-                const typeMap = {
-                    color: 'colorpicker',
-                    fillColor: 'colorpicker',
-                    pattern: 'pattern',
-                    axisLabel: 'switch',
-                    font: 'font',
-                    lineWidth: 'none',
-                };
-                this.settingsDialog.items = Object.keys(parameters)
-                    .filter(key => !( // Remove pattern option from Fibonacci tools
-                        (drawing.name.startsWith('fib') || drawing.name === 'retracement')
-                        && key === 'pattern'))
-                    .map(key => ({
-                        id: key,
-                        title: formatCamelCase(key),
-                        value: drawing[key],
-                        defaultValue: parameters[key],
-                        type: typeMap[key],
-                    }));
-                this.activeDrawing = drawing;
-                this.activeDrawing.highlighted = false;
-                this.settingsDialog.title = formatCamelCase(drawing.name);
-                this.settingsDialog.setOpen(true);
-
-                return true;
+                this.showDrawToolDialog(drawing);
+                return true; // Override default behaviour; prevent ChartIQ from deleting the drawing
             }
         }
         return false;
+    }
+
+    showDrawToolDialog(drawing) {
+        const dontDeleteMe = drawing.abort(); // eslint-disable-line no-unused-vars
+        const parameters = CIQ.Drawing.getDrawingParameters(this.stx, drawing.name);
+
+        const typeMap = {
+            color: 'colorpicker',
+            fillColor: 'colorpicker',
+            pattern: 'pattern',
+            axisLabel: 'switch',
+            font: 'font',
+            lineWidth: 'none',
+        };
+        this.settingsDialog.items = Object.keys(parameters)
+            .filter(key => !( // Remove pattern option from Fibonacci tools
+                (drawing.name.startsWith('fib') || drawing.name === 'retracement')
+                && key === 'pattern'))
+            .map(key => ({
+                id: key,
+                title: formatCamelCase(key),
+                value: drawing[key],
+                defaultValue: parameters[key],
+                type: typeMap[key],
+            }));
+        this.activeDrawing = drawing;
+        this.activeDrawing.highlighted = false;
+        this.settingsDialog.title = formatCamelCase(drawing.name);
+        this.settingsDialog.setOpen(true);
     }
 
     noTool = () => {

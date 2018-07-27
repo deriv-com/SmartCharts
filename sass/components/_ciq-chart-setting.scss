@@ -1,18 +1,7 @@
 
 .cq-chart-setting {
-    &.stxMenuActive{
-        .cq-menu-dropdown {
-            right: 0px;
-            width: 280px;
-            height: 200px;
-        }
-    }
     .cq-menu-dropdown {
-        height: 0px;
         width: 280px;
-        @include themify($themes) {
-            color: themed('defaultTextStrong');
-        }
         .cq-menu-container{
             height: 0px;
             &.active{
@@ -25,15 +14,16 @@
         line-height: 40px;
         font-size: 16px;
         display: flex;
+        > .ic-icon{
+            line-height: 45px;
+            margin: 0 5px 0 10px !important;
+        }
         .title-text{
             display: block;
             font-size: 16px;
             line-height: 40px;
             font-weight: 400;
             padding: 0 .7em;
-            @include themify($themes) {
-                color: themed('defaultText');
-            }
         }
         > .ic-icon {
             line-height: 44px;
@@ -47,7 +37,8 @@
             width: 30px;
             pointer-events: none;
             opacity: 0;
-            line-height: 35px;
+            line-height: 37px;
+            margin: 0 !important;
         }
     }
     .body {
@@ -65,19 +56,19 @@
                 }
                 &.ciq-list-item-position{
                     .ciq-action{
-                        .ic-icon{ 
+                        .ic-icon{
                             rect{
-                                @include themify($themes) {stroke: themed('defaultBorder');}
+                                @include themify($themes) {stroke: themed('ChartSettingIcon');}
                             }
                             path{
-                                @include themify($themes) {fill: themed('defaultBorder');}
+                                @include themify($themes) {fill: themed('ChartSettingIcon');}
                             }
                             &.active{
                                 rect{
-                                    @include themify($themes) {stroke: themed('activeColor');}
+                                    @include themify($themes) {stroke: themed('ChartSettingActiveIcon');}
                                 }
                                 path{
-                                    @include themify($themes) {fill: themed('activeColor');}
+                                    @include themify($themes) {fill: themed('ChartSettingActiveIcon');}
                                 }
                             }
                         }
@@ -110,7 +101,7 @@
                 }
                 &:nth-child(2){
                     @include themify($themes) {
-                        border-top: themed('listBorder');
+                        border-top: 1px solid themed('ListLiBorder');
                     }
                 }
                 .ic-icon{

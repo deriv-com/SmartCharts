@@ -1,17 +1,37 @@
 
+.cq-dialog-overlay {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+    position:  absolute;
+    bottom: 2em;
+}
 .cq-settings-dialog {
     display: flex;
     flex-direction: column;
+    height: auto !important;
     .ciq-num-input > input[type=number] {
         width: 5.5em;
     }
     .titlebar {
-        height: 40x;
+        height: 40px;
         display: flex;
         justify-content: space-between;
         align-items: center;
+        @include themify($themes) {
+            color: themed('DialogHeadText');
+        }
+        .ciq-favorite{
+            path{
+                @include themify($themes) {
+                    stroke: themed('DialogHeadIcon');
+                }
+            }
+        }
         .title {
-            font-size: 24px;
+            font-size: 14px;
             padding-left: 16px;
             padding-bottom: 5px;
         }
@@ -22,7 +42,7 @@
         }
         &.no-tabs {
             @include themify($themes) {
-                border-bottom: 1px solid themed('defaultBorder');
+                border-bottom: 1px solid themed('DialogHeadBorder');
             }
         }
     }
@@ -33,7 +53,7 @@
         display: flex;
         position: relative;
         @include themify($themes) {
-            border-bottom: 1px solid themed('defaultBorder');
+            border-bottom: 1px solid themed('DialogHeadBorder');
         }
         @include box-sizing(border-box);
         > div {
@@ -51,7 +71,7 @@
             bottom: -1px;
             left: 0;
             @include themify($themes) {
-                background: themed('activeColor');
+                background: themed('DialogHeadActiveBorder');
             }
             @include transition(left linear 0.1s);
             &.second {
@@ -64,10 +84,13 @@
         flex-grow: 1;
         overflow: scroll;
         height: 200px;
+        @include themify($themes) {
+            background: themed('DialogSettingBodyBg');
+        }
         .item {
             @include box-sizing(border-box);
             padding: 0 16px;
-            height: 32px;
+            height: 25px;
             margin-bottom: 5px;
             display: flex;
             flex-direction: column;
@@ -77,6 +100,9 @@
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
+                @include themify($themes) {
+                    color: themed('DialogBodyText');
+                }
             }
         }
     }
@@ -84,7 +110,8 @@
         display: flex;
         justify-content: flex-end;
         @include themify($themes) {
-            border-top: 1px solid themed('defaultBorder');
+            border-top: 1px solid themed('DialogFootBorder');
+            background: themed('DialogFootBg');
         }
         > div {
             width: 90px;
@@ -94,7 +121,7 @@
             cursor: pointer;
             font-size: 14px;
             @include themify($themes) {
-                color: themed('activeColor');
+                color: themed('DialogFootText');
             }
         }
     }
@@ -107,16 +134,40 @@
     input[type=number] {
         display: inline-block;
         width: 3.2em;
-        line-height: 1.9em;
+        line-height: 1.6em;
         margin-right: 5px;
         padding-left: 6px;
-        @include themify($themes) {
-            border: 1px solid themed('defaultBorderMedium');
-        }
         @include border-radius(3px);
+        @include themify($themes) {
+            border: none;
+            @include box-shadow ( 0 ,0 ,0 ,1px,themed('defaultBorder'));
+        }
     }
 
     .cq-color-picker {
         display: inline-block;
+        .dropdown{
+            @include themify($themes) {
+                border: 1px solid themed('ColorPickerBorder');
+            }
+        }
+    }
+}
+
+/* Mobile Style */
+.smartcharts-mobile {
+    .cq-dialog-overlay {
+        background: rgba(0, 0, 0, 0.3);
+        visibility: hidden;
+        bottom: 0;
+    }
+    .cq-dialog-active {
+        visibility: visible;
+        z-index: 1;
+    }
+    .cq-settings-dialog {
+        .items {
+            padding: 5px 0;
+        }
     }
 }

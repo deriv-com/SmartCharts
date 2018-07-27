@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Polish\n"
 "Language: pl_PL\n"
-"PO-Revision-Date: 2018-06-09 07:40-0400\n"
+"PO-Revision-Date: 2018-07-19 09:42\n"
 
 msgid "Favorites"
 msgstr "Ulubione"
@@ -25,10 +25,10 @@ msgid "PRICE"
 msgstr "CENA"
 
 msgid "OPEN"
-msgstr "OTWÓRZ"
+msgstr "OTWARCIE"
 
 msgid "CLOSE"
-msgstr "ZAMKNIJ"
+msgstr "ZAMKNIĘCIE"
 
 msgid "HIGH"
 msgstr "WYSOKIE"
@@ -40,7 +40,7 @@ msgid "Underlying Assets"
 msgstr "Aktywa bazowe"
 
 msgid "Share"
-msgstr "Udostępnij"
+msgstr "Udostępnianie"
 
 msgid "Share / Download Chart"
 msgstr "Udostępnij/pobierz wykres"
@@ -73,7 +73,7 @@ msgid "Zoom in"
 msgstr "Powiększ"
 
 msgid "Interval"
-msgstr "Odstęp"
+msgstr "odstępu"
 
 msgid "Tick"
 msgstr "Zmiana ceny"
@@ -96,11 +96,20 @@ msgstr "Szablony"
 msgid "Template name"
 msgstr "Nazwa szablonu"
 
-msgid "There is no template added by you."
-msgstr "Nie dodałeś/-aś jeszcze żadnych szablonów."
+msgid "Add New"
+msgstr ""
 
-msgid "Click + icon to add one."
-msgstr "Kliknij ikonę +, aby dodać."
+msgid " is already exist."
+msgstr ""
+
+msgid "Would you like to overwrite it?"
+msgstr ""
+
+msgid "CANCEL"
+msgstr ""
+
+msgid "OVERWRITE"
+msgstr ""
 
 msgid "Comparison"
 msgstr "Porównania"
@@ -115,10 +124,10 @@ msgid "Line"
 msgstr "Linia"
 
 msgid "Dot"
-msgstr "Kropka"
+msgstr "Kropki"
 
 msgid "Colored Dot"
-msgstr "Kolorowa kropka"
+msgstr "Kolorowe kropki"
 
 msgid "Spline"
 msgstr "Funkcja sklejana"
@@ -169,7 +178,7 @@ msgid "Reversal"
 msgstr "Odwrotność"
 
 msgid "RESET"
-msgstr "RESET"
+msgstr "RESETUJ"
 
 msgid "DONE"
 msgstr "GOTOWE"
@@ -178,13 +187,13 @@ msgid "Settings"
 msgstr "Ustawienia"
 
 msgid "Position"
-msgstr "Pozycja"
+msgstr "Orientacja"
 
 msgid "Dark Mode"
 msgstr "Tryb ciemny"
 
 msgid "Countdown"
-msgstr ""
+msgstr "Odliczanie"
 
 msgid "Asset Information"
 msgstr "Informacje o aktywach"
@@ -196,7 +205,7 @@ msgid "[symbol] market is presently closed."
 msgstr "Rynek [symbol] jest obecnie zamknięty."
 
 msgid "Streaming for [symbol] is not available due to license restrictions"
-msgstr "Z powodu ograniczeń licencyjnych przesyłanie strumieniowe w przypadku [symbol] jest niedostępne"
+msgstr "Z powodu ograniczeń licencyjnych przesyłanie strumieniowe dla [symbol] jest niedostępne"
 
 msgid "Copy to clipboard"
 msgstr "Kopiuj do schowka"
@@ -217,7 +226,7 @@ msgid "Average Line"
 msgstr "Linia średniej"
 
 msgid "Callout"
-msgstr ""
+msgstr "Wezwanie"
 
 msgid "Channel"
 msgstr "Kanał"
@@ -292,10 +301,10 @@ msgid "Shape - Star"
 msgstr "Kształt – gwiazda"
 
 msgid "Speed Resistance Arc"
-msgstr "Łuk odporności na prędkość"
+msgstr "Łuk odporn. na prędkość"
 
 msgid "Speed Resistance Line"
-msgstr "Linia odporności na prędkość"
+msgstr "Linia odporn. na prędkość"
 
 msgid "Time Cycle"
 msgstr "Cykl czasu"
@@ -323,6 +332,9 @@ msgstr "kliknij prawym przyciskiem, aby usunąć"
 
 msgid "right-click to manage"
 msgstr "kliknij prawym przyciskiem, aby zarządzać"
+
+msgid "tap to manage"
+msgstr ""
 
 msgid "Chart data is not available for this symbol."
 msgstr "Dane wykresowe są niedostępne dla tego symbolu."
@@ -400,7 +412,7 @@ msgid "Aroon Up"
 msgstr "Aroon Up"
 
 msgid "Aroon Down"
-msgstr "Aroon Down (w dół)"
+msgstr "Aroon Down"
 
 msgid "Aroon Oscillator"
 msgstr "Oscylator Aroon"
@@ -448,7 +460,7 @@ msgid "Trade Volume Index"
 msgstr "Indeks wolumenu handlowego"
 
 msgid "Min Tick Value"
-msgstr "Wartość najmniejszej zmiany ceny"
+msgstr "Wartość min. zmiany ceny"
 
 msgid "Swing Index"
 msgstr "Indeks wahań"
@@ -478,7 +490,7 @@ msgid "Index"
 msgstr "Indeks"
 
 msgid "Negative Volume Index"
-msgstr "Wskaźnik ujemnego wolumenu"
+msgstr "Indeks ujemnego wolumenu"
 
 msgid "On Balance Volume"
 msgstr "Wolumen zbilansowany"
@@ -544,7 +556,7 @@ msgid "Twiggs Money Flow"
 msgstr "Przepływy pieniężne Twiggsa"
 
 msgid "Chaikin Money Flow"
-msgstr "Przepływy pieniężne Chaikin"
+msgstr "Przepływy pieniężne Chaikina"
 
 msgid "Chaikin Volatility"
 msgstr "Wskaźnik zmienności Chaikina"
@@ -700,7 +712,7 @@ msgid "Fractal High"
 msgstr "Fractal High"
 
 msgid "Fractal Low"
-msgstr "Fraktal Low"
+msgstr "Fractal Low"
 
 msgid "Fractal Channel"
 msgstr "Fractal Channel"
@@ -715,31 +727,31 @@ msgid "Prime Number Bands"
 msgstr "Wstęgi liczb pierwszych"
 
 msgid "Prime Bands Top"
-msgstr ""
+msgstr "Wstęgi Prime - góra"
 
 msgid "Prime Bands Bottom"
-msgstr ""
+msgstr "Wstęgi Prime - dół"
 
 msgid "Prime Bands Channel"
-msgstr ""
+msgstr "Kanał wstęg Prime"
 
 msgid "Prime Number Oscillator"
-msgstr "Prime Number Oscillator (Oscylator liczb pierwszych)"
+msgstr "Oscylator liczb pierwszych (Prime Number Oscillator)"
 
 msgid "Tolerance Percentage"
 msgstr "Margines tolerancji"
 
 msgid "Bollinger Bands"
-msgstr "Wstęga Bollingera"
+msgstr "Wstęgi Bollingera"
 
 msgid "Bollinger Bands Top"
-msgstr "Góra wstęgi Bollingera"
+msgstr "Wstęgi Bollingera - góra"
 
 msgid "Bollinger Bands Median"
-msgstr "Środek wstęgi Bollingera"
+msgstr "Średnia wstęg Bollingera"
 
 msgid "Bollinger Bands Bottom"
-msgstr "Dół wstęgi Bollingera"
+msgstr "Wstęgi Bollingera - dół"
 
 msgid "Donchian Channel"
 msgstr "Kanał Donchiana"
@@ -751,13 +763,13 @@ msgid "Low Period"
 msgstr "Okres niski"
 
 msgid "Donchian High"
-msgstr "Wysoka wartość kanału Donchiana"
+msgstr "Wysoka wstęga kanału Donchiana"
 
 msgid "Donchian Median"
-msgstr "Mediana kanału Donchiana"
+msgstr "Średnia wstęga kanału Donchiana"
 
 msgid "Donchian Low"
-msgstr "Niska wartość kanału Donchiana"
+msgstr "Niska wstęga kanału Donchiana"
 
 msgid "Highest High Value"
 msgstr "Najwyższa wysoka wartość"
@@ -769,19 +781,19 @@ msgid "Mass Index"
 msgstr "Indeks masowy\n"
 
 msgid "Bulge Threshold"
-msgstr ""
+msgstr "Próg wypukłości"
 
 msgid "Keltner Channel"
 msgstr "Kanał Keltnera"
 
 msgid "Keltner Top"
-msgstr "Góra kanału Keltnera"
+msgstr "Kanał Keltnera - góra"
 
 msgid "Keltner Median"
 msgstr "Średnia kanału Keltnera"
 
 msgid "Keltner Bottom"
-msgstr "Dół kanału Keltnera"
+msgstr "Kanał Keltnera - dół"
 
 msgid "Parabolic SAR"
 msgstr "Paraboliczny wskaźnik SAR"
@@ -817,10 +829,10 @@ msgid "Elder Force Index"
 msgstr "Wskaźnik EFI (Elder Force Index)"
 
 msgid "Linear Reg Slope"
-msgstr ""
+msgstr "Nachylenie regresji liniowej"
 
 msgid "Slope"
-msgstr ""
+msgstr "Nachylenie"
 
 msgid "Center Of Gravity"
 msgstr "Środek grawitacji"
@@ -829,7 +841,7 @@ msgid "Typical Price"
 msgstr "Typowa cena"
 
 msgid "Weighted Close"
-msgstr ""
+msgstr "Zamknięcie ważone"
 
 msgid "Money Flow Index"
 msgstr "Indeks przepływu pieniędzy"
@@ -838,7 +850,7 @@ msgid "Williams %R"
 msgstr "Williams %R"
 
 msgid "Accumulation/Distribution"
-msgstr ""
+msgstr "Akumulacja/dystrybucja"
 
 msgid "Use Volume"
 msgstr "Użyj wolumenu"
@@ -847,10 +859,10 @@ msgid "Volume Chart"
 msgstr "Wykres wolumenu"
 
 msgid "Up Volume"
-msgstr "Dół wolumenu"
+msgstr "Wolumen - góra"
 
 msgid "Down Volume"
-msgstr "Góra wolumenu"
+msgstr "Wolumen - dół"
 
 msgid "Volume Underlay"
 msgstr "Podkładka wolumenu"
@@ -886,7 +898,7 @@ msgid "3 Standard Deviation (3σ)"
 msgstr "3 odchylenia standardowe (3σ)"
 
 msgid "Correlation Coefficient"
-msgstr ""
+msgstr "Współczynnik korelacji"
 
 msgid "Price Momentum Oscillator"
 msgstr "Oscylator impetu ceny"
@@ -919,25 +931,25 @@ msgid "Scale Factor"
 msgstr "Czynnik skali"
 
 msgid "Green"
-msgstr "Zielony"
+msgstr "Zielone"
 
 msgid "Fade"
-msgstr ""
+msgstr "Brązowe"
 
 msgid "Fake"
-msgstr ""
+msgstr "Niebieskie"
 
 msgid "Squat"
-msgstr ""
+msgstr "Różowe"
 
 msgid "ATR Bands"
 msgstr "Wstęgi ATR"
 
 msgid "ATR Bands Top"
-msgstr "Góra wstęg ATR"
+msgstr "Wstęgi ATR - góra"
 
 msgid "ATR Bands Bottom"
-msgstr "Dół wstęg ATR"
+msgstr "Wstęgi ATR - dół"
 
 msgid "ATR Bands Channel"
 msgstr "Kanał wstęg ATR"
@@ -952,13 +964,13 @@ msgid "Multiplier"
 msgstr "Mnożnik"
 
 msgid "STARC Bands Top"
-msgstr "Góra wstęg STARC"
+msgstr "Wstęgi STARC - góra"
 
 msgid "STARC Bands Median"
 msgstr "Średnia wstęg STARC"
 
 msgid "STARC Bands Bottom"
-msgstr "Dół wstęg STARC"
+msgstr "Wstęgi STARC - dół"
 
 msgid "ATR Trailing Stops"
 msgstr "Zlecenia Trailing Stop ATR"
@@ -1063,13 +1075,13 @@ msgid "Show Fractals"
 msgstr "Pokaż fraktale"
 
 msgid "Jaw"
-msgstr "Szczęka"
+msgstr "Szczęka (Jaw)"
 
 msgid "Teeth"
-msgstr "Ząb"
+msgstr "Ząb (Teeth)"
 
 msgid "Lips"
-msgstr "Usta"
+msgstr "Usta (Lips)"
 
 msgid "Gator Oscillator"
 msgstr "Oscylator Gator"
@@ -1114,7 +1126,7 @@ msgid "Performance Index"
 msgstr "Wskaźnik efektywności"
 
 msgid "Gain"
-msgstr ""
+msgstr "Zysk"
 
 msgid "Loss"
 msgstr "Strata"
