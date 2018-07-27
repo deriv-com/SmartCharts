@@ -12,11 +12,11 @@ export default class ChartNotifier {
         this.removeByCategoryCallback(category);
     }
 
-    setMessageCallback(callback) {
+    onMessage(callback) {
         this.messageCallback = callback;
     }
 
-    setRemoveByCategoryCallback(callback) {
+    onRemoveByCategory(callback) {
         this.removeByCategoryCallback = callback;
     }
 }

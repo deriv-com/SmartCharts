@@ -5,8 +5,10 @@ class Notification extends React.Component {
     constructor(props) {
         super(props);
         this.state = { messages: [] };
+        props.notifier.onMessage(this.onMessage);
+        props.notifier.onRemoveByCategory(this.onRemoveByCategory);
     }
-    onMessage(message, duration = 10) {
+    onMessage = (message, duration = 10) => {
         const messages = this.state.messages;
         message.id = (new Date()).getTime();
         message.type = message.type || 'warning';
@@ -48,7 +50,7 @@ class Notification extends React.Component {
         });
     }
 
-    removeByCategory(category) {
+    onRemoveByCategory = (category) => {
         this.state.messages.map((msg) => {
             if (msg.category === category) {
                 this.onRemove(msg.id);
@@ -57,11 +59,6 @@ class Notification extends React.Component {
     }
 
     render() {
-        const { notifier } = this.props;
-
-        notifier.setMessageCallback(e => this.onMessage(e));
-        notifier.setRemoveByCategoryCallback(e => this.removeByCategory(e));
-
         return (
             <div className="cq-notifications">
                 {this.state.messages.map(message => (
