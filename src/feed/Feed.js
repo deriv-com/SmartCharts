@@ -11,7 +11,7 @@ class Feed {
     constructor(binaryApi, stx, mainStore) {
         this._stx = stx;
         this._binaryApi = binaryApi;
-        this._callbacks = {};
+        this._streamCallbacks = {};
         this._lastStreamEpoch = {};
         this._mainStore = mainStore;
         this._emitter = new EventEmitter({ emitDelay: 0 });
@@ -24,14 +24,22 @@ class Feed {
     // Do not call explicitly! Method below is called by ChartIQ when unsubscribing symbols.
     unsubscribe({ symbol, period, interval }) {
         const granularity = Feed.calculateGranularity(period, interval);
-        const key = `${symbol}-${granularity}`;
-        if (this._callbacks[key]) {
+        const key = this._getKey({ symbol, granularity });
+        this._forgetStream(key);
+    }
+
+    _forgetStream(key) {
+        const { symbol, granularity } = this._unpackKey(key);
+        if (this._streamCallbacks[key]) {
             this._binaryApi.forget({
                 symbol,
                 granularity,
-            }, this._callbacks[key]);
+            }, this._streamCallbacks[key]);
+            delete this._streamCallbacks[key];
+        }
+
+        if (this._lastStreamEpoch[key]) {
             delete this._lastStreamEpoch[key];
-            delete this._callbacks[key];
         }
     }
 
@@ -68,17 +76,17 @@ class Feed {
             // Strange issue where comparison series is offset by timezone...
             start -= suggestedStartDate.getTimezoneOffset() * 60;
         }
-        const key = `${symbol}-${granularity}`;
+        const key = this._getKey({ symbol, granularity });
         const comparisonChartSymbol = isComparisonChart ? symbol : undefined;
 
-        const dataRequest = {
+        const tickHistoryRequest = {
             start,
             symbol,
             granularity,
         };
 
         const [tickHistoryPromise, processTickHistory] = this._getProcessTickHistoryClosure(key, comparisonChartSymbol);
-        this._binaryApi.subscribeTickHistory(dataRequest, processTickHistory);
+        this._binaryApi.subscribeTickHistory(tickHistoryRequest, processTickHistory);
 
         let response = await tickHistoryPromise;
 
@@ -90,7 +98,7 @@ class Feed {
             const tParams = { symbol: symbolObject.name };
             if (/^(MarketIsClosed|NoRealtimeQuotes)$/.test(errorCode)) {
                 // Although market is closed, we display the past tick history data
-                response = await this._binaryApi.getTickHistory(dataRequest);
+                response = await this._binaryApi.getTickHistory(tickHistoryRequest);
                 this._mainStore.notification.notify({
                     text: t.translate('[symbol] market is presently closed.', tParams),
                     category: 'activesymbol',
@@ -113,7 +121,7 @@ class Feed {
                 return;
             }
         } else {
-            this._callbacks[key] = processTickHistory;
+            this._streamCallbacks[key] = processTickHistory;
         }
 
         const quotes = TickHistoryFormatter.formatHistory(response);
@@ -161,12 +169,8 @@ class Feed {
     }
 
     unsubscribeAll() {
-        for (const key in this._callbacks) {
-            const [symbol, granularity] = key.split('-');
-            this._binaryApi.forget({
-                symbol,
-                granularity,
-            }, this._callbacks[key]);
+        for (const key of Object.keys(this._streamCallbacks)) {
+            this._forgetStream(key);
         }
     }
 
@@ -240,17 +244,17 @@ class Feed {
     }
 
     _onConnectionClosed() {
+        this._streamCallbacks = {}; // prevent forget requests; active streams are invalid when connection closed
         this._connectionClosedDate = new Date();
     }
 
     _onConnectionReopened() {
         const keys = Object.keys(this._lastStreamEpoch);
         if (keys.length === 0) { return; }
-        const granularity = +keys[0].split('-')[1];
+        const { granularity } = this._unpackKey(keys[0]);
         const elapsedSeconds = (new Date() - this._connectionClosedDate) / 1000 | 0;
         const maxIdleSeconds = (granularity || 1) * this._stx.chart.maxTicks;
         if (elapsedSeconds >= maxIdleSeconds) {
-            this._callbacks = {}; // We don't need to send forget requests for a new connection
             this._mainStore.chart.refreshChart();
         } else {
             for (const key of keys) {
@@ -262,11 +266,13 @@ class Feed {
     }
 
     _resumeStream(key, start) {
-        const [symbol, granularity] = key.split('-');
+        if (this._streamCallbacks[key]) {
+            throw new Error('You cannot resume an active stream!');
+        }
+        const { symbol, granularity } = this._unpackKey(key);
         const comparisonChartSymbol = (this._stx.chart.symbol !== symbol) ? symbol : undefined;
         const [tickHistoryPromise, processTickHistory] = this._getProcessTickHistoryClosure(key, comparisonChartSymbol);
-        // override the processTickHistory callback with new processTickHistory
-        this._callbacks[key] = processTickHistory;
+        this._streamCallbacks[key] = processTickHistory;
         this._binaryApi.subscribeTickHistory({
             start,
             symbol,
@@ -275,6 +281,15 @@ class Feed {
         tickHistoryPromise.then((resp) => {
             this._appendHistory(resp, key, comparisonChartSymbol);
         });
+    }
+
+    _getKey({ symbol, granularity }) {
+        return `${symbol}-${granularity}`;
+    }
+
+    _unpackKey(key) {
+        const [symbol, granularity] = key.split('-');
+        return { symbol, granularity: +granularity };
     }
 }
 
