@@ -56,6 +56,42 @@ CIQ.Animation = function (stx, animationParameters, easeMachine) {
         nextBoundary = null;
     }
 
+    let shadowIndex = 0,
+        timer,
+        cqContext,
+        cqX,
+        cqY;
+
+    function SpotPulse(index) {
+        index = Math.round(index / 3);
+
+        let innerRadius = index,
+            outerRadius = index * 3,
+            radius = index * 2;
+
+        cqContext.clearRect(cqX, cqY, radius, 0, 4 * Math.PI);
+
+        let gradient = cqContext.createRadialGradient(cqX, cqY, innerRadius, cqX, cqY, outerRadius);
+        gradient.addColorStop(0, 'rgba(0, 156, 255,0.0');
+        gradient.addColorStop(0.9, `rgba(0, 156, 255,${(1 - index / 10)}`);
+
+        cqContext.arc(cqX, cqY, radius, 0, 2 * Math.PI);
+
+        cqContext.fillStyle = gradient;
+        cqContext.fill();
+    }
+
+    function spotDraw() {
+        shadowIndex++;
+        if (shadowIndex > 30) { shadowIndex = 0; }
+        SpotPulse(shadowIndex);
+
+        setTimeout(() => {
+            window.requestAnimationFrame(spotDraw);
+        }, 50);
+    }
+
+
     stx.addEventListener(['symbolChange', 'layout'], (obj) => {
         initMarketSessionFlags();
     });
@@ -255,6 +291,7 @@ CIQ.Animation = function (stx, animationParameters, easeMachine) {
         }
     });
 
+
     stx.append('draw', function () {
         if (filterSession) { return; }
         if (this.chart.dataSet && this.chart.dataSet.length && this.mainSeriesRenderer && this.mainSeriesRenderer.supportsAnimation) {
@@ -267,6 +304,8 @@ CIQ.Animation = function (stx, animationParameters, easeMachine) {
             let context = this.chart.context;
             let panel = this.chart.panel;
             let currentQuote = this.currentQuote();
+
+
             if (!currentQuote) { return; }
             let price = currentQuote.Close;
             let x = this.pixelFromTick(currentQuote.tick, this.chart);
@@ -276,11 +315,28 @@ CIQ.Animation = function (stx, animationParameters, easeMachine) {
                 this.chart.yAxis.top <= y &&
                 this.chart.yAxis.bottom >= y) {
                 if (flashingColorIndex >= flashingColors.length) { flashingColorIndex = 0; }
+
+
                 context.beginPath();
                 context.moveTo(x, y);
-                context.arc(x, y, 2 + flashingColorIndex * 1.07, 0, Math.PI * 2, false);
-                context.fillStyle = flashingColors[flashingColorIndex];
+                context.arc(x, y, 2 +  1.07, 0, Math.PI * 2, false);
+                context.fillStyle = flashingColors[0];
                 context.fill();
+
+
+                cqContext = context;
+                cqX = x;
+                cqY = y;
+                cqContext.save();
+
+                shadowIndex++;
+                if (shadowIndex > 30) { shadowIndex = 0; }
+                SpotPulse(shadowIndex);
+
+                clearTimeout(timer);
+                timer = setTimeout(() => {
+                    // spotDraw();
+                }, 40);
             }
         }
     });
