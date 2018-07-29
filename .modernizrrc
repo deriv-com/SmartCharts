@@ -1,0 +1,24 @@
+{
+  "minify": true,
+  "options": [
+    "domPrefixes",
+    "hasEvent",
+    "testAllProps",
+    "testProp",
+    "html5shiv",
+    "setClasses"
+  ],
+  "feature-detects": [
+    "test/history",
+    "test/storage/localstorage",
+    "test/svg",
+    "test/es5/object",
+    "test/es6/array",
+    "test/es6/object",
+    "test/css/borderimage",
+    "test/css/flexbox",
+    "test/css/transforms",
+    "test/css/transformstylepreserve3d",
+    "test/css/transforms3d"
+  ]
+}

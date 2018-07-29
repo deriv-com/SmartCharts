@@ -96,6 +96,8 @@
   "dependencies": {
     "event-emitter-es6": "^1.1.5",
     "lodash.debounce": "^4.0.8",
+    "modernizr": "^3.6.0",
+    "modernizr-loader": "^1.0.1",
     "prop-types": "^15.6.0",
     "react-perfect-scrollbar": "^1.1.1",
     "react-transition-group": "^2.3.1",

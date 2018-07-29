@@ -71,6 +71,14 @@ const config = {
                 test: /\.po$/,
                 loader: 'json-loader!po-loader',
             },
+            {
+                test: /\.modernizrrc.js$/,
+                use: 'modernizr-loader'
+            },
+            {
+                test: /\.modernizrrc(\.json)?$/,
+                loader: "modernizr-loader!json-loader"
+            },
         ],
     },
     plugins: [
@@ -121,6 +129,7 @@ if (isApp) {
     config.resolve = {
         alias: {
             '@binary-com/smartcharts': path.resolve(__dirname, 'src/'),
+            modernizr$: path.resolve(__dirname, '.modernizrrc')
         },
     };
     config.plugins.push(new CopyWebpackPlugin([

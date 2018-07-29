@@ -15,6 +15,7 @@ import { // eslint-disable-line import/no-extraneous-dependencies,import/no-unre
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { configure } from 'mobx';
+import SupportDetection from './SupportDetection';
 import './app.scss';
 import './doorbell';
 import { ConnectionManager, StreamManager } from './connection';
@@ -97,18 +98,20 @@ class App extends Component {
         const { settings } = this.state;
 
         return (
-            <SmartChart
-                onSymbolChange={symbol => console.log('Symbol has changed to:', symbol)}
-                isMobile={CIQ.isMobile}
-                enableRouting
-                chartControlsWidgets={renderControls}
-                requestAPI={requestAPI}
-                requestSubscribe={requestSubscribe}
-                requestForget={requestForget}
-                shareOrigin={shareOrigin}
-                settings={settings}
-                onSettingsChange={this.saveSettings}
-            />
+            <SupportDetection>
+                <SmartChart
+                    onSymbolChange={symbol => console.log('Symbol has changed to:', symbol)}
+                    isMobile={CIQ.isMobile}
+                    enableRouting
+                    chartControlsWidgets={renderControls}
+                    requestAPI={requestAPI}
+                    requestSubscribe={requestSubscribe}
+                    requestForget={requestForget}
+                    shareOrigin={shareOrigin}
+                    settings={settings}
+                    onSettingsChange={this.saveSettings}
+                />
+            </SupportDetection>
         );
     }
 }
