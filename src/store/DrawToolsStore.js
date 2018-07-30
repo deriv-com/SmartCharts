@@ -89,10 +89,13 @@ export default class DrawToolsStore {
         const vectorType = this.stx.currentVectorParameters.vectorType;
         const img = document.getElementById('drawing-mouse-pointer');
         const container = document.getElementsByClassName('chartContainer primary')[0];
+        const crosshairX = document.getElementsByClassName('stx_crosshair_x')[0];
+        const crosshairY = document.getElementsByClassName('stx_crosshair_y')[0];
+
         if (vectorType) {
             img.style.display = 'block';
-            img.style.left = `${e.clientX || e.touches[0].clientX}px`;
-            img.style.top = `${(e.clientY || e.touches[0].clientY) - 16}px`;
+            img.style.left = `${crosshairX.offsetLeft}px`;
+            img.style.top = `${crosshairY.offsetTop - 16}px`;
             container.style.cursor = 'none';
         } else {
             img.style.display = 'none';
