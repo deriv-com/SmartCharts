@@ -3,6 +3,11 @@ import sinon from 'sinon';
 import PendingPromise from '../../../src/utils/PendingPromise';
 
 export class DummyConnectionManager extends EventEmitter {
+    constructor() {
+        super({ emitDelay: 0 });
+        this.send = sinon.fake(this.send.bind(this));
+    }
+
     onOpened() {
     }
 
@@ -14,7 +19,6 @@ export class DummyConnectionManager extends EventEmitter {
         this.emit('close');
     }
 
-    sendSpy = sinon.spy();
     _response = null;
 
     set response(val) {
@@ -26,20 +30,11 @@ export class DummyConnectionManager extends EventEmitter {
         this._response = val;
     }
 
-    constructor() {
-        super({ emitDelay: 0 });
-    }
-
     send(request) {
         if (!this._response && !this.pendingRequest) {
             this.pendingRequest = new PendingPromise();
             return this.pendingRequest;
         }
-
-        this.sendSpy({
-            request,
-            response: this._response,
-        });
 
         return Promise.resolve(this._response);
     }
