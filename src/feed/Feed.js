@@ -143,21 +143,39 @@ class Feed {
     }
 
     async fetchPaginationData(symbol, suggestedStartDate, endDate, params, callback) {
-        const start = getUTCEpoch(suggestedStartDate);
         const end   = getUTCEpoch(endDate);
-        const now   = getUTCEpoch(new Date());
-        const startLimit = now - (2.8 * 365 * 24 * 60 * 60);
+        const start = getUTCEpoch(suggestedStartDate);
         const { period, interval } = params;
+        const granularity = Feed.calculateGranularity(period, interval);
 
+        await this._getPaginationData(symbol, granularity, start, end, callback);
+    }
+
+    async _getPaginationData(symbol, granularity, start, end, callback) {
+        const now   = getUTCEpoch(new Date());
+        // Tick history data only goes as far back as 3 years:
+        const startLimit = now - (2.8 * 365 * 24 * 60 * 60 /* == 3 Years */);
         let result = { quotes: [] };
         if (end > startLimit) {
             try {
                 const response = await this._binaryApi.getTickHistory({
                     symbol,
-                    granularity: Feed.calculateGranularity(period, interval),
+                    granularity,
                     start: Math.max(start, startLimit),
                     end,
                 });
+                const firstEpoch = Feed.getFirstEpoch(response);
+                if (firstEpoch === undefined || firstEpoch === end) {
+                    const newStart = start - (end - start);
+                    if (newStart <= startLimit) {
+                        // Passed available range. Prevent anymore pagination requests:
+                        callback({ moreAvailable: false, quotes: [] });
+                        return;
+                    }
+                    // Recursively extend the date range for more data until we exceed available range
+                    await this._getPaginationData(symbol, granularity, newStart, end, callback);
+                    return;
+                }
                 result.quotes = TickHistoryFormatter.formatHistory(response);
             } catch (err) {
                 console.error(err);
@@ -203,6 +221,15 @@ class Feed {
 
     static getEpochFromTick({ tick, ohlc }) {
         return tick ? tick.epoch : ohlc.open_time;
+    }
+
+    static getFirstEpoch({ candles, history }) {
+        if (candles && candles.length > 0) {
+            return candles[0].epoch;
+        } else if (history && history.times.length > 0) {
+            const { times } = history;
+            return +times[0];
+        }
     }
 
     static getLatestEpoch({ candles, history }) {
