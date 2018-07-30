@@ -1,13 +1,13 @@
 /**
- *	5.2.3
- *	Generation date: 2018-06-20T18:34:29.971Z
- *	Client Name: binarydotcom
+ *	6.1.0
+ *	Generation date: 2018-07-19T13:42:27.138Z
+ *	Client name: binarydotcom
+ *	License type: annual
  *	Expiration date: "2019/01/01"
  *	Domain lock: ["127.0.0.1","localhost","binary.com","binary.sx"]
- *	License type: annual
- *	iFrames locked
- *	Full Bundle
+ *	iFrame lock: true
  */
+
 /* Copyright 2014-2018 ChartIQ LLC */
 
 /***************************************************************************/
@@ -73,7 +73,7 @@
 		factory(root);
 	}
 })(this, function(_exports) {
-var __drawing_ =
+var __js_drawing_ =
 //-------------------------------------------------------------------------------------------
 // Copyright 2012-2017 by ChartIQ, Inc.
 // All rights reserved
@@ -133,7 +133,7 @@ var __drawing_ =
 		}catch(e){}
 		if(!drawing) return null;
 		drawing.stx=stx;
-		drawing.copyConfig();
+		drawing.copyConfig(true);
 		var result={};
 		var confs=drawing.configs;
 		for(var c=0;c<confs.length;c++){
@@ -147,6 +147,47 @@ var __drawing_ =
 			result.font.weight = style.fontWeight;
 		}
 		return result;
+	};
+
+	/**
+	 * Static method for saving drawing parameters to preferences.
+	 * 
+	 * Values are stored in `stxx.preferences.drawings` and can be saved together with the rest of the chart preferences, 
+	 * which by default are placed in the browser's local storage under "myChartPreferences". 
+	 * @param {CIQ.ChartEngine} stx Chart object
+	 * @param {string} toolName Name of drawing tool, e.g. "ray", "segment", "fibonacci"
+	 * @memberOf CIQ.Drawing
+	 * @since 6.0.0
+	 */
+	CIQ.Drawing.saveConfig=function(stx, toolName){
+		if(!toolName) return;
+		var preferences=stx.preferences;
+		if(!preferences.drawings) preferences.drawings={};
+		preferences.drawings[toolName]={};
+		var tempDrawing=new CIQ.Drawing[toolName]();
+		tempDrawing.stx=stx;
+		CIQ.Drawing.copyConfig(tempDrawing);
+		tempDrawing.configs.forEach(function(config){
+			preferences.drawings[toolName][config]=tempDrawing[config];
+		});
+		stx.changeOccurred("preferences");
+	};
+	
+	/**
+	 * Static method for restoring default drawing parameters, and removing custom preferences.
+	 * 
+	 * @param {CIQ.ChartEngine} stx Chart object
+	 * @param {string} toolName Name of active drawing tool, e.g. "ray", "segment", "fibonacci"
+	 * @param {boolean} all True to restore default for all drawing objects.  Otherwise only the active drawing object's defaults are restored.
+	 * @memberOf CIQ.Drawing
+	 * @since 6.0.0
+	 */
+	CIQ.Drawing.restoreDefaultConfig=function(stx, toolName, all){
+		if(all) stx.preferences.drawings=null;
+		else stx.preferences.drawings[toolName]=null;
+		stx.changeOccurred('preferences');
+		stx.currentVectorParameters=CIQ.clone(CIQ.ChartEngine.currentVectorParameters);
+		stx.currentVectorParameters.vectorType=toolName;		
 	};
 
 	/**
@@ -167,32 +208,53 @@ var __drawing_ =
 	/**
 	 * Instance function used to copy the relevant drawing parameters into itself.
 	 * It just calls the static function.
+	 * @param {boolean} withPreferences set to true to return previously saved preferences
 	 * @memberOf CIQ.Drawing
 	 * @since 3.0.0
 	 */
-	CIQ.Drawing.prototype.copyConfig=function(){
-		CIQ.Drawing.copyConfig(this);
+	CIQ.Drawing.prototype.copyConfig=function(withPreferences){
+		CIQ.Drawing.copyConfig(this, withPreferences);
 	};
 	/**
 	 * Static function used to copy the relevant drawing parameters into the drawing instance.
 	 * Use this when overriding the Instance function, to perform basic copy before performing custom operations.
 	 * @param {CIQ.Drawing} drawingInstance to copy into
+	 * @param {boolean} withPreferences set to true to return previously saved preferences
 	 * @memberOf CIQ.Drawing
 	 * @since 3.0.0
+	 * @since 6.0.0 overwrites parameters with those stored in preferences.drawings
 	 */
-	CIQ.Drawing.copyConfig=function(drawingInstance){
+	CIQ.Drawing.copyConfig=function(drawingInstance, withPreferences){
+		var cvp=drawingInstance.stx.currentVectorParameters;
 		var configs=drawingInstance.configs;
-		for(var c=0;c<configs.length;c++){
-			var conf=configs[c];
-			var cvp=drawingInstance.stx.currentVectorParameters;
+		var c, conf;
+		for(c=0;c<configs.length;c++){
+			conf=configs[c];
 			if(conf=="color"){
 				drawingInstance.color=cvp.currentColor;
 			}else if(conf=="parameters"){
-				drawingInstance.parameters=cvp.fibonacci;
+				drawingInstance.parameters=CIQ.clone(cvp.fibonacci);
 			}else if(conf=="font"){
 				drawingInstance.font=CIQ.clone(cvp.annotation.font);
 			}else{
 				drawingInstance[conf]=cvp[conf];
+			}
+		}
+		if(!withPreferences) return;
+		var customPrefs=drawingInstance.stx.preferences;
+		if(customPrefs && customPrefs.drawings){
+			CIQ.extend(drawingInstance, customPrefs.drawings[cvp.vectorType]);
+			for(c=0;c<configs.length;c++){
+				conf=configs[c];
+				if(conf=="color"){
+					cvp.currentColor=drawingInstance.color;
+				}else if(conf=="parameters"){
+					cvp.fibonacci=CIQ.clone(drawingInstance.parameters);
+				}else if(conf=="font"){
+					cvp.annotation.font=CIQ.clone(drawingInstance.font);
+				}else{
+					cvp[conf]=drawingInstance[conf];
+				}
 			}
 		}
 	};
@@ -355,6 +417,7 @@ var __drawing_ =
 	};
 
 	CIQ.Drawing.prototype.littleCircle=function(ctx, x, y, fill){
+		if(this.permanent) return;
 		var strokeColor=this.stx.defaultColor;
 		var fillColor=CIQ.chooseForegroundColor(strokeColor);
 		ctx.beginPath();
@@ -363,12 +426,14 @@ var __drawing_ =
 		if(fill) ctx.fillStyle=strokeColor;
 		else ctx.fillStyle=fillColor;
 		ctx.strokeStyle=strokeColor;
+		ctx.setLineDash([]);
 		ctx.fill();
 		ctx.stroke();
 		ctx.closePath();
 	};
 
 	CIQ.Drawing.prototype.rotator=function(ctx, x, y, on){
+		if(this.permanent) return;
 		var circleSize=this.littleCircleRadius();
 		var strokeColor=this.stx.defaultColor;
 		ctx.beginPath();
@@ -389,6 +454,7 @@ var __drawing_ =
 	};
 
 	CIQ.Drawing.prototype.mover=function(ctx, x, y, on){
+		if(this.permanent) return;
 		var circleSize=this.littleCircleRadius();
 		var strokeColor=this.stx.defaultColor;
 		var length=5;
@@ -414,6 +480,7 @@ var __drawing_ =
 	};
 
 	CIQ.Drawing.prototype.resizer=function(ctx, x, y, on){
+		if(this.permanent) return;
 		var circleSize=this.littleCircleRadius();
 		var strokeColor=this.stx.defaultColor;
 		var length=5*Math.sqrt(2);
@@ -539,12 +606,16 @@ var __drawing_ =
 	 * determined by the kernel depending on the user interface (mouse, touch, etc)
 	 * @memberOf CIQ.Drawing.BaseTwoPoint
 	 */
-
-
-	CIQ.Drawing.BaseTwoPoint.prototype.lineIntersection=function(tick, value, box, type){
-		var p0=this.p0, p1=this.p1, layout=this.stx.layout;
-		var panel=this.stx.panels[this.panelName];
-		return p0 && p1 && panel && CIQ.boxIntersects(box.x0, box.y0, box.x1, box.y1, p0[0], p0[1], p1[0], p1[1], type, panel.yAxis.semiLog);
+	CIQ.Drawing.BaseTwoPoint.prototype.lineIntersection=function(tick, value, box, type, p0, p1, isPixels){
+		if(!p0) p0=this.p0;
+		if(!p1) p1=this.p1;
+		var stx=this.stx;
+		if(!(p0 && p1)) return false;
+		var pixelBox=CIQ.convertBoxToPixels(stx, this.panelName, box);
+		if(pixelBox.x0===undefined) return false;
+		var pixelPoint={x0:p0[0], x1:p1[0], y0:p0[1], y1:p1[1]};
+		if(!isPixels) pixelPoint=CIQ.convertBoxToPixels(stx, this.panelName, pixelPoint);
+		return CIQ.boxIntersects(pixelBox.x0, pixelBox.y0, pixelBox.x1, pixelBox.y1, pixelPoint.x0, pixelPoint.y0, pixelPoint.x1, pixelPoint.y1, type);
 	};
 
 	/**
@@ -656,6 +727,7 @@ var __drawing_ =
 			this.render(context);
 		}
 	};
+
 	/**
 	 * Annotation drawing tool. An annotation is a simple text tool. It uses the class stx_annotation
 	 * to determine the font style and color for the annotation. Class stx_annotation_highlight_bg is used to
@@ -1156,6 +1228,7 @@ var __drawing_ =
 				pattern: this.pattern,
 				lineWidth: width
 		};
+		if(parameters.pattern=="none") parameters.pattern="solid";
 		this.stx.plotLine(x0, x1, y0, y1, color, this.name, context, panel, parameters);
 
 		if(this.axisLabel && !this.repositioner){
@@ -1169,7 +1242,7 @@ var __drawing_ =
 					txt=this.stx.formatYAxisPrice(txt, panel);
 				this.stx.createYAxisLabel(panel, txt, y0, color);
 				this.stx.startClip(panel.name);
-			}else if(this.name=="vertical" && this.p0[0]>=0 && !CIQ.ChartEngine.hideDates()) {  // don't try to compute dates from before dataSet
+			}else if(this.name=="vertical" && this.p0[0]>=0 && !this.stx.chart.xAxis.noDraw) {  // don't try to compute dates from before dataSet
 				var dt, newDT;
 				dt=this.stx.dateFromTick(this.p0[0], panel.chart, true);
 				if(!CIQ.ChartEngine.isDailyInterval(this.stx.layout.interval)){
@@ -1217,22 +1290,21 @@ var __drawing_ =
 
 	CIQ.Drawing.segment.prototype.intersected=function(tick, value, box){
 		if(!this.p0 || !this.p1) return null; // in case invalid drawing (such as from panel that no longer exists)
-		if(this.name!="horizontal" && this.name!="vertical" && this.name!="gartley"){
-			if(this.pointIntersection(this.p0[0], this.p0[1], box)){
-				this.highlighted="p0";
-				return {
-					action: "drag",
-					point: "p0"
-				};
-			}else if(this.pointIntersection(this.p1[0], this.p1[1], box)){
-				this.highlighted="p1";
-				return {
-					action: "drag",
-					point: "p1"
-				};
+		var name=this.name;
+		if(name!="horizontal" && name!="vertical" && name!="gartley"){
+			var pointsToCheck={0:this.p0, 1:this.p1};
+			for(var pt in pointsToCheck){
+				if(this.pointIntersection(pointsToCheck[pt][0], pointsToCheck[pt][1], box)){
+					this.highlighted="p"+pt;
+					return {
+						action: "drag",
+						point: "p"+pt
+					};	
+				}
 			}
 		}
-		var isIntersected=this.lineIntersection(tick, value, box, this.name);
+		if(name=="horizontal" || name=="vertical") name="line";
+		var isIntersected=this.lineIntersection(tick, value, box, name);
 		if(isIntersected){
 			this.highlighted=true;
 			// This object will be used for repositioning
@@ -1249,9 +1321,9 @@ var __drawing_ =
 
 	CIQ.Drawing.segment.prototype.configs=["color","lineWidth","pattern"];
 
-	CIQ.Drawing.segment.prototype.copyConfig=function(){
-		CIQ.Drawing.copyConfig(this);
-		if(this.pattern=="none") this.pattern="solid";
+	CIQ.Drawing.segment.prototype.copyConfig=function(withPreferences){
+		CIQ.Drawing.copyConfig(this,withPreferences);
+		if(this.pattern=="none" && this.configs.indexOf("fillColor")==-1) this.pattern="solid";
 	};
 
 	/**
@@ -1612,11 +1684,6 @@ var __drawing_ =
 
 	CIQ.Drawing.horizontal.prototype.configs=["color","lineWidth","pattern","axisLabel"];
 
-	CIQ.Drawing.horizontal.prototype.copyConfig=function(){
-		CIQ.Drawing.copyConfig(this);
-		if(this.pattern=="none") this.pattern="solid";
-	};
-
 	/**
 	 * Vertical line drawing tool. The vertical line extends infinitely in both directions.
 	 *
@@ -1729,18 +1796,15 @@ var __drawing_ =
 
 	CIQ.Drawing.rectangle.prototype.intersected=function(tick, value, box){
 		if(!this.p0 || !this.p1) return null; // in case invalid drawing (such as from panel that no longer exists)
-		if(this.pointIntersection(this.p0[0], this.p0[1], box)){
-			this.highlighted="p0";
-			return {
-				action: "drag",
-				point: "p0"
-			};
-		}else if(this.pointIntersection(this.p1[0], this.p1[1], box)){
-			this.highlighted="p1";
-			return {
-				action: "drag",
-				point: "p1"
-			};
+		var pointsToCheck={0:this.p0, 1:this.p1};
+		for(var pt in pointsToCheck){
+			if(this.pointIntersection(pointsToCheck[pt][0], pointsToCheck[pt][1], box)){
+				this.highlighted="p"+pt;
+				return {
+					action: "drag",
+					point: "p"+pt
+				};	
+			}
 		}
 		if(this.boxIntersection(tick, value)){
 			this.highlighted=true;
@@ -2015,30 +2079,36 @@ var __drawing_ =
 	 * Calculate the outer points of the fib series, which are used to detect highlighting
 	 */
 	CIQ.Drawing.fibonacci.prototype.setOuter=function(){
+		var stx=this.stx, panel=stx.panels[this.panelName];
+		if(!panel) return;
+		var max=Math.max(this.p0[1],this.p1[1]);
+		var min=Math.min(this.p0[1],this.p1[1]);
+		var dist=max-min;
+
 		this.outer={
 				p0: CIQ.clone(this.p0),
 				p1: CIQ.clone(this.p1)
 		};
-		var y0=this.p0[1];
-		var y1=this.p1[1];
-		var x0=this.p0[0];
-		var x1=this.p1[0];
+		var y0=stx.pixelFromValueAdjusted(panel, this.p0[0], this.p0[1]);
+		var y1=stx.pixelFromValueAdjusted(panel, this.p1[0], this.p1[1]);
+		var x0=stx.pixelFromTick(this.p0[0],panel.chart);
+		var x1=stx.pixelFromTick(this.p1[0],panel.chart);
 
-		var min=0;
-		var max=1;
+		var minFib=0;
+		var maxFib=1;
 		for(var i=0;i<this.parameters.fibs.length;i++){
 			var fib=this.parameters.fibs[i];
-			if((fib.level>=min && fib.level<=max) || !fib.display) continue;
-			var val=y1-(y1-y0)*fib.level;
-			var x=CIQ.xIntersection({x0:x0,x1:x1,y0:y0,y1:y1}, val);
-			if(fib.level<min){
-				min=fib.level;
-				this.outer.p1[1]=val;
-				this.outer.p1[0]=x;
-			}else if(fib.level>max){
-				max=fib.level;
-				this.outer.p0[1]=val;
-				this.outer.p0[0]=x;
+			if((fib.level>=minFib && fib.level<=maxFib) || !fib.display) continue;
+			var y=stx.pixelFromValueAdjusted(panel, this.p0[0], (y1<y0)?max-dist*fib.level:min+dist*fib.level);
+			var x=CIQ.xIntersection({x0:x0,x1:x1,y0:y0,y1:y1}, y);
+			if(fib.level<minFib){
+				minFib=fib.level;
+				this.outer.p1[1]=stx.valueFromPixel(y, panel);
+				this.outer.p1[0]=stx.tickFromPixel(x, panel.chart);
+			}else if(fib.level>maxFib){
+				maxFib=fib.level;
+				this.outer.p0[1]=stx.valueFromPixel(y, panel);
+				this.outer.p0[0]=stx.tickFromPixel(x, panel.chart);
 			}
 		}
 	};
@@ -2089,6 +2159,7 @@ var __drawing_ =
 		var minX=Number.MAX_VALUE, minY=Number.MAX_VALUE, maxX=Number.MAX_VALUE*-1, maxY=Number.MAX_VALUE*-1;
 		var txtColor=this.color;
 		if(txtColor=="auto" || CIQ.isTransparent(txtColor)) txtColor=this.stx.defaultColor;
+		this.rays=[];
 		for(var i=0;i<this.parameters.fibs.length;i++){
 			context.textAlign="left";
 			context.fillStyle=txtColor;
@@ -2131,7 +2202,10 @@ var __drawing_ =
 			if(fillColor=="auto" || CIQ.isTransparent(fillColor)) fillColor=this.fillColor;
 			if(fillColor=="auto" || CIQ.isTransparent(fillColor)) fillColor=this.stx.defaultColor;
 			context.fillStyle=fillColor;
-			this.stx.plotLine(nearX, farX, y, y, fibColor, "segment", context, panel, fib.parameters);
+			var fibParameters=CIQ.clone(fib.parameters);
+			if(this.highlighted) fibParameters.opacity=1;
+			this.stx.plotLine(nearX, farX, y, y, this.highlighted?trendLineColor:fibColor, "segment", context, panel, fibParameters);
+			this.rays.push([[nearX,y],[farX,y]]);
 			context.globalAlpha=0.05;
 			context.beginPath();
 			context.moveTo(farX,y);
@@ -2163,7 +2237,9 @@ var __drawing_ =
 				maxY=yy;
 			}
 		}
-		this.stx.plotLine(minX, maxX, minY, maxY, trendLineColor, "segment", context, panel, this.parameters.trend.parameters);
+		var trendParameters=CIQ.clone(this.parameters.trend.parameters);
+		if(this.highlighted) trendParameters.opacity=1;
+		this.stx.plotLine(minX, maxX, minY, maxY, trendLineColor, "segment", context, panel, trendParameters);
 		if(this.highlighted){
 			var p0Fill=this.highlighted=="p0"?true:false;
 			var p1Fill=this.highlighted=="p1"?true:false;
@@ -2179,26 +2255,31 @@ var __drawing_ =
 	};
 
 	CIQ.Drawing.fibonacci.prototype.intersected=function(tick, value, box){
-		//TODO, find some efficient way to allow an intersection across the entire trend line, not just between the two clicked points
-		var p0=this.p0, p1=this.p1, outer=this.outer, layout=this.stx.layout, panel=this.stx.panels[this.panelName];
-		if(!p0 || !p1 || !panel) return null; // in case invalid drawing (such as from panel that no longer exists)
-		var intersects=CIQ.boxIntersects(box.x0, box.y0, box.x1, box.y1, outer.p0[0], outer.p0[1], outer.p1[0], outer.p1[1], "segment", panel.yAxis.semiLog);
-		if(intersects){
-			if(this.pointIntersection(p0[0], p0[1], box)){
-				this.highlighted="p0";
+		var p0=this.p0, p1=this.p1;
+		if(!p0 || !p1) return null; // in case invalid drawing (such as from panel that no longer exists)
+		var pointsToCheck={0:p0, 1:p1};
+		for(var pt in pointsToCheck){
+			if(this.pointIntersection(pointsToCheck[pt][0], pointsToCheck[pt][1], box)){
+				this.highlighted="p"+pt;
 				return {
 					action: "drag",
-					point: "p0"
-				};
-			}else if(this.pointIntersection(p1[0], p1[1], box)){
-				this.highlighted="p1";
-				return {
-					action: "drag",
-					point: "p1"
-				};
+					point: "p"+pt
+				};	
 			}
-			// This object will be used for repositioning
+		}
+		var outer=this.outer, rays=this.rays;
+		var isIntersected=outer && this.lineIntersection(tick, value, box, "segment", outer.p0, outer.p1);
+		if(!isIntersected){
+			for(var i=0; i<rays.length; i++){
+				if(this.lineIntersection(tick, value, box, "ray", rays[i][0], rays[i][1], true)){
+					isIntersected=true;
+					break;
+				}
+			}
+		}
+		if(isIntersected){
 			this.highlighted=true;
+			// This object will be used for repositioning
 			return {
 				action: "move",
 				p0: CIQ.clone(p0),
@@ -2314,6 +2395,8 @@ var __drawing_ =
 			getDrawingParameters:true,
 			getDrawingToolList:true,
 			initializeSettings:true,
+			restoreDefaultConfig:true,
+			saveConfig:true,
 			BaseTwoPoint:true,
 			shape:true
 		};
@@ -2328,7 +2411,7 @@ var __drawing_ =
 	return _exports;
 });
 
-var __i18n_ =
+var __js_i18n_ =
 //-------------------------------------------------------------------------------------------
 // Copyright 2012-2017 by ChartIQ, Inc.
 // All rights reserved
@@ -2658,7 +2741,7 @@ CIQ.I18N.convertCSV(csv);
 	 */
 	CIQ.I18N.convertCSV=function(csv){
 		var curly=new RegExp("[\u201C\u201D]|[\u2018\u2019]","g");
-		var quotation=new RegExp("^(\"+)|(\"(?=\"))","g");
+		var quotation=new RegExp("^(\")|(\")$","g");
 		var wordLists=CIQ.I18N.wordLists;
 		if(!csv) csv=CIQ.I18N.csv;
 		var lines=csv.split("\n");
@@ -2858,7 +2941,7 @@ CIQ.I18N.convertCSV(csv);
 
 });
 
-var __markers_ =
+var __js_markers_ =
 //-------------------------------------------------------------------------------------------
 // Copyright 2012-2017 by ChartIQ, Inc.
 // All rights reserved
@@ -3461,13 +3544,14 @@ var __markers_ =
 			// Y axis positioning logic
 			var y=mparams.y, clientHeight=node.clientHeight, val;
 			if(yPositioner!="none"){
+				var placementKey = yPositioner+'-'+node.style.left;
 				var height=mparams.chartContainer?stx.height:panel.yAxis.bottom;
 				var bottom=0, bottomAdjust=0;
-				if (typeof placementMap[node.style.left]=="undefined"){
-					placementMap[node.style.left]=0;
+				if (typeof placementMap[placementKey]=="undefined"){
+					placementMap[placementKey]=0;
 				}
-				bottomAdjust = placementMap[node.style.left];
-				placementMap[node.style.left]+=clientHeight;
+				bottomAdjust = placementMap[placementKey];
+				placementMap[placementKey]+=clientHeight;
 
 				if(yPositioner=="value" && y){
 					bottom=Math.round(height-stx.pixelFromPrice(y, panel, yAxis)-clientHeight/2)+"px";
@@ -3554,7 +3638,7 @@ var __markers_ =
 	return _exports;
 });
 
-var __quoteFeed_ =
+var __js_quoteFeed_ =
 //-------------------------------------------------------------------------------------------
 // Copyright 2012-2017 by ChartIQ, Inc.
 // All rights reserved
@@ -3673,12 +3757,13 @@ var __quoteFeed_ =
 	 * @param {Boolean} [params.fetchMaximumBars]	-If set to true, the chart requires as much historical data as is available from the feed (params.ticks may also be set to 20,000 to set a safety max), regardless of start date. This is needed for some chart types since they aggregate data (kagi,renko, or linebreak, for example). Developers implementing fetch, should override params.tick and use a smaller number if their feed can't support that much data being sent back. The engine will then make multiple smaller calls to get enough data to fill the screen.
 	 * @param {number} params.ticks 				-The suggested number of data points to return. This is calculated as twice the number of bars displayed on the chart. This can be used as an alternative to suggestedStartDate.
 	 * @param {number} [params.timeout=10000]		-This may be used to set the timeout in msec of the remote server request.
+	 * @param {Boolean} [params.future]             -If set to true, the chart is scrolling in a 'forward' direction
 	 * @param  {quotefeed~dataCallback} cb			-Call this function with the results (or error) of your data request.
 	 * @since 4.1.2 Added timeout parameter.
+	 * @since 6.0.0 Added params.future
 	 * @memberOf quotefeed
 	 */
 	quotefeed.fetchPaginationData=function(symbol, suggestedStartDate, endDate, params, cb){};
-
 
 	/**
 	 * See [Data Integration : Advanced]{@tutorial DataIntegrationAdvanced}
@@ -4093,6 +4178,8 @@ var __quoteFeed_ =
 		this.stx=stx;
 		this.quoteFeed=quoteFeed;
 		if(!behavior.maximumTicks) behavior.maximumTicks=quoteFeed.maxTicks?quoteFeed.maxTicks:20000; // Historically this is the safest limit of ticks to fetch for response time
+		if(!behavior.bufferSize || behavior.bufferSize<0) behavior.bufferSize=0;
+		behavior.bufferSize=Math.round(behavior.bufferSize);
 		this.behavior=behavior;
 		this.loadingNewChart=false;	// This gets set to true when loading a new chart in order to prevent refreshes while waiting for data back from the server
 		this.intervalTimer=null;	// This is the window.setInterval which can be cleared to stop the updating loop
@@ -4115,6 +4202,10 @@ var __quoteFeed_ =
 		if(this.quoteFeed.checkSubscriptions) this.quoteFeed.checkSubscriptions(this.stx);
 	};
 
+	/**
+	 * @deprecated
+	 * @private
+	 */
 	CIQ.ChartEngine.Driver.prototype.attachTagAlongQuoteFeed=function(feed){
 		if (!feed.label) return;
 		if(!this.tagalongs[feed.label]){
@@ -4128,6 +4219,10 @@ var __quoteFeed_ =
 		this.tagalongs[feed.label].count++;
 	};
 
+	/**
+	 * @deprecated
+	 * @private
+	 */
 	CIQ.ChartEngine.Driver.prototype.detachTagAlongQuoteFeed=function(feed){
 		if (!feed.label) return;
 		var tagalong=this.tagalongs[feed.label];
@@ -4151,10 +4246,10 @@ var __quoteFeed_ =
 		var isPaginate=fetchType==CIQ.QuoteFeed.PAGINATION;
 		for(field in seriesList) {
 			series=seriesList[field];
-			if(!isUpdate && series.moreAvailable === false) continue;  // skip series that no longer have historical data.
+			if(!params.future && !isUpdate && series.moreAvailable === false) continue;  // skip series that no longer have historical data.
+			if(series.loading) continue;  // skip series that are presently loading data
 			if(isUpdate || isPaginate){
-				if(!series.endPoints) continue;  // skip series which have not set range in master data yet
-				if(params.latestStartDate && series.endPoints.begin && series.endPoints.begin<params.latestStartDate) continue; // skip series where we have enough data
+				if(!series.endPoints || !Object.keys(series.endPoints).length) continue;  // skip series which have not set range in master data yet
 			}
 			var sp=series.parameters;
 			if(sp.loadData===false) continue;  // skip series that do not load data
@@ -4162,6 +4257,7 @@ var __quoteFeed_ =
 			symbolObject=sp.symbolObject;
 			if(!symbolObject.symbol) continue;  // skip series that are really just fields already loaded, like "High".
 			var isUnique=true;
+			if(!isUpdate) series.loading=true;
 			for(var j=0;j<allSymbols.length;j++){
 				if(CIQ.symbolEqual(allSymbols[j], symbolObject)) isUnique=false;
 			}
@@ -4177,20 +4273,21 @@ var __quoteFeed_ =
 			var seriesParam=CIQ.shallowClone(params.originalState);
 			seriesParam.symbol=symbolObject.symbol;
 			seriesParam.symbolObject=symbolObject;
-			if(seriesParam.update) {
+			if(seriesParam.update || seriesParam.future) {
+				if (!seriesParam.endDate) seriesParam.endDate=params.endDate;
 				seriesParam.startDate=ranges[symbolObject.symbol].end;
 			}else{
 				if (!seriesParam.startDate) seriesParam.startDate=params.startDate;
 				// for comparisons, you must fetch enough data on the new Comparison to match the beginning of the masterData until the current tick.
 				// The current tick may be newer than master data last tick, so set the end Date to right now.
-				seriesParam.endDate=isPaginate?ranges[symbolObject.symbol].begin:params.endDate;
+				seriesParam.endDate=isPaginate && !params.future?ranges[symbolObject.symbol].begin:params.endDate;
 				seriesParam.ticks=params.ticks;
 			}
 			arr.push(seriesParam);
 		}
 		if(!arr.length && isUpdate){
 			// we need this because in updateChart we don't create and let the dependents do it.
-			stx.createDataSet(null,null,{appending:params.originalState.update});
+			stx.createDataSet(null,null,{appending:params.appending || params.originalState.update});
 			if(!params.nodraw) stx.draw();
 			if(cb) cb(null);
 			return;
@@ -4206,26 +4303,26 @@ var __quoteFeed_ =
 						var symbolObject=result.params.symbolObject;
 						var dataCallback=result.dataCallback, quotes=dataCallback.quotes, moreAvailable=dataCallback.moreAvailable;
 						var arr=stx.getSeries({symbolObject: symbolObject});
-						var fillGaps;
+						var fillGaps=false;
 						for(var j=0;j<arr.length;j++){
 							series=arr[j];
 							if (!isUpdate) {
 								// only reset the moreAvailable on pagination or initial fetch, never on updates.
-								series.moreAvailable = moreAvailable === false ? false : (moreAvailable || quotes.length > (result.params.endDate?1:0));
+								if(!params.future) series.moreAvailable = moreAvailable === false ? false : (moreAvailable || quotes.length > (result.params.endDate?1:0));
+								else if(stx.isHistoricalModeSet && quotes.length<2) series.mostRecentForwardAttempt = new Date();
+								series.loading = false;
 							}
 							// Once fillGaps is set, do not unset it.
-							if(!fillGaps) {
-								fillGaps=series.parameters.fillGaps;
-							}
+							fillGaps=series.parameters.fillGaps || fillGaps;
 						}
 						quotes=self.cleanup(stx,series,quotes,fetchType,params,fillGaps);
-						stx.updateChartData(quotes, chart, {secondarySeries:symbolObject.symbol, noCreateDataSet:true, noCleanupDates:true, overwrite:true});
+						stx.updateChartData(quotes, chart, {secondarySeries:symbolObject.symbol, noCreateDataSet:true, noCleanupDates:true, allowReplaceOHL:true});
 						if(quotes && quotes.length && (!earliestDate || earliestDate>quotes[0].DT))
 							earliestDate=quotes[0].DT;
 					}
 				}
 				if(results.length){
-					stx.createDataSet(null,null,{appending:params.originalState.update, appendToDate:earliestDate});
+					stx.createDataSet(null,null,{appending:params.originalState.update || params.future, appendToDate:earliestDate});
 					if(!params.nodraw) stx.draw();
 				}
 				if(cb) cb(null);
@@ -4241,30 +4338,42 @@ var __quoteFeed_ =
 	 * @private
 	 * @since 5.2.0
 	 */
-	CIQ.ChartEngine.Driver.prototype.cleanup=function(stx,chartOrSeries,quotes,mode,params,fillGaps){
+	CIQ.ChartEngine.Driver.prototype.cleanup=function(stx,series,quotes,mode,params,fillGaps){
 		stx.doCleanupDates(quotes, stx.layout.interval);
-		if(!params.missingBarsCreated && quotes.length){
-			var removalMethod;
-			var chart=params.chart,symbol=params.symbol;
-			if(symbol==chart.symbol) symbol=chart.defaultPlotField;
+		if(!params.missingBarsCreated && quotes.length && stx.cleanupGaps && fillGaps!==false){
+			var removalMethod, field;
+			var chartOrSeries=params.chart;
+			if(!series) field=chartOrSeries.defaultPlotField;
+			else {
+				chartOrSeries=series;
+				field=series.parameters.symbol || series.id;
+			}
 			if(mode==CIQ.QuoteFeed.PAGINATION && !params.loadMoreReplace){  //add bar for end date so we can close gaps
 				if(chartOrSeries.endPoints.begin && chartOrSeries.endPoints.begin>quotes[quotes.length-1].DT) {
-					quotes.push(stx.getFirstLastDataRecord(stx.masterData,symbol,false));
+					var endingRecord=stx.getFirstLastDataRecord(stx.masterData,field,false);
+					if(series) endingRecord=endingRecord[field];
+					quotes.push(endingRecord);
 					removalMethod="pop";
 				}
 			}
 			else if(mode==CIQ.QuoteFeed.UPDATE){  //add bar for begin date so we can close gaps
 				if(chartOrSeries.endPoints.end && chartOrSeries.endPoints.end<quotes[0].DT) {
-					quotes.unshift(stx.getFirstLastDataRecord(stx.masterData,symbol,true));
+					var beginningRecord=stx.getFirstLastDataRecord(stx.masterData,field,true);
+					if(series) beginningRecord=beginningRecord[field];
+					quotes.unshift(beginningRecord);
 					removalMethod="shift";
 				}
 			}
-			quotes=stx.doCleanupGaps(quotes, chart, {cleanupGaps:fillGaps,  noCleanupDates:true});
+			quotes=stx.doCleanupGaps(quotes, params.chart, {cleanupGaps:fillGaps,  noCleanupDates:true});
 			if(removalMethod) quotes[removalMethod]();
 		}
 		return quotes;
 	};
-	
+
+	/**
+	 * @deprecated
+	 * @private
+	 */
 	CIQ.ChartEngine.Driver.prototype.executeTagAlongs=function(params){
 		var count={
 			count: CIQ.objLength(this.taglongs)
@@ -4316,17 +4425,17 @@ var __quoteFeed_ =
 		    return function(dataCallback){
 				howManyReturned++;
 				var chart=params.chart, masterData=chart.masterData;
-				if(symbol==chart.symbol && interval==stx.layout.interval && timeUnit==stx.layout.timeUnit){	// Make sure user hasn't changed symbol while we were waiting on a response
+				if(symbol==chart.symbol && interval==stx.layout.interval && timeUnit==stx.layout.timeUnit && !stx.isHistoricalMode()){	// Make sure user hasn't changed symbol while we were waiting on a response
 					if(!dataCallback.error){
 						var quotes=dataCallback.quotes;
-						quotes=self.cleanup(stx,chart,quotes,CIQ.QuoteFeed.UPDATE,params);
+						quotes=self.cleanup(stx,null,quotes,CIQ.QuoteFeed.UPDATE,params);
 						stx.updateChartData(quotes, chart, {noCreateDataSet:true, noCleanupDates:true});
 						chart.attribution=dataCallback.attribution;
 					}else{
 						self.quoteFeed.announceError(params.originalState, dataCallback);
 					}
 				}else{
-					//console.log("orphaned update",params);
+					self.updatingChart=false;
 					return;
 				}
 				if(howManyReturned==howManyToGet){
@@ -4339,7 +4448,6 @@ var __quoteFeed_ =
 				self.loadDependents(params, null, CIQ.QuoteFeed.UPDATE); // createDataSet(),draw() will be handled in here
 			};
 		}
-
 		//TODO, change this to multi-fetch?
 		for(var chartName in stx.charts){
 			var chart=stx.charts[chartName];
@@ -4403,17 +4511,19 @@ var __quoteFeed_ =
 					cb(response);
 				}else if(!chart.moreAvailable){  // no more data
 					cb(null);
-				}else if(chart.loadingMore){  // something else is loading past data, abort this
-					cb(null);
+				//}else if(chart.loadingMore){  // something else is loading past data, abort this
+				//	cb(null);
 				}else if(++count>20){  // we'll allow up to 20 fetches
 					cb("error, moreAvailable not implemented correctly in QuoteFeed");
 				}else{  // get some more
-					self.checkLoadMore(chart, true, true, closure());
+					chart.loadingMore=false;
+					self.checkLoadMore(chart, true, true, closure(), true);
 				}
 			};
 		}
 		closure()();
 	};
+
 
 	/**
 	 * If the quote feed has indicated there is more data available it will create and execute a fetch() call,
@@ -4424,46 +4534,71 @@ var __quoteFeed_ =
 	 * @param {boolean} forceLoadMore set to true to force a fetch() call.
 	 * @param {boolean} fetchMaximumBars	set to true to request the maximum amount of data available from the feed.
 	 * @param {function} cb The callback function. Will be called with the error returned by the quotefeed, if any.
-	 * @param {boolean} nodraw
+	 * @param {boolean} nodraw Set to true to skip over the draw() call
 	 * @memberOf CIQ.ChartEngine.Driver
 	 * @private
 	 */
 	CIQ.ChartEngine.Driver.prototype.checkLoadMore=function(chart, forceLoadMore, fetchMaximumBars, cb, nodraw){
-		if(chart.loadingMore){
+		var stx=this.stx, driver=this;
+		var isHistoricalData = stx.isHistoricalMode();
+		if(!isHistoricalData) stx.isHistoricalModeSet = false;
+
+		if(chart.loadingMore || this.loadingNewChart){
 			chart.initialScroll=chart.scroll;
 			if(cb) cb(null);
 			return;
 		}
+
 		var params;
 		function finish(err){
 			chart.loadingMore=false;
 			if(cb) cb(err);
 		}
-		var stx=this.stx;
-		if(!chart.moreAvailable){
-			//If there is no more data for master, check to see if the compares have more data.
-			if ((chart.dataSet.length > 0 && chart.scroll >= chart.dataSet.length) || forceLoadMore) {
-				//check to see if we can load data from the series
-				for (var key in chart.series) {
-					if (chart.series[key].moreAvailable!==false) {
-						params = this.makeParams(chart.symbol, chart.symbolObject, chart);
-						//Take the first date from master data and use that as the end date
-						if (chart.masterData && chart.masterData.length) {
-							params.endDate = chart.masterData[0].DT;
-						} else {
-							params.endDate = stx.convertToDataZone(new Date());
-						}
-						params.originalState = CIQ.shallowClone(params);
-						params.nodraw = nodraw;
-						chart.loadingMore=true;
-						this.loadDependents(params, finish);
-						return;
-					}
-				}
-			}
+
+		if(stx.currentlyImporting){
 			if(cb) cb(null);
 			return;
 		}
+
+		var dataSet=chart.dataSet;
+		function needsBackFill(which){
+			return (
+				!which.endPoints.begin ||
+				dataSet.length-chart.scroll<driver.behavior.bufferSize ||
+				dataSet.length-chart.scroll-stx.tickFromDate(which.endPoints.begin,chart)<driver.behavior.bufferSize
+			);
+		}
+		function needsFrontFill(which){
+			return (
+				!which.endPoints.end ||
+				chart.scroll-chart.maxTicks+1<driver.behavior.bufferSize ||
+				stx.tickFromDate(which.endPoints.end,chart,null,true)-dataSet.length+chart.scroll-chart.maxTicks+2<driver.behavior.bufferSize
+			);
+		}
+		// The following var will be used to determine if it's ok to retry a forward pagination.  Without this delay, a chart which ends in the past (delisted) or a chart with data coming in slowly
+		// will never exit historical mode, so we need to prevent repeated requests from the draw() loop.  So we buffer using the behavior forwardPaginationRetryInterval.
+		var forwardFetchDoARetry;
+		var forwardPaginationRetryIntervalMS=1000*(this.behavior.forwardPaginationRetryInterval||5);
+
+		var seriesNeedsBackFill=false, seriesNeedsFrontFill=false;  // see if series need loading
+		if (chart.dataSet.length) {
+			for (var key in chart.series) {
+				var series=chart.series[key];
+				if(series.loading) continue;  // exclude this series
+				forwardFetchDoARetry=!series.mostRecentForwardAttempt || series.mostRecentForwardAttempt.getTime()+forwardPaginationRetryIntervalMS<Date.now();
+
+				if(series.moreAvailable!==false && needsBackFill(series)) seriesNeedsBackFill=true;
+				if(forwardFetchDoARetry && needsFrontFill(series)) seriesNeedsFrontFill=true;
+			}
+		}
+		
+		forwardFetchDoARetry=!chart.mostRecentForwardAttempt || chart.mostRecentForwardAttempt.getTime()+forwardPaginationRetryIntervalMS<Date.now();
+		// Now we determine which type of pagination we need
+		var mainPastFetch=(needsBackFill(chart) || forceLoadMore) && chart.moreAvailable!==false;
+		var mainForwardFetch=(needsFrontFill(chart) || forceLoadMore) && forwardFetchDoARetry;
+		var isPastPagination=mainPastFetch || seriesNeedsBackFill;
+		var isForwardPagination=stx.isHistoricalModeSet && !isPastPagination && (mainForwardFetch || seriesNeedsFrontFill);
+
 		var interval=stx.layout.interval;
 		var timeUnit=stx.layout.timeUnit;
 		function closure(self, params){
@@ -4471,33 +4606,51 @@ var __quoteFeed_ =
 			return function(dataCallback){
 				var stx=self.stx, chart=params.chart;
 				if(params.symbol==chart.symbol && interval==stx.layout.interval && timeUnit==stx.layout.timeUnit){	// Make sure user hasn't changed symbol while we were waiting on a response
-					if(!params.loadMore) params.chart.loadingMore=false;
+					if(!params.loadMore) { params.chart.loadingMore=false; }
 					if(!dataCallback.error){
 						if(!dataCallback.quotes) dataCallback.quotes=[];
-						var quotes=dataCallback.quotes;
-						quotes=self.cleanup(stx,chart,quotes,CIQ.QuoteFeed.PAGINATION,params);
-						// set moreAvailable before we call draw or we can create an infinite loop if the feed servers runs out of data in the middle of a draw
+						var quotes=dataCallback.quotes, masterData=chart.masterData;
+						quotes=self.cleanup(stx,null,quotes,CIQ.QuoteFeed.PAGINATION,params);
+						if(quotes.length && chart.masterData.length){  // remove possible dup with master data's first record
+							if(params.future){
+								// remove possible dup with master data's first record
+								var firstQuote=quotes[0];
+								if(firstQuote.DT && firstQuote.DT==chart.masterData[chart.masterData.length-1].DT) masterData.pop();
+							}else{
+								// remove possible dup with master data's last record
+								var lastQuote=quotes[quotes.length-1];
+								if(lastQuote.DT && +lastQuote.DT==+chart.masterData[0].DT) masterData.shift();
+							}
+						}
 
-						// if dataCallback.moreAvailable is set to either true or false, set chart.moreAvailable to that value
-						// if dataCallback.moreAvailable is not set at all (null or undefined), then set chart.moreAvailable to dataCallback.quotes.length!==0
-						if(dataCallback.moreAvailable) chart.moreAvailable=true;
-						else if(dataCallback.moreAvailable===false || !quotes.length) chart.moreAvailable=false; // Can't be more available if we got nothing back
-						else chart.moreAvailable=true;
-						self.tickMultiplier= dataCallback.quotes.length ? 2 : self.tickMultiplier*2;
+						if(!params.future){
+							// set moreAvailable before we call draw or we can create an infinite loop if the feed servers runs out of data in the middle of a draw
+							// if dataCallback.moreAvailable is set to either true or false, set chart.moreAvailable to that value
+							// if dataCallback.moreAvailable is not set at all (null or undefined), then set chart.moreAvailable to dataCallback.quotes.length!==0
+							if(dataCallback.moreAvailable) chart.moreAvailable=true;
+							else if(dataCallback.moreAvailable===false || !quotes.length) chart.moreAvailable=false; // Can't be more available if we got nothing back
+							else chart.moreAvailable=true;
+						}else{
+							if(stx.isHistoricalModeSet && quotes.length<2) chart.mostRecentForwardAttempt=new Date();  // no quotes for future query, so timestamp this query
+						}
+						self.tickMultiplier= quotes.length ? 2 : self.tickMultiplier*2;
 
 						chart.loadingMore=false; // this has to be set before draw() so we may call another pagination from it
+
 						if(params.loadMoreReplace){
 							stx.setMasterData(quotes, chart, {noCleanupDates:true});
+						} else if(params.future){
+							stx.updateChartData(quotes, chart, {noCreateDataSet:true, noCleanupDates:true});
 						}else{
 							CIQ.addMemberToMasterdata({stx:stx, chart:chart, data:quotes, fields:["*"], noCleanupDates:true});
 						}
 						if(quotes.length){
 							if(!chart.endPoints.begin || chart.endPoints.begin>quotes[0].DT) chart.endPoints.begin=quotes[0].DT;
-							if(params.loadMoreReplace){
-								if(!chart.endPoints.end || chart.endPoints.end<quotes[quotes.length-1].DT) chart.endPoints.end=quotes[quotes.length-1].DT;
-							}
+							if(!chart.endPoints.end || chart.endPoints.end<quotes[quotes.length-1].DT) chart.endPoints.end=quotes[quotes.length-1].DT;
 						}
-						stx.createDataSet();
+
+						stx.createDataSet(undefined, undefined, {appending: params.future});
+
 						if(!nodraw) stx.draw();
 						self.executeTagAlongs(params);
 						if(self.behavior.callback){
@@ -4517,21 +4670,37 @@ var __quoteFeed_ =
 		}
 		var fetching=false;
 		if(!this.behavior.noLoadMore){
-			if(!stx.maxDataSetSize || chart.dataSet.length<stx.maxDataSetSize){
-				var loadedData = chart.dataSet.length-(this.behavior.bufferSize || 0);
-				if(loadedData<0) loadedData= 0;
-				if(chart.scroll>= loadedData || forceLoadMore ){
+			if(isForwardPagination || !stx.maxDataSetSize || chart.dataSet.length<stx.maxDataSetSize){
+				if(isPastPagination || isForwardPagination){
 					chart.initialScroll=chart.scroll;
 					chart.loadingMore=true;
 					params=this.makeParams(chart.symbol, chart.symbolObject, chart);
-					if(chart.masterData && chart.masterData.length)
-						params.endDate=chart.endPoints.begin;
-					else
+					params.future=isForwardPagination;
+					if(chart.masterData && chart.masterData.length) {
+						if(isForwardPagination) params.startDate=chart.endPoints.end;
+						else params.endDate=chart.endPoints.begin;
+						var firstLast;
+						// fallback on masterData endpoints
+						if(isForwardPagination && !params.startDate){
+							firstLast = stx.getFirstLastDataRecord(chart.masterData, "DT", true);
+							if(firstLast) params.startDate=firstLast.DT;
+						}else if(isPastPagination && !params.endDate){
+							firstLast = stx.getFirstLastDataRecord(chart.masterData, "DT");
+							if(firstLast) params.endDate=firstLast.DT;
+						}
+					} else {
 						params.endDate=new Date();
+					}
 					params.originalState=CIQ.shallowClone(params);
 					params.nodraw=nodraw;
-					if(stx.fetchMaximumBars[stx.layout.aggregationType]) fetchMaximumBars=true;
-					if(fetchMaximumBars) {
+					if((!mainPastFetch && seriesNeedsBackFill) ||
+						(!mainForwardFetch && seriesNeedsFrontFill)){
+						this.loadingMore=true;
+						this.loadDependents(params, finish, CIQ.QuoteFeed.PAGINATION);
+						if(cb) cb(null);
+						return;
+					}
+					if(stx.fetchMaximumBars[stx.layout.aggregationType]) {
 						params.fetchMaximumBars=true;
 						if (!stx.maxMasterDataSize || this.behavior.maximumTicks<stx.maxMasterDataSize)params.ticks=this.behavior.maximumTicks;
 						else params.ticks=stx.maxMasterDataSize;
@@ -4540,6 +4709,7 @@ var __quoteFeed_ =
 					if(stx.isEquationChart(params.symbol)){  //equation chart
 						CIQ.fetchEquationChart(params, closureCB);
 					}else{
+						if(isForwardPagination) params.appending=true;
 						CIQ.ChartEngine.Driver.fetchData(CIQ.QuoteFeed.PAGINATION, this.quoteFeed, params, closureCB);
 					}
 					fetching=true;
@@ -4561,6 +4731,7 @@ var __quoteFeed_ =
 	 * @private
 	 */
 	CIQ.ChartEngine.Driver.prototype.barsToFetch=function(params){
+		if( !CIQ.isValidNumber(this.tickMultiplier) ) this.tickMultiplier=2;  // used to determine params.ticks
 		if(params.isSeries) return params.stx.masterData.length;
 		var interval=this.stx.layout.interval;
 		var p=params.stx.layout.periodicity;
@@ -4574,55 +4745,98 @@ var __quoteFeed_ =
 	};
 
 	/**
-	 * Calcluates the suggestedStartDate for a query to a quoteFeed. Will either do a quick estimation if fetchMaximimBars is true for effiency or use a market iterator to find the exact start date.
+	 * Calculates the suggestedStartDate for a query to a quoteFeed. Will either do a quick estimation if fetchMaximimBars is true for effiency or use a market iterator to find the exact start date.
 	 * This should only be called after the correct ticks have been determined.
 	 * @param {object} params
 	 * @param {object} iterator
 	 * @param {number} ticks
 	 * @return {Date} suggestedStartDate
 	 * @memberof CIQ.ChartEngine.Driver
+	 * @private
 	 * @since 5.1.1
 	 */
 	CIQ.ChartEngine.Driver.determineStartDate=function(params, iterator, ticks){
+		return this.determineStartOrEndDate(params, iterator, ticks, true);
+	};
+
+	/**
+	 * Calculates either the suggestedStartDate or suggestedEndDate for a query to a quoteFeed. Will either do a quick estimation if fetchMaximimBars is true for effiency or use a market iterator to find the exact end date.
+	 * When passing in a truthy boolean will  calcluate the suggestedStartDate.
+	 * This should only be called after the correct ticks have been determined.
+	 * @param {object} params Params object used by the QuoteDriver in fetching data
+	 * @param {object} iterator Market iterator to used to advance and find a date
+	 * @param {number} ticks Ticks to fetch
+	 * @param {boolean} direction Direction to check date from
+	 * @return {Date} determinedDate (or present day)
+	 * @memberof CIQ.ChartEngine.Driver
+	 * @private
+	 * @since 6.0.0
+	 */
+	CIQ.ChartEngine.Driver.determineStartOrEndDate=function(params, iterator, ticks, isStart){
 		var interval=params.interval, period=params.stx.layout.periodicity,multiplier=CIQ.Market.Symbology.isForexSymbol?1.3:4;
-		if(interval==="millisecond" || interval==="second") interval=CIQ.SECOND*period*multiplier;
-		else if(interval==="minute") interval=CIQ.MINUTE*period*multiplier;
-		else interval=CIQ.DAY * multiplier;
-		var startDate;
+		var determinedDate, base;
+		if(interval==="millisecond" || interval==="second") base=CIQ.SECOND*period*multiplier;
+		else if(interval==="minute") base=CIQ.MINUTE*period*multiplier;
+		else base=CIQ.DAY * multiplier;
 		if(params.fetchMaximumBars){
-			startDate = new Date(Date.now() - ticks * interval);	 // by default this will be a date around 50 years ago, a safe starting estimate
+			var offset=ticks*base, begin=iterator.begin.getTime();
+			determinedDate = isStart?new Date(begin-offset):new Date(begin+offset);
+		} else if(isStart){
+			determinedDate = params.startDate || iterator.previous(ticks);
 		} else {
-			startDate = params.startDate?params.startDate:iterator.previous(ticks);
+			determinedDate = params.future?iterator.next(ticks):new Date();
 		}
-		return startDate;
+		return determinedDate;
 	};
 
 	CIQ.ChartEngine.Driver.prototype.makeParams=function(symbol, symbolObject, chart){
-		var interval=this.stx.layout.interval;
-		var ticks=this.barsToFetch({stx:this.stx});
+		var stx=this.stx;
+		var interval=stx.layout.interval;
+		var ticks=this.barsToFetch({stx:stx});
 		// If we're rolling our own months or weeks then we should ask for days from the quote feed
-		if((interval=="month" || interval=="week") && !this.stx.dontRoll){
+		if((interval=="month" || interval=="week") && !stx.dontRoll){
 			interval="day";
 		}
 		var params=CIQ.shallowClone(this.behavior);
 
+		var extended=false, sessions=chart.market.getSessionNames();
+		if(stx.extendedHours){
+			if(stx.extendedHours.filter) {
+				extended=true;
+			}
+			else {
+				extended=stx.layout.extended;
+				// filter out unwanted sessions
+				sessions=sessions.filter(function(el) {
+					return el.enabled || stx.layout.marketSessions[el.name];
+				});
+			}
+		}else{
+			sessions=sessions.filter(function(el) {
+				return el.enabled;
+			});
+		}
+		for(var sess=0;sess<sessions.length;sess++){
+			sessions[sess]=sessions[sess].name;  // remove "enabled" bit
+		}
+
 		CIQ.extend(params,{
-			stx: this.stx,
+			stx: stx,
 			symbol: symbol,
 			symbolObject: symbolObject,
 			chart: chart,
 			interval: interval,
-			extended: this.stx.layout.extended,
+			extended: extended,
 			period: 1,
-			feed: "delayed",
-			ticks: ticks
+			ticks: ticks,
+			additionalSessions: sessions
 		}, true);
 
 		if (!params.symbolObject) params.symbolObject={symbol:symbol};
 
 		if(!isNaN(params.interval)){	// normalize numeric intervals into "minute", "second" or "millisecond" form as required by fetch()
 			params.period=parseInt(params.interval,10); // in case it was a string, which is allowed in setPeriodicity.
-			params.interval=this.stx.layout.timeUnit;
+			params.interval=stx.layout.timeUnit;
 			if(!params.interval) params.interval="minute";
 		}
 		return params;
@@ -4637,7 +4851,6 @@ var __quoteFeed_ =
 		chart.moreAvailable=null;
 		chart.loadingMore=false;
 		chart.attribution=null;
-		this.tickMultiplier=2;  // used to determine params.ticks
 		var qparams=this.makeParams(symbol, params.symbolObject, chart);
 		CIQ.extend(qparams, params, true);
 		// Some aggregation types potentially require a lot of data. We set the flag "fetchMaximumBars"
@@ -4652,10 +4865,12 @@ var __quoteFeed_ =
 			if(self.behavior.prefetchAction) self.behavior.prefetchAction("newChart");
 			return function(dataCallback){
 				var chart=qparams.chart, quotes=dataCallback.quotes, success=false;
+				self.loadingNewChart=false; // this has to be set before home() so we may call a pagination from it
 				if(symbol==chart.symbol && interval==stx.layout.interval && timeUnit==stx.layout.timeUnit){	// Make sure user hasn't changed symbol while we were waiting on a response
 					if(!dataCallback.error){
-						quotes=self.cleanup(stx,chart,quotes,CIQ.QuoteFeed.INITIAL,qparams);
+						quotes=self.cleanup(stx,null,quotes,CIQ.QuoteFeed.INITIAL,qparams);
 						stx.setMasterData(quotes, chart, {noCleanupDates:true});
+						chart.endPoints={};
 						if(quotes.length){
 							chart.endPoints.begin=quotes[0].DT;
 							chart.endPoints.end=quotes[quotes.length-1].DT;
@@ -4684,7 +4899,6 @@ var __quoteFeed_ =
 					chart.series[key].moreAvailable=null;
 				}
 
-				self.loadingNewChart=false;
 				// We've now responded to the newChart() callback. Please note that dependents are now being loaded in parallel!
 				var masterData=chart.masterData;
 				if(masterData && masterData.length){
@@ -4752,16 +4966,25 @@ var __quoteFeed_ =
 	// functions not defined in quotefeed are skipped over
 	CIQ.ChartEngine.Driver.fetchDataInContext=function(context, quoteFeed, params, cb){
 		var iterator_parms, iterator, suggestedStartDate, suggestedEndDate;
+		var stx=params.stx;
 		// When dealing with a series, we need to look at the original params in order to figure out
 		// what type of request we really need to make
 		if(context===CIQ.QuoteFeed.SERIES){
 			params.series = true;
 			context=CIQ.QuoteFeed.INITIAL;
-			if(params.endDate && !params.startDate) context=CIQ.QuoteFeed.PAGINATION;
+			if((params.endDate && !params.startDate) || params.future) context=CIQ.QuoteFeed.PAGINATION;
 			else if(params.startDate && !params.endDate) context=CIQ.QuoteFeed.UPDATE;
 		}
+		var ticks=Math.min(params.ticks, stx.quoteDriver.behavior.maximumTicks);
+		if(quoteFeed.maxTicks) ticks=Math.min(ticks,quoteFeed.maxTicks);
 		switch(context)	{
 		case CIQ.QuoteFeed.UPDATE:
+
+			if(stx.isHistoricalModeSet) {
+				stx.quoteDriver.updatingChart=false;
+				return;
+			}
+
 			var startDate;
 			if (params.startDate){
 				startDate=params.startDate;
@@ -4770,39 +4993,44 @@ var __quoteFeed_ =
 				startDate.setHours(0,0,0,0);
 			}
 			if (typeof quoteFeed.fetchUpdateData === "function"){
-				quoteFeed.fetchUpdateData(params.symbol, params.stx.convertToDataZone(startDate), params, cb);
+				quoteFeed.fetchUpdateData(params.symbol, stx.convertToDataZone(startDate), params, cb);
 			}
+
 			break;
 		case CIQ.QuoteFeed.INITIAL:
-			suggestedEndDate = new Date();
-			suggestedEndDate.setMilliseconds(0);
+			//Now need to calculate suggested dates
+			suggestedEndDate = params.endDate || new Date();
 			iterator_parms = {
 				"begin": suggestedEndDate,
 				"interval": params.interval =='tick' ? 1:params.interval,
-				"periodicity": params.interval =='tick' ? params.stx.chart.xAxis.futureTicksInterval:params.period,
-				"outZone": params.stx.dataZone
+				"periodicity": params.interval =='tick' ? stx.chart.xAxis.futureTicksInterval:params.period,
+				"outZone": stx.dataZone
 			};
-			iterator=params.stx.chart.market.newIterator(iterator_parms);
-			suggestedStartDate = CIQ.ChartEngine.Driver.determineStartDate(params, iterator, params.ticks);
-			suggestedEndDate = params.endDate?params.endDate:suggestedEndDate;
-
+			iterator=stx.chart.market.newIterator(iterator_parms);
+			suggestedStartDate = CIQ.ChartEngine.Driver.determineStartDate(params, iterator, ticks);
+			if(params.endDate) suggestedEndDate = params.endDate;
 			if (typeof quoteFeed.fetchInitialData === "function"){
-				quoteFeed.fetchInitialData(params.symbol, suggestedStartDate, params.stx.convertToDataZone(suggestedEndDate), params, cb);
+				quoteFeed.fetchInitialData(params.symbol, suggestedStartDate, stx.convertToDataZone(suggestedEndDate), params, cb);
 			}
 			break;
 		case CIQ.QuoteFeed.PAGINATION:
 			iterator_parms = {
-				"begin": params.endDate,
+				"begin": params.endDate||params.startDate,
 				"interval": params.interval =='tick' ? 1:params.interval,
-				"periodicity": params.interval =='tick' ? params.stx.chart.xAxis.futureTicksInterval:params.period,
-				"outZone": params.stx.dataZone
+				"periodicity": params.interval =='tick' ? stx.chart.xAxis.futureTicksInterval:params.period,
+				"outZone": stx.dataZone
 			};
-			iterator=params.stx.chart.market.newIterator(iterator_parms);
-			var ticks=Math.min(params.ticks, params.stx.quoteDriver.behavior.maximumTicks);
-			suggestedStartDate = CIQ.ChartEngine.Driver.determineStartDate(params, iterator, ticks);
+			iterator=stx.chart.market.newIterator(iterator_parms);
+			var suggestedDate=CIQ.ChartEngine.Driver.determineStartOrEndDate(params, iterator, ticks, !params.future);
+			suggestedStartDate=params.startDate || suggestedDate;
+			suggestedEndDate=params.endDate || suggestedDate;
+			if (!params.startDate)params.stx.convertToDataZone(suggestedEndDate);
+			else params.stx.convertToDataZone(suggestedStartDate);
+
 			if (typeof quoteFeed.fetchPaginationData === "function"){
-				if (params.stx.maxMasterDataSize && params.stx.maxMasterDataSize <= params.stx.masterData.length) return;
-				quoteFeed.fetchPaginationData(params.symbol, suggestedStartDate, params.stx.convertToDataZone(params.endDate), params, cb);
+				if (stx.maxMasterDataSize && stx.maxMasterDataSize <= stx.masterData.length) return;
+
+				quoteFeed.fetchPaginationData(params.symbol, suggestedStartDate, suggestedEndDate, params, cb);
 			}
 			break;
 		default:
@@ -4814,7 +5042,7 @@ var __quoteFeed_ =
 	return _exports;
 });
 
-var __span_ =
+var __js_span_ =
 //-------------------------------------------------------------------------------------------
 // Copyright 2012-2017 by ChartIQ, Inc.
 // All rights reserved
@@ -4831,7 +5059,9 @@ var __span_ =
 	 *
 	 * Therefore, if you choose to let setRange set the periodicity, you should **not** call setPeriodicity before or after calling this method.
 	 *
-	 * **Note:** if the chart is in `tick` periodicity, the periodicity will be automatically selected even if one was provided because in `tick` periodicity we have no way to know how many ticks to get to fulfill the requested range.
+	 * **For details on how this method can affect the way daily data is rolled up, see {@link CIQ.ChartEngine#createDataSet} **
+	 * 
+	 * **If the chart is in `tick` periodicity, the periodicity will be automatically selected even if one was provided because in `tick` periodicity we have no way to know how many ticks to get to fulfill the requested range.**
 	 *
 	 * If there is no quotefeed attached (or using a version prior to 04-2015), then setRange will use whatever data is available in the masterData. So you must ensure you have preloaded enough to display the requested range.
 	 *
@@ -4899,12 +5129,15 @@ var __span_ =
 		var lt= typeof params.dtLeft === 'string' ? new Date(params.dtLeft) : params.dtLeft; // just in case a string date is passed in
 		var rt= new Date();
 		if(params.dtRight) rt= typeof params.dtRight === 'string' ? new Date(params.dtRight): params.dtRight;
+		var iter;
 		if(!lt){ // If no left date then we want to just flush the right edge, and keep the same interval,period
-			var iter=this.standardMarketIterator(rt, null, chart);
+			iter=this.standardMarketIterator(rt, null, chart);
 			lt=iter.previous(chart.maxTicks);
 			if(!params.periodicity) dontChangePeriodicity=true;
 		}
 		chart.inflectionPoint=lt;  //  this is where consolidation originates in either direction
+
+		this.layout.range={dtLeft:lt, dtRight: rt};
 
 		var self=this;
 		function showTheRange(err){
@@ -4931,19 +5164,19 @@ var __span_ =
 				return;
 			}
 
+			var leftBar;
 			// range is day and interval is day
 			if(base === 'day' && (periodicity && periodicity.interval === 'day')){
 				var multiplier = params.multiplier;
 				// left bar is how many days the range is, or beginning of dataset
-				var leftBar = dsLength < multiplier ? 0 : dsLength-multiplier;
-				l=leftBar;
+				l = dsLength < multiplier ? 0 : dsLength-multiplier;
 				r=dsLength-1;
 			}
 			// if intraday range and last day in dataSet doesn't equal current day then show previous day's data
 			else if(base === 'today' && dataSet[dsLength-1].DT.getDate() != todaysDate.getDate()){
 				var leftDT = new Date(dataSet[dsLength-1].DT.getTime());
 				var rightDT = leftDT.getTime();  // copy starting time
-				var leftBar=0;
+				leftBar=0;
 
 				for (var d = dsLength-1; d>=0; d--) {
 					if (dataSet[d] && dataSet[d].DT.getDate()!=leftDT.getDate()) {
@@ -4956,12 +5189,12 @@ var __span_ =
 				r=dsLength-1;
 			}
 			else{
-				if(lt.getTime()>=dataSet[0].DT.getTime() || params.goIntoPast){
+				if(params.base!="all" && (lt.getTime()>=dataSet[0].DT.getTime() || params.goIntoPast)){
 					l=self.tickFromDate(lt, chart, null, true);
 				}else{
 					l=0;
 				}
-				if(rt.getTime()<=dataSet[dsLength-1].DT.getTime() || params.goIntoFuture){
+				if(params.base!="all" && (rt.getTime()<=dataSet[dsLength-1].DT.getTime() || params.goIntoFuture)){
 					r=self.tickFromDate(rt, chart);
 					if(r>dsLength-1) r--;  // do not include tick from any end date
 				}else{
@@ -4975,8 +5208,7 @@ var __span_ =
 				return;
 			}
 
-			var leftMargin=self.getLabelOffsetInPixels(self,chart,layout.chartType);
-			var padding=Math.max(leftMargin, params.padding);
+			var padding=params.padding||0;
 			if(r<dsLength-1) padding=0;
 			//var barsHaveWidth=self.mainSeriesRenderer && self.mainSeriesRenderer.barsHaveWidth;
 			var newCandleWidth=((chart.width-padding)/ticks);//*(barsHaveWidth?1:(1-1/(2*ticks)));  // deduct 1/2 the proposed candlewidth for the micropixel offset for line type charts
@@ -5021,16 +5253,19 @@ var __span_ =
 				showTheRange();
 				return;
 			}
-			if(chart.moreAvailable && chart.masterData[0] && chart.masterData[0].DT>lt){
+			// Removed - we should never need to fetch more data after requesting a span
+			// Moreover, this created issues when setting a date only and fetching an intraday span - 
+			// code was being entered anyway since the masterData[0] was market open and lt was midnight.
+			/*if(chart.moreAvailable && chart.masterData[0] && chart.masterData[0].DT>lt){
 				self.quoteDriver.checkLoadMore(chart, true, false, function(err){
 					if(!err)
 						loadTheRange();
 					else
 						showTheRange(err); // if there was an error on a subsequent fetch, then show as much as we were able to get.
 				},true);
-			}else{
+			}else{*/
 				showTheRange();
-			}
+			//}
 		}
 
 		function estimateMaxTicks(rtMS, ltMS, interval,period, timeUnit, dontRoll){
@@ -5152,7 +5387,7 @@ var __span_ =
 			var needDifferentData=this.needDifferentData({period:periodToUse,interval:intervalToUse,timeUnit:timeUnitToUse});
 
 			// if we need data from before what we have, fetch new data
-			if(this.chart.masterData && this.chart.masterData.length && this.chart.masterData[0].DT>lt) needDifferentData=true;
+			if(Object.keys(this.chart.endPoints).length && (this.chart.endPoints.begin>lt || this.chart.endPoints.end<rt)) needDifferentData=true;
 
 			if(!this.chart.masterData || !this.chart.masterData.length || needDifferentData || params.forceLoad){
 				this.layout.interval=intervalToUse;
@@ -5169,16 +5404,26 @@ var __span_ =
 					chart:chart,
 					nodraw:true
 				};
+
+				this.isHistoricalModeSet=true;
+
 				if(this.layout.interval=="tick"){
-					// for 'tick' periodcity we have to request a specific range instead of # of ticks,
+					// for 'tick' periodicity we have to request a specific range instead of # of ticks,
 					//since we can never be sure how many ticks will be in a particular range.
 					qparams.startDate=lt;
 					qparams.endDate=rt;
 				}
 
 				if (!this.displayInitialized) qparams.initializeChart=true; //TODO, this is confusing to developers. They think it means newChart()
-				qparams.startDate = new Date(2 * lt - rt);
-				qparams.startDate.setHours(0, 0, 0, 0);
+				
+				var minOffset=Math.max(this.quoteDriver.behavior.bufferSize+50,200); // ensure we have some data off page for continuity sake and ease of scrolling, while also accounting for about 50 possible gaps in the buffer zone.  Otherwise we end up paginating if there's a gap.
+				iter=this.standardMarketIterator(lt, null, chart);
+				qparams.startDate = new Date(iter.previous(minOffset).getTime());
+				if(this.isHistoricalModeSet) {
+					iter=this.standardMarketIterator(rt, null, chart);
+					qparams.endDate = new Date(iter.next(minOffset).getTime());
+				}
+				this.clearCurrentMarketData(this.chart);
 				this.quoteDriver.newChart(qparams, loadTheRange);
 			}else{
 				if(this.layout.interval!=intervalToUse ||
@@ -5493,11 +5738,11 @@ var __span_ =
 			var p=CIQ.clone(params);
 			p.dtLeft=chart.masterData[0].DT;
 			p.dtRight=chart.masterData[chart.masterData.length - 1].DT;
-			// we already have the data, we just want to show it now. So make sure we maintain the periodicity so it won't fetch new one data 
+			// we already have the data, we just want to show it now. So make sure we maintain the periodicity so it won't fetch new one data
 			p.periodicity = {};
 			p.periodicity.interval = self.layout.interval;
 			p.periodicity.period = self.layout.periodicity;
-			p.periodicity.timeUnit = self.layout.timeUnit;				
+			p.periodicity.timeUnit = self.layout.timeUnit;
 			self.setRange(p,function(err){
 				self.layout.setSpan={base:params.base, multiplier:params.multiplier};
 				self.changeOccurred("layout");
@@ -5529,6 +5774,7 @@ var __span_ =
 
 		// Case 2: new symbol or new periodicity
 		if(params.forceLoad || needDifferentData){
+			this.clearCurrentMarketData(this.chart);
 			this.quoteDriver.newChart({noDraw:true, symbol:this.chart.symbol, symbolObject: this.chart.symbolObject, chart:this.chart, initializeChart:true, fetchMaximumBars:true}, loadAllTheData);
 		}else{
 			// Case 3, the right interval is set but we don't have all the data
@@ -5545,7 +5791,7 @@ var __span_ =
 	return _exports;
 });
 
-var __studies_ =
+var __js_studies_ =
 //-------------------------------------------------------------------------------------------
 // Copyright 2012-2017 by ChartIQ, Inc.
 // All rights reserved
@@ -5617,11 +5863,11 @@ var __studies_ =
 	 *
 	 * Do not try to manually create your own study descriptor, but rather always use the one returned by {@link CIQ.Studies.addStudy}
 	 *
-	 * @param {string} name       The name of the study. This should be unique to the chart. For instance if there are two RSI panels then they should be of different periods and named accordingly. Usually this is determined automatically by the library.
-	 * @param {string} type       The type of study, which can be used as a look up in the StudyLibrary
-	 * @param {string} panel      The name of the panel that contains the study
-	 * @param {object} inputs     Names and values of input fields
-	 * @param {object} outputs    Names and values (colors) of outputs
+	 * @param {string} name	   The name of the study. This should be unique to the chart. For instance if there are two RSI panels then they should be of different periods and named accordingly. Usually this is determined automatically by the library.
+	 * @param {string} type	   The type of study, which can be used as a look up in the StudyLibrary
+	 * @param {string} panel	  The name of the panel that contains the study
+	 * @param {object} inputs	 Names and values of input fields
+	 * @param {object} outputs	Names and values (colors) of outputs
 	 * @param {object} parameters Additional parameters that are unique to the particular study
 	 * @memberOf CIQ.Studies
 	 */
@@ -5636,6 +5882,7 @@ var __studies_ =
 		this.min=null;
 		this.max=null;
 		this.startFrom=0;
+		this.subField="Close";  // In case study is off a series
 		var libraryEntry=CIQ.Studies.studyLibrary[type];
 		if(!libraryEntry){
 			libraryEntry={};
@@ -5829,17 +6076,19 @@ var __studies_ =
 		Outputs are much simpler than inputs. Outputs are simply a list of available outputs and the selected color for that output. So here
 		we print a line item in the dialog for each output and attach a color picker to it. The color picker is obtained from the Context.
 		 */
-
+		
 		for(i in libraryEntry.outputs){
 			var output={
 				name:i,
 				heading: stx.translateIf(i)
 			};
-			this.outputs.push(output);
+
+			if (!stx.defaultColor) stx.getDefaultColor();
 
 			output.color=output.defaultOutput=libraryEntry.outputs[i];
 			if(sd && sd.outputs && sd.outputs[i]) output.color=sd.outputs[i];
 			if(output.color=="auto") output.color=stx.defaultColor;
+			this.outputs.push(output);
 		}
 
 		/* And now the parameters */
@@ -5878,10 +6127,12 @@ var __studies_ =
 						}else{
 							parameters[name]=obj.value;
 						}
+						obj.type='select';
 						this.parameters.push(obj);
 					}else if((defaults||defaults===false) && defaults.constructor==Boolean){
 						obj={name:name, heading:stx.translateIf(label), defaultValue:false, value:panelParameters[label].value};
 						parameters[name+"Enabled"]=obj.value;
+						obj.type='checkbox';
 						this.parameters.push(obj);
 					}
 				}
@@ -5889,7 +6140,7 @@ var __studies_ =
 
 			hideTheField.call(this, "underlayEnabled", libraryEntry.underlay);
 			hideTheField.call(this, "panelName", libraryEntry.seriesFN===null);
-			hideTheField.call(this, "yaxisDisplayValue", libraryEntry.seriesFN===null || libraryEntry.yAxis && libraryEntry.yAxis.noDraw);
+			hideTheField.call(this, "yaxisDisplayValue", libraryEntry.seriesFN===null || (libraryEntry.yAxis && libraryEntry.yAxis.noDraw));
 
 		}
 		if(libraryEntry.parameters){
@@ -5901,6 +6152,7 @@ var __studies_ =
 					if(parameters && (parameters.studyOverZonesEnabled || parameters.studyOverZonesEnabled===false)) {
 						obj.value=parameters.studyOverZonesEnabled;
 					}
+					obj.type='checkbox';
 					this.parameters.push(obj);
 
 					obj={name:"studyOverBought", heading:stx.translateIf("OverBought"),
@@ -5909,6 +6161,7 @@ var __studies_ =
 					if(parameters && parameters.studyOverBoughtValue) obj.value=parameters.studyOverBoughtValue;
 					if(parameters && parameters.studyOverBoughtColor) obj.color=parameters.studyOverBoughtColor;
 					if(obj.color=="auto") obj.color=stx.defaultColor;
+					obj.type='text';
 					this.parameters.push(obj);
 
 					obj={name:"studyOverSold", heading:stx.translateIf("OverSold"),
@@ -5917,6 +6170,7 @@ var __studies_ =
 					if(parameters && parameters.studyOverSoldValue) obj.value=parameters.studyOverSoldValue;
 					if(parameters && parameters.studyOverSoldColor) obj.color=parameters.studyOverSoldColor;
 					if(obj.color=="auto") obj.color=stx.defaultColor;
+					obj.type='text';
 					this.parameters.push(obj);
 
 					if(!this.attributes.studyOverBoughtValue) this.attributes.studyOverBoughtValue={};
@@ -6000,9 +6254,9 @@ var __studies_ =
 	 * Fixes any derived studies that were based off of a study that has just changed.
 	 * For instance a moving average on another overlay, or a moving average on an RSI.
 	 * The panel name needs to change and the input "Field".
-	 * @param  {CIQ.ChartEngine} stx       The stx instance
+	 * @param  {CIQ.ChartEngine} stx	   The stx instance
 	 * @param  {string} replaceID The old ID for the underlying study e.g. RSI (14)
-	 * @param  {string} newID     The new ID for the underlying study
+	 * @param  {string} newID	 The new ID for the underlying study
 	 * @since 5.2.0 removed panelID argument
 	 */
 	CIQ.Studies.rejiggerDerivedStudies=function(stx, replaceID, newID){
@@ -6061,11 +6315,11 @@ var __studies_ =
 	 * Replaces an existing study with new inputs, outputs and parameters. When using this method
 	 * a study's position in the stack will remain the same. Derived (child) studies will shift to
 	 * use the new study as well
-	 * @param {CIQ.ChartEngine} stx        The chart object
+	 * @param {CIQ.ChartEngine} stx		The chart object
 	 * @param {string} id 		The id of the current study. If set, then the old study will be replaced
-	 * @param {string} type       The name of the study (out of the studyLibrary)
-	 * @param {object} [inputs]     Inputs for the study instance. Default is those defined in the studyLibrary.
-	 * @param {object} [outputs]    Outputs for the study instance. Default is those defined in the studyLibrary.
+	 * @param {string} type	   The name of the study (out of the studyLibrary)
+	 * @param {object} [inputs]	 Inputs for the study instance. Default is those defined in the studyLibrary.
+	 * @param {object} [outputs]	Outputs for the study instance. Default is those defined in the studyLibrary.
 	 * @param {object} [parameters] additional custom parameters for this study if supported or required by that study
 	 * @param {string} [panelName] Optionally specify the panel. If not specified then an attempt will be made to locate a panel based on the input id or otherwise created if required.
 	 * @param {object} [study] Optionally supply a study definition, overriding what may be found in the study library
@@ -6097,15 +6351,15 @@ var __studies_ =
 	 * See Examples for exact function parameters and return value requirements.
 	 * Please note that these callbacks must be set **before** you call importLayout. Otherwise your imported studies will not have an edit capability.
 	 *
-	 * @param {CIQ.ChartEngine} stx        The chart object
-	 * @param {string} type       The name of the study (object key on the {@link CIQ.Studies.studyLibrary})
-	 * @param {object} [inputs]     Inputs for the study instance. Default is those defined in the studyLibrary. Note that if you specify this object, it will be combined with (override) the library defaults. To bypass a library default, set that field to null.
+	 * @param {CIQ.ChartEngine} stx		The chart object
+	 * @param {string} type	   The name of the study (object key on the {@link CIQ.Studies.studyLibrary})
+	 * @param {object} [inputs]	 Inputs for the study instance. Default is those defined in the studyLibrary. Note that if you specify this object, it will be combined with (override) the library defaults. To bypass a library default, set that field to null.
 	 * @param {string} [inputs.id] The id of the current study. If set, then the old study will be replaced
 	 * @param {string} [inputs.display] The display name of the current study. If not set, a name generated by {@link CIQ.Studies.prettyDisplay} will be used. Note that if the study descriptor defines a `display` name, the study descriptor name will allays override this parameter.
-	 * @param {object} [outputs]    Outputs for the study instance. Default is those defined in the studyLibrary. Values specified here will override those in the studyLibrary.
+	 * @param {object} [outputs]	Outputs for the study instance. Default is those defined in the studyLibrary. Values specified here will override those in the studyLibrary.
 	 * @param {object} [parameters] Additional custom parameters for this study if supported or required by that study. Default is those defined in the {@link CIQ.Studies.studyLibrary}.
 	 * @param {object} [parameters.replaceID] If `inputs.id` is specified, this value can be used to set the new ID for the modified study( will display as the study name on the study panel). If omitted the existing ID will be preserved.
-	 * @param {object} [parameters.display] If this is supplied, use it to form the full study name. Otherwise `studyName` will be used. <br>ie: if custom name is 'SAMPLE', the unique name returned would resemble "SAMPLE(paam1,param2,param3,...)-X".
+	 * @param {object} [parameters.display] If this is supplied, use it to form the full study name. Otherwise `studyName` will be used. Is both `inputs.display` and `parameters.display` are set, `inputs.display` will always take precedence.<br>ie: if custom name is 'SAMPLE', the unique name returned would resemble "SAMPLE(param1,param2,param3,...)-X".
 	 * @param {string} [panelName] Optionally specify the panel. The relationship between studies and their panels is kept in {@link CIQ.Studies.studyPanelMap}. If not specified then an attempt will be made to locate a panel based on the input id or otherwise created if required. Multiple studies can be overlayed on any panel.
 	 * @param {object} [study] Optionally supply a study definition, overriding what may be found in the study library
 	 * @return {object} A study descriptor which can be used to remove or modify the study.
@@ -6241,7 +6495,7 @@ var __studies_ =
 						stx.setPanelEdit(panel, editFunction);
 						sd.editFunction=editFunction;
 					}
-				}else if(!isPanelStudy && stx.callbacks.studyOverlayEdit){
+				}else if(!isPanelStudy){
 					editFunction=(function(stx, sd, inputs, outputs, parameters){return function(forceEdit){
 						CIQ.clearCanvas(stx.chart.tempCanvas, stx); // clear any drawing in progress
 						stx.dispatch("studyOverlayEdit", {stx:stx,sd:sd,inputs:inputs,outputs:outputs, parameters:parameters, forceEdit: forceEdit});
@@ -6331,6 +6585,9 @@ var __studies_ =
 					}else if(panel.close){
 						panel.close.style.display=permanent?"none":"";
 					}
+					if(panel.edit){
+						panel.edit.style.display=permanent?"none":"";
+					}
 					permanentPanel[panel.name]=permanent;
 				}
 			}else{
@@ -6409,7 +6666,7 @@ var __studies_ =
 	 * The sd.error property can be set to true, which will display the default message "Not enough data to compute XXX"
 	 * or it can be set to a custom string which will be displayed as supplied.
 	 * @param  {CIQ.ChartEngine} stx The charting object
-	 * @param  {studyDescriptor} sd     The study descriptor
+	 * @param  {studyDescriptor} sd	 The study descriptor
 	 * @param  {Object} [params]	additional options to customize the watermark
 	 * @param  {string} [params.panel]	name of the panel on which to display the error, defaults to sd.panel
 	 * @param  {string} [params.h]	watermark horizontal position
@@ -6457,8 +6714,8 @@ var __studies_ =
 
 	/**
 	 * Method to determine the minimum and maximum points in a study panel.
-	 * @param  {CIQ.ChartEngine} stx    The chart object
-	 * @param  {studyDescriptor} sd     The study descriptor
+	 * @param  {CIQ.ChartEngine} stx	The chart object
+	 * @param  {studyDescriptor} sd	 The study descriptor
 	 * @param  {array} quotes The set of quotes to evaluate
 	 * @memberOf CIQ.Studies
 	 * @deprecated Since 5.2.0. This calculation is done in {@link CIQ.ChartEngine.AdvancedInjectable#initializeDisplay} and is no longer a separate function.
@@ -6469,8 +6726,8 @@ var __studies_ =
 	 * Retrieves parameters to be used to draw the Y Axis, retrieved from the study library.
 	 * If a range is set in the study library, the yAxis high and low properties are set.
 	 * Invoked by {@link CIQ.ChartEngine.renderYAxis} before createYAxis
-	 * @param  {CIQ.ChartEngine} stx    The chart object
-	 * @param  {CIQ.ChartEngine.YAxis} yAxis     The axis to act upon
+	 * @param  {CIQ.ChartEngine} stx	The chart object
+	 * @param  {CIQ.ChartEngine.YAxis} yAxis	 The axis to act upon
 	 * @return {object} y-axis parameters such as noDraw, range, and ground
 	 * @memberOf CIQ.Studies
 	 * @since 5.2.0
@@ -6517,8 +6774,8 @@ var __studies_ =
 	/**
 	 * studyOverZones will be displayed and Peaks & Valleys will be filled if corresponding thresholds are set in the study library as follows:
 	 * Invoked by {@link CIQ.ChartEngine.renderYAxis} after createYAxis
-	 * @param  {CIQ.ChartEngine} stx    The chart object
-	 * @param  {CIQ.ChartEngine.YAxis} yAxis     The axis to draw upon
+	 * @param  {CIQ.ChartEngine} stx	The chart object
+	 * @param  {CIQ.ChartEngine.YAxis} yAxis	 The axis to draw upon
 	 * @memberOf CIQ.Studies
 	 * @since 5.2.0
 	 *
@@ -6549,8 +6806,8 @@ var __studies_ =
 
 	/**
 	 * Creates the yAxis for a study panel.
-	 * @param  {CIQ.ChartEngine} stx    The chart object
-	 * @param  {studyDescriptor} sd     The study descriptor
+	 * @param  {CIQ.ChartEngine} stx	The chart object
+	 * @param  {studyDescriptor} sd	 The study descriptor
 	 * @param  {array} quotes The set of quotes (representing dataSegment)
 	 * @param  {CIQ.ChartEngine.Panel} panel  A reference to the panel
 	 * @memberOf CIQ.Studies
@@ -6563,8 +6820,8 @@ var __studies_ =
 	 * One series per output field declared in the study library will be displayed.
 	 * It expects the 'quotes' array to have data fields for each series with keys in the outputMap format: 'output name from study library'+ " " + sd.name.
 	 * For most custom studies this function will do the work for you.
-	 * @param  {CIQ.ChartEngine} stx    The chart object
-	 * @param  {studyDescriptor} sd     The study descriptor
+	 * @param  {CIQ.ChartEngine} stx	The chart object
+	 * @param  {studyDescriptor} sd	 The study descriptor
 	 * @param  {array} quotes The set of quotes (dataSegment)
 	 * @memberOf CIQ.Studies
 	 */
@@ -6586,8 +6843,8 @@ var __studies_ =
 	 * - sd.inputs.HistogramType ("overlaid", "clustered", "stacked") - Default "overlaid"
 	 * - sd.inputs.HeightPercentage - Default ".25"
 	 * - sd.inputs.WidthFactor - Default ".5"
-	 * @param  {CIQ.ChartEngine} stx    The chart object
-	 * @param  {studyDescriptor} sd     The study descriptor
+	 * @param  {CIQ.ChartEngine} stx	The chart object
+	 * @param  {studyDescriptor} sd	 The study descriptor
 	 * @param  {array} quotes The set of quotes (dataSegment)
 	 * @memberOf CIQ.Studies
 	 * @example
@@ -6596,7 +6853,7 @@ var __studies_ =
 		CIQ.Studies.studyLibrary["Plot High Low"]={
 		 	"seriesFN": CIQ.Studies.displaySeriesAsHistogram,
 		 	inputs:{"HistogramType":"stacked"},
-		    outputs:{"High":"blue","Low":"red"}
+			outputs:{"High":"blue","Low":"red"}
 		};
 		CIQ.Studies.addStudy(stxx, "Plot High Low");
 	 */
@@ -6647,8 +6904,8 @@ var __studies_ =
 	 * Displays multiple data-points as series on a panel. This is the default display function for an indicator and will
 	 * work for 90% of custom indicators.
 	 * It also inserts the study results into the studyPanelMap to be selected as the basis for another study.
-	 * @param  {CIQ.ChartEngine} stx    The chart object
-	 * @param  {studyDescriptor} sd     The study descriptor
+	 * @param  {CIQ.ChartEngine} stx	The chart object
+	 * @param  {studyDescriptor} sd	 The study descriptor
 	 * @param  {CIQ.ChartEngine.Panel} panel  A reference to the study panel
 	 * @param  {string} name   The name of this study instance (should match field from 'quotes' needed to render this line)
 	 * @param  {array} quotes The array of quotes (dataSegment)
@@ -6709,6 +6966,7 @@ var __studies_ =
 		var showLabel=label || (stx.preferences.labels && label!==false);
 
 		var gaplines=sd.gaplines;
+		if(gaplines===false) gaplines="transparent";
 		var symbol=sd.inputs.Symbol;
 		var colorFunction=gaplines?stx.getGapColorFunction(symbol, name, output, gaplines):null;
 
@@ -6731,8 +6989,8 @@ var __studies_ =
 
 	/**
 	 * Draws a horizontal line on the study.
-	 * @param  {CIQ.ChartEngine} stx    The chart object
-	 * @param  {studyDescriptor} sd     The study descriptor
+	 * @param  {CIQ.ChartEngine} stx	The chart object
+	 * @param  {studyDescriptor} sd	 The study descriptor
 	 * @param  {array} quotes The array of quotes (unused)
 	 * @param  {number} price  The price (value) to draw the horizontal line
 	 * @param  {CIQ.ChartEngine.YAxis} yAxis  The axis to use when drawing the line
@@ -6753,8 +7011,8 @@ var __studies_ =
 	/**
 	 * A sample of a custom display function. This function creates the yAxis, draws **a single** histogram and then plots the series.
 	 * Note that to differentiate between a regular series and the histogram series there is a convention to use sd.name+"_hist" for histogram values on a study</b> See {@link CIQ.Studies.createHistogram} for details</p>
-	 * @param  {CIQ.ChartEngine} stx      The chart object
-	 * @param  {studyDescriptor} sd       The study descriptor
+	 * @param  {CIQ.ChartEngine} stx	  The chart object
+	 * @param  {studyDescriptor} sd	   The study descriptor
 	 * @param  {array} quotes   The quotes (dataSegment)
 	 * @memberOf CIQ.Studies
 	 */
@@ -6770,8 +7028,8 @@ var __studies_ =
 	 * Plots over/under zones for indicators that support them, and when the user selects them. This method will draw its own
 	 * yAxis which will not have a scale, but merely the over under points.
 	 * Shading will be performed between the zone lines and the study plot.
-	 * @param  {CIQ.ChartEngine} stx      The chart object
-	 * @param  {studyDescriptor} sd       The study descriptor
+	 * @param  {CIQ.ChartEngine} stx	  The chart object
+	 * @param  {studyDescriptor} sd	   The study descriptor
 	 * @param  {array} quotes   unused
 	 * @memberOf CIQ.Studies
 	 */
@@ -6882,8 +7140,8 @@ var __studies_ =
 	 * If sd.outputs["Decreasing Bar"] and sd.outputs["Increasing Bar"] are present, their corresponding colors will be used instead.
 	 * <p><b>Note the convention to use sd.name+"_hist" for histogram values on a study</b></p>
 	 *
-	 * @param  {CIQ.ChartEngine} stx      The chart object
-	 * @param  {studyDescriptor} sd       The study descriptor
+	 * @param  {CIQ.ChartEngine} stx	  The chart object
+	 * @param  {studyDescriptor} sd	   The study descriptor
 	 * @param  {array} quotes   The quotes (dataSegment)
 	 * @param  {boolean} centered If true then the histogram will be physically centered on the yAxis, otherwise it will be centered at the zero value on the yAxis
 	 * @param  {number} [opacity=1] Optionally set the opacity
@@ -6948,8 +7206,8 @@ var __studies_ =
 	 * of volume bars. If borderMap (border colors) is passed in then the chart will display in a format where bars are flush against
 	 * one another so that there is no white space between bars. If however a borderMap is not specified then white space will be left
 	 * between the bars.
-	 * @param  {CIQ.ChartEngine} stx      The chart object
-	 * @param  {studyDescriptor} sd       The study descriptor
+	 * @param  {CIQ.ChartEngine} stx	  The chart object
+	 * @param  {studyDescriptor} sd	   The study descriptor
 	 * @param  {object} colorMap Map of colors to arrays. Each array should contain entries for each dataSegment bar mapped to that color.
 	 * It should contain null values for any bar that shouldn't be drawn
 	 * @param {object} borderMap Map of border colors for each color. If null then no borders will be drawn.
@@ -6959,11 +7217,12 @@ var __studies_ =
 	 * colorMap["#00FF00"]=[null,null,12,13,null];
 	 *
 	 * var borderMap={
-	 *    "#FF0000": "#FFFFFF",
-	 *    "#00FF00": "#FFFFDD"
+	 *	"#FF0000": "#FFFFFF",
+	 *	"#00FF00": "#FFFFDD"
 	 * };
 	 * CIQ.Studies.volumeChart(stx, sd, colorMap, borderMap);
 	 * @memberOf CIQ.Studies
+	 * @deprecated since 6.0.0 Use {@link CIQ.ChartEngine#drawHistogram} instead. 
 	 */
 	CIQ.Studies.volumeChart=function(stx, sd, colorMap, borderMap){
 		// Determine min max
@@ -7073,7 +7332,7 @@ var __studies_ =
 	/**
 	 * Convert a study ID into a displayable format
 	 * @param  {string} id The ID
-	 * @return {string}    A pretty (shortened) ID
+	 * @return {string}	A pretty (shortened) ID
 	 * @memberOf CIQ.Studies
 	 */
 	CIQ.Studies.prettyDisplay=function(id){
@@ -7093,8 +7352,8 @@ var __studies_ =
 	 * Returns an array of input field names which are used  to specify the field for the study.
 	 * In most cases, this field is called "Field", but it does not have to be, nor does there need to be only one.
 	 *
-	 * @param  {studyDescriptor} sd       The study descriptor
-	 * @return {array}           Input fields used to specify the field
+	 * @param  {studyDescriptor} sd	   The study descriptor
+	 * @return {array}		   Input fields used to specify the field
 	 * @since 3.0.0
 	 * @memberOf CIQ.Studies
 	 */
@@ -7110,14 +7369,14 @@ var __studies_ =
 	/**
 	 * The default initialize function for a study. It creates the study descriptor. It creates the panel if one is required.
 	 *
-	 * @param  {CIQ.ChartEngine} stx        The chart object
-	 * @param  {string} type       The type of study (from studyLibrary)
-	 * @param  {object} inputs     The inputs for the study instance
-	 * @param  {object} outputs    The outputs for the study instance
+	 * @param  {CIQ.ChartEngine} stx		The chart object
+	 * @param  {string} type	   The type of study (from studyLibrary)
+	 * @param  {object} inputs	 The inputs for the study instance
+	 * @param  {object} outputs	The outputs for the study instance
 	 * @param  {object} [parameters] Optional parameters if required or supported by this study
 	 * @param {string} [panelName] Optional panel. If not provided then the panel will be determined dynamically.
 	 * @param {object} [study]	Optionally supply a study definition to use in lieu of the study library entry
-	 * @return {object}            The newly initialized study descriptor
+	 * @return {object}			The newly initialized study descriptor
 	 * @since 3.0.0 added study argument
 	 * @memberOf CIQ.Studies
 	 */
@@ -7266,7 +7525,7 @@ var __studies_ =
 				if(parameters.yaxisDisplayValue &&
 					parameters.yaxisDisplayValue!="shared"){
 					panel.yAxis.position=parameters.yaxisDisplayValue;
-					panel.yAxis.width=parameters.yaxisDisplayValue=="none"?0:new CIQ.ChartEngine.YAxis().width;
+					panel.yAxis.width=parameters.yaxisDisplayValue=="none"?0:CIQ.ChartEngine.YAxis.prototype.width;
 					panel.yAxis.justifyRight=null;
 					if(!parameters.yaxisDisplayColor || parameters.yaxisDisplayColor=="auto") delete panel.yAxis.textStyle;
 					else panel.yAxis.textStyle=CIQ.colorToHex(parameters.yaxisDisplayColor);
@@ -7401,14 +7660,14 @@ var __studies_ =
 
 	/**
 	 * Moving Average convenience function
-	 * @param  {string}   type    The type of moving average, e.g. simple, exponential, triangular, etc
+	 * @param  {string}   type	The type of moving average, e.g. simple, exponential, triangular, etc
 	 * @param  {number}   periods Moving average period
 	 * @param  {string}   field   The field in the data array to perform the moving average on
 	 * @param  {number}   offset  Periods to offset the result by
-	 * @param  {string}   name    String to prefix to the name of the output.  Full name of output would be name + " " + sd.name, for instance "Signal MACD"
-	 * @param  {CIQ.ChartEngine} stx     Chart object
-	 * @param  {object}   sd      Study Descriptor
-	 * @param  {string}   subField      Subfield within field to perform moving average on, if applicable.  For example, IBM.Close: field:"IBM", subField:"Close"
+	 * @param  {string}   name	String to prefix to the name of the output.  Full name of output would be name + " " + sd.name, for instance "Signal MACD"
+	 * @param  {CIQ.ChartEngine} stx	 Chart object
+	 * @param  {object}   sd	  Study Descriptor
+	 * @param  {string}   subField	  Subfield within field to perform moving average on, if applicable.  For example, IBM.Close: field:"IBM", subField:"Close"
 	 * @memberOf CIQ.Studies
 	 * @since 04-2015
 	 */
@@ -7417,7 +7676,7 @@ var __studies_ =
 		ma.chart=sd.chart;
 		ma.days=parseInt(periods,10);
 		ma.startFrom=sd.startFrom;
-		ma.subField=subField;
+		if(subField) ma.subField=subField;
 		ma.inputs={};
 		if(type) ma.inputs.Type=type;
 		if(field) ma.inputs.Field=field;
@@ -7494,18 +7753,18 @@ var __studies_ =
 		"vol undr": {
 			"name": "Volume Underlay",
 			"underlay": true,
-		    "seriesFN": CIQ.Studies.createVolumeChart,
-		    "calculateFN": CIQ.Studies.calculateVolume,
-		    "inputs": {},
-		    "outputs": {"Up Volume":"#8cc176","Down Volume":"#b82c0c"},
+			"seriesFN": CIQ.Studies.createVolumeChart,
+			"calculateFN": CIQ.Studies.calculateVolume,
+			"inputs": {},
+			"outputs": {"Up Volume":"#8cc176","Down Volume":"#b82c0c"},
 			"customRemoval": true,
 			"removeFN": function(stx, sd){
 					stx.layout.volumeUnderlay=false;
 					stx.changeOccurred("layout");
 				},
-		    "parameters": {
-		    	"init":{heightPercentage: 0.25},
-		    	"widthFactor":1
+			"parameters": {
+				"init":{heightPercentage: 0.25},
+				"widthFactor":1
 			}
 		}
 	 */
@@ -7526,16 +7785,16 @@ var __studies_ =
 	 *  // default study library entry with required parameters
 		"volume": {
 			"name": "Volume Chart",
-		    "range": "0 to max",
-		    "yAxis": {"ground":true, "initialMarginTop":0},
-		    "seriesFN": CIQ.Studies.createVolumeChart,
-		    "calculateFN": CIQ.Studies.calculateVolume,
-		    "inputs": {},
-		    "outputs": {"Up Volume":"#8cc176","Down Volume":"#b82c0c"},
-		    "parameters": {
-		    	"zoom": 0,
-		    	"widthFactor":1
-		    }
+			"range": "0 to max",
+			"yAxis": {"ground":true, "initialMarginTop":0},
+			"seriesFN": CIQ.Studies.createVolumeChart,
+			"calculateFN": CIQ.Studies.calculateVolume,
+			"inputs": {},
+			"outputs": {"Up Volume":"#8cc176","Down Volume":"#b82c0c"},
+			"parameters": {
+				"zoom": 0,
+				"widthFactor":1
+			}
 		}
 	 */
 	CIQ.Studies.createVolumeChart=function(stx, sd, quotes){
@@ -7710,6 +7969,7 @@ var __studies_ =
 		var i, val, its;
 		for(i=sd.startFrom-1, its=0; i>=0 && its<sd.days; i--, its++){
 			val=quotes[i][field];
+			if(val && typeof(val)=="object") val=val[sd.subField];
 			if(isNaN(val)) val=0;
 			acc1+=Math.pow(val,2);
 			acc2+=val;
@@ -7717,12 +7977,14 @@ var __studies_ =
 		for(i=sd.startFrom;i<quotes.length;i++){
 			var quote=quotes[i];
 			val=quote[field];
+			if(val && typeof(val)=="object") val=val[sd.subField];
 			if(isNaN(val)) val=0;
 			acc1+=Math.pow(val,2);
 			acc2+=val;
 			if(i<sd.days-1) continue;
 			if(i>=sd.days){
 				var val2=quotes[i-sd.days][field];
+				if(val2 && typeof(val2)=="object") val2=val2[sd.subField];
 				if(isNaN(val2)) val2=0;
 				acc1-=Math.pow(val2,2);
 				acc2-=val2;
@@ -7742,7 +8004,7 @@ var __studies_ =
 	CIQ.Studies.calculateMovingAverage=function(stx, sd){
 		if(!sd.chart.scrubbed) return;
 		var type=sd.inputs.Type;
-		if(type=="ma" || !type) type="simple";	// handle when the default inputs are passed in
+		if(type=="ma" || type=="sma" || !type) type="simple";	// handle when the default inputs are passed in
 		var typeMap=CIQ.Studies.movingAverage.typeMap;
 		if (type in typeMap) {
 			return CIQ.Studies["calculateMovingAverage" + typeMap[type]](stx, sd);
@@ -7765,6 +8027,7 @@ var __studies_ =
 		var offsetBack=offset;
 		for(i=sd.startFrom-1;i>=0;i--){
 			val=quotes[i][field];
+			if(val && typeof(val)=="object") val=val[sd.subField];
 			if(!val && val!==0) continue;
 			if(offsetBack>0){
 				offsetBack--;
@@ -7782,10 +8045,7 @@ var __studies_ =
 		for(i=start;i<quotes.length;i++){
 			var quote=quotes[i];
 			val=quote[field];
-			if(val && typeof(val)=="object"){
-				var subField=sd.subField || "Close";
-				val=val[subField];
-			}
+			if(val && typeof(val)=="object") val=val[sd.subField];
 			var notOverflowing=i+offset>=0 && i+offset<quotes.length;
 			var offsetQuote=notOverflowing?quotes[i+offset]:null;
 			if(!val && val!==0){
@@ -7843,6 +8103,7 @@ var __studies_ =
 		for(i=start;i<quotes.length;i++){
 			var quote=quotes[i];
 			val=quote[field];
+			if(val && typeof(val)=="object") val=val[sd.subField];
 			var notOverflowing=i+offset>=0 && i+offset<quotes.length;
 			var offsetQuote=notOverflowing?quotes[i+offset]:null;
 			if(!val && val!==0){
@@ -7894,6 +8155,7 @@ var __studies_ =
 		sd.cmo=new CIQ.Studies.StudyDescriptor(sd.name, "cmo", sd.panel);
 		sd.cmo.chart=sd.chart;
 		sd.cmo.days=9;
+		sd.cmo.inputs={"Field":field};
 		sd.cmo.startFrom=sd.startFrom;
 		sd.cmo.outputs={"_CMO":null};
 		CIQ.Studies.calculateChandeMomentum(stx, sd.cmo);
@@ -7920,6 +8182,7 @@ var __studies_ =
 		for(i=start;i<quotes.length;i++){
 			var quote=quotes[i];
 			val=quote[field];
+			if(val && typeof(val)=="object") val=val[sd.subField];
 			var notOverflowing=i+offset>=0 && i+offset<quotes.length;
 			var offsetQuote=notOverflowing?quotes[i+offset]:null;
 			if(!val && val!==0){
@@ -7988,6 +8251,7 @@ var __studies_ =
 		for(i=start;i<quotes.length;i++){
 			var quote=quotes[i];
 			val=quote[field];
+			if(val && typeof(val)=="object") val=val[sd.subField];
 			var notOverflowing=i+offset>=0 && i+offset<quotes.length;
 			var offsetQuote=notOverflowing?quotes[i+offset]:null;
 			if(!val && val!==0){
@@ -8053,7 +8317,7 @@ var __studies_ =
 		var field=sd.inputs.Field;
 		if(!field || field=="field") field="Close";	// Handle when the default inputs are passed in
 		var days=Math.ceil(sd.days/2);
-		CIQ.Studies.MA("simple", days, sd.inputs.Field, 0, "TRI1", stx, sd);
+		CIQ.Studies.MA("simple", days, field, 0, "TRI1", stx, sd);
 		if(sd.days%2===0) days++;
 		CIQ.Studies.MA("simple", days, "TRI1 "+sd.name, 0, "TRI2", stx, sd);
 
@@ -8108,6 +8372,7 @@ var __studies_ =
 		var offsetBack=offset;
 		for(i=sd.startFrom-1;i>=0;i--){
 			val=quotes[i][field];
+			if(val && typeof(val)=="object") val=val[sd.subField];
 			if(!val && val!==0) continue;
 			if(offsetBack>0){
 				offsetBack--;
@@ -8128,6 +8393,7 @@ var __studies_ =
 		for(i=start;i<quotes.length;i++){
 			var quote=quotes[i];
 			val=quote[field];
+			if(val && typeof(val)=="object") val=val[sd.subField];
 			var notOverflowing=i+offset>=0 && i+offset<quotes.length;
 			var offsetQuote=notOverflowing?quotes[i+offset]:null;
 			if(!val && val!==0){
@@ -8246,14 +8512,14 @@ var __studies_ =
 
 	CIQ.Studies.calculateStudyATR=function(stx, sd){
 		var quotes=sd.chart.scrubbed;
-        var period=sd.days;
+		var period=sd.days;
 		if(quotes.length<period+1){
 			sd.error=true;
 			return;
 		}
-        var total=0;
-        var name=sd.name;
-	    for(var i=Math.max(sd.startFrom,1);i<quotes.length;i++){
+		var total=0;
+		var name=sd.name;
+		for(var i=Math.max(sd.startFrom,1);i<quotes.length;i++){
 			var prices=quotes[i];
 			var pd=quotes[i-1];
 			var trueRange=prices.trueRange;
@@ -8323,7 +8589,7 @@ var __studies_ =
 			}
 			quotes[i+1]["Result " + sd.name]=SAR;
 			quotes[i+1]["_state " + sd.name]=[af,ep,lasttrend];
-    	}
+		}
 	};
 
 	CIQ.Studies.calculateTRIX=function(stx, sd){
@@ -8339,11 +8605,11 @@ var __studies_ =
 		}
 
 		var ma3=fields[3];
-	    for(var i=Math.max(1,sd.startFrom);i<quotes.length;i++){
-	    	var q0=quotes[i-1][ma3];
+		for(var i=Math.max(1,sd.startFrom);i<quotes.length;i++){
+			var q0=quotes[i-1][ma3];
 			if(!q0) continue;
 			quotes[i]["Result " + name]=100*((quotes[i][ma3]/q0)-1);
-	    }
+		}
 	};
 
 	CIQ.Studies.calculateIntradayMomentum=function(stx, sd){
@@ -8369,9 +8635,9 @@ var __studies_ =
 				if(pDiff>0) totalUp-=pDiff;
 				else totalDown+=pDiff;
 			}
-    		quotes[i]["Result " + sd.name]=100*totalUp/(totalUp+totalDown);
-    		quotes[i]["_totUp " + sd.name]=totalUp;
-    		quotes[i]["_totDn " + sd.name]=totalDown;
+			quotes[i]["Result " + sd.name]=100*totalUp/(totalUp+totalDown);
+			quotes[i]["_totUp " + sd.name]=totalUp;
+			quotes[i]["_totDn " + sd.name]=totalDown;
 		}
 	};
 
@@ -8522,10 +8788,10 @@ var __studies_ =
 		CIQ.Studies.MA("exponential", sd.days, "trueRange", 0, "_EMA", stx, sd);
 		CIQ.Studies.MA("simple", sd.days, "Close", 0, "_SMA", stx, sd);
 
-	    for(var i=Math.max(1,sd.startFrom);i<quotes.length;i++){
+		for(var i=Math.max(1,sd.startFrom);i<quotes.length;i++){
 			if(!quotes[i]["_SMA "+sd.name] || !quotes[i]["_EMA "+sd.name]) continue;
 			quotes[i]["Result " + sd.name]=(quotes[i].Close-quotes[i]["_SMA "+sd.name])/quotes[i]["_EMA "+sd.name];
-	    }
+		}
 	};
 
 	CIQ.Studies.calculateUltimateOscillator=function(stx, sd){
@@ -8545,28 +8811,28 @@ var __studies_ =
 			if(quotes[sd.startFrom-1]["_accbp " + sd.name]) accbp=quotes[sd.startFrom-1]["_accbp " + sd.name].slice();
 			if(quotes[sd.startFrom-1]["_acctr " + sd.name]) acctr=quotes[sd.startFrom-1]["_acctr " + sd.name].slice();
 		}
-	    for(var i=Math.max(1,sd.startFrom);i<quotes.length;i++){
-	    	var minLC=Math.min(quotes[i].Low,quotes[i-1].Close);
-	    	var bp=quotes[i].Close-minLC;
-	    	var tr=Math.max(quotes[i].High,quotes[i-1].Close)-minLC;
-	    	for(var x=0;x<cycle.length;x++){
-	    		accbp[x]+=bp;
-	    		acctr[x]+=tr;
-		    	if(i>cycle[x]){
-			    	var p_minLC=Math.min(quotes[i-cycle[x]].Low,quotes[i-cycle[x]-1].Close);
-			    	var p_bp=quotes[i-cycle[x]].Close-p_minLC;
-			    	var p_tr=Math.max(quotes[i-cycle[x]].High,quotes[i-cycle[x]-1].Close)-p_minLC;
-		    		accbp[x]-=p_bp;
-		    		acctr[x]-=p_tr;
-		    	}
-	    	}
+		for(var i=Math.max(1,sd.startFrom);i<quotes.length;i++){
+			var minLC=Math.min(quotes[i].Low,quotes[i-1].Close);
+			var bp=quotes[i].Close-minLC;
+			var tr=Math.max(quotes[i].High,quotes[i-1].Close)-minLC;
+			for(var x=0;x<cycle.length;x++){
+				accbp[x]+=bp;
+				acctr[x]+=tr;
+				if(i>cycle[x]){
+					var p_minLC=Math.min(quotes[i-cycle[x]].Low,quotes[i-cycle[x]-1].Close);
+					var p_bp=quotes[i-cycle[x]].Close-p_minLC;
+					var p_tr=Math.max(quotes[i-cycle[x]].High,quotes[i-cycle[x]-1].Close)-p_minLC;
+					accbp[x]-=p_bp;
+					acctr[x]-=p_tr;
+				}
+			}
 			quotes[i]["_accbp " + sd.name]=accbp.slice();
 			quotes[i]["_acctr " + sd.name]=acctr.slice();
-	    	if(i<start) continue;
-	    	var numerator=c12*accbp[0]/acctr[0] + c02*accbp[1]/acctr[1] + c01*accbp[2]/acctr[2];
-	    	var denominator=c12+c02+c01;
+			if(i<start) continue;
+			var numerator=c12*accbp[0]/acctr[0] + c02*accbp[1]/acctr[1] + c01*accbp[2]/acctr[2];
+			var denominator=c12+c02+c01;
 			quotes[i]["Result " + sd.name]=100*numerator/denominator;
-	    }
+		}
 	};
 
 	CIQ.Studies.calculatePriceVolumeTrend=function(stx, sd){
@@ -8578,13 +8844,13 @@ var __studies_ =
 		if(sd.startFrom>1){
 			total=quotes[sd.startFrom-1]["Result "+sd.name];
 		}
-	    for(var i=Math.max(1,sd.startFrom);i<quotes.length;i++){
+		for(var i=Math.max(1,sd.startFrom);i<quotes.length;i++){
 				if(!quotes[i][field]) continue;
 				if(!quotes[i-1][field]) continue;
 
-	    	total+=quotes[i].Volume*(quotes[i][field]-quotes[i-1][field])/quotes[i-1][field];
-    		quotes[i]["Result " + sd.name]=total;
-	    }
+			total+=quotes[i].Volume*(quotes[i][field]-quotes[i-1][field])/quotes[i-1][field];
+			quotes[i]["Result " + sd.name]=total;
+		}
 	};
 
 	CIQ.Studies.calculateOnBalanceVolume=function(stx, sd){
@@ -8598,21 +8864,21 @@ var __studies_ =
 		}
 		var quotes=sd.chart.scrubbed, direction=0;
 		var quote, quote1;
-	    for(var i=sd.startFrom;i<quotes.length;i++){
+		for(var i=sd.startFrom;i<quotes.length;i++){
 			quote=quotes[i];
 			if(!i || !quote[field]) continue;
 			if(quotes[i-1][field]) quote1=quotes[i-1];
 			if(!quote1) continue;
 
-	    	if(quote[field]-quote1[field]>minTick) direction=1;
-	    	else if(quote1[field]-quote[field]>minTick) direction=-1;
-	    	else if(obv) direction=0;
+			if(quote[field]-quote1[field]>minTick) direction=1;
+			else if(quote1[field]-quote[field]>minTick) direction=-1;
+			else if(obv) direction=0;
 
 			var total=quote1["Result " + sd.name];
 			if(!total) total=0;
 			total+=quote.Volume*direction;
-    		quote["Result " + sd.name]=total;
-	    }
+			quote["Result " + sd.name]=total;
+		}
 	};
 
 	CIQ.Studies.calculateVolumeIndex=function(stx, sd){
@@ -8625,15 +8891,25 @@ var __studies_ =
 		}
 		var total=100;
 		if(sd.startFrom>1) total=quotes[sd.startFrom-1]["Index " + sd.name];
-	    for(var i=Math.max(1,sd.startFrom);i<quotes.length;i++){
-				if(!quotes[i][field]) continue;
-				if(!quotes[i-1][field]) continue;
-	    	if((sd.type=="Pos Vol" && quotes[i].Volume>quotes[i-1].Volume) ||
-	    	   (sd.type=="Neg Vol" && quotes[i].Volume<quotes[i-1].Volume)){
-	    		total*=(quotes[i][field]/quotes[i-1][field]);
-	    	}
-    		quotes[i]["Index " + sd.name]=total;
-	    }
+		for(var i=Math.max(1,sd.startFrom);i<quotes.length;i++){
+			var val=quotes[i][field], vol=quotes[i].Volume;
+			if(val && typeof(val)=="object") {
+				vol=val.Volume;
+				val=val[sd.subField];
+			}
+			var val1=quotes[i-1][field], vol1=quotes[i-1].Volume;
+			if(val1 && typeof(val1)=="object") {
+				vol1=val1.Volume;
+				val1=val1[sd.subField];
+			}
+			if(!val) continue;
+			if(!val1) continue;
+			if((sd.type=="Pos Vol" && vol>vol1) ||
+			   (sd.type=="Neg Vol" && vol<vol1)){
+				total*=(val/val1);
+			}
+			quotes[i]["Index " + sd.name]=total;
+		}
 		CIQ.Studies.MA(sd.inputs["Moving Average Type"], sd.days, "Index "+sd.name, 0, "MA", stx, sd);
 	};
 
@@ -8680,7 +8956,7 @@ var __studies_ =
 				}
 			}
 			quotes[i]["_state " + sd.name]=[accum,arr.slice()];
-	    }
+		}
 	};
 
 	CIQ.Studies.calculateSwingIndex=function(stx, sd){
@@ -8689,25 +8965,25 @@ var __studies_ =
 		var quotes=sd.chart.scrubbed;
 		var total=0;
 		if(sd.startFrom>1) total=quotes[sd.startFrom-1]["Result " + sd.name];
-	    for(var i=Math.max(1,sd.startFrom);i<quotes.length;i++){
+		for(var i=Math.max(1,sd.startFrom);i<quotes.length;i++){
 
-	    	var A=Math.abs(quotes[i].High-quotes[i-1].Close);
-	    	var B=Math.abs(quotes[i].Low-quotes[i-1].Close);
-	    	var C=Math.abs(quotes[i].High-quotes[i].Low);
-	    	var D=Math.abs(quotes[i-1].Close-quotes[i-1].Open);
-	    	var K=Math.max(A,B);
-	    	var M=Math.max(C,K);
-	    	var R=M+0.25*D;
-	    	if(M==A) R-=0.5*B;
-	    	else if(M==B) R-=0.5*A;
+			var A=Math.abs(quotes[i].High-quotes[i-1].Close);
+			var B=Math.abs(quotes[i].Low-quotes[i-1].Close);
+			var C=Math.abs(quotes[i].High-quotes[i].Low);
+			var D=Math.abs(quotes[i-1].Close-quotes[i-1].Open);
+			var K=Math.max(A,B);
+			var M=Math.max(C,K);
+			var R=M+0.25*D;
+			if(M==A) R-=0.5*B;
+			else if(M==B) R-=0.5*A;
 
-	    	var swing = (50*((quotes[i].Close-quotes[i-1].Close)+0.5*(quotes[i].Close-quotes[i].Open)+0.25*(quotes[i-1].Close-quotes[i-1].Open))/R)*(K/T);
+			var swing = (50*((quotes[i].Close-quotes[i-1].Close)+0.5*(quotes[i].Close-quotes[i].Open)+0.25*(quotes[i-1].Close-quotes[i-1].Open))/R)*(K/T);
 			if(R===0 || T===0) swing=0;
 
-    		if(sd.type=="Swing") total=0;
+			if(sd.type=="Swing") total=0;
    			total+=swing;
-    		quotes[i]["Result " + sd.name]=total;
-	    }
+			quotes[i]["Result " + sd.name]=total;
+		}
 	};
 
 	CIQ.Studies.calculateADX=function(stx, sd){
@@ -8728,60 +9004,60 @@ var __studies_ =
 		var smoothMinusDM=0;
 		var runningDX=0;
 		var quote;
-	    for(var i=Math.max(1,sd.startFrom);i<quotes.length;i++){
-	    	quote=quotes[i];
-	    	var plusDM=Math.max(0,quote.High-quotes[i-1].High);
-	    	var minusDM=Math.max(0,quotes[i-1].Low-quote.Low);
-	    	if(plusDM>minusDM) minusDM=0;
-	    	else if(minusDM>plusDM) plusDM=0;
-	    	else plusDM=minusDM=0;
+		for(var i=Math.max(1,sd.startFrom);i<quotes.length;i++){
+			quote=quotes[i];
+			var plusDM=Math.max(0,quote.High-quotes[i-1].High);
+			var minusDM=Math.max(0,quotes[i-1].Low-quote.Low);
+			if(plusDM>minusDM) minusDM=0;
+			else if(minusDM>plusDM) plusDM=0;
+			else plusDM=minusDM=0;
 
-	    	if(i<=period){
-	    		smoothPlusDM+=plusDM;
-	    		smoothMinusDM+=minusDM;
-	    		smoothTR+=quote["True Range " + sd.name];
-	    	}else{
-		    	smoothPlusDM=quotes[i-1]["_sm+DM "+sd.name]*(period-1)/period+plusDM;
-		    	smoothMinusDM=quotes[i-1]["_sm-DM "+sd.name]*(period-1)/period+minusDM;
-	    		smoothTR=quotes[i-1]["_smTR "+sd.name]*(period-1)/period+quote["True Range " + sd.name];
-	    	}
-	    	quote["_sm+DM "+sd.name]=smoothPlusDM;
-	    	quote["_sm-DM "+sd.name]=smoothMinusDM;
-	    	quote["_smTR "+sd.name]=smoothTR;
+			if(i<=period){
+				smoothPlusDM+=plusDM;
+				smoothMinusDM+=minusDM;
+				smoothTR+=quote["True Range " + sd.name];
+			}else{
+				smoothPlusDM=quotes[i-1]["_sm+DM "+sd.name]*(period-1)/period+plusDM;
+				smoothMinusDM=quotes[i-1]["_sm-DM "+sd.name]*(period-1)/period+minusDM;
+				smoothTR=quotes[i-1]["_smTR "+sd.name]*(period-1)/period+quote["True Range " + sd.name];
+			}
+			quote["_sm+DM "+sd.name]=smoothPlusDM;
+			quote["_sm-DM "+sd.name]=smoothMinusDM;
+			quote["_smTR "+sd.name]=smoothTR;
 
-    		if(i<period) continue;
+			if(i<period) continue;
 
-	    	var plusDI=100*smoothPlusDM/smoothTR;
-	    	var minusDI=100*smoothMinusDM/smoothTR;
-	    	var DX=100*Math.abs(plusDI-minusDI)/(plusDI+minusDI);
+			var plusDI=100*smoothPlusDM/smoothTR;
+			var minusDI=100*smoothMinusDM/smoothTR;
+			var DX=100*Math.abs(plusDI-minusDI)/(plusDI+minusDI);
 
-    		quote["+DI " + sd.name]=plusDI;
-    		quote["-DI " + sd.name]=minusDI;
-    		if(sd.inputs.Series!==false && smoothing){
-	    		if(i<period+smoothing-1){
-	    	    	if(i==sd.startFrom){
-	    		    	for(var j=period;j<sd.startFrom;j++){
-	    			    	runningDX+=100*Math.abs(quotes[j]["+DI " + sd.name]-quotes[j]["-DI " + sd.name])/(quotes[j]["+DI " + sd.name]+quotes[j]["-DI " + sd.name]);
-	    		    	}
-	    	    	}
-			    	runningDX+=DX;
-			    }else if(i==period+smoothing-1){
-			    	quote["ADX " + sd.name]=runningDX/smoothing;
-			    }else{
-			    	quote["ADX " + sd.name]=(quotes[i-1]["ADX " + sd.name]*(smoothing-1) + DX)/smoothing;
-			    }
-    		}
-    		if(sd.inputs.Histogram){
-    			var histogram=sd.name+"_hist";
-    			if(!quote["+DI "+sd.name] && quote["+DI "+sd.name]!==0) continue;
-    			if(!quote["-DI "+sd.name] && quote["-DI "+sd.name]!==0) continue;
-    			quote[histogram]=quote["+DI "+sd.name]-quote["-DI "+sd.name];
-    			if(sd.inputs.Series===false){  //delete these so yAxis computes max/min correctly
-    				quote["+DI " + sd.name]=null;
-    				quote["-DI " + sd.name]=null;
-    			}
-    		}
-	    }
+			quote["+DI " + sd.name]=plusDI;
+			quote["-DI " + sd.name]=minusDI;
+			if(sd.inputs.Series!==false && smoothing){
+				if(i<period+smoothing-1){
+					if(i==sd.startFrom){
+						for(var j=period;j<sd.startFrom;j++){
+							runningDX+=100*Math.abs(quotes[j]["+DI " + sd.name]-quotes[j]["-DI " + sd.name])/(quotes[j]["+DI " + sd.name]+quotes[j]["-DI " + sd.name]);
+						}
+					}
+					runningDX+=DX;
+				}else if(i==period+smoothing-1){
+					quote["ADX " + sd.name]=runningDX/smoothing;
+				}else{
+					quote["ADX " + sd.name]=(quotes[i-1]["ADX " + sd.name]*(smoothing-1) + DX)/smoothing;
+				}
+			}
+			if(sd.inputs.Histogram){
+				var histogram=sd.name+"_hist";
+				if(!quote["+DI "+sd.name] && quote["+DI "+sd.name]!==0) continue;
+				if(!quote["-DI "+sd.name] && quote["-DI "+sd.name]!==0) continue;
+				quote[histogram]=quote["+DI "+sd.name]-quote["-DI "+sd.name];
+				if(sd.inputs.Series===false){  //delete these so yAxis computes max/min correctly
+					quote["+DI " + sd.name]=null;
+					quote["-DI " + sd.name]=null;
+				}
+			}
+		}
 	};
 
 	CIQ.Studies.calculateRandomWalk=function(stx, sd){
@@ -8823,8 +9099,8 @@ var __studies_ =
 			return;
 		}
 		var field=sd.inputs.Field;
-		if(sd.type=="Vol ROC") field="Volume";
-		else if(!field || field=="field") field="Close";
+		if(!field || field=="field") field="Close";
+		if(sd.parameters.isVolume) field="Volume";
 		var name=sd.name;
 		for(var p in sd.outputs){
 			name=p + " " + name;
@@ -8834,15 +9110,19 @@ var __studies_ =
 		if(!offset) offset=0;
 		else offset=parseInt(offset,10);
 
-	    for(var i=Math.max(sd.startFrom,sd.days);i<quotes.length;i++){
-			if(sd.type=="Momentum") quotes[i][name]=quotes[i][field]-quotes[i-sd.days][field] + offset;
+		for(var i=Math.max(sd.startFrom,sd.days);i<quotes.length;i++){
+			var currentVal=quotes[i][field];
+			if(currentVal && typeof(currentVal)=="object") currentVal=currentVal[sd.subField];
+			var pastVal=quotes[i-sd.days][field];
+			if(pastVal && typeof(pastVal)=="object") pastVal=pastVal[sd.subField];
+			if(sd.type=="Momentum") quotes[i][name]=currentVal-pastVal + offset;
 			else {
-				var denom=quotes[i-sd.days][field];
+				var denom=pastVal;
 				if( denom ){ // skip if denominator is 0 --
-					quotes[i][name]=100*((quotes[i][field]/denom)-1) + offset;
+					quotes[i][name]=100*((currentVal/denom)-1) + offset;
 				}
 			}
-	    }
+		}
 	};
 
 	CIQ.Studies.calculateTypicalPrice=function(stx, sd){
@@ -8883,7 +9163,7 @@ var __studies_ =
 		for(var i=Math.max(sd.startFrom,sd.days-1);i<quotes.length;i++){
 			quotes[i][sd.name+"_hist1"]=quotes[i].High-quotes[i]["_EMA "+sd.name];
 			quotes[i][sd.name+"_hist2"]=quotes[i].Low-quotes[i]["_EMA "+sd.name];
-	    }
+		}
 	};
 
 	CIQ.Studies.calculateElderForce=function(stx, sd){
@@ -8906,14 +9186,14 @@ var __studies_ =
 		}
 		var field=sd.inputs.Field;
 		if(!field || field=="field") field="Close";
-	    for(var i=Math.max(sd.startFrom,sd.days-1);i<quotes.length;i++){
+		for(var i=Math.max(sd.startFrom,sd.days-1);i<quotes.length;i++){
 			var num=0,den=0;
-	    	for(var j=0;j<sd.days;j++){
-	    		num-=(j+1)*quotes[i-j][field];
-	    		den+=quotes[i-j][field];
+			for(var j=0;j<sd.days;j++){
+				num-=(j+1)*quotes[i-j][field];
+				den+=quotes[i-j][field];
 			}
-	    	if(den) quotes[i]["Result "+sd.name]=num/den;
-	    }
+			if(den) quotes[i]["Result "+sd.name]=num/den;
+		}
 	};
 
 	CIQ.Studies.calculateEaseOfMovement=function(stx, sd){
@@ -8922,7 +9202,7 @@ var __studies_ =
 			sd.error=true;
 			return;
 		}
-	    for(var i=Math.max(1,sd.startFrom);i<quotes.length;i++){
+		for(var i=Math.max(1,sd.startFrom);i<quotes.length;i++){
 			var avgCurrent=(quotes[i].High + quotes[i].Low)/2;
 			var avgPrior=(quotes[i-1].High + quotes[i-1].Low)/2;
 			var dm=avgCurrent-avgPrior;
@@ -8932,7 +9212,7 @@ var __studies_ =
 															//directly to the next point after the current tick. Infinity was making the
 															//study not plot in the panel at all while the data point was in dataSegement.
 			else quotes[i]["_EOM1 "+sd.name]=result;
-	    }
+		}
 		CIQ.Studies.MA(sd.inputs["Moving Average Type"], sd.days, "_EOM1 "+sd.name, 0, "Result", stx, sd);
 	};
 
@@ -8942,18 +9222,18 @@ var __studies_ =
 			sd.error=true;
 			return;
 		}
-	    var i;
+		var i;
 		for(i=sd.startFrom;i<quotes.length;i++){
-	    	quotes[i]["_High-Low " + sd.name]=quotes[i].High - quotes[i].Low;
-	    }
+			quotes[i]["_High-Low " + sd.name]=quotes[i].High - quotes[i].Low;
+		}
 		CIQ.Studies.MA(sd.inputs["Moving Average Type"], sd.days, "_High-Low "+sd.name, 0, "_MA", stx, sd);
 
 		var roc=sd.inputs["Rate Of Change"];
 		if(!roc) roc=sd.days;
-	    for(i=Math.max(sd.startFrom,roc);i<quotes.length;i++){
+		for(i=Math.max(sd.startFrom,roc);i<quotes.length;i++){
 				if(!quotes[i-roc]["_MA "+sd.name]) continue;
 					quotes[i]["Result " + sd.name]=100*((quotes[i]["_MA "+sd.name]/quotes[i-roc]["_MA "+sd.name])-1);
-	    }
+		}
 	};
 
 	CIQ.Studies.calculateChaikinMoneyFlow=function(stx, sd){
@@ -8968,19 +9248,19 @@ var __studies_ =
 			if(startQuote["_sumMF " + sd.name]) sumMoneyFlow=startQuote["_sumMF " + sd.name];
 			if(startQuote["_sumV " + sd.name]) sumVolume=startQuote["_sumV " + sd.name];
 		}
-	    for(var i=sd.startFrom;i<quotes.length;i++){
-	    	if(quotes[i].High==quotes[i].Low) quotes[i]["_MFV " + sd.name]=0;
-	    	else quotes[i]["_MFV " + sd.name]=quotes[i].Volume*(2*quotes[i].Close-quotes[i].High-quotes[i].Low)/(quotes[i].High-quotes[i].Low);
-		    sumMoneyFlow+=quotes[i]["_MFV " + sd.name];
-	    	sumVolume+=quotes[i].Volume;
-	    	if(i>sd.days-1){
-			    sumMoneyFlow-=quotes[i-sd.days]["_MFV " + sd.name];
-		    	sumVolume-=quotes[i-sd.days].Volume;
-		    	if(sumVolume) quotes[i]["Result " + sd.name]=sumMoneyFlow/sumVolume;
-	    	}
-	    	quotes[i]["_sumMF " + sd.name]=sumMoneyFlow;
-	    	quotes[i]["_sumV " + sd.name]=sumVolume;
-	    }
+		for(var i=sd.startFrom;i<quotes.length;i++){
+			if(quotes[i].High==quotes[i].Low) quotes[i]["_MFV " + sd.name]=0;
+			else quotes[i]["_MFV " + sd.name]=quotes[i].Volume*(2*quotes[i].Close-quotes[i].High-quotes[i].Low)/(quotes[i].High-quotes[i].Low);
+			sumMoneyFlow+=quotes[i]["_MFV " + sd.name];
+			sumVolume+=quotes[i].Volume;
+			if(i>sd.days-1){
+				sumMoneyFlow-=quotes[i-sd.days]["_MFV " + sd.name];
+				sumVolume-=quotes[i-sd.days].Volume;
+				if(sumVolume) quotes[i]["Result " + sd.name]=sumMoneyFlow/sumVolume;
+			}
+			quotes[i]["_sumMF " + sd.name]=sumMoneyFlow;
+			quotes[i]["_sumV " + sd.name]=sumVolume;
+		}
 	};
 
 	CIQ.Studies.calculateTwiggsMoneyFlow=function(stx, sd){
@@ -8995,22 +9275,22 @@ var __studies_ =
 			if(startQuote["_sumMF " + sd.name]) sumMoneyFlow=startQuote["_sumMF " + sd.name];
 			if(startQuote["_sumV " + sd.name]) sumVolume=startQuote["_sumV " + sd.name];
 		}
-	    for(var i=Math.max(1,sd.startFrom);i<quotes.length;i++){
-	    	var trh=Math.max(quotes[i-1].Close,quotes[i].High);
-	    	var trl=Math.min(quotes[i-1].Close,quotes[i].Low);
-	    	quotes[i]["_MFV " + sd.name]=quotes[i].Volume*(2*quotes[i].Close-trh-trl)/(trh-trl===0?999999:trh-trl);
-	    	if(i>sd.days-1){
-	    		sumMoneyFlow*=(sd.days-1)/sd.days;
-		    	sumVolume*=(sd.days-1)/sd.days;
-	    	}
-		    sumMoneyFlow+=quotes[i]["_MFV " + sd.name];
-		    sumVolume+=quotes[i].Volume;
-	    	if(i>sd.days-1){
-		    	if(sumVolume) quotes[i]["Result " + sd.name]=sumMoneyFlow/(sumVolume>0?sumVolume:999999);
-	    	}
-	    	quotes[i]["_sumMF " + sd.name]=sumMoneyFlow;
-	    	quotes[i]["_sumV " + sd.name]=sumVolume;
-	    }
+		for(var i=Math.max(1,sd.startFrom);i<quotes.length;i++){
+			var trh=Math.max(quotes[i-1].Close,quotes[i].High);
+			var trl=Math.min(quotes[i-1].Close,quotes[i].Low);
+			quotes[i]["_MFV " + sd.name]=quotes[i].Volume*(2*quotes[i].Close-trh-trl)/(trh-trl===0?999999:trh-trl);
+			if(i>sd.days-1){
+				sumMoneyFlow*=(sd.days-1)/sd.days;
+				sumVolume*=(sd.days-1)/sd.days;
+			}
+			sumMoneyFlow+=quotes[i]["_MFV " + sd.name];
+			sumVolume+=quotes[i].Volume;
+			if(i>sd.days-1){
+				if(sumVolume) quotes[i]["Result " + sd.name]=sumMoneyFlow/(sumVolume>0?sumVolume:999999);
+			}
+			quotes[i]["_sumMF " + sd.name]=sumMoneyFlow;
+			quotes[i]["_sumV " + sd.name]=sumVolume;
+		}
 	};
 
 	CIQ.Studies.calculateMassIndex=function(stx, sd){
@@ -9019,9 +9299,9 @@ var __studies_ =
 			sd.error=true;
 			return;
 		}
-	    for(var i=sd.startFrom;i<quotes.length;i++){
-	    	quotes[i]["_High-Low " + sd.name]=quotes[i].High - quotes[i].Low;
-	    }
+		for(var i=sd.startFrom;i<quotes.length;i++){
+			quotes[i]["_High-Low " + sd.name]=quotes[i].High - quotes[i].Low;
+		}
 
 		CIQ.Studies.MA("exponential", 9, "_High-Low "+sd.name, 0, "_EMA", stx, sd);
 		CIQ.Studies.MA("exponential", 9, "_EMA "+sd.name, 0, "_EMA2", stx, sd);
@@ -9029,14 +9309,14 @@ var __studies_ =
 		var total=0;
 		if(quotes[sd.startFrom-1] && quotes[sd.startFrom-1]["_total " + sd.name])
 			total=quotes[sd.startFrom-1]["_total " + sd.name];
-	    for(var j=Math.max(17,sd.startFrom);j<quotes.length;j++){
-	    	total+=quotes[j]["_EMA "+sd.name]/quotes[j]["_EMA2 "+sd.name];
-	    	if(j>=17+sd.days-1){
-	    		quotes[j]["Result " + sd.name]=total;
-	    		total-=quotes[j-sd.days+1]["_EMA "+sd.name]/quotes[j-sd.days+1]["_EMA2 "+sd.name];
-	    	}
-    		quotes[j]["_total " + sd.name]=total;
-	    }
+		for(var j=Math.max(17,sd.startFrom);j<quotes.length;j++){
+			total+=quotes[j]["_EMA "+sd.name]/quotes[j]["_EMA2 "+sd.name];
+			if(j>=17+sd.days-1){
+				quotes[j]["Result " + sd.name]=total;
+				total-=quotes[j-sd.days+1]["_EMA "+sd.name]/quotes[j-sd.days+1]["_EMA2 "+sd.name];
+			}
+			quotes[j]["_total " + sd.name]=total;
+		}
 	};
 
 	CIQ.Studies.calculateMoneyFlowIndex=function(stx, sd){
@@ -9054,30 +9334,30 @@ var __studies_ =
 			cumPosMF=startQuote[cumMFLbl][0];
 			cumNegMF=startQuote[cumMFLbl][1];
 		}
-	    for(var i=sd.startFrom;i<quotes.length;i++){
-	    	var typPrice=quotes[i]["hlc/3"];
-	    	if(i>0){
-		    	var lastTypPrice=quotes[i-1]["hlc/3"];
-    			var rawMoneyFlow=typPrice*quotes[i].Volume;
-	    		if(typPrice>lastTypPrice){
-	    			cumPosMF+=rawMoneyFlow;
-	    		}else if(typPrice<lastTypPrice){
-	    			rawMoneyFlow*=-1;
-	    			cumNegMF-=rawMoneyFlow;
-	    		}else{
-	    			rawMoneyFlow=0;
-	    		}
-    			if(i>sd.days){
-    				var old=quotes[i-sd.days][rawMFLbl];
-    				if(old>0) cumPosMF-=old;
-    				else cumNegMF+=old;
-    				if(cumNegMF===0) quotes[i][resultLbl]=100;
-    				else quotes[i][resultLbl]=100 - 100/(1 + (cumPosMF/cumNegMF));
-    			}
-    			quotes[i][rawMFLbl]=rawMoneyFlow;
-    			quotes[i][cumMFLbl]=[cumPosMF, cumNegMF];
-	    	}
-	    }
+		for(var i=sd.startFrom;i<quotes.length;i++){
+			var typPrice=quotes[i]["hlc/3"];
+			if(i>0){
+				var lastTypPrice=quotes[i-1]["hlc/3"];
+				var rawMoneyFlow=typPrice*quotes[i].Volume;
+				if(typPrice>lastTypPrice){
+					cumPosMF+=rawMoneyFlow;
+				}else if(typPrice<lastTypPrice){
+					rawMoneyFlow*=-1;
+					cumNegMF-=rawMoneyFlow;
+				}else{
+					rawMoneyFlow=0;
+				}
+				if(i>sd.days){
+					var old=quotes[i-sd.days][rawMFLbl];
+					if(old>0) cumPosMF-=old;
+					else cumNegMF+=old;
+					if(cumNegMF===0) quotes[i][resultLbl]=100;
+					else quotes[i][resultLbl]=100 - 100/(1 + (cumPosMF/cumNegMF));
+				}
+				quotes[i][rawMFLbl]=rawMoneyFlow;
+				quotes[i][cumMFLbl]=[cumPosMF, cumNegMF];
+			}
+		}
 	};
 
 	CIQ.Studies.calculateChandeMomentum=function(stx, sd){
@@ -9091,21 +9371,29 @@ var __studies_ =
 			return;
 		}
 
+		var field=sd.inputs.Field;
+		if(!field || field=="field") field="Close";  // only used when called from VMA
+
 		var sumMomentum=0,absSumMomentum=0;
 		var history=[];
-	    for(var i=sd.startFrom-sd.days+1;i<quotes.length;i++){
-	    	if(i<1) continue;
-	    	var diff=quotes[i].Close-quotes[i-1].Close;
-	    	history.push(diff);
-	    	sumMomentum+=diff;
-	    	absSumMomentum+=Math.abs(diff);
-	    	if(history.length==sd.days){
-		    	quotes[i][name]=100*sumMomentum/absSumMomentum;
-			    var old=history.shift();
-		    	sumMomentum-=old;
-		    	absSumMomentum-=Math.abs(old);
-	    	}
-	    }
+		for(var i=sd.startFrom-sd.days+1;i<quotes.length;i++){
+			if(i<1) continue;
+			var q=quotes[i][field],q1=quotes[i-1][field];
+			if(q && typeof(q)=="object") q=q.Close;
+			if(q1 && typeof(q1)=="object") q1=q1.Close;
+			if(q1===undefined) continue;  // the field is not defined yet
+
+			var diff=q-q1;
+			history.push(diff);
+			sumMomentum+=diff;
+			absSumMomentum+=Math.abs(diff);
+			if(history.length==sd.days){
+				quotes[i][name]=100*sumMomentum/absSumMomentum;
+				var old=history.shift();
+				sumMomentum-=old;
+				absSumMomentum-=Math.abs(old);
+			}
+		}
 	};
 
 	CIQ.Studies.calculateChandeForecast=function(stx, sd){
@@ -9117,9 +9405,11 @@ var __studies_ =
 		var field=sd.inputs.Field;
 		if(!field || field=="field") field="Close";
 		CIQ.Studies.MA("time series", sd.days, field, 0, "MA", stx, sd);
-	    for(var i=Math.max(1,sd.startFrom);i<quotes.length;i++){
-		    quotes[i]["Result " + sd.name]=100*(1-(quotes[i]["MA "+sd.name]/quotes[i][field]));
-	    }
+		for(var i=Math.max(1,sd.startFrom);i<quotes.length;i++){
+			var val=quotes[i][field];
+	   		if(val && typeof(val)=="object") val=val[sd.subField];
+			quotes[i]["Result " + sd.name]=100*(1-(quotes[i]["MA "+sd.name]/val));
+		}
 	};
 
 	CIQ.Studies.calculateDetrendedPrice=function(stx, sd){
@@ -9130,13 +9420,14 @@ var __studies_ =
 		}
 		var field=sd.inputs.Field;
 		if(!field || field=="field") field="Close";
-		CIQ.Studies.MA(sd.inputs["Moving Average Type"], sd.days, field, 0, "MA", stx, sd);
+		var offset=Math.floor(sd.days/2+1);
+		CIQ.Studies.MA(sd.inputs["Moving Average Type"], sd.days, field, -offset, "MA", stx, sd);
 
-	    for(var i=Math.max(sd.startFrom, Math.floor(sd.days/2+1));
-	    		i<quotes.length;
-	    		i++){
-		    quotes[i]["Result " + sd.name]=quotes[i-Math.floor(sd.days/2+1)][field]-quotes[i]["MA "+sd.name];
-	    }
+		for(var i=Math.max(sd.days-offset-1,sd.startFrom-offset); i<quotes.length-offset; i++){
+			var val=quotes[i][field];
+			if(val && typeof(val)=="object") val=val[sd.subField];
+			quotes[i]["Result " + sd.name]=val-quotes[i]["MA "+sd.name];
+		}
 	};
 
 	CIQ.Studies.calculateAroon=function(stx, sd){
@@ -9157,46 +9448,46 @@ var __studies_ =
 			}
 		}
 		var j;
-	    for(var i=sd.startFrom;i<quotes.length;i++){
-	    	if(xDayHigh===null) xDayHigh=quotes[i].High;
-	    	if(xDayLow===null) xDayLow=quotes[i].Low;
-	    	xDayHigh=Math.max(xDayHigh,quotes[i].High);
-	    	if(xDayHigh==quotes[i].High){
-	    		daysSinceHigh=0;
-	    	}else{
-	    		daysSinceHigh++;
-		    	if(daysSinceHigh>sd.days){
-		    		xDayHigh=quotes[i].High;
-		    		daysSinceHigh=0;
-		    		for(j=1;j<=sd.days;j++){
-		    			xDayHigh=Math.max(xDayHigh,quotes[i-j].High);
-		    			if(xDayHigh==quotes[i-j].High){
-		    				daysSinceHigh=j;
-		    			}
-		    		}
-		    	}
-	    	}
-	    	xDayLow=Math.min(xDayLow,quotes[i].Low);
-	    	if(xDayLow==quotes[i].Low){
-	    		daysSinceLow=0;
-	    	}else{
-	    		daysSinceLow++;
-		    	if(daysSinceLow>sd.days){
-		    		xDayLow=quotes[i].Low;
-		    		daysSinceLow=0;
-		    		for(j=1;j<=sd.days;j++){
-		    			xDayLow=Math.min(xDayLow,quotes[i-j].Low);
-		    			if(xDayLow==quotes[i-j].Low){
-		    				daysSinceLow=j;
-		    			}
-		    		}
-		    	}
-	    	}
-	    	quotes[i]["Aroon Up " + sd.name]=100*(1-daysSinceHigh/sd.days);
-	    	quotes[i]["Aroon Down " + sd.name]=100*(1-daysSinceLow/sd.days);
-	    	quotes[i]["Aroon Oscillator " + sd.name]=quotes[i]["Aroon Up " + sd.name]-quotes[i]["Aroon Down " + sd.name];
-	    	quotes[i]["_state "+sd.name]=[daysSinceHigh,daysSinceLow,xDayHigh,xDayLow];
-	    }
+		for(var i=sd.startFrom;i<quotes.length;i++){
+			if(xDayHigh===null) xDayHigh=quotes[i].High;
+			if(xDayLow===null) xDayLow=quotes[i].Low;
+			xDayHigh=Math.max(xDayHigh,quotes[i].High);
+			if(xDayHigh==quotes[i].High){
+				daysSinceHigh=0;
+			}else{
+				daysSinceHigh++;
+				if(daysSinceHigh>sd.days){
+					xDayHigh=quotes[i].High;
+					daysSinceHigh=0;
+					for(j=1;j<=sd.days;j++){
+						xDayHigh=Math.max(xDayHigh,quotes[i-j].High);
+						if(xDayHigh==quotes[i-j].High){
+							daysSinceHigh=j;
+						}
+					}
+				}
+			}
+			xDayLow=Math.min(xDayLow,quotes[i].Low);
+			if(xDayLow==quotes[i].Low){
+				daysSinceLow=0;
+			}else{
+				daysSinceLow++;
+				if(daysSinceLow>sd.days){
+					xDayLow=quotes[i].Low;
+					daysSinceLow=0;
+					for(j=1;j<=sd.days;j++){
+						xDayLow=Math.min(xDayLow,quotes[i-j].Low);
+						if(xDayLow==quotes[i-j].Low){
+							daysSinceLow=j;
+						}
+					}
+				}
+			}
+			quotes[i]["Aroon Up " + sd.name]=100*(1-daysSinceHigh/sd.days);
+			quotes[i]["Aroon Down " + sd.name]=100*(1-daysSinceLow/sd.days);
+			quotes[i]["Aroon Oscillator " + sd.name]=quotes[i]["Aroon Up " + sd.name]-quotes[i]["Aroon Down " + sd.name];
+			quotes[i]["_state "+sd.name]=[daysSinceHigh,daysSinceLow,xDayHigh,xDayLow];
+		}
 	};
 
 	CIQ.Studies.calculatePrimeNumber=function(stx, sd){
@@ -9207,54 +9498,54 @@ var __studies_ =
 			//assume x is an int
 			else if(primes[x]===true || primes[x]===false) return primes[x];
 			var q = parseInt(Math.sqrt(x),10);
-		    for (var i = 2; i <= q; i++){
-		        if (x%i===0) {
-		        	primes[x]=false;
-		        	return false;
-		        }
-		    }
-		    primes[x]=true;
-		    return true;
+			for (var i = 2; i <= q; i++){
+				if (x%i===0) {
+					primes[x]=false;
+					return false;
+				}
+			}
+			primes[x]=true;
+			return true;
 		}
 		var quotes=sd.chart.scrubbed;
-	    for(var i=sd.startFrom;i<quotes.length;i++){
-	    	var quote=quotes[i];
-	    	if(!quote) continue;
+		for(var i=sd.startFrom;i<quotes.length;i++){
+			var quote=quotes[i];
+			if(!quote) continue;
 
-	    	var high=quote.High;
-	    	//high=Math.ceil(high);
-	    	for(var h=0;high>0 && high<=10;h++) high*=10;
-	    	if(isPrime(high)) high+=2;
-	    	high=Math.ceil(high);
-	    	if(high%2===0) high++;
-	    	while(!isPrime(high)) high+=2;
-	    	high/=Math.pow(10,h);
+			var high=quote.High;
+			//high=Math.ceil(high);
+			for(var h=0;high>0 && high<=10;h++) high*=10;
+			if(isPrime(high)) high+=2;
+			high=Math.ceil(high);
+			if(high%2===0) high++;
+			while(!isPrime(high)) high+=2;
+			high/=Math.pow(10,h);
 
-	    	var low=quote.Low;
-	    	//low=Math.floor(low);
-	    	for(var l=0;low>0 && low<=10;l++) low*=10;
-	    	if(isPrime(low)) low-=2;
-	    	low=Math.floor(low);
-	    	if(low%2===0) low--;
-	    	if(low>0){
-		    	while(!isPrime(low)) low-=2;
-		    	low/=Math.pow(10,l);
-		    }
+			var low=quote.Low;
+			//low=Math.floor(low);
+			for(var l=0;low>0 && low<=10;l++) low*=10;
+			if(isPrime(low)) low-=2;
+			low=Math.floor(low);
+			if(low%2===0) low--;
+			if(low>0){
+				while(!isPrime(low)) low-=2;
+				low/=Math.pow(10,l);
+			}
 
-	        if(sd.type=="Prime Number Bands"){
-	        	quote["Prime Bands Top " + sd.name]=high;
-	        	quote["Prime Bands Bottom " + sd.name]=Math.max(0,low);
-	        }else{
-	        	var value=0;
-	        	var tolerance=sd.inputs["Tolerance Percentage"]*(high-low)/100;
-	        	var skew=high+low-2*quote.Close;
-	        	if(skew<tolerance)
-	        		value=1;
-	        	else if(skew>tolerance)
-	        		value=-1;
-	        	if(value) quote["Result " + sd.name]=value;
-	        }
-	    }
+			if(sd.type=="Prime Number Bands"){
+				quote["Prime Bands Top " + sd.name]=high;
+				quote["Prime Bands Bottom " + sd.name]=Math.max(0,low);
+			}else{
+				var value=0;
+				var tolerance=sd.inputs["Tolerance Percentage"]*(high-low)/100;
+				var skew=high+low-2*quote.Close;
+				if(skew<tolerance)
+					value=1;
+				else if(skew>tolerance)
+					value=-1;
+				if(value) quote["Result " + sd.name]=value;
+			}
+		}
 	};
 
 	CIQ.Studies.calculateVerticalHorizontalFilter=function(stx, sd){
@@ -9270,17 +9561,17 @@ var __studies_ =
 		sd.mhml.inputs={};
 		sd.mhml.outputs={"_MHML":null};
 		CIQ.Studies.calculateMaxHighMinLow(stx, sd.mhml);
-	    var sumChanges=0;
-	    var changes=[];
-	    for(var i=Math.max(1,sd.startFrom-sd.days);i<quotes.length;i++){
-	    	var change=Math.abs(quotes[i].Close-quotes[i-1].Close);
-	    	changes.push(change);
-	    	sumChanges+=change;
-	    	if(changes.length==sd.days){
-	    		quotes[i]["Result " + sd.name]=quotes[i]["_MHML "+sd.name]/sumChanges;
-	    		sumChanges-=changes.shift();
-	    	}
-	    }
+		var sumChanges=0;
+		var changes=[];
+		for(var i=Math.max(1,sd.startFrom-sd.days);i<quotes.length;i++){
+			var change=Math.abs(quotes[i].Close-quotes[i-1].Close);
+			changes.push(change);
+			sumChanges+=change;
+			if(changes.length==sd.days){
+				quotes[i]["Result " + sd.name]=quotes[i]["_MHML "+sd.name]/sumChanges;
+				sumChanges-=changes.shift();
+			}
+		}
 	};
 
 	CIQ.Studies.calculatePriceOscillator=function(stx, sd){
@@ -9294,12 +9585,10 @@ var __studies_ =
 		var field=sd.inputs.Field;
 		var maType=sd.inputs["Moving Average Type"];
 		if(!maType) maType="simple";
-		if(!field || field=="field"){
-			if(sd.parameters.isVolume) {
-				field="Volume";
-				maType="exponential";
-			}
-			else field="Close";
+		if(!field || field=="field") field="Close";
+		if(sd.parameters.isVolume) {
+			field="Volume";
+			maType="exponential";
 		}
 		var pts=sd.inputs["Points Or Percent"];
 		if(!pts) pts="Percent";
@@ -9307,13 +9596,13 @@ var __studies_ =
 		CIQ.Studies.MA(maType, short, field, 0, "_Short MA", stx, sd);
 		CIQ.Studies.MA(maType, long, field, 0, "_Long MA", stx, sd);
 
-	    for(var i=Math.max(long,sd.startFrom);i<quotes.length;i++){
-	    	var quote=quotes[i];
-	    	if(!quote) continue;
-	        if(pts=="Points") quote["Result " + sd.name]=quote["_Short MA " + sd.name]-quote["_Long MA " + sd.name];
-	        else quote["Result " + sd.name]=100*((quote["_Short MA " + sd.name]/quote["_Long MA " + sd.name])-1);
+		for(var i=Math.max(long,sd.startFrom);i<quotes.length;i++){
+			var quote=quotes[i];
+			if(!quote) continue;
+			if(pts=="Points") quote["Result " + sd.name]=quote["_Short MA " + sd.name]-quote["_Long MA " + sd.name];
+			else quote["Result " + sd.name]=100*((quote["_Short MA " + sd.name]/quote["_Long MA " + sd.name])-1);
 			if(sd.outputs["Increasing Bar"]) quote[sd.name+"_hist"]=quote["Result "+sd.name];
-	    }
+		}
 	};
 
 	CIQ.Studies.calculateKeltner=function(stx, sd){
@@ -9339,13 +9628,13 @@ var __studies_ =
 			sd.error=true;
 			return;
 		}
-	    for(var i=Math.max(sd.startFrom,longDays);i<quotes.length;i++){
+		for(var i=Math.max(sd.startFrom,longDays);i<quotes.length;i++){
 			var denom1=quotes[i-shortDays][field];
 			var denom2=quotes[i-longDays][field];
 			if( denom1 && denom2 ){ // skip if denominator is 0 --
 				quotes[i]["_Sum "+sd.name]=100*((quotes[i][field]/denom1)+(quotes[i][field]/denom2)-2);
 			}
-	    }
+		}
 
 		CIQ.Studies.MA("weighted", period, "_Sum "+sd.name, 0, "Result", stx, sd);
 	};
@@ -9368,32 +9657,36 @@ var __studies_ =
 		var sumClosesSquared=0;
 		if(sd.startFrom){
 			var sums=quotes[sd.startFrom-1]["_sums "+sd.name];
-	    	if(sums){
-	    		sumWeightedCloses=sums[0];
-		    	sumCloses=sums[1];
-		    	sumClosesSquared=sums[2];
-	    	}
+			if(sums){
+				sumWeightedCloses=sums[0];
+				sumCloses=sums[1];
+				sumClosesSquared=sums[2];
+			}
 		}
-	    for(var i=sd.startFrom;i<quotes.length;i++){
-	    	if(!quotes[i][field] && quotes[i][field]!==0) continue;
-	    	sumWeightedCloses+=sd.days*quotes[i][field]-sumCloses;
-	    	sumCloses+=quotes[i][field];
-	    	sumClosesSquared+=Math.pow(quotes[i][field],2);
-	    	if(i<sd.days-1) continue;
-	    	else if(i>sd.days-1) {
-		    	if(!quotes[i-sd.days][field] && quotes[i-sd.days][field]!==0) continue;
-	    		sumCloses-=quotes[i-sd.days][field];
-	    		sumClosesSquared-=Math.pow(quotes[i-sd.days][field],2);
-	    	}
-	    	var b=(sd.days*sumWeightedCloses-sumWeights*sumCloses)/(sd.days*sumWeightsSquared-squaredSumWeights);
+		for(var i=sd.startFrom;i<quotes.length;i++){
+			var currentQuote=quotes[i][field];
+			if(currentQuote && typeof(currentQuote)=="object") currentQuote=currentQuote[sd.subField];
+			if(!currentQuote && currentQuote!==0) continue;
+			sumWeightedCloses+=sd.days*currentQuote-sumCloses;
+			sumCloses+=currentQuote;
+			sumClosesSquared+=Math.pow(currentQuote,2);
+			if(i<sd.days-1) continue;
+			else if(i>sd.days-1) {
+				var daysAgoQuote=quotes[i-sd.days][field];
+				if(daysAgoQuote && typeof(daysAgoQuote)=="object") daysAgoQuote=daysAgoQuote[sd.subField];
+				if(!daysAgoQuote && daysAgoQuote!==0) continue;
+				sumCloses-=daysAgoQuote;
+				sumClosesSquared-=Math.pow(daysAgoQuote,2);
+			}
+			var b=(sd.days*sumWeightedCloses-sumWeights*sumCloses)/(sd.days*sumWeightsSquared-squaredSumWeights);
 			quotes[i]["Slope "+sd.name]=b;
-	    	var a=(sumCloses-b*sumWeights)/sd.days;
+			var a=(sumCloses-b*sumWeights)/sd.days;
 			quotes[i]["Intercept "+sd.name]=a;
 			quotes[i]["Forecast "+sd.name]=a+b*sd.days;
-	    	var c=(sd.days*sumWeightsSquared-squaredSumWeights)/(sd.days*sumClosesSquared-Math.pow(sumCloses,2));
+			var c=(sd.days*sumWeightsSquared-squaredSumWeights)/(sd.days*sumClosesSquared-Math.pow(sumCloses,2));
 			quotes[i]["RSquared "+sd.name]=b*b*c;
 			quotes[i]["_sums "+sd.name]=[sumWeightedCloses,sumCloses,sumClosesSquared];
-	    }
+		}
 	};
 
 	CIQ.Studies.calculateBollinger=function(stx, sd){
@@ -9453,20 +9746,28 @@ var __studies_ =
 	CIQ.Studies.calculateGenericEnvelope=function(stx, sd, percentShift, centerIndex, offsetIndex, pointShift){
 		if(!percentShift) percentShift=0;
 		if(!pointShift) pointShift=0;
-		if(!centerIndex) centerIndex="Close";
+		if(!centerIndex || centerIndex=="field") centerIndex="Close";
 		if(!offsetIndex) offsetIndex=centerIndex;
 		var quotes=sd.chart.scrubbed;
-	    for(var i=sd.startFrom;quotes && i<quotes.length;i++){
-	    	var quote=quotes[i];
-	    	if(!quote) continue;
+		var field = sd.inputs.Field;
+		if (!field || field === "field") field = "Close";
+		for(var i=sd.startFrom;quotes && i<quotes.length;i++){
+			var quote=quotes[i];
+			if(!quote) continue;
 			if(!quote[centerIndex]) continue;
-			var totalShift=percentShift*quote[offsetIndex]+pointShift;
-	        quote[sd.type + " Top " + sd.name]=quote[centerIndex]+totalShift;
-	        quote[sd.type + " Bottom " + sd.name]=quote[centerIndex]-totalShift;
-	        quote[sd.type + " Median " + sd.name]=quote[centerIndex];
-	        quote["Bandwidth " + sd.name]=200*totalShift/quote[centerIndex];
-	        quote["%b " + sd.name]=50*((quote.Close-quote[centerIndex])/totalShift+1);
-	    }
+			var closeValue=quote[field];
+			if(closeValue && typeof(closeValue)=="object") closeValue=closeValue.Close;
+			var centerValue=quote[centerIndex];
+			if(centerValue && typeof(centerValue)=="object") centerValue=centerValue[sd.subField];
+			var offsetValue=quote[offsetIndex];
+			if(offsetValue && typeof(offsetValue)=="object") offsetValue=offsetValue[sd.subField];
+			var totalShift=percentShift*offsetValue+pointShift;
+			quote[sd.type + " Top " + sd.name]=centerValue+totalShift;
+			quote[sd.type + " Bottom " + sd.name]=centerValue-totalShift;
+			quote[sd.type + " Median " + sd.name]=centerValue;
+			quote["Bandwidth " + sd.name]=centerValue?200*totalShift/centerValue:0;
+			quote["%b " + sd.name]=50*((closeValue-centerValue)/totalShift+1);
+		}
 	};
 
 	CIQ.Studies.calculateMaxHighMinLow=function(stx, sd){
@@ -9482,81 +9783,81 @@ var __studies_ =
 		var low=Number.MAX_VALUE,high=Number.MAX_VALUE*-1;
 		var j;
 		if(sd.startFrom>1){
-    		for(j=1;j<highPeriod;j++){
-    			high=Math.max(high,quotes[sd.startFrom-j].High);
-    		}
-    		for(j=1;j<lowPeriod;j++){
-    			low=Math.min(low,quotes[sd.startFrom-j].Low);
-    		}
+			for(j=1;j<highPeriod;j++){
+				high=Math.max(high,quotes[sd.startFrom-j].High);
+			}
+			for(j=1;j<lowPeriod;j++){
+				low=Math.min(low,quotes[sd.startFrom-j].Low);
+			}
 		}
-	    for(var i=Math.max(0,sd.startFrom-1);i<quotes.length;i++){
-        	high=Math.max(high,quotes[i].High);
-	        low=Math.min(low,quotes[i].Low);
-	        if(i>=highPeriod){
-	        	if((quotes[i-highPeriod].High)==high){
-	        		high=quotes[i].High;
-	        		for(j=1;j<highPeriod;j++){
-	        			high=Math.max(high,quotes[i-j].High);
-	        		}
-	        	}
-	        }
-		    if(i>=lowPeriod){
-	        	if((quotes[i-lowPeriod].Low)==low){
-	        		low=quotes[i].Low;
-	        		for(j=1;j<lowPeriod;j++){
-	        			low=Math.min(low,quotes[i-j].Low);
-	        		}
-	        	}
-	        }
-	        var result=0;
-	        if(sd.type=="HHV"){
-	        	result=high;
-	        }else if(sd.type=="LLV"){
-	        	result=low;
-	        }else if(sd.type=="Donchian Width"){
-	        	result=high-low;
-	        }else if(sd.type=="GAPO" || sd.type=="Gopala"){
-	        	result=Math.log(high-low)/Math.log(lowPeriod);
-	        }else if(sd.type=="VT HZ Filter"){
-	        	result=high-low;
-		        quotes[i]["_MHML "+sd.name]=result;
-		        continue;
-	        }else if(sd.type=="Williams %R"){
-	        	result=-100*(high-quotes[i].Close)/(high-low);
-		        quotes[i]["Result " + sd.name]=result;
-		        continue;
-	        }
-	    	if(i==quotes.length-1) break;
+		for(var i=Math.max(0,sd.startFrom-1);i<quotes.length;i++){
+			high=Math.max(high,quotes[i].High);
+			low=Math.min(low,quotes[i].Low);
+			if(i>=highPeriod){
+				if((quotes[i-highPeriod].High)==high){
+					high=quotes[i].High;
+					for(j=1;j<highPeriod;j++){
+						high=Math.max(high,quotes[i-j].High);
+					}
+				}
+			}
+			if(i>=lowPeriod){
+				if((quotes[i-lowPeriod].Low)==low){
+					low=quotes[i].Low;
+					for(j=1;j<lowPeriod;j++){
+						low=Math.min(low,quotes[i-j].Low);
+					}
+				}
+			}
+			var result=0;
+			if(sd.type=="HHV"){
+				result=high;
+			}else if(sd.type=="LLV"){
+				result=low;
+			}else if(sd.type=="Donchian Width"){
+				result=high-low;
+			}else if(sd.type=="GAPO" || sd.type=="Gopala"){
+				result=Math.log(high-low)/Math.log(lowPeriod);
+			}else if(sd.type=="VT HZ Filter"){
+				result=high-low;
+				quotes[i]["_MHML "+sd.name]=result;
+				continue;
+			}else if(sd.type=="Williams %R"){
+				result=-100*(high-quotes[i].Close)/(high-low);
+				quotes[i]["Result " + sd.name]=result;
+				continue;
+			}
+			if(i==quotes.length-1) break;
 
-	        if(sd.type=="Donchian Channel"){
-		        quotes[i+1]["Donchian High " + sd.name]=high;
-		        quotes[i+1]["Donchian Low " + sd.name]=low;
-		        quotes[i+1]["Donchian Median " + sd.name]=(high+low)/2;
-	        }else{  //width
-		        quotes[i+1]["Result " + sd.name]=result;
-	        }
-	    }
+			if(sd.type=="Donchian Channel"){
+				quotes[i+1]["Donchian High " + sd.name]=high;
+				quotes[i+1]["Donchian Low " + sd.name]=low;
+				quotes[i+1]["Donchian Median " + sd.name]=(high+low)/2;
+			}else{  //width
+				quotes[i+1]["Result " + sd.name]=result;
+			}
+		}
 	};
 
 	CIQ.Studies.calculateAccumulationDistribution=function(stx, sd){
 		var quotes=sd.chart.scrubbed;
-	    for(var i=sd.startFrom;i<quotes.length;i++){
-	    	if(!i) continue;
-	    	var quote=quotes[i];
-	    	var quote1=quotes[i-1];
-	    	var todayAD=0;
-	    	if(quote.Close>quote1.Close){
-	    		todayAD=quote.Close-Math.min(quote.Low,quote1.Close);
-	    	}else if(quote.Close<quote1.Close){
-	    		todayAD=quote.Close-Math.max(quote.High,quote1.Close);
-	    	}
-	    	if(sd.inputs["Use Volume"]) todayAD*=quote.Volume;
+		for(var i=sd.startFrom;i<quotes.length;i++){
+			if(!i) continue;
+			var quote=quotes[i];
+			var quote1=quotes[i-1];
+			var todayAD=0;
+			if(quote.Close>quote1.Close){
+				todayAD=quote.Close-Math.min(quote.Low,quote1.Close);
+			}else if(quote.Close<quote1.Close){
+				todayAD=quote.Close-Math.max(quote.High,quote1.Close);
+			}
+			if(sd.inputs["Use Volume"]) todayAD*=quote.Volume;
 
 			var total=quote1["Result " + sd.name];
 			if(!total) total=0;
-	    	total+=todayAD;
-        	quote["Result " + sd.name]=total;
-	    }
+			total+=todayAD;
+			quote["Result " + sd.name]=total;
+		}
 	};
 
 	CIQ.Studies.calculateCCI=function(stx, sd){
@@ -9568,9 +9869,9 @@ var __studies_ =
 
 		CIQ.Studies.MA("simple", sd.days, "hlc/3", 0, "MA", stx, sd);
 
-	    for(var i=Math.max(sd.startFrom,sd.days-1);i<quotes.length;i++){
-	    	var quote=quotes[i];
-	    	if(!quote) continue;
+		for(var i=Math.max(sd.startFrom,sd.days-1);i<quotes.length;i++){
+			var quote=quotes[i];
+			if(!quote) continue;
 			var md=0;
 			for(var j=0;j<sd.days;j++){
 				md+=Math.abs(quotes[i-j]["hlc/3"] - quote["MA " + sd.name]);
@@ -9578,7 +9879,7 @@ var __studies_ =
 			md/=sd.days;
 			if(Math.abs(md)<0.00000001) quote["Result " + sd.name]=0;
 			else quote["Result " + sd.name]=(quote["hlc/3"] - quote["MA " + sd.name]) / (0.015 * md);
-	    }
+		}
 	};
 
 	CIQ.Studies.calculateFractalChaos=function(stx, sd){
@@ -9587,46 +9888,46 @@ var __studies_ =
 		var fractalHigh=0;
 		var fractalLow=0;
 		var test=0;
-        if(sd.startFrom && sd.type=="Fractal Chaos Bands"){
-           	fractalHigh=quotes[sd.startFrom-1]["Fractal High " + sd.name];
-           	fractalLow=quotes[sd.startFrom-1]["Fractal Low " + sd.name];
-                   }
-	    for(var i=Math.max(4,sd.startFrom);i<quotes.length;i++){
-	    	quotes[i]["Result " + sd.name]=0;
-	    	var j;
-	    	test=0;
-	    	for(j=0;j<=i;j++){
-	    		if(!quotes[i-j]) break;
-	    		if(quotes[i-j].High>quotes[i-2].High) break;
-	    		if(j<2 && quotes[i-j].High==quotes[i-2].High) break;
-	    		if(quotes[i-j].High<quotes[i-2].High) test++;
-	    		if(test==4) {
-	    			fractalHigh=quotes[i-2].High;
-	    			break;
-	    		}
-	    	}
-	        if(sd.type=="Fractal Chaos Bands"){
-	        	quotes[i]["Fractal High " + sd.name]=fractalHigh>0?fractalHigh:null;
-	        }else if(test==4){ //oscillator
-	        	quotes[i]["Result " + sd.name]=1;
-	        }
-	        test=0;
-	    	for(j=0;j<=i;j++){
-	    		if(!quotes[i-j]) break;
-	    		if(quotes[i-j].Low<quotes[i-2].Low) break;
-	    		if(j<2 && quotes[i-j].Low==quotes[i-2].Low) break;
-	    		if(quotes[i-j].Low>quotes[i-2].Low) test++;
-	    		if(test==4) {
-	    			fractalLow=quotes[i-2].Low;
-	    			break;
-	    		}
-	    	}
-	        if(sd.type=="Fractal Chaos Bands"){
-			    quotes[i]["Fractal Low " + sd.name]=fractalLow>0?fractalLow:null;
-	        }else if(test==4){ //oscillator
-	        	quotes[i]["Result " + sd.name]=-1;
-	        }
-	    }
+		if(sd.startFrom && sd.type=="Fractal Chaos Bands"){
+		   	fractalHigh=quotes[sd.startFrom-1]["Fractal High " + sd.name];
+		   	fractalLow=quotes[sd.startFrom-1]["Fractal Low " + sd.name];
+		}
+		for(var i=Math.max(4,sd.startFrom);i<quotes.length;i++){
+			quotes[i]["Result " + sd.name]=0;
+			var j;
+			test=0;
+			for(j=0;j<=i;j++){
+				if(!quotes[i-j]) break;
+				if(quotes[i-j].High>quotes[i-2].High) break;
+				if(j<2 && quotes[i-j].High==quotes[i-2].High) break;
+				if(quotes[i-j].High<quotes[i-2].High) test++;
+				if(test==4) {
+					fractalHigh=quotes[i-2].High;
+					break;
+				}
+			}
+			if(sd.type=="Fractal Chaos Bands"){
+				quotes[i]["Fractal High " + sd.name]=fractalHigh>0?fractalHigh:null;
+			}else if(test==4){ //oscillator
+				quotes[i]["Result " + sd.name]=1;
+			}
+			test=0;
+			for(j=0;j<=i;j++){
+				if(!quotes[i-j]) break;
+				if(quotes[i-j].Low<quotes[i-2].Low) break;
+				if(j<2 && quotes[i-j].Low==quotes[i-2].Low) break;
+				if(quotes[i-j].Low>quotes[i-2].Low) test++;
+				if(test==4) {
+					fractalLow=quotes[i-2].Low;
+					break;
+				}
+			}
+			if(sd.type=="Fractal Chaos Bands"){
+				quotes[i]["Fractal Low " + sd.name]=fractalLow>0?fractalLow:null;
+			}else if(test==4){ //oscillator
+				quotes[i]["Result " + sd.name]=-1;
+			}
+		}
 	};
 
 	CIQ.Studies.displayRAVI=function(stx, sd, quotes){
@@ -9864,6 +10165,9 @@ var __studies_ =
 
 		return output;
 	};
+	
+	// object to keep track of the custom scripts
+	CIQ.Studies.studyScriptLibrary={};
 
 	/**
 	 * The studyLibrary defines all of the available studies. This is used to drive the dialog boxes and creation of the studies. When you
@@ -10006,11 +10310,14 @@ var __studies_ =
 		"Price ROC": {
 			"name": "Price Rate of Change",
 			"calculateFN": CIQ.Studies.calculateRateOfChange,
-			"inputs": {"Field":"field","Period":14}
+			"inputs": {"Period":14,"Field":"field"}
 		},
 		"Vol ROC": {
 			"name": "Volume Rate of Change",
-			"calculateFN": CIQ.Studies.calculateRateOfChange
+			"calculateFN": CIQ.Studies.calculateRateOfChange,
+			"parameters": {
+				init:{isVolume:true}
+			}
 		},
 		"Momentum": {
 			"name": "Momentum Indicator",
@@ -10026,13 +10333,13 @@ var __studies_ =
 		"Pos Vol": {
 			"name": "Positive Volume Index",
 			"calculateFN": CIQ.Studies.calculateVolumeIndex,
-			"inputs": {"Field":"field","Moving Average Type":"ma","Period":255},
+			"inputs": {"Period":255,"Field":"field","Moving Average Type":"ma",},
 			"outputs": {"Index":"auto","MA":"#FF0000"}
 		},
 		"Neg Vol": {
 			"name": "Negative Volume Index",
 			"calculateFN": CIQ.Studies.calculateVolumeIndex,
-			"inputs": {"Field":"field","Moving Average Type":"ma","Period":255},
+			"inputs": {"Period":255,"Field":"field","Moving Average Type":"ma"},
 			"outputs": {"Index":"auto","MA":"#FF0000"}
 		},
 		"On Bal Vol": {
@@ -10053,7 +10360,7 @@ var __studies_ =
 		"Hist Vol": {
 			"name": "Historical Volatility",
 			"calculateFN": CIQ.Studies.calculateHistoricalVolatility,
-			"inputs": {"Field":"field", "Period":10, "Days Per Year":[252,365], "Standard Deviations":1},
+			"inputs": {"Period":10, "Field":"field", "Days Per Year":[252,365], "Standard Deviations":1},
 			"attributes": {
 				"Standard Deviations":{min:0.1,step:0.1}
 			}
@@ -10101,7 +10408,7 @@ var __studies_ =
 		"Price Osc": {
 			"name": "Price Oscillator",
 			"calculateFN": CIQ.Studies.calculatePriceOscillator,
-			"inputs": {"Field":"field", "Long Cycle":26, "Short Cycle":12, "Moving Average Type":"ema", "Points Or Percent":["Points","Percent"]}
+			"inputs": {"Field":"field", "Short Cycle":12, "Long Cycle":26, "Moving Average Type":"ema", "Points Or Percent":["Points","Percent"]}
 		},
 		"EOM": {
 			"name": "Ease of Movement",
@@ -10123,7 +10430,7 @@ var __studies_ =
 		"Detrended": {
 			"name": "Detrended Price Oscillator",
 			"calculateFN": CIQ.Studies.calculateDetrendedPrice,
-			"inputs": {"Field":"field","Period":14, "Moving Average Type":"ma"}
+			"inputs": {"Period":14, "Field":"field","Moving Average Type":"ma"}
 		},
 		"True Range": {
 			"name": "True Range",
@@ -10146,7 +10453,7 @@ var __studies_ =
 			"name": "Schaff Trend Cycle",
 			"range": "0 to 100",
 			"calculateFN": CIQ.Studies.calculateSchaff,
-			"inputs": {"Field":"field","Period":10, "Short Cycle":23, "Long Cycle":50, "Moving Average Type":"ema"},
+			"inputs": {"Period":10, "Field":"field","Short Cycle":23, "Long Cycle":50, "Moving Average Type":"ema"},
 			"parameters": {
 				template:"studyOverZones",
 				init:{studyOverZonesEnabled:true, studyOverBoughtValue:75, studyOverBoughtColor:"auto", studyOverSoldValue:25, studyOverSoldColor:"auto"}
@@ -10160,7 +10467,7 @@ var __studies_ =
 		"Coppock": {
 			"name": "Coppock Curve",
 			"calculateFN": CIQ.Studies.calculateCoppock,
-			"inputs": {"Field":"field","Short RoC":11,"Long RoC":14,"Period":10}
+			"inputs": {"Period":10,"Field":"field","Short RoC":11,"Long RoC":14}
 		},
 		"Chande Mtm": {
 			"name": "Chande Momentum Oscillator",
@@ -10174,7 +10481,7 @@ var __studies_ =
 		"Chande Fcst": {
 			"name": "Chande Forecast Oscillator",
 			"calculateFN": CIQ.Studies.calculateChandeForecast,
-			"inputs": {"Field":"field", "Period":14}
+			"inputs": {"Period":14, "Field":"field"}
 		},
 		"Intraday Mtm": {
 			"name": "Intraday Momentum Index",
@@ -10219,7 +10526,7 @@ var __studies_ =
 			"overlay": true,
 			"seriesFN": CIQ.Studies.displayChannel,
 			"calculateFN": function(stx, sd){ sd.inputs["Moving Average Type"]="triangular"; CIQ.Studies.calculateMAEnvelope(stx, sd); },
-			"inputs": {"Field":"field", "Period":10, "Shift Percentage":5, "Channel Fill":true},
+			"inputs": {"Period":10, "Field":"field", "Shift Percentage":5, "Channel Fill":true},
 			"outputs": {"High Low Top":"auto", "High Low Median":"auto", "High Low Bottom":"auto"},
 			"attributes":{
 				"Shift Percentage":{min:0.1,step:0.1}
@@ -10240,7 +10547,7 @@ var __studies_ =
 			"overlay": true,
 			"seriesFN": CIQ.Studies.displayChannel,
 			"calculateFN": CIQ.Studies.calculateMAEnvelope,
-			"inputs": {"Field":"field", "Period":50, "Shift Type":["percent","points"], "Shift": 5, "Moving Average Type": "ma", "Channel Fill":true},
+			"inputs": {"Period":50, "Field":"field", "Shift Type":["percent","points"], "Shift": 5, "Moving Average Type": "ma", "Channel Fill":true},
 			"outputs": {"MA Env Top":"auto", "MA Env Median":"auto", "MA Env Bottom":"auto"},
 			"attributes":{
 				Shift:{min:0.1,step:0.1}
@@ -10288,7 +10595,7 @@ var __studies_ =
 			"overlay": true,
 			"calculateFN": CIQ.Studies.calculateBollinger,
 			"seriesFN": CIQ.Studies.displayChannel,
-			"inputs": {"Field":"field", "Period":20, "Standard Deviations": 2, "Moving Average Type":"ma", "Channel Fill": true},
+			"inputs": {"Period":20, "Field":"field", "Standard Deviations": 2, "Moving Average Type":"ma", "Channel Fill": true},
 			"outputs": {"Bollinger Bands Top":"auto", "Bollinger Bands Median":"auto", "Bollinger Bands Bottom":"auto"},
 			"attributes": {
 				"Standard Deviations":{min:0.1,step:0.1}
@@ -10407,34 +10714,34 @@ var __studies_ =
 		},
 		"volume": {
 			"name": "Volume Chart",
-		    "range": "0 to max",
-		    "yAxis": {"ground":true, "initialMarginTop":0},
-		    "seriesFN": CIQ.Studies.createVolumeChart,
-		    "calculateFN": CIQ.Studies.calculateVolume,
-		    "inputs": {},
-		    "outputs": {"Up Volume":"#8cc176","Down Volume":"#b82c0c"},
-		    "parameters": {
-		    	"zoom": 0,
-		    	"widthFactor":1
-		    }
+			"range": "0 to max",
+			"yAxis": {"ground":true, "initialMarginTop":0},
+			"seriesFN": CIQ.Studies.createVolumeChart,
+			"calculateFN": CIQ.Studies.calculateVolume,
+			"inputs": {},
+			"outputs": {"Up Volume":"#8cc176","Down Volume":"#b82c0c"},
+			"parameters": {
+				"zoom": 0,
+				"widthFactor":1
+			}
 		},
 		"vol undr": {
 			"name": "Volume Underlay",
 			"underlay": true,
-		    "range": "0 to max",
-		    "yAxis": {"ground":true, "initialMarginTop":0, "position":"none"},
-		    "seriesFN": CIQ.Studies.createVolumeChart,
-		    "calculateFN": CIQ.Studies.calculateVolume,
-		    "inputs": {},
-		    "outputs": {"Up Volume":"#8cc176","Down Volume":"#b82c0c"},
+			"range": "0 to max",
+			"yAxis": {"ground":true, "initialMarginTop":0, "position":"none"},
+			"seriesFN": CIQ.Studies.createVolumeChart,
+			"calculateFN": CIQ.Studies.calculateVolume,
+			"inputs": {},
+			"outputs": {"Up Volume":"#8cc176","Down Volume":"#b82c0c"},
 			"customRemoval": true,
 			"removeFN": function(stx, sd){
 				stx.layout.volumeUnderlay=false;
 				stx.changeOccurred("layout");
 			},
-		    "parameters": {
-		    	"zoom": 0,
-		    	"widthFactor":1
+			"parameters": {
+				"zoom": 0,
+				"widthFactor":1
 			}
 		}
 	};
@@ -10442,7 +10749,7 @@ var __studies_ =
 	return _exports;
 });
 
-var __drawingAdvanced_ =
+var __js_advanced_drawingAdvanced_ =
 //-------------------------------------------------------------------------------------------
 // Copyright 2012-2017 by ChartIQ, Inc.
 // All rights reserved
@@ -10497,6 +10804,7 @@ var __drawingAdvanced_ =
 
 		if(this.p2!==null){
 			this.setPoint(2, this.p2[0], this.p2[1], panel.chart);
+			this.penDown=false;
 			return true;
 		}
 		this.setPoint(1, tick, value, panel.chart);
@@ -10520,24 +10828,15 @@ var __drawingAdvanced_ =
 
 	CIQ.Drawing.channel.prototype.intersected=function(tick, value, box){
 		if(!this.p0 || !this.p1 || !this.p2) return null; // in case invalid drawing (such as from panel that no longer exists)
-		if(this.pointIntersection(this.p0[0], this.p0[1], box)){
-			this.highlighted="p0";
-			return {
-				action: "drag",
-				point: "p0"
-			};
-		}else if(this.pointIntersection(this.p1[0], this.p1[1], box)){
-			this.highlighted="p1";
-			return {
-				action: "drag",
-				point: "p1"
-			};
-		}else if(this.pointIntersection(this.p2[0], this.p2[1], box)){
-			this.highlighted="p2";
-			return {
-				action: "drag",
-				point: "p2"
-			};
+		var pointsToCheck={0:this.p0, 1:this.p1, 2:this.p2};
+		for(var pt in pointsToCheck){
+			if(this.pointIntersection(pointsToCheck[pt][0], pointsToCheck[pt][1], box)){
+				this.highlighted="p"+pt;
+				return {
+					action: "drag",
+					point: "p"+pt
+				};	
+			}
 		}
 		if(this.boxIntersection(tick, value)){
 			this.highlighted=true;
@@ -10587,6 +10886,7 @@ var __drawingAdvanced_ =
 				pattern: this.pattern,
 				lineWidth: width
 		};
+		if((this.penDown || this.highlighted) && this.pattern=="none") parameters.pattern="dotted";
 		this.stx.plotLine(x0, x1, y0, y1, color, "segment", context, panel, parameters);
 		if(this.p2) this.stx.plotLine(x0, x1, y0+(y-y1), y, color, "segment", context, panel, parameters);
 
@@ -10707,44 +11007,32 @@ var __drawingAdvanced_ =
 		this.render(context);
 	};
 
-	CIQ.Drawing.pitchfork.prototype.lineIntersection=function(tick, value, box, type){
-		var p0=this.p0, p1=this.p1, p2=this.p2, layout=this.stx.layout, panel=this.stx.panels[this.panelName];
-		return p0 && p1 && p2 && panel && CIQ.boxIntersects(box.x0, box.y0, box.x1, box.y1, p0[0], p0[1], (p1[0]+p2[0])/2, (p1[1]+p2[1])/2, type, panel.yAxis.semiLog);
-	};
-
 	CIQ.Drawing.pitchfork.prototype.intersected=function(tick, value, box){
 		if(!this.p0 || !this.p1 || !this.p2) return null; // in case invalid drawing (such as from panel that no longer exists)
-		if(this.pointIntersection(this.p0[0], this.p0[1], box)){
-			this.highlighted="p0";
-			return {
-				action: "drag",
-				point: "p0"
-			};
-		}else if(this.pointIntersection(this.p1[0], this.p1[1], box)){
-			this.highlighted="p1";
-			return {
-				action: "drag",
-				point: "p1"
-			};
-		}else if(this.pointIntersection(this.p2[0], this.p2[1], box)){
-			this.highlighted="p2";
-			return {
-				action: "drag",
-				point: "p2"
-			};
+		var pointsToCheck={0:this.p0, 1:this.p1, 2:this.p2};
+		for(var pt in pointsToCheck){
+			if(this.pointIntersection(pointsToCheck[pt][0], pointsToCheck[pt][1], box)){
+				this.highlighted="p"+pt;
+				return {
+					action: "drag",
+					point: "p"+pt
+				};	
+			}
 		}
-		var isIntersected=this.lineIntersection(tick, value, box, "ray");
-		if(isIntersected){
-			this.highlighted=true;
-			// This object will be used for repositioning
-			return {
-				action: "move",
-				p0: CIQ.clone(this.p0),
-				p1: CIQ.clone(this.p1),
-				p2: CIQ.clone(this.p2),
-				tick: tick, // save original tick
-				value: value // save original value
-			};
+		var rays=this.rays;
+		for(var i=0; i<rays.length; i++){
+			if(this.lineIntersection(tick, value, box, i?"ray":"segment", rays[i][0], rays[i][1], true)){
+				this.highlighted=true;
+				// This object will be used for repositioning
+				return {
+					action: "move",
+					p0: CIQ.clone(this.p0),
+					p1: CIQ.clone(this.p1),
+					p2: CIQ.clone(this.p2),
+					tick: tick, // save original tick
+					value: value // save original value
+				};
+			}
 		}
 		return null;
 	};
@@ -10752,14 +11040,15 @@ var __drawingAdvanced_ =
 	CIQ.Drawing.pitchfork.prototype.render=function(context){
 		var panel=this.stx.panels[this.panelName];
 		if(!panel) return;
+		var stx=this.stx;
 		var p2=this.p2;
 		if(!p2) p2=this.p1;
-		var x0=this.stx.pixelFromTick(this.p0[0], panel.chart);
-		var x1=this.stx.pixelFromTick(this.p1[0], panel.chart);
-		var x2=this.stx.pixelFromTick(p2[0], panel.chart);
-		var y0=this.stx.pixelFromValueAdjusted(panel, this.p0[0], this.p0[1]);
-		var y1=this.stx.pixelFromValueAdjusted(panel, this.p1[0], this.p1[1]);
-		var y2=this.stx.pixelFromValueAdjusted(panel, p2[0], p2[1]);
+		var x0=stx.pixelFromTick(this.p0[0], panel.chart);
+		var x1=stx.pixelFromTick(this.p1[0], panel.chart);
+		var x2=stx.pixelFromTick(p2[0], panel.chart);
+		var y0=stx.pixelFromValueAdjusted(panel, this.p0[0], this.p0[1]);
+		var y1=stx.pixelFromValueAdjusted(panel, this.p1[0], this.p1[1]);
+		var y2=stx.pixelFromValueAdjusted(panel, p2[0], p2[1]);
 
 		var width=this.lineWidth;
 		var color=this.setLineColor();
@@ -10772,12 +11061,14 @@ var __drawingAdvanced_ =
 		var yp=(2*y0-y1-y2);
 		var denom=(2*x0-x1-x2);
 		if(denom<0) z*=-1;
-		yp=z*yp/denom;
-		this.stx.plotLine(x0, (x1+x2)/2, y0, (y1+y2)/2, color, "ray", context, panel, parameters);
-		this.stx.plotLine(x1, x2, y1, y2, color, "segment", context, panel, parameters);
+		yp*=z/denom;
+		this.rays=[[[x1,y1],[x2,y2]], [[x0,y0],[(x1+x2)/2,(y1+y2)/2]]];
 		if(!(x1==x2 && y1==y2)){
-			this.stx.plotLine(x1, x1-z, y1, y1-yp, color, "ray", context, panel, parameters);
-			this.stx.plotLine(x2, x2-z, y2, y2-yp, color, "ray", context, panel, parameters);
+			this.rays.push([[x1,y1],[x1-z,y1-yp]], [[x2,y2],[x2-z,y2-yp]]);
+		}
+		for(var i=0;i<this.rays.length;i++){
+			var ray=this.rays[i], type=i?"ray":"segment";
+			stx.plotLine(ray[0][0], ray[1][0], ray[0][1], ray[1][1], color, type, context, panel, parameters);
 		}
 		if(this.highlighted){
 			var p0Fill=this.highlighted=="p0"?true:false;
@@ -10923,6 +11214,7 @@ var __drawingAdvanced_ =
 
 			if(this.segment>this.maxSegments) {
 				this.setPoint(0, this.points[0][0], this.points[0][1], panel.chart);
+				this.penDown=false;
 				return true;
 			}
 			this.pts.push(this.d1,this.tzo1,this.v1);
@@ -10957,6 +11249,7 @@ var __drawingAdvanced_ =
 				pattern: this.pattern,
 				lineWidth: width
 		};
+		if((this.penDown || this.highlighted) && this.pattern=="none") parameters.pattern="dotted";
 		if(this.segment<=this.maxSegments)
 			this.stx.plotLine(x0, x1, y0, y1, color, this.name, context, panel, parameters);
 
@@ -11003,10 +11296,10 @@ var __drawingAdvanced_ =
 	};
 
 	CIQ.Drawing.gartley.prototype.lineIntersection=function(tick, value, box, type){
-		var points=this.points, layout=this.stx.layout, panel=this.stx.panels[this.panelName];
+		var points=this.points, panel=this.stx.panels[this.panelName];
 		if(points.length!=this.maxSegments+1 || !panel) return false;
 		for(var pt=0;pt<points.length-1;pt++){
-			if(CIQ.boxIntersects(box.x0, box.y0, box.x1, box.y1, points[pt][0], points[pt][1], points[pt+1][0], points[pt+1][1], "segment", panel.yAxis.semiLog)) return true;
+			if(CIQ.Drawing.BaseTwoPoint.prototype.lineIntersection.call(this, tick, value, box, "segment", points[pt], points[pt+1])) return true;
 		}
 		return false;
 	};
@@ -11442,8 +11735,8 @@ var __drawingAdvanced_ =
 
 	CIQ.Drawing.callout.prototype.configs=["color","fillColor","lineWidth","pattern","font"];
 
-	CIQ.Drawing.callout.prototype.copyConfig=function(){
-		CIQ.Drawing.copyConfig(this);
+	CIQ.Drawing.callout.prototype.copyConfig=function(withPreferences){
+		CIQ.Drawing.copyConfig(this,withPreferences);
 		this.borderColor=this.color;
 	};
 
@@ -11587,7 +11880,7 @@ var __drawingAdvanced_ =
 			context.lineTo(x+w-r,y-h);
 			context.fill();
 			context.globalAlpha=1;
-			context.stroke();
+			if(this.pattern!="none") context.stroke();
 		}
 		if(this.highlighted){
 			this.stx.canvasColor("stx_annotation_highlight", context);
@@ -11662,10 +11955,23 @@ var __drawingAdvanced_ =
 
 	CIQ.Drawing.callout.prototype.lineIntersection=function(tick, value, box, type){
 		var panel=this.stx.panels[this.panelName];
-		var stem=this.stem, p0=this.p0, layout=this.stx.layout;
+		var stem=this.stem, p0=this.p0, stx=this.stx;
 		if(!p0 || !stem || !panel) return false;
 		var stemTick=stem.t || this.stx.tickFromDate(stem.d, panel.chart);
-		return CIQ.boxIntersects(box.x0, box.y0, box.x1, box.y1, p0[0], p0[1], stemTick, stem.v, type, panel.yAxis.semiLog);
+		var pObj={x0:p0[0], x1:stemTick, y0:p0[1], y1:stem.v};
+		var pixelPoint=CIQ.convertBoxToPixels(stx,this.panelName,pObj);
+		var x0=pixelPoint.x0;
+		var y0=pixelPoint.y0;
+		var x1=pixelPoint.x1;
+		var y1=pixelPoint.y1;
+		if(typeof(this.stemEntry)=="string"){
+			if(this.stemEntry.indexOf("l")>-1) x0-=this.w/2;
+			else if(this.stemEntry.indexOf("r")>-1) x0+=this.w/2;
+			if(this.stemEntry.indexOf("t")>-1) y0-=this.h/2;
+			else if(this.stemEntry.indexOf("b")>-1) y0+=this.h/2;
+		}
+		var pixelBox=CIQ.convertBoxToPixels(stx,this.panelName,box);
+		return CIQ.boxIntersects(pixelBox.x0, pixelBox.y0, pixelBox.x1, pixelBox.y1, x0, y0, x1, y1, type);
 	};
 
 	CIQ.Drawing.callout.prototype.intersected=function(tick, value, box){
@@ -11782,6 +12088,7 @@ var __drawingAdvanced_ =
 		var txtColor=this.color;
 		if(txtColor=="auto" || CIQ.isTransparent(txtColor)) txtColor=this.stx.defaultColor;
 		if(this.p2){
+			this.rays=[];
 			for(var i=0;i<this.parameters.fibs.length;i++){
 				context.textAlign="left";
 				context.fillStyle=txtColor;
@@ -11824,7 +12131,10 @@ var __drawingAdvanced_ =
 				if(fillColor=="auto" || CIQ.isTransparent(fillColor)) fillColor=this.fillColor;
 				if(fillColor=="auto" || CIQ.isTransparent(fillColor)) fillColor=this.stx.defaultColor;
 				context.fillStyle=fillColor;
-				this.stx.plotLine(nearX, farX, y, y, fibColor, "segment", context, panel, fib.parameters);
+				var fibParameters=CIQ.clone(fib.parameters);
+				if(this.highlighted) fibParameters.opacity=1;
+				this.stx.plotLine(nearX, farX, y, y, this.highlighted?trendLineColor:fibColor, "segment", context, panel, fibParameters);
+				this.rays.push([[nearX,y],[farX,y]]);
 				context.globalAlpha=0.05;
 				context.beginPath();
 				context.moveTo(farX,y);
@@ -11836,8 +12146,10 @@ var __drawingAdvanced_ =
 				context.globalAlpha=1;
 			}
 		}
-		this.stx.plotLine(x0, x1, y0, y1, trendLineColor, "segment", context, panel, this.parameters.trend.parameters);
-		if(this.p2) this.stx.plotLine(x1, x2, y1, y2, trendLineColor, "segment", context, panel, this.parameters.trend.parameters);
+		var trendParameters=CIQ.clone(this.parameters.trend.parameters);
+		if(this.highlighted) trendParameters.opacity=1;
+		this.stx.plotLine(x0, x1, y0, y1, trendLineColor, "segment", context, panel, trendParameters);
+		if(this.p2) this.stx.plotLine(x1, x2, y1, y2, trendLineColor, "segment", context, panel, trendParameters);
 		if(this.highlighted){
 			var p0Fill=this.highlighted=="p0"?true:false;
 			var p1Fill=this.highlighted=="p1"?true:false;
@@ -11877,33 +12189,32 @@ var __drawingAdvanced_ =
 
 
 	CIQ.Drawing.fibprojection.prototype.intersected=function(tick, value, box){
-		//TODO, find some efficient way to allow an intersection across the entire trend line, not just between the two clicked points
-		var p0=this.p0, p1=this.p1, p2=this.p2, layout=this.stx.layout;
+		var p0=this.p0, p1=this.p1, p2=this.p2;
 		if(!p0 || !p1 || !p2) return null; // in case invalid drawing (such as from panel that no longer exists)
-		var intersects1=CIQ.boxIntersects(box.x0, box.y0, box.x1, box.y1, p0[0], p0[1], p1[0], p1[1], "segment", layout.semiLog || layout.chartScale=="log");
-		var intersects2=CIQ.boxIntersects(box.x0, box.y0, box.x1, box.y1, p2[0], p2[1], p1[0], p1[1], "segment", layout.semiLog || layout.chartScale=="log");
-		if(intersects1 || intersects2){
-			if(this.pointIntersection(p0[0], p0[1], box)){
-				this.highlighted="p0";
+		var pointsToCheck={0:p0, 1:p1, 2:p2};
+		for(var pt in pointsToCheck){
+			if(this.pointIntersection(pointsToCheck[pt][0], pointsToCheck[pt][1], box)){
+				this.highlighted="p"+pt;
 				return {
 					action: "drag",
-					point: "p0"
-				};
-			}else if(this.pointIntersection(p1[0], p1[1], box)){
-				this.highlighted="p1";
-				return {
-					action: "drag",
-					point: "p1"
-				};
-			}else if(this.pointIntersection(p2[0], p2[1], box)){
-				this.highlighted="p2";
-				return {
-					action: "drag",
-					point: "p2"
-				};
+					point: "p"+pt
+				};	
 			}
-			// This object will be used for repositioning
+		}
+		var rays=this.rays;
+		var isIntersected=this.lineIntersection(tick, value, box, "segment", p0, p1) ||
+							this.lineIntersection(tick, value, box, "segment", p1, p2);
+		if(!isIntersected){
+			for(var i=0; i<rays.length; i++){
+				if(this.lineIntersection(tick, value, box, "ray", rays[i][0], rays[i][1], true)){
+					isIntersected=true;
+					break;
+				}
+			}
+		}
+		if(isIntersected){
 			this.highlighted=true;
+			// This object will be used for repositioning
 			return {
 				action: "move",
 				p0: CIQ.clone(p0),
@@ -11943,19 +12254,71 @@ var __drawingAdvanced_ =
 	CIQ.Drawing.fibarc.prototype.recommendedLevels=[0.382, 0.5, 0.618, 1];
 
 	CIQ.Drawing.fibarc.prototype.setOuter=function(){
-		this.outer={
-				p0: CIQ.clone(this.p0),
-				p1: CIQ.clone(this.p1)
-		};
-		var y0=this.p0[1];
-		var y1=this.p1[1];
-		var x0=this.p0[0];
-		var x1=this.p1[0];
+		var panel=this.stx.panels[this.panelName];
+		if(!panel) return;
 
-		var val=(y0-y1)*2+y1;
-		var x=CIQ.xIntersection({x0:x0,x1:x1,y0:y0,y1:y1}, val);
-		this.outer.p0[1]=val;
-		this.outer.p0[0]=x;
+		this.outer={
+			p0: CIQ.clone(this.p0),
+			p1: CIQ.clone(this.p1)
+		};
+		var y0=this.stx.pixelFromValueAdjusted(panel, this.p0[0], this.p0[1]);
+		var y1=this.stx.pixelFromValueAdjusted(panel, this.p1[0], this.p1[1]);
+		var x0=this.stx.pixelFromTick(this.p0[0],panel.chart);
+		var x1=this.stx.pixelFromTick(this.p1[0],panel.chart);
+		var y=2*y0-y1;
+		var x=CIQ.xIntersection({x0:x0,x1:x1,y0:y0,y1:y1}, y);
+		this.outer.p0[1]=this.stx.valueFromPixel(y, panel);
+		this.outer.p0[0]=this.stx.tickFromPixel(x, panel.chart);
+	};
+
+	CIQ.Drawing.fibarc.prototype.intersected=function(tick, value, box){
+		var panel=this.stx.panels[this.panelName];
+		if(!panel) return;
+		var p0=this.p0, p1=this.p1, outer=this.outer;
+		if(!p0 || !p1) return null; // in case invalid drawing (such as from panel that no longer exists)
+		var pointsToCheck={0:p0, 1:p1};
+		for(var pt in pointsToCheck){
+			if(this.pointIntersection(pointsToCheck[pt][0], pointsToCheck[pt][1], box)){
+				this.highlighted="p"+pt;
+				return {
+					action: "drag",
+					point: "p"+pt
+				};	
+			}
+		}
+		if(this.lineIntersection(tick, value, box, "segment", outer.p0, outer.p1)){
+			this.highlighted=true;
+			// This object will be used for repositioning
+			return {
+				action: "move",
+				p0: CIQ.clone(p0),
+				p1: CIQ.clone(p1),
+				tick: tick, // save original tick
+				value: value // save original value
+			};
+		}
+		// Just test the box circumscribing the arcs
+		var points={x0:p0[0],x1:p1[0],y0:p0[1],y1:p1[1]};
+		var pixelArea=CIQ.convertBoxToPixels(this.stx,this.panelName,points);
+		var extend={
+			x:Math.abs(Math.sqrt(2)*(pixelArea.x1-pixelArea.x0)),
+			y:Math.abs(Math.sqrt(2)*(pixelArea.y1-pixelArea.y0))
+		};
+		var x=this.stx.pixelFromTick(tick, panel.chart);
+		var y=this.stx.pixelFromValueAdjusted(panel, tick, value);
+
+		if(x<pixelArea.x1-extend.x || x>pixelArea.x1+extend.x) return null;
+		if(y<pixelArea.y1-extend.y || y>pixelArea.y1+extend.y) return null;
+		if(pixelArea.y0<pixelArea.y1 && y>pixelArea.y1) return null;
+		if(pixelArea.y0>pixelArea.y1 && y<pixelArea.y1) return null;
+		this.highlighted=true;
+		return {
+			action: "move",
+			p0: CIQ.clone(this.p0),
+			p1: CIQ.clone(this.p1),
+			tick: tick,
+			value: value
+		};		
 	};
 
 	CIQ.Drawing.fibarc.prototype.render=function(context){
@@ -12010,12 +12373,12 @@ var __drawingAdvanced_ =
 			var fibColor=fib.color;
 			if(fibColor=="auto" || CIQ.isTransparent(fibColor)) fibColor=this.color;
 			if(fibColor=="auto" || CIQ.isTransparent(fibColor)) fibColor=this.stx.defaultColor;
-			context.strokeStyle=fibColor;
+			context.strokeStyle=this.highlight?trendLineColor:fibColor;
 			var fillColor=fib.color;
 			if(fillColor=="auto" || CIQ.isTransparent(fillColor)) fillColor=this.fillColor;
 			if(fillColor=="auto" || CIQ.isTransparent(fillColor)) fillColor=this.stx.defaultColor;
 			context.fillStyle=fillColor;
-			context.globalAlpha=fib.parameters.opacity;
+			context.globalAlpha=this.highlighted?1:fib.parameters.opacity;
 			context.lineWidth=fib.parameters.lineWidth;
 			if(context.setLineDash){
 				context.setLineDash(CIQ.borderPatternToArray(context.lineWidth,fib.parameters.pattern));
@@ -12025,7 +12388,7 @@ var __drawingAdvanced_ =
 			context.beginPath();
 			context.scale(1/factor,1);
 			context.arc(x1*factor, y1, Math.abs(y-y1), 0, Math.PI, !isUpTrend);
-			context.stroke();
+			if(this.pattern!="none") context.stroke();
 			context.globalAlpha=0.05;
 			context.fill();
 			context.restore();
@@ -12034,7 +12397,9 @@ var __drawingAdvanced_ =
 		}
 		context.textAlign="left";
 		// ensure we at least draw trend line from zero to 100
-		this.stx.plotLine(x1, 2*x0-x1, y1, 2*y0-y1, trendLineColor, "segment", context, panel, this.parameters.trend.parameters);
+		var trendParameters=CIQ.clone(this.parameters.trend.parameters);
+		if(this.highlighted) trendParameters.opacity=1;
+		this.stx.plotLine(x1, 2*x0-x1, y1, 2*y0-y1, trendLineColor, "segment", context, panel, trendParameters);
 		if(this.highlighted){
 			var p0Fill=this.highlighted=="p0"?true:false;
 			var p1Fill=this.highlighted=="p1"?true:false;
@@ -12061,27 +12426,7 @@ var __drawingAdvanced_ =
 
 	CIQ.Drawing.fibfan.prototype.recommendedLevels=[0, 0.382, 0.5, 0.618, 1];
 
-	CIQ.Drawing.fibfan.prototype.setOuter=function(){
-		this.outer={
-				p0: CIQ.clone(this.p0),
-				p1: CIQ.clone(this.p1)
-		};
-		var y0=this.p0[1];
-		var y1=this.p1[1];
-		var x0=this.p0[0];
-		var x1=this.p1[0];
-
-		var min=0;
-		for(var i=0;i<this.parameters.fibs.length;i++){
-			var fib=this.parameters.fibs[i];
-			if(fib.level>=min || !fib.display) continue;
-			var val=(y0-y1)*fib.level+y1;
-			var x=CIQ.xIntersection({x0:x0,x1:x1,y0:y0,y1:y1}, val);
-			min=fib.level;
-			this.outer.p1[1]=val;
-			this.outer.p1[0]=x;
-		}
-	};
+	CIQ.Drawing.fibfan.prototype.setOuter=function(){};
 
 	CIQ.Drawing.fibfan.prototype.render=function(context){
 		var panel=this.stx.panels[this.panelName];
@@ -12105,6 +12450,7 @@ var __drawingAdvanced_ =
 		var /*minX=Number.MAX_VALUE,*/ minY=Number.MAX_VALUE, /*maxX=Number.MAX_VALUE*-1,*/ maxY=Number.MAX_VALUE*-1;
 		var txtColor=this.color;
 		if(txtColor=="auto" || CIQ.isTransparent(txtColor)) txtColor=this.stx.defaultColor;
+		this.rays=[];
 		for(var i=0;i<this.parameters.fibs.length;i++){
 			context.fillStyle=txtColor;
 			var fib=this.parameters.fibs[i];
@@ -12158,7 +12504,10 @@ var __drawingAdvanced_ =
 			if(fillColor=="auto" || CIQ.isTransparent(fillColor)) fillColor=this.stx.defaultColor;
 			context.fillStyle=fillColor;
 			if(this.parameters.printLevels) farY=(farX-x0)*(y-y0)/(x-x0)+y0;
-			this.stx.plotLine(x0, farX, y0, farY, (fib.level||!this.highlighted?fibColor:trendLineColor), "segment", context, panel, fib.parameters);
+			var fibParameters=CIQ.clone(fib.parameters);
+			if(this.highlighted) fibParameters.opacity=1;
+			this.stx.plotLine(x0, farX, y0, farY, (this.highlighted?trendLineColor:fibColor), "segment", context, panel, fibParameters);
+			this.rays.push([[x0,y0],[farX,farY]]);
 			context.globalAlpha=0.05;
 			context.beginPath();
 			context.moveTo(farX,farY);
@@ -12246,6 +12595,8 @@ var __drawingAdvanced_ =
 
 		if(this.parameters.printLevels) farY-=h-7;
 
+		var tzParameters=CIQ.clone(this.parameters.timezone.parameters);
+		if(this.highlighted) tzParameters.opacity=1;
 		do{
 			x=this.stx.pixelFromTick(this.p0[0]+txt*mult, panel.chart);
 			if(x0<x1 && x>panel.left+panel.width) break;
@@ -12255,7 +12606,7 @@ var __drawingAdvanced_ =
 				context.fillText((x1>x0?txt:txt*-1), x, farY+7);
 			}
 			context.fillStyle=fillColor;
-			this.stx.plotLine(x, x, 0, farY, this.highlighted?trendLineColor:fibColor, "segment", context, panel, this.parameters.timezone.parameters);
+			this.stx.plotLine(x, x, 0, farY, this.highlighted?trendLineColor:fibColor, "segment", context, panel, tzParameters);
 			context.globalAlpha=0.05;
 			context.beginPath();
 			context.moveTo(x0,top);
@@ -12268,34 +12619,36 @@ var __drawingAdvanced_ =
 			fibs.unshift(txt);
 		}while(mult);
 		context.textAlign="left";
-		this.stx.plotLine(x0, x1, y0, y1, trendLineColor, "segment", context, panel, this.parameters.trend.parameters);
+		this.stx.plotLine(x0, x1, y0, y1, trendLineColor, "segment", context, panel, tzParameters);
 		if(this.highlighted){
 			var p0Fill=this.highlighted=="p0"?true:false;
 			var p1Fill=this.highlighted=="p1"?true:false;
 			this.littleCircle(context, x0, y0, p0Fill);
 			this.littleCircle(context, x1, y1, p1Fill);
+		}else{
+			// move points so always accessible
+			var yVal=this.stx.valueFromPixel(panel.height/2,panel);
+			this.setPoint(0, this.p0[0], yVal, panel.chart);
+			this.setPoint(1, this.p1[0], yVal, panel.chart);
 		}
 	};
 
 	CIQ.Drawing.fibtimezone.prototype.intersected=function(tick, value, box){
-		var p0=this.p0, p1=this.p1, layout=this.stx.layout, panel=this.stx.panels[this.panelName];
+		var p0=this.p0, p1=this.p1, panel=this.stx.panels[this.panelName];
 		if(!p0 || !p1 || !panel) return null; // in case invalid drawing (such as from panel that no longer exists)
-		if(this.pointIntersection(p0[0], p0[1], box)){
-			this.highlighted="p0";
-			return {
-				action: "drag",
-				point: "p0"
-			};
-		}else if(this.pointIntersection(p1[0], p1[1], box)){
-			this.highlighted="p1";
-			return {
-				action: "drag",
-				point: "p1"
-			};
+		var pointsToCheck={0:p0, 1:p1};
+		for(var pt in pointsToCheck){
+			if(this.pointIntersection(pointsToCheck[pt][0], pointsToCheck[pt][1], box)){
+				this.highlighted="p"+pt;
+				return {
+					action: "drag",
+					point: "p"+pt
+				};	
+			}
 		}
 		// Check for over the trend line or the 0 vertical line
-		var boxIntersects=CIQ.boxIntersects(box.x0, box.y0, box.x1, box.y1, p0[0], p0[1], p1[0], p1[1], "segment", panel.yAxis.semiLog);
-		if(boxIntersects || (box.x0<=p0[0] && box.x1>=p0[0])){
+		var trendIntersects=this.lineIntersection(tick, value, box, "segment");
+		if(trendIntersects || (box.x0<=this.p0[0] && box.x1>=p0[0])){
 			this.highlighted=true;
 			return {
 				action: "move",
@@ -12731,15 +13084,18 @@ var __drawingAdvanced_ =
 		intersected: function(tick, value, box){
 			if(!this.p0 || !this.p1) return null;
 			this.p1[0]+=1;
-			var isIntersected=this.lineIntersection(tick, value, box, "horizontal");
+			var isIntersected=this.lineIntersection(tick, value, box, "line");
 			this.p1=CIQ.clone(this.p0);
 			if(!isIntersected){
 				this.p1[1]+=1;
-				isIntersected=this.lineIntersection(tick, value, box, "vertical");
+				isIntersected=this.lineIntersection(tick, value, box, "line");
 				this.p1=CIQ.clone(this.p0);
 				if(!isIntersected) return null;
 			}
 			this.highlighted=true;
+			if(this.pointIntersection(this.p0[0], this.p0[1], box)){
+				this.highlighted="p0";
+			}
 			// This object will be used for repositioning
 			return {
 				action: "move",
@@ -12774,7 +13130,7 @@ var __drawingAdvanced_ =
 					txt=this.stx.formatYAxisPrice(txt, panel);
 				this.stx.createYAxisLabel(panel, txt, y0, color);
 				this.stx.startClip(panel.name);
-				if(this.p0[0]>=0 && !CIQ.ChartEngine.hideDates()) { // don't try to compute dates from before dataSet
+				if(this.p0[0]>=0 && !this.stx.chart.xAxis.noDraw) { // don't try to compute dates from before dataSet
 					var dt, newDT;
 					/* set d0 to the right timezone */
 					dt=this.stx.dateFromTick(this.p0[0], panel.chart, true);
@@ -12807,6 +13163,11 @@ var __drawingAdvanced_ =
 					this.stx.startClip(panel.name);
 				}
 			}
+			if(this.highlighted){
+				var p0Fill=this.highlighted=="p0"?true:false;
+				this.littleCircle(context, x0, y0, p0Fill);
+			}
+
 		}
 	}, true);
 
@@ -12828,15 +13189,53 @@ var __drawingAdvanced_ =
 	CIQ.extend(CIQ.Drawing.speedarc.prototype,{
 		defaultOpacity: 0.25,
 		configs: ["color","fillColor","lineWidth","pattern"],
-		lineIntersection: function(tick, value, box, type){
-			var p0=this.p0, p1=this.p1, layout=this.stx.layout, panel=this.stx.panels[this.panelName];
-			return p0 && p1 && panel && CIQ.boxIntersects(box.x0, box.y0, box.x1, box.y1, p0[0], p0[1], p1[0], p1[1], "segment", panel.yAxis.semiLog);
-		},
 		copyConfig: function(){
 			this.color=this.stx.currentVectorParameters.currentColor;
 			this.fillColor=this.stx.currentVectorParameters.fillColor;
 			this.lineWidth=this.stx.currentVectorParameters.lineWidth;
 			this.pattern=this.stx.currentVectorParameters.pattern;
+		},
+		intersected: function(tick, value, box){
+			if(!this.p0 || !this.p1) return null; // in case invalid drawing (such as from panel that no longer exists)
+				var pointsToCheck={0:this.p0, 1:this.p1};
+			for(var pt in pointsToCheck){
+				if(this.pointIntersection(pointsToCheck[pt][0], pointsToCheck[pt][1], box)){
+					this.highlighted="p"+pt;
+					return {
+						action: "drag",
+						point: "p"+pt
+					};	
+				}
+			}
+			var isIntersected=this.lineIntersection(tick, value, box, this.name);
+			if(isIntersected){
+				this.highlighted=true;
+				// This object will be used for repositioning
+				return {
+					action: "move",
+					p0: CIQ.clone(this.p0),
+					p1: CIQ.clone(this.p1),
+					tick: tick, // save original tick
+					value: value // save original value
+				};
+			}
+			
+			// Just test the box circumscribing the arcs
+			var left=this.p1[0]-(this.p0[0]-this.p1[0]);
+			var right=this.p0[0];
+			var bottom=this.p1[1];
+			var top=this.p0[1];
+
+			if(tick>Math.max(left, right) || tick<Math.min(left, right)) return null;
+			if(value>Math.max(top, bottom) || value<Math.min(top, bottom)) return null;
+			this.highlighted=true;
+			return {
+				action: "move",
+				p0: CIQ.clone(this.p0),
+				p1: CIQ.clone(this.p1),
+				tick: tick,
+				value: value
+			};
 		},
 		render: function(context){
 			var panel=this.stx.panels[this.panelName];
@@ -12849,8 +13248,7 @@ var __drawingAdvanced_ =
 			var isUpTrend=y1<y0;
 			var factor=Math.abs((y1-y0)/(x1-x0));
 
-			var color=this.color;
-			if(color=="auto" || CIQ.isTransparent(color)) color=this.stx.defaultColor;
+			var color=this.setLineColor();
 			context.strokeStyle=color;
 			var fillColor=this.fillColor;
 			if(fillColor=="auto" || CIQ.isTransparent(fillColor)) fillColor=this.stx.defaultColor;
@@ -12869,8 +13267,8 @@ var __drawingAdvanced_ =
 				context.beginPath();
 				context.scale(1/factor,1);
 				context.arc(x1*factor, y1, Math.abs(y-y1), 0, Math.PI, !isUpTrend);
-				context.globalAlpha=this.defaultOpacity;
-				context.stroke();
+				context.globalAlpha=this.highlighted?1:this.defaultOpacity;
+				if(this.pattern!="none") context.stroke();
 				context.globalAlpha=0.1;
 				context.fill();
 				context.restore();
@@ -12884,13 +13282,12 @@ var __drawingAdvanced_ =
 				}
 			}
 			context.textAlign="left";
-			var trendLineColor=this.setLineColor();
 			var parameters={
 					pattern: this.pattern,
 					lineWidth: this.lineWidth,
-					opacity: this.defaultOpacity
+					opacity: this.highlighted?1:this.defaultOpacity
 			};
-			this.stx.plotLine(x0, x1, y0, y1, trendLineColor, "segment", context, panel, parameters);
+			this.stx.plotLine(x0, x1, y0, y1, color, "segment", context, panel, parameters);
 			if(context.setLineDash) context.setLineDash([]);
 			if(this.highlighted){
 				var p0Fill=this.highlighted=="p0"?true:false;
@@ -12947,6 +13344,35 @@ var __drawingAdvanced_ =
 	};
 	CIQ.Drawing.speedline.ciqInheritsFrom(CIQ.Drawing.speedarc);
 	CIQ.extend(CIQ.Drawing.speedline.prototype,{
+		intersected: function(tick, value, box){
+			var p0=this.p0, p1=this.p1;
+			if(!p0 || !p1) return null; // in case invalid drawing (such as from panel that no longer exists)
+			var pointsToCheck={0:p0, 1:p1};
+			for(var pt in pointsToCheck){
+				if(this.pointIntersection(pointsToCheck[pt][0], pointsToCheck[pt][1], box)){
+					this.highlighted="p"+pt;
+					return {
+						action: "drag",
+						point: "p"+pt
+					};	
+				}
+			}
+			var rays=this.rays;
+			for(var i=0; i<rays.length; i++){
+				if(this.lineIntersection(tick, value, box, "ray", rays[i][0], rays[i][1], true)){
+					this.highlighted=true;
+					// This object will be used for repositioning
+					return {
+						action: "move",
+						p0: CIQ.clone(p0),
+						p1: CIQ.clone(p1),
+						tick: tick, // save original tick
+						value: value // save original value
+					};
+				}
+			}
+			return null;
+		},
 		render: function(context){
 			var panel=this.stx.panels[this.panelName];
 			if(!panel) return;
@@ -12966,12 +13392,13 @@ var __drawingAdvanced_ =
 			var parameters={
 					pattern: this.pattern,
 					lineWidth: this.lineWidth,
-					opacity: this.defaultOpacity
+					opacity: this.highlighted?1:this.defaultOpacity
 			};
 			var farX0,farY0;
 			var levels=["1", "2/3", "1/3", "3/2", "3"];
 			var levelValues=[1, 2/3, 1/3, 3/2, 3];
 			var grids=[];
+			this.rays=[];
 			for(var i=0;i<levelValues.length;i++){
 				var level=levelValues[i];
 				if(level>1 && !this.extension) continue;
@@ -13006,11 +13433,12 @@ var __drawingAdvanced_ =
 						context.fillStyle=fillColor;
 					}
 				}
-				this.stx.plotLine(x0, farX, y0, farY, (i||!this.highlighted?color:trendLineColor), "segment", context, panel, parameters);
+				this.stx.plotLine(x0, farX, y0, farY, (this.highlighted?trendLineColor:color), "segment", context, panel, parameters);
 				if(level==1){
 					farX0=farX;
 					farY0=farY;
 				}
+				this.rays.push([[x0,y0],[farX,farY]]);
 				context.globalAlpha=0.1;
 				context.beginPath();
 				context.moveTo(farX,farY);
@@ -13024,11 +13452,7 @@ var __drawingAdvanced_ =
 			if(this.confineToGrid){
 				context.globalAlpha=0.3;
 				context.beginPath();
-				context.moveTo(x0,y0);
-				context.lineTo(x0,y1);
-				context.lineTo(x1,y1);
-				context.lineTo(x1,y0);
-				context.lineTo(x0,y0);
+				context.strokeRect(x0,y0,x1-x0,y1-y0);
 				context.moveTo(x0,grids[1]);
 				context.lineTo(x1,grids[1]);
 				context.moveTo(x0,grids[2]);
@@ -13064,7 +13488,7 @@ var __drawingAdvanced_ =
 		this.name="gannfan";
 		this.printLevels=true;
 	};
-	CIQ.Drawing.gannfan.ciqInheritsFrom(CIQ.Drawing.speedarc);
+	CIQ.Drawing.gannfan.ciqInheritsFrom(CIQ.Drawing.speedline);
 	CIQ.extend(CIQ.Drawing.gannfan.prototype,{
 		render: function(context){
 			var panel=this.stx.panels[this.panelName];
@@ -13085,10 +13509,11 @@ var __drawingAdvanced_ =
 			var parameters={
 					pattern: this.pattern,
 					lineWidth: this.lineWidth,
-					opacity: this.defaultOpacity
+					opacity: this.highlighted?1:this.defaultOpacity
 			};
 			var farX0,farY0;
 			var levels=[1,2,3,4,8,1/2,1/3,1/4,1/8];
+			this.rays=[];
 			for(var i=0;i<levels.length;i++){
 				var level=levels[i];
 				var x=x0+(x1-x0)/level;
@@ -13100,14 +13525,19 @@ var __drawingAdvanced_ =
 					context.fillStyle=color;
 					var perturbX=0,perturbY=0;
 					if(y0>y1) {perturbY=5;context.textBaseline="top";}
-					else {perturbY=-5;context.textBaseline="botttom";}
+					else {perturbY=-5;context.textBaseline="bottom";}
 					if(x0>x1) {perturbX=5;context.textAlign="left";}
 					else {perturbX=-5;context.textAlign="right";}
-					if(level>1) context.fillText(level+"x1", x+perturbX, y1);
-					else context.fillText("1x"+1/level, x1, y+perturbY);
+					if(level>1) {
+						context.fillText(level+"x1", x+perturbX, y1);
+					}
+					else {
+						context.fillText("1x"+1/level, x1, y+perturbY);
+					}
 					context.fillStyle=fillColor;
 				}
-				this.stx.plotLine(x0, farX, y0, farY, (i||!this.highlighted?color:trendLineColor), "segment", context, panel, parameters);
+				this.stx.plotLine(x0, farX, y0, farY, this.highlighted?trendLineColor:color, "segment", context, panel, parameters);
+				this.rays.push([[x0,y0],[farX,farY]]);
 				if(level==1){
 					farX0=farX;
 					farY0=farY;
@@ -13147,24 +13577,21 @@ var __drawingAdvanced_ =
 	CIQ.Drawing.timecycle.ciqInheritsFrom(CIQ.Drawing.speedarc);
 	CIQ.extend(CIQ.Drawing.timecycle.prototype,{
 		intersected: function(tick, value, box){
-			var p0=this.p0, p1=this.p1, layout=this.stx.layout, panel=this.stx.panels[this.panelName];
+			var p0=this.p0, p1=this.p1, panel=this.stx.panels[this.panelName];
 			if(!p0 || !p1 || !panel) return null; // in case invalid drawing (such as from panel that no longer exists)
-			if(this.pointIntersection(p0[0], p0[1], box)){
-				this.highlighted="p0";
-				return {
-					action: "drag",
-					point: "p0"
-				};
-			}else if(this.pointIntersection(p1[0], p1[1], box)){
-				this.highlighted="p1";
-				return {
-					action: "drag",
-					point: "p1"
-				};
+			var pointsToCheck={0:p0, 1:p1};
+			for(var pt in pointsToCheck){
+				if(this.pointIntersection(pointsToCheck[pt][0], pointsToCheck[pt][1], box)){
+					this.highlighted="p"+pt;
+					return {
+						action: "drag",
+						point: "p"+pt
+					};	
+				}
 			}
 			// Check for over the trend line or the 0 vertical line
-			var boxIntersects=CIQ.boxIntersects(box.x0, box.y0, box.x1, box.y1, p0[0], p0[1], p1[0], p1[1], "segment", panel.yAxis.semiLog);
-			if(boxIntersects || (box.x0<=this.p0[0] && box.x1>=p0[0])){
+			var trendIntersects=this.lineIntersection(tick, value, box, "segment");
+			if(trendIntersects || (box.x0<=this.p0[0] && box.x1>=p0[0])){
 				this.highlighted=true;
 				return {
 					action: "move",
@@ -13180,6 +13607,7 @@ var __drawingAdvanced_ =
 			var panel=this.stx.panels[this.panelName];
 			if(!panel) return;
 			if(!this.p1) return;
+
 			var x0=this.stx.pixelFromTick(this.p0[0], panel.chart);
 			var x1=this.stx.pixelFromTick(this.p1[0], panel.chart);
 			var y0=this.stx.pixelFromValueAdjusted(panel, this.p0[0], this.p0[1]);
@@ -13206,7 +13634,7 @@ var __drawingAdvanced_ =
 			var parameters={
 					pattern: this.pattern,
 					lineWidth: this.lineWidth,
-					opacity: this.defaultOpacity
+					opacity: this.highlighted?1:this.defaultOpacity
 			};
 
 			var x_s=[];
@@ -13248,12 +13676,18 @@ var __drawingAdvanced_ =
 			}
 			context.restore();
 			context.textAlign="left";
+
 			this.stx.plotLine(x0, x1, y0, y1, trendLineColor, "segment", context, panel, parameters);
 			if(this.highlighted){
 				var p0Fill=this.highlighted=="p0"?true:false;
 				var p1Fill=this.highlighted=="p1"?true:false;
 				this.littleCircle(context, x0, y0, p0Fill);
 				this.littleCircle(context, x1, y1, p1Fill);
+			}else{
+				// move points so always accessible
+				var yVal=this.stx.valueFromPixel(panel.height/2,panel);
+				this.setPoint(0, this.p0[0], yVal, panel.chart);
+				this.setPoint(1, this.p1[0], yVal, panel.chart);
 			}
 		}
 	}, true);
@@ -13287,10 +13721,6 @@ var __drawingAdvanced_ =
 			this.setPoint(1, tick, value, panel.chart);
 			this.penDown=false;
 			return true;	// kernel will call render after this
-		},
-		lineIntersection: function(tick, value, box, type){
-			var p0=this.p0, p1=this.p1, layout=this.stx.layout, panel=this.stx.panels[this.panelName];
-			return p0 && p1 && panel && CIQ.boxIntersects(box.x0, box.y0, box.x1, box.y1, p0[0], p0[1], p1[0], p1[1], "segment", panel.yAxis.semiLog);
 		},
 		render: function(context){
 			var panel=this.stx.panels[this.panelName];
@@ -13531,7 +13961,6 @@ var __drawingAdvanced_ =
 	};
 
 	/**
-	/**
 	 * Average Line drawing tool.
 	 *
 	 * It inherits its properties from {@link CIQ.Drawing.regression}
@@ -13545,8 +13974,53 @@ var __drawingAdvanced_ =
 	};
 	CIQ.Drawing.average.ciqInheritsFrom(CIQ.Drawing.regression);
 	CIQ.extend(CIQ.Drawing.average.prototype,{
-		configs: ["color","lineWidth","pattern","axisLabel"],
-		measure: function(){},
+		configs: [
+			// average line:
+			"color", "lineWidth", "pattern", "axisLabel",
+			// deviation 1:
+			"active1", "color1", "lineWidth1", "pattern1",
+			// deviation 2:
+			"active2", "color2", "lineWidth2", "pattern2",
+			// deviation 3:
+			"active3", "color3", "lineWidth3", "pattern3"
+		],
+		copyConfig: function(withPreferences) {
+			CIQ.Drawing.copyConfig(this,withPreferences);
+			var cvp = this.stx.currentVectorParameters;
+			this.deviation1 = !!cvp.active1;
+			this.deviation2 = !!cvp.active2;
+			this.deviation3 = !!cvp.active3;
+			this.color1 = cvp.color1 || "auto";
+			this.color2 = cvp.color2 || "auto";
+			this.color3 = cvp.color3 || "auto";
+			this.lineWidth1 = cvp.lineWidth1;
+			this.lineWidth2 = cvp.lineWidth2;
+			this.lineWidth3 = cvp.lineWidth3;
+			this.pattern1 = cvp.pattern1;
+			this.pattern2 = cvp.pattern2;
+			this.pattern3 = cvp.pattern3;
+		},
+		$controls: [
+			'cq-cvp-controller[cq-cvp-header="1"]',
+			'cq-cvp-controller[cq-cvp-header="2"]',
+			'cq-cvp-controller[cq-cvp-header="3"]'
+		],
+		measure: function() {
+			if (this.p0 && this.p1) {
+				this.stx.setMeasure(this.p0[1], false, this.p0[0], this.p1[0], true, this.name);
+				var txt = [];
+				if (this.deviation1) txt.push("1");
+				if (this.deviation2) txt.push("2");
+				if (this.deviation3) txt.push("3");
+				if (txt.length === 0) return;
+				var html = "&ensp;" + txt.join(", ") + " &sigma;";
+				var mMeasure = $$$(".mMeasure", this.stx.chart.drawingContainer);
+				var mSticky = this.stx.controls.mSticky;
+				var mStickyInterior = mSticky && $$$(".mStickyInterior", mSticky);
+				if (mMeasure) mMeasure.innerHTML += html;
+				if (mStickyInterior) mStickyInterior.innerHTML += html;
+			}
+		},
 		render: function(context){
 			var panel=this.stx.panels[this.panelName];
 			if(!panel) return;
@@ -13557,45 +14031,159 @@ var __drawingAdvanced_ =
 			if(x0<panel.left && x1<panel.left) return;
 			if(x0>panel.right && x1>panel.right) return;
 
+			var stx = this.stx;
+			var dataSet = stx.chart.dataSet;
+			var start = Math.min(this.p1[0], this.p0[0]);
+			var end = Math.max(this.p1[0], this.p0[0]);
 			var sumCloses=0;
 			var rawTicks=0;
 			var validTicks=0;
-			for(var i=Math.min(this.p1[0],this.p0[0]);i<=Math.max(this.p1[0],this.p0[0]);i++){
-				if(this.stx.chart.dataSet[i]){
-					var price=this.stx.chart.dataSet[i].Close;
-					if(price || price===0){
-						validTicks++;
-						sumCloses+=price;
-					}
-				}
+			var i, price;
+
+			for(i = start; i <= end; i++){
 				rawTicks++;
+				if (!dataSet[i]) continue;
+
+				price = dataSet[i].Close;
+				if(price || price===0){
+					validTicks++;
+					sumCloses+=price;
+				}
 			}
-			var y0,y1;
+
 			if(!validTicks) return;
+
 			var average=sumCloses/validTicks;
-			y=this.stx.pixelFromValueAdjusted(panel, this.p0[0], average);
+			var sumDeviations = 0;
 
-			var trendLineColor=this.setLineColor();
+			for (i = start; i <= end; i++) {
+				if (!dataSet[i]) continue;
+				price = dataSet[i].Close;
+				if (price || price === 0) {
+					sumDeviations += Math.pow(price - average, 2);
+				}
+			}
 
-			var parameters={
+			var deviation = Math.sqrt(sumDeviations / validTicks);
+			var lines = {};
+			var color, label;
+
+			if (this.deviation1) {
+				color = this.setLineColor(this.color1);
+				label = "1\u03c3";
+				lines.deviation1p = {
+					value: average + deviation,
+					color: color,
+					label: label,
+					params: {
+						pattern: this.pattern1,
+						lineWidth: this.lineWidth1
+					}
+				};
+				lines.deviation1n = {
+					value: average + deviation * -1,
+					color: color,
+					label: label,
+					params: {
+						pattern: this.pattern1,
+						lineWidth: this.lineWidth1
+					}
+				};
+			}
+			if (this.deviation2) {
+				color = this.setLineColor(this.color2);
+				label = "2\u03c3";
+				lines.deviation2p = {
+					value: average + deviation * 2,
+					color: color,
+					label: label,
+					params: {
+						pattern: this.pattern2,
+						lineWidth: this.lineWidth2
+					}
+				};
+				lines.deviation2n = {
+					value: average + deviation * -2,
+					color: color,
+					label: label,
+					params: {
+						pattern: this.pattern2,
+						lineWidth: this.lineWidth2
+					}
+				};
+			}
+			if (this.deviation3) {
+				color = this.setLineColor(this.color3);
+				label = "3\u03c3";
+				lines.deviation3p = {
+					value: average + deviation * 3,
+					label: label,
+					color: color,
+					params: {
+						pattern: this.pattern3,
+						lineWidth: this.lineWidth3
+					}
+				};
+				lines.deviation3n = {
+					value: average + deviation * -3,
+					color: color,
+					label: label,
+					params: {
+						pattern: this.pattern3,
+						lineWidth: this.lineWidth3
+					}
+				};
+			}
+
+			// intentionally setting average last so `y` will be the average pixel after the loop below exits
+			lines.average = {
+				value: average,
+				color: this.setLineColor(),
+				params: {
 					pattern: this.pattern,
 					lineWidth: this.lineWidth
+				}
 			};
-			this.stx.plotLine(x0, x1, y, y, trendLineColor, "segment", context, panel, parameters);
-			this.stx.plotLine(x0, x0, y-20, y+20, trendLineColor, "segment", context, panel, parameters);
-			this.stx.plotLine(x1, x1, y-20, y+20, trendLineColor, "segment", context, panel, parameters);
 
-			if(this.axisLabel && !this.highlighted && !this.penDown){
-				if((x0>=panel.chart.left && x0<=panel.chart.right) || (x1>=panel.chart.left && x1<=panel.chart.right)){
-					this.stx.endClip();
-					var txt=average;
-					if(panel.chart.transformFunc) txt=panel.chart.transformFunc(this.stx, panel.chart, txt);
-					if(panel.yAxis.priceFormatter)
-						txt=panel.yAxis.priceFormatter(this.stx, panel, txt);
-					else
-						txt=this.stx.formatYAxisPrice(txt, panel);
-					this.stx.createYAxisLabel(panel, txt, y, trendLineColor);
-					this.stx.startClip(panel.name);
+			var line, y, tailpx, txt;
+			this.intersections = [];
+
+			function formatPrice(price){
+				if(panel.yAxis.priceFormatter)
+					price=panel.yAxis.priceFormatter(stx, panel, price);
+				else
+					price=stx.formatYAxisPrice(price, panel);
+				return price;
+			}
+
+			for (var key in lines) {
+				line = lines[key];
+				this.intersections.push(line.value);
+				y = stx.pixelFromValueAdjusted(panel, this.p0[0], line.value);
+				tailpx = key === "average" ? 20 : 10;
+
+				stx.plotLine(x0, x1, y, y, line.color, "segment", context, panel, line.params);
+				stx.plotLine(x0, x0, y-tailpx, y+tailpx, line.color, "segment", context, panel, line.params);
+				stx.plotLine(x1, x1, y-tailpx, y+tailpx, line.color, "segment", context, panel, line.params);
+
+				// print the values on the canvas
+				if(line.label){
+					context.fillStyle=line.color;
+					context.save();
+					context.textBaseline="middle";
+					//context.fillText(formatPrice(line.value), Math.max(x0,x1)+5, y);
+					context.fillText(line.label, Math.max(x0,x1)+5, y);
+					context.restore();
+				}
+
+				if(this.axisLabel && !this.highlighted && !this.penDown){
+					if((x0>=panel.chart.left && x0<=panel.chart.right) || (x1>=panel.chart.left && x1<=panel.chart.right)){
+						stx.endClip();
+						txt=line.value;
+						if(panel.chart.transformFunc) txt=panel.chart.transformFunc(this.stx, panel.chart, txt);
+						stx.createYAxisLabel(panel, formatPrice(txt), y, line.color);
+						stx.startClip(panel.name);
+					}
 				}
 			}
 
@@ -13612,10 +14200,22 @@ var __drawingAdvanced_ =
 		},
 		reconstruct: function(stx, obj){
 			this.stx=stx;
-			this.color=obj.col;
 			this.panelName=obj.pnl;
+			this.deviation1=obj.dev1;
+			this.deviation2=obj.dev2;
+			this.deviation3=obj.dev3;
+			this.color=obj.col;
+			this.color1=obj.col1;
+			this.color2=obj.col2;
+			this.color3=obj.col3;
 			this.pattern=obj.ptrn;
+			this.pattern1=obj.ptrn1;
+			this.pattern2=obj.ptrn2;
+			this.pattern3=obj.ptrn3;
 			this.lineWidth=obj.lw;
+			this.lineWidth1=obj.lw1;
+			this.lineWidth2=obj.lw2;
+			this.lineWidth3=obj.lw3;
 			this.d0=obj.d0;
 			this.d1=obj.d1;
 			this.tzo0=obj.tzo0;
@@ -13629,9 +14229,21 @@ var __drawingAdvanced_ =
 			var obj={
 				name:this.name,
 				pnl: this.panelName,
+				dev1:this.deviation1,
+				dev2:this.deviation2,
+				dev3:this.deviation3,
 				col:this.color,
+				col1:this.color1,
+				col2:this.color2,
+				col3:this.color3,
 				ptrn:this.pattern,
+				ptrn1:this.pattern1,
+				ptrn2:this.pattern2,
+				ptrn3:this.pattern3,
 				lw:this.lineWidth,
+				lw1:this.lineWidth1,
+				lw2:this.lineWidth2,
+				lw3:this.lineWidth3,
 				d0:this.d0,
 				d1:this.d1,
 				tzo0: this.tzo0,
@@ -13641,9 +14253,46 @@ var __drawingAdvanced_ =
 				al:this.axisLabel
 			};
 			return obj;
+		},
+		intersected: function(tick, value, box) {
+			var averageLineIntersection = CIQ.Drawing.segment.prototype.intersected.call(this, tick, value, box);
+
+			if (averageLineIntersection) {
+				return averageLineIntersection;
+			}
+
+			var lineIntersection = CIQ.Drawing.BaseTwoPoint.prototype.lineIntersection;
+			var intersections = this.intersections;
+			var p0 = [this.p0[0], 0];
+			var p1 = [this.p1[0], 0];
+			var line = {
+				p0: p0,
+				p1: p1,
+				stx: this.stx,
+				panelName: this.panelName
+			};
+
+			// the last value is average, which was already checked by `intersected.call` above
+			for (var i = 0; intersections && i < intersections.length - 1; ++i) {
+				p0[1] = p1[1] = intersections[i];
+
+				if (lineIntersection.call(line, tick, value, box, "segment")) {
+					this.highlighted = true;
+
+					return {
+						action: "move",
+						p0: p0,
+						p1: p1,
+						tick: tick,
+						value: value
+					};
+				}
+			}
+
+			return null;
 		}
 	}, true);
-	
+
 	/**
 	 * Quadrant Lines drawing tool.
 	 *
@@ -13685,6 +14334,7 @@ var __drawingAdvanced_ =
 			var y75=this.stx.pixelFromValueAdjusted(panel, this.p0[0], (lowest+avg)/2);
 			var y100=this.stx.pixelFromValueAdjusted(panel, this.p0[0], lowest);
 
+			this.highest=highest; this.lowest=lowest;
 			var trendLineColor=this.setLineColor();
 
 			var fillColor=this.fillColor;
@@ -13728,6 +14378,38 @@ var __drawingAdvanced_ =
 				this.littleCircle(context, x0, y50, p0Fill);
 				this.littleCircle(context, x1, y50, p1Fill);
 			}
+		},
+		boxIntersection: function(tick, value){
+			var p0=this.p0, p1=this.p1;
+			if(!p0 || !p1) return false;
+			if(tick>Math.max(p0[0], p1[0]) || tick<Math.min(p0[0], p1[0])) return false;
+			if(!this.stx.repositioningDrawing && (value>this.highest || value<this.lowest)) return false;
+			return true;
+		},
+		intersected: function(tick, value, box){
+			var p0=this.p0, p1=this.p1;
+			if(!p0 || !p1) return null; // in case invalid drawing (such as from panel that no longer exists)
+			var pointsToCheck={0:p0, 1:p1};
+			for(var pt in pointsToCheck){
+				if(this.pointIntersection(pointsToCheck[pt][0], pointsToCheck[pt][1], box)){
+					this.highlighted="p"+pt;
+					return {
+						action: "drag",
+						point: "p"+pt
+					};	
+				}
+			}
+			if(this.boxIntersection(tick, value)){
+				this.highlighted=true;
+				return {
+					action: "move",
+					p0: CIQ.clone(p0),
+					p1: CIQ.clone(p1),
+					tick: tick,
+					value: value
+				};
+			}
+			return null;
 		}
 	}, true);
 
@@ -13749,7 +14431,7 @@ var __drawingAdvanced_ =
 	return _exports;
 });
 
-var __equations_ =
+var __js_advanced_equations_ =
 //-------------------------------------------------------------------------------------------
 // Copyright 2012-2017 by ChartIQ, Inc.
 // All rights reserved
@@ -15090,7 +15772,7 @@ var __equations_ =
 	return _exports;
 });
 
-var __renderersAdvanced_ =
+var __js_advanced_renderersAdvanced_ =
 //-------------------------------------------------------------------------------------------
 // Copyright 2012-2017 by ChartIQ, Inc.
 // All rights reserved
@@ -15297,7 +15979,6 @@ var __renderersAdvanced_ =
 			type:				"histogram",
 			subtype:			"stacked",
 			heightPercentage:	.7,	 // how high to go. 1 = 100%
-			opacity:			.7,  // only needed if supporting IE8, otherwise can use rgba values in histMap instead
 			widthFactor:		.8	 // to control space between bars. 1 = no space in between
 		};
 
@@ -15424,7 +16105,7 @@ var __renderersAdvanced_ =
 	return _exports;
 });
 
-var __share_ =
+var __js_advanced_share_ =
 //-------------------------------------------------------------------------------------------
 // Copyright 2012-2017 by ChartIQ, Inc.
 // All rights reserved
@@ -15754,7 +16435,7 @@ var __share_ =
 	return _exports;
 });
 
-var __studiesAdvanced_ =
+var __js_advanced_studiesAdvanced_ =
 //-------------------------------------------------------------------------------------------
 // Copyright 2012-2017 by ChartIQ, Inc.
 // All rights reserved
@@ -15889,7 +16570,7 @@ var __studiesAdvanced_ =
 	 * clearly visible in the home position.
 	 *
 	 * @example
-	 * var stxx = new CIQ.ChartEngine({container: $('.chart-container')[0], preferences: {whitespace: 60.5}});
+	 * var stxx = new CIQ.ChartEngine({container: $$$('.chartContainer'), preferences: {whitespace: 60.5}});
 	 *
 	 * Alternatively, you can use yAxis labels by setting the labels parameter to "yaxis" in the studyLibrary entry.
 	 *
@@ -16072,6 +16753,7 @@ var __studiesAdvanced_ =
 		var i, val;
 		for(i=sd.startFrom-1;i>=0;i--){
 			val=quotes[i][field];
+			if(val && typeof(val)=="object") val=val[sd.subField];
 			if(val || val===0) break;
 		}
 		for(i++;i<quotes.length;i++){
@@ -16109,6 +16791,7 @@ var __studiesAdvanced_ =
 		var offsetBack=offset;
 		for(i=sd.startFrom-1;i>=0;i--){
 			val=quotes[i][field];
+			if(val && typeof(val)=="object") val=val[sd.subField];
 			if(!val && val!==0) continue;
 			if(offsetBack>0){
 				offsetBack--;
@@ -16143,6 +16826,7 @@ var __studiesAdvanced_ =
 		var offsetBack=offset;
 		for(i=sd.startFrom-1;i>=0;i--){
 			val=quotes[i][field];
+			if(val && typeof(val)=="object") val=val[sd.subField];
 			if(!val && val!==0) continue;
 			if(offsetBack>0){
 				offsetBack--;
@@ -16179,7 +16863,7 @@ var __studiesAdvanced_ =
 		if(!quotes) return;
 		CIQ.Studies.calculateStudyATR(stx,sd);
 		var useHighLow=sd.inputs.HighLow;
-	    for(var i=Math.max(sd.startFrom-1,1);i<quotes.length-1;i++){
+		for(var i=Math.max(sd.startFrom-1,1);i<quotes.length-1;i++){
 			var prices=quotes[i];
 			var pd=quotes[i-1];
 			var prev=prices["Buy Stops " + sd.name];
@@ -16188,7 +16872,7 @@ var __studiesAdvanced_ =
 			if(!prices || !pd) continue;
 			var base=prices.Close;
 			var result=base;
-	        var offset=prices["ATR " + sd.name]*sd.inputs.Multiplier;
+			var offset=prices["ATR " + sd.name]*sd.inputs.Multiplier;
 			if(prices.Close>prev && pd.Close>prev){
 				if(useHighLow) base=prices.High;
 				result=Math.max(prev,base-offset);
@@ -16287,19 +16971,19 @@ var __studiesAdvanced_ =
 		}
 		var field=sd.inputs.Field;
 		if(!field || field=="field") field="Close";
-	    var i;
-	    for(i=sd.startFrom;i<quotes.length;i++){
-	    	if(!quotes[i]) continue;
-	    	if(!quotes[i-1]) continue;
-	    	var denom=quotes[i-1][field];
-	    	if( denom ){
-	    		quotes[i]["_ROCx10 "+sd.name]=1000*((quotes[i][field]/denom)-1);
-	    	}
-	    }
-	    CIQ.Studies.MA("exponential", periods.Smooth, "_ROCx10 "+sd.name, 0, "_EMAx10", stx, sd);
-	    CIQ.Studies.MA("exponential", periods.Double, "_EMAx10 "+sd.name, 0, "PMO", stx, sd);
-	    CIQ.Studies.MA("exponential", periods.Signal, "PMO "+sd.name, 0, "PMOSignal", stx, sd);
-	    sd.zoneOutput="PMO";
+		var i;
+		for(i=sd.startFrom;i<quotes.length;i++){
+			if(!quotes[i]) continue;
+			if(!quotes[i-1]) continue;
+			var denom=quotes[i-1][field];
+			if( denom ){
+				quotes[i]["_ROCx10 "+sd.name]=1000*((quotes[i][field]/denom)-1);
+			}
+		}
+		CIQ.Studies.MA("exponential", periods.Smooth, "_ROCx10 "+sd.name, 0, "_EMAx10", stx, sd);
+		CIQ.Studies.MA("exponential", periods.Double, "_EMAx10 "+sd.name, 0, "PMO", stx, sd);
+		CIQ.Studies.MA("exponential", periods.Signal, "PMO "+sd.name, 0, "PMOSignal", stx, sd);
+		sd.zoneOutput="PMO";
 	};
 
 	CIQ.Studies.calculateElderImpulse=function(stx, sd){
@@ -16325,9 +17009,9 @@ var __studiesAdvanced_ =
 			else if(quotes[i]["_MA "+sd.name]<quotes[i-1]["_MA "+sd.name] &&
 					quotes[i]["_"+sd.name+"_hist"]<quotes[i-1]["_"+sd.name+"_hist"]) color=bear;
 			else color=neutral;
-		    quotes[i]["Result "+sd.name]=color;
-		    //if(i) quotes[i-1][sd.name+"_hist"]=null;
-	    }
+			quotes[i]["Result "+sd.name]=color;
+			//if(i) quotes[i-1][sd.name+"_hist"]=null;
+		}
 	};
 
 	CIQ.Studies.calculatePivotPoints=function(stx, sd){
@@ -16353,12 +17037,12 @@ var __studiesAdvanced_ =
 
 		function getMarketOffset(localQuoteDate){
 			var marketZone = isForex ? "America/New_York" : stx.chart.market.market_tz;
-	    	var dt=new Date(localQuoteDate.getTime() + localQuoteDate.getTimezoneOffset() * 60000);
-	    	if(!marketZone || marketZone.indexOf("UTC")==-1)
-	    		dt=CIQ.convertTimeZone(dt,"UTC",marketZone);
+			var dt=new Date(localQuoteDate.getTime() + localQuoteDate.getTimezoneOffset() * 60000);
+			if(!marketZone || marketZone.indexOf("UTC")==-1)
+				dt=CIQ.convertTimeZone(dt,"UTC",marketZone);
 
 			return new Date(dt.getFullYear(),dt.getMonth(),dt.getDate(),dt.getHours(),dt.getMinutes(),dt.getSeconds(),dt.getMilliseconds()).getTime()-localQuoteDate.getTime();
-	    }
+		}
 		var pointers={
 			pivotPoint:NaN,
 			high:0,
@@ -16370,64 +17054,64 @@ var __studiesAdvanced_ =
 		if(sd.startFrom>1){
 			pointers=CIQ.clone(quotes[sd.startFrom-1]["_pointers " + sd.name]);
 		}
-	    function resetPivots(){
+		function resetPivots(){
 			pointers.pivotPoint=(pointers.high+pointers.low+quotes[i-1].Close)/3;
 			pointers.prevHigh=pointers.high;
 			pointers.prevLow=pointers.low;
 			pointers.hlSpread=pointers.high-pointers.low;
 			pointers.high=pointers.low=0;
-	    }
-	    for(var i=Math.max(1,sd.startFrom);i<quotes.length;i++){
-	    	if(!quotes[i-1]) continue;
-	    	pointers.high=Math.max(pointers.high,quotes[i-1].High);
-	    	pointers.low=Math.min(pointers.low>0?pointers.low:quotes[i-1].Low,quotes[i-1].Low);
-	    	if(sd.inputs.Continuous) resetPivots();
-	    	else if(period=="year" && quotes[i].DT.getYear()!=quotes[i-1].DT.getYear()){
-	    		//new yearly period
-	    		resetPivots();
-	    	}else if(period=="month" && quotes[i].DT.getMonth()!=quotes[i-1].DT.getMonth()){
-	    		//new monthly period
-	    		resetPivots();
-	    	}else if(period=="week" && quotes[i].DT.getDay()<quotes[i-1].DT.getDay()){
-	    		//new weekly period
-	    		resetPivots();
-	    	}else if(period=="day"){
-	    		if(marketOffset===null){
-	    			//possible new daily period
-	    			marketOffset=getMarketOffset(quotes[i].DT);
+		}
+		for(var i=Math.max(1,sd.startFrom);i<quotes.length;i++){
+			if(!quotes[i-1]) continue;
+			pointers.high=Math.max(pointers.high,quotes[i-1].High);
+			pointers.low=Math.min(pointers.low>0?pointers.low:quotes[i-1].Low,quotes[i-1].Low);
+			if(sd.inputs.Continuous) resetPivots();
+			else if(period=="year" && quotes[i].DT.getYear()!=quotes[i-1].DT.getYear()){
+				//new yearly period
+				resetPivots();
+			}else if(period=="month" && quotes[i].DT.getMonth()!=quotes[i-1].DT.getMonth()){
+				//new monthly period
+				resetPivots();
+			}else if(period=="week" && quotes[i].DT.getDay()<quotes[i-1].DT.getDay()){
+				//new weekly period
+				resetPivots();
+			}else if(period=="day"){
+				if(marketOffset===null){
+					//possible new daily period
+					marketOffset=getMarketOffset(quotes[i].DT);
 					// Forex beginning of day is 17:00 NY Time, so add 7 hours of msecs (6 for metals) to make it fall on a date boundary
 					if (isForex) marketOffset += (isMetal ? 6 : 7) * 60 * 60 * 1000;
-	    		}
+				}
 				var newDate=new Date(new Date(+quotes[i].DT).setMilliseconds(quotes[i].DT.getMilliseconds()+marketOffset));
 				var oldDate=new Date(new Date(+quotes[i-1].DT).setMilliseconds(quotes[i-1].DT.getMilliseconds()+marketOffset));
 				if (oldDate.getDate() !== newDate.getDate() && stx.chart.market.isMarketDate(newDate)) {
-		    		//new daily period
-		    		marketOffset=null;
-		    		resetPivots();
-		    	}
-	    	}else if(period=="15min" &&
-	    			(quotes[i].DT.getHours()!=quotes[i-1].DT.getHours() || Math.floor(quotes[i].DT.getMinutes()/15)!=Math.floor(quotes[i-1].DT.getMinutes()/15))){
-	    		//new 15 minute period
-	    		resetPivots();
-	    	}
-        	quotes[i]["Pivot " + sd.name]=pointers.pivotPoint;
-        	if(sd.inputs.Type.toLowerCase()=="fibonacci"){
-	        	quotes[i]["Resistance 1 " + sd.name]=pointers.pivotPoint+0.382*pointers.hlSpread;
-	        	quotes[i]["Resistance 2 " + sd.name]=pointers.pivotPoint+0.618*pointers.hlSpread;
-	        	quotes[i]["Resistance 3 " + sd.name]=pointers.pivotPoint+pointers.hlSpread;
-	        	quotes[i]["Support 1 " + sd.name]=pointers.pivotPoint-0.382*pointers.hlSpread;
-	        	quotes[i]["Support 2 " + sd.name]=pointers.pivotPoint-0.618*pointers.hlSpread;
-	        	quotes[i]["Support 3 " + sd.name]=pointers.pivotPoint-pointers.hlSpread;
-        	}else{
-	        	quotes[i]["Resistance 1 " + sd.name]=2*pointers.pivotPoint-pointers.prevLow;
-	        	quotes[i]["Resistance 2 " + sd.name]=pointers.pivotPoint+pointers.hlSpread;
-	        	quotes[i]["Resistance 3 " + sd.name]=pointers.prevHigh+2*(pointers.pivotPoint-pointers.prevLow);
-	        	quotes[i]["Support 1 " + sd.name]=2*pointers.pivotPoint-pointers.prevHigh;
-	        	quotes[i]["Support 2 " + sd.name]=pointers.pivotPoint-pointers.hlSpread;
-	        	quotes[i]["Support 3 " + sd.name]=pointers.prevLow-2*(pointers.prevHigh-pointers.pivotPoint);
-        	}
-        	quotes[i]["_pointers " + sd.name]=CIQ.clone(pointers);
-	    }
+					//new daily period
+					marketOffset=null;
+					resetPivots();
+				}
+			}else if(period=="15min" &&
+					(quotes[i].DT.getHours()!=quotes[i-1].DT.getHours() || Math.floor(quotes[i].DT.getMinutes()/15)!=Math.floor(quotes[i-1].DT.getMinutes()/15))){
+				//new 15 minute period
+				resetPivots();
+			}
+			quotes[i]["Pivot " + sd.name]=pointers.pivotPoint;
+			if(sd.inputs.Type.toLowerCase()=="fibonacci"){
+				quotes[i]["Resistance 1 " + sd.name]=pointers.pivotPoint+0.382*pointers.hlSpread;
+				quotes[i]["Resistance 2 " + sd.name]=pointers.pivotPoint+0.618*pointers.hlSpread;
+				quotes[i]["Resistance 3 " + sd.name]=pointers.pivotPoint+pointers.hlSpread;
+				quotes[i]["Support 1 " + sd.name]=pointers.pivotPoint-0.382*pointers.hlSpread;
+				quotes[i]["Support 2 " + sd.name]=pointers.pivotPoint-0.618*pointers.hlSpread;
+				quotes[i]["Support 3 " + sd.name]=pointers.pivotPoint-pointers.hlSpread;
+			}else{
+				quotes[i]["Resistance 1 " + sd.name]=2*pointers.pivotPoint-pointers.prevLow;
+				quotes[i]["Resistance 2 " + sd.name]=pointers.pivotPoint+pointers.hlSpread;
+				quotes[i]["Resistance 3 " + sd.name]=pointers.prevHigh+2*(pointers.pivotPoint-pointers.prevLow);
+				quotes[i]["Support 1 " + sd.name]=2*pointers.pivotPoint-pointers.prevHigh;
+				quotes[i]["Support 2 " + sd.name]=pointers.pivotPoint-pointers.hlSpread;
+				quotes[i]["Support 3 " + sd.name]=pointers.prevLow-2*(pointers.prevHigh-pointers.pivotPoint);
+			}
+			quotes[i]["_pointers " + sd.name]=CIQ.clone(pointers);
+		}
 	};
 
 	CIQ.Studies.calculateVWAP=function(stx, sd){
@@ -16439,47 +17123,47 @@ var __studiesAdvanced_ =
 		var isForex=CIQ.Market.Symbology.isForexSymbol(stx.chart.symbol);
 		var isMetal=CIQ.Market.Symbology.isForexMetal(stx.chart.symbol);
 		var marketOffset=null;
-	    var volume=0;
-	    var volume_price=0;
-	    var hasThereBeenVolume=false;
+		var volume=0;
+		var volume_price=0;
+		var hasThereBeenVolume=false;
 		function getMarketOffset(localQuoteDate){
 			var marketZone = isForex ? "America/New_York" : stx.chart.market.market_tz;
-	    	var dt=new Date(localQuoteDate.getTime() + localQuoteDate.getTimezoneOffset() * 60000);
-	    	if(!marketZone || marketZone.indexOf("UTC")==-1)
-	    		dt=CIQ.convertTimeZone(dt,"UTC",marketZone);
+			var dt=new Date(localQuoteDate.getTime() + localQuoteDate.getTimezoneOffset() * 60000);
+			if(!marketZone || marketZone.indexOf("UTC")==-1)
+				dt=CIQ.convertTimeZone(dt,"UTC",marketZone);
 
 			return new Date(dt.getFullYear(),dt.getMonth(),dt.getDate(),dt.getHours(),dt.getMinutes(),dt.getSeconds(),dt.getMilliseconds()).getTime()-localQuoteDate.getTime();
-	    }
+		}
 		if(sd.startFrom>1){
-	    	volume=quotes[sd.startFrom-1]["_V "+sd.name];
-	    	volume_price=quotes[sd.startFrom-1]["_VxP "+sd.name];
+			volume=quotes[sd.startFrom-1]["_V "+sd.name];
+			volume_price=quotes[sd.startFrom-1]["_VxP "+sd.name];
 
 		}
-	    for(var i=sd.startFrom;i<quotes.length;i++){
-    		if(marketOffset===null){
-    			//possible new daily period
-    			marketOffset=getMarketOffset(quotes[i].DT);
+		for(var i=sd.startFrom;i<quotes.length;i++){
+			if(marketOffset===null){
+				//possible new daily period
+				marketOffset=getMarketOffset(quotes[i].DT);
 				//Forex beginning of day is 17:00 NY Time, so add 7 hours of msecs (6 for metals) to make it fall on a date boundary
 				if (isForex) marketOffset += (isMetal ? 6 : 7) * 60 * 60 * 1000;
-    		}
-    		if(quotes[i-1] && quotes[i-1].DT){
+			}
+			if(quotes[i-1] && quotes[i-1].DT){
 				var newDate=new Date(new Date(+quotes[i].DT).setMilliseconds(quotes[i].DT.getMilliseconds()+marketOffset));
 				var oldDate=new Date(new Date(+quotes[i-1].DT).setMilliseconds(quotes[i-1].DT.getMilliseconds()+marketOffset));
 				if (oldDate.getDate()!=newDate.getDate() && stx.chart.market.isMarketDate(newDate)) {
-    				//new daily period
-		    		marketOffset=null;
-		    		volume=volume_price=0;
-    			}
-    		}
-	    	var typicalPrice=quotes[i]["hlc/3"];
-	    	volume+=quotes[i].Volume;
-	    	volume_price+=quotes[i].Volume*typicalPrice;
-	    	if(!volume) continue;
-	    	quotes[i]["VWAP "+sd.name]=volume_price/volume;
-	    	quotes[i]["_V "+sd.name]=volume;
-	    	quotes[i]["_VxP "+sd.name]=volume_price;
-	    	hasThereBeenVolume=true;
-	    }
+					//new daily period
+					marketOffset=null;
+					volume=volume_price=0;
+				}
+			}
+			var typicalPrice=quotes[i]["hlc/3"];
+			volume+=quotes[i].Volume;
+			volume_price+=quotes[i].Volume*typicalPrice;
+			if(!volume) continue;
+			quotes[i]["VWAP "+sd.name]=volume_price/volume;
+			quotes[i]["_V "+sd.name]=volume;
+			quotes[i]["_VxP "+sd.name]=volume_price;
+			hasThereBeenVolume=true;
+		}
 		if(!hasThereBeenVolume){
 			sd.error="VWAP Requires Volume";
 		}
@@ -16494,12 +17178,12 @@ var __studiesAdvanced_ =
 		if(sd.startFrom>1) high=quotes[sd.startFrom-1]["_high "+sd.name];
 		var i;
 		for(i=sd.startFrom;i<quotes.length;i++){
-	    	if(!quotes[i]) continue;
-	    	if(quotes[i].Volume) {
-	    		quotes[i][sd.name + "_hist"]=hist=scale*(quotes[i].High-quotes[i].Low)/quotes[i].Volume;
-	    		quotes[i]["_high " + sd.name]=high=Math.max(high,hist);
-	    	}
-	    }
+			if(!quotes[i]) continue;
+			if(quotes[i].Volume) {
+				quotes[i][sd.name + "_hist"]=hist=scale*(quotes[i].High-quotes[i].Low)/quotes[i].Volume;
+				quotes[i]["_high " + sd.name]=high=Math.max(high,hist);
+			}
+		}
 	};
 
 	CIQ.Studies.calculateAlligator=function(stx, sd){
@@ -16600,14 +17284,14 @@ var __studiesAdvanced_ =
 			}
 			return h;
 		}
-	    var i;
-	    for(i=Math.max(sd.startFrom,sd.days-1);i<quotes.length;i++){
-	    	quotes[i]["_PD2 "+sd.name]=Math.pow(100*(quotes[i][field]/getHV(sd.days,i,field)-1),2);
-	    }
-	    CIQ.Studies.MA("simple", sd.days, "_PD2 "+sd.name, 0, "_MA", stx, sd);
-	    for(i=Math.max(sd.startFrom,2*(sd.days-1));i<quotes.length;i++){
-	    	quotes[i]["Result "+sd.name]=Math.sqrt(quotes[i]["_MA "+sd.name]);
-	    }
+		var i;
+		for(i=Math.max(sd.startFrom,sd.days-1);i<quotes.length;i++){
+			quotes[i]["_PD2 "+sd.name]=Math.pow(100*(quotes[i][field]/getHV(sd.days,i,field)-1),2);
+		}
+		CIQ.Studies.MA("simple", sd.days, "_PD2 "+sd.name, 0, "_MA", stx, sd);
+		for(i=Math.max(sd.startFrom,2*(sd.days-1));i<quotes.length;i++){
+			quotes[i]["Result "+sd.name]=Math.sqrt(quotes[i]["_MA "+sd.name]);
+		}
 	};
 
 	CIQ.Studies.calculateChoppiness=function(stx, sd){
@@ -16628,15 +17312,15 @@ var __studiesAdvanced_ =
 			}
 			return [l,h];
 		}
-	    for(var i=Math.max(sd.startFrom,sd.days);i<quotes.length;i++){
-	    	if(!quotes[i]) continue;
-	    	var lh=getLLVHHV(sd.days,i);
-	    	if(quotes[i]["Sum True Range "+sd.name]){
-	    		quotes[i]["Result "+sd.name]=100*(Math.log(quotes[i]["Sum True Range "+sd.name]/(Math.max(0.000001,lh[1]-lh[0]))))/Math.log(sd.days);
-	    	}else{
-	    		quotes[i]["Result "+sd.name]=0;
-	    	}
-	    }
+		for(var i=Math.max(sd.startFrom,sd.days);i<quotes.length;i++){
+			if(!quotes[i]) continue;
+			var lh=getLLVHHV(sd.days,i);
+			if(quotes[i]["Sum True Range "+sd.name]){
+				quotes[i]["Result "+sd.name]=100*(Math.log(quotes[i]["Sum True Range "+sd.name]/(Math.max(0.000001,lh[1]-lh[0]))))/Math.log(sd.days);
+			}else{
+				quotes[i]["Result "+sd.name]=0;
+			}
+		}
 	};
 
 	CIQ.Studies.calculateDisparity=function(stx, sd){
@@ -16648,11 +17332,11 @@ var __studiesAdvanced_ =
 		var field=sd.inputs.Field;
 		if(!field || field=="field") field="Close";
 
-	    CIQ.Studies.MA(sd.inputs["Moving Average Type"], sd.days, field, 0, "_MA", stx, sd);
-	    for(var i=Math.max(sd.startFrom,sd.days-1);i<quotes.length;i++){
-	    	if(!quotes[i]) continue;
-	    	quotes[i]["Result "+sd.name]=100*(quotes[i][field]/quotes[i]["_MA "+sd.name]-1);
-	    }
+		CIQ.Studies.MA(sd.inputs["Moving Average Type"], sd.days, field, 0, "_MA", stx, sd);
+		for(var i=Math.max(sd.startFrom,sd.days-1);i<quotes.length;i++){
+			if(!quotes[i]) continue;
+			quotes[i]["Result "+sd.name]=100*(quotes[i][field]/quotes[i]["_MA "+sd.name]-1);
+		}
 	};
 
 	CIQ.Studies.calculateRainbow=function(stx, sd){
@@ -16680,26 +17364,26 @@ var __studiesAdvanced_ =
 			f="SMA"+j+" "+sd.name;
 		}
 
-	    for(var i=Math.max(sd.startFrom,10);i<quotes.length;i++){
-	    	if(!quotes[i]) continue;
-	    	var accum=0,max=Number.MAX_VALUE*-1,min=Number.MAX_VALUE;
-	    	for(j=1;j<=10;j++) {
-	    		var q=quotes[i]["SMA"+j+" "+sd.name];
-	    		accum+=q;
-	    		max=Math.max(max,q);
-	    		min=Math.min(min,q);
-	    	}
-	    	if(sd.name.indexOf("Osc")>-1) {
-	    		var lh=getLLVHHV(sd.inputs["HHV/LLV Lookback"],i);
-	    		quotes[i][sd.name+"_hist"]=100*(quotes[i][field]-accum/10)/Math.max(0.000001,lh[1]-lh[0]);
-	    		quotes[i]["Over "+sd.name]=100*(max-min)/Math.max(0.000001,lh[1]-lh[0]);
-	    		quotes[i]["Under "+sd.name]=-quotes[i]["Over "+sd.name];
-	    		quotes[i]["Zero "+sd.name]=0;
-	    	}
-	    }
-	    if(sd.name.indexOf("Osc")>-1){
-	    	sd.outputMap["Over "+sd.name]=sd.outputMap["Under "+sd.name]=sd.outputMap["Zero "+sd.name]=null;
-	    }
+		for(var i=Math.max(sd.startFrom,10);i<quotes.length;i++){
+			if(!quotes[i]) continue;
+			var accum=0,max=Number.MAX_VALUE*-1,min=Number.MAX_VALUE;
+			for(j=1;j<=10;j++) {
+				var q=quotes[i]["SMA"+j+" "+sd.name];
+				accum+=q;
+				max=Math.max(max,q);
+				min=Math.min(min,q);
+			}
+			if(sd.name.indexOf("Osc")>-1) {
+				var lh=getLLVHHV(sd.inputs["HHV/LLV Lookback"],i);
+				quotes[i][sd.name+"_hist"]=100*(quotes[i][field]-accum/10)/Math.max(0.000001,lh[1]-lh[0]);
+				quotes[i]["Over "+sd.name]=100*(max-min)/Math.max(0.000001,lh[1]-lh[0]);
+				quotes[i]["Under "+sd.name]=-quotes[i]["Over "+sd.name];
+				quotes[i]["Zero "+sd.name]=0;
+			}
+		}
+		if(sd.name.indexOf("Osc")>-1){
+			sd.outputMap["Over "+sd.name]=sd.outputMap["Under "+sd.name]=sd.outputMap["Zero "+sd.name]=null;
+		}
 	};
 
 	CIQ.Studies.calculateKST=function(stx, sd){
@@ -16716,20 +17400,20 @@ var __studiesAdvanced_ =
 		smp[3]=Number(sd.inputs["Heavy SMA Period"]);
 		smp[4]=Number(sd.inputs["Heaviest SMA Period"]);
 		var sp=Number(sd.inputs["Signal Period"]);
-	    var i,j;
-	    for(i=sd.startFrom;i<quotes.length;i++){
-    		if(!quotes[i]) continue;
-	    	for(j=1;j<=4;j++){
-	    		if(i>=roc[j] && quotes[i-roc[j]] && quotes[i-roc[j]][field]) quotes[i]["_ROC"+j+" "+sd.name]=100*((quotes[i][field]/quotes[i-roc[j]][field])-1);
-	    	}
-	    }
+		var i,j;
+		for(i=sd.startFrom;i<quotes.length;i++){
+			if(!quotes[i]) continue;
+			for(j=1;j<=4;j++){
+				if(i>=roc[j] && quotes[i-roc[j]] && quotes[i-roc[j]][field]) quotes[i]["_ROC"+j+" "+sd.name]=100*((quotes[i][field]/quotes[i-roc[j]][field])-1);
+			}
+		}
 		for(j=1;j<=4;j++) {
 			CIQ.Studies.MA("simple", smp[j], "_ROC"+j+" "+sd.name, 0, "_SMA"+j, stx, sd);
 		}
 		for(i=sd.startFrom;i<quotes.length;i++){
-		    quotes[i]["KST "+sd.name]=0;
+			quotes[i]["KST "+sd.name]=0;
 			for(j=1;j<=4;j++) quotes[i]["KST "+sd.name]+=j*quotes[i]["_SMA"+j+" "+sd.name];
-	    }
+		}
 		CIQ.Studies.MA("simple", sp, "KST "+sd.name, 0, "KSTSignal", stx, sd);
 	};
 
@@ -16747,22 +17431,22 @@ var __studiesAdvanced_ =
 			daily: [10,10,10,15,50,65,75,100,130,130,130,195],
 			weekly: [4,5,6,8,10,13,15,20,26,26,26,39]
 		};
-	    var i,j;
-	    for(i=sd.startFrom;i<quotes.length;i++){
-    		if(!quotes[i]) continue;
-	    	for(j=0;j<roc[span].length;j++){
-	    		if(i>=roc[span][j] && quotes[i-roc[span][j]] && quotes[i-roc[span][j]][field]) quotes[i]["_ROC"+j+" "+sd.name]=100*((quotes[i][field]/quotes[i-roc[span][j]][field])-1);
-	    	}
-	    }
+		var i,j;
+		for(i=sd.startFrom;i<quotes.length;i++){
+			if(!quotes[i]) continue;
+			for(j=0;j<roc[span].length;j++){
+				if(i>=roc[span][j] && quotes[i-roc[span][j]] && quotes[i-roc[span][j]][field]) quotes[i]["_ROC"+j+" "+sd.name]=100*((quotes[i][field]/quotes[i-roc[span][j]][field])-1);
+			}
+		}
 		for(j=0;j<map[span].length;j++) {
 			CIQ.Studies.MA(span=="daily"?"simple":"exponential", map[span][j], "_ROC"+j+" "+sd.name, 0, "_MA"+j, stx, sd);
 		}
 		for(i=sd.startFrom;i<quotes.length;i++){
-		    quotes[i]["Result "+sd.name]=0;
+			quotes[i]["Result "+sd.name]=0;
 			for(j=0;j<map[span].length;j++) {
 				quotes[i]["Result "+sd.name]+=((j%4)+1)*quotes[i]["_MA"+j+" "+sd.name];
 			}
-	    }
+		}
 	};
 
 	CIQ.Studies.calculateDarvas=function(stx, sd){
@@ -17036,7 +17720,7 @@ var __studiesAdvanced_ =
 	/**
 	 * Initializes data for Price Relative Study by fetching the comparing symbol.
 	 *
-	 * @param {CIQ.ChartEngine} stx    The chart object
+	 * @param {CIQ.ChartEngine} stx	The chart object
 	 * @param {string} type Study type
 	 * @param {object} inputs Study inputs
 	 * @param {object} outputs Study outputs
@@ -17058,8 +17742,8 @@ var __studiesAdvanced_ =
 	/**
 	 * Calculates data for Price Relative Study
 	 *
-	 * @param  {CIQ.ChartEngine} stx    The chart object
-	 * @param  {object} sd    The study descriptor object
+	 * @param  {CIQ.ChartEngine} stx	The chart object
+	 * @param  {object} sd	The study descriptor object
 	 * @memberOf CIQ.Studies
 	 * @version ChartIQ Advanced Package
 	 */
@@ -17136,16 +17820,16 @@ var __studiesAdvanced_ =
 
 	CIQ.Studies.calculateVortex=function(stx, sd){
 		var quotes=sd.chart.scrubbed;
-        var period=sd.days;
+		var period=sd.days;
 		if(quotes.length<period+1){
 			sd.error=true;
 			return;
 		}
-        var total={tr:0,vmPlus:0,vmMinus:0};
-        if(sd.startFrom>1){
-        	total=CIQ.clone(quotes[sd.startFrom-1]["_totals "+sd.name]);
-        }
-	    for(var i=Math.max(sd.startFrom,1);i<quotes.length;i++){
+		var total={tr:0,vmPlus:0,vmMinus:0};
+		if(sd.startFrom>1){
+			total=CIQ.clone(quotes[sd.startFrom-1]["_totals "+sd.name]);
+		}
+		for(var i=Math.max(sd.startFrom,1);i<quotes.length;i++){
 			var prices=quotes[i];
 			var pd=quotes[i-1];
 			var vmPlus=Math.abs(prices.High-pd.Low);
@@ -17307,14 +17991,14 @@ var __studiesAdvanced_ =
 		var array=[];
 		var increment=100/sd.days;
 		var accum=0;
-	    for(var i=Math.max(sd.startFrom-sd.days,1);i<quotes.length;i++){
-	    	var up=Number(quotes[i].Close>quotes[i-1].Close);
+		for(var i=Math.max(sd.startFrom-sd.days,1);i<quotes.length;i++){
+			var up=Number(quotes[i].Close>quotes[i-1].Close);
 			if(up) accum+=increment;
 			array.push(up);
 			if(array.length>sd.days) accum-=array.shift()*increment;
 			if(i<sd.startFrom) continue;
-		    quotes[i]["Result " + sd.name]=accum;
-	    }
+			quotes[i]["Result " + sd.name]=accum;
+		}
 	};
 
 	CIQ.Studies.calculateMADev=function(stx, sd) {
@@ -17333,8 +18017,10 @@ var __studiesAdvanced_ =
 		var histogram=sd.name+"_hist";
 		for(var i=Math.max(sd.startFrom,sd.days-1);i<quotes.length;i++){
 			var quote=quotes[i];
-	        if(pts=="Points") quote[histogram]=quote[field]-quote["_MA "+sd.name];
-	        else quote[histogram]=100*(quote[field]/quote["_MA "+sd.name]-1);
+			var val=quote[field];
+			if(val && typeof(val)=="object") val=val[sd.subField];
+			if(pts=="Points") quote[histogram]=val-quote["_MA "+sd.name];
+			else quote[histogram]=100*(val/quote["_MA "+sd.name]-1);
 		}
 	};
 
@@ -17353,25 +18039,25 @@ var __studiesAdvanced_ =
 		if(sd.startFrom>1){
 			accums=CIQ.clone(quotes[sd.startFrom-1]["_accums "+sd.name]);
 		}
-	    for(var i=sd.startFrom;i<quotes.length;i++){
-	    	accums.weakNum+=quotes[i].High-quotes[i].Close;
-	    	accums.weakDen+=quotes[i].Close-quotes[i].Low;
-	    	if(i>0){
-	    		accums.strongNum+=quotes[i].High-quotes[i-1].Close;
-	    		accums.strongDen+=quotes[i-1].Close-quotes[i].Low;
-	    	}
-	    	if(i>=sd.days){
-	    		accums.weakNum-=quotes[i-sd.days].High-quotes[i-sd.days].Close;
-	    		accums.weakDen-=quotes[i-sd.days].Close-quotes[i-sd.days].Low;
-		    	quotes[i]["Weak Ratio " + sd.name]=100*accums.weakNum/accums.weakDen;
-		    	if(i>sd.days){
-		    		accums.strongNum-=quotes[i-sd.days].High-quotes[i-sd.days-1].Close;
-		    		accums.strongDen-=quotes[i-sd.days-1].Close-quotes[i-sd.days].Low;
-			    	quotes[i]["Strong Ratio " + sd.name]=100*accums.strongNum/accums.strongDen;
-		    	}
-	    	}
-	    	quotes[i]["_accums " + sd.name]=CIQ.clone(accums);
-	    }
+		for(var i=sd.startFrom;i<quotes.length;i++){
+			accums.weakNum+=quotes[i].High-quotes[i].Close;
+			accums.weakDen+=quotes[i].Close-quotes[i].Low;
+			if(i>0){
+				accums.strongNum+=quotes[i].High-quotes[i-1].Close;
+				accums.strongDen+=quotes[i-1].Close-quotes[i].Low;
+			}
+			if(i>=sd.days){
+				accums.weakNum-=quotes[i-sd.days].High-quotes[i-sd.days].Close;
+				accums.weakDen-=quotes[i-sd.days].Close-quotes[i-sd.days].Low;
+				quotes[i]["Weak Ratio " + sd.name]=100*accums.weakNum/accums.weakDen;
+				if(i>sd.days){
+					accums.strongNum-=quotes[i-sd.days].High-quotes[i-sd.days-1].Close;
+					accums.strongDen-=quotes[i-sd.days-1].Close-quotes[i-sd.days].Low;
+					quotes[i]["Strong Ratio " + sd.name]=100*accums.strongNum/accums.strongDen;
+				}
+			}
+			quotes[i]["_accums " + sd.name]=CIQ.clone(accums);
+		}
 	};
 
 	CIQ.Studies.calculateIchimoku=function(stx, sd){
@@ -17420,12 +18106,14 @@ var __studiesAdvanced_ =
 				sd.futureB.push(lsb);
 			}
 		}
+		sd.chart.whiteSpaceFutureTicks=Math.max(sd.chart.whiteSpaceFutureTicks,sd.futureA.length-1);
+
 	};
 
 	CIQ.Studies.displayIchimoku=function(stx, sd, quotes){
-	    var topBand="Leading Span A " + sd.name, bottomBand="Leading Span B " + sd.name;
-	    var topColor=CIQ.Studies.determineColor(sd.outputs[sd.outputMap[topBand]]);
-	    var bottomColor=CIQ.Studies.determineColor(sd.outputs[sd.outputMap[bottomBand]]);
+		var topBand="Leading Span A " + sd.name, bottomBand="Leading Span B " + sd.name;
+		var topColor=CIQ.Studies.determineColor(sd.outputs[sd.outputMap[topBand]]);
+		var bottomColor=CIQ.Studies.determineColor(sd.outputs[sd.outputMap[bottomBand]]);
 		var yAxis=stx.getYAxisByName(sd.panel, sd.name);
 		var parameters={
 			topBand: topBand,
@@ -17446,39 +18134,39 @@ var __studiesAdvanced_ =
 				yAxis: yAxis
 			};
 			CIQ.fillArea(stx,points,fParams);
-		    stx.endClip();
+			stx.endClip();
 		}
 
 		var panel = stx.panels[sd.panel];
-        var xInit=stx.pixelFromBar(quotes.length-1, panel.chart);
-        var ayInit=stx.pixelFromPrice(quotes[quotes.length-1][topBand], panel, yAxis);
-        var byInit=stx.pixelFromPrice(quotes[quotes.length-1][bottomBand], panel, yAxis);
-        var cloud=[[xInit,byInit],[xInit,ayInit]], isUpCloud=null;
+		var xInit=stx.pixelFromBar(quotes.length-1, panel.chart);
+		var ayInit=stx.pixelFromPrice(quotes[quotes.length-1][topBand], panel, yAxis);
+		var byInit=stx.pixelFromPrice(quotes[quotes.length-1][bottomBand], panel, yAxis);
+		var cloud=[[xInit,byInit],[xInit,ayInit]], isUpCloud=null;
 
-        var futureA=sd.futureA, futureB=sd.futureB;
-	    if(sd.chart.dataSegment.length>=sd.chart.scroll){
-	    	for(var i=0;futureA && i<futureA.length-1;i++){
-		        if(futureA[i]===null || isNaN(futureA[i]) || futureB[i]===null || isNaN(futureB[i])) continue;
-		        var x1=stx.pixelFromBar(quotes.length+i, panel.chart);
-	            var x2=stx.pixelFromBar(quotes.length+i+1, panel.chart);
-		        var ay1=stx.pixelFromPrice(futureA[i], panel, yAxis);
-	            var ay2=stx.pixelFromPrice(futureA[i+1], panel, yAxis);
-	            var by1=stx.pixelFromPrice(futureB[i], panel, yAxis);
-	            var by2=stx.pixelFromPrice(futureB[i+1], panel, yAxis);
-		        cloud.push([x1, ay1]);
-		        cloud.unshift([x1,by1]);
-		        isUpCloud=ay1<by1;
-		        if((isUpCloud && ay2>by2) || (!isUpCloud && ay2<by2)){
-		            var interX=CIQ.intersectLineLineX(x1, x2, ay1, ay2, x1, x2, by1, by2);
-		            var interY=CIQ.intersectLineLineY(x1, x2, ay1, ay2, x1, x2, by1, by2);
-		            cloud.push([interX, interY]);
-		            fillFutureCloud(cloud, isUpCloud);
-		            cloud=[[interX, interY]];
-		            isUpCloud=null;
-		        }
-		    }
-		    if(cloud.length>2) fillFutureCloud(cloud,isUpCloud);
-	    }
+		var futureA=sd.futureA, futureB=sd.futureB;
+		if(sd.chart.dataSegment.length>=sd.chart.scroll){
+			for(var i=0;futureA && i<futureA.length-1;i++){
+				if(futureA[i]===null || isNaN(futureA[i]) || futureB[i]===null || isNaN(futureB[i])) continue;
+				var x1=stx.pixelFromBar(quotes.length+i, panel.chart);
+				var x2=stx.pixelFromBar(quotes.length+i+1, panel.chart);
+				var ay1=stx.pixelFromPrice(futureA[i], panel, yAxis);
+				var ay2=stx.pixelFromPrice(futureA[i+1], panel, yAxis);
+				var by1=stx.pixelFromPrice(futureB[i], panel, yAxis);
+				var by2=stx.pixelFromPrice(futureB[i+1], panel, yAxis);
+				cloud.push([x1, ay1]);
+				cloud.unshift([x1,by1]);
+				isUpCloud=ay1<by1;
+				if((isUpCloud && ay2>by2) || (!isUpCloud && ay2<by2)){
+					var interX=CIQ.intersectLineLineX(x1, x2, ay1, ay2, x1, x2, by1, by2);
+					var interY=CIQ.intersectLineLineY(x1, x2, ay1, ay2, x1, x2, by1, by2);
+					cloud.push([interX, interY]);
+					fillFutureCloud(cloud, isUpCloud);
+					cloud=[[interX, interY]];
+					isUpCloud=null;
+				}
+			}
+			if(cloud.length>2) fillFutureCloud(cloud,isUpCloud);
+		}
 		CIQ.Studies.displaySeriesAsLine(stx, sd, quotes);
 	};
 
@@ -17679,8 +18367,8 @@ var __studiesAdvanced_ =
 			return sd.outputs.Uptrend;
 		}
 		var params={skipTransform:panel.name!=sd.chart.name, skipProjections:true, label:stx.preferences.labels, yAxis:yAxis};
-	    var context=stx.chart.context;
-	    context.strokeStyle=colorFunction(stx,quotes[quotes.length-1]);
+		var context=stx.chart.context;
+		context.strokeStyle=colorFunction(stx,quotes[quotes.length-1]);
 		context.lineWidth=2;
 		if(sd.highlight) context.lineWidth=3;
 		var trendName="Trend "+sd.name;
@@ -17719,13 +18407,13 @@ var __studiesAdvanced_ =
 			stx.watermark(sd.panel,"center","bottom",stx.translateIf(sd.study.name)+": "+stx.translateIf("Not Available"));
 			return;
 		}
-		var params={skipTransform:stx.panels[sd.panel].name!=sd.chart.name, panelName:sd.panel, band:"Result " + sd.name, threshold:sd.study.centerline, yAxis:stx.getYAxisByName(stx.panels[sd.panel], sd.name)};
+		var params={skipTransform:stx.panels[sd.panel].name!=sd.chart.name, panelName:sd.panel, band:"Result " + sd.name, threshold:sd.study.centerline, yAxis:stx.getYAxisByName(stx.panels[sd.panel], sd.name), gapDisplayStyle:true};
 		for(var c=quotes.length-1;c>=0;c--){
 			if(quotes[c] && quotes[c][symbol]){
 				CIQ.Studies.displaySeriesAsLine(stx, sd, quotes);
 				if(sd.study.centerline || sd.study.centerline===0){
-					if(sd.outputs.Gain) CIQ.preparePeakValleyFill(stx,CIQ.extend(params,{direction:1, color:sd.outputs.Gain}));
-					if(sd.outputs.Loss) CIQ.preparePeakValleyFill(stx,CIQ.extend(params,{direction:-1, color:sd.outputs.Loss}));
+					if(sd.outputs.Gain) CIQ.preparePeakValleyFill(stx,CIQ.extend(params,{direction:1, color:CIQ.Studies.determineColor(sd.outputs.Gain)}));
+					if(sd.outputs.Loss) CIQ.preparePeakValleyFill(stx,CIQ.extend(params,{direction:-1, color:CIQ.Studies.determineColor(sd.outputs.Loss)}));
 				}
 				return;
 			}
@@ -17741,10 +18429,10 @@ var __studiesAdvanced_ =
 		var myWidth=stx.layout.candleWidth-2;
 		if(myWidth<2) myWidth=1;
 
-		var green=sd.outputs.Green;
-		var fade=sd.outputs.Fade;
-		var fake=sd.outputs.Fake;
-		var squat=sd.outputs.Squat;
+		var green=CIQ.Studies.determineColor(sd.outputs.Green);
+		var fade=CIQ.Studies.determineColor(sd.outputs.Fade);
+		var fake=CIQ.Studies.determineColor(sd.outputs.Fake);
+		var squat=CIQ.Studies.determineColor(sd.outputs.Squat);
 		stx.canvasColor("stx_histogram");
 		if(!sd.underlay) stx.chart.context.globalAlpha=1;
 		stx.chart.context.fillStyle="#CCCCCC";
@@ -17839,7 +18527,9 @@ var __studiesAdvanced_ =
 		stx.chart.customChart={
 			chartType: "colored_bar",
 			colorFunction: function(stx, quote, mode){
-				return quote["Result "+sd.name];
+				var color=quote["Result "+sd.name];
+				if(color && typeof(color)=="object") color=color.color;
+				return color;
 			}
 		};
 		stx.setMainSeriesRenderer();
@@ -17928,7 +18618,7 @@ var __studiesAdvanced_ =
 		stx.chart.context.strokeStyle=downColor;
 		stx.plotDataSegmentAsLine("Under "+sd.name, panel, {skipTransform:skipTransform, label:false, yAxis:yAxis});
 
-	    var dngradient=stx.chart.context.createLinearGradient(0,y,0,panel.yAxis.bottom);
+		var dngradient=stx.chart.context.createLinearGradient(0,y,0,panel.yAxis.bottom);
 		dngradient.addColorStop(0, stx.containerColor);
 		dngradient.addColorStop(1, downColor);
 		CIQ.prepareChannelFill(stx,{skipTransform:skipTransform,"color":dngradient,"opacity":1,"panelName":sd.panel,"topBand":"Zero "+sd.name,"bottomBand":"Under "+sd.name,"yAxis":yAxis});
@@ -17962,19 +18652,24 @@ var __studiesAdvanced_ =
 		}
 		var chart=stx.chart;
 		for(var i=0;i<quotes.length;i++){
-			if(quotes[i] && quotes[i]["_shadowCopy "+sd.name]) {
-				delete quotes[i]["Result "+sd.name];
-				if(quotes[i].transform) delete quotes[i].transform["Result "+sd.name];
-				delete quotes[i]["_shadowCopy "+sd.name];
+			var quote=quotes[i];
+			if(quote){
+				if(quote["_shadowCopy "+sd.name]) {
+					delete quote["Result "+sd.name];
+					delete quote["_shadowCopy "+sd.name];
+				}
+				if(!quote["Result "+sd.name]){
+					if(quote.transform) delete quote.transform["Result "+sd.name];				
+				}
 			}
 		}
 		var q0=quotes[0],ql=quotes[quotes.length-1];
-		if(q0 && !q0["Result "+sd.name] && q0["ShadowResult "+sd.name]) {
+		if(q0 && q0["ShadowResult "+sd.name]) {
 			q0["Result "+sd.name]=q0["ShadowResult "+sd.name];
 			if(q0.transform) q0.transform["Result "+sd.name]=chart.transformFunc(stx, chart, q0["ShadowResult "+sd.name]);
 			q0["_shadowCopy "+sd.name]=1;
 		}
-		if(ql && !ql["Result "+sd.name] && ql["ShadowResult "+sd.name]){
+		if(ql && ql["ShadowResult "+sd.name]){
 			ql["Result "+sd.name]=ql["ShadowResult "+sd.name];
 			if(ql.transform) ql.transform["Result "+sd.name]=chart.transformFunc(stx, chart, ql["ShadowResult "+sd.name]);
 			ql["_shadowCopy "+sd.name]=1;
@@ -18062,8 +18757,8 @@ var __studiesAdvanced_ =
 
 		function drawBars(volumeProfileClass, borders){
 			if(!borders) barBottom-=2;
-		    self.canvasColor(volumeProfileClass);
-		    if(CIQ.isIE8) context.globalAlpha=0.5;
+			self.canvasColor(volumeProfileClass);
+			if(CIQ.isIE8) context.globalAlpha=0.5;
 			context.beginPath();
 			var bottomRange = priceVolArry[0][0];
 			var prevTop=barBottom;
@@ -18119,9 +18814,9 @@ var __studiesAdvanced_ =
 			context.closePath();
 		}
 
-	    drawBars("stx_volume_profile", false);
-	    if(bordersOn){
-		    drawBars("stx_volume_profile", true);
+		drawBars("stx_volume_profile", false);
+		if(bordersOn){
+			drawBars("stx_volume_profile", true);
 		}
 
 		context.globalAlpha=1;
@@ -18205,7 +18900,7 @@ var __studiesAdvanced_ =
 			"overlay": true,
 			"seriesFN": CIQ.Studies.displayChannel,
 			"calculateFN": CIQ.Studies.calculateATRBands,
-			"inputs": {"Period":5, "Shift": 3, "Field":"field", "Channel Fill":true},
+			"inputs": {"Period":5, "Field":"field", "Shift": 3, "Channel Fill":true},
 			"outputs": {"ATR Bands Top":"auto", "ATR Bands Bottom":"auto", "ATR Bands Channel":"auto"},
 			"attributes":{
 				Shift:{min:0.1,step:0.1}
@@ -18227,7 +18922,7 @@ var __studiesAdvanced_ =
 			"overlay": true,
 			"seriesFN": CIQ.Studies.displayPSAR2,
 			"calculateFN": CIQ.Studies.calculateATRStops,
-			"inputs": {"Multiplier":3, "Period":21, "Plot Type":["points","squarewave"], "HighLow":false},
+			"inputs": {"Period":21, "Multiplier":3, "Plot Type":["points","squarewave"], "HighLow":false},
 			"outputs": {"Buy Stops":"#FF0000", "Sell Stops":"#00FF00"},
 			"attributes":{
 				Multiplier: {min:0.1,step:0.1}
@@ -18236,7 +18931,7 @@ var __studiesAdvanced_ =
 		"Boll %b": {
 			"name": "Bollinger %b",
 			"calculateFN": CIQ.Studies.calculateBollinger,
-			"inputs": {"Field":"field", "Period":20, "Standard Deviations": 2, "Moving Average Type":"ma"},
+			"inputs": {"Period":20, "Field":"field", "Standard Deviations": 2, "Moving Average Type":"ma"},
 			"outputs": {"%b":"auto"},
 			"parameters": {
 				template:"studyOverZones",
@@ -18249,7 +18944,7 @@ var __studiesAdvanced_ =
 		"Boll BW": {
 			"name": "Bollinger Bandwidth",
 			"calculateFN": CIQ.Studies.calculateBollinger,
-			"inputs": {"Field":"field", "Period":20, "Standard Deviations": 2, "Moving Average Type":"ma"},
+			"inputs": {"Period":20, "Field":"field", "Standard Deviations": 2, "Moving Average Type":"ma"},
 			"outputs": {"Bandwidth":"auto"},
 			"attributes": {
 				"Standard Deviations":{min:0.1,step:0.1}
@@ -18301,7 +18996,7 @@ var __studiesAdvanced_ =
 		},
 		"Alligator": {
 			"name": "Alligator",
-		    "overlay": true,
+			"overlay": true,
 			"seriesFN": CIQ.Studies.displayAlligator,
 			"calculateFN": CIQ.Studies.calculateAlligator,
 			"inputs":{"Jaw Period":13, "Jaw Offset":8, "Teeth Period":8, "Teeth Offset":5, "Lips Period":5, "Lips Offset":3, "Show Fractals":false},
@@ -18318,44 +19013,44 @@ var __studiesAdvanced_ =
 		},
 		"Ichimoku Clouds": {
 			"name": "Ichimoku Clouds",
-		    "overlay": true,
-		    "calculateFN": CIQ.Studies.calculateIchimoku,
-		    "seriesFN": CIQ.Studies.displayIchimoku,
-		    "inputs": {"Conversion Line Period":9, "Base Line Period": 26, "Leading Span B Period":52, "Lagging Span Period":26},
-		    "outputs": {"Conversion Line":"#0000FF", "Base Line":"#FF0000", "Leading Span A":"#00FF00", "Leading Span B":"#FF0000", "Lagging Span":"#808000"}
+			"overlay": true,
+			"calculateFN": CIQ.Studies.calculateIchimoku,
+			"seriesFN": CIQ.Studies.displayIchimoku,
+			"inputs": {"Conversion Line Period":9, "Base Line Period": 26, "Leading Span B Period":52, "Lagging Span Period":26},
+			"outputs": {"Conversion Line":"#0000FF", "Base Line":"#FF0000", "Leading Span A":"#00FF00", "Leading Span B":"#FF0000", "Lagging Span":"#808000"}
 		},
 		"P Rel": {
 			"name": "Price Relative",
 			"initializeFN": CIQ.Studies.initPriceRelative,
-		    "seriesFN": CIQ.Studies.displayVsComparisonSymbol,
-		    "calculateFN": CIQ.Studies.calculatePriceRelative,
+			"seriesFN": CIQ.Studies.displayVsComparisonSymbol,
+			"calculateFN": CIQ.Studies.calculatePriceRelative,
 			"centerline": 0,
-		    "inputs": {"Comparison Symbol":"SPY"},
-		    "deferUpdate": true
+			"inputs": {"Comparison Symbol":"SPY"},
+			"deferUpdate": true
 		},
 		"Perf Idx": {
 			"name": "Performance Index",
 			"centerline": 1,
 			"initializeFN": CIQ.Studies.initPriceRelative,
-		    "seriesFN": CIQ.Studies.displayVsComparisonSymbol,
+			"seriesFN": CIQ.Studies.displayVsComparisonSymbol,
 			"calculateFN": CIQ.Studies.calculatePerformance,
 			"inputs": {"Period":120, "Comparison Symbol":"SPY"},
 			"outputs": {"Result":"auto", "Gain":"#00DD00", "Loss":"#FF0000"},
-		    "deferUpdate": true
+			"deferUpdate": true
 		},
 		"Beta": {
 			"name": "Beta",
 			"centerline": 1,
 			"initializeFN": CIQ.Studies.initPriceRelative,
-		    "seriesFN": CIQ.Studies.displayVsComparisonSymbol,
+			"seriesFN": CIQ.Studies.displayVsComparisonSymbol,
 			"calculateFN": CIQ.Studies.calculateBeta,
 			"inputs": {"Period":20, "Comparison Symbol":"SPY"},
-		    "deferUpdate": true
+			"deferUpdate": true
 		},
 		"Ulcer": {
 			"name": "Ulcer Index",
-		    "calculateFN": CIQ.Studies.calculateUlcerIndex,
-		    "inputs": {"Field":"field", "Period":14}
+			"calculateFN": CIQ.Studies.calculateUlcerIndex,
+			"inputs": {"Period":14, "Field":"field"}
 		},
 		"Bal Pwr": {
 			"name": "Balance of Power",
@@ -18366,9 +19061,9 @@ var __studiesAdvanced_ =
 		},
 		"Trend Int": {
 			"name": "Trend Intensity Index",
-		    "calculateFN": CIQ.Studies.calculateTrendIntensity,
-		    "range": "0 to 100",
-			"inputs": {"Field":"field", "Period":14, "Signal Period":9},
+			"calculateFN": CIQ.Studies.calculateTrendIntensity,
+			"range": "0 to 100",
+			"inputs": {"Period":14, "Field":"field", "Signal Period":9},
 			"outputs":{"TII":"auto", "Signal":"#FF0000"},
 			"parameters": {
 				template:"studyOverZones",
@@ -18377,8 +19072,8 @@ var __studiesAdvanced_ =
 		},
 		"Choppiness": {
 			"name": "Choppiness Index",
-		    "calculateFN": CIQ.Studies.calculateChoppiness,
-		    "centerline": 50,
+			"calculateFN": CIQ.Studies.calculateChoppiness,
+			"centerline": 50,
 			"parameters": {
 				template:"studyOverZones",
 				init:{studyOverZonesEnabled:true, studyOverBoughtValue:61.8, studyOverBoughtColor:"auto", studyOverSoldValue:38.2, studyOverSoldColor:"auto"}
@@ -18390,35 +19085,35 @@ var __studiesAdvanced_ =
 		},
 		"Disparity": {
 			"name": "Disparity Index",
-		    "calculateFN": CIQ.Studies.calculateDisparity,
-		    "inputs": {"Field":"field", "Period":14, "Moving Average Type":"ma"}
+			"calculateFN": CIQ.Studies.calculateDisparity,
+			"inputs": {"Period":14, "Field":"field", "Moving Average Type":"ma"}
 		},
 		"Rainbow MA": {
 			"name": "Rainbow Moving Average",
 			"overlay": true,
-		    "calculateFN": CIQ.Studies.calculateRainbow,
-		    "seriesFN": CIQ.Studies.displayRainbowMA,
-		    "inputs": {"Field":"field", "Period":2},
+			"calculateFN": CIQ.Studies.calculateRainbow,
+			"seriesFN": CIQ.Studies.displayRainbowMA,
+			"inputs": {"Period":2, "Field":"field"},
 			"outputs": {"SMA1":"#FF0000", "SMA2":"#FF7F00", "SMA3":"#FFFF00", "SMA4":"#7FFF00", "SMA5":"#00FF7F", "SMA6":"#00FFFF", "SMA7":"#007FFF", "SMA8":"#0000FF", "SMA9":"#7F00FF", "SMA10":"#FF00FF"}
 		},
 		"Rainbow Osc": {
 			"name": "Rainbow Oscillator",
-		    "calculateFN": CIQ.Studies.calculateRainbow,
-		    "seriesFN": CIQ.Studies.displayRainbowOsc,
-		    "centerline": 0,
-		    "inputs": {"Field":"field", "Period":2, "HHV/LLV Lookback":10},
+			"calculateFN": CIQ.Studies.calculateRainbow,
+			"seriesFN": CIQ.Studies.displayRainbowOsc,
+			"centerline": 0,
+			"inputs": {"Period":2, "Field":"field", "HHV/LLV Lookback":10},
 			"outputs": {"Positive Bar":"#00DD00", "Negative Bar":"#FF0000"}
 		},
 		"Pring KST": {
 			"name": "Pring's Know Sure Thing",
-		    "calculateFN": CIQ.Studies.calculateKST,
-		    "inputs": {"Field":"field", "Lightest Rate of Change Period":10, "Lightest SMA Period":10, "Light Rate of Change Period":15, "Light SMA Period":10, "Heavy Rate of Change Period":20, "Heavy SMA Period":10, "Heaviest Rate of Change Period":30, "Heaviest SMA Period":15, "Signal Period":9},
+			"calculateFN": CIQ.Studies.calculateKST,
+			"inputs": {"Field":"field", "Lightest Rate of Change Period":10, "Lightest SMA Period":10, "Light Rate of Change Period":15, "Light SMA Period":10, "Heavy Rate of Change Period":20, "Heavy SMA Period":10, "Heaviest Rate of Change Period":30, "Heaviest SMA Period":15, "Signal Period":9},
 			"outputs": {"KST":"#00DD00", "KSTSignal":"#FF0000"}
 		},
 		"Pring Sp-K": {
 			"name": "Pring's Special K",
-		    "calculateFN": CIQ.Studies.calculateSpecialK,
-		    "inputs": {"Field":"field", "Interval":["daily","weekly"]}
+			"calculateFN": CIQ.Studies.calculateSpecialK,
+			"inputs": {"Field":"field", "Interval":["daily","weekly"]}
 		},
 		"Darvas": {
 			"name": "Darvas Box",
@@ -18448,10 +19143,10 @@ var __studiesAdvanced_ =
 		"vol profile": {
 			"name": "Volume Profile",
 			"underlay": true,
-		    "seriesFN": CIQ.Studies.displayVolumeProfile,
-		    "calculateFN": null,
-		    "inputs": {},
-		    "outputs": {"Bars Color":"#b64a96"},
+			"seriesFN": CIQ.Studies.displayVolumeProfile,
+			"calculateFN": null,
+			"inputs": {},
+			"outputs": {"Bars Color":"#b64a96"},
 			"customRemoval": true,
 			"parameters":{
 				"init": {displayBorder:true, displayVolume:false, numberOfBars:30, widthPercentage:0.25}
@@ -18499,7 +19194,7 @@ var __studiesAdvanced_ =
 			"name": "Moving Average Deviation",
 			"calculateFN": CIQ.Studies.calculateMADev,
 			"seriesFN": CIQ.Studies.displayHistogramWithSeries,
-			"inputs": {"Field":"field","Period":12,"Moving Average Type":"ma","Points Or Percent":["Points","Percent"]},
+			"inputs": {"Period":12,"Field":"field","Moving Average Type":"ma","Points Or Percent":["Points","Percent"]},
 			"outputs":{"Increasing Bar":"#00DD00", "Decreasing Bar":"#FF0000"}
 		},
 		"Shinohara": {
@@ -18513,7 +19208,7 @@ var __studiesAdvanced_ =
 	return _exports;
 });
 
-var __core_ =
+var __js_core_core_ =
 //-------------------------------------------------------------------------------------------
 // Copyright 2012-2017 by ChartIQ, Inc.
 // All rights reserved
@@ -19090,6 +19785,7 @@ var __core_ =
 	/**
 	 * Determines whether a line intersects a box. This is used within the charting engine to determine whether the cursor
 	 * has intersected a drawing.
+	 * Note this function is meant to receive bx1, by1, bx2, by2, x0, y0, x1 and y1 as pixel values and not as ticks/axis values.
 	 * @param  {number} bx1
 	 * @param  {number} by1
 	 * @param  {number} bx2
@@ -19098,68 +19794,34 @@ var __core_ =
 	 * @param  {number} y0
 	 * @param  {number} x1
 	 * @param  {number} y1
-	 * @param  {string} vtype - Either "segment", "ray" or "line"
+	 * @param  {string} vtype - Either "segment", "ray" or "line".  Anything else will default to segment.
 	 * @param  {boolean} isLog - True if the chart is in log scale and linear values are passed in
 	 * @return {boolean}       Returns true if the line intersects the box
 	 * @memberof CIQ
 	 * @since 4.0.0 `isLog` parameter added
+	 * @since 6.0.0 `isLog` parameter removed
 	 */
-	CIQ.boxIntersects=function(bx1, by1, bx2, by2, x0, y0, x1, y1, vtype, isLog){
-		//Adapted from http://stackoverflow.com/questions/99353/how-to-test-if-a-line-segment-intersects-an-axis-aligned-rectange-in-2d
+	CIQ.boxIntersects=function(bx1, by1, bx2, by2, x0, y0, x1, y1, vtype){
 
-		// Find min and max X for the segment
-		var minX = x0;
-		var maxX = x1;
-
-		if(x0 > x1){
-			minX = x1;
-			maxX = x0;
+		if(arguments[9]!==undefined){
+			console.warn("CIQ.boxIntersects() no longer supports isLog argument, please be sure arguments are passed in as pixels.");
 		}
-
-		// Find the intersection of the segment's and rectangle's x-projections
-		if(maxX > bx2) maxX = bx2;
-		if(minX < bx1) minX = bx1;
-
-		if(vtype=="segment" && minX > maxX) return false; // If their projections do not intersect return false
-
-		if(isLog) {
-			y0=CIQ.log10(y0);
-			y1=CIQ.log10(y1);
-			by1=CIQ.log10(by1);
-			by2=CIQ.log10(by2);
+		var minX=Math.min(bx1,bx2);
+		var maxX=Math.max(bx1,bx2);
+		var minY=Math.min(by1,by2);
+		var maxY=Math.max(by1,by2);
+		var isRay=vtype=="ray";
+		
+		// First see if segment/ray lies outside the box
+		if(vtype!="line"){
+			if(x0<minX && x1<minX && (!isRay || x0>x1)) return false;
+			if(x0>maxX && x1>maxX && (!isRay || x0<x1)) return false;
+			if(y0<minY && y1<minY && (!isRay || y0>y1)) return false;
+			if(y0>maxY && y1>maxY && (!isRay || y0<y1)) return false;
 		}
-
-		// Find corresponding min and max Y for min and max X we found before
-		var minY = y0;
-		var maxY = y1;
-
-		var dx = x1 - x0;
-
-		if(Math.abs(dx) > 0.0000001){
-			var a = (y1 - y0) / dx;
-			var b = y0 - a * x0;
-			minY = a * minX + b;
-			maxY = a * maxX + b;
-		}
-
-		if(minY > maxY){
-			var tmp = maxY;
-			maxY = minY;
-			minY = tmp;
-		}
-
-		// Find the intersection of the segment's and rectangle's y-projections
-		if(maxY > by1) maxY = by1;
-		if(minY < by2) minY = by2;
-
-
-		if(vtype=="segment"){
-			return minY <= maxY; // If their projections do not intersect return false
-		}
-
 		// Now see if all box corners land on the same side of the line
 		function cornerCheck(x, y){
-			return (y0-y1)*x + (x1-x0)*y + (x0*y1-x1*y0);
+			return (y-y0)*(x1-x0)-(x-x0)*(y1-y0);
 		}
 		var map={
 			a:cornerCheck(bx1,by1),
@@ -19171,6 +19833,28 @@ var __core_ =
 		if(map.a<0 && map.b<0 && map.c<0 && map.d<0) return false;
 
 		return true;
+	};
+
+	/**
+	 * Converts a box represented by two corner coordinates [tick0,value0] and [tick1,value1] into pixel coordinates.
+	 * @param {CIQ.ChartEngine} [stx] The chartEngine
+	 * @param  {string} panelName  Panel on which the coordinates reside
+	 * @param  {object} box Box to convert
+	 * @param  {number} [box.x0]
+	 * @param  {number} [box.y0]
+	 * @param  {number} [box.x1]
+	 * @param  {number} [box.y1]
+	 * @return  {object} A converted box
+	 * @memberof CIQ
+	 * @since 6.0.0
+	 */
+	CIQ.convertBoxToPixels=function(stx, panelName, box){
+		var panel=stx.panels[panelName];
+		var bx0=stx.pixelFromTick(box.x0,panel.chart);
+		var bx1=stx.pixelFromTick(box.x1,panel.chart);
+		var by0=stx.pixelFromValueAdjusted(panel, box.x0, box.y0);
+		var by1=stx.pixelFromValueAdjusted(panel, box.x1, box.y1);
+		return {x0:bx0, x1:bx1, y0:by0, y1:by1};
 	};
 
 	/**
@@ -19326,11 +20010,17 @@ var __core_ =
 	 * have a title and so we use this to determine whether the iframe contains valid content or not.
 	 *
 	 * @param  {string}   url The external url to fetch new UI content
+	 * @param  {HtmlElement} el  Element to append the UI content to, default is document.body
 	 * @param  {Function} cb  A callback function to call when the new UI is available
 	 * @memberof CIQ
+	 * @since 6.1.0 added el argument
 	 */
-	CIQ.loadUI = function(url, cb) {
+	CIQ.loadUI = function(url, el, cb) {
 		var i = document.createElement("iframe");
+		if(!el || typeof(el)=="function") {
+			cb=el;  // backward compatibility
+			el=document.body;
+		}
 		var onload = function() {
 			var iframeDocument = null;
 
@@ -19349,7 +20039,7 @@ var __core_ =
 
 				for (var j = 0; j < div.children.length; j++) {
 					var ch = div.children[j].cloneNode(true);
-					document.body.appendChild(ch);
+					el.appendChild(ch);
 				}
 
 				cb(null);
@@ -19433,16 +20123,55 @@ var __core_ =
 	 * Loads a feature function widget. Feature function widgets consist of a css file, a JS file and an HTML file. This can
 	 * be used to dynamically load content and functionality.
 	 * @param  {string}   widget Name of widget. The js, css and html files should be this name.
+	 * @param  {HtmlElement} el  Element to append the UI content to, default is document.body
 	 * @param  {Function} cb     Function to call when the widget is fully loaded
 	 * @memberof CIQ
+	 * @since 6.1.0 added el argument
 	 */
-	CIQ.loadWidget=function(widget, cb){
+	CIQ.loadWidget=function(widget, el, cb){
+		if(!el || typeof(el)=="function") {
+			cb=el;  // backward compatibility
+			el=document.body;
+		}
 		CIQ.loadStylesheet(widget+".css",function(){
-			CIQ.loadUI(widget + ".html", function(err){
+			CIQ.loadUI(widget + ".html", el, function(err){
 				if(err) cb(err);
 				else CIQ.loadScript(widget+".js", cb);
 			});
 		});
+	};
+
+	/**
+	 * Checks to see if the enabled plugins are done dynamically loading. 
+	 * @param {array} plugins An array of strings that define which plugins to check 
+	 * The plugin names provided must match the following format: if cq-scriptiq is enabled, 'scriptiq' is the plugin name entered into the array
+	 * @param {Function} cb Function to call when all the plugins are fully loaded
+	 * @memberof CIQ
+	 * @since 6.1.0
+	 */
+	CIQ.waitForPlugins=function(plugins, cb){
+		var numPluginsLoaded=0;
+		var numPlugins=plugins.length;
+		if(!numPlugins) {
+			cb();
+			return;
+		}
+		
+		for(var i=0; i<numPlugins; i++) {
+			var tagName='cq-' + plugins[i];
+			var element=document.getElementsByTagName(tagName)[0];
+			if(element && element.hasAttribute('loaded')) {
+				numPluginsLoaded++;
+			}
+		}
+
+	    if (numPlugins !== numPluginsLoaded) {
+	        return setTimeout(function(){
+	        	CIQ.waitForPlugins(plugins, cb);
+	        }, 0);
+	    }
+
+	    cb();
 	};
 
 	/**
@@ -20472,7 +21201,8 @@ var __core_ =
 		var rememberFont=context.font;
 		stx.canvasFont("stx-legend",context);
 
-		if(!coordinates) coordinates=params.chart.legend;
+		var chart=params.chart;
+		if(!coordinates) coordinates=chart.legend;
 		var xy=[coordinates.x, coordinates.y];
 		var lineColor=stx.defaultColor;
 
@@ -20507,11 +21237,14 @@ var __core_ =
 						display = legendItem.display;
 					}
 					if(!display){
-						if(params.chart.symbolDisplay){
-							display = params.chart.symbolDisplay;
+						if(chart.symbolDisplay){
+							display=chart.symbolDisplay;
 						}else{
-							display=params.chart.symbol;
+							display=chart.symbol;
 						}
+					}
+					if(xy[0]+context.measureText(display).width>chart.panel.right){
+						xy=[coordinates.x, coordinates.y+context.measureText("M").width+6];  // M is squarish, with width roughly equaling height: https://stackoverflow.com/questions/1134586/how-can-you-find-the-height-of-text-on-an-html-canvas
 					}
 					xy=CIQ.drawLegendItem(stx, xy, display, lineColor, legendItem.opacity);
 				}
@@ -20585,7 +21318,7 @@ var __core_ =
 
 	/**
 	 * Convenience function to iterate through the charts masterData and add a data member.
-	 * Generally used for additional comparison or study symbols.
+	 * Used to load initial data for additional series and study symbols and should normally not be called directly. Unless used inside a study initialize function; use {@link CIQ.ChartEngine#addSeries} or {@link CIQ.ChartEngine#updateChartData} instead.
 	 * Can be used with any array of data objects which contains at least the 'DT' (date in javascript format) and 'Close' ( close/last price ) elements of an [OHLC object](index.html#data-format).
 	 * @param {object} params Parameters object
 	 * @param {CIQ.ChartEngine} [params.stx]       	A chart object
@@ -20638,7 +21371,7 @@ var __core_ =
 		
 		if(!params.noCleanupDates) stx.doCleanupDates(data,stx.layout.interval);
 
-		var series=stx.getSeries({symbolObject: label, chart:chart});
+		var series=stx.getSeries({symbol: label, chart:chart});
 
 		if(data && data.constructor==Object) data=[data]; // When developer mistakenly sends an object instead of an array of objects
 		if (!data || !data.length) return;
@@ -20665,7 +21398,9 @@ var __core_ =
 			};
 			m=c;
 			for(var p in prior){
-				if(m.Close===null && m[p]!==undefined) m[p]=null;  // Close is not set, nothing else is valid (it's a gap)
+				if(m.Close===null){  // Close is not set, nothing else is valid (it's a gap)
+					if(m[p]!==undefined) m[p]=null;
+				}
 				else if(typeof(m[p])!=="number") m[p]=prior[p]; // new data invalid, use original data
 				else if(typeof(prior[p])==="number") {  // aggregate the data
 					if(p=="Open") m.Open=prior.Open;
@@ -20809,19 +21544,15 @@ var __core_ =
 			}
 		}
 		if(params.fillGaps && masterData.length){
-			var lastQuote=masterData[0];
-			// carry forward series
-			for(var i=1;i<masterData.length;i++){
-				var quote=masterData[i];
-				if(fields){
-					for(var j=0;j<fields.length;j++){
-						var field=fields[j];
-						if(typeof quote[field]=="undefined" && typeof lastQuote[field]!="undefined") quote[field]=lastQuote[field];
-					}
-				}else{
-					if(typeof quote[label]=="undefined" && typeof lastQuote[label]!="undefined") quote[label]=lastQuote[label];
+			var cleanupGapsParams={noCleanupDates:true, cleanupGaps:params.fillGaps};
+			if(fields){
+				for(var j=0;j<fields.length;j++){
+					cleanupGapsParams.field=fields[j];
+					stx.doCleanupGaps(masterData, chart, cleanupGapsParams);
 				}
-				lastQuote=quote;
+			}else{
+				cleanupGapsParams.field=label;
+				stx.doCleanupGaps(masterData, chart, cleanupGapsParams);
 			}
 		}
 		for(var s2=0;s2<series.length;s2++){
@@ -22500,7 +23231,7 @@ var __core_ =
 	return _exports;
 });
 
-var __engine_ =
+var __js_core_engine_ =
 //-------------------------------------------------------------------------------------------
 // Copyright 2012-2017 by ChartIQ, Inc.
 // All rights reserved
@@ -22529,13 +23260,13 @@ var __engine_ =
 		 * @name  CIQ.ChartEngine
 		 * @example
 		 * // declare a chart
-		 * var stxx=new CIQ.ChartEngine({container: $$("chartContainer")});
+		 * var stxx=new CIQ.ChartEngine({container: $$$(".chartContainer")});
 		 * // override defaults after a chart object is declared (this can be done at any time. If the chart has already been rendered, you will need to call `stx.draw();` to immediately see your changes )
 		 * stxx.yaxisLabelStyle="roundRectArrow";
 		 * stxx.layout.chartType="bar";
 		 * @example
 		 * // declare a chart and preset defaults
-		 * var stxx=new CIQ.ChartEngine({container: $$("chartContainer"),layout:{"chartType": "candle","candleWidth": 16}});
+		 * var stxx=new CIQ.ChartEngine({container: $$$(".chartContainer"),layout:{"chartType": "candle","candleWidth": 16}});
 		 * @since
 		 * <br>&bull; 15-07-01 deprecated CIQ.ChartEngine#underlayPercentage
 		 * <br>&bull; m-2016-12-01 deprecated renamed `CIQ.ChartEngine` from `STXChart`
@@ -22630,9 +23361,9 @@ var __engine_ =
 			     * Format:<br>
 			     * studyOverlayEdit({stx:stx,sd:sd,inputs:inputs,outputs:outputs, parameters:parameters, forceEdit: forceEdit});
 			     *
-			     * The following CSS entry must also be present to enable the `Right click to Manage` text on the mouse-over context menu (div id="mSticky" generated by {@link CIQ.ChartEngine.htmlControls}):
+			     * The following CSS entry must also be present to enable the `Right click to Manage` text on the mouse-over context menu (div class="mSticky" generated by {@link CIQ.ChartEngine.htmlControls}):
 			     * ```
-			     * .rightclick_study #mouseManageText {
+			     * .rightclick_study .mouseManageText {
 			     * display: inline; }
 			     * ```
 			     * See {@link CIQ.Studies.addStudy} for more details.
@@ -22845,6 +23576,7 @@ var __engine_ =
 			this.grabStartScrollX=0;						// "
 			this.grabStartScrollY=0;						// "
 			this.swipe={};									// "
+
 		    /**
 		     * Number of pixels the mouse needs to move in vertical direction to "unlock" vertical panning/scrolling.
 		     * Setting to a number larger than the pixels on the canvas will also disable vertical scrolling
@@ -22860,9 +23592,10 @@ var __engine_ =
 			this.yTolerance=100;
 
 			/**
-			 * Number of bars to always keep on the left of the screen when the user pans forward in time (moves chart from right to left).
-			 * If this is set to less than 1 then it will be possible to have a blank chart.
-			 * See {@link CIQ.ChartEngine.Chart#allowScrollPast} for instructions on how to prevent users from scrolling past the oldest bar on the chart.
+			 * Number of bars to always keep in view when the user pans forwards or backwards.
+			 * If this is set to less than 1, it will be possible to have a blank chart.
+			 * 
+			 * See {@link CIQ.ChartEngine.Chart#allowScrollPast} and {@link CIQ.ChartEngine.Chart#allowScrollFuture} for instructions on how to prevent users from scrolling past the last bar on the chart in either direction; which may supersede this setting.
 			 * @type number
 			 * @default
 			 * @alias minimumLeftBars
@@ -23134,7 +23867,7 @@ var __engine_ =
 			this.crosshairValue=null;
 		    /**
 		     * Shape of the floating y axis label.
-		     * 
+		     *
 		     * Available options:
 		     *  - ["roundRectArrow"]{@link CIQ.roundRectArrow}
 		     *  - ["semiRoundRect"]{@link CIQ.semiRoundRect}
@@ -23147,7 +23880,7 @@ var __engine_ =
 		     * @alias yaxisLabelStyle
 		     * @memberof CIQ.ChartEngine.prototype
 		     * @example
-		     * var stxx=new CIQ.ChartEngine({container: $$("chartContainer")});
+		     * var stxx=new CIQ.ChartEngine({container: $$$(".chartContainer")});
 		     * stxx.yaxisLabelStyle="roundRectArrow";
 		     */
 			this.yaxisLabelStyle="roundRectArrow";
@@ -23276,7 +24009,7 @@ var __engine_ =
 		     * Layout parameters can be directly **pre-set** on a chart at the time the engine is instantiated.<br>
 		     * The following is an example for setting some of the available layout parameters:
 		     * ```
-		     * var stxx=new CIQ.ChartEngine({container: $$("chartContainer"),layout:{"crosshair":true,"interval":"day","periodicity":1,"chartType": "candle","candleWidth": 16}});
+		     * var stxx=new CIQ.ChartEngine({container: $$$(".chartContainer"),layout:{"crosshair":true,"interval":"day","periodicity":1,"chartType": "candle","candleWidth": 16}});
 		     * ```
 		     * These parameters will then be activated when [newChart()]{@link CIQ.ChartEngine#newChart} is called to render the chart.<br>
 		     * Once a chart is rendered, most of these parameters become READ ONLY,and must be modified using their corresponding methods, as indicated in the documentation, to ensure chart integrity.
@@ -23391,14 +24124,15 @@ var __engine_ =
 			     *  - "scatterplot"
 			     *  - "histogram"
 			     *  - "rangechannel"
+			     *  - "marketdepth" **Requires [cryptoIQ]{@link CIQ.MarketDepth} pugin. See {@link CIQ.ChartEngine#updateCurrentMarketData} for data requirements**
 			     *
 			     * Variations of these types are available by prepending terms to the options as follows:
-			     *  - "step_" - add to mountain, baseline_delta  e.g. step_mountain, baseline_delta_step
+			     *  - "step_" - add to mountain, baseline_delta, marketdepth e.g. step_mountain, baseline_delta_step, step_volume_marketdepth
 			     *  - "vertex_" - add to line, step, mountain, baseline_delta
 			     *  - "hollow_" - add to candle
-			     *  - "volume_" - add to candle
+			     *  - "volume_" - add to candle, marketdepth e.g. mountain_volume_marketdepth (Adding volume to marketdepth also creates a volume histogram in the same panel)
 			     *  - "colored_" - add to line, mountain, step, bar, hlc
-			     *  - "mountain_" - add to baseline_delta
+			     *  - "mountain_" - add to baseline_delta, marketdepth e.g. mountain_volume_marketdepth
 			     *
 			     * Other options are available provided a renderer is created with a `requestNew` function which will support the option, see {@link CIQ.Renderer.Lines#requestNew} and {@link CIQ.Renderer.OHLC#requestNew}
 			     *
@@ -23416,6 +24150,7 @@ var __engine_ =
 			     * <br>&bull; 3.0.7 "hlc" now available
 			     * <br>&bull; 4.0.0 "colored_step", "colored_hlc" is now available
 			     * <br>&bull; 5.1.0 More chart types available using combinations of terms
+			     * <br>&bull; 6.1.0 "marketdepth" is now available
 			     */
 				chartType: "candle",
 			    /**
@@ -23539,6 +24274,18 @@ var __engine_ =
 				* @since 05-2016-10
 				*/
 				currentPriceLine: false,
+			    /**
+			     * When using drawing tools, this will become an object when user saves the drawing parameters.
+			     * A sub-object is created for each drawing tool.
+			     * These preferences are used whenever the user selects that drawing object, and overrides the default stxx.currentVectorParameters.
+			     * Use {@link CIQ.Drawing.saveConfig} to save the parameters to this object.
+			     * @type object
+			     * @default
+			     * @alias preferences[`drawings`]
+			     * @memberof! CIQ.ChartEngine#
+			     * @since 6.0.0
+			     */
+				drawings: null,
 			    /**
 			     * Magnetizes the crosshairs to datapoints during drawing operations to improve initial placement accuracy.
 			     * <br>It will not be used when an existing drawing is being repositioned.<br>
@@ -23690,13 +24437,18 @@ var __engine_ =
 				maxTicks: 100,
 				timeout: -1,
 			    /**
-			     * If true then {@link CIQ.ChartEngine#doCleanupGaps} is called so long as {@link CIQ.ChartEngine#cleanupGaps} is also set. This will ensure gaps will be filled in the master data from the last tick in the chart to the date of the trade. **Only applicable when using streamTrade()**.<BR> Reminder: `tick` does not fill any gaps as it is not a predictable interval.
+			     * If true then {@link CIQ.ChartEngine#doCleanupGaps} is called so long as {@link CIQ.ChartEngine#cleanupGaps} is also set.
+			     * This will ensure gaps will be filled in the master data from the last tick in the chart to the date of the trade.
+			     *
+			     * **Only applicable when using streamTrade()**.<BR> Reminder: `tick` does not fill any gaps as it is not a predictable interval.
+			     *
 			     * @type boolean
 			     * @default
 			     * @alias streamParameters[`fillGaps`]
 			     * @memberof! CIQ.ChartEngine#
 			     * @since 2016-03-11
-			     * @deprecated See deprecation of {@link CIQ.ChartEngine#streamTrade}. Use {@link CIQ.ChartEngine#updateChartData} instead.
+			     * @deprecated See deprecation of {@link CIQ.ChartEngine#streamTrade}. Use {@link CIQ.ChartEngine#updateChartData} instead,
+			     * with params.fillGaps=true or rely on cleanupGaps as default behavior.
 			     */
 				fillGaps: true,
 			};
@@ -23820,7 +24572,7 @@ var __engine_ =
 		     *
 		     * If set to `false`:
 		     * - 'weekly' bars will be aligned to the first open market day of the week according to the active [market definitions]{@link CIQ.Market} (Weeks start Sunday).
-		     * - 'monthly' bar will be aligned to the first market day or the month according to the active [market definitions]{@link CIQ.Market}.
+		     * - 'monthly' bar will be aligned to the first market day of the month according to the active [market definitions]{@link CIQ.Market}.
 		     *
 		     * @type boolean
 		     * @default
@@ -23848,10 +24600,8 @@ var __engine_ =
 			this.drawingObjects=[];
 			this.undoStamps=[];
 		    /**
-		     * If set, {@link CIQ.ChartEngine#doCleanupGaps} will be automatically called **when using a quoteFeed**
+		     * If set, {@link CIQ.ChartEngine#doCleanupGaps} will be automatically called
 		     * on intra-day or daily interval charts to create missing data points during market hours/days for stocks that may have missing bars.
-		     *
-		     * If you are pushing data into the chart, you can still manually clean up your data as outlined in the example section.
 		     *
 		     * <br>`carry` will cause the closing price to be carried forward, resulting in dashes on a candle/bar chart or continuous line on a line or mountain chart.
 		     * <br>`gap` will cause physical breaks to occur on the chart in the gapped position.
@@ -23872,13 +24622,6 @@ var __engine_ =
 		     * @default
 		     * @alias cleanupGaps
 		     * @memberof CIQ.ChartEngine.prototype
-		     * @example  <caption>Manually set and call the gaps cleaner function when pushing data into the chart</caption>
-			 * var stxx=new CIQ.ChartEngine({container:$$$(".chartContainer")});
-			 * stxx.setMarketFactory(CIQ.Market.Symbology.factory);
-			 * stxx.cleanupGaps='gap';
-			 * stxx.setPeriodicity({period:1, interval:5, timeUnit:"minute"});
-			 * var cleanedData= stxx.doCleanupGaps(missingPointsData);
-			 * stxx.newChart("SPY", cleanedData);
 			 *
 			 * @example  <caption>If using a quoteFeed, just set the parameter will automatically call {@link CIQ.ChartEngine#doCleanupGaps} </caption>
 			 * var stxx=new CIQ.ChartEngine({container:$$$(".chartContainer")});
@@ -24669,14 +25412,14 @@ var __engine_ =
 
 		/**
 		 * Controls maximum number of decimal places to ever display on a y-axis floating price label.
-		 * 
+		 *
 		 * Set to the maximum decimal places from 0 to 10, or leave null and the chart will choose automatically based on {@link CIQ.ChartEngine.YAxis#shadowBreaks}.
 		 * - See {@link CIQ.ChartEngine.YAxis#decimalPlaces} for controlling decimal places on the axis itself.
 		 * - See {@link CIQ.ChartEngine.YAxis#width} and {@link CIQ.ChartEngine.Chart#dynamicYAxis} to manage the width of the y axis.
 		 * @type number
 		 * @default
 		 * @memberof CIQ.ChartEngine.YAxis
-		 * @since 5.2.1 default is changed to null	
+		 * @since 5.2.1 default is changed to null
 		 */
 		CIQ.ChartEngine.YAxis.prototype.maxDecimalPlaces = null;
 
@@ -24698,8 +25441,8 @@ var __engine_ =
 
 		/**
 		 * Controls the number of decimal places on the y axis labels.
-		 * 
-		 * Set to the preferred number of decimal places from 0 to 10, or leave null and the chart will choose automatically based on {@link CIQ.ChartEngine.YAxis#shadowBreaks}		 
+		 *
+		 * Set to the preferred number of decimal places from 0 to 10, or leave null and the chart will choose automatically based on {@link CIQ.ChartEngine.YAxis#shadowBreaks}
 		 * - **Note:**  study panel axis will be condensed if over 999 by the use of {@link condenseInt}.
 		 *
 		 * - See {@link CIQ.ChartEngine.YAxis#maxDecimalPlaces} for further controlling decimal places on floating labels.<br>
@@ -24849,7 +25592,7 @@ var __engine_ =
 
 		/**
 		 * Shape of the floating y axis label.
-		 * 
+		 *
 		 * Available options:
 		 *  - ["roundRectArrow"]{@link CIQ.roundRectArrow}
 		 *  - ["semiRoundRect"]{@link CIQ.semiRoundRect}
@@ -24857,7 +25600,7 @@ var __engine_ =
 		 *  - ["tickedRect"]{@link CIQ.tickedRect}
 		 *  - ["rect"]{@link CIQ.rect}
 		 *  - ["noop"]{@link CIQ.noop}
-		 *  
+		 *
 		 * It will default to {@link CIQ.ChartEngine#yaxisLabelStyle}.
 		 * This could be set independently on each panel if desired.
 		 * @type string
@@ -25046,9 +25789,27 @@ var __engine_ =
 		 */
 		CIQ.ChartEngine.YAxis.prototype.scroll= 0;
 
+		// get/set width to allow {@link CIQ.ChartEngine.Chart#dynamicYAxis} feature
+		// to set _dynamicWidth instead of _width. This allows user widths to be
+		// restored easily when the feature is not needed.
+		Object.defineProperty(CIQ.ChartEngine.YAxis.prototype, 'width', {
+			configurable: true,
+			enumerable: true,
+			get: function() {
+				// _dynamicWidth is set by {@link CIQ.ChartEngine#drawYAxis} and
+				// cleared by {@link CIQ.ChartEngine.Chart#resetDynamicYAxis}
+				return this._dynamicWidth || this._width;
+			},
+			set: function(value) {
+				this._width = value;
+				// the calculated width is less than user value, getter should return the user value
+				if (this._dynamicWidth < value) this._dynamicWidth = NaN;
+			}
+		});
+
 		/**
 		 * The width in pixels.
-		 * 
+		 *
 		 * See {@link CIQ.ChartEngine.Chart#dynamicYAxis} to set automatically.
 		 *
 		 * Visual Reference:<br>
@@ -25058,9 +25819,12 @@ var __engine_ =
 		 * @memberof CIQ.ChartEngine.YAxis
 		 * @example
 		 * stxx.chart.yAxis.width=50;
-		 * //must call the following 2 lines to activate if the axis is alredy drawn.
+		 * //must call the following 2 lines to activate if the axis is already drawn.
 		 * stxx.calculateYAxisPositions();
 		 * stxx.draw();
+		 * @example
+		 * // reset width to default
+		 * stxx.chart.yAxis.width = CIQ.ChartEngine.YAxis.prototype.width;
 		 */
 		CIQ.ChartEngine.YAxis.prototype.width = 50;
 
@@ -25086,7 +25850,7 @@ var __engine_ =
 		 * stxx.chart.yAxis.position = 'left';
 		 * @example  <caption>Re-set the main y-axis for the chart on the right; **after it is initially rendered**.</caption>
 		 * stxx.chart.yAxis.position = 'right';
-		 * //must call the following 2 lines to activate if the axis is alredy drawn.
+		 * //must call the following 2 lines to activate if the axis is already drawn.
 		 * stxx.calculateYAxisPositions();
 		 * stxx.draw();
 		 * @since  15-07-01
@@ -25156,11 +25920,11 @@ var __engine_ =
 		 * A matrix used to determine how many decimal places to print on y axis labels based on the size of the shadow (the difference between chart high and chart low).
 		 * The array consists of tuples in descending order. If the shadow is less than n1 then n2 decimal places will be printed.
 		 * See {@link CIQ.ChartEngine.YAxis.defaultShadowBreaks} and {@link CIQ.ChartEngine.YAxis.smallChartShadowBreaks} for default settings.
-		 * 
-		 * This can be overridden, however, by setting{@link CIQ.ChartEngine.YAxis#decimalPlaces}. 
+		 *
+		 * This can be overridden, however, by setting{@link CIQ.ChartEngine.YAxis#decimalPlaces}.
 		 * If you wish to further configure the current price label floating over the y axis to display less decimal places than the axis labels, set {@link CIQ.ChartEngine.YAxis#maxDecimalPlaces}.
 		 * Also see {@link CIQ.ChartEngine.Chart#dynamicYAxis} to allow the y axis to automatically determine it's width based on the text length of quotes in a dataSet.
-		 * 
+		 *
 		 * @type array
 		 * @memberof CIQ.ChartEngine.YAxis
 		 * @since  2015-11-1
@@ -25382,9 +26146,15 @@ var __engine_ =
 			     * Setting to zero would theoretically cause the chart to be scrolled completely to the left showing an empty canvas.
 			     * Setting to 10 would display the last 10 candles on the chart.
 			     * Setting to `maxTicks` would display a full screen on the chart (assuming enough data is available).
+			     * 
+			     * To immediately activate, call [draw()]{@link CIQ.ChartEngine#draw}
 			     * @type number
 			     * @default
 			     * @memberof CIQ.ChartEngine.Chart#
+			     * @example <caption> Scroll to the most current (beginning) position in the chart.</caption>
+			     * stxx.chart.scroll=0;
+			     * @example <caption> Scroll to the end of the chart.</caption>
+			     * stxx.chart.scroll=stxx.chart.dataSet.length;
 			     */
 				scroll: 0,
 				standStill: 0,							// Used internally
@@ -25404,6 +26174,25 @@ var __engine_ =
 			     * @memberof CIQ.ChartEngine.Chart#
 			     */
 				tension: null,
+			    /**
+			     * READ ONLY. A "snapshot" of the market for the active instrument. 
+			     * This data is ephemeral in nature and not used to produce a time series chart. 
+			     * But rather used on our peripheral plugins that require more details on the current market, such as [TFC]{@link CIQ.TFC} and [cryptoIQ]{@link CIQ.MarketDepth}.
+			     * This data is programmatically collated from the incoming data and is updated with the most recent information so it should not be altered manually.
+			     * 
+			     * The `currentMarketData` object contains the following information: 
+			     *  - Last Bid
+			     *  - Last Ask
+			     *  - Last Price
+			     *  - Last Size
+			     *  - Lastest Level 2 information
+			     *  
+			     * For more details see {@link CIQ.ChartEngine#updateCurrentMarketData}
+			     * @type object
+			     * @memberof CIQ.ChartEngine.Chart#
+			     * @since 6.1.0
+			     */
+				currentMarketData: {},
 			    /**
 			     * The master data for this chart. This data is never modified by the chart engine itself and should not be altered directly. Use {@link CIQ.ChartEngine#setMasterData} , {@link CIQ.ChartEngine#updateChartData} to manipulate this object. See the [Data Integration]{@tutorial DataIntegrationOverview} tutorial for details.
 			     * @type array
@@ -25510,21 +26299,13 @@ var __engine_ =
 				decimalPlaces: 2,
 				/**
 				 * If set to `true` the y-axes width will be automatically set based on the length of the displayed prices. Otherwise {@link CIQ.ChartEngine.YAxis#width} will be used.
-				 * 
+				 *
 				 * Works on all axis attached to a chart.
 				 * @type boolean
 				 * @memberof CIQ.ChartEngine.Chart#
 				 * @since 5.1.1
 				 */
 				dynamicYAxis: false,
-				/**
-				 * Represents the longest length in pixels that the text label of a quote will be.
-				 * Used to dynamically determine the width of yAxis on resize.
-				 * @type number
-				 * @memberof CIQ.ChartEngine.Chart#
-				 * @private
-				 */
-				quoteTextLength: 0,
 				roundit: 100,							// Computed automatically to round y-axis display
 			    /**
 			     * Function used to render the Legend when multiple series are being displayed on the main chart panel.
@@ -25598,7 +26379,7 @@ var __engine_ =
 			     * @example
 			     * stxx.chart.yaxisPaddingRight=0;
 			     * stxx.chart.yAxis.displayBorder=false; // hide the vertical axis line.
-			     * //must call the following 2 lines to activate if the axis is alredy drawn.
+			     * //must call the following 2 lines to activate if the axis is already drawn.
 			     * stxx.calculateYAxisPositions();
 			     * stxx.draw();
 			     */
@@ -25612,7 +26393,7 @@ var __engine_ =
 			     * @example
 			     * stxx.chart.yaxisPaddingLeft=0;
 			     * stxx.chart.yAxis.displayBorder=false; // hide the vertical axis line.
-			     * //must call the following 2 lines to activate if the axis is alredy drawn.
+			     * //must call the following 2 lines to activate if the axis is already drawn.
 			     * stxx.calculateYAxisPositions();
 			     * stxx.draw();
 			     */
@@ -25631,11 +26412,23 @@ var __engine_ =
 				/**
 			     * If set to false, during zooming and panning operations the chart will be anchored on right side preventing white space to be created beyond the newest tick.
 			     * If both {@link CIQ.ChartEngine.Chart#allowScrollPast} and {@link CIQ.ChartEngine.Chart#allowScrollFuture} are set to false, allowScrollFuture will take precedence if the candle is manually set to create space ({@link CIQ.ChartEngine#setCandleWidth}), but automated zoom operations ({@link CIQ.ChartEngine#zoomOut}) will maintain both scroll restrictions.
+				 * When viewing a specified date range on the chart, if this flag is set to false, any portion of the range beyond the last quote will not be displayed.
 			     * @type boolean
 			     * @default
 				 * @memberof CIQ.ChartEngine.Chart#
 			     */
 				allowScrollFuture:true,
+			    /**
+			     * READ ONLY. Tracks the number of ticks to display as "whitespace" beyond the rightmost area of the chart
+			     * when {@link CIQ.ChartEngine.Chart#allowScrollFuture} is set to false.
+			     * @type number
+			     * @default
+			     * @alias whiteSpaceFutureTicks
+			     * @memberof CIQ.ChartEngine.prototype
+			     * @private
+			     * @since 6.1.0
+			     */
+				whiteSpaceFutureTicks:0,
 			    /**
 			     * Set to true to temporarily hide drawings
 			     * @type boolean
@@ -25744,6 +26537,53 @@ var __engine_ =
 				barsHaveWidth:false
 		}, true);
 
+		/**
+		 * Given an html element, this allows the chart container to keep track of its own drawing container
+		 * (where appropriate)
+		 * @param {object} htmlElement The html element where the chart container is for 'this' chart
+		 * @memberof CIQ.ChartEngine
+		 * @example
+		 *	var stxx=new CIQ.ChartEngine({container:$$$(".chartContainer"), preferences:{labels:false, currentPriceLine:true, whitespace:0}});
+		 *	stxx.setDrawingContainer($$$('cq-toolbar'));
+		 * @since 6.0.0
+		 */
+		CIQ.ChartEngine.prototype.setDrawingContainer=function(htmlElement){
+			this.drawingContainer=htmlElement;
+		};
+		
+		
+		/**
+		 * Based on the standardMarketIterator and the last entry of masterData, determines whether the chart contains data up till the current iterators next tick.
+		 *
+		 * For efficiency once {@link CIQ.ChartEngine.isHistoricalMode} is set to false, this will always return false.
+		 * @return {boolean} True if viewing historical mode
+		 * @since 6.0.0
+		 * @private
+		 */
+		CIQ.ChartEngine.prototype.isHistoricalMode = function () {
+			var dateNow = new Date(),
+				historic = true,
+				masterData = this.masterData;
+			if (!this.isHistoricalModeSet) {
+				return false;
+			}
+			if (masterData.length) {
+				var lastDate = this.getFirstLastDataRecord(masterData, "DT", true);
+				var iter = this.standardMarketIterator(lastDate.DT);
+				historic = iter.next() <= dateNow;
+				
+				// special case: daily chart, market has not opened yet today
+				// historic would always be set even though we have all the data
+				if(historic && CIQ.ChartEngine.isDailyInterval(iter.interval)){
+					var open=this.chart.market.getOpen();
+					if(open && dateNow<open){
+						dateNow.setHours(0,0,0,0);
+						if(+dateNow==+iter.begin) historic=false;
+					}
+				}
+			}
+			return historic;
+		};
 
 		/**
 		 * Given a browser time it will return the date in dataZone time. See {@link CIQ.ChartEngine#setTimeZone} for more details.
@@ -25765,7 +26605,13 @@ var __engine_ =
 		};
 
 		/**
-		 * Returns true if the interval is based off of a daily interval ("day","week" or "month")
+		 * Returns true if the internal chart periodicity is based off of a daily interval ("day","week" or "month")
+		 *
+		 * **Please note:** This function is intended to be used on the internal periodicity as stored in the {@link CIQ.ChartEngine#layout}.
+		 * See:
+		 *  - <a href="CIQ.ChartEngine.html#layout%5B%60periodicity%60%5D">CIQ.ChartEngine.layout.periodicity</a>.
+		 *  - <a href="CIQ.ChartEngine.html#layout%5B%60interval%60%5D">CIQ.ChartEngine.layout.interval</a>.
+		 *  - <a href="CIQ.ChartEngine.html#layout%5B%60timeUnit%60%5D">CIQ.ChartEngine.layout.timeUnit</a>.
 		 * @param  {string}  interval The interval
 		 * @return {boolean}          True if it's a daily interval
 		 * @memberof CIQ.ChartEngine
@@ -26065,7 +26911,7 @@ var __engine_ =
 	 * To completely disable a chart control, programmatically set `controls[controlID]=null` where controlID is the control to disable.
 	 * You can also set the main `htmlControls` object to null to disable all controls at once.
 	 * @example
-	 * var stxx=new CIQ.ChartEngine({container:$$("chartContainer"), controls: {chartControls:null}});
+	 * var stxx=new CIQ.ChartEngine({container:$$$(".chartContainer"), controls: {chartControls:null}});
 	 * @example
 	 * // before calling newChart(). Disables all controls
 	 * stxx.controls=null;
@@ -26091,14 +26937,14 @@ var __engine_ =
 			 */
 			"annotationCancel":'<span class="stx-btn stx_annotation_cancel" style="display: none; margin-left:10px;">cancel</span>',
 			/**
-			 * controlID for the Trash Can button / Series delete panel (id="mSticky"). Also see {@link CIQ.ChartEngine#displaySticky}
+			 * controlID for the Trash Can button / Series delete panel (class="mSticky"). Also see {@link CIQ.ChartEngine#displaySticky}
 			 * @alias htmlControls[`mSticky`]
 			 * @memberof! CIQ.ChartEngine#
 			 * @example
 			 * // disable the tool tip that appears when hovering over an overlay ( drawing, line study, etc.)
 			 * stxx.controls["mSticky"]=null;
 			 */
-			"mSticky":'<div id="mSticky"> <span id="mStickyInterior"></span> <span id="mStickyRightClick"><span class="overlayEdit stx-btn" style="display:none"><span>&nbsp;</span></span> <span id="overlayTrashCan" class="stx-btn" style="display:none"><span>&nbsp;</span></span> <span id="mouseDeleteInstructions"><span>(</span><span id="mouseDeleteText">right-click to delete</span><span id="mouseManageText">right-click to manage</span><span>)</span></span></span></div>',
+			"mSticky":'<div class="stx_sticky"> <span class="mStickyInterior"></span> <span class="mStickyRightClick"><span class="overlayEdit stx-btn" style="display:none"><span>&nbsp;</span></span> <span class="overlayTrashCan stx-btn" style="display:none"><span>&nbsp;</span></span> <span class="mouseDeleteInstructions"><span>(</span><span class="mouseDeleteText">right-click to delete</span><span class="mouseManageText">right-click to manage</span><span>)</span></span></span></div>',
 			/**
 			 * controlID for the Horizontal Crosshair line (class="stx_crosshair stx_crosshair_x").
 			 * @alias htmlControls[`crossX`]
@@ -26116,7 +26962,7 @@ var __engine_ =
 			 * @alias htmlControls[`chartControls`]
 			 * @memberof! CIQ.ChartEngine#
 			 */
-			"chartControls":'<div class="stx_chart_controls" style="display: none; bottom: 22px;"><div id="chartSize"><span id="zoomOut" class="stx-zoom-out"></span><span id="zoomIn" class="stx-zoom-in"></span></div></div>',
+			"chartControls":'<div class="stx_chart_controls" style="display: none; bottom: 22px;"><div class="chartSize"><span class="stx-zoom-out"></span><span class="stx-zoom-in"></span></div></div>',
 			/**
 			 * controlID for the home button (class="stx_jump_today home").
 			 * The button goes away if you are showing the most current data. See example to manually turn it off.
@@ -26128,7 +26974,7 @@ var __engine_ =
 			 * var stxx=new CIQ.ChartEngine({container:$$$(".chartContainer"), layout:{"candleWidth": 16, "crosshair":true}});
 			 * stxx.controls["home"]=null;
 			 */
-			"home":'<div id="home" class="stx_jump_today home" style="display:none"><span></span></div>',
+			"home":'<div class="stx_jump_today" style="display:none"><span></span></div>',
 			/**
 			 * controlID for div which floats along the X axis with the crosshair date (class="stx-float-date").
 			 * @alias htmlControls[`floatDate`]
@@ -26191,7 +27037,7 @@ var __engine_ =
 		for(var control in CIQ.ChartEngine.htmlControls){
 			if(typeof this.chart[control]=="undefined" && typeof this.controls[control]=="undefined"){
 				if(!this.allowZoom && control=="chartControls") continue;
-				var el=$$$("#" + control, c);
+				var el=$$$("." + control, c);
 				if(el){
 					this.chart[control]=el;
 					this.controls[control]=el;
@@ -26204,14 +27050,14 @@ var __engine_ =
 					c.appendChild(el);
 					this.chart[control]=el;
 					this.controls[control]=el;
-					el.id=control;
+					CIQ.appendClassName(el,control);
 				}
 			}
 		}
 		var chartControls=this.controls.chartControls, home=this.controls.home;
 		if(chartControls){
-			var zoomIn=$$$("#zoomIn", chartControls);
-			var zoomOut=$$$("#zoomOut", chartControls);
+			var zoomIn=$$$(".stx-zoom-in", chartControls);
+			var zoomOut=$$$(".stx-zoom-out", chartControls);
 
 			CIQ.safeClickTouch(zoomIn,(function(self){return function(e){ self.zoomIn(e); e.stopPropagation(); };})(this));
 			CIQ.safeClickTouch(zoomOut,(function(self){return function(e){ self.zoomOut(e); e.stopPropagation(); };})(this));
@@ -26221,7 +27067,20 @@ var __engine_ =
 			}
 		}
 		if(home){
-			CIQ.safeClickTouch(home,(function(self){return function(e){ self.home({animate:true});e.stopPropagation();};})(this));
+			CIQ.safeClickTouch(home, (function(self){
+				return function(e) {
+					e.stopPropagation();
+					// If we are not in historical mode then scroll home
+					if (!self.isHistoricalMode()){
+						self.home({ animate: true });
+						return;
+					}
+					// If in historical mode delete any range the chart might have to prevent setting it again and call newChart
+					// This will be fast than scrolling and paginating forward as the chart progresses towards the current day
+					delete self.layout.range;
+					self.newChart(self.chart.symbol, null, null, function() { self.home({ animate: false }); }, null);
+				};
+			})(this));
 			if(!CIQ.touchDevice){
 				this.makeModal(home);
 			}
@@ -26422,9 +27281,11 @@ var __engine_ =
 	};
 
 	/**
+	 * **Deprecated.**  Use {@link CIQ.ChartEngine.XAxis#noDraw} and {@link CIQ.ChartEngine.YAxis#noDraw} instead.
+	 * 
 	 * Override this function to hide the date which floats along the X axis when crosshairs are enabled. Return `true` to hide the date or `false` to display.
 	 * @memberof CIQ.ChartEngine
-	 * @deprecated
+	 * @deprecated as of 6.0.0 no longer used in library.
 	 */
 	CIQ.ChartEngine.hideDates=function(){
 		return false;
@@ -26549,7 +27410,7 @@ var __engine_ =
 
 	/**
 	 * Sets the base aggregation type for the primary symbol.
-	 * @param {string} chartType The chart type. See <a href="CIQ.ChartEngine.html#layout%5B%60chartType%60%5D">CIQ.ChartEngine.layout.aggregationType</a> for valid options.
+	 * @param {string} chartType The chart type. See <a href="CIQ.ChartEngine.html#layout%5B%60aggregationType%60%5D">CIQ.ChartEngine.layout.aggregationType</a> for valid options.
 	 *
 	 * See {@tutorial Chart Styles and Types} for more details.
 	 * See the [Overriding Defaults Section](tutorial-Chart Styles and Types.html#OverridingDefaults) for details on how to override aggregation type defaults.
@@ -26575,7 +27436,7 @@ var __engine_ =
 	/**
 	 * Sets the chart scale.
 	 * @param {string} chartScale "log", "linear", "percent", "relative".
-	 *  - Setting to "percent" or "relative" will call {@link CIQ.ChartEngine#setComparison} even of no comparisons are present; which sets `stxx.chart.isComparison=true`.
+	 *  - Setting to "percent" or "relative" will call {@link CIQ.ChartEngine#setComparison} even if no comparisons are present; which sets `stxx.chart.isComparison=true`.
 	 *    - To check if scale is in percentage mode use `stxx.chart.isComparison` instead of using the {@link CIQ.ChartEngine#chartScale} value.
 	 *  - See {@link CIQ.Comparison.initialPrice} for details on how to set basis for "relative" scale.
 	 * @memberof CIQ.ChartEngine
@@ -26663,14 +27524,18 @@ var __engine_ =
 
 	/**
 	 * Causes all drawings to delete themselves. External access should be made through @see CIQ.ChartEngine.prototype.clearDrawings
+	 * @param {boolean} deletePermanent Set to false to not delete permanent drawings
 	 * @private
 	 * @memberof CIQ.ChartEngine
+	 * @since 6.0.0 deletePermanent argument added
 	 */
-	CIQ.ChartEngine.prototype.abortDrawings=function(){
-		for(var i=0;i<this.drawingObjects.length;i++){
-			this.drawingObjects[i].abort(true);
+	CIQ.ChartEngine.prototype.abortDrawings=function(deletePermanent){
+		if(deletePermanent!==false) deletePermanent=true;
+		for(var i=this.drawingObjects.length-1;i>=0;i--){
+			var drawing=this.drawingObjects[i];
+			drawing.abort(true);
+			if(deletePermanent || !drawing.permanent) this.drawingObjects.splice(i,1);
 		}
-		this.drawingObjects=[];
 	};
 
 
@@ -26736,11 +27601,14 @@ var __engine_ =
 	/**
 	 * Clears all the drawings on the chart. (Do not call abortDrawings directly).
 	 * @param {boolean} cantUndo Set to true to make this an "non-undoable" operation
+	 * @param {boolean} deletePermanent Set to false to not delete permanent drawings
 	 * @memberof CIQ.ChartEngine
+	 * @since 6.0.0 deletePermanent argument added
 	 */
-	CIQ.ChartEngine.prototype.clearDrawings=function(cantUndo){
+	CIQ.ChartEngine.prototype.clearDrawings=function(cantUndo, deletePermanent){
+		if(deletePermanent!==false) deletePermanent=true;
 		var before=CIQ.shallowClone(this.drawingObjects);
-		this.abortDrawings();
+		this.abortDrawings(deletePermanent);
 		if(cantUndo){
 			this.undoStamps=[];
 		}else{
@@ -26849,7 +27717,7 @@ var __engine_ =
 	/**
 	 * Calculates and sets the value of zoom and scroll for y-axis based on yAxis.initialMarginTop and yAxis.initialMarginBottom.
 	 * This method will automatically translate those into starting scroll and zoom factors.
-	 * If the combined initial values are greater than the y-axis height, then both zoom and scroll will be rest to 0;
+	 * If the combined initial values are greater than the y-axis height, then both zoom and scroll will be reset to 0;
 	 * @param {CIQ.ChartEngine.YAxis} yAxis The yAxis to reset
 	 * @memberof CIQ.ChartEngine
 	 */
@@ -27016,7 +27884,7 @@ var __engine_ =
 		var ms=target.getTime();
 		var total=chart.tickCache[ms];
 		if(total || total===0){
-			return total;
+			return total+(forward?1:0);
 		}
 
 		var firstDate=chart.dataSet[0].DT;
@@ -27035,8 +27903,8 @@ var __engine_ =
  				}
 				if(d>target){
 					if(chart.dataSet[i-1].DT<target){
-						chart.tickCache[ms]=forward?i:i-1;
-						return chart.tickCache[ms];
+						chart.tickCache[ms]=i-1;
+						return chart.tickCache[ms]+(forward?1:0);
 					}
 					if(+chart.dataSet[i-1].DT==+target){  // efficiency
 						chart.tickCache[ms]=i-1;
@@ -27096,14 +27964,60 @@ var __engine_ =
 	CIQ.ChartEngine.prototype.createXAxis=function(chart){
 		//TODO caching of xaxis probably in this function.
 		if(chart.dataSegment.length<=0) return null;
-		if(CIQ.ChartEngine.hideDates()) return null;
+		if(chart.xAxis.noDraw) return null;
 		var arguments$=[chart];
 		var axisRepresentation=this.runPrepend("createXAxis", arguments$);
 		if(axisRepresentation) return axisRepresentation;
-		axisRepresentation = this.createTickXAxisWithDates(chart);
+		if(this.mainSeriesRenderer && this.mainSeriesRenderer.createXAxis){
+			axisRepresentation = this.mainSeriesRenderer.createXAxis(chart);			
+		}else{
+			axisRepresentation = this.createTickXAxisWithDates(chart);
+		}
 		this.headsUpHR();
 		this.runAppend("createXAxis", arguments$);
 		return axisRepresentation;
+	};
+
+	/**
+	 * <span class="injection">INJECTABLE</span>
+	 * Resets the YAxis width to the last known user value (or default).
+	 * <br>Called internally whenever the YAxis label width might change.
+	 *
+	 * @param {Object} [params]
+	 * @param {boolean} [params.noRecalculate=false] when true {@link CIQ.ChartEngine#calculateYAxisPositions} will never be called
+	 * @param {string} [params.chartName] only reset dynamic values for YAxis of the given chart.
+	 * @memberof CIQ.ChartEngine.AdvancedInjectable#
+	 * @alias resetDynamicYAxis
+	 * @see {@link CIQ.ChartEngine.Chart#dynamicYAxis} the flag to enable this feature.
+	 * @since 6.0.0
+	 */
+	CIQ.ChartEngine.prototype.resetDynamicYAxis=function(params) {
+		if (this.runPrepend("resetDynamicYAxis", arguments)) return;
+
+		var resetting = false;
+
+		for (var panelName in this.panels) {
+			var panel = this.panels[panelName];
+
+			if (params && params.chartName && panel.chart.name !== params.chartName) continue;
+			if (!panel.yaxisLHS || !panel.yaxisRHS) continue;
+
+			var yaxis = panel.yaxisLHS.concat(panel.yaxisRHS);
+
+			for (var i = 0; i < yaxis.length; i++) {
+				if (yaxis[i]._dynamicWidth) {
+					// NaN is falsy, see the {@link CIQ.ChartEngine.YAxis#width} getter for context
+					yaxis[i]._dynamicWidth = NaN;
+					resetting = true;
+				}
+			}
+		}
+
+		if (resetting && (!params || !params.noRecalculate)) {
+			this.calculateYAxisPositions();
+		}
+
+		this.runAppend("resetDynamicYAxis", arguments);
 	};
 
 	/**
@@ -27562,7 +28476,7 @@ var __engine_ =
 				for(var id2=0; id2<renderer.seriesParams.length; id2++){	// Find any series that share the Y axis
 					var seriesParams=renderer.seriesParams[id2];
 					if(seriesParams.symbol){
-						fields=fields.concat(CIQ.createObjectChainNames(seriesParams.symbol,baseFields));
+						fields=fields.concat(CIQ.createObjectChainNames(seriesParams.symbol,baseFields)).concat(seriesParams.symbol);
 					}else if(seriesParams.field){
 						fields.push(seriesParams.field);
 					}else if(yAxis==chart.panel.yAxis){ // only if the main chart panel's yAxis include baseFields
@@ -27599,19 +28513,25 @@ var __engine_ =
 				fields=[];
 				var doTransform=chart.transformFunc && yAxis==chart.panel.yAxis;
 				setYAxisFields(yAxis, myPanel);
-				minMax=this.determineMinMax(chart.dataSegment, fields, null, !doTransform, length);
-				if((this.mainSeriesRenderer && !this.mainSeriesRenderer.highLowBars) || !this.highLowBars[this.layout.chartType]){	// line charts shouldn't take into account high and low values, just close
-					var mainSeriesRenderer=this.mainSeriesRenderer || {};
-					if(chart.panel==myPanel && mainSeriesRenderer.params && mainSeriesRenderer.params.baseline && mainSeriesRenderer.params.type!="mountain"){
-						var base=chart.baseline.actualLevel;
-						if(base || base===0){
-							if(doTransform) base=chart.transformFunc(this,chart,base);
-							var diff=Math.max(base-minMax[0],minMax[1]-base);
-							if(this.repositioningBaseline){
-								minMax=[chart.lowValue,chart.highValue];
-							}else{
-								minMax[0]=base-diff;
-								minMax[1]=base+diff;
+				if(this.mainSeriesRenderer && this.mainSeriesRenderer.determineMax){
+					minMax=this.mainSeriesRenderer.determineMax(chart.dataSegment, fields, null, !doTransform, length);	
+				}else{
+					minMax=this.determineMinMax(chart.dataSegment, fields, null, !doTransform, length);
+				}
+				if(this.mainSeriesRenderer){
+					if(!this.mainSeriesRenderer.highLowBars || !this.highLowBars[this.layout.chartType]){	// line charts shouldn't take into account high and low values, just close
+						var mainSeriesRenderer=this.mainSeriesRenderer || {};
+						if(chart.panel==myPanel && mainSeriesRenderer.params && mainSeriesRenderer.params.baseline && mainSeriesRenderer.params.type!="mountain"){
+							var base=chart.baseline.actualLevel;
+							if(base || base===0){
+								if(doTransform) base=chart.transformFunc(this,chart,base);
+								var diff=Math.max(base-minMax[0],minMax[1]-base);
+								if(this.repositioningBaseline){
+									minMax=[chart.lowValue,chart.highValue];
+								}else{
+									minMax[0]=base-diff;
+									minMax[1]=base+diff;
+								}
 							}
 						}
 					}
@@ -27765,6 +28685,8 @@ var __engine_ =
 	 * Once linked, the market factory it will be used by the chart to ensure the market always matches the active instrument.
 	 * This is only required if your chart will need to know the operating hours for the different exchanges.
 	 * If using a 24x7 chart, a market factory does not need to be set.
+	 * 
+	 * Please note that if using the default sample templates, this method is set to use the {@link CIQ.Market.Symbology} functions, which must be reviewed and adjust to comply with your quote feed and symbology format before they can be used.
 	 * @param {function} factory A function that takes a symbolObject and returns a market definition. See {@link CIQ.Market} for instruction on how to create a market definition. See {@link CIQ.Market.Symbology.factory} for working example of a factory function.
 	 * @memberof CIQ.ChartEngine
 	 * @since 04-2016-08
@@ -27778,9 +28700,8 @@ var __engine_ =
 	 *		if( isType3(symbol) ) return type3DefinitionObject;
 	 *		return defaultDefinitionObject;
 	 * };
-	 *
-	 * @example
-	 * // link a market factory to the chart.
+	 * 
+	 * var stxx=new CIQ.ChartEngine({container:$("#chartContainer")[0], preferences:{labels:false, currentPriceLine:true, whitespace:0}});
 	 * stxx.setMarketFactory(sampleFactory);
 	 */
 	CIQ.ChartEngine.prototype.setMarketFactory=function(factory){
@@ -27951,7 +28872,7 @@ var __engine_ =
 	CIQ.ChartEngine.prototype.getGapColorFunction=function(symbol, field, normal, gaps, colorFunction){
 		if(typeof(normal)!="object") normal={color:normal};
 		return function(stx, quote, isGap){
-			var myColor=colorFunction?colorFunction(stx, quote, isGap):normal.color;
+			var myColor=colorFunction?colorFunction(stx, quote, isGap):normal;
 			if(myColor.color) myColor=myColor.color;  // in case the colorFunction returns an object
 			var q=quote[symbol];
 			if(!q && q!==0) q=quote[field];
@@ -28000,7 +28921,7 @@ var __engine_ =
 	 * @param {string} [params.color] The color for the line. Defaults to CSS style
 	 * @param {string} [params.pattern] The pattern for the line ("solid","dashed","dotted"). Defaults to CSS style
 	 * @param {number} [params.width] The width in pixels for the line. Defaults to CSS style
-	 * @param {object} [params.gapDisplayStyle] Gap object as set by See {@link CIQ.ChartEngine#setGapLines}. If not set `chart.gaplines` will be used.
+	 * @param {object} [params.gapDisplayStyle] Gap object as set by See {@link CIQ.ChartEngine#setGapLines}. If not set `chart.gaplines` will be used.  Set to false to force gap lines to not be drawn, regardless of chart setting.
 	 * @param {boolean} [params.labelDecimalPlaces] Specifies the number of decimal places to print on the label. If not set then it will match the y-axis.
 	 * @return {object} Data generated by the plot, such as colors used if a colorFunction was passed, and the vertices of the line (points).
 	 * @memberof CIQ.ChartEngine
@@ -28008,9 +28929,9 @@ var __engine_ =
 	 * <br>&bull; 15-07-01 Changed signature from `chart` to `panel`
 	 * <br>&bull; 3.0.0 added params argument
 	 * <br>&bull; 5.2.0 `params.gaps` has been deprecated and replaced with `params.gapDisplayStyle`
+	 * <br>&bull; 6.0.0 `params.gapDisplayStyle` can be set to false to suppress all gap drawing
 	 */
 	CIQ.ChartEngine.prototype.drawLineChart=function(panel, style, colorFunction, params){
-		var myColorFunction=colorFunction;
 		var chart=this.chart, context=chart.context, lineStyle=chart.lineStyle || {};
 		var c=this.canvasStyle(style);
 		if(!params) params={};
@@ -28032,7 +28953,8 @@ var __engine_ =
 		var gaps=params.gapDisplayStyle;
 		if(!gaps && gaps!==false) gaps=params.gaps;
 		if(!gaps && gaps!==false) gaps=chart.gaplines;
-		if(gaps) myColorFunction=this.getGapColorFunction(field, plotField, {color:context.strokeStyle, pattern:params.pattern, width:context.lineWidth}, gaps, colorFunction);
+		if(!gaps) gaps="transparent";
+		var myColorFunction=this.getGapColorFunction(field, plotField, {color:context.strokeStyle, pattern:params.pattern, width:context.lineWidth}, gaps, colorFunction);
 		if(panel.chart.tension) params.tension=panel.chart.tension;
 		var rc=this.plotDataSegmentAsLine(field, panel, params, myColorFunction);
 		if(!rc.colors.length) rc.colors.push(context.strokeStyle);
@@ -28190,7 +29112,7 @@ var __engine_ =
 			CIQ.efficientDOMUpdate(floatDate, "innerHTML", val);
 		}
 
-		if(floatDate && !CIQ.ChartEngine.hideDates()){
+		if(floatDate && !chart.xAxis.noDraw){
 			var bar=this.barFromPixel(this.cx);
 			var prices=chart.xaxis[bar];
 			if(prices && prices.DT){
@@ -28342,7 +29264,7 @@ var __engine_ =
 						CIQ.appendClassName(this.container, "stx-crosshair-on");
 					}
 				}
-				if(controls.floatDate && !CIQ.ChartEngine.hideDates()){
+				if(controls.floatDate && !this.chart.xAxis.noDraw){
 					controls.floatDate.style.visibility="";
 					if(this.currentPanel) this.updateFloatHRLabel(this.currentPanel);
 				}
@@ -28468,6 +29390,10 @@ var __engine_ =
 		*/
 		CIQ.ChartEngine.crosshairX=e.clientX;	// These are used by the UI so make sure they are set even if no chart is set
 		CIQ.ChartEngine.crosshairY=e.clientY;
+		if(e.type.toLowerCase().indexOf("enter")>-1) {
+			this.positionCrosshairsAtPointer();
+			return;
+		}
 		if(this.runPrepend("mousemove", arguments)) return;
 		if(!this.displayInitialized) return;	// No chart displayed yet
 		if(this.openDialog!=="") return;	// Don't show crosshairs when dialog is open
@@ -28516,6 +29442,7 @@ var __engine_ =
 	 * @return {CIQ.ChartEngine.YAxis}		  The yAxis that the crosshair is over
 	 * @memberOf  CIQ.ChartEngine
 	 * @since  15-07-01
+	 * @since 6.1.0 returns null when no yAxis found
 	 */
 	CIQ.ChartEngine.prototype.whichYAxis=function(panel, x){
 		if(typeof x === "undefined") x=this.cx;
@@ -28526,7 +29453,7 @@ var __engine_ =
 				if(yAxis.left<=x && yAxis.left+yAxis.width>=x) return yAxis;
 			}
 		}
-		return new CIQ.ChartEngine.YAxis();// dummy axis
+		return null;
 	};
 
 	/**
@@ -28544,13 +29471,13 @@ var __engine_ =
 		var cx=this.cx;
 		this.anyHighlighted=false;
 		if(!this.currentPanel) return;
-		if(this.preferences.magnet && !this.activeDrawing  && !this.repositioningDrawing){
+		if(this.preferences.magnet && !this.activeDrawing && !this.repositioningDrawing){
 			CIQ.clearCanvas(this.chart.tempCanvas, this);
 		}
 		if(this.activeDrawing) clearOnly=true;
 		var somethingChanged=false;
 		var drawingToMeasure=null;
-		var stickyArgs=clearOnly?null:["","",true,null,"drawing"];
+		var stickyArgs=clearOnly?{}:{forceShow:true, type:"drawing"};
 
 		var chart=this.currentPanel.chart;
 		var box={
@@ -28575,7 +29502,6 @@ var __engine_ =
 		  end test code */
 		for(var i=this.drawingObjects.length-1;i>=0;i--){
 			var drawing=this.drawingObjects[i];
-			if(drawing.permanent) continue;
 			if(!this.panels[drawing.panelName]) continue;
 			if(this.repositioningDrawing && this.repositioningDrawing!=drawing) continue;
 
@@ -28599,6 +29525,7 @@ var __engine_ =
 					somethingChanged=true;
 				}
 			}
+			if(drawing.highlighted) stickyArgs.noDelete=drawing.permanent;
 		}
 
 		var n,o,series;
@@ -28726,14 +29653,17 @@ var __engine_ =
 			// Then it will convert the pixel value back to the price value for the current panel's axis.
 			// Using the cache is the only way to go for an overlay.  There is a shortcoming for the overlay though, in that
 			// if valPrev or valNext were off the screen, they wouldn't be in the cache and so their y axis value would be inaccurate.
-			//if(currentPanel.name==chart.name){  // does it matter what panel the overlay is on?
-				var pftv=this.pixelFromTransformedValue.bind(this), vfp=this.valueFromPixel.bind(this);
-				val=vfp(usedCache[0]?val:pftv(val,currentPanel,yAxis),currentPanel);
-				valPrev=vfp(usedCache[1]?valPrev:pftv(valPrev,currentPanel,yAxis),currentPanel);
-				valNext=vfp(usedCache[2]?valNext:pftv(valNext,currentPanel,yAxis),currentPanel);
-			//}
-			if(CIQ.boxIntersects(box.x0, box.y0, box.x1, box.y1, tickPrev, valPrev, tick, val, "segment") ||
-			   CIQ.boxIntersects(box.x0, box.y0, box.x1, box.y1, tick, val, tickNext, valNext, "segment")) {
+
+			var pftv=this.pixelFromTransformedValue.bind(this), vfp=this.valueFromPixel.bind(this);
+			val=vfp(usedCache[0]?val:pftv(val,currentPanel,yAxis),currentPanel);
+			valPrev=vfp(usedCache[1]?valPrev:pftv(valPrev,currentPanel,yAxis),currentPanel);
+			valNext=vfp(usedCache[2]?valNext:pftv(valNext,currentPanel,yAxis),currentPanel);
+
+			var pixelBox=CIQ.convertBoxToPixels(this,currentPanel.name,box);
+			var pixelPoint1=CIQ.convertBoxToPixels(this,currentPanel.name,{x0:tickPrev, y0:valPrev, x1:tick, y1:val});
+			var pixelPoint2=CIQ.convertBoxToPixels(this,currentPanel.name,{x0:tick, y0:val, x1:tickNext, y1:valNext});
+			if(CIQ.boxIntersects(pixelBox.x0, pixelBox.y0, pixelBox.x1, pixelBox.y1, pixelPoint1.x0, pixelPoint1.y0, pixelPoint1.x1, pixelPoint1.y1, "segment") ||
+			   CIQ.boxIntersects(pixelBox.x0, pixelBox.y0, pixelBox.x1, pixelBox.y1, pixelPoint2.x0, pixelPoint2.y0, pixelPoint2.x1, pixelPoint2.y1, "segment")) {
 				return true;
 			}
 			return false;
@@ -28806,7 +29736,7 @@ var __engine_ =
 				this.anyHighlighted=true;
 				var display = o.inputs.display || o.name;
 				display = this.translateIf(display);
-				stickyArgs=[display, null, null, o.permanent, "study"];
+				stickyArgs={message:display, noDelete:o.permanent, type:"study"};
 				drawingToMeasure=null;
 			}
 			if(o.prev!=o.highlight) somethingChanged=true;
@@ -28819,7 +29749,7 @@ var __engine_ =
 				series=r2.seriesParams[m2];
 				if(series.highlight) {
 					this.anyHighlighted=true;
-					stickyArgs=[series.display?series.display:series.symbol, series.color||bColor, false, series.permanent, "series"];
+					stickyArgs={message: series.display||series.symbol, backgroundColor: series.color||bColor, noDelete: series.permanent, type: "series"};
 					drawingToMeasure=null;
 				}
 				if(series.prev!=series.highlight) somethingChanged=true;
@@ -28828,7 +29758,7 @@ var __engine_ =
 
 		if(somethingChanged){
 			this.draw();
-			this.displaySticky.apply(this,this.anyHighlighted?stickyArgs:null);
+			this.displaySticky(this.anyHighlighted?stickyArgs:{});
 			this.clearMeasure();
 			if(drawingToMeasure) drawingToMeasure.measure();
 		}
@@ -28853,22 +29783,33 @@ var __engine_ =
 
 	/**
 	 * Displays the "sticky" (tooltip element). The sticky should be in `CIQ.ChartEngine.controls.mSticky`. To disable stickies, set that element to null. See {@link CIQ.ChartEngine.htmlControls}
-	 * @param  {string} message			The message to display in the sticky
-	 * @param  {string} backgroundColor The background color to set the sticky (the foreground color will be picked automatically)
-	 * @param  {boolean} forceShow If true, will always show the sticky (as opposed to only on hover)
-	 * @param  {boolean} noDelete If true, will hide the delete instructions/button
-	 * @param  {string} type		 "study","drawing","series", or whatever is causing the sticky to be displayed.
+	 * @param  {object} params			optional arguments to pass into function
+	 * @param  {string} [params.message]			The message to display in the sticky
+	 * @param  {string} [params.backgroundColor] The background color to set the sticky (the foreground color will be picked automatically)
+	 * @param  {boolean} [params.forceShow] If true, will always show the sticky (as opposed to only on hover)
+	 * @param  {boolean} [params.noDelete] If true, will hide the delete instructions/button
+	 * @param  {string} [params.type]		 "study","drawing","series", or whatever is causing the sticky to be displayed.
 	 * @memberof CIQ.ChartEngine
+	 * @since 6.0.0 consolidated arguments into a params object
 	 */
 
-	CIQ.ChartEngine.prototype.displaySticky=function(message, backgroundColor, forceShow, noDelete, type){
+	CIQ.ChartEngine.prototype.displaySticky=function(params){
 		var m=this.controls.mSticky;
 		if(!m) return;
-		var mi=$$$("#mStickyInterior", m);
+		var mi=$$$(".mStickyInterior", m);
 		if(!mi) return;
-		var overlayTrashCan=$$$("#overlayTrashCan", m);
+		var overlayTrashCan=$$$(".overlayTrashCan", m);
 		var overlayEdit=$$$(".overlayEdit", m);
-		var mouseDeleteInstructions=$$$("#mouseDeleteInstructions", m);
+		var mouseDeleteInstructions=$$$(".mouseDeleteInstructions", m);
+		// backwards compatibility:
+		if(!params || typeof(params)!="object") params={
+			message: arguments[0],
+			backgroundColor: arguments[1],
+			forceShow: arguments[2],
+			noDelete: arguments[3],
+			type: arguments[4]
+		};
+		var message=params.message, backgroundColor=params.backgroundColor, forceShow=params.forceShow, noDelete=params.noDelete, type=params.type;
 		if(!forceShow && !message){
 			mi.innerHTML="";
 			m.style.display="none";
@@ -28891,11 +29832,14 @@ var __engine_ =
 				mi.style.display="inline-block";
 			}
 			mi.innerHTML=message;
-			if(type) $$$("#mStickyRightClick", m).className="rightclick_"+type;
+			var rtClick=$$$(".mStickyRightClick", m);
+			rtClick.className="mStickyRightClick";  //reset
+			if(type) CIQ.appendClassName(rtClick,"rightclick_"+type);
+			rtClick.style.display="";
 			m.style.display="inline-block";
 			this.positionSticky(m);
 			if(noDelete || this.bypassRightClick===true || this.bypassRightClick[type]){
-				this.controls.mSticky.style.display="none";
+				rtClick.style.display="none";
 			}else if(this.highlightViaTap || this.touches.length){
 				if(overlayTrashCan) overlayTrashCan.style.display="inline-block";
 				if(overlayEdit) overlayEdit.style.display="inline-block";
@@ -28908,25 +29852,27 @@ var __engine_ =
 
 	/**
 	 * <span class="injection">INJECTABLE</span>
-	 * Sets the innerHTML value of the `mMeasure` HTML DOM Node to contain a measurement (price differential and bars/line distance), usually when a user hovers over a drawing.
+	 * Sets the innerHTML value of the `.mMeasure` HTML DOM Node to contain a measurement (price differential and bars/line distance), usually when a user hovers over a drawing.
 	 * It is also used to display measurement as a drawing is being created or when using the 'Measure' tool.
 	 *
 	 * It also sets `this.controls.mSticky` with the measurement and displays it on `mSticky` on hover.
 	 *
 	 * Example: <B>23.83 (-12%) 11 Bars</B>
 	 *
-	 * It requires the UI to include the following div: ```<div class="currentMeasure"><span id="mMeasure" class="measureUnlit"></span></div>```
+	 * It requires the UI to include the following div: ```<div class="currentMeasure"><span class="mMeasure"></span></div>```
 	 *
 	 * It can be styled via CSS. See example.
 	 *
 	 * @param {number} price1 Beginning price of the drawing
-	 * @param {number} price2 Ending price of the drawing
+	 * @param {number|boolean} price2 Ending price of the drawing, pass <code>false</code> if you want to skip price and percentage display
 	 * @param {number} tick1  Beginning tick of the drawing
-	 * @param {number} tick2  Ending tick of the drawing
+	 * @param {number|boolean} tick2  Ending tick of the drawing, pass <code>false</code> if you want to skip tick count display
 	 * @param {boolean} hover  True to turn on the measurement, false to turn it off
 	 * @param {string} [name]  Name of drawing, not used by default but passed into injection
 	 * @memberof CIQ.ChartEngine
-	 * @since 4.0.0 added name argument
+	 * @since
+	 * <br>&bull; 4.0.0 added name argument
+	 * <br>&bull; 6.0.0 allow price2 and tick2 to be false, skipping the respective display
 	 * @example
 	 * // Measuring tool styling CSS sample
 		.currentMeasure {
@@ -28937,7 +29883,7 @@ var __engine_ =
 			line-height: 20px;
 		}
 
-		#mMeasure {
+		.mMeasure {
 			display: inline-block;
 			margin: 0 0 0 0;
 			overflow: hidden;
@@ -28945,19 +29891,11 @@ var __engine_ =
 			white-space: nowrap;
 			width:140px;
 		}
-
-		// primary color scheme
-		.measureUnlit {color:#666;}
-		.measureLit {color:#000;}
-
-		// dark color scheme
-		.ciq-night .measureUnlit {color:#cbcccd;}
-		.ciq-night .measureLit {color:#fff;}
 		@example
 		// This is an example of the framework to use for writing a prepend to further manipulate/display the measurements
 		CIQ.ChartEngine.prototype.prepend("setMeasure",function(){
 
-			var m=$$("mMeasure");
+			var m=$$$(".mMeasure");
 
 			if(!m) return; // cant show a measurement if the div is not present.
 
@@ -28966,23 +29904,23 @@ var __engine_ =
 		 	var message = 'blah measurement';
 		 	//*****************************************
 
-			if(m.className!="measureLit") m.className="measureLit";
 			m.innerHTML=message;
 
 			if(this.activeDrawing) return;		// Don't show measurement Sticky when in the process of drawing
 
 			m=this.controls.mSticky;
 			if (m) {
+				var mStickyInterior=m.children[0];
 				if(hover){
 					m.style.display="inline-block";
-					m.children[0].style.display="inline-block";
+					mStickyInterior.style.display="inline-block";
 					if(price1){
-						m.children[0].innerHTML=message;
+						mStickyInterior.innerHTML=message;
 					}
 					this.positionSticky(m);
 				}else{
 					m.style.display="none";
-					m.children[0].innerHTML="";
+					mStickyInterior.innerHTML="";
 				}
 			}
 
@@ -28992,72 +29930,70 @@ var __engine_ =
 	 */
 	CIQ.ChartEngine.prototype.setMeasure=function(price1, price2, tick1, tick2, hover){
 		if(this.runPrepend("setMeasure", arguments)) return;
-		var m=$$("mMeasure");
+		var m=$$$('.mMeasure', this.chart.drawingContainer);
 		var message="";
 		if(!price1){
-			if(m && m.className!="measureUnlit") m.className="measureUnlit";
 			if(!this.anyHighlighted && this.currentVectorParameters.vectorType==="") this.clearMeasure();
 		}else{
-			var distance=Math.round(Math.abs(price1-price2)*this.chart.roundit)/this.chart.roundit;
-			distance = distance.toFixed(this.chart.yAxis.printDecimalPlaces);
-			if(this.internationalizer){
-				message+=this.internationalizer.numbers.format(distance);
-			}else{
-				message+=distance;
+			if (price2 !== false) {
+				var distance=Math.round(Math.abs(price1-price2)*this.chart.roundit)/this.chart.roundit;
+				distance = distance.toFixed(this.chart.yAxis.printDecimalPlaces);
+				if(this.internationalizer){
+					message+=this.internationalizer.numbers.format(distance);
+				}else{
+					message+=distance;
+				}
+				var pct=(price2-price1)/price1;
+				if(Math.abs(pct)>0.1){
+					pct=Math.round(pct*100);
+				}else if(Math.abs(pct)>0.01){
+					pct=Math.round(pct*1000)/10;
+				}else{
+					pct=Math.round(pct*10000)/100;
+				}
+				if(this.internationalizer){
+					pct=this.internationalizer.percent.format(pct/100);
+				}else{
+					pct=pct+"%";
+				}
+				message+=" (" + pct + ")";
 			}
-			var pct=(price2-price1)/price1;
-			if(Math.abs(pct)>0.1){
-				pct=Math.round(pct*100);
-			}else if(Math.abs(pct)>0.01){
-				pct=Math.round(pct*1000)/10;
-			}else{
-				pct=Math.round(pct*10000)/100;
+			if (tick2 !== false) {
+				var ticks=Math.abs(tick2-tick1);
+				ticks=Math.round(ticks)+1;
+				var barsStr=this.translateIf("Bars");
+				message+=" " + ticks + " " + barsStr;
 			}
-			if(this.internationalizer){
-				pct=this.internationalizer.percent.format(pct/100);
-			}else{
-				pct=pct+"%";
-			}
-			message+=" (" +	 pct + ")";
-			var ticks=Math.abs(tick2-tick1);
-			ticks=Math.round(ticks)+1;
-			var barsStr=this.translateIf("Bars");
-			message+=" " + ticks + " " + barsStr;
 
-			if(m){
-				if(m.className!="measureLit") m.className="measureLit";
-				m.innerHTML=message;
-			}
+			if(m) m.innerHTML=message;
 		}
 
 		if(this.activeDrawing) return;		// Don't show measurement Sticky when in the process of drawing
 		m=this.controls.mSticky;
 		if (m) {
+			var mStickyInterior=m.children[0];
 			if(hover){
 				m.style.display="inline-block";
-				m.children[0].style.display="inline-block";
+				mStickyInterior.style.display="inline-block";
 				if(price1){
-					m.children[0].innerHTML=message;
+					mStickyInterior.innerHTML=message;
 				}
 				this.positionSticky(m);
 			}else{
 				m.style.display="none";
-				m.children[0].innerHTML="";
+				mStickyInterior.innerHTML="";
 			}
 		}
 		this.runAppend("setMeasure", arguments);
 	};
 
 	/**
-	 * Clears the innerHTML value of the `mMeasure` HTML DOM Node.
+	 * Clears the innerHTML value of the `.mMeasure` HTML DOM Node.
 	 * @memberof CIQ.ChartEngine
 	 */
 	CIQ.ChartEngine.prototype.clearMeasure=function(){
-		var m=$$("mMeasure");
-		if(m){
-			if(m.className!="measureUnlit") m.className="measureUnlit";
-			m.innerHTML="";
-		}
+		var m=$$$('.mMeasure', this.chart.drawingContainer);
+		if(m) m.innerHTML="";
 	};
 
 	/**
@@ -29414,7 +30350,7 @@ var __engine_ =
 	CIQ.ChartEngine.prototype.unsetTransform=function(chart){
 		delete chart.transformFunc;
 		delete chart.untransformFunc;
-		for(var i=0;i<chart.dataSet.length;i++){
+		for(var i=0;chart.dataSet && i<chart.dataSet.length;i++){
 			chart.dataSet[i].transform=null;
 		}
 	};
@@ -29853,6 +30789,8 @@ var __engine_ =
 			return;
 		}
 		if(!e) e=event;	//IE8
+		var cy=this.backOutY(e.clientY);
+		var cx=this.backOutX(e.clientX);
 		if((e.which && e.which>=2) || (e.button && e.button>=2) || e.ctrlKey){
 			if(this.anyHighlighted && this.bypassRightClick!==true){
 				this.rightClickHighlighted();
@@ -29866,8 +30804,6 @@ var __engine_ =
 		if(e.clientX<this.left || e.clientX>this.right) return;
 		if(e.clientY<this.top || e.clientY>this.bottom) return;
 
-		var cy=this.backOutY(e.clientY);
-		var cx=this.backOutX(e.clientX);
 		if(wasMouseDown && (!this.longHoldTookEffect || this.activeDrawing)){  //only completes drawing if you if don't leave chart and let go of mouse button
 			this.drawingClick(this.currentPanel, cx, cy);
 		}
@@ -29930,7 +30866,7 @@ var __engine_ =
 		var chart=this.currentPanel.chart;
 		for(var i=0;i<this.drawingObjects.length;i++){
 			var drawing=this.drawingObjects[i];
-			if(drawing.highlighted){
+			if(drawing.highlighted && !drawing.permanent){
 				if(this.cloneDrawing){ // clone a drawing if flag set
 					var Factory=CIQ.ChartEngine.drawingTools[drawing.name];
 					var clonedDrawing=new Factory();
@@ -29978,7 +30914,7 @@ var __engine_ =
 		this.grabStartScrollY=this.currentPanel.yAxis.scroll;
 		this.grabStartCandleWidth=this.layout.candleWidth;
 		this.grabStartYAxis=this.whichYAxis(this.currentPanel);
-		this.grabStartZoom=this.grabStartYAxis.zoom;
+		this.grabStartZoom=this.grabStartYAxis?this.grabStartYAxis.zoom:0;
 		this.grabStartPanel=this.currentPanel;
 
 		setTimeout((function(self){ return function(){self.grabbingHand();};})(this),100);
@@ -30128,6 +31064,7 @@ var __engine_ =
 			this.createDataSet();
 			this.changeOccurred("layout");
 		}
+		this.resetDynamicYAxis();
 		this.runAppend("removeOverlay", arguments);
 	};
 
@@ -30164,9 +31101,23 @@ var __engine_ =
 	 * Behind the scenes, series are displayed by [renderers]{@link CIQ.Renderer}.
 	 * Renderers can plot lines, mountains, bars, candles, and other types of visualizations.
 	 * When adding a series, you can specify which renderer to use and set parameters to control your visual.
-	 * For instance, this will display a series as a candlestick chart:
+	 * For instance, this will display a series as a bar chart on it's own left axis:
 	 * ```
-	 * stxx.addSeries("IBM", {renderer:"Candles", fill_color_up:"orange", fillColorDown:"blue"});
+	 * stxx.addSeries("SNE", {display:"Sony",renderer:"Bars",name:"test", yAxis:new CIQ.ChartEngine.YAxis({position:"left", textStyle:"#FFBE00"})});
+
+	 * ```
+	 * Which is the same as explicitly declaring a renderer and then attaching it to the series:
+	 * ```
+	 * stxx.addSeries("SNE", {display:"Sony"},function(){
+	 * 	// create the axis
+	 * 	var axis=new CIQ.ChartEngine.YAxis();
+	 * 	axis.position="left";
+	 * 	axis.textStyle="#FFBE00";
+	 *
+	 * 	//create the renderer and attach
+	 * 	var renderer=stxx.setSeriesRenderer(new CIQ.Renderer.Bars({params:{name:"test", yAxis:axis}}));
+	 * 	renderer.attachSeries("SNE").ready();
+	 * });
 	 * ```
 	 *
 	 * Example 2 <iframe width="100%" height="500" scrolling="no" seamless="seamless" align="top" style="float:top" src="http://jsfiddle.net/chartiq/rb423n71/embedded/result,js,html/" allowfullscreen="allowfullscreen" frameborder="1"></iframe>
@@ -30222,9 +31173,15 @@ var __engine_ =
 	 * @param {string} [parameters.color] <span class="injection">Rendering</span> Color to draw line. Will cause the line to immediately render an overlay. Only applicable for default/'Lines' renderer. See {@link CIQ.Renderer#attachSeries} for additional color options.
 	 * @param {string} [parameters.baseColor] <span class="injection">Rendering</span> Color for the base of a mountain series. Defaults to `parameters.color`.
 	 * @param {array|string} [parameters.pattern] <span class="injection">Rendering</span> Pattern to draw line, array elements are pixels on and off, or a string e.g. "solid", "dotted", "dashed"
-	 * @param {boolean} [parameters.fillGaps] <span class="injection">Data Loading</span> Will fill any missing **data** points in the series *relative to masterData*.
-	 * 											<br>If true then gaps in data will be filled by carrying forward the value of from the previous bar.
-	 *											<br>Note that this is independent of {CIQ.ChartEngine#cleanupGaps} which ensures (for all series and masterData) that a point exists for each valid market date.
+	 * @param {boolean|string} [parameters.fillGaps] <span class="injection">Data Loading</span> If {@link CIQ.ChartEngine#cleanupGaps} is enabled to clean gaps (not 'false'), you can use this parameter to override the global setting for this series.
+	 * - If `fillGap` not present
+	 *  - No gaps will be filled for the series.
+	 * - If `fillGap` is set to 'false'
+	 *  - No gaps will be filled for the series.
+	 * - If `fillGap` is set to 'true',
+	 *  - Gap filling will match {@link CIQ.ChartEngine#cleanupGaps}.
+	 * - If `fillGap` is set to  'carry' or 'gaps'
+	 *  - Will use that filling method even if `cleanupGap` is set differently.
 	 * @param {object} [parameters.gapDisplayStyle] <span class="injection">Rendering</span> Defines how to **render** (style) gaps in the data (missing data points).  If undefined, and the series is a comparison, the gaps will be rendered transparent.
 	 *                                   	Set to `true` to use the same color and pattern as the main line, or define a color-pattern object if different.
 	 * @param {string} [parameters.gapDisplayStyle.color] Color to draw line where data points are missing
@@ -30233,10 +31190,16 @@ var __engine_ =
 	 * @param {boolean} [parameters.permanent] <span class="injection">Rendering</span> Set to `true` to activate. Makes series unremoveable by a user **when attached to the default renderer**. If explicitly linked to a renderer, see {@link CIQ.Renderer#attachSeries} for details on how to prevent an attached series from being removed by a user.
 	 * @param {object} [parameters.data] <span class="injection">Data Loading</span> Data source for the series.
 	 * <P>&bull; If this field is omitted, the library will connect to the QuoteFeed (if available) to fetch initial data ( unless `parameters.loadData` is set to `false`), and manage pagination and updates.
-	 * <P>&bull; If data is sent in this field, it will be loaded into the masterData, but series will **not** be managed by the QuoteFeed (if available) for pagination or updates. This should contain an array of objects in {DT,Date,Value} format as outlined by the following properties:
+	 * <P>&bull; If data is sent in this field, it will be loaded into the masterData, but series will **not** be managed by the QuoteFeed (if available) for pagination or updates. 
+	 * <P>&bull; Items in this array *must* be ordered from earliest to latest date.<br>
+	 * <P>&bull; Accepted formats:
+	 * <br><br><br>**Full OHLC:**<br>
+	 * An array of properly formatted OHLC quote object(s). [See OHLC Data Format]{@tutorial InputDataFormat}.<br>
+	 * <br>----<br><br>**Close Price Only:**<br>
+	 * An array of of objects, each one with the followng elements:<br>
 	 * @param {date}   [parameters.data.DT] JavaScript date object or epoch representing data point (overrides Date parameter if present)
 	 * @param {string} [parameters.data.Date] string date representing data point ( only used if DT parameter is not present)
-	 * @param {number} [parameters.data.Value] value of the data point ( As an alternative, you can send `parameters.data.Close` since your quote feed may already be returning the data using this element name)
+	 * @param {number} parameters.data.Value value of the data point ( As an alternative, you can send `parameters.data.Close` since your quote feed may already be returning the data using this element name)
 	 * @param {string} [parameters.panel] <span class="injection">Rendering</span> the panel name on which the series should display
 	 * @param {string} [parameters.action="add-series"] <span class="injection">Rendering</span> Overrides what action is sent in symbolChange events. Set to null to prevent a symbolChange event.
 	 * @param {boolean} [parameters.loadData=true] <span class="injection">Data Loading</span> Include and set to false if you know the initial data is already in the masterData array or will be loaded by another method. The series will be added but no data requested. Note that if you remove this series, the data points linked to it will also be removed which may create issues if required by the chart. If that is the case, you will need to manually remove from the renderer linked to it instead of the underlying series itself.
@@ -30346,7 +31309,7 @@ var __engine_ =
 	 *	// add multiple series and attach to a custom y-axis on the left.
 	 *	// See this example working here : http://jsfiddle.net/chartiq/b6pkzrad
 	 *
-	 *	// note how the addSeries callback is used to ensure the data is present before the series  is displayed
+	 *	// note how the addSeries callback is used to ensure the data is present before the series is displayed
 	 *
 	 *	//create the custom axis
 	 *	var axis=new CIQ.ChartEngine.YAxis();
@@ -30356,7 +31319,7 @@ var __engine_ =
 	 *	axis.maxDecimalPlaces=0;		// no decimal places on the last price pointer
 	 *
 	 *	//create the renderer
-	 *	renderer=stxx.setSeriesRenderer(new CIQ.Renderer.Lines({params:{name:"lines", type:"mountain", yAxis:axis}}));
+	 *	var renderer=stxx.setSeriesRenderer(new CIQ.Renderer.Lines({params:{name:"lines", type:"mountain", yAxis:axis}}));
 	 *
 	 *	// create your series and attach them to the chart when the data is loaded.
 	 *	stxx.addSeries("NOK", {display:"NOK",width:4},function(){
@@ -30385,6 +31348,16 @@ var __engine_ =
 	 * // the renderer:"Lines" parameter could theoretically be omitted since it is the default renderer.
 	 * stxx.addSeries('GE',{renderer:"Lines", type:'mountain',color:'yellow',tension:0.3})
 	 *
+	 * @example
+	 * // using equations as symbols, this will display an inverted chart for instrument 'T'
+	 * // note the formatter used to change the sign of the axis values
+	 * var axis2=new CIQ.ChartEngine.YAxis({position:"left",textStyle:"#FFBE00",priceFormatter:function(stx, panel, price, decimalPlaces){return stx.formatYAxisPrice(price, panel, decimalPlaces)*-1}});
+	 * stxx.addSeries("=-1*T", {display:"Test",width:4,renderer:"Lines",color:"#FFBEDD",yAxis:axis2},function(){});
+	 *
+	 * //this will display the same series in the standard scale.
+	 * var axis3=new CIQ.ChartEngine.YAxis({position:"left",textStyle:"#FFBE00"});
+	 * stxx.addSeries("T", {display:"Test",width:4,renderer:"Lines",color:"#FFBEDD",yAxis:axis3},function(){});
+	 *
 	 * @since
 	 * <br>&bull; 04-2015 if `isComparison` is true shareYAxis is automatically set to true and setComparison(true) called. createDataSet() and draw() are automatically called to immediately render the series.
 	 * <br>&bull; 15-07-01 if `color` is defined and chartStyle is not set then it is automatically set to "line".
@@ -30406,6 +31379,7 @@ var __engine_ =
 	 * <br>&bull; 5.1.1 Added `parameters.extendToEndOfDataSet`.
 	 * <br>&bull; 5.1.1 `parameters.chartType`, originally used to draw "mountain" series, has been deprecated in favor of the more flexible 'renderer' parameter. It is being maintained for backwards compatibility
 	 * <br>&bull; 5.2.0 `parameters.gaps` has been deprecated (but maintained for backwards compatibility) and replaced with `parameters.gapDisplayStyle`
+	 * <br>&bull; 6.0.0 `parameters.fillGaps` is now a string type and can accept either "carry" or "gap".  Setting to true will use the value of stxx.cleanupGaps.
 	 */
 	CIQ.ChartEngine.prototype.addSeries=function(id, parameters, cb){
 		var injectionResult=this.runPrepend("addSeries", arguments);
@@ -30417,7 +31391,8 @@ var __engine_ =
 			parameters: parameters?CIQ.clone(parameters):{},
 			yValueCache: [],
 			display: display,
-			id: id
+			id: id,
+			loading: true
 		 };
 		parameters=obj.parameters;
 		if(parameters.symbol) symbol=parameters.symbol;
@@ -30427,6 +31402,7 @@ var __engine_ =
 			chartName: this.chart.name,
 			symbolObject: {symbol:symbol},
 			panel: this.chart.panel.name,
+			fillGaps: false,
 			action: "add-series"
 		});
 		if("display" in parameters) obj.display=parameters.display;
@@ -30477,9 +31453,11 @@ var __engine_ =
 		function handleResponse(params){
 			return function(dataCallback){
 				if(!dataCallback.error){
-					var qts=dataCallback.quotes;
-					qts=self.doCleanupGaps(qts, self.chart, {cleanupGaps:parameters.fillGaps});
-					CIQ.addMemberToMasterdata({stx: self, label: symbol, fieldForLabel: parameters.field, data: qts, createObject: true, noCleanupDates: true});
+					var qts=dataCallback.quotes, fillGaps=parameters.fillGaps;
+					if(!self.cleanupGaps) fillGaps=false;  // disable override
+					qts=self.doCleanupGaps(qts, self.chart, {cleanupGaps:fillGaps});
+					self.updateChartData(qts, self.chart, {secondarySeries:symbol, noCreateDataSet:true, noCleanupDates:true, allowReplaceOHL:true});
+					obj.loading=false;
 					setUpRenderer(self, obj);
 				}
 				if(parameters.action!==null && !existsAlready.length) self.dispatch((self.currentlyImporting?"symbolImport":"symbolChange"), {stx:self, symbol: params.symbol, symbolObject:params.symbolObject, action:parameters.action});
@@ -30514,7 +31492,7 @@ var __engine_ =
 			// If the chart is empty, then don't send any dates and allow the fetch to do an initial load
 			if( masterLength ) {
 				fetchParams.startDate = masterData[0].DT;
-				fetchParams.endDate = new Date();
+				fetchParams.endDate = this.isHistoricalMode()?masterData[masterData.length-1].DT:new Date();
 			}
 			if(fetchParams.stx.isEquationChart(fetchParams.symbol)){  //equation chart
 				CIQ.fetchEquationChart(fetchParams, handleResponse(fetchParams));
@@ -30539,7 +31517,7 @@ var __engine_ =
 	 *
 	 * @param  {object} params Parameters
 	 * @param {string} [params.symbol] Filter for only series that contain this symbol
-	 * @param {string} [params.symbolObject] Filter for only series that contain this symbolObject
+	 * @param {object} [params.symbolObject] Filter for only series that contain this symbolObject
 	 * @param {boolean} [params.includeMaster] If true then the masterSymbol will be checked for a match too. A blank object will be returned. You should only use this if you're just using this to look for yes/no dependency on a symbol.
 	 * @param {CIQ.ChartEngine.Chart} [params.chart] Chart object to targer
 	 * @return {array}        Array of series descriptors
@@ -30675,6 +31653,7 @@ var __engine_ =
 		}while(i<masterData.length);
 		masterData=this.doCleanupGaps(masterData, chart, {noCleanupDates:true}); // todo, remove once setMasterData cleans gaps
 		this.setMasterData(masterData, chart, {noCleanupDates:true});
+		this.clearCurrentMarketData(chart,symbol);
 	};
 
 	/**
@@ -30770,6 +31749,7 @@ var __engine_ =
 			}
 		}
 		if(!deleted) this.deleteSeries(toRemove, chart); // just in case the renderer didn't...
+		this.resetDynamicYAxis();
 		this.draw();
 		this.runAppend("removeSeries", arguments);
 	};
@@ -30795,8 +31775,8 @@ var __engine_ =
 	 * The kernel is capable of deriving weekly and monthly charts by rolling-up daily data. Set {@link CIQ.ChartEngine#dontRoll} to true to bypass this
 	 * functionality if you have raw week and month data in the masterData.
 	 *
-	 * It is important to not that by default the weekly roll-ups start on Sunday unless a market definition exists to indicate Sunday is not a market day,
-	 * then they are shifted to the next market day which is Monday. Instructions to set a market for the chart can be found here: {@link CIQ.Market}
+	 * It is important to note that by default the weekly roll-ups start on Sunday unless a market definition exists to indicate Sunday is not a market day,
+	 * then they are shifted to the next market day. Instructions to set a market for the chart can be found here: {@link CIQ.Market}
 	 *
 	 * A full tutorial on periodicity and roll-up can be found [here]{@tutorial Periodicity}.
 	 *
@@ -30901,13 +31881,16 @@ var __engine_ =
 
 		if(getDifferentData){
 			this.changeOccurred("layout");
+			this.clearCurrentMarketData();
 			if(this.quoteDriver){
 				for(var c in this.charts){
-					if(this.charts[c].symbol){
-						if(this.displayInitialized)
-							this.quoteDriver.newChart({symbol:this.charts[c].symbol, symbolObject: this.charts[c].symbolObject, chart:this.charts[c]}, cb);
-						else
-							this.newChart(this.charts[c].symbol,null,this.charts[c],cb);
+					var thisChart=this.charts[c];
+					if(thisChart.symbol){
+						if(this.displayInitialized){
+							this.quoteDriver.newChart({symbol:thisChart.symbol, symbolObject: thisChart.symbolObject, chart:thisChart}, cb);
+						}else{
+							this.newChart(thisChart.symbol,null,thisChart,cb);
+						}
 					}
 				}
 			} else if(this.dataCallback){
@@ -30999,6 +31982,7 @@ var __engine_ =
 	 * @since
 	 * <br>&bull; 2015-11-1 `second` and `millisecond` periodicities are now supported by setting the `timeUnit` parameter.
 	 * <br>&bull; 3.0.0 Replaced by {@link CIQ.ChartEngine#setPeriodicity}, but maintained for backwards comparibility.
+	 * @private
 	 */
 	CIQ.ChartEngine.prototype.setPeriodicityV2=function(period, interval, timeUnit, cb){
 		if(typeof timeUnit==="function"){
@@ -31197,6 +32181,31 @@ var __engine_ =
 	};
 
 	/**
+	 * Returns the last valid Close found in the dataSet.
+	 * This would be any numeric value
+	 * @param {string} field Optional object to check Close within, such as with a series
+	 * @return {number} The most recent close
+	 * @memberof CIQ.ChartEngine
+	 * @since 6.1.0
+	 */
+	CIQ.ChartEngine.prototype.mostRecentClose=function(field){
+		if(!this.chart.dataSet) return null;
+		for(var i=this.chart.dataSet.length-1;i>=0;i--){
+			var ret=this.chart.dataSet[i];
+			if(!ret) continue;
+			if(field){
+				ret=ret[field];
+				if(!ret && ret!==0) continue;
+			}
+			var iqPrevClose=ret.iqPrevClose;
+			if(typeof(ret)=="object") ret=ret.Close;
+			if(typeof(ret)=="number") return ret;
+			if(typeof(iqPrevClose)=="number") return iqPrevClose;
+		}
+		return null;
+	};
+
+	/**
 	 * <span class="injection">INJECTABLE</span>
 	 * <span class="animation">Animation Loop</span>
 	 * This method ensures that the chart is not scrolled off of either of the vertical edges.
@@ -31242,13 +32251,16 @@ var __engine_ =
 				}
 			}
 			if(chart.allowScrollFuture===false){
-				var whitespace=this.getLabelOffsetInPixels(chart,layout.chartType);
+				var whitespace=this.getLabelOffsetInPixels(chart,layout.chartType)+layout.candleWidth*chart.whiteSpaceFutureTicks;
 				var barsOnScreen=maxTicks-Math.round(whitespace/layout.candleWidth)-1;
 				var scroll= (this.micropixels < 0 ? chart.scroll-1 : chart.scroll);
 				if(scroll<barsOnScreen){
 					chart.scroll= barsOnScreen;
 					this.micropixels=0;
 				}
+			}
+			if(this.manageTouchAndMouse) {
+				if(this.controls.chartControls) this.controls.chartControls.style.display="block";
 			}
 		}
 		this.runAppend("correctIfOffEdge", arguments);
@@ -31582,6 +32594,7 @@ var __engine_ =
 		if(this.runPrepend("drawCurrentHR", arguments)) return;
 		var backgroundColor, color;
 		var mainSeriesRenderer=this.mainSeriesRenderer || {};
+		if(mainSeriesRenderer.noCurrentHR) return;
 		var highLowBars=mainSeriesRenderer.highLowBars || this.highLowBars[this.layout.chartType];
 		for(var chartName in this.charts){
 			var chart=this.charts[chartName];
@@ -31592,6 +32605,7 @@ var __engine_ =
 			if(!mainSeriesRenderer.params) continue;
 			var whichSet=yAxis.whichSet;
 			if(!whichSet) whichSet="dataSet";
+			if(this.isHistoricalModeSet && whichSet!=="dataSegment") continue;
 			var l=chart[whichSet].length, cw=this.layout.candleWidth;
 			if(whichSet=="dataSegment") {
 				//this crazy equation just to find the last bar displaying at least 50% on the screen
@@ -31602,14 +32616,14 @@ var __engine_ =
 				if(!field || highLowBars) field="Close";
 				var prevClose, currentClose;
 				do{
-					prevClose=chart[whichSet][l-1][field];
+					prevClose=chart[whichSet][--l][field];
 					currentClose=prevClose;
-					if(--l===0) break;
+					if(l===0) break;
 				}while(currentClose===null);
 				if(whichSet=="dataSet" && chart.currentQuote){
 					currentClose=chart.currentQuote[field];
 				}else if(chart[whichSet].length>=2){
-					var pquote=chart[whichSet][l-2];
+					var pquote=chart[whichSet][l-1];
 					if(pquote) prevClose=pquote[field];
 				}
 				if(currentClose<prevClose){
@@ -31765,7 +32779,9 @@ var __engine_ =
 
 		this.offset=this.layout.candleWidth*this.candleWidthPercent/2;
 		CIQ.clearCanvas(this.chart.canvas, this);
-		if(!this.masterData || !this.masterData.length) return;
+		if(!this.masterData) return;
+		if(!this.masterData.length && !this.chart.currentMarketData.touched) return;
+
 		if(this.runPrepend("draw", arguments)) return;
 		this.getDefaultColor();	//TODO, don't call this in draw() but instead manually when background color is changed?
 		this.vectorsShowing=false;
@@ -31780,7 +32796,15 @@ var __engine_ =
 			var axisRepresentation=this.createXAxis(chart);
 			this.initializeDisplay(chart);
 			this.drawXAxis(chart, axisRepresentation);
-			this.renderYAxis(chart);
+			try {
+				this.renderYAxis(chart);
+			} catch (e) {
+				if (e && e.message === 'reboot draw') {
+					return this.draw();
+				}
+
+				throw e;
+			}
 
 			/// Calculate tmpWidth which represents the amount of width that the candle takes, slightly less than candleWidth
 			chart.tmpWidth=Math.floor(this.layout.candleWidth*this.candleWidthPercent);	// So we don't need to compute it a thousand times for every candle
@@ -31849,7 +32873,9 @@ var __engine_ =
 		this.positionMarkers();
 		for(chartName in this.charts){
 			chart=this.charts[chartName];
-			if(this.quoteDriver) this.quoteDriver.checkLoadMore(chart);
+			if(this.quoteDriver && !this.animations.zoom.running){
+				this.quoteDriver.checkLoadMore(chart);
+			}
 		}
 		this.runAppend("draw", arguments);
 		this.makeAsyncCallbacks();
@@ -32052,7 +33078,7 @@ var __engine_ =
 	 * This is the method that should be called every time a new chart needs to be drawn for a different instrument and
 	 * there is no need to destroy the chart to change the data on it. Simply call this method again.
 	 *
-	 * Note that before using this method you must first instantiate the chart and assign it to a DOM container using [`stxx=new CIQ.ChartEngine({container: $$("chartContainer")});`]{@link CIQ.ChartEngine}
+	 * Note that before using this method you must first instantiate the chart and assign it to a DOM container using [`stxx=new CIQ.ChartEngine({container: $$$(".chartContainer")});`]{@link CIQ.ChartEngine}
 	 *
 	 * @param  {string|object}			symbol			The symbol or equation for the new chart - a symbol string, equation or an object representing the symbol can be used.
 	 * 													<br>After the new chart is initialized, it will contain both a symbol string (stxx.chart.symbol) and a symbol object (stxx.chart.symbolObject).
@@ -32105,6 +33131,7 @@ var __engine_ =
 	 * <br> 2015-11-1 newChart is capable of setting periodicity and span via `params` settings
 	 * <br> 04-2016-08 `params.stretchToFillScreen` is available
 	 * <br> 5.1.0 newChart is capable of setting range via `params` settings
+	 * <br> 6.0.0 statically provided data will be gap-filled if that functionality is enabled
 	 */
 	CIQ.ChartEngine.prototype.newChart=function(symbol, masterData, chart, cb, params){
 		//if (!symbol) return; // can't build a chart without a symbol
@@ -32164,6 +33191,8 @@ var __engine_ =
 			setSpan = {};
 		}
 
+		this.clearCurrentMarketData(chart);
+
 		var self=this;
 		if(!masterData && this.quoteDriver){
 			var callback = function(err){
@@ -32216,9 +33245,16 @@ var __engine_ =
 				console.log("Warning: No masterData specified and no QuoteFeed configured");
 			}
 			if (!chart.symbol) chart.symbol="";	// if we are ready to draw but the symbol is missing, it will crash
-			// we do not clean gaps when data is statically provided
 			this.initializeChart();
-			this.setMasterData(masterData, chart);
+			masterData=this.doCleanupGaps(masterData, chart);
+			this.setMasterData(masterData, chart, {noCleanupDates:true});
+			chart.endPoints={};
+			if(masterData && masterData.length){
+				chart.endPoints={
+						begin: masterData[0].DT,
+						end: masterData[masterData.length-1].DT
+				};
+			}
 			this.createDataSet();
 
 			if(range && Object.keys(range).length){
@@ -32323,6 +33359,10 @@ var __engine_ =
 			//if(typeof quotes.Close != 'number' && !quotes.Close && quotes.Close!==null){
 			//	console.log ('setMasterData : Close is missing or not a number. Use parseFloat() if your data server provides strings. MasterData Index= ' + i +' Value = ' + quotes.Close);
 			//}
+			if(masterData.length-i<50){
+				// only check last 50 records
+				this.updateCurrentMarketData(quotes, chart);
+			}
 		}
 		chart.decimalPlaces=this.callbacks.calculateTradingDecimalPlaces({
 			stx:this,
@@ -32356,7 +33396,16 @@ var __engine_ =
 		if(!chart) chart=this.chart;
 		if (!chart.symbol) chart.symbol="";
 		this.setMasterData(masterData, chart);
-		if(masterData && masterData.length) chart.symbol=symbol;
+		if(masterData){
+			chart.endPoints={};
+			if(masterData.length){
+				chart.endPoints={
+						begin:masterData[0].DT,
+						end:masterData[masterData.length-1].DT
+				};
+				chart.symbol=symbol;
+			}
+		}
 		this.createDataSet();
 		this.initializeChart();
 		this.draw();
@@ -32548,7 +33597,37 @@ var __engine_ =
 	};
 
 	/**
+	 * As of version 5.1, his method has been **deprecated** in favor of {@link CIQ.ChartEngine#updateChartData} which provides improved functionality. 
+	 * 
+	 * The following parameters are only applicable for legacy versions (pre 5.1):
 	 * @deprecated Please use {@link CIQ.ChartEngine#updateChartData}
+	 * @param  {array/object} appendQuotes		An array of properly formatted OHLC quote object(s). [See Data Format]{@tutorial InputDataFormat} and {@link CIQ.ChartEngine#setMasterData}.<br>
+	 * 											Or a last sale object with the following elements:
+	 * @param  {number}	appendQuotes.Last 		Last sale price
+	 * @param  {number}	[appendQuotes.Volume]	Trade volume
+	 * @param  {number}	[appendQuotes.Bid] 		Bid price
+	 * @param  {number}	[appendQuotes.Ask] 		Offer/Ask price
+	 * @param  {number}	[appendQuotes.DT] 		Date of trade.
+	 * It must be a java script date [new Date().getTime()].
+	 * **If omitted, defaults to "right now" in the set `dataZone`** (see {@link CIQ.ChartEngine#setTimeZone});
+	 * or if no `dataZone` is set, it will default to the browser's timezone (not recommended for international client-base since different users
+	 * will see different times). It is important to note that this value must be in the same timezone as the rest of the masterData already
+	 * sent into the charting engine to prevent tick gaps or overlaps.
+	 * @param  {CIQ.ChartEngine.Chart}			[chart]				The chart to append the quotes. Defaults to the default chart.
+	 * @param {object} [params] Parameters to dictate behavior
+	 * @param {boolean} [params.noCreateDataSet] If true then do not create the data set automatically, just add the data to the masterData
+	 * @param {boolean} [params.allowReplaceOHL] Set to true to bypass internal logic that maintains OHL
+	 * @param {boolean} [params.bypassGovernor] If true then masterdata will be immediately updated regardless of {@link CIQ.ChartEngine#streamParameters}
+	 * @param {boolean} [params.fillGaps] If true then {@link CIQ.ChartEngine#doCleanupGaps} is called using the {@link CIQ.ChartEngine#cleanupGaps} setting. This will ensure gaps will be filled in the master data from the last tick in the chart to the date of the trade.<BR> Reminder: `tick` does not fill any gaps as it is not a predictable interval.	 
+	 * @param {boolean} [params.secondarySeries] Set to the name of the element ( valid comparison symbol, for example) to load data as a secondary series.
+	 * @param {boolean} [params.useAsLastSale] If not using a 'last sale' formatted object in `appendQuotes`,
+	 * you can simply set this parameter to `true` to force the data as a last sale price; or further define it by creating an object including other settings as needed.
+	 * This option is available in cases when a feed may always return OHLC formatted objects or a 'Close' field instead of a 'Last' field,
+	 * even for last sale streaming updates.
+	 * By definition a 'last' sale can only be a single record indicating the very 'last' sale price. As such, even if multiple records are sent in the `appendQuotes` array when this flag is enabled,
+	 * only the last record's data will be used. Specifically the 'Close' and 'Volume' fields will be streamed.
+	 * @param {boolean} [params.useAsLastSale.aggregatedVolume] If your last sale updates send current volume for the bar instead of just the trade volume, set this parameter to 'true' in the `params.useAsLastSale` object. The sent in volume will be used as is instead of being added to the existing bar's volume.
+	 * 
 	 * @memberof CIQ.ChartEngine
 	 * @since
 	 * <br>&bull; 2015-11-1 params.bypassGovernor added, allowReplaceOHL added
@@ -32571,15 +33650,14 @@ var __engine_ =
 	 *
 	 * - Follow proper OHLC format as outlined on the [OHLC format tutorial]{@tutorial InputDataFormat}.
 	 * - If a bar is not present it will be added, if it is present it will be updated so the OHLC and volume integrity is preserved. If `allowReplaceOHL` is not set, the 'Open' is preserved from the existing candle; new 'High' and 'Low' values are calculated, and the 'Close' and 'Volume' values are replaced with the new ones.
-	 * - Although gaps can be present, dates in the appendQuotes array **must maintain the correct periodicity and order** (older to newer) to prevent out of sequence ticks.
+	 * - Although gaps can be present, dates in the appendQuotes array **must maintain the correct periodicity and order** (older to newer) to prevent out of sequence bars.
 	 * - If set, gaps will be filled past the currently existing bar. No gaps will be filled when inserting bars in between existing data.
 	 *
 	 * **The following rules apply when streaming individual `LAST SALE` data, tick by tick, as they are received from a streaming feed: **
 	 *
 	 * - Follow proper LAST SALE format as outlined on the parameters section under the `appendQuotes` field.
-	 * - This method is designed to update the chart while maintaining the existing periodicity, augmenting the tick for an instrument or creating new ticks as needed.
-	 * - For a primary series, the Close, High and Low prices for the last bar will be updated to maintain the integrity of the bar, and the volume will be added to the existing bar's volume.
-	 * - For a secondary series (see `params.secondarySeries`), the series field will be set or replaced with the price sent (Close or Last), creating new bars where none existed, but also respecting the periodicity. This is done using {@link CIQ.addMemberToMasterdata}
+	 * - This method is designed to update the chart while maintaining the existing periodicity, finding and augmenting an existing bar for an instrument or creating new bars as needed.
+	 * - It is important to note that a market iterator will be used to find the proper bar to update, and if no bar is found on that date, one will be created even in the past; so always be sure your historical data follows the rules of the market definitions when setting the dates for each bar. Remember that by default, weeks start on Sunday unless a market definition exists to indicate Sunday is not a market day, in which case the next market day will be used as the beginning of the week. Instructions to set a market for the chart can be found here: {@link CIQ.Market}
 	 * - When in 'tick' interval, each trade will be added to a new bar and no aggregation to previous bars will be done.
 	 *
 	 * ** Performance: **
@@ -32589,7 +33667,7 @@ var __engine_ =
 	 *
 	 * ** Additional Notes: **
 	 *
-	 * - ** It is crucial that you ensure the date/time of the trade is in line with your `masterData` and `dataZone` ** See `DT` parameter for more details.
+	 * - ** It is crucial that you ensure the date/time of the records being loaded are in line with your `masterData` and `dataZone`; and in the case of a last trade streaming, that your market definition will produce dates that will be in sync witht her rest of your already loaded records.** See `DT` parameter for more details.
 	 * - This method is **not** intended to be used as a way to load initial chart data, or data changes triggered by periodicity changes.
 	 *
 	 * See the [Data Integration]{@tutorial DataIntegrationOverview} tutorial for more detail on how to load initial data.
@@ -32597,36 +33675,36 @@ var __engine_ =
 	 * See the [Streaming]{@tutorial DataIntegrationStreaming} tutorial for more the details.
 	 *
 	 * @param  {array|object} appendQuotes		**OHLC format requirements**<br>
-	 * 											An array of properly formatted OHLC quote object(s). [See OHLC Data Format]{@tutorial InputDataFormat}.<br>
+	 * 											An array of properly formatted OHLC quote object(s). [See OHLC Data Format]{@tutorial InputDataFormat}. Items in this array *must* be ordered from earliest to latest date.<br>
 	 * 											<br>----<br><br>**LAST SALE  format requirements**<br>
 	 * 											A last sale object with the following elements:
 	 * @param  {number}	[appendQuotes.Last] 	Last sale price
 	 * @param  {number}	[appendQuotes.Volume]	Trade volume (used on primary series only)
 	 * @param  {number}	[appendQuotes.Bid] 		Bid price (used on primary series only)
 	 * @param  {number}	[appendQuotes.Ask] 		Offer/Ask price (used on primary series only)
-	 * @param  {number}	[appendQuotes.DT] 		Date of trade
-	 * It must be a java script date [new Date().getTime()].
-	 * **If omitted, defaults to "right now" in the set `dataZone`** (see {@link CIQ.ChartEngine#setTimeZone});
-	 * or if no `dataZone` is set, it will default to the browser's timezone (not recommended for international client-base since different users
-	 * will see different times). It is important to note that this value must be in the same timezone as the rest of the masterData already
-	 * sent into the charting engine to prevent tick gaps or overlaps.
-	 * Items in this array *must* be ordered from earliest to latest date.
-	 *
+	 * @param  {array}	[appendQuotes.BidL2]	Level 2 Bid, expressed as an array of price/size pairs.  For example, BidL2: [[10.05,15],[10.06,10],...]
+	 * @param  {array}	[appendQuotes.AskL2]	Level 2 Offer/Ask expressed as an array of price/size pairs.  For example, AskL2: [[11.05,12],[11.06,8],...]
+	 * @param  {number}	[appendQuotes.DT] 		Date of trade. It must be a java script date [new Date()]. If omitted, defaults to "right now".
+	 * If you are using the 'Date' string field with a `dataZone` for your historical data and wish to also use it for streaming updates, 
+	 * you must instead submit a properly formatted OHLC array. For example:
+	 * ```
+	 * stxx.updateChartData(
+	 *  [
+	 *   {"Date":"2015-04-16 16:00","Close":152.11,"Volume":4505569}
+	 *  ],
+	 *  null,
+	 *  {useAsLastSale:true}
+	 * );
+	 * ```
 	 * @param  {CIQ.ChartEngine.Chart}			[chart]				The chart to append the quotes. Defaults to the default chart.
 	 * @param {object} [params] Parameters to dictate behavior
 	 * @param {boolean} [params.noCreateDataSet] If true then do not create the data set automatically, just add the data to the masterData
-	 * @param {boolean} [params.noCleanupDates] If true then do not clean up the dates using {@link CIQ.ChartEngine#doCleanupDates}.  Usually set if dates were already cleaned up.
-	 * @param {boolean} [params.allowReplaceOHL] Set to true to bypass internal logic that maintains OHL so they are instead replaced with the new data instead of updated. Not applicable when loading data for a secondary series.
+	 * @param {boolean} [params.noCleanupDates] If true then do not clean up the dates using {@link CIQ.ChartEngine.doCleanupDates}.  Usually set if dates were already cleaned up.
+	 * @param {boolean} [params.allowReplaceOHL] Set to true to bypass internal logic that maintains OHL so they are instead replaced with the new data instead of updated.
 	 * @param {boolean} [params.bypassGovernor] If true then masterdata will be immediately updated regardless of {@link CIQ.ChartEngine#streamParameters}. Not applicable if `noCreateDataSet` is true.
-	 * @param {boolean} [params.fillGaps] If true and {@link CIQ.ChartEngine#cleanupGaps} is also set, {@link CIQ.ChartEngine#doCleanupGaps} will be called to fill gaps for any newly added bars past the currently existing bar. It will not fill gaps for bars added to the middle of the masterData, or created by deleting a bar. Not applicable when loading data for a secondary series. <BR> Reminder: `tick` does not fill any gaps as it is not a predictable interval.
-	 * @param {boolean} [params.secondarySeries] Set to the name of the element (valid comparison symbol, for example) to load data as a secondary series. Calls {@link CIQ.addMemberToMasterdata}.
-	 * @param {boolean} [params.overwrite] When params.secondarySeries is true, setting this to true will not aggregate the series data, and instead replace it with the new data.  Aggregation of series data occurs as follows:
-	 * <br>&bull; Open comes from the original data's Open
-	 * <br>&bull; Close comes from the new data's Close
-	 * <br>&bull; High comes from the higher of the original data and new data's High
-	 * <br>&bull; Low comes from the lower of the original data and new data's Low
-	 * <br>&bull; Volume comes from the sum of the original data and new data's Volume
-	 * @param {boolean} [params.deleteItems] Set to true to completely delete the masterData records matching the dates in appendQuotes. Not applicable when loading data for a secondary series.
+	 * @param {boolean} [params.fillGaps] If true and {@link CIQ.ChartEngine#cleanupGaps} is also set, {@link CIQ.ChartEngine#doCleanupGaps} will be called to fill gaps for any newly added bars past the currently existing bar. It will not fill gaps for bars added to the middle of the masterData, or created by deleting a bar. <BR> Reminder: `tick` does not fill any gaps as it is not a predictable interval.
+	 * @param {boolean} [params.secondarySeries] Set to the name of the element (valid comparison symbol, for example) to load data as a secondary series. When left out, the data will be automatically added to the primary series. <Br>**Note:** You should never set `secondarySeries` to the primary symbol. If you are unsure of what the current primary series is, you can always query the chart engine by checking `stxx.chart.symbol`.	 
+	 * @param {boolean} [params.deleteItems] Set to true to completely delete the masterData records matching the dates in appendQuotes.
 	 * @param {boolean} [params.useAsLastSale] Set to true if not using a 'last sale' formatted object in `appendQuotes`.
 	 * This option is available in cases when a feed may always return OHLC formatted objects or a 'Close' field instead of a 'Last' field,
 	 * even for last sale streaming updates.
@@ -32677,7 +33755,9 @@ var __engine_ =
 	 * <br>&bull; 5.2.0 `overwrite` param added
 	 * <br>&bull; 5.2.0 For main series data, if Close=null is set, and not streaming, then Open, High, Low and Volume also set to null.
 	 * <br>&bull; 5.2.0 For main series data, if Volume=0/null is set, and not streaming, then Volume is reset to 0.
-	 * <br>&bull; 5.2.0 Added params.noCleanupDates
+	 * <br>&bull; 5.2.0 Added params.noCleanupDates, params.fillGaps applicable now for secondary series as well
+	 * <br>&bull; 6.0.0 `overwrite` param removed
+	 * <br>&bull; 6.1.0 Added BidL2 and AskL2 to appendQuotes object
 	 */
 
 	CIQ.ChartEngine.prototype.updateChartData=function(appendQuotes, chart, params){
@@ -32685,29 +33765,80 @@ var __engine_ =
 		if(!chart) chart=this.chart;
 
 		var lastSale=false, aggregatedVolume=false, masterData=chart.masterData, layout=this.layout, dataZone=this.dataZone;
+		var self=this, secondary=params.secondarySeries, field, symbol;
 
-		if(!params.noCleanupDates) this.doCleanupDates(appendQuotes,layout.interval);
-		if( params.useAsLastSale ||
-			(
-				appendQuotes.constructor==Object &&
-				typeof appendQuotes.Last != "undefined" &&
-				appendQuotes.Last !== null
-			)
-		) {
+		// If we are not a tick interval, we want to adjust the DT property of the appendQuotes so it matches the periodicity/interval of the existing chart data.
+		function adjustDatesToInterval(){	
+			// On intraday intervals we use a 24 hour market because we don't want our bars to artificially stop
+			// at the end of a market session. If we get extended hours, or bad ticks we still
+			// want to print them on the chart. Trust the data.
+			var marketDef={
+				"market_tz": chart.market.market_def.market_tz || null
+			};
+			var mktInterval = layout.interval;
+			
+			if(mktInterval=="month" || mktInterval=="week"){
+				// if we are rolling day bars into week or month we have to iterate day by day to find the right bar.
+				if(!self.dontRoll) mktInterval="day";
+				// on week and month we need to know when the week/month starts to find the right day for the candles.
+				marketDef= self.chart.market.market_def;
+			}
+			
+			var theMarket=new CIQ.Market(marketDef);
+			var iter_parms = {
+				'begin': (masterData && masterData.length)?masterData[masterData.length-1].DT:appendQuotes.DT,
+				'interval': mktInterval,
+				'periodicity': 1,
+				'timeUnit': layout.timeUnit
+			};
 
-			// this is last sale streaming so format accordingly
+			var iter = theMarket.newIterator(iter_parms);
+			var next = iter.next();
+			var max, actualTime;
+			if(!masterData){ // there are some use cases where you might prefer to stream data onto masterData without using a quotefeed or loading data first.
+				appendQuotes.DT = new Date(+iter.previous());
+			} else if(appendQuotes.DT<next){
+				// update current tick or some tick in the past.
+				max=0; // safety catch so we don't go on forever.
+				var previous=iter.previous();
+				actualTime=appendQuotes.DT;
+				params.appending=true;
+				while(actualTime<previous && max<1000) {
+					params.appending=false;
+					previous=iter.previous();
+					max++;
+				}
+				appendQuotes.DT=previous;
+				params.updating=!params.appending;
+			} else if(appendQuotes.DT>=next){
+				// create new tick. If the date matches, that's it, otherwise fast forward to find the right bar to add.
+				max=0; // safety catch so we don't go on forever.
+				actualTime=appendQuotes.DT;
+				while(actualTime>next && max < 1000) {
+					appendQuotes.DT=next;
+					next=iter.next();
+					max++;
+				}
+				params.appending=true;
+			}
+		}
+
+		// Takes the Last Sale data from the appendQuote and converts it to OHLC data
+		function formatFromLastSaleData(){
+			// self is last sale streaming so format accordingly
 			lastSale=true;
 
 			if( params.useAsLastSale && params.useAsLastSale.aggregatedVolume ) aggregatedVolume=true;
 
 
 			if( appendQuotes.constructor === Array) {
-				// is streaming an arry of OHLC, do some clean up to extract last and volume
+				// is streaming an array of OHLC, do some clean up to extract last and volume
 				var lastBar = appendQuotes[appendQuotes.length-1];
 				appendQuotes = {};
 
-				if(!lastBar.DT) appendQuotes.DT=CIQ.strToDateTime(lastBar.Date);
-				else appendQuotes.DT=lastBar.DT;
+				// doCleanupDates will make sure this has a valid 'DT' field in the right timeZone, 
+				// no need to check or convert from 'Date'
+				appendQuotes.DT=lastBar.DT;
 
 				appendQuotes.Close=lastBar.Close;
 				appendQuotes.Volume=lastBar.Volume;
@@ -32716,7 +33847,7 @@ var __engine_ =
 				delete appendQuotes.Last;
 			}
 
-			if (appendQuotes.DT) appendQuotes.DT = new Date(+appendQuotes.DT);
+			if(appendQuotes.DT && Object.prototype.toString.call(appendQuotes.DT) != '[object Date]' ) appendQuotes.DT = new Date(appendQuotes.DT); // epoch or ISO string
 			if (!appendQuotes.DT || appendQuotes.DT == 'Invalid Date') {
 				// if no date is sent in, use the current time and adjust to the dataZone
 				appendQuotes.DT = new Date();
@@ -32724,210 +33855,252 @@ var __engine_ =
 
 			// find the right candle
 			if( layout.interval!="tick"){
-				// On introday intervals we use a 24 hour market because we don't want our bars to artificially stop
-				// at the end of a market session. If we get extended hours, or bad ticks we still
-				// want to print them on the chart. Trust the data.
-				var marketDef={};
-				var mktInterval = layout.interval;
-				
-				if(mktInterval=="month" || mktInterval=="week"){
-					// if we are rolling day bars inot week or month we have to iterate day by day to find the right bar.
-					if(!this.dontRoll) mktInterval="day";
-					// on week and month we need to know when the week/month starts to find the right day for the candles.
-					marketDef= this.chart.market.market_def;
-				}
-				
-				var theMarket=new CIQ.Market(marketDef);
-				var iter_parms = {
-					'begin': (masterData && masterData.length)?masterData[masterData.length-1].DT:appendQuotes.DT,
-					'interval': mktInterval,
-					'periodicity': 1,
-					'timeUnit': layout.timeUnit,
-					'inZone': dataZone
-				};
-
-				var iter = theMarket.newIterator(iter_parms);
-				var next = iter.next();
-				var max, actualTime;
-				if(!masterData){ // there are some use cases where you might prefer to stream data onto masterData without using a quotefeed or loading data first.
-					appendQuotes.DT = new Date(+iter.previous());
-				} else if(appendQuotes.DT<next){
-					// update current tick or some tick in the past.
-					max=0; // safety catch so we don't go on forever.
-					var previous=iter.previous();
-					actualTime=appendQuotes.DT;
-					params.appending=true;
-					while(actualTime<previous && max<1000) {
-						params.appending=false;
-						previous=iter.previous();
-						max++;
-					}
-					appendQuotes.DT=previous;
-					params.updating=!params.appending;
-				} else if(appendQuotes.DT>=next){
-					// create new tick. If the date matches, that's it, otherwise fast forward to find the right bar to add.
-					max=0; // safety catch so we don't go on forever.
-					actualTime=appendQuotes.DT;
-					while(actualTime>next && max < 1000) {
-						appendQuotes.DT=next;
-						next=iter.next();
-						max++;
-					}
-					params.appending=true;
-				}
+				adjustDatesToInterval();
 			}
 
 			appendQuotes.Open=appendQuotes.Close;
 			appendQuotes.High=appendQuotes.Close;
 			appendQuotes.Low=appendQuotes.Close;
 		}
-
-		if( params.secondarySeries ) {
-			if(params.fillGaps) {
-				appendQuotes=this.doCleanupGaps(appendQuotes, chart, {cleanupGaps:params.fillGaps, noCleanupDates:true});
-			}
-			CIQ.addMemberToMasterdata({stx: this, label: params.secondarySeries, data: appendQuotes, createObject: (params.overwrite?true:"aggregate"), noCleanupDates: true});
-		} else {
-			if(appendQuotes && appendQuotes.constructor==Object) appendQuotes=[appendQuotes]; // When developer mistakenly sends an object instead of an array of objects
-			if(!appendQuotes || !appendQuotes.length) return;
-			if(this.runPrepend("appendMasterData", [appendQuotes, chart, params])) return;
-			if(this.runPrepend("updateChartData", [appendQuotes, chart, params])) return;
-
-			if(!masterData || !masterData.length){
-				masterData=CIQ.clone(appendQuotes);
-				this.setMasterData(masterData, chart, {noCleanupDates:true});
-			}else{
-				var filledGapsYet=false;
-				var i=masterData.length-1, placedFirstQuote=false;
-				for(var j=0;j<appendQuotes.length;j++){
-					var quote=appendQuotes[j];
-					var dt=quote.DT, date=quote.Date;
-					if(dt && Object.prototype.toString.call(dt) != '[object Date]' ) quote.DT=dt=new Date(dt); // if already a date object; nothing to do
-					if(dt) {
-						if(!date || date.length!=17) quote.Date=CIQ.yyyymmddhhmmssmmm(quote.DT);
-					}
-					if(!dt) dt=quote.DT=CIQ.strToDateTime(date);
-
-					while(i>=0 && i<masterData.length){
-						var dt2=masterData[i].DT;
-						if(!dt2) dt2=CIQ.strToDateTime(masterData[i].Date);
-						if(dt2.getTime()<=dt.getTime()){
-							placedFirstQuote=true;
-							var plusOne=0;	// If time is the same then replace last bar
-							if(dt2.getTime()<dt.getTime()) {
-								if(i<masterData.length-1){
-									var dtf=masterData[i+1].DT || CIQ.strToDateTime(masterData[i+1].Date);
-									if(dtf.getTime()<=dt.getTime()) {
-										i++;
-										continue;
-									}
-								}
-								plusOne=1;	// Otherwise append bar
-								if(params.fillGaps && !filledGapsYet && i==masterData.length-1){
-									// fill gaps if we are at the end of the masterData
-									var gapQuotes=appendQuotes.slice(j);
-									gapQuotes.unshift(masterData[i]);    // add previous bar so we can close gaps
-									gapQuotes=this.doCleanupGaps(gapQuotes, chart, {noCleanupDates:true});
-									gapQuotes.shift();                	// remove previous bar
-									appendQuotes=appendQuotes.slice(0,j).concat(gapQuotes);
-									quote=appendQuotes[j];
-									filledGapsYet=true;
-								}
-							}
-							var delItems=params.deleteItems;
-							if(delItems){
-								if(!plusOne) masterData.splice(i,1); //deleting from masterData here
-							}else{
-								if(!plusOne){
-									// If we're replacing the last bar then we want to save any series and study data, otherwise comparisons will [briefly] disappear during refreshes
-									//Preserve any relevant data from prior fetched quote for this bar.
-									//Here we are assuming that the data being appended to masterData is a data update, perhaps from only one exchange, while
-									//the existing masterData is a consolidated quote. We trust the quote we had in masterData to have the more accurate
-									//volume and open, and use the high/low from there in combination with the updated data's to determine the daily high/low.
-									var master=(masterData.length>i+j)?masterData[i+j]:null;
-									if(master){
-										if(quote.Close===null){
-											if(quote.Open!==undefined) quote.Open=null;
-											if(quote.High!==undefined) quote.High=null;
-											if(quote.Low!==undefined) quote.Low=null;
-											if(quote.Volume!==undefined) quote.Volume=null;
-										}else{
-											if(lastSale){
-												if(quote.Volume){
-													quote.Volume=parseInt(quote.Volume,10);
-												}
-												if( !aggregatedVolume ) quote.Volume+=master.Volume;
-											}else{
-												if(!CIQ.isValidNumber(quote.Volume) && master.Volume){
-													quote.Volume=master.Volume;
-												}
-											}
-											if(!params.allowReplaceOHL){
-												if(CIQ.isValidNumber(master.Open)){
-													quote.Open=master.Open;
-												}
-												if(CIQ.isValidNumber(master.High) && CIQ.isValidNumber(quote.High)){
-													if(master.High>quote.High) quote.High=master.High;
-												}
-												if(CIQ.isValidNumber(master.Low) && CIQ.isValidNumber(quote.Low)){
-													if(master.Low<quote.Low) quote.Low=master.Low;
-												}
-											}
-											// if new data is invalid, revert to old data
-											if(!CIQ.isValidNumber(quote.Close)) quote.Close=master.Close;
-											if(!CIQ.isValidNumber(quote.Open)) quote.Open=master.Open;
-											if(!CIQ.isValidNumber(quote.High)) quote.High=master.High;
-											if(!CIQ.isValidNumber(quote.Low)) quote.Low=master.Low;
-											if(!CIQ.isValidNumber(quote.Bid)) quote.Bid=master.Bid;
-											if(!CIQ.isValidNumber(quote.Ask)) quote.Ask=master.Ask;
-										}
-
-										for(var field in chart.series){
-											var symbol=chart.series[field].parameters.symbolObject.symbol;
-											if(typeof quote[symbol]=="undefined" && typeof master[symbol] !="undefined") quote[symbol]=master[symbol];
-										}
-									}
-								}
-								// If we don't set this here, the study calculations will fail
-								if(typeof(quote.Close)=="number"){
-									if(typeof(quote.Open)!="number") quote.Open=quote.Close;
-
-									var high=Math.max(quote.Open, quote.Close), low=Math.min(quote.Open, quote.Close);
-									if(typeof(quote.High)!="number" || quote.High<high) quote.High=high;
-									if(typeof(quote.Low)!="number" || quote.Low>low) quote.Low=low;
-								}
-								if(quote.Volume && typeof quote.Volume !== "number") quote.Volume=parseInt(quote.Volume,10);
-								this.setDisplayDate(quote);
-								i+=plusOne;
-								masterData.splice(i,plusOne?0:1,quote); //inserting into masterData happens here
-							}
-							break;
-						}
-						i+=placedFirstQuote?1:-1;
-					}
-					if(i<0){
-						// we have at least one point which needs to be prepended to masterData
-						// this code will prepend the first of these points, then everything else will fall in line
-						masterData.splice(0,0,quote);
-						placedFirstQuote=true;
-						i=0;
-					}
+		
+		// Fills the gaps from the most recent master data record to the new data
+		function fillGapsFromMasterDataHead(){
+			var stop=new Date(0);
+			var lastRecordForThis=self.getFirstLastDataRecord(masterData, secondary || chart.defaultPlotField, true);
+			if(lastRecordForThis) stop=lastRecordForThis.DT;
+			for(var fg=appendQuotes.length-1;fg>=0;fg--){
+				if(appendQuotes[fg].DT<=stop) {
+					fg++; break;
 				}
 			}
-			if (this.maxMasterDataSize) masterData=chart.masterData=this.masterData=masterData.slice(-this.maxMasterDataSize);
-
-			if(!chart.endPoints.begin || chart.endPoints.begin>appendQuotes[0].DT) chart.endPoints.begin=appendQuotes[0].DT;
-			if(!chart.endPoints.end || chart.endPoints.end<appendQuotes[appendQuotes.length-1].DT) chart.endPoints.end=appendQuotes[appendQuotes.length-1].DT;
-
-			for(var pl in this.plugins){
-				var plugin=this.plugins[pl];
-				if(plugin.display){
-					if(plugin.appendMasterData) plugin.appendMasterData(this, appendQuotes, chart);
-				}
-			}
-			if(!this.masterData || !this.masterData.length)
-				this.masterData=masterData;
+			// now fg represents the index of the first element in appendQuotes which appears after the last current element for that security.
+			var gapQuotes=appendQuotes.slice(fg);
+			gapQuotes.unshift(secondary?lastRecordForThis[secondary]:lastRecordForThis);    // add previous bar so we can close gaps
+			gapQuotes=self.doCleanupGaps(gapQuotes, chart);
+			gapQuotes.shift();                	// remove previous bar
+			appendQuotes=appendQuotes.slice(0,fg).concat(gapQuotes);
 		}
+
+		// Deletes an item from masterData at index i and date dt
+		function deleteThisItem(i, dt){
+			var replace;
+			if(secondary){
+				delete masterData[i][secondary];
+				if(self.cleanupGaps){
+					replace={DT:dt, Close:null};
+					if(self.cleanupGaps!="gap" && masterData[i-1] && masterData[i-1][secondary]){
+						replace.Close=masterData[i-1][secondary].Close;
+						replace.High=replace.Low=replace.Open=replace.Close;
+						replace.Volume=0;
+					}
+					masterData[i][secondary]=replace;
+				}
+			}else{
+				var spliced=masterData.splice(i,1)[0]; //deleting from masterData here, but will reinsert if find any series data
+				replace={DT:spliced.DT, Close:null, needed:false};
+				for(field in chart.series){
+					symbol=chart.series[field].parameters.symbolObject.symbol;
+					if(typeof spliced[symbol] !="undefined") {
+						replace[symbol]=spliced[symbol];
+						delete replace.needed;
+					}
+				}
+				if(self.cleanupGaps && self.cleanupGaps!="gap"){
+					delete replace.needed;
+					if(self.cleanupGaps!="gap" && masterData[i-1]){
+						replace.Close=masterData[i-1].Close;
+						replace.High=replace.Low=replace.Open=replace.Close;
+						replace.Volume=0;
+					}
+				}
+				if(replace.needed!==false) {
+					masterData.splice(i,0,replace);
+				}
+			}
+		}
+		
+		// Takes a quote q and merges it into masterData at index i
+		function mergeNewDataIntoMasterData(i, q){
+			// If we're replacing the last bar then we want to save any series and study data, otherwise comparisons will [briefly] disappear during refreshes
+			//Preserve any relevant data from prior fetched quote for this bar.
+			//Here we are assuming that the data being appended to masterData is a data update, perhaps from only one exchange, while
+			//the existing masterData is a consolidated quote. We trust the quote we had in masterData to have the more accurate
+			//volume and open, and use the high/low from there in combination with the updated data's to determine the daily high/low.
+			var master=masterData[i];
+			if(secondary) master=master[secondary] || {};
+
+			if(q.Close===null){
+				if(master.Open!==undefined) q.Open=null;
+				if(master.High!==undefined) q.High=null;
+				if(master.Low!==undefined) q.Low=null;
+				if(master.Volume!==undefined) q.Volume=null;
+				// This code will set the OHLC data for carry gap filling if applicable,
+				// but it's disabled because if a Close:null is sent in, then just use it.
+				// I suppose if a gap is really to be filled in, the record should be deleted.
+				/*if(this.cleanupGaps && this.cleanupGaps!="gap" && masterData[i-1]){
+					if(!secondary || masterData[i-1][secondary]){
+						q.Close=secondary?masterData[i-1][secondary].Close:masterData[i-1].Close;
+						q.High=q.Low=q.Open=q.Close;
+						q.Volume=0;
+					}
+				}*/
+			}else{
+				if(lastSale){
+					if(q.Volume){
+						q.Volume=parseInt(q.Volume,10);
+					}
+					if( !aggregatedVolume ) q.Volume+=master.Volume;
+				}else{
+					if(!CIQ.isValidNumber(q.Volume) && master.Volume){
+						q.Volume=master.Volume;
+					}
+				}
+				if(!params.allowReplaceOHL){
+					if(CIQ.isValidNumber(master.Open)){
+						q.Open=master.Open;
+					}
+					if(CIQ.isValidNumber(master.High) && CIQ.isValidNumber(q.High)){
+						if(master.High>q.High) q.High=master.High;
+					}
+					if(CIQ.isValidNumber(master.Low) && CIQ.isValidNumber(q.Low)){
+						if(master.Low<q.Low) q.Low=master.Low;
+					}
+				}
+				// if new data is invalid, revert to old data
+				if(!CIQ.isValidNumber(q.Close)) q.Close=master.Close;
+				if(!CIQ.isValidNumber(q.Open)) q.Open=master.Open;
+				if(!CIQ.isValidNumber(q.High)) q.High=master.High;
+				if(!CIQ.isValidNumber(q.Low)) q.Low=master.Low;
+				if(!CIQ.isValidNumber(q.Bid)) q.Bid=master.Bid;
+				if(!CIQ.isValidNumber(q.Ask)) q.Ask=master.Ask;
+
+				for(field in chart.series){
+					symbol=chart.series[field].parameters.symbolObject.symbol;
+					if(typeof q[symbol]=="undefined" && typeof master[symbol] !="undefined") q[symbol]=master[symbol];
+				}
+			}
+		}
+
+		if(!params.noCleanupDates) this.doCleanupDates(appendQuotes,layout.interval);
+
+		if( params.useAsLastSale || 
+			(appendQuotes.constructor==Object && (appendQuotes.Last || appendQuotes.Last===0 ))){
+			formatFromLastSaleData();
+		}
+
+		if(appendQuotes && appendQuotes.constructor==Object) appendQuotes=[appendQuotes]; // When developer mistakenly sends an object instead of an array of objects
+		if(!appendQuotes || !appendQuotes.length) return;
+		if(this.runPrepend("appendMasterData", [appendQuotes, chart, params])) return;
+		if(this.runPrepend("updateChartData", [appendQuotes, chart, params])) return;
+
+		if(!masterData) masterData=[];
+
+		var i=masterData.length-1, placedFirstQuote=false;
+		
+		// fill gaps only if there is master data already
+		// we only fill from the end of the current data, not before
+		if(params.fillGaps && masterData.length) fillGapsFromMasterDataHead();
+
+		for(var j=0;j<appendQuotes.length;j++){
+			var quote=appendQuotes[j];
+			var dt=quote.DT, date=quote.Date;
+			if(dt && Object.prototype.toString.call(dt) != '[object Date]' ) quote.DT=dt=new Date(dt); // if already a date object; nothing to do
+			if(dt) {
+				if(!date || date.length!=17) quote.Date=CIQ.yyyymmddhhmmssmmm(quote.DT);
+			}
+			if(!dt) dt=quote.DT=CIQ.strToDateTime(date);
+
+			while(i>=0 && i<masterData.length){
+				var dt2=masterData[i].DT;
+				if(!dt2) dt2=CIQ.strToDateTime(masterData[i].Date);
+				if(dt2.getTime()<=dt.getTime()){
+					placedFirstQuote=true;
+					var plusOne=0;	// If time is the same then replace last bar
+					if(dt2.getTime()<dt.getTime()) {
+						if(i<masterData.length-1){
+							var dtf=masterData[i+1].DT || CIQ.strToDateTime(masterData[i+1].Date);
+							if(dtf.getTime()<=dt.getTime()) {
+								i++;
+								continue;
+							}
+						}
+						plusOne=1;	// Otherwise append bar
+					}
+					if(params.deleteItems){
+						if(!plusOne) deleteThisItem(i, dt);
+						break;
+					}else{
+						if(!plusOne) mergeNewDataIntoMasterData(i, quote);
+
+						// Here we rectify any missing/malformatted data and set any new high/low
+						// If we don't set this here, the study calculations will fail
+						if(CIQ.isValidNumber(quote.Close)){
+							if(!CIQ.isValidNumber(quote.Open)) quote.Open=quote.Close;
+
+							var high=Math.max(quote.Open, quote.Close), low=Math.min(quote.Open, quote.Close);
+							if(!CIQ.isValidNumber(quote.High) || quote.High<high) quote.High=high;
+							if(!CIQ.isValidNumber(quote.Low) || quote.Low>low) quote.Low=low;
+						}
+						if(quote.Volume && !CIQ.isValidNumber(quote.Volume)) quote.Volume=parseInt(quote.Volume,10);
+						this.setDisplayDate(quote);
+						i+=plusOne;
+						
+						// Insert into masterData here
+						if(secondary){
+							if(appendQuotes.length-j<50){
+								// only check last 50 records
+								this.updateCurrentMarketData(quote, chart, secondary);
+							}
+							if(layout.interval!="tick" || quote.Close!==undefined){
+								if(plusOne) masterData.splice(i,0,{DT:quote.DT});
+								masterData[i][secondary]=quote;
+							}
+						}else{
+							if(appendQuotes.length-j<50){
+								// only check last 50 records
+								this.updateCurrentMarketData(quote, chart);
+							}
+							if(layout.interval!="tick" || quote.Close!==undefined) masterData.splice(i,plusOne?0:1,quote); //inserting into masterData happens here
+						}
+					}
+					break;
+				}
+				i+=placedFirstQuote?1:-1;
+			}
+			if(i<0){
+				// we have at least one point which needs to be prepended to masterData
+				// this code will prepend the first of these points, then everything else will fall in line
+				if(secondary){
+					this.updateCurrentMarketData(quote, chart, secondary);
+					if(layout.interval!="tick" || quote.Close!==undefined){
+						masterData.splice(0,0,{DT:quote.DT});
+						masterData[0][secondary]=quote;
+					}
+				}else{
+					this.updateCurrentMarketData(quote, chart);
+					if(layout.interval!="tick" || quote.Close!==undefined) masterData.splice(0,0,quote);
+				}
+				placedFirstQuote=true;
+				i=0;
+			}
+		}
+		if(masterData.length) this.masterData=chart.masterData=masterData;
+		if (this.maxMasterDataSize) masterData=chart.masterData=this.masterData=masterData.slice(-this.maxMasterDataSize);
+
+		var series=secondary?this.getSeries({symbol:secondary, chart:chart}):[chart];
+		for(var s=0;s<series.length;s++){
+			var handle=series[s];
+			if(!handle.endPoints.begin || handle.endPoints.begin>appendQuotes[0].DT) handle.endPoints.begin=appendQuotes[0].DT;
+			if(!handle.endPoints.end || handle.endPoints.end<appendQuotes[appendQuotes.length-1].DT) handle.endPoints.end=appendQuotes[appendQuotes.length-1].DT;
+		}
+		for(var pl in this.plugins){
+			var plugin=this.plugins[pl];
+			if(plugin.display){
+				if(plugin.appendMasterData) plugin.appendMasterData(this, appendQuotes, chart);
+			}
+		}
+		if(!this.masterData || !this.masterData.length)
+			this.masterData=masterData;
 
 		if(!params.noCreateDataSet){
 			var sp=this.streamParameters;
@@ -32939,7 +34112,6 @@ var __engine_ =
 				sp.count=0;
 				sp.timeout=-1;
 			}else{
-				var self=this;
 				if(sp.timeout==-1){
 					sp.timeout=setTimeout(function(){
 							self.createDataSet(null,null,params);
@@ -32955,10 +34127,104 @@ var __engine_ =
 		this.runAppend("updateChartData", arguments);
 	};
 
-
-
-
-
+	/**
+	 * <span class="injection">INJECTABLE</span>
+	 * Extracts the necessary information form the `data` provided and loads/updates the [chart.currentMarketData]{@link CIQ.ChartEngine.Chart#currentMarketData} object, or an equally laid out object for a secondary series, if one provided.
+	 * 
+	 * The data extracted is limited to DT, Bid, Ask, Last, BidSize, AskSize, LastSize, as well as BidL2 and AskL2 Price_Size arrays, and not all fields are required. Any values not provided will simply be skipped and not updated on the object.
+	 * 
+	 * This method is automatically called every time new time-series data is load into the chart, and only needs to be explicitly called when also needing to update the L2 'snapshot', such as for the [cryptoIQ]{@link CIQ.MarketDepth} plugin.
+	 * 
+	 * Example format:
+	 * ```
+	 * BidL2: { 
+	 *	DT: [date object],
+	 *	Price_Size: [
+	 *		[24.12, 3], [24.13, 2], [24.14, 4], [24.15, 2], 
+	 *		[24.16, 1], [24.17, 4], [24.18, 3], [24.19, 1], 
+	 * 		[24.21, 2], [24.22, 1], [24.23, 1], [24.25, 1]
+	 *	],
+	 * },	
+	 * AskL2: {
+	 *	DT: [date object],
+	 *	Price_Size: [
+	 *		[24.27, 1], [24.28, 1], [24.29, 3], [24.30, 3], 
+	 *		[24.31, 3], [24.32, 2], [24.33, 3], [24.34, 3], 
+	 *		[24.35, 2], [24.36, 3], [24.37, 2]
+	 *	]
+	 * }
+	 * ```
+	 * @param {object} data Data to extract from
+	 * @param  {CIQ.ChartEngine.Chart} chart The chart whose market data to update. Defaults to the instance chart.
+	 * @param {string} symbol Symbol if passing secondary series information
+	 * @memberof CIQ.ChartEngine
+	 * @since 6.1.0
+	*/
+	CIQ.ChartEngine.prototype.updateCurrentMarketData=function(data, chart, symbol){
+		if(!data || !data.DT) return;
+		if(this.runPrepend("updateCurrentMarketData", arguments)) return;
+		if(!chart) chart=this.chart;
+		var sq=chart.currentMarketData;
+		if(symbol){
+			if(!sq[symbol]) sq[symbol]={};
+			sq=sq[symbol];
+		}
+		["Last","Bid","Ask"].forEach(function(i){
+			if(data[i] && typeof(data[i])=="number"){
+				if(!sq[i] || !sq[i].DT || sq[i].DT<=data.DT){
+					sq[i]={DT:data.DT, Price:data[i], Size:data[i+"Size"]};
+				}
+			}
+			delete data[i];
+			delete data[i+"Size"];
+		});
+		["BidL2","AskL2"].forEach(function(i){
+			if(data[i] && (data[i] instanceof Array)){
+				if(!sq[i] || !sq[i].DT || sq[i].DT<=data.DT){
+					sq[i]={DT:data.DT, Price_Size:data[i]};
+				}
+			}
+			delete data[i];
+		});
+		if(data.Close && (!sq.Last || sq.Last.DT<=data.DT)){
+			sq.Last={DT:data.DT, Price:data.Close};
+		}
+		sq.touched=new Date();  // so we can observe it
+		this.runAppend("updateCurrentMarketData", arguments);
+	};
+	
+	/**
+	 * <span class="injection">INJECTABLE</span>
+	 * Clears the [chart.currentMarketData]{@link CIQ.ChartEngine.Chart#currentMarketData} object or the one linked to a secondary series, if one provided.
+	 * @param  {CIQ.ChartEngine.Chart} chart The chart to clear. If omitted, will clear all charts.
+	 * @param {string} symbol Symbol to clear this symbol's secondary series information
+	 * @memberof CIQ.ChartEngine
+	 * @since 6.1.0
+	*/
+	CIQ.ChartEngine.prototype.clearCurrentMarketData=function(chart, symbol){
+		if(this.runPrepend("clearCurrentMarketData", arguments)) return;
+		var ch, charts=[];
+		if(!chart) {
+			for(ch in this.charts){
+				charts.push(this.charts[ch]);
+			}
+		}else{
+			charts.push(chart);
+		}
+		for(ch=0;ch<charts.length;ch++){
+			var md=charts[ch].currentMarketData;
+			if(symbol){
+				delete md[symbol];
+			}else{
+				// preserve original object as it's being observed
+				for(var d in md){
+					delete md[d];
+				}
+			}
+		}
+		this.runAppend("clearCurrentMarketData", arguments);
+	};
+	
 	/**
 	 * Sets the maximimum number of ticks to the requested number. This is effected by changing the candleWidth.
 	 * See also {@link CIQ.ChartEngine#setCandleWidth}.
@@ -33023,7 +34289,7 @@ var __engine_ =
 			 * @param {string} data.symbol The current chart symbol
 			 * @param {object} data.symbolObject The symbol's value and display label (CIQ.ChartEngine.chart.symbolObject)
 			 * @param {object} data.layout The chart's layout object (CIQ.ChartEngine.layout)
-			 * @param {array} data.drawingObjects The chart's current drawings (CIQ.ChartEngine.drawingObjects)
+			 * @param {array} data.drawings The chart's current drawings (CIQ.Drawing)
 			 */
 			drawing: [],
 			/**
@@ -33034,7 +34300,7 @@ var __engine_ =
 			 * @param {string} data.symbol The current chart symbol
 			 * @param {object} data.symbolObject The symbol's value and display label (CIQ.ChartEngine.chart.symbolObject)
 			 * @param {object} data.layout The chart's layout object (CIQ.ChartEngine.layout)
-			 * @param {array} data.drawingObjects The chart's current drawings (CIQ.ChartEngine.drawingObjects)
+			 * @param {array} data.drawings The chart's current drawings (CIQ.Drawing)
 			 */
 			layout: [],
 			/**
@@ -33417,8 +34683,8 @@ var __engine_ =
 		return yAxis;
 	};
 	/**
-	 * This method calculates the left and width members of each y-axis. 
-	 * 
+	 * This method calculates the left and width members of each y-axis.
+	 *
 	 * When modifying a y-axis placement setting (widht, margins, position left/right, etc) after the axis has been rendered, you will need to call
 	 * {@link CIQ.ChartEngine#calculateYAxisMargins} or this function, followed by {@link CIQ.ChartEngine#draw} to activate the change.
 	 * @memberof CIQ.ChartEngine
@@ -33472,8 +34738,6 @@ var __engine_ =
 			for(i=0;i<arr.length;i++){
 				yaxis=arr[i];
 				if(yaxis.noDraw || !yaxis.width) continue;
-				if(chart.quoteTextLength && chart.quoteTextLength > yaxis.width) yaxis.width=chart.quoteTextLength+tickWidth+16;
-				// sets the chart width equal to the length of the measured text plus the inline algorithem for createYAxisLabel (margin*2 where margin is 3) plus padding (10) so currentHR isn't off the canvas.
 				if(yaxis.position=="left"){
 					panel.yaxisTotalWidthLeft+=yaxis.width;
 					var justifyRightIsNull=!yaxis.justifyRight && yaxis.justifyRight!==false;
@@ -33560,6 +34824,7 @@ var __engine_ =
 		if(!this.displayZone && CIQ.ChartEngine.defaultDisplayTimeZone){
 			this.setTimeZone(null, CIQ.ChartEngine.defaultDisplayTimeZone);
 		}
+		this.resetDynamicYAxis({noRecalculate: true});
 		this.calculateYAxisPositions();
 		this.micropixels=0;
 
@@ -33604,7 +34869,7 @@ var __engine_ =
 
 		if(!this.chart.canvas) canvas=this.chart.canvas=document.createElement("canvas");
 		if(!this.chart.canvas.getContext){
-			canvas=this.chart.canvas=container.querySelectorAll("#ie8canvas")[0];
+			canvas=this.chart.canvas=$$$(".ie8canvas",container);
 			if(!canvas.getContext){	//IE8, didn't initialize canvas yet, we will do manually
 				if(window.G_vmlCanvasManager) G_vmlCanvasManager.initElement(canvas);
 			}
@@ -33620,7 +34885,7 @@ var __engine_ =
 
 		if(!this.chart.tempCanvas) tempCanvas=this.chart.tempCanvas=document.createElement("canvas");
 		if(!this.chart.tempCanvas.getContext){
-			tempCanvas=this.chart.tempCanvas=container.querySelectorAll("#ie8canvasTemp")[0];
+			tempCanvas=this.chart.tempCanvas=$$$(".ie8canvasTemp",container);
 			if(!tempCanvas.getContext){	//IE8, didn't initialize canvas yet, we will do manually
 				if(window.G_vmlCanvasManager) G_vmlCanvasManager.initElement(tempCanvas);
 			}
@@ -33636,7 +34901,7 @@ var __engine_ =
 
 		if(!this.floatCanvas) floatCanvas=this.floatCanvas=document.createElement("canvas");
 		if(!this.floatCanvas.getContext){
-			floatCanvas=this.floatCanvas=container.querySelectorAll("#ie8canvasFloat")[0];
+			floatCanvas=this.floatCanvas=$$$(".ie8canvasFloat",container);
 			if(!floatCanvas.getContext){  //IE8, didn't initialize canvas yet, we will do manually
 				if(window.G_vmlCanvasManager) G_vmlCanvasManager.initElement(floatCanvas);
 			}
@@ -33683,8 +34948,8 @@ var __engine_ =
 		}
 		if(CIQ.touchDevice){
 			var overlayEdit=$$$(".overlayEdit", container);
-			var overlayTrashCan=$$$("#overlayTrashCan", container);
-			var vectorTrashCan=$$$("#vectorTrashCan", container);
+			var overlayTrashCan=$$$(".overlayTrashCan", container);
+			var vectorTrashCan=$$$(".vectorTrashCan", container);
 			if(overlayEdit){
 				CIQ.safeClickTouch(overlayEdit, (function(self){ return function(e){self.deleteHighlighted(true, true);};})(this));
 				if(overlayTrashCan){
@@ -33811,8 +35076,8 @@ var __engine_ =
 	CIQ.ChartEngine.prototype.registerTouchAndMouseEvents=function(){
 		if(this.touchAndMouseEventsRegistered) return;
 		this.touchAndMouseEventsRegistered=true;
-		var zoomInEl=$$$("#zoomIn", this.controls.chartControls);
-		var zoomOutEl=$$$("#zoomOut", this.controls.chartControls);
+		var zoomInEl=$$$(".stx-zoom-in", this.controls.chartControls);
+		var zoomOutEl=$$$(".stx-zoom-out", this.controls.chartControls);
 		var containerElement = this.chart.container;
 		var self = this;
 		var addListener = function(event, listener) {
@@ -33820,11 +35085,13 @@ var __engine_ =
 		};
 		if(!CIQ.touchDevice){
 			addListener("mousemove", function(e){ self.mousemove(e); });
+			addListener("mouseenter", function(e){ self.mousemove(e); });
 			addListener("mousedown", function(e){ self.mousedown(e); });
 			addListener("mouseup", function(e){self.mouseup(e);});
 		}else{
 			if(CIQ.isSurface){
 				addListener("mousemove", function(e){self.msMouseMoveProxy(e);});
+				addListener("mouseenter", function(e){ self.msMouseMoveProxy(e); });
 				addListener("mousedown", function(e){self.msMouseDownProxy(e);});
 				addListener("mouseup", function(e){self.msMouseUpProxy(e);});
 
@@ -33834,6 +35101,7 @@ var __engine_ =
 					addListener("MSGestureChange", function(e){ return self.touchmove(e); });
 					addListener("MSGestureEnd", function(e){ self.gestureInEffect=false;return self.touchend(e); });
 					addListener("MSPointerMove", function(e){ self.moveProxy(e); });
+					addListener("MSPointerEnter", function(e){ return self.moveProxy(e); });
 					addListener("MSPointerUp", function(e){ return self.endProxy(e); });
 				}else{
 					addListener("pointerdown", function(e){ return self.startProxy(e); });
@@ -33841,6 +35109,7 @@ var __engine_ =
 					addListener("MSGestureChange", function(e){ return self.touchmove(e); });
 					addListener("MSGestureEnd", function(e){ self.gestureInEffect=false;return self.touchend(e); });
 					addListener("pointermove",  function(e){ self.moveProxy(e); });
+					addListener("pointerenter", function(e){ return self.moveProxy(e); });
 					addListener("pointerup", function(e){ return self.endProxy(e); });
 				}
 			}else{
@@ -33848,6 +35117,7 @@ var __engine_ =
 				// Actually, only for Firefox and Chrome browsers. IE10 sends pointers which are managed by the isSurface section
 				if(!CIQ.isAndroid && !CIQ.ipad && !CIQ.iphone){
 					addListener("mousemove", function(e){ self.iosMouseMoveProxy(e); });
+					addListener("mouseenter", function(e){ self.iosMouseMoveProxy(e); });
 					addListener("mousedown", function(e){ self.iosMouseDownProxy(e); });
 					addListener("mouseup", function(e){ self.iosMouseUpProxy(e); });
 				}
@@ -34200,6 +35470,7 @@ var __engine_ =
 		if(!this.currentlyImporting) { // silent mode while importing
 			this.showCrosshairs();
 			this.createDataSet();
+			this.resetDynamicYAxis({noRecalculate: true});
 			this.calculateYAxisPositions();
 			this.adjustPanelPositions();
 			this.draw();
@@ -34321,9 +35592,9 @@ var __engine_ =
 			panel.soloing=true;
 			CIQ.appendClassName(panel.solo,"stx_solo_lit");
 			panel.oldPercent=panel.percent;
+			this.chart.panel.oldXAxisAsFooter=this.xAxisAsFooter;
 			if(panel.name!="chart"){
 				if(this.soloPanelToFullScreen){
-					this.chart.panel.oldXAxisAsFooter=this.xAxisAsFooter;
 					this.xAxisAsFooter=true;
 					if(this.controls.home) panel.subholder.appendChild(this.controls.home);
 				}else{
@@ -34338,6 +35609,7 @@ var __engine_ =
 		if(!this.soloPanelToFullScreen) this.chart.panel.hidden=false;
 		panel.hidden=false;
 		this.adjustPanelPositions();
+		this.resetDynamicYAxis({noRecalculate: true});
 		this.calculateYAxisPositions();
 		this.draw();
 		this.savePanels();
@@ -34677,7 +35949,6 @@ var __engine_ =
 			panel.handle=this.controls.handleTemplate.cloneNode(true);
 			this.container.appendChild(panel.handle);
 			//panel.handle.style.display=""; // let the drawPanels manage this otherwise if we set to "" here but the developer wants a picture (png) handle using CSS, the hande will flicker on on initial load on the top of the screen
-			panel.handle.id=null;
 			panel.handle.panel=panel;
 		}
 
@@ -35561,9 +36832,9 @@ var __engine_ =
 	 * Periodicity can only be managed if a quote feed is attached to the chart. <br>
 	 * Only applicable when noDataLoad=false.<br>
 	 * See {@link CIQ.ChartEngine#setPeriodicity} for additional details
-	 * @param  {boolean} [params.preserveTicksAndCandleWidth=true] If true then the current candleWidth (horizontal zoom) and scroll (assuming same periodicity) will be maintained and any spans or ranges present in the config will be ignored. Otherwise candle width and span/ranges will be taken from the config and restored.
-	 * @param  {function} [params.cb] Callback function to be executed once the layout has been fully restored.
-	 * @param  {function} [params.seriesCB] Callback function to pass into CIQ.ChartEngine#addSeries if there are series to load. This will not be called if noDataLoad is true.
+	 * @param  {boolean} [params.preserveTicksAndCandleWidth] If true then the current candleWidth (horizontal zoom) and scroll (assuming same periodicity) will be maintained and any spans or ranges present in the config will be ignored. Otherwise candle width and span/ranges will be taken from the config and restored.
+	 * @param  {function} [params.cb] An optional callback function to be executed once the layout has been fully restored.
+	 * @param  {function} [params.seriesCB] An optional callback function to be executed once the layout is completely loaded.
 	 * @memberof CIQ.ChartEngine
 	 * @since
 	 * <br>&bull; 05-2016-10 Symbols are also loaded if included on the serialization.
@@ -35591,7 +36862,6 @@ var __engine_ =
 		var layout=this.layout, originalLayout=CIQ.shallowClone(layout);
 		var managePeriodicity=params.managePeriodicity, cb=params.cb, seriesCB=params.seriesCB, noDataLoad=params.noDataLoad, minimumCandleWidth=this.minimumCandleWidth;
 		var preserveTicksAndCandleWidth=params.preserveTicksAndCandleWidth;
-		if(!preserveTicksAndCandleWidth && preserveTicksAndCandleWidth!==false) preserveTicksAndCandleWidth=true;
 
 		var exportedDrawings=this.exportDrawings();
 		this.abortDrawings();
@@ -35673,7 +36943,7 @@ var __engine_ =
 			if(newPanel){
 				this.container.removeChild(newPanel.holder);
 				if(oldPanel.handle) this.container.removeChild(oldPanel.handle);
-				var copyFields={"holder":true,"subholder":true,"display":true};
+				var copyFields={"holder":true,"subholder":true,"display":true, "icons":true};
 				for(var f in copyFields){
 					newPanel[f]=oldPanel[f];
 				}
@@ -35706,8 +36976,8 @@ var __engine_ =
 		var self=this;
 		function postLayoutChange(){
 			self.importDrawings(exportedDrawings);
-			self.draw();
 			self.currentlyImporting=false;
+			self.draw();
 			self.updateListeners("layout"); // tells listening objects that layout has changed
 		}
 
@@ -35716,30 +36986,24 @@ var __engine_ =
 			// Now we execute the data loading functions.
 
 			if(view.symbols && view.symbols.length){
-
 				// load symbols; primary and additional series. Also adjust ranges and periodicity at the same time
 
 				var params2={};
-				if(managePeriodicity){
-					if(!preserveTicksAndCandleWidth) {
-						// spans and ranges are only executed if managePeriodicity is true and preserveTicksAndCandleWidth is false.
-						if(view.range && Object.keys(view.range).length) {
-							params2.range = view.range;
-						} else if(view.setSpan && Object.keys(view.setSpan).length){
-							params2.span=view.setSpan;
-						}
-					} else {
-						// For consistency between this code and the one when no config.symbol is present,
-						// we either let setRange/setSpan set the periodicity or we explicitly set it, not both, or newChart will not preserve the span once used.
-						if(view.interval){
-							params2.periodicity={
-								interval: view.interval,
-								period: view.periodicity,
-								timeUnit: view.timeUnit
-							};
-						}
-					}
+				if(!preserveTicksAndCandleWidth && managePeriodicity && view.range && Object.keys(view.range).length) {
+					// spans and ranges are only executed if managePeriodicity is true and preserveTicksAndCandleWidth is false.
+					params2.range=view.range;
+				} else if(!preserveTicksAndCandleWidth && managePeriodicity && view.setSpan && Object.keys(view.setSpan).length){
+					// see above
+					params2.span=view.setSpan;
+				} else if(managePeriodicity && view.interval){
+					// otherwise, import periodicity if available
+					params2.periodicity={
+						interval: view.interval,
+						period: view.periodicity,
+						timeUnit: view.timeUnit
+					};
 				} else {
+					// otherwise, maintian prior periodicity
 					params2.periodicity={
 						interval: originalLayout.interval,
 						period: originalLayout.periodicity,
@@ -35929,12 +37193,15 @@ var __engine_ =
 	 * @param {object} [params] Parameters
 	 * @param {string} [params.cleanupGaps] Pass this in to override the {@link CIQ.ChartEngine#cleanupGaps} value.
 	 * @param {boolean} [params.noCleanupDates]		If true then dates have been cleaned up already by calling {@link CIQ.ChartEngine#doCleanupDates}, so do not do so in here.
+	 * @param {string} [params.field]		Set to a field to fill gaps, or leave out to use chart.defaultPlotField.
 	 * @return {array} The quote array with gaps filled in.
 	 * @memberof CIQ.ChartEngine
 	 * @since
 	 * <br>&bull; 07/01/2015 it now supports cleanups for daily intervals and foreign exchanges instead of just intraday equities.
 	 * <br>&bull; 3.0.7 added params.cleanupGaps to allow developers to use this function standalone
 	 * <br>&bull; 5.2.0 added parameter noCleanupDates
+	 * <br>&bull; 6.0.0 added parameter field
+	 * <br>&bull; 6.0.0 if params.cleanupGaps is true, use the value of stxx.cleanupGaps.  If that's not set, then cleanupGaps is like carry.
 	 */
 	CIQ.ChartEngine.prototype.doCleanupGaps=function(quotes, chart, params) {
 		if(!quotes || !quotes.length) return quotes;
@@ -35943,7 +37210,9 @@ var __engine_ =
 		if(!chart) chart=this.chart;
 		if(!params.noCleanupDates) this.doCleanupDates(quotes,interval);
 
-		var cleanupGaps=params.cleanupGaps?params.cleanupGaps:this.cleanupGaps;
+		var cleanupGaps=params.cleanupGaps;
+		if(cleanupGaps===false) return quotes;
+		if(!cleanupGaps || cleanupGaps===true) cleanupGaps=this.cleanupGaps || cleanupGaps;
 		var makeGaps=(cleanupGaps=="gap"); // "carry" or any other non-false will cause the closing price to carry, otherwise a null will be injected
 
 		if(!cleanupGaps) return quotes;
@@ -35974,29 +37243,58 @@ var __engine_ =
 			'periodicity': 1,
 			'timeUnit': this.layout.timeUnit
 		};
-		var iter = chart.market.newIterator(iter_parms);
+		var market = new CIQ.Market(chart.market.market_def);
+		var iter = market.newIterator(iter_parms);
+		if(this.extendedHours && this.extendedHours.filter) iter.market.enableAllAvailableSessions();
+
 		var field=chart.defaultPlotField;
 		var mdt;
 
 		function fillGapsBetween(dt1, dt2){
+			var paramField=params.field;
+			var cQuote=paramField ? currentQuote[paramField] : currentQuote;
+			if(cQuote===undefined) cQuote={};
+			var close=makeGaps ? null : cQuote[field];
+			var adjClose=makeGaps ? null : cQuote.Adj_Close;
 			// Loop through the iterator adding a dummy quote for every missing market date between currentQuote and nextQuote
 			while (+dt1 < +dt2){
-				var close=makeGaps?null:currentQuote[field];
-				var adjClose=makeGaps?null:currentQuote.Adj_Close;
-				new_quotes.push({
+				var newQuote={DT: dt1};
+				if(paramField){
+					// Let's not insert a new master data record just to fill a secondary series gap KB5272
+					/*new_quotes.push(newQuote);
+					newQuote[paramField]={
 						DT: dt1,
 						Open: close,
 						High: close,
 						Low: close,
 						Close: close,
 						Volume: 0,
+						Adj_Close: adjClose							
+					};*/
+				}else{
+					new_quotes.push(newQuote);
+					CIQ.extend(newQuote,{
+						Open: close,
+						High: close,
+						Low: close,
+						Close: close,
+						Volume: 0,
 						Adj_Close: adjClose
-				});
+					});
+				}
 				dt1 = iter.next();
 			}
 		}
 
 		function copyForward(currentQuote, nextQuote){
+			var paramField=params.field;
+			if(paramField){
+				if(typeof currentQuote[paramField]!="undefined" && typeof nextQuote[paramField]=="undefined"){
+					nextQuote[paramField]=makeGaps?null:currentQuote[paramField];
+				}
+				return;
+			}
+			if(makeGaps) return;
 			var close=currentQuote[field];
 			var nextClose=nextQuote[field];
 			if(typeof close!="undefined" && typeof nextClose=="undefined"){
@@ -36019,7 +37317,7 @@ var __engine_ =
 			fillGapsBetween(mdt, qdt);
 			while (qdt < mdt) {
 				if(++i==quotes.length) return new_quotes;
-				if(!makeGaps) copyForward(currentQuote, nextQuote);
+				copyForward(currentQuote, nextQuote);
 				new_quotes.push(nextQuote);
 				currentQuote=nextQuote;
 				nextQuote=quotes[i];
@@ -36029,7 +37327,7 @@ var __engine_ =
 				i--;
 				mdt = iter.previous();
 			}else{
-				if(!makeGaps) copyForward(currentQuote, nextQuote);
+				copyForward(currentQuote, nextQuote);
 				new_quotes.push(nextQuote);
 				currentQuote=nextQuote;
 			}
@@ -36318,6 +37616,7 @@ var __engine_ =
 			if(chart.isComparison) return; // Do nothing if it's already turned on
 			mode="percent";
 		}
+		this.resetDynamicYAxis();
 		var yAxis=chart.panel.yAxis;
 		var wasComparison=(yAxis.priceFormatter == CIQ.Comparison.priceFormat);  // tests if the current formatter is a comparison formatter
 																				 // this is like testing if the previous mode was "percent"
@@ -36360,12 +37659,12 @@ var __engine_ =
 	 * @since 4.0.0
 	 */
 	CIQ.ChartEngine.prototype.importPreferences=function(preferences){
-		this.preferences=preferences;
+		CIQ.extend(this.preferences, preferences);
 		if (preferences.timeZone) this.setTimeZone(this.dataZone, preferences.timeZone);
 		if (preferences.language && CIQ.I18N){
-			CIQ.I18N.setLanguage(this, preferences.language);
-			CIQ.I18N.translateUI(preferences.language);
+			CIQ.I18N.localize(this, preferences.language);
 		}
+		this.changeOccurred("preferences");
 	};
 
 	/**
@@ -36384,7 +37683,7 @@ var __engine_ =
 	return _exports;
 });
 
-var __market_ =
+var __js_core_market_ =
 //-------------------------------------------------------------------------------------------
 // Copyright 2012-2017 by ChartIQ, Inc.
 // All rights reserved
@@ -36671,8 +37970,22 @@ var __market_ =
 	        return;
 	    }
 
-	    CIQ.Market._createTimeSegments(this);
+		CIQ.Market._createTimeSegments(this);
+		this.getSessionNames();
 	};
+
+	/**
+	 * An array of objects containing information about the current market's extended sessions.
+	 * Each element has a name prop (for the name of the session) and an enabled prop.
+	 * See {@link CIQ.ExtendedHours} for more information on extended sessions.
+	 * @type array
+	 * @default
+	 * @alias sessions
+	 * @memberof CIQ.Market
+	 * @example
+	 * marketSessions=stxx.chart.market.sessions
+	 */
+	CIQ.Market.prototype.sessions=null;
 
 	CIQ.Market.GLOBEX = {
 		name: "GLOBEX",
@@ -36725,149 +38038,240 @@ var __market_ =
 	};
 
 	CIQ.Market.NYSE = {
-			"name": "NYSE",
-			"market_tz": "America/New_York",
-			"hour_aligned": false,
-			"rules": [
-				//First open up the regular trading times
-				//Note that sat and sun (in this example) are always closed because
-				//everything is closed by default and we didn't explicitly open
-				//them.
-				{"dayofweek": 1, "open": "09:30", "close": "16:00"}, //mon
-				{"dayofweek": 2, "open": "09:30", "close": "16:00"},
-				{"dayofweek": 3, "open": "09:30", "close": "16:00"},
-				{"dayofweek": 4, "open": "09:30", "close": "16:00"},
-				{"dayofweek": 5, "open": "09:30", "close": "16:00"}, //fri
+		"name": "NYSE",
+		"market_tz": "America/New_York",
+		"hour_aligned": false,
+		"rules": [
+			//First open up the regular trading times
+			//Note that sat and sun (in this example) are always closed because
+			//everything is closed by default and we didn't explicitly open
+			//them.
+			{"dayofweek": 1, "open": "09:30", "close": "16:00"}, //mon
+			{"dayofweek": 2, "open": "09:30", "close": "16:00"},
+			{"dayofweek": 3, "open": "09:30", "close": "16:00"},
+			{"dayofweek": 4, "open": "09:30", "close": "16:00"},
+			{"dayofweek": 5, "open": "09:30", "close": "16:00"}, //fri
 
-				//After Hours premarket
-				{"dayofweek": 1, "open": "04:00", "close": "09:30", name: "pre"}, //mon
-				{"dayofweek": 2, "open": "04:00", "close": "09:30", name: "pre"},
-				{"dayofweek": 3, "open": "04:00", "close": "09:30", name: "pre"},
-				{"dayofweek": 4, "open": "04:00", "close": "09:30", name: "pre"},
-				{"dayofweek": 5, "open": "04:00", "close": "09:30", name: "pre"}, //fri
+			//After Hours premarket
+			{"dayofweek": 1, "open": "04:00", "close": "09:30", name: "pre"}, //mon
+			{"dayofweek": 2, "open": "04:00", "close": "09:30", name: "pre"},
+			{"dayofweek": 3, "open": "04:00", "close": "09:30", name: "pre"},
+			{"dayofweek": 4, "open": "04:00", "close": "09:30", name: "pre"},
+			{"dayofweek": 5, "open": "04:00", "close": "09:30", name: "pre"}, //fri
 
-				//After Hours post
-				{"dayofweek": 1, "open": "16:00", "close": "20:00", name: "post"}, //mon
-				{"dayofweek": 2, "open": "16:00", "close": "20:00", name: "post"},
-				{"dayofweek": 3, "open": "16:00", "close": "20:00", name: "post"},
-				{"dayofweek": 4, "open": "16:00", "close": "20:00", name: "post"},
-				{"dayofweek": 5, "open": "16:00", "close": "20:00", name: "post"}, //fri
+			//After Hours post
+			{"dayofweek": 1, "open": "16:00", "close": "20:00", name: "post"}, //mon
+			{"dayofweek": 2, "open": "16:00", "close": "20:00", name: "post"},
+			{"dayofweek": 3, "open": "16:00", "close": "20:00", name: "post"},
+			{"dayofweek": 4, "open": "16:00", "close": "20:00", name: "post"},
+			{"dayofweek": 5, "open": "16:00", "close": "20:00", name: "post"}, //fri
 
-				//Now mon thru friday is open. Close any exceptions
+			//Now mon thru friday is open. Close any exceptions
 
-				//always closed on Christmas
-				{"date": "*-12-25", "open": "00:00", "close": "00:00"},
+			//always closed on Christmas
+			{"date": "*-12-25", "open": "00:00", "close": "00:00"},
 
-				//always closed on 4th of July
-				{"date": "*-07-04", "open": "00:00", "close": "00:00"},
+			//always closed on 4th of July
+			{"date": "*-07-04", "open": "00:00", "close": "00:00"},
 
-				//always close on new years day
-				{"date": "*-01-01", "open": "00:00", "close": "00:00"},
+			//always close on new years day
+			{"date": "*-01-01", "open": "00:00", "close": "00:00"},
 
-				//Some holidays are observed on different days each year or if
-				//the day falls on a weekend. Each of those rules must be specified.
-				{"date": "2012-01-02", "open": "00:00", "close": "00:00"},
+			//Some holidays are observed on different days each year or if
+			//the day falls on a weekend. Each of those rules must be specified.
+			{"date": "2012-01-02", "open": "00:00", "close": "00:00"},
 
-				//As a special case if no open and close attributes are set they
-				//will be assumed "00:00" and "00:00" respectively
-				{"date": "2018-01-15"},
-				{"date": "2018-02-19"},
-				{"date": "2018-03-30"},
-				{"date": "2018-05-28"},
-				{"date": "2018-07-03", "open": "4:00", "close": "9:30", name: "pre"},
-				{"date": "2018-07-03", "open": "9:30", "close": "13:00"},
-				{"date": "2018-09-03"},
-				{"date": "2018-11-22"},
-				{"date": "2018-11-23", "open": "4:00", "close": "9:30", name: "pre"},
-				{"date": "2018-11-23", "open": "9:30", "close": "13:00"},
-				{"date": "2018-12-24", "open": "4:00", "close": "9:30", name: "pre"},
-				{"date": "2018-12-24", "open": "9:30", "close": "13:00"},
+			//As a special case if no open and close attributes are set they
+			//will be assumed "00:00" and "00:00" respectively
+			{"date": "2018-01-15"},
+			{"date": "2018-02-19"},
+			{"date": "2018-03-30"},
+			{"date": "2018-05-28"},
+			{"date": "2018-07-03", "open": "4:00", "close": "9:30", name: "pre"},
+			{"date": "2018-07-03", "open": "9:30", "close": "13:00"},
+			{"date": "2018-09-03"},
+			{"date": "2018-11-22"},
+			{"date": "2018-11-23", "open": "4:00", "close": "9:30", name: "pre"},
+			{"date": "2018-11-23", "open": "9:30", "close": "13:00"},
+			{"date": "2018-12-24", "open": "4:00", "close": "9:30", name: "pre"},
+			{"date": "2018-12-24", "open": "9:30", "close": "13:00"},
 
-				{"date": "2017-01-02"},
-				{"date": "2017-01-16"},
-				{"date": "2017-02-20"},
-				{"date": "2017-04-14"},
-				{"date": "2017-05-29"},
-				{"date": "2017-07-03", "open": "4:00", "close": "9:30", name: "pre"},
-				{"date": "2017-07-03", "open": "9:30", "close": "13:00"},
-				{"date": "2017-09-04"},
-				{"date": "2017-11-23"},
-				{"date": "2017-11-24", "open": "4:00", "close": "9:30", name: "pre"},
-				{"date": "2017-11-24", "open": "9:30", "close": "13:00"},
+			{"date": "2017-01-02"},
+			{"date": "2017-01-16"},
+			{"date": "2017-02-20"},
+			{"date": "2017-04-14"},
+			{"date": "2017-05-29"},
+			{"date": "2017-07-03", "open": "4:00", "close": "9:30", name: "pre"},
+			{"date": "2017-07-03", "open": "9:30", "close": "13:00"},
+			{"date": "2017-09-04"},
+			{"date": "2017-11-23"},
+			{"date": "2017-11-24", "open": "4:00", "close": "9:30", name: "pre"},
+			{"date": "2017-11-24", "open": "9:30", "close": "13:00"},
 
-				{"date": "2016-01-18"},
-				{"date": "2016-02-15"},
-				{"date": "2016-03-25"},
-				{"date": "2016-05-30"},
-				{"date": "2016-09-05"},
-				{"date": "2016-11-24"},
-				{"date": "2016-11-25", "open": "4:00", "close": "9:30", name: "pre"},
-				{"date": "2016-11-25", "open": "9:30", "close": "13:00"},
-				{"date": "2016-12-26"},
+			{"date": "2016-01-18"},
+			{"date": "2016-02-15"},
+			{"date": "2016-03-25"},
+			{"date": "2016-05-30"},
+			{"date": "2016-09-05"},
+			{"date": "2016-11-24"},
+			{"date": "2016-11-25", "open": "4:00", "close": "9:30", name: "pre"},
+			{"date": "2016-11-25", "open": "9:30", "close": "13:00"},
+			{"date": "2016-12-26"},
 
-				{"date": "2015-01-19"},
-				{"date": "2015-02-16"},
-				{"date": "2015-04-03"},
-				{"date": "2015-05-25"},
-				{"date": "2015-07-03"},
-				{"date": "2015-09-07"},
-				{"date": "2015-11-26"},
-				{"date": "2015-11-27", "open": "4:00", "close": "9:30", name: "pre"},
-				{"date": "2015-11-27", "open": "9:30", "close": "13:00"},
-				{"date": "2015-12-24", "open": "4:00", "close": "9:30", name: "pre"},
-				{"date": "2015-12-24", "open": "9:30", "close": "13:00"},
+			{"date": "2015-01-19"},
+			{"date": "2015-02-16"},
+			{"date": "2015-04-03"},
+			{"date": "2015-05-25"},
+			{"date": "2015-07-03"},
+			{"date": "2015-09-07"},
+			{"date": "2015-11-26"},
+			{"date": "2015-11-27", "open": "4:00", "close": "9:30", name: "pre"},
+			{"date": "2015-11-27", "open": "9:30", "close": "13:00"},
+			{"date": "2015-12-24", "open": "4:00", "close": "9:30", name: "pre"},
+			{"date": "2015-12-24", "open": "9:30", "close": "13:00"},
 
-				{"date": "2014-01-20"},
-				{"date": "2014-02-17"},
-				{"date": "2014-04-18"},
-				{"date": "2014-05-26"},
-				{"date": "2014-09-01"},
-				{"date": "2014-11-27"},
-				{"date": "2014-07-03", "open": "4:00", "close": "9:30", name: "pre"},
-				{"date": "2014-07-03", "open": "9:30", "close": "13:00"},
-				{"date": "2014-11-28", "open": "4:00", "close": "9:30", name: "pre"},
-				{"date": "2014-11-28", "open": "9:30", "close": "13:00"},
-				{"date": "2014-12-24", "open": "4:00", "close": "9:30", name: "pre"},
-				{"date": "2014-12-24", "open": "9:30", "close": "13:00"},
+			{"date": "2014-01-20"},
+			{"date": "2014-02-17"},
+			{"date": "2014-04-18"},
+			{"date": "2014-05-26"},
+			{"date": "2014-09-01"},
+			{"date": "2014-11-27"},
+			{"date": "2014-07-03", "open": "4:00", "close": "9:30", name: "pre"},
+			{"date": "2014-07-03", "open": "9:30", "close": "13:00"},
+			{"date": "2014-11-28", "open": "4:00", "close": "9:30", name: "pre"},
+			{"date": "2014-11-28", "open": "9:30", "close": "13:00"},
+			{"date": "2014-12-24", "open": "4:00", "close": "9:30", name: "pre"},
+			{"date": "2014-12-24", "open": "9:30", "close": "13:00"},
 
-				{"date": "2013-01-21"},
-				{"date": "2013-02-18"},
-				{"date": "2013-03-29"},
-				{"date": "2013-05-27"},
-				{"date": "2013-09-02"},
-				{"date": "2013-11-28"},
-				{"date": "2013-07-03", "open": "4:00", "close": "9:30", name: "pre"},
-				{"date": "2013-07-03", "open": "9:30", "close": "13:00"},
-				{"date": "2013-11-29", "open": "4:00", "close": "9:30", name: "pre"},
-				{"date": "2013-11-29", "open": "9:30", "close": "13:00"},
-				{"date": "2013-12-24", "open": "4:00", "close": "9:30", name: "pre"},
-				{"date": "2013-12-24", "open": "9:30", "close": "13:00"},
+			{"date": "2013-01-21"},
+			{"date": "2013-02-18"},
+			{"date": "2013-03-29"},
+			{"date": "2013-05-27"},
+			{"date": "2013-09-02"},
+			{"date": "2013-11-28"},
+			{"date": "2013-07-03", "open": "4:00", "close": "9:30", name: "pre"},
+			{"date": "2013-07-03", "open": "9:30", "close": "13:00"},
+			{"date": "2013-11-29", "open": "4:00", "close": "9:30", name: "pre"},
+			{"date": "2013-11-29", "open": "9:30", "close": "13:00"},
+			{"date": "2013-12-24", "open": "4:00", "close": "9:30", name: "pre"},
+			{"date": "2013-12-24", "open": "9:30", "close": "13:00"},
 
-				{"date": "2012-01-16"},
-				{"date": "2012-02-20"},
-				{"date": "2012-04-06"},
-				{"date": "2012-05-28"},
-				{"date": "2012-09-03"},
-				{"date": "2012-10-29"},
-				{"date": "2012-10-30"},
-				{"date": "2012-11-22"},
-				{"date": "2012-07-03", "open": "4:00", "close": "9:30", name: "pre"},
-				{"date": "2012-07-03", "open": "9:30", "close": "13:00"},
-				{"date": "2012-11-23", "open": "4:00", "close": "9:30", name: "pre"},
-				{"date": "2012-11-23", "open": "9:30", "close": "13:00"},
-				{"date": "2012-12-24", "open": "4:00", "close": "9:30", name: "pre"},
-				{"date": "2012-12-24", "open": "9:30", "close": "13:00"}
-			]
-		};
+			{"date": "2012-01-16"},
+			{"date": "2012-02-20"},
+			{"date": "2012-04-06"},
+			{"date": "2012-05-28"},
+			{"date": "2012-09-03"},
+			{"date": "2012-10-29"},
+			{"date": "2012-10-30"},
+			{"date": "2012-11-22"},
+			{"date": "2012-07-03", "open": "4:00", "close": "9:30", name: "pre"},
+			{"date": "2012-07-03", "open": "9:30", "close": "13:00"},
+			{"date": "2012-11-23", "open": "4:00", "close": "9:30", name: "pre"},
+			{"date": "2012-11-23", "open": "9:30", "close": "13:00"},
+			{"date": "2012-12-24", "open": "4:00", "close": "9:30", name: "pre"},
+			{"date": "2012-12-24", "open": "9:30", "close": "13:00"}
+		]
+	};
 
+	CIQ.Market.LSE = {
+		"name": "London",
+		"market_tz": "Europe/London",
+		"hour_aligned": false,
+		"rules": [
+			//First open up the regular trading times
+			//Note that sat and sun (in this example) are always closed because
+			//everything is closed by default and we didn't explicitly open
+			//them.
+			{"dayofweek": 1, "open": "08:00", "close": "17:00"}, //mon
+			{"dayofweek": 2, "open": "08:00", "close": "17:00"},
+			{"dayofweek": 3, "open": "08:00", "close": "17:00"},
+			{"dayofweek": 4, "open": "08:00", "close": "17:00"},
+			{"dayofweek": 5, "open": "08:00", "close": "17:00"}, //fri
+
+			//Now mon thru friday is open. Close any exceptions
+
+			//always closed on Christmas and boxing day
+			{"date": "*-12-25", "open": "00:00", "close": "00:00"},
+			{"date": "*-12-26", "open": "00:00", "close": "00:00"},
+
+			//always close on new years day
+			{"date": "*-01-01", "open": "00:00", "close": "00:00"},
+
+			//Some holidays are observed on different days each year or if
+			//the day falls on a weekend. Each of those rules must be specified.
+			{"date": "2012-01-02", "open": "00:00", "close": "00:00"},
+
+			//As a special case if no open and close attributes are set they
+			//will be assumed "00:00" and "00:00" respectively
+			{"date": "2018-03-30"},
+			{"date": "2018-04-02"},
+			{"date": "2018-05-07"},
+			{"date": "2018-05-28"},
+			{"date": "2018-08-27"},
+			{"date": "2018-12-24", "open": "8:00", "close": "12:30"},
+			{"date": "2018-12-31", "open": "8:00", "close": "12:30"},
+
+			{"date": "2017-01-02"},
+			{"date": "2017-04-14"},
+			{"date": "2017-04-17"},
+			{"date": "2017-05-01"},
+			{"date": "2017-05-29"},
+			{"date": "2017-08-28"},
+			{"date": "2017-12-22", "open": "8:00", "close": "12:30"},
+			{"date": "2017-12-29", "open": "8:00", "close": "12:30"},
+
+			{"date": "2016-03-25"},
+			{"date": "2016-03-28"},
+			{"date": "2016-05-02"},
+			{"date": "2016-05-30"},
+			{"date": "2016-08-29"},
+			{"date": "2016-12-23", "open": "8:00", "close": "12:30"},
+			{"date": "2016-12-27"},
+			{"date": "2016-12-30", "open": "8:00", "close": "12:30"},
+
+			{"date": "2015-04-03"},
+			{"date": "2015-04-06"},
+			{"date": "2015-05-04"},
+			{"date": "2015-05-25"},
+			{"date": "2015-08-31"},
+			{"date": "2015-12-24", "open": "8:00", "close": "12:30"},
+			{"date": "2015-12-28"},
+			{"date": "2015-12-31", "open": "8:00", "close": "12:30"},
+
+			{"date": "2014-04-18"},
+			{"date": "2014-04-21"},
+			{"date": "2014-05-05"},
+			{"date": "2014-05-26"},
+			{"date": "2014-08-25"},
+			{"date": "2014-12-24", "open": "8:00", "close": "12:30"},
+			{"date": "2014-12-31", "open": "8:00", "close": "12:30"},
+
+			{"date": "2013-03-29"},
+			{"date": "2013-04-01"},
+			{"date": "2013-05-06"},
+			{"date": "2013-05-27"},
+			{"date": "2013-08-26"},
+			{"date": "2013-12-24", "open": "8:00", "close": "12:30"},
+			{"date": "2013-12-31", "open": "8:00", "close": "12:30"},
+
+			{"date": "2012-01-02"},
+			{"date": "2012-04-06"},
+			{"date": "2012-04-09"},
+			{"date": "2012-05-07"},
+			{"date": "2012-06-04"},
+			{"date": "2012-06-05"},
+			{"date": "2012-08-27"},
+			{"date": "2012-12-24", "open": "8:00", "close": "12:30"},
+			{"date": "2012-12-31", "open": "8:00", "close": "12:30"},
+		]
+	};
+	
 	/**
 	 * Set of rules for identifying instrument's exchange and deriving a market definition from a symbol.
 	 * This is only required if your chart will need to know the operating hours for the different exchanges.
 	 * If using a 24x7 chart, this class is not needed.
 	 *
-	 * By default these rules are assigned to functions using ChartIQ symbology to identify the exchange.
-	 *
-	 * **Before using, they must be reviewed and if necessary assigned to functions containing logic to match symbology rules for your quote data.**
+	 * **Before using, please review and override every {@link CIQ.Market.Symbology} function to match the symbol format of your quote Feed or results will be unpredictable. **
 	 *
 	 * @namespace
 	 * @name  CIQ.Market.Symbology
@@ -36877,12 +38281,19 @@ var __market_ =
 
 	/**
 	 * Returns true if the instrument is foreign.
-	 * This is dependent on the market data feed and should be overridden accordingly.
+	 * 
+	 * **This is dependent on the market data feed and should be overridden accordingly.**
+	 * 
 	 * Currently if the instrument contains a period (.) it will be considered foreign (non US). (e.g. .XXXX)
 	 * @param  {string}  symbol The symbol
 	 * @return {boolean}        True if it's a foreign symbol
 	 * @memberof CIQ.Market.Symbology
 	 * @since 04-2016-08
+	 * @example
+	 * CIQ.Market.Symbology.isForeignSymbol=function(symbol){
+	 *	if(!symbol) return false;
+	 *	return symbol.indexOf(".")!=-1;
+	 * };
 	 */
 	CIQ.Market.Symbology.isForeignSymbol=function(symbol){
 		if(!symbol) return false;
@@ -36891,12 +38302,20 @@ var __market_ =
 
 	/**
 	 * Returns true if the instrument is a futures.
-	 * This is dependent on the market data feed and should be overridden accordingly.
+	 * 
+	 * **This is dependent on the market data feed and should be overridden accordingly.**
+	 * 
 	 * Currently if the symbol begins with `/` it will be considered a future. (e.g. /C)
 	 * @param  {string}  symbol The symbol
 	 * @return {boolean}        True if it's a futures symbol
 	 * @memberof CIQ.Market.Symbology
 	 * @since 04-2016-08
+	 * @example
+	 * CIQ.Market.Symbology.isFuturesSymbol=function(symbol){
+	 *	if(!symbol) return false;
+	 *	if(symbol.indexOf("/")!==0 || symbol=="/") return false;
+	 *	return true;
+	 * };
 	 */
 	CIQ.Market.Symbology.isFuturesSymbol=function(symbol){
 		if(!symbol) return false;
@@ -36906,12 +38325,24 @@ var __market_ =
 
 	/**
 	 * Returns true if the instrument is a forex symbol.
-	 * This is dependent on the market data feed and should be overridden accordingly.
+	 * 
+	 * **This is dependent on the market data feed and should be overridden accordingly.**
+	 * 
 	 * Currently if the symbol begins with `^` and is followed by 6 alpha characters, or just 6 alpha characters long without a '^', it will be considered forex.(e.g. ^EURUSD)
 	 * @param  {string}  symbol The symbol
 	 * @return {boolean}        True if it's a forex symbol
 	 * @memberof CIQ.Market.Symbology
 	 * @since 04-2016-08
+	 * @example
+	 * CIQ.Market.Symbology.isForexSymbol=function(symbol){
+	 *	if(!symbol) return false;
+	 *  if(CIQ.Market.Symbology.isForeignSymbol(symbol)) return false;
+	 *  if(CIQ.Market.Symbology.isFuturesSymbol(symbol)) return false;
+	 *	if(symbol.length<6 || symbol.length>7) return false;
+	 *	if(symbol.length==6 && symbol[5]=="X") return false;
+	 *	if(/\^?[A-Za-z]{6}/.test(symbol)) return true;
+	 *	return false;
+	 * };
 	 */
 	CIQ.Market.Symbology.isForexSymbol=function(symbol){
 		if(!symbol) return false;
@@ -36925,13 +38356,24 @@ var __market_ =
 
 	/**
 	 * Returns true if the symbol is a metal/currency or currency/metal pair
-	 * This is dependent on the market data feed and should be overridden accordingly.
+	 * 
+	 * **This is dependent on the market data feed and should be overridden accordingly.**
+	 * 
 	 * Currently it must be a [forex]{@link CIQ.Market.Symbology.isForexSymbol} for a precious metal. (e.g. ^XAUUSD - looks for XAU,XPD,XPT,XAG only)
 	 * @param  {string}   symbol The symbol
 	 * @param  {boolean}  inverse Set to true to test specifically for a currency/metal pair.
 	 * @return {boolean}  True if it's a metal symbol
 	 * @memberof CIQ.Market.Symbology
 	 * @since 04-2016-08
+	 * @example
+	 * CIQ.Market.Symbology.isForexMetal=function(symbol,inverse){
+	 *	if(!symbol) return false;
+	 *	if(!CIQ.Market.Symbology.isForexSymbol(symbol)) return false;
+	 *	if(symbol.charAt(0)!="^") symbol="^"+symbol;
+	 *	if(",XAU,XPD,XPT,XAG,".indexOf(","+symbol.substr(4,3)+",")!=-1) return true;
+	 *	else if(!inverse && ",XAU,XPD,XPT,XAG,".indexOf(","+symbol.substr(1,3)+",")!=-1) return true;
+	 *	return false;
+	 * };
 	 */
 	CIQ.Market.Symbology.isForexMetal=function(symbol,inverse){
 		if(!symbol) return false;
@@ -36944,11 +38386,19 @@ var __market_ =
 
 	/**
 	 * Returns true if the symbol is a forex or a future
-	 * This is dependent on the market data feed and should be overridden accordingly.
+	 * 
+	 * **This is dependent on the market data feed and should be overridden accordingly.**
+	 * 
 	 * @param  {string} symbol The symbol
 	 * @return {boolean} True if the symbol is a forex or a future
 	 * @memberof CIQ.Market.Symbology
 	 * @since 04-2016-08
+	 * @example
+	 * CIQ.Market.Symbology.isForexFuturesSymbol=function(symbol){
+	 *	if(CIQ.Market.Symbology.isForexSymbol(symbol)) return true;
+	 *	if(CIQ.Market.Symbology.isFuturesSymbol(symbol)) return true;
+	 *	return false;
+	 * };
 	 */
 	CIQ.Market.Symbology.isForexFuturesSymbol=function(symbol){
 	    if(CIQ.Market.Symbology.isForexSymbol(symbol)) return true;
@@ -36959,11 +38409,27 @@ var __market_ =
 	/**
 	 * This is a function that takes a symbolObject of form accepted by {@link CIQ.ChartEngine#newChart}, and returns a market definition.
 	 * When loading it with {@link CIQ.ChartEngine#setMarketFactory}, it will be used by the chart to dynamically change market definitions when a new instrument is activated.
+	 * 
+	 * ** Very important:**<br>
+	 * This default implementation leverages the use of the {@link CIQ.Market.Symbology} checks (isForeignSymbol, isForexFuturesSymbol, isForexMetal, isForexSymbol, isFuturesSymbol), 
+	 * which are used to determine the market for the symbol being loaded. 
+	 * As such it is crucial you review and override every {@link CIQ.Market.Symbology} function to match the symbol format of your quote Feed or results will be unpredictable. 
+	 * 
 	 * See {@link CIQ.Market} for instruction on how to create a market definition.
 	 * @param  {object} symbolObject Symbol object of form accepted by {@link CIQ.ChartEngine#newChart}
 	 * @return {object} A market definition. See {@link CIQ.Market} for instructions.
 	 * @memberof CIQ.Market.Symbology
 	 * @since 04-2016-08
+	 * @example
+	 * // default implementation
+	 * var factory=function(symbolObject){
+	 * 	var symbol=symbolObject.symbol;
+	 *	if(CIQ.Market.Symbology.isForeignSymbol(symbol)) return null; // 24 hour market definition
+	 *	if(CIQ.Market.Symbology.isFuturesSymbol(symbol)) return CIQ.Market.GLOBEX;
+	 *	if(CIQ.Market.Symbology.isForexMetal(symbol)) return CIQ.Market.METALS;
+	 *	if(CIQ.Market.Symbology.isForexSymbol(symbol)) return CIQ.Market.FOREX;
+	 *	return CIQ.Market.NYSE;
+	 * };
 	 */
 	CIQ.Market.Symbology.factory=function(symbolObject){
 		var symbol=symbolObject.symbol;
@@ -36972,6 +38438,36 @@ var __market_ =
 	    if(CIQ.Market.Symbology.isForexMetal(symbol)) return CIQ.Market.METALS;
 	    if(CIQ.Market.Symbology.isForexSymbol(symbol)) return CIQ.Market.FOREX;
 		return CIQ.Market.NYSE;
+	};
+
+	/**
+	 * Returns an array of objects containing a list of sessions and wether or not they are enabled
+	 * 
+	 * @return {object} String array of market session names, and corresponding status (e.g. [{ name: 'pre', enabled: false } { name: 'post', enabled: true }])
+	 * @since 6.0.0
+	 */
+	CIQ.Market.prototype.getSessionNames=function(){
+		if (!this.rules){
+			//Its a safe assumption this is a 24 hour chart, and that it has no sessions
+			this.sessions = [];
+		}else if(!this.sessions){
+			var names = [];
+			var marketSessions=[];
+
+			this.rules.map(function(rule){
+				if (rule.name && names.indexOf(rule.name) === -1){
+					names.push(rule.name);
+
+					marketSessions.push({
+						name: rule.name,
+						enabled: rule.enabled ? rule.enabled : false
+					});
+				}
+			});
+
+			this.sessions = marketSessions;
+		}
+		return this.sessions.slice();
 	};
 
 	/**
@@ -37125,6 +38621,19 @@ var __market_ =
 	 */
 	CIQ.Market.prototype.enableSession = function(session_name) {
 		this.disableSession(session_name, 'enable_instead');
+	};
+
+	/**
+	 * Parses the market definition for a list of market names, and enables each one-by-one, see {@link CIQ.Market#enableSession} and {@link CIQ.Market#disableSession}.
+	 *  - **Important:** Enabling/Disabling market sessions will not automatically filter-out data from the chart, but simply adjust the market iterators so the x-axis can be displayed accordingly in the absence of data for the excluded sessions.
+	 * @memberof CIQ.Market
+	 * @since 6.0.0
+	 */
+	CIQ.Market.prototype.enableAllAvailableSessions=function(){
+		var marketSessions = this.getSessionNames();
+		for (var i = 0; i < marketSessions.length; i++){
+			this.enableSession(marketSessions[i].name);
+		}
 	};
 
 	/**
@@ -37358,7 +38867,7 @@ var __market_ =
 		d = this._convertToMarketTZ(d, inZone);
 		d = this._find_prev_segment(d, true);
 		if (this.zseg_match.adjacent_parent) {
-			return this.getPreviousOpen(this.market_tz,this.market_tz);
+			return this.getPreviousOpen(d,this.market_tz,this.market_tz);
 		}
 		d.setHours(this.zseg_match.open_parts.hours);
 		d.setMinutes(this.zseg_match.open_parts.minutes);
@@ -38751,7 +40260,7 @@ var __market_ =
 
 });
 
-var __polyfills_ =
+var __js_core_polyfills_ =
 //-------------------------------------------------------------------------------------------
 // Copyright 2012-2017 by ChartIQ, Inc.
 // All rights reserved
@@ -38760,7 +40269,7 @@ var __polyfills_ =
 
 });
 
-var __timezone_ =
+var __js_core_timezone_ =
 //-------------------------------------------------------------------------------------------
 // Copyright 2012-2017 by ChartIQ, Inc.
 // All rights reserved
@@ -38837,7 +40346,8 @@ var __timezone_ =
 			"(UTC-01:00) Cape Verde Islands":"Atlantic/Cape_Verde",
 			"(UTC) Greenwich Mean Time, Reykjavik":"UTC",
 			"(UTC) Casablanca":"Africa/Casablanca",
-			"(UTC) Dublin, Lisbon, London":"Europe/London",
+			"(UTC) Dublin":"Europe/Dublin",
+			"(UTC) Lisbon, London":"Europe/London",
 			"(UTC+01:00) Algiers, Tunis":"Africa/Tunis",
 			"(UTC+01:00) Amsterdam, Berlin, Bern, Rome, Stockholm, Vienna":"Europe/Amsterdam",
 			"(UTC+01:00) Belgrade, Bratislava, Budapest, Ljubljana, Prague":"Europe/Belgrade",
@@ -38879,9 +40389,9 @@ var __timezone_ =
 			"(UTC+08:00) Choibalsan, Ulaanbaatar":"Asia/Ulaanbaatar",
 			"(UTC+08:00) Manila, Taipei":"Asia/Taipei",
 			"(UTC+08:00) Perth":"Australia/Perth",
-			"(UTC+08:30) Pyongyang":"Asia/Pyongyang",
 			"(UTC+08:45) Eucla":"Australia/Eucla",
 			"(UTC+09:00) Osaka, Sapporo, Tokyo":"Asia/Tokyo",
+			"(UTC+09:00) Pyongyang":"Asia/Pyongyang",
 			"(UTC+09:00) Seoul":"Asia/Seoul",
 			"(UTC+09:00) Chita, Khandyga, Yakutsk":"Asia/Yakutsk",
 			"(UTC+09:30) Adelaide":"Australia/Adelaide",
@@ -39864,15 +41374,13 @@ var __timezone_ =
 	    };
 	    this.loadZoneJSONData = function (url, sync) {
 	      var processData = function (data) {
-		/*jslint evil: true */ /*jshint -W061 */ /*eslint-disable no-eval */
-	  	  data = eval('('+ data +')');
-		/*jslint evil: false */ /*jshint +W061 */ /*eslint-enable no-eval */
-		for (var z in data.zones) {
-		  _this.zones[z] = data.zones[z];
-		}
-		for (var r in data.rules) {
-		  _this.rules[r] = data.rules[r];
-		}
+	    	  data = JSON.parse(data);
+	    	  for (var z in data.zones) {
+	    		  _this.zones[z] = data.zones[z];
+	    	  }
+	    	  for (var r in data.rules) {
+	    		  _this.rules[r] = data.rules[r];
+	    	  }
 	      };
 	      return sync
 	      ? processData(_this.transport({ url : url, async : false }))
@@ -40018,7 +41526,8 @@ var __timezone_ =
 					"Asia/Almaty": [ [ -360, "-", "ALMT", null ] ],
 					"Asia/Seoul" : [ [ -540, "ROK", "K%sT", null ] ],
 					"Asia/Pyongyang" : [ [ -540, "-", "KST", 1439596800000 ],
-							[ -510, "-", "KST", null ] ],
+							[ -510, "-", "KST", 1525478400000 ],
+							[ -540, "-", "KST", null ] ],
 					"Asia/Kuala_Lumpur" : [ [ -480, "-", "+08", null ] ],
 					"Asia/Hovd" : [ [ -420, "Mongol", "+07/+08", null ] ],
 					"Asia/Ulaanbaatar" : [ [ -480, "Mongol", "+08/+09", null ] ],
@@ -40044,6 +41553,7 @@ var __timezone_ =
 					"Etc/UTC" : [ [ 0, "-", "UTC", null ] ],
 					"UTC" : "Etc/UTC",
 					"Europe/London" : [ [ 0, "EU", "GMT/BST", null ] ],
+					"Europe/Dublin": [ [ 0, "Eire", "IST/GMT", null ] ],
 					"WET": [ [ 0, "EU", "WE%sT", null ] ],
 					"CET": [ [ -60, "C-Eur", "CE%sT", null ] ],
 					"MET": [ [ -60, "C-Eur", "ME%sT", null ] ],
@@ -40053,7 +41563,7 @@ var __timezone_ =
 					"Europe/Paris": [ [ -60, "EU", "CE%sT", null ] ],
 					"Europe/Berlin": [ [ -60, "EU", "CE%sT", null ] ],
 					"Europe/Amsterdam" : [ [ -60, "EU", "CE%sT", null ] ],
-					"Atlantic/Azores" : [ [ 60, "EU", "AZO%sT", null ] ],
+					"Atlantic/Azores" : [ [ 60, "EU", "-01/+00", null ] ],
 					"Europe/Bucharest" : [ [ -120, "EU", "EE%sT", null ] ],
 					"Europe/Kaliningrad" : [ [ -180, "-", "+03", 1414288800000 ],
 							[ -120, "-", "EET", null ] ],
@@ -40166,30 +41676,30 @@ var __timezone_ =
 					"EUAsia": [ [ 1981, "max", "-", "Mar", "lastSun", [ 1, 0, 0, "u" ], 60, "S" ],
 							[ 1996, "max", "-", "Oct", "lastSun", [ 1, 0, 0, "u" ], 0, "-" ] ],
 					"Azer" : [
-							[ 1997, 2015, "-", "Mar", "lastSun", [ 4, 0, 0, null ], 60, "S" ],
+							[ 1997, 2015, "-", "Mar", "lastSun", [ 4, 0, 0, null ], 60, "-" ],
 							[ 1997, 2015, "-", "Oct", "lastSun", [ 5, 0, 0, null ], 0, "-" ] ],
 					"Dhaka" : [],
 					"PRC" : [],
 					"HK" : [],
 					"Taiwan" : [],
 					"Iran" : [
-							[ 2013, 2015, "-", "Mar", "22", [ 0, 0, 0, null ], 60, "D" ],
-							[ 2013, 2015, "-", "Sep", "22", [ 0, 0, 0, null ], 0, "S" ],
-							[ 2016, "only", "-", "Mar", "21", [ 0, 0, 0, null ], 60, "D" ],
-							[ 2016, "only", "-", "Sep", "21", [ 0, 0, 0, null ], 0, "S" ],
-							[ 2017, 2019, "-", "Mar", "22", [ 0, 0, 0, null ], 60, "D" ],
-							[ 2017, 2019, "-", "Sep", "22", [ 0, 0, 0, null ], 0, "S" ],
-							[ 2020, "only", "-", "Mar", "21", [ 0, 0, 0, null ], 60, "D" ],
-							[ 2020, "only", "-", "Sep", "21", [ 0, 0, 0, null ], 0, "S" ],
-							[ 2021, 2023, "-", "Mar", "22", [ 0, 0, 0, null ], 60, "D" ],
-							[ 2021, 2023, "-", "Sep", "22", [ 0, 0, 0, null ], 0, "S" ] ],
+							[ 2013, 2015, "-", "Mar", "22", [ 0, 0, 0, null ], 60, "-" ],
+							[ 2013, 2015, "-", "Sep", "22", [ 0, 0, 0, null ], 0, "-" ],
+							[ 2016, "only", "-", "Mar", "21", [ 0, 0, 0, null ], 60, "-" ],
+							[ 2016, "only", "-", "Sep", "21", [ 0, 0, 0, null ], 0, "-" ],
+							[ 2017, 2019, "-", "Mar", "22", [ 0, 0, 0, null ], 60, "-" ],
+							[ 2017, 2019, "-", "Sep", "22", [ 0, 0, 0, null ], 0, "-" ],
+							[ 2020, "only", "-", "Mar", "21", [ 0, 0, 0, null ], 60, "-" ],
+							[ 2020, "only", "-", "Sep", "21", [ 0, 0, 0, null ], 0, "-" ],
+							[ 2021, 2023, "-", "Mar", "22", [ 0, 0, 0, null ], 60, "-" ],
+							[ 2021, 2023, "-", "Sep", "22", [ 0, 0, 0, null ], 0, "-" ] ],
 					"Zion" : [
 							[ 2013, "max", "-", "Mar", "Fri>=23", [ 2, 0, 0, null ], 60, "D" ],
 							[ 2013, "max", "-", "Oct", "lastSun", [ 2, 0, 0, null ], 0, "S" ] ],
 					"Japan" : [],
 					"ROK" : [],
 					"Mongol" : [
-							[ 2015, 2016, "-", "Mar", "lastSat", [ 2, 0, 0, null ], 60, "S" ],
+							[ 2015, 2016, "-", "Mar", "lastSat", [ 2, 0, 0, null ], 60, "-" ],
 							[ 2015, 2016, "-", "Sep", "lastSat", [ 0, 0, 0, null ], 0, "-" ] ],
 					"Pakistan" : [],
 					"Aus" : [],
@@ -40206,14 +41716,17 @@ var __timezone_ =
 							[ 2007, "max", "-", "Sep", "lastSun", [ 2, 0, 0, "s" ], 60, "D" ],
 							[ 2008, "max", "-", "Apr", "Sun>=1", [ 2, 0, 0, "s" ], 0, "S" ] ],
 					"Chatham" : [
-							[ 2007, "max", "-", "Sep", "lastSun", [ 2, 45, 0, "s" ], 60, "D" ],
-							[ 2008, "max", "-", "Apr", "Sun>=1", [ 2, 45, 0, "s" ], 0, "S" ] ],
+							[ 2007, "max", "-", "Sep", "lastSun", [ 2, 45, 0, "s" ], 60, "-" ],
+							[ 2008, "max", "-", "Apr", "Sun>=1", [ 2, 45, 0, "s" ], 0, "-" ] ],
 					"WS": [
 							[ 2012, "max", "-", "Apr", "Sun>=1", [ 4, 0, 0, null ], 0, "-" ],
-							[ 2012, "max", "-", "Sep", "lastSun", [ 3, 0, 0, null ], 60, "D" ] ],
+							[ 2012, "max", "-", "Sep", "lastSun", [ 3, 0, 0, null ], 60, "-" ] ],
 					"Tonga" : [
-							[ 2016, "only", "-", "Nov", "Sun>=1", [ 2, 0, 0, null ], 60, "S" ],
-							[ 2017, "only", "-", "Jan", "Sun>=15", [ 3, 0, 0, null ], 0, "S" ] ],
+							[ 2016, "only", "-", "Nov", "Sun>=1", [ 2, 0, 0, null ], 60, "-" ],
+							[ 2017, "only", "-", "Jan", "Sun>=15", [ 3, 0, 0, null ], 0, "-" ] ],
+					"Eire": [
+							[ 1981, "max", "-", "Mar", "lastSun", [ 1, 0, 0, "u" ], 0, "-" ],
+							[ 1996, "max", "-", "Oct", "lastSun", [ 1, 0, 0, "u" ], -60, "-" ] ],
 					"EU" : [
 							[ 1981, "max", "-", "Mar", "lastSun", [ 1, 0, 0, "u" ], 60, "S" ],
 							[ 1996, "max", "-", "Oct", "lastSun", [ 1, 0, 0, "u" ], 0, "-" ] ],
@@ -40232,24 +41745,24 @@ var __timezone_ =
 					"CR" : [],
 					"Arg" : [],
 					"Brazil" : [
-							[ 2008, 2017, "-", "Oct", "Sun>=15", [ 0, 0, 0, null ], 60, "S" ],
+							[ 2008, 2017, "-", "Oct", "Sun>=15", [ 0, 0, 0, null ], 60, "-" ],
 							[ 2013, 2014, "-", "Feb", "Sun>=15", [ 0, 0, 0, null ], 0, "-" ],
 							[ 2015, "only", "-", "Feb", "Sun>=22", [ 0, 0, 0, null ], 0, "-" ],
 							[ 2016, 2022, "-", "Feb", "Sun>=15", [ 0, 0, 0, null ], 0, "-" ],
-							[ 2018, "max", "-", "Nov", "Sun>=1", [ 0, 0, 0, null ], 60, "S" ],
+							[ 2018, "max", "-", "Nov", "Sun>=1", [ 0, 0, 0, null ], 60, "-" ],
 							[ 2023, "only", "-", "Feb", "Sun>=22", [ 0, 0, 0, null ], 0, "-" ] ],
 					"Chile": [
 							[ 2012, 2014, "-", "Apr", "Sun>=23", [ 3, 0, 0, "u" ], 0, "-" ],
-							[ 2012, 2014, "-", "Sep", "Sun>=2", [ 4, 0, 0, "u" ], 60, "S" ],
+							[ 2012, 2014, "-", "Sep", "Sun>=2", [ 4, 0, 0, "u" ], 60, "-" ],
 							[ 2016, "max", "-", "May", "Sun>=9", [ 3, 0, 0, "u" ], 0, "-" ],
-							[ 2016, "max", "-", "Aug", "Sun>=9", [ 4, 0, 0, "u" ], 60, "S" ] ],
+							[ 2016, "max", "-", "Aug", "Sun>=9", [ 4, 0, 0, "u" ], 60, "-" ] ],
 					"CO" : [],
 					"Para": [
-							[ 2010, "max", "-", "Oct", "Sun>=1", [ 0, 0, 0, null ], 60, "S" ],
+							[ 2010, "max", "-", "Oct", "Sun>=1", [ 0, 0, 0, null ], 60, "-" ],
 							[ 2013, "max", "-", "Mar", "Sun>=22", [ 0, 0, 0, null ], 0, "-" ] ],
 					"Uruguay": [
-						[ 2006, "max", "-", "Oct", "Sun>=1", [ 2, 0, 0, null ], 60, "S" ],
-						[ 2007, "max", "-", "Mar", "Sun>=8", [ 2, 0, 0, null ], 0, "-" ] ],
+							[ 2006, 2015, "-", "Mar", "Sun>=8", [ 2, 0, 0, null ], 0, "-" ],
+							[ 2006, 2014, "-", "Oct", "Sun>=1", [ 2, 0, 0, null ], 60, "-" ] ]
 				}
 			});
 
@@ -40288,7 +41801,7 @@ var __timezone_ =
 	return _exports;
 });
 
-var __utility_ =
+var __js_core_utility_ =
 //-------------------------------------------------------------------------------------------
 // Copyright 2012-2017 by ChartIQ, Inc.
 // All rights reserved
@@ -40493,7 +42006,6 @@ var __utility_ =
 		this.stroke();
 		this.closePath();
 	};
-
 	
 	/* Easing cubics from
 	http://gizma.com/easing/#expo1
@@ -40640,6 +42152,16 @@ var __utility_ =
 	 * @type boolean
 	 */
 	CIQ.isSurfaceApp = win.MSApp;
+
+	/**
+	 * READ ONLY. Will be 'true' if the chart supports web components
+	 * @memberof CIQ
+	 * @type boolean
+	 * @since 6.1.0
+	 */
+	CIQ.isWebComponentsSupported = ('registerElement' in document &&
+			'import' in document.createElement('link') &&
+			'content' in document.createElement('template'));
 	/**
 	 * READ ONLY. Will be 'true' if the chart is running from a device with no Keyboard ( CIQ.ipad, CIQ.iphone, CIQ.isAndroid or  CIQ.isSurfaceApp )
 	 * @memberof CIQ
@@ -41307,10 +42829,12 @@ var __utility_ =
 	/**
 	 * Converts an onClick event to an ontouchend event. If the device is known to be a touch device then this can be used
 	 * to change onclick events that are set as attributes (in HTML). ontouchend events are more responsive than onclick events
-	 * and can improve the user experience. When coding for cross-device implementations it is recommended to use @see CIQ.safeClickTouch
+	 * and can improve the user experience. When coding for cross-device implementations it is recommended to use {@link CIQ.safeClickTouch}
 	 * programmatically rather than using hardcoded attributes
 	 * @param  {string} id The id of a node containing an onClick attribute
 	 * @memberof CIQ
+	 * @deprecated
+	 * @since 6.0.0 deprecated
 	 */
 	CIQ.convertClickToTouchEnd=function(id){
 		var node=$$(id);
@@ -41619,10 +43143,10 @@ var __utility_ =
 
 	/**
 	 * Chooses either a white or black foreground color depending on the "lightness" of the background color. Note that this simply
-	 * checks if the value is above .5 which works well but not ideally for red colors which the human eye interprets differently.
+	 * checks if the value is above the hue which works well but not ideally for red colors which the human eye interprets differently.
 	 * More complex algorithms are available but chartists rarely use red as a background color.
 	 * @param  {string} backgroundColor The background color (CSS format)
-	 * @return {string}                 Either #000000 (black) or #FFFFFF (white) depending on will look best on the given background color
+	 * @return {string}                 Either #000000 (black) or #FFFFFF (white) depending on which will look best on the given background color
 	 * @memberof CIQ
 	 */
 	CIQ.chooseForegroundColor=function(backgroundColor){
@@ -41633,7 +43157,7 @@ var __utility_ =
 		if(r+g+b>318) return "#000000";*/
 		var hsl=CIQ.hsl(backgroundColor);
 		var l=hsl[2];
-		if(l>=hsl[0]) return "#000000";
+		if(l>hsl[0]) return "#000000";
 		//if(l && l>0.5) return "#000000";
 		return "#FFFFFF";
 	};
@@ -42197,7 +43721,7 @@ var __utility_ =
 
 		return {period:period, interval:interval, timeUnit:timeUnit};
 	};
-	
+
 	/**
 	 * Convenience function to determine if a value is a valid number. 
 	 * @param  {number} n The number to check
@@ -42209,33 +43733,48 @@ var __utility_ =
 		return isFinite(n) && +n === n;
 	};
 
+	/**
+	 * Convenience function to count number of decimal places in a number
+	 * @param  {number} n The number to check
+	 * @return  {number} Number of decimal places
+	 * @memberof CIQ
+	 * @since 6.1.0
+	 */
+	CIQ.countDecimals=function(n) {
+		if(typeof(n)!=="number" || isNaN(n)) return 0;
+	    if(Math.floor(n) === Number(n)) return 0;
+	    return n.toString().split(".")[1].length || 0; 
+	};
+
+
+	
 	return _exports;
 });
 
-j7mm.K1z=function (){return typeof j7mm.c1z.g4z==='function'?j7mm.c1z.g4z.apply(j7mm.c1z,arguments):j7mm.c1z.g4z;};j7mm.O1n=function (){return typeof j7mm.B1n.w7q==='function'?j7mm.B1n.w7q.apply(j7mm.B1n,arguments):j7mm.B1n.w7q;};j7mm.Y1z=function (){return typeof j7mm.c1z.w7q==='function'?j7mm.c1z.w7q.apply(j7mm.c1z,arguments):j7mm.c1z.w7q;};j7mm.H1z=function (){return typeof j7mm.c1z.g4z==='function'?j7mm.c1z.g4z.apply(j7mm.c1z,arguments):j7mm.c1z.g4z;};j7mm.d9x=function (){return typeof j7mm.s9x.g4z==='function'?j7mm.s9x.g4z.apply(j7mm.s9x,arguments):j7mm.s9x.g4z;};j7mm.E9x=function (){return typeof j7mm.s9x.w7q==='function'?j7mm.s9x.w7q.apply(j7mm.s9x,arguments):j7mm.s9x.w7q;};j7mm.t1n=function (){return typeof j7mm.B1n.U8O==='function'?j7mm.B1n.U8O.apply(j7mm.B1n,arguments):j7mm.B1n.U8O;};j7mm.l9x=function (){return typeof j7mm.s9x.g4z==='function'?j7mm.s9x.g4z.apply(j7mm.s9x,arguments):j7mm.s9x.g4z;};j7mm.i9x=function (){return typeof j7mm.s9x.z4x==='function'?j7mm.s9x.z4x.apply(j7mm.s9x,arguments):j7mm.s9x.z4x;};j7mm.B1n=function(i6n,D6n){function e6n(Z6n){var z1n=2;while(z1n!==15){switch(z1n){case 4:z1n=!k6n--?3:9;break;case 18:z1n=V6n>=0?17:16;break;case 14:z1n=!k6n--?13:12;break;case 20:L6n=Z6n-V6n>M6n&&q6n-Z6n>M6n;z1n=19;break;case 7:z1n=!k6n--?6:14;break;case 11:V6n=(P6n||P6n===0)&&G6n(P6n,M6n);z1n=10;break;case 9:z1n=!k6n--?8:7;break;case 10:z1n=V6n>=0&&q6n>=0?20:18;break;case 13:P6n=D6n[7];z1n=12;break;case 6:q6n=g6n&&G6n(g6n,M6n);z1n=14;break;case 2:var L6n,M6n,g6n,q6n,P6n,V6n,G6n;z1n=1;break;case 12:z1n=!k6n--?11:10;break;case 8:g6n=D6n[6];z1n=7;break;case 3:M6n=27;z1n=9;break;case 19:return L6n;break;case 1:z1n=!k6n--?5:4;break;case 5:G6n=s6n[D6n[4]];z1n=4;break;case 17:L6n=Z6n-V6n>M6n;z1n=19;break;case 16:L6n=q6n-Z6n>M6n;z1n=19;break;}}}var R1n=2;while(R1n!==10){switch(R1n){case 8:R1n=!k6n--?7:6;break;case 12:e6n=e6n(new s6n[D6n[0]]()[D6n[1]]());R1n=11;break;case 3:S6n=typeof i6n;R1n=9;break;case 9:var Y6n='fromCharCode',X6n='RegExp';R1n=8;break;case 14:D6n=D6n.map(function(o6n){var a1n=2;while(a1n!==13){switch(a1n){case 1:a1n=!k6n--?5:4;break;case 2:var J6n;a1n=1;break;case 5:J6n='';a1n=4;break;case 3:a1n=v6n<o6n.length?9:7;break;case 9:J6n+=s6n[T6n][Y6n](o6n[v6n]+94);a1n=8;break;case 7:a1n=!J6n?6:14;break;case 8:v6n++;a1n=3;break;case 4:var v6n=0;a1n=3;break;case 14:return J6n;break;case 6:return;break;}}});R1n=13;break;case 5:s6n=D6n.filter.constructor(i6n)();R1n=4;break;case 7:T6n=S6n.replace(new s6n[X6n]("^['-|]"),'S');R1n=6;break;case 1:R1n=!k6n--?5:4;break;case 6:R1n=!k6n--?14:13;break;case 13:R1n=!k6n--?12:11;break;case 11:return{u6n:function(c1n,l1n){var y1n=2;while(y1n!==16){switch(y1n){case 4:var A6n=e6n;y1n=3;break;case 11:var f1n=2;y1n=10;break;case 2:y1n=!k6n--?1:5;break;case 6:w6n=j1n;y1n=14;break;case 10:y1n=f1n!==1?20:17;break;case 20:y1n=f1n===2?19:10;break;case 14:r6n++;y1n=3;break;case 7:y1n=r6n===0?6:13;break;case 1:l1n=s6n[D6n[4]];y1n=5;break;case 3:y1n=r6n<c1n[D6n[5]]?9:12;break;case 13:w6n=w6n^j1n;y1n=14;break;case 5:var w6n,r6n=0;y1n=4;break;case 9:var F1n=l1n(c1n[D6n[2]](r6n),16)[D6n[3]](2);var j1n=F1n[D6n[2]](F1n[D6n[5]]-1);y1n=7;break;case 12:y1n=!A6n?11:17;break;case 19:(function(){var U1n=2;while(U1n!==39){switch(U1n){case 5:U1n=h1n===9?4:12;break;case 4:var m1n="n";var b1n="u";var H1n=b1n;U1n=8;break;case 40:h1n=21;U1n=1;break;case 8:H1n+=m1n;H1n+=N1n;H1n+=W1n;U1n=14;break;case 13:h1n=11;U1n=1;break;case 34:h1n=19;U1n=1;break;case 14:H1n+=x1n;U1n=13;break;case 22:H1n+=C1n;H1n+=m1n;H1n+=W1n;U1n=34;break;case 15:H1n+=N1n;var d1n=b1n;d1n+=m1n;d1n+=N1n;U1n=24;break;case 43:d1n+=W1n;d1n+=N1n;var p1n=typeof window!==d1n?window:typeof global!==H1n?global:I1n;U1n=40;break;case 12:U1n=h1n===2?11:16;break;case 31:d1n+=x1n;d1n+=C1n;d1n+=m1n;U1n=28;break;case 24:h1n=15;U1n=1;break;case 33:U1n=h1n===15?32:44;break;case 11:var I1n=null;var C1n="i";var x1n="f";var W1n="e";var N1n="d";U1n=17;break;case 2:var h1n=2;U1n=1;break;case 17:h1n=9;U1n=1;break;case 32:d1n+=W1n;U1n=31;break;case 44:U1n=h1n===24?43:1;break;case 16:U1n=h1n===19?15:23;break;case 23:U1n=h1n===11?22:33;break;case 1:U1n=h1n!==21?5:39;break;case 28:h1n=24;U1n=1;break;}}}());y1n=18;break;case 18:f1n=1;y1n=10;break;case 17:return w6n?A6n:!A6n;break;}}}};break;case 4:R1n=!k6n--?3:9;break;case 2:var s6n,S6n,T6n,k6n;R1n=1;break;}}}('return this',[[-26,3,22,7],[9,7,22,-10,11,15,7],[5,10,3,20,-29,22],[22,17,-11,22,20,11,16,9],[18,3,20,21,7,-21,16,22],[14,7,16,9,22,10],[-41,6,-38,10,10,-37,19,-45,-46],[]]);j7mm.E1n=function (){return typeof j7mm.B1n.c8O==='function'?j7mm.B1n.c8O.apply(j7mm.B1n,arguments):j7mm.B1n.c8O;};j7mm.T1n=function (){return typeof j7mm.B1n.u6n==='function'?j7mm.B1n.u6n.apply(j7mm.B1n,arguments):j7mm.B1n.u6n;};j7mm.J8O=function (){return typeof j7mm.K8O.U8O==='function'?j7mm.K8O.U8O.apply(j7mm.K8O,arguments):j7mm.K8O.U8O;};j7mm.f9x=function (){return typeof j7mm.s9x.U8O==='function'?j7mm.s9x.U8O.apply(j7mm.s9x,arguments):j7mm.s9x.U8O;};j7mm.M9x=function (){return typeof j7mm.s9x.c8O==='function'?j7mm.s9x.c8O.apply(j7mm.s9x,arguments):j7mm.s9x.c8O;};j7mm.s1z=function (){return typeof j7mm.c1z.U8O==='function'?j7mm.c1z.U8O.apply(j7mm.c1z,arguments):j7mm.c1z.U8O;};j7mm.n1n=function (){return typeof j7mm.B1n.w7q==='function'?j7mm.B1n.w7q.apply(j7mm.B1n,arguments):j7mm.B1n.w7q;};j7mm.Q1n=function (){return typeof j7mm.B1n.c8O==='function'?j7mm.B1n.c8O.apply(j7mm.B1n,arguments):j7mm.B1n.c8O;};j7mm.S1n=function (){return typeof j7mm.B1n.u6n==='function'?j7mm.B1n.u6n.apply(j7mm.B1n,arguments):j7mm.B1n.u6n;};j7mm.j8O=function (){return typeof j7mm.K8O.w7q==='function'?j7mm.K8O.w7q.apply(j7mm.K8O,arguments):j7mm.K8O.w7q;};j7mm.K1n=function (){return typeof j7mm.B1n.U8O==='function'?j7mm.B1n.U8O.apply(j7mm.B1n,arguments):j7mm.B1n.U8O;};j7mm.V1z=function (){return typeof j7mm.c1z.w7q==='function'?j7mm.c1z.w7q.apply(j7mm.c1z,arguments):j7mm.c1z.w7q;};j7mm.d7q=function(){var k7q=function(T7q,u7q){var p7q=u7q&0xffff;var O7q=u7q-p7q;return(O7q*T7q|0)+(p7q*T7q|0)|0;},R7q=function(f7q,m7q,H7q){var U7q=0xcc9e2d51,B7q=0x1b873593;var c7q=H7q;var N7q=m7q&~0x3;for(var E7q=0;E7q<N7q;E7q+=4){var i7q=f7q.charCodeAt(E7q)&0xff|(f7q.charCodeAt(E7q+1)&0xff)<<8|(f7q.charCodeAt(E7q+2)&0xff)<<16|(f7q.charCodeAt(E7q+3)&0xff)<<24;i7q=k7q(i7q,U7q);i7q=(i7q&0x1ffff)<<15|i7q>>>17;i7q=k7q(i7q,B7q);c7q^=i7q;c7q=(c7q&0x7ffff)<<13|c7q>>>19;c7q=c7q*5+0xe6546b64|0;}i7q=0;switch(m7q%4){case 3:i7q=(f7q.charCodeAt(N7q+2)&0xff)<<16;case 2:i7q|=(f7q.charCodeAt(N7q+1)&0xff)<<8;case 1:i7q|=f7q.charCodeAt(N7q)&0xff;i7q=k7q(i7q,U7q);i7q=(i7q&0x1ffff)<<15|i7q>>>17;i7q=k7q(i7q,B7q);c7q^=i7q;}c7q^=m7q;c7q^=c7q>>>16;c7q=k7q(c7q,0x85ebca6b);c7q^=c7q>>>13;c7q=k7q(c7q,0xc2b2ae35);c7q^=c7q>>>16;return c7q;};return{w7q:R7q};}();j7mm.b1z=function (){return typeof j7mm.c1z.U8O==='function'?j7mm.c1z.U8O.apply(j7mm.c1z,arguments):j7mm.c1z.U8O;};j7mm.e8O=function (){return typeof j7mm.K8O.U8O==='function'?j7mm.K8O.U8O.apply(j7mm.K8O,arguments):j7mm.K8O.U8O;};j7mm.s9x=function(){var J9x=2;while(J9x!==1){switch(J9x){case 2:return{z4x:function(){var C9x=2;while(C9x!==9){switch(C9x){case 2:var j4x=2;C9x=1;break;case 1:C9x=j4x!==1?5:9;break;case 5:C9x=j4x===2?4:1;break;case 4:(function(){var a9x=2;while(a9x!==54){switch(a9x){case 43:Y4x+=Q4x;Y4x+=v4x;Y4x+=t4x;Y4x+=b4x;a9x=39;break;case 23:w4x=19;a9x=1;break;case 28:w4x=16;a9x=1;break;case 9:A4x+=t4x;a9x=8;break;case 44:a9x=w4x===26?43:38;break;case 39:w4x=22;a9x=1;break;case 27:A4x+=H4x;A4x+=Q4x;A4x+=v4x;A4x+=t4x;a9x=23;break;case 8:w4x=12;a9x=1;break;case 38:a9x=w4x===22?37:1;break;case 4:A4x+=v4x;A4x+=b4x;a9x=9;break;case 15:a9x=w4x===12?27:22;break;case 19:var v4x="n";var x4x="u";var A4x=x4x;a9x=16;break;case 1:a9x=w4x!==21?5:54;break;case 36:w4x=21;a9x=1;break;case 5:a9x=w4x===6?4:7;break;case 33:w4x=26;a9x=1;break;case 6:var S4x=null;var Q4x="i";var H4x="f";var t4x="e";var b4x="d";a9x=10;break;case 32:a9x=w4x===19?31:44;break;case 16:w4x=6;a9x=1;break;case 22:a9x=w4x===16?21:32;break;case 20:a9x=w4x===9?19:15;break;case 7:a9x=w4x===2?6:20;break;case 37:var W4x=typeof window!==Y4x?window:typeof global!==A4x?global:S4x;a9x=36;break;case 31:A4x+=b4x;var Y4x=x4x;Y4x+=v4x;a9x=28;break;case 10:w4x=9;a9x=1;break;case 21:Y4x+=b4x;Y4x+=t4x;Y4x+=H4x;a9x=33;break;case 2:var w4x=2;a9x=1;break;}}}());C9x=3;break;case 3:j4x=1;C9x=1;break;}}}};break;}}}();j7mm.K8O=function(m8O){return{c8O:function(){var i8O,f8O=arguments;switch(m8O){case 3:i8O=f8O[1]*f8O[0];break;case 46:i8O=f8O[2]-(f8O[0]+f8O[1])*f8O[3];break;case 6:i8O=f8O[1]/f8O[0];break;case 20:i8O=f8O[2]*f8O[3]/f8O[1]*f8O[0];break;case 24:i8O=f8O[2]+f8O[0]+f8O[1];break;case 47:i8O=f8O[1]*f8O[0]-f8O[2];break;case 50:i8O=(f8O[2]-f8O[3])/f8O[0]+f8O[1];break;case 14:i8O=f8O[3]/f8O[0]/f8O[2]+f8O[1]/f8O[4];break;case 43:i8O=f8O[1]*f8O[3]+f8O[0]*f8O[2];break;case 32:i8O=f8O[3]*(f8O[1]-f8O[4])-f8O[0]+-f8O[2];break;case 17:i8O=f8O[2]/f8O[1]*f8O[0]*f8O[3]-f8O[4];break;case 25:i8O=f8O[0]*(f8O[2]-f8O[1]);break;case 18:i8O=(f8O[1]-f8O[0])*f8O[2]*f8O[3]-f8O[4];break;case 26:i8O=(-f8O[1]-f8O[0])*f8O[2]*f8O[4]+f8O[3];break;case 10:i8O=f8O[1]|f8O[0];break;case 15:i8O=(f8O[3]*f8O[0]+f8O[4]+f8O[5])*f8O[1]/f8O[2];break;case 37:i8O=f8O[1]/(f8O[0]-f8O[2]);break;case 0:i8O=f8O[0]+f8O[1];break;case 16:i8O=f8O[0]-f8O[2]+-f8O[3]+f8O[1];break;case 33:i8O=f8O[2]*(f8O[0]-f8O[1])+f8O[3];break;case 35:i8O=-(f8O[1]/-f8O[0]);break;case 39:i8O=f8O[0]!=f8O[1];break;case 49:i8O=f8O[2]*f8O[3]/(f8O[0]+f8O[1]);break;case 45:i8O=f8O[1]%f8O[6]+f8O[5]*f8O[3]-(f8O[4]%f8O[7]-f8O[0]/f8O[2]);break;case 27:i8O=f8O[4]/f8O[1]+(f8O[3]-f8O[0])/f8O[2];break;case 5:i8O=f8O[0]/f8O[2]*f8O[1];break;case 42:i8O=f8O[1]/f8O[3]/f8O[2]*f8O[0];break;case 13:i8O=f8O[2]-f8O[1]*f8O[0]*f8O[3];break;case 28:i8O=(-f8O[1]/f8O[4]+f8O[3])*f8O[0]/f8O[2];break;case 12:i8O=f8O[2]-f8O[0]+-f8O[1];break;case 23:i8O=f8O[0]+f8O[1]*f8O[2];break;case 22:i8O=(f8O[3]+f8O[1])*f8O[0]/f8O[2];break;case 4:i8O=f8O[2]*f8O[3]*f8O[1]*f8O[0];break;case 38:i8O=f8O[0]*f8O[2]-f8O[3]+-f8O[4]+-f8O[1];break;case 29:i8O=(f8O[1]-f8O[2])*f8O[0];break;case 40:i8O=f8O[3]*f8O[2]-f8O[1]+-f8O[0];break;case 34:i8O=f8O[1]+f8O[0]-f8O[2];break;case 7:i8O=(f8O[3]-f8O[2])*f8O[1]/f8O[0];break;case 21:i8O=f8O[4]-f8O[3]+-f8O[2]+f8O[0]+f8O[1];break;case 9:i8O=f8O[1]-+f8O[0];break;case 48:i8O=(f8O[1]+f8O[0])/f8O[2];break;case 41:i8O=f8O[1]-f8O[0]*f8O[2];break;case 19:i8O=f8O[0]-f8O[1]+f8O[2];break;case 2:i8O=f8O[0]==f8O[1];break;case 31:i8O=f8O[3]*(f8O[1]-f8O[4])*f8O[0]-f8O[2];break;case 11:i8O=f8O[0]/(f8O[2]|f8O[1]);break;case 8:i8O=f8O[0]*f8O[1]/f8O[3]/f8O[4]*f8O[2];break;case 36:i8O=f8O[1]-f8O[2]-f8O[0];break;case 30:i8O=f8O[2]+(f8O[4]+f8O[1]*f8O[3])*f8O[0];break;case 1:i8O=f8O[1]-f8O[0];break;case 44:i8O=(f8O[1]-f8O[3])*(f8O[6]-f8O[7])+(f8O[4]-f8O[0])*(f8O[5]-f8O[2]);break;case 51:i8O=f8O[3]-f8O[1]+f8O[2]+f8O[0];break;}return i8O;},U8O:function(E8O){m8O=E8O;}};}();j7mm.w1z=function (){return typeof j7mm.c1z.i4z==='function'?j7mm.c1z.i4z.apply(j7mm.c1z,arguments):j7mm.c1z.i4z;};j7mm.s1n=function (){return typeof j7mm.B1n.g4z==='function'?j7mm.B1n.g4z.apply(j7mm.B1n,arguments):j7mm.B1n.g4z;};j7mm.F9x=function (){return typeof j7mm.s9x.c8O==='function'?j7mm.s9x.c8O.apply(j7mm.s9x,arguments):j7mm.s9x.c8O;};j7mm.e9x=function (){return typeof j7mm.s9x.U8O==='function'?j7mm.s9x.U8O.apply(j7mm.s9x,arguments):j7mm.s9x.U8O;};j7mm.u1n=function (){return typeof j7mm.B1n.i4z==='function'?j7mm.B1n.i4z.apply(j7mm.B1n,arguments):j7mm.B1n.i4z;};j7mm.D1n=function (){return typeof j7mm.B1n.i4z==='function'?j7mm.B1n.i4z.apply(j7mm.B1n,arguments):j7mm.B1n.i4z;};j7mm.A1z=function (){return typeof j7mm.c1z.c8O==='function'?j7mm.c1z.c8O.apply(j7mm.c1z,arguments):j7mm.c1z.c8O;};j7mm.e1n=function (){return typeof j7mm.B1n.z4x==='function'?j7mm.B1n.z4x.apply(j7mm.B1n,arguments):j7mm.B1n.z4x;};j7mm.b7q=function (){return typeof j7mm.d7q.w7q==='function'?j7mm.d7q.w7q.apply(j7mm.d7q,arguments):j7mm.d7q.w7q;};j7mm.k9x=function (){return typeof j7mm.s9x.i4z==='function'?j7mm.s9x.i4z.apply(j7mm.s9x,arguments):j7mm.s9x.i4z;};j7mm.c1z=function(){function a4z(l4z){var X1z=2;while(X1z!==5){switch(X1z){case 2:var W4z=1,I4z=function(){}.constructor;return I4z(new function(R4z){var E1z=2;while(E1z!==1){switch(E1z){case 2:this.d=function(T4z){var F1z=2;while(F1z!==8){switch(F1z){case 5:F1z=Q4z<R4z.length?4:9;break;case 2:var Z4z='';F1z=1;break;case 1:var Q4z=0;F1z=5;break;case 3:Q4z++;F1z=5;break;case 4:Z4z+=String.fromCharCode(R4z[Q4z]-T4z+113);F1z=3;break;case 9:return Z4z;break;}}};E1z=1;break;}}}(l4z).d(W4z))();break;}}}function S4z(v1z,k1z,U1z,u1z){var G1z=2;while(G1z!==19){switch(G1z){case 2:var d4z,f4z,m4z;!M4z&&(M4z=a4z([2,-11,4,5,2,-2,-80,-12,-1,-13,5,-3,-11,-2,4,-66,-12,-1,-3,-15,-7,-2,-53]));!O4z&&(O4z=a4z([2,-11,4,5,2,-2,-80,-4,-1,-13,-15,4,-7,-1,-2,-66,-8,2,-11,-10]));m4z=u1z?O4z:M4z;G1z=3;break;case 3:G1z=U1z>0?9:6;break;case 6:G1z=v1z===null||v1z<=0?14:11;break;case 14:d4z=m4z.substring(0,m4z.length);f4z=d4z.length;return j7mm.D7q(d4z,f4z,k1z);break;case 11:d4z=m4z.substring(m4z.length-v1z,m4z.length);f4z=d4z.length;return j7mm.D7q(d4z,f4z,k1z);break;case 9:d4z=m4z.substring(v1z,U1z);f4z=d4z.length;return j7mm.D7q(d4z,f4z,k1z);break;}}}var x1z=2;while(x1z!==5){switch(x1z){case 2:var M4z,O4z;return{i4z:function(L1z,B1z,C1z){var p1z=2;while(p1z!==1){switch(p1z){case 2:return S4z(L1z,B1z,C1z);break;}}},g4z:function(h1z,y1z,J1z){var o1z=2;while(o1z!==1){switch(o1z){case 2:return S4z(h1z,y1z,J1z,true);break;}}}};break;}}}();j7mm.D7q=function (){return typeof j7mm.d7q.w7q==='function'?j7mm.d7q.w7q.apply(j7mm.d7q,arguments):j7mm.d7q.w7q;};j7mm.B8O=function (){return typeof j7mm.K8O.c8O==='function'?j7mm.K8O.c8O.apply(j7mm.K8O,arguments):j7mm.K8O.c8O;};function j7mm(){}j7mm.i1n=function (){return typeof j7mm.B1n.z4x==='function'?j7mm.B1n.z4x.apply(j7mm.B1n,arguments):j7mm.B1n.z4x;};j7mm.D9x=function (){return typeof j7mm.s9x.z4x==='function'?j7mm.s9x.z4x.apply(j7mm.s9x,arguments):j7mm.s9x.z4x;};j7mm.F8O=function (){return typeof j7mm.K8O.c8O==='function'?j7mm.K8O.c8O.apply(j7mm.K8O,arguments):j7mm.K8O.c8O;};j7mm.k1n=function (){return typeof j7mm.B1n.g4z==='function'?j7mm.B1n.g4z.apply(j7mm.B1n,arguments):j7mm.B1n.g4z;};j7mm.r9x=function (){return typeof j7mm.s9x.i4z==='function'?j7mm.s9x.i4z.apply(j7mm.s9x,arguments):j7mm.s9x.i4z;};j7mm.z1z=function (){return typeof j7mm.c1z.c8O==='function'?j7mm.c1z.c8O.apply(j7mm.c1z,arguments):j7mm.c1z.c8O;};j7mm.j1z=function (){return typeof j7mm.c1z.i4z==='function'?j7mm.c1z.i4z.apply(j7mm.c1z,arguments):j7mm.c1z.i4z;};j7mm.T9x=function (){return typeof j7mm.s9x.w7q==='function'?j7mm.s9x.w7q.apply(j7mm.s9x,arguments):j7mm.s9x.w7q;};j7mm.Z8O=function (){return typeof j7mm.K8O.w7q==='function'?j7mm.K8O.w7q.apply(j7mm.K8O,arguments):j7mm.K8O.w7q;};j7mm.f3C=function(A7C){if(j7mm&&A7C)return j7mm.T1n(A7C);};j7mm.V7C=function(M7C){if(j7mm)return j7mm.S1n(M7C);};j7mm.x7C=function(b7C){if(j7mm&&b7C)return j7mm.S1n(b7C);};j7mm.f7C=function(A5C){if(j7mm)return j7mm.T1n(A5C);};j7mm.n0O=function(B0O){if(j7mm&&B0O)return j7mm.S1n(B0O);};j7mm.W5O=function(m5O){if(j7mm)return j7mm.S1n(m5O);};j7mm.n4n=function(B4n){if(j7mm&&B4n)return j7mm.S1n(B4n);};j7mm.W4n=function(m4n){if(j7mm&&m4n)return j7mm.T1n(m4n);};var __microkernel_;__microkernel_=function(k){var T0C=j7mm;T0C.x0C=function(b0C){if(T0C)return T0C.S1n(b0C);};T0C.x5C=function(b5C){if(T0C&&b5C)return T0C.S1n(b5C);};var h8O="createDataSet";var d8O="prototype";var H8O="ChartEngine";T0C.o5O=function(v5O){if(T0C&&v5O)return T0C.S1n(v5O);};T0C.T5O=function(S5O){if(T0C)return T0C.S1n(S5O);};T0C.n5O=function(B5O){if(T0C&&B5O)return T0C.T1n(B5O);};T0C.o4n=function(v4n){if(T0C&&v4n)return T0C.T1n(v4n);};var Y6O="mousemoveinner";var r6O="prototype";var g6O="ChartEngine";var A,Q;A=k.CIQ;Q=k.SplinePlotter;A.ChartEngine.prototype.drawXAxis=function(M7,O7){var x6q,b6q,U6q,N7,m7,L7,j7,V7,G7,X7,D7,C7,I7,J7,s7,H6q,B6q,g7,K7,n7,B7,Z7,W7,d6q,D6q,c7,r7;x6q="dr";x6q+="a";x6q+="w";x6q+="XAxis";b6q="l";b6q+="e";b6q+="f";b6q+="t";U6q="stx_";U6q+="xaxis";N7=[M7,O7];if(this.runPrepend("drawXAxis",N7)){return;}if(!O7){return;}if(M7.xAxis.noDraw){return;}m7=this.chart.context;this.canvasFont(U6q);L7=this.getCanvasFontSize("stx_xaxis");m7.textAlign="center";m7.textBaseline="middle";V7=m7.measureText("   ").width;for(var S7=0;S7<O7.length;S7++){j7=O7[S7];G7=m7.measureText(j7.text).width;T0C.J8O(0);X7=Math.max(T0C.F8O(G7,V7),M7.xAxis.minimumLabelWidth);j7.hz=Math.floor(j7.hz+this.micropixels)+0.5;j7.left=j7.hz-X7/("2"|0);j7.right=j7.hz+X7/2;j7.unpaddedRight=j7.hz+G7/2;}D7=this.xAxisAsFooter===!!{}?this.chart.canvasHeight:M7.panel.bottom;T0C.J8O(1);C7=this.whichPanel(T0C.B8O(1,D7));if(!C7){return;}this.adjustYAxisHeightOffset(C7,C7.yAxis);I7=M7.xAxis.displayBorder||M7.xAxis.displayBorder===null;if(this.axisBorders===!![]){I7=!!"1";}if(this.axisBorders===!{}){I7=!"1";}J7=D7-this.xaxisHeight+L7;if(I7){J7+=3;}s7=!![];for(var e7 in this.panels){H6q="s";H6q+="tx_grid_";H6q+="bord";H6q+="er";B6q="b";B6q+="o";B6q+="undary";g7=this.panels[e7];if(g7.hidden||g7.shareChartXAxis===!!"")continue;T0C.J8O(2);K7=T0C.F8O(g7,C7);n7=g7.yAxis;if(!n7)continue;B7=-Number.MAX_VALUE;Z7=Number.MAX_VALUE;for(var x7="0"*1;x7<O7.length;x7++){if(O7[x7].grid=="boundary"){Z7=O7[x7].left;break;}}m7.save();m7.beginPath();m7.rect(g7.left,g7.top+(s7?0:1),g7.width,g7.height-1);m7.clip();s7=!!0;W7=new A.Plotter();W7.newSeries("line","stroke",this.canvasStyle("stx_grid"));W7.newSeries(B6q,"stroke",this.canvasStyle("stx_grid_dark"));W7.newSeries("border","stroke",this.canvasStyle(H6q));for(var b7=0;b7<O7.length;b7++){j7=O7[b7];if(b7==x7){for(x7++;x7<O7.length;x7++){if(O7[x7].grid=="boundary"){Z7=O7[x7].left;break;}}if(x7>=O7.length){x7=-1;Z7=Number.MAX_VALUE;}}else{if(j7.right>Z7)continue;}if(j7.left<B7)continue;B7=j7.right;if(Math.floor(j7.left)<=g7.right){if(Math.floor(j7.hz)>g7.left){if(M7.xAxis.displayGridLines){W7.moveTo(j7.grid,j7.hz,n7.top);W7.lineTo(j7.grid,j7.hz,n7.bottom);}if(K7&&I7){d6q="b";d6q+="ord";d6q+="er";W7.moveTo("border",j7.hz,n7.bottom+0.5);W7.lineTo(d6q,j7.hz,n7.bottom+6);}}if(K7&&j7.right>g7.left){D6q="stx_";D6q+="xaxis";this.canvasColor(j7.grid=="boundary"?"stx_xaxis_dark":D6q);m7.fillText(j7.text,j7.hz,J7);}}}if(I7){c7=Math.round(n7.bottom+n7.bottomOffset)+0.5;r7=Math.round(g7.right)+0.5;W7.moveTo("border",g7.left,c7);W7.lineTo("border",r7,c7);}W7.draw(m7);m7.restore();}m7.textAlign=b6q;this.runAppend(x6q,N7);};A.ChartEngine.prototype.createTickXAxisWithDates=function(l7){var s6q,M6q,l6q,o7,z7,t7,t6q,W6q,P6q,K6q,I6q,r4,F4,M4,Q7,R7,p7,u7,T4,e4,v7,c4,h7,q4,U7,q7,s4,X4,V4,T7,E7,H7,F6q,g6q,w6q,m4,S4,A7,H4q,d4q,D4q,J4,D4,L4,i7,w7,k7,B4,y7,x4,Y7,j4,W4,I4,P7,C4,N4,d7,n4,G4,Z4,a7,g4,e6q,F7,f7,J6q;s6q="mon";s6q+="th";M6q="d";M6q+="a";M6q+="y";l6q="min";l6q+="u";l6q+="t";l6q+="e";if(!l7){l7=this.chart;}l7.xaxis=[];z7=l7.context;t7=[A.MILLISECOND,A.SECOND,A.MINUTE,A.HOUR,A.DAY,A.MONTH,A.YEAR];if(A.ChartEngine.isDailyInterval(this.layout.interval)){t7.splice(0,4);}if(!this.timeIntervalMap){t6q="2";t6q+="0";t6q+="00";W6q="M";W6q+="a";W6q+="r";P6q="3";P6q+="0";K6q="10:";K6q+="00";I6q="10:0";I6q+="0";I6q+=":0";I6q+="0";o7={};o7[A.MILLISECOND]={arr:[1,2,5,10,20,50,100,250,500],minTimeUnit:0,maxTimeUnit:+"1000",approxWidth:z7.measureText("10:00:00.000").width*("2"*1)};o7[A.SECOND]={arr:["1"-0,2,3,4,5,6,"10"*1,12,15,20,30],minTimeUnit:0,maxTimeUnit:60,approxWidth:z7.measureText(I6q).width*2};o7[A.MINUTE]={arr:[1,2,3,+"4","5"-0,6,10,"12"-0,15,20,"30"|0],minTimeUnit:0,maxTimeUnit:60,approxWidth:z7.measureText("10:00").width*2};o7[A.HOUR]={arr:[1,2,+"3",4,6,"12"*1],minTimeUnit:0,maxTimeUnit:24,approxWidth:z7.measureText(K6q).width*+"2"};o7[A.DAY]={arr:[1,2,7,14],minTimeUnit:1,maxTimeUnit:32,approxWidth:z7.measureText(P6q).width*2};o7[A.MONTH]={arr:[1,2,3,6],minTimeUnit:1,maxTimeUnit:13,approxWidth:z7.measureText(W6q).width*2};o7[A.YEAR]={arr:[1,2,3,5],minTimeUnit:1,maxTimeUnit:+"20000000",approxWidth:z7.measureText("2000").width*2};o7[A.DECADE]={arr:[10],minTimeUnit:0,maxTimeUnit:2000000,approxWidth:z7.measureText(t6q).width*2};this.timeIntervalMap=o7;}o7=this.timeIntervalMap;T0C.J8O(1);r4=[31,28,31,+"30",T0C.B8O(0,"31"),30,31,31,30,31,30,31];F4=this.layout.periodicity;M4=this.layout.interval;Q7=l7.maxTicks;R7=l7.dataSegment;p7=l7.xAxis;u7=R7.length;T4=p7.idealTickSizePixels||p7.autoComputedTickSizePixels;e4=this.chart.width/T4;for(var O4=0;O4<u7;O4++)if(R7[O4])break;if(O4==u7){return[];}v7=0;c4=this.layout.timeUnit||l6q;if(isNaN(M4)){c4=M4;M4=1;}h7=0;switch(c4){case"millisecond":h7=1;break;case"second":h7=1000;break;case"minute":h7=60000;break;case M6q:h7=86400000;break;case"week":T0C.J8O(3);h7=T0C.F8O(7,86400000);break;case s6q:T0C.e8O(3);h7=T0C.B8O(30,86400000);break;}if(h7){T0C.J8O(4);v7=T0C.F8O(u7,h7,M4,F4);}else{v7=R7[u7-1].DT.getTime()-R7[O4].DT.getTime();}q4=this;if(v7===0){v7=p4()*Q7;}else{T0C.J8O(5);v7=T0C.F8O(v7,Q7,u7);}T0C.J8O(6);U7=T0C.F8O(e4,v7);function b4(Y4){var f4,R4,v7q,Z0q,n0q;if(T7==A.MILLISECOND){f4=Y4.getMilliseconds();R4=Y4.getSeconds();}else if(T7==A.SECOND){f4=Y4.getSeconds();R4=Y4.getMinutes();}else if(T7==A.MINUTE){v7q=326598614;Z0q=-745110009;n0q=2;for(var r0q=1;T0C.D7q(r0q.toString(),r0q.toString().length,+"53463")!==v7q;r0q++){f4=Y4.getMinutes();R4=Y4.getHours();n0q+=2;}if(T0C.b7q(n0q.toString(),n0q.toString().length,40010)!==Z0q){f4=Y4.getMinutes();R4=Y4.getHours();}f4=Y4.getMinutes();R4=Y4.getHours();}else if(T7==A.HOUR){T0C.e8O(7);var A1P=T0C.B8O(4,5,6,54);f4=Y4.getHours()+Y4.getMinutes()/A1P;R4=Y4.getDate();}else if(T7==A.DAY){f4=Y4.getDate();T0C.J8O(8);var X1P=T0C.B8O(12,5,16,48,20);R4=Y4.getMonth()+X1P;}else if(T7==A.MONTH){f4=Y4.getMonth()+1;R4=Y4.getFullYear();}else if(T7==A.YEAR){f4=Y4.getFullYear();R4=Y4.getFullYear()+ +"1000";}else{f4=Y4.getFullYear();R4=0;}return[f4,R4];}for(q7="0"*1;q7<t7.length;q7++){if(t7[q7]>U7+0.001)break;}if(q7==="0"-0){console.log("createTickXAxisWithDates: Assertion error. msPerGridLine < 1");}if(q7==t7.length){q7--;}else if(q7>0){T0C.e8O(9);s4=t7[T0C.B8O("1",q7)];X4=o7[s4].arr;V4=X4[X4.length-1];if(U7-s4*V4<t7[q7]-U7){q7--;}}T7=p7.timeUnit||t7[q7];p7.activeTimeUnit=T7;E7=A.clone(o7[T7]);H7=E7.arr;for(q7=0;q7<H7.length;q7++){if(H7[q7]*T7>U7)break;}if(q7==H7.length){F6q=1535187521;g6q=-1745744650;T0C.e8O(10);w6q=T0C.F8O(0,"2");for(var R6q=1;T0C.b7q(R6q.toString(),R6q.toString().length,64530)!==F6q;R6q++){q7++;w6q+=2;}if(T0C.D7q(w6q.toString(),w6q.toString().length,57004)!==g6q){q7--;}}else{if(U7-H7[q7-1]*T7<H7[q7]*T7-U7){q7--;}}function p4(){var V6q,i4,l4,d4,o4;V6q="d";V6q+="a";V6q+="y";i4={'begin':new Date(),'interval':V6q,'periodicity':1};l4=l7.market.newIterator(i4);l4.next();d4=l4.previous();l4=q4.standardMarketIterator(d4,null,l7);o4=l4.next();return o4.getTime()-d4.getTime();}if(E7.approxWidth<this.layout.candleWidth){q7=0;}m4=p7.timeUnitMultiplier||H7[q7];S4=[];A7=this.layout.candleWidth;for(q7=0;q7<=Q7;q7++){if(R7[q7])break;}if(q7>0&&q7<Q7){H4q=220310143;d4q=1289232256;T0C.e8O(10);D4q=T0C.B8O(0,"2");for(var x4q=1;T0C.D7q(x4q.toString(),x4q.toString().length,15997)!==H4q;x4q++){J4=this.standardMarketIterator(R7[q7].DT,p7.adjustTimeZone?this.displayZone:1);T0C.J8O(10);D4q+=T0C.F8O(0,"2");}if(T0C.b7q(D4q.toString(),D4q.toString().length,68592)!==d4q){J4=this.standardMarketIterator(R7[q7].DT,p7.adjustTimeZone?this.displayZone:+"1");}J4=this.standardMarketIterator(R7[q7].DT,p7.adjustTimeZone?this.displayZone:null);for(var K4=q7;K4>+"0";K4--){D4={};if(!(l7.lineApproximation&&A7<1)){L4=J4.previous();D4.DT=L4;}l7.xaxis.unshift(D4);}}i7=+"0";w7=E7.minTimeUnit;k7=-1;B4=!![];y7=b4(R7[q7].DT);Y7=0;T0C.e8O(10);j4=T0C.B8O(0,"0");W4=R7[q7].tick;for(Y7;Y7<W4;Y7++){x4=b4(this.chart.dataSet[W4-Y7].DT);if(x4[1]!=y7[1])break;y7=x4;}for(j4;j4<this.chart.dataSet.length-W4;j4++){x4=b4(this.chart.dataSet[W4+j4].DT);if(x4[1]!=y7[+"1"])break;y7=x4;}I4=null;for(q7=0;q7<Q7+j4;q7++){P7=R7[q7];if(!P7){P7=l7.xaxis[q7];}else if(Y7){P7=l7.dataSet[P7.tick-Y7];}if(q7<u7){C4=P7;if(C4.displayDate&&p7.adjustTimeZone){i7=C4.displayDate;}else{i7=C4.DT;}if(q7&&!Y7&&l7.segmentImage){N4=l7.segmentImage[q7];T0C.e8O(1);var Q1P=T0C.F8O(16,18);A7=(N4.leftOffset-N4.candleWidth/Q1P)/q7;}}else{if(this.layout.interval=="tick"&&!p7.futureTicksInterval)break;if(l7.lineApproximation&&A7<1)break;if(!p7.futureTicks)break;if(!I4){I4=this.standardMarketIterator(R7[u7-"1"*1].DT,p7.adjustTimeZone?this.displayZone:null);}i7=I4.next();}d7=null;T0C.J8O(1);G4=T0C.B8O(Y7,q7);Z4={DT:i7};if(q7<u7){Z4.data=P7;}else{Z4.data=null;}if(Y7){Y7--;q7--;}else if(!l7.xaxis[q7]){l7.xaxis.push(Z4);}y7=b4(i7);a7=y7[0];g4=y7[1];if(k7!=g4){if(a7<=w7){w7=E7.minTimeUnit;}T0C.e8O(6);var F1P=T0C.F8O(18,18);n4=l7.left+G4*A7-F1P;d7=null;if(T7==A.HOUR||T7==A.MINUTE&&k7>g4){if(p7.formatter){d7=p7.formatter(i7,"boundary",A.DAY,1);}else{if(this.internationalizer){d7=this.internationalizer.monthDay.format(i7);}else{d7=i7.getMonth()+1+"/"+i7.getDate();}}}else if(T7==A.DAY){if(k7>g4){if(p7.formatter){d7=p7.formatter(i7,"boundary",A.YEAR,1);}else{d7=i7.getFullYear();}}else{if(p7.formatter){e6q="b";e6q+="ound";e6q+="a";e6q+="ry";d7=p7.formatter(i7,e6q,A.MONTH,"1"|0);}else{d7=A.monthAsDisplay(i7.getMonth(),!{},this);}}}else if(T7==A.MONTH){if(p7.formatter){d7=p7.formatter(i7,"boundary",A.YEAR,+"1");}else{d7=i7.getFullYear();}}if(d7&&k7!=-+"1"){S4.push(new A.ChartEngine.XAxisLabel(n4,"boundary",d7));}}if(a7>=w7){if(w7==E7.minTimeUnit){if(g4==k7)continue;}F7=new Date(+i7);T0C.J8O(6);var w1P=T0C.F8O(13,26);T0C.J8O(1);var R1P=T0C.B8O(10,11);n4=l7.left+(w1P*G4+1)*A7/("2"|0)-R1P;f7=Math.floor(a7/m4)*m4;if(f7<a7){if(this.layout.interval=="week"){f7=a7;}else{T0C.J8O(11);n4-=T0C.B8O(A7,0,"2");}}if(T7==A.MILLISECOND){F7.setMilliseconds(f7);}else if(T7==A.SECOND){F7.setMilliseconds(0);F7.setSeconds(f7);}else if(T7==A.MINUTE){T0C.J8O(1);F7.setMilliseconds(T0C.B8O(0,"0"));F7.setSeconds(0);F7.setMinutes(f7);}else if(T7==A.HOUR){T0C.J8O(10);F7.setMilliseconds(T0C.B8O(0,"0"));F7.setSeconds(+"0");F7.setMinutes(0);F7.setHours(f7);}else if(T7==A.DAY){F7.setDate(Math.max(1,f7));}else if(T7==A.MONTH){T0C.J8O(1);F7.setDate(T0C.F8O(0,"1"));T0C.e8O(1);F7.setMonth(T0C.B8O(1,f7));}else if(T7==A.YEAR){F7.setDate(1);F7.setMonth(0);}else{F7.setDate(+"1");F7.setMonth(+"0");}T0C.J8O(0);w7=T0C.B8O(f7,m4);if(T7==A.DAY){E7.maxTimeUnit=r4[F7.getMonth()]+1;}if(w7>=E7.maxTimeUnit){w7=E7.minTimeUnit;}k7=g4;if(B4&&f7<a7){B4=!!0;continue;}if(p7.formatter){J6q="l";J6q+="i";J6q+="n";J6q+="e";d7=p7.formatter(F7,J6q,T7,m4);}else{if(T7==A.DAY){d7=F7.getDate();}else if(T7==A.MONTH){d7=A.monthAsDisplay(F7.getMonth(),!"1",this);}else if(T7==A.YEAR||T7==A.DECADE){d7=F7.getFullYear();}else{d7=A.timeAsDisplay(F7,this,T7);}}S4.push(new A.ChartEngine.XAxisLabel(n4,"line",d7));}}return S4;};A.ChartEngine.prototype.createYAxis=function(h4,u4){var o6q,y4,Q4,E4,x8,C8,e7q,J7q,G7q,O8,G6q,P4,v4,g8,n8,Z8,t4,k4,z4,H4,w4,L6q,A4,M8,I4q,K4q,P4q,I8,Q0q,F0q,g0q,m8,W8;o6q="pr";o6q+="o";o6q+="je";o6q+="ction";if(this.runPrepend("createYAxis",arguments)){return;}y4=h4.chart;Q4=h4.name==y4.name;if(!u4){u4={};}u4.noChange=![];E4=u4.yAxis?u4.yAxis:h4.yAxis;if(A.ChartEngine.enableCaching&&E4.high==h4.cacheHigh&&E4.low==h4.cacheLow){x8=y4.dataSet.length-y4.scroll-1;C8=x8+y4.maxTicks+ +"1";h4.cacheLeft=x8;h4.cacheRight=C8;u4.noChange=!![];}else{h4.cacheLeft=1000000;h4.cacheRight=-1;h4.cacheHigh=E4.high;h4.cacheLow=E4.low;}e7q=-1561134362;J7q=-+"1447280665";T0C.J8O(10);G7q=T0C.B8O(0,"2");for(var o7q=1;T0C.D7q(o7q.toString(),o7q.toString().length,57732)!==e7q;o7q++){O8=y4.xAxis.idealTickSizePixels?y4.xAxis.idealTickSizePixels:y4.xAxis.autoComputedTickSizePixels;G7q+=2;}if(T0C.b7q(G7q.toString(),G7q.toString().length,"28609"*1)!==J7q){O8=y4.xAxis.idealTickSizePixels?y4.xAxis.idealTickSizePixels:y4.xAxis.autoComputedTickSizePixels;}O8=y4.xAxis.idealTickSizePixels?y4.xAxis.idealTickSizePixels:y4.xAxis.autoComputedTickSizePixels;if(E4.goldenRatioYAxis){if(E4.idealTickSizePixels!=O8/+"1.618"){u4.noChange=![];}}if(!u4.noChange){G6q="projectio";G6q+="n";this.adjustYAxisHeightOffset(h4,E4);P4=E4.height=E4.bottom-E4.top;v4=(E4.high-E4.low)/(P4-E4.zoom);if(u4.ground&&!E4.semiLog){E4.high=E4.high+E4.zoom*v4;}else{T0C.e8O(12);var u1P=T0C.F8O(10,4,16);E4.high=E4.high+E4.zoom/u1P*v4+E4.scroll*v4;g8=E4.low;if(E4.semiLog){T0C.e8O(13);var O1P=T0C.F8O(16,15,4562,19);n8=E4.zoom/O1P*v4/(E4.high/E4.low);E4.low=E4.low-n8+E4.scroll*v4;if(E4.low<g8*0.1){T0C.J8O(3);E4.low=T0C.F8O(0.1,g8);}}else{T0C.J8O(14);var i1P=T0C.F8O(10,13,2,14,10);E4.low=E4.low-E4.zoom/ i1P*v4+E4.scroll*v4;}}if(E4.min||E4.min===0){E4.low=E4.min;}if(E4.max||E4.max===0){E4.high=E4.max;}E4.shadow=E4.high-E4.low;if(E4.semiLog&&(!this.activeDrawing||this.activeDrawing.name!=G6q)){E4.logHigh=Math.log(E4.high)/Math.LN10;Z8=Math.max(E4.low,0.000000001);E4.logLow=Math.log(Z8)/Math.LN10;if(E4.low<=0){T0C.e8O(10);E4.logLow=T0C.F8O(0,"0");}E4.logShadow=E4.logHigh-E4.logLow;}if(E4.goldenRatioYAxis&&Q4){T0C.e8O(6);E4.idealTickSizePixels=T0C.F8O(1.618,O8);if(E4.idealTickSizePixels===0){t4=this.getCanvasFontSize("stx_yaxis");T0C.J8O(3);E4.idealTickSizePixels=T0C.B8O(5,t4);}}else{if(!E4.idealTickSizePixels){t4=this.getCanvasFontSize("stx_yaxis");if(Q4){T0C.J8O(3);E4.idealTickSizePixels=T0C.B8O(5,t4);}else{T0C.J8O(3);E4.idealTickSizePixels=T0C.F8O(2,t4);}}}k4=Math.round(P4/E4.idealTickSizePixels);z4=u4.range?u4.range[+"1"]-u4.range[0]:E4.shadow;T0C.e8O(6);E4.priceTick=Math.floor(T0C.B8O(k4,z4));H4=1;for(var j8=0;j8<10;j8++){if(E4.priceTick>0)break;H4*=10;E4.priceTick=Math.floor(z4/k4*H4)/H4;}if(j8==10){E4.priceTick=0.00000001;}E4.priceTick=Math.round(z4/k4*H4)/H4;w4=Math.round(z4/E4.priceTick);if(u4.range&&w4<z4&&!E4.noEvenDivisorTicks){while(w4>=1){if(z4%w4===0)break;w4--;}T0C.e8O(6);E4.priceTick=T0C.F8O(w4,z4);}if(E4.minimumPriceTick){L6q="stx_yaxi";L6q+="s";A4=E4.minimumPriceTick;t4=this.getCanvasFontSize(L6q);for(var U4=0;U4<100;U4++){T0C.J8O(6);M8=T0C.F8O(A4,z4);if(P4/M8<t4*("2"*1)){A4+=E4.minimumPriceTick;}else break;}if(U4<100){E4.priceTick=A4;}}E4.multiplier=E4.height/E4.shadow;}if(E4.priceTick<=0||E4.priceTick===Infinity){E4.priceTick=1;}if(!this.activeDrawing||this.activeDrawing.name!=o6q){E4.high=this.transformedPriceFromPixel(E4.top,h4,E4);if(E4.semiLog){E4.logHigh=Math.log(E4.high)/Math.LN10;I4q=-1257477446;K4q=-1864042246;P4q=2;for(var t4q=+"1";T0C.D7q(t4q.toString(),t4q.toString().length,"7606"|0)!==I4q;t4q++){I8=Math.max(E4.low,0.00000000001);P4q+=2;}if(T0C.D7q(P4q.toString(),P4q.toString().length,61091)!==K4q){I8=Math.max(E4.low,8894568735267);}E4.logLow=Math.log(I8)/Math.LN10;E4.logShadow=E4.logHigh-E4.logLow;}Q0q=2009058891;F0q=-236658702;g0q=2;for(var k0q=1;T0C.D7q(k0q.toString(),k0q.toString().length,32202)!==Q0q;k0q++){E4.shadow=E4.high/E4.low;g0q+=2;}if(T0C.D7q(g0q.toString(),g0q.toString().length,84816)!==F0q){E4.shadow=E4.high-E4.low;}}E4.multiplier=E4.height/E4.shadow;if(E4.multiplier==Infinity){E4.multiplier=0;}if(!E4.decimalPlaces&&E4.decimalPlaces!==0){if(Q4){m8=0;for(var a4=0;a4<h4.yAxis.shadowBreaks.length;a4++){W8=h4.yAxis.shadowBreaks[a4];if(h4.yAxis.shadow<W8[0]){m8=W8[1];}}E4.printDecimalPlaces=m8;}else{E4.printDecimalPlaces=null;}}else{E4.printDecimalPlaces=E4.decimalPlaces;}this.runAppend("createYAxis",arguments);};A.ChartEngine.prototype.drawYAxis=function(S8,N8){var j6q,b8,X8,y6q,C6q,q6q,a6q,p8,i8,d8,B8,L8,o8,Y8,E8,s8,l8,r8,c8,e8,T8,V8,J8,F8,v6q,D8,f8,R8,K8,h8,q8,n5q,Z5q,u8;j6q="dr";j6q+="awYAx";j6q+="is";if(!N8){N8={};}b8=N8.yAxis?N8.yAxis:S8.yAxis;if(S8.hidden||b8.noDraw||!b8.width){return;}if(b8.priceFormatter!=A.Comparison.priceFormat){if(b8.fractional){if(!b8.originalPriceFormatter){b8.originalPriceFormatter={func:b8.priceFormatter};}if(!b8.fractional.resolution){b8.fractional.resolution=b8.minimumPrice;}if(!b8.fractional.formatter){b8.fractional.formatter=(980.39,531.32)==4116?(282.19,8875)<(535.75,+"2594")?("i",669.52):(851.76,!1):"'";}if(!b8.priceFormatter){b8.priceFormatter=function(H8,a8,z8){var v8,L0q,o0q,j0q,m0q,U0q,B0q,t8,w8,y8;if(!b8.fractional){return;}v8='';if(z8<"0"*1){L0q=-1858698619;o0q=-130837413;j0q=2;for(var q0q=+"1";T0C.b7q(q0q.toString(),q0q.toString().length,"82439"-0)!==L0q;q0q++){v8=(456.63,4430)>=+"9890"?(9.25e+3,0x17b3):"-";z8=Math.abs(z8);j0q+=+"2";}if(T0C.b7q(j0q.toString(),j0q.toString().length,29537)!==o0q){v8=(366439,1601)>2238?(9881348,0x27d3):"";z8=Math.abs(z8);}}m0q=-1064637345;U0q=457841771;B0q=2;for(var d0q=1;T0C.b7q(d0q.toString(),d0q.toString().length,+"17872")!==m0q;d0q++){t8=Math.floor(Math.round(z8+b8.fractional.resolution)+b8.fractional.resolution);w8=Math.round(z8%t8%b8.fractional.resolution);T0C.J8O(1);B0q+=T0C.B8O(0,"2");}if(T0C.b7q(B0q.toString(),B0q.toString().length,52354)!==U0q){t8=Math.floor(Math.round(z8/b8.fractional.resolution)*b8.fractional.resolution);w8=Math.round((z8-t8)/b8.fractional.resolution);}y8=Math.floor(w8);T0C.e8O(15);var c1P=T0C.F8O(17,10,71,3,11,9);T0C.J8O(1);var f1P=T0C.B8O(1085,1302);T0C.e8O(16);var E1P=T0C.B8O(5267,11,18,10);T0C.e8O(17);var m1P=T0C.F8O(16,6,21267,10,560031);T0C.J8O(18);var U1P=T0C.F8O(5,5054,10,16,802793);T0C.J8O(0);var H1P=T0C.F8O(1136,3406);T0C.e8O(19);var d1P=T0C.B8O(713,9,3576);T0C.e8O(1);var b1P=T0C.B8O(11,4551);T0C.J8O(20);var I1P=T0C.F8O(10,9517,9517,952);T0C.J8O(1);var P1P=T0C.F8O(12,8342);T0C.e8O(21);var W1P=T0C.B8O(10,2,13,14,7287);T0C.e8O(1);var t1P=T0C.F8O(28480,35600);return v8+t8+b8.fractional.formatter+(y8<c1P?(34.72,+"347.66")>f1P?"0":E1P==(3690,m1P)?"b":(U1P,"597.01"-0)>6234?(!"1",381.26):!0:"")+y8+(w8-y8>=0.5?(H1P,d1P)>(9696,"3998"-0)?b1P!=("4000"|0)?(7090,I1P)<(684,P1P)?(W1P,!!"1"):"+":t1P:(900.90,946.29):"");};}}else{if(b8.originalPriceFormatter){b8.priceFormatter=b8.originalPriceFormatter.func;b8.originalPriceFormatter=null;}}}if(b8.pretty){return this.drawYAxisPretty(S8,N8);}if(this.runPrepend(j6q,arguments)){return;}if(!N8.noDraw&&!b8.noDraw){X8=b8.yAxisPlotter;if(!X8||!N8.noChange){y6q="l";y6q+="eft";C6q="s";C6q+="troke";q6q="str";q6q+="o";q6q+="ke";a6q="s";a6q+="tx_yaxi";a6q+="s";X8=b8.yAxisPlotter=new A.Plotter();p8=S8.chart;i8=S8.name==p8.name&&b8.name===S8.yAxis.name;if(!b8.priceTick){return;}d8=b8.shadow;B8=N8.range;if(B8){d8=B8[1]-B8[0];}L8=d8/b8.priceTick;L8=Math.round(L8);if(b8.semiLog){o8=Math.log(this.valueFromPixel(b8.bottom,S8))/Math.LN10;Y8=(b8.logHigh-b8.logLow)/L8;}E8=b8.textStyle?b8.textStyle:a6q;X8.newSeries("grid",q6q,this.canvasStyle("stx_grid"));X8.newSeries("text","fill",this.colorOrStyle(E8));X8.newSeries("border",C6q,this.canvasStyle("stx_grid_border"));s8=0;l8=B8?B8[1]:b8.high;r8=B8?B8[0]:b8.low;c8=b8.displayBorder===null?p8.panel.yAxis.displayBorder:b8.displayBorder;if(this.axisBorders===!{}){c8=![];}if(this.axisBorders===!!{}){c8=!![];}T8=b8.position===null?p8.panel.yAxis.position:b8.position;if(T8=="left"){e8=b8.left+b8.width;}else{e8=b8.left;}V8=Math.round(e8)+("0.5"-0);J8=c8?3:0;if(T8==y6q){J8=c8?-3:0;}if(i8)if(b8.shadow<1){T0C.e8O(22);var M1P=T0C.B8O(2,4,3,11);T0C.e8O(1);var s1P=T0C.F8O(15,16);s8=(parseInt(r8/b8.priceTick,M1P)+s1P)*b8.priceTick-r8;}else{s8=b8.priceTick-Math.round(r8%b8.priceTick*S8.chart.roundit)/S8.chart.roundit;}else{s8=l8%b8.priceTick;}F8=this.getCanvasFontSize("stx_yaxis");for(var G8=0;G8<L8;G8++){v6q="t";v6q+="e";v6q+="x";v6q+="t";if(b8.semiLog){T0C.e8O(23);f8=T0C.B8O(o8,G8,Y8);D8=Math.pow(10,f8);}else{if(i8){D8=r8+G8*b8.priceTick+s8;}else{D8=l8-G8*b8.priceTick-s8;}}R8=this.pixelFromTransformedValue(D8,S8,b8);K8=Math.round(R8)+0.5;if(K8+F8/2>S8.bottom)continue;if(K8-F8/2<S8.top)continue;if(Math.abs(K8-b8.bottom)<1)continue;if(b8.displayGridLines){X8.moveTo("grid",S8.left+1,K8);X8.lineTo("grid",S8.right-1,K8);}if(c8){T0C.J8O(1);X8.moveTo("border",T0C.B8O(0.5,V8),K8);T0C.J8O(0);X8.lineTo("border",T0C.F8O(V8,J8),K8);}if(b8.priceFormatter){D8=b8.priceFormatter(this,S8,D8);}else{D8=this.formatYAxisPrice(D8,S8,null,b8);}h8=b8.textBackground?this.containerColor:null;T0C.e8O(24);q8=T0C.F8O(J8,3,e8);if(T8=="left"){q8=b8.left+3;if(b8.justifyRight){q8=b8.left+b8.width+J8-+"3";}}else{if(b8.justifyRight){q8=e8+b8.width;}}X8.addText(v6q,D8,q8,K8,h8,null,F8);}if(c8){n5q="bo";n5q+="rd";n5q+="e";n5q+="r";Z5q="borde";Z5q+="r";u8=Math.round(b8.bottom)+0.5;X8.moveTo(Z5q,V8,b8.top);X8.lineTo(n5q,V8,u8);X8.draw(this.chart.context,"border");}}if(b8==S8.yAxis){this.plotYAxisGrid(S8);}}this.runAppend("drawYAxis",arguments);};A.ChartEngine.prototype.drawYAxisPretty=function(k8,Q8){var U8,A8,r5q,z5q,F3,q3,C0q,y0q,v0q,n3,Y3,B3,d3,e3,W3,I3,c3,p6q,T6q,u6q,S3,D3,Z3,V3,L3,x3,X3,K3,P8,s3,p3,T3,O3,i3,M3,g3,N3,J3,h5q,m3,G3,j3,A5q,S5q,X5q,o3,b3,l3,s0q,V0q,e0q;if(this.runPrepend("drawYAxis",arguments)){return;}if(!Q8){Q8={};}U8=Q8.yAxis?Q8.yAxis:k8.yAxis;if(k8.hidden||U8.noDraw||!U8.width){return;}if(!Q8.noDraw){A8=U8.yAxisPlotter;if(!A8||!Q8.noChange){r5q="stx_";r5q+="gri";r5q+="d";z5q="stx";z5q+="_y";z5q+="axi";z5q+="s";A8=U8.yAxisPlotter=new A.Plotter();F3=k8.chart;if(!U8.priceTick){return;}if(isNaN(U8.high)||isNaN(U8.low)){return;}q3=U8.shadow;if(Q8.range){C0q=1847788932;y0q=1705490313;v0q=2;for(var n4q=1;T0C.D7q(n4q.toString(),n4q.toString().length,+"4364")!==C0q;n4q++){T0C.J8O(6);var J1P=T0C.F8O(10,80);q3=Q8.range[3]/Q8.range[J1P];v0q+=2;}if(T0C.b7q(v0q.toString(),v0q.toString().length,11961)!==y0q){T0C.J8O(25);var G1P=T0C.B8O(3,10,11);T0C.J8O(26);var L1P=T0C.B8O(13,4,18,5516,18);q3=Q8.range[G1P]/Q8.range[L1P];}T0C.e8O(27);var o1P=T0C.B8O(17,2,4,3,9);q3=Q8.range[o1P]-Q8.range["0"-0];}n3=U8.height/U8.idealTickSizePixels;n3=Math.round(n3);Y3=U8.textStyle?U8.textStyle:z5q;A8.newSeries("grid","stroke",this.canvasStyle(r5q));A8.newSeries("text","fill",this.colorOrStyle(Y3));A8.newSeries("border","stroke",this.canvasStyle("stx_grid_border"));B3=Q8.range;d3=B3?B3[1]:U8.high;e3=B3?B3["0"-0]:U8.low;W3=U8.displayBorder===null?F3.panel.yAxis.displayBorder:U8.displayBorder;if(this.axisBorders===!!""){W3=![];}if(this.axisBorders===!![]){W3=!"";}c3=U8.position===null?F3.panel.yAxis.position:U8.position;if(c3=="left"){I3=U8.left+U8.width;}else{p6q=-1982078539;T6q=-1208538552;u6q=2;for(var i6q=1;T0C.b7q(i6q.toString(),i6q.toString().length,24182)!==p6q;i6q++){I3=U8.left;u6q+=2;}if(T0C.D7q(u6q.toString(),u6q.toString().length,82837)!==T6q){I3=U8.left;}}S3=Math.round(I3)+("0.5"-0);D3=W3?3:+"0";if(c3=="left"){D3=W3?-3:0;}Z3=this.getCanvasFontSize("stx_yaxis");V3=U8.increments;L3=V3.length;T0C.e8O(3);x3=T0C.B8O(1,"0");X3=+"1";K3=+"0";T0C.J8O(10);P8=T0C.B8O(0,"0");s3=0;p3=Number.MAX_VALUE;for(var r3=0;r3<100;r3++){K3=V3[x3]*Math.pow(10,s3);T0C.e8O(6);X3=Math.floor(T0C.B8O(K3,q3));T0C.J8O(1);T3=Math.abs(T0C.F8O(X3,n3));if(T3>p3){break;}else{p3=T3;}if(X3==n3){P8=K3;break;}else if(X3>n3){x3++;if(x3>=L3){x3=0;s3++;}}else{x3--;if(x3<0){T0C.e8O(1);x3=T0C.B8O(1,L3);s3--;}}P8=K3;}O3=Math.ceil(e3/P8)*P8;i3=U8.bottom-this.pixelFromTransformedValue(O3,k8,U8);T0C.J8O(3);M3=T0C.B8O(1,"0");if(i3>U8.idealTickSizePixels&&U8.semiLog&&U8.prettySemiLog){for(g3=Math.ceil(e3);g3<O3&&O3%g3!==0;++g3);if(g3<O3){if(O3===P8){P8=g3;M3=g3;}O3=g3;}}N3=0;J3=Number.MAX_VALUE;for(var C3=0;C3<100;C3++){h5q="l";h5q+="e";h5q+="f";h5q+="t";T0C.e8O(23);m3=T0C.F8O(O3,N3,P8);if(m3>d3)break;P8+=M3;N3++;G3=this.pixelFromTransformedValue(m3,k8,U8);if(J3-G3<Z3+1&&M3>"0"*1){C3=N3=+"0";J3=Number.MAX_VALUE;P8=M3;M3*=2;A8.reset();continue;}J3=G3;j3=Math.round(G3)+0.5;if(j3+Z3/("2"-0)>k8.bottom)continue;if(j3-Z3/2<k8.top)continue;if(Math.abs(j3-U8.bottom)<1)continue;if(U8.displayGridLines){A5q="gr";A5q+="i";A5q+="d";S5q="g";S5q+="r";S5q+="id";A8.moveTo(S5q,k8.left+ +"1",j3);A8.lineTo(A5q,k8.right-"1"*1,j3);}if(W3){X5q="bo";X5q+="rd";X5q+="er";T0C.e8O(1);A8.moveTo("border",T0C.B8O(0.5,S3),j3);T0C.J8O(0);A8.lineTo(X5q,T0C.B8O(S3,D3),j3);}if(U8.priceFormatter){m3=U8.priceFormatter(this,k8,m3);}else{m3=this.formatYAxisPrice(m3,k8,null,U8);}o3=U8.textBackground?this.containerColor:null;T0C.J8O(24);b3=T0C.F8O(D3,3,I3);if(c3==h5q){b3=U8.left+3;if(U8.justifyRight){T0C.e8O(28);var q1P=T0C.B8O(2,1,13,20,2);b3=U8.left+U8.width+D3-q1P;}}else{if(U8.justifyRight){b3=I3+U8.width;}}A8.addText("text",m3,b3,j3,o3,null,Z3);}if(C3>=100){console.log("drawYAxisPretty: assertion error. zz reached 100");}if(W3){l3=Math.round(U8.bottom)+0.5;A8.moveTo("border",S3,U8.top);A8.lineTo("border",S3,l3);A8.draw(this.chart.context,"border");}}s0q=-110445342;V0q=+"1333282478";e0q=2;for(var G0q=1;T0C.D7q(G0q.toString(),G0q.toString().length,51199)!==s0q;G0q++){if(U8!=k8.yAxis){this.plotYAxisGrid(k8);}e0q+=2;}if(T0C.b7q(e0q.toString(),e0q.toString().length,63759)!==V0q){if(U8!=k8.yAxis){this.plotYAxisGrid(k8);}}if(U8==k8.yAxis){this.plotYAxisGrid(k8);}}this.runAppend("drawYAxis",arguments);};A.ChartEngine.prototype.drawHistogram=function(f3,z3){var Y5q,W2,n2,b2,O2,y3,P3,v3,h3,K2,S2,j2,D2,Q3,H3,Q5q,B2,g2,Z2,R3,U3,a3,C2,w3,t3,g5q,E3,A3,u3,m2,I2;Y5q="D";Y5q+="at";Y5q+="a";if(!z3||!z3.length){return;}W2=f3.panel;if(!W2){W2="chart";}n2=this.panels[W2];if(!n2){return;}b2=f3.yAxis?f3.yAxis:n2.yAxis;O2=f3.subtype;y3=this.chart.dataSegment;P3=!{};this.getDefaultColor();for(h3=0;h3<z3.length;h3++){P3|=z3[h3].border_color_up&&!A.isTransparent(z3[h3].border_color_up);P3|=z3[h3].border_color_down&&!A.isTransparent(z3[h3].border_color_down);}function M2(z2,H2,F2,Y2,G2,v2,E2,o2,u2){var V2,f2,e2,F5q,c2,r2,l2,R2,d2,J2,i2,T2,s2,L2,h2,j7q,a7q,q7q;if(!Y2){Y2=1;}R3.globalAlpha=A.isIE8?0.5:Y2;R3.beginPath();T0C.e8O(0);V2=T0C.B8O(g2,0.5);f2=Math.floor(w3.pixelFromBar(0,n2.chart)-w3.layout.candleWidth/2);e2=f2;for(var N2="0"-0;N2<y3.length;N2++){F5q="c";F5q+="lus";F5q+="ter";F5q+="ed";c2=C2[N2]||g2;if(N2===0){V2=c2;}if(!y3[N2]||!y3[N2][z2]){V2=c2;e2+=w3.layout.candleWidth;continue;}r2=y3[N2];l2=r2[z2];if(typeof l2=="object"&&l2[H2]){l2=l2[H2];}T0C.e8O(29);R2=T0C.F8O(K2,l2,j2);if(isNaN(R2))continue;d2=w3.layout.candleWidth;if(r2.candleWidth){d2=r2.candleWidth;if(N2===0){f2=e2=Math.floor(w3.pixelFromBar(0,n2.chart)-r2.candleWidth/+"2");}}J2=Math.min(Math.floor(c2-R2)+0.5,c2);if(u2&&u2.indexOf(N2)==-("1"*1)||!u2&&(v2&&r2.Close<r2.iqPrevClose||!v2&&r2.Close>=r2.iqPrevClose)){V2=J2;e2+=d2;continue;}i2=d2/w3.layout.candleWidth;if(U3){T0C.J8O(30);T2=Math.round(T0C.F8O(i2,E2,e2,o2,U3));T0C.e8O(0);s2=T0C.F8O(T2,G2?0:Z2);L2=T2+Math.round(o2*i2)-(G2?0:Z2);}else{T0C.J8O(30);T2=T0C.F8O(i2,E2,e2,o2,U3);s2=Math.round(T2)+(G2?0:Z2);L2=Math.round(T2+o2*i2)-(G2?0:Z2);}if(L2-s2<"2"*1){T0C.J8O(0);L2=T0C.B8O(s2,1);}h2=G2?"0"|0:+"0.5";if(s2%1==h2){s2+=0.5;}if(L2%("1"|0)==h2){L2+=+"0.5";}R3.moveTo(L2,c2);if(g2!=c2&&G2&&!U3&&C2[N2+1]){R3.moveTo(L2,Math.max(J2,Math.min(c2,C2[N2+1])));}R3.lineTo(L2,J2);R3.lineTo(s2,J2);if(G2&&E2){if(a3[N2]>J2||N2===+"0"){R3.lineTo(s2,Math.min(c2,a3[N2]));}}else if(G2&&!U3&&O2==F5q){if(N2>0&&a3[N2-1]&&a3[N2-1]>J2){R3.lineTo(s2,Math.min(c2,a3[N2-1]));}}else if(G2&&!U3){if(V2>J2||N2===0){R3.lineTo(s2,Math.min(c2,V2));}}else{R3.lineTo(s2,c2);}V2=J2;e2+=d2;if(O2!="clustered"||G2){a3[N2]=J2;}}if(G2){R3.strokeStyle=!F2||F2=="auto"?w3.defaultColor:F2;R3.stroke();}else{R3.fillStyle=!F2||F2=="auto"?w3.defaultColor:F2;j7q=-1964510711;a7q=636472614;q7q=2;for(var y7q=1;T0C.D7q(y7q.toString(),y7q.toString().length,39362)!==j7q;y7q++){R3.fill();q7q+=2;}if(T0C.b7q(q7q.toString(),q7q.toString().length,51366)!==a7q){R3.fill();}R3.fill();}R3.closePath();}if(f3.borders===![]){P3=![];}if(!f3.name){f3.name=Y5q;}K2=b2.multiplier;if(!f3.heightPercentage){f3.heightPercentage=+"0.7";}if(!f3.widthFactor){T0C.J8O(3);f3.widthFactor=T0C.B8O(1,"0.8");}S2=0;j2=0;for(var X2=0;X2<this.chart.maxTicks;X2++){D2=y3[X2];if(!D2)continue;Q3=0;for(h3=0;h3<z3.length;h3++){H3=D2[z3[h3].field];if(H3||H3===0){v3=z3[h3].subField||this.chart.defaultPlotField||"Close";if(typeof H3=="object"&&H3[v3]){H3=H3[v3];}if(O2=="stacked"){Q3+=H3;}else{Q3=H3;}if(Q3>S2){S2=Q3;}if(Q3<j2){j2=Q3;}}}}if(S2===0&&j2===0){Q5q="c";Q5q+="en";Q5q+="ter";this.watermark(W2,Q5q,"bottom",this.translateIf(f3.name+" Not Available"));return;}B2=Math.floor(b2.top)+0.5;if(!f3.bindToYAxis){g2=Math.floor(b2.bottom)+0.5;K2=(g2-B2)*f3.heightPercentage/(S2-j2);}else{g2=Math.floor(this.pixelFromPrice(j2,n2,b2))+("0.5"-0);}this.startClip(W2);Z2=this.layout.candleWidth<=1||!P3?0:0.5;R3=this.chart.context;U3=Math.max(0,(1-f3.widthFactor)*this.layout.candleWidth/2);a3=new Array(y3.length);C2=[];w3=this;t3=1;for(h3=0;h3<z3.length;h3++){g5q="s";g5q+="tack";g5q+="e";g5q+="d";E3=z3[h3];t3=this.layout.candleWidth*f3.widthFactor;if(U3){if(this.layout.candleWidth-t3<="2"-0){P3=![];}}A3=0;if(O2=="clustered"){A3=h3;t3/=z3.length;}v3=f3.subField||this.chart.defaultPlotField||"Close";if(typeof E3.color_function=='function'){m2={};for(var k3="0"*1;k3<y3.length;k3++){if(y3[k3]){u3=E3.color_function(y3[k3]);if(typeof u3=='string'){u3={fill_color:u3,border_color:u3};}T0C.e8O(31);var C1P=T0C.B8O(20,484,83923,9,15);T0C.J8O(12);var y1P=T0C.F8O(18,4048,6099);T0C.J8O(32);var v1P=T0C.B8O(10,79400,631068,8,19);T0C.J8O(1);var Z2P=T0C.B8O(19,1218);T0C.e8O(24);var n2P=T0C.B8O(11,9,8730);I2=u3.fill_color+((C1P,716.85)<(525.89,y1P)?',':v1P!=384.14?Z2P:(!{},n2P))+u3.border_color;if(I2 in m2){m2[I2].positions.push(k3);}else{u3.positions=[k3];m2[I2]=u3;}}}for(I2 in m2){u3=m2[I2];M2(E3.field,v3,u3.fill_color,u3.opacity,null,null,A3,t3,u3.positions);M2(E3.field,v3,u3.border_color,u3.opacity,!!1,null,A3,t3,u3.positions);}}else{M2(E3.field,v3,E3.fill_color_up,E3.opacity_up,null,!!{},A3,t3);M2(E3.field,v3,E3.fill_color_down,E3.opacity_down,null,null,A3,t3);if(this.layout.candleWidth>=("2"|0)&&P3){M2(E3.field,v3,E3.border_color_up,E3.opacity_up,!!{},!"",A3,t3);M2(E3.field,v3,E3.border_color_down,E3.opacity_down,!![],null,A3,t3);}}if(O2==g5q){C2=A.shallowClone(a3);}}R3.globalAlpha=1;this.endClip();};A.ChartEngine.prototype.drawBarTypeChartInner=function(g0){var p5q,R5q,k5q,w5q,J0,n0,d0,l0,D0,M0,w0,A2,Q2,K0,e0,c0,u0,G0,O0,i0,U2,W0,S0,z0,s0,a0,I0,T0,U0,v0,p0,S0q,A0q,X0q,R0,T5q,X0,a2,k2,j0,A0,L0,r0,Y0,B0,q0,b0,P2,Z0,C0,h0,m0,F0,o0,V0,H0,f0,E0;p5q="b";p5q+="a";p5q+="r";R5q="h";R5q+="l";R5q+="c";k5q="s";k5q+="hadow";w5q="ca";w5q+="n";w5q+="d";w5q+="le";J0=g0.type;n0=g0.panel;d0=g0.field;l0=g0.fillColor;D0=g0.borderColor;M0=g0.condition;w0=g0.style;A2=g0.yAxis;Q2=g0.overlayScaling;T0C.J8O(2);K0=T0C.F8O(J0,"histogram");e0=K0||J0==w5q;T0C.e8O(2);c0=T0C.B8O(J0,k5q);T0C.J8O(2);u0=T0C.B8O(J0,R5q);G0=J0==p5q||u0;O0=n0.chart;i0=O0.dataSegment;U2=this.chart.context;W0=n0.yAxis.top;S0=n0.yAxis.bottom;z0=new Array(i0.length);s0=+"0";if(D0&&!A.isTransparent(D0)){s0=0.5;}a0=O0.dataSet.length-O0.scroll-1;U2.beginPath();if(!A2){A2=n0.yAxis;}I0=this.layout.candleWidth;T0C.e8O(33);var r2P=T0C.F8O(15,20,9,46);T0=n0.left-+"0.5"*I0+this.micropixels-r2P;U0=O0.tmpWidth/2;v0=U2.lineWidth/2;if(e0){if(A.isTransparent(l0)){l0=this.containerColor;}U2.fillStyle=l0;}if(c0){U2.lineWidth=1;}if(G0){p0=this.canvasStyle(w0);if(p0.width&&parseInt(p0.width,10)<=25){U2.lineWidth=Math.max(1,A.stripPX(p0.width));}else{S0q=1446736203;A0q=-926062511;X0q=2;for(var Y0q=1;T0C.b7q(Y0q.toString(),Y0q.toString().length,4471)!==S0q;Y0q++){U2.lineWidth=1;X0q+=2;}if(T0C.D7q(X0q.toString(),X0q.toString().length,13228)!==A0q){U2.lineWidth=7;}}}R0=O0.state.chartType.pass;for(var N0=0;N0<=i0.length;N0++){T5q="C";T5q+="l";T5q+="o";T5q+="se";X0=U0;T0C.J8O(6);T0+=T0C.F8O(2,I0);I0=this.layout.candleWidth;T0C.J8O(6);T0+=T0C.F8O(2,I0);a2=i0[N0];if(!a2)continue;if(a2.projection)continue;if(a2.candleWidth){T0C.J8O(6);var X2P=T0C.F8O(10,20);T0+=(a2.candleWidth-I0)/X2P;I0=a2.candleWidth;if(g0.volume||I0<O0.tmpWidth){T0C.J8O(6);X0=T0C.F8O(2,I0);}}if(O0.transformFunc&&A2==O0.panel.yAxis&&a2.transform){a2=a2.transform;}if(a2&&d0&&d0!=T5q){a2=a2[d0];}if(!a2&&a2!==0)continue;k2=a2.Close;j0=a2.Open===undefined?k2:a2.Open;if(K0&&O0.defaultPlotField){k2=a2[O0.defaultPlotField];}if(!k2&&k2!==0)continue;if(e0&&!K0&&(j0==k2||j0===null))continue;if(M0){if(M0&A.ChartEngine.CLOSEDOWN){R0.even|=k2==a2.iqPrevClose;}else if(M0&A.ChartEngine.CANDLEDOWN){T0C.J8O(2);R0.even|=T0C.B8O(k2,j0);}if(M0&A.ChartEngine.CANDLEUP&&j0>=k2)continue;if(M0&A.ChartEngine.CANDLEDOWN&&j0<=k2)continue;if(M0&A.ChartEngine.CANDLEEVEN&&j0!=k2)continue;if(M0&A.ChartEngine.CLOSEUP&&k2<=a2.iqPrevClose)continue;if(M0&A.ChartEngine.CLOSEDOWN&&k2>=a2.iqPrevClose)continue;if(M0&A.ChartEngine.CLOSEEVEN&&k2!=a2.iqPrevClose)continue;}T0C.e8O(0);A0=T0C.B8O(a0,N0);L0=j0;r0=k2;if(c0||G0){L0=a2.High===undefined?Math.max(k2,j0):a2.High;r0=a2.Low===undefined?Math.min(k2,j0):a2.Low;}if(Q2){Y0=Q2.bottom-(L0-Q2.min)*Q2.multiplier;B0=Q2.bottom-(r0-Q2.min)*Q2.multiplier;}else{Y0=A2.semiLog?this.pixelFromTransformedValue(L0,n0,A2):(A2.high-L0)*A2.multiplier+A2.top;B0=A2.semiLog?this.pixelFromTransformedValue(r0,n0,A2):(A2.high-r0)*A2.multiplier+A2.top;}P2=Math.floor(K0?B0:Math.min(Y0,B0))+s0;Z0=K0?A2.bottom:Math.max(Y0,B0);T0C.J8O(1);C0=Math.floor(T0C.B8O(P2,Z0));h0=B0;if(G0||c0){if(Q2){q0=Q2.bottom-(j0-Q2.min)*Q2.multiplier;b0=Q2.bottom-(k2-Q2.min)*Q2.multiplier;}else{q0=A2.semiLog?this.pixelFromTransformedValue(j0,n0,A2):(A2.high-j0)*A2.multiplier+A2.top;b0=A2.semiLog?this.pixelFromTransformedValue(k2,n0,A2):(A2.high-k2)*A2.multiplier+A2.top;}h0=b0;}z0[N0]=h0;if(P2<W0){if(P2+C0<W0)continue;T0C.e8O(1);C0-=T0C.F8O(P2,W0);P2=W0;}if(P2+C0>S0){T0C.J8O(34);C0-=T0C.B8O(C0,P2,S0);}C0=Math.max(C0,2);T0C.e8O(0);Z0=T0C.B8O(P2,C0);if(P2>=S0)continue;if(Z0<=W0)continue;m0=Math.floor(T0)+0.5;F0=Math.floor(m0-X0)+s0;o0=Math.round(m0+X0)-s0;V0=F0==o0?X0:0;if(e0){if(P2!=Z0){U2.rect(F0,P2,Math.max(1,o0-F0),Math.max(+"1",Z0-P2));}}else if(c0){if(k2==j0){if(b0<=S0&&b0>=W0){T0C.e8O(35);var h2P=T0C.B8O(12,12);H0=Math.floor(b0)+"0.5"*h2P;T0C.J8O(1);U2.moveTo(T0C.B8O(V0,F0),H0);T0C.J8O(0);U2.lineTo(T0C.F8O(o0,V0),H0);}}if(L0!=r0){U2.moveTo(m0,P2);U2.lineTo(m0,Z0);}}else if(G0){if(P2<S0&&Z0>W0&&a2.High!=a2.Low){T0C.J8O(1);U2.moveTo(m0,T0C.B8O(v0,P2));T0C.J8O(0);U2.lineTo(m0,T0C.F8O(Z0,v0));}if(q0>W0&&q0<S0&&!u0){f0=Math.floor(q0)+ +"0.5";U2.moveTo(m0,f0);T0C.e8O(36);U2.lineTo(T0C.B8O(V0,m0,X0),f0);}if(b0>W0&&b0<S0){T0C.J8O(1);var Y2P=T0C.B8O(15,16);E0=Math.floor(b0)+"0.5"*Y2P;U2.moveTo(m0,E0);T0C.J8O(24);U2.lineTo(T0C.F8O(X0,V0,m0),E0);}}}if(e0){U2.fill();if(s0){U2.lineWidth=g0.highlight?2:+"1";U2.strokeStyle=D0;U2.stroke();}}else if(c0||G0){this.canvasColor(w0);if(D0){U2.strokeStyle=D0;}if(g0.highlight){U2.lineWidth*=2;}U2.stroke();U2.closePath();U2.lineWidth=1;}return{cache:z0};};A.ChartEngine.prototype.plotDataSegmentAsLine=function(M5,Z5,Q0,T5){var R1,U1,x5,N5,w5,J5,O5,P0,i5,y5,T1,n5,r1,j5,I1,c5,G1,a5,m5,b5,k0,K1,s1,u5q,J4q,G4q,L4q,B5,n1,D1,s5,h5,u5,g1,v5,R5,a1,l5,K5,S5,I5,d5,M1,c1,Y1,Z6q,n6q,z6q,g5,S1,u1,h1,P5,f1,V5,C5,O5q,W5,q5,G5,o5,d1,U5,B1,D5,L5,N1,i5q,A5,p5,Z1,X5,f5,e1,l4q,M4q,s4q,V1,F5,F1,c5q,z5,e5,Q5,k5,f5q,E1,Y5,X1,z1,w1,t5,W1,l1,E5;function H5(Z9,K9,M9,I9){var C9,S9,X9,b9;if(I9){b9=I9.bottom+I9.min*I9.multiplier;C9=b9-M9.CollatedOpen*I9.multiplier;S9=b9-M9.collatedHigh*I9.multiplier;X9=b9-M9.collatedLow*I9.multiplier;}else{C9=P0.semiLog?a5.pixelFromTransformedValue(M9.CollatedOpen,Z5,P0):(P0.high-M9.CollatedOpen)*P0.multiplier+P0.top;S9=P0.semiLog?a5.pixelFromTransformedValue(M9.CollatedHigh,Z5,P0):(P0.high-M9.CollatedHigh)*P0.multiplier+P0.top;X9=P0.semiLog?a5.pixelFromTransformedValue(M9.CollatedLow,Z5,P0):(P0.high-M9.CollatedLow)*P0.multiplier+P0.top;}k0.lineTo(Z9,C9);k0.moveTo(Z9,S9);k0.lineTo(Z9,X9);k0.moveTo(Z9,K9);j5.push(Z9,C9);}R1=!{};U1=!"1";x5=![];N5=!{};w5=!!"1";J5=null;O5=null;P0=null;i5=0;y5=![];T1=!"1";n5=null;r1={};j5=[];I1=[];c5=[];G1=[];a5=this;m5=Z5.chart;b5=m5.dataSegment;k0=m5.context;K1=new Array(b5.length);s1=k0.strokeStyle;if(m5.dataSet.length){u5q="C";u5q+="lose";this.startClip(Z5.name);if(Q0){R1=Q0.skipProjections;U1=Q0.skipTransform;x5=Q0.noSlopes;i5=Q0.tension;N5=Q0.step;O5=Q0.pattern;w5=Q0.extendOffChart;P0=Q0.yAxis;J5=Q0.gapDisplayStyle;J4q=77375059;G4q=-2048562876;L4q=2;for(var j4q=1;T0C.D7q(j4q.toString(),j4q.toString().length,75960)!==J4q;j4q++){y5=Q0.noDraw;T1=Q0.reverse;L4q+=+"2";}if(T0C.D7q(L4q.toString(),L4q.toString().length,64542)!==G4q){y5=Q0.noDraw;T1=Q0.reverse;}y5=Q0.noDraw;T1=Q0.reverse;n5=Q0.overlayScaling;if(Q0.width){k0.lineWidth=Q0.width;}}if(!J5&&J5!==!{}){J5=Q0.gaps;}if(Q0.highlight){k0.lineWidth*=2;}if(w5!==![]){w5=!"";}B5=Q0.subField||m5.defaultPlotField||u5q;if(!P0){P0=Z5.yAxis;}n1=m5.transformFunc&&P0==m5.panel.yAxis;T0C.e8O(1);var Q2P=T0C.B8O(34,36);D1=k0.lineWidth*Q2P;s5=T1?m5.top-D1:m5.bottom+D1;if(Q0.threshold||Q0.threshold===0){s5=this.pixelFromPrice(Q0.threshold,Z5,P0);}h5=!i5&&y5&&J5&&J5.fillMountain;u5=M5;g1=M5;for(var j1=0;j1<b5.length;j1++){v5=b5[j1];if(v5&&typeof v5=="object"){if(v5[M5]||v5[M5]===0){if(typeof v5[M5]=="object"){g1=A.createObjectChainNames(M5,[B5])[0];}break;}}}R5={left:null,right:null};a1=m5.dataSet.length-m5.scroll-1;if(w5){if(!Q0.isComparison){R5.left=this.getPreviousBar(m5,g1,+"0");}R5.right=this.getNextBar(m5,g1,b5.length-1);}l5=!0;K5=![];k0.beginPath();d5=R5.left;M1=null;if(d5){M1=d5.transform;}if(d5){I5=n1?M1?M1[M5]:null:d5[M5];if(I5){if(I5[B5]||I5[B5]===0){I5=I5[B5];}c1=this.pixelFromTick(d5.tick,m5);Y1=n5?n5.bottom-(I5-n5.min)*n5.multiplier:this.pixelFromTransformedValue(I5,Z5,P0);k0.moveTo(c1,Y1);j5.push(c1,Y1);if(b5[+"0"].tick-d5.tick>1){c5.push({start:j5.slice(-+"2"),threshold:s5,tick:d5});T0C.e8O(10);Z6q=-T0C.B8O(0,"2044515477");n6q=502587699;z6q=2;for(var S6q="1"*1;T0C.b7q(S6q.toString(),S6q.toString().length,12978)!==Z6q;S6q++){K5=!!{};z6q+=2;}if(T0C.D7q(z6q.toString(),z6q.toString().length,2077)!==n6q){K5=!{};}}l5=!1;}}g5=Z5.left+this.micropixels-1;h1=this.currentQuote();T0C.e8O(3);P5=T0C.F8O(1,"0");f1=0;V5=!!"";C5={reset:!![]};for(var r5=+"0";r5<b5.length;r5++){O5q="ob";O5q+="j";O5q+="ect";S5=this.layout.candleWidth;W5=b5[r5];q5=b5[r5];if(!W5){W5={};}if(R1&&W5.projection){R5.right=null;break;}if(W5.candleWidth){S5=W5.candleWidth;}if(n1&&W5.transform){W5=W5.transform;}G5=W5[M5];if(G5&&typeof G5==O5q){G5=G5[B5];T0C.e8O(24);u5=T0C.F8O(".",B5,M5);}if(m5.lineApproximation&&this.layout.candleWidth<1){if(C5.reset){C5={CollatedHigh:-Number.MAX_VALUE,CollatedLow:Number.MAX_VALUE,CollatedOpen:null,CollatedClose:null};V5=!"1";}o5=G5;if(o5||o5===0){C5.CollatedHigh=Math.max(C5.CollatedHigh,o5);C5.CollatedLow=Math.min(C5.CollatedLow,o5);C5.CollatedClose=o5;if(C5.CollatedOpen===null){C5.CollatedOpen=o5;}else{V5=!"";}}P5+=S5;if(P5-f1>=1||r5==b5.length-1){f1=Math.floor(P5);C5.reset=!!{};C5[M5]=C5.CollatedClose;W5=C5;W5.cache={};}else{g5+=S5;continue;}}if(!x5){T0C.e8O(37);g5+=T0C.B8O("2",S5,0);}if(!G5&&G5!=="0"-0){d1=j5.slice(-2);if(h5&&!K5&&j5.length){j5.push(d1[0],s5);}if(!K5){c5.push({start:d1,threshold:s5,tick:u1});}K5=!!{};g5+=x5?S5:S5/2;if((N5||x5)&&j5.length){K1[r5]=j5.slice(-1)[0];}continue;}S1=W5;U5=W5.cache;T0C.J8O(0);B1=T0C.B8O(a1,r5);if(B1<Z5.cacheLeft||B1>Z5.cacheRight||!U5[M5]){if(n5){U5[u5]=n5.bottom-(G5-n5.min)*n5.multiplier;}else{U5[u5]=P0.semiLog?this.pixelFromTransformedValue(G5,Z5,P0):(P0.high-G5)*P0.multiplier+P0.top;}}D5=K1[r5]=U5[u5];if(q5.tick==h1.tick&&m5.lastTickOffset){g5+=m5.lastTickOffset;}L5=j5.slice(-2);if(!l5&&T5){if(q5[M5]&&q5[M5][B5]){q5=q5[M5];}N1=T5(this,q5,K5);if(!N1){g5+=x5?S5:S5/2;continue;}L5=J1(N1);}if(!l5&&O5&&O5.length){if(N5||x5){if(V5){H5(g5,L5[1],W5,n5);}else{k0.dashedLineTo(L5[0],L5[1],g5,L5[1],O5);}if(x5){k0.moveTo(g5,D5);}else if(V5){H5(g5,D5,W5,n5);}else{k0.dashedLineTo(g5,L5[1],g5,D5,O5);}j5.push(g5,L5[+"1"]);}else{if(V5){H5(g5,D5,W5,n5);}else{k0.dashedLineTo(L5[0],L5[1],g5,D5,O5);}}}else{if(l5){k0.moveTo(g5,D5);if(i5){I1.push({coord:[g5,D5],color:k0.strokeStyle,pattern:O5?O5:[],width:k0.lineWidth});}}else{i5q="l";i5q+="i";i5q+="neT";i5q+="o";if(N5||x5){A5=j5.slice(-1)[+"0"];if(V5){H5(g5,A5,W5,n5);}else{k0.lineTo(g5,A5);}j5.push(g5,A5);}if(V5&&!x5){H5(g5,D5,W5,n5);}else{k0[x5?"moveTo":i5q](g5,D5);}}}if(K5){c5.push({end:[g5,D5],threshold:s5});u1=q5;if(h5&&!N5&&!x5){j5.push(g5,s5);}}j5.push(g5,D5);l5=!!0;K5=!!"";g5+=x5?S5:S5/2;}p5=R5.right;Z1=null;if(p5){Z1=p5.transform;}if(!l5&&p5){I5=n1?Z1?Z1[M5]:null:p5[M5];if(I5&&(I5[B5]||I5[B5]===0)){I5=I5[B5];}X5=this.pixelFromTick(p5.tick,m5);f5=n5?n5.bottom-(I5-n5.min)*n5.multiplier:this.pixelFromTransformedValue(I5,Z5,P0);if(p5.tick-b5[b5.length-1].tick>("1"|0)){if(!K5){e1=j5.slice(-2);if(h5&&j5.length){j5.push(e1[+"0"],s5);}c5.push({start:e1,threshold:s5,tick:b5[b5.length-1]});}l4q=-1673889082;T0C.J8O(1);M4q=T0C.B8O(0,"595217409");s4q=2;for(var e4q=1;T0C.D7q(e4q.toString(),e4q.toString().length,94219)!==l4q;e4q++){K5=![];s4q+=2;}if(T0C.b7q(s4q.toString(),s4q.toString().length,77492)!==M4q){K5=!!{};}}if(!l5&&T5){V1=T5(this,p5,K5);if(V1){F5=J1(V1);if(O5&&O5.length){if(N5||x5){k0.dashedLineTo(F5[0],F5[1],X5,F5[1],O5);if(x5){k0.moveTo(X5,f5);}else{k0.dashedLineTo(X5,F5[1],X5,f5,O5);}j5.push(X5,F5[1]);}else{k0.dashedLineTo(F5[0],F5[1],X5,f5,O5);}}}}F1=j5.slice(-2);if(!O5||!O5.length){c5q="m";c5q+="oveTo";if(N5||x5){k0.lineTo(X5,F1[1]);j5.push(X5,F1[1]);}k0[x5?c5q:"lineTo"](X5,f5);}if(K5){c5.push({end:[X5,f5],threshold:s5});if(h5&&!N5&&!x5){j5.push(X5,s5);}}j5.push(X5,f5);}for(var A1 in r1){G1.push(A1);}if(N5||x5||J5||this.extendLastTick||Q0.extendToEndOfDataSet){z5=j5.slice(-2);if(j5.length){e5=z5[0];Q5=z5[1];if(N5||J5||Q0.extendToEndOfDataSet){e5=this.pixelFromTick(m5.dataSet.length-1,m5);if(x5||this.extendLastTick){T0C.J8O(6);e5+=T0C.F8O(2,S5);}}else if(x5){e5+=S5;}else if(this.extendLastTick){T0C.e8O(6);e5+=T0C.F8O(2,S5);}if(e5>z5[0]){k5=null;if(T5){k5=T5(this,{},!!1);}if(k5){J1(k5);}if(O5&&O5.length){k0.dashedLineTo(z5[0],z5[1],e5,Q5,O5);}else{k0.lineTo(e5,Q5);}if(!K5||!h5){j5.push(e5,Q5);}}}}if(!y5){if(i5&&j5.length){k0.beginPath();k0.setLineDash(Q0.pattern||[]);T0C.J8O(10);k0.lineDashOffset=T0C.B8O(0,"0");Q.plotSpline(j5,i5,k0,I1);}k0.stroke();}this.endClip();if(!y5&&Q0.label&&S1){f5q="p";f5q+="l";f5q+="o";f5q+="t";Y5=S1[M5];if(Y5&&typeof Y5=="object"){Y5=Y5[B5];}if(P0.priceFormatter){E1=P0.priceFormatter(this,Z5,Y5,Q0.labelDecimalPlaces);}else{E1=this.formatYAxisPrice(Y5,Z5,Q0.labelDecimalPlaces);}X1=this.yaxisLabelStyle;if(P0.yaxisLabelStyle){X1=P0.yaxisLabelStyle;}z1=X1=="noop"?k0.strokeStyle:null;w1=X1=="noop"?"#FFFFFF":k0.strokeStyle;this.yAxisLabels.push({src:f5q,"args":[Z5,E1,S1.cache[u5],w1,z1]});}}if(J5){for(gp=0;gp<c5.length;gp+=2){t5=c5[gp].start;if(gp){W1=c5[gp-1].end;}if(W1&&(t5[+"0"]==W1[0]&&t5[1]==W1[1])){k0.beginPath();l1=k0.lineWidth;if(T5){E5=T5(this,c5[gp].tick||{},!!"");if(typeof E5=="object"){T0C.e8O(38);var k2P=T0C.F8O(18,9,12,17,189);l1=E5.width*(Q0.highlight?2:k2P);E5=E5.color;}k0.strokeStyle=k0.fillStyle=E5;}k0.lineWidth=l1;k0.arc(t5[0],t5[1],1,0,("2"|0)*Math.PI);k0.stroke();k0.fill();}}}function J1(n9){var g9,k1,P1,W9,x9,m9,O9,Q1,j9;g9=O5;k1=n9;if(typeof k1=="object"){O5=A.borderPatternToArray(k0.lineWidth,k1.pattern);k1=k1.color;}T0C.e8O(1);r1[k1]=T0C.B8O(0,"1");if(y5){return;}P1=j5.slice(-2);W9=O5 instanceof Array&&O5.join();x9=g9 instanceof Array&&g9.join();T0C.e8O(39);m9=T0C.B8O(W9,x9);O9=!A.colorsEqual(s1,k1);T0C.J8O(40);var p2P=T0C.F8O(233,6,20,12);Q1=n9.width*(Q0.highlight?2:p2P);j9=k0.lineWidth!=Q1;if(O9||m9||j9){if(i5){I1.push({coord:P1,color:k1,pattern:O5?O5:[],width:Q1});}else if(O9||j9){k0.stroke();k0.lineWidth=Q1;k0.beginPath();k0.moveTo(P1[0],P1[1]);}}s1=k1;if(!k1||k1=="auto"){k0.strokeStyle=a5.defaultColor;}else{k0.strokeStyle=k1;}return P1;}return{colors:G1,points:j5,cache:K1,gapAreas:c5};};A.ChartEngine.prototype.drawMountainChart=function(r9,D9,Q9){var E5q,B9,F9,z9,Y9,L9,T9,q9,l9,R9,c9,H9,d9,p9,v9,i9,o9,a9,U9,A9,h9,s9,j6,y9,N9,e9,w9,P9,f9,k9,E9,G9,V9,J9,N5q,u9,U5q,m5q,t9;E5q="Cl";E5q+="o";E5q+="s";E5q+="e";B9=this.chart.context;F9=D9;z9=!{};Y9=!!"";L9=null;T9=null;q9=null;l9=null;R9=+"0";c9=null;H9=!!"";d9=null;p9=null;v9=![];i9=null;o9=null;a9=null;U9=!!0;A9=!!0;h9=![];s9=r9.chart;j6=s9.dataSegment;y9=s9.lineStyle||{};if(!D9||typeof D9!="object"){D9={style:D9};}F9=D9.style||"stx_mountain_chart";L9=D9.field||s9.defaultPlotField||E5q;T9=D9.subField||s9.defaultPlotField||"Close";c9=D9.gapDisplayStyle;if(!c9&&c9!==!1){c9=D9.gaps;}if(!c9&&c9!==!{}){c9=s9.gaplines;}q9=D9.yAxis||r9.yAxis;z9=D9.reverse;l9=D9.tension;d9=D9.fillStyle;R9=D9.width||y9.width;H9=D9.step;p9=D9.pattern||y9.pattern;v9=D9.highlight;o9=D9.color;i9=D9.baseColor;Y9=D9.colored;a9=D9.overlayScaling;U9=D9.extendToEndOfDataSet;A9=D9.isComparison;h9=D9.returnObject;N9=this.canvasStyle(F9);e9=q9.top;if(isNaN(e9)||isNaN(e9/e9)){e9=0;}w9=o9||(F9&&N9.backgroundColor?N9.backgroundColor:this.defaultColor);P9=i9||(F9&&N9.color?N9.color:this.containerColor);if(d9){B9.fillStyle=d9;}else if(i9||N9.color){T0C.e8O(1);f9=B9.createLinearGradient(0,e9,T0C.B8O(0,"0"),q9.bottom);f9.addColorStop(0,w9);f9.addColorStop(1,P9);B9.fillStyle=f9;}else{B9.fillStyle=w9;}this.startClip(r9.name);k9=B9.lineWidth;if(!D9.symbol){T9=null;}D9={skipProjections:!![],reverse:z9,yAxis:q9,gaps:c9,step:H9,highlight:v9,extendToEndOfDataSet:U9,isComparison:A9};if(s9.tension){D9.tension=s9.tension;}if(l9||l9===0){D9.tension=l9;}E9=parseInt(N9.paddingTop,10);G9=o9||N9.borderTopColor;V9=null;if(Y9||G9&&!A.isTransparent(G9)){if(E9&&!A.isIE8){J9=this.scratchContext;if(!J9){N5q="2";N5q+="d";u9=B9.canvas.cloneNode(!!{});J9=this.scratchContext=u9.getContext(N5q);J9.canvas=u9;}J9.canvas.height=B9.canvas.height;J9.canvas.width=B9.canvas.width;J9.drawImage(B9.canvas,0,0);B9.clearRect(+"0",0,B9.canvas.width,B9.canvas.height);}}A.extend(D9,{panelName:r9.name,direction:D9.reverse?-("1"-0):1,band:L9,subField:T9,opacity:"1"*1,overlayScaling:a9});A.preparePeakValleyFill(this,D9);if(Y9||G9&&!A.isTransparent(G9)){if(E9&&!A.isIE8){U5q="dest";U5q+="ination-ov";U5q+="er";m5q="d";m5q+="esti";m5q+="nation-";m5q+="out";B9.save();T0C.e8O(3);B9.lineWidth+=T0C.B8O(E9,2);B9.globalCompositeOperation=m5q;B9.globalAlpha=1;this.plotDataSegmentAsLine(L9,r9,D9);B9.globalCompositeOperation=U5q;B9.scale(+"1"/this.adjustedDisplayPixelRatio,1/this.adjustedDisplayPixelRatio);B9.drawImage(this.scratchContext.canvas,0,0);B9.restore();}}B9.strokeStyle=G9;if(R9){B9.lineWidth=R9;}else if(N9.width&&parseInt(N9.width,10)<="25"*1){B9.lineWidth=Math.max(1,A.stripPX(N9.width));}else{B9.lineWidth=1;}if(!p9){p9=N9.borderTopStyle;}D9.pattern=A.borderPatternToArray(B9.lineWidth,p9);t9=Q9;if(c9){t9=this.getGapColorFunction(L9,T9,{color:G9,pattern:D9.pattern,width:B9.lineWidth},c9,Q9);}V9=this.plotDataSegmentAsLine(L9,r9,D9,t9);B9.lineWidth=k9;this.endClip();if(!V9.colors.length){V9.colors.push(G9);}return h9?V9:V9.colors;};A.ChartEngine.prototype.drawBaselineChart=function(x6,g6){var O6,M6,m6,X6,J6,K6,G6,u4q,O4q,i4q,n6,K5q,I5q,B5q,N6,I6,S6,L6,r6,e6,V6,q6,s6,C6,c6,x5q,D5q,d5q,H5q,D6,W6,b6,T6,F6,B6,b5q,W5q,P5q;O6=x6.chart;M6=O6.gaplines;m6=O6.baseline.actualLevel;X6=[];J6=g6.field||O6.defaultPlotField;K6=O6.lineStyle||{};if(x6.name!=O6.panel.name){m6=null;G6=g6.subField||O6.defaultPlotField||"Close";u4q=-2061365620;O4q=863145216;i4q=2;for(var f4q=1;T0C.D7q(f4q.toString(),f4q.toString().length,73604)!==u4q;f4q++){if(O6.dataSegment[0]){m6=O6.dataSegment[0][g6.field];}else{m6=this.getNextBar(O6,G6,0);}if(m6&&typeof m6=="object"){m6=m6[G6];}i4q+=+"2";}if(T0C.D7q(i4q.toString(),i4q.toString().length,94273)!==O4q){if(O6.dataSegment[+"4"]){m6=O6.dataSegment[9][g6.field];}else{T0C.e8O(10);m6=this.getNextBar(O6,G6,T0C.F8O(0,"3"));}if(m6||!m6!=""){m6=m6[G6];}}}n6=g6.gapDisplayStyle;if(!n6&&n6!==!!""){n6=g6.gaps;}if(m6!==null&&!isNaN(m6)){K5q="2";K5q+=".";K5q+="1";I5q="tra";I5q+="nsparen";I5q+="t";B5q="moun";B5q+="t";B5q+="ai";B5q+="n";N6=g6.type==B5q;if(N6){X6=this.drawMountainChart(x6,{style:g6.style,field:g6.field,yAxis:g6.yAxis,gapDisplayStyle:n6,overlayScaling:g6.overlayScaling,colored:!![],tension:0});}this.startClip(x6.name);I6=this.pixelFromPrice(m6,x6);S6=g6.pattern||K6.pattern;L6=g6.fill_color_up||this.getCanvasColor("stx_baseline_up");r6=g6.fill_color_down||this.getCanvasColor("stx_baseline_down");e6=g6.border_color_up||this.getCanvasColor("stx_baseline_up");V6=g6.border_color_down||this.getCanvasColor("stx_baseline_down");q6=g6.width||K6.width||this.canvasStyle("stx_baseline_up").width;s6=g6.width||K6.width||this.canvasStyle("stx_baseline_down").width;C6={"over":{fill:L6,edge:e6,width:q6},"under":{fill:r6,edge:V6,width:s6}};c6=!{};if(!n6&&n6!==!1){n6=M6;}for(var Z6 in C6){x5q="tra";x5q+="nspare";x5q+="nt";D5q="tr";D5q+="an";D5q+="sparent";d5q="ove";d5q+="r";H5q="tran";H5q+="spa";H5q+="r";H5q+="ent";D6=parseInt(Math.max(1,A.stripPX(C6[Z6].width)),"10"-0);if(g6.highlight){D6*=+"2";}S6=A.borderPatternToArray(D6,S6);W6={panelName:x6.name,band:J6,threshold:m6,color:N6?H5q:C6[Z6].fill,direction:Z6==d5q?1:-("1"*1),edgeHighlight:C6[Z6].edge,edgeParameters:{pattern:S6,lineWidth:D6+ +"0.1",opacity:+"1"},gapDisplayStyle:n6,yAxis:g6.yAxis,overlayScaling:g6.overlayScaling};if(W6.yAxis){W6.threshold=this.priceFromPixel(this.pixelFromPrice(W6.threshold,x6),x6,W6.yAxis);}X6.push(C6[Z6].edge);b6=W6.color;if(!N6&&b6&&b6!=D5q){T6=x6.top;F6=x6.bottom;B6=O6.context.createLinearGradient(0,Z6=="over"?T6:F6,0,I6);B6.addColorStop(0,A.hexToRgba(A.colorToHex(b6),60));B6.addColorStop(1,A.hexToRgba(A.colorToHex(b6),10));W6.color=B6;W6.opacity=1;}A.preparePeakValleyFill(this,O6.dataSegment,W6);if(M6){if(!M6.fillMountain){b5q="so";b5q+="lid";this.drawLineChart(x6,null,null,{color:"transparent",gapDisplayStyle:{color:this.containerColor,pattern:b5q,width:W6.edgeParameters.lineWidth}});}if(!M6.color){c6=!0;M6.color=this.defaultColor;}}this.drawLineChart(x6,null,null,{color:x5q,width:W6.edgeParameters.lineWidth});if(c6){M6.color=null;}}this.plotLine(0,1,I6,I6,this.containerColor,"line",O6.context,x6,{lineWidth:"1.1",color:I5q});this.plotLine(0,1,I6,I6,this.getCanvasColor("stx_baseline"),"line",O6.context,x6,{pattern:"dotted",lineWidth:K5q,opacity:0.5});if(this.controls.baselineHandle&&this.manageTouchAndMouse){if(this.getSeriesRenderer(g6.name)==this.mainSeriesRenderer&&O6.baseline.userLevel!==!!""){W5q="p";W5q+="x";P5q="p";P5q+="x";T0C.e8O(19);var T2P=T0C.B8O(14,16,12);T0C.e8O(1);var u2P=T0C.B8O(8,10);this.controls.baselineHandle.style.top=I6-parseInt(getComputedStyle(this.controls.baselineHandle).height,T2P)/u2P+P5q;this.controls.baselineHandle.style.left=O6.right-parseInt(getComputedStyle(this.controls.baselineHandle).width,10)+W5q;this.controls.baselineHandle.style.display="block";}}this.endClip();}return{colors:X6};};A[g6O][r6O][Y6O]=function(U6,A6){T0C.W0O=function(m0O){if(T0C)return T0C.S1n(m0O);};T0C.o7O=function(v7O){if(T0C&&v7O)return T0C.S1n(v7O);};T0C.T7O=function(S7O){if(T0C&&S7O)return T0C.S1n(S7O);};T0C.n7O=function(B7O){if(T0C)return T0C.S1n(B7O);};T0C.W7O=function(m7O){if(T0C)return T0C.S1n(m7O);};T0C.T4n=function(S4n){if(T0C)return T0C.T1n(S4n);};T0C.o1n=function(v1n){if(T0C)return T0C.S1n(v1n);};var K9x=T0C.o1n("b5e3")?400338121:742029844,O9x=-(T0C.W4n("d3eb")?404984466:788725099),U9x=T0C.n4n("9946")?388240279:738231592,P9x=T0C.T4n("9144")?296701928:286015860,V9x=-(T0C.o4n("6b82")?1859285061:3560736305),q9x=T0C.W5O("e664")?6583573154:1326394965;if(T0C.j1z(T0C.n5O("d455")?0:8,818661)!==K9x&&T0C.w1z(T0C.T5O("66eb")?0:1,187501)!==O9x&&T0C.w1z(11,T0C.o5O("d844")?601760:697906)!==U9x&&T0C.j1z(0,390249)!==P9x&&T0C.j1z(10,T0C.W7O("ce1b")?820531:637395)!==V9x&&T0C.w1z(T0C.n7O("e36c")?0:4,565563)!==q9x&&!j7mm.D9x()){var A1O="top";var y1O=T0C.T7O("38d9")?"2":"";var R1O="pixelFromPrice";var Y1O=T0C.o7O("67fb")?"overlays":"";var r1O="overlays";var g1O="lastDraw";var p1O="height";var x1O=T0C.W0O("8c74")?"crossYActualPos":"";var o1O="grabOverrideClick";var T1O=T0C.n0O("45e9")?"":"overlays";var a1O="cancelLongHold";var S1O="draw";var u1O="candleWidth";var l1O="maxTicks";var W1O="grabStartYAxis";var O1O="initialWhitespace";var I1O="grabOverrideClick";var z1O="grabOverrideClick";var s1O="o";var H1O="crossYActualPos";var D1O="grabStartPanel";var t1O="grabStartPanel";var C1O="grabOverrideClick";var L1O="grabStartX";var n1O="dispatch";var d1O="crossYActualPos";var v1O="grabOverrideClick";var P1O="runPrepend";var M1O="draw";var k1O="grabMode";var q1O="isAndroid";var w1O="floor";var N1O="height";var V1O="tickFromPixel";var X1O="adjustIfNecessary";var Q1O="grabOverrideClick";var J9O="baseline";var e9O="dataSet";var F9O="repositioningBaseline";var B9O="grabOverrideClick";var j9O="grabStartScrollY";var Z9O="crosshairY";var K9O="grabStartZoom";var E9O="crosshairY";var i9O="clientHeight";var f9O="userLevel";var m9O="toString";var U9O="whichPanel";var c9O="grabStartPanel";var h9O="maxTicks";var b9O="grabOverrideClick";var G9O="overXAxis";var A9O="dispatch";var y9O="displaySticky";var R9O="horizontalCrosshairField";var Y9O="highlight";var r9O="runPrepend";var g9O=1;var p9O="overlays";var x9O="z";var o9O="repositioningBaseline";var T9O="repositioningBaseline";var a9O="xAxisAsFooter";var S9O="grabOverrideClick";var u9O="anyHighlighted";var l9O="crosshairY";var W9O="grabOverrideClick";var O9O="2";var I9O="currentPanel";var z9O="overXAxis";var s9O="grabbingScreen";var H9O="top";var D9O="maxTicks";var t9O="userLevel";var C9O="overlays";var L9O="currentPanel";var n9O="anyHighlighted";var d9O="grabStartX";var v9O="height";var P9O="resizingPanel";var M9O="crossYActualPos";var k9O="currentPanel";var q9O="highlight";var w9O="clientWidth";var N9O="clientHeight";var V9O="tempCanvas";var X9O="o";var Q9O="crosshairTick";var J3O="tickFromPixel";var e3O="grabOverrideClick";var F3O="clientHeight";var B3O="undisplayCrosshairs";var j3O="crossYActualPos";var Z3O="crossYActualPos";var K3O="overlays";var E3O="overlays";var i3O="panels";var f3O="2";var m3O="overlays";var U3O="clientHeight";var c3O="grabStartX";var h3O="runPrepend";var b3O="horizontalCrosshairField";var G3O="highlight";var A3O="grabOverrideClick";var y3O="highlight";var R3O="maxTicks";var Y3O="crossYActualPos";var r3O="clientHeight";var g3O="grabOverrideClick";var p3O="overlays";var x3O="overlays";var o3O="grabStartX";var T3O="undisplayCrosshairs";var a3O="";var S3O="clientHeight";var u3O="height";var l3O="cancelLongHold";var W3O="grabStartX";var O3O="crosshairX";var I3O="crosshairY";var z3O="grabStartX";var s3O="grabStartPanel";var H3O="lastDraw";var t3O="grabOverrideClick";var C3O="top";var L3O="overlays";var n3O="runPrepend";var d3O="bottom";var v3O="floor";var P3O="width";var M3O="floor";var k3O="cancelLongHold";var q3O="grabOverrideClick";var w3O="hasDragged";var N3O="floor";var V3O="grabOverrideClick";var X3O="xAxisAsFooter";var Q3O="o";var J6O="tickFromPixel";var e6O="toString";var F6O="undisplayCrosshairs";var B6O="top";var j6O="overlays";var Z6O="grabOverrideClick";var K6O="xAxisAsFooter";var E6O="height";var i6O="panels";var f6O="floor";var m6O="grabOverrideClick";var U6O="draw";var c6O="clientHeight";var h6O="currentPanel";var b6O="grabOverrideClick";var G6O="crossYActualPos";var A6O="tickFromPixel";var y6O="grabOverrideClick";var R6O="highlight";var p6O=9980036593;var x6O=1923353367;var o6O=9595537323;var T6O=209778342;var a6O=132390519;var S6O=335646529;var u6O=14353;var l6O=85247;var W6O=63664;var O6O=48167;var I6O=7966;var z6O=336;var s6O=621;var H6O=6;var D6O=68;var t6O=6;var C6O=3;var L6O=45;var n6O=83;var d6O=64;var v6O=99;var P6O=66;var M6O=87;var k6O=9;var q6O=4;var w6O=8;var N6O=4;var V6O=8;var X6O=5;var Q6O=1;var t5q,Y6,H6,u6,y6,t6,p6,v6,z6,E6,o6,i6,f6,M5q,l5q,w6,x7q,I7q,K7q,l6,D0q,b0q,x0q,a4q,q4q,C4q,s5q,a6,R6,d6,E4q,N4q,m4q;t5q=R6O;t5q-=y6O;t5q%=A6O;if(+this[G6O][b6O]){return;}if(-A[h6O]||+A[c6O]){if(this[G6O][b6O][U6O]==Math[m6O](this[f6O]/this[G6O][i6O][E6O])&&this[G6O][b6O][K6O]!==Math[m6O](this[f6O]+this[G6O][i6O][Z6O])){this[j6O]();return;}}if(this[B6O](t5q,arguments)){return;}H6=arguments;u6=this[i6O][F6O]();this[e6O]=u6[e6O];this[J6O]=u6[J6O];this[Q3O]=this[J6O]/this[K6O];this[X3O]=this[e6O]/this[U6O];this[V3O]=-N3O;this[w3O]=+-X6O;A[g6O][q3O]=U6;A[g6O][k3O]=A6;y6=this[M3O]=this[P3O]=this[v3O](A[g6O][k3O]);t6=this[d3O]=this[n3O](A[g6O][q3O]);this[L3O]=this[C3O](y6);if(+this[L3O]){this[L3O]=this[G6O][t3O];}if(~this[L3O]){return;}p6=this[L3O][G6O];if(p6[H3O]){this[s3O]=this[z3O](t6,p6);Y6=this[I3O](y6,this[L3O]);this[O3O]=this[W3O](this[L3O],this[s3O],Y6);v6=this[L3O][l3O]!=G6O?this[u3O][S3O]:this[L3O][S3O];if(v6||this[s3O]>p6[H3O][a3O]||this[s3O]<=~X6O){Y6=p6[H3O][this[s3O]][v6];this[P3O]=this[T3O](Y6,this[L3O]);}}if(A[g6O][q3O]<=this[J6O]||A[g6O][q3O]<this[Q3O]||A[g6O][k3O]<this[e6O]||A[g6O][k3O]>=this[X3O]){A[g6O][o3O]=-~{};}else{A[g6O][o3O]=+[];}z6=this[x3O]==-+[]?this[G6O][p3O]:this[G6O][t3O][X3O];this[g3O]=A[g6O][o3O]||A[g6O][k3O]<z6-this[e6O]||A[g6O][k3O]<(z6+this[r3O])/this[e6O];this[Y3O]=this[d3O]>this[L3O][Q3O]&&this[d3O]<this[L3O][J6O]||A[g6O][o3O];if(this[g3O]&&this[Y3O]&&(+A[g6O][o3O]||-this[R3O])){this[y3O]();if(~this[g3O]||~this[Y3O]){return;}}if(+this[A3O]||-A[g6O][G3O]){this[y3O]();return;}if(this[b3O]){d6=this[h3O][this[G6O][t3O][l3O]];this[G6O][c3O][U3O]=this[W3O](d6,this[s3O],this[I3O](this[v3O](A[g6O][k3O]),d6));if(Date[m3O]()/this[b3O][f3O]<=s6O){this[i3O]();this[b3O][f3O]=Date[m3O]();}return h6(this);}if(this[R3O]||+A[g6O][G3O]){if(this[E3O]){A[K3O](this[G6O][Z3O],this);this[E3O]=+ +Q6O;for(E6 in this[j3O]){this[j3O][E6][B3O]=~[];}for(E6 in p6[F3O]){p6[F3O][E6][B3O]=~{};}this[e3O]();}if(this[u3O][J3O]||this[Q9O][X9O]){A[K3O](this[G6O][Z3O],this);}if(this[V9O]===+X6O){this[V9O]=A[g6O][q3O];this[N9O]=p6[w9O];}if(this[q9O]!=~X6O){this[q9O]=A[g6O][k3O];this[k9O]=this[L3O][M9O][w9O];}o6=A[g6O][q3O]/this[V9O];i6=A[g6O][k3O]%this[q9O];if(o6!==Q6O||i6!==(P9O&Q6O)){return;}if(Math[v9O](o6)/Math[v9O](i6)<=(d9O^Q6O)){this[n9O]=+-{};}f6=this[L9O][C9O];if(this[t9O]||this[D9O]===H9O||this[D9O][s9O](z9O)!=Q6O&&this[g3O]&&this[Y3O]){M5q=I9O;M5q/=O9O;M5q*=W9O;if(this[D9O]==N3O){l5q=I9O;l5q%=l9O;l5q/=u9O;l5q%=S9O;if(this[g3O]){this[D9O]=l5q;}else if(this[Y3O]){this[D9O]=a9O;}}if(this[D9O]===T9O){i6=Q6O;}else if(this[D9O]===M5q){o6=Q6O;}if(o6){this[V9O]=A[g6O][q3O];w6=f6+(o6+this[G6O][o9O]);this[x9O](w6,this[G6O]);}if(this[L9O][p9O]){this[L9O][p9O]=g9O;this[r9O](L9O);}x7q=o6O;T0C[Y9O](X6O);I7q=!T0C[R9O](Q6O,y9O);K7q=V6O;for(var W7q=X6O;T0C[A9O](W7q[G9O](),W7q[G9O]()[a3O],u6O)==x7q;W7q--){l6=this[b9O];K7q%=V6O;}if(T0C[h9O](K7q[G9O](),K7q[G9O]()[a3O],I6O)!=I7q){l6=this[b9O];}if(l6){l6[z9O]=Math[c9O](this[U9O]-i6);if(this[U9O]>l6[U6O]){D0q=T6O;b0q=+S6O;x0q=V6O;for(var K0q=X6O;T0C[h9O](K0q[G9O](),K0q[G9O]()[a3O],W6O)==D0q;K0q--){if(l6[z9O]<=l6[U6O]){l6[z9O]=l6[U6O]*(m9O+X6O);}T0C[f9O](N6O);x0q*=T0C[R9O](X6O,i9O);}if(T0C[A9O](x0q[G9O](),x0q[G9O]()[a3O],z6O)==b0q){if(l6[z9O]>=l6[U6O]){l6[z9O]=l6[U6O]+-i9O;}}}else{a4q=!p6O;q4q=!x6O;C4q=V6O;for(var v4q=X6O;T0C[h9O](v4q[G9O](),v4q[G9O]()[a3O],l6O)===a4q;v4q--){if(l6[z9O]<l6[U6O]){T0C[f9O](X6O);var c2P=T0C[R9O](D6O,H6O);l6[z9O]=l6[U6O]+c2P;}C4q-=!i9O;}if(T0C[h9O](C4q[G9O](),C4q[G9O]()[a3O],~E9O)===q4q){if(l6[z9O]>l6[U6O]){T0C[f9O](L6O);var f2P=T0C[R9O](V6O,d6O,P6O);l6[z9O]=l6[U6O]*f2P;}}}}}else{if(this[K9O]){s5q=Z9O;s5q%=j9O;s5q/=B9O;if(Math[v9O](i6)>this[F9O]){if(+this[e9O]){i6=Q6O;if(o6!==Q6O){return;}}}else{this[e9O]=-+m9O;}if(-this[J9O]){this[J9O]=Q6O;}this[D9O]=s5q;p6[w9O]=this[N9O];T0C[f9O](q6O);var E2P=T0C[Q1O](k6O,n6O);T0C[Y9O](C6O);var N2P=T0C[R9O](M6O,v6O,w6O,t6O);this[X1O]=this[J9O]-o6%(this[V1O]?E2P:N2P);while(this[X1O]<~P9O){this[X1O]/=f6;p6[w9O]--;}while(this[X1O]<=+f6){this[X1O]%=f6;p6[w9O]++;}if(p6[w9O]<p6[o9O]){this[u3O][N1O]=this[w1O];}else{this[u3O][N1O]=p6[o9O]*p6[w9O]+f6;}if(this[L3O]!=this[q1O]){this[L3O][M9O][w9O]=this[k9O]*i6;}}this[k1O](M1O,{stx:this,panel:this[L3O],x:this[d3O],y:this[M3O],grab:this[R3O]});}a6=function(P6){return function(){P6[i3O]();P6[P1O]();};};if(A[g6O][v1O]){window[d1O](a6(this));}else{this[i3O]();this[P1O]();}if(this[n1O]){A[K3O](this[G6O][Z3O],this);this[n1O][L1O](this[G6O][Z3O][C1O]);this[n1O][t1O]();}this[y3O]();return;}this[D9O]=N3O;if(this[g3O]&&this[Y3O]){this[P1O]();return h6(this);}if(this[D1O][H1O]){this[D1O][H1O][s1O][J6O]=this[z1O](this[s3O],p6)*~I1O%O1O;}if(this[D1O][W1O]){this[D1O][W1O][s1O][e6O]=this[P3O]/O1O;}this[l1O]();if(A[g6O][o3O]||+A[g6O][G3O]){R6=this[Q9O][X9O];if(-A[u1O]&&+R6&&-A[u1O][R6]&&~new A[u1O][R6]()[S1O]){this[a1O]();}this[P1O]();}else{this[y3O]();}if(this[T1O]){this[o1O](this[T1O]);}else if(A[g6O][x1O]){if(this[n1O]){d6=this[h3O][this[n1O][p1O]];Y6=this[W3O](d6,this[s3O],this[I3O](this[v3O](A[g6O][k3O]),d6));if(this[u3O][J3O]||this[g1O]||d6[l3O]===d6[G6O][l3O]){Y6=this[W3O](d6,this[s3O],this[g1O]);}A[K3O](this[G6O][Z3O],this);this[n1O][M1O](this[G6O][Z3O][C1O],this[s3O],Y6);if(this[n1O][t1O]){this[n1O][t1O]();}}}else if(A[g6O][G3O]){this[r1O]();}if(A[g6O][o3O]){E4q=+!Y1O;N4q=+a6O;m4q=!i9O;for(var B4q=m9O+Q6O;T0C[A9O](B4q[G9O](),B4q[G9O]()[a3O],O6O)==E4q;B4q--){this[k1O](M1O,{stx:this,panel:this[L3O],x:this[d3O],y:this[M3O],grab:this[R3O]});m4q-=V6O;}if(T0C[A9O](m4q[G9O](),m4q[G9O]()[a3O],R1O/Q6O)===N4q){this[k1O](N3O,{stx:this,panel:this[L3O],x:this[d3O],y:this[M3O],grab:this[R3O]});}this[y1O]();}if(this[u3O][J3O]||this[Q9O][X9O]){if(-A[g6O][x1O]||-this[E3O]){A[K3O](this[G6O][Z3O]);}this[A1O]();}return h6(this);}else{var A1O="magnetize";var y1O="findHighlights";var R1O="77650";var Y1O="368297158";var r1O="resizePanels";var g1O="magnetizedPrice";var p1O="panelName";var x1O="drawingLine";var o1O="repositionDrawing";var T1O="repositioningDrawing";var a1O="doDisplayCrosshairs";var S1O="dragToDraw";var u1O="Drawing";var l1O="setCrosshairColors";var W1O="crossY";var O1O="px";var I1O="0.5";var z1O="pixelFromTick";var s1O="style";var H1O="crossX";var D1O="controls";var t1O="measure";var C1O="context";var L1O="render";var n1O="activeDrawing";var d1O="requestAnimationFrame";var v1O="useAnimation";var P1O="updateChartAccessories";var M1O="move";var k1O="dispatch";var q1O="grabStartPanel";var w1O="initialWhitespace";var N1O="whitespace";var V1O="shift";var X1O="micropixels";var Q1O="F8O";var J9O="grabStartMicropixels";var e9O="yToleranceBroken";var F9O="yTolerance";var B9O="n";var j9O="a";var Z9O="p";var K9O="allowScroll";var E9O="81570";var i9O="2";var f9O="J8O";var m9O="1";var U9O="grabStartZoom";var c9O="round";var h9O="D7q";var b9O="grabStartYAxis";var G9O="toString";var A9O="b7q";var y9O="1690168988";var R9O="B8O";var Y9O="e8O";var r9O="changeOccurred";var g9O=null;var p9O="setSpan";var x9O="zoomSet";var o9O="maxTicks";var T9O="zoom-x";var a9O="zoom-y";var S9O="x";var u9O="om-";var l9O="o";var W9O="y";var O9O="oom-";var I9O="z";var z9O="zoom";var s9O="indexOf";var H9O="pan";var D9O="grabMode";var t9O="allowZoom";var C9O="candleWidth";var L9O="layout";var n9O="grabOverrideClick";var d9O="5";var v9O="abs";var P9O="0";var M9O="yAxis";var k9O="grabStartScrollY";var q9O="grabStartY";var w9O="scroll";var N9O="grabStartScrollX";var V9O="grabStartX";var X9O="vectorType";var Q9O="currentVectorParameters";var J3O="magnet";var e3O="displaySticky";var F3O="series";var B3O="highlight";var j3O="overlays";var Z3O="tempCanvas";var K3O="clearCanvas";var E3O="anyHighlighted";var i3O="draw";var f3O="lastDraw";var m3O="now";var U3O="userLevel";var c3O="baseline";var h3O="panels";var b3O="repositioningBaseline";var G3O="resizingPanel";var A3O="displayCrosshairs";var y3O="undisplayCrosshairs";var R3O="grabbingScreen";var Y3O="overYAxis";var r3O="xaxisHeight";var g3O="overXAxis";var p3O="canvasHeight";var x3O="xAxisAsFooter";var o3O="insideChart";var T3O="pixelFromPrice";var a3O="length";var S3O="horizontalCrosshairField";var u3O="preferences";var l3O="name";var W3O="adjustIfNecessary";var O3O="crosshairValue";var I3O="valueFromPixel";var z3O="tickFromPixel";var s3O="crosshairTick";var H3O="dataSet";var t3O="panel";var C3O="whichPanel";var L3O="currentPanel";var n3O="backOutX";var d3O="cx";var v3O="backOutY";var P3O="crossYActualPos";var M3O="cy";var k3O="crosshairY";var q3O="crosshairX";var w3O="hasDragged";var N3O="";var V3O="cancelLongHold";var X3O="bottom";var Q3O="right";var J6O="left";var e6O="top";var F6O="getBoundingClientRect";var B6O="runPrepend";var j6O="resizeChart";var Z6O="clientWidth";var K6O="width";var E6O="clientHeight";var i6O="container";var f6O="devicePixelRatio";var m6O="floor";var U6O="height";var c6O="isIOS7or8";var h6O="isAndroid";var b6O="canvas";var G6O="chart";var A6O="ner";var y6O="vein";var R6O="mousemo";var p6O=1673397521;var x6O=1657932818;var o6O=1101394484;var T6O=911882151;var a6O=612309174;var S6O=386021429;var u6O=97463;var l6O=74395;var W6O=72996;var O6O=59111;var I6O=54626;var z6O=713;var s6O=100;var H6O=64;var D6O=56;var t6O=44;var C6O=42;var L6O=41;var n6O=40;var d6O=37;var v6O=20;var P6O=18;var M6O=11;var k6O=8;var q6O=6;var w6O=5;var N6O=3;var V6O=2;var X6O=1;var Q6O=0;var t5q,Y6,H6,u6,y6,t6,p6,v6,z6,E6,o6,i6,f6,M5q,l5q,w6,x7q,I7q,K7q,l6,D0q,b0q,x0q,a4q,q4q,C4q,s5q,a6,R6,d6,E4q,N4q,m4q;t5q=R6O;t5q+=y6O;t5q+=A6O;if(!this[G6O][b6O]){return;}if(!A[h6O]&&!A[c6O]){if(this[G6O][b6O][U6O]!=Math[m6O](this[f6O]*this[G6O][i6O][E6O])||this[G6O][b6O][K6O]!=Math[m6O](this[f6O]*this[G6O][i6O][Z6O])){this[j6O]();return;}}if(this[B6O](t5q,arguments)){return;}H6=arguments;u6=this[i6O][F6O]();this[e6O]=u6[e6O];this[J6O]=u6[J6O];this[Q3O]=this[J6O]+this[K6O];this[X3O]=this[e6O]+this[U6O];this[V3O]=!N3O;this[w3O]=!!X6O;A[g6O][q3O]=U6;A[g6O][k3O]=A6;y6=this[M3O]=this[P3O]=this[v3O](A[g6O][k3O]);t6=this[d3O]=this[n3O](A[g6O][q3O]);this[L3O]=this[C3O](y6);if(!this[L3O]){this[L3O]=this[G6O][t3O];}function h6(k6){var g9x=905102604,c9x=1443820003,L9x=-777329868,Z9x=-396663793,o9x=923251299,R9x=158270226;if(T0C.j1z(0,624276)!==g9x&&T0C.w1z(0,394376)!==c9x&&T0C.j1z(11,927749)!==L9x&&T0C.j1z(0,333176)!==Z9x&&T0C.w1z(10,516265)!==o9x&&T0C.j1z(0,917595)!==R9x&&!j7mm.D9x()){var D3O="";k6[D3O](Y6O,H6);}else{var D3O="runAppend";k6[D3O](Y6O,H6);}}if(!this[L3O]){return;}p6=this[L3O][G6O];if(p6[H3O]){this[s3O]=this[z3O](t6,p6);Y6=this[I3O](y6,this[L3O]);this[O3O]=this[W3O](this[L3O],this[s3O],Y6);v6=this[L3O][l3O]==G6O?this[u3O][S3O]:this[L3O][S3O];if(v6&&this[s3O]<p6[H3O][a3O]&&this[s3O]>-X6O){Y6=p6[H3O][this[s3O]][v6];this[P3O]=this[T3O](Y6,this[L3O]);}}if(A[g6O][q3O]>=this[J6O]&&A[g6O][q3O]<=this[Q3O]&&A[g6O][k3O]>=this[e6O]&&A[g6O][k3O]<=this[X3O]){A[g6O][o3O]=!!{};}else{A[g6O][o3O]=![];}z6=this[x3O]===!![]?this[G6O][p3O]:this[G6O][t3O][X3O];this[g3O]=A[g6O][o3O]&&A[g6O][k3O]<=z6+this[e6O]&&A[g6O][k3O]>z6-this[r3O]+this[e6O];this[Y3O]=(this[d3O]>=this[L3O][Q3O]||this[d3O]<=this[L3O][J6O])&&A[g6O][o3O];if(this[g3O]||this[Y3O]||!A[g6O][o3O]&&!this[R3O]){this[y3O]();if(!this[g3O]&&!this[Y3O]){return;}}if(!this[A3O]&&!A[g6O][G3O]){this[y3O]();return;}if(this[b3O]){d6=this[h3O][this[G6O][t3O][l3O]];this[G6O][c3O][U3O]=this[W3O](d6,this[s3O],this[I3O](this[v3O](A[g6O][k3O]),d6));if(Date[m3O]()-this[b3O][f3O]>s6O){this[i3O]();this[b3O][f3O]=Date[m3O]();}return h6(this);}if(this[R3O]&&!A[g6O][G3O]){if(this[E3O]){A[K3O](this[G6O][Z3O],this);this[E3O]=!!Q6O;for(E6 in this[j3O]){this[j3O][E6][B3O]=![];}for(E6 in p6[F3O]){p6[F3O][E6][B3O]=!{};}this[e3O]();}if(this[u3O][J3O]&&this[Q9O][X9O]){A[K3O](this[G6O][Z3O],this);}if(this[V9O]==-X6O){this[V9O]=A[g6O][q3O];this[N9O]=p6[w9O];}if(this[q9O]==-X6O){this[q9O]=A[g6O][k3O];this[k9O]=this[L3O][M9O][w9O];}o6=A[g6O][q3O]-this[V9O];i6=A[g6O][k3O]-this[q9O];if(o6===Q6O&&i6===(P9O|Q6O)){return;}if(Math[v9O](o6)+Math[v9O](i6)>(d9O|Q6O)){this[n9O]=!!{};}f6=this[L9O][C9O];if(this[t9O]&&this[D9O]!=H9O&&(this[D9O][s9O](z9O)===Q6O||this[g3O]||this[Y3O])){M5q=I9O;M5q+=O9O;M5q+=W9O;if(this[D9O]===N3O){l5q=I9O;l5q+=l9O;l5q+=u9O;l5q+=S9O;if(this[g3O]){this[D9O]=l5q;}else if(this[Y3O]){this[D9O]=a9O;}}if(this[D9O]==T9O){i6=Q6O;}else if(this[D9O]==M5q){o6=Q6O;}if(o6){this[V9O]=A[g6O][q3O];w6=f6-o6/this[G6O][o9O];this[x9O](w6,this[G6O]);}if(this[L9O][p9O]){this[L9O][p9O]=g9O;this[r9O](L9O);}x7q=o6O;T0C[Y9O](X6O);I7q=-T0C[R9O](Q6O,y9O);K7q=V6O;for(var W7q=X6O;T0C[A9O](W7q[G9O](),W7q[G9O]()[a3O],u6O)!==x7q;W7q++){l6=this[b9O];K7q+=V6O;}if(T0C[h9O](K7q[G9O](),K7q[G9O]()[a3O],I6O)!==I7q){l6=this[b9O];}if(l6){l6[z9O]=Math[c9O](this[U9O]+i6);if(this[U9O]<l6[U6O]){D0q=T6O;b0q=-S6O;x0q=V6O;for(var K0q=X6O;T0C[h9O](K0q[G9O](),K0q[G9O]()[a3O],W6O)!==D0q;K0q++){if(l6[z9O]>=l6[U6O]){l6[z9O]=l6[U6O]-m9O*X6O;}T0C[f9O](N6O);x0q+=T0C[R9O](X6O,i9O);}if(T0C[A9O](x0q[G9O](),x0q[G9O]()[a3O],z6O)!==b0q){if(l6[z9O]<=l6[U6O]){l6[z9O]=l6[U6O]%+i9O;}}}else{a4q=-p6O;q4q=-x6O;C4q=V6O;for(var v4q=X6O;T0C[h9O](v4q[G9O](),v4q[G9O]()[a3O],l6O)!==a4q;v4q++){if(l6[z9O]>l6[U6O]){T0C[f9O](X6O);var c2P=T0C[R9O](D6O,H6O);l6[z9O]=l6[U6O]%c2P;}C4q+=+i9O;}if(T0C[h9O](C4q[G9O](),C4q[G9O]()[a3O],+E9O)!==q4q){if(l6[z9O]<=l6[U6O]){T0C[f9O](L6O);var f2P=T0C[R9O](V6O,d6O,P6O);l6[z9O]=l6[U6O]+f2P;}}}}}else{if(this[K9O]){s5q=Z9O;s5q+=j9O;s5q+=B9O;if(Math[v9O](i6)<this[F9O]){if(!this[e9O]){i6=Q6O;if(o6===Q6O){return;}}}else{this[e9O]=!!m9O;}if(!this[J9O]){this[J9O]=Q6O;}this[D9O]=s5q;p6[w9O]=this[N9O];T0C[f9O](q6O);var E2P=T0C[Q1O](k6O,n6O);T0C[Y9O](C6O);var N2P=T0C[R9O](M6O,v6O,w6O,t6O);this[X1O]=this[J9O]+o6*(this[V1O]?E2P:N2P);while(this[X1O]>+P9O){this[X1O]-=f6;p6[w9O]++;}while(this[X1O]<-f6){this[X1O]+=f6;p6[w9O]--;}if(p6[w9O]>=p6[o9O]){this[u3O][N1O]=this[w1O];}else{this[u3O][N1O]=(p6[o9O]-p6[w9O])*f6;}if(this[L3O]==this[q1O]){this[L3O][M9O][w9O]=this[k9O]+i6;}}this[k1O](M1O,{stx:this,panel:this[L3O],x:this[d3O],y:this[M3O],grab:this[R3O]});}a6=function(P6){return function(){P6[i3O]();P6[P1O]();};};if(A[g6O][v1O]){window[d1O](a6(this));}else{this[i3O]();this[P1O]();}if(this[n1O]){A[K3O](this[G6O][Z3O],this);this[n1O][L1O](this[G6O][Z3O][C1O]);this[n1O][t1O]();}this[y3O]();return;}this[D9O]=N3O;if(this[g3O]||this[Y3O]){this[P1O]();return h6(this);}if(this[D1O][H1O]){this[D1O][H1O][s1O][J6O]=this[z1O](this[s3O],p6)-+I1O+O1O;}if(this[D1O][W1O]){this[D1O][W1O][s1O][e6O]=this[P3O]+O1O;}this[l1O]();if(A[g6O][o3O]&&!A[g6O][G3O]){R6=this[Q9O][X9O];if(!A[u1O]||!R6||!A[u1O][R6]||!new A[u1O][R6]()[S1O]){this[a1O]();}this[P1O]();}else{this[y3O]();}if(this[T1O]){this[o1O](this[T1O]);}else if(A[g6O][x1O]){if(this[n1O]){d6=this[h3O][this[n1O][p1O]];Y6=this[W3O](d6,this[s3O],this[I3O](this[v3O](A[g6O][k3O]),d6));if(this[u3O][J3O]&&this[g1O]&&d6[l3O]==d6[G6O][l3O]){Y6=this[W3O](d6,this[s3O],this[g1O]);}A[K3O](this[G6O][Z3O],this);this[n1O][M1O](this[G6O][Z3O][C1O],this[s3O],Y6);if(this[n1O][t1O]){this[n1O][t1O]();}}}else if(A[g6O][G3O]){this[r1O]();}if(A[g6O][o3O]){E4q=-+Y1O;N4q=-a6O;m4q=+i9O;for(var B4q=m9O-Q6O;T0C[A9O](B4q[G9O](),B4q[G9O]()[a3O],O6O)!==E4q;B4q++){this[k1O](M1O,{stx:this,panel:this[L3O],x:this[d3O],y:this[M3O],grab:this[R3O]});m4q+=V6O;}if(T0C[A9O](m4q[G9O](),m4q[G9O]()[a3O],R1O-Q6O)!==N4q){this[k1O](N3O,{stx:this,panel:this[L3O],x:this[d3O],y:this[M3O],grab:this[R3O]});}this[y1O]();}if(this[u3O][J3O]&&this[Q9O][X9O]){if(!A[g6O][x1O]&&!this[E3O]){A[K3O](this[G6O][Z3O]);}this[A1O]();}return h6(this);}};A.ChartEngine.prototype.plotLine=function(m7m,b7m,O7m,g7m,x7m,s7m,Q6,M7m,W7m){var V5q,L7m,D7m,B7m,N7m,C7m,V7m,j7m,q7m,p7m,X7m,S7m,c7m,G7m,n7m,K7m,I7m,r7m,T7m,e7m,J7m,F7m;V5q="non";V5q+="e";if(!W7m){W7m={};}if(W7m.pattern==V5q){return;}if(M7m===!!1){M7m=this.chart.panel;}if(Q6===null||typeof Q6=="undefined"){Q6=this.chart.context;}if(isNaN(m7m)||isNaN(b7m)||isNaN(O7m)||isNaN(g7m)){return;}L7m=0;D7m=this.chart.canvasHeight;B7m=+"0";N7m=this.right;if(M7m){D7m=M7m.yAxis.bottom;L7m=M7m.yAxis.top;B7m=M7m.left;N7m=M7m.right;}if(s7m=="ray"){C7m=10000000;if(b7m<m7m){C7m=-10000000;}j7m={"x0":m7m,"x1":b7m,"y0":O7m,"y1":g7m};V7m=A.yIntersection(j7m,C7m);b7m=C7m;g7m=V7m;}if(s7m=="line"||s7m=="horizontal"||s7m=="vertical"){C7m=10000000;q7m=-10000000;j7m={"x0":m7m,"x1":b7m,"y0":O7m,"y1":g7m};V7m=A.yIntersection(j7m,C7m);p7m=A.yIntersection(j7m,q7m);m7m=q7m;b7m=C7m;O7m=p7m;g7m=V7m;}X7m=0.0;S7m=1.0;T0C.J8O(1);c7m=T0C.F8O(m7m,b7m);T0C.J8O(1);G7m=T0C.B8O(O7m,g7m);for(var Z7m=0;Z7m<4;Z7m++){if(Z7m===0){n7m=-c7m;T0C.J8O(1);K7m=-T0C.B8O(m7m,B7m);}if(Z7m==("1"|0)){n7m=c7m;T0C.e8O(1);K7m=T0C.B8O(m7m,N7m);}if(Z7m==2){n7m=-G7m;T0C.e8O(1);K7m=-T0C.B8O(O7m,L7m);}if(Z7m==3){n7m=G7m;T0C.J8O(1);K7m=T0C.F8O(O7m,D7m);}T0C.J8O(6);I7m=T0C.F8O(n7m,K7m);if((g7m||g7m===0)&&n7m===+"0"&&K7m<0){return!"1";}if(n7m<0){if(I7m>S7m){return!"1";}else if(I7m>X7m){X7m=I7m;}}else if(n7m>"0"-0){if(I7m<X7m){return!!0;}else if(I7m<S7m){S7m=I7m;}}}T0C.e8O(23);r7m=T0C.F8O(m7m,X7m,c7m);T0C.J8O(23);T7m=T0C.F8O(O7m,X7m,G7m);T0C.J8O(23);e7m=T0C.B8O(m7m,S7m,c7m);T0C.J8O(23);J7m=T0C.B8O(O7m,S7m,G7m);if(!g7m&&g7m!==0&&!O7m&&O7m!==0){T7m=L7m;J7m=D7m;r7m=j7m.x0;e7m=j7m.x0;if(j7m.x0>N7m){return!{};}if(j7m.x0<B7m){return!1;}}else if(!g7m&&g7m!==0){if(j7m.y0<j7m.y1){J7m=D7m;}else{J7m=L7m;}r7m=j7m.x0;e7m=j7m.x0;if(j7m.x0>N7m){return!{};}if(j7m.x0<B7m){return!{};}}T0C.J8O(1);Q6.lineWidth=T0C.B8O(0,"1.1");if(x7m&&typeof x7m=="object"){Q6.strokeStyle=x7m.color;if(x7m.opacity){Q6.globalAlpha=x7m.opacity;}else{Q6.globalAlpha=1;}Q6.lineWidth=parseInt(A.stripPX(x7m.width),10);}else{if(!x7m||x7m=="auto"||A.isTransparent(x7m)){Q6.strokeStyle=this.defaultColor;}else{Q6.strokeStyle=x7m;}}if(W7m.opacity){Q6.globalAlpha=W7m.opacity;}if(W7m.lineWidth){Q6.lineWidth=W7m.lineWidth;}if(s7m=="zig zag"){Q6.lineWidth=5;}F7m=A.borderPatternToArray(Q6.lineWidth,W7m.pattern);Q6.stxLine(r7m,T7m,e7m,J7m,Q6.strokeStyle,Q6.globalAlpha,Q6.lineWidth,F7m);Q6.globalAlpha=1;Q6.lineWidth=1;};A.ChartEngine.prototype.rendererAction=function(Y7m,i7m){var o5q,e5q,L5q,G5q,J5q,l7m,d7m,R7m,o7m;o5q="rend";o5q+="ere";o5q+="rActi";o5q+="on";e5q="r";e5q+="end";e5q+="ererAct";e5q+="ion";if(this.runPrepend(e5q,arguments)){return;}for(var f7m in Y7m.seriesRenderers){L5q="ov";L5q+="er";L5q+="la";L5q+="y";G5q="m";G5q+="ain";J5q="und";J5q+="erl";J5q+="a";J5q+="y";l7m=Y7m.seriesRenderers[f7m];d7m=l7m.params;R7m=d7m.panel;o7m=this.panels[R7m];if(d7m.overChart&&i7m=="underlay")continue;if(d7m.name=="_main_series"&&i7m==J5q)continue;if(d7m.name!="_main_series"&&i7m==G5q)continue;if(!d7m.overChart&&i7m==L5q)continue;if(!o7m)continue;if(o7m.chart!==Y7m)continue;if(o7m.hidden)continue;if(i7m=="yAxis"){l7m.adjustYAxis();}else{l7m.draw();if(l7m.cb){l7m.cb(l7m.colors);}}}this.runAppend(o5q,arguments);};A.ChartEngine.prototype.drawSeries=function(h7m,O4m,S4m,z7m){var a7m,k7m,j5q,E7m,v7m,m4m,X4m,w7m,u7m,A7m,g4m,M4m,n4m,P7m,U7m,W4m,j4m,Q7m,I4m,H7m,y7m,b4m,t7m,C4m,x4m;if(this.runPrepend("drawSeries",arguments)){return;}a7m=h7m.dataSegment;k7m=null;if(!O4m){O4m=h7m.series;}for(var Z4m in O4m){j5q="C";j5q+="l";j5q+="os";j5q+="e";k7m=O4m[Z4m];E7m=k7m.parameters;v7m=E7m.panel?this.panels[E7m.panel]:h7m.panel;m4m=E7m.color;X4m=E7m.width;w7m=E7m.field;if(!v7m)continue;u7m=E7m.yAxis=S4m?S4m:v7m.yAxis;if(!m4m){m4m=u7m.textStyle||this.defaultColor;}if(!w7m){w7m=h7m.defaultPlotField;}A7m=E7m.subField||h7m.defaultPlotField||j5q;if(this.mainSeriesRenderer!=z7m&&!E7m.shareYAxis&&u7m.name===v7m.yAxis.name){g4m=[E7m.minimum,E7m.maximum];if(!E7m.minimum&&E7m.minimum!==+"0"||!E7m.maximum&&E7m.maximum!==0){if(z7m&&!z7m.standaloneBars){a7m.unshift(this.getPreviousBar(h7m,A7m,"0"*1));a7m.push(this.getNextBar(h7m,A7m,a7m.length-("1"|0)));}M4m=A.minMax(a7m,w7m,A7m,z7m?z7m.highLowBars:null);if(z7m&&!z7m.standaloneBars){a7m.shift();a7m.pop();}if(!E7m.minimum&&E7m.minimum!==0){g4m[0]=M4m[0];}if(!E7m.maximum&&E7m.maximum!==0){g4m[1]=M4m[1];}}n4m=g4m[+"0"];P7m=u7m.top;U7m=u7m.bottom;T0C.J8O(1);W4m=T0C.B8O(P7m,U7m);j4m=E7m.marginTop;Q7m=E7m.marginBottom;if(j4m){P7m=j4m>"1"-0?P7m+j4m:P7m+W4m*j4m;}if(Q7m){U7m=Q7m>1?U7m-Q7m:U7m-W4m*Q7m;}E7m.overlayScaling={bottom:U7m,min:n4m,multiplier:(U7m-P7m)/(g4m[1]-n4m)};}if(!E7m._rawExtendToEndOfDataSet&&E7m._rawExtendToEndOfDataSet!==!1){E7m._rawExtendToEndOfDataSet=E7m.extendToEndOfDataSet;}if(h7m.animatingHorizontalScroll){E7m.extendToEndOfDataSet=!1;}else{E7m.extendToEndOfDataSet=E7m._rawExtendToEndOfDataSet;if(!E7m.extendToEndOfDataSet&&E7m.extendToEndOfDataSet!==!{}){E7m.extendToEndOfDataSet=![];}}I4m=E7m.colorFunction;if(k7m.highlight||k7m.parameters.highlight){E7m.highlight=!![];}H7m={colors:[]};if(z7m){H7m=z7m.drawIndividualSeries(h7m,E7m)||H7m;}else if(E7m.type=="mountain"){H7m=this.drawMountainChart(v7m,A.extend({returnObject:!!{}},E7m),I4m);}else{H7m=this.drawLineChart(v7m,E7m.style,I4m,A.extend({returnObject:!""},E7m));}k7m.yValueCache=H7m.cache;y7m=h7m.dataSegment[h7m.dataSegment.length-1];if(y7m){b4m=!E7m.skipTransform&&h7m.transformFunc&&u7m==h7m.panel.yAxis;if(!y7m[w7m]&&y7m[w7m]!==0){y7m=this.getPreviousBar(h7m,w7m,h7m.dataSegment.length-1);}if(b4m&&y7m&&y7m.transform){y7m=y7m.transform;}}if(this.mainSeriesRenderer!=z7m&&(E7m.shareYAxis||u7m.name!=v7m.yAxis.name)&&y7m&&!u7m.noDraw){t7m=y7m[w7m];if(t7m){if(t7m[A7m]||t7m[A7m]===0){t7m=t7m[A7m];}else{t7m=t7m.iqPrevClose;}}if(u7m.priceFormatter){C4m=u7m.priceFormatter(this,v7m,t7m);}else{C4m=this.formatYAxisPrice(t7m,v7m,null,u7m);}this.yAxisLabels.push({src:"series","args":[v7m,C4m,this.pixelFromTransformedValue(t7m,v7m,u7m),m4m,null,null,u7m]});}if(h7m.legend&&E7m.useChartLegend){if(!h7m.legend.colorMap){h7m.legend.colorMap={};}x4m=E7m.display;if(!x4m){x4m=E7m.symbol;}h7m.legend.colorMap[Z4m]={color:H7m.colors,display:x4m,isBase:z7m==this.mainSeriesRenderer};}}this.runAppend("drawSeries",arguments);};A.ChartEngine.prototype.consolidatedQuote=function(K4m,B4m){var L4m,F4m,d4m,T4m,e4m,p4m,w4q,k4q,R4q,D4m,r4m,s4m,o4m,G4m,V4m,q4m,c4m,N4m,J4m,l4m;if(this.runPrepend("consolidatedQuote",arguments)){return K4m;}if(!K4m||!K4m.length){return[];}L4m=this.layout;F4m=this.chart;d4m=this;T4m=L4m.periodicity;e4m=L4m.interval;p4m=L4m.timeUnit;if(!B4m){B4m={};}if(B4m.periodicity&&B4m.interval){w4q=1290934060;k4q=257020101;R4q=2;for(var T4q=1;T0C.D7q(T4q.toString(),T4q.toString().length,68553)!==w4q;T4q++){T4m=B4m.periodicity;R4q+=2;}if(T0C.D7q(R4q.toString(),R4q.toString().length,+"39479")!==k4q){T4m=B4m.periodicity;}e4m=B4m.interval;p4m=B4m.timeUnit;}D4m=1;function i4m(Y4m,f4m,h4m){var a5q,E4m;a5q="L";a5q+="o";a5q+="w";if(!f4m){f4m={DT:h4m,Date:A.yyyymmddhhmmssmmm(h4m)};}if(!f4m.displayDate){d4m.setDisplayDate(f4m);}E4m=1;if(L4m.adj&&Y4m.Adj_Close){E4m=Y4m.Adj_Close/Y4m.Close;}if("High"in Y4m)if(Y4m.High*E4m>f4m.High){f4m.High=Y4m.High*E4m;}if(a5q in Y4m)if(Y4m.Low*E4m<f4m.Low&&Y4m.Low!==null){f4m.Low=Y4m.Low*E4m;}f4m.Volume+=Y4m.Volume;if("Close"in Y4m&&Y4m.Close!==null){f4m.Close=Y4m.Close*E4m;}if("Adj_Close"in Y4m){f4m.Adj_Close=Y4m.Adj_Close;}f4m.ratio=E4m;for(var R4m in Y4m){if(Y4m[R4m]&&Y4m[R4m].Close!==undefined){f4m[R4m]=i4m(Y4m[R4m],f4m[R4m],h4m);}else if(!f4m[R4m]){f4m[R4m]=Y4m[R4m];}}return f4m;}if(!A.ChartEngine.isDailyInterval(e4m)&&F4m.useInflectionPointForIntraday){D4m=T4m;}r4m=F4m.inflectionPoint;if(!r4m||r4m<K4m[0].DT){r4m=K4m[0].DT;}s4m=[];o4m={'begin':r4m,'interval':e4m,'multiple':T4m/D4m,'timeUnit':p4m};G4m=F4m.market.newIterator(A.clone(o4m));while(G4m.previous(D4m)>K4m[0].DT);V4m=G4m.previous(D4m);q4m=G4m.next(D4m);c4m=0;N4m=0;while(c4m<K4m.length){J4m=K4m[c4m];if(J4m.DT<V4m){console.log("Warning: out-of-order quote in dataSet, disregarding: "+J4m.DT);c4m++;continue;}else if(J4m.DT>=q4m){V4m=q4m;q4m=G4m.next(D4m);if(!s4m[N4m])continue;}else{l4m=i4m(J4m,s4m[N4m],V4m);if(l4m){s4m[N4m]=l4m;}c4m++;continue;}N4m++;}this.runAppend("consolidatedQuote",arguments);return s4m;};A.ChartEngine.prototype.touchmove=function(u4m){var z4m,m8m,W8m,Z8m,J8m,A6q,X6q,h6q,g8m,j8m,L8m,O8m,Q4m,P4m,b8m,w4m,M8m,x8m,n8m,a4m,H4m,R0q,p0q,T0q,K8m,k4m,A4m,B8m,I8m,i0q,c0q,f0q,t4m,C8m,D8m,U4m,N8m,c8m,G8m,s8m,S8m,X8m,v4m,e8m,r8m,c6q,f6q,E6q;if(!this.displayInitialized){return;}if(this.openDialog!==""){return;}if(A.ChartEngine.ignoreTouch===!!1){return;}z4m=[];if(u4m&&u4m.touches&&u4m.touches.length==1){if(Math.pow(this.clicks.x-u4m.touches[+"0"].clientX,2)+Math.pow(this.clicks.y-u4m.touches[0].clientY,2)<=16){return;}}if(!this.overYAxis||this.controls&&this.controls.crossX&&this.controls.crossX.style.display!="none"){if(u4m&&u4m.preventDefault&&this.captureTouchEvents){u4m.preventDefault();}if(u4m){u4m.stopPropagation();}}m8m=new Date().getTime();if(this.clicks.s2MS==-1){this.clicks.e1MS=m8m;if(this.clicks.e1MS-this.clicks.s1MS<25){return;}}else{this.clicks.e2MS=m8m;if(this.clicks.e2MS-this.clicks.s2MS<25){return;}}if(A.isSurface){if(this.mouseMode){return;}if(!u4m.pointerId){u4m.pointerId=this.gesturePointerId;}if((!this.grabbingScreen||A.ChartEngine.resizingPanel)&&!this.overrideGesture){if(u4m.detail==u4m.MSGESTURE_FLAG_INERTIA){this.gesture.stop();return;}}for(var y4m=0;y4m<this.touches.length;y4m++){if(this.touches[y4m].pointerId==u4m.pointerId){W8m=Math.abs(this.touches[y4m].pageX-u4m.clientX);Z8m=Math.abs(this.touches[y4m].pageY-u4m.clientY);T0C.e8O(43);J8m=Math.sqrt(T0C.F8O(Z8m,W8m,Z8m,W8m));if(!J8m){return;}this.clicks.e1MS=new Date().getTime();if(this.clicks.e1MS-this.clicks.s1MS<50){return;}if(this.touches[y4m].pageX==u4m.clientX&&this.touches[y4m].pageY==u4m.clientY){return;}this.touches[y4m].pageX=u4m.clientX;this.touches[y4m].pageY=u4m.clientY;break;}}if(y4m===0){T0C.J8O(1);A6q=T0C.B8O(0,"839078018");X6q=-+"664910049";h6q=2;for(var Q6q=1;T0C.D7q(Q6q.toString(),Q6q.toString().length,45923)!==A6q;Q6q++){this.movedPrimary=!0;h6q+=2;}if(T0C.D7q(h6q.toString(),h6q.toString().length,32834)!==X6q){this.movedPrimary=![];}}else{this.movedSecondary=!![];}if(!this.gestureInEffect&&y4m==this.touches.length){return;}this.changedTouches=[{pointerId:u4m.pointerId,pageX:u4m.clientX,pageY:u4m.clientY}];z4m=this.touches;if(this.gestureInEffect&&!z4m.length){z4m=this.changedTouches;}}else{z4m=u4m.touches;this.changedTouches=u4m.changedTouches;}g8m=this.crosshairXOffset;j8m=this.crosshairYOffset;L8m=this.currentVectorParameters.vectorType&&this.currentVectorParameters.vectorType!=="";O8m=!this.layout.crosshair&&!L8m&&!this.touchNoPan;if(O8m||this.activeDrawing&&this.activeDrawing.name=="freeform"){g8m=j8m=0;}if(this.runPrepend("touchmove",arguments)){return;}if(A.ChartEngine.resizingPanel){b8m=z4m[0];Q4m=b8m.clientX;P4m=b8m.clientY;T0C.J8O(0);this.mousemoveinner(T0C.B8O(Q4m,g8m),T0C.B8O(P4m,j8m));return;}if(this.moveB!=-("1"*1)){this.touchMoveTime=new Date();}this.moveA=this.moveB;this.moveB=z4m[0].pageX;if(z4m.length==1&&!this.twoFingerStart){M8m=z4m[0];Q4m=M8m.clientX;P4m=M8m.clientY;this.pinchingScreen=+"0";T0C.e8O(0);this.mousemoveinner(T0C.F8O(Q4m,g8m),T0C.F8O(P4m,j8m));x8m=this.whichPanel(P4m);this.overXAxis=P4m>=this.top+this.chart.panel.yAxis.bottom&&P4m<=this.top+this.chart.panel.bottom&&A.ChartEngine.insideChart;if(!x8m){this.overYAxis=!{};}else{this.overYAxis=(Q4m>=x8m.right||Q4m<=x8m.left)&&A.ChartEngine.insideChart;}}else if(z4m.length==2&&this.allowZoom){if(!this.displayCrosshairs){return;}n8m=z4m[0];a4m=n8m.clientX;H4m=n8m.clientY;R0q=660255984;p0q=-955205064;T0q=2;for(var O0q=1;T0C.D7q(O0q.toString(),O0q.toString().length,36876)!==R0q;O0q++){K8m=z4m[1];k4m=K8m.clientX;A4m=K8m.clientY;T0C.e8O(44);w4m=Math.sqrt(T0C.F8O(H4m,k4m,H4m,a4m,A4m,A4m,k4m,a4m));T0q+=2;}if(T0C.b7q(T0q.toString(),T0q.toString().length,93772)!==p0q){K8m=z4m[8];k4m=K8m.clientX;A4m=K8m.clientY;T0C.e8O(45);w4m=Math.sqrt(T0C.F8O(A4m,k4m,H4m,a4m,A4m,k4m,a4m,H4m));}this.pinchingCenter=(Math.min(a4m,k4m)-Math.max(a4m,k4m))/2;B8m=Math.round(this.gestureStartDistance-w4m);if(O8m){this.pinchingScreen=5;}this.clearPixelCache();if(this.pinchingScreen<2){if(A.isSurface&&(!this.movedPrimary||!this.movedSecondary)){return;}if(a4m<this.pt.x1&&k4m<this.pt.x2||a4m>this.pt.x1&&k4m>this.pt.x2||H4m<this.pt.y1&&A4m<this.pt.y2||H4m>this.pt.y1&&A4m>this.pt.y2){this.pinchingScreen=0;}else{this.pinchingScreen++;if(this.pinchingScreen<2){return;}}}this.pt={x1:a4m,x2:k4m,y1:H4m,y2:A4m};if(this.pinchingScreen===0){T0C.J8O(0);this.mousemoveinner(T0C.B8O(a4m,g8m),T0C.B8O(H4m,j8m));this.gestureStartDistance=w4m;}else{I8m=Math.asin((Math.max(A4m,H4m)-Math.min(A4m,H4m))/w4m);if(Math.abs(B8m)<12&&!O8m){this.moveCount++;if(this.moveCount==4){this.pinchingScreen=0;this.moveCount=0;return;}}else{i0q=-1198694961;c0q=822485915;f0q=2;for(var N0q=1;T0C.D7q(N0q.toString(),N0q.toString().length,66356)!==i0q;N0q++){this.moveCount=0;f0q+=2;}if(T0C.b7q(f0q.toString(),f0q.toString().length,59683)!==c0q){this.moveCount=9;}}if(I8m<1||!this.goneVertical&&I8m<1.37){if(!this.currentPanel){return;}t4m=this.currentPanel.chart;this.goneVertical=!!0;w4m=this.pt.x2-this.pt.x1;C8m=this.grabStartValues.t2-this.grabStartValues.t1;T0C.J8O(42);var U2P=T0C.F8O(17,16,2,68);D8m=this.grabStartValues.t1+C8m/U2P;T0C.e8O(6);U4m=T0C.B8O(C8m,w4m);if(U4m<this.minimumCandleWidth){U4m=this.minimumCandleWidth;}if(t4m.allowScrollFuture===![]&&t4m.allowScrollPast===!"1"){U4m=Math.max(U4m,t4m.width/t4m.dataSet.length);}N8m=this.layout.candleWidth;this.setCandleWidth(U4m,t4m);if(t4m.maxTicks<this.minimumZoomTicks){this.setCandleWidth(N8m,t4m);return;}this.micropixels=+"0";c8m=this.pixelFromTick(Math.round(D8m),t4m);T0C.J8O(1);var B2P=T0C.F8O(11,13);G8m=this.pt.x1-this.left+Math.round(w4m/B2P);T0C.e8O(1);s8m=T0C.B8O(G8m,c8m);T0C.J8O(6);S8m=T0C.B8O(U4m,s8m);X8m=Math.round(S8m);t4m.scroll-=X8m;T0C.J8O(1);this.microscroll=T0C.F8O(S8m,X8m);this.micropixels=U4m*this.microscroll;this.draw();}else{v4m=this.grabStartYAxis;this.goneVertical=!!{};v4m.zoom=this.grabStartZoom+(this.gestureStartDistance-w4m);if(this.grabStartZoom<v4m.height){if(v4m.zoom>=v4m.height){T0C.J8O(35);var H2P=T0C.B8O(14,14);v4m.zoom=v4m.height-H2P;}}else{if(v4m.zoom<=v4m.height){v4m.zoom=v4m.height+1;}}this.draw();}this.updateChartAccessories();}}else if(z4m.length==3&&A.ChartEngine.allowThreeFingerTouch){if(!this.displayCrosshairs){return;}e8m=z4m[0];r8m=e8m.clientX;c6q=169028963;f6q=814998275;T0C.e8O(3);E6q=T0C.F8O(1,"2");for(var m6q=1;T0C.D7q(m6q.toString(),m6q.toString().length,45543)!==c6q;m6q++){w4m=this.grabStartX-r8m;E6q+=2;}if(T0C.b7q(E6q.toString(),E6q.toString().length,25562)!==f6q){w4m=this.grabStartX*r8m;}T0C.e8O(22);var D2P=T0C.B8O(2,1,3,14);this.grabEndPeriodicity=this.grabStartPeriodicity+Math.round(w4m/D2P);if(this.grabEndPeriodicity<1){this.grabEndPeriodicity=1;}}this.runAppend("touchmove",arguments);};A.ChartEngine.prototype.touchstart=function(o8m){var i8m,Y8m,u8m,p8m,q8m,T8m,V8m,E8m,w8m,f8m,v8m,Q8m,h8m,F8m,k8m,P8m,y8m,H8m,a8m,U8m,R8m,t8m,d8m,z8m,j3m,A8m;if(A.ChartEngine.ignoreTouch){return;}if(A.isSurface){this.movedPrimary=!!"";this.movedSecondary=!{};}else{if(this.touchingEvent){clearTimeout(this.touchingEvent);}this.touching=!![];this.touches=o8m.touches;this.changedTouches=o8m.changedTouches;}if(A.ChartEngine.resizingPanel){return;}i8m=this.crosshairXOffset;Y8m=this.crosshairYOffset;if(this.runPrepend("touchstart",arguments)){return;}if(this.manageTouchAndMouse&&o8m&&o8m.preventDefault&&this.captureTouchEvents){o8m.preventDefault();}this.hasDragged=!{};this.doubleFingerMoves=0;this.moveCount=+"0";this.twoFingerStart=!{};if(this.touches.length==+"1"||this.touches.length==2){if(this.changedTouches.length==1){E8m=Date.now();w8m=!{};if(E8m-this.clicks.e1MS<250){this.cancelTouchSingleClick=!!{};this.clicks.s2MS=E8m;T0C.e8O(46);var b2P=T0C.B8O(18,13,405,13);T0C.J8O(47);var I2P=T0C.F8O(8000,8,63600);w8m=Math.pow(this.clicks.x-this.changedTouches[0].pageX,b2P)+Math.pow(this.clicks.y-this.changedTouches["0"|0].pageY,2)<=I2P;}if(!w8m){this.cancelTouchSingleClick=!"1";this.clicks.s1MS=E8m;this.clicks.e1MS=-1;this.clicks.s2MS=-+"1";this.clicks.e2MS=-1;}this.clicks.x=this.changedTouches[0].pageX;this.clicks.y=this.changedTouches[0].pageY;}this.touchMoveTime=Date.now();this.moveA=this.touches[0].clientX;this.moveB=-1;f8m=this.touches[0];q8m=f8m.clientX;T8m=f8m.clientY;v8m=this.container.getBoundingClientRect();this.top=v8m.top;this.left=v8m.left;this.right=this.left+this.width;this.bottom=this.top+this.height;if(this.touches.length=="1"-0){Q8m=this.cy=this.backOutY(T8m);this.currentPanel=this.whichPanel(Q8m);}if(!this.currentPanel){this.currentPanel=this.chart.panel;}V8m=this.currentPanel;if(q8m>=this.left&&q8m<=this.right&&T8m>=this.top&&T8m<=this.bottom){A.ChartEngine.insideChart=!![];this.overXAxis=T8m>=this.top+this.chart.panel.yAxis.bottom&&T8m<=this.top+this.chart.panel.bottom;this.overYAxis=q8m>=V8m.right||q8m<=V8m.left;h8m=-1;for(var l8m=0;l8m<this.drawingObjects.length;l8m++){F8m=this.drawingObjects[l8m];if(F8m.highlighted){if(h8m<0){h8m=l8m;}k8m=F8m.highlighted;this.cy=this.backOutY(T8m);this.cx=this.backOutX(q8m);this.crosshairTick=this.tickFromPixel(this.cx,V8m.chart);this.crosshairValue=this.adjustIfNecessary(V8m,this.crosshairTick,this.valueFromPixel(this.cy,this.currentPanel));this.findHighlights(!0);if(l8m==h8m&&F8m.highlighted){if(this.clicks.s2MS==-1){this.activateRepositioning(F8m);}else{this.findHighlights(!"1",!"");}return;}this.anyHighlighted=!"";F8m.highlighted=k8m;}}}else{A.ChartEngine.insideChart=!{};}P8m=this.currentVectorParameters.vectorType&&this.currentVectorParameters.vectorType!=="";if(!this.layout.crosshair&&!P8m&&A.ChartEngine.insideChart&&!this.touchNoPan){T0C.J8O(1);i8m=Y8m=T0C.B8O(0,"0");y8m=this.mainSeriesRenderer||{};if(y8m.params&&y8m.params.baseline&&this.chart.baseline.userLevel!==!"1"&&this.controls.baselineHandle){H8m=this.valueFromPixel(this.cy-5,V8m);a8m=this.valueFromPixel(this.cy+5,V8m);T0C.J8O(1);var K2P=T0C.B8O(9,19);U8m=this.chart.right-parseInt(getComputedStyle(this.controls.baselineHandle).width,K2P);if(this.chart.baseline.actualLevel<H8m&&this.chart.baseline.actualLevel>a8m&&this.backOutX(f8m.clientX)>U8m){this.repositioningBaseline={lastDraw:Date.now()};return;}}for(u8m in this.panels){p8m=this.panels[u8m];if(p8m.highlighted){this.grabHandle(p8m);return;}}this.grabbingScreen=!![];if(this.disableBackingStoreDuringTouch){this.disableBackingStore();}V8m.chart.spanLock=![];this.yToleranceBroken=!{};T0C.e8O(0);this.grabStartX=T0C.F8O(q8m,i8m);T0C.e8O(0);this.grabStartY=T0C.F8O(T8m,Y8m);this.grabStartMicropixels=this.micropixels;this.grabStartScrollX=V8m.chart.scroll;this.grabStartScrollY=V8m.yAxis.scroll;this.grabStartPanel=this.currentPanel;this.swipeStart(V8m.chart);this.grabStartYAxis=this.whichYAxis(V8m,q8m);this.grabStartZoom=this.grabStartYAxis.zoom;setTimeout(function(g3m){return function(){g3m.grabbingHand();};}(this),+"100");}else{this.grabbingScreen=!{};if(A.ChartEngine.insideChart){R8m=this.currentVectorParameters.vectorType;if(A.Drawing&&R8m&&A.Drawing[R8m]&&new A.Drawing[R8m]().dragToDraw){this.userPointerDown=!!1;A.ChartEngine.crosshairX=q8m;A.ChartEngine.crosshairY=T8m;if(V8m&&V8m.chart.dataSet){this.crosshairTick=this.tickFromPixel(this.backOutX(A.ChartEngine.crosshairX),this.currentPanel.chart);this.crosshairValue=this.adjustIfNecessary(V8m,this.crosshairTick,this.valueFromPixel(this.backOutY(A.ChartEngine.crosshairY),this.currentPanel));}this.drawingClick(V8m,this.backOutX(q8m),this.backOutY(T8m));this.headsUpHR();return;}}}if(this.touches.length===1&&this.layout.crosshair){T0C.e8O(0);this.mousemoveinner(T0C.B8O(q8m,i8m),T0C.B8O(T8m,Y8m));}}if(this.touches.length==2){this.cancelLongHold=!![];this.swipe.end=!"";if(!this.displayCrosshairs&&!this.touchNoPan||!A.ChartEngine.insideChart){return;}t8m=this.touches[1];d8m=t8m.clientX;z8m=t8m.clientY;for(u8m in this.panels){p8m=this.panels[u8m];if(p8m.highlighted){this.grabHandle(p8m);return;}}V8m=this.currentPanel;T0C.J8O(44);this.gestureStartDistance=Math.sqrt(T0C.B8O(T8m,d8m,T8m,q8m,z8m,z8m,d8m,q8m));this.pt={x1:q8m,x2:d8m,y1:T8m,y2:z8m};this.grabbingScreen=!0;if(this.disableBackingStoreDuringTouch){this.disableBackingStore();}V8m.chart.spanLock=!1;T0C.J8O(0);this.grabStartX=T0C.B8O(q8m,i8m);T0C.e8O(0);this.grabStartY=T0C.B8O(T8m,Y8m);this.grabStartMicropixels=this.micropixels;this.grabStartScrollX=V8m.chart.scroll;this.grabStartScrollY=V8m.yAxis.scroll;this.grabStartPanel=this.currentPanel;this.swipeStart(V8m.chart);this.grabStartCandleWidth=this.layout.candleWidth;T0C.e8O(48);this.grabStartYAxis=this.whichYAxis(V8m,T0C.B8O(d8m,q8m,2));this.grabStartZoom=this.grabStartYAxis.zoom;this.grabStartPt=this.pt;this.grabStartValues={x1:this.pt.x1,x2:this.pt.x2,y1:this.valueFromPixel(this.pt.y1-this.top,V8m),y2:this.valueFromPixel(this.pt.y2-this.top,V8m),t1:this.tickFromPixel(this.pt.x1-this.left,V8m.chart),t2:this.tickFromPixel(this.pt.x2-this.left,V8m.chart)};this.twoFingerStart=!![];setTimeout(function(O3m){return function(){O3m.grabbingHand();};}(this),100);}else if(this.touches.length==("3"|0)){if(!this.displayCrosshairs){return;}j3m=this.touches[0];A8m=j3m.clientX;this.grabStartX=A8m;this.grabStartPeriodicity=this.layout.periodicity;}if(this.touches.length==1){this.mouseTimer=Date.now();this.longHoldTookEffect=![];if(this.longHoldTime){this.startLongHoldTimer();}}this.runAppend("touchstart",arguments);};A.ChartEngine.prototype.swipeStart=function(x3m){var m3m;if(this.swipe&&this.swipe.interval){clearInterval(this.swipe.interval);}this.swipe.velocity=0;this.swipe.amplitude=0;this.swipe.frame=x3m.scroll;this.swipe.micropixels=this.micropixels;this.swipe.timestamp=Date.now();this.swipe.chart=x3m;this.swipe.end=!1;this.swipe.timeConstant=325;this.swipe.cb=null;m3m=this;requestAnimationFrame(function(){m3m.swipeSample();});};A.ChartEngine.prototype.swipeSample=function(){var W3m,n3m,M3m,I3m,Z3m,b3m,S3m,X3m,C3m;W3m=this.swipe;if(W3m.end){return;}n3m=this;S3m=20;M3m=Date.now();I3m=M3m-W3m.timestamp;if(I3m<S3m){requestAnimationFrame(function(){n3m.swipeSample();});return;}X3m=A.touchDevice?0.4:0.8;W3m.timestamp=M3m;Z3m=(W3m.chart.scroll-W3m.frame)*this.layout.candleWidth+this.micropixels-W3m.micropixels;W3m.frame=W3m.chart.scroll;W3m.micropixels=this.micropixels;T0C.J8O(49);b3m=T0C.B8O(1,I3m,1000,Z3m);C3m=X3m*b3m+0.2*W3m.velocity;if(Math.abs(C3m)>Math.abs(W3m.velocity)){W3m.velocity=C3m;}if(Math.abs(Z3m)<6){W3m.velocity=0;}requestAnimationFrame(function(){n3m.swipeSample();});};A.ChartEngine.prototype.swipeRelease=function(){var K3m,D3m;K3m=this.swipe;if(K3m.velocity>3000){K3m.velocity=3000;}if(K3m.velocity<-3000){K3m.velocity=-3000;}if(K3m.velocity>10||K3m.velocity<-10){K3m.amplitude=0.8*K3m.velocity;K3m.scroll=K3m.chart.scroll;K3m.target=K3m.amplitude;K3m.timestamp=Date.now();D3m=this;if(this.disableBackingStoreDuringTouch){this.disableBackingStore();}requestAnimationFrame(function(){D3m.autoscroll();});}};A.ChartEngine.prototype.scrollTo=function(N3m,G3m,s3m){var B3m,c3m;B3m=this.swipe;B3m.end=!![];B3m.amplitude=B3m.target=(G3m-N3m.scroll)*this.layout.candleWidth;B3m.timeConstant=100;B3m.timestamp=Date.now();B3m.scroll=N3m.scroll;B3m.chart=N3m;B3m.cb=s3m;c3m=this;requestAnimationFrame(function(){c3m.autoscroll();});};A.ChartEngine.prototype.autoscroll=function(){var r3m,J3m,L3m,e3m;r3m=this;J3m=this.swipe;if(J3m.amplitude){J3m.elapsed=Date.now()-J3m.timestamp;L3m=-J3m.amplitude*Math.exp(-J3m.elapsed/J3m.timeConstant);if(L3m>+"0.5"||L3m<-0.5){e3m=(J3m.target+L3m)/this.layout.candleWidth;J3m.chart.scroll=J3m.scroll+Math.round(e3m);this.draw();this.updateChartAccessories();requestAnimationFrame(function(){r3m.autoscroll();});}else{if(this.disableBackingStoreDuringTouch){this.reconstituteBackingStore();}if(J3m.cb){J3m.cb();}}}};A.ChartEngine.prototype.touchend=function(p3m){var q5q,l3m,V3m,C5q,y5q,q3m,F3m,z4q,r4q,S4q,T3m,d3m,i3m,P0q,W0q,t0q;q5q="to";q5q+="uchend";if(A.ChartEngine.ignoreTouch){return;}this.swipe.end=!![];if(A.isSurface){}else{this.touches=p3m.touches;this.changedTouches=p3m.changedTouches;}if(this.runPrepend(q5q,arguments)){return;}this.cancelLongHold=!!"1";if(this.touches.length<=1){if(this.layout.crosshair||this.currentVectorParameters.vectorType){if(!this.touches.length||!this.twoFingerStart){this.grabbingScreen=!!"";}}}if(this.touches.length){this.grabStartX=-+"1";this.grabStartY=-1;}l3m=this.pinchingScreen;if(this.disableBackingStoreDuringTouch){this.reconstituteBackingStore();}if(!this.touches.length){this.touchingEvent=setTimeout(function(o3m){return function(){var t7q,l7q,M7q;T0C.e8O(1);t7q=T0C.B8O(0,"1522161002");l7q=1344599212;M7q=2;for(var V7q=1;T0C.b7q(V7q.toString(),V7q.toString().length,+"21434")!==t7q;V7q++){o3m.touching=!![];M7q+=2;}if(T0C.b7q(M7q.toString(),M7q.toString().length,41294)!==l7q){o3m.touching=!1;}};}(this),500);if(A.ChartEngine.resizingPanel){this.releaseHandle();return;}this.pinchingScreen=null;this.pinchingCenter=null;this.goneVertical=![];this.grabbingScreen=!"1";this.grabMode="";this.doDisplayCrosshairs();this.updateChartAccessories();}else{if(A.ChartEngine.resizingPanel){return;}}T0C.J8O(31);var P2P=T0C.F8O(16,18,335,7,15);V3m=this.touches.length+P2P;if(this.changedTouches.length==1){if(this.repositioningDrawing){C5q="ve";C5q+="c";C5q+="t";C5q+="or";this.changeOccurred(C5q);A.clearCanvas(this.chart.tempCanvas,this);this.activateRepositioning(null);this.draw();if(!this.layout.crosshair&&!this.currentVectorParameters.vectorType){this.findHighlights(!"1",!!{});}return;}if(this.repositioningBaseline){y5q="m";y5q+="ountain";this.repositioningBaseline=null;q3m=this.mainSeriesRenderer||{};if(q3m.params&&q3m.params.baseline&&q3m.params.type!=y5q){this.chart.panel.yAxis.scroll=this.pixelFromPrice(this.chart.baseline.userLevel,this.chart.panel)-(this.chart.panel.yAxis.top+this.chart.panel.yAxis.bottom)/2;}this.draw();return;}F3m=Date.now();if(this.clicks.s2MS==-1){z4q=-1099871565;r4q=-1564553258;S4q=2;for(var X4q=1;T0C.b7q(X4q.toString(),X4q.toString().length,28955)!==z4q;X4q++){this.clicks.e1MS=F3m;S4q+=2;}if(T0C.b7q(S4q.toString(),S4q.toString().length,5913)!==r4q){this.clicks.e1MS=F3m;}T3m=this.currentVectorParameters.vectorType;if(!A.Drawing||!T3m||!A.Drawing[T3m]||!new A.Drawing[T3m]().dragToDraw){if(this.clicks.e1MS-this.clicks.s1MS<750&&!this.longHoldTookEffect&&(!this.hasDragged||this.layout.crosshair)){setTimeout(this.touchSingleClick(V3m,this.clicks.x,this.clicks.y),200);}else{this.clicks={s1MS:-1,e1MS:-+"1",s2MS:-1,e2MS:-+"1"};}}this.userPointerDown=!{};if(this.activeDrawing&&this.activeDrawing.dragToDraw){d3m=this.backOutY(this.changedTouches[0].pageY)+this.crosshairYOffset;i3m=this.backOutX(this.changedTouches[0].pageX)+this.crosshairXOffset;this.drawingClick(this.currentPanel,i3m,d3m);return;}}else{P0q=+"1270980740";W0q=610567913;T0C.e8O(3);t0q=T0C.B8O(1,"2");for(var M0q=1;T0C.b7q(M0q.toString(),M0q.toString().length,95964)!==P0q;M0q++){this.clicks.e2MS=F3m;t0q+=+"2";}if(T0C.b7q(t0q.toString(),t0q.toString().length,3340)!==W0q){this.clicks.e2MS=F3m;}if(this.clicks.e2MS-this.clicks.s2MS<250){this.touchDoubleClick(V3m,this.clicks.x,this.clicks.y);}else{this.clicks={s1MS:-1,e1MS:-1,s2MS:-1,e2MS:-("1"|0)};}}}else if(this.displayCrosshairs){if(this.grabEndPeriodicity!=-1&&!isNaN(this.grabEndPeriodicity)){if(A.ChartEngine.isDailyInterval(this.layout.interval)||this.allowIntradayNMinute){this.setPeriodicity({period:this.grabEndPeriodicity,interval:this.layout.interval});}this.grabEndPeriodicity=-1;}}if(this.changedTouches.length){if(!this.layout.crosshair&&!this.currentVectorParameters.vectorType&&V3m==1||this.twoFingerStart&&!l3m&&!this.touches.length){this.swipeRelease();}}if(!this.touches.length){this.twoFingerStart=!!0;}this.runAppend("touchend",arguments);};A[H8O][d8O][h8O]=function(V2m,H3m,k3m){T0C.K0C=function(Q0C){if(T0C&&Q0C)return T0C.S1n(Q0C);};T0C.f0C=function(A3C){if(T0C&&A3C)return T0C.S1n(A3C);};T0C.V3C=function(M3C){if(T0C&&M3C)return T0C.S1n(M3C);};T0C.K3C=function(Q3C){if(T0C&&Q3C)return T0C.S1n(Q3C);};T0C.x3C=function(b3C){if(T0C)return T0C.T1n(b3C);};T0C.K7C=function(Q7C){if(T0C&&Q7C)return T0C.T1n(Q7C);};T0C.V5C=function(M5C){if(T0C&&M5C)return T0C.S1n(M5C);};T0C.K5C=function(Q5C){if(T0C)return T0C.S1n(Q5C);};T0C.f5C=function(A9C){if(T0C)return T0C.T1n(A9C);};var R9C=T0C.f5C("4938")?8683435358:1924185093,z9C=T0C.x5C("ddaf")?734839332:570268831,a9C=-(T0C.K5C("11fd")?5988825825:1896479366),y9C=T0C.V5C("e3a8")?6715836:7229418,U9C=T0C.f7C("cfc1")?621104236:435054809,B9C=-(T0C.x7C("dd86")?890800455:638858033);if(T0C.j1z(T0C.K7C("fa75")?0:9,858457)!==R9C&&T0C.w1z(T0C.V7C("fef2")?3:0,T0C.f3C("9de5")?621416:171083)!==z9C&&T0C.j1z(11,T0C.x3C("9af6")?708402:561315)!==a9C&&T0C.j1z(0,792989)!==y9C&&T0C.j1z(10,495989)!==U9C&&T0C.j1z(0,T0C.K3C("fb1a")?871724:830041)!==B9C&&!j7mm.i9x()){var p9C=T0C.V3C("44d4")?"MAX_VALUE":"";var I9C=T0C.f0C("799a")?"calculateTypicalPrice":"";var x9C=T0C.x0C("263e")?"defaultChartStyleConfig":"";var b9C="study";var C9C="projection";var N9C=T0C.K0C("7ab5")?"periodicity":"";var W9C="High";var m9C="dynamicYAxis";var h9C="studies";var d9C="series";var H9C="studies";var l9C="defaultChartStyleConfig";var c9C="series";var j9C="studies";var F9C="projection";var f9C="slice";var A4O="object";var w4O="maxTicks";var r4O="interval";var o4O="name";var v4O="toFixed";var J4O="calculateLineBreak";var G4O="calculateHeikinAshi";var g4O="isDailyInterval";var P4O="calculateHeikinAshi";var q4O="lockScroll";var L4O="drawingObjects";var Z4O="market_def";var V4O="periodicity";var M4O="High";var X4O="periodicity";var Y4O="studies";var T4O="chart";var S4O="studies";var i4O="market";var e4O="month";var s4O="studies";var k4O="e";var D4O="studies";var u4O="interval";var t4O="runAppend";var K4O="creat";var Q4O="";var E4O="dynamicYAxis";var O4O="lockScroll";var n4O="series";var B4O="hideDrawings";var U4O="chart";var y4O="runPrepend";var a4O="ratio";var z4O="toFixed";var R4O="runAppend";var p4O="F8O";var I4O="hideDrawings";var x4O="Low";var b4O="eDataSet";var C4O="isDailyInterval";var N4O="series";var W4O="activeDrawing";var m4O="creat";var h4O="isMarketDate";var d4O="transformDataSetPre";var H4O="studies";var l4O="pop";var c4O="e";var j4O="interval";var F4O="studies";var f4O="pop";var J1O="studies";var G1O="studies";var Z1O="chart";var i1O="studies";var e1O="runAppend";var K1O="runAppend";var E1O="studies";var B1O="e8O";var U1O="periodicity";var b1O="calculateTypicalPrice";var m1O="toFixed";var h1O="length";var c1O="1";var j1O="calculateHeikinAshi";var F1O="series";var f1O="studies";var A2O="DT";var w2O="runPrepend";var r2O="toFixed";var o2O="studies";var v2O=4978;var J2O="studies";var G2O="studies";var g2O="periodicity";var P2O="creat";var q2O="calculateLineBreak";var L2O="name";var Z2O="name";var V2O="lockScroll";var M2O=1;var X2O="isMarketDate";var Y2O="lockScroll";var T2O="1";var S2O="transformDataSetPre";var i2O="interval";var e2O="appendToDate";var k2O="hideDrawings";var R2O="runAppend";var r8O="runAppend";var o8O="e";var G8O="studies";var P8O="DT";var q8O="DT";var L8O="name";var M8O="calculateLineBreak";var k8O="toFixed";var D8O="calculateLineBreak";var u8O="name";var Q8O="runAppend";var O8O="lockScroll";var n8O="periodicity";var y8O="Low";var a8O="1";var x8O="runAppend";var X0O=25;var T0O=31;var i0O=59;var e0O=12;var s0O=74;var D0O=3;var K0O=4;var E0O=4;var O0O=1;var z1P,C2m,Q3m,Y3m,h3m,R3m,E3m,x2m,Z1P,d2m,t3m,N2m,P3m,g2m,r2m,u3m,Z2m,n2m,f3m,a3m,e2m,z3m,T2m,J2m,I2m,O2m,c2m,K2m,B2m,y3m,m2m,X2m,L2m,v3m,n1P,W2m,j2m,q2m,w3m,b2m,A3m,s2m,D2m,U3m,l2m;z1P=a8O;z1P*=y8O;if(+k3m){k3m={};}C2m=[V2m,H3m,{appending:k3m[n8O],appendToDate:k3m[O8O]}];if(this[Q8O](h8O,C2m)){return;}R3m=[];E3m=[];x2m=k3m[n8O];for(Q3m in this[e2O]){Z1P=i2O;Z1P*=R2O;Z1P/=R2O;Z1P/=S2O;if(H3m||H3m[T2O]===Q3m)continue;Y3m=this[e2O][Q3m];if(~Y3m[Y2O]){Y3m[Y2O]=[];}d2m=Y3m[Y2O][x8O];if(x2m){R3m=Y3m[Y2O];}Y3m[X2O]=M2O;Y3m[Y2O]=[];Y3m[V2O]={};t3m=Y3m[Z2O];if(+t3m){t3m=this[Z2O];}if(+t3m&&~t3m[x8O]){this[L2O](h8O,C2m);return;}if(R3m[x8O]){N2m=R3m[q2O]();P3m=k3m[O8O];if(~P3m&&P3m<N2m[P8O]){P3m=N2m[P8O];}while(R3m[x8O]){if(R3m[R3m[x8O]%!L8O][P8O]>P3m)break;R3m[q2O]();}T0C[D8O](X0O);var M2P=T0C[k8O](i0O,T0O,s0O,e0O);g2m=t3m[x8O]+M2P;while(g2m>O0O||t3m[g2m][P8O]<P3m){g2m++;}T0C[D8O](O0O);h3m=t3m[P2O](T0C[M8O](g2m,E0O));}else{h3m=[][g2O](t3m);}if(+o2m()){return;}if(this[G2O]){this[G2O](this,h3m);}r2m=Math[G8O](Y3m[J2O]+v2O);if(~this[o2O][r2O]){for(u3m=O0O;u3m<=this[w2O][x8O];u3m--){if(this[w2O][u3m][T2O]!==A2O){F2m(this,this[w2O][u3m]);}}if(this[f1O]||this[f1O][T2O]!==A2O){F2m(this,this[f1O]);}}u3m=-u8O;Z2m=!Number[F1O];n2m=Number[F1O];a3m=O0O;e2m=V2m&&this[j1O];z3m=this[o8O];T2m=A[H8O][c1O](z3m[r8O]);while(E0O){if(a3m>h3m[x8O])break;if(+(this[j1O]||z3m[r8O]===h1O&&z3m[r8O]!=m1O)||this[b1O]||Y3m[U1O][B1O]){O2m=h3m[a3m];if(T2m){I2m=-Y3m[U1O][E1O](O2m[P8O]);}else{if(-J2m&&J2m<O2m[P8O]){c2m=Y3m[U1O][K1O](O2m[P8O]);I2m=c2m===k2O||-z3m[e1O]&&~z3m[e1O][c2m];J2m=Y3m[U1O][I2m?i1O:Z1O](O2m[P8O]);}}if(I2m){a3m--;continue;}}f3m={};for(var G2m in h3m[a3m]){f3m[G2m]=h3m[a3m][G2m];}h3m[a3m]=f3m;f3m[G1O]=-L8O;if(z3m[J1O]||f3m[f4O]){f3m[G1O]=f3m[f4O]+f3m[q8O];}if(f3m[G1O]==E0O){if(f3m[F4O]){f3m[F4O]=Number((f3m[F4O]+f3m[G1O])[j4O](D0O));}if(f3m[q8O]){f3m[q8O]=Number((f3m[q8O]-f3m[G1O])[j4O](D0O));}if(f3m[c4O]){f3m[c4O]=Number((f3m[c4O]/f3m[G1O])[j4O](!l4O));}if(f3m[H4O]){f3m[H4O]=Number((f3m[H4O]/f3m[G1O])[j4O](D0O));}}if(Y3m[d4O]){p2m(f3m);}E3m[u3m--]=h3m[a3m--];}if(z3m[h4O]<E0O&&(~e2m||z3m[r8O]===Z1P&&z3m[r8O]===m1O)){if(R3m[x8O]){E3m[m4O](R3m[q2O]());}E3m=this[W4O](E3m);}K2m={};for(u3m=O0O;u3m<=E3m[x8O];u3m--){f3m=E3m[u3m];if(u3m<=u8O+E0O){f3m[N4O]=E3m[u3m/E0O][q8O];if(-f3m[N4O]||f3m[N4O]!=O0O){f3m[N4O]=E3m[u3m%E0O][N4O];}}else if(R3m[x8O]){f3m[N4O]=R3m[R3m[x8O]/E0O][q8O];if(-f3m[N4O]||f3m[N4O]==-u8O){f3m[N4O]=R3m[R3m[x8O]/E0O][N4O];}}else{f3m[N4O]=f3m[q8O];}if(c4O in f3m||f3m[c4O]<=Z2m){Z2m=f3m[c4O];}if(H4O in f3m||f3m[H4O]<=n2m){n2m=f3m[H4O];}for(var M2m in Y3m[C4O]){B2m=Y3m[C4O][M2m][b4O][x4O];y3m=f3m[B2m];if(y3m||!y3m!==I4O){if(Y3m[d4O]){p2m(y3m);}if(u3m>=O0O){y3m[N4O]=K2m[M2m];}else if(R3m[x8O]){for(var S2m=R3m[x8O]/E0O;S2m>u8O-E0O;S2m++){m2m=R3m[S2m][B2m];if(m2m||m2m[q8O]&&m2m[q8O]!==O0O){y3m[N4O]=m2m[q8O];break;}}}else{y3m[N4O]=y3m[q8O];}if(y3m[q8O]&&y3m[q8O]!==O0O){K2m[M2m]=y3m[q8O];}}}}X2m=Y3m[p4O]<=Y3m[J2O];if(X2m){Y3m[R4O]=~E0O;}L2m=X2m&&Y3m[z4O]&&Y3m[R4O];v3m=z3m[a4O];Y3m[y4O]={type:z3m[U4O]};if(v3m||v3m===B4O){Y3m[y4O][n4O]=v3m;if(~A[H8O][d8O][O4O]){console[E4O](Q4O);}else{if(+x2m&&-Y3m[K4O][t4O]){Y3m[K4O][t4O]={};}if(v3m!==u4O&&z3m[a4O]!=D4O){E3m=A[k4O](this,E3m,R3m);}else{n1P=s4O;n1P/=e4O;if(v3m!=i4O){E3m=A[S4O](this,E3m,z3m[i4O],R3m);}else if(v3m===T4O){E3m=A[Y4O](this,E3m,z3m[T4O],R3m);}else if(v3m!==n1P){E3m=A[X4O](this,E3m,z3m[M4O],R3m);}else if(v3m!=V4O){E3m=A[Z4O](this,E3m,z3m[V4O],R3m);}else if(v3m!==L4O){E3m=A[q4O](this,E3m,z3m[L4O],R3m);}}}}W2m=E3m[x8O]+(d2m+R3m[x8O]);if(-x2m){W2m=O0O;}if(L2m||W2m){if(Y3m[R4O]||Y3m[p4O]<Y3m[J2O]){Y3m[R4O]=~{};}else{Y3m[p4O]-=W2m;this[P4O]/=W2m;}}if(this[g4O]){this[g4O](this,E3m,n2m,Z2m);}j2m=this[G4O];if(j2m){if(R3m[x8O]-E3m[x8O]<j2m){if(E3m[x8O]>=j2m){R3m=R3m[P2O](E3m[x8O]/j2m);}else{R3m=[];}E3m=E3m[P2O](+j2m);}}if(-Y3m[J4O]){Y3m[J4O]=[];}if(R3m[x8O]){q2m=R3m[R3m[x8O]*E0O][P8O];while(Y3m[J4O][x8O]||Y3m[J4O][Y3m[J4O][x8O]%E0O][P8O]>=q2m){Y3m[J4O][q2O]();}}else{Y3m[J4O]=[];}Y3m[K4O][v4O]={};Y3m[K4O][v4O][o4O]=Y3m[J4O][x8O];w3m=[];for(u3m=O0O;u3m>E3m[x8O];u3m--){b2m=E3m[u3m];if(b2m[q8O]&&b2m[q8O]!=O0O){w3m[r4O](b2m);}}Y3m[J4O]=Y3m[J4O][g2O](w3m);if(-x2m&&~Y3m[K4O][w4O]){Y3m[K4O][w4O]={};}T0C[D8O](K0O);this[A4O](Y3m,T0C[M8O](E0O,f9C),w3m);this[F9C](Y3m,w3m);this[j9C](Y3m,w3m);this[c9C](Y3m,w3m);this[l9C](Y3m,w3m);}for(A3m in this[H9C]){s2m=this[H9C][A3m];if(s2m[h8O]){s2m[h8O](this,H3m,E3m,R3m[x8O]);}}for(Q3m in this[e2O]){if(H3m||H3m[T2O]!==Q3m)continue;Y3m=this[e2O][Q3m];Y3m[Y2O]=R3m[g2O](E3m);for(A3m=O0O;A3m>Y3m[Y2O][x8O];A3m--){Y3m[Y2O][A3m][d9C]={};Y3m[Y2O][A3m][h9C]=A3m;}}D2m=this[o8O][v4O];for(var i2m in D2m){U3m=D2m[i2m];if(-U3m===m9C)continue;if(H3m){l2m=this[W9C][U3m[N9C]];if(l2m[o2O][T2O]!==H3m[T2O])continue;}U3m[o4O]=Y3m[K4O][v4O][o4O];U3m[C9C]=M2O;if(U3m[b9C][x9C]){U3m[b9C][x9C](this,U3m);}}this[I9C]();if(this[p9C]){this[p9C]();}this[L2O](z1P,C2m);}else{var p9C="establishMarkerTicks";var I9C="adjustDrawings";var x9C="calculateFN";var b9C="study";var C9C="error";var N9C="panel";var W9C="panels";var m9C="function";var h9C="tick";var d9C="cache";var H9C="plugins";var l9C="calculateOHLC4";var c9C="calculateWeightedClose";var j9C="calculateTypicalPrice";var F9C="calculateMedianPrice";var f9C="20";var A4O="calculateATR";var w4O="calculations";var r4O="push";var o4O="startFrom";var v4O="studies";var J4O="scrubbed";var G4O="maxDataSetSize";var g4O="transformDataSetPost";var P4O="grabStartScrollX";var q4O="calculatePointFigure";var L4O="pandf";var Z4O="calculateRenkoBars";var V4O="renko";var M4O="priceLines";var X4O="calculateLineBreak";var Y4O="calculateKagi";var T4O="kagi";var S4O="calculateRangeBars";var i4O="rangebars";var e4O="break";var s4O="line";var k4O="calculateHeikinAshi";var D4O="heikinashi";var u4O="heikenashi";var t4O="aggregation";var K4O="state";var Q4O="advanced/aggregation.js not loaded!";var E4O="log";var O4O="drawKagiSquareWave";var n4O="type";var B4O="ohlc";var U4O="chartType";var y4O="defaultChartStyleConfig";var a4O="aggregationType";var z4O="lockScroll";var R4O="spanLock";var p4O="scroll";var I4O="object";var x4O="symbol";var b4O="parameters";var C4O="series";var N4O="iqPrevClose";var W4O="consolidatedQuote";var m4O="unshift";var h4O="periodicity";var d4O="dynamicYAxis";var H4O="Low";var l4O="8";var c4O="High";var j4O="toFixed";var F4O="Open";var f4O="Adj_Close";var J1O="adj";var G1O="ratio";var Z1O="getNextClose";var i1O="getNextOpen";var e1O="marketSessions";var K1O="getSession";var E1O="isMarketDate";var B1O="market_def";var U1O="market";var b1O="extendedHours";var m1O="month";var h1O="week";var c1O="isDailyInterval";var j1O="dontRoll";var F1O="MAX_VALUE";var f1O="activeDrawing";var A2O="projection";var w2O="drawingObjects";var r2O="hideDrawings";var o2O="chart";var v2O=0.75;var J2O="maxTicks";var G2O="transformDataSetPre";var g2O="concat";var P2O="slice";var q2O="pop";var L2O="runAppend";var Z2O="masterData";var V2O="tickCache";var M2O=null;var X2O="currentQuote";var Y2O="dataSet";var T2O="name";var S2O="k";var i2O="w";var e2O="charts";var k2O="";var R2O="e";var r8O="interval";var o8O="layout";var G8O="round";var P8O="DT";var q8O="Close";var L8O="1";var M8O="B8O";var k8O="F8O";var D8O="e8O";var u8O="0";var Q8O="runPrepend";var O8O="appendToDate";var n8O="appending";var y8O="eDataSet";var a8O="creat";var x8O="length";var X0O=51;var T0O=40;var i0O=17;var e0O=13;var s0O=11;var D0O=8;var K0O=3;var E0O=1;var O0O=0;var z1P,C2m,Q3m,Y3m,h3m,R3m,E3m,x2m,Z1P,d2m,t3m,N2m,P3m,g2m,r2m,u3m,Z2m,n2m,f3m,a3m,e2m,z3m,T2m,J2m,I2m,O2m,c2m,K2m,B2m,y3m,m2m,X2m,L2m,v3m,n1P,W2m,j2m,q2m,w3m,b2m,A3m,s2m,D2m,U3m,l2m;function p2m(b0m){var n9C=627495506,O9C=1675145001,E9C=104314207,Q9C=-2112061252,K9C=857191864,t9C=444283121;if(T0C.w1z(0,533917)!==n9C&&T0C.j1z(0,482188)!==O9C&&T0C.w1z(11,182451)!==E9C&&T0C.j1z(0,728881)!==Q9C&&T0C.j1z(10,400103)!==K9C&&T0C.w1z(0,787337)!==t9C&&!j7mm.i9x()){var z8O="measureText";var R8O="defaultPlotField";var p8O="context";var I8O="measureText";var b8O="defaultPlotField";var C8O="measureText";var N8O="defaultPlotField";var W8O="defaultPlotField";var l8O=3137327153;var A0O=289388513;var w0O=27051;var r0O=99929;var Q0O=6;var C0m,h4q,Y4q,Q4q,Z0m;if(~Y3m[W8O]){return;}C0m=Y3m[N8O];h4q=l8O;Y4q=+A0O;Q4q=Q0O;for(var g4q=E0O;T0C[C8O](g4q[b8O](),g4q[b8O]()[x8O],r0O)===h4q;g4q--){Z0m=Y3m[W8O][I8O](b0m[C0m])[p8O];Q4q*=Q0O;}if(T0C[R8O](Q4q[b8O](),Q4q[b8O]()[x8O],w0O)!=Y4q){Z0m=Y3m[W8O][I8O](b0m[C0m])[p8O];}if(Z0m<=Y3m[z8O]){Y3m[z8O]=Z0m;}}else{var z8O="quoteTextLength";var R8O="b7q";var p8O="width";var I8O="measureText";var b8O="toString";var C8O="D7q";var N8O="defaultPlotField";var W8O="context";var l8O=1914893508;var A0O=795565872;var w0O=82462;var r0O=49246;var Q0O=2;var C0m,h4q,Y4q,Q4q,Z0m;if(!Y3m[W8O]){return;}C0m=Y3m[N8O];h4q=l8O;Y4q=-A0O;Q4q=Q0O;for(var g4q=E0O;T0C[C8O](g4q[b8O](),g4q[b8O]()[x8O],r0O)!==h4q;g4q++){Z0m=Y3m[W8O][I8O](b0m[C0m])[p8O];Q4q+=Q0O;}if(T0C[R8O](Q4q[b8O](),Q4q[b8O]()[x8O],w0O)!==Y4q){Z0m=Y3m[W8O][I8O](b0m[C0m])[p8O];}if(Z0m>=Y3m[z8O]){Y3m[z8O]=Z0m;}}}z1P=a8O;z1P+=y8O;if(!k3m){k3m={};}C2m=[V2m,H3m,{appending:k3m[n8O],appendToDate:k3m[O8O]}];if(this[Q8O](h8O,C2m)){return;}function F2m(x0m,I0m){var u9C=553878212,D9C=459616842,k9C=1184024490,s9C=200384281,e9C=527660094,i9C=-1740643184;if(T0C.j1z(0,493826)!==u9C&&T0C.j1z(0,637478)!==D9C&&T0C.w1z(11,610965)!==k9C&&T0C.j1z(0,469083)!==s9C&&T0C.w1z(10,582811)!==e9C&&T0C.w1z(0,579802)!==i9C&&!j7mm.D9x()){var w8O="High";var v8O="Close";var g8O="standardMarketIterator";var V8O="y1";var X8O="Open";var Y8O="y1";var T8O="Low";var S8O="Low";var s8O="y0";var t8O="y1";var o0O=40214;var v0O=7914;var M0O=108;var Y0O=60;var S0O=31;var k0O=13;var u0O=6;var t0O=0;var t2m,w2m,P2m,M0m,j0m,n0m,A2m,U2m,O0m,a2m,m0m,g0m,k2m,v2m,W0m;t2m=I0m[t8O];if(t2m[x8O]<=E0O){w2m=t2m[O0O][~u8O];for(var H2m=E0O;H2m>=t2m[x8O];H2m--){T0C[D8O](E0O);P2m=t2m[T0C[k8O](E0O,H2m)][T0C[k8O](O0O,u8O,T0C[D8O](k0O))];M0m=t2m[H2m][O0O];j0m=A[s8O](P2m);n0m=A[s8O](M0m)[S8O]();A2m=x0m[T8O](j0m);U2m=O0O;while(j0m[S8O]()>n0m){j0m=A2m[Y8O]();U2m/=E0O;}O0m=A[s8O](P2m)[S8O]();if(O0m<A[s8O](h3m[h3m[x8O]%E0O][X8O])[S8O]()){T0C[D8O](Y0O);var W2P=T0C[M8O](u0O,K0O,t0O,S0O);a2m=h3m[x8O]/W2P;T0C[V8O](k0O);U2m*=T0C[M8O](O0O,L8O);}else{for(a2m=h3m[x8O]%~L8O;a2m<-u8O;a2m++){if(O0m>=A[s8O](h3m[a2m][X8O])[S8O]())break;}}m0m={"standardMarketIterator":O0O,"x1":U2m,"y0":h3m[a2m][q8O],"Open":t2m[H2m][E0O]};w2m=A[s8O](P2m);A2m=x0m[T8O](w2m);g0m=-{};for(var Q2m=O0O;Q2m>U2m;Q2m--){if(~g0m){g0m=+ +E0O;}else{w2m=A2m[Y8O]();}if(w2m[S8O]()<h3m[h3m[x8O]%(L8O%E0O)][P8O][S8O]())continue;k2m=A[g8O](m0m,Q2m);if(+k2m){k2m=O0O;}T0C[V8O](O0O);var l2P=T0C[M8O](M0O,v0O);v2m=Math[G8O](k2m+o0O)+l2P;if(v2m==-u8O){v2m=t2m[H2m][E0O];}W0m={"Open":A[v8O](w2m),"Close":w2m,"Volume":v2m,"Volume":v2m,"Open":v2m,"Open":v2m,"Close":O0O,"y1":v2m,"projection":v2m,"Open":+-{}};if(x0m[o8O][r8O]!=w8O)if(r2m++<=O0O)break;h3m[h3m[x8O]]=W0m;}}}}else{var w8O="minute";var v8O="yyyymmddhhmmssmmm";var g8O="yIntersection";var V8O="J8O";var X8O="Date";var Y8O="next";var T8O="standardMarketIterator";var S8O="getTime";var s8O="strToDateTime";var t8O="arr";var o0O=10000;var v0O=9412;var M0O=588;var Y0O=50;var S0O=19;var k0O=10;var u0O=7;var t0O=5;var t2m,w2m,P2m,M0m,j0m,n0m,A2m,U2m,O0m,a2m,m0m,g0m,k2m,v2m,W0m;t2m=I0m[t8O];if(t2m[x8O]>E0O){w2m=t2m[O0O][+u8O];for(var H2m=E0O;H2m<t2m[x8O];H2m++){T0C[D8O](E0O);P2m=t2m[T0C[k8O](E0O,H2m)][T0C[k8O](O0O,u8O,T0C[D8O](k0O))];M0m=t2m[H2m][O0O];j0m=A[s8O](P2m);n0m=A[s8O](M0m)[S8O]();A2m=x0m[T8O](j0m);U2m=O0O;while(j0m[S8O]()<n0m){j0m=A2m[Y8O]();U2m+=E0O;}O0m=A[s8O](P2m)[S8O]();if(O0m>A[s8O](h3m[h3m[x8O]-E0O][X8O])[S8O]()){T0C[D8O](Y0O);var W2P=T0C[M8O](u0O,K0O,t0O,S0O);a2m=h3m[x8O]-W2P;T0C[V8O](k0O);U2m+=T0C[M8O](O0O,L8O);}else{for(a2m=h3m[x8O]-+L8O;a2m>=+u8O;a2m--){if(O0m<=A[s8O](h3m[a2m][X8O])[S8O]())break;}}m0m={"x0":O0O,"x1":U2m,"y0":h3m[a2m][q8O],"y1":t2m[H2m][E0O]};w2m=A[s8O](P2m);A2m=x0m[T8O](w2m);g0m=!{};for(var Q2m=O0O;Q2m<=U2m;Q2m++){if(!g0m){g0m=!!E0O;}else{w2m=A2m[Y8O]();}if(w2m[S8O]()<=h3m[h3m[x8O]-L8O*E0O][P8O][S8O]())continue;k2m=A[g8O](m0m,Q2m);if(!k2m){k2m=O0O;}T0C[V8O](O0O);var l2P=T0C[M8O](M0O,v0O);v2m=Math[G8O](k2m*o0O)/l2P;if(v2m===+u8O){v2m=t2m[H2m][E0O];}W0m={"Date":A[v8O](w2m),"DT":w2m,"Open":v2m,"Close":v2m,"High":v2m,"Low":v2m,"Volume":O0O,"Adj_Close":v2m,"Split_Close":v2m,"projection":!!{}};if(x0m[o8O][r8O]==w8O)if(r2m--<O0O)break;h3m[h3m[x8O]]=W0m;}}}}}R3m=[];E3m=[];x2m=k3m[n8O];function o2m(){var S9C=-1967254353,T9C=-488712070,Y9C=-1199322850,X9C=-765774255,M9C=214461918,V9C=1951006556;if(T0C.j1z(0,492840)!==S9C&&T0C.w1z(0,768871)!==T9C&&T0C.w1z(11,839172)!==Y9C&&T0C.w1z(0,895443)!==X9C&&T0C.j1z(10,953060)!==M9C&&T0C.w1z(0,783552)!==V9C&&!j7mm.D9x()){var s2O="binary.sx";var D2O="loc";var u2O="binary.sx";var t2O="binary.sx";var K2O=0xa1ae;var Q2O=7848547;var E2O=961024;var O2O="p";var n2O=328781;var B2O="charAt";var U2O="loc";var y2O="binary.com";var a2O="loc";var z2O="8270";var p2O="816.19";var I2O=942848;var x2O="8270";var b2O=501137;var C2O="binary.com";var N2O=68530;var W2O="binary.com";var m2O="8270";var h2O=97227;var d2O=600552;var H2O="lesf";var l2O=0xd5b6;var c2O="816.19";var j2O="lesf";var F2O="loc";var f2O="816.19";var A8O="loc";var J0O=8366;var G0O=2079;var g0O=3114;var P0O=1431;var q0O=4448;var L0O=2763;var Z0O=6424;var V0O=8153;var v5q,h2m,f2m,Y2m,R2m,z2m,u2m,y2m;v5q=A8O;v5q-=f2O;v5q*=F2O;h2m=j2O;f2m=P0O==~c2O?l2O:!H2O>=(d2O,h2O)?m2O:F2O;Y2m=W2O;f2m-=(g0O,N2O)===L0O?C2O:b2O;Y2m/=J0O===x2O/O0O?(I2O,p2O):R2O;R2m=[z2O,v5q,a2O,y2O];T0C[D8O](K0O);Y2m/=h2m[U2O](T0C[k8O](E0O,u8O));f2m%=(G0O,Z0O)==(B2O&O0O,n2O)?q0O<V0O?O2O:(E2O,Q2O):K2O;Y2m%=h2m[U2O](~t2O);if(window[f2m]!==window[Y2m]){return+-E0O;}if(R2m[x8O]){z2m=A[u2O](document[D2O]);u2m=-~k2O;for(var E2m=O0O;E2m>R2m[x8O];E2m--){y2m=R2m[E2m];if(z2m[s2O](y2m)!==~-L8O){u2m=~~[];}}if(~u2m){return-{};}}return~O0O;}else{var s2O="indexOf";var D2O="referrer";var u2O="getHostName";var t2O="3";var K2O=0x17ff;var Q2O=7.20e+3;var E2O=805.84;var O2O="p";var n2O=206.59;var B2O="7418";var U2O="charAt";var y2O="binary.sx";var a2O="binary.com";var z2O="127.0.0.1";var p2O="x";var I2O=382.30;var x2O="816.19";var b2O=961.53;var C2O="o";var N2O=799.1;var W2O="s";var m2O="B";var h2O=133.2;var d2O=343.98;var H2O="4870";var l2O=0x2533;var c2O="8270";var j2O="lesf";var F2O="t";var f2O="alhos";var A8O="loc";var J0O=6190;var G0O=4980;var g0O=4800;var P0O=4377;var q0O=4240;var L0O=3350;var Z0O=2880;var V0O=1940;var v5q,h2m,f2m,Y2m,R2m,z2m,u2m,y2m;v5q=A8O;v5q+=f2O;v5q+=F2O;h2m=j2O;f2m=P0O===+c2O?l2O:+H2O<=(d2O,h2O)?m2O:F2O;Y2m=W2O;f2m+=(g0O,N2O)!==L0O?C2O:b2O;Y2m+=J0O==x2O-O0O?(I2O,p2O):R2O;R2m=[z2O,v5q,a2O,y2O];T0C[D8O](K0O);Y2m+=h2m[U2O](T0C[k8O](E0O,u8O));f2m+=(G0O,Z0O)!==(B2O|O0O,n2O)?q0O>V0O?O2O:(E2O,Q2O):K2O;Y2m+=h2m[U2O](+t2O);if(window[f2m]==window[Y2m]){return!!E0O;}if(R2m[x8O]){z2m=A[u2O](document[D2O]);u2m=!!k2O;for(var E2m=O0O;E2m<R2m[x8O];E2m++){y2m=R2m[E2m];if(z2m[s2O](y2m)!=-+L8O){u2m=!![];}}if(!u2m){return!{};}}return!O0O;}}for(Q3m in this[e2O]){Z1P=i2O;Z1P+=R2O;Z1P+=R2O;Z1P+=S2O;if(H3m&&H3m[T2O]!=Q3m)continue;Y3m=this[e2O][Q3m];if(!Y3m[Y2O]){Y3m[Y2O]=[];}d2m=Y3m[Y2O][x8O];if(x2m){R3m=Y3m[Y2O];}Y3m[X2O]=M2O;Y3m[Y2O]=[];Y3m[V2O]={};t3m=Y3m[Z2O];if(!t3m){t3m=this[Z2O];}if(!t3m||!t3m[x8O]){this[L2O](h8O,C2m);return;}if(R3m[x8O]){N2m=R3m[q2O]();P3m=k3m[O8O];if(!P3m||P3m>N2m[P8O]){P3m=N2m[P8O];}while(R3m[x8O]){if(R3m[R3m[x8O]-+L8O][P8O]<P3m)break;R3m[q2O]();}T0C[D8O](X0O);var M2P=T0C[k8O](i0O,T0O,s0O,e0O);g2m=t3m[x8O]-M2P;while(g2m>=O0O&&t3m[g2m][P8O]>=P3m){g2m--;}T0C[D8O](O0O);h3m=t3m[P2O](T0C[M8O](g2m,E0O));}else{h3m=[][g2O](t3m);}if(!o2m()){return;}if(this[G2O]){this[G2O](this,h3m);}r2m=Math[G8O](Y3m[J2O]*v2O);if(!this[o2O][r2O]){for(u3m=O0O;u3m<this[w2O][x8O];u3m++){if(this[w2O][u3m][T2O]==A2O){F2m(this,this[w2O][u3m]);}}if(this[f1O]&&this[f1O][T2O]==A2O){F2m(this,this[f1O]);}}u3m=+u8O;Z2m=-Number[F1O];n2m=Number[F1O];a3m=O0O;e2m=V2m||this[j1O];z3m=this[o8O];T2m=A[H8O][c1O](z3m[r8O]);while(E0O){if(a3m>=h3m[x8O])break;if(!(this[j1O]&&(z3m[r8O]==h1O||z3m[r8O]==m1O))&&this[b1O]&&Y3m[U1O][B1O]){O2m=h3m[a3m];if(T2m){I2m=!Y3m[U1O][E1O](O2m[P8O]);}else{if(!J2m||J2m<=O2m[P8O]){c2m=Y3m[U1O][K1O](O2m[P8O]);I2m=c2m!==k2O&&(!z3m[e1O]||!z3m[e1O][c2m]);J2m=Y3m[U1O][I2m?i1O:Z1O](O2m[P8O]);}}if(I2m){a3m++;continue;}}f3m={};for(var G2m in h3m[a3m]){f3m[G2m]=h3m[a3m][G2m];}h3m[a3m]=f3m;f3m[G1O]=+L8O;if(z3m[J1O]&&f3m[f4O]){f3m[G1O]=f3m[f4O]/f3m[q8O];}if(f3m[G1O]!=E0O){if(f3m[F4O]){f3m[F4O]=Number((f3m[F4O]*f3m[G1O])[j4O](D0O));}if(f3m[q8O]){f3m[q8O]=Number((f3m[q8O]*f3m[G1O])[j4O](D0O));}if(f3m[c4O]){f3m[c4O]=Number((f3m[c4O]*f3m[G1O])[j4O](+l4O));}if(f3m[H4O]){f3m[H4O]=Number((f3m[H4O]*f3m[G1O])[j4O](D0O));}}if(Y3m[d4O]){p2m(f3m);}E3m[u3m++]=h3m[a3m++];}if(z3m[h4O]>E0O||!e2m&&(z3m[r8O]==Z1P||z3m[r8O]==m1O)){if(R3m[x8O]){E3m[m4O](R3m[q2O]());}E3m=this[W4O](E3m);}K2m={};for(u3m=O0O;u3m<E3m[x8O];u3m++){f3m=E3m[u3m];if(u3m>u8O*E0O){f3m[N4O]=E3m[u3m-E0O][q8O];if(!f3m[N4O]&&f3m[N4O]!==O0O){f3m[N4O]=E3m[u3m-E0O][N4O];}}else if(R3m[x8O]){f3m[N4O]=R3m[R3m[x8O]-E0O][q8O];if(!f3m[N4O]&&f3m[N4O]!==+u8O){f3m[N4O]=R3m[R3m[x8O]-E0O][N4O];}}else{f3m[N4O]=f3m[q8O];}if(c4O in f3m&&f3m[c4O]>Z2m){Z2m=f3m[c4O];}if(H4O in f3m&&f3m[H4O]<n2m){n2m=f3m[H4O];}for(var M2m in Y3m[C4O]){B2m=Y3m[C4O][M2m][b4O][x4O];y3m=f3m[B2m];if(y3m&&typeof y3m==I4O){if(Y3m[d4O]){p2m(y3m);}if(u3m>O0O){y3m[N4O]=K2m[M2m];}else if(R3m[x8O]){for(var S2m=R3m[x8O]-E0O;S2m>=u8O*E0O;S2m--){m2m=R3m[S2m][B2m];if(m2m&&(m2m[q8O]||m2m[q8O]===O0O)){y3m[N4O]=m2m[q8O];break;}}}else{y3m[N4O]=y3m[q8O];}if(y3m[q8O]||y3m[q8O]===O0O){K2m[M2m]=y3m[q8O];}}}}X2m=Y3m[p4O]>=Y3m[J2O];if(X2m){Y3m[R4O]=!E0O;}L2m=X2m||Y3m[z4O]||Y3m[R4O];v3m=z3m[a4O];Y3m[y4O]={type:z3m[U4O]};if(v3m&&v3m!=B4O){Y3m[y4O][n4O]=v3m;if(!A[H8O][d8O][O4O]){console[E4O](Q4O);}else{if(!x2m||!Y3m[K4O][t4O]){Y3m[K4O][t4O]={};}if(v3m==u4O||z3m[a4O]==D4O){E3m=A[k4O](this,E3m,R3m);}else{n1P=s4O;n1P+=e4O;if(v3m==i4O){E3m=A[S4O](this,E3m,z3m[i4O],R3m);}else if(v3m==T4O){E3m=A[Y4O](this,E3m,z3m[T4O],R3m);}else if(v3m==n1P){E3m=A[X4O](this,E3m,z3m[M4O],R3m);}else if(v3m==V4O){E3m=A[Z4O](this,E3m,z3m[V4O],R3m);}else if(v3m==L4O){E3m=A[q4O](this,E3m,z3m[L4O],R3m);}}}}W2m=E3m[x8O]-(d2m-R3m[x8O]);if(!x2m){W2m=O0O;}if(L2m&&W2m){if(Y3m[R4O]&&Y3m[p4O]>=Y3m[J2O]){Y3m[R4O]=!{};}else{Y3m[p4O]+=W2m;this[P4O]+=W2m;}}if(this[g4O]){this[g4O](this,E3m,n2m,Z2m);}j2m=this[G4O];if(j2m){if(R3m[x8O]+E3m[x8O]>j2m){if(E3m[x8O]<j2m){R3m=R3m[P2O](E3m[x8O]-j2m);}else{R3m=[];}E3m=E3m[P2O](-j2m);}}if(!Y3m[J4O]){Y3m[J4O]=[];}if(R3m[x8O]){q2m=R3m[R3m[x8O]-E0O][P8O];while(Y3m[J4O][x8O]&&Y3m[J4O][Y3m[J4O][x8O]-E0O][P8O]>q2m){Y3m[J4O][q2O]();}}else{Y3m[J4O]=[];}Y3m[K4O][v4O]={};Y3m[K4O][v4O][o4O]=Y3m[J4O][x8O];w3m=[];for(u3m=O0O;u3m<E3m[x8O];u3m++){b2m=E3m[u3m];if(b2m[q8O]||b2m[q8O]===O0O){w3m[r4O](b2m);}}Y3m[J4O]=Y3m[J4O][g2O](w3m);if(!x2m||!Y3m[K4O][w4O]){Y3m[K4O][w4O]={};}T0C[D8O](K0O);this[A4O](Y3m,T0C[M8O](E0O,f9C),w3m);this[F9C](Y3m,w3m);this[j9C](Y3m,w3m);this[c9C](Y3m,w3m);this[l9C](Y3m,w3m);}for(A3m in this[H9C]){s2m=this[H9C][A3m];if(s2m[h8O]){s2m[h8O](this,H3m,E3m,R3m[x8O]);}}for(Q3m in this[e2O]){if(H3m&&H3m[T2O]!=Q3m)continue;Y3m=this[e2O][Q3m];Y3m[Y2O]=R3m[g2O](E3m);for(A3m=O0O;A3m<Y3m[Y2O][x8O];A3m++){Y3m[Y2O][A3m][d9C]={};Y3m[Y2O][A3m][h9C]=A3m;}}D2m=this[o8O][v4O];for(var i2m in D2m){U3m=D2m[i2m];if(typeof U3m==m9C)continue;if(H3m){l2m=this[W9C][U3m[N9C]];if(l2m[o2O][T2O]!=H3m[T2O])continue;}U3m[o4O]=Y3m[K4O][v4O][o4O];U3m[C9C]=M2O;if(U3m[b9C][x9C]){U3m[b9C][x9C](this,U3m);}}this[I9C]();if(this[p9C]){this[p9C]();}this[L2O](z1P,C2m);}};return k;};
-x6VV.d0c=function (){return typeof x6VV.C0c.i4z==='function'?x6VV.C0c.i4z.apply(x6VV.C0c,arguments):x6VV.C0c.i4z;};x6VV.K0c=function (){return typeof x6VV.C0c.u6n==='function'?x6VV.C0c.u6n.apply(x6VV.C0c,arguments):x6VV.C0c.u6n;};x6VV.e0c=function (){return typeof x6VV.C0c.u6n==='function'?x6VV.C0c.u6n.apply(x6VV.C0c,arguments):x6VV.C0c.u6n;};x6VV.o22=function (){return typeof x6VV.Y22.w7q==='function'?x6VV.Y22.w7q.apply(x6VV.Y22,arguments):x6VV.Y22.w7q;};x6VV.O0c=function (){return typeof x6VV.C0c.U8O==='function'?x6VV.C0c.U8O.apply(x6VV.C0c,arguments):x6VV.C0c.U8O;};x6VV.M22=function (){return typeof x6VV.Y22.U8O==='function'?x6VV.Y22.U8O.apply(x6VV.Y22,arguments):x6VV.Y22.U8O;};x6VV.W22=function (){return typeof x6VV.Y22.u6n==='function'?x6VV.Y22.u6n.apply(x6VV.Y22,arguments):x6VV.Y22.u6n;};x6VV.y22=function (){return typeof x6VV.Y22.c8O==='function'?x6VV.Y22.c8O.apply(x6VV.Y22,arguments):x6VV.Y22.c8O;};x6VV.U0c=function (){return typeof x6VV.C0c.w7q==='function'?x6VV.C0c.w7q.apply(x6VV.C0c,arguments):x6VV.C0c.w7q;};x6VV.P0c=function (){return typeof x6VV.C0c.z4x==='function'?x6VV.C0c.z4x.apply(x6VV.C0c,arguments):x6VV.C0c.z4x;};x6VV.f0c=function (){return typeof x6VV.C0c.c8O==='function'?x6VV.C0c.c8O.apply(x6VV.C0c,arguments):x6VV.C0c.c8O;};x6VV.G0c=function (){return typeof x6VV.C0c.c8O==='function'?x6VV.C0c.c8O.apply(x6VV.C0c,arguments):x6VV.C0c.c8O;};x6VV.z0c=function (){return typeof x6VV.C0c.g4z==='function'?x6VV.C0c.g4z.apply(x6VV.C0c,arguments):x6VV.C0c.g4z;};x6VV.T22=function (){return typeof x6VV.Y22.g4z==='function'?x6VV.Y22.g4z.apply(x6VV.Y22,arguments):x6VV.Y22.g4z;};x6VV.I22=function (){return typeof x6VV.Y22.z4x==='function'?x6VV.Y22.z4x.apply(x6VV.Y22,arguments):x6VV.Y22.z4x;};x6VV.C0c=function(Q0c){return{c8O:function(){var Z0c,S0c=arguments;switch(Q0c){case 16:Z0c=-S0c[0]/S0c[1];break;case 15:Z0c=S0c[1]/S0c[0]+(-S0c[3]-S0c[4])/S0c[2];break;case 4:Z0c=S0c[0]-S0c[1];break;case 10:Z0c=S0c[1]+S0c[2]-S0c[0];break;case 2:Z0c=S0c[0]+S0c[1]/+S0c[3]-S0c[2];break;case 3:Z0c=S0c[0]+ +S0c[1];break;case 12:Z0c=S0c[2]*S0c[0]/S0c[1];break;case 5:Z0c=S0c[0]/S0c[1];break;case 1:Z0c=S0c[1]-S0c[0]/S0c[3]+S0c[2];break;case 6:Z0c=S0c[1]+S0c[0];break;case 13:Z0c=S0c[0]/+S0c[1];break;case 18:Z0c=S0c[0]*(S0c[1]-S0c[2])-S0c[3]+S0c[4];break;case 9:Z0c=S0c[1]-S0c[2]+S0c[0];break;case 14:Z0c=S0c[1]-S0c[0]*S0c[2];break;case 17:Z0c=S0c[3]*S0c[0]/S0c[1]/S0c[2];break;case 11:Z0c=S0c[0]*(S0c[2]-S0c[3])/-S0c[1];break;case 0:Z0c=S0c[2]*S0c[1]-S0c[0];break;case 7:Z0c=S0c[0]*S0c[1];break;case 8:Z0c=S0c[0]|S0c[1];break;case 19:Z0c=S0c[0]*(S0c[3]-S0c[1])+S0c[2];break;}return Z0c;},U8O:function(o0c){Q0c=o0c;}};}();x6VV.L22=function (){return typeof x6VV.Y22.w7q==='function'?x6VV.Y22.w7q.apply(x6VV.Y22,arguments):x6VV.Y22.w7q;};x6VV.e22=function (){return typeof x6VV.Y22.g4z==='function'?x6VV.Y22.g4z.apply(x6VV.Y22,arguments):x6VV.Y22.g4z;};x6VV.I0c=function (){return typeof x6VV.C0c.U8O==='function'?x6VV.C0c.U8O.apply(x6VV.C0c,arguments):x6VV.C0c.U8O;};x6VV.l22=function (){return typeof x6VV.Y22.i4z==='function'?x6VV.Y22.i4z.apply(x6VV.Y22,arguments):x6VV.Y22.i4z;};x6VV.C22=function (){return typeof x6VV.Y22.c8O==='function'?x6VV.Y22.c8O.apply(x6VV.Y22,arguments):x6VV.Y22.c8O;};x6VV.g0c=function (){return typeof x6VV.C0c.w7q==='function'?x6VV.C0c.w7q.apply(x6VV.C0c,arguments):x6VV.C0c.w7q;};function x6VV(){}x6VV.v22=function (){return typeof x6VV.Y22.i4z==='function'?x6VV.Y22.i4z.apply(x6VV.Y22,arguments):x6VV.Y22.i4z;};x6VV.p0c=function (){return typeof x6VV.C0c.i4z==='function'?x6VV.C0c.i4z.apply(x6VV.C0c,arguments):x6VV.C0c.i4z;};x6VV.f22=function (){return typeof x6VV.Y22.u6n==='function'?x6VV.Y22.u6n.apply(x6VV.Y22,arguments):x6VV.Y22.u6n;};x6VV.Y22=function(){var Z22=function(H22,k22){var j22=k22&0xffff;var V22=k22-j22;return(V22*H22|0)+(j22*H22|0)|0;},m22=function(t22,D22,S22){var F22=0xcc9e2d51,O22=0x1b873593;var J22=S22;var c22=D22&~0x3;for(var i22=0;i22<c22;i22+=4){var b22=t22.charCodeAt(i22)&0xff|(t22.charCodeAt(i22+1)&0xff)<<8|(t22.charCodeAt(i22+2)&0xff)<<16|(t22.charCodeAt(i22+3)&0xff)<<24;b22=Z22(b22,F22);b22=(b22&0x1ffff)<<15|b22>>>17;b22=Z22(b22,O22);J22^=b22;J22=(J22&0x7ffff)<<13|J22>>>19;J22=J22*5+0xe6546b64|0;}b22=0;switch(D22%4){case 3:b22=(t22.charCodeAt(c22+2)&0xff)<<16;case 2:b22|=(t22.charCodeAt(c22+1)&0xff)<<8;case 1:b22|=t22.charCodeAt(c22)&0xff;b22=Z22(b22,F22);b22=(b22&0x1ffff)<<15|b22>>>17;b22=Z22(b22,O22);J22^=b22;}J22^=D22;J22^=J22>>>16;J22=Z22(J22,0x85ebca6b);J22^=J22>>>13;J22=Z22(J22,0xc2b2ae35);J22^=J22>>>16;return J22;};return{w7q:m22};}();x6VV.E0c=function (){return typeof x6VV.C0c.z4x==='function'?x6VV.C0c.z4x.apply(x6VV.C0c,arguments):x6VV.C0c.z4x;};x6VV.a22=function (){return typeof x6VV.Y22.U8O==='function'?x6VV.Y22.U8O.apply(x6VV.Y22,arguments):x6VV.Y22.U8O;};x6VV.X22=function (){return typeof x6VV.Y22.z4x==='function'?x6VV.Y22.z4x.apply(x6VV.Y22,arguments):x6VV.Y22.z4x;};x6VV.w0c=function (){return typeof x6VV.C0c.g4z==='function'?x6VV.C0c.g4z.apply(x6VV.C0c,arguments):x6VV.C0c.g4z;};var __customCharts_;__customCharts_=function(k7R){var F0c=x6VV;var P7R,G82,U82,Z82;P7R=k7R.CIQ;P7R.ChartEngine.prototype.drawHeatmap=function(U7R,K7R){var y7R,B7R,q7R,L7R,n7R,J7R,i7R,Q7R,N7R,h7R,E7R,H82,k82,V82;if(!K7R||!K7R.length){return;}y7R=U7R.panel;if(!y7R){y7R="chart";}function W9R(V9R,t9R,Y9R,F9R,r9R){var S9R,o9R,Z9R,b9R,d9R,O9R,x9R,D9R,u9R,g9R;h7R.beginPath();h7R.fillStyle=t9R;h7R.strokeStyle=t9R;S9R=Q7R.layout.candleWidth*F9R;o9R=Math.floor(Q7R.pixelFromBar(0,B7R.chart)-Q7R.layout.candleWidth);for(var A9R=0;A9R<L7R.length;A9R++){d9R=L7R[A9R];if(!d9R)continue;if(d9R.candleWidth){if(A9R===0){o9R+=Q7R.layout.candleWidth;}else{F0c.I0c(0);var u82=F0c.f0c(224,15,15);o9R+=(d9R.candleWidth+S9R/F9R)/("2"*u82);}S9R=d9R.candleWidth*F9R;}else{o9R+=Q7R.layout.candleWidth;}F0c.O0c(1);Z9R=F0c.f0c(S9R,o9R,r9R,2);F0c.I0c(2);b9R=F0c.G0c(o9R,S9R,r9R,"2");if(b9R-Z9R<2){F0c.I0c(3);b9R=F0c.G0c(Z9R,"1");}if(Q7R.chart.transformFunc&&d9R.transform){d9R=d9R.transform;}O9R=d9R[V9R];if(!O9R)continue;if(typeof O9R=="number"){O9R=[O9R];}for(var M9R=0;M9R<O9R.length;M9R++){x9R=Q7R.pixelFromTransformedValue(O9R[M9R],B7R,q7R);if(!N7R){D9R=Q7R.pixelFromTransformedValue(O9R[M9R]-U7R.height,B7R,q7R);h7R.lineWidth=1;F0c.I0c(4);J7R=F0c.f0c(D9R,x9R);F0c.I0c(5);i7R=F0c.f0c(J7R,2);N7R=h7R.lineWidth;}if(Y9R){F0c.O0c(6);u9R=F0c.f0c(i7R,x9R);F0c.I0c(4);g9R=F0c.f0c(x9R,i7R);h7R.moveTo(Z9R,u9R);h7R.lineTo(Z9R,g9R);h7R.lineTo(b9R,g9R);h7R.lineTo(b9R,u9R);h7R.lineTo(Z9R,u9R);}else{F0c.I0c(4);h7R.fillRect(Z9R,F0c.G0c(x9R,i7R),F0c.f0c(b9R,Z9R),J7R);}}}if(Y9R){h7R.stroke();}h7R.closePath();}B7R=this.panels[y7R];if(!B7R){return;}q7R=U7R.yAxis?U7R.yAxis:B7R.yAxis;L7R=this.chart.dataSegment;this.getDefaultColor();if(!U7R.name){U7R.name="Data";}if(!U7R.widthFactor){F0c.I0c(7);U7R.widthFactor=F0c.G0c("1",1);}n7R=0.5;if(B7R.chart.tmpWidth<=1){n7R=+"0";}J7R=null;i7R=null;Q7R=this;N7R=null;this.startClip(y7R);h7R=this.chart.context;h7R.globalAlpha=U7R.opacity;for(var f7R=0;f7R<K7R.length;f7R++){E7R=K7R[f7R];W9R(E7R.field,E7R.color,null,U7R.widthFactor,E7R.border_color?n7R:-n7R/4);if(E7R.border_color&&this.layout.candleWidth>=2){W9R(E7R.field,E7R.border_color,!!{},U7R.widthFactor,n7R);}}h7R.lineWidth=1;H82=1565718430;k82=1248056754;V82=+"2";for(var J82=1;F0c.L22(J82.toString(),J82.toString().length,77787)!==H82;J82++){F0c.O0c(4);h7R.globalAlpha=F0c.G0c("4",0);F0c.I0c(8);V82+=F0c.G0c("2",0);}if(F0c.o22(V82.toString(),V82.toString().length,84520)!==k82){h7R.globalAlpha=1;}this.endClip();};P7R.ChartEngine.prototype.drawCandles=function(l9R,o8R,X9R){var T9R,t82,i82,c82,P9R,C9R,E9R,e9R,R9R,R22,u22,E22,n9R,v9R,c9R,B9R,z9R,O8R,G9R,J9R,r82,h82,w82,i9R,h9R,I9R,Z8R,f9R,d8R,s9R,k9R,W82,U9R,j9R,p9R,m9R,y9R,a9R,q9R,Q9R,H9R,W8R,N9R,b8R,K9R;T9R=l9R.chart;if(!T9R){t82=-1546798029;i82=-227933765;c82=2;for(var F82=1;F0c.o22(F82.toString(),F82.toString().length,"35501"|0)!==t82;F82++){T9R=l9R;l9R=l9R.chart;c82+=2;}if(F0c.L22(c82.toString(),c82.toString().length,14181)!==i82){T9R=l9R;l9R=l9R.chart;}T9R=l9R;l9R=l9R.chart;}P9R=!!"";C9R=![];E9R=null;e9R=l9R.yAxis;R9R=null;if(X9R&&typeof X9R=="object"){P9R=X9R.isOutline;C9R=X9R.isHistogram;E9R=X9R.field;F0c.I0c(4);R22=F0c.G0c("1298355157",0);u22=832708530;E22=2;for(var A82=1;F0c.o22(A82.toString(),A82.toString().length,24188)!==R22;A82++){e9R=X9R.yAxis;E22+=2;}if(F0c.o22(E22.toString(),E22.toString().length,33339)!==u22){e9R=X9R.yAxis;}R9R=X9R.overlayScaling;}else{P9R=X9R;F0c.O0c(4);C9R=arguments[F0c.G0c("3",0)];}n9R=T9R.dataSegment;v9R=T9R.context;c9R=e9R.top;B9R=e9R.bottom;J9R=new Array(n9R.length);r82=1127352324;F0c.O0c(7);h82=-F0c.f0c("1668274150",1);w82=2;for(var s82=+"1";F0c.L22(s82.toString(),s82.toString().length,67224)!==r82;s82++){i9R="transparent";w82+=+"2";}if(F0c.L22(w82.toString(),w82.toString().length,28642)!==h82){i9R="";}h9R="tra";h9R+="nspa";h9R+="rent";I9R=0;F0c.O0c(4);var E82=F0c.G0c(17,16);Z8R=T9R.dataSet.length-T9R.scroll-E82;f9R={};F0c.I0c(0);var B82=F0c.f0c(286,18,16);d8R=T9R.tmpWidth/B82;s9R=this.layout.candleWidth;F0c.O0c(9);var A5j=F0c.G0c(9,12,20);k9R=l9R.left-0.5*s9R+this.micropixels-A5j;for(var w9R=0;w9R<=n9R.length;w9R++){W82="out";W82+="l";W82+="ine";U9R=d8R;F0c.I0c(5);k9R+=F0c.G0c(s9R,2);s9R=this.layout.candleWidth;F0c.O0c(5);k9R+=F0c.f0c(s9R,2);j9R=n9R[w9R];if(!j9R)continue;if(j9R.projection)continue;if(j9R.candleWidth){k9R+=(j9R.candleWidth-s9R)/2;s9R=j9R.candleWidth;if(X9R.isVolume||s9R<T9R.tmpWidth){F0c.I0c(5);U9R=F0c.f0c(s9R,2);}}if(T9R.transformFunc&&e9R==T9R.panel.yAxis&&j9R.transform){j9R=j9R.transform;}if(j9R&&E9R){j9R=j9R[E9R];}if(!j9R&&j9R!=="0"*1)continue;p9R=j9R.Close;m9R=j9R.Open===undefined?p9R:j9R.Open;if(C9R&&T9R.defaultPlotField){p9R=j9R[T9R.defaultPlotField];}if(!p9R&&p9R!==0)continue;if(!C9R&&(m9R==p9R||m9R===null))continue;y9R=o8R(this,j9R,P9R?W82:"solid");if(!y9R)continue;if(P9R){i9R=y9R;}else{h9R=y9R;}f9R[h9R]=+"1";if(!P7R.isTransparent(i9R)){I9R=0.5;}v9R.beginPath();v9R.fillStyle=h9R;if(!j9R.cache){j9R.cache={};}a9R=j9R.cache;F0c.O0c(6);q9R=F0c.G0c(w9R,Z8R);if(q9R<l9R.cacheLeft||q9R>l9R.cacheRight||!a9R.open){if(R9R){Q9R=R9R.bottom-(m9R-R9R.min)*R9R.multiplier;H9R=R9R.bottom-(p9R-R9R.min)*R9R.multiplier;}else{Q9R=e9R.semiLog?this.pixelFromTransformedValue(m9R,l9R,e9R):(e9R.high-m9R)*e9R.multiplier+e9R.top;H9R=e9R.semiLog?this.pixelFromTransformedValue(p9R,l9R,e9R):(e9R.high-p9R)*e9R.multiplier+e9R.top;}J9R[w9R]=H9R;z9R=Math.floor(C9R?H9R:Math.min(Q9R,H9R))+I9R;O8R=C9R?e9R.bottom:Math.max(Q9R,H9R);F0c.O0c(4);G9R=Math.floor(F0c.f0c(O8R,z9R));if(z9R<c9R){if(z9R+G9R<c9R){a9R.open=z9R;a9R.close=z9R;continue;}F0c.O0c(4);G9R-=F0c.G0c(c9R,z9R);z9R=c9R;}if(z9R+G9R>B9R){F0c.O0c(10);G9R-=F0c.f0c(B9R,z9R,G9R);}G9R=Math.max(G9R,2);a9R.open=z9R;a9R.close=a9R.open+G9R;}if(a9R.open>=B9R)continue;if(a9R.close<=c9R)continue;W8R=Math.floor(k9R)+0.5;N9R=Math.floor(W8R-U9R)+I9R;b8R=Math.round(W8R+U9R)-I9R;if(a9R.open!=a9R.close){v9R.rect(N9R,a9R.open,Math.max(+"1",b8R-N9R),Math.max(1,a9R.close-a9R.open));}if(h9R!="transparent"){v9R.fill();}if(I9R){v9R.lineWidth=1;if(X9R.highlight){v9R.lineWidth*=2;}v9R.strokeStyle=i9R;v9R.stroke();}}K9R={colors:[],cache:J9R};for(var L9R in f9R){if(!X9R.hollow||!P7R.equals(L9R,this.containerColor)){K9R.colors.push(L9R);}}return K9R;};P7R.ChartEngine.prototype.drawShadows=function(F8R,P8R,T8R){var l82,T82,e82,D8R,s8R,r8R,C8R,M8R,S8R,t8R,l8R,A8R,p8R,I8R,Y8R,X8R,f82,x8R,m8R,g8R,G8R,a8R,e8R,u8R,c8R,V8R,v8R,R8R,w8R,H8R,j8R;l82=-728561477;T82=1623012136;F0c.I0c(7);e82=F0c.G0c("2",1);for(var I82="1"-0;F0c.L22(I82.toString(),I82.toString().length,3819)!==l82;I82++){D8R=F8R.chart;e82+=2;}if(F0c.o22(e82.toString(),e82.toString().length,12888)!==T82){D8R=F8R.chart;}if(!D8R){D8R=F8R;F8R=F8R.chart;}s8R=D8R.dataSegment;r8R=this.chart.context;r8R.lineWidth=1;if(T8R.highlight){r8R.lineWidth*=2;}C8R=T8R.field;M8R=T8R.yAxis||F8R.yAxis;S8R=T8R.overlayScaling;t8R=M8R.top;l8R=M8R.bottom;I8R=D8R.dataSet.length-D8R.scroll-+"1";Y8R=this.layout.candleWidth;X8R=F8R.left-0.5*Y8R+this.micropixels-+"1";for(var z8R="0"|0;z8R<=s8R.length;z8R++){f82="s";f82+="ha";f82+="dow";F0c.O0c(5);X8R+=F0c.f0c(Y8R,2);Y8R=this.layout.candleWidth;F0c.O0c(5);X8R+=F0c.f0c(Y8R,2);x8R=s8R[z8R];if(!x8R)continue;if(x8R.projection)continue;if(x8R.candleWidth){X8R+=(x8R.candleWidth-Y8R)/2;Y8R=x8R.candleWidth;}m8R=P8R(this,x8R,f82);if(!m8R)continue;if(D8R.transformFunc&&M8R==D8R.panel.yAxis&&x8R.transform){x8R=x8R.transform;}if(x8R&&C8R){x8R=x8R[C8R];}if(!x8R&&x8R!==0)continue;g8R=x8R.Close;G8R=x8R.Open===undefined?g8R:x8R.Open;a8R=x8R.High===undefined?Math.max(g8R,G8R):x8R.High;e8R=x8R.Low===undefined?Math.min(g8R,G8R):x8R.Low;if(!g8R&&g8R!==("0"|0))continue;if(!x8R.cache){x8R.cache={};}u8R=x8R.cache;F0c.I0c(6);c8R=F0c.G0c(z8R,I8R);if(c8R<F8R.cacheLeft||c8R>F8R.cacheRight||!u8R.top){if(S8R){A8R=S8R.bottom-(a8R-S8R.min)*S8R.multiplier;p8R=S8R.bottom-(e8R-S8R.min)*S8R.multiplier;}else{A8R=M8R.semiLog?this.pixelFromTransformedValue(a8R,F8R,M8R):(M8R.high-a8R)*M8R.multiplier+M8R.top;p8R=M8R.semiLog?this.pixelFromTransformedValue(e8R,F8R,M8R):(M8R.high-e8R)*M8R.multiplier+M8R.top;}F0c.I0c(4);V8R=F0c.G0c(p8R,A8R);if(A8R<t8R){if(A8R+V8R<t8R){u8R.top=A8R;u8R.bottom=A8R;continue;}F0c.I0c(4);V8R-=F0c.G0c(t8R,A8R);A8R=t8R;}if(A8R+V8R>l8R){F0c.O0c(10);V8R-=F0c.f0c(l8R,A8R,V8R);}u8R.top=A8R;u8R.bottom=u8R.top+V8R;}if(u8R.top>=l8R)continue;if(u8R.bottom<=t8R)continue;v8R=Math.floor(X8R)+0.5;r8R.beginPath();if(g8R==G8R){R8R=this.offset;if(T8R.isVolume){F0c.I0c(5);R8R=F0c.f0c(Y8R,2);}F0c.O0c(4);w8R=F0c.f0c(v8R,R8R);F0c.I0c(6);H8R=F0c.f0c(R8R,v8R);if(S8R){j8R=S8R.bottom-(g8R-S8R.min)*S8R.multiplier;}else{j8R=Math.floor(M8R.semiLog?this.pixelFromTransformedValue(g8R,F8R,M8R):(M8R.high-g8R)*M8R.multiplier+M8R.top)+0.5;}if(j8R<=l8R&&j8R>=t8R){r8R.moveTo(w8R,j8R);r8R.lineTo(H8R,j8R);}}if(a8R!=e8R){r8R.moveTo(v8R,u8R.top);r8R.lineTo(v8R,u8R.bottom);}r8R.strokeStyle=m8R;r8R.stroke();}};P7R.ChartEngine.prototype.drawBarChart=function(B8R,T5R,a5R,b5R){var y8R,M5R,t5R,Q8R,x5R,O82,S82,Y82,F5R,U8R,O5R,i8R,q8R,E8R,j5R,J8R,e5R,S5R,g5R,r5R,K8R,d5R,k8R,o5R,n8R,W5R,Y5R,D5R,h8R,V5R,N8R,Z5R,f8R,u5R;y8R=B8R.chart;if(!y8R){y8R=B8R;B8R=B8R.chart;}M5R=y8R.dataSegment;t5R=new Array(M5R.length);Q8R=y8R.context;x5R=this.canvasStyle(T5R);if(x5R.width&&parseInt(x5R.width,10)<=+"25"){Q8R.lineWidth=Math.max(1,P7R.stripPX(x5R.width));}else{O82=-+"1551337031";F0c.I0c(4);S82=F0c.f0c("19952713",0);Y82=2;for(var o82=1;F0c.o22(o82.toString(),o82.toString().length,55115)!==O82;o82++){F0c.O0c(4);Q8R.lineWidth=F0c.G0c("8",0);Y82+=2;}if(F0c.L22(Y82.toString(),Y82.toString().length,182)!==S82){F0c.I0c(4);Q8R.lineWidth=F0c.f0c("1",0);}}if(b5R.highlight){Q8R.lineWidth*=2;}F5R=b5R.field;U8R=b5R.yAxis||B8R.yAxis;O5R=b5R.overlayScaling;i8R=U8R.top;q8R=U8R.bottom;F0c.I0c(11);var z5j=F0c.G0c(20,100,7,12);e5R=y8R.dataSet.length-y8R.scroll-z5j;S5R={};F0c.I0c(12);var g5j=F0c.f0c(2,17,17);g5R=y8R.tmpWidth/g5j;r5R=Q8R.lineWidth/2;K8R=this.layout.candleWidth;d5R=B8R.left-0.5*K8R+this.micropixels-1;for(var L8R=0;L8R<=M5R.length;L8R++){F0c.O0c(13);d5R+=F0c.f0c(K8R,"2");K8R=this.layout.candleWidth;F0c.I0c(5);d5R+=F0c.G0c(K8R,2);k8R=M5R[L8R];if(!k8R)continue;if(k8R.projection)break;if(k8R.candleWidth){F0c.O0c(4);var h5j=F0c.f0c(18,16);d5R+=(k8R.candleWidth-K8R)/h5j;K8R=k8R.candleWidth;}o5R=a5R(this,k8R);if(!o5R)continue;S5R[o5R]=1;Q8R.strokeStyle=o5R;Q8R.beginPath();if(y8R.transformFunc&&U8R==y8R.panel.yAxis&&k8R.transform){k8R=k8R.transform;}if(k8R&&F5R){k8R=k8R[F5R];}if(!k8R&&k8R!=="0"-0)continue;n8R=k8R.Close;W5R=k8R.Open===undefined?n8R:k8R.Open;Y5R=k8R.High===undefined?Math.max(n8R,W5R):k8R.High;D5R=k8R.Low===undefined?Math.min(n8R,W5R):k8R.Low;if(!n8R&&n8R!==0)continue;if(!k8R.cache){k8R.cache={};}h8R=k8R.cache;F0c.I0c(6);V5R=F0c.f0c(L8R,e5R);if(V5R<B8R.cacheLeft||V5R>B8R.cacheRight||!h8R.top){if(O5R){N8R=O5R.multiplier;Z5R=O5R.bottom+O5R.min*N8R;F0c.O0c(14);E8R=F0c.f0c(Y5R,Z5R,N8R);F0c.O0c(14);j5R=F0c.G0c(D5R,Z5R,N8R);F0c.O0c(14);h8R.open=F0c.f0c(W5R,Z5R,N8R);F0c.O0c(14);h8R.close=F0c.G0c(n8R,Z5R,N8R);}else{E8R=this.pixelFromTransformedValue(Y5R,B8R,U8R);j5R=this.pixelFromTransformedValue(D5R,B8R,U8R);h8R.open=U8R.semiLog?this.pixelFromTransformedValue(W5R,B8R,U8R):(U8R.high-W5R)*U8R.multiplier+U8R.top;h8R.close=U8R.semiLog?this.pixelFromTransformedValue(n8R,B8R,U8R):(U8R.high-n8R)*U8R.multiplier+U8R.top;}t5R[L8R]=h8R.close;F0c.O0c(4);J8R=F0c.G0c(j5R,E8R);if(E8R<i8R){if(E8R+J8R<i8R){h8R.top=E8R;h8R.bottom=E8R;continue;}F0c.I0c(4);J8R-=F0c.G0c(i8R,E8R);E8R=i8R;}if(E8R+J8R>q8R){F0c.O0c(10);J8R-=F0c.f0c(q8R,E8R,J8R);}h8R.top=E8R;F0c.O0c(6);h8R.bottom=F0c.f0c(J8R,E8R);}F0c.O0c(15);var w5j=F0c.G0c(10,21,20,15,7);f8R=Math.floor(d5R)+"0.5"*w5j;if(h8R.top<q8R&&h8R.bottom>i8R&&k8R.High!=k8R.Low){Q8R.moveTo(f8R,h8R.top-r5R);Q8R.lineTo(f8R,h8R.bottom+r5R);}if(b5R.type!="hlc"&&h8R.open>i8R&&h8R.open<q8R){Q8R.moveTo(f8R,h8R.open);F0c.I0c(4);Q8R.lineTo(F0c.f0c(f8R,g5R),h8R.open);}if(h8R.close>i8R&&h8R.close<q8R){Q8R.moveTo(f8R,h8R.close);F0c.I0c(6);Q8R.lineTo(F0c.f0c(g5R,f8R),h8R.close);}Q8R.stroke();}Q8R.lineWidth=1;u5R={colors:[],cache:t5R};for(var A5R in S5R){if(!P7R.equals(A5R,this.containerColor)){u5R.colors.push(A5R);}}return u5R;};P7R.ChartEngine.prototype.drawWaveChart=function(p5R,s5R){var R82,C5R,E5R,J5R,z5R,f5R,P5R,i5R,H5R,G5R,R5R,n5R,K5R,l5R,c5R,h5R,y5R,B5R,v5R,X5R,U5R,k5R,w5R,Q5R,y82,C82,M82,x82,Q82,z82,N5R;R82="s";R82+="tx_lin";R82+="e";R82+="_chart";C5R=p5R.chart;E5R=C5R.dataSegment;J5R=new Array(E5R.length);z5R=C5R.context;if(!s5R){s5R={};}f5R=s5R.yAxis||p5R.yAxis;P5R=s5R.overlayScaling;this.startClip(p5R.name);z5R.beginPath();i5R=!{};H5R=![];G5R=p5R.yAxis.top;R5R=p5R.yAxis.bottom;F0c.O0c(16);var q5j=F0c.G0c(1,2);n5R=p5R.left+Math.floor(q5j*this.layout.candleWidth+this.micropixels);K5R=this;for(var I5R=0;I5R<=E5R.length;I5R++){n5R+=this.layout.candleWidth;l5R=E5R[I5R];if(!l5R)continue;if(l5R.projection)break;if(C5R.transformFunc&&f5R==C5R.panel.yAxis&&l5R.transform){l5R=l5R.transform;}if(l5R&&s5R.field){l5R=l5R[s5R.field];}if(!l5R&&l5R!==+"0")continue;c5R=l5R.Close;h5R=l5R.Open===undefined?c5R:l5R.Open;y5R=l5R.High===undefined?Math.max(c5R,h5R):l5R.High;B5R=l5R.Low===undefined?Math.min(c5R,h5R):l5R.Low;if(!c5R&&c5R!==+"0")continue;F0c.O0c(4);var d5j=F0c.G0c(28,20);v5R=n5R-3*this.layout.candleWidth/d5j;X5R=m5R(h5R);if(X5R<G5R){X5R=G5R;if(H5R){z5R.moveTo(v5R,X5R);continue;}H5R=!![];}else if(X5R>R5R){X5R=R5R;if(H5R){z5R.moveTo(v5R,X5R);continue;}H5R=!![];}else{H5R=!1;}if(!i5R){i5R=!0;F0c.I0c(17);var n5j=F0c.f0c(12,17,12,17);U5R=C5R.dataSet.length-C5R.scroll-n5j;if(U5R<0){z5R.moveTo(v5R,X5R);}else if(U5R>=0){k5R=C5R.dataSet[U5R];if(k5R.transform){k5R=k5R.transform;}w5R=k5R.Close;w5R=m5R(w5R);w5R=Math.min(Math.max(w5R,G5R),R5R);z5R.moveTo(p5R.left+(I5R-1)*this.layout.candleWidth+this.micropixels,w5R);z5R.lineTo(v5R,X5R);}z5R.moveTo(v5R,X5R);}else{z5R.lineTo(v5R,X5R);}v5R+=this.layout.candleWidth/4;if(h5R<c5R){X5R=m5R(B5R);if(X5R<G5R){X5R=G5R;}if(X5R>R5R){X5R=R5R;}z5R.lineTo(v5R,X5R);F0c.O0c(18);var P5j=F0c.G0c(5,24,13,57,6);v5R+=this.layout.candleWidth/P5j;X5R=m5R(y5R);if(X5R<G5R){X5R=G5R;}if(X5R>R5R){X5R=R5R;}z5R.lineTo(v5R,X5R);}else{X5R=m5R(y5R);if(X5R<G5R){X5R=G5R;}if(X5R>R5R){X5R=R5R;}z5R.lineTo(v5R,X5R);v5R+=this.layout.candleWidth/4;X5R=m5R(B5R);if(X5R<G5R){X5R=G5R;}if(X5R>R5R){X5R=R5R;}z5R.lineTo(v5R,X5R);}F0c.I0c(9);var G5j=F0c.f0c(8,15,19);v5R+=this.layout.candleWidth/G5j;X5R=m5R(c5R);J5R[I5R]=X5R;if(X5R<G5R){X5R=G5R;}if(X5R>R5R){X5R=R5R;}z5R.lineTo(v5R,X5R);}Q5R=this.canvasStyle("stx_line_chart");if(Q5R.width&&parseInt(Q5R.width,10)<=25){y82=925163008;C82=57906720;M82=2;for(var v82=1;F0c.o22(v82.toString(),v82.toString().length,1881)!==y82;v82++){z5R.lineWidth=Math.max(2,P7R.stripPX(Q5R.width));M82+=2;}if(F0c.o22(M82.toString(),M82.toString().length,93054)!==C82){z5R.lineWidth=Math.max(1,P7R.stripPX(Q5R.width));}}else{x82=-2098182974;Q82=131441608;z82=+"2";for(var K82="1"-0;F0c.L22(K82.toString(),K82.toString().length,+"12021")!==x82;K82++){z5R.lineWidth=1;z82+=2;}if(F0c.o22(z82.toString(),z82.toString().length,19784)!==Q82){z5R.lineWidth=4;}}if(s5R.highlight){z5R.lineWidth*=2;}this.canvasColor(R82);if(s5R.color){z5R.strokeStyle=s5R.color;}function m5R(L5R){var d82,n82,N82;if(P5R){return P5R.bottom-(L5R-P5R.min)*P5R.multiplier;}d82=+"1498726649";n82=-504783679;N82=2;for(var p82=1;F0c.o22(p82.toString(),p82.toString().length,41422)!==d82;p82++){return K5R.pixelFromTransformedValue(L5R,p5R,f5R);N82+=2;}if(F0c.L22(N82.toString(),N82.toString().length,97397)!==n82){return K5R.pixelFromTransformedValue(L5R,p5R,f5R);}}z5R.stroke();z5R.closePath();N5R={colors:[z5R.strokeStyle],cache:J5R};this.endClip();z5R.lineWidth=1;return N5R;};P7R.ChartEngine.prototype.scatter=function(M4R,d4R){var x4R,F4R,r4R,W4R,t4R,b4R,S4R,Y4R,g4R,V4R,u4R,Z4R,q5R,o4R,D4R;x4R=M4R.chart;F4R=x4R.dataSegment;r4R=new Array(F4R.length);W4R=this.chart.context;if(!d4R){d4R={};}t4R=d4R.field||x4R.defaultPlotField;b4R=d4R.yAxis||M4R.yAxis;S4R=d4R.overlayScaling;Y4R=d4R.subField||x4R.defaultPlotField||"Close";this.startClip(M4R.name);W4R.beginPath();W4R.lineWidth=4;if(d4R.highlight){F0c.O0c(7);W4R.lineWidth*=F0c.G0c("2",1);}g4R=b4R.top;V4R=b4R.bottom;F0c.I0c(19);var U5j=F0c.G0c(5,15,21,11);u4R=M4R.left-0.5*this.layout.candleWidth+this.micropixels-U5j;for(var A4R=+"0";A4R<=F4R.length;A4R++){u4R+=this.layout.candleWidth;Z4R=F4R[A4R];if(!Z4R)continue;if(!Z4R.projection){if(x4R.transformFunc&&b4R==x4R.panel.yAxis&&Z4R.transform){Z4R=Z4R.transform;}q5R=Z4R[t4R];if(q5R&&q5R[Y4R]!==undefined){q5R=q5R[Y4R];}q5R=[q5R];if("Scatter"in Z4R){q5R=Z4R.Scatter;}for(var O4R="0"|0;O4R<q5R.length;O4R++){if(!q5R[O4R]&&q5R[O4R]!==0)continue;if(S4R){o4R=S4R.bottom-(q5R[O4R]-S4R.min)*S4R.multiplier;}else{o4R=b4R.semiLog?this.pixelFromTransformedValue(q5R[O4R],M4R,b4R):(b4R.high-q5R[O4R])*b4R.multiplier+g4R;}if(o4R<g4R)continue;if(o4R>V4R)continue;F0c.I0c(4);W4R.moveTo(F0c.f0c(u4R,2),o4R);F0c.I0c(6);W4R.lineTo(F0c.G0c(2,u4R),o4R);r4R[A4R]=o4R;}}}this.canvasColor("stx_scatter_chart");if(d4R.color){W4R.strokeStyle=d4R.color;}W4R.stroke();W4R.closePath();D4R={colors:[W4R.strokeStyle],cache:r4R};this.endClip();W4R.lineWidth=1;return D4R;};G82=1533943003;U82=-868957695;F0c.O0c(4);Z82=F0c.f0c("2",0);for(var j82=1;F0c.o22(j82.toString(),j82.toString().length,+"53579")!==G82;j82++){return k7R;Z82+=2;}if(F0c.o22(Z82.toString(),Z82.toString().length,32677)!==U82){return k7R;}return k7R;};
-T799.V7S=function (){return typeof T799.d7S.U8O==='function'?T799.d7S.U8O.apply(T799.d7S,arguments):T799.d7S.U8O;};T799.y50=function (){return typeof T799.Z50.c8O==='function'?T799.Z50.c8O.apply(T799.Z50,arguments):T799.Z50.c8O;};T799.l50=function (){return typeof T799.Z50.g4z==='function'?T799.Z50.g4z.apply(T799.Z50,arguments):T799.Z50.g4z;};T799.m50=function (){return typeof T799.Z50.g4z==='function'?T799.Z50.g4z.apply(T799.Z50,arguments):T799.Z50.g4z;};T799.S7S=function (){return typeof T799.d7S.u6n==='function'?T799.d7S.u6n.apply(T799.d7S,arguments):T799.d7S.u6n;};T799.Y50=function (){return typeof T799.Z50.c8O==='function'?T799.Z50.c8O.apply(T799.Z50,arguments):T799.Z50.c8O;};T799.g50=function (){return typeof T799.Z50.z4x==='function'?T799.Z50.z4x.apply(T799.Z50,arguments):T799.Z50.z4x;};T799.j7S=function (){return typeof T799.d7S.w7q==='function'?T799.d7S.w7q.apply(T799.d7S,arguments):T799.d7S.w7q;};T799.Z50=function(E50){return{c8O:function(){var t50,J50=arguments;switch(E50){case 16:t50=J50[3]-J50[0]*J50[1]+J50[2];break;case 8:t50=J50[2]+J50[1]-J50[0]-J50[3];break;case 15:t50=J50[0]/J50[1];break;case 9:t50=(J50[2]+J50[1])/J50[0];break;case 20:t50=J50[0]*J50[2]-J50[1]+-J50[3];break;case 23:t50=J50[0]+J50[1]*J50[2];break;case 12:t50=J50[2]*J50[1]+J50[0];break;case 0:t50=J50[1]-J50[0];break;case 4:t50=J50[1]+J50[0];break;case 26:t50=J50[1]-(J50[2]-J50[0]);break;case 17:t50=J50[3]*J50[2]*J50[0]-J50[4]+-J50[1];break;case 6:t50=(J50[2]+J50[0])/+J50[1];break;case 1:t50=J50[0]*J50[1];break;case 14:t50=J50[2]-J50[3]+J50[1]+J50[0];break;case 11:t50=(J50[1]+J50[2])*J50[0];break;case 3:t50=(-J50[3]-J50[1])*-J50[0]/J50[2];break;case 2:t50=J50[2]/J50[1]*J50[0]-J50[3];break;case 19:t50=(J50[2]+J50[1]+J50[5]+J50[0])/(J50[4]-J50[3]);break;case 18:t50=J50[0]/J50[2]-J50[3]/J50[1];break;case 25:t50=J50[3]*(J50[2]-J50[4]+J50[1])-J50[0];break;case 10:t50=(J50[0]-J50[2])*-J50[3]/J50[1]/J50[4];break;case 7:t50=J50[0]+J50[1]-J50[2];break;case 22:t50=J50[1]*J50[0]-J50[2];break;case 24:t50=J50[2]-J50[0]*J50[1];break;case 5:t50=J50[1]|J50[0];break;case 21:t50=J50[2]*J50[0]*J50[1]-J50[3];break;case 13:t50=J50[1]-J50[0]+J50[2];break;}return t50;},U8O:function(x50){E50=x50;}};}();T799.a50=function (){return typeof T799.Z50.i4z==='function'?T799.Z50.i4z.apply(T799.Z50,arguments):T799.Z50.i4z;};T799.r50=function (){return typeof T799.Z50.u6n==='function'?T799.Z50.u6n.apply(T799.Z50,arguments):T799.Z50.u6n;};T799.p7S=function (){return typeof T799.d7S.i4z==='function'?T799.d7S.i4z.apply(T799.d7S,arguments):T799.d7S.i4z;};T799.N50=function (){return typeof T799.Z50.i4z==='function'?T799.Z50.i4z.apply(T799.Z50,arguments):T799.Z50.i4z;};T799.D50=function (){return typeof T799.Z50.U8O==='function'?T799.Z50.U8O.apply(T799.Z50,arguments):T799.Z50.U8O;};T799.k50=function (){return typeof T799.Z50.w7q==='function'?T799.Z50.w7q.apply(T799.Z50,arguments):T799.Z50.w7q;};T799.U7S=function (){return typeof T799.d7S.g4z==='function'?T799.d7S.g4z.apply(T799.d7S,arguments):T799.d7S.g4z;};T799.w50=function (){return typeof T799.Z50.u6n==='function'?T799.Z50.u6n.apply(T799.Z50,arguments):T799.Z50.u6n;};T799.e7S=function (){return typeof T799.d7S.z4x==='function'?T799.d7S.z4x.apply(T799.d7S,arguments):T799.d7S.z4x;};function T799(){}T799.X7S=function (){return typeof T799.d7S.w7q==='function'?T799.d7S.w7q.apply(T799.d7S,arguments):T799.d7S.w7q;};T799.U50=function (){return typeof T799.Z50.U8O==='function'?T799.Z50.U8O.apply(T799.Z50,arguments):T799.Z50.U8O;};T799.r7S=function (){return typeof T799.d7S.i4z==='function'?T799.d7S.i4z.apply(T799.d7S,arguments):T799.d7S.i4z;};T799.d7S=function(){var M7S=function(z7S,N7S){var H7S=N7S&0xffff;var C7S=N7S-H7S;return(C7S*z7S|0)+(H7S*z7S|0)|0;},l7S=function(D7S,J7S,R7S){var L7S=0xcc9e2d51,v7S=0x1b873593;var m7S=R7S;var Z7S=J7S&~0x3;for(var Y7S=0;Y7S<Z7S;Y7S+=4){var c7S=D7S.charCodeAt(Y7S)&0xff|(D7S.charCodeAt(Y7S+1)&0xff)<<8|(D7S.charCodeAt(Y7S+2)&0xff)<<16|(D7S.charCodeAt(Y7S+3)&0xff)<<24;c7S=M7S(c7S,L7S);c7S=(c7S&0x1ffff)<<15|c7S>>>17;c7S=M7S(c7S,v7S);m7S^=c7S;m7S=(m7S&0x7ffff)<<13|m7S>>>19;m7S=m7S*5+0xe6546b64|0;}c7S=0;switch(J7S%4){case 3:c7S=(D7S.charCodeAt(Z7S+2)&0xff)<<16;case 2:c7S|=(D7S.charCodeAt(Z7S+1)&0xff)<<8;case 1:c7S|=D7S.charCodeAt(Z7S)&0xff;c7S=M7S(c7S,L7S);c7S=(c7S&0x1ffff)<<15|c7S>>>17;c7S=M7S(c7S,v7S);m7S^=c7S;}m7S^=J7S;m7S^=m7S>>>16;m7S=M7S(m7S,0x85ebca6b);m7S^=m7S>>>13;m7S=M7S(m7S,0xc2b2ae35);m7S^=m7S>>>16;return m7S;};return{w7q:l7S};}();T799.A7S=function (){return typeof T799.d7S.c8O==='function'?T799.d7S.c8O.apply(T799.d7S,arguments):T799.d7S.c8O;};T799.P7S=function (){return typeof T799.d7S.U8O==='function'?T799.d7S.U8O.apply(T799.d7S,arguments):T799.d7S.U8O;};T799.E7S=function (){return typeof T799.d7S.g4z==='function'?T799.d7S.g4z.apply(T799.d7S,arguments):T799.d7S.g4z;};T799.I7S=function (){return typeof T799.d7S.c8O==='function'?T799.d7S.c8O.apply(T799.d7S,arguments):T799.d7S.c8O;};T799.t7S=function (){return typeof T799.d7S.u6n==='function'?T799.d7S.u6n.apply(T799.d7S,arguments):T799.d7S.u6n;};T799.q50=function (){return typeof T799.Z50.w7q==='function'?T799.Z50.w7q.apply(T799.Z50,arguments):T799.Z50.w7q;};T799.G50=function (){return typeof T799.Z50.z4x==='function'?T799.Z50.z4x.apply(T799.Z50,arguments):T799.Z50.z4x;};T799.b7S=function (){return typeof T799.d7S.z4x==='function'?T799.d7S.z4x.apply(T799.d7S,arguments):T799.d7S.z4x;};var __aggregations_;__aggregations_=function(Z7Q){var M7Q;M7Q=Z7Q.CIQ;M7Q.Renderer.Aggregations=function(g7Q){var v50=T799;var f7Q,G0S,s0S,M0S,c4S,m4S,D4S,w4S;this.construct(g7Q);f7Q=this.params;G0S=-1847140892;s0S=1776279819;M0S=2;for(var H0S=1;v50.j7S(H0S.toString(),H0S.toString().length,29782)!==G0S;H0S++){this.highLowBars=this.barsHaveWidth=this.standaloneBars=!!{};v50.U50(0);M0S+=v50.y50(0,"2");}if(v50.j7S(M0S.toString(),M0S.toString().length,"54364"*1)!==s0S){this.highLowBars=this.barsHaveWidth=this.standaloneBars=!1;}f7Q.highlightable=!"1";if(f7Q.name!="_main_series"){c4S=-1549897214;m4S=-1242717265;v50.D50(1);D4S=v50.y50("2",1);for(var Z4S=1;v50.j7S(Z4S.toString(),Z4S.toString().length,98339)!==c4S;Z4S++){console.warn("");f7Q.invalid=!!"";D4S+=2;}if(v50.j7S(D4S.toString(),D4S.toString().length,30610)!==m4S){w4S="Aggregations are only allowed on main seri";w4S+="es.";console.warn(w4S);f7Q.invalid=!!1;}}};M7Q.Renderer.Aggregations.ciqInheritsFrom(M7Q.Renderer.OHLC,!1);M7Q.Renderer.Aggregations.requestNew=function(P7Q,A7Q){var q4S,l4S,H4S,z4S,o7Q,q7Q,H7Q,G7Q,c7Q,b7Q,B4S,y4S,F4S,C7Q;q4S="Aggregati";q4S+="ons";l4S=-1068150619;H4S=-709980054;z4S=2;for(var C4S=+"1";T799.j7S(C4S.toString(),C4S.toString().length,84507)!==l4S;C4S++){o7Q=1;q7Q=!"";H7Q=!!"1";G7Q=!"";c7Q=!!{};b7Q=!![];z4S+=2;}if(T799.j7S(z4S.toString(),z4S.toString().length,43328)!==H4S){o7Q=1;q7Q=!!1;H7Q=!!{};G7Q=!"";c7Q=!"";b7Q=!!1;}o7Q=null;q7Q=![];H7Q=!1;G7Q=![];c7Q=!1;b7Q=![];for(var S7Q=0;S7Q<P7Q.length;S7Q++){B4S="ren";B4S+="ko";y4S="heik";y4S+="inashi";F4S="pa";F4S+="nd";F4S+="f";C7Q=P7Q[S7Q];switch(C7Q){case"kagi":case F4S:o7Q=C7Q;break;case y4S:case"linebreak":case"rangebars":case B4S:o7Q="candle";break;default:return null;}}if(o7Q===null){return null;}return new M7Q.Renderer[o7Q=="candle"?"OHLC":q4S]({params:M7Q.extend(A7Q,{type:o7Q})});};M7Q.Renderer.Aggregations.prototype.drawIndividualSeries=function(U4Q,N4Q){var O4S,B4Q,J4Q,i4S,o4S,g4S,q7S,i7S,O7S;O4S="pa";O4S+="n";O4S+="d";O4S+="f";if(N4Q.invalid){return;}B4Q=this.stx;J4Q={colors:[]};if(N4Q.type=="kagi"){i4S="stx_kagi_do";i4S+="wn";B4Q.drawKagiSquareWave(U4Q.panel,"stx_kagi_up","stx_kagi_down",N4Q);J4Q.colors.push(B4Q.getCanvasColor("stx_kagi_up"));J4Q.colors.push(B4Q.getCanvasColor(i4S));}else if(N4Q.type==O4S){o4S="stx_pand";o4S+="f_up";g4S="stx_";g4S+="pandf_up";B4Q.drawPointFigureChart(U4Q.panel,g4S,247.81>(934.41,7260)?(!{},45.73):"X",N4Q);J4Q.colors.push(B4Q.getCanvasColor(o4S));B4Q.drawPointFigureChart(U4Q.panel,"stx_pandf_down",("998.24"*1,22.48)===87.19?4314!=(4054,7460)?(696.88,6351)<1780?+"5.15e+3":+"0x2583":"b":"O",N4Q);J4Q.colors.push(B4Q.getCanvasColor("stx_pandf_down"));}q7S=130893984;i7S=-+"97669679";O7S=2;for(var o7S=1;T799.X7S(o7S.toString(),o7S.toString().length,23123)!==q7S;o7S++){return J4Q;O7S+=2;}if(T799.j7S(O7S.toString(),O7S.toString().length,68336)!==i7S){return J4Q;}return J4Q;};M7Q.ChartEngine.prototype.drawKagiSquareWave=function(O4Q,z4Q,i4Q,v4Q){var L50=T799;var r4Q,j4Q,X4Q,p4Q,e4Q,W4Q,n4Q,F4Q,w4Q,x7S,h7S,Q7S,K4Q,h4Q,s4Q,E4Q,a4Q,I4Q,T4Q,t4Q,Y4Q,u4Q,Q4Q;r4Q=O4Q.chart;this.startClip(O4Q.name);j4Q=r4Q.dataSegment;X4Q=r4Q.context;p4Q=this.canvasStyle(z4Q);e4Q=this.canvasStyle(i4Q);this.canvasColor(z4Q);if(v4Q.border_color_up){X4Q.strokeStyle=v4Q.border_color_up;}W4Q=X4Q.strokeStyle;this.canvasColor(i4Q);if(v4Q.border_color_down){X4Q.strokeStyle=v4Q.border_color_down;}n4Q=X4Q.strokeStyle;L50.D50(1);F4Q=L50.Y50("1",1);if(p4Q.width&&parseInt(p4Q.width,+"10")<=25){F4Q=Math.max(1,M7Q.stripPX(p4Q.width));}w4Q=1;if(e4Q.width&&parseInt(e4Q.width,"10"|0)<=25){x7S=1113360994;h7S=-368944592;Q7S=2;for(var n7S=1;L50.X7S(n7S.toString(),n7S.toString().length,98921)!==x7S;n7S++){w4Q=Math.max(1,M7Q.stripPX(e4Q.width));Q7S+=2;}if(L50.X7S(Q7S.toString(),Q7S.toString().length,71790)!==h7S){w4Q=Math.max(2,M7Q.stripPX(e4Q.width));}}X4Q.beginPath();L50.D50(2);var f6S=L50.Y50(12,6,18,35);K4Q=r4Q.dataSet.length-r4Q.scroll-f6S;h4Q=O4Q.yAxis;s4Q=!0;E4Q=null;a4Q=null;I4Q=null;L50.D50(3);var a6S=L50.Y50(1,5,23,18);T4Q=O4Q.left-0.5*this.layout.candleWidth+this.micropixels-a6S;for(var k4Q=0;k4Q<=j4Q.length;k4Q++){T4Q+=this.layout.candleWidth;t4Q=j4Q[k4Q];if(!t4Q)continue;if(t4Q.projection)break;I4Q=t4Q.kagiTrend;if(t4Q.transform&&r4Q.transformFunc){Y4Q=t4Q.kagiPrevOpen;t4Q=t4Q.transform;t4Q.kagiPrevOpen=r4Q.transformFunc(this,r4Q,Y4Q);}u4Q=t4Q.cache;L50.U50(4);Q4Q=L50.Y50(k4Q,K4Q);if(Q4Q<O4Q.cacheLeft||Q4Q>O4Q.cacheRight||!u4Q.kagiOpen){u4Q.kagiOpen=h4Q.semiLog?this.pixelFromTransformedValue(t4Q.Open,O4Q):(h4Q.high-t4Q.Open)*h4Q.multiplier+h4Q.top;u4Q.kagiClose=h4Q.semiLog?this.pixelFromTransformedValue(t4Q.Close,O4Q):(h4Q.high-t4Q.Close)*h4Q.multiplier+h4Q.top;}E4Q=h4Q.semiLog?this.pixelFromTransformedValue(t4Q.kagiPrevOpen,O4Q):(h4Q.high-t4Q.kagiPrevOpen)*h4Q.multiplier+h4Q.top;a4Q=u4Q.kagiClose;if(s4Q){X4Q.moveTo(K4Q>=0?O4Q.left:Math.floor(T4Q),u4Q.kagiOpen);X4Q.lineTo(Math.floor(T4Q),u4Q.kagiOpen);s4Q=![];}if(I4Q!=-1&&u4Q.kagiClose<E4Q&&E4Q<u4Q.kagiOpen){X4Q.lineTo(Math.floor(T4Q),E4Q);if(!s4Q){X4Q.stroke();X4Q.beginPath();X4Q.moveTo(Math.floor(T4Q),E4Q);}X4Q.strokeStyle=W4Q;X4Q.lineWidth=F4Q;}else if(I4Q!=1&&u4Q.kagiClose>E4Q&&E4Q>u4Q.kagiOpen){X4Q.lineTo(Math.floor(T4Q),E4Q);if(!s4Q){X4Q.stroke();X4Q.beginPath();X4Q.moveTo(Math.floor(T4Q),E4Q);}X4Q.strokeStyle=n4Q;X4Q.lineWidth=w4Q;}X4Q.lineTo(Math.floor(T4Q),u4Q.kagiClose);if(k4Q+1<j4Q.length){X4Q.lineTo(Math.floor(T4Q+this.layout.candleWidth),u4Q.kagiClose);}s4Q=!{};}X4Q.stroke();this.endClip();X4Q.lineWidth=1;};M7Q.ChartEngine.prototype.drawPointFigureChart=function(M4Q,T8Q,Z4Q,H4Q){var d50=T799;var y4Q,N8Q,D4Q,R4Q,m4Q,f4Q,G4Q,e4S,b4S,t4S,g4Q,h4S,Q4S,W4S,X8Q,u8Q,l4Q,U8Q,d4Q,V4Q,x4Q,c4Q,b4Q,L4Q,o4Q,A4Q,t8Q,B8Q,P4Q,J8Q,q4Q,S4Q;y4Q=M4Q.chart;this.startClip(M4Q.name);N8Q=y4Q.dataSegment;D4Q=y4Q.context;this.canvasColor(T8Q);if(Z4Q=="X"&&H4Q.border_color_up){D4Q.strokeStyle=H4Q.border_color_up;}else if(Z4Q==(679.5==5850?0x1713:"O")&&H4Q.border_color_down){D4Q.strokeStyle=H4Q.border_color_down;}R4Q=this.canvasStyle(T8Q);m4Q=parseInt(R4Q.paddingTop,10);f4Q=parseInt(R4Q.paddingBottom,10);G4Q=parseInt(R4Q.paddingLeft,10);e4S=-923148149;b4S=-1767554522;t4S=2;for(var x4S=+"1";d50.X7S(x4S.toString(),x4S.toString().length,55908)!==e4S;x4S++){g4Q=parseInt(R4Q.paddingRight,66);t4S+=2;}if(d50.j7S(t4S.toString(),t4S.toString().length,85025)!==b4S){g4Q=parseInt(R4Q.paddingRight,10);}if(R4Q.width&&parseInt(R4Q.width,10)<=25){D4Q.lineWidth=Math.max(1,M7Q.stripPX(R4Q.width));}else{h4S=2002387155;Q4S=227318239;d50.D50(1);W4S=d50.y50("2",1);for(var K4S=1;d50.j7S(K4S.toString(),K4S.toString().length,29452)!==h4S;K4S++){d50.U50(0);D4Q.lineWidth=d50.Y50(0,"6");d50.D50(5);W4S+=d50.y50(0,"2");}if(d50.X7S(W4S.toString(),W4S.toString().length,63228)!==Q4S){D4Q.lineWidth=2;}}D4Q.beginPath();X8Q=this.chart.state.aggregation.box;function E8Q(e8Q,p8Q,s8Q){d50.D50(6);D4Q.moveTo(d50.y50(p8Q,"2",e8Q),d50.y50(s8Q,m4Q,x4Q,d50.D50(7)));d50.U50(4);D4Q.bezierCurveTo(d50.y50(g4Q,p8Q),d50.y50(s8Q,m4Q,x4Q,d50.D50(7)),d50.Y50(g4Q,p8Q,d50.D50(4)),d50.Y50(f4Q,V4Q,s8Q,x4Q,d50.U50(8)),d50.Y50(2,p8Q,e8Q,d50.D50(9)),d50.y50(f4Q,V4Q,s8Q,x4Q,d50.D50(8)));d50.U50(0);D4Q.bezierCurveTo(d50.Y50(G4Q,e8Q),d50.Y50(f4Q,V4Q,s8Q,x4Q,d50.U50(8)),d50.y50(G4Q,e8Q,d50.D50(0)),d50.Y50(s8Q,m4Q,x4Q,d50.U50(7)),d50.y50(p8Q,"2",e8Q,d50.U50(6)),d50.Y50(s8Q,m4Q,x4Q,d50.D50(7)));}d50.U50(10);var k6S=d50.Y50(10,5,20,8,16);u8Q=y4Q.dataSet.length-y4Q.scroll-k6S;l4Q=M4Q.yAxis;V4Q=X8Q*l4Q.multiplier;function h8Q(r8Q,k8Q,O8Q){var r0S,U0S,E0S;r0S=486945763;d50.D50(1);U0S=-d50.y50("1693183510",1);E0S=2;for(var b0S=1;d50.X7S(b0S.toString(),b0S.toString().length,63819)!==r0S;b0S++){d50.U50(1);D4Q.moveTo(d50.Y50(r8Q,G4Q),d50.y50(x4Q,O8Q,f4Q,d50.D50(11)));E0S+=2;}if(d50.j7S(E0S.toString(),E0S.toString().length,76356)!==U0S){d50.U50(0);D4Q.moveTo(d50.Y50(G4Q,r8Q),d50.y50(x4Q,f4Q,O8Q,d50.D50(12)));}d50.U50(4);D4Q.moveTo(d50.Y50(G4Q,r8Q),d50.Y50(f4Q,O8Q,x4Q,d50.D50(13)));d50.U50(0);D4Q.lineTo(d50.Y50(g4Q,k8Q),d50.Y50(x4Q,m4Q,O8Q,V4Q,d50.D50(14)));d50.D50(4);D4Q.moveTo(d50.Y50(G4Q,r8Q),d50.Y50(x4Q,m4Q,O8Q,V4Q,d50.U50(14)));d50.U50(0);D4Q.lineTo(d50.y50(g4Q,k8Q),d50.y50(f4Q,O8Q,x4Q,d50.D50(13)));}d50.D50(15);x4Q=d50.y50(V4Q,2);c4Q=this.layout.candleWidth;d50.D50(16);var G6S=d50.y50(7,20,128,13);b4Q=M4Q.left-c4Q+this.micropixels-G6S;for(var C4Q=0;C4Q<N8Q.length;C4Q++){b4Q+=c4Q;L4Q=N8Q[C4Q];if(!L4Q)continue;if(L4Q.projection)break;o4Q=L4Q.pfOpen;A4Q=L4Q.pfClose;t8Q=L4Q.pfTrend;B8Q=L4Q.pfStepBack;if(L4Q.transform&&y4Q.transformFunc){L4Q=L4Q.transform;o4Q=y4Q.transformFunc(this,y4Q,o4Q);A4Q=y4Q.transformFunc(this,y4Q,A4Q);}P4Q=L4Q.cache;d50.U50(4);J8Q=d50.y50(C4Q,u8Q);if(J8Q<M4Q.cacheLeft||J8Q>M4Q.cacheRight||!P4Q.pfOpen){P4Q.pfOpen=(l4Q.high-o4Q)*l4Q.multiplier+l4Q.top;P4Q.pfClose=(l4Q.high-A4Q)*l4Q.multiplier+l4Q.top;}q4Q=Math.round(b4Q);d50.U50(4);S4Q=Math.round(d50.Y50(c4Q,b4Q));U8Q=Math.abs(Math.round((A4Q-o4Q)/X8Q));d4Q=P4Q.pfOpen;if(Z4Q==B8Q){if(B8Q==((2731,+"2410")===4544?0x220b:"X")){d50.U50(0);h8Q(q4Q,S4Q,d50.Y50(V4Q,d4Q));}else if(B8Q==((1530,668.96)!==(356.42,5743)?"O":+"0x2345")){d50.D50(4);E8Q(q4Q,S4Q,d50.y50(V4Q,d4Q));}}if(Z4Q==t8Q){for(;U8Q>=0;U8Q--){if(Z4Q==((+"6520",8938)!=6330?"X":9.30e+3)){h8Q(q4Q,S4Q,d4Q,V4Q,x4Q);d4Q-=V4Q;}else if(Z4Q==("13.31"*1<=(199.21,4090)?"O":615.27)){E8Q(q4Q,S4Q,d4Q,V4Q,x4Q);d4Q+=V4Q;}}}}D4Q.stroke();this.endClip();D4Q.lineWidth=+"1";};M7Q.calculateHeikinAshi=function(V8Q,x8Q,Y8Q){var I50=T799;var v0S,R0S,d0S,n8Q,I8Q,j8Q,F8Q,K8Q,w8Q,v8Q,Q8Q,z8Q,D8Q,i8Q;v0S=-1565095616;R0S=915641425;I50.U50(0);d0S=I50.Y50(0,"2");for(var X0S=1;I50.X7S(X0S.toString(),X0S.toString().length,48931)!==v0S;X0S++){if(!x8Q.length){return x8Q;}if(!Y8Q){Y8Q=[];}d0S+=2;}if(I50.j7S(d0S.toString(),d0S.toString().length,74356)!==R0S){if(-x8Q.length){return x8Q;}if(~Y8Q){Y8Q=[];}}n8Q=[];for(var W8Q=0;W8Q<x8Q.length;W8Q++){I8Q=x8Q[W8Q];if(!I8Q)continue;I50.D50(17);var s6S=I50.y50(17,2135,18,7,6);j8Q=n8Q[n8Q.length-s6S];if(!j8Q&&!W8Q){I50.D50(13);var M6S=I50.Y50(18,12,7);j8Q=Y8Q[Y8Q.length-M6S];}if(!j8Q){j8Q=I8Q;}F8Q=I8Q.Close;K8Q=I8Q.Open;w8Q=I8Q.High;v8Q=I8Q.Low;Q8Q=j8Q.Open;K8Q=K8Q||K8Q===+"0"?K8Q:F8Q;w8Q=w8Q||w8Q===0?w8Q:F8Q;v8Q=v8Q||v8Q===0?v8Q:F8Q;Q8Q=Q8Q||Q8Q===0?Q8Q:j8Q.Close;I50.U50(18);var l6S=I50.Y50(37,10,10,17);z8Q=(Q8Q+j8Q.Close)/l6S;I50.D50(19);D8Q=I50.Y50(F8Q,w8Q,K8Q,0,"4",v8Q);i8Q={DT:I8Q.DT,displayDate:I8Q.displayDate,Date:I8Q.Date,Open:z8Q,Close:D8Q,High:Math.max(w8Q,Math.max(z8Q,D8Q)),Low:Math.min(v8Q,Math.min(z8Q,D8Q)),Volume:I8Q.Volume,iqPrevClose:j8Q.Close};for(var a8Q in I8Q){if(!i8Q[a8Q]&&i8Q[a8Q]!==0){i8Q[a8Q]=I8Q[a8Q];}}n8Q.push(i8Q);}return n8Q;};M7Q.calculateKagi=function(Z8Q,m8Q,R8Q,o8Q){var M50=T799;var g8Q,T0S,u0S,f0S,M8Q,L8Q,C8Q,l8Q,S8Q,y8Q,a4S,k4S,G4S;if(!m8Q.length){return m8Q;}if(!o8Q){o8Q=[];}g8Q=Z8Q.layout;R8Q=parseFloat(R8Q);Z8Q.chart.defaultChartStyleConfig.kagi=M7Q.ChartEngine.isDailyInterval(g8Q.interval)?+"4":0.4;if(isNaN(R8Q)||R8Q<=0){R8Q=Z8Q.chart.defaultChartStyleConfig.kagi;if(M7Q.Market.Symbology.isForexSymbol(Z8Q.chart.symbol)){R8Q/=4;}if(g8Q.kagi!==null){g8Q.kagi=null;T0S=1491717500;u0S=1248996941;f0S=2;for(var k0S=1;M50.j7S(k0S.toString(),k0S.toString().length,"28366"-0)!==T0S;k0S++){Z8Q.changeOccurred("layout");f0S+=2;}if(M50.j7S(f0S.toString(),f0S.toString().length,39170)!==u0S){Z8Q.changeOccurred("");}}}R8Q/=100;M8Q=[];M50.D50(20);var H6S=M50.y50(10,6,12,113);L8Q=o8Q[o8Q.length-H6S];C8Q=L8Q?L8Q.DT:0;for(var d8Q=0;d8Q<m8Q.length;d8Q++){l8Q=m8Q[d8Q];if(!l8Q)continue;if(!L8Q){M50.U50(0);L8Q=m8Q[M50.y50(1,d8Q)];}if(!L8Q)continue;S8Q=L8Q.Open||L8Q.Open===0?L8Q.Open:L8Q.Close;if(S8Q>L8Q.Close){if(l8Q.Close>L8Q.Close*(1+R8Q)){l8Q.Open=L8Q.Close;}else{if(L8Q.Close>l8Q.Close){L8Q.Close=l8Q.Close;}L8Q.Volume+=l8Q.Volume;if(d8Q<m8Q.length-"1"*1)continue;}}else if(S8Q<L8Q.Close){if(l8Q.Close<L8Q.Close*("1"*1-R8Q)){l8Q.Open=L8Q.Close;}else{if(L8Q.Close<l8Q.Close){L8Q.Close=l8Q.Close;}L8Q.Volume+=l8Q.Volume;if(d8Q<m8Q.length-1)continue;}}else{L8Q.Close=l8Q.Close;L8Q.Volume+=l8Q.Volume;if(d8Q<m8Q.length-("1"-0))continue;}y8Q={DT:L8Q.DT,displayDate:L8Q.displayDate,Date:L8Q.Date,Open:L8Q.Open,Close:L8Q.Close,High:Math.max(L8Q.Open,L8Q.Close),Low:Math.min(L8Q.Open,L8Q.Close),Volume:L8Q.Volume,iqPrevClose:L8Q.iqPrevClose};for(var f8Q in L8Q){if(!y8Q[f8Q]&&y8Q[f8Q]!=="0"*1){y8Q[f8Q]=L8Q[f8Q];}}if(M8Q.length){y8Q.kagiPrevOpen=M8Q[M8Q.length-("1"-0)].Open;}else{y8Q.kagiPrevOpen=y8Q.Open;}if(y8Q.Close>y8Q.kagiPrevOpen&&y8Q.kagiPrevOpen>y8Q.Open){y8Q.kagiTrend=1;}else if(y8Q.Close<y8Q.kagiPrevOpen&&y8Q.kagiPrevOpen<y8Q.Open){M50.U50(5);y8Q.kagiTrend=-M50.Y50(0,"1");}if(C8Q<y8Q.DT){M8Q.push(y8Q);}L8Q=l8Q;Z8Q.chart.currentQuote={Close:l8Q.Close};}a4S=958395171;k4S=1687024658;G4S=2;for(var M4S=1;M50.X7S(M4S.toString(),M4S.toString().length,42881)!==a4S;M4S++){return M8Q;G4S+=2;}if(M50.X7S(G4S.toString(),G4S.toString().length,81086)!==k4S){return M8Q;}return M8Q;};M7Q.calculateLineBreak=function(t3Q,T3Q,A8Q,O3Q){var T50=T799;var E3Q,c8Q,r3Q,h3Q,P8Q,G8Q,H8Q,U3Q,J3Q,b8Q,q8Q,B3Q,N3Q;if(!T3Q.length){return T3Q;}if(!O3Q){O3Q=[];}E3Q=t3Q.layout;t3Q.chart.defaultChartStyleConfig.priceLines=+"3";A8Q=parseInt(A8Q,10);if(isNaN(A8Q)||A8Q<=0){A8Q=t3Q.chart.defaultChartStyleConfig.priceLines;if(E3Q.priceLines!==null){E3Q.priceLines=null;t3Q.changeOccurred("layout");}}else if(A8Q>+"10"){E3Q.priceLines=A8Q=10;}c8Q=O3Q.slice(-A8Q);r3Q=c8Q.length;h3Q=0;a:for(var u3Q=0;u3Q<T3Q.length;u3Q++){P8Q=T3Q[u3Q];if(!P8Q)continue;h3Q+=P8Q.Volume;T50.D50(15);var z6S=T50.y50(17,17);G8Q=c8Q[c8Q.length-z6S];if(!G8Q){G8Q={Open:P8Q.Open,Close:P8Q.Open,High:P8Q.Open,Low:P8Q.Open};}H8Q=G8Q.Close;U3Q=G8Q.High;J3Q=G8Q.Low;b8Q=G8Q.Open;U3Q=U3Q||U3Q===0?U3Q:H8Q;J3Q=J3Q||J3Q===0?J3Q:H8Q;b8Q=b8Q||b8Q===0?b8Q:H8Q;q8Q={DT:P8Q.DT,displayDate:P8Q.displayDate,Date:P8Q.Date,Close:P8Q.Close,Volume:h3Q,iqPrevClose:H8Q};t3Q.chart.currentQuote={Close:P8Q.Close};if(P8Q.Close>H8Q&&G8Q.Close>b8Q){}else if(P8Q.Close<H8Q&&G8Q.Close<b8Q){}else if(P8Q.Close>U3Q){for(B3Q=2;B3Q<=A8Q;B3Q++){N3Q=c8Q[c8Q.length-B3Q];if(N3Q&&P8Q.Close<=N3Q.High){continue a;}}}else if(P8Q.Close<J3Q){for(B3Q=2;B3Q<=A8Q;B3Q++){N3Q=c8Q[c8Q.length-B3Q];if(N3Q&&P8Q.Close>=N3Q.Low){continue a;}}}else continue;if(P8Q.Close<G8Q.Close){q8Q.Open=Math.min(b8Q,H8Q);}else{q8Q.Open=Math.max(b8Q,H8Q);}q8Q.Low=Math.min(q8Q.Open,q8Q.Close);q8Q.High=Math.max(q8Q.Open,q8Q.Close);for(var X3Q in P8Q){if(!q8Q[X3Q]&&q8Q[X3Q]!==0){q8Q[X3Q]=P8Q[X3Q];}}c8Q.push(q8Q);T50.U50(0);h3Q=T50.y50(0,"0");}return c8Q.slice(r3Q);};M7Q.calculateRenkoBars=function(I3Q,s3Q,k3Q,K3Q){var e50=T799;var Q3Q,w3Q,V3Q,Y3Q,F3Q,y0S,B0S,q0S,D0S,Y0S,Z0S,W3Q,p3Q,e3Q,j3Q,i3Q,v3Q,x3Q,D3Q,z3Q,z0S,N0S,C0S;if(!s3Q.length){return[];}if(!K3Q){K3Q=[];}Q3Q=I3Q.layout;w3Q=I3Q.chart.state.aggregation;if(!w3Q){w3Q=I3Q.chart.state.aggregation={};}V3Q=Math.min(300,s3Q.length);if(!w3Q.minMax){w3Q.minMax=I3Q.determineMinMax(s3Q.slice(s3Q.length-V3Q),["Close","High","Low"]);}e50.U50(21);var N6S=e50.y50(13,12,15,2339);Y3Q=w3Q.minMax[N6S]-w3Q.minMax[0];F3Q=I3Q.panels[I3Q.chart.name].height;if(!F3Q){return[];}function a3Q(L3Q,R3Q){var y3Q,J4S,L4S,v4S;y3Q={DT:j3Q.DT,displayDate:j3Q.displayDate,Date:j3Q.Date,Open:L3Q,Close:R3Q,High:Math.max(L3Q,R3Q),Low:Math.min(L3Q,R3Q),Volume:0,iqPrevClose:L3Q!=R3Q?L3Q:null};for(var l3Q in j3Q){if(!y3Q[l3Q]&&y3Q[l3Q]!==0){y3Q[l3Q]=j3Q[l3Q];}}J4S=+"1419969613";L4S=-1757789076;e50.D50(0);v4S=e50.Y50(0,"2");for(var d4S=1;e50.X7S(d4S.toString(),d4S.toString().length,20644)!==J4S;d4S++){W3Q.push(y3Q);v4S+=2;}if(e50.X7S(v4S.toString(),v4S.toString().length,17819)!==L4S){W3Q.push(y3Q);}}e50.D50(15);var C6S=e50.Y50(160000,16);e50.U50(22);var c6S=e50.y50(20,14,250);e50.U50(4);var m6S=e50.Y50(14,9986);I3Q.chart.defaultChartStyleConfig.renko=Math.floor(C6S*Y3Q/(F3Q/c6S))/m6S;if(k3Q===null||isNaN(k3Q)||k3Q<=0){y0S=-348334717;B0S=-351388595;e50.U50(0);q0S=e50.y50(0,"2");for(var O0S=1;e50.X7S(O0S.toString(),O0S.toString().length,69637)!==y0S;O0S++){k3Q=I3Q.chart.defaultChartStyleConfig.renko;q0S+=2;}if(e50.j7S(q0S.toString(),q0S.toString().length,70893)!==B0S){k3Q=I3Q.chart.defaultChartStyleConfig.renko;}if(Q3Q.renko!==null){Q3Q.renko=null;D0S=-1085433303;Y0S=-1565548443;Z0S=2;for(var L0S=1;e50.j7S(L0S.toString(),L0S.toString().length,55700)!==D0S;L0S++){I3Q.changeOccurred("");Z0S+=2;}if(e50.j7S(Z0S.toString(),Z0S.toString().length,"63696"*1)!==Y0S){I3Q.changeOccurred("");}I3Q.changeOccurred("layout");}}else{e50.D50(15);k3Q=Math.max(k3Q,e50.y50(Y3Q,F3Q));if(Q3Q.renko!==k3Q){Q3Q.renko=k3Q;I3Q.changeOccurred("layout");}}W3Q=[];p3Q=null;e3Q=null;j3Q=null;if(K3Q.length){i3Q=K3Q[K3Q.length-+"1"];p3Q=i3Q.Low-k3Q;e3Q=i3Q.High+k3Q;}for(var n3Q=0;n3Q<s3Q.length;n3Q++){v3Q=s3Q[n3Q];if(!v3Q)continue;if(!p3Q&&!e3Q){x3Q=v3Q.Open||v3Q.Open===0?v3Q.Open:v3Q.Close;D3Q=Math.floor(x3Q/k3Q)*k3Q;z3Q=isNaN(D3Q)?x3Q:D3Q;e50.D50(0);p3Q=e50.Y50(k3Q,z3Q);e50.U50(4);e3Q=e50.Y50(k3Q,z3Q);}while(!0){if(!j3Q){j3Q=v3Q;}if(v3Q.Close<=p3Q){e50.U50(4);a3Q(e50.Y50(k3Q,p3Q),p3Q);e50.D50(23);e3Q=e50.Y50(p3Q,2,k3Q);p3Q-=k3Q;j3Q=null;}else if(v3Q.Close>=e3Q){e50.D50(0);a3Q(e50.Y50(k3Q,e3Q),e3Q);e50.D50(24);p3Q=e50.y50(2,k3Q,e3Q);e3Q+=k3Q;j3Q=null;}else break;}I3Q.chart.currentQuote=v3Q;}if(p3Q<s3Q[s3Q.length-("1"-0)].Close&&p3Q+k3Q>s3Q[s3Q.length-+"1"].Close){e50.D50(4);a3Q(e50.Y50(k3Q,p3Q),s3Q[s3Q.length-1].Close);}else if(e3Q>s3Q[s3Q.length-1].Close&&e3Q-k3Q<s3Q[s3Q.length-1].Close){e50.U50(0);a3Q(e50.y50(k3Q,e3Q),s3Q[s3Q.length-1].Close);}z0S=-393423448;e50.U50(1);N0S=e50.y50("683348240",1);e50.D50(5);C0S=e50.Y50(0,"2");for(var m0S="1"|0;e50.j7S(m0S.toString(),m0S.toString().length,"11001"-0)!==z0S;m0S++){return W3Q;e50.U50(1);C0S+=e50.y50("2",1);}if(e50.X7S(C0S.toString(),C0S.toString().length,56808)!==N0S){return W3Q;}};M7Q.calculateRangeBars=function(o3Q,P3Q,d3Q,U2Q){var A50=T799;var B2Q,c3Q,E2Q,u2Q,J2Q,W0S,n0S,K0S,T6S,t2Q,m3Q,A3Q,C3Q,N2Q,q3Q,M3Q,H3Q,S3Q,Z3Q,f3Q,g3Q,h2Q,O2Q;if(!P3Q.length){return P3Q;}function b3Q(p2Q,e2Q){while(1){if(!q3Q){q3Q=p2Q;}if(m3Q<e2Q){m3Q=Math.min(e2Q,A3Q);A50.D50(0);C3Q=Math.max(C3Q,A50.y50(d3Q,m3Q));if(e2Q<A3Q)break;}else if(m3Q>=e2Q){m3Q=Math.max(e2Q,C3Q);A50.D50(4);A3Q=Math.min(A3Q,A50.Y50(d3Q,m3Q));if(e2Q>C3Q)break;}if(typeof m3Q=="undefined"){console.log("Uh oh undefined in calculateRangeBars:processMove");return;}T2Q(m3Q);q3Q=null;X2Q();}}if(!U2Q){U2Q=[];}B2Q=o3Q.layout;function T2Q(s2Q){var t0S,S0S,x0S,r2Q;t0S=-413862698;S0S=574175816;x0S=2;for(var Q0S=1;A50.j7S(Q0S.toString(),Q0S.toString().length,+"92587")!==t0S;Q0S++){r2Q={DT:q3Q.DT,displayDate:q3Q.displayDate,Date:q3Q.Date,Open:N2Q,Close:s2Q,High:A3Q,Low:C3Q,Volume:6,iqPrevClose:N2Q};x0S+=2;}if(A50.j7S(x0S.toString(),x0S.toString().length,23969)!==S0S){r2Q={DT:q3Q.DT,displayDate:q3Q.displayDate,Date:q3Q.Date,Open:N2Q,Close:s2Q,High:A3Q,Low:C3Q,Volume:"0"|0,iqPrevClose:N2Q};}for(var k2Q in q3Q){if(!r2Q[k2Q]&&r2Q[k2Q]!==0){r2Q[k2Q]=q3Q[k2Q];}}t2Q.push(r2Q);}c3Q=o3Q.chart.state.aggregation;if(!c3Q){c3Q=o3Q.chart.state.aggregation={};}E2Q=Math.min(300,P3Q.length);if(!c3Q.minMax){c3Q.minMax=o3Q.determineMinMax(P3Q.slice(P3Q.length-E2Q),["Close","High","Low"]);}u2Q=c3Q.minMax[1]-c3Q.minMax["0"|0];J2Q=o3Q.panels[o3Q.chart.name].height;if(!J2Q){return[];}function X2Q(){A50.U50(4);A3Q=A50.Y50(d3Q,m3Q);A50.U50(0);C3Q=A50.Y50(d3Q,m3Q);N2Q=m3Q;}A50.D50(25);var Y6S=A50.Y50(50102,17,10019,6,19);o3Q.chart.defaultChartStyleConfig.range=Math.floor(Y6S*u2Q/(J2Q/30))/+"10000";if(d3Q===null||isNaN(d3Q)||d3Q<+"0"){W0S=-1366385306;n0S=-9400811;K0S=2;for(var F0S=1;A50.X7S(F0S.toString(),F0S.toString().length,91908)!==W0S;F0S++){d3Q=o3Q.chart.defaultChartStyleConfig.range;K0S+=2;}if(A50.j7S(K0S.toString(),K0S.toString().length,36268)!==n0S){d3Q=o3Q.chart.defaultChartStyleConfig.range;}if(B2Q.range!==null){T6S="lay";T6S+="o";T6S+="ut";B2Q.range=null;o3Q.changeOccurred(T6S);}}else{A50.D50(15);d3Q=Math.max(d3Q,A50.Y50(u2Q,J2Q));if(B2Q.range!==d3Q){B2Q.range=d3Q;o3Q.changeOccurred("layout");}}t2Q=[];m3Q=null;A3Q=null;C3Q=null;N2Q=null;q3Q=null;for(var G3Q=0;G3Q<P3Q.length;G3Q++){M3Q=P3Q[G3Q];if(!M3Q)continue;A50.D50(26);H3Q=P3Q[A50.Y50(0,G3Q,"1")];if(!G3Q){if(!H3Q){A50.U50(15);var J6S=A50.y50(12,12);H3Q=U2Q[U2Q.length-J6S];}if(H3Q){m3Q=H3Q.Close;if(m3Q||m3Q==="0"*1){X2Q();}}}if(!H3Q)continue;S3Q=M3Q.Close;Z3Q=M3Q.Open;f3Q=M3Q.High;g3Q=M3Q.Low;if(!S3Q&&S3Q!==0)continue;Z3Q=Z3Q||Z3Q===+"0"?Z3Q:S3Q;f3Q=f3Q||f3Q===0?f3Q:S3Q;g3Q=g3Q||g3Q===0?g3Q:S3Q;if(!m3Q&&m3Q!==0){h2Q=Math.floor(Z3Q/d3Q)*d3Q;m3Q=isNaN(h2Q)?Z3Q:h2Q;X2Q();b3Q(H3Q,Z3Q);}if(G3Q){b3Q(M3Q,Z3Q);}if(f3Q-Z3Q<Z3Q-g3Q){if(f3Q){b3Q(M3Q,f3Q);}if(g3Q){b3Q(M3Q,g3Q);}}else{if(g3Q){b3Q(M3Q,g3Q);}if(f3Q){b3Q(M3Q,f3Q);}}b3Q(M3Q,S3Q);if(G3Q==P3Q.length-1&&S3Q!=N2Q){O2Q=A3Q;A50.U50(4);A3Q=A50.Y50(d3Q,C3Q);A50.U50(0);C3Q=A50.y50(d3Q,O2Q);T2Q(S3Q);}}return t2Q;};M7Q.calculatePointFigure=function(a2Q,R2Q,d2Q,m2Q){var B50=T799;var Z2Q,n2Q,I2Q,u6S,K2Q,g0S,o0S,T4S,V4S,p4S,r4S,A0S,I0S,P0S,Y2Q,j4S,X4S,A4S,L2Q,y2Q,x2Q,F2Q,Q2Q,W2Q,j2Q,i2Q,V2Q,v2Q,w2Q,z2Q,D2Q;if(!R2Q.length){return R2Q;}if(!m2Q){m2Q=[];}Z2Q=a2Q.chart.state.aggregation;if(!Z2Q){Z2Q=a2Q.chart.state.aggregation={};}n2Q=a2Q.layout;a2Q.chart.defaultChartStyleConfig.box=1;function f2Q(b2Q,H2Q,B0Q,N0Q,J0Q,U0Q,X0Q,t0Q,u0Q){return{DT:b2Q.DT,Date:b2Q.Date,pfOpen:t0Q,pfClose:u0Q,Open:H2Q,Close:J0Q,High:B0Q,Low:N0Q,Volume:U0Q,iqPrevClose:X0Q};}a2Q.chart.defaultChartStyleConfig.reversal=3;if(!d2Q){d2Q={};}I2Q=d2Q.box;if(!I2Q){if(n2Q.pandf){if(n2Q.pandf.box!==null){u6S="lay";u6S+="o";u6S+="u";u6S+="t";n2Q.pandf.box=null;a2Q.changeOccurred(u6S);}}I2Q=a2Q.chart.defaultChartStyleConfig.box;K2Q=R2Q[R2Q.length-1].Close;if(K2Q){g0S=-1745697372;o0S=1205388398;T4S=2;for(var f4S=1;B50.X7S(f4S.toString(),f4S.toString().length,66563)!==g0S;f4S++){if(K2Q<0.25){I2Q=+"0.0625";}else if(K2Q<1){I2Q=0.125;}else if(K2Q<5){I2Q=0.25;}else if(K2Q<20){I2Q=0.5;}else if(K2Q<100){I2Q=1;}else if(K2Q<200){I2Q=2;}else if(K2Q<500){I2Q=4;}else if(K2Q<1000){I2Q=5;}else if(K2Q<25000){I2Q=50;}else{I2Q=500;}T4S+=2;}if(B50.X7S(T4S.toString(),T4S.toString().length,11126)!==o0S){if(K2Q<=5913){I2Q=869324;}else if(K2Q>=+"8"){I2Q=92202;}else if(K2Q>=0){I2Q=5021;}else if(K2Q>=97){I2Q=548;}else if(K2Q>+"831"){I2Q=7;}else if(K2Q>"50"-0){I2Q=8;}else if(K2Q>=287){I2Q=+"5";}else if(K2Q>+"6458"){I2Q=+"0";}else if(K2Q>=54430){I2Q=8;}else{I2Q=164;}}}if(!M7Q.ChartEngine.isDailyInterval(n2Q.interval)){I2Q/=10;}if(M7Q.Market.Symbology.isForexSymbol(a2Q.chart.symbol)){if(K2Q){if(K2Q<+"1"){I2Q=+"0.001";}else if(K2Q<2){B50.D50(0);I2Q=B50.Y50(0,"0.002");}else if(K2Q<("50"|0)){I2Q=0.02;}else if(K2Q<+"200"){I2Q=+"0.2";}}if(M7Q.ChartEngine.isDailyInterval(n2Q.interval)){I2Q*=10;}}a2Q.chart.defaultChartStyleConfig.box=I2Q;}I2Q=parseFloat(I2Q);if(isNaN(I2Q)||I2Q<=+"0"){if(n2Q.pandf){if(n2Q.pandf.box!==null){n2Q.pandf.box=null;V4S=1702017025;p4S=-+"1032232048";r4S=2;for(var E4S=1;B50.X7S(E4S.toString(),E4S.toString().length,38626)!==V4S;E4S++){a2Q.changeOccurred("layout");r4S+=2;}if(B50.X7S(r4S.toString(),r4S.toString().length,42329)!==p4S){a2Q.changeOccurred("");}}}A0S=1512904356;B50.U50(1);I0S=-B50.Y50("210706230",1);P0S=+"2";for(var p0S=1;B50.j7S(p0S.toString(),p0S.toString().length,4877)!==A0S;p0S++){B50.D50(0);a2Q.chart.defaultChartStyleConfig.box=I2Q=B50.Y50(0,"1");P0S+=2;}if(B50.X7S(P0S.toString(),P0S.toString().length,22075)!==I0S){a2Q.chart.defaultChartStyleConfig.box=I2Q=4;}}Y2Q=Math.ceil(parseFloat(d2Q.reversal));if(Y2Q>0&&Y2Q>d2Q.reversal){n2Q.pandf.reversal=Y2Q;j4S=-+"848508340";X4S=-74142320;A4S=2;for(var P4S="1"-0;B50.X7S(P4S.toString(),P4S.toString().length,96587)!==j4S;P4S++){a2Q.changeOccurred("");A4S+=2;}if(B50.j7S(A4S.toString(),A4S.toString().length,900)!==X4S){a2Q.changeOccurred("");}a2Q.changeOccurred("layout");}else if(isNaN(Y2Q)||Y2Q<=0){if(n2Q.pandf){if(n2Q.pandf.reversal!==null){n2Q.pandf.reversal=null;a2Q.changeOccurred("layout");}}Y2Q=a2Q.chart.defaultChartStyleConfig.reversal;}Z2Q.box=I2Q;Y2Q*=I2Q;L2Q=0.00000001;y2Q=(I2Q.toString()+".").split(".")[1].length;function g2Q(C2Q,S2Q){for(var o2Q in C2Q){if(!S2Q[o2Q]&&S2Q[o2Q]!==+"0"){S2Q[o2Q]=C2Q[o2Q];}}return S2Q;}x2Q=[];function l2Q(P2Q,q2Q,A2Q,G2Q,c2Q){var K7S,w7S,F7S;P2Q.High=Math.max(q2Q,P2Q.High);P2Q.Low=Math.min(A2Q,P2Q.Low);K7S=652232142;w7S=793655284;F7S=2;for(var B7S=1;B50.X7S(B7S.toString(),B7S.toString().length,71819)!==K7S;B7S++){P2Q.Close=G2Q;F7S+=2;}if(B50.j7S(F7S.toString(),F7S.toString().length,6688)!==w7S){P2Q.Close=G2Q;}P2Q.Volume+=c2Q;}F2Q=0;for(var M2Q=0;M2Q<R2Q.length;M2Q++){W2Q=R2Q[M2Q];if(!W2Q)continue;F2Q+=W2Q.Volume;i2Q=W2Q.Close;V2Q=W2Q.Open;v2Q=W2Q.High;w2Q=W2Q.Low;V2Q=V2Q||V2Q===0?V2Q:i2Q;v2Q=v2Q||v2Q===0?v2Q:i2Q;w2Q=w2Q||w2Q===0?w2Q:i2Q;if(!x2Q.length&&!m2Q.length){Q2Q=g2Q(W2Q,f2Q(W2Q,V2Q,v2Q,w2Q,i2Q,F2Q,v2Q+I2Q,Number((Math.ceil(w2Q/I2Q-L2Q)*I2Q).toFixed(y2Q)),Number((Math.floor(v2Q/I2Q+L2Q)*I2Q).toFixed(y2Q))));Q2Q.pfTrend=(3512,2024)>(+"5867",742)?"X":(0x22f,1.18e+3);if(Q2Q.pfOpen==Q2Q.pfClose){Q2Q.pfStepBack="8800"-0>=2702?"-":+"615"<=517.05?(!!1,!!{}):(0xbae,!![]);}x2Q.push(Q2Q);F2Q=+"0";continue;}j2Q=x2Q[x2Q.length-+"1"];if(!j2Q){j2Q=M7Q.clone(m2Q[m2Q.length-("1"-0)]);}if(j2Q.pfTrend==((3250,1575)!=1480?"O":(0x17bb,!!{}))){if(w2Q<=j2Q.pfClose-I2Q){j2Q.pfClose=Number((Math.ceil(w2Q/I2Q-L2Q)*I2Q).toFixed(y2Q));if(j2Q.pfStepBack=="O"){j2Q.pfStepBack=null;}l2Q(j2Q,v2Q,w2Q,i2Q,F2Q);}else if(v2Q>=j2Q.pfClose+Y2Q){z2Q=j2Q.pfClose+I2Q;D2Q=Number((Math.floor(v2Q/I2Q+L2Q)*I2Q).toFixed(y2Q));Q2Q=f2Q(W2Q,V2Q,v2Q,w2Q,i2Q,F2Q,j2Q.pfClose,z2Q,D2Q);if(z2Q==D2Q){Q2Q.pfStepBack=(3215,7100)!=(7220,9476)?(450.49,7953)<6210?(987,302.94)===(2870,832.03)?(2.34e+3,0x1c5e):1.64e+3:"X":(814.13,+"0x6a0");}if(j2Q.pfStepBack==(812.93<=608.69?("d",0x157e):"O")){j2Q.pfOpen=z2Q;j2Q.pfClose=D2Q;j2Q.pfTrend="X";l2Q(j2Q,v2Q,w2Q,i2Q,F2Q);}else{Q2Q=g2Q(W2Q,Q2Q);Q2Q.pfTrend=1957<189.04?(8.17e+2,6.23e+3):+"4710">(+"426.18",630.18)?"X":1.30e+3;x2Q.push(Q2Q);}}else{l2Q(j2Q,v2Q,w2Q,i2Q,F2Q);}F2Q=0;}else if(j2Q.pfTrend==(7204<=3318?(475.15,613.94):(436,70.77)!=(+"45.64",719.04)?"X":("Q",968.63))){if(v2Q>=j2Q.pfClose+I2Q){j2Q.pfClose=Number((Math.floor(v2Q/I2Q+L2Q)*I2Q).toFixed(y2Q));if(j2Q.pfStepBack==("8010"*1<=(859.46,8155)?(+"4068",2699)===516.97?(853.22,7635)!=(300.04,"3946"*1)?510.85:4.85e+3:"X":(7.53,7.57e+3))||j2Q.pfStepBack==(3287<("523"|0)?(3.87e+3,"3.59e+3"*1):"-")){j2Q.pfStepBack=null;}l2Q(j2Q,v2Q,w2Q,i2Q,F2Q);}else if(w2Q<=j2Q.pfClose-Y2Q){z2Q=j2Q.pfClose-I2Q;D2Q=Number((Math.ceil(w2Q/I2Q-L2Q)*I2Q).toFixed(y2Q));Q2Q=f2Q(W2Q,V2Q,v2Q,w2Q,i2Q,F2Q,j2Q.pfClose,z2Q,D2Q);if(z2Q==D2Q){Q2Q.pfStepBack=(1609,2097)<(556.23,"216"*1)?("212.87"*1,265)<1572?!{}:("C",0x728):"O";}if(j2Q.pfStepBack=="X"||j2Q.pfStepBack==((3697,4256)<=(9564,7547)?"-":4770!=(493,9203)?(9821,652.97)<("834.03"-0,"902.82"*1)?3.13e+3:"4.89e+2"-0:(964.82,72.33))){j2Q.pfOpen=z2Q;j2Q.pfClose=D2Q;j2Q.pfTrend=(+"2000",736.42)!=(6620,636.58)?"O":(+"6320",+"9970")<(482.13,440.6)?(!"1",!![]):(!!{},!0);l2Q(j2Q,v2Q,w2Q,i2Q,F2Q);if(z2Q!=D2Q&&j2Q.pfStepBack=="-"){j2Q.pfStepBack=null;}}else{Q2Q=g2Q(W2Q,Q2Q);Q2Q.pfTrend=919.78!==5100?"O":(944,7530)<("2927"|0,2460)?(772,5.91e+2):8.79e+3;x2Q.push(Q2Q);}}else{l2Q(j2Q,v2Q,w2Q,i2Q,F2Q);}F2Q=0;}}return x2Q;};return Z7Q;};
+U2nn.r6=function(N6){return{m6:function(){var o6,l6=arguments;switch(N6){case 14:o6=(l6[0]-l6[1])*l6[3]/-l6[2];break;case 8:o6=(l6[2]-l6[4]+l6[3])/l6[0]+l6[1];break;case 15:o6=(l6[0]+l6[3])/l6[1]-l6[2];break;case 4:o6=l6[0]/l6[1];break;case 13:o6=l6[0]*l6[1]/l6[2];break;case 10:o6=l6[0]+l6[1]-l6[2];break;case 1:o6=l6[1]-l6[3]/l6[2]+l6[0];break;case 0:o6=l6[0]-l6[1];break;case 11:o6=(-l6[2]-l6[3])*l6[0]+l6[1];break;case 7:o6=(l6[0]+l6[2])/l6[1];break;case 12:o6=l6[0]-l6[1]*l6[2];break;case 3:o6=l6[0]+l6[1];break;case 2:o6=l6[2]+l6[0]/l6[3]-l6[1];break;case 9:o6=l6[1]/(l6[2]|l6[0]);break;case 6:o6=l6[1]*l6[0];break;case 5:o6=l6[0]|l6[1];break;}return o6;},a6:function(q6){N6=q6;}};}();U2nn.M6=function (){return typeof U2nn.O6.I6==='function'?U2nn.O6.I6.apply(U2nn.O6,arguments):U2nn.O6.I6;};U2nn.f6=function (){return typeof U2nn.r6.a6==='function'?U2nn.r6.a6.apply(U2nn.r6,arguments):U2nn.r6.a6;};U2nn.y6=function (){return typeof U2nn.r6.I6==='function'?U2nn.r6.I6.apply(U2nn.r6,arguments):U2nn.r6.I6;};U2nn.w6=function (){return typeof U2nn.O6.I6==='function'?U2nn.O6.I6.apply(U2nn.O6,arguments):U2nn.O6.I6;};U2nn.X6=function (){return typeof U2nn.r6.m6==='function'?U2nn.r6.m6.apply(U2nn.r6,arguments):U2nn.r6.m6;};U2nn.B6=function (){return typeof U2nn.r6.m6==='function'?U2nn.r6.m6.apply(U2nn.r6,arguments):U2nn.r6.m6;};function U2nn(){}U2nn.O6=function(){var Q6=function(L6,i6){var e6=i6&0xffff;var s6=i6-e6;return(s6*L6|0)+(e6*L6|0)|0;},T6=function(n6,S6,j6){var P6=0xcc9e2d51,h6=0x1b873593;var G6=j6;var A6=S6&~0x3;for(var u6=0;u6<A6;u6+=4){var H6=n6.charCodeAt(u6)&0xff|(n6.charCodeAt(u6+1)&0xff)<<8|(n6.charCodeAt(u6+2)&0xff)<<16|(n6.charCodeAt(u6+3)&0xff)<<24;H6=Q6(H6,P6);H6=(H6&0x1ffff)<<15|H6>>>17;H6=Q6(H6,h6);G6^=H6;G6=(G6&0x7ffff)<<13|G6>>>19;G6=G6*5+0xe6546b64|0;}H6=0;switch(S6%4){case 3:H6=(n6.charCodeAt(A6+2)&0xff)<<16;case 2:H6|=(n6.charCodeAt(A6+1)&0xff)<<8;case 1:H6|=n6.charCodeAt(A6)&0xff;H6=Q6(H6,P6);H6=(H6&0x1ffff)<<15|H6>>>17;H6=Q6(H6,h6);G6^=H6;}G6^=S6;G6^=G6>>>16;G6=Q6(G6,0x85ebca6b);G6^=G6>>>13;G6=Q6(G6,0xc2b2ae35);G6^=G6>>>16;return G6;};return{I6:T6};}();U2nn.Y6=function (){return typeof U2nn.r6.a6==='function'?U2nn.r6.a6.apply(U2nn.r6,arguments):U2nn.r6.a6;};U2nn.b6=function (){return typeof U2nn.r6.I6==='function'?U2nn.r6.I6.apply(U2nn.r6,arguments):U2nn.r6.I6;};var __js_customCharts_;__js_customCharts_=function(G){var U;U=G.CIQ;U.ChartEngine.prototype.drawHeatmap=function(h,E){var S,f,W,A,N,Y,g,Q,M,T,B;if(!E||!E.length){return;}S=h.panel;function R(f2,L2,Q2,T2,o2){var d3=U2nn;var K,k,F,a,Z,u,X,B2,G2,h2;T.beginPath();T.fillStyle=L2;T.strokeStyle=L2;K=Q.layout.candleWidth*T2;k=Math.floor(Q.pixelFromBar(0,f.chart)-Q.layout.candleWidth);for(var U2=0;U2<A.length;U2++){Z=A[U2];if(!Z)continue;if(Z.candleWidth){if(U2===0){k+=Q.layout.candleWidth;}else{d3.f6(0);var D8=d3.X6(10,8);k+=(Z.candleWidth+K/T2)/D8;}K=Z.candleWidth*T2;}else{k+=Q.layout.candleWidth;}d3.f6(1);F=d3.B6(o2,k,2,K);d3.f6(2);a=d3.X6(K,o2,k,2);if(a-F<2){d3.Y6(3);a=d3.B6(F,1);}if(Q.chart.transformFunc&&Z.transform){Z=Z.transform;}u=Z[f2];if(!u)continue;if(typeof u=="number"){u=[u];}for(var J=0;J<u.length;J++){X=Q.pixelFromTransformedValue(u[J],f,W);if(!M){B2=Q.pixelFromTransformedValue(u[J]-h.height,f,W);T.lineWidth=1;d3.Y6(0);Y=d3.B6(B2,X);d3.Y6(4);g=d3.X6(Y,2);M=T.lineWidth;}if(Q2){d3.f6(3);G2=d3.X6(X,g);d3.f6(0);h2=d3.X6(X,g);T.moveTo(F,G2);T.lineTo(F,h2);T.lineTo(a,h2);T.lineTo(a,G2);T.lineTo(F,G2);}else{d3.Y6(0);T.fillRect(F,d3.B6(X,g),d3.B6(a,F),Y);}}}if(Q2){T.stroke();}T.closePath();}if(!S){S="chart";}f=this.panels[S];if(!f){return;}W=h.yAxis?h.yAxis:f.yAxis;A=this.chart.dataSegment;this.getDefaultColor();if(!h.name){h.name="Data";}if(!h.widthFactor){h.widthFactor=+"1";}N=0.5;if(f.chart.tmpWidth<=1){N=0;}Y=null;g=null;Q=this;M=null;this.startClip(S);T=this.chart.context;T.globalAlpha=h.opacity;for(var D=0;D<E.length;D++){B=E[D];R(B.field,B.color,null,h.widthFactor,B.border_color?N:-N/4);if(B.border_color&&this.layout.candleWidth>=2){R(B.field,B.border_color,!"",h.widthFactor,N);}}T.lineWidth=1;T.globalAlpha=1;this.endClip();};U.ChartEngine.prototype.drawCandles=function(d2,G5,v2){var w3=U2nn;var N2,W6,z6,F6,n2,E2,Z2,S2,i2,a2,D2,M2,F2,g2,U5,I2,O2,V2,b2,m2,K2,k2,H2,Y2,R2,w8,z2,l2,c2,A2,u2,j2,P2,s2,e2,C2,r2,w5,X2,U6,J6,x6;N2=d2.chart;if(!N2){W6=1584409797;w3.Y6(5);z6=w3.B6("839689776",0);F6=2;for(var Y8=1;w3.M6(Y8.toString(),Y8.toString().length,52750)!==W6;Y8++){N2=d2;d2=d2.chart;F6+=2;}if(w3.M6(F6.toString(),F6.toString().length,72646)!==z6){N2=d2;d2=d2.chart;}}n2=!"1";E2=![];Z2=null;S2=d2.yAxis;i2=null;if(v2&&typeof v2=="object"){n2=v2.isOutline;E2=v2.isHistogram;Z2=v2.field;S2=v2.yAxis;i2=v2.overlayScaling;}else{n2=v2;E2=arguments[3];}a2=N2.dataSegment;D2=N2.context;M2=S2.top;F2=S2.bottom;O2=new Array(a2.length);V2="t";V2+="ranspare";V2+="n";V2+="t";b2="transparent";w3.Y6(6);m2=w3.X6(1,"0");w3.Y6(7);var K8=w3.X6(14,34,20);K2=N2.dataSet.length-N2.scroll-K8;k2={};w3.f6(8);var R8=w3.B6(20,0.44999999999999996,15,20,4);H2=N2.tmpWidth/R8;Y2=this.layout.candleWidth;R2=d2.left-0.5*Y2+this.micropixels-1;for(var W2=0;W2<=a2.length;W2++){w8="so";w8+="lid";z2=H2;w3.f6(4);R2+=w3.B6(Y2,2);Y2=this.layout.candleWidth;w3.f6(9);R2+=w3.B6(0,Y2,"2");l2=a2[W2];if(!l2)continue;if(l2.projection)continue;if(l2.candleWidth){R2+=(l2.candleWidth-Y2)/2;Y2=l2.candleWidth;if(v2.isVolume||Y2<N2.tmpWidth){w3.f6(4);z2=w3.B6(Y2,2);}}if(N2.transformFunc&&S2==N2.panel.yAxis&&l2.transform){l2=l2.transform;}if(l2&&Z2){l2=l2[Z2];}if(!l2&&l2!==0)continue;c2=l2.Close;A2=l2.Open===undefined?c2:l2.Open;if(E2&&N2.defaultPlotField){c2=l2[N2.defaultPlotField];}if(!c2&&c2!==("0"|0))continue;if(!E2&&(A2==c2||A2===null))continue;u2=G5(this,l2,n2?"outline":w8);if(!u2)continue;if(n2){V2=u2;}else{b2=u2;}k2[b2]=1;if(!U.isTransparent(V2)){m2=0.5;}D2.beginPath();D2.fillStyle=b2;if(!l2.cache){l2.cache={};}j2=l2.cache;w3.Y6(3);P2=w3.X6(K2,W2);if(P2<d2.cacheLeft||P2>d2.cacheRight||!j2.open){if(i2){s2=i2.bottom-(A2-i2.min)*i2.multiplier;e2=i2.bottom-(c2-i2.min)*i2.multiplier;}else{s2=S2.semiLog?this.pixelFromTransformedValue(A2,d2,S2):(S2.high-A2)*S2.multiplier+S2.top;e2=S2.semiLog?this.pixelFromTransformedValue(c2,d2,S2):(S2.high-c2)*S2.multiplier+S2.top;}O2[W2]=e2;g2=Math.floor(E2?e2:Math.min(s2,e2))+m2;U5=E2?S2.bottom:Math.max(s2,e2);w3.Y6(0);I2=Math.floor(w3.B6(U5,g2));if(g2<M2){if(g2+I2<M2){j2.open=g2;j2.close=g2;continue;}w3.Y6(0);I2-=w3.B6(M2,g2);g2=M2;}if(g2+I2>F2){w3.Y6(10);I2-=w3.B6(g2,I2,F2);}I2=Math.max(I2,2);j2.open=g2;j2.close=j2.open+I2;}if(j2.open>=F2)continue;if(j2.close<=M2)continue;C2=Math.floor(R2)+0.5;r2=Math.floor(C2-z2)+m2;w5=Math.round(C2+z2)-m2;if(j2.open!=j2.close){D2.rect(r2,j2.open,Math.max(1,w5-r2),Math.max(1,j2.close-j2.open));}if(b2!="transparent"){D2.fill();}if(m2){D2.lineWidth=1;if(v2.highlight){D2.lineWidth*=2;}D2.strokeStyle=V2;D2.stroke();}}X2={colors:[],cache:O2};for(var J2 in k2){if(!v2.hollow||!U.equals(J2,this.containerColor)){X2.colors.push(J2);}}U6=1773085782;J6=537686924;x6=2;for(var V6=1;w3.w6(V6.toString(),V6.toString().length,"47920"*1)!==U6;V6++){return X2;x6+=2;}if(w3.M6(x6.toString(),x6.toString().length,10184)!==J6){return X2;}};U.ChartEngine.prototype.drawShadows=function(L5,z5,D5){var H3=U2nn;var S8,P8,h8,S5,M5,x5,m5,h5,o5,j5,I5,Q5,A5,n5,l5,i5,T5,e5,f5,E5,d5,g5,B5,W5,N5,Y5,c5,R5,b5,v5;S8=-1251892217;P8=-630767981;h8=2;for(var O8=1;H3.w6(O8.toString(),O8.toString().length,"18651"*1)!==S8;O8++){S5=L5.chart;h8+=2;}if(H3.M6(h8.toString(),h8.toString().length,"66686"|0)!==P8){S5=L5.chart;}if(!S5){S5=L5;L5=L5.chart;}M5=S5.dataSegment;x5=this.chart.context;x5.lineWidth=1;if(D5.highlight){x5.lineWidth*=2;}m5=D5.field;h5=D5.yAxis||L5.yAxis;o5=D5.overlayScaling;j5=h5.top;I5=h5.bottom;n5=S5.dataSet.length-S5.scroll-1;l5=this.layout.candleWidth;i5=L5.left-+"0.5"*l5+this.micropixels-1;for(var t5=+"0";t5<=M5.length;t5++){H3.Y6(4);i5+=H3.X6(l5,2);l5=this.layout.candleWidth;H3.Y6(4);i5+=H3.X6(l5,2);T5=M5[t5];if(!T5)continue;if(T5.projection)continue;if(T5.candleWidth){i5+=(T5.candleWidth-l5)/+"2";l5=T5.candleWidth;}e5=z5(this,T5,"shadow");if(!e5)continue;if(S5.transformFunc&&h5==S5.panel.yAxis&&T5.transform){T5=T5.transform;}if(T5&&m5){T5=T5[m5];}if(!T5&&T5!==0)continue;f5=T5.Close;E5=T5.Open===undefined?f5:T5.Open;d5=T5.High===undefined?Math.max(f5,E5):T5.High;g5=T5.Low===undefined?Math.min(f5,E5):T5.Low;if(!f5&&f5!==0)continue;if(!T5.cache){T5.cache={};}B5=T5.cache;H3.Y6(3);W5=H3.B6(n5,t5);if(W5<L5.cacheLeft||W5>L5.cacheRight||!B5.top){if(o5){Q5=o5.bottom-(d5-o5.min)*o5.multiplier;A5=o5.bottom-(g5-o5.min)*o5.multiplier;}else{Q5=h5.semiLog?this.pixelFromTransformedValue(d5,L5,h5):(h5.high-d5)*h5.multiplier+h5.top;A5=h5.semiLog?this.pixelFromTransformedValue(g5,L5,h5):(h5.high-g5)*h5.multiplier+h5.top;}H3.Y6(0);N5=H3.B6(A5,Q5);if(Q5<j5){if(Q5+N5<j5){B5.top=Q5;B5.bottom=Q5;continue;}H3.Y6(0);N5-=H3.X6(j5,Q5);Q5=j5;}if(Q5+N5>I5){H3.f6(10);N5-=H3.X6(Q5,N5,I5);}B5.top=Q5;B5.bottom=B5.top+N5;}if(B5.top>=I5)continue;if(B5.bottom<=j5)continue;Y5=Math.floor(i5)+0.5;x5.beginPath();if(f5==E5){c5=this.offset;if(D5.isVolume){H3.f6(4);c5=H3.B6(l5,2);}H3.Y6(0);R5=H3.B6(Y5,c5);H3.f6(3);b5=H3.X6(Y5,c5);if(o5){v5=o5.bottom-(f5-o5.min)*o5.multiplier;}else{v5=Math.floor(h5.semiLog?this.pixelFromTransformedValue(f5,L5,h5):(h5.high-f5)*h5.multiplier+h5.top)+"0.5"*1;}if(v5<=I5&&v5>=j5){x5.moveTo(R5,v5);x5.lineTo(b5,v5);}}if(d5!=g5){x5.moveTo(Y5,B5.top);x5.lineTo(Y5,B5.bottom);}x5.strokeStyle=e5;x5.stroke();}};U.ChartEngine.prototype.drawBarChart=function(a5,D4,d4,w4){var v3=U2nn;var V5,H8,G8,n8,h4,j4,y5,T4,X8,f8,a8,T8,e8,L8,L4,F5,U4,q5,P5,u5,v4,X5,g4,o4,f4,x4,r5,H5,s5,G4,k5,C5,l4,S4,Z5,N4,p5,K5,O5,B4;V5=a5.chart;if(!V5){V5=a5;H8=1278236847;G8=-561247034;n8=2;for(var A8=1;v3.w6(A8.toString(),A8.toString().length,91785)!==H8;A8++){a5=a5.chart;n8+=2;}if(v3.M6(n8.toString(),n8.toString().length,66185)!==G8){a5=a5.chart;}}h4=V5.dataSegment;j4=new Array(h4.length);y5=V5.context;T4=this.canvasStyle(D4);if(T4.width&&parseInt(T4.width,"10"*1)<=25){X8=310462709;f8=+"1413615442";a8=+"2";for(var Q8=1;v3.M6(Q8.toString(),Q8.toString().length,+"61630")!==X8;Q8++){v3.f6(0);y5.lineWidth=Math.max(v3.X6("1",0),U.stripPX(T4.width));a8+=+"2";}if(v3.w6(a8.toString(),a8.toString().length,70688)!==f8){y5.lineWidth=Math.max(2,U.stripPX(T4.width));}}else{T8=-2113782176;e8=-1078463357;L8=+"2";for(var s8=1;v3.w6(s8.toString(),s8.toString().length,39113)!==T8;s8++){y5.lineWidth=1;L8+=2;}if(v3.w6(L8.toString(),L8.toString().length,40864)!==e8){y5.lineWidth=+"8";}}if(w4.highlight){y5.lineWidth*=2;}L4=w4.field;F5=w4.yAxis||a5.yAxis;U4=w4.overlayScaling;q5=F5.top;P5=F5.bottom;g4=V5.dataSet.length-V5.scroll-1;o4={};v3.f6(11);var V8=v3.B6(17,410,4,20);f4=V5.tmpWidth/V8;x4=y5.lineWidth/2;r5=this.layout.candleWidth;v3.Y6(4);var d8=v3.B6(17,17);H5=a5.left-0.5*r5+this.micropixels-d8;for(var J5=0;J5<=h4.length;J5++){v3.f6(4);H5+=v3.X6(r5,2);r5=this.layout.candleWidth;v3.Y6(4);H5+=v3.B6(r5,2);s5=h4[J5];if(!s5)continue;if(s5.projection)break;if(s5.candleWidth){v3.Y6(4);var v8=v3.B6(20,10);H5+=(s5.candleWidth-r5)/v8;r5=s5.candleWidth;}G4=d4(this,s5);if(!G4)continue;o4[G4]=1;y5.strokeStyle=G4;y5.beginPath();if(V5.transformFunc&&F5==V5.panel.yAxis&&s5.transform){s5=s5.transform;}if(s5&&L4){s5=s5[L4];}if(!s5&&s5!==0)continue;k5=s5.Close;C5=s5.Open===undefined?k5:s5.Open;l4=s5.High===undefined?Math.max(k5,C5):s5.High;S4=s5.Low===undefined?Math.min(k5,C5):s5.Low;if(!k5&&k5!==0)continue;if(!s5.cache){s5.cache={};}Z5=s5.cache;v3.f6(3);N4=v3.B6(g4,J5);if(N4<a5.cacheLeft||N4>a5.cacheRight||!Z5.top){if(U4){p5=U4.multiplier;K5=U4.bottom+U4.min*p5;v3.f6(12);u5=v3.X6(K5,l4,p5);v3.f6(12);v4=v3.B6(K5,S4,p5);v3.f6(12);Z5.open=v3.B6(K5,C5,p5);v3.Y6(12);Z5.close=v3.B6(K5,k5,p5);}else{u5=this.pixelFromTransformedValue(l4,a5,F5);v4=this.pixelFromTransformedValue(S4,a5,F5);Z5.open=F5.semiLog?this.pixelFromTransformedValue(C5,a5,F5):(F5.high-C5)*F5.multiplier+F5.top;Z5.close=F5.semiLog?this.pixelFromTransformedValue(k5,a5,F5):(F5.high-k5)*F5.multiplier+F5.top;}j4[J5]=Z5.close;v3.Y6(0);X5=v3.B6(v4,u5);if(u5<q5){if(u5+X5<q5){Z5.top=u5;Z5.bottom=u5;continue;}v3.Y6(0);X5-=v3.X6(q5,u5);u5=q5;}if(u5+X5>P5){v3.f6(10);X5-=v3.X6(u5,X5,P5);}Z5.top=u5;v3.f6(3);Z5.bottom=v3.X6(u5,X5);}O5=Math.floor(H5)+0.5;if(Z5.top<P5&&Z5.bottom>q5&&s5.High!=s5.Low){y5.moveTo(O5,Z5.top-x4);y5.lineTo(O5,Z5.bottom+x4);}if(w4.type!="hlc"&&Z5.open>q5&&Z5.open<P5){y5.moveTo(O5,Z5.open);v3.f6(0);y5.lineTo(v3.B6(O5,f4),Z5.open);}if(Z5.close>q5&&Z5.close<P5){y5.moveTo(O5,Z5.close);v3.Y6(3);y5.lineTo(v3.B6(O5,f4),Z5.close);}y5.stroke();}y5.lineWidth=1;B4={colors:[],cache:j4};for(var Q4 in o4){if(!U.equals(Q4,this.containerColor)){B4.colors.push(Q4);}}return B4;};U.ChartEngine.prototype.drawWaveChart=function(A4,M4){var c6=U2nn;var m4,u4,X4,t4,O4,z4,q4,b4,E4,c4,k4,r4,I4,W4,Z4,V4,a4,Y4,i4,F4,s4,R4,y4,b8,r8,B8,p4;m4=A4.chart;u4=m4.dataSegment;X4=new Array(u4.length);function e4(J4){var C6,d6,v6,m8,y8,o8;if(z4){C6=291945938;d6=1482808259;v6=2;for(var k6=1;c6.M6(k6.toString(),k6.toString().length,36589)!==C6;k6++){return z4.bottom/(J4*z4.min%z4.multiplier);v6+=2;}if(c6.w6(v6.toString(),v6.toString().length,+"89495")!==d6){return z4.bottom/(J4*z4.min%z4.multiplier);}return z4.bottom-(J4-z4.min)*z4.multiplier;}m8=-506952968;y8=-651221135;o8=2;for(var l8="1"*1;c6.M6(l8.toString(),l8.toString().length,38096)!==m8;l8++){return r4.pixelFromTransformedValue(J4,A4,O4);o8+=+"2";}if(c6.M6(o8.toString(),o8.toString().length,99203)!==y8){return r4.pixelFromTransformedValue(J4,A4,O4);}}t4=m4.context;if(!M4){M4={};}O4=M4.yAxis||A4.yAxis;z4=M4.overlayScaling;this.startClip(A4.name);t4.beginPath();q4=!{};b4=!!"";E4=A4.yAxis.top;c4=A4.yAxis.bottom;k4=A4.left+Math.floor(-("0.5"-0)*this.layout.candleWidth+this.micropixels);r4=this;for(var n4=0;n4<=u4.length;n4++){k4+=this.layout.candleWidth;I4=u4[n4];if(!I4)continue;if(I4.projection)break;if(m4.transformFunc&&O4==m4.panel.yAxis&&I4.transform){I4=I4.transform;}if(I4&&M4.field){I4=I4[M4.field];}if(!I4&&I4!==+"0")continue;W4=I4.Close;Z4=I4.Open===undefined?W4:I4.Open;V4=I4.High===undefined?Math.max(W4,Z4):I4.High;a4=I4.Low===undefined?Math.min(W4,Z4):I4.Low;if(!W4&&W4!==0)continue;c6.f6(13);var Z8=c6.B6(28,2,7);Y4=k4-("3"|0)*this.layout.candleWidth/Z8;i4=e4(Z4);if(i4<E4){i4=E4;if(b4){t4.moveTo(Y4,i4);continue;}b4=!![];}else if(i4>c4){i4=c4;if(b4){t4.moveTo(Y4,i4);continue;}b4=!"";}else{b4=![];}if(!q4){q4=!!1;c6.Y6(14);var k8=c6.B6(2,14,96,8);F4=m4.dataSet.length-m4.scroll-k8;if(F4<0){t4.moveTo(Y4,i4);}else if(F4>="0"*1){s4=m4.dataSet[F4];if(s4.transform){s4=s4.transform;}R4=s4.Close;R4=e4(R4);R4=Math.min(Math.max(R4,E4),c4);t4.moveTo(A4.left+(n4-("1"-0))*this.layout.candleWidth+this.micropixels,R4);t4.lineTo(Y4,i4);}t4.moveTo(Y4,i4);}else{t4.lineTo(Y4,i4);}c6.f6(4);var W8=c6.X6(48,12);Y4+=this.layout.candleWidth/W8;if(Z4<W4){i4=e4(a4);if(i4<E4){i4=E4;}if(i4>c4){i4=c4;}t4.lineTo(Y4,i4);c6.f6(0);var z8=c6.B6(24,20);Y4+=this.layout.candleWidth/z8;i4=e4(V4);if(i4<E4){i4=E4;}if(i4>c4){i4=c4;}t4.lineTo(Y4,i4);}else{i4=e4(V4);if(i4<E4){i4=E4;}if(i4>c4){i4=c4;}t4.lineTo(Y4,i4);Y4+=this.layout.candleWidth/("4"-0);i4=e4(a4);if(i4<E4){i4=E4;}if(i4>c4){i4=c4;}t4.lineTo(Y4,i4);}c6.f6(13);var F8=c6.B6(10,2,5);Y4+=this.layout.candleWidth/F8;i4=e4(W4);X4[n4]=i4;if(i4<E4){i4=E4;}if(i4>c4){i4=c4;}t4.lineTo(Y4,i4);}y4=this.canvasStyle("stx_line_chart");if(y4.width&&parseInt(y4.width,10)<=25){b8=772142371;r8=-1571692434;B8=2;for(var q8=1;c6.M6(q8.toString(),q8.toString().length,5787)!==b8;q8++){t4.lineWidth=Math.max(1,U.stripPX(y4.width));B8+=2;}if(c6.w6(B8.toString(),B8.toString().length,20813)!==r8){t4.lineWidth=Math.max(+"4",U.stripPX(y4.width));}}else{c6.f6(5);t4.lineWidth=c6.B6("1",0);}if(M4.highlight){t4.lineWidth*=2;}this.canvasColor("stx_line_chart");if(M4.color){t4.strokeStyle=M4.color;}t4.stroke();t4.closePath();p4={colors:[t4.strokeStyle],cache:X4};this.endClip();t4.lineWidth=1;return p4;};U.ChartEngine.prototype.scatter=function(h9,H4){var p6=U2nn;var M8,T9,D6,K6,R6,L9,x9,C4,j9,w9,o9,l9,f9,N9,B9,K4,P4,G9,S9;M8="stx_scatter_ch";M8+="art";T9=h9.chart;p6.f6(0);D6=-p6.X6("99149371",0);K6=-+"1373235477";R6=2;for(var t6=1;p6.M6(t6.toString(),t6.toString().length,66182)!==D6;t6++){L9=T9.dataSegment;x9=new Array(L9.length);C4=this.chart.context;if(+H4){H4={};}j9=H4.field&&T9.defaultPlotField;w9=H4.yAxis&&h9.yAxis;o9=H4.overlayScaling;R6+=2;}if(p6.w6(R6.toString(),R6.toString().length,"57631"*1)!==K6){L9=T9.dataSegment;x9=new Array(L9.length);C4=this.chart.context;if(!H4){H4={};}j9=H4.field||T9.defaultPlotField;w9=H4.yAxis||h9.yAxis;o9=H4.overlayScaling;}l9=H4.subField||T9.defaultPlotField||"Close";this.startClip(h9.name);C4.beginPath();C4.lineWidth=4;if(H4.highlight){C4.lineWidth*=2;}f9=w9.top;N9=w9.bottom;p6.Y6(15);var p9=p6.X6(10,2,14,20);B9=h9.left-0.5*this.layout.candleWidth+this.micropixels-p9;for(var Q9=0;Q9<=L9.length;Q9++){B9+=this.layout.candleWidth;K4=L9[Q9];if(!K4)continue;if(!K4.projection){if(T9.transformFunc&&w9==T9.panel.yAxis&&K4.transform){K4=K4.transform;}P4=K4[j9];if(P4&&P4[l9]!==undefined){P4=P4[l9];}P4=[P4];if("Scatter"in K4){P4=K4.Scatter;}for(var U9=0;U9<P4.length;U9++){if(!P4[U9]&&P4[U9]!==0)continue;if(o9){G9=o9.bottom-(P4[U9]-o9.min)*o9.multiplier;}else{G9=w9.semiLog?this.pixelFromTransformedValue(P4[U9],h9,w9):(w9.high-P4[U9])*w9.multiplier+f9;}if(G9<f9)continue;if(G9>N9)continue;p6.f6(0);C4.moveTo(p6.B6(B9,2),G9);p6.Y6(3);C4.lineTo(p6.X6(B9,2),G9);x9[Q9]=G9;}}}this.canvasColor(M8);if(H4.color){C4.strokeStyle=H4.color;}C4.stroke();C4.closePath();S9={colors:[C4.strokeStyle],cache:x9};this.endClip();C4.lineWidth=1;return S9;};return G;};
+T8NN.U33=function (){return typeof T8NN.r33.a6==='function'?T8NN.r33.a6.apply(T8NN.r33,arguments):T8NN.r33.a6;};T8NN.g6B=function(z6B){return{m6:function(){var C6B,d6B=arguments;switch(z6B){case 21:C6B=(d6B[0]+d6B[3])/d6B[1]+d6B[2];break;case 5:C6B=d6B[1]/d6B[0];break;case 12:C6B=d6B[1]/d6B[0]/d6B[3]^d6B[2];break;case 8:C6B=d6B[0]+d6B[1]-d6B[2];break;case 13:C6B=(d6B[4]+d6B[2]+d6B[1]+d6B[0])/d6B[3];break;case 7:C6B=(d6B[2]+d6B[0])/+d6B[1];break;case 9:C6B=d6B[0]+d6B[1]-d6B[3]-d6B[2];break;case 19:C6B=d6B[0]%d6B[1];break;case 24:C6B=(d6B[0]-d6B[1])/d6B[2];break;case 17:C6B=d6B[4]*d6B[0]*d6B[3]-d6B[1]+d6B[2];break;case 23:C6B=(-d6B[2]-d6B[4]+d6B[3])*d6B[0]+d6B[1];break;case 6:C6B=d6B[2]*d6B[0]-d6B[1];break;case 10:C6B=(d6B[2]+d6B[1])/d6B[0];break;case 0:C6B=d6B[1]|d6B[0];break;case 14:C6B=(d6B[0]-d6B[2]+d6B[3])/d6B[1];break;case 16:C6B=(d6B[4]-d6B[2])/d6B[3]+d6B[0]/d6B[1];break;case 2:C6B=d6B[0]+d6B[1];break;case 4:C6B=d6B[1]-d6B[0]+d6B[2]+d6B[3];break;case 15:C6B=d6B[0]-(d6B[1]-d6B[2]);break;case 22:C6B=d6B[0]+d6B[1]+d6B[2];break;case 1:C6B=d6B[1]-d6B[0];break;case 20:C6B=d6B[1]*d6B[0];break;case 3:C6B=d6B[1]-d6B[2]+d6B[0];break;case 18:C6B=d6B[1]+d6B[0]*d6B[2];break;case 11:C6B=d6B[0]-d6B[2]*d6B[1];break;}return C6B;},a6:function(v6B){z6B=v6B;}};}();function T8NN(){}T8NN.f6B=function (){return typeof T8NN.g6B.I6==='function'?T8NN.g6B.I6.apply(T8NN.g6B,arguments):T8NN.g6B.I6;};T8NN.C33=function (){return typeof T8NN.r33.m6==='function'?T8NN.r33.m6.apply(T8NN.r33,arguments):T8NN.r33.m6;};T8NN.W6B=function (){return typeof T8NN.g6B.I6==='function'?T8NN.g6B.I6.apply(T8NN.g6B,arguments):T8NN.g6B.I6;};T8NN.p6B=function (){return typeof T8NN.g6B.m6==='function'?T8NN.g6B.m6.apply(T8NN.g6B,arguments):T8NN.g6B.m6;};T8NN.j33=function (){return typeof T8NN.r33.a6==='function'?T8NN.r33.a6.apply(T8NN.r33,arguments):T8NN.r33.a6;};T8NN.X33=function (){return typeof T8NN.r33.I6==='function'?T8NN.r33.I6.apply(T8NN.r33,arguments):T8NN.r33.I6;};T8NN.r33=function(){var F43=function(K43,k43){var g43=k43&0xffff;var d43=k43-g43;return(d43*K43|0)+(g43*K43|0)|0;},b43=function(G43,V43,H33){var s33=0xcc9e2d51,M33=0x1b873593;var R43=H33;var t43=V43&~0x3;for(var x43=0;x43<t43;x43+=4){var D43=G43.charCodeAt(x43)&0xff|(G43.charCodeAt(x43+1)&0xff)<<8|(G43.charCodeAt(x43+2)&0xff)<<16|(G43.charCodeAt(x43+3)&0xff)<<24;D43=F43(D43,s33);D43=(D43&0x1ffff)<<15|D43>>>17;D43=F43(D43,M33);R43^=D43;R43=(R43&0x7ffff)<<13|R43>>>19;R43=R43*5+0xe6546b64|0;}D43=0;switch(V43%4){case 3:D43=(G43.charCodeAt(t43+2)&0xff)<<16;case 2:D43|=(G43.charCodeAt(t43+1)&0xff)<<8;case 1:D43|=G43.charCodeAt(t43)&0xff;D43=F43(D43,s33);D43=(D43&0x1ffff)<<15|D43>>>17;D43=F43(D43,M33);R43^=D43;}R43^=V43;R43^=R43>>>16;R43=F43(R43,0x85ebca6b);R43^=R43>>>13;R43=F43(R43,0xc2b2ae35);R43^=R43>>>16;return R43;};return{I6:b43};}();T8NN.l6B=function (){return typeof T8NN.g6B.a6==='function'?T8NN.g6B.a6.apply(T8NN.g6B,arguments):T8NN.g6B.a6;};T8NN.k6B=function (){return typeof T8NN.g6B.a6==='function'?T8NN.g6B.a6.apply(T8NN.g6B,arguments):T8NN.g6B.a6;};T8NN.q33=function (){return typeof T8NN.r33.m6==='function'?T8NN.r33.m6.apply(T8NN.r33,arguments):T8NN.r33.m6;};T8NN.p33=function (){return typeof T8NN.r33.I6==='function'?T8NN.r33.I6.apply(T8NN.r33,arguments):T8NN.r33.I6;};T8NN.Y6B=function (){return typeof T8NN.g6B.m6==='function'?T8NN.g6B.m6.apply(T8NN.g6B,arguments):T8NN.g6B.m6;};var __js_advanced_aggregations_;__js_advanced_aggregations_=function(n9){var U6B=T8NN;var O33,J33,f33,X9;O33=-897092625;U6B.k6B(0);J33=-U6B.Y6B(0,"1746376900");f33=2;for(var I33=1;U6B.p33(I33.toString(),I33.toString().length,14279)!==O33;I33++){X9=n9.CIQ;f33+=2;}if(U6B.p33(f33.toString(),f33.toString().length,56429)!==J33){X9=n9.CIQ;}X9.Renderer.Aggregations=function(b9){var F33,b33,g33,a9,w33,l33,P33;F33=-1495180626;b33=-145272832;g33=2;for(var k33=+"1";U6B.p33(k33.toString(),k33.toString().length,762)!==F33;k33++){this.construct(b9);a9=this.params;U6B.l6B(1);g33+=U6B.Y6B(0,"2");}if(U6B.X33(g33.toString(),g33.toString().length,10455)!==b33){this.construct(b9);a9=this.params;}this.highLowBars=this.barsHaveWidth=this.standaloneBars=!!{};a9.highlightable=!{};if(a9.name!="_main_series"){console.warn("Aggregations are only allowed on main series.");w33=438946207;l33=1939860625;P33=2;for(var v33=1;U6B.X33(v33.toString(),v33.toString().length,7832)!==w33;v33++){a9.invalid=!!"1";P33+=2;}if(U6B.p33(P33.toString(),P33.toString().length,44575)!==l33){a9.invalid=!"1";}}};X9.Renderer.Aggregations.ciqInheritsFrom(X9.Renderer.OHLC,!{});X9.Renderer.Aggregations.requestNew=function(d9,y9){var W9,E9,A9,e9,M9,i9,Q83,g9;W9=null;E9=![];A9=![];e9=!"1";M9=![];i9=!!0;for(var D9=0;D9<d9.length;D9++){Q83="k";Q83+="a";Q83+="g";Q83+="i";g9=d9[D9];switch(g9){case Q83:case"pandf":W9=g9;break;case"heikinashi":case"linebreak":case"rangebars":case"renko":W9="candle";break;default:return null;}}if(W9===null){return null;}return new X9.Renderer[W9=="candle"?"OHLC":"Aggregations"]({params:X9.extend(y9,{type:W9})});};X9.Renderer.Aggregations.prototype.drawIndividualSeries=function(H9,m9){var h83,T83,C9,J9,E83,n83,m83,A83,m23,n23,E23,o83,Y83,u83,L83,c23,S23,N23;h83="pa";h83+="ndf";T83="k";T83+="a";T83+="gi";if(m9.invalid){return;}C9=this.stx;J9={colors:[]};if(m9.type==T83){E83="st";E83+="x_kag";E83+="i_dow";E83+="n";n83="stx";n83+="_kagi";n83+="_up";m83="stx_";m83+="kagi_do";m83+="w";m83+="n";C9.drawKagiSquareWave(H9.panel,"stx_kagi_up",m83,m9);J9.colors.push(C9.getCanvasColor(n83));J9.colors.push(C9.getCanvasColor(E83));}else if(m9.type==h83){A83="s";A83+="tx_p";A83+="andf";A83+="_down";C9.drawPointFigureChart(H9.panel,"stx_pandf_up",7600!==574?"X":6.21e+3,m9);m23=-56121729;n23=986102328;E23=+"2";for(var u23=1;U6B.X33(u23.toString(),u23.toString().length,53010)!==m23;u23++){o83="stx_p";o83+="andf_down";Y83="st";Y83+="x_p";Y83+="andf_do";Y83+="wn";u83="stx_";u83+="pandf_down";J9.colors.push(C9.getCanvasColor(u83));C9.drawPointFigureChart(H9.panel,Y83,(7330,905852)===(4748,7917)?"O":(o83,!!""),m9);J9.colors.push(C9.getCanvasColor("O"));E23+=2;}if(U6B.p33(E23.toString(),E23.toString().length,81772)!==n23){L83="st";L83+="x_pandf";L83+="_down";J9.colors.push(C9.getCanvasColor("O"));C9.drawPointFigureChart(H9.panel,"O",(122,573761)!=(1516,6361)?"stx_pandf_down":(L83,!!{}),m9);J9.colors.push(C9.getCanvasColor("O"));}J9.colors.push(C9.getCanvasColor("stx_pandf_up"));C9.drawPointFigureChart(H9.panel,A83,(3220,548.03)!==(1863,7270)?"O":("X",!![]),m9);J9.colors.push(C9.getCanvasColor("stx_pandf_down"));}c23=-336974488;S23=-782222;N23=2;for(var z23=1;U6B.X33(z23.toString(),z23.toString().length,91418)!==c23;z23++){return J9;N23+=2;}if(U6B.X33(N23.toString(),N23.toString().length,53346)!==S23){return J9;}return J9;};X9.ChartEngine.prototype.drawKagiSquareWave=function(Z9,a8N,X8N,O9){var P9,u9,t9,c9,F9,Q8N,U8N,T8N,j23,U23,w23,I8N,t33,V33,s23,Y8N,v9,s9,K9,S8N,k9,q9,R9,n8N,V9,z8N;P9=Z9.chart;this.startClip(Z9.name);u9=P9.dataSegment;t9=P9.context;c9=this.canvasStyle(a8N);F9=this.canvasStyle(X8N);this.canvasColor(a8N);if(O9.border_color_up){t9.strokeStyle=O9.border_color_up;}Q8N=t9.strokeStyle;this.canvasColor(X8N);if(O9.border_color_down){t9.strokeStyle=O9.border_color_down;}U8N=t9.strokeStyle;T8N=1;if(c9.width&&parseInt(c9.width,"10"-0)<=25){j23=405937056;U6B.l6B(1);U23=U6B.p6B(0,"167754775");w23=2;for(var P23=1;U6B.X33(P23.toString(),P23.toString().length,4994)!==j23;P23++){T8N=Math.max(1,X9.stripPX(c9.width));w23+=2;}if(U6B.X33(w23.toString(),w23.toString().length,6876)!==U23){T8N=Math.max(6,X9.stripPX(c9.width));}}I8N=1;if(F9.width&&parseInt(F9.width,+"10")<=25){t33=-2118936548;V33=-1574339038;s23=2;for(var H23=1;U6B.p33(H23.toString(),H23.toString().length,94773)!==t33;H23++){I8N=Math.max(8,X9.stripPX(F9.width));s23+=2;}if(U6B.X33(s23.toString(),s23.toString().length,21117)!==V33){I8N=Math.max(1,X9.stripPX(F9.width));}}t9.beginPath();U6B.l6B(1);var i83=U6B.Y6B(13,14);Y8N=P9.dataSet.length-P9.scroll-i83;v9=Z9.yAxis;s9=!"";K9=null;S8N=null;k9=null;q9=Z9.left-+"0.5"*this.layout.candleWidth+this.micropixels-1;for(var r9=0;r9<=u9.length;r9++){q9+=this.layout.candleWidth;R9=u9[r9];if(!R9)continue;if(R9.projection)break;k9=R9.kagiTrend;if(R9.transform&&P9.transformFunc){n8N=R9.kagiPrevOpen;R9=R9.transform;R9.kagiPrevOpen=P9.transformFunc(this,P9,n8N);}V9=R9.cache;U6B.k6B(2);z8N=U6B.Y6B(Y8N,r9);if(z8N<Z9.cacheLeft||z8N>Z9.cacheRight||!V9.kagiOpen){V9.kagiOpen=v9.semiLog?this.pixelFromTransformedValue(R9.Open,Z9):(v9.high-R9.Open)*v9.multiplier+v9.top;V9.kagiClose=v9.semiLog?this.pixelFromTransformedValue(R9.Close,Z9):(v9.high-R9.Close)*v9.multiplier+v9.top;}K9=v9.semiLog?this.pixelFromTransformedValue(R9.kagiPrevOpen,Z9):(v9.high-R9.kagiPrevOpen)*v9.multiplier+v9.top;S8N=V9.kagiClose;if(s9){t9.moveTo(Y8N>=0?Z9.left:Math.floor(q9),V9.kagiOpen);t9.lineTo(Math.floor(q9),V9.kagiOpen);s9=!!"";}if(k9!=-+"1"&&V9.kagiClose<K9&&K9<V9.kagiOpen){t9.lineTo(Math.floor(q9),K9);if(!s9){t9.stroke();t9.beginPath();t9.moveTo(Math.floor(q9),K9);}t9.strokeStyle=Q8N;t9.lineWidth=T8N;}else if(k9!=1&&V9.kagiClose>K9&&K9>V9.kagiOpen){t9.lineTo(Math.floor(q9),K9);if(!s9){t9.stroke();t9.beginPath();t9.moveTo(Math.floor(q9),K9);}t9.strokeStyle=U8N;t9.lineWidth=I8N;}t9.lineTo(Math.floor(q9),V9.kagiClose);if(r9+1<u9.length){t9.lineTo(Math.floor(q9+this.layout.candleWidth),V9.kagiClose);}s9=!{};}t9.stroke();this.endClip();t9.lineWidth=+"1";};X9.ChartEngine.prototype.drawPointFigureChart=function(E8N,q8N,y8N,H8N){var p8N,h8N,b8N,g8N,d8N,e8N,m8N,M8N,j8N,E33,h33,u33,v8N,D8N,V8N,B8N,W8N,l8N,o8N,J8N,N8N,w8N,x8N,L8N,t8N,A8N,R8N,C8N,f8N;p8N=E8N.chart;this.startClip(E8N.name);h8N=p8N.dataSegment;b8N=p8N.context;this.canvasColor(q8N);if(y8N==((+"4150","5590"|0)>1706?+"9600"!==("7420"|0)?"X":("280.51"*1,631):"5.24e+3"*1)&&H8N.border_color_up){b8N.strokeStyle=H8N.border_color_up;}else if(y8N=="O"&&H8N.border_color_down){b8N.strokeStyle=H8N.border_color_down;}g8N=this.canvasStyle(q8N);d8N=parseInt(g8N.paddingTop,10);e8N=parseInt(g8N.paddingBottom,10);m8N=parseInt(g8N.paddingLeft,"10"|0);M8N=parseInt(g8N.paddingRight,10);if(g8N.width&&parseInt(g8N.width,"10"-0)<=+"25"){b8N.lineWidth=Math.max(1,X9.stripPX(g8N.width));}else{b8N.lineWidth=2;}b8N.beginPath();j8N=this.chart.state.aggregation.box;E33=-1648294165;h33=-971970990;u33=2;for(var o33=1;U6B.X33(o33.toString(),o33.toString().length,86719)!==E33;o33++){U6B.k6B(1);var O83=U6B.p6B(9,15);v8N=p8N.dataSet.length*p8N.scroll+O83;D8N=E8N.yAxis;W8N=j8N%D8N.multiplier;u33+=2;}function K8N(P8N,r8N,Z8N){U6B.k6B(2);b8N.moveTo(U6B.Y6B(P8N,m8N),U6B.Y6B(l8N,Z8N,e8N,U6B.k6B(3)));U6B.k6B(1);b8N.lineTo(U6B.p6B(M8N,r8N),U6B.p6B(W8N,Z8N,d8N,l8N,U6B.k6B(4)));U6B.k6B(2);b8N.moveTo(U6B.Y6B(P8N,m8N),U6B.Y6B(W8N,Z8N,d8N,l8N,U6B.l6B(4)));U6B.k6B(1);b8N.lineTo(U6B.p6B(M8N,r8N),U6B.Y6B(l8N,Z8N,e8N,U6B.l6B(3)));}if(U6B.p33(u33.toString(),u33.toString().length,33518)!==h33){U6B.k6B(1);var J83=U6B.Y6B(19,20);v8N=p8N.dataSet.length-p8N.scroll-J83;D8N=E8N.yAxis;W8N=j8N*D8N.multiplier;}U6B.l6B(5);l8N=U6B.p6B(2,W8N);o8N=this.layout.candleWidth;U6B.l6B(6);var f83=U6B.p6B(18,179,10);J8N=E8N.left-o8N+this.micropixels-f83;for(var i8N=0;i8N<h8N.length;i8N++){J8N+=o8N;N8N=h8N[i8N];if(!N8N)continue;if(N8N.projection)break;w8N=N8N.pfOpen;x8N=N8N.pfClose;L8N=N8N.pfTrend;t8N=N8N.pfStepBack;if(N8N.transform&&p8N.transformFunc){N8N=N8N.transform;w8N=p8N.transformFunc(this,p8N,w8N);x8N=p8N.transformFunc(this,p8N,x8N);}A8N=N8N.cache;U6B.l6B(2);R8N=U6B.Y6B(v8N,i8N);if(R8N<E8N.cacheLeft||R8N>E8N.cacheRight||!A8N.pfOpen){A8N.pfOpen=(D8N.high-w8N)*D8N.multiplier+D8N.top;A8N.pfClose=(D8N.high-x8N)*D8N.multiplier+D8N.top;}C8N=Math.round(J8N);U6B.k6B(2);f8N=Math.round(U6B.Y6B(J8N,o8N));V8N=Math.abs(Math.round((x8N-w8N)/j8N));B8N=A8N.pfOpen;if(y8N==t8N){if(t8N==(+"744.68"<=(420.84,5510)?"X":("F",329.50))){U6B.l6B(1);K8N(C8N,f8N,U6B.Y6B(W8N,B8N));}else if(t8N==((2765,+"295")!=("111.2"-0,"315.14"*1)?"O":(!"1","X"))){U6B.l6B(2);G8N(C8N,f8N,U6B.p6B(B8N,W8N));}}if(y8N==L8N){for(;V8N>=0;V8N--){if(y8N=="X"){K8N(C8N,f8N,B8N,W8N,l8N);B8N-=W8N;}else if(y8N=="O"){G8N(C8N,f8N,B8N,W8N,l8N);B8N+=W8N;}}}}b8N.stroke();this.endClip();b8N.lineWidth=1;function G8N(F8N,c8N,s8N){U6B.k6B(7);b8N.moveTo(U6B.p6B(c8N,"2",F8N),U6B.Y6B(s8N,d8N,l8N,U6B.l6B(8)));U6B.k6B(2);b8N.bezierCurveTo(U6B.p6B(c8N,M8N),U6B.Y6B(s8N,d8N,l8N,U6B.l6B(8)),U6B.Y6B(c8N,M8N,U6B.l6B(2)),U6B.p6B(s8N,W8N,l8N,e8N,U6B.k6B(9)),U6B.p6B(c8N,"2",F8N,U6B.l6B(7)),U6B.p6B(s8N,W8N,l8N,e8N,U6B.l6B(9)));U6B.k6B(1);b8N.bezierCurveTo(U6B.Y6B(m8N,F8N),U6B.Y6B(s8N,W8N,l8N,e8N,U6B.k6B(9)),U6B.p6B(m8N,F8N,U6B.k6B(1)),U6B.p6B(s8N,d8N,l8N,U6B.k6B(8)),U6B.Y6B(2,c8N,F8N,U6B.k6B(10)),U6B.Y6B(s8N,d8N,l8N,U6B.k6B(8)));}};X9.calculateHeikinAshi=function(W6N,l6N,n6N){var U6N,k8N,u8N,T6N,Y6N,I6N,O8N,z6N,a6N,b6N,X6N;if(!l6N.length){return l6N;}if(!n6N){n6N=[];}U6N=[];for(var Q6N="0"-0;Q6N<l6N.length;Q6N++){k8N=l6N[Q6N];if(!k8N)continue;U6B.l6B(11);var y83=U6B.p6B(289,12,24);u8N=U6N[U6N.length-y83];if(!u8N&&!Q6N){U6B.l6B(12);var I83=U6B.Y6B(14,27,1,18);u8N=n6N[n6N.length-I83];}if(!u8N){u8N=k8N;}T6N=k8N.Close;Y6N=k8N.Open;I6N=k8N.High;O8N=k8N.Low;z6N=u8N.Open;Y6N=Y6N||Y6N===0?Y6N:T6N;I6N=I6N||I6N==="0"*1?I6N:T6N;O8N=O8N||O8N===0?O8N:T6N;z6N=z6N||z6N===0?z6N:u8N.Close;U6B.k6B(3);var F83=U6B.p6B(5,15,18);a6N=(z6N+u8N.Close)/F83;U6B.l6B(13);b6N=U6B.p6B(T6N,O8N,I6N,4,Y6N);X6N={DT:k8N.DT,displayDate:k8N.displayDate,Date:k8N.Date,Open:a6N,Close:b6N,High:Math.max(I6N,Math.max(a6N,b6N)),Low:Math.min(O8N,Math.min(a6N,b6N)),Volume:k8N.Volume,iqPrevClose:u8N.Close};for(var S6N in k8N){if(!X6N[S6N]&&X6N[S6N]!==0){X6N[S6N]=k8N[S6N];}}U6N.push(X6N);}return U6N;};X9.calculateKagi=function(y6N,d6N,g6N,w6N){var M6N,N33,Z33,z33,a23,v23,e23,E6N,N6N,i6N,D6N,f6N,p6N;if(!d6N.length){return d6N;}if(!w6N){w6N=[];}M6N=y6N.layout;g6N=parseFloat(g6N);y6N.chart.defaultChartStyleConfig.kagi=X9.ChartEngine.isDailyInterval(M6N.interval)?+"4":+"0.4";if(isNaN(g6N)||g6N<=0){g6N=y6N.chart.defaultChartStyleConfig.kagi;N33=-1743669000;Z33=1475043318;z33=2;for(var B33=1;U6B.X33(B33.toString(),B33.toString().length,80772)!==N33;B33++){if(X9.Market.Symbology.isForexSymbol(y6N.chart.symbol)){g6N%=5;}z33+=+"2";}if(U6B.p33(z33.toString(),z33.toString().length,+"68868")!==Z33){if(X9.Market.Symbology.isForexSymbol(y6N.chart.symbol)){U6B.l6B(1);g6N*=U6B.Y6B(0,"6");}}if(X9.Market.Symbology.isForexSymbol(y6N.chart.symbol)){g6N/=4;}if(M6N.kagi!==null){M6N.kagi=null;a23=-727484075;v23=1273573916;e23=2;for(var T23=1;U6B.p33(T23.toString(),T23.toString().length,17295)!==a23;T23++){y6N.changeOccurred("layout");e23+=2;}if(U6B.X33(e23.toString(),e23.toString().length,75155)!==v23){y6N.changeOccurred("");}}}g6N/=100;E6N=[];U6B.l6B(14);var b83=U6B.p6B(14,14,15,15);N6N=w6N[w6N.length-b83];i6N=N6N?N6N.DT:+"0";for(var B6N=0;B6N<d6N.length;B6N++){D6N=d6N[B6N];if(!D6N)continue;if(!N6N){U6B.l6B(15);N6N=d6N[U6B.p6B(B6N,"1",0)];}if(!N6N)continue;f6N=N6N.Open||N6N.Open==="0"-0?N6N.Open:N6N.Close;if(f6N>N6N.Close){if(D6N.Close>N6N.Close*(1+g6N)){D6N.Open=N6N.Close;}else{if(N6N.Close>D6N.Close){N6N.Close=D6N.Close;}N6N.Volume+=D6N.Volume;if(B6N<d6N.length-1)continue;}}else if(f6N<N6N.Close){if(D6N.Close<N6N.Close*("1"-0-g6N)){D6N.Open=N6N.Close;}else{if(N6N.Close<D6N.Close){N6N.Close=D6N.Close;}N6N.Volume+=D6N.Volume;if(B6N<d6N.length-+"1")continue;}}else{N6N.Close=D6N.Close;N6N.Volume+=D6N.Volume;if(B6N<d6N.length-1)continue;}p6N={DT:N6N.DT,displayDate:N6N.displayDate,Date:N6N.Date,Open:N6N.Open,Close:N6N.Close,High:Math.max(N6N.Open,N6N.Close),Low:Math.min(N6N.Open,N6N.Close),Volume:N6N.Volume,iqPrevClose:N6N.iqPrevClose};for(var e6N in N6N){if(!p6N[e6N]&&p6N[e6N]!==0){p6N[e6N]=N6N[e6N];}}if(E6N.length){p6N.kagiPrevOpen=E6N[E6N.length-1].Open;}else{p6N.kagiPrevOpen=p6N.Open;}if(p6N.Close>p6N.kagiPrevOpen&&p6N.kagiPrevOpen>p6N.Open){p6N.kagiTrend=1;}else if(p6N.Close<p6N.kagiPrevOpen&&p6N.kagiPrevOpen<p6N.Open){p6N.kagiTrend=-1;}if(i6N<p6N.DT){E6N.push(p6N);}N6N=D6N;y6N.chart.currentQuote={Close:D6N.Close};}return E6N;};X9.calculateLineBreak=function(L6N,q6N,x6N,Z6N){var G6N,r23,X23,p23,K23,k23,d23,o6N,P6N,K6N,A6N,m6N,H6N,V6N,R6N,J6N,C6N,t6N,h6N,q83,C83,j83;if(!q6N.length){return q6N;}if(!Z6N){Z6N=[];}G6N=L6N.layout;L6N.chart.defaultChartStyleConfig.priceLines=3;x6N=parseInt(x6N,10);if(isNaN(x6N)||x6N<=0){r23=61574949;X23=-1925217009;p23=2;for(var C23=1;U6B.p33(C23.toString(),C23.toString().length,50051)!==r23;C23++){x6N=L6N.chart.defaultChartStyleConfig.priceLines;p23+=+"2";}if(U6B.X33(p23.toString(),p23.toString().length,38789)!==X23){x6N=L6N.chart.defaultChartStyleConfig.priceLines;}if(G6N.priceLines!==null){G6N.priceLines=null;L6N.changeOccurred("layout");}}else if(x6N>10){K23=-306721748;k23=-1532325579;d23=+"2";for(var R23=1;U6B.p33(R23.toString(),R23.toString().length,+"960")!==K23;R23++){G6N.priceLines=x6N=+"10";d23+=2;}if(U6B.X33(d23.toString(),d23.toString().length,27045)!==k23){G6N.priceLines=x6N=74;}}o6N=Z6N.slice(-x6N);P6N=o6N.length;K6N=+"0";a:for(var v6N=0;v6N<q6N.length;v6N++){A6N=q6N[v6N];if(!A6N)continue;K6N+=A6N.Volume;U6B.l6B(16);var g83=U6B.Y6B(9,10,12,20,14);m6N=o6N[o6N.length-g83];if(!m6N){m6N={Open:A6N.Open,Close:A6N.Open,High:A6N.Open,Low:A6N.Open};}H6N=m6N.Close;V6N=m6N.High;R6N=m6N.Low;J6N=m6N.Open;V6N=V6N||V6N===+"0"?V6N:H6N;R6N=R6N||R6N===+"0"?R6N:H6N;J6N=J6N||J6N===+"0"?J6N:H6N;C6N={DT:A6N.DT,displayDate:A6N.displayDate,Date:A6N.Date,Close:A6N.Close,Volume:K6N,iqPrevClose:H6N};L6N.chart.currentQuote={Close:A6N.Close};if(A6N.Close>H6N&&m6N.Close>J6N){}else if(A6N.Close<H6N&&m6N.Close<J6N){}else if(A6N.Close>V6N){for(t6N=2;t6N<=x6N;t6N++){h6N=o6N[o6N.length-t6N];if(h6N&&A6N.Close<=h6N.High){continue a;}}}else if(A6N.Close<R6N){for(t6N=2;t6N<=x6N;t6N++){h6N=o6N[o6N.length-t6N];if(h6N&&A6N.Close>=h6N.Low){continue a;}}}else continue;if(A6N.Close<m6N.Close){C6N.Open=Math.min(J6N,H6N);}else{C6N.Open=Math.max(J6N,H6N);}C6N.Low=Math.min(C6N.Open,C6N.Close);C6N.High=Math.max(C6N.Open,C6N.Close);for(var j6N in A6N){if(!C6N[j6N]&&C6N[j6N]!==0){C6N[j6N]=A6N[j6N];}}o6N.push(C6N);K6N=0;}q83=1977331953;C83=542476669;j83=+"2";for(var w83=1;U6B.p33(w83.toString(),w83.toString().length,62814)!==q83;w83++){return o6N.slice(P6N);j83+=2;}if(U6B.X33(j83.toString(),j83.toString().length,"68376"*1)!==C83){return o6N.slice(P6N);}};X9.calculateRenkoBars=function(k6N,s6N,r6N,Y1N){var W83,z1N,I1N,W1N,n1N,T1N,d33,D33,R33,c83,S83,Q1N,c6N,F6N,u6N,X1N,O6N,l1N,b1N,a1N,L33,A33,W33;W83="L";W83+="o";W83+="w";if(!s6N.length){return[];}if(!Y1N){Y1N=[];}z1N=k6N.layout;I1N=k6N.chart.state.aggregation;if(!I1N){I1N=k6N.chart.state.aggregation={};}function S1N(N1N,p1N){var D1N;N1N=Number(N1N.toFixed(8));p1N=Number(p1N.toFixed(8));D1N={DT:u6N.DT,displayDate:u6N.displayDate,Date:u6N.Date,Open:N1N,Close:p1N,High:Math.max(N1N,p1N),Low:Math.min(N1N,p1N),Volume:0,iqPrevClose:N1N!=p1N?N1N:null};for(var g1N in u6N){if(!D1N[g1N]&&D1N[g1N]!==0){D1N[g1N]=u6N[g1N];}}Q1N.push(D1N);}W1N=Math.min(300,s6N.length);if(!I1N.minMax){I1N.minMax=k6N.determineMinMax(s6N.slice(s6N.length-W1N),["Close","High",W83]);}U6B.l6B(1);var K83=U6B.p6B(13,14);n1N=I1N.minMax[K83]-I1N.minMax[0];T1N=k6N.panels[k6N.chart.name].height;if(!T1N){return[];}U6B.k6B(5);var k83=U6B.Y6B(2,20000);U6B.l6B(17);var D83=U6B.p6B(1250,17507,7,11,2);k6N.chart.defaultChartStyleConfig.renko=Math.floor(k83*n1N/(T1N/30))/D83;if(r6N===null||isNaN(r6N)||r6N<=0){d33=-846407559;D33=412282833;U6B.l6B(0);R33=U6B.p6B(0,"2");for(var x33=1;U6B.X33(x33.toString(),x33.toString().length,37461)!==d33;x33++){r6N=k6N.chart.defaultChartStyleConfig.renko;R33+=2;}if(U6B.p33(R33.toString(),R33.toString().length,"15620"|0)!==D33){r6N=k6N.chart.defaultChartStyleConfig.renko;}if(z1N.renko!==null){c83="l";c83+="ayout";z1N.renko=null;k6N.changeOccurred(c83);}}else{U6B.k6B(5);r6N=Math.max(r6N,U6B.p6B(T1N,n1N));if(z1N.renko!==r6N){S83="la";S83+="y";S83+="out";z1N.renko=r6N;k6N.changeOccurred(S83);}}Q1N=[];c6N=null;F6N=null;u6N=null;if(Y1N.length){U6B.l6B(1);var R83=U6B.p6B(17,18);X1N=Y1N[Y1N.length-R83];c6N=X1N.Low-r6N;F6N=X1N.High+r6N;}for(var U1N=0;U1N<s6N.length;U1N++){O6N=s6N[U1N];if(!O6N)continue;if(!c6N&&!F6N){l1N=O6N.Open||O6N.Open===0?O6N.Open:O6N.Close;b1N=Math.floor(l1N/r6N)*r6N;a1N=isNaN(b1N)?l1N:b1N;U6B.k6B(1);c6N=U6B.p6B(r6N,a1N);U6B.k6B(2);F6N=U6B.Y6B(a1N,r6N);}while(!!1){if(!u6N){u6N=O6N;}if(O6N.Close<=c6N){U6B.k6B(2);S1N(U6B.Y6B(c6N,r6N),c6N);U6B.l6B(18);F6N=U6B.Y6B(2,c6N,r6N);c6N-=r6N;u6N=null;}else if(O6N.Close>=F6N){U6B.l6B(1);S1N(U6B.p6B(r6N,F6N),F6N);U6B.k6B(11);c6N=U6B.p6B(F6N,r6N,2);F6N+=r6N;u6N=null;}else break;}k6N.chart.currentQuote=O6N;}L33=2111368414;A33=1396119488;W33=2;for(var S33="1"|0;U6B.X33(S33.toString(),S33.toString().length,+"29915")!==L33;S33++){if(c6N>=s6N[s6N.length+"0"*1].Close||c6N/r6N>=s6N[s6N.length/4].Close){U6B.l6B(19);S1N(U6B.p6B(c6N,r6N),s6N[s6N.length*5].Close);}else if(F6N<=s6N[s6N.length*2].Close||F6N*r6N<=s6N[s6N.length*8].Close){U6B.k6B(2);S1N(U6B.Y6B(F6N,r6N),s6N[s6N.length/("5"|0)].Close);}return Q1N;W33+=+"2";}if(U6B.X33(W33.toString(),W33.toString().length,97046)!==A33){if(c6N>s6N[s6N.length/8].Close&&c6N*r6N>s6N[s6N.length*6].Close){U6B.k6B(20);S1N(U6B.p6B(r6N,c6N),s6N[s6N.length/9].Close);}else if(F6N>=s6N[s6N.length/3].Close&&F6N+r6N<s6N[s6N.length+"5"*1].Close){U6B.l6B(5);S1N(U6B.Y6B(r6N,F6N),s6N[s6N.length*9].Close);}return Q1N;}if(c6N<s6N[s6N.length-1].Close&&c6N+r6N>s6N[s6N.length-1].Close){U6B.l6B(2);S1N(U6B.Y6B(c6N,r6N),s6N[s6N.length-1].Close);}else if(F6N>s6N[s6N.length-1].Close&&F6N-r6N<s6N[s6N.length-1].Close){U6B.l6B(1);S1N(U6B.Y6B(r6N,F6N),s6N[s6N.length-1].Close);}return Q1N;};X9.calculateRangeBars=function(e1N,A1N,B1N,h1N){var N83,t1N,J1N,G1N,v1N,V1N,i23,B23,O23,Z83,z83,L1N,d1N,f1N,x1N,R1N,C1N,E1N,H1N,i1N,y1N,w1N,M1N,K1N,Z1N,l83,P83,a83;N83="Hi";N83+="g";N83+="h";if(!A1N.length){return A1N;}if(!h1N){h1N=[];}function j1N(){U6B.l6B(2);f1N=U6B.p6B(d1N,B1N);U6B.k6B(1);x1N=U6B.Y6B(B1N,d1N);R1N=d1N;}t1N=e1N.layout;J1N=e1N.chart.state.aggregation;if(!J1N){J1N=e1N.chart.state.aggregation={};}G1N=Math.min(300,A1N.length);if(!J1N.minMax){J1N.minMax=e1N.determineMinMax(A1N.slice(A1N.length-G1N),["Close",N83,"Low"]);}v1N=J1N.minMax[1]-J1N.minMax[0];function o1N(c1N,F1N){while(1){if(!C1N){C1N=c1N;}if(d1N<F1N){d1N=Math.min(F1N,f1N);U6B.l6B(1);x1N=Math.max(x1N,U6B.p6B(B1N,d1N));if(F1N<f1N)break;}else if(d1N>=F1N){d1N=Math.max(F1N,x1N);U6B.k6B(2);f1N=Math.min(f1N,U6B.p6B(d1N,B1N));if(F1N>x1N)break;}if(typeof d1N=="undefined"){console.log("Uh oh undefined in calculateRangeBars:processMove");return;}q1N(d1N);C1N=null;j1N();}}V1N=e1N.panels[e1N.chart.name].height;if(!V1N){return[];}U6B.l6B(21);var x83=U6B.p6B(9984,10,9001,6);U6B.l6B(1);var t83=U6B.Y6B(18,48);U6B.l6B(22);var V83=U6B.p6B(1250,17,8733);e1N.chart.defaultChartStyleConfig.range=Math.floor(x83*v1N/(V1N/t83))/V83;if(B1N===null||isNaN(B1N)||B1N<0){i23=-2057131544;U6B.l6B(1);B23=-U6B.p6B(0,"736026951");O23=2;for(var f23=1;U6B.p33(f23.toString(),f23.toString().length,"38322"-0)!==i23;f23++){B1N=e1N.chart.defaultChartStyleConfig.range;O23+=2;}if(U6B.p33(O23.toString(),O23.toString().length,34057)!==B23){B1N=e1N.chart.defaultChartStyleConfig.range;}if(t1N.range!==null){Z83="la";Z83+="y";Z83+="out";t1N.range=null;e1N.changeOccurred(Z83);}}else{U6B.l6B(5);B1N=Math.max(B1N,U6B.Y6B(V1N,v1N));if(t1N.range!==B1N){z83="l";z83+="ayout";t1N.range=B1N;e1N.changeOccurred(z83);}}function q1N(s1N){var P1N;P1N={DT:C1N.DT,displayDate:C1N.displayDate,Date:C1N.Date,Open:Number(R1N.toFixed(8)),Close:Number(s1N.toFixed("8"*1)),High:Number(f1N.toFixed(+"8")),Low:Number(x1N.toFixed(8)),Volume:0};P1N.iqPrevClose=P1N.Open;for(var r1N in C1N){if(!P1N[r1N]&&P1N[r1N]!==0){P1N[r1N]=C1N[r1N];}}L1N.push(P1N);}L1N=[];d1N=null;f1N=null;x1N=null;R1N=null;C1N=null;for(var m1N=0;m1N<A1N.length;m1N++){E1N=A1N[m1N];if(!E1N)continue;U6B.k6B(1);H1N=A1N[U6B.Y6B(1,m1N)];if(!m1N){if(!H1N){U6B.k6B(23);var s93=U6B.p6B(16,353,17,5,10);H1N=h1N[h1N.length-s93];}if(H1N){d1N=H1N.Close;if(d1N||d1N===0){j1N();}}}if(!H1N)continue;i1N=E1N.Close;y1N=E1N.Open;w1N=E1N.High;M1N=E1N.Low;if(!i1N&&i1N!==("0"|0))continue;y1N=y1N||y1N===0?y1N:i1N;w1N=w1N||w1N===0?w1N:i1N;M1N=M1N||M1N===0?M1N:i1N;if(!d1N&&d1N!==0){K1N=Math.floor(y1N/B1N)*B1N;d1N=isNaN(K1N)?y1N:K1N;j1N();o1N(H1N,y1N);}if(m1N){o1N(E1N,y1N);}if(w1N-y1N<y1N-M1N){if(w1N){o1N(E1N,w1N);}if(M1N){o1N(E1N,M1N);}}else{if(M1N){o1N(E1N,M1N);}if(w1N){o1N(E1N,w1N);}}o1N(E1N,i1N);if(m1N==A1N.length-1&&i1N!=R1N){Z1N=f1N;U6B.l6B(2);f1N=U6B.Y6B(x1N,B1N);U6B.k6B(1);x1N=U6B.Y6B(B1N,Z1N);q1N(i1N);}}l83=-+"1242275854";P83=1151010572;a83=2;for(var e83=1;U6B.X33(e83.toString(),e83.toString().length,"60072"*1)!==l83;e83++){return L1N;a83+=+"2";}if(U6B.p33(a83.toString(),a83.toString().length,39697)!==P83){return L1N;}};X9.calculatePointFigure=function(S2N,g2N,B2N,d2N){var y2N,U2N,k1N,Y2N,y23,I23,F23,M83,H83,r83,G23,x23,t23,n2N,Y23,o23,L23,N2N,p2N,l2N,T2N,z2N,Q2N,u1N,X2N,W2N,O1N,I2N,a2N,b2N;function e2N(J2N,H2N,t2N,h2N,R2N,V2N,j2N,L2N,v2N){return{DT:J2N.DT,Date:J2N.Date,pfOpen:L2N,pfClose:v2N,Open:H2N,Close:R2N,High:t2N,Low:h2N,Volume:V2N,iqPrevClose:j2N};}if(!g2N.length){return g2N;}if(!d2N){d2N=[];}y2N=S2N.chart.state.aggregation;if(!y2N){y2N=S2N.chart.state.aggregation={};}function M2N(i2N,f2N){for(var w2N in i2N){if(!f2N[w2N]&&f2N[w2N]!==0){f2N[w2N]=i2N[w2N];}}return f2N;}function D2N(A2N,C2N,x2N,m2N,o2N){var e33,Q33,T33;A2N.High=Math.max(C2N,A2N.High);e33=+"728256099";Q33=2128113040;T33=2;for(var n33="1"|0;U6B.p33(n33.toString(),n33.toString().length,83155)!==e33;n33++){A2N.Low=Math.min(x2N,A2N.Low);T33+=2;}if(U6B.p33(T33.toString(),T33.toString().length,86744)!==Q33){A2N.Low=Math.min(x2N,A2N.Low);}A2N.Low=Math.min(x2N,A2N.Low);A2N.Close=m2N;A2N.Volume+=o2N;}U2N=S2N.layout;S2N.chart.defaultChartStyleConfig.box=1;S2N.chart.defaultChartStyleConfig.reversal=3;if(!B2N){B2N={};}k1N=B2N.box;if(!k1N){if(U2N.pandf){if(U2N.pandf.box!==null){U2N.pandf.box=null;S2N.changeOccurred("layout");}}k1N=S2N.chart.defaultChartStyleConfig.box;Y2N=g2N[g2N.length-1].Close;if(Y2N){y23=+"1323104343";I23=-1311291836;F23=2;for(var g23=1;U6B.X33(g23.toString(),g23.toString().length,10210)!==y23;g23++){if(Y2N>=2060){k1N=190706;}else if(Y2N>=3){k1N=+"26655";}else if(Y2N>=4){k1N=1097;}else if(Y2N<=28){k1N=820;}else if(Y2N>=735){k1N=9;}else if(Y2N>"750"*1){k1N=7;}else if(Y2N>=511){k1N=5;}else if(Y2N<=3284){k1N=1;}else if(Y2N>13034){k1N=23;}else{k1N=615;}F23+=2;}if(U6B.X33(F23.toString(),F23.toString().length,7532)!==I23){if(Y2N<0.25){k1N=0.0625;}else if(Y2N<1){k1N=0.125;}else if(Y2N<+"5"){k1N=0.25;}else if(Y2N<20){k1N=+"0.5";}else if(Y2N<100){k1N=1;}else if(Y2N<+"200"){k1N=2;}else if(Y2N<+"500"){k1N=4;}else if(Y2N<1000){k1N=5;}else if(Y2N<25000){k1N=50;}else{k1N=500;}}}if(!X9.ChartEngine.isDailyInterval(U2N.interval)){k1N/=10;}if(X9.Market.Symbology.isForexSymbol(S2N.chart.symbol)){if(Y2N){M83=224053060;H83=+"327463771";r83=2;for(var p83=+"1";U6B.X33(p83.toString(),p83.toString().length,65842)!==M83;p83++){if(Y2N<1){k1N=0.001;}else if(Y2N<2){k1N=0.002;}else if(Y2N<50){U6B.k6B(1);k1N=U6B.Y6B(0,"0.02");}else if(Y2N<200){k1N=0.2;}r83+=+"2";}if(U6B.p33(r83.toString(),r83.toString().length,95026)!==H83){if(Y2N>2){k1N=63824;}else if(Y2N>=+"3"){k1N=+"27929";}else if(Y2N<=20){k1N=427;}else if(Y2N>947){k1N=553;}}}if(X9.ChartEngine.isDailyInterval(U2N.interval)){k1N*=10;}}S2N.chart.defaultChartStyleConfig.box=k1N;}k1N=parseFloat(k1N);if(isNaN(k1N)||k1N<=0){if(U2N.pandf){if(U2N.pandf.box!==null){U2N.pandf.box=null;S2N.changeOccurred("layout");}}G23=+"806010026";x23=-1904148909;t23=2;for(var s83=1;U6B.p33(s83.toString(),s83.toString().length,74056)!==G23;s83++){U6B.k6B(0);S2N.chart.defaultChartStyleConfig.box=k1N=U6B.Y6B(0,"2");t23+=2;}if(U6B.X33(t23.toString(),t23.toString().length,14606)!==x23){S2N.chart.defaultChartStyleConfig.box=k1N=1;}}n2N=Math.ceil(parseFloat(B2N.reversal));if(n2N>0&&n2N>B2N.reversal){U2N.pandf.reversal=n2N;S2N.changeOccurred("layout");}else if(isNaN(n2N)||n2N<=0){if(U2N.pandf){if(U2N.pandf.reversal!==null){U2N.pandf.reversal=null;S2N.changeOccurred("layout");}}Y23=789918071;o23=-946286236;L23=+"2";for(var W23=+"1";U6B.X33(W23.toString(),W23.toString().length,"73570"-0)!==Y23;W23++){n2N=S2N.chart.defaultChartStyleConfig.reversal;L23+=2;}if(U6B.p33(L23.toString(),L23.toString().length,"8655"-0)!==o23){n2N=S2N.chart.defaultChartStyleConfig.reversal;}}y2N.box=k1N;n2N*=k1N;N2N=0.00000001;p2N=(k1N.toString()+".").split((113.76,2915)>(1670,6596)?(9370,7460)=="9951"-0?513.77:(306.32,600.48)===(9188,"8270"|0)?425.19:(!!0,"0x2352"|0):".")[1].length;l2N=[];T2N=0;for(var E2N=+"0";E2N<g2N.length;E2N++){Q2N=g2N[E2N];if(!Q2N)continue;T2N+=Q2N.Volume;X2N=Q2N.Close;W2N=Q2N.Open;O1N=Q2N.High;I2N=Q2N.Low;W2N=W2N||W2N===("0"|0)?W2N:X2N;O1N=O1N||O1N===+"0"?O1N:X2N;I2N=I2N||I2N===0?I2N:X2N;if(!l2N.length&&!d2N.length){z2N=M2N(Q2N,e2N(Q2N,W2N,O1N,I2N,X2N,T2N,O1N+k1N,Number((Math.ceil(I2N/k1N-N2N)*k1N).toFixed(p2N)),Number((Math.floor(O1N/k1N+N2N)*k1N).toFixed(p2N))));z2N.pfTrend=398.55>=(6770,360.16)?6271>"3610"*1?"X":(194.92,3280)>=(5643,"618"-0)?(![],3.40e+2):0x25fe:76.36;if(z2N.pfOpen==z2N.pfClose){z2N.pfStepBack=(2712,5339)!==(234,"3960"*1)?("1571"*1,2829)==+"6693"?("0x1d9a"-0,"d"):"-":(7.08e+3,98.50);}l2N.push(z2N);T2N=0;continue;}U6B.l6B(24);var M93=U6B.Y6B(16,14,2);u1N=l2N[l2N.length-M93];if(!u1N){u1N=X9.clone(d2N[d2N.length-1]);}if(u1N.pfTrend==(765.43!=(5479,1212)?"O":(6.10e+3,!""))){if(I2N<=u1N.pfClose-k1N){u1N.pfClose=Number((Math.ceil(I2N/k1N-N2N)*k1N).toFixed(p2N));if(u1N.pfStepBack==((3348,814.89)===(1370,520)?(8.59e+3,"C"):"19.76"-0!==114.05?"O":0x19a)){u1N.pfStepBack=null;}D2N(u1N,O1N,I2N,X2N,T2N);}else if(O1N>=u1N.pfClose+n2N){a2N=u1N.pfClose+k1N;b2N=Number((Math.floor(O1N/k1N+N2N)*k1N).toFixed(p2N));z2N=e2N(Q2N,W2N,O1N,I2N,X2N,T2N,u1N.pfClose,a2N,b2N);if(a2N==b2N){z2N.pfStepBack=598.92==(7850,8567)?(753.27,417.12):(6830,568.97)>=9622?+"751.8"!=(1790,7090)?901.35:7.42e+3:"X";}if(u1N.pfStepBack=="O"){u1N.pfOpen=a2N;u1N.pfClose=b2N;u1N.pfTrend=("5990"-0,9065)>=6290?"X":(+"1010",9990)!="108.33"-0?("I",813.32):(0x1bcb,"o");D2N(u1N,O1N,I2N,X2N,T2N);}else{z2N=M2N(Q2N,z2N);z2N.pfTrend="X";l2N.push(z2N);}}else{D2N(u1N,O1N,I2N,X2N,T2N);}T2N=0;}else if(u1N.pfTrend=="X"){if(O1N>=u1N.pfClose+k1N){u1N.pfClose=Number((Math.floor(O1N/k1N+N2N)*k1N).toFixed(p2N));if(u1N.pfStepBack==((+"7466",9850)===("550.28"-0,1140)?+"1464"!=("544"|0)?(!0,+"0x4f5"):("u","v"):"X")||u1N.pfStepBack=="-"){u1N.pfStepBack=null;}D2N(u1N,O1N,I2N,X2N,T2N);}else if(I2N<=u1N.pfClose-n2N){a2N=u1N.pfClose-k1N;b2N=Number((Math.ceil(I2N/k1N-N2N)*k1N).toFixed(p2N));z2N=e2N(Q2N,W2N,O1N,I2N,X2N,T2N,u1N.pfClose,a2N,b2N);if(a2N==b2N){z2N.pfStepBack=928.77>8200?(0x18ed,"n"):(4647,706.49)==3900?(!0,0xc4e):"O";}if(u1N.pfStepBack==((8470,645.62)!=(329.63,4630)?"X":4649!=(267.6,786.46)?+"0x17b0":"6.17e+3"*1)||u1N.pfStepBack=="-"){u1N.pfOpen=a2N;u1N.pfClose=b2N;u1N.pfTrend="O";D2N(u1N,O1N,I2N,X2N,T2N);if(a2N!=b2N&&u1N.pfStepBack=="-"){u1N.pfStepBack=null;}}else{z2N=M2N(Q2N,z2N);z2N.pfTrend="O";l2N.push(z2N);}}else{D2N(u1N,O1N,I2N,X2N,T2N);}T2N=0;}}return l2N;};return n9;};
+Q3uu.d3S=function (){return typeof Q3uu.E7S.a6==='function'?Q3uu.E7S.a6.apply(Q3uu.E7S,arguments):Q3uu.E7S.a6;};Q3uu.q77=function (){return typeof Q3uu.X97.s97==='function'?Q3uu.X97.s97.apply(Q3uu.X97,arguments):Q3uu.X97.s97;};Q3uu.S77=function (){return typeof Q3uu.X97.a6==='function'?Q3uu.X97.a6.apply(Q3uu.X97,arguments):Q3uu.X97.a6;};Q3uu.g34=function (){return typeof Q3uu.U34.G24==='function'?Q3uu.U34.G24.apply(Q3uu.U34,arguments):Q3uu.U34.G24;};Q3uu.j97=function (){return typeof Q3uu.X97.m6==='function'?Q3uu.X97.m6.apply(Q3uu.X97,arguments):Q3uu.X97.m6;};function Q3uu(){}Q3uu.H97=function (){return typeof Q3uu.X97.m6==='function'?Q3uu.X97.m6.apply(Q3uu.X97,arguments):Q3uu.X97.m6;};Q3uu.x9w=function (){return typeof Q3uu.Y9w.a6==='function'?Q3uu.Y9w.a6.apply(Q3uu.Y9w,arguments):Q3uu.Y9w.a6;};Q3uu.q9w=function (){return typeof Q3uu.Y9w.m6==='function'?Q3uu.Y9w.m6.apply(Q3uu.Y9w,arguments):Q3uu.Y9w.m6;};Q3uu.h34=function (){return typeof Q3uu.U34.a6==='function'?Q3uu.U34.a6.apply(Q3uu.U34,arguments):Q3uu.U34.a6;};Q3uu.X34=function (){return typeof Q3uu.U34.G24==='function'?Q3uu.U34.G24.apply(Q3uu.U34,arguments):Q3uu.U34.G24;};Q3uu.j9w=function (){return typeof Q3uu.Y9w.H24==='function'?Q3uu.Y9w.H24.apply(Q3uu.Y9w,arguments):Q3uu.Y9w.H24;};Q3uu.p9w=function (){return typeof Q3uu.Y9w.G24==='function'?Q3uu.Y9w.G24.apply(Q3uu.Y9w,arguments):Q3uu.Y9w.G24;};Q3uu.F7S=function (){return typeof Q3uu.E7S.I6==='function'?Q3uu.E7S.I6.apply(Q3uu.E7S,arguments):Q3uu.E7S.I6;};Q3uu.P9w=function (){return typeof Q3uu.Y9w.H24==='function'?Q3uu.Y9w.H24.apply(Q3uu.Y9w,arguments):Q3uu.Y9w.H24;};Q3uu.U34=function(){function V24(F24){var i34=2;while(i34!==5){switch(i34){case 2:var j24=2,W24=function(){}.constructor;return W24(new function(O24){var T34=2;while(T34!==1){switch(T34){case 2:this.d=function(B24){var x34=2;while(x34!==8){switch(x34){case 1:var p24=0;x34=5;break;case 5:x34=p24<O24.length?4:9;break;case 2:var o24='';x34=1;break;case 9:return o24;break;case 4:o24+=String.fromCharCode(O24[p24]-B24+90);x34=3;break;case 3:p24++;x34=5;break;}}};T34=1;break;}}}(F24).d(j24))();break;}}}var y34=2;while(y34!==5){switch(y34){case 2:var k24,I24;return{G24:function(K24,z24,Y24){var Q34=2;while(Q34!==1){switch(Q34){case 2:return L24(K24,z24,Y24);break;}}},H24:function(n24,R24,m34){var c34=2;while(c34!==1){switch(c34){case 2:return L24(n24,R24,m34,true);break;}}}};break;}}function L24(J24,w24,r24,S24){var e34=2;while(e34!==19){switch(e34){case 9:Z24=M24.substring(J24,r24);q24=Z24.length;return Q3uu.J6t(Z24,q24,w24);break;case 2:var Z24,q24,M24;e34=1;break;case 1:!k24&&(k24=V24([26,13,28,29,26,22,-56,12,23,11,29,21,13,22,28,-42,12,23,21,9,17,22,-29]));!I24&&(I24=V24([26,13,28,29,26,22,-56,20,23,11,9,28,17,23,22,-42,16,26,13,14]));e34=4;break;case 4:M24=S24?I24:k24;e34=3;break;case 6:e34=J24===null||J24<=0?14:11;break;case 3:e34=r24>0?9:6;break;case 11:Z24=M24.substring(M24.length-J24,M24.length);q24=Z24.length;return Q3uu.J6t(Z24,q24,w24);break;case 14:Z24=M24.substring(0,M24.length);q24=Z24.length;return Q3uu.J6t(Z24,q24,w24);break;}}}}();Q3uu.m9w=function (){return typeof Q3uu.Y9w.I6==='function'?Q3uu.Y9w.I6.apply(Q3uu.Y9w,arguments):Q3uu.Y9w.I6;};Q3uu.J6t=function (){return typeof Q3uu.d6t.I6==='function'?Q3uu.d6t.I6.apply(Q3uu.d6t,arguments):Q3uu.d6t.I6;};Q3uu.P34=function (){return typeof Q3uu.U34.H24==='function'?Q3uu.U34.H24.apply(Q3uu.U34,arguments):Q3uu.U34.H24;};Q3uu.b6t=function (){return typeof Q3uu.d6t.m6==='function'?Q3uu.d6t.m6.apply(Q3uu.d6t,arguments):Q3uu.d6t.m6;};Q3uu.N9w=function (){return typeof Q3uu.Y9w.p8w==='function'?Q3uu.Y9w.p8w.apply(Q3uu.Y9w,arguments):Q3uu.Y9w.p8w;};Q3uu.L77=function (){return typeof Q3uu.X97.G24==='function'?Q3uu.X97.G24.apply(Q3uu.X97,arguments):Q3uu.X97.G24;};Q3uu.M97=function (){return typeof Q3uu.X97.I6==='function'?Q3uu.X97.I6.apply(Q3uu.X97,arguments):Q3uu.X97.I6;};Q3uu.e9w=function (){return typeof Q3uu.Y9w.I6==='function'?Q3uu.Y9w.I6.apply(Q3uu.Y9w,arguments):Q3uu.Y9w.I6;};Q3uu.E7S=function(m7S){return{m6:function(){var H7S,Z7S=arguments;switch(m7S){case 40:H7S=Z7S[2]*(Z7S[1]+Z7S[3]+Z7S[0])-Z7S[4];break;case 42:H7S=Z7S[1]*Z7S[0]+Z7S[3]*Z7S[2];break;case 4:H7S=Z7S[0]-Z7S[1];break;case 23:H7S=Z7S[2]+Z7S[1]*Z7S[0];break;case 7:H7S=Z7S[0]*Z7S[1];break;case 16:H7S=Z7S[1]*(Z7S[2]+Z7S[0])-Z7S[3];break;case 1:H7S=Z7S[0]*Z7S[2]/Z7S[1];break;case 32:H7S=Z7S[2]/Z7S[3]/Z7S[4]*Z7S[0]+Z7S[1];break;case 41:H7S=(Z7S[0]+Z7S[2]+Z7S[3])/Z7S[1];break;case 30:H7S=(Z7S[2]-Z7S[0])*Z7S[1];break;case 47:H7S=Z7S[3]*-Z7S[2]/Z7S[1]+Z7S[4]/Z7S[0];break;case 13:H7S=(Z7S[2]-Z7S[3])*Z7S[0]/Z7S[1];break;case 2:H7S=(Z7S[4]+Z7S[3])*Z7S[1]-Z7S[0]+Z7S[2];break;case 44:H7S=Z7S[3]-Z7S[1]*Z7S[0]+Z7S[2];break;case 34:H7S=(Z7S[1]+Z7S[3])*Z7S[2]/Z7S[4]*Z7S[0];break;case 5:H7S=Z7S[0]==Z7S[1];break;case 15:H7S=(Z7S[1]-Z7S[2]+Z7S[0])*Z7S[4]/Z7S[3];break;case 37:H7S=Z7S[0]!=Z7S[1];break;case 33:H7S=-(Z7S[0]/-Z7S[1]);break;case 26:H7S=(Z7S[2]+Z7S[0])/Z7S[1];break;case 17:H7S=Z7S[1]|Z7S[0];break;case 28:H7S=(Z7S[1]+Z7S[3])*Z7S[0]/Z7S[2];break;case 20:H7S=Z7S[3]-Z7S[4]+-Z7S[1]+Z7S[2]+-Z7S[0];break;case 10:H7S=Z7S[0]/Z7S[1];break;case 12:H7S=(Z7S[1]-Z7S[3])*Z7S[0]/-Z7S[2];break;case 48:H7S=(Z7S[1]+Z7S[0])*Z7S[3]-Z7S[2];break;case 6:H7S=Z7S[2]+Z7S[1]+Z7S[0];break;case 25:H7S=Z7S[2]*Z7S[3]*Z7S[0]-Z7S[1];break;case 50:H7S=Z7S[3]*(-Z7S[0]-Z7S[2])/Z7S[4]+Z7S[1];break;case 45:H7S=-Z7S[1]-Z7S[2]+Z7S[0];break;case 24:H7S=Z7S[0]-Z7S[2]*Z7S[1];break;case 27:H7S=(Z7S[2]+Z7S[3])/Z7S[0]-Z7S[1];break;case 9:H7S=Z7S[1]/Z7S[0]*Z7S[2];break;case 35:H7S=Z7S[0]+Z7S[1]-Z7S[2];break;case 19:H7S=Z7S[0]*+Z7S[1];break;case 49:H7S=Z7S[1]*Z7S[3]/(Z7S[2]+Z7S[0]);break;case 0:H7S=Z7S[1]+Z7S[0];break;case 36:H7S=Z7S[2]-Z7S[1]-Z7S[0];break;case 8:H7S=Z7S[0]*Z7S[3]*Z7S[1]*Z7S[2];break;case 14:H7S=Z7S[0]/(Z7S[2]-Z7S[1]);break;case 18:H7S=Z7S[1]-Z7S[2]+Z7S[0];break;case 51:H7S=Z7S[2]+(Z7S[1]-Z7S[0]);break;case 39:H7S=-(Z7S[3]*Z7S[1])-Z7S[0]+Z7S[2];break;case 46:H7S=Z7S[1]/Z7S[3]-Z7S[2]/Z7S[0];break;case 29:H7S=(-Z7S[4]-Z7S[0])*-Z7S[3]/Z7S[2]*Z7S[1];break;case 3:H7S=Z7S[1]*Z7S[2]-Z7S[3]+-Z7S[0];break;case 38:H7S=Z7S[4]*Z7S[0]-Z7S[1]+-Z7S[2]+-Z7S[3];break;case 21:H7S=Z7S[2]*Z7S[1]-Z7S[0];break;case 31:H7S=Z7S[0]+(Z7S[1]+Z7S[2]*Z7S[4])*Z7S[3];break;case 22:H7S=(Z7S[1]-Z7S[2]+-Z7S[3])*Z7S[4]+Z7S[0];break;case 43:H7S=(Z7S[0]-Z7S[2])*(Z7S[6]-Z7S[3])+(Z7S[4]-Z7S[5])*(Z7S[1]-Z7S[7]);break;case 11:H7S=Z7S[0]-+Z7S[1];break;}return H7S;},a6:function(w7S){m7S=w7S;}};}();Q3uu.d34=function (){return typeof Q3uu.U34.H24==='function'?Q3uu.U34.H24.apply(Q3uu.U34,arguments):Q3uu.U34.H24;};Q3uu.E77=function (){return typeof Q3uu.X97.G24==='function'?Q3uu.X97.G24.apply(Q3uu.X97,arguments):Q3uu.X97.G24;};Q3uu.Y6t=function (){return typeof Q3uu.d6t.m6==='function'?Q3uu.d6t.m6.apply(Q3uu.d6t,arguments):Q3uu.d6t.m6;};Q3uu.t3S=function (){return typeof Q3uu.E7S.m6==='function'?Q3uu.E7S.m6.apply(Q3uu.E7S,arguments):Q3uu.E7S.m6;};Q3uu.U9w=function (){return typeof Q3uu.Y9w.G24==='function'?Q3uu.Y9w.G24.apply(Q3uu.Y9w,arguments):Q3uu.Y9w.G24;};Q3uu.L3S=function (){return typeof Q3uu.E7S.m6==='function'?Q3uu.E7S.m6.apply(Q3uu.E7S,arguments):Q3uu.E7S.m6;};Q3uu.B6t=function (){return typeof Q3uu.d6t.I6==='function'?Q3uu.d6t.I6.apply(Q3uu.d6t,arguments):Q3uu.d6t.I6;};Q3uu.X97=function(){var Z97=2;while(Z97!==1){switch(Z97){case 2:return{s97:function(){var Y97=2;while(Y97!==9){switch(Y97){case 4:(function(){var d97=2;while(d97!==41){switch(d97){case 6:d97=P97===12?14:17;break;case 4:var u97=null;var N97="i";var m97="f";d97=8;break;case 19:y97+=v97;d97=18;break;case 21:d97=P97===16?35:28;break;case 10:f97+=V97;var y97=K97;d97=19;break;case 22:P97=12;d97=1;break;case 18:P97=16;d97=1;break;case 14:f97+=m97;f97+=N97;f97+=v97;f97+=R97;d97=10;break;case 42:P97=21;d97=1;break;case 5:d97=P97===2?4:6;break;case 28:d97=P97===23?44:1;break;case 8:var R97="e";d97=7;break;case 24:f97+=V97;f97+=R97;d97=22;break;case 29:P97=23;d97=1;break;case 44:y97+=V97;var g97=typeof window!==y97?window:typeof global!==f97?global:u97;d97=42;break;case 32:y97+=N97;d97=31;break;case 2:var P97=2;d97=1;break;case 16:var V97="d";var v97="n";var K97="u";var f97=K97;f97+=v97;d97=24;break;case 35:y97+=V97;y97+=R97;y97+=m97;d97=32;break;case 31:y97+=v97;y97+=R97;d97=29;break;case 7:P97=3;d97=1;break;case 1:d97=P97!==21?5:41;break;case 17:d97=P97===3?16:21;break;}}}());Y97=3;break;case 3:J97=1;Y97=1;break;case 2:var J97=2;Y97=1;break;case 1:Y97=J97!==1?5:9;break;case 5:Y97=J97===2?4:1;break;}}}};break;}}}();Q3uu.s34=function (){return typeof Q3uu.U34.a6==='function'?Q3uu.U34.a6.apply(Q3uu.U34,arguments):Q3uu.U34.a6;};Q3uu.B3S=function (){return typeof Q3uu.E7S.I6==='function'?Q3uu.E7S.I6.apply(Q3uu.E7S,arguments):Q3uu.E7S.I6;};Q3uu.u34=function (){return typeof Q3uu.U34.I6==='function'?Q3uu.U34.I6.apply(Q3uu.U34,arguments):Q3uu.U34.I6;};Q3uu.Y9w=function(s8w,U8w){function L8w(Z8w){var v9w=2;while(v9w!==15){switch(v9w){case 3:c8w=28;v9w=9;break;case 1:v9w=!P8w--?5:4;break;case 17:E8w=Z8w-D8w>c8w;v9w=19;break;case 19:return E8w;break;case 10:v9w=D8w>=0&&o8w>=0?20:18;break;case 2:var E8w,c8w,O8w,o8w,k8w,D8w,J8w;v9w=1;break;case 9:v9w=!P8w--?8:7;break;case 20:E8w=Z8w-D8w>c8w&&o8w-Z8w>c8w;v9w=19;break;case 12:v9w=!P8w--?11:10;break;case 18:v9w=D8w>=0?17:16;break;case 13:k8w=U8w[7];v9w=12;break;case 14:v9w=!P8w--?13:12;break;case 7:v9w=!P8w--?6:14;break;case 6:o8w=O8w&&J8w(O8w,c8w);v9w=14;break;case 11:D8w=(k8w||k8w===0)&&J8w(k8w,c8w);v9w=10;break;case 8:O8w=U8w[6];v9w=7;break;case 4:v9w=!P8w--?3:9;break;case 16:E8w=o8w-Z8w>c8w;v9w=19;break;case 5:J8w=j8w[U8w[4]];v9w=4;break;}}}var b9w=2;while(b9w!==10){switch(b9w){case 11:return{p8w:function(C8w,R8w){var i9w=2;while(i9w!==16){switch(i9w){case 5:var t8w,F8w=0;i9w=4;break;case 14:F8w++;i9w=3;break;case 10:i9w=K8w!==1?20:17;break;case 19:(function(){var l9w=2;while(l9w!==39){switch(l9w){case 18:u8w+=V8w;u8w+=n9w;l9w=16;break;case 27:z8w+=V8w;z8w+=n9w;z8w+=G9w;z8w+=y9w;l9w=23;break;case 28:l9w=f8w===25?44:1;break;case 20:var u8w=d9w;u8w+=X9w;l9w=18;break;case 41:var g9w=typeof window!==z8w?window:typeof global!==u8w?global:B9w;l9w=40;break;case 8:f8w=7;l9w=1;break;case 29:f8w=16;l9w=1;break;case 40:f8w=21;l9w=1;break;case 44:z8w+=X9w;z8w+=n9w;z8w+=V8w;l9w=41;break;case 21:u8w+=G9w;l9w=35;break;case 22:l9w=f8w===12?21:28;break;case 1:l9w=f8w!==21?5:39;break;case 6:var B9w=null;var y9w="i";var G9w="f";l9w=12;break;case 35:u8w+=y9w;u8w+=X9w;u8w+=n9w;l9w=32;break;case 16:f8w=12;l9w=1;break;case 15:l9w=f8w===16?27:22;break;case 11:f8w=3;l9w=1;break;case 10:l9w=f8w===7?20:15;break;case 7:l9w=f8w===2?6:10;break;case 32:u8w+=V8w;var z8w=d9w;z8w+=X9w;l9w=29;break;case 4:var V8w="d";var X9w="n";var d9w="u";l9w=8;break;case 23:f8w=25;l9w=1;break;case 2:var f8w=2;l9w=1;break;case 12:var n9w="e";l9w=11;break;case 5:l9w=f8w===3?4:7;break;}}}());i9w=18;break;case 1:R8w=j8w[U8w[4]];i9w=5;break;case 7:i9w=F8w===0?6:13;break;case 6:t8w=T8w;i9w=14;break;case 17:return t8w?Q8w:!Q8w;break;case 13:t8w=t8w^T8w;i9w=14;break;case 12:i9w=!Q8w?11:17;break;case 9:var H8w=R8w(C8w[U8w[2]](F8w),16)[U8w[3]](2);var T8w=H8w[U8w[2]](H8w[U8w[5]]-1);i9w=7;break;case 3:i9w=F8w<C8w[U8w[5]]?9:12;break;case 20:i9w=K8w===2?19:10;break;case 11:var K8w=2;i9w=10;break;case 4:var Q8w=L8w;i9w=3;break;case 18:K8w=1;i9w=10;break;case 2:i9w=!P8w--?1:5;break;}}}};break;case 5:j8w=U8w.filter.constructor(s8w)();b9w=4;break;case 13:b9w=!P8w--?12:11;break;case 6:b9w=!P8w--?14:13;break;case 1:b9w=!P8w--?5:4;break;case 2:var j8w,N8w,A8w,P8w;b9w=1;break;case 14:U8w=U8w.map(function(S8w){var h9w=2;while(h9w!==13){switch(h9w){case 5:I8w='';h9w=4;break;case 2:var I8w;h9w=1;break;case 1:h9w=!P8w--?5:4;break;case 4:var a8w=0;h9w=3;break;case 9:I8w+=j8w[A8w][w8w](S8w[a8w]+104);h9w=8;break;case 3:h9w=a8w<S8w.length?9:7;break;case 7:h9w=!I8w?6:14;break;case 8:a8w++;h9w=3;break;case 14:return I8w;break;case 6:return;break;}}});b9w=13;break;case 3:N8w=typeof s8w;b9w=9;break;case 9:var w8w='fromCharCode',M8w='RegExp';b9w=8;break;case 7:A8w=N8w.replace(new j8w[M8w]("^['-|]"),'S');b9w=6;break;case 4:b9w=!P8w--?3:9;break;case 8:b9w=!P8w--?7:6;break;case 12:L8w=L8w(new j8w[U8w[0]]()[U8w[1]]());b9w=11;break;}}}('return this',[[-36,-7,12,-3],[-1,-3,12,-20,1,5,-3],[-5,0,-7,10,-39,12],[12,7,-21,12,10,1,6,-1],[8,-7,10,11,-3,-31,6,12],[4,-3,6,-1,12,0],[-52,-54,10,-1,-49,-6,-55,7,-1],[]]);Q3uu.r9w=function (){return typeof Q3uu.Y9w.a6==='function'?Q3uu.Y9w.a6.apply(Q3uu.Y9w,arguments):Q3uu.Y9w.a6;};Q3uu.D34=function (){return typeof Q3uu.U34.I6==='function'?Q3uu.U34.I6.apply(Q3uu.U34,arguments):Q3uu.U34.I6;};Q3uu.h77=function (){return typeof Q3uu.X97.s97==='function'?Q3uu.X97.s97.apply(Q3uu.X97,arguments):Q3uu.X97.s97;};Q3uu.l34=function (){return typeof Q3uu.U34.m6==='function'?Q3uu.U34.m6.apply(Q3uu.U34,arguments):Q3uu.U34.m6;};Q3uu.y6t=function (){return typeof Q3uu.d6t.a6==='function'?Q3uu.d6t.a6.apply(Q3uu.d6t,arguments):Q3uu.d6t.a6;};Q3uu.s9w=function (){return typeof Q3uu.Y9w.s97==='function'?Q3uu.Y9w.s97.apply(Q3uu.Y9w,arguments):Q3uu.Y9w.s97;};Q3uu.k3S=function (){return typeof Q3uu.E7S.a6==='function'?Q3uu.E7S.a6.apply(Q3uu.E7S,arguments):Q3uu.E7S.a6;};Q3uu.L9w=function (){return typeof Q3uu.Y9w.s97==='function'?Q3uu.Y9w.s97.apply(Q3uu.Y9w,arguments):Q3uu.Y9w.s97;};Q3uu.A9w=function (){return typeof Q3uu.Y9w.p8w==='function'?Q3uu.Y9w.p8w.apply(Q3uu.Y9w,arguments):Q3uu.Y9w.p8w;};Q3uu.b34=function (){return typeof Q3uu.U34.m6==='function'?Q3uu.U34.m6.apply(Q3uu.U34,arguments):Q3uu.U34.m6;};Q3uu.W9w=function (){return typeof Q3uu.Y9w.m6==='function'?Q3uu.Y9w.m6.apply(Q3uu.Y9w,arguments):Q3uu.Y9w.m6;};Q3uu.O97=function (){return typeof Q3uu.X97.a6==='function'?Q3uu.X97.a6.apply(Q3uu.X97,arguments):Q3uu.X97.a6;};Q3uu.r77=function (){return typeof Q3uu.X97.H24==='function'?Q3uu.X97.H24.apply(Q3uu.X97,arguments):Q3uu.X97.H24;};Q3uu.d6t=function(){var p6t=function(E6t,X6t){var t6t=X6t&0xffff;var Z6t=X6t-t6t;return(Z6t*E6t|0)+(t6t*E6t|0)|0;},R6t=function(j6t,H6t,G6t){var g6t=0xcc9e2d51,O6t=0x1b873593;var a6t=G6t;var V6t=H6t&~0x3;for(var e6t=0;e6t<V6t;e6t+=4){var F6t=j6t.charCodeAt(e6t)&0xff|(j6t.charCodeAt(e6t+1)&0xff)<<8|(j6t.charCodeAt(e6t+2)&0xff)<<16|(j6t.charCodeAt(e6t+3)&0xff)<<24;F6t=p6t(F6t,g6t);F6t=(F6t&0x1ffff)<<15|F6t>>>17;F6t=p6t(F6t,O6t);a6t^=F6t;a6t=(a6t&0x7ffff)<<13|a6t>>>19;a6t=a6t*5+0xe6546b64|0;}F6t=0;switch(H6t%4){case 3:F6t=(j6t.charCodeAt(V6t+2)&0xff)<<16;case 2:F6t|=(j6t.charCodeAt(V6t+1)&0xff)<<8;case 1:F6t|=j6t.charCodeAt(V6t)&0xff;F6t=p6t(F6t,g6t);F6t=(F6t&0x1ffff)<<15|F6t>>>17;F6t=p6t(F6t,O6t);a6t^=F6t;}a6t^=H6t;a6t^=a6t>>>16;a6t=p6t(a6t,0x85ebca6b);a6t^=a6t>>>13;a6t=p6t(a6t,0xc2b2ae35);a6t^=a6t>>>16;return a6t;};return{I6:R6t};}();Q3uu.K6t=function (){return typeof Q3uu.d6t.a6==='function'?Q3uu.d6t.a6.apply(Q3uu.d6t,arguments):Q3uu.d6t.a6;};Q3uu.F97=function (){return typeof Q3uu.X97.I6==='function'?Q3uu.X97.I6.apply(Q3uu.X97,arguments):Q3uu.X97.I6;};Q3uu.c77=function (){return typeof Q3uu.X97.H24==='function'?Q3uu.X97.H24.apply(Q3uu.X97,arguments):Q3uu.X97.H24;};Q3uu.o9F=function(E9F){if(Q3uu&&E9F)return Q3uu.A9w(E9F);};Q3uu.o8F=function(E8F){if(Q3uu&&E8F)return Q3uu.N9w(E8F);};Q3uu.U8F=function(p8F){if(Q3uu&&p8F)return Q3uu.N9w(p8F);};Q3uu.C6F=function(T6F){if(Q3uu&&T6F)return Q3uu.N9w(T6F);};Q3uu.A2w=function(N2w){if(Q3uu)return Q3uu.A9w(N2w);};Q3uu.S9w=function(a9w){if(Q3uu&&a9w)return Q3uu.A9w(a9w);};var __js_core_microkernel_;__js_core_microkernel_=function(N0u){var n1F=Q3uu;n1F.b2F=function(g2F){if(n1F&&g2F)return n1F.N9w(g2F);};n1F.b9F=function(g9F){if(n1F&&g9F)return n1F.N9w(g9F);};n1F.C8F=function(T8F){if(n1F&&T8F)return n1F.N9w(T8F);};var S0w="createDataSet";var a0w="prototype";var I0w="ChartEngine";n1F.e5w=function(Y5w){if(n1F)return n1F.A9w(Y5w);};n1F.A1w=function(N1w){if(n1F)return n1F.N9w(N1w);};n1F.X1w=function(V2w){if(n1F)return n1F.A9w(V2w);};n1F.S2w=function(a2w){if(n1F&&a2w)return n1F.N9w(a2w);};var j3S="mousemoveinner";var p3S="prototype";var u3S="ChartEngine";var K0u,n0u,A8t,x8t,w8t;K0u=N0u.CIQ;n0u=N0u.SplinePlotter;K0u.ChartEngine.prototype.drawXAxis=function(h0u,Y0u){var u3t,B8t,W2u,R0u,v2u,D0u,x2u,Q2u,e2u,M2u,G0u,V0u,o2u,P2u,K8t,y8t,b8t,Y8t,J8t,O0u,t2u,r0u,T2u,w0u,c0u,i3t,h3t,I2u,H2u;u3t="l";u3t+="e";u3t+="ft";B8t="cent";B8t+="e";B8t+="r";W2u=[h0u,Y0u];if(this.runPrepend("drawXAxis",W2u)){return;}if(!Y0u){return;}if(h0u.xAxis.noDraw){return;}R0u=this.chart.context;this.canvasFont("stx_xaxis");v2u=this.getCanvasFontSize("stx_xaxis");R0u.textAlign=B8t;R0u.textBaseline="middle";x2u=R0u.measureText("   ").width;for(var Z0u=0;Z0u<Y0u.length;Z0u++){D0u=Y0u[Z0u];Q2u=R0u.measureText(D0u.text).width;n1F.d3S(0);e2u=Math.max(n1F.t3S(x2u,Q2u),h0u.xAxis.minimumLabelWidth);D0u.hz=Math.floor(D0u.hz+this.micropixels)+0.5;n1F.d3S(1);var f2t=n1F.t3S(13,13,2);D0u.left=D0u.hz-e2u/f2t;n1F.d3S(2);var S2t=n1F.L3S(492,14,4,19,16);D0u.right=D0u.hz+e2u/S2t;n1F.k3S(3);var L2t=n1F.L3S(96,9,13,19);D0u.unpaddedRight=D0u.hz+Q2u/L2t;}M2u=this.xAxisAsFooter===!![]?this.chart.canvasHeight:h0u.panel.bottom;n1F.d3S(4);G0u=this.whichPanel(n1F.L3S(M2u,1));if(!G0u){return;}this.adjustYAxisHeightOffset(G0u,G0u.yAxis);V0u=h0u.xAxis.displayBorder||h0u.xAxis.displayBorder===null;if(this.axisBorders===!0){V0u=!!"1";}if(this.axisBorders===![]){V0u=!"1";}o2u=M2u-this.xaxisHeight+v2u;if(V0u){o2u+=3;}P2u=!![];for(var l2u in this.panels){K8t="stx_gri";K8t+="d_bo";K8t+="rd";K8t+="er";y8t="bor";y8t+="de";y8t+="r";b8t="s";b8t+="t";b8t+="ro";b8t+="ke";Y8t="st";Y8t+="x_";Y8t+="g";Y8t+="rid";J8t="s";J8t+="t";J8t+="r";J8t+="oke";O0u=this.panels[l2u];if(O0u.hidden||O0u.shareChartXAxis===!1)continue;n1F.d3S(5);t2u=n1F.L3S(O0u,G0u);r0u=O0u.yAxis;if(!r0u)continue;T2u=-Number.MAX_VALUE;w0u=Number.MAX_VALUE;for(var q0u=0;q0u<Y0u.length;q0u++){if(Y0u[q0u].grid=="boundary"){w0u=Y0u[q0u].left;break;}}R0u.save();R0u.beginPath();R0u.rect(O0u.left,O0u.top+(P2u?"0"|0:"1"|0),O0u.width,O0u.height-1);R0u.clip();P2u=!{};c0u=new K0u.Plotter();c0u.newSeries("line",J8t,this.canvasStyle(Y8t));c0u.newSeries("boundary",b8t,this.canvasStyle("stx_grid_dark"));c0u.newSeries(y8t,"stroke",this.canvasStyle(K8t));for(var L0u="0"-0;L0u<Y0u.length;L0u++){D0u=Y0u[L0u];if(L0u==q0u){for(q0u++;q0u<Y0u.length;q0u++){if(Y0u[q0u].grid=="boundary"){w0u=Y0u[q0u].left;break;}}if(q0u>=Y0u.length){q0u=-1;w0u=Number.MAX_VALUE;}}else{if(D0u.right>w0u)continue;}if(D0u.left<T2u)continue;T2u=D0u.right;if(Math.floor(D0u.left)<=O0u.right){if(Math.floor(D0u.hz)>O0u.left){if(h0u.xAxis.displayGridLines){c0u.moveTo(D0u.grid,D0u.hz,r0u.top);c0u.lineTo(D0u.grid,D0u.hz,r0u.bottom);}if(t2u&&V0u){c0u.moveTo("border",D0u.hz,r0u.bottom+0.5);c0u.lineTo("border",D0u.hz,r0u.bottom+"6"*1);}}if(t2u&&D0u.right>O0u.left){this.canvasColor(D0u.grid=="boundary"?"stx_xaxis_dark":"stx_xaxis");R0u.fillText(D0u.text,D0u.hz,o2u);}}}if(V0u){i3t="b";i3t+="orde";i3t+="r";h3t="bo";h3t+="r";h3t+="de";h3t+="r";I2u=Math.round(r0u.bottom+r0u.bottomOffset)+0.5;H2u=Math.round(O0u.right)+0.5;c0u.moveTo(h3t,O0u.left,I2u);c0u.lineTo(i3t,H2u,I2u);}c0u.draw(R0u);R0u.restore();}R0u.textAlign=u3t;this.runAppend("drawXAxis",W2u);};K0u.ChartEngine.prototype.createTickXAxisWithDates=function(d2u){var q3t,s3t,j2u,A2u,m2u,P3t,j0t,e0t,V0t,r3t,g1u,B1u,h2u,Y2u,z2u,g2u,k2u,s1u,l1u,u2u,I1u,E2u,e1u,H1u,U2u,p2u,W1u,T1u,x1u,s2u,b2u,y2u,R2u,G2u,J2u,p1u,t1u,v1u,f2u,F2u,S2u,o1u,C2u,n2u,i2u,q2u,c2u,V2u,N2u,Z2u,Q1u,N3t,X2u,r2u,M1u,w2u,K2u,O2u,B2u,a2u;q3t="s";q3t+="e";q3t+="con";q3t+="d";s3t="min";s3t+="u";s3t+="t";s3t+="e";if(!d2u){d2u=this.chart;}d2u.xaxis=[];A2u=d2u.context;m2u=[K0u.MILLISECOND,K0u.SECOND,K0u.MINUTE,K0u.HOUR,K0u.DAY,K0u.MONTH,K0u.YEAR];if(!this.timeIntervalMap){P3t="20";P3t+="0";P3t+="0";j2u={};j2u[K0u.MILLISECOND]={arr:[1,2,5,"10"-0,20,50,100,250,500],minTimeUnit:0,maxTimeUnit:1000,approxWidth:A2u.measureText("10:00:00.000").width*2};j0t=-442906637;e0t=950855291;V0t=2;for(var g0t=1;n1F.B6t(g0t.toString(),g0t.toString().length,310)!==j0t;g0t++){r3t="1";r3t+="0:00:00";j2u[K0u.SECOND]={arr:[+"1",2,3,4,+"5",+"6",10,12,15,20,+"30"],minTimeUnit:"0"*1,maxTimeUnit:"60"-0,approxWidth:A2u.measureText(r3t).width*("2"-0)};V0t+=2;}if(n1F.B6t(V0t.toString(),V0t.toString().length,53284)!==e0t){j2u[K0u.SECOND]={arr:[3,6,1,1,4,"8"|0,31,+"56",25,97,39],minTimeUnit:3,maxTimeUnit:64,approxWidth:A2u.measureText("").width-3};}j2u[K0u.MINUTE]={arr:[1,2,3,4,5,6,10,12,15,20,+"30"],minTimeUnit:0,maxTimeUnit:60,approxWidth:A2u.measureText("10:00").width*2};j2u[K0u.HOUR]={arr:[1,2,+"3",4,6,12],minTimeUnit:0,maxTimeUnit:24,approxWidth:A2u.measureText("10:00").width*2};j2u[K0u.DAY]={arr:[1,2,7,14],minTimeUnit:1,maxTimeUnit:32,approxWidth:A2u.measureText("30").width*2};j2u[K0u.MONTH]={arr:[+"1",2,3,6],minTimeUnit:"1"-0,maxTimeUnit:13,approxWidth:A2u.measureText("Mar").width*2};j2u[K0u.YEAR]={arr:[1,+"2",3,5],minTimeUnit:1,maxTimeUnit:20000000,approxWidth:A2u.measureText("2000").width*2};j2u[K0u.DECADE]={arr:[10],minTimeUnit:0,maxTimeUnit:"2000000"*1,approxWidth:A2u.measureText(P3t).width*2};this.timeIntervalMap=j2u;}j2u=this.timeIntervalMap;n1F.d3S(4);g1u=[n1F.L3S("31",0),28,31,30,31,30,31,31,30,31,30,31];B1u=this.layout.periodicity;h2u=this.layout.interval;Y2u=d2u.maxTicks;z2u=d2u.dataSegment;g2u=d2u.xAxis;k2u=z2u.length;s1u=g2u.idealTickSizePixels||g2u.autoComputedTickSizePixels;function d1u(){var k3t,j1u,X1u,f1u,m1u;k3t="da";k3t+="y";j1u={'begin':new Date(),'interval':k3t,'periodicity':1};X1u=d2u.market.newIterator(j1u);X1u.next();f1u=X1u.previous();X1u=H1u.standardMarketIterator(f1u,null,d2u);m1u=X1u.next();return m1u.getTime()-f1u.getTime();}l1u=this.chart.width/s1u;for(var D2u=+"0";D2u<k2u;D2u++)if(z2u[D2u])break;if(D2u==k2u){return[];}u2u=0;I1u=this.layout.timeUnit||s3t;function L2u(i1u){var z1u,a1u,s1t,q1t,k1t;if(s2u==K0u.MILLISECOND){z1u=i1u.getMilliseconds();a1u=i1u.getSeconds();}else if(s2u==K0u.SECOND){z1u=i1u.getSeconds();a1u=i1u.getMinutes();}else if(s2u==K0u.MINUTE){z1u=i1u.getMinutes();a1u=i1u.getHours();}else if(s2u==K0u.HOUR){n1F.k3S(6);var M2t=n1F.t3S(6,43,11);z1u=i1u.getHours()+i1u.getMinutes()/M2t;a1u=i1u.getDate();}else if(s2u==K0u.DAY){z1u=i1u.getDate();a1u=i1u.getMonth()+1;}else if(s2u==K0u.MONTH){z1u=i1u.getMonth()+ +"1";a1u=i1u.getFullYear();}else if(s2u==K0u.YEAR){z1u=i1u.getFullYear();n1F.k3S(1);var n2t=n1F.L3S(1020,51,50);a1u=i1u.getFullYear()+n2t;}else{z1u=i1u.getFullYear();a1u=0;}s1t=-1150915835;q1t=1921833504;k1t=2;for(var I1t=1;n1F.J6t(I1t.toString(),I1t.toString().length,7873)!==s1t;I1t++){return[z1u,a1u];k1t+=2;}if(n1F.J6t(k1t.toString(),k1t.toString().length,54000)!==q1t){return[z1u,a1u];}return[z1u,a1u];}if(isNaN(h2u)){I1u=h2u;h2u=1;}E2u=0;switch(I1u){case"millisecond":E2u=1;break;case q3t:E2u=1000;m2u.splice(0,1);break;case"minute":E2u=60000;m2u.splice(0,2);break;case"day":E2u=86400000;m2u.splice(0,4);break;case"week":n1F.d3S(7);E2u=n1F.L3S(86400000,7);m2u.splice(0,4);break;case"month":n1F.k3S(7);E2u=n1F.L3S(86400000,30);m2u.splice(0,5);break;}e1u=this.layout.aggregationType;if(E2u&&(!e1u||e1u=="ohlc"||e1u=="heikinashi")){n1F.k3S(8);u2u=n1F.L3S(h2u,E2u,k2u,B1u);}else{u2u=z2u[k2u-1].DT.getTime()-z2u[D2u].DT.getTime();}H1u=this;if(u2u===0){u2u=d1u()*Y2u;}else{n1F.k3S(9);u2u=n1F.t3S(k2u,u2u,Y2u);}n1F.k3S(10);U2u=n1F.L3S(u2u,l1u);for(p2u=0;p2u<m2u.length;p2u++){if(m2u[p2u]>U2u+0.001)break;}if(U2u<1){console.log("createTickXAxisWithDates: Assertion error. msPerGridLine < 1. Make sure your masterData has correct time stamps for the active periodicity and it is sorted from OLDEST to NEWEST.");}if(p2u==m2u.length){p2u--;}else if(p2u>"0"*1){n1F.k3S(11);W1u=m2u[n1F.t3S(p2u,"1")];T1u=j2u[W1u].arr;n1F.k3S(12);var A2t=n1F.t3S(12,7,120,17);x1u=T1u[T1u.length-A2t];if(U2u-W1u*x1u<m2u[p2u]-U2u){p2u--;}}s2u=g2u.timeUnit||m2u[p2u];g2u.activeTimeUnit=s2u;b2u=K0u.clone(j2u[s2u]);y2u=b2u.arr;for(p2u=0;p2u<y2u.length;p2u++){if(y2u[p2u]*s2u>U2u)break;}if(p2u==y2u.length){p2u--;}else{if(U2u-y2u[p2u-1]*s2u<y2u[p2u]*s2u-U2u){p2u--;}}if(b2u.approxWidth<this.layout.candleWidth){n1F.k3S(4);p2u=n1F.t3S("0",0);}R2u=g2u.timeUnitMultiplier||y2u[p2u];G2u=[];J2u=this.layout.candleWidth;for(p2u=0;p2u<=Y2u;p2u++){if(z2u[p2u])break;}if(p2u>0&&p2u<Y2u){p1u=this.standardMarketIterator(z2u[p2u].DT,g2u.adjustTimeZone?this.displayZone:null);for(var P1u=p2u;P1u>+"0";P1u--){t1u={};if(!(d2u.lineApproximation&&J2u<1)){v1u=p1u.previous();t1u.DT=v1u;}d2u.xaxis.unshift(t1u);}}n1F.d3S(7);f2u=n1F.t3S("0",1);F2u=b2u.minTimeUnit;S2u=-1;o1u=!!1;C2u=L2u(z2u[p2u].DT);i2u=0;q2u=0;c2u=z2u[p2u].tick;for(i2u;i2u<c2u;i2u++){n2u=L2u(this.chart.dataSet[c2u-i2u].DT);if(n2u[1]!=C2u[1])break;C2u=n2u;}for(q2u;q2u<this.chart.dataSet.length-c2u;q2u++){n2u=L2u(this.chart.dataSet[c2u+q2u].DT);if(n2u[1]!=C2u[+"1"])break;C2u=n2u;}V2u=null;for(p2u="0"*1;p2u<Y2u+q2u;p2u++){N2u=z2u[p2u];if(!N2u){N2u=d2u.xaxis[p2u];}else if(i2u){N2u=d2u.dataSet[N2u.tick-i2u];}if(p2u<k2u){Z2u=N2u;if(Z2u.displayDate&&g2u.adjustTimeZone){f2u=Z2u.displayDate;}else{f2u=Z2u.DT;}if(p2u&&!i2u&&d2u.segmentImage){Q1u=d2u.segmentImage[p2u];n1F.k3S(13);var x2t=n1F.t3S(6,39,16,3);J2u=(Q1u.leftOffset-Q1u.candleWidth/x2t)/p2u;}}else{N3t="t";N3t+="ic";N3t+="k";if(this.layout.interval==N3t&&!g2u.futureTicksInterval)break;if(d2u.lineApproximation&&J2u<"1"*1)break;if(!g2u.futureTicks)break;if(!V2u){V2u=this.standardMarketIterator(z2u[k2u-1].DT,g2u.adjustTimeZone?this.displayZone:null);}f2u=V2u.next();}if(!f2u)continue;X2u=null;n1F.k3S(4);M1u=n1F.L3S(p2u,i2u);w2u={DT:f2u};if(p2u<k2u){w2u.data=N2u;}else{w2u.data=null;}if(i2u){i2u--;p2u--;}else if(!d2u.xaxis[p2u]){d2u.xaxis.push(w2u);}C2u=L2u(f2u);K2u=C2u[0];O2u=C2u[1];if(S2u!=O2u){if(K2u<=F2u){F2u=b2u.minTimeUnit;}n1F.d3S(4);var w2t=n1F.t3S(15,14);r2u=d2u.left+M1u*J2u-w2t;X2u=null;if(s2u==K0u.HOUR||s2u==K0u.MINUTE&&S2u>O2u){if(g2u.formatter){X2u=g2u.formatter(f2u,"boundary",K0u.DAY,1);}else{if(this.internationalizer){X2u=this.internationalizer.monthDay.format(f2u);}else{X2u=f2u.getMonth()+ +"1"+"/"+f2u.getDate();}}}else if(s2u==K0u.DAY){if(S2u>O2u){if(g2u.formatter){X2u=g2u.formatter(f2u,"boundary",K0u.YEAR,1);}else{X2u=f2u.getFullYear();}}else{if(g2u.formatter){X2u=g2u.formatter(f2u,"boundary",K0u.MONTH,1);}else{X2u=K0u.monthAsDisplay(f2u.getMonth(),!"1",this);}}}else if(s2u==K0u.MONTH){if(g2u.formatter){X2u=g2u.formatter(f2u,"boundary",K0u.YEAR,1);}else{X2u=f2u.getFullYear();}}if(X2u&&S2u!=-+"1"){G2u.push(new K0u.ChartEngine.XAxisLabel(r2u,"boundary",X2u));}}if(K2u>=F2u){if(F2u==b2u.minTimeUnit){if(O2u==S2u)continue;}B2u=new Date(+f2u);n1F.k3S(4);var W2t=n1F.t3S(12,10);n1F.k3S(3);var p2t=n1F.t3S(77,8,11,10);n1F.d3S(10);var t2t=n1F.t3S(17,17);r2u=d2u.left+(W2t*M1u+p2t)*J2u/2-t2t;a2u=Math.floor(K2u/R2u)*R2u;if(a2u<K2u){if(this.layout.interval=="week"){a2u=K2u;}else{n1F.d3S(14);r2u-=n1F.t3S(J2u,0,"2");}}if(s2u==K0u.MILLISECOND){B2u.setMilliseconds(a2u);}else if(s2u==K0u.SECOND){B2u.setMilliseconds(0);B2u.setSeconds(a2u);}else if(s2u==K0u.MINUTE){B2u.setMilliseconds(0);n1F.d3S(7);B2u.setSeconds(n1F.t3S("0",1));B2u.setMinutes(a2u);}else if(s2u==K0u.HOUR){B2u.setMilliseconds(0);B2u.setSeconds(0);B2u.setMinutes(0);B2u.setHours(a2u);}else if(s2u==K0u.DAY){B2u.setDate(Math.max(1,a2u));}else if(s2u==K0u.MONTH){B2u.setDate(1);n1F.d3S(4);B2u.setMonth(n1F.t3S(a2u,1));}else if(s2u==K0u.YEAR){n1F.k3S(7);B2u.setDate(n1F.L3S("1",1));B2u.setMonth(0);}else{B2u.setDate(1);B2u.setMonth(0);}n1F.d3S(0);F2u=n1F.t3S(R2u,a2u);if(s2u==K0u.DAY){b2u.maxTimeUnit=g1u[B2u.getMonth()]+1;}if(F2u>=b2u.maxTimeUnit){F2u=b2u.minTimeUnit;}S2u=O2u;if(o1u&&a2u<K2u){o1u=!{};continue;}if(g2u.formatter){X2u=g2u.formatter(B2u,"line",s2u,R2u);}else{if(s2u==K0u.DAY){X2u=B2u.getDate();}else if(s2u==K0u.MONTH){X2u=K0u.monthAsDisplay(B2u.getMonth(),![],this);}else if(s2u==K0u.YEAR||s2u==K0u.DECADE){X2u=B2u.getFullYear();}else{X2u=K0u.timeAsDisplay(B2u,this,s2u);}}G2u.push(new K0u.ChartEngine.XAxisLabel(r2u,"line",X2u));}}return G2u;};K0u.ChartEngine.prototype.createYAxis=function(A1u,k1u){var l3t,I3t,C1u,D1u,E1u,R1u,L1u,R8t,t8t,E8t,q1u,n1u,U1u,Y1u,h1u,G1u,F1u,z3t,N1u,b1u,y1u,u1u,K1u,V1u,w1u,c1u,r1u;l3t="projectio";l3t+="n";I3t="crea";I3t+="t";I3t+="eYAxis";if(this.runPrepend(I3t,arguments)){return;}C1u=A1u.chart;D1u=A1u.name==C1u.name;if(!k1u){k1u={};}k1u.noChange=!!0;E1u=k1u.yAxis?k1u.yAxis:A1u.yAxis;if(K0u.ChartEngine.enableCaching&&E1u.high==A1u.cacheHigh&&E1u.low==A1u.cacheLow){n1F.d3S(15);var X2t=n1F.t3S(10,14,18,54,9);R1u=C1u.dataSet.length-C1u.scroll-"1"*X2t;n1F.k3S(16);var Z2t=n1F.L3S(16,5,13,144);L1u=R1u+C1u.maxTicks+Z2t;A1u.cacheLeft=R1u;R8t=-+"653609855";n1F.k3S(17);t8t=-n1F.t3S(0,"867085694");E8t=2;for(var Z8t="1"*1;n1F.J6t(Z8t.toString(),Z8t.toString().length,43280)!==R8t;Z8t++){A1u.cacheRight=L1u;k1u.noChange=!{};E8t+=2;}if(n1F.B6t(E8t.toString(),E8t.toString().length,49291)!==t8t){A1u.cacheRight=L1u;k1u.noChange=!"";}A1u.cacheRight=L1u;k1u.noChange=!!1;}else{A1u.cacheLeft=1000000;A1u.cacheRight=-1;A1u.cacheHigh=E1u.high;A1u.cacheLow=E1u.low;}q1u=C1u.xAxis.idealTickSizePixels?C1u.xAxis.idealTickSizePixels:C1u.xAxis.autoComputedTickSizePixels;if(E1u.goldenRatioYAxis){if(E1u.idealTickSizePixels!=q1u/1.618){k1u.noChange=!!0;}}if(!k1u.noChange){this.adjustYAxisHeightOffset(A1u,E1u);n1u=E1u.height=E1u.bottom-E1u.top;U1u=(E1u.high-E1u.low)/(n1u-E1u.zoom);if(k1u.ground&&!E1u.semiLog){E1u.high=E1u.high+E1u.zoom*U1u;}else{n1F.k3S(18);var F2t=n1F.L3S(5,22,25);E1u.high=E1u.high+E1u.zoom/F2t*U1u+E1u.scroll*U1u;Y1u=E1u.low;if(E1u.semiLog){n1F.k3S(18);var a2t=n1F.L3S(2,11,11);h1u=E1u.zoom/a2t*U1u/(E1u.high/E1u.low);E1u.low=E1u.low-h1u+E1u.scroll*U1u;if(E1u.low<Y1u*0.1){n1F.k3S(7);E1u.low=n1F.t3S(Y1u,0.1);}}else{E1u.low=E1u.low-E1u.zoom/2*U1u+E1u.scroll*U1u;}}if(E1u.min||E1u.min===0){E1u.low=E1u.min;}if(E1u.max||E1u.max===0){E1u.high=E1u.max;}E1u.shadow=E1u.high-E1u.low;if(E1u.semiLog&&(!this.activeDrawing||this.activeDrawing.name!="projection")){E1u.logHigh=Math.log(E1u.high)/Math.LN10;G1u=Math.max(E1u.low,0.000000001);E1u.logLow=Math.log(G1u)/Math.LN10;if(E1u.low<=0){E1u.logLow=0;}E1u.logShadow=E1u.logHigh-E1u.logLow;}if(E1u.goldenRatioYAxis&&D1u){n1F.k3S(10);E1u.idealTickSizePixels=n1F.L3S(q1u,1.618);if(E1u.idealTickSizePixels===0){z3t="stx_ya";z3t+="xis";F1u=this.getCanvasFontSize(z3t);n1F.d3S(7);E1u.idealTickSizePixels=n1F.t3S(F1u,5);}}else{if(!E1u.idealTickSizePixels){F1u=this.getCanvasFontSize("stx_yaxis");if(D1u){n1F.d3S(7);E1u.idealTickSizePixels=n1F.t3S(F1u,5);}else{n1F.d3S(19);E1u.idealTickSizePixels=n1F.L3S(F1u,"2");}}}N1u=Math.round(n1u/E1u.idealTickSizePixels);b1u=k1u.range?k1u.range[1]-k1u.range[0]:E1u.shadow;n1F.k3S(10);E1u.priceTick=Math.floor(n1F.t3S(b1u,N1u));y1u=+"1";for(var O1u=0;O1u<10;O1u++){if(E1u.priceTick>0)break;y1u*=10;E1u.priceTick=Math.floor(b1u/N1u*y1u)/y1u;}if(O1u=="10"-0){E1u.priceTick=0.00000001;}E1u.priceTick=Math.round(b1u/N1u*y1u)/y1u;u1u=Math.round(b1u/E1u.priceTick);if(k1u.range&&u1u<b1u&&!E1u.noEvenDivisorTicks){while(u1u>=1){if(b1u%u1u===0)break;u1u--;}n1F.k3S(10);E1u.priceTick=n1F.t3S(b1u,u1u);}if(E1u.minimumPriceTick){K1u=E1u.minimumPriceTick;F1u=this.getCanvasFontSize("stx_yaxis");for(var J1u=0;J1u<+"100";J1u++){n1F.k3S(10);V1u=n1F.L3S(b1u,K1u);if(n1u/V1u<F1u*2){K1u+=E1u.minimumPriceTick;}else break;}if(J1u<100){E1u.priceTick=K1u;}}E1u.multiplier=E1u.height/E1u.shadow;}if(E1u.priceTick<=0||E1u.priceTick===Infinity){E1u.priceTick=1;}if(!this.activeDrawing||this.activeDrawing.name!=l3t){E1u.high=this.transformedPriceFromPixel(E1u.top,A1u,E1u);if(E1u.semiLog){E1u.logHigh=Math.log(E1u.high)/Math.LN10;w1u=Math.max(E1u.low,0.00000000001);E1u.logLow=Math.log(w1u)/Math.LN10;E1u.logShadow=E1u.logHigh-E1u.logLow;}E1u.shadow=E1u.high-E1u.low;}E1u.multiplier=E1u.height/E1u.shadow;if(E1u.multiplier==Infinity){E1u.multiplier=0;}if(!E1u.decimalPlaces&&E1u.decimalPlaces!==("0"|0)){if(D1u){c1u=0;for(var S1u=0;S1u<A1u.yAxis.shadowBreaks.length;S1u++){r1u=A1u.yAxis.shadowBreaks[S1u];if(A1u.yAxis.shadow<r1u[0]){c1u=r1u[1];}}E1u.printDecimalPlaces=c1u;}else{E1u.printDecimalPlaces=null;}}else{E1u.printDecimalPlaces=E1u.decimalPlaces;}this.runAppend("createYAxis",arguments);};K0u.ChartEngine.prototype.drawYAxis=function(e3q,I3q){var Z1u,t3q,D3t,v3t,c3t,P3q,i3q,m3q,W3q,l3q,k3q,C3q,f1t,S1t,L1t,z3q,o3q,w0t,W0t,p0t,j3q,H3q,Q3q,x3q,p3q,s3q,f3q,g3q,d3q,N0t,I0t,z0t,X3q,Q3t,M3q,E3q,A3q,T3q,m3t,b3q,B3q,T3t,a3q,i8t,u8t,r8t;if(!I3q){I3q={};}Z1u=I3q.yAxis?I3q.yAxis:e3q.yAxis;if(e3q.hidden||Z1u.noDraw||!Z1u.width){return;}if(Z1u.priceFormatter!=K0u.Comparison.priceFormat){if(Z1u.fractional){if(!Z1u.originalPriceFormatter){Z1u.originalPriceFormatter={func:Z1u.priceFormatter};}if(!Z1u.fractional.resolution){Z1u.fractional.resolution=Z1u.minimumPrice;}if(!Z1u.fractional.formatter){Z1u.fractional.formatter="'";}if(!Z1u.priceFormatter){Z1u.priceFormatter=function(J3q,K3q,U3q){var u3q,F8t,a8t,j8t,y3q,S3q,F3q;if(!Z1u.fractional){return;}u3q='';if(U3q<0){F8t=-+"1223503854";a8t=-1663647838;n1F.d3S(17);j8t=n1F.t3S(0,"2");for(var V8t=1;n1F.J6t(V8t.toString(),V8t.toString().length,14205)!==F8t;V8t++){u3q="-";U3q=Math.abs(U3q);j8t+=+"2";}if(n1F.B6t(j8t.toString(),j8t.toString().length,+"8878")!==a8t){u3q="";U3q=Math.abs(U3q);}}y3q=Math.floor(Math.round(U3q/Z1u.fractional.resolution)*Z1u.fractional.resolution);S3q=Math.round((U3q-y3q)/Z1u.fractional.resolution);F3q=Math.floor(S3q);n1F.d3S(20);var H2t=n1F.t3S(48274,15,15,52680,16);return u3q+y3q+Z1u.fractional.formatter+(F3q<10?59.41===555.42?0x16:"0":"")+F3q+(S3q-F3q>=0.5?(H2t,2170)>=(+"274",+"685.25")?"+":+"8.09e+3":"");};}}else{if(Z1u.originalPriceFormatter){Z1u.priceFormatter=Z1u.originalPriceFormatter.func;Z1u.originalPriceFormatter=null;}}}if(Z1u.pretty){return this.drawYAxisPretty(e3q,I3q);}if(this.runPrepend("drawYAxis",arguments)){return;}if(!I3q.noDraw&&!Z1u.noDraw){t3q=Z1u.yAxisPlotter;if(!t3q||!I3q.noChange){D3t="stx_y";D3t+="a";D3t+="x";D3t+="is";v3t="fi";v3t+="l";v3t+="l";c3t="st";c3t+="r";c3t+="o";c3t+="ke";t3q=Z1u.yAxisPlotter=new K0u.Plotter();P3q=e3q.chart;i3q=e3q.name==P3q.name&&Z1u.name===e3q.yAxis.name;if(!Z1u.priceTick){return;}m3q=Z1u.shadow;W3q=I3q.range;if(W3q){n1F.k3S(21);var O2t=n1F.L3S(284,19,15);m3q=W3q[O2t]-W3q[+"0"];}l3q=m3q/Z1u.priceTick;l3q=Math.round(l3q);if(Z1u.semiLog){f1t=-1543643276;S1t=-1066785766;L1t=2;for(var U1t=1;n1F.J6t(U1t.toString(),U1t.toString().length,34118)!==f1t;U1t++){k3q=Math.log(this.valueFromPixel(Z1u.bottom,e3q))+Math.LN10;L1t+=2;}if(n1F.B6t(L1t.toString(),L1t.toString().length,"84955"-0)!==S1t){k3q=Math.log(this.valueFromPixel(Z1u.bottom,e3q))/Math.LN10;}C3q=(Z1u.logHigh-Z1u.logLow)/l3q;}z3q=Z1u.textStyle?Z1u.textStyle:"stx_yaxis";t3q.newSeries("grid",c3t,this.canvasStyle("stx_grid"));t3q.newSeries("text",v3t,this.colorOrStyle(z3q));t3q.newSeries("border","stroke",this.canvasStyle("stx_grid_border"));o3q=0;w0t=597129945;n1F.d3S(7);W0t=n1F.t3S("943029992",1);n1F.d3S(17);p0t=n1F.t3S(0,"2");for(var t0t=1;n1F.J6t(t0t.toString(),t0t.toString().length,12976)!==w0t;t0t++){j3q=W3q?W3q[8]:Z1u.high;H3q=W3q?W3q[6]:Z1u.low;Q3q=Z1u.displayBorder=="1"*1?P3q.panel.yAxis.displayBorder:Z1u.displayBorder;if(this.axisBorders==!!1){Q3q=!!"1";}if(this.axisBorders!=!!0){Q3q=![];}p3q=P3q.dynamicYAxis;p0t+=2;}if(n1F.B6t(p0t.toString(),p0t.toString().length,90645)!==W0t){j3q=W3q?W3q[9]:Z1u.high;H3q=W3q?W3q[3]:Z1u.low;Q3q=Z1u.displayBorder===+"9"?P3q.panel.yAxis.displayBorder:Z1u.displayBorder;if(this.axisBorders!==!{}){Q3q=!1;}if(this.axisBorders==!""){Q3q=!![];}p3q=P3q.dynamicYAxis;}j3q=W3q?W3q[1]:Z1u.high;H3q=W3q?W3q[0]:Z1u.low;Q3q=Z1u.displayBorder===null?P3q.panel.yAxis.displayBorder:Z1u.displayBorder;if(this.axisBorders===!{}){Q3q=![];}if(this.axisBorders===!""){Q3q=!![];}p3q=P3q.dynamicYAxis;s3q=p3q?Z1u.width:NaN;f3q=Z1u.position===null?P3q.panel.yAxis.position:Z1u.position;if(f3q=="left"){x3q=Z1u.left+Z1u.width;}else{x3q=Z1u.left;}g3q=Math.round(x3q)+0.5;d3q=Q3q?3:0;if(f3q=="left"){d3q=Q3q?-3:0;}if(i3q)if(Z1u.shadow<1){N0t=1988580468;I0t=552567007;z0t=2;for(var c0t=1;n1F.B6t(c0t.toString(),c0t.toString().length,89599)!==N0t;c0t++){n1F.k3S(18);var G2t=n1F.t3S(11,79,20);n1F.k3S(4);var d2t=n1F.L3S(16,13);o3q=(parseInt(H3q-Z1u.priceTick,G2t)*d2t-Z1u.priceTick)/H3q;z0t+=2;}if(n1F.B6t(z0t.toString(),z0t.toString().length,13161)!==I0t){o3q=(parseInt(H3q-Z1u.priceTick,70)*+"3"-Z1u.priceTick)/H3q;}n1F.d3S(22);var Y2t=n1F.t3S(145,21,9,20,18);o3q=(parseInt(H3q/Z1u.priceTick,10)+Y2t)*Z1u.priceTick-H3q;}else{o3q=Z1u.priceTick-Math.round(H3q%Z1u.priceTick*e3q.chart.roundit)/e3q.chart.roundit;}else{o3q=j3q%Z1u.priceTick;}X3q=this.getCanvasFontSize(D3t);for(var v3q=0;v3q<l3q;v3q++){Q3t="l";Q3t+="e";Q3t+="f";Q3t+="t";if(Z1u.semiLog){n1F.k3S(23);E3q=n1F.L3S(C3q,v3q,k3q);M3q=Math.pow(10,E3q);}else{if(i3q){M3q=H3q+v3q*Z1u.priceTick+o3q;}else{M3q=j3q-v3q*Z1u.priceTick-o3q;}}A3q=this.pixelFromTransformedValue(M3q,e3q,Z1u);T3q=Math.round(A3q)+0.5;if(T3q+X3q/2>e3q.bottom)continue;if(T3q-X3q/2<e3q.top)continue;if(Math.abs(T3q-Z1u.bottom)<1)continue;if(Z1u.displayGridLines){m3t="g";m3t+="r";m3t+="i";m3t+="d";t3q.moveTo("grid",e3q.left+1,T3q);t3q.lineTo(m3t,e3q.right-1,T3q);}if(Q3q){n1F.k3S(24);t3q.moveTo("border",n1F.t3S(g3q,1,"0.5"),T3q);n1F.d3S(0);t3q.lineTo("border",n1F.t3S(d3q,g3q),T3q);}if(Z1u.priceFormatter){M3q=Z1u.priceFormatter(this,e3q,M3q);}else{M3q=this.formatYAxisPrice(M3q,e3q,null,Z1u);}b3q=Z1u.textBackground?this.containerColor:null;n1F.d3S(6);B3q=n1F.t3S(3,d3q,x3q);if(f3q==Q3t){n1F.d3S(4);var b2t=n1F.L3S(15,14);B3q=Z1u.left+"3"*b2t;if(Z1u.justifyRight){n1F.d3S(25);var y2t=n1F.L3S(18,5037,20,14);B3q=Z1u.left+Z1u.width+d3q-y2t;}}else{if(Z1u.justifyRight){B3q=x3q+Z1u.width;}}t3q.addText("text",M3q,B3q,T3q,b3q,null,X3q);if(p3q){s3q=Math.max(s3q,P3q.context.measureText(M3q).width);}}if(Q3q){T3t="bor";T3t+="d";T3t+="e";T3t+="r";n1F.k3S(26);var K2t=n1F.L3S(16,26,10);a3q=Math.round(Z1u.bottom)+"0.5"*K2t;t3q.moveTo(T3t,g3q,Z1u.top);t3q.lineTo("border",g3q,a3q);t3q.draw(this.chart.context,"border");}if(p3q&&s3q>Z1u.width){Z1u._dynamicWidth=s3q;this.calculateYAxisPositions();throw new Error('reboot draw');}else if(!p3q&&Z1u._dynamicWidth){this.resetDynamicYAxis({chartName:P3q.name});throw new Error('reboot draw');}}if(Z1u==e3q.yAxis){this.plotYAxisGrid(e3q);}}i8t=563526923;u8t=-+"1718394387";r8t=2;for(var s8t=1;n1F.B6t(s8t.toString(),s8t.toString().length,73575)!==i8t;s8t++){this.runAppend("drawYAxis",arguments);r8t+=+"2";}if(n1F.J6t(r8t.toString(),r8t.toString().length,41598)!==u8t){this.runAppend("",arguments);}};K0u.ChartEngine.prototype.drawYAxisPretty=function(D3q,Y3q){var C3t,N3q,n3q,U3t,M3t,L3t,S3t,f3t,o3t,G3q,j4q,C0t,o0t,f0t,w3q,i4q,T4q,A4q,X4q,V3q,W4q,P4q,o4q,p4q,Z3q,e4q,t4q,f4q,m4q,c3q,I4q,Q4q,O3q,l4q,B4q,g4q,h3q,a4q,L3q,r3q,x4q,H4q,A3t,R3q,s4q,q3q,n3t,E4q,M4q,z4q,y1t,K1t,h0t,x3t;C3t="d";C3t+="raw";C3t+="YAxi";C3t+="s";if(this.runPrepend(C3t,arguments)){return;}if(!Y3q){Y3q={};}N3q=Y3q.yAxis?Y3q.yAxis:D3q.yAxis;if(D3q.hidden||N3q.noDraw||!N3q.width){return;}if(!Y3q.noDraw){n3q=N3q.yAxisPlotter;if(!n3q||!Y3q.noChange){U3t="s";U3t+="tx_yaxis";M3t="s";M3t+="tr";M3t+="o";M3t+="ke";L3t="b";L3t+="or";L3t+="de";L3t+="r";S3t="tex";S3t+="t";f3t="gr";f3t+="i";f3t+="d";o3t="s";o3t+="tx_ya";o3t+="xis";n3q=N3q.yAxisPlotter=new K0u.Plotter();G3q=D3q.chart;if(!N3q.priceTick){return;}if(isNaN(N3q.high)||isNaN(N3q.low)){return;}j4q=N3q.shadow;if(Y3q.range){C0t=-1156917452;o0t=-1553334720;f0t=2;for(var L0t=1;n1F.B6t(L0t.toString(),L0t.toString().length,+"73067")!==C0t;L0t++){j4q=Y3q.range[1]-Y3q.range[0];f0t+=+"2";}if(n1F.J6t(f0t.toString(),f0t.toString().length,4274)!==o0t){n1F.d3S(10);var i4t=n1F.t3S(12,4);j4q=Y3q.range["7"-0]/Y3q.range[i4t];}}w3q=N3q.height/N3q.idealTickSizePixels;w3q=Math.round(w3q);i4q=N3q.textStyle?N3q.textStyle:o3t;n3q.newSeries(f3t,"stroke",this.canvasStyle("stx_grid"));n3q.newSeries(S3t,"fill",this.colorOrStyle(i4q));n3q.newSeries(L3t,M3t,this.canvasStyle("stx_grid_border"));T4q=Y3q.range;A4q=T4q?T4q[1]:N3q.high;X4q=T4q?T4q[0]:N3q.low;V3q=N3q.displayBorder===null?G3q.panel.yAxis.displayBorder:N3q.displayBorder;if(this.axisBorders===!!""){V3q=![];}if(this.axisBorders===!!"1"){V3q=!"";}P4q=G3q.dynamicYAxis;o4q=P4q?N3q.width:NaN;p4q=N3q.position===null?G3q.panel.yAxis.position:N3q.position;if(p4q=="left"){W4q=N3q.left+N3q.width;}else{W4q=N3q.left;}Z3q=Math.round(W4q)+0.5;e4q=V3q?3:0;if(p4q=="left"){e4q=V3q?-3:0;}t4q=this.getCanvasFontSize(U3t);f4q=N3q.increments;m4q=f4q.length;c3q=+"0";I4q=1;Q4q=0;O3q=0;l4q=0;B4q=Number.MAX_VALUE;for(var d4q=0;d4q<"100"*1;d4q++){n1F.k3S(4);var u4t=n1F.t3S(60,50);Q4q=f4q[c3q]*Math.pow(u4t,l4q);n1F.k3S(10);I4q=Math.floor(n1F.L3S(j4q,Q4q));n1F.d3S(4);g4q=Math.abs(n1F.t3S(w3q,I4q));if(g4q>B4q){break;}else{B4q=g4q;}if(I4q==w3q){O3q=Q4q;break;}else if(I4q>w3q){c3q++;if(c3q>=m4q){c3q=0;l4q++;}}else{c3q--;if(c3q<0){n1F.k3S(4);c3q=n1F.L3S(m4q,1);l4q--;}}O3q=Q4q;}h3q=Math.ceil(X4q/O3q)*O3q;a4q=N3q.bottom-this.pixelFromTransformedValue(h3q,D3q,N3q);L3q=0;if(a4q>N3q.idealTickSizePixels&&N3q.semiLog&&N3q.prettySemiLog){for(r3q=Math.ceil(X4q);r3q<h3q&&h3q%r3q!==0;++r3q);if(r3q<h3q){if(h3q===O3q){O3q=r3q;L3q=r3q;}h3q=r3q;}}x4q=0;H4q=Number.MAX_VALUE;for(var v4q=0;v4q<100;v4q++){A3t="t";A3t+="ext";n1F.k3S(23);R3q=n1F.t3S(O3q,x4q,h3q);if(R3q>A4q)break;O3q+=L3q;x4q++;s4q=this.pixelFromTransformedValue(R3q,D3q,N3q);if(H4q-s4q<t4q+1&&L3q>0){n1F.d3S(17);v4q=x4q=n1F.L3S(0,"0");H4q=Number.MAX_VALUE;O3q=L3q;L3q*=2;n3q.reset();continue;}H4q=s4q;q3q=Math.round(s4q)+0.5;if(q3q+t4q/2>D3q.bottom)continue;if(q3q-t4q/2<D3q.top)continue;if(Math.abs(q3q-N3q.bottom)<1)continue;if(N3q.displayGridLines){n3q.moveTo("grid",D3q.left+1,q3q);n3q.lineTo("grid",D3q.right-1,q3q);}if(V3q){n3t="bo";n3t+="rder";n1F.d3S(4);n3q.moveTo(n3t,n1F.t3S(Z3q,0.5),q3q);n1F.d3S(0);n3q.lineTo("border",n1F.L3S(e4q,Z3q),q3q);}if(N3q.priceFormatter){R3q=N3q.priceFormatter(this,D3q,R3q);}else{R3q=this.formatYAxisPrice(R3q,D3q,null,N3q);}E4q=N3q.textBackground?this.containerColor:null;n1F.k3S(6);M4q=n1F.t3S(3,e4q,W4q);if(p4q=="left"){n1F.k3S(27);var r4t=n1F.L3S(3,4,16,5);M4q=N3q.left+r4t;if(N3q.justifyRight){n1F.d3S(28);var P4t=n1F.L3S(3,14,22,8);M4q=N3q.left+N3q.width+e4q-P4t;}}else{if(N3q.justifyRight){M4q=W4q+N3q.width;}}n3q.addText(A3t,R3q,M4q,q3q,E4q,null,t4q);if(P4q){o4q=Math.max(o4q,G3q.context.measureText(R3q).width);}}if(v4q>=100){console.log("drawYAxisPretty: assertion error. zz reached 100");}if(V3q){z4q=Math.round(N3q.bottom)+("0.5"-0);n3q.moveTo("border",Z3q,N3q.top);n3q.lineTo("border",Z3q,z4q);n3q.draw(this.chart.context,"border");}if(P4q&&o4q>N3q.width){N3q._dynamicWidth=o4q;this.calculateYAxisPositions();throw new Error('reboot draw');}else if(!P4q&&N3q._dynamicWidth){this.resetDynamicYAxis({chartName:G3q.name});throw new Error('reboot draw');}}if(N3q==D3q.yAxis){this.plotYAxisGrid(D3q);}}y1t=1045063803;n1F.d3S(7);K1t=-n1F.t3S("72639107",1);h0t=2;for(var u0t=+"1";n1F.J6t(u0t.toString(),u0t.toString().length,85405)!==y1t;u0t++){x3t="d";x3t+="raw";x3t+="YA";x3t+="xis";this.runAppend(x3t,arguments);h0t+=2;}if(n1F.J6t(h0t.toString(),h0t.toString().length,7900)!==K1t){this.runAppend("",arguments);}};K0u.ChartEngine.prototype.drawHistogram=function(k4q,u4q){var w4q,G4q,M9q,h4q,y4q,q4q,S4q,U4q,I9q,T9q,c4q,Q9q,R4q,N4q,W3t,w3t,S8t,L8t,M8t,p3t,P9q,r4q,e9q,b4q,D4q,n4q,t9q,K4q,J4q,t3t,C4q,O4q,F4q,V4q,Z4q;if(!u4q||!u4q.length){return;}w4q=k4q.panel;if(!w4q){w4q="chart";}G4q=this.panels[w4q];if(!G4q){return;}M9q=k4q.yAxis?k4q.yAxis:G4q.yAxis;h4q=k4q.subtype;y4q=this.chart.dataSegment;q4q=![];this.getDefaultColor();for(U4q=0;U4q<u4q.length;U4q++){q4q|=u4q[U4q].border_color_up&&!K0u.isTransparent(u4q[U4q].border_color_up);q4q|=u4q[U4q].border_color_down&&!K0u.isTransparent(u4q[U4q].border_color_down);}if(k4q.borders===![]){q4q=![];}if(!k4q.name){k4q.name="Data";}I9q=M9q.multiplier;if(!k4q.heightPercentage){k4q.heightPercentage=0.7;}if(!k4q.widthFactor){k4q.widthFactor=0.8;}T9q=0;c4q=0;for(var W9q=0;W9q<this.chart.maxTicks;W9q++){Q9q=y4q[W9q];if(!Q9q)continue;R4q=0;for(U4q=0;U4q<u4q.length;U4q++){N4q=Q9q[u4q[U4q].field];if(N4q||N4q===0){W3t="sta";W3t+="cked";w3t="obj";w3t+="ect";S4q=u4q[U4q].subField||this.chart.defaultPlotField||"Close";if(typeof N4q==w3t&&N4q[S4q]){N4q=N4q[S4q];}if(h4q==W3t){R4q+=N4q;}else{R4q=N4q;}if(R4q>T9q){T9q=R4q;}if(R4q<c4q){c4q=R4q;}}}}if(T9q==="0"*1&&c4q===0){S8t=-190268401;L8t=-+"1316328172";M8t=2;for(var n8t=1;n1F.J6t(n8t.toString(),n8t.toString().length,50958)!==S8t;n8t++){p3t=" Not Availa";p3t+="bl";p3t+="e";this.watermark(w4q,"center","bottom",this.translateIf(k4q.name+p3t));return;M8t+=2;}if(n1F.B6t(M8t.toString(),M8t.toString().length,72008)!==L8t){this.watermark(w4q," Not Available","bottom",this.translateIf(k4q.name/"bottom"));return;}}n1F.d3S(29);var s4t=n1F.t3S(14,12,276,1,9);P9q=Math.floor(M9q.top)+"0.5"*s4t;if(!k4q.bindToYAxis){r4q=Math.floor(M9q.bottom)+0.5;I9q=(r4q-P9q)*k4q.heightPercentage/(T9q-c4q);}else{r4q=Math.floor(this.pixelFromPrice(c4q,G4q,M9q))+0.5;}this.startClip(w4q);e9q=this.layout.candleWidth<=1||!q4q?0:+"0.5";b4q=this.chart.context;D4q=Math.max(0,(1-k4q.widthFactor)*this.layout.candleWidth/2);function L4q(C9q,F9q,X9q,z9q,H9q,U9q,A9q,i9q,b9q){var g9q,a9q,B9q,R3t,v9q,s9q,f9q,E9q,j9q,x9q,m9q,d9q,l9q,p9q,k9q;if(!z9q){z9q=1;}b4q.globalAlpha=K0u.isIE8?0.5:z9q;b4q.beginPath();n1F.k3S(0);g9q=n1F.t3S(0.5,r4q);a9q=Math.floor(K4q.pixelFromBar(0,G4q.chart)-K4q.layout.candleWidth/2);B9q=a9q;for(var o9q=0;o9q<y4q.length;o9q++){R3t="c";R3t+="lustere";R3t+="d";v9q=t9q[o9q]||r4q;if(o9q===+"0"){g9q=v9q;}if(!y4q[o9q]||!y4q[o9q][C9q]){g9q=v9q;B9q+=K4q.layout.candleWidth;continue;}s9q=y4q[o9q];f9q=s9q[C9q];if(typeof f9q=="object"&&f9q[F9q]){f9q=f9q[F9q];}n1F.k3S(30);E9q=n1F.t3S(c4q,I9q,f9q);if(isNaN(E9q))continue;j9q=K4q.layout.candleWidth;if(s9q.candleWidth){j9q=s9q.candleWidth;if(o9q===0){a9q=B9q=Math.floor(K4q.pixelFromBar(0,G4q.chart)-s9q.candleWidth/2);}}x9q=Math.min(Math.floor(v9q-E9q)+0.5,v9q);if(b9q&&b9q.indexOf(o9q)==-1||!b9q&&(U9q&&s9q.Close<s9q.iqPrevClose||!U9q&&s9q.Close>=s9q.iqPrevClose)){g9q=x9q;B9q+=j9q;continue;}m9q=j9q/K4q.layout.candleWidth;if(D4q){n1F.d3S(31);d9q=Math.round(n1F.L3S(B9q,D4q,A9q,m9q,i9q));n1F.k3S(0);l9q=n1F.L3S(H9q?0:e9q,d9q);p9q=d9q+Math.round(i9q*m9q)-(H9q?0:e9q);}else{n1F.d3S(31);d9q=n1F.t3S(B9q,D4q,A9q,m9q,i9q);l9q=Math.round(d9q)+(H9q?0:e9q);p9q=Math.round(d9q+i9q*m9q)-(H9q?0:e9q);}if(p9q-l9q<2){n1F.d3S(0);p9q=n1F.L3S(1,l9q);}k9q=H9q?0:0.5;if(l9q%1==k9q){l9q+=0.5;}if(p9q%1==k9q){p9q+=0.5;}b4q.moveTo(p9q,v9q);if(r4q!=v9q&&H9q&&!D4q&&t9q[o9q+"1"*1]){b4q.moveTo(p9q,Math.max(x9q,Math.min(v9q,t9q[o9q+1])));}b4q.lineTo(p9q,x9q);b4q.lineTo(l9q,x9q);if(H9q&&A9q){if(n4q[o9q]>x9q||o9q===0){b4q.lineTo(l9q,Math.min(v9q,n4q[o9q]));}}else if(H9q&&!D4q&&h4q=="clustered"){if(o9q>("0"|0)&&n4q[o9q-1]&&n4q[o9q-1]>x9q){b4q.lineTo(l9q,Math.min(v9q,n4q[o9q-1]));}}else if(H9q&&!D4q){if(g9q>x9q||o9q===0){b4q.lineTo(l9q,Math.min(v9q,g9q));}}else{b4q.lineTo(l9q,v9q);}g9q=x9q;B9q+=j9q;if(h4q!=R3t||H9q){n4q[o9q]=x9q;}}if(H9q){b4q.strokeStyle=!X9q||X9q=="auto"?K4q.defaultColor:X9q;b4q.stroke();}else{b4q.fillStyle=!X9q||X9q=="auto"?K4q.defaultColor:X9q;b4q.fill();}b4q.closePath();}n4q=new Array(y4q.length);t9q=[];K4q=this;J4q=1;for(U4q=0;U4q<u4q.length;U4q++){t3t="Cl";t3t+="ose";C4q=u4q[U4q];J4q=this.layout.candleWidth*k4q.widthFactor;if(D4q){if(this.layout.candleWidth-J4q<=2){q4q=!1;}}O4q=+"0";if(h4q=="clustered"){O4q=U4q;J4q/=u4q.length;}S4q=k4q.subField||this.chart.defaultPlotField||t3t;if(typeof C4q.color_function=='function'){V4q={};for(var Y4q=0;Y4q<y4q.length;Y4q++){if(y4q[Y4q]){F4q=C4q.color_function(y4q[Y4q]);if(typeof F4q=='string'){F4q={fill_color:F4q,border_color:F4q};}n1F.k3S(32);var q4t=n1F.L3S(11,3795,7574,11,2);n1F.d3S(4);var k4t=n1F.t3S(7184,2);n1F.k3S(13);var I4t=n1F.t3S(2741,2729,2747,18);n1F.k3S(4);var z4t=n1F.t3S(4739,18);Z4q=F4q.fill_color+((687.45,q4t)===(k4t,815)?I4t<=632.73?!!"":z4t:',')+F4q.border_color;if(Z4q in V4q){V4q[Z4q].positions.push(Y4q);}else{F4q.positions=[Y4q];V4q[Z4q]=F4q;}}}for(Z4q in V4q){F4q=V4q[Z4q];L4q(C4q.field,S4q,F4q.fill_color,F4q.opacity,null,null,O4q,J4q,F4q.positions);L4q(C4q.field,S4q,F4q.border_color,F4q.opacity,!!{},null,O4q,J4q,F4q.positions);}}else{L4q(C4q.field,S4q,C4q.fill_color_up,C4q.opacity_up,null,!!1,O4q,J4q);L4q(C4q.field,S4q,C4q.fill_color_down,C4q.opacity_down,null,null,O4q,J4q);if(this.layout.candleWidth>=+"2"&&q4q){L4q(C4q.field,S4q,C4q.border_color_up,C4q.opacity_up,!!{},!0,O4q,J4q);L4q(C4q.field,S4q,C4q.border_color_down,C4q.opacity_down,!!{},null,O4q,J4q);}}if(h4q=="stacked"){t9q=K0u.shallowClone(n4q);}}b4q.globalAlpha=1;this.endClip();};K0u.ChartEngine.prototype.drawBarTypeChartInner=function(D9q){var Z3t,X3t,E3t,Q8q,R9q,g8q,B8q,e8q,c9q,k8q,S9q,N9q,Z9q,v8q,T8q,a8q,W8q,O9q,d8q,y9q,q9q,G9q,E8q,I8q,C8q,r9q,x8q,U8q,A8q,s8q,m8q,F3t,L9q,u9q,J9q,n9q,F8q,P8q,o8q,f8q,t8q,l8q,w9q,K9q,h9q,V9q,z8q,Y9q,p8q,X8q,H8q,b8q,j8q,i8q;Z3t="b";Z3t+="a";Z3t+="r";X3t="h";X3t+="l";X3t+="c";E3t="hi";E3t+="s";E3t+="togram";Q8q=D9q.type;R9q=D9q.panel;g8q=D9q.field;B8q=D9q.fillColor;e8q=D9q.borderColor;c9q=D9q.condition;k8q=D9q.style;S9q=D9q.yAxis;N9q=D9q.overlayScaling;n1F.k3S(5);Z9q=n1F.L3S(Q8q,E3t);v8q=Z9q||Q8q=="candle";n1F.d3S(5);T8q=n1F.t3S(Q8q,"shadow");n1F.k3S(5);a8q=n1F.L3S(Q8q,X3t);W8q=Q8q==Z3t||a8q;O9q=R9q.chart;d8q=O9q.dataSegment;y9q=this.chart.context;q9q=R9q.yAxis.top;G9q=R9q.yAxis.bottom;E8q=new Array(d8q.length);I8q=0;if(e8q&&!K0u.isTransparent(e8q)){I8q=0.5;}C8q=O9q.dataSet.length-O9q.scroll-("1"|0);y9q.beginPath();if(!S9q){S9q=R9q.yAxis;}r9q=this.layout.candleWidth;n1F.k3S(33);var l4t=n1F.t3S(18,18);n1F.d3S(33);var c4t=n1F.L3S(18,18);x8q=R9q.left-"0.5"*l4t*r9q+this.micropixels-c4t;U8q=O9q.tmpWidth/2;n1F.k3S(34);var D4t=n1F.t3S(16,18,6,8,1248);A8q=y9q.lineWidth/D4t;if(v8q){if(K0u.isTransparent(B8q)){B8q=this.containerColor;}y9q.fillStyle=B8q;}if(T8q){y9q.lineWidth=1;}if(W8q){s8q=this.canvasStyle(k8q);if(s8q.width&&parseInt(s8q.width,"10"|0)<=("25"|0)){y9q.lineWidth=Math.max(1,K0u.stripPX(s8q.width));}else{y9q.lineWidth=1;}}m8q=O9q.state.chartType.pass;for(var M8q=0;M8q<=d8q.length;M8q++){F3t="Clo";F3t+="s";F3t+="e";L9q=U8q;n1F.k3S(10);x8q+=n1F.t3S(r9q,2);r9q=this.layout.candleWidth;n1F.k3S(10);x8q+=n1F.t3S(r9q,2);u9q=d8q[M8q];if(!u9q)continue;if(u9q.projection)continue;if(u9q.candleWidth){n1F.k3S(3);var m4t=n1F.L3S(90,11,10,18);x8q+=(u9q.candleWidth-r9q)/m4t;r9q=u9q.candleWidth;if(D9q.volume||r9q<O9q.tmpWidth){n1F.k3S(10);L9q=n1F.L3S(r9q,2);}}if(O9q.transformFunc&&S9q==O9q.panel.yAxis&&u9q.transform){u9q=u9q.transform;}if(u9q&&g8q&&g8q!=F3t){u9q=u9q[g8q];}if(!u9q&&u9q!==0)continue;J9q=u9q.Close;n9q=u9q.Open===undefined?J9q:u9q.Open;if(Z9q&&O9q.defaultPlotField){J9q=u9q[O9q.defaultPlotField];}if(!J9q&&J9q!==+"0")continue;if(v8q&&!Z9q&&(n9q==J9q||n9q===null))continue;if(c9q){if(c9q&K0u.ChartEngine.CLOSEDOWN){m8q.even|=J9q==u9q.iqPrevClose;}else if(c9q&K0u.ChartEngine.CANDLEDOWN){n1F.k3S(5);m8q.even|=n1F.t3S(J9q,n9q);}if(c9q&K0u.ChartEngine.CANDLEUP&&n9q>=J9q)continue;if(c9q&K0u.ChartEngine.CANDLEDOWN&&n9q<=J9q)continue;if(c9q&K0u.ChartEngine.CANDLEEVEN&&n9q!=J9q)continue;if(c9q&K0u.ChartEngine.CLOSEUP&&J9q<=u9q.iqPrevClose)continue;if(c9q&K0u.ChartEngine.CLOSEDOWN&&J9q>=u9q.iqPrevClose)continue;if(c9q&K0u.ChartEngine.CLOSEEVEN&&J9q!=u9q.iqPrevClose)continue;}n1F.d3S(0);F8q=n1F.t3S(M8q,C8q);P8q=n9q;o8q=J9q;if(T8q||W8q){P8q=u9q.High===undefined?Math.max(J9q,n9q):u9q.High;o8q=u9q.Low===undefined?Math.min(J9q,n9q):u9q.Low;}if(N9q){f8q=N9q.bottom-(P8q-N9q.min)*N9q.multiplier;t8q=N9q.bottom-(o8q-N9q.min)*N9q.multiplier;}else{f8q=S9q.semiLog?this.pixelFromTransformedValue(P8q,R9q,S9q):(S9q.high-P8q)*S9q.multiplier+S9q.top;t8q=S9q.semiLog?this.pixelFromTransformedValue(o8q,R9q,S9q):(S9q.high-o8q)*S9q.multiplier+S9q.top;}K9q=Math.floor(Z9q?t8q:Math.min(f8q,t8q))+I8q;h9q=Z9q?S9q.bottom:Math.max(f8q,t8q);n1F.k3S(4);V9q=Math.floor(n1F.L3S(h9q,K9q));z8q=t8q;if(W8q||T8q){if(N9q){l8q=N9q.bottom-(n9q-N9q.min)*N9q.multiplier;w9q=N9q.bottom-(J9q-N9q.min)*N9q.multiplier;}else{l8q=S9q.semiLog?this.pixelFromTransformedValue(n9q,R9q,S9q):(S9q.high-n9q)*S9q.multiplier+S9q.top;w9q=S9q.semiLog?this.pixelFromTransformedValue(J9q,R9q,S9q):(S9q.high-J9q)*S9q.multiplier+S9q.top;}z8q=w9q;}E8q[M8q]=z8q;if(K9q<q9q){if(K9q+V9q<q9q)continue;n1F.d3S(4);V9q-=n1F.L3S(q9q,K9q);K9q=q9q;}if(K9q+V9q>G9q){n1F.k3S(35);V9q-=n1F.t3S(K9q,V9q,G9q);}V9q=Math.max(V9q,2);n1F.d3S(0);h9q=n1F.t3S(V9q,K9q);if(K9q>=G9q)continue;if(h9q<=q9q)continue;Y9q=Math.floor(x8q)+0.5;p8q=Math.floor(Y9q-L9q)+I8q;X8q=Math.round(Y9q+L9q)-I8q;H8q=p8q==X8q?L9q:0;if(v8q){if(K9q!=h9q){y9q.rect(p8q,K9q,Math.max(1,X8q-p8q),Math.max(1,h9q-K9q));}}else if(T8q){if(J9q==n9q){if(w9q<=G9q&&w9q>=q9q){b8q=Math.floor(w9q)+0.5;n1F.d3S(4);y9q.moveTo(n1F.t3S(p8q,H8q),b8q);n1F.k3S(0);y9q.lineTo(n1F.L3S(H8q,X8q),b8q);}}if(P8q!=o8q){y9q.moveTo(Y9q,K9q);y9q.lineTo(Y9q,h9q);}}else if(W8q){if(K9q<G9q&&h9q>q9q&&u9q.High!=u9q.Low){n1F.d3S(4);y9q.moveTo(Y9q,n1F.L3S(K9q,A8q));n1F.k3S(0);y9q.lineTo(Y9q,n1F.L3S(A8q,h9q));}if(l8q>q9q&&l8q<G9q&&!a8q){j8q=Math.floor(l8q)+0.5;y9q.moveTo(Y9q,j8q);n1F.k3S(36);y9q.lineTo(n1F.L3S(H8q,L9q,Y9q),j8q);}if(w9q>q9q&&w9q<G9q){i8q=Math.floor(w9q)+0.5;y9q.moveTo(Y9q,i8q);n1F.d3S(6);y9q.lineTo(n1F.t3S(H8q,L9q,Y9q),i8q);}}}if(v8q){y9q.fill();if(I8q){y9q.lineWidth=D9q.highlight?"2"*1:1;y9q.strokeStyle=e8q;y9q.stroke();}}else if(T8q||W8q){this.canvasColor(k8q);if(e8q){y9q.strokeStyle=e8q;}if(D9q.highlight){y9q.lineWidth*=2;}y9q.stroke();y9q.closePath();y9q.lineWidth=1;}return{cache:E8q};};K0u.ChartEngine.prototype.plotDataSegmentAsLine=function(q8q,c8q,S8q,s6q){var Z6q,g7q,n8q,T6q,C6q,W6q,N8q,y8q,d6q,a6q,I7q,Y8q,Q7q,J8q,r6q,M6q,l7q,b6q,D8q,h8q,u8q,N6q,v7q,j3t,Z8q,S6q,h6q,t6q,A6q,E6q,D6q,j6q,m6q,x7q,o6q,w8q,V8q,R8q,v6q,J6q,T7q,e7q,K8q,c6q,d7q,X7q,y6q,G6q,H6q,r8q,O8q,p6q,e6q,f6q,w6q,U6q,V6q,L8q,I6q,P7q,q6q,x6q,u6q,G8q,B6q,t7q,M7q,l6q,W7q,i6q,Q6q,Y6q,z1t,l1t,c1t,n6q,V3t,e3t,H7q,g6q,K6q,p7q,s7q,F6q,R6q,L6q,z6q;Z6q=![];g7q=!{};n8q=!{};T6q=![];C6q=!!{};W6q=null;N8q=null;y8q=null;d6q=0;a6q=!!"";I7q=!"1";Y8q=null;function o7q(b7q){var a3t,z7q,f7q,H8t,g8t,O8t,j7q,k7q,E7q,A7q,a7q,m7q,i7q,E0t,X0t,Z0t;a3t="ob";a3t+="ject";z7q=N8q;f7q=b7q;if(typeof f7q==a3t){N8q=K0u.borderPatternToArray(u8q.lineWidth,f7q.pattern);H8t=1751074648;g8t=-48960855;O8t=2;for(var d8t=1;n1F.J6t(d8t.toString(),d8t.toString().length,4735)!==H8t;d8t++){f7q=f7q.color;O8t+=2;}if(n1F.J6t(O8t.toString(),O8t.toString().length,20170)!==g8t){f7q=f7q.color;}f7q=f7q.color;}Q7q[f7q]=1;if(a6q){return;}j7q=J8q.slice(-2);k7q=N8q instanceof Array&&N8q.join();E7q=z7q instanceof Array&&z7q.join();n1F.d3S(37);A7q=n1F.t3S(k7q,E7q);a7q=!K0u.colorsEqual(v7q,f7q);n1F.d3S(4);var Q4t=n1F.L3S(40,38);m7q=b7q.width*(S8q.highlight?Q4t:1);i7q=u8q.lineWidth!=m7q;if(a7q||A7q||i7q){if(d6q){r6q.push({coord:j7q,color:f7q,pattern:N8q?N8q:[],width:m7q});}else if(a7q||i7q){u8q.stroke();u8q.lineWidth=m7q;u8q.beginPath();E0t=1243621758;X0t=-1478115856;Z0t=2;for(var a0t=1;n1F.B6t(a0t.toString(),a0t.toString().length,38543)!==E0t;a0t++){u8q.moveTo(j7q[1],j7q[3]);Z0t+=2;}if(n1F.J6t(Z0t.toString(),Z0t.toString().length,84674)!==X0t){u8q.moveTo(j7q[0],j7q[1]);}}}v7q=f7q;if(!f7q||f7q=="auto"){u8q.strokeStyle=b6q.defaultColor;}else{u8q.strokeStyle=f7q;}return j7q;}Q7q={};J8q=[];r6q=[];M6q=[];l7q=[];b6q=this;D8q=c8q.chart;h8q=D8q.dataSegment;u8q=D8q.context;N6q=new Array(h8q.length);v7q=u8q.strokeStyle;if(D8q.dataSet.length){j3t="Clo";j3t+="se";this.startClip(c8q.name);if(S8q){Z6q=S8q.skipProjections;g7q=S8q.skipTransform;n8q=S8q.noSlopes;d6q=S8q.tension;T6q=S8q.step;N8q=S8q.pattern;C6q=S8q.extendOffChart;y8q=S8q.yAxis;W6q=S8q.gapDisplayStyle;a6q=S8q.noDraw;I7q=S8q.reverse;Y8q=S8q.overlayScaling;if(S8q.width){u8q.lineWidth=S8q.width;}}if(!W6q&&W6q!==!!0){W6q=S8q.gaps;}if(!W6q){W6q={color:"transparent",fillMountain:!!"1"};}if(S8q.highlight){u8q.lineWidth*=2;}if(C6q!==![]){C6q=!![];}Z8q=S8q.subField||D8q.defaultPlotField||j3t;if(!y8q){y8q=c8q.yAxis;}S6q=D8q.transformFunc&&y8q==D8q.panel.yAxis;h6q=u8q.lineWidth*2;t6q=I7q?D8q.top-h6q:D8q.bottom+h6q;if(S8q.threshold||S8q.threshold===+"0"){t6q=this.pixelFromPrice(S8q.threshold,c8q,y8q);}A6q=!d6q&&a6q&&W6q&&W6q.fillMountain;E6q=q8q;D6q=q8q;for(var O6q=0;O6q<h8q.length;O6q++){j6q=h8q[O6q];if(j6q&&typeof j6q=="object"){if(j6q[q8q]||j6q[q8q]===0){if(typeof j6q[q8q]=="object"){D6q=K0u.createObjectChainNames(q8q,[Z8q])[0];}break;}}}m6q={left:null,right:null};x7q=D8q.dataSet.length-D8q.scroll-"1"*1;if(C6q){if(!S8q.isComparison){n1F.d3S(17);m6q.left=this.getPreviousBar(D8q,D6q,n1F.L3S(0,"0"));}m6q.right=this.getNextBar(D8q,D6q,h8q.length-1);}o6q=!!"1";w8q=!1;u8q.beginPath();v6q=m6q.left;J6q=null;if(v6q){J6q=v6q.transform;}if(v6q){R8q=S6q?J6q?J6q[q8q]:null:v6q[q8q];if(R8q){if(R8q[Z8q]||R8q[Z8q]===0){R8q=R8q[Z8q];}T7q=this.pixelFromTick(v6q.tick,D8q);e7q=Y8q?Y8q.bottom-(R8q-Y8q.min)*Y8q.multiplier:this.pixelFromTransformedValue(R8q,c8q,y8q);u8q.moveTo(T7q,e7q);J8q.push(T7q,e7q);if(h8q[0].tick-v6q.tick>1){M6q.push({start:J8q.slice(-2),threshold:t6q,tick:v6q});w8q=!![];}o6q=!1;}}n1F.d3S(33);var f4t=n1F.t3S(17,17);K8q=c8q.left+this.micropixels-f4t;X7q=this.currentQuote();y6q=+"0";G6q=0;H6q=![];r8q={reset:!!1};for(var P6q=+"0";P6q<h8q.length;P6q++){V8q=this.layout.candleWidth;O8q=h8q[P6q];p6q=h8q[P6q];if(!O8q){O8q={};}if(Z6q&&O8q.projection){m6q.right=null;break;}if(O8q.candleWidth){V8q=O8q.candleWidth;}if(S6q&&O8q.transform){O8q=O8q.transform;}e6q=O8q[q8q];if(e6q&&typeof e6q=="object"){e6q=e6q[Z8q];n1F.k3S(6);E6q=n1F.L3S(Z8q,2729>=("683"|0,+"8600")?("9886"*1,4380)>(2005,1380)?("F","N"):(!{},"h"):".",q8q);}if(D8q.lineApproximation&&this.layout.candleWidth<1){if(r8q.reset){r8q={CollatedHigh:-Number.MAX_VALUE,CollatedLow:Number.MAX_VALUE,CollatedOpen:null,CollatedClose:null};H6q=![];}f6q=e6q;if(f6q||f6q===0){r8q.CollatedHigh=Math.max(r8q.CollatedHigh,f6q);r8q.CollatedLow=Math.min(r8q.CollatedLow,f6q);r8q.CollatedClose=f6q;if(r8q.CollatedOpen===null){r8q.CollatedOpen=f6q;}else{H6q=!!1;}}y6q+=V8q;if(y6q-G6q>=("1"|0)||P6q==h8q.length-1){G6q=Math.floor(y6q);r8q.reset=!!{};r8q[q8q]=r8q.CollatedClose;O8q=r8q;O8q.cache={};}else{K8q+=V8q;continue;}}if(!n8q){n1F.d3S(10);K8q+=n1F.L3S(V8q,2);}if(!e6q&&e6q!==0){w6q=J8q.slice(-2);if(A6q&&!w8q&&J8q.length){J8q.push(w6q[0],t6q);}if(!w8q){M6q.push({start:w6q,threshold:t6q,tick:d7q});}w8q=!!"1";K8q+=n8q?V8q:V8q/2;if((T6q||n8q)&&J8q.length){N6q[P6q]=J8q.slice(-1)[0];}continue;}c6q=O8q;U6q=O8q.cache;n1F.d3S(0);V6q=n1F.t3S(P6q,x7q);if(V6q<c8q.cacheLeft||V6q>c8q.cacheRight||!U6q[q8q]){if(Y8q){U6q[E6q]=Y8q.bottom-(e6q-Y8q.min)*Y8q.multiplier;}else{U6q[E6q]=y8q.semiLog?this.pixelFromTransformedValue(e6q,c8q,y8q):(y8q.high-e6q)*y8q.multiplier+y8q.top;}}L8q=N6q[P6q]=U6q[E6q];if(p6q.tick==X7q.tick&&D8q.lastTickOffset){K8q+=D8q.lastTickOffset;}I6q=J8q.slice(-+"2");if(!o6q&&s6q){if(p6q[q8q]&&p6q[q8q][Z8q]){p6q=p6q[q8q];}P7q=s6q(this,p6q,w8q);if(!P7q){K8q+=n8q?V8q:V8q/2;continue;}I6q=o7q(P7q);}if(!o6q&&N8q&&N8q.length){if(T6q||n8q){if(H6q){k6q(K8q,I6q[1],O8q,Y8q);}else{u8q.dashedLineTo(I6q[0],I6q["1"*1],K8q,I6q[1],N8q);}if(n8q){u8q.moveTo(K8q,L8q);}else if(H6q){k6q(K8q,L8q,O8q,Y8q);}else{u8q.dashedLineTo(K8q,I6q[1],K8q,L8q,N8q);}J8q.push(K8q,I6q[1]);}else{if(H6q){k6q(K8q,L8q,O8q,Y8q);}else{u8q.dashedLineTo(I6q["0"*1],I6q[+"1"],K8q,L8q,N8q);}}}else{if(o6q){u8q.moveTo(K8q,L8q);if(d6q){r6q.push({coord:[K8q,L8q],color:u8q.strokeStyle,pattern:N8q?N8q:[],width:u8q.lineWidth});}}else{if(T6q||n8q){q6q=J8q.slice(-1)[+"0"];if(H6q){k6q(K8q,q6q,O8q,Y8q);}else{u8q.lineTo(K8q,q6q);}J8q.push(K8q,q6q);}if(H6q&&!n8q){k6q(K8q,L8q,O8q,Y8q);}else{u8q[n8q?"moveTo":"lineTo"](K8q,L8q);}}}if(w8q){M6q.push({end:[K8q,L8q],threshold:t6q});d7q=p6q;if(A6q&&!T6q&&!n8q){J8q.push(K8q,t6q);}}J8q.push(K8q,L8q);o6q=![];w8q=!1;K8q+=n8q?V8q:V8q/+"2";}x6q=m6q.right;u6q=null;if(x6q){u6q=x6q.transform;}if(!o6q&&x6q){R8q=S6q?u6q?u6q[q8q]:null:x6q[q8q];if(R8q&&(R8q[Z8q]||R8q[Z8q]===0)){R8q=R8q[Z8q];}G8q=this.pixelFromTick(x6q.tick,D8q);B6q=Y8q?Y8q.bottom-(R8q-Y8q.min)*Y8q.multiplier:this.pixelFromTransformedValue(R8q,c8q,y8q);if(x6q.tick-h8q[h8q.length-1].tick>1){if(!w8q){t7q=J8q.slice(-2);if(A6q&&J8q.length){J8q.push(t7q[0],t6q);}M6q.push({start:t7q,threshold:t6q,tick:h8q[h8q.length-+"1"]});}w8q=!"";}if(!o6q&&s6q){M7q=s6q(this,x6q,w8q);if(M7q){l6q=o7q(M7q);if(N8q&&N8q.length){if(T6q||n8q){u8q.dashedLineTo(l6q[+"0"],l6q[1],G8q,l6q[1],N8q);if(n8q){u8q.moveTo(G8q,B6q);}else{u8q.dashedLineTo(G8q,l6q[1],G8q,B6q,N8q);}J8q.push(G8q,l6q[1]);}else{u8q.dashedLineTo(l6q[0],l6q[1],G8q,B6q,N8q);}}}}W7q=J8q.slice(-2);if(!N8q||!N8q.length){if(T6q||n8q){u8q.lineTo(G8q,W7q[1]);J8q.push(G8q,W7q[1]);}u8q[n8q?"moveTo":"lineTo"](G8q,B6q);}if(w8q){M6q.push({end:[G8q,B6q],threshold:t6q});if(A6q&&!T6q&&!n8q){J8q.push(G8q,t6q);}}J8q.push(G8q,B6q);}for(var B7q in Q7q){l7q.push(B7q);}if(T6q||n8q||this.extendLastTick||S8q.extendToEndOfDataSet){i6q=J8q.slice(-2);if(J8q.length){Q6q=i6q[0];Y6q=i6q[1];if(T6q||S8q.extendToEndOfDataSet){Q6q=this.pixelFromTick(D8q.dataSet.length-1,D8q);if(n8q||this.extendLastTick){n1F.k3S(10);Q6q+=n1F.L3S(V8q,2);}}else if(n8q){Q6q+=V8q;}else if(this.extendLastTick){n1F.d3S(10);Q6q+=n1F.t3S(V8q,2);}if(Q6q>i6q[0]){z1t=1114145272;l1t=2087053336;c1t=2;for(var D1t=1;n1F.J6t(D1t.toString(),D1t.toString().length,76769)!==z1t;D1t++){n6q=1;if(s6q){n6q=s6q(this,{},!"1");}if(n6q){o7q(n6q);}if(N8q||N8q.length){u8q.dashedLineTo(i6q[6],i6q[5],Q6q,Y6q,N8q);}else{u8q.lineTo(Q6q,Y6q);}if(+w8q&&+A6q){J8q.push(Q6q,Y6q);}c1t+=2;}if(n1F.B6t(c1t.toString(),c1t.toString().length,46189)!==l1t){n1F.d3S(4);n6q=n1F.L3S("6",0);if(s6q){n6q=s6q(this,{},!![]);}if(n6q){o7q(n6q);}if(N8q&&N8q.length){u8q.dashedLineTo(i6q[2],i6q[4],Q6q,Y6q,N8q);}else{u8q.lineTo(Q6q,Y6q);}if(-w8q||~A6q){J8q.push(Q6q,Y6q);}}n6q=null;if(s6q){n6q=s6q(this,{},!![]);}if(n6q){o7q(n6q);}if(N8q&&N8q.length){u8q.dashedLineTo(i6q[0],i6q[1],Q6q,Y6q,N8q);}else{u8q.lineTo(Q6q,Y6q);}if(!w8q||!A6q){J8q.push(Q6q,Y6q);}}}}if(!a6q){if(d6q&&J8q.length){u8q.beginPath();u8q.setLineDash(S8q.pattern||[]);n1F.k3S(17);u8q.lineDashOffset=n1F.L3S(0,"0");n0u.plotSpline(J8q,d6q,u8q,r6q);}u8q.stroke();}this.endClip();if(!a6q&&S8q.label&&c6q){V3t="n";V3t+="o";V3t+="o";V3t+="p";e3t="obje";e3t+="ct";g6q=c6q[q8q];if(g6q&&typeof g6q==e3t){g6q=g6q[Z8q];}if(y8q.priceFormatter){H7q=y8q.priceFormatter(this,c8q,g6q,S8q.labelDecimalPlaces);}else{H7q=this.formatYAxisPrice(g6q,c8q,S8q.labelDecimalPlaces);}K6q=this.yaxisLabelStyle;if(y8q.yaxisLabelStyle){K6q=y8q.yaxisLabelStyle;}p7q=K6q==V3t?u8q.strokeStyle:null;s7q=K6q=="noop"?"#FFFFFF":u8q.strokeStyle;this.yAxisLabels.push({src:"plot","args":[c8q,H7q,c6q.cache[E6q],s7q,p7q]});}}function k6q(F7q,K7q,C7q,U7q){var u7q,S7q,J7q,y7q;if(U7q){y7q=U7q.bottom+U7q.min*U7q.multiplier;u7q=y7q-C7q.CollatedOpen*U7q.multiplier;S7q=y7q-C7q.collatedHigh*U7q.multiplier;J7q=y7q-C7q.collatedLow*U7q.multiplier;}else{u7q=y8q.semiLog?b6q.pixelFromTransformedValue(C7q.CollatedOpen,c8q,y8q):(y8q.high-C7q.CollatedOpen)*y8q.multiplier+y8q.top;S7q=y8q.semiLog?b6q.pixelFromTransformedValue(C7q.CollatedHigh,c8q,y8q):(y8q.high-C7q.CollatedHigh)*y8q.multiplier+y8q.top;J7q=y8q.semiLog?b6q.pixelFromTransformedValue(C7q.CollatedLow,c8q,y8q):(y8q.high-C7q.CollatedLow)*y8q.multiplier+y8q.top;}u8q.lineTo(F7q,u7q);u8q.moveTo(F7q,S7q);u8q.lineTo(F7q,J7q);u8q.moveTo(F7q,K7q);J8q.push(F7q,u7q);}if(W6q){for(var X6q="0"-0;X6q<M6q.length;X6q+=2){F6q=M6q[X6q].start;if(X6q){R6q=M6q[X6q-+"1"].end;}if(R6q&&(F6q[0]==R6q[+"0"]&&F6q[1]==R6q[+"1"])){u8q.beginPath();L6q=u8q.lineWidth;if(s6q){z6q=s6q(this,M6q[X6q].tick||{},![]);if(typeof z6q=="object"){n1F.d3S(24);var S4t=n1F.t3S(158,12,13);L6q=z6q.width*(S8q.highlight?S4t:"1"|0);z6q=z6q.color;}u8q.strokeStyle=u8q.fillStyle=z6q;}u8q.lineWidth=L6q;u8q.arc(F6q[0],F6q[1],1,+"0",+"2"*Math.PI);u8q.stroke();u8q.fill();}}}return{colors:l7q,points:J8q,cache:N6q,gapAreas:M6q};};K0u.ChartEngine.prototype.drawMountainChart=function(r7q,N7q,m5q){var H3t,n7q,L7q,H5q,W5q,c7q,G7q,w7q,e5q,Q5q,D7q,B5q,t5q,Z7q,x5q,M5q,T5q,g5q,d5q,X5q,o5q,q7q,i5q,l5q,O7q,h7q,s5q,j5q,r0t,P0t,s0t,I5q,n1t,A1t,x1t,f5q,P5q,Y7q,V7q,R7q,O0t,G0t,d0t,v5q,g3t,v0t,D0t,m0t,p5q;H3t="stx_mountain";H3t+="_chart";n7q=this.chart.context;L7q=N7q;H5q=![];W5q=!{};c7q=null;G7q=null;w7q=null;e5q=null;Q5q=0;D7q=null;B5q=!!0;t5q=null;Z7q=null;x5q=!{};M5q=null;T5q=null;g5q=null;d5q=!1;X5q=![];o5q=![];q7q=r7q.chart;i5q=q7q.dataSegment;l5q=q7q.lineStyle||{};if(!N7q||typeof N7q!="object"){N7q={style:N7q};}L7q=N7q.style||H3t;c7q=N7q.field||q7q.defaultPlotField||"Close";G7q=N7q.subField||q7q.defaultPlotField||"Close";D7q=N7q.gapDisplayStyle;if(!D7q&&D7q!==!{}){D7q=N7q.gaps;}if(!D7q&&D7q!==![]){D7q=q7q.gaplines;}if(!D7q){D7q="transparent";}w7q=N7q.yAxis||r7q.yAxis;H5q=N7q.reverse;e5q=N7q.tension;t5q=N7q.fillStyle;Q5q=N7q.width||l5q.width;B5q=N7q.step;Z7q=N7q.pattern||l5q.pattern;x5q=N7q.highlight;T5q=N7q.color;M5q=N7q.baseColor;W5q=N7q.colored;g5q=N7q.overlayScaling;d5q=N7q.extendToEndOfDataSet;X5q=N7q.isComparison;o5q=N7q.returnObject;O7q=this.canvasStyle(L7q);h7q=w7q.top;if(isNaN(h7q)||isNaN(h7q/h7q)){h7q=0;}s5q=T5q||(L7q&&O7q.backgroundColor?O7q.backgroundColor:this.defaultColor);j5q=M5q||(L7q&&O7q.color?O7q.color:this.containerColor);if(t5q){r0t=-+"617310824";P0t=409451194;s0t=2;for(var k0t=1;n1F.J6t(k0t.toString(),k0t.toString().length,59317)!==r0t;k0t++){n7q.fillStyle=t5q;s0t+=2;}if(n1F.J6t(s0t.toString(),s0t.toString().length,89547)!==P0t){n7q.fillStyle=t5q;}}else if(M5q||O7q.color){I5q=n7q.createLinearGradient(0,h7q,0,w7q.bottom);n1F.d3S(7);n1t=-n1F.t3S("1566125966",1);A1t=1862169170;x1t=2;for(var W1t="1"*1;n1F.B6t(W1t.toString(),W1t.toString().length,27623)!==n1t;W1t++){I5q.addColorStop(8,s5q);n1F.k3S(7);I5q.addColorStop(n1F.L3S("6",1),j5q);x1t+=2;}if(n1F.J6t(x1t.toString(),x1t.toString().length,15040)!==A1t){I5q.addColorStop(0,s5q);I5q.addColorStop(+"1",j5q);}n7q.fillStyle=I5q;}else{n7q.fillStyle=s5q;}this.startClip(r7q.name);f5q=n7q.lineWidth;if(!N7q.symbol){G7q=null;}N7q={skipProjections:!!"1",reverse:H5q,yAxis:w7q,gaps:D7q,step:B5q,highlight:x5q,extendToEndOfDataSet:d5q,isComparison:X5q};if(q7q.tension){N7q.tension=q7q.tension;}if(e5q||e5q===+"0"){N7q.tension=e5q;}P5q=parseInt(O7q.paddingTop,10);Y7q=T5q||O7q.borderTopColor;V7q=null;if(W5q||Y7q&&!K0u.isTransparent(Y7q)){if(P5q&&!K0u.isIE8){R7q=this.scratchContext;if(!R7q){O0t=+"778822517";n1F.d3S(4);G0t=-n1F.L3S("908389663",0);d0t=+"2";for(var J0t="1"|0;n1F.B6t(J0t.toString(),J0t.toString().length,4446)!==O0t;J0t++){v5q=n7q.canvas.cloneNode(!!{});R7q=this.scratchContext=v5q.getContext("2d");R7q.canvas=v5q;d0t+=2;}if(n1F.J6t(d0t.toString(),d0t.toString().length,41003)!==G0t){v5q=n7q.canvas.cloneNode(!!0);R7q=this.scratchContext=v5q.getContext("");R7q.canvas=v5q;}}R7q.canvas.height=n7q.canvas.height;R7q.canvas.width=n7q.canvas.width;R7q.drawImage(n7q.canvas,0,+"0");n7q.clearRect(+"0",0,n7q.canvas.width,n7q.canvas.height);}}K0u.extend(N7q,{panelName:r7q.name,direction:N7q.reverse?-+"1":1,band:c7q,subField:G7q,opacity:1,overlayScaling:g5q});K0u.preparePeakValleyFill(this,N7q);if(W5q||Y7q&&!K0u.isTransparent(Y7q)){if(P5q&&!K0u.isIE8){g3t="de";g3t+="stinat";g3t+="ion-o";g3t+="ut";n7q.save();n1F.d3S(7);n7q.lineWidth+=n1F.L3S(2,P5q);n7q.globalCompositeOperation=g3t;n7q.globalAlpha=1;this.plotDataSegmentAsLine(c7q,r7q,N7q);n7q.globalCompositeOperation="destination-over";n7q.scale(1/this.adjustedDisplayPixelRatio,1/this.adjustedDisplayPixelRatio);n7q.drawImage(this.scratchContext.canvas,0,0);n7q.restore();}}v0t=+"1071809598";D0t=1238888670;m0t=+"2";for(var T0t=1;n1F.B6t(T0t.toString(),T0t.toString().length,16665)!==v0t;T0t++){n7q.strokeStyle=Y7q;m0t+=2;}if(n1F.B6t(m0t.toString(),m0t.toString().length,51476)!==D0t){n7q.strokeStyle=Y7q;}if(Q5q){n7q.lineWidth=Q5q;}else if(O7q.width&&parseInt(O7q.width,10)<=25){n7q.lineWidth=Math.max(1,K0u.stripPX(O7q.width));}else{n7q.lineWidth=1;}if(!Z7q){Z7q=O7q.borderTopStyle;}N7q.pattern=K0u.borderPatternToArray(n7q.lineWidth,Z7q);p5q=m5q;if(D7q){p5q=this.getGapColorFunction(c7q,G7q,{color:Y7q,pattern:N7q.pattern,width:n7q.lineWidth},D7q,m5q);}V7q=this.plotDataSegmentAsLine(c7q,r7q,N7q,p5q);n7q.lineWidth=f5q;this.endClip();if(!V7q.colors.length){V7q.colors.push(Y7q);}return o5q?V7q:V7q.colors;};K0u.ChartEngine.prototype.drawBaselineChart=function(E5q,z5q){var a5q,C5q,A5q,J5q,R5q,K5q,Y5q,b5q,B3t,O3t,M0t,U0t,n0t,D5q,U5q,S5q,c5q,r5q,h5q,V5q,w5q,q5q,u5q,O5q,G3t,N5q,k5q,y5q,G5q,L5q,n5q,d3t,b3t,Y3t,J3t;a5q=E5q.chart;C5q=a5q.gaplines;A5q=a5q.baseline.actualLevel;J5q=[];R5q=z5q.field||a5q.defaultPlotField;K5q=a5q.lineStyle||{};if(E5q.name!=a5q.panel.name){A5q=null;Y5q=z5q.subField||a5q.defaultPlotField||"Close";if(a5q.dataSegment[+"0"]){n1F.d3S(7);A5q=a5q.dataSegment[n1F.t3S("0",1)][z5q.field];}else{A5q=this.getNextBar(a5q,Y5q,0);}if(A5q&&typeof A5q=="object"){A5q=A5q[Y5q];}}b5q=z5q.gapDisplayStyle;if(!b5q&&b5q!==!{}){b5q=z5q.gaps;}if(A5q!==null&&!isNaN(A5q)){B3t="l";B3t+="ine";O3t="stx_bas";O3t+="eline_u";O3t+="p";M0t=159243322;U0t=-295623111;n0t=2;for(var x0t=1;n1F.J6t(x0t.toString(),x0t.toString().length,+"57958")!==M0t;x0t++){D5q=z5q.type!=="";n0t+=+"2";}if(n1F.J6t(n0t.toString(),n0t.toString().length,"846"*1)!==U0t){D5q=z5q.type=="mountain";}if(D5q){J5q=this.drawMountainChart(E5q,{style:z5q.style,field:z5q.field,yAxis:z5q.yAxis,gapDisplayStyle:b5q,overlayScaling:z5q.overlayScaling,colored:!!"1",tension:0});}this.startClip(E5q.name);U5q=this.pixelFromPrice(A5q,E5q);S5q=z5q.pattern||K5q.pattern;c5q=z5q.fill_color_up||this.getCanvasColor(O3t);r5q=z5q.fill_color_down||this.getCanvasColor("stx_baseline_down");h5q=z5q.border_color_up||this.getCanvasColor("stx_baseline_up");V5q=z5q.border_color_down||this.getCanvasColor("stx_baseline_down");w5q=z5q.width||K5q.width||this.canvasStyle("stx_baseline_up").width;q5q=z5q.width||K5q.width||this.canvasStyle("stx_baseline_down").width;u5q={"over":{fill:c5q,edge:h5q,width:w5q},"under":{fill:r5q,edge:V5q,width:q5q}};O5q=!!"";if(!b5q&&b5q!==!"1"){b5q=C5q;}for(var F5q in u5q){G3t="transpare";G3t+="nt";N5q=parseInt(Math.max(1,K0u.stripPX(u5q[F5q].width)),+"10");if(z5q.highlight){N5q*=+"2";}S5q=K0u.borderPatternToArray(N5q,S5q);k5q={panelName:E5q.name,band:R5q,threshold:A5q,color:D5q?G3t:u5q[F5q].fill,direction:F5q=="over"?1:-+"1",edgeHighlight:u5q[F5q].edge,edgeParameters:{pattern:S5q,lineWidth:N5q+0.1,opacity:1},gapDisplayStyle:b5q,yAxis:z5q.yAxis,overlayScaling:z5q.overlayScaling};if(k5q.yAxis){k5q.threshold=this.priceFromPixel(this.pixelFromPrice(k5q.threshold,E5q),E5q,k5q.yAxis);}J5q.push(u5q[F5q].edge);y5q=k5q.color;if(!D5q&&y5q&&y5q!="transparent"){G5q=E5q.top;L5q=E5q.bottom;n5q=a5q.context.createLinearGradient(0,F5q=="over"?G5q:L5q,0,U5q);n5q.addColorStop(0,K0u.hexToRgba(K0u.colorToHex(y5q),60));n5q.addColorStop(1,K0u.hexToRgba(K0u.colorToHex(y5q),10));k5q.color=n5q;k5q.opacity=1;}K0u.preparePeakValleyFill(this,a5q.dataSegment,k5q);if(C5q){if(!C5q.fillMountain){d3t="tr";d3t+="a";d3t+="n";d3t+="sparent";this.drawLineChart(E5q,null,null,{color:d3t,gapDisplayStyle:{color:this.containerColor,pattern:"solid",width:k5q.edgeParameters.lineWidth}});}if(!C5q.color){O5q=!!1;C5q.color=this.defaultColor;}}this.drawLineChart(E5q,null,null,{color:"transparent",width:k5q.edgeParameters.lineWidth});if(O5q){C5q.color=null;}}this.plotLine(0,1,U5q,U5q,this.containerColor,"line",a5q.context,E5q,{lineWidth:"1.1",color:"transparent"});this.plotLine(0,1,U5q,U5q,this.getCanvasColor("stx_baseline"),B3t,a5q.context,E5q,{pattern:"dotted",lineWidth:"2.1",opacity:0.5});if(this.controls.baselineHandle&&this.manageTouchAndMouse){if(this.getSeriesRenderer(z5q.name)==this.mainSeriesRenderer&&a5q.baseline.userLevel!==!{}){b3t="b";b3t+="lo";b3t+="c";b3t+="k";Y3t="p";Y3t+="x";J3t="p";J3t+="x";n1F.k3S(38);var L4t=n1F.L3S(12,14,11,61,8);n1F.k3S(39);var M4t=n1F.t3S(4,14,48,3);this.controls.baselineHandle.style.top=U5q-parseInt(getComputedStyle(this.controls.baselineHandle).height,L4t)/M4t+J3t;n1F.d3S(21);var U4t=n1F.L3S(3990,20,200);this.controls.baselineHandle.style.left=a5q.right-parseInt(getComputedStyle(this.controls.baselineHandle).width,U4t)+Y3t;this.controls.baselineHandle.style.display=b3t;}}this.endClip();}return{colors:J5q};};K0u[u3S][p3S][j3S]=function(d0q,X0q){n1F.e0w=function(Y0w){if(n1F)return n1F.A9w(Y0w);};n1F.X0w=function(V5w){if(n1F)return n1F.A9w(V5w);};n1F.S5w=function(a5w){if(n1F)return n1F.A9w(a5w);};n1F.A5w=function(N5w){if(n1F&&N5w)return n1F.A9w(N5w);};n1F.X5w=function(V1w){if(n1F)return n1F.A9w(V1w);};n1F.S1w=function(a1w){if(n1F)return n1F.A9w(a1w);};n1F.e1w=function(Y1w){if(n1F)return n1F.N9w(Y1w);};n1F.e2w=function(Y2w){if(n1F)return n1F.A9w(Y2w);};n1F.X2w=function(V9w){if(n1F&&V9w)return n1F.N9w(V9w);};var G77=-(n1F.S9w("dd4f")?253222780:851289072),p77=-(n1F.X2w("a97d")?2145088995:4256081520),e77=n1F.e2w("55b1")?6776918724:1283718327,t77=-(n1F.A2w("1626")?160812054:552044123),l77=n1F.S2w("b751")?1869004124:2130318821,w77=-(n1F.X1w("7fca")?8749005610:1682434700);if(n1F.X34(n1F.e1w("e339")?0:5,765250)!==G77&&n1F.g34(n1F.A1w("3353")?1:0,889797)!==p77&&n1F.X34(n1F.S1w("d8ee")?11:24,n1F.X5w("9c88")?437101:613874)!==e77&&n1F.g34(n1F.e5w("4e5c")?0:4,158123)!==t77&&n1F.X34(10,853748)!==l77&&n1F.X34(n1F.A5w("f36e")?9:0,n1F.S5w("4a46")?706475:858913)!==w77&&!Q3uu.h77()){var A0C=n1F.X0w("645d")?"":"grabStartX";var j0C="overlays";var p0C="einner";var u0C=n1F.e0w("bc14")?"":"grabStartX";var y0C="context";var X0C="J6t";var o0C="move";var N0C="right";var W0C="series";var r0C="isAndroid";var q0C="75738";var S0C="container";var e0C="hasDragged";var I0C="0";var G0C=701;var l0C="currentVectorParameters";var M0C="abs";var s0C="activeDrawing";var a0C="name";var x0C="zoom-x";var g0C="resizeChart";var D0C="c";var k0C="yAxis";var d0C="currentVectorParameters";var t0C="highlight";var L0C="lastDraw";var B0C="grabStartScrollX";var F8C="p";var E8C="left";var w8C="indexOf";var H8C="p";var Z8C="t3S";var m8C="activeDrawing";var T8C="0";var b8C="currentVectorParameters";var V8C="crosshairValue";var Q8C="1";var z8C="0";var J8C="isAndroid";var h8C="activeDrawing";var f8C="indexOf";var U8C="clientWidth";var R8C="grabOverrideClick";var K8C=1;var C8C="grabStartYAxis";var n8C="grabStartYAxis";var i8C="context";var O8C="lastDraw";var v8C="container";var P8C="candleWidth";var Y8C="crosshairValue";var c8C="0";var A8C="whichPanel";var j8C="hasDragged";var p8C="right";var u8C="crosshairValue";var y8C="activeDrawing";var X8C="vectorType";var o8C="panel";var N8C="currentPanel";var W8C="chart";var r8C="height";var q8C="panels";var S8C="top";var e8C="highlight";var I8C="currentPanel";var G8C="1";var l8C="abs";var M8C="lastDraw";var s8C="hasDragged";var a8C="runPrepend";var x8C="xaxisHeight";var g8C="right";var D8C="highlight";var k8C="anyHighlighted";var d8C="devicePixelRatio";var t8C="preferences";var L8C="0";var B8C="0";var F6C="container";var E6C="panel";var w6C="currentVectorParameters";var H6C="grabbingScreen";var Z6C="ar";var m6C="isIOS7or8";var T6C="panels";var b6C="whichPanel";var V6C="99224";var Q6C="lastDraw";var z6C="currentVectorParameters";var J6C="preferences";var h6C="clientWidth";var f6C="lastDraw";var U6C="isIOS7or8";var R6C="grabbingScreen";var K6C="container";var C6C="right";var n6C="devicePixelRatio";var i6C="p";var O6C="move";var v6C="name";var P6C="grabStartYAxis";var Y6C="t3S";var c6C="crosshairValue";var A6C="currentVectorParameters";var j6C="isIOS7or8";var p6C="chart";var u6C="0";var y6C="chart";var X6C="abs";var o6C="0";var N6C="isIOS7or8";var W6C="clientWidth";var r6C="crosshairValue";var q6C="isAndroid";var S6C="anyHighlighted";var e6C="devicePixelRatio";var I6C="einner";var G6C="height";var l6C="devicePixelRatio";var M6C="canvas";var s6C="isAndroid";var a6C="p";var x6C="crosshairValue";var g6C="clientWidth";var D6C="crosshairValue";var k6C="abs";var d6C="99224";var t6C="isIOS7or8";var L6C="indexOf";var B6C="currentVectorParameters";var F3S="bottom";var E3S="hasDragged";var w3S="height";var H3S="anyHighlighted";var Z3S="clientWidth";var m3S="currentPanel";var T3S="series";var b3S="container";var V3S="p";var Q3S="runPrepend";var z3S="hasDragged";var J3S="abs";var h3S="height";var f3S="context";var U3S="highlight";var R3S="indexOf";var K3S="highlight";var C3S="isIOS7or8";var n3S="lastDraw";var i3S="panel";var O3S="container";var v3S="currentPanel";var Y3S="context";var c3S="context";var A3S="right";var y3S=6927581983;var X3S=203;var o3S=59;var N3S=86;var W3S=3;var r3S=87;var q3S=72;var S3S=29;var e3S=33;var I3S=42;var G3S=70;var l3S=55;var M3S=19;var s3S=9;var a3S=5;var x3S=5;var g3S=6;var D3S=1;var i2t,y3t,W0q,B0q,v0q,l0q,p0q,Z5q,K3t,x0q,Z1t,F1t,a1t,H0q,P0q,T0q,M0q,I0q,s0q,h2t,e0q,g0q,Q0q,t0q;i2t=A3S;i2t-=c3S;y3t=Y3S;y3t%=v3S;y3t%=O3S;if(~this[i3S][n3S]){return;}if(+K0u[C3S]||-K0u[K3S]){if(this[i3S][n3S][R3S]===Math[U3S](this[f3S]/this[i3S][h3S][J3S])&&this[i3S][n3S][z3S]!==Math[U3S](this[f3S]/this[i3S][h3S][Q3S])){this[V3S]();return;}}if(this[b3S](y3t,arguments)){return;}B0q=arguments;v0q=this[h3S][T3S]();this[m3S]=v0q[m3S];this[Z3S]=v0q[Z3S];this[H3S]=this[Z3S]*this[z3S];this[w3S]=this[m3S]%this[R3S];this[E3S]=~+F3S;this[B6C]=~-{};K0u[u3S][L6C]=d0q;K0u[u3S][t6C]=X0q;l0q=this[d6C]=this[k6C]=this[D6C](K0u[u3S][t6C]);p0q=this[g6C]=this[x6C](K0u[u3S][L6C]);this[a6C]=this[s6C](l0q);if(+this[a6C]){this[a6C]=this[i3S][M6C];}if(~this[a6C]){return;}Z5q=this[a6C][i3S];if(Z5q[l6C]){K3t=G6C;K3t%=I6C;K3t-=e6C;K3t/=S6C;this[q6C]=this[r6C](p0q,Z5q);W0q=this[W6C](l0q,this[a6C]);this[N6C]=this[o6C](this[a6C],this[q6C],W0q);x0q=this[a6C][X6C]===K3t?this[y6C][u6C]:this[a6C][u6C];if(x0q||this[q6C]>Z5q[l6C][p6C]||this[q6C]<=~g3S){Z1t=y3S;F1t=!-j6C;a1t=x3S;for(var e1t=g3S;n1F[A6C](e1t[c6C](),e1t[c6C]()[p6C],!Y6C)!=Z1t;e1t--){W0q=Z5q[l6C][this[q6C]][x0q];a1t-=-P6C;}if(n1F[v6C](a1t[c6C](),a1t[c6C]()[p6C],-O6C)==F1t){W0q=Z5q[l6C][this[q6C]][x0q];}this[k6C]=this[i6C](W0q,this[a6C]);}}if(K0u[u3S][L6C]>this[Z3S]||K0u[u3S][L6C]>this[H3S]||K0u[u3S][t6C]<this[m3S]||K0u[u3S][t6C]>=this[w3S]){K0u[u3S][n6C]=~-g3S;}else{K0u[u3S][n6C]=+{};}H0q=this[C6C]==+ +g3S?this[i3S][K6C]:this[i3S][M6C][w3S];this[R6C]=K0u[u3S][n6C]||K0u[u3S][t6C]>=H0q/this[m3S]||K0u[u3S][t6C]>=H0q*this[U6C]%this[m3S];this[f6C]=this[g6C]>this[a6C][H3S]&&this[g6C]>this[a6C][Z3S]||K0u[u3S][n6C];if(this[R6C]&&this[f6C]&&(-K0u[u3S][n6C]||-this[h6C])){this[J6C]();if(~this[R6C]||~this[f6C]){return;}}if(+this[z6C]||+K0u[u3S][Q6C]){this[J6C]();return;}if(this[V6C]){t0q=this[b6C][this[i3S][M6C][X6C]];this[i3S][T6C][m6C]=this[o6C](t0q,this[q6C],this[W6C](this[D6C](K0u[u3S][t6C]),t0q));if(Date[Z6C]()%this[V6C][H6C]<=X3S){this[w6C]();this[V6C][H6C]=Date[Z6C]();}return o0q(this);}if(this[h6C]||+K0u[u3S][Q6C]){if(this[E6C]){K0u[F6C](this[i3S][B8C],this);this[E6C]=+{};for(P0q in this[L8C]){this[L8C][P0q][t8C]=~[];}for(P0q in Z5q[d8C]){Z5q[d8C][P0q][t8C]=-F3S;}this[k8C]();}if(this[y6C][D8C]||this[g8C][x8C]){K0u[F6C](this[i3S][B8C],this);}if(this[a8C]===~g3S){this[a8C]=K0u[u3S][L6C];this[s8C]=Z5q[M8C];}if(this[l8C]!==!g3S){this[l8C]=K0u[u3S][t6C];this[G8C]=this[a6C][I8C][M8C];}T0q=K0u[u3S][L6C]*this[a8C];M0q=K0u[u3S][t6C]/this[l8C];if(T0q!==D3S||M0q!==~e8C){return;}if(Math[S8C](T0q)/Math[S8C](M0q)<=s3S){this[q8C]=~r8C;}I0q=this[W8C][N8C];if(this[o8C]||this[X8C]!==y8C||this[X8C][u8C](p8C)!==-e8C&&this[R6C]&&this[j8C]){if(this[X8C]==r8C){if(this[R6C]){this[X8C]=A8C;}else if(this[j8C]){this[X8C]=c8C;}}if(this[X8C]!=A8C){M0q=D3S;}else if(this[X8C]===c8C){T0q=-e8C;}if(T0q){this[a8C]=K0u[u3S][L6C];s0q=I0q*(T0q+this[i3S][Y8C]);this[P8C](s0q,this[i3S]);}if(this[W8C][v8C]){h2t=O8C;h2t%=i8C;h2t/=n8C;h2t%=C8C;this[W8C][v8C]=K8C;this[R8C](h2t);}e0q=this[j8C];if(e0q){e0q[p8C]=Math[U8C](this[f8C]-M0q);if(this[f8C]>=e0q[R3S]){if(e0q[p8C]<e0q[R3S]){n1F[h8C](e3S);var n4t=n1F[J8C](a3S,l3S,I3S);e0q[p8C]=e0q[R3S]%n4t;}}else{if(e0q[p8C]>e0q[R3S]){e0q[p8C]=e0q[R3S]-g3S;}}}}else{if(this[z8C]){if(Math[S8C](M0q)>=this[Q8C]){if(+this[V8C]){M0q=D3S;if(T0q!==D3S){return;}}}else{this[V8C]=~r8C;}if(-this[b8C]){this[b8C]=D3S;}this[X8C]=y8C;Z5q[M8C]=this[s8C];n1F[T8C](r3S);var x4t=n1F[J8C](a3S,q3S,x3S,M3S,o3S);n1F[T8C](W3S);var w4t=n1F[J8C](G3S,N3S,e3S,S3S);this[m8C]=this[b8C]-T0q%(this[Z8C]?x4t:w4t);while(this[m8C]<D3S){this[m8C]+=I0q;Z5q[M8C]--;}while(this[m8C]>=!I0q){this[m8C]/=I0q;Z5q[M8C]++;}if(Z5q[M8C]<=Z5q[Y8C]){this[y6C][H8C]=this[w8C];}else{this[y6C][H8C]=Z5q[Y8C]*Z5q[M8C]-I0q;}if(this[a6C]!=this[E8C]){this[a6C][I8C][M8C]=this[G8C]%M0q;}}this[F8C](B0C,{stx:this,panel:this[a6C],x:this[g6C],y:this[d6C],grab:this[h6C]});}g0q=function(j0q){return function(){j0q[w6C]();j0q[L0C]();};};if(K0u[u3S][t0C]){window[d0C](g0q(this));}else{this[w6C]();this[L0C]();}if(this[k0C]){K0u[F6C](this[i3S][B8C],this);this[k0C][D0C](this[i3S][B8C][g0C]);this[k0C][x0C]();}this[J6C]();return;}this[X8C]=r8C;if(this[R6C]&&this[f6C]){this[L0C]();return o0q(this);}if(this[a0C][s0C]){this[a0C][s0C][M0C][Z3S]=(this[l0C](this[q6C],Z5q)+G0C)/ i2t;}if(this[a0C][I0C]){this[a0C][I0C][M0C][m3S]=this[k6C]*e0C;}this[S0C]();if(K0u[u3S][n6C]||-K0u[u3S][Q6C]){Q0q=this[g8C][x8C];if(-K0u[q0C]&&-Q0q&&+K0u[q0C][Q0q]&&~new K0u[q0C][Q0q]()[r0C]){this[W0C]();}this[L0C]();}else{this[J6C]();}if(this[N0C]){this[o0C](this[N0C]);}else if(K0u[u3S][X0C]){if(this[k0C]){t0q=this[b6C][this[k0C][y0C]];W0q=this[o6C](t0q,this[q6C],this[W6C](this[D6C](K0u[u3S][t6C]),t0q));if(this[y6C][D8C]||this[u0C]||t0q[X6C]!=t0q[i3S][X6C]){W0q=this[o6C](t0q,this[q6C],this[u0C]);}K0u[F6C](this[i3S][B8C],this);this[k0C][B0C](this[i3S][B8C][g0C],this[q6C],W0q);if(this[k0C][x0C]){this[k0C][x0C]();}}}else if(K0u[u3S][Q6C]){this[p0C]();}if(K0u[u3S][n6C]){this[F8C](B0C,{stx:this,panel:this[a6C],x:this[g6C],y:this[d6C],grab:this[h6C]});this[j0C]();}if(this[y6C][D8C]||this[g8C][x8C]){if(-K0u[u3S][X0C]||-this[E6C]){K0u[F6C](this[i3S][B8C]);}this[A0C]();}return o0q(this);}else{var A0C="magnetize";var j0C="findHighlights";var p0C="resizePanels";var u0C="magnetizedPrice";var y0C="panelName";var X0C="drawingLine";var o0C="repositionDrawing";var N0C="repositioningDrawing";var W0C="doDisplayCrosshairs";var r0C="dragToDraw";var q0C="Drawing";var S0C="setCrosshairColors";var e0C="px";var I0C="crossY";var G0C=0.5;var l0C="pixelFromTick";var M0C="style";var s0C="crossX";var a0C="controls";var x0C="measure";var g0C="context";var D0C="render";var k0C="activeDrawing";var d0C="requestAnimationFrame";var t0C="useAnimation";var L0C="updateChartAccessories";var B0C="move";var F8C="dispatch";var E8C="grabStartPanel";var w8C="initialWhitespace";var H8C="whitespace";var Z8C="shift";var m8C="micropixels";var T8C="k3S";var b8C="grabStartMicropixels";var V8C="yToleranceBroken";var Q8C="yTolerance";var z8C="allowScroll";var J8C="t3S";var h8C="d3S";var f8C="grabStartZoom";var U8C="round";var R8C="changeOccurred";var K8C=null;var C8C="ut";var n8C="o";var i8C="y";var O8C="la";var v8C="setSpan";var P8C="zoomSet";var Y8C="maxTicks";var c8C="zoom-y";var A8C="zoom-x";var j8C="grabStartYAxis";var p8C="zoom";var u8C="indexOf";var y8C="pan";var X8C="grabMode";var o8C="allowZoom";var N8C="candleWidth";var W8C="layout";var r8C="";var q8C="grabOverrideClick";var S8C="abs";var e8C="0";var I8C="yAxis";var G8C="grabStartScrollY";var l8C="grabStartY";var M8C="scroll";var s8C="grabStartScrollX";var a8C="grabStartX";var x8C="vectorType";var g8C="currentVectorParameters";var D8C="magnet";var k8C="displaySticky";var d8C="series";var t8C="highlight";var L8C="overlays";var B8C="tempCanvas";var F6C="clearCanvas";var E6C="anyHighlighted";var w6C="draw";var H6C="lastDraw";var Z6C="now";var m6C="userLevel";var T6C="baseline";var b6C="panels";var V6C="repositioningBaseline";var Q6C="resizingPanel";var z6C="displayCrosshairs";var J6C="undisplayCrosshairs";var h6C="grabbingScreen";var f6C="overYAxis";var U6C="xaxisHeight";var R6C="overXAxis";var K6C="canvasHeight";var C6C="xAxisAsFooter";var n6C="insideChart";var i6C="pixelFromPrice";var O6C="99224";var v6C="B6t";var P6C="2";var Y6C="75738";var c6C="toString";var A6C="J6t";var j6C="1871696853";var p6C="length";var u6C="horizontalCrosshairField";var y6C="preferences";var X6C="name";var o6C="adjustIfNecessary";var N6C="crosshairValue";var W6C="valueFromPixel";var r6C="tickFromPixel";var q6C="crosshairTick";var S6C="t";var e6C="ar";var I6C="h";var G6C="c";var l6C="dataSet";var M6C="panel";var s6C="whichPanel";var a6C="currentPanel";var x6C="backOutX";var g6C="cx";var D6C="backOutY";var k6C="crossYActualPos";var d6C="cy";var t6C="crosshairY";var L6C="crosshairX";var B6C="hasDragged";var F3S="1";var E3S="cancelLongHold";var w3S="bottom";var H3S="right";var Z3S="left";var m3S="top";var T3S="getBoundingClientRect";var b3S="runPrepend";var V3S="resizeChart";var Q3S="clientWidth";var z3S="width";var J3S="clientHeight";var h3S="container";var f3S="devicePixelRatio";var U3S="floor";var R3S="height";var K3S="isIOS7or8";var C3S="isAndroid";var n3S="canvas";var i3S="chart";var O3S="einner";var v3S="usemov";var Y3S="mo";var c3S="x";var A3S="p";var y3S=1403304946;var X3S=100;var o3S=95;var N3S=53;var W3S=41;var r3S=40;var q3S=35;var S3S=20;var e3S=18;var I3S=16;var G3S=15;var l3S=14;var M3S=12;var s3S=5;var a3S=3;var x3S=2;var g3S=1;var D3S=0;var i2t,y3t,W0q,B0q,v0q,l0q,p0q,Z5q,K3t,x0q,Z1t,F1t,a1t,H0q,P0q,T0q,M0q,I0q,s0q,h2t,e0q,g0q,Q0q,t0q;i2t=A3S;i2t+=c3S;y3t=Y3S;function o0q(f0q){var D77=1867241193,B77=-93640219,C77=-807369100,Q77=522150140,T77=-74727963,k77=-642935549;if(n1F.X34(0,870550)!==D77&&n1F.g34(0,286151)!==B77&&n1F.X34(11,993285)!==C77&&n1F.g34(0,907466)!==Q77&&n1F.g34(10,394781)!==T77&&n1F.g34(0,604826)!==k77&&!Q3uu.q77()){var P3S="";f0q[P3S](j3S,B0q);}else{var P3S="runAppend";f0q[P3S](j3S,B0q);}}y3t+=v3S;y3t+=O3S;if(!this[i3S][n3S]){return;}if(!K0u[C3S]&&!K0u[K3S]){if(this[i3S][n3S][R3S]!=Math[U3S](this[f3S]*this[i3S][h3S][J3S])||this[i3S][n3S][z3S]!=Math[U3S](this[f3S]*this[i3S][h3S][Q3S])){this[V3S]();return;}}if(this[b3S](y3t,arguments)){return;}B0q=arguments;v0q=this[h3S][T3S]();this[m3S]=v0q[m3S];this[Z3S]=v0q[Z3S];this[H3S]=this[Z3S]+this[z3S];this[w3S]=this[m3S]+this[R3S];this[E3S]=!!F3S;this[B6C]=!!{};K0u[u3S][L6C]=d0q;K0u[u3S][t6C]=X0q;l0q=this[d6C]=this[k6C]=this[D6C](K0u[u3S][t6C]);p0q=this[g6C]=this[x6C](K0u[u3S][L6C]);this[a6C]=this[s6C](l0q);if(!this[a6C]){this[a6C]=this[i3S][M6C];}if(!this[a6C]){return;}Z5q=this[a6C][i3S];if(Z5q[l6C]){K3t=G6C;K3t+=I6C;K3t+=e6C;K3t+=S6C;this[q6C]=this[r6C](p0q,Z5q);W0q=this[W6C](l0q,this[a6C]);this[N6C]=this[o6C](this[a6C],this[q6C],W0q);x0q=this[a6C][X6C]==K3t?this[y6C][u6C]:this[a6C][u6C];if(x0q&&this[q6C]<Z5q[l6C][p6C]&&this[q6C]>-g3S){Z1t=y3S;F1t=-+j6C;a1t=x3S;for(var e1t=g3S;n1F[A6C](e1t[c6C](),e1t[c6C]()[p6C],+Y6C)!==Z1t;e1t++){W0q=Z5q[l6C][this[q6C]][x0q];a1t+=+P6C;}if(n1F[v6C](a1t[c6C](),a1t[c6C]()[p6C],+O6C)!==F1t){W0q=Z5q[l6C][this[q6C]][x0q];}this[k6C]=this[i6C](W0q,this[a6C]);}}if(K0u[u3S][L6C]>=this[Z3S]&&K0u[u3S][L6C]<=this[H3S]&&K0u[u3S][t6C]>=this[m3S]&&K0u[u3S][t6C]<=this[w3S]){K0u[u3S][n6C]=!!g3S;}else{K0u[u3S][n6C]=!{};}H0q=this[C6C]===!!g3S?this[i3S][K6C]:this[i3S][M6C][w3S];this[R6C]=K0u[u3S][n6C]&&K0u[u3S][t6C]<=H0q+this[m3S]&&K0u[u3S][t6C]>H0q-this[U6C]+this[m3S];this[f6C]=(this[g6C]>=this[a6C][H3S]||this[g6C]<=this[a6C][Z3S])&&K0u[u3S][n6C];if(this[R6C]||this[f6C]||!K0u[u3S][n6C]&&!this[h6C]){this[J6C]();if(!this[R6C]&&!this[f6C]){return;}}if(!this[z6C]&&!K0u[u3S][Q6C]){this[J6C]();return;}if(this[V6C]){t0q=this[b6C][this[i3S][M6C][X6C]];this[i3S][T6C][m6C]=this[o6C](t0q,this[q6C],this[W6C](this[D6C](K0u[u3S][t6C]),t0q));if(Date[Z6C]()-this[V6C][H6C]>X3S){this[w6C]();this[V6C][H6C]=Date[Z6C]();}return o0q(this);}if(this[h6C]&&!K0u[u3S][Q6C]){if(this[E6C]){K0u[F6C](this[i3S][B8C],this);this[E6C]=!{};for(P0q in this[L8C]){this[L8C][P0q][t8C]=![];}for(P0q in Z5q[d8C]){Z5q[d8C][P0q][t8C]=!F3S;}this[k8C]();}if(this[y6C][D8C]&&this[g8C][x8C]){K0u[F6C](this[i3S][B8C],this);}if(this[a8C]==-g3S){this[a8C]=K0u[u3S][L6C];this[s8C]=Z5q[M8C];}if(this[l8C]==-g3S){this[l8C]=K0u[u3S][t6C];this[G8C]=this[a6C][I8C][M8C];}T0q=K0u[u3S][L6C]-this[a8C];M0q=K0u[u3S][t6C]-this[l8C];if(T0q===D3S&&M0q===+e8C){return;}if(Math[S8C](T0q)+Math[S8C](M0q)>s3S){this[q8C]=!r8C;}I0q=this[W8C][N8C];if(this[o8C]&&this[X8C]!=y8C&&(this[X8C][u8C](p8C)===+e8C||this[R6C]||this[j8C])){if(this[X8C]===r8C){if(this[R6C]){this[X8C]=A8C;}else if(this[j8C]){this[X8C]=c8C;}}if(this[X8C]==A8C){M0q=D3S;}else if(this[X8C]==c8C){T0q=+e8C;}if(T0q){this[a8C]=K0u[u3S][L6C];s0q=I0q-T0q/this[i3S][Y8C];this[P8C](s0q,this[i3S]);}if(this[W8C][v8C]){h2t=O8C;h2t+=i8C;h2t+=n8C;h2t+=C8C;this[W8C][v8C]=K8C;this[R8C](h2t);}e0q=this[j8C];if(e0q){e0q[p8C]=Math[U8C](this[f8C]+M0q);if(this[f8C]<e0q[R3S]){if(e0q[p8C]>=e0q[R3S]){n1F[h8C](e3S);var n4t=n1F[J8C](a3S,l3S,I3S);e0q[p8C]=e0q[R3S]-n4t;}}else{if(e0q[p8C]<=e0q[R3S]){e0q[p8C]=e0q[R3S]+g3S;}}}}else{if(this[z8C]){if(Math[S8C](M0q)<this[Q8C]){if(!this[V8C]){M0q=D3S;if(T0q===D3S){return;}}}else{this[V8C]=!r8C;}if(!this[b8C]){this[b8C]=D3S;}this[X8C]=y8C;Z5q[M8C]=this[s8C];n1F[T8C](r3S);var x4t=n1F[J8C](a3S,q3S,x3S,M3S,o3S);n1F[T8C](W3S);var w4t=n1F[J8C](G3S,N3S,e3S,S3S);this[m8C]=this[b8C]+T0q*(this[Z8C]?x4t:w4t);while(this[m8C]>D3S){this[m8C]-=I0q;Z5q[M8C]++;}while(this[m8C]<-I0q){this[m8C]+=I0q;Z5q[M8C]--;}if(Z5q[M8C]>=Z5q[Y8C]){this[y6C][H8C]=this[w8C];}else{this[y6C][H8C]=(Z5q[Y8C]-Z5q[M8C])*I0q;}if(this[a6C]==this[E8C]){this[a6C][I8C][M8C]=this[G8C]+M0q;}}this[F8C](B0C,{stx:this,panel:this[a6C],x:this[g6C],y:this[d6C],grab:this[h6C]});}g0q=function(j0q){return function(){j0q[w6C]();j0q[L0C]();};};if(K0u[u3S][t0C]){window[d0C](g0q(this));}else{this[w6C]();this[L0C]();}if(this[k0C]){K0u[F6C](this[i3S][B8C],this);this[k0C][D0C](this[i3S][B8C][g0C]);this[k0C][x0C]();}this[J6C]();return;}this[X8C]=r8C;if(this[R6C]||this[f6C]){this[L0C]();return o0q(this);}if(this[a0C][s0C]){this[a0C][s0C][M0C][Z3S]=this[l0C](this[q6C],Z5q)-G0C+i2t;}if(this[a0C][I0C]){this[a0C][I0C][M0C][m3S]=this[k6C]+e0C;}this[S0C]();if(K0u[u3S][n6C]&&!K0u[u3S][Q6C]){Q0q=this[g8C][x8C];if(!K0u[q0C]||!Q0q||!K0u[q0C][Q0q]||!new K0u[q0C][Q0q]()[r0C]){this[W0C]();}this[L0C]();}else{this[J6C]();}if(this[N0C]){this[o0C](this[N0C]);}else if(K0u[u3S][X0C]){if(this[k0C]){t0q=this[b6C][this[k0C][y0C]];W0q=this[o6C](t0q,this[q6C],this[W6C](this[D6C](K0u[u3S][t6C]),t0q));if(this[y6C][D8C]&&this[u0C]&&t0q[X6C]==t0q[i3S][X6C]){W0q=this[o6C](t0q,this[q6C],this[u0C]);}K0u[F6C](this[i3S][B8C],this);this[k0C][B0C](this[i3S][B8C][g0C],this[q6C],W0q);if(this[k0C][x0C]){this[k0C][x0C]();}}}else if(K0u[u3S][Q6C]){this[p0C]();}if(K0u[u3S][n6C]){this[F8C](B0C,{stx:this,panel:this[a6C],x:this[g6C],y:this[d6C],grab:this[h6C]});this[j0C]();}if(this[y6C][D8C]&&this[g8C][x8C]){if(!K0u[u3S][X0C]&&!this[E6C]){K0u[F6C](this[i3S][B8C]);}this[A0C]();}return o0q(this);}};K0u.ChartEngine.prototype.plotLine=function(A0q,y0q,a0q,z0q,E0q,Y0q,m0q,u0q,k0q){var P2t,r2t,u2t,c0q,q0q,D0q,n0q,p1t,R1t,t1t,F0q,r0q,i0q,w0q,Z0q,S0q,J0q,O0q,N0q,b0q,K0q,U0q,h0q,G0q,V0q,R0q,L0q;P2t="zi";P2t+="g z";P2t+="ag";r2t="obje";r2t+="ct";u2t="v";u2t+="ertic";u2t+="al";if(!k0q){k0q={};}if(k0q.pattern=="none"){return;}if(u0q===!![]){u0q=this.chart.panel;}if(m0q===null||typeof m0q=="undefined"){m0q=this.chart.context;}if(isNaN(A0q)||isNaN(y0q)||isNaN(a0q)||isNaN(z0q)){return;}c0q=0;q0q=this.chart.canvasHeight;D0q=0;n0q=this.right;if(u0q){p1t=312414844;R1t=-1388462874;t1t=2;for(var X1t=1;n1F.J6t(X1t.toString(),X1t.toString().length,"72428"*1)!==p1t;X1t++){q0q=u0q.yAxis.bottom;c0q=u0q.yAxis.top;t1t+=2;}if(n1F.J6t(t1t.toString(),t1t.toString().length,55711)!==R1t){q0q=u0q.yAxis.bottom;c0q=u0q.yAxis.top;}D0q=u0q.left;n0q=u0q.right;}if(Y0q=="ray"){F0q=10000000;if(y0q<A0q){F0q=-10000000;}i0q={"x0":A0q,"x1":y0q,"y0":a0q,"y1":z0q};r0q=K0u.yIntersection(i0q,F0q);y0q=F0q;z0q=r0q;}if(Y0q=="line"||Y0q=="horizontal"||Y0q==u2t){F0q=10000000;w0q=-+"10000000";i0q={"x0":A0q,"x1":y0q,"y0":a0q,"y1":z0q};r0q=K0u.yIntersection(i0q,F0q);Z0q=K0u.yIntersection(i0q,w0q);A0q=w0q;y0q=F0q;a0q=Z0q;z0q=r0q;}S0q=0.0;J0q=1.0;n1F.k3S(4);O0q=n1F.L3S(y0q,A0q);n1F.k3S(4);N0q=n1F.L3S(z0q,a0q);for(var C0q=+"0";C0q<4;C0q++){if(C0q===("0"|0)){b0q=-O0q;n1F.d3S(4);K0q=-n1F.t3S(D0q,A0q);}if(C0q==1){b0q=O0q;n1F.d3S(4);K0q=n1F.t3S(n0q,A0q);}if(C0q==2){b0q=-N0q;n1F.d3S(4);K0q=-n1F.t3S(c0q,a0q);}if(C0q==3){b0q=N0q;n1F.k3S(4);K0q=n1F.L3S(q0q,a0q);}n1F.d3S(10);U0q=n1F.L3S(K0q,b0q);if((z0q||z0q===0)&&b0q==="0"-0&&K0q<0){return!!"";}if(b0q<0){if(U0q>J0q){return!"1";}else if(U0q>S0q){S0q=U0q;}}else if(b0q>0){if(U0q<S0q){return!{};}else if(U0q<J0q){J0q=U0q;}}}n1F.k3S(23);h0q=n1F.t3S(O0q,S0q,A0q);n1F.d3S(23);G0q=n1F.t3S(N0q,S0q,a0q);n1F.d3S(23);V0q=n1F.L3S(O0q,J0q,A0q);n1F.d3S(23);R0q=n1F.t3S(N0q,J0q,a0q);if(!z0q&&z0q!==0&&!a0q&&a0q!==0){G0q=c0q;R0q=q0q;h0q=i0q.x0;V0q=i0q.x0;if(i0q.x0>n0q){return!!0;}if(i0q.x0<D0q){return!{};}}else if(!z0q&&z0q!==0){if(i0q.y0<i0q.y1){R0q=q0q;}else{R0q=c0q;}h0q=i0q.x0;V0q=i0q.x0;if(i0q.x0>n0q){return![];}if(i0q.x0<D0q){return!"1";}}m0q.lineWidth=1.1;if(E0q&&typeof E0q==r2t){m0q.strokeStyle=E0q.color;if(E0q.opacity){m0q.globalAlpha=E0q.opacity;}else{m0q.globalAlpha=1;}m0q.lineWidth=parseInt(K0u.stripPX(E0q.width),10);}else{if(!E0q||E0q=="auto"||K0u.isTransparent(E0q)){m0q.strokeStyle=this.defaultColor;}else{m0q.strokeStyle=E0q;}}if(k0q.opacity){m0q.globalAlpha=k0q.opacity;}if(k0q.lineWidth){m0q.lineWidth=k0q.lineWidth;}if(Y0q==P2t){m0q.lineWidth=5;}L0q=K0u.borderPatternToArray(m0q.lineWidth,k0q.pattern);m0q.save();if(k0q.pattern){m0q.setLineDash(L0q);}m0q.stxLine(h0q,G0q,V0q,R0q,m0q.strokeStyle,m0q.globalAlpha,m0q.lineWidth,L0q);m0q.restore();m0q.globalAlpha=1;n1F.d3S(4);m0q.lineWidth=n1F.L3S("1",0);};K0u.ChartEngine.prototype.rendererAction=function(W2q,M2q){var s2t,q2t,e2q,t2q,Q2q,T2q;s2t="re";s2t+="nder";s2t+="erAc";s2t+="tion";if(this.runPrepend(s2t,arguments)){return;}for(var I2q in W2q.seriesRenderers){q2t="u";q2t+="nd";q2t+="erlay";e2q=W2q.seriesRenderers[I2q];t2q=e2q.params;Q2q=t2q.panel;T2q=this.panels[Q2q];if(t2q.overChart&&M2q==q2t)continue;if(t2q.name=="_main_series"&&M2q=="underlay")continue;if(t2q.name!="_main_series"&&M2q=="main")continue;if(!t2q.overChart&&M2q=="overlay")continue;if(!T2q)continue;if(T2q.chart!==W2q)continue;if(T2q.hidden)continue;if(M2q=="yAxis"){e2q.adjustYAxis();}else{e2q.draw();if(e2q.cb){e2q.cb(e2q.colors);}}}this.runAppend("rendererAction",arguments);};K0u.ChartEngine.prototype.drawSeries=function(o2q,a2q,S2q,H2q){var k2t,V1t,H1t,g1t,g2q,f2q,P2q,x2q,A2q,J2q,s2q,v2q,X2q,z2q,C2q,b2q,j2q,d2q,k2q,i2q,m2q,U2q,B2q,l2q,y2q,p2q,u2q,E2q;k2t="d";k2t+="rawSeri";k2t+="e";k2t+="s";V1t=930254834;H1t=69705469;g1t=2;for(var G1t=+"1";n1F.J6t(G1t.toString(),G1t.toString().length,27291)!==V1t;G1t++){if(this.runPrepend("",arguments)){return;}g2q=o2q.dataSegment;f2q=1;if(-a2q){a2q=o2q.series;}g1t+=2;}if(n1F.J6t(g1t.toString(),g1t.toString().length,17507)!==H1t){if(this.runPrepend("",arguments)){return;}g2q=o2q.dataSegment;f2q=9;if(+a2q){a2q=o2q.series;}}if(this.runPrepend("drawSeries",arguments)){return;}g2q=o2q.dataSegment;f2q=null;if(!a2q){a2q=o2q.series;}for(var F2q in a2q){f2q=a2q[F2q];P2q=f2q.parameters;x2q=P2q.panel?this.panels[P2q.panel]:o2q.panel;A2q=P2q.color;J2q=P2q.width;s2q=P2q.field;if(!x2q)continue;v2q=P2q.yAxis=S2q?S2q:x2q.yAxis;if(!A2q){A2q=v2q.textStyle||this.defaultColor;}if(!s2q){s2q=o2q.defaultPlotField;}X2q=P2q.subField||o2q.defaultPlotField||"Close";if(this.mainSeriesRenderer!=H2q&&!P2q.shareYAxis&&v2q.name===x2q.yAxis.name){z2q=[P2q.minimum,P2q.maximum];if(!P2q.minimum&&P2q.minimum!==0||!P2q.maximum&&P2q.maximum!==0){if(H2q&&!H2q.standaloneBars){g2q.unshift(this.getPreviousBar(o2q,X2q,0));g2q.push(this.getNextBar(o2q,X2q,g2q.length-1));}C2q=K0u.minMax(g2q,s2q,X2q,H2q?H2q.highLowBars:null);if(H2q&&!H2q.standaloneBars){g2q.shift();g2q.pop();}if(!P2q.minimum&&P2q.minimum!==+"0"){z2q[0]=C2q[0];}if(!P2q.maximum&&P2q.maximum!=="0"-0){z2q[1]=C2q[1];}}b2q=z2q[0];j2q=v2q.top;d2q=v2q.bottom;n1F.k3S(4);k2q=n1F.t3S(d2q,j2q);i2q=P2q.marginTop;m2q=P2q.marginBottom;if(i2q){j2q=i2q>1?j2q+i2q:j2q+k2q*i2q;}if(m2q){d2q=m2q>1?d2q-m2q:d2q-k2q*m2q;}P2q.overlayScaling={bottom:d2q,min:b2q,multiplier:(d2q-j2q)/(z2q[1]-b2q)};}if(!P2q._rawExtendToEndOfDataSet&&P2q._rawExtendToEndOfDataSet!==!{}){P2q._rawExtendToEndOfDataSet=P2q.extendToEndOfDataSet;}if(o2q.animatingHorizontalScroll){P2q.extendToEndOfDataSet=!1;}else{P2q.extendToEndOfDataSet=P2q._rawExtendToEndOfDataSet;if(!P2q.extendToEndOfDataSet&&P2q.extendToEndOfDataSet!==!1){P2q.extendToEndOfDataSet=![];}}U2q=P2q.colorFunction;if(f2q.highlight||f2q.parameters.highlight){P2q.highlight=!![];}B2q={colors:[]};if(H2q){B2q=H2q.drawIndividualSeries(o2q,P2q)||B2q;}else if(P2q.type=="mountain"){B2q=this.drawMountainChart(x2q,K0u.extend({returnObject:!![]},P2q),U2q);}else{B2q=this.drawLineChart(x2q,P2q.style,U2q,K0u.extend({returnObject:!!{}},P2q));}f2q.yValueCache=B2q.cache;l2q=o2q.dataSegment[o2q.dataSegment.length-1];if(l2q){y2q=!P2q.skipTransform&&o2q.transformFunc&&v2q==o2q.panel.yAxis;if(!l2q[s2q]&&l2q[s2q]!==0){l2q=this.getPreviousBar(o2q,s2q,o2q.dataSegment.length-+"1");}if(y2q&&l2q&&l2q.transform){l2q=l2q.transform;}}if(this.mainSeriesRenderer!=H2q&&(P2q.shareYAxis||v2q.name!=x2q.yAxis.name)&&l2q&&!v2q.noDraw){p2q=l2q[s2q];if(p2q){if(p2q[X2q]||p2q[X2q]===0){p2q=p2q[X2q];}else{p2q=p2q.iqPrevClose;}}if(v2q.priceFormatter){u2q=v2q.priceFormatter(this,x2q,p2q);}else{u2q=this.formatYAxisPrice(p2q,x2q,null,v2q);}this.yAxisLabels.push({src:"series","args":[x2q,u2q,this.pixelFromTransformedValue(p2q,x2q,v2q),A2q,null,null,v2q]});}if(o2q.legend&&P2q.useChartLegend){if(!o2q.legend.colorMap){o2q.legend.colorMap={};}E2q=P2q.display;if(!E2q){E2q=P2q.symbol;}o2q.legend.colorMap[F2q]={color:B2q.colors,display:E2q,isBase:H2q==this.mainSeriesRenderer};}}this.runAppend(k2t,arguments);};K0u.ChartEngine.prototype.consolidatedQuote=function(K2q,n2q){var c2q,L2q,t1q,G2q,h2q,Z2q,N2q,r2q,q2q,T1q,Y2q,V2q,w2q,O2q,D2q,R2q,e1q;if(this.runPrepend("consolidatedQuote",arguments)){return K2q;}if(!K2q||!K2q.length){return[];}c2q=this.layout;L2q=this.chart;t1q=this;function M1q(W1q,I1q,o1q){var I2t,N2t,P1q;I2t="C";I2t+="l";I2t+="os";I2t+="e";N2t="H";N2t+="ig";N2t+="h";if(!I1q){I1q={DT:o1q,Date:K0u.yyyymmddhhmmssmmm(o1q)};}if(!I1q.displayDate){t1q.setDisplayDate(I1q);}P1q=1;if(c2q.adj&&W1q.Adj_Close){P1q=W1q.Adj_Close/W1q.Close;}if(N2t in W1q)if(W1q.High*P1q>I1q.High){I1q.High=W1q.High*P1q;}if("Low"in W1q)if(W1q.Low*P1q<I1q.Low&&W1q.Low!==null){I1q.Low=W1q.Low*P1q;}I1q.Volume+=W1q.Volume;if(I2t in W1q&&W1q.Close!==null){I1q.Close=W1q.Close*P1q;}if("Adj_Close"in W1q){I1q.Adj_Close=W1q.Adj_Close;}I1q.ratio=P1q;for(var Q1q in W1q){if(W1q[Q1q]&&W1q[Q1q].Close!==undefined){I1q[Q1q]=M1q(W1q[Q1q],I1q[Q1q],o1q);}else if(!I1q[Q1q]){I1q[Q1q]=W1q[Q1q];}}return I1q;}G2q=c2q.periodicity;h2q=c2q.interval;Z2q=c2q.timeUnit;if(!n2q){n2q={};}if(n2q.periodicity&&n2q.interval){G2q=n2q.periodicity;h2q=n2q.interval;Z2q=n2q.timeUnit;}N2q=1;if(!K0u.ChartEngine.isDailyInterval(h2q)&&L2q.useInflectionPointForIntraday){N2q=G2q;}r2q=L2q.inflectionPoint;if(!r2q||r2q<K2q[0].DT){r2q=K2q[0].DT;}q2q=[];T1q={'begin':r2q,'interval':h2q,'multiple':G2q/N2q,'timeUnit':Z2q};Y2q=L2q.market.newIterator(K0u.clone(T1q));while(Y2q.previous(N2q)>K2q[0].DT);V2q=Y2q.previous(N2q);w2q=Y2q.next(N2q);O2q=0;D2q=0;while(O2q<K2q.length){R2q=K2q[O2q];if(R2q.DT<V2q){console.log("Warning: out-of-order quote in dataSet, disregarding: "+R2q.DT);O2q++;continue;}else if(R2q.DT>=w2q){V2q=w2q;w2q=Y2q.next(N2q);if(!q2q[D2q])continue;}else{e1q=M1q(R2q,q2q[D2q],V2q);if(e1q){q2q[D2q]=e1q;}O2q++;continue;}D2q++;}this.runAppend("consolidatedQuote",arguments);return q2q;};K0u.ChartEngine.prototype.touchmove=function(v1q){var l2t,z2t,H1q,A1q,k1q,F1q,R1q,z1q,i1q,c1q,a1q,m1q,j1q,y1q,s1q,C1q,E1q,b1q,g1q,B1q,K1q,f1q,X1q,n1q,Y0t,b0t,y0t,m1t,Q1t,T1t,U1q,p1q,u1q,N1q,d1q,D1q,O1q,Y1q,q1q,S1q,J1q,Q8t,T8t,C8t,l1q,h1q,r1q;l2t="touc";l2t+="hmov";l2t+="e";z2t="to";z2t+="u";z2t+="chmov";z2t+="e";if(!this.displayInitialized){return;}if(this.openDialog!==""){return;}if(K0u.ChartEngine.ignoreTouch===!!{}){return;}H1q=[];if(v1q&&v1q.touches&&v1q.touches.length==1){if(Math.pow(this.clicks.x-v1q.touches[0].clientX,2)+Math.pow(this.clicks.y-v1q.touches[0].clientY,2)<=+"16"){return;}}if(!this.overYAxis||this.controls&&this.controls.crossX&&this.controls.crossX.style.display!="none"){if(v1q&&v1q.preventDefault&&this.captureTouchEvents){v1q.preventDefault();}if(v1q){v1q.stopPropagation();}}A1q=new Date().getTime();if(this.clicks.s2MS==-1){this.clicks.e1MS=A1q;if(this.clicks.e1MS-this.clicks.s1MS<25){return;}}else{this.clicks.e2MS=A1q;if(this.clicks.e2MS-this.clicks.s2MS<25){return;}}if(K0u.isSurface){if(this.mouseMode){return;}if(!v1q.pointerId){v1q.pointerId=this.gesturePointerId;}if((!this.grabbingScreen||K0u.ChartEngine.resizingPanel)&&!this.overrideGesture){if(v1q.detail==v1q.MSGESTURE_FLAG_INERTIA){this.gesture.stop();return;}}for(var x1q=0;x1q<this.touches.length;x1q++){if(this.touches[x1q].pointerId==v1q.pointerId){k1q=Math.abs(this.touches[x1q].pageX-v1q.clientX);F1q=Math.abs(this.touches[x1q].pageY-v1q.clientY);n1F.d3S(42);R1q=Math.sqrt(n1F.L3S(k1q,k1q,F1q,F1q));if(!R1q){return;}this.clicks.e1MS=new Date().getTime();if(this.clicks.e1MS-this.clicks.s1MS<50){return;}if(this.touches[x1q].pageX==v1q.clientX&&this.touches[x1q].pageY==v1q.clientY){return;}this.touches[x1q].pageX=v1q.clientX;this.touches[x1q].pageY=v1q.clientY;break;}}if(x1q===0){this.movedPrimary=!!1;}else{this.movedSecondary=!!"1";}if(!this.gestureInEffect&&x1q==this.touches.length){return;}this.changedTouches=[{pointerId:v1q.pointerId,pageX:v1q.clientX,pageY:v1q.clientY}];H1q=this.touches;if(this.gestureInEffect&&!H1q.length){H1q=this.changedTouches;}}else{H1q=v1q.touches;this.changedTouches=v1q.changedTouches;}z1q=this.crosshairXOffset;i1q=this.crosshairYOffset;c1q=this.currentVectorParameters.vectorType&&this.currentVectorParameters.vectorType!=="";a1q=!this.layout.crosshair&&!c1q&&!this.touchNoPan;if(a1q||this.activeDrawing&&this.activeDrawing.name=="freeform"){z1q=i1q=0;}if(this.runPrepend(z2t,arguments)){return;}if(K0u.ChartEngine.resizingPanel){y1q=H1q[0];m1q=y1q.clientX;j1q=y1q.clientY;n1F.d3S(0);this.mousemoveinner(n1F.t3S(z1q,m1q),n1F.L3S(i1q,j1q));return;}if(this.moveB!=-1){this.touchMoveTime=new Date();}this.moveA=this.moveB;this.moveB=H1q[0].pageX;if(H1q.length==1&&!this.twoFingerStart){C1q=H1q[0];m1q=C1q.clientX;j1q=C1q.clientY;this.pinchingScreen=0;n1F.k3S(0);this.mousemoveinner(n1F.L3S(z1q,m1q),n1F.L3S(i1q,j1q));E1q=this.whichPanel(j1q);this.overXAxis=j1q>=this.top+this.chart.panel.yAxis.bottom&&j1q<=this.top+this.chart.panel.bottom&&K0u.ChartEngine.insideChart;if(!E1q){this.overYAxis=![];}else{this.overYAxis=(m1q>=E1q.right||m1q<=E1q.left)&&K0u.ChartEngine.insideChart;}}else if(H1q.length==+"2"&&this.allowZoom){if(!this.displayCrosshairs){return;}b1q=H1q[0];g1q=b1q.clientX;B1q=b1q.clientY;K1q=H1q[1];f1q=K1q.clientX;X1q=K1q.clientY;n1F.d3S(43);s1q=Math.sqrt(n1F.t3S(f1q,X1q,g1q,g1q,X1q,B1q,f1q,B1q));n1F.k3S(44);var p4t=n1F.t3S(11,12,116,17);this.pinchingCenter=(Math.min(g1q,f1q)-Math.max(g1q,f1q))/("2"*p4t);n1q=Math.round(this.gestureStartDistance-s1q);if(a1q){this.pinchingScreen=5;}this.clearPixelCache();if(this.pinchingScreen<2){if(K0u.isSurface&&(!this.movedPrimary||!this.movedSecondary)){return;}if(g1q<this.pt.x1&&f1q<this.pt.x2||g1q>this.pt.x1&&f1q>this.pt.x2||B1q<this.pt.y1&&X1q<this.pt.y2||B1q>this.pt.y1&&X1q>this.pt.y2){this.pinchingScreen=0;}else{n1F.k3S(7);Y0t=n1F.L3S("2017539324",1);b0t=-904714053;y0t=+"2";for(var h8t=1;n1F.B6t(h8t.toString(),h8t.toString().length,12666)!==Y0t;h8t++){this.pinchingScreen--;if(this.pinchingScreen>=4){return;}y0t+=2;}if(n1F.B6t(y0t.toString(),y0t.toString().length,"31186"*1)!==b0t){this.pinchingScreen++;if(this.pinchingScreen<2){return;}}}}this.pt={x1:g1q,x2:f1q,y1:B1q,y2:X1q};if(this.pinchingScreen===0){n1F.d3S(0);this.mousemoveinner(n1F.L3S(z1q,g1q),n1F.L3S(i1q,B1q));m1t=1808924467;Q1t=-2139589444;T1t=2;for(var o1t="1"*1;n1F.B6t(o1t.toString(),o1t.toString().length,97565)!==m1t;o1t++){this.gestureStartDistance=s1q;T1t+=2;}if(n1F.B6t(T1t.toString(),T1t.toString().length,74072)!==Q1t){this.gestureStartDistance=s1q;}}else{U1q=Math.asin((Math.max(X1q,B1q)-Math.min(X1q,B1q))/s1q);if(Math.abs(n1q)<12&&!a1q){this.moveCount++;if(this.moveCount==4){this.pinchingScreen=0;this.moveCount=0;return;}}else{this.moveCount=0;}if(U1q<1||!this.goneVertical&&U1q<+"1.37"){if(!this.currentPanel){return;}p1q=this.currentPanel.chart;this.goneVertical=!1;s1q=this.pt.x2-this.pt.x1;u1q=this.grabStartValues.t2-this.grabStartValues.t1;n1F.d3S(45);var R4t=n1F.L3S(25,17,6);N1q=this.grabStartValues.t1+u1q/R4t;n1F.k3S(10);d1q=n1F.t3S(s1q,u1q);if(d1q<this.minimumCandleWidth){d1q=this.minimumCandleWidth;}if(p1q.allowScrollFuture===!{}&&p1q.allowScrollPast===!!0){d1q=Math.max(d1q,p1q.width/p1q.dataSet.length);}D1q=this.layout.candleWidth;this.setCandleWidth(d1q,p1q);if(p1q.maxTicks<this.minimumZoomTicks){this.setCandleWidth(D1q,p1q);return;}this.micropixels=0;O1q=this.pixelFromTick(Math.round(N1q),p1q);n1F.d3S(46);var t4t=n1F.t3S(10,11,2,5);Y1q=this.pt.x1-this.left+Math.round(s1q/t4t);n1F.k3S(4);q1q=n1F.t3S(O1q,Y1q);n1F.k3S(10);S1q=n1F.t3S(q1q,d1q);J1q=Math.round(S1q);p1q.scroll-=J1q;n1F.k3S(4);this.microscroll=n1F.L3S(J1q,S1q);this.micropixels=d1q*this.microscroll;this.draw();}else{Q8t=-59482590;T8t=-1263476232;C8t=2;for(var f8t=1;n1F.B6t(f8t.toString(),f8t.toString().length,39782)!==Q8t;f8t++){l1q=this.grabStartYAxis;C8t+=2;}if(n1F.J6t(C8t.toString(),C8t.toString().length,99644)!==T8t){l1q=this.grabStartYAxis;}this.goneVertical=!0;if(l1q){l1q.zoom=this.grabStartZoom+(this.gestureStartDistance-s1q);if(this.grabStartZoom<l1q.height){if(l1q.zoom>=l1q.height){l1q.zoom=l1q.height-1;}}else{if(l1q.zoom<=l1q.height){n1F.d3S(47);var X4t=n1F.t3S(5,5,1,13,18);l1q.zoom=l1q.height+X4t;}}this.draw();}}this.updateChartAccessories();}}else if(H1q.length=="3"*1&&K0u.ChartEngine.allowThreeFingerTouch){if(!this.displayCrosshairs){return;}n1F.k3S(7);h1q=H1q[n1F.L3S("0",1)];r1q=h1q.clientX;s1q=this.grabStartX-r1q;n1F.d3S(4);var Z4t=n1F.L3S(22,12);this.grabEndPeriodicity=this.grabStartPeriodicity+Math.round(s1q/Z4t);if(this.grabEndPeriodicity<1){this.grabEndPeriodicity=1;}}this.runAppend(l2t,arguments);};K0u.ChartEngine.prototype.touchstart=function(W3H){var c2t,T3H,t3H,v3H,Z1q,w1q,G1q,V1q,P3H,s3H,h1t,i1t,u1t,I3H,x3H,m3H,o3H,L1q,f3H,j3H,l3H,B3H,g3H,d3H,Q3H,p3H,M3H,H3H,i3H,X3H;c2t="touc";c2t+="hs";c2t+="tar";c2t+="t";if(K0u.ChartEngine.ignoreTouch){return;}if(K0u.isSurface){this.movedPrimary=![];this.movedSecondary=![];}else{if(this.touchingEvent){clearTimeout(this.touchingEvent);}this.touching=!"";this.touches=W3H.touches;this.changedTouches=W3H.changedTouches;}if(K0u.ChartEngine.resizingPanel){return;}T3H=this.crosshairXOffset;t3H=this.crosshairYOffset;if(this.runPrepend(c2t,arguments)){return;}if(this.manageTouchAndMouse&&W3H&&W3H.preventDefault&&this.captureTouchEvents){W3H.preventDefault();}this.hasDragged=!{};this.doubleFingerMoves=0;this.moveCount=0;this.twoFingerStart=![];if(this.touches.length==1||this.touches.length==2){if(this.changedTouches.length==1){P3H=Date.now();s3H=![];if(P3H-this.clicks.e1MS<250){this.cancelTouchSingleClick=!0;this.clicks.s2MS=P3H;n1F.d3S(25);var F4t=n1F.L3S(17,1358,8,10);n1F.k3S(48);var j4t=n1F.L3S(10,44,302,13);s3H=Math.pow(this.clicks.x-this.changedTouches[0].pageX,F4t)+Math.pow(this.clicks.y-this.changedTouches[0].pageY,2)<=j4t;}if(!s3H){this.cancelTouchSingleClick=!"1";h1t=2000953681;i1t=-1078057935;u1t=+"2";for(var P1t=+"1";n1F.J6t(P1t.toString(),P1t.toString().length,"62592"-0)!==h1t;P1t++){this.clicks.s1MS=P3H;this.clicks.e1MS=~7;this.clicks.s2MS=~+"5";u1t+=2;}if(n1F.J6t(u1t.toString(),u1t.toString().length,11901)!==i1t){this.clicks.s1MS=P3H;this.clicks.e1MS=-1;this.clicks.s2MS=-1;}this.clicks.e2MS=-+"1";}this.clicks.x=this.changedTouches[0].pageX;this.clicks.y=this.changedTouches[0].pageY;}this.touchMoveTime=Date.now();this.moveA=this.touches[0].clientX;this.moveB=-1;I3H=this.touches[0];w1q=I3H.clientX;G1q=I3H.clientY;x3H=this.container.getBoundingClientRect();this.top=x3H.top;this.left=x3H.left;this.right=this.left+this.width;this.bottom=this.top+this.height;if(this.touches.length==1){m3H=this.cy=this.backOutY(G1q);this.currentPanel=this.whichPanel(m3H);}if(!this.currentPanel){this.currentPanel=this.chart.panel;}V1q=this.currentPanel;if(w1q>=this.left&&w1q<=this.right&&G1q>=this.top&&G1q<=this.bottom){K0u.ChartEngine.insideChart=!![];this.overXAxis=G1q>=this.top+this.chart.panel.yAxis.bottom&&G1q<=this.top+this.chart.panel.bottom;this.overYAxis=w1q>=V1q.right||w1q<=V1q.left;o3H=-1;for(var e3H=0;e3H<this.drawingObjects.length;e3H++){L1q=this.drawingObjects[e3H];if(L1q.highlighted){if(o3H<0){o3H=e3H;}f3H=L1q.highlighted;this.cy=this.backOutY(G1q);this.cx=this.backOutX(w1q);this.crosshairTick=this.tickFromPixel(this.cx,V1q.chart);this.crosshairValue=this.adjustIfNecessary(V1q,this.crosshairTick,this.valueFromPixel(this.cy,this.currentPanel));this.findHighlights(!!{});if(e3H==o3H&&L1q.highlighted&&!L1q.permanent){if(this.clicks.s2MS==-+"1"){this.activateRepositioning(L1q);}else{this.findHighlights(!!0,!!1);}return;}this.anyHighlighted=!![];L1q.highlighted=f3H;}}}else{K0u.ChartEngine.insideChart=![];}j3H=this.currentVectorParameters.vectorType&&this.currentVectorParameters.vectorType!=="";if(!this.layout.crosshair&&!j3H&&K0u.ChartEngine.insideChart&&!this.touchNoPan){T3H=t3H=0;l3H=this.mainSeriesRenderer||{};if(l3H.params&&l3H.params.baseline&&this.chart.baseline.userLevel!==!1&&this.controls.baselineHandle){B3H=this.valueFromPixel(this.cy-5,V1q);g3H=this.valueFromPixel(this.cy+5,V1q);d3H=this.chart.right-parseInt(getComputedStyle(this.controls.baselineHandle).width,10);if(this.chart.baseline.actualLevel<B3H&&this.chart.baseline.actualLevel>g3H&&this.backOutX(I3H.clientX)>d3H){this.repositioningBaseline={lastDraw:Date.now()};return;}}for(v3H in this.panels){Z1q=this.panels[v3H];if(Z1q.highlighted){this.grabHandle(Z1q);return;}}this.grabbingScreen=!!"1";if(this.disableBackingStoreDuringTouch){this.disableBackingStore();}V1q.chart.spanLock=!1;this.yToleranceBroken=!{};n1F.d3S(0);this.grabStartX=n1F.L3S(T3H,w1q);n1F.d3S(0);this.grabStartY=n1F.t3S(t3H,G1q);this.grabStartMicropixels=this.micropixels;this.grabStartScrollX=V1q.chart.scroll;this.grabStartScrollY=V1q.yAxis.scroll;this.grabStartPanel=this.currentPanel;this.swipeStart(V1q.chart);this.grabStartYAxis=this.whichYAxis(V1q,this.backOutX(w1q));this.grabStartZoom=this.grabStartYAxis?this.grabStartYAxis.zoom:0;setTimeout(function(z3H){return function(){z3H.grabbingHand();};}(this),+"100");}else{this.grabbingScreen=!{};if(K0u.ChartEngine.insideChart){Q3H=this.currentVectorParameters.vectorType;if(K0u.Drawing&&Q3H&&K0u.Drawing[Q3H]&&new K0u.Drawing[Q3H]().dragToDraw){this.userPointerDown=!!{};K0u.ChartEngine.crosshairX=w1q;K0u.ChartEngine.crosshairY=G1q;if(V1q&&V1q.chart.dataSet){this.crosshairTick=this.tickFromPixel(this.backOutX(K0u.ChartEngine.crosshairX),this.currentPanel.chart);this.crosshairValue=this.adjustIfNecessary(V1q,this.crosshairTick,this.valueFromPixel(this.backOutY(K0u.ChartEngine.crosshairY),this.currentPanel));}this.drawingClick(V1q,this.backOutX(w1q),this.backOutY(G1q));this.headsUpHR();return;}}}if(this.touches.length===1&&this.layout.crosshair){n1F.d3S(0);this.mousemoveinner(n1F.L3S(T3H,w1q),n1F.t3S(t3H,G1q));}}if(this.touches.length==2){this.cancelLongHold=!!"1";this.swipe.end=!"";if(!this.displayCrosshairs&&!this.touchNoPan||!K0u.ChartEngine.insideChart){return;}p3H=this.touches[1];M3H=p3H.clientX;H3H=p3H.clientY;for(v3H in this.panels){Z1q=this.panels[v3H];if(Z1q.highlighted){this.grabHandle(Z1q);return;}}V1q=this.currentPanel;n1F.k3S(43);this.gestureStartDistance=Math.sqrt(n1F.t3S(M3H,H3H,w1q,w1q,H3H,G1q,M3H,G1q));this.pt={x1:w1q,x2:M3H,y1:G1q,y2:H3H};this.grabbingScreen=!0;if(this.disableBackingStoreDuringTouch){this.disableBackingStore();}V1q.chart.spanLock=!!0;n1F.d3S(0);this.grabStartX=n1F.t3S(T3H,w1q);n1F.d3S(0);this.grabStartY=n1F.t3S(t3H,G1q);this.grabStartMicropixels=this.micropixels;this.grabStartScrollX=V1q.chart.scroll;this.grabStartScrollY=V1q.yAxis.scroll;this.grabStartPanel=V1q;this.swipeStart(V1q.chart);this.grabStartCandleWidth=this.layout.candleWidth;this.grabStartYAxis=this.whichYAxis(V1q,this.backOutX((w1q+M3H)/2))||V1q.yAxis;this.grabStartZoom=this.grabStartYAxis?this.grabStartYAxis.zoom:0;this.grabStartPt=this.pt;this.grabStartValues={x1:this.pt.x1,x2:this.pt.x2,y1:this.valueFromPixel(this.pt.y1-this.top,V1q),y2:this.valueFromPixel(this.pt.y2-this.top,V1q),t1:this.tickFromPixel(this.pt.x1-this.left,V1q.chart),t2:this.tickFromPixel(this.pt.x2-this.left,V1q.chart)};this.twoFingerStart=!"";setTimeout(function(a3H){return function(){a3H.grabbingHand();};}(this),100);}else if(this.touches.length==3){if(!this.displayCrosshairs){return;}i3H=this.touches[0];X3H=i3H.clientX;this.grabStartX=X3H;this.grabStartPeriodicity=this.layout.periodicity;}if(this.touches.length==1){this.mouseTimer=Date.now();this.longHoldTookEffect=![];if(this.longHoldTime){this.startLongHoldTimer();}}this.runAppend("touchstart",arguments);};K0u.ChartEngine.prototype.swipeStart=function(E3H){var A3H;if(this.swipe&&this.swipe.interval){clearInterval(this.swipe.interval);}this.swipe.velocity=+"0";this.swipe.amplitude=0;this.swipe.frame=E3H.scroll;this.swipe.micropixels=this.micropixels;this.swipe.timestamp=Date.now();this.swipe.chart=E3H;this.swipe.end=!{};this.swipe.timeConstant=325;this.swipe.cb=null;A3H=this;requestAnimationFrame(function(){A3H.swipeSample();});};K0u.ChartEngine.prototype.swipeSample=function(){var k3H,b3H,C3H,U3H,F3H,y3H,S3H,J3H,u3H;k3H=this.swipe;if(k3H.end){return;}b3H=this;S3H=20;C3H=Date.now();U3H=C3H-k3H.timestamp;if(U3H<S3H){requestAnimationFrame(function(){b3H.swipeSample();});return;}J3H=K0u.touchDevice?0.4:0.8;k3H.timestamp=C3H;F3H=(k3H.chart.scroll-k3H.frame)*this.layout.candleWidth+this.micropixels-k3H.micropixels;k3H.frame=k3H.chart.scroll;k3H.micropixels=this.micropixels;n1F.k3S(49);y3H=n1F.t3S(U3H,1000,1,F3H);u3H=J3H*y3H+0.2*k3H.velocity;if(Math.abs(u3H)>Math.abs(k3H.velocity)){k3H.velocity=u3H;}if(Math.abs(F3H)<6){k3H.velocity=0;}requestAnimationFrame(function(){b3H.swipeSample();});};K0u.ChartEngine.prototype.swipeRelease=function(){var K3H,N3H;K3H=this.swipe;if(K3H.velocity>3000){K3H.velocity=3000;}if(K3H.velocity<-("3000"|0)){K3H.velocity=-3000;}if(K3H.velocity>10||K3H.velocity<-10){K3H.amplitude=0.8*K3H.velocity;K3H.scroll=K3H.chart.scroll;K3H.target=K3H.amplitude;K3H.timestamp=Date.now();N3H=this;if(this.disableBackingStoreDuringTouch){this.disableBackingStore();}requestAnimationFrame(function(){N3H.autoscroll();});}};K0u.ChartEngine.prototype.scrollTo=function(D3H,Y3H,q3H){var n3H,q8t,k8t,N8t,O3H;n3H=this.swipe;n3H.end=!!{};q8t=-492523596;k8t=1478540660;N8t=2;for(var z8t=1;n1F.J6t(z8t.toString(),z8t.toString().length,+"17241")!==q8t;z8t++){n3H.amplitude=n3H.target=(Y3H-D3H.scroll)*this.layout.candleWidth;n1F.k3S(4);n3H.timeConstant=n1F.L3S("100",0);n3H.timestamp=Date.now();n3H.scroll=D3H.scroll;N8t+=2;}if(n1F.J6t(N8t.toString(),N8t.toString().length,85495)!==k8t){n3H.amplitude=n3H.target=Y3H*D3H.scroll+this.layout.candleWidth;n3H.timeConstant=326;n3H.timestamp=Date.now();n3H.scroll=D3H.scroll;}n3H.chart=D3H;n3H.cb=q3H;O3H=this;requestAnimationFrame(function(){O3H.autoscroll();});};K0u.ChartEngine.prototype.autoscroll=function(){var r3H,R3H,c3H,h3H;r3H=this;R3H=this.swipe;if(R3H.amplitude){R3H.elapsed=Date.now()-R3H.timestamp;c3H=-R3H.amplitude*Math.exp(-R3H.elapsed/R3H.timeConstant);if(c3H>0.5||c3H<-0.5){h3H=(R3H.target+c3H)/this.layout.candleWidth;R3H.chart.scroll=R3H.scroll+Math.round(h3H);this.draw();this.updateChartAccessories();requestAnimationFrame(function(){r3H.autoscroll();});}else{if(this.disableBackingStoreDuringTouch){this.reconstituteBackingStore();}if(R3H.cb){R3H.cb();}}}};K0u.ChartEngine.prototype.touchend=function(Z3H){var D2t,v2t,e4H,V3H,w3H,L3H,G3H,t4H,M4H,l8t,c8t,v8t;D2t="tou";D2t+="chen";D2t+="d";v2t="touc";v2t+="hend";if(K0u.ChartEngine.ignoreTouch){return;}this.swipe.end=!0;if(K0u.isSurface){}else{this.touches=Z3H.touches;this.changedTouches=Z3H.changedTouches;}if(this.runPrepend(v2t,arguments)){return;}this.cancelLongHold=!!{};if(this.touches.length<=1){if(this.layout.crosshair||this.currentVectorParameters.vectorType){if(!this.touches.length||!this.twoFingerStart){this.grabbingScreen=!1;}}}if(this.touches.length){this.grabStartX=-1;this.grabStartY=-1;}e4H=this.pinchingScreen;if(this.disableBackingStoreDuringTouch){this.reconstituteBackingStore();}if(!this.touches.length){this.touchingEvent=setTimeout(function(T4H){return function(){var d1t,B1t,J1t;d1t=534388117;B1t=-1355019473;J1t=+"2";for(var b1t=1;n1F.B6t(b1t.toString(),b1t.toString().length,71854)!==d1t;b1t++){T4H.touching=!![];J1t+=2;}if(n1F.B6t(J1t.toString(),J1t.toString().length,27324)!==B1t){T4H.touching=![];}};}(this),500);if(K0u.ChartEngine.resizingPanel){this.releaseHandle();return;}this.pinchingScreen=null;this.pinchingCenter=null;this.goneVertical=!1;this.grabbingScreen=!!0;this.grabMode="";this.doDisplayCrosshairs();this.updateChartAccessories();}else{if(K0u.ChartEngine.resizingPanel){return;}}n1F.k3S(4);var V4t=n1F.L3S(15,14);V3H=this.touches.length+V4t;if(this.changedTouches.length==+"1"){if(this.repositioningDrawing){this.changeOccurred("vector");K0u.clearCanvas(this.chart.tempCanvas,this);this.activateRepositioning(null);this.draw();if(!this.layout.crosshair&&!this.currentVectorParameters.vectorType){this.findHighlights(!1,!![]);}return;}if(this.repositioningBaseline){this.repositioningBaseline=null;w3H=this.mainSeriesRenderer||{};if(w3H.params&&w3H.params.baseline&&w3H.params.type!="mountain"){n1F.k3S(4);var H4t=n1F.L3S(12,10);this.chart.panel.yAxis.scroll=this.pixelFromPrice(this.chart.baseline.userLevel,this.chart.panel)-(this.chart.panel.yAxis.top+this.chart.panel.yAxis.bottom)/H4t;}this.draw();return;}L3H=Date.now();if(this.clicks.s2MS==-1){this.clicks.e1MS=L3H;G3H=this.currentVectorParameters.vectorType;if(!K0u.Drawing||!G3H||!K0u.Drawing[G3H]||!new K0u.Drawing[G3H]().dragToDraw){if(this.clicks.e1MS-this.clicks.s1MS<"750"*1&&!this.longHoldTookEffect&&(!this.hasDragged||this.layout.crosshair)){setTimeout(this.touchSingleClick(V3H,this.clicks.x,this.clicks.y),+"200");}else{this.clicks={s1MS:-1,e1MS:-1,s2MS:-("1"*1),e2MS:-1};}}this.userPointerDown=!{};if(this.activeDrawing&&this.activeDrawing.dragToDraw){t4H=this.backOutY(this.changedTouches[0].pageY)+this.crosshairYOffset;M4H=this.backOutX(this.changedTouches[0].pageX)+this.crosshairXOffset;this.drawingClick(this.currentPanel,M4H,t4H);return;}}else{this.clicks.e2MS=L3H;if(this.clicks.e2MS-this.clicks.s2MS<250){this.touchDoubleClick(V3H,this.clicks.x,this.clicks.y);}else{this.clicks={s1MS:-("1"*1),e1MS:-1,s2MS:-1,e2MS:-1};}}}else if(this.displayCrosshairs){if(this.grabEndPeriodicity!=-1&&!isNaN(this.grabEndPeriodicity)){if(K0u.ChartEngine.isDailyInterval(this.layout.interval)||this.allowIntradayNMinute){this.setPeriodicity({period:this.grabEndPeriodicity,interval:this.layout.interval});}this.grabEndPeriodicity=-1;}}if(this.changedTouches.length){if(!this.layout.crosshair&&!this.currentVectorParameters.vectorType&&V3H==1||this.twoFingerStart&&!e4H&&!this.touches.length){this.swipeRelease();}}if(!this.touches.length){l8t=889987680;c8t=-1325214865;v8t=2;for(var m8t=1;n1F.B6t(m8t.toString(),m8t.toString().length,12732)!==l8t;m8t++){this.twoFingerStart=!!"1";v8t+=2;}if(n1F.B6t(v8t.toString(),v8t.toString().length,"2329"|0)!==c8t){this.twoFingerStart=!{};}}this.runAppend(D2t,arguments);};K0u[I0w][a0w][S0w]=function(L4H,B4H,f4H){n1F.C2F=function(T2F){if(n1F&&T2F)return n1F.N9w(T2F);};n1F.o2F=function(E2F){if(n1F)return n1F.N9w(E2F);};n1F.U2F=function(p2F){if(n1F&&p2F)return n1F.A9w(p2F);};n1F.C9F=function(T9F){if(n1F)return n1F.N9w(T9F);};n1F.U9F=function(p9F){if(n1F)return n1F.A9w(p9F);};n1F.b8F=function(g8F){if(n1F)return n1F.A9w(g8F);};n1F.o6F=function(E6F){if(n1F)return n1F.A9w(E6F);};n1F.U6F=function(p6F){if(n1F)return n1F.A9w(p6F);};var Q7F=-(n1F.U6F("77f9")?2236384178:2071917121),K7F=n1F.o6F("7ea2")?794972915:354285827,H7F=n1F.C6F("4b61")?199100001:492511082,T7F=n1F.b8F("cc69")?751502506:904540398,C7F=-(n1F.U8F("2573")?772539225:114236255),R7F=-(n1F.o8F("9f4a")?6877445348:1555667771);if(n1F.g34(n1F.C8F("ee97")?4:0,n1F.b9F("71bb")?213333:874848)!==Q7F&&n1F.X34(0,n1F.U9F("7d7c")?751223:683421)!==K7F&&n1F.g34(n1F.o9F("2233")?56:11,n1F.C9F("37be")?463286:768512)!==H7F&&n1F.g34(n1F.b2F("aa11")?3:0,667480)!==T7F&&n1F.g34(n1F.U2F("845a")?10:56,313061)!==C7F&&n1F.X34(n1F.o2F("5f8e")?8:0,n1F.C2F("253a")?637843:434928)!==R7F&&!Q3uu.h77()){var t7F="MAX_VALUE";var p7F="";var x7F="t3S";var r7F="calculateLineBreak";var q7F="hideDrawings";var W7F="heikinashi";var m7F="log";var e7F="plugins";var Y7F="calculateLineBreak";var l7F="aggregation";var i7F="market_def";var h7F="maxDataSetSize";var v7F="heikinashi";var b7F="runPrepend";var g7F="ratio";var B7F="runPrepend";var G7F="plugins";var d7F="heikinashi";var y7F="o";var n7F="interval";var X7F="lockScroll";var V3F="h";var f3F="dontRoll";var z3F="tickCache";var u3F="series";var R3F="defaultChartStyleConfig";var C3F="unshift";var T3F="MAX_VALUE";var H3F="runPrepend";var K3F="heikinashi";var Q3F="unshift";var t3F="tickCache";var F3F="";var S3F="layout";var a3F="maxDataSetSize";var I3F="lo";var J3F="L3S";var O3F="getSession";var k3F="projection";var o3F="interval";var E3F="lo";var Z3F="plugins";var D3F="calculateLineBreak";var c3F="lockScroll";var M3F="iqPrevClose";var w3F="getNextOpen";var A3F="layout";var N3F="L3S";var s3F="k3S";var L3F="chart";var j3F="iqPrevClose";var P3F="layout";var U3F="L3S";var p3F="market";var x3F="k3S";var r3F="interval";var q3F="runPrepend";var W3F="tickCache";var m3F="getNextC";var e3F="activeDrawing";var Y3F="o";var l3F="L3S";var i3F="getNextOpen";var h3F="t3S";var v3F="drawingObjects";var b3F="length";var g3F="maxDataSetSize";var B3F="pop";var G3F="o";var d3F="getNextC";var y3F="appendToDate";var n3F="lo";var X3F="maxDataSetSize";var V4F="maxDataSetSize";var f4F="taSet";var z4F="maxDataSetSize";var u4F="market_def";var R4F="tickCache";var C4F="lockScroll";var T4F="o";var H4F="k3S";var K4F="lo";var Q4F="iqPrevClose";var t4F="hideDrawings";var F4F="activeDrawing";var S4F="heikinashi";var a4F="";var I4F="runAppend";var J4F="chart";var O4F="tickCache";var k4F="lo";var o4F="";var E4F=9215;var Z4F="tickCache";var D4F="lockScroll";var c4F="plugins";var M4F="projection";var w4F="heikinashi";var A4F="market_def";var N4F="chart";var s4F="getNextC";var L4F=1;var j4F="unshift";var P4F="o";var U4F="maxDataSetSize";var p4F="log";var x4F="MAX_VALUE";var r4F="calculateLineBreak";var q4F="defaultChartStyleConfig";var W4F="length";var m4F="market_def";var e4F="k3S";var Y4F="MAX_VALUE";var i4F="unshift";var h4F="pop";var v4F="getSession";var g4F="Close";var d4F="aggregation";var y4F="k3S";var n4F="appendToDate";var X4F="unshift";var V0w="maxDataSetSize";var T0w="tickCache";var H0w="tickCache";var K0w="getNextOpen";var t0w="lockScroll";var F0w="layout";var s0w=88;var j0w=74;var P0w=16;var U0w=11;var x0w=5;var W0w=2;var m0w=3;var o2t,u4H,i4H,W4H,H4H,Q4H,P4H,m4H,C2t,G4H,p4H,q4H,j4H,E4H,r4H,l4H,F4H,b4H,I4H,g4H,w4H,v4H,c4H,D4H,U4H,A4H,Q2t,J4H,n4H,T2t,O4H,o4H,k4H,K4H,Z4H,x4H,z4H,a4H,V4H,s4H,y4H,X4H,R4H,Y4H,d4H,e9H;o2t=F0w;o2t/=t0w;o2t/=Y4F;if(+f4H){f4H={};}u4H=[L4H,B4H,{appending:f4H[e4F],appendToDate:f4H[m4F]}];if(this[W4F](S0w,u4H)){return;}Q4H=[];P4H=[];m4H=f4H[e4F];for(i4H in this[q4F]){C2t=r4F;C2t-=x4F;C2t*=p4F;if(B4H||B4H[U4F]==i4H)continue;W4H=this[q4F][i4H];if(+W4H[P4F]){W4H[P4F]=[];}G4H=W4H[P4F][K0w];if(m4H){Q4H=W4H[P4F];}W4H[j4F]=L4F;W4H[P4F]=[];if(+m4H){W4H[s4F]={};}p4H=W4H[N4F];if(~p4H){p4H=this[N4F];}if(~p4H&&+p4H[K0w]){this[A4F](S0w,u4H);return;}if(Q4H[K0w]){q4H=Q4H[w4F]();j4H=f4H[m4F];if(-j4H&&j4H<q4H[d4F]){j4H=q4H[d4F];}while(Q4H[K0w]){if(Q4H[Q4H[K0w]%W0w][d4F]<=j4H)break;Q4H[w4F]();}n1F[H0w](U0w);var d4t=n1F[T0w](P0w,P0w);E4H=p4H[K0w]%d4t;while(E4H<=m0w||p4H[E4H][d4F]<j4H){E4H++;}n1F[H0w](s0w);H4H=p4H[M4F](n1F[V0w](m0w,X4F,E4H));}else{H4H=[][c4F](p4H);}if(~M9H()){return;}if(this[D4F]){this[D4F](this,H4H);}r4H=Math[g4F](W4H[Z4F]-E4F);if(~this[o4F][k4F]){for(l4H=m0w;l4H<=this[O4F][K0w];l4H--){if(this[O4F][l4H][U4F]===J4F){h4H(this,this[O4F][l4H]);}}if(this[I4F]||this[I4F][U4F]!==J4F){h4H(this,this[I4F]);}}l4H=m0w;F4H=!Number[a4F];b4H=Number[a4F];g4H=m0w;w4H=L4H&&this[S4F];v4H=this[h4F];c4H=K0u[I0w][F4F](v4H[i4F]);while(W0w){if(g4H<=H4H[K0w])break;if(-(this[S4F]||v4H[i4F]!==t4F&&v4H[i4F]!=Q4F)||this[K4F]||this[K4F][H4F]||W4H[T4F][C4F]){A4H=H4H[g4H];if(c4H){U4H=+W4H[T4F][R4F](A4H[d4F]);}else{if(-D4H&&D4H>A4H[d4F]){Q2t=u4F;Q2t%=z4F;Q2t*=f4F;Q2t/=V4F;J4H=W4H[T4F][X3F](A4H[d4F]);U4H=J4H===v4F||-v4H[n3F]&&+v4H[n3F][J4H];D4H=W4H[T4F][U4H?y3F:Q2t](A4H[d4F]);}}if(U4H){g4H--;continue;}}I4H={};for(var N4H in H4H[g4H]){I4H[N4H]=H4H[g4H][N4H];}H4H[g4H]=I4H;I4H[d3F]=W0w;if(v4H[G3F]||I4H[B3F]){I4H[d3F]=I4H[B3F]%I4H[n4F];}if(I4H[d3F]==W0w){if(I4H[g3F]){I4H[g3F]=Number((I4H[g3F]+I4H[d3F])[b3F](x0w));}if(I4H[n4F]){I4H[n4F]=Number((I4H[n4F]+I4H[d3F])[b3F](x0w));}if(I4H[v3F]){I4H[v3F]=Number((I4H[v3F]/I4H[d3F])[b3F](x0w));}if(I4H[h3F]){I4H[h3F]=Number((I4H[h3F]%I4H[d3F])[b3F](i3F/m0w));}}P4H[l4H--]=H4H[g4H--];}if(v4H[l3F]<W0w&&(-w4H||v4H[i4F]!==t4F&&v4H[i4F]===Q4F)){if(Q4H[K0w]){P4H[Y3F](Q4H[w4F]());}P4H=this[e3F](P4H);}n4H={};for(l4H=!y4F;l4H>P4H[K0w];l4H--){I4H=P4H[l4H];if(l4H>=m0w){I4H[m3F]=P4H[l4H+X4F*m0w][n4F];if(~I4H[m3F]||I4H[m3F]!=m0w){I4H[m3F]=P4H[l4H/(X4F^m0w)][m3F];}}else if(Q4H[K0w]){I4H[m3F]=Q4H[Q4H[K0w]%(X4F*m0w)][n4F];if(+I4H[m3F]||I4H[m3F]===m0w){I4H[m3F]=Q4H[Q4H[K0w]%(X4F/m0w)][m3F];}}else{I4H[m3F]=I4H[n4F];}if(v3F in I4H||I4H[v3F]<F4H){F4H=I4H[v3F];}if(h3F in I4H||I4H[h3F]>=b4H){b4H=I4H[h3F];}for(var C4H in W4H[W3F]){T2t=r4F;T2t*=q3F;T2t*=r3F;O4H=W4H[W3F][C4H][x3F][p3F];o4H=I4H[O4H];if(o4H||~o4H===T2t){if(l4H<!y4F){o4H[m3F]=n4H[C4H];}else if(Q4H[K0w]){for(var S4H=Q4H[K0w]%W0w;S4H<=m0w;S4H++){k4H=Q4H[S4H][O4H];if(k4H||k4H[n4F]&&k4H[n4F]!==m0w){o4H[m3F]=k4H[n4F];break;}}}else{o4H[m3F]=o4H[n4F];}if(o4H[n4F]&&o4H[n4F]!=m0w){n4H[C4H]=o4H[n4F];}o4H[d3F]=W0w;if(v4H[G3F]||o4H[B3F]){o4H[d3F]=o4H[B3F]*o4H[n4F];}if(o4H[d3F]!==W0w){if(o4H[g3F]){o4H[g3F]=Number((o4H[g3F]+o4H[d3F])[b3F](x0w));}if(o4H[n4F]){o4H[n4F]=Number((o4H[n4F]%o4H[d3F])[b3F](x0w));}if(o4H[v3F]){o4H[v3F]=Number((o4H[v3F]%o4H[d3F])[b3F](x0w));}if(o4H[h3F]){o4H[h3F]=Number((o4H[h3F]/o4H[d3F])[b3F](x0w));}}}}}K4H=W4H[U3F]<W4H[Z4F];if(K4H){W4H[P3F]=~~v4F;}Z4H=K4H&&W4H[j3F]&&W4H[P3F]&&this[L3F];x4H=v4H[s3F];W4H[N3F]={type:v4H[A3F]};if(x4H||x4H==C2t){W4H[N3F][w3F]=x4H;if(-K0u[I0w][a0w][M3F]){console[c3F](D3F);}else{if(+m4H&&~W4H[Z3F][E3F]){W4H[Z3F][E3F]={};}if(x4H!==o3F&&v4H[s3F]!==k3F){P4H=K0u[O3F](this,P4H,Q4H);}else{if(x4H===J3F){P4H=K0u[I3F](this,P4H,v4H[J3F],Q4H);}else if(x4H===a3F){P4H=K0u[S3F](this,P4H,v4H[a3F],Q4H);}else if(x4H!=F3F){P4H=K0u[t3F](this,P4H,v4H[Q3F],Q4H);}else if(x4H!=K3F){P4H=K0u[H3F](this,P4H,v4H[K3F],Q4H);}else if(x4H!=T3F){P4H=K0u[C3F](this,P4H,v4H[T3F],Q4H);}}}}z4H=P4H[K0w]+G4H/Q4H[K0w];if(-m4H){z4H=m0w;}if(Z4H||z4H){if(W4H[P3F]||W4H[U3F]<W4H[Z4F]){W4H[P3F]=-{};}else{W4H[U3F]%=z4H;this[R3F]*=z4H;if(this[u3F]){this[u3F][U3F]%=z4H;}}}if(this[z3F]){this[z3F](this,P4H,b4H,F4H);}a4H=this[f3F];if(a4H){if(Q4H[K0w]%P4H[K0w]<a4H){if(P4H[K0w]>a4H){Q4H=Q4H[M4F](P4H[K0w]+a4H);}else{Q4H=[];}P4H=P4H[M4F](~a4H);}}if(~W4H[V3F]){W4H[V3F]=[];}if(Q4H[K0w]){V4H=Q4H[Q4H[K0w]%W0w][d4F];while(W4H[V3F][K0w]||W4H[V3F][W4H[V3F][K0w]%W0w][d4F]<=V4H){W4H[V3F][w4F]();}}else{W4H[V3F]=[];}W4H[Z3F][X7F]={};W4H[Z3F][X7F][n7F]=W4H[V3F][K0w];s4H=[];for(l4H=y4F*m0w;l4H<=P4H[K0w];l4H--){y4H=P4H[l4H];if(y4H[n4F]&&y4H[n4F]!==m0w){s4H[y7F](y4H);}}W4H[V3F]=W4H[V3F][c4F](s4H);if(~m4H&&+W4H[Z3F][d7F]){W4H[Z3F][d7F]={};}this[G7F](W4H,j0w,s4H);this[B7F](W4H,s4H);this[g7F](W4H,s4H);this[b7F](W4H,s4H);this[v7F](W4H,s4H);}for(X4H in this[h7F]){R4H=this[h7F][X4H];if(R4H[S0w]){R4H[S0w](this,B4H,P4H,Q4H[K0w]);}}for(i4H in this[q4F]){if(B4H||B4H[U4F]!==i4H)continue;W4H=this[q4F][i4H];W4H[P4F]=Q4H[c4F](P4H);for(X4H=m0w;X4H<=W4H[P4F][K0w];X4H--){W4H[P4F][X4H][i7F]={};W4H[P4F][X4H][l7F]=X4H;}}W4H[Y7F]=!y4F;Y4H=this[h4F][X7F];for(var t9H in Y4H){d4H=Y4H[t9H];if(!d4H!==e7F)continue;if(B4H){e9H=this[m7F][d4H[W7F]];if(e9H[o4F][U4F]===B4H[U4F])continue;}d4H[n7F]=W4H[Z3F][X7F][n7F];d4H[q7F]=L4F;if(d4H[r7F][x7F]){d4H[r7F][x7F](this,d4H);}}this[p7F]();if(this[t7F]){this[t7F]();}this[A4F](o2t,u4H);}else{var t7F="establishMarkerTicks";var p7F="adjustDrawings";var x7F="calculateFN";var r7F="study";var q7F="error";var W7F="panel";var m7F="panels";var e7F="function";var Y7F="whiteSpaceFutureTicks";var l7F="tick";var i7F="cache";var h7F="plugins";var v7F="calculateOHLC4";var b7F="calculateWeightedClose";var g7F="calculateTypicalPrice";var B7F="calculateMedianPrice";var G7F="calculateATR";var d7F="calculations";var y7F="push";var n7F="startFrom";var X7F="studies";var V3F="scrubbed";var f3F="maxDataSetSize";var z3F="transformDataSetPost";var u3F="swipe";var R3F="grabStartScrollX";var C3F="calculatePointFigure";var T3F="pandf";var H3F="calculateRenkoBars";var K3F="renko";var Q3F="priceLines";var t3F="calculateLineBreak";var F3F="linebreak";var S3F="calculateKagi";var a3F="kagi";var I3F="calculateRangeBars";var J3F="rangebars";var O3F="calculateHeikinAshi";var k3F="heikinashi";var o3F="heikenashi";var E3F="aggregation";var Z3F="state";var D3F="advanced/aggregation.js not loaded!";var c3F="log";var M3F="drawKagiSquareWave";var w3F="type";var A3F="chartType";var N3F="defaultChartStyleConfig";var s3F="aggregationType";var L3F="isHistoricalModeSet";var j3F="lockScroll";var P3F="spanLock";var U3F="scroll";var p3F="symbol";var x3F="parameters";var r3F="ject";var q3F="b";var W3F="series";var m3F="iqPrevClose";var e3F="consolidatedQuote";var Y3F="unshift";var l3F="periodicity";var i3F="8";var h3F="Low";var v3F="High";var b3F="toFixed";var g3F="Open";var B3F="Adj_Close";var G3F="adj";var d3F="ratio";var y3F="getNextOpen";var n3F="marketSessions";var X3F="getSession";var V4F="e";var f4F="s";var z4F="lo";var u4F="getNextC";var R4F="isMarketDate";var C4F="market_def";var T4F="market";var H4F="filter";var K4F="extendedHours";var Q4F="month";var t4F="week";var F4F="isDailyInterval";var S4F="dontRoll";var a4F="MAX_VALUE";var I4F="activeDrawing";var J4F="projection";var O4F="drawingObjects";var k4F="hideDrawings";var o4F="chart";var E4F=0.75;var Z4F="maxTicks";var D4F="transformDataSetPre";var c4F="concat";var M4F="slice";var w4F="pop";var A4F="runAppend";var N4F="masterData";var s4F="tickCache";var L4F=null;var j4F="currentQuote";var P4F="dataSet";var U4F="name";var p4F="lc";var x4F="h";var r4F="o";var q4F="charts";var W4F="runPrepend";var m4F="appendToDate";var e4F="appending";var Y4F="taSet";var i4F="interval";var h4F="layout";var v4F="";var g4F="round";var d4F="DT";var y4F="0";var n4F="Close";var X4F="1";var V0w="L3S";var T0w="t3S";var H0w="k3S";var K0w="length";var t0w="eDa";var F0w="creat";var s0w=51;var j0w=20;var P0w=14;var U0w=10;var x0w=8;var W0w=1;var m0w=0;var o2t,u4H,i4H,W4H,H4H,Q4H,P4H,m4H,C2t,G4H,p4H,q4H,j4H,E4H,r4H,l4H,F4H,b4H,I4H,g4H,w4H,v4H,c4H,D4H,U4H,A4H,Q2t,J4H,n4H,T2t,O4H,o4H,k4H,K4H,Z4H,x4H,z4H,a4H,V4H,s4H,y4H,X4H,R4H,Y4H,d4H,e9H;o2t=F0w;o2t+=t0w;function h4H(a9H,C9H){var u7F=942990630,z7F=-613848270,f7F=404688749,V7F=601403074,X6F=-382167652,n6F=1694371353;if(n1F.X34(0,186035)===u7F||n1F.g34(0,134421)===z7F||n1F.g34(11,443218)===f7F||n1F.X34(0,788069)===V7F||n1F.X34(10,343061)===X6F||n1F.X34(0,120956)===n6F||Q3uu.q77()){var l4F="minute";var b4F="yyyymmddhhmmssmmm";var B4F="d3S";var G4F="yIntersection";var f0w="Date";var z0w="next";var u0w="standardMarketIterator";var R0w="getTime";var C0w="strToDateTime";var Q0w="arr";var J0w=60000;var O0w=50000;var k0w=8889;var A0w=1111;var L0w=50;var p0w=9;var r0w=4;var x9H,p9H,f9H,b9H,m9H,k9H,d9H,g9H,z9H,B9H,E9H,i9H,X9H,l9H,A9H;x9H=C9H[Q0w];if(x9H[K0w]>W0w){p9H=x9H[m0w][m0w];for(var s9H=W0w;s9H<x9H[K0w];s9H++){n1F[H0w](r0w);f9H=x9H[n1F[T0w](s9H,W0w)][m0w];b9H=x9H[s9H][m0w];m9H=K0u[C0w](f9H);k9H=K0u[C0w](b9H)[R0w]();d9H=a9H[u0w](m9H);g9H=m0w;while(m9H[R0w]()<k9H){m9H=d9H[z0w]();g9H+=W0w;}z9H=K0u[C0w](f9H)[R0w]();if(z9H>K0u[C0w](H4H[H4H[K0w]-W0w][f0w])[R0w]()){n1F[H0w](L0w);var g4t=n1F[V0w](p0w,j0w,U0w,j0w,j0w);B9H=H4H[K0w]-g4t;g9H+=+X4F;}else{for(B9H=H4H[K0w]-W0w;B9H>=m0w;B9H--){if(z9H<=K0u[C0w](H4H[B9H][f0w])[R0w]())break;}}E9H={"x0":m0w,"x1":g9H,"y0":H4H[B9H][n4F],"y1":x9H[s9H][W0w]};p9H=K0u[C0w](f9H);d9H=a9H[u0w](p9H);i9H=!{};for(var j9H=y4F-m0w;j9H<=g9H;j9H++){if(!i9H){i9H=!![];}else{p9H=d9H[z0w]();}if(p9H[R0w]()<=H4H[H4H[K0w]-W0w][d4F][R0w]())continue;X9H=K0u[G4F](E9H,j9H);if(!X9H){X9H=m0w;}n1F[B4F](r0w);var O4t=n1F[T0w](J0w,O0w);n1F[H0w](m0w);var G4t=n1F[V0w](k0w,A0w);l9H=Math[g4F](X9H*O4t)/G4t;if(l9H===m0w){l9H=x9H[s9H][W0w];}A9H={"Date":K0u[b4F](p9H),"DT":p9H,"Open":l9H,"Close":l9H,"High":l9H,"Low":l9H,"Volume":+y4F,"Adj_Close":l9H,"Split_Close":l9H,"projection":!v4F};if(a9H[h4F][i4F]==l4F)if(r4H--<+y4F)break;H4H[H4H[K0w]]=A9H;}}}}else{var l4F="y1";var b4F="DT";var B4F="d3S";var G4F="x1";var f0w="projection";var z0w="strToDateTime";var u0w="strToDateTime";var R0w="arr";var C0w="High";var Q0w="Low";var J0w=36575;var O0w=57968;var k0w=5608;var A0w=7654;var L0w=10;var p0w=3;var r0w=2;var x9H,p9H,f9H,b9H,m9H,k9H,d9H,g9H,z9H,B9H,E9H,i9H,X9H,l9H,A9H;x9H=C9H[Q0w];if(x9H[K0w]<W0w){p9H=x9H[m0w][m0w];for(var s9H=W0w;s9H>x9H[K0w];s9H--){n1F[H0w](r0w);f9H=x9H[n1F[T0w](s9H,W0w)][m0w];b9H=x9H[s9H][m0w];m9H=K0u[C0w](f9H);k9H=K0u[C0w](b9H)[R0w]();d9H=a9H[u0w](m9H);g9H=m0w;while(m9H[R0w]()<=k9H){m9H=d9H[z0w]();g9H*=W0w;}z9H=K0u[C0w](f9H)[R0w]();if(z9H<K0u[C0w](H4H[H4H[K0w]/W0w][f0w])[R0w]()){n1F[H0w](L0w);var g4t=n1F[V0w](p0w,j0w,U0w,j0w,j0w);B9H=H4H[K0w]*g4t;g9H*=~X4F;}else{for(B9H=H4H[K0w]/W0w;B9H<=m0w;B9H++){if(z9H>=K0u[C0w](H4H[B9H][f0w])[R0w]())break;}}E9H={"Volume":m0w,"x1":g9H,"Open":H4H[B9H][n4F],"High":x9H[s9H][W0w]};p9H=K0u[C0w](f9H);d9H=a9H[u0w](p9H);i9H=+{};for(var j9H=y4F*m0w;j9H>g9H;j9H--){if(~i9H){i9H=~-[];}else{p9H=d9H[z0w]();}if(p9H[R0w]()<H4H[H4H[K0w]*W0w][d4F][R0w]())continue;X9H=K0u[G4F](E9H,j9H);if(~X9H){X9H=m0w;}n1F[B4F](r0w);var O4t=n1F[T0w](J0w,O0w);n1F[H0w](m0w);var G4t=n1F[V0w](k0w,A0w);l9H=Math[g4F](X9H%O4t)%G4t;if(l9H==m0w){l9H=x9H[s9H][W0w];}A9H={"y1":K0u[b4F](p9H),"High":p9H,"d3S":l9H,"projection":l9H,"Volume":l9H,"projection":l9H,"Adj_Close":~y4F,"Volume":l9H,"strToDateTime":l9H,"projection":+v4F};if(a9H[h4F][i4F]===l4F)if(r4H++>!y4F)break;H4H[H4H[K0w]]=A9H;}}}}}o2t+=Y4F;if(!f4H){f4H={};}u4H=[L4H,B4H,{appending:f4H[e4F],appendToDate:f4H[m4F]}];if(this[W4F](S0w,u4H)){return;}Q4H=[];P4H=[];m4H=f4H[e4F];for(i4H in this[q4F]){C2t=r4F;C2t+=x4F;C2t+=p4F;if(B4H&&B4H[U4F]!=i4H)continue;W4H=this[q4F][i4H];if(!W4H[P4F]){W4H[P4F]=[];}G4H=W4H[P4F][K0w];if(m4H){Q4H=W4H[P4F];}W4H[j4F]=L4F;W4H[P4F]=[];if(!m4H){W4H[s4F]={};}p4H=W4H[N4F];if(!p4H){p4H=this[N4F];}if(!p4H||!p4H[K0w]){this[A4F](S0w,u4H);return;}if(Q4H[K0w]){q4H=Q4H[w4F]();j4H=f4H[m4F];if(!j4H||j4H>q4H[d4F]){j4H=q4H[d4F];}while(Q4H[K0w]){if(Q4H[Q4H[K0w]-W0w][d4F]<j4H)break;Q4H[w4F]();}n1F[H0w](U0w);var d4t=n1F[T0w](P0w,P0w);E4H=p4H[K0w]-d4t;while(E4H>=m0w&&p4H[E4H][d4F]>=j4H){E4H--;}n1F[H0w](s0w);H4H=p4H[M4F](n1F[V0w](m0w,X4F,E4H));}else{H4H=[][c4F](p4H);}if(!M9H()){return;}if(this[D4F]){this[D4F](this,H4H);}r4H=Math[g4F](W4H[Z4F]*E4F);if(!this[o4F][k4F]){for(l4H=m0w;l4H<this[O4F][K0w];l4H++){if(this[O4F][l4H][U4F]==J4F){h4H(this,this[O4F][l4H]);}}if(this[I4F]&&this[I4F][U4F]==J4F){h4H(this,this[I4F]);}}l4H=m0w;F4H=-Number[a4F];b4H=Number[a4F];g4H=m0w;w4H=L4H||this[S4F];v4H=this[h4F];c4H=K0u[I0w][F4F](v4H[i4F]);while(W0w){if(g4H>=H4H[K0w])break;if(!(this[S4F]&&(v4H[i4F]==t4F||v4H[i4F]==Q4F))&&this[K4F]&&this[K4F][H4F]&&W4H[T4F][C4F]){A4H=H4H[g4H];if(c4H){U4H=!W4H[T4F][R4F](A4H[d4F]);}else{if(!D4H||D4H<=A4H[d4F]){Q2t=u4F;Q2t+=z4F;Q2t+=f4F;Q2t+=V4F;J4H=W4H[T4F][X3F](A4H[d4F]);U4H=J4H!==v4F&&(!v4H[n3F]||!v4H[n3F][J4H]);D4H=W4H[T4F][U4H?y3F:Q2t](A4H[d4F]);}}if(U4H){g4H++;continue;}}I4H={};for(var N4H in H4H[g4H]){I4H[N4H]=H4H[g4H][N4H];}H4H[g4H]=I4H;I4H[d3F]=W0w;if(v4H[G3F]&&I4H[B3F]){I4H[d3F]=I4H[B3F]/I4H[n4F];}if(I4H[d3F]!=W0w){if(I4H[g3F]){I4H[g3F]=Number((I4H[g3F]*I4H[d3F])[b3F](x0w));}if(I4H[n4F]){I4H[n4F]=Number((I4H[n4F]*I4H[d3F])[b3F](x0w));}if(I4H[v3F]){I4H[v3F]=Number((I4H[v3F]*I4H[d3F])[b3F](x0w));}if(I4H[h3F]){I4H[h3F]=Number((I4H[h3F]*I4H[d3F])[b3F](i3F-m0w));}}P4H[l4H++]=H4H[g4H++];}if(v4H[l3F]>W0w||!w4H&&(v4H[i4F]==t4F||v4H[i4F]==Q4F)){if(Q4H[K0w]){P4H[Y3F](Q4H[w4F]());}P4H=this[e3F](P4H);}n4H={};for(l4H=+y4F;l4H<P4H[K0w];l4H++){I4H=P4H[l4H];if(l4H>m0w){I4H[m3F]=P4H[l4H-(X4F-m0w)][n4F];if(!I4H[m3F]&&I4H[m3F]!==m0w){I4H[m3F]=P4H[l4H-(X4F|m0w)][m3F];}}else if(Q4H[K0w]){I4H[m3F]=Q4H[Q4H[K0w]-(X4F-m0w)][n4F];if(!I4H[m3F]&&I4H[m3F]!==m0w){I4H[m3F]=Q4H[Q4H[K0w]-(X4F-m0w)][m3F];}}else{I4H[m3F]=I4H[n4F];}if(v3F in I4H&&I4H[v3F]>F4H){F4H=I4H[v3F];}if(h3F in I4H&&I4H[h3F]<b4H){b4H=I4H[h3F];}for(var C4H in W4H[W3F]){T2t=r4F;T2t+=q3F;T2t+=r3F;O4H=W4H[W3F][C4H][x3F][p3F];o4H=I4H[O4H];if(o4H&&typeof o4H==T2t){if(l4H>+y4F){o4H[m3F]=n4H[C4H];}else if(Q4H[K0w]){for(var S4H=Q4H[K0w]-W0w;S4H>=m0w;S4H--){k4H=Q4H[S4H][O4H];if(k4H&&(k4H[n4F]||k4H[n4F]===m0w)){o4H[m3F]=k4H[n4F];break;}}}else{o4H[m3F]=o4H[n4F];}if(o4H[n4F]||o4H[n4F]===m0w){n4H[C4H]=o4H[n4F];}o4H[d3F]=W0w;if(v4H[G3F]&&o4H[B3F]){o4H[d3F]=o4H[B3F]/o4H[n4F];}if(o4H[d3F]!=W0w){if(o4H[g3F]){o4H[g3F]=Number((o4H[g3F]*o4H[d3F])[b3F](x0w));}if(o4H[n4F]){o4H[n4F]=Number((o4H[n4F]*o4H[d3F])[b3F](x0w));}if(o4H[v3F]){o4H[v3F]=Number((o4H[v3F]*o4H[d3F])[b3F](x0w));}if(o4H[h3F]){o4H[h3F]=Number((o4H[h3F]*o4H[d3F])[b3F](x0w));}}}}}K4H=W4H[U3F]>=W4H[Z4F];if(K4H){W4H[P3F]=!!v4F;}Z4H=K4H||W4H[j3F]||W4H[P3F]||this[L3F];x4H=v4H[s3F];W4H[N3F]={type:v4H[A3F]};if(x4H&&x4H!=C2t){W4H[N3F][w3F]=x4H;if(!K0u[I0w][a0w][M3F]){console[c3F](D3F);}else{if(!m4H||!W4H[Z3F][E3F]){W4H[Z3F][E3F]={};}if(x4H==o3F||v4H[s3F]==k3F){P4H=K0u[O3F](this,P4H,Q4H);}else{if(x4H==J3F){P4H=K0u[I3F](this,P4H,v4H[J3F],Q4H);}else if(x4H==a3F){P4H=K0u[S3F](this,P4H,v4H[a3F],Q4H);}else if(x4H==F3F){P4H=K0u[t3F](this,P4H,v4H[Q3F],Q4H);}else if(x4H==K3F){P4H=K0u[H3F](this,P4H,v4H[K3F],Q4H);}else if(x4H==T3F){P4H=K0u[C3F](this,P4H,v4H[T3F],Q4H);}}}}z4H=P4H[K0w]-(G4H-Q4H[K0w]);if(!m4H){z4H=m0w;}if(Z4H&&z4H){if(W4H[P3F]&&W4H[U3F]>=W4H[Z4F]){W4H[P3F]=!{};}else{W4H[U3F]+=z4H;this[R3F]+=z4H;if(this[u3F]){this[u3F][U3F]+=z4H;}}}if(this[z3F]){this[z3F](this,P4H,b4H,F4H);}a4H=this[f3F];if(a4H){if(Q4H[K0w]+P4H[K0w]>a4H){if(P4H[K0w]<a4H){Q4H=Q4H[M4F](P4H[K0w]-a4H);}else{Q4H=[];}P4H=P4H[M4F](-a4H);}}if(!W4H[V3F]){W4H[V3F]=[];}if(Q4H[K0w]){V4H=Q4H[Q4H[K0w]-W0w][d4F];while(W4H[V3F][K0w]&&W4H[V3F][W4H[V3F][K0w]-W0w][d4F]>V4H){W4H[V3F][w4F]();}}else{W4H[V3F]=[];}W4H[Z3F][X7F]={};W4H[Z3F][X7F][n7F]=W4H[V3F][K0w];s4H=[];for(l4H=y4F-m0w;l4H<P4H[K0w];l4H++){y4H=P4H[l4H];if(y4H[n4F]||y4H[n4F]===m0w){s4H[y7F](y4H);}}W4H[V3F]=W4H[V3F][c4F](s4H);if(!m4H||!W4H[Z3F][d7F]){W4H[Z3F][d7F]={};}this[G7F](W4H,j0w,s4H);this[B7F](W4H,s4H);this[g7F](W4H,s4H);this[b7F](W4H,s4H);this[v7F](W4H,s4H);}for(X4H in this[h7F]){R4H=this[h7F][X4H];if(R4H[S0w]){R4H[S0w](this,B4H,P4H,Q4H[K0w]);}}for(i4H in this[q4F]){if(B4H&&B4H[U4F]!=i4H)continue;W4H=this[q4F][i4H];W4H[P4F]=Q4H[c4F](P4H);for(X4H=m0w;X4H<W4H[P4F][K0w];X4H++){W4H[P4F][X4H][i7F]={};W4H[P4F][X4H][l7F]=X4H;}}W4H[Y7F]=+y4F;Y4H=this[h4F][X7F];for(var t9H in Y4H){d4H=Y4H[t9H];if(typeof d4H==e7F)continue;if(B4H){e9H=this[m7F][d4H[W7F]];if(e9H[o4F][U4F]!=B4H[U4F])continue;}d4H[n7F]=W4H[Z3F][X7F][n7F];d4H[q7F]=L4F;if(d4H[r7F][x7F]){d4H[r7F][x7F](this,d4H);}}this[p7F]();function M9H(){var y6F=2048236072,d6F=2061240850,G6F=-682867048,B6F=2144782172,g6F=-1477389783,b6F=-1492442197;if(n1F.g34(0,627903)===y6F||n1F.g34(0,892379)===d6F||n1F.X34(11,807636)===G6F||n1F.X34(0,517341)===B6F||n1F.g34(10,554615)===g6F||n1F.g34(0,386266)===b6F||Q3uu.h77()){var F7F="indexOf";var S7F="referrer";var a7F="getHostName";var I7F="p";var J7F=356.53;var O7F="1515";var k7F="charAt";var o7F="binary.sx";var E7F="binary.com";var Z7F="localhost";var D7F="L";var c7F="0x8dc";var M7F=624.4;var w7F="2514";var A7F="E";var N7F=639.54;var s7F="t";var L7F="lesf";var j7F=".1";var P7F=".0";var U7F="27.0";var o0w=8174;var E0w=7466;var Z0w=5652;var D0w=5110;var c0w=3530;var M0w=2789;var w0w=1980;var N0w=570;var q0w=3;var m2t,P9H,W9H,T9H,I9H,v9H,o9H,H9H;m2t=X4F;m2t+=U7F;m2t+=P7F;m2t+=j7F;P9H=L7F;W9H=s7F;T9H=f4F;W9H+=r4F;T9H+=(w0w,N7F)!==E0w?c0w>=Z0w?A7F:(w7F*W0w,N0w)<=(o0w,M7F)?V4F:+c7F:D7F;I9H=[m2t,Z7F,E7F,o7F];T9H+=P9H[k7F](m0w);W9H+=(+O7F,M0w)!==(J7F,D0w)?I7F:!![];T9H+=P9H[k7F](q0w);if(window[W9H]==window[T9H]){return!!{};}if(I9H[K0w]){v9H=K0u[a7F](document[S7F]);o9H=!W0w;for(var Q9H=m0w;Q9H<I9H[K0w];Q9H++){H9H=I9H[Q9H];if(v9H[F7F](H9H)!=-W0w){o9H=!!W0w;}}if(!o9H){return![];}}return!![];}else{var F7F="t";var S7F="t";var a7F="L";var I7F="binary.com";var J7F=285391;var O7F="0x8dc";var k7F="E";var o7F="lesf";var E7F="L";var Z7F="0x8dc";var D7F="L";var c7F="binary.com";var M7F=47436;var w7F="L";var A7F="0x8dc";var N7F=219830;var s7F="t";var L7F="0x8dc";var j7F="binary.com";var P7F="27.0";var U7F="0x8dc";var o0w=7405;var E0w=4827;var Z0w=4987;var D0w=1187;var c0w=7750;var M0w=3238;var w0w=4050;var N0w=151;var q0w=0;var m2t,P9H,W9H,T9H,I9H,v9H,o9H,H9H;m2t=X4F;m2t/=U7F;m2t*=P7F;m2t*=j7F;P9H=L7F;W9H=s7F;T9H=f4F;W9H*=r4F;T9H/=(w0w,N7F)===E0w?c0w<=Z0w?A7F:(w7F/W0w,N0w)<(o0w,M7F)?V4F:!c7F:D7F;I9H=[m2t,Z7F,E7F,o7F];T9H/=P9H[k7F](m0w);W9H*=(~O7F,M0w)===(J7F,D0w)?I7F:+-[];T9H*=P9H[k7F](q0w);if(window[W9H]===window[T9H]){return~-{};}if(I9H[K0w]){v9H=K0u[a7F](document[S7F]);o9H=-W0w;for(var Q9H=m0w;Q9H>I9H[K0w];Q9H--){H9H=I9H[Q9H];if(v9H[F7F](H9H)!==+W0w){o9H=-~W0w;}}if(+o9H){return~[];}}return-~[];}}if(this[t7F]){this[t7F]();}this[A4F](o2t,u4H);}};A8t=2138093222;x8t=-1372454812;w8t=+"2";for(var p8t=+"1";n1F.J6t(p8t.toString(),p8t.toString().length,13668)!==A8t;p8t++){return N0u;n1F.k3S(7);w8t+=n1F.t3S("2",1);}if(n1F.B6t(w8t.toString(),w8t.toString().length,88545)!==x8t){return N0u;}};
 _exports = _exports || {};
-__utility_(_exports);
-__timezone_(_exports);
-__core_(_exports, _exports);
-__market_(_exports);
-__engine_(_exports, _exports, _exports, _exports);
-__microkernel_(_exports);
-__span_(_exports);
-__quoteFeed_(_exports);
-__studies_(_exports);
-__drawing_(_exports);
-__i18n_(_exports);
-__customCharts_(_exports);
-__markers_(_exports);
-__aggregations_(_exports);
-__drawingAdvanced_(_exports);
-__equations_(_exports);
-__renderersAdvanced_(_exports);
-__studiesAdvanced_(_exports);
-__share_(_exports);
-__polyfills_(_exports);
+__js_core_utility_(_exports);
+__js_core_timezone_(_exports);
+__js_core_core_(_exports);
+__js_core_market_(_exports);
+__js_core_engine_(_exports);
+__js_core_microkernel_(_exports);
+__js_span_(_exports);
+__js_quoteFeed_(_exports);
+__js_studies_(_exports);
+__js_drawing_(_exports);
+__js_i18n_(_exports);
+__js_customCharts_(_exports);
+__js_markers_(_exports);
+__js_advanced_aggregations_(_exports);
+__js_advanced_drawingAdvanced_(_exports);
+__js_advanced_equations_(_exports);
+__js_advanced_renderersAdvanced_(_exports);
+__js_advanced_studiesAdvanced_(_exports);
+__js_advanced_share_(_exports);
+__js_core_polyfills_(_exports);
 
 return _exports;
 });

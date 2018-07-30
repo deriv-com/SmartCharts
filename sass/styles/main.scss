@@ -103,8 +103,8 @@
 
 /* Basic Buttons */
 .ciq-btn,
-#annotationCancel,
-#annotationSave {
+.annotationCancel,
+.annotationSave {
 	// font-size:$font-size-button;
 	font-weight:700;
 	text-transform:uppercase;
@@ -162,7 +162,7 @@
 		}
 	}
 }
-#annotationCancel, #annotationSave{
+.annotationCancel, .annotationSave{
 	position: absolute;
 }
 .ciq-btn.fancy { /* Defaults */

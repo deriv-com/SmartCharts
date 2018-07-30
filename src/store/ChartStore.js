@@ -188,9 +188,9 @@ class ChartStore {
             yTolerance: 999999, // disable vertical scrolling
         });
 
-        const deleteElement = stxx.chart.panel.holder.parentElement.querySelector('#mouseDeleteText');
-        const manageElement = stxx.chart.panel.holder.parentElement.querySelector('#mouseManageText');
-        const manageTouchElement = stxx.chart.panel.holder.parentElement.querySelector('#overlayTrashCan');
+        const deleteElement = stxx.chart.panel.holder.parentElement.querySelector('.mouseDeleteText');
+        const manageElement = stxx.chart.panel.holder.parentElement.querySelector('.mouseManageText');
+        const manageTouchElement = stxx.chart.panel.holder.parentElement.querySelector('.overlayTrashCan');
         deleteElement.textConent = t.translate('right-click to delete');
         manageElement.textConent = t.translate('right-click to manage');
         manageTouchElement.textContent = t.translate('tap to manage');
