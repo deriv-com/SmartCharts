@@ -986,7 +986,7 @@ cq-hu-dynamic { /* HU Container Box */
 	.ciq-hu-stroke { /* HU BG Image Border */
 		opacity: 0;
 	}
-	
+
 	> div {
 		position:absolute;
 		height:125px;
@@ -1469,7 +1469,7 @@ cq-share-dialog {
 			height: auto;
 			width: 100%;
 		}
-		&.ciq-studies, &.cq-comparison-new {
+		&.ciq-studies, &.cq-comparison-new, &.cq-chart-title {
 			.cq-menu-dropdown {
 				/* for studies and comparison dropdown, fill screen in mobile */
 				height: 100%;
