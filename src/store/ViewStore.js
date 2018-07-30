@@ -91,6 +91,7 @@ export default class ViewStore {
                 stx,
             });
             if (this.loader) { this.loader.hide(); }
+            this.menu.setOpen(false);
         };
         setTimeout(importLayout, 100);
     }
