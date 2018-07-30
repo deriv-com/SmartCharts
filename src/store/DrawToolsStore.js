@@ -88,12 +88,15 @@ export default class DrawToolsStore {
     onMouseMove = (e) => {
         const vectorType = this.stx.currentVectorParameters.vectorType;
         const img = document.getElementById('drawing-mouse-pointer');
+        const container = document.getElementsByClassName('chartContainer primary')[0];
         if (vectorType) {
             img.style.display = 'block';
             img.style.left = `${e.clientX || e.touches[0].clientX}px`;
             img.style.top = `${(e.clientY || e.touches[0].clientY) - 16}px`;
+            container.style.cursor = 'none';
         } else {
             img.style.display = 'none';
+            container.style.cursor = 'auto';
         }
     }
 
