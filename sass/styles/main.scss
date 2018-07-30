@@ -1497,3 +1497,46 @@ cq-share-dialog {
 .cq-menu-dropdown {
 	line-height: 2.1em;
 }
+
+
+
+
+
+$spot-color: #0298d3;
+
+.cq-marker-spot{
+	width: 6px;
+	height: 6px;
+	border-radius: 50%;
+	cursor: pointer;
+	position: absolute;
+	background: $spot-color;
+	box-shadow: 0 0 0 rgba($spot-color, 0.4);
+	animation: pulse 2s infinite;
+}
+
+@-webkit-keyframes pulse {
+	0% {
+		-webkit-box-shadow: 0 0 0 0 rgba($spot-color, 0.4);
+	}
+	70% {
+		-webkit-box-shadow: 0 0 0 10px rgba($spot-color, 0);
+	}
+	100% {
+		-webkit-box-shadow: 0 0 0 0 rgba($spot-color, 0);
+	}
+}
+@keyframes pulse {
+  0% {
+    -moz-box-shadow: 0 0 0 0 rgba($spot-color, 0.4);
+    box-shadow: 0 0 0 0 rgba($spot-color, 0.4);
+  }
+  70% {
+      -moz-box-shadow: 0 0 0 10px rgba($spot-color, 0);
+      box-shadow: 0 0 0 10px rgba($spot-color, 0);
+  }
+  100% {
+      -moz-box-shadow: 0 0 0 0 rgba($spot-color, 0);
+      box-shadow: 0 0 0 0 rgba($spot-color, 0);
+  }
+}
