@@ -253,6 +253,13 @@ CIQ.Animation = function (stx, animationParameters, easeMachine) {
     });
 
     stx.append('draw', function () {
+        if (!currentSpotElement) {
+            currentSpotElement = document.createElement('span');
+            currentSpotElement.className = 'cq-spot';
+            this.chart.panel.holder.parentElement.appendChild(currentSpotElement);
+        }
+        currentSpotElement.style.display = 'none';
+
         if (filterSession) { return; }
         if (this.chart.dataSet && this.chart.dataSet.length && this.mainSeriesRenderer && this.mainSeriesRenderer.supportsAnimation) {
             let context = this.chart.context;
@@ -266,14 +273,11 @@ CIQ.Animation = function (stx, animationParameters, easeMachine) {
             if (this.chart.yAxis.left > x &&
                 this.chart.yAxis.top <= y &&
                 this.chart.yAxis.bottom >= y) {
-                if (!currentSpotElement) {
-                    currentSpotElement = document.createElement('span');
-                    currentSpotElement.className = 'cq-marker-spot';
-                    this.chart.panel.holder.parentElement.appendChild(currentSpotElement);
-                } else {
-                    currentSpotElement.style.top = `${y - 3}px`;
-                    currentSpotElement.style.left = `${x - 3}px`;
-                }
+                currentSpotElement.style = {
+                    display: 'block',
+                    top: `${y - 3}px`,
+                    left: `${x - 3}px`,
+                };
             }
         }
     });
