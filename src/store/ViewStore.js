@@ -85,12 +85,17 @@ export default class ViewStore {
         const stx = this.stx;
 
         const importLayout = () => {
-            stx.importLayout(this.views[idx].layout, true, true);
-            if (stx.changeCallback) { stx.changeCallback(stx, 'layout'); }
-            stx.dispatch('layout', {
-                stx,
+            const finishImportLayout = () => {
+                stx.changeOccurred('layout');
+                if (this.loader) { this.loader.hide(); }
+            };
+
+            stx.importLayout(this.views[idx].layout, {
+                managePeriodicity: true,
+                preserveTicksAndCandleWidth: true,
+                cb: finishImportLayout,
             });
-            if (this.loader) { this.loader.hide(); }
+
             this.menu.setOpen(false);
         };
         setTimeout(importLayout, 100);

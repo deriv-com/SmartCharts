@@ -286,7 +286,7 @@ class CrosshairStore {
                 } else if (dsField.constructor === Date) {
                     const { floatDate } = stx.controls;
                     if (name === 'DT' && floatDate && floatDate.innerHTML) {
-                        if (CIQ.ChartEngine.hideDates()) {
+                        if (stx.chart.xAxis.noDraw) {
                             continue;
                         } else {
                             fieldValue = floatDate.innerHTML;
