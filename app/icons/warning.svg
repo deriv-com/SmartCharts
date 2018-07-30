@@ -1,0 +1,11 @@
+<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <g id="icons/system/light/alert-message/warning" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="ic-warning">
+            <circle id="Oval" fill="#FFC107" cx="8" cy="8" r="8"></circle>
+            <g id="Group-2" transform="translate(8.000000, 8.000000) scale(1, -1) translate(-8.000000, -8.000000) translate(6.500000, 4.000000)" fill="#FFFFFF">
+                <circle id="Oval-2" cx="1.5" cy="1" r="1"></circle>
+                <path d="M1.5,3 C2.05228475,3 2.5,3.44771525 2.5,4 L2.5,7 C2.5,7.55228475 2.05228475,8 1.5,8 C0.94771525,8 0.5,7.55228475 0.5,7 L0.5,4 C0.5,3.44771525 0.94771525,3 1.5,3 Z" id="Rectangle"></path>
+            </g>
+        </g>
+    </g>
+</svg>
