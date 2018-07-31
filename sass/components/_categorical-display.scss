@@ -346,11 +346,11 @@
     .cq-categorical-display{
         flex-direction: column;
         width: 100%;
-        display: inline;
+        height: 100%;
         .cq-lookup-filters {
             width: 100%;
+            height: 10.5em;
             border-right: none;
-            height: auto;
             max-height: 200px;
             overflow: hidden;
             @include transition(max-height .2s ease-in);
