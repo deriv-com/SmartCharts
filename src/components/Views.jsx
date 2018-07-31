@@ -99,7 +99,7 @@ const Views = ({
                             <div className="ovrwrit-alrt-title">
                                 <alertIconMap.warning />
                                 <span>
-                                    {templateName + t.translate(' is already exist.')}
+                                    {templateName + t.translate(' already exists.')}
                                 </span>
                                 <span>
                                     {t.translate('Would you like to overwrite it?')}
