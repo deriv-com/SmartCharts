@@ -103,54 +103,51 @@ html, body {
     @include themify($themes) {
         background-color: themed('ChartBg');
     }
-}
 
-.stx-btn-panel:hover span,
-.stx-btn-panel:active span { /* Make buttons full opacity on hover or hit */
-    opacity: 1;
-}
-
-.stx-btn-panel:active { /* Scale up when active */
-    -webkit-transform: scale(1.2, 1.2);
-    -ms-transform: scale(1.2, 1.2);
-    transform: scale(1.2, 1.2);
-}
-
-.stx-btn-panel > span.stx-ico-up {
-    background: url('./icons/chart/ic-up.svg') no-repeat center;
-}
-
-.stx-btn-panel > span.stx-ico-down {
-    background: url('./icons/chart/ic-down.svg') no-repeat center;
-}
-
-.stx-btn-panel > span.stx-ico-close {
-    background: url('./icons/delete/ic-delete.svg') no-repeat center;
-}
-
-.stx-btn-panel > span.stx-ico-edit {
-    background: url('./icons/chart/ic-settings.svg') no-repeat center;
-}
-
-.stx-btn-panel > span.stx-ico-focus {
-    background: url('./icons/chart/ic-maximize.svg') no-repeat center;
-}
-
-.smartcharts-dark {
-    .stx-btn-panel > span.stx-ico-up {
-        background: url('./icons/chart/ic-up-dark.svg') no-repeat center;
+    &:hover span, &:active span { /* Make buttons full opacity on hover or hit */
+        opacity: 1;
     }
-    .stx-btn-panel > span.stx-ico-down {
-        background: url('./icons/chart/ic-down-dark.svg') no-repeat center;
+    &:active { /* Scale up when active */
+        -webkit-transform: scale(1.2, 1.2);
+        -ms-transform: scale(1.2, 1.2);
+        transform: scale(1.2, 1.2);
     }
-    .stx-btn-panel > span.stx-ico-close {
-        background: url('./icons/delete/ic-delete-dark.svg') no-repeat center;
+}
+
+.stx-btn-panel > span {
+    background: no-repeat center;
+
+    &.stx-ico-up {
+        background-image: url('./icons/chart/ic-up.svg');
     }
-    .stx-btn-panel > span.stx-ico-edit {
-        background: url('./icons/chart/ic-settings-dark.svg') no-repeat center;
+    &.stx-ico-down {
+        background-image: url('./icons/chart/ic-down.svg');
     }
-    .stx-btn-panel > span.stx-ico-focus {
-        background: url('./icons/chart/ic-maximize-dark.svg') no-repeat center;
+    &.stx-ico-close {
+        background-image: url('./icons/delete/ic-delete.svg');
+    }
+    &.stx-ico-edit {
+        background-image: url('./icons/chart/ic-settings.svg');
+    }
+    &.stx-ico-focus {
+        background-image: url('./icons/chart/ic-maximize.svg');
+    }
+    .smartcharts-dark & {
+        &.stx-ico-up {
+            background-image: url('./icons/chart/ic-up-dark.svg');
+        }
+        &.stx-ico-down {
+            background-image: url('./icons/chart/ic-down-dark.svg');
+        }
+        &.stx-ico-close {
+            background-image: url('./icons/delete/ic-delete-dark.svg');
+        }
+        &.stx-ico-edit {
+            background-image: url('./icons/chart/ic-settings-dark.svg');
+        }
+        &.stx-ico-focus {
+            background-image: url('./icons/chart/ic-maximize-dark.svg');
+        }
     }
 }
 
@@ -867,20 +864,6 @@ html, body {
     font-size: 10px;
     font-family: 'Roboto';
 }
-
-// .stx_line_chart {color:#fff;}
-// .stx_bar_chart {color:#fff;}
-
-// .stx_candle_shadow, .stx_bar_even {color:#ccc;}
-
-// .stx_candle_down, .stx_line_down, .stx_histogram_down { border-left-color: #e34621; }
-// .stx_candle_up, .stx_line_up, .stx_histogram_up { border-left-color: #b8dea8; }
-
-// .stx_histogram_even{border-left-color:#cccccc;}
-
-// .stx_hollow_candle_even{color:#cccccc;}
-
-// .stx_baseline{color:#ccc;}
 
 /* --------------------------------------------------------- CHART AREA ELEMENTS --------------------------------------------------------- */
 
