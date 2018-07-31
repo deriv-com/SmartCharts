@@ -2,6 +2,7 @@
     display: flex !important;
     height: auto;
     width: auto !important;
+
     &:after {
         display: none;
     }
@@ -9,7 +10,7 @@
         opacity: 1;
         position: relative;
         cursor: pointer;
-        transition: scale .25s;
+        transition: scale 0.25s;
     }
     .cq-menu-btn {
         padding: 5px 0px;
@@ -21,17 +22,17 @@
         display: none; /* TODO */
     }
 }
-.cq-chart-control-left{
-    .cq-chart-size{
+
+.cq-chart-control-left {
+    .cq-chart-size {
         width: 100px !important;
         flex-flow: column;
     }
 }
 
-
-.smartcharts-desktop{
+.smartcharts-desktop {
     &.smartcharts-480 {
-        .cq-chart-control-bottom{
+        .cq-chart-control-bottom {
             .cq-chart-controls {
                 .cq-chart-size {
                     .cq-menu-btn {
@@ -42,7 +43,7 @@
         }
     }
     &.smartcharts-900 {
-        .cq-chart-control-bottom{
+        .cq-chart-control-bottom {
             .cq-chart-controls {
                 .cq-chart-size {
                     .cq-menu-btn {
@@ -53,7 +54,7 @@
         }
     }
     &.smartcharts-1100 {
-        .cq-chart-control-bottom{
+        .cq-chart-control-bottom {
             .cq-chart-controls {
                 .cq-chart-size {
                     .cq-menu-btn {

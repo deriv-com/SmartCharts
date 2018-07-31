@@ -5,14 +5,15 @@
 $red: #f44336;
 $green: #4caf50;
 
-
 .chart-line {
     position: absolute;
     z-index: 35;
+
     &.horizontal {
         width: 100%;
         left: 0;
         font-size: 10px;
+
         &:hover {
             z-index: 105;
         }
@@ -40,8 +41,12 @@ $green: #4caf50;
 /*hover*/
 
 .draggable.chart-line:hover {
-    &.horizontal { cursor: ns-resize; }
-    &.vertical   { cursor: ew-resize; }
+    &.horizontal {
+        cursor: ns-resize;
+    }
+    &.vertical {
+        cursor: ew-resize;
+    }
 }
 
 /*hover*/
@@ -60,6 +65,7 @@ $green: #4caf50;
     border-style: solid;
     border-width: 1px;
     border-color: inherit;
+
     .price {
         padding: 1px 12px;
         font-size: 14px;
@@ -87,6 +93,7 @@ $green: #4caf50;
         .price-arrow {
             width: 20px;
             height: 23px;
+
             span {
                 opacity: 1;
             }
@@ -94,10 +101,7 @@ $green: #4caf50;
     }
 }
 
-
-
 /*hover*/
-
 
 .price {
     font-weight: 300;
@@ -111,19 +115,18 @@ $green: #4caf50;
 
 .draggable .price {
     padding: 1px 18px;
-    &::after {
+
+    &:after {
         content: '≡';
         font-size: 25px;
         position: absolute;
         right: 1px;
         top: -1px;
-        transform: scaleX(0.8)
+        transform: scaleX(0.8);
     }
 }
 
-
 /*--------------------------------------------------*/
-
 
 /* shade */
 
@@ -145,9 +148,15 @@ $green: #4caf50;
 
 @mixin createShadeStyle($style-name, $shade-color) {
     .#{$style-name} {
-        .top-shade     { background-image: linear-gradient(to bottom, transparent 30%, $shade-color); }
-        .between-shade { background-color: $shade-color; }
-        .bottom-shade  { background-image: linear-gradient(to bottom, $shade-color, transparent 70%) }
+        .top-shade {
+            background-image: linear-gradient(to bottom, transparent 30%, $shade-color);
+        }
+        .between-shade {
+            background-color: $shade-color;
+        }
+        .bottom-shade {
+            background-image: linear-gradient(to bottom, $shade-color, transparent 70%);
+        }
     }
 }
 

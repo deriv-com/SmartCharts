@@ -10,25 +10,11 @@ html, body {
     margin: 0px; /*to deal with iFraming which sets 8px by default in some browsers*/
 }
 
-.chartContainer,
-#chartContainer { /* DIV that the canvas expands to. #chartContainer is only for backward compatibility with older libraries. */
+.chartContainer { /* DIV that the canvas expands to. #chartContainer is only for backward compatibility with older libraries. */
     display: block;
     font-family: $base-font;
     font-size: 12px;
     position: relative; /* chart container must be relative for internal DOM elements to be correct */
-}
-
-/* Chart Block */
-.ciq-chart {
-    height:auto;
-    width:100%;
-    @include themify($themes) {
-        background: themed('ChartBg');
-    }
-}
-
-/* The Chart */
-.chartContainer {
     z-index: 1;
     @include transition(height 0.4s ease-in-out);
     @include themify($themes) {
@@ -36,13 +22,26 @@ html, body {
         color: themed('ChartText');
     }
 }
-.cq-chart-control-left{
-    .chartContainer{
-        width: calc( 100% - 90px );
-        margin-left: 90px;
+
+/* Chart Block */
+.ciq-chart {
+    height: auto;
+    width: 100%;
+    @include themify($themes) {
+        background: themed('ChartBg');
     }
 }
 
+/* The Chart */
+.cq-chart-control-left {
+    .stx-panel-control {
+        left: 10px;
+    }
+    .chartContainer {
+        width: calc(100% - 90px);
+        margin-left: 90px;
+    }
+}
 
 .sharing .ciq-no-share {
     display: none !important;
@@ -65,22 +64,23 @@ html, body {
     overflow: visible;
     background-repeat: no-repeat;
     @include border-radius(3px);
-    -webkit-transition: color .25s, border .25s, box-shadow .25s;
-    -moz-transition: color .25s, border .25s, box-shadow .25s;
-    transition: color .25s, border .25s, box-shadow .25s;
+    -webkit-transition: color 0.25s, border 0.25s, box-shadow 0.25s;
+    -moz-transition: color 0.25s, border 0.25s, box-shadow 0.25s;
+    transition: color 0.25s, border 0.25s, box-shadow 0.25s;
     @include user-select(none);
+
     &:hover {
         color: #444444;
         border: solid 1px #c5c5c5;
-        -webkit-box-shadow: 0px 1px 1px rgba(0, 0, 0, .1), inset 0px -8px 6px rgba(100, 100, 100, .03);
-        -moz-box-shadow: 0px 1px 1px rgba(0, 0, 0, .1), inset 0px -8px 6px rgba(100, 100, 100, .03);
-        box-shadow: 0px 1px 1px rgba(0, 0, 0, .1), inset 0px -8px 6px rgba(100, 100, 100, .03);
+        -webkit-box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.1), inset 0px -8px 6px rgba(100, 100, 100, 0.03);
+        -moz-box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.1), inset 0px -8px 6px rgba(100, 100, 100, 0.03);
+        box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.1), inset 0px -8px 6px rgba(100, 100, 100, 0.03);
     }
     &:active {
         color: #333;
-        -webkit-box-shadow: inset 0px 8px 6px rgba(100, 100, 100, .03);
-        -moz-box-shadow: inset 0px 8px 6px rgba(100, 100, 100, .03);
-        box-shadow: inset 0px 8px 6px rgba(100, 100, 100, .03);
+        -webkit-box-shadow: inset 0px 8px 6px rgba(100, 100, 100, 0.03);
+        -moz-box-shadow: inset 0px 8px 6px rgba(100, 100, 100, 0.03);
+        box-shadow: inset 0px 8px 6px rgba(100, 100, 100, 0.03);
     }
 }
 
@@ -92,12 +92,17 @@ html, body {
     width: 25px;
     height: 25px;
     cursor: pointer;
-    -webkit-transition: -webkit-transform .2s;
-    transition: transform .2s;
+    -webkit-transition: -webkit-transform 0.2s;
+    transition: transform 0.2s;
 }
 
 .stx-btn-panel { /* Button Spacing */
     margin: 3px 2px;
+    opacity: 0;
+    @include transition(opacity 0.5s);
+    @include themify($themes) {
+        background-color: themed('ChartBg');
+    }
 }
 
 .stx-btn-panel:hover span,
@@ -130,7 +135,8 @@ html, body {
 .stx-btn-panel > span.stx-ico-focus {
     background: url('./icons/chart/ic-maximize.svg') no-repeat center;
 }
-.smartcharts-dark{
+
+.smartcharts-dark {
     .stx-btn-panel > span.stx-ico-up {
         background: url('./icons/chart/ic-up-dark.svg') no-repeat center;
     }
@@ -145,7 +151,7 @@ html, body {
     }
     .stx-btn-panel > span.stx-ico-focus {
         background: url('./icons/chart/ic-maximize-dark.svg') no-repeat center;
-    }    
+    }
 }
 
 /* --------------------------------------------------------- CHART CONTROLS --------------------------------------------------------- */
@@ -169,7 +175,7 @@ html, body {
 }
 
 .stx_jump_today { /* Button  jumping to today's data */
-    color: #FFF;
+    color: #fff;
     overflow: hidden;
     position: absolute;
     bottom: 12px;
@@ -181,11 +187,11 @@ html, body {
     margin-bottom: 17px;
     @include border-radius(3px);
     background: #fafafa;
-    -webkit-box-shadow: 0px 1px 2px rgba(0, 0, 0, .2);
-    -moz-box-shadow: 0px 1px 2px rgba(0, 0, 0, .2);
-    box-shadow: 0px 1px 1px rgba(0, 0, 0, .2);
-    transition: background .25s;
-    -webkit-transition: background .25s;
+    -webkit-box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.2);
+    -moz-box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.2);
+    box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.2);
+    transition: background 0.25s;
+    -webkit-transition: background 0.25s;
     cursor: pointer;
     z-index: 30;
 }
@@ -197,9 +203,9 @@ html, body {
     width: 30px;
     padding-top: 25px;
     background: url('./icons/chart/jump-to-today.svg') no-repeat center;
-    transition: opacity .25s, transform .2s;
-    -webkit-transition: opacity .25s, -webkit-transform .2s;
-    opacity: .6;
+    transition: opacity 0.25s, transform 0.2s;
+    -webkit-transition: opacity 0.25s, -webkit-transform 0.2s;
+    opacity: 0.6;
 }
 
 .stx_jump_today:hover span {
@@ -213,7 +219,7 @@ html, body {
     cursor: ns-resize;
     display: none;
     height: 20px;
-    opacity: .5;
+    opacity: 0.5;
     position: absolute;
     width: 20px;
     z-index: 30;
@@ -226,7 +232,6 @@ html, body {
 .stx-drag-chart { /* Use the hand icon when grabbing and moving the chart */
     cursor: url('./icons/chart/closedhand.cur'), default !important;
 }
-
 
 .stx-panel-control { /* Panel Control buttons template */
     position: absolute;
@@ -241,17 +246,11 @@ html, body {
         background: themed('ChartBg');
         border: 1px solid themed('ChartBorder');
     }
-    .stx-panel-title{
-        box-shadow: none;
-        margin: 5px;
-        @include themify($themes) {
-            border-right: 1px solid themed('ChartBorder');
-        }
-    }
-    .stx-btn-panel{
+
+    .stx-btn-panel {
         opacity: 1;
     }
-     * {
+    * {
         @include user-select(none);
     }
     &.stx-show {
@@ -261,11 +260,15 @@ html, body {
         float: left;
     }
     .stx-panel-title { /* Panel/Chart Titles */
+        box-shadow: none;
+        @include themify($themes) {
+            border-right: 1px solid themed('ChartBorder');
+        }
         margin: 5px 10px;
         float: left;
         display: inline-block;
         color: #333;
-        padding: 0 10px 0 10px;
+        padding: 0 10px;
         line-height: 22px;
         font-size: 12px;
         text-align: left;
@@ -275,20 +278,13 @@ html, body {
         }
     }
 }
-.cq-chart-control-left {
-    .stx-panel-control {
-        left: 10px;
-    }
-}
-
-
 
 /* ------------------------------------------------------- CHART OVERLAY ELEMENTS ------------------------------------------------------ */
-#mSticky{
+#mSticky {
     position: absolute;
     display: none;
     white-space: nowrap;
-    padding: 10px 10px 0 10px;
+    padding: 10px 10px 0;
     z-index: 40;
     font-size: 12px;
 
@@ -298,9 +294,10 @@ html, body {
         background: themed('TooltipBg');
         box-shadow: 0 0 10px themed('TooltipShadow');
     }
+
     &:before {
         position: absolute;
-        content: " ";
+        content: ' ';
         width: 100%;
         height: 40px;
         left: 0px;
@@ -314,17 +311,15 @@ html, body {
         position: absolute;
         pointer-events: none;
         border: solid;
-        border-width: 4px 4px 0px 4px;
+        border-width: 4px 4px 0px;
         top: 100%;
-        content: " ";
+        content: ' ';
         left: calc(50% - 4px);
         @include themify($themes) {
             border-color: themed('TooltipBg') transparent;
         }
     }
-
-
-    #mStickyInterior{
+    #mStickyInterior {
         margin: 0px;
         text-indent: 30px;
         width: 20px;
@@ -338,8 +333,8 @@ html, body {
             color: themed('DefaultMain') !important;
         }
     }
-    #mStickyRightClick{
-        padding: 20px 10px 10px 10px;
+    #mStickyRightClick {
+        padding: 20px 10px 10px;
         height: 70px;
         line-height: 20px;
         position: relative;
@@ -359,6 +354,7 @@ html, body {
         background: themed('TooltipBg');
         box-shadow: themed('TooltipShadow');
     }
+
     &:before {
         @include themify($themes) {
             border-color: themed('TooltipBg') transparent;
@@ -373,7 +369,7 @@ html, body {
 
 #sMeasure { /* Drawing and study info div contents*/
     margin: 0px;
-    padding: 5px 10px 5px 10px;
+    padding: 5px 10px;
     display: inline-block;
     float: left;
 }
@@ -474,10 +470,11 @@ html, body {
         background-color: themed('CrosshairLabel');
     }
 }
+
 .stx-float-date { /* Crosshair Floating x-axis date label*/
     position: absolute;
     font-size: 10px;
-    font-family: Helvetica;
+    font-family: 'Helvetica';
     z-index: 30;
     color: #fff;
     padding: 1px 6px;
@@ -508,7 +505,7 @@ html, body {
     left: 0px;
     height: 1px;
     width: 98%;
-    margin-top: -1px; /* since we're using border-top to draw the actual line */
+    margin-top: 0; /* since we're using border-top to draw the actual line */
 }
 
 #crossX, .stx_crosshair_x { /* Horizontal Crosshair line size */
@@ -524,9 +521,9 @@ html, body {
 /* -------- Chart and Study Panel Styling -------- */
 
 .stx_panels { /* Panel Title text */
-    font-family: Helvetica;
+    font-family: 'Helvetica';
     font-size: 10px;
-    color: white;
+    color: #fff;
 }
 
 .stx_panel_background { /* Panel Title background */
@@ -538,11 +535,6 @@ html, body {
     color: #cccccc;
 }
 
-.stx_panel_drag { /* Darker Divider between panels when resizing */
-    width: 2px;
-    color: #666;
-}
-
 .stx_solo_lit span { /* Add background to expand button when toggled on */
     background-color: #b1b7b8;
     color: #ffffff;
@@ -552,20 +544,19 @@ html, body {
 /* -------- Chart Grid -------- */
 
 .stx_grid { /* Default Grid */
-    color: #efefef;
+    @include themify($themes) {
+        background: themed('ChartBg');
+        color: themed('ChartGrid');
+    }
+    width: 1px;
     opacity: 1;
-    border-style: solid;
-}
-
-.stx_grid_dark { /* Default Grid dividers */
-    color: #cccccc;
-    opacity: .9;
     border-style: solid;
 }
 
 .stx_grid_border { /* Default Grid borders */
     color: #999999;
     border-style: solid;
+    opacity: 0;
 }
 
 /* -------- Chart Type Styles -------- */
@@ -595,26 +586,24 @@ html, body {
 }
 
 .stx_baseline_delta_mountain { /* Default color for baseline delta mountain Charts */
-    background-color: rgba(163, 102, 255, .5); /* background color for mountain. If IE8 support is needed use #5CC7C0 instead as rgba is not supported*/
-    color: rgba(163, 102, 255, .01); /* Optional gradient. If IE8 support is needed use #EFF9F9 instead as rgba is not supported */
+    background-color: rgba(163, 102, 255, 0.5); /* background color for mountain. If IE8 support is needed use #5CC7C0 instead as rgba is not supported*/
+    color: rgba(163, 102, 255, 0.01); /* Optional gradient. If IE8 support is needed use #EFF9F9 instead as rgba is not supported */
     padding: 3px; /* Optional padding between the baseline and the mountain shading*/
 }
 
 .stx_colored_mountain_chart { /* Default color for colored mountain Charts */
-    background-color: rgba(163, 102, 255, .5); /* background color for mountain. If IE8 support is needed use #5CC7C0 instead as rgba is not supported*/
-    color: rgba(163, 102, 255, .01); /* Optional gradient. If IE8 support is needed use #EFF9F9 instead as rgba is not supported */
+    background-color: rgba(163, 102, 255, 0.5); /* background color for mountain. If IE8 support is needed use #5CC7C0 instead as rgba is not supported*/
+    color: rgba(163, 102, 255, 0.01); /* Optional gradient. If IE8 support is needed use #EFF9F9 instead as rgba is not supported */
     width: 2px; /* Optional line width */
     padding: 4px; /* Optional padding between the baseline and the mountain shading*/
 }
 
 .stx_mountain_chart { /* Default color for mountain Charts */
-    background-color: rgba(102, 202, 196, .5); /* background color for mountain. If IE8 support is needed use #5CC7C0 instead as rgba is not supported*/
-    color: rgba(102, 202, 196, .01); /* Optional gradient. If IE8 support is needed use #EFF9F9 instead as rgba is not supported */
-    border: #66CAC4; /* Optional line color */
-    width: 1px; /* Optional line width */
+    color: rgba(0, 156, 255, 0.01); /* background color for mountain */
+    background-color: rgba(0, 102, 255, 0.5); /* Optional gradient */
+    border: #009cff; /* Optional line color */
+    width: 2px; /* Optional line width */
 }
-
-/*.stx_mountain_chart.color {width:24px;}*/
 
 .stx_histogram_down { /* Down Bar color */
     color: $chart-red;
@@ -638,7 +627,7 @@ html, body {
 }
 
 .stx_highlight_vector { /* change the color and weight of drawings and study overlays on hover */
-    color: red;
+    color: #ff0000;
     width: 3px;
 }
 
@@ -703,13 +692,13 @@ html, body {
 
 .stx_pandf_down { /* P&F chart color, padding, width for downtrend */
     color: $chart-red;
-    padding: 2px 0px 2px 0px;
+    padding: 2px 0px;
     width: 2px;
 }
 
 .stx_pandf_up { /* P&F chart color, padding, width for uptrend */
     color: $chart-green;
-    padding: 2px 0px 2px 0px;
+    padding: 2px 0px;
     width: 2px;
 }
 
@@ -730,53 +719,55 @@ html, body {
 /* Volume underlay styles */
 .stx_volume_underlay_up {
     color: rgb(140, 193, 118); /* legacy only. Use study library output "Up Volume" instead */
-    opacity: .3;
+    opacity: 0.3;
     border-left-color: rgb(0, 0, 0);
 }
 
 .stx_volume_underlay_down {
     color: rgb(184, 45, 12); /* legacy only. Use study library output "Down Volume" instead */
-    opacity: .3;
+    opacity: 0.3;
     border-left-color: rgb(0, 0, 0);
 }
 
 /* Volume profile styles */
 .stx_volume_profile {
-    opacity: .3;
+    opacity: 0.3;
     border-color: rgb(0, 0, 0);
 }
 
 /* Line color for projections */
 
 .stx_projection_new { /* Line color for active line when drawing projections */
-    color: blue;
+    color: #0000ff;
 }
 
 .stx_gaps { /* Transparent gaps overlay style */
     color: #b1b7b8;
-    opacity: .3;
+    opacity: 0.3;
 }
 
 .stx_histogram { /* Default color for histograms */
     @include themify($themes) {
         color: themed('ChartText');
     }
-    opacity: .2;
+    opacity: 0.2;
 }
 
 /* -------- Annotations -------- */
 
 .stx_annotation { /* Annotation styles */
     font-size: 13px;
-    font-family: Helvetica;
+    font-family: 'Helvetica';
     background: transparent;
-    border: none;
     box-shadow: none;
     padding: 0px 6px;
     outline: none;
     color: #333;
     resize: none;
     z-index: 1000;
+    @include themify($themes) {
+        border: 1px solid themed('ChartBorder');
+    }
 }
 
 .stx_annotation_bg { /* Annotation backgrounds */
@@ -784,7 +775,7 @@ html, body {
 }
 
 .stx_annotation_highlight { /* Annotation highlight color */
-    color: white;
+    color: #fff;
 }
 
 .stx_annotation_highlight_bg { /* Annotation highlight background color */
@@ -796,9 +787,9 @@ html, body {
     position: absolute;
     display: none;
     font-size: 11px;
-    -webkit-box-shadow: 0px 1px 2px rgba(0, 0, 0, .2);
-    -moz-box-shadow: 0px 1px 2px rgba(0, 0, 0, .2);
-    box-shadow: 0px 1px 2px rgba(0, 0, 0, .2);
+    -webkit-box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.2);
+    -moz-box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.2);
+    box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.2);
     z-index: 50;
 }
 
@@ -808,12 +799,12 @@ html, body {
 
 .stx_watermark { /* Optional watermark style */
     font-size: 16px;
-    font-family: Helvetica;
+    font-family: 'Helvetica';
 }
 
 .stx_fib_levels { /* Text for fibonacci values */
     font-size: 12px;
-    font-family: Helvetica;
+    font-family: 'Helvetica';
     color: transparent;
 }
 
@@ -821,7 +812,7 @@ html, body {
 
 .stx_share {
     font-size: 14px;
-    font-family: georgia;
+    font-family: 'georgia';
     @include themify($themes) {
         color: themed('ChartText');
     }
@@ -830,7 +821,7 @@ html, body {
 
 .stx_share_symbol {
     font-size: 14px;
-    font-family: Arial;
+    font-family: 'Arial';
     font-weight: bold;
 }
 
@@ -852,50 +843,29 @@ html, body {
         background-color: rgba(0, 255, 0, 0.8);
         width: 1px;
     }
-
     &.pre {
         background-color: rgba(255, 255, 0, 0.1);
     }
-
     &.post {
         background-color: rgba(0, 0, 255, 0.2);
     }
 }
 
-
-
-.stx_grid { /* Default Grid lines */
-    @include themify($themes) {
-        background: themed('ChartBg');
-    }
-    width: 1px;
-}
-.stx_grid_border {/* Default Grid borders */
-    opacity: 0;
-}
-.stx_grid_dark {/* Default Grid dividers */
+.stx_grid_dark { /* Default Grid dividers */
     @include themify($themes) {
         color: themed('ChartGrid');
     }
     opacity: 1;
+    opacity: 0.9;
+    border-style: solid;
 }
+
 .stx_yaxis, .stx_xaxis, .stx_xaxis_dark {
     @include themify($themes) {
         color: themed('ChartText');
     }
     font-size: 10px;
-    font-family: Roboto;
-}
-
-.stx_grid {
-    @include themify($themes) {
-        color: themed('ChartGrid');
-    }
-}
-.stx_grid_dark {
-    @include themify($themes) {
-        color: themed('ChartGrid');
-    }
+    font-family: 'Roboto';
 }
 
 // .stx_line_chart {color:#fff;}
@@ -912,16 +882,7 @@ html, body {
 
 // .stx_baseline{color:#ccc;}
 
-// .stx_mountain_chart {/* Default color for mountain Charts */
-//     background-color: rgba(0,156,255,.5);   /* background color for mountain */
-//     color: rgba(0,102,255,.01);             /* Optional gradient */
-//     border: #009cff;    /* Optional line color */
-//     width: 2px;                 /* Optional line width */
-// }
-
-
 /* --------------------------------------------------------- CHART AREA ELEMENTS --------------------------------------------------------- */
-
 
 .cq-down {
     color: $chart-red;
@@ -931,136 +892,13 @@ html, body {
     color: $chart-green;
 }
 
-cq-attrib-container {
-    position: absolute;
-    background: rgba(250,250,250,.9);
-    color: rgba(0,0,0,.4);
-    left: 30px;
-    bottom: 5px;
-    margin: 0;
-    font-size: 10px;
-    padding: 0 5px;
-
-    cq-attrib-source,
-    cq-attrib-quote-type {
-       padding: 2px 0;
-    }
-
-    cq-attrib-source a {
-        @include themify($themes) {
-            color: themed('DefaultText');
-        }
-    }
-}
-
-
-cq-theme-dialog  {
-    width: 440px;
-    & cq-section {
-        display:inline-block;
-        vertical-align:top;
-        margin-top: 15px;
-        &:first-of-type {
-            border-right:dashed 1px rgba(0,0,0,.5);
-            padding-right: 5px;
-        }
-        &:last-of-type {
-            padding-left: 5px;
-        }
-    }
-    & cq-action {
-        display:flex;
-        justify-content:center;
-        height:30px;
-        margin-top:10px;
-        & input {
-            width:200px;
-            padding-left:10px;
-        }
-        & div.ciq-btn {
-            position:absolute;
-            right:40px;
-        }
-    }
-    cq-placeholder {
-        width:150px;
-    }
-}
-
-cq-theme-piece {
-    display:block;
-    float:right;
-    & cq-swatch {
-        margin-left:5px;
-        margin-top:3px;
-    }
-}
-
-/* language dialog */
-cq-languages {
-    & > div {
-        margin-left: 70px;
-    }
-}
-
-cq-language-name {
-    display:inline-block;
-    text-align: center;
-    vertical-align:top;
-    cq-dialog & {
-        height: 27px;
-        line-height: 27px;
-        font-size: 14px;
-        cursor: pointer;
-        &:hover{
-            background-color:#F0F0F0;
-        }
-    }
-}
-
-
-
-
 /* --------------------------------------------------------- CHART SDK --------------------------------------------------------- */
-
-/* Chart */
-
-.stx_mountain_chart {/* Default color for mountain Charts */
-    color: rgba(0,156,255,.01); /* background color for mountain */
-    background-color: rgba(0,102,255,.5);               /* Optional gradient */
-    border: #009cff;    /* Optional line color */
-    width: 2px;                 /* Optional line width */
-}
 
 /* -------- Axis tabs and current Prices -------- */
 
-
-#crossY, .stx_crosshair_y {
-    margin-top: 0px;
-}
-
-.stx_annotation {
-    background: transparent;
-    @include themify($themes) {
-        border: 1px solid themed('ChartBorder');
-    }
-}
-
-.stx-btn-panel {
-    opacity:0;
-    @include transition(opacity .5s);
-    @include themify($themes) {
-        background-color: themed('ChartBg');
-    }
-}
-
-.break-sm .stx-btn-panel {
-    display: none;
-}
-
 .stx-holder:hover .stx-btn-panel {
     opacity: 1;
-    @include transition(opacity .5s, height .3s);
+    @include transition(opacity 0.5s, height 0.3s);
 }
 
 .stx-ico-handle {
@@ -1076,27 +914,27 @@ cq-language-name {
         box-shadow: 0 0 0px 8px themed('ChartBg');
         background: themed('ChartBg');
     }
-    span{
+
+    span {
         padding: 100%;
         @include themify($themes) {
             background: themed('ChartIndicateDivide');
         }
     }
     &:hover {
-        opacity: .3;
+        opacity: 0.3;
     }
     &:active { /* Use the vertical resize when adjusting panels */
         cursor: ns-resize;
     }
     &.stx-grab {
-        opacity: .3;
-        height:2px;
+        opacity: 0.3;
+        height: 2px;
         @include themify($themes) {
             background-color: themed('ChartBorder');
         }
     }
 }
-
 
 /* hide the default panel drag */
 .stx_panel_drag {
@@ -1107,27 +945,10 @@ cq-language-name {
     font-family: $base-font;
 }
 
-.stx_line_chart {
-    width: 2px;
-}
-.stx_market_session{
-    &.divider {
-        background-color: rgba(0,0,0,0);
-        width: 1px;
-    }
-    &.pre {
-        background-color: rgba(71,218,223,0.3);
-
-    }
-    &.post {
-        background-color: rgba(21,118,135,0.3);
-    }
-}
-
-
 .sidenav.active {
-  display:flex;
+    display: flex;
 }
+
 .sidenav {
     height: 250px;
     width: 40px;
@@ -1140,7 +961,7 @@ cq-language-name {
     align-content: center;
     padding: 0;
     @include themify($themes) {
-        border-left:1px solid themed('ChartBorder');
+        border-left: 1px solid themed('ChartBorder');
     }
 }
 
@@ -1148,19 +969,12 @@ cq-language-name {
     margin-top: -3px;
 }
 
-.break-sm .sidenav {
-    top: 45px;
-}
-
-.break-sm ciq-sidenav {
-    display: block;
-}
-
 .stx_range_slider.shading {
-    background-color: rgba(128,128,128,0.3);
-    border: solid 2px rgba(0,144,183,1);
+    background-color: rgba(128, 128, 128, 0.3);
+    border: solid 2px rgba(0, 144, 183, 1);
     width: 5px;
 }
+
 .stx-chart-panel.stx-show { /* Hide default Chart Title and Icons */
     display: none;
 }
@@ -1173,8 +987,6 @@ cq-language-name {
      */
     display: none !important;
 }
-
-
 
 .ps--active-x > .ps__rail-x,
 .ps--active-y > .ps__rail-y {
