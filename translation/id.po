@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Indonesian\n"
 "Language: id_ID\n"
-"PO-Revision-Date: 2018-07-31 02:40\n"
+"PO-Revision-Date: 2018-07-31 04:00\n"
 
 msgid "Favorites"
 msgstr "Favorit"
@@ -100,7 +100,7 @@ msgid "Add New"
 msgstr "Tambah Baru"
 
 msgid " already exists."
-msgstr ""
+msgstr " sudah tersedia."
 
 msgid "Would you like to overwrite it?"
 msgstr "Apakah Anda ingin menggantikannya?"
