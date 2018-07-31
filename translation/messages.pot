@@ -86,7 +86,7 @@ msgstr ""
 msgid "Add New"
 msgstr ""
 
-msgid " is already exist."
+msgid " already exists."
 msgstr ""
 
 msgid "Would you like to overwrite it?"
