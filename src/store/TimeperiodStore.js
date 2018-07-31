@@ -62,6 +62,11 @@ export default class TimeperiodStore {
         };
 
         const setRemain = () => {
+            if (stx.isDestroyed) {
+                if (this.countdownInterval) { clearInterval(this.countdownInterval); }
+                return;
+            }
+
             const dataSet = stx.chart.dataSet;
             if (dataSet && dataSet.length !== 0) {
                 const now = new Date();

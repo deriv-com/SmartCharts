@@ -22,7 +22,6 @@ html, body {
 .ciq-chart {
     height:auto;
     width:100%;
-    @include box-shadow (0px, 2px, 5px, rgba(0, 0, 0, .1));
     @include themify($themes) {
         background: themed('ChartBg');
     }
