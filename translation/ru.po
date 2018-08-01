@@ -10,49 +10,103 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
-"PO-Revision-Date: 2018-07-31 02:40\n"
+"PO-Revision-Date: 2018-08-01 09:21\n"
 
-msgid "Favorites"
-msgstr "Избранное"
+msgid " already exists."
+msgstr ""
 
-msgid "There are no favorites yet."
-msgstr "Нет записей в избранном."
+msgid "[symbol] market is presently closed."
+msgstr "Рынок [symbol] закрыт в данный момент."
 
-msgid "CLOSED"
-msgstr "ЗАКРЫТО"
+msgid "\"Mass Index\" or \"Doji Star\""
+msgstr "\"Индекс массы\" или \"звезда дожи\""
 
-msgid "PRICE"
-msgstr "ЦЕНА"
+msgid "Active"
+msgstr "Активные"
 
-msgid "OPEN"
-msgstr "ОТКРЫТИЕ"
+msgid "Add New"
+msgstr ""
+
+msgid "Annotation"
+msgstr "Примечание"
+
+msgid "Asset Information"
+msgstr "Информация об активе"
+
+msgid "Average Line"
+msgstr "Средняя линия"
+
+msgid "Baseline"
+msgstr "Основная линия"
+
+msgid "Box Size"
+msgstr "Размер ячейки"
+
+msgid "Callout"
+msgstr "Сноска"
+
+msgid "CANCEL"
+msgstr ""
+
+msgid "Candle"
+msgstr "Свеча"
+
+msgid "Channel"
+msgstr "Канал"
+
+msgid "Chart data is not available for this symbol."
+msgstr "График недоступен для данного актива."
+
+msgid "Chart types"
+msgstr "Вид графика"
+
+msgid "Clear All"
+msgstr "Очистить все"
 
 msgid "CLOSE"
 msgstr "ЗАКРЫТИЕ"
 
-msgid "HIGH"
-msgstr "МАКС."
+msgid "CLOSED"
+msgstr "ЗАКРЫТО"
 
-msgid "LOW"
-msgstr "МИН."
+msgid "Colored Dot"
+msgstr "Цветные точки"
 
-msgid "Underlying Assets"
-msgstr "Основные активы"
+msgid "Comparison"
+msgstr "Сравнение"
 
-msgid "Share"
-msgstr "Поделиться"
+msgid "Continuous"
+msgstr "Непрерывный"
 
-msgid "Share / Download Chart"
-msgstr "Поделиться / загрузить график"
+msgid "Copied!"
+msgstr "Скопировано!"
 
-msgid "Share link"
-msgstr "Поделиться ссылкой"
+msgid "Copy to clipboard"
+msgstr "Копировать в буфер"
 
-msgid "Failed to generate link"
-msgstr "Не удалось создать ссылку"
+msgid "Countdown"
+msgstr "Отсчёт"
 
-msgid "Retry"
-msgstr "Попробовать снова"
+msgid "Crosshair"
+msgstr "Перекрестие"
+
+msgid "Crossline"
+msgstr "Линия пересечения"
+
+msgid "Dark Mode"
+msgstr "Тёмный режим"
+
+msgid "Day"
+msgstr "День"
+
+msgid "DONE"
+msgstr "ГОТОВО"
+
+msgid "Doodle"
+msgstr "Произвольной формы"
+
+msgid "Dot"
+msgstr "Точечный"
 
 msgid "Download chart"
 msgstr "Загрузить график"
@@ -60,197 +114,26 @@ msgstr "Загрузить график"
 msgid "Draw tools"
 msgstr "Ср-ва отображения"
 
-msgid "Clear All"
-msgstr "Очистить все"
+msgid "Ellipse"
+msgstr "Эллипс"
 
-msgid "Measure"
-msgstr "Измерить"
-
-msgid "Zoom out"
-msgstr "Уменьшить"
-
-msgid "Zoom in"
-msgstr "Увеличить"
-
-msgid "Interval"
-msgstr "Интервал"
-
-msgid "Tick"
-msgstr "Тик"
-
-msgid "Minute"
-msgstr "Мин."
-
-msgid "Hour"
-msgstr "Час."
-
-msgid "Day"
-msgstr "День"
-
-msgid "Crosshair"
-msgstr "Перекрестие"
-
-msgid "Templates"
-msgstr "Шаблоны"
-
-msgid "Template name"
-msgstr "Название шаблона"
-
-msgid "Add New"
-msgstr ""
-
-msgid " already exists."
-msgstr ""
-
-msgid "Would you like to overwrite it?"
-msgstr ""
-
-msgid "CANCEL"
-msgstr ""
-
-msgid "OVERWRITE"
-msgstr ""
-
-msgid "Comparison"
-msgstr "Сравнение"
-
-msgid "Indicators"
-msgstr "Индикаторы"
-
-msgid "Chart types"
-msgstr "Вид графика"
-
-msgid "Line"
-msgstr "Линия"
-
-msgid "Dot"
-msgstr "Точечный"
-
-msgid "Colored Dot"
-msgstr "Цветные точки"
-
-msgid "Spline"
-msgstr "Кривая"
-
-msgid "Baseline"
-msgstr "Основная линия"
-
-msgid "Candle"
-msgstr "Свеча"
-
-msgid "OHLC"
-msgstr "OHLC"
-
-msgid "Hollow Candle"
-msgstr "пустая свеча"
-
-msgid "Heikin Ashi"
-msgstr "Хейкен Аши"
-
-msgid "Kagi"
-msgstr "Каги"
-
-msgid "Line Break"
-msgstr "Разрыв линии"
-
-msgid "Renko"
-msgstr "Ренко"
-
-msgid "Range Bars"
-msgstr "Столбцы"
-
-msgid "Point & Figure"
-msgstr "Крестики-нолики"
-
-msgid "Reversal Percentage"
-msgstr "Процент разворота"
-
-msgid "Range"
-msgstr "Диапазон"
-
-msgid "Price Lines"
-msgstr "Линии цены"
-
-msgid "Box Size"
-msgstr "Размер ячейки"
-
-msgid "Reversal"
-msgstr "Разворот"
-
-msgid "RESET"
-msgstr "СБРОСИТЬ"
-
-msgid "DONE"
-msgstr "ГОТОВО"
-
-msgid "Settings"
-msgstr "Настройки"
-
-msgid "Position"
-msgstr "Позиция"
-
-msgid "Dark Mode"
-msgstr "Тёмный режим"
-
-msgid "Countdown"
-msgstr "Отсчёт"
-
-msgid "Asset Information"
-msgstr "Информация об активе"
-
-msgid "Language"
-msgstr "Язык"
-
-msgid "[symbol] market is presently closed."
-msgstr "Рынок [symbol] закрыт в данный момент."
-
-msgid "Streaming for [symbol] is not available due to license restrictions"
-msgstr "Потоковые котировки для [symbol] недоступны из-за лицензионных ограничений"
-
-msgid "Copy to clipboard"
-msgstr "Копировать в буфер"
-
-msgid "Copied!"
-msgstr "Скопировано!"
+msgid "Failed to generate link"
+msgstr "Не удалось создать ссылку"
 
 msgid "Failed!"
 msgstr "Ошибка!"
 
-msgid "Search..."
-msgstr "Поиск..."
-
-msgid "Annotation"
-msgstr "Примечание"
-
-msgid "Average Line"
-msgstr "Средняя линия"
-
-msgid "Callout"
-msgstr "Сноска"
-
-msgid "Channel"
-msgstr "Канал"
-
-msgid "Continuous"
-msgstr "Непрерывный"
-
-msgid "Crossline"
-msgstr "Линия пересечения"
-
-msgid "Doodle"
-msgstr "Произвольной формы"
-
-msgid "Ellipse"
-msgstr "Эллипс"
-
-msgid "Fib Retracement"
-msgstr "Корр. Фибоначчи"
+msgid "Favorites"
+msgstr "Избранное"
 
 msgid "Fib Arc"
 msgstr "Дуга Фибоначчи"
 
 msgid "Fib Fan"
 msgstr "Веер Фибоначчи"
+
+msgid "Fib Retracement"
+msgstr "Корр. Фибоначчи"
 
 msgid "Fib Time Zone"
 msgstr "Часовой пояс Фибоначчи"
@@ -261,14 +144,80 @@ msgstr "Веер Ганна"
 msgid "Gartley"
 msgstr "Гартли"
 
+msgid "Heikin Ashi"
+msgstr "Хейкен Аши"
+
+msgid "HIGH"
+msgstr "МАКС."
+
+msgid "Hollow Candle"
+msgstr "пустая свеча"
+
 msgid "Horizontal"
 msgstr "Горизонт."
+
+msgid "Hour"
+msgstr "Час."
+
+msgid "Indicators"
+msgstr "Индикаторы"
+
+msgid "Interval"
+msgstr "Интервал"
+
+msgid "Kagi"
+msgstr "Каги"
+
+msgid "Language"
+msgstr "Язык"
+
+msgid "Line"
+msgstr "Линия"
+
+msgid "Line Break"
+msgstr "Разрыв линии"
+
+msgid "LOW"
+msgstr "МИН."
+
+msgid "Measure"
+msgstr "Измерить"
+
+msgid "Minute"
+msgstr "Мин."
+
+msgid "OHLC"
+msgstr "OHLC"
+
+msgid "OPEN"
+msgstr "ОТКРЫТИЕ"
+
+msgid "OVERWRITE"
+msgstr ""
 
 msgid "Pitchfork"
 msgstr "Вилка"
 
+msgid "Point & Figure"
+msgstr "Крестики-нолики"
+
+msgid "Position"
+msgstr "Позиция"
+
+msgid "PRICE"
+msgstr "ЦЕНА"
+
+msgid "Price Lines"
+msgstr "Линии цены"
+
 msgid "Quadrant Lines"
 msgstr "Перпендикулярные линии"
+
+msgid "Range"
+msgstr "Диапазон"
+
+msgid "Range Bars"
+msgstr "Столбцы"
 
 msgid "Ray"
 msgstr "Луч"
@@ -279,8 +228,35 @@ msgstr "Прямоугольник"
 msgid "Regression Line"
 msgstr "Регресионная линия"
 
+msgid "Renko"
+msgstr "Ренко"
+
+msgid "RESET"
+msgstr "СБРОСИТЬ"
+
+msgid "Retry"
+msgstr "Попробовать снова"
+
+msgid "Reversal"
+msgstr "Разворот"
+
+msgid "Reversal Percentage"
+msgstr "Процент разворота"
+
+msgid "right-click to delete"
+msgstr "Щелкните правой кнопкой мыши чтобы удалить"
+
+msgid "right-click to manage"
+msgstr "Щелкните правой кнопкой мыши чтобы управлять"
+
+msgid "Search..."
+msgstr "Поиск..."
+
 msgid "Segment"
 msgstr "Сегмент"
+
+msgid "Settings"
+msgstr "Настройки"
 
 msgid "Shape - Arrow"
 msgstr "Фигура - Стрелка"
@@ -300,11 +276,47 @@ msgstr "Фигура - Сердце"
 msgid "Shape - Star"
 msgstr "Фигура - Звезда"
 
+msgid "Share"
+msgstr "Поделиться"
+
+msgid "Share / Download Chart"
+msgstr "Поделиться / загрузить график"
+
+msgid "Share link"
+msgstr "Поделиться ссылкой"
+
 msgid "Speed Resistance Arc"
 msgstr "Дуга сопротивления"
 
 msgid "Speed Resistance Line"
 msgstr "Линия сопротивления"
+
+msgid "Spline"
+msgstr "Кривая"
+
+msgid "Streaming for [symbol] is not available due to license restrictions"
+msgstr "Потоковые котировки для [symbol] недоступны из-за лицензионных ограничений"
+
+msgid "tap to manage"
+msgstr ""
+
+msgid "Template name"
+msgstr "Название шаблона"
+
+msgid "Templates"
+msgstr "Шаблоны"
+
+msgid "There are no active comparisons yet."
+msgstr "Нет активных сравнений."
+
+msgid "There are no active indicators yet."
+msgstr "Нет активных индикаторов."
+
+msgid "There are no favorites yet."
+msgstr "Нет записей в избранном."
+
+msgid "Tick"
+msgstr "Тик"
 
 msgid "Time Cycle"
 msgstr "Временной круг"
@@ -312,32 +324,20 @@ msgstr "Временной круг"
 msgid "Tirone Levels"
 msgstr "Уровни Тирона"
 
+msgid "Underlying Assets"
+msgstr "Основные активы"
+
 msgid "Vertical"
 msgstr "Вертикаль"
 
-msgid "Active"
-msgstr "Активные"
-
-msgid "There are no active comparisons yet."
-msgstr "Нет активных сравнений."
-
-msgid "\"Mass Index\" or \"Doji Star\""
-msgstr "\"Индекс массы\" или \"звезда дожи\""
-
-msgid "There are no active indicators yet."
-msgstr "Нет активных индикаторов."
-
-msgid "right-click to delete"
-msgstr "Щелкните правой кнопкой мыши чтобы удалить"
-
-msgid "right-click to manage"
-msgstr "Щелкните правой кнопкой мыши чтобы управлять"
-
-msgid "tap to manage"
+msgid "Would you like to overwrite it?"
 msgstr ""
 
-msgid "Chart data is not available for this symbol."
-msgstr "График недоступен для данного актива."
+msgid "Zoom in"
+msgstr "Увеличить"
+
+msgid "Zoom out"
+msgstr "Уменьшить"
 
 msgid "RSI"
 msgstr "RSI"
