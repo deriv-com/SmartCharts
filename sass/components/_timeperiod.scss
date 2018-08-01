@@ -1,194 +1,204 @@
 .ciq-period {
-	padding: 0 ;
-	line-height: 1.5em !important;
-	> .cq-menu-btn {
-		padding: 0 5px;
-		> .bt-priod {
-			display: block;
-			height: auto;
-			line-height: 2em;
-			border-radius: 2px;
-			box-sizing: border-box;
-			cursor: pointer;
-			text-align: center;
-			padding-top: 5px;
-			@include themify($themes) {color: themed('menuText');}
-			.ic-priod {
-				@include border-radius(4px);
-				padding: 3px 5px;
-			}
-		}
-	}
-	&:hover {
-		.ic-priod {
-			@include themify($themes) {
-				background: themed('menuActiveBg');
-			}
-		}
-	} 
-	&.stxMenuActive {
-		.bt-priod{
-			font-weight: 500;
-		}
-		.ic-priod{
-			@include themify($themes) {background: themed('menuActiveBg');}
-		}
-		.ic-subtitle,
-		.ic-priod span {
-			@include themify($themes) {color: themed('MenuActiveText');}
-		}
-	}
-	&:after {
-		display: none;
-	}
-	.unit_display {
-		text-transform: capitalize;
-	}
-	.interval_display {
-		margin: 0 5px 0 0;
-	}
-	.cq-menu-dropdown {
-		width: 296px;
-		height: 160px;
-		font-size: 12px;
-		font-weight: normal;
-		.cq-interval{
-			height: 160px;
-			width: 100%;
-			display: flex;
-			flex-direction: row;
-			@include themify($themes) {background: themed('TimeBg');}
-		}
-		.timeUnit {
-			display: flex;
-			flex-direction: column;
-			width: 88px;
-			height: 100%;
-			@include themify($themes) {background: themed('TimeUnitBg');}
-			span {
-				cursor: pointer;
-				display: block;
-				height: 40px;
-				padding-left: 16px;
-				line-height: 40px;
-				font-weight: 300;
-				@include themify($themes) {
-					color: themed('TimeUnitColor');
-					border-right: 1px solid themed('TimeUnitItemBorder');
-				}
-				&.selected {
-					font-weight: 500;
-					@include themify($themes) {
-						color: themed('TimeActiveUnitColor');
-						background: themed('TimeActiveUnitBg');
-						border-right: 2px solid themed('TimeActiveUnitItemBorder');
-					}
-				}
-			}
-		}
+    padding: 0;
+    line-height: 1.5em !important;
 
-		.interval {
-			display: flex;
-			flex-direction: column;
-			width: 208px;
-			.row {
-				height: 40px;
-				display: flex;
-				flex-direction: row;
-				margin: 0 4px;
-				align-items: center;
-				font-weight: 300;
-				span {
-					cursor: pointer;
-					margin: 0 3px 0 0;
-					width: 24px;
-					height: 24px;
-					text-align: center;
-					line-height: 26px;
-					border: 1px solid transparent;
-					@include border-radius(4px);
-					@include themify($themes) {color: themed('TimeItemColor');}
-					&.selected {
-						line-height: 27px;
-						font-weight: bold;
-						@include themify($themes) {
-							color: themed('TimeActiveItemColor') !important;
-							background: themed('TimeActiveItemBg');
-							border-color: themed('TimeActiveItemBorder');
-						}
-					}
-					&:hover{
-						line-height: 27px;
-						font-weight: bold;
-						@include themify($themes) {
-							color: themed('TimeHoverItemColor');
-							border-color: themed('TimeHoverItemBorder');
-						}
-					}
-				}
-			}
-		}
-	}
+    > .cq-menu-btn {
+        padding: 0 5px;
+
+        > .bt-priod {
+            display: block;
+            height: auto;
+            line-height: 2em;
+            border-radius: 2px;
+            box-sizing: border-box;
+            cursor: pointer;
+            text-align: center;
+            padding-top: 5px;
+            @include themify($themes) {
+                color: themed('menuText');
+            }
+
+            .ic-priod {
+                @include border-radius(4px);
+                padding: 3px 5px;
+            }
+        }
+    }
+    &:hover {
+        .ic-priod {
+            @include themify($themes) {
+                background: themed('menuActiveBg');
+            }
+        }
+    }
+    &.stxMenuActive {
+        .bt-priod {
+            font-weight: 500;
+        }
+        .ic-priod {
+            @include themify($themes) {
+                background: themed('menuActiveBg');
+            }
+        }
+        .ic-subtitle,
+        .ic-priod span {
+            @include themify($themes) {
+                color: themed('MenuActiveText');
+            }
+        }
+    }
+    &:after {
+        display: none;
+    }
+    .unit_display {
+        text-transform: capitalize;
+    }
+    .interval_display {
+        margin: 0 5px 0 0;
+    }
+    .cq-menu-dropdown {
+        width: 296px;
+        height: 160px;
+        font-size: 12px;
+        font-weight: normal;
+
+        .cq-interval {
+            height: 160px;
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+            @include themify($themes) {
+                background: themed('TimeBg');
+            }
+        }
+        .timeUnit {
+            display: flex;
+            flex-direction: column;
+            width: 88px;
+            height: 100%;
+            @include themify($themes) {
+                background: themed('TimeUnitBg');
+            }
+
+            span {
+                cursor: pointer;
+                display: block;
+                height: 40px;
+                padding-left: 16px;
+                line-height: 40px;
+                font-weight: 300;
+                @include themify($themes) {
+                    color: themed('TimeUnitColor');
+                    border-right: 1px solid themed('TimeUnitItemBorder');
+                }
+
+                &.selected {
+                    font-weight: 500;
+                    @include themify($themes) {
+                        color: themed('TimeActiveUnitColor');
+                        background: themed('TimeActiveUnitBg');
+                        border-right: 2px solid themed('TimeActiveUnitItemBorder');
+                    }
+                }
+            }
+        }
+        .interval {
+            display: flex;
+            flex-direction: column;
+            width: 208px;
+
+            .row {
+                height: 40px;
+                display: flex;
+                flex-direction: row;
+                margin: 0 4px;
+                align-items: center;
+                font-weight: 300;
+
+                span {
+                    cursor: pointer;
+                    margin: 0 3px 0 0;
+                    width: 24px;
+                    height: 24px;
+                    text-align: center;
+                    line-height: 26px;
+                    border: 1px solid transparent;
+                    @include border-radius(4px);
+                    @include themify($themes) {
+                        color: themed('TimeItemColor');
+                    }
+
+                    &.selected {
+                        line-height: 27px;
+                        font-weight: bold;
+                        @include themify($themes) {
+                            color: themed('TimeActiveItemColor') !important;
+                            background: themed('TimeActiveItemBg');
+                            border-color: themed('TimeActiveItemBorder');
+                        }
+                    }
+                    &:hover {
+                        line-height: 27px;
+                        font-weight: bold;
+                        @include themify($themes) {
+                            color: themed('TimeHoverItemColor');
+                            border-color: themed('TimeHoverItemBorder');
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 
-.cq-chart-control-left{
-	.ciq-period {
-		>.cq-menu-btn {
-			>.bt-priod {
-				.ic-priod {
-					padding: 6px 20px;
-				}
-			}
-		}
-	}
+.cq-chart-control-left {
+    .ciq-period {
+        > .cq-menu-btn {
+            > .bt-priod {
+                .ic-priod {
+                    padding: 6px 20px;
+                }
+            }
+        }
+    }
 }
 
 /* Mobile Style */
 .smartcharts-mobile {
-	.ciq-period {
-		padding: 0 !important;
-		>.cq-menu-btn {
-			padding: 0 !important;
-			.bt-priod{
-				>span {
-					padding: 5px 5px !important;
-				}
-			}
-		}
-	}
+    .ciq-period {
+        padding: 0 !important;
+
+        > .cq-menu-btn {
+            padding: 0 !important;
+
+            .bt-priod {
+                > span {
+                    padding: 5px !important;
+                }
+            }
+        }
+    }
 }
 
-.smartcharts-480 {
-	.cq-chart-control-bottom {
-		.ciq-period {
-			> .cq-menu-btn {
-				padding: 10px 5px !important;
-			}
-		}
-		.ciq-period{
-		    width: 70px !important;
-		    top: 0px;
-		}
-	}
-}
-.smartcharts-900 {
-	.cq-chart-control-bottom {
-		.ciq-period {
-			> .cq-menu-btn {
-				padding: 10px 5px !important;
-			}
-		}
-		.ciq-period{
-		    width: 80px !important;
-		    top: 0px;
-		}
-	}
-}
-.smartcharts-1100 {
-	.cq-chart-control-bottom {
-		.ciq-period{
-		    width: 100px !important;
-		    top: 0px;
-		}
-	}
+.cq-chart-control-bottom .ciq-period {
+    .smartcharts-480 & {
+        width: 70px !important;
+        top: 0px;
+
+        > .cq-menu-btn {
+            padding: 10px 5px !important;
+        }
+    }
+    .smartcharts-900 & {
+        width: 80px !important;
+        top: 0px;
+
+        > .cq-menu-btn {
+            padding: 10px 5px !important;
+        }
+    }
+    .smartcharts-1100 & {
+        width: 100px !important;
+        top: 0px;
+    }
 }

@@ -3,6 +3,7 @@ const path = require('path');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const StyleLintPlugin = require('stylelint-webpack-plugin');
 
 const production = process.env.NODE_ENV === 'production';
 const isApp = process.env.BUILD_MODE === 'app';
@@ -78,6 +79,7 @@ const config = {
             t: [path.resolve(__dirname, './src/Translation.js'), 't'],
         }),
         new MiniCssExtractPlugin({ filename: 'smartcharts.css' }),
+        new StyleLintPlugin(),
         new CopyWebpackPlugin([
             { from: './chartiq/chartiq.min.js' },
         ]),
