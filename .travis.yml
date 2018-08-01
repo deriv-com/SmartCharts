@@ -15,6 +15,9 @@ notifications:
     on_pull_requests: false
     on_success: never
 
+before_script:
+  - yarn test
+
 script:
   - yarn build-travis
 
