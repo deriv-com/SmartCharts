@@ -7,7 +7,6 @@ import DrawToolsStore from './DrawToolsStore';
 import ChartTitleStore from './ChartTitleStore';
 import AssetInformationStore from './AssetInformationStore';
 import ComparisonListStore from './ComparisonListStore';
-import NotificationStore from './NotificationStore';
 import ViewStore from './ViewStore';
 import CrosshairStore from './CrosshairStore';
 import ShareStore from './ShareStore';
@@ -28,7 +27,6 @@ export default class MainStore {
     timeperiod = new TimeperiodStore(this);
     assetInformation = new AssetInformationStore(this);
     comparisonList = new ComparisonListStore(this);
-    notification = new NotificationStore(this);
     view = new ViewStore(this);
     crosshair = new CrosshairStore(this);
     share = new ShareStore(this);
