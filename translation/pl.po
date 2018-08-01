@@ -10,10 +10,10 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Polish\n"
 "Language: pl_PL\n"
-"PO-Revision-Date: 2018-08-01 09:21\n"
+"PO-Revision-Date: 2018-08-01 16:22\n"
 
 msgid " already exists."
-msgstr ""
+msgstr " już istnieje."
 
 msgid "[symbol] market is presently closed."
 msgstr "Rynek [symbol] jest obecnie zamknięty."
@@ -25,7 +25,7 @@ msgid "Active"
 msgstr "Aktywne"
 
 msgid "Add New"
-msgstr ""
+msgstr "Dodaj nowy"
 
 msgid "Annotation"
 msgstr "Adnotacja"
@@ -46,7 +46,7 @@ msgid "Callout"
 msgstr "Wezwanie"
 
 msgid "CANCEL"
-msgstr ""
+msgstr "ANULUJ"
 
 msgid "Candle"
 msgstr "Świeca"
@@ -193,7 +193,7 @@ msgid "OPEN"
 msgstr "OTWARCIE"
 
 msgid "OVERWRITE"
-msgstr ""
+msgstr "NADPISZ"
 
 msgid "Pitchfork"
 msgstr "Widły"
@@ -298,7 +298,7 @@ msgid "Streaming for [symbol] is not available due to license restrictions"
 msgstr "Z powodu ograniczeń licencyjnych przesyłanie strumieniowe dla [symbol] jest niedostępne"
 
 msgid "tap to manage"
-msgstr ""
+msgstr "naciśnij, aby zarządzać"
 
 msgid "Template name"
 msgstr "Nazwa szablonu"
@@ -331,7 +331,7 @@ msgid "Vertical"
 msgstr "Linia pionowa"
 
 msgid "Would you like to overwrite it?"
-msgstr ""
+msgstr "Chcesz go nadpisać?"
 
 msgid "Zoom in"
 msgstr "Powiększ"
