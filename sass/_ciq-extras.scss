@@ -1,77 +1,72 @@
-$base-font:			'Roboto', sans-serif;
-$heading-font:		'Roboto Condensed', sans-serif;
+$base-font: 'Roboto', sans-serif;
+$heading-font: 'Roboto Condensed', sans-serif;
 
-$red:				#ff002a;
-$green:				#85c730;
-$accent: 			#398dff;
+$red: #ff002a;
+$green: #85c730;
+$accent: #398dff;
 
-$bg1:				#fff;
-$bg2:				#f3f3f3;
+$bg1: #fff;
+$bg2: #f3f3f3;
 
-$font-xs:			9px;
-$font-s:			11px;
-$font-m:			12px;
-$font-l:			14px;
+$font-xs: 9px;
+$font-s: 11px;
+$font-m: 12px;
+$font-l: 14px;
 
 $soft-corners: 1px;
 
 /* Basic Text */
 
-$text-subtle:		#999;
-$text-medium:		#666;
-$text-strong:		#000;
-
+$text-subtle: #999;
+$text-medium: #666;
+$text-strong: #000;
 
 /* Borders */
 
-$border-subtle:		#ddd;
-$border-medium:		#ccc;
-$border-strong:		#999;
-
+$border-subtle: #ddd;
+$border-medium: #ccc;
+$border-strong: #999;
 
 /* Light Theme */
 
-$theme1-bg:			#f8f8f8;
-$theme1-main:		#fff;
-$theme1-hu-bg:		#ffffff;
+$theme1-bg: #f8f8f8;
+$theme1-main: #fff;
+$theme1-hu-bg: #ffffff;
 $theme1-hu-bg-dynamic: #ffffff;
-$theme1-text:		#000;
-
+$theme1-text: #000;
 
 /* ciq-night Theme */
 
-$theme2-bg:			#151f28;
-$theme2-main:		#1c2a35;
-$theme2-hu-bg: 		#1C2A35;
+$theme2-bg: #151f28;
+$theme2-main: #1c2a35;
+$theme2-hu-bg: #1c2a35;
 $theme2-hu-bg-dynamic: #2a51d0;
-$theme2-text:		#fff;
-
+$theme2-text: #fff;
 
 /* Layout */
 
 $nav-height: 45px;
 $footer-height: 45px;
 
-
 //@mixin box-layer {
 //}
 
 @mixin hide-text {
-	font: 0/0 a;
-	text-shadow: none;
-	color: transparent;
+    font: 0/0 'a';
+    text-shadow: none;
+    color: transparent;
 }
 
 @mixin text-truncate {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 @mixin opacity($opacity) {
-  opacity: $opacity;
-  $opacity-ie: $opacity * 100;
-  filter: alpha(opacity=$opacity-ie); //IE8
+    opacity: $opacity;
+    $opacity-ie: $opacity * 100;
+    filter: alpha(opacity=$opacity-ie); //IE8
 }
 
 @mixin background-opacity($color, $opacity: 0.3) {
@@ -80,60 +75,66 @@ $footer-height: 45px;
 }
 
 @mixin border-radius($radius) {
-  -webkit-border-radius: $radius;
-     -moz-border-radius: $radius;
-      -ms-border-radius: $radius;
-          border-radius: $radius;
+    -webkit-border-radius: $radius;
+    -moz-border-radius: $radius;
+    -ms-border-radius: $radius;
+    border-radius: $radius;
 }
 
 @mixin user-select($select) {
-	-webkit-user-select: $select;
-	   -moz-user-select: $select;
-	    -ms-user-select: $select;
-	        user-select: $select;
+    -webkit-user-select: $select;
+    -moz-user-select: $select;
+    -ms-user-select: $select;
+    user-select: $select;
 }
 
-@mixin box-shadow($top, $left, $blur, $color, $inset:"") {
-   -webkit-box-shadow:$top $left $blur $color #{$inset};
-      -moz-box-shadow:$top $left $blur $color #{$inset};
-           box-shadow:$top $left $blur $color #{$inset};
+@mixin box-shadow($top, $left, $blur, $color, $inset:'') {
+    -webkit-box-shadow: $top $left $blur $color #{$inset};
+    -moz-box-shadow: $top $left $blur $color #{$inset};
+    box-shadow: $top $left $blur $color #{$inset};
 }
-
 
 @mixin box-sizing($box) {
-	-webkit-box-sizing: $box;
-       -moz-box-sizing: $box;
-            box-sizing: $box;
+    -webkit-box-sizing: $box;
+    -moz-box-sizing: $box;
+    box-sizing: $box;
 }
 
 @mixin rotate($degrees) {
-	-webkit-transform: rotate($degrees);  /* Saf3.1+, Chrome */
-	-moz-transform: rotate($degrees);  /* FF3.5+ */
-	-ms-transform: rotate($degrees);  /* IE9 */
-	-o-transform: rotate($degrees);  /* Opera 10.5 */
-	transform: rotate($degrees);
-	zoom: 1;
+    -webkit-transform: rotate($degrees); /* Saf3.1+, Chrome */
+    -moz-transform: rotate($degrees); /* FF3.5+ */
+    -ms-transform: rotate($degrees); /* IE9 */
+    -o-transform: rotate($degrees); /* Opera 10.5 */
+    transform: rotate($degrees);
+    zoom: 1;
 }
 
 /* ------------------------------------------------------- CHART OVERLAY ELEMENTS ------------------------------------------------------ */
 
-.rightclick_study .mouseManageText { display:inline; }
-.rightclick_study .mouseDeleteText { display:none; }
+.rightclick_study .mouseManageText {
+    display: inline;
+}
+
+.rightclick_study .mouseDeleteText {
+    display: none;
+}
+
 .rightclick_study .overlayEdit {
-	margin-top: -4px;
-	margin-left: 5px;
-  	opacity: 1;
-	&.stx-btn span {
-	    @include themify($themes) {
-	        background-color: themed('defaultMain');
-	    }
-		border:none;
-		background-position: -301px -26px;
-		width: 23px;
-	}
+    margin-top: -4px;
+    margin-left: 5px;
+    opacity: 1;
+
+    &.stx-btn span {
+        @include themify($themes) {
+            background-color: themed('defaultMain');
+        }
+        border: none;
+        background-position: -301px -26px;
+        width: 23px;
+    }
 }
 
 /* ------------------------------------------------------- SLEEP MODE ------------------------------------------------------ */
 .ciq-sleeping .chartContainer {
-	opacity:.5;
+    opacity: 0.5;
 }

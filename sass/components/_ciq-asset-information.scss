@@ -10,6 +10,7 @@
     opacity: 1;
     height: 14px;
     @include transition(all 0.1s);
+
     &.hide {
         height: 0;
         opacity: 0;
@@ -22,6 +23,7 @@
         justify-content: flex-start;
         align-items: center;
         font-size: 12px;
+
         div:first-child {
             padding: 0 8px;
         }
@@ -33,12 +35,15 @@
         }
     }
 }
+
 .smartcharts-mobile {
     .ciq-asset-information {
         left: 2px;
         flex-wrap: wrap;
-        > div{
+
+        > div {
             font-size: 12px;
+
             div:first-child {
                 padding: 0px 5px;
             }
