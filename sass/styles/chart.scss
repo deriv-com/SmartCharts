@@ -291,7 +291,7 @@ html, body {
     }
 
     #mStickyInterior {
-        padding: 8px 0 4px;
+        padding: 8px 8px 4px;
         position: relative;
         width: 100%;
         @include border-radius(3px 3px 0px 0px);
@@ -300,6 +300,7 @@ html, body {
             background: themed('StickyInteriorBg');
         }
         border: none;
+        box-sizing: border-box;
     }
     #mStickyRightClick {
         position: relative;
