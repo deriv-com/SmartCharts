@@ -25,7 +25,7 @@ function esc(s) {
 const extractTextFromFunctions = (...args) => (code_obj) => {
     let textFunctions = estree.filterTreeForMethodsAndFunctionsNamed(...args)(code_obj);
     const getText = (x) => {
-        const strings = x.arguments.slice(0, 2).map(arg => arg.value);
+        const strings = x.arguments.slice(0, 2).map(arg => esc(arg.value));
         const { line, column } = x.loc.start;
         return {
             text: strings[0],
