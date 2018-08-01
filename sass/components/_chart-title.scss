@@ -4,32 +4,29 @@
     z-index: 41;
     margin: 0.2em 0.8em;
 
-    .cq-menu-btn {
-        > .cq-symbol-select-btn {
-            cursor: pointer;
+    // We can differentiate whether chart title is disabled via .cq-menu-btn class
+    .cq-menu-btn > .cq-symbol-select-btn {
+        cursor: pointer;
 
-            &:hover {
-                @include themify($themes) {
-                    border: solid 1px themed('menuActiveBorder');
-                }
-            }
-            > .ic-icon.cq-symbol-dropdown {
-                display: block;
-                margin-right: 0px;
-                width: 24px;
-                transform: scale(1);
+        &:hover {
+            @include themify($themes) {
+                border: solid 1px themed('menuActiveBorder');
             }
         }
+        > .ic-icon.cq-symbol-dropdown {
+            display: block;
+            margin-right: 0px;
+            width: 24px;
+            transform: scale(1);
+        }
     }
-    &.stxMenuActive > .cq-menu-btn {
-        > .cq-symbol-select-btn {
-            @include themify($themes) {
-                border: 1px solid themed('menuActiveBorder');
-            }
+    &.stxMenuActive > .cq-menu-btn > .cq-symbol-select-btn {
+        @include themify($themes) {
+            border: 1px solid themed('menuActiveBorder');
+        }
 
-            > .ic-icon.cq-symbol-dropdown {
-                transform: rotate(180deg);
-            }
+        > .ic-icon.cq-symbol-dropdown {
+            transform: rotate(180deg);
         }
     }
     .cq-symbol-select-btn {
