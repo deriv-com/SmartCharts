@@ -277,7 +277,7 @@ html, body {
 }
 
 /* ------------------------------------------------------- CHART OVERLAY ELEMENTS ------------------------------------------------------ */
-.mSticky{
+.mSticky {
     position: absolute;
     display: none;
     white-space: nowrap;
@@ -342,6 +342,7 @@ html, body {
 .overlayEdit { /* These are the small divs that come up when you hover over a drawing or study overlay */
     /*text-transform: capitalize;*/
     display: none;
+    opacity: 0;
     font-size: 11px;
     white-space: nowrap;
     z-index: 40;
@@ -394,10 +395,6 @@ html, body {
     text-indent: 100px;
     border: solid #ddd 1px;
     background: #efefef url('./icons/delete/ic-delete.svg') no-repeat center;
-}
-
-.overlayEdit {
-    opacity: 0;
 }
 
 /* To enable editing of overlay studies on mobile. You'll need to also implement stxx.callbacks.studyOverlayEdit
