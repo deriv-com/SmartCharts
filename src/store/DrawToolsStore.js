@@ -86,6 +86,7 @@ export default class DrawToolsStore {
     };
 
     onMouseMove = (e) => {
+        e.preventDefault();
         const vectorType = this.stx.currentVectorParameters.vectorType;
         const img = document.getElementById('drawing-mouse-pointer');
         const container = document.getElementsByClassName('chartContainer primary')[0];
