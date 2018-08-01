@@ -10,49 +10,103 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Indonesian\n"
 "Language: id_ID\n"
-"PO-Revision-Date: 2018-07-31 04:00\n"
+"PO-Revision-Date: 2018-08-01 09:21\n"
 
-msgid "Favorites"
-msgstr "Favorit"
+msgid " already exists."
+msgstr " sudah tersedia."
 
-msgid "There are no favorites yet."
-msgstr "Favorit belum tersedia."
+msgid "[symbol] market is presently closed."
+msgstr "[symbol] pasar saat ini ditutup."
 
-msgid "CLOSED"
-msgstr "TUTUP"
+msgid "\"Mass Index\" or \"Doji Star\""
+msgstr "\"Mass Index\" atau \"Doji Star\""
 
-msgid "PRICE"
-msgstr "HARGA"
+msgid "Active"
+msgstr "Aktif"
 
-msgid "OPEN"
-msgstr "OPEN"
+msgid "Add New"
+msgstr "Tambah Baru"
+
+msgid "Annotation"
+msgstr "Anotasi"
+
+msgid "Asset Information"
+msgstr "Informasi Aset"
+
+msgid "Average Line"
+msgstr "Garis Rata-Rata"
+
+msgid "Baseline"
+msgstr "Baseline"
+
+msgid "Box Size"
+msgstr "Box Size"
+
+msgid "Callout"
+msgstr "Callout"
+
+msgid "CANCEL"
+msgstr "BATAL"
+
+msgid "Candle"
+msgstr "Candle"
+
+msgid "Channel"
+msgstr "Kanal"
+
+msgid "Chart data is not available for this symbol."
+msgstr "Data chart tidak tersedia untuk simbol ini."
+
+msgid "Chart types"
+msgstr "Jenis chart"
+
+msgid "Clear All"
+msgstr "Hapus Semua"
 
 msgid "CLOSE"
 msgstr "CLOSE"
 
-msgid "HIGH"
-msgstr "HIGH"
+msgid "CLOSED"
+msgstr "TUTUP"
 
-msgid "LOW"
-msgstr "LOW"
+msgid "Colored Dot"
+msgstr "Titik Berwarna"
 
-msgid "Underlying Assets"
-msgstr "Aset Dasar"
+msgid "Comparison"
+msgstr "Perbandingan"
 
-msgid "Share"
-msgstr "Bagikan"
+msgid "Continuous"
+msgstr "Continuous"
 
-msgid "Share / Download Chart"
-msgstr "Bagikan / Download Chart"
+msgid "Copied!"
+msgstr "Tersalin!"
 
-msgid "Share link"
-msgstr "Bagikan link"
+msgid "Copy to clipboard"
+msgstr "Salin ke clipboard"
 
-msgid "Failed to generate link"
-msgstr "Gagal menghasilkan link"
+msgid "Countdown"
+msgstr "Hitung mundur"
 
-msgid "Retry"
-msgstr "Mencoba kembali"
+msgid "Crosshair"
+msgstr "Crosshair"
+
+msgid "Crossline"
+msgstr "Crossline"
+
+msgid "Dark Mode"
+msgstr "Dark Mode"
+
+msgid "Day"
+msgstr "Hari"
+
+msgid "DONE"
+msgstr "SELESAI"
+
+msgid "Doodle"
+msgstr "Doodle"
+
+msgid "Dot"
+msgstr "Titik"
 
 msgid "Download chart"
 msgstr "Unduh chart"
@@ -60,197 +114,26 @@ msgstr "Unduh chart"
 msgid "Draw tools"
 msgstr "Alat gambar"
 
-msgid "Clear All"
-msgstr "Hapus Semua"
+msgid "Ellipse"
+msgstr "Ellipse"
 
-msgid "Measure"
-msgstr "Mengukur"
-
-msgid "Zoom out"
-msgstr "Perkecil"
-
-msgid "Zoom in"
-msgstr "Perbesar"
-
-msgid "Interval"
-msgstr "Interval"
-
-msgid "Tick"
-msgstr "Tik"
-
-msgid "Minute"
-msgstr "Menit"
-
-msgid "Hour"
-msgstr "Jam"
-
-msgid "Day"
-msgstr "Hari"
-
-msgid "Crosshair"
-msgstr "Crosshair"
-
-msgid "Templates"
-msgstr "Pola"
-
-msgid "Template name"
-msgstr "Nama pola"
-
-msgid "Add New"
-msgstr "Tambah Baru"
-
-msgid " already exists."
-msgstr " sudah tersedia."
-
-msgid "Would you like to overwrite it?"
-msgstr "Apakah Anda ingin menggantikannya?"
-
-msgid "CANCEL"
-msgstr "BATAL"
-
-msgid "OVERWRITE"
-msgstr "MENGGANTI"
-
-msgid "Comparison"
-msgstr "Perbandingan"
-
-msgid "Indicators"
-msgstr "Indikator"
-
-msgid "Chart types"
-msgstr "Jenis chart"
-
-msgid "Line"
-msgstr "Garis"
-
-msgid "Dot"
-msgstr "Titik"
-
-msgid "Colored Dot"
-msgstr "Titik Berwarna"
-
-msgid "Spline"
-msgstr "Spline"
-
-msgid "Baseline"
-msgstr "Baseline"
-
-msgid "Candle"
-msgstr "Candle"
-
-msgid "OHLC"
-msgstr "OHLC"
-
-msgid "Hollow Candle"
-msgstr "Hollow Candle"
-
-msgid "Heikin Ashi"
-msgstr "Heikin Ashi"
-
-msgid "Kagi"
-msgstr "Kagi"
-
-msgid "Line Break"
-msgstr "Line Break"
-
-msgid "Renko"
-msgstr "Renko"
-
-msgid "Range Bars"
-msgstr "Range Bars"
-
-msgid "Point & Figure"
-msgstr "Point & Figure"
-
-msgid "Reversal Percentage"
-msgstr "Persentase Pembalikan"
-
-msgid "Range"
-msgstr "Rentang"
-
-msgid "Price Lines"
-msgstr "Price Lines"
-
-msgid "Box Size"
-msgstr "Box Size"
-
-msgid "Reversal"
-msgstr "Reversal"
-
-msgid "RESET"
-msgstr "ULANG"
-
-msgid "DONE"
-msgstr "SELESAI"
-
-msgid "Settings"
-msgstr "Pengaturan"
-
-msgid "Position"
-msgstr "Posisi"
-
-msgid "Dark Mode"
-msgstr "Dark Mode"
-
-msgid "Countdown"
-msgstr "Hitung mundur"
-
-msgid "Asset Information"
-msgstr "Informasi Aset"
-
-msgid "Language"
-msgstr "Bahasa"
-
-msgid "[symbol] market is presently closed."
-msgstr "[symbol] pasar saat ini ditutup."
-
-msgid "Streaming for [symbol] is not available due to license restrictions"
-msgstr "Streaming untuk [symbol] tidak tersedia berhubung batasan lisensi"
-
-msgid "Copy to clipboard"
-msgstr "Salin ke clipboard"
-
-msgid "Copied!"
-msgstr "Tersalin!"
+msgid "Failed to generate link"
+msgstr "Gagal menghasilkan link"
 
 msgid "Failed!"
 msgstr "Gagal!"
 
-msgid "Search..."
-msgstr "Cari..."
-
-msgid "Annotation"
-msgstr "Anotasi"
-
-msgid "Average Line"
-msgstr "Garis Rata-Rata"
-
-msgid "Callout"
-msgstr "Callout"
-
-msgid "Channel"
-msgstr "Kanal"
-
-msgid "Continuous"
-msgstr "Continuous"
-
-msgid "Crossline"
-msgstr "Crossline"
-
-msgid "Doodle"
-msgstr "Doodle"
-
-msgid "Ellipse"
-msgstr "Ellipse"
-
-msgid "Fib Retracement"
-msgstr "Fib Retracement"
+msgid "Favorites"
+msgstr "Favorit"
 
 msgid "Fib Arc"
 msgstr "Fib Arc"
 
 msgid "Fib Fan"
 msgstr "Fib Fan"
+
+msgid "Fib Retracement"
+msgstr "Fib Retracement"
 
 msgid "Fib Time Zone"
 msgstr "Zona Waktu Fib"
@@ -261,14 +144,80 @@ msgstr "Kipas Gann"
 msgid "Gartley"
 msgstr "Gartley"
 
+msgid "Heikin Ashi"
+msgstr "Heikin Ashi"
+
+msgid "HIGH"
+msgstr "HIGH"
+
+msgid "Hollow Candle"
+msgstr "Hollow Candle"
+
 msgid "Horizontal"
 msgstr "Horizontal"
+
+msgid "Hour"
+msgstr "Jam"
+
+msgid "Indicators"
+msgstr "Indikator"
+
+msgid "Interval"
+msgstr "Interval"
+
+msgid "Kagi"
+msgstr "Kagi"
+
+msgid "Language"
+msgstr "Bahasa"
+
+msgid "Line"
+msgstr "Garis"
+
+msgid "Line Break"
+msgstr "Line Break"
+
+msgid "LOW"
+msgstr "LOW"
+
+msgid "Measure"
+msgstr "Mengukur"
+
+msgid "Minute"
+msgstr "Menit"
+
+msgid "OHLC"
+msgstr "OHLC"
+
+msgid "OPEN"
+msgstr "OPEN"
+
+msgid "OVERWRITE"
+msgstr "MENGGANTI"
 
 msgid "Pitchfork"
 msgstr "Pitchfork"
 
+msgid "Point & Figure"
+msgstr "Point & Figure"
+
+msgid "Position"
+msgstr "Posisi"
+
+msgid "PRICE"
+msgstr "HARGA"
+
+msgid "Price Lines"
+msgstr "Price Lines"
+
 msgid "Quadrant Lines"
 msgstr "Garis Kuadran"
+
+msgid "Range"
+msgstr "Rentang"
+
+msgid "Range Bars"
+msgstr "Range Bars"
 
 msgid "Ray"
 msgstr "Ray"
@@ -279,8 +228,35 @@ msgstr "Persegi"
 msgid "Regression Line"
 msgstr "Garis Regresi"
 
+msgid "Renko"
+msgstr "Renko"
+
+msgid "RESET"
+msgstr "ULANG"
+
+msgid "Retry"
+msgstr "Mencoba kembali"
+
+msgid "Reversal"
+msgstr "Reversal"
+
+msgid "Reversal Percentage"
+msgstr "Persentase Pembalikan"
+
+msgid "right-click to delete"
+msgstr "klik kanan untuk menghapus"
+
+msgid "right-click to manage"
+msgstr "klik kanan untuk mengelola"
+
+msgid "Search..."
+msgstr "Cari..."
+
 msgid "Segment"
 msgstr "Segmen"
+
+msgid "Settings"
+msgstr "Pengaturan"
 
 msgid "Shape - Arrow"
 msgstr "Bentuk - Panah"
@@ -300,11 +276,47 @@ msgstr "Bentuk - Hati"
 msgid "Shape - Star"
 msgstr "Bentuk - Bintang"
 
+msgid "Share"
+msgstr "Bagikan"
+
+msgid "Share / Download Chart"
+msgstr "Bagikan / Download Chart"
+
+msgid "Share link"
+msgstr "Bagikan link"
+
 msgid "Speed Resistance Arc"
 msgstr "Perlawanan Panah Kecepatan"
 
 msgid "Speed Resistance Line"
 msgstr "Perlawanan Garis Kecepatan"
+
+msgid "Spline"
+msgstr "Spline"
+
+msgid "Streaming for [symbol] is not available due to license restrictions"
+msgstr "Streaming untuk [symbol] tidak tersedia berhubung batasan lisensi"
+
+msgid "tap to manage"
+msgstr "tap untuk mengelola"
+
+msgid "Template name"
+msgstr "Nama pola"
+
+msgid "Templates"
+msgstr "Pola"
+
+msgid "There are no active comparisons yet."
+msgstr "Belum tersedia perbandingan aktif."
+
+msgid "There are no active indicators yet."
+msgstr "Belum tersedia indikator aktif."
+
+msgid "There are no favorites yet."
+msgstr "Favorit belum tersedia."
+
+msgid "Tick"
+msgstr "Tik"
 
 msgid "Time Cycle"
 msgstr "Siklus Waktu"
@@ -312,32 +324,20 @@ msgstr "Siklus Waktu"
 msgid "Tirone Levels"
 msgstr "Tingkat Tirone"
 
+msgid "Underlying Assets"
+msgstr "Aset Dasar"
+
 msgid "Vertical"
 msgstr "Vertikal"
 
-msgid "Active"
-msgstr "Aktif"
+msgid "Would you like to overwrite it?"
+msgstr "Apakah Anda ingin menggantikannya?"
 
-msgid "There are no active comparisons yet."
-msgstr "Belum tersedia perbandingan aktif."
+msgid "Zoom in"
+msgstr "Perbesar"
 
-msgid "\"Mass Index\" or \"Doji Star\""
-msgstr "\"Mass Index\" atau \"Doji Star\""
-
-msgid "There are no active indicators yet."
-msgstr "Belum tersedia indikator aktif."
-
-msgid "right-click to delete"
-msgstr "klik kanan untuk menghapus"
-
-msgid "right-click to manage"
-msgstr "klik kanan untuk mengelola"
-
-msgid "tap to manage"
-msgstr "tap untuk mengelola"
-
-msgid "Chart data is not available for this symbol."
-msgstr "Data chart tidak tersedia untuk simbol ini."
+msgid "Zoom out"
+msgstr "Perkecil"
 
 msgid "RSI"
 msgstr "RSI"
