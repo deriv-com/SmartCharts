@@ -2,10 +2,10 @@
 msgid " already exists."
 msgstr ""
 
-msgid ""Mass Index" or "Doji Star""
+msgid "[symbol] market is presently closed."
 msgstr ""
 
-msgid "[symbol] market is presently closed."
+msgid "\"Mass Index\" or \"Doji Star\""
 msgstr ""
 
 msgid "Active"
