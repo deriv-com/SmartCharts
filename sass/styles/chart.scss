@@ -304,7 +304,7 @@ html, body {
         @include border-radius(3px 3px 0px 0px);
         font-weight: 500;
         @include themify($themes) {
-            background: themed('TooltipBg');
+            background: themed('StickyInteriorBg');
         }
         border: none;
     }
@@ -1177,9 +1177,6 @@ cq-language-name {
             padding: 0px 8px 0 8px !important;
             line-height: 30px;
             @include border-radius(3px 0px 0px 3px);
-            @include themify($themes) {
-                border-right: 2px solid red !important;
-            }
             width: auto;
             z-index: 99;
         }
