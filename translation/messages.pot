@@ -1,44 +1,98 @@
 
-msgid "Favorites"
+msgid " already exists."
 msgstr ""
 
-msgid "There are no favorites yet."
+msgid ""Mass Index" or "Doji Star""
 msgstr ""
 
-msgid "CLOSED"
+msgid "[symbol] market is presently closed."
 msgstr ""
 
-msgid "PRICE"
+msgid "Active"
 msgstr ""
 
-msgid "OPEN"
+msgid "Add New"
+msgstr ""
+
+msgid "Annotation"
+msgstr ""
+
+msgid "Asset Information"
+msgstr ""
+
+msgid "Average Line"
+msgstr ""
+
+msgid "Baseline"
+msgstr ""
+
+msgid "Box Size"
+msgstr ""
+
+msgid "Callout"
+msgstr ""
+
+msgid "CANCEL"
+msgstr ""
+
+msgid "Candle"
+msgstr ""
+
+msgid "Channel"
+msgstr ""
+
+msgid "Chart data is not available for this symbol."
+msgstr ""
+
+msgid "Chart types"
+msgstr ""
+
+msgid "Clear All"
 msgstr ""
 
 msgid "CLOSE"
 msgstr ""
 
-msgid "HIGH"
+msgid "CLOSED"
 msgstr ""
 
-msgid "LOW"
+msgid "Colored Dot"
 msgstr ""
 
-msgid "Underlying Assets"
+msgid "Comparison"
 msgstr ""
 
-msgid "Share"
+msgid "Continuous"
 msgstr ""
 
-msgid "Share / Download Chart"
+msgid "Copied!"
 msgstr ""
 
-msgid "Share link"
+msgid "Copy to clipboard"
 msgstr ""
 
-msgid "Failed to generate link"
+msgid "Countdown"
 msgstr ""
 
-msgid "Retry"
+msgid "Crosshair"
+msgstr ""
+
+msgid "Crossline"
+msgstr ""
+
+msgid "Dark Mode"
+msgstr ""
+
+msgid "Day"
+msgstr ""
+
+msgid "DONE"
+msgstr ""
+
+msgid "Doodle"
+msgstr ""
+
+msgid "Dot"
 msgstr ""
 
 msgid "Download chart"
@@ -47,196 +101,25 @@ msgstr ""
 msgid "Draw tools"
 msgstr ""
 
-msgid "Clear All"
+msgid "Ellipse"
 msgstr ""
 
-msgid "Measure"
-msgstr ""
-
-msgid "Zoom out"
-msgstr ""
-
-msgid "Zoom in"
-msgstr ""
-
-msgid "Interval"
-msgstr ""
-
-msgid "Tick"
-msgstr ""
-
-msgid "Minute"
-msgstr ""
-
-msgid "Hour"
-msgstr ""
-
-msgid "Day"
-msgstr ""
-
-msgid "Crosshair"
-msgstr ""
-
-msgid "Templates"
-msgstr ""
-
-msgid "Template name"
-msgstr ""
-
-msgid "Add New"
-msgstr ""
-
-msgid " is already exist."
-msgstr ""
-
-msgid "Would you like to overwrite it?"
-msgstr ""
-
-msgid "CANCEL"
-msgstr ""
-
-msgid "OVERWRITE"
-msgstr ""
-
-msgid "Comparison"
-msgstr ""
-
-msgid "Indicators"
-msgstr ""
-
-msgid "Chart types"
-msgstr ""
-
-msgid "Line"
-msgstr ""
-
-msgid "Dot"
-msgstr ""
-
-msgid "Colored Dot"
-msgstr ""
-
-msgid "Spline"
-msgstr ""
-
-msgid "Baseline"
-msgstr ""
-
-msgid "Candle"
-msgstr ""
-
-msgid "OHLC"
-msgstr ""
-
-msgid "Hollow Candle"
-msgstr ""
-
-msgid "Heikin Ashi"
-msgstr ""
-
-msgid "Kagi"
-msgstr ""
-
-msgid "Line Break"
-msgstr ""
-
-msgid "Renko"
-msgstr ""
-
-msgid "Range Bars"
-msgstr ""
-
-msgid "Point & Figure"
-msgstr ""
-
-msgid "Reversal Percentage"
-msgstr ""
-
-msgid "Range"
-msgstr ""
-
-msgid "Price Lines"
-msgstr ""
-
-msgid "Box Size"
-msgstr ""
-
-msgid "Reversal"
-msgstr ""
-
-msgid "RESET"
-msgstr ""
-
-msgid "DONE"
-msgstr ""
-
-msgid "Settings"
-msgstr ""
-
-msgid "Position"
-msgstr ""
-
-msgid "Dark Mode"
-msgstr ""
-
-msgid "Countdown"
-msgstr ""
-
-msgid "Asset Information"
-msgstr ""
-
-msgid "Language"
-msgstr ""
-
-msgid "[symbol] market is presently closed."
-msgstr ""
-
-msgid "Streaming for [symbol] is not available due to license restrictions"
-msgstr ""
-
-msgid "Copy to clipboard"
-msgstr ""
-
-msgid "Copied!"
+msgid "Failed to generate link"
 msgstr ""
 
 msgid "Failed!"
 msgstr ""
 
-msgid "Search..."
-msgstr ""
-
-msgid "Annotation"
-msgstr ""
-
-msgid "Average Line"
-msgstr ""
-
-msgid "Callout"
-msgstr ""
-
-msgid "Channel"
-msgstr ""
-
-msgid "Continuous"
-msgstr ""
-
-msgid "Crossline"
-msgstr ""
-
-msgid "Doodle"
-msgstr ""
-
-msgid "Ellipse"
-msgstr ""
-
-msgid "Fib Retracement"
+msgid "Favorites"
 msgstr ""
 
 msgid "Fib Arc"
 msgstr ""
 
 msgid "Fib Fan"
+msgstr ""
+
+msgid "Fib Retracement"
 msgstr ""
 
 msgid "Fib Time Zone"
@@ -248,13 +131,79 @@ msgstr ""
 msgid "Gartley"
 msgstr ""
 
+msgid "Heikin Ashi"
+msgstr ""
+
+msgid "HIGH"
+msgstr ""
+
+msgid "Hollow Candle"
+msgstr ""
+
 msgid "Horizontal"
+msgstr ""
+
+msgid "Hour"
+msgstr ""
+
+msgid "Indicators"
+msgstr ""
+
+msgid "Interval"
+msgstr ""
+
+msgid "Kagi"
+msgstr ""
+
+msgid "Language"
+msgstr ""
+
+msgid "Line"
+msgstr ""
+
+msgid "Line Break"
+msgstr ""
+
+msgid "LOW"
+msgstr ""
+
+msgid "Measure"
+msgstr ""
+
+msgid "Minute"
+msgstr ""
+
+msgid "OHLC"
+msgstr ""
+
+msgid "OPEN"
+msgstr ""
+
+msgid "OVERWRITE"
 msgstr ""
 
 msgid "Pitchfork"
 msgstr ""
 
+msgid "Point & Figure"
+msgstr ""
+
+msgid "Position"
+msgstr ""
+
+msgid "PRICE"
+msgstr ""
+
+msgid "Price Lines"
+msgstr ""
+
 msgid "Quadrant Lines"
+msgstr ""
+
+msgid "Range"
+msgstr ""
+
+msgid "Range Bars"
 msgstr ""
 
 msgid "Ray"
@@ -266,7 +215,34 @@ msgstr ""
 msgid "Regression Line"
 msgstr ""
 
+msgid "Renko"
+msgstr ""
+
+msgid "RESET"
+msgstr ""
+
+msgid "Retry"
+msgstr ""
+
+msgid "Reversal"
+msgstr ""
+
+msgid "Reversal Percentage"
+msgstr ""
+
+msgid "right-click to delete"
+msgstr ""
+
+msgid "right-click to manage"
+msgstr ""
+
+msgid "Search..."
+msgstr ""
+
 msgid "Segment"
+msgstr ""
+
+msgid "Settings"
 msgstr ""
 
 msgid "Shape - Arrow"
@@ -287,10 +263,46 @@ msgstr ""
 msgid "Shape - Star"
 msgstr ""
 
+msgid "Share"
+msgstr ""
+
+msgid "Share / Download Chart"
+msgstr ""
+
+msgid "Share link"
+msgstr ""
+
 msgid "Speed Resistance Arc"
 msgstr ""
 
 msgid "Speed Resistance Line"
+msgstr ""
+
+msgid "Spline"
+msgstr ""
+
+msgid "Streaming for [symbol] is not available due to license restrictions"
+msgstr ""
+
+msgid "tap to manage"
+msgstr ""
+
+msgid "Template name"
+msgstr ""
+
+msgid "Templates"
+msgstr ""
+
+msgid "There are no active comparisons yet."
+msgstr ""
+
+msgid "There are no active indicators yet."
+msgstr ""
+
+msgid "There are no favorites yet."
+msgstr ""
+
+msgid "Tick"
 msgstr ""
 
 msgid "Time Cycle"
@@ -299,31 +311,19 @@ msgstr ""
 msgid "Tirone Levels"
 msgstr ""
 
+msgid "Underlying Assets"
+msgstr ""
+
 msgid "Vertical"
 msgstr ""
 
-msgid "Active"
+msgid "Would you like to overwrite it?"
 msgstr ""
 
-msgid "There are no active comparisons yet."
+msgid "Zoom in"
 msgstr ""
 
-msgid "\"Mass Index\" or \"Doji Star\""
-msgstr ""
-
-msgid "There are no active indicators yet."
-msgstr ""
-
-msgid "right-click to delete"
-msgstr ""
-
-msgid "right-click to manage"
-msgstr ""
-
-msgid "tap to manage"
-msgstr ""
-
-msgid "Chart data is not available for this symbol."
+msgid "Zoom out"
 msgstr ""
 
 

@@ -29,6 +29,7 @@ class ChartStore {
     chartControlsNode = null;
     chartContainerNode = null;
     holderStyle;
+    onMessage = null;
     @observable containerWidth = null;
     @observable context = null;
     @observable currentActiveSymbol;
@@ -107,6 +108,10 @@ class ChartStore {
         this.chartContainerHeight = this.chartHeight - offsetHeight;
     }
 
+    notify(message) {
+        if (this.onMessage) { this.onMessage(message); }
+    }
+
     updateCanvas = () => {
         if (this.stxx.slider) {
             this.stxx.slider.display(this.stxx.layout.rangeSlider);
@@ -149,6 +154,7 @@ class ChartStore {
             isMobile,
             shareOrigin = 'https://charts.binary.com',
             enableRouting,
+            onMessage,
             settings,
             onSettingsChange,
         } = props;
@@ -159,6 +165,9 @@ class ChartStore {
         chartSetting.onSettingsChange = onSettingsChange;
         this.isMobile = isMobile;
         this.onSymbolChange = onSymbolChange;
+
+
+        this.onMessage = onMessage;
 
         const stxx = this.stxx = new CIQ.ChartEngine({
             markerDelay: null, // disable 25ms delay for placement of markers

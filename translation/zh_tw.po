@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Chinese Traditional\n"
 "Language: zh_TW\n"
-"PO-Revision-Date: 2018-07-19 09:42\n"
+"PO-Revision-Date: 2018-07-31 07:31\n"
 
 msgid "Favorites"
 msgstr "我的最愛"
@@ -97,19 +97,19 @@ msgid "Template name"
 msgstr "範本名稱"
 
 msgid "Add New"
-msgstr ""
+msgstr "添新"
 
-msgid " is already exist."
-msgstr ""
+msgid " already exists."
+msgstr " 已經存在。"
 
 msgid "Would you like to overwrite it?"
-msgstr ""
+msgstr "是否要覆蓋它？"
 
 msgid "CANCEL"
-msgstr ""
+msgstr "取消"
 
 msgid "OVERWRITE"
-msgstr ""
+msgstr "覆蓋"
 
 msgid "Comparison"
 msgstr "比較"
@@ -334,7 +334,7 @@ msgid "right-click to manage"
 msgstr "按右鍵管理"
 
 msgid "tap to manage"
-msgstr ""
+msgstr "點擊管理"
 
 msgid "Chart data is not available for this symbol."
 msgstr "此符號不可用於圖表資料。"

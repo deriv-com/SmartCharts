@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Spanish\n"
 "Language: es_ES\n"
-"PO-Revision-Date: 2018-07-19 09:43\n"
+"PO-Revision-Date: 2018-07-31 02:41\n"
 
 msgid "Favorites"
 msgstr ""
@@ -99,7 +99,7 @@ msgstr ""
 msgid "Add New"
 msgstr ""
 
-msgid " is already exist."
+msgid " already exists."
 msgstr ""
 
 msgid "Would you like to overwrite it?"
