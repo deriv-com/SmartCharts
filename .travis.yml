@@ -15,8 +15,8 @@ notifications:
     on_pull_requests: false
     on_success: never
 
-before_install:
-  - yarn install
+script:
+  - yarn build-travis
 
 before_deploy:
   - bash scripts/prepare-deploy.sh
