@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Chinese Traditional\n"
 "Language: zh_TW\n"
-"PO-Revision-Date: 2018-07-30 04:10\n"
+"PO-Revision-Date: 2018-07-31 07:31\n"
 
 msgid "Favorites"
 msgstr "我的最愛"
@@ -99,7 +99,7 @@ msgstr "範本名稱"
 msgid "Add New"
 msgstr "添新"
 
-msgid " is already exist."
+msgid " already exists."
 msgstr " 已經存在。"
 
 msgid "Would you like to overwrite it?"
