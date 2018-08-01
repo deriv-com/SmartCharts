@@ -176,14 +176,9 @@
         border-right: 1px solid themed('MenuBorder');
     }
 
-}
-
-.cq-chart-control-left {
-    .ciq-menu {
-        &.stxMenuActive {
-            @include themify($themes) {
-                box-shadow: 2px 0.3px 0px 0 themed('MenuActiveBorder');
-            }
+    .ciq-menu.stxMenuActive {
+        @include themify($themes) {
+            box-shadow: 2px 0.3px 0px 0 themed('MenuActiveBorder');
         }
     }
 }
