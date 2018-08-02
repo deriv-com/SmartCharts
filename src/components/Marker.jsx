@@ -22,15 +22,8 @@ export default connect(
         children: store.children,
         className: store.className,
     }),
-    (store, {
-        yPositioner, xPositioner, x, y, children, className,
-    }) => {
-        store.setX(x);
-        store.setXPositioner(xPositioner);
-        if (yPositioner) { store.yPositioner = yPositioner; }
-        if (y) { store.y = y; }
-        store.children = children;
-        store.className = className;
+    (store, props) => {
+        store.updateProps(props);
     },
 )(Marker);
 

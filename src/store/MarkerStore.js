@@ -1,5 +1,5 @@
 import { observable, action } from 'mobx';
-import { getUTCDate } from '../utils';
+import { getUTCDate, updatePropIfChanged } from '../utils';
 
 // width here includes the size of the flag
 const MARKER_MAX_WIDTH = 150;
@@ -9,6 +9,8 @@ export default class MarkerStore {
     xPositioner = 'epoch';
     tick;
     isDistantFuture;
+    className;
+    children;
     x;
     y;
     @observable left;
@@ -34,17 +36,18 @@ export default class MarkerStore {
         this.stx.removeEventListener(this._listenerId);
     }
 
-    setX(val) {
-        if (val !== undefined && this.x !== val) {
-            this.x = val;
-            this.updateMarkerTick();
-        }
-    }
+    updateProps({ children, className, y, yPositioner, x, xPositioner }) {
+        this.className = className;
+        this.children = children;
 
-    setXPositioner(val) {
-        if (val !== undefined && this.xPositioner !== val) {
-            this.xPositioner = val;
-            this.updateMarkerTick();
+        let isUpdateMarkerTickRequired = false;
+        let isUpdatePositionRequired = false;
+        updatePropIfChanged(this, { x, xPositioner }, () => { isUpdateMarkerTickRequired = true; });
+        updatePropIfChanged(this, { y, yPositioner }, () => { isUpdatePositionRequired   = true; });
+        if (isUpdateMarkerTickRequired) {
+            this.updateMarkerTick(); // also calls updatePosition
+        } else if (isUpdatePositionRequired) {
+            this.updatePosition();
         }
     }
 
