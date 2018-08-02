@@ -72,7 +72,8 @@ export default class StudyLegendStore {
     }
 
     @action.bound onSelectItem(item) {
-        CIQ.Studies.addStudy(this.stx, item);
+        const sd = CIQ.Studies.addStudy(this.stx, item);
+        this.changeStudyPanelTitle(sd);
         this.menu.setOpen(false);
     }
 
@@ -171,7 +172,18 @@ export default class StudyLegendStore {
         this.helper.updateStudy(updates);
         this.updateActiveStudies();
         this.stx.draw();
+        this.changeStudyPanelTitle(this.helper.sd);
         this.settingsDialog.title = this.helper.sd.name.toUpperCase();
+    }
+
+
+    changeStudyPanelTitle(sd) {
+        // Remove numbers from the end of indicator titles in mobile
+        if (this.mainStore.chart.isMobile) {
+            this.stx.panels[sd.panel].display = sd.type;
+            this.stx.draw();
+            this.mainStore.chart.saveLayout();
+        }
     }
 
     shouldRenderLegend() {
