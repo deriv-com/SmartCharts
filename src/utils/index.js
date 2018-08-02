@@ -104,3 +104,21 @@ export function stxtap(el, func) {
 export function getUTCEpoch(date) {
     return (date.getTime() / 1000) - (date.getTimezoneOffset() * 60) | 0;
 }
+
+export function getUTCDate(epoch) {
+    const UTCdate = new Date(epoch * 1000).toISOString();
+    return UTCdate.substring(0, 19);
+}
+
+export function updatePropIfChanged(source, props, onChanged) {
+    let isChanged = false;
+    for (const attr in props) {
+        if (props[attr] !== undefined && source[attr] !== props[attr]) {
+            source[attr] = props[attr];
+            isChanged = true;
+        }
+    }
+
+    if (isChanged && onChanged) { onChanged(); }
+}
+

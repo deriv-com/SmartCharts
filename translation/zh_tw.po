@@ -10,49 +10,103 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Chinese Traditional\n"
 "Language: zh_TW\n"
-"PO-Revision-Date: 2018-07-31 07:31\n"
+"PO-Revision-Date: 2018-08-01 09:21\n"
 
-msgid "Favorites"
-msgstr "我的最愛"
+msgid " already exists."
+msgstr " 已經存在。"
 
-msgid "There are no favorites yet."
-msgstr "還沒有偏好。"
+msgid "[symbol] market is presently closed."
+msgstr "[symbol] 市場目前已關閉。"
 
-msgid "CLOSED"
-msgstr "已關閉"
+msgid "\"Mass Index\" or \"Doji Star\""
+msgstr "\"質量指數\" 或 \"十字星\""
 
-msgid "PRICE"
-msgstr "價格"
+msgid "Active"
+msgstr "活躍"
 
-msgid "OPEN"
-msgstr "開盤"
+msgid "Add New"
+msgstr "添新"
+
+msgid "Annotation"
+msgstr "注釋"
+
+msgid "Asset Information"
+msgstr "資產資訊"
+
+msgid "Average Line"
+msgstr "平均線"
+
+msgid "Baseline"
+msgstr "基線"
+
+msgid "Box Size"
+msgstr "箱尺寸"
+
+msgid "Callout"
+msgstr "賣出"
+
+msgid "CANCEL"
+msgstr "取消"
+
+msgid "Candle"
+msgstr "蠟燭線"
+
+msgid "Channel"
+msgstr "通道"
+
+msgid "Chart data is not available for this symbol."
+msgstr "此符號不可用於圖表資料。"
+
+msgid "Chart types"
+msgstr "圖表類型"
+
+msgid "Clear All"
+msgstr "全部清除"
 
 msgid "CLOSE"
 msgstr "收盤"
 
-msgid "HIGH"
-msgstr "高"
+msgid "CLOSED"
+msgstr "已關閉"
 
-msgid "LOW"
-msgstr "低"
+msgid "Colored Dot"
+msgstr "彩色點"
 
-msgid "Underlying Assets"
-msgstr "標的資產"
+msgid "Comparison"
+msgstr "比較"
 
-msgid "Share"
-msgstr "共享"
+msgid "Continuous"
+msgstr "連續線"
 
-msgid "Share / Download Chart"
-msgstr "共用/下載圖表"
+msgid "Copied!"
+msgstr "已複製！"
 
-msgid "Share link"
-msgstr "共用連結"
+msgid "Copy to clipboard"
+msgstr "複製到剪貼板"
 
-msgid "Failed to generate link"
-msgstr "未能產生連結"
+msgid "Countdown"
+msgstr "倒計時"
 
-msgid "Retry"
-msgstr "重試"
+msgid "Crosshair"
+msgstr "交叉線"
+
+msgid "Crossline"
+msgstr "十字線"
+
+msgid "Dark Mode"
+msgstr "暗模式"
+
+msgid "Day"
+msgstr "天"
+
+msgid "DONE"
+msgstr "已完成"
+
+msgid "Doodle"
+msgstr "自由形式"
+
+msgid "Dot"
+msgstr "點"
 
 msgid "Download chart"
 msgstr "下載圖表"
@@ -60,197 +114,26 @@ msgstr "下載圖表"
 msgid "Draw tools"
 msgstr "繪圖工具"
 
-msgid "Clear All"
-msgstr "全部清除"
+msgid "Ellipse"
+msgstr "橢圓"
 
-msgid "Measure"
-msgstr "測量"
-
-msgid "Zoom out"
-msgstr "縮小"
-
-msgid "Zoom in"
-msgstr "放大"
-
-msgid "Interval"
-msgstr "間隔"
-
-msgid "Tick"
-msgstr "跳動點"
-
-msgid "Minute"
-msgstr "分鐘"
-
-msgid "Hour"
-msgstr "小時"
-
-msgid "Day"
-msgstr "天"
-
-msgid "Crosshair"
-msgstr "交叉線"
-
-msgid "Templates"
-msgstr "範本"
-
-msgid "Template name"
-msgstr "範本名稱"
-
-msgid "Add New"
-msgstr "添新"
-
-msgid " already exists."
-msgstr " 已經存在。"
-
-msgid "Would you like to overwrite it?"
-msgstr "是否要覆蓋它？"
-
-msgid "CANCEL"
-msgstr "取消"
-
-msgid "OVERWRITE"
-msgstr "覆蓋"
-
-msgid "Comparison"
-msgstr "比較"
-
-msgid "Indicators"
-msgstr "指標"
-
-msgid "Chart types"
-msgstr "圖表類型"
-
-msgid "Line"
-msgstr "列"
-
-msgid "Dot"
-msgstr "點"
-
-msgid "Colored Dot"
-msgstr "彩色點"
-
-msgid "Spline"
-msgstr "Spline法"
-
-msgid "Baseline"
-msgstr "基線"
-
-msgid "Candle"
-msgstr "蠟燭線"
-
-msgid "OHLC"
-msgstr "OHLC條形圖"
-
-msgid "Hollow Candle"
-msgstr "空心蠟燭線"
-
-msgid "Heikin Ashi"
-msgstr "Heikin Ashi燭圖"
-
-msgid "Kagi"
-msgstr "Kagi圖指標"
-
-msgid "Line Break"
-msgstr "線中斷圖"
-
-msgid "Renko"
-msgstr "磚形圖"
-
-msgid "Range Bars"
-msgstr "範圍欄圖"
-
-msgid "Point & Figure"
-msgstr "點數圖"
-
-msgid "Reversal Percentage"
-msgstr "反向百分率"
-
-msgid "Range"
-msgstr "範圍"
-
-msgid "Price Lines"
-msgstr "價格線"
-
-msgid "Box Size"
-msgstr "箱尺寸"
-
-msgid "Reversal"
-msgstr "反向"
-
-msgid "RESET"
-msgstr "重置"
-
-msgid "DONE"
-msgstr "已完成"
-
-msgid "Settings"
-msgstr "設定"
-
-msgid "Position"
-msgstr "頭寸"
-
-msgid "Dark Mode"
-msgstr "暗模式"
-
-msgid "Countdown"
-msgstr "倒計時"
-
-msgid "Asset Information"
-msgstr "資產資訊"
-
-msgid "Language"
-msgstr "語言"
-
-msgid "[symbol] market is presently closed."
-msgstr "[symbol] 市場目前已關閉。"
-
-msgid "Streaming for [symbol] is not available due to license restrictions"
-msgstr "由於許可限制, [symbol] 串流不可用"
-
-msgid "Copy to clipboard"
-msgstr "複製到剪貼板"
-
-msgid "Copied!"
-msgstr "已複製！"
+msgid "Failed to generate link"
+msgstr "未能產生連結"
 
 msgid "Failed!"
 msgstr "失敗！"
 
-msgid "Search..."
-msgstr "搜索..."
-
-msgid "Annotation"
-msgstr "注釋"
-
-msgid "Average Line"
-msgstr "平均線"
-
-msgid "Callout"
-msgstr "賣出"
-
-msgid "Channel"
-msgstr "通道"
-
-msgid "Continuous"
-msgstr "連續線"
-
-msgid "Crossline"
-msgstr "十字線"
-
-msgid "Doodle"
-msgstr "自由形式"
-
-msgid "Ellipse"
-msgstr "橢圓"
-
-msgid "Fib Retracement"
-msgstr "Fib 回調線"
+msgid "Favorites"
+msgstr "我的最愛"
 
 msgid "Fib Arc"
 msgstr "Fib 弧形圖"
 
 msgid "Fib Fan"
 msgstr "Fib 扇形圖"
+
+msgid "Fib Retracement"
+msgstr "Fib 回調線"
 
 msgid "Fib Time Zone"
 msgstr "Fib 時區"
@@ -261,14 +144,80 @@ msgstr "江恩扇形線"
 msgid "Gartley"
 msgstr "Gartley形態"
 
+msgid "Heikin Ashi"
+msgstr "Heikin Ashi燭圖"
+
+msgid "HIGH"
+msgstr "高"
+
+msgid "Hollow Candle"
+msgstr "空心蠟燭線"
+
 msgid "Horizontal"
 msgstr "水平"
+
+msgid "Hour"
+msgstr "小時"
+
+msgid "Indicators"
+msgstr "指標"
+
+msgid "Interval"
+msgstr "間隔"
+
+msgid "Kagi"
+msgstr "Kagi圖指標"
+
+msgid "Language"
+msgstr "語言"
+
+msgid "Line"
+msgstr "列"
+
+msgid "Line Break"
+msgstr "線中斷圖"
+
+msgid "LOW"
+msgstr "低"
+
+msgid "Measure"
+msgstr "測量"
+
+msgid "Minute"
+msgstr "分鐘"
+
+msgid "OHLC"
+msgstr "OHLC條形圖"
+
+msgid "OPEN"
+msgstr "開盤"
+
+msgid "OVERWRITE"
+msgstr "覆蓋"
 
 msgid "Pitchfork"
 msgstr "叉子"
 
+msgid "Point & Figure"
+msgstr "點數圖"
+
+msgid "Position"
+msgstr "頭寸"
+
+msgid "PRICE"
+msgstr "價格"
+
+msgid "Price Lines"
+msgstr "價格線"
+
 msgid "Quadrant Lines"
 msgstr "四等分線"
+
+msgid "Range"
+msgstr "範圍"
+
+msgid "Range Bars"
+msgstr "範圍欄圖"
 
 msgid "Ray"
 msgstr "射線"
@@ -279,8 +228,35 @@ msgstr "矩形"
 msgid "Regression Line"
 msgstr "迴歸線"
 
+msgid "Renko"
+msgstr "磚形圖"
+
+msgid "RESET"
+msgstr "重置"
+
+msgid "Retry"
+msgstr "重試"
+
+msgid "Reversal"
+msgstr "反向"
+
+msgid "Reversal Percentage"
+msgstr "反向百分率"
+
+msgid "right-click to delete"
+msgstr "按右鍵刪除"
+
+msgid "right-click to manage"
+msgstr "按右鍵管理"
+
+msgid "Search..."
+msgstr "搜索..."
+
 msgid "Segment"
 msgstr "段"
+
+msgid "Settings"
+msgstr "設定"
 
 msgid "Shape - Arrow"
 msgstr "形狀-箭頭"
@@ -300,11 +276,47 @@ msgstr "形狀-心形"
 msgid "Shape - Star"
 msgstr "形狀-星形"
 
+msgid "Share"
+msgstr "共享"
+
+msgid "Share / Download Chart"
+msgstr "共用/下載圖表"
+
+msgid "Share link"
+msgstr "共用連結"
+
 msgid "Speed Resistance Arc"
 msgstr "速阻弧線"
 
 msgid "Speed Resistance Line"
 msgstr "速阻線"
+
+msgid "Spline"
+msgstr "Spline法"
+
+msgid "Streaming for [symbol] is not available due to license restrictions"
+msgstr "由於許可限制, [symbol] 串流不可用"
+
+msgid "tap to manage"
+msgstr "點擊管理"
+
+msgid "Template name"
+msgstr "範本名稱"
+
+msgid "Templates"
+msgstr "範本"
+
+msgid "There are no active comparisons yet."
+msgstr "還沒有任何激活比較."
+
+msgid "There are no active indicators yet."
+msgstr "還沒有任何激活指標."
+
+msgid "There are no favorites yet."
+msgstr "還沒有偏好。"
+
+msgid "Tick"
+msgstr "跳動點"
 
 msgid "Time Cycle"
 msgstr "時間週期"
@@ -312,32 +324,20 @@ msgstr "時間週期"
 msgid "Tirone Levels"
 msgstr "泰隆水平線"
 
+msgid "Underlying Assets"
+msgstr "標的資產"
+
 msgid "Vertical"
 msgstr "垂直"
 
-msgid "Active"
-msgstr "活躍"
+msgid "Would you like to overwrite it?"
+msgstr "是否要覆蓋它？"
 
-msgid "There are no active comparisons yet."
-msgstr "還沒有任何激活比較."
+msgid "Zoom in"
+msgstr "放大"
 
-msgid "\"Mass Index\" or \"Doji Star\""
-msgstr "\"質量指數\" 或 \"十字星\""
-
-msgid "There are no active indicators yet."
-msgstr "還沒有任何激活指標."
-
-msgid "right-click to delete"
-msgstr "按右鍵刪除"
-
-msgid "right-click to manage"
-msgstr "按右鍵管理"
-
-msgid "tap to manage"
-msgstr "點擊管理"
-
-msgid "Chart data is not available for this symbol."
-msgstr "此符號不可用於圖表資料。"
+msgid "Zoom out"
+msgstr "縮小"
 
 msgid "RSI"
 msgstr "相對強弱指數"
