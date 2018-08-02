@@ -280,8 +280,6 @@ CIQ.Animation = function (stx, animationParameters, easeMachine) {
             if (this.chart.yAxis.left > x &&
                 this.chart.yAxis.top <= y &&
                 this.chart.yAxis.bottom >= y) {
-                // console.log(x, y);
-
                 currentSpotElement.style.top = `${y}px`;
                 currentSpotElement.style.left = `${x - 3}px`;
                 currentSpotElement.style.display = 'block';
