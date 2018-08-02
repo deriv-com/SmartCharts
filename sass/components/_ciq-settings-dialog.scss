@@ -116,6 +116,7 @@
     .buttons {
         display: flex;
         justify-content: flex-end;
+        border-radius: 5px;
         @include themify($themes) {
             border-top: 1px solid themed('DialogFootBorder');
             background: themed('DialogFootBg');
