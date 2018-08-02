@@ -262,10 +262,7 @@ CIQ.Animation = function (stx, animationParameters, easeMachine) {
         currentSpotElement.style.display = 'none';
 
         if (filterSession) { return; }
-        if (
-            this.layout.timeUnit === 'second'
-            && this.layout.interval === 1
-            && this.chart.dataSet
+        if (this.chart.dataSet
             && this.chart.dataSet.length
             && this.mainSeriesRenderer
             && this.mainSeriesRenderer.supportsAnimation) {
