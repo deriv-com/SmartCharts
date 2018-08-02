@@ -82,7 +82,15 @@ class App extends Component {
         const notifier = new ChartNotifier();
         const settings = createObjectFromLocalStorage('smartchart-setting');
         if (settings) { this.startingLanguage = settings.language; }
-        this.state = { settings, notifier };
+        connectionManager.on(
+            ConnectionManager.EVENT_CONNECTION_CLOSE,
+            () => this.setState({ isConnectionOpened: false }),
+        );
+        connectionManager.on(
+            ConnectionManager.EVENT_CONNECTION_REOPEN,
+            () => this.setState({ isConnectionOpened: true }),
+        );
+        this.state = { settings, isConnectionOpened: true, notifier };
     }
 
     symbolChange = (symbol) => {
@@ -101,6 +109,8 @@ class App extends Component {
     };
     startingLanguage = 'en';
     render() {
+        const { settings, isConnectionOpened } = this.state;
+
         const renderTopWidgets = () => (
             <React.Fragment>
                 <ChartTitle />
@@ -111,7 +121,7 @@ class App extends Component {
                 />
             </React.Fragment>
         );
-        const { settings } = this.state;
+
         return (
             <SmartChart
                 onSymbolChange={symbol => this.symbolChange(symbol)}
@@ -126,6 +136,7 @@ class App extends Component {
                 shareOrigin={shareOrigin}
                 settings={settings}
                 onSettingsChange={this.saveSettings}
+                isConnectionOpened={isConnectionOpened}
             />
         );
     }
