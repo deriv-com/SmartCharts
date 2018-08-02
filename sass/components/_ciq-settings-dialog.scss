@@ -5,13 +5,15 @@
     justify-content: center;
     height: 100%;
     width: 100%;
-    position:  absolute;
+    position: absolute;
     bottom: 2em;
 }
+
 .cq-settings-dialog {
     display: flex;
     flex-direction: column;
     height: auto !important;
+
     .ciq-num-input > input[type=number] {
         width: 5.5em;
     }
@@ -22,6 +24,13 @@
         align-items: center;
         @include themify($themes) {
             color: themed('DialogHeadText');
+        }
+        .ciq-favorite {
+            path {
+                @include themify($themes) {
+                    stroke: themed('DialogHeadIcon');
+                }
+            }
         }
         .title {
             font-size: 14px;
@@ -50,7 +59,6 @@
             }
         }
     }
-
     .tabs {
         height: 40px;
         align-items: stretch;
@@ -60,13 +68,17 @@
             border-bottom: 1px solid themed('DialogHeadBorder');
         }
         @include box-sizing(border-box);
+
         > div {
             text-align: center;
             line-height: 40px;
             width: 50%;
             cursor: pointer;
             font-size: 14px;
-            &.active { font-weight: bold; }
+
+            &.active {
+                font-weight: bold;
+            }
         }
         .active-border {
             position: absolute;
@@ -78,6 +90,7 @@
                 background: themed('DialogHeadActiveBorder');
             }
             @include transition(left linear 0.1s);
+
             &.second {
                 left: 50%;
             }
@@ -91,6 +104,7 @@
         @include themify($themes) {
             background: themed('DialogSettingBodyBg');
         }
+
         .item {
             @include box-sizing(border-box);
             padding: 0 16px;
@@ -99,6 +113,7 @@
             display: flex;
             flex-direction: column;
             justify-content: space-around;
+
             .title {
                 font-size: 12px;
                 display: flex;
@@ -117,6 +132,7 @@
             border-top: 1px solid themed('DialogFootBorder');
             background: themed('DialogFootBg');
         }
+
         > div {
             width: 90px;
             height: 40px;
@@ -144,13 +160,13 @@
         @include border-radius(3px);
         @include themify($themes) {
             border: none;
-            @include box-shadow ( 0 ,0 ,0 ,1px,themed('defaultBorder'));
+            @include box-shadow (0, 0, 0, 1px, themed('defaultBorder'));
         }
     }
-
     .cq-color-picker {
         display: inline-block;
-        .dropdown{
+
+        .dropdown {
             @include themify($themes) {
                 border: 1px solid themed('ColorPickerBorder');
             }

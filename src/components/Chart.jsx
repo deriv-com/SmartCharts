@@ -16,7 +16,6 @@ import './ui';
 
 import ChartControls from './ChartControls.jsx';
 import SettingsDialog from './SettingsDialog.jsx';
-import Notification from './Notification.jsx';
 import Crosshair from './Crosshair.jsx';
 import { connect } from '../store/Connect';
 
@@ -40,8 +39,11 @@ class Chart extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        const { settings, setSettings } = nextProps;
+        const { settings, setSettings, setConnectionIsOpened, isConnectionOpened } = nextProps;
         setSettings(settings);
+        if (isConnectionOpened !== undefined) {
+            setConnectionIsOpened(isConnectionOpened);
+        }
     }
 
     componentWillUnmount() {
@@ -68,6 +70,7 @@ class Chart extends Component {
         const currentPosition = `cq-chart-control-${(position && !isMobile) ? position : 'bottom'}`;
         const contextWidth =  !isMobile ? `smartcharts-${containerWidth}` : '';
         const renderTopWidgets = topWidgets || defaultTopWidgets;
+
 
         return (
             <div
@@ -110,7 +113,6 @@ class Chart extends Component {
                 <DrawToolsSettingsDialog />
                 <AggregateChartSettingsDialog />
                 <StudySettingsDialog />
-                <Notification />
             </div>
         );
     }
@@ -129,4 +131,5 @@ export default connect(({ chart, drawTools, studies, chartSetting, chartType }) 
     setSettings: chartSetting.setSettings,
     chartContainerHeight: chart.chartContainerHeight,
     containerWidth: chart.containerWidth,
+    setConnectionIsOpened: chart.setConnectionIsOpened,
 }))(Chart);

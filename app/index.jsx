@@ -11,6 +11,9 @@ import { // eslint-disable-line import/no-extraneous-dependencies,import/no-unre
     ChartSetting,
     createObjectFromLocalStorage,
     Share,
+    ChartTitle,
+    AssetInformation,
+    ComparisonList,
 } from '@binary-com/smartcharts'; // eslint-disable-line import/no-unresolved
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
@@ -18,6 +21,9 @@ import { configure } from 'mobx';
 import './app.scss';
 import './doorbell';
 import { ConnectionManager, StreamManager } from './connection';
+import Notification from './Notification.jsx';
+import ChartNotifier from './ChartNotifier.js';
+
 
 if (window.location.host.endsWith('binary.com')) {
     window._trackJs = { token: '346262e7ffef497d85874322fff3bbf8', application: 'smartcharts' };
@@ -50,7 +56,6 @@ const connectionManager = new ConnectionManager({
 });
 
 const streamManager = new StreamManager(connectionManager);
-
 const renderControls = () => (
     <React.Fragment>
         {CIQ.isMobile ? '' : <CrosshairToggle />}
@@ -65,42 +70,65 @@ const renderControls = () => (
         <ChartSetting />
     </React.Fragment>
 );
-
 const requestAPI = connectionManager.send.bind(connectionManager);
 const requestSubscribe = streamManager.subscribe.bind(streamManager);
 const requestForget = streamManager.forget.bind(streamManager);
 const shareOrigin = window.location.href.split('?')[0];
 
+
 class App extends Component {
     constructor(props) {
         super(props);
+        this.notifier = new ChartNotifier();
         const settings = createObjectFromLocalStorage('smartchart-setting');
         if (settings) { this.startingLanguage = settings.language; }
-        this.state = { settings };
+        connectionManager.on(
+            ConnectionManager.EVENT_CONNECTION_CLOSE,
+            () => this.setState({ isConnectionOpened: false }),
+        );
+        connectionManager.on(
+            ConnectionManager.EVENT_CONNECTION_REOPEN,
+            () => this.setState({ isConnectionOpened: true }),
+        );
+        this.state = { settings, isConnectionOpened: true };
     }
 
-    startingLanguage = 'en';
+    symbolChange = (symbol) => {
+        this.notifier.removeByCategory('activesymbol');
+        console.log('Symbol has changed to:', symbol);
+    };
 
     saveSettings = (settings) => {
         console.log('settings updated:', settings);
         CIQ.localStorageSetItem('smartchart-setting', JSON.stringify(settings));
 
         this.setState({ settings });
-
         if (this.startingLanguage !== settings.language) {
             window.location.reload();
         }
     };
-
-
+    startingLanguage = 'en';
     render() {
-        const { settings } = this.state;
+        const { settings, isConnectionOpened } = this.state;
+
+        const renderTopWidgets = () => (
+            <React.Fragment>
+                <ChartTitle />
+                <AssetInformation />
+                <ComparisonList />
+                <Notification
+                    notifier={this.notifier}
+                />
+            </React.Fragment>
+        );
 
         return (
             <SmartChart
-                onSymbolChange={symbol => console.log('Symbol has changed to:', symbol)}
+                onSymbolChange={symbol => this.symbolChange(symbol)}
+                onMessage={e => this.notifier.notify(e)}
                 isMobile={CIQ.isMobile}
                 enableRouting
+                topWidgets={renderTopWidgets}
                 chartControlsWidgets={renderControls}
                 requestAPI={requestAPI}
                 requestSubscribe={requestSubscribe}
@@ -108,6 +136,7 @@ class App extends Component {
                 shareOrigin={shareOrigin}
                 settings={settings}
                 onSettingsChange={this.saveSettings}
+                isConnectionOpened={isConnectionOpened}
             />
         );
     }
