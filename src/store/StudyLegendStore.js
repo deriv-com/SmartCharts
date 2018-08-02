@@ -173,9 +173,8 @@ export default class StudyLegendStore {
         this.updateActiveStudies();
         this.stx.draw();
         this.changeStudyPanelTitle(this.helper.sd);
-        this.settingsDialog.title = this.helper.sd.name.toUpperCase();
+        this.settingsDialog.title = this.helper.sd.libraryEntry.name;
     }
-
 
     changeStudyPanelTitle(sd) {
         // Remove numbers from the end of indicator titles in mobile
@@ -224,7 +223,7 @@ export default class StudyLegendStore {
 
             studies.push({
                 enabled: true,
-                display: sd.inputs.display,
+                display:this.mainStore.chart.isMobile ? sd.libraryEntry.name : sd.inputs.display,
                 dataObject: {
                     stx,
                     sd,
