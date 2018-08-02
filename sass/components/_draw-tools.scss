@@ -2,12 +2,11 @@
 .ciq-draw-tools {
     .cq-menu-dropdown {
         width: 200px;
-        padding: 5px 16px 16px 16px !important;
+        padding: 5px 16px 16px !important;
         @include box-sizing(border-box);
-    }
-    .cq-menu-dropdown{
         padding: 0em !important;
         overflow: visible !important;
+
         .title {
             height: 40px;
             line-height: 40px;
@@ -16,13 +15,14 @@
             display: flex;
             justify-content: space-between;
             @include themify($themes) {
-                color: themed('defaultTextStrong');
+                color: themed('DialogHeadText');
             }
-            .ciq-bars-buttons{
+
+            .ciq-bars-buttons {
                 cursor: pointer;
                 display: flex;
-                padding: 6px 6px;
-                @include svg-icon-stroke('controlText');
+                padding: 6px;
+                @include svg-icon-stroke('DialogHeadIcon');
             }
         }
         .body {
@@ -30,9 +30,10 @@
         }
     }
 }
-.smartcharts-mobile{
+
+.smartcharts-mobile {
     .ciq-draw-tools {
-        .ciq-list{
+        .ciq-list {
             margin: 0px 15px;
         }
     }

@@ -61,6 +61,8 @@
         "no-shadow": 1,
         "no-bitwise": 0,
         "one-var": 0,
+        "one-var-declaration-per-line": 0,
+        "prefer-arrow-callback": 0,
         "no-mixed-operators": 0,
         "max-len": 0,
         "prefer-const": 1,

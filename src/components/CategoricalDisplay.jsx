@@ -2,8 +2,7 @@
 import React, { Fragment } from 'react';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import {
-    CategoryIconMap, ItemIconMap, SearchIcon,
-    SymbolPlaceholderIcon, ActiveOptionsIconMap, FavoriteIcon, CloseIcon,
+    CategoryIconMap, ItemIconMap, SearchIcon, ActiveOptionsIconMap, FavoriteIcon, CloseIcon,
 } from './Icons.jsx';
 import '../../sass/components/_categorical-display.scss';
 
@@ -44,8 +43,8 @@ const CategoricalDisplay = ({
             <CloseIcon className="icon-close-menu" onClick={() => closeMenu()} />
         </div> : '');
     const renderIcon = (item) => {
-        if (!item.itemId) { return ''; }
-        const ItemIcon = ItemIconMap[item.itemId] || SymbolPlaceholderIcon;
+        if (!item.itemId || !ItemIconMap[item.itemId]) { return ''; }
+        const ItemIcon = ItemIconMap[item.itemId];
         return <ItemIcon className={`ic-${item.itemId}`} />;
     };
     const renderText = item => <span className="ciq-item-display">{item.display}</span>;

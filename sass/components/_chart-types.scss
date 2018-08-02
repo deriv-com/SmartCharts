@@ -1,72 +1,93 @@
 .ciq-chart-types {
-	.ciq-toggle-asset-information {
-		font-size: 10px;
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		position: relative;
-		top: -5px;
-		@include themify($themes) {color: themed('defaulTextStrong');}
-	}
-	.cq-menu-dropdown {
-		width: 200px;
-		@include box-sizing(border-box);
-		.title {
-			display: flex;
-			align-items: center;
-			cursor: pointer;
+    .cq-menu-dropdown {
+        width: 200px;
+        @include box-sizing(border-box);
+
+        .title {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
 
             height: 40px;
             line-height: 40px;
             padding-left: 16px;
             font-size: 16px;
-            display: flex;
             justify-content: space-between;
             @include themify($themes) {
-                color: themed('defaultTextStrong');
+                color: themed('ChartTypeText');
             }
-			.ic-icon {
-				margin-right: 7px;
-			}
-		}
-		.body{
-			padding: 0px 5px 0px 16px;
-		}
-	}
-	.ciq-list {
-		.ciq-list-item {
-			padding: 0;
-			justify-content: space-between;
-			> .left {
-				display: inline-flex;
-				align-items: center;
-			}
-			> .ciq-aggregate-setting {
-				margin-right: 5px;
-				> .ic-icon {
-					> svg > path {
-						@include themify($themes) {
-							fill: themed('defaultTextMedium');
-						}
-					}
-					&:hover > svg > path {
-						@include themify($themes) {
-							fill: themed('activeColor');
-						}
-					}
-				}
-			}
-		}
-	}
+
+            .ic-icon {
+                margin-right: 7px;
+            }
+        }
+        .body {
+            padding: 0px 5px 0px 16px;
+        }
+    }
+    .ciq-list {
+        .ciq-list-item {
+            &.active {
+                @include themify($themes) {
+                    border-right: 2px solid themed('ChartTypeActiveListBorderRight');
+                }
+
+                > .left {
+                    .ic-icon {
+                        path,
+                        circle,
+                        rect {
+                            @include themify($themes) {
+                                fill: themed('ChartTypeActiveListIcon');
+                            }
+                        }
+                    }
+                }
+            }
+            padding: 0;
+            justify-content: space-between;
+
+            > .left {
+                display: inline-flex;
+                align-items: center;
+
+                .ic-icon {
+                    path,
+                    circle,
+                    rect {
+                        @include themify($themes) {
+                            fill: themed('ChartTypeListIcon');
+                        }
+                    }
+                }
+            }
+            > .ciq-aggregate-setting {
+                margin-right: 5px;
+
+                > .ic-icon {
+                    > svg > path {
+                        @include themify($themes) {
+                            fill: themed('ChartTypeListIcon');
+                        }
+                    }
+                    &:hover > svg > path {
+                        @include themify($themes) {
+                            fill: themed('ChartTypeActiveListIcon');
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 
-.smartcharts-mobile{
-	.ciq-chart-types {
-		.ciq-toggle-asset-information{
-			margin: 15px 15px 0 ;
-		}
-		.ciq-list {
-			margin: 10px 15px;
-		}
-	}
+.smartcharts-mobile {
+    .ciq-chart-types {
+        .ciq-toggle-asset-information {
+            margin: 15px 15px 0;
+        }
+        .ciq-list {
+            margin: 0 15px;
+        }
+    }
 }

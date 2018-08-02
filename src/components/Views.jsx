@@ -73,7 +73,7 @@ const Views = ({
                                         </span>
                                         : <span className="add-new" onClick={main}> {t.translate('Add New')} </span>
                                 }
-                                <span className={`icon ${!templateName ? 'hide' : ''}`}>
+                                <span className="icon">
                                     {
                                         currentRoute === 'add'
                                             ? <TickIcon className="tick-icon" onClick={add} />
@@ -99,7 +99,7 @@ const Views = ({
                             <div className="ovrwrit-alrt-title">
                                 <alertIconMap.warning />
                                 <span>
-                                    {templateName + t.translate(' is already exist.')}
+                                    {templateName + t.translate(' already exists.')}
                                 </span>
                                 <span>
                                     {t.translate('Would you like to overwrite it?')}

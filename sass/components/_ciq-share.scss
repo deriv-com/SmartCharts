@@ -9,17 +9,15 @@
         line-height: 40px;
         font-size: 16px;
         display: flex;
-        .title-text{
+
+        .title-text {
             display: block;
             font-size: 16px;
             line-height: 40px;
             font-weight: 400;
-            padding: 0 .7em;
-            @include themify($themes) {
-                color: themed('defaultText');
-            }
+            padding: 0 0.7em;
         }
-        .icon-close-menu{
+        .icon-close-menu {
             position: absolute;
             top: 5px;
             right: 5px;
@@ -33,7 +31,8 @@
     .body {
         height: 100%;
         padding: 16px;
-        .loading{
+
+        .loading {
             background: transparent url('../icons/loading/loading-ellipsis.svg') no-repeat scroll center center;
             height: 26px;
             width: 100%;
@@ -41,18 +40,29 @@
         }
         .content {
             display: flex;
+            padding: 5px 0;
+
             input {
                 line-height: 32px;
                 height: 32px;
                 outline: none;
                 flex-grow: 1;
                 padding-left: 4px;
+                border-right: none;
                 @include box-sizing(border-box);
-                @include border-radius(4px);
+                @include border-radius(4px 0 0 4px);
                 @include themify($themes) {
-                    color: themed('controlText');
-                    border: 1px solid themed('defaultBorder');
-                    background-color: themed('defaultMain');
+                    color: themed('SharedInputText');
+                    background-color: themed('SharedInputBg');
+                    border-top: 1px solid themed('SharedInputBorder');
+                    border-left: 1px solid themed('SharedInputBorder');
+                    border-bottom: 1px solid themed('SharedInputBorder');
+                }
+
+                g {
+                    @include themify($themes) {
+                        fill: themed('SharedBtnIcon');
+                    }
                 }
             }
             .ic-icon {
@@ -64,8 +74,12 @@
                 @include border-radius(0 4px 4px 0);
                 @include box-sizing(border-box);
                 @include themify($themes) {
-                    background: themed('activeColor');
+                    border-top: 1px solid themed('SharedInputBorder');
+                    border-right: 1px solid themed('SharedInputBorder');
+                    border-bottom: 1px solid themed('SharedInputBorder');
+                    background: themed('SharedBtnBg');
                 }
+
                 &:after {
                     width: auto !important;
                     left: auto !important;
@@ -79,35 +93,45 @@
             }
             .download-btn {
                 width: 56px;
-                height: 32px;
+                height: 20px;
                 text-align: center;
-                line-height: 32px;
-                margin-right: 8px;
+                line-height: 20px;
                 cursor: pointer;
-                @include border-radius(4px);
+                background: transparent;
+                border: none;
                 @include box-sizing(border-box);
                 @include themify($themes) {
-                    border: 1px solid themed('defaultBorder');
-                    background-color: themed('defaultMain');
+                    color: themed('SharedBtnDownloadText');
                 }
-                &:hover {
+
+                &:first-child {
                     @include themify($themes) {
-                        border-color: themed('activeColor');
+                        border-right: 1px solid themed('SharedBtnDownloadBorder');
                     }
                 }
             }
         }
-
         .caption2 {
             margin-top: 10px;
         }
     }
 }
+
+.smartcharts-dark {
+    .cq-share {
+        .body {
+            .loading {
+                background: transparent url('../icons/loading/loading-ellipsis-dark.svg') no-repeat scroll center center;
+            }
+        }
+    }
+}
+
 /* Mobile Style */
 .smartcharts-mobile {
     .cq-share {
         .title {
-            .icon-close-menu{
+            .icon-close-menu {
                 pointer-events: initial;
                 opacity: 1;
             }

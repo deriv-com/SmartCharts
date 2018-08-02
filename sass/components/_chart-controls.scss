@@ -2,19 +2,20 @@
 .cq-chart-controls {
     position: absolute;
     display: flex !important;
-    box-shadow: 0 2px 2px 0 rgba(0,0,0,0.12);
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.12);
     z-index: 2;
     flex-wrap: wrap; /* Optional. only if you want the items to wrap */
     justify-content: center;
     align-items: center;
-
-    @include themify($themes) {
-        background: themed('defaultMain');
-    }
     @include border-radius(2px);
     @include box-sizing(border-box);
+    @include themify($themes) {
+        background: themed('MenuBg');
+    }
+
     .ciq-menu {
         width: 100px;
+
         > span {
             margin: 0;
             padding: 0;
@@ -25,8 +26,68 @@
             transform: rotate(225deg); /* 180 + 45 */
             display: none;
         }
-        .cq-menu-btn{
+        &.stxMenuActive {
+            @include themify($themes) {
+                box-shadow: 0px -2px 0px 0 themed('MenuActiveBorder');
+            }
+
+            .cq-menu-btn {
+                @include themify($themes) {
+                    background: themed('MenuActiveBg');
+                }
+
+                > .ic-icon,
+                > .cq-toggle {
+                    @include themify($themes) {
+                        color: themed('MenuActiveText');
+                    }
+                    @include svg-icon-color('MenuActiveIcon');
+
+                    .ic-subtitle {
+                        font-weight: 500;
+                        @include themify($themes) {
+                            color: themed('MenuActiveText');
+                        }
+                    }
+                }
+            }
+        }
+        .cq-menu-btn {
             position: relative;
+            padding: 0 5px;
+
+            &:hover {
+                @include themify($themes) {
+                    background: themed('MenuHoverBg');
+                }
+            }
+            > .ic-icon {
+                padding: 0.35em 0.5em;
+            }
+            > .ic-icon,
+            > .cq-toggle {
+                &.active {
+                    .ic-subtitle {
+                        font-weight: 500;
+                        @include themify($themes) {
+                            color: themed('MenuActiveText');
+                        }
+                    }
+                }
+                @include svg-icon-color('MenuIcon');
+
+                .ic-subtitle {
+                    font-weight: normal;
+                    font-style: normal;
+                    font-stretch: normal;
+                    line-height: normal;
+                    letter-spacing: normal;
+                    text-align: center;
+                    @include themify($themes) {
+                        color: themed('MenuText');
+                    }
+                }
+            }
         }
         .notification-badge {
             background: #e9e9e9;
@@ -38,11 +99,12 @@
             line-height: 18px;
             left: 55px;
             width: 16px;
-            height:16px;
-            font-family: Roboto;
+            height: 16px;
+            font-family: 'Roboto';
             font-weight: bold;
             text-align: center;
-            &.x2{
+
+            &.x2 {
                 width: 24px;
             }
         }
@@ -65,76 +127,73 @@
         /* the left and translateX 50% centers the dropdowns */
         left: 50%;
         transform: translateX(-50%) translateY(3em);
-        &.cq-menu-dropdown-enter-done, &.cq-menu-dropdown-enter-active{
+
+        &.cq-menu-dropdown-enter-done, &.cq-menu-dropdown-enter-active {
             transform: translateX(-50%) translateY(0em);
         }
     }
     .cq-chart-control-left & {
+        bottom: auto;
+        left: 9em;
+        top: -1em;
+        @include box-shadow (0px, 0, 4px, rgba(0, 0, 0, 0.2));
+        @include transition(opacity 0.2s 0s);
+        @include dialog-transition();
         transform: translateX(-3em);
-        &.cq-menu-dropdown-enter-done, &.cq-menu-dropdown-enter-active{
+
+        &.cq-menu-dropdown-enter-done, &.cq-menu-dropdown-enter-active {
             transform: translateX(0em);
         }
     }
-    &.cq-menu-dropdown-exit-active{
+    &.cq-menu-dropdown-exit-active {
         opacity: 0;
         z-index: -3;
     }
-    &.cq-menu-dropdown-enter-done, &.cq-menu-dropdown-enter-active{
+    &.cq-menu-dropdown-enter-done, &.cq-menu-dropdown-enter-active {
         opacity: 1;
         z-index: 6;
     }
 }
 
-.cq-chart-control-bottom{
-    .cq-chart-controls {
-        bottom: 0px;
-        height: 50px;
-        width: 100%;
-        padding: 0 5px;
-        @include themify($themes) {
-            border-top: 1px solid themed('defaultBorder');
-        }
+.cq-chart-control-bottom .cq-chart-controls {
+    bottom: 0px;
+    height: 50px;
+    width: 100%;
+    padding: 0 5px;
+    @include themify($themes) {
+        border-top: 1px solid themed('MenuBorder');
     }
 }
-.cq-chart-control-left{
-    .cq-chart-controls {
-        left: 0px;
-        top: 0;
-        height: 100%;
-        width: 100px;
-        padding: 5px 0;
-        flex-flow: column;
+
+.cq-chart-control-left .cq-chart-controls {
+    left: 0px;
+    top: 0;
+    height: 100%;
+    width: 100px;
+    padding: 5px 0;
+    flex-flow: column;
+    @include themify($themes) {
+        border-right: 1px solid themed('MenuBorder');
+    }
+
+    .ciq-menu.stxMenuActive {
         @include themify($themes) {
-            border-right: 1px solid themed('defaultBorder');
-        }
-        .ciq-menu{
-            height: 60px;
-            .cq-menu-dropdown {
-                bottom: auto;
-                left: 9em;
-                top: -1em;
-                @include box-shadow (0px, 0, 4px, rgba(0, 0, 0, .2));
-                @include transition( opacity .20s 0s);
-                @include dialog-transition();
-                &.cq-menu-dropdown-exit.cq-menu-dropdown-exit-active,
-                &.cq-menu-dropdown-exit-done{
-                    @include dialog-transition();
-                }
-            }
+            box-shadow: 2px 0.3px 0px 0 themed('MenuActiveBorder');
         }
     }
 }
 
 /* Mobile Style */
-.smartcharts-mobile{
+.smartcharts-mobile {
     .cq-chart-controls {
         justify-content: space-around;
         padding: 0 0.7em;
         height: 40px;
         @include themify($themes) {
-            border-top: 1px solid themed('defaultBorder');
+            border-top: 1px solid themed('MenuBorder');
         }
-        &.active{
+
+        &.active {
             z-index: 5;
         }
         .cq-menu-btn {
@@ -143,12 +202,13 @@
         .ciq-menu {
             padding: 0em;
             width: auto;
-            .cq-menu-btn{
-                > .ic-icon{
-                    padding: .35em 0em;
+
+            .cq-menu-btn {
+                > .ic-icon {
+                    padding: 0.35em 0em;
                 }
-                > .bt-priod{
-                    padding: .7em .5em !important;
+                > .bt-priod {
+                    padding: 0.7em 0.5em !important;
                 }
             }
             .cq-menu-dropdown {
@@ -158,74 +218,86 @@
                 border: none;
                 box-shadow: none;
             }
-            .notification-badge{
+            .notification-badge {
                 left: 15px;
             }
         }
-        .bt-priod ,.cq-toggle , .cq-menu-btn , .cq-chart-size>span
-        {
-             padding: 0 !important;
+        .bt-priod, .cq-toggle, .cq-menu-btn, .cq-chart-size > span {
+            padding: 0 !important;
         }
         .ic-priod {
-            padding : 6px 0px !important;
+            padding: 6px 0px !important;
         }
     }
 }
 
-.smartcharts-desktop .cq-chart-control-bottom {
-    .smartcharts-480 {
-        .cq-chart-controls {
-            .ciq-menu {
-                width: 47px;
-                .cq-menu-btn {
-                    > .ic-icon{
-                        padding: .35em 0em;
-                    }
-                    .ic-subtitle{
-                        display: none;
-                    }
+.smartcharts-desktop {
+    &.smartcharts-480 {
+        .cq-chart-control-bottom {
+            .cq-chart-controls {
+                .cq-toggle {
+                    padding: 0.35em 0.6em;
                 }
-                .notification-badge{
-                    left: 28px;
+                .ciq-menu {
+                    width: 47px;
+
+                    .cq-menu-btn {
+                        padding: 5px;
+
+                        > .ic-icon {
+                            padding: 0.35em 0em;
+                        }
+                        .ic-subtitle {
+                            display: none;
+                        }
+                    }
+                    .notification-badge {
+                        left: 28px;
+                    }
                 }
             }
         }
     }
-    .smartcharts-900 {
-        .cq-chart-controls {
-            .ciq-menu {
-                width: 70px;
-                .cq-menu-btn {
-                    > .ic-icon{
-                        padding: .35em 0em;
+    &.smartcharts-900 {
+        .cq-chart-control-bottom {
+            .cq-chart-controls {
+                .ciq-menu {
+                    width: 70px;
+
+                    .cq-menu-btn {
+                        padding: 5px;
+
+                        > .ic-icon {
+                            padding: 0.35em 0em;
+                        }
+                        .ic-subtitle {
+                            display: none;
+                        }
                     }
-                    .ic-subtitle{
-                        display: none;
+                    .notification-badge {
+                        left: 39px;
                     }
-                }
-                .notification-badge{
-                    left: 39px;
                 }
             }
         }
     }
-    .smartcharts-1100 {
+    &.smartcharts-1100 {
         .cq-chart-controls {
             .ciq-menu {
                 width: 100px;
+
                 .cq-menu-btn {
-                    > .ic-icon{
-                        padding: .35em 0.5em;
+                    > .ic-icon {
+                        padding: 0.35em 0.5em;
                     }
-                    .ic-subtitle{
+                    .ic-subtitle {
                         display: block;
                     }
                 }
-                .notification-badge{
+                .notification-badge {
                     left: 55px;
                 }
             }
         }
     }
 }
-

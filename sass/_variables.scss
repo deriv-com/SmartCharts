@@ -1,111 +1,96 @@
-
-
 /* ------------------------ *\
 		Variables
 \* ------------------------ */
 
-$base-font:			'Roboto' , Helvetica, sans-serif !default;
-$heading-font:		'Roboto Condensed', sans-serif !default;
+$base-font: 'Roboto', helvetica, sans-serif !default;
+$heading-font: 'Roboto Condensed', sans-serif !default;
 
-$font-size-base:		12px !default;
-$font-size-button:		11px !default;
-$font-size-toolbar:		14px !default;
-
+$font-size-base: 12px !default;
+$font-size-button: 11px !default;
+$font-size-toolbar: 14px !default;
 
 /* --------- Border Radius --------- */
 $soft-corners: 3px !default; // Set to zero to eliminate soft corners
-
-
 
 /* --------- COLOR :: Border --------- */
 $nav-height: 45px !default;
 $footer-height: 45px !default;
 
-$active-color: #4C5794;
+$active-color: #4c5794;
 $large-icon-size: 32px;
 $normal-icon-size: 24px;
 $small-icon-size: 16px;
 
-
-
 /* ------------------------ *\
-        Mixin		
+        Mixin
 \* ------------------------ */
 
 /* --------- Animation : dialog --------- */
 @mixin dialog-transition {
-  @include transition(
-      pointer-events 0.2s cubic-bezier(.64,.04,.35,1),
-      transform 0.25s cubic-bezier(.64,.04,.35,1),
-      opacity 0.17s cubic-bezier(.64,.04,.35,1),
-      z-index 0.17s cubic-bezier(.64,.04,.35,1)
-  );
+    @include transition(
+        pointer-events 0.2s cubic-bezier(0.64, 0.04, 0.35, 1),
+        transform 0.25s cubic-bezier(0.64, 0.04, 0.35, 1),
+        opacity 0.17s cubic-bezier(0.64, 0.04, 0.35, 1),
+        z-index 0.17s cubic-bezier(0.64, 0.04, 0.35, 1)
+    );
 }
-
-
-
-
 
 @mixin svg-icon-color($color) {
-    svg, path, g{
-      @include themify($themes) {
-        color: themed($color);
-        fill: themed($color);
-      }
+    svg, path, g, polyline {
+        @include themify($themes) {
+            color: themed($color);
+            fill: themed($color);
+        }
     }
 }
+
 @mixin svg-icon-stroke($color) {
-    path{
-      @include themify($themes) {
-        stroke: themed($color);
-      }
+    path {
+        @include themify($themes) {
+            stroke: themed($color);
+        }
     }
 }
-
-
-
 
 /* --------- CSS Properties --------- */
 
 @mixin text-truncate {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
-
-@mixin transition($transition...){
-  -webkit-transition: $transition;
-     -moz-transition: $transition;
-      -ms-transition: $transition;
-          transition: $transition; 
+@mixin transition($transition...) {
+    -webkit-transition: $transition;
+    -moz-transition: $transition;
+    -ms-transition: $transition;
+    transition: $transition;
 }
 
 @mixin border-radius($radius : $soft-corners) {
-  -webkit-border-radius: $radius;
-     -moz-border-radius: $radius;
-      -ms-border-radius: $radius;
-          border-radius: $radius;
+    -webkit-border-radius: $radius;
+    -moz-border-radius: $radius;
+    -ms-border-radius: $radius;
+    border-radius: $radius;
 }
 
 @mixin user-select($select) {
-	-webkit-user-select: $select;
-	   -moz-user-select: $select;
-	    -ms-user-select: $select;
-	        user-select: $select;
+    -webkit-user-select: $select;
+    -moz-user-select: $select;
+    -ms-user-select: $select;
+    user-select: $select;
 }
 
-@mixin box-shadow($top, $left, $blur, $color, $inset:"") {
-   -webkit-box-shadow:$top $left $blur $color #{$inset};
-      -moz-box-shadow:$top $left $blur $color #{$inset};
-           box-shadow:$top $left $blur $color #{$inset};
+@mixin box-shadow($top, $left, $blur, $color, $inset:'') {
+    -webkit-box-shadow: $top $left $blur $color #{$inset};
+    -moz-box-shadow: $top $left $blur $color #{$inset};
+    box-shadow: $top $left $blur $color #{$inset};
 }
-
 
 @mixin box-sizing($box) {
-	-webkit-box-sizing: $box;
-       -moz-box-sizing: $box;
-            box-sizing: $box;
+    -webkit-box-sizing: $box;
+    -moz-box-sizing: $box;
+    box-sizing: $box;
 }
 
 @mixin optional-at-root($sel) {
@@ -133,16 +118,16 @@ $small-icon-size: 16px;
 }
 
 @mixin rotate($degrees) {
-	-webkit-transform: rotate($degrees);  /* Saf3.1+, Chrome */
-	-moz-transform: rotate($degrees);  /* FF3.5+ */
-	-ms-transform: rotate($degrees);  /* IE9 */
-	-o-transform: rotate($degrees);  /* Opera 10.5 */
-	transform: rotate($degrees);
-	zoom: 1;
+    -webkit-transform: rotate($degrees); /* Saf3.1+, Chrome */
+    -moz-transform: rotate($degrees); /* FF3.5+ */
+    -ms-transform: rotate($degrees); /* IE9 */
+    -o-transform: rotate($degrees); /* Opera 10.5 */
+    transform: rotate($degrees);
+    zoom: 1;
 }
 
 @mixin triangle-base($width) {
-    content: "";
+    content: '';
     width: 0px;
     height: 0px;
     display: block;

@@ -2,12 +2,10 @@ import ResizeObserver from 'resize-observer-polyfill';
 import { action, observable } from 'mobx';
 import PendingPromise from '../utils/PendingPromise';
 import Context from '../components/ui/Context';
-import { stableSort } from './utils';
-// import BarrierStore from './BarrierStore';
 import KeystrokeHub from '../components/ui/KeystrokeHub';
 import '../components/ui/Animation';
 import { BinaryAPI, Feed } from '../feed';
-import { createObjectFromLocalStorage } from '../utils';
+import { createObjectFromLocalStorage, stableSort } from '../utils';
 
 // import '../AddOns';
 
@@ -29,8 +27,8 @@ class ChartStore {
     enableRouting = null;
     chartNode = null;
     chartControlsNode = null;
-    chartContainerNode = null;
     holderStyle;
+    onMessage = null;
     @observable containerWidth = null;
     @observable context = null;
     @observable currentActiveSymbol;
@@ -109,6 +107,10 @@ class ChartStore {
         this.chartContainerHeight = this.chartHeight - offsetHeight;
     }
 
+    notify(message) {
+        if (this.onMessage) { this.onMessage(message); }
+    }
+
     updateCanvas = () => {
         if (this.stxx.slider) {
             this.stxx.slider.display(this.stxx.layout.rangeSlider);
@@ -124,10 +126,8 @@ class ChartStore {
             this.containerWidth = 1100;
         } else if (this.modalNode.clientWidth > 900) {
             this.containerWidth = 900;
-        } else if (this.modalNode.clientWidth > 480) {
-            this.containerWidth = 480;
         } else {
-            this.containerWidth = 1100;
+            this.containerWidth = 480;
         }
 
 
@@ -153,6 +153,7 @@ class ChartStore {
             isMobile,
             shareOrigin = 'https://charts.binary.com',
             enableRouting,
+            onMessage,
             settings,
             onSettingsChange,
         } = props;
@@ -164,7 +165,11 @@ class ChartStore {
         this.isMobile = isMobile;
         this.onSymbolChange = onSymbolChange;
 
+
+        this.onMessage = onMessage;
+
         const stxx = this.stxx = new CIQ.ChartEngine({
+            maxMasterDataSize: 5000, // cap size so tick_history requests do not become too large
             markerDelay: null, // disable 25ms delay for placement of markers
             container: this.rootNode.querySelector('.chartContainer.primary'),
             controls: { chartControls: null }, // hide the default zoom buttons
@@ -350,8 +355,6 @@ class ChartStore {
             this.onSymbolChange(symbolObj);
         }
 
-        this.loader.show();
-
         // reset comparisons
         this.comparisonSymbols = [];
         for (const field in this.stxx.chart.series) {
@@ -360,6 +363,15 @@ class ChartStore {
             }
         }
 
+        this.newChart(symbolObj);
+
+        this.stxx.chart.yAxis.decimalPlaces = symbolObj.decimal_places;
+        this.currentActiveSymbol = symbolObj;
+        this.categorizedSymbols = this.categorizeActiveSymbols();
+    }
+
+    @action.bound newChart(symbolObj) {
+        this.loader.show();
         this.stxx.newChart(symbolObj, null, null, (err) => {
             this.loader.hide();
             if (err) {
@@ -368,10 +380,12 @@ class ChartStore {
             }
             this.restoreDrawings();
         });
+    }
 
-        this.stxx.chart.yAxis.decimalPlaces = symbolObj.decimal_places;
-        this.currentActiveSymbol = symbolObj;
-        this.categorizedSymbols = this.categorizeActiveSymbols();
+    // Makes requests to tick history API that will replace
+    // Existing chart tick/ohlc data
+    @action.bound refreshChart() {
+        this.newChart(this.currentActiveSymbol);
     }
 
     @action.bound updateComparisons() {
@@ -414,6 +428,8 @@ class ChartStore {
         // we need to manually unsubscribe them.
         this.feed.unsubscribeAll();
         this.feed = null;
+        this.stxx.updateChartData = function () {}; // prevent any data from entering the chart
+        this.stxx.isDestroyed = true;
         this.stxx.destroy();
         this.stxx = null;
     }
@@ -496,6 +512,12 @@ class ChartStore {
         }
 
         return categorizedSymbols;
+    }
+
+    setConnectionIsOpened = (isOpened) => {
+        if (this.feed) {
+            this.feed.setConnectionOpened(isOpened);
+        }
     }
 }
 

@@ -1,7 +1,7 @@
 import { observable, action, computed, when, reaction } from 'mobx';
-import { getTimeUnit, getIntervalInSeconds  } from './utils';
 import MenuStore from './MenuStore';
 import { getChartTypes } from './ChartTypeStore';
+import { getTimeUnit, getIntervalInSeconds } from '../utils';
 
 const chartTypes = getChartTypes();
 const notCandles = chartTypes
@@ -62,6 +62,11 @@ export default class TimeperiodStore {
         };
 
         const setRemain = () => {
+            if (stx.isDestroyed) {
+                if (this.countdownInterval) { clearInterval(this.countdownInterval); }
+                return;
+            }
+
             const dataSet = stx.chart.dataSet;
             if (dataSet && dataSet.length !== 0) {
                 const now = new Date();

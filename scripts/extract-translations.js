@@ -1,4 +1,3 @@
-const _ = require('lodash');
 const path = require('path');
 const fs = require('fs');
 const esprima = require('esprima');
@@ -24,24 +23,25 @@ function esc(s) {
 }
 
 const extractTextFromFunctions = (...args) => (code_obj) => {
-    const textFunctions = estree.filterTreeForMethodsAndFunctionsNamed(...args)(code_obj);
-    return _.map(textFunctions, (node) => {
-        const strings = node.arguments.slice(0, 2).map(arg => arg.value);
-        if (!strings[0]) return; // ignore invalid strings
+    let textFunctions = estree.filterTreeForMethodsAndFunctionsNamed(...args)(code_obj);
+    const getText = (x) => {
+        const strings = x.arguments.slice(0, 2).map(arg => esc(arg.value));
+        const { line, column } = x.loc.start;
         return {
-            text: esc(strings[0]),
-            pluralForm: esc(strings[1]),
-            loc: {
-                line: node.loc.start.line,
-                column: node.loc.start.column,
-            },
+            text: strings[0],
+            pluralForm: strings[1],
+            loc: { line, column },
         };
-    });
+    };
+    textFunctions = textFunctions.map(getText).filter(x => x.text !== undefined);
+    // have translations in alphabetical order to avoid confusing diffs when code changes
+    textFunctions.sort(({ text: a }, { text: b }) => a.localeCompare(b));
+    return textFunctions;
 };
 
 const formatText = (extracted_obj) => {
     let body = '';
-    _.forEach(extracted_obj, (info) => {
+    extracted_obj.forEach((info) => {
         if (!info || string_map[info.text]) {
             return;
         }
@@ -71,9 +71,7 @@ function getIndicatorStrings() {
 }
 
 function extractOutPot(source, translationDir) {
-    default_options.output = translationDir;
-    let options = _.find(this.loaders, loader => loader.path.indexOf('textExtractor') !== -1);
-    options = options ? options.options : default_options;
+    const options = { ...default_options, output: translationDir };
     const output = options.output;
     const parsed_code = parseCode(source);
     const extracted_text = extractTextFromFunctions(...options.method_names)(parsed_code);
