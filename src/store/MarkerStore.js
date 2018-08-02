@@ -1,11 +1,12 @@
 import { observable, action } from 'mobx';
+import { getUTCDate } from '../utils';
 
 // width here includes the size of the flag
 const MARKER_MAX_WIDTH = 150;
 
 export default class MarkerStore {
     yPositioner = 'value';
-    xPositioner = 'date';
+    xPositioner = 'epoch';
     tick;
     isDistantFuture;
     x;
@@ -158,11 +159,17 @@ export default class MarkerStore {
 
     // ChartIQ's marker functions wants markers. Let's give them markers.
     getDummyMarker() {
+        let x = this.x;
+        let xPositioner = this.xPositioner;
+        if (this.xPositioner === 'epoch') {
+            xPositioner = 'date';
+            x = new Date(getUTCDate(x));
+        }
+
         return {
             chart: this.chart,
             params: {
-                x: this.x,
-                xPositioner: this.xPositioner,
+                x, xPositioner,
             },
         };
     }

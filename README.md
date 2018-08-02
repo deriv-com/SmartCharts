@@ -158,7 +158,7 @@ Markers provide a way for developers to place DOM elements inside the chart that
 --------|--------------
 className | Adds custom class name to marker. All markers have class name `stx-marker`.
 x | x position of the chart; depends on `xPositioner`.
-xPositioner | Determines x position. Choose between `date` or `none`. Defaults to `date`.
+xPositioner | Determines x position. Choose between `epoch` or `none`. Defaults to `epoch`.
 y | y position of the chart; depends on `yPositioner`.
 yPositioner | Determines y position. Choose between `value` or `none`. Defaults to `value`.
 

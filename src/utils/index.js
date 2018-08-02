@@ -104,3 +104,8 @@ export function stxtap(el, func) {
 export function getUTCEpoch(date) {
     return (date.getTime() / 1000) - (date.getTimezoneOffset() * 60) | 0;
 }
+
+export function getUTCDate(epoch) {
+    const UTCdate = new Date(epoch * 1000).toISOString();
+    return UTCdate.substring(0, 19);
+}
