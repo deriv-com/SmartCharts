@@ -27,7 +27,6 @@ class ChartStore {
     enableRouting = null;
     chartNode = null;
     chartControlsNode = null;
-    chartContainerNode = null;
     holderStyle;
     onMessage = null;
     @observable containerWidth = null;
@@ -170,6 +169,7 @@ class ChartStore {
         this.onMessage = onMessage;
 
         const stxx = this.stxx = new CIQ.ChartEngine({
+            maxMasterDataSize: 5000, // cap size so tick_history requests do not become too large
             markerDelay: null, // disable 25ms delay for placement of markers
             container: this.rootNode.querySelector('.chartContainer.primary'),
             controls: { chartControls: null }, // hide the default zoom buttons
@@ -355,8 +355,6 @@ class ChartStore {
             this.onSymbolChange(symbolObj);
         }
 
-        this.loader.show();
-
         // reset comparisons
         this.comparisonSymbols = [];
         for (const field in this.stxx.chart.series) {
@@ -365,6 +363,15 @@ class ChartStore {
             }
         }
 
+        this.newChart(symbolObj);
+
+        this.stxx.chart.yAxis.decimalPlaces = symbolObj.decimal_places;
+        this.currentActiveSymbol = symbolObj;
+        this.categorizedSymbols = this.categorizeActiveSymbols();
+    }
+
+    @action.bound newChart(symbolObj) {
+        this.loader.show();
         this.stxx.newChart(symbolObj, null, null, (err) => {
             this.loader.hide();
             if (err) {
@@ -373,10 +380,12 @@ class ChartStore {
             }
             this.restoreDrawings();
         });
+    }
 
-        this.stxx.chart.yAxis.decimalPlaces = symbolObj.decimal_places;
-        this.currentActiveSymbol = symbolObj;
-        this.categorizedSymbols = this.categorizeActiveSymbols();
+    // Makes requests to tick history API that will replace
+    // Existing chart tick/ohlc data
+    @action.bound refreshChart() {
+        this.newChart(this.currentActiveSymbol);
     }
 
     @action.bound updateComparisons() {
@@ -503,6 +512,12 @@ class ChartStore {
         }
 
         return categorizedSymbols;
+    }
+
+    setConnectionIsOpened = (isOpened) => {
+        if (this.feed) {
+            this.feed.setConnectionOpened(isOpened);
+        }
     }
 }
 

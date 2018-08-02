@@ -15,6 +15,8 @@ SmartCharts is both the name of the app ([charts.binary.com](https://charts.bina
 - use `yarn build` to build the library
 - use `yarn build:app` to build the [charts.binary.com](https://charts.binary.com/) app
 - use `yarn analyze` to run webpack-bundle-analyzer
+- use `yarn test` to run unit tests
+- use `yarn coverage` to see test coverage
 
 > Note: eventhough both `yarn build` and `yarn build:app` outputs `smartcharts.js` and `smartcharts.css`, **they are not the same files**. One outputs a library and the the other outputs an app.
 
@@ -93,8 +95,8 @@ onSettingsChange | Callback that will be fired each time a setting is changed.
 settings | Sets the chart settings. Refer to [Chart Settings](#chart-settings)
 barriers | Draw chart barriers. Refer to [Barriers API](#barriers-api) for usage details
 enableRouting | Enable routing for dialogs. Defaults to `false`
+isConnectionOpened | Sets the connection status. If set, upon reconnection smartcharts will either patch missing tick data or refresh the chart, depending on granularity; if not set, it is assumed that connection is always opened. Defaults to `undefined`.
 onMessage | SmartCharts will notify messages via this method. `onMessage` expect 1 parameter `(message => {})`
-
 
 ### Chart Settings
 
