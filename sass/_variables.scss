@@ -123,6 +123,21 @@ $small-icon-size: 16px;
     }
 }
 
+@mixin keyframes($name) {
+    @-webkit-keyframes #{$name} {
+        @content;
+    }
+    @-moz-keyframes #{$name} {
+        @content;
+    }
+    @-ms-keyframes #{$name} {
+        @content;
+    }
+    @keyframes #{$name} {
+        @content;
+    }
+}
+
 @mixin rotate($degrees) {
     -webkit-transform: rotate($degrees); /* Saf3.1+, Chrome */
     -moz-transform: rotate($degrees); /* FF3.5+ */

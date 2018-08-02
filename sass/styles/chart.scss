@@ -989,18 +989,7 @@ $spot-color: #0298d3;
     animation: pulse 1.6s infinite;
 }
 
-@-webkit-keyframes pulse {
-    0% {
-        @include box-shadow-raw(0 0 0 0 rgba($spot-color, 0.6));
-    }
-    70% {
-        @include box-shadow-raw(0 0 0 10px rgba($spot-color, 0));
-    }
-    100% {
-        @include box-shadow-raw(0 0 0 0 rgba($spot-color, 0));
-    }
-}
-@keyframes pulse {
+@include keyframes(pulse) {
     0% {
         @include box-shadow-raw(0 0 0 0 rgba($spot-color, 0.6));
     }
