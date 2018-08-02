@@ -25,6 +25,7 @@
         @include themify($themes) {
             color: themed('DialogHeadText');
         }
+
         .ciq-favorite {
             path {
                 @include themify($themes) {
@@ -41,14 +42,19 @@
             display: flex;
             align-items: center;
             height: 50px;
-            .ic-icon{
-                path{
-                    @include themify($themes) {fill: themed('DialogHeadIcon');}
+
+            .ic-icon {
+                path {
+                    @include themify($themes) {
+                        fill: themed('DialogHeadIcon');
+                    }
                 }
-                &.ciq-favorite{
-                    path{
+                &.ciq-favorite {
+                    path {
                         fill: transparent;
-                        @include themify($themes) {stroke: themed('DialogHeadIcon');}
+                        @include themify($themes) {
+                            stroke: themed('DialogHeadIcon');
+                        }
                     }
                 }
             }
@@ -64,10 +70,10 @@
         align-items: stretch;
         display: flex;
         position: relative;
+        @include box-sizing(border-box);
         @include themify($themes) {
             border-bottom: 1px solid themed('DialogHeadBorder');
         }
-        @include box-sizing(border-box);
 
         > div {
             text-align: center;
@@ -86,10 +92,10 @@
             width: calc(50% + 1px);
             bottom: -1px;
             left: 0;
+            @include transition(left linear 0.1s);
             @include themify($themes) {
                 background: themed('DialogHeadActiveBorder');
             }
-            @include transition(left linear 0.1s);
 
             &.second {
                 left: 50%;
