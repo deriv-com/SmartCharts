@@ -133,7 +133,7 @@ export default class StudyLegendStore {
         });
 
         this.settingsDialog.items = [...outputs, ...inputs, ...parameters];
-        this.settingsDialog.title = study.sd.libraryEntry.name;
+        this.settingsDialog.title = t.translate(study.sd.libraryEntry.name);
         // TODO:
         // const description = StudyInfo[study.sd.type];
         // this.settingsDialog.description = description || t.translate("No description yet");
@@ -173,7 +173,7 @@ export default class StudyLegendStore {
         this.updateActiveStudies();
         this.stx.draw();
         this.changeStudyPanelTitle(this.helper.sd);
-        this.settingsDialog.title = this.helper.sd.libraryEntry.name;
+        this.settingsDialog.title = t.translate(this.helper.sd.libraryEntry.name);
     }
 
     changeStudyPanelTitle(sd) {
@@ -223,7 +223,7 @@ export default class StudyLegendStore {
 
             studies.push({
                 enabled: true,
-                display:this.mainStore.chart.isMobile ? sd.libraryEntry.name : sd.inputs.display,
+                display:this.mainStore.chart.isMobile ? t.translate(sd.libraryEntry.name) : sd.inputs.display,
                 dataObject: {
                     stx,
                     sd,
