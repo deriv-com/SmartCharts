@@ -1,15 +1,19 @@
 import { observable, action } from 'mobx';
+import { getUTCDate, updatePropIfChanged } from '../utils';
 
 // width here includes the size of the flag
 const MARKER_MAX_WIDTH = 150;
 
 export default class MarkerStore {
     yPositioner = 'value';
-    xPositioner = 'date';
+    xPositioner = 'epoch';
     tick;
     isDistantFuture;
+    className;
+    children;
     x;
     y;
+    @observable display;
     @observable left;
     @observable bottom;
 
@@ -20,6 +24,7 @@ export default class MarkerStore {
         this.panel = this.chart.panel;
         this.yAxis = this.panel.yAxis;
 
+        this.mainStore.chart.feed.onPagination(this.updateMarkerTick);
         this._listenerId = this.stx.addEventListener('newChart', this.updateMarkerTick);
         this._injectionId = this.stx.prepend('positionMarkers', this.updatePosition);
 
@@ -33,17 +38,18 @@ export default class MarkerStore {
         this.stx.removeEventListener(this._listenerId);
     }
 
-    setX(val) {
-        if (val !== undefined && this.x !== val) {
-            this.x = val;
-            this.updateMarkerTick();
-        }
-    }
+    updateProps({ children, className, y, yPositioner, x, xPositioner }) {
+        this.className = className;
+        this.children = children;
 
-    setXPositioner(val) {
-        if (val !== undefined && this.xPositioner !== val) {
-            this.xPositioner = val;
-            this.updateMarkerTick();
+        let isUpdateMarkerTickRequired = false;
+        let isUpdatePositionRequired = false;
+        updatePropIfChanged(this, { x, xPositioner }, () => { isUpdateMarkerTickRequired = true; });
+        updatePropIfChanged(this, { y, yPositioner }, () => { isUpdatePositionRequired   = true; });
+        if (isUpdateMarkerTickRequired) {
+            this.updateMarkerTick(); // also calls updatePosition
+        } else if (isUpdatePositionRequired) {
+            this.updatePosition();
         }
     }
 
@@ -82,14 +88,19 @@ export default class MarkerStore {
             if (!quote) quote = dataSet[dataSet.length - 1]; // Future ticks based off the value of the current quote
         }
 
-        if (left < -MARKER_MAX_WIDTH || left > this.chart.width + MARKER_MAX_WIDTH) {
-            return; // Do not update the marker if it is not visible
+        const isMarkerExceedRange = left < -MARKER_MAX_WIDTH || left > this.chart.width + MARKER_MAX_WIDTH;
+        if (isMarkerExceedRange) {
+            this.hideMarker();
+            return;
         }
 
         this.left = left;
 
         // Y axis positioning logic
-        if (this.yPositioner === 'none') { return; }
+        if (this.yPositioner === 'none') {
+            this.showMarker();
+            return;
+        }
 
         let val;
         const showsHighs = this.stx.chart.highLowBars || this.stx.highLowBars[this.stx.layout.chartType];
@@ -133,6 +144,7 @@ export default class MarkerStore {
         }
 
         this.bottom = bottom | 0;
+        this.showMarker();
     }
 
     @action.bound updateMarkerTick() {
@@ -158,16 +170,26 @@ export default class MarkerStore {
 
     // ChartIQ's marker functions wants markers. Let's give them markers.
     getDummyMarker() {
+        let x = this.x;
+        let xPositioner = this.xPositioner;
+        if (this.xPositioner === 'epoch') {
+            xPositioner = 'date';
+            x = new Date(getUTCDate(x));
+        }
+
         return {
             chart: this.chart,
             params: {
-                x: this.x,
-                xPositioner: this.xPositioner,
+                x, xPositioner,
             },
         };
     }
 
     hideMarker() {
-        this.left = -1000;
+        this.display = 'none';
+    }
+
+    showMarker() {
+        this.display = undefined;
     }
 }
