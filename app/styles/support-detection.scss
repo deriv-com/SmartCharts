@@ -48,3 +48,18 @@
         text-decoration: none;
     }
 }
+
+.cq-not-guaranteed {
+    background: url('./assets/bg-not-supported.svg') repeat scroll center center;
+    width: 40%;
+    height: 280px;
+    position: absolute;
+    font-family: 'Roboto';
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.5;
+    letter-spacing: normal;
+    text-align: center;
+    color: #333333;
+    margin: 40px auto 0;
+}

@@ -1,5 +1,7 @@
 import React from 'react';
 
+import './styles/support-detection.scss';
+
 const { detect } = require('detect-browser');
 
 const browser = detect();
@@ -12,9 +14,26 @@ const SupportedBrowser = {
         opera: 1601190,
         yandexbrowser: 14122120,
     },
+    'Windows 10':{
+        ie: 0,
+        firefox: 0,
+        chrome: 0,
+        opera: 0,
+        yandexbrowser: 0,
+    },
     'Windows 8':{
         ie: 1000,
-        firefox: 6100,
+        firefox: 2700,
+        chrome: 3601985,
+        opera: 2601656,
+        yandexbrowser: 14122125,
+    },
+    'Windows 7':{
+        ie: 1100,
+        firefox: 2700,
+        chrome: 3601985,
+        opera: 2601656,
+        yandexbrowser: 0,
     },
 };
 
@@ -40,10 +59,6 @@ class SupportDetection extends React.Component {
             */
             const os = browser.os;
 
-            console.log(name);
-            console.log(version);
-            console.log(os);
-
             if (SupportedBrowser[os] && SupportedBrowser[os][name]) {
                 this.setState({
                     hasError: (version < SupportedBrowser[os][name]),
@@ -60,12 +75,28 @@ class SupportDetection extends React.Component {
     }
 
     render() {
+        const NotGuaranteed = (
+            <div className="cq-not-guaranteed">
+                <h1>We are  NOT guaranteed</h1>
+                <p>Binary.com does not guaranteed your browser. Please update your browser.</p>
+                <a href="https://www.binary.com/">Update Browser</a>
+            </div>
+        );
+
         if (this.state.hasError) {
-            return <h1> Not Supported. </h1>;
+            return (
+                <div className="cq-not-supported">
+                    <div className="cq-logo" />
+                    <div className="cq-icon-not-supported" />
+                    <h1>YOUR BROWSER IS NOT SUPPORTED</h1>
+                    <p>Binary.com does not support your browser. Please update your browser.</p>
+                    <a href="https://www.binary.com/">Update Browser</a>
+                </div>
+            );
         }
         return (
             <div>
-                {this.state.unknown ? '' : ''}
+                {this.state.unknown ? NotGuaranteed : null }
 
                 {this.props.children}
             </div>

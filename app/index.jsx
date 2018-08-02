@@ -23,7 +23,7 @@ import './doorbell';
 import { ConnectionManager, StreamManager } from './connection';
 import Notification from './Notification.jsx';
 import ChartNotifier from './ChartNotifier.js';
-import SupportDetection from './SupportDetection';
+import SupportDetection from './SupportDetection.jsx';
 
 
 if (window.location.host.endsWith('binary.com')) {
