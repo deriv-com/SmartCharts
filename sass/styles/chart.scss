@@ -976,11 +976,9 @@ html, body {
     background-color: transparent !important;
 }
 
-
-
 $spot-color: #0298d3;
 
-.cq-spot{
+.cq-spot {
     width: 6px;
     height: 6px;
     border-radius: 50%;
@@ -992,12 +990,24 @@ $spot-color: #0298d3;
 }
 
 @-webkit-keyframes pulse {
-    0% {@include box-shadow-raw(0 0 0 0 rgba($spot-color, 0.6));}
-    70% {@include box-shadow-raw(0 0 0 10px rgba($spot-color, 0));}
-    100% {@include box-shadow-raw(0 0 0 0 rgba($spot-color, 0));}
+    0% {
+        @include box-shadow-raw(0 0 0 0 rgba($spot-color, 0.6));
+    }
+    70% {
+        @include box-shadow-raw(0 0 0 10px rgba($spot-color, 0));
+    }
+    100% {
+        @include box-shadow-raw(0 0 0 0 rgba($spot-color, 0));
+    }
 }
 @keyframes pulse {
-    0% {@include box-shadow-raw(0 0 0 0 rgba($spot-color, 0.6));}
-    70% {@include box-shadow-raw(0 0 0 10px rgba($spot-color, 0));}
-    100% {@include box-shadow-raw(0 0 0 0 rgba($spot-color, 0));}
+    0% {
+        @include box-shadow-raw(0 0 0 0 rgba($spot-color, 0.6));
+    }
+    70% {
+        @include box-shadow-raw(0 0 0 10px rgba($spot-color, 0));
+    }
+    100% {
+        @include box-shadow-raw(0 0 0 0 rgba($spot-color, 0));
+    }
 }
