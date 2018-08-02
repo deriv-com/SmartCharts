@@ -10,49 +10,103 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Vietnamese\n"
 "Language: vi_VN\n"
-"PO-Revision-Date: 2018-07-31 02:40\n"
+"PO-Revision-Date: 2018-08-01 09:21\n"
 
-msgid "Favorites"
-msgstr "Yêu thích"
+msgid " already exists."
+msgstr ""
 
-msgid "There are no favorites yet."
-msgstr "Không có mục yêu thích nào."
+msgid "[symbol] market is presently closed."
+msgstr "[symbol] thị trường hiện đã đóng cửa."
 
-msgid "CLOSED"
-msgstr "ĐÃ ĐÓNG"
+msgid "\"Mass Index\" or \"Doji Star\""
+msgstr "\"Mass Index\" hay \"Doji Star\""
 
-msgid "PRICE"
-msgstr "GIÁ"
+msgid "Active"
+msgstr "Hoạt động"
 
-msgid "OPEN"
-msgstr "MỞ"
+msgid "Add New"
+msgstr ""
+
+msgid "Annotation"
+msgstr "Chú thích"
+
+msgid "Asset Information"
+msgstr "Thông tin tài sản"
+
+msgid "Average Line"
+msgstr "Đường trung bình"
+
+msgid "Baseline"
+msgstr "Đường cơ sở"
+
+msgid "Box Size"
+msgstr "Kích thước hộp"
+
+msgid "Callout"
+msgstr "Chú thích"
+
+msgid "CANCEL"
+msgstr ""
+
+msgid "Candle"
+msgstr "Nến"
+
+msgid "Channel"
+msgstr "Kênh"
+
+msgid "Chart data is not available for this symbol."
+msgstr "Biểu đồ dữ liệu không khả dụng cho ký hiệu này."
+
+msgid "Chart types"
+msgstr "Loại biểu đồ"
+
+msgid "Clear All"
+msgstr "Xóa tất cả"
 
 msgid "CLOSE"
 msgstr "ĐÓNG"
 
-msgid "HIGH"
-msgstr "CAO"
+msgid "CLOSED"
+msgstr "ĐÃ ĐÓNG"
 
-msgid "LOW"
-msgstr "THẤP"
+msgid "Colored Dot"
+msgstr "Dấu chấm màu"
 
-msgid "Underlying Assets"
-msgstr "Tài sản cơ sở"
+msgid "Comparison"
+msgstr "So sánh"
 
-msgid "Share"
-msgstr "Chia sẻ"
+msgid "Continuous"
+msgstr "Liên tục"
 
-msgid "Share / Download Chart"
-msgstr "Chia sẽ / Tải Về Biểu Đồ"
+msgid "Copied!"
+msgstr "Đã sao chép!"
 
-msgid "Share link"
-msgstr "Chia sẻ liên kết"
+msgid "Copy to clipboard"
+msgstr "Sao chép vào clipboard"
 
-msgid "Failed to generate link"
-msgstr "Không thể tạo liên kết"
+msgid "Countdown"
+msgstr "Đếm ngược"
 
-msgid "Retry"
-msgstr "Thử lại"
+msgid "Crosshair"
+msgstr "Chữ thập"
+
+msgid "Crossline"
+msgstr "Đường giao nhau"
+
+msgid "Dark Mode"
+msgstr "Chế độ tối"
+
+msgid "Day"
+msgstr "Ngày"
+
+msgid "DONE"
+msgstr "HOÀN THÀNH"
+
+msgid "Doodle"
+msgstr "Nháp"
+
+msgid "Dot"
+msgstr "Dấu chấm"
 
 msgid "Download chart"
 msgstr "Tải về biểu đồ"
@@ -60,197 +114,26 @@ msgstr "Tải về biểu đồ"
 msgid "Draw tools"
 msgstr "Công cụ vẽ"
 
-msgid "Clear All"
-msgstr "Xóa tất cả"
+msgid "Ellipse"
+msgstr "Hình elíp"
 
-msgid "Measure"
-msgstr "Đo"
-
-msgid "Zoom out"
-msgstr "Thu nhỏ"
-
-msgid "Zoom in"
-msgstr "Phóng to"
-
-msgid "Interval"
-msgstr "Khoảng Thời Gian"
-
-msgid "Tick"
-msgstr "Giây"
-
-msgid "Minute"
-msgstr "Phút"
-
-msgid "Hour"
-msgstr "Giờ"
-
-msgid "Day"
-msgstr "Ngày"
-
-msgid "Crosshair"
-msgstr "Chữ thập"
-
-msgid "Templates"
-msgstr "Mẫu"
-
-msgid "Template name"
-msgstr "Tên mẫu"
-
-msgid "Add New"
-msgstr ""
-
-msgid " already exists."
-msgstr ""
-
-msgid "Would you like to overwrite it?"
-msgstr ""
-
-msgid "CANCEL"
-msgstr ""
-
-msgid "OVERWRITE"
-msgstr ""
-
-msgid "Comparison"
-msgstr "So sánh"
-
-msgid "Indicators"
-msgstr "Chỉ số"
-
-msgid "Chart types"
-msgstr "Loại biểu đồ"
-
-msgid "Line"
-msgstr "Dòng kẻ"
-
-msgid "Dot"
-msgstr "Dấu chấm"
-
-msgid "Colored Dot"
-msgstr "Dấu chấm màu"
-
-msgid "Spline"
-msgstr "Chốt"
-
-msgid "Baseline"
-msgstr "Đường cơ sở"
-
-msgid "Candle"
-msgstr "Nến"
-
-msgid "OHLC"
-msgstr "OHLC"
-
-msgid "Hollow Candle"
-msgstr "Nến rỗng"
-
-msgid "Heikin Ashi"
-msgstr "Heikin Ashi"
-
-msgid "Kagi"
-msgstr "Kagi"
-
-msgid "Line Break"
-msgstr "Ngắt dòng"
-
-msgid "Renko"
-msgstr "Renko"
-
-msgid "Range Bars"
-msgstr "Phạm vi các cột"
-
-msgid "Point & Figure"
-msgstr "Điểm & hình"
-
-msgid "Reversal Percentage"
-msgstr "Tỷ lệ phần trăm đảo ngược"
-
-msgid "Range"
-msgstr "Phạm vi"
-
-msgid "Price Lines"
-msgstr "Dòng giá"
-
-msgid "Box Size"
-msgstr "Kích thước hộp"
-
-msgid "Reversal"
-msgstr "Đảo ngược"
-
-msgid "RESET"
-msgstr "THIẾT LẬP LẠI"
-
-msgid "DONE"
-msgstr "HOÀN THÀNH"
-
-msgid "Settings"
-msgstr "Cài đặt"
-
-msgid "Position"
-msgstr "Phiên"
-
-msgid "Dark Mode"
-msgstr "Chế độ tối"
-
-msgid "Countdown"
-msgstr "Đếm ngược"
-
-msgid "Asset Information"
-msgstr "Thông tin tài sản"
-
-msgid "Language"
-msgstr "Ngôn ngữ"
-
-msgid "[symbol] market is presently closed."
-msgstr "[symbol] thị trường hiện đã đóng cửa."
-
-msgid "Streaming for [symbol] is not available due to license restrictions"
-msgstr "Truyền cho [symbol] không khả dụng do các hạn chế cấp phép"
-
-msgid "Copy to clipboard"
-msgstr "Sao chép vào clipboard"
-
-msgid "Copied!"
-msgstr "Đã sao chép!"
+msgid "Failed to generate link"
+msgstr "Không thể tạo liên kết"
 
 msgid "Failed!"
 msgstr "Thất bại!"
 
-msgid "Search..."
-msgstr "Tìm kiếm..."
-
-msgid "Annotation"
-msgstr "Chú thích"
-
-msgid "Average Line"
-msgstr "Đường trung bình"
-
-msgid "Callout"
-msgstr "Chú thích"
-
-msgid "Channel"
-msgstr "Kênh"
-
-msgid "Continuous"
-msgstr "Liên tục"
-
-msgid "Crossline"
-msgstr "Đường giao nhau"
-
-msgid "Doodle"
-msgstr "Nháp"
-
-msgid "Ellipse"
-msgstr "Hình elíp"
-
-msgid "Fib Retracement"
-msgstr "Hồi qui Fibonacci"
+msgid "Favorites"
+msgstr "Yêu thích"
 
 msgid "Fib Arc"
 msgstr "Đường cung Fibonacci"
 
 msgid "Fib Fan"
 msgstr "Cánh quạt Fibonacci"
+
+msgid "Fib Retracement"
+msgstr "Hồi qui Fibonacci"
 
 msgid "Fib Time Zone"
 msgstr "Múi giờ Fibonacci"
@@ -261,14 +144,80 @@ msgstr "Cánh quạt Gann"
 msgid "Gartley"
 msgstr "Gartley"
 
+msgid "Heikin Ashi"
+msgstr "Heikin Ashi"
+
+msgid "HIGH"
+msgstr "CAO"
+
+msgid "Hollow Candle"
+msgstr "Nến rỗng"
+
 msgid "Horizontal"
 msgstr "Theo chiều ngang"
+
+msgid "Hour"
+msgstr "Giờ"
+
+msgid "Indicators"
+msgstr "Chỉ số"
+
+msgid "Interval"
+msgstr "Khoảng Thời Gian"
+
+msgid "Kagi"
+msgstr "Kagi"
+
+msgid "Language"
+msgstr "Ngôn ngữ"
+
+msgid "Line"
+msgstr "Dòng kẻ"
+
+msgid "Line Break"
+msgstr "Ngắt dòng"
+
+msgid "LOW"
+msgstr "THẤP"
+
+msgid "Measure"
+msgstr "Đo"
+
+msgid "Minute"
+msgstr "Phút"
+
+msgid "OHLC"
+msgstr "OHLC"
+
+msgid "OPEN"
+msgstr "MỞ"
+
+msgid "OVERWRITE"
+msgstr ""
 
 msgid "Pitchfork"
 msgstr "Pitchfork"
 
+msgid "Point & Figure"
+msgstr "Điểm & hình"
+
+msgid "Position"
+msgstr "Phiên"
+
+msgid "PRICE"
+msgstr "GIÁ"
+
+msgid "Price Lines"
+msgstr "Dòng giá"
+
 msgid "Quadrant Lines"
 msgstr "Đường góc phần tư"
+
+msgid "Range"
+msgstr "Phạm vi"
+
+msgid "Range Bars"
+msgstr "Phạm vi các cột"
 
 msgid "Ray"
 msgstr "Ray"
@@ -279,8 +228,35 @@ msgstr "Hình chữ nhật"
 msgid "Regression Line"
 msgstr "Hồi qui tuyến"
 
+msgid "Renko"
+msgstr "Renko"
+
+msgid "RESET"
+msgstr "THIẾT LẬP LẠI"
+
+msgid "Retry"
+msgstr "Thử lại"
+
+msgid "Reversal"
+msgstr "Đảo ngược"
+
+msgid "Reversal Percentage"
+msgstr "Tỷ lệ phần trăm đảo ngược"
+
+msgid "right-click to delete"
+msgstr "nhấp chuột phải để xóa"
+
+msgid "right-click to manage"
+msgstr "nhấp chuột phải để quản lý"
+
+msgid "Search..."
+msgstr "Tìm kiếm..."
+
 msgid "Segment"
 msgstr "Phân khúc"
+
+msgid "Settings"
+msgstr "Cài đặt"
 
 msgid "Shape - Arrow"
 msgstr "Hình dạng - mũi tên"
@@ -300,11 +276,47 @@ msgstr "Hình dạng - Trái tim"
 msgid "Shape - Star"
 msgstr "Hình dạng - Ngôi sao"
 
+msgid "Share"
+msgstr "Chia sẻ"
+
+msgid "Share / Download Chart"
+msgstr "Chia sẽ / Tải Về Biểu Đồ"
+
+msgid "Share link"
+msgstr "Chia sẻ liên kết"
+
 msgid "Speed Resistance Arc"
 msgstr "Đường cung kháng tốc"
 
 msgid "Speed Resistance Line"
 msgstr "Tuyến kháng tốc"
+
+msgid "Spline"
+msgstr "Chốt"
+
+msgid "Streaming for [symbol] is not available due to license restrictions"
+msgstr "Truyền cho [symbol] không khả dụng do các hạn chế cấp phép"
+
+msgid "tap to manage"
+msgstr ""
+
+msgid "Template name"
+msgstr "Tên mẫu"
+
+msgid "Templates"
+msgstr "Mẫu"
+
+msgid "There are no active comparisons yet."
+msgstr "Không có sự so sánh đang hoạt động nào."
+
+msgid "There are no active indicators yet."
+msgstr "Chưa có chỉ số hoạt động nào."
+
+msgid "There are no favorites yet."
+msgstr "Không có mục yêu thích nào."
+
+msgid "Tick"
+msgstr "Giây"
 
 msgid "Time Cycle"
 msgstr "Chu kỳ thời gian"
@@ -312,32 +324,20 @@ msgstr "Chu kỳ thời gian"
 msgid "Tirone Levels"
 msgstr "Cấp độ Tirone"
 
+msgid "Underlying Assets"
+msgstr "Tài sản cơ sở"
+
 msgid "Vertical"
 msgstr "Theo chiều dọc"
 
-msgid "Active"
-msgstr "Hoạt động"
-
-msgid "There are no active comparisons yet."
-msgstr "Không có sự so sánh đang hoạt động nào."
-
-msgid "\"Mass Index\" or \"Doji Star\""
-msgstr "\"Mass Index\" hay \"Doji Star\""
-
-msgid "There are no active indicators yet."
-msgstr "Chưa có chỉ số hoạt động nào."
-
-msgid "right-click to delete"
-msgstr "nhấp chuột phải để xóa"
-
-msgid "right-click to manage"
-msgstr "nhấp chuột phải để quản lý"
-
-msgid "tap to manage"
+msgid "Would you like to overwrite it?"
 msgstr ""
 
-msgid "Chart data is not available for this symbol."
-msgstr "Biểu đồ dữ liệu không khả dụng cho ký hiệu này."
+msgid "Zoom in"
+msgstr "Phóng to"
+
+msgid "Zoom out"
+msgstr "Thu nhỏ"
 
 msgid "RSI"
 msgstr "RSI"
