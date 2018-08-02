@@ -79,7 +79,7 @@ const shareOrigin = window.location.href.split('?')[0];
 class App extends Component {
     constructor(props) {
         super(props);
-        const notifier = new ChartNotifier();
+        this.notifier = new ChartNotifier();
         const settings = createObjectFromLocalStorage('smartchart-setting');
         if (settings) { this.startingLanguage = settings.language; }
         connectionManager.on(
@@ -90,11 +90,11 @@ class App extends Component {
             ConnectionManager.EVENT_CONNECTION_REOPEN,
             () => this.setState({ isConnectionOpened: true }),
         );
-        this.state = { settings, isConnectionOpened: true, notifier };
+        this.state = { settings, isConnectionOpened: true };
     }
 
     symbolChange = (symbol) => {
-        this.state.notifier.removeByCategory('activesymbol');
+        this.notifier.removeByCategory('activesymbol');
         console.log('Symbol has changed to:', symbol);
     };
 
@@ -117,7 +117,7 @@ class App extends Component {
                 <AssetInformation />
                 <ComparisonList />
                 <Notification
-                    notifier={this.state.notifier}
+                    notifier={this.notifier}
                 />
             </React.Fragment>
         );
@@ -125,7 +125,7 @@ class App extends Component {
         return (
             <SmartChart
                 onSymbolChange={symbol => this.symbolChange(symbol)}
-                onMessage={e => this.state.notifier.notify(e)}
+                onMessage={e => this.notifier.notify(e)}
                 isMobile={CIQ.isMobile}
                 enableRouting
                 topWidgets={renderTopWidgets}

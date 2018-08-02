@@ -4,12 +4,13 @@ import MarkerStore from '../store/MarkerStore';
 import '../../sass/components/_markers.scss';
 
 const Marker = ({
+    display,
     left,
     bottom,
     children,
     className,
 }) => (
-    <div className={`stx-marker ${className || ''}`} style={{ left, bottom }}>
+    <div className={`stx-marker ${className || ''}`} style={{ display, left, bottom }}>
         {children}
     </div>
 );
@@ -21,16 +22,10 @@ export default connect(
         bottom: store.bottom,
         children: store.children,
         className: store.className,
+        display: store.display,
     }),
-    (store, {
-        yPositioner, xPositioner, x, y, children, className,
-    }) => {
-        store.setX(x);
-        store.setXPositioner(xPositioner);
-        if (yPositioner) { store.yPositioner = yPositioner; }
-        if (y) { store.y = y; }
-        store.children = children;
-        store.className = className;
+    (store, props) => {
+        store.updateProps(props);
     },
 )(Marker);
 

@@ -6,6 +6,7 @@ import { getUTCEpoch } from '../utils';
 class Feed {
     static get EVENT_MASTER_DATA_UPDATE() { return 'EVENT_MASTER_DATA_UPDATE'; }
     static get EVENT_COMPARISON_DATA_UPDATE() { return 'EVENT_COMPARISON_DATA_UPDATE'; }
+    static get EVENT_ON_PAGINATION() { return 'EVENT_ON_PAGINATION'; }
 
     constructor(binaryApi, stx, mainStore) {
         this._stx = stx;
@@ -180,6 +181,10 @@ class Feed {
         }
 
         callback(result);
+        const isMainChart = this._stx.chart.symbol === symbol;
+        if (isMainChart) { // ignore comparisons
+            this._emitter.emit(Feed.EVENT_ON_PAGINATION, { start, end });
+        }
     }
 
     unsubscribeAll() {
@@ -253,6 +258,10 @@ class Feed {
 
     onComparisonDataUpdate(callback) {
         this._emitter.on(Feed.EVENT_COMPARISON_DATA_UPDATE, callback);
+    }
+
+    onPagination(callback) {
+        this._emitter.on(Feed.EVENT_ON_PAGINATION, callback);
     }
 
     setConnectionOpened(isOpened) {
