@@ -13,6 +13,7 @@ export default class MarkerStore {
     children;
     x;
     y;
+    @observable display;
     @observable left;
     @observable bottom;
 
@@ -23,6 +24,7 @@ export default class MarkerStore {
         this.panel = this.chart.panel;
         this.yAxis = this.panel.yAxis;
 
+        this.mainStore.chart.feed.onPagination(this.updateMarkerTick);
         this._listenerId = this.stx.addEventListener('newChart', this.updateMarkerTick);
         this._injectionId = this.stx.prepend('positionMarkers', this.updatePosition);
 
@@ -86,14 +88,19 @@ export default class MarkerStore {
             if (!quote) quote = dataSet[dataSet.length - 1]; // Future ticks based off the value of the current quote
         }
 
-        if (left < -MARKER_MAX_WIDTH || left > this.chart.width + MARKER_MAX_WIDTH) {
-            return; // Do not update the marker if it is not visible
+        const isMarkerExceedRange = left < -MARKER_MAX_WIDTH || left > this.chart.width + MARKER_MAX_WIDTH;
+        if (isMarkerExceedRange) {
+            this.hideMarker();
+            return;
         }
 
         this.left = left;
 
         // Y axis positioning logic
-        if (this.yPositioner === 'none') { return; }
+        if (this.yPositioner === 'none') {
+            this.showMarker();
+            return;
+        }
 
         let val;
         const showsHighs = this.stx.chart.highLowBars || this.stx.highLowBars[this.stx.layout.chartType];
@@ -137,6 +144,7 @@ export default class MarkerStore {
         }
 
         this.bottom = bottom | 0;
+        this.showMarker();
     }
 
     @action.bound updateMarkerTick() {
@@ -178,6 +186,10 @@ export default class MarkerStore {
     }
 
     hideMarker() {
-        this.left = -1000;
+        this.display = 'none';
+    }
+
+    showMarker() {
+        this.display = undefined;
     }
 }
