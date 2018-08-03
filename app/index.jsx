@@ -79,14 +79,22 @@ const shareOrigin = window.location.href.split('?')[0];
 class App extends Component {
     constructor(props) {
         super(props);
-        const notifier = new ChartNotifier();
+        this.notifier = new ChartNotifier();
         const settings = createObjectFromLocalStorage('smartchart-setting');
         if (settings) { this.startingLanguage = settings.language; }
-        this.state = { settings, notifier };
+        connectionManager.on(
+            ConnectionManager.EVENT_CONNECTION_CLOSE,
+            () => this.setState({ isConnectionOpened: false }),
+        );
+        connectionManager.on(
+            ConnectionManager.EVENT_CONNECTION_REOPEN,
+            () => this.setState({ isConnectionOpened: true }),
+        );
+        this.state = { settings, isConnectionOpened: true };
     }
 
     symbolChange = (symbol) => {
-        this.state.notifier.removeByCategory('activesymbol');
+        this.notifier.removeByCategory('activesymbol');
         console.log('Symbol has changed to:', symbol);
     };
 
@@ -101,21 +109,23 @@ class App extends Component {
     };
     startingLanguage = 'en';
     render() {
+        const { settings, isConnectionOpened } = this.state;
+
         const renderTopWidgets = () => (
             <React.Fragment>
                 <ChartTitle />
                 <AssetInformation />
                 <ComparisonList />
                 <Notification
-                    notifier={this.state.notifier}
+                    notifier={this.notifier}
                 />
             </React.Fragment>
         );
-        const { settings } = this.state;
+
         return (
             <SmartChart
                 onSymbolChange={symbol => this.symbolChange(symbol)}
-                onMessage={e => this.state.notifier.notify(e)}
+                onMessage={e => this.notifier.notify(e)}
                 isMobile={CIQ.isMobile}
                 enableRouting
                 topWidgets={renderTopWidgets}
@@ -126,6 +136,7 @@ class App extends Component {
                 shareOrigin={shareOrigin}
                 settings={settings}
                 onSettingsChange={this.saveSettings}
+                isConnectionOpened={isConnectionOpened}
             />
         );
     }

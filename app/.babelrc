@@ -7,4 +7,23 @@
         "transform-class-properties",
         "transform-object-rest-spread",
     ],
+    "env": {
+        "test": {
+            "presets": [["env"], "react"],"plugins": [
+                "transform-decorators-legacy",
+                "transform-class-properties",
+                "transform-object-rest-spread",
+                "transform-runtime",
+                "transform-async-to-generator",
+                "istanbul",
+                ["inline-react-svg", {
+                    "svgo": {
+                        "plugins": [
+                            { "cleanupIDs": false },
+                            { "removeTitle": true }
+                        ]
+                    }
+                }]
+            ] }
+    }
 }

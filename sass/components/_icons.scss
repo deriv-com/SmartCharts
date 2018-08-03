@@ -19,7 +19,7 @@
     &.ciq-active-favorite {
         svg > g > g > path {
             @include themify($themes) {
-                fill: themed('StarIconFav');
+                fill: themed('StarIconFav') !important;
                 stroke: themed('StarIconFav') !important;
             }
         }
