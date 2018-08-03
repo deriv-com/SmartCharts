@@ -1,29 +1,27 @@
 
 $themes: (
     light: (
-        DefaultMain:            #ffffff,
-        DefaultBg:              #ffffff,
-        DefaultText:            #AAACBA,
+        DefaultMain:            #fff,
+        DefaultBg:              #fff,
+        DefaultText:            #aaacba,
         DefaultBorder:          rgba(170, 172, 186, 0.3),
-
 
         /**
         * Chart
         */
-        ChartBg: #ffffff,
+        ChartBg: #fff,
         ChartBorder: #e9e9ed,
-        ChartText: #AAACBA,
+        ChartText: #aaacba,
         ChartCandleBg: #2a3052,
-        ChartCandleText: #ffffff,
+        ChartCandleText: #fff,
         ChartGrid: rgba(170, 172, 186, 0.08),
         ChartIndicateText: #333333,
         ChartIndicateDivide: #e9e9ed,
 
-
         /**
         * Menu
         */
-        MenuBg: #ffffff,
+        MenuBg: #fff,
         MenuIcon: #333333,
         MenuText: #333333,
         MenuBorder: #e9e9ed,
@@ -35,43 +33,39 @@ $themes: (
         MenuActiveText: #333333,
         MenuActiveBorder: #2a3052,
 
-
         /**
         * Chart Title
         */
-        ChartTitleBg: #ffffff,
+        ChartTitleBg: #fff,
         ChartTitleText: #2a3052,
         ChartTitleBorder: #e9e9ed,
         ChartTitlePriceText: #333333,
 
-
         /**
         * List
         */
-        ListLiBg: #ffffff,
+        ListLiBg: #fff,
         ListLiText: #333333,
         ListLiBorder: #e9e9ed,
         ListActiveLiBg: #f4f4f6,
         ListActiveLiText: #2a3052,
         ListActiveLiBorder: #e9e9ed,
 
-
         /**
         * Dialog
         */
         DialogBorder: rgba(170, 172, 186, 0.5),
-        DialogHeadBg: #ffffff,
+        DialogHeadBg: #fff,
         DialogHeadText: #141414,
         DialogHeadBorder: #e9e9ed,
         DialogHeadIcon: #141414,
         DialogHeadActiveBorder: #e9e9ed,
         DialogBodyBg: #fafafb,
         DialogBodyText: #333333,
-        DialogFootBg: #ffffff,
+        DialogFootBg: #fff,
         DialogFootText: #333333,
-        DialogFootBorder: #ffffff,
-        DialogSettingBodyBg: #ffffff,
-
+        DialogFootBorder: #fff,
+        DialogSettingBodyBg: #fff,
 
         /**
         * ChartType
@@ -81,7 +75,6 @@ $themes: (
         ChartTypeActiveListIcon: #2a3052,
         ChartTypeActiveListBorderRight: #f4f4f6,
 
-
         /**
         * Chart Setting
         */
@@ -89,89 +82,79 @@ $themes: (
         ChartSettingIcon: rgba(170, 172, 186, 0.3),
         ChartSettingActiveIcon: #2a3052,
 
-
         /**
         * Template
         */
-        TemplateAddBg: #AAACBA,
-        TemplateAddIcon: #2A3052,
+        TemplateAddBg: #aaacba,
+        TemplateAddIcon: #2a3052,
         TemplateText:  #333333,
         TemplateInputText:  #333333,
         TemplateBtn: #2a3052,
         TemplateActiveText: #e2e2e2,
         TemplateActiveIcon: #333333,
 
-
         /**
         * Tooltip
         */
         TooltipBg: rgba(21, 33, 45, 0.88),
-        TooltipText: #ffffff,
+        TooltipText: #fff,
         TooltipShadow: rgba(21, 33, 45, 0.32),
-
 
         /**
         * Color Picker, Download button
         */
-        ColorPickerBg: #ffffff,
+        ColorPickerBg: #fff,
         ColorPickerBorder: #e9e9ed,
-
 
         /**
         * Dropdown
         */
         DropdownText: #333333,
-        DropdownBg: #ffffff,
+        DropdownBg: #fff,
         DropdownBorder: #e9e9ed,
-
 
         /**
         * Slider
         */
         SliderText: #2a3052,
-        SliderHandleBg: #ffffff,
+        SliderHandleBg: #fff,
         SliderHandleBorder: #2a3052,
         SliderBarBg: #e9e9ed,
         SliderBarActiveBg: #2a3052,
 
-
         /**
         * Switch
         */
-        SwitchText: #ffffff,
-        SwitchHandle: #ffffff,
+        SwitchText: #fff,
+        SwitchHandle: #fff,
         SwitchOffBg: #e9e9ed,
-        SwitchOnBg: #4CAF50,
-
+        SwitchOnBg: #4caf50,
 
         /**
         * ComparisonItem
         */
         ComparisonItemText: #333333,
         ComparisonItemIcon: #2a3052,
-        ComparisonItemHoverBg: #ffffff,
-
-
+        ComparisonItemHoverBg: #fff,
 
         /**
         * Shared
         */
         SharedInput: #333333,
-        SharedInputBg: #ffffff,
+        SharedInputBg: #fff,
         SharedInputBorder: #e9e9ed,
         SharedInputText: #333333,
         SharedBtnBg: #2a3052,
-        SharedBtnIcon: #ffffff,
+        SharedBtnIcon: #fff,
         SharedBtnDownloadText: #51adf6,
         SharedBtnDownloadBorder: rgba(170, 172, 186, 0.3),
-
 
         /**
         * Time
         */
         TimeMenuActiveIconBorder: #f4f4f6,
-        TimeBg: #ffffff,
-        TimeUnitBg: #ffffff,
+        TimeBg: #fff,
+        TimeUnitBg: #fff,
         TimeUnitColor: #333333,
         TimeUnitItemBorder: #e9e9ed,
         TimeActiveUnitBg: #f4f4f6,
@@ -180,17 +163,15 @@ $themes: (
 
         TimeColor: #2a3052,
         TimeActiveItemBg: #2a3052,
-        TimeActiveItemColor: #ffffff,
+        TimeActiveItemColor: #fff,
         TimeActiveItemBorder: #2a3052,
         TimeHoverItemColor: #2a3052,
         TimeHoverItemBorder: #2a3052,
-
 
         /**
         * Asset Information
         */
         AssetInfoText: #333333,
-
 
         /**
         * Categorical Display
@@ -203,19 +184,19 @@ $themes: (
         CatDisplaySearchBorder: #e9e9ed,
         CatDisplayActiveSearchBorder: #b0b3bf,
 
-        CatDisplayFilterBg: #ffffff,
+        CatDisplayFilterBg: #fff,
         CatDisplayFilterText: #333333,
         CatDisplayFilterIcon: #333333,
-        CatDisplayFilterInputText: #ffffff,
+        CatDisplayFilterInputText: #fff,
         CatDisplayActiveFilterBg: #f4f4f6,
         CatDisplayActiveFilterText: #2a3052,
         CatDisplayActiveFilterIcon: #2a3052,
         CatDisplayActiveFilterBorder: #2a3052,
 
         CatDisplayCatTitleText: #333333,
-        CatDisplayCatContentBg: #ffffff,
+        CatDisplayCatContentBg: #fff,
         CatDisplayCatContentBorder: #e9e9ed,
-        CatDisplayCatContentTitleBg: #ffffff,
+        CatDisplayCatContentTitleBg: #fff,
         CatDisplayCatContentTitleText: #333333,
         CatDisplayCatContentIcon: #2a3052,
         CatDisplayCatContentHover: #f4f4f6,
@@ -224,118 +205,109 @@ $themes: (
         * Crosshair
         */
         CrosshairBg: rgba(21, 33, 45, 0.88),
-        CrosshairText: #FFFFFF,
-        CrosshairBorder: rgba(21,33,45,0.88),
-        CrosshairAxis: #4A4F6C,
-        CrosshairLabel: #4A4F6C,
+        CrosshairText: #fff,
+        CrosshairBorder: rgba(21, 33, 45, 0.88),
+        CrosshairAxis: #4a4f6c,
+        CrosshairLabel: #4a4f6c,
 
         /**
         * Icon
         */
-        StarIconFav: #E98024,
+        StarIconFav: #e98024,
     ),
     dark: (
         DefaultMain:            #2a3052,
         DefaultBg:              #2a3052,
-        DefaultText:            #ffffff,
+        DefaultText:            #fff,
         DefaultBorder:          rgba(170, 172, 186, 0.3),
-
 
         /**
         * Chart
         */
         ChartBg: #2a3052,
         ChartBorder: rgba(170, 172, 186, 0.3),
-        ChartText: #AAACBA,
-        ChartCandleBg: #ffffff,
+        ChartText: #aaacba,
+        ChartCandleBg: #fff,
         ChartCandleText: #2a3052,
         ChartGrid: rgba(170, 172, 186, 0.08),
-        ChartIndicateText: #ffffff,
+        ChartIndicateText: #fff,
         ChartIndicateDivide: rgba(170, 172, 186, 0.3),
-
 
         /**
         * Menu
         */
         MenuBg: #2a3052,
         MenuBorder: rgba(170, 172, 186, 0.1),
-        MenuIcon: #AAACBA,
-        MenuText: #AAACBA,
+        MenuIcon: #aaacba,
+        MenuText: #aaacba,
 
         MenuHoverBg: #555975,
         MenuHoverIconBg: #555975,
 
         MenuActiveBg: #555975,
-        MenuActiveText: #ffffff,
-        MenuActiveIcon: #ffffff,
+        MenuActiveText: #fff,
+        MenuActiveIcon: #fff,
         MenuActiveBorder: #fff,
-
 
         /**
         * Chart Title
         */
         ChartTitleBg: #2a3052,
-        ChartTitleText: #AAACBA,
+        ChartTitleText: #aaacba,
         ChartTitleBorder: rgba(170, 172, 186, 0.3),
         ChartTitlePriceText: rgb(179, 174, 174),
-
 
         /**
         * List
         */
         ListLiBg: #2a3052,
-        ListLiText: #AAACBA,
+        ListLiText: #aaacba,
         ListLiBorder: rgba(170, 172, 186, 0.3),
         ListActiveLiBg: #3f4463,
-        ListActiveLiText: #ffffff,
+        ListActiveLiText: #fff,
         ListActiveLiBorder: #3f4463,
-
 
         /**
         * Dialog
         */
         DialogBorder: rgba(170, 172, 186, 0.2),
         DialogHeadBg: #2a3052,
-        DialogHeadText: #ffffff,
+        DialogHeadText: #fff,
         DialogHeadBorder: #353b5b,
-        DialogHeadIcon: #AAACBA,
-        DialogHeadActiveBorder: #ffffff,
+        DialogHeadIcon: #aaacba,
+        DialogHeadActiveBorder: #fff,
         DialogBodyBg: #353b5b,
         DialogBodyText: #aaacba,
         DialogFootBg: #353b5b,
-        DialogFootText: #ffffff,
+        DialogFootText: #fff,
         DialogFootBorder: #353b5b,
         DialogSettingBodyBg: #353b5b,
-
 
         /**
         * ChartType
         */
-        ChartTypeText: #AAACBA,
-        ChartTypeListIcon: #AAACBA,
-        ChartTypeActiveListIcon: #ffffff,
-        ChartTypeActiveListBorderRight: #ffffff,
-
+        ChartTypeText: #aaacba,
+        ChartTypeListIcon: #aaacba,
+        ChartTypeActiveListIcon: #fff,
+        ChartTypeActiveListBorderRight: #fff,
 
         /**
         * Chart Setting
         */
-        ChartSettingText: #AAACBA,
+        ChartSettingText: #aaacba,
         ChartSettingIcon: rgba(170, 172, 186, 0.3),
         ChartSettingActiveIcon: #e2e2e2,
-
 
         /**
         * Template
         */
-        TemplateAddBg: #AAACBA,
-        TemplateAddIcon: #AAACBA,
+        TemplateAddBg: #aaacba,
+        TemplateAddIcon: #aaacba,
         TemplateText:  #aaacba,
         TemplateInputText:  #d8d8d8,
-        TemplateBtn: #ffffff,
+        TemplateBtn: #fff,
         TemplateActiveText: #e2e2e2,
-        TemplateActiveIcon: #AAACBA,
-
+        TemplateActiveIcon: #aaacba,
 
         /**
         * Tooltip
@@ -344,62 +316,54 @@ $themes: (
         TooltipText: #2a3052,
         TooltipShadow: rgba(21, 33, 45, 0.32),
 
-
         /**
         * Color Picker, Download button
         */
         ColorPickerBg: #2a3052,
         ColorPickerBorder: rgba(170, 172, 186, 0.5),
 
-
         /**
         * Dropdown
         */
-        DropdownText: #ffffff,
+        DropdownText: #fff,
         DropdownBg: #3f4463,
         DropdownBorder: #7f8397,
-
 
         /**
         * Slider
         */
-        SliderText: #ffffff,
+        SliderText: #fff,
         SliderHandleBg: #3f4463,
-        SliderHandleBorder: #ffffff,
+        SliderHandleBorder: #fff,
         SliderBarBg: #7f8397,
-        SliderBarActiveBg: #ffffff,
-
+        SliderBarActiveBg: #fff,
 
         /**
         * Switch
         */
-        SwitchText: #ffffff,
-        SwitchHandle: #ffffff,
+        SwitchText: #fff,
+        SwitchHandle: #fff,
         SwitchOffBg: rgba(170, 172, 186, 0.3),
-        SwitchOnBg: #4CAF50,
-
+        SwitchOnBg: #4caf50,
 
         /**
         * ComparisonItem
         */
-        ComparisonItemText: #ffffff,
-        ComparisonItemIcon: #AAACBA,
+        ComparisonItemText: #fff,
+        ComparisonItemIcon: #aaacba,
         ComparisonItemHoverBg: #3f4463,
-
-
 
         /**
         * Shared
         */
-        SharedInput: #AAACBA,
+        SharedInput: #aaacba,
         SharedInputBg: #2a3052,
         SharedInputBorder: rgba(170, 172, 186, 0.5),
-        SharedInputText: #AAACBA,
+        SharedInputText: #aaacba,
         SharedBtnBg: #2a3052,
-        SharedBtnIcon: #AAACBA,
+        SharedBtnIcon: #aaacba,
         SharedBtnDownloadText: #51adf6,
         SharedBtnDownloadBorder: rgba(170, 172, 186, 0.3),
-
 
         /**
         * Time
@@ -409,49 +373,47 @@ $themes: (
         TimeUnitColor: #aaacba,
         TimeUnitItemBorder: rgba(170, 172, 186, 0.3),
         TimeActiveUnitBg: #4a4f6c,
-        TimeActiveUnitColor: #ffffff,
-        TimeActiveUnitItemBorder: #ffffff,
+        TimeActiveUnitColor: #fff,
+        TimeActiveUnitItemBorder: #fff,
 
         TimeColor: #aaacba,
         TimeActiveItemBg: #555975,
-        TimeActiveItemColor: #ffffff,
+        TimeActiveItemColor: #fff,
         TimeActiveItemBorder: #3f4463,
         TimeHoverItemColor:  #aaacba,
-        TimeHoverItemBorder: #ffffff,
-
+        TimeHoverItemBorder: #fff,
 
         /**
         * Asset Information
         */
-        AssetInfoText: #AAACBA,
-
+        AssetInfoText: #aaacba,
 
         /**
         * Categorical Display
         */
         CatDisplayBg: #353b5b,
-        CatDisplayText: #AAACBA,
+        CatDisplayText: #aaacba,
         CatDisplayBorder: #555975,
 
-        CatDisplaySearchText: #AAACBA,
+        CatDisplaySearchText: #aaacba,
         CatDisplaySearchBorder: rgba(170, 172, 186, 0.3),
-        CatDisplayActiveSearchBorder: #ffffff,
+        CatDisplayActiveSearchBorder: #fff,
 
         CatDisplayFilterBg: #2a3052,
         CatDisplayFilterText: #2a3052,
-        CatDisplayFilterIcon: #AAACBA,
-        CatDisplayFilterInputText: #ffffff,
+        CatDisplayFilterIcon: #aaacba,
+        CatDisplayFilterInputText: #fff,
         CatDisplayActiveFilterBg: #4a4f6c,
         CatDisplayActiveFilterText: #fff,
         CatDisplayActiveFilterBorder: #fff,
-        CatDisplayActiveFilterIcon: #ffffff,
+        CatDisplayActiveFilterIcon: #fff,
 
-        CatDisplayCatTitleText: #ffffff,
+        CatDisplayCatTitleText: #fff,
         CatDisplayCatContentBg: #2a3052,
         CatDisplayCatContentBorder: rgba(170, 172, 186, 0.5),
         CatDisplayCatContentTitleBg: #2a3052,
-        CatDisplayCatContentTitleText: #AAACBA,
-        CatDisplayCatContentIcon: #AAACBA,
+        CatDisplayCatContentTitleText: #aaacba,
+        CatDisplayCatContentIcon: #aaacba,
         CatDisplayCatContentHover: #4a4f6c,
 
         /**
@@ -460,35 +422,31 @@ $themes: (
         CrosshairBg: rgba(255, 255, 255, 0.88),
         CrosshairText: #2a3052,
         CrosshairBorder: #4a4f6c,
-        CrosshairAxis: #ffffff,
-        CrosshairLabel: #4A4F6C,
-        
-
+        CrosshairAxis: #fff,
+        CrosshairLabel: #4a4f6c,
 
         /**
         * Icon
         */
-        StarIconFav: #E98024,
+        StarIconFav: #e98024,
     ),
 );
 
-
-
 @mixin themify($themes: $themes) {
-  @each $theme, $map in $themes {
-
-    .smartcharts-#{$theme} & {
-      $theme-map: () !global;
-      @each $key, $submap in $map {
-        $value: map-get(map-get($themes, $theme), '#{$key}');
-        $theme-map: map-merge($theme-map, ($key: $value)) !global;
-      }
-      @content;
-      $theme-map: null !global;
+    @each $theme, $map in $themes {
+        .smartcharts-#{$theme} & {
+            $theme-map: () !global;
+            @each $key, $submap in $map {
+                $value: map-get(map-get($themes, $theme), '#{$key}');
+                $theme-map: map-merge($theme-map, ($key: $value)) !global;
+            }
+            @content;
+            $theme-map: null !global;
+        }
     }
-  }
 }
+
 @function themed($key) {
-  @return map-get($theme-map, $key);
+    @return map-get($theme-map, $key);
 }
 

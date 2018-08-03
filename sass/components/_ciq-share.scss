@@ -9,14 +9,15 @@
         line-height: 40px;
         font-size: 16px;
         display: flex;
-        .title-text{
+
+        .title-text {
             display: block;
             font-size: 16px;
             line-height: 40px;
             font-weight: 400;
-            padding: 0 .7em;
+            padding: 0 0.7em;
         }
-        .icon-close-menu{
+        .icon-close-menu {
             position: absolute;
             top: 5px;
             right: 5px;
@@ -30,7 +31,8 @@
     .body {
         height: 100%;
         padding: 16px;
-        .loading{
+
+        .loading {
             background: transparent url('../icons/loading/loading-ellipsis.svg') no-repeat scroll center center;
             height: 26px;
             width: 100%;
@@ -39,7 +41,8 @@
         .content {
             display: flex;
             padding: 5px 0;
-            input { 
+
+            input {
                 line-height: 32px;
                 height: 32px;
                 outline: none;
@@ -55,6 +58,7 @@
                     border-left: 1px solid themed('SharedInputBorder');
                     border-bottom: 1px solid themed('SharedInputBorder');
                 }
+
                 g {
                     @include themify($themes) {
                         fill: themed('SharedBtnIcon');
@@ -75,6 +79,7 @@
                     border-bottom: 1px solid themed('SharedInputBorder');
                     background: themed('SharedBtnBg');
                 }
+
                 &:after {
                     width: auto !important;
                     left: auto !important;
@@ -98,36 +103,35 @@
                 @include themify($themes) {
                     color: themed('SharedBtnDownloadText');
                 }
-                &:first-child{
+
+                &:first-child {
                     @include themify($themes) {
                         border-right: 1px solid themed('SharedBtnDownloadBorder');
                     }
                 }
             }
         }
-
         .caption2 {
             margin-top: 10px;
         }
     }
 }
 
-.smartcharts-dark{
+.smartcharts-dark {
     .cq-share {
         .body {
-            .loading{
+            .loading {
                 background: transparent url('../icons/loading/loading-ellipsis-dark.svg') no-repeat scroll center center;
             }
         }
     }
 }
 
-
 /* Mobile Style */
 .smartcharts-mobile {
     .cq-share {
         .title {
-            .icon-close-menu{
+            .icon-close-menu {
                 pointer-events: initial;
                 opacity: 1;
             }

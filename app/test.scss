@@ -4,15 +4,14 @@
     display: flex;
 }
 
-
-
 .grid {
     position: relative;
     display: grid;
     grid-template-rows: 1fr auto auto;
-    grid-template-columns: repeat(12,[col-start] 1fr);
+    grid-template-columns: repeat(12, [col-start] 1fr);
     width: 100%;
     height: 100vh;
+
     .chart-instance {
         position: relative;
         grid-column: col-start/span 12;
@@ -25,7 +24,8 @@
         line-height: 100px;
         transition: line-height 0.5s;
         vertical-align: middle;
-        input[type="number"] {
+
+        input[type='number'] {
             width: 60px;
         }
     }
@@ -36,9 +36,9 @@
 #doorbell-button {
     left: -30px;
     bottom: 30%;
-    background: #4C5794;
+    background: #4c5794;
     color: #fff;
-    border: 1px solid #4C5794;
+    border: 1px solid #4c5794;
     border-bottom: none;
     padding: 4px 8px;
     transform: rotate(90deg);
@@ -51,17 +51,18 @@
 
     input, textarea {
         outline: 0;
+
         &:focus {
-            border: 1px solid #4C5794;
+            border: 1px solid #4c5794;
         }
     }
-
     #doorbell-submit-button {
-        color: #4C5794;
+        color: #4c5794;
         border: none;
-        background: white;
+        background: #fff;
+
         &:hover {
-            background: white;
+            background: #fff;
         }
     }
 }
