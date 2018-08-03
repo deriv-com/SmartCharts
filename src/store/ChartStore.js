@@ -17,7 +17,6 @@ class ChartStore {
         this.mainStore = mainStore;
     }
 
-    onSymbolChange = null;
     contextPromise = new PendingPromise();
     activeSymbols = [];
     rootNode = null;
@@ -145,7 +144,6 @@ class ChartStore {
         this.chartControlsNode = this.rootNode.querySelector('.cq-chart-controls');
 
         const {
-            onSymbolChange,
             initialSymbol,
             requestAPI,
             requestSubscribe,
@@ -163,8 +161,6 @@ class ChartStore {
         chartSetting.setSettings(settings);
         chartSetting.onSettingsChange = onSettingsChange;
         this.isMobile = isMobile;
-        this.onSymbolChange = onSymbolChange;
-
 
         this.onMessage = onMessage;
 
@@ -292,7 +288,6 @@ class ChartStore {
                     this.changeSymbol(initialSymbol);
                 } else if (stxx.chart.symbol) {
                     this.setCurrentActiveSymbols(stxx);
-                    if (this.onSymbolChange) { this.onSymbolChange(this.currentActiveSymbol); }
                 } else {
                     this.changeSymbol(this.defaultSymbol);
                 }
@@ -357,10 +352,6 @@ class ChartStore {
         if (this.currentActiveSymbol
             && symbolObj.symbol === this.currentActiveSymbol.symbol) {
             return;
-        }
-
-        if (this.onSymbolChange) {
-            this.onSymbolChange(symbolObj);
         }
 
         // reset comparisons
@@ -428,6 +419,11 @@ class ChartStore {
             comp.price = srs.lastQuote ? srs.lastQuote.Close : undefined;
             i++;
         }
+    }
+
+    @action.bound updateProps({ settings, isConnectionOpened }) {
+        this.mainStore.chartSetting.setSettings(settings);
+        this.setConnectionIsOpened(isConnectionOpened);
     }
 
     @action.bound destroy() {
@@ -523,7 +519,7 @@ class ChartStore {
     }
 
     setConnectionIsOpened = (isOpened) => {
-        if (this.feed) {
+        if (isOpened !== undefined && this.feed) {
             this.feed.setConnectionOpened(isOpened);
         }
     }
