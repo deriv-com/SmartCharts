@@ -58,10 +58,7 @@ class Menu extends Component {
                         </div>,
                         modalNode,
                     )
-                }
-                {!isMobile &&
-                    dropdown
-                }
+                || (dropdown)}
             </div>
         );
     }

@@ -130,7 +130,7 @@ export default class ChartTypeStore {
 
     @action.bound setType(type) {
         if (typeof type === 'string') {
-            type = this.types.filter(t => t.id === type)[0];
+            type = this.types.find(t => t.id === type);
         }
         if (type.id === this.type.id) {
             this.menu.setOpen(false);
