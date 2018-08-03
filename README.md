@@ -194,7 +194,7 @@ const App = () => (
 
 Here are the following components you can import:
  - Top widgets:
-    - `<ChartTitle />`
+    - `<ChartTitle enabled={true} />` - set `enabled` to `false` to prevent user from changing the symbol from this component.
     - `<AssetInformation />`
     - `<ComparisonList />`
  - Chart controls:
