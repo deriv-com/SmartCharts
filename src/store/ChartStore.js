@@ -285,7 +285,7 @@ class ChartStore {
                  * Updating market close status each 10 minute
                  */
                 this.onMarketClosedStatus();
-                setInterval(this.onMarketClosedStatus, 10 * 60 * 1000);
+                setInterval(this.onMarketClosedStatus.bind(this), 10 * 60 * 1000);
             };
             const href = window.location.href;
             if (href.startsWith(shareOrigin) && href.indexOf('#') !== -1) {
