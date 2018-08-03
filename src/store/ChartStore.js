@@ -5,7 +5,7 @@ import Context from '../components/ui/Context';
 import KeystrokeHub from '../components/ui/KeystrokeHub';
 import '../components/ui/Animation';
 import { BinaryAPI, Feed } from '../feed';
-import { createObjectFromLocalStorage, stableSort } from '../utils';
+import { createObjectFromLocalStorage, stableSort, calculateTimeUnitInterval } from '../utils';
 
 // import '../AddOns';
 
@@ -22,7 +22,11 @@ class ChartStore {
     rootNode = null;
     stxx = null;
     id = null;
-    defaultSymbol = 'R_100';
+    defaults = {
+        symbol: 'R_100',
+        granularity: 0,
+        chartType: 'mountain',
+    };
     enableRouting = null;
     chartNode = null;
     chartControlsNode = null;
@@ -144,7 +148,7 @@ class ChartStore {
         this.chartControlsNode = this.rootNode.querySelector('.cq-chart-controls');
 
         const {
-            initialSymbol,
+            symbol,
             requestAPI,
             requestSubscribe,
             requestForget,
@@ -163,6 +167,8 @@ class ChartStore {
         this.isMobile = isMobile;
 
         this.onMessage = onMessage;
+        const { chartType, granularity } = this.defaults;
+        const { timeUnit, interval } = calculateTimeUnitInterval(granularity);
 
         const stxx = this.stxx = new CIQ.ChartEngine({
             maxMasterDataSize: 5000, // cap size so tick_history requests do not become too large
@@ -178,6 +184,11 @@ class ChartStore {
                     initialMarginTop: 125,
                     initialMarginBottom: 10,
                 },
+            },
+            layout: {
+                chartType,
+                timeUnit,
+                interval,
             },
             minimumLeftBars: 15,
             minimumZoomTicks: 20,
@@ -261,10 +272,10 @@ class ChartStore {
         api.getActiveSymbols().then(({ active_symbols }) => {
             let layoutData = createObjectFromLocalStorage(`layout-${this.id}`);
 
-            // if initialSymbol is different from local storage layoutData, it takes
+            // if symbol is different from local storage layoutData, it takes
             // precedence over layoutData.symbols. Note that layoutData retrieved
             // from URL will take precedence over initialSymbol
-            if (initialSymbol && layoutData && layoutData.symbols[0].symbol !== initialSymbol) {
+            if (symbol && layoutData && layoutData.symbols[0].symbol !== symbol) {
                 // If symbol in layoutData.symbol[0] and initialSymbol are different,
                 // restoreLayout and changeSymbol cannot be executed together or
                 // chartIQ will stream both symbols in the the same chart
@@ -273,23 +284,23 @@ class ChartStore {
 
             const onLayoutDataReady = () => {
                 this.setActiveSymbols(active_symbols);
-                if (layoutData) {
-                    for (const symbol of layoutData.symbols) {
+                if (layoutData && layoutData.symbols) {
+                    for (const cacheSymbol of layoutData.symbols) {
                         // Symbol from cache may be in different language, so replace it with server's
-                        const { symbolObject } = symbol;
+                        const { symbolObject } = cacheSymbol;
                         const updatedSymbol = this.activeSymbols.find(x => symbolObject.symbol === x.symbol);
-                        symbol.symbolObject = updatedSymbol;
+                        cacheSymbol.symbolObject = updatedSymbol;
                     }
 
                     this.restoreLayout(stxx, layoutData);
                 }
 
-                if (initialSymbol && !(layoutData && layoutData.symbols)) {
-                    this.changeSymbol(initialSymbol);
+                if (symbol && !(layoutData && layoutData.symbols)) {
+                    this.changeSymbol(symbol);
                 } else if (stxx.chart.symbol) {
                     this.setCurrentActiveSymbols(stxx);
                 } else {
-                    this.changeSymbol(this.defaultSymbol);
+                    this.changeSymbol(this.defaults.symbol);
                 }
                 this.setLayoutData(context);
             };
@@ -369,16 +380,17 @@ class ChartStore {
         this.categorizedSymbols = this.categorizeActiveSymbols();
     }
 
-    @action.bound newChart(symbolObj) {
+    @action.bound newChart(symbolObj, params) {
         this.loader.show();
-        this.stxx.newChart(symbolObj, null, null, (err) => {
+        const onChartLoad = (err) => {
             this.loader.hide();
             if (err) {
                 /* TODO, symbol not found error */
                 return;
             }
             this.restoreDrawings();
-        });
+        };
+        this.stxx.newChart(symbolObj, null, null, onChartLoad, params);
     }
 
     // Makes requests to tick history API that will replace
@@ -421,9 +433,16 @@ class ChartStore {
         }
     }
 
-    @action.bound updateProps({ settings, isConnectionOpened }) {
+    @action.bound updateProps({ settings, isConnectionOpened, symbol }) {
         this.mainStore.chartSetting.setSettings(settings);
         this.setConnectionIsOpened(isConnectionOpened);
+
+        if (symbol && this.currentActiveSymbol) {
+            const foundSymbol = this.activeSymbols.find(x => x.symbol === symbol);
+            if (foundSymbol && (foundSymbol.symbol !== this.currentActiveSymbol.symbol)) {
+                this.changeSymbol(foundSymbol);
+            }
+        }
     }
 
     @action.bound destroy() {
