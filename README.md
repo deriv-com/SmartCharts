@@ -93,6 +93,8 @@ onSettingsChange | Callback that will be fired each time a setting is changed.
 settings | Sets the chart settings. Refer to [Chart Settings](#chart-settings)
 barriers | Draw chart barriers. Refer to [Barriers API](#barriers-api) for usage details
 enableRouting | Enable routing for dialogs. Defaults to `false`
+onMessage | SmartCharts will notify messages via this method. `onMessage` expect 1 parameter `(message => {})`
+
 
 ### Chart Settings
 

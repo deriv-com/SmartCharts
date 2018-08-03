@@ -1,5 +1,4 @@
 import EventEmitter from 'event-emitter-es6';
-import NotificationStore from '../store/NotificationStore';
 import { TickHistoryFormatter } from './TickHistoryFormatter';
 import PendingPromise from '../utils/PendingPromise';
 import { getUTCEpoch } from '../utils';
@@ -77,9 +76,6 @@ class Feed {
         this._binaryApi.subscribeTickHistory(dataRequest, processTick);
         let response = await tickHistoryPromise;
 
-        // Clear all notifications related to active symbols
-        this._mainStore.notification.removeByCategory('activesymbol');
-
         if (response.error) {
             const errorMessage = response.error.message;
             const errorCode = response.error.code;
@@ -87,16 +83,16 @@ class Feed {
             if (/^(MarketIsClosed|NoRealtimeQuotes)$/.test(errorCode)) {
                 // Although market is closed, we display the past tick history data
                 response = await this._binaryApi.getTickHistory(dataRequest);
-                this._mainStore.notification.notify({
+                this._mainStore.chart.notify({
                     text: errorCode === 'NoRealtimeQuotes' ?
                         errorMessage :
                         t.translate('[symbol] market is presently closed.', tParams),
                     category: 'activesymbol',
                 });
             } else if (errorCode === 'StreamingNotAllowed') {
-                this._mainStore.notification.notify({
+                this._mainStore.chart.notify({
                     text: t.translate('Streaming for [symbol] is not available due to license restrictions', tParams),
-                    type: NotificationStore.TYPE_ERROR,
+                    type: 'error',
                     category: 'activesymbol',
                 });
                 let dataCallback = { quotes: [] };
