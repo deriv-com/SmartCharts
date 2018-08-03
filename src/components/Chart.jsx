@@ -39,8 +39,11 @@ class Chart extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        const { settings, setSettings } = nextProps;
+        const { settings, setSettings, setConnectionIsOpened, isConnectionOpened } = nextProps;
         setSettings(settings);
+        if (isConnectionOpened !== undefined) {
+            setConnectionIsOpened(isConnectionOpened);
+        }
     }
 
     componentWillUnmount() {
@@ -128,4 +131,5 @@ export default connect(({ chart, drawTools, studies, chartSetting, chartType }) 
     setSettings: chartSetting.setSettings,
     chartContainerHeight: chart.chartContainerHeight,
     containerWidth: chart.containerWidth,
+    setConnectionIsOpened: chart.setConnectionIsOpened,
 }))(Chart);
