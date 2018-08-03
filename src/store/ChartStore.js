@@ -224,6 +224,20 @@ class ChartStore {
         this.holderStyle = stxx.chart.panel.holder.style;
 
         stxx.append('deleteHighlighted', this.updateComparisons);
+
+        stxx.append('adjustPanelPositions', function () {
+            let index = 0;
+            for (const x in stxx.panels) {
+                // Hide arrow up for first study
+                if (index == 1) {
+                    const panel = stxx.panels[x];
+                    panel.up.style.display = 'none';
+                    break;
+                }
+                index++;
+            }
+        });
+
         stxx.addEventListener('layout', () => {
             this.saveLayout();
             this.updateChartPanelTop();
