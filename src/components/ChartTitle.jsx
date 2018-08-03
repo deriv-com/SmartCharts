@@ -16,6 +16,8 @@ const ChartTitle = ({
     MarketSelector,
     AnimatedPrice,
     onCloseMenu,
+    setMenuOpen,
+    onChange,
     enabled = true,
 }) => {
     if (!currentSymbol) { return null; }
@@ -51,6 +53,10 @@ const ChartTitle = ({
                 </Menu.Title>
                 <Menu.Body>
                     <MarketSelector
+                        onSelectItem={(x) => {
+                            onChange(x);
+                            setMenuOpen(false);
+                        }}
                         dialogTitle={t.translate('Underlying Assets')}
                         closeMenu={() => onCloseMenu()}
                     />
@@ -74,5 +80,7 @@ export default connect(({ chartTitle: c }) => ({
     MarketSelector: c.categoricalDisplay.connect(CategoricalDisplay),
     AnimatedPrice: c.animatedPrice.connect(AnimatedPrice),
     onCloseMenu: c.menu.onTitleClick,
+    setMenuOpen: c.menu.setOpen,
+    onChange: c.setSymbol,
     isMobile: c.categoricalDisplay.isMobile,
 }))(ChartTitle);
