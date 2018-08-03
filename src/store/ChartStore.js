@@ -277,8 +277,17 @@ class ChartStore {
             }
 
             const onLayoutDataReady = () => {
-                this.restoreLayout(stxx, layoutData);
                 this.setActiveSymbols(active_symbols);
+                if (layoutData) {
+                    for (const symbol of layoutData.symbols) {
+                        // Symbol from cache may be in different language, so replace it with server's
+                        const { symbolObject } = symbol;
+                        const updatedSymbol = this.activeSymbols.find(x => symbolObject.symbol === x.symbol);
+                        symbol.symbolObject = updatedSymbol;
+                    }
+
+                    this.restoreLayout(stxx, layoutData);
+                }
 
                 if (initialSymbol && !(layoutData && layoutData.symbols)) {
                     this.changeSymbol(initialSymbol);
