@@ -6,7 +6,7 @@ import { CloseIcon } from './Icons.jsx';
 import '../../sass/components/_timeperiod.scss';
 
 const Timeperiod = ({
-    setPeriodicity,
+    setGranularity,
     interval,
     timeUnit,
     interval_display,
@@ -44,73 +44,73 @@ const Timeperiod = ({
                 <div className="interval">
                     <div className="row">
                         <span
-                            onClick={() => setPeriodicity(1, 'second')}
+                            onClick={() => setGranularity(0)}
                             className={timeUnit === 'tick' && interval === 1 ? 'selected' : ''}
                         >1
                         </span>
                     </div>
                     <div className="row">
                         <span
-                            onClick={() => setPeriodicity(1, 'minute')}
+                            onClick={() => setGranularity(60)}
                             className={timeUnit === 'minute' && interval === 1 ? 'selected' : ''}
                         >1
                         </span>
                         <span
-                            onClick={() => setPeriodicity(2, 'minute')}
+                            onClick={() => setGranularity(120)}
                             className={interval === 2 ? 'selected' : ''}
                         >2
                         </span>
                         <span
-                            onClick={() => setPeriodicity(3, 'minute')}
+                            onClick={() => setGranularity(180)}
                             className={interval === 3 ? 'selected' : ''}
                         >3
                         </span>
                         <span
-                            onClick={() => setPeriodicity(5, 'minute')}
+                            onClick={() => setGranularity(300)}
                             className={interval === 5 ? 'selected' : ''}
                         >5
                         </span>
                         <span
-                            onClick={() => setPeriodicity(10, 'minute')}
+                            onClick={() => setGranularity(600)}
                             className={interval === 10 ? 'selected' : ''}
                         >10
                         </span>
                         <span
-                            onClick={() => setPeriodicity(15, 'minute')}
+                            onClick={() => setGranularity(900)}
                             className={interval === 15 ? 'selected' : ''}
                         >15
                         </span>
                         <span
-                            onClick={() => setPeriodicity(30, 'minute')}
+                            onClick={() => setGranularity(1800)}
                             className={interval === 30 ? 'selected' : ''}
                         >30
                         </span>
                     </div>
                     <div className="row">
                         <span
-                            onClick={() => setPeriodicity(60, 'minute')}
+                            onClick={() => setGranularity(3600)}
                             className={interval === 60 ? 'selected' : ''}
                         >1
                         </span>
                         <span
-                            onClick={() => setPeriodicity(120, 'minute')}
+                            onClick={() => setGranularity(7200)}
                             className={interval === 120 ? 'selected' : ''}
                         >2
                         </span>
                         <span
-                            onClick={() => setPeriodicity(240, 'minute')}
+                            onClick={() => setGranularity(14400)}
                             className={interval === 240 ? 'selected' : ''}
                         >4
                         </span>
                         <span
-                            onClick={() => setPeriodicity(480, 'minute')}
+                            onClick={() => setGranularity(28800)}
                             className={interval === 480 ? 'selected' : ''}
                         >8
                         </span>
                     </div>
                     <div className="row">
                         <span
-                            onClick={() => setPeriodicity(1, 'day')}
+                            onClick={() => setGranularity(86400)}
                             className={timeUnit === 'day' ? 'selected' : ''}
                         >1
                         </span>
@@ -122,7 +122,7 @@ const Timeperiod = ({
 );
 
 export default connect(({ timeperiod: s }) => ({
-    setPeriodicity: s.setPeriodicity,
+    setGranularity: s.setGranularity,
     timeUnit: s.timeUnit,
     interval: s.interval,
     interval_display: s.interval_display,

@@ -5,9 +5,7 @@ import Context from '../components/ui/Context';
 import KeystrokeHub from '../components/ui/KeystrokeHub';
 import '../components/ui/Animation';
 import { BinaryAPI, Feed } from '../feed';
-import { createObjectFromLocalStorage, stableSort, calculateTimeUnitInterval } from '../utils';
-
-// import '../AddOns';
+import { createObjectFromLocalStorage, stableSort, calculateTimeUnitInterval, calculateGranularity } from '../utils';
 
 class ChartStore {
     static _id_counter = 0;
@@ -22,6 +20,7 @@ class ChartStore {
     rootNode = null;
     stxx = null;
     id = null;
+    paramProps = {};
     defaults = {
         symbol: 'R_100',
         granularity: 0,
@@ -202,7 +201,6 @@ class ChartStore {
         manageElement.textConent = t.translate('right-click to manage');
         manageTouchElement.textContent = t.translate('tap to manage');
 
-        // Animation (using tension requires splines.js)
         CIQ.Animation(stxx, { stayPut: true });
 
         // connect chart to data
@@ -215,18 +213,6 @@ class ChartStore {
         if (this.enableRouting) {
             this.routingStore.handleRouting();
         }
-
-        // Extended hours trading zones
-        // new CIQ.ExtendedHours({
-        //     stx: stxx,
-        //     filter: true,
-        // });
-
-        // Inactivity timer
-        // new CIQ.InactivityTimer({
-        //     stx: stxx,
-        //     minutes: 30,
-        // });
 
         this.holderStyle = stxx.chart.panel.holder.style;
 
@@ -246,20 +232,7 @@ class ChartStore {
             cb: KeystrokeHub.defaultHotKeys,
         });
 
-        const UIStorage = new CIQ.NameValueStore(); // eslint-disable-line no-unused-vars
-
         // TODO: excluded studies
-        const params = { // eslint-disable-line no-unused-vars
-            excludedStudies: {
-                Directional: true,
-                Gopala: true,
-                vchart: true,
-            },
-            alwaysDisplayDialog: {
-                ma: true,
-            },
-            /* dialogBeforeAddingStudy: {"rsi": true} // here's how to always show a dialog before adding the study */
-        };
 
         this.loader.show();
 
@@ -355,32 +328,50 @@ class ChartStore {
         this.isChartAvailable = status;
     }
 
-    @action.bound changeSymbol(symbolObj) {
+    @action.bound changeSymbol(symbolObj, granularity) {
         if (typeof symbolObj === 'string') {
             symbolObj = this.activeSymbols.find(s => s.symbol === symbolObj);
         }
 
-        if (this.currentActiveSymbol
-            && symbolObj.symbol === this.currentActiveSymbol.symbol) {
+        const isSymbolAvailable = symbolObj && this.currentActiveSymbol;
+
+        if (
+            (isSymbolAvailable
+                && symbolObj.symbol === this.currentActiveSymbol.symbol)
+            &&
+            (granularity !== undefined
+                && granularity === this.granularity)
+        ) {
             return;
         }
 
-        // reset comparisons
-        this.comparisonSymbols = [];
-        for (const field in this.stxx.chart.series) {
-            if (this.stxx.chart.series[field].parameters.bucket !== 'study') {
-                this.stxx.removeSeries(field);
+        const isResetComparisons = isSymbolAvailable
+            && (symbolObj.symbol !== this.currentActiveSymbol.symbol);
+        if (isResetComparisons) {
+            this.comparisonSymbols = [];
+            for (const field in this.stxx.chart.series) {
+                if (this.stxx.chart.series[field].parameters.bucket !== 'study') {
+                    this.stxx.removeSeries(field);
+                }
             }
         }
 
-        this.newChart(symbolObj);
+        let params;
+        if (granularity !== undefined) {
+            params = { periodicity: calculateTimeUnitInterval(granularity) };
+        }
 
-        this.stxx.chart.yAxis.decimalPlaces = symbolObj.decimal_places;
-        this.currentActiveSymbol = symbolObj;
-        this.categorizedSymbols = this.categorizeActiveSymbols();
+        this.newChart(symbolObj, params);
+
+        if (symbolObj) {
+            this.stxx.chart.yAxis.decimalPlaces = symbolObj.decimal_places;
+            this.currentActiveSymbol = symbolObj;
+            this.categorizedSymbols = this.categorizeActiveSymbols();
+        }
     }
 
-    @action.bound newChart(symbolObj, params) {
+    // Calling newChart with symbolObj as undefined refreshes the chart
+    @action.bound newChart(symbolObj = this.currentActiveSymbol, params) {
         this.loader.show();
         const onChartLoad = (err) => {
             this.loader.hide();
@@ -396,7 +387,7 @@ class ChartStore {
     // Makes requests to tick history API that will replace
     // Existing chart tick/ohlc data
     @action.bound refreshChart() {
-        this.newChart(this.currentActiveSymbol);
+        this.newChart();
     }
 
     @action.bound updateComparisons() {
@@ -433,14 +424,22 @@ class ChartStore {
         }
     }
 
-    @action.bound updateProps({ settings, isConnectionOpened, symbol }) {
+    @action.bound updateProps({ settings, isConnectionOpened, symbol, granularity, chartType }) {
         this.mainStore.chartSetting.setSettings(settings);
         this.setConnectionIsOpened(isConnectionOpened);
 
-        if (symbol && this.currentActiveSymbol) {
-            const foundSymbol = this.activeSymbols.find(x => x.symbol === symbol);
-            if (foundSymbol && (foundSymbol.symbol !== this.currentActiveSymbol.symbol)) {
-                this.changeSymbol(foundSymbol);
+        if (this.currentActiveSymbol) {
+            const { interval, timeUnit } = this.stxx.layout;
+            this.paramProps = { symbol, granularity, chartType };
+            this.granularity =  (interval === 'day') ? 86400 : calculateGranularity(interval, timeUnit);
+            const currentParams = {
+                symbol: this.currentActiveSymbol.symbol,
+                granularity: this.granularity,
+                chartType: this.mainStore.chartType.type.id,
+            };
+            if ((symbol !== undefined && symbol !== currentParams.symbol)
+                || (granularity !== undefined && granularity !== currentParams.granularity)) {
+                this.changeSymbol(symbol, granularity);
             }
         }
     }

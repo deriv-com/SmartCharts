@@ -32,6 +32,14 @@ export default class ChartTitleStore {
         this.update();
     };
 
+    @action.bound setSymbol(symbolObj) {
+        if (this.chart.paramProps.symbol !== undefined) {
+            return; // prop takes precedence
+        }
+
+        this.chart.changeSymbol(symbolObj);
+    }
+
     @action.bound update(quote) {
         if (!this.currentSymbol) { return; }
 

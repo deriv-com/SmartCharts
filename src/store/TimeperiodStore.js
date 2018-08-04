@@ -4,9 +4,6 @@ import { getChartTypes } from './ChartTypeStore';
 import { getTimeUnit, getIntervalInSeconds } from '../utils';
 
 const chartTypes = getChartTypes();
-const notCandles = chartTypes
-    .filter(t => !t.candleOnly)
-    .map(t => t.id);
 
 const aggregateCharts = chartTypes
     .filter(t => t.settingsOnClick);
@@ -34,6 +31,8 @@ export default class TimeperiodStore {
 
         reaction(() => this.timeUnit, this.showCountdown);
         reaction(() => this.interval, this.showCountdown);
+
+        this.context.stx.addEventListener('newChart', this.updateDisplay);
     };
 
     countdownInterval = null;
@@ -96,34 +95,18 @@ export default class TimeperiodStore {
         }
     };
 
-    @action.bound setPeriodicity(interval, timeUnit) {
-        if (this.loader) {
-            this.loader.show();
+    @action.bound setGranularity(granularity) {
+        if (this.mainStore.chart.paramProps.granularity !== undefined) {
+            return; // prop takes precedence
         }
+        this.mainStore.chart.changeSymbol(undefined, granularity);
+        this.menu.setOpen(false);
+    }
 
+    @action.bound updateDisplay() {
         const stx = this.context.stx;
-        const wasTick = stx.layout.timeUnit === 'second';
-        stx.setPeriodicity({ period: 1, interval, timeUnit }, () => {
-            if (this.loader) {
-                this.loader.hide();
-            }
-
-            const chartType = this.mainStore.chartType;
-            const isTick = timeUnit === 'second';
-            const isCandle = notCandles.indexOf(chartType.type.id) === -1;
-
-            if (isCandle && isTick) {
-                chartType.setType('mountain');
-            } else if (!isTick && wasTick) {
-                chartType.setType('candle');
-            }
-
-            this.mainStore.chart.saveLayout();
-        });
-
         this.timeUnit = getTimeUnit(stx.layout);
         this.interval = stx.layout.interval;
-        this.menu.setOpen(false);
     }
 
     @computed get remainLabelY() {

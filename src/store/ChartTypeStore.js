@@ -90,6 +90,10 @@ function getAggregates() {
     };
 }
 
+const notCandles = getChartTypes()
+    .filter(t => !t.candleOnly)
+    .map(t => t.id);
+
 export default class ChartTypeStore {
     constructor(mainStore) {
         this.mainStore = mainStore;
@@ -126,6 +130,19 @@ export default class ChartTypeStore {
         const typeIdx = this.chartTypes.findIndex(t => t.id === chartType);
         this.list.selectedIdx = typeIdx;
         this.type = this.chartTypes[typeIdx];
+
+        this.context.stx.addEventListener('newChart', this.syncTypeWithGranularity);
+    };
+
+    syncTypeWithGranularity = () => {
+        const isTick = this.stx.layout.timeUnit === 'second';
+        const isCandle = notCandles.indexOf(this.type.id) === -1;
+
+        if (isCandle && isTick) {
+            this.setType('mountain');
+        } else if (!isTick && !isCandle) {
+            this.setType('candle');
+        }
     };
 
     @action.bound setType(type) {
