@@ -226,16 +226,8 @@ class ChartStore {
         stxx.append('deleteHighlighted', this.updateComparisons);
 
         stxx.append('adjustPanelPositions', function () {
-            let index = 0;
-            for (const x in stxx.panels) {
-                // Hide arrow up for first study
-                if (index == 1) {
-                    const panel = stxx.panels[x];
-                    panel.up.style.display = 'none';
-                    break;
-                }
-                index++;
-            }
+            const panel = Object.keys(stxx.panels)[1];
+            stxx.panels[panel].up.style.display = 'none';
         });
 
         stxx.addEventListener('layout', () => {
