@@ -189,14 +189,14 @@ class ChartStore {
             minimumZoomTicks: 20,
             yTolerance: 999999, // disable vertical scrolling
         };
-        const layout = {
+        const chartLayout = {
             chartType: chartType || this.defaults.chartType,
         };
-        if (layout.chartType === 'spline') {
-            layout.chartType = 'mountain';
-            engineParams.chart.tension = layout.tension = 0.5;
+        if (chartLayout.chartType === 'spline') { // cause there's no such thing as spline chart in ChartIQ
+            chartLayout.chartType = 'mountain';
+            engineParams.chart.tension = chartLayout.tension = 0.5;
         }
-        engineParams.layout = layout;
+        engineParams.layout = chartLayout;
 
         const stxx = this.stxx = new CIQ.ChartEngine(engineParams);
 
@@ -249,45 +249,11 @@ class ChartStore {
         this.restorePreferences();
 
         api.getActiveSymbols().then(({ active_symbols }) => {
-            let layoutData = createObjectFromLocalStorage(`layout-${this.id}`);
+            this.setActiveSymbols(active_symbols);
+            let layoutData = this.restoreLayoutFromLocalStorage(`layout-${this.id}`);
 
             const onLayoutDataReady = () => {
-                this.setActiveSymbols(active_symbols);
                 if (layoutData) {
-                    if (symbol !== undefined && symbol !== layoutData.symbols[0].symbol) {
-                        // symbol prop takes precedence over local storage data
-                        const symbolObject = this.activeSymbols.find(x => x.symbol === symbol);
-                        layoutData.symbols = [{ symbol, symbolObject }];
-                    }
-
-                    for (const symbolDat of layoutData.symbols) {
-                        // Symbol from cache may be in different language, so replace it with server's
-                        const { symbol: cachedSymbol } = symbolDat;
-                        const updatedSymbol = this.activeSymbols.find(x => cachedSymbol === x.symbol);
-                        symbolDat.symbolObject = updatedSymbol;
-                    }
-
-                    if (granularity !== undefined) {
-                        const periodicity = calculateTimeUnitInterval(granularity);
-                        layoutData = { ...layoutData, ...periodicity };
-                    } else {
-                        const { timeUnit, interval } = layoutData;
-                        if (timeUnit) {
-                            this.granularity = calculateGranularity(interval, timeUnit);
-                        } else {
-                            this.granularity = 86400; // 1 day
-                        }
-                    }
-
-                    if (chartType !== undefined) {
-                        if (chartType === 'spline') {
-                            layoutData.chartType = 'mountain';
-                            stxx.chart.tension = layoutData.tension = 0.5;
-                        } else {
-                            layoutData.chartType = chartType;
-                        }
-                    }
-
                     this.restoreLayout(stxx, layoutData);
                     this.setCurrentActiveSymbols(stxx);
                 } else {
@@ -325,10 +291,57 @@ class ChartStore {
 
         this.feed.onComparisonDataUpdate(this.updateComparisons);
     }
+
+    restoreLayoutFromLocalStorage(id) {
+        let layoutData = createObjectFromLocalStorage(id);
+
+        if (!layoutData) return layoutData;
+
+        // prop values will always take precedence
+        const { symbol, granularity, chartType } = this.paramProps;
+
+        if (symbol !== undefined && symbol !== layoutData.symbols[0].symbol) {
+            // symbol prop takes precedence over local storage data
+            const symbolObject = this.activeSymbols.find(x => x.symbol === symbol);
+            layoutData.symbols = [{ symbol, symbolObject }];
+        }
+
+        for (const symbolDat of layoutData.symbols) {
+            // Symbol from cache may be in different language, so replace it with server's
+            const { symbol: cachedSymbol } = symbolDat;
+            const updatedSymbol = this.activeSymbols.find(x => cachedSymbol === x.symbol);
+            symbolDat.symbolObject = updatedSymbol;
+        }
+
+        if (granularity !== undefined) {
+            const periodicity = calculateTimeUnitInterval(granularity);
+            layoutData = { ...layoutData, ...periodicity };
+        } else {
+            const { timeUnit, interval } = layoutData;
+            if (timeUnit) {
+                this.granularity = calculateGranularity(interval, timeUnit);
+            } else {
+                this.granularity = 86400; // 1 day
+            }
+        }
+
+        if (chartType !== undefined) {
+            if (chartType === 'spline') { // cause there's no such thing as spline chart in ChartIQ
+                layoutData.chartType = 'mountain';
+                this.stxx.chart.tension = layoutData.tension = 0.5;
+            } else {
+                layoutData.chartType = chartType;
+            }
+        }
+
+        return layoutData;
+    }
+
     removeComparison(symbolObj) {
         this.context.stx.removeSeries(symbolObj.symbol);
         this.updateComparisons();
     }
+
     @action.bound setLayoutData(context) {
         this.context = context;
         this.contextPromise.resolve(this.context);
@@ -451,8 +464,8 @@ class ChartStore {
         this.mainStore.chartSetting.setSettings(settings);
         this.setConnectionIsOpened(isConnectionOpened);
 
+        this.paramProps = { symbol, granularity, chartType };
         if (this.currentActiveSymbol) {
-            this.paramProps = { symbol, granularity, chartType };
             const currentParams = {
                 symbol: this.currentActiveSymbol.symbol,
                 granularity: this.granularity,
