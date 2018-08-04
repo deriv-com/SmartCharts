@@ -258,7 +258,6 @@ CIQ.Animation = function (stx, animationParameters, easeMachine) {
             currentSpotElement.className = 'cq-spot';
             this.chart.panel.holder.parentElement.appendChild(currentSpotElement);
         }
-
         currentSpotElement.style.display = 'none';
 
         if (filterSession) { return; }
@@ -273,12 +272,12 @@ CIQ.Animation = function (stx, animationParameters, easeMachine) {
             let price = currentQuote.Close;
             let x = this.pixelFromTick(currentQuote.tick, this.chart);
             if (this.chart.lastTickOffset) { x += this.chart.lastTickOffset; }
-            let y = this.pixelFromPrice(price, panel) | 0;
+            let y = this.pixelFromPrice(price, panel);
             if (this.chart.yAxis.left > x &&
                 this.chart.yAxis.top <= y &&
                 this.chart.yAxis.bottom >= y) {
                 currentSpotElement.style.top = `${y}px`;
-                currentSpotElement.style.left = `${x - 3}px`;
+                currentSpotElement.style.left = `${x}px`;
                 currentSpotElement.style.display = 'block';
             }
         }
