@@ -54,7 +54,9 @@ const ChartTitle = ({
                 <Menu.Body>
                     <MarketSelector
                         onSelectItem={(x) => {
-                            onChange(x);
+                            if (x.symbol !== currentSymbol.symbol) {
+                                onChange(x);
+                            }
                             setMenuOpen(false);
                         }}
                         dialogTitle={t.translate('Underlying Assets')}
@@ -70,7 +72,7 @@ const ChartTitle = ({
     );
 };
 
-export default connect(({ chartTitle: c }) => ({
+export default connect(({ chartTitle: c, chart }) => ({
     todayChange: c.todayChange,
     isPriceUp: c.animatedPrice.isIncrease,
     isVisible: c.isVisible,
@@ -81,6 +83,6 @@ export default connect(({ chartTitle: c }) => ({
     AnimatedPrice: c.animatedPrice.connect(AnimatedPrice),
     onCloseMenu: c.menu.onTitleClick,
     setMenuOpen: c.menu.setOpen,
-    onChange: c.setSymbol,
+    onChange: chart.changeSymbol,
     isMobile: c.categoricalDisplay.isMobile,
 }))(ChartTitle);
