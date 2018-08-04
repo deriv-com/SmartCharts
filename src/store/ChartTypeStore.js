@@ -113,6 +113,7 @@ export default class ChartTypeStore {
 
     get context() { return this.mainStore.chart.context; }
     get stx() { return this.context.stx; }
+    get chartTypeProp() { return this.mainStore.chart.paramProps.chartType; }
 
     onContextReady = () => {
         this.aggregates = getAggregates();
@@ -138,10 +139,19 @@ export default class ChartTypeStore {
 
         if (isCandle && isTick) {
             this.setType('mountain');
-        } else if (!isTick && !isCandle) {
+        } else if (!isTick && !isCandle && this.chartTypeProp === undefined) {
             this.setType('candle');
         }
     };
+
+    @action.bound setTypeFromUI(type) {
+        if (this.chartTypeProp !== undefined) {
+            console.error('Changing chart type does nothing because chartType prop is being set. Consider overriding the onChange prop in <ChartTypes />');
+            return;
+        }
+
+        this.setType(type);
+    }
 
     @action.bound setType(type) {
         if (typeof type === 'string') {

@@ -26,6 +26,7 @@ class ChartStore {
         granularity: 0,
         chartType: 'mountain',
     };
+    granularity;
     enableRouting = null;
     chartNode = null;
     chartControlsNode = null;
@@ -148,6 +149,8 @@ class ChartStore {
 
         const {
             symbol,
+            chartType,
+            granularity,
             requestAPI,
             requestSubscribe,
             requestForget,
@@ -166,8 +169,7 @@ class ChartStore {
         this.isMobile = isMobile;
 
         this.onMessage = onMessage;
-        const { chartType, granularity } = this.defaults;
-        const { timeUnit, interval } = calculateTimeUnitInterval(granularity);
+        this.granularity = (granularity !== undefined) ? granularity : this.defaults.granularity;
 
         const stxx = this.stxx = new CIQ.ChartEngine({
             maxMasterDataSize: 5000, // cap size so tick_history requests do not become too large
@@ -185,9 +187,7 @@ class ChartStore {
                 },
             },
             layout: {
-                chartType,
-                timeUnit,
-                interval,
+                chartType: chartType || this.defaults.chartType,
             },
             minimumLeftBars: 15,
             minimumZoomTicks: 20,
@@ -245,36 +245,47 @@ class ChartStore {
         api.getActiveSymbols().then(({ active_symbols }) => {
             let layoutData = createObjectFromLocalStorage(`layout-${this.id}`);
 
-            // if symbol is different from local storage layoutData, it takes
-            // precedence over layoutData.symbols. Note that layoutData retrieved
-            // from URL will take precedence over initialSymbol
-            if (symbol && layoutData && layoutData.symbols[0].symbol !== symbol) {
-                // If symbol in layoutData.symbol[0] and initialSymbol are different,
-                // restoreLayout and changeSymbol cannot be executed together or
-                // chartIQ will stream both symbols in the the same chart
-                delete layoutData.symbols;
-            }
-
             const onLayoutDataReady = () => {
                 this.setActiveSymbols(active_symbols);
-                if (layoutData && layoutData.symbols) {
-                    for (const cacheSymbol of layoutData.symbols) {
+                if (layoutData) {
+                    if (symbol !== undefined && symbol !== layoutData.symbols[0].symbol) {
+                        // symbol prop takes precedence over local storage data
+                        const symbolObject = this.activeSymbols.find(x => x.symbol === symbol);
+                        layoutData.symbols = [{ symbol, symbolObject }];
+                    }
+
+                    for (const symbolDat of layoutData.symbols) {
                         // Symbol from cache may be in different language, so replace it with server's
-                        const { symbolObject } = cacheSymbol;
-                        const updatedSymbol = this.activeSymbols.find(x => symbolObject.symbol === x.symbol);
-                        cacheSymbol.symbolObject = updatedSymbol;
+                        const { symbol: cachedSymbol } = symbolDat;
+                        const updatedSymbol = this.activeSymbols.find(x => cachedSymbol === x.symbol);
+                        symbolDat.symbolObject = updatedSymbol;
+                    }
+
+                    if (granularity !== undefined) {
+                        const periodicity = calculateTimeUnitInterval(granularity);
+                        layoutData = { ...layoutData, ...periodicity };
+                    } else {
+                        const { timeUnit, interval } = layoutData;
+                        if (timeUnit) {
+                            this.granularity = calculateGranularity(interval, timeUnit);
+                        } else {
+                            this.granularity = 86400; // 1 day
+                        }
+                    }
+
+                    if (chartType !== undefined) {
+                        layoutData.chartType = chartType;
                     }
 
                     this.restoreLayout(stxx, layoutData);
-                }
-
-                if (symbol && !(layoutData && layoutData.symbols)) {
-                    this.changeSymbol(symbol);
-                } else if (stxx.chart.symbol) {
                     this.setCurrentActiveSymbols(stxx);
                 } else {
-                    this.changeSymbol(this.defaults.symbol);
+                    this.changeSymbol(
+                        symbol || this.defaults.symbol,
+                        this.granularity,
+                    );
                 }
+
                 this.setLayoutData(context);
             };
             const href = window.location.href;
@@ -358,6 +369,7 @@ class ChartStore {
 
         let params;
         if (granularity !== undefined) {
+            this.granularity = granularity;
             params = { periodicity: calculateTimeUnitInterval(granularity) };
         }
 
@@ -429,9 +441,7 @@ class ChartStore {
         this.setConnectionIsOpened(isConnectionOpened);
 
         if (this.currentActiveSymbol) {
-            const { interval, timeUnit } = this.stxx.layout;
             this.paramProps = { symbol, granularity, chartType };
-            this.granularity =  (interval === 'day') ? 86400 : calculateGranularity(interval, timeUnit);
             const currentParams = {
                 symbol: this.currentActiveSymbol.symbol,
                 granularity: this.granularity,
@@ -440,6 +450,9 @@ class ChartStore {
             if ((symbol !== undefined && symbol !== currentParams.symbol)
                 || (granularity !== undefined && granularity !== currentParams.granularity)) {
                 this.changeSymbol(symbol, granularity);
+            }
+            if (chartType !== undefined && chartType !== currentParams.chartType) {
+                this.mainStore.chartType.setType(chartType);
             }
         }
     }

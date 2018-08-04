@@ -71,7 +71,7 @@ const ChartTypes = ({
 export default connect(({ chartType }) => ({
     Type: chartType.type,
     setOpen: chartType.menu.setOpen,
-    onChange: chartType.setType,
+    onChange: chartType.setTypeFromUI,
     showAggregateDialog: chartType.showAggregateDialog,
     menuOpen: chartType.menu.open,
     Menu: chartType.menu.connect(Menu),
