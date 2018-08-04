@@ -129,6 +129,7 @@
                     }
 
                     &.selected {
+                        pointer-events: none;
                         line-height: 27px;
                         font-weight: bold;
                         @include themify($themes) {

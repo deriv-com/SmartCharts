@@ -97,10 +97,10 @@ export default class TimeperiodStore {
 
     @action.bound setGranularity(granularity) {
         if (this.mainStore.chart.paramProps.granularity !== undefined) {
-            return; // prop takes precedence
+            console.error('Setting granularity does nothing since granularity prop is set. Consider overriding the onChange prop in <TimePeriod />');
+            return;
         }
         this.mainStore.chart.changeSymbol(undefined, granularity);
-        this.menu.setOpen(false);
     }
 
     @action.bound updateDisplay() {
