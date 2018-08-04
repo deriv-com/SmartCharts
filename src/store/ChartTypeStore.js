@@ -102,7 +102,6 @@ export default class ChartTypeStore {
 
         this.list = new ListStore({
             getContext: () => this.context,
-            onItemSelected: item => this.setType(item),
             getItems: () => this.types,
         });
 
@@ -128,7 +127,6 @@ export default class ChartTypeStore {
             chartType = this.stx.layout.chartType;
         }
         const typeIdx = this.chartTypes.findIndex(t => t.id === chartType);
-        this.list.selectedIdx = typeIdx;
         this.type = this.chartTypes[typeIdx];
 
         this.context.stx.addEventListener('newChart', this.syncTypeWithGranularity);
@@ -150,7 +148,6 @@ export default class ChartTypeStore {
             type = this.types.find(t => t.id === type);
         }
         if (type.id === this.type.id) {
-            this.menu.setOpen(false);
             return;
         }
         if (type.id === 'spline') {
@@ -166,10 +163,8 @@ export default class ChartTypeStore {
                 this.stx.setChartType(type.id);
             }
         }
-        this.list.selectedIdx = this.types.findIndex(t => t.id === type.id);
         this.type = type;
         this.mainStore.timeperiod.showCountdown(true);
-        this.menu.setOpen(false);
     }
 
     @action.bound showAggregateDialog(aggregateId) {

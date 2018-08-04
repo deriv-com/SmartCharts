@@ -10,12 +10,22 @@ const ChartTypes = ({
     Type,
     Menu,
     menuOpen,
-    TypeList,
+    setOpen,
+    onChange,
+    ChartTypeList,
     showAggregateDialog,
     closeMenu,
     isMobile,
 }) => {
     if (Type === undefined) return (null);
+
+    const onItemClick = (idx, chartType) => {
+        if (Type.id !== chartType.id) {
+            onChange(chartType.id);
+        }
+        setOpen(false);
+    };
+
     return (
         <Menu
             className="ciq-display collapse ciq-chart-types"
@@ -29,10 +39,13 @@ const ChartTypes = ({
             <Menu.Body>
                 <div className="title">
                     <div className="mobile-title">{t.translate('Chart types')}</div>
-                    {isMobile ? <CloseIcon className="icon-close-menu" onClick={() => closeMenu()} /> : '' }
+                    {isMobile ? <CloseIcon className="icon-close-menu" onClick={closeMenu} /> : '' }
                 </div>
                 <div className="body">
-                    <TypeList height={260}>
+                    <ChartTypeList
+                        height={260}
+                        onItemClick={onItemClick}
+                    >
                         {T => (
                             <React.Fragment>
                                 <span className="left">
@@ -48,7 +61,7 @@ const ChartTypes = ({
                             </span>}
                             </React.Fragment>
                         )}
-                    </TypeList>
+                    </ChartTypeList>
                 </div>
             </Menu.Body>
         </Menu>
@@ -57,11 +70,12 @@ const ChartTypes = ({
 
 export default connect(({ chartType }) => ({
     Type: chartType.type,
-    setOpen: chartType.setOpen,
+    setOpen: chartType.menu.setOpen,
+    onChange: chartType.setType,
     showAggregateDialog: chartType.showAggregateDialog,
     menuOpen: chartType.menu.open,
     Menu: chartType.menu.connect(Menu),
-    TypeList: chartType.list.connect(List),
+    ChartTypeList: chartType.list.connect(List),
     closeMenu: chartType.menu.onTitleClick,
     isMobile: chartType.mainStore.chart.isMobile,
 }))(ChartTypes);
