@@ -170,8 +170,7 @@ class ChartStore {
 
         this.onMessage = onMessage;
         this.granularity = (granularity !== undefined) ? granularity : this.defaults.granularity;
-
-        const stxx = this.stxx = new CIQ.ChartEngine({
+        const engineParams = {
             maxMasterDataSize: 5000, // cap size so tick_history requests do not become too large
             markerDelay: null, // disable 25ms delay for placement of markers
             container: this.rootNode.querySelector('.chartContainer.primary'),
@@ -186,13 +185,20 @@ class ChartStore {
                     initialMarginBottom: 10,
                 },
             },
-            layout: {
-                chartType: chartType || this.defaults.chartType,
-            },
             minimumLeftBars: 15,
             minimumZoomTicks: 20,
             yTolerance: 999999, // disable vertical scrolling
-        });
+        };
+        const layout = {
+            chartType: chartType || this.defaults.chartType,
+        };
+        if (layout.chartType === 'spline') {
+            layout.chartType = 'mountain';
+            engineParams.chart.tension = layout.tension = 0.5;
+        }
+        engineParams.layout = layout;
+
+        const stxx = this.stxx = new CIQ.ChartEngine(engineParams);
 
         const deleteElement = stxx.chart.panel.holder.parentElement.querySelector('#mouseDeleteText');
         const manageElement = stxx.chart.panel.holder.parentElement.querySelector('#mouseManageText');
@@ -274,7 +280,12 @@ class ChartStore {
                     }
 
                     if (chartType !== undefined) {
-                        layoutData.chartType = chartType;
+                        if (chartType === 'spline') {
+                            layoutData.chartType = 'mountain';
+                            stxx.chart.tension = layoutData.tension = 0.5;
+                        } else {
+                            layoutData.chartType = chartType;
+                        }
                     }
 
                     this.restoreLayout(stxx, layoutData);
