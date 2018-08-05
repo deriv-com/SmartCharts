@@ -18,7 +18,7 @@ const ChartTitle = ({
     onCloseMenu,
     setMenuOpen,
     onChange,
-    enabled = true,
+    enabled,
 }) => {
     if (!currentSymbol) { return null; }
 
@@ -43,32 +43,27 @@ const ChartTitle = ({
     );
 
     return (
-        enabled && (
-            <Menu
-                className={chartTitleClassName}
-                isFullscreen
-            >
-                <Menu.Title>
-                    {chartTitleContent}
-                </Menu.Title>
-                <Menu.Body>
-                    <MarketSelector
-                        onSelectItem={(x) => {
-                            if (x.symbol !== currentSymbol.symbol) {
-                                onChange(x);
-                            }
-                            setMenuOpen(false);
-                        }}
-                        dialogTitle={t.translate('Underlying Assets')}
-                        closeMenu={() => onCloseMenu()}
-                    />
-                </Menu.Body>
-            </Menu>)
-        || (
-            <div className={chartTitleClassName}>
-                { chartTitleContent }
-            </div>
-        )
+        <Menu
+            enabled={enabled}
+            className={chartTitleClassName}
+            isFullscreen
+        >
+            <Menu.Title>
+                {chartTitleContent}
+            </Menu.Title>
+            <Menu.Body>
+                <MarketSelector
+                    onSelectItem={(x) => {
+                        if (x.symbol !== currentSymbol.symbol) {
+                            onChange(x);
+                        }
+                        setMenuOpen(false);
+                    }}
+                    dialogTitle={t.translate('Underlying Assets')}
+                    closeMenu={() => onCloseMenu()}
+                />
+            </Menu.Body>
+        </Menu>
     );
 };
 

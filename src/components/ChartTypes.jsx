@@ -16,6 +16,7 @@ const ChartTypes = ({
     showAggregateDialog,
     closeMenu,
     isMobile,
+    enabled,
 }) => {
     if (Type === undefined) return (null);
 
@@ -29,6 +30,7 @@ const ChartTypes = ({
     return (
         <Menu
             className="ciq-display collapse ciq-chart-types"
+            enabled={enabled}
         >
             <Menu.Title>
                 <Type.icon

@@ -15,6 +15,7 @@ const Timeperiod = ({
     closeMenu,
     setOpen,
     isMobile,
+    enabled,
 }) => {
     const onGranularityClick = (granularity) => {
         onChange(granularity);
@@ -23,6 +24,7 @@ const Timeperiod = ({
     return (
         <Menu
             className="ciq-period"
+            enabled={enabled}
         >
             <Menu.Title>
                 <div className="bt-priod">

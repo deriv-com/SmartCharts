@@ -19,6 +19,7 @@ class Menu extends Component {
             isMobile,
             isFullscreen,
             modalNode,
+            enabled = true,
         } = this.props;
         const first = React.Children.map(children, (child, i) => (i === 0 ? child : null));
         const rest  = React.Children.map(children, (child, i) => (i !== 0 ? child : null));
@@ -39,14 +40,15 @@ class Menu extends Component {
             </CSSTransition>);
 
         return (
-            <div className={`ciq-menu ${className || ''} ${open ? 'stxMenuActive' : ''}`}>
-                <div
-                    className="cq-menu-btn"
-                    onClick={onTitleClick}
-                >
-                    {first}
-                </div>
-                {(isMobile && modalNode) &&
+            enabled && (
+                <div className={`ciq-menu ciq-enabled ${className || ''} ${open ? 'stxMenuActive' : ''}`}>
+                    <div
+                        className="cq-menu-btn"
+                        onClick={onTitleClick}
+                    >
+                        {first}
+                    </div>
+                    {(isMobile && modalNode) &&
                     ReactDOM.createPortal(
                         <div className={`cq-modal-dropdown ${className || ''} ${open ? 'stxMenuActive' : ''}`}>
                             <div
@@ -59,7 +61,14 @@ class Menu extends Component {
                         modalNode,
                     )
                 || (dropdown)}
-            </div>
+                </div>
+            ) || (
+                <div className={`ciq-menu ciq-disabled ${className || ''}`}>
+                    <div className="cq-menu-btn">
+                        {first}
+                    </div>
+                </div>
+            )
         );
     }
 }
