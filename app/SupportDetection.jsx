@@ -14,26 +14,27 @@ const SupportedBrowser = {
         opera: 1601190,
         yandexbrowser: 14122120,
     },
-    'Windows 10':{
-        ie: 0,
-        firefox: 0,
-        chrome: 0,
-        opera: 0,
-        yandexbrowser: 0,
+    'Windows 10': {
+        edge: 15150630,
+        ie: 1100,
+        firefox: 3200,
+        chrome: 3702062,
+        opera: 230522,
+        yandexbrowser: 14122125,
     },
-    'Windows 8':{
+    'Windows 8': {
         ie: 1000,
         firefox: 2700,
         chrome: 3601985,
         opera: 2601656,
         yandexbrowser: 14122125,
     },
-    'Windows 7':{
+    'Windows 7': {
         ie: 1100,
         firefox: 2700,
         chrome: 3601985,
         opera: 2601656,
-        yandexbrowser: 0,
+        yandexbrowser: 14122125,
     },
 };
 

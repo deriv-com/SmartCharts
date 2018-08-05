@@ -149,7 +149,7 @@ $green: #4caf50;
 @mixin createShadeStyle($style-name, $shade-color) {
     .#{$style-name} {
         .top-shade {
-            background-image: linear-gradient(to bottom, transparent 30%, $shade-color);
+            background-image: linear-gradient(top, transparent 30%, $shade-color); //plugin/no-unsupported-browser-features
         }
         .between-shade {
             background-color: $shade-color;
