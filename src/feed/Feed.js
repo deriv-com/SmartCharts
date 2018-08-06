@@ -1,7 +1,7 @@
 import EventEmitter from 'event-emitter-es6';
 import { TickHistoryFormatter } from './TickHistoryFormatter';
 import PendingPromise from '../utils/PendingPromise';
-import { getUTCEpoch } from '../utils';
+import { calculateGranularity, getUTCEpoch } from '../utils';
 
 class Feed {
     static get EVENT_MASTER_DATA_UPDATE() { return 'EVENT_MASTER_DATA_UPDATE'; }
@@ -23,7 +23,7 @@ class Feed {
 
     // Do not call explicitly! Method below is called by ChartIQ when unsubscribing symbols.
     unsubscribe({ symbol, period, interval }) {
-        const granularity = Feed.calculateGranularity(period, interval);
+        const granularity = calculateGranularity(period, interval);
         const key = this._getKey({ symbol, granularity });
         this._forgetStream(key);
     }
@@ -69,7 +69,7 @@ class Feed {
 
     async fetchInitialData(symbol, suggestedStartDate, suggestedEndDate, params, callback) {
         const { period, interval, symbolObject } = params;
-        const granularity = Feed.calculateGranularity(period, interval);
+        const granularity = calculateGranularity(period, interval);
         const isComparisonChart = this._stx.chart.symbol !== symbol;
         let start = suggestedStartDate / 1000 | 0;
         if (isComparisonChart) {
@@ -143,7 +143,7 @@ class Feed {
         const end   = getUTCEpoch(endDate);
         const start = getUTCEpoch(suggestedStartDate);
         const { period, interval } = params;
-        const granularity = Feed.calculateGranularity(period, interval);
+        const granularity = calculateGranularity(period, interval);
 
         await this._getPaginationData(symbol, granularity, start, end, callback);
     }
@@ -240,16 +240,6 @@ class Feed {
             const { times } = history;
             return times[times.length - 1];
         }
-    }
-
-    static calculateGranularity(period, interval) {
-        const toSeconds = {
-            second: 0,
-            minute: 60,
-            day: 24 * 60 * 60,
-        };
-
-        return toSeconds[interval] * period;
     }
 
     onMasterDataUpdate(callback) {

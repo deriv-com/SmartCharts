@@ -26,28 +26,37 @@
             transform: rotate(225deg); /* 180 + 45 */
             display: none;
         }
-        &.stxMenuActive {
-            @include themify($themes) {
-                box-shadow: 0px -2px 0px 0 themed('MenuActiveBorder');
-            }
-
-            .cq-menu-btn {
+        &.ciq-enabled {
+            &.stxMenuActive {
                 @include themify($themes) {
-                    background: themed('MenuActiveBg');
+                    box-shadow: 0px -2px 0px 0 themed('MenuActiveBorder');
                 }
 
-                > .ic-icon,
-                > .cq-toggle {
+                .cq-menu-btn {
                     @include themify($themes) {
-                        color: themed('MenuActiveText');
+                        background: themed('MenuActiveBg');
                     }
-                    @include svg-icon-color('MenuActiveIcon');
 
-                    .ic-subtitle {
-                        font-weight: 500;
+                    > .ic-icon,
+                    > .cq-toggle {
                         @include themify($themes) {
                             color: themed('MenuActiveText');
                         }
+                        @include svg-icon-color('MenuActiveIcon');
+
+                        .ic-subtitle {
+                            font-weight: 500;
+                            @include themify($themes) {
+                                color: themed('MenuActiveText');
+                            }
+                        }
+                    }
+                }
+            }
+            .cq-menu-btn {
+                &:hover {
+                    @include themify($themes) {
+                        background: themed('MenuHoverBg');
                     }
                 }
             }
@@ -56,11 +65,6 @@
             position: relative;
             padding: 0 5px;
 
-            &:hover {
-                @include themify($themes) {
-                    background: themed('MenuHoverBg');
-                }
-            }
             > .ic-icon {
                 padding: 0.35em 0.5em;
             }
@@ -116,6 +120,7 @@
         @include box-sizing(border-box);
     }
     .cq-toggle {
+        cursor: pointer;
         padding: 0.35em 2.6em;
         color: #575757;
     }
