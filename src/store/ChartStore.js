@@ -227,7 +227,9 @@ class ChartStore {
 
         stxx.append('adjustPanelPositions', function () {
             const panel = Object.keys(stxx.panels)[1];
-            stxx.panels[panel].up.style.display = 'none';
+            if (panel) {
+                stxx.panels[panel].up.style.display = 'none';
+            }
         });
 
         stxx.addEventListener('layout', () => {
