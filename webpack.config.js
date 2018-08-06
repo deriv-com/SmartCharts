@@ -30,6 +30,16 @@ const config = {
                         loader: 'css-loader',
                         options: { sourceMap: true },
                     }, {
+                      loader: 'postcss-loader',
+                      options: {
+                        ident: 'postcss',
+                        plugins: (loader) => [
+                            require('postcss-import')({ root: loader.resourcePath }),
+                            require('postcss-preset-env')(),
+                            require('cssnano')()
+                        ]
+                      }
+                    },{
                         loader: 'sass-loader',
                         options: {
                             sourceMap: true,

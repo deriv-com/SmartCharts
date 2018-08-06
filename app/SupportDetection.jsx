@@ -8,33 +8,40 @@ const browser = detect();
 
 const SupportedBrowser = {
     'Mac OS': {
-        safari: 808,
-        firefox: 2600,
-        chrome: 2901547,
-        opera: 1601190,
-        yandexbrowser: 14122120,
+        safari: 913,
+        firefox: 2700,
+        chrome: 4902623,
+        opera: 3602130,
+        yandexbrowser: 14122130,
     },
     'Windows 10': {
         edge: 15150630,
-        ie: 1100,
+        ie: 1100, // not supported
         firefox: 3200,
-        chrome: 3702062,
-        opera: 230522,
-        yandexbrowser: 14122125,
+        chrome: 4902623,
+        opera: 3602130,
+        yandexbrowser: 14122130,
+    },
+    'Windows 8.1': {
+        ie: 1200, // not supported at all
+        firefox: 2700,
+        chrome: 4902623,
+        opera: 3602130,
+        yandexbrowser: 14122130,
     },
     'Windows 8': {
-        ie: 1000,
+        ie: 1200, // not supported at all
         firefox: 2700,
-        chrome: 3601985,
-        opera: 2601656,
-        yandexbrowser: 14122125,
+        chrome: 4902623,
+        opera: 3602130,
+        yandexbrowser: 14122130,
     },
     'Windows 7': {
-        ie: 1100,
+        ie: 1200, // not supported at all
         firefox: 2700,
         chrome: 3601985,
         opera: 2601656,
-        yandexbrowser: 14122125,
+        yandexbrowser: 14122130,
     },
 };
 

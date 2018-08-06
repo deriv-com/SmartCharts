@@ -50,7 +50,7 @@
     "number-max-precision"                             : 2,
     "number-no-trailing-zeros"                         : true,
     "property-case"                                    : "lower",
-    "plugin/no-unsupported-browser-features"           : true,
+    "plugin/no-unsupported-browser-features"           : [true, { "severity": "warning" }],
     "rule-empty-line-before"                           : ["always", { "ignore": ["after-comment"], "except": ["inside-block-and-after-rule", "first-nested"] }],
     "selector-attribute-brackets-space-inside"         : "never",
     "selector-attribute-operator-space-after"          : "never",
