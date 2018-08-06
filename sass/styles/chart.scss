@@ -297,10 +297,10 @@ html, body {
         @include border-radius(3px 3px 0px 0px);
         font-weight: 500;
         @include themify($themes) {
-            background: themed('StickyInteriorBg');
+            background: themed('TooltipTextBg');
         }
         border: none;
-        box-sizing: border-box;
+        @include box-sizing(border-box);
     }
     #mStickyRightClick {
         position: relative;
@@ -391,11 +391,6 @@ html, body {
 */
 
 #overlayTrashCan {
-    font-weight: 300;
-    border: none;
-    @include themify($themes) {
-        color: themed('tooltipTextColor');
-    }
     display: none !important;
 }
 
