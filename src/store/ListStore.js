@@ -1,4 +1,4 @@
-import { observable, action } from 'mobx';
+import { action } from 'mobx';
 import { connect } from './Connect';
 
 export default class ListStore {
@@ -10,16 +10,12 @@ export default class ListStore {
         this.onItemSelected = onItemSelected;
     }
 
-    @observable selectedIdx = 0;
-
     @action.bound onItemClick(idx, item) {
-        this.selectedIdx = idx;
         this.onItemSelected(item);
     }
 
     connect = connect(() => ({
         items: this.getItems(),
-        selectedIdx: this.selectedIdx,
         onItemClick: this.onItemClick,
     }));
 }
