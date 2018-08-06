@@ -181,6 +181,7 @@ class ChartStore {
             controls: { chartControls: null }, // hide the default zoom buttons
             preferences: {
                 currentPriceLine: true,
+                whitespace: 100,
             },
             chart: {
                 yAxis: {
