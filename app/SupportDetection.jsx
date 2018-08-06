@@ -87,7 +87,7 @@ class SupportDetection extends React.Component {
             <div className="cq-not-guaranteed">
                 <h1>We are  NOT guaranteed</h1>
                 <p>Binary.com does not guaranteed your browser. Please update your browser.</p>
-                <a href="https://www.binary.com/">Update Browser</a>
+                <a href="http://outdatedbrowser.com/">Update Browser</a>
             </div>
         );
 
@@ -98,7 +98,7 @@ class SupportDetection extends React.Component {
                     <div className="cq-icon-not-supported" />
                     <h1>YOUR BROWSER IS NOT SUPPORTED</h1>
                     <p>Binary.com does not support your browser. Please update your browser.</p>
-                    <a href="https://www.binary.com/">Update Browser</a>
+                    <a href="http://outdatedbrowser.com/">Update Browser</a>
                 </div>
             );
         }
