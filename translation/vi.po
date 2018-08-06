@@ -10,10 +10,10 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Vietnamese\n"
 "Language: vi_VN\n"
-"PO-Revision-Date: 2018-08-01 09:21\n"
+"PO-Revision-Date: 2018-08-03 06:41\n"
 
 msgid " already exists."
-msgstr ""
+msgstr " đã tồn tại."
 
 msgid "[symbol] market is presently closed."
 msgstr "[symbol] thị trường hiện đã đóng cửa."
@@ -25,7 +25,7 @@ msgid "Active"
 msgstr "Hoạt động"
 
 msgid "Add New"
-msgstr ""
+msgstr "Thêm mới"
 
 msgid "Annotation"
 msgstr "Chú thích"
@@ -46,7 +46,7 @@ msgid "Callout"
 msgstr "Chú thích"
 
 msgid "CANCEL"
-msgstr ""
+msgstr "HỦY BỎ"
 
 msgid "Candle"
 msgstr "Nến"
@@ -193,7 +193,7 @@ msgid "OPEN"
 msgstr "MỞ"
 
 msgid "OVERWRITE"
-msgstr ""
+msgstr "GHI ĐÈ LÊN"
 
 msgid "Pitchfork"
 msgstr "Pitchfork"
@@ -298,7 +298,7 @@ msgid "Streaming for [symbol] is not available due to license restrictions"
 msgstr "Truyền cho [symbol] không khả dụng do các hạn chế cấp phép"
 
 msgid "tap to manage"
-msgstr ""
+msgstr "bấm vào để quản lý"
 
 msgid "Template name"
 msgstr "Tên mẫu"
@@ -331,7 +331,7 @@ msgid "Vertical"
 msgstr "Theo chiều dọc"
 
 msgid "Would you like to overwrite it?"
-msgstr ""
+msgstr "Bạn có muốn ghi đè lên nó không?"
 
 msgid "Zoom in"
 msgstr "Phóng to"
