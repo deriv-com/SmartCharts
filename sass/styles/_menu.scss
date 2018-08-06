@@ -4,68 +4,6 @@
         color: themed('MenuText');
     }
 
-    &.stxMenuActive {
-        @include themify($themes) {
-            box-shadow: 0px -2px 0px 0 themed('MenuActiveBorder');
-        }
-
-        .cq-menu-btn {
-            @include themify($themes) {
-                background: themed('MenuActiveBg');
-            }
-
-            > .ic-icon,
-            > .cq-toggle {
-                @include themify($themes) {
-                    color: themed('MenuActiveText');
-                }
-                @include svg-icon-color('MenuActiveIcon');
-
-                .ic-subtitle {
-                    font-weight: 500;
-                    @include themify($themes) {
-                        color: themed('MenuActiveText');
-                    }
-                }
-            }
-        }
-    }
-    .cq-menu-btn {
-        padding: 0 5px;
-
-        &:hover {
-            @include themify($themes) {
-                background: themed('MenuHoverBg');
-            }
-        }
-        > .ic-icon {
-            padding: 0.35em 0.5em;
-        }
-        > .ic-icon,
-        > .cq-toggle {
-            &.active {
-                .ic-subtitle {
-                    font-weight: 500;
-                    @include themify($themes) {
-                        color: themed('MenuActiveText');
-                    }
-                }
-            }
-            @include svg-icon-color('MenuIcon');
-
-            .ic-subtitle {
-                font-weight: normal;
-                font-style: normal;
-                font-stretch: normal;
-                line-height: normal;
-                letter-spacing: normal;
-                text-align: center;
-                @include themify($themes) {
-                    color: themed('MenuText');
-                }
-            }
-        }
-    }
     > .ic-icon,
     > .cq-toggle {
         @include svg-icon-color('MenuIcon');
@@ -74,6 +12,12 @@
         padding: 0 12px 0 0;
         position: relative;
         font-weight: 400;
+    }
+    .cq-menu-btn {
+        user-select: none;
+    }
+    &.ciq-enabled > .cq-menu-btn {
+        cursor: pointer;
     }
 }
 
@@ -168,28 +112,16 @@
     }
 }
 
-.cq-chart-control-left {
-    .ciq-menu {
-        &.stxMenuActive {
-            @include themify($themes) {
-                box-shadow: 2px 0.3px 0px 0 themed('MenuActiveBorder');
-            }
-        }
-    }
-}
-
 .smartcharts-mobile {
     .ciq-menu {
         &.stxMenuActive {
             z-index: 9;
         }
-        .cq-menu-btn {
-            &:hover {
-                > .ic-icon,
-                > .cq-toggle {
-                    svg {
-                        background: transparent;
-                    }
+        .cq-menu-btn:hover {
+            > .ic-icon,
+            > .cq-toggle {
+                svg {
+                    background: transparent;
                 }
             }
         }

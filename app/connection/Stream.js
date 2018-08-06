@@ -1,64 +1,42 @@
-export default class Stream {
-    static get EVENT_STREAM() {
-        return 'EVENT_STREAM';
-    }
+import EventEmitter from 'event-emitter-es6';
 
-    static get EVENT_DISCONNECT() {
-        return 'EVENT_DISCONNECT';
-    }
+export default class Stream extends EventEmitter {
+    static get EVENT_STREAM() { return 'EVENT_STREAM'; }
+    static get EVENT_NO_SUBSCRIBER() { return 'EVENT_NO_SUBSCRIBER'; }
 
-    static get EVENT_RECONNECT() {
-        return 'EVENT_RECONNECT';
-    }
+    subscriberCount = 0;
 
-    static get EVENT_REMEMBER_STREAM() {
-        return 'EVENT_REMEMBER_STREAM';
-    }
-
-    static get EVENT_FORGET_STREAM() {
-        return 'EVENT_FORGET_STREAM';
-    }
-
-    constructor(
-        subscription,
-        emitter,
-    ) {
-        this._subscription = subscription;
-        this._emitter = emitter;
-        this._callbacks = {
-            [Stream.EVENT_STREAM]: [],
-            [Stream.EVENT_RECONNECT]: [],
-            [Stream.EVENT_DISCONNECT]: [],
-        };
-        this._emitter.emit(Stream.EVENT_REMEMBER_STREAM);
-    }
-
-    get response() {
-        return this._subscription.response;
+    constructor() {
+        super({ emitDelay: 0 });
     }
 
     forget() {
-        for (const event of Object.keys(this._callbacks)) {
-            for (const callback of this._callbacks[event]) {
-                this._emitter.off(event, callback);
-            }
-            this._callbacks[event] = [];
-        }
-        this._emitter.emit(Stream.EVENT_FORGET_STREAM);
+        this.off(Stream.EVENT_STREAM);
+        this._emitter.emit(Stream.EVENT_NO_SUBSCRIBER);
+    }
+
+    emitTick(data) {
+        this.emit(Stream.EVENT_STREAM, data);
+    }
+
+    onNoSubscriber(callback) {
+        this.on(Stream.EVENT_NO_SUBSCRIBER, callback);
+    }
+
+    offNoSubscriber(callback) {
+        this.off(Stream.EVENT_NO_SUBSCRIBER, callback);
     }
 
     onStream(callback) {
-        this._callbacks[Stream.EVENT_STREAM].push(callback);
-        this._emitter.on(Stream.EVENT_STREAM, callback);
+        this.subscriberCount++;
+        this.on(Stream.EVENT_STREAM, callback);
     }
 
-    onDisconnect(callback) {
-        this._callbacks[Stream.EVENT_DISCONNECT].push(callback);
-        this._emitter.on(Stream.EVENT_DISCONNECT, callback);
-    }
-
-    onReconnect(callback) {
-        this._callbacks[Stream.EVENT_RECONNECT].push(callback);
-        this._emitter.on(Stream.EVENT_RECONNECT, callback);
+    offStream(callback) {
+        this.subscriberCount--;
+        this.on(Stream.EVENT_STREAM, callback);
+        if (this.subscriberCount === 0) {
+            this.emit(Stream.EVENT_NO_SUBSCRIBER);
+        }
     }
 }

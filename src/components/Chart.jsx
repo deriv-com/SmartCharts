@@ -39,8 +39,8 @@ class Chart extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        const { settings, setSettings } = nextProps;
-        setSettings(settings);
+        const { updateProps, ...props } = nextProps;
+        updateProps(props);
     }
 
     componentWillUnmount() {
@@ -126,7 +126,7 @@ export default connect(({ chart, drawTools, studies, chartSetting, chartType }) 
     isChartAvailable: chart.isChartAvailable,
     chartPanelTop: chart.chartPanelTop,
     setting: chartSetting,
-    setSettings: chartSetting.setSettings,
+    updateProps: chart.updateProps,
     chartContainerHeight: chart.chartContainerHeight,
     containerWidth: chart.containerWidth,
 }))(Chart);

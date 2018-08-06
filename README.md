@@ -15,6 +15,8 @@ SmartCharts is both the name of the app ([charts.binary.com](https://charts.bina
 - use `yarn build` to build the library
 - use `yarn build:app` to build the [charts.binary.com](https://charts.binary.com/) app
 - use `yarn analyze` to run webpack-bundle-analyzer
+- use `yarn test` to run unit tests
+- use `yarn coverage` to see test coverage
 
 > Note: eventhough both `yarn build` and `yarn build:app` outputs `smartcharts.js` and `smartcharts.css`, **they are not the same files**. One outputs a library and the the other outputs an app.
 
@@ -83,18 +85,21 @@ Props marked with `*` are **mandatory**:
 requestAPI* | SmartCharts will make single API calls by passing the request input directly to this method, and expects a `Promise` to be returned.
 requestSubscribe* | SmartCharts will make streaming calls via this method. `requestSubscribe` expects 2 parameters `(request, callback) => {}`: the `request` input and a `callback` in which response will be passed to for each time a response is available. Keep track of this `callback` as SmartCharts will pass this to you to forget the subscription (via `requestForget`).
 requestForget* | When SmartCharts no longer needs a subscription (made via `requestSubscribe`), it will call this method (passing in `request` and `callback` passed from `requestSubscribe`) to halt the subscription.
-onSymbolChange | When SmartCharts changes the symbol, it will call this function, passing the symbol object as parameter.
+symbol | Sets the main chart symbol. Defaults to `R_100`. Refer [Props vs UI](#props-vs-ui) for usage details.
+granularity | Sets the granularity of the chart. Allowed values are 60, 120, 180, 300, 600, 900, 1800, 3600, 7200, 14400, 28800, 86400. Defaults to 0. Refer [Props vs UI](#props-vs-ui) for usage details.
+chartType | Sets the chartType. Choose between `mountain` (Line), `line` (Dot), `colored_line` (Colored Dot),  `spline`,  `baseline`, `candle`, `colored_bar` (OHLC), `hollow_candle`, `heikinashi`, `kagi`, `linebreak`, `renko`, `rangebars`, and `pandf` (Point & Figure). Defaults to `mountain`. Refer [Props vs UI](#props-vs-ui) for usage details.
+startEpoch | Set the start epoch of the chart
+endEpoch | Set the end epoch of the chart
 chartControlsWidgets | Render function for chart control widgets. Refer to [Customising Components](#customising-components).
 topWidgets | Render function for top widgets. Refer to [Customising Components](#customising-components).
-initialSymbol | Sets the initial symbol.
 isMobile | Switch between mobile or desktop view. Defaults to `false`.
 shareOrigin | Sets the origin of the generated share link. Defaults to `https://charts.binary.com`.
 onSettingsChange | Callback that will be fired each time a setting is changed.
 settings | Sets the chart settings. Refer to [Chart Settings](#chart-settings)
 barriers | Draw chart barriers. Refer to [Barriers API](#barriers-api) for usage details
 enableRouting | Enable routing for dialogs. Defaults to `false`
+isConnectionOpened | Sets the connection status. If set, upon reconnection smartcharts will either patch missing tick data or refresh the chart, depending on granularity; if not set, it is assumed that connection is always opened. Defaults to `undefined`.
 onMessage | SmartCharts will notify messages via this method. `onMessage` expect 1 parameter `(message => {})`
-
 
 ### Chart Settings
 
@@ -143,7 +148,7 @@ Markers provide a way for developers to place DOM elements inside the chart that
 ```jsx
 <SmartChart>
     <Marker
-        x={new Date(2018, 5, 20)}
+        x={1533192979}
         yPositioner="none"
         className="chart-line vertical trade-start-line"
     >
@@ -158,7 +163,7 @@ Markers provide a way for developers to place DOM elements inside the chart that
 --------|--------------
 className | Adds custom class name to marker. All markers have class name `stx-marker`.
 x | x position of the chart; depends on `xPositioner`.
-xPositioner | Determines x position. Choose between `date` or `none`. Defaults to `date`.
+xPositioner | Determines x position. Choose between `epoch` or `none`. Defaults to `epoch`.
 y | y position of the chart; depends on `yPositioner`.
 yPositioner | Determines y position. Choose between `value` or `none`. Defaults to `value`.
 
@@ -192,20 +197,38 @@ const App = () => (
 
 Here are the following components you can import:
  - Top widgets:
-    - `<ChartTitle />`
+    - `<ChartTitle enabled={true} onChange={(symbol) => {}} />`
     - `<AssetInformation />`
     - `<ComparisonList />`
  - Chart controls:
-    - `<CrosshairToggle />`
-    - `<ChartTypes />`
+    - `<CrosshairToggle enabled={true} />`
+    - `<ChartTypes enabled={true} onChange={(chartType) => {}} />`
     - `<StudyLegend />`
     - `<Comparison />`
     - `<DrawTools />`
     - `<Views />`
     - `<Share />`
-    - `<Timeperiod />`
+    - `<Timeperiod enabled={true} onChange={(chartType) => {}} />`
     - `<ChartSize />`
     - `<ChartSetting />`
+ 
+ ### Props vs UI
+ 
+Certain chart parameters can be set either by props or from the chart UI:
+  
+   - `symbol` - set by `<ChartTitle />`
+   - `granularity` - set by `<TimePeriod >`
+   - `chartType` - set by `<ChartTypes />`
+  
+  This creates conflicts in deciding which is the single source of truth. To circumvent this, if these props are set (not `undefined`), selecting options in its corresponding components will not have any affect affect on the chart; the prop values take precedence. To have control over both the UI and the props, we provide library users the option to _override_ component behaviour via `onChange` prop. For example, to retrieve the symbol a client chooses:
+ 
+ ```jsx
+<ChartTitle
+    onChange={(symbol) => { /* ...Pass to symbol prop in <SmartCharts /> */ }}
+/>
+```
+ 
+ See available components and their props in [Customising Components](#customising-components).
  
 ## Contribute
 
