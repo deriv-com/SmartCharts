@@ -5,7 +5,7 @@ import Context from '../components/ui/Context';
 import KeystrokeHub from '../components/ui/KeystrokeHub';
 import '../components/ui/Animation';
 import { BinaryAPI, Feed } from '../feed';
-import { createObjectFromLocalStorage, stableSort, calculateTimeUnitInterval, calculateGranularity } from '../utils';
+import { createObjectFromLocalStorage, stableSort, calculateTimeUnitInterval, calculateGranularity, getUTCDate } from '../utils';
 
 class ChartStore {
     static _id_counter = 0;
@@ -27,6 +27,8 @@ class ChartStore {
         chartType: 'mountain',
     };
     granularity;
+    startEpoch;
+    endEpoch;
     enableRouting = null;
     chartNode = null;
     chartControlsNode = null;
@@ -160,6 +162,8 @@ class ChartStore {
             onMessage,
             settings,
             onSettingsChange,
+            startEpoch,
+            endEpoch,
         } = props;
         const api = new BinaryAPI(requestAPI, requestSubscribe, requestForget);
         const { share, chartSetting } = this.mainStore;
@@ -177,6 +181,7 @@ class ChartStore {
             controls: { chartControls: null }, // hide the default zoom buttons
             preferences: {
                 currentPriceLine: true,
+                whitespace: 100,
             },
             chart: {
                 yAxis: {
@@ -189,12 +194,16 @@ class ChartStore {
             minimumZoomTicks: 20,
             yTolerance: 999999, // disable vertical scrolling
         };
-        const chartLayout = {
+        let chartLayout = {
             chartType: chartType || this.defaults.chartType,
         };
         if (chartLayout.chartType === 'spline') { // cause there's no such thing as spline chart in ChartIQ
             chartLayout.chartType = 'mountain';
             engineParams.chart.tension = chartLayout.tension = 0.5;
+        }
+        const rangeSpan = this.getRangeSpan(startEpoch, endEpoch);
+        if (rangeSpan) {
+            chartLayout = { ...chartLayout, ...rangeSpan };
         }
         engineParams.layout = chartLayout;
 
@@ -211,6 +220,8 @@ class ChartStore {
 
         // connect chart to data
         this.feed = new Feed(api, stxx, this.mainStore);
+        this.feed.startEpoch = startEpoch;
+        this.feed.endEpoch = endEpoch;
         stxx.attachQuoteFeed(this.feed, {
             refreshInterval: null,
         });
@@ -325,6 +336,11 @@ class ChartStore {
             }
         }
 
+        const rangeSpan = this.getRangeSpan();
+        if (rangeSpan) {
+            layoutData = { ...layoutData, ...rangeSpan };
+        }
+
         if (chartType !== undefined) {
             if (chartType === 'spline') { // cause there's no such thing as spline chart in ChartIQ
                 layoutData.chartType = 'mountain';
@@ -417,7 +433,29 @@ class ChartStore {
             }
             this.restoreDrawings();
         };
-        this.stxx.newChart(symbolObj, null, null, onChartLoad, params);
+        const rangeSpan = this.getRangeSpan();
+        this.stxx.newChart(symbolObj, null, null, onChartLoad, { ...params, ...rangeSpan });
+    }
+
+    // TODO: range span needs to update in real time
+    getRangeSpan(startEpoch = this.paramProps.startEpoch, endEpoch = this.paramProps.endEpoch) {
+        let range, span;
+        if (startEpoch !== undefined || endEpoch !== undefined) {
+            const dtLeft  = (startEpoch !== undefined) ? new Date(getUTCDate(startEpoch)) : undefined;
+            const dtRight = (endEpoch   !== undefined) ? new Date(getUTCDate(endEpoch))   : undefined;
+            const periodicity = calculateTimeUnitInterval(this.granularity);
+            range = {
+                dtLeft,
+                dtRight,
+                periodicity,
+                goIntoFuture: true,
+                goIntoPast: true,
+            };
+            if (dtLeft) {
+                span = { base: 'all', periodicity };
+            }
+            return { range, span };
+        }
     }
 
     // Makes requests to tick history API that will replace
@@ -460,11 +498,11 @@ class ChartStore {
         }
     }
 
-    @action.bound updateProps({ settings, isConnectionOpened, symbol, granularity, chartType }) {
+    @action.bound updateProps({ settings, isConnectionOpened, symbol, granularity, chartType, startEpoch, endEpoch }) {
         this.mainStore.chartSetting.setSettings(settings);
         this.setConnectionIsOpened(isConnectionOpened);
 
-        this.paramProps = { symbol, granularity, chartType };
+        this.paramProps = { symbol, granularity, chartType, startEpoch, endEpoch };
         if (this.currentActiveSymbol) {
             const currentParams = {
                 symbol: this.currentActiveSymbol.symbol,
