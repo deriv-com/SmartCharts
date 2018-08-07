@@ -27,10 +27,6 @@ export default class MarkerStore {
         this.mainStore.chart.feed.onPagination(this.updateMarkerTick);
         this._listenerId = this.stx.addEventListener('newChart', this.updateMarkerTick);
         this._injectionId = this.stx.prepend('positionMarkers', this.updatePosition);
-
-        if (this.stx.currentQuote() !== null) {
-            this.updateMarkerTick();
-        }
     }
 
     destructor() {

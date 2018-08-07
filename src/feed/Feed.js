@@ -1,17 +1,19 @@
 import EventEmitter from 'event-emitter-es6';
 import { TickHistoryFormatter } from './TickHistoryFormatter';
 import PendingPromise from '../utils/PendingPromise';
-import { getUTCEpoch } from '../utils';
+import { calculateGranularity, getUTCEpoch } from '../utils';
 
 class Feed {
     static get EVENT_MASTER_DATA_UPDATE() { return 'EVENT_MASTER_DATA_UPDATE'; }
     static get EVENT_COMPARISON_DATA_UPDATE() { return 'EVENT_COMPARISON_DATA_UPDATE'; }
     static get EVENT_ON_PAGINATION() { return 'EVENT_ON_PAGINATION'; }
+    startEpoch;
+    endEpoch;
 
     constructor(binaryApi, stx, mainStore) {
         this._stx = stx;
         this._binaryApi = binaryApi;
-        this._streamCallbacks = {};
+        this._activeStreams = {};
         this._lastStreamEpoch = {};
         this._mainStore = mainStore;
         this._emitter = new EventEmitter({ emitDelay: 0 });
@@ -23,19 +25,19 @@ class Feed {
 
     // Do not call explicitly! Method below is called by ChartIQ when unsubscribing symbols.
     unsubscribe({ symbol, period, interval }) {
-        const granularity = Feed.calculateGranularity(period, interval);
+        const granularity = calculateGranularity(period, interval);
         const key = this._getKey({ symbol, granularity });
         this._forgetStream(key);
     }
 
     _forgetStream(key) {
         const { symbol, granularity } = this._unpackKey(key);
-        if (this._streamCallbacks[key]) {
+        if (this._activeStreams[key]) {
             this._binaryApi.forget({
                 symbol,
                 granularity,
-            }, this._streamCallbacks[key]);
-            delete this._streamCallbacks[key];
+            });
+            delete this._activeStreams[key];
         }
 
         if (this._lastStreamEpoch[key]) {
@@ -69,14 +71,18 @@ class Feed {
 
     async fetchInitialData(symbol, suggestedStartDate, suggestedEndDate, params, callback) {
         const { period, interval, symbolObject } = params;
-        const granularity = Feed.calculateGranularity(period, interval);
+        const granularity = calculateGranularity(period, interval);
+        const key = this._getKey({ symbol, granularity });
+
         const isComparisonChart = this._stx.chart.symbol !== symbol;
-        let start = suggestedStartDate / 1000 | 0;
+        let start = this.startEpoch || (suggestedStartDate / 1000 | 0);
+        const end = this.endEpoch;
+        const date = new Date();
+        const now = (date.getTime() / 1000) | 0;
         if (isComparisonChart) {
             // Strange issue where comparison series is offset by timezone...
             start -= suggestedStartDate.getTimezoneOffset() * 60;
         }
-        const key = this._getKey({ symbol, granularity });
         const comparisonChartSymbol = isComparisonChart ? symbol : undefined;
 
         const tickHistoryRequest = {
@@ -85,8 +91,14 @@ class Feed {
             granularity,
         };
 
-        const [tickHistoryPromise, processTickHistory] = this._getProcessTickHistoryClosure(key, comparisonChartSymbol);
-        this._binaryApi.subscribeTickHistory(tickHistoryRequest, processTickHistory);
+        let tickHistoryPromise, processTickHistory;
+        if (end && now > end) { // end is in the past; no streaming required
+            tickHistoryRequest.end = end;
+            tickHistoryPromise = this._binaryApi.getTickHistory(tickHistoryRequest);
+        } else {
+            [tickHistoryPromise, processTickHistory] = this._getProcessTickHistoryClosure(key, comparisonChartSymbol);
+            this._binaryApi.subscribeTickHistory(tickHistoryRequest, processTickHistory);
+        }
 
         let response = await tickHistoryPromise;
 
@@ -117,8 +129,8 @@ class Feed {
                 callback(dataCallback);
                 return;
             }
-        } else {
-            this._streamCallbacks[key] = processTickHistory;
+        } else if (processTickHistory) {
+            this._activeStreams[key] = true;
         }
 
         const quotes = TickHistoryFormatter.formatHistory(response);
@@ -129,9 +141,11 @@ class Feed {
 
         callback({ quotes });
         if (!isComparisonChart) {
+            const prev = quotes[quotes.length - 2];
+            const prevClose = (prev !== undefined) ? prev.Close : undefined;
             this._emitter.emit(Feed.EVENT_MASTER_DATA_UPDATE, {
                 ...quotes[quotes.length - 1],
-                prevClose: quotes[quotes.length - 2].Close,
+                prevClose,
             });
             this._mainStore.chart.setChartAvailability(true);
         } else {
@@ -143,12 +157,17 @@ class Feed {
         const end   = getUTCEpoch(endDate);
         const start = getUTCEpoch(suggestedStartDate);
         const { period, interval } = params;
-        const granularity = Feed.calculateGranularity(period, interval);
+        const granularity = calculateGranularity(period, interval);
 
         await this._getPaginationData(symbol, granularity, start, end, callback);
     }
 
     async _getPaginationData(symbol, granularity, start, end, callback) {
+        if (this.startEpoch && start < this.startEpoch) {
+            callback({ moreAvailable: false, quotes: [] });
+            return;
+        }
+
         const now   = getUTCEpoch(new Date());
         // Tick history data only goes as far back as 3 years:
         const startLimit = now - (2.8 * 365 * 24 * 60 * 60 /* == 3 Years */);
@@ -188,13 +207,18 @@ class Feed {
     }
 
     unsubscribeAll() {
-        for (const key of Object.keys(this._streamCallbacks)) {
+        for (const key of Object.keys(this._activeStreams)) {
             this._forgetStream(key);
         }
     }
 
     _appendTick(resp, key, comparisonChartSymbol) {
-        this._lastStreamEpoch[key] = Feed.getEpochFromTick(resp);
+        const lastEpoch = +Feed.getEpochFromTick(resp);
+        if (this.endEpoch && lastEpoch > this.endEpoch) {
+            this._forgetStream(key);
+        }
+
+        this._lastStreamEpoch[key] = lastEpoch;
         const quotes = [TickHistoryFormatter.formatTick(resp)];
 
         this._updateChartData(quotes, comparisonChartSymbol);
@@ -242,16 +266,6 @@ class Feed {
         }
     }
 
-    static calculateGranularity(period, interval) {
-        const toSeconds = {
-            second: 0,
-            minute: 60,
-            day: 24 * 60 * 60,
-        };
-
-        return toSeconds[interval] * period;
-    }
-
     onMasterDataUpdate(callback) {
         this._emitter.on(Feed.EVENT_MASTER_DATA_UPDATE, callback);
     }
@@ -276,7 +290,7 @@ class Feed {
     }
 
     _onConnectionClosed() {
-        this._streamCallbacks = {}; // prevent forget requests; active streams are invalid when connection closed
+        this._activeStreams = {}; // prevent forget requests; active streams are invalid when connection closed
         this._connectionClosedDate = new Date();
     }
 
@@ -298,13 +312,13 @@ class Feed {
     }
 
     _resumeStream(key, start) {
-        if (this._streamCallbacks[key]) {
+        if (this._activeStreams[key]) {
             throw new Error('You cannot resume an active stream!');
         }
         const { symbol, granularity } = this._unpackKey(key);
         const comparisonChartSymbol = (this._stx.chart.symbol !== symbol) ? symbol : undefined;
         const [tickHistoryPromise, processTickHistory] = this._getProcessTickHistoryClosure(key, comparisonChartSymbol);
-        this._streamCallbacks[key] = processTickHistory;
+        this._activeStreams[key] = true;
         this._binaryApi.subscribeTickHistory({
             start,
             symbol,

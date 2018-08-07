@@ -12,7 +12,6 @@ export default class ChartTitleStore {
         this.categoricalDisplay = new CategoricalDisplayStore({
             getCategoricalItems: () => this.mainStore.chart.categorizedSymbols,
             getIsShown: () => this.menu.open,
-            onSelectItem: this.onSelectItem.bind(this),
             placeholderText: t.translate('Search...'),
             favoritesId: 'chartTitle&Comparison',
             mainStore,
@@ -28,18 +27,19 @@ export default class ChartTitleStore {
     @computed get decimalPlaces() { return this.mainStore.chart.currentActiveSymbol.decimal_places; }
     @computed get isShowChartPrice() { return this.mainStore.chart.isChartAvailable; }
 
-    @action.bound onSelectItem(symbolObject) {
-        const currentSymbol = this.mainStore.chart.stxx.chart.symbol;
-        if (symbolObject.symbol !== currentSymbol) {
-            this.chart.changeSymbol(symbolObject);
-        }
-        this.menu.setOpen(false);
-    }
-
     onContextReady = () => {
         this.chart.feed.onMasterDataUpdate(this.update);
         this.update();
     };
+
+    @action.bound setSymbol(symbolObj) {
+        if (this.chart.paramProps.symbol !== undefined) {
+            console.error('Changing symbol does nothing because symbol prop is being set. Consider overriding the onChange prop in <ChartTitle />');
+            return;
+        }
+
+        this.chart.changeSymbol(symbolObj);
+    }
 
     @action.bound update(quote) {
         if (!this.currentSymbol) { return; }
