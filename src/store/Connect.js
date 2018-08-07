@@ -6,7 +6,11 @@ import { action } from 'mobx';
 const connect_v2 = (Store, mapStoresToProps, handleProps) => {
     // wrap the mapping function usually passed to mobx-react's inject method
     // so that it additionally unboxes any observables
-    const unboxedMapStoresToProps = (stores, props, context) => mapStoresToProps(stores, props, context);
+    const unboxedMapStoresToProps = (stores, props, context) => {
+        const injectedProps = mapStoresToProps(stores, props, context);
+        Object.assign(injectedProps, props);
+        return injectedProps;
+    };
 
     class UnboxedComponent extends Component {
         handlePropsAction = action(handleProps || (() => {}));
@@ -14,11 +18,13 @@ const connect_v2 = (Store, mapStoresToProps, handleProps) => {
         static childContextTypes = { mobxStores: PropTypes.object };
 
         getChildContext() { return { mobxStores: this.store }; }
+
         componentWillMount() {
             this.store = new Store(this.context.mobxStores);
             this.injectedComponent = inject(unboxedMapStoresToProps)(UnboxedComponent.WrappedComponent);
             this.injectedComponent.displayName = `inject-${UnboxedComponent.displayName}`;
         }
+
         componentDidMount() {
             if (handleProps) { this.handlePropsAction(this.store, this.props); }
         }
@@ -34,11 +40,11 @@ const connect_v2 = (Store, mapStoresToProps, handleProps) => {
                 this.store.destructor();
             }
         }
+
         render() {
             return React.createElement(this.injectedComponent);
         }
     }
-
 
     // apply the mobx store injection with our wrapped function
     // const InjectedComponent = inject(unboxedMapStoresToProps)(UnboxedComponent);
@@ -116,7 +122,11 @@ export const connect = (...args) => {
 
     // wrap the mapping function usually passed to mobx-react's inject method
     // so that it additionally unboxes any observables
-    const unboxedMapStoresToProps = (stores, props, context) => mapStoresToProps(stores, props, context);
+    const unboxedMapStoresToProps = (stores, props, context) => {
+        const injectedProps = mapStoresToProps(stores, props, context);
+        Object.assign(injectedProps, props);
+        return injectedProps;
+    };
 
     // apply the mobx store injection with our wrapped function
     const InjectedComponent = inject(unboxedMapStoresToProps)(UnboxedComponent);
