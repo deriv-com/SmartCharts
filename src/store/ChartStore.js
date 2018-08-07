@@ -40,7 +40,6 @@ class ChartStore {
     @observable isChartAvailable = true;
     @observable comparisonSymbols = [];
     @observable categorizedSymbols = [];
-    @observable barrierJSX;
     @observable chartHeight;
     @observable chartContainerHeight;
     @observable isMobile = false;
