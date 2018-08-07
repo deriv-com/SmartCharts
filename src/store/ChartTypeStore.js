@@ -112,7 +112,9 @@ export default class ChartTypeStore {
     }
 
     get context() { return this.mainStore.chart.context; }
+
     get stx() { return this.context.stx; }
+
     get chartTypeProp() { return this.mainStore.chart.paramProps.chartType; }
 
     onContextReady = () => {

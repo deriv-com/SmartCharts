@@ -113,7 +113,9 @@ export default class StudyLegendStore {
                     defaultValue: par.defaultValue,
                     type: 'switch',
                 };
-            } else if (par.defaultValue.constructor === Number) {
+            }
+
+            if (par.defaultValue.constructor === Number) {
                 return {
                     ...shared,
                     id: par.name,

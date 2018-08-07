@@ -83,7 +83,7 @@ class Chart extends Component {
                                 <RenderInsideChart at="holder">
                                     {barriers.map((barr, idx) => (
                                         <Barrier
-                                            key={`barrier-${idx}`}
+                                            key={`barrier-${idx}`} // eslint-disable-line react/no-array-index-key
                                             {...barr}
                                         />
                                     ))}
@@ -98,10 +98,11 @@ class Chart extends Component {
                                     <Crosshair />
                                 </div>
                                 <Loader />
-                                {!isChartAvailable &&
+                                {!isChartAvailable && (
                                     <div className="cq-chart-unavailable">
                                         {t.translate('Chart data is not available for this symbol.')}
-                                    </div>}
+                                    </div>
+                                )}
                             </div>
                             <ChartControls widgets={chartControlsWidgets} />
                         </div>
