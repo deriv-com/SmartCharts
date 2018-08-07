@@ -43,13 +43,14 @@ CIQ.Animation = function (stx, animationParameters, easeMachine) {
     stx.tickAnimator = easeMachine || new CIQ.EaseMachine(Math.easeOutCubic, 1000);
     let scrollAnimator = new CIQ.EaseMachine(Math.easeInOutCubic, 1000);
 
-    let flashingColors = ['#0298d3', '#19bcfc', '#5dcffc', '#9ee3ff'];
-    let flashingColorIndex = 0;
+    // let flashingColors = ['#0298d3', '#19bcfc', '#5dcffc', '#9ee3ff'];
+    // let flashingColorIndex = 0;
     let flashingColorThrottle = 20;
     let flashingColorThrottleCounter = 0;
 
     let filterSession = false;
     let nextBoundary = null;
+    let currentSpotElement;
 
     function initMarketSessionFlags() {
         filterSession = false;
@@ -256,10 +257,12 @@ CIQ.Animation = function (stx, animationParameters, easeMachine) {
     });
 
     stx.append('draw', function () {
+        let currentSpotChanged = false;
+
         if (filterSession) { return; }
         if (this.chart.dataSet && this.chart.dataSet.length && this.mainSeriesRenderer && this.mainSeriesRenderer.supportsAnimation) {
             if (flashingColorThrottleCounter % flashingColorThrottle === 0) {
-                flashingColorIndex++;
+                // flashingColorIndex++;
                 flashingColorThrottleCounter = 0;
             }
             flashingColorThrottleCounter++;
@@ -275,13 +278,19 @@ CIQ.Animation = function (stx, animationParameters, easeMachine) {
             if (this.chart.yAxis.left > x &&
                 this.chart.yAxis.top <= y &&
                 this.chart.yAxis.bottom >= y) {
-                if (flashingColorIndex >= flashingColors.length) { flashingColorIndex = 0; }
+                // if (flashingColorIndex >= flashingColors.length) { flashingColorIndex = 0; }
                 context.beginPath();
                 context.moveTo(x, y);
-                context.arc(x, y, 2 + flashingColorIndex * 1.07, 0, Math.PI * 2, false);
-                context.fillStyle = flashingColors[flashingColorIndex];
+                context.arc(x, y, 3, 0, Math.PI * 2, false);
+                context.fillStyle = '#0298d3'; // flashingColors[flashingColorIndex];
                 context.fill();
             }
+        }
+
+        if (!currentSpotElement) {
+            currentSpotElement = document.createElement('span');
+            currentSpotElement.className = 'cq-spot';
+            this.chart.panel.holder.parentElement.appendChild(currentSpotElement);
         }
     });
 };
