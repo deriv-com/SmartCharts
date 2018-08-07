@@ -98,8 +98,8 @@ class App extends React.Component {
         const { barrierType, highLow : { high, low }, hidePriceLines, draggable, relative } = this.state;
         const barriers = barrierType ? [{
             shade: barrierType,
-            shadeColor: 'red',
-            color: '#f44336',
+            shadeColor: 'blue',
+            color: 'yellow',
             onChange: this.handleBarrierChange,
             relative,
             draggable,

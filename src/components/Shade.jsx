@@ -5,10 +5,12 @@ const Shade = ({
     bottom,
     visible,
     className,
+    backgroundColor,
+    backgroundImage,
 }) => (
     <div
         className={`shade ${className || ''} ${visible ? '' : 'hidden'}`}
-        style={{ top, bottom }}
+        style={{ top, bottom, backgroundColor, backgroundImage }}
     />
 );
 

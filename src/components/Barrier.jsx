@@ -19,7 +19,7 @@ const Barrier = ({
     isInitialized,
 }) => (isInitialized &&
     <div
-        className={`barrier ${shadeColor} ${hidePriceLines ? 'hide-pricelines' : ''}`}
+        className={`barrier ${hidePriceLines ? 'hide-pricelines' : ''}`}
     >
         <HighPriceLine lineStyle={lineStyle} color={color} />
         <LowPriceLine  lineStyle={lineStyle} color={color} />
@@ -27,18 +27,21 @@ const Barrier = ({
             className="top-shade"
             top={aboveShade.top}
             bottom={aboveShade.bottom}
+            backgroundImage={`linear-gradient(to bottom, transparent 30%, ${shadeColor})`}
             visible={aboveShade.visible}
         />
         <Shade
             className="between-shade"
             top={betweenShade.top}
             bottom={betweenShade.bottom}
+            backgroundColor={shadeColor}
             visible={betweenShade.visible}
         />
         <Shade
             className="bottom-shade"
             top={belowShade.top}
             bottom={belowShade.bottom}
+            backgroundImage={`linear-gradient(to bottom, ${shadeColor}, transparent 70%)`}
             visible={belowShade.visible}
         />
     </div>
