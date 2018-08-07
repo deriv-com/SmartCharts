@@ -41,7 +41,6 @@ class ChartStore {
     @observable comparisonSymbols = [];
     @observable categorizedSymbols = [];
     @observable barrierJSX;
-    @observable chartPanelTop = 0;
     @observable chartHeight;
     @observable chartContainerHeight;
     @observable isMobile = false;
@@ -244,11 +243,9 @@ class ChartStore {
 
         stxx.addEventListener('layout', () => {
             this.saveLayout();
-            this.updateChartPanelTop();
         });
         stxx.addEventListener('symbolChange', this.saveLayout.bind(this));
         stxx.addEventListener('drawing', this.saveDrawings.bind(this));
-        stxx.addEventListener('newChart', this.updateChartPanelTop);
         stxx.addEventListener('preferences', this.savePreferences.bind(this));
 
         const context = new Context(stxx, this.rootNode);
@@ -370,12 +367,6 @@ class ChartStore {
         this.context = context;
         this.contextPromise.resolve(this.context);
         this.resizeScreen();
-        this.updateChartPanelTop();
-    }
-
-    @action.bound updateChartPanelTop() {
-        if (this.holderStyle === undefined) { return; }
-        this.chartPanelTop = this.holderStyle.top;
     }
 
     @action.bound setCurrentActiveSymbols(stxx) {
