@@ -17,13 +17,10 @@ const Barrier = ({
     hidePriceLines,
     lineStyle,
     isInitialized,
-}) => {
-    const chartContainer = document.getElementsByClassName('chartContainer')[0];
-    chartContainer.style.setProperty('--shade-color', shadeColor);
-
-    return (isInitialized &&
+}) => (isInitialized &&
     <div
         className={`barrier ${hidePriceLines ? 'hide-pricelines' : ''}`}
+        style={{ '--shade-color': shadeColor }}
     >
         <HighPriceLine lineStyle={lineStyle} color={color} />
         <LowPriceLine  lineStyle={lineStyle} color={color} />
@@ -46,9 +43,7 @@ const Barrier = ({
             visible={belowShade.visible}
         />
     </div>
-    );
-};
-
+);
 export default connect(
     BarrierStore,
     store => ({

@@ -130,7 +130,7 @@ Attributes marked with `*` are **mandatory**:
 
 | Attribute | Description |
 --------|--------------
-shadeColor | Barrier shade color;
+shadeColor | Barrier shade color Defaults to `green`;
 color | Price line color. Defaults to `#000`.
 shade | Shade type; choose between `NONE_SINGLE`, `NONE_DOUBLE`, `ABOVE`, `BELOW`, `OUTSIDE` or `BETWEEN`. Defaults to `NONE_SINGLE`.
 hidePriceLines | hide/show the price lines. Defaults to `false`.
