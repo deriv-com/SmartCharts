@@ -83,9 +83,9 @@ export class Pattern extends React.Component {
     ];
     render() {
         const { pattern, lineWidth, onChange } = this.props;
-        const title = pattern !== 'none' ?
-            <span className={`option ${pattern}-${lineWidth}`} /> :
-            <span className="none">None</span>;
+        const title = pattern !== 'none'
+            ? <span className={`option ${pattern}-${lineWidth}`} />
+            : <span className="none">None</span>;
 
         return (
             <DropDown
@@ -93,9 +93,9 @@ export class Pattern extends React.Component {
                 title={title}
                 onRowClick={onChange}
             >
-                {p => (p.pattern !== 'none' ?
-                    <span className={`option ${p.pattern}-${p.width}`} /> :
-                    <span className="none">None</span>)
+                {p => (p.pattern !== 'none'
+                    ? <span className={`option ${p.pattern}-${p.width}`} />
+                    : <span className="none">None</span>)
                 }
             </DropDown>
         );

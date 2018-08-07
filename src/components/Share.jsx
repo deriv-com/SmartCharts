@@ -51,13 +51,15 @@ const Share = ({
                     className="content"
                     style={{ display: ((!loading && !urlGenerated) ? 'flex' : 'none') }}
                 >
-                    {shortUrlFailed ? <p>{t.translate('Failed to generate link')}</p> :
-                        <div
-                            className="download-btn"
-                            onClick={refreshShareLink}
-                        >
-                            {t.translate('Retry')}
-                        </div>}
+                    {shortUrlFailed ? <p>{t.translate('Failed to generate link')}</p>
+                        : (
+                            <div
+                                className="download-btn"
+                                onClick={refreshShareLink}
+                            >
+                                {t.translate('Retry')}
+                            </div>
+                        )}
                 </div>
                 <div
                     className="content"

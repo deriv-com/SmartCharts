@@ -31,13 +31,15 @@ const ChartTitle = ({
                 <div className="cq-market">{currentSymbol.market_display_name}</div>
                 <div className="cq-symbol">{currentSymbol.name}</div>
             </div>
-            {isVisible && isShowChartPrice &&
-            <div className="cq-chart-price">
-                <SpotPrice className="cq-current-price" />
-                <div className={`cq-change ${isPriceUp ? 'stx-up' : 'stx-down'}`}>
-                    <span className="cq-todays-change">{todayChange || 0}</span>&nbsp;
+            {isVisible && isShowChartPrice
+            && (
+                <div className="cq-chart-price">
+                    <SpotPrice className="cq-current-price" />
+                    <div className={`cq-change ${isPriceUp ? 'stx-up' : 'stx-down'}`}>
+                        <span className="cq-todays-change">{todayChange || 0}</span>&nbsp;
+                    </div>
                 </div>
-            </div>}
+            )}
             <ArrowIcon className="cq-symbol-dropdown" />
         </div>
     );

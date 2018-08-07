@@ -54,13 +54,15 @@ const ChartTypes = ({
                                     <T.icon  className={`margin ${T.active ? 'active' : ''}`} />
                                     <span className="ciq-icon-text">{T.text}</span>
                                 </span>
-                                {T.settingsOnClick &&
-                            <span
-                                className="ciq-aggregate-setting"
-                                onClick={() => showAggregateDialog(T.id)}
-                            >
-                                <SettingIcon />
-                            </span>}
+                                {T.settingsOnClick
+                            && (
+                                <span
+                                    className="ciq-aggregate-setting"
+                                    onClick={() => showAggregateDialog(T.id)}
+                                >
+                                    <SettingIcon />
+                                </span>
+                            )}
                             </React.Fragment>
                         )}
                     </ChartTypeList>

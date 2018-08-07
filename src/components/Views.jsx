@@ -54,66 +54,71 @@ const Views = ({
             </div>
             <div className="content">
                 {
-                    currentRoute !== 'overwrite' ?
-                        <div>
-                            <div className="template-name">
-                                {
-                                    currentRoute === 'add' ?
-                                        <span className="add">
-                                            <BackIcon onClick={cancel} />
-                                            <input
-                                                ref={inputRef}
-                                                className="view-input"
-                                                value={templateName}
-                                                placeholder={t.translate('Template name')}
-                                                maxLength={20}
-                                                onChange={onChange}
-                                                onKeyUp={onSubmit}
-                                            />
-                                        </span>
-                                        : <span className="add-new" onClick={main}> {t.translate('Add New')} </span>
-                                }
-                                <span className="icon">
+                    currentRoute !== 'overwrite'
+                        ? (
+                            <div>
+                                <div className="template-name">
                                     {
                                         currentRoute === 'add'
-                                            ? <TickIcon className="tick-icon" onClick={add} />
-                                            : <AddIcon className="add-icon" onClick={main} />
+                                            ? (
+                                                <span className="add">
+                                                    <BackIcon onClick={cancel} />
+                                                    <input
+                                                        ref={inputRef}
+                                                        className="view-input"
+                                                        value={templateName}
+                                                        placeholder={t.translate('Template name')}
+                                                        maxLength={20}
+                                                        onChange={onChange}
+                                                        onKeyUp={onSubmit}
+                                                    />
+                                                </span>
+                                            )
+                                            : <span className="add-new" onClick={main}> {t.translate('Add New')} </span>
                                     }
-                                </span>
-                            </div>
-                            <PerfectScrollbar className="ciq-list">
-                                {
-                                    views.map((view, i) => (
-                                        <ViewItem
-                                            view={view}
-                                            key={view.name}
-                                            onClick={e => applyLayout(i, e)}
-                                            remove={e => remove(i, e)}
-                                        />
-                                    ))
-                                }
-                            </PerfectScrollbar >
-                        </div>
-                        :
-                        <div className="ovrwrit-alrt">
-                            <div className="ovrwrit-alrt-title">
-                                <alertIconMap.warning />
-                                <span>
-                                    {templateName + t.translate(' already exists.')}
-                                </span>
-                                <span>
-                                    {t.translate('Would you like to overwrite it?')}
-                                </span>
-                            </div>
-                            <div className="ovrwrit-alrt-buttons">
-                                <div onClick={main}>
-                                    {t.translate('CANCEL')}
+                                    <span className="icon">
+                                        {
+                                            currentRoute === 'add'
+                                                ? <TickIcon className="tick-icon" onClick={add} />
+                                                : <AddIcon className="add-icon" onClick={main} />
+                                        }
+                                    </span>
                                 </div>
-                                <div onClick={overwrite}>
-                                    {t.translate('OVERWRITE')}
+                                <PerfectScrollbar className="ciq-list">
+                                    {
+                                        views.map((view, i) => (
+                                            <ViewItem
+                                                view={view}
+                                                key={view.name}
+                                                onClick={e => applyLayout(i, e)}
+                                                remove={e => remove(i, e)}
+                                            />
+                                        ))
+                                    }
+                                </PerfectScrollbar>
+                            </div>
+                        )
+                        :                        (
+                            <div className="ovrwrit-alrt">
+                                <div className="ovrwrit-alrt-title">
+                                    <alertIconMap.warning />
+                                    <span>
+                                        {templateName + t.translate(' already exists.')}
+                                    </span>
+                                    <span>
+                                        {t.translate('Would you like to overwrite it?')}
+                                    </span>
+                                </div>
+                                <div className="ovrwrit-alrt-buttons">
+                                    <div onClick={main}>
+                                        {t.translate('CANCEL')}
+                                    </div>
+                                    <div onClick={overwrite}>
+                                        {t.translate('OVERWRITE')}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        )
                 }
             </div>
         </ViewsMenu.Body>

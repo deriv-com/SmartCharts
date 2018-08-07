@@ -16,7 +16,7 @@
         "react"
     ],
     "parserOptions": {
-        "ecmaVersion": 8,
+        "ecmaVersion": 2018,
         "sourceType": "module"
     },
     "settings": {
@@ -69,6 +69,12 @@
         "import/no-extraneous-dependencies": ["error", {"packageDir": "./"}],
         "no-underscore-dangle": 0,
         "prefer-destructuring": 0,
+        "react/no-access-state-in-setstate": 0,
+        "react/destructuring-assignment": 0,
+        "react/forbid-prop-types": 0,
+        "react/jsx-props-no-multi-spaces": 0,
+        "react/jsx-one-expression-per-line": 0,
+        "lines-between-class-members": 0,
         "no-this-before-super": 2,
         "no-unused-expressions": 2,
         "semi": 2,

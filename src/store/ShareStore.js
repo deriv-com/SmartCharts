@@ -219,4 +219,3 @@ export default class ShareStore {
         this.screenshotArea = this.context.topNode.querySelector('.ciq-chart');
     };
 }
-

@@ -37,11 +37,13 @@ const Timeperiod = ({
                 </div>
             </TimePeriodMenu.Title>
             <TimePeriodMenu.Body>
-                {isMobile ?
-                    <div className="cq-mobile-title">
-                        <div className="mobile-title">{t.translate('Interval')}</div>
-                        <CloseIcon className="icon-close-menu" onClick={() => closeMenu()} />
-                    </div> : ''}
+                {isMobile
+                    ? (
+                        <div className="cq-mobile-title">
+                            <div className="mobile-title">{t.translate('Interval')}</div>
+                            <CloseIcon className="icon-close-menu" onClick={() => closeMenu()} />
+                        </div>
+                    ) : ''}
                 <div className="cq-interval">
                     <div className="timeUnit">
                         <span className={timeUnit === 'tick' ? 'selected' : ''}>{t.translate('Tick')}</span>
