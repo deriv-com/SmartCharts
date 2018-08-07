@@ -89,18 +89,18 @@ export default class DrawToolsStore {
     onMouseMove = (e) => {
         e.preventDefault();
         const vectorType = this.stx.currentVectorParameters.vectorType;
-        const img = document.getElementById('drawing-mouse-pointer');
+        const drawingMousePointer = document.getElementById('drawing-mouse-pointer');
         const container = document.getElementsByClassName('chartContainer primary')[0];
         const crosshairX = document.getElementsByClassName('stx_crosshair_x')[0];
         const crosshairY = document.getElementsByClassName('stx_crosshair_y')[0];
 
         if (vectorType) {
-            img.style.display = 'block';
-            img.style.left = `${crosshairX.offsetLeft}px`;
-            img.style.top = `${crosshairY.offsetTop - 16}px`;
+            drawingMousePointer.style.display = 'block';
+            drawingMousePointer.style.left = `${crosshairX.offsetLeft}px`;
+            drawingMousePointer.style.top = `${crosshairY.offsetTop - 16}px`;
             container.style.cursor = 'none';
         } else {
-            img.style.display = 'none';
+            drawingMousePointer.style.display = 'none';
             container.style.cursor = 'auto';
         }
     }
@@ -109,9 +109,9 @@ export default class DrawToolsStore {
         e.preventDefault();
         setTimeout(() => {
             const vectorType = this.stx.currentVectorParameters.vectorType;
-            const img = document.getElementById('drawing-mouse-pointer');
+            const drawingMousePointer = document.getElementById('drawing-mouse-pointer');
             if (!vectorType) {
-                img.style.display = 'none';
+                drawingMousePointer.style.display = 'none';
             }
         }, 500);
     }
