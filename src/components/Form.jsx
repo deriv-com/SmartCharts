@@ -53,9 +53,9 @@ export class DropDown extends React.Component {
                     <ArrowIcon />
                 </div>
                 <div className={`dropdown ${open ? 'active' : ''}`}>
-                    {rows.map((row, rowIdx) => (
+                    {rows.map(row => (
                         <div
-                            key={rowIdx}
+                            key={row}
                             className="row"
                             onClick={() => onRowClick && onRowClick(row)}
                         >
@@ -143,10 +143,10 @@ export class ColorPicker extends React.Component {
                 />
                 <div className={`dropdown ${this.state.open ? 'open' : ''}`}>
                     {this.colorMap.map((row, rowIdx) => (
-                        <div key={rowIdx} className="row">
-                            {row.map((tileColor, idx) => (
+                        <div key={rowIdx /* eslint-disable-line react/no-array-index-key */} className="row">
+                            {row.map(tileColor => (
                                 <div
-                                    key={idx}
+                                    key={tileColor}
                                     className="tile-color"
                                     style={{ backgroundColor: tileColor }}
                                     onClick={() => setColor(tileColor)}
@@ -240,8 +240,8 @@ export const NumberColorPicker = ({
     // Do NOT rename the variables Value and Color! The keys are also
     // used as attribute suffixes
     const { Value, Color } = value;
-    const onValueChange = Value => onChange({ Color, Value });
-    const onColorChange = Color => onChange({ Color, Value });
+    const onValueChange = v => onChange({ Color,    Value: v });
+    const onColorChange = c => onChange({ Color: c, Value    });
 
     return (
         <span className="cq-numbercolorpicker">

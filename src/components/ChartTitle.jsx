@@ -12,9 +12,9 @@ const ChartTitle = ({
     isShowChartPrice,
     isPriceUp,
     currentSymbol,
-    Menu,
+    ChartTitleMenu,
     MarketSelector,
-    AnimatedPrice,
+    SpotPrice,
     onCloseMenu,
     setMenuOpen,
     onChange,
@@ -33,7 +33,7 @@ const ChartTitle = ({
             </div>
             {isVisible && isShowChartPrice &&
             <div className="cq-chart-price">
-                <AnimatedPrice className="cq-current-price" />
+                <SpotPrice className="cq-current-price" />
                 <div className={`cq-change ${isPriceUp ? 'stx-up' : 'stx-down'}`}>
                     <span className="cq-todays-change">{todayChange || 0}</span>&nbsp;
                 </div>
@@ -43,15 +43,15 @@ const ChartTitle = ({
     );
 
     return (
-        <Menu
+        <ChartTitleMenu
             enabled={enabled}
             className={chartTitleClassName}
             isFullscreen
         >
-            <Menu.Title>
+            <ChartTitleMenu.Title>
                 {chartTitleContent}
-            </Menu.Title>
-            <Menu.Body>
+            </ChartTitleMenu.Title>
+            <ChartTitleMenu.Body>
                 <MarketSelector
                     onSelectItem={(x) => {
                         if (x.symbol !== currentSymbol.symbol) {
@@ -62,8 +62,8 @@ const ChartTitle = ({
                     dialogTitle={t.translate('Underlying Assets')}
                     closeMenu={() => onCloseMenu()}
                 />
-            </Menu.Body>
-        </Menu>
+            </ChartTitleMenu.Body>
+        </ChartTitleMenu>
     );
 };
 
@@ -73,9 +73,9 @@ export default connect(({ chartTitle: c }) => ({
     isVisible: c.isVisible,
     isShowChartPrice: c.isShowChartPrice,
     currentSymbol: c.currentSymbol,
-    Menu: c.menu.connect(Menu),
+    ChartTitleMenu: c.menu.connect(Menu),
     MarketSelector: c.categoricalDisplay.connect(CategoricalDisplay),
-    AnimatedPrice: c.animatedPrice.connect(AnimatedPrice),
+    SpotPrice: c.animatedPrice.connect(AnimatedPrice),
     onCloseMenu: c.menu.onTitleClick,
     setMenuOpen: c.menu.setOpen,
     onChange: c.setSymbol,

@@ -83,7 +83,7 @@ class Chart extends Component {
                                 <RenderInsideChart at="holder">
                                     {barriers.map((barr, idx) => (
                                         <Barrier
-                                            key={`barrier-${idx}`}
+                                            key={`barrier-${idx}`} // eslint-disable-line react/no-array-index-key
                                             {...barr}
                                         />
                                     ))}

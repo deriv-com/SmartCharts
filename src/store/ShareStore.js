@@ -105,14 +105,14 @@ export default class ShareStore {
                     const href = response.data.expand[0].long_url;
                     const encodedJsonPart = href.split('#').slice(1).join('#');
                     const url = href.split('#')[0];
-                    const hash = url.split('?')[1];
+                    const urlHash = url.split('?')[1];
 
                     payload = decodeURIComponent(encodedJsonPart) + payload;
 
-                    if (hash === 'NONE') {
+                    if (urlHash === 'NONE') {
                         return payload;
                     }
-                    return this.expandBitlyAsync(hash, payload);
+                    return this.expandBitlyAsync(urlHash, payload);
                 }
                 return null;
             });

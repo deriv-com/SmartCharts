@@ -1,4 +1,3 @@
-/* eslint-disable react/no-array-index-key */
 import React, { Fragment } from 'react';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import {
@@ -71,7 +70,7 @@ const CategoricalDisplay = ({
         >
             {renderLeft(item)}
             <div className="right">
-                {(item.dataObject && item.dataObject.exchange_is_open == 0) ? <span className="closed-market">{t.translate('CLOSED')}</span> : ''}
+                {(item.dataObject && item.dataObject.exchange_is_open === 0) ? <span className="closed-market">{t.translate('CLOSED')}</span> : ''}
                 {renderFavorite(item)}
             </div>
         </div>);
@@ -85,11 +84,11 @@ const CategoricalDisplay = ({
             <div className="right">
                 {activeOptions &&
                 <span className="cq-active-options">
-                    {activeOptions.map((opt, i) => {
+                    {activeOptions.map((opt) => {
                         const ActiveOptionIcon = ActiveOptionsIconMap[opt.id];
                         return (
                             <span
-                                key={`active-opt-${i}`}
+                                key={opt.id}
                                 className={`ic-${opt.id}`}
                                 onClick={e => opt.onClick && opt.onClick(item.dataObject, e)}
                             >
@@ -122,12 +121,12 @@ const CategoricalDisplay = ({
                     <CloseIcon className="icon-reset" onClick={() => clearFilterText()} />
                 </div>
                 <div className="cq-filter-panel">
-                    { filteredItems.map((category, i) => {
+                    { filteredItems.map((category) => {
                         const CategoryIcon = CategoryIconMap[category.categoryId];
                         const isActive = activeCategoryKey === category.categoryId;
                         return (
                             <div
-                                key={i}
+                                key={category.categoryId}
                                 className={`cq-filter ${isActive ? 'cq-active-filter' : ''} ${!isMobile ? 'cq-hover-style' : ''}`}
                                 onClick={e => handleFilterClick(category, e)}
                             >
@@ -145,18 +144,18 @@ const CategoricalDisplay = ({
                 onScrollDown={scrollDown}
             >
                 <div className="results-panel">
-                    { filteredItems.map((category, i) =>
+                    { filteredItems.map(category =>
                         (getItemCount(category) > 0 || category.emptyDescription) &&
                             <div
-                                key={`cat-${i}`}
+                                key={category.categoryId}
                                 className={`category category-${category.categoryId}`}
                                 ref={el => setCategoryElement(el, category.categoryId)}
                             >
                                 <div className="category-title">{t.translate(category.categoryName)}</div>
                                 { category.hasSubcategory
-                                    ? category.data.map((subcategory, j) =>
+                                    ? category.data.map(subcategory =>
                                         getItemCount(subcategory) > 0 &&
-                                        <Fragment key={j}>
+                                        <Fragment key={subcategory.subcategoryName}>
                                             <div className="category-content">
                                                 <div className="subcategory">{t.translate(subcategory.subcategoryName)}</div>
                                                 { subcategory.data.map(renderItem)}

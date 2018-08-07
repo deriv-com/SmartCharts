@@ -25,7 +25,7 @@ const ViewItem = ({
 );
 
 const Views = ({
-    Menu,
+    ViewsMenu,
     menuOpen,
     views,
     routes: { current: currentRoute, add, main, overwrite, cancel },
@@ -37,14 +37,14 @@ const Views = ({
     templateName,
     closeMenu,
 }) => (
-    <Menu className="ciq-views">
-        <Menu.Title className="cq-menu-btn">
+    <ViewsMenu className="ciq-views">
+        <ViewsMenu.Title className="cq-menu-btn">
             <TemplateIcon
                 className={`ic-icon-with-sub ${menuOpen ? 'active' : ''}`}
                 tooltip-title={t.translate('Templates')}
             />
-        </Menu.Title>
-        <Menu.Body>
+        </ViewsMenu.Title>
+        <ViewsMenu.Body>
             <div className="title">
                 <div className="title-text">{t.translate('Templates')}</div>
                 <CloseIcon
@@ -86,7 +86,7 @@ const Views = ({
                                     views.map((view, i) => (
                                         <ViewItem
                                             view={view}
-                                            key={i}
+                                            key={view.name}
                                             onClick={e => applyLayout(i, e)}
                                             remove={e => remove(i, e)}
                                         />
@@ -116,12 +116,12 @@ const Views = ({
                         </div>
                 }
             </div>
-        </Menu.Body>
-    </Menu>
+        </ViewsMenu.Body>
+    </ViewsMenu>
 );
 
 export default connect(({ view: s }) => ({
-    Menu: s.menu.connect(Menu),
+    ViewsMenu: s.menu.connect(Menu),
     views: s.views,
     routes: s.routes,
     onOverwrite: s.onOverwrite,

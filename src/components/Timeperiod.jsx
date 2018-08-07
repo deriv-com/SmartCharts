@@ -11,7 +11,7 @@ const Timeperiod = ({
     timeUnit,
     interval_display,
     timeUnit_display,
-    Menu,
+    TimePeriodMenu,
     closeMenu,
     setOpen,
     isMobile,
@@ -22,11 +22,11 @@ const Timeperiod = ({
         setOpen(false);
     };
     return (
-        <Menu
+        <TimePeriodMenu
             className="ciq-period"
             enabled={enabled}
         >
-            <Menu.Title>
+            <TimePeriodMenu.Title>
                 <div className="bt-priod">
                     <span className="ic-priod">
                         <span className="interval_display">{interval_display}</span>
@@ -35,8 +35,8 @@ const Timeperiod = ({
                     <br />
                     <span className="ic-subtitle">{t.translate('Interval')}</span>
                 </div>
-            </Menu.Title>
-            <Menu.Body>
+            </TimePeriodMenu.Title>
+            <TimePeriodMenu.Body>
                 {isMobile ?
                     <div className="cq-mobile-title">
                         <div className="mobile-title">{t.translate('Interval')}</div>
@@ -125,8 +125,8 @@ const Timeperiod = ({
                         </div>
                     </div>
                 </div>
-            </Menu.Body>
-        </Menu>);
+            </TimePeriodMenu.Body>
+        </TimePeriodMenu>);
 };
 
 export default connect(({ timeperiod: s }) => ({
@@ -135,7 +135,7 @@ export default connect(({ timeperiod: s }) => ({
     interval: s.interval,
     interval_display: s.interval_display,
     timeUnit_display: s.timeUnit_display,
-    Menu: s.menu.connect(Menu),
+    TimePeriodMenu: s.menu.connect(Menu),
     setOpen: s.menu.setOpen,
     closeMenu: s.menu.onTitleClick,
     isMobile: s.mainStore.chart.isMobile,
