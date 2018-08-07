@@ -139,8 +139,8 @@ export default class PriceLineStore {
 
     _locationFromPrice(p) {
         return (
-            this.stx.pixelFromPrice(p, this.chart.panel) -
-            this.chart.panel.top
+            this.stx.pixelFromPrice(p, this.chart.panel)
+            - this.chart.panel.top
         );
     }
 

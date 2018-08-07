@@ -134,8 +134,7 @@ export default class BarrierStore {
         if (this._shadeState === shadeState) { return; }
         this._shadeState = shadeState;
 
-        const noShade =
-            this._shadeState === BarrierStore.SHADE_NONE_SINGLE
+        const noShade = this._shadeState === BarrierStore.SHADE_NONE_SINGLE
             || this._shadeState === BarrierStore.SHADE_NONE_DOUBLE;
 
         if (noShade) {
@@ -143,14 +142,11 @@ export default class BarrierStore {
             this.betweenShade.visible = false;
             this.belowShade.visible = false;
         } else {
-            const aboveShadeEnable =
-                this._shadeState === BarrierStore.SHADE_ABOVE
+            const aboveShadeEnable = this._shadeState === BarrierStore.SHADE_ABOVE
                 || this._shadeState === BarrierStore.SHADE_OUTSIDE;
-            const belowShadeEnable =
-                this._shadeState === BarrierStore.SHADE_BELOW
+            const belowShadeEnable = this._shadeState === BarrierStore.SHADE_BELOW
                 || this._shadeState === BarrierStore.SHADE_OUTSIDE;
-            const betweenShadeEnable =
-                this._shadeState === BarrierStore.SHADE_BETWEEN;
+            const betweenShadeEnable = this._shadeState === BarrierStore.SHADE_BETWEEN;
 
             this.aboveShade.visible = aboveShadeEnable;
             this.betweenShade.visible = betweenShadeEnable;
@@ -159,8 +155,7 @@ export default class BarrierStore {
             this._drawShadedArea();
         }
 
-        const showLowBarrier =
-            this._shadeState === BarrierStore.SHADE_OUTSIDE
+        const showLowBarrier = this._shadeState === BarrierStore.SHADE_OUTSIDE
             || this._shadeState === BarrierStore.SHADE_BETWEEN
             || this._shadeState === BarrierStore.SHADE_NONE_DOUBLE;
 

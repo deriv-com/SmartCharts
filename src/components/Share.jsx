@@ -10,7 +10,7 @@ import '../../sass/components/_ciq-share.scss';
 
 
 const Share = ({
-    Menu,
+    ShareMenu,
     menuOpen,
     loading,
     urlGenerated,
@@ -26,14 +26,14 @@ const Share = ({
     closeMenu,
     isLoadingPNG,
 }) => (
-    <Menu className="cq-share">
-        <Menu.Title>
+    <ShareMenu className="cq-share">
+        <ShareMenu.Title>
             <ShareIcon
                 className={`ic-icon-with-sub ${menuOpen ? 'active' : ''}`}
                 tooltip-title={t.translate('Share')}
             />
-        </Menu.Title>
-        <Menu.Body>
+        </ShareMenu.Title>
+        <ShareMenu.Body>
             <div className="title">
                 <div className="title-text">{t.translate('Share / Download Chart')}</div>
                 <CloseIcon
@@ -51,13 +51,15 @@ const Share = ({
                     className="content"
                     style={{ display: ((!loading && !urlGenerated) ? 'flex' : 'none') }}
                 >
-                    {shortUrlFailed ? <p>{t.translate('Failed to generate link')}</p> :
-                        <div
-                            className="download-btn"
-                            onClick={refreshShareLink}
-                        >
-                            {t.translate('Retry')}
-                        </div>}
+                    {shortUrlFailed ? <p>{t.translate('Failed to generate link')}</p>
+                        : (
+                            <div
+                                className="download-btn"
+                                onClick={refreshShareLink}
+                            >
+                                {t.translate('Retry')}
+                            </div>
+                        )}
                 </div>
                 <div
                     className="content"
@@ -89,12 +91,12 @@ const Share = ({
                     </div>
                 </div>
             </div>
-        </Menu.Body>
-    </Menu>
+        </ShareMenu.Body>
+    </ShareMenu>
 );
 
 export default connect(({ share: s }) => ({
-    Menu: s.menu.connect(Menu),
+    ShareMenu: s.menu.connect(Menu),
     menuOpen: s.menu.dialog.open,
     loading: s.loading,
     urlGenerated: s.urlGenerated,

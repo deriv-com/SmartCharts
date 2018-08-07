@@ -388,8 +388,7 @@ class ChartStore {
         if (
             (isSymbolAvailable
                 && symbolObj.symbol === this.currentActiveSymbol.symbol)
-            &&
-            (granularity !== undefined
+            && (granularity !== undefined
                 && granularity === this.granularity)
         ) {
             return;
