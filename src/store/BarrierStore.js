@@ -4,7 +4,6 @@ import ShadeStore from './ShadeStore';
 import PendingPromise from '../utils/PendingPromise';
 
 export default class BarrierStore {
-    static get SHADE_COLOR_RED() { return 'red'; }
     static get SHADE_COLOR_GREEN() { return 'green'; }
 
     static get SHADE_NONE_SINGLE() { return 'SHADE_NONE_SINGLE'; }
