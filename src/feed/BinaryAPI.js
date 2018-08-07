@@ -29,7 +29,8 @@ export default class BinaryAPI {
         const key = this._getKey(params);
         const request = BinaryAPI.createTickHistoryRequest({ ...params, subscribe: 1 });
         this.streamRequests[key] = { request, callback };
-        this.requestSubscribe(request, callback);
+        // Send a copy of the request, in case it gets mutated outside
+        this.requestSubscribe({ ...request }, callback);
     }
 
     forget(params) {
