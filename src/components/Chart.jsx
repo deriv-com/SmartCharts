@@ -39,11 +39,8 @@ class Chart extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        const { settings, setSettings, setConnectionIsOpened, isConnectionOpened } = nextProps;
-        setSettings(settings);
-        if (isConnectionOpened !== undefined) {
-            setConnectionIsOpened(isConnectionOpened);
-        }
+        const { updateProps, ...props } = nextProps;
+        updateProps(props);
     }
 
     componentWillUnmount() {
@@ -86,7 +83,7 @@ class Chart extends Component {
                                 <RenderInsideChart at="holder">
                                     {barriers.map((barr, idx) => (
                                         <Barrier
-                                            key={`barrier-${idx}`}
+                                            key={`barrier-${idx}`} // eslint-disable-line react/no-array-index-key
                                             {...barr}
                                         />
                                     ))}
@@ -101,10 +98,11 @@ class Chart extends Component {
                                     <Crosshair />
                                 </div>
                                 <Loader />
-                                {!isChartAvailable &&
+                                {!isChartAvailable && (
                                     <div className="cq-chart-unavailable">
                                         {t.translate('Chart data is not available for this symbol.')}
-                                    </div>}
+                                    </div>
+                                )}
                             </div>
                             <ChartControls widgets={chartControlsWidgets} />
                         </div>
@@ -128,8 +126,7 @@ export default connect(({ chart, drawTools, studies, chartSetting, chartType }) 
     isChartAvailable: chart.isChartAvailable,
     chartPanelTop: chart.chartPanelTop,
     setting: chartSetting,
-    setSettings: chartSetting.setSettings,
+    updateProps: chart.updateProps,
     chartContainerHeight: chart.chartContainerHeight,
     containerWidth: chart.containerWidth,
-    setConnectionIsOpened: chart.setConnectionIsOpened,
 }))(Chart);

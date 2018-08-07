@@ -13,6 +13,12 @@
         position: relative;
         font-weight: 400;
     }
+    .cq-menu-btn {
+        user-select: none;
+    }
+    &.ciq-enabled > .cq-menu-btn {
+        cursor: pointer;
+    }
 }
 
 .cq-menu-dropdown {
@@ -111,13 +117,11 @@
         &.stxMenuActive {
             z-index: 9;
         }
-        .cq-menu-btn {
-            &:hover {
-                > .ic-icon,
-                > .cq-toggle {
-                    svg {
-                        background: transparent;
-                    }
+        .cq-menu-btn:hover {
+            > .ic-icon,
+            > .cq-toggle {
+                svg {
+                    background: transparent;
                 }
             }
         }
