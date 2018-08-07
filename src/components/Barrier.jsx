@@ -17,7 +17,11 @@ const Barrier = ({
     hidePriceLines,
     lineStyle,
     isInitialized,
-}) => (isInitialized &&
+}) => {
+    const smartchart = document.getElementsByClassName('ciq-chart-area')[0];
+    smartchart.style.setProperty('--shade-color', shadeColor);
+
+    return (isInitialized &&
     <div
         className={`barrier ${hidePriceLines ? 'hide-pricelines' : ''}`}
     >
@@ -27,25 +31,23 @@ const Barrier = ({
             className="top-shade"
             top={aboveShade.top}
             bottom={aboveShade.bottom}
-            backgroundImage={`linear-gradient(to bottom, transparent 30%, ${shadeColor})`}
             visible={aboveShade.visible}
         />
         <Shade
             className="between-shade"
             top={betweenShade.top}
             bottom={betweenShade.bottom}
-            backgroundColor={shadeColor}
             visible={betweenShade.visible}
         />
         <Shade
             className="bottom-shade"
             top={belowShade.top}
             bottom={belowShade.bottom}
-            backgroundImage={`linear-gradient(to bottom, ${shadeColor}, transparent 70%)`}
             visible={belowShade.visible}
         />
     </div>
-);
+    );
+};
 
 export default connect(
     BarrierStore,

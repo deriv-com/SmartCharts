@@ -142,7 +142,15 @@ $green: #4caf50;
     @include transition(opacity 0.1s ease-out);
 }
 
-.between-shade {
-    opacity: 0.2;
+.top-shade {
+    background-image: linear-gradient(to bottom, transparent 30%, var(--shade-color));
 }
 
+.between-shade {
+    opacity: 0.2;
+    background-color: var(--shade-color);
+}
+
+.bottom-shade {
+    background-image: linear-gradient(to bottom, var(--shade-color), transparent 70%);
+}
