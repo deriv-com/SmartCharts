@@ -227,7 +227,7 @@ class ChartStore {
         stxx.append('adjustPanelPositions', function () {
             const panel = Object.keys(stxx.panels)[1];
             if (panel) {
-                stxx.panels[panel].up.style.display = 'none';
+                stxx.panels[panel].up.style.display = 'none'; // Hide the up arrow from first indicator to prevent user from moving the indicator panel above the main chart
             }
         });
 
