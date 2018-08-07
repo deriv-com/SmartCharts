@@ -64,7 +64,9 @@ export default class DrawToolsStore {
     }
 
     get context() { return this.mainStore.chart.context; }
+
     get stx() { return this.context.stx; }
+
     activeDrawing = null;
 
     onContextReady = () => {

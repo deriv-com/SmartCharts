@@ -1,7 +1,7 @@
 import React from 'react';
 import { observable, action } from 'mobx';
 import MenuStore from './MenuStore';
-import { FlagIcons } from './../components/Icons.jsx';
+import { FlagIcons } from '../components/Icons.jsx';
 
 export default class ChartSettingStore {
     constructor(mainStore) {
@@ -143,4 +143,3 @@ export default class ChartSettingStore {
         this.saveSetting();
     }
 }
-

@@ -17,7 +17,7 @@ const Barrier = ({
     hidePriceLines,
     lineStyle,
     isInitialized,
-}) => (isInitialized &&
+}) => (isInitialized && (
     <div
         className={`barrier ${hidePriceLines ? 'hide-pricelines' : ''}`}
         style={{ '--shade-color': shadeColor }}
@@ -43,7 +43,8 @@ const Barrier = ({
             visible={belowShade.visible}
         />
     </div>
-);
+));
+
 export default connect(
     BarrierStore,
     store => ({
