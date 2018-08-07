@@ -9,11 +9,11 @@ const connect_v2 = (Store, mapStoresToProps, handleProps) => {
     const unboxedMapStoresToProps = (stores, props, context) => mapStoresToProps(stores, props, context);
 
     class UnboxedComponent extends Component {
+        handlePropsAction = action(handleProps || (() => {}));
         static contextTypes = { mobxStores: PropTypes.object };
         static childContextTypes = { mobxStores: PropTypes.object };
 
         getChildContext() { return { mobxStores: this.store }; }
-
         componentWillMount() {
             this.store = new Store(this.context.mobxStores);
             this.injectedComponent = inject(unboxedMapStoresToProps)(UnboxedComponent.WrappedComponent);
@@ -22,6 +22,7 @@ const connect_v2 = (Store, mapStoresToProps, handleProps) => {
         componentDidMount() {
             if (handleProps) { this.handlePropsAction(this.store, this.props); }
         }
+
         componentWillReceiveProps(nextProps) {
             this.handlePropsAction(this.store, nextProps);
         }
@@ -33,8 +34,6 @@ const connect_v2 = (Store, mapStoresToProps, handleProps) => {
                 this.store.destructor();
             }
         }
-
-        handlePropsAction = action(handleProps || (() => {}));
         render() {
             return React.createElement(this.injectedComponent);
         }
