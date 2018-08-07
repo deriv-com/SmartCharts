@@ -7,7 +7,7 @@ import Shade from './Shade.jsx';
 import { isValidProp } from '../utils';
 
 const Barrier = ({
-    shadeColor,
+    shadeColor = '#4caf50',
     color = '#000',
     HighPriceLine,
     LowPriceLine,
@@ -19,7 +19,8 @@ const Barrier = ({
     isInitialized,
 }) => (isInitialized && (
     <div
-        className={`barrier ${shadeColor} ${hidePriceLines ? 'hide-pricelines' : ''}`}
+        className={`barrier ${hidePriceLines ? 'hide-pricelines' : ''}`}
+        style={{ '--shade-color': shadeColor }}
     >
         <HighPriceLine lineStyle={lineStyle} color={color} />
         <LowPriceLine  lineStyle={lineStyle} color={color} />
