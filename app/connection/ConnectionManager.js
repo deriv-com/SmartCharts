@@ -15,7 +15,15 @@ class ConnectionManager extends EventEmitter {
     }
 
     _initialize() {
-        this._websocket = new RobustWebsocket(this._url);
+        this._websocket = new RobustWebsocket(this._url, null, {
+            shouldReconnect(event /* , ws */) {
+                if (event.code === 1008
+                    || event.code === 1011
+                    || event.type === 'close') return;
+                if (event.type === 'online') { return 0; }
+                return 3000;
+            },
+        });
 
         // There's a strange bug where upon reconnection over a short period
         // the OPEN status precedes CLOSED. To circumvent this we manually
