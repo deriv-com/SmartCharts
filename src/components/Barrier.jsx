@@ -7,7 +7,7 @@ import Shade from './Shade.jsx';
 import { isValidProp } from '../utils';
 
 const Barrier = ({
-    shadeColor = 'green',
+    shadeColor = '#4caf50',
     color = '#000',
     HighPriceLine,
     LowPriceLine,
