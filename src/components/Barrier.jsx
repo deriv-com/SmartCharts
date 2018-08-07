@@ -18,8 +18,8 @@ const Barrier = ({
     lineStyle,
     isInitialized,
 }) => {
-    const smartchart = document.getElementsByClassName('ciq-chart-area')[0];
-    smartchart.style.setProperty('--shade-color', shadeColor);
+    const chartContainer = document.getElementsByClassName('chartContainer')[0];
+    chartContainer.style.setProperty('--shade-color', shadeColor);
 
     return (isInitialized &&
     <div
