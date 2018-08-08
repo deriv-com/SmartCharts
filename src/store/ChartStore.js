@@ -54,23 +54,36 @@ class ChartStore {
     get routingStore() {
         return this.mainStore.routing;
     }
+
     saveLayout() {
         const layoutData = this.stxx.exportLayout(true);
         const json = JSON.stringify(layoutData);
         CIQ.localStorageSetItem(`layout-${this.id}`, json);
     }
 
-    restoreLayout(stx, layoutData) {
-        if (!layoutData) { return; }
+    // returns false if restoring layout fails
+    restoreLayout() {
+        const layoutData = this.restoreLayoutFromLocalStorage(`layout-${this.id}`);
 
-        stx.importLayout(layoutData, {
-            managePeriodicity: true,
-            cb: () => {
-                if (layoutData.tension) { stx.chart.tension = layoutData.tension; }
-                this.restoreDrawings(stx, stx.chart.symbol);
-                if (this.loader) { this.loader.hide(); }
-            },
-        });
+        if (layoutData) {
+            this.stxx.importLayout(layoutData, {
+                managePeriodicity: true,
+                cb: () => {
+                    if (layoutData.tension) {
+                        this.stxx.chart.tension = layoutData.tension;
+                    }
+                    this.restoreDrawings(this.stxx, this.stxx.chart.symbol);
+                    if (this.loader) {
+                        this.loader.hide();
+                    }
+                },
+            });
+            this.setCurrentActiveSymbols(this.stxx);
+
+            return true;
+        }
+
+        return false;
     }
 
     saveDrawings() {
@@ -258,12 +271,9 @@ class ChartStore {
 
         api.getActiveSymbols().then(({ active_symbols }) => {
             this.setActiveSymbols(active_symbols);
-            const layoutData = this.restoreLayoutFromLocalStorage(`layout-${this.id}`);
+            const isRestoreSuccess = this.restoreLayout();
 
-            if (layoutData) {
-                this.restoreLayout(stxx, layoutData);
-                this.setCurrentActiveSymbols(stxx);
-            } else {
+            if (!isRestoreSuccess) {
                 this.changeSymbol(
                     symbol || this.defaults.symbol,
                     this.granularity,
