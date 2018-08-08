@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Polish\n"
 "Language: pl_PL\n"
-"PO-Revision-Date: 2018-08-01 16:22\n"
+"PO-Revision-Date: 2018-08-08 08:01\n"
 
 msgid " already exists."
 msgstr " już istnieje."
@@ -78,12 +78,6 @@ msgstr "Porównania"
 msgid "Continuous"
 msgstr "Ciągła"
 
-msgid "Copied!"
-msgstr "Skopiowane!"
-
-msgid "Copy to clipboard"
-msgstr "Kopiuj do schowka"
-
 msgid "Countdown"
 msgstr "Odliczanie"
 
@@ -108,20 +102,17 @@ msgstr "Doodle"
 msgid "Dot"
 msgstr "Kropki"
 
-msgid "Download chart"
-msgstr "Pobierz wykres"
+msgid "Download"
+msgstr ""
+
+msgid "Download Chart"
+msgstr ""
 
 msgid "Draw tools"
 msgstr "Narzędzia do rysowania"
 
 msgid "Ellipse"
 msgstr "Elipsa"
-
-msgid "Failed to generate link"
-msgstr "Nie udało się wygenerować łącza"
-
-msgid "Failed!"
-msgstr "Nie udało się!"
 
 msgid "Favorites"
 msgstr "Ulubione"
@@ -234,9 +225,6 @@ msgstr "Renko"
 msgid "RESET"
 msgstr "RESETUJ"
 
-msgid "Retry"
-msgstr "Spróbuj ponownie"
-
 msgid "Reversal"
 msgstr "Odwrotność"
 
@@ -275,15 +263,6 @@ msgstr "Kształt - serce"
 
 msgid "Shape - Star"
 msgstr "Kształt – gwiazda"
-
-msgid "Share"
-msgstr "Udostępnianie"
-
-msgid "Share / Download Chart"
-msgstr "Udostępnij/pobierz wykres"
-
-msgid "Share link"
-msgstr "Łącze do udostępniania"
 
 msgid "Speed Resistance Arc"
 msgstr "Łuk odporn. na prędkość"
