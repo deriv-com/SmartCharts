@@ -7,6 +7,7 @@ import ChartTitle from './ChartTitle.jsx';
 import AssetInformation from './AssetInformation.jsx';
 import Loader from './Loader.jsx';
 import Barrier from './Barrier.jsx';
+import DrawingCursor from './DrawingCursor.jsx';
 
 /* css + scss */
 import '../../sass/app.scss';
@@ -62,6 +63,7 @@ class Chart extends Component {
             topWidgets,
             chartContainerHeight,
             containerWidth,
+            isDrawing,
         } = this.props;
 
         const currentPosition = `cq-chart-control-${(position && !isMobile) ? position : 'bottom'}`;
@@ -94,7 +96,7 @@ class Chart extends Component {
                                 <div className="cq-top-ui-widgets" style={{ top: chartPanelTop }}>
                                     { renderTopWidgets() }
                                 </div>
-                                <div className="chartContainer primary" style={{ height: chartContainerHeight }}>
+                                <div className={`chartContainer primary ${isDrawing ? 'ciq-draw-mode' : ''}`} style={{ height: chartContainerHeight }}>
                                     <Crosshair />
                                 </div>
                                 <Loader />
@@ -110,13 +112,13 @@ class Chart extends Component {
                 <DrawToolsSettingsDialog />
                 <AggregateChartSettingsDialog />
                 <StudySettingsDialog />
-                <div id="drawing-mouse-pointer" className="drawing-mouse-pointer" />
+                <DrawingCursor />
             </div>
         );
     }
 }
 
-export default connect(({ chart, drawTools, studies, chartSetting, chartType }) => ({
+export default connect(({ chart, drawTools, studies, chartSetting, chartType, drawingCursor }) => ({
     contextPromise: chart.contextPromise,
     init: chart.init,
     destroy: chart.destroy,
@@ -129,4 +131,5 @@ export default connect(({ chart, drawTools, studies, chartSetting, chartType }) 
     updateProps: chart.updateProps,
     chartContainerHeight: chart.chartContainerHeight,
     containerWidth: chart.containerWidth,
+    isDrawing: drawingCursor.isDrawing,
 }))(Chart);

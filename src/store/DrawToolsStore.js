@@ -69,12 +69,6 @@ export default class DrawToolsStore {
 
     onContextReady = () => {
         document.addEventListener('keydown', this.closeOnEscape, false);
-        document.addEventListener('mousemove', this.onMouseMove);
-
-        const container = document.getElementsByClassName('chartContainer primary')[0];
-        container.addEventListener('touchmove', this.onMouseMove);
-        container.addEventListener('touchend', this.onTouchEnd);
-
         this.stx.addEventListener('drawing', this.noTool);
         this.stx.prepend('deleteHighlighted', this.onDeleteHighlighted);
     };
@@ -85,36 +79,6 @@ export default class DrawToolsStore {
             this.stx.changeVectorType('');
         }
     };
-
-    onMouseMove = (e) => {
-        e.preventDefault();
-        const vectorType = this.stx.currentVectorParameters.vectorType;
-        const drawingMousePointer = document.getElementById('drawing-mouse-pointer');
-        const container = document.getElementsByClassName('chartContainer primary')[0];
-        const crosshairX = document.getElementsByClassName('stx_crosshair_x')[0];
-        const crosshairY = document.getElementsByClassName('stx_crosshair_y')[0];
-
-        if (vectorType) {
-            drawingMousePointer.style.display = 'block';
-            drawingMousePointer.style.left = `${crosshairX.offsetLeft}px`;
-            drawingMousePointer.style.top = `${crosshairY.offsetTop - 16}px`;
-            container.style.cursor = 'none';
-        } else {
-            drawingMousePointer.style.display = 'none';
-            container.style.cursor = 'auto';
-        }
-    }
-
-    onTouchEnd = (e) => {
-        e.preventDefault();
-        setTimeout(() => {
-            const vectorType = this.stx.currentVectorParameters.vectorType;
-            const drawingMousePointer = document.getElementById('drawing-mouse-pointer');
-            if (!vectorType) {
-                drawingMousePointer.style.display = 'none';
-            }
-        }, 500);
-    }
 
     @action.bound onDeleteHighlighted() {
         for (const drawing of this.stx.drawingObjects) {

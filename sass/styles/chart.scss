@@ -21,6 +21,10 @@ html, body {
         background: themed('ChartBg');
         color: themed('ChartText');
     }
+
+    &.ciq-draw-mode {
+        cursor: none;
+    }
 }
 
 /* Chart Block */
@@ -950,15 +954,6 @@ html, body {
 .ps--active-x > .ps__rail-x,
 .ps--active-y > .ps__rail-y {
     background-color: transparent !important;
-}
-
-.drawing-mouse-pointer {
-    display: none;
-    position: absolute;
-    width: 16px;
-    height: 16px;
-    z-index: 999;
-    background: url('./icons/pencil/ic-pencil.svg') no-repeat center;
 }
 
 .smartcharts-mobile {
