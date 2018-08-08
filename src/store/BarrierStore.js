@@ -4,9 +4,6 @@ import ShadeStore from './ShadeStore';
 import PendingPromise from '../utils/PendingPromise';
 
 export default class BarrierStore {
-    static get SHADE_COLOR_RED() { return 'red'; }
-    static get SHADE_COLOR_GREEN() { return 'green'; }
-
     static get SHADE_NONE_SINGLE() { return 'SHADE_NONE_SINGLE'; }
     static get SHADE_NONE_DOUBLE() { return 'SHADE_NONE_DOUBLE'; }
     static get SHADE_ABOVE() { return 'SHADE_ABOVE'; }
@@ -16,7 +13,8 @@ export default class BarrierStore {
 
     static get BARRIER_CHANGED() { return 'BARRIER_CHANGED'; }
 
-    @observable shadeColor = BarrierStore.SHADE_COLOR_GREEN;
+    @observable shadeColor;
+    @observable color;
     @observable isBetweenShadeVisible = false;
     @observable isTopShadeVisible = false;
     @observable isBottomShadeVisible = false;
@@ -134,8 +132,7 @@ export default class BarrierStore {
         if (this._shadeState === shadeState) { return; }
         this._shadeState = shadeState;
 
-        const noShade =
-            this._shadeState === BarrierStore.SHADE_NONE_SINGLE
+        const noShade = this._shadeState === BarrierStore.SHADE_NONE_SINGLE
             || this._shadeState === BarrierStore.SHADE_NONE_DOUBLE;
 
         if (noShade) {
@@ -143,14 +140,11 @@ export default class BarrierStore {
             this.betweenShade.visible = false;
             this.belowShade.visible = false;
         } else {
-            const aboveShadeEnable =
-                this._shadeState === BarrierStore.SHADE_ABOVE
+            const aboveShadeEnable = this._shadeState === BarrierStore.SHADE_ABOVE
                 || this._shadeState === BarrierStore.SHADE_OUTSIDE;
-            const belowShadeEnable =
-                this._shadeState === BarrierStore.SHADE_BELOW
+            const belowShadeEnable = this._shadeState === BarrierStore.SHADE_BELOW
                 || this._shadeState === BarrierStore.SHADE_OUTSIDE;
-            const betweenShadeEnable =
-                this._shadeState === BarrierStore.SHADE_BETWEEN;
+            const betweenShadeEnable = this._shadeState === BarrierStore.SHADE_BETWEEN;
 
             this.aboveShade.visible = aboveShadeEnable;
             this.betweenShade.visible = betweenShadeEnable;
@@ -159,8 +153,7 @@ export default class BarrierStore {
             this._drawShadedArea();
         }
 
-        const showLowBarrier =
-            this._shadeState === BarrierStore.SHADE_OUTSIDE
+        const showLowBarrier = this._shadeState === BarrierStore.SHADE_OUTSIDE
             || this._shadeState === BarrierStore.SHADE_BETWEEN
             || this._shadeState === BarrierStore.SHADE_NONE_DOUBLE;
 

@@ -6,128 +6,139 @@ import { CloseIcon } from './Icons.jsx';
 import '../../sass/components/_timeperiod.scss';
 
 const Timeperiod = ({
-    setPeriodicity,
+    onChange,
     interval,
     timeUnit,
     interval_display,
     timeUnit_display,
-    Menu,
+    TimePeriodMenu,
     closeMenu,
+    setOpen,
     isMobile,
-}) => (
-    <Menu
-        className="ciq-period"
-    >
-        <Menu.Title>
-            <div className="bt-priod">
-                <span className="ic-priod">
-                    <span className="interval_display">{interval_display}</span>
-                    <span className="unit_display">{timeUnit_display}</span>
-                </span>
-                <br />
-                <span className="ic-subtitle">{t.translate('Interval')}</span>
-            </div>
-        </Menu.Title>
-        <Menu.Body>
-            {isMobile ?
-                <div className="cq-mobile-title">
-                    <div className="mobile-title">{t.translate('Interval')}</div>
-                    <CloseIcon className="icon-close-menu" onClick={() => closeMenu()} />
-                </div> : '' }
-            <div className="cq-interval">
-                <div className="timeUnit">
-                    <span className={timeUnit === 'tick' ? 'selected' : ''}>{t.translate('Tick')}</span>
-                    <span className={timeUnit === 'minute' ? 'selected' : ''}>{t.translate('Minute')}</span>
-                    <span className={timeUnit === 'hour' ? 'selected' : ''}>{t.translate('Hour')}</span>
-                    <span className={timeUnit === 'day' ? 'selected' : ''}>{t.translate('Day')}</span>
+    enabled,
+}) => {
+    const onGranularityClick = (granularity) => {
+        onChange(granularity);
+        setOpen(false);
+    };
+    return (
+        <TimePeriodMenu
+            className="ciq-period"
+            enabled={enabled}
+        >
+            <TimePeriodMenu.Title>
+                <div className="bt-priod">
+                    <span className="ic-priod">
+                        <span className="interval_display">{interval_display}</span>
+                        <span className="unit_display">{timeUnit_display}</span>
+                    </span>
+                    <br />
+                    <span className="ic-subtitle">{t.translate('Interval')}</span>
                 </div>
-                <div className="interval">
-                    <div className="row">
-                        <span
-                            onClick={() => setPeriodicity(1, 'second')}
-                            className={timeUnit === 'tick' && interval === 1 ? 'selected' : ''}
-                        >1
-                        </span>
+            </TimePeriodMenu.Title>
+            <TimePeriodMenu.Body>
+                {isMobile
+                    ? (
+                        <div className="cq-mobile-title">
+                            <div className="mobile-title">{t.translate('Interval')}</div>
+                            <CloseIcon className="icon-close-menu" onClick={() => closeMenu()} />
+                        </div>
+                    ) : ''}
+                <div className="cq-interval">
+                    <div className="timeUnit">
+                        <span className={timeUnit === 'tick' ? 'selected' : ''}>{t.translate('Tick')}</span>
+                        <span className={timeUnit === 'minute' ? 'selected' : ''}>{t.translate('Minute')}</span>
+                        <span className={timeUnit === 'hour' ? 'selected' : ''}>{t.translate('Hour')}</span>
+                        <span className={timeUnit === 'day' ? 'selected' : ''}>{t.translate('Day')}</span>
                     </div>
-                    <div className="row">
-                        <span
-                            onClick={() => setPeriodicity(1, 'minute')}
-                            className={timeUnit === 'minute' && interval === 1 ? 'selected' : ''}
-                        >1
-                        </span>
-                        <span
-                            onClick={() => setPeriodicity(2, 'minute')}
-                            className={interval === 2 ? 'selected' : ''}
-                        >2
-                        </span>
-                        <span
-                            onClick={() => setPeriodicity(3, 'minute')}
-                            className={interval === 3 ? 'selected' : ''}
-                        >3
-                        </span>
-                        <span
-                            onClick={() => setPeriodicity(5, 'minute')}
-                            className={interval === 5 ? 'selected' : ''}
-                        >5
-                        </span>
-                        <span
-                            onClick={() => setPeriodicity(10, 'minute')}
-                            className={interval === 10 ? 'selected' : ''}
-                        >10
-                        </span>
-                        <span
-                            onClick={() => setPeriodicity(15, 'minute')}
-                            className={interval === 15 ? 'selected' : ''}
-                        >15
-                        </span>
-                        <span
-                            onClick={() => setPeriodicity(30, 'minute')}
-                            className={interval === 30 ? 'selected' : ''}
-                        >30
-                        </span>
-                    </div>
-                    <div className="row">
-                        <span
-                            onClick={() => setPeriodicity(60, 'minute')}
-                            className={interval === 60 ? 'selected' : ''}
-                        >1
-                        </span>
-                        <span
-                            onClick={() => setPeriodicity(120, 'minute')}
-                            className={interval === 120 ? 'selected' : ''}
-                        >2
-                        </span>
-                        <span
-                            onClick={() => setPeriodicity(240, 'minute')}
-                            className={interval === 240 ? 'selected' : ''}
-                        >4
-                        </span>
-                        <span
-                            onClick={() => setPeriodicity(480, 'minute')}
-                            className={interval === 480 ? 'selected' : ''}
-                        >8
-                        </span>
-                    </div>
-                    <div className="row">
-                        <span
-                            onClick={() => setPeriodicity(1, 'day')}
-                            className={timeUnit === 'day' ? 'selected' : ''}
-                        >1
-                        </span>
+                    <div className="interval">
+                        <div className="row">
+                            <span
+                                onClick={() => onGranularityClick(0)}
+                                className={timeUnit === 'tick' && interval === 1 ? 'selected' : ''}
+                            >1
+                            </span>
+                        </div>
+                        <div className="row">
+                            <span
+                                onClick={() => onGranularityClick(60)}
+                                className={timeUnit === 'minute' && interval === 1 ? 'selected' : ''}
+                            >1
+                            </span>
+                            <span
+                                onClick={() => onGranularityClick(120)}
+                                className={interval === 2 ? 'selected' : ''}
+                            >2
+                            </span>
+                            <span
+                                onClick={() => onGranularityClick(180)}
+                                className={interval === 3 ? 'selected' : ''}
+                            >3
+                            </span>
+                            <span
+                                onClick={() => onGranularityClick(300)}
+                                className={interval === 5 ? 'selected' : ''}
+                            >5
+                            </span>
+                            <span
+                                onClick={() => onGranularityClick(600)}
+                                className={interval === 10 ? 'selected' : ''}
+                            >10
+                            </span>
+                            <span
+                                onClick={() => onGranularityClick(900)}
+                                className={interval === 15 ? 'selected' : ''}
+                            >15
+                            </span>
+                            <span
+                                onClick={() => onGranularityClick(1800)}
+                                className={interval === 30 ? 'selected' : ''}
+                            >30
+                            </span>
+                        </div>
+                        <div className="row">
+                            <span
+                                onClick={() => onGranularityClick(3600)}
+                                className={interval === 60 ? 'selected' : ''}
+                            >1
+                            </span>
+                            <span
+                                onClick={() => onGranularityClick(7200)}
+                                className={interval === 120 ? 'selected' : ''}
+                            >2
+                            </span>
+                            <span
+                                onClick={() => onGranularityClick(14400)}
+                                className={interval === 240 ? 'selected' : ''}
+                            >4
+                            </span>
+                            <span
+                                onClick={() => onGranularityClick(28800)}
+                                className={interval === 480 ? 'selected' : ''}
+                            >8
+                            </span>
+                        </div>
+                        <div className="row">
+                            <span
+                                onClick={() => onGranularityClick(86400)}
+                                className={timeUnit === 'day' ? 'selected' : ''}
+                            >1
+                            </span>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </Menu.Body>
-    </Menu>
-);
+            </TimePeriodMenu.Body>
+        </TimePeriodMenu>);
+};
 
 export default connect(({ timeperiod: s }) => ({
-    setPeriodicity: s.setPeriodicity,
+    onChange: s.setGranularity,
     timeUnit: s.timeUnit,
     interval: s.interval,
     interval_display: s.interval_display,
     timeUnit_display: s.timeUnit_display,
-    Menu: s.menu.connect(Menu),
+    TimePeriodMenu: s.menu.connect(Menu),
+    setOpen: s.menu.setOpen,
     closeMenu: s.menu.onTitleClick,
     isMobile: s.mainStore.chart.isMobile,
 }))(Timeperiod);
