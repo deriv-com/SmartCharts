@@ -156,7 +156,6 @@ class ChartStore {
             requestSubscribe,
             requestForget,
             isMobile,
-            shareOrigin = 'https://charts.binary.com',
             enableRouting,
             onMessage,
             settings,
@@ -165,8 +164,7 @@ class ChartStore {
             endEpoch,
         } = props;
         const api = new BinaryAPI(requestAPI, requestSubscribe, requestForget);
-        const { share, chartSetting } = this.mainStore;
-        share.shareOrigin = shareOrigin;
+        const { chartSetting } = this.mainStore;
         chartSetting.setSettings(settings);
         chartSetting.onSettingsChange = onSettingsChange;
         this.isMobile = isMobile;
@@ -260,40 +258,19 @@ class ChartStore {
 
         api.getActiveSymbols().then(({ active_symbols }) => {
             this.setActiveSymbols(active_symbols);
-            let layoutData = this.restoreLayoutFromLocalStorage(`layout-${this.id}`);
+            const layoutData = this.restoreLayoutFromLocalStorage(`layout-${this.id}`);
 
-            const onLayoutDataReady = () => {
-                if (layoutData) {
-                    this.restoreLayout(stxx, layoutData);
-                    this.setCurrentActiveSymbols(stxx);
-                } else {
-                    this.changeSymbol(
-                        symbol || this.defaults.symbol,
-                        this.granularity,
-                    );
-                }
-
-                this.setLayoutData(context);
-            };
-            const href = window.location.href;
-            if (href.startsWith(shareOrigin) && href.indexOf('#') !== -1) {
-                const encodedJsonPart = href.split('#').slice(1).join('#');
-                const url = href.split('#')[0];
-                const hash = url.split('?')[1];
-
-                if (hash) {
-                    window.history.replaceState({}, document.title, window.location.pathname);
-                    const promise = this.mainStore.share.expandBitlyAsync(hash, decodeURIComponent(encodedJsonPart));
-                    promise.then((encodedJson) => {
-                        layoutData = JSON.parse(encodedJson);
-                        onLayoutDataReady();
-                    }).catch(() => onLayoutDataReady());
-                } else {
-                    onLayoutDataReady();
-                }
+            if (layoutData) {
+                this.restoreLayout(stxx, layoutData);
+                this.setCurrentActiveSymbols(stxx);
             } else {
-                onLayoutDataReady();
+                this.changeSymbol(
+                    symbol || this.defaults.symbol,
+                    this.granularity,
+                );
             }
+
+            this.setLayoutData(context);
         });
 
         this.resizeObserver = new ResizeObserver(this.resizeScreen);

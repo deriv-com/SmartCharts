@@ -65,12 +65,6 @@ msgstr ""
 msgid "Continuous"
 msgstr ""
 
-msgid "Copied!"
-msgstr ""
-
-msgid "Copy to clipboard"
-msgstr ""
-
 msgid "Countdown"
 msgstr ""
 
@@ -102,12 +96,6 @@ msgid "Draw tools"
 msgstr ""
 
 msgid "Ellipse"
-msgstr ""
-
-msgid "Failed to generate link"
-msgstr ""
-
-msgid "Failed!"
 msgstr ""
 
 msgid "Favorites"
@@ -221,9 +209,6 @@ msgstr ""
 msgid "RESET"
 msgstr ""
 
-msgid "Retry"
-msgstr ""
-
 msgid "Reversal"
 msgstr ""
 
@@ -267,9 +252,6 @@ msgid "Share"
 msgstr ""
 
 msgid "Share / Download Chart"
-msgstr ""
-
-msgid "Share link"
 msgstr ""
 
 msgid "Speed Resistance Arc"

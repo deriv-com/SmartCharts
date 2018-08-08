@@ -42,7 +42,6 @@ import Search from '../../sass/icons/search/ic-search-normal.svg';
 import Edit from '../../sass/icons/edit/ic-edit.svg';
 import IndicatorCategory from '../../sass/icons/sidebar/indicator/ic-indicator-normal.svg';
 import Arrow from '../../sass/icons/dropdown/ic-dropdown.svg';
-import Copy from '../../sass/icons/share/ic-copy.svg';
 import Share from '../../sass/icons/share/ic-share.svg';
 import PositionLeft from '../../sass/icons/chart settings/setting/ic-position-left.svg';
 import PositionBottom from '../../sass/icons/chart settings/setting/ic-position-bottom.svg';
@@ -209,7 +208,6 @@ export const EditIcon = Wrapper(Edit);
 export const SettingIcon = Wrapper(Edit);
 export const ArrowIcon = Wrapper(Arrow);
 export const FavoriteIcon = Wrapper(Star);
-export const CopyIcon = Wrapper(Copy);
 export const ShareIcon = Wrapper(Share);
 
 
