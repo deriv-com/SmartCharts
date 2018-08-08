@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Thai\n"
 "Language: th_TH\n"
-"PO-Revision-Date: 2018-08-08 09:46\n"
+"PO-Revision-Date: 2018-08-08 09:52\n"
 
 msgid " already exists."
 msgstr " มีอยู่แล้ว"
@@ -328,13 +328,13 @@ msgid "Show Zones"
 msgstr "แสดงพื้นที่"
 
 msgid "OverBought"
-msgstr "ซื้อมากเกินไป"
+msgstr "ซื้อมากเกินไป (OverBought)"
 
 msgid "OverSold"
-msgstr "ขายมากเกินไป"
+msgstr "ขายมากเกินไป (OverSold)"
 
 msgid "Moving Average"
-msgstr "ค่าเฉลี่ยเคลื่อนที่"
+msgstr "ค่าเฉลี่ยเคลื่อนที่ (Moving Average)"
 
 msgid "Field"
 msgstr "ฟิลด์"
@@ -529,7 +529,7 @@ msgid "Long Cycle"
 msgstr "รอบยาว"
 
 msgid "Points Or Percent"
-msgstr "คะแนนหรือร้อยละ"
+msgstr "คะแนน หรือ ร้อยละ"
 
 msgid "Twiggs Money Flow"
 msgstr "Twiggs Money Flow"
@@ -604,10 +604,10 @@ msgid "Random Walk Index"
 msgstr "ดัชนี Random Walk"
 
 msgid "Random Walk High"
-msgstr "Random Walk สูง"
+msgstr "ค่า Random Walk สูง"
 
 msgid "Random Walk Low"
-msgstr "Random Walk ต่ำ"
+msgstr "ค่า Random Walk ต่ำ"
 
 msgid "ADX/DMS"
 msgstr "ADX/DMS"
@@ -724,13 +724,13 @@ msgid "Bollinger Bands"
 msgstr "Bollinger Bands"
 
 msgid "Bollinger Bands Top"
-msgstr "Bollinger Bands ค่าสูงสุด"
+msgstr "ค่า Bollinger Bands สูงสุด"
 
 msgid "Bollinger Bands Median"
-msgstr "Bollinger Bands ค่ากลาง"
+msgstr "ค่า Bollinger Bands มัธยฐาน"
 
 msgid "Bollinger Bands Bottom"
-msgstr "Bollinger Bands ค่าต่ำสุด"
+msgstr "ค่า Bollinger Bands ต่ำสุด"
 
 msgid "Donchian Channel"
 msgstr "Donchian Channel"
@@ -742,13 +742,13 @@ msgid "Low Period"
 msgstr "ระยะเวลาต่ำ"
 
 msgid "Donchian High"
-msgstr "Donchian สูง"
+msgstr "ค่า Donchian สูง"
 
 msgid "Donchian Median"
-msgstr "Donchian ค่ากลาง"
+msgstr "ค่า Donchian มัธยฐาน"
 
 msgid "Donchian Low"
-msgstr "Donchian ต่ำ"
+msgstr "ค่า Donchian ต่ำ"
 
 msgid "Highest High Value"
 msgstr "ค่าสูงสูงที่สุด"
