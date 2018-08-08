@@ -37,6 +37,7 @@ export default class DrawingCursorStore {
 
     @action.bound onTouchEnd = (e) => {
         e.preventDefault();
+        // A delay is needed to remove drawing cursor after drawing ends on touch end in mobile
         setTimeout(this.updateDisplay(), 500);
     }
 
