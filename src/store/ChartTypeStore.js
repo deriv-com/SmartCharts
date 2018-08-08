@@ -90,6 +90,10 @@ function getAggregates() {
     };
 }
 
+const notCandles = getChartTypes()
+    .filter(t => !t.candleOnly)
+    .map(t => t.id);
+
 export default class ChartTypeStore {
     constructor(mainStore) {
         this.mainStore = mainStore;
@@ -98,7 +102,6 @@ export default class ChartTypeStore {
 
         this.list = new ListStore({
             getContext: () => this.context,
-            onItemSelected: item => this.setType(item),
             getItems: () => this.types,
         });
 
@@ -109,7 +112,10 @@ export default class ChartTypeStore {
     }
 
     get context() { return this.mainStore.chart.context; }
+
     get stx() { return this.context.stx; }
+
+    get chartTypeProp() { return this.mainStore.chart.paramProps.chartType; }
 
     onContextReady = () => {
         this.aggregates = getAggregates();
@@ -124,16 +130,36 @@ export default class ChartTypeStore {
             chartType = this.stx.layout.chartType;
         }
         const typeIdx = this.chartTypes.findIndex(t => t.id === chartType);
-        this.list.selectedIdx = typeIdx;
         this.type = this.chartTypes[typeIdx];
+
+        this.context.stx.addEventListener('newChart', this.syncTypeWithGranularity);
     };
+
+    syncTypeWithGranularity = () => {
+        const isTick = this.stx.layout.timeUnit === 'second';
+        const isCandle = notCandles.indexOf(this.type.id) === -1;
+
+        if (isCandle && isTick) {
+            this.setType('mountain');
+        } else if (!isTick && !isCandle && this.chartTypeProp === undefined) {
+            this.setType('candle');
+        }
+    };
+
+    @action.bound setTypeFromUI(type) {
+        if (this.chartTypeProp !== undefined) {
+            console.error('Changing chart type does nothing because chartType prop is being set. Consider overriding the onChange prop in <ChartTypes />');
+            return;
+        }
+
+        this.setType(type);
+    }
 
     @action.bound setType(type) {
         if (typeof type === 'string') {
-            type = this.types.filter(t => t.id === type)[0];
+            type = this.types.find(t => t.id === type);
         }
         if (type.id === this.type.id) {
-            this.menu.setOpen(false);
             return;
         }
         if (type.id === 'spline') {
@@ -149,10 +175,8 @@ export default class ChartTypeStore {
                 this.stx.setChartType(type.id);
             }
         }
-        this.list.selectedIdx = this.types.findIndex(t => t.id === type.id);
         this.type = type;
         this.mainStore.timeperiod.showCountdown(true);
-        this.menu.setOpen(false);
     }
 
     @action.bound showAggregateDialog(aggregateId) {
