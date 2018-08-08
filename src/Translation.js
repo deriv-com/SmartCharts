@@ -31,6 +31,7 @@ export class Translation {
     constructor(lang = 'en') {
         this.lang = lang;
     }
+
     setLanguage(lang) {
         if (lang_map[lang]) {
             this.lang = lang;
@@ -38,6 +39,7 @@ export class Translation {
             console.error('Unsupported language:', lang);
         }
     }
+
     /**
      *
      * @param {*} args include string to be translated, its plural form,

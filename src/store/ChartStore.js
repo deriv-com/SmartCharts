@@ -40,7 +40,6 @@ class ChartStore {
     @observable isChartAvailable = true;
     @observable comparisonSymbols = [];
     @observable categorizedSymbols = [];
-    @observable barrierJSX;
     @observable chartPanelTop = 0;
     @observable chartHeight;
     @observable chartContainerHeight;
@@ -387,8 +386,7 @@ class ChartStore {
         if (
             (isSymbolAvailable
                 && symbolObj.symbol === this.currentActiveSymbol.symbol)
-            &&
-            (granularity !== undefined
+            && (granularity !== undefined
                 && granularity === this.granularity)
         ) {
             return;

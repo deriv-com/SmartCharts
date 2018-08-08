@@ -29,4 +29,3 @@ export default connect(({ assetInformation: ai }) => ({
     low: ai.low,
     visible: ai.visible,
 }))(AssetInformation);
-

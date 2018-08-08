@@ -10,10 +10,10 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: French\n"
 "Language: fr_FR\n"
-"PO-Revision-Date: 2018-08-01 09:21\n"
+"PO-Revision-Date: 2018-08-07 12:51\n"
 
 msgid " already exists."
-msgstr ""
+msgstr " existe déja."
 
 msgid "[symbol] market is presently closed."
 msgstr "Le marché [symbol] est actuellement fermé."
@@ -25,7 +25,7 @@ msgid "Active"
 msgstr "Actif"
 
 msgid "Add New"
-msgstr ""
+msgstr "Ajouter Nouveau"
 
 msgid "Annotation"
 msgstr "Annotation"
@@ -46,7 +46,7 @@ msgid "Callout"
 msgstr "Légende"
 
 msgid "CANCEL"
-msgstr ""
+msgstr "ANNULATION"
 
 msgid "Candle"
 msgstr "Bougie"
@@ -193,7 +193,7 @@ msgid "OPEN"
 msgstr "OUVERTURE"
 
 msgid "OVERWRITE"
-msgstr ""
+msgstr "REMPLACER"
 
 msgid "Pitchfork"
 msgstr "Fourche"
@@ -331,7 +331,7 @@ msgid "Vertical"
 msgstr "Vertical"
 
 msgid "Would you like to overwrite it?"
-msgstr ""
+msgstr "Aimeriez vous le remplacer?"
 
 msgid "Zoom in"
 msgstr "Effectuer un zoom avant"
