@@ -15,4 +15,3 @@ export default connect(({ drawingCursor : dc }) => ({
     left: dc.left,
     display: dc.display,
 }))(DrawingCursor);
-
