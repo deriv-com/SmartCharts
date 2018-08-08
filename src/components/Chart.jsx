@@ -56,7 +56,6 @@ class Chart extends Component {
             setting : { position, theme },
             barriers = [],
             children,
-            chartPanelTop,
             chartControlsWidgets,
             AggregateChartSettingsDialog,
             topWidgets,
@@ -91,7 +90,7 @@ class Chart extends Component {
                                 <RenderInsideChart at="subholder">
                                     {children}
                                 </RenderInsideChart>
-                                <div className="cq-top-ui-widgets" style={{ top: chartPanelTop }}>
+                                <div className="cq-top-ui-widgets" >
                                     { renderTopWidgets() }
                                 </div>
                                 <div className="chartContainer primary" style={{ height: chartContainerHeight }}>
@@ -124,7 +123,6 @@ export default connect(({ chart, drawTools, studies, chartSetting, chartType }) 
     DrawToolsSettingsDialog : drawTools.settingsDialog.connect(SettingsDialog),
     AggregateChartSettingsDialog : chartType.settingsDialog.connect(SettingsDialog),
     isChartAvailable: chart.isChartAvailable,
-    chartPanelTop: chart.chartPanelTop,
     setting: chartSetting,
     updateProps: chart.updateProps,
     chartContainerHeight: chart.chartContainerHeight,
