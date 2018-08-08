@@ -295,7 +295,7 @@ class ChartStore {
         if (!layoutData) return layoutData;
 
         // prop values will always take precedence
-        const { symbol, granularity, chartType } = this.paramProps;
+        const { symbol, granularity, chartType, startEpoch, endEpoch } = this.paramProps;
 
         if (symbol !== undefined && symbol !== layoutData.symbols[0].symbol) {
             // symbol prop takes precedence over local storage data
@@ -314,6 +314,7 @@ class ChartStore {
             const periodicity = calculateTimeUnitInterval(granularity);
             layoutData = { ...layoutData, ...periodicity };
         } else {
+            // update this.granularity with chartLayout
             const { timeUnit, interval } = layoutData;
             if (timeUnit) {
                 this.granularity = calculateGranularity(interval, timeUnit);
@@ -322,18 +323,14 @@ class ChartStore {
             }
         }
 
-        const rangeSpan = this.getRangeSpan();
-        if (rangeSpan) {
-            layoutData = { ...layoutData, ...rangeSpan };
+        if (startEpoch || endEpoch) {
+            // already set in chart params
+            delete layoutData.span;
+            delete layoutData.range;
         }
 
         if (chartType !== undefined) {
-            if (chartType === 'spline') { // cause there's no such thing as spline chart in ChartIQ
-                layoutData.chartType = 'mountain';
-                this.stxx.chart.tension = layoutData.tension = 0.5;
-            } else {
-                layoutData.chartType = chartType;
-            }
+            delete layoutData.chartType;
         }
 
         return layoutData;
