@@ -89,7 +89,10 @@ msgstr ""
 msgid "Dot"
 msgstr ""
 
-msgid "Download chart"
+msgid "Download"
+msgstr ""
+
+msgid "Download Chart"
 msgstr ""
 
 msgid "Draw tools"
@@ -246,12 +249,6 @@ msgid "Shape - Heart"
 msgstr ""
 
 msgid "Shape - Star"
-msgstr ""
-
-msgid "Share"
-msgstr ""
-
-msgid "Share / Download Chart"
 msgstr ""
 
 msgid "Speed Resistance Arc"

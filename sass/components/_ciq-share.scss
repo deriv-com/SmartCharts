@@ -1,8 +1,14 @@
 
 .cq-share {
+    .cq-menu-btn > .ic-icon > svg > g > path {
+        fill: none !important;
+        @include themify($themes) {
+            stroke: themed('MenuIcon');
+        }
+    }
     .cq-menu-dropdown {
         width: 280px;
-        height: 200px;
+        height: 105px;
     }
     .title {
         height: 40px;

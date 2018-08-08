@@ -2,7 +2,7 @@ import React from 'react';
 import Menu from './Menu.jsx';
 import { connect } from '../store/Connect';
 import {
-    ShareIcon,
+    DownloadIcon,
     CloseIcon,
 } from './Icons.jsx';
 import '../../sass/components/_ciq-share.scss';
@@ -18,21 +18,20 @@ const Share = ({
 }) => (
     <ShareMenu className="cq-share">
         <ShareMenu.Title>
-            <ShareIcon
+            <DownloadIcon
                 className={`ic-icon-with-sub ${menuOpen ? 'active' : ''}`}
-                tooltip-title={t.translate('Share')}
+                tooltip-title={t.translate('Download')}
             />
         </ShareMenu.Title>
         <ShareMenu.Body>
             <div className="title">
-                <div className="title-text">{t.translate('Share / Download Chart')}</div>
+                <div className="title-text">{t.translate('Download Chart')}</div>
                 <CloseIcon
                     className="icon-close-menu"
                     onClick={() => closeMenu()}
                 />
             </div>
             <div className="body">
-                <div className="caption2">{t.translate('Download chart')}</div>
                 <div className="content">
                     <div
                         className="download-btn"
