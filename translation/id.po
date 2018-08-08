@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Indonesian\n"
 "Language: id_ID\n"
-"PO-Revision-Date: 2018-08-01 09:21\n"
+"PO-Revision-Date: 2018-08-08 08:01\n"
 
 msgid " already exists."
 msgstr " sudah tersedia."
@@ -78,12 +78,6 @@ msgstr "Perbandingan"
 msgid "Continuous"
 msgstr "Continuous"
 
-msgid "Copied!"
-msgstr "Tersalin!"
-
-msgid "Copy to clipboard"
-msgstr "Salin ke clipboard"
-
 msgid "Countdown"
 msgstr "Hitung mundur"
 
@@ -108,20 +102,17 @@ msgstr "Doodle"
 msgid "Dot"
 msgstr "Titik"
 
-msgid "Download chart"
-msgstr "Unduh chart"
+msgid "Download"
+msgstr ""
+
+msgid "Download Chart"
+msgstr ""
 
 msgid "Draw tools"
 msgstr "Alat gambar"
 
 msgid "Ellipse"
 msgstr "Ellipse"
-
-msgid "Failed to generate link"
-msgstr "Gagal menghasilkan link"
-
-msgid "Failed!"
-msgstr "Gagal!"
 
 msgid "Favorites"
 msgstr "Favorit"
@@ -234,9 +225,6 @@ msgstr "Renko"
 msgid "RESET"
 msgstr "ULANG"
 
-msgid "Retry"
-msgstr "Mencoba kembali"
-
 msgid "Reversal"
 msgstr "Reversal"
 
@@ -275,15 +263,6 @@ msgstr "Bentuk - Hati"
 
 msgid "Shape - Star"
 msgstr "Bentuk - Bintang"
-
-msgid "Share"
-msgstr "Bagikan"
-
-msgid "Share / Download Chart"
-msgstr "Bagikan / Download Chart"
-
-msgid "Share link"
-msgstr "Bagikan link"
 
 msgid "Speed Resistance Arc"
 msgstr "Perlawanan Panah Kecepatan"
