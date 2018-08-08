@@ -63,27 +63,64 @@ class ChartStore {
 
     // returns false if restoring layout fails
     restoreLayout() {
-        const layoutData = this.restoreLayoutFromLocalStorage(`layout-${this.id}`);
+        let layoutData = createObjectFromLocalStorage(`layout-${this.id}`);
 
-        if (layoutData) {
-            this.stxx.importLayout(layoutData, {
-                managePeriodicity: true,
-                cb: () => {
-                    if (layoutData.tension) {
-                        this.stxx.chart.tension = layoutData.tension;
-                    }
-                    this.restoreDrawings(this.stxx, this.stxx.chart.symbol);
-                    if (this.loader) {
-                        this.loader.hide();
-                    }
-                },
-            });
-            this.setCurrentActiveSymbols(this.stxx);
+        if (!layoutData) return false;
 
-            return true;
+        // prop values will always take precedence
+        const { symbol, granularity, chartType, startEpoch, endEpoch } = this.paramProps;
+
+        if (symbol !== undefined && symbol !== layoutData.symbols[0].symbol) {
+            // symbol prop takes precedence over local storage data
+            const symbolObject = this.activeSymbols.find(x => x.symbol === symbol);
+            layoutData.symbols = [{ symbol, symbolObject }];
         }
 
-        return false;
+        for (const symbolDat of layoutData.symbols) {
+            // Symbol from cache may be in different language, so replace it with server's
+            const { symbol: cachedSymbol } = symbolDat;
+            const updatedSymbol = this.activeSymbols.find(x => cachedSymbol === x.symbol);
+            symbolDat.symbolObject = updatedSymbol;
+        }
+
+        if (granularity !== undefined) {
+            const periodicity = calculateTimeUnitInterval(granularity);
+            layoutData = { ...layoutData, ...periodicity };
+        } else {
+            // update this.granularity with chartLayout
+            const { timeUnit, interval } = layoutData;
+            if (timeUnit) {
+                this.granularity = calculateGranularity(interval, timeUnit);
+            } else {
+                this.granularity = 86400; // 1 day
+            }
+        }
+
+        if (startEpoch || endEpoch) {
+            // already set in chart params
+            delete layoutData.span;
+            delete layoutData.range;
+        }
+
+        if (chartType !== undefined) {
+            delete layoutData.chartType;
+        }
+
+        this.stxx.importLayout(layoutData, {
+            managePeriodicity: true,
+            cb: () => {
+                if (layoutData.tension) {
+                    this.stxx.chart.tension = layoutData.tension;
+                }
+                this.restoreDrawings(this.stxx, this.stxx.chart.symbol);
+                if (this.loader) {
+                    this.loader.hide();
+                }
+            },
+        });
+        this.setCurrentActiveSymbols(this.stxx);
+
+        return true;
     }
 
     saveDrawings() {
@@ -287,53 +324,6 @@ class ChartStore {
         this.resizeObserver.observe(modalNode);
 
         this.feed.onComparisonDataUpdate(this.updateComparisons);
-    }
-
-    restoreLayoutFromLocalStorage(id) {
-        let layoutData = createObjectFromLocalStorage(id);
-
-        if (!layoutData) return layoutData;
-
-        // prop values will always take precedence
-        const { symbol, granularity, chartType, startEpoch, endEpoch } = this.paramProps;
-
-        if (symbol !== undefined && symbol !== layoutData.symbols[0].symbol) {
-            // symbol prop takes precedence over local storage data
-            const symbolObject = this.activeSymbols.find(x => x.symbol === symbol);
-            layoutData.symbols = [{ symbol, symbolObject }];
-        }
-
-        for (const symbolDat of layoutData.symbols) {
-            // Symbol from cache may be in different language, so replace it with server's
-            const { symbol: cachedSymbol } = symbolDat;
-            const updatedSymbol = this.activeSymbols.find(x => cachedSymbol === x.symbol);
-            symbolDat.symbolObject = updatedSymbol;
-        }
-
-        if (granularity !== undefined) {
-            const periodicity = calculateTimeUnitInterval(granularity);
-            layoutData = { ...layoutData, ...periodicity };
-        } else {
-            // update this.granularity with chartLayout
-            const { timeUnit, interval } = layoutData;
-            if (timeUnit) {
-                this.granularity = calculateGranularity(interval, timeUnit);
-            } else {
-                this.granularity = 86400; // 1 day
-            }
-        }
-
-        if (startEpoch || endEpoch) {
-            // already set in chart params
-            delete layoutData.span;
-            delete layoutData.range;
-        }
-
-        if (chartType !== undefined) {
-            delete layoutData.chartType;
-        }
-
-        return layoutData;
     }
 
     removeComparison(symbolObj) {
