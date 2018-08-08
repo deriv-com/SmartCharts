@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Indonesian\n"
 "Language: id_ID\n"
-"PO-Revision-Date: 2018-08-08 08:01\n"
+"PO-Revision-Date: 2018-08-08 08:23\n"
 
 msgid " already exists."
 msgstr " sudah tersedia."
@@ -103,10 +103,10 @@ msgid "Dot"
 msgstr "Titik"
 
 msgid "Download"
-msgstr ""
+msgstr "Download"
 
 msgid "Download Chart"
-msgstr ""
+msgstr "Download Grafik"
 
 msgid "Draw tools"
 msgstr "Alat gambar"
