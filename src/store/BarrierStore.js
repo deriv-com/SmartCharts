@@ -4,9 +4,6 @@ import ShadeStore from './ShadeStore';
 import PendingPromise from '../utils/PendingPromise';
 
 export default class BarrierStore {
-    static get SHADE_COLOR_RED() { return 'red'; }
-    static get SHADE_COLOR_GREEN() { return 'green'; }
-
     static get SHADE_NONE_SINGLE() { return 'SHADE_NONE_SINGLE'; }
     static get SHADE_NONE_DOUBLE() { return 'SHADE_NONE_DOUBLE'; }
     static get SHADE_ABOVE() { return 'SHADE_ABOVE'; }
@@ -16,7 +13,8 @@ export default class BarrierStore {
 
     static get BARRIER_CHANGED() { return 'BARRIER_CHANGED'; }
 
-    @observable shadeColor = BarrierStore.SHADE_COLOR_GREEN;
+    @observable shadeColor;
+    @observable color;
     @observable isBetweenShadeVisible = false;
     @observable isTopShadeVisible = false;
     @observable isBottomShadeVisible = false;
