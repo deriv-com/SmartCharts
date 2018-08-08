@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Thai\n"
 "Language: th_TH\n"
-"PO-Revision-Date: 2018-08-08 09:32\n"
+"PO-Revision-Date: 2018-08-08 09:46\n"
 
 msgid " already exists."
 msgstr " มีอยู่แล้ว"
@@ -616,7 +616,7 @@ msgid "Smoothing Period"
 msgstr "Smoothing Period"
 
 msgid "Series"
-msgstr "ซีรีย์"
+msgstr "ซีรีส์"
 
 msgid "Shading"
 msgstr "แรเงา"
@@ -634,10 +634,10 @@ msgid "ADX"
 msgstr "ADX"
 
 msgid "Positive Bar"
-msgstr "บาร์เชิงบวก"
+msgstr "แท่งเชิงบวก"
 
 msgid "Negative Bar"
-msgstr "แท่งด้านลบ"
+msgstr "แท่งเชิงลบ"
 
 msgid "High Low Bands"
 msgstr "High Low Bands"
@@ -649,13 +649,13 @@ msgid "Channel Fill"
 msgstr "ช่องเติม"
 
 msgid "High Low Top"
-msgstr "High Low สูงสุด"
+msgstr "ค่า High Low สูงสุด"
 
 msgid "High Low Median"
-msgstr "ค่ามัธยฐานสูงต่ำ"
+msgstr "ค่า High Low มัธยฐาน"
 
 msgid "High Low Bottom"
-msgstr "High Low ต่ำสุด"
+msgstr "ค่า High Low ต่ำสุด "
 
 msgid "High Minus Low"
 msgstr "High ลบ Low"
@@ -676,13 +676,13 @@ msgid "Shift"
 msgstr "Shift"
 
 msgid "MA Env Top"
-msgstr "MA Env Top"
+msgstr "ค่า MA Env สูงสุด"
 
 msgid "MA Env Median"
-msgstr "MA Env Median"
+msgstr "ค่า MA Env มัธยฐาน"
 
 msgid "MA Env Bottom"
-msgstr "MA Env Bottom"
+msgstr "ค่า MA Env ต่ำสุด"
 
 msgid "Fractal Chaos Bands"
 msgstr "Fractal Chaos Bands"
@@ -706,10 +706,10 @@ msgid "Prime Number Bands"
 msgstr "Prime Number Bands"
 
 msgid "Prime Bands Top"
-msgstr "Prime Bands สูงสุด"
+msgstr "ค่า Prime Bands สูงสุด"
 
 msgid "Prime Bands Bottom"
-msgstr "Prime Bands ต่ำสุด"
+msgstr "ค่า Prime Bands ต่ำสุด"
 
 msgid "Prime Bands Channel"
 msgstr "Prime Bands Channel"
@@ -838,10 +838,10 @@ msgid "Volume Chart"
 msgstr "แผนภูมิแสดงปริมาณ"
 
 msgid "Up Volume"
-msgstr "เพิ่มปริมาณ"
+msgstr "ปริมาณขาขึ้น"
 
 msgid "Down Volume"
-msgstr "ปริมาณลดลง"
+msgstr "ปริมาณขาลง"
 
 msgid "Volume Underlay"
 msgstr "Volume Underlay"
@@ -856,13 +856,13 @@ msgid "Display Average"
 msgstr "แสดงค่าเฉลี่ย"
 
 msgid "Display 1 Standard Deviation (1σ)"
-msgstr "แสดงค่าเบี่ยงเบนมาตรฐาน 1 (1σ)"
+msgstr "แสดง 1 ค่าเบี่ยงเบนมาตรฐาน (1σ)"
 
 msgid "Display 2 Standard Deviation (2σ)"
-msgstr "แสดงค่าเบี่ยงเบนมาตรฐาน 2 (2σ)"
+msgstr "แสดง 2 ค่าเบี่ยงเบนมาตรฐาน (2σ)"
 
 msgid "Display 3 Standard Deviation (3σ)"
-msgstr "แสดงค่าเบี่ยงเบนมาตรฐาน 3 (3σ)"
+msgstr "แสดง 3 ค่าเบี่ยงเบนมาตรฐาน (3σ)"
 
 msgid "Average"
 msgstr "ค่าเฉลี่ย"
@@ -976,10 +976,10 @@ msgid "Bollinger Bandwidth"
 msgstr "Bollinger Bandwidth"
 
 msgid "Bandwidth"
-msgstr "แบนวิดท์"
+msgstr "แบนด์วิดท์"
 
 msgid "Donchian Width"
-msgstr "Donchian กว้าง"
+msgstr "ความกว้าง Donchian"
 
 msgid "Relative Vigor Index"
 msgstr "ดัชนี Relative Vigor"
