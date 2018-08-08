@@ -28,8 +28,8 @@ export default class DrawingCursorStore {
 
         if (this.isDrawing) {
             this.display = 'block';
-            this.left = `${this.crosshairX.offsetLeft}px`;
-            this.top = `${this.crosshairY.offsetTop - 16}px`;
+            this.left = this.crosshairX.offsetLeft;
+            this.top = this.crosshairY.offsetTop - 16;
         } else {
             this.display = 'none';
         }
