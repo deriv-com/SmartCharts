@@ -4,9 +4,9 @@
     <title>icons/system/light/download/ic-download</title>
     <desc>Created with Sketch.</desc>
     <defs></defs>
-    <g id="icons/system/light/download/ic-download" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round">
-        <path d="M15.5,12.5 L15.5,14.5 C15.5,15.0522847 15.0522847,15.5 14.5,15.5 L1.5,15.5 C0.94771525,15.5 0.5,15.0522847 0.5,14.5 L0.5,12.5" id="Rectangle-14" stroke="#2A3052"></path>
-        <path d="M8,0.5 L8,12" id="Path-30" stroke="#2A3052"></path>
-        <polyline id="Path-31" stroke="#2A3052" stroke-linejoin="round" points="3.5 8.5 8 12.5 12.5 8.5"></polyline>
+    <g id="icons/system/light/download/ic-download"  stroke-width="1" fill="none"  stroke-linecap="round">
+        <path d="M15.5,12.5 L15.5,14.5 C15.5,15.0522847 15.0522847,15.5 14.5,15.5 L1.5,15.5 C0.94771525,15.5 0.5,15.0522847 0.5,14.5 L0.5,12.5" id="Rectangle-14" ></path>
+        <path d="M8,0.5 L8,12" id="Path-30"></path>
+        <path id="Path-31" d="M3.5 8.5 8 12.5 12.5 8.5"></path>
     </g>
 </svg>

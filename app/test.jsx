@@ -59,7 +59,6 @@ const renderControls = () => (
 const requestAPI = connectionManager.send.bind(connectionManager);
 const requestSubscribe = streamManager.subscribe.bind(streamManager);
 const requestForget = streamManager.forget.bind(streamManager);
-const shareOrigin = window.location.href.split('?')[0];
 
 class App extends React.Component {
     state = {
@@ -121,7 +120,6 @@ class App extends React.Component {
                         requestAPI={requestAPI}
                         requestSubscribe={requestSubscribe}
                         requestForget={requestForget}
-                        shareOrigin={shareOrigin}
                         barriers={barriers}
                     />
                 </div>
