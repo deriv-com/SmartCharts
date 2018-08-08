@@ -40,7 +40,6 @@ class ChartStore {
     @observable isChartAvailable = true;
     @observable comparisonSymbols = [];
     @observable categorizedSymbols = [];
-    @observable chartPanelTop = 0;
     @observable chartHeight;
     @observable chartContainerHeight;
     @observable isMobile = false;
@@ -281,13 +280,19 @@ class ChartStore {
         this.holderStyle = stxx.chart.panel.holder.style;
 
         stxx.append('deleteHighlighted', this.updateComparisons);
+
+        stxx.append('adjustPanelPositions', function () {
+            const panel = Object.keys(stxx.panels)[1];
+            if (panel) {
+                stxx.panels[panel].up.style.display = 'none'; // Hide the up arrow from first indicator to prevent user from moving the indicator panel above the main chart
+            }
+        });
+
         stxx.addEventListener('layout', () => {
             this.saveLayout();
-            this.updateChartPanelTop();
         });
         stxx.addEventListener('symbolChange', this.saveLayout.bind(this));
         stxx.addEventListener('drawing', this.saveDrawings.bind(this));
-        stxx.addEventListener('newChart', this.updateChartPanelTop);
         stxx.addEventListener('preferences', this.savePreferences.bind(this));
 
         const context = new Context(stxx, this.rootNode);
@@ -335,12 +340,6 @@ class ChartStore {
         this.context = context;
         this.contextPromise.resolve(this.context);
         this.resizeScreen();
-        this.updateChartPanelTop();
-    }
-
-    @action.bound updateChartPanelTop() {
-        if (this.holderStyle === undefined) { return; }
-        this.chartPanelTop = this.holderStyle.top;
     }
 
     @action.bound setCurrentActiveSymbols(stxx) {
