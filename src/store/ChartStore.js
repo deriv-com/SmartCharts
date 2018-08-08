@@ -5,7 +5,8 @@ import Context from '../components/ui/Context';
 import KeystrokeHub from '../components/ui/KeystrokeHub';
 import '../components/ui/Animation';
 import { BinaryAPI, Feed } from '../feed';
-import { createObjectFromLocalStorage, stableSort, calculateTimeUnitInterval, calculateGranularity, getUTCDate } from '../utils';
+import { stableSort, calculateTimeUnitInterval, getUTCDate } from '../utils';
+import ChartState from './ChartState';
 
 class ChartStore {
     static _id_counter = 0;
@@ -33,6 +34,7 @@ class ChartStore {
     chartNode = null;
     chartControlsNode = null;
     holderStyle;
+    state;
     onMessage = null;
     @observable containerWidth = null;
     @observable context = null;
@@ -52,106 +54,6 @@ class ChartStore {
     get loader() { return this.mainStore.loader; }
     get routingStore() {
         return this.mainStore.routing;
-    }
-
-    saveLayout() {
-        const layoutData = this.stxx.exportLayout(true);
-        const json = JSON.stringify(layoutData);
-        CIQ.localStorageSetItem(`layout-${this.id}`, json);
-    }
-
-    // returns false if restoring layout fails
-    restoreLayout() {
-        let layoutData = createObjectFromLocalStorage(`layout-${this.id}`);
-
-        if (!layoutData) return false;
-
-        // prop values will always take precedence
-        const { symbol, granularity, chartType, startEpoch, endEpoch } = this.paramProps;
-
-        if (symbol !== undefined && symbol !== layoutData.symbols[0].symbol) {
-            // symbol prop takes precedence over local storage data
-            const symbolObject = this.activeSymbols.find(x => x.symbol === symbol);
-            layoutData.symbols = [{ symbol, symbolObject }];
-        }
-
-        for (const symbolDat of layoutData.symbols) {
-            // Symbol from cache may be in different language, so replace it with server's
-            const { symbol: cachedSymbol } = symbolDat;
-            const updatedSymbol = this.activeSymbols.find(x => cachedSymbol === x.symbol);
-            symbolDat.symbolObject = updatedSymbol;
-        }
-
-        if (granularity !== undefined) {
-            const periodicity = calculateTimeUnitInterval(granularity);
-            layoutData = { ...layoutData, ...periodicity };
-        } else {
-            // update this.granularity with chartLayout
-            const { timeUnit, interval } = layoutData;
-            if (timeUnit) {
-                this.granularity = calculateGranularity(interval, timeUnit);
-            } else {
-                this.granularity = 86400; // 1 day
-            }
-        }
-
-        if (startEpoch || endEpoch) {
-            // already set in chart params
-            delete layoutData.span;
-            delete layoutData.range;
-        }
-
-        if (chartType !== undefined) {
-            delete layoutData.chartType;
-        }
-
-        this.stxx.importLayout(layoutData, {
-            managePeriodicity: true,
-            cb: () => {
-                if (layoutData.tension) {
-                    this.stxx.chart.tension = layoutData.tension;
-                }
-                this.restoreDrawings(this.stxx, this.stxx.chart.symbol);
-                if (this.loader) {
-                    this.loader.hide();
-                }
-            },
-        });
-
-        this.updateCurrentActiveSymbol();
-
-        return true;
-    }
-
-    saveDrawings() {
-        const obj = this.stxx.exportDrawings();
-        const symbol = this.stxx.chart.symbol;
-        if (obj.length === 0) {
-            CIQ.localStorage.removeItem(symbol);
-        } else {
-            CIQ.localStorageSetItem(symbol, JSON.stringify(obj));
-        }
-    }
-
-    restoreDrawings() {
-        const drawings = createObjectFromLocalStorage(this.stxx.chart.symbol);
-        if (drawings) {
-            this.stxx.importDrawings(drawings);
-            this.stxx.draw();
-        }
-    }
-
-    restorePreferences() {
-        const pref = createObjectFromLocalStorage(`preferences-${this.id}`);
-        if (pref) {
-            this.stxx.importPreferences(pref);
-        }
-    }
-    savePreferences() {
-        CIQ.localStorageSetItem(
-            `preferences-${this.id}`,
-            JSON.stringify(this.stxx.exportPreferences()),
-        );
     }
 
     updateHeight(position) {
@@ -255,6 +157,7 @@ class ChartStore {
         engineParams.layout = chartLayout;
 
         const stxx = this.stxx = new CIQ.ChartEngine(engineParams);
+        this.state = new ChartState(this);
 
         const deleteElement = stxx.chart.panel.holder.parentElement.querySelector('#mouseDeleteText');
         const manageElement = stxx.chart.panel.holder.parentElement.querySelector('#mouseManageText');
@@ -282,20 +185,6 @@ class ChartStore {
 
         stxx.append('deleteHighlighted', this.updateComparisons);
 
-        stxx.append('adjustPanelPositions', function () {
-            const panel = Object.keys(stxx.panels)[1];
-            if (panel) {
-                stxx.panels[panel].up.style.display = 'none'; // Hide the up arrow from first indicator to prevent user from moving the indicator panel above the main chart
-            }
-        });
-
-        stxx.addEventListener('layout', () => {
-            this.saveLayout();
-        });
-        stxx.addEventListener('symbolChange', this.saveLayout.bind(this));
-        stxx.addEventListener('drawing', this.saveDrawings.bind(this));
-        stxx.addEventListener('preferences', this.savePreferences.bind(this));
-
         const context = new Context(stxx, this.rootNode);
 
         new KeystrokeHub(document.querySelector('body'), context, { // eslint-disable-line no-new
@@ -307,14 +196,14 @@ class ChartStore {
         this.loader.show();
 
         const studiesStore = this.mainStore.studies;
-        stxx.callbacks.studyOverlayEdit = study => studiesStore.editStudy(study);
-        stxx.callbacks.studyPanelEdit = study => studiesStore.editStudy(study);
+        stxx.callbacks.studyOverlayEdit = studiesStore.editStudy;
+        stxx.callbacks.studyPanelEdit = studiesStore.editStudy;
 
-        this.restorePreferences();
+        this.state.restorePreferences();
 
         api.getActiveSymbols().then(action(({ active_symbols }) => {
             this.setActiveSymbols(active_symbols);
-            const isRestoreSuccess = this.restoreLayout();
+            const isRestoreSuccess = this.state.restoreLayout();
 
             if (!isRestoreSuccess) {
                 this.changeSymbol(
@@ -411,7 +300,7 @@ class ChartStore {
                 /* TODO, symbol not found error */
                 return;
             }
-            this.restoreDrawings();
+            this.state.restoreDrawings();
         };
         const rangeSpan = this.getRangeSpan();
         this.stxx.newChart(symbolObj, null, null, onChartLoad, { ...params, ...rangeSpan });
