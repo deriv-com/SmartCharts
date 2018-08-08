@@ -90,7 +90,7 @@ class Chart extends Component {
                                 <RenderInsideChart at="subholder">
                                     {children}
                                 </RenderInsideChart>
-                                <div className="cq-top-ui-widgets" >
+                                <div className="cq-top-ui-widgets">
                                     { renderTopWidgets() }
                                 </div>
                                 <div className="chartContainer primary" style={{ height: chartContainerHeight }}>

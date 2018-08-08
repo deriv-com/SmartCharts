@@ -117,7 +117,8 @@ class ChartStore {
                 }
             },
         });
-        this.setCurrentActiveSymbols(this.stxx);
+
+        this.updateCurrentActiveSymbol();
 
         return true;
     }
@@ -311,7 +312,7 @@ class ChartStore {
 
         this.restorePreferences();
 
-        api.getActiveSymbols().then(({ active_symbols }) => {
+        api.getActiveSymbols().then(action(({ active_symbols }) => {
             this.setActiveSymbols(active_symbols);
             const isRestoreSuccess = this.restoreLayout();
 
@@ -322,8 +323,10 @@ class ChartStore {
                 );
             }
 
-            this.setLayoutData(context);
-        });
+            this.context = context;
+            this.contextPromise.resolve(this.context);
+            this.resizeScreen();
+        }));
 
         this.resizeObserver = new ResizeObserver(this.resizeScreen);
         this.resizeObserver.observe(modalNode);
@@ -336,17 +339,13 @@ class ChartStore {
         this.updateComparisons();
     }
 
-    @action.bound setLayoutData(context) {
-        this.context = context;
-        this.contextPromise.resolve(this.context);
-        this.resizeScreen();
-    }
-
-    @action.bound setCurrentActiveSymbols(stxx) {
-        this.currentActiveSymbol = stxx.chart.symbolObject;
-        stxx.chart.yAxis.decimalPlaces = stxx.chart.symbolObject.decimal_places;
+    @action.bound updateCurrentActiveSymbol() {
+        const { symbolObject } = this.stxx.chart;
+        this.currentActiveSymbol = symbolObject;
+        this.stxx.chart.yAxis.decimalPlaces = symbolObject.decimal_places;
         this.categorizedSymbols = this.categorizeActiveSymbols();
     }
+
     @action.bound setChartAvailability(status) {
         this.isChartAvailable = status;
     }
@@ -387,9 +386,7 @@ class ChartStore {
         this.newChart(symbolObj, params);
 
         if (symbolObj) {
-            this.stxx.chart.yAxis.decimalPlaces = symbolObj.decimal_places;
-            this.currentActiveSymbol = symbolObj;
-            this.categorizedSymbols = this.categorizeActiveSymbols();
+            this.updateCurrentActiveSymbol();
         }
     }
 
