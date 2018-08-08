@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Thai\n"
 "Language: th_TH\n"
-"PO-Revision-Date: 2018-08-08 08:01\n"
+"PO-Revision-Date: 2018-08-08 09:32\n"
 
 msgid " already exists."
 msgstr " มีอยู่แล้ว"
@@ -103,10 +103,10 @@ msgid "Dot"
 msgstr "จุด"
 
 msgid "Download"
-msgstr ""
+msgstr "ดาวน์โหลด"
 
 msgid "Download Chart"
-msgstr ""
+msgstr "ดาวน์โหลดแผนภูมิ"
 
 msgid "Draw tools"
 msgstr "เครื่องมือวาดภาพ"
@@ -1255,7 +1255,7 @@ msgid "Volume Profile"
 msgstr "โพรไฟล์ปริมาณ"
 
 msgid "Bars Color"
-msgstr "สีแถบ"
+msgstr "แถบสีของแผนภูมิ"
 
 msgid "Vortex Indicator"
 msgstr "ดัชนี Vortex"
@@ -1270,7 +1270,7 @@ msgid "ZigZag"
 msgstr "ซิกแซก"
 
 msgid "Distance(%)"
-msgstr "ระยะทาง(%)"
+msgstr "ระยะทาง (%)"
 
 msgid "Psychological Line"
 msgstr "Psychological Line"
