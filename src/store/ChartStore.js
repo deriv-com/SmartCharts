@@ -202,7 +202,7 @@ class ChartStore {
 
         this.state.restorePreferences();
 
-        api.getActiveSymbols().then(action(({ active_symbols }) => {
+        this.api.getActiveSymbols().then(action(({ active_symbols }) => {
             /**
              * Updating market close status each 10 minute
              */
