@@ -1,17 +1,39 @@
+import { action, observable, when } from 'mobx';
 import { createObjectFromLocalStorage, calculateTimeUnitInterval, calculateGranularity } from '../utils';
 
 class ChartState {
-    get stxx() {
-        return this.chartStore.stxx;
+    static _id_counter = 0;
+
+    @observable granularity;
+    @observable chartType;
+    @observable startEpoch;
+    @observable endEpoch;
+    @observable symbol;
+    @observable isConnectionOpened;
+    get stxx() { return this.chartStore.stxx; }
+    get context() { return this.chartStore.context; }
+
+    constructor(mainStore) {
+        this.chartStore = mainStore.chart;
+        this.id = ++ChartState._id_counter;
+        when(() => this.context, this.onContextReady);
     }
 
-    constructor(chartStore) {
-        this.chartStore = chartStore;
-        this.id = chartStore.id;
+    onContextReady = () => {
         this.stxx.addEventListener('layout', this.saveLayout.bind(this));
         this.stxx.addEventListener('symbolChange', this.saveLayout.bind(this));
         this.stxx.addEventListener('drawing', this.saveDrawings.bind(this));
         this.stxx.addEventListener('preferences', this.savePreferences.bind(this));
+    };
+
+    @action.bound updateProps({ settings, isConnectionOpened, symbol, granularity, chartType, startEpoch, endEpoch }) {
+        this.settings = settings;
+        this.isConnectionOpened = isConnectionOpened;
+        this.symbol = symbol;
+        this.granularity = granularity;
+        this.chartType = chartType;
+        this.startEpoch = startEpoch;
+        this.endEpoch = endEpoch;
     }
 
     saveLayout() {
@@ -27,12 +49,10 @@ class ChartState {
         if (!layoutData) return false;
 
         // prop values will always take precedence
-        const { symbol, granularity, chartType, startEpoch, endEpoch } = this.chartStore.paramProps;
-
-        if (symbol !== undefined && symbol !== layoutData.symbols[0].symbol) {
+        if (this.symbol !== undefined && this.symbol !== layoutData.symbols[0].symbol) {
             // symbol prop takes precedence over local storage data
-            const symbolObject = this.chartStore.activeSymbols.find(x => x.symbol === symbol);
-            layoutData.symbols = [{ symbol, symbolObject }];
+            const symbolObject = this.chartStore.activeSymbols.find(x => x.symbol === this.symbol);
+            layoutData.symbols = [{ symbol: this.symbol, symbolObject }];
         }
 
         for (const symbolDat of layoutData.symbols) {
@@ -42,8 +62,8 @@ class ChartState {
             symbolDat.symbolObject = updatedSymbol;
         }
 
-        if (granularity !== undefined) {
-            const periodicity = calculateTimeUnitInterval(granularity);
+        if (this.granularity !== undefined) {
+            const periodicity = calculateTimeUnitInterval(this.granularity);
             layoutData = { ...layoutData, ...periodicity };
         } else {
             // update this.granularity with chartLayout
@@ -55,14 +75,14 @@ class ChartState {
             }
         }
 
-        if (startEpoch || endEpoch) {
+        if (this.startEpoch || this.endEpoch) {
             // already set in chart params
             delete layoutData.span;
             delete layoutData.range;
         }
 
-        if (chartType !== undefined) {
-            delete layoutData.chartType;
+        if (this.chartType !== undefined) {
+            layoutData.chartType = this.chartType;
         }
 
         this.stxx.importLayout(layoutData, {

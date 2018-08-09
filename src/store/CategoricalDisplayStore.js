@@ -295,7 +295,7 @@ export default class CategoricalDisplayStore {
             .filter(favItem => favItem)
             .map(favItem => (typeof favItem === 'string' ? favItem : favItem.itemId));
         this.mainStore.favoriteSessionStore.favoritesChangeTrigger = !this.mainStore.favoriteSessionStore.favoritesChangeTrigger;
-        this.mainStore.chart.state.saveLayout();
+        this.mainStore.state.saveLayout();
     }
 
     setFavoriteById(id) {

@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Thai\n"
 "Language: th_TH\n"
-"PO-Revision-Date: 2018-08-08 08:01\n"
+"PO-Revision-Date: 2018-08-08 10:02\n"
 
 msgid " already exists."
 msgstr " มีอยู่แล้ว"
@@ -46,7 +46,7 @@ msgid "Callout"
 msgstr "คำบรรยายภาพ"
 
 msgid "CANCEL"
-msgstr "ยกเลิก"
+msgstr "CANCEL"
 
 msgid "Candle"
 msgstr "แท่งเทียน"
@@ -64,10 +64,10 @@ msgid "Clear All"
 msgstr "ล้างทั้งหมด"
 
 msgid "CLOSE"
-msgstr "ปิด"
+msgstr "CLOSE"
 
 msgid "CLOSED"
-msgstr "ปิด"
+msgstr "CLOSED"
 
 msgid "Colored Dot"
 msgstr "จุดสี"
@@ -103,10 +103,10 @@ msgid "Dot"
 msgstr "จุด"
 
 msgid "Download"
-msgstr ""
+msgstr "ดาวน์โหลด"
 
 msgid "Download Chart"
-msgstr ""
+msgstr "ดาวน์โหลดแผนภูมิ"
 
 msgid "Draw tools"
 msgstr "เครื่องมือวาดภาพ"
@@ -139,7 +139,7 @@ msgid "Heikin Ashi"
 msgstr "Heikin Ashi"
 
 msgid "HIGH"
-msgstr "สูง"
+msgstr "HIGH"
 
 msgid "Hollow Candle"
 msgstr "เทียนกลวง"
@@ -169,7 +169,7 @@ msgid "Line Break"
 msgstr "เส้นแบ่งบรรทัด"
 
 msgid "LOW"
-msgstr "ต่ำ"
+msgstr "LOW"
 
 msgid "Measure"
 msgstr "วัด"
@@ -181,10 +181,10 @@ msgid "OHLC"
 msgstr "OHLC"
 
 msgid "OPEN"
-msgstr "เปิด"
+msgstr "OPEN"
 
 msgid "OVERWRITE"
-msgstr "เขียนทับ"
+msgstr "OVERWRITE"
 
 msgid "Pitchfork"
 msgstr "Pitchfork"
@@ -223,7 +223,7 @@ msgid "Renko"
 msgstr "Renko"
 
 msgid "RESET"
-msgstr "ตั้งค่าใหม่"
+msgstr "RESET"
 
 msgid "Reversal"
 msgstr "กลับตัว"
@@ -328,13 +328,13 @@ msgid "Show Zones"
 msgstr "แสดงพื้นที่"
 
 msgid "OverBought"
-msgstr "ซื้อมากเกินไป"
+msgstr "ซื้อมากเกินไป (OverBought)"
 
 msgid "OverSold"
-msgstr "ขายมากเกินไป"
+msgstr "ขายมากเกินไป (OverSold)"
 
 msgid "Moving Average"
-msgstr "ค่าเฉลี่ยเคลื่อนที่"
+msgstr "ค่าเฉลี่ยเคลื่อนที่ (Moving Average)"
 
 msgid "Field"
 msgstr "ฟิลด์"
@@ -427,16 +427,16 @@ msgid "TRIX"
 msgstr "TRIX"
 
 msgid "Standard Deviation"
-msgstr "ส่วนเบี่ยงเบนมาตรฐาน"
+msgstr "ส่วนเบี่ยงเบนมาตรฐาน (Standard Deviation)"
 
 msgid "Standard Deviations"
-msgstr "ส่วนเบี่ยงเบนมาตรฐาน"
+msgstr "ส่วนเบี่ยงเบนมาตรฐาน (Standard Deviation)"
 
 msgid "Moving Average Type"
 msgstr "ประเภทค่าเฉลี่ยเคลื่อนที่"
 
 msgid "Trade Volume Index"
-msgstr "ดัชนีปริมาณการค้า"
+msgstr "ดัชนีปริมาณการซื้อขาย"
 
 msgid "Min Tick Value"
 msgstr "ค่าช่วงราคาต่ำสุด"
@@ -529,7 +529,7 @@ msgid "Long Cycle"
 msgstr "รอบยาว"
 
 msgid "Points Or Percent"
-msgstr "คะแนนหรือร้อยละ"
+msgstr "คะแนน หรือ ร้อยละ"
 
 msgid "Twiggs Money Flow"
 msgstr "Twiggs Money Flow"
@@ -604,10 +604,10 @@ msgid "Random Walk Index"
 msgstr "ดัชนี Random Walk"
 
 msgid "Random Walk High"
-msgstr "Random Walk สูง"
+msgstr "ค่า Random Walk สูง"
 
 msgid "Random Walk Low"
-msgstr "Random Walk ต่ำ"
+msgstr "ค่า Random Walk ต่ำ"
 
 msgid "ADX/DMS"
 msgstr "ADX/DMS"
@@ -616,7 +616,7 @@ msgid "Smoothing Period"
 msgstr "Smoothing Period"
 
 msgid "Series"
-msgstr "ซีรีย์"
+msgstr "ซีรีส์"
 
 msgid "Shading"
 msgstr "แรเงา"
@@ -634,10 +634,10 @@ msgid "ADX"
 msgstr "ADX"
 
 msgid "Positive Bar"
-msgstr "บาร์เชิงบวก"
+msgstr "แท่งเชิงบวก"
 
 msgid "Negative Bar"
-msgstr "แท่งด้านลบ"
+msgstr "แท่งเชิงลบ"
 
 msgid "High Low Bands"
 msgstr "High Low Bands"
@@ -649,13 +649,13 @@ msgid "Channel Fill"
 msgstr "ช่องเติม"
 
 msgid "High Low Top"
-msgstr "High Low สูงสุด"
+msgstr "ค่า High Low สูงสุด"
 
 msgid "High Low Median"
-msgstr "ค่ามัธยฐานสูงต่ำ"
+msgstr "ค่า High Low มัธยฐาน"
 
 msgid "High Low Bottom"
-msgstr "High Low ต่ำสุด"
+msgstr "ค่า High Low ต่ำสุด "
 
 msgid "High Minus Low"
 msgstr "High ลบ Low"
@@ -676,13 +676,13 @@ msgid "Shift"
 msgstr "Shift"
 
 msgid "MA Env Top"
-msgstr "MA Env Top"
+msgstr "ค่า MA Env สูงสุด"
 
 msgid "MA Env Median"
-msgstr "MA Env Median"
+msgstr "ค่า MA Env มัธยฐาน"
 
 msgid "MA Env Bottom"
-msgstr "MA Env Bottom"
+msgstr "ค่า MA Env ต่ำสุด"
 
 msgid "Fractal Chaos Bands"
 msgstr "Fractal Chaos Bands"
@@ -706,10 +706,10 @@ msgid "Prime Number Bands"
 msgstr "Prime Number Bands"
 
 msgid "Prime Bands Top"
-msgstr "Prime Bands สูงสุด"
+msgstr "ค่า Prime Bands สูงสุด"
 
 msgid "Prime Bands Bottom"
-msgstr "Prime Bands ต่ำสุด"
+msgstr "ค่า Prime Bands ต่ำสุด"
 
 msgid "Prime Bands Channel"
 msgstr "Prime Bands Channel"
@@ -724,13 +724,13 @@ msgid "Bollinger Bands"
 msgstr "Bollinger Bands"
 
 msgid "Bollinger Bands Top"
-msgstr "Bollinger Bands ค่าสูงสุด"
+msgstr "ค่า Bollinger Bands สูงสุด"
 
 msgid "Bollinger Bands Median"
-msgstr "Bollinger Bands ค่ากลาง"
+msgstr "ค่า Bollinger Bands มัธยฐาน"
 
 msgid "Bollinger Bands Bottom"
-msgstr "Bollinger Bands ค่าต่ำสุด"
+msgstr "ค่า Bollinger Bands ต่ำสุด"
 
 msgid "Donchian Channel"
 msgstr "Donchian Channel"
@@ -742,13 +742,13 @@ msgid "Low Period"
 msgstr "ระยะเวลาต่ำ"
 
 msgid "Donchian High"
-msgstr "Donchian สูง"
+msgstr "ค่า Donchian สูง"
 
 msgid "Donchian Median"
-msgstr "Donchian ค่ากลาง"
+msgstr "ค่า Donchian มัธยฐาน"
 
 msgid "Donchian Low"
-msgstr "Donchian ต่ำ"
+msgstr "ค่า Donchian ต่ำ"
 
 msgid "Highest High Value"
 msgstr "ค่าสูงสูงที่สุด"
@@ -838,10 +838,10 @@ msgid "Volume Chart"
 msgstr "แผนภูมิแสดงปริมาณ"
 
 msgid "Up Volume"
-msgstr "เพิ่มปริมาณ"
+msgstr "ปริมาณขาขึ้น"
 
 msgid "Down Volume"
-msgstr "ปริมาณลดลง"
+msgstr "ปริมาณขาลง"
 
 msgid "Volume Underlay"
 msgstr "Volume Underlay"
@@ -856,13 +856,13 @@ msgid "Display Average"
 msgstr "แสดงค่าเฉลี่ย"
 
 msgid "Display 1 Standard Deviation (1σ)"
-msgstr "แสดงค่าเบี่ยงเบนมาตรฐาน 1 (1σ)"
+msgstr "แสดง 1 ค่าเบี่ยงเบนมาตรฐาน (1σ)"
 
 msgid "Display 2 Standard Deviation (2σ)"
-msgstr "แสดงค่าเบี่ยงเบนมาตรฐาน 2 (2σ)"
+msgstr "แสดง 2 ค่าเบี่ยงเบนมาตรฐาน (2σ)"
 
 msgid "Display 3 Standard Deviation (3σ)"
-msgstr "แสดงค่าเบี่ยงเบนมาตรฐาน 3 (3σ)"
+msgstr "แสดง 3 ค่าเบี่ยงเบนมาตรฐาน (3σ)"
 
 msgid "Average"
 msgstr "ค่าเฉลี่ย"
@@ -976,10 +976,10 @@ msgid "Bollinger Bandwidth"
 msgstr "Bollinger Bandwidth"
 
 msgid "Bandwidth"
-msgstr "แบนวิดท์"
+msgstr "แบนด์วิดท์"
 
 msgid "Donchian Width"
-msgstr "Donchian กว้าง"
+msgstr "ความกว้าง Donchian"
 
 msgid "Relative Vigor Index"
 msgstr "ดัชนี Relative Vigor"
@@ -1255,7 +1255,7 @@ msgid "Volume Profile"
 msgstr "โพรไฟล์ปริมาณ"
 
 msgid "Bars Color"
-msgstr "สีแถบ"
+msgstr "แถบสีของแผนภูมิ"
 
 msgid "Vortex Indicator"
 msgstr "ดัชนี Vortex"
@@ -1270,7 +1270,7 @@ msgid "ZigZag"
 msgstr "ซิกแซก"
 
 msgid "Distance(%)"
-msgstr "ระยะทาง(%)"
+msgstr "ระยะทาง (%)"
 
 msgid "Psychological Line"
 msgstr "Psychological Line"
