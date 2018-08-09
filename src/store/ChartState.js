@@ -76,7 +76,7 @@ class ChartState {
         }
 
         if (this.chartType !== undefined) {
-            delete layoutData.chartType;
+            layoutData.chartType = this.chartType;
         }
 
         this.stxx.importLayout(layoutData, {
