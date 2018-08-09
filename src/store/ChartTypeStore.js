@@ -136,7 +136,9 @@ export default class ChartTypeStore {
         this.type = this.chartTypes[typeIdx];
 
         reaction(() => this.mainStore.state.chartType, () => {
-            this.setType(this.mainStore.state.chartType);
+            if (this.mainStore.state.chartType !== undefined) {
+                this.setType(this.mainStore.state.chartType);
+            }
         });
     };
 

@@ -1,5 +1,5 @@
 import { action, observable, when } from 'mobx';
-import { createObjectFromLocalStorage, calculateTimeUnitInterval, calculateGranularity, updatePropIfChanged } from '../utils';
+import { createObjectFromLocalStorage, calculateTimeUnitInterval, calculateGranularity } from '../utils';
 
 class ChartState {
     static _id_counter = 0;
@@ -27,7 +27,13 @@ class ChartState {
     };
 
     @action.bound updateProps({ settings, isConnectionOpened, symbol, granularity, chartType, startEpoch, endEpoch }) {
-        updatePropIfChanged(this, { settings, isConnectionOpened, symbol, granularity, chartType, startEpoch, endEpoch });
+        this.settings = settings;
+        this.isConnectionOpened = isConnectionOpened;
+        this.symbol = symbol;
+        this.granularity = granularity;
+        this.chartType = chartType;
+        this.startEpoch = startEpoch;
+        this.endEpoch = endEpoch;
     }
 
     saveLayout() {
