@@ -166,7 +166,6 @@ export default class ChartTypeStore {
             }
         }
         this.type = type;
-        this.mainStore.timeperiod.showCountdown(true);
     }
 
     @action.bound showAggregateDialog(aggregateId) {

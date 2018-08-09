@@ -139,7 +139,6 @@ export default class ChartSettingStore {
     @action.bound showCountdown(value) {
         if (this.countdown === value) { return; }
         this.countdown = value;
-        this.mainStore.timeperiod.showCountdown(value);
         this.saveSetting();
     }
 }
