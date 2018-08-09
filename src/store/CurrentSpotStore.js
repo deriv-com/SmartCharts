@@ -21,6 +21,7 @@ class CurrectSpotStore {
         const chart = this.stx.chart;
         const layout = this.stx.layout;
         const mainSeriesRenderer = this.stx.mainSeriesRenderer;
+        let visible = true;
 
         if (chart.dataSet
             && chart.dataSet.length
@@ -38,14 +39,14 @@ class CurrectSpotStore {
                 && chart.yAxis.bottom >= y) {
                 this.top = y;
                 this.left = (Math.abs(x - this.left) > 1) ? x : this.left;
-
-                this.show = (layout.chartType !== 'candle'
-                        && layout.chartType !== 'colored_bar'
-                        && layout.chartType !== 'hollow_candle');
             } else {
-                this.show = false;
+                visible = false;
             }
         }
+
+        this.show = visible && (layout.chartType !== 'candle'
+                && layout.chartType !== 'colored_bar'
+                && layout.chartType !== 'hollow_candle');
     }
 }
 
