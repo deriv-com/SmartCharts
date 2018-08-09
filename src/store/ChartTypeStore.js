@@ -211,5 +211,5 @@ export default class ChartTypeStore {
         }));
     }
 
-    @observable type;
+    @observable type = getChartTypes()[0];
 }
