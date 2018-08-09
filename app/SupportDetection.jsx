@@ -16,28 +16,28 @@ const SupportedBrowser = {
     },
     'Windows 10': {
         edge: 15150630,
-        ie: 1100, // not supported
+        ie: 0, // not supported
         firefox: 3200,
         chrome: 4902623,
         opera: 3602130,
         yandexbrowser: 14122130,
     },
     'Windows 8.1': {
-        ie: 1200, // not supported at all
+        ie: 0, // not supported at all
         firefox: 2700,
         chrome: 4902623,
         opera: 3602130,
         yandexbrowser: 14122130,
     },
     'Windows 8': {
-        ie: 1200, // not supported at all
+        ie: 0, // not supported at all
         firefox: 2700,
         chrome: 4902623,
         opera: 3602130,
         yandexbrowser: 14122130,
     },
     'Windows 7': {
-        ie: 1200, // not supported at all
+        ie: 0, // not supported at all
         firefox: 2700,
         chrome: 3601985,
         opera: 2601656,
@@ -85,9 +85,9 @@ class SupportDetection extends React.Component {
     render() {
         const NotGuaranteed = (
             <div className="cq-not-guaranteed">
-                <h1>We are  NOT guaranteed</h1>
-                <p>Binary.com does not guaranteed your browser. Please update your browser.</p>
-                <a href="http://outdatedbrowser.com/">Update Browser</a>
+                <h1>Incompatible browser</h1>
+                <p>Binary.com does not recognise or support your current browser.</p>
+                <p>Please <a href="http://outdatedbrowser.com/">Update Browser</a> immediately.</p>
             </div>
         );
 
