@@ -26,22 +26,21 @@ class CurrectSpotStore {
                 let x = this.pixelFromTick(currentQuote.tick, this.chart) | 0;
                 if (this.chart.lastTickOffset) { x += this.chart.lastTickOffset; }
                 const y = this.pixelFromPrice(price, panel) | 0;
-                if (this.chart.yAxis.left > x &&
-                    this.chart.yAxis.top <= y &&
-                    this.chart.yAxis.bottom >= y &&
-                    x > self.left) {
+                if (this.chart.yAxis.left > x
+                    && this.chart.yAxis.top <= y
+                    && this.chart.yAxis.bottom >= y) {
                     self.updateSpot(x, y);
                 }
             }
 
-            self.updateDisplay(this.layout.periodicity == 1
+            self.updateDisplay(this.layout.periodicity === 1
                 && this.layout.timeUnit === 'second');
         });
     }
 
     @action.bound updateSpot(x, y) {
-        this.left = x;
         this.top = y;
+        this.left = x > this.left ? x : this.left;
     }
 
     @action.bound updateDisplay(show) {

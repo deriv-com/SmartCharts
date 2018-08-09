@@ -8,7 +8,7 @@ import '../../sass/components/_chart-types.scss';
 
 const ChartTypes = ({
     Type,
-    Menu,
+    ChartTypeMenu,
     menuOpen,
     setOpen,
     onChange,
@@ -28,17 +28,17 @@ const ChartTypes = ({
     };
 
     return (
-        <Menu
+        <ChartTypeMenu
             className="ciq-display collapse ciq-chart-types"
             enabled={enabled}
         >
-            <Menu.Title>
+            <ChartTypeMenu.Title>
                 <Type.icon
                     className={`ic-icon-with-sub ${menuOpen ? 'active' : ''}`}
                     tooltip-title={t.translate(Type.text)}
                 />
-            </Menu.Title>
-            <Menu.Body>
+            </ChartTypeMenu.Title>
+            <ChartTypeMenu.Body>
                 <div className="title">
                     <div className="mobile-title">{t.translate('Chart types')}</div>
                     {isMobile ? <CloseIcon className="icon-close-menu" onClick={closeMenu} /> : '' }
@@ -54,19 +54,21 @@ const ChartTypes = ({
                                     <T.icon  className={`margin ${T.active ? 'active' : ''}`} />
                                     <span className="ciq-icon-text">{T.text}</span>
                                 </span>
-                                {T.settingsOnClick &&
-                            <span
-                                className="ciq-aggregate-setting"
-                                onClick={() => showAggregateDialog(T.id)}
-                            >
-                                <SettingIcon />
-                            </span>}
+                                {T.settingsOnClick
+                            && (
+                                <span
+                                    className="ciq-aggregate-setting"
+                                    onClick={() => showAggregateDialog(T.id)}
+                                >
+                                    <SettingIcon />
+                                </span>
+                            )}
                             </React.Fragment>
                         )}
                     </ChartTypeList>
                 </div>
-            </Menu.Body>
-        </Menu>
+            </ChartTypeMenu.Body>
+        </ChartTypeMenu>
     );
 };
 
@@ -76,7 +78,7 @@ export default connect(({ chartType }) => ({
     onChange: chartType.setTypeFromUI,
     showAggregateDialog: chartType.showAggregateDialog,
     menuOpen: chartType.menu.open,
-    Menu: chartType.menu.connect(Menu),
+    ChartTypeMenu: chartType.menu.connect(Menu),
     ChartTypeList: chartType.list.connect(List),
     closeMenu: chartType.menu.onTitleClick,
     isMobile: chartType.mainStore.chart.isMobile,

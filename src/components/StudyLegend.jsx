@@ -8,39 +8,39 @@ import { IndicatorIcon } from './Icons.jsx';
 const StudyLegend = ({
     isOpened,
     setOpen,
-    Menu,
+    StudyMenu,
     menuOpen,
     StudyCategoricalDisplay,
     onCloseMenu,
     isMobile,
     activeStudiesNo,
 }) => (
-    <Menu
+    <StudyMenu
         className="ciq-studies collapse"
         isOpened={isOpened}
         setOpen={setOpen}
         isMobile={isMobile}
     >
-        <Menu.Title>
+        <StudyMenu.Title>
             <IndicatorIcon
                 className={`ic-icon-with-sub ${menuOpen ? 'active' : ''}`}
                 tooltip-title={t.translate('Indicators')}
             />
             <NotificationBadge notificationCount={activeStudiesNo} />
-        </Menu.Title>
-        <Menu.Body>
+        </StudyMenu.Title>
+        <StudyMenu.Body>
             <StudyCategoricalDisplay
                 dialogTitle={t.translate('Indicators')}
                 closeMenu={() => onCloseMenu()}
             />
-        </Menu.Body>
-    </Menu>
+        </StudyMenu.Body>
+    </StudyMenu>
 );
 
 export default connect(({ studies: st }) => ({
     isOpened: st.open,
     setOpen: st.setOpen,
-    Menu: st.menu.connect(Menu),
+    StudyMenu: st.menu.connect(Menu),
     menuOpen: st.menu.open,
     StudyCategoricalDisplay: st.categoricalDisplay.connect(CategoricalDisplay),
     onCloseMenu: st.menu.onTitleClick,

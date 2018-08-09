@@ -1,4 +1,3 @@
-/* eslint-disable no-new, react/jsx-indent, react/no-danger, react/jsx-indent-props */
 import PropTypes from 'prop-types';
 import React, { Component, Fragment } from 'react';
 import RenderInsideChart from './RenderInsideChart.jsx';
@@ -57,7 +56,6 @@ class Chart extends Component {
             setting : { position, theme },
             barriers = [],
             children,
-            chartPanelTop,
             chartControlsWidgets,
             AggregateChartSettingsDialog,
             topWidgets,
@@ -75,7 +73,8 @@ class Chart extends Component {
                 className={`smartcharts smartcharts-${theme} ${contextWidth} smartcharts-${isMobile ? 'mobile' : 'desktop'}`}
                 ref={(modalNode) => { this.modalNode = modalNode; }}
             >
-                <cq-context
+                <div
+                    className="cq-context"
                     ref={(root) => { this.root = root; }}
                 >
                     <div className={` ${currentPosition}`}>
@@ -84,7 +83,7 @@ class Chart extends Component {
                                 <RenderInsideChart at="holder">
                                     {barriers.map((barr, idx) => (
                                         <Barrier
-                                            key={`barrier-${idx}`}
+                                            key={`barrier-${idx}`} // eslint-disable-line react/no-array-index-key
                                             {...barr}
                                         />
                                     ))}
@@ -93,22 +92,23 @@ class Chart extends Component {
                                     {children}
                                     <CurrentSpot />
                                 </RenderInsideChart>
-                                <div className="cq-top-ui-widgets" style={{ top: chartPanelTop }}>
+                                <div className="cq-top-ui-widgets">
                                     { renderTopWidgets() }
                                 </div>
                                 <div className="chartContainer primary" style={{ height: chartContainerHeight }}>
                                     <Crosshair />
                                 </div>
                                 <Loader />
-                                {!isChartAvailable &&
+                                {!isChartAvailable && (
                                     <div className="cq-chart-unavailable">
                                         {t.translate('Chart data is not available for this symbol.')}
-                                    </div>}
+                                    </div>
+                                )}
                             </div>
                             <ChartControls widgets={chartControlsWidgets} />
                         </div>
                     </div>
-                </cq-context>
+                </div>
                 <DrawToolsSettingsDialog />
                 <AggregateChartSettingsDialog />
                 <StudySettingsDialog />
@@ -125,7 +125,6 @@ export default connect(({ chart, drawTools, studies, chartSetting, chartType }) 
     DrawToolsSettingsDialog : drawTools.settingsDialog.connect(SettingsDialog),
     AggregateChartSettingsDialog : chartType.settingsDialog.connect(SettingsDialog),
     isChartAvailable: chart.isChartAvailable,
-    chartPanelTop: chart.chartPanelTop,
     setting: chartSetting,
     updateProps: chart.updateProps,
     chartContainerHeight: chart.chartContainerHeight,

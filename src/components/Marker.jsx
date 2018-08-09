@@ -28,4 +28,3 @@ export default connect(
         store.updateProps(props);
     },
 )(Marker);
-

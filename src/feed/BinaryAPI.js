@@ -1,5 +1,6 @@
 export default class BinaryAPI {
     static get DEFAULT_COUNT() { return 1000; }
+    streamRequests = {};
     constructor(requestAPI, requestSubscribe, requestForget) {
         this.requestAPI = requestAPI;
         this.requestSubscribe = requestSubscribe;
@@ -25,12 +26,17 @@ export default class BinaryAPI {
     }
 
     subscribeTickHistory(params, callback) {
+        const key = this._getKey(params);
         const request = BinaryAPI.createTickHistoryRequest({ ...params, subscribe: 1 });
-        this.requestSubscribe(request, callback);
+        this.streamRequests[key] = { request, callback };
+        // Send a copy of the request, in case it gets mutated outside
+        this.requestSubscribe({ ...request }, callback);
     }
 
-    forget(params, callback) {
-        const request = BinaryAPI.createTickHistoryRequest({ ...params, subscribe: 1 });
+    forget(params) {
+        const key = this._getKey(params);
+        const { request, callback } = this.streamRequests[key];
+        delete this.streamRequests[key];
         return this.requestForget(request, callback);
     }
 
@@ -58,5 +64,9 @@ export default class BinaryAPI {
         }
 
         return request;
+    }
+
+    _getKey({ symbol, granularity }) {
+        return `${symbol}-${granularity}`;
     }
 }

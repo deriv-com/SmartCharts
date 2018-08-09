@@ -5,13 +5,15 @@ const CurrentSpot = ({
     left,
     top,
     show,
-}) => (show &&
-    <div>
-        <span
-            className="cq-spot"
-            style={{ top, left }}
-        />
-    </div>
+}) => (show
+    && (
+        <div>
+            <span
+                className="cq-spot"
+                style={{ top, left }}
+            />
+        </div>
+    )
 );
 
 export default connect(({ currentSpot: cs }) => ({

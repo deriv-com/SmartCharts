@@ -18,7 +18,7 @@ import {
 } from '../components/Icons.jsx';
 import SettingsDialogStore from './SettingsDialogStore';
 
-export function getChartTypes() {
+function getChartTypes() {
     return [
         { id: 'mountain',      text: t.translate('Line'),           candleOnly: false, icon: LineIcon         },
         { id: 'line',          text: t.translate('Dot'),            candleOnly: false, icon: DotIcon          },
@@ -36,6 +36,13 @@ export function getChartTypes() {
         { id: 'pandf',         text: t.translate('Point & Figure'), candleOnly: true,  icon: PointFigureIcon, settingsOnClick: true },
     ];
 }
+
+const notCandles = getChartTypes()
+    .filter(t => !t.candleOnly)
+    .map(t => t.id);
+
+const aggregateCharts = getChartTypes()
+    .filter(t => t.settingsOnClick);
 
 function getAggregates() {
     return {
@@ -90,10 +97,6 @@ function getAggregates() {
     };
 }
 
-const notCandles = getChartTypes()
-    .filter(t => !t.candleOnly)
-    .map(t => t.id);
-
 export default class ChartTypeStore {
     constructor(mainStore) {
         this.mainStore = mainStore;
@@ -114,6 +117,8 @@ export default class ChartTypeStore {
     get context() { return this.mainStore.chart.context; }
     get stx() { return this.context.stx; }
     get chartTypeProp() { return this.mainStore.chart.paramProps.chartType; }
+    get isCandle() { return notCandles.indexOf(this.type.id) === -1; }
+    get isAggregateChart() { return !!aggregateCharts.find(t => t.id === this.stx.layout.aggregationType); }
 
     onContextReady = () => {
         this.aggregates = getAggregates();
@@ -129,19 +134,6 @@ export default class ChartTypeStore {
         }
         const typeIdx = this.chartTypes.findIndex(t => t.id === chartType);
         this.type = this.chartTypes[typeIdx];
-
-        this.context.stx.addEventListener('newChart', this.syncTypeWithGranularity);
-    };
-
-    syncTypeWithGranularity = () => {
-        const isTick = this.stx.layout.timeUnit === 'second';
-        const isCandle = notCandles.indexOf(this.type.id) === -1;
-
-        if (isCandle && isTick) {
-            this.setType('mountain');
-        } else if (!isTick && !isCandle && this.chartTypeProp === undefined) {
-            this.setType('candle');
-        }
     };
 
     @action.bound setTypeFromUI(type) {
@@ -219,5 +211,5 @@ export default class ChartTypeStore {
         }));
     }
 
-    @observable type;
+    @observable type = getChartTypes()[0];
 }

@@ -1,12 +1,6 @@
 import { observable, action, computed, when, reaction } from 'mobx';
 import MenuStore from './MenuStore';
-import { getChartTypes } from './ChartTypeStore';
 import { getTimeUnit, getIntervalInSeconds } from '../utils';
-
-const chartTypes = getChartTypes();
-
-const aggregateCharts = chartTypes
-    .filter(t => t.settingsOnClick);
 
 export default class TimeperiodStore {
     constructor(mainStore) {
@@ -17,7 +11,6 @@ export default class TimeperiodStore {
 
     get context() { return this.mainStore.chart.context; }
     get loader() { return this.mainStore.loader; }
-
     @observable timeUnit = null;
     @observable interval = null;
     remain = null;
@@ -36,12 +29,13 @@ export default class TimeperiodStore {
     };
 
     countdownInterval = null;
+
     showCountdown = (callFromSettings = false) => {
         if (!this.context) { return; }
 
         const stx = this.context.stx;
         const isTick = this.timeUnit === 'tick';
-        const hasCountdown = !aggregateCharts.some(t => t.id === stx.layout.aggregationType);
+        const hasCountdown = !this.mainStore.chartType.isAggregateChart;
         this.remain = null;
         if (this.countdownInterval) { clearInterval(this.countdownInterval); }
         if (this._injectionId)  { stx.removeInjection(this._injectionId); }
@@ -100,6 +94,7 @@ export default class TimeperiodStore {
             console.error('Setting granularity does nothing since granularity prop is set. Consider overriding the onChange prop in <TimePeriod />');
             return;
         }
+
         this.mainStore.chart.changeSymbol(undefined, granularity);
     }
 
@@ -131,6 +126,7 @@ export default class TimeperiodStore {
         }
         return +this.interval ? this.interval : 1;
     }
+
     @computed get display() {
         const t = this.timeUnit ? this.timeUnit[0] : '';
         return this.interval_display + t; // 1d, 1t, 5m, 2h

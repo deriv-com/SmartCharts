@@ -13,7 +13,7 @@ class Feed {
     constructor(binaryApi, stx, mainStore) {
         this._stx = stx;
         this._binaryApi = binaryApi;
-        this._streamCallbacks = {};
+        this._activeStreams = {};
         this._lastStreamEpoch = {};
         this._mainStore = mainStore;
         this._emitter = new EventEmitter({ emitDelay: 0 });
@@ -32,12 +32,12 @@ class Feed {
 
     _forgetStream(key) {
         const { symbol, granularity } = this._unpackKey(key);
-        if (this._streamCallbacks[key]) {
+        if (this._activeStreams[key]) {
             this._binaryApi.forget({
                 symbol,
                 granularity,
-            }, this._streamCallbacks[key]);
-            delete this._streamCallbacks[key];
+            });
+            delete this._activeStreams[key];
         }
 
         if (this._lastStreamEpoch[key]) {
@@ -130,7 +130,7 @@ class Feed {
                 return;
             }
         } else if (processTickHistory) {
-            this._streamCallbacks[key] = processTickHistory;
+            this._activeStreams[key] = true;
         }
 
         const quotes = TickHistoryFormatter.formatHistory(response);
@@ -207,7 +207,7 @@ class Feed {
     }
 
     unsubscribeAll() {
-        for (const key of Object.keys(this._streamCallbacks)) {
+        for (const key of Object.keys(this._activeStreams)) {
             this._forgetStream(key);
         }
     }
@@ -251,7 +251,9 @@ class Feed {
     static getFirstEpoch({ candles, history }) {
         if (candles && candles.length > 0) {
             return candles[0].epoch;
-        } else if (history && history.times.length > 0) {
+        }
+
+        if (history && history.times.length > 0) {
             const { times } = history;
             return +times[0];
         }
@@ -260,7 +262,9 @@ class Feed {
     static getLatestEpoch({ candles, history }) {
         if (candles) {
             return candles[candles.length - 1].epoch;
-        } else if (history) {
+        }
+
+        if (history) {
             const { times } = history;
             return times[times.length - 1];
         }
@@ -290,7 +294,7 @@ class Feed {
     }
 
     _onConnectionClosed() {
-        this._streamCallbacks = {}; // prevent forget requests; active streams are invalid when connection closed
+        this._activeStreams = {}; // prevent forget requests; active streams are invalid when connection closed
         this._connectionClosedDate = new Date();
     }
 
@@ -312,13 +316,13 @@ class Feed {
     }
 
     _resumeStream(key, start) {
-        if (this._streamCallbacks[key]) {
+        if (this._activeStreams[key]) {
             throw new Error('You cannot resume an active stream!');
         }
         const { symbol, granularity } = this._unpackKey(key);
         const comparisonChartSymbol = (this._stx.chart.symbol !== symbol) ? symbol : undefined;
         const [tickHistoryPromise, processTickHistory] = this._getProcessTickHistoryClosure(key, comparisonChartSymbol);
-        this._streamCallbacks[key] = processTickHistory;
+        this._activeStreams[key] = true;
         this._binaryApi.subscribeTickHistory({
             start,
             symbol,

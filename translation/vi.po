@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Vietnamese\n"
 "Language: vi_VN\n"
-"PO-Revision-Date: 2018-08-03 06:41\n"
+"PO-Revision-Date: 2018-08-08 08:01\n"
 
 msgid " already exists."
 msgstr " đã tồn tại."
@@ -78,12 +78,6 @@ msgstr "So sánh"
 msgid "Continuous"
 msgstr "Liên tục"
 
-msgid "Copied!"
-msgstr "Đã sao chép!"
-
-msgid "Copy to clipboard"
-msgstr "Sao chép vào clipboard"
-
 msgid "Countdown"
 msgstr "Đếm ngược"
 
@@ -108,20 +102,17 @@ msgstr "Nháp"
 msgid "Dot"
 msgstr "Dấu chấm"
 
-msgid "Download chart"
-msgstr "Tải về biểu đồ"
+msgid "Download"
+msgstr ""
+
+msgid "Download Chart"
+msgstr ""
 
 msgid "Draw tools"
 msgstr "Công cụ vẽ"
 
 msgid "Ellipse"
 msgstr "Hình elíp"
-
-msgid "Failed to generate link"
-msgstr "Không thể tạo liên kết"
-
-msgid "Failed!"
-msgstr "Thất bại!"
 
 msgid "Favorites"
 msgstr "Yêu thích"
@@ -234,9 +225,6 @@ msgstr "Renko"
 msgid "RESET"
 msgstr "THIẾT LẬP LẠI"
 
-msgid "Retry"
-msgstr "Thử lại"
-
 msgid "Reversal"
 msgstr "Đảo ngược"
 
@@ -275,15 +263,6 @@ msgstr "Hình dạng - Trái tim"
 
 msgid "Shape - Star"
 msgstr "Hình dạng - Ngôi sao"
-
-msgid "Share"
-msgstr "Chia sẻ"
-
-msgid "Share / Download Chart"
-msgstr "Chia sẽ / Tải Về Biểu Đồ"
-
-msgid "Share link"
-msgstr "Chia sẻ liên kết"
 
 msgid "Speed Resistance Arc"
 msgstr "Đường cung kháng tốc"
