@@ -18,12 +18,11 @@ export default class DrawingCursorStore {
         this.crosshairX = this.stx.container.querySelector('.stx_crosshair_x');
         this.crosshairY = this.stx.container.querySelector('.stx_crosshair_y');
         this.stx.container.addEventListener('mousemove', this.onMouseMove);
-        this.stx.container.addEventListener('touchmove', this.onMouseMove);
+        this.stx.container.addEventListener('touchmove', this.onMouseMove, { passive: true });
         this.stx.container.addEventListener('touchend', this.onTouchEnd);
     };
 
     @action.bound onMouseMove = (e) => {
-        //e.preventDefault();
         this.isDrawing = this.stx.currentVectorParameters.vectorType;
 
         if (this.isDrawing) {
@@ -36,7 +35,6 @@ export default class DrawingCursorStore {
     }
 
     @action.bound onTouchEnd = (e) => {
-        //e.preventDefault();
         // A delay is needed to remove drawing cursor after drawing ends on touch end in mobile
         setTimeout(this.updateDisplay, 500);
     }
