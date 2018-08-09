@@ -122,3 +122,27 @@ export function updatePropIfChanged(source, props, onChanged) {
     if (isChanged && onChanged) { onChanged(); }
 }
 
+export function calculateTimeUnitInterval(granularity) {
+    let interval = 1;
+    let timeUnit = 'second';
+
+    if (granularity === 86400) {
+        timeUnit = 'day';
+    } else if (granularity > 0) {
+        interval = granularity / 60;
+        timeUnit = 'minute';
+    }
+
+    return { interval, timeUnit };
+}
+
+export function calculateGranularity(period, interval) {
+    const toSeconds = {
+        second: 0,
+        minute: 60,
+        day: 24 * 60 * 60,
+    };
+
+    return toSeconds[interval] * period;
+}
+

@@ -46,8 +46,6 @@ CIQ.Animation = function (stx, animationParameters, easeMachine) {
     let filterSession = false;
     let nextBoundary = null;
 
-    let currentSpotElement;
-
     function initMarketSessionFlags() {
         filterSession = false;
         nextBoundary = null;
@@ -251,40 +249,4 @@ CIQ.Animation = function (stx, animationParameters, easeMachine) {
             return true; // bypass default behavior in favor of animation
         }
     });
-
-    stx.append('draw', function () {
-        let currentSpotChanged = false;
-        if (!currentSpotElement) {
-            currentSpotElement = document.createElement('span');
-            currentSpotElement.className = 'cq-spot';
-            this.chart.panel.holder.parentElement.appendChild(currentSpotElement);
-        }
-
-        if (filterSession) { return; }
-        if (this.chart.dataSet
-            && this.chart.dataSet.length
-            && this.mainSeriesRenderer
-            && this.mainSeriesRenderer.supportsAnimation) {
-            let context = this.chart.context;
-            let panel = this.chart.panel;
-            let currentQuote = this.currentQuote();
-            if (!currentQuote) { return; }
-            let price = currentQuote.Close;
-            let x = this.pixelFromTick(currentQuote.tick, this.chart) | 0;
-            if (this.chart.lastTickOffset) { x += this.chart.lastTickOffset; }
-            let y = this.pixelFromPrice(price, panel) | 0;
-            if (this.chart.yAxis.left > x &&
-                this.chart.yAxis.top <= y &&
-                this.chart.yAxis.bottom >= y) {
-                currentSpotElement.style.top = `${y}px`;
-                currentSpotElement.style.left = `${x}px`;
-                currentSpotElement.style.display = 'block';
-                currentSpotChanged = true;
-            }
-        }
-        if (!currentSpotChanged) {
-            currentSpotElement.style.display = 'none';
-        }
-    });
 };
-

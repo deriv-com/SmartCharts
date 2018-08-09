@@ -7,6 +7,7 @@ import ChartTitle from './ChartTitle.jsx';
 import AssetInformation from './AssetInformation.jsx';
 import Loader from './Loader.jsx';
 import Barrier from './Barrier.jsx';
+import CurrentSpot from './CurrentSpot.jsx';
 
 /* css + scss */
 import '../../sass/app.scss';
@@ -39,11 +40,8 @@ class Chart extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        const { settings, setSettings, setConnectionIsOpened, isConnectionOpened } = nextProps;
-        setSettings(settings);
-        if (isConnectionOpened !== undefined) {
-            setConnectionIsOpened(isConnectionOpened);
-        }
+        const { updateProps, ...props } = nextProps;
+        updateProps(props);
     }
 
     componentWillUnmount() {
@@ -93,6 +91,7 @@ class Chart extends Component {
                                 </RenderInsideChart>
                                 <RenderInsideChart at="subholder">
                                     {children}
+                                    <CurrentSpot />
                                 </RenderInsideChart>
                                 <div className="cq-top-ui-widgets" style={{ top: chartPanelTop }}>
                                     { renderTopWidgets() }
@@ -128,8 +127,7 @@ export default connect(({ chart, drawTools, studies, chartSetting, chartType }) 
     isChartAvailable: chart.isChartAvailable,
     chartPanelTop: chart.chartPanelTop,
     setting: chartSetting,
-    setSettings: chartSetting.setSettings,
+    updateProps: chart.updateProps,
     chartContainerHeight: chart.chartContainerHeight,
     containerWidth: chart.containerWidth,
-    setConnectionIsOpened: chart.setConnectionIsOpened,
 }))(Chart);

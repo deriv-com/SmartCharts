@@ -5,9 +5,7 @@ import Context from '../components/ui/Context';
 import KeystrokeHub from '../components/ui/KeystrokeHub';
 import '../components/ui/Animation';
 import { BinaryAPI, Feed } from '../feed';
-import { createObjectFromLocalStorage, stableSort } from '../utils';
-
-// import '../AddOns';
+import { createObjectFromLocalStorage, stableSort, calculateTimeUnitInterval, calculateGranularity, getUTCDate } from '../utils';
 
 class ChartStore {
     static _id_counter = 0;
@@ -17,13 +15,20 @@ class ChartStore {
         this.mainStore = mainStore;
     }
 
-    onSymbolChange = null;
     contextPromise = new PendingPromise();
     activeSymbols = [];
     rootNode = null;
     stxx = null;
     id = null;
-    defaultSymbol = 'R_100';
+    paramProps = {};
+    defaults = {
+        symbol: 'R_100',
+        granularity: 0,
+        chartType: 'mountain',
+    };
+    granularity;
+    startEpoch;
+    endEpoch;
     enableRouting = null;
     chartNode = null;
     chartControlsNode = null;
@@ -145,8 +150,9 @@ class ChartStore {
         this.chartControlsNode = this.rootNode.querySelector('.cq-chart-controls');
 
         const {
-            onSymbolChange,
-            initialSymbol,
+            symbol,
+            chartType,
+            granularity,
             requestAPI,
             requestSubscribe,
             requestForget,
@@ -156,6 +162,8 @@ class ChartStore {
             onMessage,
             settings,
             onSettingsChange,
+            startEpoch,
+            endEpoch,
         } = props;
         const api = new BinaryAPI(requestAPI, requestSubscribe, requestForget);
         const { share, chartSetting } = this.mainStore;
@@ -163,18 +171,17 @@ class ChartStore {
         chartSetting.setSettings(settings);
         chartSetting.onSettingsChange = onSettingsChange;
         this.isMobile = isMobile;
-        this.onSymbolChange = onSymbolChange;
-
 
         this.onMessage = onMessage;
-
-        const stxx = this.stxx = new CIQ.ChartEngine({
+        this.granularity = (granularity !== undefined) ? granularity : this.defaults.granularity;
+        const engineParams = {
             maxMasterDataSize: 5000, // cap size so tick_history requests do not become too large
             markerDelay: null, // disable 25ms delay for placement of markers
             container: this.rootNode.querySelector('.chartContainer.primary'),
             controls: { chartControls: null }, // hide the default zoom buttons
             preferences: {
                 currentPriceLine: true,
+                whitespace: isMobile ? 50 : 150,
             },
             chart: {
                 yAxis: {
@@ -186,7 +193,21 @@ class ChartStore {
             minimumLeftBars: 15,
             minimumZoomTicks: 20,
             yTolerance: 999999, // disable vertical scrolling
-        });
+        };
+        let chartLayout = {
+            chartType: chartType || this.defaults.chartType,
+        };
+        if (chartLayout.chartType === 'spline') { // cause there's no such thing as spline chart in ChartIQ
+            chartLayout.chartType = 'mountain';
+            engineParams.chart.tension = chartLayout.tension = 0.5;
+        }
+        const rangeSpan = this.getRangeSpan(startEpoch, endEpoch);
+        if (rangeSpan) {
+            chartLayout = { ...chartLayout, ...rangeSpan };
+        }
+        engineParams.layout = chartLayout;
+
+        const stxx = this.stxx = new CIQ.ChartEngine(engineParams);
 
         const deleteElement = stxx.chart.panel.holder.parentElement.querySelector('#mouseDeleteText');
         const manageElement = stxx.chart.panel.holder.parentElement.querySelector('#mouseManageText');
@@ -195,11 +216,12 @@ class ChartStore {
         manageElement.textConent = t.translate('right-click to manage');
         manageTouchElement.textContent = t.translate('tap to manage');
 
-        // Animation (using tension requires splines.js)
         CIQ.Animation(stxx, { stayPut: true });
 
         // connect chart to data
         this.feed = new Feed(api, stxx, this.mainStore);
+        this.feed.startEpoch = startEpoch;
+        this.feed.endEpoch = endEpoch;
         stxx.attachQuoteFeed(this.feed, {
             refreshInterval: null,
         });
@@ -208,18 +230,6 @@ class ChartStore {
         if (this.enableRouting) {
             this.routingStore.handleRouting();
         }
-
-        // Extended hours trading zones
-        // new CIQ.ExtendedHours({
-        //     stx: stxx,
-        //     filter: true,
-        // });
-
-        // Inactivity timer
-        // new CIQ.InactivityTimer({
-        //     stx: stxx,
-        //     minutes: 30,
-        // });
 
         this.holderStyle = stxx.chart.panel.holder.style;
 
@@ -239,20 +249,7 @@ class ChartStore {
             cb: KeystrokeHub.defaultHotKeys,
         });
 
-        const UIStorage = new CIQ.NameValueStore(); // eslint-disable-line no-unused-vars
-
         // TODO: excluded studies
-        const params = { // eslint-disable-line no-unused-vars
-            excludedStudies: {
-                Directional: true,
-                Gopala: true,
-                vchart: true,
-            },
-            alwaysDisplayDialog: {
-                ma: true,
-            },
-            /* dialogBeforeAddingStudy: {"rsi": true} // here's how to always show a dialog before adding the study */
-        };
 
         this.loader.show();
 
@@ -263,39 +260,20 @@ class ChartStore {
         this.restorePreferences();
 
         api.getActiveSymbols().then(({ active_symbols }) => {
-            let layoutData = createObjectFromLocalStorage(`layout-${this.id}`);
-
-            // if initialSymbol is different from local storage layoutData, it takes
-            // precedence over layoutData.symbols. Note that layoutData retrieved
-            // from URL will take precedence over initialSymbol
-            if (initialSymbol && layoutData && layoutData.symbols[0].symbol !== initialSymbol) {
-                // If symbol in layoutData.symbol[0] and initialSymbol are different,
-                // restoreLayout and changeSymbol cannot be executed together or
-                // chartIQ will stream both symbols in the the same chart
-                delete layoutData.symbols;
-            }
+            this.setActiveSymbols(active_symbols);
+            let layoutData = this.restoreLayoutFromLocalStorage(`layout-${this.id}`);
 
             const onLayoutDataReady = () => {
-                this.setActiveSymbols(active_symbols);
                 if (layoutData) {
-                    for (const symbol of layoutData.symbols) {
-                        // Symbol from cache may be in different language, so replace it with server's
-                        const { symbolObject } = symbol;
-                        const updatedSymbol = this.activeSymbols.find(x => symbolObject.symbol === x.symbol);
-                        symbol.symbolObject = updatedSymbol;
-                    }
-
                     this.restoreLayout(stxx, layoutData);
+                    this.setCurrentActiveSymbols(stxx);
+                } else {
+                    this.changeSymbol(
+                        symbol || this.defaults.symbol,
+                        this.granularity,
+                    );
                 }
 
-                if (initialSymbol && !(layoutData && layoutData.symbols)) {
-                    this.changeSymbol(initialSymbol);
-                } else if (stxx.chart.symbol) {
-                    this.setCurrentActiveSymbols(stxx);
-                    if (this.onSymbolChange) { this.onSymbolChange(this.currentActiveSymbol); }
-                } else {
-                    this.changeSymbol(this.defaultSymbol);
-                }
                 this.setLayoutData(context);
             };
             const href = window.location.href;
@@ -324,10 +302,62 @@ class ChartStore {
 
         this.feed.onComparisonDataUpdate(this.updateComparisons);
     }
+
+    restoreLayoutFromLocalStorage(id) {
+        let layoutData = createObjectFromLocalStorage(id);
+
+        if (!layoutData) return layoutData;
+
+        // prop values will always take precedence
+        const { symbol, granularity, chartType } = this.paramProps;
+
+        if (symbol !== undefined && symbol !== layoutData.symbols[0].symbol) {
+            // symbol prop takes precedence over local storage data
+            const symbolObject = this.activeSymbols.find(x => x.symbol === symbol);
+            layoutData.symbols = [{ symbol, symbolObject }];
+        }
+
+        for (const symbolDat of layoutData.symbols) {
+            // Symbol from cache may be in different language, so replace it with server's
+            const { symbol: cachedSymbol } = symbolDat;
+            const updatedSymbol = this.activeSymbols.find(x => cachedSymbol === x.symbol);
+            symbolDat.symbolObject = updatedSymbol;
+        }
+
+        if (granularity !== undefined) {
+            const periodicity = calculateTimeUnitInterval(granularity);
+            layoutData = { ...layoutData, ...periodicity };
+        } else {
+            const { timeUnit, interval } = layoutData;
+            if (timeUnit) {
+                this.granularity = calculateGranularity(interval, timeUnit);
+            } else {
+                this.granularity = 86400; // 1 day
+            }
+        }
+
+        const rangeSpan = this.getRangeSpan();
+        if (rangeSpan) {
+            layoutData = { ...layoutData, ...rangeSpan };
+        }
+
+        if (chartType !== undefined) {
+            if (chartType === 'spline') { // cause there's no such thing as spline chart in ChartIQ
+                layoutData.chartType = 'mountain';
+                this.stxx.chart.tension = layoutData.tension = 0.5;
+            } else {
+                layoutData.chartType = chartType;
+            }
+        }
+
+        return layoutData;
+    }
+
     removeComparison(symbolObj) {
         this.context.stx.removeSeries(symbolObj.symbol);
         this.updateComparisons();
     }
+
     @action.bound setLayoutData(context) {
         this.context = context;
         this.contextPromise.resolve(this.context);
@@ -349,51 +379,89 @@ class ChartStore {
         this.isChartAvailable = status;
     }
 
-    @action.bound changeSymbol(symbolObj) {
+    @action.bound changeSymbol(symbolObj, granularity) {
         if (typeof symbolObj === 'string') {
             symbolObj = this.activeSymbols.find(s => s.symbol === symbolObj);
         }
 
-        if (this.currentActiveSymbol
-            && symbolObj.symbol === this.currentActiveSymbol.symbol) {
+        const isSymbolAvailable = symbolObj && this.currentActiveSymbol;
+
+        if (
+            (isSymbolAvailable
+                && symbolObj.symbol === this.currentActiveSymbol.symbol)
+            &&
+            (granularity !== undefined
+                && granularity === this.granularity)
+        ) {
             return;
         }
 
-        if (this.onSymbolChange) {
-            this.onSymbolChange(symbolObj);
-        }
-
-        // reset comparisons
-        this.comparisonSymbols = [];
-        for (const field in this.stxx.chart.series) {
-            if (this.stxx.chart.series[field].parameters.bucket !== 'study') {
-                this.stxx.removeSeries(field);
+        const isResetComparisons = isSymbolAvailable
+            && (symbolObj.symbol !== this.currentActiveSymbol.symbol);
+        if (isResetComparisons) {
+            this.comparisonSymbols = [];
+            for (const field in this.stxx.chart.series) {
+                if (this.stxx.chart.series[field].parameters.bucket !== 'study') {
+                    this.stxx.removeSeries(field);
+                }
             }
         }
 
-        this.newChart(symbolObj);
+        let params;
+        if (granularity !== undefined) {
+            this.granularity = granularity;
+            params = { periodicity: calculateTimeUnitInterval(granularity) };
+        }
 
-        this.stxx.chart.yAxis.decimalPlaces = symbolObj.decimal_places;
-        this.currentActiveSymbol = symbolObj;
-        this.categorizedSymbols = this.categorizeActiveSymbols();
+        this.newChart(symbolObj, params);
+
+        if (symbolObj) {
+            this.stxx.chart.yAxis.decimalPlaces = symbolObj.decimal_places;
+            this.currentActiveSymbol = symbolObj;
+            this.categorizedSymbols = this.categorizeActiveSymbols();
+        }
     }
 
-    @action.bound newChart(symbolObj) {
+    // Calling newChart with symbolObj as undefined refreshes the chart
+    @action.bound newChart(symbolObj = this.currentActiveSymbol, params) {
         this.loader.show();
-        this.stxx.newChart(symbolObj, null, null, (err) => {
+        const onChartLoad = (err) => {
             this.loader.hide();
             if (err) {
                 /* TODO, symbol not found error */
                 return;
             }
             this.restoreDrawings();
-        });
+        };
+        const rangeSpan = this.getRangeSpan();
+        this.stxx.newChart(symbolObj, null, null, onChartLoad, { ...params, ...rangeSpan });
+    }
+
+    // TODO: range span needs to update in real time
+    getRangeSpan(startEpoch = this.paramProps.startEpoch, endEpoch = this.paramProps.endEpoch) {
+        let range, span;
+        if (startEpoch !== undefined || endEpoch !== undefined) {
+            const dtLeft  = (startEpoch !== undefined) ? new Date(getUTCDate(startEpoch)) : undefined;
+            const dtRight = (endEpoch   !== undefined) ? new Date(getUTCDate(endEpoch))   : undefined;
+            const periodicity = calculateTimeUnitInterval(this.granularity);
+            range = {
+                dtLeft,
+                dtRight,
+                periodicity,
+                goIntoFuture: true,
+                goIntoPast: true,
+            };
+            if (dtLeft) {
+                span = { base: 'all', periodicity };
+            }
+            return { range, span };
+        }
     }
 
     // Makes requests to tick history API that will replace
     // Existing chart tick/ohlc data
     @action.bound refreshChart() {
-        this.newChart(this.currentActiveSymbol);
+        this.newChart();
     }
 
     @action.bound updateComparisons() {
@@ -427,6 +495,27 @@ class ChartStore {
             const srs = stx.chart.series[sybl];
             comp.price = srs.lastQuote ? srs.lastQuote.Close : undefined;
             i++;
+        }
+    }
+
+    @action.bound updateProps({ settings, isConnectionOpened, symbol, granularity, chartType, startEpoch, endEpoch }) {
+        this.mainStore.chartSetting.setSettings(settings);
+        this.setConnectionIsOpened(isConnectionOpened);
+
+        this.paramProps = { symbol, granularity, chartType, startEpoch, endEpoch };
+        if (this.currentActiveSymbol) {
+            const currentParams = {
+                symbol: this.currentActiveSymbol.symbol,
+                granularity: this.granularity,
+                chartType: this.mainStore.chartType.type.id,
+            };
+            if ((symbol !== undefined && symbol !== currentParams.symbol)
+                || (granularity !== undefined && granularity !== currentParams.granularity)) {
+                this.changeSymbol(symbol, granularity);
+            }
+            if (chartType !== undefined && chartType !== currentParams.chartType) {
+                this.mainStore.chartType.setType(chartType);
+            }
         }
     }
 
@@ -523,7 +612,7 @@ class ChartStore {
     }
 
     setConnectionIsOpened = (isOpened) => {
-        if (this.feed) {
+        if (isOpened !== undefined && this.feed) {
             this.feed.setConnectionOpened(isOpened);
         }
     }
