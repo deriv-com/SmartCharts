@@ -1,4 +1,5 @@
 import { action, observable, when } from 'mobx';
+import debounce from 'lodash.debounce';
 
 class CurrectSpotStore {
     constructor(mainStore) {
@@ -6,14 +7,26 @@ class CurrectSpotStore {
         when(() => this.context, this.onContextReady);
     }
 
+    resizing = false;
     @observable top = 0;
     @observable left = 0;
     @observable show = false;
 
     get context() { return this.mainStore.chart.context; }
     get stx() { return this.context.stx; }
+
+    onScreenResize = debounce(() => {
+        this.resizing = false;
+    }, 10);
+
     onContextReady = () => {
         const self = this;
+
+        window.addEventListener('resize', () => {
+            self.resizing = true;
+            self.onScreenResize();
+        });
+
         this.stx.append('draw', function () {
             if (this.chart.dataSet
                 && this.chart.dataSet.length
@@ -40,7 +53,7 @@ class CurrectSpotStore {
 
     @action.bound updateSpot(x, y) {
         this.top = y;
-        this.left = x > this.left ? x : this.left;
+        this.left = (x > this.left || this.resizing) ? x : this.left;
     }
 
     @action.bound updateDisplay(show) {
