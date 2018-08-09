@@ -1,4 +1,5 @@
 import EventEmitter from 'event-emitter-es6';
+import { reaction } from 'mobx';
 import { TickHistoryFormatter } from './TickHistoryFormatter';
 import PendingPromise from '../utils/PendingPromise';
 import { calculateGranularity, getUTCEpoch } from '../utils';
@@ -16,6 +17,8 @@ class Feed {
         this._activeStreams = {};
         this._lastStreamEpoch = {};
         this._mainStore = mainStore;
+        reaction(() => mainStore.state.isConnectionOpened, this.onConnectionChanged.bind(this));
+
         this._emitter = new EventEmitter({ emitDelay: 0 });
         this._isConnectionOpened = true;
     }
@@ -292,8 +295,9 @@ class Feed {
         this._emitter.on(Feed.EVENT_ON_PAGINATION, callback);
     }
 
-    setConnectionOpened(isOpened) {
-        if (isOpened === this._isConnectionOpened) { return; }
+    onConnectionChanged() {
+        const isOpened = this._mainStore.state.isConnectionOpened;
+        if (isOpened === undefined || isOpened === this._isConnectionOpened) { return; }
 
         this._isConnectionOpened = isOpened;
         if (isOpened) {

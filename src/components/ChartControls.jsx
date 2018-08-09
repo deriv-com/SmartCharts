@@ -32,11 +32,11 @@ const ChartControls = ({
     widgets,
     context,
 }) => {
-    const controls =  widgets || renderDefaultControls(isMobile);
+    const Controls =  widgets || renderDefaultControls(isMobile);
 
     return (
         <div className={`cq-chart-controls ${hasOpenMenu ? ' active' : ''}`}>
-            { context ? controls() : null }
+            { context ? <Controls /> : null }
         </div>
     );
 };
