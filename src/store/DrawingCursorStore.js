@@ -22,7 +22,7 @@ export default class DrawingCursorStore {
         this.stx.container.addEventListener('touchend', this.onTouchEnd);
     };
 
-    @action.bound onMouseMove = (e) => {
+    @action.bound onMouseMove = () => {
         this.isDrawing = this.stx.currentVectorParameters.vectorType;
 
         if (this.isDrawing) {
@@ -34,7 +34,7 @@ export default class DrawingCursorStore {
         }
     }
 
-    @action.bound onTouchEnd = (e) => {
+    @action.bound onTouchEnd = () => {
         // A delay is needed to remove drawing cursor after drawing ends on touch end in mobile
         setTimeout(this.updateDisplay, 500);
     }
