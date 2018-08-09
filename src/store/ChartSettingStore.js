@@ -1,5 +1,5 @@
 import React from 'react';
-import { observable, action } from 'mobx';
+import { observable, action, reaction } from 'mobx';
 import MenuStore from './MenuStore';
 import { FlagIcons } from '../components/Icons.jsx';
 
@@ -8,6 +8,9 @@ export default class ChartSettingStore {
         this.defaultLanguage = this.languages[0];
         this.mainStore = mainStore;
         this.menu = new MenuStore(mainStore, { route: 'setting' });
+        reaction(() => mainStore.state.settings, () => {
+            this.setSettings(mainStore.state.settings);
+        });
     }
 
     get context() { return this.mainStore.chart.context; }
