@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Italian\n"
 "Language: it_IT\n"
-"PO-Revision-Date: 2018-08-09 09:23\n"
+"PO-Revision-Date: 2018-08-09 09:34\n"
 
 msgid " already exists."
 msgstr ""
@@ -229,7 +229,7 @@ msgid "Reversal"
 msgstr "Reversal"
 
 msgid "Reversal Percentage"
-msgstr "Formula inversa della percentuale"
+msgstr "Percentuale di reversal"
 
 msgid "right-click to delete"
 msgstr "destro del mouse per cancellare"
