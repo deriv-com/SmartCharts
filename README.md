@@ -85,12 +85,14 @@ Props marked with `*` are **mandatory**:
 requestAPI* | SmartCharts will make single API calls by passing the request input directly to this method, and expects a `Promise` to be returned.
 requestSubscribe* | SmartCharts will make streaming calls via this method. `requestSubscribe` expects 2 parameters `(request, callback) => {}`: the `request` input and a `callback` in which response will be passed to for each time a response is available. Keep track of this `callback` as SmartCharts will pass this to you to forget the subscription (via `requestForget`).
 requestForget* | When SmartCharts no longer needs a subscription (made via `requestSubscribe`), it will call this method (passing in `request` and `callback` passed from `requestSubscribe`) to halt the subscription.
-onSymbolChange | When SmartCharts changes the symbol, it will call this function, passing the symbol object as parameter.
+symbol | Sets the main chart symbol. Defaults to `R_100`. Refer [Props vs UI](#props-vs-ui) for usage details.
+granularity | Sets the granularity of the chart. Allowed values are 60, 120, 180, 300, 600, 900, 1800, 3600, 7200, 14400, 28800, 86400. Defaults to 0. Refer [Props vs UI](#props-vs-ui) for usage details.
+chartType | Sets the chartType. Choose between `mountain` (Line), `line` (Dot), `colored_line` (Colored Dot),  `spline`,  `baseline`, `candle`, `colored_bar` (OHLC), `hollow_candle`, `heikinashi`, `kagi`, `linebreak`, `renko`, `rangebars`, and `pandf` (Point & Figure). Defaults to `mountain`. Refer [Props vs UI](#props-vs-ui) for usage details.
+startEpoch | Set the start epoch of the chart
+endEpoch | Set the end epoch of the chart
 chartControlsWidgets | Render function for chart control widgets. Refer to [Customising Components](#customising-components).
 topWidgets | Render function for top widgets. Refer to [Customising Components](#customising-components).
-initialSymbol | Sets the initial symbol.
 isMobile | Switch between mobile or desktop view. Defaults to `false`.
-shareOrigin | Sets the origin of the generated share link. Defaults to `https://charts.binary.com`.
 onSettingsChange | Callback that will be fired each time a setting is changed.
 settings | Sets the chart settings. Refer to [Chart Settings](#chart-settings)
 barriers | Draw chart barriers. Refer to [Barriers API](#barriers-api) for usage details
@@ -127,7 +129,7 @@ Attributes marked with `*` are **mandatory**:
 
 | Attribute | Description |
 --------|--------------
-shadeColor | Barrier shade color; choose between `green` and `red`. Defaults to `green`.
+shadeColor | Barrier shade color. Defaults to `green`.
 color | Price line color. Defaults to `#000`.
 shade | Shade type; choose between `NONE_SINGLE`, `NONE_DOUBLE`, `ABOVE`, `BELOW`, `OUTSIDE` or `BETWEEN`. Defaults to `NONE_SINGLE`.
 hidePriceLines | hide/show the price lines. Defaults to `false`.
@@ -145,7 +147,7 @@ Markers provide a way for developers to place DOM elements inside the chart that
 ```jsx
 <SmartChart>
     <Marker
-        x={new Date(2018, 5, 20)}
+        x={1533192979}
         yPositioner="none"
         className="chart-line vertical trade-start-line"
     >
@@ -194,20 +196,38 @@ const App = () => (
 
 Here are the following components you can import:
  - Top widgets:
-    - `<ChartTitle enabled={true} />` - set `enabled` to `false` to prevent user from changing the symbol from this component.
+    - `<ChartTitle enabled={true} onChange={(symbol) => {}} />`
     - `<AssetInformation />`
     - `<ComparisonList />`
  - Chart controls:
-    - `<CrosshairToggle />`
-    - `<ChartTypes />`
+    - `<CrosshairToggle enabled={true} />`
+    - `<ChartTypes enabled={true} onChange={(chartType) => {}} />`
     - `<StudyLegend />`
     - `<Comparison />`
     - `<DrawTools />`
     - `<Views />`
     - `<Share />`
-    - `<Timeperiod />`
+    - `<Timeperiod enabled={true} onChange={(chartType) => {}} />`
     - `<ChartSize />`
     - `<ChartSetting />`
+ 
+ ### Props vs UI
+ 
+Certain chart parameters can be set either by props or from the chart UI:
+  
+   - `symbol` - set by `<ChartTitle />`
+   - `granularity` - set by `<TimePeriod >`
+   - `chartType` - set by `<ChartTypes />`
+  
+  This creates conflicts in deciding which is the single source of truth. To circumvent this, if these props are set (not `undefined`), selecting options in its corresponding components will not have any affect affect on the chart; the prop values take precedence. To have control over both the UI and the props, we provide library users the option to _override_ component behaviour via `onChange` prop. For example, to retrieve the symbol a client chooses:
+ 
+ ```jsx
+<ChartTitle
+    onChange={(symbol) => { /* ...Pass to symbol prop in <SmartCharts /> */ }}
+/>
+```
+ 
+ See available components and their props in [Customising Components](#customising-components).
  
 ## Contribute
 

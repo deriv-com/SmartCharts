@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Dutch\n"
 "Language: nl_NL\n"
-"PO-Revision-Date: 2018-08-01 09:21\n"
+"PO-Revision-Date: 2018-08-08 08:01\n"
 
 msgid " already exists."
 msgstr ""
@@ -78,12 +78,6 @@ msgstr ""
 msgid "Continuous"
 msgstr ""
 
-msgid "Copied!"
-msgstr ""
-
-msgid "Copy to clipboard"
-msgstr ""
-
 msgid "Countdown"
 msgstr ""
 
@@ -108,19 +102,16 @@ msgstr ""
 msgid "Dot"
 msgstr ""
 
-msgid "Download chart"
+msgid "Download"
+msgstr ""
+
+msgid "Download Chart"
 msgstr ""
 
 msgid "Draw tools"
 msgstr ""
 
 msgid "Ellipse"
-msgstr ""
-
-msgid "Failed to generate link"
-msgstr ""
-
-msgid "Failed!"
 msgstr ""
 
 msgid "Favorites"
@@ -234,9 +225,6 @@ msgstr ""
 msgid "RESET"
 msgstr ""
 
-msgid "Retry"
-msgstr ""
-
 msgid "Reversal"
 msgstr ""
 
@@ -274,15 +262,6 @@ msgid "Shape - Heart"
 msgstr ""
 
 msgid "Shape - Star"
-msgstr ""
-
-msgid "Share"
-msgstr ""
-
-msgid "Share / Download Chart"
-msgstr ""
-
-msgid "Share link"
 msgstr ""
 
 msgid "Speed Resistance Arc"
