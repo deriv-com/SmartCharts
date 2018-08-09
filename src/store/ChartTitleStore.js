@@ -33,7 +33,7 @@ export default class ChartTitleStore {
     };
 
     @action.bound setSymbol(symbolObj) {
-        if (this.chart.paramProps.symbol !== undefined) {
+        if (this.mainStore.state.symbol !== undefined) {
             console.error('Changing symbol does nothing because symbol prop is being set. Consider overriding the onChange prop in <ChartTitle />');
             return;
         }

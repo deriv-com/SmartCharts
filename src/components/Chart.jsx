@@ -64,8 +64,7 @@ class Chart extends Component {
 
         const currentPosition = `cq-chart-control-${(position && !isMobile) ? position : 'bottom'}`;
         const contextWidth =  !isMobile ? `smartcharts-${containerWidth}` : '';
-        const renderTopWidgets = topWidgets || defaultTopWidgets;
-
+        const TopWidgets = topWidgets || defaultTopWidgets;
 
         return (
             <div
@@ -91,7 +90,7 @@ class Chart extends Component {
                                     {children}
                                 </RenderInsideChart>
                                 <div className="cq-top-ui-widgets">
-                                    { renderTopWidgets() }
+                                    <TopWidgets />
                                 </div>
                                 <div className="chartContainer primary" style={{ height: chartContainerHeight }}>
                                     <Crosshair />
@@ -115,7 +114,7 @@ class Chart extends Component {
     }
 }
 
-export default connect(({ chart, drawTools, studies, chartSetting, chartType }) => ({
+export default connect(({ chart, drawTools, studies, chartSetting, chartType, state }) => ({
     contextPromise: chart.contextPromise,
     init: chart.init,
     destroy: chart.destroy,
@@ -124,7 +123,7 @@ export default connect(({ chart, drawTools, studies, chartSetting, chartType }) 
     AggregateChartSettingsDialog : chartType.settingsDialog.connect(SettingsDialog),
     isChartAvailable: chart.isChartAvailable,
     setting: chartSetting,
-    updateProps: chart.updateProps,
+    updateProps: state.updateProps,
     chartContainerHeight: chart.chartContainerHeight,
     containerWidth: chart.containerWidth,
 }))(Chart);

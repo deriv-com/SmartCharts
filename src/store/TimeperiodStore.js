@@ -1,6 +1,6 @@
 import { observable, action, computed, when, reaction } from 'mobx';
 import MenuStore from './MenuStore';
-import { getTimeUnit, getIntervalInSeconds } from '../utils';
+import { getTimeUnit, getIntervalInSeconds, displayMilliseconds } from '../utils';
 
 export default class TimeperiodStore {
     constructor(mainStore) {
@@ -11,6 +11,7 @@ export default class TimeperiodStore {
 
     get context() { return this.mainStore.chart.context; }
     get loader() { return this.mainStore.loader; }
+    get isTick() { return this.timeUnit === 'tick'; }
     @observable timeUnit = null;
     @observable interval = null;
     remain = null;
@@ -20,43 +21,43 @@ export default class TimeperiodStore {
         this.timeUnit = getTimeUnit({ timeUnit, interval });
         this.interval = interval;
 
-        this.showCountdown();
+        this.updateCountdown();
 
-        reaction(() => this.timeUnit, this.showCountdown);
-        reaction(() => this.interval, this.showCountdown);
+        reaction(() => [
+            this.timeUnit,
+            this.interval,
+            this.mainStore.chartSetting.countdown,
+            this.mainStore.chartType.type,
+        ], this.updateCountdown.bind(this));
 
         this.context.stx.addEventListener('newChart', this.updateDisplay);
     };
 
     countdownInterval = null;
 
-    showCountdown = (callFromSettings = false) => {
-        if (!this.context) { return; }
+    clearCountdown() {
+        if (this.countdownInterval) {
+            clearInterval(this.countdownInterval);
+        }
 
-        const stx = this.context.stx;
-        const isTick = this.timeUnit === 'tick';
-        const hasCountdown = !this.mainStore.chartType.isAggregateChart;
-        this.remain = null;
-        if (this.countdownInterval) { clearInterval(this.countdownInterval); }
-        if (this._injectionId)  { stx.removeInjection(this._injectionId); }
+        if (this._injectionId)  {
+            this.context.stx.removeInjection(this._injectionId);
+        }
+
         this._injectionId = undefined;
         this.countdownInterval = undefined;
-        stx.draw();
 
-        const displayMilliseconds = (ms) => {
-            const totalSec = ms / 1000;
-            if (totalSec <= 0) { return null; }
-            const padNum = n => (`0${n}`).slice(-2);
-            const seconds = padNum(Math.trunc((totalSec) % 60));
-            const minutes = padNum(Math.trunc((totalSec / 60) % 60));
-            let hours = Math.trunc((totalSec / 3600) % 24);
-            hours = hours ? `${hours}:` : '';
-            return `${hours}${minutes}:${seconds}`;
-        };
+        this.context.stx.draw();
+    }
+
+    updateCountdown() {
+        const stx = this.context.stx;
+        this.remain = null;
+        this.clearCountdown();
 
         const setRemain = () => {
-            if (stx.isDestroyed) {
-                if (this.countdownInterval) { clearInterval(this.countdownInterval); }
+            if (stx.isDestroyed || this.isTick) {
+                this.clearCountdown();
                 return;
             }
 
@@ -70,9 +71,17 @@ export default class TimeperiodStore {
             }
         };
 
-        if (this.mainStore.chartSetting.countdown && !isTick && hasCountdown) {
+        const isCountdownChart = !this.mainStore.chartType.isAggregateChart;
+        const hasCountdown = this.mainStore.chartSetting.countdown && !this.isTick && isCountdownChart;
+
+        if (hasCountdown) {
             if (!this._injectionId) {
                 this._injectionId = stx.append('draw', () => {
+                    if (this.isTick) {
+                        this.clearCountdown();
+                        return;
+                    }
+
                     if (this.remain && stx.currentQuote() !== null) {
                         stx.yaxisLabelStyle = 'rect';
                         stx.createYAxisLabel(stx.chart.panel, this.remain, this.remainLabelY, '#15212d', '#FFFFFF');
@@ -81,16 +90,15 @@ export default class TimeperiodStore {
                 });
             }
 
-            if (callFromSettings) { setRemain(); }
-
             if (!this.countdownInterval) {
                 this.countdownInterval = setInterval(setRemain, 1000);
+                setRemain();
             }
         }
-    };
+    }
 
     @action.bound setGranularity(granularity) {
-        if (this.mainStore.chart.paramProps.granularity !== undefined) {
+        if (this.mainStore.state.granularity !== undefined) {
             console.error('Setting granularity does nothing since granularity prop is set. Consider overriding the onChange prop in <TimePeriod />');
             return;
         }
