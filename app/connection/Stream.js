@@ -2,7 +2,6 @@ import EventEmitter from 'event-emitter-es6';
 
 export default class Stream extends EventEmitter {
     static get EVENT_STREAM() { return 'EVENT_STREAM'; }
-
     static get EVENT_NO_SUBSCRIBER() { return 'EVENT_NO_SUBSCRIBER'; }
 
     subscriberCount = 0;

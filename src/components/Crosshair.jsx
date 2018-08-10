@@ -18,12 +18,8 @@ const Crosshair = ({
 
         {rows.map(row => (
             <div className="row" key={row.name}>
-                <span>
-                    {row.name !== 'DT' ? `${row.name}:` : row.value}
-                </span>
-                <span>
-                    {row.name !== 'DT' ? row.value : ''}
-                </span>
+                <span>{row.name !== 'DT' ? `${row.name}:` : row.value}</span>
+                <span>{row.name !== 'DT' ? row.value : ''}</span>
             </div>
         ))}
     </div>

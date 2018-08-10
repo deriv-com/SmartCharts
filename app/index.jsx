@@ -107,9 +107,7 @@ class App extends Component {
             window.location.reload();
         }
     };
-
     startingLanguage = 'en';
-
     render() {
         const { settings, isConnectionOpened } = this.state;
 

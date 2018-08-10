@@ -36,9 +36,9 @@ export function isValidProp(p) {
 export const getTimeUnit = ({ timeUnit, interval }) => {
     if (timeUnit === null && interval === 'day') {
         return 'day';
-    } if (timeUnit === 'minute' && interval % 60 === 0) {
+    } else if (timeUnit === 'minute' && interval % 60 === 0) {
         return 'hour';
-    } if (timeUnit === 'second') {
+    } else if (timeUnit === 'second') {
         return 'tick';
     }
     return timeUnit;
@@ -145,3 +145,4 @@ export function calculateGranularity(period, interval) {
 
     return toSeconds[interval] * period;
 }
+

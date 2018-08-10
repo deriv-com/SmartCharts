@@ -5,39 +5,25 @@ import PendingPromise from '../utils/PendingPromise';
 
 export default class BarrierStore {
     static get SHADE_COLOR_RED() { return 'red'; }
-
     static get SHADE_COLOR_GREEN() { return 'green'; }
 
     static get SHADE_NONE_SINGLE() { return 'SHADE_NONE_SINGLE'; }
-
     static get SHADE_NONE_DOUBLE() { return 'SHADE_NONE_DOUBLE'; }
-
     static get SHADE_ABOVE() { return 'SHADE_ABOVE'; }
-
     static get SHADE_BELOW() { return 'SHADE_BELOW'; }
-
     static get SHADE_BETWEEN() { return 'SHADE_BETWEEN'; }
-
     static get SHADE_OUTSIDE() { return 'SHADE_OUTSIDE'; }
 
     static get BARRIER_CHANGED() { return 'BARRIER_CHANGED'; }
 
     @observable shadeColor = BarrierStore.SHADE_COLOR_GREEN;
-
     @observable isBetweenShadeVisible = false;
-
     @observable isTopShadeVisible = false;
-
     @observable isBottomShadeVisible = false;
-
     @observable hidePriceLines = false;
-
     @observable lineStyle = undefined;
-
     @observable isInitialized = false;
-
     @observable initializePromise = new PendingPromise();
-
     _shadeState;
 
     @computed get pip() { return this.mainStore.chart.currentActiveSymbol.decimal_places; }
@@ -95,11 +81,8 @@ export default class BarrierStore {
     }
 
     get high_barrier() { return this._high_barrier.price; }
-
     get low_barrier() { return this._low_barrier.price; }
-
     set high_barrier(price) { this._high_barrier.price = price; }
-
     set low_barrier(price) { this._low_barrier.price = price; }
 
     _setupConstrainBarrierPrices() {
@@ -125,9 +108,7 @@ export default class BarrierStore {
     }
 
     get context() { return this.mainStore.chart.context; }
-
     get stx() { return this.context.stx; }
-
     get chart() { return this.stx.chart; }
 
     _onBarrierChange = null;
@@ -153,7 +134,8 @@ export default class BarrierStore {
         if (this._shadeState === shadeState) { return; }
         this._shadeState = shadeState;
 
-        const noShade =            this._shadeState === BarrierStore.SHADE_NONE_SINGLE
+        const noShade =
+            this._shadeState === BarrierStore.SHADE_NONE_SINGLE
             || this._shadeState === BarrierStore.SHADE_NONE_DOUBLE;
 
         if (noShade) {
@@ -161,11 +143,14 @@ export default class BarrierStore {
             this.betweenShade.visible = false;
             this.belowShade.visible = false;
         } else {
-            const aboveShadeEnable =                this._shadeState === BarrierStore.SHADE_ABOVE
+            const aboveShadeEnable =
+                this._shadeState === BarrierStore.SHADE_ABOVE
                 || this._shadeState === BarrierStore.SHADE_OUTSIDE;
-            const belowShadeEnable =                this._shadeState === BarrierStore.SHADE_BELOW
+            const belowShadeEnable =
+                this._shadeState === BarrierStore.SHADE_BELOW
                 || this._shadeState === BarrierStore.SHADE_OUTSIDE;
-            const betweenShadeEnable =                this._shadeState === BarrierStore.SHADE_BETWEEN;
+            const betweenShadeEnable =
+                this._shadeState === BarrierStore.SHADE_BETWEEN;
 
             this.aboveShade.visible = aboveShadeEnable;
             this.betweenShade.visible = betweenShadeEnable;
@@ -174,7 +159,8 @@ export default class BarrierStore {
             this._drawShadedArea();
         }
 
-        const showLowBarrier =            this._shadeState === BarrierStore.SHADE_OUTSIDE
+        const showLowBarrier =
+            this._shadeState === BarrierStore.SHADE_OUTSIDE
             || this._shadeState === BarrierStore.SHADE_BETWEEN
             || this._shadeState === BarrierStore.SHADE_NONE_DOUBLE;
 

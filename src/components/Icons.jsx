@@ -168,9 +168,7 @@ const Wrapper = WrappedComponent => (props) => {
         >
             <WrappedComponent />
             <br />
-            <span className="ic-subtitle">
-                {tooltip}
-            </span>
+            <span className="ic-subtitle">{tooltip}</span>
         </span>
     );
 };
@@ -371,10 +369,7 @@ function createCompositeIcon(A, B, icId) {
     return (props) => {
         const { className, ...p } = props;
         return (
-            <span className={`${icId} ${className}`} {...p}>
-                <A />
-                <B />
-            </span>
+            <span className={`${icId} ${className}`} {...p}><A /><B /></span>
         );
     };
 }

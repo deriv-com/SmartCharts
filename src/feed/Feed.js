@@ -5,13 +5,9 @@ import { calculateGranularity, getUTCEpoch } from '../utils';
 
 class Feed {
     static get EVENT_MASTER_DATA_UPDATE() { return 'EVENT_MASTER_DATA_UPDATE'; }
-
     static get EVENT_COMPARISON_DATA_UPDATE() { return 'EVENT_COMPARISON_DATA_UPDATE'; }
-
     static get EVENT_ON_PAGINATION() { return 'EVENT_ON_PAGINATION'; }
-
     startEpoch;
-
     endEpoch;
 
     constructor(binaryApi, stx, mainStore) {
@@ -255,7 +251,7 @@ class Feed {
     static getFirstEpoch({ candles, history }) {
         if (candles && candles.length > 0) {
             return candles[0].epoch;
-        } if (history && history.times.length > 0) {
+        } else if (history && history.times.length > 0) {
             const { times } = history;
             return +times[0];
         }
@@ -264,7 +260,7 @@ class Feed {
     static getLatestEpoch({ candles, history }) {
         if (candles) {
             return candles[candles.length - 1].epoch;
-        } if (history) {
+        } else if (history) {
             const { times } = history;
             return times[times.length - 1];
         }

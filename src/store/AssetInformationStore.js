@@ -5,19 +5,15 @@ export default class AssetInformationStore {
         this.mainStore = mainStore;
         when(() => this.context, this.onContextReady);
     }
-
     @computed get decimalPlaces() {
         return this.mainStore.chart.currentActiveSymbol.decimal_places;
     }
-
     @computed get isTick() {
         return this.mainStore.timeperiod.timeUnit === 'tick';
     }
 
     get context() { return this.mainStore.chart.context; }
-
     get visible() { return !this.mainStore.chart.isMobile && this.mainStore.chartSetting.assetInformation; }
-
     get stx() { return this.context.stx; }
 
     onContextReady = () => {
@@ -44,12 +40,8 @@ export default class AssetInformationStore {
     }
 
     @observable price = null;
-
     @observable open = null;
-
     @observable high = null;
-
     @observable low = null;
-
     @observable close = null;
 }

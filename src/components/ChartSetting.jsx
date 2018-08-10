@@ -36,9 +36,7 @@ const ChartSetting = ({
 }) => {
     const renderPosition = () => (
         <div className="ciq-list-item ciq-list-item-position">
-            <span className="ciq-icon-text">
-                {t.translate('Position')}
-            </span>
+            <span className="ciq-icon-text">{t.translate('Position')}</span>
             <div className="ciq-action">
                 <PositionBottomIcon
                     onClick={() => setPosition('bottom')}
@@ -53,20 +51,14 @@ const ChartSetting = ({
     const renderMain = () => (
         <div>
             <div className="title">
-                <div className="title-text">
-                    {' '}
-                    {t.translate('Settings')}
-                    {' '}
-                </div>
+                <div className="title-text"> {t.translate('Settings')} </div>
                 <CloseIcon className="icon-close-menu" onClick={() => closeMenu()} />
             </div>
             <div className="body">
                 <div className="ciq-list ciq-list-setting">
                     {!isMobile ? renderPosition() : ''}
                     <div className="ciq-list-item">
-                        <span className="ciq-icon-text">
-                            {t.translate('Dark Mode')}
-                        </span>
+                        <span className="ciq-icon-text">{t.translate('Dark Mode')}</span>
                         <div className="ciq-action">
                             <Switch
                                 value={(theme === 'dark')}
@@ -75,9 +67,7 @@ const ChartSetting = ({
                         </div>
                     </div>
                     <div className="ciq-list-item">
-                        <span className="ciq-icon-text">
-                            {t.translate('Countdown')}
-                        </span>
+                        <span className="ciq-icon-text">{t.translate('Countdown')}</span>
                         <div className="ciq-action">
                             <Switch
                                 value={countdown}
@@ -86,9 +76,7 @@ const ChartSetting = ({
                         </div>
                     </div>
                     <div className="ciq-list-item">
-                        <span className="ciq-icon-text">
-                            {t.translate('Asset Information')}
-                        </span>
+                        <span className="ciq-icon-text">{t.translate('Asset Information')}</span>
                         <div className="ciq-action">
                             <Switch
                                 value={assetInformation}
@@ -100,9 +88,7 @@ const ChartSetting = ({
                         className="ciq-list-item ciq-list-item-lng"
                         onClick={() => setView('language')}
                     >
-                        <span className="ciq-icon-text">
-                            {t.translate('Language')}
-                        </span>
+                        <span className="ciq-icon-text">{t.translate('Language')}</span>
                         <div className="ciq-action">
                             {selectedLanguage.icon}
                         </div>
@@ -127,9 +113,7 @@ const ChartSetting = ({
                             onClick={() => setLanguage(language.key)}
                         >
                             {language.icon}
-                            <span className="ciq-icon-text">
-                                {language.name}
-                            </span>
+                            <span className="ciq-icon-text">{language.name}</span>
                         </div>))}
                 </div>
             </div>

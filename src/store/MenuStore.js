@@ -23,11 +23,8 @@ export default class MenuStore {
     }
 
     @observable modalNode = null;
-
     @observable route = '';
-
     @computed get open() { return this.dialog.open; }
-
     @action.bound setOpen(val) {
         this.dialog.setOpen(val);
         /**

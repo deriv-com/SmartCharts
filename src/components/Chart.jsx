@@ -98,12 +98,10 @@ class Chart extends Component {
                                     <Crosshair />
                                 </div>
                                 <Loader />
-                                {!isChartAvailable
-                                    && (
-                                        <div className="cq-chart-unavailable">
-                                            {t.translate('Chart data is not available for this symbol.')}
-                                        </div>
-                                    )}
+                                {!isChartAvailable &&
+                                    <div className="cq-chart-unavailable">
+                                        {t.translate('Chart data is not available for this symbol.')}
+                                    </div>}
                             </div>
                             <ChartControls widgets={chartControlsWidgets} />
                         </div>

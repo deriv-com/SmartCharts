@@ -16,13 +16,10 @@ export default class TimeperiodStore {
     }
 
     get context() { return this.mainStore.chart.context; }
-
     get loader() { return this.mainStore.loader; }
 
     @observable timeUnit = null;
-
     @observable interval = null;
-
     remain = null;
 
     onContextReady = () => {
@@ -39,7 +36,6 @@ export default class TimeperiodStore {
     };
 
     countdownInterval = null;
-
     showCountdown = (callFromSettings = false) => {
         if (!this.context) { return; }
 
@@ -135,7 +131,6 @@ export default class TimeperiodStore {
         }
         return +this.interval ? this.interval : 1;
     }
-
     @computed get display() {
         const t = this.timeUnit ? this.timeUnit[0] : '';
         return this.interval_display + t; // 1d, 1t, 5m, 2h

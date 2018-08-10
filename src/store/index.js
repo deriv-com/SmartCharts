@@ -18,36 +18,20 @@ import RoutingStore from './RoutingStore';
 
 export default class MainStore {
     favoriteSessionStore = new FavoriteSessionStore();
-
     chart = new ChartStore(this);
-
     chartType = new ChartTypeStore(this);
-
     studies = new StudyLegendStore(this);
-
     comparison = new ComparisonStore(this);
-
     drawTools = new DrawToolsStore(this);
-
     chartTitle = new ChartTitleStore(this);
-
     timeperiod = new TimeperiodStore(this);
-
     assetInformation = new AssetInformationStore(this);
-
     comparisonList = new ComparisonListStore(this);
-
     view = new ViewStore(this);
-
     crosshair = new CrosshairStore(this);
-
     share = new ShareStore(this);
-
     chartSetting = new ChartSettingStore(this);
-
     loader = new LoaderStore();
-
     chartSize = new ChartSizeStore(this);
-
     routing = new RoutingStore(this);
 }

@@ -33,7 +33,6 @@ export default class StudyLegendStore {
     }
 
     get context() { return this.mainStore.chart.context; }
-
     get stx() { return this.context.stx; }
 
     onContextReady = () => {
@@ -44,7 +43,6 @@ export default class StudyLegendStore {
     };
 
     previousStudies = { };
-
     @observable activeStudies = {
         categoryName: t.translate('Active'),
         categoryId: 'active',
@@ -115,7 +113,7 @@ export default class StudyLegendStore {
                     defaultValue: par.defaultValue,
                     type: 'switch',
                 };
-            } if (par.defaultValue.constructor === Number) {
+            } else if (par.defaultValue.constructor === Number) {
                 return {
                     ...shared,
                     id: par.name,
@@ -142,11 +140,9 @@ export default class StudyLegendStore {
         this.settingsDialog.stared = !!this.categoricalDisplay.favoritesMap[helper.name];
         this.settingsDialog.setOpen(true);
     }
-
     @action.bound starStudy(study) {
         this.categoricalDisplay.setFavoriteById(study.name);
     }
-
     @action.bound deleteStudy(study) {
         const sd = study.sd;
         if (!sd.permanent) {
@@ -158,7 +154,6 @@ export default class StudyLegendStore {
             }, 0);
         }
     }
-
     @action.bound updateStudy(study, items) {
         const updates = { };
         for (const { id, category, value } of items) {

@@ -6,25 +6,15 @@ const MARKER_MAX_WIDTH = 150;
 
 export default class MarkerStore {
     yPositioner = 'value';
-
     xPositioner = 'epoch';
-
     tick;
-
     isDistantFuture;
-
     className;
-
     children;
-
     x;
-
     y;
-
     @observable display;
-
     @observable left;
-
     @observable bottom;
 
     constructor(mainStore) {

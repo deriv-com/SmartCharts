@@ -82,8 +82,8 @@ export default class ComparisonStore {
         }
 
         // don't allow symbol if same as main chart or just white space
-        if (context.stx.chart.symbol.toLowerCase() !== symbolObject.symbol.toLowerCase()
-            && symbolObject.symbol.trim().length > 0) {
+        if (context.stx.chart.symbol.toLowerCase() !== symbolObject.symbol.toLowerCase() &&
+            symbolObject.symbol.trim().length > 0) {
             stx.addSeries(symbolObject.symbol, params, (err, series) => {
                 if (err) {
                     this.mainStore.chart.removeComparison(series.parameters.symbolObject);

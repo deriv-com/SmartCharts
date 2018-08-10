@@ -272,9 +272,9 @@ CIQ.Animation = function (stx, animationParameters, easeMachine) {
             let x = this.pixelFromTick(currentQuote.tick, this.chart);
             if (this.chart.lastTickOffset) { x += this.chart.lastTickOffset; }
             let y = this.pixelFromPrice(price, panel);
-            if (this.chart.yAxis.left > x
-                && this.chart.yAxis.top <= y
-                && this.chart.yAxis.bottom >= y) {
+            if (this.chart.yAxis.left > x &&
+                this.chart.yAxis.top <= y &&
+                this.chart.yAxis.bottom >= y) {
                 if (flashingColorIndex >= flashingColors.length) { flashingColorIndex = 0; }
                 context.beginPath();
                 context.moveTo(x, y);
@@ -285,3 +285,4 @@ CIQ.Animation = function (stx, animationParameters, easeMachine) {
         }
     });
 };
+

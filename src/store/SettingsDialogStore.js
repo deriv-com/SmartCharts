@@ -4,18 +4,12 @@ import Dialog from '../components/Dialog.jsx';
 import MenuStore from './MenuStore';
 
 export default class SettingsDialogStore {
-    @observable items = [];
-
-    // [{id: '', title: '', value: ''}]
+    @observable items = []; // [{id: '', title: '', value: ''}]
     @observable title = '';
-
     @observable stared = false;
-
     @observable description = '';
 
-    @observable activeTab = 'settings';
-
-    // 'settings' | 'description'
+    @observable activeTab = 'settings'; // 'settings' | 'description'
     @computed get showTabs() { return !!this.description; }
 
     constructor({
@@ -29,11 +23,9 @@ export default class SettingsDialogStore {
     }
 
     get context() { return this.mainStore.chart.context; }
-
     get stx() { return this.context.stx; }
 
     @computed get open() { return this.menu.open; }
-
     @action.bound setOpen(value) {
         return this.menu.setOpen(value);
     }
@@ -47,11 +39,9 @@ export default class SettingsDialogStore {
         this.stared = !this.stared;
         this.onStared(this.stared);
     }
-
     @action.bound onTabClick(id) {
         this.activeTab = id;
     }
-
     @action.bound onResetClick() {
         const items = this.items.map((item) => {
             const clone = JSON.parse(JSON.stringify(item));
@@ -61,7 +51,6 @@ export default class SettingsDialogStore {
         this.items = items;
         this.onChanged(items);
     }
-
     @action.bound onItemChange(id, newValue) {
         const items = this.items.map((item) => {
             const clone = JSON.parse(JSON.stringify(item));

@@ -16,59 +16,34 @@ class ChartStore {
     }
 
     contextPromise = new PendingPromise();
-
     activeSymbols = [];
-
     rootNode = null;
-
     stxx = null;
-
     id = null;
-
     paramProps = {};
-
     defaults = {
         symbol: 'R_100',
         granularity: 0,
         chartType: 'mountain',
     };
-
     granularity;
-
     startEpoch;
-
     endEpoch;
-
     enableRouting = null;
-
     chartNode = null;
-
     chartControlsNode = null;
-
     holderStyle;
-
     onMessage = null;
-
     @observable containerWidth = null;
-
     @observable context = null;
-
     @observable currentActiveSymbol;
-
     @observable isChartAvailable = true;
-
     @observable comparisonSymbols = [];
-
     @observable categorizedSymbols = [];
-
     @observable barrierJSX;
-
     @observable chartPanelTop = 0;
-
     @observable chartHeight;
-
     @observable chartContainerHeight;
-
     @observable isMobile = false;
 
     @action.bound setActiveSymbols(activeSymbols) {
@@ -77,11 +52,9 @@ class ChartStore {
     }
 
     get loader() { return this.mainStore.loader; }
-
     get routingStore() {
         return this.mainStore.routing;
     }
-
     saveLayout() {
         const layoutData = this.stxx.exportLayout(true);
         const json = JSON.stringify(layoutData);
@@ -125,7 +98,6 @@ class ChartStore {
             this.stxx.importPreferences(pref);
         }
     }
-
     savePreferences() {
         CIQ.localStorageSetItem(
             `preferences-${this.id}`,
@@ -403,7 +375,6 @@ class ChartStore {
         stxx.chart.yAxis.decimalPlaces = stxx.chart.symbolObject.decimal_places;
         this.categorizedSymbols = this.categorizeActiveSymbols();
     }
-
     @action.bound setChartAvailability(status) {
         this.isChartAvailable = status;
     }
@@ -418,7 +389,8 @@ class ChartStore {
         if (
             (isSymbolAvailable
                 && symbolObj.symbol === this.currentActiveSymbol.symbol)
-            &&            (granularity !== undefined
+            &&
+            (granularity !== undefined
                 && granularity === this.granularity)
         ) {
             return;

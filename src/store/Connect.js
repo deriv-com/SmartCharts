@@ -113,9 +113,7 @@ export const connect = (...args) => {
 const connect_v2 = (Store, mapStoresToProps, handleProps) => {
     class UnboxedComponent extends Component {
         static contextTypes = { mobxStores: PropTypes.object };
-
         static childContextTypes = { mobxStores: PropTypes.object };
-
         getChildContext() { return { mobxStores: this.store }; }
 
         handlePropsAction = action(handleProps || (() => {}));
@@ -123,13 +121,11 @@ const connect_v2 = (Store, mapStoresToProps, handleProps) => {
         componentWillReceiveProps(nextProps) {
             this.handlePropsAction(this.store, nextProps);
         }
-
         componentWillMount() {
             this.store = new Store(this.context.mobxStores);
             this.injectedComponent = inject(unboxedMapStoresToProps)(UnboxedComponent.WrappedComponent);
             this.injectedComponent.displayName = `inject-${UnboxedComponent.displayName}`;
         }
-
         componentDidMount() {
             if (handleProps) { this.handlePropsAction(this.store, this.props); }
         }

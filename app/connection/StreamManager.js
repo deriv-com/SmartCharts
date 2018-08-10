@@ -2,17 +2,11 @@ import Stream from './Stream';
 
 class StreamManager {
     MAX_CACHE_TICKS = 5000;
-
     _connection;
-
     _streams = {};
-
     _streamIds = {};
-
     _tickHistoryCache = {};
-
     _tickHistoryPromises = {};
-
     _beingForgotten = {};
 
     constructor(connection) {

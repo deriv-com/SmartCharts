@@ -1,7 +1,7 @@
 import React from 'react';
 import { observable, action } from 'mobx';
 import MenuStore from './MenuStore';
-import { FlagIcons } from '../components/Icons.jsx';
+import { FlagIcons } from './../components/Icons.jsx';
 
 export default class ChartSettingStore {
     constructor(mainStore) {
@@ -11,7 +11,6 @@ export default class ChartSettingStore {
     }
 
     get context() { return this.mainStore.chart.context; }
-
     get stx() { return this.context.stx; }
 
     languages = [
@@ -65,21 +64,13 @@ export default class ChartSettingStore {
             icon: <FlagIcons.ChineseTraditional />,
         },
     ];
-
     defaultLanguage = {};
-
     onSettingsChange;
-
     @observable assetInformation = true;
-
     @observable view = '';
-
     @observable language = this.languages[0];
-
     @observable position = 'bottom';
-
     @observable theme = 'light';
-
     @observable countdown = false;
 
     @action.bound setSettings(settings) {
@@ -152,3 +143,4 @@ export default class ChartSettingStore {
         this.saveSetting();
     }
 }
+

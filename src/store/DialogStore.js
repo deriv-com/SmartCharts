@@ -14,13 +14,10 @@ export default class DialogStore {
     }
 
     get context() { return this.mainStore.chart.context; }
-
     get routingStore() {
         return this.mainStore.routing;
     }
-
     @observable open = false;
-
     setOpen = debounce((val) => {
         this.openDialog(val);
     }, 300, { leading: true, trailing: false });
@@ -47,7 +44,6 @@ export default class DialogStore {
             this.setOpen(false);
         }
     };
-
     closeOnEscape = (e) => {
         const ESCAPE = 27;
         if (e.keyCode === ESCAPE) {

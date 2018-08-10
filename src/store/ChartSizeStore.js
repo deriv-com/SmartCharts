@@ -7,7 +7,6 @@ export default class ChartSizeStore {
         this.mainStore = mainStore;
         when(() => this.mainStore.chart.context, this.onContextReady);
     }
-
     onContextReady = () => { this.stx = this.mainStore.chart.context.stx; };
 
     @action.bound zoomIn() {
@@ -18,3 +17,4 @@ export default class ChartSizeStore {
         if (this.stx) { this.stx.zoomOut(); }
     }
 }
+

@@ -14,43 +14,29 @@ export default class ShareStore {
     }
 
     get context() { return this.mainStore.chart.context; }
-
     get stx() { return this.context.stx; }
 
     @computed get timeUnit() { return this.mainStore.timeperiod.timeUnit; }
-
     @computed get timeperiodDisplay() { return this.mainStore.timeperiod.display; }
-
     @computed get marketDisplayName() {
         return this.mainStore.chart.currentActiveSymbol.market_display_name;
     }
-
     @computed get decimalPlaces() {
         return this.mainStore.chart.currentActiveSymbol.decimal_places;
     }
 
     defaultCopyTooltipText = t.translate('Copy to clipboard');
-
     @observable copyTooltip = this.defaultCopyTooltipText;
-
     @action.bound resetCopyTooltip() { this.copyTooltip = this.defaultCopyTooltipText; }
-
     @action.bound onCopyDone(successful) {
         this.copyTooltip = successful ? t.translate('Copied!') : t.translate('Failed!');
     }
-
     bitlyUrl = 'https://api-ssl.bitly.com/v3';
-
     accessToken = '837c0c4f99fcfbaca55ef9073726ef1f6a5c9349';
-
     @observable loading = false;
-
     @observable urlGenerated = false;
-
     @observable shortUrlFailed = false;
-
     @observable isLoadingPNG = false;
-
     @observable shareLink = '';
 
 
@@ -76,7 +62,6 @@ export default class ShareStore {
             .then(this.onHashSuccess)
             .catch(this.onHashFail);
     }
-
     @action.bound onHashSuccess(hash) {
         if (hash) {
             this.loading = false;
@@ -87,7 +72,6 @@ export default class ShareStore {
             this.onHashFail();
         }
     }
-
     @action.bound onHashFail() {
         this.loading = false;
         this.urlGenerated = false;
@@ -109,7 +93,6 @@ export default class ShareStore {
                 return null;
             });
     }
-
     expandBitlyAsync(hash, payload) {
         if (hash === 'NONE') {
             return Promise.resolve(payload);
@@ -215,7 +198,6 @@ export default class ShareStore {
         } catch (e) { } // eslint-disable-line no-empty
         return successful;
     }
-
     copyWithNavigator() {
         const text = this.shareLink;
         return navigator.clipboard.writeText(text)
@@ -233,8 +215,8 @@ export default class ShareStore {
     }
 
     onInputRef = (ref) => { this.inputRef = ref; }
-
     onContextReady = () => {
         this.screenshotArea = this.context.topNode.querySelector('.ciq-chart');
     };
 }
+

@@ -10,9 +10,9 @@ const List = ({
 }) => {
     const hasFunctionAsChildren = (typeof children === 'function');
     const renderRow = hasFunctionAsChildren ? children : (item => item.text);
-    const itemClassName = it => 'ciq-list-item'
-               + ` ${it.disabled ? 'disabled' : ''}`
-               + ` ${it.active ? 'active' : ''}`;
+    const itemClassName = it => 'ciq-list-item' +
+               ` ${it.disabled ? 'disabled' : ''}` +
+               ` ${it.active ? 'active' : ''}`;
     return (
         <PerfectScrollbar
             className="ciq-list"

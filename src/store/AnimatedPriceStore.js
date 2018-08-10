@@ -3,9 +3,7 @@ import { connect } from './Connect';
 
 export default class AnimatedPriceStore {
     @observable price = '';
-
     @observable isIncrease = false;
-
     oldPrice = '';
 
     @action.bound setPrice(val) {
