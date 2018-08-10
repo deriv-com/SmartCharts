@@ -31,20 +31,16 @@ const DrawTools = ({
             </div>
             <div className="body">
                 <div className="cq-draw-buttons">
-                    <div className="cq-draw-button">
-                        <ClearIcon
-                            className="ciq-tooltip"
-                            onClick={clearAll}
-                            tooltip-title={t.translate('Clear All')}
-                        />
+                    <div className="cq-draw-button" onClick={clearAll}>
+                        <ClearIcon />
                         <span>{t.translate('Clear All')}</span>
                     </div>
-                    <div className="cq-draw-button" style={{ display: 'none'  /* TODO: measurement tool doesn't show measurement */ }}>
-                        <MeasureIcon
-                            className="ciq-tooltip"
-                            onClick={() => selectTool('measure')}
-                            tooltip-title={t.translate('Measure')}
-                        />
+                    <div
+                        className="cq-draw-button"
+                        onClick={() => selectTool('measure')}
+                        style={{ display: 'none'  /* TODO: measurement tool doesn't show measurement */ }}
+                    >
+                        <MeasureIcon />
                         <span>{t.translate('Measure')}</span>
                     </div>
                 </div>
