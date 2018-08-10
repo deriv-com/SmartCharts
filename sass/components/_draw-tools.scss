@@ -2,8 +2,7 @@
 .ciq-draw-tools {
     .cq-menu-dropdown {
         width: 200px;
-        padding: 5px 16px 16px !important;
-        @include box-sizing(border-box);
+        box-sizing: border-box;
         padding: 0em !important;
         overflow: visible !important;
 

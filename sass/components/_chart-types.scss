@@ -1,7 +1,7 @@
 .ciq-chart-types {
     .cq-menu-dropdown {
         width: 200px;
-        @include box-sizing(border-box);
+        box-sizing: border-box;
 
         .title {
             display: flex;

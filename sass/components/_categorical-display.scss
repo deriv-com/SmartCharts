@@ -8,9 +8,9 @@
     @include themify($themes) {
         color: themed('CatDisplayText');
     }
-    @include transition(opacity 1s);
+    transition: opacity 1s;
     @include border-radius();
-    @include box-shadow (0px, 2px, 4px, rgba(0, 0, 0, 0.2));
+    box-shadow: 0px, 2px, 4px, rgba(0, 0, 0, 0.2);
 
     .cq-lookup-filters {
         width: 34%;
@@ -71,7 +71,7 @@
             line-height: 28px;
             font-size: 9px;
             top: 7px;
-            @include transition(right, opacity 0.2s ease-in-out);
+            transition: right, opacity 0.2s ease-in-out;
             @include svg-icon-color('CatDisplayFilterIcon');
         }
         > input:focus + .ic-icon svg path {
@@ -134,8 +134,8 @@
         line-height: 3.4em;
         text-align: left;
         cursor: pointer;
-        @include transition(background-color 0.3s);
-        @include box-sizing(border-box);
+        transition: background-color 0.3s;
+        box-sizing: border-box;
 
         &.cq-hover-style:hover {
             @include themify($themes) {
@@ -360,14 +360,14 @@
             border-right: none;
             max-height: 200px;
             overflow: hidden;
-            @include transition(max-height 0.2s ease-in);
+            transition: max-height 0.2s ease-in;
             @include themify($themes) {
                 border-bottom: 1px solid themed('CatDisplaySearchBorder');
             }
 
             &.scroll-down {
                 max-height: 0;
-                @include transition(max-height 0.2s ease-out);
+                transition: max-height 0.2s ease-out;
             }
         }
         .cq-lookup-input {

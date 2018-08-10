@@ -20,12 +20,7 @@
         font-size: 12px;
         height: 18px;
         opacity: 1;
-        @include transition(background 0.2s 0s,
-        padding 0.2s 0s,
-        opacity 0.2s 0.2s,
-        height 0.2s 0.4s,
-        font-size 0s 0.4s,
-        margin 0.2s 0.4s);
+        transition: background 0.2s 0s, padding 0.2s 0s, opacity 0.2s 0.2s, height 0.2s 0.4s, font-size 0s 0.4s, margin 0.2s 0.4s;
 
         &, .left, .right {
             display: flex;
@@ -56,7 +51,7 @@
         height: $icon-size;
     }
     .cq-comparison-item .ciq-close {
-        @include transition(opacity 0.2s 0s);
+        transition: opacity 0.2s 0s;
         cursor: pointer;
         opacity: 0;
         left: 7px;

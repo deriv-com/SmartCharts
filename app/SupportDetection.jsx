@@ -7,42 +7,6 @@ const { detect } = require('detect-browser');
 const browser = detect();
 
 const SupportedBrowser = {
-    'Mac OS': {
-        safari: 913,
-        firefox: 2700,
-        chrome: 4902623,
-        opera: 3602130,
-        yandexbrowser: 14122130,
-    },
-    'Windows 10': {
-        edge: 15150630,
-        ie: 1100, // not supported
-        firefox: 3200,
-        chrome: 4902623,
-        opera: 3602130,
-        yandexbrowser: 14122130,
-    },
-    'Windows 8.1': {
-        ie: 1200, // not supported at all
-        firefox: 2700,
-        chrome: 4902623,
-        opera: 3602130,
-        yandexbrowser: 14122130,
-    },
-    'Windows 8': {
-        ie: 1200, // not supported at all
-        firefox: 2700,
-        chrome: 4902623,
-        opera: 3602130,
-        yandexbrowser: 14122130,
-    },
-    'Windows 7': {
-        ie: 1200, // not supported at all
-        firefox: 2700,
-        chrome: 3601985,
-        opera: 2601656,
-        yandexbrowser: 14122130,
-    },
 };
 
 

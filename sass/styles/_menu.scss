@@ -29,13 +29,8 @@
     pointer-events: none;
     opacity: 0;
     z-index: -3;
-    @include transition(
-        visibility 150ms ease-out,
-        z-index 150ms ease-out,
-        transform 150ms ease-out,
-        opacity 150ms ease-out
-    );
-    @include box-shadow (0px, 2px, 4px, rgba(0, 0, 0, 0.2));
+    transition: visibility 150ms ease-out, z-index 150ms ease-out, transform 150ms ease-out, opacity 150ms ease-out;
+    box-shadow: 0px, 2px, 4px, rgba(0, 0, 0, 0.2);
     @include border-radius();
     @include themify($themes) {
         color: themed('DialogBodyText');
