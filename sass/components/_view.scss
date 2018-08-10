@@ -18,16 +18,6 @@
                 font-weight: 400;
                 padding: 0 0.7em;
             }
-            .icon-close-menu {
-                position: absolute;
-                top: 5px;
-                right: 5px;
-                cursor: pointer;
-                height: 30px;
-                width: 30px;
-                pointer-events: none;
-                opacity: 0;
-            }
         }
         .template-name {
             display: flex;
@@ -171,14 +161,6 @@
 }
 
 .smartcharts-mobile {
-    .ciq-views {
-        .title {
-            .icon-close-menu {
-                pointer-events: initial;
-                opacity: 1;
-            }
-        }
-    }
     .cq-menu-dropdown {
         .dropdown-title {
             .icon {
