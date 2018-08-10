@@ -31,9 +31,9 @@ class CurrectSpotStore {
             const currentQuote = this.stx.currentQuote();
             if (!currentQuote) { return; }
             const price = currentQuote.Close;
-            let x = this.stx.pixelFromTick(currentQuote.tick, chart) | 0;
+            let x = this.stx.pixelFromTick(currentQuote.tick, chart);
             if (chart.lastTickOffset) { x += chart.lastTickOffset; }
-            const y = this.stx.pixelFromPrice(price, panel) | 0;
+            const y = this.stx.pixelFromPrice(price, panel);
             if (chart.yAxis.left > x
                 && chart.yAxis.top <= y
                 && chart.yAxis.bottom >= y) {
