@@ -209,6 +209,10 @@ export default class ChartTypeStore {
     @computed get types() {
         const isTickSelected = this.mainStore.timeperiod.timeUnit === 'tick';
 
+        if (this.chartTypes === undefined) {
+            this.chartTypes = getChartTypes();
+        }
+
         return this.chartTypes.map(t => ({
             ...t,
             active: t.id === this.type.id,
