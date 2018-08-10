@@ -12,6 +12,7 @@ class ChartStore {
         this.mainStore = mainStore;
     }
 
+    RANGE_PADDING_PX = 125;
     contextPromise = new PendingPromise();
     activeSymbols = [];
     rootNode = null;
@@ -104,8 +105,6 @@ class ChartStore {
             onMessage,
             settings,
             onSettingsChange,
-            startEpoch,
-            endEpoch,
         } = props;
         const api = new BinaryAPI(requestAPI, requestSubscribe, requestForget);
         const { chartSetting } = this.mainStore;
@@ -133,8 +132,7 @@ class ChartStore {
                     // position: 'left',
                 },
             },
-            minimumLeftBars: 15,
-            minimumZoomTicks: 20,
+            minimumLeftBars: 2,
             yTolerance: 999999, // disable vertical scrolling
         };
         let chartLayout = {
@@ -144,7 +142,7 @@ class ChartStore {
             chartLayout.chartType = 'mountain';
             engineParams.chart.tension = chartLayout.tension = 0.5;
         }
-        const rangeSpan = this.getRangeSpan(startEpoch, endEpoch);
+        const rangeSpan = this.getRangeSpan();
         if (rangeSpan) {
             chartLayout = { ...chartLayout, ...rangeSpan };
         }
@@ -306,12 +304,15 @@ class ChartStore {
         this.stxx.newChart(symbolObj, null, null, onChartLoad, { ...params, ...rangeSpan });
     }
 
-    // TODO: range span needs to update in real time
-    getRangeSpan(startEpoch = this.state.startEpoch, endEpoch = this.state.endEpoch) {
+    getRangeSpan() {
+        const { startEpoch, endEpoch } = this.state;
         let range, span;
+        const paddingRatio = this.chartNode.clientWidth / this.RANGE_PADDING_PX;
+        const elapsedSeconds = endEpoch - startEpoch;
+        const epochPadding = elapsedSeconds / paddingRatio | 0;
         if (startEpoch !== undefined || endEpoch !== undefined) {
-            const dtLeft  = (startEpoch !== undefined) ? new Date(getUTCDate(startEpoch)) : undefined;
-            const dtRight = (endEpoch   !== undefined) ? new Date(getUTCDate(endEpoch))   : undefined;
+            const dtLeft  = (startEpoch !== undefined) ? new Date(getUTCDate(startEpoch - epochPadding)) : undefined;
+            const dtRight = (endEpoch   !== undefined) ? new Date(getUTCDate(endEpoch + epochPadding))   : undefined;
             const periodicity = calculateTimeUnitInterval(this.granularity);
             range = {
                 dtLeft,
