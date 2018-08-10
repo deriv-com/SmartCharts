@@ -10,29 +10,24 @@ class Notification extends React.Component {
     }
 
     onMessage = (message, duration = 10) => {
-        const messages = this.state.messages;
-        message.id = (new Date()).getTime();
-        message.type = message.type || 'warning';
-        message.hide = false;
+        const msg = {
+            type: 'warning',
+            ...message,
+            id: new Date().getTime(),
+            hide: false,
+        };
 
-        messages.push(message);
-        this.setState({
-            messages,
-        });
+        this.setState(prevState => ({ messages: prevState.messages.concat([msg]) }));
 
         if (duration > 0) {
-            setTimeout(() => this.onRemove(message.id), duration * 1000);
+            setTimeout(() => this.onRemove(msg.id), duration * 1000);
         }
-    }
+    };
 
     onRemove(id) {
-        let messages = this.state.messages.map((x) => {
-            x.hide = x.id === id ? true : x.hide;
-            return x;
-        });
-        this.setState({
-            messages,
-        });
+        this.setState(prevState => ({
+            messages: prevState.messages.map(message => ({ ...message, hide: message.id === id ? true : message.hide })),
+        }));
 
         /**
             message removing has an animation which animate 300ms so,
@@ -40,10 +35,9 @@ class Notification extends React.Component {
             the animated finish, I remove the message for the store
         */
         setTimeout(() => {
-            messages = messages.filter(x => x.id !== id);
-            this.setState({
-                messages,
-            });
+            this.setState(prevState => ({
+                messages: prevState.messages.filter(x => x.id !== id),
+            }));
         }, 300);
     }
 
