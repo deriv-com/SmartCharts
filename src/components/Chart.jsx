@@ -1,4 +1,3 @@
-/* eslint-disable no-new, react/jsx-indent, react/no-danger, react/jsx-indent-props */
 import PropTypes from 'prop-types';
 import React, { Component, Fragment } from 'react';
 import RenderInsideChart from './RenderInsideChart.jsx';
@@ -56,7 +55,6 @@ class Chart extends Component {
             setting : { position, theme },
             barriers = [],
             children,
-            chartPanelTop,
             chartControlsWidgets,
             AggregateChartSettingsDialog,
             topWidgets,
@@ -66,15 +64,15 @@ class Chart extends Component {
 
         const currentPosition = `cq-chart-control-${(position && !isMobile) ? position : 'bottom'}`;
         const contextWidth =  !isMobile ? `smartcharts-${containerWidth}` : '';
-        const renderTopWidgets = topWidgets || defaultTopWidgets;
-
+        const TopWidgets = topWidgets || defaultTopWidgets;
 
         return (
             <div
                 className={`smartcharts smartcharts-${theme} ${contextWidth} smartcharts-${isMobile ? 'mobile' : 'desktop'}`}
                 ref={(modalNode) => { this.modalNode = modalNode; }}
             >
-                <cq-context
+                <div
+                    className="cq-context"
                     ref={(root) => { this.root = root; }}
                 >
                     <div className={` ${currentPosition}`}>
@@ -91,8 +89,8 @@ class Chart extends Component {
                                 <RenderInsideChart at="subholder">
                                     {children}
                                 </RenderInsideChart>
-                                <div className="cq-top-ui-widgets" style={{ top: chartPanelTop }}>
-                                    { renderTopWidgets() }
+                                <div className="cq-top-ui-widgets">
+                                    <TopWidgets />
                                 </div>
                                 <div className="chartContainer primary" style={{ height: chartContainerHeight }}>
                                     <Crosshair />
@@ -107,7 +105,7 @@ class Chart extends Component {
                             <ChartControls widgets={chartControlsWidgets} />
                         </div>
                     </div>
-                </cq-context>
+                </div>
                 <DrawToolsSettingsDialog />
                 <AggregateChartSettingsDialog />
                 <StudySettingsDialog />
@@ -116,7 +114,7 @@ class Chart extends Component {
     }
 }
 
-export default connect(({ chart, drawTools, studies, chartSetting, chartType }) => ({
+export default connect(({ chart, drawTools, studies, chartSetting, chartType, state }) => ({
     contextPromise: chart.contextPromise,
     init: chart.init,
     destroy: chart.destroy,
@@ -124,9 +122,8 @@ export default connect(({ chart, drawTools, studies, chartSetting, chartType }) 
     DrawToolsSettingsDialog : drawTools.settingsDialog.connect(SettingsDialog),
     AggregateChartSettingsDialog : chartType.settingsDialog.connect(SettingsDialog),
     isChartAvailable: chart.isChartAvailable,
-    chartPanelTop: chart.chartPanelTop,
     setting: chartSetting,
-    updateProps: chart.updateProps,
+    updateProps: state.updateProps,
     chartContainerHeight: chart.chartContainerHeight,
     containerWidth: chart.containerWidth,
 }))(Chart);

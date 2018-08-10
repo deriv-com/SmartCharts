@@ -52,7 +52,7 @@ class CrosshairStore {
         this.state = (this.state + 1) % 3;
         this.stx.layout.crosshair = this.state;
         this.stx.doDisplayCrosshairs();
-        this.mainStore.chart.saveLayout();
+        this.mainStore.state.saveLayout();
     }
 
     @action.bound renderCrosshairTooltip() {

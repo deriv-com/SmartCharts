@@ -1,17 +1,14 @@
 import ResizeObserver from 'resize-observer-polyfill';
-import { action, observable } from 'mobx';
+import { action, observable, reaction } from 'mobx';
 import PendingPromise from '../utils/PendingPromise';
 import Context from '../components/ui/Context';
 import KeystrokeHub from '../components/ui/KeystrokeHub';
 import '../components/ui/Animation';
 import { BinaryAPI, Feed } from '../feed';
-import { createObjectFromLocalStorage, stableSort, calculateTimeUnitInterval, calculateGranularity, getUTCDate } from '../utils';
+import { stableSort, calculateTimeUnitInterval, getUTCDate } from '../utils';
 
 class ChartStore {
-    static _id_counter = 0;
-
     constructor(mainStore) {
-        this.id = ++ChartStore._id_counter;
         this.mainStore = mainStore;
     }
 
@@ -19,20 +16,17 @@ class ChartStore {
     activeSymbols = [];
     rootNode = null;
     stxx = null;
-    id = null;
-    paramProps = {};
     defaults = {
         symbol: 'R_100',
         granularity: 0,
         chartType: 'mountain',
     };
     granularity;
-    startEpoch;
-    endEpoch;
     enableRouting = null;
     chartNode = null;
     chartControlsNode = null;
     holderStyle;
+    state;
     onMessage = null;
     @observable containerWidth = null;
     @observable context = null;
@@ -40,7 +34,6 @@ class ChartStore {
     @observable isChartAvailable = true;
     @observable comparisonSymbols = [];
     @observable categorizedSymbols = [];
-    @observable chartPanelTop = 0;
     @observable chartHeight;
     @observable chartContainerHeight;
     @observable isMobile = false;
@@ -53,55 +46,6 @@ class ChartStore {
     get loader() { return this.mainStore.loader; }
     get routingStore() {
         return this.mainStore.routing;
-    }
-    saveLayout() {
-        const layoutData = this.stxx.exportLayout(true);
-        const json = JSON.stringify(layoutData);
-        CIQ.localStorageSetItem(`layout-${this.id}`, json);
-    }
-
-    restoreLayout(stx, layoutData) {
-        if (!layoutData) { return; }
-
-        stx.importLayout(layoutData, {
-            managePeriodicity: true,
-            cb: () => {
-                if (layoutData.tension) { stx.chart.tension = layoutData.tension; }
-                this.restoreDrawings(stx, stx.chart.symbol);
-                if (this.loader) { this.loader.hide(); }
-            },
-        });
-    }
-
-    saveDrawings() {
-        const obj = this.stxx.exportDrawings();
-        const symbol = this.stxx.chart.symbol;
-        if (obj.length === 0) {
-            CIQ.localStorage.removeItem(symbol);
-        } else {
-            CIQ.localStorageSetItem(symbol, JSON.stringify(obj));
-        }
-    }
-
-    restoreDrawings() {
-        const drawings = createObjectFromLocalStorage(this.stxx.chart.symbol);
-        if (drawings) {
-            this.stxx.importDrawings(drawings);
-            this.stxx.draw();
-        }
-    }
-
-    restorePreferences() {
-        const pref = createObjectFromLocalStorage(`preferences-${this.id}`);
-        if (pref) {
-            this.stxx.importPreferences(pref);
-        }
-    }
-    savePreferences() {
-        CIQ.localStorageSetItem(
-            `preferences-${this.id}`,
-            JSON.stringify(this.stxx.exportPreferences()),
-        );
     }
 
     updateHeight(position) {
@@ -156,7 +100,6 @@ class ChartStore {
             requestSubscribe,
             requestForget,
             isMobile,
-            shareOrigin = 'https://charts.binary.com',
             enableRouting,
             onMessage,
             settings,
@@ -165,11 +108,11 @@ class ChartStore {
             endEpoch,
         } = props;
         const api = new BinaryAPI(requestAPI, requestSubscribe, requestForget);
-        const { share, chartSetting } = this.mainStore;
-        share.shareOrigin = shareOrigin;
+        const { chartSetting } = this.mainStore;
         chartSetting.setSettings(settings);
         chartSetting.onSettingsChange = onSettingsChange;
         this.isMobile = isMobile;
+        this.state = this.mainStore.state;
 
         this.onMessage = onMessage;
         this.granularity = (granularity !== undefined) ? granularity : this.defaults.granularity;
@@ -187,6 +130,7 @@ class ChartStore {
                     // Put some top margin so chart doesn't get blocked by chart title
                     initialMarginTop: 125,
                     initialMarginBottom: 10,
+                    // position: 'left',
                 },
             },
             minimumLeftBars: 15,
@@ -233,14 +177,6 @@ class ChartStore {
         this.holderStyle = stxx.chart.panel.holder.style;
 
         stxx.append('deleteHighlighted', this.updateComparisons);
-        stxx.addEventListener('layout', () => {
-            this.saveLayout();
-            this.updateChartPanelTop();
-        });
-        stxx.addEventListener('symbolChange', this.saveLayout.bind(this));
-        stxx.addEventListener('drawing', this.saveDrawings.bind(this));
-        stxx.addEventListener('newChart', this.updateChartPanelTop);
-        stxx.addEventListener('preferences', this.savePreferences.bind(this));
 
         const context = new Context(stxx, this.rootNode);
 
@@ -253,48 +189,35 @@ class ChartStore {
         this.loader.show();
 
         const studiesStore = this.mainStore.studies;
-        stxx.callbacks.studyOverlayEdit = study => studiesStore.editStudy(study);
-        stxx.callbacks.studyPanelEdit = study => studiesStore.editStudy(study);
+        stxx.callbacks.studyOverlayEdit = studiesStore.editStudy;
+        stxx.callbacks.studyPanelEdit = studiesStore.editStudy;
 
-        this.restorePreferences();
+        this.state.restorePreferences();
 
-        api.getActiveSymbols().then(({ active_symbols }) => {
+        api.getActiveSymbols().then(action(({ active_symbols }) => {
             this.setActiveSymbols(active_symbols);
-            let layoutData = this.restoreLayoutFromLocalStorage(`layout-${this.id}`);
+            const isRestoreSuccess = this.state.restoreLayout();
 
-            const onLayoutDataReady = () => {
-                if (layoutData) {
-                    this.restoreLayout(stxx, layoutData);
-                    this.setCurrentActiveSymbols(stxx);
-                } else {
-                    this.changeSymbol(
-                        symbol || this.defaults.symbol,
-                        this.granularity,
-                    );
-                }
-
-                this.setLayoutData(context);
-            };
-            const href = window.location.href;
-            if (href.startsWith(shareOrigin) && href.indexOf('#') !== -1) {
-                const encodedJsonPart = href.split('#').slice(1).join('#');
-                const url = href.split('#')[0];
-                const hash = url.split('?')[1];
-
-                if (hash) {
-                    window.history.replaceState({}, document.title, window.location.pathname);
-                    const promise = this.mainStore.share.expandBitlyAsync(hash, decodeURIComponent(encodedJsonPart));
-                    promise.then((encodedJson) => {
-                        layoutData = JSON.parse(encodedJson);
-                        onLayoutDataReady();
-                    }).catch(() => onLayoutDataReady());
-                } else {
-                    onLayoutDataReady();
-                }
-            } else {
-                onLayoutDataReady();
+            if (!isRestoreSuccess) {
+                this.changeSymbol(
+                    symbol || this.defaults.symbol,
+                    this.granularity,
+                );
             }
-        });
+
+            this.context = context;
+            this.contextPromise.resolve(this.context);
+            this.resizeScreen();
+
+            reaction(() => [
+                this.state.symbol,
+                this.state.granularity,
+            ], () => {
+                if (this.state.symbol !== undefined || this.state.granularity !== undefined) {
+                    this.changeSymbol(this.state.symbol, this.state.granularity);
+                }
+            });
+        }));
 
         this.resizeObserver = new ResizeObserver(this.resizeScreen);
         this.resizeObserver.observe(modalNode);
@@ -302,78 +225,18 @@ class ChartStore {
         this.feed.onComparisonDataUpdate(this.updateComparisons);
     }
 
-    restoreLayoutFromLocalStorage(id) {
-        let layoutData = createObjectFromLocalStorage(id);
-
-        if (!layoutData) return layoutData;
-
-        // prop values will always take precedence
-        const { symbol, granularity, chartType } = this.paramProps;
-
-        if (symbol !== undefined && symbol !== layoutData.symbols[0].symbol) {
-            // symbol prop takes precedence over local storage data
-            const symbolObject = this.activeSymbols.find(x => x.symbol === symbol);
-            layoutData.symbols = [{ symbol, symbolObject }];
-        }
-
-        for (const symbolDat of layoutData.symbols) {
-            // Symbol from cache may be in different language, so replace it with server's
-            const { symbol: cachedSymbol } = symbolDat;
-            const updatedSymbol = this.activeSymbols.find(x => cachedSymbol === x.symbol);
-            symbolDat.symbolObject = updatedSymbol;
-        }
-
-        if (granularity !== undefined) {
-            const periodicity = calculateTimeUnitInterval(granularity);
-            layoutData = { ...layoutData, ...periodicity };
-        } else {
-            const { timeUnit, interval } = layoutData;
-            if (timeUnit) {
-                this.granularity = calculateGranularity(interval, timeUnit);
-            } else {
-                this.granularity = 86400; // 1 day
-            }
-        }
-
-        const rangeSpan = this.getRangeSpan();
-        if (rangeSpan) {
-            layoutData = { ...layoutData, ...rangeSpan };
-        }
-
-        if (chartType !== undefined) {
-            if (chartType === 'spline') { // cause there's no such thing as spline chart in ChartIQ
-                layoutData.chartType = 'mountain';
-                this.stxx.chart.tension = layoutData.tension = 0.5;
-            } else {
-                layoutData.chartType = chartType;
-            }
-        }
-
-        return layoutData;
-    }
-
     removeComparison(symbolObj) {
         this.context.stx.removeSeries(symbolObj.symbol);
         this.updateComparisons();
     }
 
-    @action.bound setLayoutData(context) {
-        this.context = context;
-        this.contextPromise.resolve(this.context);
-        this.resizeScreen();
-        this.updateChartPanelTop();
-    }
-
-    @action.bound updateChartPanelTop() {
-        if (this.holderStyle === undefined) { return; }
-        this.chartPanelTop = this.holderStyle.top;
-    }
-
-    @action.bound setCurrentActiveSymbols(stxx) {
-        this.currentActiveSymbol = stxx.chart.symbolObject;
-        stxx.chart.yAxis.decimalPlaces = stxx.chart.symbolObject.decimal_places;
+    @action.bound updateCurrentActiveSymbol() {
+        const { symbolObject } = this.stxx.chart;
+        this.currentActiveSymbol = symbolObject;
+        this.stxx.chart.yAxis.decimalPlaces = symbolObject.decimal_places;
         this.categorizedSymbols = this.categorizeActiveSymbols();
     }
+
     @action.bound setChartAvailability(status) {
         this.isChartAvailable = status;
     }
@@ -414,9 +277,19 @@ class ChartStore {
         this.newChart(symbolObj, params);
 
         if (symbolObj) {
-            this.stxx.chart.yAxis.decimalPlaces = symbolObj.decimal_places;
-            this.currentActiveSymbol = symbolObj;
-            this.categorizedSymbols = this.categorizeActiveSymbols();
+            this.updateCurrentActiveSymbol();
+        }
+
+        const { chartType: chartTypeStore } = this.mainStore;
+        if (chartTypeStore.chartTypeProp === undefined) {
+            const isTick = this.stxx.layout.timeUnit === 'second';
+            const isCandle = chartTypeStore.isCandle;
+            if (isCandle && isTick) {
+                // Tick charts cannot be represented with candles
+                chartTypeStore.setType('mountain');
+            } else if (!isTick && !isCandle) {
+                chartTypeStore.setType('candle');
+            }
         }
     }
 
@@ -429,14 +302,14 @@ class ChartStore {
                 /* TODO, symbol not found error */
                 return;
             }
-            this.restoreDrawings();
+            this.state.restoreDrawings();
         };
         const rangeSpan = this.getRangeSpan();
         this.stxx.newChart(symbolObj, null, null, onChartLoad, { ...params, ...rangeSpan });
     }
 
     // TODO: range span needs to update in real time
-    getRangeSpan(startEpoch = this.paramProps.startEpoch, endEpoch = this.paramProps.endEpoch) {
+    getRangeSpan(startEpoch = this.state.startEpoch, endEpoch = this.state.endEpoch) {
         let range, span;
         if (startEpoch !== undefined || endEpoch !== undefined) {
             const dtLeft  = (startEpoch !== undefined) ? new Date(getUTCDate(startEpoch)) : undefined;
@@ -493,27 +366,6 @@ class ChartStore {
             const srs = stx.chart.series[sybl];
             comp.price = srs.lastQuote ? srs.lastQuote.Close : undefined;
             i++;
-        }
-    }
-
-    @action.bound updateProps({ settings, isConnectionOpened, symbol, granularity, chartType, startEpoch, endEpoch }) {
-        this.mainStore.chartSetting.setSettings(settings);
-        this.setConnectionIsOpened(isConnectionOpened);
-
-        this.paramProps = { symbol, granularity, chartType, startEpoch, endEpoch };
-        if (this.currentActiveSymbol) {
-            const currentParams = {
-                symbol: this.currentActiveSymbol.symbol,
-                granularity: this.granularity,
-                chartType: this.mainStore.chartType.type.id,
-            };
-            if ((symbol !== undefined && symbol !== currentParams.symbol)
-                || (granularity !== undefined && granularity !== currentParams.granularity)) {
-                this.changeSymbol(symbol, granularity);
-            }
-            if (chartType !== undefined && chartType !== currentParams.chartType) {
-                this.mainStore.chartType.setType(chartType);
-            }
         }
     }
 
@@ -607,12 +459,6 @@ class ChartStore {
         }
 
         return categorizedSymbols;
-    }
-
-    setConnectionIsOpened = (isOpened) => {
-        if (isOpened !== undefined && this.feed) {
-            this.feed.setConnectionOpened(isOpened);
-        }
     }
 }
 
