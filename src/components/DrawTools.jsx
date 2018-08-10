@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from '../store/Connect';
 import Menu from './Menu.jsx';
 import List from './List.jsx';
-import { DrawIcon, ClearIcon, MeasureIcon } from './Icons.jsx';
+import { DrawIcon, ClearIcon, MeasureIcon, CloseIcon } from './Icons.jsx';
 import '../../sass/components/_draw-tools.scss';
 
 const DrawTools = ({
@@ -11,6 +11,8 @@ const DrawTools = ({
     Menu,
     menuOpen,
     DrawList,
+    closeMenu,
+    isMobile,
 }) => (
     <Menu
         className="ciq-draw-tools"
@@ -25,21 +27,27 @@ const DrawTools = ({
         <Menu.Body>
             <div className="title">
                 <div className="ciq-bars-title">{t.translate('Draw tools')}</div>
-                <div className="ciq-bars-buttons">
-                    <ClearIcon
-                        className="ciq-tooltip"
-                        onClick={clearAll}
-                        tooltip-title={t.translate('Clear All')}
-                    />
-                    <MeasureIcon
-                        style={{ display: 'none' /* TODO: measurement tool doesn't show measurement */ }}
-                        className="ciq-tooltip"
-                        onClick={() => selectTool('measure')}
-                        tooltip-title={t.translate('Measure')}
-                    />
-                </div>
+                {isMobile ? <CloseIcon className="icon-close-menu" onClick={closeMenu} /> : '' }             
             </div>
             <div className="body">
+                <div className="cq-draw-buttons">
+                    <div className='cq-draw-button'>
+                        <ClearIcon
+                            className="ciq-tooltip"
+                            onClick={clearAll}
+                            tooltip-title={t.translate('Clear All')}
+                        />
+                        <span>{t.translate('Clear All')}</span>
+                    </div>
+                    <div className='cq-draw-button' style={{ display: 'none'  /* TODO: measurement tool doesn't show measurement */ }}>  }
+                        <MeasureIcon
+                            className="ciq-tooltip"
+                            onClick={() => selectTool('measure')}
+                            tooltip-title={t.translate('Measure')}
+                        />
+                        <span>{t.translate('Measure')}</span>
+                    </div>
+                </div>
                 <DrawList />
             </div>
         </Menu.Body>
@@ -52,4 +60,6 @@ export default connect(({ drawTools: dt }) => ({
     Menu: dt.menu.connect(Menu),
     menuOpen: dt.menu.open,
     DrawList: dt.list.connect(List),
+    closeMenu: dt.menu.onTitleClick,
+    isMobile: dt.mainStore.chart.isMobile,
 }))(DrawTools);

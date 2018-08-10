@@ -17,16 +17,6 @@
             font-weight: 400;
             padding: 0 0.7em;
         }
-        .icon-close-menu {
-            position: absolute;
-            top: 5px;
-            right: 5px;
-            cursor: pointer;
-            height: 30px;
-            width: 30px;
-            pointer-events: none;
-            opacity: 0;
-        }
     }
     .body {
         height: 100%;
@@ -122,18 +112,6 @@
         .body {
             .loading {
                 background: transparent url('../icons/loading/loading-ellipsis-dark.svg') no-repeat scroll center center;
-            }
-        }
-    }
-}
-
-/* Mobile Style */
-.smartcharts-mobile {
-    .cq-share {
-        .title {
-            .icon-close-menu {
-                pointer-events: initial;
-                opacity: 1;
             }
         }
     }
