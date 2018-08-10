@@ -139,7 +139,7 @@ $green: #4caf50;
     width: 100%;
     right: 0px;
     opacity: 0.3;
-    @include transition(opacity 0.1s ease-out);
+    transition: opacity 0.1s ease-out;
 }
 
 .between-shade {
