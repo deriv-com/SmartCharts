@@ -19,12 +19,17 @@ export default class ChartTitleStore {
     }
 
     @observable todayChange = null;
+
     @observable isVisible = false;
 
     get chart() { return this.mainStore.chart; }
+
     get context() { return this.mainStore.chart.context; }
+
     @computed get currentSymbol() { return this.mainStore.chart.currentActiveSymbol; }
+
     @computed get decimalPlaces() { return this.mainStore.chart.currentActiveSymbol.decimal_places; }
+
     @computed get isShowChartPrice() { return this.mainStore.chart.isChartAvailable; }
 
     onContextReady = () => {

@@ -2,6 +2,7 @@
 
 export default class ChartNotifier {
     messageCallback = null;
+
     removeByCategoryCallback=null
 
     notify(message) {

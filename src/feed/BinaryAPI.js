@@ -1,6 +1,8 @@
 export default class BinaryAPI {
     static get DEFAULT_COUNT() { return 1000; }
+
     streamRequests = {};
+
     constructor(requestAPI, requestSubscribe, requestForget) {
         this.requestAPI = requestAPI;
         this.requestSubscribe = requestSubscribe;

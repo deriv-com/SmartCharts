@@ -39,11 +39,17 @@ export default class CategoricalDisplayStore {
             when(() => this.context, this.initFavorites.bind(this));
         }
     }
+
     @observable scrollPanel;
+
     @observable filterText = '';
+
     @observable placeholderText = '';
+
     @observable activeCategoryKey = '';
+
     @observable favoritesMap = {};
+
     @observable favoritesCategory = {
         categoryName: t.translate('Favorites'),
         categoryId: 'favorite',
@@ -51,9 +57,13 @@ export default class CategoricalDisplayStore {
         emptyDescription: t.translate('There are no favorites yet.'),
         data: [],
     };
+
     @observable isScrollingDown = false;
+
     scrollTop = undefined;
+
     isUserScrolling = true;
+
     lastFilteredItems = [];
 
     get context() {
@@ -279,6 +289,7 @@ export default class CategoricalDisplayStore {
         e.nativeEvent.isHandledByDialog = true; // prevent close dialog
         this.setFavorite(item);
     }
+
     setFavorite(item) {
         if (this.favoritesMap[item.itemId]) {
             this.favoritesCategory.data = this.favoritesCategory.data

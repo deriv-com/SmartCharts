@@ -10,7 +10,7 @@ export class TickHistoryFormatter {
                 Close: +p,
             }));
             return quotes;
-        } else if (candles) {
+        } if (candles) {
             const quotes = candles.map(c => ({
                 Date: getUTCDate(+c.epoch),
                 Open: +c.open,
@@ -29,7 +29,7 @@ export class TickHistoryFormatter {
                 Date: getUTCDate(+tick.epoch),
                 Close: +tick.quote,
             };
-        } else if (ohlc) {
+        } if (ohlc) {
             return {
                 Date: getUTCDate(+ohlc.open_time),
                 Open: +ohlc.open,

@@ -16,7 +16,9 @@ const ComparisonList = ({
                 <div key={`compare-${i}`} className="cq-comparison-item">
                     <span className="left">
                         <span className="cq-comparison-swatch" style={{ backgroundColor: item.color }} />
-                        <span className="cq-comparison-label">{item.symbolObject.name}</span>
+                        <span className="cq-comparison-label">
+                            {item.symbolObject.name}
+                        </span>
                     </span>
                     <span className="right">
                         <AnimatedPrice />

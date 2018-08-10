@@ -9,7 +9,9 @@ const AnimatedPrice = ({
     return (
         <React.Fragment>
             {!price && <span className="cq-comparison-loader stx-show" />}
-            <div className={classes}>{price}</div>
+            <div className={classes}>
+                {price}
+            </div>
         </React.Fragment>
     );
 };

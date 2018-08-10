@@ -4,6 +4,7 @@ import { PendingPromise } from '@binary-com/smartcharts'; // eslint-disable-line
 
 class ConnectionManager extends EventEmitter {
     static get EVENT_CONNECTION_CLOSE() { return 'CONNECTION_CLOSE'; }
+
     static get EVENT_CONNECTION_REOPEN() { return 'CONNECTION_REOPEN'; }
 
     constructor({ appId, endpoint, language }) {

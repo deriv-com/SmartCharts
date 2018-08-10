@@ -7,13 +7,21 @@ const LINE_OFFSET_HEIGHT_HALF = LINE_OFFSET_HEIGHT >> 1;
 
 export default class PriceLineStore {
     _relative = false;
+
     @observable draggable = true;
+
     @observable isDragging = false;
+
     @observable visible = true;
+
     @observable top = 0;
+
     @observable _price = 0;
+
     @observable zIndex;
+
     @observable offScreen = false;
+
     @observable uncentered = false;
 
     @computed get pip() { return this.mainStore.chart.currentActiveSymbol.decimal_places; }
@@ -45,6 +53,7 @@ export default class PriceLineStore {
     };
 
     static get EVENT_PRICE_CHANGED() { return 'EVENT_PRICE_CHANGED'; }
+
     static get EVENT_DRAG_RELEASED() { return 'EVENT_DRAG_RELEASED'; }
 
     @computed get priceDisplay() {
@@ -139,8 +148,8 @@ export default class PriceLineStore {
 
     _locationFromPrice(p) {
         return (
-            this.stx.pixelFromPrice(p, this.chart.panel) -
-            this.chart.panel.top
+            this.stx.pixelFromPrice(p, this.chart.panel)
+            - this.chart.panel.top
         );
     }
 

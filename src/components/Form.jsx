@@ -20,14 +20,19 @@ export const Slider = ({
             value={value}
             withBars
         />
-        <div className="value">{value}</div>
+        <div className="value">
+            {value}
+        </div>
     </div>
 );
 
 export class DropDown extends React.Component {
     state = { open: false };
+
     titleRef = null;
+
     onClick = () => this.setState({ open: !this.state.open });
+
     close = (e) => {
         if (e.target !== this.titleRef) {
             this.setState({ open: false });
@@ -35,6 +40,7 @@ export class DropDown extends React.Component {
     }
 
     componentDidMount() { document.addEventListener('click', this.close, false); }
+
     componentWillUnmount() { document.removeEventListener('click', this.close); }
 
     render() {
@@ -81,11 +87,16 @@ export class Pattern extends React.Component {
         { width: 5, pattern: 'dashed' },
         { width: 0, pattern: 'none' },
     ];
+
     render() {
         const { pattern, lineWidth, onChange } = this.props;
-        const title = pattern !== 'none' ?
-            <span className={`option ${pattern}-${lineWidth}`} /> :
-            <span className="none">None</span>;
+        const title = pattern !== 'none'
+            ? <span className={`option ${pattern}-${lineWidth}`} />
+            : (
+                <span className="none">
+None
+                </span>
+            );
 
         return (
             <DropDown
@@ -93,9 +104,13 @@ export class Pattern extends React.Component {
                 title={title}
                 onRowClick={onChange}
             >
-                {p => (p.pattern !== 'none' ?
-                    <span className={`option ${p.pattern}-${p.width}`} /> :
-                    <span className="none">None</span>)
+                {p => (p.pattern !== 'none'
+                    ? <span className={`option ${p.pattern}-${p.width}`} />
+                    : (
+                        <span className="none">
+None
+                        </span>
+                    ))
                 }
             </DropDown>
         );
@@ -117,9 +132,13 @@ export class ColorPicker extends React.Component {
         ['#770001', '#792e03', '#7b4906', '#817a0b', '#41661e', '#005827', '#005951',
             '#003b5c', '#001d40', '#000e35', '#04002c', '#19002b', '#2c002a', '#580028'],
     ];
+
     state = { open: false };
+
     titleRef = null;
+
     onClick = () => this.setState({ open: !this.state.open });
+
     close = (e) => {
         if (e.target !== this.titleRef) {
             this.setState({ open: false });
@@ -127,6 +146,7 @@ export class ColorPicker extends React.Component {
     };
 
     componentDidMount() { document.addEventListener('click', this.close, false); }
+
     componentWillUnmount() { document.removeEventListener('click', this.close); }
 
     render() {
@@ -300,13 +320,21 @@ export const FontSetting = ({
                 onChange={onBoldChange}
                 active={!!weight}
             >
-                <div className="cq-text-icon"><b>B</b></div>
+                <div className="cq-text-icon">
+                    <b>
+B
+                    </b>
+                </div>
             </Toggle>
             <Toggle
                 active={!!style}
                 onChange={onItalicChange}
             >
-                <div className="cq-text-icon"><i>i</i></div>
+                <div className="cq-text-icon">
+                    <i>
+i
+                    </i>
+                </div>
             </Toggle>
             <DropDown
                 className="cq-changefontsize"
@@ -314,7 +342,11 @@ export const FontSetting = ({
                 title={size || '13px'}
                 onRowClick={onFontSizeChange}
             >
-                {p => <span className="option">{p}</span>}
+                {p => (
+                    <span className="option">
+                        {p}
+                    </span>
+                )}
             </DropDown>
             <DropDown
                 className="cq-changefontfamily"
@@ -322,7 +354,11 @@ export const FontSetting = ({
                 title={family || families[0]}
                 onRowClick={onFontFamilyChange}
             >
-                {p => <span className="option">{p}</span>}
+                {p => (
+                    <span className="option">
+                        {p}
+                    </span>
+                )}
             </DropDown>
         </span>
     );

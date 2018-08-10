@@ -33,7 +33,9 @@ class PriceLine extends Component {
                 <div className="drag-line" style={{ borderTopStyle: lineStyle }} />
                 <div className="draggable-area" />
                 <div className="drag-price" style={{ backgroundColor: draggable ? '#FFF' : color }}>
-                    <div className="price">{priceDisplay}</div>
+                    <div className="price">
+                        {priceDisplay}
+                    </div>
                 </div>
             </div>
         );

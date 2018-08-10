@@ -35,14 +35,18 @@ const Share = ({
         </Menu.Title>
         <Menu.Body>
             <div className="title">
-                <div className="title-text">{t.translate('Share / Download Chart')}</div>
+                <div className="title-text">
+                    {t.translate('Share / Download Chart')}
+                </div>
                 <CloseIcon
                     className="icon-close-menu"
                     onClick={() => closeMenu()}
                 />
             </div>
             <div className="body">
-                <div className="caption1">{t.translate('Share link')}</div>
+                <div className="caption1">
+                    {t.translate('Share link')}
+                </div>
                 <div
                     className="loading"
                     style={{ display: (loading ? 'block' : 'none') }}
@@ -51,13 +55,19 @@ const Share = ({
                     className="content"
                     style={{ display: ((!loading && !urlGenerated) ? 'flex' : 'none') }}
                 >
-                    {shortUrlFailed ? <p>{t.translate('Failed to generate link')}</p> :
-                        <div
-                            className="download-btn"
-                            onClick={refreshShareLink}
-                        >
-                            {t.translate('Retry')}
-                        </div>}
+                    {shortUrlFailed ? (
+                        <p>
+                            {t.translate('Failed to generate link')}
+                        </p>
+                    )
+                        : (
+                            <div
+                                className="download-btn"
+                                onClick={refreshShareLink}
+                            >
+                                {t.translate('Retry')}
+                            </div>
+                        )}
                 </div>
                 <div
                     className="content"
@@ -75,17 +85,24 @@ const Share = ({
                     />
                 </div>
 
-                <div className="caption2">{t.translate('Download chart')}</div>
+                <div className="caption2">
+                    {t.translate('Download chart')}
+                </div>
                 <div className="content">
                     <div
                         className="download-btn"
                         onClick={downloadPNG}
-                    > PNG {isLoadingPNG && <span className="cq-loading" />}
+                    >
+                        {' '}
+PNG
+                        {isLoadingPNG && <span className="cq-loading" />}
                     </div>
                     <div
                         className="download-btn"
                         onClick={downloadCSV}
-                    > CSV
+                    >
+                        {' '}
+CSV
                     </div>
                 </div>
             </div>

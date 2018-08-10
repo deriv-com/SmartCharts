@@ -8,9 +8,13 @@ export default class ViewStore {
         this.menu = new MenuStore(mainStore, { route: 'templates' });
         when(() => this.context, this.onContextReady);
     }
+
     @observable scrollPanel;
+
     @observable templateName = '';
+
     @observable views = [];
+
     @observable routes = {
         current: 'main',
         add: () => this.saveViews(),
@@ -20,7 +24,9 @@ export default class ViewStore {
     };
 
     get context() { return this.mainStore.chart.context; }
+
     get stx() { return this.context.stx; }
+
     get loader() { return this.mainStore.loader; }
 
     onContextReady = () => {
