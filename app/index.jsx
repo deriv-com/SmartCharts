@@ -77,6 +77,7 @@ const requestForget = streamManager.forget.bind(streamManager);
 
 class App extends Component {
     startingLanguage = 'en';
+
     constructor(props) {
         super(props);
         this.notifier = new ChartNotifier();
