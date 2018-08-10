@@ -163,8 +163,6 @@ class ChartStore {
 
         // connect chart to data
         this.feed = new Feed(api, stxx, this.mainStore);
-        this.feed.startEpoch = startEpoch;
-        this.feed.endEpoch = endEpoch;
         stxx.attachQuoteFeed(this.feed, {
             refreshInterval: null,
         });
