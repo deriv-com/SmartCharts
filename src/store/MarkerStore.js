@@ -164,6 +164,8 @@ export default class MarkerStore {
 
         if (this.tick) {
             this.updatePosition();
+        } else {
+            this.hideMarker();
         }
     }
 
