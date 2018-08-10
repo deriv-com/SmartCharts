@@ -1,4 +1,5 @@
 import EventEmitter from 'event-emitter-es6';
+import { reaction, when } from 'mobx';
 import { TickHistoryFormatter } from './TickHistoryFormatter';
 import PendingPromise from '../utils/PendingPromise';
 import { calculateGranularity, getUTCEpoch } from '../utils';
@@ -7,8 +8,9 @@ class Feed {
     static get EVENT_MASTER_DATA_UPDATE() { return 'EVENT_MASTER_DATA_UPDATE'; }
     static get EVENT_COMPARISON_DATA_UPDATE() { return 'EVENT_COMPARISON_DATA_UPDATE'; }
     static get EVENT_ON_PAGINATION() { return 'EVENT_ON_PAGINATION'; }
-    startEpoch;
-    endEpoch;
+    get startEpoch() { return this._mainStore.state.startEpoch; }
+    get endEpoch() { return this._mainStore.state.endEpoch; }
+    get context() { return this._mainStore.chart.context; }
 
     constructor(binaryApi, stx, mainStore) {
         this._stx = stx;
@@ -16,9 +18,20 @@ class Feed {
         this._activeStreams = {};
         this._lastStreamEpoch = {};
         this._mainStore = mainStore;
+        reaction(() => mainStore.state.isConnectionOpened, this.onConnectionChanged.bind(this));
+        when(() => this.context, this.onContextReady);
+
         this._emitter = new EventEmitter({ emitDelay: 0 });
         this._isConnectionOpened = true;
     }
+
+    onContextReady = () => {
+        reaction(() => [this.startEpoch, this.endEpoch], this.onRangeChanged);
+    };
+
+    onRangeChanged = () => {
+        console.log('RANGE CHANGE', this.startEpoch, this.endEpoch);
+    };
 
     // although not used, subscribe is overridden so that unsubscribe will be called by ChartIQ
     subscribe() {}
@@ -251,7 +264,9 @@ class Feed {
     static getFirstEpoch({ candles, history }) {
         if (candles && candles.length > 0) {
             return candles[0].epoch;
-        } else if (history && history.times.length > 0) {
+        }
+
+        if (history && history.times.length > 0) {
             const { times } = history;
             return +times[0];
         }
@@ -260,7 +275,9 @@ class Feed {
     static getLatestEpoch({ candles, history }) {
         if (candles) {
             return candles[candles.length - 1].epoch;
-        } else if (history) {
+        }
+
+        if (history) {
             const { times } = history;
             return times[times.length - 1];
         }
@@ -278,8 +295,9 @@ class Feed {
         this._emitter.on(Feed.EVENT_ON_PAGINATION, callback);
     }
 
-    setConnectionOpened(isOpened) {
-        if (isOpened === this._isConnectionOpened) { return; }
+    onConnectionChanged() {
+        const isOpened = this._mainStore.state.isConnectionOpened;
+        if (isOpened === undefined || isOpened === this._isConnectionOpened) { return; }
 
         this._isConnectionOpened = isOpened;
         if (isOpened) {

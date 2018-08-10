@@ -8,23 +8,23 @@ import '../../sass/components/_draw-tools.scss';
 const DrawTools = ({
     clearAll,
     selectTool,
-    Menu,
+    DrawToolsMenu,
     menuOpen,
     DrawList,
     closeMenu,
     isMobile,
 }) => (
-    <Menu
+    <DrawToolsMenu
         className="ciq-draw-tools"
     >
-        <Menu.Title>
+        <DrawToolsMenu.Title>
             <DrawIcon
                 className={`ic-icon-with-sub ${menuOpen ? 'active' : ''}`}
                 tooltip-title={t.translate('Draw tools')}
             />
-        </Menu.Title>
+        </DrawToolsMenu.Title>
 
-        <Menu.Body>
+        <DrawToolsMenu.Body>
             <div className="title">
                 <div className="ciq-bars-title">{t.translate('Draw tools')}</div>
                 {isMobile ? <CloseIcon className="icon-close-menu" onClick={closeMenu} /> : '' }             
@@ -50,14 +50,14 @@ const DrawTools = ({
                 </div>
                 <DrawList />
             </div>
-        </Menu.Body>
-    </Menu>
+        </DrawToolsMenu.Body>
+    </DrawToolsMenu>
 );
 
 export default connect(({ drawTools: dt }) => ({
     clearAll: dt.clearAll,
     selectTool: dt.selectTool,
-    Menu: dt.menu.connect(Menu),
+    DrawToolsMenu: dt.menu.connect(Menu),
     menuOpen: dt.menu.open,
     DrawList: dt.list.connect(List),
     closeMenu: dt.menu.onTitleClick,

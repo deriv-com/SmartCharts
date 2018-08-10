@@ -48,8 +48,8 @@ class Menu extends Component {
                     >
                         {first}
                     </div>
-                    {(isMobile && modalNode) &&
-                    ReactDOM.createPortal(
+                    {(isMobile && modalNode)
+                    && ReactDOM.createPortal(
                         <div className={`cq-modal-dropdown ${className || ''} ${open ? 'stxMenuActive' : ''}`}>
                             <div
                                 className="cq-menu-overlay"

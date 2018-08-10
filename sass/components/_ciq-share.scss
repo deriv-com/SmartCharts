@@ -1,8 +1,14 @@
 
 .cq-share {
+    .cq-menu-btn > .ic-icon > svg > g > path {
+        fill: none !important;
+        @include themify($themes) {
+            stroke: themed('MenuIcon');
+        }
+    }
     .cq-menu-dropdown {
         width: 280px;
-        height: 200px;
+        height: 105px;
     }
     .title {
         height: 40px;
@@ -22,65 +28,10 @@
         height: 100%;
         padding: 16px;
 
-        .loading {
-            background: transparent url('../icons/loading/loading-ellipsis.svg') no-repeat scroll center center;
-            height: 26px;
-            width: 100%;
-            display: block;
-        }
         .content {
             display: flex;
             padding: 5px 0;
 
-            input {
-                line-height: 32px;
-                height: 32px;
-                outline: none;
-                flex-grow: 1;
-                padding-left: 4px;
-                border-right: none;
-                @include box-sizing(border-box);
-                @include border-radius(4px 0 0 4px);
-                @include themify($themes) {
-                    color: themed('SharedInputText');
-                    background-color: themed('SharedInputBg');
-                    border-top: 1px solid themed('SharedInputBorder');
-                    border-left: 1px solid themed('SharedInputBorder');
-                    border-bottom: 1px solid themed('SharedInputBorder');
-                }
-
-                g {
-                    @include themify($themes) {
-                        fill: themed('SharedBtnIcon');
-                    }
-                }
-            }
-            .ic-icon {
-                width: 32px;
-                height: 32px;
-                padding-top: 4px;
-                position: relative;
-                left: -1px;
-                @include border-radius(0 4px 4px 0);
-                @include box-sizing(border-box);
-                @include themify($themes) {
-                    border-top: 1px solid themed('SharedInputBorder');
-                    border-right: 1px solid themed('SharedInputBorder');
-                    border-bottom: 1px solid themed('SharedInputBorder');
-                    background: themed('SharedBtnBg');
-                }
-
-                &:after {
-                    width: auto !important;
-                    left: auto !important;
-                    right: -10px;
-                    white-space: nowrap;
-                    bottom: 36px;
-                }
-                &:before {
-                    bottom: 32px;
-                }
-            }
             .download-btn {
                 width: 56px;
                 height: 20px;
@@ -103,16 +54,6 @@
         }
         .caption2 {
             margin-top: 10px;
-        }
-    }
-}
-
-.smartcharts-dark {
-    .cq-share {
-        .body {
-            .loading {
-                background: transparent url('../icons/loading/loading-ellipsis-dark.svg') no-repeat scroll center center;
-            }
         }
     }
 }

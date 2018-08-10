@@ -16,7 +16,7 @@ import '../../sass/components/_ciq-chart-setting.scss';
 
 
 const ChartSetting = ({
-    Menu,
+    ChartSettingMenu,
     menuOpen,
     selectedLanguage,
     languages,
@@ -106,10 +106,10 @@ const ChartSetting = ({
             </div>
             <div className="body">
                 <div className="ciq-list ciq-list-language">
-                    {languages.map((language, index) => (
+                    {languages.map(language => (
                         <div
                             className={`ciq-list-item ${(selectedLanguage.key === language.key) ? 'selected' : ''}`}
-                            key={index}
+                            key={language.key}
                             onClick={() => setLanguage(language.key)}
                         >
                             {language.icon}
@@ -119,14 +119,14 @@ const ChartSetting = ({
             </div>
         </div>);
     return (
-        <Menu className="cq-chart-setting">
-            <Menu.Title>
+        <ChartSettingMenu className="cq-chart-setting">
+            <ChartSettingMenu.Title>
                 <SettingIcon
                     className={`ic-icon-with-sub ${menuOpen ? 'active' : ''}`}
                     tooltip-title={t.translate('Settings')}
                 />
-            </Menu.Title>
-            <Menu.Body>
+            </ChartSettingMenu.Title>
+            <ChartSettingMenu.Body>
                 <div className={`cq-setting-container container-${view === '' ? 'main' : view}`}>
                     <CSSTransition
                         in={view === ''}
@@ -146,13 +146,13 @@ const ChartSetting = ({
                         {renderLanguage()}
                     </CSSTransition>
                 </div>
-            </Menu.Body>
-        </Menu>
+            </ChartSettingMenu.Body>
+        </ChartSettingMenu>
     );
 };
 
 export default connect(({ chartSetting: s, chart: c }) => ({
-    Menu: s.menu.connect(Menu),
+    ChartSettingMenu: s.menu.connect(Menu),
     menuOpen: s.menu.dialog.open,
     selectedLanguage: s.language,
     languages: s.languages,
