@@ -147,3 +147,14 @@ export function calculateGranularity(period, interval) {
 
     return toSeconds[interval] * period;
 }
+
+export function displayMilliseconds(ms) {
+    const totalSec = ms / 1000;
+    if (totalSec <= 0) { return null; }
+    const padNum = n => (`0${n}`).slice(-2);
+    const seconds = padNum(Math.trunc((totalSec) % 60));
+    const minutes = padNum(Math.trunc((totalSec / 60) % 60));
+    let hours = Math.trunc((totalSec / 3600) % 24);
+    hours = hours ? `${hours}:` : '';
+    return `${hours}${minutes}:${seconds}`;
+}
