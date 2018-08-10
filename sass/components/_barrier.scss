@@ -2,9 +2,6 @@
 
 /* Drag Lines and Prices */
 
-$red: #f44336;
-$green: #4caf50;
-
 .chart-line {
     position: absolute;
     z-index: 35;
@@ -142,23 +139,15 @@ $green: #4caf50;
     transition: opacity 0.1s ease-out;
 }
 
+.top-shade {
+    background-image: linear-gradient(to bottom, transparent 30%, var(--shade-color));
+}
+
 .between-shade {
     opacity: 0.2;
+    background-color: var(--shade-color);
 }
 
-@mixin createShadeStyle($style-name, $shade-color) {
-    .#{$style-name} {
-        .top-shade {
-            background-image: linear-gradient(to bottom, transparent 30%, $shade-color);
-        }
-        .between-shade {
-            background-color: $shade-color;
-        }
-        .bottom-shade {
-            background-image: linear-gradient(to bottom, $shade-color, transparent 70%);
-        }
-    }
+.bottom-shade {
+    background-image: linear-gradient(to bottom, var(--shade-color), transparent 70%);
 }
-
-@include createShadeStyle('red', $red);
-@include createShadeStyle('green', $green);

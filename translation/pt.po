@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Portuguese\n"
 "Language: pt_PT\n"
-"PO-Revision-Date: 2018-08-01 09:21\n"
+"PO-Revision-Date: 2018-08-08 14:04\n"
 
 msgid " already exists."
 msgstr " já existe."
@@ -78,12 +78,6 @@ msgstr "Comparações"
 msgid "Continuous"
 msgstr "Contínuo"
 
-msgid "Copied!"
-msgstr "Copiado!"
-
-msgid "Copy to clipboard"
-msgstr "Copiar para área de transferência"
-
 msgid "Countdown"
 msgstr "Contagem regressiva"
 
@@ -108,7 +102,10 @@ msgstr "Forma livre"
 msgid "Dot"
 msgstr "Ponto"
 
-msgid "Download chart"
+msgid "Download"
+msgstr "Baixar"
+
+msgid "Download Chart"
 msgstr "Baixar gráfico"
 
 msgid "Draw tools"
@@ -116,12 +113,6 @@ msgstr "Ferramentas de desenho"
 
 msgid "Ellipse"
 msgstr "Elipse"
-
-msgid "Failed to generate link"
-msgstr "Falha ao gerar link"
-
-msgid "Failed!"
-msgstr "Falhou!"
 
 msgid "Favorites"
 msgstr "Favoritos"
@@ -234,9 +225,6 @@ msgstr "Renko"
 msgid "RESET"
 msgstr "REINICIAR"
 
-msgid "Retry"
-msgstr "Tentar novamente"
-
 msgid "Reversal"
 msgstr "Inversão"
 
@@ -275,15 +263,6 @@ msgstr "Forma - Coração"
 
 msgid "Shape - Star"
 msgstr "Forma - Estrela"
-
-msgid "Share"
-msgstr "Partilhar"
-
-msgid "Share / Download Chart"
-msgstr "Compartilhar / Baixar gráfico"
-
-msgid "Share link"
-msgstr "Compartilhar o link"
 
 msgid "Speed Resistance Arc"
 msgstr "Arco de Resistência Velocidade"

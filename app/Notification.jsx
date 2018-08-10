@@ -8,6 +8,7 @@ class Notification extends React.Component {
         props.notifier.onMessage(this.onMessage);
         props.notifier.onRemoveByCategory(this.onRemoveByCategory);
     }
+
     onMessage = (message, duration = 10) => {
         const messages = this.state.messages;
         message.id = (new Date()).getTime();
@@ -23,6 +24,7 @@ class Notification extends React.Component {
             setTimeout(() => this.onRemove(message.id), duration * 1000);
         }
     }
+
     onRemove(id) {
         let messages = this.state.messages.map((x) => {
             x.hide = x.id === id ? true : x.hide;
@@ -44,6 +46,7 @@ class Notification extends React.Component {
             });
         }, 300);
     }
+
     onRemoveAll() {
         this.state.messages.forEach((x) => {
             this.onRemove(x.id);

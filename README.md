@@ -93,7 +93,6 @@ endEpoch | Set the end epoch of the chart
 chartControlsWidgets | Render function for chart control widgets. Refer to [Customising Components](#customising-components).
 topWidgets | Render function for top widgets. Refer to [Customising Components](#customising-components).
 isMobile | Switch between mobile or desktop view. Defaults to `false`.
-shareOrigin | Sets the origin of the generated share link. Defaults to `https://charts.binary.com`.
 onSettingsChange | Callback that will be fired each time a setting is changed.
 settings | Sets the chart settings. Refer to [Chart Settings](#chart-settings)
 barriers | Draw chart barriers. Refer to [Barriers API](#barriers-api) for usage details
@@ -130,7 +129,7 @@ Attributes marked with `*` are **mandatory**:
 
 | Attribute | Description |
 --------|--------------
-shadeColor | Barrier shade color; choose between `green` and `red`. Defaults to `green`.
+shadeColor | Barrier shade color. Defaults to `green`.
 color | Price line color. Defaults to `#000`.
 shade | Shade type; choose between `NONE_SINGLE`, `NONE_DOUBLE`, `ABOVE`, `BELOW`, `OUTSIDE` or `BETWEEN`. Defaults to `NONE_SINGLE`.
 hidePriceLines | hide/show the price lines. Defaults to `false`.
