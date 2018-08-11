@@ -34,7 +34,9 @@ class Chart extends Component {
     }
 
     componentDidMount() {
-        this.props.init(this.root, this.modalNode, this.props);
+        const { updateProps, init, ...props } = this.props;
+        updateProps(props);
+        init(this.root, this.modalNode, props);
     }
 
     componentWillReceiveProps(nextProps) {
