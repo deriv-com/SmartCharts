@@ -125,7 +125,6 @@ class App extends Component {
 
         return (
             <SmartChart
-                onSymbolChange={symbol => this.symbolChange(symbol)}
                 onMessage={e => this.notifier.notify(e)}
                 isMobile={CIQ.isMobile}
                 enableRouting

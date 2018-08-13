@@ -53,9 +53,9 @@ export class DropDown extends React.Component {
                     <ArrowIcon />
                 </div>
                 <div className={`dropdown ${open ? 'active' : ''}`}>
-                    {rows.map(row => (
+                    {rows.map((row, idx) => (
                         <div
-                            key={row}
+                            key={idx} // eslint-disable-line react/no-array-index-key
                             className="row"
                             onClick={() => onRowClick && onRowClick(row)}
                         >

@@ -1,4 +1,4 @@
-import { action, computed, observable, when } from 'mobx';
+import { action, computed, observable, reaction, when } from 'mobx';
 import MenuStore from './MenuStore';
 import ListStore from './ListStore';
 import {
@@ -116,7 +116,7 @@ export default class ChartTypeStore {
 
     get context() { return this.mainStore.chart.context; }
     get stx() { return this.context.stx; }
-    get chartTypeProp() { return this.mainStore.chart.paramProps.chartType; }
+    get chartTypeProp() { return this.mainStore.state.chartType; }
     get isCandle() { return notCandles.indexOf(this.type.id) === -1; }
     get isAggregateChart() { return !!aggregateCharts.find(t => t.id === this.stx.layout.aggregationType); }
 
@@ -134,6 +134,12 @@ export default class ChartTypeStore {
         }
         const typeIdx = this.chartTypes.findIndex(t => t.id === chartType);
         this.type = this.chartTypes[typeIdx];
+
+        reaction(() => this.mainStore.state.chartType, () => {
+            if (this.mainStore.state.chartType !== undefined) {
+                this.setType(this.mainStore.state.chartType);
+            }
+        });
     };
 
     @action.bound setTypeFromUI(type) {
@@ -166,7 +172,6 @@ export default class ChartTypeStore {
             }
         }
         this.type = type;
-        this.mainStore.timeperiod.showCountdown(true);
     }
 
     @action.bound showAggregateDialog(aggregateId) {
@@ -203,6 +208,10 @@ export default class ChartTypeStore {
 
     @computed get types() {
         const isTickSelected = this.mainStore.timeperiod.timeUnit === 'tick';
+
+        if (this.chartTypes === undefined) {
+            this.chartTypes = getChartTypes();
+        }
 
         return this.chartTypes.map(t => ({
             ...t,

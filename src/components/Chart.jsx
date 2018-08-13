@@ -35,7 +35,9 @@ class Chart extends Component {
     }
 
     componentDidMount() {
-        this.props.init(this.root, this.modalNode, this.props);
+        const { updateProps, init, ...props } = this.props;
+        updateProps(props);
+        init(this.root, this.modalNode, props);
     }
 
     componentWillReceiveProps(nextProps) {
@@ -66,8 +68,7 @@ class Chart extends Component {
 
         const currentPosition = `cq-chart-control-${(position && !isMobile) ? position : 'bottom'}`;
         const contextWidth =  !isMobile ? `smartcharts-${containerWidth}` : '';
-        const renderTopWidgets = topWidgets || defaultTopWidgets;
-
+        const TopWidgets = topWidgets || defaultTopWidgets;
 
         return (
             <div
@@ -93,7 +94,7 @@ class Chart extends Component {
                                     {children}
                                 </RenderInsideChart>
                                 <div className="cq-top-ui-widgets">
-                                    { renderTopWidgets() }
+                                    <TopWidgets />
                                 </div>
                                 <div className={`chartContainer primary ${isDrawing ? 'ciq-draw-mode' : ''}`} style={{ height: chartContainerHeight }}>
                                     <Crosshair />
@@ -118,7 +119,7 @@ class Chart extends Component {
     }
 }
 
-export default connect(({ chart, drawTools, studies, chartSetting, chartType, drawingCursor }) => ({
+export default connect(({ chart, drawTools, studies, chartSetting, chartType, drawingCursor, state }) => ({
     contextPromise: chart.contextPromise,
     init: chart.init,
     destroy: chart.destroy,
@@ -127,7 +128,7 @@ export default connect(({ chart, drawTools, studies, chartSetting, chartType, dr
     AggregateChartSettingsDialog : chartType.settingsDialog.connect(SettingsDialog),
     isChartAvailable: chart.isChartAvailable,
     setting: chartSetting,
-    updateProps: chart.updateProps,
+    updateProps: state.updateProps,
     chartContainerHeight: chart.chartContainerHeight,
     containerWidth: chart.containerWidth,
     isDrawing: drawingCursor.isDrawing,

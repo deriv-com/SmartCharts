@@ -16,10 +16,12 @@ import FavoriteSessionStore from './FavoriteSessionStore';
 import ChartSizeStore from './ChartSizeStore';
 import RoutingStore from './RoutingStore';
 import DrawingCursorStore from './DrawingCursorStore';
+import ChartState from './ChartState';
 
 export default class MainStore {
     favoriteSessionStore = new FavoriteSessionStore();
     chart = new ChartStore(this);
+    state = new ChartState(this);
     chartType = new ChartTypeStore(this);
     studies = new StudyLegendStore(this);
     comparison = new ComparisonStore(this);

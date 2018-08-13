@@ -1,35 +1,28 @@
 import ResizeObserver from 'resize-observer-polyfill';
-import { action, observable } from 'mobx';
+import { action, observable, reaction } from 'mobx';
 import PendingPromise from '../utils/PendingPromise';
 import Context from '../components/ui/Context';
 import KeystrokeHub from '../components/ui/KeystrokeHub';
 import '../components/ui/Animation';
 import { BinaryAPI, Feed } from '../feed';
 import { stableSort, calculateTimeUnitInterval, getUTCDate } from '../utils';
-import ChartState from './ChartState';
 
 class ChartStore {
-    static _id_counter = 0;
-
     constructor(mainStore) {
-        this.id = ++ChartStore._id_counter;
         this.mainStore = mainStore;
     }
 
+    RANGE_PADDING_PX = 125;
     contextPromise = new PendingPromise();
     activeSymbols = [];
     rootNode = null;
     stxx = null;
-    id = null;
-    paramProps = {};
     defaults = {
         symbol: 'R_100',
         granularity: 0,
         chartType: 'mountain',
     };
     granularity;
-    startEpoch;
-    endEpoch;
     enableRouting = null;
     chartNode = null;
     chartControlsNode = null;
@@ -112,14 +105,13 @@ class ChartStore {
             onMessage,
             settings,
             onSettingsChange,
-            startEpoch,
-            endEpoch,
         } = props;
         const api = new BinaryAPI(requestAPI, requestSubscribe, requestForget);
         const { chartSetting } = this.mainStore;
         chartSetting.setSettings(settings);
         chartSetting.onSettingsChange = onSettingsChange;
         this.isMobile = isMobile;
+        this.state = this.mainStore.state;
 
         this.onMessage = onMessage;
         this.granularity = (granularity !== undefined) ? granularity : this.defaults.granularity;
@@ -137,10 +129,10 @@ class ChartStore {
                     // Put some top margin so chart doesn't get blocked by chart title
                     initialMarginTop: 125,
                     initialMarginBottom: 10,
+                    // position: 'left',
                 },
             },
-            minimumLeftBars: 15,
-            minimumZoomTicks: 20,
+            minimumLeftBars: 2,
             yTolerance: 999999, // disable vertical scrolling
         };
         let chartLayout = {
@@ -150,14 +142,13 @@ class ChartStore {
             chartLayout.chartType = 'mountain';
             engineParams.chart.tension = chartLayout.tension = 0.5;
         }
-        const rangeSpan = this.getRangeSpan(startEpoch, endEpoch);
+        const rangeSpan = this.getRangeSpan();
         if (rangeSpan) {
             chartLayout = { ...chartLayout, ...rangeSpan };
         }
         engineParams.layout = chartLayout;
 
         const stxx = this.stxx = new CIQ.ChartEngine(engineParams);
-        this.state = new ChartState(this);
 
         const deleteElement = stxx.chart.panel.holder.parentElement.querySelector('#mouseDeleteText');
         const manageElement = stxx.chart.panel.holder.parentElement.querySelector('#mouseManageText');
@@ -168,8 +159,6 @@ class ChartStore {
 
         // connect chart to data
         this.feed = new Feed(api, stxx, this.mainStore);
-        this.feed.startEpoch = startEpoch;
-        this.feed.endEpoch = endEpoch;
         stxx.attachQuoteFeed(this.feed, {
             refreshInterval: null,
         });
@@ -213,6 +202,15 @@ class ChartStore {
             this.context = context;
             this.contextPromise.resolve(this.context);
             this.resizeScreen();
+
+            reaction(() => [
+                this.state.symbol,
+                this.state.granularity,
+            ], () => {
+                if (this.state.symbol !== undefined || this.state.granularity !== undefined) {
+                    this.changeSymbol(this.state.symbol, this.state.granularity);
+                }
+            });
         }));
 
         this.resizeObserver = new ResizeObserver(this.resizeScreen);
@@ -304,12 +302,15 @@ class ChartStore {
         this.stxx.newChart(symbolObj, null, null, onChartLoad, { ...params, ...rangeSpan });
     }
 
-    // TODO: range span needs to update in real time
-    getRangeSpan(startEpoch = this.paramProps.startEpoch, endEpoch = this.paramProps.endEpoch) {
+    getRangeSpan() {
+        const { startEpoch, endEpoch } = this.state;
         let range, span;
+        const paddingRatio = this.chartNode.clientWidth / this.RANGE_PADDING_PX;
+        const elapsedSeconds = endEpoch - startEpoch;
+        const epochPadding = elapsedSeconds / paddingRatio | 0;
         if (startEpoch !== undefined || endEpoch !== undefined) {
-            const dtLeft  = (startEpoch !== undefined) ? new Date(getUTCDate(startEpoch)) : undefined;
-            const dtRight = (endEpoch   !== undefined) ? new Date(getUTCDate(endEpoch))   : undefined;
+            const dtLeft  = (startEpoch !== undefined) ? new Date(getUTCDate(startEpoch - epochPadding)) : undefined;
+            const dtRight = (endEpoch   !== undefined) ? new Date(getUTCDate(endEpoch + epochPadding))   : undefined;
             const periodicity = calculateTimeUnitInterval(this.granularity);
             range = {
                 dtLeft,
@@ -362,27 +363,6 @@ class ChartStore {
             const srs = stx.chart.series[sybl];
             comp.price = srs.lastQuote ? srs.lastQuote.Close : undefined;
             i++;
-        }
-    }
-
-    @action.bound updateProps({ settings, isConnectionOpened, symbol, granularity, chartType, startEpoch, endEpoch }) {
-        this.mainStore.chartSetting.setSettings(settings);
-        this.setConnectionIsOpened(isConnectionOpened);
-
-        this.paramProps = { symbol, granularity, chartType, startEpoch, endEpoch };
-        if (this.currentActiveSymbol) {
-            const currentParams = {
-                symbol: this.currentActiveSymbol.symbol,
-                granularity: this.granularity,
-                chartType: this.mainStore.chartType.type.id,
-            };
-            if ((symbol !== undefined && symbol !== currentParams.symbol)
-                || (granularity !== undefined && granularity !== currentParams.granularity)) {
-                this.changeSymbol(symbol, granularity);
-            }
-            if (chartType !== undefined && chartType !== currentParams.chartType) {
-                this.mainStore.chartType.setType(chartType);
-            }
         }
     }
 
@@ -476,12 +456,6 @@ class ChartStore {
         }
 
         return categorizedSymbols;
-    }
-
-    setConnectionIsOpened = (isOpened) => {
-        if (isOpened !== undefined && this.feed) {
-            this.feed.setConnectionOpened(isOpened);
-        }
     }
 }
 
