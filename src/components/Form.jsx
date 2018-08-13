@@ -27,7 +27,7 @@ export const Slider = ({
 export class DropDown extends React.Component {
     state = { open: false };
     titleRef = null;
-    onClick = () => this.setState({ open: !this.state.open });
+    onClick = () => this.setState(prevState => ({ open: !prevState.open }));
     close = (e) => {
         if (e.target !== this.titleRef) {
             this.setState({ open: false });
@@ -119,7 +119,7 @@ export class ColorPicker extends React.Component {
     ];
     state = { open: false };
     titleRef = null;
-    onClick = () => this.setState({ open: !this.state.open });
+    onClick = () => this.setState(prevState => ({ open: !prevState.open }));
     close = (e) => {
         if (e.target !== this.titleRef) {
             this.setState({ open: false });
