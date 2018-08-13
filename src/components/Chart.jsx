@@ -98,6 +98,7 @@ class Chart extends Component {
                                 </div>
                                 <div className={`chartContainer primary ${isDrawing ? 'ciq-draw-mode' : ''}`} style={{ height: chartContainerHeight }}>
                                     <Crosshair />
+                                    <DrawingCursor />
                                 </div>
                                 <Loader />
                                 {!isChartAvailable && (
@@ -113,7 +114,6 @@ class Chart extends Component {
                 <DrawToolsSettingsDialog />
                 <AggregateChartSettingsDialog />
                 <StudySettingsDialog />
-                <DrawingCursor />
             </div>
         );
     }

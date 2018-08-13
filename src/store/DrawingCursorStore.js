@@ -17,8 +17,7 @@ export default class DrawingCursorStore {
     onContextReady = () => {
         this.crosshairX = this.stx.container.querySelector('.stx_crosshair_x');
         this.crosshairY = this.stx.container.querySelector('.stx_crosshair_y');
-        this.stx.container.addEventListener('mousemove', this.onMouseMove);
-        this.stx.container.addEventListener('touchmove', this.onMouseMove, { passive: true });
+        this.stx.append('positionCrosshairsAtPointer' , this.onMouseMove)
         this.stx.container.addEventListener('touchend', this.onTouchEnd);
     };
 
