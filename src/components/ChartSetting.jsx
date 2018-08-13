@@ -48,6 +48,17 @@ const ChartSetting = ({
                 />
             </div>
         </div>);
+    const renderAssetInformation = () => (
+        <div className="ciq-list-item">
+            <span className="ciq-icon-text">{t.translate('Asset Information')}</span>
+            <div className="ciq-action">
+                <Switch
+                    value={assetInformation}
+                    onChange={setAssetInformation}
+                />
+            </div>
+        </div>
+    );
     const renderMain = () => (
         <div>
             <div className="title">
@@ -75,15 +86,7 @@ const ChartSetting = ({
                             />
                         </div>
                     </div>
-                    <div className="ciq-list-item">
-                        <span className="ciq-icon-text">{t.translate('Asset Information')}</span>
-                        <div className="ciq-action">
-                            <Switch
-                                value={assetInformation}
-                                onChange={setAssetInformation}
-                            />
-                        </div>
-                    </div>
+                    {!isMobile ? renderAssetInformation() : ''}
                     <div
                         className="ciq-list-item ciq-list-item-lng"
                         onClick={() => setView('language')}
