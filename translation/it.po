@@ -10,10 +10,10 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Italian\n"
 "Language: it_IT\n"
-"PO-Revision-Date: 2018-08-01 09:21\n"
+"PO-Revision-Date: 2018-08-09 11:01\n"
 
 msgid " already exists."
-msgstr ""
+msgstr "Già esistente."
 
 msgid "[symbol] market is presently closed."
 msgstr "Il mercato di [symbol] è momentaneamente chiuso."
@@ -25,7 +25,7 @@ msgid "Active"
 msgstr "Attivo"
 
 msgid "Add New"
-msgstr ""
+msgstr "Aggiungi nuovo"
 
 msgid "Annotation"
 msgstr "Annotazione"
@@ -37,7 +37,7 @@ msgid "Average Line"
 msgstr "Linea della media"
 
 msgid "Baseline"
-msgstr "Linea di base"
+msgstr "Linea di riferimento"
 
 msgid "Box Size"
 msgstr "Unità di escursione"
@@ -46,7 +46,7 @@ msgid "Callout"
 msgstr "Fumetto"
 
 msgid "CANCEL"
-msgstr ""
+msgstr "ANNULLA"
 
 msgid "Candle"
 msgstr "Candela"
@@ -78,12 +78,6 @@ msgstr "Confronto"
 msgid "Continuous"
 msgstr "Continuo"
 
-msgid "Copied!"
-msgstr "Copia eseguita!"
-
-msgid "Copy to clipboard"
-msgstr "Copia negli Appunti"
-
 msgid "Countdown"
 msgstr "Conto alla rovescia"
 
@@ -108,7 +102,10 @@ msgstr "Mano libera"
 msgid "Dot"
 msgstr "Punto"
 
-msgid "Download chart"
+msgid "Download"
+msgstr "Scarica"
+
+msgid "Download Chart"
 msgstr "Scarica grafico"
 
 msgid "Draw tools"
@@ -116,12 +113,6 @@ msgstr "Strumenti disegno"
 
 msgid "Ellipse"
 msgstr "Ellisse"
-
-msgid "Failed to generate link"
-msgstr "Creazione link non riuscita"
-
-msgid "Failed!"
-msgstr "Operazione non riuscita!"
 
 msgid "Favorites"
 msgstr "Preferiti"
@@ -193,7 +184,7 @@ msgid "OPEN"
 msgstr "APERTURA"
 
 msgid "OVERWRITE"
-msgstr ""
+msgstr "SOVRASCRIVI"
 
 msgid "Pitchfork"
 msgstr "Pitchfork"
@@ -234,14 +225,11 @@ msgstr "Renko"
 msgid "RESET"
 msgstr "REIMPOSTA"
 
-msgid "Retry"
-msgstr "Riprova"
-
 msgid "Reversal"
 msgstr "Reversal"
 
 msgid "Reversal Percentage"
-msgstr "Formula inversa della percentuale"
+msgstr "Percentuale di reversal"
 
 msgid "right-click to delete"
 msgstr "destro del mouse per cancellare"
@@ -276,15 +264,6 @@ msgstr "Forma - Cuore"
 msgid "Shape - Star"
 msgstr "Forma - Stella"
 
-msgid "Share"
-msgstr "Condividi"
-
-msgid "Share / Download Chart"
-msgstr "Condividi / Scarica grafico"
-
-msgid "Share link"
-msgstr "Condividi link"
-
 msgid "Speed Resistance Arc"
 msgstr "Arco di resistenza della velocità"
 
@@ -298,7 +277,7 @@ msgid "Streaming for [symbol] is not available due to license restrictions"
 msgstr "[symbol] in streaming non è disponibile a causa delle limitazioni della licenza"
 
 msgid "tap to manage"
-msgstr ""
+msgstr "Tocca per gestire"
 
 msgid "Template name"
 msgstr "Nome del modello"
@@ -331,7 +310,7 @@ msgid "Vertical"
 msgstr "Verticale"
 
 msgid "Would you like to overwrite it?"
-msgstr ""
+msgstr "Desideri sovrascrivere?"
 
 msgid "Zoom in"
 msgstr "Zoom avanti"

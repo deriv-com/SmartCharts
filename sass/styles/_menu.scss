@@ -13,6 +13,12 @@
         position: relative;
         font-weight: 400;
     }
+    .cq-menu-btn {
+        user-select: none;
+    }
+    &.ciq-enabled > .cq-menu-btn {
+        cursor: pointer;
+    }
 }
 
 .cq-menu-dropdown {
@@ -85,7 +91,7 @@
 
         .mobile-title {
             font-size: 14px;
-            line-height: 30px;
+            line-height: 40px;
             font-weight: 400;
             padding: 0em 0.9em;
             @include themify($themes) {
@@ -93,9 +99,18 @@
             }
         }
         .icon-close-menu {
-            margin-right: 6px;
-            cursor: pointer;
+            top: 10px;
         }
+    }
+    .icon-close-menu {
+        cursor: pointer;
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        height: 30px;
+        width: 30px;
+        pointer-events: none;
+        opacity: 0;
     }
     .cq-categorical-display {
         .cq-lookup-filters {
@@ -111,13 +126,11 @@
         &.stxMenuActive {
             z-index: 9;
         }
-        .cq-menu-btn {
-            &:hover {
-                > .ic-icon,
-                > .cq-toggle {
-                    svg {
-                        background: transparent;
-                    }
+        .cq-menu-btn:hover {
+            > .ic-icon,
+            > .cq-toggle {
+                svg {
+                    background: transparent;
                 }
             }
         }
@@ -132,6 +145,11 @@
                 border-radius: 0;
                 width: 100%;
                 position: absolute;
+
+                .icon-close-menu {
+                    pointer-events: initial;
+                    opacity: 1;
+                }
             }
         }
     }

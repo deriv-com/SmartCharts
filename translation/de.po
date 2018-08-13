@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: German\n"
 "Language: de_DE\n"
-"PO-Revision-Date: 2018-08-01 09:21\n"
+"PO-Revision-Date: 2018-08-09 22:11\n"
 
 msgid " already exists."
 msgstr " existiert bereits."
@@ -78,12 +78,6 @@ msgstr "Vergleich"
 msgid "Continuous"
 msgstr "Durchgehend"
 
-msgid "Copied!"
-msgstr "Kopiert!"
-
-msgid "Copy to clipboard"
-msgstr "In die Zwischenablage kopieren"
-
 msgid "Countdown"
 msgstr "Countdown"
 
@@ -108,7 +102,10 @@ msgstr "Freiform"
 msgid "Dot"
 msgstr "Punkt"
 
-msgid "Download chart"
+msgid "Download"
+msgstr "Herunterladen"
+
+msgid "Download Chart"
 msgstr "Chart herunterladen"
 
 msgid "Draw tools"
@@ -116,12 +113,6 @@ msgstr "Zeichen-Tools"
 
 msgid "Ellipse"
 msgstr "Ellipse"
-
-msgid "Failed to generate link"
-msgstr "Generieren des Links ist fehlgeschlagen"
-
-msgid "Failed!"
-msgstr "Fehlgeschlagen!"
 
 msgid "Favorites"
 msgstr "Favoriten"
@@ -234,9 +225,6 @@ msgstr "Renko"
 msgid "RESET"
 msgstr "Zurücksetzen"
 
-msgid "Retry"
-msgstr "Wiederholen"
-
 msgid "Reversal"
 msgstr "Umkehrung"
 
@@ -275,15 +263,6 @@ msgstr "Form - Herz"
 
 msgid "Shape - Star"
 msgstr "Form - Stern"
-
-msgid "Share"
-msgstr "Teilen"
-
-msgid "Share / Download Chart"
-msgstr "Chart teilen/herunterladen"
-
-msgid "Share link"
-msgstr "Link teilen"
 
 msgid "Speed Resistance Arc"
 msgstr "Speed Resistance Arc"

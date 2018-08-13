@@ -27,10 +27,6 @@ export default class MarkerStore {
         this.mainStore.chart.feed.onPagination(this.updateMarkerTick);
         this._listenerId = this.stx.addEventListener('newChart', this.updateMarkerTick);
         this._injectionId = this.stx.prepend('positionMarkers', this.updatePosition);
-
-        if (this.stx.currentQuote() !== null) {
-            this.updateMarkerTick();
-        }
     }
 
     destructor() {
@@ -67,14 +63,17 @@ export default class MarkerStore {
             }
         }
 
-        if (!this.tick) return;
-
         // X axis positioning logic
         const { dataSet } = this.chart;
         let quote = null;
         let left;
 
         if (this.xPositioner !== 'none') {
+            if (!this.tick) {
+                this.hideMarker();
+                return;
+            }
+
             if (this.xPositioner === 'bar' && this.x) {
                 if (this.x < this.chart.xaxis.length) {
                     const xaxis = this.chart.xaxis[this.x];
@@ -86,18 +85,18 @@ export default class MarkerStore {
                 left = this.stx.pixelFromTick(this.tick, this.chart) - this.chart.left;
             }
             if (!quote) quote = dataSet[dataSet.length - 1]; // Future ticks based off the value of the current quote
-        }
-
-        const isMarkerExceedRange = left < -MARKER_MAX_WIDTH || left > this.chart.width + MARKER_MAX_WIDTH;
-        if (isMarkerExceedRange) {
-            this.hideMarker();
-            return;
+            const isMarkerExceedRange = left < -MARKER_MAX_WIDTH || left > this.chart.width + MARKER_MAX_WIDTH;
+            if (isMarkerExceedRange) {
+                this.hideMarker();
+                return;
+            }
         }
 
         this.left = left;
 
         // Y axis positioning logic
         if (this.yPositioner === 'none') {
+            this.bottom = undefined;
             this.showMarker();
             return;
         }
@@ -165,6 +164,8 @@ export default class MarkerStore {
 
         if (this.tick) {
             this.updatePosition();
+        } else {
+            this.hideMarker();
         }
     }
 

@@ -52,7 +52,7 @@ class CrosshairStore {
         this.state = (this.state + 1) % 3;
         this.stx.layout.crosshair = this.state;
         this.stx.doDisplayCrosshairs();
-        this.mainStore.chart.saveLayout();
+        this.mainStore.state.saveLayout();
     }
 
     @action.bound renderCrosshairTooltip() {
@@ -62,8 +62,8 @@ class CrosshairStore {
         const { stx } = this;
         const { crossX, crossY } = stx.controls;
         // crosshairs are not on
-        if ((crossX && crossX.style.display === 'none') ||
-            (crossY && crossY.style.display === 'none')
+        if ((crossX && crossX.style.display === 'none')
+            || (crossY && crossY.style.display === 'none')
         ) {
             return;
         }
@@ -102,16 +102,16 @@ class CrosshairStore {
             }
         }
 
-        if (!(CIQ.ChartEngine.insideChart &&
-            stx.layout.crosshair &&
-            stx.displayCrosshairs &&
-            !stx.overXAxis &&
-            !stx.overYAxis &&
-            !stx.openDialog &&
-            !stx.activeDrawing &&
-            !stx.grabbingScreen &&
-            goodBar &&
-            overBar)
+        if (!(CIQ.ChartEngine.insideChart
+            && stx.layout.crosshair
+            && stx.displayCrosshairs
+            && !stx.overXAxis
+            && !stx.overYAxis
+            && !stx.openDialog
+            && !stx.activeDrawing
+            && !stx.grabbingScreen
+            && goodBar
+            && overBar)
         ) {
             this.hide();
             this.lastBar = {};
@@ -266,8 +266,8 @@ class CrosshairStore {
             }
 
             const fieldName = displayName.replace(/^(Result )(.*)/, '$2');
-            if ((dsField || dsField === 0) &&
-                (name === 'DT' || typeof dsField !== 'object' || dsField.Close || dsField.Close === 0)
+            if ((dsField || dsField === 0)
+                && (name === 'DT' || typeof dsField !== 'object' || dsField.Close || dsField.Close === 0)
             ) {
                 let fieldValue = '';
                 if (dsField.Close || dsField.Close === 0) {

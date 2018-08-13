@@ -15,7 +15,15 @@ class ConnectionManager extends EventEmitter {
     }
 
     _initialize() {
-        this._websocket = new RobustWebsocket(this._url);
+        this._websocket = new RobustWebsocket(this._url, null, {
+            shouldReconnect(event /* , ws */) {
+                if (event.code === 1008
+                    || event.code === 1011
+                    || event.type === 'close') return;
+                if (event.type === 'online') { return 0; }
+                return 3000;
+            },
+        });
 
         // There's a strange bug where upon reconnection over a short period
         // the OPEN status precedes CLOSED. To circumvent this we manually
@@ -55,10 +63,12 @@ class ConnectionManager extends EventEmitter {
         if (this._websocket.readyState === WebSocket.OPEN) {
             this.send({ ping: 1 }, 5000)
                 .catch(() => {
-                    console.error('Server unresponsive. Creating new connection...');
-                    // Reset connection if ping gets no pong from server
-                    this._websocket.close();
-                    this._initialize();
+                    if (this._websocket.readyState === WebSocket.OPEN) {
+                        console.error('Server unresponsive. Creating new connection...');
+                        // Reset connection if ping gets no pong from server
+                        this._websocket.close();
+                        this._initialize();
+                    }
                 });
         }
     }

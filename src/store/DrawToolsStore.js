@@ -64,7 +64,9 @@ export default class DrawToolsStore {
     }
 
     get context() { return this.mainStore.chart.context; }
+
     get stx() { return this.context.stx; }
+
     activeDrawing = null;
 
     onContextReady = () => {
@@ -145,7 +147,7 @@ export default class DrawToolsStore {
         }
         this.activeDrawing.highlighted = false;
         this.activeDrawing.adjust();
-        this.mainStore.chart.saveDrawings();
+        this.mainStore.state.saveDrawings();
     }
 
     @action.bound onDeleted() {

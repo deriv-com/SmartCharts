@@ -73,10 +73,11 @@ const renderControls = () => (
 const requestAPI = connectionManager.send.bind(connectionManager);
 const requestSubscribe = streamManager.subscribe.bind(streamManager);
 const requestForget = streamManager.forget.bind(streamManager);
-const shareOrigin = window.location.href.split('?')[0];
 
 
 class App extends Component {
+    startingLanguage = 'en';
+
     constructor(props) {
         super(props);
         this.notifier = new ChartNotifier();
@@ -95,7 +96,7 @@ class App extends Component {
 
     symbolChange = (symbol) => {
         this.notifier.removeByCategory('activesymbol');
-        console.log('Symbol has changed to:', symbol);
+        this.setState({ symbol });
     };
 
     saveSettings = (settings) => {
@@ -107,33 +108,32 @@ class App extends Component {
             window.location.reload();
         }
     };
-    startingLanguage = 'en';
-    render() {
-        const { settings, isConnectionOpened } = this.state;
 
-        const renderTopWidgets = () => (
-            <React.Fragment>
-                <ChartTitle />
-                <AssetInformation />
-                <ComparisonList />
-                <Notification
-                    notifier={this.notifier}
-                />
-            </React.Fragment>
-        );
+    renderTopWidgets = () => (
+        <React.Fragment>
+            <ChartTitle onChange={this.symbolChange} />
+            <AssetInformation />
+            <ComparisonList />
+            <Notification
+                notifier={this.notifier}
+            />
+        </React.Fragment>
+    );
+
+    render() {
+        const { settings, isConnectionOpened, symbol } = this.state;
 
         return (
             <SmartChart
-                onSymbolChange={symbol => this.symbolChange(symbol)}
+                symbol={symbol}
                 onMessage={e => this.notifier.notify(e)}
                 isMobile={CIQ.isMobile}
                 enableRouting
-                topWidgets={renderTopWidgets}
+                topWidgets={this.renderTopWidgets}
                 chartControlsWidgets={renderControls}
                 requestAPI={requestAPI}
                 requestSubscribe={requestSubscribe}
                 requestForget={requestForget}
-                shareOrigin={shareOrigin}
                 settings={settings}
                 onSettingsChange={this.saveSettings}
                 isConnectionOpened={isConnectionOpened}
