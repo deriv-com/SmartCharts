@@ -53,7 +53,7 @@ class Notification extends React.Component {
                 this.onRemove(msg.id);
             }
         });
-    }
+    };
 
     render() {
         return (
