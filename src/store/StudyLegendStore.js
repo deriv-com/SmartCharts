@@ -39,6 +39,14 @@ export default class StudyLegendStore {
         this.stx.callbacks.studyOverlayEdit = this.editStudy;
         this.stx.callbacks.studyPanelEdit = this.editStudy;
         this.stx.append('createDataSet', this.renderLegend);
+        this.stx.append('adjustPanelPositions', () => {
+            const panel = Object.keys(this.stx.panels)[1];
+            if (panel) {
+                // Hide the up arrow from first indicator to prevent user
+                // from moving the indicator panel above the main chart
+                this.stx.panels[panel].up.style.display = 'none';
+            }
+        });
         this.renderLegend();
     };
 
@@ -114,7 +122,9 @@ export default class StudyLegendStore {
                     defaultValue: par.defaultValue,
                     type: 'switch',
                 };
-            } else if (par.defaultValue.constructor === Number) {
+            }
+
+            if (par.defaultValue.constructor === Number) {
                 return {
                     ...shared,
                     id: par.name,

@@ -4,16 +4,18 @@ import Chart from './Chart.jsx';
 import MainStore from '../store';
 
 class SmartChart extends React.Component {
-    get chart() { return this.mainStore.chart; }
-    get stx() { return this.chart.stxx; }
     mainStore = new MainStore();
+
+    get chart() { return this.mainStore.chart; }
+
+    get stx() { return this.chart.stxx; }
 
     render() {
         const { children, ...props } = this.props;
 
         return (
             <MobxProvider store={this.mainStore}>
-                <Chart {...props} >
+                <Chart {...props}>
                     {children}
                 </Chart>
             </MobxProvider>

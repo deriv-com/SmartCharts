@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
-"PO-Revision-Date: 2018-08-01 09:21\n"
+"PO-Revision-Date: 2018-08-08 08:01\n"
 
 msgid " already exists."
 msgstr ""
@@ -78,12 +78,6 @@ msgstr "Сравнение"
 msgid "Continuous"
 msgstr "Непрерывный"
 
-msgid "Copied!"
-msgstr "Скопировано!"
-
-msgid "Copy to clipboard"
-msgstr "Копировать в буфер"
-
 msgid "Countdown"
 msgstr "Отсчёт"
 
@@ -108,20 +102,17 @@ msgstr "Произвольной формы"
 msgid "Dot"
 msgstr "Точечный"
 
-msgid "Download chart"
-msgstr "Загрузить график"
+msgid "Download"
+msgstr ""
+
+msgid "Download Chart"
+msgstr ""
 
 msgid "Draw tools"
 msgstr "Ср-ва отображения"
 
 msgid "Ellipse"
 msgstr "Эллипс"
-
-msgid "Failed to generate link"
-msgstr "Не удалось создать ссылку"
-
-msgid "Failed!"
-msgstr "Ошибка!"
 
 msgid "Favorites"
 msgstr "Избранное"
@@ -234,9 +225,6 @@ msgstr "Ренко"
 msgid "RESET"
 msgstr "СБРОСИТЬ"
 
-msgid "Retry"
-msgstr "Попробовать снова"
-
 msgid "Reversal"
 msgstr "Разворот"
 
@@ -275,15 +263,6 @@ msgstr "Фигура - Сердце"
 
 msgid "Shape - Star"
 msgstr "Фигура - Звезда"
-
-msgid "Share"
-msgstr "Поделиться"
-
-msgid "Share / Download Chart"
-msgstr "Поделиться / загрузить график"
-
-msgid "Share link"
-msgstr "Поделиться ссылкой"
 
 msgid "Speed Resistance Arc"
 msgstr "Дуга сопротивления"

@@ -36,9 +36,11 @@ export function isValidProp(p) {
 export const getTimeUnit = ({ timeUnit, interval }) => {
     if (timeUnit === null && interval === 'day') {
         return 'day';
-    } else if (timeUnit === 'minute' && interval % 60 === 0) {
+    }
+    if (timeUnit === 'minute' && interval % 60 === 0) {
         return 'hour';
-    } else if (timeUnit === 'second') {
+    }
+    if (timeUnit === 'second') {
         return 'tick';
     }
     return timeUnit;
@@ -122,3 +124,37 @@ export function updatePropIfChanged(source, props, onChanged) {
     if (isChanged && onChanged) { onChanged(); }
 }
 
+export function calculateTimeUnitInterval(granularity) {
+    let interval = 1;
+    let timeUnit = 'second';
+
+    if (granularity === 86400) {
+        timeUnit = 'day';
+    } else if (granularity > 0) {
+        interval = granularity / 60;
+        timeUnit = 'minute';
+    }
+
+    return { interval, timeUnit };
+}
+
+export function calculateGranularity(period, interval) {
+    const toSeconds = {
+        second: 0,
+        minute: 60,
+        day: 24 * 60 * 60,
+    };
+
+    return toSeconds[interval] * period;
+}
+
+export function displayMilliseconds(ms) {
+    const totalSec = ms / 1000;
+    if (totalSec <= 0) { return null; }
+    const padNum = n => (`0${n}`).slice(-2);
+    const seconds = padNum(Math.trunc((totalSec) % 60));
+    const minutes = padNum(Math.trunc((totalSec / 60) % 60));
+    let hours = Math.trunc((totalSec / 3600) % 24);
+    hours = hours ? `${hours}:` : '';
+    return `${hours}${minutes}:${seconds}`;
+}

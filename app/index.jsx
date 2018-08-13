@@ -73,10 +73,11 @@ const renderControls = () => (
 const requestAPI = connectionManager.send.bind(connectionManager);
 const requestSubscribe = streamManager.subscribe.bind(streamManager);
 const requestForget = streamManager.forget.bind(streamManager);
-const shareOrigin = window.location.href.split('?')[0];
 
 
 class App extends Component {
+    startingLanguage = 'en';
+
     constructor(props) {
         super(props);
         this.notifier = new ChartNotifier();
@@ -107,7 +108,7 @@ class App extends Component {
             window.location.reload();
         }
     };
-    startingLanguage = 'en';
+
     render() {
         const { settings, isConnectionOpened } = this.state;
 
@@ -124,7 +125,6 @@ class App extends Component {
 
         return (
             <SmartChart
-                onSymbolChange={symbol => this.symbolChange(symbol)}
                 onMessage={e => this.notifier.notify(e)}
                 isMobile={CIQ.isMobile}
                 enableRouting
@@ -133,7 +133,6 @@ class App extends Component {
                 requestAPI={requestAPI}
                 requestSubscribe={requestSubscribe}
                 requestForget={requestForget}
-                shareOrigin={shareOrigin}
                 settings={settings}
                 onSettingsChange={this.saveSettings}
                 isConnectionOpened={isConnectionOpened}
