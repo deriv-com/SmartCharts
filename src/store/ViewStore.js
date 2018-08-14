@@ -24,13 +24,12 @@ export default class ViewStore {
     get loader() { return this.mainStore.loader; }
 
     onContextReady = () => {
-        const views = createObjectFromLocalStorage(`${this.mainStore.state.chartId}-cq-views`);
+        const views = createObjectFromLocalStorage('cq-views');
         if (views) { this.views = views; }
     }
 
     updateLocalStorage = () => {
-        if (!this.mainStore.state.chartId) return;
-        CIQ.localStorageSetItem(`${this.mainStore.state.chartId}-cq-views`, JSON.stringify(this.views));
+        CIQ.localStorageSetItem('cq-views', JSON.stringify(this.views));
     }
 
     @action.bound onChange(e) {

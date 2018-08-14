@@ -42,12 +42,12 @@ class ChartState {
         if (!this.chartId) return;
         const layoutData = this.stxx.exportLayout(true);
         const json = JSON.stringify(layoutData);
-        CIQ.localStorageSetItem(`${this.chartId}-layout-${this.id}`, json);
+        CIQ.localStorageSetItem(`${this.chartId}-layout`, json);
     }
 
     // returns false if restoring layout fails
     restoreLayout() {
-        let layoutData = createObjectFromLocalStorage(`${this.chartId}-layout-${this.id}`);
+        let layoutData = createObjectFromLocalStorage(`${this.chartId}-layout`);
 
         if (!layoutData) return false;
 
@@ -126,7 +126,7 @@ class ChartState {
     }
 
     restorePreferences() {
-        const pref = createObjectFromLocalStorage(`${this.chartId}-preferences-${this.id}`);
+        const pref = createObjectFromLocalStorage(`${this.chartId}-preferences`);
         if (pref) {
             this.stxx.importPreferences(pref);
         }
@@ -135,7 +135,7 @@ class ChartState {
     savePreferences() {
         if (!this.chartId) return;
         CIQ.localStorageSetItem(
-            `${this.chartId}-preferences-${this.id}`,
+            `${this.chartId}-preferences`,
             JSON.stringify(this.stxx.exportPreferences()),
         );
     }

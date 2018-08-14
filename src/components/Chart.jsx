@@ -50,7 +50,6 @@ class Chart extends Component {
 
     render() {
         const {
-            chartId, // eslint-disable-line no-unused-vars
             DrawToolsSettingsDialog,
             StudySettingsDialog,
             isMobile = false,
