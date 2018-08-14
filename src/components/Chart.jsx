@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import React, { Component, Fragment } from 'react';
 import RenderInsideChart from './RenderInsideChart.jsx';
 import ComparisonList from './ComparisonList.jsx';
@@ -27,12 +26,6 @@ const defaultTopWidgets = () => (
 );
 
 class Chart extends Component {
-    static childContextTypes = { promise: PropTypes.object };
-
-    getChildContext() {
-        return { promise: this.props.contextPromise };
-    }
-
     componentDidMount() {
         const { updateProps, init, ...props } = this.props;
         updateProps(props);
@@ -117,7 +110,6 @@ class Chart extends Component {
 }
 
 export default connect(({ chart, drawTools, studies, chartSetting, chartType, state }) => ({
-    contextPromise: chart.contextPromise,
     init: chart.init,
     destroy: chart.destroy,
     StudySettingsDialog : studies.settingsDialog.connect(SettingsDialog),

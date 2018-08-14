@@ -1,18 +1,16 @@
 import { PureComponent } from 'react';
 import ReactDOM from 'react-dom';
-import PropTypes from 'prop-types';
 import { createElement } from './ui/utils';
+import { connect } from '../store/Connect';
 
 const inChartPrefix = 'cq-inchart-';
 
 // Render given Components under stx-holder to position it relative to the active symbol chart.
 class RenderInsideChart extends PureComponent {
-    static contextTypes = { promise: PropTypes.object };
-
     componentDidMount() {
-        const at = this.props && this.props.at || 'holder';
+        const { at = 'holder', contextPromise } = this.props;
 
-        this.context.promise.then((context) => {
+        contextPromise.then((context) => {
             const nodeName = `${inChartPrefix}${at}`;
             // reuse existing node when possible:
             let elem = context.topNode.querySelector(`.${nodeName}`);
@@ -36,4 +34,6 @@ class RenderInsideChart extends PureComponent {
     }
 }
 
-export default RenderInsideChart;
+export default connect(({ chart }) => ({
+    contextPromise: chart.contextPromise,
+}))(RenderInsideChart);
