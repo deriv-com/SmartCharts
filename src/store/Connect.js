@@ -1,15 +1,38 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { inject, Provider } from 'mobx-react';
-import { action } from 'mobx';
+import { isBoxedObservable, isObservable, isObservableArray, isObservableMap, toJS, action } from 'mobx';
+
+const unboxProps = (props) => {
+    const unboxedProps = {};
+    Object.keys(props).forEach((key) => {
+        const value = props[key];
+        let result;
+        if (isObservableArray(value)) {
+            result = value.slice(0);
+        } else if (isObservableMap(value)) {
+            result = value.toJS();
+        } else if (isBoxedObservable(value)) {
+            result = value.get();
+        } else if (isObservable(value)) {
+            result = toJS(value);
+        } else {
+            result = value;
+        }
+        unboxedProps[key] = result;
+    });
+    return unboxedProps;
+};
 
 const connect_v2 = (Store, mapStoresToProps, handleProps) => {
     // wrap the mapping function usually passed to mobx-react's inject method
     // so that it additionally unboxes any observables
     const unboxedMapStoresToProps = (stores, props, context) => {
-        const injectedProps = mapStoresToProps(stores, props, context);
-        Object.assign(injectedProps, props);
-        return injectedProps;
+        const injectedProps = unboxProps(mapStoresToProps(stores, props, context));
+        return {
+            ...injectedProps,
+            ...props,
+        };
     };
 
     class UnboxedComponent extends Component {
@@ -96,37 +119,29 @@ export class MobxProvider extends Provider {
         };
     }
 }
-const isFunction = fn => typeof (fn) === 'function';
-
-const isShallowEqual = (a, b) => (
-    Object.keys(a).every(key => (
-        (isFunction(a[key]) && isFunction(b[key])) || a[key] === b[key]
-    ))
-);
 
 export const connect = (...args) => {
     if (args.length > 1) {
         return connect_v2(...args);
     }
     const mapStoresToProps = args[0];
-    class UnboxedComponent extends Component {
-        shouldComponentUpdate(nextProps) {
-            return !isShallowEqual(nextProps, this.props);
-        }
-
-        render() {
-            const WC = UnboxedComponent.WrappedComponent;
-            return WC ? React.createElement(WC, this.props) : null;
-        }
-    }
 
     // wrap the mapping function usually passed to mobx-react's inject method
     // so that it additionally unboxes any observables
     const unboxedMapStoresToProps = (stores, props, context) => {
-        const injectedProps = mapStoresToProps(stores, props, context);
-        Object.assign(injectedProps, props);
-        return injectedProps;
+        const injectedProps = unboxProps(mapStoresToProps(stores, props, context));
+        return {
+            ...injectedProps,
+            ...props,
+        };
     };
+
+    class UnboxedComponent extends Component { // eslint-disable-line react/prefer-stateless-function
+        render() {
+            const WC = UnboxedComponent.WrappedComponent;
+            return React.createElement(WC, this.props);
+        }
+    }
 
     // apply the mobx store injection with our wrapped function
     const InjectedComponent = inject(unboxedMapStoresToProps)(UnboxedComponent);
