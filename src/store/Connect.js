@@ -1,7 +1,6 @@
-/* eslint-disable */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { inject, observer, Provider } from 'mobx-react';
+import { inject, Provider } from 'mobx-react';
 import { isBoxedObservable, isObservable, isObservableArray, isObservableMap, toJS, action } from 'mobx';
 
 const unboxProps = (props) => {
@@ -137,7 +136,7 @@ export const connect = (...args) => {
         };
     };
 
-    class UnboxedComponent extends Component {
+    class UnboxedComponent extends Component { // eslint-disable-line react/prefer-stateless-function
         render() {
             const WC = UnboxedComponent.WrappedComponent;
             return React.createElement(WC, this.props);
