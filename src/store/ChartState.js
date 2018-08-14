@@ -27,7 +27,8 @@ class ChartState {
         this.stxx.addEventListener('preferences', this.savePreferences.bind(this));
     };
 
-    @action.bound updateProps({ settings, isConnectionOpened, symbol, granularity, chartType, startEpoch, endEpoch }) {
+    @action.bound updateProps({ chartId, settings, isConnectionOpened, symbol, granularity, chartType, startEpoch, endEpoch }) {
+        this.chartId = chartId;
         this.settings = settings;
         this.isConnectionOpened = isConnectionOpened;
         this.symbol = symbol;
@@ -40,12 +41,12 @@ class ChartState {
     saveLayout() {
         const layoutData = this.stxx.exportLayout(true);
         const json = JSON.stringify(layoutData);
-        CIQ.localStorageSetItem(`layout-${this.id}`, json);
+        CIQ.localStorageSetItem(`${this.chartId}-layout-${this.id}`, json);
     }
 
     // returns false if restoring layout fails
     restoreLayout() {
-        let layoutData = createObjectFromLocalStorage(`layout-${this.id}`);
+        let layoutData = createObjectFromLocalStorage(`${this.chartId}-layout-${this.id}`);
 
         if (!layoutData) return false;
 
@@ -108,14 +109,14 @@ class ChartState {
         const obj = this.stxx.exportDrawings();
         const symbol = this.stxx.chart.symbol;
         if (obj.length === 0) {
-            CIQ.localStorage.removeItem(symbol);
+            CIQ.localStorage.removeItem(`${this.chartId}-${symbol}`);
         } else {
-            CIQ.localStorageSetItem(symbol, JSON.stringify(obj));
+            CIQ.localStorageSetItem(`${this.chartId}-${symbol}`, JSON.stringify(obj));
         }
     }
 
     restoreDrawings() {
-        const drawings = createObjectFromLocalStorage(this.stxx.chart.symbol);
+        const drawings = createObjectFromLocalStorage(`${this.chartId}-${this.stxx.chart.symbol}`);
         if (drawings) {
             this.stxx.importDrawings(drawings);
             this.stxx.draw();
@@ -123,7 +124,7 @@ class ChartState {
     }
 
     restorePreferences() {
-        const pref = createObjectFromLocalStorage(`preferences-${this.id}`);
+        const pref = createObjectFromLocalStorage(`${this.chartId}-preferences-${this.id}`);
         if (pref) {
             this.stxx.importPreferences(pref);
         }
@@ -131,7 +132,7 @@ class ChartState {
 
     savePreferences() {
         CIQ.localStorageSetItem(
-            `preferences-${this.id}`,
+            `${this.chartId}-preferences-${this.id}`,
             JSON.stringify(this.stxx.exportPreferences()),
         );
     }

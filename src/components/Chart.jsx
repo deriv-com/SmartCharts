@@ -50,6 +50,7 @@ class Chart extends Component {
 
     render() {
         const {
+            chartId, // eslint-disable-line no-unused-vars
             DrawToolsSettingsDialog,
             StudySettingsDialog,
             isMobile = false,
@@ -128,4 +129,5 @@ export default connect(({ chart, drawTools, studies, chartSetting, chartType, st
     updateProps: state.updateProps,
     chartContainerHeight: chart.chartContainerHeight,
     containerWidth: chart.containerWidth,
+    chartId: chart.chartId,
 }))(Chart);

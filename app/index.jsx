@@ -34,10 +34,12 @@ if (window.location.host.endsWith('binary.com')) {
 
 configure({ enforceActions: true });
 
+const chartId = 'charts.binary';
+
 const getLanguageStorage = function () {
     const default_language = 'en';
     try {
-        const setting_string = CIQ.localStorage.getItem('smartchart-setting'),
+        const setting_string = CIQ.localStorage.getItem(`${chartId}-smartchart-setting`),
             setting = JSON.parse(setting_string !== '' ? setting_string : '{}');
 
         return setting.language || default_language;
@@ -74,14 +76,13 @@ const requestAPI = connectionManager.send.bind(connectionManager);
 const requestSubscribe = streamManager.subscribe.bind(streamManager);
 const requestForget = streamManager.forget.bind(streamManager);
 
-
 class App extends Component {
     startingLanguage = 'en';
 
     constructor(props) {
         super(props);
         this.notifier = new ChartNotifier();
-        const settings = createObjectFromLocalStorage('smartchart-setting');
+        const settings = createObjectFromLocalStorage(`${chartId}-smartchart-setting`);
         if (settings) { this.startingLanguage = settings.language; }
         connectionManager.on(
             ConnectionManager.EVENT_CONNECTION_CLOSE,
@@ -101,7 +102,7 @@ class App extends Component {
 
     saveSettings = (settings) => {
         console.log('settings updated:', settings);
-        CIQ.localStorageSetItem('smartchart-setting', JSON.stringify(settings));
+        CIQ.localStorageSetItem(`${chartId}-smartchart-setting`, JSON.stringify(settings));
 
         this.setState({ settings });
         if (this.startingLanguage !== settings.language) {

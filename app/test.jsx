@@ -21,10 +21,13 @@ import './doorbell';
 import { ConnectionManager, StreamManager } from './connection';
 
 configure({ enforceActions: true });
+
+const chartId = 'charts.binary';
+
 const getLanguageStorage = function () {
     const default_language = 'en';
     try {
-        const setting_string = CIQ.localStorage.getItem('smartchart-setting'),
+        const setting_string = CIQ.localStorage.getItem(`${chartId}-smartchart-setting`),
             setting = JSON.parse(setting_string !== '' ? setting_string : '{}');
 
         return setting.language || default_language;
