@@ -259,9 +259,9 @@ class ChartStore {
                                 // If open time is cross day, then should check time till tomorrow
                                 // and yesterday till now
                                 if (
-                                    (openTime > closeTime && nowUtc >= toEpochGMT(open[i], -1) && nowUtc <= closeTime) ||
-                                        (openTime > closeTime && nowUtc >= toEpochGMT(open[i]) && nowUtc <= toEpochGMT(close[i], 1)) ||
-                                        (nowUtc >= openTime && nowUtc <= closeTime)
+                                    (openTime > closeTime && nowUtc >= toEpochGMT(open[i], -1) && nowUtc <= closeTime)
+                                        || (openTime > closeTime && nowUtc >= toEpochGMT(open[i]) && nowUtc <= toEpochGMT(close[i], 1))
+                                        || (nowUtc >= openTime && nowUtc <= closeTime)
                                 ) {
                                     isOpen = true;
                                     break;

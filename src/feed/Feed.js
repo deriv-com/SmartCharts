@@ -123,9 +123,9 @@ class Feed {
                 // Although market is closed, we display the past tick history data
                 response = await this._binaryApi.getTickHistory(tickHistoryRequest);
                 this._mainStore.chart.notify({
-                    text: errorCode === 'NoRealtimeQuotes' ?
-                        errorMessage :
-                        t.translate('[symbol] market is presently closed.', tParams),
+                    text: errorCode === 'NoRealtimeQuotes'
+                        ? errorMessage
+                        : t.translate('[symbol] market is presently closed.', tParams),
                     category: 'activesymbol',
                 });
             } else if (errorCode === 'StreamingNotAllowed') {
