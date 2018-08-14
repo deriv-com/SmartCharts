@@ -126,6 +126,7 @@ class App extends Component {
 
         return (
             <SmartChart
+                chartId={chartId}
                 symbol={symbol}
                 onMessage={e => this.notifier.notify(e)}
                 isMobile={CIQ.isMobile}
