@@ -24,7 +24,7 @@ export default class ViewStore {
     get loader() { return this.mainStore.loader; }
 
     onContextReady = () => {
-        const views = createObjectFromLocalStorage(`${this.chartId}-cq-views`);
+        const views = createObjectFromLocalStorage(`${this.mainStore.state.chartId}-cq-views`);
         if (views) { this.views = views; }
     }
 
