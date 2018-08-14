@@ -17,28 +17,12 @@
         font-size: 16px;
         display: flex;
 
-        > .ic-icon {
-            line-height: 45px;
-            margin: 0 5px 0 10px !important;
-        }
         .title-text {
             display: block;
             font-size: 16px;
             line-height: 40px;
             font-weight: 400;
             padding: 0 0.7em;
-        }
-        .icon-close-menu {
-            position: absolute;
-            top: 5px;
-            right: 5px;
-            cursor: pointer;
-            height: 30px;
-            width: 30px;
-            pointer-events: none;
-            opacity: 0;
-            line-height: 37px;
-            margin: 0 !important;
         }
     }
     .body {
@@ -180,12 +164,6 @@
 /* Mobile Style */
 .smartcharts-mobile {
     .cq-chart-setting {
-        .title {
-            .icon-close-menu {
-                pointer-events: initial;
-                opacity: 1;
-            }
-        }
         .cq-setting-container {
             width: 100%;
             position: relative;
