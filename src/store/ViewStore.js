@@ -24,11 +24,12 @@ export default class ViewStore {
     get loader() { return this.mainStore.loader; }
 
     onContextReady = () => {
-        const views = createObjectFromLocalStorage('cq-views');
+        const views = createObjectFromLocalStorage(`${this.chartId}-cq-views`);
         if (views) { this.views = views; }
     }
 
     updateLocalStorage = () => {
+        if (this.mainStore.state.chartId) return;
         CIQ.localStorageSetItem(`${this.mainStore.state.chartId}-cq-views`, JSON.stringify(this.views));
     }
 

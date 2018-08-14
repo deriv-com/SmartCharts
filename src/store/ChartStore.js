@@ -30,7 +30,6 @@ class ChartStore {
     holderStyle;
     state;
     onMessage = null;
-    @observable chartId = 'chart';
     @observable containerWidth = null;
     @observable context = null;
     @observable currentActiveSymbol;

@@ -39,6 +39,7 @@ class ChartState {
     }
 
     saveLayout() {
+        if (!this.chartId) return;
         const layoutData = this.stxx.exportLayout(true);
         const json = JSON.stringify(layoutData);
         CIQ.localStorageSetItem(`${this.chartId}-layout-${this.id}`, json);
@@ -106,6 +107,7 @@ class ChartState {
     }
 
     saveDrawings() {
+        if (!this.chartId) return;
         const obj = this.stxx.exportDrawings();
         const symbol = this.stxx.chart.symbol;
         if (obj.length === 0) {
@@ -131,6 +133,7 @@ class ChartState {
     }
 
     savePreferences() {
+        if (!this.chartId) return;
         CIQ.localStorageSetItem(
             `${this.chartId}-preferences-${this.id}`,
             JSON.stringify(this.stxx.exportPreferences()),

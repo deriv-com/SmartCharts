@@ -129,5 +129,4 @@ export default connect(({ chart, drawTools, studies, chartSetting, chartType, st
     updateProps: state.updateProps,
     chartContainerHeight: chart.chartContainerHeight,
     containerWidth: chart.containerWidth,
-    chartId: chart.chartId,
 }))(Chart);
