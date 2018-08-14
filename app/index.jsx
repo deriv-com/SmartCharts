@@ -96,7 +96,7 @@ class App extends Component {
 
     symbolChange = (symbol) => {
         this.notifier.removeByCategory('activesymbol');
-        console.log('Symbol has changed to:', symbol);
+        this.setState({ symbol });
     };
 
     saveSettings = (settings) => {
@@ -109,26 +109,27 @@ class App extends Component {
         }
     };
 
-    render() {
-        const { settings, isConnectionOpened } = this.state;
+    renderTopWidgets = () => (
+        <React.Fragment>
+            <ChartTitle onChange={this.symbolChange} />
+            <AssetInformation />
+            <ComparisonList />
+            <Notification
+                notifier={this.notifier}
+            />
+        </React.Fragment>
+    );
 
-        const renderTopWidgets = () => (
-            <React.Fragment>
-                <ChartTitle />
-                <AssetInformation />
-                <ComparisonList />
-                <Notification
-                    notifier={this.notifier}
-                />
-            </React.Fragment>
-        );
+    render() {
+        const { settings, isConnectionOpened, symbol } = this.state;
 
         return (
             <SmartChart
+                symbol={symbol}
                 onMessage={e => this.notifier.notify(e)}
                 isMobile={CIQ.isMobile}
                 enableRouting
-                topWidgets={renderTopWidgets}
+                topWidgets={this.renderTopWidgets}
                 chartControlsWidgets={renderControls}
                 requestAPI={requestAPI}
                 requestSubscribe={requestSubscribe}

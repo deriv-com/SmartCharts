@@ -57,7 +57,7 @@ const ChartTitle = ({
                 <MarketSelector
                     onSelectItem={(x) => {
                         if (x.symbol !== currentSymbol.symbol) {
-                            onChange(x);
+                            onChange(x.symbol);
                         }
                         setMenuOpen(false);
                     }}
