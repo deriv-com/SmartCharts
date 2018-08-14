@@ -76,6 +76,8 @@ const requestForget = streamManager.forget.bind(streamManager);
 
 
 class App extends Component {
+    startingLanguage = 'en';
+
     constructor(props) {
         super(props);
         this.notifier = new ChartNotifier();
@@ -106,8 +108,6 @@ class App extends Component {
             window.location.reload();
         }
     };
-
-    startingLanguage = 'en';
 
     render() {
         const { settings, isConnectionOpened } = this.state;
