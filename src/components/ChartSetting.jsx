@@ -7,11 +7,11 @@ import { connect } from '../store/Connect';
 import { Switch } from './Form.jsx';
 import {
     SettingIcon,
-    PositionLeftIcon,
-    PositionBottomIcon,
     BackIcon,
     CloseIcon,
 } from './Icons.jsx';
+import ThemeToggle from './ThemeToggle.jsx';
+import AssetInformationToggle from './AssetInformationToggle.jsx';
 import '../../sass/components/_ciq-chart-setting.scss';
 
 
@@ -34,31 +34,6 @@ const ChartSetting = ({
     setAssetInformation,
     isMobile,
 }) => {
-    const renderPosition = () => (
-        <div className="ciq-list-item ciq-list-item-position">
-            <span className="ciq-icon-text">{t.translate('Position')}</span>
-            <div className="ciq-action">
-                <PositionBottomIcon
-                    onClick={() => setPosition('bottom')}
-                    className={`${position === 'bottom' ? 'active' : ''}`}
-                />
-                <PositionLeftIcon
-                    onClick={() => setPosition('left')}
-                    className={`${position === 'left' ? 'active' : ''}`}
-                />
-            </div>
-        </div>);
-    const renderAssetInformation = () => (
-        <div className="ciq-list-item">
-            <span className="ciq-icon-text">{t.translate('Asset Information')}</span>
-            <div className="ciq-action">
-                <Switch
-                    value={assetInformation}
-                    onChange={setAssetInformation}
-                />
-            </div>
-        </div>
-    );
     const renderMain = () => (
         <div>
             <div className="title">
@@ -67,7 +42,7 @@ const ChartSetting = ({
             </div>
             <div className="body">
                 <div className="ciq-list ciq-list-setting">
-                    {!isMobile ? renderPosition() : ''}
+                    {!isMobile ? <ThemeToggle setPosition={setPosition} position={position} /> : ''}
                     <div className="ciq-list-item">
                         <span className="ciq-icon-text">{t.translate('Dark Mode')}</span>
                         <div className="ciq-action">
@@ -86,7 +61,7 @@ const ChartSetting = ({
                             />
                         </div>
                     </div>
-                    {!isMobile ? renderAssetInformation() : ''}
+                    {!isMobile ? <AssetInformationToggle value={assetInformation} onChange={setAssetInformation} /> : ''}
                     <div
                         className="ciq-list-item ciq-list-item-lng"
                         onClick={() => setView('language')}
