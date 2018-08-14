@@ -29,7 +29,7 @@ export default class ViewStore {
     }
 
     updateLocalStorage = () => {
-        if (this.mainStore.state.chartId) return;
+        if (!this.mainStore.state.chartId) return;
         CIQ.localStorageSetItem(`${this.mainStore.state.chartId}-cq-views`, JSON.stringify(this.views));
     }
 
