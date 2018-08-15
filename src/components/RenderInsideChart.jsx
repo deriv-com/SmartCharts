@@ -7,8 +7,9 @@ const inChartPrefix = 'cq-inchart-';
 
 // Render given Components under stx-holder to position it relative to the active symbol chart.
 class RenderInsideChart extends PureComponent {
-    componentDidMount() {
-        const { at = 'holder', contextPromise } = this.props;
+    constructor(props) {
+        super(props);
+        const { at = 'holder', contextPromise } = props;
 
         contextPromise.then((context) => {
             const nodeName = `${inChartPrefix}${at}`;
