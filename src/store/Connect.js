@@ -1,34 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
-import { isBoxedObservable, isObservable, isObservableArray, isObservableMap, toJS, action } from 'mobx';
-
-const unboxProps = (props) => {
-    const unboxedProps = {};
-    Object.keys(props).forEach((key) => {
-        const value = props[key];
-        let result;
-        if (isObservableArray(value)) {
-            result = value.slice(0);
-        } else if (isObservableMap(value)) {
-            result = value.toJS();
-        } else if (isBoxedObservable(value)) {
-            result = value.get();
-        } else if (isObservable(value)) {
-            result = toJS(value);
-        } else {
-            result = value;
-        }
-        unboxedProps[key] = result;
-    });
-    return unboxedProps;
-};
+import { action } from 'mobx';
 
 const connect_v2 = (Store, mapStoresToProps, handleProps) => {
     // wrap the mapping function usually passed to mobx-react's inject method
     // so that it additionally unboxes any observables
     const unboxedMapStoresToProps = (stores, props, context) => {
-        const injectedProps = unboxProps(mapStoresToProps(stores, props, context));
+        const injectedProps = mapStoresToProps(stores, props, context);
         return {
             ...injectedProps,
             ...props,
@@ -46,9 +25,6 @@ const connect_v2 = (Store, mapStoresToProps, handleProps) => {
             this.store = new Store(this.context.mobxStores);
             this.injectedComponent = inject(unboxedMapStoresToProps)(UnboxedComponent.WrappedComponent);
             this.injectedComponent.displayName = `inject-${UnboxedComponent.displayName}`;
-        }
-
-        componentDidMount() {
             if (handleProps) { this.handlePropsAction(this.store, this.props); }
         }
 
