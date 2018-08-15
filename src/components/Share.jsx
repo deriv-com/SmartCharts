@@ -1,5 +1,4 @@
 import React from 'react';
-import Menu from './Menu.jsx';
 import { connect } from '../store/Connect';
 import {
     DownloadIcon,
@@ -50,7 +49,7 @@ const Share = ({
 );
 
 export default connect(({ share: s }) => ({
-    ShareMenu: s.menu.connect(Menu),
+    ShareMenu: s.ShareMenu,
     menuOpen: s.menu.dialog.open,
     downloadPNG: s.downloadPNG,
     downloadCSV: s.downloadCSV,

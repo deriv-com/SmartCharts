@@ -1,7 +1,5 @@
 import React from 'react';
 import { connect } from '../store/Connect';
-import Menu from './Menu.jsx';
-import List from './List.jsx';
 import { DrawIcon, ClearIcon, MeasureIcon, CloseIcon } from './Icons.jsx';
 import '../../sass/components/_draw-tools.scss';
 
@@ -53,9 +51,9 @@ const DrawTools = ({
 export default connect(({ drawTools: dt }) => ({
     clearAll: dt.clearAll,
     selectTool: dt.selectTool,
-    DrawToolsMenu: dt.menu.connect(Menu),
+    DrawToolsMenu: dt.DrawToolsMenu,
     menuOpen: dt.menu.open,
-    DrawList: dt.list.connect(List),
+    DrawList: dt.DrawList,
     closeMenu: dt.menu.onTitleClick,
     isMobile: dt.mainStore.chart.isMobile,
 }))(DrawTools);
