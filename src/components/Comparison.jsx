@@ -1,7 +1,5 @@
 import React from 'react';
-import Menu from './Menu.jsx';
 import { connect } from '../store/Connect';
-import CategoricalDisplay from './CategoricalDisplay.jsx';
 import NotificationBadge from './NotificationBadge.jsx';
 import { ComparisonIcon } from './Icons.jsx';
 
@@ -34,8 +32,8 @@ const Comparison = ({
 );
 
 export default connect(({ comparison: c }) => ({
-    ComparisonSelector: c.categoricalDisplay.connect(CategoricalDisplay),
-    ComparisonMenu: c.menu.connect(Menu),
+    ComparisonSelector: c.ComparisonSelector,
+    ComparisonMenu: c.ComparisonMenu,
     menuOpen: c.menu.open,
     onCloseMenu: c.menu.onTitleClick,
     isMobile: c.categoricalDisplay.isMobile,

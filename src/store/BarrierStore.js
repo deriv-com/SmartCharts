@@ -2,6 +2,7 @@ import { observable, action, computed } from 'mobx';
 import PriceLineStore from './PriceLineStore';
 import ShadeStore from './ShadeStore';
 import PendingPromise from '../utils/PendingPromise';
+import PriceLine from '../components/PriceLine.jsx';
 
 export default class BarrierStore {
     static get SHADE_NONE_SINGLE() { return 'SHADE_NONE_SINGLE'; }
@@ -50,6 +51,9 @@ export default class BarrierStore {
         this.shadeState = BarrierStore.SHADE_NONE_SINGLE;
 
         if (this.context && this.stx.currentQuote()) { this.init(); }
+
+        this.HighPriceLine = this._high_barrier.connect(PriceLine);
+        this.LowPriceLine = this._low_barrier.connect(PriceLine);
     }
 
     @action.bound init() {

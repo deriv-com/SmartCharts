@@ -13,7 +13,6 @@ import '../Plugin';
 import './ui';
 
 import ChartControls from './ChartControls.jsx';
-import SettingsDialog from './SettingsDialog.jsx';
 import Crosshair from './Crosshair.jsx';
 import { connect } from '../store/Connect';
 
@@ -112,9 +111,9 @@ class Chart extends Component {
 export default connect(({ chart, drawTools, studies, chartSetting, chartType, state }) => ({
     init: chart.init,
     destroy: chart.destroy,
-    StudySettingsDialog : studies.settingsDialog.connect(SettingsDialog),
-    DrawToolsSettingsDialog : drawTools.settingsDialog.connect(SettingsDialog),
-    AggregateChartSettingsDialog : chartType.settingsDialog.connect(SettingsDialog),
+    StudySettingsDialog : studies.StudySettingsDialog,
+    DrawToolsSettingsDialog : drawTools.DrawToolsSettingsDialog,
+    AggregateChartSettingsDialog : chartType.AggregateChartSettingsDialog,
     isChartAvailable: chart.isChartAvailable,
     setting: chartSetting,
     updateProps: state.updateProps,

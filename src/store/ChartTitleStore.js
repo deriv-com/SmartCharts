@@ -2,6 +2,9 @@ import { observable, action, computed, when } from 'mobx';
 import MenuStore from './MenuStore';
 import AnimatedPriceStore from './AnimatedPriceStore';
 import CategoricalDisplayStore from './CategoricalDisplayStore';
+import Menu from '../components/Menu.jsx';
+import CategoricalDisplay from '../components/CategoricalDisplay.jsx';
+import AnimatedPrice from '../components/AnimatedPrice.jsx';
 
 export default class ChartTitleStore {
     constructor(mainStore) {
@@ -16,6 +19,10 @@ export default class ChartTitleStore {
             favoritesId: 'chartTitle&Comparison',
             mainStore,
         });
+
+        this.ChartTitleMenu = this.menu.connect(Menu);
+        this.MarketSelector = this.categoricalDisplay.connect(CategoricalDisplay);
+        this.SpotPrice = this.animatedPrice.connect(AnimatedPrice);
     }
 
     @observable todayChange = null;

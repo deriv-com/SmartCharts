@@ -1,11 +1,13 @@
 import { observable, action, when } from 'mobx';
 import { createObjectFromLocalStorage } from '../utils';
 import MenuStore from './MenuStore';
+import Menu from '../components/Menu.jsx';
 
 export default class ViewStore {
     constructor(mainStore) {
         this.mainStore = mainStore;
         this.menu = new MenuStore(mainStore, { route: 'templates' });
+        this.ViewsMenu = this.menu.connect(Menu);
         when(() => this.context, this.onContextReady);
     }
     @observable scrollPanel;

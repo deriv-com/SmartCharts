@@ -10,6 +10,7 @@ export default class MenuStore {
         reaction(() => this.open, () => this.blurInput());
         when(() => this.mainStore.chart.context, this.onContextReady);
         if (options && options.route) { this.route = options.route; }
+        this.DropDownDialog = this.dialog.connect(Dialog);
     }
 
     get context() { return this.mainStore.chart.context; }
@@ -57,7 +58,7 @@ export default class MenuStore {
         setOpen: this.setOpen,
         open: this.open,
         onTitleClick: this.onTitleClick,
-        DropdownDialog: this.dialog.connect(Dialog),
+        DropdownDialog: this.DropDownDialog,
         modalNode: this.modalNode,
         isMobile: this.mainStore.chart.isMobile,
     }))
