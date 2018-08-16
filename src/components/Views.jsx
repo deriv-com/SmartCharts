@@ -1,6 +1,5 @@
 import React from 'react';
 import PerfectScrollbar from 'react-perfect-scrollbar';
-import Menu from './Menu.jsx';
 import { connect } from '../store/Connect';
 import {
     BackIcon,
@@ -126,7 +125,7 @@ const Views = ({
 );
 
 export default connect(({ view: s }) => ({
-    ViewsMenu: s.menu.connect(Menu),
+    ViewsMenu: s.ViewsMenu,
     views: s.views,
     routes: s.routes,
     onOverwrite: s.onOverwrite,

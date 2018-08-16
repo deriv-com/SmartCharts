@@ -2,6 +2,9 @@ import { action, reaction, when } from 'mobx';
 import MenuStore from './MenuStore';
 import ListStore from './ListStore';
 import SettingsDialogStore from './SettingsDialogStore';
+import Menu from '../components/Menu.jsx';
+import List from '../components/List.jsx';
+import SettingsDialog from '../components/SettingsDialog.jsx';
 
 // camelCase to spaces separated capitalized string.
 const formatCamelCase = (s) => {
@@ -13,12 +16,13 @@ export default class DrawToolsStore {
     constructor(mainStore) {
         this.mainStore = mainStore;
         this.menu = new MenuStore(mainStore, { route: 'draw-tool' });
+        this.DrawToolsMenu = this.menu.connect(Menu);
         this.settingsDialog = new SettingsDialogStore({
             mainStore,
             onDeleted: this.onDeleted,
             onChanged: this.onChanged,
         });
-
+        this.DrawToolsSettingsDialog = this.settingsDialog.connect(SettingsDialog);
         this.list = new ListStore({
             getContext: () => this.context,
             onItemSelected: item => this.selectTool(item.id),
@@ -58,6 +62,8 @@ export default class DrawToolsStore {
                 { id: 'vertical',    text: t.translate('Vertical') },
             ],
         });
+
+        this.DrawList = this.list.connect(List);
 
         when(() => this.context, this.onContextReady);
         reaction(() => this.menu.open, this.noTool);

@@ -17,6 +17,9 @@ import {
     SplineIcon,
 } from '../components/Icons.jsx';
 import SettingsDialogStore from './SettingsDialogStore';
+import List from '../components/List.jsx';
+import Menu from '../components/Menu.jsx';
+import SettingsDialog from '../components/SettingsDialog.jsx';
 
 function getChartTypes() {
     return [
@@ -112,6 +115,10 @@ export default class ChartTypeStore {
             mainStore,
             onChanged: items => this.updateAggregate(items),
         });
+
+        this.ChartTypeMenu = this.menu.connect(Menu);
+        this.ChartTypeList = this.list.connect(List);
+        this.AggregateChartSettingsDialog = this.settingsDialog.connect(SettingsDialog);
     }
 
     get context() { return this.mainStore.chart.context; }
@@ -208,6 +215,10 @@ export default class ChartTypeStore {
 
     @computed get types() {
         const isTickSelected = this.mainStore.timeperiod.timeUnit === 'tick';
+
+        if (this.chartTypes === undefined) {
+            this.chartTypes = getChartTypes();
+        }
 
         return this.chartTypes.map(t => ({
             ...t,

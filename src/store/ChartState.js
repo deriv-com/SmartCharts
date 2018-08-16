@@ -10,6 +10,7 @@ class ChartState {
     @observable endEpoch;
     @observable symbol;
     @observable isConnectionOpened;
+    @observable settings;
     get stxx() { return this.chartStore.stxx; }
     get context() { return this.chartStore.context; }
 

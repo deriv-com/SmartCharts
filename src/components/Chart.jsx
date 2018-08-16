@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import React, { Component, Fragment } from 'react';
 import RenderInsideChart from './RenderInsideChart.jsx';
 import ComparisonList from './ComparisonList.jsx';
@@ -14,7 +13,6 @@ import '../Plugin';
 import './ui';
 
 import ChartControls from './ChartControls.jsx';
-import SettingsDialog from './SettingsDialog.jsx';
 import Crosshair from './Crosshair.jsx';
 import { connect } from '../store/Connect';
 
@@ -27,14 +25,10 @@ const defaultTopWidgets = () => (
 );
 
 class Chart extends Component {
-    static childContextTypes = { promise: PropTypes.object };
-
-    getChildContext() {
-        return { promise: this.props.contextPromise };
-    }
-
     componentDidMount() {
-        this.props.init(this.root, this.modalNode, this.props);
+        const { updateProps, init, ...props } = this.props;
+        updateProps(props);
+        init(this.root, this.modalNode, props);
     }
 
     componentWillReceiveProps(nextProps) {
@@ -115,12 +109,11 @@ class Chart extends Component {
 }
 
 export default connect(({ chart, drawTools, studies, chartSetting, chartType, state }) => ({
-    contextPromise: chart.contextPromise,
     init: chart.init,
     destroy: chart.destroy,
-    StudySettingsDialog : studies.settingsDialog.connect(SettingsDialog),
-    DrawToolsSettingsDialog : drawTools.settingsDialog.connect(SettingsDialog),
-    AggregateChartSettingsDialog : chartType.settingsDialog.connect(SettingsDialog),
+    StudySettingsDialog : studies.StudySettingsDialog,
+    DrawToolsSettingsDialog : drawTools.DrawToolsSettingsDialog,
+    AggregateChartSettingsDialog : chartType.AggregateChartSettingsDialog,
     isChartAvailable: chart.isChartAvailable,
     setting: chartSetting,
     updateProps: state.updateProps,

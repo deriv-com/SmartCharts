@@ -1,5 +1,5 @@
 import EventEmitter from 'event-emitter-es6';
-import { reaction } from 'mobx';
+import { reaction, when } from 'mobx';
 import { TickHistoryFormatter } from './TickHistoryFormatter';
 import PendingPromise from '../utils/PendingPromise';
 import { calculateGranularity, getUTCEpoch } from '../utils';
@@ -8,8 +8,9 @@ class Feed {
     static get EVENT_MASTER_DATA_UPDATE() { return 'EVENT_MASTER_DATA_UPDATE'; }
     static get EVENT_COMPARISON_DATA_UPDATE() { return 'EVENT_COMPARISON_DATA_UPDATE'; }
     static get EVENT_ON_PAGINATION() { return 'EVENT_ON_PAGINATION'; }
-    startEpoch;
-    endEpoch;
+    get startEpoch() { return this._mainStore.state.startEpoch; }
+    get endEpoch() { return this._mainStore.state.endEpoch; }
+    get context() { return this._mainStore.chart.context; }
 
     constructor(binaryApi, stx, mainStore) {
         this._stx = stx;
@@ -18,10 +19,19 @@ class Feed {
         this._lastStreamEpoch = {};
         this._mainStore = mainStore;
         reaction(() => mainStore.state.isConnectionOpened, this.onConnectionChanged.bind(this));
+        when(() => this.context, this.onContextReady);
 
         this._emitter = new EventEmitter({ emitDelay: 0 });
         this._isConnectionOpened = true;
     }
+
+    onContextReady = () => {
+        reaction(() => [this.startEpoch, this.endEpoch], this.onRangeChanged);
+    };
+
+    onRangeChanged = () => {
+        console.log('RANGE CHANGE', this.startEpoch, this.endEpoch);
+    };
 
     // although not used, subscribe is overridden so that unsubscribe will be called by ChartIQ
     subscribe() {}
@@ -106,13 +116,16 @@ class Feed {
         let response = await tickHistoryPromise;
 
         if (response.error) {
+            const errorMessage = response.error.message;
             const errorCode = response.error.code;
             const tParams = { symbol: symbolObject.name };
             if (/^(MarketIsClosed|NoRealtimeQuotes)$/.test(errorCode)) {
                 // Although market is closed, we display the past tick history data
                 response = await this._binaryApi.getTickHistory(tickHistoryRequest);
                 this._mainStore.chart.notify({
-                    text: t.translate('[symbol] market is presently closed.', tParams),
+                    text: errorCode === 'NoRealtimeQuotes'
+                        ? errorMessage
+                        : t.translate('[symbol] market is presently closed.', tParams),
                     category: 'activesymbol',
                 });
             } else if (errorCode === 'StreamingNotAllowed') {
@@ -130,6 +143,13 @@ class Feed {
                     this._mainStore.chart.setChartAvailability(false);
                 }
                 callback(dataCallback);
+                return;
+            } else {
+                this._mainStore.notification.notify({
+                    text: errorMessage,
+                    category: 'activesymbol',
+                });
+                callback({ quotes: [] });
                 return;
             }
         } else if (processTickHistory) {

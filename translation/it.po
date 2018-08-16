@@ -10,10 +10,10 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Italian\n"
 "Language: it_IT\n"
-"PO-Revision-Date: 2018-08-08 08:01\n"
+"PO-Revision-Date: 2018-08-09 11:01\n"
 
 msgid " already exists."
-msgstr ""
+msgstr "Già esistente."
 
 msgid "[symbol] market is presently closed."
 msgstr "Il mercato di [symbol] è momentaneamente chiuso."
@@ -25,7 +25,7 @@ msgid "Active"
 msgstr "Attivo"
 
 msgid "Add New"
-msgstr ""
+msgstr "Aggiungi nuovo"
 
 msgid "Annotation"
 msgstr "Annotazione"
@@ -37,7 +37,7 @@ msgid "Average Line"
 msgstr "Linea della media"
 
 msgid "Baseline"
-msgstr "Linea di base"
+msgstr "Linea di riferimento"
 
 msgid "Box Size"
 msgstr "Unità di escursione"
@@ -46,7 +46,7 @@ msgid "Callout"
 msgstr "Fumetto"
 
 msgid "CANCEL"
-msgstr ""
+msgstr "ANNULLA"
 
 msgid "Candle"
 msgstr "Candela"
@@ -103,10 +103,10 @@ msgid "Dot"
 msgstr "Punto"
 
 msgid "Download"
-msgstr ""
+msgstr "Scarica"
 
 msgid "Download Chart"
-msgstr ""
+msgstr "Scarica grafico"
 
 msgid "Draw tools"
 msgstr "Strumenti disegno"
@@ -184,7 +184,7 @@ msgid "OPEN"
 msgstr "APERTURA"
 
 msgid "OVERWRITE"
-msgstr ""
+msgstr "SOVRASCRIVI"
 
 msgid "Pitchfork"
 msgstr "Pitchfork"
@@ -229,7 +229,7 @@ msgid "Reversal"
 msgstr "Reversal"
 
 msgid "Reversal Percentage"
-msgstr "Formula inversa della percentuale"
+msgstr "Percentuale di reversal"
 
 msgid "right-click to delete"
 msgstr "destro del mouse per cancellare"
@@ -277,7 +277,7 @@ msgid "Streaming for [symbol] is not available due to license restrictions"
 msgstr "[symbol] in streaming non è disponibile a causa delle limitazioni della licenza"
 
 msgid "tap to manage"
-msgstr ""
+msgstr "Tocca per gestire"
 
 msgid "Template name"
 msgstr "Nome del modello"
@@ -310,7 +310,7 @@ msgid "Vertical"
 msgstr "Verticale"
 
 msgid "Would you like to overwrite it?"
-msgstr ""
+msgstr "Desideri sovrascrivere?"
 
 msgid "Zoom in"
 msgstr "Zoom avanti"

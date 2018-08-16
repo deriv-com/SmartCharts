@@ -1,7 +1,7 @@
 import React from 'react';
-import { MobxProvider } from '../store/Connect';
-import Chart from './Chart.jsx';
+import { Provider } from 'mobx-react';
 import MainStore from '../store';
+import Chart from './Chart.jsx';
 
 class SmartChart extends React.Component {
     get chart() { return this.mainStore.chart; }
@@ -14,11 +14,11 @@ class SmartChart extends React.Component {
         const { children, ...props } = this.props;
 
         return (
-            <MobxProvider store={this.mainStore}>
+            <Provider {...this.mainStore}>
                 <Chart {...props}>
                     {children}
                 </Chart>
-            </MobxProvider>
+            </Provider>
         );
     }
 }

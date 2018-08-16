@@ -113,6 +113,11 @@ const config = {
             root: 'mobxReact',
         },
         'babel-polyfill': 'babel-polyfill',
+        'react-transition-group':  {
+            commonjs: 'react-transition-group',
+            commonjs2: 'react-transition-group',
+            root: 'ReactTransitionGroup',
+        },
     },
 };
 
@@ -162,6 +167,12 @@ if (isApp) {
                 './node_modules/mobx-react/index.min.js' :
                 './node_modules/mobx-react/index.js',
             to: 'mobx-react.js',
+        },
+        {
+            from: production ?
+                './node_modules/react-transition-group/dist/react-transition-group.min.js' :
+                './node_modules/react-transition-group/dist/react-transition-group.js',
+            to: 'react-transition-group.js',
         },
     ]));
 }
