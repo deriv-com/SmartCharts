@@ -994,10 +994,10 @@ $spot-color: #0298d3;
 
     &:before {
         content: '\25CF';
-        font-size: 14px;
+        font-size: 18px;
         color: $spot-color;
         position: relative;
-        left: -1px;
+        left: -2.3px;
         line-height: 5px;
     }
 }
