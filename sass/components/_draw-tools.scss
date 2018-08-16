@@ -29,7 +29,8 @@
                 justify-content: center;
                 cursor: pointer;
                 margin: 8px 11px 8px 0;
-                @include border-radius(3px);
+                border-radius: 3px;
+
                 @include svg-icon-stroke('DialogHeadIcon');
                 @include themify {
                     border: solid themed('DropdownBorder') 1px;

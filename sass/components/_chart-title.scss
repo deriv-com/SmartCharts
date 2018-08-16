@@ -36,8 +36,8 @@
         position: relative;
         display: flex;
         align-items: center;
+        border-radius: 3px;
 
-        @include border-radius();
         @include themify($themes) {
             color: themed('ChartTitleText');
             background: themed('ChartTitleBg');

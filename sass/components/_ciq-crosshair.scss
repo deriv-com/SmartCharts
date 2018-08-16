@@ -11,6 +11,7 @@
     pointer-events: none;
     opacity: 0;
     z-index: 30;
+    border-radius: 4px;
     @include themify($themes) {
         color: themed('CrosshairText');
         background: themed('CrosshairBg');
@@ -20,8 +21,6 @@
         pointer-events: initial;
         opacity: 1;
     }
-    @include border-radius(4px);
-
     &:after,
     &:before {
         content: '';

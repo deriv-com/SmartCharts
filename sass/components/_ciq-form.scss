@@ -14,12 +14,12 @@
     .handle {
         width: 10px;
         height: 10px;
+        box-sizing: border-box;
+        border-radius: 7px;
         @include themify($themes) {
             background-color: themed('SliderHandleBg');
             border: 2px solid themed('SliderHandleBorder');
         }
-        box-sizing: border-box;
-        @include border-radius(7px);
     }
     .bar {
         position: relative;
@@ -58,7 +58,7 @@
         line-height: 32px;
         padding-left: 8px;
         cursor: pointer;
-        @include border-radius(4px);
+        border-radius: 4px;
         box-sizing: border-box;
         @include themify($themes) {
             color: themed('DropdownText') !important;
@@ -87,12 +87,12 @@
         max-height: 200px;
         overflow: scroll;
         box-shadow: 0 2px 8px 0 rgba(42, 48, 82, 0.14);
+        box-sizing: border-box;
+        border-radius: 4px;
         @include themify($themes) {
             background: themed('DropdownBg');
             border: 1px solid themed('DropdownBorder');
         }
-        box-sizing: border-box;
-        @include border-radius(4px);
 
         .row {
             cursor: pointer;
@@ -163,7 +163,7 @@
         height: 100%;
         width: 100%;
         cursor: pointer;
-        @include border-radius(2px);
+        border-radius: 2px;
         box-sizing: border-box;
         @include themify($themes) {
             background-color: themed('ColorPickerBg');
@@ -180,7 +180,7 @@
         padding: 8px;
         box-shadow: 0 2px 8px 0 rgba(42, 48, 82, 0.14);
         transition: opacity 0.1s;
-        @include border-radius(4px);
+        border-radius: 4px;
         @include themify($themes) {
             background: themed('ColorPickerBg');
         }
@@ -212,7 +212,7 @@
     height: 16px;
     position: relative;
     cursor: pointer;
-    @include border-radius(8px);
+    border-radius: 8px;
 
     .handle {
         position: absolute;
@@ -220,7 +220,7 @@
         width: 14px;
         height: 14px;
         transition: left 0.2s;
-        @include border-radius(7px);
+        border-radius: 7px;
         @include themify($themes) {
             background: themed('SwitchHandle');
         }

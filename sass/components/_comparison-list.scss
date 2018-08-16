@@ -33,7 +33,7 @@
         }
         &:hover {
             box-shadow: 0 2px 8px 0 rgba(42, 48, 82, 0.14);
-            @include border-radius($soft-corners);
+            border-radius: 3px;
             @include themify($themes) {
                 background: themed('ComparisonItemHoverBg');
             }

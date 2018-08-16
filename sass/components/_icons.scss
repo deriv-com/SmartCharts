@@ -6,7 +6,7 @@
     width: $normal-icon-size;
     line-height: 32px;
     transition: all 0.2s 0.15s;
-    @include border-radius(2px);
+    border-radius: 2px;
     box-sizing: border-box;
     text-align: center;
 
@@ -71,7 +71,7 @@
         padding: 8px;
         z-index: 98;
         transition: opacity 0.3s;
-        @include border-radius(4px);
+        border-radius: 4px;
         @include themify($themes) {
             color: themed('TooltipText');
             background: themed('TooltipBg');
