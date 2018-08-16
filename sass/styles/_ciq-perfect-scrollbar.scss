@@ -62,7 +62,7 @@
  */
 .ps__thumb-x {
     background-color: #aaa;
-    @include border-radius(6px);
+    border-radius: 6px;
     transition: background-color 0.2s linear, height 0.2s ease-in-out;
     height: 6px;
     /* there must be 'bottom' for ps__thumb-x */
@@ -73,7 +73,7 @@
 
 .ps__thumb-y {
     background-color: #aaa;
-    @include border-radius(6px);
+    border-radius: 6px;
     transition: background-color 0.2s linear, width 0.2s ease-in-out;
     width: 6px !important;
     /* there must be 'right' for ps__thumb-y */

@@ -218,10 +218,10 @@
         }
 
         &:first-child {
-            @include border-radius(3px 3px 0 0);
+            border-radius: 3px 3px 0 0;
         }
         &:last-child {
-            @include border-radius(0 0 3px 3px);
+            border-radius: 0 0 3px 3px;
             border-bottom: none;
         }
         .left, .right {

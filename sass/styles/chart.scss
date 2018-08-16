@@ -63,7 +63,7 @@ html, body {
     text-align: center;
     overflow: visible;
     background-repeat: no-repeat;
-    @include border-radius(3px);
+    border-radius: 3px;
     transition: color 0.25s, border 0.25s, box-shadow 0.25s;
     user-select: none;
 
@@ -173,7 +173,7 @@ html, body {
     width: 30px;
     padding: 0px;
     margin-bottom: 17px;
-    @include border-radius(3px);
+    border-radius: 3px;
     background: #fafafa;
     box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.2);
     transition: background 0.25s;
@@ -225,7 +225,7 @@ html, body {
     z-index: 30;
     display: none;
     margin: 5px;
-    @include border-radius(3px);
+    border-radius: 3px;
     @include themify($themes) {
         background: themed('ChartBg');
         border: 1px solid themed('ChartBorder');
@@ -272,7 +272,7 @@ html, body {
     z-index: 40;
     font-size: 12px;
 
-    @include border-radius(5px);
+    border-radius: 5px;
     @include themify($themes) {
         color: themed('TooltipText');
         background: themed('TooltipBg');
@@ -286,7 +286,7 @@ html, body {
         height: 40px;
         left: 0px;
         top: 0px;
-        @include border-radius(5px 5px 0 0);
+        border-radius: 5px 5px 0 0;
         @include themify($themes) {
             background: themed('TooltipBg');
         }
@@ -311,7 +311,7 @@ html, body {
         line-height: 20px;
         padding: 0;
         position: relative;
-        @include border-radius(3px);
+        border-radius: 3px;
         @include themify($themes) {
             font-weight: 500;
             color: themed('DefaultMain') !important;
@@ -332,7 +332,7 @@ html, body {
     font-size: 11px;
     white-space: nowrap;
     z-index: 40;
-    @include border-radius(3px);
+    border-radius: 3px;
     @include themify($themes) {
         color: themed('TooltipText');
         background: themed('TooltipBg');
@@ -376,7 +376,7 @@ html, body {
     margin: 0 0 0 5px;
     width: 23px;
     height: 23px;
-    @include border-radius(3px);
+    border-radius: 3px;
     overflow: hidden;
     text-indent: 100px;
     border: solid #ddd 1px;
@@ -449,7 +449,7 @@ html, body {
 
 .stx-float-price,
 .stx-float-date {
-    @include border-radius(3px);
+    border-radius: 3px;
     @include themify($themes) {
         background-color: themed('CrosshairLabel');
     }
