@@ -125,7 +125,9 @@ class App extends Component {
         const { settings, isConnectionOpened, symbol } = this.state;
 
         return (
-            <SupportDetection>
+            <SupportDetection
+                onMessage={e => this.notifier.notify(e)}
+            >
                 <SmartChart
                     symbol={symbol}
                     onMessage={e => this.notifier.notify(e)}

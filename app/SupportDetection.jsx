@@ -77,38 +77,35 @@ class SupportDetection extends React.Component {
         }
     }
 
+    componentDidMount() {
+        const { onMessage } = this.props;
+        if (this.state.unknown && onMessage) {
+            onMessage({
+                text: 'Please update your browser to the latest version.',
+                type: 'warning',
+                category: 'browser',
+            });
+        }
+    }
+
     componentDidCatch(error, info) {
         this.setState({ hasError: true });
         console.error(error, info);
     }
 
     render() {
-        const NotGuaranteed = (
-            <div className="cq-not-guaranteed">
-                <h1>Incompatible browser</h1>
-                <p>Binary.com does not recognise or support your current browser.</p>
-                <p>Please <a href="http://outdatedbrowser.com/">Update Browser</a> immediately.</p>
-            </div>
-        );
-
         if (this.state.hasError) {
             return (
                 <div className="cq-not-supported">
                     <div className="cq-logo" />
                     <div className="cq-icon-not-supported" />
                     <h1>YOUR BROWSER IS NOT SUPPORTED</h1>
-                    <p>Binary.com does not support your browser. Please update your browser.</p>
+                    <p>Please update your browser for the best trading experience.</p>
                     <a href="http://outdatedbrowser.com/">Update Browser</a>
                 </div>
             );
         }
-        return (
-            <div>
-                {this.state.unknown ? NotGuaranteed : null }
-
-                {this.props.children}
-            </div>
-        );
+        return this.props.children;
     }
 }
 
