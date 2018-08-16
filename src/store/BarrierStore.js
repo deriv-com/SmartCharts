@@ -3,6 +3,7 @@ import PriceLineStore from './PriceLineStore';
 import ShadeStore from './ShadeStore';
 import PendingPromise from '../utils/PendingPromise';
 import PriceLine from '../components/PriceLine.jsx';
+import { isValidProp } from '../utils';
 
 export default class BarrierStore {
     static get SHADE_NONE_SINGLE() { return 'SHADE_NONE_SINGLE'; }
@@ -75,7 +76,24 @@ export default class BarrierStore {
         this._drawShadedArea();
     }
 
-    destructor() {
+    @action.bound updateProps({
+        color, shadeColor, shade, high, low, relative, draggable, onChange, hidePriceLines, lineStyle,
+    }) {
+        this.initializePromise.then(action(() => {
+            if (color) { this.color = color; }
+            if (shadeColor) { this.shadeColor = shadeColor; }
+            if (shade) { this.shadeState = `SHADE_${shade}`.toUpperCase(); }
+            if (relative !== undefined) { this.relative = relative; }
+            if (draggable !== undefined) { this.draggable = draggable; }
+            if (isValidProp(high)) { this.high_barrier = high; }
+            if (isValidProp(low)) { this.low_barrier = low; }
+            if (onChange) { this.onBarrierChange = onChange; }
+            this.lineStyle = lineStyle;
+            this.hidePriceLines = !!hidePriceLines;
+        }));
+    }
+
+    @action.bound destructor() {
         this.stx.removeInjection(this._injectionId);
         this.stx.removeEventListener(this._listenerId);
         this._high_barrier.destructor();
