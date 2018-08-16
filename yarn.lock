@@ -3144,7 +3144,7 @@ encodeurl@~1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/encodeurl/-/encodeurl-1.0.2.tgz#ad3ff4c86ec2d029322f5a02c3a9a606c95b3f59"
 
-encoding@^0.1.11, encoding@^0.1.12:
+encoding@^0.1.11:
   version "0.1.12"
   resolved "https://registry.yarnpkg.com/encoding/-/encoding-0.1.12.tgz#538b66f3ee62cd1ab51ec323829d1f9480c74beb"
   dependencies:
@@ -4156,28 +4156,11 @@ getpass@^0.1.1:
   dependencies:
     assert-plus "^1.0.0"
 
-gettext-loader2@^0.3.0:
-  version "0.3.0"
-  resolved "https://registry.yarnpkg.com/gettext-loader2/-/gettext-loader2-0.3.0.tgz#bfbfeccd7477a2008418d968e431a587ad6e9367"
-  dependencies:
-    esprima-fb "^15001.1001.0-dev-harmony-fb"
-    estree-utils "^0.1.1"
-    gettext-parser "^1.2.2"
-    loader-utils "^0.2.11"
-    ramda "^0.17.1"
-
 gettext-parser@1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/gettext-parser/-/gettext-parser-1.1.0.tgz#2c5a6638d893934b9b55037d0ad82cb7004b2679"
   dependencies:
     encoding "^0.1.11"
-
-gettext-parser@^1.2.2:
-  version "1.4.0"
-  resolved "https://registry.yarnpkg.com/gettext-parser/-/gettext-parser-1.4.0.tgz#f8baf34a292f03d5e42f02df099d301f167a7ace"
-  dependencies:
-    encoding "^0.1.12"
-    safe-buffer "^5.1.1"
 
 gh-pages@^1.1.0:
   version "1.2.0"
@@ -5607,15 +5590,6 @@ loader-utils@1.1.0, loader-utils@^1.0.1, loader-utils@^1.0.2, loader-utils@^1.1.
     big.js "^3.1.3"
     emojis-list "^2.0.0"
     json5 "^0.5.0"
-
-loader-utils@^0.2.11:
-  version "0.2.17"
-  resolved "https://registry.yarnpkg.com/loader-utils/-/loader-utils-0.2.17.tgz#f86e6374d43205a6e6c60e9196f17c0299bfb348"
-  dependencies:
-    big.js "^3.1.3"
-    emojis-list "^2.0.0"
-    json5 "^0.5.0"
-    object-assign "^4.0.1"
 
 locate-path@^2.0.0:
   version "2.0.0"
