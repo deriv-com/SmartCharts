@@ -69,7 +69,7 @@
         "import/no-extraneous-dependencies": ["error", {"packageDir": "./"}],
         "no-underscore-dangle": 0,
         "prefer-destructuring": 0,
-        "react/no-access-state-in-setstate": 0,
+        "react/no-access-state-in-setstate": 2,
         "react/destructuring-assignment": 0,
         "react/forbid-prop-types": 0,
         "react/jsx-props-no-multi-spaces": 0,

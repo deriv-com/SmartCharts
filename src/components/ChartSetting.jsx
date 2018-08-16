@@ -2,18 +2,50 @@
 
 import React from 'react';
 import { CSSTransition } from 'react-transition-group';
-import Menu from './Menu.jsx';
 import { connect } from '../store/Connect';
 import { Switch } from './Form.jsx';
 import {
+    PositionLeftIcon,
+    PositionBottomIcon,
     SettingIcon,
     BackIcon,
     CloseIcon,
 } from './Icons.jsx';
-import ThemeToggle from './ThemeToggle.jsx';
-import AssetInformationToggle from './AssetInformationToggle.jsx';
 import '../../sass/components/_ciq-chart-setting.scss';
 
+const AssetInformationToggle = ({
+    value,
+    onChange,
+}) => (
+    <div className="ciq-list-item">
+        <span className="ciq-icon-text">{t.translate('Asset Information')}</span>
+        <div className="ciq-action">
+            <Switch
+                value={value}
+                onChange={onChange}
+            />
+        </div>
+    </div>
+);
+
+const ThemeToggle = ({
+    position,
+    setPosition,
+}) => (
+    <div className="ciq-list-item ciq-list-item-position">
+        <span className="ciq-icon-text">{t.translate('Position')}</span>
+        <div className="ciq-action">
+            <PositionBottomIcon
+                onClick={() => setPosition('bottom')}
+                className={`${position === 'bottom' ? 'active' : ''}`}
+            />
+            <PositionLeftIcon
+                onClick={() => setPosition('left')}
+                className={`${position === 'left' ? 'active' : ''}`}
+            />
+        </div>
+    </div>
+);
 
 const ChartSetting = ({
     ChartSettingMenu,
@@ -130,7 +162,7 @@ const ChartSetting = ({
 };
 
 export default connect(({ chartSetting: s, chart: c }) => ({
-    ChartSettingMenu: s.menu.connect(Menu),
+    ChartSettingMenu: s.ChartSettingMenu,
     menuOpen: s.menu.dialog.open,
     selectedLanguage: s.language,
     languages: s.languages,

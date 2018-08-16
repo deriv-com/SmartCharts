@@ -1,8 +1,5 @@
 import React from 'react';
 import { connect } from '../store/Connect';
-import Menu from './Menu.jsx';
-import CategoricalDisplay from './CategoricalDisplay.jsx';
-import AnimatedPrice from './AnimatedPrice.jsx';
 import { ItemIconMap, SymbolPlaceholderIcon, ArrowIcon } from './Icons.jsx';
 import '../../sass/components/_chart-title.scss';
 
@@ -57,7 +54,7 @@ const ChartTitle = ({
                 <MarketSelector
                     onSelectItem={(x) => {
                         if (x.symbol !== currentSymbol.symbol) {
-                            onChange(x);
+                            onChange(x.symbol);
                         }
                         setMenuOpen(false);
                     }}
@@ -75,9 +72,9 @@ export default connect(({ chartTitle: c }) => ({
     isVisible: c.isVisible,
     isShowChartPrice: c.isShowChartPrice,
     currentSymbol: c.currentSymbol,
-    ChartTitleMenu: c.menu.connect(Menu),
-    MarketSelector: c.categoricalDisplay.connect(CategoricalDisplay),
-    SpotPrice: c.animatedPrice.connect(AnimatedPrice),
+    ChartTitleMenu: c.ChartTitleMenu,
+    MarketSelector: c.MarketSelector,
+    SpotPrice: c.SpotPrice,
     onCloseMenu: c.menu.onTitleClick,
     setMenuOpen: c.menu.setOpen,
     onChange: c.setSymbol,
