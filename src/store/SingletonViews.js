@@ -4,10 +4,11 @@ import { createObjectFromLocalStorage } from '../utils';
 let singletonViews = null;
 
 class SingletonViews {
-    constructor() {
+    constructor(mainStore) {
         if (!singletonViews) {
             singletonViews = this;
         }
+        this.mainStore = mainStore;
         this.views = createObjectFromLocalStorage('cq-views') || [];
         return singletonViews;
     }
@@ -15,6 +16,7 @@ class SingletonViews {
     @observable views = [];
 
     updateLocalStorage = () => {
+        if (!this.mainStore.state.chartId) return;
         CIQ.localStorageSetItem('cq-views', JSON.stringify(this.views));
     }
 }

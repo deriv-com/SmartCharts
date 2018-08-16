@@ -26,7 +26,7 @@ export default class ViewStore {
     get loader() { return this.mainStore.loader; }
 
     onContextReady = () => {
-        this.singletonViews = new SingletonViews();
+        this.singletonViews = new SingletonViews(this.mainStore);
     }
 
     @action.bound onChange(e) {
