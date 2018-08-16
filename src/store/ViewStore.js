@@ -65,7 +65,7 @@ export default class ViewStore {
         const templateIndex = this.singletonViews.views.findIndex(x => x.name.toLowerCase() === this.templateName.toLowerCase());
         this.singletonViews.views[templateIndex].layout = layout;
         this.singletonViews.views[templateIndex].name = this.templateName;
-        this._singlesingletonViewstonViews.updateLocalStorage();
+        this.singletonViews.updateLocalStorage();
         this.updateRoute('main');
         this.templateName = '';
     }

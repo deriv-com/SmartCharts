@@ -70,6 +70,7 @@
     "estree-utils": "^0.1.1",
     "file-loader": "^1.1.6",
     "fs": "^0.0.1-security",
+    "gettext-loader2": "^0.3.0",
     "gh-pages": "^1.1.0",
     "image-webpack-loader": "^4.1.0",
     "jquery": "^3.2.1",
