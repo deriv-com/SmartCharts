@@ -2,12 +2,14 @@ import React from 'react';
 import { observable, action, reaction } from 'mobx';
 import MenuStore from './MenuStore';
 import { FlagIcons } from '../components/Icons.jsx';
+import Menu from '../components/Menu.jsx';
 
 export default class ChartSettingStore {
     constructor(mainStore) {
         this.defaultLanguage = this.languages[0];
         this.mainStore = mainStore;
         this.menu = new MenuStore(mainStore, { route: 'setting' });
+        this.ChartSettingMenu = this.menu.connect(Menu);
         reaction(() => mainStore.state.settings, () => {
             this.setSettings(mainStore.state.settings);
         });

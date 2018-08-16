@@ -2,7 +2,6 @@
 
 import React from 'react';
 import { CSSTransition } from 'react-transition-group';
-import Menu from './Menu.jsx';
 import { connect } from '../store/Connect';
 import { Switch } from './Form.jsx';
 import {
@@ -152,7 +151,7 @@ const ChartSetting = ({
 };
 
 export default connect(({ chartSetting: s, chart: c }) => ({
-    ChartSettingMenu: s.menu.connect(Menu),
+    ChartSettingMenu: s.ChartSettingMenu,
     menuOpen: s.menu.dialog.open,
     selectedLanguage: s.language,
     languages: s.languages,

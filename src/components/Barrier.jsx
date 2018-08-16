@@ -2,7 +2,6 @@ import React from 'react';
 import { action } from 'mobx';
 import { connect } from '../store/Connect';
 import BarrierStore from '../store/BarrierStore';
-import PriceLine from './PriceLine.jsx';
 import Shade from './Shade.jsx';
 import { isValidProp } from '../utils';
 
@@ -48,8 +47,8 @@ const Barrier = ({
 export default connect(
     BarrierStore,
     store => ({
-        HighPriceLine: store._high_barrier.connect(PriceLine),
-        LowPriceLine: store._low_barrier.connect(PriceLine),
+        HighPriceLine: store.HighPriceLine,
+        LowPriceLine: store.LowPriceLine,
         aboveShade: store.aboveShade.clone(),
         belowShade: store.belowShade.clone(),
         betweenShade: store.betweenShade.clone(),
