@@ -24,7 +24,6 @@ class ChartState {
         this.stxx.addEventListener('layout', this.saveLayout.bind(this));
         this.stxx.addEventListener('symbolChange', this.saveLayout.bind(this));
         this.stxx.addEventListener('drawing', this.saveDrawings.bind(this));
-        this.stxx.addEventListener('preferences', this.savePreferences.bind(this));
     };
 
     @action.bound updateProps({ chartId, settings, isConnectionOpened, symbol, granularity, chartType, startEpoch, endEpoch }) {
@@ -123,21 +122,6 @@ class ChartState {
             this.stxx.importDrawings(drawings);
             this.stxx.draw();
         }
-    }
-
-    restorePreferences() {
-        const pref = createObjectFromLocalStorage(`${this.chartId}-preferences`);
-        if (pref) {
-            this.stxx.importPreferences(pref);
-        }
-    }
-
-    savePreferences() {
-        if (!this.chartId) return;
-        CIQ.localStorageSetItem(
-            `${this.chartId}-preferences`,
-            JSON.stringify(this.stxx.exportPreferences()),
-        );
     }
 }
 
