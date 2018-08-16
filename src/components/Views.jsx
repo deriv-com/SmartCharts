@@ -127,7 +127,7 @@ const Views = ({
 
 export default connect(({ view: s }) => ({
     ViewsMenu: s.menu.connect(Menu),
-    views: s.views,
+    views: s.singletonViews.views,
     routes: s.routes,
     onOverwrite: s.onOverwrite,
     onCancel: s.onCancel,

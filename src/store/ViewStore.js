@@ -1,6 +1,6 @@
 import { observable, action, when } from 'mobx';
-import { createObjectFromLocalStorage } from '../utils';
 import MenuStore from './MenuStore';
+import SingletonViews from './SingletonViews';
 
 export default class ViewStore {
     constructor(mainStore) {
@@ -8,9 +8,9 @@ export default class ViewStore {
         this.menu = new MenuStore(mainStore, { route: 'templates' });
         when(() => this.context, this.onContextReady);
     }
+
     @observable scrollPanel;
     @observable templateName = '';
-    @observable views = [];
     @observable routes = {
         current: 'main',
         add: () => this.saveViews(),
@@ -24,12 +24,7 @@ export default class ViewStore {
     get loader() { return this.mainStore.loader; }
 
     onContextReady = () => {
-        const views = createObjectFromLocalStorage('cq-views');
-        if (views) { this.views = views; }
-    }
-
-    updateLocalStorage = () => {
-        CIQ.localStorageSetItem('cq-views', JSON.stringify(this.views));
+        this.singletonViews = new SingletonViews();
     }
 
     @action.bound onChange(e) {
@@ -52,31 +47,31 @@ export default class ViewStore {
     }
 
     @action.bound saveViews() {
-        if (this.views.some(x => x.name.toLowerCase() === this.templateName.toLowerCase())) {
+        if (this.singletonViews.views.some(x => x.name.toLowerCase() === this.templateName.toLowerCase())) {
             this.updateRoute('overwrite');
         } else if (this.templateName.length > 0) {
             this.updateRoute('main');
             const layout = this.stx.exportLayout();
-            this.views.push({ name: this.templateName, layout });
-            this.updateLocalStorage();
+            this.singletonViews.views.push({ name: this.templateName, layout });
+            this.singletonViews.updateLocalStorage();
             this.templateName = '';
         }
     }
 
     @action.bound overwrite() {
         const layout = this.stx.exportLayout();
-        const templateIndex = this.views.findIndex(x => x.name.toLowerCase() === this.templateName.toLowerCase());
-        this.views[templateIndex].layout = layout;
-        this.views[templateIndex].name = this.templateName;
-        this.updateLocalStorage();
+        const templateIndex = this.singletonViews.views.findIndex(x => x.name.toLowerCase() === this.templateName.toLowerCase());
+        this.singletonViews.views[templateIndex].layout = layout;
+        this.singletonViews.views[templateIndex].name = this.templateName;
+        this._singlesingletonViewstonViews.updateLocalStorage();
         this.updateRoute('main');
         this.templateName = '';
     }
 
     @action.bound remove(idx, e) {
-        this.views.splice(idx, 1);
+        this.singletonViews.views.splice(idx, 1);
         e.nativeEvent.is_item_removed = true;
-        this.updateLocalStorage();
+        this.singletonViews.updateLocalStorage();
     }
 
     @action.bound applyLayout = (idx, e) => {
@@ -85,7 +80,7 @@ export default class ViewStore {
         const stx = this.stx;
 
         const importLayout = () => {
-            stx.importLayout(this.views[idx].layout, true, true);
+            stx.importLayout(this.singletonViews.views[idx].layout, true, true);
             if (stx.changeCallback) { stx.changeCallback(stx, 'layout'); }
             stx.dispatch('layout', {
                 stx,
