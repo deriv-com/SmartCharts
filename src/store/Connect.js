@@ -45,6 +45,13 @@ function connectCustomStore(mapperFunction, CustomStore) {
             }
         }
 
+        // make some nice names that will show up in the React Devtools
+        const wrappedDisplayName = WrappedComponent.displayName
+            || WrappedComponent.name
+            || (WrappedComponent.constructor && WrappedComponent.constructor.name)
+            || 'Unknown';
+        StoredComponent.displayName = `unbox-${wrappedDisplayName}`;
+
         return inject(mainStore => ({ mainStore }))(StoredComponent);
     };
 }
