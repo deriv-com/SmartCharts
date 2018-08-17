@@ -5,14 +5,47 @@ import { CSSTransition } from 'react-transition-group';
 import { connect } from '../store/Connect';
 import { Switch } from './Form.jsx';
 import {
-    SettingIcon,
     PositionLeftIcon,
     PositionBottomIcon,
+    SettingIcon,
     BackIcon,
     CloseIcon,
 } from './Icons.jsx';
 import '../../sass/components/_ciq-chart-setting.scss';
 
+const AssetInformationToggle = ({
+    value,
+    onChange,
+}) => (
+    <div className="ciq-list-item">
+        <span className="ciq-icon-text">{t.translate('Asset Information')}</span>
+        <div className="ciq-action">
+            <Switch
+                value={value}
+                onChange={onChange}
+            />
+        </div>
+    </div>
+);
+
+const ThemeToggle = ({
+    position,
+    setPosition,
+}) => (
+    <div className="ciq-list-item ciq-list-item-position">
+        <span className="ciq-icon-text">{t.translate('Position')}</span>
+        <div className="ciq-action">
+            <PositionBottomIcon
+                onClick={() => setPosition('bottom')}
+                className={`${position === 'bottom' ? 'active' : ''}`}
+            />
+            <PositionLeftIcon
+                onClick={() => setPosition('left')}
+                className={`${position === 'left' ? 'active' : ''}`}
+            />
+        </div>
+    </div>
+);
 
 const ChartSetting = ({
     ChartSettingMenu,
@@ -33,20 +66,6 @@ const ChartSetting = ({
     setAssetInformation,
     isMobile,
 }) => {
-    const renderPosition = () => (
-        <div className="ciq-list-item ciq-list-item-position">
-            <span className="ciq-icon-text">{t.translate('Position')}</span>
-            <div className="ciq-action">
-                <PositionBottomIcon
-                    onClick={() => setPosition('bottom')}
-                    className={`${position === 'bottom' ? 'active' : ''}`}
-                />
-                <PositionLeftIcon
-                    onClick={() => setPosition('left')}
-                    className={`${position === 'left' ? 'active' : ''}`}
-                />
-            </div>
-        </div>);
     const renderMain = () => (
         <div>
             <div className="title">
@@ -55,7 +74,7 @@ const ChartSetting = ({
             </div>
             <div className="body">
                 <div className="ciq-list ciq-list-setting">
-                    {!isMobile ? renderPosition() : ''}
+                    {!isMobile ? <ThemeToggle setPosition={setPosition} position={position} /> : ''}
                     <div className="ciq-list-item">
                         <span className="ciq-icon-text">{t.translate('Dark Mode')}</span>
                         <div className="ciq-action">
@@ -74,15 +93,7 @@ const ChartSetting = ({
                             />
                         </div>
                     </div>
-                    <div className="ciq-list-item">
-                        <span className="ciq-icon-text">{t.translate('Asset Information')}</span>
-                        <div className="ciq-action">
-                            <Switch
-                                value={assetInformation}
-                                onChange={setAssetInformation}
-                            />
-                        </div>
-                    </div>
+                    {!isMobile ? <AssetInformationToggle value={assetInformation} onChange={setAssetInformation} /> : ''}
                     <div
                         className="ciq-list-item ciq-list-item-lng"
                         onClick={() => setView('language')}
