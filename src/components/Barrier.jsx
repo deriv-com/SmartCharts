@@ -1,16 +1,15 @@
 import React from 'react';
 import { connect } from '../store/Connect';
 import BarrierStore from '../store/BarrierStore';
-import Shade from './Shade.jsx';
 
 const Barrier = ({
     shadeColor = '#4caf50',
     color = '#000',
     HighPriceLine,
     LowPriceLine,
-    aboveShade,
-    belowShade,
-    betweenShade,
+    AboveShade,
+    BetweenShade,
+    BelowShade,
     hidePriceLines,
     lineStyle,
     isInitialized,
@@ -21,24 +20,9 @@ const Barrier = ({
     >
         <HighPriceLine lineStyle={lineStyle} color={color} />
         <LowPriceLine  lineStyle={lineStyle} color={color} />
-        <Shade
-            className="top-shade"
-            top={aboveShade.top}
-            bottom={aboveShade.bottom}
-            visible={aboveShade.visible}
-        />
-        <Shade
-            className="between-shade"
-            top={betweenShade.top}
-            bottom={betweenShade.bottom}
-            visible={betweenShade.visible}
-        />
-        <Shade
-            className="bottom-shade"
-            top={belowShade.top}
-            bottom={belowShade.bottom}
-            visible={belowShade.visible}
-        />
+        <AboveShade />
+        <BetweenShade />
+        <BelowShade />
     </div>
 ));
 
@@ -47,9 +31,9 @@ export default connect(
     store => ({
         HighPriceLine: store.HighPriceLine,
         LowPriceLine: store.LowPriceLine,
-        aboveShade: store.aboveShade.clone(),
-        belowShade: store.belowShade.clone(),
-        betweenShade: store.betweenShade.clone(),
+        AboveShade: store.AboveShade,
+        BetweenShade: store.BetweenShade,
+        BelowShade: store.BelowShade,
         shadeColor: store.shadeColor,
         color: store.color,
         hidePriceLines: store.hidePriceLines,
