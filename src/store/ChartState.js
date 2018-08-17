@@ -41,12 +41,12 @@ class ChartState {
         if (!this.chartId) return;
         const layoutData = this.stxx.exportLayout(true);
         const json = JSON.stringify(layoutData);
-        CIQ.localStorageSetItem(`${this.chartId}-layout`, json);
+        CIQ.localStorageSetItem(`layout-${this.chartId}`, json);
     }
 
     // returns false if restoring layout fails
     restoreLayout() {
-        let layoutData = createObjectFromLocalStorage(`${this.chartId}-layout`);
+        let layoutData = createObjectFromLocalStorage(`layout-${this.chartId}`);
 
         if (!layoutData) return false;
 
@@ -110,14 +110,14 @@ class ChartState {
         const obj = this.stxx.exportDrawings();
         const symbol = this.stxx.chart.symbol;
         if (obj.length === 0) {
-            CIQ.localStorage.removeItem(`${this.chartId}-${symbol}`);
+            CIQ.localStorage.removeItem(`${symbol}-${this.chartId}`);
         } else {
-            CIQ.localStorageSetItem(`${this.chartId}-${symbol}`, JSON.stringify(obj));
+            CIQ.localStorageSetItem(`${symbol}-${this.chartId}`, JSON.stringify(obj));
         }
     }
 
     restoreDrawings() {
-        const drawings = createObjectFromLocalStorage(`${this.chartId}-${this.stxx.chart.symbol}`);
+        const drawings = createObjectFromLocalStorage(`${this.stxx.chart.symbol}-${this.chartId}`);
         if (drawings) {
             this.stxx.importDrawings(drawings);
             this.stxx.draw();
