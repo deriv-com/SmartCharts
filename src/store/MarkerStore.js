@@ -29,12 +29,12 @@ export default class MarkerStore {
         this._injectionId = this.stx.prepend('positionMarkers', this.updatePosition);
     }
 
-    destructor() {
+    @action.bound destructor() {
         this.stx.removeInjection(this._injectionId);
         this.stx.removeEventListener(this._listenerId);
     }
 
-    updateProps({ children, className, y, yPositioner, x, xPositioner }) {
+    @action.bound updateProps({ children, className, y, yPositioner, x, xPositioner }) {
         this.className = className;
         this.children = children;
 

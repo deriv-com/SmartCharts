@@ -292,6 +292,101 @@ Each time a new translation string is added to the code, you need to update the 
 
 Once the new `messages.pot` is merged into the `dev` branch, it will automatically be updated in [CrowdIn](https://crowdin.com/project/smartcharts/settings#files). You should expect to see a PR with the title **New Crowdin translations**
  in a few minutes; this PR will update the `*.po` files.
+ 
+ ### State Management and the `connect` Method
+ 
+ SmartCharts uses a variation of [Mobdux](https://medium.com/@cameronfletcher92/mobdux-combining-the-good-parts-of-mobx-and-redux-61bac90ee448) to assist with state management using Mobx.
+ 
+ Each component consists of 2 parts: a **template** (`*.jsx` file), and a **store** (`*Store.js` file). There are 3 scenarios in which the [`connect`](https://github.com/binary-com/SmartCharts/blob/dev/src/store/Connect.js) method is used:
+ 
+#####  1. Main Components: The component is tied directly to the main store.
+
+Examples: `<ChartTitle />`, `<TimePeriod />`, `<Views />`...
+
+Each component here is mapped to a corresponding store in the main store. **Only one copy of this component may exist per `<SmartChart />` instance**, and its state is managed by the main store tree (defined as `mainStore` in SmartCharts). Here you pass a `mapperFunction` that would be applied directly to the main store:
+  
+```jsx
+
+function mapperFunction(mainStore) {
+    return {
+        value: mainStore.subStore.value,
+    }
+}
+
+export default connect(mapperFunction)(MyComponent);
+```
+
+Connections in the scenario #1 should be done in the `jsx` file, to keep consistent with other components. Except for the component tied to the main store (`Chart.jsx`), all components using this method should be SFC (Stateless Functional Components), and have the lifecycle managed by the main store.
+
+##### 2. Subcomponents: Component is connected inside a store
+
+Examples: `<Menu />`, `<List />`, `<CategoricalDisplay />`...
+
+This is used when multiple copies of a store needs to exist in the same state tree. Here we do the connection inside the constructor of a child of the main store and pass it as a prop to the template. For example `<ChartTitle />` needs a `<Menu />`, so in `ChartTitleStore` we create an instance of `MenuStore` and connect it:
+
+```js
+export default class ChartTitleStore {
+    constructor(mainStore) {
+        this.menu = new MenuStore(mainStore);
+        this.ChartTitleMenu = this.menu.connect(Menu);
+        // ...
+    }
+    // ...    
+}
+```
+
+The `connect` method for subcomponents are defined in its store (instead of the template file) that contains its own `mapperFunction`:
+
+```js
+export default class MenuStore {
+    // ...
+    connect = connect(() => ({
+        setOpen: this.setOpen,
+        open: this.open,
+    }))
+}
+```
+
+We then pass the connected component in `ChartTitle.jsx`:
+
+```js
+export default connect(({ chartTitle: c }) => ({
+    ChartTitleMenu: c.ChartTitleMenu,
+}))(ChartTitle);
+```
+
+> **Note**: Do NOT connect subcomponents in another connect method; `connect` creates a new component each time it is called, and a `mapperFunction` is called every time a mobx reaction or prop update is triggered.
+
+##### 3. Independent Components: components that are not managed by the main store
+
+Examples: `<Barrier />`, `<Marker />`
+
+Independent components is able to access the main store, but the main store has no control over independent components. As such, each independent component manages its own life cycle. Here is the interface for its store:
+
+```js
+class IndependentStore {
+    constructor(mainStore) {}
+    updateProps(nextProps) {} // intercept the props from the component
+    destructor()           {} // called on componentWillUnmount
+}
+```
+
+This enables library users to use multiple copies of a component without connecting it, because mounting an independent component will also create its own store (refer to [`Marker API`](#marker-api) to see usage example of such a component). Therefore, for each independent component you connect you will also need to pass its store class (not an instance but the class itself) as a second parameter to the `connect` function:
+
+```jsx
+function mapperFunction(customStore) {
+    return {
+        value: customStore.value,
+    }
+}
+
+export default connect(
+    mapperFunction,
+    MyStoreClass, // Required argument for independent components
+)(MyIndependentComponent);
+```
+
+Note that **for independent components, the `mapperFunction` is applied to the store instance**, not the main store. Should you need to access any value from the main store, you can do this via the `mainStore` passed to the constructor of each independent store class.
 
 ## Manual Deployment
 

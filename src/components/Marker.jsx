@@ -16,7 +16,6 @@ const Marker = ({
 );
 
 export default connect(
-    MarkerStore,
     store => ({
         left: store.left,
         bottom: store.bottom,
@@ -24,7 +23,5 @@ export default connect(
         className: store.className,
         display: store.display,
     }),
-    (store, props) => {
-        store.updateProps(props);
-    },
+    MarkerStore,
 )(Marker);
