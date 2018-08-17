@@ -17,6 +17,7 @@ class ChartStore {
     activeSymbols = [];
     rootNode = null;
     stxx = null;
+    api = null;
     defaults = {
         symbol: 'R_100',
         granularity: 0,
@@ -106,7 +107,7 @@ class ChartStore {
             settings,
             onSettingsChange,
         } = props;
-        const api = new BinaryAPI(requestAPI, requestSubscribe, requestForget);
+        this.api = new BinaryAPI(requestAPI, requestSubscribe, requestForget);
         const { chartSetting } = this.mainStore;
         chartSetting.setSettings(settings);
         chartSetting.onSettingsChange = onSettingsChange;
@@ -158,7 +159,7 @@ class ChartStore {
         CIQ.Animation(stxx, { stayPut: true });
 
         // connect chart to data
-        this.feed = new Feed(api, stxx, this.mainStore);
+        this.feed = new Feed(this.api, stxx, this.mainStore);
         stxx.attachQuoteFeed(this.feed, {
             refreshInterval: null,
         });
@@ -188,7 +189,12 @@ class ChartStore {
 
         this.state.restorePreferences();
 
-        api.getActiveSymbols().then(action(({ active_symbols }) => {
+        this.api.getActiveSymbols().then(action(({ active_symbols }) => {
+            /**
+             * Updating market close status each 10 minute
+             */
+            this.onMarketClosedStatus();
+            setInterval(this.onMarketClosedStatus.bind(this), 10 * 60 * 1000);
             this.setActiveSymbols(active_symbols);
             const isRestoreSuccess = this.state.restoreLayout();
 
@@ -217,6 +223,56 @@ class ChartStore {
         this.resizeObserver.observe(modalNode);
 
         this.feed.onComparisonDataUpdate(this.updateComparisons);
+    }
+
+    /**
+     * Get tradeTimes if not loaded yet
+     * OR update the active symbols by comapring open time
+     */
+    onMarketClosedStatus() {
+        this.api.getTradingTimes()
+            .then(this.updateMarketClosedStatus);
+    }
+
+    @action.bound updateMarketClosedStatus(response) {
+        const nowUtc = (new Date()).getTime();
+        const toEpochGMT = (hour, crossDay) => {
+            const currentDate = new Date();
+            currentDate.setDate(currentDate.getDate() + (crossDay || 0));
+            const dateStr = currentDate.toISOString().substring(0, 11);
+            return new Date(`${dateStr}${hour}Z`).getTime();
+        };
+        response.trading_times.markets.forEach((market) => {
+            market.submarkets.forEach((submarket) => {
+                submarket.symbols.forEach((symbol) => {
+                    const foundSymbol = this.activeSymbols.find(item => item.symbol === symbol.symbol);
+                    if (foundSymbol) {
+                        let isOpen = false;
+                        for (let i = 0; i <= symbol.times.open.length; i++) {
+                            const { open, close } = symbol.times;
+                            if (open.length && close.length) {
+                                const openTime = toEpochGMT(open[i]);
+                                const closeTime = toEpochGMT(close[i]);
+
+                                // If open time is cross day, then should check time till tomorrow
+                                // and yesterday till now
+                                if (
+                                    (openTime > closeTime && nowUtc >= toEpochGMT(open[i], -1) && nowUtc <= closeTime)
+                                        || (openTime > closeTime && nowUtc >= toEpochGMT(open[i]) && nowUtc <= toEpochGMT(close[i], 1))
+                                        || (nowUtc >= openTime && nowUtc <= closeTime)
+                                ) {
+                                    isOpen = true;
+                                    break;
+                                }
+                            }
+                        }
+                        foundSymbol.exchange_is_open = isOpen;
+                    }
+                });
+            });
+        });
+
+        this.categorizedSymbols = this.categorizeActiveSymbols();
     }
 
     removeComparison(symbolObj) {
@@ -408,6 +464,7 @@ class ChartStore {
                 }
             }
         }
+
         return orderedSymbols;
     }
 

@@ -1,8 +1,6 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import React from 'react';
 import { connect } from '../store/Connect';
-import Menu from './Menu.jsx';
-import List from './List.jsx';
 import { CloseIcon, SettingIcon } from './Icons.jsx';
 import '../../sass/components/_chart-types.scss';
 
@@ -78,8 +76,8 @@ export default connect(({ chartType }) => ({
     onChange: chartType.setTypeFromUI,
     showAggregateDialog: chartType.showAggregateDialog,
     menuOpen: chartType.menu.open,
-    ChartTypeMenu: chartType.menu.connect(Menu),
-    ChartTypeList: chartType.list.connect(List),
+    ChartTypeMenu: chartType.ChartTypeMenu,
+    ChartTypeList: chartType.ChartTypeList,
     closeMenu: chartType.menu.onTitleClick,
     isMobile: chartType.mainStore.chart.isMobile,
 }))(ChartTypes);
