@@ -26,8 +26,8 @@ class ChartState {
         this.stxx.addEventListener('drawing', this.saveDrawings.bind(this));
     };
 
-    @action.bound updateProps({ chartId, settings, isConnectionOpened, symbol, granularity, chartType, startEpoch, endEpoch }) {
-        this.chartId = chartId;
+    @action.bound updateProps({ Id, settings, isConnectionOpened, symbol, granularity, chartType, startEpoch, endEpoch }) {
+        this.chartId = Id;
         this.settings = settings;
         this.isConnectionOpened = isConnectionOpened;
         this.symbol = symbol;
