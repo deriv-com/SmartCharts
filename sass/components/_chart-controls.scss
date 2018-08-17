@@ -63,7 +63,7 @@
         }
         .cq-menu-btn {
             position: relative;
-            padding: 0 5px;
+            padding: 3px 5px;
 
             > .ic-icon {
                 padding: 0.35em 0.5em;
@@ -161,7 +161,7 @@
 
 .cq-chart-control-bottom .cq-chart-controls {
     bottom: 0px;
-    height: 50px;
+    height: 54px;
     width: 100%;
     padding: 0 5px;
     @include themify($themes) {
