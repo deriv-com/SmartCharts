@@ -3,6 +3,8 @@ import { connect } from '../store/Connect';
 import {
     DownloadIcon,
     CloseIcon,
+    PngIcon,
+    CsvIcon,
 } from './Icons.jsx';
 import '../../sass/components/_ciq-share.scss';
 
@@ -32,15 +34,26 @@ const Share = ({
             </div>
             <div className="body">
                 <div className="content">
-                    <div
-                        className="download-btn"
-                        onClick={downloadPNG}
-                    > PNG {isLoadingPNG && <span className="cq-loading" />}
-                    </div>
-                    <div
-                        className="download-btn"
-                        onClick={downloadCSV}
-                    > CSV
+                    <div className="ciq-list ciq-list-download">
+                        <div
+                            className="ciq-list-item"
+                            onClick={downloadPNG}
+                        >
+                            <span className="ciq-icon-text">
+                                {t.translate('Download as PNG')}
+                                {isLoadingPNG && <span className="cq-loading" />}
+                            </span>
+                            <PngIcon />
+                        </div>
+                        <div
+                            className="ciq-list-item"
+                            onClick={downloadCSV}
+                        >
+                            <span className="ciq-icon-text">
+                                {t.translate('Download as CSV')}
+                            </span>
+                            <CsvIcon />
+                        </div>
                     </div>
                 </div>
             </div>

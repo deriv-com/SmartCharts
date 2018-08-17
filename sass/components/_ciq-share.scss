@@ -32,22 +32,21 @@
             display: flex;
             padding: 5px 0;
 
-            .download-btn {
-                width: 56px;
-                height: 20px;
-                text-align: center;
-                line-height: 20px;
-                cursor: pointer;
-                background: transparent;
-                border: none;
-                @include box-sizing(border-box);
-                @include themify($themes) {
-                    color: themed('SharedBtnDownloadText');
-                }
+            .ciq-list-download {
+                width: 100%;
 
-                &:first-child {
-                    @include themify($themes) {
-                        border-right: 1px solid themed('SharedBtnDownloadBorder');
+                .ciq-list-item {
+                    width: 100%;
+                    padding: 1px 10px;
+                    height: 40px;
+                    justify-content: space-between;
+
+                    .cq-loading {
+                        margin-left: 5px;
+                    }
+                    .ic-icon {
+                        position: relative;
+                        top: -4px;
                     }
                 }
             }
