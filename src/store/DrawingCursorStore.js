@@ -15,19 +15,17 @@ export default class DrawingCursorStore {
     @observable display;
 
     onContextReady = () => {
-        this.crosshairX = this.stx.container.querySelector('.stx_crosshair_x');
-        this.crosshairY = this.stx.container.querySelector('.stx_crosshair_y');
-        this.stx.append('positionCrosshairsAtPointer' , this.onMouseMove)
+        this.stx.append('mousemoveinner', this.onMouseMove);
         this.stx.container.addEventListener('touchend', this.onTouchEnd);
     };
 
-    @action.bound onMouseMove = () => {
+    @action.bound onMouseMove = (epX, epY) => {
         this.isDrawing = this.stx.currentVectorParameters.vectorType;
 
         if (this.isDrawing) {
             this.display = 'block';
-            this.left = this.crosshairX.offsetLeft;
-            this.top = this.crosshairY.offsetTop - 16;
+            this.left = epX;
+            this.top = epY - 16;
         } else {
             this.display = 'none';
         }
