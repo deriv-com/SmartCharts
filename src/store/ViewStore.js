@@ -1,18 +1,20 @@
 import { observable, action, when } from 'mobx';
 import { createObjectFromLocalStorage } from '../utils';
 import MenuStore from './MenuStore';
+import Menu from '../components/Menu.jsx';
 
 export default class ViewStore {
     constructor(mainStore) {
         this.mainStore = mainStore;
         this.menu = new MenuStore(mainStore, { route: 'templates' });
+        this.ViewsMenu = this.menu.connect(Menu);
         when(() => this.context, this.onContextReady);
     }
     @observable scrollPanel;
     @observable templateName = '';
     @observable views = [];
+    @observable currentRoute = 'main';
     @observable routes = {
-        current: 'main',
         add: () => this.saveViews(),
         main: () => this.updateRoute('add'),
         cancel: () => this.onCancel(),
@@ -48,7 +50,7 @@ export default class ViewStore {
     }
 
     @action.bound updateRoute(name) {
-        this.routes.current = name;
+        this.currentRoute = name;
     }
 
     @action.bound saveViews() {
@@ -74,7 +76,7 @@ export default class ViewStore {
     }
 
     @action.bound remove(idx, e) {
-        this.views.splice(idx, 1);
+        this.views = this.views.filter((x, index) => idx !== index);
         e.nativeEvent.is_item_removed = true;
         this.updateLocalStorage();
     }
