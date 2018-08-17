@@ -10,7 +10,7 @@ import { // eslint-disable-line import/no-extraneous-dependencies,import/no-unre
     DrawTools,
     ChartSetting,
     createObjectFromLocalStorage,
-    Share,
+    Download,
     ChartTitle,
     AssetInformation,
     ComparisonList,
@@ -64,7 +64,7 @@ const renderControls = () => (
         <Comparison />
         <DrawTools />
         <Views />
-        <Share />
+        <Download />
         <Timeperiod />
         {CIQ.isMobile ? '' : <ChartSize />}
         <ChartSetting />

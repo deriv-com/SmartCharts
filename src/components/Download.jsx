@@ -6,10 +6,10 @@ import {
     PngIcon,
     CsvIcon,
 } from './Icons.jsx';
-import '../../sass/components/_ciq-share.scss';
+import '../../sass/components/_ciq-download.scss';
 
 
-const Share = ({
+const Download = ({
     ShareMenu,
     menuOpen,
     downloadCSV,
@@ -17,7 +17,7 @@ const Share = ({
     closeMenu,
     isLoadingPNG,
 }) => (
-    <ShareMenu className="cq-share">
+    <ShareMenu className="cq-download">
         <ShareMenu.Title>
             <DownloadIcon
                 className={`ic-icon-with-sub ${menuOpen ? 'active' : ''}`}
@@ -61,11 +61,11 @@ const Share = ({
     </ShareMenu>
 );
 
-export default connect(({ share: s }) => ({
-    ShareMenu: s.ShareMenu,
-    menuOpen: s.menu.dialog.open,
-    downloadPNG: s.downloadPNG,
-    downloadCSV: s.downloadCSV,
-    closeMenu: s.menu.onTitleClick,
-    isLoadingPNG: s.isLoadingPNG,
-}))(Share);
+export default connect(({ download: d }) => ({
+    ShareMenu: d.ShareMenu,
+    menuOpen: d.menu.dialog.open,
+    downloadPNG: d.downloadPNG,
+    downloadCSV: d.downloadCSV,
+    closeMenu: d.menu.onTitleClick,
+    isLoadingPNG: d.isLoadingPNG,
+}))(Download);
