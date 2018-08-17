@@ -1,6 +1,5 @@
 import React from 'react';
 import PerfectScrollbar from 'react-perfect-scrollbar';
-import Menu from './Menu.jsx';
 import { connect } from '../store/Connect';
 import {
     BackIcon,
@@ -28,7 +27,8 @@ const Views = ({
     ViewsMenu,
     menuOpen,
     views,
-    routes: { current: currentRoute, add, main, overwrite, cancel },
+    currentRoute,
+    routes: { add, main, overwrite, cancel },
     onChange,
     onSubmit,
     applyLayout,
@@ -126,7 +126,7 @@ const Views = ({
 );
 
 export default connect(({ view: s }) => ({
-    ViewsMenu: s.menu.connect(Menu),
+    ViewsMenu: s.ViewsMenu,
     views: s.views,
     routes: s.routes,
     onOverwrite: s.onOverwrite,
@@ -137,6 +137,7 @@ export default connect(({ view: s }) => ({
     applyLayout: s.applyLayout,
     menuOpen: s.menu.dialog.open,
     inputRef: s.inputRef,
+    currentRoute: s.currentRoute,
     templateName :s.templateName,
     closeMenu: s.menu.onTitleClick,
 }))(Views);

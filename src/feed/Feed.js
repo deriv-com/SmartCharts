@@ -116,13 +116,16 @@ class Feed {
         let response = await tickHistoryPromise;
 
         if (response.error) {
+            const errorMessage = response.error.message;
             const errorCode = response.error.code;
             const tParams = { symbol: symbolObject.name };
             if (/^(MarketIsClosed|NoRealtimeQuotes)$/.test(errorCode)) {
                 // Although market is closed, we display the past tick history data
                 response = await this._binaryApi.getTickHistory(tickHistoryRequest);
                 this._mainStore.chart.notify({
-                    text: t.translate('[symbol] market is presently closed.', tParams),
+                    text: errorCode === 'NoRealtimeQuotes'
+                        ? errorMessage
+                        : t.translate('[symbol] market is presently closed.', tParams),
                     category: 'activesymbol',
                 });
             } else if (errorCode === 'StreamingNotAllowed') {
@@ -140,6 +143,13 @@ class Feed {
                     this._mainStore.chart.setChartAvailability(false);
                 }
                 callback(dataCallback);
+                return;
+            } else {
+                this._mainStore.notification.notify({
+                    text: errorMessage,
+                    category: 'activesymbol',
+                });
+                callback({ quotes: [] });
                 return;
             }
         } else if (processTickHistory) {

@@ -1,7 +1,6 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import React from 'react';
 import { connect } from '../store/Connect';
-import Menu from './Menu.jsx';
 import { CloseIcon } from './Icons.jsx';
 import '../../sass/components/_timeperiod.scss';
 
@@ -137,7 +136,7 @@ export default connect(({ timeperiod: s }) => ({
     interval: s.interval,
     interval_display: s.interval_display,
     timeUnit_display: s.timeUnit_display,
-    TimePeriodMenu: s.menu.connect(Menu),
+    TimePeriodMenu: s.TimePeriodMenu,
     setOpen: s.menu.setOpen,
     closeMenu: s.menu.onTitleClick,
     isMobile: s.mainStore.chart.isMobile,

@@ -439,6 +439,10 @@ otc('JPY', 'OTC_N225');
 otc('Spanish', 'OTC_IBEX35');
 otc('USD', 'OTC_SPC');
 otc('WallStreet', 'OTC_DJI');
+otc('USD', 'OTC_NDX');
+otc('CHF', 'OTC_SSMI');
+otc('HongKong', 'OTC_HSI');
+otc('AUD', 'OTC_AS51');
 
 export const ActiveOptionsIconMap = {
     delete: DeleteIcon,

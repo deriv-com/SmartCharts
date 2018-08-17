@@ -1,6 +1,4 @@
 import React from 'react';
-import Menu from './Menu.jsx';
-import CategoricalDisplay from './CategoricalDisplay.jsx';
 import NotificationBadge from './NotificationBadge.jsx';
 import { connect } from '../store/Connect';
 import { IndicatorIcon } from './Icons.jsx';
@@ -40,9 +38,9 @@ const StudyLegend = ({
 export default connect(({ studies: st }) => ({
     isOpened: st.open,
     setOpen: st.setOpen,
-    StudyMenu: st.menu.connect(Menu),
+    StudyMenu: st.StudyMenu,
     menuOpen: st.menu.open,
-    StudyCategoricalDisplay: st.categoricalDisplay.connect(CategoricalDisplay),
+    StudyCategoricalDisplay: st.StudyCategoricalDisplay,
     onCloseMenu: st.menu.onTitleClick,
     isMobile: st.categoricalDisplay.isMobile,
     activeStudiesNo: st.activeStudies.data.length,
