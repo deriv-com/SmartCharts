@@ -195,7 +195,6 @@ class ChartStore {
             /**
              * Updating market close status each 10 minute
              */
-            this.onMarketClosedStatus();
             setInterval(this.onMarketClosedStatus.bind(this), 10 * 60 * 1000);
             this.setActiveSymbols(active_symbols);
             const isRestoreSuccess = this.state.restoreLayout();
@@ -219,6 +218,8 @@ class ChartStore {
                     this.changeSymbol(this.state.symbol, this.state.granularity);
                 }
             });
+
+            this.onMarketClosedStatus();
         }));
 
         this.resizeObserver = new ResizeObserver(this.resizeScreen);
@@ -237,6 +238,7 @@ class ChartStore {
     }
 
     @action.bound updateMarketClosedStatus(response) {
+        const currentSymbol = this.currentActiveSymbol;
         const nowUtc = (new Date()).getTime();
         const toEpochGMT = (hour, crossDay) => {
             const currentDate = new Date();
@@ -269,6 +271,12 @@ class ChartStore {
                             }
                         }
                         foundSymbol.exchange_is_open = isOpen;
+                        if (
+                            currentSymbol.symbol === foundSymbol.symbol
+                            && currentSymbol.exchange_is_open !== foundSymbol.exchange_is_open
+                        ) {
+                            this.changeSymbol(foundSymbol);
+                        }
                     }
                 });
             });
