@@ -27,7 +27,8 @@ const Views = ({
     ViewsMenu,
     menuOpen,
     views,
-    routes: { current: currentRoute, add, main, overwrite, cancel },
+    currentRoute,
+    routes: { add, main, overwrite, cancel },
     onChange,
     onSubmit,
     applyLayout,
@@ -136,6 +137,7 @@ export default connect(({ view: s }) => ({
     applyLayout: s.applyLayout,
     menuOpen: s.menu.dialog.open,
     inputRef: s.inputRef,
+    currentRoute: s.currentRoute,
     templateName :s.templateName,
     closeMenu: s.menu.onTitleClick,
 }))(Views);

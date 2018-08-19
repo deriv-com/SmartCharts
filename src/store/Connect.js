@@ -1,85 +1,67 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
-import { action } from 'mobx';
 
-const connect_v2 = (Store, mapStoresToProps, handleProps) => {
-    // wrap the mapping function usually passed to mobx-react's inject method
-    // so that it additionally unboxes any observables
-    const unboxedMapStoresToProps = (stores, props, context) => {
-        const injectedProps = mapStoresToProps(stores, props, context);
-        return {
-            ...injectedProps,
-            ...props,
-        };
-    };
+function connectMainStore(mapperFunction) {
+    // Combine both stores and props, with props taking precedence
+    const mapStoresAndProps = (mainStore, props /* , context */) => ({
+        ...mapperFunction(mainStore),
+        ...props,
+    });
 
-    class UnboxedComponent extends Component {
-        handlePropsAction = action(handleProps || (() => {}));
-        static contextTypes = { mobxStores: PropTypes.object };
-        static childContextTypes = { mobxStores: PropTypes.object };
+    return WrappedComponent => inject(mapStoresAndProps)(WrappedComponent);
+}
 
-        getChildContext() { return { mobxStores: this.store }; }
+function connectCustomStore(mapperFunction, CustomStore) {
+    return (WrappedComponent) => {
+        class StoredComponent extends Component {
+            constructor(props) {
+                super(props);
+                const { mainStore } = this.props;
+                this.store = new CustomStore(mainStore);
+                const mapStoresAndProps = (_mainStore, nextProps) => ({
+                    ...mapperFunction(this.store),
+                    ...nextProps,
+                });
+                if (this.store.updateProps) {
+                    this.store.updateProps(props);
+                }
+                this.injectedComponent = inject(mapStoresAndProps)(WrappedComponent);
+            }
 
-        componentWillMount() {
-            this.store = new Store(this.context.mobxStores);
-            this.injectedComponent = inject(unboxedMapStoresToProps)(UnboxedComponent.WrappedComponent);
-            this.injectedComponent.displayName = `inject-${UnboxedComponent.displayName}`;
-            if (handleProps) { this.handlePropsAction(this.store, this.props); }
-        }
+            componentWillReceiveProps(nextProps) {
+                if (this.store.updateProps) {
+                    this.store.updateProps(nextProps);
+                }
+            }
 
-        componentWillReceiveProps(nextProps) {
-            this.handlePropsAction(this.store, nextProps);
-        }
+            componentWillUnmount() {
+                if (this.store.destructor) {
+                    this.store.destructor();
+                }
+            }
 
-        shouldComponentUpdate(/* nextProps */) { return false; }
-
-        componentWillUnmount() {
-            if (this.store && this.store.destructor) {
-                this.store.destructor();
+            render() {
+                return React.createElement(this.injectedComponent);
             }
         }
 
-        render() {
-            return React.createElement(this.injectedComponent);
-        }
-    }
-
-    // apply the mobx store injection with our wrapped function
-    // const InjectedComponent = inject(unboxedMapStoresToProps)(UnboxedComponent);
-    return (WrappedComponent) => {
-        UnboxedComponent.WrappedComponent = WrappedComponent;
         // make some nice names that will show up in the React Devtools
         const wrappedDisplayName = WrappedComponent.displayName
             || WrappedComponent.name
             || (WrappedComponent.constructor && WrappedComponent.constructor.name)
             || 'Unknown';
-        // InjectedComponent.displayName = `inject-${wrappedDisplayName}`;
-        UnboxedComponent.displayName = `unbox-${wrappedDisplayName}`;
+        StoredComponent.displayName = `unbox-${wrappedDisplayName}`;
 
-        // let sub components like Menu.Body or List.Item work.
-        Object.keys(WrappedComponent).forEach((key) => {
-            const SubComponent = WrappedComponent[key];
-            if (!/^childContextTypes$/.test(key) && typeof SubComponent === 'function') {
-                UnboxedComponent[key] = SubComponent;
-            }
-        });
-
-        return UnboxedComponent;
+        return inject(mainStore => ({ mainStore }))(StoredComponent);
     };
-};
+}
 
-export const connect = (...args) => {
-    if (args.length > 1) {
-        return connect_v2(...args);
+
+// if store is not defined, main store is used
+export function connect(mapperFunction, CustomStore) {
+    if (CustomStore === undefined) {
+        return connectMainStore(mapperFunction);
     }
-    const mapStoresToProps = args[0];
 
-    // Combine both stores and props, with props taking precedence
-    const mapStoresAndProps = (allStores, props /* , context */) => ({
-        ...mapStoresToProps(allStores),
-        ...props,
-    });
-
-    return WrappedComponent => inject(mapStoresAndProps)(WrappedComponent);
-};
+    return connectCustomStore(mapperFunction, CustomStore);
+}

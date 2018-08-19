@@ -1,7 +1,7 @@
 import { observable, action, when } from 'mobx';
+import { createObjectFromLocalStorage } from '../utils';
 import MenuStore from './MenuStore';
 import Menu from '../components/Menu.jsx';
-import { createObjectFromLocalStorage } from '../utils';
 
 export default class ViewStore {
     constructor(mainStore) {
@@ -14,8 +14,8 @@ export default class ViewStore {
     staticViews = observable.box(ViewStore).get();
     @observable scrollPanel;
     @observable templateName = '';
+    @observable currentRoute = 'main';
     @observable routes = {
-        current: 'main',
         add: () => this.saveViews(),
         main: () => this.updateRoute('add'),
         cancel: () => this.onCancel(),
@@ -27,7 +27,7 @@ export default class ViewStore {
     get loader() { return this.mainStore.loader; }
 
     onContextReady = () => {
-        const views =  createObjectFromLocalStorage('cq-views');
+        const views = createObjectFromLocalStorage('cq-views');
         if (views && !this.staticViews.views) {
             this.staticViews.views = views;
         }
@@ -53,7 +53,7 @@ export default class ViewStore {
     }
 
     @action.bound updateRoute(name) {
-        this.routes.current = name;
+        this.currentRoute = name;
     }
 
     @action.bound saveViews() {
@@ -79,7 +79,7 @@ export default class ViewStore {
     }
 
     @action.bound remove(idx, e) {
-        this.staticViews.views.splice(idx, 1);
+        this.views = this.staticViews.views.filter((x, index) => idx !== index);
         e.nativeEvent.is_item_removed = true;
         this.updateLocalStorage();
     }
