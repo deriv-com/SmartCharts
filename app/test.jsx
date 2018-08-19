@@ -25,7 +25,7 @@ configure({ enforceActions: true });
 const getLanguageStorage = function () {
     const default_language = 'en';
     try {
-        const setting_string = CIQ.localStorage.getItem(`smartchart-setting`),
+        const setting_string = CIQ.localStorage.getItem('smartchart-setting'),
             setting = JSON.parse(setting_string !== '' ? setting_string : '{}');
 
         return setting.language || default_language;

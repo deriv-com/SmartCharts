@@ -1,7 +1,7 @@
 import { observable, action, when } from 'mobx';
 import MenuStore from './MenuStore';
 import Menu from '../components/Menu.jsx';
-import SingletonViews from './SingletonViews';
+import { createObjectFromLocalStorage } from '../utils';
 
 export default class ViewStore {
     constructor(mainStore) {
@@ -11,6 +11,7 @@ export default class ViewStore {
         when(() => this.context, this.onContextReady);
     }
 
+    staticViews = observable.box(ViewStore).get();
     @observable scrollPanel;
     @observable templateName = '';
     @observable routes = {
@@ -26,7 +27,14 @@ export default class ViewStore {
     get loader() { return this.mainStore.loader; }
 
     onContextReady = () => {
-        this.singletonViews = new SingletonViews();
+        const views =  createObjectFromLocalStorage('cq-views');
+        if (views && !this.staticViews.views) {
+            this.staticViews.views = views;
+        }
+    }
+
+    updateLocalStorage = () => {
+        CIQ.localStorageSetItem('cq-views', JSON.stringify(this.staticViews.views));
     }
 
     @action.bound onChange(e) {
@@ -49,31 +57,31 @@ export default class ViewStore {
     }
 
     @action.bound saveViews() {
-        if (this.singletonViews.views.some(x => x.name.toLowerCase() === this.templateName.toLowerCase())) {
+        if (this.staticViews.views.some(x => x.name.toLowerCase() === this.templateName.toLowerCase())) {
             this.updateRoute('overwrite');
         } else if (this.templateName.length > 0) {
             this.updateRoute('main');
             const layout = this.stx.exportLayout();
-            this.singletonViews.views.push({ name: this.templateName, layout });
-            this.singletonViews.updateLocalStorage();
+            this.staticViews.views.push({ name: this.templateName, layout });
+            this.updateLocalStorage();
             this.templateName = '';
         }
     }
 
     @action.bound overwrite() {
         const layout = this.stx.exportLayout();
-        const templateIndex = this.singletonViews.views.findIndex(x => x.name.toLowerCase() === this.templateName.toLowerCase());
-        this.singletonViews.views[templateIndex].layout = layout;
-        this.singletonViews.views[templateIndex].name = this.templateName;
-        this.singletonViews.updateLocalStorage();
+        const templateIndex = this.staticViews.views.findIndex(x => x.name.toLowerCase() === this.templateName.toLowerCase());
+        this.staticViews.views[templateIndex].layout = layout;
+        this.staticViews.views[templateIndex].name = this.templateName;
+        this.updateLocalStorage();
         this.updateRoute('main');
         this.templateName = '';
     }
 
     @action.bound remove(idx, e) {
-        this.singletonViews.views.splice(idx, 1);
+        this.staticViews.views.splice(idx, 1);
         e.nativeEvent.is_item_removed = true;
-        this.singletonViews.updateLocalStorage();
+        this.updateLocalStorage();
     }
 
     @action.bound applyLayout = (idx, e) => {
@@ -82,7 +90,7 @@ export default class ViewStore {
         const stx = this.stx;
 
         const importLayout = () => {
-            stx.importLayout(this.singletonViews.views[idx].layout, true, true);
+            stx.importLayout(this.staticViews.views[idx].layout, true, true);
             if (stx.changeCallback) { stx.changeCallback(stx, 'layout'); }
             stx.dispatch('layout', {
                 stx,
