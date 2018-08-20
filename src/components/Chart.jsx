@@ -123,4 +123,5 @@ export default connect(({ chart, drawTools, studies, chartSetting, chartType, st
     chartContainerHeight: chart.chartContainerHeight,
     containerWidth: chart.containerWidth,
     isDrawing: drawingCursor.isDrawing,
+    theme: chartSetting.theme,
 }))(Chart);
