@@ -1,4 +1,4 @@
-import { observable, action, when } from 'mobx';
+import { observable, action } from 'mobx';
 import { createObjectFromLocalStorage } from '../utils';
 import MenuStore from './MenuStore';
 import Menu from '../components/Menu.jsx';
@@ -8,10 +8,9 @@ export default class ViewStore {
         this.mainStore = mainStore;
         this.menu = new MenuStore(mainStore, { route: 'templates' });
         this.ViewsMenu = this.menu.connect(Menu);
-        when(() => this.context, this.onContextReady);
     }
 
-    staticViews = observable.box(ViewStore).get();
+    @observable static views = createObjectFromLocalStorage('cq-views');
     @observable scrollPanel;
     @observable templateName = '';
     @observable currentRoute = 'main';
@@ -26,15 +25,8 @@ export default class ViewStore {
     get stx() { return this.context.stx; }
     get loader() { return this.mainStore.loader; }
 
-    onContextReady = () => {
-        const views = createObjectFromLocalStorage('cq-views');
-        if (views && !this.staticViews.views) {
-            this.staticViews.views = views;
-        }
-    }
-
     updateLocalStorage = () => {
-        CIQ.localStorageSetItem('cq-views', JSON.stringify(this.staticViews.views));
+        CIQ.localStorageSetItem('cq-views', JSON.stringify(ViewStore.views));
     }
 
     @action.bound onChange(e) {
@@ -57,12 +49,12 @@ export default class ViewStore {
     }
 
     @action.bound saveViews() {
-        if (this.staticViews.views.some(x => x.name.toLowerCase() === this.templateName.toLowerCase())) {
+        if (ViewStore.views.some(x => x.name.toLowerCase() === this.templateName.toLowerCase())) {
             this.updateRoute('overwrite');
         } else if (this.templateName.length > 0) {
             this.updateRoute('main');
             const layout = this.stx.exportLayout();
-            this.staticViews.views.push({ name: this.templateName, layout });
+            ViewStore.views.push({ name: this.templateName, layout });
             this.updateLocalStorage();
             this.templateName = '';
         }
@@ -70,16 +62,16 @@ export default class ViewStore {
 
     @action.bound overwrite() {
         const layout = this.stx.exportLayout();
-        const templateIndex = this.staticViews.views.findIndex(x => x.name.toLowerCase() === this.templateName.toLowerCase());
-        this.staticViews.views[templateIndex].layout = layout;
-        this.staticViews.views[templateIndex].name = this.templateName;
+        const templateIndex = ViewStore.views.findIndex(x => x.name.toLowerCase() === this.templateName.toLowerCase());
+        ViewStore.views[templateIndex].layout = layout;
+        ViewStore.views[templateIndex].name = this.templateName;
         this.updateLocalStorage();
         this.updateRoute('main');
         this.templateName = '';
     }
 
     @action.bound remove(idx, e) {
-        this.views = this.staticViews.views.filter((x, index) => idx !== index);
+        ViewStore.views = ViewStore.views.filter((x, index) => idx !== index);
         e.nativeEvent.is_item_removed = true;
         this.updateLocalStorage();
     }
@@ -90,7 +82,7 @@ export default class ViewStore {
         const stx = this.stx;
 
         const importLayout = () => {
-            stx.importLayout(this.staticViews.views[idx].layout, true, true);
+            stx.importLayout(ViewStore.views[idx].layout, true, true);
             if (stx.changeCallback) { stx.changeCallback(stx, 'layout'); }
             stx.dispatch('layout', {
                 stx,
