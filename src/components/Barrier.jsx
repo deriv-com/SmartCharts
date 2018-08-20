@@ -1,18 +1,15 @@
 import React from 'react';
-import { action } from 'mobx';
 import { connect } from '../store/Connect';
 import BarrierStore from '../store/BarrierStore';
-import Shade from './Shade.jsx';
-import { isValidProp } from '../utils';
 
 const Barrier = ({
     shadeColor = '#4caf50',
     color = '#000',
     HighPriceLine,
     LowPriceLine,
-    aboveShade,
-    belowShade,
-    betweenShade,
+    AboveShade,
+    BetweenShade,
+    BelowShade,
     hidePriceLines,
     lineStyle,
     isInitialized,
@@ -23,55 +20,26 @@ const Barrier = ({
     >
         <HighPriceLine lineStyle={lineStyle} color={color} />
         <LowPriceLine  lineStyle={lineStyle} color={color} />
-        <Shade
-            className="top-shade"
-            top={aboveShade.top}
-            bottom={aboveShade.bottom}
-            visible={aboveShade.visible}
-        />
-        <Shade
-            className="between-shade"
-            top={betweenShade.top}
-            bottom={betweenShade.bottom}
-            visible={betweenShade.visible}
-        />
-        <Shade
-            className="bottom-shade"
-            top={belowShade.top}
-            bottom={belowShade.bottom}
-            visible={belowShade.visible}
-        />
+        <AboveShade />
+        <BetweenShade />
+        <BelowShade />
     </div>
 ));
 
+
 export default connect(
-    BarrierStore,
     store => ({
         HighPriceLine: store.HighPriceLine,
         LowPriceLine: store.LowPriceLine,
-        aboveShade: store.aboveShade.clone(),
-        belowShade: store.belowShade.clone(),
-        betweenShade: store.betweenShade.clone(),
+        AboveShade: store.AboveShade,
+        BetweenShade: store.BetweenShade,
+        BelowShade: store.BelowShade,
         shadeColor: store.shadeColor,
         color: store.color,
         hidePriceLines: store.hidePriceLines,
         lineStyle: store.lineStyle,
         isInitialized: store.isInitialized,
+        destructor: store.destructor,
     }),
-    (store, {
-        color, shadeColor, shade, high, low, relative, draggable, onChange, hidePriceLines, lineStyle,
-    }) => {
-        store.initializePromise.then(action(() => {
-            if (color) { store.color = color; }
-            if (shadeColor) { store.shadeColor = shadeColor; }
-            if (shade) { store.shadeState = `SHADE_${shade}`.toUpperCase(); }
-            if (relative !== undefined) { store.relative = relative; }
-            if (draggable !== undefined) { store.draggable = draggable; }
-            if (isValidProp(high)) { store.high_barrier = high; }
-            if (isValidProp(low)) { store.low_barrier = low; }
-            if (onChange) { store.onBarrierChange = onChange; }
-            store.lineStyle = lineStyle;
-            store.hidePriceLines = !!hidePriceLines;
-        }));
-    },
+    BarrierStore,
 )(Barrier);
