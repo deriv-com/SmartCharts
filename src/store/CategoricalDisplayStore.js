@@ -83,14 +83,12 @@ export default class CategoricalDisplayStore {
         if (this.filteredItems.length === 0) { return; }
 
         const ActiveViewHeight = this.scrollPanel.clientHeight * 1 / 5;
-        const elScrollPanel = this.scrollPanel.getBoundingClientRect();
-        const scrollPanelTop = elScrollPanel.top;
         let activeMenuId = null;
 
         for (const category of this.filteredItems) {
             const el = this.categoryElements[category.categoryId];
             const r = el.getBoundingClientRect();
-            const top = r.top - scrollPanelTop;
+            const top = r.top - this.scrollPanel.getBoundingClientRect().top;
             if (top < ActiveViewHeight) {
                 activeMenuId = category.categoryId;
             }
