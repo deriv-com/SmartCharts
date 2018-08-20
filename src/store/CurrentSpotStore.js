@@ -1,4 +1,4 @@
-import { action, observable, when } from 'mobx';
+import { action, computed, observable, when } from 'mobx';
 
 class CurrectSpotStore {
     constructor(mainStore) {
@@ -9,6 +9,7 @@ class CurrectSpotStore {
     @observable top = 0;
     @observable left = 0;
     @observable show = false;
+    @computed get pip() { return this.mainStore.chart.currentActiveSymbol.decimal_places; }
 
     get context() { return this.mainStore.chart.context; }
     get stx() { return this.context.stx; }
@@ -31,14 +32,16 @@ class CurrectSpotStore {
             const currentQuote = this.stx.currentQuote();
             if (!currentQuote) { return; }
             const price = currentQuote.Close;
-            let x = this.stx.pixelFromTick(currentQuote.tick, chart);
-            if (chart.lastTickOffset) { x += chart.lastTickOffset; }
+            const x = this.stx.pixelFromTick(currentQuote.tick, chart) + (chart.lastTickOffset || 0);
             const y = this.stx.pixelFromPrice(price, panel);
             if (chart.yAxis.left > x
                 && chart.yAxis.top <= y
                 && chart.yAxis.bottom >= y) {
-                this.top = y;
-                this.left = (Math.abs(x - this.left) > 1) ? x : this.left;
+                // Limit precision to reduce wobbly-ness in the spot:
+                this.top = +y.toFixed(this.pip);
+                if (Math.abs(this.left - x) >= 1) {
+                    this.left = Math.round(x);
+                }
             } else {
                 visible = false;
             }
