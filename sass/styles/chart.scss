@@ -472,10 +472,12 @@ html, body {
     }
 }
 
-.stx_crosshair_drawing { /* Darker crosshairs lines when drawing */
+.stx_crosshair_drawing { /* Crosshairs lines when drawing */
     position: absolute;
     z-index: 10;
-    background-color: #333;
+    @include themify($themes) {
+        background-color: themed('CrosshairAxis');
+    }
 }
 
 #crossY, .stx_crosshair_y { /* Vertical Crosshair line size */
