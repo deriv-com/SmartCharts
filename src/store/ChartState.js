@@ -2,8 +2,6 @@ import { action, observable, when } from 'mobx';
 import { createObjectFromLocalStorage, calculateTimeUnitInterval, calculateGranularity } from '../utils';
 
 class ChartState {
-    static _id_counter = 0;
-
     @observable granularity;
     @observable chartType;
     @observable startEpoch;
@@ -16,7 +14,6 @@ class ChartState {
 
     constructor(mainStore) {
         this.chartStore = mainStore.chart;
-        this.id = ++ChartState._id_counter;
         when(() => this.context, this.onContextReady);
     }
 
@@ -26,8 +23,8 @@ class ChartState {
         this.stxx.addEventListener('drawing', this.saveDrawings.bind(this));
     };
 
-    @action.bound updateProps({ Id, settings, isConnectionOpened, symbol, granularity, chartType, startEpoch, endEpoch }) {
-        this.chartId = Id;
+    @action.bound updateProps({ id, settings, isConnectionOpened, symbol, granularity, chartType, startEpoch, endEpoch }) {
+        this.chartId = id;
         this.settings = settings;
         this.isConnectionOpened = isConnectionOpened;
         this.symbol = symbol;

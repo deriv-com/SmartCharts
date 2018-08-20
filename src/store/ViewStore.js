@@ -10,7 +10,7 @@ export default class ViewStore {
         this.ViewsMenu = this.menu.connect(Menu);
     }
 
-    @observable static views = createObjectFromLocalStorage('cq-views');
+    @observable static views = createObjectFromLocalStorage('cq-views') || [];
     @observable scrollPanel;
     @observable templateName = '';
     @observable currentRoute = 'main';
@@ -25,7 +25,7 @@ export default class ViewStore {
     get stx() { return this.context.stx; }
     get loader() { return this.mainStore.loader; }
 
-    updateLocalStorage = () => {
+    static updateLocalStorage() {
         CIQ.localStorageSetItem('cq-views', JSON.stringify(ViewStore.views));
     }
 
@@ -55,7 +55,7 @@ export default class ViewStore {
             this.updateRoute('main');
             const layout = this.stx.exportLayout();
             ViewStore.views.push({ name: this.templateName, layout });
-            this.updateLocalStorage();
+            ViewStore.updateLocalStorage();
             this.templateName = '';
         }
     }
@@ -65,7 +65,7 @@ export default class ViewStore {
         const templateIndex = ViewStore.views.findIndex(x => x.name.toLowerCase() === this.templateName.toLowerCase());
         ViewStore.views[templateIndex].layout = layout;
         ViewStore.views[templateIndex].name = this.templateName;
-        this.updateLocalStorage();
+        ViewStore.updateLocalStorage();
         this.updateRoute('main');
         this.templateName = '';
     }
@@ -73,7 +73,7 @@ export default class ViewStore {
     @action.bound remove(idx, e) {
         ViewStore.views = ViewStore.views.filter((x, index) => idx !== index);
         e.nativeEvent.is_item_removed = true;
-        this.updateLocalStorage();
+        ViewStore.updateLocalStorage();
     }
 
     @action.bound applyLayout = (idx, e) => {
