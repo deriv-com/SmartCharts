@@ -2,8 +2,6 @@ import { action, observable, when } from 'mobx';
 import { createObjectFromLocalStorage, calculateTimeUnitInterval, calculateGranularity } from '../utils';
 
 class ChartState {
-    static _id_counter = 0;
-
     @observable granularity;
     @observable chartType;
     @observable startEpoch;
@@ -16,7 +14,6 @@ class ChartState {
 
     constructor(mainStore) {
         this.chartStore = mainStore.chart;
-        this.id = ++ChartState._id_counter;
         when(() => this.context, this.onContextReady);
     }
 
@@ -24,10 +21,10 @@ class ChartState {
         this.stxx.addEventListener('layout', this.saveLayout.bind(this));
         this.stxx.addEventListener('symbolChange', this.saveLayout.bind(this));
         this.stxx.addEventListener('drawing', this.saveDrawings.bind(this));
-        this.stxx.addEventListener('preferences', this.savePreferences.bind(this));
     };
 
-    @action.bound updateProps({ settings, isConnectionOpened, symbol, granularity, chartType, startEpoch, endEpoch }) {
+    @action.bound updateProps({ id, settings, isConnectionOpened, symbol, granularity, chartType, startEpoch, endEpoch }) {
+        this.chartId = id;
         this.settings = settings;
         this.isConnectionOpened = isConnectionOpened;
         this.symbol = symbol;
@@ -38,14 +35,15 @@ class ChartState {
     }
 
     saveLayout() {
+        if (!this.chartId) return;
         const layoutData = this.stxx.exportLayout(true);
         const json = JSON.stringify(layoutData);
-        CIQ.localStorageSetItem(`layout-${this.id}`, json);
+        CIQ.localStorageSetItem(`layout-${this.chartId}`, json);
     }
 
     // returns false if restoring layout fails
     restoreLayout() {
-        let layoutData = createObjectFromLocalStorage(`layout-${this.id}`);
+        let layoutData = createObjectFromLocalStorage(`layout-${this.chartId}`);
 
         if (!layoutData) return false;
 
@@ -105,35 +103,22 @@ class ChartState {
     }
 
     saveDrawings() {
+        if (!this.chartId) return;
         const obj = this.stxx.exportDrawings();
         const symbol = this.stxx.chart.symbol;
         if (obj.length === 0) {
-            CIQ.localStorage.removeItem(symbol);
+            CIQ.localStorage.removeItem(`${symbol}-${this.chartId}`);
         } else {
-            CIQ.localStorageSetItem(symbol, JSON.stringify(obj));
+            CIQ.localStorageSetItem(`${symbol}-${this.chartId}`, JSON.stringify(obj));
         }
     }
 
     restoreDrawings() {
-        const drawings = createObjectFromLocalStorage(this.stxx.chart.symbol);
+        const drawings = createObjectFromLocalStorage(`${this.stxx.chart.symbol}-${this.chartId}`);
         if (drawings) {
             this.stxx.importDrawings(drawings);
             this.stxx.draw();
         }
-    }
-
-    restorePreferences() {
-        const pref = createObjectFromLocalStorage(`preferences-${this.id}`);
-        if (pref) {
-            this.stxx.importPreferences(pref);
-        }
-    }
-
-    savePreferences() {
-        CIQ.localStorageSetItem(
-            `preferences-${this.id}`,
-            JSON.stringify(this.stxx.exportPreferences()),
-        );
     }
 }
 

@@ -21,6 +21,7 @@ import './doorbell';
 import { ConnectionManager, StreamManager } from './connection';
 
 configure({ enforceActions: true });
+
 const getLanguageStorage = function () {
     const default_language = 'en';
     try {
