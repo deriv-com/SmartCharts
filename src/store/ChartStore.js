@@ -187,8 +187,6 @@ class ChartStore {
         stxx.callbacks.studyOverlayEdit = studiesStore.editStudy;
         stxx.callbacks.studyPanelEdit = studiesStore.editStudy;
 
-        this.state.restorePreferences();
-
         this.api.getActiveSymbols().then(action(({ active_symbols }) => {
             /**
              * Updating market close status each 10 minute

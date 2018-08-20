@@ -3,6 +3,8 @@ import PriceLineStore from './PriceLineStore';
 import ShadeStore from './ShadeStore';
 import PendingPromise from '../utils/PendingPromise';
 import PriceLine from '../components/PriceLine.jsx';
+import Shade from '../components/Shade.jsx';
+import { isValidProp } from '../utils';
 
 export default class BarrierStore {
     static get SHADE_NONE_SINGLE() { return 'SHADE_NONE_SINGLE'; }
@@ -44,9 +46,12 @@ export default class BarrierStore {
 
         this._listenerId = this.stx.addEventListener('newChart', this.init);
 
-        this.aboveShade = new ShadeStore();
-        this.betweenShade = new ShadeStore();
-        this.belowShade = new ShadeStore();
+        this.aboveShadeStore = new ShadeStore('top-shade');
+        this.betweenShadeStore = new ShadeStore('between-shade');
+        this.belowShadeStore = new ShadeStore('bottom-shade');
+        this.AboveShade = this.aboveShadeStore.connect(Shade);
+        this.BetweenShade = this.betweenShadeStore.connect(Shade);
+        this.BelowShade = this.belowShadeStore.connect(Shade);
 
         this.shadeState = BarrierStore.SHADE_NONE_SINGLE;
 
@@ -75,7 +80,24 @@ export default class BarrierStore {
         this._drawShadedArea();
     }
 
-    destructor() {
+    @action.bound updateProps({
+        color, shadeColor, shade, high, low, relative, draggable, onChange, hidePriceLines, lineStyle,
+    }) {
+        this.initializePromise.then(action(() => {
+            if (color) { this.color = color; }
+            if (shadeColor) { this.shadeColor = shadeColor; }
+            if (shade) { this.shadeState = `SHADE_${shade}`.toUpperCase(); }
+            if (relative !== undefined) { this.relative = relative; }
+            if (draggable !== undefined) { this.draggable = draggable; }
+            if (isValidProp(high)) { this.high_barrier = high; }
+            if (isValidProp(low)) { this.low_barrier = low; }
+            if (onChange) { this.onBarrierChange = onChange; }
+            this.lineStyle = lineStyle;
+            this.hidePriceLines = !!hidePriceLines;
+        }));
+    }
+
+    @action.bound destructor() {
         this.stx.removeInjection(this._injectionId);
         this.stx.removeEventListener(this._listenerId);
         this._high_barrier.destructor();
@@ -140,9 +162,9 @@ export default class BarrierStore {
             || this._shadeState === BarrierStore.SHADE_NONE_DOUBLE;
 
         if (noShade) {
-            this.aboveShade.visible = false;
-            this.betweenShade.visible = false;
-            this.belowShade.visible = false;
+            this.aboveShadeStore.visible = false;
+            this.betweenShadeStore.visible = false;
+            this.belowShadeStore.visible = false;
         } else {
             const aboveShadeEnable = this._shadeState === BarrierStore.SHADE_ABOVE
                 || this._shadeState === BarrierStore.SHADE_OUTSIDE;
@@ -150,9 +172,9 @@ export default class BarrierStore {
                 || this._shadeState === BarrierStore.SHADE_OUTSIDE;
             const betweenShadeEnable = this._shadeState === BarrierStore.SHADE_BETWEEN;
 
-            this.aboveShade.visible = aboveShadeEnable;
-            this.betweenShade.visible = betweenShadeEnable;
-            this.belowShade.visible = belowShadeEnable;
+            this.aboveShadeStore.visible = aboveShadeEnable;
+            this.betweenShadeStore.visible = betweenShadeEnable;
+            this.belowShadeStore.visible = belowShadeEnable;
 
             this._drawShadedArea();
         }
@@ -219,19 +241,19 @@ export default class BarrierStore {
 
     _shadeBetween() {
         const bottom = this._calcBottomShade(this._low_barrier);
-        this.betweenShade.top = this._high_barrier.top;
-        this.betweenShade.bottom = bottom;
+        this.betweenShadeStore.top = this._high_barrier.top;
+        this.betweenShadeStore.bottom = bottom;
     }
 
     _shadeBelow(barrier = this._high_barrier) {
-        this.belowShade.top = barrier.top;
-        this.belowShade.bottom = 0;
+        this.belowShadeStore.top = barrier.top;
+        this.belowShadeStore.bottom = 0;
     }
 
     _shadeAbove(barrier = this._high_barrier) {
         const bottom = this._calcBottomShade(barrier);
-        this.aboveShade.top = 0;
-        this.aboveShade.bottom = bottom;
+        this.aboveShadeStore.top = 0;
+        this.aboveShadeStore.bottom = bottom;
     }
 
     _shadeOutside() {

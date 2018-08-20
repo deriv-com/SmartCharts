@@ -11,18 +11,18 @@ class Feed {
     get startEpoch() { return this._mainStore.state.startEpoch; }
     get endEpoch() { return this._mainStore.state.endEpoch; }
     get context() { return this._mainStore.chart.context; }
+    _activeStreams = {};
+    _lastStreamEpoch = {};
+    _isConnectionOpened = true;
 
     constructor(binaryApi, stx, mainStore) {
         this._stx = stx;
         this._binaryApi = binaryApi;
-        this._activeStreams = {};
-        this._lastStreamEpoch = {};
         this._mainStore = mainStore;
         reaction(() => mainStore.state.isConnectionOpened, this.onConnectionChanged.bind(this));
         when(() => this.context, this.onContextReady);
 
         this._emitter = new EventEmitter({ emitDelay: 0 });
-        this._isConnectionOpened = true;
     }
 
     onContextReady = () => {
@@ -114,6 +114,13 @@ class Feed {
         }
 
         let response = await tickHistoryPromise;
+
+        // if symbol is changed before request is completed, past request needs to be forgotten:
+        if (!isComparisonChart && this._stx.chart.symbol !== symbol) {
+            callback({ quotes: [] });
+            this._binaryApi.forget({ symbol, granularity });
+            return;
+        }
 
         if (response.error) {
             const errorMessage = response.error.message;
