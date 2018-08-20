@@ -115,6 +115,13 @@ class Feed {
 
         let response = await tickHistoryPromise;
 
+        // if symbol is changed before request is completed, past request needs to be forgotten:
+        if (!isComparisonChart && this._stx.chart.symbol !== symbol) {
+            callback({ quotes: [] });
+            this._binaryApi.forget({ symbol, granularity });
+            return;
+        }
+
         if (response.error) {
             const errorMessage = response.error.message;
             const errorCode = response.error.code;
