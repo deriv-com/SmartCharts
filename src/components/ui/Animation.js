@@ -40,8 +40,8 @@ CIQ.Animation = function (stx, animationParameters, easeMachine) {
     animationParameters = CIQ.extend(params, animationParameters);
 
     if (params.tension) stx.chart.tension = animationParameters.tension;
-    stx.tickAnimator = easeMachine || new CIQ.EaseMachine(Math.easeOutCubic, 1000);
-    let scrollAnimator = new CIQ.EaseMachine(Math.easeInOutCubic, 1000);
+    stx.tickAnimator = easeMachine || new CIQ.EaseMachine(Math.easeOutCubic, 500);
+    let scrollAnimator = new CIQ.EaseMachine(Math.easeInOutCubic, 500);
 
     let filterSession = false;
     let nextBoundary = null;
