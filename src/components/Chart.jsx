@@ -5,6 +5,7 @@ import ChartTitle from './ChartTitle.jsx';
 import AssetInformation from './AssetInformation.jsx';
 import Loader from './Loader.jsx';
 import Barrier from './Barrier.jsx';
+import DrawingCursor from './DrawingCursor.jsx';
 
 /* css + scss */
 import '../../sass/app.scss';
@@ -54,6 +55,7 @@ class Chart extends Component {
             topWidgets,
             chartContainerHeight,
             containerWidth,
+            isDrawing,
         } = this.props;
 
         const currentPosition = `cq-chart-control-${(position && !isMobile) ? position : 'bottom'}`;
@@ -86,8 +88,9 @@ class Chart extends Component {
                                 <div className="cq-top-ui-widgets">
                                     <TopWidgets />
                                 </div>
-                                <div className="chartContainer primary" style={{ height: chartContainerHeight }}>
+                                <div className={`chartContainer ${isDrawing ? 'ciq-draw-mode' : ''}`} style={{ height: chartContainerHeight }}>
                                     <Crosshair />
+                                    <DrawingCursor />
                                 </div>
                                 <Loader />
                                 {!isChartAvailable && (
@@ -108,7 +111,7 @@ class Chart extends Component {
     }
 }
 
-export default connect(({ chart, drawTools, studies, chartSetting, chartType, state }) => ({
+export default connect(({ chart, drawTools, studies, chartSetting, chartType, state, drawingCursor }) => ({
     init: chart.init,
     destroy: chart.destroy,
     StudySettingsDialog : studies.StudySettingsDialog,
@@ -119,4 +122,5 @@ export default connect(({ chart, drawTools, studies, chartSetting, chartType, st
     updateProps: state.updateProps,
     chartContainerHeight: chart.chartContainerHeight,
     containerWidth: chart.containerWidth,
+    isDrawing: drawingCursor.isDrawing,
 }))(Chart);

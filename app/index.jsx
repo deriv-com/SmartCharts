@@ -10,7 +10,7 @@ import { // eslint-disable-line import/no-extraneous-dependencies,import/no-unre
     DrawTools,
     ChartSetting,
     createObjectFromLocalStorage,
-    Share,
+    Download,
     ChartTitle,
     AssetInformation,
     ComparisonList,
@@ -47,6 +47,7 @@ const getLanguageStorage = function () {
     }
 };
 
+const chartId = '1';
 const appId  = CIQ.localStorage.getItem('config.app_id') || 12812;
 const serverUrl  = CIQ.localStorage.getItem('config.server_url') || 'wss://ws.binaryws.com/websockets/v3';
 
@@ -65,7 +66,7 @@ const renderControls = () => (
         <Comparison />
         <DrawTools />
         <Views />
-        <Share />
+        <Download />
         <Timeperiod />
         {CIQ.isMobile ? '' : <ChartSize />}
         <ChartSetting />
@@ -74,7 +75,6 @@ const renderControls = () => (
 const requestAPI = connectionManager.send.bind(connectionManager);
 const requestSubscribe = streamManager.subscribe.bind(streamManager);
 const requestForget = streamManager.forget.bind(streamManager);
-
 
 class App extends Component {
     constructor(props) {
@@ -93,6 +93,8 @@ class App extends Component {
         this.state = { settings, isConnectionOpened: true };
     }
 
+    startingLanguage = 'en';
+
     symbolChange = (symbol) => {
         this.notifier.removeByCategory('activesymbol');
         this.setState({ symbol });
@@ -107,8 +109,6 @@ class App extends Component {
             window.location.reload();
         }
     };
-
-    startingLanguage = 'en';
 
     renderTopWidgets = () => (
         <React.Fragment>
@@ -129,6 +129,7 @@ class App extends Component {
                 onMessage={e => this.notifier.notify(e)}
             >
                 <SmartChart
+                    id={chartId}
                     symbol={symbol}
                     onMessage={e => this.notifier.notify(e)}
                     isMobile={CIQ.isMobile}

@@ -91,7 +91,7 @@ export default class CategoricalDisplayStore {
                 continue;
             }
             const r = el.getBoundingClientRect();
-            const top = r.top - this.scrollPanel.scrollTop;
+            const top = r.top - this.scrollPanel.getBoundingClientRect().top;
             if (top > 0) { break; }
             i++;
         }

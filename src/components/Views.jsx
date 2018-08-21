@@ -1,6 +1,7 @@
 import React from 'react';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import { connect } from '../store/Connect';
+import ViewStore from '../store/ViewStore';
 import {
     BackIcon,
     TemplateIcon,
@@ -127,7 +128,7 @@ const Views = ({
 
 export default connect(({ view: s }) => ({
     ViewsMenu: s.ViewsMenu,
-    views: s.views,
+    views: ViewStore.views,
     routes: s.routes,
     onOverwrite: s.onOverwrite,
     onCancel: s.onCancel,

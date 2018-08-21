@@ -1,6 +1,8 @@
 import { action, observable, when } from 'mobx';
 import { sameBar } from '../utils';
 
+const MAX_TOOLTIP_WIDTH = 315;
+
 class CrosshairStore {
     constructor(mainStore) {
         this.mainStore = mainStore;
@@ -22,9 +24,9 @@ class CrosshairStore {
 
     @observable top = 0;
     @observable left = -50000;
-    @observable right = 'auto';
     @observable rows = [];
     @observable state = 0;
+    @observable isArrowLeft = true;
     node = null;
     lastBar = {};
     showChange = false;
@@ -34,11 +36,6 @@ class CrosshairStore {
     hide = () => {
         this.top = 0;
         this.left = -50000;
-        this.right = 'auto';
-    };
-
-    setRootRef = (ref) => {
-        this.node = ref;
     };
 
     onContextReady = () => {
@@ -286,7 +283,7 @@ class CrosshairStore {
                 } else if (dsField.constructor === Date) {
                     const { floatDate } = stx.controls;
                     if (name === 'DT' && floatDate && floatDate.innerHTML) {
-                        if (CIQ.ChartEngine.hideDates()) {
+                        if (stx.chart.xAxis.noDraw) {
                             continue;
                         } else {
                             fieldValue = floatDate.innerHTML;
@@ -312,20 +309,9 @@ class CrosshairStore {
     }
 
     updateTooltipPosition() {
-        const offset = 30;
-        let left = null,
-            right = null;
-        if (this.node.offsetWidth + offset < CIQ.ChartEngine.crosshairX) {
-            left = 'auto';
-            right = (this.stx.container.clientWidth - this.stx.cx + offset) | 0;
-        } else {
-            left = (this.stx.cx + offset) | 0;
-            right = 'auto';
-        }
-        const top = (CIQ.ChartEngine.crosshairY - this.stx.top - (this.node.offsetHeight >> 1)) | 0;
-        this.top = top;
-        this.left = left;
-        this.right = right;
+        this.isArrowLeft = CIQ.ChartEngine.crosshairX <= MAX_TOOLTIP_WIDTH;
+        this.left = CIQ.ChartEngine.crosshairX;
+        this.top = CIQ.ChartEngine.crosshairY;
     }
 }
 

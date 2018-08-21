@@ -104,8 +104,6 @@
     .items {
         padding: 16px 0;
         flex-grow: 1;
-        overflow: scroll;
-        height: 200px;
         @include themify($themes) {
             background: themed('DialogSettingBodyBg');
         }
@@ -113,7 +111,7 @@
         .item {
             box-sizing: border-box;
             padding: 0 16px;
-            height: 25px;
+            height: 30px;
             margin-bottom: 5px;
             display: flex;
             flex-direction: column;
@@ -133,8 +131,8 @@
     .buttons {
         display: flex;
         justify-content: flex-end;
+        margin-bottom: 5px;
         @include themify($themes) {
-            border-top: 1px solid themed('DialogFootBorder');
             background: themed('DialogFootBg');
         }
 
@@ -193,6 +191,10 @@
     .cq-settings-dialog {
         .items {
             padding: 5px 0;
+
+            .item {
+                height: 28px;
+            }
         }
     }
 }
