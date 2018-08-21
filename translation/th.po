@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Thai\n"
 "Language: th_TH\n"
-"PO-Revision-Date: 2018-08-21 21:50\n"
+"PO-Revision-Date: 2018-08-21 22:00\n"
 
 msgid " already exists."
 msgstr " มีอยู่แล้ว"
@@ -442,7 +442,7 @@ msgid "Moving Average Type"
 msgstr "ประเภทค่าเฉลี่ยเคลื่อนที่"
 
 msgid "Trade Volume Index"
-msgstr "ดัชนีปริมาณการซื้อขาย"
+msgstr "ดัชนีปริมาณการซื้อขาย (Trade Volume Index)"
 
 msgid "Min Tick Value"
 msgstr "ค่าช่วงราคาต่ำสุด"
@@ -454,7 +454,7 @@ msgid "Limit Move Value"
 msgstr "Limit Move Value"
 
 msgid "Accumulative Swing Index"
-msgstr "ดัชนีแกว่งสะสม"
+msgstr "ดัชนีแกว่งสะสม (Accumulative Swing Index)"
 
 msgid "Price Rate of Change"
 msgstr "อัตราราคาของการเปลี่ยนแปลง"
@@ -889,7 +889,7 @@ msgid "Price Momentum Oscillator"
 msgstr "Price Momentum Oscillator"
 
 msgid "Double Smoothing Period"
-msgstr "ช่วง Double Smoothing"
+msgstr "Double Smoothing Period"
 
 msgid "PMO"
 msgstr "PMO"
