@@ -8,7 +8,7 @@ import CrosshairToggle from './CrosshairToggle.jsx';
 import Timeperiod from './Timeperiod.jsx';
 import ChartSize from './ChartSize.jsx';
 import DrawTools from './DrawTools.jsx';
-import Share from './Share.jsx';
+import Download from './Download.jsx';
 import '../../sass/components/_chart-controls.scss';
 
 
@@ -20,7 +20,7 @@ const renderDefaultControls = isMobile => () => (
         <Comparison />
         <DrawTools />
         <Views />
-        <Share />
+        <Download />
         <Timeperiod />
         {isMobile ? '' : <ChartSize />}
     </React.Fragment>
@@ -47,7 +47,7 @@ export default connect(({ chart,
     comparison,
     drawTools,
     view,
-    share,
+    download,
     timeperiod,
     chartSetting }) => ({
     isMobile: chart.isMobile,
@@ -58,7 +58,7 @@ export default connect(({ chart,
             || comparison.menu.open
             || drawTools.menu.open
             || view.menu.open
-            || share.menu.open
+            || download.menu.open
             || timeperiod.menu.open
             || chartSetting.menu.open
     ),

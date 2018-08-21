@@ -15,6 +15,9 @@ import PointFigure from '../../sass/icons/chart settings/chart types/ic-pointfig
 import RangeBars from '../../sass/icons/chart settings/chart types/ic-rangebars-normal.svg';
 import Renko from '../../sass/icons/chart settings/chart types/ic-renko-normal.svg';
 import Spline from '../../sass/icons/chart settings/chart types/spline/ic-spline-normal.svg';
+import Png from '../../sass/icons/download/ic-png.svg';
+import Csv from '../../sass/icons/download/ic-csv.svg';
+
 
 import Add from '../../sass/icons/chart settings/zoom-in/ic-zoomin-light.svg';
 import Close from '../../sass/icons/close/ic-close.svg';
@@ -200,6 +203,8 @@ export const IndicatorIcon = Wrapper(Indicator);
 export const MeasureIcon = Wrapper(Measure);
 export const ZoomOutIcon = Wrapper(Minus);
 export const SplineIcon = Wrapper(Spline);
+export const PngIcon = Wrapper(Png);
+export const CsvIcon = Wrapper(Csv);
 export const StarIcon = Wrapper(Star);
 export const TemplateIcon = Wrapper(Template);
 export const TickIcon = Wrapper(Tick);
