@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Thai\n"
 "Language: th_TH\n"
-"PO-Revision-Date: 2018-08-21 21:40\n"
+"PO-Revision-Date: 2018-08-21 21:50\n"
 
 msgid " already exists."
 msgstr " มีอยู่แล้ว"
@@ -1066,7 +1066,7 @@ msgid "Teeth"
 msgstr "ฟัน"
 
 msgid "Lips"
-msgstr "ริมฝีปาก"
+msgstr "Lips"
 
 msgid "Gator Oscillator"
 msgstr "Gator Oscillator"
@@ -1180,25 +1180,25 @@ msgid "Pring's Know Sure Thing"
 msgstr "Pring's Know Sure Thing"
 
 msgid "Lightest Rate of Change Period"
-msgstr "ช่วง Lightest Rate of Change"
+msgstr "อัตราเบาบางที่สุดของช่วงเปลี่ยนแปลง"
 
 msgid "Lightest SMA Period"
 msgstr "ช่วง SMA น้อยที่สุด"
 
 msgid "Light Rate of Change Period"
-msgstr "ช่วง Light Rate of Change"
+msgstr "อัตราเบาบางของช่วงเปลี่ยนแปลง"
 
 msgid "Light SMA Period"
 msgstr "ช่วง SMA เบาบาง"
 
 msgid "Heavy Rate of Change Period"
-msgstr "ช่วง Heavy Rate of Change"
+msgstr "อัตราสูงของช่วงเปลี่ยนแปลง"
 
 msgid "Heavy SMA Period"
 msgstr "ช่วง SMA มาก"
 
 msgid "Heaviest Rate of Change Period"
-msgstr "ช่วง Heaviest Rate of Change"
+msgstr "อัตราสูงที่สุดของช่วงเปลี่ยนแปลง"
 
 msgid "Heaviest SMA Period"
 msgstr "ช่วง SMA มากที่สุด"
