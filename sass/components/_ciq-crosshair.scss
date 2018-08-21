@@ -18,7 +18,6 @@
         }
         display: flex;
         flex-direction: column;
-        transform: translateY(-50%);
 
         &:after,
         &:before {
@@ -43,10 +42,13 @@
                 border-left: 6px solid themed('CrosshairBg');
             }
         }
-        &.arrow-left:after {
-            display: block;
+        &.arrow-left {
+            transform: translateX(30px) translateY(-50%);
         }
-        &.arrow-right:before {
+        &.arrow-right {
+            transform: translateX(calc(-100% - 30px)) translateY(-50%);
+        }
+        &.arrow-left:after, &.arrow-right:before {
             display: block;
         }
         .row {

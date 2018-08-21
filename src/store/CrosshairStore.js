@@ -1,6 +1,8 @@
 import { action, observable, when } from 'mobx';
 import { sameBar } from '../utils';
 
+const MAX_TOOLTIP_WIDTH = 315;
+
 class CrosshairStore {
     constructor(mainStore) {
         this.mainStore = mainStore;
@@ -34,10 +36,6 @@ class CrosshairStore {
     hide = () => {
         this.top = 0;
         this.left = -50000;
-    };
-
-    setRootRef = (ref) => {
-        this.node = ref;
     };
 
     onContextReady = () => {
@@ -311,18 +309,9 @@ class CrosshairStore {
     }
 
     updateTooltipPosition() {
-        const offset = 30;
-        const width = this.node.offsetWidth + offset;
-        let left = null;
-        if (width < CIQ.ChartEngine.crosshairX) {
-            this.isArrowLeft = false;
-            left = (this.stx.cx - width);
-        } else {
-            this.isArrowLeft = true;
-            left = (this.stx.cx + offset);
-        }
-        this.top = (CIQ.ChartEngine.crosshairY - this.stx.top) | 0;
-        this.left = left | 0;
+        this.isArrowLeft = CIQ.ChartEngine.crosshairX <= MAX_TOOLTIP_WIDTH;
+        this.left = CIQ.ChartEngine.crosshairX;
+        this.top = CIQ.ChartEngine.crosshairY;
     }
 }
 
