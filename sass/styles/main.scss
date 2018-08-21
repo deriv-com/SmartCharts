@@ -171,6 +171,12 @@
         z-index: 2;
         margin: 0.2em 0.5em;
         width: 100%;
+        pointer-events: none;
+
+        > div {
+            // top widgets panel will have no pointer events, but it's children should not be affected:
+            pointer-events: initial;
+        }
     }
     .ciq-menu {
         display: inline-block;

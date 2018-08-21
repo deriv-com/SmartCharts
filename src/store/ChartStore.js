@@ -119,7 +119,7 @@ class ChartStore {
         const engineParams = {
             maxMasterDataSize: 5000, // cap size so tick_history requests do not become too large
             markerDelay: null, // disable 25ms delay for placement of markers
-            container: this.rootNode.querySelector('.chartContainer.primary'),
+            container: this.rootNode.querySelector('.chartContainer'),
             controls: { chartControls: null }, // hide the default zoom buttons
             preferences: {
                 currentPriceLine: true,
