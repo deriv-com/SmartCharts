@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Thai\n"
 "Language: th_TH\n"
-"PO-Revision-Date: 2018-08-21 02:51\n"
+"PO-Revision-Date: 2018-08-21 21:05\n"
 
 msgid " already exists."
 msgstr " มีอยู่แล้ว"
@@ -106,10 +106,10 @@ msgid "Download"
 msgstr "ดาวน์โหลด"
 
 msgid "Download as CSV"
-msgstr ""
+msgstr "ดาวน์โหลดเป็น CSV"
 
 msgid "Download as PNG"
-msgstr ""
+msgstr "ดาวน์โหลดเป็น PNG"
 
 msgid "Download Chart"
 msgstr "ดาวน์โหลดแผนภูมิ"
@@ -424,7 +424,7 @@ msgid "Time Series Forecast"
 msgstr "การพยากรณ์อนุกรมเวลา"
 
 msgid "Vertical Horizontal Filter"
-msgstr "Vertical Horizontal Filter"
+msgstr "ตัวกรอง Vertical Horizontal"
 
 msgid "Result"
 msgstr "ผลลัพธ์"
