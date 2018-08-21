@@ -1,7 +1,7 @@
 import React from 'react';
 import PerfectScrollbar from 'react-perfect-scrollbar';
-import Menu from './Menu.jsx';
 import { connect } from '../store/Connect';
+import ViewStore from '../store/ViewStore';
 import {
     BackIcon,
     TemplateIcon,
@@ -28,7 +28,8 @@ const Views = ({
     ViewsMenu,
     menuOpen,
     views,
-    routes: { current: currentRoute, add, main, overwrite, cancel },
+    currentRoute,
+    routes: { add, main, overwrite, cancel },
     onChange,
     onSubmit,
     applyLayout,
@@ -126,8 +127,8 @@ const Views = ({
 );
 
 export default connect(({ view: s }) => ({
-    ViewsMenu: s.menu.connect(Menu),
-    views: s.views,
+    ViewsMenu: s.ViewsMenu,
+    views: ViewStore.views,
     routes: s.routes,
     onOverwrite: s.onOverwrite,
     onCancel: s.onCancel,
@@ -137,6 +138,7 @@ export default connect(({ view: s }) => ({
     applyLayout: s.applyLayout,
     menuOpen: s.menu.dialog.open,
     inputRef: s.inputRef,
+    currentRoute: s.currentRoute,
     templateName :s.templateName,
     closeMenu: s.menu.onTitleClick,
 }))(Views);

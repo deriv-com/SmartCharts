@@ -12,7 +12,7 @@ import Timeperiod from './components/Timeperiod.jsx';
 import ChartSize from './components/ChartSize.jsx';
 import DrawTools from './components/DrawTools.jsx';
 import ChartSetting from './components/ChartSetting.jsx';
-import Share from './components/Share.jsx';
+import Download from './components/Download.jsx';
 import SmartChart from './components/SmartChart.jsx';
 import ComparisonList from './components/ComparisonList.jsx';
 import ChartTitle from './components/ChartTitle.jsx';
@@ -36,7 +36,7 @@ export {
     DrawTools,
     Marker,
     PendingPromise,
-    Share,
+    Download,
     SmartChart,
     StudyLegend,
     Timeperiod,
@@ -57,7 +57,7 @@ export default {
     DrawTools,
     Marker,
     PendingPromise,
-    Share,
+    Download,
     SmartChart,
     StudyLegend,
     Timeperiod,

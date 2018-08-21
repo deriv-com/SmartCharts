@@ -1,6 +1,6 @@
 {
   "name": "@binary-com/smartcharts",
-  "version": "0.2.2",
+  "version": "0.2.7",
   "main": "dist/smartcharts.js",
   "author": "amin@binary.com",
   "license": "ISC",
@@ -90,6 +90,7 @@
     "raw-loader": "^0.5.1",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
+    "react-transition-group": "^2.3.1",
     "regenerator-runtime": "^0.11.1",
     "resize-observer-polyfill": "^1.5.0",
     "rimraf": "^2.6.2",
@@ -110,7 +111,6 @@
     "lodash.debounce": "^4.0.8",
     "prop-types": "^15.6.0",
     "react-perfect-scrollbar": "^1.1.1",
-    "react-transition-group": "^2.3.1",
     "resize-observer-polyfill": "^1.5.0",
     "robust-websocket": "^0.3.0"
   },
@@ -119,6 +119,7 @@
     "mobx": "^5.0.3",
     "mobx-react": "^5.1.2",
     "react": "^16.2.0",
-    "react-dom": "^16.2.0"
+    "react-dom": "^16.2.0",
+    "react-transition-group": "^2.3.1"
   }
 }

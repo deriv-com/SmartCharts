@@ -2,6 +2,9 @@ import { observable, action, when } from 'mobx';
 import MenuStore from './MenuStore';
 import CategoricalDisplayStore from './CategoricalDisplayStore';
 import SettingsDialogStore from './SettingsDialogStore';
+import SettingsDialog from '../components/SettingsDialog.jsx';
+import Menu from '../components/Menu.jsx';
+import CategoricalDisplay from '../components/CategoricalDisplay.jsx';
 // TODO:
 // import StudyInfo from '../study-info';
 
@@ -30,6 +33,9 @@ export default class StudyLegendStore {
             onStared: () => this.starStudy(this.helper),
             onChanged: items => this.updateStudy(this.helper.sd, items),
         });
+        this.StudyCategoricalDisplay = this.categoricalDisplay.connect(CategoricalDisplay);
+        this.StudyMenu = this.menu.connect(Menu);
+        this.StudySettingsDialog = this.settingsDialog.connect(SettingsDialog);
     }
 
     get context() { return this.mainStore.chart.context; }

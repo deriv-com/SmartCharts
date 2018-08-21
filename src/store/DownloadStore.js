@@ -2,14 +2,16 @@ import { observable, action, computed, when } from 'mobx';
 import MenuStore from './MenuStore';
 import { loadScript, downloadFileInBrowser } from '../utils';
 import PendingPromise from '../utils/PendingPromise';
+import Menu from '../components/Menu.jsx';
 
 const html2canvasCDN = 'https://charts.binary.com/dist/html2canvas.min.js';
 
-export default class ShareStore {
+export default class DownloadStore {
     constructor(mainStore) {
         this.mainStore = mainStore;
-        this.menu = new MenuStore(mainStore, { route:'share' });
+        this.menu = new MenuStore(mainStore, { route:'download' });
         when(() => this.context, this.onContextReady);
+        this.ShareMenu = this.menu.connect(Menu);
     }
 
     get context() { return this.mainStore.chart.context; }

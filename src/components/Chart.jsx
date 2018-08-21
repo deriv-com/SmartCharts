@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import React, { Component, Fragment } from 'react';
 import RenderInsideChart from './RenderInsideChart.jsx';
 import ComparisonList from './ComparisonList.jsx';
@@ -6,6 +5,7 @@ import ChartTitle from './ChartTitle.jsx';
 import AssetInformation from './AssetInformation.jsx';
 import Loader from './Loader.jsx';
 import Barrier from './Barrier.jsx';
+import DrawingCursor from './DrawingCursor.jsx';
 
 /* css + scss */
 import '../../sass/app.scss';
@@ -13,7 +13,6 @@ import '../../sass/app.scss';
 import './ui';
 
 import ChartControls from './ChartControls.jsx';
-import SettingsDialog from './SettingsDialog.jsx';
 import Crosshair from './Crosshair.jsx';
 import { connect } from '../store/Connect';
 
@@ -26,12 +25,6 @@ const defaultTopWidgets = () => (
 );
 
 class Chart extends Component {
-    static childContextTypes = { promise: PropTypes.object };
-
-    getChildContext() {
-        return { promise: this.props.contextPromise };
-    }
-
     componentDidMount() {
         const { updateProps, init, ...props } = this.props;
         updateProps(props);
@@ -61,6 +54,7 @@ class Chart extends Component {
             topWidgets,
             chartContainerHeight,
             containerWidth,
+            isDrawing,
         } = this.props;
 
         const currentPosition = `cq-chart-control-${(position && !isMobile) ? position : 'bottom'}`;
@@ -93,8 +87,9 @@ class Chart extends Component {
                                 <div className="cq-top-ui-widgets">
                                     <TopWidgets />
                                 </div>
-                                <div className="chartContainer primary" style={{ height: chartContainerHeight }}>
+                                <div className={`chartContainer primary ${isDrawing ? 'ciq-draw-mode' : ''}`} style={{ height: chartContainerHeight }}>
                                     <Crosshair />
+                                    <DrawingCursor />
                                 </div>
                                 <Loader />
                                 {!isChartAvailable && (
@@ -115,16 +110,16 @@ class Chart extends Component {
     }
 }
 
-export default connect(({ chart, drawTools, studies, chartSetting, chartType, state }) => ({
-    contextPromise: chart.contextPromise,
+export default connect(({ chart, drawTools, studies, chartSetting, chartType, state, drawingCursor }) => ({
     init: chart.init,
     destroy: chart.destroy,
-    StudySettingsDialog : studies.settingsDialog.connect(SettingsDialog),
-    DrawToolsSettingsDialog : drawTools.settingsDialog.connect(SettingsDialog),
-    AggregateChartSettingsDialog : chartType.settingsDialog.connect(SettingsDialog),
+    StudySettingsDialog : studies.StudySettingsDialog,
+    DrawToolsSettingsDialog : drawTools.DrawToolsSettingsDialog,
+    AggregateChartSettingsDialog : chartType.AggregateChartSettingsDialog,
     isChartAvailable: chart.isChartAvailable,
     setting: chartSetting,
     updateProps: state.updateProps,
     chartContainerHeight: chart.chartContainerHeight,
     containerWidth: chart.containerWidth,
+    isDrawing: drawingCursor.isDrawing,
 }))(Chart);

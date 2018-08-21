@@ -9,12 +9,13 @@ import AssetInformationStore from './AssetInformationStore';
 import ComparisonListStore from './ComparisonListStore';
 import ViewStore from './ViewStore';
 import CrosshairStore from './CrosshairStore';
-import ShareStore from './ShareStore';
+import DownloadStore from './DownloadStore';
 import ChartSettingStore from './ChartSettingStore';
 import LoaderStore from './LoaderStore';
 import FavoriteSessionStore from './FavoriteSessionStore';
 import ChartSizeStore from './ChartSizeStore';
 import RoutingStore from './RoutingStore';
+import DrawingCursorStore from './DrawingCursorStore';
 import ChartState from './ChartState';
 
 export default class MainStore {
@@ -31,9 +32,10 @@ export default class MainStore {
     comparisonList = new ComparisonListStore(this);
     view = new ViewStore(this);
     crosshair = new CrosshairStore(this);
-    share = new ShareStore(this);
+    download = new DownloadStore(this);
     chartSetting = new ChartSettingStore(this);
     loader = new LoaderStore();
     chartSize = new ChartSizeStore(this);
     routing = new RoutingStore(this);
+    drawingCursor = new DrawingCursorStore(this);
 }
