@@ -88,7 +88,7 @@ class Chart extends Component {
                                 <div className="cq-top-ui-widgets">
                                     <TopWidgets />
                                 </div>
-                                <div className={`chartContainer primary ${isDrawing ? 'ciq-draw-mode' : ''}`} style={{ height: chartContainerHeight }}>
+                                <div className={`chartContainer ${isDrawing ? 'ciq-draw-mode' : ''}`} style={{ height: chartContainerHeight }}>
                                     <Crosshair />
                                     <DrawingCursor />
                                 </div>
