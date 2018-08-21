@@ -1,65 +1,68 @@
 .cq-crosshair {
-    display: none;
-}
-
-.stx-crosshair-on .cq-crosshair {
-    position: absolute;
-    display: block;
-    padding: 8px;
-    box-sizing: border-box;
-    box-shadow: 0 2px 8px 0 rgba(21, 33, 45, 0.32);
-    pointer-events: none;
+    position: relative;
     opacity: 0;
     z-index: 30;
-    @include themify($themes) {
-        color: themed('CrosshairText');
-        background: themed('CrosshairBg');
-    }
+    top: 0;
+    left: 0;
 
+    .cq-crosshair-content {
+        @include border-radius(4px);
+        position: absolute;
+        pointer-events: none;
+        padding: 8px;
+        box-sizing: border-box;
+        box-shadow: 0 2px 8px 0 rgba(21, 33, 45, 0.32);
+        @include themify($themes) {
+            color: themed('CrosshairText');
+            background: themed('CrosshairBg');
+        }
+        display: flex;
+        flex-direction: column;
+        transform: translateY(-50%);
+
+        &:after,
+        &:before {
+            content: '';
+            position: absolute;
+            top: calc(50% - 4px);
+            width: 0;
+            height: 0;
+            border-top: 4px solid transparent;
+            border-bottom: 4px solid transparent;
+            display: none;
+        }
+        &:after {
+            left: -6px;
+            @include themify($themes) {
+                border-right: 6px solid themed('CrosshairBg');
+            }
+        }
+        &:before {
+            left: 100%;
+            @include themify($themes) {
+                border-left: 6px solid themed('CrosshairBg');
+            }
+        }
+        &.arrow-left:after {
+            display: block;
+        }
+        &.arrow-right:before {
+            display: block;
+        }
+        .row {
+            font-size: 12px;
+            line-height: 18px;
+
+            span:first-child {
+                padding-right: 5px;
+            }
+            span:last-child {
+                font-weight: bold;
+            }
+        }
+    }
     &.active {
         pointer-events: initial;
         opacity: 1;
-    }
-    @include border-radius(4px);
-
-    &:after,
-    &:before {
-        content: '';
-        position: absolute;
-        top: calc(50% - 4px);
-        width: 0;
-        height: 0;
-        border-top: 4px solid transparent;
-        border-bottom: 4px solid transparent;
-        display: none;
-    }
-    &:after {
-        left: -6px;
-        @include themify($themes) {
-            border-right: 6px solid themed('CrosshairBg');
-        }
-    }
-    &:before {
-        left: 100%;
-        @include themify($themes) {
-            border-left: 6px solid themed('CrosshairBg');
-        }
-    }
-    &.arrow-left:after {
-        display: block;
-    }
-    &.arrow-right:before {
-        display: block;
-    }
-    .row {
-        font-size: 12px;
-        line-height: 18px;
-
-        span:first-child {
-            padding-right: 5px;
-        }
-        span:last-child {
-            font-weight: bold;
-        }
     }
 }
