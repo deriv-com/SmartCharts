@@ -46,6 +46,7 @@ const getLanguageStorage = function () {
     }
 };
 
+const chartId = '1';
 const appId  = CIQ.localStorage.getItem('config.app_id') || 12812;
 const serverUrl  = CIQ.localStorage.getItem('config.server_url') || 'wss://ws.binaryws.com/websockets/v3';
 
@@ -73,7 +74,6 @@ const renderControls = () => (
 const requestAPI = connectionManager.send.bind(connectionManager);
 const requestSubscribe = streamManager.subscribe.bind(streamManager);
 const requestForget = streamManager.forget.bind(streamManager);
-
 
 class App extends Component {
     startingLanguage = 'en';
@@ -125,6 +125,7 @@ class App extends Component {
 
         return (
             <SmartChart
+                id={chartId}
                 symbol={symbol}
                 onMessage={e => this.notifier.notify(e)}
                 isMobile={CIQ.isMobile}

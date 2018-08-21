@@ -153,10 +153,8 @@ class ChartStore {
 
         const deleteElement = stxx.chart.panel.holder.parentElement.querySelector('#mouseDeleteText');
         const manageElement = stxx.chart.panel.holder.parentElement.querySelector('#mouseManageText');
-        const manageTouchElement = stxx.chart.panel.holder.parentElement.querySelector('#overlayTrashCan');
         deleteElement.textConent = t.translate('right-click to delete');
         manageElement.textConent = t.translate('right-click to manage');
-        manageTouchElement.textContent = t.translate('tap to manage');
 
         CIQ.Animation(stxx, { stayPut: true });
 
@@ -188,8 +186,6 @@ class ChartStore {
         const studiesStore = this.mainStore.studies;
         stxx.callbacks.studyOverlayEdit = studiesStore.editStudy;
         stxx.callbacks.studyPanelEdit = studiesStore.editStudy;
-
-        this.state.restorePreferences();
 
         this.api.getActiveSymbols().then(action(({ active_symbols }) => {
             /**

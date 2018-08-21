@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
+    <title>icons/system/light/pencil/ic-pencil</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="icons/system/light/pencil/ic-pencil" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <path d="M1,11.2928932 L11.4393398,0.853553391 C12.0251263,0.267766953 12.9748737,0.267766953 13.5606602,0.853553391 L15.1464466,2.43933983 C15.732233,3.02512627 15.732233,3.97487373 15.1464466,4.56066017 L4.70710678,15 L1,15 L1,11.2928932 Z" id="Combined-Shape" fill="#2A3052" fill-rule="nonzero"></path>
+        <path d="M10,3.70710678 L12.2928932,6 L4.29289322,14 L2,14 L2,11.7071068 L10,3.70710678 Z M10.7071068,3 L12.1464466,1.56066017 C12.3417088,1.36539803 12.6582912,1.36539803 12.8535534,1.56066017 L14.4393398,3.14644661 C14.634602,3.34170876 14.634602,3.65829124 14.4393398,3.85355339 L13,5.29289322 L10.7071068,3 Z" id="Combined-Shape" fill="#FFFFFF"></path>
+    </g>
+</svg>
