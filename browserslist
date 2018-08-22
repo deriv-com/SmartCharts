@@ -1,5 +1,5 @@
-safari > 10
-firefox > 27
-chrome > 36
-not ie > 0
-not op_mini > 0 
+defaults
+not op_mini all
+not ie <= 11
+not IE_Mob <= 11
+not Samsung <= 4
