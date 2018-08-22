@@ -4,11 +4,11 @@ import MainStore from '../store';
 import Chart from './Chart.jsx';
 
 class SmartChart extends React.Component {
+    mainStore = new MainStore();
+
     get chart() { return this.mainStore.chart; }
 
     get stx() { return this.chart.stxx; }
-
-    mainStore = new MainStore();
 
     render() {
         const { children, ...props } = this.props;
