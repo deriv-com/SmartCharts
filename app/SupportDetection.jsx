@@ -1,0 +1,113 @@
+import React from 'react';
+
+import './styles/support-detection.scss';
+
+const { detect } = require('detect-browser');
+
+const browser = detect();
+
+const SupportedBrowser = {
+    'Mac OS': {
+        safari: 913,
+        firefox: 2700,
+        chrome: 4902623,
+        opera: 3602130,
+        yandexbrowser: 14122130,
+    },
+    'Windows 10': {
+        edge: 15150630,
+        ie: 0, // not supported
+        firefox: 3200,
+        chrome: 4902623,
+        opera: 3602130,
+        yandexbrowser: 14122130,
+    },
+    'Windows 8.1': {
+        ie: 0, // not supported at all
+        firefox: 2700,
+        chrome: 4902623,
+        opera: 3602130,
+        yandexbrowser: 14122130,
+    },
+    'Windows 8': {
+        ie: 0, // not supported at all
+        firefox: 2700,
+        chrome: 4902623,
+        opera: 3602130,
+        yandexbrowser: 14122130,
+    },
+    'Windows 7': {
+        ie: 0, // not supported at all
+        firefox: 2700,
+        chrome: 3601985,
+        opera: 2601656,
+        yandexbrowser: 14122130,
+    },
+};
+
+
+class SupportDetection extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            unknown: false,
+            hasError: false,
+        };
+    }
+
+    componentWillMount() {
+        if (browser) {
+            const version = browser.version.split('.').join('');
+            /**
+                safari, chrome, firefox, opera, yandexbrowser, ie, edge
+            */
+            const name = browser.name;
+            /**
+                Mac OS, IOS, Android OS, Windows 7, Windows 8, Windows 10,
+            */
+            const os = browser.os;
+
+            if (SupportedBrowser[os] && SupportedBrowser[os][name]) {
+                this.setState({
+                    hasError: (version < SupportedBrowser[os][name]),
+                });
+            } else {
+                this.setState({ unknown: true });
+            }
+        }
+    }
+
+    componentDidMount() {
+        const { onMessage } = this.props;
+        if (this.state.unknown && onMessage) {
+            onMessage({
+                text: 'Please update your browser to the latest version.',
+                type: 'warning',
+                category: 'browser',
+            });
+        }
+    }
+
+    componentDidCatch(error, info) {
+        this.setState({ hasError: true });
+        console.error(error, info);
+    }
+
+    render() {
+        if (this.state.hasError) {
+            return (
+                <div className="cq-not-supported">
+                    <div className="cq-logo" />
+                    <div className="cq-icon-not-supported" />
+                    <h1>YOUR BROWSER IS NOT SUPPORTED</h1>
+                    <p>Please update your browser for the best trading experience.</p>
+                    <a href="http://outdatedbrowser.com/">Update Browser</a>
+                </div>
+            );
+        }
+        return this.props.children;
+    }
+}
+
+
+export default SupportDetection;
