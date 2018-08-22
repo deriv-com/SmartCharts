@@ -9,7 +9,7 @@ import {
 import '../../sass/components/_ciq-download.scss';
 
 
-const Download = ({
+const Share = ({
     ShareMenu,
     menuOpen,
     downloadCSV,
@@ -61,11 +61,11 @@ const Download = ({
     </ShareMenu>
 );
 
-export default connect(({ download: d }) => ({
+export default connect(({ share: d }) => ({
     ShareMenu: d.ShareMenu,
     menuOpen: d.menu.dialog.open,
     downloadPNG: d.downloadPNG,
     downloadCSV: d.downloadCSV,
     closeMenu: d.menu.onTitleClick,
     isLoadingPNG: d.isLoadingPNG,
-}))(Download);
+}))(Share);
