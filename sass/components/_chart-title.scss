@@ -42,8 +42,8 @@
         position: relative;
         display: flex;
         align-items: center;
+        border-radius: 3px;
 
-        @include border-radius();
         @include themify($themes) {
             color: themed('ChartTitleText');
         }
@@ -76,7 +76,7 @@
         .cq-symbol,
         .cq-chart-price {
             .cq-animated-price {
-                @include transition(color 300ms ease-out);
+                transition: color 300ms ease-out;
                 padding-left: 16px;
             }
             > div {
@@ -151,7 +151,7 @@
         }
         .cq-menu-dropdown {
             width: 100%;
-            @include transition(none !important);
+            transition: none !important;
 
             &.open {
                 margin: 0px;
