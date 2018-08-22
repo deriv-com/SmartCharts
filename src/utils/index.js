@@ -84,16 +84,16 @@ export function downloadFileInBrowser(filename, content, type) {
         navigator.msSaveBlob(blob, filename);
         return;
     }
+    /* Evergreen Browsers */
     const link = document.createElement('a');
-    if (link.download !== undefined) { /* Evergreen Browsers */
-        const url = type === 'image/png;' ? content : URL.createObjectURL(blob);
-        link.setAttribute('href', url);
-        link.setAttribute('download', filename);
-        link.style.visibility = 'hidden';
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-    }
+    const url = URL.createObjectURL(blob);
+    link.setAttribute('href', url);
+    link.setAttribute('download', filename);
+    link.setAttribute('target', '_blank');
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
 }
 
 export function stxtap(el, func) {
