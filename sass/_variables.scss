@@ -9,9 +9,6 @@ $font-size-base: 12px !default;
 $font-size-button: 11px !default;
 $font-size-toolbar: 14px !default;
 
-/* --------- Border Radius --------- */
-$soft-corners: 3px !default; // Set to zero to eliminate soft corners
-
 /* --------- COLOR :: Border --------- */
 $nav-height: 45px !default;
 $footer-height: 45px !default;
@@ -27,12 +24,7 @@ $small-icon-size: 16px;
 
 /* --------- Animation : dialog --------- */
 @mixin dialog-transition {
-    @include transition(
-        pointer-events 0.2s cubic-bezier(0.64, 0.04, 0.35, 1),
-        transform 0.25s cubic-bezier(0.64, 0.04, 0.35, 1),
-        opacity 0.17s cubic-bezier(0.64, 0.04, 0.35, 1),
-        z-index 0.17s cubic-bezier(0.64, 0.04, 0.35, 1)
-    );
+    transition: pointer-events 0.2s cubic-bezier(0.64, 0.04, 0.35, 1), transform 0.25s cubic-bezier(0.64, 0.04, 0.35, 1), opacity 0.17s cubic-bezier(0.64, 0.04, 0.35, 1), z-index 0.17s cubic-bezier(0.64, 0.04, 0.35, 1);
 }
 
 @mixin svg-icon-color($color) {
@@ -60,39 +52,6 @@ $small-icon-size: 16px;
     white-space: nowrap;
 }
 
-@mixin transition($transition...) {
-    -webkit-transition: $transition;
-    -moz-transition: $transition;
-    -ms-transition: $transition;
-    transition: $transition;
-}
-
-@mixin border-radius($radius : $soft-corners) {
-    -webkit-border-radius: $radius;
-    -moz-border-radius: $radius;
-    -ms-border-radius: $radius;
-    border-radius: $radius;
-}
-
-@mixin user-select($select) {
-    -webkit-user-select: $select;
-    -moz-user-select: $select;
-    -ms-user-select: $select;
-    user-select: $select;
-}
-
-@mixin box-shadow($top, $left, $blur, $color, $inset:'') {
-    -webkit-box-shadow: $top $left $blur $color #{$inset};
-    -moz-box-shadow: $top $left $blur $color #{$inset};
-    box-shadow: $top $left $blur $color #{$inset};
-}
-
-@mixin box-sizing($box) {
-    -webkit-box-sizing: $box;
-    -moz-box-sizing: $box;
-    box-sizing: $box;
-}
-
 @mixin optional-at-root($sel) {
     @at-root #{if(not &, $sel, selector-append(&, $sel))} {
         @content;
@@ -115,15 +74,6 @@ $small-icon-size: 16px;
     @include optional-at-root(':-ms-input-placeholder') {
         @content;
     }
-}
-
-@mixin rotate($degrees) {
-    -webkit-transform: rotate($degrees); /* Saf3.1+, Chrome */
-    -moz-transform: rotate($degrees); /* FF3.5+ */
-    -ms-transform: rotate($degrees); /* IE9 */
-    -o-transform: rotate($degrees); /* Opera 10.5 */
-    transform: rotate($degrees);
-    zoom: 1;
 }
 
 @mixin triangle-base($width) {
