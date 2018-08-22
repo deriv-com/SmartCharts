@@ -8,6 +8,7 @@ import { BinaryAPI, Feed } from '../feed';
 import { stableSort, calculateTimeUnitInterval, getUTCDate } from '../utils';
 
 class ChartStore {
+    static keystrokeHub;
     constructor(mainStore) {
         this.mainStore = mainStore;
     }
@@ -39,6 +40,7 @@ class ChartStore {
     @observable chartHeight;
     @observable chartContainerHeight;
     @observable isMobile = false;
+    @observable cursorInChart = false;
 
     @action.bound setActiveSymbols(activeSymbols) {
         this.activeSymbols = this.processSymbols(activeSymbols);
@@ -119,7 +121,7 @@ class ChartStore {
         const engineParams = {
             maxMasterDataSize: 5000, // cap size so tick_history requests do not become too large
             markerDelay: null, // disable 25ms delay for placement of markers
-            container: this.rootNode.querySelector('.chartContainer.primary'),
+            container: this.rootNode.querySelector('.chartContainer'),
             controls: { chartControls: null }, // hide the default zoom buttons
             preferences: {
                 currentPriceLine: true,
@@ -175,9 +177,12 @@ class ChartStore {
 
         const context = new Context(stxx, this.rootNode);
 
-        new KeystrokeHub(document.querySelector('body'), context, { // eslint-disable-line no-new
-            cb: KeystrokeHub.defaultHotKeys,
-        });
+        // only one instance of keystrokeHub should exist
+        if (ChartStore.keystrokeHub === undefined) {
+            ChartStore.keystrokeHub = new KeystrokeHub(document.body, context, {
+                cb: KeystrokeHub.defaultHotKeys,
+            });
+        }
 
         // TODO: excluded studies
 
@@ -204,6 +209,8 @@ class ChartStore {
             }
 
             this.context = context;
+            stxx.container.addEventListener('mouseenter', this.onMouseEnter);
+            stxx.container.addEventListener('mouseleave', this.onMouseLeave);
             this.contextPromise.resolve(this.context);
             this.resizeScreen();
 
@@ -221,6 +228,16 @@ class ChartStore {
         this.resizeObserver.observe(modalNode);
 
         this.feed.onComparisonDataUpdate(this.updateComparisons);
+    }
+
+    @action.bound onMouseEnter() {
+        this.cursorInChart = true;
+        ChartStore.keystrokeHub.setActiveContext(this.context);
+    }
+
+    @action.bound onMouseLeave() {
+        this.cursorInChart = false;
+        ChartStore.keystrokeHub.setActiveContext(null);
     }
 
     /**
@@ -426,6 +443,11 @@ class ChartStore {
         // we need to manually unsubscribe them.
         this.feed.unsubscribeAll();
         this.feed = null;
+        if (ChartStore.keystrokeHub.context === this.context) {
+            ChartStore.keystrokeHub.setActiveContext(null);
+        }
+        this.stxx.container.removeEventListener('mouseenter', this.onMouseEnter);
+        this.stxx.container.removeEventListener('mouseleave', this.onMouseLeave);
         this.stxx.updateChartData = function () {}; // prevent any data from entering the chart
         this.stxx.isDestroyed = true;
         this.stxx.destroy();

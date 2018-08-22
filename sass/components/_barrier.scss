@@ -58,7 +58,7 @@
     top: -11px;
     position: absolute;
     right: 0px;
-    @include border-radius(5px);
+    border-radius: 5px;
     border-style: solid;
     border-width: 1px;
     border-color: inherit;
@@ -136,7 +136,7 @@
     width: 100%;
     right: 0px;
     opacity: 0.3;
-    @include transition(opacity 0.1s ease-out);
+    transition: opacity 0.1s ease-out;
 }
 
 .top-shade {
