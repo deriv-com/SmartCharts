@@ -615,11 +615,20 @@ var warnedAboutObserverInjectDeprecation = false;
 var componentByNodeRegistry = typeof WeakMap !== "undefined" ? new WeakMap() : undefined;
 var renderReporter = new EventEmitter();
 
-function createSymbol(name) {
+var createdSymbols = {};
+
+function createRealSymbol(name) {
     if (typeof Symbol === "function") {
         return Symbol(name);
     }
     return "$mobxReactProp$" + name + Math.random();
+}
+
+function createSymbol(name) {
+    if (!createdSymbols[name]) {
+        createdSymbols[name] = createRealSymbol(name);
+    }
+    return createdSymbols[name];
 }
 
 var skipRenderKey = createSymbol("skipRender");
