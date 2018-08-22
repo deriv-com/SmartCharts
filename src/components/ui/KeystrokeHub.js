@@ -155,6 +155,7 @@ class KeystrokeHub extends Helper {
      * @private
      */
     handler(obj) {
+        if (!this.context) { return; }
         const stx = this.context.stx;
         if (stx.editingAnnotation) { return; }
         const e = obj.e,

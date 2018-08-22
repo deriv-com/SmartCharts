@@ -3,8 +3,7 @@
     .cq-menu-dropdown {
         width: 250px;
         padding: 5px 16px 16px !important;
-        @include box-sizing(border-box);
-        padding: 0em !important;
+        box-sizing: border-box;
         overflow: visible !important;
 
         .title {
@@ -30,7 +29,8 @@
                 justify-content: center;
                 cursor: pointer;
                 margin: 8px 11px 8px 0;
-                @include border-radius(3px);
+                border-radius: 3px;
+
                 @include svg-icon-stroke('DialogHeadIcon');
                 @include themify {
                     border: solid themed('DropdownBorder') 1px;

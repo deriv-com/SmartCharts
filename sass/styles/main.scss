@@ -2,8 +2,8 @@
 /* Inputs */
 .stx-textarea {
     padding: 0 5px 0 10px;
-    @include user-select(text);
-    @include box-sizing(border-box);
+    box-sizing: border-box;
+    user-select: text;
     @include themify($themes) {
         border-left: 1px solid themed('DefaultBorder');
     }
@@ -24,10 +24,9 @@
     padding: 0 10px;
     cursor: pointer;
     border: none;
-    @include transition(all 0.2s 0s, opacity 0.2s 0s);
-    @include box-sizing(border-box);
-    // @include border-radius($soft-corners);
-    @include box-shadow(0, 1px, 2px, rgba(0, 0, 0, 0.2));
+    transition: all 0.2s 0s, opacity 0.2s 0s;
+    box-sizing: border-box;
+    box-shadow: 0, 1px, 2px, rgba(0, 0, 0, 0.2);
     @include themify($themes) {
         background: themed('DefaultBg');
         color: themed('MenuText');
@@ -35,13 +34,13 @@
 
     &:hover {
         border: none;
-        @include box-shadow(0, 1px, 2px, rgba(0, 0, 0, 0.3));
+        box-shadow: 0, 1px, 2px, rgba(0, 0, 0, 0.3);
     }
     &:active,
     &:active {
         border: none;
-        @include transition(all 0s 0s);
-        @include box-shadow(inset 0, 1px, 2px, rgba(0, 0, 0, 0.2));
+        transition: all 0s 0s;
+        box-shadow: inset 0, 1px, 2px, rgba(0, 0, 0, 0.2);
     }
     &.ciq-primary,
     &.ciq-primary {
@@ -60,11 +59,11 @@
         &.ciq-simple {
             border: none;
             background: transparent;
-            @include box-shadow(0, 0, 0, 0, rgba(0, 0, 0, 0));
+            box-shadow: 0, 0, 0, 0, rgba(0, 0, 0, 0);
 
             &:hover,
             &:active {
-                @include box-shadow(0, 0, 0, 0, rgba(0, 0, 0, 0));
+                box-shadow: 0, 0, 0, 0, rgba(0, 0, 0, 0);
             }
         }
     }
@@ -86,7 +85,7 @@
 .ciq-chart,
 .stx-panel-side,
 .ciq-footer {
-    @include box-sizing(border-box);
+    box-sizing: border-box;
 }
 
 /* Navigation Bar */
@@ -124,7 +123,7 @@
     float: left;
     position: absolute;
     z-index: -12;
-    @include box-sizing(border-box);
+    box-sizing: border-box;
 
     &.stxMenuActive {
         z-index: 4;
@@ -153,7 +152,7 @@
             color: themed('DefaultText');
             background-color: themed('DefaultMain');
         }
-        @include user-select(text);
+        user-select: text;
 
         &::placeholder,
         &::-moz-placeholder {
@@ -171,18 +170,24 @@
         z-index: 2;
         margin: 0.2em 0.5em;
         width: 100%;
+        pointer-events: none;
+
+        > div {
+            // top widgets panel will have no pointer events, but it's children should not be affected:
+            pointer-events: initial;
+        }
     }
     .ciq-menu {
         display: inline-block;
         position: relative;
-        @include box-sizing(border-box);
+        box-sizing: border-box;
     }
     .ciq-menu-section {
         float: right;
     }
     /* Mobile Style */
     .smartcharts-mobile {
-        @include user-select(none);
+        user-select: none;
     }
     .cq-chart-control-left {
         .cq-top-ui-widgets {
@@ -234,7 +239,7 @@
         padding: 0;
         opacity: 0;
         visibility: hidden;
-        @include transition(opacity 150 ease-out);
+        transition: opacity 150 ease-out;
     }
     .stxMenuActive {
         .cq-menu-overlay {

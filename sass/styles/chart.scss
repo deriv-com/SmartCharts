@@ -16,7 +16,7 @@ html, body {
     font-size: 12px;
     position: relative; /* chart container must be relative for internal DOM elements to be correct */
     z-index: 1;
-    @include transition(height 0.4s ease-in-out);
+    transition: height 0.4s ease-in-out;
     @include themify($themes) {
         background: themed('ChartBg');
         color: themed('ChartText');
@@ -67,23 +67,17 @@ html, body {
     text-align: center;
     overflow: visible;
     background-repeat: no-repeat;
-    @include border-radius(3px);
-    -webkit-transition: color 0.25s, border 0.25s, box-shadow 0.25s;
-    -moz-transition: color 0.25s, border 0.25s, box-shadow 0.25s;
+    border-radius: 3px;
     transition: color 0.25s, border 0.25s, box-shadow 0.25s;
-    @include user-select(none);
+    user-select: none;
 
     &:hover {
         color: #444444;
         border: solid 1px #c5c5c5;
-        -webkit-box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.1), inset 0px -8px 6px rgba(100, 100, 100, 0.03);
-        -moz-box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.1), inset 0px -8px 6px rgba(100, 100, 100, 0.03);
         box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.1), inset 0px -8px 6px rgba(100, 100, 100, 0.03);
     }
     &:active {
         color: #333;
-        -webkit-box-shadow: inset 0px 8px 6px rgba(100, 100, 100, 0.03);
-        -moz-box-shadow: inset 0px 8px 6px rgba(100, 100, 100, 0.03);
         box-shadow: inset 0px 8px 6px rgba(100, 100, 100, 0.03);
     }
 }
@@ -96,14 +90,13 @@ html, body {
     width: 25px;
     height: 25px;
     cursor: pointer;
-    -webkit-transition: -webkit-transform 0.2s;
     transition: transform 0.2s;
 }
 
 .stx-btn-panel { /* Button Spacing */
     margin: 3px 2px;
     opacity: 0;
-    @include transition(opacity 0.5s);
+    transition: opacity 0.5s;
     @include themify($themes) {
         background-color: themed('ChartBg');
     }
@@ -112,8 +105,6 @@ html, body {
         opacity: 1;
     }
     &:active { /* Scale up when active */
-        -webkit-transform: scale(1.2, 1.2);
-        -ms-transform: scale(1.2, 1.2);
         transform: scale(1.2, 1.2);
     }
 }
@@ -186,13 +177,10 @@ html, body {
     width: 30px;
     padding: 0px;
     margin-bottom: 17px;
-    @include border-radius(3px);
+    border-radius: 3px;
     background: #fafafa;
-    -webkit-box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.2);
-    -moz-box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.2);
     box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.2);
     transition: background 0.25s;
-    -webkit-transition: background 0.25s;
     cursor: pointer;
     z-index: 30;
 }
@@ -205,7 +193,6 @@ html, body {
     padding-top: 25px;
     background: url('./icons/chart/jump-to-today.svg') no-repeat center;
     transition: opacity 0.25s, transform 0.2s;
-    -webkit-transition: opacity 0.25s, -webkit-transform 0.2s;
     opacity: 0.6;
 }
 
@@ -242,7 +229,7 @@ html, body {
     z-index: 30;
     display: none;
     margin: 5px;
-    @include border-radius(3px);
+    border-radius: 3px;
     @include themify($themes) {
         background: themed('ChartBg');
         border: 1px solid themed('ChartBorder');
@@ -252,7 +239,7 @@ html, body {
         opacity: 1;
     }
     * {
-        @include user-select(none);
+        user-select: none;
     }
     &.stx-show {
         display: inline-block;
@@ -288,7 +275,7 @@ html, body {
     font-size: 12px;
     text-align: center;
     white-space: nowrap;
-    @include border-radius(3px);
+    border-radius: 3px;
     @include themify($themes) {
         color: themed('TooltipText');
         background: themed('TooltipBg');
@@ -298,13 +285,13 @@ html, body {
         padding: 8px 8px 4px;
         position: relative;
         width: 100%;
-        @include border-radius(3px 3px 0px 0px);
+        border-radius: 3px 3px 0px 0px;
         font-weight: 500;
         @include themify($themes) {
             background: themed('TooltipTextBg');
         }
         border: none;
-        @include box-sizing(border-box);
+        box-sizing: border-box;
     }
     .mStickyRightClick {
         position: relative;
@@ -318,7 +305,7 @@ html, body {
     font-size: 11px;
     white-space: nowrap;
     z-index: 40;
-    @include border-radius(3px);
+    border-radius: 3px;
     @include themify($themes) {
         color: themed('TooltipText');
         background: themed('TooltipBg');
@@ -357,7 +344,7 @@ html, body {
     @include themify($themes) {
         background: themed('TooltipBg') !important;
     }
-    @include border-radius(3px);
+    border-radius: 3px;
 }
 
 .overlayEdit.stx-btn span,
@@ -443,7 +430,7 @@ html, body {
 
 .stx-float-price,
 .stx-float-date {
-    @include border-radius(3px);
+    border-radius: 3px;
     @include themify($themes) {
         background-color: themed('CrosshairLabel');
     }
@@ -767,8 +754,6 @@ html, body {
     position: absolute;
     display: none;
     font-size: 11px;
-    -webkit-box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.2);
-    -moz-box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.2);
     box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.2);
     z-index: 50;
 }
@@ -864,7 +849,7 @@ html, body {
 
 .stx-holder:hover .stx-btn-panel {
     opacity: 1;
-    @include transition(opacity 0.5s, height 0.3s);
+    transition: opacity 0.5s, height 0.3s;
 }
 
 .stx-ico-handle {
@@ -967,7 +952,7 @@ html, body {
             margin: 0px;
             padding: 0px 8px 0 !important;
             line-height: 30px;
-            @include border-radius(3px 0px 0px 3px);
+            border-radius: 3px 0px 0px 3px;
             width: auto;
             z-index: 99;
         }
