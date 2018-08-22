@@ -26,10 +26,16 @@ const defaultTopWidgets = () => (
 );
 
 class Chart extends Component {
+    constructor(props) {
+        super(props);
+        this.modalNode = React.createRef();
+        this.root = React.createRef();
+    }
+
     componentDidMount() {
         const { updateProps, init, ...props } = this.props;
         updateProps(props);
-        init(this.root, this.modalNode, props);
+        init(this.root.current, this.modalNode.current, props);
     }
 
     componentWillReceiveProps(nextProps) {
@@ -65,11 +71,11 @@ class Chart extends Component {
         return (
             <div
                 className={`smartcharts smartcharts-${theme} ${contextWidth} smartcharts-${isMobile ? 'mobile' : 'desktop'}`}
-                ref={(modalNode) => { this.modalNode = modalNode; }}
+                ref={this.modalNode}
             >
                 <div
                     className="cq-context"
-                    ref={(root) => { this.root = root; }}
+                    ref={this.root}
                 >
                     <div className={` ${currentPosition}`}>
                         <div className="ciq-chart-area">
