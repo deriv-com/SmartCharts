@@ -1,5 +1,10 @@
 .cq-crosshair {
+    display: none;
+}
+
+.stx-crosshair-on .cq-crosshair {
     position: relative;
+    display: block;
     opacity: 0;
     z-index: 30;
     top: 0;

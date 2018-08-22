@@ -8,9 +8,10 @@ const Crosshair = ({
     rows,
     state,
     isArrowLeft,
+    cursorInChart,
 }) => (
     <div
-        className={`cq-crosshair ${(state === 2) ? 'active' : ''}`}
+        className={`cq-crosshair ${(state === 2 && cursorInChart) ? 'active' : ''}`}
         style={{ left, top }}
     >
         <div
@@ -26,10 +27,11 @@ const Crosshair = ({
     </div>
 );
 
-export default connect(({ crosshair: c }) => ({
+export default connect(({ crosshair: c, chart }) => ({
     left: c.left,
     top: c.top,
     rows: c.rows,
     isArrowLeft: c.isArrowLeft,
     state: c.state,
+    cursorInChart: chart.cursorInChart,
 }))(Crosshair);
