@@ -28,14 +28,6 @@ class Keystroke {
         this.downValue = ''; // Android Chrome bug requires a workaround for keyup.
     }
 
-    destructor() {
-        this.node.removeEventListener('keyup', this.keyup);
-        this.node.removeEventListener('keydown', this.keydown);
-        this.node.removeEventListener('keypress', this.keypress);
-        // otherwise ctrl-t to switch tabs causes ctrl to get stuck
-        window.removeEventListener('blur', this.onblur);
-    }
-
     // http://stackoverflow.com/questions/30743490/capture-keys-typed-on-android-virtual-keyboard-using-javascript
     // On Chrome Android, the keydown/keyup events are broken. We have to figure out the key that was pressed by
     // examining the value of an input box before (keydown) and after (keyup) and identifying what changed
