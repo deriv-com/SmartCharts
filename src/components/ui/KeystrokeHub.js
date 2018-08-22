@@ -36,6 +36,10 @@ class KeystrokeHub extends Helper {
         this.keystroke = new Keystroke(node, handler());
     }
 
+    destructor() {
+        this.keystroke.destructor();
+    }
+
     /**
      * Global default hotkey method. Pass this or your own metho in to CIQ.UI.KeystrokeHub
      * @memberof CIQ.UI.KeyboardShortcuts

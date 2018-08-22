@@ -175,7 +175,7 @@ class ChartStore {
 
         const context = new Context(stxx, this.rootNode);
 
-        new KeystrokeHub(document.querySelector('body'), context, { // eslint-disable-line no-new
+        this.keystrokeHub = new KeystrokeHub(document.body, context, {
             cb: KeystrokeHub.defaultHotKeys,
         });
 
@@ -422,6 +422,7 @@ class ChartStore {
 
     @action.bound destroy() {
         this.resizeObserver.disconnect();
+        this.keystrokeHub.destructor();
         // Destroying the chart does not unsubscribe the streams;
         // we need to manually unsubscribe them.
         this.feed.unsubscribeAll();

@@ -28,6 +28,14 @@ class Keystroke {
         this.downValue = ''; // Android Chrome bug requires a workaround for keyup.
     }
 
+    destructor() {
+        this.node.removeEventListener('keyup', this.keyup);
+        this.node.removeEventListener('keydown', this.keydown);
+        this.node.removeEventListener('keypress', this.keypress);
+        // otherwise ctrl-t to switch tabs causes ctrl to get stuck
+        window.removeEventListener('blur', this.onblur);
+    }
+
     // http://stackoverflow.com/questions/30743490/capture-keys-typed-on-android-virtual-keyboard-using-javascript
     // On Chrome Android, the keydown/keyup events are broken. We have to figure out the key that was pressed by
     // examining the value of an input box before (keydown) and after (keyup) and identifying what changed
@@ -55,7 +63,7 @@ class Keystroke {
     // before the input field is updated, we save any key that has been handled by these in this.key
     // but we don't process the stroke until the keyup event is fired. This ensures that our handlers
     // will always have the right key (capitalized) and that input field value will be up to date.
-    keyup(e) {
+    keyup = (e) => {
         const key = e.which;
         if (this.implementAndroidWorkaround) {
             this.androidWorkaroundKeyup(e);
@@ -83,9 +91,10 @@ class Keystroke {
         // This is where we handle the keystroke, regardless of whether we captured the key with a down or press event
         // The exception to this is the arrow keys, which are processed in keydown
         if (this.key) { this.cb({ key: this.key, e, keystroke: this }); }
-    }
+    };
 
-    keydown(e) {
+    keydown = (e) => {
+        this.downValue = e.target.value;
         if (this.noKeyCapture) { return; }
         let key = e.which;
         if (key === 229 && CIQ.isAndroid) {
@@ -131,40 +140,35 @@ class Keystroke {
             this.key = null;
             this.cb({ key, e, keystroke: this });
         }
-    }
+    };
 
     /**
      * Identifies a keypress event
      * @memberof CIQ.UI.Keystroke
      * @param e
      */
-    keypress(e) {
+    keypress = (e) => {
         if (this.noKeyCapture) { return; }
         const key = e.which;
         if (key < 32 || key > 222) { return; } // handled by keydown
         this.key = key;
-    }
+    };
+
+    onblur = (e) => {
+        this.ctrl = false;
+        this.cb({ key: 17, e, keystroke: this });
+    };
 
     /**
      * initializes member funcitons
      * @memberof CIQ.UI.Keystroke
      */
     initialize() {
-        const self = this;
-        this.node.addEventListener('keyup', (e) => {
-            self.keyup(e);
-        });
-        this.node.addEventListener('keydown', (e) => {
-            self.downValue = e.target.value;
-            self.keydown(e);
-        });
-        this.node.addEventListener('keypress', (e) => {
-            self.keypress(e);
-        });
-        window.addEventListener('blur', (e) => { // otherwise ctrl-t to switch tabs causes ctrl to get stuck
-            self.ctrl = false;
-            self.cb({ key: 17, e, keystroke: self });
-        });
+        this.node.addEventListener('keyup', this.keyup);
+        this.node.addEventListener('keydown', this.keydown);
+        this.node.addEventListener('keypress', this.keypress);
+        // otherwise ctrl-t to switch tabs causes ctrl to get stuck
+        window.addEventListener('blur', this.onblur);
     }
 }
 
