@@ -52,7 +52,6 @@ class Chart extends Component {
             StudySettingsDialog,
             isMobile = false,
             isChartAvailable,
-            setting : { position, theme },
             barriers = [],
             children,
             chartControlsWidgets,
@@ -61,6 +60,8 @@ class Chart extends Component {
             chartContainerHeight,
             containerWidth,
             isDrawing,
+            theme,
+            position,
         } = this.props;
 
         const currentPosition = `cq-chart-control-${(position && !isMobile) ? position : 'bottom'}`;
@@ -123,9 +124,10 @@ export default connect(({ chart, drawTools, studies, chartSetting, chartType, st
     DrawToolsSettingsDialog : drawTools.DrawToolsSettingsDialog,
     AggregateChartSettingsDialog : chartType.AggregateChartSettingsDialog,
     isChartAvailable: chart.isChartAvailable,
-    setting: chartSetting,
     updateProps: state.updateProps,
     chartContainerHeight: chart.chartContainerHeight,
     containerWidth: chart.containerWidth,
     isDrawing: drawingCursor.isDrawing,
+    theme: chartSetting.theme,
+    position: chartSetting.position,
 }))(Chart);
