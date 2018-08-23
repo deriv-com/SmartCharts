@@ -7,6 +7,65 @@ import '../components/ui/Animation';
 import { BinaryAPI, Feed } from '../feed';
 import { stableSort, calculateTimeUnitInterval, getUTCDate } from '../utils';
 
+CIQ.ChartEngine.prototype.createYAxisLabel = function (panel, txt, y, backgroundColor, color, ctx, yAxis) {
+    if (panel.yAxis.drawPriceLabels === false || panel.yAxis.noDraw) return;
+    const yax = yAxis || panel.yAxis;
+    if (yax.noDraw || !yax.width) return;
+    const context = ctx || this.chart.context;
+    const margin = 3;
+    const height = this.getCanvasFontSize('stx_yaxis') + (margin << 1);
+    this.canvasFont('stx_yaxis', context);
+    this.drawBorders = yax.displayBorder;
+    const tickWidth = this.drawBorders ? 3 : 0; // pixel width of tick off edge of border
+    let width;
+    try {
+        width = context.measureText(txt).width + tickWidth + (margin << 1);
+    } catch (e) {
+        width = yax.width;
+    } // Firefox doesn't like this in hidden iframe
+
+    let x = yax.left - margin + 3;
+    if (yax.width < 0) x += (yax.width - width);
+    let textx = x + margin + tickWidth;
+    let radius = 3;
+    const position = (yax.position === null ? panel.chart.yAxis.position : yax.position);
+    if (position === 'left') {
+        x = yax.left + yax.width + margin - 3;
+        width *= -1;
+        if (yax.width < 0) x -= (yax.width + width);
+        textx = x - margin - tickWidth;
+        radius = -3;
+        context.textAlign = 'right';
+    }
+    if (y + (height >> 1) > yax.bottom) y = yax.bottom - (height >> 1);
+    if (y - (height >> 1) < yax.top)    y = yax.top    + (height >> 1);
+
+    if (typeof (CIQ[this.yaxisLabelStyle]) === 'undefined') {
+        this.yaxisLabelStyle = 'roundRectArrow'; // in case of user error, set a default.
+    }
+    let yaxisLabelStyle = this.yaxisLabelStyle;
+    if (yax.yaxisLabelStyle) yaxisLabelStyle = yax.yaxisLabelStyle;
+    const params = {
+        ctx: context,
+        x,
+        y,
+        top: y - (height >> 1),
+        width,
+        height,
+        radius,
+        backgroundColor,
+        fill: true,
+        stroke: false,
+        margin: {
+            left: textx - x,
+            top: 1,
+        },
+        txt,
+        color,
+    };
+    CIQ[yaxisLabelStyle](params);
+};
+
 class ChartStore {
     static keystrokeHub;
     constructor(mainStore) {
@@ -133,6 +192,8 @@ class ChartStore {
                     initialMarginTop: 125,
                     initialMarginBottom: 10,
                     // position: 'left',
+                    width: -10,
+                    justifyRight: true,
                 },
             },
             minimumLeftBars: 2,
