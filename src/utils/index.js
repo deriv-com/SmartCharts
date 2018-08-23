@@ -86,7 +86,7 @@ export function downloadFileInBrowser(filename, content, type) {
     }
     /* Evergreen Browsers */
     const link = document.createElement('a');
-    const url = URL.createObjectURL(blob);
+    const url = type === 'image/png;' ? content : URL.createObjectURL(blob);
     link.setAttribute('href', url);
     link.setAttribute('download', filename);
     link.setAttribute('target', '_blank');
