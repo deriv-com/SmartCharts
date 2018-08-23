@@ -16,6 +16,7 @@ import FavoriteSessionStore from './FavoriteSessionStore';
 import ChartSizeStore from './ChartSizeStore';
 import RoutingStore from './RoutingStore';
 import CurrentSpotStore from './CurrentSpotStore';
+import DrawingCursorStore from './DrawingCursorStore';
 import ChartState from './ChartState';
 
 export default class MainStore {
@@ -38,4 +39,5 @@ export default class MainStore {
     chartSize = new ChartSizeStore(this);
     routing = new RoutingStore(this);
     currentSpot = new CurrentSpotStore(this);
+    drawingCursor = new DrawingCursorStore(this);
 }
