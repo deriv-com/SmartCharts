@@ -233,6 +233,10 @@ html,body{-ms-touch-action:none;margin:0px}
 .stx-chart-panel.stx-show{display:none}
 .ciq-chart.ciq-screenshot .cq-menu-dropdown{display:none !important}
 .ps--active-x>.ps__rail-x,.ps--active-y>.ps__rail-y{background-color:transparent !important}
+.cq-spot{width:6px;height:6px;padding:0px;line-height:1px;border-radius:100%;cursor:pointer;position:absolute;background:transparent;-webkit-animation:pulse 1.6s infinite;animation:pulse 1.6s infinite;margin-left:-3px;margin-top:-3px;box-shadow:0 0 0 rgba(2,152,211,0.6)}
+.cq-spot:before{content:'\25CF';font-size:18px;color:#0298d3;position:relative;left:-2.3px;line-height:5px}
+@-webkit-keyframes pulse{0%{box-shadow:0 0 0 0 rgba(2,152,211,0.6)}70%{box-shadow:0 0 0 10px rgba(2,152,211,0)}100%{box-shadow:0 0 0 0 rgba(2,152,211,0)}}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(2,152,211,0.6)}70%{box-shadow:0 0 0 10px rgba(2,152,211,0)}100%{box-shadow:0 0 0 0 rgba(2,152,211,0)}}
 .smartcharts-mobile #mSticky{background:none}
 .smartcharts-mobile #mSticky #mStickyInterior{margin:0px;padding:0px 8px 0 !important;line-height:30px;border-radius:3px 0px 0px 3px;width:auto;z-index:99}
 .smartcharts-mobile #mSticky #mStickyRightClick{margin-left:-2px !important}
