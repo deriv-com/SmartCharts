@@ -16,10 +16,14 @@ html, body {
     font-size: 12px;
     position: relative; /* chart container must be relative for internal DOM elements to be correct */
     z-index: 1;
-    @include transition(height 0.4s ease-in-out);
+    transition: height 0.4s ease-in-out;
     @include themify($themes) {
         background: themed('ChartBg');
         color: themed('ChartText');
+    }
+
+    &.ciq-draw-mode {
+        cursor: none;
     }
 }
 
@@ -63,23 +67,17 @@ html, body {
     text-align: center;
     overflow: visible;
     background-repeat: no-repeat;
-    @include border-radius(3px);
-    -webkit-transition: color 0.25s, border 0.25s, box-shadow 0.25s;
-    -moz-transition: color 0.25s, border 0.25s, box-shadow 0.25s;
+    border-radius: 3px;
     transition: color 0.25s, border 0.25s, box-shadow 0.25s;
-    @include user-select(none);
+    user-select: none;
 
     &:hover {
         color: #444444;
         border: solid 1px #c5c5c5;
-        -webkit-box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.1), inset 0px -8px 6px rgba(100, 100, 100, 0.03);
-        -moz-box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.1), inset 0px -8px 6px rgba(100, 100, 100, 0.03);
         box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.1), inset 0px -8px 6px rgba(100, 100, 100, 0.03);
     }
     &:active {
         color: #333;
-        -webkit-box-shadow: inset 0px 8px 6px rgba(100, 100, 100, 0.03);
-        -moz-box-shadow: inset 0px 8px 6px rgba(100, 100, 100, 0.03);
         box-shadow: inset 0px 8px 6px rgba(100, 100, 100, 0.03);
     }
 }
@@ -92,14 +90,13 @@ html, body {
     width: 25px;
     height: 25px;
     cursor: pointer;
-    -webkit-transition: -webkit-transform 0.2s;
     transition: transform 0.2s;
 }
 
 .stx-btn-panel { /* Button Spacing */
     margin: 3px 2px;
     opacity: 0;
-    @include transition(opacity 0.5s);
+    transition: opacity 0.5s;
     @include themify($themes) {
         background-color: themed('ChartBg');
     }
@@ -108,8 +105,6 @@ html, body {
         opacity: 1;
     }
     &:active { /* Scale up when active */
-        -webkit-transform: scale(1.2, 1.2);
-        -ms-transform: scale(1.2, 1.2);
         transform: scale(1.2, 1.2);
     }
 }
@@ -182,13 +177,10 @@ html, body {
     width: 30px;
     padding: 0px;
     margin-bottom: 17px;
-    @include border-radius(3px);
+    border-radius: 3px;
     background: #fafafa;
-    -webkit-box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.2);
-    -moz-box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.2);
     box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.2);
     transition: background 0.25s;
-    -webkit-transition: background 0.25s;
     cursor: pointer;
     z-index: 30;
 }
@@ -201,7 +193,6 @@ html, body {
     padding-top: 25px;
     background: url('./icons/chart/jump-to-today.svg') no-repeat center;
     transition: opacity 0.25s, transform 0.2s;
-    -webkit-transition: opacity 0.25s, -webkit-transform 0.2s;
     opacity: 0.6;
 }
 
@@ -238,7 +229,7 @@ html, body {
     z-index: 30;
     display: none;
     margin: 5px;
-    @include border-radius(3px);
+    border-radius: 3px;
     @include themify($themes) {
         background: themed('ChartBg');
         border: 1px solid themed('ChartBorder');
@@ -248,7 +239,7 @@ html, body {
         opacity: 1;
     }
     * {
-        @include user-select(none);
+        user-select: none;
     }
     &.stx-show {
         display: inline-block;
@@ -280,62 +271,30 @@ html, body {
 #mSticky {
     position: absolute;
     display: none;
-    white-space: nowrap;
-    padding: 10px 10px 0;
     z-index: 40;
     font-size: 12px;
-
-    @include border-radius(5px);
+    text-align: center;
+    white-space: nowrap;
+    border-radius: 3px;
     @include themify($themes) {
         color: themed('TooltipText');
         background: themed('TooltipBg');
-        box-shadow: 0 0 10px themed('TooltipShadow');
     }
 
-    &:before {
-        position: absolute;
-        content: ' ';
-        width: 100%;
-        height: 40px;
-        left: 0px;
-        top: 0px;
-        @include border-radius(5px 5px 0 0);
-        @include themify($themes) {
-            background: themed('TooltipBg');
-        }
-    }
-    &:after {
-        position: absolute;
-        pointer-events: none;
-        border: solid;
-        border-width: 4px 4px 0px;
-        top: 100%;
-        content: ' ';
-        left: calc(50% - 4px);
-        @include themify($themes) {
-            border-color: themed('TooltipBg') transparent;
-        }
-    }
     #mStickyInterior {
-        margin: 0px;
-        text-indent: 30px;
-        width: 20px;
-        height: 20px;
-        line-height: 20px;
-        padding: 0;
+        padding: 8px 8px 4px;
         position: relative;
-        @include border-radius(3px);
+        width: 100%;
+        border-radius: 3px 3px 0px 0px;
+        font-weight: 500;
         @include themify($themes) {
-            font-weight: 500;
-            color: themed('DefaultMain') !important;
+            background: themed('TooltipTextBg');
         }
+        border: none;
+        box-sizing: border-box;
     }
     #mStickyRightClick {
-        padding: 20px 10px 10px;
-        height: 70px;
-        line-height: 20px;
         position: relative;
-        top: 14px;
     }
 }
 
@@ -345,7 +304,7 @@ html, body {
     font-size: 11px;
     white-space: nowrap;
     z-index: 40;
-    @include border-radius(3px);
+    border-radius: 3px;
     @include themify($themes) {
         color: themed('TooltipText');
         background: themed('TooltipBg');
@@ -373,31 +332,43 @@ html, body {
 
 .overlayEdit.stx-btn,
 #vectorTrashCan.stx-btn { /* Drawing and study info div delete button wrappers for mobile */
-    background: none;
     cursor: pointer;
     display: inline-block;
     text-align: center;
     width: 30px;
-    height: 27px;
-    /*	padding:0px; */
+    height: 30px;
+    padding: 0;
     border: none;
+
+    @include themify($themes) {
+        background: themed('TooltipBg') !important;
+    }
+    border-radius: 3px;
 }
 
 .overlayEdit.stx-btn span,
 #vectorTrashCan.stx-btn span { /* Drawing and study info div delete button content */
     display: block;
-    margin: 0 0 0 5px;
-    width: 23px;
-    height: 23px;
-    @include border-radius(3px);
+    height: 30px;
+    width: 30px !important;
     overflow: hidden;
     text-indent: 100px;
-    border: solid #ddd 1px;
-    background: #efefef url('./icons/delete/ic-delete.svg') no-repeat center;
+    @include themify($themes) {
+        background: url('./icons/chart/ic-settings-dark.svg') no-repeat center !important;
+    }
 }
 
-.overlayEdit {
-    opacity: 0;
+.rightclick_study .overlayEdit {
+    margin: 0px !important;
+}
+
+.rightclick_series {
+    .overlayEdit.stx-btn span,
+    #vectorTrashCan.stx-btn span {
+        @include themify($themes) {
+            background: url('./icons/delete/ic-delete-dark.svg') no-repeat center !important;
+        }
+    }
 }
 
 /* To enable editing of overlay studies on mobile. You'll need to also implement stxx.callbacks.studyOverlayEdit
@@ -411,15 +382,11 @@ html, body {
 */
 
 #overlayTrashCan {
-    font-weight: 300;
-    border: none;
-    @include themify($themes) {
-        color: themed('tooltipTextColor');
-    }
+    display: none !important;
 }
 
 #mouseDeleteInstructions {
-    margin: 0px;
+    margin: 8px;
     background: transparent;
     display: block;
 }
@@ -462,7 +429,7 @@ html, body {
 
 .stx-float-price,
 .stx-float-date {
-    @include border-radius(3px);
+    border-radius: 3px;
     @include themify($themes) {
         background-color: themed('CrosshairLabel');
     }
@@ -492,10 +459,12 @@ html, body {
     }
 }
 
-.stx_crosshair_drawing { /* Darker crosshairs lines when drawing */
+.stx_crosshair_drawing { /* Crosshairs lines when drawing */
     position: absolute;
     z-index: 10;
-    background-color: #333;
+    @include themify($themes) {
+        background-color: themed('CrosshairAxis');
+    }
 }
 
 #crossY, .stx_crosshair_y { /* Vertical Crosshair line size */
@@ -784,8 +753,6 @@ html, body {
     position: absolute;
     display: none;
     font-size: 11px;
-    -webkit-box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.2);
-    -moz-box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.2);
     box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.2);
     z-index: 50;
 }
@@ -881,7 +848,7 @@ html, body {
 
 .stx-holder:hover .stx-btn-panel {
     opacity: 1;
-    @include transition(opacity 0.5s, height 0.3s);
+    transition: opacity 0.5s, height 0.3s;
 }
 
 .stx-ico-handle {
@@ -974,4 +941,60 @@ html, body {
 .ps--active-x > .ps__rail-x,
 .ps--active-y > .ps__rail-y {
     background-color: transparent !important;
+}
+
+$spot-color: #0298d3;
+
+.cq-spot {
+    width: 6px;
+    height: 6px;
+    padding: 0px;
+    line-height: 1px;
+    border-radius: 100%;
+    cursor: pointer;
+    position: absolute;
+    background: transparent;
+    animation: pulse 1.6s infinite;
+    margin-left: -3px;
+    margin-top: -3px;
+    box-shadow: 0 0 0 rgba($spot-color, 0.6);
+
+    &:before {
+        content: '\25CF';
+        font-size: 18px;
+        color: $spot-color;
+        position: relative;
+        left: -2.3px;
+        line-height: 5px;
+    }
+}
+
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba($spot-color, 0.6);
+    }
+    70% {
+        box-shadow: 0 0 0 10px rgba($spot-color, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba($spot-color, 0);
+    }
+}
+
+.smartcharts-mobile {
+    #mSticky {
+        background: none;
+
+        #mStickyInterior {
+            margin: 0px;
+            padding: 0px 8px 0 !important;
+            line-height: 30px;
+            border-radius: 3px 0px 0px 3px;
+            width: auto;
+            z-index: 99;
+        }
+        #mStickyRightClick {
+            margin-left: -2px !important;
+        }
+    }
 }

@@ -18,6 +18,7 @@ import ComparisonList from './components/ComparisonList.jsx';
 import ChartTitle from './components/ChartTitle.jsx';
 import AssetInformation from './components/AssetInformation.jsx';
 import Marker from './components/Marker.jsx';
+import CurrentSpot from './components/CurrentSpot.jsx';
 import { createObjectFromLocalStorage } from './utils';
 
 import './SplinePlotter';
@@ -40,6 +41,7 @@ export {
     SmartChart,
     StudyLegend,
     Timeperiod,
+    CurrentSpot,
     Views,
 };
 
@@ -61,5 +63,6 @@ export default {
     SmartChart,
     StudyLegend,
     Timeperiod,
+    CurrentSpot,
     Views,
 };

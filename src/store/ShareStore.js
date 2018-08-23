@@ -9,7 +9,7 @@ const html2canvasCDN = 'https://charts.binary.com/dist/html2canvas.min.js';
 export default class ShareStore {
     constructor(mainStore) {
         this.mainStore = mainStore;
-        this.menu = new MenuStore(mainStore, { route:'share' });
+        this.menu = new MenuStore(mainStore, { route:'download' });
         when(() => this.context, this.onContextReady);
         this.ShareMenu = this.menu.connect(Menu);
     }
