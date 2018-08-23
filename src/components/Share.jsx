@@ -3,8 +3,10 @@ import { connect } from '../store/Connect';
 import {
     DownloadIcon,
     CloseIcon,
+    PngIcon,
+    CsvIcon,
 } from './Icons.jsx';
-import '../../sass/components/_ciq-share.scss';
+import '../../sass/components/_ciq-download.scss';
 
 
 const Share = ({
@@ -15,7 +17,7 @@ const Share = ({
     closeMenu,
     isLoadingPNG,
 }) => (
-    <ShareMenu className="cq-share">
+    <ShareMenu className="cq-download">
         <ShareMenu.Title>
             <DownloadIcon
                 className={`ic-icon-with-sub ${menuOpen ? 'active' : ''}`}
@@ -32,15 +34,26 @@ const Share = ({
             </div>
             <div className="body">
                 <div className="content">
-                    <div
-                        className="download-btn"
-                        onClick={downloadPNG}
-                    > PNG {isLoadingPNG && <span className="cq-loading" />}
-                    </div>
-                    <div
-                        className="download-btn"
-                        onClick={downloadCSV}
-                    > CSV
+                    <div className="ciq-list ciq-list-download">
+                        <div
+                            className="ciq-list-item"
+                            onClick={downloadPNG}
+                        >
+                            <span className="ciq-icon-text">
+                                {t.translate('Download as PNG')}
+                                {isLoadingPNG && <span className="cq-loading" />}
+                            </span>
+                            <PngIcon />
+                        </div>
+                        <div
+                            className="ciq-list-item"
+                            onClick={downloadCSV}
+                        >
+                            <span className="ciq-icon-text">
+                                {t.translate('Download as CSV')}
+                            </span>
+                            <CsvIcon />
+                        </div>
                     </div>
                 </div>
             </div>
@@ -48,11 +61,11 @@ const Share = ({
     </ShareMenu>
 );
 
-export default connect(({ share: s }) => ({
-    ShareMenu: s.ShareMenu,
-    menuOpen: s.menu.dialog.open,
-    downloadPNG: s.downloadPNG,
-    downloadCSV: s.downloadCSV,
-    closeMenu: s.menu.onTitleClick,
-    isLoadingPNG: s.isLoadingPNG,
+export default connect(({ share: d }) => ({
+    ShareMenu: d.ShareMenu,
+    menuOpen: d.menu.dialog.open,
+    downloadPNG: d.downloadPNG,
+    downloadCSV: d.downloadCSV,
+    closeMenu: d.menu.onTitleClick,
+    isLoadingPNG: d.isLoadingPNG,
 }))(Share);

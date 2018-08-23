@@ -30,6 +30,15 @@ const config = {
                         loader: 'css-loader',
                         options: { sourceMap: true },
                     }, {
+                        loader: 'postcss-loader',
+                        options: {
+                            ident: 'postcss',
+                            plugins: loader => [
+                                require('postcss-import')({ root: loader.resourcePath }),
+                                require('postcss-preset-env')(),
+                            ],
+                        },
+                    }, {
                         loader: 'sass-loader',
                         options: {
                             sourceMap: true,
@@ -135,33 +144,33 @@ if (isApp) {
         { from: './node_modules/babel-polyfill/dist/polyfill.min.js', to: 'babel-polyfill.min.js' },
         { from: './chartiq/html2canvas.min.js' },
         {
-            from: production ?
-                './node_modules/react/umd/react.production.min.js' :
-                './node_modules/react/umd/react.development.js',
+            from: production
+                ? './node_modules/react/umd/react.production.min.js'
+                : './node_modules/react/umd/react.development.js',
             to: 'react.js',
         },
         {
-            from: production ?
-                './node_modules/react-dom/umd/react-dom.production.min.js' :
-                './node_modules/react-dom/umd/react-dom.development.js',
+            from: production
+                ? './node_modules/react-dom/umd/react-dom.production.min.js'
+                : './node_modules/react-dom/umd/react-dom.development.js',
             to: 'react-dom.js',
         },
         {
-            from: production ?
-                './node_modules/mobx/lib/mobx.umd.min.js' :
-                './node_modules/mobx/lib/mobx.umd.js',
+            from: production
+                ? './node_modules/mobx/lib/mobx.umd.min.js'
+                : './node_modules/mobx/lib/mobx.umd.js',
             to: 'mobx.js',
         },
         {
-            from: production ?
-                './node_modules/mobx-react/index.min.js' :
-                './node_modules/mobx-react/index.js',
+            from: production
+                ? './node_modules/mobx-react/index.min.js'
+                : './node_modules/mobx-react/index.js',
             to: 'mobx-react.js',
         },
         {
-            from: production ?
-                './node_modules/react-transition-group/dist/react-transition-group.min.js' :
-                './node_modules/react-transition-group/dist/react-transition-group.js',
+            from: production
+                ? './node_modules/react-transition-group/dist/react-transition-group.min.js'
+                : './node_modules/react-transition-group/dist/react-transition-group.js',
             to: 'react-transition-group.js',
         },
     ]));
