@@ -1,6 +1,7 @@
 import { observable, action, computed, when } from 'mobx';
 import MenuStore from './MenuStore';
-import { loadScript, downloadFileInBrowser } from '../utils';
+import { saveAs } from 'file-saver'; 
+import { loadScript } from '../utils';
 import PendingPromise from '../utils/PendingPromise';
 import Menu from '../components/Menu.jsx';
 
@@ -49,12 +50,10 @@ export default class ShareStore {
     }
 
     @action.bound _onCanvasReady(canvas) {
-        const content = canvas.toDataURL('image/png');
-        downloadFileInBrowser(
-            `${new Date().toUTCString()}.png`,
-            content,
-            'image/png;',
-        );
+        canvas.toBlob(function(blob) {
+            saveAs(blob, `${new Date().toUTCString()}.png`);
+        });
+        
         this.isLoadingPNG = false;
         CIQ.unappendClassName(this.screenshotArea, 'ciq-screenshot');
     }
@@ -90,11 +89,8 @@ export default class ShareStore {
             }
         });
 
-        downloadFileInBrowser(
-            `${this.marketDisplayName} (${this.timeperiodDisplay}).csv`,
-            lines.join('\n'),
-            'text/csv;charset=utf-8;',
-        );
+        var blob = new Blob([ lines.join('\n')], {type: "text/csv;charset=utf-8;"});
+        saveAs(blob, `${this.marketDisplayName} (${this.timeperiodDisplay}).csv`);
     }
 
     onContextReady = () => {
