@@ -78,22 +78,34 @@ export function sameBar(bar1, bar2) {
         || (bar1.Volume !== bar2.Volume));
 }
 
-export function downloadFileInBrowser(filename, content, type) {
+export function downloadFileInBrowser(filename, content, type, newTab) {
     const blob = new Blob([content], { type });
     if (navigator.msSaveBlob) { // IE 10+
         navigator.msSaveBlob(blob, filename);
         return;
     }
-    /* Evergreen Browsers */
-    const link = document.createElement('a');
     const url = type === 'image/png;' ? content : URL.createObjectURL(blob);
-    link.setAttribute('href', url);
-    link.setAttribute('download', filename);
-    link.setAttribute('target', '_blank');
-    link.style.visibility = 'hidden';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    const link = document.createElement('a');
+    if (link.download !== undefined) {
+        // Browsers that support HTML5 download attribute
+        link.setAttribute('href', url);
+        link.setAttribute('download', filename);
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        return;
+    }
+    if (newTab) {
+        if (type === 'image/png;') {
+            newTab.document.write(`<iframe src="${url}" frameborder="0" style="border:0; top:0px; left:0px; bottom:0px; right:0px; width:100%; height:100%;" allowfullscreen></iframe>`);
+        } else {
+            const lines = content.split('\n');
+            for (let i = 0; i < lines.length; i++) {
+                newTab.document.write(`${lines[i]}<br/>`);
+            }
+        }
+    }
 }
 
 export function stxtap(el, func) {
