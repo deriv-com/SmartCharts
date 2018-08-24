@@ -19,8 +19,8 @@
             }
 
             .ic-priod {
-                @include border-radius(4px);
                 font-size: 12px;
+                border-radius: 4px;
                 padding: 3px 5px;
             }
         }
@@ -127,7 +127,7 @@
                     text-align: center;
                     line-height: 26px;
                     border: 1px solid transparent;
-                    @include border-radius(4px);
+                    border-radius: 4px;
                     @include themify($themes) {
                         color: themed('TimeItemColor');
                     }

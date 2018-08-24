@@ -5,6 +5,7 @@ import ChartTitle from './ChartTitle.jsx';
 import AssetInformation from './AssetInformation.jsx';
 import Loader from './Loader.jsx';
 import Barrier from './Barrier.jsx';
+import CurrentSpot from './CurrentSpot.jsx';
 import DrawingCursor from './DrawingCursor.jsx';
 
 /* css + scss */
@@ -26,10 +27,16 @@ const defaultTopWidgets = () => (
 );
 
 class Chart extends Component {
+    constructor(props) {
+        super(props);
+        this.modalNode = React.createRef();
+        this.root = React.createRef();
+    }
+
     componentDidMount() {
         const { updateProps, init, ...props } = this.props;
         updateProps(props);
-        init(this.root, this.modalNode, props);
+        init(this.root.current, this.modalNode.current, props);
     }
 
     componentWillReceiveProps(nextProps) {
@@ -47,7 +54,6 @@ class Chart extends Component {
             StudySettingsDialog,
             isMobile = false,
             isChartAvailable,
-            setting : { position, theme },
             barriers = [],
             children,
             chartControlsWidgets,
@@ -56,6 +62,8 @@ class Chart extends Component {
             chartContainerHeight,
             containerWidth,
             isDrawing,
+            theme,
+            position,
         } = this.props;
 
         const currentPosition = `cq-chart-control-${(position && !isMobile) ? position : 'bottom'}`;
@@ -65,11 +73,11 @@ class Chart extends Component {
         return (
             <div
                 className={`smartcharts smartcharts-${theme} ${contextWidth} smartcharts-${isMobile ? 'mobile' : 'desktop'}`}
-                ref={(modalNode) => { this.modalNode = modalNode; }}
+                ref={this.modalNode}
             >
                 <div
                     className="cq-context"
-                    ref={(root) => { this.root = root; }}
+                    ref={this.root}
                 >
                     <div className={` ${currentPosition}`}>
                         <div className="ciq-chart-area">
@@ -84,11 +92,12 @@ class Chart extends Component {
                                 </RenderInsideChart>
                                 <RenderInsideChart at="subholder">
                                     {children}
+                                    <CurrentSpot />
                                 </RenderInsideChart>
                                 <div className="cq-top-ui-widgets">
                                     <TopWidgets />
                                 </div>
-                                <div className={`chartContainer primary ${isDrawing ? 'ciq-draw-mode' : ''}`} style={{ height: chartContainerHeight }}>
+                                <div className={`chartContainer ${isDrawing ? 'ciq-draw-mode' : ''}`} style={{ height: chartContainerHeight }}>
                                     <Crosshair />
                                     <DrawingCursor />
                                 </div>
@@ -118,9 +127,10 @@ export default connect(({ chart, drawTools, studies, chartSetting, chartType, st
     DrawToolsSettingsDialog : drawTools.DrawToolsSettingsDialog,
     AggregateChartSettingsDialog : chartType.AggregateChartSettingsDialog,
     isChartAvailable: chart.isChartAvailable,
-    setting: chartSetting,
     updateProps: state.updateProps,
     chartContainerHeight: chart.chartContainerHeight,
     containerWidth: chart.containerWidth,
     isDrawing: drawingCursor.isDrawing,
+    theme: chartSetting.theme,
+    position: chartSetting.position,
 }))(Chart);

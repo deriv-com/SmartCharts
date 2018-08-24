@@ -92,6 +92,12 @@ msgstr ""
 msgid "Download"
 msgstr ""
 
+msgid "Download as CSV"
+msgstr ""
+
+msgid "Download as PNG"
+msgstr ""
+
 msgid "Download Chart"
 msgstr ""
 
