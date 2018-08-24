@@ -4,7 +4,7 @@ import PendingPromise from '../utils/PendingPromise';
 import Context from '../components/ui/Context';
 import KeystrokeHub from '../components/ui/KeystrokeHub';
 import '../components/ui/Animation';
-import { BinaryAPI, Feed } from '../feed';
+import { BinaryAPI, Feed, TradingTimes } from '../feed';
 import { stableSort, calculateTimeUnitInterval, getUTCDate } from '../utils';
 
 class ChartStore {
@@ -110,6 +110,8 @@ class ChartStore {
             onSettingsChange,
         } = props;
         this.api = new BinaryAPI(requestAPI, requestSubscribe, requestForget);
+        window.tradingTimes = new TradingTimes(this.api);
+        window.tradingTimes.initialize();
         const { chartSetting } = this.mainStore;
         chartSetting.setSettings(settings);
         chartSetting.onSettingsChange = onSettingsChange;

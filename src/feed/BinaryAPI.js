@@ -14,10 +14,8 @@ export default class BinaryAPI {
         });
     }
 
-    getTradingTimes() {
-        return this.requestAPI({
-            trading_times: 'today',
-        });
+    getTradingTimes(trading_times = 'today') {
+        return this.requestAPI({ trading_times });
     }
 
     getTickHistory(params) {
