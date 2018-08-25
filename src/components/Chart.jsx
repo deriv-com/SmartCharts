@@ -5,6 +5,7 @@ import ChartTitle from './ChartTitle.jsx';
 import AssetInformation from './AssetInformation.jsx';
 import Loader from './Loader.jsx';
 import Barrier from './Barrier.jsx';
+import CurrentSpot from './CurrentSpot.jsx';
 import DrawingCursor from './DrawingCursor.jsx';
 
 /* css + scss */
@@ -90,6 +91,7 @@ class Chart extends Component {
                                 </RenderInsideChart>
                                 <RenderInsideChart at="subholder">
                                     {children}
+                                    <CurrentSpot />
                                 </RenderInsideChart>
                                 <div className="cq-top-ui-widgets">
                                     <TopWidgets />
