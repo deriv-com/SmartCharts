@@ -18,7 +18,7 @@
     "instrument": false
   },
   "scripts": {
-    "build": "rimraf dist && webpack --mode=production --optimize-minimize --progress",
+    "build": "rimraf dist && cross-env NODE_ENV=production webpack --mode=production --optimize-minimize --progress",
     "build:app": "cross-env BUILD_MODE='app' yarn build",
     "build-travis": "yarn build:app && node scripts/update-hashes.js",
     "analyze": "cross-env ANALYZE_BUNDLE=true yarn build",
@@ -103,11 +103,13 @@
     "stylelint": "^9.3.0",
     "stylelint-webpack-plugin": "^0.10.5",
     "svg-url-loader": "^2.3.1",
+    "uglify-js": "^3.4.7",
     "url-loader": "^1.0.1",
-    "webpack": "^4.8.1",
+    "webpack": "^4.17.1",
     "webpack-bundle-analyzer": "^2.9.1",
     "webpack-cli": "^3.0.6",
-    "webpack-dev-server": "^3.1.4"
+    "webpack-dev-server": "^3.1.4",
+    "write": "^1.0.3"
   },
   "dependencies": {
     "event-emitter-es6": "^1.1.5",
