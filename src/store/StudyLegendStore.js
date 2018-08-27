@@ -197,7 +197,7 @@ export default class StudyLegendStore {
         if (this.mainStore.chart.isMobile) {
             this.stx.panels[sd.panel].display = sd.type;
             this.stx.draw();
-            this.mainStore.chart.saveLayout();
+            this.mainStore.state.saveLayout();
         }
     }
 
