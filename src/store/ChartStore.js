@@ -1,11 +1,12 @@
 import ResizeObserver from 'resize-observer-polyfill';
-import { action, observable, reaction } from 'mobx';
+import { action, observable, reaction, computed } from 'mobx';
 import PendingPromise from '../utils/PendingPromise';
 import Context from '../components/ui/Context';
 import KeystrokeHub from '../components/ui/KeystrokeHub';
 import '../components/ui/Animation';
 import { BinaryAPI, Feed, TradingTimes } from '../feed';
-import { stableSort, calculateTimeUnitInterval, getUTCDate } from '../utils';
+import ActiveSymbols from './ActiveSymbols';
+import { calculateTimeUnitInterval, getUTCDate } from '../utils';
 
 class ChartStore {
     static keystrokeHub;
@@ -15,7 +16,6 @@ class ChartStore {
 
     RANGE_PADDING_PX = 125;
     contextPromise = new PendingPromise();
-    activeSymbols = [];
     rootNode = null;
     stxx = null;
     api = null;
@@ -36,16 +36,10 @@ class ChartStore {
     @observable currentActiveSymbol;
     @observable isChartAvailable = true;
     @observable comparisonSymbols = [];
-    @observable categorizedSymbols = [];
     @observable chartHeight;
     @observable chartContainerHeight;
     @observable isMobile = false;
     @observable cursorInChart = false;
-
-    @action.bound setActiveSymbols(activeSymbols) {
-        this.activeSymbols = this.processSymbols(activeSymbols);
-        this.categorizedSymbols = this.categorizeActiveSymbols();
-    }
 
     get loader() { return this.mainStore.loader; }
     get routingStore() {
@@ -110,8 +104,9 @@ class ChartStore {
             onSettingsChange,
         } = props;
         this.api = new BinaryAPI(requestAPI, requestSubscribe, requestForget);
-        window.tradingTimes = new TradingTimes(this.api);
-        window.tradingTimes.initialize();
+        this.tradingTimes = new TradingTimes(this.api);
+        this.tradingTimes.initialize();
+        this.activeSymbols = new ActiveSymbols(this.api, this.tradingTimes);
         const { chartSetting } = this.mainStore;
         chartSetting.setSettings(settings);
         chartSetting.onSettingsChange = onSettingsChange;
@@ -194,13 +189,7 @@ class ChartStore {
         stxx.callbacks.studyOverlayEdit = studiesStore.editStudy;
         stxx.callbacks.studyPanelEdit = studiesStore.editStudy;
 
-        this.api.getActiveSymbols().then(action(({ active_symbols }) => {
-            /**
-             * Updating market close status each 10 minute
-             */
-            this.onMarketClosedStatus();
-            setInterval(this.onMarketClosedStatus.bind(this), 10 * 60 * 1000);
-            this.setActiveSymbols(active_symbols);
+        this.activeSymbols.retrieveActiveSymbols().then(action(() => {
             const isRestoreSuccess = this.state.restoreLayout();
 
             if (!isRestoreSuccess) {
@@ -232,6 +221,31 @@ class ChartStore {
         this.feed.onComparisonDataUpdate(this.updateComparisons);
     }
 
+    @computed get categorizedSymbols() {
+        if (!this.activeSymbols || this.activeSymbols.categorizedSymbols.length === 0) return [];
+
+        const categorized = [];
+        for (const category of this.activeSymbols.activeSymbols) {
+            const categoryData = [];
+            const categoryCopy = { ...category, data: categoryData };
+            for (const subcategory of category.data) {
+                const subcategoryData = [];
+                const subcategoryCopy = { ...subcategory, data: subcategoryData };
+                for (const symbolObj of subcategory.data) {
+                    const selected = symbolObj.symbol === this.currentActiveSymbol.symbol;
+                    subcategoryData.push({
+                        ...symbolObj,
+                        selected,
+                    });
+                }
+                categoryData.push(subcategoryCopy);
+            }
+            categorized.push(categoryCopy);
+        }
+
+        return categorized;
+    }
+
     @action.bound onMouseEnter() {
         this.cursorInChart = true;
         ChartStore.keystrokeHub.setActiveContext(this.context);
@@ -240,56 +254,6 @@ class ChartStore {
     @action.bound onMouseLeave() {
         this.cursorInChart = false;
         ChartStore.keystrokeHub.setActiveContext(null);
-    }
-
-    /**
-     * Get tradeTimes if not loaded yet
-     * OR update the active symbols by comapring open time
-     */
-    onMarketClosedStatus() {
-        this.api.getTradingTimes()
-            .then(this.updateMarketClosedStatus);
-    }
-
-    @action.bound updateMarketClosedStatus(response) {
-        const nowUtc = (new Date()).getTime();
-        const toEpochGMT = (hour, crossDay) => {
-            const currentDate = new Date();
-            currentDate.setDate(currentDate.getDate() + (crossDay || 0));
-            const dateStr = currentDate.toISOString().substring(0, 11);
-            return new Date(`${dateStr}${hour}Z`).getTime();
-        };
-        response.trading_times.markets.forEach((market) => {
-            market.submarkets.forEach((submarket) => {
-                submarket.symbols.forEach((symbol) => {
-                    const foundSymbol = this.activeSymbols.find(item => item.symbol === symbol.symbol);
-                    if (foundSymbol) {
-                        let isOpen = false;
-                        for (let i = 0; i <= symbol.times.open.length; i++) {
-                            const { open, close } = symbol.times;
-                            if (open.length && close.length) {
-                                const openTime = toEpochGMT(open[i]);
-                                const closeTime = toEpochGMT(close[i]);
-
-                                // If open time is cross day, then should check time till tomorrow
-                                // and yesterday till now
-                                if (
-                                    (openTime > closeTime && nowUtc >= toEpochGMT(open[i], -1) && nowUtc <= closeTime)
-                                        || (openTime > closeTime && nowUtc >= toEpochGMT(open[i]) && nowUtc <= toEpochGMT(close[i], 1))
-                                        || (nowUtc >= openTime && nowUtc <= closeTime)
-                                ) {
-                                    isOpen = true;
-                                    break;
-                                }
-                            }
-                        }
-                        foundSymbol.exchange_is_open = isOpen;
-                    }
-                });
-            });
-        });
-
-        this.categorizedSymbols = this.categorizeActiveSymbols();
     }
 
     removeComparison(symbolObj) {
@@ -301,7 +265,6 @@ class ChartStore {
         const { symbolObject } = this.stxx.chart;
         this.currentActiveSymbol = symbolObject;
         this.stxx.chart.yAxis.decimalPlaces = symbolObject.decimal_places;
-        this.categorizedSymbols = this.categorizeActiveSymbols();
     }
 
     @action.bound setChartAvailability(status) {
@@ -310,7 +273,7 @@ class ChartStore {
 
     @action.bound changeSymbol(symbolObj, granularity) {
         if (typeof symbolObj === 'string') {
-            symbolObj = this.activeSymbols.find(s => s.symbol === symbolObj);
+            symbolObj = this.activeSymbols.getSymbolObj(symbolObj);
         }
 
         const isSymbolAvailable = symbolObj && this.currentActiveSymbol;
@@ -454,87 +417,6 @@ class ChartStore {
         this.stxx.isDestroyed = true;
         this.stxx.destroy();
         this.stxx = null;
-    }
-
-    processSymbols(symbols) {
-        const processedSymbols = [];
-
-        // Stable sort is required to retain the order of the symbol name
-        stableSort(symbols, (a, b) => a.submarket_display_name.localeCompare(b.submarket_display_name));
-
-        for (const s of symbols) {
-            processedSymbols.push({
-                symbol: s.symbol,
-                name: s.display_name,
-                market: s.market,
-                market_display_name: s.market_display_name,
-                submarket_display_name: s.submarket_display_name,
-                exchange_is_open: s.exchange_is_open,
-                decimal_places: s.pip.length - 2,
-            });
-        }
-
-
-        // Categorize symbols in order defined by another array; there's probably a more
-        // efficient algo for this, but for just ~100 items it's not worth the effort
-        const order = ['forex', 'indices', 'stocks', 'commodities', 'volidx'];
-        const orderedSymbols = [];
-        for (const o of order) {
-            for (const p of processedSymbols) {
-                if (o === p.market) {
-                    orderedSymbols.push(p);
-                }
-            }
-        }
-
-        return orderedSymbols;
-    }
-
-    categorizeActiveSymbols() {
-        if (this.activeSymbols.length <= 0 || !this.currentActiveSymbol) { return []; }
-
-        const activeSymbols = this.activeSymbols;
-        const categorizedSymbols = [];
-        if (activeSymbols.length > 0) {
-            const first = activeSymbols[0];
-            const getSubcategory = d => ({
-                subcategoryName: d.submarket_display_name,
-                data: [],
-            });
-            const getCategory = d => ({
-                categoryName: d.market_display_name,
-                categoryId: d.market,
-                hasSubcategory: true,
-                data: [],
-            });
-            let subcategory = getSubcategory(first);
-            let category = getCategory(first);
-            for (const symbol of activeSymbols) {
-                if (category.categoryName !== symbol.market_display_name) {
-                    category.data.push(subcategory);
-                    categorizedSymbols.push(category);
-                    subcategory = getSubcategory(symbol);
-                    category = getCategory(symbol);
-                }
-                if (subcategory.subcategoryName !== symbol.submarket_display_name) {
-                    category.data.push(subcategory);
-                    subcategory = getSubcategory(symbol);
-                }
-                const selected = symbol.symbol === this.currentActiveSymbol.symbol;
-                subcategory.data.push({
-                    enabled: true,
-                    selected,
-                    itemId: symbol.symbol,
-                    display: symbol.name,
-                    dataObject: symbol,
-                });
-            }
-
-            category.data.push(subcategory);
-            categorizedSymbols.push(category);
-        }
-
-        return categorizedSymbols;
     }
 }
 

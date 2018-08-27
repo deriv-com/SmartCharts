@@ -145,10 +145,10 @@ export default class CategoricalDisplayStore {
 
 
     @computed get filteredItems() {
-        let filteredItems = toJS(this.getCategoricalItems());
+        let filteredItems = this.getCategoricalItems().slice(0);
 
         if (this.favoritesId) {
-            const favsCategory = toJS(this.favoritesCategory);
+            const favsCategory = { ...this.favoritesCategory };
             const findFavItem = (category) => {
                 const foundItems = [];
                 if (category.hasSubcategory) {
@@ -182,7 +182,7 @@ export default class CategoricalDisplayStore {
         }
 
         if (this.getActiveCategory) {
-            const activeCategory = toJS(this.getActiveCategory());
+            const activeCategory = this.getActiveCategory();
             filteredItems.unshift(activeCategory);
         }
 
