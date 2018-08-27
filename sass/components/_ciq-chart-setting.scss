@@ -115,7 +115,7 @@
         height: 265px;
         width: 280px;
         position: relative;
-        @include transition(height 250ms ease-out);
+        transition: height 250ms ease-out;
 
         &.container-language {
             height: 300px;
@@ -125,7 +125,7 @@
             width: 280px;
             position: absolute;
             top: 0px;
-            @include transition(transform 250ms ease-out, opacity 0.17s ease-out);
+            transition: transform 250ms ease-out, opacity 0.17s ease-out;
         }
         .cq-setting-main {
             transform: translateX(-100%);

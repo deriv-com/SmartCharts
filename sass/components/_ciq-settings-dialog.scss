@@ -69,7 +69,7 @@
         align-items: stretch;
         display: flex;
         position: relative;
-        @include box-sizing(border-box);
+        box-sizing: border-box;
         @include themify($themes) {
             border-bottom: 1px solid themed('DialogHeadBorder');
         }
@@ -91,7 +91,7 @@
             width: calc(50% + 1px);
             bottom: -1px;
             left: 0;
-            @include transition(left linear 0.1s);
+            transition: left linear 0.1s;
             @include themify($themes) {
                 background: themed('DialogHeadActiveBorder');
             }
@@ -109,7 +109,7 @@
         }
 
         .item {
-            @include box-sizing(border-box);
+            box-sizing: border-box;
             padding: 0 16px;
             height: 30px;
             margin-bottom: 5px;
@@ -160,10 +160,10 @@
         line-height: 1.6em;
         margin-right: 5px;
         padding-left: 6px;
-        @include border-radius(3px);
+        border-radius: 3px;
         @include themify($themes) {
             border: none;
-            @include box-shadow (0, 0, 0, 1px, themed('defaultBorder'));
+            box-shadow: 0, 0, 0, 1px, themed('defaultBorder');
         }
     }
     .cq-color-picker {

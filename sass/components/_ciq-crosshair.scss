@@ -6,7 +6,7 @@
     left: 0;
 
     .cq-crosshair-content {
-        @include border-radius(4px);
+        border-radius: 4px;
         position: absolute;
         pointer-events: none;
         padding: 8px;

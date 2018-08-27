@@ -10,10 +10,10 @@
     box-shadow: 0 0 0.63em 0.03em rgba(0, 0, 0, 0.14);
     visibility: hidden;
     z-index: -3;
+    @include dialog-transition();
     @include themify($themes) {
         background: themed('DialogHeadBg');
     }
-    @include dialog-transition();
 
     &.open {
         visibility: visible;
