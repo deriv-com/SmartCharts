@@ -132,6 +132,7 @@ class Feed {
         if (this._tradingTimes.isMarketOpened(symbol)) {
             const delay = this._tradingTimes.getDelayedMinutes(symbol);
             if (delay > 0) {
+                tickHistoryRequest.start -= delay * 60;
                 this._mainStore.chart.notify({
                     text: t.translate('[symbol] feed is delayed by [delay] minutes', { ...tParams, delay }),
                     category: 'activesymbol',
@@ -405,6 +406,7 @@ class Feed {
         };
         if (delay > 0) {
             this._binaryApi.getTickHistory(tickHistoryRequest).then((response) => {
+                tickHistoryRequest.start -= delay * 60;
                 const lastEpoch = Feed.getLatestEpoch(response);
                 if (lastEpoch) { // on errors, lastEpoch can be undefined
                     this._lastStreamEpoch[key] = lastEpoch;
