@@ -12,6 +12,7 @@ class Feed {
     get endEpoch() { return this._mainStore.state.endEpoch; }
     get context() { return this._mainStore.chart.context; }
     _activeStreams = {};
+    _delayedStreams = {};
     _lastStreamEpoch = {};
     _isConnectionOpened = true;
 
@@ -52,6 +53,9 @@ class Feed {
                 granularity,
             });
             delete this._activeStreams[key];
+        } else if (this._delayedStreams[key]) {
+            clearInterval(this._delayedStreams[key]);
+            delete this._delayedStreams[key];
         }
 
         if (this._lastStreamEpoch[key]) {
@@ -98,10 +102,11 @@ class Feed {
             start -= suggestedStartDate.getTimezoneOffset() * 60;
         }
         const comparisonChartSymbol = isComparisonChart ? symbol : undefined;
+        const tParams = { symbol: symbolObject.name };
 
         if (this._tradingTimes.isFeedUnavailable(symbol)) {
             this._mainStore.chart.notify({
-                text: t.translate('Streaming for [symbol] is not available due to license restrictions', { symbol }),
+                text: t.translate('Streaming for [symbol] is not available due to license restrictions', tParams),
                 type: 'error',
                 category: 'activesymbol',
             });
@@ -123,47 +128,64 @@ class Feed {
             granularity,
         };
 
-        let tickHistoryPromise, processTickHistory;
-        if (end && now > end) { // end is in the past; no streaming required
-            tickHistoryRequest.end = end;
-            tickHistoryPromise = this._binaryApi.getTickHistory(tickHistoryRequest);
-        } else {
-            [tickHistoryPromise, processTickHistory] = this._getProcessTickHistoryClosure(key, comparisonChartSymbol);
-            this._binaryApi.subscribeTickHistory(tickHistoryRequest, processTickHistory);
-        }
-
-        let response = await tickHistoryPromise;
-
-        // if symbol is changed before request is completed, past request needs to be forgotten:
-        if (!isComparisonChart && this._stx.chart.symbol !== symbol) {
-            callback({ quotes: [] });
-            this._binaryApi.forget({ symbol, granularity });
-            return;
-        }
-
-        if (response.error) {
-            const errorMessage = response.error.message;
-            const errorCode = response.error.code;
-            const tParams = { symbol: symbolObject.name };
-            if (/^(MarketIsClosed|NoRealtimeQuotes)$/.test(errorCode)) {
-                // Although market is closed, we display the past tick history data
-                response = await this._binaryApi.getTickHistory(tickHistoryRequest);
+        let response;
+        if (this._tradingTimes.isMarketOpened(symbol)) {
+            const delay = this._tradingTimes.getDelayedMinutes(symbol);
+            if (delay > 0) {
                 this._mainStore.chart.notify({
-                    text: errorCode === 'NoRealtimeQuotes'
-                        ? errorMessage
-                        : t.translate('[symbol] market is presently closed.', tParams),
+                    text: t.translate('[symbol] is delayed by [delay] minutes', { ...tParams, delay }),
                     category: 'activesymbol',
                 });
+
+                response = await this._binaryApi.getTickHistory(tickHistoryRequest);
+
+                const lastEpoch = Feed.getLatestEpoch(response);
+                if (lastEpoch) { // on errors, lastEpoch can be undefined
+                    this._lastStreamEpoch[key] = lastEpoch;
+                }
+
+                this._delayedStreams[key] = setInterval(() => this.onUpdateDelayedFeed(key, comparisonChartSymbol), delay * 60000);
             } else {
-                this._mainStore.notification.notify({
-                    text: errorMessage,
-                    category: 'activesymbol',
-                });
-                callback({ quotes: [] });
-                return;
+                let tickHistoryPromise, processTickHistory;
+                if (end && now > end) { // end is in the past; no streaming required
+                    tickHistoryRequest.end = end;
+                    tickHistoryPromise = this._binaryApi.getTickHistory(tickHistoryRequest);
+                } else {
+                    [tickHistoryPromise, processTickHistory] = this._getProcessTickHistoryClosure(key, comparisonChartSymbol);
+                    this._binaryApi.subscribeTickHistory(tickHistoryRequest, processTickHistory);
+                }
+
+                response = await tickHistoryPromise;
+
+                // if symbol is changed before request is completed, past request needs to be forgotten:
+                if (!isComparisonChart && this._stx.chart.symbol !== symbol) {
+                    callback({ quotes: [] });
+                    this._binaryApi.forget({ symbol, granularity });
+                    return;
+                }
+
+                if (response.error) {
+                    const { message: text } = response.error;
+                    this._mainStore.chart.notify({
+                        text,
+                        category: 'activesymbol',
+                    });
+                    callback({ quotes: [] });
+                    return;
+                }
+
+                if (processTickHistory) {
+                    this._activeStreams[key] = true;
+                }
             }
-        } else if (processTickHistory) {
-            this._activeStreams[key] = true;
+        } else {
+            this._mainStore.chart.notify({
+                text: t.translate('[symbol] market is presently closed.', tParams),
+                category: 'activesymbol',
+            });
+
+            // Although market is closed, we display the past tick history data
+            response = await this._binaryApi.getTickHistory(tickHistoryRequest);
         }
 
         const quotes = TickHistoryFormatter.formatHistory(response);
@@ -239,8 +261,24 @@ class Feed {
         }
     }
 
+    async onUpdateDelayedFeed(key, comparisonChartSymbol) {
+        const { symbol, granularity } = this._unpackKey(key);
+        const lastEpoch = +this._lastStreamEpoch[key];
+        const tickHistoryRequest = {
+            start: lastEpoch,
+            symbol,
+            granularity,
+        };
+        const response = await this._binaryApi.getTickHistory(tickHistoryRequest);
+        this._appendHistory(response, key, comparisonChartSymbol);
+    }
+
     unsubscribeAll() {
         for (const key of Object.keys(this._activeStreams)) {
+            this._forgetStream(key);
+        }
+
+        for (const key of Object.keys(this._delayedStreams)) {
             this._forgetStream(key);
         }
     }
@@ -329,6 +367,10 @@ class Feed {
 
     _onConnectionClosed() {
         this._activeStreams = {}; // prevent forget requests; active streams are invalid when connection closed
+        for (const key of Object.keys(this._delayedStreams)) {
+            clearInterval(this._delayedStreams[key]);
+            delete this._delayedStreams[key];
+        }
         this._connectionClosedDate = new Date();
     }
 
@@ -350,21 +392,34 @@ class Feed {
     }
 
     _resumeStream(key, start) {
-        if (this._activeStreams[key]) {
+        if (this._activeStreams[key] || this._delayedStreams[key]) {
             throw new Error('You cannot resume an active stream!');
         }
         const { symbol, granularity } = this._unpackKey(key);
         const comparisonChartSymbol = (this._stx.chart.symbol !== symbol) ? symbol : undefined;
-        const [tickHistoryPromise, processTickHistory] = this._getProcessTickHistoryClosure(key, comparisonChartSymbol);
-        this._activeStreams[key] = true;
-        this._binaryApi.subscribeTickHistory({
+        const delay = this._tradingTimes.getDelayedMinutes(symbol);
+        const tickHistoryRequest = {
             start,
             symbol,
             granularity,
-        }, processTickHistory);
-        tickHistoryPromise.then((resp) => {
-            this._appendHistory(resp, key, comparisonChartSymbol);
-        });
+        };
+        if (delay > 0) {
+            this._binaryApi.getTickHistory(tickHistoryRequest).then((response) => {
+                const lastEpoch = Feed.getLatestEpoch(response);
+                if (lastEpoch) { // on errors, lastEpoch can be undefined
+                    this._lastStreamEpoch[key] = lastEpoch;
+                }
+
+                this._delayedStreams[key] = setInterval(() => this.onUpdateDelayedFeed(key, comparisonChartSymbol), delay * 60000);
+            });
+        } else {
+            const [tickHistoryPromise, processTickHistory] = this._getProcessTickHistoryClosure(key, comparisonChartSymbol);
+            this._activeStreams[key] = true;
+            this._binaryApi.subscribeTickHistory(tickHistoryRequest, processTickHistory);
+            tickHistoryPromise.then((resp) => {
+                this._appendHistory(resp, key, comparisonChartSymbol);
+            });
+        }
     }
 
     _getKey({ symbol, granularity }) {
