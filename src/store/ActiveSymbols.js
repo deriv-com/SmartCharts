@@ -1,5 +1,5 @@
 import { observable, action, computed } from 'mobx';
-import { stableSort } from '../utils';
+import { stableSort, cloneCategories } from '../utils';
 
 export default class ActiveSymbols {
     @observable changes = {};
@@ -9,7 +9,6 @@ export default class ActiveSymbols {
     constructor(api, tradingTimes) {
         this._api = api;
         tradingTimes.onMarketOpenCloseChanged(action((changes) => {
-            if (this.categorizedSymbols.length === 0) return;
             for (const symbol in changes) {
                 this.symbolMap[symbol].exchange_is_open = changes[symbol];
             }
@@ -28,26 +27,13 @@ export default class ActiveSymbols {
     }
 
     @computed get activeSymbols() {
-        const categorized = [];
-        for (const category of this.categorizedSymbols) {
-            const categoryData = [];
-            const categoryCopy = { ...category, data: categoryData };
-            for (const subcategory of category.data) {
-                const subcategoryData = [];
-                const subcategoryCopy = { ...subcategory, data: subcategoryData };
-                for (const symbolObj of subcategory.data) {
-                    const exchange_is_open = (symbolObj.symbol in this.changes) ? this.changes[symbolObj.symbol] : symbolObj.exchange_is_open;
-                    subcategoryData.push({
-                        ...symbolObj,
-                        exchange_is_open,
-                    });
-                }
-                categoryData.push(subcategoryCopy);
-            }
-            categorized.push(categoryCopy);
-        }
-
-        return categorized;
+        return cloneCategories(this.categorizedSymbols, (symbolObj) => {
+            const exchange_is_open = (symbolObj.symbol in this.changes) ? this.changes[symbolObj.symbol] : symbolObj.exchange_is_open;
+            return {
+                ...symbolObj,
+                exchange_is_open,
+            };
+        });
     }
 
     getSymbolObj(symbol) {
