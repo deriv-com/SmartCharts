@@ -348,6 +348,19 @@
     }
 }
 
+.smartcharts-desktop {
+    &.smartcharts-480 {
+        .cq-categorical-display {
+            width: 450px;
+        }
+    }
+    &.smartcharts-900 {
+        .cq-categorical-display {
+            width: 550px;
+        }
+    }
+}
+
 .smartcharts-mobile {
     .cq-categorical-display {
         flex-direction: column;

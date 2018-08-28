@@ -12,7 +12,6 @@
             border-radius: 2px;
             box-sizing: border-box;
             text-align: center;
-            padding-top: 8px;
             font-size: 10px;
             @include themify($themes) {
                 color: themed('menuText');
@@ -205,5 +204,8 @@
     .smartcharts-1100 & {
         width: 100px !important;
         top: 0px;
+        .bt-priod {
+            padding-top: 8px;
+        }
     }
 }

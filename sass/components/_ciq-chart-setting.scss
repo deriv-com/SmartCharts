@@ -1,8 +1,6 @@
 
 .cq-chart-setting {
     .cq-menu-dropdown {
-        width: 280px;
-
         .cq-menu-container {
             height: 0px;
 
@@ -162,6 +160,14 @@
         .cq-menu-dropdown {
             top: auto !important;
             bottom: 1em !important;
+        }
+    }
+}
+
+.smartcharts-desktop {
+    &.smartcharts-480 {
+        .cq-setting-container {
+            width: 230px;
         }
     }
 }
