@@ -77,10 +77,6 @@ class Feed {
                 this._appendTick(resp, key, comparisonChartSymbol);
                 return;
             }
-            const lastEpoch = Feed.getLatestEpoch(resp);
-            if (lastEpoch) { // on errors, lastEpoch can be undefined
-                this._lastStreamEpoch[key] = lastEpoch;
-            }
             tickHistoryPromise.resolve(resp);
             hasHistory = true;
         };
@@ -129,7 +125,10 @@ class Feed {
         };
 
         let response;
-        if (this._tradingTimes.isMarketOpened(symbol)) {
+        if (end && now > end) { // end is in the past; no streaming required
+            tickHistoryRequest.end = end;
+            response = await this._binaryApi.getTickHistory(tickHistoryRequest);
+        } else if (this._tradingTimes.isMarketOpened(symbol)) {
             const delay = this._tradingTimes.getDelayedMinutes(symbol);
             if (delay > 0) {
                 tickHistoryRequest.start -= delay * 60;
@@ -140,22 +139,10 @@ class Feed {
 
                 response = await this._binaryApi.getTickHistory(tickHistoryRequest);
 
-                const lastEpoch = Feed.getLatestEpoch(response);
-                if (lastEpoch) { // on errors, lastEpoch can be undefined
-                    this._lastStreamEpoch[key] = lastEpoch;
-                }
-
                 this._delayedStreams[key] = setInterval(() => this.onUpdateDelayedFeed(key, comparisonChartSymbol), delay * 60000);
             } else {
-                let tickHistoryPromise, processTickHistory;
-                if (end && now > end) { // end is in the past; no streaming required
-                    tickHistoryRequest.end = end;
-                    tickHistoryPromise = this._binaryApi.getTickHistory(tickHistoryRequest);
-                } else {
-                    [tickHistoryPromise, processTickHistory] = this._getProcessTickHistoryClosure(key, comparisonChartSymbol);
-                    this._binaryApi.subscribeTickHistory(tickHistoryRequest, processTickHistory);
-                }
-
+                const [tickHistoryPromise, processTickHistory] = this._getProcessTickHistoryClosure(key, comparisonChartSymbol);
+                this._binaryApi.subscribeTickHistory(tickHistoryRequest, processTickHistory);
                 response = await tickHistoryPromise;
 
                 // if symbol is changed before request is completed, past request needs to be forgotten:
@@ -178,6 +165,10 @@ class Feed {
                 if (processTickHistory) {
                     this._activeStreams[key] = true;
                 }
+            }
+            const lastEpoch = Feed.getLatestEpoch(response);
+            if (lastEpoch) { // on errors, lastEpoch can be undefined
+                this._lastStreamEpoch[key] = lastEpoch;
             }
         } else {
             this._mainStore.chart.notify({
