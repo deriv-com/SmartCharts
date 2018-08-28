@@ -1,26 +1,19 @@
 import { observable, action, computed, when, reaction } from 'mobx';
 import MenuStore from './MenuStore';
-import { getChartTypes } from './ChartTypeStore';
-import { getTimeUnit, getIntervalInSeconds } from '../utils';
-
-const chartTypes = getChartTypes();
-const notCandles = chartTypes
-    .filter(t => !t.candleOnly)
-    .map(t => t.id);
-
-const aggregateCharts = chartTypes
-    .filter(t => t.settingsOnClick);
+import { getTimeUnit, getIntervalInSeconds, displayMilliseconds } from '../utils';
+import Menu from '../components/Menu.jsx';
 
 export default class TimeperiodStore {
     constructor(mainStore) {
         this.mainStore = mainStore;
         when(() => this.context, this.onContextReady);
         this.menu = new MenuStore(mainStore, { route:'time-period' });
+        this.TimePeriodMenu = this.menu.connect(Menu);
     }
 
     get context() { return this.mainStore.chart.context; }
     get loader() { return this.mainStore.loader; }
-
+    get isTick() { return this.timeUnit === 'tick'; }
     @observable timeUnit = null;
     @observable interval = null;
     remain = null;
@@ -30,40 +23,43 @@ export default class TimeperiodStore {
         this.timeUnit = getTimeUnit({ timeUnit, interval });
         this.interval = interval;
 
-        this.showCountdown();
+        this.updateCountdown();
 
-        reaction(() => this.timeUnit, this.showCountdown);
-        reaction(() => this.interval, this.showCountdown);
+        reaction(() => [
+            this.timeUnit,
+            this.interval,
+            this.mainStore.chartSetting.countdown,
+            this.mainStore.chartType.type,
+        ], this.updateCountdown.bind(this));
+
+        this.context.stx.addEventListener('newChart', this.updateDisplay);
     };
 
     countdownInterval = null;
-    showCountdown = (callFromSettings = false) => {
-        if (!this.context) { return; }
 
-        const stx = this.context.stx;
-        const isTick = this.timeUnit === 'tick';
-        const hasCountdown = !aggregateCharts.some(t => t.id === stx.layout.aggregationType);
-        this.remain = null;
-        if (this.countdownInterval) { clearInterval(this.countdownInterval); }
-        if (this._injectionId)  { stx.removeInjection(this._injectionId); }
+    clearCountdown() {
+        if (this.countdownInterval) {
+            clearInterval(this.countdownInterval);
+        }
+
+        if (this._injectionId)  {
+            this.context.stx.removeInjection(this._injectionId);
+        }
+
         this._injectionId = undefined;
         this.countdownInterval = undefined;
-        stx.draw();
 
-        const displayMilliseconds = (ms) => {
-            const totalSec = ms / 1000;
-            if (totalSec <= 0) { return null; }
-            const padNum = n => (`0${n}`).slice(-2);
-            const seconds = padNum(Math.trunc((totalSec) % 60));
-            const minutes = padNum(Math.trunc((totalSec / 60) % 60));
-            let hours = Math.trunc((totalSec / 3600) % 24);
-            hours = hours ? `${hours}:` : '';
-            return `${hours}${minutes}:${seconds}`;
-        };
+        this.context.stx.draw();
+    }
+
+    updateCountdown() {
+        const stx = this.context.stx;
+        this.remain = null;
+        this.clearCountdown();
 
         const setRemain = () => {
-            if (stx.isDestroyed) {
-                if (this.countdownInterval) { clearInterval(this.countdownInterval); }
+            if (stx.isDestroyed || this.isTick) {
+                this.clearCountdown();
                 return;
             }
 
@@ -77,9 +73,17 @@ export default class TimeperiodStore {
             }
         };
 
-        if (this.mainStore.chartSetting.countdown && !isTick && hasCountdown) {
+        const isCountdownChart = !this.mainStore.chartType.isAggregateChart;
+        const hasCountdown = this.mainStore.chartSetting.countdown && !this.isTick && isCountdownChart;
+
+        if (hasCountdown) {
             if (!this._injectionId) {
                 this._injectionId = stx.append('draw', () => {
+                    if (this.isTick) {
+                        this.clearCountdown();
+                        return;
+                    }
+
                     if (this.remain && stx.currentQuote() !== null) {
                         stx.yaxisLabelStyle = 'rect';
                         stx.createYAxisLabel(stx.chart.panel, this.remain, this.remainLabelY, '#15212d', '#FFFFFF');
@@ -88,42 +92,26 @@ export default class TimeperiodStore {
                 });
             }
 
-            if (callFromSettings) { setRemain(); }
-
             if (!this.countdownInterval) {
                 this.countdownInterval = setInterval(setRemain, 1000);
+                setRemain();
             }
         }
-    };
+    }
 
-    @action.bound setPeriodicity(interval, timeUnit) {
-        if (this.loader) {
-            this.loader.show();
+    @action.bound setGranularity(granularity) {
+        if (this.mainStore.state.granularity !== undefined) {
+            console.error('Setting granularity does nothing since granularity prop is set. Consider overriding the onChange prop in <TimePeriod />');
+            return;
         }
 
+        this.mainStore.chart.changeSymbol(undefined, granularity);
+    }
+
+    @action.bound updateDisplay() {
         const stx = this.context.stx;
-        const wasTick = stx.layout.timeUnit === 'second';
-        stx.setPeriodicity({ period: 1, interval, timeUnit }, () => {
-            if (this.loader) {
-                this.loader.hide();
-            }
-
-            const chartType = this.mainStore.chartType;
-            const isTick = timeUnit === 'second';
-            const isCandle = notCandles.indexOf(chartType.type.id) === -1;
-
-            if (isCandle && isTick) {
-                chartType.setType('mountain');
-            } else if (!isTick && wasTick) {
-                chartType.setType('candle');
-            }
-
-            this.mainStore.chart.saveLayout();
-        });
-
         this.timeUnit = getTimeUnit(stx.layout);
         this.interval = stx.layout.interval;
-        this.menu.setOpen(false);
     }
 
     @computed get remainLabelY() {
@@ -148,6 +136,7 @@ export default class TimeperiodStore {
         }
         return +this.interval ? this.interval : 1;
     }
+
     @computed get display() {
         const t = this.timeUnit ? this.timeUnit[0] : '';
         return this.interval_display + t; // 1d, 1t, 5m, 2h

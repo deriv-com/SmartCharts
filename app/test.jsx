@@ -21,6 +21,7 @@ import './doorbell';
 import { ConnectionManager, StreamManager } from './connection';
 
 configure({ enforceActions: true });
+
 const getLanguageStorage = function () {
     const default_language = 'en';
     try {
@@ -59,7 +60,6 @@ const renderControls = () => (
 const requestAPI = connectionManager.send.bind(connectionManager);
 const requestSubscribe = streamManager.subscribe.bind(streamManager);
 const requestForget = streamManager.forget.bind(streamManager);
-const shareOrigin = window.location.href.split('?')[0];
 
 class App extends React.Component {
     state = {
@@ -71,6 +71,9 @@ class App extends React.Component {
         this.setState({ hidePriceLines: evt.target.checked });
     };
 
+    onColorChange =(evt) => {
+        this.setState({ shadeColor: evt.target.value });
+    }
 
     onHighLowChange = (evt) => {
         this.setState({ highLow: { [evt.target.id]: +evt.target.value } });
@@ -95,10 +98,10 @@ class App extends React.Component {
     };
 
     render() {
-        const { barrierType, highLow : { high, low }, hidePriceLines, draggable, relative } = this.state;
+        const { barrierType, highLow : { high, low }, hidePriceLines, draggable, relative, shadeColor } = this.state;
         const barriers = barrierType ? [{
             shade: barrierType,
-            shadeColor: 'red',
+            shadeColor,
             color: '#f44336',
             onChange: this.handleBarrierChange,
             relative,
@@ -118,7 +121,6 @@ class App extends React.Component {
                         requestAPI={requestAPI}
                         requestSubscribe={requestSubscribe}
                         requestForget={requestForget}
-                        shareOrigin={shareOrigin}
                         barriers={barriers}
                     />
                 </div>
@@ -133,6 +135,16 @@ class App extends React.Component {
                             <option value="BETWEEN">BETWEEN</option>
                             <option value="OUTSIDE">OUTSIDE</option>
                             <option value="">disable</option>
+                        </select>
+                        Choose barrier bg color:&nbsp;
+                        <select defaultValue="" id="barrierBGColor" onChange={this.onColorChange}>
+                            <option value="GREEN">GREEN</option>
+                            <option value="RED">RED</option>
+                            <option value="YELLOW">YELLOW</option>
+                            <option value="ORANGERED">ORANGERED</option>
+                            <option value="PURPLE">PURPLE</option>
+                            <option value="BLUE">BLUE</option>
+                            <option value="DEEPPINK">DEEPPINK</option>
                         </select>
                         &nbsp;
                         <b>low:</b> <input id="low" type="number" value={low === undefined ? '' : low} onChange={this.onHighLowChange} />,

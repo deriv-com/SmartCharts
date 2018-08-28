@@ -1,45 +1,105 @@
 import ResizeObserver from 'resize-observer-polyfill';
-import { action, observable } from 'mobx';
+import { action, observable, reaction } from 'mobx';
 import PendingPromise from '../utils/PendingPromise';
 import Context from '../components/ui/Context';
 import KeystrokeHub from '../components/ui/KeystrokeHub';
 import '../components/ui/Animation';
 import { BinaryAPI, Feed } from '../feed';
-import { createObjectFromLocalStorage, stableSort } from '../utils';
+import { stableSort, calculateTimeUnitInterval, getUTCDate } from '../utils';
 
-// import '../AddOns';
+CIQ.ChartEngine.prototype.createYAxisLabel = function (panel, txt, y, backgroundColor, color, ctx, yAxis) {
+    if (panel.yAxis.drawPriceLabels === false || panel.yAxis.noDraw) return;
+    const yax = yAxis || panel.yAxis;
+    if (yax.noDraw || !yax.width) return;
+    const context = ctx || this.chart.context;
+    const margin = 3;
+    const height = this.getCanvasFontSize('stx_yaxis') + (margin << 1);
+    this.canvasFont('stx_yaxis', context);
+    this.drawBorders = yax.displayBorder;
+    const tickWidth = this.drawBorders ? 3 : 0; // pixel width of tick off edge of border
+    let width;
+    try {
+        width = context.measureText(txt).width + tickWidth + (margin << 1);
+    } catch (e) {
+        width = yax.width;
+    } // Firefox doesn't like this in hidden iframe
+
+    let x = yax.left - margin + 3;
+    if (yax.width < 0) x += (yax.width - width);
+    let textx = x + margin + tickWidth;
+    let radius = 3;
+    const position = (yax.position === null ? panel.chart.yAxis.position : yax.position);
+    if (position === 'left') {
+        x = yax.left + yax.width + margin - 3;
+        width *= -1;
+        if (yax.width < 0) x -= (yax.width + width);
+        textx = x - margin - tickWidth;
+        radius = -3;
+        context.textAlign = 'right';
+    }
+    if (y + (height >> 1) > yax.bottom) y = yax.bottom - (height >> 1);
+    if (y - (height >> 1) < yax.top)    y = yax.top    + (height >> 1);
+
+    if (typeof (CIQ[this.yaxisLabelStyle]) === 'undefined') {
+        this.yaxisLabelStyle = 'roundRectArrow'; // in case of user error, set a default.
+    }
+    let yaxisLabelStyle = this.yaxisLabelStyle;
+    if (yax.yaxisLabelStyle) yaxisLabelStyle = yax.yaxisLabelStyle;
+    const params = {
+        ctx: context,
+        x,
+        y,
+        top: y - (height >> 1),
+        width,
+        height,
+        radius,
+        backgroundColor,
+        fill: true,
+        stroke: false,
+        margin: {
+            left: textx - x,
+            top: 1,
+        },
+        txt,
+        color,
+    };
+    CIQ[yaxisLabelStyle](params);
+};
 
 class ChartStore {
-    static _id_counter = 0;
-
+    static keystrokeHub;
     constructor(mainStore) {
-        this.id = ++ChartStore._id_counter;
         this.mainStore = mainStore;
     }
 
-    onSymbolChange = null;
+    RANGE_PADDING_PX = 125;
     contextPromise = new PendingPromise();
     activeSymbols = [];
     rootNode = null;
     stxx = null;
-    id = null;
-    defaultSymbol = 'R_100';
+    api = null;
+    defaults = {
+        symbol: 'R_100',
+        granularity: 0,
+        chartType: 'mountain',
+    };
+    granularity;
     enableRouting = null;
     chartNode = null;
     chartControlsNode = null;
-    chartContainerNode = null;
     holderStyle;
+    state;
+    onMessage = null;
     @observable containerWidth = null;
     @observable context = null;
     @observable currentActiveSymbol;
     @observable isChartAvailable = true;
     @observable comparisonSymbols = [];
     @observable categorizedSymbols = [];
-    @observable barrierJSX;
-    @observable chartPanelTop = 0;
     @observable chartHeight;
     @observable chartContainerHeight;
     @observable isMobile = false;
+    @observable cursorInChart = false;
 
     @action.bound setActiveSymbols(activeSymbols) {
         this.activeSymbols = this.processSymbols(activeSymbols);
@@ -50,61 +110,16 @@ class ChartStore {
     get routingStore() {
         return this.mainStore.routing;
     }
-    saveLayout() {
-        const layoutData = this.stxx.exportLayout(true);
-        const json = JSON.stringify(layoutData);
-        CIQ.localStorageSetItem(`layout-${this.id}`, json);
-    }
-
-    restoreLayout(stx, layoutData) {
-        if (!layoutData) { return; }
-
-        stx.importLayout(layoutData, {
-            managePeriodicity: true,
-            cb: () => {
-                if (layoutData.tension) { stx.chart.tension = layoutData.tension; }
-                this.restoreDrawings(stx, stx.chart.symbol);
-                if (this.loader) { this.loader.hide(); }
-            },
-        });
-    }
-
-    saveDrawings() {
-        const obj = this.stxx.exportDrawings();
-        const symbol = this.stxx.chart.symbol;
-        if (obj.length === 0) {
-            CIQ.localStorage.removeItem(symbol);
-        } else {
-            CIQ.localStorageSetItem(symbol, JSON.stringify(obj));
-        }
-    }
-
-    restoreDrawings() {
-        const drawings = createObjectFromLocalStorage(this.stxx.chart.symbol);
-        if (drawings) {
-            this.stxx.importDrawings(drawings);
-            this.stxx.draw();
-        }
-    }
-
-    restorePreferences() {
-        const pref = createObjectFromLocalStorage(`preferences-${this.id}`);
-        if (pref) {
-            this.stxx.importPreferences(pref);
-        }
-    }
-    savePreferences() {
-        CIQ.localStorageSetItem(
-            `preferences-${this.id}`,
-            JSON.stringify(this.stxx.exportPreferences()),
-        );
-    }
 
     updateHeight(position) {
         const panelPosition = position || this.mainStore.chartSetting.position;
         const offsetHeight = (panelPosition === 'left') ? 0 : this.chartControlsNode.offsetHeight;
         this.chartHeight = this.chartNode.offsetHeight;
         this.chartContainerHeight = this.chartHeight - offsetHeight;
+    }
+
+    notify(message) {
+        if (this.onMessage) { this.onMessage(message); }
     }
 
     updateCanvas = () => {
@@ -141,56 +156,73 @@ class ChartStore {
         this.chartControlsNode = this.rootNode.querySelector('.cq-chart-controls');
 
         const {
-            onSymbolChange,
-            initialSymbol,
+            symbol,
+            chartType,
+            granularity,
             requestAPI,
             requestSubscribe,
             requestForget,
             isMobile,
-            shareOrigin = 'https://charts.binary.com',
             enableRouting,
+            onMessage,
             settings,
             onSettingsChange,
         } = props;
-        const api = new BinaryAPI(requestAPI, requestSubscribe, requestForget);
-        const { share, chartSetting } = this.mainStore;
-        share.shareOrigin = shareOrigin;
+        this.api = new BinaryAPI(requestAPI, requestSubscribe, requestForget);
+        const { chartSetting } = this.mainStore;
         chartSetting.setSettings(settings);
         chartSetting.onSettingsChange = onSettingsChange;
         this.isMobile = isMobile;
-        this.onSymbolChange = onSymbolChange;
+        this.state = this.mainStore.state;
 
-        const stxx = this.stxx = new CIQ.ChartEngine({
+        this.onMessage = onMessage;
+        this.granularity = (granularity !== undefined) ? granularity : this.defaults.granularity;
+        const engineParams = {
+            maxMasterDataSize: 5000, // cap size so tick_history requests do not become too large
             markerDelay: null, // disable 25ms delay for placement of markers
-            container: this.rootNode.querySelector('.chartContainer.primary'),
+            container: this.rootNode.querySelector('.chartContainer'),
             controls: { chartControls: null }, // hide the default zoom buttons
             preferences: {
                 currentPriceLine: true,
+                whitespace: isMobile ? 50 : 150,
             },
             chart: {
                 yAxis: {
                     // Put some top margin so chart doesn't get blocked by chart title
                     initialMarginTop: 125,
                     initialMarginBottom: 10,
+                    // position: 'left',
+                    width: -10,
+                    justifyRight: true,
                 },
             },
-            minimumLeftBars: 15,
-            minimumZoomTicks: 20,
+            minimumLeftBars: 2,
             yTolerance: 999999, // disable vertical scrolling
-        });
+        };
+        let chartLayout = {
+            chartType: chartType || this.defaults.chartType,
+        };
+        if (chartLayout.chartType === 'spline') { // cause there's no such thing as spline chart in ChartIQ
+            chartLayout.chartType = 'mountain';
+            engineParams.chart.tension = chartLayout.tension = 0.5;
+        }
+        const rangeSpan = this.getRangeSpan();
+        if (rangeSpan) {
+            chartLayout = { ...chartLayout, ...rangeSpan };
+        }
+        engineParams.layout = chartLayout;
+
+        const stxx = this.stxx = new CIQ.ChartEngine(engineParams);
 
         const deleteElement = stxx.chart.panel.holder.parentElement.querySelector('#mouseDeleteText');
         const manageElement = stxx.chart.panel.holder.parentElement.querySelector('#mouseManageText');
-        const manageTouchElement = stxx.chart.panel.holder.parentElement.querySelector('#overlayTrashCan');
         deleteElement.textConent = t.translate('right-click to delete');
         manageElement.textConent = t.translate('right-click to manage');
-        manageTouchElement.textContent = t.translate('tap to manage');
 
-        // Animation (using tension requires splines.js)
         CIQ.Animation(stxx, { stayPut: true });
 
         // connect chart to data
-        this.feed = new Feed(api, stxx, this.mainStore);
+        this.feed = new Feed(this.api, stxx, this.mainStore);
         stxx.attachQuoteFeed(this.feed, {
             refreshInterval: null,
         });
@@ -200,174 +232,236 @@ class ChartStore {
             this.routingStore.handleRouting();
         }
 
-        // Extended hours trading zones
-        // new CIQ.ExtendedHours({
-        //     stx: stxx,
-        //     filter: true,
-        // });
-
-        // Inactivity timer
-        // new CIQ.InactivityTimer({
-        //     stx: stxx,
-        //     minutes: 30,
-        // });
-
         this.holderStyle = stxx.chart.panel.holder.style;
 
         stxx.append('deleteHighlighted', this.updateComparisons);
-        stxx.addEventListener('layout', () => {
-            this.saveLayout();
-            this.updateChartPanelTop();
-        });
-        stxx.addEventListener('symbolChange', this.saveLayout.bind(this));
-        stxx.addEventListener('drawing', this.saveDrawings.bind(this));
-        stxx.addEventListener('newChart', this.updateChartPanelTop);
-        stxx.addEventListener('preferences', this.savePreferences.bind(this));
 
         const context = new Context(stxx, this.rootNode);
 
-        new KeystrokeHub(document.querySelector('body'), context, { // eslint-disable-line no-new
-            cb: KeystrokeHub.defaultHotKeys,
-        });
-
-        const UIStorage = new CIQ.NameValueStore(); // eslint-disable-line no-unused-vars
+        // only one instance of keystrokeHub should exist
+        if (ChartStore.keystrokeHub === undefined) {
+            ChartStore.keystrokeHub = new KeystrokeHub(document.body, context, {
+                cb: KeystrokeHub.defaultHotKeys,
+            });
+        }
 
         // TODO: excluded studies
-        const params = { // eslint-disable-line no-unused-vars
-            excludedStudies: {
-                Directional: true,
-                Gopala: true,
-                vchart: true,
-            },
-            alwaysDisplayDialog: {
-                ma: true,
-            },
-            /* dialogBeforeAddingStudy: {"rsi": true} // here's how to always show a dialog before adding the study */
-        };
 
         this.loader.show();
 
         const studiesStore = this.mainStore.studies;
-        stxx.callbacks.studyOverlayEdit = study => studiesStore.editStudy(study);
-        stxx.callbacks.studyPanelEdit = study => studiesStore.editStudy(study);
+        stxx.callbacks.studyOverlayEdit = studiesStore.editStudy;
+        stxx.callbacks.studyPanelEdit = studiesStore.editStudy;
 
-        this.restorePreferences();
+        this.api.getActiveSymbols().then(action(({ active_symbols }) => {
+            /**
+             * Updating market close status each 10 minute
+             */
+            this.onMarketClosedStatus();
+            setInterval(this.onMarketClosedStatus.bind(this), 10 * 60 * 1000);
+            this.setActiveSymbols(active_symbols);
+            const isRestoreSuccess = this.state.restoreLayout();
 
-        api.getActiveSymbols().then(({ active_symbols }) => {
-            let layoutData = createObjectFromLocalStorage(`layout-${this.id}`);
-
-            // if initialSymbol is different from local storage layoutData, it takes
-            // precedence over layoutData.symbols. Note that layoutData retrieved
-            // from URL will take precedence over initialSymbol
-            if (initialSymbol && layoutData && layoutData.symbols[0].symbol !== initialSymbol) {
-                // If symbol in layoutData.symbol[0] and initialSymbol are different,
-                // restoreLayout and changeSymbol cannot be executed together or
-                // chartIQ will stream both symbols in the the same chart
-                delete layoutData.symbols;
+            if (!isRestoreSuccess) {
+                this.changeSymbol(
+                    symbol || this.defaults.symbol,
+                    this.granularity,
+                );
             }
 
-            const onLayoutDataReady = () => {
-                this.restoreLayout(stxx, layoutData);
+            this.context = context;
+            stxx.container.addEventListener('mouseenter', this.onMouseEnter);
+            stxx.container.addEventListener('mouseleave', this.onMouseLeave);
+            this.contextPromise.resolve(this.context);
+            this.resizeScreen();
 
-                this.setActiveSymbols(active_symbols);
-
-                if (initialSymbol && !(layoutData && layoutData.symbols)) {
-                    this.changeSymbol(initialSymbol);
-                } else if (stxx.chart.symbol) {
-                    this.setCurrentActiveSymbols(stxx);
-                    if (this.onSymbolChange) { this.onSymbolChange(this.currentActiveSymbol); }
-                } else {
-                    this.changeSymbol(this.defaultSymbol);
+            reaction(() => [
+                this.state.symbol,
+                this.state.granularity,
+            ], () => {
+                if (this.state.symbol !== undefined || this.state.granularity !== undefined) {
+                    this.changeSymbol(this.state.symbol, this.state.granularity);
                 }
-                this.setLayoutData(context);
-            };
-            const href = window.location.href;
-            if (href.startsWith(shareOrigin) && href.indexOf('#') !== -1) {
-                const encodedJsonPart = href.split('#').slice(1).join('#');
-                const url = href.split('#')[0];
-                const hash = url.split('?')[1];
-
-                if (hash) {
-                    window.history.replaceState({}, document.title, window.location.pathname);
-                    const promise = this.mainStore.share.expandBitlyAsync(hash, decodeURIComponent(encodedJsonPart));
-                    promise.then((encodedJson) => {
-                        layoutData = JSON.parse(encodedJson);
-                        onLayoutDataReady();
-                    }).catch(() => onLayoutDataReady());
-                } else {
-                    onLayoutDataReady();
-                }
-            } else {
-                onLayoutDataReady();
-            }
-        });
+            });
+        }));
 
         this.resizeObserver = new ResizeObserver(this.resizeScreen);
         this.resizeObserver.observe(modalNode);
 
         this.feed.onComparisonDataUpdate(this.updateComparisons);
     }
+
+    @action.bound onMouseEnter() {
+        this.cursorInChart = true;
+        ChartStore.keystrokeHub.setActiveContext(this.context);
+    }
+
+    @action.bound onMouseLeave() {
+        this.cursorInChart = false;
+        ChartStore.keystrokeHub.setActiveContext(null);
+    }
+
+    /**
+     * Get tradeTimes if not loaded yet
+     * OR update the active symbols by comapring open time
+     */
+    onMarketClosedStatus() {
+        this.api.getTradingTimes()
+            .then(this.updateMarketClosedStatus);
+    }
+
+    @action.bound updateMarketClosedStatus(response) {
+        const nowUtc = (new Date()).getTime();
+        const toEpochGMT = (hour, crossDay) => {
+            const currentDate = new Date();
+            currentDate.setDate(currentDate.getDate() + (crossDay || 0));
+            const dateStr = currentDate.toISOString().substring(0, 11);
+            return new Date(`${dateStr}${hour}Z`).getTime();
+        };
+        response.trading_times.markets.forEach((market) => {
+            market.submarkets.forEach((submarket) => {
+                submarket.symbols.forEach((symbol) => {
+                    const foundSymbol = this.activeSymbols.find(item => item.symbol === symbol.symbol);
+                    if (foundSymbol) {
+                        let isOpen = false;
+                        for (let i = 0; i <= symbol.times.open.length; i++) {
+                            const { open, close } = symbol.times;
+                            if (open.length && close.length) {
+                                const openTime = toEpochGMT(open[i]);
+                                const closeTime = toEpochGMT(close[i]);
+
+                                // If open time is cross day, then should check time till tomorrow
+                                // and yesterday till now
+                                if (
+                                    (openTime > closeTime && nowUtc >= toEpochGMT(open[i], -1) && nowUtc <= closeTime)
+                                        || (openTime > closeTime && nowUtc >= toEpochGMT(open[i]) && nowUtc <= toEpochGMT(close[i], 1))
+                                        || (nowUtc >= openTime && nowUtc <= closeTime)
+                                ) {
+                                    isOpen = true;
+                                    break;
+                                }
+                            }
+                        }
+                        foundSymbol.exchange_is_open = isOpen;
+                    }
+                });
+            });
+        });
+
+        this.categorizedSymbols = this.categorizeActiveSymbols();
+    }
+
     removeComparison(symbolObj) {
         this.context.stx.removeSeries(symbolObj.symbol);
         this.updateComparisons();
     }
-    @action.bound setLayoutData(context) {
-        this.context = context;
-        this.contextPromise.resolve(this.context);
-        this.resizeScreen();
-        this.updateChartPanelTop();
-    }
 
-    @action.bound updateChartPanelTop() {
-        if (this.holderStyle === undefined) { return; }
-        this.chartPanelTop = this.holderStyle.top;
-    }
-
-    @action.bound setCurrentActiveSymbols(stxx) {
-        this.currentActiveSymbol = stxx.chart.symbolObject;
-        stxx.chart.yAxis.decimalPlaces = stxx.chart.symbolObject.decimal_places;
+    @action.bound updateCurrentActiveSymbol() {
+        const { symbolObject } = this.stxx.chart;
+        this.currentActiveSymbol = symbolObject;
+        this.stxx.chart.yAxis.decimalPlaces = symbolObject.decimal_places;
         this.categorizedSymbols = this.categorizeActiveSymbols();
     }
+
     @action.bound setChartAvailability(status) {
         this.isChartAvailable = status;
     }
 
-    @action.bound changeSymbol(symbolObj) {
+    @action.bound changeSymbol(symbolObj, granularity) {
         if (typeof symbolObj === 'string') {
             symbolObj = this.activeSymbols.find(s => s.symbol === symbolObj);
         }
 
-        if (this.currentActiveSymbol
-            && symbolObj.symbol === this.currentActiveSymbol.symbol) {
+        const isSymbolAvailable = symbolObj && this.currentActiveSymbol;
+
+        if (
+            (isSymbolAvailable
+                && symbolObj.symbol === this.currentActiveSymbol.symbol)
+            && (granularity !== undefined
+                && granularity === this.granularity)
+        ) {
             return;
         }
 
-        if (this.onSymbolChange) {
-            this.onSymbolChange(symbolObj);
-        }
-
-        this.loader.show();
-
-        // reset comparisons
-        this.comparisonSymbols = [];
-        for (const field in this.stxx.chart.series) {
-            if (this.stxx.chart.series[field].parameters.bucket !== 'study') {
-                this.stxx.removeSeries(field);
+        const isResetComparisons = isSymbolAvailable
+            && (symbolObj.symbol !== this.currentActiveSymbol.symbol);
+        if (isResetComparisons) {
+            this.comparisonSymbols = [];
+            for (const field in this.stxx.chart.series) {
+                if (this.stxx.chart.series[field].parameters.bucket !== 'study') {
+                    this.stxx.removeSeries(field);
+                }
             }
         }
 
-        this.stxx.newChart(symbolObj, null, null, (err) => {
+        let params;
+        if (granularity !== undefined) {
+            this.granularity = granularity;
+            params = { periodicity: calculateTimeUnitInterval(granularity) };
+        }
+
+        this.newChart(symbolObj, params);
+
+        if (symbolObj) {
+            this.updateCurrentActiveSymbol();
+        }
+
+        const { chartType: chartTypeStore } = this.mainStore;
+        if (chartTypeStore.chartTypeProp === undefined) {
+            const isTick = this.stxx.layout.timeUnit === 'second';
+            const isCandle = chartTypeStore.isCandle;
+            if (isCandle && isTick) {
+                // Tick charts cannot be represented with candles
+                chartTypeStore.setType('mountain');
+            } else if (!isTick && !isCandle) {
+                chartTypeStore.setType('candle');
+            }
+        }
+    }
+
+    // Calling newChart with symbolObj as undefined refreshes the chart
+    @action.bound newChart(symbolObj = this.currentActiveSymbol, params) {
+        this.loader.show();
+        const onChartLoad = (err) => {
             this.loader.hide();
             if (err) {
                 /* TODO, symbol not found error */
                 return;
             }
-            this.restoreDrawings();
-        });
+            this.state.restoreDrawings();
+        };
+        const rangeSpan = this.getRangeSpan();
+        this.stxx.newChart(symbolObj, null, null, onChartLoad, { ...params, ...rangeSpan });
+    }
 
-        this.stxx.chart.yAxis.decimalPlaces = symbolObj.decimal_places;
-        this.currentActiveSymbol = symbolObj;
-        this.categorizedSymbols = this.categorizeActiveSymbols();
+    getRangeSpan() {
+        const { startEpoch, endEpoch } = this.state;
+        let range, span;
+        const paddingRatio = this.chartNode.clientWidth / this.RANGE_PADDING_PX;
+        const elapsedSeconds = endEpoch - startEpoch;
+        const epochPadding = elapsedSeconds / paddingRatio | 0;
+        if (startEpoch !== undefined || endEpoch !== undefined) {
+            const dtLeft  = (startEpoch !== undefined) ? new Date(getUTCDate(startEpoch - epochPadding)) : undefined;
+            const dtRight = (endEpoch   !== undefined) ? new Date(getUTCDate(endEpoch + epochPadding))   : undefined;
+            const periodicity = calculateTimeUnitInterval(this.granularity);
+            range = {
+                dtLeft,
+                dtRight,
+                periodicity,
+                goIntoFuture: true,
+                goIntoPast: true,
+            };
+            if (dtLeft) {
+                span = { base: 'all', periodicity };
+            }
+            return { range, span };
+        }
+    }
+
+    // Makes requests to tick history API that will replace
+    // Existing chart tick/ohlc data
+    @action.bound refreshChart() {
+        this.newChart();
     }
 
     @action.bound updateComparisons() {
@@ -410,6 +504,11 @@ class ChartStore {
         // we need to manually unsubscribe them.
         this.feed.unsubscribeAll();
         this.feed = null;
+        if (ChartStore.keystrokeHub.context === this.context) {
+            ChartStore.keystrokeHub.setActiveContext(null);
+        }
+        this.stxx.container.removeEventListener('mouseenter', this.onMouseEnter);
+        this.stxx.container.removeEventListener('mouseleave', this.onMouseLeave);
         this.stxx.updateChartData = function () {}; // prevent any data from entering the chart
         this.stxx.isDestroyed = true;
         this.stxx.destroy();
@@ -446,6 +545,7 @@ class ChartStore {
                 }
             }
         }
+
         return orderedSymbols;
     }
 

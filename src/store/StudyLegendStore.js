@@ -2,6 +2,9 @@ import { observable, action, when } from 'mobx';
 import MenuStore from './MenuStore';
 import CategoricalDisplayStore from './CategoricalDisplayStore';
 import SettingsDialogStore from './SettingsDialogStore';
+import SettingsDialog from '../components/SettingsDialog.jsx';
+import Menu from '../components/Menu.jsx';
+import CategoricalDisplay from '../components/CategoricalDisplay.jsx';
 // TODO:
 // import StudyInfo from '../study-info';
 
@@ -30,6 +33,9 @@ export default class StudyLegendStore {
             onStared: () => this.starStudy(this.helper),
             onChanged: items => this.updateStudy(this.helper.sd, items),
         });
+        this.StudyCategoricalDisplay = this.categoricalDisplay.connect(CategoricalDisplay);
+        this.StudyMenu = this.menu.connect(Menu);
+        this.StudySettingsDialog = this.settingsDialog.connect(SettingsDialog);
     }
 
     get context() { return this.mainStore.chart.context; }
@@ -39,6 +45,14 @@ export default class StudyLegendStore {
         this.stx.callbacks.studyOverlayEdit = this.editStudy;
         this.stx.callbacks.studyPanelEdit = this.editStudy;
         this.stx.append('createDataSet', this.renderLegend);
+        this.stx.append('adjustPanelPositions', () => {
+            const panel = Object.keys(this.stx.panels)[1];
+            if (panel) {
+                // Hide the up arrow from first indicator to prevent user
+                // from moving the indicator panel above the main chart
+                this.stx.panels[panel].up.style.display = 'none';
+            }
+        });
         this.renderLegend();
     };
 
@@ -72,7 +86,8 @@ export default class StudyLegendStore {
     }
 
     @action.bound onSelectItem(item) {
-        CIQ.Studies.addStudy(this.stx, item);
+        const sd = CIQ.Studies.addStudy(this.stx, item);
+        this.changeStudyPanelTitle(sd);
         this.menu.setOpen(false);
     }
 
@@ -113,7 +128,9 @@ export default class StudyLegendStore {
                     defaultValue: par.defaultValue,
                     type: 'switch',
                 };
-            } else if (par.defaultValue.constructor === Number) {
+            }
+
+            if (par.defaultValue.constructor === Number) {
                 return {
                     ...shared,
                     id: par.name,
@@ -132,7 +149,7 @@ export default class StudyLegendStore {
         });
 
         this.settingsDialog.items = [...outputs, ...inputs, ...parameters];
-        this.settingsDialog.title = study.sd.name.toUpperCase();
+        this.settingsDialog.title = t.translate(study.sd.libraryEntry.name);
         // TODO:
         // const description = StudyInfo[study.sd.type];
         // this.settingsDialog.description = description || t.translate("No description yet");
@@ -171,7 +188,17 @@ export default class StudyLegendStore {
         this.helper.updateStudy(updates);
         this.updateActiveStudies();
         this.stx.draw();
-        this.settingsDialog.title = this.helper.sd.name.toUpperCase();
+        this.changeStudyPanelTitle(this.helper.sd);
+        this.settingsDialog.title = t.translate(this.helper.sd.libraryEntry.name);
+    }
+
+    changeStudyPanelTitle(sd) {
+        // Remove numbers from the end of indicator titles in mobile
+        if (this.mainStore.chart.isMobile) {
+            this.stx.panels[sd.panel].display = sd.type;
+            this.stx.draw();
+            this.mainStore.state.saveLayout();
+        }
     }
 
     shouldRenderLegend() {
@@ -206,13 +233,13 @@ export default class StudyLegendStore {
     @action.bound updateActiveStudies() {
         const stx = this.stx;
         const studies = [];
-        Object.keys(stx.layout.studies).forEach((id) => {
+        Object.keys(stx.layout.studies || []).forEach((id) => {
             const sd = stx.layout.studies[id];
             if (sd.customLegend) { return; }
 
             studies.push({
                 enabled: true,
-                display: sd.inputs.display,
+                display:this.mainStore.chart.isMobile ? t.translate(sd.libraryEntry.name) : sd.inputs.display,
                 dataObject: {
                     stx,
                     sd,

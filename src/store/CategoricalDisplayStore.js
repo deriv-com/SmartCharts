@@ -91,7 +91,7 @@ export default class CategoricalDisplayStore {
                 continue;
             }
             const r = el.getBoundingClientRect();
-            const top = r.top - this.scrollPanel.scrollTop;
+            const top = r.top - this.scrollPanel.getBoundingClientRect().top;
             if (top > 0) { break; }
             i++;
         }
@@ -295,7 +295,7 @@ export default class CategoricalDisplayStore {
             .filter(favItem => favItem)
             .map(favItem => (typeof favItem === 'string' ? favItem : favItem.itemId));
         this.mainStore.favoriteSessionStore.favoritesChangeTrigger = !this.mainStore.favoriteSessionStore.favoritesChangeTrigger;
-        this.mainStore.chart.saveLayout();
+        this.mainStore.state.saveLayout();
     }
 
     setFavoriteById(id) {

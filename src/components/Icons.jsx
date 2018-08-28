@@ -15,6 +15,9 @@ import PointFigure from '../../sass/icons/chart settings/chart types/ic-pointfig
 import RangeBars from '../../sass/icons/chart settings/chart types/ic-rangebars-normal.svg';
 import Renko from '../../sass/icons/chart settings/chart types/ic-renko-normal.svg';
 import Spline from '../../sass/icons/chart settings/chart types/spline/ic-spline-normal.svg';
+import Png from '../../sass/icons/download/ic-png.svg';
+import Csv from '../../sass/icons/download/ic-csv.svg';
+
 
 import Add from '../../sass/icons/chart settings/zoom-in/ic-zoomin-light.svg';
 import Close from '../../sass/icons/close/ic-close.svg';
@@ -42,8 +45,7 @@ import Search from '../../sass/icons/search/ic-search-normal.svg';
 import Edit from '../../sass/icons/edit/ic-edit.svg';
 import IndicatorCategory from '../../sass/icons/sidebar/indicator/ic-indicator-normal.svg';
 import Arrow from '../../sass/icons/dropdown/ic-dropdown.svg';
-import Copy from '../../sass/icons/share/ic-copy.svg';
-import Share from '../../sass/icons/share/ic-share.svg';
+import Download from '../../sass/icons/download/ic-download.svg';
 import PositionLeft from '../../sass/icons/chart settings/setting/ic-position-left.svg';
 import PositionBottom from '../../sass/icons/chart settings/setting/ic-position-bottom.svg';
 import Back from '../../sass/icons/back/ic-back.svg';
@@ -201,6 +203,8 @@ export const IndicatorIcon = Wrapper(Indicator);
 export const MeasureIcon = Wrapper(Measure);
 export const ZoomOutIcon = Wrapper(Minus);
 export const SplineIcon = Wrapper(Spline);
+export const PngIcon = Wrapper(Png);
+export const CsvIcon = Wrapper(Csv);
 export const StarIcon = Wrapper(Star);
 export const TemplateIcon = Wrapper(Template);
 export const TickIcon = Wrapper(Tick);
@@ -209,8 +213,7 @@ export const EditIcon = Wrapper(Edit);
 export const SettingIcon = Wrapper(Edit);
 export const ArrowIcon = Wrapper(Arrow);
 export const FavoriteIcon = Wrapper(Star);
-export const CopyIcon = Wrapper(Copy);
-export const ShareIcon = Wrapper(Share);
+export const DownloadIcon = Wrapper(Download);
 
 
 export const PositionLeftIcon = Wrapper(PositionLeft);
@@ -441,6 +444,10 @@ otc('JPY', 'OTC_N225');
 otc('Spanish', 'OTC_IBEX35');
 otc('USD', 'OTC_SPC');
 otc('WallStreet', 'OTC_DJI');
+otc('USD', 'OTC_NDX');
+otc('CHF', 'OTC_SSMI');
+otc('HongKong', 'OTC_HSI');
+otc('AUD', 'OTC_AS51');
 
 export const ActiveOptionsIconMap = {
     delete: DeleteIcon,

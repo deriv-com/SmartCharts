@@ -15,6 +15,8 @@ SmartCharts is both the name of the app ([charts.binary.com](https://charts.bina
 - use `yarn build` to build the library
 - use `yarn build:app` to build the [charts.binary.com](https://charts.binary.com/) app
 - use `yarn analyze` to run webpack-bundle-analyzer
+- use `yarn test` to run unit tests
+- use `yarn coverage` to see test coverage
 
 > Note: eventhough both `yarn build` and `yarn build:app` outputs `smartcharts.js` and `smartcharts.css`, **they are not the same files**. One outputs a library and the the other outputs an app.
 
@@ -83,16 +85,21 @@ Props marked with `*` are **mandatory**:
 requestAPI* | SmartCharts will make single API calls by passing the request input directly to this method, and expects a `Promise` to be returned.
 requestSubscribe* | SmartCharts will make streaming calls via this method. `requestSubscribe` expects 2 parameters `(request, callback) => {}`: the `request` input and a `callback` in which response will be passed to for each time a response is available. Keep track of this `callback` as SmartCharts will pass this to you to forget the subscription (via `requestForget`).
 requestForget* | When SmartCharts no longer needs a subscription (made via `requestSubscribe`), it will call this method (passing in `request` and `callback` passed from `requestSubscribe`) to halt the subscription.
-onSymbolChange | When SmartCharts changes the symbol, it will call this function, passing the symbol object as parameter.
+id | Uniquely identifies a chart's indicators, comparisons, symbol and layout; saving them to local storage and loading them when page refresh. If not set, SmartCharts renders a fresh chart with default values on each refresh. Defaults to `undefined`.
+symbol | Sets the main chart symbol. Defaults to `R_100`. Refer [Props vs UI](#props-vs-ui) for usage details.
+granularity | Sets the granularity of the chart. Allowed values are 60, 120, 180, 300, 600, 900, 1800, 3600, 7200, 14400, 28800, 86400. Defaults to 0. Refer [Props vs UI](#props-vs-ui) for usage details.
+chartType | Sets the chartType. Choose between `mountain` (Line), `line` (Dot), `colored_line` (Colored Dot),  `spline`,  `baseline`, `candle`, `colored_bar` (OHLC), `hollow_candle`, `heikinashi`, `kagi`, `linebreak`, `renko`, `rangebars`, and `pandf` (Point & Figure). Defaults to `mountain`. Refer [Props vs UI](#props-vs-ui) for usage details.
+startEpoch | Set the start epoch of the chart
+endEpoch | Set the end epoch of the chart
 chartControlsWidgets | Render function for chart control widgets. Refer to [Customising Components](#customising-components).
 topWidgets | Render function for top widgets. Refer to [Customising Components](#customising-components).
-initialSymbol | Sets the initial symbol.
 isMobile | Switch between mobile or desktop view. Defaults to `false`.
-shareOrigin | Sets the origin of the generated share link. Defaults to `https://charts.binary.com`.
 onSettingsChange | Callback that will be fired each time a setting is changed.
 settings | Sets the chart settings. Refer to [Chart Settings](#chart-settings)
 barriers | Draw chart barriers. Refer to [Barriers API](#barriers-api) for usage details
 enableRouting | Enable routing for dialogs. Defaults to `false`
+isConnectionOpened | Sets the connection status. If set, upon reconnection smartcharts will either patch missing tick data or refresh the chart, depending on granularity; if not set, it is assumed that connection is always opened. Defaults to `undefined`.
+onMessage | SmartCharts will notify messages via this method. `onMessage` expect 1 parameter `(message => {})`
 
 ### Chart Settings
 
@@ -123,7 +130,7 @@ Attributes marked with `*` are **mandatory**:
 
 | Attribute | Description |
 --------|--------------
-shadeColor | Barrier shade color; choose between `green` and `red`. Defaults to `green`.
+shadeColor | Barrier shade color. Defaults to `green`.
 color | Price line color. Defaults to `#000`.
 shade | Shade type; choose between `NONE_SINGLE`, `NONE_DOUBLE`, `ABOVE`, `BELOW`, `OUTSIDE` or `BETWEEN`. Defaults to `NONE_SINGLE`.
 hidePriceLines | hide/show the price lines. Defaults to `false`.
@@ -141,7 +148,7 @@ Markers provide a way for developers to place DOM elements inside the chart that
 ```jsx
 <SmartChart>
     <Marker
-        x={new Date(2018, 5, 20)}
+        x={1533192979}
         yPositioner="none"
         className="chart-line vertical trade-start-line"
     >
@@ -156,7 +163,7 @@ Markers provide a way for developers to place DOM elements inside the chart that
 --------|--------------
 className | Adds custom class name to marker. All markers have class name `stx-marker`.
 x | x position of the chart; depends on `xPositioner`.
-xPositioner | Determines x position. Choose between `date` or `none`. Defaults to `date`.
+xPositioner | Determines x position. Choose between `epoch` or `none`. Defaults to `epoch`.
 y | y position of the chart; depends on `yPositioner`.
 yPositioner | Determines y position. Choose between `value` or `none`. Defaults to `value`.
 
@@ -190,20 +197,38 @@ const App = () => (
 
 Here are the following components you can import:
  - Top widgets:
-    - `<ChartTitle />`
+    - `<ChartTitle enabled={true} onChange={(symbol) => {}} />`
     - `<AssetInformation />`
     - `<ComparisonList />`
  - Chart controls:
-    - `<CrosshairToggle />`
-    - `<ChartTypes />`
+    - `<CrosshairToggle enabled={true} />`
+    - `<ChartTypes enabled={true} onChange={(chartType) => {}} />`
     - `<StudyLegend />`
     - `<Comparison />`
     - `<DrawTools />`
     - `<Views />`
     - `<Share />`
-    - `<Timeperiod />`
+    - `<Timeperiod enabled={true} onChange={(chartType) => {}} />`
     - `<ChartSize />`
     - `<ChartSetting />`
+ 
+ ### Props vs UI
+ 
+Certain chart parameters can be set either by props or from the chart UI:
+  
+   - `symbol` - set by `<ChartTitle />`
+   - `granularity` - set by `<TimePeriod >`
+   - `chartType` - set by `<ChartTypes />`
+  
+  This creates conflicts in deciding which is the single source of truth. To circumvent this, if these props are set (not `undefined`), selecting options in its corresponding components will not have any affect affect on the chart; the prop values take precedence. To have control over both the UI and the props, we provide library users the option to _override_ component behaviour via `onChange` prop. For example, to retrieve the symbol a client chooses:
+ 
+ ```jsx
+<ChartTitle
+    onChange={(symbol) => { /* ...Pass to symbol prop in <SmartCharts /> */ }}
+/>
+```
+ 
+ See available components and their props in [Customising Components](#customising-components).
  
 ## Contribute
 
@@ -268,6 +293,101 @@ Each time a new translation string is added to the code, you need to update the 
 
 Once the new `messages.pot` is merged into the `dev` branch, it will automatically be updated in [CrowdIn](https://crowdin.com/project/smartcharts/settings#files). You should expect to see a PR with the title **New Crowdin translations**
  in a few minutes; this PR will update the `*.po` files.
+ 
+ ### State Management and the `connect` Method
+ 
+ SmartCharts uses a variation of [Mobdux](https://medium.com/@cameronfletcher92/mobdux-combining-the-good-parts-of-mobx-and-redux-61bac90ee448) to assist with state management using Mobx.
+ 
+ Each component consists of 2 parts: a **template** (`*.jsx` file), and a **store** (`*Store.js` file). There are 3 scenarios in which the [`connect`](https://github.com/binary-com/SmartCharts/blob/dev/src/store/Connect.js) method is used:
+ 
+#####  1. Main Components: The component is tied directly to the main store.
+
+Examples: `<ChartTitle />`, `<TimePeriod />`, `<Views />`...
+
+Each component here is mapped to a corresponding store in the main store. **Only one copy of this component may exist per `<SmartChart />` instance**, and its state is managed by the main store tree (defined as `mainStore` in SmartCharts). Here you pass a `mapperFunction` that would be applied directly to the main store:
+  
+```jsx
+
+function mapperFunction(mainStore) {
+    return {
+        value: mainStore.subStore.value,
+    }
+}
+
+export default connect(mapperFunction)(MyComponent);
+```
+
+Connections in the scenario #1 should be done in the `jsx` file, to keep consistent with other components. Except for the component tied to the main store (`Chart.jsx`), all components using this method should be SFC (Stateless Functional Components), and have the lifecycle managed by the main store.
+
+##### 2. Subcomponents: Component is connected inside a store
+
+Examples: `<Menu />`, `<List />`, `<CategoricalDisplay />`...
+
+This is used when multiple copies of a store needs to exist in the same state tree. Here we do the connection inside the constructor of a child of the main store and pass it as a prop to the template. For example `<ChartTitle />` needs a `<Menu />`, so in `ChartTitleStore` we create an instance of `MenuStore` and connect it:
+
+```js
+export default class ChartTitleStore {
+    constructor(mainStore) {
+        this.menu = new MenuStore(mainStore);
+        this.ChartTitleMenu = this.menu.connect(Menu);
+        // ...
+    }
+    // ...    
+}
+```
+
+The `connect` method for subcomponents are defined in its store (instead of the template file) that contains its own `mapperFunction`:
+
+```js
+export default class MenuStore {
+    // ...
+    connect = connect(() => ({
+        setOpen: this.setOpen,
+        open: this.open,
+    }))
+}
+```
+
+We then pass the connected component in `ChartTitle.jsx`:
+
+```js
+export default connect(({ chartTitle: c }) => ({
+    ChartTitleMenu: c.ChartTitleMenu,
+}))(ChartTitle);
+```
+
+> **Note**: Do NOT connect subcomponents in another connect method; `connect` creates a new component each time it is called, and a `mapperFunction` is called every time a mobx reaction or prop update is triggered.
+
+##### 3. Independent Components: components that are not managed by the main store
+
+Examples: `<Barrier />`, `<Marker />`
+
+Independent components is able to access the main store, but the main store has no control over independent components. As such, each independent component manages its own life cycle. Here is the interface for its store:
+
+```js
+class IndependentStore {
+    constructor(mainStore) {}
+    updateProps(nextProps) {} // intercept the props from the component
+    destructor()           {} // called on componentWillUnmount
+}
+```
+
+This enables library users to use multiple copies of a component without connecting it, because mounting an independent component will also create its own store (refer to [`Marker API`](#marker-api) to see usage example of such a component). Therefore, for each independent component you connect you will also need to pass its store class (not an instance but the class itself) as a second parameter to the `connect` function:
+
+```jsx
+function mapperFunction(customStore) {
+    return {
+        value: customStore.value,
+    }
+}
+
+export default connect(
+    mapperFunction,
+    MyStoreClass, // Required argument for independent components
+)(MyIndependentComponent);
+```
+
+Note that **for independent components, the `mapperFunction` is applied to the store instance**, not the main store. Should you need to access any value from the main store, you can do this via the `mainStore` passed to the constructor of each independent store class.
 
 ## Manual Deployment
 

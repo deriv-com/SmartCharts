@@ -1,121 +1,130 @@
 .cq-chart-title {
+    display: inline-block;
     top: 1em;
     z-index: 41;
-    margin: .2em 0.8em;
-    &.stxMenuActive {
-        box-shadow: none !important;
-        .cq-menu-btn{
-            .cq-symbol-select-btn{
-                @include themify($themes) {
-                    border: 1px solid themed('menuActiveBorder');
-                }
-                .cq-symbol-dropdown{
-                    transform: rotate(180deg) !important;
-                }
-            }
-        }
-    }
-    .cq-menu-btn{
-        padding: 0 !important;
-        margin: .2em 0em;
-        .cq-symbol-select-btn {
-            font-family: $base-font;
-            padding: 0.3em 0.5em 0.3em 1em;
+    margin: 0.2em 0.8em;
+
+    &.ciq-menu.ciq-enabled {
+        .cq-menu-btn > .cq-symbol-select-btn {
             cursor: pointer;
-            position: relative;
-            display: flex;
-            align-items: center;
+
             &:hover {
                 @include themify($themes) {
                     border: solid 1px themed('menuActiveBorder');
                 }
             }
-            @include border-radius();
-            @include themify($themes) {
-                color: themed('ChartTitleText');
-                background: themed('ChartTitleBg');
-                border: solid 1px themed('ChartTitleBorder');
-            }
-            > .ic-icon, > .ic-frx, > .ic-wld, > .ic-otc {
-                height: $large-icon-size;
-                width: $large-icon-size;
-                margin-right: 12px;
-                transform: scale(1.3);
-                > svg {
-                    height: $large-icon-size;
-                }
-            }
-            .cq-symbol-info {
-                display: flex;
-                flex-direction: column;
-                .cq-market {
-                    font-size: 12px;
-                    font-weight: bold;
-                    line-height: 1.5;
-                    width: fit-content;
-                }
-            }
-            .cq-symbol-dropdown{
+            > .ic-icon.cq-symbol-dropdown {
+                display: block;
                 margin-right: 0px;
                 width: 24px;
-                margin-left: 12px;
                 transform: scale(1);
             }
-            .cq-symbol,
-            .cq-chart-price {
-                .cq-animated-price {
-                    @include transition(color 300ms ease-out);
-                    padding-left: 16px;
-                }
-                > div {
-                    line-height: 1.5;
-                }
-                line-height: 22px;
-                font-size: 12px;
-                text-align: left;
-            }
-            .cq-symbol {
-                font-size: 16px;
-                font-weight: 700;
-            }
-            .cq-chart-price {
-                margin-left: 9px;
-                vertical-align: text-bottom;
-                @include themify($themes) {
-                    color: themed('ChartTitlePriceText');
-                }
-            }
-            .cq-chart-price > * {
-                position: relative;
+        }
+        &.stxMenuActive > .cq-menu-btn > .cq-symbol-select-btn {
+            @include themify($themes) {
+                border: 1px solid themed('menuActiveBorder');
             }
 
+            > .ic-icon.cq-symbol-dropdown {
+                transform: rotate(180deg);
+            }
+        }
+    }
+    &.ciq-enabled .cq-symbol-select-btn {
+        @include themify($themes) {
+            background: themed('ChartTitleBg');
+            border: solid 1px themed('ChartTitleBorder');
+        }
+    }
+    .cq-symbol-select-btn {
+        font-family: $base-font;
+        padding: 0.3em 1em;
+        position: relative;
+        display: flex;
+        align-items: center;
+        border-radius: 3px;
+
+        @include themify($themes) {
+            color: themed('ChartTitleText');
+        }
+
+        > .ic-icon.cq-symbol-dropdown {
+            display: none;
+        }
+        > .ic-icon, > .ic-frx, > .ic-wld, > .ic-otc {
+            height: $large-icon-size;
+            width: $large-icon-size;
+            margin-right: 12px;
+            margin-left: 12px;
+            transform: scale(1.3);
+
+            > svg {
+                height: $large-icon-size;
+            }
+        }
+        .cq-symbol-info {
+            display: flex;
+            flex-direction: column;
+
+            .cq-market {
+                font-size: 12px;
+                font-weight: bold;
+                line-height: 1.5;
+                width: fit-content;
+            }
+        }
+        .cq-symbol,
+        .cq-chart-price {
+            .cq-animated-price {
+                transition: color 300ms ease-out;
+                padding-left: 16px;
+            }
+            > div {
+                line-height: 1.5;
+            }
+            line-height: 22px;
+            font-size: 12px;
+            text-align: left;
+        }
+        .cq-symbol {
+            font-size: 16px;
+            font-weight: 700;
+        }
+        .cq-chart-price > * {
+            position: relative;
+        }
+        .cq-chart-price {
+            margin-left: 9px;
+            vertical-align: text-bottom;
+            @include themify($themes) {
+                color: themed('ChartTitlePriceText');
+            }
             /* Up/Down Arrow indicators */
-            .cq-chart-price {
-                .cq-change {
-                    &.stx-up:after, &.stx-down:after {
-                        float: left;
-                        margin-top: 5px;
-                        margin-right: 5px;
-                        @include triangle-base(6px);
-                    }
-                    &.stx-up:after {
-                        border-bottom: 8px solid rgb(76, 175, 80);
-                    }
-                    &.stx-down:after {
-                        border-top: 8px solid rgb(249, 84, 84);
-                    }
+            .cq-change {
+                &.stx-up:after, &.stx-down:after {
+                    float: left;
+                    margin-top: 5px;
+                    margin-right: 5px;
+                    @include triangle-base(6px);
+                }
+                &.stx-up:after {
+                    border-bottom: 8px solid rgb(76, 175, 80);
+                }
+                &.stx-down:after {
+                    border-top: 8px solid rgb(249, 84, 84);
                 }
             }
         }
     }
     .cq-menu-dropdown {
-        box-shadow: 0 0 0.625em 0.025em rgba(0, 0, 0, 0.14);
+        box-shadow: 0 0 0.63em 0.03em rgba(0, 0, 0, 0.14);
         left: 0px;
-        bottom: auto !important;
-        transform: translateX(0) translateY( -3em );
+        bottom: auto;
+        transform: translateX(0) translateY(-3em);
+
         &.cq-menu-dropdown-enter-done, &.cq-menu-dropdown-enter-active {
             opacity: 1;
-            transform: translateX(0) translateY( 0em );
+            transform: translateX(0) translateY(0em);
         }
         &.cq-menu-dropdown-enter-done {
             z-index: 6;
@@ -124,42 +133,28 @@
 }
 
 /* Mobile Style */
-.smartcharts.smartcharts-mobile{
-    .cq-top-ui-widgets{
+.smartcharts.smartcharts-mobile {
+    .cq-top-ui-widgets {
         width: 100%;
         padding: 0px;
         margin: 0px;
         z-index: 3;
-        .cq-menu-btn{
-            padding: 0px;
-            margin: .4em .5em;
-            margin: 0px;
-        }
     }
-    .cq-chart-title{
+    .cq-chart-title {
         width: 100%;
         display: block;
         top: 0em;
         margin: 0px;
-        .cq-menu-btn {
-            padding: 0px;
-            margin: .3em 0.4em;
+
+        .cq-symbol-select-btn {
+            margin: 0.3em 0.4em;
         }
-        .cq-menu-dropdown{
+        .cq-menu-dropdown {
             width: 100%;
-            margin: 0px !important;
-            top: 0px !important;
-            left: 0px !important;
-            z-index: 4 !important;
-            @include transition(none !important);
-            &.open{
+            transition: none !important;
+
+            &.open {
                 margin: 0px;
-                bottom: auto;
-            }
-            .cq-categorical-display{
-                .cq-scroll-panel{
-                    height: calc( 100vh - 11em );
-                }
             }
         }
     }

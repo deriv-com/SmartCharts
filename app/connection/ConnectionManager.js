@@ -1,44 +1,91 @@
 import EventEmitter from 'event-emitter-es6';
+import RobustWebsocket from 'robust-websocket';
 import { PendingPromise } from '@binary-com/smartcharts'; // eslint-disable-line import/no-extraneous-dependencies,import/no-unresolved
 
 class ConnectionManager extends EventEmitter {
     static get EVENT_CONNECTION_CLOSE() { return 'CONNECTION_CLOSE'; }
     static get EVENT_CONNECTION_REOPEN() { return 'CONNECTION_REOPEN'; }
+
     constructor({ appId, endpoint, language }) {
         super({ emitDelay: 0 });
         this._url = `${endpoint}?l=${language}&app_id=${appId}`;
         this._counterReqId = 1;
         this._initialize();
         this._pendingRequests = { };
-        this._autoReconnect = true;
     }
-    _initialize() {
-        this._websocket = new WebSocket(this._url);
 
-        this._websocket.addEventListener('open', this._onopen.bind(this));
-        this._websocket.addEventListener('close', this._onclose.bind(this));
-        this._websocket.addEventListener('error', this._onclose.bind(this));
+    _initialize() {
+        this._websocket = new RobustWebsocket(this._url, null, {
+            shouldReconnect(event /* , ws */) {
+                if (event.code === 1008
+                    || event.code === 1011
+                    || event.type === 'close') return;
+                if (event.type === 'online') { return 0; }
+                return 3000;
+            },
+        });
+
+        // There's a strange bug where upon reconnection over a short period
+        // the OPEN status precedes CLOSED. To circumvent this we manually
+        // check the readyState when the event is fired
+        const onConnectionStatusChanged = () => {
+            if (this._websocket.readyState === WebSocket.OPEN) {
+                this._onWsOpen();
+            } else {
+                this._onWsClosed();
+            }
+        };
+        this._websocket.addEventListener('open', onConnectionStatusChanged);
+        this._websocket.addEventListener('close', onConnectionStatusChanged);
         this._websocket.addEventListener('message', this._onmessage.bind(this));
-        this._connectionOpened = PendingPromise();
     }
-    _onopen() {
-        this._connectionOpened.resolve();
+
+    onOpened(callback) {
+        this.on(ConnectionManager.EVENT_CONNECTION_REOPEN, callback);
     }
-    _onclose() {
-        if (this._connectionOpened.isPending) {
-            this._connectionOpened.reject('Connection Error');
+
+    onClosed(callback) {
+        this.on(ConnectionManager.EVENT_CONNECTION_CLOSE, callback);
+    }
+
+    _onWsOpen() {
+        if (this._connectionOpened) {
+            this._connectionOpened.resolve();
+            this._connectionOpened = undefined;
         }
-        Object.keys(this._pendingRequests).forEach(req_id => this._pendingRequests[req_id]
-            .reject('Connection Error'));
+        this.emit(ConnectionManager.EVENT_CONNECTION_REOPEN);
+        if (!this._pingTimer) {
+            this._pingTimer = setInterval(this._pingCheck.bind(this), 15000);
+        }
+    }
+
+    _pingCheck() {
+        if (this._websocket.readyState === WebSocket.OPEN) {
+            this.send({ ping: 1 }, 5000)
+                .catch(() => {
+                    if (this._websocket.readyState === WebSocket.OPEN) {
+                        console.error('Server unresponsive. Creating new connection...');
+                        // Reset connection if ping gets no pong from server
+                        this._websocket.close();
+                        this._initialize();
+                    }
+                });
+        }
+    }
+
+    _onWsClosed() {
+        if (!this._pingTimer) {
+            clearInterval(this._pingTimer);
+            this._pingTimer = undefined;
+        }
+
+        Object.keys(this._pendingRequests).forEach((req_id) => {
+            this._pendingRequests[req_id].reject('Pending requests are rejected as connection is closed.');
+        });
         this._pendingRequests = { };
-        if (this._autoReconnect) {
-            this._initialize();
-            this._connectionOpened.then(() => {
-                this.emit(ConnectionManager.EVENT_CONNECTION_REOPEN);
-            });
-        }
         this.emit(ConnectionManager.EVENT_CONNECTION_CLOSE);
     }
+
     _onmessage(message) {
         const data = JSON.parse(message.data);
         const { req_id, msg_type } = data;
@@ -48,13 +95,7 @@ class ConnectionManager extends EventEmitter {
         }
         this.emit(msg_type, data);
     }
-    _assertConnected() {
-        ['CONNECTING', 'CLOSING', 'CLOSED'].forEach((state) => {
-            if (this._websocket.readyState === WebSocket[state]) {
-                throw new Error(`Websocket is ${state}`);
-            }
-        });
-    }
+
     _timeoutRequest(req_id, timeout) {
         setTimeout(() => {
             if (this._pendingRequests[req_id] && this._pendingRequests[req_id].isPending) {
@@ -67,10 +108,16 @@ class ConnectionManager extends EventEmitter {
     async send(data, timeout) {
         const req = Object.assign({}, data);
         req.req_id = this._counterReqId++;
-        await this._connectionOpened;
-        this._assertConnected();
+
+        if (this._websocket.readyState !== WebSocket.OPEN) {
+            if (!this._connectionOpened) {
+                this._connectionOpened = new PendingPromise();
+            }
+            await this._connectionOpened;
+        }
+
         this._websocket.send(JSON.stringify(req));
-        this._pendingRequests[req.req_id] = PendingPromise(req);
+        this._pendingRequests[req.req_id] = new PendingPromise(req);
         if (timeout) {
             this._timeoutRequest(req.req_id, timeout);
         }
@@ -78,7 +125,6 @@ class ConnectionManager extends EventEmitter {
     }
 
     destroy() {
-        this._autoReconnect = 0;
         this._websocket.close();
     }
 }

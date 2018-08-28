@@ -1,5 +1,3 @@
-/* eslint-disable no-new, react/jsx-indent, react/no-danger, react/jsx-indent-props */
-import PropTypes from 'prop-types';
 import React, { Component, Fragment } from 'react';
 import RenderInsideChart from './RenderInsideChart.jsx';
 import ComparisonList from './ComparisonList.jsx';
@@ -7,6 +5,8 @@ import ChartTitle from './ChartTitle.jsx';
 import AssetInformation from './AssetInformation.jsx';
 import Loader from './Loader.jsx';
 import Barrier from './Barrier.jsx';
+import CurrentSpot from './CurrentSpot.jsx';
+import DrawingCursor from './DrawingCursor.jsx';
 
 /* css + scss */
 import '../../sass/app.scss';
@@ -15,8 +15,6 @@ import '../Plugin';
 import './ui';
 
 import ChartControls from './ChartControls.jsx';
-import SettingsDialog from './SettingsDialog.jsx';
-import Notification from './Notification.jsx';
 import Crosshair from './Crosshair.jsx';
 import { connect } from '../store/Connect';
 
@@ -29,19 +27,21 @@ const defaultTopWidgets = () => (
 );
 
 class Chart extends Component {
-    static childContextTypes = { promise: PropTypes.object };
-
-    getChildContext() {
-        return { promise: this.props.contextPromise };
+    constructor(props) {
+        super(props);
+        this.modalNode = React.createRef();
+        this.root = React.createRef();
     }
 
     componentDidMount() {
-        this.props.init(this.root, this.modalNode, this.props);
+        const { updateProps, init, ...props } = this.props;
+        updateProps(props);
+        init(this.root.current, this.modalNode.current, props);
     }
 
     componentWillReceiveProps(nextProps) {
-        const { settings, setSettings } = nextProps;
-        setSettings(settings);
+        const { updateProps, ...props } = nextProps;
+        updateProps(props);
     }
 
     componentWillUnmount() {
@@ -54,28 +54,30 @@ class Chart extends Component {
             StudySettingsDialog,
             isMobile = false,
             isChartAvailable,
-            setting : { position, theme },
             barriers = [],
             children,
-            chartPanelTop,
             chartControlsWidgets,
             AggregateChartSettingsDialog,
             topWidgets,
             chartContainerHeight,
             containerWidth,
+            isDrawing,
+            theme,
+            position,
         } = this.props;
 
         const currentPosition = `cq-chart-control-${(position && !isMobile) ? position : 'bottom'}`;
         const contextWidth =  !isMobile ? `smartcharts-${containerWidth}` : '';
-        const renderTopWidgets = topWidgets || defaultTopWidgets;
+        const TopWidgets = topWidgets || defaultTopWidgets;
 
         return (
             <div
                 className={`smartcharts smartcharts-${theme} ${contextWidth} smartcharts-${isMobile ? 'mobile' : 'desktop'}`}
-                ref={(modalNode) => { this.modalNode = modalNode; }}
+                ref={this.modalNode}
             >
-                <cq-context
-                    ref={(root) => { this.root = root; }}
+                <div
+                    className="cq-context"
+                    ref={this.root}
                 >
                     <div className={` ${currentPosition}`}>
                         <div className="ciq-chart-area">
@@ -83,50 +85,52 @@ class Chart extends Component {
                                 <RenderInsideChart at="holder">
                                     {barriers.map((barr, idx) => (
                                         <Barrier
-                                            key={`barrier-${idx}`}
+                                            key={`barrier-${idx}`} // eslint-disable-line react/no-array-index-key
                                             {...barr}
                                         />
                                     ))}
                                 </RenderInsideChart>
                                 <RenderInsideChart at="subholder">
                                     {children}
+                                    <CurrentSpot />
                                 </RenderInsideChart>
-                                <div className="cq-top-ui-widgets" style={{ top: chartPanelTop }}>
-                                    { renderTopWidgets() }
+                                <div className="cq-top-ui-widgets">
+                                    <TopWidgets />
                                 </div>
-                                <div className="chartContainer primary" style={{ height: chartContainerHeight }}>
+                                <div className={`chartContainer ${isDrawing ? 'ciq-draw-mode' : ''}`} style={{ height: chartContainerHeight }}>
                                     <Crosshair />
+                                    <DrawingCursor />
                                 </div>
                                 <Loader />
-                                {!isChartAvailable &&
+                                {!isChartAvailable && (
                                     <div className="cq-chart-unavailable">
                                         {t.translate('Chart data is not available for this symbol.')}
-                                    </div>}
+                                    </div>
+                                )}
                             </div>
                             <ChartControls widgets={chartControlsWidgets} />
                         </div>
                     </div>
-                </cq-context>
+                </div>
                 <DrawToolsSettingsDialog />
                 <AggregateChartSettingsDialog />
                 <StudySettingsDialog />
-                <Notification />
             </div>
         );
     }
 }
 
-export default connect(({ chart, drawTools, studies, chartSetting, chartType }) => ({
-    contextPromise: chart.contextPromise,
+export default connect(({ chart, drawTools, studies, chartSetting, chartType, state, drawingCursor }) => ({
     init: chart.init,
     destroy: chart.destroy,
-    StudySettingsDialog : studies.settingsDialog.connect(SettingsDialog),
-    DrawToolsSettingsDialog : drawTools.settingsDialog.connect(SettingsDialog),
-    AggregateChartSettingsDialog : chartType.settingsDialog.connect(SettingsDialog),
+    StudySettingsDialog : studies.StudySettingsDialog,
+    DrawToolsSettingsDialog : drawTools.DrawToolsSettingsDialog,
+    AggregateChartSettingsDialog : chartType.AggregateChartSettingsDialog,
     isChartAvailable: chart.isChartAvailable,
-    chartPanelTop: chart.chartPanelTop,
-    setting: chartSetting,
-    setSettings: chartSetting.setSettings,
+    updateProps: state.updateProps,
     chartContainerHeight: chart.chartContainerHeight,
     containerWidth: chart.containerWidth,
+    isDrawing: drawingCursor.isDrawing,
+    theme: chartSetting.theme,
+    position: chartSetting.position,
 }))(Chart);

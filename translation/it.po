@@ -10,247 +10,127 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Italian\n"
 "Language: it_IT\n"
-"PO-Revision-Date: 2018-07-19 09:42\n"
+"PO-Revision-Date: 2018-08-21 02:51\n"
 
-msgid "Favorites"
-msgstr "Preferiti"
+msgid " already exists."
+msgstr "Già esistente."
 
-msgid "There are no favorites yet."
-msgstr "Non sono ancora stati aggiunti preferiti."
+msgid "[symbol] market is presently closed."
+msgstr "Il mercato di [symbol] è momentaneamente chiuso."
 
-msgid "CLOSED"
-msgstr "CHIUSO"
+msgid "\"Mass Index\" or \"Doji Star\""
+msgstr "\"Indice di massa\" o \"Doji Star\""
 
-msgid "PRICE"
-msgstr "PREZZO"
+msgid "Active"
+msgstr "Attivo"
 
-msgid "OPEN"
-msgstr "APERTURA"
+msgid "Add New"
+msgstr "Aggiungi nuovo"
+
+msgid "Annotation"
+msgstr "Annotazione"
+
+msgid "Asset Information"
+msgstr "Informazioni sull'asset"
+
+msgid "Average Line"
+msgstr "Linea della media"
+
+msgid "Baseline"
+msgstr "Linea di riferimento"
+
+msgid "Box Size"
+msgstr "Unità di escursione"
+
+msgid "Callout"
+msgstr "Fumetto"
+
+msgid "CANCEL"
+msgstr "ANNULLA"
+
+msgid "Candle"
+msgstr "Candela"
+
+msgid "Channel"
+msgstr "Canale"
+
+msgid "Chart data is not available for this symbol."
+msgstr "I dati del grafico non sono disponibili per questo simbolo."
+
+msgid "Chart types"
+msgstr "Tipologie di grafico"
+
+msgid "Clear All"
+msgstr "Cancella tutto"
 
 msgid "CLOSE"
 msgstr "CHIUSURA"
 
-msgid "HIGH"
-msgstr "MASSIMO"
+msgid "CLOSED"
+msgstr "CHIUSO"
 
-msgid "LOW"
-msgstr "MINIMO"
+msgid "Colored Dot"
+msgstr "Punto colorato"
 
-msgid "Underlying Assets"
-msgstr "Asset sottostanti"
+msgid "Comparison"
+msgstr "Confronto"
 
-msgid "Share"
-msgstr "Condividi"
+msgid "Continuous"
+msgstr "Continuo"
 
-msgid "Share / Download Chart"
-msgstr "Condividi / Scarica grafico"
+msgid "Countdown"
+msgstr "Conto alla rovescia"
 
-msgid "Share link"
-msgstr "Condividi link"
+msgid "Crosshair"
+msgstr "Mirino"
 
-msgid "Failed to generate link"
-msgstr "Creazione link non riuscita"
+msgid "Crossline"
+msgstr "Crossline"
 
-msgid "Retry"
-msgstr "Riprova"
+msgid "Dark Mode"
+msgstr "Modalità scura"
 
-msgid "Download chart"
+msgid "Day"
+msgstr "Giorno"
+
+msgid "DONE"
+msgstr "ESEGUITO"
+
+msgid "Doodle"
+msgstr "Mano libera"
+
+msgid "Dot"
+msgstr "Punto"
+
+msgid "Download"
+msgstr "Scarica"
+
+msgid "Download as CSV"
+msgstr ""
+
+msgid "Download as PNG"
+msgstr ""
+
+msgid "Download Chart"
 msgstr "Scarica grafico"
 
 msgid "Draw tools"
 msgstr "Strumenti disegno"
 
-msgid "Clear All"
-msgstr "Cancella tutto"
-
-msgid "Measure"
-msgstr "Misura"
-
-msgid "Zoom out"
-msgstr "Zoom indietro"
-
-msgid "Zoom in"
-msgstr "Zoom avanti"
-
-msgid "Interval"
-msgstr "Intervallo"
-
-msgid "Tick"
-msgstr "Tick"
-
-msgid "Minute"
-msgstr "Minuto"
-
-msgid "Hour"
-msgstr "Ora"
-
-msgid "Day"
-msgstr "Giorno"
-
-msgid "Crosshair"
-msgstr "Mirino"
-
-msgid "Templates"
-msgstr "Modelli"
-
-msgid "Template name"
-msgstr "Nome del modello"
-
-msgid "Add New"
-msgstr ""
-
-msgid " is already exist."
-msgstr ""
-
-msgid "Would you like to overwrite it?"
-msgstr ""
-
-msgid "CANCEL"
-msgstr ""
-
-msgid "OVERWRITE"
-msgstr ""
-
-msgid "Comparison"
-msgstr "Confronto"
-
-msgid "Indicators"
-msgstr "Indicatori"
-
-msgid "Chart types"
-msgstr "Tipologie di grafico"
-
-msgid "Line"
-msgstr "Linea"
-
-msgid "Dot"
-msgstr "Punto"
-
-msgid "Colored Dot"
-msgstr "Punto colorato"
-
-msgid "Spline"
-msgstr "Spline"
-
-msgid "Baseline"
-msgstr "Linea di base"
-
-msgid "Candle"
-msgstr "Candela"
-
-msgid "OHLC"
-msgstr "OHLC"
-
-msgid "Hollow Candle"
-msgstr "Candela vuota"
-
-msgid "Heikin Ashi"
-msgstr "Heikin Ashi"
-
-msgid "Kagi"
-msgstr "Kagi"
-
-msgid "Line Break"
-msgstr "Line Break"
-
-msgid "Renko"
-msgstr "Renko"
-
-msgid "Range Bars"
-msgstr "Range Bars"
-
-msgid "Point & Figure"
-msgstr "Punto e figura"
-
-msgid "Reversal Percentage"
-msgstr "Formula inversa della percentuale"
-
-msgid "Range"
-msgstr "Intervallo"
-
-msgid "Price Lines"
-msgstr "Linee dei prezzi"
-
-msgid "Box Size"
-msgstr "Unità di escursione"
-
-msgid "Reversal"
-msgstr "Reversal"
-
-msgid "RESET"
-msgstr "REIMPOSTA"
-
-msgid "DONE"
-msgstr "ESEGUITO"
-
-msgid "Settings"
-msgstr "Impostazioni"
-
-msgid "Position"
-msgstr "Posizione"
-
-msgid "Dark Mode"
-msgstr "Modalità scura"
-
-msgid "Countdown"
-msgstr "Conto alla rovescia"
-
-msgid "Asset Information"
-msgstr "Informazioni sull'asset"
-
-msgid "Language"
-msgstr "Lingua"
-
-msgid "[symbol] market is presently closed."
-msgstr "Il mercato di [symbol] è momentaneamente chiuso."
-
-msgid "Streaming for [symbol] is not available due to license restrictions"
-msgstr "[symbol] in streaming non è disponibile a causa delle limitazioni della licenza"
-
-msgid "Copy to clipboard"
-msgstr "Copia negli Appunti"
-
-msgid "Copied!"
-msgstr "Copia eseguita!"
-
-msgid "Failed!"
-msgstr "Operazione non riuscita!"
-
-msgid "Search..."
-msgstr "Cerca..."
-
-msgid "Annotation"
-msgstr "Annotazione"
-
-msgid "Average Line"
-msgstr "Linea della media"
-
-msgid "Callout"
-msgstr "Fumetto"
-
-msgid "Channel"
-msgstr "Canale"
-
-msgid "Continuous"
-msgstr "Continuo"
-
-msgid "Crossline"
-msgstr "Crossline"
-
-msgid "Doodle"
-msgstr "Mano libera"
-
 msgid "Ellipse"
 msgstr "Ellisse"
 
-msgid "Fib Retracement"
-msgstr "Ritracciamento Fib"
+msgid "Favorites"
+msgstr "Preferiti"
 
 msgid "Fib Arc"
 msgstr "Arco Fib"
 
 msgid "Fib Fan"
 msgstr "Ventaglio Fib"
+
+msgid "Fib Retracement"
+msgstr "Ritracciamento Fib"
 
 msgid "Fib Time Zone"
 msgstr "Zona temporale Fib"
@@ -261,14 +141,80 @@ msgstr "Ventaglio Gann"
 msgid "Gartley"
 msgstr "Gartley"
 
+msgid "Heikin Ashi"
+msgstr "Heikin Ashi"
+
+msgid "HIGH"
+msgstr "MASSIMO"
+
+msgid "Hollow Candle"
+msgstr "Candela vuota"
+
 msgid "Horizontal"
 msgstr "Orizzontale"
+
+msgid "Hour"
+msgstr "Ora"
+
+msgid "Indicators"
+msgstr "Indicatori"
+
+msgid "Interval"
+msgstr "Intervallo"
+
+msgid "Kagi"
+msgstr "Kagi"
+
+msgid "Language"
+msgstr "Lingua"
+
+msgid "Line"
+msgstr "Linea"
+
+msgid "Line Break"
+msgstr "Line Break"
+
+msgid "LOW"
+msgstr "MINIMO"
+
+msgid "Measure"
+msgstr "Misura"
+
+msgid "Minute"
+msgstr "Minuto"
+
+msgid "OHLC"
+msgstr "OHLC"
+
+msgid "OPEN"
+msgstr "APERTURA"
+
+msgid "OVERWRITE"
+msgstr "SOVRASCRIVI"
 
 msgid "Pitchfork"
 msgstr "Pitchfork"
 
+msgid "Point & Figure"
+msgstr "Punto e figura"
+
+msgid "Position"
+msgstr "Posizione"
+
+msgid "PRICE"
+msgstr "PREZZO"
+
+msgid "Price Lines"
+msgstr "Linee dei prezzi"
+
 msgid "Quadrant Lines"
 msgstr "Linee quadranti"
+
+msgid "Range"
+msgstr "Intervallo"
+
+msgid "Range Bars"
+msgstr "Range Bars"
 
 msgid "Ray"
 msgstr "Raggio"
@@ -279,8 +225,32 @@ msgstr "Rettangolo"
 msgid "Regression Line"
 msgstr "Linea di regressione"
 
+msgid "Renko"
+msgstr "Renko"
+
+msgid "RESET"
+msgstr "REIMPOSTA"
+
+msgid "Reversal"
+msgstr "Reversal"
+
+msgid "Reversal Percentage"
+msgstr "Percentuale di reversal"
+
+msgid "right-click to delete"
+msgstr "destro del mouse per cancellare"
+
+msgid "right-click to manage"
+msgstr "destro del mouse per gestire"
+
+msgid "Search..."
+msgstr "Cerca..."
+
 msgid "Segment"
 msgstr "Segmento"
+
+msgid "Settings"
+msgstr "Impostazioni"
 
 msgid "Shape - Arrow"
 msgstr "Forma - Freccia"
@@ -306,38 +276,53 @@ msgstr "Arco di resistenza della velocità"
 msgid "Speed Resistance Line"
 msgstr "Linea di resistenza della velocità"
 
+msgid "Spline"
+msgstr "Spline"
+
+msgid "Streaming for [symbol] is not available due to license restrictions"
+msgstr "[symbol] in streaming non è disponibile a causa delle limitazioni della licenza"
+
+msgid "tap to manage"
+msgstr "Tocca per gestire"
+
+msgid "Template name"
+msgstr "Nome del modello"
+
+msgid "Templates"
+msgstr "Modelli"
+
+msgid "There are no active comparisons yet."
+msgstr "Non risulta ancora nessun confronto attivo."
+
+msgid "There are no active indicators yet."
+msgstr "Non risulta ancora nessun indicatore attivo."
+
+msgid "There are no favorites yet."
+msgstr "Non sono ancora stati aggiunti preferiti."
+
+msgid "Tick"
+msgstr "Tick"
+
 msgid "Time Cycle"
 msgstr "Ciclo temporale"
 
 msgid "Tirone Levels"
 msgstr "Livelli di Tirone"
 
+msgid "Underlying Assets"
+msgstr "Asset sottostanti"
+
 msgid "Vertical"
 msgstr "Verticale"
 
-msgid "Active"
-msgstr "Attivo"
+msgid "Would you like to overwrite it?"
+msgstr "Desideri sovrascrivere?"
 
-msgid "There are no active comparisons yet."
-msgstr "Non risulta ancora nessun confronto attivo."
+msgid "Zoom in"
+msgstr "Zoom avanti"
 
-msgid "\"Mass Index\" or \"Doji Star\""
-msgstr "\"Indice di massa\" o \"Doji Star\""
-
-msgid "There are no active indicators yet."
-msgstr "Non risulta ancora nessun indicatore attivo."
-
-msgid "right-click to delete"
-msgstr "destro del mouse per cancellare"
-
-msgid "right-click to manage"
-msgstr "destro del mouse per gestire"
-
-msgid "tap to manage"
-msgstr ""
-
-msgid "Chart data is not available for this symbol."
-msgstr "I dati del grafico non sono disponibili per questo simbolo."
+msgid "Zoom out"
+msgstr "Zoom indietro"
 
 msgid "RSI"
 msgstr "RSI"

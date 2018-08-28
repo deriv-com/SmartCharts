@@ -1,22 +1,23 @@
 
 .cq-dialog {
     width: 344px;
-    left: calc(50% - 344px/2);
+    left: calc(50% - 344px / 2);
     top: auto;
     border-radius: 5px;
     position: absolute;
     opacity: 0;
     margin-top: 120px;
-    box-shadow: 0 0 0.625em 0.025em rgba(0, 0, 0, 0.14);
+    box-shadow: 0 0 0.63em 0.03em rgba(0, 0, 0, 0.14);
     visibility: hidden;
     z-index: -3;
+    @include dialog-transition();
     @include themify($themes) {
         background: themed('DialogHeadBg');
     }
-    @include dialog-transition();
-    &.open{
+
+    &.open {
         visibility: visible;
-    	margin-top: 0px;
+        margin-top: 0px;
         opacity: 1;
         z-index: 3;
     }
