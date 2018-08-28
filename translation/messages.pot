@@ -2,6 +2,9 @@
 msgid " already exists."
 msgstr ""
 
+msgid "[symbol] feed is delayed by [delay] minutes"
+msgstr ""
+
 msgid "[symbol] market is presently closed."
 msgstr ""
 
@@ -267,9 +270,6 @@ msgid "Spline"
 msgstr ""
 
 msgid "Streaming for [symbol] is not available due to license restrictions"
-msgstr ""
-
-msgid "tap to manage"
 msgstr ""
 
 msgid "Template name"

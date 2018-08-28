@@ -133,7 +133,7 @@ class Feed {
             const delay = this._tradingTimes.getDelayedMinutes(symbol);
             if (delay > 0) {
                 this._mainStore.chart.notify({
-                    text: t.translate('[symbol] is delayed by [delay] minutes', { ...tParams, delay }),
+                    text: t.translate('[symbol] feed is delayed by [delay] minutes', { ...tParams, delay }),
                     category: 'activesymbol',
                 });
 
