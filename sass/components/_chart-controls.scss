@@ -63,7 +63,7 @@
         }
         .cq-menu-btn {
             position: relative;
-            padding: 0 5px;
+            padding: 3px 5px;
 
             > .ic-icon {
                 padding: 0.35em 0.5em;
@@ -87,6 +87,7 @@
                     line-height: normal;
                     letter-spacing: normal;
                     text-align: center;
+                    font-size: 10px;
                     @include themify($themes) {
                         color: themed('MenuText');
                     }
@@ -161,7 +162,7 @@
 
 .cq-chart-control-bottom .cq-chart-controls {
     bottom: 0px;
-    height: 50px;
+    height: 54px;
     width: 100%;
     padding: 0 5px;
     @include themify($themes) {
@@ -246,7 +247,7 @@
                     width: 47px;
 
                     .cq-menu-btn {
-                        padding: 5px;
+                        padding: 8px 5px;
 
                         > .ic-icon {
                             padding: 0.35em 0em;
@@ -269,7 +270,7 @@
                     width: 70px;
 
                     .cq-menu-btn {
-                        padding: 5px;
+                        padding: 8px 5px;
 
                         > .ic-icon {
                             padding: 0.35em 0em;

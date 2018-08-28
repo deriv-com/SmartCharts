@@ -61,12 +61,12 @@ const renderControls = () => (
     <React.Fragment>
         {CIQ.isMobile ? '' : <CrosshairToggle />}
         <ChartTypes />
+        <Timeperiod />
         <StudyLegend />
         <Comparison />
         <DrawTools />
         <Views />
         <Share />
-        <Timeperiod />
         {CIQ.isMobile ? '' : <ChartSize />}
         <ChartSetting />
     </React.Fragment>

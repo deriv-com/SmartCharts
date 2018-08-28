@@ -5,6 +5,7 @@ import ChartTitle from './ChartTitle.jsx';
 import AssetInformation from './AssetInformation.jsx';
 import Loader from './Loader.jsx';
 import Barrier from './Barrier.jsx';
+import CurrentSpot from './CurrentSpot.jsx';
 import DrawingCursor from './DrawingCursor.jsx';
 
 /* css + scss */
@@ -53,7 +54,6 @@ class Chart extends Component {
             StudySettingsDialog,
             isMobile = false,
             isChartAvailable,
-            setting : { position, theme },
             barriers = [],
             children,
             chartControlsWidgets,
@@ -62,6 +62,8 @@ class Chart extends Component {
             chartContainerHeight,
             containerWidth,
             isDrawing,
+            theme,
+            position,
         } = this.props;
 
         const currentPosition = `cq-chart-control-${(position && !isMobile) ? position : 'bottom'}`;
@@ -90,6 +92,7 @@ class Chart extends Component {
                                 </RenderInsideChart>
                                 <RenderInsideChart at="subholder">
                                     {children}
+                                    <CurrentSpot />
                                 </RenderInsideChart>
                                 <div className="cq-top-ui-widgets">
                                     <TopWidgets />
@@ -124,9 +127,10 @@ export default connect(({ chart, drawTools, studies, chartSetting, chartType, st
     DrawToolsSettingsDialog : drawTools.DrawToolsSettingsDialog,
     AggregateChartSettingsDialog : chartType.AggregateChartSettingsDialog,
     isChartAvailable: chart.isChartAvailable,
-    setting: chartSetting,
     updateProps: state.updateProps,
     chartContainerHeight: chart.chartContainerHeight,
     containerWidth: chart.containerWidth,
     isDrawing: drawingCursor.isDrawing,
+    theme: chartSetting.theme,
+    position: chartSetting.position,
 }))(Chart);
