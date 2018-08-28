@@ -6,7 +6,7 @@ import KeystrokeHub from '../components/ui/KeystrokeHub';
 import '../components/ui/Animation';
 import { BinaryAPI, Feed, TradingTimes } from '../feed';
 import ActiveSymbols from './ActiveSymbols';
-import { calculateTimeUnitInterval, getUTCDate } from '../utils';
+import { calculateTimeUnitInterval, getUTCDate, cloneCategories } from '../utils';
 
 CIQ.ChartEngine.prototype.createYAxisLabel = function (panel, txt, y, backgroundColor, color, ctx, yAxis) {
     if (panel.yAxis.drawPriceLabels === false || panel.yAxis.noDraw) return;
@@ -285,26 +285,14 @@ class ChartStore {
     @computed get categorizedSymbols() {
         if (!this.activeSymbols || this.activeSymbols.categorizedSymbols.length === 0) return [];
 
-        const categorized = [];
-        for (const category of this.activeSymbols.activeSymbols) {
-            const categoryData = [];
-            const categoryCopy = { ...category, data: categoryData };
-            for (const subcategory of category.data) {
-                const subcategoryData = [];
-                const subcategoryCopy = { ...subcategory, data: subcategoryData };
-                for (const symbolObj of subcategory.data) {
-                    const selected = symbolObj.symbol === this.currentActiveSymbol.symbol;
-                    subcategoryData.push({
-                        ...symbolObj,
-                        selected,
-                    });
-                }
-                categoryData.push(subcategoryCopy);
-            }
-            categorized.push(categoryCopy);
-        }
-
-        return categorized;
+        const activeSymbols = this.activeSymbols.activeSymbols;
+        return cloneCategories(activeSymbols, (item) => {
+            const selected = item.dataObject.symbol === this.currentActiveSymbol.symbol;
+            return {
+                ...item,
+                selected,
+            };
+        });
     }
 
     @action.bound onMouseEnter() {

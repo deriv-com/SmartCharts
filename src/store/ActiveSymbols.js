@@ -8,32 +8,37 @@ export default class ActiveSymbols {
 
     constructor(api, tradingTimes) {
         this._api = api;
-        tradingTimes.onMarketOpenCloseChanged(action((changes) => {
-            for (const symbol in changes) {
-                this.symbolMap[symbol].exchange_is_open = changes[symbol];
-            }
-            this.changes = changes;
-        }));
+        this._tradingTimes = tradingTimes;
     }
 
     @action.bound async retrieveActiveSymbols() {
+        if (this.processedSymbols) {
+            return this.activeSymbols;
+        }
         const { active_symbols } = await this._api.getActiveSymbols();
         this.processedSymbols = this._processSymbols(active_symbols);
         this.categorizedSymbols = this._categorizeActiveSymbols(this.processedSymbols);
         for (const symbolObj of this.processedSymbols) {
             this.symbolMap[symbolObj.symbol] = symbolObj;
         }
+        this._tradingTimes.onMarketOpenCloseChanged(action((changes) => {
+            for (const symbol in changes) {
+                this.symbolMap[symbol].exchange_is_open = changes[symbol];
+            }
+            this.changes = changes;
+        }));
         return this.activeSymbols;
     }
 
     @computed get activeSymbols() {
-        return cloneCategories(this.categorizedSymbols, (symbolObj) => {
-            const exchange_is_open = (symbolObj.symbol in this.changes) ? this.changes[symbolObj.symbol] : symbolObj.exchange_is_open;
-            return {
-                ...symbolObj,
-                exchange_is_open,
-            };
+        const categorized = cloneCategories(this.categorizedSymbols, (item) => {
+            const { symbol } = item.dataObject;
+            if (symbol in this.changes) {
+                item.dataObject.exchange_is_open = this.changes[symbol];
+            }
+            return { ...item };
         });
+        return categorized;
     }
 
     getSymbolObj(symbol) {
@@ -53,7 +58,7 @@ export default class ActiveSymbols {
                 market: s.market,
                 market_display_name: s.market_display_name,
                 submarket_display_name: s.submarket_display_name,
-                exchange_is_open: s.exchange_is_open,
+                exchange_is_open: !!s.exchange_is_open,
                 decimal_places: s.pip.length - 2,
             });
         }
@@ -105,7 +110,6 @@ export default class ActiveSymbols {
                 itemId: symbol.symbol,
                 display: symbol.name,
                 dataObject: symbol,
-                exchange_is_open: !!symbol.exchange_is_open,
             });
         }
 
