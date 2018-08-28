@@ -164,7 +164,6 @@ class ChartStore {
         } = props;
         this.api = new BinaryAPI(requestAPI, requestSubscribe, requestForget);
         this.tradingTimes = new TradingTimes(this.api);
-        this.tradingTimes.initialize();
         this.activeSymbols = new ActiveSymbols(this.api, this.tradingTimes);
         const { chartSetting } = this.mainStore;
         chartSetting.setSettings(settings);
@@ -218,12 +217,6 @@ class ChartStore {
 
         CIQ.Animation(stxx, { stayPut: true });
 
-        // connect chart to data
-        this.feed = new Feed(this.api, stxx, this.mainStore);
-        stxx.attachQuoteFeed(this.feed, {
-            refreshInterval: null,
-        });
-
         this.enableRouting = enableRouting;
         if (this.enableRouting) {
             this.routingStore.handleRouting();
@@ -250,36 +243,42 @@ class ChartStore {
         stxx.callbacks.studyOverlayEdit = studiesStore.editStudy;
         stxx.callbacks.studyPanelEdit = studiesStore.editStudy;
 
-        this.activeSymbols.retrieveActiveSymbols().then(action(() => {
-            const isRestoreSuccess = this.state.restoreLayout();
+        this.tradingTimes.initialize().then(() => {
+            this.activeSymbols.retrieveActiveSymbols().then(action(() => {
+                const isRestoreSuccess = this.state.restoreLayout();
 
-            if (!isRestoreSuccess) {
-                this.changeSymbol(
-                    symbol || this.defaults.symbol,
-                    this.granularity,
-                );
-            }
-
-            this.context = context;
-            stxx.container.addEventListener('mouseenter', this.onMouseEnter);
-            stxx.container.addEventListener('mouseleave', this.onMouseLeave);
-            this.contextPromise.resolve(this.context);
-            this.resizeScreen();
-
-            reaction(() => [
-                this.state.symbol,
-                this.state.granularity,
-            ], () => {
-                if (this.state.symbol !== undefined || this.state.granularity !== undefined) {
-                    this.changeSymbol(this.state.symbol, this.state.granularity);
+                if (!isRestoreSuccess) {
+                    this.changeSymbol(
+                        symbol || this.defaults.symbol,
+                        this.granularity,
+                    );
                 }
+
+                this.context = context;
+                stxx.container.addEventListener('mouseenter', this.onMouseEnter);
+                stxx.container.addEventListener('mouseleave', this.onMouseLeave);
+                this.contextPromise.resolve(this.context);
+                this.resizeScreen();
+
+                reaction(() => [
+                    this.state.symbol,
+                    this.state.granularity,
+                ], () => {
+                    if (this.state.symbol !== undefined || this.state.granularity !== undefined) {
+                        this.changeSymbol(this.state.symbol, this.state.granularity);
+                    }
+                });
+            }));
+            // connect chart to data
+            this.feed = new Feed(this.api, stxx, this.mainStore, this.tradingTimes);
+            stxx.attachQuoteFeed(this.feed, {
+                refreshInterval: null,
             });
-        }));
+            this.feed.onComparisonDataUpdate(this.updateComparisons);
+        });
 
         this.resizeObserver = new ResizeObserver(this.resizeScreen);
         this.resizeObserver.observe(modalNode);
-
-        this.feed.onComparisonDataUpdate(this.updateComparisons);
     }
 
     @computed get categorizedSymbols() {

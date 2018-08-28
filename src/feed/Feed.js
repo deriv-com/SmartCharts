@@ -15,10 +15,11 @@ class Feed {
     _lastStreamEpoch = {};
     _isConnectionOpened = true;
 
-    constructor(binaryApi, stx, mainStore) {
+    constructor(binaryApi, stx, mainStore, tradingTimes) {
         this._stx = stx;
         this._binaryApi = binaryApi;
         this._mainStore = mainStore;
+        this._tradingTimes = tradingTimes;
         reaction(() => mainStore.state.isConnectionOpened, this.onConnectionChanged.bind(this));
         when(() => this.context, this.onContextReady);
 
@@ -98,6 +99,24 @@ class Feed {
         }
         const comparisonChartSymbol = isComparisonChart ? symbol : undefined;
 
+        if (this._tradingTimes.isFeedUnavailable(symbol)) {
+            this._mainStore.chart.notify({
+                text: t.translate('Streaming for [symbol] is not available due to license restrictions', { symbol }),
+                type: 'error',
+                category: 'activesymbol',
+            });
+            let dataCallback = { quotes: [] };
+            if (isComparisonChart) {
+                // Passing error will prevent the chart from being shown; for
+                // main chart we still want the chart to be shown, just disabled
+                dataCallback = { error: 'StreamingNotAllowed', suppressAlert: true, ...dataCallback };
+            } else {
+                this._mainStore.chart.setChartAvailability(false);
+            }
+            callback(dataCallback);
+            return;
+        }
+
         const tickHistoryRequest = {
             start,
             symbol,
@@ -135,22 +154,6 @@ class Feed {
                         : t.translate('[symbol] market is presently closed.', tParams),
                     category: 'activesymbol',
                 });
-            } else if (errorCode === 'StreamingNotAllowed') {
-                this._mainStore.chart.notify({
-                    text: t.translate('Streaming for [symbol] is not available due to license restrictions', tParams),
-                    type: 'error',
-                    category: 'activesymbol',
-                });
-                let dataCallback = { quotes: [] };
-                if (isComparisonChart) {
-                    // Passing error will prevent the chart from being shown; for
-                    // main chart we still want the chart to be shown, just disabled
-                    dataCallback = { error: errorCode, suppressAlert: true, ...dataCallback };
-                } else {
-                    this._mainStore.chart.setChartAvailability(false);
-                }
-                callback(dataCallback);
-                return;
             } else {
                 this._mainStore.notification.notify({
                     text: errorMessage,
