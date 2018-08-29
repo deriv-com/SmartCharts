@@ -243,6 +243,13 @@ class ChartStore {
         stxx.callbacks.studyOverlayEdit = studiesStore.editStudy;
         stxx.callbacks.studyPanelEdit = studiesStore.editStudy;
 
+        // connect chart to data
+        this.feed = new Feed(this.api, stxx, this.mainStore, this.tradingTimes);
+        stxx.attachQuoteFeed(this.feed, {
+            refreshInterval: null,
+        });
+        this.feed.onComparisonDataUpdate(this.updateComparisons);
+
         this.tradingTimes.initialize().then(() => {
             this.activeSymbols.retrieveActiveSymbols().then(action(() => {
                 const isRestoreSuccess = this.state.restoreLayout();
@@ -269,12 +276,6 @@ class ChartStore {
                     }
                 });
             }));
-            // connect chart to data
-            this.feed = new Feed(this.api, stxx, this.mainStore, this.tradingTimes);
-            stxx.attachQuoteFeed(this.feed, {
-                refreshInterval: null,
-            });
-            this.feed.onComparisonDataUpdate(this.updateComparisons);
         });
 
         this.resizeObserver = new ResizeObserver(this.resizeScreen);
