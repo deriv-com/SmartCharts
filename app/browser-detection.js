@@ -155,6 +155,35 @@ function browserDetect(rootEleId, SupportedBrowsers){
         cqRoot.parentNode.removeChild(cqRoot);
     }
 
+    function renderNotDetctedNotification(){
+        var cqNotifications = document.createElement('div');
+        cqNotifications.className = 'cq-notifications';
+
+        var cqWarning = document.createElement('div');
+        cqWarning.className = 'notification warning down';
+
+        var cqIcon = document.createElement('div');
+        cqIcon.className = 'ic-icon icon-notification-warning';
+        cqWarning.appendChild(cqIcon);
+
+        var cqText = document.createElement('div');
+        cqText.className = 'text';
+        cqText.innerHTML = 'Please update your browser to the latest version.';
+        cqWarning.appendChild(cqText);
+
+        var cqClose = document.createElement('div');
+        cqClose.className = 'close-icon';
+        cqWarning.appendChild(cqClose);
+
+        cqNotifications.appendChild(cqWarning);
+
+        cqRoot.appendChild(cqNotifications);
+
+        setTimeout(function(){
+            cqWarning.className = 'notification warning down hide';
+        }, 10000);
+    }
+
     window.onerror = function(message, source, lineno, colno, error){
         if (
                 (
@@ -179,9 +208,10 @@ function browserDetect(rootEleId, SupportedBrowsers){
                 throw new Error('not supported browser');
             }
         } else {
-            alert('Please update your browser to the latest version.');
+            setTimeout(renderNotDetctedNotification, 200)
         }
     }
+
 }
 
 browserDetect('root', {
