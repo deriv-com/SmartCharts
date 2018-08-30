@@ -457,6 +457,7 @@ class ChartStore {
 
     @action.bound destroy() {
         this.resizeObserver.disconnect();
+        this.tradingTimes.destructor();
         // Destroying the chart does not unsubscribe the streams;
         // we need to manually unsubscribe them.
         this.feed.unsubscribeAll();
