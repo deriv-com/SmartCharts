@@ -12,12 +12,13 @@ import Timeperiod from './components/Timeperiod.jsx';
 import ChartSize from './components/ChartSize.jsx';
 import DrawTools from './components/DrawTools.jsx';
 import ChartSetting from './components/ChartSetting.jsx';
-import Download from './components/Download.jsx';
+import Share from './components/Share.jsx';
 import SmartChart from './components/SmartChart.jsx';
 import ComparisonList from './components/ComparisonList.jsx';
 import ChartTitle from './components/ChartTitle.jsx';
 import AssetInformation from './components/AssetInformation.jsx';
 import Marker from './components/Marker.jsx';
+import CurrentSpot from './components/CurrentSpot.jsx';
 import { createObjectFromLocalStorage } from './utils';
 
 import './SplinePlotter';
@@ -36,10 +37,11 @@ export {
     DrawTools,
     Marker,
     PendingPromise,
-    Download,
+    Share,
     SmartChart,
     StudyLegend,
     Timeperiod,
+    CurrentSpot,
     Views,
 };
 
@@ -57,9 +59,10 @@ export default {
     DrawTools,
     Marker,
     PendingPromise,
-    Download,
+    Share,
     SmartChart,
     StudyLegend,
     Timeperiod,
+    CurrentSpot,
     Views,
 };

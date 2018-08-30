@@ -10,7 +10,7 @@ import { // eslint-disable-line import/no-extraneous-dependencies,import/no-unre
     DrawTools,
     ChartSetting,
     createObjectFromLocalStorage,
-    Download,
+    Share,
     ChartTitle,
     AssetInformation,
     ComparisonList,
@@ -61,12 +61,12 @@ const renderControls = () => (
     <React.Fragment>
         {CIQ.isMobile ? '' : <CrosshairToggle />}
         <ChartTypes />
+        <Timeperiod />
         <StudyLegend />
         <Comparison />
         <DrawTools />
         <Views />
-        <Download />
-        <Timeperiod />
+        <Share />
         {CIQ.isMobile ? '' : <ChartSize />}
         <ChartSetting />
     </React.Fragment>

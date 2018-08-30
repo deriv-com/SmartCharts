@@ -30,18 +30,22 @@
             }
         }
     }
+    &.ciq-enabled .cq-symbol-select-btn {
+        @include themify($themes) {
+            background: themed('ChartTitleBg');
+            border: solid 1px themed('ChartTitleBorder');
+        }
+    }
     .cq-symbol-select-btn {
         font-family: $base-font;
         padding: 0.3em 1em;
         position: relative;
         display: flex;
         align-items: center;
+        border-radius: 3px;
 
-        @include border-radius();
         @include themify($themes) {
             color: themed('ChartTitleText');
-            background: themed('ChartTitleBg');
-            border: solid 1px themed('ChartTitleBorder');
         }
 
         > .ic-icon.cq-symbol-dropdown {
@@ -72,7 +76,7 @@
         .cq-symbol,
         .cq-chart-price {
             .cq-animated-price {
-                @include transition(color 300ms ease-out);
+                transition: color 300ms ease-out;
                 padding-left: 16px;
             }
             > div {
@@ -147,7 +151,7 @@
         }
         .cq-menu-dropdown {
             width: 100%;
-            @include transition(none !important);
+            transition: none !important;
 
             &.open {
                 margin: 0px;

@@ -197,7 +197,7 @@ export default class StudyLegendStore {
         if (this.mainStore.chart.isMobile) {
             this.stx.panels[sd.panel].display = sd.type;
             this.stx.draw();
-            this.mainStore.chart.saveLayout();
+            this.mainStore.state.saveLayout();
         }
     }
 
@@ -233,7 +233,7 @@ export default class StudyLegendStore {
     @action.bound updateActiveStudies() {
         const stx = this.stx;
         const studies = [];
-        Object.keys(stx.layout.studies).forEach((id) => {
+        Object.keys(stx.layout.studies || []).forEach((id) => {
             const sd = stx.layout.studies[id];
             if (sd.customLegend) { return; }
 
