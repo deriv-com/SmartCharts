@@ -46,6 +46,7 @@ class DelayedSubscription extends Subscription {
             }
 
             this._startTimer();
+            return response;
         }
     }
 
