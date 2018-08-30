@@ -14,46 +14,20 @@ class DelayedSubscription extends Subscription {
         };
     }
 
-    async initialFetch() {
-        const response = await this._binaryApi.getTickHistory(this._request);
-
-        const lastEpoch = Subscription.getLatestEpoch(response);
-
-        if (lastEpoch) { // on errors, lastEpoch can be undefined
-            this.lastStreamEpoch = lastEpoch;
-        }
-
-        this._startTimer();
-
-        return response;
-    }
-
     pause() {
         this._endTimer();
     }
 
-    async resume() {
-        if (this.lastStreamEpoch) {
-            const tickHistoryRequest = {
-                ...this._request,
-                start: this.lastStreamEpoch,
-            };
-
-            const response = await this._binaryApi.getTickHistory(tickHistoryRequest);
-            const lastEpoch = Subscription.getLatestEpoch(response);
-            if (lastEpoch) { // on errors, lastEpoch can be undefined
-                this.lastStreamEpoch = lastEpoch;
-            }
-
-            this._startTimer();
-            return response;
-        }
+    async _startSubscribe(tickHistoryRequest) {
+        const response = await this._binaryApi.getTickHistory(tickHistoryRequest);
+        const quotes = this._processHistoryResponse(response);
+        this._startTimer();
+        return quotes;
     }
 
     forget() {
         this._endTimer();
-        this.lastStreamEpoch = undefined;
-        this._emitter.off(Subscription.EVENT_TICK);
+        super.forget();
     }
 
     _startTimer() {
@@ -76,8 +50,8 @@ class DelayedSubscription extends Subscription {
                 start: this.lastStreamEpoch,
             };
             const response = await this._binaryApi.getTickHistory(tickHistoryRequest);
-            this.lastStreamEpoch = +Subscription.getLatestEpoch(response);
-            this._emitter.emit(Subscription.EVENT_TICK, response);
+            const quotes = this._processHistoryResponse(response);
+            this._emitter.emit(Subscription.EVENT_CHART_DATA, quotes);
         } else {
             console.error('Unable to update delayed feed without epoch from last tick');
             this._endTimer();

@@ -91,10 +91,11 @@ class Feed {
             granularity,
         };
 
-        let response;
+        let getHistoryOnly = false;
+        let quotes;
         if (end && now > end) { // end is in the past; no streaming required
             tickHistoryRequest.end = end;
-            response = await this._binaryApi.getTickHistory(tickHistoryRequest);
+            getHistoryOnly = true;
         } else if (this._tradingTimes.isMarketOpened(symbol)) {
             let subscription;
             const delay = this._tradingTimes.getDelayedMinutes(symbol);
@@ -105,36 +106,33 @@ class Feed {
                 });
 
                 subscription = new DelayedSubscription(tickHistoryRequest, this._binaryApi, this._stx, delay);
-                response = await subscription.initialFetch();
-
-                subscription.onTick((tickResponse) => {
-                    this._appendHistory(tickResponse, key, comparisonChartSymbol);
-                });
             } else {
                 subscription = new RealtimeSubscription(tickHistoryRequest, this._binaryApi, this._stx);
-                response = await subscription.initialFetch();
-
-                // if symbol is changed before request is completed, past request needs to be forgotten:
-                if (!isComparisonChart && this._stx.chart.symbol !== symbol) {
-                    callback({ quotes: [] });
-                    subscription.forget();
-                    return;
-                }
-
-                if (response.error) {
-                    const { message: text } = response.error;
-                    this._mainStore.chart.notify({
-                        text,
-                        category: 'activesymbol',
-                    });
-                    callback({ quotes: [] });
-                    return;
-                }
-
-                subscription.onTick((tickResponse) => {
-                    this._appendTick(tickResponse, key, comparisonChartSymbol);
-                });
             }
+
+            try {
+                quotes = await subscription.initialFetch();
+            } catch (error) {
+                const { message: text } = error;
+                this._mainStore.chart.notify({
+                    text,
+                    category: 'activesymbol',
+                });
+                callback({ quotes: [] });
+                return;
+            }
+
+            subscription.onChartData((tickResponse) => {
+                this._appendChartData(tickResponse, key, comparisonChartSymbol);
+            });
+
+            // if symbol is changed before request is completed, past request needs to be forgotten:
+            if (!isComparisonChart && this._stx.chart.symbol !== symbol) {
+                callback({ quotes: [] });
+                subscription.forget();
+                return;
+            }
+
             this._activeStreams[key] = subscription;
         } else {
             this._mainStore.chart.notify({
@@ -143,12 +141,17 @@ class Feed {
             });
 
             // Although market is closed, we display the past tick history data
-            response = await this._binaryApi.getTickHistory(tickHistoryRequest);
+            getHistoryOnly = true;
         }
 
-        const quotes = TickHistoryFormatter.formatHistory(response);
+        if (getHistoryOnly) {
+            const response = await this._binaryApi.getTickHistory(tickHistoryRequest);
+            quotes = TickHistoryFormatter.formatHistory(response);
+        }
+
         if (!quotes) {
-            console.error('Unexpected response: ', response);
+            console.error('No quotes found!!');
+            callback({ quotes: [] });
             return;
         }
 
@@ -227,29 +230,15 @@ class Feed {
 
     _forgetIfEndEpoch(key) {
         const subscription = this._activeStreams[key];
+        if (!subscription) { return; }
         const lastEpoch = subscription.lastStreamEpoch;
         if (this.endEpoch && lastEpoch > this.endEpoch) {
             this._forgetStream(key);
         }
     }
 
-    _appendTick(resp, key, comparisonChartSymbol) {
+    _appendChartData(quotes, key, comparisonChartSymbol) {
         this._forgetIfEndEpoch(key);
-
-        const quotes = [TickHistoryFormatter.formatTick(resp)];
-
-        this._updateChartData(quotes, comparisonChartSymbol);
-    }
-
-    _appendHistory(resp, key, comparisonChartSymbol) {
-        this._forgetIfEndEpoch(key);
-
-        const quotes = TickHistoryFormatter.formatHistory(resp);
-
-        this._updateChartData(quotes, comparisonChartSymbol);
-    }
-
-    _updateChartData(quotes, comparisonChartSymbol) {
         if (comparisonChartSymbol) {
             this._stx.updateChartData(quotes, null, {
                 secondarySeries: comparisonChartSymbol,
@@ -323,8 +312,8 @@ class Feed {
     _resumeStream(key) {
         const { symbol } = this._unpackKey(key);
         const comparisonChartSymbol = (this._stx.chart.symbol !== symbol) ? symbol : undefined;
-        this._activeStreams[key].resume().then((resp) => {
-            this._appendHistory(resp, key, comparisonChartSymbol);
+        this._activeStreams[key].resume().then((quotes) => {
+            this._appendChartData(quotes, key, comparisonChartSymbol);
         });
     }
 

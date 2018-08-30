@@ -1,26 +1,9 @@
 import PendingPromise from '../../utils/PendingPromise';
 import Subscription from './Subscription';
+import { TickHistoryFormatter } from '../TickHistoryFormatter';
 
 class RealtimeSubscription extends Subscription {
     _tickCallback;
-
-    async initialFetch() {
-        const [tickHistoryPromise, processTickHistory] = this._getProcessTickHistoryClosure();
-        this._binaryApi.subscribeTickHistory(this._request, processTickHistory);
-        const response = await tickHistoryPromise;
-
-        const lastEpoch = Subscription.getLatestEpoch(response);
-
-        if (lastEpoch) { // on errors, lastEpoch can be undefined
-            this.lastStreamEpoch = lastEpoch;
-        }
-
-        if (!response.error) {
-            this._tickCallback = processTickHistory;
-        }
-
-        return response;
-    }
 
     pause() {
         // prevent forget requests; active streams are invalid when connection closed
@@ -32,21 +15,17 @@ class RealtimeSubscription extends Subscription {
             throw new Error('You cannot resume an active stream!');
         }
 
-        if (this.lastStreamEpoch) {
-            const { symbol, granularity } = this._request;
-            const tickHistoryRequest = {
-                start: +this.lastStreamEpoch,
-                symbol,
-                granularity,
-            };
+        return super.resume();
+    }
 
-            const [tickHistoryPromise, processTickHistory] = this._getProcessTickHistoryClosure();
-            this._tickCallback = processTickHistory;
-            this._binaryApi.subscribeTickHistory(tickHistoryRequest, processTickHistory);
+    async _startSubscribe(tickHistoryRequest) {
+        const [tickHistoryPromise, processTickHistory] = this._getProcessTickHistoryClosure();
+        this._binaryApi.subscribeTickHistory(tickHistoryRequest, processTickHistory);
+        const response = await tickHistoryPromise;
+        const quotes = this._processHistoryResponse(response);
+        this._tickCallback = processTickHistory;
 
-            const response = await tickHistoryPromise;
-            return response;
-        }
+        return quotes;
     }
 
     forget() {
@@ -59,8 +38,7 @@ class RealtimeSubscription extends Subscription {
             this._tickCallback = undefined;
         }
 
-        this.lastStreamEpoch = undefined;
-        this._emitter.off(Subscription.EVENT_TICK);
+        super.forget();
     }
 
     _getProcessTickHistoryClosure() {
@@ -74,14 +52,19 @@ class RealtimeSubscription extends Subscription {
             // We assume that 1st response is the history, and subsequent
             // responses are tick stream data.
             if (hasHistory) {
-                this.lastStreamEpoch = +Subscription.getEpochFromTick(resp);
-                this._emitter.emit(Subscription.EVENT_TICK, resp);
+                this._onTick(resp);
                 return;
             }
             tickHistoryPromise.resolve(resp);
             hasHistory = true;
         };
         return [tickHistoryPromise, processTickHistory];
+    }
+
+    _onTick(response) {
+        this.lastStreamEpoch = +Subscription.getEpochFromTick(response);
+        const quotes = [TickHistoryFormatter.formatTick(response)];
+        this._emitter.emit(Subscription.EVENT_CHART_DATA, quotes);
     }
 }
 
