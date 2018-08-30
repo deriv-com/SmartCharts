@@ -11,15 +11,13 @@ export const Slider = ({
     onChange,
 }) => {
     const barWidth = 120;// css hardcode
-    const rangeWidth = max - min;
-    const valueWidth = value - min;
-    const wantedWidth = Math.round((barWidth * valueWidth) / rangeWidth);
+    const activeWidth = Math.round((barWidth * (value - min)) / (max - min));
 
     return (
         <div className="cq-slider">
             <div className="cq-slider-range">
                 <div className="cq-slider-bar" />
-                <div className="cq-slider-active-bar" style={{ width: `${wantedWidth}px` }} />
+                <div className="cq-slider-active-bar" style={{ width: `${activeWidth}px` }} />
                 <input
                     type="range"
                     min={min}
