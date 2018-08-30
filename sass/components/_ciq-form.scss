@@ -16,37 +16,109 @@
             left: 0px;
             top: 0px;
         }
-        input {
+        input[type='range'] {
             -webkit-appearance: none;
             width: 120px;
-            outline: none;
-            height: 2px;
+            margin: 0;
             background: transparent;
-            top: -2px;
-
-            &::-webkit-slider-thumb {
-                -webkit-appearance: none;
-                appearance: none;
-                width: 10px;
-                height: 10px;
-                box-sizing: border-box;
-                border-radius: 7px;
-                @include themify($themes) {
-                    background-color: themed('SliderHandleBg');
-                    border: 2px solid themed('SliderHandleBorder');
-                }
-            }
-            &::-moz-range-thumb {
-                width: 10px;
-                height: 10px;
-                box-sizing: border-box;
-                border-radius: 7px;
-                @include themify($themes) {
-                    background-color: themed('SliderHandleBg');
-                    border: 2px solid themed('SliderHandleBorder');
-                }
+            height: 2px;
+        }
+        input[type='range']:focus {
+            outline: none;
+        }
+        input[type='range']::-webkit-slider-runnable-track {
+            width: 120px;
+            height: 2px;
+            cursor: pointer;
+            border-radius: 0px;
+            border: 0px solid #010101;
+            background: transparent;
+        }
+        input[type='range']::-moz-range-track {
+            width: 120px;
+            height: 2px;
+            cursor: pointer;
+            border-radius: 0px;
+            border: 0px solid #010101;
+            background: transparent;
+        }
+        input[type='range']::-ms-track {
+            width: 120px;
+            height: 2px;
+            cursor: pointer;
+            background: transparent;
+            border-color: transparent;
+            color: transparent;
+        }
+        input[type='range']::-ms-thumb {
+            cursor: pointer;
+            width: 10px;
+            height: 10px;
+            box-sizing: border-box;
+            border-radius: 7px;
+            margin-top: -2px;
+            @include themify($themes) {
+                background-color: themed('SliderHandleBg');
+                border: 2px solid themed('SliderHandleBorder');
             }
         }
+        input[type='range']::-moz-range-thumb {
+            cursor: pointer;
+            width: 10px;
+            height: 10px;
+            box-sizing: border-box;
+            border-radius: 7px;
+            margin-top: -4px;
+            @include themify($themes) {
+                background-color: themed('SliderHandleBg');
+                border: 2px solid themed('SliderHandleBorder');
+            }
+        }
+        input[type='range']::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            margin-top: -4px;
+
+            cursor: pointer;
+            width: 10px;
+            height: 10px;
+            box-sizing: border-box;
+            border-radius: 7px;
+            @include themify($themes) {
+                background-color: themed('SliderHandleBg');
+                border: 2px solid themed('SliderHandleBorder');
+            }
+        }
+        // input {
+        //     -webkit-appearance: none;
+        //     width: 120px;
+        //     outline: none;
+        //     height: 2px;
+        //     background: transparent;
+        //     top: -2px;
+
+        //     &::-webkit-slider-thumb {
+        //         -webkit-appearance: none;
+        //         appearance: none;
+        //         width: 10px;
+        //         height: 10px;
+        //         box-sizing: border-box;
+        //         border-radius: 7px;
+        //         @include themify($themes) {
+        //             background-color: themed('SliderHandleBg');
+        //             border: 2px solid themed('SliderHandleBorder');
+        //         }
+        //     }
+        //     &::-moz-range-thumb {
+        //         width: 10px;
+        //         height: 10px;
+        //         box-sizing: border-box;
+        //         border-radius: 7px;
+        //         @include themify($themes) {
+        //             background-color: themed('SliderHandleBg');
+        //             border: 2px solid themed('SliderHandleBorder');
+        //         }
+        //     }
+        // }
         .cq-slider-bar {
             width: 120px;
             outline: none;
