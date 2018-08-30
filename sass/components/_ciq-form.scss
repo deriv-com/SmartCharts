@@ -4,37 +4,63 @@
     height: 10px;
     display: flex;
     align-items: center;
+    position: relative;
 
-    .slider {
-        width: 120px;
-        height: 10px;
-        cursor: pointer;
-        touch-action: manipulation;
-    }
-    .handle {
-        width: 10px;
-        height: 10px;
-        box-sizing: border-box;
-        border-radius: 7px;
-        @include themify($themes) {
-            background-color: themed('SliderHandleBg');
-            border: 2px solid themed('SliderHandleBorder');
-        }
-    }
-    .bar {
+    .cq-slider-range {
         position: relative;
-        top: 4px;
-    }
-    .bar.bar-0 {
-        height: 2px;
-        @include themify($themes) {
-            background: themed('SliderBarActiveBg');
+        width: 120px;
+        margin-top: -2px;
+
+        > input, div {
+            position: absolute;
+            left: 0px;
+            top: 0px;
         }
-    }
-    .bar.bar-1 {
-        height: 2px;
-        @include themify($themes) {
-            background: themed('SliderBarBg');
+        input {
+            -webkit-appearance: none;
+            width: 120px;
+            outline: none;
+            height: 2px;
+            background: transparent;
+            top: -2px;
+
+            &::-webkit-slider-thumb {
+                -webkit-appearance: none;
+                appearance: none;
+                width: 10px;
+                height: 10px;
+                box-sizing: border-box;
+                border-radius: 7px;
+                @include themify($themes) {
+                    background-color: themed('SliderHandleBg');
+                    border: 2px solid themed('SliderHandleBorder');
+                }
+            }
+            &::-moz-range-thumb {
+                width: 10px;
+                height: 10px;
+                box-sizing: border-box;
+                border-radius: 7px;
+                @include themify($themes) {
+                    background-color: themed('SliderHandleBg');
+                    border: 2px solid themed('SliderHandleBorder');
+                }
+            }
+        }
+        .cq-slider-bar {
+            width: 120px;
+            outline: none;
+            height: 2px;
+            @include themify($themes) {
+                background: themed('SliderBarBg');
+            }
+        }
+        .cq-slider-active-bar {
+            height: 2px;
+            min-width: 10px;
+            @include themify($themes) {
+                background: themed('SliderBarActiveBg');
+            }
         }
     }
     > div:last-child {
