@@ -252,6 +252,10 @@ class ChartStore {
 
         this.tradingTimes.initialize().then(() => {
             this.activeSymbols.retrieveActiveSymbols().then(action(() => {
+                // In the odd event that chart is destroyed by the time
+                // the request finishes, just calmly return...
+                if (stxx.isDestroyed) { return; }
+
                 const isRestoreSuccess = this.state.restoreLayout();
 
                 if (!isRestoreSuccess) {
