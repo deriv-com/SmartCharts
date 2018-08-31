@@ -213,6 +213,14 @@ class ChartStore {
 
         CIQ.Animation(stxx, { stayPut: true });
 
+        // connect chart to data
+        this.feed = new Feed(this.api, stxx, this.mainStore, this.tradingTimes);
+        stxx.attachQuoteFeed(this.feed, {
+            refreshInterval: null,
+        });
+
+        this.feed.onComparisonDataUpdate(this.updateComparisons);
+
         this.enableRouting = enableRouting;
         if (this.enableRouting) {
             this.routingStore.handleRouting();
@@ -238,13 +246,6 @@ class ChartStore {
         const studiesStore = this.mainStore.studies;
         stxx.callbacks.studyOverlayEdit = studiesStore.editStudy;
         stxx.callbacks.studyPanelEdit = studiesStore.editStudy;
-
-        // connect chart to data
-        this.feed = new Feed(this.api, stxx, this.mainStore, this.tradingTimes);
-        stxx.attachQuoteFeed(this.feed, {
-            refreshInterval: null,
-        });
-        this.feed.onComparisonDataUpdate(this.updateComparisons);
 
         this.tradingTimes.initialize().then(() => {
             this.activeSymbols.retrieveActiveSymbols().then(action(() => {
