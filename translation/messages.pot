@@ -5,6 +5,9 @@ msgstr ""
 msgid "[symbol] feed is delayed by [delay] minutes"
 msgstr ""
 
+msgid "[symbol] market is now opened."
+msgstr ""
+
 msgid "[symbol] market is presently closed."
 msgstr ""
 

@@ -112,10 +112,6 @@ class ChartStore {
         this.chartContainerHeight = this.chartHeight - offsetHeight;
     }
 
-    notify(message) {
-        if (this.onMessage) { this.onMessage(message); }
-    }
-
     updateCanvas = () => {
         if (this.stxx.slider) {
             this.stxx.slider.display(this.stxx.layout.rangeSlider);
@@ -171,7 +167,7 @@ class ChartStore {
         this.isMobile = isMobile;
         this.state = this.mainStore.state;
 
-        this.onMessage = onMessage;
+        this.mainStore.notifier.onMessage = onMessage;
         this.granularity = (granularity !== undefined) ? granularity : this.defaults.granularity;
         const engineParams = {
             maxMasterDataSize: 5000, // cap size so tick_history requests do not become too large

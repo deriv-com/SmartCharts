@@ -65,14 +65,10 @@ class Feed {
             start -= suggestedStartDate.getTimezoneOffset() * 60;
         }
         const comparisonChartSymbol = isComparisonChart ? symbol : undefined;
-        const tParams = { symbol: symbolObject.name };
+        const symbolName = symbolObject.name;
 
         if (this._tradingTimes.isFeedUnavailable(symbol)) {
-            this._mainStore.chart.notify({
-                text: t.translate('Streaming for [symbol] is not available due to license restrictions', tParams),
-                type: 'error',
-                category: 'activesymbol',
-            });
+            this._mainStore.notifier.notifyFeedUnavailable(symbolName);
             let dataCallback = { quotes: [] };
             if (isComparisonChart) {
                 // Passing error will prevent the chart from being shown; for
@@ -100,10 +96,7 @@ class Feed {
             let subscription;
             const delay = this._tradingTimes.getDelayedMinutes(symbol);
             if (delay > 0) {
-                this._mainStore.chart.notify({
-                    text: t.translate('[symbol] feed is delayed by [delay] minutes', { ...tParams, delay }),
-                    category: 'activesymbol',
-                });
+                this._mainStore.notifier.notifyDelayedMarket(symbolName, delay);
 
                 subscription = new DelayedSubscription(tickHistoryRequest, this._binaryApi, this._stx, delay);
             } else {
@@ -135,10 +128,7 @@ class Feed {
 
             this._activeStreams[key] = subscription;
         } else {
-            this._mainStore.chart.notify({
-                text: t.translate('[symbol] market is presently closed.', tParams),
-                category: 'activesymbol',
-            });
+            this._mainStore.notifier.notifyMarketClose(symbolName);
 
             // Although market is closed, we display the past tick history data
             getHistoryOnly = true;
