@@ -107,7 +107,7 @@ class Feed {
                 quotes = await subscription.initialFetch();
             } catch (error) {
                 const { message: text } = error;
-                this._mainStore.chart.notify({
+                this._mainStore.notifier.notify({
                     text,
                     category: 'activesymbol',
                 });
