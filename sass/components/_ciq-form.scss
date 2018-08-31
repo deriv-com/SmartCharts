@@ -9,7 +9,8 @@
     .cq-slider-range {
         position: relative;
         width: 120px;
-        margin-top: -2px;
+        margin-top: 8px;
+        height: 10px;
 
         > input, div {
             position: absolute;
@@ -21,104 +22,77 @@
             width: 120px;
             margin: 0;
             background: transparent;
-            height: 2px;
-        }
-        input[type='range']:focus {
-            outline: none;
-        }
-        input[type='range']::-webkit-slider-runnable-track {
-            width: 120px;
-            height: 2px;
-            cursor: pointer;
-            border-radius: 0px;
-            border: 0px solid #010101;
-            background: transparent;
-        }
-        input[type='range']::-moz-range-track {
-            width: 120px;
-            height: 2px;
-            cursor: pointer;
-            border-radius: 0px;
-            border: 0px solid #010101;
-            background: transparent;
-        }
-        input[type='range']::-ms-track {
-            width: 120px;
-            height: 2px;
-            cursor: pointer;
-            background: transparent;
-            border-color: transparent;
-            color: transparent;
-        }
-        input[type='range']::-ms-thumb {
-            cursor: pointer;
-            width: 10px;
-            height: 10px;
-            box-sizing: border-box;
-            border-radius: 7px;
-            margin-top: -2px;
-            @include themify($themes) {
-                background-color: themed('SliderHandleBg');
-                border: 2px solid themed('SliderHandleBorder');
-            }
-        }
-        input[type='range']::-moz-range-thumb {
-            cursor: pointer;
-            width: 10px;
-            height: 10px;
-            box-sizing: border-box;
-            border-radius: 7px;
-            margin-top: -4px;
-            @include themify($themes) {
-                background-color: themed('SliderHandleBg');
-                border: 2px solid themed('SliderHandleBorder');
-            }
-        }
-        input[type='range']::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            margin-top: -4px;
+            height: 11px;
+            top: -5px;
 
-            cursor: pointer;
-            width: 10px;
-            height: 10px;
-            box-sizing: border-box;
-            border-radius: 7px;
-            @include themify($themes) {
-                background-color: themed('SliderHandleBg');
-                border: 2px solid themed('SliderHandleBorder');
+            &:focus {
+                outline: none;
+            }
+            &::-webkit-slider-runnable-track {
+                width: 120px;
+                height: 10px;
+                cursor: pointer;
+                border-radius: 0px;
+                border: 0px solid #010101;
+                background: transparent;
+            }
+            &::-moz-range-track {
+                width: 120px;
+                height: 14px;
+                cursor: pointer;
+                border-radius: 0px;
+                border: 0px solid #010101;
+                background: transparent;
+                margin-top: -3px;
+                top: -3px;
+            }
+            &::-ms-track {
+                width: 120px;
+                height: 10px;
+                cursor: pointer;
+                background: transparent;
+                border-color: transparent;
+                color: transparent;
+            }
+            &::-ms-thumb {
+                cursor: pointer;
+                width: 10px;
+                height: 10px;
+                box-sizing: border-box;
+                border-radius: 7px;
+                margin-top: -2px;
+                @include themify($themes) {
+                    background-color: themed('SliderHandleBg');
+                    border: 2px solid themed('SliderHandleBorder');
+                }
+            }
+            &::-moz-range-thumb {
+                cursor: pointer;
+                width: 10px;
+                height: 10px;
+                box-sizing: border-box;
+                border-radius: 7px;
+                margin-top: -2px;
+                @include themify($themes) {
+                    background-color: themed('SliderHandleBg');
+                    border: 2px solid themed('SliderHandleBorder');
+                }
+            }
+            &::-webkit-slider-thumb {
+                -webkit-appearance: none;
+                margin-top: 0px;
+
+                cursor: pointer;
+                width: 10px;
+                height: 10px;
+                box-sizing: border-box;
+                border-radius: 7px;
+                @include themify($themes) {
+                    background-color: themed('SliderHandleBg');
+                    border: 2px solid themed('SliderHandleBorder');
+                }
             }
         }
-        // input {
-        //     -webkit-appearance: none;
-        //     width: 120px;
-        //     outline: none;
-        //     height: 2px;
-        //     background: transparent;
-        //     top: -2px;
-
-        //     &::-webkit-slider-thumb {
-        //         -webkit-appearance: none;
-        //         appearance: none;
-        //         width: 10px;
-        //         height: 10px;
-        //         box-sizing: border-box;
-        //         border-radius: 7px;
-        //         @include themify($themes) {
-        //             background-color: themed('SliderHandleBg');
-        //             border: 2px solid themed('SliderHandleBorder');
-        //         }
-        //     }
-        //     &::-moz-range-thumb {
-        //         width: 10px;
-        //         height: 10px;
-        //         box-sizing: border-box;
-        //         border-radius: 7px;
-        //         @include themify($themes) {
-        //             background-color: themed('SliderHandleBg');
-        //             border: 2px solid themed('SliderHandleBorder');
-        //         }
-        //     }
-        // }
         .cq-slider-bar {
             width: 120px;
             outline: none;
