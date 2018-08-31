@@ -275,12 +275,33 @@ class ChartStore {
                         this.changeSymbol(this.state.symbol, this.state.granularity);
                     }
                 });
+
+                this.tradingTimes.onMarketOpenCloseChanged(this.onMarketOpenClosedChange);
             }));
         });
 
         this.resizeObserver = new ResizeObserver(this.resizeScreen);
         this.resizeObserver.observe(modalNode);
     }
+
+    onMarketOpenClosedChange = (changes) => {
+        const symbolObjects = this.stxx.getSymbols().map(item => item.symbolObject);
+        let shouldRefreshChart = false;
+        for (const { symbol, name } of symbolObjects) {
+            if (symbol in changes) {
+                if (changes[symbol]) {
+                    shouldRefreshChart = true;
+                    this.mainStore.notifier.notifyMarketOpen(name);
+                } else {
+                    this.mainStore.notifier.notifyMarketClose(name);
+                }
+            }
+        }
+        if (shouldRefreshChart) {
+            // refresh to stream opened market
+            this.refreshChart();
+        }
+    };
 
     @computed get categorizedSymbols() {
         if (!this.activeSymbols || this.activeSymbols.categorizedSymbols.length === 0) return [];
