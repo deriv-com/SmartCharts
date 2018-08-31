@@ -110,7 +110,6 @@
     "webpack-dev-server": "^3.1.4"
   },
   "dependencies": {
-    "detect-browser": "^3.0.0",
     "event-emitter-es6": "^1.1.5",
     "lodash.debounce": "^4.0.8",
     "prop-types": "^15.6.0",
