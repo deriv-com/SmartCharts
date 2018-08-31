@@ -125,26 +125,32 @@ function browserDetect(rootEleId, SupportedBrowsers){
     function renderNotSupported(){
         var cqNotSupported = document.createElement('div');
         cqNotSupported.className = 'cq-not-supported';
+        cqNotSupported.style = 'background:#fff url("./dist/app/assets/bg-not-supported.svg") repeat scroll center center;position:fixed;width:100%;height:100%;font-family:"Roboto";font-style:normal;line-height:1.5;letter-spacing:normal;text-align:center;color:#333333;';
 
         var cqLogo = document.createElement('div');
         cqLogo.className = 'cq-logo';
+        cqLogo.style = 'background:url("./dist/app/assets/binary-logo.svg") no-repeat scroll center center;width:139px;height:32px;margin-bottom:8%;padding:20px;';
         cqNotSupported.appendChild(cqLogo);
 
         var cqIconNotSupported = document.createElement('div');
         cqIconNotSupported.className = 'cq-icon-not-supported';
+        cqIconNotSupported.style = 'background:url("./dist/app/assets/icon-not-supported.svg") no-repeat scroll center center / 160px 160px;width:160px;height:160px;margin:auto;';
         cqNotSupported.appendChild(cqIconNotSupported);
 
         var cqH1 = document.createElement('h1');
         cqH1.innerHTML = 'YOUR BROWSER IS NOT SUPPORTED';
+        cqH1.style = 'font-family:"Roboto";font-size:24px;font-weight:bold;text-transform:uppercase;';
         cqNotSupported.appendChild(cqH1);
 
         var cqP = document.createElement('p');
         cqP.innerHTML = 'Please update your browser for the best trading experience.';
+        cqP.style = 'font-family:"Roboto";font-size:20px;font-weight:normal;';
         cqNotSupported.appendChild(cqP);
 
         var cqA = document.createElement('a');
         cqA.href = 'http://outdatedbrowser.com/';
         cqA.innerHTML = 'Update Browser';
+        cqA.style = 'background:#e98024;border-radius:4px;font-family:"Roboto";color:#fff;padding:10px;font-size:14px;font-weight:500;text-align:center;text-transform:uppercase;text-decoration:none;';
         cqNotSupported.appendChild(cqA);
         
         if (cqRoot.nextSibling) {
@@ -211,7 +217,6 @@ function browserDetect(rootEleId, SupportedBrowsers){
             setTimeout(renderNotDetctedNotification, 200)
         }
     }
-
 }
 
 browserDetect('root', {

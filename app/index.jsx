@@ -23,7 +23,6 @@ import './doorbell';
 import { ConnectionManager, StreamManager } from './connection';
 import Notification from './Notification.jsx';
 import ChartNotifier from './ChartNotifier.js';
-import SupportDetection from './SupportDetection.jsx';
 
 
 if (window.location.host.endsWith('binary.com')) {
@@ -125,25 +124,21 @@ class App extends Component {
         const { settings, isConnectionOpened, symbol } = this.state;
 
         return (
-            <SupportDetection
+            <SmartChart
+                id={chartId}
+                symbol={symbol}
                 onMessage={e => this.notifier.notify(e)}
-            >
-                <SmartChart
-                    id={chartId}
-                    symbol={symbol}
-                    onMessage={e => this.notifier.notify(e)}
-                    isMobile={CIQ.isMobile}
-                    enableRouting
-                    topWidgets={this.renderTopWidgets}
-                    chartControlsWidgets={renderControls}
-                    requestAPI={requestAPI}
-                    requestSubscribe={requestSubscribe}
-                    requestForget={requestForget}
-                    settings={settings}
-                    onSettingsChange={this.saveSettings}
-                    isConnectionOpened={isConnectionOpened}
-                />
-            </SupportDetection>
+                isMobile={CIQ.isMobile}
+                enableRouting
+                topWidgets={this.renderTopWidgets}
+                chartControlsWidgets={renderControls}
+                requestAPI={requestAPI}
+                requestSubscribe={requestSubscribe}
+                requestForget={requestForget}
+                settings={settings}
+                onSettingsChange={this.saveSettings}
+                isConnectionOpened={isConnectionOpened}
+            />
         );
     }
 }
