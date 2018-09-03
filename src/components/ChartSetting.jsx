@@ -110,6 +110,7 @@ const ChartSetting = ({
         <div>
             <div className="title">
                 <BackIcon
+                    className="icon-back-menu"
                     onClick={() => setView()}
                 />
                 {t.translate('Language')}

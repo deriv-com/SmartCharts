@@ -5,17 +5,6 @@
         box-sizing: border-box;
         overflow: visible !important;
 
-        .title {
-            height: 40px;
-            line-height: 40px;
-            padding-left: 16px;
-            font-size: 16px;
-            display: flex;
-            justify-content: space-between;
-            @include themify($themes) {
-                color: themed('DialogHeadText');
-            }
-        }
         .body {
             padding: 0px 5px 0px 16px;
 
