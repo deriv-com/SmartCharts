@@ -92,11 +92,7 @@ const config = {
             t: [path.resolve(__dirname, './src/Translation.js'), 't'],
         }),
         new MiniCssExtractPlugin({ filename: 'smartcharts.css' }),
-        new StyleLintPlugin(),
-        new CopyWebpackPlugin([
-            { from: './app/browser-detection.js'},
-            { from: './app/assets/*.svg'}
-        ]),
+        new StyleLintPlugin()
     ],
     externals: {
         chartiq: 'CIQ',
