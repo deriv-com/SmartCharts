@@ -24,7 +24,7 @@ class Menu extends Component {
             enabled = true,
         } = this.props;
         const first = React.Children.map(children, (child, i) => (i === 0 ? child : null));
-        const rest  = React.Children.map(children, (child, i) => (i !== 0 ? React.cloneElement(child, { title, onTitleClick }) : null));
+        const rest  = React.Children.map(children, (child, i) => (i !== 0 ? child : null));
 
         const dropdown = (
             <CSSTransition
@@ -37,6 +37,17 @@ class Menu extends Component {
                     isMobile={isMobile}
                     isFullscreen={isFullscreen}
                 >
+                    {title
+                    && (
+                        <div className="title">
+                            <div className="title-text">{title}</div>
+                            <CloseIcon
+                                className="icon-close-menu"
+                                onClick={onTitleClick}
+                            />
+                        </div>
+                    )
+                    }
                     {rest}
                 </DropdownDialog>
             </CSSTransition>);
@@ -76,21 +87,6 @@ class Menu extends Component {
 }
 
 Menu.Title = ({ children }) => children;
-Menu.Body  = ({ children, title, onTitleClick }) => (
-    <div>
-        { title
-         && (
-             <div className="title">
-                 <div className="title-text">{title}</div>
-                 <CloseIcon
-                     className="icon-close-menu"
-                     onClick={onTitleClick}
-                 />
-             </div>
-         )
-        }
-        {children}
-    </div>
-);
+Menu.Body  = ({ children }) => children;
 
 export default Menu;
