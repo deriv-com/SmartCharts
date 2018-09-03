@@ -84,6 +84,7 @@ export default class ViewStore {
         const importLayout = () => {
             const finishImportLayout = () => {
                 stx.changeOccurred('layout');
+                this.mainStore.studies.updateActiveStudies();
                 if (this.loader) { this.loader.hide(); }
             };
             stx.importLayout(ViewStore.views[idx].layout, {

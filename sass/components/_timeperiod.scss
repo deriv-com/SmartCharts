@@ -12,12 +12,14 @@
             border-radius: 2px;
             box-sizing: border-box;
             text-align: center;
-            padding-top: 5px;
+            padding-top: 8px;
+            font-size: 10px;
             @include themify($themes) {
                 color: themed('menuText');
             }
 
             .ic-priod {
+                font-size: 12px;
                 border-radius: 4px;
                 padding: 3px 5px;
             }

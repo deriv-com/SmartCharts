@@ -16,12 +16,12 @@ const renderDefaultControls = isMobile => () => (
     <React.Fragment>
         {isMobile ? '' : <CrosshairToggle />}
         <ChartTypes />
+        <Timeperiod />
         <StudyLegend />
         <Comparison />
         <DrawTools />
         <Views />
         <Share />
-        <Timeperiod />
         {isMobile ? '' : <ChartSize />}
     </React.Fragment>
 );
