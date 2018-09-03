@@ -37,8 +37,8 @@ const CategoricalDisplay = ({
      * @return HTML
      */
     const renderMobileTitle = () => (isMobile ? (
-        <div className="cq-mobile-title">
-            <div className="mobile-title">{dialogTitle}</div>
+        <div className="title">
+            <div className="title-text">{dialogTitle}</div>
             <CloseIcon className="icon-close-menu" onClick={() => closeMenu()} />
         </div>
     ) : '');

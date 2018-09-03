@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import React from 'react';
 import { connect } from '../store/Connect';
-import { CloseIcon, SettingIcon } from './Icons.jsx';
+import { SettingIcon } from './Icons.jsx';
 import '../../sass/components/_chart-types.scss';
 
 const ChartTypes = ({
@@ -12,8 +12,6 @@ const ChartTypes = ({
     onChange,
     ChartTypeList,
     showAggregateDialog,
-    closeMenu,
-    isMobile,
     enabled,
 }) => {
     if (Type === undefined) return (null);
@@ -29,6 +27,7 @@ const ChartTypes = ({
         <ChartTypeMenu
             className="ciq-display collapse ciq-chart-types"
             enabled={enabled}
+            title={t.translate('Chart types')}
         >
             <ChartTypeMenu.Title>
                 <Type.icon
@@ -37,10 +36,6 @@ const ChartTypes = ({
                 />
             </ChartTypeMenu.Title>
             <ChartTypeMenu.Body>
-                <div className="title">
-                    <div className="mobile-title">{t.translate('Chart types')}</div>
-                    {isMobile ? <CloseIcon className="icon-close-menu" onClick={closeMenu} /> : '' }
-                </div>
                 <div className="body">
                     <ChartTypeList
                         height={260}
@@ -78,6 +73,4 @@ export default connect(({ chartType }) => ({
     menuOpen: chartType.menu.open,
     ChartTypeMenu: chartType.ChartTypeMenu,
     ChartTypeList: chartType.ChartTypeList,
-    closeMenu: chartType.menu.onTitleClick,
-    isMobile: chartType.mainStore.chart.isMobile,
 }))(ChartTypes);
