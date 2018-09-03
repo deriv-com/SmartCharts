@@ -32,7 +32,7 @@ if (window.location.host.endsWith('binary.com')) {
     document.body.appendChild(s);
 }
 
-configure({ enforceActions: true });
+configure({ enforceActions: 'observed' });
 
 const getLanguageStorage = function () {
     const default_language = 'en';
@@ -57,20 +57,6 @@ const connectionManager = new ConnectionManager({
 });
 
 const streamManager = new StreamManager(connectionManager);
-const renderControls = () => (
-    <React.Fragment>
-        {CIQ.isMobile ? '' : <CrosshairToggle />}
-        <ChartTypes />
-        <Timeperiod />
-        <StudyLegend />
-        <Comparison />
-        <DrawTools />
-        <Views />
-        <Share />
-        {CIQ.isMobile ? '' : <ChartSize />}
-        <ChartSetting />
-    </React.Fragment>
-);
 const requestAPI = connectionManager.send.bind(connectionManager);
 const requestSubscribe = streamManager.subscribe.bind(streamManager);
 const requestForget = streamManager.forget.bind(streamManager);
@@ -120,6 +106,21 @@ class App extends Component {
         </React.Fragment>
     );
 
+    renderControls = () => (
+        <React.Fragment>
+            {CIQ.isMobile ? '' : <CrosshairToggle />}
+            <ChartTypes />
+            <Timeperiod />
+            <StudyLegend />
+            <Comparison />
+            <DrawTools />
+            <Views />
+            <Share />
+            {CIQ.isMobile ? '' : <ChartSize />}
+            <ChartSetting />
+        </React.Fragment>
+    );
+
     render() {
         const { settings, isConnectionOpened, symbol } = this.state;
 
@@ -131,7 +132,7 @@ class App extends Component {
                 isMobile={CIQ.isMobile}
                 enableRouting
                 topWidgets={this.renderTopWidgets}
-                chartControlsWidgets={renderControls}
+                chartControlsWidgets={this.renderControls}
                 requestAPI={requestAPI}
                 requestSubscribe={requestSubscribe}
                 requestForget={requestForget}
