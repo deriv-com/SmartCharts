@@ -33,7 +33,7 @@ if (window.location.host.endsWith('binary.com')) {
 }
 
 if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register(`${window.location.origin + window.location.pathname}/sw.js`)
+    navigator.serviceWorker.register(`${window.location.origin + window.location.pathname}sw.js`)
         .then(() => {
             console.log('Service Worker Registered');
         }).catch((registrationError) => {

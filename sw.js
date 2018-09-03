@@ -12,7 +12,6 @@ var filesToCache = [
   './dist/smartcharts.js'
 ];
 
-
 self.addEventListener('install', function(e) {
   console.log('[ServiceWorker] Install');
   e.waitUntil(
@@ -30,6 +29,7 @@ self.addEventListener('activate', function(event){
 
 self.addEventListener('fetch', function(event){
   console.log('fetch');
+  if (event.request.cache === 'only-if-cached' && event.request.mode !== 'same-origin') {return;}
   event.respondWith(
     caches.match(event.request, {ignoreSearch:true}).then(function(response){
       return response || fetch(event.request);
