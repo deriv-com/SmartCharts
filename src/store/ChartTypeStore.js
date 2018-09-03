@@ -165,7 +165,6 @@ export default class ChartTypeStore {
         if (type.id === this.type.id) {
             return;
         }
-        this.stx.xaxisHeight = 30;
         if (type.id === 'spline') {
             // Spline is just a line with tension
             this.stx.chart.tension = this.stx.layout.tension = 0.5;
