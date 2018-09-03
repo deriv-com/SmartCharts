@@ -32,7 +32,7 @@ if (window.location.host.endsWith('binary.com')) {
     document.body.appendChild(s);
 }
 
-configure({ enforceActions: true });
+configure({ enforceActions: 'observed' });
 
 const getLanguageStorage = function () {
     const default_language = 'en';
