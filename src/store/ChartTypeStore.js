@@ -175,7 +175,7 @@ export default class ChartTypeStore {
             if (this.aggregates[type.id]) {
                 this.stx.chart.baseline.userLevel = false;
                 this.stx.setAggregationType(type.id);
-                this.stx.chart.baseline.userLevel = true;
+                this.stx.chart.baseline.userLevel = null;
             } else {
                 this.stx.setChartType(type.id);
             }
