@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Portuguese\n"
 "Language: pt_PT\n"
-"PO-Revision-Date: 2018-08-21 02:51\n"
+"PO-Revision-Date: 2018-08-24 20:41\n"
 
 msgid " already exists."
 msgstr " já existe."
@@ -106,10 +106,10 @@ msgid "Download"
 msgstr "Baixar"
 
 msgid "Download as CSV"
-msgstr ""
+msgstr "Baixar como CSV"
 
 msgid "Download as PNG"
-msgstr ""
+msgstr "Baixar como PNG"
 
 msgid "Download Chart"
 msgstr "Baixar gráfico"

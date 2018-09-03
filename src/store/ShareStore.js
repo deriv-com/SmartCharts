@@ -27,6 +27,11 @@ export default class ShareStore {
     }
     @observable isLoadingPNG = false;
 
+    createNewTab() {
+        // Create a new tab for browsers that doesn't support HTML5 download attribute
+        return !!navigator.platform && /iPad|iPhone|iPod/.test(navigator.platform) ? window.open() : null;
+    }
+
     loadHtml2Canvas() {
         if (this._promise_html2canas) {
             return this._promise_html2canvas;
@@ -38,22 +43,25 @@ export default class ShareStore {
 
     @action.bound downloadPNG() {
         this.isLoadingPNG = true;
+        const newTab = this.createNewTab();
+
         this.loadHtml2Canvas()
             .then(() => window.html2canvas(this.screenshotArea))
             .then(() => {
                 // since react rerenders is not immediate, we use CIQ.appendClassName to
                 // immediately append/unappend class name before taking screenshot.
                 CIQ.appendClassName(this.screenshotArea, 'ciq-screenshot');
-                window.html2canvas(this.screenshotArea).then(this._onCanvasReady);
+                window.html2canvas(this.screenshotArea).then(canvas => this._onCanvasReady(canvas, newTab));
             });
     }
 
-    @action.bound _onCanvasReady(canvas) {
+    @action.bound _onCanvasReady(canvas, newTab) {
         const content = canvas.toDataURL('image/png');
         downloadFileInBrowser(
             `${new Date().toUTCString()}.png`,
             content,
             'image/png;',
+            newTab,
         );
         this.isLoadingPNG = false;
         CIQ.unappendClassName(this.screenshotArea, 'ciq-screenshot');
@@ -89,11 +97,11 @@ export default class ShareStore {
                 ].join(','));
             }
         });
-
         downloadFileInBrowser(
             `${this.marketDisplayName} (${this.timeperiodDisplay}).csv`,
             lines.join('\n'),
             'text/csv;charset=utf-8;',
+            this.createNewTab(),
         );
     }
 

@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Thai\n"
 "Language: th_TH\n"
-"PO-Revision-Date: 2018-08-21 02:51\n"
+"PO-Revision-Date: 2018-08-21 22:10\n"
 
 msgid " already exists."
 msgstr " มีอยู่แล้ว"
@@ -106,10 +106,10 @@ msgid "Download"
 msgstr "ดาวน์โหลด"
 
 msgid "Download as CSV"
-msgstr ""
+msgstr "ดาวน์โหลดเป็น CSV"
 
 msgid "Download as PNG"
-msgstr ""
+msgstr "ดาวน์โหลดเป็น PNG"
 
 msgid "Download Chart"
 msgstr "ดาวน์โหลดแผนภูมิ"
@@ -424,7 +424,7 @@ msgid "Time Series Forecast"
 msgstr "การพยากรณ์อนุกรมเวลา"
 
 msgid "Vertical Horizontal Filter"
-msgstr "Vertical Horizontal Filter"
+msgstr "ตัวกรอง Vertical Horizontal"
 
 msgid "Result"
 msgstr "ผลลัพธ์"
@@ -442,7 +442,7 @@ msgid "Moving Average Type"
 msgstr "ประเภทค่าเฉลี่ยเคลื่อนที่"
 
 msgid "Trade Volume Index"
-msgstr "ดัชนีปริมาณการซื้อขาย"
+msgstr "ดัชนีปริมาณการซื้อขาย (Trade Volume Index)"
 
 msgid "Min Tick Value"
 msgstr "ค่าช่วงราคาต่ำสุด"
@@ -454,7 +454,7 @@ msgid "Limit Move Value"
 msgstr "Limit Move Value"
 
 msgid "Accumulative Swing Index"
-msgstr "ดัชนีแกว่งสะสม"
+msgstr "ดัชนีแกว่งสะสม (Accumulative Swing Index)"
 
 msgid "Price Rate of Change"
 msgstr "อัตราราคาของการเปลี่ยนแปลง"
@@ -505,7 +505,7 @@ msgid "%D"
 msgstr "%D"
 
 msgid "Historical Volatility"
-msgstr "ความผันผวนในอดีต"
+msgstr "ความผันผวนในอดีต (Historical Volatility)"
 
 msgid "Days Per Year"
 msgstr "จำนวนวันต่อปี"
@@ -547,7 +547,7 @@ msgid "Chaikin Volatility"
 msgstr "ความผันผวน Chaikin"
 
 msgid "Rate Of Change"
-msgstr "Rate Of Change"
+msgstr "อัตราของการเปลี่ยนแปลง"
 
 msgid "Price Oscillator"
 msgstr "Price Oscillator"
@@ -775,7 +775,7 @@ msgid "Keltner Top"
 msgstr "Keltner สูงสุด"
 
 msgid "Keltner Median"
-msgstr "Keltner ค่ากลาง"
+msgstr "Keltner มัธยฐาน"
 
 msgid "Keltner Bottom"
 msgstr "Keltner ต่ำสุด"
@@ -889,7 +889,7 @@ msgid "Price Momentum Oscillator"
 msgstr "Price Momentum Oscillator"
 
 msgid "Double Smoothing Period"
-msgstr "ช่วง Double Smoothing"
+msgstr "Double Smoothing Period"
 
 msgid "PMO"
 msgstr "PMO"
@@ -952,7 +952,7 @@ msgid "STARC Bands Top"
 msgstr "STARC Bands สูงสุด"
 
 msgid "STARC Bands Median"
-msgstr "STARC Bands ค่ากลาง"
+msgstr "STARC Bands มัธยฐาน"
 
 msgid "STARC Bands Bottom"
 msgstr "STARC Bands ต่ำสุด"
@@ -1066,7 +1066,7 @@ msgid "Teeth"
 msgstr "ฟัน"
 
 msgid "Lips"
-msgstr "ริมฝีปาก"
+msgstr "Lips"
 
 msgid "Gator Oscillator"
 msgstr "Gator Oscillator"
@@ -1180,28 +1180,28 @@ msgid "Pring's Know Sure Thing"
 msgstr "Pring's Know Sure Thing"
 
 msgid "Lightest Rate of Change Period"
-msgstr "ช่วง Lightest Rate of Change"
+msgstr "อัตราเบาบางที่สุดของช่วงเปลี่ยนแปลง"
 
 msgid "Lightest SMA Period"
-msgstr "ช่วง Lightest SMA"
+msgstr "ช่วง SMA น้อยที่สุด"
 
 msgid "Light Rate of Change Period"
-msgstr "ช่วง Light Rate of Change"
+msgstr "อัตราเบาบางของช่วงเปลี่ยนแปลง"
 
 msgid "Light SMA Period"
-msgstr "ช่วง Light SMA"
+msgstr "ช่วง SMA เบาบาง"
 
 msgid "Heavy Rate of Change Period"
-msgstr "ช่วง Heavy Rate of Change"
+msgstr "อัตราสูงของช่วงเปลี่ยนแปลง"
 
 msgid "Heavy SMA Period"
-msgstr "ช่วง Heavy SMA"
+msgstr "ช่วง SMA มาก"
 
 msgid "Heaviest Rate of Change Period"
-msgstr "ช่วง Heaviest Rate of Change"
+msgstr "อัตราสูงที่สุดของช่วงเปลี่ยนแปลง"
 
 msgid "Heaviest SMA Period"
-msgstr "ช่วง Heaviest SMA"
+msgstr "ช่วง SMA มากที่สุด"
 
 msgid "KST"
 msgstr "KST"
