@@ -165,6 +165,7 @@ export default class ChartTypeStore {
         if (type.id === this.type.id) {
             return;
         }
+        this.stx.xaxisHeight = 30;
         if (type.id === 'spline') {
             // Spline is just a line with tension
             this.stx.chart.tension = this.stx.layout.tension = 0.5;
@@ -173,7 +174,9 @@ export default class ChartTypeStore {
             this.stx.chart.tension = 0;
             delete this.stx.layout.tension;
             if (this.aggregates[type.id]) {
+                this.stx.chart.baseline.userLevel = false;
                 this.stx.setAggregationType(type.id);
+                this.stx.chart.baseline.userLevel = true;
             } else {
                 this.stx.setChartType(type.id);
             }
