@@ -14,6 +14,7 @@ const Comparison = ({
     <ComparisonMenu
         className="cq-comparison-new cq-symbols-display"
         isMobile={isMobile}
+        title={isMobile ? t.translate('Comparison') : ''}
     >
         <ComparisonMenu.Title>
             <ComparisonIcon
@@ -24,7 +25,6 @@ const Comparison = ({
         </ComparisonMenu.Title>
         <ComparisonMenu.Body>
             <ComparisonSelector
-                dialogTitle={t.translate('Comparison')}
                 closeMenu={() => onCloseMenu()}
             />
         </ComparisonMenu.Body>

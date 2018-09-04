@@ -18,6 +18,7 @@ const StudyLegend = ({
         isOpened={isOpened}
         setOpen={setOpen}
         isMobile={isMobile}
+        title={isMobile ? t.translate('Indicators') : ''}
     >
         <StudyMenu.Title>
             <IndicatorIcon
@@ -28,7 +29,6 @@ const StudyLegend = ({
         </StudyMenu.Title>
         <StudyMenu.Body>
             <StudyCategoricalDisplay
-                dialogTitle={t.translate('Indicators')}
                 closeMenu={() => onCloseMenu()}
             />
         </StudyMenu.Body>

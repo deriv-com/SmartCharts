@@ -9,7 +9,6 @@ import {
     TickIcon,
     DeleteIcon,
     alertIconMap,
-    CloseIcon,
 } from './Icons.jsx';
 import '../../sass/components/_view.scss';
 
@@ -36,9 +35,11 @@ const Views = ({
     remove,
     inputRef,
     templateName,
-    closeMenu,
 }) => (
-    <ViewsMenu className="ciq-views">
+    <ViewsMenu
+        className="ciq-views"
+        title={t.translate('Templates')}
+    >
         <ViewsMenu.Title className="cq-menu-btn">
             <TemplateIcon
                 className={`ic-icon-with-sub ${menuOpen ? 'active' : ''}`}
@@ -46,13 +47,6 @@ const Views = ({
             />
         </ViewsMenu.Title>
         <ViewsMenu.Body>
-            <div className="title">
-                <div className="title-text">{t.translate('Templates')}</div>
-                <CloseIcon
-                    className="icon-close-menu"
-                    onClick={() => closeMenu()}
-                />
-            </div>
             <div className="content">
                 {
                     currentRoute !== 'overwrite'
@@ -140,5 +134,4 @@ export default connect(({ view: s }) => ({
     inputRef: s.inputRef,
     currentRoute: s.currentRoute,
     templateName :s.templateName,
-    closeMenu: s.menu.onTitleClick,
 }))(Views);
