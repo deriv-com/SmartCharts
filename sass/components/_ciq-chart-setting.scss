@@ -12,17 +12,10 @@
         }
     }
     .title {
-        height: 40px;
-        line-height: 40px;
-        font-size: 16px;
-        display: flex;
-
-        .title-text {
-            display: block;
-            font-size: 16px;
-            line-height: 40px;
-            font-weight: 400;
-            padding: 0 0.7em;
+        > .icon-back-menu {
+            line-height: 45px;
+            margin: 0 5px 0 10px !important;
+            cursor: pointer;
         }
     }
     .body {

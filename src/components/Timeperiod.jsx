@@ -1,7 +1,6 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import React from 'react';
 import { connect } from '../store/Connect';
-import { CloseIcon } from './Icons.jsx';
 import '../../sass/components/_timeperiod.scss';
 
 const Timeperiod = ({
@@ -11,7 +10,6 @@ const Timeperiod = ({
     interval_display,
     timeUnit_display,
     TimePeriodMenu,
-    closeMenu,
     setOpen,
     isMobile,
     enabled,
@@ -24,6 +22,7 @@ const Timeperiod = ({
         <TimePeriodMenu
             className="ciq-period"
             enabled={enabled}
+            title={isMobile ? t.translate('Interval') : ''}
         >
             <TimePeriodMenu.Title>
                 <div className="bt-priod">
@@ -36,13 +35,6 @@ const Timeperiod = ({
                 </div>
             </TimePeriodMenu.Title>
             <TimePeriodMenu.Body>
-                {isMobile
-                    ? (
-                        <div className="cq-mobile-title">
-                            <div className="mobile-title">{t.translate('Interval')}</div>
-                            <CloseIcon className="icon-close-menu" onClick={() => closeMenu()} />
-                        </div>
-                    ) : ''}
                 <div className="cq-interval">
                     <div className="timeUnit">
                         <span className={timeUnit === 'tick' ? 'selected' : ''}>{t.translate('Tick')}</span>
@@ -138,6 +130,5 @@ export default connect(({ timeperiod: s }) => ({
     timeUnit_display: s.timeUnit_display,
     TimePeriodMenu: s.TimePeriodMenu,
     setOpen: s.menu.setOpen,
-    closeMenu: s.menu.onTitleClick,
     isMobile: s.mainStore.chart.isMobile,
 }))(Timeperiod);

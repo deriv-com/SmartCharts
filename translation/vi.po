@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Vietnamese\n"
 "Language: vi_VN\n"
-"PO-Revision-Date: 2018-08-21 02:51\n"
+"PO-Revision-Date: 2018-08-21 07:01\n"
 
 msgid " already exists."
 msgstr " đã tồn tại."
@@ -106,10 +106,10 @@ msgid "Download"
 msgstr "Tải xuống"
 
 msgid "Download as CSV"
-msgstr ""
+msgstr "Tải xuống CSV"
 
 msgid "Download as PNG"
-msgstr ""
+msgstr "Tải xuống PNG"
 
 msgid "Download Chart"
 msgstr "Tải Về Biểu Đồ"
