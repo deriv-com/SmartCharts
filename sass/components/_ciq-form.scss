@@ -4,37 +4,71 @@
     height: 10px;
     display: flex;
     align-items: center;
+    position: relative;
 
-    .slider {
-        width: 120px;
-        height: 10px;
-        cursor: pointer;
-        touch-action: manipulation;
-    }
-    .handle {
-        width: 10px;
-        height: 10px;
-        box-sizing: border-box;
-        border-radius: 7px;
-        @include themify($themes) {
-            background-color: themed('SliderHandleBg');
-            border: 2px solid themed('SliderHandleBorder');
-        }
-    }
-    .bar {
+    .cq-slider-range {
         position: relative;
-        top: 4px;
-    }
-    .bar.bar-0 {
-        height: 2px;
-        @include themify($themes) {
-            background: themed('SliderBarActiveBg');
+        width: 120px;
+        margin-top: 8px;
+        height: 10px;
+
+        > input, div {
+            position: absolute;
+            left: 0px;
+            top: 0px;
         }
-    }
-    .bar.bar-1 {
-        height: 2px;
-        @include themify($themes) {
-            background: themed('SliderBarBg');
+        input[type='range'] {
+            -webkit-appearance: none;
+            width: 120px;
+            margin: 0;
+            background: transparent;
+            height: 12px;
+            top: -6px;
+
+            &:focus {
+                outline: none;
+            }
+            &::-webkit-slider-runnable-track {
+                @include rangetrack();
+            }
+            &::-moz-range-track {
+                @include rangetrack();
+                height: 14px;
+                margin-top: -3px;
+                top: -3px;
+            }
+            &::-ms-track {
+                @include rangetrack();
+                color: transparent;
+            }
+            &::-ms-thumb {
+                @include rangethumb();
+                margin-top: 0px;
+            }
+            &::-moz-range-thumb {
+                @include rangethumb();
+                margin-top: 0px;
+            }
+            &::-webkit-slider-thumb {
+                -webkit-appearance: none;
+                @include rangethumb();
+                margin-top: 1px;
+            }
+        }
+        .cq-slider-bar {
+            width: 120px;
+            outline: none;
+            height: 2px;
+            @include themify($themes) {
+                background: themed('SliderBarBg');
+            }
+        }
+        .cq-slider-active-bar {
+            height: 2px;
+            min-width: 10px;
+            @include themify($themes) {
+                background: themed('SliderBarActiveBg');
+            }
         }
     }
     > div:last-child {

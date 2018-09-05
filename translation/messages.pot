@@ -194,9 +194,6 @@ msgstr ""
 msgid "Position"
 msgstr ""
 
-msgid "PRICE"
-msgstr ""
-
 msgid "Price Lines"
 msgstr ""
 
@@ -270,6 +267,9 @@ msgid "Speed Resistance Line"
 msgstr ""
 
 msgid "Spline"
+msgstr ""
+
+msgid "SPOT"
 msgstr ""
 
 msgid "Streaming for [symbol] is not available due to license restrictions"
