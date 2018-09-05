@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
-"PO-Revision-Date: 2018-08-21 02:51\n"
+"PO-Revision-Date: 2018-09-05 01:41\n"
 
 msgid " already exists."
 msgstr " 已经存在。"
@@ -201,9 +201,6 @@ msgstr "点数图"
 msgid "Position"
 msgstr "头寸"
 
-msgid "PRICE"
-msgstr "价格"
-
 msgid "Price Lines"
 msgstr "价格线"
 
@@ -279,11 +276,11 @@ msgstr "速阻线"
 msgid "Spline"
 msgstr "Spline法"
 
+msgid "SPOT"
+msgstr ""
+
 msgid "Streaming for [symbol] is not available due to license restrictions"
 msgstr "由于许可限制, [symbol] 串流不可用"
-
-msgid "tap to manage"
-msgstr "点击管理"
 
 msgid "Template name"
 msgstr "模板名称"

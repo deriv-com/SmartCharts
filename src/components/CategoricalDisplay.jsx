@@ -25,8 +25,6 @@ const CategoricalDisplay = ({
     onFavoritedItem,
     favoritesId,
     favoritesMap,
-    dialogTitle,
-    closeMenu,
     isScrollingDown,
     updateScrollSpy,
     scrollUp,
@@ -36,12 +34,6 @@ const CategoricalDisplay = ({
      * On mobile mode, this part appear on the top of dialog
      * @return HTML
      */
-    const renderMobileTitle = () => (isMobile ? (
-        <div className="cq-mobile-title">
-            <div className="mobile-title">{dialogTitle}</div>
-            <CloseIcon className="icon-close-menu" onClick={() => closeMenu()} />
-        </div>
-    ) : '');
     const renderIcon = (item) => {
         if (!item.itemId || !ItemIconMap[item.itemId]) { return ''; }
         const ItemIcon = ItemIconMap[item.itemId];
@@ -109,7 +101,6 @@ const CategoricalDisplay = ({
 
     return (
         <div className="cq-categorical-display">
-            {renderMobileTitle()}
             <div className={`cq-lookup-filters ${isScrollingDown ? 'scroll-down' : ''}`}>
                 <div className={`cq-lookup-input ${filterText.trim() !== '' ? 'active' : ''}`}>
                     <input
