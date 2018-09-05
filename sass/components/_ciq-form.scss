@@ -29,68 +29,30 @@
                 outline: none;
             }
             &::-webkit-slider-runnable-track {
-                width: 120px;
-                height: 10px;
-                cursor: pointer;
-                border-radius: 0px;
-                border: 0px solid #010101;
-                background: transparent;
+                @include rangetrack();
             }
             &::-moz-range-track {
-                width: 120px;
+                @include rangetrack();
                 height: 14px;
-                cursor: pointer;
-                border-radius: 0px;
-                border: 0px solid #010101;
-                background: transparent;
                 margin-top: -3px;
                 top: -3px;
             }
             &::-ms-track {
-                width: 120px;
-                height: 10px;
-                cursor: pointer;
-                background: transparent;
-                border-color: transparent;
+                @include rangetrack();
                 color: transparent;
             }
             &::-ms-thumb {
-                cursor: pointer;
-                width: 10px;
-                height: 10px;
-                box-sizing: border-box;
-                border-radius: 7px;
+                @include rangethumb();
                 margin-top: 0px;
-                @include themify($themes) {
-                    background-color: themed('SliderHandleBg');
-                    border: 2px solid themed('SliderHandleBorder');
-                }
             }
             &::-moz-range-thumb {
-                cursor: pointer;
-                width: 10px;
-                height: 10px;
-                box-sizing: border-box;
-                border-radius: 7px;
+                @include rangethumb();
                 margin-top: 0px;
-                @include themify($themes) {
-                    background-color: themed('SliderHandleBg');
-                    border: 2px solid themed('SliderHandleBorder');
-                }
             }
             &::-webkit-slider-thumb {
                 -webkit-appearance: none;
+                @include rangethumb();
                 margin-top: 1px;
-
-                cursor: pointer;
-                width: 10px;
-                height: 10px;
-                box-sizing: border-box;
-                border-radius: 7px;
-                @include themify($themes) {
-                    background-color: themed('SliderHandleBg');
-                    border: 2px solid themed('SliderHandleBorder');
-                }
             }
         }
         .cq-slider-bar {
