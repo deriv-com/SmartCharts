@@ -17,7 +17,7 @@ export const Slider = ({
         <div className="cq-slider">
             <div className="cq-slider-range">
                 <div className="cq-slider-bar" />
-                <div className="cq-slider-active-bar" style={{ width: `${activeWidth}px` }} />
+                <div className="cq-slider-active-bar" style={{ width: activeWidth }} />
                 <input
                     type="range"
                     min={min}
