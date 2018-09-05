@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Thai\n"
 "Language: th_TH\n"
-"PO-Revision-Date: 2018-08-21 22:10\n"
+"PO-Revision-Date: 2018-09-05 01:41\n"
 
 msgid " already exists."
 msgstr " มีอยู่แล้ว"
@@ -201,9 +201,6 @@ msgstr "จุดและตัวเลข"
 msgid "Position"
 msgstr "ตำแหน่ง"
 
-msgid "PRICE"
-msgstr "ราคา"
-
 msgid "Price Lines"
 msgstr "เส้นราคา"
 
@@ -279,11 +276,11 @@ msgstr "Speed Resistance Line"
 msgid "Spline"
 msgstr "เส้นโค้ง"
 
+msgid "SPOT"
+msgstr ""
+
 msgid "Streaming for [symbol] is not available due to license restrictions"
 msgstr "การสตรีมสำหรับ [symbol] ไม่พร้อมใช้งาน เนื่องจากข้อจำกัดสิทธิ์การใช้งาน"
-
-msgid "tap to manage"
-msgstr "กดเพื่อจัดการ"
 
 msgid "Template name"
 msgstr "ชื่อแม่แบบ"
