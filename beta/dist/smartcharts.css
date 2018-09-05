@@ -126,7 +126,7 @@ html,body{-ms-touch-action:none;margin:0px}
 .stx_crosshair_drawing{position:absolute;z-index:10}
 .smartcharts-light .stx_crosshair_drawing{background-color:#4a4f6c}
 .smartcharts-dark .stx_crosshair_drawing{background-color:#fff}
-#crossY,.stx_crosshair_y{left:0px;height:1px;width:98%;margin-top:0}
+#crossY,.stx_crosshair_y{left:0px;height:1px;width:98%;margin-top:0;z-index:0}
 #crossX,.stx_crosshair_x{top:0px;width:1px;height:100%}
 .stx-crosshair-on{cursor:crosshair}
 .stx_panels{font-family:'Helvetica';font-size:10px;color:#fff}
