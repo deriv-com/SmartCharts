@@ -19,12 +19,11 @@ for building additional themes.
 
  */
 /* TODO: deal with translations on all :after and :before content */
-@import url('https://fonts.googleapis.com/css?family=Roboto:400,700,500,100,300,400italic|Roboto+Condensed:400,700,300');
 @import 'styles/chart';
 @import 'styles/main';
 @import 'components/barrier';
 @import 'components/loader';
 @import 'styles/ciq-perfect-scrollbar';
 @import 'ciq-extras'; /* Plugins and other pieces */
+@import 'fonts';
 // Add an import for your overrides here and then recompile the SASS
-
