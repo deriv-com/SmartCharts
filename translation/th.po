@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Thai\n"
 "Language: th_TH\n"
-"PO-Revision-Date: 2018-09-05 02:21\n"
+"PO-Revision-Date: 2018-09-05 14:02\n"
 
 msgid " already exists."
 msgstr " มีอยู่แล้ว"
@@ -277,7 +277,7 @@ msgid "Spline"
 msgstr "เส้นโค้ง"
 
 msgid "SPOT"
-msgstr "จุด"
+msgstr "SPOT"
 
 msgid "Streaming for [symbol] is not available due to license restrictions"
 msgstr "การสตรีมสำหรับ [symbol] ไม่พร้อมใช้งาน เนื่องจากข้อจำกัดสิทธิ์การใช้งาน"
