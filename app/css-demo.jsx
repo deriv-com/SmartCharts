@@ -13,7 +13,7 @@ import { // eslint-disable-line import/no-extraneous-dependencies
     DrawTools,
     ChartSetting,
     Share,
-} from '@binary-com/smartcharts';
+} from '@binary-com/smartcharts'; // eslint-disable-line import/no-unresolved
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './app.scss';
@@ -23,7 +23,7 @@ import { ConnectionManager, StreamManager } from './connection';
 const getLanguageStorage = function () {
     const default_language = 'en';
     try {
-        let setting_string = CIQ.localStorage.getItem('smartchart-setting'),
+        const setting_string = CIQ.localStorage.getItem('smartchart-setting'),
             setting = JSON.parse(setting_string !== '' ? setting_string : '{}');
 
         return setting.language || default_language;
@@ -86,7 +86,7 @@ class App extends React.Component {
                 </div>
                 <div className={`bottom-blob ${yoyo ? 'yoyo' : ''}`}>
                     <svg className="icon-1">
-                        <use href="./dist/smartcharts-spritemap.svg#ic-indices-normal" />
+                        <use href="./dist/smartcharts-spritemap.svg#aud" />
                     </svg>
                 </div>
             </div>
