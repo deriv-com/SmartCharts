@@ -1,8 +1,6 @@
 
 .cq-chart-setting {
     .cq-menu-dropdown {
-        width: 280px;
-
         .cq-menu-container {
             height: 0px;
 
@@ -12,22 +10,10 @@
         }
     }
     .title {
-        height: 40px;
-        line-height: 40px;
-        font-size: 16px;
-        display: flex;
-
-        > .ic-icon {
+        > .icon-back-menu {
             line-height: 45px;
             margin: 0 5px 0 10px !important;
             cursor: pointer;
-        }
-        .title-text {
-            display: block;
-            font-size: 16px;
-            line-height: 40px;
-            font-weight: 400;
-            padding: 0 0.7em;
         }
     }
     .body {
@@ -118,7 +104,7 @@
     }
     .cq-setting-container {
         height: 265px;
-        width: 280px;
+        width: 260px;
         position: relative;
         transition: height 250ms ease-out;
 
@@ -127,7 +113,7 @@
         }
         .cq-setting-main,
         .cq-setting-language {
-            width: 280px;
+            width: 260px;
             position: absolute;
             top: 0px;
             transition: transform 250ms ease-out, opacity 0.17s ease-out;

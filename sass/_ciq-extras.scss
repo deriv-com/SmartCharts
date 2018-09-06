@@ -77,11 +77,11 @@ $footer-height: 45px;
 
 /* ------------------------------------------------------- CHART OVERLAY ELEMENTS ------------------------------------------------------ */
 
-.rightclick_study #mouseManageText {
+.rightclick_study .mouseManageText {
     display: inline;
 }
 
-.rightclick_study #mouseDeleteText {
+.rightclick_study .mouseDeleteText {
     display: none;
 }
 
