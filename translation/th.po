@@ -10,16 +10,16 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Thai\n"
 "Language: th_TH\n"
-"PO-Revision-Date: 2018-09-06 03:41\n"
+"PO-Revision-Date: 2018-09-06 06:00\n"
 
 msgid " already exists."
 msgstr " มีอยู่แล้ว"
 
 msgid "[symbol] feed is delayed by [delay] minutes"
-msgstr ""
+msgstr "[symbol] แสดงข้อมูลล่าช้า [delay] นาที"
 
 msgid "[symbol] market is now opened."
-msgstr ""
+msgstr "[symbol] ขณะนี้ ตลาดเปิดทำการแล้ว"
 
 msgid "[symbol] market is presently closed."
 msgstr "[symbol] ตลาดปิดขณะนี้"
