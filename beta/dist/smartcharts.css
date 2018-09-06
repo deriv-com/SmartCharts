@@ -277,6 +277,7 @@ html,body{-ms-touch-action:none;margin:0px}
 .smartcharts .ciq-menu-section{float:right}
 .smartcharts .smartcharts-mobile{-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}
 .smartcharts .cq-chart-control-left .cq-top-ui-widgets{left:90px}
+.smartcharts .cq-chart-control-left .cq-notifications{right:100px}
 .ciq-menu{position:relative}
 .smartcharts-light .ciq-menu{color:#333}
 .smartcharts-dark .ciq-menu{color:#aaacba}
