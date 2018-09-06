@@ -10,10 +10,16 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Chinese Traditional\n"
 "Language: zh_TW\n"
-"PO-Revision-Date: 2018-09-06 03:11\n"
+"PO-Revision-Date: 2018-09-06 03:40\n"
 
 msgid " already exists."
 msgstr " 已經存在。"
+
+msgid "[symbol] feed is delayed by [delay] minutes"
+msgstr ""
+
+msgid "[symbol] market is now opened."
+msgstr ""
 
 msgid "[symbol] market is presently closed."
 msgstr "[symbol] 市場目前已關閉。"
