@@ -34,7 +34,19 @@ class TradingTimes {
                     nextUpdateDate.setDate(nextUpdateDate.getDate() + 1);
                     // if somehow the next update date is in the past, use the current date
                     this.lastUpdateDate = ((now > nextUpdateDate) ? now : nextUpdateDate).toISOString().substring(0, 10);
+
+                    // Retain the current market open close status, because the trade times
+                    // will now be the following day:
+                    const isOpenMap = {};
+                    for (const key in this._tradingTimesMap) {
+                        isOpenMap[key] = this._tradingTimesMap[key].isOpened;
+                    }
+
                     await this._updateTradeTimes();
+
+                    for (const key in this._tradingTimesMap) {
+                        this._tradingTimesMap[key].isOpened = isOpenMap[key];
+                    }
 
                     nextUpdate = new Date(`${this.lastUpdateDate}Z`);
                 }
