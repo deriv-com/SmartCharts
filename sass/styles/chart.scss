@@ -298,27 +298,6 @@ html, body {
     }
 }
 
-.overlayEdit { /* These are the small divs that come up when you hover over a drawing or study overlay */
-    /*text-transform: capitalize;*/
-    display: none;
-    opacity: 0;
-    font-size: 11px;
-    white-space: nowrap;
-    z-index: 40;
-    border-radius: 3px;
-    @include themify($themes) {
-        color: themed('TooltipText');
-        background: themed('TooltipBg');
-        box-shadow: themed('TooltipShadow');
-    }
-
-    &:before {
-        @include themify($themes) {
-            border-color: themed('TooltipBg') transparent;
-        }
-    }
-}
-
 .vectorTrashCan, .overlayEdit {
     position: absolute;
     z-index: 40;
