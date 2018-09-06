@@ -2,43 +2,35 @@
 
 /* Drag Lines and Prices */
 
-$red: #f44336;
-$green: #4caf50;
-
-.horizontal {
-    &.chart-line {
-        height: 23px;
-    }
-}
-
 .chart-line {
     position: absolute;
     z-index: 35;
+
     &.horizontal {
         width: 100%;
-        left: 0px;
+        left: 0;
         font-size: 10px;
+
+        &:hover {
+            z-index: 105;
+        }
+        &.draggable > .draggable-area {
+            &:hover {
+                background: rgba(0, 0, 0, 0.05);
+            }
+            height: 20px;
+            top: -8px;
+            position: absolute;
+            width: 100%;
+        }
         .drag-line {
-            height: 0px;
+            height: 2px;
             float: left;
             width: 100%;
             margin-left: -10px;
-            margin-top: 11px;
-            border-top: 2px dashed;
-        }
-    }
-
-    &.vertical {
-        height: 100%;
-        top: 0px;
-
-        .drag-line {
-            border-image: linear-gradient(to top, black 80%, transparent) 1 100%;
-            height: 100%;
-            width: 10px;
-            border-left: 2px dashed;
-            left: 200px;
-            margin-left: 10px;
+            position: relative;
+            border-color: inherit;
+            border-top-width: 2px;
         }
     }
 }
@@ -46,12 +38,9 @@ $green: #4caf50;
 /*hover*/
 
 .draggable.chart-line:hover {
-    background: rgba(0, 0, 0, 0.05);
-
     &.horizontal {
         cursor: ns-resize;
     }
-
     &.vertical {
         cursor: ew-resize;
     }
@@ -59,55 +48,25 @@ $green: #4caf50;
 
 /*hover*/
 
-.draggable.horizontal.chart-line:hover .drag-line {
-    border-top-style: solid;
+.hide-pricelines > .chart-line.horizontal {
+    display: none;
 }
 
 .drag-price {
     display: block;
     height: 25px;
-    top: -1px;
+    top: -11px;
     position: absolute;
     right: 0px;
-    @include border-radius(5px);
-    @include themify($themes) {
-        background-color: themed('defaultMain');
-        border: 1px solid themed('defaultTextStrong');
-    }
+    border-radius: 5px;
+    border-style: solid;
+    border-width: 1px;
+    border-color: inherit;
+
     .price {
-        padding-left: 12px;
-        padding-top: 1px;
-        padding-right: 12px;
+        padding: 1px 12px;
         font-size: 14px;
         width: min-content;
-    }
-}
-
-.red {
-    .drag-price {
-        border-color: $red;
-    }
-
-    .price {
-        color: $red;
-    }
-
-    .drag-line {
-        color: $red;
-    }
-}
-
-.green {
-    .drag-price {
-        border-color: $green;
-    }
-
-    .price {
-        color: $green;
-    }
-
-    .drag-line {
-        color: $green;
     }
 }
 
@@ -131,6 +90,7 @@ $green: #4caf50;
         .price-arrow {
             width: 20px;
             height: 23px;
+
             span {
                 opacity: 1;
             }
@@ -138,107 +98,56 @@ $green: #4caf50;
     }
 }
 
-
-
 /*hover*/
 
-
 .price {
+    font-weight: 300;
     display: block;
     float: left;
     width: 45px;
     line-height: 23px;
     overflow: hidden;
-    @include themify($themes) {
-        color: themed('defaultTextStrong');
+
+}
+
+.draggable .price {
+    padding: 1px 18px;
+
+    &:after {
+        content: '≡';
+        font-size: 25px;
+        position: absolute;
+        right: 1px;
+        top: -1px;
+        transform: scaleX(0.8);
     }
 }
 
-
 /*--------------------------------------------------*/
 
-
 /* shade */
+
+.shade.hidden {
+    opacity: 0;
+}
 
 .shade {
     position: absolute;
     width: 100%;
     right: 0px;
     opacity: 0.3;
+    transition: opacity 0.1s ease-out;
+}
+
+.top-shade {
+    background-image: linear-gradient(to bottom, transparent 30%, var(--shade-color));
 }
 
 .between-shade {
     opacity: 0.2;
+    background-color: var(--shade-color);
 }
 
-@mixin createShadeStyle($style-name, $shade-color) {
-    .#{$style-name} {
-        .top-shade     { background-image: linear-gradient(to bottom, transparent 30%, $shade-color); }
-        .between-shade { background-color: $shade-color; }
-        .bottom-shade  { background-image: linear-gradient(to bottom, $shade-color, transparent 70%) }
-    }
-}
-
-@include createShadeStyle('red', $red);
-@include createShadeStyle('green', $green);
-
-$trade-end-color: #e98024;
-$trade-start-color: #a2a2a2;
-$trade-text-distance: 1.6em;
-
-/* Trade Start and End */
-.chart-line.vertical {
-    .trade-text {
-        top: 1em;
-        position: absolute;
-        font-size: 0.9em;
-    }
-
-    &.trade-start-line {
-        .drag-line {
-            border-image: linear-gradient(to top, $trade-start-color 80%, transparent) 1 100%;
-        }
-
-        .trade-text {
-            text-align: right;
-            right: $trade-text-distance;
-            color: $trade-start-color;
-        }
-    }
-
-    &.trade-end-line {
-        .drag-line {
-            border-image: linear-gradient(to top, $trade-end-color 80%, transparent) 1 100%;
-        }
-
-        .trade-text {
-            text-align: left;
-            left: $trade-text-distance;
-            color: $trade-end-color;
-        }
-
-        .trade-end-flag {
-            bottom: 1.9em;
-            position: absolute;
-
-            .ic-flag {
-                $icon-diameter: 1.9em;
-                background: url('icons/chart/ic-flag.svg') no-repeat;
-                height: $icon-diameter;
-                width: $icon-diameter;
-                position: inherit;
-                left: -0.07em;
-                top: 0.07em;
-            }
-
-            .circle {
-                $circle-diameter: 1.9em;
-                @include border-radius(100%);
-                width: $circle-diameter;
-                height: $circle-diameter;
-                background-color: $trade-end-color;
-                position: inherit;
-            }
-        }
-    }
+.bottom-shade {
+    background-image: linear-gradient(to bottom, var(--shade-color), transparent 70%);
 }

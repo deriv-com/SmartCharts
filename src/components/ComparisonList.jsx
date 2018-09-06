@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from '../store/Connect';
-import { CloseIcon } from './Icons.jsx';
+import { DeleteIcon } from './Icons.jsx';
 import '../../sass/components/_comparison-list.scss';
 
 const ComparisonList = ({
@@ -13,14 +13,14 @@ const ComparisonList = ({
             const AnimatedPrice = animatedPrices[i];
             if (!AnimatedPrice) { return null; }
             return (
-                <div key={`compare-${i}`} className="cq-comparison-item">
+                <div key={item.symbolObject.symbol} className="cq-comparison-item">
                     <span className="left">
                         <span className="cq-comparison-swatch" style={{ backgroundColor: item.color }} />
                         <span className="cq-comparison-label">{item.symbolObject.name}</span>
                     </span>
                     <span className="right">
                         <AnimatedPrice />
-                        <CloseIcon className="ciq-close" onClick={() => onDeleteItem(item.symbolObject)} />
+                        <DeleteIcon className="ciq-close" onClick={() => onDeleteItem(item.symbolObject)} />
                     </span>
                 </div>);
         })}

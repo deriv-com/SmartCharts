@@ -1,110 +1,64 @@
 import React from 'react';
-import Menu from './Menu.jsx';
 import { connect } from '../store/Connect';
 import {
-    ShareIcon,
-    CopyIcon,
-    CloseIcon,
+    DownloadIcon,
+    PngIcon,
+    CsvIcon,
 } from './Icons.jsx';
-import '../../sass/components/_ciq-share.scss';
+import '../../sass/components/_ciq-download.scss';
 
 
 const Share = ({
-    Menu,
+    ShareMenu,
     menuOpen,
-    loading,
-    urlGenerated,
-    shortUrlFailed,
-    refereshShareLink,
-    shareLink,
     downloadCSV,
     downloadPNG,
-    copyToClipboard,
-    resetCopyTooltip,
-    copyTooltip,
-    onInputRef,
-    closeMenu,
+    isLoadingPNG,
 }) => (
-    <Menu className="cq-share">
-        <Menu.Title>
-            <ShareIcon
+    <ShareMenu
+        className="cq-download"
+        title={t.translate('Download Chart')}
+    >
+        <ShareMenu.Title>
+            <DownloadIcon
                 className={`ic-icon-with-sub ${menuOpen ? 'active' : ''}`}
-                tooltip-title={t.translate('Share')}
+                tooltip-title={t.translate('Download')}
             />
-        </Menu.Title>
-        <Menu.Body>
-            <div className="title">
-                <div className="title-text">{t.translate('Share / Download Chart')}</div>
-                <CloseIcon
-                    className="icon-close-menu"
-                    onClick={() => closeMenu()}
-                />
-            </div>
+        </ShareMenu.Title>
+        <ShareMenu.Body>
             <div className="body">
-                <div className="caption1">{t.translate('Share link')}</div>
-                <div
-                    className="loading"
-                    style={{ display: (loading ? 'block' : 'none') }}
-                />
-                <div
-                    className="content"
-                    style={{ display: ((!loading && !urlGenerated) ? 'flex' : 'none') }}
-                >
-                    {shortUrlFailed ? <p>{t.translate('Failed to generate link')}</p> :
-                        <div
-                            className="download-btn"
-                            onClick={refereshShareLink}
-                        >
-                            {t.translate('Retry')}
-                        </div>}
-                </div>
-                <div
-                    className="content"
-                    style={{ display: ((!loading && urlGenerated) ? 'flex' : 'none') }}
-                >
-                    <input
-                        ref={onInputRef}
-                        value={shareLink}
-                    />
-                    <CopyIcon // eslint-disable-line jsx-a11y/mouse-events-have-key-events
-                        className="ciq-tooltip"
-                        onClick={copyToClipboard}
-                        onMouseOut={resetCopyTooltip}
-                        tooltip-title={copyTooltip}
-                    />
-                </div>
-
-                <div className="caption2">{t.translate('Download chart')}</div>
                 <div className="content">
-                    <div
-                        className="download-btn"
-                        onClick={downloadPNG}
-                    > PNG
-                    </div>
-                    <div
-                        className="download-btn"
-                        onClick={downloadCSV}
-                    > CSV
+                    <div className="ciq-list ciq-list-download">
+                        <div
+                            className="ciq-list-item"
+                            onClick={downloadPNG}
+                        >
+                            <span className="ciq-icon-text">
+                                {t.translate('Download as PNG')}
+                                {isLoadingPNG && <span className="cq-loading" />}
+                            </span>
+                            <PngIcon />
+                        </div>
+                        <div
+                            className="ciq-list-item"
+                            onClick={downloadCSV}
+                        >
+                            <span className="ciq-icon-text">
+                                {t.translate('Download as CSV')}
+                            </span>
+                            <CsvIcon />
+                        </div>
                     </div>
                 </div>
             </div>
-        </Menu.Body>
-    </Menu>
+        </ShareMenu.Body>
+    </ShareMenu>
 );
 
-export default connect(({ share: s }) => ({
-    Menu: s.menu.connect(Menu),
-    menuOpen: s.menu.dialog.open,
-    loading: s.loading,
-    urlGenerated: s.urlGenerated,
-    shortUrlFailed: s.shortUrlFailed,
-    refereshShareLink: s.refereshShareLink,
-    shareLink: s.shareLink,
-    downloadPNG: s.downloadPNG,
-    downloadCSV: s.downloadCSV,
-    copyToClipboard: s.copyToClipboard,
-    onInputRef: s.onInputRef,
-    resetCopyTooltip: s.resetCopyTooltip,
-    copyTooltip: s.copyTooltip,
-    closeMenu: s.menu.onTitleClick,
+export default connect(({ share: d }) => ({
+    ShareMenu: d.ShareMenu,
+    menuOpen: d.menu.dialog.open,
+    downloadPNG: d.downloadPNG,
+    downloadCSV: d.downloadCSV,
+    isLoadingPNG: d.isLoadingPNG,
 }))(Share);

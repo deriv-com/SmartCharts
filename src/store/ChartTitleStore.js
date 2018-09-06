@@ -2,21 +2,27 @@ import { observable, action, computed, when } from 'mobx';
 import MenuStore from './MenuStore';
 import AnimatedPriceStore from './AnimatedPriceStore';
 import CategoricalDisplayStore from './CategoricalDisplayStore';
+import Menu from '../components/Menu.jsx';
+import CategoricalDisplay from '../components/CategoricalDisplay.jsx';
+import AnimatedPrice from '../components/AnimatedPrice.jsx';
 
 export default class ChartTitleStore {
     constructor(mainStore) {
         this.mainStore = mainStore;
         when(() => this.context, this.onContextReady);
-        this.menu = new MenuStore(mainStore);
+        this.menu = new MenuStore(mainStore, { route: 'chart-title' });
         this.animatedPrice = new AnimatedPriceStore();
         this.categoricalDisplay = new CategoricalDisplayStore({
             getCategoricalItems: () => this.mainStore.chart.categorizedSymbols,
             getIsShown: () => this.menu.open,
-            onSelectItem: this.onSelectItem.bind(this),
             placeholderText: t.translate('Search...'),
             favoritesId: 'chartTitle&Comparison',
             mainStore,
         });
+
+        this.ChartTitleMenu = this.menu.connect(Menu);
+        this.MarketSelector = this.categoricalDisplay.connect(CategoricalDisplay);
+        this.SpotPrice = this.animatedPrice.connect(AnimatedPrice);
     }
 
     @observable todayChange = null;
@@ -28,18 +34,19 @@ export default class ChartTitleStore {
     @computed get decimalPlaces() { return this.mainStore.chart.currentActiveSymbol.decimal_places; }
     @computed get isShowChartPrice() { return this.mainStore.chart.isChartAvailable; }
 
-    @action.bound onSelectItem(symbolObject) {
-        const currentSymbol = this.mainStore.chart.stxx.chart.symbol;
-        if (symbolObject.symbol !== currentSymbol) {
-            this.chart.changeSymbol(symbolObject);
-        }
-        this.menu.setOpen(false);
-    }
-
     onContextReady = () => {
         this.chart.feed.onMasterDataUpdate(this.update);
         this.update();
     };
+
+    @action.bound setSymbol(symbolObj) {
+        if (this.mainStore.state.symbol !== undefined) {
+            console.error('Changing symbol does nothing because symbol prop is being set. Consider overriding the onChange prop in <ChartTitle />');
+            return;
+        }
+
+        this.chart.changeSymbol(symbolObj);
+    }
 
     @action.bound update(quote) {
         if (!this.currentSymbol) { return; }

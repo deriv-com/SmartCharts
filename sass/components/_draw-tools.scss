@@ -2,39 +2,35 @@
 .ciq-draw-tools {
     .cq-menu-dropdown {
         width: 200px;
-        bottom: 3.6em;
-        padding: 5px 16px 16px 16px !important;
-        @include box-sizing(border-box);
-    }
-    .cq-menu-dropdown{
-        padding: 0em !important;
+        box-sizing: border-box;
         overflow: visible !important;
-        .title {
-            height: 40px;
-            line-height: 40px;
-            padding-left: 16px;
-            font-size: 16px;
-            display: flex;
-            justify-content: space-between;
-            @include themify($themes) {
-                color: themed('defaultTextStrong');
-            }
-            .ciq-bars-buttons{
-                cursor: pointer;
-                display: flex;
-                padding: 6px 6px;
-                @include svg-icon-stroke('controlText');
-            }
-        }
+
         .body {
-            padding: 16px;
+            padding: 0px 5px 0px 16px;
+
+            .cq-draw-buttons {
+                display: flex;
+            }
+            .cq-draw-button {
+                flex: 1;
+                display: flex;
+                justify-content: center;
+                cursor: pointer;
+                margin: 8px 11px 8px 0;
+                border-radius: 3px;
+
+                @include svg-icon-stroke('DialogHeadIcon');
+                @include themify {
+                    border: solid themed('DropdownBorder') 1px;
+                }
+            }
+            .scrollbar-container {
+                .ciq-list-item {
+                    &:first-child {
+                        margin-top: 0px;
+                    }
+                }
+            }
         }
     }
-}
-.smartcharts-mobile{
-    .ciq-draw-tools {
-        .ciq-list{
-            margin: 0px 15px;
-        }
-    }   
 }

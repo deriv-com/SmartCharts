@@ -1,8 +1,6 @@
 /* TAKEN OUT OF ADDONS.JS */
 /* eslint-disable no-unused-vars,eqeqeq,no-shadow,no-alert,no-restricted-globals,prefer-const,prefer-destructuring */
 
-import CIQ from 'chartiq';
-
 /**
  * Add-On that animates the chart.
  *
@@ -15,7 +13,7 @@ import CIQ from 'chartiq';
  *
  * The following chart types are supported: line, mountain, baseline_delta
  *
- * Example <iframe width="800" height="500" scrolling="no" seamless="seamless" align="top" style="float:top" src="http://jsfiddle.net/chartiq/q1qdp8yj/embedded/result,js,html/" allowfullscreen="allowfullscreen" frameborder="1"></iframe>
+ * Example <iframe width="800" height="500" scrolling="no" seamless="seamless" align="top" style="float:top" src="http://jsfiddle.net/chartiq/6fqw652z/embedded/result,js,html/" allowfullscreen="allowfullscreen" frameborder="1"></iframe>
  *
  * @param {CIQ.ChartEngine} stx The chart object
  * @param {object} animationParameters Configuration parameters
@@ -41,14 +39,9 @@ CIQ.Animation = function (stx, animationParameters, easeMachine) {
     };
     animationParameters = CIQ.extend(params, animationParameters);
 
-    if (params.tension) { stx.chart.tension = animationParameters.tension; }
-    stx.tickAnimator = easeMachine || new CIQ.EaseMachine(Math.easeOutCubic, 1000);
-    let scrollAnimator = new CIQ.EaseMachine(Math.easeInOutCubic, 1000);
-
-    let flashingColors = ['#0298d3', '#19bcfc', '#5dcffc', '#9ee3ff'];
-    let flashingColorIndex = 0;
-    let flashingColorThrottle = 20;
-    let flashingColorThrottleCounter = 0;
+    if (params.tension) stx.chart.tension = animationParameters.tension;
+    stx.tickAnimator = easeMachine || new CIQ.EaseMachine(Math.easeOutCubic, 500);
+    let scrollAnimator = new CIQ.EaseMachine(Math.easeInOutCubic, 500);
 
     let filterSession = false;
     let nextBoundary = null;
@@ -67,8 +60,9 @@ CIQ.Animation = function (stx, animationParameters, easeMachine) {
         if (!chart) {
             chart = self.chart;
         }
-        if (!chart || !chart.defaultChartStyleConfig || chart.defaultChartStyleConfig == 'none') { return; }
-        if (params && params.animationEntry) { return; }
+        if (!chart || !chart.defaultChartStyleConfig || chart.defaultChartStyleConfig == 'none') return;
+
+        if (params !== undefined && params.animationEntry) return;
 
         function completeLastBar(value) {
             for (let md = chart.masterData.length - 1; md >= 0; md--) {
@@ -83,7 +77,7 @@ CIQ.Animation = function (stx, animationParameters, easeMachine) {
         function unanimateScroll() {
             if (chart.animatingHorizontalScroll) {
                 chart.animatingHorizontalScroll = false;
-                self.micropixels = self.nextMicroPixels = self.previousMicroPixels; // <-- Reset self.nextMicroPixels here
+                self.micropixels = self.nextMicroPixels = self.previousMicroPixels;  // <-- Reset self.nextMicroPixels here
                 chart.lastTickOffset = 0;
             }
             if (chart.closePendingAnimation !== null) {
@@ -172,25 +166,24 @@ CIQ.Animation = function (stx, animationParameters, easeMachine) {
 
         if (supportedChartType) {
             let quote = appendQuotes[appendQuotes.length - 1];
-            this.prevQuote = this.currentQuote(); // <---- prevQuote logic has been changed to prevent forward/back jitter when more than one tick comes in between animations
+            this.prevQuote = this.currentQuote();  // <---- prevQuote logic has been changed to prevent forward/back jitter when more than one tick comes in between animations
             let chartJustAdvanced = false; // When advancing, we need special logic to deal with the open
-            if (period == 1 && appendQuotes.length == 2) { // Don't do this if consolidating
+            if (period == 1 && appendQuotes.length == 2) {  // Don't do this if consolidating
                 this.prevQuote = appendQuotes[0];
                 completeLastBar(this.prevQuote.Close);
                 appendQuotes.splice(1, 1);
             }
-            if (!quote || !this.prevQuote) { return false; }
+            if (!quote || !quote.Close || !this.prevQuote || !this.prevQuote.Close) return false;
 
-            let dataZone = this.dataZone;
             if (this.extendedHours && chart.market.market_def) {
                 // Filter out unwanted sessions
                 let dtToFilter = quote.DT;
                 if (CIQ.ChartEngine.isDailyInterval(interval)) {
                     filterSession = !chart.market.isMarketDate(dtToFilter);
                 } else if (!nextBoundary || nextBoundary <= dtToFilter) {
-                    let session = chart.market.getSession(dtToFilter, dataZone);
+                    let session = chart.market.getSession(dtToFilter);
                     filterSession = (session !== '' && (!this.layout.marketSessions || !this.layout.marketSessions[session]));
-                    nextBoundary = chart.market[filterSession ? 'getNextOpen' : 'getNextClose'](dtToFilter, dataZone, dataZone);
+                    nextBoundary = chart.market[filterSession ? 'getNextOpen' : 'getNextClose'](dtToFilter);
                 }
                 if (filterSession) {
                     this.draw();
@@ -256,35 +249,4 @@ CIQ.Animation = function (stx, animationParameters, easeMachine) {
             return true; // bypass default behavior in favor of animation
         }
     });
-
-    stx.append('draw', function () {
-        if (filterSession) { return; }
-        if (this.chart.dataSet && this.chart.dataSet.length && this.mainSeriesRenderer && this.mainSeriesRenderer.supportsAnimation) {
-            if (flashingColorThrottleCounter % flashingColorThrottle === 0) {
-                flashingColorIndex++;
-                flashingColorThrottleCounter = 0;
-            }
-            flashingColorThrottleCounter++;
-
-            let context = this.chart.context;
-            let panel = this.chart.panel;
-            let currentQuote = this.currentQuote();
-            if (!currentQuote) { return; }
-            let price = currentQuote.Close;
-            let x = this.pixelFromTick(currentQuote.tick, this.chart);
-            if (this.chart.lastTickOffset) { x += this.chart.lastTickOffset; }
-            let y = this.pixelFromPrice(price, panel);
-            if (this.chart.yAxis.left > x &&
-                this.chart.yAxis.top <= y &&
-                this.chart.yAxis.bottom >= y) {
-                if (flashingColorIndex >= flashingColors.length) { flashingColorIndex = 0; }
-                context.beginPath();
-                context.moveTo(x, y);
-                context.arc(x, y, 2 + flashingColorIndex * 1.07, 0, Math.PI * 2, false);
-                context.fillStyle = flashingColors[flashingColorIndex];
-                context.fill();
-            }
-        }
-    });
 };
-

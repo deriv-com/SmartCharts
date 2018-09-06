@@ -1,166 +1,255 @@
 import EventEmitter from 'event-emitter-es6';
-import NotificationStore from '../store/NotificationStore';
+import { reaction, when } from 'mobx';
 import { TickHistoryFormatter } from './TickHistoryFormatter';
-import PendingPromise from '../utils/PendingPromise';
+import { calculateGranularity, getUTCEpoch } from '../utils';
+import { RealtimeSubscription, DelayedSubscription } from './subscription';
 
 class Feed {
     static get EVENT_MASTER_DATA_UPDATE() { return 'EVENT_MASTER_DATA_UPDATE'; }
     static get EVENT_COMPARISON_DATA_UPDATE() { return 'EVENT_COMPARISON_DATA_UPDATE'; }
+    static get EVENT_ON_PAGINATION() { return 'EVENT_ON_PAGINATION'; }
+    get startEpoch() { return this._mainStore.state.startEpoch; }
+    get endEpoch() { return this._mainStore.state.endEpoch; }
+    get context() { return this._mainStore.chart.context; }
+    _activeStreams = {};
+    _isConnectionOpened = true;
 
-    constructor(binaryApi, cxx, mainStore) {
-        this._cxx = cxx;
+    constructor(binaryApi, stx, mainStore, tradingTimes) {
+        this._stx = stx;
         this._binaryApi = binaryApi;
-        this._callbacks = {};
         this._mainStore = mainStore;
+        this._tradingTimes = tradingTimes;
+        reaction(() => mainStore.state.isConnectionOpened, this.onConnectionChanged.bind(this));
+        when(() => this.context, this.onContextReady);
+
         this._emitter = new EventEmitter({ emitDelay: 0 });
     }
+
+    onContextReady = () => {
+        reaction(() => [this.startEpoch, this.endEpoch], this.onRangeChanged);
+    };
+
+    onRangeChanged = () => {
+        console.log('RANGE CHANGE', this.startEpoch, this.endEpoch);
+    };
 
     // although not used, subscribe is overridden so that unsubscribe will be called by ChartIQ
     subscribe() {}
 
     // Do not call explicitly! Method below is called by ChartIQ when unsubscribing symbols.
-    unsubscribe(params) {
-        const key = this._getStreamKey(params);
-        if (this._callbacks[key]) {
-            const { symbolObject, period, interval } = params;
-            this._binaryApi.forget({
-                symbol: symbolObject.symbol,
-                granularity: Feed.calculateGranularity(period, interval),
-            }, this._callbacks[key]);
-            delete this._callbacks[key];
-        }
+    unsubscribe({ symbol, period, interval }) {
+        const granularity = calculateGranularity(period, interval);
+        const key = this._getKey({ symbol, granularity });
+        this._forgetStream(key);
     }
 
-    _getStreamKey({ symbol, period, interval }) {
-        return JSON.stringify({ symbol, period, interval });
+    _forgetStream(key) {
+        if (this._activeStreams[key]) {
+            this._activeStreams[key].forget();
+            delete this._activeStreams[key];
+        }
     }
 
     async fetchInitialData(symbol, suggestedStartDate, suggestedEndDate, params, callback) {
         const { period, interval, symbolObject } = params;
-        const key = this._getStreamKey(params);
-        const isComparisonChart = this._cxx.chart.symbol !== symbol;
+        const granularity = calculateGranularity(period, interval);
+        const key = this._getKey({ symbol, granularity });
+
+        const isComparisonChart = this._stx.chart.symbol !== symbol;
+        let start = this.startEpoch || (suggestedStartDate / 1000 | 0);
+        const end = this.endEpoch;
+        const date = new Date();
+        const now = (date.getTime() / 1000) | 0;
+        if (isComparisonChart) {
+            // Strange issue where comparison series is offset by timezone...
+            start -= suggestedStartDate.getTimezoneOffset() * 60;
+        }
         const comparisonChartSymbol = isComparisonChart ? symbol : undefined;
+        const symbolName = symbolObject.name;
 
-        const dataRequest = {
-            symbol,
-            granularity: Feed.calculateGranularity(period, interval),
-        };
-
-        const tickHistoryPromise = new PendingPromise();
-        let hasHistory = false;
-        const processTick = (resp) => {
-            // We assume that 1st response is the history, and subsequent
-            // responses are tick stream data.
-            if (hasHistory) {
-                const quotes = [TickHistoryFormatter.formatTick(resp)];
-
-                if (comparisonChartSymbol) {
-                    CIQ.addMemberToMasterdata({
-                        stx: this._cxx,
-                        label: comparisonChartSymbol,
-                        data: quotes,
-                        createObject: true,
-                    });
-                    this._emitter.emit(Feed.EVENT_COMPARISON_DATA_UPDATE);
-                } else {
-                    this._cxx.updateChartData(quotes);
-                    this._emitter.emit(Feed.EVENT_MASTER_DATA_UPDATE, quotes[0]);
-                }
-                return;
+        if (this._tradingTimes.isFeedUnavailable(symbol)) {
+            this._mainStore.notifier.notifyFeedUnavailable(symbolName);
+            let dataCallback = { quotes: [] };
+            if (isComparisonChart) {
+                // Passing error will prevent the chart from being shown; for
+                // main chart we still want the chart to be shown, just disabled
+                dataCallback = { error: 'StreamingNotAllowed', suppressAlert: true, ...dataCallback };
+            } else {
+                this._mainStore.chart.setChartAvailability(false);
             }
-            tickHistoryPromise.resolve(resp);
-            hasHistory = true;
+            callback(dataCallback);
+            return;
+        }
+
+        const tickHistoryRequest = {
+            start,
+            symbol,
+            granularity,
         };
-        this._binaryApi.subscribeTickHistory(dataRequest, processTick);
-        let response = await tickHistoryPromise;
 
-        // Clear all notifications related to active symbols
-        this._mainStore.notification.removeByCategory('activesymbol');
+        let getHistoryOnly = false;
+        let quotes;
+        if (end && now > end) { // end is in the past; no streaming required
+            tickHistoryRequest.end = end;
+            getHistoryOnly = true;
+        } else if (this._tradingTimes.isMarketOpened(symbol)) {
+            let subscription;
+            const delay = this._tradingTimes.getDelayedMinutes(symbol);
+            if (delay > 0) {
+                this._mainStore.notifier.notifyDelayedMarket(symbolName, delay);
 
-        if (response.error) {
-            const errorCode = response.error.code;
-            const tParams = { symbol: symbolObject.name };
-            if (/^(MarketIsClosed|NoRealtimeQuotes)$/.test(errorCode)) {
-                // Although market is closed, we display the past tick history data
-                response = await this._binaryApi.getTickHistory(dataRequest);
-                this._mainStore.notification.notify({
-                    text: t.translate('[symbol] market is presently closed.', tParams),
-                    category: 'activesymbol',
-                });
-            } else if (errorCode === 'StreamingNotAllowed') {
-                if (!isComparisonChart) {
-                    this._mainStore.chart.isChartAvailable = false;
-                }
-                this._mainStore.notification.notify({
-                    text: t.translate('Streaming for [symbol] is not available due to license restrictions', tParams),
-                    type: NotificationStore.TYPE_ERROR,
+                subscription = new DelayedSubscription(tickHistoryRequest, this._binaryApi, this._stx, delay);
+            } else {
+                subscription = new RealtimeSubscription(tickHistoryRequest, this._binaryApi, this._stx);
+            }
+
+            try {
+                quotes = await subscription.initialFetch();
+            } catch (error) {
+                const { message: text } = error;
+                this._mainStore.notifier.notify({
+                    text,
                     category: 'activesymbol',
                 });
                 callback({ quotes: [] });
                 return;
             }
+
+            subscription.onChartData((tickResponse) => {
+                this._appendChartData(tickResponse, key, comparisonChartSymbol);
+            });
+
+            // if symbol is changed before request is completed, past request needs to be forgotten:
+            if (!isComparisonChart && this._stx.chart.symbol !== symbol) {
+                callback({ quotes: [] });
+                subscription.forget();
+                return;
+            }
+
+            this._activeStreams[key] = subscription;
         } else {
-            this._callbacks[key] = processTick;
+            this._mainStore.notifier.notifyMarketClose(symbolName);
+
+            // Although market is closed, we display the past tick history data
+            getHistoryOnly = true;
         }
 
-        const quotes = TickHistoryFormatter.formatHistory(response);
+        if (getHistoryOnly) {
+            const response = await this._binaryApi.getTickHistory(tickHistoryRequest);
+            quotes = TickHistoryFormatter.formatHistory(response);
+        }
+
+        if (!quotes) {
+            console.error('No quotes found!!');
+            callback({ quotes: [] });
+            return;
+        }
 
         callback({ quotes });
         if (!isComparisonChart) {
+            const prev = quotes[quotes.length - 2];
+            const prevClose = (prev !== undefined) ? prev.Close : undefined;
             this._emitter.emit(Feed.EVENT_MASTER_DATA_UPDATE, {
                 ...quotes[quotes.length - 1],
-                prevClose: quotes[quotes.length - 2].Close,
+                prevClose,
             });
-            this._mainStore.chart.isChartAvailable = true;
+            this._mainStore.chart.setChartAvailability(true);
         } else {
             this._emitter.emit(Feed.EVENT_COMPARISON_DATA_UPDATE);
         }
     }
 
     async fetchPaginationData(symbol, suggestedStartDate, endDate, params, callback) {
-        const start = suggestedStartDate.getTime() / 1000;
-        const end = endDate.getTime() / 1000;
-        const now = (new Date().getTime() / 1000) | 0;
-        const startLimit = now - (2.8 * 365 * 24 * 60 * 60);
+        const end   = getUTCEpoch(endDate);
+        const start = getUTCEpoch(suggestedStartDate);
         const { period, interval } = params;
+        const granularity = calculateGranularity(period, interval);
 
-        const result = { quotes: [] };
+        await this._getPaginationData(symbol, granularity, start, end, callback);
+    }
+
+    async _getPaginationData(symbol, granularity, start, end, callback) {
+        if (this.startEpoch && start < this.startEpoch) {
+            callback({ moreAvailable: false, quotes: [] });
+            return;
+        }
+
+        const now   = getUTCEpoch(new Date());
+        // Tick history data only goes as far back as 3 years:
+        const startLimit = now - (2.8 * 365 * 24 * 60 * 60 /* == 3 Years */);
+        let result = { quotes: [] };
         if (end > startLimit) {
             try {
                 const response = await this._binaryApi.getTickHistory({
                     symbol,
-                    granularity: Feed.calculateGranularity(period, interval),
+                    granularity,
                     start: Math.max(start, startLimit),
                     end,
                 });
+                const firstEpoch = Feed.getFirstEpoch(response);
+                if (firstEpoch === undefined || firstEpoch === end) {
+                    const newStart = start - (end - start);
+                    if (newStart <= startLimit) {
+                        // Passed available range. Prevent anymore pagination requests:
+                        callback({ moreAvailable: false, quotes: [] });
+                        return;
+                    }
+                    // Recursively extend the date range for more data until we exceed available range
+                    await this._getPaginationData(symbol, granularity, newStart, end, callback);
+                    return;
+                }
                 result.quotes = TickHistoryFormatter.formatHistory(response);
             } catch (err) {
                 console.error(err);
-                result.quotes = { error: err };
+                result = { error: err };
             }
         }
 
         callback(result);
-    }
-
-    unsubscribeAll() {
-        for (const key in this._callbacks) {
-            const { symbol, period, interval } = JSON.parse(key);
-            this._binaryApi.forget({
-                symbol,
-                granularity: Feed.calculateGranularity(period, interval),
-            }, this._callbacks[key]);
+        const isMainChart = this._stx.chart.symbol === symbol;
+        if (isMainChart) { // ignore comparisons
+            this._emitter.emit(Feed.EVENT_ON_PAGINATION, { start, end });
         }
     }
 
-    static calculateGranularity(period, interval) {
-        const toSeconds = {
-            second: 0,
-            minute: 60,
-            day: 24 * 60 * 60,
-        };
+    unsubscribeAll() {
+        for (const key of Object.keys(this._activeStreams)) {
+            this._forgetStream(key);
+        }
+    }
 
-        return toSeconds[interval] * period;
+    _forgetIfEndEpoch(key) {
+        const subscription = this._activeStreams[key];
+        if (!subscription) { return; }
+        const lastEpoch = subscription.lastStreamEpoch;
+        if (this.endEpoch && lastEpoch > this.endEpoch) {
+            this._forgetStream(key);
+        }
+    }
+
+    _appendChartData(quotes, key, comparisonChartSymbol) {
+        this._forgetIfEndEpoch(key);
+        if (comparisonChartSymbol) {
+            this._stx.updateChartData(quotes, null, {
+                secondarySeries: comparisonChartSymbol,
+                noCreateDataSet: true,
+            });
+            this._emitter.emit(Feed.EVENT_COMPARISON_DATA_UPDATE);
+        } else {
+            this._stx.updateChartData(quotes);
+            this._emitter.emit(Feed.EVENT_MASTER_DATA_UPDATE, quotes[0]);
+        }
+    }
+
+    static getFirstEpoch({ candles, history }) {
+        if (candles && candles.length > 0) {
+            return candles[0].epoch;
+        }
+
+        if (history && history.times.length > 0) {
+            const { times } = history;
+            return +times[0];
+        }
     }
 
     onMasterDataUpdate(callback) {
@@ -169,6 +258,62 @@ class Feed {
 
     onComparisonDataUpdate(callback) {
         this._emitter.on(Feed.EVENT_COMPARISON_DATA_UPDATE, callback);
+    }
+
+    onPagination(callback) {
+        this._emitter.on(Feed.EVENT_ON_PAGINATION, callback);
+    }
+
+    onConnectionChanged() {
+        const isOpened = this._mainStore.state.isConnectionOpened;
+        if (isOpened === undefined || isOpened === this._isConnectionOpened) { return; }
+
+        this._isConnectionOpened = isOpened;
+        if (isOpened) {
+            this._onConnectionReopened();
+        } else {
+            this._onConnectionClosed();
+        }
+    }
+
+    _onConnectionClosed() {
+        for (const key in this._activeStreams) {
+            this._activeStreams[key].pause();
+        }
+        this._connectionClosedDate = new Date();
+    }
+
+    _onConnectionReopened() {
+        const keys = Object.keys(this._activeStreams);
+        if (keys.length === 0) { return; }
+        const { granularity } = this._unpackKey(keys[0]);
+        const elapsedSeconds = (new Date() - this._connectionClosedDate) / 1000 | 0;
+        const maxIdleSeconds = (granularity || 1) * this._stx.chart.maxTicks;
+        if (elapsedSeconds >= maxIdleSeconds) {
+            this._mainStore.chart.refreshChart();
+        } else {
+            for (const key of keys) {
+                this._resumeStream(key);
+            }
+        }
+        this._connectionClosedDate = undefined;
+    }
+
+    _resumeStream(key) {
+        const { symbol } = this._unpackKey(key);
+        const comparisonChartSymbol = (this._stx.chart.symbol !== symbol) ? symbol : undefined;
+        this._activeStreams[key].resume().then((quotes) => {
+            this._appendChartData(quotes, key, comparisonChartSymbol);
+        });
+    }
+
+    _getKey({ symbol, granularity }) {
+        return `${symbol}-${granularity}`;
+    }
+
+    _unpackKey(key) {
+        const [symbol, granularity] = key.split('-');
+        return { symbol, granularity: +granularity };
     }
 }
 

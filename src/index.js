@@ -1,7 +1,6 @@
 /* eslint-disable no-new, react/jsx-indent, react/no-danger, react/jsx-indent-props */
 import 'babel-polyfill';
 
-import { TradeEndLine, TradeStartLine } from './components/VerticalLine.jsx';
 import Barrier from './components/Barrier.jsx';
 import PendingPromise from './utils/PendingPromise';
 import ChartTypes from './components/ChartTypes.jsx';
@@ -18,6 +17,9 @@ import SmartChart from './components/SmartChart.jsx';
 import ComparisonList from './components/ComparisonList.jsx';
 import ChartTitle from './components/ChartTitle.jsx';
 import AssetInformation from './components/AssetInformation.jsx';
+import Marker from './components/Marker.jsx';
+import CurrentSpot from './components/CurrentSpot.jsx';
+import { createObjectFromLocalStorage } from './utils';
 
 import './SplinePlotter';
 
@@ -30,15 +32,16 @@ export {
     ChartTypes,
     Comparison,
     ComparisonList,
+    createObjectFromLocalStorage,
     CrosshairToggle,
     DrawTools,
+    Marker,
     PendingPromise,
     Share,
     SmartChart,
     StudyLegend,
     Timeperiod,
-    TradeEndLine,
-    TradeStartLine,
+    CurrentSpot,
     Views,
 };
 
@@ -51,14 +54,15 @@ export default {
     ChartTypes,
     Comparison,
     ComparisonList,
+    createObjectFromLocalStorage,
     CrosshairToggle,
     DrawTools,
+    Marker,
     PendingPromise,
     Share,
     SmartChart,
     StudyLegend,
     Timeperiod,
-    TradeEndLine,
-    TradeStartLine,
+    CurrentSpot,
     Views,
 };

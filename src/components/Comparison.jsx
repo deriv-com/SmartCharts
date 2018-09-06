@@ -1,39 +1,41 @@
 import React from 'react';
-import Menu from './Menu.jsx';
 import { connect } from '../store/Connect';
-import CategoricalDisplay from './CategoricalDisplay.jsx';
+import NotificationBadge from './NotificationBadge.jsx';
 import { ComparisonIcon } from './Icons.jsx';
 
 const Comparison = ({
-    CategoricalDisplay,
-    Menu,
+    ComparisonSelector,
+    ComparisonMenu,
     menuOpen,
     onCloseMenu,
     isMobile,
+    activeComparisonsNo,
 }) => (
-    <Menu
+    <ComparisonMenu
         className="cq-comparison-new cq-symbols-display"
         isMobile={isMobile}
+        title={isMobile ? t.translate('Comparison') : ''}
     >
-        <Menu.Title>
+        <ComparisonMenu.Title>
             <ComparisonIcon
                 className={`ic-icon-with-sub ${menuOpen ? 'active' : ''}`}
                 tooltip-title={t.translate('Comparison')}
             />
-        </Menu.Title>
-        <Menu.Body>
-            <CategoricalDisplay
-                dialogTitle={t.translate('Comparison')}
+            <NotificationBadge notificationCount={activeComparisonsNo} />
+        </ComparisonMenu.Title>
+        <ComparisonMenu.Body>
+            <ComparisonSelector
                 closeMenu={() => onCloseMenu()}
             />
-        </Menu.Body>
-    </Menu>
+        </ComparisonMenu.Body>
+    </ComparisonMenu>
 );
 
 export default connect(({ comparison: c }) => ({
-    CategoricalDisplay: c.categoricalDisplay.connect(CategoricalDisplay),
-    Menu: c.menu.connect(Menu),
+    ComparisonSelector: c.ComparisonSelector,
+    ComparisonMenu: c.ComparisonMenu,
     menuOpen: c.menu.open,
     onCloseMenu: c.menu.onTitleClick,
     isMobile: c.categoricalDisplay.isMobile,
+    activeComparisonsNo: c.mainStore.chart.comparisonSymbols.length,
 }))(Comparison);

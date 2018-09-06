@@ -1,4 +1,3 @@
-
 .ciq-asset-information {
     position: relative;
     z-index: +1;
@@ -10,7 +9,8 @@
     justify-content: flex-start;
     opacity: 1;
     height: 14px;
-    @include transition(all 0.1s);
+    transition: all 0.1s;
+
     &.hide {
         height: 0;
         opacity: 0;
@@ -23,20 +23,27 @@
         justify-content: flex-start;
         align-items: center;
         font-size: 12px;
+
         div:first-child {
             padding: 0 8px;
         }
         div:last-child {
             font-weight: bold;
         }
+        @include themify($themes) {
+            color: themed('AssetInfoText');
+        }
     }
 }
+
 .smartcharts-mobile {
     .ciq-asset-information {
         left: 2px;
         flex-wrap: wrap;
-        > div{
+
+        > div {
             font-size: 12px;
+
             div:first-child {
                 padding: 0px 5px;
             }

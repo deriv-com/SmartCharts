@@ -2,6 +2,8 @@ import React from 'react';
 import { action, computed } from 'mobx';
 import MenuStore from './MenuStore';
 import CategoricalDisplayStore from './CategoricalDisplayStore';
+import CategoricalDisplay from '../components/CategoricalDisplay.jsx';
+import Menu from '../components/Menu.jsx';
 
 const swatchColors = [
     '#8ec648', '#00afed', '#ee652e', '#912a8e',
@@ -13,20 +15,22 @@ const swatchColors = [
 export default class ComparisonStore {
     constructor(mainStore) {
         this.mainStore = mainStore;
-        this.menu = new MenuStore(mainStore);
+        this.menu = new MenuStore(mainStore, { route:'comparison' });
+        this.ComparisonMenu = this.menu.connect(Menu);
         this.categoricalDisplay = new CategoricalDisplayStore({
             getActiveCategory: () => this.activeComparisons,
             getCategoricalItems: () => this.mainStore.chart.categorizedSymbols,
             getIsShown: () => this.menu.open,
             activeOptions: [
                 { id: 'cmp-color', renderChild: item => <span style={{ backgroundColor: item.dataObject.color }} /> },
-                { id: 'delete', onClick: this.onDeleteItem.bind(this) },
+                { id: 'delete', onClick: this.onDeleteItem },
             ],
             onSelectItem: this.onSelectItem.bind(this),
             placeholderText: t.translate('Search...'),
             favoritesId: 'chartTitle&Comparison',
             mainStore,
         });
+        this.ComparisonSelector = this.categoricalDisplay.connect(CategoricalDisplay);
     }
 
     get context() { return this.mainStore.chart.context; }
@@ -52,16 +56,11 @@ export default class ComparisonStore {
     }
 
     @action.bound onDeleteItem({ symbolObject }) {
-        this.context.stx.removeSeries(symbolObject.symbol);
+        this.mainStore.chart.removeComparison(symbolObject);
     }
 
     @action.bound onSelectItem(symbolObject) {
         const context = this.context;
-        function cb(err, series) {
-            if (err) {
-                series.parameters.error = true;
-            }
-        }
         const pattern = null;
         const width = 1;
         const color = this.getSwatchColor() || 'auto';
@@ -87,16 +86,22 @@ export default class ComparisonStore {
         }
 
         // don't allow symbol if same as main chart or just white space
-        if (context.stx.chart.symbol.toLowerCase() !== symbolObject.symbol.toLowerCase() &&
-            symbolObject.symbol.trim().length > 0) {
-            stx.addSeries(symbolObject.symbol, params, cb);
+        if (context.stx.chart.symbol.toLowerCase() !== symbolObject.symbol.toLowerCase()
+            && symbolObject.symbol.trim().length > 0) {
+            stx.addSeries(symbolObject.symbol, params, (err, series) => {
+                if (err) {
+                    this.mainStore.chart.removeComparison(series.parameters.symbolObject);
+                    series.parameters.error = true;
+                }
+            });
+            this.mainStore.comparisonList.updatePrices();
         }
 
         this.menu.setOpen(false);
     }
 
     getSwatchColor() {
-        const stx = this.context.stx;
+        const { stx } = this.context;
         let selectedColor = '';
 
         const usedColors = {};

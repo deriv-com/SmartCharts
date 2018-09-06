@@ -1,190 +1,182 @@
-/* eslint-disable-camelcase */
-import EventEmitter from 'event-emitter-es6';
-import ConnectionManager from './ConnectionManager';
-import Subscription from './Subscription';
 import Stream from './Stream';
 
 class StreamManager {
-    static get MSG_TICK() { return 'tick'; }
-    static get MSG_OHLC() { return 'ohlc'; }
+    MAX_CACHE_TICKS = 5000;
+    _connection;
+    _streams = {};
+    _streamIds = {};
+    _tickHistoryCache = {};
+    _tickHistoryPromises = {};
+    _beingForgotten = {};
+
     constructor(connection) {
         this._connection = connection;
-        this._emitters = { };
-        this._streamIds = { };
-        this._subscriptionData = { };
-        this._inProgress = { };
-        this._initialize();
-        this._callbacks = new Map();
-    }
-    _initialize() {
-        for (const msgType of [StreamManager.MSG_TICK, StreamManager.MSG_OHLC]) {
-            this._connection.on(msgType, (data) => {
-                const { ticks_history: symbol, granularity } = data.echo_req;
-                const key = `${symbol}-${granularity}`;
-                if (this._emitters[key]) {
-                    this._streamIds[key] = data[msgType].id;
-                    this._emitters[key].emit(Stream.EVENT_STREAM, data);
-                } else {
-                    console.error(`LEAKING STREAM ON ${msgType} => symbol: ${symbol}, granularity: ${granularity}`); // eslint-disable-line
-                }
-            });
-        }
-        this._connection.on(ConnectionManager.EVENT_CONNECTION_CLOSE, () => {
-            this._streamIds = { };
-            for (const key of Object.keys(this._emitters)) {
-                this._emitters[key].emit(Stream.EVENT_DISCONNECT);
-            }
-        });
-        this._connection.on(ConnectionManager.EVENT_CONNECTION_REOPEN, () => {
-            for (const key of Object.keys(this._subscriptionData)) {
-                const data = this._subscriptionData[key];
-                const { ticks_history: symbol, granularity } = data.echo_req;
-                const subscription = new Subscription({ symbol, granularity }, { connection: this._connection });
-                subscription.subscribe();
-                this._inProgress[key] = this._trackSubscription(subscription);
-            }
-        });
-    }
-    _trackSubscription(subscription) {
-        return subscription.response.then((data) => {
-            const { ticks_history: symbol, granularity } = data.echo_req;
-            const key = `${symbol}-${granularity}`;
 
-            const shouldSendStreamReconnect = this._subscriptionData[key] && this._emitters[key];
-            if (shouldSendStreamReconnect) {
-                const diff = Subscription.diffResponseData(this._subscriptionData[key], data);
-                this._emitters[key].emit(Stream.EVENT_RECONNECT, diff);
-            }
-            this._subscriptionData[key] = Subscription.cloneResponseData(data);
-            delete this._inProgress[key];
-            return this._subscriptionData[key];
-        });
+        for (const msgType of ['tick', 'ohlc']) {
+            this._connection.on(msgType, this._onTick.bind(this));
+        }
+        this._connection.onClosed(this._onConnectionClosed.bind(this));
     }
-    _trackStream(stream) {
-        stream.onStream(({ echo_req, ohlc, tick }) => {
-            const { ticks_history: symbol, granularity } = echo_req;
-            const key = `${symbol}-${granularity}`;
-            if (ohlc) {
-                const candles = this._subscriptionData[key].candles;
-                const {
-                    close, open_time: epoch, high, low, open,
-                } = ohlc;
-                const candle = {
-                    close, high, low, open, epoch,
-                };
-                if (+candles[candles.length - 1].epoch === +candle.epoch) {
-                    candles[candles.length - 1] = candle;
-                } else {
-                    candles.push(candle);
+
+    _onTick(data) {
+        const key = this._getKey(data.echo_req);
+
+        if (this._streams[key]) {
+            this._streamIds[key] = data[data.msg_type].id;
+            this._cacheTick(key, data);
+            this._streams[key].emitTick(data);
+        } else if (this._beingForgotten[key] === undefined) {
+            // There could be the possibility a stream could still enter even though
+            // it is no longer in used. This is because we can't know the stream ID
+            // from the initial response; we have to wait for the next tick to retrieve it.
+            // In such scenario we need to forget these "orphaned" streams:
+            this._streamIds[key] = data[data.msg_type].id;
+            this._forgetStream(key);
+        }
+    }
+
+    _onConnectionClosed() {
+        // StreamManager simply discards all streams upon disconnection;
+        // It is not its responsibility to reestablish the streams upon reconnection.
+        this._streamIds = {}; // set it to blank so that forget requests do not get called
+        for (const key of Object.keys(this._streams)) {
+            this._forgetStream(key);
+        }
+    }
+
+    _onReceiveTickHistory(data) {
+        const key = this._getKey(data.echo_req);
+        const cache = StreamManager.cloneTickHistoryResponse(data);
+        if (cache) {
+            this._tickHistoryCache[key] = cache;
+        }
+        delete this._tickHistoryPromises[key];
+    }
+
+    _cacheTick(key, { ohlc, tick }) {
+        if (ohlc) {
+            const candles = this._tickHistoryCache[key].candles;
+            const {
+                close, open_time: epoch, high, low, open,
+            } = ohlc;
+            const candle = {
+                close, high, low, open, epoch,
+            };
+            if (+candles[candles.length - 1].epoch === +candle.epoch) {
+                candles[candles.length - 1] = candle;
+            } else {
+                candles.push(candle);
+
+                if (candles.length > this.MAX_CACHE_TICKS) {
                     candles.shift();
                 }
-            } else if (tick) {
-                const { prices, times } = this._subscriptionData[key].history;
-                const { quote: price, epoch: time } = tick;
-                prices.push(price);
+            }
+        } else if (tick) {
+            const { prices, times } = this._tickHistoryCache[key].history;
+            const { quote: price, epoch: time } = tick;
+            prices.push(price);
+            times.push(time);
+
+            if (prices.length > this.MAX_CACHE_TICKS) {
                 prices.shift();
-                times.push(time);
                 times.shift();
             }
-        });
+        }
     }
+
     _forgetStream(key) {
-        this._clearEmitter(key);
+        const stream = this._streams[key];
+        if (stream) {
+            // Note that destroying a stream also removes all subscribed events
+            stream.destroy();
+            delete this._streams[key];
+        }
+
         if (this._streamIds[key]) {
             const id = this._streamIds[key];
-            delete this._streamIds[key];
-            this._connection.send({ forget: id });
+            this._beingForgotten[key] = true;
+            this._connection.send({ forget: id })
+                .then(() => {
+                    delete this._beingForgotten[key];
+                    delete this._streamIds[key];
+                });
         }
-        if (this._subscriptionData[key]) {
-            delete this._subscriptionData[key];
-        }
-    }
-    _clearEmitter(key) {
-        if (this._emitters[key]) {
-            this._emitters[key].off(Stream.EVENT_REMEMBER_STREAM);
-            this._emitters[key].off(Stream.EVENT_FORGET_STREAM);
-            delete this._emitters[key];
-        }
-    }
-    _setupEmitter(key, subscription) {
-        const emitter = new EventEmitter({ emitDelay: 0 });
-        this._emitters[key] = emitter;
 
-        subscription.response.then((response) => {
+        if (this._tickHistoryCache[key]) {
+            delete this._tickHistoryCache[key];
+        }
+    }
+
+    _createNewStream(request) {
+        const key = this._getKey(request);
+        const stream = new Stream();
+        this._streams[key] = stream;
+        const subscribePromise = this._connection.send(request);
+        this._tickHistoryPromises[key] = subscribePromise;
+
+        subscribePromise.then((response) => {
+            this._onReceiveTickHistory(response);
             if (response.error) {
-                this._clearEmitter(key);
-            }
-        });
-        subscription.response.catch(() => this._clearEmitter(key));
-
-        let subscribers = 0;
-        emitter.on(Stream.EVENT_REMEMBER_STREAM, () => {
-            ++subscribers;
-        });
-        emitter.on(Stream.EVENT_FORGET_STREAM, () => {
-            --subscribers;
-            if (subscribers === 0) {
                 this._forgetStream(key);
             }
+        }).catch(() => {
+            this._forgetStream(key);
         });
 
-        return emitter;
-    }
-    _handleNewStream({ symbol, granularity }) {
-        const key = `${symbol}-${granularity}`;
-        const subscription = new Subscription({ symbol, granularity }, { connection: this._connection });
-        subscription.subscribe();
-        this._inProgress[key] = this._trackSubscription(subscription, key);
-        const emitter = this._setupEmitter(key, subscription);
+        stream.onNoSubscriber(() => this._forgetStream(key));
 
-        const stream = new Stream(subscription, emitter);
-        this._trackStream(stream);
-        return stream;
-    }
-    _handleExistingStream({ symbol, granularity }) {
-        const key = `${symbol}-${granularity}`;
-        const response = new Promise((resolve, reject) => {
-            const data = this._subscriptionData[key];
-            if (data) {
-                resolve(Subscription.cloneResponseData(data));
-            } else {
-                const progress = this._inProgress[key];
-                if (progress) {
-                    progress.then(data => resolve(Subscription.cloneResponseData(data)))
-                        .catch(reject);
-                } else {
-                    reject(new Error('No existing stream'));
-                }
-            }
-        });
-        const subscription = new Subscription({ symbol, granularity }, { response, connection: this._connection });
-        const emitter = this._emitters[key];
-        const stream = new Stream(subscription, emitter);
         return stream;
     }
 
-    _getStream({ symbol, granularity = 0 }) {
-        const key = `${symbol}-${granularity}`;
-        if (this._emitters[key]) {
-            return this._handleExistingStream({ symbol, granularity });
+    async subscribe(request, callback) {
+        const key = this._getKey(request);
+        let stream = this._streams[key];
+        if (!stream) {
+            stream = this._createNewStream(request);
         }
-        return this._handleNewStream({ symbol, granularity });
+
+        let tickHistoryResponse = this._tickHistoryCache[key];
+        if (tickHistoryResponse) {
+            // TODO: expand/slice tick data if cached ticks does not fit in date range
+            // If cache data is available, send a copy otherwise we risk
+            // mutating the cache outside of StreamManager
+            tickHistoryResponse = StreamManager.cloneTickHistoryResponse(tickHistoryResponse);
+        } else {
+            tickHistoryResponse = await this._tickHistoryPromises[key];
+        }
+
+        callback(tickHistoryResponse);
+        stream.onStream(callback);
     }
 
-    async subscribe(input, callback) {
-        const { ticks_history: symbol, granularity } = input;
-        const stream = this._getStream({ symbol, granularity });
-        stream.onStream(tickResponse => callback(tickResponse));
-        const historyResponse = await stream.response;
-        this._callbacks.set(callback, stream);
-
-        callback(historyResponse);
+    forget(request, callback) {
+        const key = this._getKey(request);
+        const stream = this._streams[key];
+        if (stream) {
+            stream.offStream(callback);
+        }
     }
 
-    forget(symbolRequest, callback) {
-        const stream = this._callbacks.get(callback);
-        stream.forget();
-        this._callbacks.delete(callback);
+    _getKey({ ticks_history: symbol, granularity }) {
+        return `${symbol}-${granularity}`;
+    }
+
+    static cloneTickHistoryResponse({ history, candles, ...others }) {
+        let clone;
+
+        if (history) {
+            const { prices, times } = history;
+            clone = { ...others,
+                history: {
+                    prices: prices.slice(0),
+                    times: times.slice(0),
+                },
+            };
+        } else if (candles) {
+            clone = { ...others, candles: candles.slice(0) };
+        }
+
+        return clone;
     }
 }
 

@@ -2,7 +2,7 @@
 import CIQ from 'chartiq';
 import Helper from './Helper';
 import Keystroke from './Keystroke';
-import { claims } from './';
+import { claims } from '.';
 
 /**
  * UI Helper for capturing and handling keystrokes. A helper or ContextTag can
@@ -18,6 +18,7 @@ import { claims } from './';
  */
 class KeystrokeHub extends Helper {
     static instance = null;
+
     constructor(node, context, params) {
         super(node, context, params);
         this.node = node;
@@ -34,6 +35,7 @@ class KeystrokeHub extends Helper {
         }
         this.keystroke = new Keystroke(node, handler());
     }
+
     /**
      * Global default hotkey method. Pass this or your own metho in to CIQ.UI.KeystrokeHub
      * @memberof CIQ.UI.KeyboardShortcuts
@@ -153,6 +155,7 @@ class KeystrokeHub extends Helper {
      * @private
      */
     handler(obj) {
+        if (!this.context) { return; }
         const stx = this.context.stx;
         if (stx.editingAnnotation) { return; }
         const e = obj.e,

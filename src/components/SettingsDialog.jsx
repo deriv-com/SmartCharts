@@ -27,6 +27,7 @@ const SettingsDialog = ({
     onItemChange,
     isFavoritable,
     Dialog,
+    open,
 }) => {
     const renderMap = {
         switch: item => (
@@ -69,7 +70,7 @@ const SettingsDialog = ({
                 step={item.step || 1}
                 max={item.max || 100}
                 value={item.value}
-                onChange={val => onItemChange(item.id, val)}
+                onChange={val => onItemChange(item.id, val.currentTarget.value)}
             />
         ),
         numericinput: item => (
@@ -97,71 +98,84 @@ const SettingsDialog = ({
         ),
     };
     return (
-        <Dialog className="cq-dialog cq-settings-dialog">
-            <div className={`titlebar ${!showTabs ? 'no-tabs' : ''}`}>
-                <div className="title">{title}</div>
-                <div className="icons">
-                    { onDeleteClick && <DeleteIcon
-                        onClick={onDeleteClick}
-                        className="margin"
-                    />}
-                    { isFavoritable &&
-                    <StarIcon
-                        onClick={onStarClick}
-                        className={`margin ${stared ? 'ciq-active-favorite' : ''}`}
-                    />}
-                </div>
-            </div>
-
-            { showTabs &&
-                <div className="tabs">
-                    <div
-                        onClick={() => onTabClick('settings')}
-                        className={activeTab === 'settings' ? 'active' : ''}
-                    > Settings
+        <div className={`cq-dialog-overlay ${open ? 'cq-dialog-active' : ''}`}>
+            <Dialog className="cq-dialog cq-settings-dialog">
+                <div className={`titlebar ${!showTabs ? 'no-tabs' : ''}`}>
+                    <div className="title">{title}</div>
+                    <div className="icons">
+                        { onDeleteClick && (
+                            <DeleteIcon
+                                onClick={onDeleteClick}
+                                className="margin"
+                            />
+                        )}
+                        { isFavoritable
+                    && (
+                        <StarIcon
+                            onClick={onStarClick}
+                            className={`margin ciq-favorite ${stared ? 'ciq-active-favorite' : ''}`}
+                        />
+                    )}
                     </div>
-                    <div
-                        onClick={() => onTabClick('description')}
-                        className={activeTab === 'description' ? 'active' : ''}
-                    > Description
-                    </div>
-                    <div className={`active-border ${activeTab === 'settings' ? 'first' : 'second'}`} />
                 </div>
-            }
 
-            { activeTab === 'settings' ?
-                <React.Fragment>
-                    <div className="items" >
-                        {items
-                            .map(item => (renderMap[item.type] &&
-                                <div key={item.id} className="item">
-                                    <div className="title">
-                                        <span>{item.title}</span>
-                                        {renderMap[item.type](item)}
+                { showTabs
+                && (
+                    <div className="tabs">
+                        <div
+                            onClick={() => onTabClick('settings')}
+                            className={activeTab === 'settings' ? 'active' : ''}
+                        > Settings
+                        </div>
+                        <div
+                            onClick={() => onTabClick('description')}
+                            className={activeTab === 'description' ? 'active' : ''}
+                        > Description
+                        </div>
+                        <div className={`active-border ${activeTab === 'settings' ? 'first' : 'second'}`} />
+                    </div>
+                )
+                }
+
+                { activeTab === 'settings'
+                    ? (
+                        <React.Fragment>
+                            <div className="items">
+                                {items
+                                    .map(item => (renderMap[item.type]
+                                && (
+                                    <div key={item.id} className="item">
+                                        <div className="title">
+                                            <span>{item.title}</span>
+                                            {renderMap[item.type](item)}
+                                        </div>
                                     </div>
+                                )
+                                    ))
+                                }
+                            </div>
+                            <div className="buttons">
+                                <div
+                                    className="reset"
+                                    onClick={onResetClick}
+                                >{t.translate('RESET')}
                                 </div>
-                            ))
-                        }
-                    </div>
-                    <div className="buttons">
-                        <div
-                            className="reset"
-                            onClick={onResetClick}
-                        >{t.translate('RESET')}
+                                <div
+                                    className="done"
+                                    onClick={() => setOpen(false)}
+                                >{t.translate('DONE')}
+                                </div>
+                            </div>
+                        </React.Fragment>
+                    )
+                    :                    (
+                        <div className="description">
+                            {description}
                         </div>
-                        <div
-                            className="done"
-                            onClick={() => setOpen(false)}
-                        >{t.translate('DONE')}
-                        </div>
-                    </div>
-                </React.Fragment>
-                :
-                <div className="description">
-                    {description}
-                </div>
-            }
-        </Dialog>
+                    )
+                }
+            </Dialog>
+        </div>
     );
 };
 

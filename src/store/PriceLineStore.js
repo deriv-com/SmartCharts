@@ -2,6 +2,9 @@ import EventEmitter from 'event-emitter-es6';
 import { action, computed, observable, when } from 'mobx';
 import { connect } from './Connect';
 
+const LINE_OFFSET_HEIGHT = 4;
+const LINE_OFFSET_HEIGHT_HALF = LINE_OFFSET_HEIGHT >> 1;
+
 export default class PriceLineStore {
     _relative = false;
     @observable draggable = true;
@@ -17,12 +20,16 @@ export default class PriceLineStore {
 
     constructor(mainStore) {
         this.mainStore = mainStore;
-        this._emitter = new EventEmitter();
+        this._emitter = new EventEmitter({ emitDelay: 0 });
         when(() => this.context, this.onContextReady);
     }
 
+    destructor() {
+        this.stx.removeInjection(this._injectionId);
+    }
+
     onContextReady = () => {
-        this.stx.append('draw', this._draw.bind(this));
+        this._injectionId = this.stx.append('draw', this._draw.bind(this));
     };
 
     init = () => {
@@ -38,6 +45,13 @@ export default class PriceLineStore {
     };
 
     static get EVENT_PRICE_CHANGED() { return 'EVENT_PRICE_CHANGED'; }
+    static get EVENT_DRAG_RELEASED() { return 'EVENT_DRAG_RELEASED'; }
+
+    @computed get priceDisplay() {
+        let display = this._price.toFixed(this.pip);
+        if (this.relative && this._price > 0) { display = `+${display}`; }
+        return display;
+    }
 
     get price() {
         return this._price;
@@ -45,7 +59,7 @@ export default class PriceLineStore {
 
     set price(value) {
         if (value !== this._price) {
-            this._price = +value.toFixed(this.pip);
+            this._price = value;
             this._draw();
             this._emitter.emit(PriceLineStore.EVENT_PRICE_CHANGED, this._price);
         }
@@ -59,13 +73,10 @@ export default class PriceLineStore {
         if (this._relative === value) { return; }
 
         this._relative = value;
-        const currentPrice = this.stx.currentQuote().Close;
-
-        if (this._relative) {
-            this._price -= currentPrice; // absolute to relative
-        } else {
-            this._price += currentPrice; // relative to absolute
-        }
+        // convert between relative and absolute
+        let currentPrice = this.stx.currentQuote().Close;
+        if (this._relative) { currentPrice = -currentPrice; }
+        this.price = this._price + currentPrice;
     }
 
     get context() { return this.mainStore.chart.context; }
@@ -78,16 +89,13 @@ export default class PriceLineStore {
         this._priceConstrainer = value;
     }
 
-    @computed get priceDisplay() {
-        return this.price.toFixed(this.pip);
-    }
-
     get realPrice() {
-        return this.relative ? +(this.stx.currentQuote().Close + this.price).toFixed(this.pip) : this.price;
+        return this.relative ? this.stx.currentQuote().Close + this._price : this._price;
     }
 
     @action.bound setDragLine(el) {
         this._line = el;
+        if (this._line) { this._draw(); }
     }
 
     _modalBegin() {
@@ -101,44 +109,39 @@ export default class PriceLineStore {
         this.stx.editingAnnotation = false;
     }
 
-    _startDrag() {
+    @action.bound _startDrag() {
         this._modalBegin();
         this.isDragging = true;
         this._initialPosition = this.top;
+        this._startDragPrice = this._price;
     }
 
-    _dragLine(e) {
+    @action.bound _dragLine(e) {
         if (!this._line) { return; }
         const newTop = this._initialPosition + e.displacementY;
-        const newCenter = newTop + (this._line.offsetHeight / 2);
+        const newCenter = newTop + LINE_OFFSET_HEIGHT_HALF;
         let newPrice = this._priceFromLocation(newCenter);
 
         if (this._priceConstrainer) { newPrice = this._priceConstrainer(newPrice); }
         if (this.relative) { newPrice -= this.stx.currentQuote().Close; }
 
-        this.price = this._snapPrice(newPrice);
+        this.price = newPrice;
     }
 
-    _endDrag() {
+    @action.bound _endDrag() {
         this._modalEnd();
         this.isDragging = false;
+
+        if (this._startDragPrice.toFixed(this.pip) !== this._price.toFixed(this.pip)) {
+            this._emitter.emit(PriceLineStore.EVENT_DRAG_RELEASED, this._price);
+        }
     }
 
     _locationFromPrice(p) {
         return (
-            this.stx.pixelFromPrice(p, this.chart.panel) -
-            this.chart.panel.top
+            this.stx.pixelFromPrice(p, this.chart.panel)
+            - this.chart.panel.top
         );
-    }
-
-    _snapPrice(price) {
-        // snap the limit price to the desired interval if one defined
-        let minTick = this.chart.yAxis.minimumPriceTick;
-        if (!minTick) { minTick = 0.00000001; } // maximum # places
-        const numToRoundTo = 1 / minTick;
-        price = Math.round(price * numToRoundTo) / numToRoundTo;
-
-        return price;
     }
 
     _priceFromLocation(y) {
@@ -147,42 +150,47 @@ export default class PriceLineStore {
             this.chart.panel,
         );
 
-        return this._snapPrice(price);
+        return price;
     }
 
-    _positionAtPrice(price) {
-        let top = this._locationFromPrice(price);
-        top -= (this._line.offsetHeight / 2);
+    @action.bound _updateTop() {
+        if (this.stx.currentQuote() === null) { return; }
+
+        let top = this._locationFromPrice(this.realPrice);
 
         // keep line on chart even if price is off viewable area:
         if (top < 0) {
             this.uncentered = true;
-            if (top < -(this._line.offsetHeight / 2)) {
+            if (top < -LINE_OFFSET_HEIGHT_HALF) {
                 this.offScreen = true;
             }
             top = 0;
-        } else if (top + this._line.offsetHeight > this.chart.panel.height) {
+        } else if (top + LINE_OFFSET_HEIGHT > this.chart.panel.height) {
             this.uncentered = true;
-            if ((top + this._line.offsetHeight) - this.chart.panel.height > this._line.offsetHeight / 2) {
+            if ((top + LINE_OFFSET_HEIGHT) - this.chart.panel.height > LINE_OFFSET_HEIGHT_HALF) {
                 this.offScreen = true;
             }
-            top = this.chart.panel.height - this._line.offsetHeight;
+            top = this.chart.panel.height - LINE_OFFSET_HEIGHT;
         } else {
             this.uncentered = false;
             this.offScreen = false;
         }
 
-        this.top = top;
+        this.top = top | 0;
     }
 
     _draw() {
         if (this.visible && this._line) {
-            this._positionAtPrice(this.realPrice);
+            this._updateTop();
         }
     }
 
     onPriceChanged(callback) {
         this._emitter.on(PriceLineStore.EVENT_PRICE_CHANGED, callback);
+    }
+
+    onDragReleased(callback) {
+        this._emitter.on(PriceLineStore.EVENT_DRAG_RELEASED, callback);
     }
 
     connect = connect(() => ({

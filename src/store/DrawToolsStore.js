@@ -2,6 +2,9 @@ import { action, reaction, when } from 'mobx';
 import MenuStore from './MenuStore';
 import ListStore from './ListStore';
 import SettingsDialogStore from './SettingsDialogStore';
+import Menu from '../components/Menu.jsx';
+import List from '../components/List.jsx';
+import SettingsDialog from '../components/SettingsDialog.jsx';
 
 // camelCase to spaces separated capitalized string.
 const formatCamelCase = (s) => {
@@ -12,15 +15,15 @@ const formatCamelCase = (s) => {
 export default class DrawToolsStore {
     constructor(mainStore) {
         this.mainStore = mainStore;
-        this.menu = new MenuStore(mainStore);
+        this.menu = new MenuStore(mainStore, { route: 'draw-tool' });
+        this.DrawToolsMenu = this.menu.connect(Menu);
         this.settingsDialog = new SettingsDialogStore({
             mainStore,
             onDeleted: this.onDeleted,
             onChanged: this.onChanged,
         });
-
+        this.DrawToolsSettingsDialog = this.settingsDialog.connect(SettingsDialog);
         this.list = new ListStore({
-            getIsOpen: () => this.menu.open,
             getContext: () => this.context,
             onItemSelected: item => this.selectTool(item.id),
             getItems: () => [
@@ -60,18 +63,22 @@ export default class DrawToolsStore {
             ],
         });
 
+        this.DrawList = this.list.connect(List);
+
         when(() => this.context, this.onContextReady);
         reaction(() => this.menu.open, this.noTool);
     }
 
     get context() { return this.mainStore.chart.context; }
+
     get stx() { return this.context.stx; }
+
     activeDrawing = null;
 
     onContextReady = () => {
         document.addEventListener('keydown', this.closeOnEscape, false);
         this.stx.addEventListener('drawing', this.noTool);
-        this.stx.prepend('rightClickHighlighted', this.onRightClick);
+        this.stx.prepend('deleteHighlighted', this.onDeleteHighlighted);
     };
 
     closeOnEscape = (e) => {
@@ -81,41 +88,44 @@ export default class DrawToolsStore {
         }
     };
 
-    onRightClick = () => {
+    @action.bound onDeleteHighlighted() {
         for (const drawing of this.stx.drawingObjects) {
             if (drawing.highlighted && !drawing.permanent) {
-                const dontDeleteMe = drawing.abort(); // eslint-disable-line no-unused-vars
-                const parameters = CIQ.Drawing.getDrawingParameters(this.stx, drawing.name);
-
-                const typeMap = {
-                    color: 'colorpicker',
-                    fillColor: 'colorpicker',
-                    pattern: 'pattern',
-                    axisLabel: 'switch',
-                    font: 'font',
-                    lineWidth: 'none',
-                };
-                this.settingsDialog.items = Object.keys(parameters)
-                    .filter(key => !( // Remove pattern option from Fibonacci tools
-                        (drawing.name.startsWith('fib') || drawing.name === 'retracement')
-                        && key === 'pattern'))
-                    .map(key => ({
-                        id: key,
-                        title: formatCamelCase(key),
-                        value: drawing[key],
-                        defaultValue: parameters[key],
-                        type: typeMap[key],
-                    }));
-                this.activeDrawing = drawing;
-                this.activeDrawing.highlighted = false;
-                this.settingsDialog.title = formatCamelCase(drawing.name);
-                this.settingsDialog.setOpen(true);
-
-                return true;
+                this.showDrawToolDialog(drawing);
+                return true; // Override default behaviour; prevent ChartIQ from deleting the drawing
             }
         }
         return false;
-    };
+    }
+
+    showDrawToolDialog(drawing) {
+        const dontDeleteMe = drawing.abort(); // eslint-disable-line no-unused-vars
+        const parameters = CIQ.Drawing.getDrawingParameters(this.stx, drawing.name);
+
+        const typeMap = {
+            color: 'colorpicker',
+            fillColor: 'colorpicker',
+            pattern: 'pattern',
+            axisLabel: 'switch',
+            font: 'font',
+            lineWidth: 'none',
+        };
+        this.settingsDialog.items = Object.keys(parameters)
+            .filter(key => !( // Remove pattern option from Fibonacci tools
+                (drawing.name.startsWith('fib') || drawing.name === 'retracement')
+                && key === 'pattern'))
+            .map(key => ({
+                id: key,
+                title: formatCamelCase(key),
+                value: drawing[key],
+                defaultValue: parameters[key],
+                type: typeMap[key],
+            }));
+        this.activeDrawing = drawing;
+        this.activeDrawing.highlighted = false;
+        this.settingsDialog.title = formatCamelCase(drawing.name);
+        this.settingsDialog.setOpen(true);
+    }
 
     noTool = () => {
         const count = this.stx.drawingObjects.length;
@@ -143,7 +153,7 @@ export default class DrawToolsStore {
         }
         this.activeDrawing.highlighted = false;
         this.activeDrawing.adjust();
-        this.mainStore.chart.saveDrawings();
+        this.mainStore.state.saveDrawings();
     }
 
     @action.bound onDeleted() {

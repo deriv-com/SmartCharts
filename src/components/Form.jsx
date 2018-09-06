@@ -1,6 +1,5 @@
 /* eslint-disable react/sort-comp,react/no-multi-comp */
 import React from 'react';
-import ReactSlider from './Slider.jsx';
 import { ArrowIcon } from './Icons.jsx';
 import '../../sass/components/_ciq-form.scss';
 
@@ -10,24 +9,34 @@ export const Slider = ({
     step = 1,
     value,
     onChange,
-}) => (
-    <div className="cq-slider">
-        <ReactSlider
-            min={min}
-            max={max}
-            step={step}
-            onChange={onChange}
-            value={value}
-            withBars
-        />
-        <div className="value">{value}</div>
-    </div>
-);
+}) => {
+    const barWidth = 120;// css hardcode
+    const activeWidth = Math.round((barWidth * (value - min)) / (max - min));
+
+    return (
+        <div className="cq-slider">
+            <div className="cq-slider-range">
+                <div className="cq-slider-bar" />
+                <div className="cq-slider-active-bar" style={{ width: activeWidth }} />
+                <input
+                    type="range"
+                    min={min}
+                    max={max}
+                    step={step}
+                    onChange={onChange}
+                    onInput={onChange}
+                    value={value}
+                />
+            </div>
+            <div className="value">{value}</div>
+        </div>
+    );
+};
 
 export class DropDown extends React.Component {
     state = { open: false };
     titleRef = null;
-    onClick = () => this.setState({ open: !this.state.open });
+    onClick = () => this.setState(prevState => ({ open: !prevState.open }));
     close = (e) => {
         if (e.target !== this.titleRef) {
             this.setState({ open: false });
@@ -53,9 +62,9 @@ export class DropDown extends React.Component {
                     <ArrowIcon />
                 </div>
                 <div className={`dropdown ${open ? 'active' : ''}`}>
-                    {rows.map((row, rowIdx) => (
+                    {rows.map((row, idx) => (
                         <div
-                            key={rowIdx}
+                            key={idx} // eslint-disable-line react/no-array-index-key
                             className="row"
                             onClick={() => onRowClick && onRowClick(row)}
                         >
@@ -83,9 +92,9 @@ export class Pattern extends React.Component {
     ];
     render() {
         const { pattern, lineWidth, onChange } = this.props;
-        const title = pattern !== 'none' ?
-            <span className={`option ${pattern}-${lineWidth}`} /> :
-            <span className="none">None</span>;
+        const title = pattern !== 'none'
+            ? <span className={`option ${pattern}-${lineWidth}`} />
+            : <span className="none">None</span>;
 
         return (
             <DropDown
@@ -93,9 +102,9 @@ export class Pattern extends React.Component {
                 title={title}
                 onRowClick={onChange}
             >
-                {p => (p.pattern !== 'none' ?
-                    <span className={`option ${p.pattern}-${p.width}`} /> :
-                    <span className="none">None</span>)
+                {p => (p.pattern !== 'none'
+                    ? <span className={`option ${p.pattern}-${p.width}`} />
+                    : <span className="none">None</span>)
                 }
             </DropDown>
         );
@@ -119,7 +128,7 @@ export class ColorPicker extends React.Component {
     ];
     state = { open: false };
     titleRef = null;
-    onClick = () => this.setState({ open: !this.state.open });
+    onClick = () => this.setState(prevState => ({ open: !prevState.open }));
     close = (e) => {
         if (e.target !== this.titleRef) {
             this.setState({ open: false });
@@ -143,10 +152,10 @@ export class ColorPicker extends React.Component {
                 />
                 <div className={`dropdown ${this.state.open ? 'open' : ''}`}>
                     {this.colorMap.map((row, rowIdx) => (
-                        <div key={rowIdx} className="row">
-                            {row.map((tileColor, idx) => (
+                        <div key={rowIdx /* eslint-disable-line react/no-array-index-key */} className="row">
+                            {row.map(tileColor => (
                                 <div
-                                    key={idx}
+                                    key={tileColor}
                                     className="tile-color"
                                     style={{ backgroundColor: tileColor }}
                                     onClick={() => setColor(tileColor)}
@@ -240,8 +249,8 @@ export const NumberColorPicker = ({
     // Do NOT rename the variables Value and Color! The keys are also
     // used as attribute suffixes
     const { Value, Color } = value;
-    const onValueChange = Value => onChange({ Color, Value });
-    const onColorChange = Color => onChange({ Color, Value });
+    const onValueChange = v => onChange({ Color,    Value: v });
+    const onColorChange = c => onChange({ Color: c, Value    });
 
     return (
         <span className="cq-numbercolorpicker">

@@ -1,15 +1,17 @@
-import html2canvas from 'html2canvas';
-import { observable, action, reaction, computed, when } from 'mobx';
+import { observable, action, computed, when } from 'mobx';
 import MenuStore from './MenuStore';
-import { downloadFileInBrowser, findAncestor } from './utils';
+import { loadScript, downloadFileInBrowser } from '../utils';
+import PendingPromise from '../utils/PendingPromise';
+import Menu from '../components/Menu.jsx';
+
+const html2canvasCDN = 'https://charts.binary.com/dist/html2canvas.min.js';
 
 export default class ShareStore {
     constructor(mainStore) {
         this.mainStore = mainStore;
-        this.menu = new MenuStore(mainStore);
-
+        this.menu = new MenuStore(mainStore, { route:'download' });
         when(() => this.context, this.onContextReady);
-        reaction(() => this.menu.open, this.refereshShareLink);
+        this.ShareMenu = this.menu.connect(Menu);
     }
 
     get context() { return this.mainStore.chart.context; }
@@ -23,112 +25,48 @@ export default class ShareStore {
     @computed get decimalPlaces() {
         return this.mainStore.chart.currentActiveSymbol.decimal_places;
     }
+    @observable isLoadingPNG = false;
 
-    defaultCopyTooltipText = t.translate('Copy to clipboard');
-    @observable copyTooltip = this.defaultCopyTooltipText;
-    @action.bound resetCopyTooltip() { this.copyTooltip = this.defaultCopyTooltipText; }
-    onCopyDone = (successful) => {
-        this.copyTooltip = successful ? t.translate('Copied!') : t.translate('Failed!');
+    createNewTab() {
+        // Create a new tab for browsers that doesn't support HTML5 download attribute
+        return !!navigator.platform && /iPad|iPhone|iPod/.test(navigator.platform) ? window.open() : null;
     }
-    bitlyUrl = 'https://api-ssl.bitly.com/v3';
-    accessToken = '837c0c4f99fcfbaca55ef9073726ef1f6a5c9349';
-    @observable loading = false;
-    @observable urlGenerated = false;
-    @observable shortUrlFailed = false;
 
-
-    @observable shareLink = '';
-
-    fixedEncodeURIComponent(str) {
-        return encodeURIComponent(str).replace(/[!'()*]/g, c => `%${c.charCodeAt(0).toString(16)}`);
-    }
-    refereshShareLink = () => {
-        const self = this;
-        if (!this.context || !this.menu.dialog.open) { return; }
-
-        const layoutData = this.stx.exportLayout(true);
-        layoutData.favorites = [];
-
-        const json = JSON.stringify(layoutData);
-        const parts = json.match(/.{1,1800}/g);
-
-        this.shortUrlFailed = false;
-        this.loading = true;
-        this.shareLink = '';
-
-        let hashPromise = Promise.resolve('NONE');
-        parts.forEach((part) => {
-            hashPromise = hashPromise.then(hash => this.shortenBitlyAsync(part, hash));
-        });
-
-        hashPromise
-            .then((hash) => {
-                if (hash) {
-                    self.shareLink = `https://bit.ly/${hash}`;
-                    self.urlGenerated = true;
-                } else {
-                    self.shortUrlFailed = true;
-                    self.urlGenerated = false;
-                }
-                self.loading = false;
-            })
-            .catch(() => {
-                self.loading = false;
-                self.urlGenerated = false;
-            });
-    }
-    shortenBitlyAsync(payload, hash) {
-        const href = window.location.href;
-        let origin = (this.shareOrigin && href.startsWith(this.shareOrigin)) ? href : this.shareOrigin;
-        origin = origin.replace('localhost', '127.0.0.1'); // make it work on localhost
-
-        const shareLink = encodeURIComponent(`${origin}?${hash}#${payload}`);
-
-        return fetch(`${this.bitlyUrl}/shorten?access_token=${this.accessToken}&longUrl=${shareLink}`)
-            .then(response => response.json())
-            .then((response) =>  {
-                if (response.status_code == 200) {
-                    return response.data.url.split('bit.ly/')[1];
-                }
-                return null;
-            });
-    }
-    expandBitlyAsync(hash, payload) {
-        if (hash === 'NONE') {
-            return Promise.resolve(payload);
+    loadHtml2Canvas() {
+        if (this._promise_html2canas) {
+            return this._promise_html2canvas;
         }
-        const bitlyLink = `${window.location.protocol}//bit.ly/${hash}`;
-        return fetch(`${this.bitlyUrl}/expand?access_token=${this.accessToken}&shortUrl=${bitlyLink}`)
-            .then(response => response.json())
-            .then((response) =>  {
-                if (response.status_code === 200) {
-                    const href = response.data.expand[0].long_url;
-                    const encodedJsonPart = href.split('#').slice(1).join('#');
-                    const url = href.split('#')[0];
-                    const hash = url.split('?')[1];
+        this._promise_html2canvas = new PendingPromise();
+        loadScript(html2canvasCDN, () => this._promise_html2canvas.resolve());
+        return this._promise_html2canvas;
+    }
 
-                    payload = decodeURIComponent(encodedJsonPart) + payload;
+    @action.bound downloadPNG() {
+        this.isLoadingPNG = true;
+        const newTab = this.createNewTab();
 
-                    if (hash == 'NONE') {
-                        return payload;
-                    }
-                    return this.expandBitlyAsync(hash, payload);
-                }
-                return null;
+        this.loadHtml2Canvas()
+            .then(() => window.html2canvas(this.screenshotArea))
+            .then(() => {
+                // since react rerenders is not immediate, we use CIQ.appendClassName to
+                // immediately append/unappend class name before taking screenshot.
+                CIQ.appendClassName(this.screenshotArea, 'ciq-screenshot');
+                window.html2canvas(this.screenshotArea).then(canvas => this._onCanvasReady(canvas, newTab));
             });
     }
-    @action.bound downloadPNG() {
-        this.menu.setOpen(false);
-        const root = findAncestor(this.stx.container, 'ciq-chart-area');
-        html2canvas(root).then((canvas) => {
-            const content = canvas.toDataURL('image/png');
-            downloadFileInBrowser(
-                `${new Date().toUTCString()}.png`,
-                content,
-                'image/png;',
-            );
-        });
+
+    @action.bound _onCanvasReady(canvas, newTab) {
+        const content = canvas.toDataURL('image/png');
+        downloadFileInBrowser(
+            `${new Date().toUTCString()}.png`,
+            content,
+            'image/png;',
+            newTab,
+        );
+        this.isLoadingPNG = false;
+        CIQ.unappendClassName(this.screenshotArea, 'ciq-screenshot');
     }
+
     @action.bound downloadCSV() {
         const isTick = this.timeUnit === 'tick';
         const header = `Date,Time,${isTick ? this.marketDisplayName : 'Open,High,Low,Close'}`;
@@ -159,41 +97,15 @@ export default class ShareStore {
                 ].join(','));
             }
         });
-
         downloadFileInBrowser(
             `${this.marketDisplayName} (${this.timeperiodDisplay}).csv`,
             lines.join('\n'),
             'text/csv;charset=utf-8;',
+            this.createNewTab(),
         );
     }
 
-    copyWithExecCommand() {
-        this.inputRef.focus();
-        this.inputRef.select();
-
-        let successful = false;
-        try {
-            successful = document.execCommand('copy');
-        } catch (e) { } // eslint-disable-line no-empty
-        return successful;
-    }
-    copyWithNavigator() {
-        const text = this.shareLink;
-        return navigator.clipboard.writeText(text)
-            .then(() => true)
-            .catch(() => false);
-    }
-
-
-    @action.bound copyToClipboard() {
-        if (!navigator.clipboard) {
-            this.onCopyDone(this.copyWithExecCommand());
-        } else {
-            this.copyWithNavigator().then(this.onCopyDone);
-        }
-    }
-
-    onInputRef = (ref) => { this.inputRef = ref; }
-    onContextReady = () => { };
+    onContextReady = () => {
+        this.screenshotArea = this.context.topNode.querySelector('.ciq-chart');
+    };
 }
-

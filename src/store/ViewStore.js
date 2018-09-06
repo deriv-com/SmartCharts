@@ -1,34 +1,32 @@
-import { observable, action, when } from 'mobx';
+import { observable, action } from 'mobx';
 import { createObjectFromLocalStorage } from '../utils';
 import MenuStore from './MenuStore';
+import Menu from '../components/Menu.jsx';
 
 export default class ViewStore {
     constructor(mainStore) {
         this.mainStore = mainStore;
-        this.menu = new MenuStore(mainStore);
-        when(() => this.context, this.onContextReady);
+        this.menu = new MenuStore(mainStore, { route: 'templates' });
+        this.ViewsMenu = this.menu.connect(Menu);
     }
 
+    @observable static views = createObjectFromLocalStorage('cq-views') || [];
+    @observable scrollPanel;
     @observable templateName = '';
-    @observable views = [];
+    @observable currentRoute = 'main';
     @observable routes = {
-        current: 'main',
         add: () => this.saveViews(),
         main: () => this.updateRoute('add'),
-        cancel: () => this.updateRoute('main'),
+        cancel: () => this.onCancel(),
+        overwrite: () => this.overwrite(),
     };
 
     get context() { return this.mainStore.chart.context; }
     get stx() { return this.context.stx; }
     get loader() { return this.mainStore.loader; }
 
-    onContextReady = () => {
-        const views = createObjectFromLocalStorage('cq-views');
-        if (views) { this.views = views; }
-    }
-
-    updateLocalStorage = () => {
-        CIQ.localStorageSetItem('cq-views', JSON.stringify(this.views));
+    static updateLocalStorage() {
+        CIQ.localStorageSetItem('cq-views', JSON.stringify(ViewStore.views));
     }
 
     @action.bound onChange(e) {
@@ -41,43 +39,67 @@ export default class ViewStore {
         }
     }
 
+    @action.bound onCancel() {
+        this.templateName = '';
+        this.updateRoute('main');
+    }
+
     @action.bound updateRoute(name) {
-        this.routes.current = name;
+        this.currentRoute = name;
     }
 
     @action.bound saveViews() {
-        this.updateRoute('main');
-        if (this.templateName.length > 0) {
+        if (ViewStore.views.some(x => x.name.toLowerCase() === this.templateName.toLowerCase())) {
+            this.updateRoute('overwrite');
+        } else if (this.templateName.length > 0) {
+            this.updateRoute('main');
             const layout = this.stx.exportLayout();
-            this.views.push({ name: this.templateName, layout });
-            this.updateLocalStorage();
+            ViewStore.views.push({ name: this.templateName, layout });
+            ViewStore.updateLocalStorage();
+            this.templateName = '';
         }
+    }
+
+    @action.bound overwrite() {
+        const layout = this.stx.exportLayout();
+        const templateIndex = ViewStore.views.findIndex(x => x.name.toLowerCase() === this.templateName.toLowerCase());
+        ViewStore.views[templateIndex].layout = layout;
+        ViewStore.views[templateIndex].name = this.templateName;
+        ViewStore.updateLocalStorage();
+        this.updateRoute('main');
         this.templateName = '';
     }
 
     @action.bound remove(idx, e) {
-        this.views.splice(idx, 1);
+        ViewStore.views = ViewStore.views.filter((x, index) => idx !== index);
         e.nativeEvent.is_item_removed = true;
-        this.updateLocalStorage();
+        ViewStore.updateLocalStorage();
     }
 
-    applyLayout = (idx, e) => {
+    @action.bound applyLayout(idx, e) {
         if (e.nativeEvent.is_item_removed) { return; }
         if (this.loader) { this.loader.show(); }
         const stx = this.stx;
 
         const importLayout = () => {
-            stx.importLayout(this.views[idx].layout, true, true);
-            if (stx.changeCallback) { stx.changeCallback(stx, 'layout'); }
-            stx.dispatch('layout', {
-                stx,
+            const finishImportLayout = () => {
+                stx.changeOccurred('layout');
+                this.mainStore.studies.updateActiveStudies();
+                if (this.loader) { this.loader.hide(); }
+            };
+            stx.importLayout(ViewStore.views[idx].layout, {
+                managePeriodicity: true,
+                preserveTicksAndCandleWidth: true,
+                cb: finishImportLayout,
             });
-            if (this.loader) { this.loader.hide(); }
+            this.menu.setOpen(false);
         };
         setTimeout(importLayout, 100);
     }
 
     inputRef = (ref) => {
-        if (ref) { ref.focus(); }
+        if (ref) {
+            ref.focus();
+        }
     }
 }

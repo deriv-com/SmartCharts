@@ -1,48 +1,89 @@
 
+.cq-dialog-overlay {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    bottom: 2em;
+}
+
 .cq-settings-dialog {
     display: flex;
     flex-direction: column;
+    height: auto !important;
+
     .ciq-num-input > input[type=number] {
         width: 5.5em;
     }
     .titlebar {
-        height: 40x;
+        height: 40px;
         display: flex;
         justify-content: space-between;
         align-items: center;
+        @include themify($themes) {
+            color: themed('DialogHeadText');
+        }
+
+        .ciq-favorite {
+            path {
+                @include themify($themes) {
+                    stroke: themed('DialogHeadIcon');
+                }
+            }
+        }
         .title {
-            font-size: 24px;
+            font-size: 14px;
             padding-left: 16px;
-            padding-bottom: 5px;
         }
         .icons {
             display: flex;
             align-items: center;
             height: 50px;
+
+            .ic-icon {
+                path {
+                    @include themify($themes) {
+                        fill: themed('DialogHeadIcon');
+                    }
+                }
+                &.ciq-favorite {
+                    path {
+                        fill: transparent;
+                        @include themify($themes) {
+                            stroke: themed('DialogHeadIcon');
+                        }
+                    }
+                }
+            }
         }
         &.no-tabs {
             @include themify($themes) {
-                border-bottom: 1px solid themed('defaultBorder');
+                border-bottom: 1px solid themed('DialogHeadBorder');
             }
         }
     }
-
     .tabs {
         height: 40px;
         align-items: stretch;
         display: flex;
         position: relative;
+        box-sizing: border-box;
         @include themify($themes) {
-            border-bottom: 1px solid themed('defaultBorder');
+            border-bottom: 1px solid themed('DialogHeadBorder');
         }
-        @include box-sizing(border-box);
+
         > div {
             text-align: center;
             line-height: 40px;
             width: 50%;
             cursor: pointer;
             font-size: 14px;
-            &.active { font-weight: bold; }
+
+            &.active {
+                font-weight: bold;
+            }
         }
         .active-border {
             position: absolute;
@@ -50,10 +91,11 @@
             width: calc(50% + 1px);
             bottom: -1px;
             left: 0;
+            transition: left linear 0.1s;
             @include themify($themes) {
-                background: themed('activeColor');
+                background: themed('DialogHeadActiveBorder');
             }
-            @include transition(left linear 0.1s);
+
             &.second {
                 left: 50%;
             }
@@ -62,30 +104,38 @@
     .items {
         padding: 16px 0;
         flex-grow: 1;
-        overflow: scroll;
-        height: 200px;
+        @include themify($themes) {
+            background: themed('DialogSettingBodyBg');
+        }
+
         .item {
-            @include box-sizing(border-box);
+            box-sizing: border-box;
             padding: 0 16px;
-            height: 32px;
+            height: 30px;
             margin-bottom: 5px;
             display: flex;
             flex-direction: column;
             justify-content: space-around;
+
             .title {
                 font-size: 12px;
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
+                @include themify($themes) {
+                    color: themed('DialogBodyText');
+                }
             }
         }
     }
     .buttons {
         display: flex;
         justify-content: flex-end;
+        margin-bottom: 5px;
         @include themify($themes) {
-            border-top: 1px solid themed('defaultBorder');
+            background: themed('DialogFootBg');
         }
+
         > div {
             width: 90px;
             height: 40px;
@@ -94,7 +144,7 @@
             cursor: pointer;
             font-size: 14px;
             @include themify($themes) {
-                color: themed('activeColor');
+                color: themed('DialogFootText');
             }
         }
     }
@@ -107,16 +157,44 @@
     input[type=number] {
         display: inline-block;
         width: 3.2em;
-        line-height: 1.9em;
+        line-height: 1.6em;
         margin-right: 5px;
         padding-left: 6px;
+        border-radius: 3px;
         @include themify($themes) {
-            border: 1px solid themed('defaultBorderMedium');
+            border: none;
+            box-shadow: 0, 0, 0, 1px, themed('defaultBorder');
         }
-        @include border-radius(3px);
     }
-
     .cq-color-picker {
         display: inline-block;
+
+        .dropdown {
+            @include themify($themes) {
+                border: 1px solid themed('ColorPickerBorder');
+            }
+        }
+    }
+}
+
+/* Mobile Style */
+.smartcharts-mobile {
+    .cq-dialog-overlay {
+        background: rgba(0, 0, 0, 0.3);
+        visibility: hidden;
+        bottom: 0;
+    }
+    .cq-dialog-active {
+        visibility: visible;
+        z-index: 1;
+    }
+    .cq-settings-dialog {
+        .items {
+            padding: 5px 0;
+
+            .item {
+                height: 28px;
+            }
+        }
     }
 }

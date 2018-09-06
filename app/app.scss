@@ -47,9 +47,9 @@
 #doorbell-button {
     left: -30px;
     bottom: 30%;
-    background: #4C5794;
+    background: #4c5794;
     color: #fff;
-    border: 1px solid #4C5794;
+    border: 1px solid #4c5794;
     border-bottom: none;
     padding: 4px 8px;
     transform: rotate(90deg);
@@ -62,21 +62,36 @@
 
     input, textarea {
         outline: 0;
+
         &:focus {
-            border: 1px solid #4C5794;
+            border: 1px solid #4c5794;
         }
     }
-
     #doorbell-submit-button {
-        color: #4C5794;
+        color: #4c5794;
         border: none;
-        background: white;
+        background: #fff;
+
         &:hover {
-            background: white;
+            background: #fff;
         }
     }
 }
 
 #doorbell-background {
     opacity: 0;
+}
+
+.smartcharts-mobile {
+    /*
+      For charts app, we want the chart controls to still
+      be visible when its dropdown shows up. To do this we
+      assume the height of the chart controls is always 40px
+      in mobile:
+     */
+    .ciq-period, .cq-download, .ciq-views, .ciq-drawtools, .ciq-studies, .cq-chart-setting, .ciq-draw-tools, .cq-comparison-new, .ciq-chart-types {
+        .cq-menu-overlay {
+            height: calc(100% - 40px);
+        }
+    }
 }
