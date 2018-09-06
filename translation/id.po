@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Indonesian\n"
 "Language: id_ID\n"
-"PO-Revision-Date: 2018-08-21 03:20\n"
+"PO-Revision-Date: 2018-09-05 02:11\n"
 
 msgid " already exists."
 msgstr " sudah tersedia."
@@ -201,9 +201,6 @@ msgstr "Point & Figure"
 msgid "Position"
 msgstr "Posisi"
 
-msgid "PRICE"
-msgstr "HARGA"
-
 msgid "Price Lines"
 msgstr "Price Lines"
 
@@ -279,11 +276,11 @@ msgstr "Perlawanan Garis Kecepatan"
 msgid "Spline"
 msgstr "Spline"
 
+msgid "SPOT"
+msgstr "SPOT"
+
 msgid "Streaming for [symbol] is not available due to license restrictions"
 msgstr "Streaming untuk [symbol] tidak tersedia berhubung batasan lisensi"
-
-msgid "tap to manage"
-msgstr "tap untuk mengelola"
 
 msgid "Template name"
 msgstr "Nama pola"

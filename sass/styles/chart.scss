@@ -473,6 +473,7 @@ html, body {
     height: 1px;
     width: 98%;
     margin-top: 0; /* since we're using border-top to draw the actual line */
+    z-index: 0;
 }
 
 .crossX, .stx_crosshair_x { /* Horizontal Crosshair line size */
