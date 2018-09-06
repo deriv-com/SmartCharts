@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Thai\n"
 "Language: th_TH\n"
-"PO-Revision-Date: 2018-09-06 06:00\n"
+"PO-Revision-Date: 2018-09-06 06:11\n"
 
 msgid " already exists."
 msgstr " มีอยู่แล้ว"
@@ -22,7 +22,7 @@ msgid "[symbol] market is now opened."
 msgstr "[symbol] ขณะนี้ ตลาดเปิดทำการแล้ว"
 
 msgid "[symbol] market is presently closed."
-msgstr "[symbol] ตลาดปิดขณะนี้"
+msgstr "[symbol] ขณะนี้ ตลาดได้ปิดทำการ"
 
 msgid "\"Mass Index\" or \"Doji Star\""
 msgstr "\"ดัชนีมวล\" หรือ \"Doji Star\""
