@@ -90,7 +90,7 @@ const config = {
     },
     plugins: [
         new SVGSpritemapPlugin({
-            src: path.resolve(__dirname, './sass/icons/flags/**/*.svg'),
+            src: path.resolve(__dirname, './sass/icons/spritesheet/**/*.svg'),
             prefix: '',
             filename: 'smartcharts-spritemap.svg',
             // svgo: {
@@ -175,7 +175,7 @@ if (process.env.ANALYZE_BUNDLE) {
 }
 
 if (isApp) {
-    config.entry = path.resolve(__dirname, './app/css-demo.jsx');
+    config.entry = path.resolve(__dirname, './app/index.jsx');
     config.resolve = {
         alias: {
             '@binary-com/smartcharts': path.resolve(__dirname, 'src/'),

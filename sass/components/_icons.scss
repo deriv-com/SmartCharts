@@ -98,6 +98,11 @@
     }
 }
 
+svg.cq-spritesheet {
+    width: 24px;
+    height: 24px;
+}
+
 .ic-frx, .ic-otc, .ic-wld {
     width: 32px;
     height: 32px;
@@ -105,6 +110,10 @@
     display: inline-block;
     vertical-align: top;
 
+    .ic-icon svg {
+        width: 24px;
+        height: 24px;
+    }
     > span {
         position: absolute;
     }
@@ -124,11 +133,20 @@
     > span:last-child {
         top: -8px;
         left: 9px;
+
+        svg { // OTC Badge
+            width: 13px;
+            height: 9px;
+        }
     }
 }
 
-.ic-wld {
-    > span:last-child {
+.ic-wld > .ic-icon {
+    > svg {
+        width: 32px;
+        height: 32px;
+    }
+    &:last-child {
         > svg {
             width: 12px;
             height: 8px;
@@ -138,15 +156,19 @@
     }
 }
 
-.ic-frxXPDUSD > svg > g > g > g > path:first-child {
+.ic-frxXAUUSD > svg {
+    fill: #f8d61f;
+}
+
+.ic-frxXPDUSD > svg {
     fill: #e9eaf0;
 }
 
-.ic-frxXPTUSD > svg > g > g > g > path:first-child {
+.ic-frxXPTUSD > svg {
     fill: #f4f3f3;
 }
 
-.ic-frxXAGUSD > svg > g > g > g > path:first-child {
+.ic-frxXAGUSD > svg {
     fill: #e1e1e1;
 }
 
