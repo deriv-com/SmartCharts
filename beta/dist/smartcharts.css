@@ -91,11 +91,6 @@ html,body{-ms-touch-action:none;margin:0px}
 .smartcharts-light .mSticky .mStickyInterior{background:#333}
 .smartcharts-dark .mSticky .mStickyInterior{background:#fff}
 .mSticky .mStickyRightClick{position:relative}
-.overlayEdit{display:none;opacity:0;font-size:11px;white-space:nowrap;z-index:40;border-radius:3px}
-.smartcharts-light .overlayEdit{color:#fff;background:rgba(51,51,51,0.88);box-shadow:rgba(21,33,45,0.32)}
-.smartcharts-dark .overlayEdit{color:#2a3052;background:rgba(255,255,255,0.8);box-shadow:rgba(21,33,45,0.32)}
-.smartcharts-light .overlayEdit:before{border-color:rgba(51,51,51,0.88) transparent}
-.smartcharts-dark .overlayEdit:before{border-color:rgba(255,255,255,0.8) transparent}
 .vectorTrashCan,.overlayEdit{position:absolute;z-index:40}
 .sMeasure{margin:0px;padding:5px 10px;display:inline-block;float:left}
 .overlayEdit.stx-btn,.vectorTrashCan.stx-btn{cursor:pointer;display:inline-block;text-align:center;width:30px;height:30px;padding:0;border:none;border-radius:3px}
