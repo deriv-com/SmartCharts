@@ -99,7 +99,7 @@ settings | Sets the chart settings. Refer to [Chart Settings](#chart-settings)
 barriers | Draw chart barriers. Refer to [Barriers API](#barriers-api) for usage details
 enableRouting | Enable routing for dialogs. Defaults to `false`
 isConnectionOpened | Sets the connection status. If set, upon reconnection smartcharts will either patch missing tick data or refresh the chart, depending on granularity; if not set, it is assumed that connection is always opened. Defaults to `undefined`.
-onMessage | SmartCharts will notify messages via this method. `onMessage` expect 1 parameter `(message => {})`
+onMessage | SmartCharts will send notifications via this callback, should it be provided. Each notification will have the following structure: `{ text, type, category }`.
 
 ### Chart Settings
 

@@ -1,5 +1,6 @@
 import { action, observable, computed, when, reaction, toJS } from 'mobx';
 import { connect } from './Connect';
+import { cloneCategories, cloneCategory } from '../utils';
 
 export default class CategoricalDisplayStore {
     constructor({
@@ -145,10 +146,10 @@ export default class CategoricalDisplayStore {
 
 
     @computed get filteredItems() {
-        let filteredItems = toJS(this.getCategoricalItems());
+        let filteredItems = cloneCategories(this.getCategoricalItems());
 
         if (this.favoritesId) {
-            const favsCategory = toJS(this.favoritesCategory);
+            const favsCategory = { ...this.favoritesCategory };
             const findFavItem = (category) => {
                 const foundItems = [];
                 if (category.hasSubcategory) {
@@ -182,7 +183,7 @@ export default class CategoricalDisplayStore {
         }
 
         if (this.getActiveCategory) {
-            const activeCategory = toJS(this.getActiveCategory());
+            const activeCategory = cloneCategory(this.getActiveCategory());
             filteredItems.unshift(activeCategory);
         }
 
