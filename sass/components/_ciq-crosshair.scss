@@ -1,3 +1,16 @@
+.cq-crosshair-toggle {
+    &:hover {
+        @include themify($themes) {
+            background: themed('MenuHoverBg');
+        }
+    }
+    .cq-toggle {
+        &.active {
+            @include svg-icon-color('MenuActiveIcon', true);
+        }
+    }
+}
+
 .cq-crosshair {
     display: none;
 }

@@ -41,6 +41,11 @@
                             fill: themed('ChartTypeListIcon');
                         }
                     }
+                    g {
+                        @include themify($themes) {
+                            stroke: themed('ChartTypeListIcon');
+                        }
+                    }
                 }
             }
             > .ciq-aggregate-setting {

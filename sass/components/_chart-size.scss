@@ -15,6 +15,12 @@
     .cq-menu-btn {
         cursor: pointer;
         padding: 5px 0px;
+
+        &:hover {
+            @include themify($themes) {
+                background: themed('MenuHoverBg');
+            }
+        }
     }
     .interval-title {
         white-space: nowrap;
