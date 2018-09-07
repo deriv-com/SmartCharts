@@ -83,32 +83,19 @@ export default class CategoricalDisplayStore {
         if (this.pauseScrollSpy || !this.scrollPanel) { return; }
         if (this.filteredItems.length === 0) { return; }
 
+        const ActiveViewHeight = this.scrollPanel.clientHeight * 1 / 5;
+        let activeMenuId = null;
 
-        let i = 0;
         for (const category of this.filteredItems) {
             const el = this.categoryElements[category.categoryId];
-            if (!el) {
-                i++;
-                continue;
-            }
             const r = el.getBoundingClientRect();
             const top = r.top - this.scrollPanel.getBoundingClientRect().top;
-            if (top > 0) { break; }
-            i++;
-        }
-
-        // get first non-empty category
-        let idx = i - 1;
-        let id;
-        while (idx >= 0) {
-            id = this.filteredItems[idx].categoryId;
-            if (this.categoryElements[id] !== null) {
-                break;
+            if (top < ActiveViewHeight) {
+                activeMenuId = category.categoryId;
             }
-            idx--;
         }
 
-        this.activeCategoryKey = id || this.filteredItems[0].categoryId;
+        this.activeCategoryKey = activeMenuId || this.filteredItems[0].categoryId;
         this.scrollTop = this.scrollPanel.scrollTop;
     }
 
