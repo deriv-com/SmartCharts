@@ -14,7 +14,11 @@ export default class CategoricalDisplayStore {
         mainStore,
     }) {
         reaction(getIsShown, () => {
-            if (getIsShown()) {
+            const isShown = getIsShown();
+            if (isShown) {
+                // deferred the rendering until user opens the dropdown
+                // setTimeout is required, otherwise it will block the render
+                setTimeout(action(() => { this.isShown = isShown; }), 0);
                 // Odd. Why is setTimeout needed here?
                 if (!this.isMobile) {
                     setTimeout(() => this.searchInput.focus(), 0);
@@ -40,6 +44,7 @@ export default class CategoricalDisplayStore {
             when(() => this.context, this.initFavorites.bind(this));
         }
     }
+    @observable isShown = false;
     @observable scrollPanel;
     @observable filterText = '';
     @observable placeholderText = '';
@@ -146,6 +151,8 @@ export default class CategoricalDisplayStore {
 
 
     @computed get filteredItems() {
+        if (!this.isShown) { return []; }
+
         let filteredItems = cloneCategories(this.getCategoricalItems());
 
         if (this.favoritesId) {
