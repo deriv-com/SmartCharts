@@ -115,6 +115,7 @@ class App extends React.Component {
             <div className="grid">
                 <div className="chart-instance">
                     <SmartChart
+                        id="1"
                         onSymbolChange={symbol => console.log('Symbol has changed to:', symbol)}
                         isMobile={CIQ.isMobile}
                         chartControlsWidgets={renderControls}
@@ -124,35 +125,17 @@ class App extends React.Component {
                         barriers={barriers}
                     />
                 </div>
-                <div className="bottom-blob">
-                    <label htmlFor="barrierType">
-                        Choose barrier type:&nbsp;
-                        <select defaultValue="" id="barrierType" onChange={this.handleBarrierTypeChange}>
-                            <option value="NONE_SINGLE">NONE_SINGLE</option>
-                            <option value="NONE_DOUBLE">NONE_DOUBLE</option>
-                            <option value="ABOVE">ABOVE</option>
-                            <option value="BELOW">BELOW</option>
-                            <option value="BETWEEN">BETWEEN</option>
-                            <option value="OUTSIDE">OUTSIDE</option>
-                            <option value="">disable</option>
-                        </select>
-                        Choose barrier bg color:&nbsp;
-                        <select defaultValue="" id="barrierBGColor" onChange={this.onColorChange}>
-                            <option value="GREEN">GREEN</option>
-                            <option value="RED">RED</option>
-                            <option value="YELLOW">YELLOW</option>
-                            <option value="ORANGERED">ORANGERED</option>
-                            <option value="PURPLE">PURPLE</option>
-                            <option value="BLUE">BLUE</option>
-                            <option value="DEEPPINK">DEEPPINK</option>
-                        </select>
-                        &nbsp;
-                        <b>low:</b> <input id="low" type="number" value={low === undefined ? '' : low} onChange={this.onHighLowChange} />,
-                        <b>high:</b> <input id="high" type="number" value={high === undefined ? '' : high} onChange={this.onHighLowChange} />;
-                        No PriceLine: <input type="checkbox" checked={hidePriceLines === undefined ? '' : hidePriceLines} onChange={this.onPriceLineDisableChange} />
-                        Relative: <input type="checkbox" checked={relative === undefined ? '' : relative} onChange={this.onRelativeChange} />
-                        Draggable: <input type="checkbox" checked={draggable === undefined ? '' : draggable} onChange={this.onDraggableChange} />
-                    </label>
+                <div>
+                    <SmartChart
+                        id="2"
+                        onSymbolChange={symbol => console.log('Symbol has changed to:', symbol)}
+                        isMobile={CIQ.isMobile}
+                        chartControlsWidgets={renderControls}
+                        requestAPI={requestAPI}
+                        requestSubscribe={requestSubscribe}
+                        requestForget={requestForget}
+                        barriers={barriers}
+                    />
                 </div>
             </div>
         );

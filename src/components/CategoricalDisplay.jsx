@@ -40,12 +40,14 @@ const CategoricalDisplay = ({
         return <ItemIcon className={`ic-${item.itemId}`} />;
     };
     const renderText = item => <span className="ciq-item-display">{item.display}</span>;
+    const isFavExist = favItem => favoritesMap[favoritesId].length > 0 && favoritesMap[favoritesId].some(fav => Object.keys(fav).indexOf(favItem) > -1);
+
     const renderFavorite = (item) => {
         if (!item.itemId || !favoritesId) { return ''; }
         return (
             <FavoriteIcon
                 onClick={e => onFavoritedItem(item, e)}
-                className={`ciq-favorite ${favoritesMap[item.itemId] ? 'ciq-active-favorite' : ''}`}
+                className={`ciq-favorite 'ciq-active-favorite' ${isFavExist(item.itemId) ? 'ciq-active-favorite' : ''}`}
             />
         );
     };
