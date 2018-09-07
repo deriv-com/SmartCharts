@@ -24,6 +24,11 @@ import { ConnectionManager, StreamManager } from './connection';
 import Notification from './Notification.jsx';
 import ChartNotifier from './ChartNotifier.js';
 
+if (process.env.NODE_ENV !== 'production') {
+    // eslint-disable-next-line global-require
+    const { whyDidYouUpdate } = require('why-did-you-update');
+    whyDidYouUpdate(React);
+}
 
 if (window.location.host.endsWith('binary.com')) {
     window._trackJs = { token: '346262e7ffef497d85874322fff3bbf8', application: 'smartcharts' };

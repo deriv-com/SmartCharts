@@ -109,6 +109,7 @@
     "webpack-bundle-analyzer": "^2.9.1",
     "webpack-cli": "^3.0.6",
     "webpack-dev-server": "^3.1.4",
+    "why-did-you-update": "^0.1.1",
     "write": "^1.0.3"
   },
   "dependencies": {
