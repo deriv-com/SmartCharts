@@ -1,42 +1,49 @@
 import React from 'react';
 import '../../sass/components/_icons.scss';
 
-import Png from '../../sass/icons/download/ic-png.svg';
-import Csv from '../../sass/icons/download/ic-csv.svg';
-
-
-import Add from '../../sass/icons/chart settings/zoom-in/ic-zoomin-light.svg';
-import Close from '../../sass/icons/close/ic-close.svg';
-import Comparison from '../../sass/icons/chart settings/comparison/ic-comparison-normal.svg';
-import CrosshairOff from '../../sass/icons/chart settings/crosshair/ic-crosshair-off.svg';
-import CrosshairOn from '../../sass/icons/chart settings/crosshair/ic-crosshair-on.svg';
-import CrosshairTooltip from '../../sass/icons/chart settings/crosshair/ic-crosshair-tooltip.svg';
-import Delete from '../../sass/icons/delete/ic-delete.svg';
-import Clear from '../../sass/icons/clear/ic-clear.svg';
-import Draw from '../../sass/icons/chart settings/drawing tools/ic-drawingtools-normal.svg';
-import Indicator from '../../sass/icons/chart settings/indicators/ic-indicator-normal.svg';
-import Measure from '../../sass/icons/measure/ic-measure.svg';
-import Minus from '../../sass/icons/chart settings/zoom-out/ic-zoomout-light.svg';
-import Template from '../../sass/icons/chart settings/chart template/ic-charttemplate-normal.svg';
-import Tick from '../../sass/icons/tick/ic-tick.svg';
-import Search from '../../sass/icons/search/ic-search-normal.svg';
-import Edit from '../../sass/icons/edit/ic-edit.svg';
-import Arrow from '../../sass/icons/dropdown/ic-dropdown.svg';
-import Download from '../../sass/icons/download/ic-download.svg';
-import PositionLeft from '../../sass/icons/chart settings/setting/ic-position-left.svg';
-import PositionBottom from '../../sass/icons/chart settings/setting/ic-position-bottom.svg';
-import Back from '../../sass/icons/back/ic-back.svg';
-
-import SymbolPlaceholder from '../../sass/icons/placeholder/ic-placeholder.svg';
-
 const SpriteSheetIcon = name => () => (
+    <svg className="cq-spritesheet">
+        <use href={`./dist/smartcharts-spritemap.svg#${name}`} />
+    </svg>
+/*
+    // Use views to render SVG on CSS side
     <span
         className="cq-spritesheet"
         style={{
             content: `url(./dist/smartcharts-spritemap.svg#${name}-view)`,
         }}
     />
+*/
 );
+
+const Png = SpriteSheetIcon('ic-png');
+const Csv = SpriteSheetIcon('ic-csv');
+
+
+const Add = SpriteSheetIcon('ic-zoomin-light');
+const Close = SpriteSheetIcon('ic-close');
+const Comparison = SpriteSheetIcon('ic-comparison-normal');
+const CrosshairOff = SpriteSheetIcon('ic-crosshair-off');
+const CrosshairOn = SpriteSheetIcon('ic-crosshair-on');
+const CrosshairTooltip = SpriteSheetIcon('ic-crosshair-tooltip');
+const Delete = SpriteSheetIcon('ic-delete');
+const Clear = SpriteSheetIcon('ic-clear');
+const Draw = SpriteSheetIcon('ic-drawingtools-normal');
+const Measure = SpriteSheetIcon('ic-measure');
+const Minus = SpriteSheetIcon('ic-zoomout-light');
+const Template = SpriteSheetIcon('ic-charttemplate-normal');
+const Tick = SpriteSheetIcon('ic-tick');
+const Search = SpriteSheetIcon('ic-search-normal');
+const Edit = SpriteSheetIcon('ic-edit');
+const Arrow = SpriteSheetIcon('ic-dropdown');
+const Download = SpriteSheetIcon('ic-download');
+const PositionLeft = SpriteSheetIcon('ic-position-left');
+const PositionBottom = SpriteSheetIcon('ic-position-bottom');
+const Back = SpriteSheetIcon('ic-back');
+
+const SymbolPlaceholder = SpriteSheetIcon('ic-placeholder');
+
+const Indicator = SpriteSheetIcon('ic-indicator-normal');
 
 const Warning = SpriteSheetIcon('warning');
 const Error = SpriteSheetIcon('error');
@@ -187,12 +194,12 @@ export const SymbolPlaceholderIcon = Wrapper(SymbolPlaceholder);
 export const CategoryIconMap = {
     active: SpriteSheetIcon('ic-active-normal'),
     commodities: SpriteSheetIcon('ic-commodities-normal'),
-    favorite: SpriteSheetIcon('ic-favorite-normal'),
+    favorite: Star,
     forex: SpriteSheetIcon('ic-forex-normal'),
     indices: SpriteSheetIcon('ic-indices-normal'),
     stocks: SpriteSheetIcon('ic-otc-normal'),
     volidx: SpriteSheetIcon('ic-volatility-normal'),
-    indicators: SpriteSheetIcon('ic-indicator-normal'),
+    indicators: Indicator,
 };
 
 const FlagIconMap = {
