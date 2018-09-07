@@ -305,7 +305,7 @@ html,body{-ms-touch-action:none;margin:0px}
 .smartcharts-dark .cq-menu-dropdown .cq-categorical-display .cq-lookup-filters{background:#2a3052}
 .smartcharts-mobile .ciq-menu.stxMenuActive{z-index:9}
 .smartcharts-mobile .ciq-menu .cq-menu-btn:hover>.ic-icon svg,.smartcharts-mobile .ciq-menu .cq-menu-btn:hover>.cq-toggle svg{background:transparent}
-.smartcharts-mobile .cq-modal-dropdown{height:inherit}
+.smartcharts-mobile .cq-modal-dropdown{height:inherit;pointer-events:none}
 .smartcharts-mobile .cq-modal-dropdown .cq-menu-overlay .cq-menu-dropdown{bottom:0;box-shadow:none;border-radius:0;width:100%;position:absolute}
 .smartcharts-mobile .cq-modal-dropdown .cq-menu-overlay .cq-menu-dropdown .icon-close-menu{pointer-events:initial;opacity:1}
 .cq-chart-unavailable{position:absolute;text-align:center;width:100%;top:50%;z-index:1;font-size:17px;color:#878787}
