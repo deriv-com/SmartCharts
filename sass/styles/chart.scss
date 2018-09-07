@@ -268,7 +268,7 @@ html, body {
 }
 
 /* ------------------------------------------------------- CHART OVERLAY ELEMENTS ------------------------------------------------------ */
-#mSticky {
+.mSticky {
     position: absolute;
     display: none;
     z-index: 40;
@@ -281,7 +281,7 @@ html, body {
         background: themed('TooltipBg');
     }
 
-    #mStickyInterior {
+    .mStickyInterior {
         padding: 8px 8px 4px;
         position: relative;
         width: 100%;
@@ -293,37 +293,17 @@ html, body {
         border: none;
         box-sizing: border-box;
     }
-    #mStickyRightClick {
+    .mStickyRightClick {
         position: relative;
     }
 }
 
-#showMeasure { /* These are the small divs that come up when you hover over a drawing or study overlay */
-    /*text-transform: capitalize;*/
-    display: none;
-    font-size: 11px;
-    white-space: nowrap;
-    z-index: 40;
-    border-radius: 3px;
-    @include themify($themes) {
-        color: themed('TooltipText');
-        background: themed('TooltipBg');
-        box-shadow: themed('TooltipShadow');
-    }
-
-    &:before {
-        @include themify($themes) {
-            border-color: themed('TooltipBg') transparent;
-        }
-    }
-}
-
-#vectorTrashCan, #showMeasure, .overlayEdit {
+.vectorTrashCan, .overlayEdit {
     position: absolute;
     z-index: 40;
 }
 
-#sMeasure { /* Drawing and study info div contents*/
+.sMeasure { /* Drawing and study info div contents*/
     margin: 0px;
     padding: 5px 10px;
     display: inline-block;
@@ -331,7 +311,7 @@ html, body {
 }
 
 .overlayEdit.stx-btn,
-#vectorTrashCan.stx-btn { /* Drawing and study info div delete button wrappers for mobile */
+.vectorTrashCan.stx-btn { /* Drawing and study info div delete button wrappers for mobile */
     cursor: pointer;
     display: inline-block;
     text-align: center;
@@ -347,7 +327,7 @@ html, body {
 }
 
 .overlayEdit.stx-btn span,
-#vectorTrashCan.stx-btn span { /* Drawing and study info div delete button content */
+.vectorTrashCan.stx-btn span { /* Drawing and study info div delete button content */
     display: block;
     height: 30px;
     width: 30px !important;
@@ -364,7 +344,7 @@ html, body {
 
 .rightclick_series {
     .overlayEdit.stx-btn span,
-    #vectorTrashCan.stx-btn span {
+    .vectorTrashCan.stx-btn span {
         @include themify($themes) {
             background: url('./icons/delete/ic-delete-dark.svg') no-repeat center !important;
         }
@@ -376,30 +356,30 @@ html, body {
 	margin-left: 5px;
 	opacity: 1;
 }
-#overlayTrashCan {
+.overlayTrashCan {
 	margin-left: 34px;
 }
 */
 
-#overlayTrashCan {
+.overlayTrashCan {
     display: none !important;
 }
 
-#mouseDeleteInstructions {
+.mouseDeleteInstructions {
     margin: 8px;
     background: transparent;
     display: block;
 }
 
-#mouseDeleteText, #mouseManageText {
+.mouseDeleteText, .mouseManageText {
     display: none;
 }
 
-.rightclick_drawing #mouseManageText {
+.rightclick_drawing .mouseManageText {
     display: inline;
 }
 
-.rightclick_series #mouseDeleteText {
+.rightclick_series .mouseDeleteText {
     display: inline;
 }
 
@@ -467,7 +447,7 @@ html, body {
     }
 }
 
-#crossY, .stx_crosshair_y { /* Vertical Crosshair line size */
+.crossY, .stx_crosshair_y { /* Vertical Crosshair line size */
     left: 0px;
     height: 1px;
     width: 98%;
@@ -475,7 +455,7 @@ html, body {
     z-index: 0;
 }
 
-#crossX, .stx_crosshair_x { /* Horizontal Crosshair line size */
+.crossX, .stx_crosshair_x { /* Horizontal Crosshair line size */
     top: 0px;
     width: 1px;
     height: 100%;
@@ -749,7 +729,7 @@ html, body {
     color: #3d4447;
 }
 
-#annotationSave, #annotationCancel,
+.annotationSave, .annotationCancel,
 .stx-btn.stx_annotation_save, .stx-btn.stx_annotation_cancel { /* Annotation Buttons */
     position: absolute;
     display: none;
@@ -758,7 +738,7 @@ html, body {
     z-index: 50;
 }
 
-#annotationCancel, .stx_annotation_cancel {
+.annotationCancel, .stx_annotation_cancel {
     margin-left: 10px;
 }
 
@@ -983,10 +963,10 @@ $spot-color: #0298d3;
 }
 
 .smartcharts-mobile {
-    #mSticky {
+    .mSticky {
         background: none;
 
-        #mStickyInterior {
+        .mStickyInterior {
             margin: 0px;
             padding: 0px 8px 0 !important;
             line-height: 30px;
@@ -994,7 +974,7 @@ $spot-color: #0298d3;
             width: auto;
             z-index: 99;
         }
-        #mStickyRightClick {
+        .mStickyRightClick {
             margin-left: -2px !important;
         }
     }
