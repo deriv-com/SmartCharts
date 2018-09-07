@@ -1,20 +1,6 @@
 import React from 'react';
 import '../../sass/components/_icons.scss';
 
-// Chart types:
-import BaseLine from '../../sass/icons/chart settings/chart types/baseline/ic-baseline-normal.svg';
-import Candle from '../../sass/icons/chart settings/chart types/candle/ic-candle-normal.svg';
-import Dot from '../../sass/icons/chart settings/chart types/dot/ic-dot-normal.svg';
-import HeikinAshi from '../../sass/icons/chart settings/chart types/ic-heikin-ashi-normal.svg';
-import HollowCandle from '../../sass/icons/chart settings/chart types/hollow candle/ic-hollowcandle-normal.svg';
-import Kagi from '../../sass/icons/chart settings/chart types/ic-kagi-normal.svg';
-import Line from '../../sass/icons/chart settings/chart types/line/ic-line-normal.svg';
-import LineBreak from '../../sass/icons/chart settings/chart types/ic-linebreak-normal.svg';
-import OHLC from '../../sass/icons/chart settings/chart types/ohlc/ic-ohlc-normal.svg';
-import PointFigure from '../../sass/icons/chart settings/chart types/ic-pointfigure-normal.svg';
-import RangeBars from '../../sass/icons/chart settings/chart types/ic-rangebars-normal.svg';
-import Renko from '../../sass/icons/chart settings/chart types/ic-renko-normal.svg';
-import Spline from '../../sass/icons/chart settings/chart types/spline/ic-spline-normal.svg';
 import Png from '../../sass/icons/download/ic-png.svg';
 import Csv from '../../sass/icons/download/ic-csv.svg';
 
@@ -31,38 +17,31 @@ import Draw from '../../sass/icons/chart settings/drawing tools/ic-drawingtools-
 import Indicator from '../../sass/icons/chart settings/indicators/ic-indicator-normal.svg';
 import Measure from '../../sass/icons/measure/ic-measure.svg';
 import Minus from '../../sass/icons/chart settings/zoom-out/ic-zoomout-light.svg';
-import Star from '../../sass/icons/favorite/ic-favorite-normal.svg';
 import Template from '../../sass/icons/chart settings/chart template/ic-charttemplate-normal.svg';
 import Tick from '../../sass/icons/tick/ic-tick.svg';
-import Active from '../../sass/icons/sidebar/active/ic-active-normal.svg';
-import Commodities from '../../sass/icons/sidebar/commodities/ic-commodities-normal.svg';
-import FavoriteCategory from '../../sass/icons/sidebar/favorite/ic-favorite-normal.svg';
-import Forex from '../../sass/icons/sidebar/forex/ic-forex-normal.svg';
-import Indices from '../../sass/icons/sidebar/indices/ic-indices-normal.svg';
-import Stocks from '../../sass/icons/sidebar/otc/ic-otc-normal.svg';
-import Volidx from '../../sass/icons/sidebar/volatility/ic-volatility-normal.svg';
 import Search from '../../sass/icons/search/ic-search-normal.svg';
 import Edit from '../../sass/icons/edit/ic-edit.svg';
-import IndicatorCategory from '../../sass/icons/sidebar/indicator/ic-indicator-normal.svg';
 import Arrow from '../../sass/icons/dropdown/ic-dropdown.svg';
 import Download from '../../sass/icons/download/ic-download.svg';
 import PositionLeft from '../../sass/icons/chart settings/setting/ic-position-left.svg';
 import PositionBottom from '../../sass/icons/chart settings/setting/ic-position-bottom.svg';
 import Back from '../../sass/icons/back/ic-back.svg';
 
-
-import Warning from '../../sass/icons/alert message/warning.svg';
-import Error from '../../sass/icons/alert message/error.svg';
-import Success from '../../sass/icons/alert message/success.svg';
-import Info from '../../sass/icons/alert message/info.svg';
-
 import SymbolPlaceholder from '../../sass/icons/placeholder/ic-placeholder.svg';
 
 const SpriteSheetIcon = name => () => (
-    <svg className="cq-spritesheet">
-        <use href={`./dist/smartcharts-spritemap.svg#${name}`} />
-    </svg>
+    <span
+        className="cq-spritesheet"
+        style={{
+            content: `url(./dist/smartcharts-spritemap.svg#${name}-view)`,
+        }}
+    />
 );
+
+const Warning = SpriteSheetIcon('warning');
+const Error = SpriteSheetIcon('error');
+const Success = SpriteSheetIcon('success');
+const Info = SpriteSheetIcon('info');
 
 /* Energy */
 const Metal = SpriteSheetIcon('ic-metal');
@@ -114,6 +93,23 @@ const NZD = SpriteSheetIcon('nzd');
 const PLN = SpriteSheetIcon('pln');
 const SEK = SpriteSheetIcon('sek');
 const USD = SpriteSheetIcon('usd');
+
+// Chart types:
+const BaseLine = SpriteSheetIcon('ic-baseline-normal');
+const Candle = SpriteSheetIcon('ic-candle-normal');
+const Dot = SpriteSheetIcon('ic-dot-normal');
+const HeikinAshi = SpriteSheetIcon('ic-heikin-ashi-normal');
+const HollowCandle = SpriteSheetIcon('ic-hollowcandle-normal');
+const Kagi = SpriteSheetIcon('ic-kagi-normal');
+const Line = SpriteSheetIcon('ic-line-normal');
+const LineBreak = SpriteSheetIcon('ic-linebreak-normal');
+const OHLC = SpriteSheetIcon('ic-ohlc-normal');
+const PointFigure = SpriteSheetIcon('ic-pointfigure-normal');
+const RangeBars = SpriteSheetIcon('ic-rangebars-normal');
+const Renko = SpriteSheetIcon('ic-renko-normal');
+const Spline = SpriteSheetIcon('ic-spline-normal');
+
+const Star = SpriteSheetIcon('ic-favorite-normal');
 
 const Wrapper = WrappedComponent => (props) => {
     let { className, 'tooltip-title': tooltip, ...p } = props; // eslint-disable-line prefer-const
@@ -189,14 +185,14 @@ export const alertIconMap = {
 export const SymbolPlaceholderIcon = Wrapper(SymbolPlaceholder);
 
 export const CategoryIconMap = {
-    active: Wrapper(Active),
-    commodities: Wrapper(Commodities),
-    favorite: Wrapper(FavoriteCategory),
-    forex: Wrapper(Forex),
-    indices: Wrapper(Indices),
-    stocks: Wrapper(Stocks),
-    volidx: Wrapper(Volidx),
-    indicators: Wrapper(IndicatorCategory),
+    active: SpriteSheetIcon('ic-active-normal'),
+    commodities: SpriteSheetIcon('ic-commodities-normal'),
+    favorite: SpriteSheetIcon('ic-favorite-normal'),
+    forex: SpriteSheetIcon('ic-forex-normal'),
+    indices: SpriteSheetIcon('ic-indices-normal'),
+    stocks: SpriteSheetIcon('ic-otc-normal'),
+    volidx: SpriteSheetIcon('ic-volatility-normal'),
+    indicators: SpriteSheetIcon('ic-indicator-normal'),
 };
 
 const FlagIconMap = {
@@ -262,52 +258,6 @@ export const ItemIconMap = {
     GDAXI: FlagIconMap.German,
     ISEQ: FlagIconMap.Ireland,
     TOP40: FlagIconMap.SouthAfrica,
-    /*
-    // German
-    DEAIR: Wrapper(Airbus),
-    DEALV: Wrapper(Allianz),
-    DEBMW: Wrapper(BMW),
-    DEDAI: Wrapper(Daimler),
-    DEDBK: Wrapper(Deutschebank),
-    DENOT: Wrapper(Novartis),
-    DESAP: Wrapper(SAP),
-    DESIE: Wrapper(Siemens),
-    // India
-    INBHARTIARTL: Wrapper(BhartiAirtel),
-    INMARUTI:     Wrapper(MarutiSuzuki),
-    INRIL:        Wrapper(RelianceIndustries),
-    INTATASTEEL:  Wrapper(TataSteel),
-    // UK
-    UKBP:   Wrapper(BP),
-    UKBARC: Wrapper(Barclays),
-    UKBATS: Wrapper(BritishAmericanTobacco),
-    UKHSBA: Wrapper(HSBC),
-    UKLLOY: Wrapper(LloydsBank),
-    UKRIO:  Wrapper(RioTinto),
-    UKSTAN: Wrapper(StandardChartered),
-    UKTSCO: Wrapper(Tesco),
-    // US
-    USALIBA:  Wrapper(Alibaba),
-    USGOOG:   Wrapper(Alphabet),
-    USAMZN:   Wrapper(Amazon),
-    USAMX:    Wrapper(AmericanExpress),
-    USAAPL:   Wrapper(Apple),
-    USBRKSHR: Wrapper(BershireHathaway),
-    USBNG:    Wrapper(Boeing),
-    USCAT:    Wrapper(Caterpillar),
-    USCT:     Wrapper(Citigroup),
-    USEA:     Wrapper(ElectronicArts),
-    USXOM:    Wrapper(ExxonMobil),
-    USFB:     Wrapper(Facebook),
-    USGLDSCH: Wrapper(GoldmanSachs),
-    USIBM:    Wrapper(IBM),
-    USJNJ:    Wrapper(JohnsonAndJohnson),
-    USMA:     Wrapper(Mastercard),
-    USMCDON:  Wrapper(McDonalds),
-    USMSFT:   Wrapper(Microsoft),
-    USPEP:    Wrapper(PepsiCo),
-    USPG:     Wrapper(ProcterAndGamble),
-    */
     /* Commodities */
     frxBROUSD: Wrapper(OilUSD),
     frxXAUUSD: MetalIcon,
