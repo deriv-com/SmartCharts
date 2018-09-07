@@ -3,6 +3,7 @@ const path = require('path');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const SVGSpritemapPlugin = require('svg-spritemap-webpack-plugin');
 const StyleLintPlugin = require('stylelint-webpack-plugin');
 const UglifyJs = require('uglify-js');
 const write = require('write');
@@ -88,6 +89,14 @@ const config = {
         ],
     },
     plugins: [
+        new SVGSpritemapPlugin({
+            src: path.resolve(__dirname, './sass/icons/spritesheet/**/*.svg'),
+            prefix: '',
+            filename: 'smartcharts-spritemap.svg',
+            // svgo: {
+            //     cleanupIDs: true,
+            // },
+        }),
         new webpack.ProvidePlugin({
             t: [path.resolve(__dirname, './src/Translation.js'), 't'],
         }),

@@ -50,6 +50,10 @@
 
         > .ic-icon.cq-symbol-dropdown {
             display: none;
+
+            svg {
+                width: 16px;
+            }
         }
         > .ic-icon, > .ic-frx, > .ic-wld, > .ic-otc {
             height: $large-icon-size;
@@ -60,6 +64,7 @@
 
             > svg {
                 height: $large-icon-size;
+                width: $large-icon-size;
             }
         }
         .cq-symbol-info {

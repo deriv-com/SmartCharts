@@ -102,6 +102,7 @@
     "style-loader": "^0.21.0",
     "stylelint": "^9.3.0",
     "stylelint-webpack-plugin": "^0.10.5",
+    "svg-spritemap-webpack-plugin": "^2.7.0",
     "svg-url-loader": "^2.3.1",
     "uglify-js": "^3.4.7",
     "url-loader": "^1.0.1",
