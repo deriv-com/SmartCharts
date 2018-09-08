@@ -33988,109 +33988,103 @@ var __js_core_engine_ =
 			formatFromLastSaleData();
 		}
 
-        if( params.secondarySeries ) {
-            if(params.fillGaps) {
-                appendQuotes=this.doCleanupGaps(appendQuotes, chart, {cleanupGaps:params.fillGaps, noCleanupDates:true});
-            }
-            CIQ.addMemberToMasterdata({stx: this, label: params.secondarySeries, data: appendQuotes, createObject: (params.overwrite?true:"aggregate"), noCleanupDates: true});
-        } else {
-			if(appendQuotes && appendQuotes.constructor==Object) appendQuotes=[appendQuotes]; // When developer mistakenly sends an object instead of an array of objects
-			if(!appendQuotes || !appendQuotes.length) return;
-			if(this.runPrepend("appendMasterData", [appendQuotes, chart, params])) return;
-			if(this.runPrepend("updateChartData", [appendQuotes, chart, params])) return;
-	
-			if(!masterData) masterData=[];
-	
-			var i=masterData.length-1, placedFirstQuote=false;
-			
-			// fill gaps only if there is master data already
-			// we only fill from the end of the current data, not before
-			if(params.fillGaps && masterData.length) fillGapsFromMasterDataHead();
-	
-			for(var j=0;j<appendQuotes.length;j++){
-				var quote=appendQuotes[j];
-				var dt=quote.DT, date=quote.Date;
-				if(dt && Object.prototype.toString.call(dt) != '[object Date]' ) quote.DT=dt=new Date(dt); // if already a date object; nothing to do
-				if(dt) {
-					if(!date || date.length!=17) quote.Date=CIQ.yyyymmddhhmmssmmm(quote.DT);
-				}
-				if(!dt) dt=quote.DT=CIQ.strToDateTime(date);
-	
-				while(i>=0 && i<masterData.length){
-					var dt2=masterData[i].DT;
-					if(!dt2) dt2=CIQ.strToDateTime(masterData[i].Date);
-					if(dt2.getTime()<=dt.getTime()){
-						placedFirstQuote=true;
-						var plusOne=0;	// If time is the same then replace last bar
-						if(dt2.getTime()<dt.getTime()) {
-							if(i<masterData.length-1){
-								var dtf=masterData[i+1].DT || CIQ.strToDateTime(masterData[i+1].Date);
-								if(dtf.getTime()<=dt.getTime()) {
-									i++;
-									continue;
-								}
-							}
-							plusOne=1;	// Otherwise append bar
-						}
-						if(params.deleteItems){
-							if(!plusOne) deleteThisItem(i, dt);
-							break;
-						}else{
-							if(!plusOne) mergeNewDataIntoMasterData(i, quote);
-	
-							// Here we rectify any missing/malformatted data and set any new high/low
-							// If we don't set this here, the study calculations will fail
-							if(CIQ.isValidNumber(quote.Close)){
-								if(!CIQ.isValidNumber(quote.Open)) quote.Open=quote.Close;
-	
-								var high=Math.max(quote.Open, quote.Close), low=Math.min(quote.Open, quote.Close);
-								if(!CIQ.isValidNumber(quote.High) || quote.High<high) quote.High=high;
-								if(!CIQ.isValidNumber(quote.Low) || quote.Low>low) quote.Low=low;
-							}
-							if(quote.Volume && !CIQ.isValidNumber(quote.Volume)) quote.Volume=parseInt(quote.Volume,10);
-							this.setDisplayDate(quote);
-							i+=plusOne;
-							
-							// Insert into masterData here
-							if(secondary){
-								if(appendQuotes.length-j<50){
-									// only check last 50 records
-									this.updateCurrentMarketData(quote, chart, secondary, {fromTrade:true});
-								}
-								if(layout.interval!="tick" || quote.Close!==undefined){
-									if(plusOne) masterData.splice(i,0,{DT:quote.DT});
-									masterData[i][secondary]=quote;
-								}
-							}else{
-								if(appendQuotes.length-j<50){
-									// only check last 50 records
-									this.updateCurrentMarketData(quote, chart, null, {fromTrade:true});
-								}
-								if(layout.interval!="tick" || quote.Close!==undefined) masterData.splice(i,plusOne?0:1,quote); //inserting into masterData happens here
-							}
-						}
-						break;
-					}
-					i+=placedFirstQuote?1:-1;
-				}
-				if(i<0){
-					// we have at least one point which needs to be prepended to masterData
-					// this code will prepend the first of these points, then everything else will fall in line
-					if(secondary){
-						this.updateCurrentMarketData(quote, chart, secondary, {fromTrade:true});
-						if(layout.interval!="tick" || quote.Close!==undefined){
-							masterData.splice(0,0,{DT:quote.DT});
-							masterData[0][secondary]=quote;
-						}
-					}else{
-						this.updateCurrentMarketData(quote, chart, null, {fromTrade:true});
-						if(layout.interval!="tick" || quote.Close!==undefined) masterData.splice(0,0,quote);
-					}
+		if(appendQuotes && appendQuotes.constructor==Object) appendQuotes=[appendQuotes]; // When developer mistakenly sends an object instead of an array of objects
+		if(!appendQuotes || !appendQuotes.length) return;
+		if(this.runPrepend("appendMasterData", [appendQuotes, chart, params])) return;
+		if(this.runPrepend("updateChartData", [appendQuotes, chart, params])) return;
+
+		if(!masterData) masterData=[];
+
+		var i=masterData.length-1, placedFirstQuote=false;
+		
+		// fill gaps only if there is master data already
+		// we only fill from the end of the current data, not before
+		if(params.fillGaps && masterData.length) fillGapsFromMasterDataHead();
+
+		for(var j=0;j<appendQuotes.length;j++){
+			var quote=appendQuotes[j];
+			var dt=quote.DT, date=quote.Date;
+			if(dt && Object.prototype.toString.call(dt) != '[object Date]' ) quote.DT=dt=new Date(dt); // if already a date object; nothing to do
+			if(dt) {
+				if(!date || date.length!=17) quote.Date=CIQ.yyyymmddhhmmssmmm(quote.DT);
+			}
+			if(!dt) dt=quote.DT=CIQ.strToDateTime(date);
+
+			while(i>=0 && i<masterData.length){
+				var dt2=masterData[i].DT;
+				if(!dt2) dt2=CIQ.strToDateTime(masterData[i].Date);
+				if(dt2.getTime()<=dt.getTime()){
 					placedFirstQuote=true;
-					i=0;
+					var plusOne=0;	// If time is the same then replace last bar
+					if(dt2.getTime()<dt.getTime()) {
+						if(i<masterData.length-1){
+							var dtf=masterData[i+1].DT || CIQ.strToDateTime(masterData[i+1].Date);
+							if(dtf.getTime()<=dt.getTime()) {
+								i++;
+								continue;
+							}
+						}
+						plusOne=1;	// Otherwise append bar
+					}
+					if(params.deleteItems){
+						if(!plusOne) deleteThisItem(i, dt);
+						break;
+					}else{
+						if(!plusOne) mergeNewDataIntoMasterData(i, quote);
+
+						// Here we rectify any missing/malformatted data and set any new high/low
+						// If we don't set this here, the study calculations will fail
+						if(CIQ.isValidNumber(quote.Close)){
+							if(!CIQ.isValidNumber(quote.Open)) quote.Open=quote.Close;
+
+							var high=Math.max(quote.Open, quote.Close), low=Math.min(quote.Open, quote.Close);
+							if(!CIQ.isValidNumber(quote.High) || quote.High<high) quote.High=high;
+							if(!CIQ.isValidNumber(quote.Low) || quote.Low>low) quote.Low=low;
+						}
+						if(quote.Volume && !CIQ.isValidNumber(quote.Volume)) quote.Volume=parseInt(quote.Volume,10);
+						this.setDisplayDate(quote);
+						i+=plusOne;
+						
+						// Insert into masterData here
+						if(secondary){
+							if(appendQuotes.length-j<50){
+								// only check last 50 records
+								this.updateCurrentMarketData(quote, chart, secondary, {fromTrade:true});
+							}
+							if(layout.interval!="tick" || quote.Close!==undefined){
+								if(plusOne) masterData.splice(i,0,{DT:quote.DT});
+								masterData[i][secondary]=quote;
+							}
+						}else{
+							if(appendQuotes.length-j<50){
+								// only check last 50 records
+								this.updateCurrentMarketData(quote, chart, null, {fromTrade:true});
+							}
+							if(layout.interval!="tick" || quote.Close!==undefined) masterData.splice(i,plusOne?0:1,quote); //inserting into masterData happens here
+						}
+					}
+					break;
 				}
-            }
-            if(masterData.length) this.masterData=chart.masterData=masterData;
+				i+=placedFirstQuote?1:-1;
+			}
+			if(i<0){
+				// we have at least one point which needs to be prepended to masterData
+				// this code will prepend the first of these points, then everything else will fall in line
+				if(secondary){
+					this.updateCurrentMarketData(quote, chart, secondary, {fromTrade:true});
+					if(layout.interval!="tick" || quote.Close!==undefined){
+						masterData.splice(0,0,{DT:quote.DT});
+						masterData[0][secondary]=quote;
+					}
+				}else{
+					this.updateCurrentMarketData(quote, chart, null, {fromTrade:true});
+					if(layout.interval!="tick" || quote.Close!==undefined) masterData.splice(0,0,quote);
+				}
+				placedFirstQuote=true;
+				i=0;
+			}
+		}
+		if(masterData.length) this.masterData=chart.masterData=masterData;
 		if (this.maxMasterDataSize) masterData=chart.masterData=this.masterData=masterData.slice(-this.maxMasterDataSize);
 
 		var series=secondary?this.getSeries({symbol:secondary, chart:chart}):[chart];
@@ -34107,7 +34101,6 @@ var __js_core_engine_ =
 		}
 		if(!this.masterData || !this.masterData.length)
 			this.masterData=masterData;
-        }
 
 		if(!params.noCreateDataSet){
 			var sp=this.streamParameters;
@@ -34132,9 +34125,9 @@ var __js_core_engine_ =
 		}
 		this.runAppend("appendMasterData", arguments);
 		this.runAppend("updateChartData", arguments);
-    };
+	};
 
-    /**
+	/**
 	 * <span class="injection">INJECTABLE</span>
 	 * Extracts the necessary information from the `data` provided and loads/updates the [chart.currentMarketData]{@link CIQ.ChartEngine.Chart#currentMarketData} object, or an equally laid out object for a secondary series, if one provided.
 	 * 

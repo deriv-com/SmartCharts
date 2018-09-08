@@ -155,7 +155,10 @@ class Feed {
             });
             this._mainStore.chart.setChartAvailability(true);
         } else {
-            this._emitter.emit(Feed.EVENT_COMPARISON_DATA_UPDATE);
+            this._emitter.emit(Feed.EVENT_COMPARISON_DATA_UPDATE, {
+                symbol,
+                ...quotes[quotes.length - 1],
+            });
         }
     }
 
@@ -234,10 +237,15 @@ class Feed {
                 secondarySeries: comparisonChartSymbol,
                 noCreateDataSet: true,
             });
-            this._emitter.emit(Feed.EVENT_COMPARISON_DATA_UPDATE);
+            this._emitter.emit(Feed.EVENT_COMPARISON_DATA_UPDATE, {
+                symbol: comparisonChartSymbol,
+                ...quotes[quotes.length - 1],
+            });
         } else {
             this._stx.updateChartData(quotes);
-            this._emitter.emit(Feed.EVENT_MASTER_DATA_UPDATE, quotes[0]);
+            this._emitter.emit(Feed.EVENT_MASTER_DATA_UPDATE, {
+                ...quotes[quotes.length - 1],
+            });
         }
     }
 

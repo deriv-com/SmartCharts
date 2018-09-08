@@ -11,9 +11,18 @@
  * 2.  The current price appears to move smoothly from the previous price
  * 3.  The chart's y-axis smoothly expands/contracts when a new high or low is reached
  *
- * The following chart types are supported: line, mountain, baseline_delta
+ * The following chart types are supported: line, mountain, baseline_delta.
  *
- * Example <iframe width="800" height="500" scrolling="no" seamless="seamless" align="top" style="float:top" src="http://jsfiddle.net/chartiq/6fqw652z/embedded/result,js,html/" allowfullscreen="allowfullscreen" frameborder="1"></iframe>
+ * Chart aggregations such as Kagi, Renko, Range Bats, etc. are not supported.
+ *
+ * By default there will be a flashing beacon created using a canvas circles. If instead you want to use a custom animation beacon, you will be able to extend the functionality yourself as follows:
+ * - In js/addOns.js, at the bottom of the CIQ.Animation function, there is an stx.append("draw") function.
+ * - Make a copy of this function so you can override the behavior.
+ * - In there you will see it determine var x and y, which are the coordinates for the center of the beacon.
+ * - At the bottom of this append function, where we draw the beacon by using the Canvas arc() function to draw a circle and then fill() to make the circle solid.
+ * - You can replace this circle and fill instructions with an image using [CanvasRenderingContext2D.drawImage()](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D#Drawing_images) .
+ *
+ * Animation Example <iframe width="800" height="500" scrolling="no" seamless="seamless" align="top" style="float:top" src="http://jsfiddle.net/chartiq/6fqw652z/embedded/result,js,html/" allowfullscreen="allowfullscreen" frameborder="1"></iframe>
  *
  * @param {CIQ.ChartEngine} stx The chart object
  * @param {object} animationParameters Configuration parameters
@@ -28,14 +37,14 @@
  * <br>&bull; 3.0.0 Now part of addOns.js. Previously provided as a standalone animation.js file
  * <br>&bull; 4.0.0 beacon only flashes for line charts. On Candles or bars it is suppressed as it produces an unnatural effect.
  * @example
- *    new CIQ.Animation(stxx, {tension:0.3});  //Default animation with splining tension of 0.3
+ *     new CIQ.Animation(stxx, {tension:0.3});  //Default animation with splining tension of 0.3
  *
  */
 CIQ.Animation = function (stx, animationParameters, easeMachine) {
     let params = {
-        stayPut: false,
-        ticksFromEdgeOfScreen: 5,
-        granularity: 1000000,
+        stayPut:false,
+        ticksFromEdgeOfScreen:5,
+        granularity:1000000,
     };
     animationParameters = CIQ.extend(params, animationParameters);
 
@@ -51,8 +60,16 @@ CIQ.Animation = function (stx, animationParameters, easeMachine) {
         nextBoundary = null;
     }
 
-    stx.addEventListener(['symbolChange', 'layout'], (obj) => {
+    stx.addEventListener(['symbolChange', 'layout'], function (obj) {
         initMarketSessionFlags();
+    });
+
+    stx.prepend('updateCurrentMarketData', function (data, chart, symbol, params) {
+        if (!chart) chart = this.chart;
+        if (params && params.fromTrade && chart.closePendingAnimation) {
+            chart.currentMarketData.animatedLast = { DT:data.DT, Price:data.Close };
+            chart.currentMarketData.Last = { DT:data.DT, Price:chart.closePendingAnimation };
+        }
     });
 
     stx.prepend('updateChartData', function (appendQuotes, chart, params) {
@@ -62,18 +79,21 @@ CIQ.Animation = function (stx, animationParameters, easeMachine) {
         }
         if (!chart || !chart.defaultChartStyleConfig || chart.defaultChartStyleConfig == 'none') return;
 
-        if (params !== undefined && params.animationEntry) return;
+        if (params !== undefined) {
+            if (params.animationEntry || params.secondarySeries) return;
+        }
 
         function completeLastBar(value) {
             for (let md = chart.masterData.length - 1; md >= 0; md--) {
                 let bar = chart.masterData[md];
                 if (bar.Close || bar.Close === 0) {
                     bar.Close = value;
+                    delete chart.currentMarketData.animatedLast;
+                    self.updateCurrentMarketData({ Close:value, DT:bar.DT });
                     return;
                 }
             }
         }
-
         function unanimateScroll() {
             if (chart.animatingHorizontalScroll) {
                 chart.animatingHorizontalScroll = false;
@@ -85,7 +105,6 @@ CIQ.Animation = function (stx, animationParameters, easeMachine) {
                 chart.closePendingAnimation = null;
             }
         }
-
         let tickAnimator = self.tickAnimator;
         // These chart types are the only types supported by animation
         let supportedChartType = this.mainSeriesRenderer && this.mainSeriesRenderer.supportsAnimation;
@@ -108,7 +127,7 @@ CIQ.Animation = function (stx, animationParameters, easeMachine) {
             }
         }
         let newParams = CIQ.clone(params);
-        if (!newParams) { newParams = {}; }
+        if (!newParams) newParams = {};
         newParams.animationEntry = true;
         newParams.bypassGovernor = true;
         newParams.noCreateDataSet = false;
@@ -132,12 +151,12 @@ CIQ.Animation = function (stx, animationParameters, easeMachine) {
                 q.Close = Math.round(newClose * animationParameters.granularity) / animationParameters.granularity; // <<------ IMPORTANT! Use 1000000 for small price increments, otherwise animation will be in increments of .0001
                 // q.Close = Math.round(newClose*chart.roundit)/chart.roundit; // to ensure decimal points don't go out too far for interim values
                 if (chartJustAdvanced) {
-                    if (!q.Open && q.Open !== 0) { q.Open = q.Close; }
-                    if (!q.High && q.High !== 0) { q.High = Math.max(q.Open, q.Close); }
-                    if (!q.Low && q.Low !== 0) { q.Low = Math.min(q.Open, q.Close); }
+                    if (!q.Open && q.Open !== 0) q.Open = q.Close;
+                    if (!q.High && q.High !== 0) q.High = Math.max(q.Open, q.Close);
+                    if (!q.Low && q.Low !== 0) q.Low = Math.min(q.Open, q.Close);
                 } else {
-                    if (quote.Close > prevQuote.High) { q.High = q.Close; }
-                    if (quote.Close < prevQuote.Low) { q.Low = q.Close; }
+                    if (quote.Close > prevQuote.High) q.High = q.Close;
+                    if (quote.Close < prevQuote.Low) q.Low = q.Close;
                 }
                 if (chart.animatingHorizontalScroll) {
                     self.micropixels = newData.micropixels;
@@ -145,7 +164,9 @@ CIQ.Animation = function (stx, animationParameters, easeMachine) {
                 }
                 newParams.updateDataSegmentInPlace = !tickAnimator.hasCompleted;
                 // console.log("animating: Old",symbol,' New : ',chart.symbol);
-                self.updateChartData([q], chart, newParams);
+                let updateQuotes = [q];
+                if (chartJustAdvanced) updateQuotes.unshift(prevQuote);
+                self.updateChartData(updateQuotes, chart, newParams);
                 newParams.firstLoop = false;
                 if (tickAnimator.hasCompleted) {
                     // console.log( 'animator has completed') ;
@@ -163,7 +184,6 @@ CIQ.Animation = function (stx, animationParameters, easeMachine) {
                 }
             };
         }
-
         if (supportedChartType) {
             let quote = appendQuotes[appendQuotes.length - 1];
             this.prevQuote = this.currentQuote();  // <---- prevQuote logic has been changed to prevent forward/back jitter when more than one tick comes in between animations
@@ -171,7 +191,6 @@ CIQ.Animation = function (stx, animationParameters, easeMachine) {
             if (period == 1 && appendQuotes.length == 2) {  // Don't do this if consolidating
                 this.prevQuote = appendQuotes[0];
                 completeLastBar(this.prevQuote.Close);
-                appendQuotes.splice(1, 1);
             }
             if (!quote || !quote.Close || !this.prevQuote || !this.prevQuote.Close) return false;
 
@@ -192,19 +211,13 @@ CIQ.Animation = function (stx, animationParameters, easeMachine) {
             }
 
             let barSpan = period;
-            if (interval == 'second' || timeUnit == 'second') {
-                barSpan *= 1000;
-            } else if (interval == 'minute' || timeUnit == 'minute') { barSpan *= 60000; }
-            if (!isNaN(interval)) { barSpan *= interval; }
-            if (interval == 'day' || timeUnit == 'day') {
-                chartJustAdvanced = quote.DT.getDate() != this.prevQuote.DT.getDate();
-            } else if (interval == 'week' || timeUnit == 'week') {
-                chartJustAdvanced = quote.DT.getDate() >= this.prevQuote.DT.getDate() + 7;
-            } else if (interval == 'month' || timeUnit == 'month') {
-                chartJustAdvanced = quote.DT.getMonth() != this.prevQuote.DT.getMonth();
-            } else {
-                chartJustAdvanced = quote.DT.getTime() >= this.prevQuote.DT.getTime() + barSpan;
-            }
+            if (interval == 'second' || timeUnit == 'second') barSpan *= 1000;
+            else if (interval == 'minute' || timeUnit == 'minute') barSpan *= 60000;
+            if (!isNaN(interval)) barSpan *= interval;
+            if (interval == 'day' || timeUnit == 'day') chartJustAdvanced = quote.DT.getDate() != this.prevQuote.DT.getDate();
+            else if (interval == 'week' || timeUnit == 'week') chartJustAdvanced = quote.DT.getDate() >= this.prevQuote.DT.getDate() + 7;
+            else if (interval == 'month' || timeUnit == 'month') chartJustAdvanced = quote.DT.getMonth() != this.prevQuote.DT.getMonth();
+            else chartJustAdvanced = quote.DT.getTime() >= this.prevQuote.DT.getTime() + barSpan;
 
             let linearChart = (!this.mainSeriesRenderer || !this.mainSeriesRenderer.standaloneBars) && !this.standaloneBars[this.layout.chartType];
 
@@ -241,11 +254,7 @@ CIQ.Animation = function (stx, animationParameters, easeMachine) {
                 Close: start,
                 micropixels: this.nextMicroPixels,
                 lineOffset: beginningOffset,
-            }, {
-                Close: quote.Close,
-                micropixels: this.micropixels,
-                lineOffset: 0,
-            });
+            }, { Close: quote.Close, micropixels: this.micropixels, lineOffset: 0 });
             return true; // bypass default behavior in favor of animation
         }
     });

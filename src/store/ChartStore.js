@@ -439,7 +439,7 @@ class ChartStore {
         this.newChart();
     }
 
-    @action.bound updateComparisons() {
+    @action.bound updateComparisons(data) {
         if (!this.context) { return; }
         const stx = this.context.stx;
         const comparisonSymbolsKeys = Object.keys(stx.chart.series);
@@ -450,11 +450,10 @@ class ChartStore {
                 for (const sybl of comparisonSymbolsKeys) {
                     const srs = stx.chart.series[sybl];
                     const prm = srs.parameters;
-                    const price = srs.lastQuote ? srs.lastQuote.Close : undefined;
 
                     comparisons.push({
                         color: prm.color,
-                        price,
+                        price: q[sybl] && q[sybl].Close,
                         symbolObject: prm.symbolObject,
                     });
                 }
@@ -464,13 +463,9 @@ class ChartStore {
         }
 
         // Update the comparison prices:
-        let i = 0;
-        for (const sybl of comparisonSymbolsKeys) {
-            const comp = this.comparisonSymbols[i];
-            const srs = stx.chart.series[sybl];
-            comp.price = srs.lastQuote ? srs.lastQuote.Close : undefined;
-            i++;
-        }
+        if (!data) { return; }
+        const comparison = this.comparisonSymbols.find(x => x.symbolObject.symbol === data.symbol);
+        comparison.price = data.Close;
     }
 
     @action.bound destroy() {
