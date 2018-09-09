@@ -53,6 +53,7 @@ export default class CategoricalDisplayStore {
     };
     @observable isScrollingDown = false;
     scrollTop = undefined;
+    @observable activeCategoryTop = undefined;
     isUserScrolling = true;
     lastFilteredItems = [];
 
@@ -82,18 +83,24 @@ export default class CategoricalDisplayStore {
         if (this.pauseScrollSpy || !this.scrollPanel) { return; }
         if (this.filteredItems.length === 0) { return; }
 
-        const ActiveViewHeight = this.scrollPanel.clientHeight * 1 / 5;
         let activeMenuId = null;
+        const categoryTitleHeight = 40;
+        let activeCategoryTop = 0;
 
         for (const category of this.filteredItems) {
             const el = this.categoryElements[category.categoryId];
             const r = el.getBoundingClientRect();
             const top = r.top - this.scrollPanel.getBoundingClientRect().top;
-            if (top < ActiveViewHeight) {
+            if (top < 0) {
                 activeMenuId = category.categoryId;
+
+                const categorySwitchPoint = r.height + top - categoryTitleHeight;
+                activeCategoryTop = categorySwitchPoint < 0 ? categorySwitchPoint : 0;
             }
         }
 
+
+        this.activeCategoryTop = activeCategoryTop + this.scrollPanel.offsetTop;
         this.activeCategoryKey = activeMenuId || this.filteredItems[0].categoryId;
         this.scrollTop = this.scrollPanel.scrollTop;
     }
@@ -120,6 +127,7 @@ export default class CategoricalDisplayStore {
                 }
             }
         }
+        this.activeCategoryTop = this.scrollPanel.offsetTop;
     }
 
     /* isMobile: fill form the ChartStore */
@@ -245,7 +253,7 @@ export default class CategoricalDisplayStore {
     }
 
     @action.bound setScrollPanel(element) {
-        this.scrollPanel = element ? element._container : null;
+        this.scrollPanel = element || null;
     }
 
     @action.bound getItemCount(category) {
@@ -323,6 +331,7 @@ export default class CategoricalDisplayStore {
         CloseUpperMenu: this.CloseUpperMenu,
         isScrollingDown: this.isScrollingDown,
         updateScrollSpy: this.updateScrollSpy,
+        activeCategoryTop: this.activeCategoryTop,
         scrollUp: this.scrollUp,
         scrollDown: this.scrollDown,
     }))

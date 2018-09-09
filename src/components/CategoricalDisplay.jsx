@@ -1,5 +1,4 @@
 import React, { Fragment } from 'react';
-import PerfectScrollbar from 'react-perfect-scrollbar';
 import {
     CategoryIconMap, ItemIconMap, SearchIcon, ActiveOptionsIconMap, FavoriteIcon, CloseIcon,
 } from './Icons.jsx';
@@ -29,8 +28,7 @@ const CategoricalDisplay = ({
     closeMenu,
     isScrollingDown,
     updateScrollSpy,
-    scrollUp,
-    scrollDown,
+    activeCategoryTop,
 }) => {
     /**
      * On mobile mode, this part appear on the top of dialog
@@ -141,21 +139,26 @@ const CategoricalDisplay = ({
                     })}
                 </div>
             </div>
-            <PerfectScrollbar
+            <div
                 className="cq-scroll-panel"
                 ref={setScrollPanel}
-                onScrollY={e => updateScrollSpy(e)}
-                onScrollUp={scrollUp}
-                onScrollDown={scrollDown}
+                onScroll={e => updateScrollSpy(e)}
             >
-                <div className="results-panel">
+                <div
+                    className="results-panel"
+                >
                     { filteredItems.map(category => (getItemCount(category) > 0 || category.emptyDescription) && (
                         <div
                             key={category.categoryId}
                             className={`category category-${category.categoryId}`}
                             ref={el => setCategoryElement(el, category.categoryId)}
                         >
-                            <div className="category-title">{t.translate(category.categoryName)}</div>
+                            <div
+                                className={`category-title ${activeCategoryKey === category.categoryId ? 'fixed' : ''}`}
+                                style={{ top: (activeCategoryKey === category.categoryId ? activeCategoryTop : 0) }}
+                            >
+                                {t.translate(category.categoryName)}
+                            </div>
                             { category.hasSubcategory
                                 ? category.data.map(subcategory => getItemCount(subcategory) > 0 && (
                                     <Fragment key={subcategory.subcategoryName}>
@@ -178,7 +181,7 @@ const CategoricalDisplay = ({
                         </div>
                     )) }
                 </div>
-            </PerfectScrollbar>
+            </div>
         </div>
     );
 };
