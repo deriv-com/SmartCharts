@@ -141,6 +141,7 @@
             top: 0px;
             @include themify($themes) {
                 background-color: themed('DialogBodyBg');
+                border-bottom: 1px solid themed('CatDisplayCatContentBorder');
             }
         }
     }

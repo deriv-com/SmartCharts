@@ -100,7 +100,6 @@ export default class CategoricalDisplayStore {
             }
         }
 
-
         this.activeCategoryTop = activeCategoryTop + this.scrollPanel.offsetTop;
         this.activeCategoryKey = activeMenuId || this.filteredItems[0].categoryId;
         this.scrollTop = this.scrollPanel.scrollTop;
