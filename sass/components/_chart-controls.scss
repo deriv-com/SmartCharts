@@ -7,8 +7,8 @@
     flex-wrap: wrap; /* Optional. only if you want the items to wrap */
     justify-content: center;
     align-items: center;
-    @include border-radius(2px);
-    @include box-sizing(border-box);
+    box-sizing: border-box;
+    border-radius: 2px;
     @include themify($themes) {
         background: themed('MenuBg');
     }
@@ -63,7 +63,7 @@
         }
         .cq-menu-btn {
             position: relative;
-            padding: 0 5px;
+            padding: 3px 5px;
 
             > .ic-icon {
                 padding: 0.35em 0.5em;
@@ -87,6 +87,7 @@
                     line-height: normal;
                     letter-spacing: normal;
                     text-align: center;
+                    font-size: 10px;
                     @include themify($themes) {
                         color: themed('MenuText');
                     }
@@ -117,7 +118,7 @@
         width: 24px;
         height: 24px;
         display: inline-block;
-        @include box-sizing(border-box);
+        box-sizing: border-box;
     }
     .cq-toggle {
         cursor: pointer;
@@ -141,7 +142,7 @@
         bottom: auto;
         left: 9em;
         top: -1em;
-        @include transition(opacity 0.2s 0s);
+        transition: opacity 0.2s 0s;
         @include dialog-transition();
         transform: translateX(-3em);
 
@@ -161,7 +162,7 @@
 
 .cq-chart-control-bottom .cq-chart-controls {
     bottom: 0px;
-    height: 50px;
+    height: 54px;
     width: 100%;
     padding: 0 5px;
     @include themify($themes) {
@@ -243,10 +244,10 @@
                     padding: 0.35em 0.6em;
                 }
                 .ciq-menu {
-                    width: 47px;
+                    width: 40px;
 
                     .cq-menu-btn {
-                        padding: 5px;
+                        padding: 8px 5px;
 
                         > .ic-icon {
                             padding: 0.35em 0em;
@@ -266,10 +267,10 @@
         .cq-chart-control-bottom {
             .cq-chart-controls {
                 .ciq-menu {
-                    width: 70px;
+                    width: 60px;
 
                     .cq-menu-btn {
-                        padding: 5px;
+                        padding: 8px 5px;
 
                         > .ic-icon {
                             padding: 0.35em 0em;
@@ -285,7 +286,7 @@
             }
         }
     }
-    &.smartcharts-1100 {
+    &.smartcharts-1280 {
         .cq-chart-controls {
             .ciq-menu {
                 width: 100px;

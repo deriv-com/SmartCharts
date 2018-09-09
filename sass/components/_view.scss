@@ -5,27 +5,13 @@
         transform: translate(-50%);
         left: 50%;
 
-        .title {
-            height: 40px;
-            line-height: 40px;
-            font-size: 16px;
-            display: flex;
-
-            .title-text {
-                display: block;
-                font-size: 16px;
-                line-height: 40px;
-                font-weight: 400;
-                padding: 0 0.7em;
-            }
-        }
         .template-name {
             display: flex;
             align-items: center;
             height: 32px;
             padding: 0 0 0 16px;
             margin: 16px 11px 0 0;
-            @include box-sizing(border-box);
+            box-sizing: border-box;
             @include themify($themes) {
                 border: 1px solid themed('ListLiBorder');
                 background: themed('ListLiBg');

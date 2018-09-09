@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
-"PO-Revision-Date: 2018-08-08 08:01\n"
+"PO-Revision-Date: 2018-09-05 01:41\n"
 
 msgid " already exists."
 msgstr ""
@@ -105,6 +105,12 @@ msgstr "Точечный"
 msgid "Download"
 msgstr ""
 
+msgid "Download as CSV"
+msgstr ""
+
+msgid "Download as PNG"
+msgstr ""
+
 msgid "Download Chart"
 msgstr ""
 
@@ -195,9 +201,6 @@ msgstr "Крестики-нолики"
 msgid "Position"
 msgstr "Позиция"
 
-msgid "PRICE"
-msgstr "ЦЕНА"
-
 msgid "Price Lines"
 msgstr "Линии цены"
 
@@ -273,11 +276,11 @@ msgstr "Линия сопротивления"
 msgid "Spline"
 msgstr "Кривая"
 
+msgid "SPOT"
+msgstr ""
+
 msgid "Streaming for [symbol] is not available due to license restrictions"
 msgstr "Потоковые котировки для [symbol] недоступны из-за лицензионных ограничений"
-
-msgid "tap to manage"
-msgstr ""
 
 msgid "Template name"
 msgstr "Название шаблона"

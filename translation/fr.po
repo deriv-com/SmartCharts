@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: French\n"
 "Language: fr_FR\n"
-"PO-Revision-Date: 2018-08-08 08:01\n"
+"PO-Revision-Date: 2018-09-05 01:41\n"
 
 msgid " already exists."
 msgstr " existe déja."
@@ -103,10 +103,16 @@ msgid "Dot"
 msgstr "Point"
 
 msgid "Download"
+msgstr "Télécharger"
+
+msgid "Download as CSV"
+msgstr ""
+
+msgid "Download as PNG"
 msgstr ""
 
 msgid "Download Chart"
-msgstr ""
+msgstr "Télécharger le graphique"
 
 msgid "Draw tools"
 msgstr "Créer des d'outils"
@@ -195,9 +201,6 @@ msgstr "Point & Figure"
 msgid "Position"
 msgstr "Position"
 
-msgid "PRICE"
-msgstr "PRIX"
-
 msgid "Price Lines"
 msgstr "Lignes de prix"
 
@@ -273,11 +276,11 @@ msgstr "Ligne de Résistance Vitesse"
 msgid "Spline"
 msgstr "Spline"
 
+msgid "SPOT"
+msgstr ""
+
 msgid "Streaming for [symbol] is not available due to license restrictions"
 msgstr "Diffusion en continu pour [symbol] n’est pas disponible en raison de restrictions de licence"
-
-msgid "tap to manage"
-msgstr "appuyer pour gérer"
 
 msgid "Template name"
 msgstr "Nom du modèle"

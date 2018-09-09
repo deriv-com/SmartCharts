@@ -5,12 +5,12 @@
     display: flex;
     text-align: left;
     overflow: hidden;
+    transition: opacity 1s;
+    border-radius: 3px;
+    box-shadow: 0px, 2px, 4px, rgba(0, 0, 0, 0.2);
     @include themify($themes) {
         color: themed('CatDisplayText');
     }
-    @include transition(opacity 1s);
-    @include border-radius();
-    @include box-shadow (0px, 2px, 4px, rgba(0, 0, 0, 0.2));
 
     .cq-lookup-filters {
         width: 34%;
@@ -21,7 +21,7 @@
     .cq-lookup-input {
         margin: 1.5em 1.1em 1.6em 1.3em;
         position: relative;
-        @include border-radius();
+        border-radius: 3px;
         @include themify($themes) {
             color: themed('CatDisplayText');
             border: 1px solid themed('CatDisplaySearchBorder');
@@ -45,7 +45,7 @@
             outline: 0;
             width: calc(100% - 40px);
             background-color: transparent;
-            @include border-radius();
+            border-radius: 3px;
             @include placeholder {
                 @include themify($themes) {
                     opacity: 0.4;
@@ -71,7 +71,7 @@
             line-height: 28px;
             font-size: 9px;
             top: 7px;
-            @include transition(right, opacity 0.2s ease-in-out);
+            transition: right, opacity 0.2s ease-in-out;
             @include svg-icon-color('CatDisplayFilterIcon');
         }
         > input:focus + .ic-icon svg path {
@@ -106,7 +106,7 @@
     }
     .category-content {
         margin: 0.4em 1em 0em;
-        @include border-radius(3px);
+        border-radius: 3px;
         @include themify($themes) {
             background-color: themed('CatDisplayCatContentBg');
             border: 1px solid themed('CatDisplayCatContentBorder');
@@ -116,7 +116,7 @@
         font-weight: 500;
         padding: 0.9em 0 0.9em 1.2em;
         font-size: 1.1em;
-        @include border-radius(3px 3px 0 0);
+        border-radius: 3px 3px 0 0;
         @include themify($themes) {
             border-bottom: 1px solid themed('CatDisplayCatContentBorder');
             color: themed('CatDisplayCatContentTitleText');
@@ -149,8 +149,8 @@
         line-height: 3.4em;
         text-align: left;
         cursor: pointer;
-        @include transition(background-color 0.3s);
-        @include box-sizing(border-box);
+        transition: background-color 0.3s;
+        box-sizing: border-box;
 
         &.cq-hover-style:hover {
             @include themify($themes) {
@@ -233,10 +233,10 @@
         }
 
         &:first-child {
-            @include border-radius(3px 3px 0 0);
+            border-radius: 3px 3px 0 0;
         }
         &:last-child {
-            @include border-radius(0 0 3px 3px);
+            border-radius: 0 0 3px 3px;
             border-bottom: none;
         }
         .left, .right {
@@ -258,7 +258,7 @@
             padding: 3px 6px;
             object-fit: contain;
             font-size: 0.64em;
-            @include border-radius();
+            border-radius: 3px;
         }
         &:hover,
         &.selected {
@@ -296,12 +296,7 @@
     }
     .empty-category {
         padding: 0.9em 1.2em;
-        @include border-radius(3px);
-    }
-    .cq-mobile-title {
-        padding-top: 16px !important;
-        padding-bottom: 16px !important;
-        border-bottom: none !important;
+        border-radius: 3px;
     }
 }
 
@@ -335,7 +330,7 @@
             vertical-align: bottom;
             left: 6px;
             position: relative;
-            @include border-radius(15px);
+            border-radius: 15px;
         }
     }
     .ciq-favorite {
@@ -365,6 +360,19 @@
     }
 }
 
+.smartcharts-desktop {
+    &.smartcharts-480 {
+        .cq-categorical-display {
+            width: 450px;
+        }
+    }
+    &.smartcharts-900 {
+        .cq-categorical-display {
+            width: 550px;
+        }
+    }
+}
+
 .smartcharts-mobile {
     .cq-categorical-display {
         flex-direction: column;
@@ -378,14 +386,14 @@
             max-height: 200px;
             overflow: hidden;
             z-index: 3;
-            @include transition(max-height 0.2s ease-in);
+            transition: max-height 0.2s ease-in;
             @include themify($themes) {
                 border-bottom: 1px solid themed('CatDisplaySearchBorder');
             }
 
             &.scroll-down {
                 max-height: 0;
-                @include transition(max-height 0.2s ease-out);
+                transition: max-height 0.2s ease-out;
             }
         }
         .cq-lookup-input {

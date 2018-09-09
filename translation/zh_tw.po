@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Chinese Traditional\n"
 "Language: zh_TW\n"
-"PO-Revision-Date: 2018-08-08 08:01\n"
+"PO-Revision-Date: 2018-09-05 01:41\n"
 
 msgid " already exists."
 msgstr " 已經存在。"
@@ -105,6 +105,12 @@ msgstr "點"
 msgid "Download"
 msgstr ""
 
+msgid "Download as CSV"
+msgstr ""
+
+msgid "Download as PNG"
+msgstr ""
+
 msgid "Download Chart"
 msgstr ""
 
@@ -195,9 +201,6 @@ msgstr "點數圖"
 msgid "Position"
 msgstr "頭寸"
 
-msgid "PRICE"
-msgstr "價格"
-
 msgid "Price Lines"
 msgstr "價格線"
 
@@ -273,11 +276,11 @@ msgstr "速阻線"
 msgid "Spline"
 msgstr "Spline法"
 
+msgid "SPOT"
+msgstr ""
+
 msgid "Streaming for [symbol] is not available due to license restrictions"
 msgstr "由於許可限制, [symbol] 串流不可用"
-
-msgid "tap to manage"
-msgstr "點擊管理"
 
 msgid "Template name"
 msgstr "範本名稱"

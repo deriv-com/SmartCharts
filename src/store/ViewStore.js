@@ -76,18 +76,22 @@ export default class ViewStore {
         ViewStore.updateLocalStorage();
     }
 
-    @action.bound applyLayout = (idx, e) => {
+    @action.bound applyLayout(idx, e) {
         if (e.nativeEvent.is_item_removed) { return; }
         if (this.loader) { this.loader.show(); }
         const stx = this.stx;
 
         const importLayout = () => {
-            stx.importLayout(ViewStore.views[idx].layout, true, true);
-            if (stx.changeCallback) { stx.changeCallback(stx, 'layout'); }
-            stx.dispatch('layout', {
-                stx,
+            const finishImportLayout = () => {
+                stx.changeOccurred('layout');
+                this.mainStore.studies.updateActiveStudies();
+                if (this.loader) { this.loader.hide(); }
+            };
+            stx.importLayout(ViewStore.views[idx].layout, {
+                managePeriodicity: true,
+                preserveTicksAndCandleWidth: true,
+                cb: finishImportLayout,
             });
-            if (this.loader) { this.loader.hide(); }
             this.menu.setOpen(false);
         };
         setTimeout(importLayout, 100);

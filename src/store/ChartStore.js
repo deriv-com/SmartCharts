@@ -1,20 +1,80 @@
 import ResizeObserver from 'resize-observer-polyfill';
-import { action, observable, reaction } from 'mobx';
+import { action, observable, reaction, computed } from 'mobx';
 import PendingPromise from '../utils/PendingPromise';
 import Context from '../components/ui/Context';
 import KeystrokeHub from '../components/ui/KeystrokeHub';
 import '../components/ui/Animation';
-import { BinaryAPI, Feed } from '../feed';
-import { stableSort, calculateTimeUnitInterval, getUTCDate } from '../utils';
+import { Feed } from '../feed';
+import { ActiveSymbols, BinaryAPI, TradingTimes } from '../binaryapi';
+import { calculateTimeUnitInterval, getUTCDate, cloneCategories } from '../utils';
+
+CIQ.ChartEngine.prototype.createYAxisLabel = function (panel, txt, y, backgroundColor, color, ctx, yAxis) {
+    if (panel.yAxis.drawPriceLabels === false || panel.yAxis.noDraw) return;
+    const yax = yAxis || panel.yAxis;
+    if (yax.noDraw || !yax.width) return;
+    const context = ctx || this.chart.context;
+    const margin = 3;
+    const height = this.getCanvasFontSize('stx_yaxis') + (margin << 1);
+    this.canvasFont('stx_yaxis', context);
+    this.drawBorders = yax.displayBorder;
+    const tickWidth = this.drawBorders ? 3 : 0; // pixel width of tick off edge of border
+    let width;
+    try {
+        width = context.measureText(txt).width + tickWidth + (margin << 1);
+    } catch (e) {
+        width = yax.width;
+    } // Firefox doesn't like this in hidden iframe
+
+    let x = yax.left - margin + 3;
+    if (yax.width < 0) x += (yax.width - width);
+    let textx = x + margin + tickWidth;
+    let radius = 3;
+    const position = (yax.position === null ? panel.chart.yAxis.position : yax.position);
+    if (position === 'left') {
+        x = yax.left + yax.width + margin - 3;
+        width *= -1;
+        if (yax.width < 0) x -= (yax.width + width);
+        textx = x - margin - tickWidth;
+        radius = -3;
+        context.textAlign = 'right';
+    }
+    if (y + (height >> 1) > yax.bottom) y = yax.bottom - (height >> 1);
+    if (y - (height >> 1) < yax.top)    y = yax.top    + (height >> 1);
+
+    if (typeof (CIQ[this.yaxisLabelStyle]) === 'undefined') {
+        this.yaxisLabelStyle = 'roundRectArrow'; // in case of user error, set a default.
+    }
+    let yaxisLabelStyle = this.yaxisLabelStyle;
+    if (yax.yaxisLabelStyle) yaxisLabelStyle = yax.yaxisLabelStyle;
+    const params = {
+        ctx: context,
+        x,
+        y,
+        top: y - (height >> 1),
+        width,
+        height,
+        radius,
+        backgroundColor,
+        fill: true,
+        stroke: false,
+        margin: {
+            left: textx - x,
+            top: 1,
+        },
+        txt,
+        color,
+    };
+    CIQ[yaxisLabelStyle](params);
+};
 
 class ChartStore {
+    static keystrokeHub;
     constructor(mainStore) {
         this.mainStore = mainStore;
     }
 
     RANGE_PADDING_PX = 125;
     contextPromise = new PendingPromise();
-    activeSymbols = [];
     rootNode = null;
     stxx = null;
     api = null;
@@ -35,15 +95,10 @@ class ChartStore {
     @observable currentActiveSymbol;
     @observable isChartAvailable = true;
     @observable comparisonSymbols = [];
-    @observable categorizedSymbols = [];
     @observable chartHeight;
     @observable chartContainerHeight;
     @observable isMobile = false;
-
-    @action.bound setActiveSymbols(activeSymbols) {
-        this.activeSymbols = this.processSymbols(activeSymbols);
-        this.categorizedSymbols = this.categorizeActiveSymbols();
-    }
+    @observable cursorInChart = false;
 
     get loader() { return this.mainStore.loader; }
     get routingStore() {
@@ -57,10 +112,6 @@ class ChartStore {
         this.chartContainerHeight = this.chartHeight - offsetHeight;
     }
 
-    notify(message) {
-        if (this.onMessage) { this.onMessage(message); }
-    }
-
     updateCanvas = () => {
         if (this.stxx.slider) {
             this.stxx.slider.display(this.stxx.layout.rangeSlider);
@@ -72,8 +123,8 @@ class ChartStore {
         if (!this.context) { return; }
 
 
-        if (this.modalNode.clientWidth > 1100) {
-            this.containerWidth = 1100;
+        if (this.modalNode.clientWidth > 1280) {
+            this.containerWidth = 1280;
         } else if (this.modalNode.clientWidth > 900) {
             this.containerWidth = 900;
         } else {
@@ -108,18 +159,20 @@ class ChartStore {
             onSettingsChange,
         } = props;
         this.api = new BinaryAPI(requestAPI, requestSubscribe, requestForget);
+        this.tradingTimes = new TradingTimes(this.api);
+        this.activeSymbols = new ActiveSymbols(this.api, this.tradingTimes);
         const { chartSetting } = this.mainStore;
         chartSetting.setSettings(settings);
         chartSetting.onSettingsChange = onSettingsChange;
         this.isMobile = isMobile;
         this.state = this.mainStore.state;
 
-        this.onMessage = onMessage;
+        this.mainStore.notifier.onMessage = onMessage;
         this.granularity = (granularity !== undefined) ? granularity : this.defaults.granularity;
         const engineParams = {
             maxMasterDataSize: 5000, // cap size so tick_history requests do not become too large
             markerDelay: null, // disable 25ms delay for placement of markers
-            container: this.rootNode.querySelector('.chartContainer.primary'),
+            container: this.rootNode.querySelector('.chartContainer'),
             controls: { chartControls: null }, // hide the default zoom buttons
             preferences: {
                 currentPriceLine: true,
@@ -131,6 +184,8 @@ class ChartStore {
                     initialMarginTop: 125,
                     initialMarginBottom: 10,
                     // position: 'left',
+                    width: -10,
+                    justifyRight: true,
                 },
             },
             minimumLeftBars: 2,
@@ -151,18 +206,20 @@ class ChartStore {
 
         const stxx = this.stxx = new CIQ.ChartEngine(engineParams);
 
-        const deleteElement = stxx.chart.panel.holder.parentElement.querySelector('#mouseDeleteText');
-        const manageElement = stxx.chart.panel.holder.parentElement.querySelector('#mouseManageText');
+        const deleteElement = stxx.chart.panel.holder.parentElement.querySelector('.mouseDeleteText');
+        const manageElement = stxx.chart.panel.holder.parentElement.querySelector('.mouseManageText');
         deleteElement.textConent = t.translate('right-click to delete');
         manageElement.textConent = t.translate('right-click to manage');
 
         CIQ.Animation(stxx, { stayPut: true });
 
         // connect chart to data
-        this.feed = new Feed(this.api, stxx, this.mainStore);
+        this.feed = new Feed(this.api, stxx, this.mainStore, this.tradingTimes);
         stxx.attachQuoteFeed(this.feed, {
             refreshInterval: null,
         });
+
+        this.feed.onComparisonDataUpdate(this.updateComparisons);
 
         this.enableRouting = enableRouting;
         if (this.enableRouting) {
@@ -175,9 +232,12 @@ class ChartStore {
 
         const context = new Context(stxx, this.rootNode);
 
-        new KeystrokeHub(document.querySelector('body'), context, { // eslint-disable-line no-new
-            cb: KeystrokeHub.defaultHotKeys,
-        });
+        // only one instance of keystrokeHub should exist
+        if (ChartStore.keystrokeHub === undefined) {
+            ChartStore.keystrokeHub = new KeystrokeHub(document.body, context, {
+                cb: KeystrokeHub.defaultHotKeys,
+            });
+        }
 
         // TODO: excluded studies
 
@@ -187,90 +247,84 @@ class ChartStore {
         stxx.callbacks.studyOverlayEdit = studiesStore.editStudy;
         stxx.callbacks.studyPanelEdit = studiesStore.editStudy;
 
-        this.api.getActiveSymbols().then(action(({ active_symbols }) => {
-            /**
-             * Updating market close status each 10 minute
-             */
-            this.onMarketClosedStatus();
-            setInterval(this.onMarketClosedStatus.bind(this), 10 * 60 * 1000);
-            this.setActiveSymbols(active_symbols);
-            const isRestoreSuccess = this.state.restoreLayout();
+        this.tradingTimes.initialize().then(() => {
+            this.activeSymbols.retrieveActiveSymbols().then(action(() => {
+                // In the odd event that chart is destroyed by the time
+                // the request finishes, just calmly return...
+                if (stxx.isDestroyed) { return; }
 
-            if (!isRestoreSuccess) {
-                this.changeSymbol(
-                    symbol || this.defaults.symbol,
-                    this.granularity,
-                );
-            }
+                const isRestoreSuccess = this.state.restoreLayout();
 
-            this.context = context;
-            this.contextPromise.resolve(this.context);
-            this.resizeScreen();
-
-            reaction(() => [
-                this.state.symbol,
-                this.state.granularity,
-            ], () => {
-                if (this.state.symbol !== undefined || this.state.granularity !== undefined) {
-                    this.changeSymbol(this.state.symbol, this.state.granularity);
+                if (!isRestoreSuccess) {
+                    this.changeSymbol(
+                        symbol || this.defaults.symbol,
+                        this.granularity,
+                    );
                 }
-            });
-        }));
+
+                this.context = context;
+                stxx.container.addEventListener('mouseenter', this.onMouseEnter);
+                stxx.container.addEventListener('mouseleave', this.onMouseLeave);
+                this.contextPromise.resolve(this.context);
+                this.resizeScreen();
+
+                reaction(() => [
+                    this.state.symbol,
+                    this.state.granularity,
+                ], () => {
+                    if (this.state.symbol !== undefined || this.state.granularity !== undefined) {
+                        this.changeSymbol(this.state.symbol, this.state.granularity);
+                    }
+                });
+
+                this.tradingTimes.onMarketOpenCloseChanged(this.onMarketOpenClosedChange);
+            }));
+        });
 
         this.resizeObserver = new ResizeObserver(this.resizeScreen);
         this.resizeObserver.observe(modalNode);
-
-        this.feed.onComparisonDataUpdate(this.updateComparisons);
     }
 
-    /**
-     * Get tradeTimes if not loaded yet
-     * OR update the active symbols by comapring open time
-     */
-    onMarketClosedStatus() {
-        this.api.getTradingTimes()
-            .then(this.updateMarketClosedStatus);
-    }
+    onMarketOpenClosedChange = (changes) => {
+        const symbolObjects = this.stxx.getSymbols().map(item => item.symbolObject);
+        let shouldRefreshChart = false;
+        for (const { symbol, name } of symbolObjects) {
+            if (symbol in changes) {
+                if (changes[symbol]) {
+                    shouldRefreshChart = true;
+                    this.mainStore.notifier.notifyMarketOpen(name);
+                } else {
+                    this.mainStore.notifier.notifyMarketClose(name);
+                }
+            }
+        }
+        if (shouldRefreshChart) {
+            // refresh to stream opened market
+            this.refreshChart();
+        }
+    };
 
-    @action.bound updateMarketClosedStatus(response) {
-        const nowUtc = (new Date()).getTime();
-        const toEpochGMT = (hour, crossDay) => {
-            const currentDate = new Date();
-            currentDate.setDate(currentDate.getDate() + (crossDay || 0));
-            const dateStr = currentDate.toISOString().substring(0, 11);
-            return new Date(`${dateStr}${hour}Z`).getTime();
-        };
-        response.trading_times.markets.forEach((market) => {
-            market.submarkets.forEach((submarket) => {
-                submarket.symbols.forEach((symbol) => {
-                    const foundSymbol = this.activeSymbols.find(item => item.symbol === symbol.symbol);
-                    if (foundSymbol) {
-                        let isOpen = false;
-                        for (let i = 0; i <= symbol.times.open.length; i++) {
-                            const { open, close } = symbol.times;
-                            if (open.length && close.length) {
-                                const openTime = toEpochGMT(open[i]);
-                                const closeTime = toEpochGMT(close[i]);
+    @computed get categorizedSymbols() {
+        if (!this.activeSymbols || this.activeSymbols.categorizedSymbols.length === 0) return [];
 
-                                // If open time is cross day, then should check time till tomorrow
-                                // and yesterday till now
-                                if (
-                                    (openTime > closeTime && nowUtc >= toEpochGMT(open[i], -1) && nowUtc <= closeTime)
-                                        || (openTime > closeTime && nowUtc >= toEpochGMT(open[i]) && nowUtc <= toEpochGMT(close[i], 1))
-                                        || (nowUtc >= openTime && nowUtc <= closeTime)
-                                ) {
-                                    isOpen = true;
-                                    break;
-                                }
-                            }
-                        }
-                        foundSymbol.exchange_is_open = isOpen;
-                    }
-                });
-            });
+        const activeSymbols = this.activeSymbols.activeSymbols;
+        return cloneCategories(activeSymbols, (item) => {
+            const selected = item.dataObject.symbol === this.currentActiveSymbol.symbol;
+            return {
+                ...item,
+                selected,
+            };
         });
+    }
 
-        this.categorizedSymbols = this.categorizeActiveSymbols();
+    @action.bound onMouseEnter() {
+        this.cursorInChart = true;
+        ChartStore.keystrokeHub.setActiveContext(this.context);
+    }
+
+    @action.bound onMouseLeave() {
+        this.cursorInChart = false;
+        ChartStore.keystrokeHub.setActiveContext(null);
     }
 
     removeComparison(symbolObj) {
@@ -282,7 +336,6 @@ class ChartStore {
         const { symbolObject } = this.stxx.chart;
         this.currentActiveSymbol = symbolObject;
         this.stxx.chart.yAxis.decimalPlaces = symbolObject.decimal_places;
-        this.categorizedSymbols = this.categorizeActiveSymbols();
     }
 
     @action.bound setChartAvailability(status) {
@@ -291,7 +344,7 @@ class ChartStore {
 
     @action.bound changeSymbol(symbolObj, granularity) {
         if (typeof symbolObj === 'string') {
-            symbolObj = this.activeSymbols.find(s => s.symbol === symbolObj);
+            symbolObj = this.activeSymbols.getSymbolObj(symbolObj);
         }
 
         const isSymbolAvailable = symbolObj && this.currentActiveSymbol;
@@ -422,95 +475,20 @@ class ChartStore {
 
     @action.bound destroy() {
         this.resizeObserver.disconnect();
+        this.tradingTimes.destructor();
         // Destroying the chart does not unsubscribe the streams;
         // we need to manually unsubscribe them.
         this.feed.unsubscribeAll();
         this.feed = null;
+        if (ChartStore.keystrokeHub.context === this.context) {
+            ChartStore.keystrokeHub.setActiveContext(null);
+        }
+        this.stxx.container.removeEventListener('mouseenter', this.onMouseEnter);
+        this.stxx.container.removeEventListener('mouseleave', this.onMouseLeave);
         this.stxx.updateChartData = function () {}; // prevent any data from entering the chart
         this.stxx.isDestroyed = true;
         this.stxx.destroy();
         this.stxx = null;
-    }
-
-    processSymbols(symbols) {
-        const processedSymbols = [];
-
-        // Stable sort is required to retain the order of the symbol name
-        stableSort(symbols, (a, b) => a.submarket_display_name.localeCompare(b.submarket_display_name));
-
-        for (const s of symbols) {
-            processedSymbols.push({
-                symbol: s.symbol,
-                name: s.display_name,
-                market: s.market,
-                market_display_name: s.market_display_name,
-                submarket_display_name: s.submarket_display_name,
-                exchange_is_open: s.exchange_is_open,
-                decimal_places: s.pip.length - 2,
-            });
-        }
-
-
-        // Categorize symbols in order defined by another array; there's probably a more
-        // efficient algo for this, but for just ~100 items it's not worth the effort
-        const order = ['forex', 'indices', 'stocks', 'commodities', 'volidx'];
-        const orderedSymbols = [];
-        for (const o of order) {
-            for (const p of processedSymbols) {
-                if (o === p.market) {
-                    orderedSymbols.push(p);
-                }
-            }
-        }
-
-        return orderedSymbols;
-    }
-
-    categorizeActiveSymbols() {
-        if (this.activeSymbols.length <= 0 || !this.currentActiveSymbol) { return []; }
-
-        const activeSymbols = this.activeSymbols;
-        const categorizedSymbols = [];
-        if (activeSymbols.length > 0) {
-            const first = activeSymbols[0];
-            const getSubcategory = d => ({
-                subcategoryName: d.submarket_display_name,
-                data: [],
-            });
-            const getCategory = d => ({
-                categoryName: d.market_display_name,
-                categoryId: d.market,
-                hasSubcategory: true,
-                data: [],
-            });
-            let subcategory = getSubcategory(first);
-            let category = getCategory(first);
-            for (const symbol of activeSymbols) {
-                if (category.categoryName !== symbol.market_display_name) {
-                    category.data.push(subcategory);
-                    categorizedSymbols.push(category);
-                    subcategory = getSubcategory(symbol);
-                    category = getCategory(symbol);
-                }
-                if (subcategory.subcategoryName !== symbol.submarket_display_name) {
-                    category.data.push(subcategory);
-                    subcategory = getSubcategory(symbol);
-                }
-                const selected = symbol.symbol === this.currentActiveSymbol.symbol;
-                subcategory.data.push({
-                    enabled: true,
-                    selected,
-                    itemId: symbol.symbol,
-                    display: symbol.name,
-                    dataObject: symbol,
-                });
-            }
-
-            category.data.push(subcategory);
-            categorizedSymbols.push(category);
-        }
-
-        return categorizedSymbols;
     }
 }
 

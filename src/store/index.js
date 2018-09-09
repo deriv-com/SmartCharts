@@ -15,10 +15,13 @@ import LoaderStore from './LoaderStore';
 import FavoriteSessionStore from './FavoriteSessionStore';
 import ChartSizeStore from './ChartSizeStore';
 import RoutingStore from './RoutingStore';
+import CurrentSpotStore from './CurrentSpotStore';
 import DrawingCursorStore from './DrawingCursorStore';
 import ChartState from './ChartState';
+import Notifier from './Notifier';
 
 export default class MainStore {
+    notifier = new Notifier();
     favoriteSessionStore = new FavoriteSessionStore();
     chart = new ChartStore(this);
     state = new ChartState(this);
@@ -37,5 +40,6 @@ export default class MainStore {
     loader = new LoaderStore();
     chartSize = new ChartSizeStore(this);
     routing = new RoutingStore(this);
+    currentSpot = new CurrentSpotStore(this);
     drawingCursor = new DrawingCursorStore(this);
 }

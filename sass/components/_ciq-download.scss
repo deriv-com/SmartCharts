@@ -1,0 +1,44 @@
+
+.cq-download {
+    .cq-menu-btn > .ic-icon > svg > g > path {
+        fill: none !important;
+        @include themify($themes) {
+            stroke: themed('MenuIcon');
+        }
+    }
+    .cq-menu-dropdown {
+        width: 280px;
+        height: 105px;
+    }
+    .body {
+        height: 100%;
+        padding: 16px;
+
+        .content {
+            display: flex;
+            padding: 5px 0;
+
+            .ciq-list-download {
+                width: 100%;
+
+                .ciq-list-item {
+                    width: 100%;
+                    padding: 1px 10px;
+                    height: 40px;
+                    justify-content: space-between;
+
+                    .cq-loading {
+                        margin-left: 5px;
+                    }
+                    .ic-icon {
+                        position: relative;
+                        top: -4px;
+                    }
+                }
+            }
+        }
+        .caption2 {
+            margin-top: 10px;
+        }
+    }
+}

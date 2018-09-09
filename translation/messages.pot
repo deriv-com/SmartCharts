@@ -2,6 +2,12 @@
 msgid " already exists."
 msgstr ""
 
+msgid "[symbol] feed is delayed by [delay] minutes"
+msgstr ""
+
+msgid "[symbol] market is now opened."
+msgstr ""
+
 msgid "[symbol] market is presently closed."
 msgstr ""
 
@@ -90,6 +96,12 @@ msgid "Dot"
 msgstr ""
 
 msgid "Download"
+msgstr ""
+
+msgid "Download as CSV"
+msgstr ""
+
+msgid "Download as PNG"
 msgstr ""
 
 msgid "Download Chart"
@@ -182,9 +194,6 @@ msgstr ""
 msgid "Position"
 msgstr ""
 
-msgid "PRICE"
-msgstr ""
-
 msgid "Price Lines"
 msgstr ""
 
@@ -260,10 +269,10 @@ msgstr ""
 msgid "Spline"
 msgstr ""
 
-msgid "Streaming for [symbol] is not available due to license restrictions"
+msgid "SPOT"
 msgstr ""
 
-msgid "tap to manage"
+msgid "Streaming for [symbol] is not available due to license restrictions"
 msgstr ""
 
 msgid "Template name"
