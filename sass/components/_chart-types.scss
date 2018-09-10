@@ -20,7 +20,7 @@
                         circle,
                         rect {
                             @include themify($themes) {
-                                fill: themed('ChartTypeActiveListIcon');
+                                stroke: themed('ChartTypeActiveListIcon');
                             }
                         }
                     }
@@ -38,7 +38,7 @@
                     circle,
                     rect {
                         @include themify($themes) {
-                            fill: themed('ChartTypeListIcon');
+                            stroke: themed('ChartTypeListIcon');
                         }
                     }
                     g {
@@ -54,12 +54,12 @@
                 > .ic-icon {
                     > svg > path {
                         @include themify($themes) {
-                            fill: themed('ChartTypeListIcon');
+                            stroke: themed('ChartTypeListIcon');
                         }
                     }
                     &:hover > svg > path {
                         @include themify($themes) {
-                            fill: themed('ChartTypeActiveListIcon');
+                            stroke: themed('ChartTypeActiveListIcon');
                         }
                     }
                 }

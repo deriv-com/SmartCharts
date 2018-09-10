@@ -33,6 +33,7 @@
 .cq-chart-control-left {
     .cq-chart-size {
         width: 100px !important;
+        min-height: 116px;
         flex-flow: column;
     }
 }
