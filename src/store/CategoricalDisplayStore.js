@@ -45,19 +45,10 @@ export default class CategoricalDisplayStore {
     @observable placeholderText = '';
     @observable activeCategoryKey = '';
     @observable static favoritesMap = {};
-    @observable favoritesCategory = {
-        categoryName: t.translate('Favorites'),
-        categoryId: 'favorite',
-        hasSubcategory: false,
-        emptyDescription: t.translate('There are no favorites yet.'),
-        data: [],
-    };
     @observable isScrollingDown = false;
     scrollTop = undefined;
     isUserScrolling = true;
     lastFilteredItems = [];
-
-    favorites = {};
 
     get context() {
         return this.mainStore.chart.context;
@@ -69,12 +60,11 @@ export default class CategoricalDisplayStore {
     }
 
     initFavorites() {
-        this.favorites = createObjectFromLocalStorage('cq-favorits') || {};
-        this.favoritesCategory.data = this.favorites[this.favoritesId] || [];
+        const favorites = (createObjectFromLocalStorage('cq-favorits') || {})[this.favoritesId] || [];
         if (!CategoricalDisplayStore.favoritesMap[this.favoritesId]) {
             CategoricalDisplayStore.favoritesMap[this.favoritesId] = [];
         }
-        for (const fav of this.favoritesCategory.data) {
+        for (const fav of favorites) {
             const favItem = fav && (typeof fav === 'string' ? fav : fav.itemId);
             const isExsist = this.isFavExist(favItem);
             if (favItem && !isExsist) {
@@ -84,11 +74,14 @@ export default class CategoricalDisplayStore {
     }
 
     saveFavorits() {
-        this.favorites[this.favoritesId] = toJS(this.favoritesCategory.data)
-            .filter(favItem => favItem)
-            .map(favItem => (typeof favItem === 'string' ? favItem : favItem.itemId));
+        // Read favorites for all the categprical components from localstorage
+        const favorites = createObjectFromLocalStorage('cq-favorits') || {};
 
-        CIQ.localStorageSetItem('cq-favorits', JSON.stringify(this.favorites));
+        // Replace the changes for current instance of CategoricalDisplay
+        favorites[this.favoritesId] = toJS(CategoricalDisplayStore.favoritesMap[this.favoritesId])
+            .map(key =>  Object.keys(key)[0]) || [];
+
+        CIQ.localStorageSetItem('cq-favorits', JSON.stringify(favorites));
     }
 
     updateFavorites() {
@@ -151,6 +144,18 @@ export default class CategoricalDisplayStore {
                 }
             }
         }
+    }
+
+    @computed get favoritesCategory()  {
+        const favoritesCategory = {
+            categoryName: t.translate('Favorites'),
+            categoryId: 'favorite',
+            hasSubcategory: false,
+            emptyDescription: t.translate('There are no favorites yet.'),
+            data: toJS(CategoricalDisplayStore.favoritesMap[this.favoritesId]).map(key =>  Object.keys(key)[0]) || [],
+        };
+
+        return favoritesCategory;
     }
 
     /* isMobile: fill form the ChartStore */
@@ -299,16 +304,8 @@ export default class CategoricalDisplayStore {
     setFavorite(item) {
         const isExsist = this.isFavExist(item.itemId);
         if (isExsist) {
-            this.favoritesCategory.data = this.favoritesCategory.data
-                .filter(favItem => favItem && favItem.itemId !== item.itemId && favItem !== item.itemId);
-
-            // delete CategoricalDisplayStore.favoritesMap[this.favoritesId][item.itemId];
-            const index = CategoricalDisplayStore.favoritesMap[this.favoritesId].indexOf(item.itemId, 0);
-            if (index > -1) {
-                CategoricalDisplayStore.favoritesMap[this.favoritesId].splice(index, 1);
-            }
+            CategoricalDisplayStore.favoritesMap[this.favoritesId] = CategoricalDisplayStore.favoritesMap[this.favoritesId].filter(x => Object.keys(x)[0] !== item.itemId);
         } else {
-            this.favoritesCategory.data.push(item);
             CategoricalDisplayStore.favoritesMap[this.favoritesId].push({ [item.itemId] : true });
         }
         this.mainStore.favoriteSessionStore.favoritesChangeTrigger = !this.mainStore.favoriteSessionStore.favoritesChangeTrigger;
