@@ -24,11 +24,11 @@ const CategoricalDisplay = ({
     activeCategoryKey,
     onFavoritedItem,
     favoritesId,
-    favoritesMap,
     isScrollingDown,
     updateScrollSpy,
     scrollUp,
     scrollDown,
+    isFavExist,
 }) => {
     /**
      * On mobile mode, this part appear on the top of dialog
@@ -40,7 +40,6 @@ const CategoricalDisplay = ({
         return <ItemIcon className={`ic-${item.itemId}`} />;
     };
     const renderText = item => <span className="ciq-item-display">{item.display}</span>;
-    const isFavExist = favItem => favoritesMap[favoritesId].length > 0 && favoritesMap[favoritesId].some(fav => Object.keys(fav).indexOf(favItem) > -1);
 
     const renderFavorite = (item) => {
         if (!item.itemId || !favoritesId) { return ''; }

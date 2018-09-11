@@ -74,7 +74,7 @@ export default class CategoricalDisplayStore {
     }
 
     saveFavorits() {
-        // Read favorites for all the categprical components from localstorage
+        // Read favorites for all CategoricalDisplay instances from localstorage
         const favorites = createObjectFromLocalStorage('cq-favorits') || {};
 
         // Replace the changes for current instance of CategoricalDisplay
@@ -154,7 +154,6 @@ export default class CategoricalDisplayStore {
             emptyDescription: t.translate('There are no favorites yet.'),
             data: toJS(CategoricalDisplayStore.favoritesMap[this.favoritesId]).map(key =>  Object.keys(key)[0]) || [],
         };
-
         return favoritesCategory;
     }
 
@@ -345,12 +344,12 @@ export default class CategoricalDisplayStore {
         setScrollPanel: this.setScrollPanel,
         setCategoryElement: this.setCategoryElement,
         onFavoritedItem: this.onFavoritedItem,
-        favoritesMap: CategoricalDisplayStore.favoritesMap,
         favoritesId: this.favoritesId,
         CloseUpperMenu: this.CloseUpperMenu,
         isScrollingDown: this.isScrollingDown,
         updateScrollSpy: this.updateScrollSpy,
         scrollUp: this.scrollUp,
         scrollDown: this.scrollDown,
+        isFavExist: this.isFavExist.bind(this),
     }))
 }
