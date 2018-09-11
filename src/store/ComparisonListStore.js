@@ -10,32 +10,34 @@ export default class ComparisonListStore {
 
     @observable animatedPrices = [];
     animatedPriceStore = [];
-    get comparisonSymbols() { return this.mainStore.chart.comparisonSymbols; }
+    get comparisonSymbols() { return this.mainStore.comparison.comparisonSymbols; }
     get context() { return this.mainStore.chart.context; }
 
-    syncAnimatedPricesWithComparisons = () => {
+    syncAnimatedPricesWithComparisons() {
         let diff = this.comparisonSymbols.length - this.animatedPrices.length;
         if (diff > 0) {
-            while (diff--) {
+            while (diff-- !== 0) {
                 const store = new AnimatedPriceStore();
-                this.animatedPrices.push(store.connect(AnimatedPrice));
                 this.animatedPriceStore.push(store);
+                this.animatedPrices = this.animatedPrices.concat([store.connect(AnimatedPrice)]);
             }
         } else if (diff < 0) {
-            this.animatedPrices.splice(diff, diff);
-            this.animatedPriceStore.splice(diff, diff);
+            while (diff++ !== 0) {
+                this.animatedPrices.pop();
+                this.animatedPriceStore.pop();
+            }
         }
-    };
+    }
 
     @action.bound updatePrices() {
         this.syncAnimatedPricesWithComparisons();
-        this.comparisonSymbols.map((item, i) => {
+        this.comparisonSymbols.map(({ price, prevPrice }, i) => {
             const animatedPrice = this.animatedPriceStore[i];
-            animatedPrice.setPrice(item.price);
+            animatedPrice.setPrice(price, prevPrice);
         });
     }
 
     @action.bound onDeleteItem(symbolObject) {
-        this.mainStore.chart.removeComparison(symbolObject);
+        this.mainStore.comparison.removeComparison(symbolObject);
     }
 }

@@ -59,7 +59,7 @@ export default class ChartTitleStore {
             currentPrice = currentPrice.toFixed(this.decimalPlaces);
             const oldPrice = quote.prevClose || this.animatedPrice.price;
             if (oldPrice !== currentPrice) {
-                this.animatedPrice.setPrice(currentPrice);
+                this.animatedPrice.setPrice(currentPrice, oldPrice);
                 if (oldPrice) {
                     this.todayChange = Math.abs(currentPrice - oldPrice).toFixed(this.decimalPlaces);
                 }
