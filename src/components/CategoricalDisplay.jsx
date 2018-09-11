@@ -46,7 +46,7 @@ const CategoricalDisplay = ({
         return (
             <FavoriteIcon
                 onClick={e => onFavoritedItem(item, e)}
-                className={`ciq-favorite 'ciq-active-favorite' ${isFavExist(item.itemId) ? 'ciq-active-favorite' : ''}`}
+                className={`ciq-favorite ${isFavExist(item.itemId) ? 'ciq-active-favorite' : ''}`}
             />
         );
     };
