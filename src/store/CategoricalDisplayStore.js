@@ -60,14 +60,14 @@ export default class CategoricalDisplayStore {
     }
 
     initFavorites() {
-        const favorites = (createObjectFromLocalStorage('cq-favorits') || {})[this.favoritesId] || [];
+        const favorites = (createObjectFromLocalStorage('cq-favorites') || {})[this.favoritesId] || [];
         if (!CategoricalDisplayStore.favoritesMap[this.favoritesId]) {
             CategoricalDisplayStore.favoritesMap[this.favoritesId] = [];
         }
         for (const fav of favorites) {
             const favItem = fav && (typeof fav === 'string' ? fav : fav.itemId);
-            const isExsist = this.isFavExist(favItem);
-            if (favItem && !isExsist) {
+            const isExist = this.isFavExist(favItem);
+            if (favItem && !isExist) {
                 CategoricalDisplayStore.favoritesMap[this.favoritesId].push({ [favItem]: true });
             }
         }
@@ -75,13 +75,13 @@ export default class CategoricalDisplayStore {
 
     saveFavorits() {
         // Read favorites for all CategoricalDisplay instances from localstorage
-        const favorites = createObjectFromLocalStorage('cq-favorits') || {};
+        const favorites = createObjectFromLocalStorage('cq-favorites') || {};
 
         // Replace the changes for current instance of CategoricalDisplay
         favorites[this.favoritesId] = toJS(CategoricalDisplayStore.favoritesMap[this.favoritesId])
             .map(key =>  Object.keys(key)[0]) || [];
 
-        CIQ.localStorageSetItem('cq-favorits', JSON.stringify(favorites));
+        CIQ.localStorageSetItem('cq-favorites', JSON.stringify(favorites));
     }
 
     updateFavorites() {
@@ -301,8 +301,8 @@ export default class CategoricalDisplayStore {
         this.setFavorite(item);
     }
     setFavorite(item) {
-        const isExsist = this.isFavExist(item.itemId);
-        if (isExsist) {
+        const isExist = this.isFavExist(item.itemId);
+        if (isExist) {
             CategoricalDisplayStore.favoritesMap[this.favoritesId] = CategoricalDisplayStore.favoritesMap[this.favoritesId].filter(x => Object.keys(x)[0] !== item.itemId);
         } else {
             CategoricalDisplayStore.favoritesMap[this.favoritesId].push({ [item.itemId] : true });
