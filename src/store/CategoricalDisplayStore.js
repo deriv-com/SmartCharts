@@ -73,7 +73,7 @@ export default class CategoricalDisplayStore {
         }
     }
 
-    saveFavorits() {
+    saveFavorites() {
         // Read favorites for all CategoricalDisplay instances from localstorage
         const favorites = createObjectFromLocalStorage('cq-favorites') || {};
 
@@ -308,7 +308,7 @@ export default class CategoricalDisplayStore {
             CategoricalDisplayStore.favoritesMap[this.favoritesId].push({ [item.itemId] : true });
         }
         this.mainStore.favoriteSessionStore.favoritesChangeTrigger = !this.mainStore.favoriteSessionStore.favoritesChangeTrigger;
-        this.saveFavorits();
+        this.saveFavorites();
     }
 
     setFavoriteById(id) {
