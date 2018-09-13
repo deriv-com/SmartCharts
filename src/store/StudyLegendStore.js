@@ -30,7 +30,7 @@ export default class StudyLegendStore {
         this.settingsDialog = new SettingsDialogStore({
             mainStore,
             onDeleted: () => this.deleteStudy(this.helper),
-            onStared: () => this.starStudy(this.helper),
+            favoritesId: 'indicators',
             onChanged: items => this.updateStudy(this.helper.sd, items),
         });
         this.StudyCategoricalDisplay = this.categoricalDisplay.connect(CategoricalDisplay);
@@ -148,13 +148,13 @@ export default class StudyLegendStore {
             throw new Error('Unrecognised parameter!');
         });
 
+        this.settingsDialog.id = study.sd.type;
         this.settingsDialog.items = [...outputs, ...inputs, ...parameters];
         this.settingsDialog.title = t.translate(study.sd.libraryEntry.name);
         // TODO:
         // const description = StudyInfo[study.sd.type];
         // this.settingsDialog.description = description || t.translate("No description yet");
         this.settingsDialog.description = '';
-        this.settingsDialog.stared = !!this.categoricalDisplay.favoritesMap[helper.name];
         this.settingsDialog.setOpen(true);
     }
     @action.bound starStudy(study) {
