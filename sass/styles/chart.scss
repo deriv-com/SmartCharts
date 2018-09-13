@@ -910,13 +910,20 @@ html, body {
     display: none;
 }
 
-.ciq-chart.ciq-screenshot .cq-menu-dropdown {
-    /*
-    There is a strange bug where dropdowns get displayed (partially)
-    when html is being rendered to canvas. So we set this to manually
-    hide it when PNG is exported.
-     */
-    display: none !important;
+.ciq-chart.ciq-screenshot {
+    .cq-menu-dropdown {
+        /*
+        There is a strange bug where dropdowns get displayed (partially)
+        when html is being rendered to canvas. So we set this to manually
+        hide it when PNG is exported.
+        */
+        display: none !important;
+    }
+    .stx-ico-edit,
+    .stx-ico-close {
+        //CSS images cause cross origin security error when export png
+        background-image: none !important;
+    }
 }
 
 .ps--active-x > .ps__rail-x,
