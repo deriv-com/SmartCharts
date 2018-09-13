@@ -6,7 +6,11 @@
     }
     .cq-toggle {
         &.active {
-            @include svg-icon-color('MenuActiveIcon', true);
+            path {
+                @include themify($themes) {
+                    fill: themed('MenuActiveIcon') !important;
+                }
+            }
         }
     }
 }
