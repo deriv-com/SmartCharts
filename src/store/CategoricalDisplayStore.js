@@ -1,6 +1,6 @@
 import { action, observable, computed, when, reaction, toJS } from 'mobx';
 import { connect } from './Connect';
-import { cloneCategories, cloneCategory } from '../utils';
+import { cloneCategories, cloneCategory, createObjectFromLocalStorage } from '../utils';
 
 export default class CategoricalDisplayStore {
     constructor({
@@ -49,14 +49,7 @@ export default class CategoricalDisplayStore {
     @observable filterText = '';
     @observable placeholderText = '';
     @observable activeCategoryKey = '';
-    @observable favoritesMap = {};
-    @observable favoritesCategory = {
-        categoryName: t.translate('Favorites'),
-        categoryId: 'favorite',
-        hasSubcategory: false,
-        emptyDescription: t.translate('There are no favorites yet.'),
-        data: [],
-    };
+    @observable static favoritesMap = {};
     @observable isScrollingDown = false;
     scrollTop = undefined;
     isUserScrolling = true;
@@ -66,21 +59,38 @@ export default class CategoricalDisplayStore {
         return this.mainStore.chart.context;
     }
 
-    initFavorites() {
-        const layout = this.context.stx.layout;
-        if (!layout.favorites) { layout.favorites = {}; }
-        if (!layout.favorites[this.favoritesId]) { layout.favorites[this.favoritesId] = []; }
+    isFavExist(favItem) {
+        const favs = CategoricalDisplayStore.favoritesMap[this.favoritesId];
+        return favs.length > 0 && favs.some(fav => Object.keys(fav).indexOf(favItem) > -1);
+    }
 
-        this.favoritesCategory.data = layout.favorites[this.favoritesId];
-        for (const fav of this.favoritesCategory.data) {
-            if (fav) {
-                this.favoritesMap[(typeof fav === 'string' ? fav : fav.itemId)] = true;
+    initFavorites() {
+        const favorites = (createObjectFromLocalStorage('cq-favorites') || {})[this.favoritesId] || [];
+        if (!CategoricalDisplayStore.favoritesMap[this.favoritesId]) {
+            CategoricalDisplayStore.favoritesMap[this.favoritesId] = [];
+        }
+        for (const fav of favorites) {
+            const favItem = fav && (typeof fav === 'string' ? fav : fav.itemId);
+            const isExist = this.isFavExist(favItem);
+            if (favItem && !isExist) {
+                CategoricalDisplayStore.favoritesMap[this.favoritesId].push({ [favItem]: true });
             }
         }
     }
 
+    saveFavorites() {
+        // Read favorites for all CategoricalDisplay instances from localstorage
+        const favorites = createObjectFromLocalStorage('cq-favorites') || {};
+
+        // Replace the changes for current instance of CategoricalDisplay
+        favorites[this.favoritesId] = toJS(CategoricalDisplayStore.favoritesMap[this.favoritesId])
+            .map(key =>  Object.keys(key)[0]) || [];
+
+        CIQ.localStorageSetItem('cq-favorites', JSON.stringify(favorites));
+    }
+
     updateFavorites() {
-        this.favoritesMap = {};
+        CategoricalDisplayStore.favoritesMap[this.favoritesId]  = [];
         this.initFavorites();
     }
 
@@ -141,6 +151,17 @@ export default class CategoricalDisplayStore {
         }
     }
 
+    @computed get favoritesCategory()  {
+        const favoritesCategory = {
+            categoryName: t.translate('Favorites'),
+            categoryId: 'favorite',
+            hasSubcategory: false,
+            emptyDescription: t.translate('There are no favorites yet.'),
+            data: toJS(CategoricalDisplayStore.favoritesMap[this.favoritesId]).map(key =>  Object.keys(key)[0]) || [],
+        };
+        return favoritesCategory;
+    }
+
     /* isMobile: fill form the ChartStore */
     @computed get isMobile() {
         if (this.mainStore) {
@@ -148,7 +169,6 @@ export default class CategoricalDisplayStore {
         }
         return false;
     }
-
 
     @computed get filteredItems() {
         if (!this.isShown) { return []; }
@@ -288,22 +308,14 @@ export default class CategoricalDisplayStore {
         this.setFavorite(item);
     }
     setFavorite(item) {
-        if (this.favoritesMap[item.itemId]) {
-            this.favoritesCategory.data = this.favoritesCategory.data
-                .filter(favItem => favItem && favItem.itemId !== item.itemId && favItem !== item.itemId);
-
-            delete this.favoritesMap[item.itemId];
+        const isExist = this.isFavExist(item.itemId);
+        if (isExist) {
+            CategoricalDisplayStore.favoritesMap[this.favoritesId] = CategoricalDisplayStore.favoritesMap[this.favoritesId].filter(x => Object.keys(x)[0] !== item.itemId);
         } else {
-            this.favoritesCategory.data.push(item);
-            this.favoritesMap[item.itemId] = true;
+            CategoricalDisplayStore.favoritesMap[this.favoritesId].push({ [item.itemId] : true });
         }
-
-        const layout = this.context.stx.layout;
-        layout.favorites[this.favoritesId] = toJS(this.favoritesCategory.data)
-            .filter(favItem => favItem)
-            .map(favItem => (typeof favItem === 'string' ? favItem : favItem.itemId));
         this.mainStore.favoriteSessionStore.favoritesChangeTrigger = !this.mainStore.favoriteSessionStore.favoritesChangeTrigger;
-        this.mainStore.state.saveLayout();
+        this.saveFavorites();
     }
 
     setFavoriteById(id) {
@@ -339,12 +351,12 @@ export default class CategoricalDisplayStore {
         setScrollPanel: this.setScrollPanel,
         setCategoryElement: this.setCategoryElement,
         onFavoritedItem: this.onFavoritedItem,
-        favoritesMap: this.favoritesMap,
         favoritesId: this.favoritesId,
         CloseUpperMenu: this.CloseUpperMenu,
         isScrollingDown: this.isScrollingDown,
         updateScrollSpy: this.updateScrollSpy,
         scrollUp: this.scrollUp,
         scrollDown: this.scrollDown,
+        isFavExist: this.isFavExist.bind(this),
     }))
 }
