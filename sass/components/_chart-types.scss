@@ -1,7 +1,7 @@
 .ciq-chart-types {
     .cq-menu-btn {
         .ic-icon {
-            path, circle {
+            path, circle, rect {
                 @include themify($themes) {
                     fill: themed('ChartTypeListIcon');
                     stroke: themed('ChartTypeListIcon');
@@ -26,9 +26,9 @@
 
                 > .left {
                     .ic-icon {
-                        path, circle {
+                        path, circle, rect {
                             @include themify($themes) {
-                                fill: themed('ChartTypeActiveListIcon');
+                                fill: themed('ChartTypeActiveListIcon') !important;
                                 stroke: themed('ChartTypeActiveListIcon');
                             }
                         }
@@ -43,7 +43,7 @@
                 align-items: center;
 
                 .ic-icon {
-                    path, circle {
+                    path, circle, rect {
                         @include themify($themes) {
                             fill: themed('ChartTypeListIcon');
                             stroke: themed('ChartTypeListIcon');
@@ -58,13 +58,11 @@
                     > svg > path {
                         @include themify($themes) {
                             fill: themed('ChartTypeListIcon');
-                            stroke: themed('ChartTypeListIcon');
                         }
                     }
                     &:hover > svg > path {
                         @include themify($themes) {
                             fill: themed('ChartTypeActiveListIcon');
-                            stroke: themed('ChartTypeActiveListIcon');
                         }
                     }
                 }
