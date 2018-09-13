@@ -54,6 +54,7 @@ export default class CategoricalDisplayStore {
     };
     @observable isScrollingDown = false;
     scrollTop = undefined;
+    @observable activeHeadKey = undefined;
     @observable activeHeadTop = undefined;
     isUserScrolling = true;
     lastFilteredItems = [];
