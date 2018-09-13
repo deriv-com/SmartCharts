@@ -11,7 +11,6 @@ import DrawingCursor from './DrawingCursor.jsx';
 /* css + scss */
 import '../../sass/app.scss';
 
-import '../Plugin';
 import './ui';
 
 import ChartControls from './ChartControls.jsx';

@@ -10,10 +10,16 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Vietnamese\n"
 "Language: vi_VN\n"
-"PO-Revision-Date: 2018-08-21 02:51\n"
+"PO-Revision-Date: 2018-09-06 07:01\n"
 
 msgid " already exists."
 msgstr " đã tồn tại."
+
+msgid "[symbol] feed is delayed by [delay] minutes"
+msgstr "nguồn cấp dữ liệu [symbol] bị trì hoãn trong [delay] phút"
+
+msgid "[symbol] market is now opened."
+msgstr "Thị trường [symbol] hiện tại đã mở."
 
 msgid "[symbol] market is presently closed."
 msgstr "[symbol] thị trường hiện đã đóng cửa."
@@ -106,10 +112,10 @@ msgid "Download"
 msgstr "Tải xuống"
 
 msgid "Download as CSV"
-msgstr ""
+msgstr "Tải xuống CSV"
 
 msgid "Download as PNG"
-msgstr ""
+msgstr "Tải xuống PNG"
 
 msgid "Download Chart"
 msgstr "Tải Về Biểu Đồ"
@@ -201,9 +207,6 @@ msgstr "Điểm & hình"
 msgid "Position"
 msgstr "Phiên"
 
-msgid "PRICE"
-msgstr "GIÁ"
-
 msgid "Price Lines"
 msgstr "Dòng giá"
 
@@ -279,11 +282,11 @@ msgstr "Tuyến kháng tốc"
 msgid "Spline"
 msgstr "Chốt"
 
+msgid "SPOT"
+msgstr "VỊ TRÍ"
+
 msgid "Streaming for [symbol] is not available due to license restrictions"
 msgstr "Truyền cho [symbol] không khả dụng do các hạn chế cấp phép"
-
-msgid "tap to manage"
-msgstr "bấm vào để quản lý"
 
 msgid "Template name"
 msgstr "Tên mẫu"

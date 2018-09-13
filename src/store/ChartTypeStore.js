@@ -173,7 +173,11 @@ export default class ChartTypeStore {
             this.stx.chart.tension = 0;
             delete this.stx.layout.tension;
             if (this.aggregates[type.id]) {
+                //Set baseline.userLevel to false so chart won't move up after AggregationType set.
+                this.stx.chart.baseline.userLevel = false;
                 this.stx.setAggregationType(type.id);
+                //Reset baseline.userLevel to its default value
+                this.stx.chart.baseline.userLevel = null;
             } else {
                 this.stx.setChartType(type.id);
             }

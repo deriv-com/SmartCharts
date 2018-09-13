@@ -16,6 +16,7 @@ const ChartTitle = ({
     setMenuOpen,
     onChange,
     enabled,
+    isMobile,
 }) => {
     if (!currentSymbol) { return null; }
 
@@ -46,6 +47,7 @@ const ChartTitle = ({
             enabled={enabled}
             className={chartTitleClassName}
             isFullscreen
+            title={isMobile ? t.translate('Underlying Assets') : ''}
         >
             <ChartTitleMenu.Title>
                 {chartTitleContent}
@@ -58,7 +60,6 @@ const ChartTitle = ({
                         }
                         setMenuOpen(false);
                     }}
-                    dialogTitle={t.translate('Underlying Assets')}
                     closeMenu={() => onCloseMenu()}
                 />
             </ChartTitleMenu.Body>
