@@ -81,7 +81,9 @@
         }
     }
     .category {
-        padding-top: 2em;
+        padding-top: 40px;
+        padding-bottom: 3em;
+        position: relative;
 
         &:last-child {
             padding-bottom: 2.5em;
@@ -124,9 +126,23 @@
         display: block;
         font-size: 1.4em;
         font-weight: 500;
-        padding: 0.1em 0.7em;
+        padding: 0 0.7em;
+        line-height: 38px;
+        position: absolute;
+        top: 0;
         @include themify($themes) {
             color: themed('CatDisplayCatTitleText');
+        }
+
+        &.fixed {
+            position: fixed;
+            width: 100%;
+            z-index: 1;
+            top: 0px;
+            @include themify($themes) {
+                background-color: themed('DialogBodyBg');
+                border-bottom: 1px solid themed('CatDisplayCatContentBorder');
+            }
         }
     }
     .cq-filter {
