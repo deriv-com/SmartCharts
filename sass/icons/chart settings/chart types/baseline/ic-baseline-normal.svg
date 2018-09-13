@@ -1,12 +1,17 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
+    <style>
+        .icon-baseline{
+            stroke: none !important;
+        }
+    </style>
     <g fill="none" fill-rule="evenodd">
-        <rect width="2" height="1" y="7.5" fill="#2A3052" rx=".5"/>
-        <rect width="2" height="1" x="3" y="7.5" fill="#2A3052" rx=".5"/>
-        <rect width="2" height="1" x="6" y="7.5" fill="#2A3052" rx=".5"/>
-        <rect width="2" height="1" x="9" y="7.5" fill="#2A3052" rx=".5"/>
-        <rect width="2" height="1" x="12.5" y="7.5" fill="#2A3052" rx=".5"/>
-        <rect width="2" height="1" x="12.5" y="6" fill="#2A3052" rx=".5"/>
-        <rect width="2" height="1" x="12.5" y="9" fill="#2A3052" rx=".5"/>
-        <path stroke="#2A3052" stroke-linecap="round" stroke-linejoin="round" d="M11.5 5.5l2-2 1.995 2M11.5 10.5l2 2 1.995-2"/>
+        <rect class="icon-baseline" width="2" height="1" y="7.5" fill="#2A3052" rx=".5"/>
+        <rect class="icon-baseline" width="2" height="1" x="3" y="7.5" fill="#2A3052" rx=".5"/>
+        <rect class="icon-baseline" width="2" height="1" x="6" y="7.5" fill="#2A3052" rx=".5"/>
+        <rect class="icon-baseline" width="2" height="1" x="9" y="7.5" fill="#2A3052" rx=".5"/>
+        <rect class="icon-baseline" width="2" height="1" x="12.5" y="7.5" fill="#2A3052" rx=".5"/>
+        <rect class="icon-baseline" width="2" height="1" x="12.5" y="6" fill="#2A3052" rx=".5"/>
+        <rect class="icon-baseline" width="2" height="1" x="12.5" y="9" fill="#2A3052" rx=".5"/>
+        <path class="icon-baseline" stroke="#2A3052" stroke-linecap="round" stroke-linejoin="round" d="M11.5 5.5l2-2 1.995 2M11.5 10.5l2 2 1.995-2"/>
     </g>
 </svg>

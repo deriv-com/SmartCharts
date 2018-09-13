@@ -1,4 +1,14 @@
 .ciq-chart-types {
+    .cq-menu-btn {
+        .ic-icon {
+            path, circle {
+                @include themify($themes) {
+                    fill: themed('ChartTypeListIcon');
+                    stroke: themed('ChartTypeListIcon');
+                }
+            }
+        }
+    }
     .cq-menu-dropdown {
         width: 200px;
         box-sizing: border-box;
@@ -16,10 +26,9 @@
 
                 > .left {
                     .ic-icon {
-                        path,
-                        circle,
-                        rect {
+                        path, circle {
                             @include themify($themes) {
+                                fill: themed('ChartTypeActiveListIcon');
                                 stroke: themed('ChartTypeActiveListIcon');
                             }
                         }
@@ -34,15 +43,9 @@
                 align-items: center;
 
                 .ic-icon {
-                    path,
-                    circle,
-                    rect {
+                    path, circle {
                         @include themify($themes) {
-                            stroke: themed('ChartTypeListIcon');
-                        }
-                    }
-                    g {
-                        @include themify($themes) {
+                            fill: themed('ChartTypeListIcon');
                             stroke: themed('ChartTypeListIcon');
                         }
                     }
@@ -54,11 +57,13 @@
                 > .ic-icon {
                     > svg > path {
                         @include themify($themes) {
+                            fill: themed('ChartTypeListIcon');
                             stroke: themed('ChartTypeListIcon');
                         }
                     }
                     &:hover > svg > path {
                         @include themify($themes) {
+                            fill: themed('ChartTypeActiveListIcon');
                             stroke: themed('ChartTypeActiveListIcon');
                         }
                     }
