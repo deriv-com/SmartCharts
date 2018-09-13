@@ -10,10 +10,16 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: German\n"
 "Language: de_DE\n"
-"PO-Revision-Date: 2018-08-21 22:50\n"
+"PO-Revision-Date: 2018-09-06 03:41\n"
 
 msgid " already exists."
 msgstr " existiert bereits."
+
+msgid "[symbol] feed is delayed by [delay] minutes"
+msgstr ""
+
+msgid "[symbol] market is now opened."
+msgstr ""
 
 msgid "[symbol] market is presently closed."
 msgstr "[symbol] Markt ist derzeit geschlossen."
@@ -201,9 +207,6 @@ msgstr "Point & Figure"
 msgid "Position"
 msgstr "Position"
 
-msgid "PRICE"
-msgstr "PREIS"
-
 msgid "Price Lines"
 msgstr "Preislinien"
 
@@ -279,11 +282,11 @@ msgstr "Speed Resistance Line"
 msgid "Spline"
 msgstr "Spline"
 
+msgid "SPOT"
+msgstr ""
+
 msgid "Streaming for [symbol] is not available due to license restrictions"
 msgstr "Streaming für [symbol] ist auf Grund von Lizenzeinschränkungen nicht verfügbar"
-
-msgid "tap to manage"
-msgstr "zum Verwalten antippen"
 
 msgid "Template name"
 msgstr "Vorlagenname"

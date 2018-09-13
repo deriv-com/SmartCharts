@@ -282,11 +282,6 @@
         padding: 0.9em 1.2em;
         border-radius: 3px;
     }
-    .cq-mobile-title {
-        padding-top: 16px !important;
-        padding-bottom: 16px !important;
-        border-bottom: none !important;
-    }
 }
 
 .stxMenuActive .cq-categorical-display {
@@ -344,6 +339,19 @@
         }
         > .ciq-item-display {
             margin-left: 15px;
+        }
+    }
+}
+
+.smartcharts-desktop {
+    &.smartcharts-480 {
+        .cq-categorical-display {
+            width: 450px;
+        }
+    }
+    &.smartcharts-900 {
+        .cq-categorical-display {
+            width: 550px;
         }
     }
 }

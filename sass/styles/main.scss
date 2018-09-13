@@ -12,8 +12,8 @@
 /* --------------------------------------------------------- BUTTONS --------------------------------------------------------- */
 
 /* Basic Buttons */
-#annotationCancel,
-#annotationSave {
+.annotationCancel,
+.annotationSave {
     // font-size:$font-size-button;
     font-weight: 700;
     text-transform: uppercase;
@@ -193,6 +193,9 @@
         .cq-top-ui-widgets {
             left: 90px;
         }
+        .cq-notifications {
+            right: 100px;
+        }
     }
 }
 
@@ -227,6 +230,10 @@
             .cq-menu-dropdown {
                 /* for studies and comparison dropdown, fill screen in mobile */
                 height: 100%;
+
+                .title {
+                    border-bottom: none !important;
+                }
             }
         }
     }

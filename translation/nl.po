@@ -10,9 +10,15 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Dutch\n"
 "Language: nl_NL\n"
-"PO-Revision-Date: 2018-08-21 02:51\n"
+"PO-Revision-Date: 2018-09-06 03:41\n"
 
 msgid " already exists."
+msgstr ""
+
+msgid "[symbol] feed is delayed by [delay] minutes"
+msgstr ""
+
+msgid "[symbol] market is now opened."
 msgstr ""
 
 msgid "[symbol] market is presently closed."
@@ -201,9 +207,6 @@ msgstr ""
 msgid "Position"
 msgstr ""
 
-msgid "PRICE"
-msgstr ""
-
 msgid "Price Lines"
 msgstr ""
 
@@ -279,10 +282,10 @@ msgstr ""
 msgid "Spline"
 msgstr ""
 
-msgid "Streaming for [symbol] is not available due to license restrictions"
+msgid "SPOT"
 msgstr ""
 
-msgid "tap to manage"
+msgid "Streaming for [symbol] is not available due to license restrictions"
 msgstr ""
 
 msgid "Template name"

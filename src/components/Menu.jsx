@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { CSSTransition } from 'react-transition-group';
+import { CloseIcon } from './Icons.jsx';
 
 class Menu extends Component {
     onOverlayClick = (e) => {
@@ -14,6 +15,7 @@ class Menu extends Component {
             open,
             className,
             children,
+            title,
             onTitleClick,
             DropdownDialog,
             isMobile,
@@ -35,6 +37,17 @@ class Menu extends Component {
                     isMobile={isMobile}
                     isFullscreen={isFullscreen}
                 >
+                    {title
+                    && (
+                        <div className="title">
+                            <div className="title-text">{title}</div>
+                            <CloseIcon
+                                className="icon-close-menu"
+                                onClick={onTitleClick}
+                            />
+                        </div>
+                    )
+                    }
                     {rest}
                 </DropdownDialog>
             </CSSTransition>);

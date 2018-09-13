@@ -18,8 +18,10 @@ import RoutingStore from './RoutingStore';
 import CurrentSpotStore from './CurrentSpotStore';
 import DrawingCursorStore from './DrawingCursorStore';
 import ChartState from './ChartState';
+import Notifier from './Notifier';
 
 export default class MainStore {
+    notifier = new Notifier();
     favoriteSessionStore = new FavoriteSessionStore();
     chart = new ChartStore(this);
     state = new ChartState(this);

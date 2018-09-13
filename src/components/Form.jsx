@@ -1,6 +1,5 @@
 /* eslint-disable react/sort-comp,react/no-multi-comp */
 import React from 'react';
-import ReactSlider from './Slider.jsx';
 import { ArrowIcon } from './Icons.jsx';
 import '../../sass/components/_ciq-form.scss';
 
@@ -10,19 +9,29 @@ export const Slider = ({
     step = 1,
     value,
     onChange,
-}) => (
-    <div className="cq-slider">
-        <ReactSlider
-            min={min}
-            max={max}
-            step={step}
-            onChange={onChange}
-            value={value}
-            withBars
-        />
-        <div className="value">{value}</div>
-    </div>
-);
+}) => {
+    const barWidth = 120;// css hardcode
+    const activeWidth = Math.round((barWidth * (value - min)) / (max - min));
+
+    return (
+        <div className="cq-slider">
+            <div className="cq-slider-range">
+                <div className="cq-slider-bar" />
+                <div className="cq-slider-active-bar" style={{ width: activeWidth }} />
+                <input
+                    type="range"
+                    min={min}
+                    max={max}
+                    step={step}
+                    onChange={onChange}
+                    onInput={onChange}
+                    value={value}
+                />
+            </div>
+            <div className="value">{value}</div>
+        </div>
+    );
+};
 
 export class DropDown extends React.Component {
     state = { open: false };

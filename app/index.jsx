@@ -41,9 +41,9 @@ if ('serviceWorker' in navigator) {
         });
 }
 
-configure({ enforceActions: true });
+configure({ enforceActions: 'observed' });
 
-const getLanguageStorage = function () {
+function getLanguageStorage() {
     const default_language = 'en';
     try {
         const setting_string = CIQ.localStorage.getItem('smartchart-setting'),
@@ -53,11 +53,16 @@ const getLanguageStorage = function () {
     } catch (e) {
         return default_language;
     }
-};
+}
+
+function getServerUrl() {
+    const local = CIQ.localStorage.getItem('config.server_url');
+    return `wss://${local || 'ws.binaryws.com'}/websockets/v3`;
+}
 
 const chartId = '1';
 const appId  = CIQ.localStorage.getItem('config.app_id') || 12812;
-const serverUrl  = CIQ.localStorage.getItem('config.server_url') || 'wss://ws.binaryws.com/websockets/v3';
+const serverUrl = getServerUrl();
 
 const connectionManager = new ConnectionManager({
     appId,
@@ -66,20 +71,6 @@ const connectionManager = new ConnectionManager({
 });
 
 const streamManager = new StreamManager(connectionManager);
-const renderControls = () => (
-    <React.Fragment>
-        {CIQ.isMobile ? '' : <CrosshairToggle />}
-        <ChartTypes />
-        <Timeperiod />
-        <StudyLegend />
-        <Comparison />
-        <DrawTools />
-        <Views />
-        <Share />
-        {CIQ.isMobile ? '' : <ChartSize />}
-        <ChartSetting />
-    </React.Fragment>
-);
 const requestAPI = connectionManager.send.bind(connectionManager);
 const requestSubscribe = streamManager.subscribe.bind(streamManager);
 const requestForget = streamManager.forget.bind(streamManager);
@@ -129,6 +120,21 @@ class App extends Component {
         </React.Fragment>
     );
 
+    renderControls = () => (
+        <React.Fragment>
+            {CIQ.isMobile ? '' : <CrosshairToggle />}
+            <ChartTypes />
+            <Timeperiod />
+            <StudyLegend />
+            <Comparison />
+            <DrawTools />
+            <Views />
+            <Share />
+            {CIQ.isMobile ? '' : <ChartSize />}
+            <ChartSetting />
+        </React.Fragment>
+    );
+
     render() {
         const { settings, isConnectionOpened, symbol } = this.state;
 
@@ -140,7 +146,7 @@ class App extends Component {
                 isMobile={CIQ.isMobile}
                 enableRouting
                 topWidgets={this.renderTopWidgets}
-                chartControlsWidgets={renderControls}
+                chartControlsWidgets={this.renderControls}
                 requestAPI={requestAPI}
                 requestSubscribe={requestSubscribe}
                 requestForget={requestForget}
