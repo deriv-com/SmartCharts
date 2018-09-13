@@ -1,9 +1,16 @@
 import React, { Fragment } from 'react';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import {
-    CategoryIconMap, ItemIconMap, SearchIcon, ActiveOptionsIconMap, FavoriteIcon, CloseIcon,
+    CategoryIconMap, ItemIconMap, SearchIcon, ActiveOptionsIconMap, CloseIcon,
 } from './Icons.jsx';
+import Favorite from './Favorite.jsx';
 import '../../sass/components/_categorical-display.scss';
+
+const Icon = ({ id }) => {
+    if (!id || !ItemIconMap[id]) { return ''; }
+    const ItemIcon = ItemIconMap[id];
+    return <ItemIcon className={`ic-${id}`} />;
+};
 
 
 const CategoricalDisplay = ({
@@ -22,38 +29,21 @@ const CategoricalDisplay = ({
     setScrollPanel,
     setCategoryElement,
     activeCategoryKey,
-    onFavoritedItem,
     favoritesId,
     isScrollingDown,
     updateScrollSpy,
     scrollUp,
     scrollDown,
-    isFavExist,
 }) => {
     /**
      * On mobile mode, this part appear on the top of dialog
      * @return HTML
      */
-    const renderIcon = (item) => {
-        if (!item.itemId || !ItemIconMap[item.itemId]) { return ''; }
-        const ItemIcon = ItemIconMap[item.itemId];
-        return <ItemIcon className={`ic-${item.itemId}`} />;
-    };
     const renderText = item => <span className="ciq-item-display">{item.display}</span>;
-
-    const renderFavorite = (item) => {
-        if (!item.itemId || !favoritesId) { return ''; }
-        return (
-            <FavoriteIcon
-                onClick={e => onFavoritedItem(item, e)}
-                className={`ciq-favorite ${isFavExist(item.itemId) ? 'ciq-active-favorite' : ''}`}
-            />
-        );
-    };
 
     const renderLeft = item => (
         <div className="left">
-            {renderIcon(item)}
+            <Icon id={item.itemId} />
             {renderText(item)}
         </div>);
 
@@ -68,7 +58,10 @@ const CategoricalDisplay = ({
 
             <div className="right">
                 {(item.dataObject && (item.dataObject.exchange_is_open === undefined || item.dataObject.exchange_is_open)) ? '' : <span className="closed-market">{t.translate('CLOSED')}</span>}
-                {renderFavorite(item)}
+                <Favorite
+                    category={favoritesId}
+                    id={item.itemId}
+                />
             </div>
         </div>);
 
@@ -96,7 +89,10 @@ const CategoricalDisplay = ({
                         })}
                     </span>
                 )}
-                {renderFavorite(item)}
+                <Favorite
+                    category={favoritesId}
+                    id={item.itemId}
+                />
             </div>
         </div>);
 
