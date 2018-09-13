@@ -10,13 +10,19 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Thai\n"
 "Language: th_TH\n"
-"PO-Revision-Date: 2018-09-05 02:21\n"
+"PO-Revision-Date: 2018-09-06 06:11\n"
 
 msgid " already exists."
 msgstr " มีอยู่แล้ว"
 
+msgid "[symbol] feed is delayed by [delay] minutes"
+msgstr "[symbol] แสดงข้อมูลล่าช้า [delay] นาที"
+
+msgid "[symbol] market is now opened."
+msgstr "[symbol] ขณะนี้ ตลาดเปิดทำการแล้ว"
+
 msgid "[symbol] market is presently closed."
-msgstr "[symbol] ตลาดปิดขณะนี้"
+msgstr "[symbol] ขณะนี้ ตลาดได้ปิดทำการ"
 
 msgid "\"Mass Index\" or \"Doji Star\""
 msgstr "\"ดัชนีมวล\" หรือ \"Doji Star\""
@@ -277,7 +283,7 @@ msgid "Spline"
 msgstr "เส้นโค้ง"
 
 msgid "SPOT"
-msgstr "จุด"
+msgstr "SPOT"
 
 msgid "Streaming for [symbol] is not available due to license restrictions"
 msgstr "การสตรีมสำหรับ [symbol] ไม่พร้อมใช้งาน เนื่องจากข้อจำกัดสิทธิ์การใช้งาน"
