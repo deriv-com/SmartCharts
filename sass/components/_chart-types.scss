@@ -7,6 +7,14 @@
                     stroke: themed('ChartTypeListIcon');
                 }
             }
+            &.active {
+                path, circle, rect {
+                    @include themify($themes) {
+                        fill: themed('MenuActiveIcon');
+                        stroke: themed('MenuActiveIcon');
+                    }
+                }
+            }
         }
     }
     .cq-menu-dropdown {
@@ -28,7 +36,7 @@
                     .ic-icon {
                         path, circle, rect {
                             @include themify($themes) {
-                                fill: themed('ChartTypeActiveListIcon') !important;
+                                fill: themed('ChartTypeActiveListIcon');
                                 stroke: themed('ChartTypeActiveListIcon');
                             }
                         }
