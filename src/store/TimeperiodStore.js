@@ -1,6 +1,6 @@
 import { observable, action, computed, when, reaction } from 'mobx';
 import MenuStore from './MenuStore';
-import { getTimeUnit, getIntervalInSeconds, displayMilliseconds } from '../utils';
+import { getTimeUnit, getIntervalInSeconds, displayMilliseconds, getLocalDate } from '../utils';
 import Menu from '../components/Menu.jsx';
 
 export default class TimeperiodStore {
@@ -57,7 +57,7 @@ export default class TimeperiodStore {
         this.remain = null;
         this.clearCountdown();
 
-        const setRemain = () => {
+        const setRemain = async () => {
             if (stx.isDestroyed || this.isTick) {
                 this.clearCountdown();
                 return;
@@ -65,7 +65,8 @@ export default class TimeperiodStore {
 
             const dataSet = stx.chart.dataSet;
             if (dataSet && dataSet.length !== 0) {
-                const now = new Date();
+                const date = await this.mainStore.chart.api.getServerTime();
+                const now = getLocalDate(date.time);
                 // Dates are in UTC; we need to do a timezone offset
                 const diff = now - dataSet[dataSet.length - 1].DT + (now.getTimezoneOffset() * 60000);
                 this.remain = displayMilliseconds((getIntervalInSeconds(stx.layout) * 1000) - diff);
