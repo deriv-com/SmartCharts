@@ -120,6 +120,7 @@
     }
     .cq-modal-dropdown {
         height: inherit;
+        pointer-events: none;
 
         .cq-menu-overlay {
             .cq-menu-dropdown {

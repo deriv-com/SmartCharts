@@ -12,8 +12,8 @@
 /* --------------------------------------------------------- BUTTONS --------------------------------------------------------- */
 
 /* Basic Buttons */
-#annotationCancel,
-#annotationSave {
+.annotationCancel,
+.annotationSave {
     // font-size:$font-size-button;
     font-weight: 700;
     text-transform: uppercase;
@@ -192,6 +192,9 @@
     .cq-chart-control-left {
         .cq-top-ui-widgets {
             left: 90px;
+        }
+        .cq-notifications {
+            right: 100px;
         }
     }
 }
