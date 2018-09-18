@@ -353,7 +353,6 @@ html,body{-ms-touch-action:none;margin:0px}
 .ps__rail-y:hover>.ps__thumb-y,.ps__rail-y:focus>.ps__thumb-y{background-color:#999;width:11px}
 @supports (-ms-overflow-style: none){.ps{overflow:auto !important}}
 @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none){.ps{overflow:auto !important}}
-.smartcharts-mobile .ps:hover>.ps__rail-y{opacity:0}
 .smartcharts-mobile .ps--scrolling-y>.ps__rail-y{opacity:0.6 !important}
 .rightclick_study .mouseManageText{display:inline}
 .rightclick_study .mouseDeleteText{display:none}
