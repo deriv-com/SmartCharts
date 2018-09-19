@@ -103,9 +103,6 @@
 }
 
 .smartcharts-mobile {
-    .ps:hover > .ps__rail-y {
-        opacity: 0;
-    }
     .ps--scrolling-y > .ps__rail-y {
         opacity: 0.6 !important;
     }
