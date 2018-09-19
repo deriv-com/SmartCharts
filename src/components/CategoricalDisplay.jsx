@@ -1,9 +1,10 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import {
-    CategoryIconMap, ItemIconMap, SearchIcon, ActiveOptionsIconMap, CloseIcon,
+    CategoryIconMap, ItemIconMap, ActiveOptionsIconMap,
 } from './Icons.jsx';
 import Favorite from './Favorite.jsx';
+import SearchInput from './SearchInput.jsx';
 import '../../sass/components/_categorical-display.scss';
 
 const Icon = ({ id }) => {
@@ -12,14 +13,78 @@ const Icon = ({ id }) => {
     return <ItemIcon className={`ic-${id}`} />;
 };
 
+const ItemLeft = ({ item: { itemId, display } }) => (
+    <div className="left">
+        <Icon id={itemId} />
+        <span className="ciq-item-display">{display}</span>
+    </div>
+);
+
+const ItemRight = ({ favoritesId, item: { dataObject, itemId } }) => (
+    <div className="right">
+        {(dataObject && (dataObject.exchange_is_open === undefined || dataObject.exchange_is_open)) ? '' : <span className="closed-market">{t.translate('CLOSED')}</span>}
+        <Favorite
+            category={favoritesId}
+            id={itemId}
+        />
+    </div>
+);
+
+const ActiveOption = ({ opt, item }) => {
+    const ActiveOptionIcon = ActiveOptionsIconMap[opt.id];
+    return (
+        <span
+            className={`ic-${opt.id}`}
+            onClick={e => opt.onClick && opt.onClick(item.dataObject, e)}
+        >
+            {ActiveOptionIcon && <ActiveOptionIcon />}
+            {opt.renderChild && opt.renderChild(item)}
+        </span>
+    );
+};
+
+const ActiveOptions = ({ activeOptions, item }) => (
+    activeOptions && (
+        <span className="cq-active-options">
+            {activeOptions.map(opt => (
+                <ActiveOption key={opt.id} opt={opt} item={item} />
+            ))}
+        </span>
+    )
+);
+
+const Filter = ({ activeCategoryKey, handleFilterClick, category, isMobile }) => {
+    const CategoryIcon = CategoryIconMap[category.categoryId];
+    const isActive = activeCategoryKey === category.categoryId;
+    return (
+        <div
+            className={`cq-filter ${isActive ? 'cq-active-filter' : ''} ${!isMobile ? 'cq-hover-style' : ''}`}
+            onClick={e => handleFilterClick(category, e)}
+        >
+            {CategoryIcon && <CategoryIcon className={`ic-${category.categoryId}`} />}
+            <span className="cq-filter-text">{t.translate(category.categoryName)}</span>
+        </div>);
+};
+
+const FilterPanel = ({ filteredItems, handleFilterClick, activeCategoryKey, isMobile }) => (
+    <div className="cq-filter-panel">
+        { filteredItems.map(category => (
+            <Filter
+                key={category.categoryId}
+                category={category}
+                handleFilterClick={handleFilterClick}
+                activeCategoryKey={activeCategoryKey}
+                isMobile={isMobile}
+            />
+        ))}
+    </div>
+);
 
 const CategoricalDisplay = ({
     isMobile,
     placeholderText,
-    setSearchInput,
     filterText,
     setFilterText,
-    clearFilterText,
     handleFilterClick,
     hasActiveItems,
     filteredItems,
@@ -34,61 +99,27 @@ const CategoricalDisplay = ({
     updateScrollSpy,
     scrollUp,
     scrollDown,
+    isShown,
 }) => {
-    /**
-     * On mobile mode, this part appear on the top of dialog
-     * @return HTML
-     */
-    const renderText = item => <span className="ciq-item-display">{item.display}</span>;
-
-    const renderLeft = item => (
-        <div className="left">
-            <Icon id={item.itemId} />
-            {renderText(item)}
-        </div>);
-
-    const renderItem = (item, k) => (
+    const renderItem = item => (
         <div
             className={`cq-item ${item.selected ? 'selected ' : ''}`}
             onClick={e => item.enabled && onSelectItem(item.dataObject, e)}
             disabled={!item.enabled}
-            key={k}
+            key={item.itemId}
         >
-            {renderLeft(item)}
-
-            <div className="right">
-                {(item.dataObject && (item.dataObject.exchange_is_open === undefined || item.dataObject.exchange_is_open)) ? '' : <span className="closed-market">{t.translate('CLOSED')}</span>}
-                <Favorite
-                    category={favoritesId}
-                    id={item.itemId}
-                />
-            </div>
+            <ItemLeft item={item} />
+            <ItemRight item={item} favoritesId={favoritesId} />
         </div>);
 
-    const renderActiveItem = (item, k) => (
+    const renderActiveItem = item => (
         <div
             className="cq-active-item"
-            key={k}
+            key={item.display}
         >
-            {renderLeft(item)}
+            <ItemLeft item={item} />
             <div className="right">
-                {activeOptions && (
-                    <span className="cq-active-options">
-                        {activeOptions.map((opt) => {
-                            const ActiveOptionIcon = ActiveOptionsIconMap[opt.id];
-                            return (
-                                <span
-                                    key={opt.id}
-                                    className={`ic-${opt.id}`}
-                                    onClick={e => opt.onClick && opt.onClick(item.dataObject, e)}
-                                >
-                                    {ActiveOptionIcon && <ActiveOptionIcon />}
-                                    {opt.renderChild && opt.renderChild(item)}
-                                </span>
-                            );
-                        })}
-                    </span>
-                )}
+                <ActiveOptions activeOptions={activeOptions} item={item} />
                 <Favorite
                     category={favoritesId}
                     id={item.itemId}
@@ -99,35 +130,20 @@ const CategoricalDisplay = ({
     return (
         <div className="cq-categorical-display">
             <div className={`cq-lookup-filters ${isScrollingDown ? 'scroll-down' : ''}`}>
-                <div className={`cq-lookup-input ${filterText.trim() !== '' ? 'active' : ''}`}>
-                    <input
-                        ref={el =>  setSearchInput(el)}
-                        onChange={e => setFilterText(e.target.value)}
-                        type="text"
-                        spellCheck="off"
-                        autoComplete="off"
-                        autoCorrect="off"
-                        autoCapitalize="off"
+                {isShown // render search only when dialog is opened allows us to focus on mount
+                && (
+                    <SearchInput
                         placeholder={placeholderText}
+                        value={filterText}
+                        onChange={setFilterText}
                     />
-                    <SearchIcon />
-                    <CloseIcon className="icon-reset" onClick={() => clearFilterText()} />
-                </div>
-                <div className="cq-filter-panel">
-                    { filteredItems.map((category) => {
-                        const CategoryIcon = CategoryIconMap[category.categoryId];
-                        const isActive = activeCategoryKey === category.categoryId;
-                        return (
-                            <div
-                                key={category.categoryId}
-                                className={`cq-filter ${isActive ? 'cq-active-filter' : ''} ${!isMobile ? 'cq-hover-style' : ''}`}
-                                onClick={e => handleFilterClick(category, e)}
-                            >
-                                {CategoryIcon && <CategoryIcon className={`ic-${category.categoryId}`} />}
-                                <span className="cq-filter-text">{t.translate(category.categoryName)}</span>
-                            </div>);
-                    })}
-                </div>
+                )}
+                <FilterPanel
+                    filteredItems={filteredItems}
+                    handleFilterClick={handleFilterClick}
+                    activeCategoryKey={activeCategoryKey}
+                    isMobile={isMobile}
+                />
             </div>
             <PerfectScrollbar
                 className="cq-scroll-panel"
@@ -146,12 +162,13 @@ const CategoricalDisplay = ({
                             <div className="category-title">{t.translate(category.categoryName)}</div>
                             { category.hasSubcategory
                                 ? category.data.map(subcategory => getItemCount(subcategory) > 0 && (
-                                    <Fragment key={subcategory.subcategoryName}>
-                                        <div className="category-content">
-                                            <div className="subcategory">{t.translate(subcategory.subcategoryName)}</div>
-                                            { subcategory.data.map(renderItem)}
-                                        </div>
-                                    </Fragment>
+                                    <div
+                                        className="category-content"
+                                        key={subcategory.subcategoryName}
+                                    >
+                                        <div className="subcategory">{t.translate(subcategory.subcategoryName)}</div>
+                                        { subcategory.data.map(renderItem)}
+                                    </div>
                                 ))
                                 : category.data.length > 0 && (
                                     <div className="category-content">

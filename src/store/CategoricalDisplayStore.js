@@ -15,14 +15,10 @@ export default class CategoricalDisplayStore {
     }) {
         reaction(getIsShown, () => {
             const isShown = getIsShown();
+            // deferred the rendering until user opens the dropdown
+            // setTimeout is required, otherwise it will block the render
+            setTimeout(action(() => { this.isShown = isShown; }), 0);
             if (isShown) {
-                // deferred the rendering until user opens the dropdown
-                // setTimeout is required, otherwise it will block the render
-                setTimeout(action(() => { this.isShown = isShown; }), 0);
-                // Odd. Why is setTimeout needed here?
-                if (!this.isMobile) {
-                    setTimeout(() => this.searchInput.focus(), 0);
-                }
                 if (!this.isInit) { this.init(); }
             }
         });
@@ -127,8 +123,6 @@ export default class CategoricalDisplayStore {
     }
 
     @computed get filteredItems() {
-        if (!this.isShown) { return []; }
-
         let filteredItems = cloneCategories(this.getCategoricalItems());
 
         if (this.favoritesId) {
@@ -217,11 +211,6 @@ export default class CategoricalDisplayStore {
         }, 0);
     }
 
-    @action.bound clearFilterText() {
-        this.setFilterText('');
-        this.searchInput.value = '';
-    }
-
     @action.bound handleFilterClick(category) {
         const el = this.categoryElements[category.categoryId];
 
@@ -235,10 +224,6 @@ export default class CategoricalDisplayStore {
             // a slight delay before enabling the scroll spy again
             setTimeout(() => { this.pauseScrollSpy = false; }, 3);
         }
-    }
-
-    @action.bound setSearchInput(element) {
-        this.searchInput = element;
     }
 
     @action.bound setScrollPanel(element) {
@@ -262,10 +247,8 @@ export default class CategoricalDisplayStore {
         isMobile: this.isMobile,
         filterText: this.filterText,
         setFilterText: this.setFilterText,
-        clearFilterText: this.clearFilterText,
         filteredItems: this.filteredItems,
         getItemCount: this.getItemCount,
-        setSearchInput: this.setSearchInput,
         handleFilterClick: this.handleFilterClick,
         onSelectItem: this.onSelectItem,
         hasActiveItems: (this.getActiveCategory !== undefined),
@@ -279,5 +262,6 @@ export default class CategoricalDisplayStore {
         updateScrollSpy: this.updateScrollSpy,
         scrollUp: this.scrollUp,
         scrollDown: this.scrollDown,
+        isShown: this.isShown,
     }))
 }

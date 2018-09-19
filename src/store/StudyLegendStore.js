@@ -157,9 +157,7 @@ export default class StudyLegendStore {
         this.settingsDialog.description = '';
         this.settingsDialog.setOpen(true);
     }
-    @action.bound starStudy(study) {
-        this.categoricalDisplay.setFavoriteById(study.name);
-    }
+
     @action.bound deleteStudy(study) {
         const sd = study.sd;
         if (!sd.permanent) {
