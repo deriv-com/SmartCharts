@@ -15,8 +15,15 @@ class ConnectionManager extends EventEmitter {
     }
 
     _initialize() {
+        const self = this;
         this._websocket = new RobustWebsocket(this._url, null, {
             shouldReconnect(event /* , ws */) {
+                if (event.code === 1006
+                && event.type === 'close') {
+                    // Server websocket disconnected; reset to restore connection
+                    self.resetConnection();
+                    return;
+                }
                 if (event.code === 1008
                     || event.code === 1011
                     || event.type === 'close') return;
@@ -66,11 +73,15 @@ class ConnectionManager extends EventEmitter {
                     if (this._websocket.readyState === WebSocket.OPEN) {
                         console.error('Server unresponsive. Creating new connection...');
                         // Reset connection if ping gets no pong from server
-                        this._websocket.close();
-                        this._initialize();
+                        this.resetConnection();
                     }
                 });
         }
+    }
+
+    resetConnection() {
+        this._websocket.close();
+        this._initialize();
     }
 
     _onWsClosed() {
