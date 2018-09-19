@@ -174,10 +174,15 @@ export default class StudyLegendStore {
     @action.bound updateStudy(study, items) {
         const updates = { };
         for (const { id, category, value, type } of items) {
-            if (type === 'numbercolorpicker'
-                ? (study[category][`${id}Color`] !== value.Color
-                    || study[category][`${id}Value`] !== value.Value)
-                : study[category][id] !== value) {
+            let isChanged;
+            if (type === 'numbercolorpicker') {
+                isChanged = study[category][`${id}Color`] !== value.Color
+                    || study[category][`${id}Value`] !== value.Value;
+            } else {
+                isChanged = study[category][id] !== value;
+            }
+
+            if (isChanged) {
                 updates[category] = updates[category] || { };
                 if (typeof value === 'object') {
                     for (const suffix in value) {
