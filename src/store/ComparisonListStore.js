@@ -5,6 +5,10 @@ import AnimatedPrice from '../components/AnimatedPrice.jsx';
 export default class ComparisonListStore {
     constructor(mainStore) {
         this.mainStore = mainStore;
+
+        // The order of setting the reaction is important. The animatedPrices array must match
+        // comparisonSymbols array _before_ updating the prices
+        reaction(() => this.comparisonSymbols.length, this.syncAnimatedPricesWithComparisons);
         reaction(() => this.comparisonSymbols.map(s => s.price), this.updatePrices);
     }
 
@@ -13,7 +17,7 @@ export default class ComparisonListStore {
     get comparisonSymbols() { return this.mainStore.comparison.comparisonSymbols; }
     get context() { return this.mainStore.chart.context; }
 
-    syncAnimatedPricesWithComparisons() {
+    @action.bound syncAnimatedPricesWithComparisons() {
         let diff = this.comparisonSymbols.length - this.animatedPrices.length;
         if (diff > 0) {
             while (diff-- !== 0) {
@@ -30,7 +34,6 @@ export default class ComparisonListStore {
     }
 
     @action.bound updatePrices() {
-        this.syncAnimatedPricesWithComparisons();
         this.comparisonSymbols.map(({ price, prevPrice }, i) => {
             const animatedPrice = this.animatedPriceStore[i];
             animatedPrice.setPrice(price, prevPrice);
