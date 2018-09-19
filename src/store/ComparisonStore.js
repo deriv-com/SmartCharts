@@ -14,6 +14,7 @@ const swatchColors = [
 
 export default class ComparisonStore {
     @observable comparisonSymbols = [];
+    currentActiveSymbol; // just used to track if symbol has changed
 
     constructor(mainStore) {
         this.mainStore = mainStore;
@@ -143,11 +144,14 @@ export default class ComparisonStore {
     @action.bound onSymbolChange({ action : symbolAction }) {
         if (symbolAction === 'master') {
             const { stx } = this.context;
-            this.comparisonSymbols = [];
-            for (const field in stx.chart.series) {
-                if (stx.chart.series[field].parameters.bucket !== 'study') {
-                    stx.removeSeries(field);
+            if (this.currentActiveSymbol !== stx.chart.symbol) {
+                this.comparisonSymbols = [];
+                for (const field in stx.chart.series) {
+                    if (stx.chart.series[field].parameters.bucket !== 'study') {
+                        stx.removeSeries(field);
+                    }
                 }
+                this.currentActiveSymbol = stx.chart.symbol;
             }
         } else {
             // symbolAction = 'add-series' or 'remove-series'
@@ -183,6 +187,7 @@ export default class ComparisonStore {
     onContextReady = () => {
         const { stx } = this.context;
         const { feed } = this.mainStore.chart;
+        this.currentActiveSymbol = stx.chart.symbol;
         stx.addEventListener('symbolChange', this.onSymbolChange);
         feed.onComparisonDataUpdate(this.updateComparisonPrices);
         this.updateComparisons();
