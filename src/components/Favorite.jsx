@@ -18,6 +18,9 @@ class Favorite extends Component {
     }
 
     render() {
+        const { category, id } = this.props;
+        if (!category || !id) return null;
+
         return (
             <FavoriteIcon
                 onClick={this.onClick}
