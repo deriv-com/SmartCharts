@@ -1,62 +1,19 @@
 import React, { Component } from 'react';
-import { action, computed, observable } from 'mobx';
+import { computed } from 'mobx';
 import { FavoriteIcon } from './Icons.jsx';
-import { createObjectFromLocalStorage } from '../utils';
-
-function loadFavorites() {
-    const local = createObjectFromLocalStorage('cq-favorites');
-    if (!local) { return; }
-
-    const favorites = {};
-    for (const categoryName in local) {
-        const category = {};
-        for (const id of local[categoryName]) {
-            category[id] = true;
-        }
-        favorites[categoryName] = category;
-    }
-
-    return favorites;
-}
+import { connect } from '../store/Connect';
 
 class Favorite extends Component {
-    @observable static favoritesMap = loadFavorites() || {
-        indicators: {},
-        'chartTitle&Comparison': {},
-    };
-
-    @action.bound static toggleFavorite(category, id) {
-        const cat = Favorite.favoritesMap[category];
-        if (cat[id]) {
-            delete cat[id];
-        } else {
-            cat[id] = true;
-        }
-        Favorite.saveFavorites();
-    }
-
-    static saveFavorites() {
-        const favorites = {};
-        for (const categoryName in Favorite.favoritesMap) {
-            const category = [];
-            for (const id in Favorite.favoritesMap[categoryName]) {
-                category.push(id);
-            }
-            favorites[categoryName] = category;
-        }
-        CIQ.localStorageSetItem('cq-favorites', JSON.stringify(favorites));
-    }
-
     onClick = (e) => {
         e.stopPropagation();
         e.nativeEvent.isHandledByDialog = true; // prevent close dialog
-        const { category, id } = this.props;
-        Favorite.toggleFavorite(category, id);
+        const { category, id, toggleFavorite } = this.props;
+        toggleFavorite(category, id);
     };
 
     @computed get isFavorite() {
-        const { category, id } = this.props;
-        const cat = Favorite.favoritesMap[category];
+        const { category, id, favoritesMap } = this.props;
+        const cat = favoritesMap[category];
         return id in cat;
     }
 
@@ -70,4 +27,7 @@ class Favorite extends Component {
     }
 }
 
-export default Favorite;
+export default connect(({ favorites: f }) => ({
+    toggleFavorite: f.toggleFavorite,
+    favoritesMap: f.favoritesMap,
+}))(Favorite);

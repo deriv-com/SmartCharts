@@ -1,7 +1,6 @@
 import { action, observable, computed, reaction } from 'mobx';
 import { connect } from './Connect';
 import { cloneCategories, cloneCategory } from '../utils';
-import Favorite from '../components/Favorite.jsx';
 
 export default class CategoricalDisplayStore {
     constructor({
@@ -114,7 +113,7 @@ export default class CategoricalDisplayStore {
             categoryId: 'favorite',
             hasSubcategory: false,
             emptyDescription: t.translate('There are no favorites yet.'),
-            data: Object.keys(Favorite.favoritesMap[this.favoritesId]) || [],
+            data: Object.keys(this.mainStore.favorites.favoritesMap[this.favoritesId]) || [],
         };
         return favoritesCategory;
     }
