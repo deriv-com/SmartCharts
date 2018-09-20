@@ -54,10 +54,11 @@ function getServerUrl() {
 const chartId = '1';
 const appId  = CIQ.localStorage.getItem('config.app_id') || 12812;
 const serverUrl = getServerUrl();
+const language = new URLSearchParams(window.location.search).get('l') || getLanguageStorage();
 
 const connectionManager = new ConnectionManager({
     appId,
-    language: getLanguageStorage(),
+    language,
     endpoint: serverUrl,
 });
 
@@ -72,8 +73,13 @@ class App extends Component {
     constructor(props) {
         super(props);
         this.notifier = new ChartNotifier();
-        const settings = createObjectFromLocalStorage('smartchart-setting');
-        if (settings) { this.startingLanguage = settings.language; }
+        let settings = createObjectFromLocalStorage('smartchart-setting');
+        if (settings) {
+            settings.language = language;
+            this.startingLanguage = settings.language;
+        } else {
+            settings = { language };
+        }
         connectionManager.on(
             ConnectionManager.EVENT_CONNECTION_CLOSE,
             () => this.setState({ isConnectionOpened: false }),
@@ -96,7 +102,11 @@ class App extends Component {
 
         this.setState({ settings });
         if (this.startingLanguage !== settings.language) {
-            window.location.reload();
+            // Place language in URL:
+            const url = new URL(window.location.href);
+            url.searchParams.delete('l');
+            url.searchParams.set('l', settings.language);
+            window.location.href = url.href;
         }
     };
 
