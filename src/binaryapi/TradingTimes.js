@@ -25,7 +25,7 @@ class TradingTimes {
             await this._updateTradeTimes();
 
             const periodicUpdate = async () => {
-                const changed = await this._updateMarketOpenClosed();
+                const changed = this._updateMarketOpenClosed(serverTime);
                 if (Object.keys(changed).length > 0) {
                     this._emitter.emit(TradingTimes.EVENT_MARKET_OPEN_CLOSE_CHANGE, changed);
                 }
@@ -65,11 +65,12 @@ class TradingTimes {
         }
     }
 
-    async _updateMarketOpenClosed() {
+    _updateMarketOpenClosed(serverTime) {
         const changed = {};
         /* eslint-disable no-await-in-loop */
+        const now = getLocalDate(serverTime);
         for (const symbol in this._tradingTimesMap) {
-            const isOpened = await this._calcIsMarketOpened(symbol);
+            const isOpened = this._calcIsMarketOpened(symbol, now);
             if (this._tradingTimesMap[symbol].isOpened !== isOpened) {
                 this._tradingTimesMap[symbol].isOpened = isOpened;
                 changed[symbol] = isOpened;
@@ -132,9 +133,7 @@ class TradingTimes {
         return this._tradingTimesMap[symbol].isOpened;
     }
 
-    async _calcIsMarketOpened(symbol) {
-        const serverTime = await this._serverTime.get();
-        const now = getLocalDate(serverTime);
+    _calcIsMarketOpened(symbol, now) {
         const {
             times, feed_license,
             isOpenAllDay, isClosedAllDay,
