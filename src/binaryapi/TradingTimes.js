@@ -67,7 +67,6 @@ class TradingTimes {
 
     _updateMarketOpenClosed(serverTime) {
         const changed = {};
-        /* eslint-disable no-await-in-loop */
         const now = getLocalDate(serverTime);
         for (const symbol in this._tradingTimesMap) {
             const isOpened = this._calcIsMarketOpened(symbol, now);

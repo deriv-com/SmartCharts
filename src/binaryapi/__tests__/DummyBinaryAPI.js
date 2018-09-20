@@ -5866,4 +5866,8 @@ export default class DummyBinaryAPI {
         if (date === '2018-08-27') trading_times = monday_trading_times;
         return Promise.resolve(trading_times);
     }
+
+    getServerTime() {
+        return 1537452217; //Thu, 20 Sep 2018 14:03:37 GMT
+    }
 }
