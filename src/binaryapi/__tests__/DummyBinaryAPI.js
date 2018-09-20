@@ -5868,6 +5868,6 @@ export default class DummyBinaryAPI {
     }
 
     getServerTime() {
-        return 1537452217; //Thu, 20 Sep 2018 14:03:37 GMT
+        return Promise.resolve(1537452217); //Thu, 20 Sep 2018 14:03:37 GMT
     }
 }
