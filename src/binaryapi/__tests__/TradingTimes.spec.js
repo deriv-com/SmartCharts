@@ -4,6 +4,7 @@ import sinon from 'sinon';
 import sinonChai from 'chai-sinon';
 import TradingTimes from '../TradingTimes';
 import DummyBinaryAPI from './DummyBinaryAPI';
+import ServerTime from '../utils/ServerTime';
 
 chai.use(sinonChai);
 
@@ -15,7 +16,8 @@ describe('TradingTimes test', async function () {
             now: 1535068800000, // Friday, 2018-08-24
         });
         this.dummyBinaryApi = new DummyBinaryAPI();
-        this.tt = new TradingTimes(this.dummyBinaryApi);
+        this.serverTime = new ServerTime(this.dummyBinaryApi);
+        this.tt = new TradingTimes(this.dummyBinaryApi, this.serverTime);
         await this.tt.initialize();
     });
 
