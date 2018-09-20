@@ -3,7 +3,7 @@ import MenuStore from './MenuStore';
 import AnimatedPriceStore from './AnimatedPriceStore';
 import CategoricalDisplayStore from './CategoricalDisplayStore';
 import Menu from '../components/Menu.jsx';
-import CategoricalDisplay from '../components/CategoricalDisplay.jsx';
+import { CategoricalDisplay } from '../components/categoricaldisplay';
 import AnimatedPrice from '../components/AnimatedPrice.jsx';
 
 export default class ChartTitleStore {

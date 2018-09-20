@@ -2,7 +2,7 @@ import React from 'react';
 import { action, computed } from 'mobx';
 import MenuStore from './MenuStore';
 import CategoricalDisplayStore from './CategoricalDisplayStore';
-import CategoricalDisplay from '../components/CategoricalDisplay.jsx';
+import { CategoricalDisplay } from '../components/categoricaldisplay';
 import Menu from '../components/Menu.jsx';
 
 const swatchColors = [

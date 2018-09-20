@@ -1,6 +1,8 @@
 import { action, observable, computed, reaction } from 'mobx';
 import { connect } from './Connect';
 import { cloneCategories, cloneCategory } from '../utils';
+import SearchInput from '../components/SearchInput.jsx';
+import { NormalItem, ActiveItem, ResultsPanel, FilterPanel } from '../components/categoricaldisplay';
 
 export default class CategoricalDisplayStore {
     constructor({
@@ -25,17 +27,57 @@ export default class CategoricalDisplayStore {
         this.getCategoricalItems = getCategoricalItems;
         this.onSelectItem = onSelectItem;
         this.getActiveCategory = getActiveCategory;
-        this.activeOptions = activeOptions;
-        this.placeholderText = placeholderText;
         this.favoritesId = favoritesId;
         this.categoryElements = {};
         this.mainStore = mainStore;
         this.isInit = false;
+
+        const normalItem = connect(() => ({
+            favoritesId,
+        }))(NormalItem);
+
+        const activeItem = connect(() => ({
+            activeOptions,
+            favoritesId,
+        }))(ActiveItem);
+
+        const getItemType = (categoryId) => {
+            // Defer render of items until panel is opened
+            // if (!this.isShown) {
+            //     return BlankItem;
+            // }
+
+            if (categoryId === 'active' && (this.getActiveCategory !== undefined)) {
+                return activeItem;
+            }
+
+            return normalItem;
+        };
+
+        this.ResultsPanel = connect(() => ({
+            filteredItems: this.filteredItems,
+            setCategoryElement: this.setCategoryElement,
+            getItemType,
+            isShown: this.isShown,
+        }))(ResultsPanel);
+
+        this.FilterPanel = connect(({ chart }) => ({
+            isMobile: chart.isMobile,
+            filteredItems: this.filteredItems,
+            handleFilterClick: this.handleFilterClick,
+            activeCategoryKey: this.activeCategoryKey,
+        }))(FilterPanel);
+
+        this.SearchInput = connect(() => ({
+            placeholder: placeholderText,
+            value: this.filterText,
+            onChange: this.setFilterText,
+        }))(SearchInput);
     }
+
     @observable isShown = false;
     @observable scrollPanel;
     @observable filterText = '';
-    @observable placeholderText = '';
     @observable activeCategoryKey = '';
     @observable isScrollingDown = false;
     scrollTop = undefined;
@@ -112,14 +154,6 @@ export default class CategoricalDisplayStore {
             data: Object.keys(this.mainStore.favorites.favoritesMap[this.favoritesId]) || [],
         };
         return favoritesCategory;
-    }
-
-    /* isMobile: fill form the ChartStore */
-    @computed get isMobile() {
-        if (this.mainStore) {
-            return this.mainStore.chart.isMobile;
-        }
-        return false;
     }
 
     @computed get filteredItems() {
@@ -230,38 +264,17 @@ export default class CategoricalDisplayStore {
         this.scrollPanel = element ? element._container : null;
     }
 
-    @action.bound getItemCount(category) {
-        let count = 0;
-        if (category.hasSubcategory) {
-            for (const sub of category.data) {
-                count += sub.data.length;
-            }
-        } else {
-            count += category.data.length;
-        }
-
-        return count;
-    }
-
     connect = connect(() => ({
-        isMobile: this.isMobile,
-        filterText: this.filterText,
-        setFilterText: this.setFilterText,
         filteredItems: this.filteredItems,
-        getItemCount: this.getItemCount,
-        handleFilterClick: this.handleFilterClick,
-        onSelectItem: this.onSelectItem,
-        hasActiveItems: (this.getActiveCategory !== undefined),
-        activeOptions: this.activeOptions,
-        placeholderText: this.placeholderText,
-        activeCategoryKey: this.activeCategoryKey,
         setScrollPanel: this.setScrollPanel,
-        setCategoryElement: this.setCategoryElement,
-        favoritesId: this.favoritesId,
         isScrollingDown: this.isScrollingDown,
         updateScrollSpy: this.updateScrollSpy,
         scrollUp: this.scrollUp,
         scrollDown: this.scrollDown,
         isShown: this.isShown,
+        onSelectItem: this.onSelectItem,
+        ResultsPanel: this.ResultsPanel,
+        FilterPanel: this.FilterPanel,
+        SearchInput: this.SearchInput,
     }))
 }
