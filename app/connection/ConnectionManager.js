@@ -17,6 +17,11 @@ class ConnectionManager extends EventEmitter {
     _initialize() {
         this._websocket = new RobustWebsocket(this._url, null, {
             shouldReconnect(event /* , ws */) {
+                if (event.code === 1006
+                && event.type === 'close') {
+                    // Server websocket disconnected; reset to restore connection
+                    return 0;
+                }
                 if (event.code === 1008
                     || event.code === 1011
                     || event.type === 'close') return;
