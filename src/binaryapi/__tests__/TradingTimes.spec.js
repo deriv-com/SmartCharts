@@ -4,7 +4,7 @@ import sinon from 'sinon';
 import sinonChai from 'chai-sinon';
 import TradingTimes from '../TradingTimes';
 import DummyBinaryAPI from './DummyBinaryAPI';
-import ServerTime from '../utils/ServerTime';
+import ServerTime from '../../utils/ServerTime';
 
 chai.use(sinonChai);
 
