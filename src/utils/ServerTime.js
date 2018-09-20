@@ -12,7 +12,7 @@ class ServerTime {
     }
 
     _timeResponse = (response) => {
-        if (response.error) return;
+        if (response.error) return getUTCEpoch(new Date());
 
         const serverTime = response.time;
         const client_time_at_response = getUTCEpoch(new Date());
