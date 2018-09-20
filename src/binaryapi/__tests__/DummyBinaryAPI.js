@@ -1,5 +1,13 @@
 import sinon from 'sinon';
 
+const serverTime = {
+    "echo_req": {
+      "time": 1
+    },
+    "msg_type": "time",
+    "time": 1537453369
+};
+
 const friday_trading_times = {
     echo_req: {
         trading_times: '2018-08-24',
@@ -5868,6 +5876,6 @@ export default class DummyBinaryAPI {
     }
 
     getServerTime() {
-        return Promise.resolve(1537452217); //Thu, 20 Sep 2018 14:03:37 GMT
+        return Promise.resolve(serverTime); //Thu, 20 Sep 2018 14:03:37 GMT
     }
 }
