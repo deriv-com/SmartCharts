@@ -10,10 +10,16 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Portuguese\n"
 "Language: pt_PT\n"
-"PO-Revision-Date: 2018-09-05 01:41\n"
+"PO-Revision-Date: 2018-09-06 09:32\n"
 
 msgid " already exists."
 msgstr " já existe."
+
+msgid "[symbol] feed is delayed by [delay] minutes"
+msgstr "O feed de [symbol] tem um atraso de [delay] minutos"
+
+msgid "[symbol] market is now opened."
+msgstr "O mercado de [symbol] está agora aberto."
 
 msgid "[symbol] market is presently closed."
 msgstr "O mercado de [symbol] está atualmente fechado."
@@ -277,7 +283,7 @@ msgid "Spline"
 msgstr "Spline"
 
 msgid "SPOT"
-msgstr ""
+msgstr "PREÇO"
 
 msgid "Streaming for [symbol] is not available due to license restrictions"
 msgstr "Transmissão ao vivo do [symbol] não está disponível devido a restrições de licença"

@@ -10,10 +10,16 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Chinese Traditional\n"
 "Language: zh_TW\n"
-"PO-Revision-Date: 2018-09-05 01:41\n"
+"PO-Revision-Date: 2018-09-06 03:40\n"
 
 msgid " already exists."
 msgstr " 已經存在。"
+
+msgid "[symbol] feed is delayed by [delay] minutes"
+msgstr ""
+
+msgid "[symbol] market is now opened."
+msgstr ""
 
 msgid "[symbol] market is presently closed."
 msgstr "[symbol] 市場目前已關閉。"
@@ -103,16 +109,16 @@ msgid "Dot"
 msgstr "點"
 
 msgid "Download"
-msgstr ""
+msgstr "下載"
 
 msgid "Download as CSV"
-msgstr ""
+msgstr "下載為 CSV"
 
 msgid "Download as PNG"
-msgstr ""
+msgstr "下載為 PNG"
 
 msgid "Download Chart"
-msgstr ""
+msgstr "下載圖表"
 
 msgid "Draw tools"
 msgstr "繪圖工具"
@@ -277,7 +283,7 @@ msgid "Spline"
 msgstr "Spline法"
 
 msgid "SPOT"
-msgstr ""
+msgstr "點"
 
 msgid "Streaming for [symbol] is not available due to license restrictions"
 msgstr "由於許可限制, [symbol] 串流不可用"
