@@ -61,7 +61,7 @@ class Feed {
         const isComparisonChart = this._stx.chart.symbol !== symbol;
         let start = this.startEpoch || (suggestedStartDate / 1000 | 0);
         const end = this.endEpoch;
-        const now = (serverTime / 1000) | 0;
+        const now = serverTime | 0;
         if (isComparisonChart) {
             // Strange issue where comparison series is offset by timezone...
             start -= suggestedStartDate.getTimezoneOffset() * 60;
