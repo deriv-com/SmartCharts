@@ -1,5 +1,5 @@
 import EventEmitter from 'event-emitter-es6';
-import { getLocalDate, getUTCEpoch  } from '../utils';
+import { getLocalDate } from '../utils';
 
 class TradingTimes {
     static get EVENT_MARKET_OPEN_CLOSE_CHANGE() { return 'EVENT_MARKET_OPEN_CLOSE_CHANGE'; }
@@ -18,7 +18,7 @@ class TradingTimes {
     }
 
     async initialize() {
-        let serverTime = this._serverTime ? await this._serverTime.get() : getUTCEpoch(new Date());
+        let serverTime = await this._serverTime.get();
         this.lastUpdateDate = getLocalDate(serverTime).toISOString().substring(0, 10);
 
         if (!this._tradingTimesMap) {
