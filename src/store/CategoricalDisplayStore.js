@@ -91,6 +91,8 @@ export default class CategoricalDisplayStore {
 
         for (const category of this.filteredItems) {
             const el = this.categoryElements[category.categoryId];
+
+            if (!el) { return; }
             const r = el.getBoundingClientRect();
             const top = r.top - this.scrollPanel.getBoundingClientRect().top;
             if (top < 0) {
