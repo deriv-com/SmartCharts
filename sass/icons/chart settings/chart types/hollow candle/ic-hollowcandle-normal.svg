@@ -1,14 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <style>
-        .icon-candle{
-            fill: none !important;
-        }
-    </style>
     <title>icons/system/light/chart settings/chart types/candle/ic-candle-normal</title>
     <desc>Created with Sketch.</desc>
     <defs></defs>
     <g id="icons/system/light/chart-settings/chart-types/hollow candle/ic-hollowcandle-normal" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <path class="icon-candle" d="M7.5,13 L5,13 L5,3 L7.5,3 L7.5,0 L8.5,0 L8.5,3 L11,3 L11,13 L8.5,13 L8.5,16 L7.5,16 L7.5,13 Z"></path>
+        <path class="no-fill" d="M7.5,13 L5,13 L5,3 L7.5,3 L7.5,0 L8.5,0 L8.5,3 L11,3 L11,13 L8.5,13 L8.5,16 L7.5,16 L7.5,13 Z"></path>
     </g>
 </svg>
