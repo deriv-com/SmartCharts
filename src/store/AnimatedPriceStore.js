@@ -16,7 +16,7 @@ export default class AnimatedPriceStore {
             this.status = 'up';
         } else if (newVal < oldVal) {
             this.status = 'down';
-        } else if (newVal === oldVal) {
+        } else {
             this.status = '';
             return;
         }
