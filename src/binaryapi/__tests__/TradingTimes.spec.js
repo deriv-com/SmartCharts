@@ -51,39 +51,44 @@ describe('TradingTimes test', async function () {
         const spy = sinon.spy();
         this.tt.onMarketOpenCloseChanged(spy);
         // STI (Singapore Index) opens at 1:00 and closes at 9:00
-        this.clock.tick('00:59:00');
-        expect(spy).to.have.callCount(0);
-        expect(this.tt.isMarketOpened('STI')).to.be.false;
-        this.clock.tick('00:01:00');
-        expect(spy).to.have.callCount(1);
-        expect(this.tt.isMarketOpened('STI')).to.be.true;
-        this.clock.tick('07:59:00');
-        expect(this.tt.isMarketOpened('STI')).to.be.true;
-        this.clock.tick('00:01:00');
-        expect(this.tt.isMarketOpened('STI')).to.be.false;
+        setTimeout(() => {
+            this.clock.tick('00:59:00');
+            expect(spy).to.have.callCount(0);
+            expect(this.tt.isMarketOpened('STI')).to.be.false;
+            this.clock.tick('00:01:00');
+            expect(spy).to.have.callCount(1);
+            expect(this.tt.isMarketOpened('STI')).to.be.true;
+            this.clock.tick('07:59:00');
+            expect(this.tt.isMarketOpened('STI')).to.be.true;
+            this.clock.tick('00:01:00');
+            expect(this.tt.isMarketOpened('STI')).to.be.false;
+        }, 0);
     });
 
     it('Test onMarketOpenCloseChanged changed object is correct', function () {
         const spy = sinon.spy();
         let changes;
         this.tt.onMarketOpenCloseChanged(spy);
-        this.clock.tick('07:00:00'); // 7:00:00
-        changes = spy.lastCall.args[0];
-        for (const symbol of ['BFX', 'AEX', 'FCHI', 'OBX']) {
-            expect(changes[symbol]).to.be.true;
-        }
-
-        this.clock.tick('07:30:00'); // 14:30:00
-
-        changes = spy.lastCall.args[0];
-        expect(changes['OBX']).to.be.false;
-
-        this.clock.tick('01:00:00'); // 15:30:00
-
-        changes = spy.lastCall.args[0];
-        for (const symbol of ['BFX', 'AEX', 'FCHI']) {
-            expect(changes[symbol]).to.be.false;
-        }
+        setTimeout(() => {
+            this.clock.tick('07:00:00'); // 7:00:00
+            changes = spy.lastCall.args[0];
+            for (const symbol of ['BFX', 'AEX', 'FCHI', 'OBX']) {
+                expect(changes[symbol]).to.be.true;
+            }
+    
+            this.clock.tick('07:30:00'); // 14:30:00
+    
+            changes = spy.lastCall.args[0];
+            expect(changes['OBX']).to.be.false;
+    
+            this.clock.tick('01:00:00'); // 15:30:00
+    
+            changes = spy.lastCall.args[0];
+            for (const symbol of ['BFX', 'AEX', 'FCHI']) {
+                expect(changes[symbol]).to.be.false;
+            }
+    
+        }, 0);
     });
 
     it('Test onMarketOpenCloseChanged changed object in multiple open close sessions', function () {
@@ -92,41 +97,40 @@ describe('TradingTimes test', async function () {
         let changes;
         this.tt.onMarketOpenCloseChanged(spy);
 
-        this.clock.tick('01:30:00'); // 1:30:00
+        setTimeout(() => {
+            this.clock.tick('01:30:00'); // 1:30:00
 
-        changes = spy.lastCall.args[0];
-        expect(changes[OTC_HSI]).to.be.true;
+            changes = spy.lastCall.args[0];
+            expect(changes[OTC_HSI]).to.be.true;
 
-        this.clock.tick('02:30:00'); // 4:00:00
+            this.clock.tick('02:30:00'); // 4:00:00
 
-        changes = spy.lastCall.args[0];
-        expect(changes[OTC_HSI]).to.be.false;
+            changes = spy.lastCall.args[0];
+            expect(changes[OTC_HSI]).to.be.false;
 
-        this.clock.tick('01:00:00'); // 5:00:00
+            this.clock.tick('01:00:00'); // 5:00:00
 
-        changes = spy.lastCall.args[0];
-        expect(changes[OTC_HSI]).to.be.true;
+            changes = spy.lastCall.args[0];
+            expect(changes[OTC_HSI]).to.be.true;
 
-        this.clock.tick('03:00:00'); // 8:00:00
+            this.clock.tick('03:00:00'); // 8:00:00
 
-        changes = spy.lastCall.args[0];
-        expect(changes[OTC_HSI]).to.be.false;
+            changes = spy.lastCall.args[0];
+            expect(changes[OTC_HSI]).to.be.false;
+
+         }, 0);
     });
 
     it('Trade request for the next day will be called if no available open/closing times are available for query', function () {
         expect(this.dummyBinaryApi.getTradingTimes).to.be.calledOnce;
         const getCalledDate = () => this.dummyBinaryApi.getTradingTimes.lastCall.args[0];
 
-        expect(getCalledDate()).to.equal('2018-08-24');
-
-        this.clock.tick('24:00:00');
-
-        expect(getCalledDate()).to.equal('2018-08-25');
-
-        this.clock.tick('24:00:00');
-
         // put a slight delay for async request to finish executing
         setTimeout(() => {
+            expect(getCalledDate()).to.equal('2018-08-24');
+            this.clock.tick('24:00:00');
+            expect(getCalledDate()).to.equal('2018-08-25');
+            this.clock.tick('24:00:00');
             expect(getCalledDate()).to.equal('2018-08-26');
         }, 0);
     });
@@ -138,12 +142,10 @@ describe('TradingTimes test', async function () {
 
         this.clock.tick('24:00:00'); // Saturday, 00:00:00
 
-        expect(this.tt.isMarketOpened(frxAUDJPY)).to.be.false;
-
-        this.clock.tick('47:59:00'); // Sunday, 23:59:00
-
         // put a slight delay for async request to finish executing
         setTimeout(() => {
+            expect(this.tt.isMarketOpened(frxAUDJPY)).to.be.false;
+            this.clock.tick('47:59:00'); // Sunday, 23:59:00
             expect(this.tt.isMarketOpened(frxAUDJPY)).to.be.false;
             this.clock.tick('00:01:00'); // Monday, 00:00:00
             expect(this.tt.isMarketOpened(frxAUDJPY)).to.be.true;
