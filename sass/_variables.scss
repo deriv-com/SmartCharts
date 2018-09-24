@@ -3,7 +3,6 @@
 \* ------------------------ */
 
 $base-font: 'Roboto', helvetica, sans-serif !default;
-$heading-font: 'Roboto Condensed', sans-serif !default;
 
 $font-size-base: 12px !default;
 $font-size-button: 11px !default;
@@ -30,7 +29,6 @@ $small-icon-size: 16px;
 @mixin svg-icon-color($color) {
     svg, path, g, polyline {
         @include themify($themes) {
-            color: themed($color);
             fill: themed($color);
         }
     }
@@ -73,6 +71,26 @@ $small-icon-size: 16px;
 
     @include optional-at-root(':-ms-input-placeholder') {
         @content;
+    }
+}
+@mixin rangetrack() {
+    width: 120px;
+    height: 10px;
+    cursor: pointer;
+    border-radius: 0px;
+    background: transparent;
+    border: 0px solid #010101;
+}
+@mixin rangethumb() {
+    cursor: pointer;
+    width: 10px;
+    height: 10px;
+    box-sizing: border-box;
+    border-radius: 7px;
+    margin-top: 0px;
+    @include themify($themes) {
+        background-color: themed('SliderHandleBg');
+        border: 2px solid themed('SliderHandleBorder');
     }
 }
 

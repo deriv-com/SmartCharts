@@ -54,15 +54,15 @@ export default class ChartTitleStore {
         this.isVisible = quote || !this.isShowChartPrice;
         if (!this.isVisible) { return; }
 
+
         let currentPrice = quote.Close;
         if (currentPrice) {
             currentPrice = currentPrice.toFixed(this.decimalPlaces);
             const oldPrice = quote.prevClose || this.animatedPrice.price;
-            if (oldPrice !== currentPrice) {
-                this.animatedPrice.setPrice(currentPrice);
-                if (oldPrice) {
-                    this.todayChange = Math.abs(currentPrice - oldPrice).toFixed(this.decimalPlaces);
-                }
+
+            this.animatedPrice.setPrice(currentPrice);
+            if (oldPrice) {
+                this.todayChange = Math.abs(currentPrice - oldPrice).toFixed(this.decimalPlaces);
             }
         }
     }

@@ -34,7 +34,7 @@ if (window.location.host.endsWith('binary.com')) {
 
 configure({ enforceActions: 'observed' });
 
-const getLanguageStorage = function () {
+function getLanguageStorage() {
     const default_language = 'en';
     try {
         const setting_string = CIQ.localStorage.getItem('smartchart-setting'),
@@ -44,11 +44,16 @@ const getLanguageStorage = function () {
     } catch (e) {
         return default_language;
     }
-};
+}
+
+function getServerUrl() {
+    const local = CIQ.localStorage.getItem('config.server_url');
+    return `wss://${local || 'ws.binaryws.com'}/websockets/v3`;
+}
 
 const chartId = '1';
 const appId  = CIQ.localStorage.getItem('config.app_id') || 12812;
-const serverUrl  = CIQ.localStorage.getItem('config.server_url') || 'wss://ws.binaryws.com/websockets/v3';
+const serverUrl = getServerUrl();
 
 const connectionManager = new ConnectionManager({
     appId,

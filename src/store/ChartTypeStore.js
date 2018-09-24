@@ -5,6 +5,7 @@ import {
     BaseLineIcon,
     CandleIcon,
     DotIcon,
+    LineDotIcon,
     HeikinAshiIcon,
     HollowCandleIcon,
     KagiIcon,
@@ -25,7 +26,7 @@ function getChartTypes() {
     return [
         { id: 'mountain',      text: t.translate('Line'),           candleOnly: false, icon: LineIcon         },
         { id: 'line',          text: t.translate('Dot'),            candleOnly: false, icon: DotIcon          },
-        { id: 'colored_line',  text: t.translate('Colored Dot'),    candleOnly: false, icon: DotIcon          },
+        { id: 'colored_line',  text: t.translate('Colored Dot'),    candleOnly: false, icon: LineDotIcon      },
         { id: 'spline',        text: t.translate('Spline'),         candleOnly: false, icon: SplineIcon       },
         { id: 'baseline',      text: t.translate('Baseline'),       candleOnly: false, icon: BaseLineIcon     },
         { id: 'candle',        text: t.translate('Candle'),         candleOnly: true,  icon: CandleIcon       },
@@ -173,7 +174,11 @@ export default class ChartTypeStore {
             this.stx.chart.tension = 0;
             delete this.stx.layout.tension;
             if (this.aggregates[type.id]) {
+                // Set baseline.userLevel to false so chart won't move up after AggregationType set.
+                this.stx.chart.baseline.userLevel = false;
                 this.stx.setAggregationType(type.id);
+                // Reset baseline.userLevel to its default value
+                this.stx.chart.baseline.userLevel = null;
             } else {
                 this.stx.setChartType(type.id);
             }
