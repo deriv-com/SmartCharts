@@ -114,6 +114,10 @@ class TradingTimes {
     }
 
     isFeedUnavailable(symbol) {
+        if (!(symbol in this._tradingTimesMap)) {
+            console.error('Symbol not in _tradingTimesMap:', symbol, ' trading map:', this._tradingTimesMap);
+            return false;
+        }
         return this._tradingTimesMap[symbol].feed_license === TradingTimes.FEED_UNAVAILABLE;
     }
 
