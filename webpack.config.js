@@ -40,6 +40,8 @@ const config = {
                             plugins: loader => [
                                 require('postcss-import')({ root: loader.resourcePath }),
                                 require('postcss-preset-env')(),
+                                require('postcss-inline-svg'),
+                                require('postcss-svgo'),
                             ],
                         },
                     }, {
@@ -50,17 +52,6 @@ const config = {
                             includePaths: [
                                 path.resolve(__dirname, './src'),
                             ],
-                        },
-                    }],
-            },
-            {
-                test: /\.(png|cur|jp(e*)g|svg)$/,
-                use: [
-                    'url-loader',
-                    {
-                        loader: 'image-webpack-loader',
-                        options: {
-                            bypassOnDebug: true,
                         },
                     }],
             },
