@@ -96,9 +96,6 @@
         .cq-chart-price {
             margin-left: 9px;
             vertical-align: text-bottom;
-            @include themify($themes) {
-                color: themed('ChartTitlePriceText');
-            }
             /* Up/Down Arrow indicators */
             .cq-change {
                 &.stx-up:after, &.stx-down:after {
