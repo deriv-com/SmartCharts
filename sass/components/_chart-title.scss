@@ -98,16 +98,16 @@
             vertical-align: text-bottom;
             /* Up/Down Arrow indicators */
             .cq-change {
-                &.stx-up:after, &.stx-down:after {
+                &:after {
                     float: left;
                     margin-top: 5px;
                     margin-right: 5px;
                     @include triangle-base(6px);
                 }
-                &.stx-up:after {
+                &.up:after {
                     border-bottom: 8px solid rgb(76, 175, 80);
                 }
-                &.stx-down:after {
+                &.down:after {
                     border-top: 8px solid rgb(249, 84, 84);
                 }
             }
