@@ -171,8 +171,16 @@ export default class StudyLegendStore {
     }
     @action.bound updateStudy(study, items) {
         const updates = { };
-        for (const { id, category, value } of items) {
-            if (study[category][id] !== value) {
+        for (const { id, category, value, type } of items) {
+            let isChanged;
+            if (type === 'numbercolorpicker') {
+                isChanged = study[category][`${id}Color`] !== value.Color
+                    || study[category][`${id}Value`] !== value.Value;
+            } else {
+                isChanged = study[category][id] !== value;
+            }
+
+            if (isChanged) {
                 updates[category] = updates[category] || { };
                 if (typeof value === 'object') {
                     for (const suffix in value) {
@@ -183,6 +191,7 @@ export default class StudyLegendStore {
                 }
             }
         }
+        if (Object.keys(updates).length === 0) return;
         this.helper.updateStudy(updates);
         this.updateActiveStudies();
         this.stx.draw();

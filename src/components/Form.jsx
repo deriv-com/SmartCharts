@@ -3,35 +3,40 @@ import React from 'react';
 import { ArrowIcon } from './Icons.jsx';
 import '../../sass/components/_ciq-form.scss';
 
-export const Slider = ({
-    min = 1,
-    max = 10,
-    step = 1,
-    value,
-    onChange,
-}) => {
-    const barWidth = 120;// css hardcode
-    const activeWidth = Math.round((barWidth * (value - min)) / (max - min));
+export class Slider extends React.Component {
+    onChange = (val) => {
+        this.props.onChange(val.currentTarget.value);
+    };
 
-    return (
-        <div className="cq-slider">
-            <div className="cq-slider-range">
-                <div className="cq-slider-bar" />
-                <div className="cq-slider-active-bar" style={{ width: activeWidth }} />
-                <input
-                    type="range"
-                    min={min}
-                    max={max}
-                    step={step}
-                    onChange={onChange}
-                    onInput={onChange}
-                    value={value}
-                />
+    render() {
+        const {
+            min = 1,
+            max = 10,
+            step = 1,
+            value,
+        } = this.props;
+        const barWidth = 120;// css hardcode
+        const activeWidth = Math.round((barWidth * (value - min)) / (max - min));
+
+        return (
+            <div className="cq-slider">
+                <div className="cq-slider-range">
+                    <div className="cq-slider-bar" />
+                    <div className="cq-slider-active-bar" style={{ width: activeWidth }} />
+                    <input
+                        type="range"
+                        min={min}
+                        max={max}
+                        step={step}
+                        onChange={this.onChange}
+                        value={value}
+                    />
+                </div>
+                <div className="value">{value}</div>
             </div>
-            <div className="value">{value}</div>
-        </div>
-    );
-};
+        );
+    }
+}
 
 export class DropDown extends React.Component {
     state = { open: false };
