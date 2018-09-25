@@ -42,7 +42,7 @@ const ChartTypes = ({
                         onItemClick={onItemClick}
                     >
                         {T => (
-                            <React.Fragment>
+                            <>
                                 <span className="left">
                                     <T.icon  className={`margin ${T.active ? 'active' : ''}`} />
                                     <span className="ciq-icon-text">{T.text}</span>
@@ -56,7 +56,7 @@ const ChartTypes = ({
                                     <SettingIcon />
                                 </span>
                             )}
-                            </React.Fragment>
+                            </>
                         )}
                     </ChartTypeList>
                 </div>

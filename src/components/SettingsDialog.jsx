@@ -161,7 +161,7 @@ const SettingsDialog = ({
 }) => (
     <div className={`cq-dialog-overlay ${open ? 'cq-dialog-active' : ''}`}>
         <Dialog className="cq-dialog cq-settings-dialog">
-            <React.Fragment>
+            <>
                 <div className={`titlebar ${!showTabs ? 'no-tabs' : ''}`}>
                     <div className="title">{title}</div>
                     <div className="icons">
@@ -190,7 +190,7 @@ const SettingsDialog = ({
 
                 { activeTab === 'settings'
                     ? (
-                        <React.Fragment>
+                        <>
                             <SettingsPanel
                                 items={items}
                                 onItemChange={onItemChange}
@@ -199,7 +199,7 @@ const SettingsDialog = ({
                                 <ResetButton onResetClick={onResetClick} />
                                 <DoneButton setOpen={setOpen} />
                             </div>
-                        </React.Fragment>
+                        </>
                     )
                     :                    (
                         <div className="description">
@@ -207,7 +207,7 @@ const SettingsDialog = ({
                         </div>
                     )
                 }
-            </React.Fragment>
+            </>
         </Dialog>
     </div>
 );
