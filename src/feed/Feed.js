@@ -277,20 +277,18 @@ class Feed {
         }
     }
 
-    async _onConnectionClosed() {
+    _onConnectionClosed() {
         for (const key in this._activeStreams) {
             this._activeStreams[key].pause();
         }
-        const UTCDate = this._serverTime.getUTCDate();
-        this._connectionClosedDate = UTCDate;
+        this._connectionClosedDate = this._serverTime.getUTCDate();
     }
 
-    async _onConnectionReopened() {
+    _onConnectionReopened() {
         const keys = Object.keys(this._activeStreams);
         if (keys.length === 0) { return; }
         const { granularity } = this._unpackKey(keys[0]);
-        const UTCDate = this._serverTime.getUTCDate();
-        const elapsedSeconds = (UTCDate - this._connectionClosedDate) / 1000 | 0;
+        const elapsedSeconds = (this._serverTime.getUTCDate() - this._connectionClosedDate) / 1000 | 0;
         const maxIdleSeconds = (granularity || 1) * this._stx.chart.maxTicks;
         if (elapsedSeconds >= maxIdleSeconds) {
             this._mainStore.chart.refreshChart();

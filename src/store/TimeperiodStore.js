@@ -57,7 +57,7 @@ export default class TimeperiodStore {
         this.remain = null;
         this.clearCountdown();
 
-        const setRemain = async () => {
+        const setRemain = () => {
             if (stx.isDestroyed || this.isTick) {
                 this.clearCountdown();
                 return;

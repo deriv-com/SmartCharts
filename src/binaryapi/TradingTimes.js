@@ -25,7 +25,7 @@ class TradingTimes {
                 if (Object.keys(changed).length > 0) {
                     this._emitter.emit(TradingTimes.EVENT_MARKET_OPEN_CLOSE_CHANGE, changed);
                 }
-                let nextUpdate = await this._nextUpdateDate();
+                let nextUpdate = this._nextUpdateDate();
 
                 if (!nextUpdate) {
                     const now = this._serverTime.getLocalDate();
