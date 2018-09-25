@@ -9,7 +9,8 @@ import {
     NumberColorPicker,
     FontSetting,
 } from './Form.jsx';
-import { DeleteIcon, StarIcon } from './Icons.jsx';
+import { DeleteIcon } from './Icons.jsx';
+import Favorite from './Favorite.jsx';
 import '../../sass/components/_ciq-settings-dialog.scss';
 
 const SettingsPanel = ({
@@ -143,6 +144,7 @@ const Tabs = ({
 );
 
 const SettingsDialog = ({
+    id,
     items, // [{ id, title, value, defaultValue, type }]
     title,
     description,
@@ -150,18 +152,16 @@ const SettingsDialog = ({
     setOpen,
     showTabs,
     onTabClick,
-    stared,
     onDeleteClick,
-    onStarClick,
+    favoritesId,
     onResetClick,
     onItemChange,
-    isFavoritable,
     Dialog,
     open,
 }) => (
     <div className={`cq-dialog-overlay ${open ? 'cq-dialog-active' : ''}`}>
         <Dialog className="cq-dialog cq-settings-dialog">
-            <React.Fragment>
+            <>
                 <div className={`titlebar ${!showTabs ? 'no-tabs' : ''}`}>
                     <div className="title">{title}</div>
                     <div className="icons">
@@ -171,11 +171,11 @@ const SettingsDialog = ({
                                 className="margin"
                             />
                         )}
-                        { isFavoritable
+                        { favoritesId
                     && (
-                        <StarIcon
-                            onClick={onStarClick}
-                            className={`margin ciq-favorite ${stared ? 'ciq-active-favorite' : ''}`}
+                        <Favorite
+                            id={id}
+                            category={favoritesId}
                         />
                     )}
                     </div>
@@ -190,7 +190,7 @@ const SettingsDialog = ({
 
                 { activeTab === 'settings'
                     ? (
-                        <React.Fragment>
+                        <>
                             <SettingsPanel
                                 items={items}
                                 onItemChange={onItemChange}
@@ -199,7 +199,7 @@ const SettingsDialog = ({
                                 <ResetButton onResetClick={onResetClick} />
                                 <DoneButton setOpen={setOpen} />
                             </div>
-                        </React.Fragment>
+                        </>
                     )
                     :                    (
                         <div className="description">
@@ -207,7 +207,7 @@ const SettingsDialog = ({
                         </div>
                     )
                 }
-            </React.Fragment>
+            </>
         </Dialog>
     </div>
 );

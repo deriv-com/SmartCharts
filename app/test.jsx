@@ -43,7 +43,7 @@ const connectionManager = new ConnectionManager({
 const streamManager = new StreamManager(connectionManager);
 
 const renderControls = () => (
-    <React.Fragment>
+    <>
         {CIQ.isMobile ? '' : <CrosshairToggle />}
         <ChartTypes />
         <StudyLegend />
@@ -54,7 +54,7 @@ const renderControls = () => (
         <Timeperiod />
         {CIQ.isMobile ? '' : <ChartSize />}
         <ChartSetting />
-    </React.Fragment>
+    </>
 );
 
 const requestAPI = connectionManager.send.bind(connectionManager);

@@ -6,18 +6,18 @@ import MenuStore from './MenuStore';
 export default class SettingsDialogStore {
     @observable items = []; // [{id: '', title: '', value: ''}]
     @observable title = '';
-    @observable stared = false;
     @observable description = '';
+    @observable id;
 
     @observable activeTab = 'settings'; // 'settings' | 'description'
     @computed get showTabs() { return !!this.description; }
 
     constructor({
-        mainStore, getContext, onDeleted, onStared, onChanged,
+        mainStore, getContext, onDeleted, favoritesId, onChanged,
     }) {
         this.getContext = getContext;
         this.onDeleted = onDeleted;
-        this.onStared = onStared;
+        this.favoritesId = favoritesId;
         this.onChanged = onChanged;
         this.menu = new MenuStore(mainStore, { route:'indicator-setting' });
         this.Dialog = this.menu.dialog.connect(Dialog);
@@ -34,11 +34,6 @@ export default class SettingsDialogStore {
     @action.bound onDeleteClick() {
         this.onDeleted();
         this.menu.setOpen(false);
-    }
-
-    @action.bound onStarClick() {
-        this.stared = !this.stared;
-        this.onStared(this.stared);
     }
 
     @action.bound onTabClick(id) {
@@ -66,15 +61,14 @@ export default class SettingsDialogStore {
         description: this.description,
         activeTab: this.activeTab,
         showTabs: this.showTabs,
-        stared: this.stared,
         setOpen: this.setOpen,
-        isFavoritable: !!this.onStared,
         onTabClick: this.onTabClick,
         onDeleteClick: this.onDeleted ? this.onDeleteClick : undefined,
-        onStarClick: this.onStarClick,
+        favoritesId: this.favoritesId,
         onResetClick: this.onResetClick,
         onItemChange: this.onItemChange,
         Dialog: this.Dialog,
         open: this.open,
+        id: this.id,
     }));
 }
