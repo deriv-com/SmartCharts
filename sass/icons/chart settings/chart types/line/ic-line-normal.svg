@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!-- Generator: Sketch 49 (51002) - http://www.bohemiancoding.com/sketch -->
     <title>icons/system/light/chart settings/chart types/line/ic-line-normal</title>
     <desc>Created with Sketch.</desc>
     <defs></defs>
     <g id="icons/system/light/chart-settings/chart-types/line/ic-line-normal" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
         <g id="ic-line">
-            <rect id="Rectangle-Copy" fill="#D8D8D8" opacity="0" x="0" y="0" width="16" height="16"></rect>
-            <rect id="Rectangle-2" fill="#2A3052" x="0" y="7.5" width="16" height="1"></rect>
+            <rect class="no-stroke" opacity="0" x="0" y="0" width="16" height="16"></rect>
+            <rect class="no-stroke" x="0" y="7.5" width="16" height="1"></rect>
         </g>
     </g>
 </svg>
