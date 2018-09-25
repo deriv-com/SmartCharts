@@ -7,7 +7,7 @@ const ChartTitle = ({
     todayChange,
     isVisible,
     isShowChartPrice,
-    isPriceUp,
+    status,
     currentSymbol,
     ChartTitleMenu,
     MarketSelector,
@@ -33,7 +33,7 @@ const ChartTitle = ({
             && (
                 <div className="cq-chart-price">
                     <SpotPrice className="cq-current-price" />
-                    <div className={`cq-change ${isPriceUp ? 'stx-up' : 'stx-down'}`}>
+                    <div className={`cq-change ${status}`}>
                         <span className="cq-todays-change">{todayChange || 0}</span>&nbsp;
                     </div>
                 </div>
@@ -69,7 +69,7 @@ const ChartTitle = ({
 
 export default connect(({ chartTitle: c }) => ({
     todayChange: c.todayChange,
-    isPriceUp: c.animatedPrice.isIncrease,
+    status: c.animatedPrice.status,
     isVisible: c.isVisible,
     isShowChartPrice: c.isShowChartPrice,
     currentSymbol: c.currentSymbol,

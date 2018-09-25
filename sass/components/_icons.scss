@@ -150,6 +150,14 @@
     fill: #e1e1e1;
 }
 
+.no-stroke {
+    stroke: none !important;
+}
+
+.no-fill {
+    fill: none !important;
+}
+
 .smartcharts-mobile {
     .cq-chart-controls .ciq-menu {
         padding: 0px;
