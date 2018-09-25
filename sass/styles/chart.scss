@@ -915,7 +915,7 @@ html, body {
     There is a strange bug where dropdowns get displayed (partially)
     when html is being rendered to canvas. So we set this to manually
     hide it when PNG is exported.
-     */
+    */
     display: none !important;
 }
 
@@ -977,5 +977,9 @@ $spot-color: #0298d3;
         .mStickyRightClick {
             margin-left: -2px !important;
         }
+    }
+    .ciq-chart.ciq-screenshot .stx-btn-panel {
+        //CSS images cause cross origin security error when export png
+        display: none !important;
     }
 }
