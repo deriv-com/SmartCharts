@@ -235,6 +235,7 @@ html,body{-ms-touch-action:none;margin:0px}
 .smartcharts-mobile .mSticky{background:none}
 .smartcharts-mobile .mSticky .mStickyInterior{margin:0px;padding:0px 8px 0 !important;line-height:30px;border-radius:3px 0px 0px 3px;width:auto;z-index:99}
 .smartcharts-mobile .mSticky .mStickyRightClick{margin-left:-2px !important}
+.smartcharts-mobile .ciq-chart.ciq-screenshot .stx-btn-panel{display:none !important}
 .stx-textarea{padding:0 5px 0 10px;box-sizing:border-box;-webkit-user-select:text;-moz-user-select:text;-ms-user-select:text;user-select:text}
 .smartcharts-light .stx-textarea{border-left:1px solid #e9e9ed}
 .smartcharts-dark .stx-textarea{border-left:1px solid #4a4f6c}
