@@ -1,5 +1,4 @@
 import EventEmitter from 'event-emitter-es6';
-import { getLocalDate } from '../utils';
 
 class TradingTimes {
     static get EVENT_MARKET_OPEN_CLOSE_CHANGE() { return 'EVENT_MARKET_OPEN_CLOSE_CHANGE'; }
@@ -18,22 +17,19 @@ class TradingTimes {
     }
 
     async initialize() {
-        let serverTime = await this._serverTime.get();
-        this.lastUpdateDate = getLocalDate(serverTime).toISOString().substring(0, 10);
-
         if (!this._tradingTimesMap) {
             await this._updateTradeTimes();
 
             const periodicUpdate = async () => {
-                const changed = this._updateMarketOpenClosed(serverTime);
+                const changed = this._updateMarketOpenClosed();
                 if (Object.keys(changed).length > 0) {
                     this._emitter.emit(TradingTimes.EVENT_MARKET_OPEN_CLOSE_CHANGE, changed);
                 }
                 let nextUpdate = await this._nextUpdateDate();
 
                 if (!nextUpdate) {
-                    serverTime = await this._serverTime.get();
-                    const now = getLocalDate(serverTime);
+                    const now = this._serverTime.getLocalDate();
+
                     // Get tomorrow's date (UTC) and set it as next update if no nextDate available
                     const nextUpdateDate = new Date(`${this.lastUpdateDate}Z`);
                     nextUpdateDate.setDate(nextUpdateDate.getDate() + 1);
@@ -56,8 +52,7 @@ class TradingTimes {
                     nextUpdate = new Date(`${this.lastUpdateDate}Z`);
                 }
 
-                serverTime = await this._serverTime.get();
-                const waitPeriod =  nextUpdate - getLocalDate(serverTime);
+                const waitPeriod =  nextUpdate - this._serverTime.getLocalDate();
                 this._updateTimer = setTimeout(periodicUpdate, waitPeriod);
             };
 
@@ -65,11 +60,10 @@ class TradingTimes {
         }
     }
 
-    _updateMarketOpenClosed(serverTime) {
+    _updateMarketOpenClosed() {
         const changed = {};
-        const now = getLocalDate(serverTime);
         for (const symbol in this._tradingTimesMap) {
-            const isOpened = this._calcIsMarketOpened(symbol, now);
+            const isOpened = this._calcIsMarketOpened(symbol);
             if (this._tradingTimesMap[symbol].isOpened !== isOpened) {
                 this._tradingTimesMap[symbol].isOpened = isOpened;
                 changed[symbol] = isOpened;
@@ -80,9 +74,9 @@ class TradingTimes {
     }
 
     async _updateTradeTimes() {
+        this.lastUpdateDate = this._serverTime.getLocalDate().toISOString().substring(0, 10);
         const response = await this._api.getTradingTimes(this.lastUpdateDate);
-        const serverTime = await this._serverTime.get();
-        const now = getLocalDate(serverTime);
+        const now = this._serverTime.getLocalDate();
         const dateStr = now.toISOString().substring(0, 11);
         const getUTCDate = hour => new Date(`${dateStr}${hour}Z`);
 
@@ -132,7 +126,8 @@ class TradingTimes {
         return this._tradingTimesMap[symbol].isOpened;
     }
 
-    _calcIsMarketOpened(symbol, now) {
+    _calcIsMarketOpened(symbol) {
+        const now = this._serverTime.getLocalDate();
         const {
             times, feed_license,
             isOpenAllDay, isClosedAllDay,
@@ -149,9 +144,8 @@ class TradingTimes {
         return false;
     }
 
-    async _nextUpdateDate() {
-        const serverTime = await this._serverTime.get();
-        const now = getLocalDate(serverTime);
+    _nextUpdateDate() {
+        const now = this._serverTime.getLocalDate();
         let nextDate;
         for (const key in this._tradingTimesMap) {
             const {

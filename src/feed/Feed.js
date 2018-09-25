@@ -1,7 +1,7 @@
 import EventEmitter from 'event-emitter-es6';
 import { reaction, when } from 'mobx';
 import { TickHistoryFormatter } from './TickHistoryFormatter';
-import { calculateGranularity, getUTCEpoch, getUTCDate, getLocalDate } from '../utils';
+import { calculateGranularity, getUTCEpoch } from '../utils';
 import { RealtimeSubscription, DelayedSubscription } from './subscription';
 
 class Feed {
@@ -55,13 +55,12 @@ class Feed {
         const { period, interval, symbolObject } = params;
         const granularity = calculateGranularity(period, interval);
         const key = this._getKey({ symbol, granularity });
-        const serverTime = await this._serverTime.get();
-        const localDate = getLocalDate(serverTime);
+        const localDate = this._serverTime.getLocalDate();
         suggestedStartDate = suggestedStartDate > localDate ? localDate : suggestedStartDate;
         const isComparisonChart = this._stx.chart.symbol !== symbol;
         let start = this.startEpoch || (suggestedStartDate / 1000 | 0);
         const end = this.endEpoch;
-        const now = serverTime | 0;
+        const now = this._serverTime.get() | 0;
         if (isComparisonChart) {
             // Strange issue where comparison series is offset by timezone...
             start -= suggestedStartDate.getTimezoneOffset() * 60;
@@ -176,7 +175,7 @@ class Feed {
             return;
         }
 
-        const now = await this._serverTime.get();
+        const now = this._serverTime.get();
         // Tick history data only goes as far back as 3 years:
         const startLimit = now - (2.8 * 365 * 24 * 60 * 60 /* == 3 Years */);
         let result = { quotes: [] };
@@ -282,8 +281,7 @@ class Feed {
         for (const key in this._activeStreams) {
             this._activeStreams[key].pause();
         }
-        const now = await this._serverTime.get();
-        const UTCDate = getUTCDate(now);
+        const UTCDate = this._serverTime.getUTCDate();
         this._connectionClosedDate = UTCDate;
     }
 
@@ -291,8 +289,7 @@ class Feed {
         const keys = Object.keys(this._activeStreams);
         if (keys.length === 0) { return; }
         const { granularity } = this._unpackKey(keys[0]);
-        const now = await this._serverTime.get();
-        const UTCDate = getUTCDate(now);
+        const UTCDate = this._serverTime.getUTCDate();
         const elapsedSeconds = (UTCDate - this._connectionClosedDate) / 1000 | 0;
         const maxIdleSeconds = (granularity || 1) * this._stx.chart.maxTicks;
         if (elapsedSeconds >= maxIdleSeconds) {
