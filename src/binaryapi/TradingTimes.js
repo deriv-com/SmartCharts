@@ -29,9 +29,9 @@ class TradingTimes {
 
                 if (!nextUpdate) {
                     const now = this._serverTime.getLocalDate();
-
+                    const getUpdateDate = () => new Date(`${this.lastUpdateDate}T00:00:00Z`);
                     // Get tomorrow's date (UTC) and set it as next update if no nextDate available
-                    const nextUpdateDate = new Date(`${this.lastUpdateDate}Z`);
+                    const nextUpdateDate = getUpdateDate();
                     nextUpdateDate.setDate(nextUpdateDate.getDate() + 1);
                     // if somehow the next update date is in the past, use the current date
                     this.lastUpdateDate = ((now > nextUpdateDate) ? now : nextUpdateDate).toISOString().substring(0, 10);
@@ -49,7 +49,7 @@ class TradingTimes {
                         this._tradingTimesMap[key].isOpened = isOpenMap[key];
                     }
 
-                    nextUpdate = new Date(`${this.lastUpdateDate}Z`);
+                    nextUpdate = getUpdateDate();
                 }
 
                 const waitPeriod =  nextUpdate - this._serverTime.getLocalDate();
@@ -115,6 +115,10 @@ class TradingTimes {
     }
 
     isFeedUnavailable(symbol) {
+        if (!(symbol in this._tradingTimesMap)) {
+            console.error('Symbol not in _tradingTimesMap:', symbol, ' trading map:', this._tradingTimesMap);
+            return false;
+        }
         return this._tradingTimesMap[symbol].feed_license === TradingTimes.FEED_UNAVAILABLE;
     }
 
