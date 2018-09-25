@@ -19,7 +19,7 @@ for building additional themes.
 
  */
 /* TODO: deal with translations on all :after and :before content */
-@import url('https://fonts.googleapis.com/css?family=Roboto:400,700,500,100,300,400italic|Roboto+Condensed:400,700,300');
+@import url('https://fonts.googleapis.com/css?family=Roboto:300,400,700&subset=latin,vietnamese,cyrillic-ext,latin-ext,cyrillic');
 @import 'styles/chart';
 @import 'styles/main';
 @import 'components/barrier';
