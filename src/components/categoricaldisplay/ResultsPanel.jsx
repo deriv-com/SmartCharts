@@ -13,12 +13,16 @@ function getItemCount(category) {
     return count;
 }
 
-const Category = ({ category, Item, setCategoryElement, onSelectItem }) => (
+const Category = ({ category, Item, setCategoryElement, onSelectItem, activeHeadKey, activeHeadTop }) => (
     <div
         className={`category category-${category.categoryId}`}
         ref={el => setCategoryElement(el, category.categoryId)}
     >
-        <div className="category-title">{t.translate(category.categoryName)}</div>
+        <div
+            className={`category-title ${activeHeadKey === category.categoryId ? 'fixed' : ''}`}
+            style={{ top: (activeHeadKey === category.categoryId ? activeHeadTop : 0) }}
+        >{t.translate(category.categoryName)}
+        </div>
         { category.hasSubcategory
             ? category.data.map(subcategory => getItemCount(subcategory) > 0 && (
                 <div
@@ -54,7 +58,7 @@ const Category = ({ category, Item, setCategoryElement, onSelectItem }) => (
     </div>
 );
 
-export const ResultsPanel = ({ filteredItems, onSelectItem, getItemType, setCategoryElement }) => (
+export const ResultsPanel = ({ filteredItems, onSelectItem, getItemType, setCategoryElement, activeHeadKey, activeHeadTop }) => (
     <div className="results-panel">
         { filteredItems.map(category => (getItemCount(category) > 0 || category.emptyDescription) && (
             <Category
@@ -63,6 +67,8 @@ export const ResultsPanel = ({ filteredItems, onSelectItem, getItemType, setCate
                 category={category}
                 setCategoryElement={setCategoryElement}
                 onSelectItem={onSelectItem}
+                activeHeadKey={activeHeadKey}
+                activeHeadTop={activeHeadTop}
             />
         )) }
     </div>
