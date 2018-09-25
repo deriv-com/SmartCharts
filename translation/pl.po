@@ -10,13 +10,13 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Polish\n"
 "Language: pl_PL\n"
-"PO-Revision-Date: 2018-09-25 19:51\n"
+"PO-Revision-Date: 2018-09-25 20:01\n"
 
 msgid " already exists."
 msgstr " już istnieje."
 
 msgid "[symbol] feed is delayed by [delay] minutes"
-msgstr ""
+msgstr "Strumień [symbol] jest opóźniony o [delay] min."
 
 msgid "[symbol] market is now opened."
 msgstr "Rynek [symbol] jest teraz otwarty."
