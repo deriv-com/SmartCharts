@@ -67,7 +67,7 @@ const ChartTitle = ({
     );
 };
 
-export default connect(({ chartTitle: c }) => ({
+export default connect(({ chartTitle: c, chart }) => ({
     todayChange: c.todayChange,
     status: c.animatedPrice.status,
     isVisible: c.isVisible,
@@ -79,5 +79,5 @@ export default connect(({ chartTitle: c }) => ({
     onCloseMenu: c.menu.onTitleClick,
     setMenuOpen: c.menu.setOpen,
     onChange: c.setSymbol,
-    isMobile: c.categoricalDisplay.isMobile,
+    isMobile: chart.isMobile,
 }))(ChartTitle);
