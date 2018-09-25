@@ -22,6 +22,8 @@ const CategoricalDisplay = ({
     setScrollPanel,
     setCategoryElement,
     activeCategoryKey,
+    activeHeadKey,
+    activeHeadTop,
     onFavoritedItem,
     favoritesId,
     isScrollingDown,
@@ -147,7 +149,11 @@ const CategoricalDisplay = ({
                             className={`category category-${category.categoryId}`}
                             ref={el => setCategoryElement(el, category.categoryId)}
                         >
-                            <div className="category-title">{t.translate(category.categoryName)}</div>
+                            <div
+                                className={`category-title ${activeHeadKey === category.categoryId ? 'fixed' : ''}`}
+                                style={{ top: (activeHeadKey === category.categoryId ? activeHeadTop : 0) }}
+                            >{t.translate(category.categoryName)}
+                            </div>
                             { category.hasSubcategory
                                 ? category.data.map(subcategory => getItemCount(subcategory) > 0 && (
                                     <Fragment key={subcategory.subcategoryName}>
