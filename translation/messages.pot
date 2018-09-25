@@ -344,9 +344,6 @@ msgstr ""
 msgid "Offset"
 msgstr ""
 
-msgid "Underlay"
-msgstr ""
-
 msgid "MA"
 msgstr ""
 
@@ -660,9 +657,6 @@ msgid "High Minus Low"
 msgstr ""
 
 msgid "Median Price"
-msgstr ""
-
-msgid "Overlay"
 msgstr ""
 
 msgid "Moving Average Envelope"

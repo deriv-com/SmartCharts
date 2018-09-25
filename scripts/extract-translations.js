@@ -1,7 +1,7 @@
 const path = require('path');
 const fs = require('fs');
-const esprima = require('esprima');
-const estree = require('estree-utils');
+const espree = require('espree');
+const walk = require('estree-walk');
 const mkdirp = require('mkdirp');
 
 let file_removed = false;
@@ -10,8 +10,8 @@ const default_options = {
     method_names: ['translate'],
 };
 
-const parseCode = source => esprima.parse(source, {
-    ecmaVersion: 9,
+const parseCode = source => espree.parse(source, {
+    ecmaVersion: 10,
     sourceType: 'script',
     tolerant: true,
     loc: true,
@@ -22,18 +22,19 @@ function esc(s) {
     return s.replace(/"/g, '\\"');
 }
 
-const extractTextFromFunctions = (...args) => (code_obj) => {
-    let textFunctions = estree.filterTreeForMethodsAndFunctionsNamed(...args)(code_obj);
-    const getText = (x) => {
-        const strings = x.arguments.slice(0, 2).map(arg => esc(arg.value));
-        const { line, column } = x.loc.start;
-        return {
-            text: strings[0],
-            pluralForm: strings[1],
-            loc: { line, column },
-        };
-    };
-    textFunctions = textFunctions.map(getText).filter(x => x.text !== undefined);
+const extractTextFromFunctions = (...method_names) => (parsed_code) => {
+    const textFunctions = [];
+    walk(parsed_code, {
+        CallExpression(node) {
+            const property = node.callee.property;
+            if (property && method_names.includes(property.name)) {
+                const [text, pluralForm] = node.arguments.slice(0, 2).map(a => esc(a.value));
+                if (text) {
+                    textFunctions.push({ text, pluralForm });
+                }
+            }
+        },
+    });
     // have translations in alphabetical order to avoid confusing diffs when code changes
     textFunctions.sort(({ text: a }, { text: b }) => a.localeCompare(b));
     return textFunctions;
@@ -100,4 +101,3 @@ if (jsFile) {
 } else {
     console.error('Please provide the transpiled js file!');
 }
-
