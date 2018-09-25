@@ -37,5 +37,5 @@ export default connect(({ comparison: c, chart }) => ({
     menuOpen: c.menu.open,
     onCloseMenu: c.menu.onTitleClick,
     isMobile: chart.isMobile,
-    activeComparisonsNo: c.mainStore.chart.comparisonSymbols.length,
+    activeComparisonsNo: c.comparisonSymbols.length,
 }))(Comparison);
