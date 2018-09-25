@@ -5,6 +5,8 @@ import CategoricalDisplayStore from './CategoricalDisplayStore';
 import Menu from '../components/Menu.jsx';
 import { CategoricalDisplay } from '../components/categoricaldisplay';
 import AnimatedPrice from '../components/AnimatedPrice.jsx';
+import { ChartPrice, SymbolSelectButton } from '../components/SymbolSelectButton.jsx';
+import { connect } from './Connect';
 
 export default class ChartTitleStore {
     constructor(mainStore) {
@@ -22,7 +24,19 @@ export default class ChartTitleStore {
 
         this.ChartTitleMenu = this.menu.connect(Menu);
         this.MarketSelector = this.categoricalDisplay.connect(CategoricalDisplay);
-        this.SpotPrice = this.animatedPrice.connect(AnimatedPrice);
+        const SpotPrice = this.animatedPrice.connect(AnimatedPrice);
+
+        const PriceDisplay = connect(() => ({
+            isVisible: this.isVisible && this.isShowChartPrice,
+            status: this.animatedPrice.status,
+            todayChange: this.todayChange,
+            SpotPrice,
+        }))(ChartPrice);
+
+        this.SymbolSelectButton = connect(() => ({
+            symbol: this.currentSymbol,
+            ChartPrice: PriceDisplay,
+        }))(SymbolSelectButton);
     }
 
     @observable todayChange = null;
