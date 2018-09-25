@@ -20,6 +20,7 @@ export default class SettingsDialogStore {
         this.onStared = onStared;
         this.onChanged = onChanged;
         this.menu = new MenuStore(mainStore, { route:'indicator-setting' });
+        this.Dialog = this.menu.dialog.connect(Dialog);
     }
 
     get context() { return this.mainStore.chart.context; }
@@ -39,26 +40,24 @@ export default class SettingsDialogStore {
         this.stared = !this.stared;
         this.onStared(this.stared);
     }
+
     @action.bound onTabClick(id) {
         this.activeTab = id;
     }
+
     @action.bound onResetClick() {
-        const items = this.items.map((item) => {
-            const clone = JSON.parse(JSON.stringify(item));
-            clone.value = clone.defaultValue;
-            return clone;
-        });
+        const items = this.items.map(item => ({ ...item, value: item.defaultValue }));
         this.items = items;
         this.onChanged(items);
     }
+
     @action.bound onItemChange(id, newValue) {
-        const items = this.items.map((item) => {
-            const clone = JSON.parse(JSON.stringify(item));
-            if (item.id === id) { clone.value = newValue; }
-            return clone;
-        });
-        this.items = items;
-        this.onChanged(items);
+        const item = this.items.find(x => x.id === id);
+        if (item && item.value !== newValue) {
+            item.value = newValue;
+            this.items = this.items.slice(0); // force array update
+            this.onChanged(this.items);
+        }
     }
 
     connect = connect(() => ({
@@ -75,7 +74,7 @@ export default class SettingsDialogStore {
         onStarClick: this.onStarClick,
         onResetClick: this.onResetClick,
         onItemChange: this.onItemChange,
-        Dialog: this.menu.dialog.connect(Dialog),
+        Dialog: this.Dialog,
         open: this.open,
     }));
 }

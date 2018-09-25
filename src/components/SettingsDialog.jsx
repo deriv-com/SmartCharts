@@ -12,22 +12,9 @@ import {
 import { DeleteIcon, StarIcon } from './Icons.jsx';
 import '../../sass/components/_ciq-settings-dialog.scss';
 
-const SettingsDialog = ({
-    items, // [{ id, title, value, defaultValue, type }]
-    title,
-    description,
-    activeTab,
-    setOpen,
-    showTabs,
-    onTabClick,
-    stared,
-    onDeleteClick,
-    onStarClick,
-    onResetClick,
+const SettingsPanel = ({
+    items,
     onItemChange,
-    isFavoritable,
-    Dialog,
-    open,
 }) => {
     const renderMap = {
         switch: item => (
@@ -43,7 +30,7 @@ const SettingsDialog = ({
             />
         ),
         pattern: (item) => {
-            const lineWidth = items.filter(it => it.id === 'lineWidth')[0].value;
+            const lineWidth = items.find(it => it.id === 'lineWidth').value;
             return (
                 <Pattern
                     pattern={item.value}
@@ -70,7 +57,7 @@ const SettingsDialog = ({
                 step={item.step || 1}
                 max={item.max || 100}
                 value={item.value}
-                onChange={val => onItemChange(item.id, val.currentTarget.value)}
+                onChange={val => onItemChange(item.id, val)}
             />
         ),
         numericinput: item => (
@@ -97,9 +84,84 @@ const SettingsDialog = ({
             />
         ),
     };
+
     return (
-        <div className={`cq-dialog-overlay ${open ? 'cq-dialog-active' : ''}`}>
-            <Dialog className="cq-dialog cq-settings-dialog">
+        <div className="items">
+            {items
+                .map(item => (renderMap[item.type]
+                        && (
+                            <div key={item.id} className="item">
+                                <div className="title">
+                                    <span>{item.title}</span>
+                                    {renderMap[item.type](item)}
+                                </div>
+                            </div>
+                        )
+                ))
+            }
+        </div>
+    );
+};
+
+const ResetButton = ({
+    onResetClick,
+}) => (
+    <div
+        className="reset"
+        onClick={onResetClick}
+    >{t.translate('RESET')}
+    </div>
+);
+
+const DoneButton = ({
+    setOpen,
+}) => (
+    <div
+        className="done"
+        onClick={() => setOpen(false)}
+    >{t.translate('DONE')}
+    </div>
+);
+
+const Tabs = ({
+    onTabClick,
+    activeTab,
+}) => (
+    <div className="tabs">
+        <div
+            onClick={() => onTabClick('settings')}
+            className={activeTab === 'settings' ? 'active' : ''}
+        > Settings
+        </div>
+        <div
+            onClick={() => onTabClick('description')}
+            className={activeTab === 'description' ? 'active' : ''}
+        > Description
+        </div>
+        <div className={`active-border ${activeTab === 'settings' ? 'first' : 'second'}`} />
+    </div>
+);
+
+const SettingsDialog = ({
+    items, // [{ id, title, value, defaultValue, type }]
+    title,
+    description,
+    activeTab,
+    setOpen,
+    showTabs,
+    onTabClick,
+    stared,
+    onDeleteClick,
+    onStarClick,
+    onResetClick,
+    onItemChange,
+    isFavoritable,
+    Dialog,
+    open,
+}) => (
+    <div className={`cq-dialog-overlay ${open ? 'cq-dialog-active' : ''}`}>
+        <Dialog className="cq-dialog cq-settings-dialog">
+            <React.Fragment>
                 <div className={`titlebar ${!showTabs ? 'no-tabs' : ''}`}>
                     <div className="title">{title}</div>
                     <div className="icons">
@@ -119,52 +181,23 @@ const SettingsDialog = ({
                     </div>
                 </div>
 
-                { showTabs
-                && (
-                    <div className="tabs">
-                        <div
-                            onClick={() => onTabClick('settings')}
-                            className={activeTab === 'settings' ? 'active' : ''}
-                        > Settings
-                        </div>
-                        <div
-                            onClick={() => onTabClick('description')}
-                            className={activeTab === 'description' ? 'active' : ''}
-                        > Description
-                        </div>
-                        <div className={`active-border ${activeTab === 'settings' ? 'first' : 'second'}`} />
-                    </div>
-                )
-                }
+                { showTabs && (
+                    <Tabs
+                        activeTab={activeTab}
+                        onTabClick={onTabClick}
+                    />
+                )}
 
                 { activeTab === 'settings'
                     ? (
                         <React.Fragment>
-                            <div className="items">
-                                {items
-                                    .map(item => (renderMap[item.type]
-                                && (
-                                    <div key={item.id} className="item">
-                                        <div className="title">
-                                            <span>{item.title}</span>
-                                            {renderMap[item.type](item)}
-                                        </div>
-                                    </div>
-                                )
-                                    ))
-                                }
-                            </div>
+                            <SettingsPanel
+                                items={items}
+                                onItemChange={onItemChange}
+                            />
                             <div className="buttons">
-                                <div
-                                    className="reset"
-                                    onClick={onResetClick}
-                                >{t.translate('RESET')}
-                                </div>
-                                <div
-                                    className="done"
-                                    onClick={() => setOpen(false)}
-                                >{t.translate('DONE')}
-                                </div>
+                                <ResetButton onResetClick={onResetClick} />
+                                <DoneButton setOpen={setOpen} />
                             </div>
                         </React.Fragment>
                     )
@@ -174,9 +207,9 @@ const SettingsDialog = ({
                         </div>
                     )
                 }
-            </Dialog>
-        </div>
-    );
-};
+            </React.Fragment>
+        </Dialog>
+    </div>
+);
 
 export default SettingsDialog;
