@@ -4,15 +4,20 @@ import { connect } from './Connect';
 export default class AnimatedPriceStore {
     @observable price = '';
     @observable isIncrease = false;
+    @observable status = '';
     oldPrice = '';
 
-    @action.bound setPrice(val) {
-        const oldVal = +this.oldPrice;
+    @action.bound setPrice(val, prevPrice) {
+        const oldVal = prevPrice || +this.oldPrice;
         const newVal = +val;
         let isIncrease = false;
         if (newVal > oldVal) {
             isIncrease = true;
-        } else if (newVal === oldVal) {
+            this.status = 'up';
+        } else if (newVal < oldVal) {
+            this.status = 'down';
+        } else {
+            this.status = '';
             return;
         }
         this.price = val;
@@ -23,6 +28,7 @@ export default class AnimatedPriceStore {
     connect = connect(() => ({
         price: this.price,
         isIncrease: this.isIncrease,
+        status: this.status,
         className: this.className,
     }));
 }

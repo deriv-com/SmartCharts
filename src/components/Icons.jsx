@@ -5,6 +5,7 @@ import '../../sass/components/_icons.scss';
 import BaseLine from '../../sass/icons/chart settings/chart types/baseline/ic-baseline-normal.svg';
 import Candle from '../../sass/icons/chart settings/chart types/candle/ic-candle-normal.svg';
 import Dot from '../../sass/icons/chart settings/chart types/dot/ic-dot-normal.svg';
+import LineDot from '../../sass/icons/chart settings/chart types/line dot/ic-linedot-normal.svg';
 import HeikinAshi from '../../sass/icons/chart settings/chart types/ic-heikin-ashi-normal.svg';
 import HollowCandle from '../../sass/icons/chart settings/chart types/hollow candle/ic-hollowcandle-normal.svg';
 import Kagi from '../../sass/icons/chart settings/chart types/ic-kagi-normal.svg';
@@ -79,19 +80,19 @@ import Vietnam from '../../sass/icons/flags/vietnam.svg';
 import Italy from '../../sass/icons/flags/italy.svg';
 import Chinese from '../../sass/icons/flags/chinese.svg';
 import ChineseTraditional from '../../sass/icons/flags/chinese-traditional.svg';
-import Belgium from '../../sass/icons/flags/belgium.svg';
-import HongKong from '../../sass/icons/flags/hong kong.svg';
-import Singapore from '../../sass/icons/flags/singapore.svg';
-import Bombay from '../../sass/icons/flags/bombay.svg';
-import Jakarta from '../../sass/icons/flags/jakarta.svg';
 import German from '../../sass/icons/flags/german.svg';
-import Dubai from '../../sass/icons/flags/dubai.svg';
-import Ireland from '../../sass/icons/flags/ireland.svg';
+import HongKong from '../../sass/icons/flags/hong kong.svg';
 import French from '../../sass/icons/flags/french.svg';
 import Dutch from '../../sass/icons/flags/dutch.svg';
 import Spanish from '../../sass/icons/flags/spanish.svg';
-import SouthAfrica from '../../sass/icons/flags/south africa.svg';
 import WallStreet from '../../sass/icons/flags/wallstreet.svg';
+// import Belgium from '../../sass/icons/flags/belgium.svg';
+// import Singapore from '../../sass/icons/flags/singapore.svg';
+// import Bombay from '../../sass/icons/flags/bombay.svg';
+// import Jakarta from '../../sass/icons/flags/jakarta.svg';
+// import Dubai from '../../sass/icons/flags/dubai.svg';
+// import Ireland from '../../sass/icons/flags/ireland.svg';
+// import SouthAfrica from '../../sass/icons/flags/south africa.svg';
 
 /** OTC STOCKS * */
 /*
@@ -179,6 +180,7 @@ const Wrapper = WrappedComponent => (props) => {
 export const BaseLineIcon = Wrapper(BaseLine);
 export const CandleIcon = Wrapper(Candle);
 export const DotIcon = Wrapper(Dot);
+export const LineDotIcon = Wrapper(LineDot);
 export const HeikinAshiIcon = Wrapper(HeikinAshi);
 export const HollowCandleIcon = Wrapper(HollowCandle);
 export const KagiIcon = Wrapper(Kagi);
@@ -256,19 +258,19 @@ const FlagIconMap = {
     PLN: Wrapper(PLN),
     SEK: Wrapper(SEK),
     USD: Wrapper(USD),
-    BOMBAY: Wrapper(Bombay),
-    Dubai: Wrapper(Dubai),
     HongKong: Wrapper(HongKong),
-    Jakarta: Wrapper(Jakarta),
-    Singapore: Wrapper(Singapore),
-    Belgium: Wrapper(Belgium),
     Dutch: Wrapper(Dutch),
     German: Wrapper(German),
     French: Wrapper(French),
-    Ireland: Wrapper(Ireland),
     Spanish: Wrapper(Spanish),
-    SouthAfrica: Wrapper(SouthAfrica),
     WallStreet: Wrapper(WallStreet),
+    // BOMBAY: Wrapper(Bombay),
+    // Dubai: Wrapper(Dubai),
+    // Jakarta: Wrapper(Jakarta),
+    // Singapore: Wrapper(Singapore),
+    // Belgium: Wrapper(Belgium),
+    // Ireland: Wrapper(Ireland),
+    // SouthAfrica: Wrapper(SouthAfrica),
 
 };
 
@@ -292,20 +294,20 @@ export const FlagIcons = {
 export const ItemIconMap = {
     SPC: FlagIconMap.USD,
     AS51: FlagIconMap.AUD,
-    BSESENSEX30: FlagIconMap.BOMBAY,
     HSI: FlagIconMap.HongKong,
-    JCI: FlagIconMap.Jakarta,
-    STI: FlagIconMap.Singapore,
     N225: FlagIconMap.JPY,
-    BFX: FlagIconMap.Belgium,
     AEX: FlagIconMap.Dutch,
-    DFMGI: FlagIconMap.Dubai,
     FCHI: FlagIconMap.French,
-    OBX: FlagIconMap.NOK,
     SSMI: FlagIconMap.CHF,
     GDAXI: FlagIconMap.German,
-    ISEQ: FlagIconMap.Ireland,
-    TOP40: FlagIconMap.SouthAfrica,
+    // BSESENSEX30: FlagIconMap.BOMBAY,
+    // JCI: FlagIconMap.Jakarta,
+    // STI: FlagIconMap.Singapore,
+    // BFX: FlagIconMap.Belgium,
+    // DFMGI: FlagIconMap.Dubai,
+    // OBX: FlagIconMap.NOK,
+    // ISEQ: FlagIconMap.Ireland,
+    // TOP40: FlagIconMap.SouthAfrica,
     /*
     // German
     DEAIR: Wrapper(Airbus),

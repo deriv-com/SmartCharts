@@ -1,4 +1,22 @@
 .ciq-chart-types {
+    .cq-menu-btn {
+        .ic-icon {
+            path, circle, rect {
+                @include themify($themes) {
+                    fill: themed('ChartTypeListIcon');
+                    stroke: themed('ChartTypeListIcon');
+                }
+            }
+            &.active {
+                path, circle, rect {
+                    @include themify($themes) {
+                        fill: themed('MenuActiveIcon');
+                        stroke: themed('MenuActiveIcon');
+                    }
+                }
+            }
+        }
+    }
     .cq-menu-dropdown {
         width: 200px;
         box-sizing: border-box;
@@ -16,11 +34,10 @@
 
                 > .left {
                     .ic-icon {
-                        path,
-                        circle,
-                        rect {
+                        path, circle, rect {
                             @include themify($themes) {
                                 fill: themed('ChartTypeActiveListIcon');
+                                stroke: themed('ChartTypeActiveListIcon');
                             }
                         }
                     }
@@ -34,11 +51,10 @@
                 align-items: center;
 
                 .ic-icon {
-                    path,
-                    circle,
-                    rect {
+                    path, circle, rect {
                         @include themify($themes) {
                             fill: themed('ChartTypeListIcon');
+                            stroke: themed('ChartTypeListIcon');
                         }
                     }
                 }

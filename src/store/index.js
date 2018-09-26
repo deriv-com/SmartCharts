@@ -12,7 +12,7 @@ import CrosshairStore from './CrosshairStore';
 import ShareStore from './ShareStore';
 import ChartSettingStore from './ChartSettingStore';
 import LoaderStore from './LoaderStore';
-import FavoriteSessionStore from './FavoriteSessionStore';
+import FavoriteStore from './FavoriteStore';
 import ChartSizeStore from './ChartSizeStore';
 import RoutingStore from './RoutingStore';
 import CurrentSpotStore from './CurrentSpotStore';
@@ -22,7 +22,7 @@ import Notifier from './Notifier';
 
 export default class MainStore {
     notifier = new Notifier();
-    favoriteSessionStore = new FavoriteSessionStore();
+    favorites = FavoriteStore.getInstance();
     chart = new ChartStore(this);
     state = new ChartState(this);
     chartType = new ChartTypeStore(this);
