@@ -338,7 +338,7 @@ html,body{-ms-touch-action:none;margin:0px}
 .top-shade{background-image:linear-gradient(to bottom, transparent 30%, var(--shade-color));background-image:linear-gradient(to bottom, transparent 30%, var(--shade-color))}
 .between-shade{opacity:0.2;background-color:var(--shade-color);background-color:var(--shade-color)}
 .bottom-shade{background-image:linear-gradient(to bottom, var(--shade-color), transparent 70%);background-image:linear-gradient(to bottom, var(--shade-color), transparent 70%)}
-.cq-loader,.cq-comparison-loader,.cq-loading{background-image:svg-load("icons/loading/loading-spin.svg");background-size:cover}
+.cq-loader,.cq-comparison-loader,.cq-loading{background-image:url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32'%3E%3Cpath d='M16 0C7.163 0 0 7.163 0 16s7.163 16 16 16 16-7.163 16-16S24.837 0 16 0m0 4c6.627 0 12 5.373 12 12s-5.373 12-12 12S4 22.627 4 16 9.373 4 16 4' opacity='.25'/%3E%3Cpath d='M16 0c8.837 0 16 7.163 16 16h-4c0-6.627-5.373-12-12-12V0z'%3E%3CanimateTransform type='rotate' repeatCount='indefinite' calcMode='linear' to='360 16 16' attributeName='transform' dur='0.8s' from='0 16 16'/%3E%3C/path%3E%3C/svg%3E");background-size:cover}
 .cq-loader{display:none;position:absolute;height:50px;width:50px;left:50%;top:50%;margin-left:-25px;margin-top:-25px;z-index:1}
 .cq-loader.show{display:block;z-index:9}
 .cq-loading{height:12px;width:12px;display:inline-block;vertical-align:middle;background-size:contain;margin-bottom:2px;margin-left:1px}
