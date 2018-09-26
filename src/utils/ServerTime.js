@@ -1,14 +1,12 @@
 import { getUTCEpoch, getLocalDate, getUTCDate } from './index';
 
 class ServerTime {
+    static _instance;
+
     clockStarted = false;
 
-    constructor(api) {
+    init(api) {
         this._api = api;
-        this.init();
-    }
-
-    init() {
         if (!this.clockStarted) {
             clearInterval(this.getTimeInterval);
             this.requestTime();
@@ -54,6 +52,12 @@ class ServerTime {
 
     getUTCDate() {
         return new Date(getUTCDate(this.getEpoch()));
+    }
+
+    static getInstance()
+    {
+        this._instance = this._instance || (this._instance = new this());
+        return this._instance;
     }
 }
 

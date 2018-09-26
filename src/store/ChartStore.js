@@ -7,7 +7,6 @@ import '../components/ui/Animation';
 import { Feed } from '../feed';
 import { ActiveSymbols, BinaryAPI, TradingTimes } from '../binaryapi';
 import { calculateTimeUnitInterval, getUTCDate, cloneCategories } from '../utils';
-import ServerTime from '../utils/ServerTime';
 
 CIQ.ChartEngine.prototype.createYAxisLabel = function (panel, txt, y, backgroundColor, color, ctx, yAxis) {
     if (panel.yAxis.drawPriceLabels === false || panel.yAxis.noDraw) return;
@@ -160,8 +159,7 @@ class ChartStore {
             onSettingsChange,
         } = props;
         this.api = new BinaryAPI(requestAPI, requestSubscribe, requestForget);
-        this.serverTime = new ServerTime(this.api);
-        this.tradingTimes = new TradingTimes(this.api, this.serverTime);
+        this.tradingTimes = new TradingTimes(this.api);
         this.activeSymbols = new ActiveSymbols(this.api, this.tradingTimes);
         const { chartSetting } = this.mainStore;
         chartSetting.setSettings(settings);
@@ -216,7 +214,7 @@ class ChartStore {
         CIQ.Animation(stxx, { stayPut: true });
 
         // connect chart to data
-        this.feed = new Feed(this.api, stxx, this.mainStore, this.serverTime, this.tradingTimes);
+        this.feed = new Feed(this.api, stxx, this.mainStore, this.tradingTimes);
         stxx.attachQuoteFeed(this.feed, {
             refreshInterval: null,
         });

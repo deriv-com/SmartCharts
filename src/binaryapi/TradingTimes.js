@@ -1,12 +1,14 @@
 import EventEmitter from 'event-emitter-es6';
+import ServerTime from '../utils/ServerTime';
 
 class TradingTimes {
     static get EVENT_MARKET_OPEN_CLOSE_CHANGE() { return 'EVENT_MARKET_OPEN_CLOSE_CHANGE'; }
     static get FEED_UNAVAILABLE() { return 'chartonly'; }
 
-    constructor(api, serverTime) {
+    constructor(api) {
         this._api = api;
-        this._serverTime = serverTime;
+        this._serverTime = ServerTime.getInstance();
+        this._serverTime.init(this._api);
         this._emitter = new EventEmitter({ emitDelay: 0 });
     }
 

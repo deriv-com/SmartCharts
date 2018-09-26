@@ -3,6 +3,7 @@ import { reaction, when } from 'mobx';
 import { TickHistoryFormatter } from './TickHistoryFormatter';
 import { calculateGranularity, getUTCEpoch } from '../utils';
 import { RealtimeSubscription, DelayedSubscription } from './subscription';
+import ServerTime from '../utils/ServerTime';
 
 class Feed {
     static get EVENT_MASTER_DATA_UPDATE() { return 'EVENT_MASTER_DATA_UPDATE'; }
@@ -14,11 +15,11 @@ class Feed {
     _activeStreams = {};
     _isConnectionOpened = true;
 
-    constructor(binaryApi, stx, mainStore, serverTime, tradingTimes) {
+    constructor(binaryApi, stx, mainStore, tradingTimes) {
         this._stx = stx;
         this._binaryApi = binaryApi;
         this._mainStore = mainStore;
-        this._serverTime = serverTime;
+        this._serverTime = ServerTime.getInstance();
         this._tradingTimes = tradingTimes;
         reaction(() => mainStore.state.isConnectionOpened, this.onConnectionChanged.bind(this));
         when(() => this.context, this.onContextReady);
