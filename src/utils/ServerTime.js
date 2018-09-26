@@ -8,10 +8,10 @@ class ServerTime {
     async init(api) {
         this._api = api;
         if (!this.clockStarted) {
-            clearInterval(this.getTimeInterval);
-            this.requestTime();
-            this.getTimeInterval = setInterval(this.requestTime.bind(this), 30000);
             this.clockStarted = true;
+            clearInterval(this.getTimeInterval);
+            await this.requestTime();
+            this.getTimeInterval = setInterval(this.requestTime.bind(this), 30000);
         }
     }
 
