@@ -5,7 +5,7 @@ class ServerTime {
 
     clockStarted = false;
 
-    init(api) {
+    async init(api) {
         this._api = api;
         if (!this.clockStarted) {
             clearInterval(this.getTimeInterval);
@@ -43,7 +43,7 @@ class ServerTime {
     }
 
     getEpoch() {
-        return this.serverTimeAtResponse ? this.serverTimeAtResponse :  getUTCEpoch(new Date());
+        return this.serverTimeAtResponse ? this.serverTimeAtResponse :  undefined;
     }
 
     getLocalDate() {

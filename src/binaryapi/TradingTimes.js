@@ -8,7 +8,6 @@ class TradingTimes {
     constructor(api) {
         this._api = api;
         this._serverTime = ServerTime.getInstance();
-        this._serverTime.init(this._api);
         this._emitter = new EventEmitter({ emitDelay: 0 });
     }
 
@@ -19,6 +18,8 @@ class TradingTimes {
     }
 
     async initialize() {
+        await this._serverTime.init(this._api);
+
         if (!this._tradingTimesMap) {
             await this._updateTradeTimes();
 
