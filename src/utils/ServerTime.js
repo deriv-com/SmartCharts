@@ -12,7 +12,7 @@ class ServerTime {
         if (!this.clockStarted) {
             clearInterval(this.getTimeInterval);
             this.requestTime();
-            this.getTimeInterval = setInterval(this.requestTime.bind(this), 60000);
+            this.getTimeInterval = setInterval(this.requestTime.bind(this), 30000);
             this.clockStarted = true;
         }
     }
@@ -44,16 +44,16 @@ class ServerTime {
         this.updateTimeInterval = setInterval(updateTime, 1000);
     }
 
-    get() {
+    getEpoch() {
         return this.serverTimeAtResponse ? this.serverTimeAtResponse :  getUTCEpoch(new Date());
     }
 
     getLocalDate() {
-        return getLocalDate(this.get());
+        return getLocalDate(this.getEpoch());
     }
 
     getUTCDate() {
-        return getUTCDate(this.get());
+        return new Date(getUTCDate(this.getEpoch()));
     }
 }
 
