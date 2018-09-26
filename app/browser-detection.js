@@ -218,7 +218,7 @@ function browserDetect(rootEleId, SupportedBrowsers){
 
 browserDetect('root', {
     'Mac OS': {
-        safari: 913,
+        safari: 1012,
         firefox: 2700,
         chrome: 4902623,
         opera: 3602130,
@@ -249,8 +249,8 @@ browserDetect('root', {
     'Windows 7': {
         ie: 0, // not supported at all
         firefox: 2700,
-        chrome: 3601985,
-        opera: 2601656,
+        chrome: 4902623,
+        opera: 3602130,
         yandexbrowser: 14122130,
     },
 });
