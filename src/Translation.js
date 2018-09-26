@@ -1,3 +1,4 @@
+import messages from '../translation/messages.pot';
 import de from '../translation/de.po';
 import fr from '../translation/fr.po';
 import id from '../translation/id.po';
@@ -12,7 +13,7 @@ import zh_cn from '../translation/zh_cn.po';
 import zh_tw from '../translation/zh_tw.po';
 
 const lang_map = {
-    en: {}, // default
+    en: [], // default
     de,
     fr,
     id,
@@ -29,6 +30,8 @@ const lang_map = {
 
 export class Translation {
     constructor(lang = 'en') {
+        console.log(messages);
+        console.log(lang_map.de);
         this.lang = lang;
     }
 
@@ -51,7 +54,7 @@ export class Translation {
      */
     translate(...args) {
         const curr_lang = lang_map[this.lang];
-        const str = args[0];
+        const str = messages[args[0]];
         let rt_str;
 
         if (typeof args[1] === 'string') { // Plural conversion
@@ -69,9 +72,13 @@ export class Translation {
             // Replace variables in string with values.
             rt_str = this.replace(rt_str, replacer);
         } else {
-            rt_str = curr_lang[str] && curr_lang[str][1] ? curr_lang[str][1] : str;
+            rt_str = curr_lang[str];
             // Replace variables in string with values.
             rt_str = this.replace(rt_str, args[1]);
+        }
+
+        if (this.lang === 'en' || !rt_str) {
+            return args[0];
         }
 
         return rt_str;
