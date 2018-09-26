@@ -3,8 +3,10 @@ import MenuStore from './MenuStore';
 import AnimatedPriceStore from './AnimatedPriceStore';
 import CategoricalDisplayStore from './CategoricalDisplayStore';
 import Menu from '../components/Menu.jsx';
-import CategoricalDisplay from '../components/CategoricalDisplay.jsx';
+import { CategoricalDisplay } from '../components/categoricaldisplay';
 import AnimatedPrice from '../components/AnimatedPrice.jsx';
+import { ChartPrice, SymbolSelectButton } from '../components/SymbolSelectButton.jsx';
+import { connect } from './Connect';
 
 export default class ChartTitleStore {
     constructor(mainStore) {
@@ -22,7 +24,19 @@ export default class ChartTitleStore {
 
         this.ChartTitleMenu = this.menu.connect(Menu);
         this.MarketSelector = this.categoricalDisplay.connect(CategoricalDisplay);
-        this.SpotPrice = this.animatedPrice.connect(AnimatedPrice);
+        const SpotPrice = this.animatedPrice.connect(AnimatedPrice);
+
+        const PriceDisplay = connect(() => ({
+            isVisible: this.isVisible && this.isShowChartPrice,
+            status: this.animatedPrice.status,
+            todayChange: this.todayChange,
+            SpotPrice,
+        }))(ChartPrice);
+
+        this.SymbolSelectButton = connect(() => ({
+            symbol: this.currentSymbol,
+            ChartPrice: PriceDisplay,
+        }))(SymbolSelectButton);
     }
 
     @observable todayChange = null;
@@ -59,8 +73,7 @@ export default class ChartTitleStore {
         if (currentPrice) {
             currentPrice = currentPrice.toFixed(this.decimalPlaces);
             const oldPrice = quote.prevClose || this.animatedPrice.price;
-
-            this.animatedPrice.setPrice(currentPrice);
+            this.animatedPrice.setPrice(currentPrice, oldPrice);
             if (oldPrice) {
                 this.todayChange = Math.abs(currentPrice - oldPrice).toFixed(this.decimalPlaces);
             }

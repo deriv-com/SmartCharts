@@ -13,7 +13,7 @@ import '../../sass/components/_chart-controls.scss';
 
 
 const renderDefaultControls = isMobile => () => (
-    <React.Fragment>
+    <>
         {isMobile ? '' : <CrosshairToggle />}
         <ChartTypes />
         <Timeperiod />
@@ -23,7 +23,7 @@ const renderDefaultControls = isMobile => () => (
         <Views />
         <Share />
         {isMobile ? '' : <ChartSize />}
-    </React.Fragment>
+    </>
 );
 
 const ChartControls = ({
