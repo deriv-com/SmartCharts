@@ -70,7 +70,7 @@ const SettingsDialog = ({
                 step={item.step || 1}
                 max={item.max || 100}
                 value={item.value}
-                onChange={val => onItemChange(item.id, val)}
+                onChange={val => onItemChange(item.id, val.currentTarget.value)}
             />
         ),
         numericinput: item => (

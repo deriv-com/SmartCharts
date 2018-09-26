@@ -170,3 +170,33 @@ export function displayMilliseconds(ms) {
     hours = hours ? `${hours}:` : '';
     return `${hours}${minutes}:${seconds}`;
 }
+
+export function cloneCategory(category, transformItem = x => x) {
+    const categoryData = [];
+    const categoryCopy = { ...category, data: categoryData };
+    if (category.hasSubcategory) {
+        for (const subcategory of category.data) {
+            const subcategoryData = [];
+            const subcategoryCopy = { ...subcategory, data: subcategoryData };
+            for (const item of subcategory.data) {
+                subcategoryData.push(transformItem(item));
+            }
+            categoryData.push(subcategoryCopy);
+        }
+    } else {
+        for (const item of category.data) {
+            categoryData.push(transformItem(item));
+        }
+    }
+
+    return categoryCopy;
+}
+
+export function cloneCategories(categories, transformItem = x => x) {
+    const categorized = [];
+    for (const category of categories) {
+        categorized.push(cloneCategory(category, transformItem));
+    }
+
+    return categorized;
+}

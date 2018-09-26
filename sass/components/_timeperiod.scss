@@ -12,7 +12,6 @@
             border-radius: 2px;
             box-sizing: border-box;
             text-align: center;
-            padding-top: 8px;
             font-size: 10px;
             @include themify($themes) {
                 color: themed('menuText');
@@ -63,9 +62,6 @@
         font-size: 12px;
         font-weight: normal;
 
-        .cq-mobile-title {
-            height: 40px;
-        }
         .cq-interval {
             height: 160px;
             width: 100%;
@@ -202,8 +198,12 @@
             padding: 10px 5px !important;
         }
     }
-    .smartcharts-1100 & {
+    .smartcharts-1280 & {
         width: 100px !important;
         top: 0px;
+
+        .bt-priod {
+            padding-top: 8px;
+        }
     }
 }

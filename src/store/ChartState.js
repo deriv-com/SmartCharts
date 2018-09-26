@@ -50,14 +50,14 @@ class ChartState {
         // prop values will always take precedence
         if (this.symbol !== undefined && this.symbol !== layoutData.symbols[0].symbol) {
             // symbol prop takes precedence over local storage data
-            const symbolObject = this.chartStore.activeSymbols.find(x => x.symbol === this.symbol);
+            const symbolObject = this.chartStore.activeSymbols.getSymbolObj(this.symbol);
             layoutData.symbols = [{ symbol: this.symbol, symbolObject }];
         }
 
         for (const symbolDat of layoutData.symbols) {
             // Symbol from cache may be in different language, so replace it with server's
             const { symbol: cachedSymbol } = symbolDat;
-            const updatedSymbol = this.chartStore.activeSymbols.find(x => cachedSymbol === x.symbol);
+            const updatedSymbol = this.chartStore.activeSymbols.getSymbolObj(cachedSymbol);
             symbolDat.symbolObject = updatedSymbol;
         }
 

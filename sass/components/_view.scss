@@ -5,20 +5,6 @@
         transform: translate(-50%);
         left: 50%;
 
-        .title {
-            height: 40px;
-            line-height: 40px;
-            font-size: 16px;
-            display: flex;
-
-            .title-text {
-                display: block;
-                font-size: 16px;
-                line-height: 40px;
-                font-weight: 400;
-                padding: 0 0.7em;
-            }
-        }
         .template-name {
             display: flex;
             align-items: center;
