@@ -31,14 +31,14 @@ class ServerTime {
         }
 
         const serverTime = response.time;
-
+        const clientTimeAtResponse = getUTCEpoch(new Date());
+        this.serverTimeAtResponse = serverTime + ((clientTimeAtResponse - this.clientTimeAtRequest)/2);
+        
         const updateTime = () => {
-            const clientTimeAtResponse = getUTCEpoch(new Date());
-            this.serverTimeAtResponse = (serverTime + clientTimeAtResponse - this.clientTimeAtRequest);
+            this.serverTimeAtResponse+=1;
         };
 
         clearInterval(this.updateTimeInterval);
-        updateTime();
         this.updateTimeInterval = setInterval(updateTime, 1000);
     }
 
