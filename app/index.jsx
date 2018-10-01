@@ -85,6 +85,10 @@ class App extends Component {
         this.state = { settings, isConnectionOpened: true };
     }
 
+    shouldComponentUpdate(nextProps , nextState) {
+        return this.state.isConnectionOpened !== nextState.isConnectionOpened;
+    }
+ 
     symbolChange = (symbol) => {
         this.notifier.removeByCategory('activesymbol');
         this.setState({ symbol });
@@ -126,6 +130,10 @@ class App extends Component {
         </>
     );
 
+    onMessage=(e) => {
+        this.notifier.notify(e)
+    }
+
     render() {
         const { settings, isConnectionOpened, symbol } = this.state;
 
@@ -133,7 +141,7 @@ class App extends Component {
             <SmartChart
                 id={chartId}
                 symbol={symbol}
-                onMessage={e => this.notifier.notify(e)}
+                onMessage={this.onMessage}
                 isMobile={CIQ.isMobile}
                 enableRouting
                 topWidgets={this.renderTopWidgets}
