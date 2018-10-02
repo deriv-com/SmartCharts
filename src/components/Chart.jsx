@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import RenderInsideChart from './RenderInsideChart.jsx';
 import ComparisonList from './ComparisonList.jsx';
 import ChartTitle from './ChartTitle.jsx';
@@ -16,14 +16,6 @@ import './ui';
 import ChartControls from './ChartControls.jsx';
 import Crosshair from './Crosshair.jsx';
 import { connect } from '../store/Connect';
-
-const defaultTopWidgets = () => (
-    <Fragment>
-        <ChartTitle />
-        <AssetInformation />
-        <ComparisonList />
-    </Fragment>
-);
 
 class Chart extends Component {
     constructor(props) {
@@ -47,6 +39,14 @@ class Chart extends Component {
         this.props.destroy();
     }
 
+    defaultTopWidgets = () => (
+        <>
+            <ChartTitle />
+            <AssetInformation />
+            <ComparisonList />
+        </>
+    );
+
     render() {
         const {
             DrawToolsSettingsDialog,
@@ -67,7 +67,7 @@ class Chart extends Component {
 
         const currentPosition = `cq-chart-control-${(position && !isMobile) ? position : 'bottom'}`;
         const contextWidth =  !isMobile ? `smartcharts-${containerWidth}` : '';
-        const TopWidgets = topWidgets || defaultTopWidgets;
+        const TopWidgets = topWidgets || this.defaultTopWidgets;
 
         return (
             <div

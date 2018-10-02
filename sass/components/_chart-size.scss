@@ -15,6 +15,12 @@
     .cq-menu-btn {
         cursor: pointer;
         padding: 5px 0px;
+
+        &:hover {
+            @include themify($themes) {
+                background: themed('MenuHoverBg');
+            }
+        }
     }
     .interval-title {
         white-space: nowrap;
@@ -27,6 +33,7 @@
 .cq-chart-control-left {
     .cq-chart-size {
         width: 100px !important;
+        min-height: 116px;
         flex-flow: column;
     }
 }
@@ -60,7 +67,8 @@
                 .cq-chart-size {
                     .cq-menu-btn {
                         width: 100px;
-                        padding: 0px !important;
+                        padding-right: 0px !important;
+                        padding-left: 0px !important;
                     }
                 }
             }

@@ -60,7 +60,7 @@
             margin-top: 50px;
         }
         .close-icon {
-            background: url('./icons/ic-close.svg') no-repeat scroll center center;
+            background: svg-load('./icons/ic-close.svg') no-repeat scroll center center;
             cursor: pointer;
             margin: 0px 5px;
             position: relative;
@@ -71,16 +71,16 @@
             padding: 0 5px;
         }
         .icon-notification-warning {
-            background: url('./icons/warning.svg') no-repeat scroll center center;
+            background: svg-load('./icons/warning.svg') no-repeat scroll center center;
         }
         .icon-notification-error {
-            background: url('./icons/error.svg') no-repeat scroll center center;
+            background: svg-load('./icons/error.svg') no-repeat scroll center center;
         }
         .icon-notification-info {
-            background: url('./icons/info.svg') no-repeat scroll center center;
+            background: svg-load('./icons/info.svg') no-repeat scroll center center;
         }
         .icon-notification-success {
-            background: url('./icons/success.svg') no-repeat scroll center center;
+            background: svg-load('./icons/success.svg') no-repeat scroll center center;
         }
     }
 }

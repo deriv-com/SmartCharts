@@ -259,21 +259,17 @@ We organise the development in Trello. Here is the standard workflow of how a fe
 
 ### Debugging NPM Package
 
-Some issues only show up for library users, so it is helpful to test the NPM package before deploying it to library users. To do this we provide an environment in the `app` folder, with its own `package.json`, `webpack.config.js` and `index.html`. Calling `yarn install` and `yarn start` in the `app` folder builds the SmartCharts library *from the NPM library*.
+Some issues only show up for library users, so it is helpful to test the NPM package before deploying it to library users. You can do this by building the library directly into the node_modules directory of an app that uses the SmartCharts library. For example to test the library build on binary-static you can execute:
 
-Now to test whether your change affect the NPM library, execute:
-
-    yarn watch --output-path './app/node_modules/@binary-com/smartcharts/dist'
+    yarn watch --output-path '../binary-static/node_modules/@binary-com/smartcharts/dist'
 
 Now each time you make any change, it will overwrite the SmartCharts library inside the `node_modules` folder. 
-
-> Note: We do not recommend this method of developing unless you are testing the NPM package, as it is very slow for development purposes.
 
 ### Separation of App and Library
 
 There should be a clear distinction between developing for app and developing for library. Library source code is all inside `src` folder, whereas app source code is inside `app`.
 
-Webpack determines whether to build an app or library depending on whether an environment variable `BUILD_MODE` is set to `app`. Setting this variable switches the entry point of the project, but on the **same** `webpack.config.js` (the one on the root folder). The `webpack.config.js` and `index.html` in the `app` folder is never actually used in this process; they serve as a guide to how to use the smartcharts library as an npm package. We do it this way to develop the app to have hot reload available when we modify library files.
+Webpack determines whether to build an app or library depending on whether an environment variable `BUILD_MODE` is set to `app`. Setting this variable switches the entry point of the project (app build mode uses `app/index.jsx` while library uses `src/index.js`). We do it this way to develop the app to have hot reload available when we modify library files.
 
 ### Translations
 

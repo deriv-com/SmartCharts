@@ -146,17 +146,8 @@ class Feed {
         }
 
         callback({ quotes });
-        if (!isComparisonChart) {
-            const prev = quotes[quotes.length - 2];
-            const prevClose = (prev !== undefined) ? prev.Close : undefined;
-            this._emitter.emit(Feed.EVENT_MASTER_DATA_UPDATE, {
-                ...quotes[quotes.length - 1],
-                prevClose,
-            });
-            this._mainStore.chart.setChartAvailability(true);
-        } else {
-            this._emitter.emit(Feed.EVENT_COMPARISON_DATA_UPDATE);
-        }
+
+        this._emitDataUpdate(quotes, comparisonChartSymbol);
     }
 
     async fetchPaginationData(symbol, suggestedStartDate, endDate, params, callback) {
@@ -234,10 +225,29 @@ class Feed {
                 secondarySeries: comparisonChartSymbol,
                 noCreateDataSet: true,
             });
-            this._emitter.emit(Feed.EVENT_COMPARISON_DATA_UPDATE);
         } else {
             this._stx.updateChartData(quotes);
-            this._emitter.emit(Feed.EVENT_MASTER_DATA_UPDATE, quotes[0]);
+        }
+
+        this._emitDataUpdate(quotes, comparisonChartSymbol);
+    }
+
+    _emitDataUpdate(quotes, comparisonChartSymbol) {
+        const prev = quotes[quotes.length - 2];
+        const prevClose = (prev !== undefined) ? prev.Close : undefined;
+        const dataUpdate = {
+            ...quotes[quotes.length - 1],
+            prevClose,
+        };
+
+        if (!comparisonChartSymbol) {
+            this._emitter.emit(Feed.EVENT_MASTER_DATA_UPDATE, dataUpdate);
+            this._mainStore.chart.setChartAvailability(true);
+        } else {
+            this._emitter.emit(Feed.EVENT_COMPARISON_DATA_UPDATE, {
+                symbol: comparisonChartSymbol,
+                ...dataUpdate,
+            });
         }
     }
 
