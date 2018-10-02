@@ -167,6 +167,7 @@ if (isApp) {
         { from: './sass/favicons/*.png' },
         { from: './node_modules/@babel/polyfill/dist/polyfill.min.js', to: 'babel-polyfill.min.js' },
         { from: './chartiq/html2canvas.min.js' },
+        { from: './nojs-smartcharts.css'},
         {
             from: production
                 ? './node_modules/react/umd/react.production.min.js'
