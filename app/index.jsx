@@ -32,6 +32,15 @@ if (window.location.host.endsWith('binary.com')) {
     document.body.appendChild(s);
 }
 
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register(`${window.location.origin + window.location.pathname}sw.js`)
+        .then(() => {
+            console.log('Service Worker Registered');
+        }).catch((registrationError) => {
+            console.log('SW registration failed: ', registrationError);
+        });
+}
+
 configure({ enforceActions: 'observed' });
 
 function getLanguageStorage() {
