@@ -387,6 +387,8 @@
             max-height: 200px;
             overflow: hidden;
             transition: max-height 0.2s ease-in;
+            position: relative;
+            z-index: 9;
             @include themify($themes) {
                 border-bottom: 1px solid themed('CatDisplaySearchBorder');
             }
