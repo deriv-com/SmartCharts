@@ -169,6 +169,7 @@ if (isApp) {
         { from: './app/browser-detection.js'},
         { from: './app/assets/*.svg'},
         { from: './chartiq/html2canvas.min.js' },
+        { from: './nojs-smartcharts.css'},
         {
             from: production
                 ? './node_modules/react/umd/react.production.min.js'
