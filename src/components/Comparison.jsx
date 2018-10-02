@@ -31,11 +31,11 @@ const Comparison = ({
     </ComparisonMenu>
 );
 
-export default connect(({ comparison: c }) => ({
+export default connect(({ comparison: c, chart }) => ({
     ComparisonSelector: c.ComparisonSelector,
     ComparisonMenu: c.ComparisonMenu,
     menuOpen: c.menu.open,
     onCloseMenu: c.menu.onTitleClick,
-    isMobile: c.categoricalDisplay.isMobile,
-    activeComparisonsNo: c.mainStore.chart.comparisonSymbols.length,
+    isMobile: chart.isMobile,
+    activeComparisonsNo: c.comparisonSymbols.length,
 }))(Comparison);

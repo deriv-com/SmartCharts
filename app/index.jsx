@@ -110,18 +110,18 @@ class App extends Component {
     };
 
     renderTopWidgets = () => (
-        <React.Fragment>
+        <>
             <ChartTitle onChange={this.symbolChange} />
             <AssetInformation />
             <ComparisonList />
             <Notification
                 notifier={this.notifier}
             />
-        </React.Fragment>
+        </>
     );
 
     renderControls = () => (
-        <React.Fragment>
+        <>
             {CIQ.isMobile ? '' : <CrosshairToggle />}
             <ChartTypes />
             <Timeperiod />
@@ -132,7 +132,7 @@ class App extends Component {
             <Share />
             {CIQ.isMobile ? '' : <ChartSize />}
             <ChartSetting />
-        </React.Fragment>
+        </>
     );
 
     render() {

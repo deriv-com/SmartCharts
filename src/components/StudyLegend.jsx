@@ -35,13 +35,13 @@ const StudyLegend = ({
     </StudyMenu>
 );
 
-export default connect(({ studies: st }) => ({
+export default connect(({ studies: st, chart }) => ({
     isOpened: st.open,
     setOpen: st.setOpen,
     StudyMenu: st.StudyMenu,
     menuOpen: st.menu.open,
     StudyCategoricalDisplay: st.StudyCategoricalDisplay,
     onCloseMenu: st.menu.onTitleClick,
-    isMobile: st.categoricalDisplay.isMobile,
+    isMobile: chart.isMobile,
     activeStudiesNo: st.activeStudies.data.length,
 }))(StudyLegend);

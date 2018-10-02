@@ -6,20 +6,21 @@ import MenuStore from './MenuStore';
 export default class SettingsDialogStore {
     @observable items = []; // [{id: '', title: '', value: ''}]
     @observable title = '';
-    @observable stared = false;
     @observable description = '';
+    @observable id;
 
     @observable activeTab = 'settings'; // 'settings' | 'description'
     @computed get showTabs() { return !!this.description; }
 
     constructor({
-        mainStore, getContext, onDeleted, onStared, onChanged,
+        mainStore, getContext, onDeleted, favoritesId, onChanged,
     }) {
         this.getContext = getContext;
         this.onDeleted = onDeleted;
-        this.onStared = onStared;
+        this.favoritesId = favoritesId;
         this.onChanged = onChanged;
         this.menu = new MenuStore(mainStore, { route:'indicator-setting' });
+        this.Dialog = this.menu.dialog.connect(Dialog);
     }
 
     get context() { return this.mainStore.chart.context; }
@@ -35,30 +36,23 @@ export default class SettingsDialogStore {
         this.menu.setOpen(false);
     }
 
-    @action.bound onStarClick() {
-        this.stared = !this.stared;
-        this.onStared(this.stared);
-    }
     @action.bound onTabClick(id) {
         this.activeTab = id;
     }
+
     @action.bound onResetClick() {
-        const items = this.items.map((item) => {
-            const clone = JSON.parse(JSON.stringify(item));
-            clone.value = clone.defaultValue;
-            return clone;
-        });
+        const items = this.items.map(item => ({ ...item, value: item.defaultValue }));
         this.items = items;
         this.onChanged(items);
     }
+
     @action.bound onItemChange(id, newValue) {
-        const items = this.items.map((item) => {
-            const clone = JSON.parse(JSON.stringify(item));
-            if (item.id === id) { clone.value = newValue; }
-            return clone;
-        });
-        this.items = items;
-        this.onChanged(items);
+        const item = this.items.find(x => x.id === id);
+        if (item && item.value !== newValue) {
+            item.value = newValue;
+            this.items = this.items.slice(0); // force array update
+            this.onChanged(this.items);
+        }
     }
 
     connect = connect(() => ({
@@ -67,15 +61,14 @@ export default class SettingsDialogStore {
         description: this.description,
         activeTab: this.activeTab,
         showTabs: this.showTabs,
-        stared: this.stared,
         setOpen: this.setOpen,
-        isFavoritable: !!this.onStared,
         onTabClick: this.onTabClick,
         onDeleteClick: this.onDeleted ? this.onDeleteClick : undefined,
-        onStarClick: this.onStarClick,
+        favoritesId: this.favoritesId,
         onResetClick: this.onResetClick,
         onItemChange: this.onItemChange,
-        Dialog: this.menu.dialog.connect(Dialog),
+        Dialog: this.Dialog,
         open: this.open,
+        id: this.id,
     }));
 }

@@ -45,7 +45,7 @@
                         @include svg-icon-color('MenuActiveIcon');
 
                         .ic-subtitle {
-                            font-weight: 500;
+                            font-weight: bold;
                             @include themify($themes) {
                                 color: themed('MenuActiveText');
                             }
@@ -72,7 +72,7 @@
             > .cq-toggle {
                 &.active {
                     .ic-subtitle {
-                        font-weight: 500;
+                        font-weight: bold;
                         @include themify($themes) {
                             color: themed('MenuActiveText');
                         }

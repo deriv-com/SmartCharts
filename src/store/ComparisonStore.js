@@ -1,8 +1,8 @@
 import React from 'react';
-import { action, computed } from 'mobx';
+import { action, computed, observable, when } from 'mobx';
 import MenuStore from './MenuStore';
 import CategoricalDisplayStore from './CategoricalDisplayStore';
-import CategoricalDisplay from '../components/CategoricalDisplay.jsx';
+import { CategoricalDisplay } from '../components/categoricaldisplay';
 import Menu from '../components/Menu.jsx';
 
 const swatchColors = [
@@ -13,6 +13,9 @@ const swatchColors = [
 ];
 
 export default class ComparisonStore {
+    @observable comparisonSymbols = [];
+    currentActiveSymbol; // just used to track if symbol has changed
+
     constructor(mainStore) {
         this.mainStore = mainStore;
         this.menu = new MenuStore(mainStore, { route:'comparison' });
@@ -31,13 +34,28 @@ export default class ComparisonStore {
             mainStore,
         });
         this.ComparisonSelector = this.categoricalDisplay.connect(CategoricalDisplay);
+        when(() => this.context, this.onContextReady);
     }
 
     get context() { return this.mainStore.chart.context; }
 
+    @action.bound updateComparisonPrices(data) {
+        const comparison = this.comparisonSymbols.find(x => x.symbolObject.symbol === data.symbol);
+        if (comparison) {
+            comparison.price = data.Close;
+            comparison.prevPrice = data.prevClose;
+        } else {
+            this.updateComparisons();
+        }
+    }
+
+    removeComparison(symbolObj) {
+        this.context.stx.removeSeries(symbolObj.symbol);
+    }
+
     @computed get activeComparisons() {
         const result = [];
-        for (const symbol of this.mainStore.chart.comparisonSymbols) {
+        for (const symbol of this.comparisonSymbols) {
             result.push({
                 enabled: true,
                 selected: false,
@@ -56,7 +74,7 @@ export default class ComparisonStore {
     }
 
     @action.bound onDeleteItem({ symbolObject }) {
-        this.mainStore.chart.removeComparison(symbolObject);
+        this.removeComparison(symbolObject);
     }
 
     @action.bound onSelectItem(symbolObject) {
@@ -86,15 +104,17 @@ export default class ComparisonStore {
         }
 
         // don't allow symbol if same as main chart or just white space
-        if (context.stx.chart.symbol.toLowerCase() !== symbolObject.symbol.toLowerCase()
-            && symbolObject.symbol.trim().length > 0) {
+        if (context.stx.chart.symbol !== symbolObject.symbol) {
+            this.comparisonSymbols.push({
+                color,
+                symbolObject,
+            });
             stx.addSeries(symbolObject.symbol, params, (err, series) => {
                 if (err) {
-                    this.mainStore.chart.removeComparison(series.parameters.symbolObject);
+                    this.removeComparison(series.parameters.symbolObject);
                     series.parameters.error = true;
                 }
             });
-            this.mainStore.comparisonList.updatePrices();
         }
 
         this.menu.setOpen(false);
@@ -120,4 +140,56 @@ export default class ComparisonStore {
 
         return selectedColor;
     }
+
+    @action.bound onSymbolChange({ action : symbolAction }) {
+        if (symbolAction === 'master') {
+            const { stx } = this.context;
+            if (this.currentActiveSymbol !== stx.chart.symbol) {
+                this.comparisonSymbols = [];
+                for (const field in stx.chart.series) {
+                    if (stx.chart.series[field].parameters.bucket !== 'study') {
+                        stx.removeSeries(field);
+                    }
+                }
+                this.currentActiveSymbol = stx.chart.symbol;
+            }
+        } else {
+            // symbolAction = 'add-series' or 'remove-series'
+            this.updateComparisons();
+        }
+    }
+
+    updateComparisons() {
+        if (!this.context) { return; }
+        const { stx } = this.context;
+        const comparisonSymbolsKeys = Object.keys(stx.chart.series);
+        if (comparisonSymbolsKeys.length !== this.comparisonSymbols.length) {
+            const comparisons = [];
+            const q = stx.currentQuote();
+            if (q) {
+                for (const sybl of comparisonSymbolsKeys) {
+                    const srs = stx.chart.series[sybl];
+                    const prm = srs.parameters;
+                    const comp = q[sybl];
+
+                    comparisons.push({
+                        color: prm.color,
+                        price: comp && comp.Close,
+                        prevPrice: comp && comp.iqPrevClose,
+                        symbolObject: prm.symbolObject,
+                    });
+                }
+            }
+            this.comparisonSymbols = comparisons;
+        }
+    }
+
+    onContextReady = () => {
+        const { stx } = this.context;
+        const { feed } = this.mainStore.chart;
+        this.currentActiveSymbol = stx.chart.symbol;
+        stx.addEventListener('symbolChange', this.onSymbolChange);
+        feed.onComparisonDataUpdate(this.updateComparisonPrices);
+        this.updateComparisons();
+    };
 }
