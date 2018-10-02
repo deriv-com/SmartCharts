@@ -14,6 +14,10 @@ export default class BinaryAPI {
         });
     }
 
+    getServerTime() {
+        return this.requestAPI({ time: 1 });
+    }
+
     getTradingTimes(trading_times = 'today') {
         return this.requestAPI({ trading_times });
     }
