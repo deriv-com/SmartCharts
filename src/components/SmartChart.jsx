@@ -6,6 +6,10 @@ import Chart from './Chart.jsx';
 class SmartChart extends React.Component {
     mainStore = new MainStore();
 
+    shouldComponentUpdate(nextProps) {
+       return this.props.isConnectionOpened !== nextProps.isConnectionOpened;
+    }
+
     get chart() { return this.mainStore.chart; }
 
     get stx() { return this.chart.stxx; }
