@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Portuguese\n"
 "Language: pt_PT\n"
-"PO-Revision-Date: 2018-09-06 09:32\n"
+"PO-Revision-Date: 2018-09-25 09:32\n"
 
 msgid " already exists."
 msgstr " já existe."
@@ -354,9 +354,6 @@ msgstr "Tipo"
 msgid "Offset"
 msgstr "Offset"
 
-msgid "Underlay"
-msgstr "Subjacente"
-
 msgid "MA"
 msgstr "MA"
 
@@ -671,9 +668,6 @@ msgstr "Máx. menos min."
 
 msgid "Median Price"
 msgstr "Preço médio"
-
-msgid "Overlay"
-msgstr "Sobreposição"
 
 msgid "Moving Average Envelope"
 msgstr "Envelope média móvel"

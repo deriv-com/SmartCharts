@@ -124,6 +124,10 @@ export function getUTCDate(epoch) {
     return UTCdate.substring(0, 19);
 }
 
+export function getLocalDate(epoch) {
+    return new Date(epoch * 1000);
+}
+
 export function updatePropIfChanged(source, props, onChanged) {
     let isChanged = false;
     for (const attr in props) {

@@ -2,6 +2,7 @@ import { observable, action, computed, when, reaction } from 'mobx';
 import MenuStore from './MenuStore';
 import { getTimeUnit, getIntervalInSeconds, displayMilliseconds } from '../utils';
 import Menu from '../components/Menu.jsx';
+import ServerTime from '../utils/ServerTime';
 
 export default class TimeperiodStore {
     constructor(mainStore) {
@@ -9,6 +10,7 @@ export default class TimeperiodStore {
         when(() => this.context, this.onContextReady);
         this.menu = new MenuStore(mainStore, { route:'time-period' });
         this.TimePeriodMenu = this.menu.connect(Menu);
+        this._serverTime = ServerTime.getInstance();
     }
 
     get context() { return this.mainStore.chart.context; }
@@ -65,9 +67,8 @@ export default class TimeperiodStore {
 
             const dataSet = stx.chart.dataSet;
             if (dataSet && dataSet.length !== 0) {
-                const now = new Date();
-                // Dates are in UTC; we need to do a timezone offset
-                const diff = now - dataSet[dataSet.length - 1].DT + (now.getTimezoneOffset() * 60000);
+                const now = this._serverTime.getUTCDate();
+                const diff = now - dataSet[dataSet.length - 1].DT;
                 this.remain = displayMilliseconds((getIntervalInSeconds(stx.layout) * 1000) - diff);
                 stx.draw();
             }

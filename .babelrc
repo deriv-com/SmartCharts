@@ -1,12 +1,18 @@
 {
     "presets": [
-        ["env",  { "modules": false }],
-        "react"
+        ["@babel/preset-env",  {
+            "modules": false,
+            "useBuiltIns": "entry",
+            "targets": {
+                "node": "current"
+            }
+        }],
+        "@babel/preset-react"
     ],
     "plugins": [
-        "transform-decorators-legacy",
-        "transform-class-properties",
-        "transform-object-rest-spread",
+        ["@babel/plugin-proposal-decorators", { "legacy": true }],
+        ["@babel/plugin-proposal-class-properties", { "loose" : true }],
+        ["@babel/plugin-proposal-object-rest-spread", { "useBuiltIns": true }],
         ["inline-react-svg", {
             "svgo": {
                 "plugins": [
@@ -18,21 +24,26 @@
     ],
     "env": {
         "test": {
-            "presets": [["env"], "react"],"plugins": [
-            "transform-decorators-legacy",
-            "transform-class-properties",
-            "transform-object-rest-spread",
-            "transform-runtime",
-            "transform-async-to-generator",
-            "istanbul",
-            ["inline-react-svg", {
-                "svgo": {
-                    "plugins": [
-                        { "cleanupIDs": false },
-                        { "removeTitle": true }
-                    ]
+            "presets": [["@babel/preset-env", {
+                "useBuiltIns": "entry",
+                "targets": {
+                    "node": "current"
                 }
-            }]
-        ] }
+            }],
+                "@babel/preset-react"],
+            "plugins": [
+                ["@babel/plugin-proposal-decorators", { "legacy": true }],
+                ["@babel/plugin-proposal-class-properties", { "loose" : true }],
+                ["@babel/plugin-proposal-object-rest-spread", { "useBuiltIns": true }],
+                "istanbul",
+                ["inline-react-svg", {
+                    "svgo": {
+                        "plugins": [
+                            { "cleanupIDs": false },
+                            { "removeTitle": true }
+                        ]
+                    }
+                }]
+            ] }
     }
 }

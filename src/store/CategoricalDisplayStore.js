@@ -1,6 +1,8 @@
-import { action, observable, computed, when, reaction, toJS } from 'mobx';
+import { action, observable, computed, reaction } from 'mobx';
 import { connect } from './Connect';
-import { cloneCategories, cloneCategory, createObjectFromLocalStorage } from '../utils';
+import { cloneCategories, cloneCategory } from '../utils';
+import SearchInput from '../components/SearchInput.jsx';
+import { NormalItem, ActiveItem, ResultsPanel, FilterPanel } from '../components/categoricaldisplay';
 
 export default class CategoricalDisplayStore {
     constructor({
@@ -14,39 +16,75 @@ export default class CategoricalDisplayStore {
         mainStore,
     }) {
         reaction(getIsShown, () => {
-            if (getIsShown()) {
-                // Odd. Why is setTimeout needed here?
-                if (!this.isMobile) {
-                    setTimeout(() => this.searchInput.focus(), 0);
-                }
+            const isShown = getIsShown();
+            // deferred the rendering until user opens the dropdown
+            // setTimeout is required, otherwise it will block the render
+            setTimeout(action(() => { this.isShown = isShown; }), 0);
+            if (isShown) {
                 if (!this.isInit) { this.init(); }
             }
         });
         this.getCategoricalItems = getCategoricalItems;
         this.onSelectItem = onSelectItem;
         this.getActiveCategory = getActiveCategory;
-        this.activeOptions = activeOptions;
-        this.placeholderText = placeholderText;
         this.favoritesId = favoritesId;
         this.categoryElements = {};
         this.mainStore = mainStore;
         this.isInit = false;
-        reaction(
-            () => this.mainStore.favoriteSessionStore.favoritesChangeTrigger,
-            () => { this.updateFavorites(); },
-        );
 
-        if (favoritesId && mainStore) {
-            when(() => this.context, this.initFavorites.bind(this));
-        }
+        const normalItem = connect(() => ({
+            favoritesId,
+        }))(NormalItem);
+
+        const activeItem = connect(() => ({
+            activeOptions,
+            favoritesId,
+        }))(ActiveItem);
+
+        const getItemType = (categoryId) => {
+            // Defer render of items until panel is opened
+            // if (!this.isShown) {
+            //     return BlankItem;
+            // }
+
+            if (categoryId === 'active' && (this.getActiveCategory !== undefined)) {
+                return activeItem;
+            }
+
+            return normalItem;
+        };
+
+        this.ResultsPanel = connect(() => ({
+            filteredItems: this.filteredItems,
+            setCategoryElement: this.setCategoryElement,
+            getItemType,
+            isShown: this.isShown,
+            activeHeadTop: this.activeHeadTop,
+            activeHeadKey: this.activeHeadKey,
+        }))(ResultsPanel);
+
+        this.FilterPanel = connect(({ chart }) => ({
+            isMobile: chart.isMobile,
+            filteredItems: this.filteredItems,
+            handleFilterClick: this.handleFilterClick,
+            activeCategoryKey: this.activeCategoryKey,
+        }))(FilterPanel);
+
+        this.SearchInput = connect(() => ({
+            placeholder: placeholderText,
+            value: this.filterText,
+            onChange: this.setFilterText,
+        }))(SearchInput);
     }
+
+    @observable isShown = false;
     @observable scrollPanel;
     @observable filterText = '';
-    @observable placeholderText = '';
     @observable activeCategoryKey = '';
-    @observable static favoritesMap = {};
     @observable isScrollingDown = false;
     scrollTop = undefined;
+    @observable activeHeadKey = undefined;
+    @observable activeHeadTop = undefined;
     isUserScrolling = true;
     lastFilteredItems = [];
 
@@ -54,72 +92,32 @@ export default class CategoricalDisplayStore {
         return this.mainStore.chart.context;
     }
 
-    isFavExist(favItem) {
-        const favs = CategoricalDisplayStore.favoritesMap[this.favoritesId];
-        return favs.length > 0 && favs.some(fav => Object.keys(fav).indexOf(favItem) > -1);
-    }
-
-    initFavorites() {
-        const favorites = (createObjectFromLocalStorage('cq-favorites') || {})[this.favoritesId] || [];
-        if (!CategoricalDisplayStore.favoritesMap[this.favoritesId]) {
-            CategoricalDisplayStore.favoritesMap[this.favoritesId] = [];
-        }
-        for (const fav of favorites) {
-            const favItem = fav && (typeof fav === 'string' ? fav : fav.itemId);
-            const isExist = this.isFavExist(favItem);
-            if (favItem && !isExist) {
-                CategoricalDisplayStore.favoritesMap[this.favoritesId].push({ [favItem]: true });
-            }
-        }
-    }
-
-    saveFavorites() {
-        // Read favorites for all CategoricalDisplay instances from localstorage
-        const favorites = createObjectFromLocalStorage('cq-favorites') || {};
-
-        // Replace the changes for current instance of CategoricalDisplay
-        favorites[this.favoritesId] = toJS(CategoricalDisplayStore.favoritesMap[this.favoritesId])
-            .map(key =>  Object.keys(key)[0]) || [];
-
-        CIQ.localStorageSetItem('cq-favorites', JSON.stringify(favorites));
-    }
-
-    updateFavorites() {
-        CategoricalDisplayStore.favoritesMap[this.favoritesId]  = [];
-        this.initFavorites();
-    }
-
     @action.bound updateScrollSpy() {
         if (this.pauseScrollSpy || !this.scrollPanel) { return; }
         if (this.filteredItems.length === 0) { return; }
 
+        let activeMenuId = null;
+        const categoryTitleHeight = 40;
+        let activeHeadTop = 0;
 
-        let i = 0;
         for (const category of this.filteredItems) {
             const el = this.categoryElements[category.categoryId];
-            if (!el) {
-                i++;
-                continue;
-            }
+
+            if (!el) { return; }
             const r = el.getBoundingClientRect();
             const top = r.top - this.scrollPanel.getBoundingClientRect().top;
-            if (top > 0) { break; }
-            i++;
-        }
+            if (top < 0) {
+                activeMenuId = category.categoryId;
 
-        // get first non-empty category
-        let idx = i - 1;
-        let id;
-        while (idx >= 0) {
-            id = this.filteredItems[idx].categoryId;
-            if (this.categoryElements[id] !== null) {
-                break;
+                const categorySwitchPoint = r.height + top - categoryTitleHeight;
+                activeHeadTop = categorySwitchPoint < 0 ? categorySwitchPoint : 0;
             }
-            idx--;
         }
 
-        this.activeCategoryKey = id || this.filteredItems[0].categoryId;
         this.scrollTop = this.scrollPanel.scrollTop;
+        this.activeCategoryKey = activeMenuId || this.filteredItems[0].categoryId;
+        this.activeHeadTop = activeHeadTop + this.scrollPanel.offsetTop;
+        this.activeHeadKey = this.scrollTop === 0 ? null : this.activeCategoryKey;
     }
 
     @action.bound scrollUp() {
@@ -144,6 +142,7 @@ export default class CategoricalDisplayStore {
                 }
             }
         }
+        this.activeHeadTop = this.scrollPanel.offsetTop;
     }
 
     @computed get favoritesCategory()  {
@@ -152,17 +151,9 @@ export default class CategoricalDisplayStore {
             categoryId: 'favorite',
             hasSubcategory: false,
             emptyDescription: t.translate('There are no favorites yet.'),
-            data: toJS(CategoricalDisplayStore.favoritesMap[this.favoritesId]).map(key =>  Object.keys(key)[0]) || [],
+            data: Object.keys(this.mainStore.favorites.favoritesMap[this.favoritesId]) || [],
         };
         return favoritesCategory;
-    }
-
-    /* isMobile: fill form the ChartStore */
-    @computed get isMobile() {
-        if (this.mainStore) {
-            return this.mainStore.chart.isMobile;
-        }
-        return false;
     }
 
     @computed get filteredItems() {
@@ -254,11 +245,6 @@ export default class CategoricalDisplayStore {
         }, 0);
     }
 
-    @action.bound clearFilterText() {
-        this.setFilterText('');
-        this.searchInput.value = '';
-    }
-
     @action.bound handleFilterClick(category) {
         const el = this.categoryElements[category.categoryId];
 
@@ -274,82 +260,21 @@ export default class CategoricalDisplayStore {
         }
     }
 
-    @action.bound setSearchInput(element) {
-        this.searchInput = element;
-    }
-
     @action.bound setScrollPanel(element) {
         this.scrollPanel = element ? element._container : null;
     }
 
-    @action.bound getItemCount(category) {
-        let count = 0;
-        if (category.hasSubcategory) {
-            for (const sub of category.data) {
-                count += sub.data.length;
-            }
-        } else {
-            count += category.data.length;
-        }
-
-        return count;
-    }
-
-    @action.bound onFavoritedItem(item, e) {
-        e.stopPropagation();
-        e.nativeEvent.isHandledByDialog = true; // prevent close dialog
-        this.setFavorite(item);
-    }
-    setFavorite(item) {
-        const isExist = this.isFavExist(item.itemId);
-        if (isExist) {
-            CategoricalDisplayStore.favoritesMap[this.favoritesId] = CategoricalDisplayStore.favoritesMap[this.favoritesId].filter(x => Object.keys(x)[0] !== item.itemId);
-        } else {
-            CategoricalDisplayStore.favoritesMap[this.favoritesId].push({ [item.itemId] : true });
-        }
-        this.mainStore.favoriteSessionStore.favoritesChangeTrigger = !this.mainStore.favoriteSessionStore.favoritesChangeTrigger;
-        this.saveFavorites();
-    }
-
-    setFavoriteById(id) {
-        let foundItem = null;
-        for (const category of this.getCategoricalItems()) {
-            for (const item of category.data) {
-                if (item.itemId === id) {
-                    foundItem = item;
-                    break;
-                }
-            }
-            if (foundItem) { break; }
-        }
-        if (foundItem) {
-            this.setFavorite(foundItem);
-        }
-    }
-
     connect = connect(() => ({
-        isMobile: this.isMobile,
-        filterText: this.filterText,
-        setFilterText: this.setFilterText,
-        clearFilterText: this.clearFilterText,
         filteredItems: this.filteredItems,
-        getItemCount: this.getItemCount,
-        setSearchInput: this.setSearchInput,
-        handleFilterClick: this.handleFilterClick,
-        onSelectItem: this.onSelectItem,
-        hasActiveItems: (this.getActiveCategory !== undefined),
-        activeOptions: this.activeOptions,
-        placeholderText: this.placeholderText,
-        activeCategoryKey: this.activeCategoryKey,
         setScrollPanel: this.setScrollPanel,
-        setCategoryElement: this.setCategoryElement,
-        onFavoritedItem: this.onFavoritedItem,
-        favoritesId: this.favoritesId,
-        CloseUpperMenu: this.CloseUpperMenu,
         isScrollingDown: this.isScrollingDown,
         updateScrollSpy: this.updateScrollSpy,
         scrollUp: this.scrollUp,
         scrollDown: this.scrollDown,
-        isFavExist: this.isFavExist.bind(this),
+        isShown: this.isShown,
+        onSelectItem: this.onSelectItem,
+        ResultsPanel: this.ResultsPanel,
+        FilterPanel: this.FilterPanel,
+        SearchInput: this.SearchInput,
     }))
 }

@@ -5,6 +5,7 @@ import '../../sass/components/_icons.scss';
 import BaseLine from '../../sass/icons/chart settings/chart types/baseline/ic-baseline-normal.svg';
 import Candle from '../../sass/icons/chart settings/chart types/candle/ic-candle-normal.svg';
 import Dot from '../../sass/icons/chart settings/chart types/dot/ic-dot-normal.svg';
+import LineDot from '../../sass/icons/chart settings/chart types/line dot/ic-linedot-normal.svg';
 import HeikinAshi from '../../sass/icons/chart settings/chart types/ic-heikin-ashi-normal.svg';
 import HollowCandle from '../../sass/icons/chart settings/chart types/hollow candle/ic-hollowcandle-normal.svg';
 import Kagi from '../../sass/icons/chart settings/chart types/ic-kagi-normal.svg';
@@ -179,6 +180,7 @@ const Wrapper = WrappedComponent => (props) => {
 export const BaseLineIcon = Wrapper(BaseLine);
 export const CandleIcon = Wrapper(Candle);
 export const DotIcon = Wrapper(Dot);
+export const LineDotIcon = Wrapper(LineDot);
 export const HeikinAshiIcon = Wrapper(HeikinAshi);
 export const HollowCandleIcon = Wrapper(HollowCandle);
 export const KagiIcon = Wrapper(Kagi);

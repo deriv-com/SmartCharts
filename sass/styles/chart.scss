@@ -113,35 +113,35 @@ html, body {
     background: no-repeat center;
 
     &.stx-ico-up {
-        background-image: url('./icons/chart/ic-up.svg');
+        background-image: svg-load('./icons/chart/ic-up.svg');
     }
     &.stx-ico-down {
-        background-image: url('./icons/chart/ic-down.svg');
+        background-image: svg-load('./icons/chart/ic-down.svg');
     }
     &.stx-ico-close {
-        background-image: url('./icons/delete/ic-delete.svg');
+        background-image: svg-load('./icons/delete/ic-delete.svg');
     }
     &.stx-ico-edit {
-        background-image: url('./icons/chart/ic-settings.svg');
+        background-image: svg-load('./icons/chart/ic-settings.svg');
     }
     &.stx-ico-focus {
-        background-image: url('./icons/chart/ic-maximize.svg');
+        background-image: svg-load('./icons/chart/ic-maximize.svg');
     }
     .smartcharts-dark & {
         &.stx-ico-up {
-            background-image: url('./icons/chart/ic-up-dark.svg');
+            background-image: svg-load('./icons/chart/ic-up-dark.svg');
         }
         &.stx-ico-down {
-            background-image: url('./icons/chart/ic-down-dark.svg');
+            background-image: svg-load('./icons/chart/ic-down-dark.svg');
         }
         &.stx-ico-close {
-            background-image: url('./icons/delete/ic-delete-dark.svg');
+            background-image: svg-load('./icons/delete/ic-delete-dark.svg');
         }
         &.stx-ico-edit {
-            background-image: url('./icons/chart/ic-settings-dark.svg');
+            background-image: svg-load('./icons/chart/ic-settings-dark.svg');
         }
         &.stx-ico-focus {
-            background-image: url('./icons/chart/ic-maximize-dark.svg');
+            background-image: svg-load('./icons/chart/ic-maximize-dark.svg');
         }
     }
 }
@@ -191,7 +191,7 @@ html, body {
     height: 25px;
     width: 30px;
     padding-top: 25px;
-    background: url('./icons/chart/jump-to-today.svg') no-repeat center;
+    background: svg-load('./icons/chart/jump-to-today.svg') no-repeat center;
     transition: opacity 0.25s, transform 0.2s;
     opacity: 0.6;
 }
@@ -203,7 +203,7 @@ html, body {
 /* --------------------------------------------------------- PANEL CONTROL TEMPLATES --------------------------------------------------------- */
 
 .stx-baseline-handle { /* used for dragging the baseline up and down */
-    background: url('./icons/chart/resize-icon.svg') no-repeat center;
+    background: svg-load('./icons/chart/resize-icon.svg') no-repeat center;
     cursor: ns-resize;
     display: none;
     height: 20px;
@@ -218,7 +218,7 @@ html, body {
 }
 
 .stx-drag-chart { /* Use the hand icon when grabbing and moving the chart */
-    cursor: url('./icons/chart/closedhand.cur'), default !important;
+    cursor: grabbing;
 }
 
 .stx-panel-control { /* Panel Control buttons template */
@@ -334,7 +334,7 @@ html, body {
     overflow: hidden;
     text-indent: 100px;
     @include themify($themes) {
-        background: url('./icons/chart/ic-settings-dark.svg') no-repeat center !important;
+        background: svg-load('./icons/chart/ic-settings-dark.svg') no-repeat center !important;
     }
 }
 
@@ -346,7 +346,7 @@ html, body {
     .overlayEdit.stx-btn span,
     .vectorTrashCan.stx-btn span {
         @include themify($themes) {
-            background: url('./icons/delete/ic-delete-dark.svg') no-repeat center !important;
+            background: svg-load('./icons/delete/ic-delete-dark.svg') no-repeat center !important;
         }
     }
 }
@@ -915,7 +915,7 @@ html, body {
     There is a strange bug where dropdowns get displayed (partially)
     when html is being rendered to canvas. So we set this to manually
     hide it when PNG is exported.
-     */
+    */
     display: none !important;
 }
 
@@ -977,5 +977,9 @@ $spot-color: #0298d3;
         .mStickyRightClick {
             margin-left: -2px !important;
         }
+    }
+    .ciq-chart.ciq-screenshot .stx-btn-panel {
+        //CSS images cause cross origin security error when export png
+        display: none !important;
     }
 }
