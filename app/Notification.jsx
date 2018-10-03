@@ -1,7 +1,7 @@
 import React from 'react';
 import './_ciq-notification.scss';
 
-class Notification extends React.Component {
+class Notification extends React.PureComponent {
     constructor(props) {
         super(props);
         this.state = { messages: [] };
