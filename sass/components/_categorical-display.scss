@@ -3,11 +3,10 @@
     width: 632px;
     padding: 0 !important;
     display: flex;
+    height: 100%;
     text-align: left;
     overflow: hidden;
-    transition: opacity 1s;
     border-radius: 3px;
-    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
     @include themify($themes) {
         color: themed('CatDisplayText');
     }
@@ -300,11 +299,6 @@
         padding: 0.9em 1.2em;
         border-radius: 3px;
     }
-}
-
-.stxMenuActive .cq-categorical-display {
-    opacity: 1;
-    height: 100%;
 }
 
 /* Active Symbol Icons */

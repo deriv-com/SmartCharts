@@ -142,21 +142,11 @@
         bottom: auto;
         left: 9em;
         top: -1em;
-        transition: opacity 0.2s 0s;
-        @include dialog-transition();
         transform: translateX(-3em);
 
         &.cq-menu-dropdown-enter-done, &.cq-menu-dropdown-enter-active {
             transform: translateX(0em);
         }
-    }
-    &.cq-menu-dropdown-exit-active {
-        opacity: 0;
-        z-index: -3;
-    }
-    &.cq-menu-dropdown-enter-done, &.cq-menu-dropdown-enter-active {
-        opacity: 1;
-        z-index: 6;
     }
 }
 
