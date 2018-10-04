@@ -26,8 +26,8 @@ class RenderInsideChart extends Component {
         });
     }
 
-    shouldComponentUpdate(nextProps , nextStates){
-        return this.state.container && this.state.container !== nextStates.container;
+    shouldComponentUpdate(nextProps , nextState){
+        return this.state.container && this.state.container !== nextState.container;
     }
 
     render() {

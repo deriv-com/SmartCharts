@@ -1,12 +1,16 @@
 import React from 'react';
 import './_ciq-notification.scss';
 
-class Notification extends React.PureComponent {
+class Notification extends React.Component {
     constructor(props) {
         super(props);
         this.state = { messages: [] };
         props.notifier.onMessage(this.onMessage);
         props.notifier.onRemoveByCategory(this.onRemoveByCategory);
+    }
+
+    shouldComponentUpdate(nextProps, nextState) {
+        return this.state.messages.length !== nextState.messages.length;
     }
 
     onMessage = (message, duration = 10) => {

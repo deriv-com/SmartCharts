@@ -147,8 +147,8 @@ export class ColorPicker extends React.Component {
     componentDidMount() { document.addEventListener('click', this.close, false); }
     componentWillUnmount() { document.removeEventListener('click', this.close); }
    
-    shouldComponentUpdate(nextProps, nextStates){
-        return this.state.open !== nextStates.open;
+    shouldComponentUpdate(nextProps, nextState){
+        return this.state.open !== nextState.open;
     }
       
     render() {
@@ -216,8 +216,8 @@ export class NumericInput extends React.Component {
         }
     }
 
-    shouldComponentUpdate(nextProps, nextStates){
-        return this.state.value !== nextStates.value;
+    shouldComponentUpdate(nextProps, nextState){
+        return this.state.value !== nextState.value;
     }
 
     fireOnChange = () => {

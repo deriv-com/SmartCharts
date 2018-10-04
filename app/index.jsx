@@ -98,8 +98,8 @@ class App extends Component {
         this.state = { settings, isConnectionOpened: true };
     }
 
-    shouldComponentUpdate() {
-        return this.state.symbol || false;
+    shouldComponentUpdate(nextProps, nextState) {
+        return this.state.symbol !== nextState.symbol;
     }
 
     symbolChange = (symbol) => {
