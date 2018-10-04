@@ -1,3 +1,4 @@
+import React from 'react';
 import { action, observable, computed, reaction } from 'mobx';
 import { connect } from './Connect';
 import { cloneCategories, cloneCategory } from '../utils';
@@ -16,12 +17,13 @@ export default class CategoricalDisplayStore {
         mainStore,
     }) {
         reaction(getIsShown, () => {
-            const isShown = getIsShown();
-            // deferred the rendering until user opens the dropdown
-            // setTimeout is required, otherwise it will block the render
-            setTimeout(action(() => { this.isShown = isShown; }), 0);
-            if (isShown) {
+            if (getIsShown()) {
                 if (!this.isInit) { this.init(); }
+                if (!mainStore.chart.isMobile) {
+                    setTimeout(() => {
+                        this.searchInput.current.focus();
+                    }, 0);
+                }
             }
         });
         this.getCategoricalItems = getCategoricalItems;
@@ -31,6 +33,7 @@ export default class CategoricalDisplayStore {
         this.categoryElements = {};
         this.mainStore = mainStore;
         this.isInit = false;
+        this.searchInput = React.createRef();
 
         const normalItem = connect(() => ({
             favoritesId,
@@ -53,7 +56,6 @@ export default class CategoricalDisplayStore {
             filteredItems: this.filteredItems,
             setCategoryElement: this.setCategoryElement,
             getItemType,
-            isShown: this.isShown,
             activeHeadTop: this.activeHeadTop,
             activeHeadKey: this.activeHeadKey,
         }))(ResultsPanel);
@@ -69,6 +71,7 @@ export default class CategoricalDisplayStore {
             placeholder: placeholderText,
             value: this.filterText,
             onChange: this.setFilterText,
+            searchInput: this.searchInput,
         }))(SearchInput);
     }
 
@@ -266,7 +269,6 @@ export default class CategoricalDisplayStore {
         updateScrollSpy: this.updateScrollSpy,
         scrollUp: this.scrollUp,
         scrollDown: this.scrollDown,
-        isShown: this.isShown,
         onSelectItem: this.onSelectItem,
         ResultsPanel: this.ResultsPanel,
         FilterPanel: this.FilterPanel,
