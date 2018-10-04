@@ -142,6 +142,7 @@
         }
         &.stxMenuActive .cq-menu-overlay {
             opacity: 1;
+            pointer-events: initial;
             visibility: visible;
         }
         &.cq-chart-title .cq-menu-dropdown {

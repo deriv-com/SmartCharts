@@ -148,6 +148,14 @@
             transform: translateX(0em);
         }
     }
+    &.cq-menu-dropdown-exit-active {
+        opacity: 0;
+        z-index: -3;
+    }
+    &.cq-menu-dropdown-enter-done, &.cq-menu-dropdown-enter-active {
+        opacity: 1;
+        z-index: 6;
+    }
 }
 
 .cq-chart-control-bottom .cq-chart-controls {
