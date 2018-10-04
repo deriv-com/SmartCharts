@@ -115,12 +115,15 @@
     }
     .cq-modal-dropdown {
         pointer-events: none;
-        z-index: 90;
+        z-index: 1;
         position: fixed;
         height: inherit;
         width: 100%;
         top: 0;
 
+        &.stxMenuActive {
+            z-index: 2;
+        }
         &.ciq-studies, &.cq-comparison-new, &.cq-chart-title {
             .cq-menu-overlay .cq-menu-dropdown {
                 /* for studies and comparison dropdown, fill screen in mobile */
