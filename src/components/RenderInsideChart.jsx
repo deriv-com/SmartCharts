@@ -11,8 +11,6 @@ class RenderInsideChart extends Component {
         super(props);
         const { at = 'holder', contextPromise } = props;
 
-        this.state = {container : null};
-
         contextPromise.then((context) => {
             const nodeName = `${inChartPrefix}${at}`;
             // reuse existing node when possible:
@@ -21,13 +19,10 @@ class RenderInsideChart extends Component {
                 elem = createElement(`<div class="${nodeName}"></div>`);
                 context.stx.chart.panel[at].appendChild(elem);
             }
-          
-            this.setState({container : elem});
-        });
-    }
 
-    shouldComponentUpdate(nextProps , nextState){
-        return this.state.container && this.state.container !== nextState.container;
+            this.container = elem;
+            this.forceUpdate(); // force render to be called after getting the container
+        });
     }
 
     render() {

@@ -20,13 +20,13 @@ import ReactDOM from 'react-dom';
 import { configure } from 'mobx';
 import './app.scss';
 import './doorbell';
+import { whyDidYouUpdate }  from 'why-did-you-update';
 import { ConnectionManager, StreamManager } from './connection';
 import Notification from './Notification.jsx';
 import ChartNotifier from './ChartNotifier.js';
-import { whyDidYouUpdate }  from 'why-did-you-update';
 
 if (process.env.NODE_ENV !== 'production') {
-    whyDidYouUpdate(React);
+    whyDidYouUpdate(React, { exclude: [/^RenderInsideChart$/, /^inject-/] });
 }
 
 if (window.location.host.endsWith('binary.com')) {
