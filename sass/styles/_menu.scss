@@ -1,3 +1,5 @@
+$transition-duration: 300ms;
+
 .ciq-menu {
     position: relative;
     @include themify($themes) {
@@ -32,7 +34,7 @@
     pointer-events: none;
     opacity: 0;
     z-index: 3;
-    transition: transform 150ms, opacity 150ms;
+    transition: transform $transition-duration, opacity $transition-duration;
     box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
     margin-top: 5px;
     @include themify($themes) {
@@ -136,7 +138,7 @@
         }
         .cq-menu-overlay {
             position: relative;
-            transition: opacity 150ms;
+            transition: opacity $transition-duration;
             background: rgba(0, 0, 0, 0.3);
             height: inherit;
             width: 100%;
