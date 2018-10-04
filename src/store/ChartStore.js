@@ -98,6 +98,7 @@ class ChartStore {
     @observable chartContainerHeight;
     @observable isMobile = false;
     @observable cursorInChart = false;
+    @observable shouldRenderDialogs = false;
 
     get loader() { return this.mainStore.loader; }
     get routingStore() {
@@ -273,6 +274,12 @@ class ChartStore {
                 });
 
                 this.tradingTimes.onMarketOpenCloseChanged(this.onMarketOpenClosedChange);
+
+                setTimeout(action(() => {
+                    // Defer the render of the dialogs and dropdowns; this enables
+                    // considerable performance improvements for slower devices.
+                    this.shouldRenderDialogs = true;
+                }), 500);
             }));
         });
 
