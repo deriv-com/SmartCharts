@@ -42,11 +42,6 @@ export default class CategoricalDisplayStore {
         }))(ActiveItem);
 
         const getItemType = (categoryId) => {
-            // Defer render of items until panel is opened
-            // if (!this.isShown) {
-            //     return BlankItem;
-            // }
-
             if (categoryId === 'active' && (this.getActiveCategory !== undefined)) {
                 return activeItem;
             }
