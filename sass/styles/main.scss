@@ -26,7 +26,7 @@
     border: none;
     transition: all 0.2s 0s, opacity 0.2s 0s;
     box-sizing: border-box;
-    box-shadow: 0, 1px, 2px, rgba(0, 0, 0, 0.2);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
     @include themify($themes) {
         background: themed('DefaultBg');
         color: themed('MenuText');
@@ -34,13 +34,13 @@
 
     &:hover {
         border: none;
-        box-shadow: 0, 1px, 2px, rgba(0, 0, 0, 0.3);
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
     }
     &:active,
     &:active {
         border: none;
         transition: all 0s 0s;
-        box-shadow: inset 0, 1px, 2px, rgba(0, 0, 0, 0.2);
+        box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2);
     }
     &.ciq-primary,
     &.ciq-primary {
@@ -59,19 +59,14 @@
         &.ciq-simple {
             border: none;
             background: transparent;
-            box-shadow: 0, 0, 0, 0, rgba(0, 0, 0, 0);
+            box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
 
             &:hover,
             &:active {
-                box-shadow: 0, 0, 0, 0, rgba(0, 0, 0, 0);
+                box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
             }
         }
     }
-}
-
-.cq-menu-dropdown {
-    display: block;
-    line-height: 2.1em;
 }
 
 .cq-menu-dropdown .ps-scrollbar-y-rail {
@@ -211,47 +206,4 @@
     z-index: 1;
     font-size: 17px;
     color: #878787;
-}
-
-.smartcharts-mobile {
-    .cq-modal-dropdown {
-        &.stxMenuActive {
-            z-index: 90;
-            position: fixed;
-            height: 100%;
-            width: 100%;
-            top: 0;
-        }
-        .cq-menu-dropdown {
-            height: auto;
-            width: 100%;
-        }
-        &.ciq-studies, &.cq-comparison-new, &.cq-chart-title {
-            .cq-menu-dropdown {
-                /* for studies and comparison dropdown, fill screen in mobile */
-                height: 100%;
-
-                .title {
-                    border-bottom: none !important;
-                }
-            }
-        }
-    }
-    .cq-menu-overlay {
-        position: relative;
-        background: rgba(0, 0, 0, 0.3);
-        height: inherit;
-        width: 100%;
-        left: 0;
-        padding: 0;
-        opacity: 0;
-        visibility: hidden;
-        transition: opacity 150 ease-out;
-    }
-    .stxMenuActive {
-        .cq-menu-overlay {
-            opacity: 1;
-            visibility: visible;
-        }
-    }
 }

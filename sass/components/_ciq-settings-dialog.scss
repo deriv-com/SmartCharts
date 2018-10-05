@@ -163,7 +163,7 @@
         border-radius: 3px;
         @include themify($themes) {
             border: none;
-            box-shadow: 0, 0, 0, 1px, themed('defaultBorder');
+            box-shadow: 0 0 0 1px themed('defaultBorder');
         }
     }
     .cq-color-picker {

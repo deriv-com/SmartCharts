@@ -6,7 +6,6 @@ const ChartTitle = ({
     currentSymbol,
     ChartTitleMenu,
     MarketSelector,
-    onCloseMenu,
     SymbolSelectButton,
     setMenuOpen,
     onChange,
@@ -33,7 +32,6 @@ const ChartTitle = ({
                         }
                         setMenuOpen(false);
                     }}
-                    closeMenu={onCloseMenu}
                 />
             </ChartTitleMenu.Body>
         </ChartTitleMenu>
@@ -44,7 +42,6 @@ export default connect(({ chartTitle: c, chart }) => ({
     currentSymbol: c.currentSymbol,
     ChartTitleMenu: c.ChartTitleMenu,
     MarketSelector: c.MarketSelector,
-    onCloseMenu: c.menu.onTitleClick,
     setMenuOpen: c.menu.setOpen,
     onChange: c.setSymbol,
     SymbolSelectButton: c.SymbolSelectButton,

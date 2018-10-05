@@ -54,12 +54,13 @@ export default class MenuStore {
         this.setOpen(!this.open);
     }
 
-    connect = connect(() => ({
+    connect = connect(({ chart: c }) => ({
         setOpen: this.setOpen,
         open: this.open,
         onTitleClick: this.onTitleClick,
         DropdownDialog: this.DropDownDialog,
         modalNode: this.modalNode,
-        isMobile: this.mainStore.chart.isMobile,
+        isMobile: c.isMobile,
+        shouldRenderDialogs: c.shouldRenderDialogs,
     }))
 }
