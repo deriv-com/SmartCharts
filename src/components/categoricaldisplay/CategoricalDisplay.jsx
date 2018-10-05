@@ -12,11 +12,17 @@ const CategoricalDisplay = ({
     ResultsPanel,
     FilterPanel,
     SearchInput,
+    isMobile,
+    scrollSpace
 }) => (
     <div className="cq-categorical-display">
-        <div className={`cq-lookup-filters ${isScrollingDown ? 'scroll-down' : ''}`}>
-            <SearchInput />
-            <FilterPanel />
+        <div className={`cq-lookup-filters ${isScrollingDown ? '' : ''}`}>
+            <div className="cq-lookup-panel"
+                style={{height: isMobile ? (44 + (scrollSpace*1.2)) : false}}
+                >
+                <SearchInput />
+                <FilterPanel />
+            </div>
         </div>
         <PerfectScrollbar
             className="cq-scroll-panel"
