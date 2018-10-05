@@ -6,6 +6,7 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const StyleLintPlugin = require('stylelint-webpack-plugin');
 const UglifyJs = require('uglify-js');
 const write = require('write');
+const SpriteLoaderPlugin = require('svg-sprite-loader/plugin');
 
 const production = process.env.NODE_ENV === 'production';
 const isApp = process.env.BUILD_MODE === 'app';
@@ -25,6 +26,15 @@ const config = {
     output,
     module: {
         rules: [
+            {
+                test: /\.svg$/,
+                use: [
+                    { loader: 'svg-sprite-loader',
+                        options: {
+                            extract: true,
+                        } },
+                ],
+            },
             {
                 test: /\.(s*)css$/,
                 use: [
@@ -83,7 +93,8 @@ const config = {
             t: [path.resolve(__dirname, './src/Translation.js'), 't'],
         }),
         new MiniCssExtractPlugin({ filename: 'smartcharts.css' }),
-        new StyleLintPlugin()
+        new StyleLintPlugin(),
+        new SpriteLoaderPlugin(),
     ],
     externals: {
         chartiq: 'CIQ',
@@ -166,10 +177,10 @@ if (isApp) {
     config.plugins.push(new CopyWebpackPlugin([
         { from: './sass/favicons/*.png' },
         { from: './node_modules/@babel/polyfill/dist/polyfill.min.js', to: 'babel-polyfill.min.js' },
-        { from: './app/browser-detection.js'},
-        { from: './app/assets/*.svg'},
+        { from: './app/browser-detection.js' },
+        { from: './app/assets/*.svg' },
         { from: './chartiq/html2canvas.min.js' },
-        { from: './nojs-smartcharts.css'},
+        { from: './nojs-smartcharts.css' },
         {
             from: production
                 ? './node_modules/react/umd/react.production.min.js'

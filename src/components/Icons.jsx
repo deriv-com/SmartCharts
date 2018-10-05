@@ -159,9 +159,10 @@ import MarketBull from '../../sass/icons/active-symbols/volatility/bull market/i
 import OTCBadge from '../../sass/icons/active-symbols/ic-otcbadge.svg';
 import SmartFX from '../../sass/icons/active-symbols/ic-smartfx-placeholder.svg';
 
-const Wrapper = WrappedComponent => (props) => {
+const Wrapper = SvgLogo => (props) => {
     let { className, 'tooltip-title': tooltip, ...p } = props; // eslint-disable-line prefer-const
     className = `ic-icon ${className || ''}`;
+    const vb = SvgLogo.viewBox.split(' ').slice(2).map(x => `${x}px`);
 
     return (
         <span
@@ -169,7 +170,9 @@ const Wrapper = WrappedComponent => (props) => {
             tooltip-title={tooltip}
             {...p}
         >
-            <WrappedComponent />
+            <svg style={{ width: vb[0], height: vb[1] }}>
+                <use xlinkHref={SvgLogo.url} />
+            </svg>
             <br />
             <span className="ic-subtitle">{tooltip}</span>
         </span>

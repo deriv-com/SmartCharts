@@ -13,14 +13,6 @@
         ["@babel/plugin-proposal-decorators", { "legacy": true }],
         ["@babel/plugin-proposal-class-properties", { "loose" : true }],
         ["@babel/plugin-proposal-object-rest-spread", { "useBuiltIns": true }],
-        ["inline-react-svg", {
-            "svgo": {
-                "plugins": [
-                    { "cleanupIDs": false },
-                    { "removeTitle": true }
-                ]
-            }
-        }]
     ],
     "env": {
         "test": {
@@ -35,15 +27,7 @@
                 ["@babel/plugin-proposal-decorators", { "legacy": true }],
                 ["@babel/plugin-proposal-class-properties", { "loose" : true }],
                 ["@babel/plugin-proposal-object-rest-spread", { "useBuiltIns": true }],
-                "istanbul",
-                ["inline-react-svg", {
-                    "svgo": {
-                        "plugins": [
-                            { "cleanupIDs": false },
-                            { "removeTitle": true }
-                        ]
-                    }
-                }]
+                "istanbul"
             ] }
     }
 }
