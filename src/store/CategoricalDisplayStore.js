@@ -87,6 +87,8 @@ export default class CategoricalDisplayStore {
     @observable activeHeadTop = undefined;
     isUserScrolling = true;
     lastFilteredItems = [];
+    filterInputPanelHeight = 50;
+    @observable scrollSpace = 50;
 
     get context() {
         return this.mainStore.chart.context;
@@ -115,6 +117,9 @@ export default class CategoricalDisplayStore {
         }
 
         this.scrollTop = this.scrollPanel.scrollTop;
+        if (this.scrollTop === 0) {
+            this.scrollSpace = 50;
+        }
         this.activeCategoryKey = activeMenuId || this.filteredItems[0].categoryId;
         this.activeHeadTop = activeHeadTop + this.scrollPanel.offsetTop;
         this.activeHeadKey = this.scrollTop === 0 ? null : this.activeCategoryKey;
@@ -122,12 +127,18 @@ export default class CategoricalDisplayStore {
 
     @action.bound scrollUp() {
         this.isScrollingDown = false;
+        this.scrollSpace = (this.scrollSpace < this.filterInputPanelHeight) 
+                            ? (this.scrollSpace + 2) 
+                            : this.filterInputPanelHeight;
     }
 
     @action.bound scrollDown() {
         // This only affects when scrolling by mouse not by code
         this.isScrollingDown = this.isUserScrolling;
         this.isUserScrolling = true;
+        this.scrollSpace = (this.scrollSpace > 0) 
+                            ? (this.scrollSpace - 2) 
+                            : 0 ;
     }
 
     @action.bound init() {
@@ -272,9 +283,11 @@ export default class CategoricalDisplayStore {
         scrollUp: this.scrollUp,
         scrollDown: this.scrollDown,
         isShown: this.isShown,
+        isMobile: this.mainStore.chart.isMobile,
         onSelectItem: this.onSelectItem,
         ResultsPanel: this.ResultsPanel,
         FilterPanel: this.FilterPanel,
         SearchInput: this.SearchInput,
+        scrollSpace: this.scrollSpace
     }))
 }
