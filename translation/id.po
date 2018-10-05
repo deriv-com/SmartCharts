@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Indonesian\n"
 "Language: id_ID\n"
-"PO-Revision-Date: 2018-09-06 06:30\n"
+"PO-Revision-Date: 2018-09-25 09:31\n"
 
 msgid " already exists."
 msgstr " sudah tersedia."
@@ -354,9 +354,6 @@ msgstr "Tipe"
 msgid "Offset"
 msgstr "Offset"
 
-msgid "Underlay"
-msgstr "Underlay"
-
 msgid "MA"
 msgstr "MA"
 
@@ -671,9 +668,6 @@ msgstr "Tinggi Minus Rendah"
 
 msgid "Median Price"
 msgstr "Harga Median"
-
-msgid "Overlay"
-msgstr "Overlay"
 
 msgid "Moving Average Envelope"
 msgstr "Amplop Moving Average"

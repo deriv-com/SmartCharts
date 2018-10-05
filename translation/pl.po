@@ -10,16 +10,16 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Polish\n"
 "Language: pl_PL\n"
-"PO-Revision-Date: 2018-09-06 03:41\n"
+"PO-Revision-Date: 2018-09-25 20:01\n"
 
 msgid " already exists."
 msgstr " już istnieje."
 
 msgid "[symbol] feed is delayed by [delay] minutes"
-msgstr ""
+msgstr "Strumień [symbol] jest opóźniony o [delay] min."
 
 msgid "[symbol] market is now opened."
-msgstr ""
+msgstr "Rynek [symbol] jest teraz otwarty."
 
 msgid "[symbol] market is presently closed."
 msgstr "Rynek [symbol] jest obecnie zamknięty."
@@ -283,7 +283,7 @@ msgid "Spline"
 msgstr "Funkcja sklejana"
 
 msgid "SPOT"
-msgstr ""
+msgstr "SPOT"
 
 msgid "Streaming for [symbol] is not available due to license restrictions"
 msgstr "Z powodu ograniczeń licencyjnych przesyłanie strumieniowe dla [symbol] jest niedostępne"
@@ -353,9 +353,6 @@ msgstr "Typ"
 
 msgid "Offset"
 msgstr "Odchylenie"
-
-msgid "Underlay"
-msgstr "Podkładka"
 
 msgid "MA"
 msgstr "MA"
@@ -671,9 +668,6 @@ msgstr "Wysoki Minus Niski"
 
 msgid "Median Price"
 msgstr "Mediana ceny"
-
-msgid "Overlay"
-msgstr "Nakładka"
 
 msgid "Moving Average Envelope"
 msgstr "Średnia krocząca Envelope"
