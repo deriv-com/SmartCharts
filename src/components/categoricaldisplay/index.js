@@ -1,6 +1,6 @@
 import CategoricalDisplay from './CategoricalDisplay.jsx';
 import { FilterPanel } from './FilterPanel.jsx';
-import { NormalItem, ActiveItem, BlankItem } from './Item.jsx';
+import { NormalItem, ActiveItem } from './Item.jsx';
 import { ResultsPanel } from './ResultsPanel.jsx';
 
 export {
@@ -9,5 +9,4 @@ export {
     NormalItem,
     ActiveItem,
     ResultsPanel,
-    BlankItem,
 };
