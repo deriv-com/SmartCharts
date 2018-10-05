@@ -57,6 +57,8 @@
         line-height: 40px;
         font-size: 16px;
         display: flex;
+        position: relative;
+        z-index: 9;
 
         .title-text {
             display: block;
