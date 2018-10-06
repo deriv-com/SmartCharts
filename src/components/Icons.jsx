@@ -44,7 +44,6 @@ import Stocks from '../../sass/icons/sidebar/otc/ic-otc-normal.svg';
 import Volidx from '../../sass/icons/sidebar/volatility/ic-volatility-normal.svg';
 import Search from '../../sass/icons/search/ic-search-normal.svg';
 import Edit from '../../sass/icons/edit/ic-edit.svg';
-import IndicatorCategory from '../../sass/icons/sidebar/indicator/ic-indicator-normal.svg';
 import Arrow from '../../sass/icons/dropdown/ic-dropdown.svg';
 import Download from '../../sass/icons/download/ic-download.svg';
 import PositionLeft from '../../sass/icons/chart settings/setting/ic-position-left.svg';
@@ -162,7 +161,7 @@ import SmartFX from '../../sass/icons/active-symbols/ic-smartfx-placeholder.svg'
 const Wrapper = SvgLogo => (props) => {
     let { className, 'tooltip-title': tooltip, ...p } = props; // eslint-disable-line prefer-const
     className = `ic-icon ${className || ''}`;
-    const vb = SvgLogo.viewBox.split(' ').slice(2).map(x => `${x}px`);
+    const vb = SvgLogo.viewBox.split(' ').slice(2);
 
     return (
         <span
@@ -170,7 +169,7 @@ const Wrapper = SvgLogo => (props) => {
             tooltip-title={tooltip}
             {...p}
         >
-            <svg style={{ width: vb[0], height: vb[1] }}>
+            <svg width={vb[0]} height={vb[1]}>
                 <use xlinkHref={SvgLogo.url} />
             </svg>
             <br />
@@ -245,7 +244,7 @@ export const CategoryIconMap = {
     indices: Wrapper(Indices),
     stocks: Wrapper(Stocks),
     volidx: Wrapper(Volidx),
-    indicators: Wrapper(IndicatorCategory),
+    indicators: Wrapper(Indicator),
 };
 
 const FlagIconMap = {

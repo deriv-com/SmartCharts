@@ -73,11 +73,6 @@
             transition: right, opacity 0.2s ease-in-out;
             @include svg-icon-color('CatDisplayFilterIcon');
         }
-        > input:focus + .ic-icon svg path {
-            @include themify($themes) {
-                fill: themed('CatDisplayFilterIcon');
-            }
-        }
     }
     .category {
         padding-top: 40px;
@@ -169,24 +164,10 @@
             }
 
             .ic-icon {
-                &.ic-active {
-                    path, rect, circle {
-                        @include themify($themes) {
-                            fill: themed('CatDisplayActiveFilterIcon');
-                        }
-                    }
-                }
-                &.ic-forex,
-                &.ic-commodities,
-                &.ic-volidx,
-                &.ic-favorite,
-                &.ic-indicators,
-                &.ic-stocks,
-                &.ic-indices {
-                    path, rect, circle {
-                        @include themify($themes) {
-                            stroke: themed('CatDisplayActiveFilterIcon');
-                        }
+                svg {
+                    @include themify($themes) {
+                        fill: themed('CatDisplayActiveFilterIcon');
+                        stroke: themed('CatDisplayActiveFilterIcon');
                     }
                 }
             }

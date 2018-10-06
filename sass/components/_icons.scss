@@ -10,27 +10,20 @@
     box-sizing: border-box;
     text-align: center;
 
-    &.brand-blue {
-        svg path {
-            fill: #2a3052;
+    &.ciq-favorite, &.ic-favorite {
+        svg {
+            fill: none !important;
+            @include themify($themes) {
+                stroke: themed('MenuIcon');
+            }
         }
     }
     &.ciq-active-favorite {
-        svg > g > g > path {
+        svg {
             @include themify($themes) {
                 fill: themed('StarIconFav') !important;
                 stroke: themed('StarIconFav') !important;
             }
-        }
-    }
-    &.ic-clear {
-        background: #4b5794;
-
-        &.fill svg path {
-            fill: #ffffff;
-        }
-        &.stroke svg path {
-            stroke: #ffffff;
         }
     }
     &.margin {
@@ -51,6 +44,32 @@
 
     br, .ic-subtitle {
         display: inline;
+    }
+}
+
+.cq-menu-btn,
+.cq-filter,
+.cq-active-options,
+.titlebar > .icons,
+.cq-draw-button,
+.cq-lookup-input,
+.ciq-chart-types .ciq-list-item {
+    .ic-icon > svg {
+        @include themify($themes) {
+            fill: themed('MenuIcon');
+            stroke: themed('MenuIcon');
+        }
+    }
+}
+
+.stxMenuActive .cq-menu-btn .ic-icon,
+.cq-lookup-input > input:focus + .ic-icon,
+.ciq-chart-types .ciq-list-item .active.ic-icon {
+    svg {
+        @include themify($themes) {
+            fill: themed('MenuActiveIcon');
+            stroke: themed('MenuActiveIcon');
+        }
     }
 }
 
@@ -138,24 +157,19 @@
     }
 }
 
-.ic-frxXPDUSD > svg > g > g > g > path:first-child {
-    fill: #e9eaf0;
-}
-
-.ic-frxXPTUSD > svg > g > g > g > path:first-child {
-    fill: #f4f3f3;
-}
-
-.ic-frxXAGUSD > svg > g > g > g > path:first-child {
-    fill: #e1e1e1;
-}
-
-.no-stroke {
-    stroke: none !important;
-}
-
-.no-fill {
-    fill: none !important;
+.ic-icon {
+    &.ic-frxXAUUSD > svg {
+        fill: #ffd700;
+    }
+    &.ic-frxXPDUSD > svg {
+        fill: #e9eaf0;
+    }
+    &.ic-frxXPTUSD > svg {
+        fill: #f4f3f3;
+    }
+    &.ic-frxXAGUSD > svg {
+        fill: #e1e1e1;
+    }
 }
 
 .smartcharts-mobile {

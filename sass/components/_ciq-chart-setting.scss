@@ -35,24 +35,16 @@
                 &.ciq-list-item-position {
                     .ciq-action {
                         .ic-icon {
-                            rect {
+                            svg {
                                 @include themify($themes) {
                                     stroke: themed('ChartSettingIcon');
-                                }
-                            }
-                            path {
-                                @include themify($themes) {
                                     fill: themed('ChartSettingIcon');
                                 }
                             }
                             &.active {
-                                rect {
+                                svg {
                                     @include themify($themes) {
                                         stroke: themed('ChartSettingActiveIcon');
-                                    }
-                                }
-                                path {
-                                    @include themify($themes) {
                                         fill: themed('ChartSettingActiveIcon');
                                     }
                                 }
