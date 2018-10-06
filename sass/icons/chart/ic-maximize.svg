@@ -4,8 +4,8 @@
     <title>488E5F21-8AF5-43B9-83DB-34E006F3486A</title>
     <desc>Created with sketchtool.</desc>
     <defs></defs>
-    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
-        <g id="icons/system/light/maximize/ic-maximize" stroke="#2A3052">
+    <g id="Symbols" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+        <g id="icons/system/light/maximize/ic-maximize">
             <path d="M10.9545455,1.5 L14.5,1.5 L14.5,5.04545455 M14.5,10.9545455 L14.5,14.5 L10.9545455,14.5 M5.04545455,14.5 L1.5,14.5 L1.5,10.9545455 M1.5,5.04545455 L1.5,1.5 L5.0413824,1.5" id="Rectangle-28"></path>
         </g>
     </g>

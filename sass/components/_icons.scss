@@ -47,7 +47,7 @@
     }
 }
 
-.cq-menu-btn,
+.cq-chart-controls .cq-menu-btn,
 .cq-filter,
 .cq-active-options,
 .titlebar > .icons,
@@ -65,7 +65,18 @@
     }
 }
 
-.stxMenuActive .cq-menu-btn .ic-icon,
+.stx-ico-up {
+    transform: rotate(180deg); // reuse the down icon by rotating the up icon
+}
+
+.stx-btn-panel > span > svg {
+    @include themify($themes) {
+        fill: themed('MenuIcon');
+        stroke: themed('MenuIcon');
+    }
+}
+
+.cq-chart-controls .stxMenuActive .cq-menu-btn .ic-icon,
 .cq-lookup-input > input:focus + .ic-icon,
 .ciq-aggregate-setting > .ic-icon:hover,
 .cq-active-options .ic-icon:hover,

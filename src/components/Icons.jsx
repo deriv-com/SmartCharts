@@ -48,6 +48,7 @@ import Download from '../../sass/icons/download/ic-download.svg';
 import PositionLeft from '../../sass/icons/chart settings/setting/ic-position-left.svg';
 import PositionBottom from '../../sass/icons/chart settings/setting/ic-position-bottom.svg';
 import Back from '../../sass/icons/back/ic-back.svg';
+import DrawCursor from '../../sass/icons/pencil/ic-pencil.svg';
 
 
 import Warning from '../../sass/icons/alert message/warning.svg';
@@ -171,11 +172,17 @@ const Wrapper = SvgLogo => (props) => {
             <svg width={vb[0]} height={vb[1]}>
                 <use xlinkHref={SvgLogo.url} />
             </svg>
-            <br />
-            <span className="ic-subtitle">{tooltip}</span>
+            {tooltip && (
+                <>
+                    <br />
+                    <span className="ic-subtitle">{tooltip}</span>
+                </>
+            )}
         </span>
     );
 };
+
+export const DrawingCursorIcon = Wrapper(DrawCursor);
 
 // Chart Types:
 export const BaseLineIcon = Wrapper(BaseLine);

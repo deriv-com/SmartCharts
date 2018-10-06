@@ -104,46 +104,16 @@ html, body {
     &:hover span, &:active span { /* Make buttons full opacity on hover or hit */
         opacity: 1;
     }
-    &:active { /* Scale up when active */
+    &:active svg { /* Scale up when active */
         transform: scale(1.2, 1.2);
     }
 }
 
 .stx-btn-panel > span {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     background: no-repeat center;
-
-    &.stx-ico-up {
-        background-image: svg-load('./icons/chart/ic-up.svg');
-    }
-    &.stx-ico-down {
-        background-image: svg-load('./icons/chart/ic-down.svg');
-    }
-    &.stx-ico-close {
-        background-image: svg-load('./icons/delete/ic-delete.svg');
-    }
-    &.stx-ico-edit {
-        background-image: svg-load('./icons/chart/ic-settings.svg');
-    }
-    &.stx-ico-focus {
-        background-image: svg-load('./icons/chart/ic-maximize.svg');
-    }
-    .smartcharts-dark & {
-        &.stx-ico-up {
-            background-image: svg-load('./icons/chart/ic-up-dark.svg');
-        }
-        &.stx-ico-down {
-            background-image: svg-load('./icons/chart/ic-down-dark.svg');
-        }
-        &.stx-ico-close {
-            background-image: svg-load('./icons/delete/ic-delete-dark.svg');
-        }
-        &.stx-ico-edit {
-            background-image: svg-load('./icons/chart/ic-settings-dark.svg');
-        }
-        &.stx-ico-focus {
-            background-image: svg-load('./icons/chart/ic-maximize-dark.svg');
-        }
-    }
 }
 
 /* --------------------------------------------------------- CHART CONTROLS --------------------------------------------------------- */
@@ -185,32 +155,32 @@ html, body {
     z-index: 30;
 }
 
-.stx_jump_today span {
+.stx_jump_today svg {
     display: inline-block;
-    line-height: 25px;
-    height: 25px;
-    width: 30px;
-    padding-top: 25px;
-    background: svg-load('./icons/chart/jump-to-today.svg') no-repeat center;
+    padding: 6px 8px;
     transition: opacity 0.25s, transform 0.2s;
     opacity: 0.6;
 }
 
-.stx_jump_today:hover span {
+.stx_jump_today:hover svg {
     opacity: 1;
 }
 
 /* --------------------------------------------------------- PANEL CONTROL TEMPLATES --------------------------------------------------------- */
 
 .stx-baseline-handle { /* used for dragging the baseline up and down */
-    background: svg-load('./icons/chart/resize-icon.svg') no-repeat center;
     cursor: ns-resize;
     display: none;
-    height: 20px;
     opacity: 0.5;
     position: absolute;
-    width: 20px;
     z-index: 30;
+    height: 20px;
+    width: 20px;
+
+    svg {
+        height: inherit;
+        width: inherit;
+    }
 }
 
 .stx-baseline-handle:hover {
@@ -242,7 +212,7 @@ html, body {
         user-select: none;
     }
     &.stx-show {
-        display: inline-block;
+        display: inline-flex;
     }
     .stx-btn { /* Float all icons so they stay in line on the left */
         float: left;
@@ -328,13 +298,19 @@ html, body {
 
 .overlayEdit.stx-btn span,
 .vectorTrashCan.stx-btn span { /* Drawing and study info div delete button content */
-    display: block;
+    align-items: center;
+    justify-content: center;
     height: 30px;
     width: 30px !important;
-    overflow: hidden;
-    text-indent: 100px;
-    @include themify($themes) {
-        background: svg-load('./icons/chart/ic-settings-dark.svg') no-repeat center !important;
+
+    svg {
+        fill: $COLOR_BRANDBLUE_75;
+    }
+    &.ic-delete {
+        display: none;
+    }
+    &.ic-edit {
+        display: flex;
     }
 }
 
@@ -343,23 +319,16 @@ html, body {
 }
 
 .rightclick_series {
-    .overlayEdit.stx-btn span,
-    .vectorTrashCan.stx-btn span {
-        @include themify($themes) {
-            background: svg-load('./icons/delete/ic-delete-dark.svg') no-repeat center !important;
+    .overlayEdit.stx-btn,
+    .vectorTrashCan.stx-btn {
+        > .ic-delete {
+            display: flex;
+        }
+        > .ic-edit {
+            display: none;
         }
     }
 }
-
-/* To enable editing of overlay studies on mobile. You'll need to also implement stxx.callbacks.studyOverlayEdit
-.overlayEdit {
-	margin-left: 5px;
-	opacity: 1;
-}
-.overlayTrashCan {
-	margin-left: 34px;
-}
-*/
 
 .overlayTrashCan {
     display: none !important;
