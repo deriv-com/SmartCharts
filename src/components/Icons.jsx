@@ -37,7 +37,6 @@ import Template from '../../sass/icons/chart settings/chart template/ic-charttem
 import Tick from '../../sass/icons/tick/ic-tick.svg';
 import Active from '../../sass/icons/sidebar/active/ic-active-normal.svg';
 import Commodities from '../../sass/icons/sidebar/commodities/ic-commodities-normal.svg';
-import FavoriteCategory from '../../sass/icons/sidebar/favorite/ic-favorite-normal.svg';
 import Forex from '../../sass/icons/sidebar/forex/ic-forex-normal.svg';
 import Indices from '../../sass/icons/sidebar/indices/ic-indices-normal.svg';
 import Stocks from '../../sass/icons/sidebar/otc/ic-otc-normal.svg';
@@ -239,7 +238,7 @@ export const SymbolPlaceholderIcon = Wrapper(SymbolPlaceholder);
 export const CategoryIconMap = {
     active: Wrapper(Active),
     commodities: Wrapper(Commodities),
-    favorite: Wrapper(FavoriteCategory),
+    favorite: Wrapper(Star),
     forex: Wrapper(Forex),
     indices: Wrapper(Indices),
     stocks: Wrapper(Stocks),

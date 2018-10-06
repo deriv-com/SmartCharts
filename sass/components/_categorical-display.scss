@@ -71,7 +71,6 @@
             font-size: 9px;
             top: 7px;
             transition: right, opacity 0.2s ease-in-out;
-            @include svg-icon-color('CatDisplayFilterIcon');
         }
     }
     .category {
@@ -81,21 +80,6 @@
 
         &:last-child {
             padding-bottom: 2.5em;
-        }
-        &.category-active {
-            .category-content {
-                .cq-active-item {
-                    .cq-active-options {
-                        .ic-icon {
-                            path {
-                                @include themify($themes) {
-                                    fill: themed('CatDisplayCatContentIcon');
-                                }
-                            }
-                        }
-                    }
-                }
-            }
         }
     }
     .category-content {
@@ -179,27 +163,6 @@
             height: $small-icon-size;
             margin-bottom: 2px;
             margin-right: 1.3em;
-
-            &.ic-active {
-                path, rect, circle {
-                    @include themify($themes) {
-                        fill: themed('CatDisplayFilterIcon');
-                    }
-                }
-            }
-            &.ic-forex,
-            &.ic-commodities,
-            &.ic-volidx,
-            &.ic-favorite,
-            &.ic-indicators,
-            &.ic-stocks,
-            &.ic-indices {
-                path, rect, circle {
-                    @include themify($themes) {
-                        stroke: themed('CatDisplayFilterIcon');
-                    }
-                }
-            }
         }
     }
     .cq-item,
@@ -225,15 +188,6 @@
         .left, .right {
             display: flex;
             align-items: center;
-        }
-        .right {
-            .ic-icon.ciq-favorite {
-                path {
-                    @include themify($themes) {
-                        stroke: themed('CatDisplayCatContentIcon');
-                    }
-                }
-            }
         }
         .closed-market {
             border: 1px solid #f44336;

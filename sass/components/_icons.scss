@@ -53,6 +53,9 @@
 .titlebar > .icons,
 .cq-draw-button,
 .cq-lookup-input,
+.template-name,
+.ciq-views .ciq-list-item,
+.cq-menu-dropdown .title, // Close icon right of dropdown title in mobile mode
 .ciq-chart-types .ciq-list-item {
     .ic-icon > svg {
         @include themify($themes) {
@@ -64,6 +67,8 @@
 
 .stxMenuActive .cq-menu-btn .ic-icon,
 .cq-lookup-input > input:focus + .ic-icon,
+.ciq-aggregate-setting > .ic-icon:hover,
+.cq-active-options .ic-icon:hover,
 .ciq-chart-types .ciq-list-item .active.ic-icon {
     svg {
         @include themify($themes) {

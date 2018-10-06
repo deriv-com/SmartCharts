@@ -69,13 +69,6 @@ $transition-duration: 300ms;
             @include themify($themes) {
                 color: themed('DialogHeadIcon');
             }
-
-            svg, path, g {
-                @include themify($themes) {
-                    color: themed('DialogHeadIcon');
-                    fill: themed('DialogHeadIcon');
-                }
-            }
         }
     }
     .icon-close-menu {

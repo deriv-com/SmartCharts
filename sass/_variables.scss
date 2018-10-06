@@ -26,22 +26,6 @@ $small-icon-size: 16px;
     transition: pointer-events 0.2s cubic-bezier(0.64, 0.04, 0.35, 1), transform 0.25s cubic-bezier(0.64, 0.04, 0.35, 1), opacity 0.17s cubic-bezier(0.64, 0.04, 0.35, 1), z-index 0.17s cubic-bezier(0.64, 0.04, 0.35, 1);
 }
 
-@mixin svg-icon-color($color) {
-    svg, path, g, polyline {
-        @include themify($themes) {
-            fill: themed($color);
-        }
-    }
-}
-
-@mixin svg-icon-stroke($color) {
-    path {
-        @include themify($themes) {
-            stroke: themed($color);
-        }
-    }
-}
-
 /* --------- CSS Properties --------- */
 
 @mixin optional-at-root($sel) {

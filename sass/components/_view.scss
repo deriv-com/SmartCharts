@@ -22,20 +22,10 @@
                 &.hide {
                     display: none;
                 }
-                .tick-icon {
-                    @include svg-icon-stroke('TemplateAddIcon');
-                }
-                .add-icon {
-                    @include svg-icon-color('TemplateAddIcon');
-                }
             }
             .add {
                 display: flex;
                 flex-grow: 8;
-
-                .ic-icon {
-                    @include svg-icon-color('TemplateAddIcon');
-                }
             }
             .add-new {
                 flex: 8 0 0;
@@ -79,7 +69,6 @@
                             @include themify($themes) {
                                 color: themed('TemplateActiveIcon');
                             }
-                            @include svg-icon-color('TemplateActiveIcon');
                         }
                     }
                     .ciq-list-item-text {
@@ -90,7 +79,6 @@
                         width: 40px;
                         opacity: 0;
                         transition: opacity 0.15s 0.2s;
-                        @include svg-icon-color('TemplateText');
                     }
                     &:first-child {
                         border-top: none;

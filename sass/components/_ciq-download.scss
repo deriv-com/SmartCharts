@@ -1,10 +1,5 @@
 
 .cq-download {
-    .cq-menu-btn > .ic-icon.active > svg {
-        @include themify($themes) {
-            stroke: themed('MenuActiveIcon');
-        }
-    }
     .cq-menu-dropdown {
         width: 280px;
     }
