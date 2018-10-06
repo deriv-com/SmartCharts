@@ -124,28 +124,14 @@
     }
 }
 
-@mixin bottom-chart-offset($class-name, $offset) {
-    .smartcharts-desktop .cq-chart-control-bottom .#{$class-name} .cq-menu-dropdown {
-        left: -#{$offset}em;
-    }
-}
-
-@include bottom-chart-offset(ciq-studies, 20);
-@include bottom-chart-offset(cq-comparison-new, 20);
-@include bottom-chart-offset(ciq-chart-types, 5.8);
-@include bottom-chart-offset(ciq-period, 9.2);
-@include bottom-chart-offset(ciq-draw-tools, 5.7);
-@include bottom-chart-offset(ciq-views, 9.3);
-@include bottom-chart-offset(cq-download, 9.3);
-@include bottom-chart-offset(cq-chart-setting, 8.8);
-
 /* Menu dropdown open/close animation */
 .cq-chart-controls .ciq-menu .cq-menu-dropdown {
     .cq-chart-control-bottom & {
-        transform: translateY(3em);
+        transform: translateX(-50%) translateY(3em);
+        left: 50%;
 
         &.cq-menu-dropdown-enter-done, &.cq-menu-dropdown-enter-active {
-            transform: translateY(0em);
+            transform: translateX(-50%) translateY(0em);
         }
     }
     .cq-chart-control-left & {
