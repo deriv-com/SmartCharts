@@ -18,6 +18,7 @@ const output =  {
     libraryExport: 'default',
     library: 'smartcharts',
     libraryTarget: 'umd',
+    hashDigestLength: 6,
 };
 
 const config = {
@@ -29,10 +30,22 @@ const config = {
             {
                 test: /\.svg$/,
                 use: [
-                    { loader: 'svg-sprite-loader',
+                    {
+                        loader: 'svg-sprite-loader',
                         options: {
                             extract: true,
-                        } },
+                            spriteFilename: 'smartcharts-sprite-[hash:4].svg',
+                        },
+                    },
+                    {
+                        loader: 'svgo-loader',
+                        options: {
+                            plugins: [
+                                { removeUselessStrokeAndFill: false },
+                                { removeUnknownsAndDefaults: false },
+                            ],
+                        },
+                    },
                 ],
             },
             {
@@ -206,9 +219,7 @@ if (isApp) {
             to: 'mobx-react.js',
         },
         {
-            from: production
-                ? './node_modules/react-transition-group/dist/react-transition-group.min.js'
-                : './node_modules/react-transition-group/dist/react-transition-group.js',
+            from: './node_modules/react-transition-group/dist/react-transition-group.js',
             to: 'react-transition-group.js',
         },
     ]));
