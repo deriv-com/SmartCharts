@@ -4,16 +4,15 @@ const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPl
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const StyleLintPlugin = require('stylelint-webpack-plugin');
-const UglifyJs = require('uglify-js');
-const write = require('write');
 
 const production = process.env.NODE_ENV === 'production';
 const isApp = process.env.BUILD_MODE === 'app';
 
 const output =  {
-    publicPath: '/dist/',
+    publicPath: './dist/',
     path: path.resolve(__dirname, 'dist'),
     filename: 'smartcharts.js',
+    chunkFilename: '[name]-[chunkhash:6].js',
     libraryExport: 'default',
     library: 'smartcharts',
     libraryTarget: 'umd',
@@ -28,6 +27,9 @@ const config = {
             '@binary-com/smartcharts': path.resolve(__dirname, 'src/'),
             chartiq: path.resolve(__dirname, 'chartiq/chartiq.js'),
         },
+    },
+    devServer: {
+        publicPath: '/dist/',
     },
     module: {
         rules: [
