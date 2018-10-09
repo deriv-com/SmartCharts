@@ -1,4 +1,3 @@
-import { CIQ } from 'chartiq';
 import { // eslint-disable-line import/no-extraneous-dependencies,import/no-unresolved
     SmartChart,
     ChartTypes,
@@ -25,6 +24,7 @@ import { ConnectionManager, StreamManager } from './connection';
 import Notification from './Notification.jsx';
 import ChartNotifier from './ChartNotifier.js';
 
+const isMobile = window.navigator.userAgent.toLowerCase().includes('mobi');
 
 if (window.location.host.endsWith('binary.com')) {
     window._trackJs = { token: '346262e7ffef497d85874322fff3bbf8', application: 'smartcharts' };
@@ -49,7 +49,7 @@ configure({ enforceActions: 'observed' });
 function getLanguageStorage() {
     const default_language = 'en';
     try {
-        const setting_string = CIQ.localStorage.getItem('smartchart-setting'),
+        const setting_string = localStorage.getItem('smartchart-setting'),
             setting = JSON.parse(setting_string !== '' ? setting_string : '{}');
 
         return setting.language || default_language;
@@ -59,12 +59,12 @@ function getLanguageStorage() {
 }
 
 function getServerUrl() {
-    const local = CIQ.localStorage.getItem('config.server_url');
+    const local = localStorage.getItem('config.server_url');
     return `wss://${local || 'ws.binaryws.com'}/websockets/v3`;
 }
 
 const chartId = '1';
-const appId  = CIQ.localStorage.getItem('config.app_id') || 12812;
+const appId  = localStorage.getItem('config.app_id') || 12812;
 const serverUrl = getServerUrl();
 
 const connectionManager = new ConnectionManager({
@@ -104,7 +104,7 @@ class App extends Component {
 
     saveSettings = (settings) => {
         console.log('settings updated:', settings);
-        CIQ.localStorageSetItem('smartchart-setting', JSON.stringify(settings));
+        localStorage.setItem('smartchart-setting', JSON.stringify(settings));
 
         this.setState({ settings });
         if (this.startingLanguage !== settings.language) {
@@ -125,7 +125,7 @@ class App extends Component {
 
     renderControls = () => (
         <>
-            {CIQ.isMobile ? '' : <CrosshairToggle />}
+            {isMobile ? '' : <CrosshairToggle />}
             <ChartTypes />
             <Timeperiod />
             <StudyLegend />
@@ -133,7 +133,7 @@ class App extends Component {
             <DrawTools />
             <Views />
             <Share />
-            {CIQ.isMobile ? '' : <ChartSize />}
+            {isMobile ? '' : <ChartSize />}
             <ChartSetting />
         </>
     );
@@ -146,7 +146,7 @@ class App extends Component {
                 id={chartId}
                 symbol={symbol}
                 onMessage={e => this.notifier.notify(e)}
-                isMobile={CIQ.isMobile}
+                isMobile={isMobile}
                 enableRouting
                 topWidgets={this.renderTopWidgets}
                 chartControlsWidgets={this.renderControls}
