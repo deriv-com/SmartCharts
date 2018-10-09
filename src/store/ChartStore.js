@@ -1,13 +1,16 @@
 import ResizeObserver from 'resize-observer-polyfill';
 import { action, observable, reaction, computed } from 'mobx';
+import { CIQ, SplinePlotter } from 'chartiq';
 import PendingPromise from '../utils/PendingPromise';
 import Context from '../components/ui/Context';
 import KeystrokeHub from '../components/ui/KeystrokeHub';
 import '../components/ui/Animation';
+import plotSpline from '../SplinePlotter';
 import { Feed } from '../feed';
 import { ActiveSymbols, BinaryAPI, TradingTimes } from '../binaryapi';
 import { calculateTimeUnitInterval, getUTCDate, cloneCategories } from '../utils';
 
+window.CIQ = CIQ;
 CIQ.ChartEngine.prototype.createYAxisLabel = function (panel, txt, y, backgroundColor, color, ctx, yAxis) {
     if (panel.yAxis.drawPriceLabels === false || panel.yAxis.noDraw) return;
     const yax = yAxis || panel.yAxis;
@@ -140,6 +143,7 @@ class ChartStore {
     }
 
     @action.bound init(rootNode, modalNode, props) {
+        SplinePlotter.plotSpline = plotSpline;
         this.rootNode = rootNode;
         this.modalNode = modalNode;
         this.chartNode = this.rootNode.querySelector('.ciq-chart-area');

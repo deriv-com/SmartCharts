@@ -1,3 +1,5 @@
+import { CIQ } from 'chartiq';
+
 export function createObjectFromLocalStorage(key) {
     const val = CIQ.localStorage.getItem(key);
     const isValid = val !== null;

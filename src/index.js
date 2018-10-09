@@ -21,8 +21,6 @@ import Marker from './components/Marker.jsx';
 import CurrentSpot from './components/CurrentSpot.jsx';
 import { createObjectFromLocalStorage } from './utils';
 
-import './SplinePlotter';
-
 export {
     AssetInformation,
     Barrier,

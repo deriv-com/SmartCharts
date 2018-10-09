@@ -1,5 +1,5 @@
 /* eslint-disable prefer-destructuring */
-import CIQ from 'chartiq';
+import { CIQ } from 'chartiq';
 import Helper from './Helper';
 import Keystroke from './Keystroke';
 import { claims } from '.';
