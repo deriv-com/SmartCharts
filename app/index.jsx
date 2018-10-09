@@ -32,6 +32,7 @@ if (window.location.host.endsWith('binary.com')) {
     document.body.appendChild(s);
 }
 
+/* // PWA support is temporarily removed until its issues can be sorted out
 if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register(`${window.location.origin + window.location.pathname}sw.js`)
         .then(() => {
@@ -40,6 +41,7 @@ if ('serviceWorker' in navigator) {
             console.log('SW registration failed: ', registrationError);
         });
 }
+*/
 
 configure({ enforceActions: 'observed' });
 

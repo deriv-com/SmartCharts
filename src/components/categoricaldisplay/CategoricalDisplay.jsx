@@ -9,15 +9,13 @@ const CategoricalDisplay = ({
     updateScrollSpy,
     scrollUp,
     scrollDown,
-    isShown,
     ResultsPanel,
     FilterPanel,
     SearchInput,
 }) => (
     <div className="cq-categorical-display">
         <div className={`cq-lookup-filters ${isScrollingDown ? 'scroll-down' : ''}`}>
-            {/* render search only when dialog is opened allows us to focus on mount */}
-            {isShown && <SearchInput />}
+            <SearchInput />
             <FilterPanel />
         </div>
         <PerfectScrollbar

@@ -130,9 +130,8 @@
 /* Menu dropdown open/close animation */
 .cq-chart-controls .ciq-menu .cq-menu-dropdown {
     .cq-chart-control-bottom & {
-        /* the left and translateX 50% centers the dropdowns */
-        left: 50%;
         transform: translateX(-50%) translateY(3em);
+        left: 50%;
 
         &.cq-menu-dropdown-enter-done, &.cq-menu-dropdown-enter-active {
             transform: translateX(-50%) translateY(0em);
@@ -142,8 +141,6 @@
         bottom: auto;
         left: 9em;
         top: -1em;
-        transition: opacity 0.2s 0s;
-        @include dialog-transition();
         transform: translateX(-3em);
 
         &.cq-menu-dropdown-enter-done, &.cq-menu-dropdown-enter-active {
