@@ -1,5 +1,3 @@
-import { CIQ } from 'chartiq';
-
 /* TAKEN OUT OF ADDONS.JS */
 /* eslint-disable no-unused-vars,eqeqeq,no-shadow,no-alert,no-restricted-globals,prefer-const,prefer-destructuring */
 
@@ -33,7 +31,7 @@ import { CIQ } from 'chartiq';
  *    new CIQ.Animation(stxx, {tension:0.3});  //Default animation with splining tension of 0.3
  *
  */
-CIQ.Animation = function (stx, animationParameters, easeMachine) {
+export default function animateChart(stx, animationParameters, easeMachine) {
     let params = {
         stayPut: false,
         ticksFromEdgeOfScreen: 5,

@@ -4,7 +4,7 @@ import { CIQ, SplinePlotter } from 'chartiq';
 import PendingPromise from '../utils/PendingPromise';
 import Context from '../components/ui/Context';
 import KeystrokeHub from '../components/ui/KeystrokeHub';
-import '../components/ui/Animation';
+import animateChart from '../components/ui/Animation';
 import plotSpline from '../SplinePlotter';
 import { Feed } from '../feed';
 import { ActiveSymbols, BinaryAPI, TradingTimes } from '../binaryapi';
@@ -215,7 +215,7 @@ class ChartStore {
         deleteElement.textConent = t.translate('right-click to delete');
         manageElement.textConent = t.translate('right-click to manage');
 
-        CIQ.Animation(stxx, { stayPut: true });
+        animateChart(stxx, { stayPut: true });
 
         // connect chart to data
         this.feed = new Feed(this.api, stxx, this.mainStore, this.tradingTimes);
