@@ -5,7 +5,6 @@ import '../../../sass/components/_categorical-display.scss';
 const CategoricalDisplay = ({
     onSelectItem,
     setScrollPanel,
-    isScrollingDown,
     updateScrollSpy,
     scrollUp,
     scrollDown,
@@ -14,7 +13,7 @@ const CategoricalDisplay = ({
     SearchInput
 }) => (
     <div className="cq-categorical-display">
-        <div className={`cq-lookup-filters ${isScrollingDown ? '' : ''}`}>
+        <div className="cq-lookup-filters">
             <SearchInput />
             <FilterPanel />
         </div>
