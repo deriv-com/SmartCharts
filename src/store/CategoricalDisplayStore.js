@@ -252,6 +252,7 @@ export default class CategoricalDisplayStore {
             this.isUserScrolling = false;
             this.scrollPanel.scrollTop = el.offsetTop;
             this.activeCategoryKey = category.categoryId;
+            this.activeHeadKey = null;
             // scrollTop takes some time to take affect, so we need
             // a slight delay before enabling the scroll spy again
             setTimeout(() => { this.pauseScrollSpy = false; }, 3);
