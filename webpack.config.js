@@ -140,7 +140,6 @@ if (isApp) {
         { from: './node_modules/@babel/polyfill/dist/polyfill.min.js', to: 'babel-polyfill.min.js' },
         { from: './app/browser-detection.js' },
         { from: './app/assets/*.svg' },
-        { from: './chartiq/html2canvas.min.js' },
         { from: './nojs-smartcharts.css' },
         {
             from: production
