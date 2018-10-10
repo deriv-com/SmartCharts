@@ -1,4 +1,3 @@
-import ResizeObserver from 'resize-observer-polyfill';
 import { action, observable, reaction, computed } from 'mobx';
 import PendingPromise from '../utils/PendingPromise';
 import Context from '../components/ui/Context';
@@ -289,10 +288,18 @@ class ChartStore {
                 }));
             });
 
-            this.resizeObserver = new ResizeObserver(this.resizeScreen);
-            this.resizeObserver.observe(modalNode);
+            if ('ResizeObserver' in window) {
+                this.resizeObserver = new ResizeObserver(this.resizeScreen);
+                this.resizeObserver.observe(modalNode);
+            } else {
+                import(/* webpackChunkName: "resize-observer-polyfill" */ 'resize-observer-polyfill').then((ResizeObserver) => {
+                    if (stxx.isDestroyed || !modalNode) { return; }
+                    this.resizeObserver = new ResizeObserver(this.resizeScreen);
+                    this.resizeObserver.observe(modalNode);
+                });
+            }
         }));
-    }
+    };
 
     onMarketOpenClosedChange = (changes) => {
         const symbolObjects = this.stxx.getSymbols().map(item => item.symbolObject);
@@ -433,7 +440,7 @@ class ChartStore {
     }
 
     @action.bound destroy() {
-        this.resizeObserver.disconnect();
+        if (this.resizeObserver) { this.resizeObserver.disconnect(); }
         this.tradingTimes.destructor();
         // Destroying the chart does not unsubscribe the streams;
         // we need to manually unsubscribe them.
