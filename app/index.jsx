@@ -32,6 +32,17 @@ if (window.location.host.endsWith('binary.com')) {
     document.body.appendChild(s);
 }
 
+/* // PWA support is temporarily removed until its issues can be sorted out
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register(`${window.location.origin + window.location.pathname}sw.js`)
+        .then(() => {
+            console.log('Service Worker Registered');
+        }).catch((registrationError) => {
+            console.log('SW registration failed: ', registrationError);
+        });
+}
+*/
+
 configure({ enforceActions: 'observed' });
 
 function getLanguageStorage() {
@@ -101,18 +112,18 @@ class App extends Component {
     };
 
     renderTopWidgets = () => (
-        <React.Fragment>
+        <>
             <ChartTitle onChange={this.symbolChange} />
             <AssetInformation />
             <ComparisonList />
             <Notification
                 notifier={this.notifier}
             />
-        </React.Fragment>
+        </>
     );
 
     renderControls = () => (
-        <React.Fragment>
+        <>
             {CIQ.isMobile ? '' : <CrosshairToggle />}
             <ChartTypes />
             <Timeperiod />
@@ -123,7 +134,7 @@ class App extends Component {
             <Share />
             {CIQ.isMobile ? '' : <ChartSize />}
             <ChartSetting />
-        </React.Fragment>
+        </>
     );
 
     render() {

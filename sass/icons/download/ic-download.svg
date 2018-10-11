@@ -1,12 +1,7 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!-- Generator: Sketch 49 (51002) - http://www.bohemiancoding.com/sketch -->
-    <title>icons/system/light/download/ic-download</title>
-    <desc>Created with Sketch.</desc>
-    <defs></defs>
-    <g id="icons/system/light/download/ic-download"  stroke-width="1" fill="none"  stroke-linecap="round">
-        <path d="M15.5,12.5 L15.5,14.5 C15.5,15.0522847 15.0522847,15.5 14.5,15.5 L1.5,15.5 C0.94771525,15.5 0.5,15.0522847 0.5,14.5 L0.5,12.5" id="Rectangle-14" ></path>
-        <path d="M8,0.5 L8,12" id="Path-30"></path>
-        <path id="Path-31" d="M3.5 8.5 8 12.5 12.5 8.5"></path>
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
+    <g fill="none" fill-rule="evenodd">
+        <path d="M13.5 4.707L9.293.5H3a.5.5 0 0 0-.5.5v14a.5.5 0 0 0 .5.5h10a.5.5 0 0 0 .5-.5V4.707z"/>
+        <path stroke-linecap="round" stroke-linejoin="round" d="M10 9.5l-2 2-2-2M8 11.5v-6"/>
+        <path d="M9.5.5v3a1 1 0 0 0 1 1h3"/>
     </g>
 </svg>

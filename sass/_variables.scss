@@ -3,7 +3,6 @@
 \* ------------------------ */
 
 $base-font: 'Roboto', helvetica, sans-serif !default;
-$heading-font: 'Roboto Condensed', sans-serif !default;
 
 $font-size-base: 12px !default;
 $font-size-button: 11px !default;
@@ -30,7 +29,6 @@ $small-icon-size: 16px;
 @mixin svg-icon-color($color) {
     svg, path, g, polyline {
         @include themify($themes) {
-            color: themed($color);
             fill: themed($color);
         }
     }
@@ -45,12 +43,6 @@ $small-icon-size: 16px;
 }
 
 /* --------- CSS Properties --------- */
-
-@mixin text-truncate {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
 
 @mixin optional-at-root($sel) {
     @at-root #{if(not &, $sel, selector-append(&, $sel))} {

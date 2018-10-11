@@ -1,5 +1,4 @@
 $base-font: 'Roboto', sans-serif;
-$heading-font: 'Roboto Condensed', sans-serif;
 
 $red: #ff002a;
 $green: #85c730;
@@ -47,34 +46,6 @@ $theme2-text: #fff;
 
 $nav-height: 45px;
 $footer-height: 45px;
-
-@mixin hide-text {
-    font: 0/0 'a';
-    text-shadow: none;
-    color: transparent;
-}
-
-@mixin text-truncate {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
-@mixin opacity($opacity) {
-    opacity: $opacity;
-    $opacity-ie: $opacity * 100;
-    filter: alpha(opacity=$opacity-ie); //IE8
-}
-
-@mixin background-opacity($color, $opacity: 0.3) {
-    background: $color; /* The Fallback */
-    background: rgba($color, $opacity);
-}
-
-@mixin rotate($degrees) {
-    transform: rotate($degrees);
-    zoom: 1;
-}
 
 /* ------------------------------------------------------- CHART OVERLAY ELEMENTS ------------------------------------------------------ */
 

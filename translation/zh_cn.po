@@ -10,16 +10,16 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
-"PO-Revision-Date: 2018-09-06 03:40\n"
+"PO-Revision-Date: 2018-10-02 02:21\n"
 
 msgid " already exists."
 msgstr " 已经存在。"
 
 msgid "[symbol] feed is delayed by [delay] minutes"
-msgstr ""
+msgstr "[symbol] 输入延迟了 [delay] 分钟"
 
 msgid "[symbol] market is now opened."
-msgstr ""
+msgstr "[symbol] 已开市。"
 
 msgid "[symbol] market is presently closed."
 msgstr "[symbol] 市场目前已关闭。"
@@ -354,9 +354,6 @@ msgstr "类型"
 msgid "Offset"
 msgstr "抵消"
 
-msgid "Underlay"
-msgstr "基础"
-
 msgid "MA"
 msgstr "移动平均数"
 
@@ -671,9 +668,6 @@ msgstr "最高价减最低价"
 
 msgid "Median Price"
 msgstr "中间价位指数"
-
-msgid "Overlay"
-msgstr "覆盖图"
 
 msgid "Moving Average Envelope"
 msgstr "移动平均线通道"

@@ -94,11 +94,11 @@ class ChartStore {
     @observable context = null;
     @observable currentActiveSymbol;
     @observable isChartAvailable = true;
-    @observable comparisonSymbols = [];
     @observable chartHeight;
     @observable chartContainerHeight;
     @observable isMobile = false;
     @observable cursorInChart = false;
+    @observable shouldRenderDialogs = false;
 
     get loader() { return this.mainStore.loader; }
     get routingStore() {
@@ -123,9 +123,9 @@ class ChartStore {
         if (!this.context) { return; }
 
 
-        if (this.modalNode.clientWidth > 1280) {
+        if (this.modalNode.clientWidth >= 1280) {
             this.containerWidth = 1280;
-        } else if (this.modalNode.clientWidth > 900) {
+        } else if (this.modalNode.clientWidth >= 900) {
             this.containerWidth = 900;
         } else {
             this.containerWidth = 480;
@@ -219,16 +219,12 @@ class ChartStore {
             refreshInterval: null,
         });
 
-        this.feed.onComparisonDataUpdate(this.updateComparisons);
-
         this.enableRouting = enableRouting;
         if (this.enableRouting) {
             this.routingStore.handleRouting();
         }
 
         this.holderStyle = stxx.chart.panel.holder.style;
-
-        stxx.append('deleteHighlighted', this.updateComparisons);
 
         const context = new Context(stxx, this.rootNode);
 
@@ -278,6 +274,12 @@ class ChartStore {
                 });
 
                 this.tradingTimes.onMarketOpenCloseChanged(this.onMarketOpenClosedChange);
+
+                setTimeout(action(() => {
+                    // Defer the render of the dialogs and dropdowns; this enables
+                    // considerable performance improvements for slower devices.
+                    this.shouldRenderDialogs = true;
+                }), 500);
             }));
         });
 
@@ -327,11 +329,6 @@ class ChartStore {
         ChartStore.keystrokeHub.setActiveContext(null);
     }
 
-    removeComparison(symbolObj) {
-        this.context.stx.removeSeries(symbolObj.symbol);
-        this.updateComparisons();
-    }
-
     @action.bound updateCurrentActiveSymbol() {
         const { symbolObject } = this.stxx.chart;
         this.currentActiveSymbol = symbolObject;
@@ -356,17 +353,6 @@ class ChartStore {
                 && granularity === this.granularity)
         ) {
             return;
-        }
-
-        const isResetComparisons = isSymbolAvailable
-            && (symbolObj.symbol !== this.currentActiveSymbol.symbol);
-        if (isResetComparisons) {
-            this.comparisonSymbols = [];
-            for (const field in this.stxx.chart.series) {
-                if (this.stxx.chart.series[field].parameters.bucket !== 'study') {
-                    this.stxx.removeSeries(field);
-                }
-            }
         }
 
         let params;
@@ -437,40 +423,6 @@ class ChartStore {
     // Existing chart tick/ohlc data
     @action.bound refreshChart() {
         this.newChart();
-    }
-
-    @action.bound updateComparisons() {
-        if (!this.context) { return; }
-        const stx = this.context.stx;
-        const comparisonSymbolsKeys = Object.keys(stx.chart.series);
-        if (comparisonSymbolsKeys.length !== this.comparisonSymbols.length) {
-            const comparisons = [];
-            const q = stx.currentQuote();
-            if (q) {
-                for (const sybl of comparisonSymbolsKeys) {
-                    const srs = stx.chart.series[sybl];
-                    const prm = srs.parameters;
-                    const price = srs.lastQuote ? srs.lastQuote.Close : undefined;
-
-                    comparisons.push({
-                        color: prm.color,
-                        price,
-                        symbolObject: prm.symbolObject,
-                    });
-                }
-            }
-            this.comparisonSymbols = comparisons;
-            return;
-        }
-
-        // Update the comparison prices:
-        let i = 0;
-        for (const sybl of comparisonSymbolsKeys) {
-            const comp = this.comparisonSymbols[i];
-            const srs = stx.chart.series[sybl];
-            comp.price = srs.lastQuote ? srs.lastQuote.Close : undefined;
-            i++;
-        }
     }
 
     @action.bound destroy() {

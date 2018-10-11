@@ -3,6 +3,7 @@ import { reaction, when } from 'mobx';
 import { TickHistoryFormatter } from './TickHistoryFormatter';
 import { calculateGranularity, getUTCEpoch } from '../utils';
 import { RealtimeSubscription, DelayedSubscription } from './subscription';
+import ServerTime from '../utils/ServerTime';
 
 class Feed {
     static get EVENT_MASTER_DATA_UPDATE() { return 'EVENT_MASTER_DATA_UPDATE'; }
@@ -18,6 +19,7 @@ class Feed {
         this._stx = stx;
         this._binaryApi = binaryApi;
         this._mainStore = mainStore;
+        this._serverTime = ServerTime.getInstance();
         this._tradingTimes = tradingTimes;
         reaction(() => mainStore.state.isConnectionOpened, this.onConnectionChanged.bind(this));
         when(() => this.context, this.onContextReady);
@@ -54,12 +56,12 @@ class Feed {
         const { period, interval, symbolObject } = params;
         const granularity = calculateGranularity(period, interval);
         const key = this._getKey({ symbol, granularity });
-
+        const localDate = this._serverTime.getLocalDate();
+        suggestedStartDate = suggestedStartDate > localDate ? localDate : suggestedStartDate;
         const isComparisonChart = this._stx.chart.symbol !== symbol;
         let start = this.startEpoch || (suggestedStartDate / 1000 | 0);
         const end = this.endEpoch;
-        const date = new Date();
-        const now = (date.getTime() / 1000) | 0;
+        const now = this._serverTime.getEpoch() | 0;
         if (isComparisonChart) {
             // Strange issue where comparison series is offset by timezone...
             start -= suggestedStartDate.getTimezoneOffset() * 60;
@@ -146,17 +148,8 @@ class Feed {
         }
 
         callback({ quotes });
-        if (!isComparisonChart) {
-            const prev = quotes[quotes.length - 2];
-            const prevClose = (prev !== undefined) ? prev.Close : undefined;
-            this._emitter.emit(Feed.EVENT_MASTER_DATA_UPDATE, {
-                ...quotes[quotes.length - 1],
-                prevClose,
-            });
-            this._mainStore.chart.setChartAvailability(true);
-        } else {
-            this._emitter.emit(Feed.EVENT_COMPARISON_DATA_UPDATE);
-        }
+
+        this._emitDataUpdate(quotes, comparisonChartSymbol);
     }
 
     async fetchPaginationData(symbol, suggestedStartDate, endDate, params, callback) {
@@ -174,7 +167,7 @@ class Feed {
             return;
         }
 
-        const now   = getUTCEpoch(new Date());
+        const now = this._serverTime.getEpoch();
         // Tick history data only goes as far back as 3 years:
         const startLimit = now - (2.8 * 365 * 24 * 60 * 60 /* == 3 Years */);
         let result = { quotes: [] };
@@ -234,10 +227,29 @@ class Feed {
                 secondarySeries: comparisonChartSymbol,
                 noCreateDataSet: true,
             });
-            this._emitter.emit(Feed.EVENT_COMPARISON_DATA_UPDATE);
         } else {
             this._stx.updateChartData(quotes);
-            this._emitter.emit(Feed.EVENT_MASTER_DATA_UPDATE, quotes[0]);
+        }
+
+        this._emitDataUpdate(quotes, comparisonChartSymbol);
+    }
+
+    _emitDataUpdate(quotes, comparisonChartSymbol) {
+        const prev = quotes[quotes.length - 2];
+        const prevClose = (prev !== undefined) ? prev.Close : undefined;
+        const dataUpdate = {
+            ...quotes[quotes.length - 1],
+            prevClose,
+        };
+
+        if (!comparisonChartSymbol) {
+            this._emitter.emit(Feed.EVENT_MASTER_DATA_UPDATE, dataUpdate);
+            this._mainStore.chart.setChartAvailability(true);
+        } else {
+            this._emitter.emit(Feed.EVENT_COMPARISON_DATA_UPDATE, {
+                symbol: comparisonChartSymbol,
+                ...dataUpdate,
+            });
         }
     }
 
@@ -280,14 +292,14 @@ class Feed {
         for (const key in this._activeStreams) {
             this._activeStreams[key].pause();
         }
-        this._connectionClosedDate = new Date();
+        this._connectionClosedDate = this._serverTime.getUTCDate();
     }
 
     _onConnectionReopened() {
         const keys = Object.keys(this._activeStreams);
         if (keys.length === 0) { return; }
         const { granularity } = this._unpackKey(keys[0]);
-        const elapsedSeconds = (new Date() - this._connectionClosedDate) / 1000 | 0;
+        const elapsedSeconds = (this._serverTime.getUTCDate() - this._connectionClosedDate) / 1000 | 0;
         const maxIdleSeconds = (granularity || 1) * this._stx.chart.maxTicks;
         if (elapsedSeconds >= maxIdleSeconds) {
             this._mainStore.chart.refreshChart();

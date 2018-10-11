@@ -1,14 +1,23 @@
 
 .cq-download {
-    .cq-menu-btn > .ic-icon > svg > g > path {
-        fill: none !important;
-        @include themify($themes) {
-            stroke: themed('MenuIcon');
+    .cq-menu-btn > .ic-icon {
+        > svg > g > path {
+            fill: none !important;
+            @include themify($themes) {
+                stroke: themed('MenuIcon');
+            }
+        }
+        &.active {
+            > svg > g > path {
+                fill: none !important;
+                @include themify($themes) {
+                    stroke: themed('MenuActiveIcon');
+                }
+            }
         }
     }
     .cq-menu-dropdown {
         width: 280px;
-        height: 105px;
     }
     .body {
         height: 100%;

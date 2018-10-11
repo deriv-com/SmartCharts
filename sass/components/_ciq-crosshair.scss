@@ -1,3 +1,20 @@
+.cq-crosshair-toggle {
+    &:hover {
+        @include themify($themes) {
+            background: themed('MenuHoverBg');
+        }
+    }
+    .cq-toggle {
+        &.active {
+            path {
+                @include themify($themes) {
+                    fill: themed('MenuActiveIcon') !important;
+                }
+            }
+        }
+    }
+}
+
 .cq-crosshair {
     display: none;
 }

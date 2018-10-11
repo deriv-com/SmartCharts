@@ -4,7 +4,7 @@ import CategoricalDisplayStore from './CategoricalDisplayStore';
 import SettingsDialogStore from './SettingsDialogStore';
 import SettingsDialog from '../components/SettingsDialog.jsx';
 import Menu from '../components/Menu.jsx';
-import CategoricalDisplay from '../components/CategoricalDisplay.jsx';
+import { CategoricalDisplay } from '../components/categoricaldisplay';
 // TODO:
 // import StudyInfo from '../study-info';
 
@@ -30,7 +30,7 @@ export default class StudyLegendStore {
         this.settingsDialog = new SettingsDialogStore({
             mainStore,
             onDeleted: () => this.deleteStudy(this.helper),
-            onStared: () => this.starStudy(this.helper),
+            favoritesId: 'indicators',
             onChanged: items => this.updateStudy(this.helper.sd, items),
         });
         this.StudyCategoricalDisplay = this.categoricalDisplay.connect(CategoricalDisplay);
@@ -148,18 +148,16 @@ export default class StudyLegendStore {
             throw new Error('Unrecognised parameter!');
         });
 
+        this.settingsDialog.id = study.sd.type;
         this.settingsDialog.items = [...outputs, ...inputs, ...parameters];
         this.settingsDialog.title = t.translate(study.sd.libraryEntry.name);
         // TODO:
         // const description = StudyInfo[study.sd.type];
         // this.settingsDialog.description = description || t.translate("No description yet");
         this.settingsDialog.description = '';
-        this.settingsDialog.stared = !!this.categoricalDisplay.favoritesMap[helper.name];
         this.settingsDialog.setOpen(true);
     }
-    @action.bound starStudy(study) {
-        this.categoricalDisplay.setFavoriteById(study.name);
-    }
+
     @action.bound deleteStudy(study) {
         const sd = study.sd;
         if (!sd.permanent) {
@@ -173,8 +171,16 @@ export default class StudyLegendStore {
     }
     @action.bound updateStudy(study, items) {
         const updates = { };
-        for (const { id, category, value } of items) {
-            if (study[category][id] !== value) {
+        for (const { id, category, value, type } of items) {
+            let isChanged;
+            if (type === 'numbercolorpicker') {
+                isChanged = study[category][`${id}Color`] !== value.Color
+                    || study[category][`${id}Value`] !== value.Value;
+            } else {
+                isChanged = study[category][id] !== value;
+            }
+
+            if (isChanged) {
                 updates[category] = updates[category] || { };
                 if (typeof value === 'object') {
                     for (const suffix in value) {
@@ -185,6 +191,7 @@ export default class StudyLegendStore {
                 }
             }
         }
+        if (Object.keys(updates).length === 0) return;
         this.helper.updateStudy(updates);
         this.updateActiveStudies();
         this.stx.draw();

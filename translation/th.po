@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Thai\n"
 "Language: th_TH\n"
-"PO-Revision-Date: 2018-09-06 06:11\n"
+"PO-Revision-Date: 2018-09-25 09:32\n"
 
 msgid " already exists."
 msgstr " มีอยู่แล้ว"
@@ -354,9 +354,6 @@ msgstr "ประเภท"
 msgid "Offset"
 msgstr "ออฟเซ็ท"
 
-msgid "Underlay"
-msgstr "Underlay"
-
 msgid "MA"
 msgstr "MA"
 
@@ -672,9 +669,6 @@ msgstr "High ลบ Low"
 msgid "Median Price"
 msgstr "ราคากลาง"
 
-msgid "Overlay"
-msgstr "ซ้อนทับ"
-
 msgid "Moving Average Envelope"
 msgstr "Moving Average Envelope"
 
@@ -901,7 +895,7 @@ msgid "PMOSignal"
 msgstr "PMOSignal"
 
 msgid "Relative Volatility"
-msgstr "ความผันผวนเชิงสัมพันธ์"
+msgstr "ความผันผวนเชิงสัมพันธ์ (Relative Volatility)"
 
 msgid "STD Period"
 msgstr "ระยะเวลา STD"
