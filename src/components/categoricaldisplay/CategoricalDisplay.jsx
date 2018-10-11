@@ -10,10 +10,11 @@ const CategoricalDisplay = ({
     scrollDown,
     ResultsPanel,
     FilterPanel,
-    SearchInput
+    SearchInput,
+    isScrollingDown
 }) => (
     <div className="cq-categorical-display">
-        <div className="cq-lookup-filters">
+        <div className={`cq-lookup-filters ${isScrollingDown ? 'scroll-down' : ''}`}>
             <SearchInput />
             <FilterPanel />
         </div>

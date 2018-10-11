@@ -31,6 +31,7 @@
     right: 0;
     /* please don't change 'position' */
     position: absolute;
+    z-index: 3;
 }
 
 .ps--active-x > .ps__rail-x,
