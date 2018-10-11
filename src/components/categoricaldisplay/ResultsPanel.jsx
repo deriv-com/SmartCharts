@@ -20,7 +20,7 @@ const Category = ({ category, Item, setCategoryElement, onSelectItem, activeHead
     >
         <div
             className={`category-title ${activeHeadKey === category.categoryId ? 'fixed' : ''}`}
-            style={{ top: (activeHeadKey === category.categoryId ? activeHeadTop : 0) }}
+            style={{ top: (activeHeadKey === category.categoryId ? activeHeadTop : null) }}
         >{t.translate(category.categoryName)}
         </div>
         { category.hasSubcategory

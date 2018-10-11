@@ -5,19 +5,16 @@ import '../../../sass/components/_categorical-display.scss';
 const CategoricalDisplay = ({
     onSelectItem,
     setScrollPanel,
-    isScrollingDown,
     updateScrollSpy,
     scrollUp,
     scrollDown,
-    isShown,
     ResultsPanel,
     FilterPanel,
-    SearchInput,
+    SearchInput
 }) => (
     <div className="cq-categorical-display">
-        <div className={`cq-lookup-filters ${isScrollingDown ? 'scroll-down' : ''}`}>
-            {/* render search only when dialog is opened allows us to focus on mount */}
-            {isShown && <SearchInput />}
+        <div className="cq-lookup-filters">
+            <SearchInput />
             <FilterPanel />
         </div>
         <PerfectScrollbar

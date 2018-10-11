@@ -70,7 +70,6 @@ export default class DialogStore {
     connect = connect(() => ({
         open: this.open,
         setOpen: this.setOpen,
-        onTitleClick: this.onTitleClick,
         onContainerClick: this.onContainerClick,
         chartHeight: this.mainStore.chart.chartHeight,
         chartContainerHeight: this.mainStore.chart.chartContainerHeight,
