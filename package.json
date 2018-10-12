@@ -23,7 +23,7 @@
     "build-travis": "yarn build:app && node scripts/update-hashes.js",
     "analyze": "cross-env ANALYZE_BUNDLE=true yarn build",
     "watch": "webpack --mode=development --progress --watch",
-    "test": "cross-env NODE_ENV=test mocha --reporter=nyan --require @babel/register './+(src|app)/!(node_modules)/**/__tests__/*.spec.js'",
+    "test": "cross-env NODE_ENV=test mocha --require @babel/register './+(src|app)/!(node_modules)/**/__tests__/*.spec.js'",
     "coverage": "cross-env NODE_ENV=test nyc yarn test",
     "start": "rimraf dist && cross-env BUILD_MODE='app' webpack-dev-server --mode=development --open  --hot --inline",
     "gh-pages": "gh-pages --dist '.' --src '{index.html,manifest.json,sw.js,dist/**,CNAME}'",
