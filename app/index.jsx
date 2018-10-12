@@ -20,10 +20,14 @@ import ReactDOM from 'react-dom';
 import { configure } from 'mobx';
 import './app.scss';
 import './doorbell';
+import { whyDidYouUpdate }  from 'why-did-you-update';
 import { ConnectionManager, StreamManager } from './connection';
 import Notification from './Notification.jsx';
 import ChartNotifier from './ChartNotifier.js';
 
+if (process.env.NODE_ENV !== 'production') {
+    whyDidYouUpdate(React, { exclude: [/^RenderInsideChart$/, /^inject-/] });
+}
 
 if (window.location.host.endsWith('binary.com')) {
     window._trackJs = { token: '346262e7ffef497d85874322fff3bbf8', application: 'smartcharts' };
@@ -96,6 +100,10 @@ class App extends Component {
         this.state = { settings, isConnectionOpened: true };
     }
 
+    shouldComponentUpdate(nextProps, nextState) {
+        return this.state.symbol !== nextState.symbol;
+    }
+
     symbolChange = (symbol) => {
         this.notifier.removeByCategory('activesymbol');
         this.setState({ symbol });
@@ -137,6 +145,10 @@ class App extends Component {
         </>
     );
 
+    onMessage = (e) => {
+        this.notifier.notify(e);
+    }
+ 
     render() {
         const { settings, isConnectionOpened, symbol } = this.state;
 
@@ -144,7 +156,7 @@ class App extends Component {
             <SmartChart
                 id={chartId}
                 symbol={symbol}
-                onMessage={e => this.notifier.notify(e)}
+                onMessage={this.onMessage}
                 isMobile={CIQ.isMobile}
                 enableRouting
                 topWidgets={this.renderTopWidgets}
