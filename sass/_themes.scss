@@ -20,7 +20,7 @@ $COLOR_LIGHT_BLUE  : #1565c0;
 $COLOR_BLUE        : #2a3052;
 $COLOR_DARK_BLUE   : #15212d;
 $COLOR_DARK_GRAY   : #d2d3da;
-$COLOR_LIGHT_BLACK : #333333;
+$COLOR_LIGHT_BLACK : #5c5c5c;
 $COLOR_BLACK       : #000000;
 
 // Dark Theme Colors
@@ -56,7 +56,10 @@ $themes: (
         ChartTitleBg: $COLOR_WHITE,
         ChartTitleText: $COLOR_BLUE,
         ChartTitleBorder: $COLOR_GRAY,
+        ChartTitleArrow: $COLOR_LIGHT_BLACK,
         ChartTitlePriceText: $COLOR_LIGHT_BLACK,
+        ChartTitleSymbolText: $COLOR_BLUE,
+        ChartTitleActiveArrow: $COLOR_BLUE,
         ListLiBg: $COLOR_WHITE,
         ListLiText: $COLOR_LIGHT_BLACK,
         ListLiBorder: $COLOR_GRAY,
@@ -96,8 +99,9 @@ $themes: (
         DropdownText: $COLOR_LIGHT_BLACK,
         DropdownBg: $COLOR_WHITE,
         DropdownBorder: $COLOR_GRAY,
-        DropdownActiveBg: $COLOR_WHITE,
-        DropdownActiveText: $COLOR_WHITE,
+        DropdownActiveBg: $COLOR_BRAND_BLUE_5,
+        DropdownActiveText: $COLOR_BLUE,
+        DropdownActiveBorder: $COLOR_BLUE,
         SliderText: $COLOR_BLUE,
         SliderHandleBg: $COLOR_WHITE,
         SliderHandleBorder: $COLOR_BLUE,
@@ -180,6 +184,7 @@ $themes: (
         ChartTitleText: $COLOR_BRANDBLUE_40,
         ChartTitleBorder: $COLOR_BRANDBLUE_85,
         ChartTitlePriceText: $COLOR_BRANDBLUE_95,
+        ChartTitleSymbolText: $COLOR_WHITE,
         ListLiBg: $COLOR_BLUE,
         ListLiText: $COLOR_BRANDBLUE_40,
         ListLiBorder: $COLOR_BRANDBLUE_85,
@@ -221,6 +226,7 @@ $themes: (
         DropdownBorder: $COLOR_BRANDBLUE_85,
         DropdownActiveBg: $COLOR_BRANDBLUE_85,
         DropdownActiveText: $COLOR_BRANDBLUE_40,
+        DropdownActiveBorder: $COLOR_WHITE,
         SliderText: $COLOR_WHITE,
         SliderHandleBg: $COLOR_BLUE,
         SliderHandleBorder: $COLOR_WHITE,

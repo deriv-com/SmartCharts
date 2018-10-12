@@ -178,9 +178,14 @@
         border-right: 1px solid themed('MenuBorder');
     }
 
-    .ciq-menu.stxMenuActive {
-        @include themify($themes) {
-            box-shadow: 2px 0.3px 0px 0 themed('MenuActiveBorder');
+    .ciq-menu {
+        height: 54px;
+        margin-bottom: 16px;
+
+        .stxMenuActive {
+            @include themify($themes) {
+                box-shadow: 2px 0.3px 0px 0 themed('MenuActiveBorder');
+            }
         }
     }
 }
