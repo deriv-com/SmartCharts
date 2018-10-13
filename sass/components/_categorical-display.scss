@@ -117,12 +117,12 @@
         }
     }
     .subcategory {
-        font-weight: 500;
         padding: 0 0 0 1.2em;
-        font-size: 1.1em;
+        font-size: 12px;
         border-radius: 3px 3px 0 0;
         display: flex;
         height: 40px;
+        font-weight: bold;
         align-items: center;
         @include themify($themes) {
             color: themed('CatDisplayCatContentTitleText');
@@ -130,8 +130,8 @@
     }
     .category-title {
         display: block;
-        font-size: 1.4em;
-        font-weight: 500;
+        font-size: 12px;
+        font-weight: bold;
         padding: 0 0.7em;
         line-height: 38px;
         position: absolute;
