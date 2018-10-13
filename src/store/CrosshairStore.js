@@ -199,6 +199,7 @@ class CrosshairStore {
         if (this.showStudies) {
             const { studies } = stx.layout;
             for (const study in studies) {
+
                 const panel = stx.panels[studies[study].panel];
                 const yAxis = panel.yAxis;
                 for (const output in studies[study].outputMap) {
