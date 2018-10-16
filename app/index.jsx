@@ -10,6 +10,7 @@ import { // eslint-disable-line import/no-extraneous-dependencies,import/no-unre
     DrawTools,
     ChartSetting,
     createObjectFromLocalStorage,
+    setSmartChartsPublicPath,
     Share,
     ChartTitle,
     AssetInformation,
@@ -24,6 +25,8 @@ import { whyDidYouUpdate }  from 'why-did-you-update';
 import { ConnectionManager, StreamManager } from './connection';
 import Notification from './Notification.jsx';
 import ChartNotifier from './ChartNotifier.js';
+
+setSmartChartsPublicPath('./dist/');
 
 const isMobile = window.navigator.userAgent.toLowerCase().includes('mobi');
 

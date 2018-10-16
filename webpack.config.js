@@ -9,10 +9,9 @@ const production = process.env.NODE_ENV === 'production';
 const isApp = process.env.BUILD_MODE === 'app';
 
 const output =  {
-    publicPath: './dist/',
     path: path.resolve(__dirname, 'dist'),
     filename: 'smartcharts.js',
-    chunkFilename: '[name]-[chunkhash:6].js',
+    chunkFilename: '[name]-[chunkhash:6].smartcharts.js',
     libraryExport: 'default',
     library: 'smartcharts',
     libraryTarget: 'umd',

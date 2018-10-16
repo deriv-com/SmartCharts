@@ -21,6 +21,10 @@ import Marker from './components/Marker.jsx';
 import CurrentSpot from './components/CurrentSpot.jsx';
 import { createObjectFromLocalStorage } from './utils';
 
+function setSmartChartsPublicPath(path) {
+    __webpack_public_path__ = path; // eslint-disable-line
+}
+
 export {
     AssetInformation,
     Barrier,
@@ -35,6 +39,7 @@ export {
     DrawTools,
     Marker,
     PendingPromise,
+    setSmartChartsPublicPath,
     Share,
     SmartChart,
     StudyLegend,
@@ -57,6 +62,7 @@ export default {
     DrawTools,
     Marker,
     PendingPromise,
+    setSmartChartsPublicPath,
     Share,
     SmartChart,
     StudyLegend,
