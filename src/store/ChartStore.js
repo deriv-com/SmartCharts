@@ -333,6 +333,9 @@ class ChartStore {
         const { symbolObject } = this.stxx.chart;
         this.currentActiveSymbol = symbolObject;
         this.stxx.chart.yAxis.decimalPlaces = symbolObject.decimal_places;
+
+        // Set display name of main series (to be shown in crosshair tooltip)
+        this.stxx.chart.seriesRenderers._main_series.seriesParams[0].display = symbolObject.name;
     }
 
     @action.bound setChartAvailability(status) {
@@ -382,8 +385,12 @@ class ChartStore {
 
     // Calling newChart with symbolObj as undefined refreshes the chart
     @action.bound newChart(symbolObj = this.currentActiveSymbol, params) {
+        this.stxx.chart.symbolDisplay = symbolObj.name;
         this.loader.show();
         const onChartLoad = (err) => {
+            // Set display name of main series (to be shown in crosshair tooltip)
+            this.stxx.chart.seriesRenderers._main_series.seriesParams[0].display = symbolObj.name;
+
             this.loader.hide();
             if (err) {
                 /* TODO, symbol not found error */

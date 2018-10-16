@@ -160,7 +160,6 @@ class CrosshairStore {
 
 
         if (this.showSeries) {
-            const symbolObjects = this.mainStore.chart.stxx.getSymbols().map(item => item.symbolObject);
             const renderers = stx.chart.seriesRenderers;
 
             for (const renderer in renderers) {
@@ -173,7 +172,6 @@ class CrosshairStore {
 
                 for (let id = 0; id < rendererToDisplay.seriesParams.length; id++) {
                     const seriesParams = rendererToDisplay.seriesParams[id];
-                    const symbolObject = symbolObjects.find(x => x.symbol === seriesParams.display);
 
                     // if a series has a symbol and a field then it maybe a object chain
                     let sKey = seriesParams.symbol;
@@ -183,7 +181,7 @@ class CrosshairStore {
                     } else if (subField && sKey !== subField) {
                         sKey = CIQ.createObjectChainNames(sKey, subField)[0];
                     }
-                    const display = (symbolObject && symbolObject.name) || (seriesParams.symbolObject && seriesParams.symbolObject.name );
+                    const display = seriesParams.display || seriesParams.symbol || seriesParams.field;
                     if (sKey && !dupMap[display]) {
                         fields.push({
                             member: sKey,
