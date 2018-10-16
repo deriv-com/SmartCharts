@@ -166,9 +166,7 @@ if (isApp) {
             to: 'mobx-react.js',
         },
         {
-            from: production
-                ? './node_modules/react-transition-group/dist/react-transition-group.min.js'
-                : './node_modules/react-transition-group/dist/react-transition-group.js',
+            from: './node_modules/react-transition-group/dist/react-transition-group.js',
             to: 'react-transition-group.js',
         },
     ]));

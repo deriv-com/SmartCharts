@@ -441,20 +441,25 @@ class ChartStore {
 
     @action.bound destroy() {
         if (this.resizeObserver) { this.resizeObserver.disconnect(); }
-        this.tradingTimes.destructor();
+        if (this.tradingTimes) { this.tradingTimes.destructor(); }
+
         // Destroying the chart does not unsubscribe the streams;
         // we need to manually unsubscribe them.
-        this.feed.unsubscribeAll();
-        this.feed = null;
+        if (this.feed) {
+            this.feed.unsubscribeAll();
+            this.feed = null;
+        }
         if (ChartStore.keystrokeHub.context === this.context) {
             ChartStore.keystrokeHub.setActiveContext(null);
         }
-        this.stxx.container.removeEventListener('mouseenter', this.onMouseEnter);
-        this.stxx.container.removeEventListener('mouseleave', this.onMouseLeave);
-        this.stxx.updateChartData = function () {}; // prevent any data from entering the chart
-        this.stxx.isDestroyed = true;
-        this.stxx.destroy();
-        this.stxx = null;
+        if (this.stxx) {
+            this.stxx.container.removeEventListener('mouseenter', this.onMouseEnter);
+            this.stxx.container.removeEventListener('mouseleave', this.onMouseLeave);
+            this.stxx.updateChartData = function () {}; // prevent any data from entering the chart
+            this.stxx.isDestroyed = true;
+            this.stxx.destroy();
+            this.stxx = null;
+        }
     }
 }
 
