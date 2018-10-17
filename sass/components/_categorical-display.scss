@@ -395,7 +395,7 @@
 
             .cq-lookup-panel {
                 position: relative;
-                transition: margin-top 0.2s linear;
+                transition: margin-top 0.2s ease;
             }
             .cq-lookup-input {
                 margin: 1.2em 1em 0.5em;
@@ -405,6 +405,14 @@
             height: 100%;
             width: 100%;
 
+            &:after {
+                background: #ff0000;
+                content: ' ';
+                position: absolute;
+                top: 0px;
+                left: 0px;
+                width: 100%;
+            }
             .category:last-child {
                 padding-bottom: 13em;
             }
