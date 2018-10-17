@@ -389,11 +389,14 @@
             border-right: none;
             position: relative;
             z-index: 9;
-            transition: max-height 0.2s ease-in-out;
             @include themify($themes) {
                 border-bottom: 1px solid themed('CatDisplaySearchBorder');
             }
 
+            .cq-lookup-panel {
+                position: relative;
+                transition: margin-top 0.2s ease-in-out;
+            }
             .cq-lookup-input {
                 margin: 1.2em 1em 0.5em;
                 opacity: 1;

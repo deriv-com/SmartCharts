@@ -85,6 +85,8 @@ export default class CategoricalDisplayStore {
     @observable activeHeadTop = undefined;
     isUserScrolling = true;
     lastFilteredItems = [];
+    filterInputPanelHeight = 60;
+    @observable scrollSpace = 60;
 
     get context() {
         return this.mainStore.chart.context;
@@ -113,6 +115,9 @@ export default class CategoricalDisplayStore {
         }
 
         this.scrollTop = this.scrollPanel.scrollTop;
+        if (this.scrollTop === 0) {
+            this.scrollSpace = this.filterInputPanelHeight;
+        }
         this.activeCategoryKey = activeMenuId || this.filteredItems[0].categoryId;
         this.activeHeadTop = activeHeadTop + this.scrollPanel.offsetTop;
         this.activeHeadKey = this.scrollTop === 0 ? null : this.activeCategoryKey;
@@ -120,12 +125,18 @@ export default class CategoricalDisplayStore {
 
     @action.bound scrollUp() {
         this.isScrollingDown = false;
+        this.scrollSpace = (this.scrollSpace < this.filterInputPanelHeight)
+                    ? (this.scrollSpace + 5)
+                    : this.filterInputPanelHeight;
     }
 
     @action.bound scrollDown() {
         // This only affects when scrolling by mouse not by code
         this.isScrollingDown = this.isUserScrolling;
         this.isUserScrolling = true;
+        this.scrollSpace = (this.scrollSpace > 0)
+                    ? (this.scrollSpace - 5)
+                    : 0 ;
     }
 
     @action.bound init() {
@@ -263,6 +274,12 @@ export default class CategoricalDisplayStore {
         this.scrollPanel = element ? element._container : null;
     }
 
+    @computed get scrollStyle() {
+        return this.mainStore.chart.isMobile ? {} : {
+            marginTop: (this.scrollSpace - 60)
+        };
+    }
+
     connect = connect(() => ({
         filteredItems: this.filteredItems,
         setScrollPanel: this.setScrollPanel,
@@ -274,5 +291,6 @@ export default class CategoricalDisplayStore {
         ResultsPanel: this.ResultsPanel,
         FilterPanel: this.FilterPanel,
         SearchInput: this.SearchInput,
+        scrollStyle: this.scrollStyle
     }))
 }

@@ -11,12 +11,16 @@ const CategoricalDisplay = ({
     ResultsPanel,
     FilterPanel,
     SearchInput,
-    isScrollingDown
+    scrollStyle
 }) => (
     <div className="cq-categorical-display">
-        <div className={`cq-lookup-filters ${isScrollingDown ? 'scroll-down' : ''}`}>
-            <SearchInput />
-            <FilterPanel />
+        <div className="cq-lookup-filters">
+            <div className="cq-lookup-panel"
+                style={scrollStyle}
+                >
+                <SearchInput />
+                <FilterPanel />
+            </div>
         </div>
         <PerfectScrollbar
             className="cq-scroll-panel"
