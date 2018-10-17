@@ -34,7 +34,7 @@ const config = {
                         loader: 'svg-sprite-loader',
                         options: {
                             extract: true,
-                            spriteFilename: 'smartcharts-sprite-[hash:4].svg',
+                            spriteFilename: 'sprite-[hash:6].smartcharts.svg',
                         },
                     },
                     {
