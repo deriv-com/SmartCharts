@@ -4,6 +4,7 @@ import { connect } from '../store/Connect';
 import { SettingIcon } from './Icons.jsx';
 import '../../sass/components/_chart-types.scss';
 
+
 const ChartTypes = ({
     Type,
     ChartTypeMenu,
@@ -25,7 +26,7 @@ const ChartTypes = ({
 
     return (
         <ChartTypeMenu
-            className="ciq-display collapse ciq-chart-types"
+            className="ciq-display ciq-chart-types"
             enabled={enabled}
             title={t.translate('Chart types')}
         >
