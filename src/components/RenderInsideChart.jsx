@@ -1,4 +1,4 @@
-import { PureComponent } from 'react';
+import { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { createElement } from './ui/utils';
 import { connect } from '../store/Connect';
@@ -6,7 +6,7 @@ import { connect } from '../store/Connect';
 const inChartPrefix = 'cq-inchart-';
 
 // Render given Components under stx-holder to position it relative to the active symbol chart.
-class RenderInsideChart extends PureComponent {
+class RenderInsideChart extends Component {
     constructor(props) {
         super(props);
         const { at = 'holder', contextPromise } = props;
@@ -19,6 +19,7 @@ class RenderInsideChart extends PureComponent {
                 elem = createElement(`<div class="${nodeName}"></div>`);
                 context.stx.chart.panel[at].appendChild(elem);
             }
+
             this.container = elem;
             this.forceUpdate(); // force render to be called after getting the container
         });

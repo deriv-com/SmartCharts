@@ -32,10 +32,10 @@ class ServerTime {
 
         const serverTime = response.time;
         const clientTimeAtResponse = getUTCEpoch(new Date());
-        this.serverTimeAtResponse = serverTime + ((clientTimeAtResponse - this.clientTimeAtRequest)/2);
-        
+        this.serverTimeAtResponse = serverTime + ((clientTimeAtResponse - this.clientTimeAtRequest) / 2);
+
         const updateTime = () => {
-            this.serverTimeAtResponse+=1;
+            this.serverTimeAtResponse += 1;
         };
 
         clearInterval(this.updateTimeInterval);
@@ -58,8 +58,7 @@ class ServerTime {
         return new Date(getUTCDate(this.getEpoch()));
     }
 
-    static getInstance()
-    {
+    static getInstance() {
         this._instance = this._instance || (this._instance = new this());
         return this._instance;
     }

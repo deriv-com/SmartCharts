@@ -23,7 +23,7 @@
     "build-travis": "yarn build:app && node scripts/update-hashes.js",
     "analyze": "cross-env ANALYZE_BUNDLE=true yarn build",
     "watch": "webpack --mode=development --progress --watch",
-    "test": "cross-env NODE_ENV=test mocha --reporter=nyan --require @babel/register './+(src|app)/!(node_modules)/**/__tests__/*.spec.js'",
+    "test": "cross-env NODE_ENV=test mocha --require @babel/register './+(src|app)/!(node_modules)/**/__tests__/*.spec.js'",
     "coverage": "cross-env NODE_ENV=test nyc yarn test",
     "start": "rimraf dist && cross-env BUILD_MODE='app' webpack-dev-server --mode=development --open  --hot --inline",
     "gh-pages": "gh-pages --dist '.' --src '{index.html,manifest.json,sw.js,dist/**,CNAME}'",
@@ -42,9 +42,9 @@
     "@babel/preset-react": "^7.0.0",
     "@babel/preset-stage-0": "^7.0.0",
     "@babel/register": "^7.0.0",
-    "babel-eslint": "^9.0.0",
+    "babel-eslint": "^10.0.1",
     "babel-loader": "^8.0.2",
-    "babel-plugin-inline-react-svg": "^0.5.2",
+    "babel-plugin-inline-react-svg": "^1.0.0",
     "babel-plugin-istanbul": "^5.0.1",
     "babel-plugin-transform-runtime": "^6.23.0",
     "chai": "^4.1.2",
@@ -70,7 +70,7 @@
     "file-loader": "^2.0.0",
     "fs": "^0.0.1-security",
     "gettext-loader2": "^0.3.0",
-    "gh-pages": "^1.1.0",
+    "gh-pages": "^2.0.1",
     "json-loader": "^0.5.7",
     "md5-file": "^4.0.0",
     "mini-css-extract-plugin": "^0.4.0",
@@ -87,17 +87,17 @@
     "postcss-import": "^12.0.0",
     "postcss-inline-svg": "^3.1.1",
     "postcss-loader": "^3.0.0",
-    "postcss-preset-env": "^5.3.0",
+    "postcss-preset-env": "^6.1.1",
     "postcss-svgo": "^4.0.0",
     "raw-loader": "^0.5.1",
     "react": "^16.4.0",
     "react-dom": "^16.4.0",
-    "react-transition-group": "^2.3.1",
+    "react-transition-group": "^2.5.0",
     "regenerator-runtime": "^0.11.1",
     "resize-observer-polyfill": "^1.5.0",
     "rimraf": "^2.6.2",
     "sass-loader": "^7.0.1",
-    "sinon": "^6.1.4",
+    "sinon": "^7.0.0",
     "style-loader": "^0.21.0",
     "stylelint": "^9.3.0",
     "stylelint-webpack-plugin": "^0.10.5",
@@ -105,7 +105,7 @@
     "uglify-js": "^3.4.7",
     "url-loader": "^1.0.1",
     "webpack": "^4.17.1",
-    "webpack-bundle-analyzer": "^2.9.1",
+    "webpack-bundle-analyzer": "^3.0.2",
     "webpack-cli": "^3.0.6",
     "webpack-dev-server": "^3.1.4",
     "write": "^1.0.3"
@@ -117,7 +117,8 @@
     "react-perfect-scrollbar": "^1.1.1",
     "resize-observer-polyfill": "^1.5.0",
     "robust-websocket": "^0.3.0",
-    "stylelint-no-unsupported-browser-features": "^3.0.1"
+    "stylelint-no-unsupported-browser-features": "^3.0.1",
+    "why-did-you-update": "^0.1.1"
   },
   "peerDependencies": {
     "@babel/polyfill": "^7.0.0",
@@ -125,6 +126,6 @@
     "mobx-react": "^5.1.2",
     "react": "^16.4.0",
     "react-dom": "^16.4.0",
-    "react-transition-group": "^2.3.1"
+    "react-transition-group": "^2.5.0"
   }
 }
