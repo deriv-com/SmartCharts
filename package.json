@@ -1,8 +1,13 @@
 {
   "name": "@binary-com/smartcharts",
-  "version": "0.2.7",
+  "version": "0.3.0",
   "main": "dist/smartcharts.js",
   "author": "amin@binary.com",
+  "contributors": [
+    "Lee Zhen Yong <bruce@binary.com>",
+    "Mahboobeh Mohammadi <mahboobeh@binary.com>",
+    "Shayan Yazdanpanah <shayan@binary.com>"
+  ],
   "license": "ISC",
   "repository": {
     "type": "git",
@@ -103,13 +108,11 @@
     "stylelint": "^9.3.0",
     "stylelint-webpack-plugin": "^0.10.5",
     "svg-url-loader": "^2.3.1",
-    "uglify-js": "^3.4.7",
     "url-loader": "^1.0.1",
     "webpack": "^4.17.1",
     "webpack-bundle-analyzer": "^3.0.2",
     "webpack-cli": "^3.0.6",
-    "webpack-dev-server": "^3.1.4",
-    "write": "^1.0.3"
+    "webpack-dev-server": "^3.1.4"
   },
   "dependencies": {
     "event-emitter-es6": "^1.1.5",
