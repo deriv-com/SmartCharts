@@ -395,22 +395,10 @@
 
             .cq-lookup-panel {
                 position: relative;
-                transition: margin-top 0.2s ease-in-out;
+                transition: margin-top 0.2s linear;
             }
             .cq-lookup-input {
                 margin: 1.2em 1em 0.5em;
-                opacity: 1;
-                transition: opacity, margin 0.2s ease-in-out;
-            }
-            &.scroll-down {
-                max-height: 50px;
-
-                .cq-lookup-input {
-                    max-height: 0px;
-                    opacity: 0;
-                    margin: 0em 1em;
-                }
-
             }
         }
         .cq-scroll-panel {

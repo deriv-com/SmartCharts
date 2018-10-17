@@ -275,9 +275,9 @@ export default class CategoricalDisplayStore {
     }
 
     @computed get scrollStyle() {
-        return this.mainStore.chart.isMobile ? {} : {
+        return this.mainStore.chart.isMobile ?{
             marginTop: (this.scrollSpace - 60)
-        };
+        } : {};
     }
 
     connect = connect(() => ({
