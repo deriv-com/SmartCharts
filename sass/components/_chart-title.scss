@@ -31,9 +31,13 @@
             }
 
             > .ic-icon.cq-symbol-dropdown {
-                svg g {
-                    @include themify($themes) {
-                        fill: themed('ChartTitleActiveArrow');
+
+                svg {
+                    transform: rotate(180deg);
+                    g {
+                        @include themify($themes) {
+                            fill: themed('ChartTitleActiveArrow');
+                        }
                     }
                 }
             }
@@ -59,6 +63,11 @@
 
         > .ic-icon.cq-symbol-dropdown {
             display: none;
+            position: relative;
+            
+            svg {
+                transition: transform 0.2s ease-in-out;
+            }
         }
         > .ic-icon, > .ic-frx, > .ic-wld, > .ic-otc {
             height: $large-icon-size;
