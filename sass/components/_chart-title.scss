@@ -31,9 +31,9 @@
             }
 
             > .ic-icon.cq-symbol-dropdown {
-
                 svg {
                     transform: rotate(180deg);
+
                     g {
                         @include themify($themes) {
                             fill: themed('ChartTitleActiveArrow');
@@ -64,7 +64,7 @@
         > .ic-icon.cq-symbol-dropdown {
             display: none;
             position: relative;
-            
+
             svg {
                 transition: transform 0.2s ease-in-out;
             }
