@@ -35,6 +35,8 @@
                 &.ciq-list-item-position {
                     .ciq-action {
                         .ic-icon {
+                            cursor: pointer;
+
                             svg {
                                 @include themify($themes) {
                                     stroke: themed('ChartSettingIcon');
