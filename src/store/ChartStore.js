@@ -257,8 +257,8 @@ class ChartStore {
         stxx.callbacks.studyOverlayEdit = studiesStore.editStudy;
         stxx.callbacks.studyPanelEdit = studiesStore.editStudy;
 
-        this.tradingTimes.initialize().then(() => {
-            this.activeSymbols.retrieveActiveSymbols().then(action(() => {
+        this.activeSymbols.retrieveActiveSymbols().then(() => {
+            this.tradingTimes.initialize().then(action(() => {
                 // In the odd event that chart is destroyed by the time
                 // the request finishes, just calmly return...
                 if (stxx.isDestroyed) { return; }
