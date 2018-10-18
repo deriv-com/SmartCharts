@@ -14,6 +14,10 @@ class Favorite extends Component {
         this.state = { isFavorite: this.isFavorite(category, id) };
     }
 
+    shouldComponentUpdate(nextProps, nextState) {
+        return this.state.isFavorite !== nextState.isFavorite;
+    }
+
     componentWillUnmount() {
         this.store.offFavoriteUpdate(this.onFavoriteUpdate);
     }
