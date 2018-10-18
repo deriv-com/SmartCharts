@@ -17,7 +17,12 @@
                 display: block;
                 margin-right: 0px;
                 width: 24px;
-                transform: scale(1);
+
+                svg g {
+                    @include themify($themes) {
+                        fill: themed('ChartTitleArrow');
+                    }
+                }
             }
         }
         &.stxMenuActive > .cq-menu-btn > .cq-symbol-select-btn {
@@ -26,7 +31,15 @@
             }
 
             > .ic-icon.cq-symbol-dropdown {
-                transform: rotate(180deg);
+                svg {
+                    transform: rotate(180deg);
+
+                    g {
+                        @include themify($themes) {
+                            fill: themed('ChartTitleActiveArrow');
+                        }
+                    }
+                }
             }
         }
     }
@@ -50,6 +63,11 @@
 
         > .ic-icon.cq-symbol-dropdown {
             display: none;
+            position: relative;
+
+            svg {
+                transition: transform 0.2s ease-in-out;
+            }
         }
         > .ic-icon, > .ic-frx, > .ic-wld, > .ic-otc {
             height: $large-icon-size;
@@ -67,8 +85,7 @@
             flex-direction: column;
 
             .cq-market {
-                font-size: 12px;
-                font-weight: bold;
+                font-size: 10px;
                 line-height: 1.5;
                 width: fit-content;
             }
@@ -87,8 +104,10 @@
             text-align: left;
         }
         .cq-symbol {
-            font-size: 16px;
-            font-weight: 700;
+            font-weight: bold;
+            @include themify($themes) {
+                color: themed('ChartTitleSymbolText');
+            }
         }
         .cq-chart-price > * {
             position: relative;
