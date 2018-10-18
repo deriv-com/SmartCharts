@@ -7,7 +7,6 @@ const Comparison = ({
     ComparisonSelector,
     ComparisonMenu,
     menuOpen,
-    onCloseMenu,
     isMobile,
     activeComparisonsNo,
 }) => (
@@ -24,9 +23,7 @@ const Comparison = ({
             <NotificationBadge notificationCount={activeComparisonsNo} />
         </ComparisonMenu.Title>
         <ComparisonMenu.Body>
-            <ComparisonSelector
-                closeMenu={() => onCloseMenu()}
-            />
+            <ComparisonSelector />
         </ComparisonMenu.Body>
     </ComparisonMenu>
 );
@@ -35,7 +32,6 @@ export default connect(({ comparison: c, chart }) => ({
     ComparisonSelector: c.ComparisonSelector,
     ComparisonMenu: c.ComparisonMenu,
     menuOpen: c.menu.open,
-    onCloseMenu: c.menu.onTitleClick,
     isMobile: chart.isMobile,
     activeComparisonsNo: c.comparisonSymbols.length,
 }))(Comparison);

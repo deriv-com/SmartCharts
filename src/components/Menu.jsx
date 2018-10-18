@@ -22,22 +22,25 @@ class Menu extends Component {
             isFullscreen,
             modalNode,
             enabled = true,
+            shouldRenderDialogs,
         } = this.props;
+
         const first = React.Children.map(children, (child, i) => (i === 0 ? child : null));
         const rest  = React.Children.map(children, (child, i) => (i !== 0 ? child : null));
 
-        const dropdown = (
-            <CSSTransition
-                in={open}
-                timeout={150}
-                classNames="cq-menu-dropdown"
-            >
-                <DropdownDialog
-                    className="cq-menu-dropdown"
-                    isMobile={isMobile}
-                    isFullscreen={isFullscreen}
+        const dropdown = (shouldRenderDialogs
+            && (
+                <CSSTransition
+                    in={open}
+                    timeout={150}
+                    classNames="cq-menu-dropdown"
                 >
-                    {title
+                    <DropdownDialog
+                        className="cq-menu-dropdown"
+                        isMobile={isMobile}
+                        isFullscreen={isFullscreen}
+                    >
+                        {title
                     && (
                         <div className="title">
                             <div className="title-text">{title}</div>
@@ -47,10 +50,11 @@ class Menu extends Component {
                             />
                         </div>
                     )
-                    }
-                    {rest}
-                </DropdownDialog>
-            </CSSTransition>);
+                        }
+                        {rest}
+                    </DropdownDialog>
+                </CSSTransition>
+            ));
 
         return (
             enabled && (

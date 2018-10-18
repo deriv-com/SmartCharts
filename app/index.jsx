@@ -10,6 +10,7 @@ import { // eslint-disable-line import/no-extraneous-dependencies,import/no-unre
     DrawTools,
     ChartSetting,
     createObjectFromLocalStorage,
+    setSmartChartsPublicPath,
     Share,
     ChartTitle,
     AssetInformation,
@@ -20,9 +21,18 @@ import ReactDOM from 'react-dom';
 import { configure } from 'mobx';
 import './app.scss';
 import './doorbell';
+import { whyDidYouUpdate }  from 'why-did-you-update';
 import { ConnectionManager, StreamManager } from './connection';
 import Notification from './Notification.jsx';
 import ChartNotifier from './ChartNotifier.js';
+
+setSmartChartsPublicPath('./dist/');
+
+const isMobile = window.navigator.userAgent.toLowerCase().includes('mobi');
+
+if (process.env.NODE_ENV !== 'production') {
+    whyDidYouUpdate(React, { exclude: [/^RenderInsideChart$/, /^inject-/] });
+}
 
 
 if (window.location.host.endsWith('binary.com')) {
@@ -32,12 +42,23 @@ if (window.location.host.endsWith('binary.com')) {
     document.body.appendChild(s);
 }
 
+/* // PWA support is temporarily removed until its issues can be sorted out
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register(`${window.location.origin + window.location.pathname}sw.js`)
+        .then(() => {
+            console.log('Service Worker Registered');
+        }).catch((registrationError) => {
+            console.log('SW registration failed: ', registrationError);
+        });
+}
+*/
+
 configure({ enforceActions: 'observed' });
 
 function getLanguageStorage() {
     const default_language = 'en';
     try {
-        const setting_string = CIQ.localStorage.getItem('smartchart-setting'),
+        const setting_string = localStorage.getItem('smartchart-setting'),
             setting = JSON.parse(setting_string !== '' ? setting_string : '{}');
 
         return setting.language || default_language;
@@ -47,12 +68,12 @@ function getLanguageStorage() {
 }
 
 function getServerUrl() {
-    const local = CIQ.localStorage.getItem('config.server_url');
+    const local = localStorage.getItem('config.server_url');
     return `wss://${local || 'ws.binaryws.com'}/websockets/v3`;
 }
 
 const chartId = '1';
-const appId  = CIQ.localStorage.getItem('config.app_id') || 12812;
+const appId  = localStorage.getItem('config.app_id') || 12812;
 const serverUrl = getServerUrl();
 
 const connectionManager = new ConnectionManager({
@@ -85,6 +106,10 @@ class App extends Component {
         this.state = { settings, isConnectionOpened: true };
     }
 
+    shouldComponentUpdate(nextProps, nextState) {
+        return this.state.symbol !== nextState.symbol;
+    }
+
     symbolChange = (symbol) => {
         this.notifier.removeByCategory('activesymbol');
         this.setState({ symbol });
@@ -92,7 +117,7 @@ class App extends Component {
 
     saveSettings = (settings) => {
         console.log('settings updated:', settings);
-        CIQ.localStorageSetItem('smartchart-setting', JSON.stringify(settings));
+        localStorage.setItem('smartchart-setting', JSON.stringify(settings));
 
         this.setState({ settings });
         if (this.startingLanguage !== settings.language) {
@@ -113,7 +138,7 @@ class App extends Component {
 
     renderControls = () => (
         <>
-            {CIQ.isMobile ? '' : <CrosshairToggle />}
+            {isMobile ? '' : <CrosshairToggle />}
             <ChartTypes />
             <Timeperiod />
             <StudyLegend />
@@ -121,10 +146,14 @@ class App extends Component {
             <DrawTools />
             <Views />
             <Share />
-            {CIQ.isMobile ? '' : <ChartSize />}
+            {isMobile ? '' : <ChartSize />}
             <ChartSetting />
         </>
     );
+
+    onMessage = (e) => {
+        this.notifier.notify(e);
+    }
 
     render() {
         const { settings, isConnectionOpened, symbol } = this.state;
@@ -133,8 +162,8 @@ class App extends Component {
             <SmartChart
                 id={chartId}
                 symbol={symbol}
-                onMessage={e => this.notifier.notify(e)}
-                isMobile={CIQ.isMobile}
+                isMobile={isMobile}
+                onMessage={this.onMessage}
                 enableRouting
                 topWidgets={this.renderTopWidgets}
                 chartControlsWidgets={this.renderControls}
