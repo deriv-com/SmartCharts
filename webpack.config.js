@@ -81,11 +81,11 @@ const config = {
             },
             {
                 test: /\.po$/,
-                loader: [path.resolve('./translation-loader.js'), 'json-loader', 'po-loader'],
+                loader: [path.resolve('./loaders/translation-loader.js'), 'json-loader', 'po-loader'],
             },
             {
                 test: /\.pot$/,
-                loader: [path.resolve('./pot-loader.js'), 'json-loader', 'po-loader'],
+                loader: [path.resolve('./loaders/pot-loader.js'), 'json-loader', 'po-loader'],
             },
         ],
     },

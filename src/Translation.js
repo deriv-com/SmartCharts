@@ -13,7 +13,6 @@ import zh_cn from '../translation/zh_cn.po';
 import zh_tw from '../translation/zh_tw.po';
 
 const lang_map = {
-    en: [], // default
     de,
     fr,
     id,
@@ -30,8 +29,6 @@ const lang_map = {
 
 export class Translation {
     constructor(lang = 'en') {
-        console.log(messages);
-        console.log(lang_map.de);
         this.lang = lang;
     }
 
@@ -54,10 +51,19 @@ export class Translation {
      */
     translate(...args) {
         const curr_lang = lang_map[this.lang];
+
+        if (!curr_lang) {
+            return this.replace(args[0], args[1]);
+        }
+
         const str = messages[args[0]];
         let rt_str;
 
         if (typeof args[1] === 'string') { // Plural conversion
+            // TODO: currently there are no plurals in SmartCharts so put this off for now...
+            throw new Error('Plural conversion not working!');
+
+            // eslint-disable-next-line no-unreachable
             const replacer = args[2];
             const prop = Object.keys(replacer);
             if (replacer[prop[0]] === 0 || replacer[prop[0]] > 1) {
@@ -74,11 +80,7 @@ export class Translation {
         } else {
             rt_str = curr_lang[str];
             // Replace variables in string with values.
-            rt_str = this.replace(rt_str, args[1]);
-        }
-
-        if (this.lang === 'en' || !rt_str) {
-            return args[0];
+            rt_str = this.replace(rt_str, args[1]) || args[0];
         }
 
         return rt_str;
