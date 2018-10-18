@@ -1,13 +1,13 @@
-/* eslint-disable no-restricted-properties,no-restricted-globals,prefer-const */
+/* eslint-disable no-restricted-globals,no-restricted-properties */
 
-window.SplinePlotter.plotSpline = function (points, tension, context, colorPatternChanges) {
+export default function plotSpline(points, tension, context, colorPatternChanges) {
     function getControlPoints(i) {
-        let x0 = points[i];
-        let y0 = points[i + 1];
-        let x1 = points[i + 2];
-        let y1 = points[i + 3];
-        let x2 = points[i + 4];
-        let y2 = points[i + 5];
+        const x0 = points[i];
+        const y0 = points[i + 1];
+        const x1 = points[i + 2];
+        const y1 = points[i + 3];
+        const x2 = points[i + 4];
+        const y2 = points[i + 5];
 
         if (isNaN(x0) || isNaN(x1) || isNaN(x2) || isNaN(y0) || isNaN(y1) || isNaN(y2)) {
             return null;
@@ -20,24 +20,24 @@ window.SplinePlotter.plotSpline = function (points, tension, context, colorPatte
         // tension controls how far the control points spread.
 
         // Scaling factors: distances from this knot to the previous and following knots.
-        let d01 = Math.sqrt(Math.pow(x1 - x0, 2) + Math.pow(y1 - y0, 2));
-        let d12 = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+        const d01 = Math.sqrt(Math.pow(x1 - x0, 2) + Math.pow(y1 - y0, 2));
+        const d12 = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
 
-        let fa = tension * d01 / (d01 + d12);
-        let fb = tension - fa;
+        const fa = tension * d01 / (d01 + d12);
+        const fb = tension - fa;
 
-        let p1x = x1 + fa * (x0 - x2);
-        let p1y = y1 + fa * (y0 - y2);
+        const p1x = x1 + fa * (x0 - x2);
+        const p1y = y1 + fa * (y0 - y2);
 
-        let p2x = x1 - fb * (x0 - x2);
-        let p2y = y1 - fb * (y0 - y2);
+        const p2x = x1 - fb * (x0 - x2);
+        const p2y = y1 - fb * (y0 - y2);
 
         return [p1x, p1y, p2x, p2y];
     }
 
     if (!tension || tension < 0) { tension = 0; }
     let cp = []; // array of control points, as x0,y0,x1,y1,...
-    let n = points.length;
+    const n = points.length;
     // Draw an open curve, not connected at the ends
     for (let i = 0; i < n - 4; i += 2) {
         cp = cp.concat(getControlPoints(i));
@@ -48,7 +48,7 @@ window.SplinePlotter.plotSpline = function (points, tension, context, colorPatte
 
     function seeIfStrokeNeeded(i) {
         if (colorPatternIndex === colorPatternChanges.length) { return; }
-        let colorPatternChange = colorPatternChanges[colorPatternIndex];
+        const colorPatternChange = colorPatternChanges[colorPatternIndex];
         if (colorPatternChange.coord[0] === points[i] && colorPatternChange.coord[1] === points[i + 1]) {
             context.stroke();
             context.strokeStyle = colorPatternChange.color;

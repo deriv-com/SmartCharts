@@ -31,7 +31,7 @@
  *    new CIQ.Animation(stxx, {tension:0.3});  //Default animation with splining tension of 0.3
  *
  */
-CIQ.Animation = function (stx, animationParameters, easeMachine) {
+export default function animateChart(stx, animationParameters, easeMachine) {
     let params = {
         stayPut: false,
         ticksFromEdgeOfScreen: 5,
