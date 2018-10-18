@@ -157,8 +157,11 @@ class CrosshairStore {
                 dupMap.Open = dupMap.High = dupMap.Low = 1;
             }
         }
+
+
         if (this.showSeries) {
             const renderers = stx.chart.seriesRenderers;
+
             for (const renderer in renderers) {
                 const rendererToDisplay = renderers[renderer];
                 const panel = stx.panels[rendererToDisplay.params.panel];
@@ -166,8 +169,10 @@ class CrosshairStore {
                 if (!yAxis && rendererToDisplay.params.shareYAxis) {
                     yAxis = panel.yAxis;
                 }
+
                 for (let id = 0; id < rendererToDisplay.seriesParams.length; id++) {
                     const seriesParams = rendererToDisplay.seriesParams[id];
+
                     // if a series has a symbol and a field then it maybe a object chain
                     let sKey = seriesParams.symbol;
                     const subField = seriesParams.field;
@@ -192,6 +197,7 @@ class CrosshairStore {
         if (this.showStudies) {
             const { studies } = stx.layout;
             for (const study in studies) {
+
                 const panel = stx.panels[studies[study].panel];
                 const yAxis = panel.yAxis;
                 for (const output in studies[study].outputMap) {
