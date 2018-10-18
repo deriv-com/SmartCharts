@@ -334,8 +334,7 @@ class ChartStore {
         this.currentActiveSymbol = symbolObject;
         this.stxx.chart.yAxis.decimalPlaces = symbolObject.decimal_places;
 
-        // Set display name of main series (to be shown in crosshair tooltip)
-        this.stxx.chart.seriesRenderers._main_series.seriesParams[0].display = symbolObject.name;
+        this.setMainSeriesDisplay(symbolObject.name);
     }
 
     @action.bound setChartAvailability(status) {
@@ -388,8 +387,7 @@ class ChartStore {
         this.stxx.chart.symbolDisplay = symbolObj.name;
         this.loader.show();
         const onChartLoad = (err) => {
-            // Set display name of main series (to be shown in crosshair tooltip)
-            this.stxx.chart.seriesRenderers._main_series.seriesParams[0].display = symbolObj.name;
+            this.setMainSeriesDisplay(symbolObj.name);
 
             this.loader.hide();
             if (err) {
@@ -424,6 +422,11 @@ class ChartStore {
             }
             return { range, span };
         }
+    }
+
+    setMainSeriesDisplay(name) {
+        // Set display name of main series (to be shown in crosshair tooltip)
+        this.stxx.chart.seriesRenderers._main_series.seriesParams[0].display = name;
     }
 
     // Makes requests to tick history API that will replace

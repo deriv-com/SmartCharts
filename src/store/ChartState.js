@@ -95,8 +95,7 @@ class ChartState {
                     this.chartStore.loader.hide();
                 }
 
-                // Set display name of main series (to be shown in crosshair tooltip)
-                this.stxx.chart.seriesRenderers._main_series.seriesParams[0].display = this.stxx.chart.symbolObject.name;
+                this.chartStore.setMainSeriesDisplay(this.stxx.chart.symbolObject.name);
             },
         });
 
