@@ -1,36 +1,50 @@
 import React, { Component } from 'react';
-import { computed } from 'mobx';
 import { FavoriteIcon } from './Icons.jsx';
-import { connect } from '../store/Connect';
+import FavoriteStore from '../store/FavoriteStore';
 
 class Favorite extends Component {
+    store = FavoriteStore.getInstance();
+
+    constructor(props) {
+        super(props);
+        this.store.onFavoriteUpdate(this.onFavoriteUpdate);
+        this.isFavorite = this.store.isFavorite;
+        this.toggleFavorite = this.store.toggleFavorite;
+        const { category, id } = this.props;
+        this.state = { isFavorite: this.isFavorite(category, id) };
+    }
+
+    componentWillUnmount() {
+        this.store.offFavoriteUpdate(this.onFavoriteUpdate);
+    }
+
+    onFavoriteUpdate = () => {
+        const { category, id } = this.props;
+        const isFavorite = this.isFavorite(category, id);
+        if (isFavorite !== this.state.isFavorite) {
+            this.setState({ isFavorite });
+        }
+    };
+
     onClick = (e) => {
         e.stopPropagation();
         e.nativeEvent.isHandledByDialog = true; // prevent close dialog
-        const { category, id, toggleFavorite } = this.props;
-        toggleFavorite(category, id);
+        const { category, id } = this.props;
+        this.toggleFavorite(category, id);
     };
-
-    @computed get isFavorite() {
-        const { category, id, favoritesMap } = this.props;
-        const cat = favoritesMap[category];
-        return id in cat;
-    }
 
     render() {
         const { category, id } = this.props;
+        const { isFavorite } = this.state;
         if (!category || !id) return null;
 
         return (
             <FavoriteIcon
                 onClick={this.onClick}
-                className={`ciq-favorite ${this.isFavorite ? 'ciq-active-favorite' : ''}`}
+                className={`ciq-favorite ${isFavorite ? 'ciq-active-favorite' : ''}`}
             />
         );
     }
 }
 
-export default connect(({ favorites: f }) => ({
-    toggleFavorite: f.toggleFavorite,
-    favoritesMap: f.favoritesMap,
-}))(Favorite);
+export default Favorite;
