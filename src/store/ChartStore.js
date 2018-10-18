@@ -1,9 +1,9 @@
-import ResizeObserver from 'resize-observer-polyfill';
 import { action, observable, reaction, computed } from 'mobx';
 import PendingPromise from '../utils/PendingPromise';
 import Context from '../components/ui/Context';
 import KeystrokeHub from '../components/ui/KeystrokeHub';
-import '../components/ui/Animation';
+import animateChart from '../components/ui/Animation';
+import plotSpline from '../SplinePlotter';
 import { Feed } from '../feed';
 import { ActiveSymbols, BinaryAPI, TradingTimes } from '../binaryapi';
 import { calculateTimeUnitInterval, getUTCDate, cloneCategories } from '../utils';
@@ -25,7 +25,7 @@ CIQ.ChartEngine.htmlControls.iconsTemplate = `<div class="stx-panel-control"><di
 CIQ.ChartEngine.htmlControls.mSticky = `<div class="stx_sticky"> <span class="mStickyInterior"></span> <span class="mStickyRightClick"><span class="overlayEdit stx-btn" style="display:none"><span class="ic-edit">${renderSVGString(EditIcon)}</span><span class="ic-delete">${renderSVGString(DeleteIcon)}</span></span> <span class="overlayTrashCan stx-btn" style="display:none"><span class="ic-edit">${renderSVGString(EditIcon)}</span><span class="ic-delete">${renderSVGString(DeleteIcon)}</span></span> <span class="mouseDeleteInstructions"><span>(</span><span class="mouseDeleteText">right-click to delete</span><span class="mouseManageText">right-click to manage</span><span>)</span></span></span></div>`;
 CIQ.ChartEngine.htmlControls.home = `<div class="stx_jump_today" style="display:none">${renderSVGString(JumpToTodayIcon)}</div>`;
 
-CIQ.ChartEngine.prototype.createYAxisLabel = function (panel, txt, y, backgroundColor, color, ctx, yAxis) {
+function myCreateYAxisLabel(panel, txt, y, backgroundColor, color, ctx, yAxis) {
     if (panel.yAxis.drawPriceLabels === false || panel.yAxis.noDraw) return;
     const yax = yAxis || panel.yAxis;
     if (yax.noDraw || !yax.width) return;
@@ -82,7 +82,7 @@ CIQ.ChartEngine.prototype.createYAxisLabel = function (panel, txt, y, background
         color,
     };
     CIQ[yaxisLabelStyle](params);
-};
+}
 
 class ChartStore {
     static keystrokeHub;
@@ -156,7 +156,21 @@ class ChartStore {
         setTimeout(this.updateCanvas, this.isMobile ? 500 : 100);
     }
 
-    @action.bound init(rootNode, modalNode, props) {
+    init = (rootNode, modalNode, props) => {
+        if (window.CIQ) {
+            this._initChart(rootNode, modalNode, props);
+        } else {
+            import(/* webpackChunkName: "chartiq" */ 'chartiq').then(action(({ CIQ, SplinePlotter }) => {
+                window.CIQ = CIQ;
+                SplinePlotter.plotSpline = plotSpline;
+                this._initChart(rootNode, modalNode, props);
+            }));
+        }
+    };
+
+    @action.bound _initChart(rootNode, modalNode, props) {
+        CIQ.ChartEngine.prototype.createYAxisLabel = myCreateYAxisLabel;
+
         this.rootNode = rootNode;
         this.modalNode = modalNode;
         this.chartNode = this.rootNode.querySelector('.ciq-chart-area');
@@ -228,7 +242,7 @@ class ChartStore {
         deleteElement.textConent = t.translate('right-click to delete');
         manageElement.textConent = t.translate('right-click to manage');
 
-        CIQ.Animation(stxx, { stayPut: true });
+        animateChart(stxx, { stayPut: true });
 
         // connect chart to data
         this.feed = new Feed(this.api, stxx, this.mainStore, this.tradingTimes);
@@ -300,8 +314,17 @@ class ChartStore {
             }));
         });
 
-        this.resizeObserver = new ResizeObserver(this.resizeScreen);
-        this.resizeObserver.observe(modalNode);
+        if ('ResizeObserver' in window) {
+            this.resizeObserver = new ResizeObserver(this.resizeScreen);
+            this.resizeObserver.observe(modalNode);
+        } else {
+            import(/* webpackChunkName: "resize-observer-polyfill" */ 'resize-observer-polyfill').then(({ default: ResizeObserver }) => {
+                window.ResizeObserver = ResizeObserver;
+                if (stxx.isDestroyed || !modalNode) { return; }
+                this.resizeObserver = new ResizeObserver(this.resizeScreen);
+                this.resizeObserver.observe(modalNode);
+            });
+        }
     }
 
     onMarketOpenClosedChange = (changes) => {
@@ -445,6 +468,7 @@ class ChartStore {
     @action.bound destroy() {
         if (this.resizeObserver) { this.resizeObserver.disconnect(); }
         if (this.tradingTimes) { this.tradingTimes.destructor(); }
+
         // Destroying the chart does not unsubscribe the streams;
         // we need to manually unsubscribe them.
         if (this.feed) {

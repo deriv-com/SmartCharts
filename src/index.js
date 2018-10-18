@@ -21,7 +21,9 @@ import Marker from './components/Marker.jsx';
 import CurrentSpot from './components/CurrentSpot.jsx';
 import { createObjectFromLocalStorage } from './utils';
 
-import './SplinePlotter';
+function setSmartChartsPublicPath(path) {
+    __webpack_public_path__ = path; // eslint-disable-line
+}
 
 export {
     AssetInformation,
@@ -37,6 +39,7 @@ export {
     DrawTools,
     Marker,
     PendingPromise,
+    setSmartChartsPublicPath,
     Share,
     SmartChart,
     StudyLegend,
@@ -59,6 +62,7 @@ export default {
     DrawTools,
     Marker,
     PendingPromise,
+    setSmartChartsPublicPath,
     Share,
     SmartChart,
     StudyLegend,
