@@ -86,6 +86,7 @@ export default class ComparisonStore {
         const params = {
             symbolObject,
             isComparison: true,
+            display: symbolObject.name,
             color,
             pattern,
             width,
