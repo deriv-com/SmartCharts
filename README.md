@@ -57,22 +57,25 @@ The job of loading the active symbols or trading times or stream data from cache
 
 Some important notes on your webpack.config.js (refer to `app/webpack.config.js`):
 
- - The ChartIQ library and the smartcharts CSS file will need to be copied from the npm library (remember to include in your `index.html`). In the example we use the `copy-webpack-plugin` webpack plugin to do this:
+ - smartcharts CSS file will need to be copied from the npm library (remember to include in your `index.html`). 
+ - smartcharts consist of a few chunks (which has filenames `*.smartcharts.*`), which it downloads asynchronously during runtime. Therefore, it needs to know where the library user places its chunks via the `setSmartChartsPublicPath` function:
+ 
+ ```js
+import { setSmartChartsPublicPath } from '@binary-com/smartcharts';
+
+// SmartCharts chunk are deployed to https://mysite.com/dist/*
+setSmartChartsPublicPath('/dist/');
+```
+ 
+ We can use the `copy-webpack-plugin` webpack plugin to copy over SmartCharts chunks:
  
  ```js
 new CopyWebpackPlugin([
-    { from: './node_modules/@binary-com/smartcharts/dist/chartiq.min.js' },
+    { from: './node_modules/@binary-com/smartcharts/dist/*.smartcharts.*' },
     { from: './node_modules/@binary-com/smartcharts/dist/smartcharts.css' },
 ])
 ```
 
- - You need to expose `CIQ` (the ChartIQ library) as a global object:
- 
-```js
-externals: {
-    CIQ: 'CIQ'
-}
-```
 
 ### API
 
