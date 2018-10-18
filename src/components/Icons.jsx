@@ -170,7 +170,7 @@ const Wrapper = SvgLogo => (props) => {
             {...p}
         >
             <svg width={vb[0]} height={vb[1]}>
-                <use xlinkHref={SvgLogo.url} />
+                <use xlinkHref={__webpack_public_path__ + SvgLogo.url /* eslint-disable-line no-undef */} />
             </svg>
             {tooltip && (
                 <>
