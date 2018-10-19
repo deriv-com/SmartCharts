@@ -228,6 +228,7 @@
             }
             .notification-badge {
                 left: 15px;
+                top: -5px;
             }
         }
         .bt-priod, .cq-toggle, .cq-menu-btn, .cq-chart-size > span {
@@ -235,6 +236,9 @@
         }
         .ic-priod {
             padding: 6px 0px !important;
+        }
+        .ic-icon-with-sub > svg {
+            padding: 0;
         }
     }
 }
