@@ -13,14 +13,13 @@ function getItemCount(category) {
     return count;
 }
 
-const Category = ({ category, Item, setCategoryElement, onSelectItem, activeHeadKey, activeHeadTop }) => (
+const Category = ({ category, Item, setCategoryElement, onSelectItem, activeHeadKey }) => (
     <div
         className={`category category-${category.categoryId}`}
         ref={el => setCategoryElement(el, category.categoryId)}
     >
         <div
             className={`category-title ${activeHeadKey === category.categoryId ? 'fixed' : ''}`}
-            style={{ top: (activeHeadKey === category.categoryId ? activeHeadTop : null) }}
         >{t.translate(category.categoryName)}
         </div>
         { category.hasSubcategory

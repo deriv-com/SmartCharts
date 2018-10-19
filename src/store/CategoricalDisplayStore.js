@@ -126,7 +126,7 @@ export default class CategoricalDisplayStore {
     @action.bound scrollUp() {
         this.isScrollingDown = false;
         this.scrollSpace = (this.scrollSpace < this.filterInputPanelHeight)
-                    ? (this.scrollSpace + 5)
+                    ? (this.scrollSpace + 3)
                     : this.filterInputPanelHeight;
     }
 
@@ -135,7 +135,7 @@ export default class CategoricalDisplayStore {
         this.isScrollingDown = this.isUserScrolling;
         this.isUserScrolling = true;
         this.scrollSpace = (this.scrollSpace > 0)
-                    ? (this.scrollSpace - 5)
+                    ? (this.scrollSpace - 3)
                     : 0 ;
     }
 

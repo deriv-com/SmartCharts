@@ -85,8 +85,6 @@
         }
     }
     .category {
-        padding-top: 40px;
-        padding-bottom: 3em;
         position: relative;
 
         &:last-child {
@@ -115,6 +113,10 @@
             background-color: themed('CatDisplayCatContentBg');
             border: 1px solid themed('CatDisplayCatContentBorder');
         }
+
+        &:last-child {
+            margin-bottom: 1em;
+        }
     }
     .subcategory {
         font-weight: 500;
@@ -133,18 +135,17 @@
         font-size: 1.4em;
         font-weight: 500;
         padding: 0 0.7em;
-        line-height: 38px;
-        position: absolute;
+        line-height: 40px;
         top: 0;
         @include themify($themes) {
             color: themed('CatDisplayCatTitleText');
         }
 
         &.fixed {
-            position: fixed;
-            width: 100%;
+            position: sticky;
             z-index: 1;
-            top: 0px;
+            top: 0px !important;
+            padding-top: 0px;
             @include themify($themes) {
                 background-color: themed('DialogBodyBg');
                 border-bottom: 1px solid themed('CatDisplayCatContentBorder');
@@ -389,13 +390,14 @@
             border-right: none;
             position: relative;
             z-index: 9;
+            transition: height 0.2s ease-in-out;
             @include themify($themes) {
                 border-bottom: 1px solid themed('CatDisplaySearchBorder');
             }
 
             .cq-lookup-panel {
                 position: relative;
-                transition: margin-top 0.2s ease;
+                transition: margin-top 0.2s ease-in-out;
             }
             .cq-lookup-input {
                 margin: 1.2em 1em 0.5em;
@@ -423,6 +425,7 @@
         .cq-filter-panel {
             display: flex;
             justify-content: space-around;
+            margin-bottom: -1px;
 
             .cq-filter {
                 border-right: none;
