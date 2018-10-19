@@ -38,7 +38,7 @@
                 background: themed('ComparisonItemHoverBg');
             }
 
-            svg, path, g {
+            svg {
                 @include themify($themes) {
                     fill: themed('ComparisonItemIcon');
                 }

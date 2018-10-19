@@ -42,7 +42,6 @@
                         @include themify($themes) {
                             color: themed('MenuActiveText');
                         }
-                        @include svg-icon-color('MenuActiveIcon');
 
                         .ic-subtitle {
                             font-weight: bold;
@@ -78,8 +77,6 @@
                         }
                     }
                 }
-                @include svg-icon-color('MenuIcon');
-
                 .ic-subtitle {
                     font-weight: normal;
                     font-style: normal;

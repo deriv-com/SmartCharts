@@ -26,13 +26,6 @@
             color: themed('DialogHeadText');
         }
 
-        .ciq-favorite {
-            path {
-                @include themify($themes) {
-                    stroke: themed('DialogHeadIcon');
-                }
-            }
-        }
         .title {
             font-size: 14px;
             padding-left: 16px;
@@ -41,22 +34,6 @@
             display: flex;
             align-items: center;
             height: 50px;
-
-            .ic-icon {
-                path {
-                    @include themify($themes) {
-                        fill: themed('DialogHeadIcon');
-                    }
-                }
-                &.ciq-favorite {
-                    path {
-                        fill: transparent;
-                        @include themify($themes) {
-                            stroke: themed('DialogHeadIcon');
-                        }
-                    }
-                }
-            }
         }
         &.no-tabs {
             @include themify($themes) {

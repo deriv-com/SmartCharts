@@ -37,19 +37,18 @@ import Template from '../../sass/icons/chart settings/chart template/ic-charttem
 import Tick from '../../sass/icons/tick/ic-tick.svg';
 import Active from '../../sass/icons/sidebar/active/ic-active-normal.svg';
 import Commodities from '../../sass/icons/sidebar/commodities/ic-commodities-normal.svg';
-import FavoriteCategory from '../../sass/icons/sidebar/favorite/ic-favorite-normal.svg';
 import Forex from '../../sass/icons/sidebar/forex/ic-forex-normal.svg';
 import Indices from '../../sass/icons/sidebar/indices/ic-indices-normal.svg';
 import Stocks from '../../sass/icons/sidebar/otc/ic-otc-normal.svg';
 import Volidx from '../../sass/icons/sidebar/volatility/ic-volatility-normal.svg';
 import Search from '../../sass/icons/search/ic-search-normal.svg';
 import Edit from '../../sass/icons/edit/ic-edit.svg';
-import IndicatorCategory from '../../sass/icons/sidebar/indicator/ic-indicator-normal.svg';
 import Arrow from '../../sass/icons/dropdown/ic-dropdown.svg';
 import Download from '../../sass/icons/download/ic-download.svg';
 import PositionLeft from '../../sass/icons/chart settings/setting/ic-position-left.svg';
 import PositionBottom from '../../sass/icons/chart settings/setting/ic-position-bottom.svg';
 import Back from '../../sass/icons/back/ic-back.svg';
+import DrawCursor from '../../sass/icons/pencil/ic-pencil.svg';
 
 
 import Warning from '../../sass/icons/alert message/warning.svg';
@@ -159,9 +158,10 @@ import MarketBull from '../../sass/icons/active-symbols/volatility/bull market/i
 import OTCBadge from '../../sass/icons/active-symbols/ic-otcbadge.svg';
 import SmartFX from '../../sass/icons/active-symbols/ic-smartfx-placeholder.svg';
 
-const Wrapper = WrappedComponent => (props) => {
+const Wrapper = SvgLogo => (props) => {
     let { className, 'tooltip-title': tooltip, ...p } = props; // eslint-disable-line prefer-const
     className = `ic-icon ${className || ''}`;
+    const vb = SvgLogo.viewBox.split(' ').slice(2);
 
     return (
         <span
@@ -169,12 +169,20 @@ const Wrapper = WrappedComponent => (props) => {
             tooltip-title={tooltip}
             {...p}
         >
-            <WrappedComponent />
-            <br />
-            <span className="ic-subtitle">{tooltip}</span>
+            <svg width={vb[0]} height={vb[1]}>
+                <use xlinkHref={__webpack_public_path__ + SvgLogo.url /* eslint-disable-line no-undef */} />
+            </svg>
+            {tooltip && (
+                <>
+                    <br />
+                    <span className="ic-subtitle">{tooltip}</span>
+                </>
+            )}
         </span>
     );
 };
+
+export const DrawingCursorIcon = Wrapper(DrawCursor);
 
 // Chart Types:
 export const BaseLineIcon = Wrapper(BaseLine);
@@ -237,12 +245,12 @@ export const SymbolPlaceholderIcon = Wrapper(SymbolPlaceholder);
 export const CategoryIconMap = {
     active: Wrapper(Active),
     commodities: Wrapper(Commodities),
-    favorite: Wrapper(FavoriteCategory),
+    favorite: Wrapper(Star),
     forex: Wrapper(Forex),
     indices: Wrapper(Indices),
     stocks: Wrapper(Stocks),
     volidx: Wrapper(Volidx),
-    indicators: Wrapper(IndicatorCategory),
+    indicators: Wrapper(Indicator),
 };
 
 const FlagIconMap = {
