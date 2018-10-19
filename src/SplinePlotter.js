@@ -74,4 +74,4 @@ export default function plotSpline(points, tension, context, colorPatternChanges
     // plot the last segment
     seeIfStrokeNeeded(n - 4);
     context.quadraticCurveTo(cp[2 * n - 10], cp[2 * n - 9], points[n - 2], points[n - 1]);
-};
+}

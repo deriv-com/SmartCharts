@@ -8,7 +8,7 @@ export class Slider extends React.Component {
         this.props.onChange(val.currentTarget.value);
     };
 
-    shouldComponentUpdate(nextProps){
+    shouldComponentUpdate(nextProps) {
         return this.props.value !== nextProps.value;
     }
 
@@ -146,11 +146,11 @@ export class ColorPicker extends React.Component {
 
     componentDidMount() { document.addEventListener('click', this.close, false); }
     componentWillUnmount() { document.removeEventListener('click', this.close); }
-   
-    shouldComponentUpdate(nextProps, nextState){
+
+    shouldComponentUpdate(nextProps, nextState) {
         return this.state.open !== nextState.open;
     }
-      
+
     render() {
         const { color, setColor } = this.props;
         const backgroundColor = color === 'auto' ? '#000000' : color;
@@ -216,7 +216,7 @@ export class NumericInput extends React.Component {
         }
     }
 
-    shouldComponentUpdate(nextProps, nextState){
+    shouldComponentUpdate(nextProps, nextState) {
         return this.state.value !== nextState.value;
     }
 

@@ -2,7 +2,6 @@
   <title>spanish</title>
   <path d="M21.5,1H2.5A1.5,1.5,0,0,0,1,2.5V4H23V2.5A1.5,1.5,0,0,0,21.5,1M2.5,0H2A2,2,0,0,0,0,2v.5H0A2.5,2.5,0,0,1,2.5,0M22,0h-.5A2.5,2.5,0,0,1,24,2.5V4h0V2a2,2,0,0,0-2-2" transform="translate(0 0)" fill="#dd172c"/>
   <polyline points="0 0 24 0 24 4 0 4 0 0" fill="none"/>
-  <path d="M0,12H0v4H24V14a2,2,0,0,1-2,2H2a2,2,0,0,1-2-2V12" transform="translate(0 0)" fill="#fff"/>
   <path d="M23,12H1v1.5A1.5,1.5,0,0,0,2.5,15h19A1.5,1.5,0,0,0,23,13.5V12m1,0h0v1.5A2.5,2.5,0,0,1,21.5,16H2.5A2.5,2.5,0,0,1,0,13.5H0V14a2,2,0,0,0,2,2H22a2,2,0,0,0,2-2V12" transform="translate(0 0)" fill="#dd172c"/>
   <polyline points="0 12 24 12 24 16 0 16 0 12" fill="none"/>
   <polyline points="24 4 24 4 24 12 24 12 24 4" fill="#ffd133"/>

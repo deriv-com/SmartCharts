@@ -18,7 +18,7 @@
                 margin-right: 0px;
                 width: 24px;
 
-                svg g {
+                svg {
                     @include themify($themes) {
                         fill: themed('ChartTitleArrow');
                     }
@@ -34,10 +34,8 @@
                 svg {
                     transform: rotate(180deg);
 
-                    g {
-                        @include themify($themes) {
-                            fill: themed('ChartTitleActiveArrow');
-                        }
+                    @include themify($themes) {
+                        fill: themed('ChartTitleActiveArrow');
                     }
                 }
             }

@@ -4,6 +4,7 @@ const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPl
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const StyleLintPlugin = require('stylelint-webpack-plugin');
+const SpriteLoaderPlugin = require('svg-sprite-loader/plugin');
 
 const production = process.env.NODE_ENV === 'production';
 const isApp = process.env.BUILD_MODE === 'app';
@@ -15,6 +16,7 @@ const output =  {
     libraryExport: 'default',
     library: 'smartcharts',
     libraryTarget: 'umd',
+    hashDigestLength: 6,
 };
 
 const config = {
@@ -32,6 +34,27 @@ const config = {
     },
     module: {
         rules: [
+            {
+                test: /\.svg$/,
+                use: [
+                    {
+                        loader: 'svg-sprite-loader',
+                        options: {
+                            extract: true,
+                            spriteFilename: 'sprite-[hash:6].smartcharts.svg',
+                        },
+                    },
+                    {
+                        loader: 'svgo-loader',
+                        options: {
+                            plugins: [
+                                { removeUselessStrokeAndFill: false },
+                                { removeUnknownsAndDefaults: false },
+                            ],
+                        },
+                    },
+                ],
+            },
             {
                 test: /\.(s*)css$/,
                 use: [
@@ -95,6 +118,7 @@ const config = {
         }),
         new MiniCssExtractPlugin({ filename: 'smartcharts.css' }),
         new StyleLintPlugin(),
+        new SpriteLoaderPlugin(),
     ],
     externals: {
         mobx: 'mobx',

@@ -42,7 +42,6 @@
                         @include themify($themes) {
                             color: themed('MenuActiveText');
                         }
-                        @include svg-icon-color('MenuActiveIcon');
 
                         .ic-subtitle {
                             font-weight: bold;
@@ -78,8 +77,6 @@
                         }
                     }
                 }
-                @include svg-icon-color('MenuIcon');
-
                 .ic-subtitle {
                     font-weight: normal;
                     font-style: normal;
@@ -228,6 +225,7 @@
             }
             .notification-badge {
                 left: 15px;
+                top: -5px;
             }
         }
         .bt-priod, .cq-toggle, .cq-menu-btn, .cq-chart-size > span {
@@ -235,6 +233,9 @@
         }
         .ic-priod {
             padding: 6px 0px !important;
+        }
+        .ic-icon-with-sub > svg {
+            padding: 0;
         }
     }
 }

@@ -1,8 +1,9 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
-    <g fill="none" fill-rule="evenodd">
-        <path class="no-fill" stroke="#2A3052" d="M1.5 4.5h5v7h-5z"/>
-        <path class="no-stroke" fill="#2A3052" d="M3.5 12h1v4h-1z"/>
-        <path class="no-fill" stroke="#2A3052" d="M9.5 4.5h5v7h-5z"/>
-        <path class="no-stroke" fill="#2A3052" d="M11.5 0h1v4h-1z"/>
+<?xml version="1.0" standalone="no"?><!-- Generator: Gravit.io -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16">
+    <g fill-rule="evenodd" fill="none" stroke-width="1" >
+        <path d=" M 1.5 4.5 L 6.5 4.5 L 6.5 11.5 L 1.5 11.5 L 1.5 4.5 Z "/>
+        <line x1="4" y1="11.5" x2="4" y2="16" />
+        <path d=" M 9.5 4.5 L 14.5 4.5 L 14.5 11.5 L 9.5 11.5 L 9.5 4.5 Z "/>
+        <line x1="12" y1="0" x2="12" y2="4.5" />
     </g>
 </svg>

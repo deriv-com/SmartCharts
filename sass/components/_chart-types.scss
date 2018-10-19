@@ -1,22 +1,4 @@
 .ciq-chart-types {
-    .cq-menu-btn {
-        .ic-icon {
-            path, circle, rect {
-                @include themify($themes) {
-                    fill: themed('ChartTypeListIcon');
-                    stroke: themed('ChartTypeListIcon');
-                }
-            }
-            &.active {
-                path, circle, rect {
-                    @include themify($themes) {
-                        fill: themed('MenuActiveIcon');
-                        stroke: themed('MenuActiveIcon');
-                    }
-                }
-            }
-        }
-    }
     .cq-menu-dropdown {
         width: 200px;
         box-sizing: border-box;
@@ -31,17 +13,6 @@
                 @include themify($themes) {
                     border-right: 2px solid themed('ChartTypeActiveListBorderRight');
                 }
-
-                > .left {
-                    .ic-icon {
-                        path, circle, rect {
-                            @include themify($themes) {
-                                fill: themed('ChartTypeActiveListIcon');
-                                stroke: themed('ChartTypeActiveListIcon');
-                            }
-                        }
-                    }
-                }
             }
             padding: 0;
             justify-content: space-between;
@@ -49,31 +20,9 @@
             > .left {
                 display: inline-flex;
                 align-items: center;
-
-                .ic-icon {
-                    path, circle, rect {
-                        @include themify($themes) {
-                            fill: themed('ChartTypeListIcon');
-                            stroke: themed('ChartTypeListIcon');
-                        }
-                    }
-                }
             }
             > .ciq-aggregate-setting {
                 margin-right: 5px;
-
-                > .ic-icon {
-                    > svg > path {
-                        @include themify($themes) {
-                            fill: themed('ChartTypeListIcon');
-                        }
-                    }
-                    &:hover > svg > path {
-                        @include themify($themes) {
-                            fill: themed('ChartTypeActiveListIcon');
-                        }
-                    }
-                }
             }
         }
     }
