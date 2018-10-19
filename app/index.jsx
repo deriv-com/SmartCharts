@@ -107,7 +107,8 @@ class App extends Component {
     }
 
     shouldComponentUpdate(nextProps, nextState) {
-        return this.state.symbol !== nextState.symbol;
+        return this.state.symbol !== nextState.symbol
+            || JSON.stringify(this.state.settings) !== JSON.stringify(nextState.settings);
     }
 
     symbolChange = (symbol) => {
