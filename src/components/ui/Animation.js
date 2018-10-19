@@ -249,4 +249,4 @@ export default function animateChart(stx, animationParameters, easeMachine) {
             return true; // bypass default behavior in favor of animation
         }
     });
-};
+}
