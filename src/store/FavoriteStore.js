@@ -1,3 +1,4 @@
+import EventEmitter from 'event-emitter-es6';
 import { action, observable } from 'mobx';
 import { createObjectFromLocalStorage } from '../utils';
 
@@ -18,6 +19,8 @@ function loadFavorites() {
 }
 
 class FavoriteStore {
+    static get EVENT_FAVORITES_UPDATE() { return 'EVENT_FAVORITES_UPDATE'; }
+
     @observable favoritesMap = loadFavorites() || {
         indicators: {},
         'chartTitle&Comparison': {},
@@ -33,6 +36,22 @@ class FavoriteStore {
         return FavoriteStore.instance;
     }
 
+    constructor() {
+        this._emitter = new EventEmitter({ emitDelay: 0 });
+    }
+
+    onFavoriteUpdate(callback) {
+        this._emitter.on(FavoriteStore.EVENT_FAVORITES_UPDATE, callback);
+    }
+
+    offFavoriteUpdate(callback) {
+        this._emitter.off(FavoriteStore.EVENT_FAVORITES_UPDATE, callback);
+    }
+
+    @action.bound isFavorite(category, id) {
+        return id in this.favoritesMap[category];
+    }
+
     @action.bound toggleFavorite(category, id) {
         const cat = this.favoritesMap[category];
         if (cat[id]) {
@@ -40,7 +59,8 @@ class FavoriteStore {
         } else {
             cat[id] = true;
         }
-        this.favoritesMap = { ...this.favoritesMap }; // force observable to update
+        this._emitter.emit(FavoriteStore.EVENT_FAVORITES_UPDATE, { category, id, value: cat[id] || false });
+        // this.favoritesMap = { ...this.favoritesMap }; // force observable to update
         this.saveFavorites();
     }
 

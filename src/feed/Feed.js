@@ -276,6 +276,10 @@ class Feed {
         this._emitter.on(Feed.EVENT_ON_PAGINATION, callback);
     }
 
+    offPagination(callback) {
+        this._emitter.off(Feed.EVENT_ON_PAGINATION, callback);
+    }
+
     onConnectionChanged() {
         const isOpened = this._mainStore.state.isConnectionOpened;
         if (isOpened === undefined || isOpened === this._isConnectionOpened) { return; }

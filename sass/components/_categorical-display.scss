@@ -76,12 +76,6 @@
             font-size: 9px;
             top: 7px;
             transition: right, opacity 0.2s ease-in-out;
-            @include svg-icon-color('CatDisplayFilterIcon');
-        }
-        > input:focus + .ic-icon svg path {
-            @include themify($themes) {
-                fill: themed('CatDisplayFilterIcon');
-            }
         }
     }
     .category {
@@ -89,21 +83,6 @@
 
         &:last-child {
             padding-bottom: 2.5em;
-        }
-        &.category-active {
-            .category-content {
-                .cq-active-item {
-                    .cq-active-options {
-                        .ic-icon {
-                            path {
-                                @include themify($themes) {
-                                    fill: themed('CatDisplayCatContentIcon');
-                                }
-                            }
-                        }
-                    }
-                }
-            }
         }
     }
     .category-content {
@@ -119,12 +98,12 @@
         }
     }
     .subcategory {
-        font-weight: 500;
         padding: 0 0 0 1.2em;
-        font-size: 1.1em;
+        font-size: 12px;
         border-radius: 3px 3px 0 0;
         display: flex;
         height: 40px;
+        font-weight: bold;
         align-items: center;
         @include themify($themes) {
             color: themed('CatDisplayCatContentTitleText');
@@ -132,8 +111,8 @@
     }
     .category-title {
         display: block;
-        font-size: 1.4em;
-        font-weight: 500;
+        font-size: 12px;
+        font-weight: bold;
         padding: 0 0.7em;
         line-height: 40px;
         top: 0;
@@ -175,24 +154,10 @@
             }
 
             .ic-icon {
-                &.ic-active {
-                    path, rect, circle {
-                        @include themify($themes) {
-                            fill: themed('CatDisplayActiveFilterIcon');
-                        }
-                    }
-                }
-                &.ic-forex,
-                &.ic-commodities,
-                &.ic-volidx,
-                &.ic-favorite,
-                &.ic-indicators,
-                &.ic-stocks,
-                &.ic-indices {
-                    path, rect, circle {
-                        @include themify($themes) {
-                            stroke: themed('CatDisplayActiveFilterIcon');
-                        }
+                svg {
+                    @include themify($themes) {
+                        fill: themed('CatDisplayActiveFilterIcon');
+                        stroke: themed('CatDisplayActiveFilterIcon');
                     }
                 }
             }
@@ -204,27 +169,6 @@
             height: $small-icon-size;
             margin-bottom: 2px;
             margin-right: 1.3em;
-
-            &.ic-active {
-                path, rect, circle {
-                    @include themify($themes) {
-                        fill: themed('CatDisplayFilterIcon');
-                    }
-                }
-            }
-            &.ic-forex,
-            &.ic-commodities,
-            &.ic-volidx,
-            &.ic-favorite,
-            &.ic-indicators,
-            &.ic-stocks,
-            &.ic-indices {
-                path, rect, circle {
-                    @include themify($themes) {
-                        stroke: themed('CatDisplayFilterIcon');
-                    }
-                }
-            }
         }
     }
     .cq-item,
@@ -250,15 +194,6 @@
         .left, .right {
             display: flex;
             align-items: center;
-        }
-        .right {
-            .ic-icon.ciq-favorite {
-                path {
-                    @include themify($themes) {
-                        stroke: themed('CatDisplayCatContentIcon');
-                    }
-                }
-            }
         }
         .closed-market {
             border: 1px solid #f44336;

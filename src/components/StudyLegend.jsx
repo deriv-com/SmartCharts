@@ -13,7 +13,7 @@ const StudyLegend = ({
     activeStudiesNo,
 }) => (
     <StudyMenu
-        className="ciq-studies collapse"
+        className="ciq-studies"
         isOpened={isOpened}
         setOpen={setOpen}
         isMobile={isMobile}

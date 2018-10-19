@@ -25,7 +25,7 @@ const ChartTypes = ({
 
     return (
         <ChartTypeMenu
-            className="ciq-display collapse ciq-chart-types"
+            className="ciq-display ciq-chart-types"
             enabled={enabled}
             title={t.translate('Chart types')}
         >

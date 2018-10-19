@@ -126,8 +126,8 @@ export default class CategoricalDisplayStore {
     @action.bound scrollUp() {
         this.isScrollingDown = false;
         this.scrollSpace = (this.scrollSpace < this.filterInputPanelHeight)
-                    ? (this.scrollSpace + 3)
-                    : this.filterInputPanelHeight;
+            ? (this.scrollSpace + 3)
+            : this.filterInputPanelHeight;
     }
 
     @action.bound scrollDown() {
@@ -135,8 +135,8 @@ export default class CategoricalDisplayStore {
         this.isScrollingDown = this.isUserScrolling;
         this.isUserScrolling = true;
         this.scrollSpace = (this.scrollSpace > 0)
-                    ? (this.scrollSpace - 3)
-                    : 0 ;
+            ? (this.scrollSpace - 3)
+            : 0;
     }
 
     @action.bound init() {
@@ -275,8 +275,8 @@ export default class CategoricalDisplayStore {
     }
 
     @computed get scrollStyle() {
-        return this.mainStore.chart.isMobile ?{
-            marginTop: (this.scrollSpace - 60)
+        return this.mainStore.chart.isMobile ? {
+            marginTop: (this.scrollSpace - 60),
         } : {};
     }
 
@@ -291,6 +291,6 @@ export default class CategoricalDisplayStore {
         ResultsPanel: this.ResultsPanel,
         FilterPanel: this.FilterPanel,
         SearchInput: this.SearchInput,
-        scrollStyle: this.scrollStyle
+        scrollStyle: this.scrollStyle,
     }))
 }

@@ -1,7 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="16" viewBox="0 0 24 16">
   <title>usd</title>
   <path d="M2,0H22a2,2,0,0,1,2,2V14a2,2,0,0,1-2,2H2a2,2,0,0,1-2-2V2A2,2,0,0,1,2,0" transform="translate(0 0)" fill="#fff"/>
-  <path d="M.12,14.69H0A1.31,1.31,0,0,0,1.31,16H2A2,2,0,0,1,.12,14.69m23.88,0h-.12A2,2,0,0,1,22,16h.69A1.31,1.31,0,0,0,24,14.69h0M2,0H1.91A1.1,1.1,0,0,0,1.6,0,1.75,1.75,0,0,1,2,0M22.78,0H22a2,2,0,0,1,1.84,1.22H24A1.22,1.22,0,0,0,22.78,0" transform="translate(0 0)" fill="#fff"/>
   <path d="M21.5,1H11.2v.22H22.29A1.51,1.51,0,0,0,21.5,1M22,0h-.5a2.51,2.51,0,0,1,2.15,1.22h.19A2,2,0,0,0,22,0" transform="translate(0 0)" fill="#f44336"/>
   <path d="M23,2.45H11.2V3.67H23V2.45m1,0h0V3.67h0V2.45" transform="translate(0 0)" fill="#f44336"/>
   <path d="M23,4.9H11.2V6.12H23V4.9m1,0h0V6.12h0V4.9" transform="translate(0 0)" fill="#f44336"/>

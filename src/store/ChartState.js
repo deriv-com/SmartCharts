@@ -94,6 +94,8 @@ class ChartState {
                 if (this.chartStore.loader) {
                     this.chartStore.loader.hide();
                 }
+
+                this.chartStore.setMainSeriesDisplay(this.stxx.chart.symbolObject.name);
             },
         });
 

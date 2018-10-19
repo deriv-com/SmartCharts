@@ -11,13 +11,14 @@ const CategoricalDisplay = ({
     ResultsPanel,
     FilterPanel,
     SearchInput,
-    scrollStyle
+    scrollStyle,
 }) => (
     <div className="cq-categorical-display">
         <div className="cq-lookup-filters">
-            <div className="cq-lookup-panel"
+            <div
+                className="cq-lookup-panel"
                 style={scrollStyle}
-                >
+            >
                 <SearchInput />
                 <FilterPanel />
             </div>

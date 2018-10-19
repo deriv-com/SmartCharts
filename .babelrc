@@ -8,15 +8,8 @@
     ],
     "plugins": [
         ["@babel/plugin-proposal-decorators", { "legacy": true }],
+        ["@babel/plugin-syntax-dynamic-import"],
         ["@babel/plugin-proposal-class-properties", { "loose" : true }],
-        ["inline-react-svg", {
-            "svgo": {
-                "plugins": [
-                    { "cleanupIDs": false },
-                    { "removeTitle": true }
-                ]
-            }
-        }]
     ],
     "env": {
         "test": {
@@ -30,15 +23,7 @@
             "plugins": [
                 ["@babel/plugin-proposal-decorators", { "legacy": true }],
                 ["@babel/plugin-proposal-class-properties", { "loose" : true }],
-                "istanbul",
-                ["inline-react-svg", {
-                    "svgo": {
-                        "plugins": [
-                            { "cleanupIDs": false },
-                            { "removeTitle": true }
-                        ]
-                    }
-                }]
+                "istanbul"
             ] }
     }
 }

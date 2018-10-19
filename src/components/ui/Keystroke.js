@@ -1,5 +1,3 @@
-import CIQ from 'chartiq';
-
 /**
  * UI Helper for capturing and handling keystrokes. cb to capture the key. Developer is responsible
  * for calling e.preventDefault() and/or e.stopPropagation();

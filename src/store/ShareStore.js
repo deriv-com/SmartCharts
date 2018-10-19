@@ -1,10 +1,7 @@
 import { observable, action, computed, when } from 'mobx';
 import MenuStore from './MenuStore';
-import { loadScript, downloadFileInBrowser } from '../utils';
-import PendingPromise from '../utils/PendingPromise';
+import { downloadFileInBrowser } from '../utils';
 import Menu from '../components/Menu.jsx';
-
-const html2canvasCDN = 'https://charts.binary.com/dist/html2canvas.min.js';
 
 export default class ShareStore {
     constructor(mainStore) {
@@ -32,26 +29,16 @@ export default class ShareStore {
         return !!navigator.platform && /iPad|iPhone|iPod/.test(navigator.platform) ? window.open() : null;
     }
 
-    loadHtml2Canvas() {
-        if (this._promise_html2canas) {
-            return this._promise_html2canvas;
-        }
-        this._promise_html2canvas = new PendingPromise();
-        loadScript(html2canvasCDN, () => this._promise_html2canvas.resolve());
-        return this._promise_html2canvas;
-    }
-
     @action.bound downloadPNG() {
         this.isLoadingPNG = true;
         const newTab = this.createNewTab();
 
-        this.loadHtml2Canvas()
-            .then(() => window.html2canvas(this.screenshotArea))
-            .then(() => {
+        import(/* webpackChunkName: "html2canvas" */ '../../chartiq/html2canvas.min.js')
+            .then((html2canvas) => {
                 // since react rerenders is not immediate, we use CIQ.appendClassName to
                 // immediately append/unappend class name before taking screenshot.
                 CIQ.appendClassName(this.screenshotArea, 'ciq-screenshot');
-                window.html2canvas(this.screenshotArea).then(canvas => this._onCanvasReady(canvas, newTab));
+                html2canvas.default(this.screenshotArea).then(canvas => this._onCanvasReady(canvas, newTab));
             });
     }
 
