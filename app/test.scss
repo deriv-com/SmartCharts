@@ -8,7 +8,7 @@
     position: relative;
     display: grid;
     grid-template-rows: 1fr auto auto;
-    grid-template-columns: repeat(12, [col-start] 1fr);
+    grid-template-columns: repeat(12, [col-start] 1fr); /* stylelint-disable-line plugin/no-unsupported-browser-features */
     width: 100%;
     height: 100vh;
 

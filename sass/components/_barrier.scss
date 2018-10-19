@@ -59,12 +59,10 @@
     position: absolute;
     right: 0px;
     border-radius: 5px;
-    border-style: solid;
-    border-width: 1px;
-    border-color: inherit;
+    border: 1px solid inherit;
 
     .price {
-        padding: 1px 12px;
+        padding: 1px 10px;
         font-size: 14px;
     }
 }
@@ -110,7 +108,7 @@
 }
 
 .draggable .price {
-    padding: 1px 18px;
+    padding: 1px 16px;
 
     &:after {
         content: '≡';
@@ -138,8 +136,9 @@
     transition: opacity 0.1s ease-out;
 }
 
+/* css gradients are only partially supported in Safari, but will work here since colors are not premultiplied */
 .top-shade {
-    background-image: linear-gradient(to bottom, transparent 30%, var(--shade-color));
+    background-image: linear-gradient(to bottom, transparent 30%, var(--shade-color)); /* stylelint-disable-line plugin/no-unsupported-browser-features */
 }
 
 .between-shade {
@@ -148,5 +147,5 @@
 }
 
 .bottom-shade {
-    background-image: linear-gradient(to bottom, var(--shade-color), transparent 70%);
+    background-image: linear-gradient(to bottom, var(--shade-color), transparent 70%); /* stylelint-disable-line plugin/no-unsupported-browser-features */
 }
