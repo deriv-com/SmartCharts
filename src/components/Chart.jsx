@@ -9,7 +9,7 @@ import CurrentSpot from './CurrentSpot.jsx';
 import DrawingCursor from './DrawingCursor.jsx';
 
 /* css + scss */
-import '../../sass/app.scss';
+import '../../sass/main.scss';
 
 import './ui';
 
