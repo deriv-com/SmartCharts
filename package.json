@@ -121,7 +121,6 @@
   "dependencies": {
     "event-emitter-es6": "^1.1.5",
     "lodash.debounce": "^4.0.8",
-    "prop-types": "^15.6.0",
     "react-perfect-scrollbar": "^1.1.1",
     "resize-observer-polyfill": "^1.5.0",
     "robust-websocket": "^0.3.0",
