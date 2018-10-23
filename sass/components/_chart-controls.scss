@@ -79,10 +79,7 @@
                 }
                 .ic-subtitle {
                     font-weight: normal;
-                    font-style: normal;
-                    font-stretch: normal;
                     line-height: normal;
-                    letter-spacing: normal;
                     text-align: center;
                     font-size: 10px;
                     @include themify($themes) {
