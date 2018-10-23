@@ -7,7 +7,7 @@ const mkdirp = require('mkdirp');
 let file_removed = false;
 const string_map = {};
 const default_options = {
-    method_names: ['translate'],
+    method_names: ['translate', 'translatable'],
 };
 
 const parseCode = source => espree.parse(source, {

@@ -13,12 +13,12 @@ const Comparison = ({
     <ComparisonMenu
         className="cq-comparison-new cq-symbols-display"
         isMobile={isMobile}
-        title={isMobile ? t.translate('Comparison') : ''}
+        title={isMobile ? t.translatable('Comparison') : ''}
     >
         <ComparisonMenu.Title>
             <ComparisonIcon
                 className={`ic-icon-with-sub ${menuOpen ? 'active' : ''}`}
-                tooltip-title={t.translate('Comparison')}
+                tooltip-title={t.translatable('Comparison')}
             />
             <NotificationBadge notificationCount={activeComparisonsNo} />
         </ComparisonMenu.Title>

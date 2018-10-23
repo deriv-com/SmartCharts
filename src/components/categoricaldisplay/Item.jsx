@@ -3,6 +3,7 @@ import {
     ItemIconMap, ActiveOptionsIconMap,
 } from '../Icons.jsx';
 import Favorite from '../Favorite.jsx';
+import TranslationText from '../TranslationText.jsx';
 
 const Icon = ({ id }) => {
     if (!id || !ItemIconMap[id]) { return ''; }
@@ -13,13 +14,13 @@ const Icon = ({ id }) => {
 const ItemLeft = ({ item: { itemId, display } }) => (
     <div className="left">
         <Icon id={itemId} />
-        <span className="ciq-item-display">{display}</span>
+        <TranslationText className="ciq-item-display" value={display} />
     </div>
 );
 
 const ItemRight = ({ favoritesId, item: { dataObject, itemId } }) => (
     <div className="right">
-        {(dataObject && (dataObject.exchange_is_open === undefined || dataObject.exchange_is_open)) ? '' : <span className="closed-market">{t.translate('CLOSED')}</span>}
+        {(dataObject && (dataObject.exchange_is_open === undefined || dataObject.exchange_is_open)) ? '' : <TranslationText className="closed-market" value={t.translatable('CLOSED')} />}
         <Favorite
             category={favoritesId}
             id={itemId}

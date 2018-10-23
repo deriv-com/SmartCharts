@@ -24,10 +24,10 @@
         align-items: center;
         font-size: 12px;
 
-        div:first-child {
+        > span:first-child {
             padding: 0 8px;
         }
-        div:last-child {
+        > span:last-child {
             font-weight: bold;
         }
         @include themify($themes) {

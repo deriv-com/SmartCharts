@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from '../store/Connect';
 import { DrawIcon, ClearIcon, MeasureIcon } from './Icons.jsx';
 import '../../sass/components/_draw-tools.scss';
+import TranslationText from './TranslationText.jsx';
 
 const DrawTools = ({
     clearAll,
@@ -12,12 +13,12 @@ const DrawTools = ({
 }) => (
     <DrawToolsMenu
         className="ciq-draw-tools"
-        title={t.translate('Draw tools')}
+        title={t.translatable('Draw tools')}
     >
         <DrawToolsMenu.Title>
             <DrawIcon
                 className={`ic-icon-with-sub ${menuOpen ? 'active' : ''}`}
-                tooltip-title={t.translate('Draw tools')}
+                tooltip-title={t.translatable('Draw tools')}
             />
         </DrawToolsMenu.Title>
 
@@ -26,7 +27,7 @@ const DrawTools = ({
                 <div className="cq-draw-buttons">
                     <div className="cq-draw-button" onClick={clearAll}>
                         <ClearIcon />
-                        <span>{t.translate('Clear All')}</span>
+                        <TranslationText value={t.translatable('Clear All')} />
                     </div>
                     <div
                         className="cq-draw-button"
@@ -34,7 +35,7 @@ const DrawTools = ({
                         style={{ display: 'none'  /* TODO: measurement tool doesn't show measurement */ }}
                     >
                         <MeasureIcon />
-                        <span>{t.translate('Measure')}</span>
+                        <TranslationText value={t.translatable('Measure')} />
                     </div>
                 </div>
                 <DrawList />

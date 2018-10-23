@@ -2,6 +2,7 @@
 import React from 'react';
 import { connect } from '../store/Connect';
 import { SettingIcon } from './Icons.jsx';
+import TranslationText from './TranslationText.jsx';
 import '../../sass/components/_chart-types.scss';
 
 const ChartTypes = ({
@@ -27,12 +28,12 @@ const ChartTypes = ({
         <ChartTypeMenu
             className="ciq-display ciq-chart-types"
             enabled={enabled}
-            title={t.translate('Chart types')}
+            title={t.translatable('Chart types')}
         >
             <ChartTypeMenu.Title>
                 <Type.icon
                     className={`ic-icon-with-sub ${menuOpen ? 'active' : ''}`}
-                    tooltip-title={t.translate(Type.text)}
+                    tooltip-title={t.translatable(Type.text)}
                 />
             </ChartTypeMenu.Title>
             <ChartTypeMenu.Body>
@@ -45,7 +46,7 @@ const ChartTypes = ({
                             <>
                                 <span className="left">
                                     <T.icon  className={`margin ${T.active ? 'active' : ''}`} />
-                                    <span className="ciq-icon-text">{T.text}</span>
+                                    <TranslationText className="ciq-icon-text" value={T.text} />
                                 </span>
                                 {T.settingsOnClick
                             && (

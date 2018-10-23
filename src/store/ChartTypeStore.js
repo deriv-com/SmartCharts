@@ -24,20 +24,20 @@ import SettingsDialog from '../components/SettingsDialog.jsx';
 
 function getChartTypes() {
     return [
-        { id: 'mountain',      text: t.translate('Line'),           candleOnly: false, icon: LineIcon         },
-        { id: 'line',          text: t.translate('Dot'),            candleOnly: false, icon: DotIcon          },
-        { id: 'colored_line',  text: t.translate('Colored Dot'),    candleOnly: false, icon: LineDotIcon      },
-        { id: 'spline',        text: t.translate('Spline'),         candleOnly: false, icon: SplineIcon       },
-        { id: 'baseline',      text: t.translate('Baseline'),       candleOnly: false, icon: BaseLineIcon     },
-        { id: 'candle',        text: t.translate('Candle'),         candleOnly: true,  icon: CandleIcon       },
-        { id: 'colored_bar',   text: t.translate('OHLC'),           candleOnly: true,  icon: OHLCIcon         },
-        { id: 'hollow_candle', text: t.translate('Hollow Candle'),  candleOnly: true,  icon: HollowCandleIcon },
-        { id: 'heikinashi',    text: t.translate('Heikin Ashi'),    candleOnly: true,  icon: HeikinAshiIcon   },
-        { id: 'kagi',          text: t.translate('Kagi'),           candleOnly: true,  icon: KagiIcon,        settingsOnClick: true },
-        { id: 'linebreak',     text: t.translate('Line Break'),     candleOnly: true,  icon: LineBreakIcon,   settingsOnClick: true },
-        { id: 'renko',         text: t.translate('Renko'),          candleOnly: true,  icon: RenkoIcon,       settingsOnClick: true },
-        { id: 'rangebars',     text: t.translate('Range Bars'),     candleOnly: true,  icon: RangeBarsIcon,   settingsOnClick: true },
-        { id: 'pandf',         text: t.translate('Point & Figure'), candleOnly: true,  icon: PointFigureIcon, settingsOnClick: true },
+        { id: 'mountain',      text: t.translatable('Line'),           candleOnly: false, icon: LineIcon         },
+        { id: 'line',          text: t.translatable('Dot'),            candleOnly: false, icon: DotIcon          },
+        { id: 'colored_line',  text: t.translatable('Colored Dot'),    candleOnly: false, icon: LineDotIcon      },
+        { id: 'spline',        text: t.translatable('Spline'),         candleOnly: false, icon: SplineIcon       },
+        { id: 'baseline',      text: t.translatable('Baseline'),       candleOnly: false, icon: BaseLineIcon     },
+        { id: 'candle',        text: t.translatable('Candle'),         candleOnly: true,  icon: CandleIcon       },
+        { id: 'colored_bar',   text: t.translatable('OHLC'),           candleOnly: true,  icon: OHLCIcon         },
+        { id: 'hollow_candle', text: t.translatable('Hollow Candle'),  candleOnly: true,  icon: HollowCandleIcon },
+        { id: 'heikinashi',    text: t.translatable('Heikin Ashi'),    candleOnly: true,  icon: HeikinAshiIcon   },
+        { id: 'kagi',          text: t.translatable('Kagi'),           candleOnly: true,  icon: KagiIcon,        settingsOnClick: true },
+        { id: 'linebreak',     text: t.translatable('Line Break'),     candleOnly: true,  icon: LineBreakIcon,   settingsOnClick: true },
+        { id: 'renko',         text: t.translatable('Renko'),          candleOnly: true,  icon: RenkoIcon,       settingsOnClick: true },
+        { id: 'rangebars',     text: t.translatable('Range Bars'),     candleOnly: true,  icon: RangeBarsIcon,   settingsOnClick: true },
+        { id: 'pandf',         text: t.translatable('Point & Figure'), candleOnly: true,  icon: PointFigureIcon, settingsOnClick: true },
     ];
 }
 
@@ -52,26 +52,26 @@ function getAggregates() {
     return {
         heikinashi: true,
         kagi: {
-            title: t.translate('Kagi'),
+            title: t.translatable('Kagi'),
             inputs: [{
                 id: 'kagi',
-                title: t.translate('Reversal Percentage'),
+                title: t.translatable('Reversal Percentage'),
                 type: 'numericinput',
             }],
         },
         renko: {
-            title: t.translate('Renko'),
+            title: t.translatable('Renko'),
             inputs: [{
                 id: 'renko',
-                title: t.translate('Range'),
+                title: t.translatable('Range'),
                 type: 'numericinput',
             }],
         },
         linebreak: {
-            title: t.translate('Line Break'),
+            title: t.translatable('Line Break'),
             inputs: [{
                 id: 'priceLines',
-                title: t.translate('Price Lines'),
+                title: t.translatable('Price Lines'),
                 type: 'numericinput',
                 max: 10,
                 step: 1,
@@ -79,22 +79,22 @@ function getAggregates() {
             }],
         },
         rangebars: {
-            title: t.translate('Range Bars'),
+            title: t.translatable('Range Bars'),
             inputs: [{
                 id: 'range',
-                title: t.translate('Range'),
+                title: t.translatable('Range'),
                 type: 'numericinput',
             }],
         },
         pandf: {
-            title: t.translate('Point & Figure'),
+            title: t.translatable('Point & Figure'),
             inputs: [{
                 id: 'box',
-                title: t.translate('Box Size'),
+                title: t.translatable('Box Size'),
                 type: 'numericinput',
             }, {
                 id: 'reversal',
-                title: t.translate('Reversal'),
+                title: t.translatable('Reversal'),
                 type: 'numericinput',
             }],
         },

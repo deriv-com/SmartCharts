@@ -19,7 +19,7 @@ const ChartTitle = ({
             enabled={enabled}
             className="cq-chart-title stx-show cq-symbols-display"
             isFullscreen
-            title={isMobile ? t.translate('Underlying Assets') : ''}
+            title={isMobile ? t.translatable('Underlying Assets') : ''}
         >
             <ChartTitleMenu.Title>
                 <SymbolSelectButton />

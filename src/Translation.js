@@ -1,3 +1,4 @@
+import EventEmitter from 'event-emitter-es6';
 import messages from '../translation/messages.pot';
 import de from '../translation/de.po';
 import fr from '../translation/fr.po';
@@ -28,13 +29,27 @@ const lang_map = {
 };
 
 export class Translation {
+    static get EVENT_TRANSLATION_CHANGED() { return 'EVENT_TRANSLATION_CHANGED'; }
+
     constructor(lang = 'en') {
         this.lang = lang;
+        this._emitter = new EventEmitter();
+    }
+
+    onTranslationChanged(callback) {
+        this._emitter.on(Translation.EVENT_TRANSLATION_CHANGED, callback);
+    }
+
+    offTranslationChanged(callback) {
+        this._emitter.off(Translation.EVENT_TRANSLATION_CHANGED, callback);
     }
 
     setLanguage(lang) {
-        if (lang_map[lang]) {
-            this.lang = lang;
+        if (lang_map[lang] || lang === 'en') {
+            if (this.lang !== lang) {
+                this.lang = lang;
+                this._emitter.emit(Translation.EVENT_TRANSLATION_CHANGED);
+            }
         } else {
             console.error('Unsupported language:', lang);
         }
@@ -94,6 +109,11 @@ export class Translation {
             const str_var = prop.shift();
             str = str.replace(`[${str_var}]`, obj[str_var]);
         }
+        return str;
+    }
+
+    // Doesn't do anything, but marks translation to be extracted from js file
+    translatable(str) {
         return str;
     }
 }

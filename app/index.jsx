@@ -121,9 +121,6 @@ class App extends Component {
         localStorage.setItem('smartchart-setting', JSON.stringify(settings));
 
         this.setState({ settings });
-        if (this.startingLanguage !== settings.language) {
-            window.location.reload();
-        }
     };
 
     renderTopWidgets = () => (

@@ -2,6 +2,7 @@
 import React from 'react';
 import { connect } from '../store/Connect';
 import '../../sass/components/_timeperiod.scss';
+import TranslationText from './TranslationText.jsx';
 
 const Timeperiod = ({
     onChange,
@@ -22,7 +23,7 @@ const Timeperiod = ({
         <TimePeriodMenu
             className="ciq-period"
             enabled={enabled}
-            title={isMobile ? t.translate('Interval') : ''}
+            title={isMobile ? t.translatable('Interval') : ''}
         >
             <TimePeriodMenu.Title>
                 <div className="bt-priod">
@@ -31,16 +32,16 @@ const Timeperiod = ({
                         <span className="unit_display">{timeUnit_display}</span>
                     </span>
                     <br />
-                    <span className="ic-subtitle">{t.translate('Interval')}</span>
+                    <TranslationText className="ic-subtitle" value={t.translatable('Interval')} />
                 </div>
             </TimePeriodMenu.Title>
             <TimePeriodMenu.Body>
                 <div className="cq-interval">
                     <div className="timeUnit">
-                        <span className={timeUnit === 'tick' ? 'selected' : ''}>{t.translate('Tick')}</span>
-                        <span className={timeUnit === 'minute' ? 'selected' : ''}>{t.translate('Minute')}</span>
-                        <span className={timeUnit === 'hour' ? 'selected' : ''}>{t.translate('Hour')}</span>
-                        <span className={timeUnit === 'day' ? 'selected' : ''}>{t.translate('Day')}</span>
+                        <TranslationText className={timeUnit === 'tick' ? 'selected' : ''} value={t.translatable('Tick')} />
+                        <TranslationText className={timeUnit === 'minute' ? 'selected' : ''} value={t.translatable('Minute')} />
+                        <TranslationText className={timeUnit === 'hour' ? 'selected' : ''} value={t.translatable('Hour')} />
+                        <TranslationText className={timeUnit === 'day' ? 'selected' : ''} value={t.translatable('Day')} />
                     </div>
                     <div className="interval">
                         <div className="row">

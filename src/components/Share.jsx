@@ -5,6 +5,7 @@ import {
     PngIcon,
     CsvIcon,
 } from './Icons.jsx';
+import TranslationText from './TranslationText.jsx';
 import '../../sass/components/_ciq-download.scss';
 
 
@@ -17,12 +18,12 @@ const Share = ({
 }) => (
     <ShareMenu
         className="cq-download"
-        title={t.translate('Download Chart')}
+        title={t.translatable('Download Chart')}
     >
         <ShareMenu.Title>
             <DownloadIcon
                 className={`ic-icon-with-sub ${menuOpen ? 'active' : ''}`}
-                tooltip-title={t.translate('Download')}
+                tooltip-title={t.translatable('Download')}
             />
         </ShareMenu.Title>
         <ShareMenu.Body>
@@ -33,8 +34,8 @@ const Share = ({
                             className="ciq-list-item"
                             onClick={downloadPNG}
                         >
-                            <span className="ciq-icon-text">
-                                {t.translate('Download as PNG')}
+                            <span>
+                                <TranslationText className="ciq-icon-text" value={t.translatable('Download as PNG')} />
                                 {isLoadingPNG && <span className="cq-loading" />}
                             </span>
                             <PngIcon />
@@ -43,9 +44,7 @@ const Share = ({
                             className="ciq-list-item"
                             onClick={downloadCSV}
                         >
-                            <span className="ciq-icon-text">
-                                {t.translate('Download as CSV')}
-                            </span>
+                            <TranslationText className="ciq-icon-text" value={t.translatable('Download as CSV')} />
                             <CsvIcon />
                         </div>
                     </div>

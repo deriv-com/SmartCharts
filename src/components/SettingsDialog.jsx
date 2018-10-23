@@ -12,6 +12,7 @@ import {
 import { DeleteIcon } from './Icons.jsx';
 import Favorite from './Favorite.jsx';
 import '../../sass/components/_ciq-settings-dialog.scss';
+import TranslationText from './TranslationText.jsx';
 
 const SettingsPanel = ({
     items,
@@ -110,7 +111,8 @@ const ResetButton = ({
     <div
         className="reset"
         onClick={onResetClick}
-    >{t.translate('RESET')}
+    >
+        <TranslationText value={t.translatable('RESET')} />
     </div>
 );
 
@@ -120,7 +122,8 @@ const DoneButton = ({
     <div
         className="done"
         onClick={() => setOpen(false)}
-    >{t.translate('DONE')}
+    >
+        <TranslationText value={t.translatable('DONE')} />
     </div>
 );
 

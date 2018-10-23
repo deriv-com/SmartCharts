@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { CSSTransition } from 'react-transition-group';
 import { CloseIcon } from './Icons.jsx';
+import TranslationText from './TranslationText.jsx';
 
 class Menu extends Component {
     onOverlayClick = (e) => {
@@ -43,7 +44,7 @@ class Menu extends Component {
                         {title
                     && (
                         <div className="title">
-                            <div className="title-text">{title}</div>
+                            <TranslationText className="title-text" value={title} />
                             <CloseIcon
                                 className="icon-close-menu"
                                 onClick={onTitleClick}

@@ -17,12 +17,12 @@ const StudyLegend = ({
         isOpened={isOpened}
         setOpen={setOpen}
         isMobile={isMobile}
-        title={isMobile ? t.translate('Indicators') : ''}
+        title={isMobile ? t.translatable('Indicators') : ''}
     >
         <StudyMenu.Title>
             <IndicatorIcon
                 className={`ic-icon-with-sub ${menuOpen ? 'active' : ''}`}
-                tooltip-title={t.translate('Indicators')}
+                tooltip-title={t.translatable('Indicators')}
             />
             <NotificationBadge notificationCount={activeStudiesNo} />
         </StudyMenu.Title>

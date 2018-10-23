@@ -17,7 +17,7 @@ const CrosshairToggle = ({
                 >
                     <CrosshairIcon
                         className="ic-icon-with-sub"
-                        tooltip-title={t.translate('Crosshair')}
+                        tooltip-title={t.translatable('Crosshair')}
                     />
                 </Toggle>
             </div>

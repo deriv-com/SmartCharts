@@ -722,23 +722,6 @@ html, body {
     color: transparent;
 }
 
-/* -------- Text for shared charts -------- */
-
-.stx_share {
-    font-size: 14px;
-    font-family: 'georgia';
-    @include themify($themes) {
-        color: themed('ChartText');
-    }
-    width: 1px;
-}
-
-.stx_share_symbol {
-    font-size: 14px;
-    font-family: 'Arial';
-    font-weight: bold;
-}
-
 .stx-holder {
     display: block;
     position: absolute;
@@ -843,26 +826,6 @@ html, body {
 
 .stx_xaxis, .stx_yaxis, .stx_watermark {
     font-family: $base-font;
-}
-
-.sidenav.active {
-    display: flex;
-}
-
-.sidenav {
-    height: 250px;
-    width: 40px;
-    position: fixed;
-    z-index: 2;
-    right: 0;
-    display: none;
-    flex-direction: column;
-    align-items: center;
-    align-content: center;
-    padding: 0;
-    @include themify($themes) {
-        border-left: 1px solid themed('ChartBorder');
-    }
 }
 
 .ciq-menu > span.icons-on {

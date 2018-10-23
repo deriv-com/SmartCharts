@@ -2,6 +2,7 @@ import React from 'react';
 import {
     CategoryIconMap,
 } from '../Icons.jsx';
+import TranslationText from '../TranslationText.jsx';
 
 const Filter = ({ activeCategoryKey, handleFilterClick, category, isMobile }) => {
     const CategoryIcon = CategoryIconMap[category.categoryId];
@@ -12,7 +13,7 @@ const Filter = ({ activeCategoryKey, handleFilterClick, category, isMobile }) =>
             onClick={e => handleFilterClick(category, e)}
         >
             {CategoryIcon && <CategoryIcon className={`ic-${category.categoryId}`} />}
-            <span className="cq-filter-text">{t.translate(category.categoryName)}</span>
+            <TranslationText className="cq-filter-text" value={category.categoryName} />
         </div>);
 };
 

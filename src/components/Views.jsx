@@ -11,6 +11,7 @@ import {
     alertIconMap,
 } from './Icons.jsx';
 import '../../sass/components/_view.scss';
+import TranslationText from './TranslationText.jsx';
 
 const ViewItem = ({
     view,
@@ -38,12 +39,12 @@ const Views = ({
 }) => (
     <ViewsMenu
         className="ciq-views"
-        title={t.translate('Templates')}
+        title={t.translatable('Templates')}
     >
         <ViewsMenu.Title className="cq-menu-btn">
             <TemplateIcon
                 className={`ic-icon-with-sub ${menuOpen ? 'active' : ''}`}
-                tooltip-title={t.translate('Templates')}
+                tooltip-title={t.translatable('Templates')}
             />
         </ViewsMenu.Title>
         <ViewsMenu.Body>
@@ -69,7 +70,7 @@ const Views = ({
                                                     />
                                                 </span>
                                             )
-                                            : <span className="add-new" onClick={main}> {t.translate('Add New')} </span>
+                                            : <TranslationText className="add-new" onClick={main} value={t.translatable('Add New')} />
                                     }
                                     <span className="icon">
                                         {
@@ -100,16 +101,14 @@ const Views = ({
                                     <span>
                                         {templateName + t.translate(' already exists.')}
                                     </span>
-                                    <span>
-                                        {t.translate('Would you like to overwrite it?')}
-                                    </span>
+                                    <TranslationText value={t.translatable('Would you like to overwrite it?')} />
                                 </div>
                                 <div className="ovrwrit-alrt-buttons">
                                     <div onClick={main}>
-                                        {t.translate('CANCEL')}
+                                        <TranslationText value={t.translatable('CANCEL')} />
                                     </div>
                                     <div onClick={overwrite}>
-                                        {t.translate('OVERWRITE')}
+                                        <TranslationText value={t.translatable('OVERWRITE')} />
                                     </div>
                                 </div>
                             </div>

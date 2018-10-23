@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from '../store/Connect';
 import '../../sass/components/_ciq-asset-information.scss';
+import TranslationText from './TranslationText.jsx';
 
 const AssetInformation = ({
     price,
@@ -13,11 +14,11 @@ const AssetInformation = ({
     <div
         className={`ciq-asset-information ${!visible ? 'hide' : ''}`}
     >
-        {price && <div> <div>{t.translate('SPOT')}:</div> <div>{price}</div> </div>}
-        {open && <div> <div>{t.translate('OPEN')}:</div> <div>{open}</div> </div>}
-        {close && <div> <div>{t.translate('CLOSE')}:</div> <div>{close}</div> </div>}
-        {high && <div> <div>{t.translate('HIGH')}:</div> <div>{high}</div> </div>}
-        {low && <div> <div>{t.translate('LOW')}:</div> <div>{low}</div> </div>}
+        {price && <div> <span><TranslationText value={t.translatable('SPOT')} />:</span> <span>{price}</span> </div>}
+        {open && <div> <span><TranslationText value={t.translatable('OPEN')} />:</span> <span>{open}</span> </div>}
+        {close && <div> <span><TranslationText value={t.translatable('CLOSE')} />:</span>  <span>{close}</span> </div>}
+        {high && <div> <span><TranslationText value={t.translatable('HIGH')} />:</span>  <span>{high}</span> </div>}
+        {low && <div> <span><TranslationText value={t.translatable('LOW')} />:</span>  <span>{low}</span> </div>}
     </div>
 );
 

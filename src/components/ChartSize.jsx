@@ -12,10 +12,10 @@ const ChartSize = ({
 }) => (
     <div className="ciq-menu cq-chart-size">
         <div className="cq-menu-btn">
-            <ZoomOutIcon className="ic-icon-with-sub cq-zoom-out" tooltip-title={t.translate('Zoom out')} onClick={zoomOut} />
+            <ZoomOutIcon className="ic-icon-with-sub cq-zoom-out" tooltip-title={t.translatable('Zoom out')} onClick={zoomOut} />
         </div>
         <div className="cq-menu-btn">
-            <ZoomInIcon className="ic-icon-with-sub cq-zoom-in" tooltip-title={t.translate('Zoom in')} onClick={zoomIn} />
+            <ZoomInIcon className="ic-icon-with-sub cq-zoom-in" tooltip-title={t.translatable('Zoom in')} onClick={zoomIn} />
         </div>
     </div>
 );
