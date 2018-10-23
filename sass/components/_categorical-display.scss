@@ -361,6 +361,10 @@
             display: flex;
             justify-content: space-around;
             margin-bottom: -1px;
+            border-bottom: 1px solid #ff9900;
+            @include themify($themes) {
+                border-bottom: 1px solid themed('CatDisplaySearchBorder');
+            }
 
             .cq-filter {
                 border-right: none;
