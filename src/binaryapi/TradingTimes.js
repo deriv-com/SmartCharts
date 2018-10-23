@@ -79,15 +79,16 @@ class TradingTimes {
     async _updateTradeTimes() {
         this.lastUpdateDate = this._serverTime.getLocalDate().toISOString().substring(0, 10);
         const response = await this._api.getTradingTimes(this.lastUpdateDate);
-        const now = this._serverTime.getLocalDate();
-        const dateStr = now.toISOString().substring(0, 11);
-        const getUTCDate = hour => new Date(`${dateStr}${hour}Z`);
 
         if (response.error) {
             const { error } = response;
-            console.error(`Trading Times error code ${error.code}: ${error.message}`);
-            return false;
+            console.error(`Error getting trading times on ${this.lastUpdateDate}: [${error.code}] "${error.message}"`);
+            return;
         }
+
+        const now = this._serverTime.getLocalDate();
+        const dateStr = now.toISOString().substring(0, 11);
+        const getUTCDate = hour => new Date(`${dateStr}${hour}Z`);
 
         this._tradingTimesMap = {};
         const { markets } = response.trading_times;
