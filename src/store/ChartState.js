@@ -59,6 +59,9 @@ class ChartState {
             const { symbol: cachedSymbol } = symbolDat;
             const updatedSymbol = this.chartStore.activeSymbols.getSymbolObj(cachedSymbol);
             symbolDat.symbolObject = updatedSymbol;
+            if (symbolDat.parameters) {
+                symbolDat.parameters.display = updatedSymbol.name;
+            }
         }
 
         if (this.granularity !== undefined) {
@@ -94,6 +97,8 @@ class ChartState {
                 if (this.chartStore.loader) {
                     this.chartStore.loader.hide();
                 }
+
+                this.chartStore.setMainSeriesDisplay(this.stxx.chart.symbolObject.name);
             },
         });
 

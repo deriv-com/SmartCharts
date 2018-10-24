@@ -12,7 +12,7 @@ import Share from './Share.jsx';
 import '../../sass/components/_chart-controls.scss';
 
 
-const renderDefaultControls = isMobile => () => (
+export const RenderDefaultControls = ({ isMobile }) => (
     <>
         {isMobile ? '' : <CrosshairToggle />}
         <ChartTypes />
@@ -32,11 +32,11 @@ const ChartControls = ({
     widgets,
     context,
 }) => {
-    const Controls =  widgets || renderDefaultControls(isMobile);
+    const Controls =  widgets || RenderDefaultControls;
 
     return (
         <div className={`cq-chart-controls ${hasOpenMenu ? ' active' : ''}`}>
-            { context ? <Controls /> : null }
+            { context ? <Controls isMobile={isMobile} /> : null }
         </div>
     );
 };

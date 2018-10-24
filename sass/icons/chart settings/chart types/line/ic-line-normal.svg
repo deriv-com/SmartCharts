@@ -3,10 +3,10 @@
     <title>icons/system/light/chart settings/chart types/line/ic-line-normal</title>
     <desc>Created with Sketch.</desc>
     <defs></defs>
-    <g id="icons/system/light/chart-settings/chart-types/line/ic-line-normal" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+    <g id="icons/system/light/chart-settings/chart-types/line/ic-line-normal" stroke="none" stroke-width="1" fill-rule="evenodd">
         <g id="ic-line">
-            <rect class="no-stroke" opacity="0" x="0" y="0" width="16" height="16"></rect>
-            <rect class="no-stroke" x="0" y="7.5" width="16" height="1"></rect>
+            <rect opacity="0" x="0" y="0" width="16" height="16"></rect>
+            <rect x="0" y="7.5" width="16" height="1"></rect>
         </g>
     </g>
 </svg>

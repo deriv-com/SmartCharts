@@ -30,8 +30,11 @@ export default class MarkerStore {
     }
 
     @action.bound destructor() {
-        this.stx.removeInjection(this._injectionId);
-        this.stx.removeEventListener(this._listenerId);
+        if (this._injectionId) { this.stx.removeInjection(this._injectionId); }
+        if (this._listenerId) { this.stx.removeEventListener(this._listenerId); }
+        this.mainStore.chart.feed.offPagination(this.updateMarkerTick);
+        this._injectionId = null;
+        this._listenerId = null;
     }
 
     @action.bound updateProps({ children, className, y, yPositioner, x, xPositioner }) {
@@ -163,6 +166,15 @@ export default class MarkerStore {
         }
 
         if (this.tick) {
+            // TODO: Temporary solution until ChartIQ can support displaying markers in dates with no tick data
+            if (dummyMarker.params.xPositioner === 'date'
+                && this.stx.masterData[this.tick].DT !== dummyMarker.params.x) {
+                console.log('Marker will not be shown because there is no tick data in ', dummyMarker.params.x);
+                this.hideMarker();
+                this.tick = null;
+                this.destructor();
+                return;
+            }
             this.updatePosition();
         } else {
             this.hideMarker();
