@@ -1,5 +1,4 @@
 /* eslint-disable no-new, react/jsx-indent, react/no-danger, react/jsx-indent-props */
-import '@babel/polyfill';
 
 import Barrier from './components/Barrier.jsx';
 import PendingPromise from './utils/PendingPromise';
