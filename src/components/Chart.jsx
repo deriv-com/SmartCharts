@@ -74,46 +74,48 @@ class Chart extends Component {
                 className={`smartcharts smartcharts-${theme} ${contextWidth} smartcharts-${isMobile ? 'mobile' : 'desktop'}`}
                 ref={this.modalNode}
             >
-                <div
-                    className="cq-context"
-                    ref={this.root}
-                >
-                    <div className={` ${currentPosition}`}>
-                        <div className="ciq-chart-area">
-                            <div className="ciq-chart">
-                                <RenderInsideChart at="holder">
-                                    {barriers.map((barr, idx) => (
-                                        <Barrier
-                                            key={`barrier-${idx}`} // eslint-disable-line react/no-array-index-key
-                                            {...barr}
-                                        />
-                                    ))}
-                                </RenderInsideChart>
-                                <RenderInsideChart at="subholder">
-                                    {children}
-                                    <CurrentSpot />
-                                </RenderInsideChart>
-                                <div className="cq-top-ui-widgets">
-                                    <TopWidgets />
-                                </div>
-                                <div className={`chartContainer ${isDrawing ? 'ciq-draw-mode' : ''}`} style={{ height: chartContainerHeight }}>
-                                    <Crosshair />
-                                    <DrawingCursor />
-                                </div>
-                                <Loader />
-                                {!isChartAvailable && (
-                                    <div className="cq-chart-unavailable">
-                                        {t.translate('Chart data is not available for this symbol.')}
+                <div className="ffff">
+                    <div
+                        className="cq-context"
+                        ref={this.root}
+                    >
+                        <div className={` ${currentPosition}`}>
+                            <div className="ciq-chart-area">
+                                <div className="ciq-chart">
+                                    <RenderInsideChart at="holder">
+                                        {barriers.map((barr, idx) => (
+                                            <Barrier
+                                                key={`barrier-${idx}`} // eslint-disable-line react/no-array-index-key
+                                                {...barr}
+                                            />
+                                        ))}
+                                    </RenderInsideChart>
+                                    <RenderInsideChart at="subholder">
+                                        {children}
+                                        <CurrentSpot />
+                                    </RenderInsideChart>
+                                    <div className="cq-top-ui-widgets">
+                                        <TopWidgets />
                                     </div>
-                                )}
+                                    <div className={`chartContainer ${isDrawing ? 'ciq-draw-mode' : ''}`} style={{ height: chartContainerHeight }}>
+                                        <Crosshair />
+                                        <DrawingCursor />
+                                    </div>
+                                    <Loader />
+                                    {!isChartAvailable && (
+                                        <div className="cq-chart-unavailable">
+                                            {t.translate('Chart data is not available for this symbol.')}
+                                        </div>
+                                    )}
+                                </div>
+                                <ChartControls widgets={chartControlsWidgets} />
                             </div>
-                            <ChartControls widgets={chartControlsWidgets} />
                         </div>
                     </div>
+                    <DrawToolsSettingsDialog />
+                    <AggregateChartSettingsDialog />
+                    <StudySettingsDialog />
                 </div>
-                <DrawToolsSettingsDialog />
-                <AggregateChartSettingsDialog />
-                <StudySettingsDialog />
             </div>
         );
     }
