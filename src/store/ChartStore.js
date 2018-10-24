@@ -240,8 +240,8 @@ class ChartStore {
 
         const deleteElement = stxx.chart.panel.holder.parentElement.querySelector('.mouseDeleteText');
         const manageElement = stxx.chart.panel.holder.parentElement.querySelector('.mouseManageText');
-        deleteElement.textConent = t.translate('right-click to delete');
-        manageElement.textConent = t.translate('right-click to manage');
+        deleteElement.textContent = t.translate('right-click to delete');
+        manageElement.textContent = t.translate('right-click to manage');
 
         animateChart(stxx, { stayPut: true });
 
