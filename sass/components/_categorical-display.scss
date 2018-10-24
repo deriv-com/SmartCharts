@@ -19,7 +19,7 @@
     }
     .cq-filter-panel {
         @include themify($themes) {
-            border-bottom: 0px solid themed('CatDisplaySearchBorder');
+            border-bottom: 0px solid themed('CatDisplayFilterBorder');
             background: themed('CatDisplayFilterBg');
         }
     }
