@@ -1,8 +1,7 @@
 {
     "presets": [
         ["@babel/preset-env",  {
-            "modules": false,
-            "useBuiltIns": "entry"
+            "modules": false
         }],
         "@babel/preset-react"
     ],
@@ -14,7 +13,6 @@
     "env": {
         "test": {
             "presets": [["@babel/preset-env", {
-                "useBuiltIns": "entry",
                 "targets": {
                     "node": "current"
                 }
