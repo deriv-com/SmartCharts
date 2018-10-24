@@ -130,10 +130,11 @@ class App extends Component {
         this.setState({ settings });
         if (this.startingLanguage !== settings.language) {
             // Place language in URL:
-            const url = new URLSearchParams(window.location.href);
+            const { origin, search, pathname } = window.location;
+            const url = new URLSearchParams(search);
             url.delete('l');
             url.set('l', settings.language);
-            window.location.href = url.href;
+            window.location.href = `${origin}${pathname}?${url.toString()}`;
         }
     };
 
