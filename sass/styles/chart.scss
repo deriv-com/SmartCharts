@@ -6,7 +6,7 @@ $chart-red: #f95454;
 /* CSS Document */
 
 html, body {
-    -ms-touch-action: none; /* This is necessary to allow the chart to grab windows touch events */
+    -ms-touch-action: none; /* This is necessary to allow the chart to grab windows touch events */ /* stylelint-disable-line plugin/no-unsupported-browser-features */
     margin: 0px; /*to deal with iFraming which sets 8px by default in some browsers*/
 }
 
@@ -23,7 +23,7 @@ html, body {
     }
 
     &.ciq-draw-mode {
-        cursor: none;
+        cursor: none; /* stylelint-disable-line plugin/no-unsupported-browser-features */
     }
 }
 
@@ -188,7 +188,7 @@ html, body {
 }
 
 .stx-drag-chart { /* Use the hand icon when grabbing and moving the chart */
-    cursor: grabbing;
+    cursor: grabbing; /* stylelint-disable-line plugin/no-unsupported-browser-features */
 }
 
 .stx-panel-control { /* Panel Control buttons template */
@@ -679,7 +679,7 @@ html, body {
     padding: 0px 6px;
     outline: none;
     color: #333;
-    resize: none;
+    resize: none; /* stylelint-disable-line plugin/no-unsupported-browser-features */
     z-index: 1000;
     @include themify($themes) {
         border: 1px solid themed('ChartBorder');
@@ -720,23 +720,6 @@ html, body {
     font-size: 12px;
     font-family: 'Helvetica';
     color: transparent;
-}
-
-/* -------- Text for shared charts -------- */
-
-.stx_share {
-    font-size: 14px;
-    font-family: 'georgia';
-    @include themify($themes) {
-        color: themed('ChartText');
-    }
-    width: 1px;
-}
-
-.stx_share_symbol {
-    font-size: 14px;
-    font-family: 'Arial';
-    font-weight: bold;
 }
 
 .stx-holder {
@@ -843,26 +826,6 @@ html, body {
 
 .stx_xaxis, .stx_yaxis, .stx_watermark {
     font-family: $base-font;
-}
-
-.sidenav.active {
-    display: flex;
-}
-
-.sidenav {
-    height: 250px;
-    width: 40px;
-    position: fixed;
-    z-index: 2;
-    right: 0;
-    display: none;
-    flex-direction: column;
-    align-items: center;
-    align-content: center;
-    padding: 0;
-    @include themify($themes) {
-        border-left: 1px solid themed('ChartBorder');
-    }
 }
 
 .ciq-menu > span.icons-on {
