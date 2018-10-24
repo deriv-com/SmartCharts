@@ -33,7 +33,7 @@ export class Translation {
     }
 
     setLanguage(lang) {
-        if (lang_map[lang]) {
+        if (lang_map[lang] || lang === 'en') {
             this.lang = lang;
         } else {
             console.error('Unsupported language:', lang);
