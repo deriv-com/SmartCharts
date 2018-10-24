@@ -106,6 +106,7 @@
     "sinon": "^7.0.0",
     "style-loader": "^0.21.0",
     "stylelint": "^9.3.0",
+    "stylelint-no-unsupported-browser-features": "^3.0.1",
     "stylelint-webpack-plugin": "^0.10.5",
     "svg-sprite-loader": "^4.1.2",
     "svg-url-loader": "^2.3.1",
@@ -120,11 +121,9 @@
   "dependencies": {
     "event-emitter-es6": "^1.1.5",
     "lodash.debounce": "^4.0.8",
-    "prop-types": "^15.6.0",
     "react-perfect-scrollbar": "^1.1.1",
     "resize-observer-polyfill": "^1.5.0",
     "robust-websocket": "^0.3.0",
-    "stylelint-no-unsupported-browser-features": "^3.0.1",
     "why-did-you-update": "^0.1.1"
   },
   "peerDependencies": {
