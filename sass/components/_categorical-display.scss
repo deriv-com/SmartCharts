@@ -19,6 +19,7 @@
     }
     .cq-filter-panel {
         @include themify($themes) {
+            border-bottom: 0px solid themed('CatDisplaySearchBorder');
             background: themed('CatDisplayFilterBg');
         }
     }
@@ -325,14 +326,14 @@
             border-right: none;
             position: relative;
             z-index: 9;
-            transition: height 0.2s ease-in-out;
+            transition: height 0.2s linear;
             @include themify($themes) {
                 border-bottom: 1px solid themed('CatDisplaySearchBorder');
             }
 
             .cq-lookup-panel {
                 position: relative;
-                transition: margin-top 0.2s ease-in-out;
+                transition: margin-top 0.2s linear;
             }
             .cq-lookup-input {
                 margin: 1.2em 1em 0.5em;
@@ -341,6 +342,7 @@
         .cq-scroll-panel {
             height: 100%;
             width: 100%;
+            border: none;
 
             &:after {
                 background: #ff0000;
@@ -361,10 +363,7 @@
             display: flex;
             justify-content: space-around;
             margin-bottom: -1px;
-            border-bottom: 1px solid #ff9900;
-            @include themify($themes) {
-                border-bottom: 1px solid themed('CatDisplaySearchBorder');
-            }
+            border-bottom-width: 1px;
 
             .cq-filter {
                 border-right: none;

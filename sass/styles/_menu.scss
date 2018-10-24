@@ -150,6 +150,7 @@ $transition-duration: 300ms;
             width: 100%;
             position: absolute;
             transform: translateY(3em);
+            border: none;
 
             &.cq-menu-dropdown-enter-done, &.cq-menu-dropdown-enter-active {
                 transform: translateY(0em);
