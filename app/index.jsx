@@ -18,6 +18,7 @@ import { // eslint-disable-line import/no-extraneous-dependencies,import/no-unre
 } from '@binary-com/smartcharts'; // eslint-disable-line import/no-unresolved
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
+import 'url-search-params-polyfill';
 import { configure } from 'mobx';
 import './app.scss';
 import './doorbell';
