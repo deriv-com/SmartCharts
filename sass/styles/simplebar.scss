@@ -1,0 +1,17 @@
+.simplebar-wrapper {
+    width: 100%;
+}
+
+.simplebar-content {
+    padding: 0px 29px 20px 0px !important;
+}
+
+.simplebar-track {
+    &.vertical {
+        width: 6px;
+
+        .simplebar-scrollbar {
+            width: 6px;
+        }
+    }
+}

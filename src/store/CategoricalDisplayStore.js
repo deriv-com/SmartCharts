@@ -1,5 +1,6 @@
 import React from 'react';
 import { action, observable, computed, reaction } from 'mobx';
+import SimpleBar from 'simplebar';
 import { connect } from './Connect';
 import { cloneCategories, cloneCategory } from '../utils';
 import SearchInput from '../components/SearchInput.jsx';
@@ -94,6 +95,7 @@ export default class CategoricalDisplayStore {
         if (this.pauseScrollSpy || !this.scrollPanel) { return; }
         if (this.filteredItems.length === 0) { return; }
 
+
         let activeMenuId = null;
         const categoryTitleHeight = 40;
         let activeHeadTop = 0;
@@ -110,6 +112,12 @@ export default class CategoricalDisplayStore {
                 const categorySwitchPoint = r.height + top - categoryTitleHeight;
                 activeHeadTop = categorySwitchPoint < 0 ? categorySwitchPoint : 0;
             }
+        }
+
+        if (this.scrollTop > this.scrollPanel.scrollTop) {
+            this.scrollUp();
+        } else {
+            this.scrollDown();
         }
 
         this.scrollTop = this.scrollPanel.scrollTop;
@@ -140,7 +148,10 @@ export default class CategoricalDisplayStore {
                 }
             }
         }
-        this.activeHeadTop = this.scrollPanel.offsetTop;
+        if (this.scrollPanel) {
+            this.scrollPanel.addEventListener('scroll', this.updateScrollSpy);
+            this.activeHeadTop = this.scrollPanel.offsetTop;
+        }
     }
 
     @computed get favoritesCategory()  {
@@ -260,14 +271,13 @@ export default class CategoricalDisplayStore {
     }
 
     @action.bound setScrollPanel(element) {
-        this.scrollPanel = element ? element._container : null;
+        this.scrollPanel = element ? (new SimpleBar(element)).getScrollElement() : null;
     }
 
     connect = connect(() => ({
         filteredItems: this.filteredItems,
         setScrollPanel: this.setScrollPanel,
         isScrollingDown: this.isScrollingDown,
-        updateScrollSpy: this.updateScrollSpy,
         scrollUp: this.scrollUp,
         scrollDown: this.scrollDown,
         onSelectItem: this.onSelectItem,

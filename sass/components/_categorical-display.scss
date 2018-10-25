@@ -88,7 +88,7 @@
         }
     }
     .category-content {
-        margin: 0.4em 1em 0em;
+        margin: 0.4em 0.3em 0em 1em;
         border-radius: 3px;
         @include themify($themes) {
             background-color: themed('CatDisplayCatContentBg');

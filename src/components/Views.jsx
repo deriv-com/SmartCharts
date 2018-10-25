@@ -1,5 +1,5 @@
 import React from 'react';
-import PerfectScrollbar from 'react-perfect-scrollbar';
+import 'simplebar';
 import { connect } from '../store/Connect';
 import ViewStore from '../store/ViewStore';
 import {
@@ -79,7 +79,7 @@ const Views = ({
                                         }
                                     </span>
                                 </div>
-                                <PerfectScrollbar className="ciq-list">
+                                <div data-simplebar className="ciq-list">
                                     {
                                         views.map((view, i) => (
                                             <ViewItem
@@ -90,7 +90,7 @@ const Views = ({
                                             />
                                         ))
                                     }
-                                </PerfectScrollbar>
+                                </div>
                             </div>
                         )
                         :                        (
