@@ -14,7 +14,12 @@
 
     .chart-instance {
         position: relative;
-        grid-column: col-start/span 12;
+        grid-column: col-start/span 6;
+    }
+    .side-chart {
+        grid-column-start: 7;
+        grid-column-end: span 6;
+        position: relative;
     }
     .bottom-blob {
         font-family: sans-serif;
