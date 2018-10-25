@@ -237,8 +237,8 @@
     }
 }
 
-.smartcharts-desktop {
-    &.smartcharts-480 {
+.smartcharts-480 {
+    .smartcharts-desktop {
         .cq-chart-control-bottom {
             .cq-chart-controls {
                 .cq-toggle {
@@ -264,7 +264,10 @@
             }
         }
     }
-    &.smartcharts-900 {
+}
+
+.smartcharts-900 {
+    .smartcharts-desktop {
         .cq-chart-control-bottom {
             .cq-chart-controls {
                 .ciq-menu {
@@ -287,7 +290,10 @@
             }
         }
     }
-    &.smartcharts-1280 {
+}
+
+.smartcharts-1280 {
+    .smartcharts-desktop {
         .cq-chart-controls {
             .ciq-menu {
                 width: 100px;
