@@ -113,11 +113,13 @@ class App extends Component {
         this.state = { settings, isConnectionOpened: true };
     }
 
+    /*
     shouldComponentUpdate(nextProps, nextState) {
         return this.state.symbol !== nextState.symbol
             || JSON.stringify(this.state.settings) !== JSON.stringify(nextState.settings);
     }
-
+    */
+   
     symbolChange = (symbol) => {
         this.notifier.removeByCategory('activesymbol');
         this.setState({ symbol });

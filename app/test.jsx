@@ -12,6 +12,7 @@ import { // eslint-disable-line import/no-extraneous-dependencies
     ChartSize,
     DrawTools,
     ChartSetting,
+    setSmartChartsPublicPath,
     Share,
 } from '@binary-com/smartcharts'; // eslint-disable-line import/no-unresolved
 import React from 'react';
@@ -19,6 +20,10 @@ import ReactDOM from 'react-dom';
 import './test.scss';
 import './doorbell';
 import { ConnectionManager, StreamManager } from './connection';
+
+setSmartChartsPublicPath('./dist/');
+
+const isMobile = window.navigator.userAgent.toLowerCase().includes('mobi');
 
 configure({ enforceActions: true });
 
@@ -44,7 +49,7 @@ const streamManager = new StreamManager(connectionManager);
 
 const renderControls = () => (
     <>
-        {CIQ.isMobile ? '' : <CrosshairToggle />}
+        {isMobile ? '' : <CrosshairToggle />}
         <ChartTypes />
         <StudyLegend />
         <Comparison />
@@ -52,7 +57,7 @@ const renderControls = () => (
         <Views />
         <Share />
         <Timeperiod />
-        {CIQ.isMobile ? '' : <ChartSize />}
+        {isMobile ? '' : <ChartSize />}
         <ChartSetting />
     </>
 );
@@ -116,7 +121,7 @@ class App extends React.Component {
                 <div className="chart-instance">
                     <SmartChart
                         onSymbolChange={symbol => console.log('Symbol has changed to:', symbol)}
-                        isMobile={CIQ.isMobile}
+                        isMobile={isMobile}
                         chartControlsWidgets={renderControls}
                         requestAPI={requestAPI}
                         requestSubscribe={requestSubscribe}
