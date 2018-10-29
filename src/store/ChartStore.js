@@ -82,6 +82,11 @@ function myCreateYAxisLabel(panel, txt, y, backgroundColor, color, ctx, yAxis) {
 
 class ChartStore {
     static keystrokeHub;
+    static chartCount = 0;
+    static tradingTimes;
+    static activeSymbols;
+    static binaryApi;
+
     constructor(mainStore) {
         this.mainStore = mainStore;
     }
@@ -190,9 +195,9 @@ class ChartStore {
             settings,
             onSettingsChange,
         } = props;
-        this.api = new BinaryAPI(requestAPI, requestSubscribe, requestForget);
-        this.tradingTimes = new TradingTimes(this.api);
-        this.activeSymbols = new ActiveSymbols(this.api, this.tradingTimes);
+        this.api = ChartStore.binaryApi || (ChartStore.binaryApi = new BinaryAPI(requestAPI, requestSubscribe, requestForget));
+        this.tradingTimes = ChartStore.tradingTimes || (ChartStore.tradingTimes = new TradingTimes(this.api));
+        this.activeSymbols = ChartStore.activeSymbols || (ChartStore.activeSymbols = new ActiveSymbols(this.api, this.tradingTimes));
         const { chartSetting } = this.mainStore;
         chartSetting.setSettings(settings);
         chartSetting.onSettingsChange = onSettingsChange;
@@ -237,6 +242,7 @@ class ChartStore {
         engineParams.layout = chartLayout;
 
         const stxx = this.stxx = new CIQ.ChartEngine(engineParams);
+        ChartStore.chartCount += 1;
 
         const deleteElement = stxx.chart.panel.holder.parentElement.querySelector('.mouseDeleteText');
         const manageElement = stxx.chart.panel.holder.parentElement.querySelector('.mouseManageText');
@@ -477,8 +483,13 @@ class ChartStore {
     }
 
     @action.bound destroy() {
+        ChartStore.chartCount -= 1;
+
         if (this.resizeObserver) { this.resizeObserver.disconnect(); }
-        if (this.tradingTimes) { this.tradingTimes.destructor(); }
+        if (this.tradingTimes && ChartStore.chartCount === 0) {
+            ChartStore.tradingTimes = null;
+            this.tradingTimes.destructor();
+        }
 
         // Destroying the chart does not unsubscribe the streams;
         // we need to manually unsubscribe them.

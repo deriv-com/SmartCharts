@@ -1,9 +1,12 @@
 import EventEmitter from 'event-emitter-es6';
 import ServerTime from '../utils/ServerTime';
+import PendingPromise from '../utils/PendingPromise';
 
 class TradingTimes {
     static get EVENT_MARKET_OPEN_CLOSE_CHANGE() { return 'EVENT_MARKET_OPEN_CLOSE_CHANGE'; }
     static get FEED_UNAVAILABLE() { return 'chartonly'; }
+    isInitialized = false;
+    tradingTimesPromise = new PendingPromise();
 
     constructor(api) {
         this._api = api;
@@ -20,8 +23,12 @@ class TradingTimes {
     async initialize() {
         await this._serverTime.init(this._api);
 
+        if (this.isInitialized) { return this.tradingTimesPromise; }
+        this.isInitialized = true;
+
         if (!this._tradingTimesMap) {
             await this._updateTradeTimes();
+            this.tradingTimesPromise.resolve();
 
             const periodicUpdate = async () => {
                 const changed = this._updateMarketOpenClosed();
