@@ -13,6 +13,7 @@ import { // eslint-disable-line import/no-extraneous-dependencies
     ChartSize,
     DrawTools,
     ChartSetting,
+    setSmartChartsPublicPath,
     Share,
 } from '@binary-com/smartcharts'; // eslint-disable-line import/no-unresolved
 import React from 'react';

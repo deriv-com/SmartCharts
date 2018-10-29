@@ -124,6 +124,7 @@
     "react-perfect-scrollbar": "^1.1.1",
     "resize-observer-polyfill": "^1.5.0",
     "robust-websocket": "^0.3.0",
+    "url-search-params-polyfill": "^5.0.0",
     "why-did-you-update": "^0.1.1"
   },
   "peerDependencies": {
