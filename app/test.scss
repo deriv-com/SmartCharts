@@ -7,7 +7,7 @@
 .grid {
     position: relative;
     display: grid;
-    grid-template-rows: 1fr auto auto;
+    grid-template-rows: auto auto;
     grid-template-columns: repeat(12, [col-start] 1fr); /* stylelint-disable-line plugin/no-unsupported-browser-features */
     width: 100%;
     height: 100vh;
@@ -20,6 +20,10 @@
         grid-column-start: 7;
         grid-column-end: span 6;
         position: relative;
+    }
+    .bottom-chart {
+        position: relative;
+        grid-column: col-start/span 12;
     }
     .bottom-blob {
         font-family: sans-serif;
