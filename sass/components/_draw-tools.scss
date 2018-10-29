@@ -19,8 +19,7 @@
                 margin: 8px 11px 8px 0;
                 border-radius: 3px;
 
-                @include svg-icon-stroke('DialogHeadIcon');
-                @include themify {
+                @include themify($themes) {
                     border: solid themed('DropdownBorder') 1px;
                 }
             }

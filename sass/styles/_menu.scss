@@ -6,10 +6,6 @@ $transition-duration: 300ms;
         color: themed('MenuText');
     }
 
-    > .ic-icon,
-    > .cq-toggle {
-        @include svg-icon-color('MenuIcon');
-    }
     > span {
         padding: 0 12px 0 0;
         position: relative;
@@ -72,13 +68,6 @@ $transition-duration: 300ms;
         > .ic-icon {
             @include themify($themes) {
                 color: themed('DialogHeadIcon');
-            }
-
-            svg, path, g {
-                @include themify($themes) {
-                    color: themed('DialogHeadIcon');
-                    fill: themed('DialogHeadIcon');
-                }
             }
         }
     }

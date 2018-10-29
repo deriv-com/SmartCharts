@@ -10,7 +10,7 @@ const CategoricalDisplay = ({
     scrollDown,
     ResultsPanel,
     FilterPanel,
-    SearchInput
+    SearchInput,
 }) => (
     <div className="cq-categorical-display">
         <div className="cq-lookup-filters">

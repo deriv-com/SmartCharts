@@ -31,7 +31,7 @@
  *    new CIQ.Animation(stxx, {tension:0.3});  //Default animation with splining tension of 0.3
  *
  */
-CIQ.Animation = function (stx, animationParameters, easeMachine) {
+export default function animateChart(stx, animationParameters, easeMachine) {
     let params = {
         stayPut: false,
         ticksFromEdgeOfScreen: 5,
@@ -222,7 +222,7 @@ CIQ.Animation = function (stx, animationParameters, easeMachine) {
                         this.previousMicroPixels = this.micropixels;
                         this.nextMicroPixels = this.micropixels + candleWidth;
                         beginningOffset = candleWidth * -1;
-                        if (chart.dataSegment.length < chart.maxTicks - animationParameters.ticksFromEdgeOfScreen && !animationParameters.stayPut) {
+                        if (chart.dataSegment && chart.dataSegment.length < chart.maxTicks - animationParameters.ticksFromEdgeOfScreen && !animationParameters.stayPut) {
                             this.nextMicroPixels = this.micropixels;
                             chart.scroll++;
                         }
@@ -249,4 +249,4 @@ CIQ.Animation = function (stx, animationParameters, easeMachine) {
             return true; // bypass default behavior in favor of animation
         }
     });
-};
+}

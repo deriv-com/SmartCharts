@@ -6,7 +6,7 @@
     }
     .cq-toggle {
         &.active {
-            path {
+            svg {
                 @include themify($themes) {
                     fill: themed('MenuActiveIcon') !important;
                 }

@@ -9,6 +9,10 @@ class Notification extends React.Component {
         props.notifier.onRemoveByCategory(this.onRemoveByCategory);
     }
 
+    shouldComponentUpdate(nextProps, nextState) {
+        return this.state.messages.length !== nextState.messages.length;
+    }
+
     onMessage = (message, duration = 10) => {
         const msg = {
             type: 'warning',

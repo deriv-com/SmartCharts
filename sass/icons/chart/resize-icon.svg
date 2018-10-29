@@ -1,72 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!-- Generator: Adobe Illustrator 21.0.2, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
-
 <svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    version="1.1"
-   id="Layer_1"
-   inkscape:version="0.92.2 5c3e80d, 2017-08-06"
-   sodipodi:docname="resize-icon.svg"
-   x="0px"
-   y="0px"
    width="6"
    height="14"
-   viewBox="0 0 6 14"
-   xml:space="preserve"><metadata
-     id="metadata3957"><rdf:RDF><cc:Work
-         rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
-           rdf:resource="http://purl.org/dc/dcmitype/StillImage" /><dc:title></dc:title></cc:Work></rdf:RDF></metadata><defs
-     id="defs3955" /><sodipodi:namedview
-     pagecolor="#ffffff"
-     bordercolor="#666666"
-     borderopacity="1"
-     objecttolerance="10"
-     gridtolerance="10"
-     guidetolerance="10"
-     inkscape:pageopacity="0"
-     inkscape:pageshadow="2"
-     inkscape:window-width="1151"
-     inkscape:window-height="667"
-     id="namedview3953"
-     showgrid="false"
-     inkscape:zoom="20.64"
-     inkscape:cx="20.214426"
-     inkscape:cy="16.203545"
-     inkscape:window-x="0"
-     inkscape:window-y="117"
-     inkscape:window-maximized="0"
-     inkscape:current-layer="Layer_1"
-     fit-margin-top="0"
-     fit-margin-left="0"
-     fit-margin-right="0"
-     fit-margin-bottom="0" /><style
-     type="text/css"
-     id="style3856">
-	.st0{fill:none;stroke:#000000;stroke-miterlimit:10;}
-	.st1{fill:#FFFFFF;}
-	.st2{fill:none;stroke:#FFFFFF;stroke-miterlimit:10;}
-	.st3{fill:#1461D4;}
-	.st4{fill:#231F20;}
-	.st5{opacity:0.5;}
-	.st6{opacity:0.5;fill:none;stroke:#231F20;stroke-miterlimit:10;enable-background:new    ;}
-	.st7{opacity:0.5;fill:none;stroke:#FFFFFF;stroke-miterlimit:10;enable-background:new    ;}
-	.st8{font-family:'AGaramondPro-BoldItalic';}
-	.st9{font-size:13.8219px;}
-	.st10{fill:#85C730;}
-	.st11{fill:#FF002A;}
-	.st12{opacity:0.4;enable-background:new    ;}
-	.st13{opacity:0.4;fill:#FFFFFF;enable-background:new    ;}
-	.st14{fill:#1A5FD1;}
-	.st15{fill:#6080C0;}
-</style><polygon
-     class="st15"
+   viewBox="0 0 6 14">
+    <polygon
      points="778.7,40.2 781.7,44.5 784.7,40.2 782.9,40.2 782.9,34.8 784.7,34.8 781.7,30.5 778.7,34.8 780.5,34.8 780.5,40.2 "
      id="polygon3950"
      transform="translate(-778.7,-30.5)"
-     style="fill:#6080c0" /></svg>
+     fill="#6080c0" />
+</svg>

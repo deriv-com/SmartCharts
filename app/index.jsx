@@ -10,6 +10,7 @@ import { // eslint-disable-line import/no-extraneous-dependencies,import/no-unre
     DrawTools,
     ChartSetting,
     createObjectFromLocalStorage,
+    setSmartChartsPublicPath,
     Share,
     ChartTitle,
     AssetInformation,
@@ -17,12 +18,22 @@ import { // eslint-disable-line import/no-extraneous-dependencies,import/no-unre
 } from '@binary-com/smartcharts'; // eslint-disable-line import/no-unresolved
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
+import 'url-search-params-polyfill';
 import { configure } from 'mobx';
 import './app.scss';
 import './doorbell';
+import { whyDidYouUpdate }  from 'why-did-you-update';
 import { ConnectionManager, StreamManager } from './connection';
 import Notification from './Notification.jsx';
 import ChartNotifier from './ChartNotifier.js';
+
+setSmartChartsPublicPath('./dist/');
+
+const isMobile = window.navigator.userAgent.toLowerCase().includes('mobi');
+
+if (process.env.NODE_ENV !== 'production') {
+    whyDidYouUpdate(React, { exclude: [/^RenderInsideChart$/, /^inject-/] });
+}
 
 
 if (window.location.host.endsWith('binary.com')) {
@@ -48,7 +59,7 @@ configure({ enforceActions: 'observed' });
 function getLanguageStorage() {
     const default_language = 'en';
     try {
-        const setting_string = CIQ.localStorage.getItem('smartchart-setting'),
+        const setting_string = localStorage.getItem('smartchart-setting'),
             setting = JSON.parse(setting_string !== '' ? setting_string : '{}');
 
         return setting.language || default_language;
@@ -58,17 +69,18 @@ function getLanguageStorage() {
 }
 
 function getServerUrl() {
-    const local = CIQ.localStorage.getItem('config.server_url');
+    const local = localStorage.getItem('config.server_url');
     return `wss://${local || 'ws.binaryws.com'}/websockets/v3`;
 }
 
 const chartId = '1';
-const appId  = CIQ.localStorage.getItem('config.app_id') || 12812;
+const appId  = localStorage.getItem('config.app_id') || 12812;
 const serverUrl = getServerUrl();
+const language = new URLSearchParams(window.location.search).get('l') || getLanguageStorage();
 
 const connectionManager = new ConnectionManager({
     appId,
-    language: getLanguageStorage(),
+    language,
     endpoint: serverUrl,
 });
 
@@ -83,8 +95,13 @@ class App extends Component {
     constructor(props) {
         super(props);
         this.notifier = new ChartNotifier();
-        const settings = createObjectFromLocalStorage('smartchart-setting');
-        if (settings) { this.startingLanguage = settings.language; }
+        let settings = createObjectFromLocalStorage('smartchart-setting');
+        if (settings) {
+            settings.language = language;
+            this.startingLanguage = settings.language;
+        } else {
+            settings = { language };
+        }
         connectionManager.on(
             ConnectionManager.EVENT_CONNECTION_CLOSE,
             () => this.setState({ isConnectionOpened: false }),
@@ -96,6 +113,13 @@ class App extends Component {
         this.state = { settings, isConnectionOpened: true };
     }
 
+    /*
+    shouldComponentUpdate(nextProps, nextState) {
+        return this.state.symbol !== nextState.symbol
+            || JSON.stringify(this.state.settings) !== JSON.stringify(nextState.settings);
+    }
+    */
+   
     symbolChange = (symbol) => {
         this.notifier.removeByCategory('activesymbol');
         this.setState({ symbol });
@@ -103,11 +127,16 @@ class App extends Component {
 
     saveSettings = (settings) => {
         console.log('settings updated:', settings);
-        CIQ.localStorageSetItem('smartchart-setting', JSON.stringify(settings));
+        localStorage.setItem('smartchart-setting', JSON.stringify(settings));
 
         this.setState({ settings });
         if (this.startingLanguage !== settings.language) {
-            window.location.reload();
+            // Place language in URL:
+            const { origin, search, pathname } = window.location;
+            const url = new URLSearchParams(search);
+            url.delete('l');
+            url.set('l', settings.language);
+            window.location.href = `${origin}${pathname}?${url.toString()}`;
         }
     };
 
@@ -124,7 +153,7 @@ class App extends Component {
 
     renderControls = () => (
         <>
-            {CIQ.isMobile ? '' : <CrosshairToggle />}
+            {isMobile ? '' : <CrosshairToggle />}
             <ChartTypes />
             <Timeperiod />
             <StudyLegend />
@@ -132,10 +161,14 @@ class App extends Component {
             <DrawTools />
             <Views />
             <Share />
-            {CIQ.isMobile ? '' : <ChartSize />}
+            {isMobile ? '' : <ChartSize />}
             <ChartSetting />
         </>
     );
+
+    onMessage = (e) => {
+        this.notifier.notify(e);
+    }
 
     render() {
         const { settings, isConnectionOpened, symbol } = this.state;
@@ -144,8 +177,8 @@ class App extends Component {
             <SmartChart
                 id={chartId}
                 symbol={symbol}
-                onMessage={e => this.notifier.notify(e)}
-                isMobile={CIQ.isMobile}
+                isMobile={isMobile}
+                onMessage={this.onMessage}
                 enableRouting
                 topWidgets={this.renderTopWidgets}
                 chartControlsWidgets={this.renderControls}

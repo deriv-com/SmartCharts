@@ -33,8 +33,14 @@
 .cq-chart-control-left {
     .cq-chart-size {
         width: 100px !important;
-        min-height: 116px;
+        min-height: 124px;
         flex-flow: column;
+
+        .cq-menu-btn {
+            &:first-child {
+                margin-bottom: 16px;
+            }
+        }
     }
 }
 
