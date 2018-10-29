@@ -85,7 +85,6 @@ class ChartStore {
     static chartCount = 0;
     static tradingTimes;
     static activeSymbols;
-    static binaryApi;
 
     constructor(mainStore) {
         this.mainStore = mainStore;
@@ -195,9 +194,12 @@ class ChartStore {
             settings,
             onSettingsChange,
         } = props;
-        this.api = ChartStore.binaryApi || (ChartStore.binaryApi = new BinaryAPI(requestAPI, requestSubscribe, requestForget));
+        this.api = new BinaryAPI(requestAPI, requestSubscribe, requestForget);
+
+        // trading times and active symbols can be reused across multiple charts
         this.tradingTimes = ChartStore.tradingTimes || (ChartStore.tradingTimes = new TradingTimes(this.api));
         this.activeSymbols = ChartStore.activeSymbols || (ChartStore.activeSymbols = new ActiveSymbols(this.api, this.tradingTimes));
+
         const { chartSetting } = this.mainStore;
         chartSetting.setSettings(settings);
         chartSetting.onSettingsChange = onSettingsChange;
