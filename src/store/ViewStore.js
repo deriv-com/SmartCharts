@@ -11,7 +11,6 @@ export default class ViewStore {
     }
 
     @observable static views = createObjectFromLocalStorage('cq-views') || [];
-    @observable scrollPanel;
     @observable templateName = '';
     @observable currentRoute = 'main';
     @observable routes = {

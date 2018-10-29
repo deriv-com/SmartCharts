@@ -229,6 +229,10 @@
         @include themify($themes) {
             border-left: 1px solid themed('CatDisplayBorder');
         }
+
+        .simplebar-scrollbar {
+            right: 3px;
+        }
     }
     .ciq-item-display {
         display: inline-block;
@@ -242,6 +246,7 @@
 
 /* Active Symbol Icons */
 .cq-categorical-display .results-panel {
+    padding-right: 1em;
     @include themify($themes) {
         background: themed('CatDisplayBg');
     }

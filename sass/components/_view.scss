@@ -47,13 +47,14 @@
         .content {
             display: block;
             height: 145px;
-            padding: 0px 5px 16px 16px;
+            padding: 0 7px 0 16px;
 
             .ciq-list {
-                height: 115px;
-                overflow: auto;
-                display: block;
+                max-height: 110px !important;
 
+                .ciq-list-inner {
+                    min-height: 131px;
+                }
                 .ciq-list-item {
                     align-items: center;
                     justify-content: flex-start;

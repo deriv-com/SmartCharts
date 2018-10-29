@@ -1,17 +1,12 @@
-.simplebar-wrapper {
-    width: 100%;
-}
 
-.simplebar-content {
-    padding: 0px 29px 20px 0px !important;
-}
+.simplebar-scrollbar {
+    right: 0px;
+    width: 6px;
 
-.simplebar-track {
-    &.vertical {
-        width: 6px;
-
-        .simplebar-scrollbar {
-            width: 6px;
+    &:before {
+        opacity: 1;
+        @include themify($themes) {
+            background: themed('ListScroll');
         }
     }
 }

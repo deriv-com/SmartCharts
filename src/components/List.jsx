@@ -16,6 +16,7 @@ const List = ({
     return (
         <div
             data-simplebar
+            data-simplebar-auto-hide="false"
             className="ciq-list"
             style={height && { height: `${height}px` }}
         >
