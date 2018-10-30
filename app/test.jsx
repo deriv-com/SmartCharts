@@ -8,6 +8,7 @@ import { // eslint-disable-line import/no-extraneous-dependencies
     Comparison,
     Views,
     CrosshairToggle,
+    setSmartChartsPublicPath,
     Timeperiod,
     ChartSize,
     DrawTools,
@@ -23,14 +24,14 @@ import { ConnectionManager, StreamManager } from './connection';
 
 setSmartChartsPublicPath('./dist/');
 
-const isMobile = window.navigator.userAgent.toLowerCase().includes('mobi');
+configure({ enforceActions: 'observed' });
 
-configure({ enforceActions: true });
+const isMobile = window.navigator.userAgent.toLowerCase().includes('mobi');
 
 const getLanguageStorage = function () {
     const default_language = 'en';
     try {
-        const setting_string = CIQ.localStorage.getItem('smartchart-setting'),
+        const setting_string = localStorage.getItem('smartchart-setting'),
             setting = JSON.parse(setting_string !== '' ? setting_string : '{}');
 
         return setting.language || default_language;
@@ -127,6 +128,14 @@ class App extends React.Component {
                         requestSubscribe={requestSubscribe}
                         requestForget={requestForget}
                         barriers={barriers}
+                    />
+                </div>
+                <div className="side-chart">
+                    <SmartChart
+                        isMobile={isMobile}
+                        requestAPI={requestAPI}
+                        requestSubscribe={requestSubscribe}
+                        requestForget={requestForget}
                     />
                 </div>
                 <div className="bottom-blob">
