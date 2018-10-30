@@ -5,7 +5,7 @@ export const dummyTickData = [
             end: 'latest',
             granularity: 0,
             req_id: 2,
-            start: 1532589644,
+            start: 1532587905,
             style: 'ticks',
             subscribe: 1,
             ticks_history: 'R_25',

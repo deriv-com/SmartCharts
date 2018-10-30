@@ -32,7 +32,7 @@ export default class MarkerStore {
     @action.bound destructor() {
         if (this._injectionId) { this.stx.removeInjection(this._injectionId); }
         if (this._listenerId) { this.stx.removeEventListener(this._listenerId); }
-        this.mainStore.chart.feed.offPagination(this.updateMarkerTick);
+        if (this.mainStore.chart.feed) { this.mainStore.chart.feed.offPagination(this.updateMarkerTick); }
         this._injectionId = null;
         this._listenerId = null;
     }

@@ -297,13 +297,16 @@
     }
 }
 
-.smartcharts-desktop {
-    &.smartcharts-480 {
+.smartcharts-480 {
+    .smartcharts-desktop {
         .cq-categorical-display {
             width: 450px;
         }
     }
-    &.smartcharts-900 {
+}
+
+.smartcharts-900 {
+    .smartcharts-desktop {
         .cq-categorical-display {
             width: 550px;
         }
