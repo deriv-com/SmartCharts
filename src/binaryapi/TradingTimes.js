@@ -31,7 +31,7 @@ class TradingTimes {
                 let nextUpdate = this._nextUpdateDate();
 
                 if (!nextUpdate) {
-                    const now = this._serverTime.getUTCDate();
+                    const now = this._serverTime.getLocalDate();
                     const getUpdateDate = () => new Date(`${this.lastUpdateDate}T00:00:00Z`);
                     // Get tomorrow's date (UTC) and set it as next update if no nextDate available
                     const nextUpdateDate = getUpdateDate();
