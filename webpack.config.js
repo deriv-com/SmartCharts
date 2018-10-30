@@ -161,7 +161,7 @@ if (process.env.ANALYZE_BUNDLE) {
 }
 
 if (isApp) {
-    config.entry = path.resolve(__dirname, './app/index.jsx');
+    config.entry = path.resolve(__dirname, './app/test.jsx');
     config.plugins.push(new CopyWebpackPlugin([
         { from: './sass/favicons/*.png' },
         { from: './node_modules/@babel/polyfill/dist/polyfill.min.js', to: 'babel-polyfill.min.js' },

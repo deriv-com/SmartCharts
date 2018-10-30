@@ -8,7 +8,6 @@ import { // eslint-disable-line import/no-extraneous-dependencies
     Comparison,
     Views,
     CrosshairToggle,
-    setSmartChartsPublicPath,
     Timeperiod,
     ChartSize,
     DrawTools,
@@ -103,8 +102,12 @@ class App extends React.Component {
         this.setState({ ...nextState, barrierType });
     };
 
+    handleDateChange = ({ currentTarget: { value } }) => {
+        this.setState({ endEpoch: (value !== '') ? (new Date(`${value}:00Z`).valueOf() / 1000) : undefined });
+    };
+
     render() {
-        const { barrierType, highLow : { high, low }, hidePriceLines, draggable, relative, shadeColor } = this.state;
+        const { barrierType, highLow : { high, low }, hidePriceLines, draggable, relative, shadeColor, endEpoch } = this.state;
         const barriers = barrierType ? [{
             shade: barrierType,
             shadeColor,
@@ -119,7 +122,7 @@ class App extends React.Component {
         }] : [];
         return (
             <div className="grid">
-                <div className="chart-instance">
+                <div className="test-chart">
                     <SmartChart
                         onSymbolChange={symbol => console.log('Symbol has changed to:', symbol)}
                         isMobile={isMobile}
@@ -128,14 +131,8 @@ class App extends React.Component {
                         requestSubscribe={requestSubscribe}
                         requestForget={requestForget}
                         barriers={barriers}
-                    />
-                </div>
-                <div className="side-chart">
-                    <SmartChart
-                        isMobile={isMobile}
-                        requestAPI={requestAPI}
-                        requestSubscribe={requestSubscribe}
-                        requestForget={requestForget}
+                        endEpoch={endEpoch}
+                        id="test"
                     />
                 </div>
                 <div className="bottom-blob">
@@ -161,11 +158,18 @@ class App extends React.Component {
                             <option value="DEEPPINK">DEEPPINK</option>
                         </select>
                         &nbsp;
+                        <br />
                         <b>low:</b> <input id="low" type="number" value={low === undefined ? '' : low} onChange={this.onHighLowChange} />,
                         <b>high:</b> <input id="high" type="number" value={high === undefined ? '' : high} onChange={this.onHighLowChange} />;
                         No PriceLine: <input type="checkbox" checked={hidePriceLines === undefined ? '' : hidePriceLines} onChange={this.onPriceLineDisableChange} />
                         Relative: <input type="checkbox" checked={relative === undefined ? '' : relative} onChange={this.onRelativeChange} />
                         Draggable: <input type="checkbox" checked={draggable === undefined ? '' : draggable} onChange={this.onDraggableChange} />
+                        <br />
+                        <b>Jump to Past (GMT):</b><input
+                            type="datetime-local"
+                            onChange={this.handleDateChange}
+                            defaultValue={new Date().toISOString().substring(0, 16)}
+                        /> - epoch: <span>{endEpoch}</span>
                     </label>
                 </div>
             </div>
