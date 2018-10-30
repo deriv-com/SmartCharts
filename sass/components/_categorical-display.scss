@@ -79,6 +79,7 @@
         }
     }
     .category {
+        padding-right: 1em;
         position: relative;
 
         &:last-child {
@@ -91,6 +92,10 @@
         @include themify($themes) {
             background-color: themed('CatDisplayCatContentBg');
             border: 1px solid themed('CatDisplayCatContentBorder');
+        }
+
+        &:last-child {
+            margin-bottom: 1em;
         }
     }
     .subcategory {
@@ -244,7 +249,6 @@
 
 /* Active Symbol Icons */
 .cq-categorical-display .results-panel {
-    padding-right: 1em;
     @include themify($themes) {
         background: themed('CatDisplayBg');
     }
@@ -355,10 +359,7 @@
                 line-height: 3em;
 
                 &.cq-active-filter {
-                    border: none;
-                    @include themify($themes) {
-                        box-shadow: 0px 2px 0px 0px themed('CatDisplaySearchBorder');
-                    }
+                    border-bottom: 2px solid;
                 }
                 > .ic-icon {
                     margin: 0px;
