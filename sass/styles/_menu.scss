@@ -105,6 +105,7 @@ $transition-duration: 300ms;
         }
     }
     .cq-modal-dropdown {
+        border: none;
         pointer-events: none;
         z-index: 1;
         position: fixed;
@@ -141,6 +142,9 @@ $transition-duration: 300ms;
         }
         &.cq-chart-title .cq-menu-dropdown {
             transform: translateY(-3em);
+        }
+        .cq-scroll-panel {
+            border-left: none;
         }
         .cq-menu-dropdown {
             height: auto;
