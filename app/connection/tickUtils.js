@@ -82,9 +82,12 @@ function mergeCandles(master, patch) {
 }
 
 export function mergeTickHistory(master, patch) {
-    if (Array.isArray(master)) {
-        return mergeCandles(master, patch);
+    const merged = { ...master };
+    if (master.candles) {
+        merged.candles = mergeCandles(master.candles, patch.candles);
+    } else {
+        merged.history = mergeTicks(master.history, patch.history);
     }
-    return mergeTicks(master, patch);
-}
 
+    return merged;
+}
