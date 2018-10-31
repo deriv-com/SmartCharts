@@ -26,6 +26,8 @@ class TradingTimes {
         if (this.isInitialized) { return this.tradingTimesPromise; }
         this.isInitialized = true;
 
+        this.lastUpdateDate = this._serverTime.getLocalDate().toISOString().substring(0, 10);
+
         if (!this._tradingTimesMap) {
             await this._updateTradeTimes();
             this.tradingTimesPromise.resolve();
@@ -39,9 +41,8 @@ class TradingTimes {
 
                 if (!nextUpdate) {
                     const now = this._serverTime.getLocalDate();
-                    const getUpdateDate = () => new Date(`${this.lastUpdateDate}T00:00:00Z`);
                     // Get tomorrow's date (UTC) and set it as next update if no nextDate available
-                    const nextUpdateDate = getUpdateDate();
+                    const nextUpdateDate = new Date(`${this.lastUpdateDate}T00:00:00Z`);
                     nextUpdateDate.setDate(nextUpdateDate.getDate() + 1);
                     // if somehow the next update date is in the past, use the current date
                     this.lastUpdateDate = ((now > nextUpdateDate) ? now : nextUpdateDate).toISOString().substring(0, 10);
@@ -59,7 +60,8 @@ class TradingTimes {
                         this._tradingTimesMap[key].isOpened = isOpenMap[key];
                     }
 
-                    nextUpdate = getUpdateDate();
+                    // next update date will be 00:00 hours (UTC) of the following day:
+                    nextUpdate = nextUpdateDate;
                 }
 
                 const waitPeriod =  nextUpdate - this._serverTime.getLocalDate();
@@ -84,7 +86,6 @@ class TradingTimes {
     }
 
     async _updateTradeTimes() {
-        this.lastUpdateDate = this._serverTime.getLocalDate().toISOString().substring(0, 10);
         const response = await this._api.getTradingTimes(this.lastUpdateDate);
 
         if (response.error) {
@@ -144,6 +145,10 @@ class TradingTimes {
     }
 
     isMarketOpened(symbol) {
+        if (!(symbol in this._tradingTimesMap)) {
+            console.error('Symbol not in _tradingTimesMap:', symbol, ' trading map:', this._tradingTimesMap);
+            return false;
+        }
         return this._tradingTimesMap[symbol].isOpened;
     }
 
