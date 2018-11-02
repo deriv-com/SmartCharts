@@ -96,16 +96,18 @@ export default class CategoricalDisplayStore {
         if (this.filteredItems.length === 0) { return; }
 
 
-        let activeMenuId = null;
         const categoryTitleHeight = 40;
+        const scrollPanelTop = this.scrollPanel.getBoundingClientRect().top;
         let activeHeadTop = 0;
+        let activeMenuId = null;
+
 
         for (const category of this.filteredItems) {
             const el = this.categoryElements[category.categoryId];
 
             if (!el) { return; }
             const r = el.getBoundingClientRect();
-            const top = r.top - this.scrollPanel.getBoundingClientRect().top;
+            const top = r.top - scrollPanelTop;
             if (top < 0) {
                 activeMenuId = category.categoryId;
 
@@ -122,7 +124,7 @@ export default class CategoricalDisplayStore {
 
         this.scrollTop = this.scrollPanel.scrollTop;
         this.activeCategoryKey = activeMenuId || this.filteredItems[0].categoryId;
-        this.activeHeadTop = activeHeadTop + this.scrollPanel.offsetTop;
+        this.activeHeadTop = activeHeadTop + (this.mainStore.chart.isMobile ? scrollPanelTop : 0);
         this.activeHeadKey = this.scrollTop === 0 ? null : this.activeCategoryKey;
     }
 

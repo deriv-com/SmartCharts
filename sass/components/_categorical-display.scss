@@ -79,6 +79,8 @@
         }
     }
     .category {
+        padding-top: 3em;
+        padding-bottom: 1em;
         padding-right: 1em;
         position: relative;
 
@@ -116,16 +118,18 @@
         font-weight: bold;
         padding: 0 0.7em;
         line-height: 40px;
+        position: absolute;
         top: 0;
+        width: 100%;
         @include themify($themes) {
             color: themed('CatDisplayCatTitleText');
         }
 
         &.fixed {
-            position: sticky;
+            position: fixed;
             width: 100%;
             z-index: 1;
-            top: 0px !important;
+            top: 0px;
             padding-top: 0px;
             @include themify($themes) {
                 background-color: themed('DialogBodyBg');
