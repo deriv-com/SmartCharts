@@ -13,14 +13,24 @@ function getItemCount(category) {
     return count;
 }
 
-const Category = ({ category, Item, setCategoryElement, onSelectItem, activeHeadKey, activeHeadTop }) => (
+const CategoryTitleClassName = (categoryId, activeHeadKey, activeHeadTop) => {
+    let TitleClassName = '';
+    if (activeHeadKey === categoryId) {
+        TitleClassName = activeHeadTop < 0 ? 'stikcy-bottom' : 'stikcy-top';
+    }
+
+    return `category-title ${TitleClassName}`;
+};
+
+
+const Category = ({ category, Item, setCategoryElement, onSelectItem, activeHeadKey, activeHeadTop, activeHeadOffset }) => (
     <div
         className={`category category-${category.categoryId}`}
         ref={el => setCategoryElement(el, category.categoryId)}
     >
         <div
-            className={`category-title ${activeHeadKey === category.categoryId ? 'fixed' : ''}`}
-            style={{ top: (activeHeadKey === category.categoryId ? activeHeadTop : null) }}
+            className={CategoryTitleClassName(category.categoryId, activeHeadKey, activeHeadTop)}
+            style={{ top: (activeHeadKey === category.categoryId) ? activeHeadOffset : null }}
         >{t.translate(category.categoryName)}
         </div>
         { category.hasSubcategory
@@ -58,7 +68,7 @@ const Category = ({ category, Item, setCategoryElement, onSelectItem, activeHead
     </div>
 );
 
-export const ResultsPanel = ({ filteredItems, onSelectItem, getItemType, setCategoryElement, activeHeadKey, activeHeadTop }) => (
+export const ResultsPanel = ({ filteredItems, onSelectItem, getItemType, setCategoryElement, activeHeadKey, activeHeadTop, activeHeadOffset }) => (
     <div className="results-panel">
         { filteredItems.map(category => (getItemCount(category) > 0 || category.emptyDescription) && (
             <Category
@@ -69,6 +79,7 @@ export const ResultsPanel = ({ filteredItems, onSelectItem, getItemType, setCate
                 onSelectItem={onSelectItem}
                 activeHeadKey={activeHeadKey}
                 activeHeadTop={activeHeadTop}
+                activeHeadOffset={activeHeadOffset}
             />
         )) }
     </div>

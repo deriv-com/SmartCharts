@@ -95,10 +95,6 @@
             background-color: themed('CatDisplayCatContentBg');
             border: 1px solid themed('CatDisplayCatContentBorder');
         }
-
-        &:last-child {
-            margin-bottom: 1em;
-        }
     }
     .subcategory {
         padding: 0 0 0 1.2em;
@@ -120,21 +116,29 @@
         line-height: 40px;
         position: absolute;
         top: 0;
-        width: 100%;
+        width: 90%;
         @include themify($themes) {
             color: themed('CatDisplayCatTitleText');
         }
 
-        &.fixed {
-            position: fixed;
+        &.stikcy-top,
+        &.stikcy-bottom {
             width: 100%;
             z-index: 1;
-            top: 0px;
             padding-top: 0px;
             @include themify($themes) {
                 background-color: themed('DialogBodyBg');
                 border-bottom: 1px solid themed('CatDisplayCatContentBorder');
             }
+        }
+        &.stikcy-bottom {
+            position: absolute;
+            top: auto !important;
+            bottom: 0px !important;
+        }
+        &.stikcy-top {
+            position: fixed;
+            top: 0px;
         }
     }
     .cq-filter {

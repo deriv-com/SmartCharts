@@ -59,6 +59,7 @@ export default class CategoricalDisplayStore {
             getItemType,
             activeHeadTop: this.activeHeadTop,
             activeHeadKey: this.activeHeadKey,
+            activeHeadOffset: this.activeHeadOffset,
         }))(ResultsPanel);
 
         this.FilterPanel = connect(({ chart }) => ({
@@ -84,6 +85,7 @@ export default class CategoricalDisplayStore {
     scrollTop = undefined;
     @observable activeHeadKey = undefined;
     @observable activeHeadTop = undefined;
+    @observable activeHeadOffset = undefined;
     isUserScrolling = true;
     lastFilteredItems = [];
 
@@ -122,9 +124,10 @@ export default class CategoricalDisplayStore {
             this.scrollDown();
         }
 
+        this.activeHeadOffset = (this.mainStore.chart.isMobile ? scrollPanelTop : 0);
         this.scrollTop = this.scrollPanel.scrollTop;
         this.activeCategoryKey = activeMenuId || this.filteredItems[0].categoryId;
-        this.activeHeadTop = activeHeadTop + (this.mainStore.chart.isMobile ? scrollPanelTop : 0);
+        this.activeHeadTop = activeHeadTop;
         this.activeHeadKey = this.scrollTop === 0 ? null : this.activeCategoryKey;
     }
 
