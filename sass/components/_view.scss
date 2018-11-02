@@ -48,6 +48,7 @@
             display: block;
             height: 145px;
             padding: 0 7px 0 16px;
+            position: relative;
 
             .ciq-list {
                 max-height: 110px !important;
@@ -93,7 +94,15 @@
         }
     }
     .ovrwrit-alrt {
-        margin: 16px 0 0 -16px;
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        width: 100%;
+        height: 100%;
+        z-index: 40;
+        @include themify($themes) {
+            background-color: themed('DialogBodyBg');
+        }
 
         .ovrwrit-alrt-title {
             text-align: center;
