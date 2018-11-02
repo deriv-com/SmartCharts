@@ -18,6 +18,7 @@ import ChartTitle from './components/ChartTitle.jsx';
 import AssetInformation from './components/AssetInformation.jsx';
 import Marker from './components/Marker.jsx';
 import CurrentSpot from './components/CurrentSpot.jsx';
+import ChartHistory from './components/ChartHistory.jsx';
 import { createObjectFromLocalStorage } from './utils';
 
 function setSmartChartsPublicPath(path) {
@@ -45,6 +46,7 @@ export {
     Timeperiod,
     CurrentSpot,
     Views,
+    ChartHistory,
 };
 
 export default {
@@ -68,4 +70,5 @@ export default {
     Timeperiod,
     CurrentSpot,
     Views,
+    ChartHistory,
 };

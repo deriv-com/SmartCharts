@@ -1,0 +1,25 @@
+.ciq-chart-history {
+    width: 170px;
+    height: 40px;
+    display: inline-block;
+    // top: -1em;
+    z-index: 41;
+    margin: 0.2em 0.8em;
+    position: relative;
+    border-radius: 4px;
+    @include themify($themes) {
+        background: themed('ChartTitleBg');
+        border: solid 1px themed('ChartTitleBorder');
+    }
+
+    .react-datepicker-popper {
+        width: 314px;
+
+        .react-datepicker__input-container {
+            input {
+                border: none;
+                padding: 12px 20px;
+            }
+        }
+    }
+}

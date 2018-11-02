@@ -15,6 +15,7 @@ import { // eslint-disable-line import/no-extraneous-dependencies,import/no-unre
     ChartTitle,
     AssetInformation,
     ComparisonList,
+    ChartHistory,
 } from '@binary-com/smartcharts'; // eslint-disable-line import/no-unresolved
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
@@ -143,6 +144,7 @@ class App extends Component {
     renderTopWidgets = () => (
         <>
             <ChartTitle onChange={this.symbolChange} />
+            <ChartHistory />
             <AssetInformation />
             <ComparisonList />
             <Notification
