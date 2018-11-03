@@ -77,6 +77,18 @@ export default class MarkerStore {
                 return;
             }
 
+            // TODO: Temporary solution until ChartIQ can support displaying markers in dates with no tick data
+            const dummyMarker = this.getDummyMarker();
+            if (dummyMarker.params.xPositioner === 'date'
+                && this.stx.masterData[this.tick]
+                && this.stx.masterData[this.tick].DT.valueOf() !== dummyMarker.params.x.valueOf()) {
+                console.log('Marker will not be shown because there is no tick data in ', dummyMarker.params.x);
+                this.hideMarker();
+                this.tick = null;
+                this.destructor();
+                return;
+            }
+
             if (this.xPositioner === 'bar' && this.x) {
                 if (this.x < this.chart.xaxis.length) {
                     const xaxis = this.chart.xaxis[this.x];
@@ -166,15 +178,6 @@ export default class MarkerStore {
         }
 
         if (this.tick) {
-            // TODO: Temporary solution until ChartIQ can support displaying markers in dates with no tick data
-            if (dummyMarker.params.xPositioner === 'date'
-                && this.stx.masterData[this.tick].DT !== dummyMarker.params.x) {
-                console.log('Marker will not be shown because there is no tick data in ', dummyMarker.params.x);
-                this.hideMarker();
-                this.tick = null;
-                this.destructor();
-                return;
-            }
             this.updatePosition();
         } else {
             this.hideMarker();
