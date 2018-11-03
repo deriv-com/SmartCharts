@@ -117,15 +117,16 @@
         position: absolute;
         top: 0;
         width: 90%;
+        transform: translate3d(0, 0, 0);
         @include themify($themes) {
             color: themed('CatDisplayCatTitleText');
         }
 
         &.stikcy-top,
         &.stikcy-bottom {
-            width: 100%;
-            z-index: 1;
+            z-index: 8;
             padding-top: 0px;
+            height: 40px;
             @include themify($themes) {
                 background-color: themed('DialogBodyBg');
                 border-bottom: 1px solid themed('CatDisplayCatContentBorder');
@@ -139,6 +140,8 @@
         &.stikcy-top {
             position: fixed;
             top: 0px;
+            z-index: 9;
+            padding-right: 25px;
         }
     }
     .cq-filter {
