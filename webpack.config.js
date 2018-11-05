@@ -110,6 +110,16 @@ const config = {
                 test: /\.pot$/,
                 loader: [path.resolve('./loaders/pot-loader.js'), 'json-loader', 'po-loader'],
             },
+            {
+                include: path.resolve(__dirname, 'src/ga.js'),
+                use :[{
+                    loader: path.resolve('./loaders/exclude-block-loader.js'),
+                    options: {
+                        start: '@if NODE_ENV=\'' + process.env.NODE_ENV + '\'',
+                        end: '@endif'
+                    },
+                }],
+            },
         ],
     },
     plugins: [
