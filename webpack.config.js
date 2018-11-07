@@ -8,6 +8,7 @@ const SpriteLoaderPlugin = require('svg-sprite-loader/plugin');
 
 const production = process.env.NODE_ENV === 'production';
 const isApp = process.env.BUILD_MODE === 'app';
+const BUILD_MODE = isApp ? process.env.BUILD_MODE : 'lib';
 
 const output =  {
     path: path.resolve(__dirname, 'dist'),
@@ -90,8 +91,8 @@ const config = {
                 test: /\.(js|jsx)$/,
                 exclude: [
                     /node_modules/,
-                    /\\chartiq/,
-                    /\\scripts/,
+                    /\/chartiq/,
+                    /\/scripts/,
                 ],
                 loader: 'eslint-loader',
                 enforce: 'pre',
@@ -115,7 +116,7 @@ const config = {
                 use :[{
                     loader: path.resolve('./loaders/exclude-block-loader.js'),
                     options: {
-                        start:`@if NODE_ENV='${process.env.NODE_ENV}'`,
+                        start:`@if BUILD_MODE='${BUILD_MODE}'`,
                         end: '@endif'
                     },
                 }],
