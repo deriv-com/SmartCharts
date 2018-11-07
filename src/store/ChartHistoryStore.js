@@ -1,7 +1,9 @@
 import { observable, action } from 'mobx';
+import moment from 'moment';
 
 export default class ChartHistory {
-    @observable date;
+    @observable date = moment().format('DD MMMM YYYY');
+    @observable time = 0;
 
     constructor(mainStore) {
         this.mainStore = mainStore;
