@@ -3,6 +3,7 @@ import React from 'react';
 import { connect } from '../store/Connect';
 import { SettingIcon } from './Icons.jsx';
 import '../../sass/components/_chart-types.scss';
+import {logEvent} from  '../utils/ga';
 
 const ChartTypes = ({
     Type,
@@ -20,6 +21,7 @@ const ChartTypes = ({
         if (Type.id !== chartType.id) {
             onChange(chartType.id);
         }
+        logEvent("Chart Type" , chartType.text, chartType.id);
         setOpen(false);
     };
 

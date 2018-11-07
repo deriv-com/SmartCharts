@@ -5,6 +5,8 @@ import SettingsDialogStore from './SettingsDialogStore';
 import SettingsDialog from '../components/SettingsDialog.jsx';
 import Menu from '../components/Menu.jsx';
 import { CategoricalDisplay } from '../components/categoricaldisplay';
+import {logEvent} from  '../utils/ga';
+
 // TODO:
 // import StudyInfo from '../study-info';
 
@@ -88,6 +90,7 @@ export default class StudyLegendStore {
     @action.bound onSelectItem(item) {
         const sd = CIQ.Studies.addStudy(this.stx, item);
         this.changeStudyPanelTitle(sd);
+        logEvent("Study legend" , item);
         this.menu.setOpen(false);
     }
 
