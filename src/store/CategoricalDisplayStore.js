@@ -84,7 +84,7 @@ export default class CategoricalDisplayStore {
     @observable isScrollingDown = false;
     scrollTop = undefined;
     @observable activeHeadKey = undefined;
-    @observable activeHeadTop = undefined;
+    @observable activeHeadTop = 0;
     @observable activeHeadOffset = undefined;
     isUserScrolling = true;
     lastFilteredItems = [];
@@ -153,10 +153,7 @@ export default class CategoricalDisplayStore {
                 }
             }
         }
-        if (this.scrollPanel) {
-            this.scrollPanel.addEventListener('scroll', this.updateScrollSpy);
-            this.activeHeadTop = this.scrollPanel.offsetTop;
-        }
+        this.scrollPanel.addEventListener('scroll', this.updateScrollSpy);
     }
 
     @computed get favoritesCategory()  {

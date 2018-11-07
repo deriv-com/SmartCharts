@@ -1,14 +1,14 @@
 .ciq-views {
     .cq-menu-dropdown {
         width: 280px;
-        height: 200px;
+        height: 196px;
 
         .template-name {
             display: flex;
             align-items: center;
             height: 32px;
             padding: 0 0 0 16px;
-            margin: 16px 9px 0 0;
+            margin: 16px 0 0;
             box-sizing: border-box;
             @include themify($themes) {
                 border: 1px solid themed('ListLiBorder');
@@ -46,15 +46,21 @@
         }
         .content {
             display: block;
-            height: 145px;
-            padding: 0 7px 0 16px;
+            height: 140px;
+            padding: 0 16px;
             position: relative;
+            background: #ff9900;
 
             .ciq-list {
-                max-height: 110px !important;
+                max-height: 107px !important;
+                display: block;
+                width: 100%;
 
-                .ciq-list-inner {
-                    min-height: 131px;
+                .simplebar-offset {
+                    right: -20px !important;
+                }
+                .simplebar-track.horizontal {
+                    display: none;
                 }
                 .ciq-list-item {
                     align-items: center;
@@ -86,7 +92,7 @@
                         border-top: none;
                         margin-top: 0;
                     }
-                    &:nth-last-child(-n+3) {
+                    &:last-child() {
                         margin-bottom: 0px !important;
                     }
                 }
