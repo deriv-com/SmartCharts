@@ -5,7 +5,7 @@ import SettingsDialogStore from './SettingsDialogStore';
 import SettingsDialog from '../components/SettingsDialog.jsx';
 import Menu from '../components/Menu.jsx';
 import { CategoricalDisplay } from '../components/categoricaldisplay';
-import {logEvent} from  '../utils/ga';
+import { logEvent } from  '../utils/ga';
 
 // TODO:
 // import StudyInfo from '../study-info';
@@ -90,13 +90,14 @@ export default class StudyLegendStore {
     @action.bound onSelectItem(item) {
         const sd = CIQ.Studies.addStudy(this.stx, item);
         this.changeStudyPanelTitle(sd);
-        logEvent("Study legend" , item);
+        logEvent('Chart Control', 'Indicator', `Add ${item}`);
         this.menu.setOpen(false);
     }
 
     @action.bound editStudy(study) {
         const helper = new CIQ.Studies.DialogHelper(study);
         this.helper = helper;
+        logEvent('Chart Control', 'Indicator', `Edit ${helper.name}`);
 
         const attributes = helper.attributes;
         const inputs = helper.inputs.map(inp => ({
@@ -163,6 +164,7 @@ export default class StudyLegendStore {
 
     @action.bound deleteStudy(study) {
         const sd = study.sd;
+        logEvent('Chart Control', 'Indicator', `Remove ${sd.name}`);
         if (!sd.permanent) {
             // Need to run this in the nextTick because the study legend can be removed by this click
             // causing the underlying chart to receive the mousedown (on IE win7)

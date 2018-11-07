@@ -5,6 +5,7 @@ import SettingsDialogStore from './SettingsDialogStore';
 import Menu from '../components/Menu.jsx';
 import List from '../components/List.jsx';
 import SettingsDialog from '../components/SettingsDialog.jsx';
+import { logEvent } from  '../utils/ga';
 
 // camelCase to spaces separated capitalized string.
 const formatCamelCase = (s) => {
@@ -143,6 +144,7 @@ export default class DrawToolsStore {
         const stx = this.context.stx;
         stx.clearMeasure(); // TODO remove this line
         stx.changeVectorType(id);
+        logEvent('Chart Control', 'Draw Tools', id);
         this.menu.setOpen(false);
         // let drawingParameters = CIQ.Drawing.getDrawingParameters(stx, id);
     }

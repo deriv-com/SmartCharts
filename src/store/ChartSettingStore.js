@@ -3,6 +3,7 @@ import { observable, action, reaction } from 'mobx';
 import MenuStore from './MenuStore';
 import { FlagIcons } from '../components/Icons.jsx';
 import Menu from '../components/Menu.jsx';
+import { logEvent } from '../utils/ga';
 
 export default class ChartSettingStore {
     constructor(mainStore) {
@@ -108,6 +109,7 @@ export default class ChartSettingStore {
         if (lng === this.language.key) { return; }
         this.language = this.languages.find(item => item.key === lng);
         t.setLanguage(lng);
+        logEvent('Chart Control', 'Chart Setting', `Change language to ${lng}`);
         this.saveSetting();
     }
 
@@ -115,6 +117,7 @@ export default class ChartSettingStore {
         if (this.theme === theme) { return; }
         this.theme = theme;
         if (this.context) { this.stx.clearStyles(); }
+        logEvent('Chart Control', 'Chart Setting', `Change theme to ${theme}`);
         this.saveSetting();
     }
 
@@ -122,6 +125,7 @@ export default class ChartSettingStore {
         if (this.position === value) { return; }
         this.position = value;
         if (this.context) { this.stx.clearStyles(); }
+        logEvent('Chart Control', 'Chart Setting', 'Change Position');
         this.saveSetting();
 
         /**
@@ -138,12 +142,15 @@ export default class ChartSettingStore {
     @action.bound setAssetInformation(value) {
         if (this.assetInformation === value) { return; }
         this.assetInformation = value;
+        logEvent('Chart Control', 'Chart Setting', `${value ? 'Show'  : 'Hide'} Asset Information`);
         this.saveSetting();
     }
 
     @action.bound showCountdown(value) {
         if (this.countdown === value) { return; }
         this.countdown = value;
+        logEvent('Chart Control', 'Chart Setting', `${value ? 'Show'  : 'Hide'} Countdown`);
+
         this.saveSetting();
     }
 }

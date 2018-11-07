@@ -4,6 +4,7 @@ import MenuStore from './MenuStore';
 import CategoricalDisplayStore from './CategoricalDisplayStore';
 import { CategoricalDisplay } from '../components/categoricaldisplay';
 import Menu from '../components/Menu.jsx';
+import { logEvent } from  '../utils/ga';
 
 const swatchColors = [
     '#8ec648', '#00afed', '#ee652e', '#912a8e',
@@ -118,6 +119,7 @@ export default class ComparisonStore {
             });
         }
 
+        logEvent('Chart Control', 'Comparison', symbolObject.name);
         this.menu.setOpen(false);
     }
 

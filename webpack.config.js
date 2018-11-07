@@ -115,7 +115,7 @@ const config = {
                 use :[{
                     loader: path.resolve('./loaders/exclude-block-loader.js'),
                     options: {
-                        start: '@if NODE_ENV=\'' + process.env.NODE_ENV + '\'',
+                        start:`@if NODE_ENV='${process.env.NODE_ENV}'`,
                         end: '@endif'
                     },
                 }],
