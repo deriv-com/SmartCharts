@@ -49,15 +49,26 @@
             height: 140px;
             padding: 0 16px;
             position: relative;
-            background: #ff9900;
 
             .ciq-list {
                 max-height: 107px !important;
-                display: block;
                 width: 100%;
+                padding: 0px !important;
+                display: block;
 
                 .simplebar-offset {
                     right: -20px !important;
+
+                    .simplebar-content {
+                        padding-right: 20px !important;
+
+                        .ciq-list-inner {
+                            min-width: 248px;
+                        }
+                    }
+                }
+                .simplebar-track {
+                    right: -8px;
                 }
                 .simplebar-track.horizontal {
                     display: none;
@@ -155,8 +166,13 @@
                 flex: none;
             }
         }
-        .content .ciq-list .ciq-list-item .ic-icon {
-            opacity: 1;
+        .content .ciq-list {
+            .ciq-list-inner {
+                width: 100%;
+            }
+            .ciq-list-item .ic-icon {
+                opacity: 1;
+            }
         }
     }
 }

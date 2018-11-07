@@ -97,24 +97,22 @@ const Views = ({
                         }
                     </span>
                 </div>
-                <div>
-                    <div
-                        className="ciq-list"
-                        data-simplebar
-                        data-simplebar-auto-hide="false"
-                    >
-                        <div className="ciq-list-inner">
-                            {
-                                views.map((view, i) => (
-                                    <ViewItem
-                                        view={view}
-                                        key={view.name}
-                                        onClick={e => applyLayout(i, e)}
-                                        remove={e => remove(i, e)}
-                                    />
-                                ))
-                            }
-                        </div>
+                <div
+                    className="ciq-list"
+                    data-simplebar
+                    data-simplebar-auto-hide="false"
+                >
+                    <div className="ciq-list-inner">
+                        {
+                            views.map((view, i) => (
+                                <ViewItem
+                                    view={view}
+                                    key={view.name}
+                                    onClick={e => applyLayout(i, e)}
+                                    remove={e => remove(i, e)}
+                                />
+                            ))
+                        }
                     </div>
                 </div>
             </div>
