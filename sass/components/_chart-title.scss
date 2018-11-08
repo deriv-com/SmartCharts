@@ -146,11 +146,11 @@
 }
 
 /* Mobile Style */
-.smartcharts.smartcharts-mobile {
+.smartcharts-mobile {
     .cq-top-ui-widgets {
         width: 100%;
         padding: 0px;
-        margin: 0px;
+        margin: 0 !important;
         z-index: 3;
     }
     .cq-chart-title {
