@@ -1,15 +1,18 @@
 /* @START-EXCLUDE: 'lib' */
 import ReactGA from 'react-ga';
+import { isProductionWebsite } from './index';
 /* @END-EXCLUDE */
 
 export function initGA() {
     /* @START-EXCLUDE: 'lib' */
+    if (!isProductionWebsite()) return;
     ReactGA.initialize('UA-40877026-15');
     /* @END-EXCLUDE */
 }
 
 export function logPageView() {
     /* @START-EXCLUDE: 'lib' */
+    if (!isProductionWebsite()) return;
     ReactGA.set({ page : window.location.pathname });
     ReactGA.pageview(window.location.pathname);
     /* @END-EXCLUDE */
@@ -17,6 +20,7 @@ export function logPageView() {
 
 export function logEvent(category, action, label) {
     /* @START-EXCLUDE: 'lib' */
+    if (!isProductionWebsite()) return;
     ReactGA.event({
         category,
         action,

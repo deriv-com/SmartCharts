@@ -186,3 +186,7 @@ export function cloneCategories(categories, transformItem = x => x) {
 
     return categorized;
 }
+
+export function isProductionWebsite() {
+    return (window.location.host.endsWith('binary.com') || window.location.host.endsWith('binary.me'));
+}
