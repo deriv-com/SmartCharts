@@ -16,7 +16,7 @@ function getItemCount(category) {
 const CategoryTitleClassName = (categoryId, activeHeadKey, activeHeadTop) => {
     let TitleClassName = '';
     if (activeHeadKey === categoryId) {
-        TitleClassName = activeHeadTop < 0 ? 'stikcy-bottom' : 'stikcy-top';
+        TitleClassName = activeHeadTop < 0 ? 'sticky-bottom' : 'sticky-top';
     }
 
     return `category-title ${TitleClassName}`;

@@ -122,8 +122,8 @@
             color: themed('CatDisplayCatTitleText');
         }
 
-        &.stikcy-top,
-        &.stikcy-bottom {
+        &.sticky-top,
+        &.sticky-bottom {
             z-index: 8;
             padding-top: 0px;
             height: 40px;
@@ -132,12 +132,12 @@
                 border-bottom: 1px solid themed('CatDisplayCatContentBorder');
             }
         }
-        &.stikcy-bottom {
+        &.sticky-bottom {
             position: absolute;
             top: auto !important;
             bottom: 0px !important;
         }
-        &.stikcy-top {
+        &.sticky-top {
             position: fixed;
             top: 0px;
             z-index: 9;
