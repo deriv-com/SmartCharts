@@ -168,7 +168,8 @@ class Feed {
     }
 
     async _getPaginationData(symbol, granularity, start, end, callback) {
-        if (this.startEpoch && start < this.startEpoch) {
+        if (this.startEpoch && start < this.startEpoch
+            || this.endEpoch && end > this.endEpoch) {
             callback({ moreAvailable: false, quotes: [] });
             return;
         }
