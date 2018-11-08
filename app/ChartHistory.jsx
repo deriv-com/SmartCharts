@@ -9,7 +9,7 @@ class ChartHistory extends React.Component {
         super(props);
         this.state = {
             date: moment().format('YYYY/MM/DD'),
-            time: '00:00',
+            time: moment().format('HH:mm'),
         };
     }
     onChange({ target }) {
@@ -34,6 +34,7 @@ class ChartHistory extends React.Component {
                     placeholder="select date"
                     name="date"
                     format="DD MMMM YYYY"
+                    has_today_btn
                     value={this.state.date}
                     onChange={e => this.onChange(e)}
                 />

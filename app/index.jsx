@@ -148,7 +148,7 @@ class App extends Component {
     renderTopWidgets = () => (
         <>
             <ChartTitle onChange={this.symbolChange} />
-            <ChartHistory onChange={this.handleDateChange} />
+            {this.state.settings.historical ? <ChartHistory onChange={this.handleDateChange} /> : ''}
             <AssetInformation />
             <ComparisonList />
             <Notification

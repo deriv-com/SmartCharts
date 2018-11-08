@@ -77,15 +77,17 @@ export default class ChartSettingStore {
     @observable position = 'bottom';
     @observable theme = 'light';
     @observable countdown = false;
+    @observable historical = false;
 
     @action.bound setSettings(settings) {
         if (settings === undefined) { return; }
-        const { theme, position, countdown, language, assetInformation } = settings;
+        const { theme, position, countdown, language, assetInformation, historical } = settings;
         if (theme            !== undefined) { this.setTheme(theme); }
         if (position         !== undefined) { this.setPosition(position); }
         if (countdown        !== undefined) { this.showCountdown(countdown); }
         if (language         !== undefined) { this.setLanguage(language); }
         if (assetInformation !== undefined) { this.setAssetInformation(assetInformation); }
+        if (historical       !== undefined) { this.setHistorical(historical); }
     }
 
     saveSetting() {
@@ -96,6 +98,7 @@ export default class ChartSettingStore {
                 theme: this.theme,
                 countdown: this.countdown,
                 assetInformation: this.assetInformation,
+                historical: this.historical,
             });
         }
     }
@@ -144,6 +147,12 @@ export default class ChartSettingStore {
     @action.bound showCountdown(value) {
         if (this.countdown === value) { return; }
         this.countdown = value;
+        this.saveSetting();
+    }
+
+    @action.bound setHistorical(value) {
+        if (this.historical === value) { return; }
+        this.historical = value;
         this.saveSetting();
     }
 }
