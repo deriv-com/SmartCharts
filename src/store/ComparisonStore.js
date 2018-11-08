@@ -4,6 +4,7 @@ import MenuStore from './MenuStore';
 import CategoricalDisplayStore from './CategoricalDisplayStore';
 import { CategoricalDisplay } from '../components/categoricaldisplay';
 import Menu from '../components/Menu.jsx';
+import { logEvent } from  '../utils/ga';
 
 const swatchColors = [
     '#8ec648', '#00afed', '#ee652e', '#912a8e',
@@ -74,10 +75,12 @@ export default class ComparisonStore {
     }
 
     @action.bound onDeleteItem({ symbolObject }) {
+        logEvent('Chart Control', 'Comparison', `Remove ${symbolObject.name}`);
         this.removeComparison(symbolObject);
     }
 
     @action.bound onSelectItem(symbolObject) {
+        logEvent('Chart Control', 'Comparison', `Add ${symbolObject.name}`);
         const context = this.context;
         const pattern = null;
         const width = 1;
@@ -117,6 +120,7 @@ export default class ComparisonStore {
                 }
             });
         }
+
 
         this.menu.setOpen(false);
     }

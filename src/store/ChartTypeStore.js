@@ -21,6 +21,7 @@ import SettingsDialogStore from './SettingsDialogStore';
 import List from '../components/List.jsx';
 import Menu from '../components/Menu.jsx';
 import SettingsDialog from '../components/SettingsDialog.jsx';
+import { logEvent } from  '../utils/ga';
 
 function getChartTypes() {
     return [
@@ -184,6 +185,7 @@ export default class ChartTypeStore {
             }
         }
         this.type = type;
+        logEvent('Chart Control', 'Chart Type', type.text);
     }
 
     @action.bound showAggregateDialog(aggregateId) {
