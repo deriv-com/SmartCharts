@@ -112,12 +112,12 @@ const config = {
                 loader: [path.resolve('./loaders/pot-loader.js'), 'json-loader', 'po-loader'],
             },
             {
-                include: [path.resolve(__dirname, 'src/ga.js'), path.resolve(__dirname, 'src/utils/ga.js')],
+                include: path.resolve(__dirname, 'src/utils/ga.js'),
                 use :[{
                     loader: path.resolve('./loaders/exclude-block-loader.js'),
                     options: {
-                        start:`@if BUILD_MODE='${BUILD_MODE}'`,
-                        end: '@endif'
+                        start:`@START-EXCLUDE: '${BUILD_MODE}'`,
+                        end: '@END-EXCLUDE'
                     },
                 }],
             },

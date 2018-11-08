@@ -1,24 +1,24 @@
 import ReactGA from 'react-ga';
 
 export function initGA() {
-    /* @if BUILD_MODE='lib' */
+    /* @START-EXCLUDE: 'lib' */
     ReactGA.initialize('UA-128254050-1');
-    /* @endif */
+    /* @END-EXCLUDE */
 }
 
 export function logPageView() {
-    /* @if BUILD_MODE='lib' */
+    /* @START-EXCLUDE: 'lib' */
     ReactGA.set({ page : window.location.pathname });
     ReactGA.pageview(window.location.pathname);
-    /* @endif */
+    /* @END-EXCLUDE */
 }
 
 export function logEvent(category, action, label) {
-    /* @if BUILD_MODE='lib' */
+    /* @START-EXCLUDE: 'lib' */
     ReactGA.event({
         category,
         action,
         label,
     });
-    /* @endif */
+    /* @END-EXCLUDE */
 }
