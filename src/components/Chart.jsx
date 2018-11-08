@@ -16,6 +16,7 @@ import './ui';
 import ChartControls from './ChartControls.jsx';
 import Crosshair from './Crosshair.jsx';
 import { connect } from '../store/Connect';
+import { initGA, logPageView } from '../utils/ga';
 
 class Chart extends Component {
     constructor(props) {
@@ -28,6 +29,8 @@ class Chart extends Component {
         const { updateProps, init, ...props } = this.props;
         updateProps(props);
         init(this.root.current, this.modalNode.current, props);
+        initGA();
+        logPageView();
     }
 
     componentWillReceiveProps(nextProps) {
