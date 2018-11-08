@@ -100,6 +100,7 @@ export default class DrawToolsStore {
     }
 
     showDrawToolDialog(drawing) {
+        logEvent('Chart Control', 'Draw Tools', `Edit ${drawing.name}`);
         const dontDeleteMe = drawing.abort(); // eslint-disable-line no-unused-vars
         const parameters = CIQ.Drawing.getDrawingParameters(this.stx, drawing.name);
 
@@ -137,14 +138,15 @@ export default class DrawToolsStore {
     };
 
     @action.bound clearAll() {
+        logEvent('Chart Control', 'Draw Tools', 'Clear All');
         this.stx.clearDrawings();
     }
 
     @action.bound selectTool(id) {
+        logEvent('Chart Control', 'Draw Tools', `Add ${id}`);
         const stx = this.context.stx;
         stx.clearMeasure(); // TODO remove this line
         stx.changeVectorType(id);
-        logEvent('Chart Control', 'Draw Tools', id);
         this.menu.setOpen(false);
         // let drawingParameters = CIQ.Drawing.getDrawingParameters(stx, id);
     }
@@ -159,6 +161,7 @@ export default class DrawToolsStore {
     }
 
     @action.bound onDeleted() {
+        logEvent('Chart Control', 'Draw Tools', `Remove ${this.activeDrawing.name}`);
         this.stx.removeDrawing(this.activeDrawing);
         this.activeDrawing = null;
     }

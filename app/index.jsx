@@ -15,6 +15,7 @@ import { // eslint-disable-line import/no-extraneous-dependencies,import/no-unre
     ChartTitle,
     AssetInformation,
     ComparisonList,
+    logEvent,
 } from '@binary-com/smartcharts'; // eslint-disable-line import/no-unresolved
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
@@ -121,6 +122,7 @@ class App extends Component {
     */
 
     symbolChange = (symbol) => {
+        logEvent('Chart Title', 'Market Selector', symbol);
         this.notifier.removeByCategory('activesymbol');
         this.setState({ symbol });
     };

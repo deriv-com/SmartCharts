@@ -75,10 +75,12 @@ export default class ComparisonStore {
     }
 
     @action.bound onDeleteItem({ symbolObject }) {
+        logEvent('Chart Control', 'Comparison', `Remove ${symbolObject.name}`);
         this.removeComparison(symbolObject);
     }
 
     @action.bound onSelectItem(symbolObject) {
+        logEvent('Chart Control', 'Comparison', `Add ${symbolObject.name}`);
         const context = this.context;
         const pattern = null;
         const width = 1;
@@ -119,7 +121,7 @@ export default class ComparisonStore {
             });
         }
 
-        logEvent('Chart Control', 'Comparison', symbolObject.name);
+
         this.menu.setOpen(false);
     }
 

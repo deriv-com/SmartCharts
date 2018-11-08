@@ -1,8 +1,10 @@
+/* @START-EXCLUDE: 'lib' */
 import ReactGA from 'react-ga';
+/* @END-EXCLUDE */
 
 export function initGA() {
     /* @START-EXCLUDE: 'lib' */
-    ReactGA.initialize('UA-128254050-1');
+    ReactGA.initialize('UA-40877026-15');
     /* @END-EXCLUDE */
 }
 
