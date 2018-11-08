@@ -35,8 +35,8 @@ if (process.env.NODE_ENV !== 'production') {
     whyDidYouUpdate(React, { exclude: [/^RenderInsideChart$/, /^inject-/] });
 }
 
-
-if (window.location.host.endsWith('binary.com')) {
+const trackJSDomains = ['binary.com', 'binary.me'];
+if (trackJSDomains.reduce((acc, val) => (acc || window.location.host.endsWith(val)), false)) {
     window._trackJs = { token: '346262e7ffef497d85874322fff3bbf8', application: 'smartcharts' };
     const s = document.createElement('script');
     s.src = 'https://cdn.trackjs.com/releases/current/tracker.js';
