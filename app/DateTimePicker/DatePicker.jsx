@@ -1,8 +1,7 @@
 import React from 'react';
 import moment from 'moment';
 import Calendar from './Calendar.jsx';
-import { ArrowIcon } from '../Icons.jsx';
-import '../../../sass/components/date-picker.scss';
+import './date-picker.scss';
 
 
 class DatePickerInput extends React.PureComponent {
@@ -184,7 +183,7 @@ export default class DatePicker extends React.PureComponent {
                         is_read_only
                         value={this.state.value}
                     />
-                    <ArrowIcon className="picker-calendar-icon-arrow" />
+                    <span className="picker-calendar-icon-arrow" />
                     <span
                         className={`picker-calendar-icon ${!this.state.is_close_btn_visible ? 'show' : ''} `}
                         onClick={this.handleVisibility}

@@ -4,8 +4,7 @@
 import { observer } from 'mobx-react';
 import moment from 'moment';
 import React from 'react';
-import { ArrowIcon } from '../Icons.jsx';
-import '../../../sass/components/time-picker.scss';
+import './time-picker.scss';
 
 const isBeforeDate = (compare_moment, start_moment, should_only_check_hour) => {
     const now_moment = moment.utc(start_moment);
@@ -237,7 +236,7 @@ class TimePicker extends React.Component {
                                     name={name}
                                     placeholder={placeholder}
                                 />
-                                <ArrowIcon className="picker-calendar-icon-arrow" />
+                                <span className="picker-calendar-icon-arrow" />
                                 <TimePickerDropdown
                                     className={`${this.state.is_open ? 'active' : ''}${is_align_right ? ' from-right' : ''}`}
                                     toggle={this.toggleDropDown}

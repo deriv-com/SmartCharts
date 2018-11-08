@@ -15,7 +15,6 @@ import { // eslint-disable-line import/no-extraneous-dependencies,import/no-unre
     ChartTitle,
     AssetInformation,
     ComparisonList,
-    ChartHistory,
 } from '@binary-com/smartcharts'; // eslint-disable-line import/no-unresolved
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
@@ -27,6 +26,7 @@ import { whyDidYouUpdate }  from 'why-did-you-update';
 import { ConnectionManager, StreamManager } from './connection';
 import Notification from './Notification.jsx';
 import ChartNotifier from './ChartNotifier.js';
+import ChartHistory from './ChartHistory.jsx';
 
 setSmartChartsPublicPath('./dist/');
 
@@ -141,10 +141,14 @@ class App extends Component {
         }
     };
 
+    handleDateChange = (value) => {
+        this.setState({ endEpoch: (value !== '') ? (new Date(`${value}:00Z`).valueOf() / 1000) : undefined });
+    };
+
     renderTopWidgets = () => (
         <>
             <ChartTitle onChange={this.symbolChange} />
-            <ChartHistory />
+            <ChartHistory onChange={this.handleDateChange} />
             <AssetInformation />
             <ComparisonList />
             <Notification
@@ -173,7 +177,7 @@ class App extends Component {
     }
 
     render() {
-        const { settings, isConnectionOpened, symbol } = this.state;
+        const { settings, isConnectionOpened, symbol, endEpoch } = this.state;
 
         return (
             <SmartChart
@@ -188,6 +192,7 @@ class App extends Component {
                 requestSubscribe={requestSubscribe}
                 requestForget={requestForget}
                 settings={settings}
+                endEpoch={endEpoch}
                 onSettingsChange={this.saveSettings}
                 isConnectionOpened={isConnectionOpened}
             />

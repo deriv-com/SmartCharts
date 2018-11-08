@@ -17,7 +17,6 @@ import ChartSizeStore from './ChartSizeStore';
 import RoutingStore from './RoutingStore';
 import CurrentSpotStore from './CurrentSpotStore';
 import DrawingCursorStore from './DrawingCursorStore';
-import ChartHistoryStore from './ChartHistoryStore';
 import ChartState from './ChartState';
 import Notifier from './Notifier';
 
@@ -35,7 +34,6 @@ export default class MainStore {
     assetInformation = new AssetInformationStore(this);
     comparisonList = new ComparisonListStore(this);
     view = new ViewStore(this);
-    chartHistory = new ChartHistoryStore(this);
     crosshair = new CrosshairStore(this);
     share = new ShareStore(this);
     chartSetting = new ChartSettingStore(this);

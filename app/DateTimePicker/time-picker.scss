@@ -9,7 +9,7 @@
         padding: 0 8px;
         border-radius: 4px;
         box-sizing: border-box;
-        font-size: 16px;
+        font-size: 14px;
         font-weight: 300;
         margin: 0;
         cursor: pointer;
@@ -113,15 +113,6 @@
                     cursor: pointer;
                     border-radius: 4px;
 
-                    // &:hover(:not.disabled) {
-                    //     background: $COLOR_GRAY;
-                    //     color: $COLOR_LIGHT_BLACK;
-
-                    //     &.selected {
-                    //         background: $COLOR_BLUE;
-                    //         color: $COLOR_WHITE;
-                    //     }
-                    // }
                     &.selected {
                         background: $COLOR_BLUE;
                         color: $COLOR_WHITE;

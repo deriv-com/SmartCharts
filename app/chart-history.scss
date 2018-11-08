@@ -18,9 +18,11 @@
             border: none !important;
         }
         .picker-calendar-icon-arrow {
+            background: svg-load('icons/ic-dropdown.svg') no-repeat scroll center center;
             position: absolute;
             right: 10px;
             top: 10px;
+            padding: 10px;
         }
     }
     .time-picker {
@@ -37,9 +39,11 @@
             border: none !important;
         }
         .picker-calendar-icon-arrow {
+            background: svg-load('icons/ic-dropdown.svg') no-repeat scroll center center;
             position: absolute;
             right: 4px;
             top: 10px;
+            padding: 10px;
         }
     }
 }
