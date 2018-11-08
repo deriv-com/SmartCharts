@@ -36,8 +36,8 @@ if (process.env.NODE_ENV !== 'production') {
     whyDidYouUpdate(React, { exclude: [/^RenderInsideChart$/, /^inject-/] });
 }
 
+const trackJSDomains = ['binary.com', 'binary.me'];
 window.isProductionWebsite = function () {
-    const trackJSDomains = ['binary.com', 'binary.me'];
     return trackJSDomains.reduce((acc, val) => (acc || window.location.host.endsWith(val)), false);
 };
 
