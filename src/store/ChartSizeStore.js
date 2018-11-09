@@ -1,5 +1,5 @@
 import { observable, when, action } from 'mobx';
-import { logEvent } from  '../utils/ga';
+import { logEvent, LogCategories, LogActions } from  '../utils/ga';
 
 export default class ChartSizeStore {
     @observable stx;
@@ -12,12 +12,12 @@ export default class ChartSizeStore {
     onContextReady = () => { this.stx = this.mainStore.chart.context.stx; };
 
     @action.bound zoomIn() {
-        logEvent('Chart Control', 'Chart Size', 'zoom In');
+        logEvent(LogCategories.ChartControl, LogActions.ChartSize, 'zoom In');
         if (this.stx) { this.stx.zoomIn(); }
     }
 
     @action.bound zoomOut() {
-        logEvent('Chart Control', 'Chart Size', 'zoom Out');
+        logEvent(LogCategories.ChartControl, LogActions.ChartSize, 'zoom Out');
         if (this.stx) { this.stx.zoomOut(); }
     }
 }

@@ -18,7 +18,7 @@ import AssetInformation from './components/AssetInformation.jsx';
 import Marker from './components/Marker.jsx';
 import CurrentSpot from './components/CurrentSpot.jsx';
 import { createObjectFromLocalStorage } from './utils';
-import { logEvent } from './utils/ga';
+import { logEvent, LogCategories, LogActions } from './utils/ga';
 
 function setSmartChartsPublicPath(path) {
     __webpack_public_path__ = path; // eslint-disable-line
@@ -46,6 +46,8 @@ export {
     CurrentSpot,
     Views,
     logEvent,
+    LogCategories,
+    LogActions,
 };
 
 export default {
@@ -70,4 +72,6 @@ export default {
     CurrentSpot,
     Views,
     logEvent,
+    LogCategories,
+    LogActions,
 };
