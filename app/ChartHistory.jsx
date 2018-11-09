@@ -9,7 +9,7 @@ class ChartHistory extends React.Component {
         super(props);
         this.state = {
             date: moment().format('YYYY/MM/DD'),
-            time: moment().format('HH:mm'),
+            time: '00:00',
         };
     }
     onChange({ target }) {
@@ -37,6 +37,8 @@ class ChartHistory extends React.Component {
                     has_today_btn
                     value={this.state.date}
                     onChange={e => this.onChange(e)}
+                    min_date={moment.utc().subtract(1, 'years').toDate()}
+                    max_date={moment.utc().toDate()}
                 />
                 <TimePicker
                     placeholder="time"
