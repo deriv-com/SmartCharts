@@ -8,6 +8,7 @@ const SpriteLoaderPlugin = require('svg-sprite-loader/plugin');
 
 const production = process.env.NODE_ENV === 'production';
 const isApp = process.env.BUILD_MODE === 'app';
+const BUILD_MODE = isApp ? process.env.BUILD_MODE : 'lib';
 
 const output =  {
     path: path.resolve(__dirname, 'dist'),
@@ -109,6 +110,16 @@ const config = {
             {
                 test: /\.pot$/,
                 loader: [path.resolve('./loaders/pot-loader.js'), 'json-loader', 'po-loader'],
+            },
+            {
+                include: path.resolve(__dirname, 'src/utils/ga.js'),
+                use :[{
+                    loader: path.resolve('./loaders/exclude-block-loader.js'),
+                    options: {
+                        start:`@START-EXCLUDE: '${BUILD_MODE}'`,
+                        end: '@END-EXCLUDE'
+                    },
+                }],
             },
         ],
     },

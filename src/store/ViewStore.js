@@ -2,6 +2,7 @@ import { observable, action } from 'mobx';
 import { createObjectFromLocalStorage } from '../utils';
 import MenuStore from './MenuStore';
 import Menu from '../components/Menu.jsx';
+import { logEvent } from  '../utils/ga';
 
 export default class ViewStore {
     constructor(mainStore) {
@@ -36,6 +37,7 @@ export default class ViewStore {
     @action.bound onSubmit(e) {
         if (e.keyCode === 13) {
             this.saveViews();
+            logEvent('Chart Control', 'Template', 'Save Template');
         }
     }
 
@@ -74,6 +76,7 @@ export default class ViewStore {
         ViewStore.views = ViewStore.views.filter((x, index) => idx !== index);
         e.nativeEvent.is_item_removed = true;
         ViewStore.updateLocalStorage();
+        logEvent('Chart Control', 'Template', 'Remove Template');
     }
 
     @action.bound applyLayout(idx, e) {
@@ -93,6 +96,7 @@ export default class ViewStore {
                 cb: finishImportLayout,
             });
             this.menu.setOpen(false);
+            logEvent('Chart Control', 'Template', 'Load Template');
         };
         setTimeout(importLayout, 100);
     }
