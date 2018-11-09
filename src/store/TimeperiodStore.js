@@ -3,7 +3,7 @@ import MenuStore from './MenuStore';
 import { getTimeUnit, getIntervalInSeconds, displayMilliseconds } from '../utils';
 import Menu from '../components/Menu.jsx';
 import ServerTime from '../utils/ServerTime';
-import { logEvent } from  '../utils/ga';
+import { logEvent, LogCategories, LogActions } from  '../utils/ga';
 
 export default class TimeperiodStore {
     constructor(mainStore) {
@@ -106,7 +106,7 @@ export default class TimeperiodStore {
             console.error('Setting granularity does nothing since granularity prop is set. Consider overriding the onChange prop in <TimePeriod />');
             return;
         }
-        logEvent('Chart Control', 'Interval', granularity.toString());
+        logEvent(LogCategories.ChartControl, LogActions.Interval, granularity.toString());
         this.mainStore.chart.changeSymbol(undefined, granularity);
     }
 
