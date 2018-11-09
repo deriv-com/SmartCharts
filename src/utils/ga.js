@@ -21,7 +21,7 @@ export const LogActions = Object.freeze({
 /* eslint-disable */
 export function initGA() {
     /* @START-EXCLUDE: 'lib' */
-    if (!window.isProductionWebsite()) return;
+    if (!window.isProductionWebsite) return;
     (function (i, s, o, g, r, a, m) {
         i.GoogleAnalyticsObject = r; i[r] = i[r] || function () {
             (i[r].q = i[r].q || []).push(arguments);
@@ -35,7 +35,7 @@ export function initGA() {
 
 export function logPageView() {
     /* @START-EXCLUDE: 'lib' */
-    if (!window.isProductionWebsite()) return;
+    if (!window.isProductionWebsite) return;
     try {
         ga('send', 'pageview', window.location.pathname);
     }
@@ -45,7 +45,7 @@ export function logPageView() {
 
 export function logEvent(category, action, label) {
     /* @START-EXCLUDE: 'lib' */
-    if (!window.isProductionWebsite()) return;
+    if (!window.isProductionWebsite) return;
     try {
         ga('send', 'event', category, action, label);
     }

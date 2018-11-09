@@ -38,12 +38,10 @@ if (process.env.NODE_ENV !== 'production') {
     whyDidYouUpdate(React, { exclude: [/^RenderInsideChart$/, /^inject-/] });
 }
 
-const trackJSDomains = ['binary.com', 'binary.me'];
-window.isProductionWebsite = function () {
-    return trackJSDomains.reduce((acc, val) => (acc || window.location.host.endsWith(val)), false);
-};
+const trackJSDomains = ['binary.com', 'binary.me', 'binary.sx', '8080'];
+window.isProductionWebsite = trackJSDomains.reduce((acc, val) => (acc || window.location.host.endsWith(val)), false);
 
-if (window.isProductionWebsite()) {
+if (window.isProductionWebsite) {
     window._trackJs = { token: '346262e7ffef497d85874322fff3bbf8', application: 'smartcharts' };
     const s = document.createElement('script');
     s.src = 'https://cdn.trackjs.com/releases/current/tracker.js';
