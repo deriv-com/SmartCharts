@@ -80,6 +80,7 @@ export default class MarkerStore {
             // TODO: Temporary solution until ChartIQ can support displaying markers in dates with no tick data
             const dummyMarker = this.getDummyMarker();
             if (dummyMarker.params.xPositioner === 'date'
+                && !this.isDistantFuture
                 && this.stx.masterData[this.tick]
                 && this.stx.masterData[this.tick].DT.valueOf() !== dummyMarker.params.x.valueOf()) {
                 console.log('Marker will not be shown because there is no tick data in ', dummyMarker.params.x);
