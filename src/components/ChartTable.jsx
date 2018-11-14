@@ -43,7 +43,7 @@ const ChartTable = ({
                                             <td className="ciq-table-cell">{item.Low}</td>,
                                             <td className="ciq-table-cell">{item.Close}</td>,
                                         ]}
-                                    <td className="ciq-table-cell">{item.Change}</td>
+                                    <td className={`ciq-table-cell ${item.Status ? item.Status : 'up'}`}>{item.Change}</td>
                                     <td className="ciq-table-cell"><span className={`cq-change ${item.Status}`} /></td>
                                 </tr>
                             ))

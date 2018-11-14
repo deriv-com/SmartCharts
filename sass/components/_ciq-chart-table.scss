@@ -1,5 +1,8 @@
 
 .ciq-chart-dialog {
+    width: auto !important;
+    left: auto;
+
     .ciq-list {
         min-height: 65vh;
     }
@@ -11,12 +14,38 @@
 }
 
 .ciq-table-head {
-    height: 30px;
+    height: 40px;
     @include themify($themes) {
-        background: themed('DefaultBorder');
+        background: themed('DialogBodyBg');
+    }
+}
+
+.ciq-table-row {
+    @include themify($themes) {
+        border-bottom: 2px solid themed('DialogBodyBg');
+    }
+
+    :last-child {
+        padding-right: 0;
+    }
+    :first-child {
+        padding-left: 30px;
     }
 }
 
 .ciq-table-cell {
     text-align: center;
+    height: 30px;
+    padding: 0 15px;
+    white-space: nowrap;
+    @include themify($themes) {
+        color: themed('DefaultText');
+    }
+
+    &.up {
+        color: #4caf50;
+    }
+    &.down {
+        color: #f95454;
+    }
 }
