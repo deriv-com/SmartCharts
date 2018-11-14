@@ -1,0 +1,22 @@
+
+.ciq-chart-dialog {
+    .ciq-list {
+        min-height: 65vh;
+    }
+}
+
+.ciq-chart-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.ciq-table-head {
+    height: 30px;
+    @include themify($themes) {
+        background: themed('DefaultBorder');
+    }
+}
+
+.ciq-table-cell {
+    text-align: center;
+}

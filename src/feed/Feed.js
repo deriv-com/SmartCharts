@@ -230,6 +230,9 @@ class Feed {
             });
         } else {
             this._stx.updateChartData(quotes);
+            if (this._stx.showTable) {
+                this._mainStore.chartTable.updateTableData(quotes);
+            }
         }
 
         this._emitDataUpdate(quotes, comparisonChartSymbol);

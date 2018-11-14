@@ -32,6 +32,7 @@ function getChartTypes() {
         { id: 'baseline',      text: t.translate('Baseline'),       candleOnly: false, icon: BaseLineIcon     },
         { id: 'candle',        text: t.translate('Candle'),         candleOnly: true,  icon: CandleIcon       },
         { id: 'colored_bar',   text: t.translate('OHLC'),           candleOnly: true,  icon: OHLCIcon         },
+        { id: 'table',         text: t.translate('Table'),          candleOnly: false, icon: LineIcon         },
         { id: 'hollow_candle', text: t.translate('Hollow Candle'),  candleOnly: true,  icon: HollowCandleIcon },
         { id: 'heikinashi',    text: t.translate('Heikin Ashi'),    candleOnly: true,  icon: HeikinAshiIcon   },
         { id: 'kagi',          text: t.translate('Kagi'),           candleOnly: true,  icon: KagiIcon,        settingsOnClick: true },
@@ -161,12 +162,19 @@ export default class ChartTypeStore {
     }
 
     @action.bound setType(type) {
+        logEvent(LogCategories.ChartControl, LogActions.ChartType, type.text);
         if (typeof type === 'string') {
             type = this.types.find(t => t.id === type);
         }
         if (type.id === this.type.id) {
             return;
         }
+        if (type.id === 'table') {
+            this.stx.showTable = true;
+            this.mainStore.chartTable.setOpen(true);
+            return;
+        }
+        this.stx.showTable = false;
         if (type.id === 'spline') {
             // Spline is just a line with tension
             this.stx.chart.tension = this.stx.layout.tension = 0.5;
@@ -185,7 +193,6 @@ export default class ChartTypeStore {
             }
         }
         this.type = type;
-        logEvent(LogCategories.ChartControl, LogActions.ChartType, type.text);
     }
 
     @action.bound showAggregateDialog(aggregateId) {
