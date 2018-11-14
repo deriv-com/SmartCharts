@@ -118,7 +118,7 @@ class Chart extends Component {
                     <DrawToolsSettingsDialog />
                     <AggregateChartSettingsDialog />
                     <StudySettingsDialog />
-                    <ChartTable/>
+                    <ChartTable />
                 </div>
             </div>
         );
