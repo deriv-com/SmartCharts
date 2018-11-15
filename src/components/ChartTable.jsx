@@ -14,73 +14,77 @@ const ChartTable = ({
         <Dialog className="cq-dialog ciq-chart-dialog">
             <>
                 <PerfectScrollbar className="ciq-list">
-                    {isMobile ?
-                        <table className="ciq-chart-table">
-                            <tbody>
-                                {tableData.map((item, idx) => (
-                                    <tr className="ciq-table-row" 
-                                    key={`chartTable-${idx}`} // eslint-disable-line react/no-array-index-key
-                                    >
-                                        <td>
-                                            <div className="ciq-table-cell">
-                                                <div className='ciq-table-date'>{item.Date}</div>
-                                                <div className={`${item.Status ? item.Status : 'up'}`}>{item.Change}</div>
-                                                <div className={`cq-change ${item.Status}`}></div>
-                                            </div>
-                                            <div className="ciq-table-cell">
-                                                {isTick && <div><span>{t.translate('Close')}</span>{item.Close}</div>}
-                                                {!isTick
+                    {isMobile
+                        ? (
+                            <table className="ciq-chart-table">
+                                <tbody>
+                                    {tableData.map((item, idx) => (
+                                        <tr
+                                            className="ciq-table-row"
+                                            key={`chartTable-${idx}`} // eslint-disable-line react/no-array-index-key
+                                        >
+                                            <td>
+                                                <div className="ciq-table-cell">
+                                                    <div className="ciq-table-date">{item.Date}</div>
+                                                    <div className={`${item.Status ? item.Status : 'up'}`}>{item.Change}</div>
+                                                    <div className={`cq-change ${item.Status}`} />
+                                                </div>
+                                                <div className="ciq-table-cell">
+                                                    {isTick && <div><span>{t.translate('Close')}</span>{item.Close}</div>}
+                                                    {!isTick
                                                     && [
                                                         <div><span>{t.translate('Open')}</span>{item.Open}</div>,
                                                         <div><span>{t.translate('High')}</span>{item.High}</div>,
                                                         <div><span>{t.translate('Low')}</span>{item.Low}</div>,
                                                         <div><span>{t.translate('Close')}</span>{item.Close}</div>,
                                                     ]}
-                                            </div>
-                                        </td>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        )
+                        :                        (
+                            <table className="ciq-chart-table">
+                                <tbody>
+                                    <tr className="ciq-table-head">
+                                        <th className="ciq-table-cell">{t.translate('Date')}</th>
+                                        {isTick
+                                            ? <th className="ciq-table-cell">{t.translate('Tick')}</th>
+                                            :                                [
+                                                <th className="ciq-table-cell">{t.translate('Open')}</th>,
+                                                <th className="ciq-table-cell">{t.translate('High')}</th>,
+                                                <th className="ciq-table-cell">{t.translate('Low')}</th>,
+                                                <th className="ciq-table-cell">{t.translate('Close')}</th>,
+                                            ]}
+                                        <th className="ciq-table-cell">{t.translate('Change')}</th>
+                                        <th className="ciq-table-cell" />
                                     </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    :
-                        <table className="ciq-chart-table">
-                        <tbody>
-                            <tr className="ciq-table-head">
-                                <th className="ciq-table-cell">{t.translate('Date')}</th>
-                                {isTick
-                                    ? <th className="ciq-table-cell">{t.translate('Tick')}</th>
-                                    :                                [
-                                        <th className="ciq-table-cell">{t.translate('Open')}</th>,
-                                        <th className="ciq-table-cell">{t.translate('High')}</th>,
-                                        <th className="ciq-table-cell">{t.translate('Low')}</th>,
-                                        <th className="ciq-table-cell">{t.translate('Close')}</th>,
-                                    ]}
-                                <th className="ciq-table-cell">{t.translate('Change')}</th>
-                                <th className="ciq-table-cell" />
-                            </tr>
 
-                            {tableData.map((item, idx) => (
-                                <tr
-                                    key={`chartTable-${idx}`} // eslint-disable-line react/no-array-index-key
-                                    className="ciq-table-row"
-                                >
-                                    <td className="ciq-table-cell">{item.Date}</td>
-                                    {isTick && <td className="ciq-table-cell">{item.Close}</td>}
-                                    {!isTick
+                                    {tableData.map((item, idx) => (
+                                        <tr
+                                            key={`chartTable-${idx}`} // eslint-disable-line react/no-array-index-key
+                                            className="ciq-table-row"
+                                        >
+                                            <td className="ciq-table-cell">{item.Date}</td>
+                                            {isTick && <td className="ciq-table-cell">{item.Close}</td>}
+                                            {!isTick
                                         && [
                                             <td className="ciq-table-cell">{item.Open}</td>,
                                             <td className="ciq-table-cell">{item.High}</td>,
                                             <td className="ciq-table-cell">{item.Low}</td>,
                                             <td className="ciq-table-cell">{item.Close}</td>,
                                         ]}
-                                    <td className={`ciq-table-cell ${item.Status ? item.Status : 'up'}`}>{item.Change}</td>
-                                    <td className="ciq-table-cell"><span className={`cq-change ${item.Status}`} /></td>
-                                </tr>
-                            ))
-                            }
+                                            <td className={`ciq-table-cell ${item.Status ? item.Status : 'up'}`}>{item.Change}</td>
+                                            <td className="ciq-table-cell"><span className={`cq-change ${item.Status}`} /></td>
+                                        </tr>
+                                    ))
+                                    }
 
-                        </tbody>
-                    </table>
+                                </tbody>
+                            </table>
+                        )
                     }
                 </PerfectScrollbar>
             </>
