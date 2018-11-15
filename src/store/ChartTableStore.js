@@ -6,7 +6,7 @@ export default class ChartTableStore {
     constructor(mainStore) {
         this.mainStore = mainStore;
         this.dialog = new DialogStore(mainStore);
-        this.ChartTableDialog = this.dialog.connect(Dialog);
+        this.Dialog = this.dialog.connect(Dialog);
         reaction(() => this.dialog.open, this.loadTableData);
     }
 
@@ -25,8 +25,8 @@ export default class ChartTableStore {
         return this.mainStore.chart.currentActiveSymbol.decimal_places;
     }
 
-    @action.bound loadTableData(value) {
-        if (value) {
+    @action.bound loadTableData() {
+        if (this.open) {
             this.stx.showTable = true;
             this.updateTableData(this.stx.masterData);
         } else {

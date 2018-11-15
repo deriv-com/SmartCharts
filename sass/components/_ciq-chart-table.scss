@@ -1,9 +1,10 @@
 .ciq-chart-dialog {
     width: auto !important;
     left: auto;
+    height: 80vh;
 
     .ciq-list {
-        min-height: 65vh;
+        max-height: 100%;
     }
 }
 
@@ -67,6 +68,7 @@
 .smartcharts-mobile {
     .ciq-chart-dialog {
         width: calc(100% - 20px) !important;
+        height: 90%;
     }
     .ciq-table-row :first-child {
         padding-left: 0;
