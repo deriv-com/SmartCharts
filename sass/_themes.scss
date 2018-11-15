@@ -157,6 +157,9 @@ $themes: (
         CrosshairAxis: rgba($COLOR_LIGHT_BLACK, 0.32),
         CrosshairLabel: rgba($COLOR_LIGHT_BLACK, 0.88),
         StarIconFav: $COLOR_ORANGE,
+        ChartHistoryBg: $COLOR_LIGHT_GRAY,
+        ChartHistoryColor: $COLOR_BRANDBLUE_40,
+        ChartHistoryBorder: $COLOR_GRAY
     ),
     dark: (
         DefaultMain:            $COLOR_BLUE,
@@ -283,6 +286,12 @@ $themes: (
         CrosshairAxis: $COLOR_WHITE,
         CrosshairLabel: $COLOR_BRANDBLUE_85,
         StarIconFav: $COLOR_ORANGE,
+        ChartHistoryBg: $COLOR_BRANDBLUE_95,
+        ChartHistoryColor: $COLOR_BRANDBLUE_40,
+        ChartHistoryBorder: $COLOR_BRANDBLUE_85,
+        ChartHistoryPickerBg: $COLOR_BLUE,
+        ChartHistoryPickerBorder: $COLOR_BRANDBLUE_85,
+        ChartHistoryPickerColor: $COLOR_WHITE,
     ),
 );
 

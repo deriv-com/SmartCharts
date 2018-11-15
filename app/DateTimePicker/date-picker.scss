@@ -47,6 +47,7 @@
 
             button {
                 border: none;
+                font-weight: bold;
             }
         }
     }
@@ -189,10 +190,17 @@
     }
 }
 
-div.datepicker-container {
+.datepicker-container {
     position: relative;
 
-    &:hover .datepicker-display, .datepicker-display:focus {
+    &.active {
+        .datepicker-display-wrapper {
+            input {
+                border-color: $COLOR_BLUE;
+            }
+        }
+    }
+    &:hover .datepicker-display {
         border-color: $COLOR_BLUE;
     }
     .datepicker-display:focus + .datepicker-native-overlay {
@@ -201,11 +209,9 @@ div.datepicker-container {
         }
     }
     .datepicker-display, .datepicker-native-overlay {
-        background: $COLOR_WHITE;
         height: 32px;
         cursor: pointer;
-        border: 1px solid $COLOR_GRAY;
-        border-radius: 5px;
+        border-radius: 4px;
         font-size: 14px;
         line-height: 100%;
         vertical-align: middle;
@@ -213,6 +219,11 @@ div.datepicker-container {
         box-sizing: border-box;
         font-weight: 300;
         transition: border 0.25s;
+        @include themify($themes) {
+            color: themed('ChartHistoryPickerColor');
+            background: themed('ChartHistoryPickerBg');
+            border: 1px solid themed('ChartHistoryPickerBorder');
+        }
     }
     .datepicker-native-overlay {
         position: absolute;
@@ -236,6 +247,16 @@ div.datepicker-container {
             }
         }
     }
+    .datepicker-display-wrapper {
+        .picker-calendar-icon-arrow {
+            background: svg-load('../icons/ic-calendar.svg') no-repeat scroll center center;
+            position: absolute;
+            right: 10px;
+            top: 6px;
+            padding: 10px;
+        }
+    }
+
     // style native date picker
     input[type=date] {
         appearance: none;

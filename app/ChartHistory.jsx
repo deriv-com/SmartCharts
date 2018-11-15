@@ -30,6 +30,7 @@ class ChartHistory extends React.Component {
     render() {
         return (
             <div className="ciq-chart-history">
+                <strong>Historical Data:</strong>
                 <DatePicker
                     placeholder="select date"
                     name="date"
@@ -43,6 +44,7 @@ class ChartHistory extends React.Component {
                 <TimePicker
                     placeholder="time"
                     name="time"
+                    is_clearable
                     value={this.state.time}
                     onChange={e => this.onChange(e)}
                 />

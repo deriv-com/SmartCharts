@@ -123,10 +123,11 @@ class ChartStore {
     }
 
     updateHeight(position) {
+        const historicalMobile = this.mainStore.chartSetting.historical && this.isMobile;
         const panelPosition = position || this.mainStore.chartSetting.position;
         const offsetHeight = (panelPosition === 'left') ? 0 : this.chartControlsNode.offsetHeight;
         this.chartHeight = this.chartNode.offsetHeight;
-        this.chartContainerHeight = this.chartHeight - offsetHeight;
+        this.chartContainerHeight = this.chartHeight - offsetHeight - (historicalMobile ? 45 : 0);
     }
 
     updateCanvas = () => {

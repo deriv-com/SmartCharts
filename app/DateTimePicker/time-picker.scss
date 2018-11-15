@@ -4,6 +4,13 @@
     &.padding {
         padding: 16px;
     }
+    .picker-calendar-icon-arrow {
+        background: svg-load('../icons/ic-time.svg') no-repeat scroll center center;
+        position: absolute;
+        right: 4px;
+        top: 6px;
+        padding: 10px;
+    }
     #time-picker-input.time-picker-input {
         height: 32px;
         padding: 0 8px;
@@ -13,6 +20,11 @@
         font-weight: 300;
         margin: 0;
         cursor: pointer;
+        @include themify($themes) {
+            color: themed('ChartHistoryPickerColor');
+            background: themed('ChartHistoryPickerBg');
+            border: 1px solid themed('ChartHistoryPickerBorder');
+        }
 
         &::placeholder {
             color: $COLOR_GRAY;
@@ -65,14 +77,17 @@
             transition: height 0.3s ease 0.15s;
 
             .time-picker-clear {
-                // background: url('../images/app_2/common/close_circle.svg') no-repeat;
+                background: svg-load('../icons/ic-close-circle.svg') no-repeat;
                 position: relative;
                 float: right;
                 display: none;
-                top: 8px;
-                width: 12px;
-                height: 12px;
+                top: 6px;
+                width: 17px;
+                height: 17px;
                 cursor: pointer;
+                svg {
+                    fill: #ff9900;
+                }
             }
             .placeholder {
                 color: $COLOR_GRAY;

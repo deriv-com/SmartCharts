@@ -167,7 +167,10 @@ export default class DatePicker extends React.PureComponent {
         }
 
         return (
-            <div ref={(node) => { this.mainNode = node; }} className="datepicker-container">
+            <div
+                ref={(node) => { this.mainNode = node; }}
+                className={`datepicker-container ${this.state.is_datepicker_visible ? 'active' : ''}`}
+            >
                 <div
                     className="datepicker-display-wrapper"
                     onMouseEnter={this.onMouseEnter}

@@ -136,12 +136,6 @@ class App extends Component {
         console.log('settings updated:', settings);
         localStorage.setItem('smartchart-setting', JSON.stringify(settings));
 
-        if (this.state.settings.historical !== undefined
-            && settings.historical !== this.state.settings.historical
-            && !settings.historical) {
-            window.location.reload(false);
-        }
-
         this.setState({ settings });
         if (this.startingLanguage !== settings.language) {
             // Place language in URL:
@@ -150,6 +144,9 @@ class App extends Component {
             url.delete('l');
             url.set('l', settings.language);
             window.location.href = `${origin}${pathname}?${url.toString()}`;
+        }
+        if (!settings.historical) {
+            this.handleDateChange('');
         }
     };
 

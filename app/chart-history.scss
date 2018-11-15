@@ -1,49 +1,72 @@
 .ciq-chart-history {
-    height: 46px;
+    border-radius: 4px;
+    height: 30px;
     display: inline-flex;
     z-index: 41;
     margin: 0.2em 0.8em;
     position: relative;
+    padding: 9px 8px 11px;
+    top: 0px;
+    width: 353px;
+    @include themify($themes) {
+        background: themed('ChartHistoryBg');
+        border: solid 1px themed('ChartHistoryBorder');
+    }
 
-    .datepicker-container {
-        border-radius: 4px;
-        margin-right: 10px;
+    > strong {
+        font-family: 'Roboto';
+        font-size: 12px;
+        font-weight: bold;
+        font-style: normal;
+        line-height: normal;
+        letter-spacing: normal;
+        padding-top: 9px;
         @include themify($themes) {
-            background: themed('ChartTitleBg');
-            border: solid 1px themed('ChartTitleBorder');
+            color: themed('ChartHistoryColor');
         }
+    }
+    .datepicker-container,
+    .time-picker {
+        border-radius: 4px;
+        height: 30px;
+    }
+    .datepicker-container {
+        margin-left: 8px;
 
         input {
-            height: 44px;
-            border: none !important;
-        }
-        .picker-calendar-icon-arrow {
-            background: svg-load('icons/ic-dropdown.svg') no-repeat scroll center center;
-            position: absolute;
-            right: 10px;
-            top: 10px;
-            padding: 10px;
+            height: 30px;
         }
     }
     .time-picker {
-        border-radius: 4px;
         width: 80px;
-        @include themify($themes) {
-            background: themed('ChartTitleBg');
-            border: solid 1px themed('ChartTitleBorder');
-        }
+        margin-left: 8px;
 
         input {
             width: 100%;
-            height: 44px !important;
-            border: none !important;
+            height: 30px !important;
         }
-        .picker-calendar-icon-arrow {
-            background: svg-load('icons/ic-dropdown.svg') no-repeat scroll center center;
-            position: absolute;
-            right: 4px;
-            top: 10px;
-            padding: 10px;
-        }
+    }
+}
+
+.smartcharts-mobile .ciq-chart-history {
+    position: fixed;
+    bottom: 39px;
+    left: 0px;
+    top: auto;
+    margin: 0px;
+    width: 100%;
+    border-right: none;
+    border-left: none;
+
+    .time-picker .time-picker-dropdown.active {
+        bottom: calc(100% + 10px);
+        top: auto;
+        right: 0px;
+    }
+    .datepicker-container .datepicker-calendar.show > div.calendar {
+        bottom: calc(100% + 8px);
+        top: auto;
+        right: -55px;
+        left: auto;
     }
 }
