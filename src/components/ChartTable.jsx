@@ -4,6 +4,7 @@ import { connect } from '../store/Connect';
 import '../../sass/components/_ciq-chart-table.scss';
 
 const ChartTable = ({
+    isMobile,
     tableData,
     ChartTableDialog,
     open,
@@ -13,7 +14,34 @@ const ChartTable = ({
         <ChartTableDialog className="cq-dialog ciq-chart-dialog">
             <>
                 <PerfectScrollbar className="ciq-list">
-                    <table className="ciq-chart-table">
+                    {isMobile ?
+                        <table className="ciq-chart-table">
+                            <tbody>
+                                {tableData.map((item, idx) => (
+                                    <tr className="ciq-table-row" 
+                                    key={`chartTable-${idx}`} // eslint-disable-line react/no-array-index-key
+                                    >
+                                        <div className="ciq-table-cell">
+                                            <div className='ciq-table-date'>{item.Date}</div>
+                                            <div className={`${item.Status ? item.Status : 'up'}`}>{item.Change}</div>
+                                            <div className={`cq-change ${item.Status}`}></div>
+                                        </div>
+                                        <div className="ciq-table-cell">
+                                            {isTick && <div><span>{t.translate('Close')}</span>{item.Close}</div>}
+                                            {!isTick
+                                                && [
+                                                    <div><span>{t.translate('Open')}</span>{item.Open}</div>,
+                                                    <div><span>{t.translate('High')}</span>{item.High}</div>,
+                                                    <div><span>{t.translate('Low')}</span>{item.Low}</div>,
+                                                    <div><span>{t.translate('Close')}</span>{item.Close}</div>,
+                                                ]}
+                                        </div>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    :
+                        <table className="ciq-chart-table">
                         <tbody>
                             <tr className="ciq-table-head">
                                 <th className="ciq-table-cell">{t.translate('Date')}</th>
@@ -51,13 +79,15 @@ const ChartTable = ({
 
                         </tbody>
                     </table>
+                    }
                 </PerfectScrollbar>
             </>
         </ChartTableDialog>
     </div>
 );
 
-export default connect(({ chartTable }) => ({
+export default connect(({  chart, chartTable }) => ({
+    isMobile: chart.isMobile,
     tableData: chartTable.tableData,
     ChartTableDialog: chartTable.ChartTableDialog,
     open: chartTable.open,
