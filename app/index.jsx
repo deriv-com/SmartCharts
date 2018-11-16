@@ -16,6 +16,8 @@ import { // eslint-disable-line import/no-extraneous-dependencies,import/no-unre
     AssetInformation,
     ComparisonList,
     logEvent,
+    LogCategories,
+    LogActions,
 } from '@binary-com/smartcharts'; // eslint-disable-line import/no-unresolved
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
@@ -38,11 +40,9 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 const trackJSDomains = ['binary.com', 'binary.me'];
-window.isProductionWebsite = function () {
-    return trackJSDomains.reduce((acc, val) => (acc || window.location.host.endsWith(val)), false);
-};
+window.isProductionWebsite = trackJSDomains.reduce((acc, val) => (acc || window.location.host.endsWith(val)), false);
 
-if (window.isProductionWebsite()) {
+if (window.isProductionWebsite) {
     window._trackJs = { token: '346262e7ffef497d85874322fff3bbf8', application: 'smartcharts' };
     const s = document.createElement('script');
     s.src = 'https://cdn.trackjs.com/releases/current/tracker.js';
@@ -127,7 +127,7 @@ class App extends Component {
     */
 
     symbolChange = (symbol) => {
-        logEvent('Chart Title', 'Market Selector', symbol);
+        logEvent(LogCategories.ChartTitle, LogActions.MarketSelector, symbol);
         this.notifier.removeByCategory('activesymbol');
         this.setState({ symbol });
     };

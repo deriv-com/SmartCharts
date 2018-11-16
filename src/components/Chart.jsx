@@ -27,10 +27,10 @@ class Chart extends Component {
 
     componentDidMount() {
         const { updateProps, init, ...props } = this.props;
-        updateProps(props);
-        init(this.root.current, this.modalNode.current, props);
         initGA();
         logPageView();
+        updateProps(props);
+        init(this.root.current, this.modalNode.current, props);
     }
 
     componentWillReceiveProps(nextProps) {
