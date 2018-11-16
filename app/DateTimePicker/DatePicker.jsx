@@ -2,7 +2,9 @@ import React from 'react';
 import moment from 'moment';
 import Calendar from './Calendar.jsx';
 import './date-picker.scss';
-
+import {
+    CalendarIcon,
+} from '../../src/components/Icons.jsx';
 
 class DatePickerInput extends React.PureComponent {
     render() {
@@ -42,7 +44,6 @@ export default class DatePicker extends React.PureComponent {
         this.state = {
             value                : props.value || '',
             is_datepicker_visible: false,
-            is_close_btn_visible : false,
         };
     }
 
@@ -72,16 +73,6 @@ export default class DatePicker extends React.PureComponent {
                 this.updateDatePickerValue(formatDate(this.state.value));
             }
         }
-    }
-
-    onMouseEnter = () => {
-        if (this.state.value && (!('is_clearable' in this.props) || this.props.is_clearable)) {
-            this.setState({ is_close_btn_visible: true });
-        }
-    }
-
-    onMouseLeave = () => {
-        this.setState({ is_close_btn_visible: false });
     }
 
     onSelectCalendar = (selected_date, is_datepicker_visible) => {
@@ -173,8 +164,7 @@ export default class DatePicker extends React.PureComponent {
             >
                 <div
                     className="datepicker-display-wrapper"
-                    onMouseEnter={this.onMouseEnter}
-                    onMouseLeave={this.onMouseLeave}
+                    onClick={this.handleVisibility}
                 >
                     <DatePickerInput
                         class_name="datepicker-display"
@@ -182,19 +172,10 @@ export default class DatePicker extends React.PureComponent {
                         name={this.props.name}
                         format={this.props.format}
                         placeholder={this.props.placeholder}
-                        onClick={this.handleVisibility}
                         is_read_only
                         value={this.state.value}
                     />
-                    <span className="picker-calendar-icon-arrow" />
-                    <span
-                        className={`picker-calendar-icon ${!this.state.is_close_btn_visible ? 'show' : ''} `}
-                        onClick={this.handleVisibility}
-                    />
-                    <span
-                        className={`close-circle-icon ${this.state.is_close_btn_visible ? 'show' : ''}`}
-                        onClick={this.clearDatePickerInput}
-                    />
+                    <CalendarIcon className="date-picker-calendar-icon" />
                 </div>
                 <div
                     className={`datepicker-calendar ${this.state.is_datepicker_visible ? 'show' : ''}`}

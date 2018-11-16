@@ -9,11 +9,9 @@ export default class ChartSettingStore {
     constructor(mainStore) {
         this.defaultLanguage = this.languages[0];
         this.mainStore = mainStore;
-        this.chartTypeStore = mainStore.chartType;
-        this.timeperiodStore = mainStore.timeperiod;
         this.menu = new MenuStore(mainStore, { route: 'setting' });
         this.ChartSettingMenu = this.menu.connect(Menu);
-        reaction(() => mainStore.state.settings, () => {
+        reaction(() => this.context, () => {
             this.setSettings(mainStore.state.settings);
         });
     }
@@ -163,9 +161,9 @@ export default class ChartSettingStore {
         if (this.historical === value) { return; }
         this.historical = value;
         this.saveSetting();
+
         if (this.historical) {
-            this.timeperiodStore.setGranularity(0);
-            this.chartTypeStore.setType('mountain');
+            this.mainStore.chart.onHistorical();
         }
     }
 }

@@ -4,6 +4,10 @@
 import { observer } from 'mobx-react';
 import moment from 'moment';
 import React from 'react';
+import {
+    TimeIcon,
+    CloseCircleIcon,
+} from '../../src/components/Icons.jsx';
 import './time-picker.scss';
 
 const isBeforeDate = (compare_moment, start_moment, should_only_check_hour) => {
@@ -91,11 +95,10 @@ class TimePickerDropdown extends React.Component {
                 >
                     <span className={value ? '' : 'placeholder'}>{value || 'Select time'}</span>
                     {(!('is_clearable' in this.props) || this.props.is_clearable)
-                        && (
-                            <span
-                                className={`${preClass}-clear`}
-                                onClick={this.clear}
-                            />
+                        && (<CloseCircleIcon
+                            className={`${preClass}-clear`}
+                            onClick={this.clear}
+                        />
                         )
                     }
                 </div>
@@ -225,18 +228,21 @@ class TimePicker extends React.Component {
                         )
                         : (
                             <React.Fragment>
-                                <input
-                                    ref={this.saveRef}
-                                    type="text"
-                                    readOnly
-                                    id={`${prefix_class}-input`}
-                                    className={`${prefix_class}-input ${this.state.is_open ? 'active' : ''}`}
-                                    value={this.state.value}
+                                <span
                                     onClick={this.toggleDropDown}
-                                    name={name}
-                                    placeholder={placeholder}
-                                />
-                                <span className="picker-calendar-icon-arrow" />
+                                >
+                                    <input
+                                        ref={this.saveRef}
+                                        type="text"
+                                        readOnly
+                                        id={`${prefix_class}-input`}
+                                        className={`${prefix_class}-input ${this.state.is_open ? 'active' : ''}`}
+                                        value={this.state.value}
+                                        name={name}
+                                        placeholder={placeholder}
+                                    />
+                                    <TimeIcon className="picker-time-icon" />
+                                </span>
                                 <TimePickerDropdown
                                     className={`${this.state.is_open ? 'active' : ''}${is_align_right ? ' from-right' : ''}`}
                                     toggle={this.toggleDropDown}

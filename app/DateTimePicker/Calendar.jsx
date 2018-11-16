@@ -47,7 +47,7 @@ function CalendarFooter({ footer, has_today_btn, onClick }) {
             { has_today_btn
                 && (
                     <CalendarButton className="calendar-footer-btn">
-                        <button type="button" onClick={onClick}>Today</button>
+                        <span onClick={onClick}>Today</span>
                     </CalendarButton>
                 )
             }

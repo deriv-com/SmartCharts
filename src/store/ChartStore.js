@@ -395,7 +395,6 @@ class ChartStore {
         if (typeof symbolObj === 'string') {
             symbolObj = this.activeSymbols.getSymbolObj(symbolObj);
         }
-
         const isSymbolAvailable = symbolObj && this.currentActiveSymbol;
 
         if (
@@ -513,6 +512,14 @@ class ChartStore {
             this.stxx.destroy();
             this.stxx = null;
         }
+    }
+
+    @action.bound onHistorical() {
+        this.contextPromise.then(() => {
+            // console.log('asdas');
+            this.mainStore.chartType.setType('mountain');
+            this.changeSymbol(undefined, 0);
+        });
     }
 }
 

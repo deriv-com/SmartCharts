@@ -2,15 +2,20 @@
     position: absolute;
     top: 0;
     left: 0;
-    background: $COLOR_WHITE;
     outline: 0;
     box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.14);
     z-index: 999;
     font-size: 14px;
     box-sizing: border-box;
     width: 280px;
+    border-radius: 4px;
+    @include themify($themes) {
+        background: themed('ChartHistoryPickerBg');
+        border: 1px solid themed('ChartHistoryPickerBorder');
+    }
 
     .calendar-input {
+        background: transparent;
         margin: 0;
         border: none;
         outline: none;
@@ -20,7 +25,9 @@
         font-weight: 300;
         height: 34px;
         padding: 6px 10px;
-        color: rgba(0, 0, 0, 0.65);
+        @include themify($themes) {
+            color: themed('ChartHistoryPickerTopColor');
+        }
 
         &[readonly] {
             cursor: default;
@@ -28,13 +35,16 @@
     }
     .calendar-footer {
         font-size: 14px;
-        border-top: 1px solid $COLOR_GRAY;
         display: grid;
         align-items: center;
         line-height: 38px;
         padding: 0 8px;
-        color: $COLOR_LIGHT_BLACK;
         font-weight: 500;
+        @include themify($themes) {
+            background: themed('ChartHistoryPickerFooterBg');
+            border-top: 1px solid themed('ChartHistoryPickerFooterBorder');
+            color: themed('ChartHistoryPickerFooterColor');
+        }
 
         .calendar-footer-extra + .calendar-footer-btn {
             border-top: 1px solid $COLOR_GRAY;
@@ -42,13 +52,9 @@
         }
         .calendar-footer-btn {
             cursor: pointer;
-            color: $COLOR_BLUE;
             text-align: center;
-
-            button {
-                border: none;
-                font-weight: bold;
-            }
+            border: none;
+            font-weight: bold;
         }
     }
     .calendar-header {
@@ -56,16 +62,22 @@
         justify-content: center;
         height: 32px;
         line-height: 32px;
-        border-top: 1px solid $COLOR_GRAY;
-        border-bottom: 1px solid $COLOR_GRAY;
         font-weight: 500;
+        @include themify($themes) {
+            background: themed('ChartHistoryPickerHeaderBg');
+            border-top: 1px solid themed('ChartHistoryPickerHeaderBorder');
+            border-bottom: 1px solid themed('ChartHistoryPickerHeaderBorder');
+            color: themed('ChartHistoryPickerHeaderColor');
+        }
 
         .calendar-select-month-btn, .calendar-select-year-btn, .calendar-select-decade-btn, .calendar-select-century-btn {
             padding: 0 4px;
             cursor: pointer;
 
             &:hover {
-                color: $COLOR_BLUE;
+                @include themify($themes) {
+                    color: themed('ChartHistoryPickerHeaderColor');
+                }
             }
             &.calendar-select-century-btn {
                 cursor: default;
@@ -78,10 +90,10 @@
             display: inline-block;
             line-height: 32px;
             cursor: pointer;
-
-            &:hover {
-                color: $COLOR_BLUE;
+            @include themify($themes) {
+                color: themed('ChartHistoryPickerHeaderIcon');
             }
+
             &.calendar-prev-year-btn {
                 left: 7%;
 
@@ -132,16 +144,20 @@
             border: 1px solid transparent;
             border-radius: 5px;
             padding: 0;
-            color: $COLOR_LIGHT_BLACK;
             text-align: center;
             background: transparent;
             transition: all 0.3s;
             font-size: 14px;
             line-height: 24px;
+            @include themify($themes) {
+                color: themed('ChartHistoryPickerBodyColor');
+            }
 
             &.calendar-date {
                 width: 24px;
-                color: $COLOR_BLUE;
+                @include themify($themes) {
+                    color: themed('ChartHistoryPickerBodyColor');
+                }
             }
             &.calendar-month, &.calendar-year {
                 padding: 0 8px;
@@ -157,34 +173,48 @@
                 text-align: center;
                 align-self: center;
                 font-weight: 500;
-                color: $COLOR_LIGHT_BLACK;
+                @include themify($themes) {
+                    color: themed('ChartHistoryPickerHeaderColor');
+                }
             }
             &.today {
                 font-weight: 400;
-                border: 1px solid $COLOR_BLUE;
+                @include themify($themes) {
+                    border: 1px solid themed('ChartHistoryPickerBodyActiveBorder');
+                }
 
                 &.disabled {
-                    color: $COLOR_GRAY;
-                    border: 1px solid $COLOR_GRAY;
+                    @include themify($themes) {
+                        color: themed('ChartHistoryPickerBodyDisableColor');
+                        border: 1px solid themed('ChartHistoryPickerBodyDisableBorder');
+                    }
                 }
             }
             &.active {
-                background: $COLOR_BLUE;
-                color: $COLOR_WHITE;
                 font-weight: 300;
+                @include themify($themes) {
+                    background: themed('ChartHistoryPickerBodyActiveBg');
+                    color: themed('ChartHistoryPickerBodyActiveColor');
+                }
 
                 &.disabled {
-                    color: $COLOR_GRAY;
-                    border: 1px solid $COLOR_GRAY;
+                    @include themify($themes) {
+                        color: themed('ChartHistoryPickerBodyDisableColor');
+                        border: 1px solid themed('ChartHistoryPickerBodyDisableBorder');
+                    }
                 }
             }
             &.disabled {
-                color: $COLOR_GRAY;
                 cursor: default;
+                @include themify($themes) {
+                    color: themed('ChartHistoryPickerBodyDisableColor');
+                }
             }
             &:hover:not(.disabled) {
                 cursor: pointer;
-                background: $COLOR_GRAY;
+                @include themify($themes) {
+                    border: 1px solid themed('ChartHistoryPickerBodyActiveBorder');
+                }
             }
         }
     }
@@ -195,8 +225,16 @@
 
     &.active {
         .datepicker-display-wrapper {
-            input {
-                border-color: $COLOR_BLUE;
+            @include themify($themes) {
+                border-color: themed('ChartHistoryPickerActiveBorder');
+            }
+
+            .date-picker-calendar-icon {
+                svg {
+                    @include themify($themes) {
+                        fill: themed('ChartHistoryPickerActiveIcon');
+                    }
+                }
             }
         }
     }
@@ -209,9 +247,8 @@
         }
     }
     .datepicker-display, .datepicker-native-overlay {
-        height: 32px;
+        height: 28px;
         cursor: pointer;
-        border-radius: 4px;
         font-size: 14px;
         line-height: 100%;
         vertical-align: middle;
@@ -219,10 +256,11 @@
         box-sizing: border-box;
         font-weight: 300;
         transition: border 0.25s;
+        background: transparent;
+        border: none;
+        border-radius: 4px;
         @include themify($themes) {
             color: themed('ChartHistoryPickerColor');
-            background: themed('ChartHistoryPickerBg');
-            border: 1px solid themed('ChartHistoryPickerBorder');
         }
     }
     .datepicker-native-overlay {
@@ -242,25 +280,38 @@
             top: 8px;
             right: 6px;
 
-            & .arrow-path {
-                fill: $COLOR_GRAY;
+            &.arrow-path {
+                @include themify($themes) {
+                    fill: themed('ChartHistoryPickerIcon');
+                }
             }
         }
     }
     .datepicker-display-wrapper {
-        .picker-calendar-icon-arrow {
-            background: svg-load('../icons/ic-calendar.svg') no-repeat scroll center center;
+        border-radius: 4px;
+        @include themify($themes) {
+            background: themed('ChartHistoryPickerBg');
+            border: 1px solid themed('ChartHistoryPickerBorder');
+        }
+
+        .date-picker-calendar-icon {
             position: absolute;
-            right: 10px;
-            top: 6px;
-            padding: 10px;
+            right: 3px;
+            top: 3px;
+            cursor: pointer;
+
+            svg {
+                @include themify($themes) {
+                    fill: themed('ChartHistoryPickerIcon');
+                }
+            }
         }
     }
 
     // style native date picker
     input[type=date] {
         appearance: none;
-        // sometimes we have 2 different elements with hover and focus in chrome mobile
+
         &:hover:not(:focus) {
             border-color: $COLOR_GRAY;
         }
@@ -290,21 +341,14 @@
             opacity: 1;
             pointer-events: auto;
         }
-        &.picker-calendar-icon:before {
-            // background-image: url('../images/app_2/common/calendar.svg');
-            background-repeat: no-repeat;
-        }
-        &.close-circle-icon:before {
-            // background-image: url('../images/app_2/common/close_circle.svg');
-            background-repeat: no-repeat;
-        }
     }
     .datepicker-calendar {
         .calendar {
+            top: 100%;
             opacity: 0;
-            transform: scale(1, 0);
-            transform-origin: top;
-            transition: all 0.25s;
+            transition: all 300ms;
+            pointer-events: none;
+            z-index: -9;
 
             & span {
                 user-select: none;
@@ -312,104 +356,9 @@
         }
         &.show > div.calendar {
             opacity: 1;
-            transform: scale(1, 1);
+            z-index: 9;
             top: calc(100% + 8px);
-        }
-    }
-}
-
-// Dark Theme
-.theme-wrapper.dark {
-    input.datepicker-display {
-        background: $COLOR_BLUE;
-        border-color: $COLOR_BRANDBLUE_85;
-        color: $COLOR_WHITE;
-
-        &:hover, &:focus, &:active {
-            border-color: $COLOR_WHITE;
-        }
-    }
-    .calendar {
-        background: $COLOR_BRANDBLUE_95;
-        border: 1px solid $COLOR_BRANDBLUE_85;
-
-        input.calendar-input {
-            border-radius: 0;
-            background: $COLOR_BRANDBLUE_95;
-            border-color: $COLOR_BRANDBLUE_85;
-            color: $COLOR_WHITE;
-
-            &:hover, &:focus, &:active {
-                border-color: $COLOR_WHITE;
-            }
-        }
-        .calendar-header, .calendar-footer {
-            border-color: $COLOR_BRANDBLUE_85;
-            color: $COLOR_WHITE;
-
-            .calendar-prev-year-btn, .calendar-prev-month-btn, .calendar-next-month-btn, .calendar-next-year-btn {
-                color: $COLOR_BRANDBLUE_40;
-
-                &:hover {
-                    color: $COLOR_WHITE;
-                }
-            }
-            span a {
-                color: $COLOR_WHITE;
-            }
-        }
-        .calendar-header {
-            background: $COLOR_BLUE;
-
-            span:hover {
-                color: $COLOR_BRANDBLUE_40;
-            }
-        }
-        span.calendar-date-header {
-            color: $COLOR_WHITE;
-        }
-        span.calendar-date, span.calendar-month, span.calendar-year {
-            color: $COLOR_BRANDBLUE_40;
-            background: $COLOR_BRANDBLUE_95;
-
-            &.active {
-                font-weight: 600;
-                color: $COLOR_BLUE;
-                background: $COLOR_WHITE;
-            }
-            &:hover:not(.active) {
-                background: $COLOR_BRANDBLUE_85;
-            }
-            &.disabled {
-                color: $COLOR_BRANDBLUE_75;
-                pointer-events: none;
-            }
-            &.today {
-                border: 1px solid $COLOR_WHITE;
-                color: $COLOR_WHITE;
-
-                &.disabled {
-                    background: $COLOR_BLUE;
-                    border: 1px solid $COLOR_BRANDBLUE_75;
-                    color: $COLOR_BRANDBLUE_75;
-                }
-                &.active {
-                    color: $COLOR_BLUE;
-                }
-            }
-        }
-        div.calendar-footer span.calendar-footer-btn {
-            color: $COLOR_BRANDBLUE_40;
-        }
-    }
-    .datepicker-container {
-        .datepicker-native-overlay {
-            background: $COLOR_BLUE;
-            border-color: $COLOR_BRANDBLUE_85;
-
-            &:hover, &:focus, &:active {
-                border-color: $COLOR_WHITE;
-            }
+            pointer-events: initial;
         }
     }
 }
