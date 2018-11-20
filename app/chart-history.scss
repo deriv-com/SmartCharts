@@ -1,13 +1,13 @@
 .ciq-chart-history {
     border-radius: 4px;
     height: 30px;
-    display: inline-flex;
     z-index: 41;
     margin: 0.2em 0.8em;
     position: relative;
     padding: 9px 8px 11px;
     top: 0px;
     width: 353px;
+    display: none;
     @include themify($themes) {
         background: themed('ChartHistoryBg');
         border: solid 1px themed('ChartHistoryBorder');
@@ -65,4 +65,8 @@
         right: -55px;
         left: auto;
     }
+}
+
+.cq-chart-title + .ciq-chart-history {
+    display: inline-flex;
 }

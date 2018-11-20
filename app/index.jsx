@@ -21,6 +21,7 @@ import { // eslint-disable-line import/no-extraneous-dependencies,import/no-unre
 } from '@binary-com/smartcharts'; // eslint-disable-line import/no-unresolved
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
+import moment from 'moment';
 import 'url-search-params-polyfill';
 import { configure } from 'mobx';
 import './app.scss';
@@ -83,7 +84,7 @@ const chartId = '1';
 const appId  = localStorage.getItem('config.app_id') || 12812;
 const serverUrl = getServerUrl();
 const language = new URLSearchParams(window.location.search).get('l') || getLanguageStorage();
-
+const today = moment().format('YYYY/MM/DD');
 const connectionManager = new ConnectionManager({
     appId,
     language,
@@ -101,12 +102,16 @@ class App extends Component {
     constructor(props) {
         super(props);
         this.notifier = new ChartNotifier();
+        let endEpoch;
         let settings = createObjectFromLocalStorage('smartchart-setting');
         if (settings) {
             settings.language = language;
             this.startingLanguage = settings.language;
         } else {
             settings = { language };
+        }
+        if (settings.historical) {
+            endEpoch = (new Date(`${today}:00Z`).valueOf() / 1000);
         }
         connectionManager.on(
             ConnectionManager.EVENT_CONNECTION_CLOSE,
@@ -116,7 +121,7 @@ class App extends Component {
             ConnectionManager.EVENT_CONNECTION_REOPEN,
             () => this.setState({ isConnectionOpened: true }),
         );
-        this.state = { settings, isConnectionOpened: true };
+        this.state = { settings, isConnectionOpened: true, endEpoch };
     }
 
     /*
@@ -145,7 +150,9 @@ class App extends Component {
             url.set('l', settings.language);
             window.location.href = `${origin}${pathname}?${url.toString()}`;
         }
-        if (!settings.historical) {
+        if (settings.historical) {
+            this.handleDateChange(today);
+        } else {
             this.handleDateChange('');
         }
     };
