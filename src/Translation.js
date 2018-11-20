@@ -1,31 +1,6 @@
 import messages from '../translation/messages.pot';
-import de from '../translation/de.po';
-import fr from '../translation/fr.po';
-import id from '../translation/id.po';
-import it from '../translation/it.po';
-import nl from '../translation/nl.po';
-import pl from '../translation/pl.po';
-import pt from '../translation/pt.po';
-import ru from '../translation/ru.po';
-import th from '../translation/th.po';
-import vi from '../translation/vi.po';
-import zh_cn from '../translation/zh_cn.po';
-import zh_tw from '../translation/zh_tw.po';
 
-const lang_map = {
-    de,
-    fr,
-    id,
-    it,
-    nl,
-    pl,
-    pt,
-    ru,
-    th,
-    vi,
-    zh_cn,
-    zh_tw,
-};
+const lang_map = {};
 
 export class Translation {
     constructor(lang = 'en') {
@@ -36,7 +11,15 @@ export class Translation {
         if (lang_map[lang] || lang === 'en') {
             this.lang = lang;
         } else {
-            console.error('Unsupported language:', lang);
+            import(/* webpackChunkName: "[request]" */ `../translation/${lang}.po`)
+                .then((imported_lang) => {
+                    if (imported_lang) {
+                        lang_map[lang] = imported_lang;
+                        this.lang = lang;
+                    } else {
+                        console.error('Unsupported language:', lang);
+                    }
+                });
         }
     }
 

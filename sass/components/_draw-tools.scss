@@ -6,7 +6,8 @@
         overflow: visible !important;
 
         .body {
-            padding: 0px 5px 0px 16px;
+            padding: 0px 7px 0px 16px;
+            overflow: visible;
 
             .cq-draw-buttons {
                 display: flex;
@@ -16,12 +17,15 @@
                 display: flex;
                 justify-content: center;
                 cursor: pointer;
-                margin: 8px 11px 8px 0;
+                margin: 8px 9px 8px 0;
                 border-radius: 3px;
 
                 @include themify($themes) {
                     border: solid themed('DropdownBorder') 1px;
                 }
+            }
+            .ciq-list {
+                max-height: 260px;
             }
             .scrollbar-container {
                 .ciq-list-item {

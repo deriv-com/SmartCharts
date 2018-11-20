@@ -1,5 +1,6 @@
 import React from 'react';
 import { action, observable, computed, reaction } from 'mobx';
+import SimpleBar from 'simplebar';
 import { connect } from './Connect';
 import { cloneCategories, cloneCategory } from '../utils';
 import SearchInput from '../components/SearchInput.jsx';
@@ -58,6 +59,7 @@ export default class CategoricalDisplayStore {
             getItemType,
             activeHeadTop: this.activeHeadTop,
             activeHeadKey: this.activeHeadKey,
+            activeHeadOffset: this.activeHeadOffset,
         }))(ResultsPanel);
 
         this.FilterPanel = connect(({ chart }) => ({
@@ -82,7 +84,8 @@ export default class CategoricalDisplayStore {
     @observable isScrollingDown = false;
     scrollTop = undefined;
     @observable activeHeadKey = undefined;
-    @observable activeHeadTop = undefined;
+    @observable activeHeadTop = 0;
+    @observable activeHeadOffset = undefined;
     isUserScrolling = true;
     lastFilteredItems = [];
 
@@ -94,16 +97,19 @@ export default class CategoricalDisplayStore {
         if (this.pauseScrollSpy || !this.scrollPanel) { return; }
         if (this.filteredItems.length === 0) { return; }
 
-        let activeMenuId = null;
+
         const categoryTitleHeight = 40;
+        const scrollPanelTop = this.scrollPanel.getBoundingClientRect().top;
         let activeHeadTop = 0;
+        let activeMenuId = null;
+
 
         for (const category of this.filteredItems) {
             const el = this.categoryElements[category.categoryId];
 
             if (!el) { return; }
             const r = el.getBoundingClientRect();
-            const top = r.top - this.scrollPanel.getBoundingClientRect().top;
+            const top = r.top - scrollPanelTop;
             if (top < 0) {
                 activeMenuId = category.categoryId;
 
@@ -112,9 +118,16 @@ export default class CategoricalDisplayStore {
             }
         }
 
+        if (this.scrollTop > this.scrollPanel.scrollTop) {
+            this.scrollUp();
+        } else {
+            this.scrollDown();
+        }
+
+        this.activeHeadOffset = (this.mainStore.chart.isMobile ? scrollPanelTop : 0);
         this.scrollTop = this.scrollPanel.scrollTop;
         this.activeCategoryKey = activeMenuId || this.filteredItems[0].categoryId;
-        this.activeHeadTop = activeHeadTop + this.scrollPanel.offsetTop;
+        this.activeHeadTop = activeHeadTop;
         this.activeHeadKey = this.scrollTop === 0 ? null : this.activeCategoryKey;
     }
 
@@ -140,7 +153,7 @@ export default class CategoricalDisplayStore {
                 }
             }
         }
-        this.activeHeadTop = this.scrollPanel.offsetTop;
+        this.scrollPanel.addEventListener('scroll', this.updateScrollSpy);
     }
 
     @computed get favoritesCategory()  {
@@ -260,14 +273,13 @@ export default class CategoricalDisplayStore {
     }
 
     @action.bound setScrollPanel(element) {
-        this.scrollPanel = element ? element._container : null;
+        this.scrollPanel = element ? (new SimpleBar(element)).getScrollElement() : null;
     }
 
     connect = connect(() => ({
         filteredItems: this.filteredItems,
         setScrollPanel: this.setScrollPanel,
         isScrollingDown: this.isScrollingDown,
-        updateScrollSpy: this.updateScrollSpy,
         scrollUp: this.scrollUp,
         scrollDown: this.scrollDown,
         onSelectItem: this.onSelectItem,
