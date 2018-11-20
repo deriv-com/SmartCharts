@@ -4,11 +4,14 @@
         box-sizing: border-box;
 
         .body {
-            padding: 0px 5px 0px 16px;
+            padding: 0px 9px 0px 16px;
         }
     }
     .ciq-list {
         .ciq-list-item {
+            &:first-child {
+                margin-top: 16px;
+            }
             &.active {
                 @include themify($themes) {
                     border-right: 2px solid themed('ChartTypeActiveListBorderRight');
@@ -32,9 +35,6 @@
     .ciq-chart-types {
         .ciq-toggle-asset-information {
             margin: 15px 15px 0;
-        }
-        .ciq-list {
-            margin: 0 15px;
         }
     }
 }
