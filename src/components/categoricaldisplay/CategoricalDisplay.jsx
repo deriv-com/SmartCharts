@@ -1,13 +1,9 @@
 import React from 'react';
-import PerfectScrollbar from 'react-perfect-scrollbar';
 import '../../../sass/components/_categorical-display.scss';
 
 const CategoricalDisplay = ({
     onSelectItem,
     setScrollPanel,
-    updateScrollSpy,
-    scrollUp,
-    scrollDown,
     ResultsPanel,
     FilterPanel,
     SearchInput,
@@ -17,17 +13,14 @@ const CategoricalDisplay = ({
             <SearchInput />
             <FilterPanel />
         </div>
-        <PerfectScrollbar
+        <div
             className="cq-scroll-panel"
             ref={setScrollPanel}
-            onScrollY={e => updateScrollSpy(e)}
-            onScrollUp={scrollUp}
-            onScrollDown={scrollDown}
         >
             <ResultsPanel
                 onSelectItem={onSelectItem}
             />
-        </PerfectScrollbar>
+        </div>
     </div>
 );
 
