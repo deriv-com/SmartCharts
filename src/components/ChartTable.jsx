@@ -14,9 +14,10 @@ const ChartTable = ({
     setOpen,
 }) => {
     const SymbolIcon = ItemIconMap[symbol.symbol] || SymbolPlaceholderIcon;
+    const width = isTick ? '340px' : '545px';
 
     return (
-        <div className={`cq-dialog-overlay ${open ? 'cq-dialog-active' : ''}`}>
+        <div className={`cq-dialog-overlay ${open ? 'cq-dialog-active' : ''}`} style={{ '--table-width': width }}>
             <Dialog className="cq-dialog ciq-chart-dialog">
             <>
                 {isMobile && (
@@ -29,7 +30,9 @@ const ChartTable = ({
                 }
                 <div
                     data-simplebar
-                    data-simplebar-auto-hide="false" className="ciq-list">
+                    data-simplebar-auto-hide="false"
+                    className="ciq-list"
+                >
                     {isMobile
                         ? (
                             <table className="ciq-chart-table">
