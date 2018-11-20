@@ -5,6 +5,7 @@ import SettingsDialogStore from './SettingsDialogStore';
 import Menu from '../components/Menu.jsx';
 import List from '../components/List.jsx';
 import SettingsDialog from '../components/SettingsDialog.jsx';
+import { logEvent, LogCategories, LogActions } from  '../utils/ga';
 
 // camelCase to spaces separated capitalized string.
 const formatCamelCase = (s) => {
@@ -99,6 +100,7 @@ export default class DrawToolsStore {
     }
 
     showDrawToolDialog(drawing) {
+        logEvent(LogCategories.ChartControl, LogActions.DrawTools, `Edit ${drawing.name}`);
         const dontDeleteMe = drawing.abort(); // eslint-disable-line no-unused-vars
         const parameters = CIQ.Drawing.getDrawingParameters(this.stx, drawing.name);
 
@@ -136,10 +138,12 @@ export default class DrawToolsStore {
     };
 
     @action.bound clearAll() {
+        logEvent(LogCategories.ChartControl, LogActions.DrawTools, 'Clear All');
         this.stx.clearDrawings();
     }
 
     @action.bound selectTool(id) {
+        logEvent(LogCategories.ChartControl, LogActions.DrawTools, `Add ${id}`);
         const stx = this.context.stx;
         stx.clearMeasure(); // TODO remove this line
         stx.changeVectorType(id);
@@ -157,6 +161,7 @@ export default class DrawToolsStore {
     }
 
     @action.bound onDeleted() {
+        logEvent(LogCategories.ChartControl, LogActions.DrawTools, `Remove ${this.activeDrawing.name}`);
         this.stx.removeDrawing(this.activeDrawing);
         this.activeDrawing = null;
     }

@@ -1,7 +1,7 @@
 import EventEmitter from 'event-emitter-es6';
 import { reaction, when } from 'mobx';
 import { TickHistoryFormatter } from './TickHistoryFormatter';
-import { calculateGranularity, getUTCEpoch } from '../utils';
+import { calculateGranularity, getUTCEpoch, calculateTimeUnitInterval } from '../utils';
 import { RealtimeSubscription, DelayedSubscription } from './subscription';
 import ServerTime from '../utils/ServerTime';
 
@@ -11,6 +11,7 @@ class Feed {
     static get EVENT_ON_PAGINATION() { return 'EVENT_ON_PAGINATION'; }
     get startEpoch() { return this._mainStore.state.startEpoch; }
     get endEpoch() { return this._mainStore.state.endEpoch; }
+    get granularity() { return this._mainStore.chart.granularity; }
     get context() { return this._mainStore.chart.context; }
     _activeStreams = {};
     _isConnectionOpened = true;
@@ -32,7 +33,32 @@ class Feed {
     };
 
     onRangeChanged = () => {
-        console.log('RANGE CHANGE', this.startEpoch, this.endEpoch);
+        const now = this._serverTime.getEpoch();
+        if (this.endEpoch && this.endEpoch > now) {
+            // endEpoch cannot be set in the future or ChartIQ will
+            // trigger a fetchInitialData request in stx.setRange
+            return;
+        }
+
+        const periodicity = calculateTimeUnitInterval(this.granularity);
+        const rangeTime = ((this.granularity || 1) * this._stx.chart.maxTicks);
+
+        // If the endEpoch is undefined _and_ there are no active streams, we initiate streaming
+        if (this.endEpoch === undefined) {
+            if (Object.keys(this._activeStreams).length === 0) {
+                // Set the end range to the future to trigger ChartIQ to start streaming
+                const future = now + 10;
+                const dtRight = new Date(future * 1000);
+                const dtLeft =  new Date((this.startEpoch || now - rangeTime) * 1000);
+                this._stx.setRange({ dtLeft, dtRight, periodicity }, () => this._stx.home());
+            }
+            return;
+        }
+
+        const dtLeft =  new Date((this.startEpoch || this.endEpoch - rangeTime) * 1000);
+        const dtRight = new Date(this.endEpoch * 1000);
+
+        this._stx.setRange({ dtLeft, dtRight, periodicity }, () => this._stx.draw());
     };
 
     // although not used, subscribe is overridden so that unsubscribe will be called by ChartIQ
@@ -223,6 +249,9 @@ class Feed {
 
     _appendChartData(quotes, key, comparisonChartSymbol) {
         this._forgetIfEndEpoch(key);
+        if (!this._activeStreams[key]) {
+            quotes = [];
+        }
         if (comparisonChartSymbol) {
             this._stx.updateChartData(quotes, null, {
                 secondarySeries: comparisonChartSymbol,

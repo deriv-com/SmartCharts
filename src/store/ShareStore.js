@@ -2,6 +2,7 @@ import { observable, action, computed, when } from 'mobx';
 import MenuStore from './MenuStore';
 import { downloadFileInBrowser } from '../utils';
 import Menu from '../components/Menu.jsx';
+import { logEvent, LogCategories, LogActions } from  '../utils/ga';
 
 export default class ShareStore {
     constructor(mainStore) {
@@ -40,6 +41,8 @@ export default class ShareStore {
                 CIQ.appendClassName(this.screenshotArea, 'ciq-screenshot');
                 html2canvas.default(this.screenshotArea).then(canvas => this._onCanvasReady(canvas, newTab));
             });
+
+        logEvent(LogCategories.ChartControl, LogActions.Download, 'Download PNG');
     }
 
     @action.bound _onCanvasReady(canvas, newTab) {
@@ -90,6 +93,8 @@ export default class ShareStore {
             'text/csv;charset=utf-8;',
             this.createNewTab(),
         );
+
+        logEvent(LogCategories.ChartControl, LogActions.Download, 'Download CSV');
     }
 
     onContextReady = () => {
