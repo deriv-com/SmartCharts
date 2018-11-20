@@ -1,7 +1,7 @@
 .ciq-chart-dialog {
-    width: auto !important;
-    left: auto;
+    width: auto;
     height: 80vh;
+    padding-right: 10px;
 
     .ciq-list {
         max-height: 100%;
@@ -54,7 +54,7 @@
             display: flex;
         }
         .cq-change:after {
-            margin: 3px 5px 0 0;
+            margin: 3px 0 0 5px;
         }
         .up {
             @include themify($themes) {

@@ -1,5 +1,5 @@
 import React from 'react';
-import PerfectScrollbar from 'react-perfect-scrollbar';
+import 'simplebar';
 import { CloseIcon, ItemIconMap, SymbolPlaceholderIcon } from './Icons.jsx';
 import { connect } from '../store/Connect';
 import '../../sass/components/_ciq-chart-table.scss';
@@ -27,7 +27,9 @@ const ChartTable = ({
                     </div>
                 )
                 }
-                <PerfectScrollbar className="ciq-list">
+                <div
+                    data-simplebar
+                    data-simplebar-auto-hide="false" className="ciq-list">
                     {isMobile
                         ? (
                             <table className="ciq-chart-table">
@@ -104,7 +106,7 @@ const ChartTable = ({
                             </table>
                         )
                     }
-                </PerfectScrollbar>
+                </div>
             </>
             </Dialog>
         </div>
