@@ -63,6 +63,11 @@
             stroke: themed('MenuIcon');
         }
     }
+    :last-child {
+        .ic-icon > svg {
+            stroke: none;
+        }
+    }
 }
 
 .stx-ico-up {

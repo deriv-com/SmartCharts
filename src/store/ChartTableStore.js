@@ -21,6 +21,10 @@ export default class ChartTableStore {
     @observable tableData = [];
     @observable isTick;
 
+    @computed get symbol() {
+        return this.mainStore.chart.currentActiveSymbol ? this.mainStore.chart.currentActiveSymbol : {};
+    }
+
     @computed get decimalPlaces() {
         return this.mainStore.chart.currentActiveSymbol.decimal_places;
     }
@@ -35,15 +39,11 @@ export default class ChartTableStore {
         }
     }
 
-    @action.bound updateTableData(ticks) {
+    @action.bound updateTableData(data) {
         this.isTick = this.mainStore.timeperiod.timeUnit === 'tick';
-        ticks.forEach((row) => {
-            const {
-                DT, Open, High, Low, Close,
-            } = row;
-
+        data.forEach(({ DT, Open, High, Low, Close }) => {
             const year = DT.getUTCFullYear();
-            const month = DT.getUTCMonth() + 1; // months from 1-12
+            const month = DT.getUTCMonth() + 1;
             const day = DT.getUTCDate();
             const hours = DT.getUTCHours();
             const minutes = DT.getUTCMinutes();

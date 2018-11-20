@@ -9,7 +9,9 @@
 }
 
 .cq-dialog-overlay {
-    background: rgba(255, 255, 255, 0.7);
+    @include themify($themes) {
+        background: themed('DialogOverlay');
+    }
     visibility: hidden;
     bottom: 0;
 }
@@ -36,31 +38,33 @@
         border-bottom: 2px solid themed('DialogBodyBg');
     }
 
-    :last-child {
-        padding-right: 0;
+    .first {
+        padding-left: 30px !important;
     }
-    :first-child {
-        padding-left: 30px;
-    }
-}
-
-.ciq-table-cell {
-    text-align: center;
-    height: 30px;
-    padding: 0 15px;
-    white-space: nowrap;
-    @include themify($themes) {
-        color: themed('DefaultText');
-    }
-
-    &.up {
+    .ciq-table-cell {
+        text-align: center;
+        height: 30px;
+        padding: 0 15px;
+        white-space: nowrap;
         @include themify($themes) {
-            color: $COLOR_LIGHT_GREEN;
+            color: themed('DefaultText');
         }
-    }
-    &.down {
-        @include themify($themes) {
-            color: $COLOR_LIGHT_RED;
+
+        .cq-change-cell {
+            display: flex;
+        }
+        .cq-change:after {
+            margin: 3px 5px 0 0;
+        }
+        .up {
+            @include themify($themes) {
+                color: $COLOR_LIGHT_GREEN;
+            }
+        }
+        .down {
+            @include themify($themes) {
+                color: $COLOR_LIGHT_RED;
+            }
         }
     }
 }
@@ -70,14 +74,11 @@
         width: calc(100% - 20px) !important;
         height: 90%;
     }
-    .ciq-table-row :first-child {
-        padding-left: 0;
-    }
     .ciq-table-cell {
         display: flex;
-        padding: 5px 15px !important;
+        padding: 5px 5px 5px 20px !important;
         text-align: left;
-        font-size: 14px;
+        font-size: 12px;
         height: 20px;
 
         .ciq-table-date {
@@ -86,16 +87,6 @@
         > div {
             padding-right: 5px;
 
-            &.up {
-                @include themify($themes) {
-                    color: $COLOR_LIGHT_GREEN;
-                }
-            }
-            &.down {
-                @include themify($themes) {
-                    color: $COLOR_LIGHT_RED;
-                }
-            }
             > span {
                 font-weight: bold;
                 padding-right: 5px;
