@@ -63,5 +63,4 @@ export default connect(({ drawTools: dt }) => ({
     DrawToolsMenu: dt.DrawToolsMenu,
     menuOpen: dt.menu.open,
     drawToolsItems: dt.drawToolsItems,
-    // DrawList: dt.DrawList,
 }))(DrawTools);
