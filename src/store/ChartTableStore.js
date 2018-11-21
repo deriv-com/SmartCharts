@@ -31,54 +31,53 @@ export default class ChartTableStore {
 
     @action.bound loadTableData() {
         if (this.open) {
-            this.stx.showTable = true;
-            this.updateTableData(this.stx.masterData);
+            this.stx.masterData.forEach((row) => this.updateTableData(row));
+            this.mainStore.chart.feed.onMasterDataUpdate(this.updateTableData);
         } else {
-            this.stx.showTable = false;
+            this.mainStore.chart.feed.offMasterDataUpdate(this.updateTableData);
             this.tableData =  [];
         }
     }
 
-    @action.bound updateTableData(data) {
+    @action.bound updateTableData({ DT, Open, High, Low, Close }) {
         this.isTick = this.mainStore.timeperiod.timeUnit === 'tick';
-        data.forEach(({ DT, Open, High, Low, Close }) => {
-            const year = DT.getUTCFullYear();
-            const month = DT.getUTCMonth() + 1;
-            const day = DT.getUTCDate();
-            const hours = DT.getUTCHours();
-            const minutes = DT.getUTCMinutes();
-            const seconds = DT.getUTCSeconds();
 
-            const date = `${year}-${month > 9 ? month : `0${month}`}-${day > 9 ? day : `0${day}`}`;
-            const time = `${hours > 9 ? hours : `0${hours}`}:${minutes > 9 ? minutes : `0${minutes}`}:${seconds > 9 ? seconds : `0${seconds}`}`;
-            const dateTime = `${date} ${time}`;
+        const year = DT.getUTCFullYear();
+        const month = DT.getUTCMonth() + 1;
+        const day = DT.getUTCDate();
+        const hours = DT.getUTCHours();
+        const minutes = DT.getUTCMinutes();
+        const seconds = DT.getUTCSeconds();
 
-            const lastTick =  this.tableData[0] || {};
-            const change = Close - lastTick.Close || 0;
-            let status = '';
-            if (Math.sign(change) !== 0) status = Math.sign(change) === 1 ? 'up' :  'down';
+        const date = `${year}-${month > 9 ? month : `0${month}`}-${day > 9 ? day : `0${day}`}`;
+        const time = `${hours > 9 ? hours : `0${hours}`}:${minutes > 9 ? minutes : `0${minutes}`}:${seconds > 9 ? seconds : `0${seconds}`}`;
+        const dateTime = `${date} ${time}`;
 
-            if (this.isTick && Close) {
-                this.tableData.unshift({ Date:dateTime, Close, Change:Math.abs(change).toFixed(this.decimalPlaces), Status: status });
-            } else if (!this.isTick && Open && High && Low && Close) {
-                if (lastTick.Date === dateTime) {
-                    lastTick.Close = Close.toFixed(this.decimalPlaces);
-                    lastTick.Change = Math.abs(Close - this.tableData[1].Close).toFixed(this.decimalPlaces);
-                } else {
-                    this.tableData.unshift(
-                        {
-                            Date: dateTime,
-                            Open: Open.toFixed(this.decimalPlaces),
-                            High: High.toFixed(this.decimalPlaces),
-                            Low: Low.toFixed(this.decimalPlaces),
-                            Close: Close.toFixed(this.decimalPlaces),
-                            Change: Math.abs(change).toFixed(this.decimalPlaces),
-                            Status: status,
-                        },
-                    );
-                }
+        const lastTick =  this.tableData[0] || {};
+        const change = Close - lastTick.Close || 0;
+        let status = '';
+        if (Math.sign(change) !== 0) status = Math.sign(change) === 1 ? 'up' :  'down';
+
+        if (this.isTick && Close) {
+            this.tableData.unshift({ Date:dateTime, Close, Change:Math.abs(change).toFixed(this.decimalPlaces), Status: status });
+        } else if (!this.isTick && Open && High && Low && Close) {
+            if (lastTick.Date === dateTime) {
+                lastTick.Close = Close.toFixed(this.decimalPlaces);
+                lastTick.Change = Math.abs(Close - this.tableData[1].Close).toFixed(this.decimalPlaces);
+            } else {
+                this.tableData.unshift(
+                    {
+                        Date: dateTime,
+                        Open: Open.toFixed(this.decimalPlaces),
+                        High: High.toFixed(this.decimalPlaces),
+                        Low: Low.toFixed(this.decimalPlaces),
+                        Close: Close.toFixed(this.decimalPlaces),
+                        Change: Math.abs(change).toFixed(this.decimalPlaces),
+                        Status: status,
+                    },
+                );
             }
-        });
+        }
         this.tableData = this.tableData.slice(0); // force array update
     }
 }

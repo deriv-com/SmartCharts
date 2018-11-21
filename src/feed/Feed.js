@@ -259,9 +259,6 @@ class Feed {
             });
         } else {
             this._stx.updateChartData(quotes);
-            if (this._stx.showTable) {
-                this._mainStore.chartTable.updateTableData(quotes);
-            }
         }
 
         this._emitDataUpdate(quotes, comparisonChartSymbol);
@@ -299,6 +296,10 @@ class Feed {
 
     onMasterDataUpdate(callback) {
         this._emitter.on(Feed.EVENT_MASTER_DATA_UPDATE, callback);
+    }
+
+    offMasterDataUpdate(callback) {
+        this._emitter.off(Feed.EVENT_MASTER_DATA_UPDATE, callback);
     }
 
     onComparisonDataUpdate(callback) {
