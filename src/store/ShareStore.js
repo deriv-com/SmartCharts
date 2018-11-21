@@ -65,8 +65,8 @@ export default class ShareStore {
             const year = DT.getUTCFullYear();
             const month = DT.getUTCMonth() + 1; // months from 1-12
             const day = DT.getUTCDate();
-            const hours = DT.getUTCHours();
-            const minutes = DT.getUTCMinutes();
+            const hours = DT.getHours();
+            const minutes = DT.getMinutes();
 
             const date = `${year}-${month > 9 ? month : `0${month}`}-${day > 9 ? day : `0${day}`}`;
             const time = `${hours > 9 ? hours : `0${hours}`}:${minutes > 9 ? minutes : `0${minutes}`}`;
