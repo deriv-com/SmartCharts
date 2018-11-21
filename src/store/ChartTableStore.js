@@ -31,7 +31,7 @@ export default class ChartTableStore {
 
     @action.bound loadTableData() {
         if (this.open) {
-            this.stx.masterData.forEach((row) => this.updateTableData(row));
+            this.stx.masterData.forEach(row => this.updateTableData(row));
             this.mainStore.chart.feed.onMasterDataUpdate(this.updateTableData);
         } else {
             this.mainStore.chart.feed.offMasterDataUpdate(this.updateTableData);

@@ -71,14 +71,16 @@ const ChartTable = ({
                                         <th className="ciq-table-cell">{t.translate('Date')}</th>
                                         {isTick
                                             ? <th className="ciq-table-cell">{t.translate('Tick')}</th>
-                                            :                                [
-                                                <th className="ciq-table-cell">{t.translate('Open')}</th>,
-                                                <th className="ciq-table-cell">{t.translate('High')}</th>,
-                                                <th className="ciq-table-cell">{t.translate('Low')}</th>,
-                                                <th className="ciq-table-cell">{t.translate('Close')}</th>,
-                                            ]}
+                                            :                                                (
+                                                <React.Fragment>
+                                                    <th className="ciq-table-cell">{t.translate('Open')}</th>
+                                                    <th className="ciq-table-cell">{t.translate('High')}</th>
+                                                    <th className="ciq-table-cell">{t.translate('Low')}</th>
+                                                    <th className="ciq-table-cell">{t.translate('Close')}</th>
+                                                </React.Fragment>
+                                            )
+                                        }
                                         <th className="ciq-table-cell">{t.translate('Change')}</th>
-                                        <th className="ciq-table-cell" />
                                     </tr>
 
                                     {tableData.map((item, idx) => (
