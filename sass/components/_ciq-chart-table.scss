@@ -30,6 +30,7 @@
     height: 40px;
     @include themify($themes) {
         background: themed('DialogBodyBg');
+        color: themed('DefaultText');
     }
 }
 
