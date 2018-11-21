@@ -17,7 +17,7 @@
                 display: flex;
                 justify-content: center;
                 cursor: pointer;
-                margin: 8px 9px 8px 0;
+                margin: 8px 0;
                 border-radius: 3px;
 
                 @include themify($themes) {
