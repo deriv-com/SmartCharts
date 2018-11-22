@@ -1,4 +1,5 @@
 import { action, observable, reaction, computed } from 'mobx';
+import IdleJs from 'idle-js';
 import PendingPromise from '../utils/PendingPromise';
 import Context from '../components/ui/Context';
 import KeystrokeHub from '../components/ui/KeystrokeHub';
@@ -340,6 +341,15 @@ class ChartStore {
                 this.resizeObserver.observe(modalNode);
             });
         }
+
+        const self = this;
+        new IdleJs({
+            idle: 4000,
+            events: ['mousemove', 'mouseenter', 'mouseover', 'keydown', 'mousedown', 'touchstart'],
+            onShow() { self.refreshChart(); },
+            keepTracking: true,
+            startAtIdle: false,
+        }).start();
     }
 
     onMarketOpenClosedChange = (changes) => {
