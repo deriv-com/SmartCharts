@@ -1,4 +1,4 @@
-import { action, reaction, when, observable } from 'mobx';
+import { action, reaction, when } from 'mobx';
 import MenuStore from './MenuStore';
 import SettingsDialogStore from './SettingsDialogStore';
 import Menu from '../components/Menu.jsx';
@@ -68,7 +68,7 @@ export default class DrawToolsStore {
 
     activeDrawing = null;
 
-    @observable drawToolsItems = DrawToolsItems;
+    drawToolsItems = DrawToolsItems;
 
     onContextReady = () => {
         document.addEventListener('keydown', this.closeOnEscape, false);
