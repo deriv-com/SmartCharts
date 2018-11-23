@@ -179,7 +179,7 @@ class App extends Component {
             <ChartTypes />
             <Timeperiod />
             <StudyLegend />
-            <Comparison />
+            {this.state.settings.historical ? '' : <Comparison />}
             <DrawTools />
             <Views />
             <Share />
@@ -209,6 +209,8 @@ class App extends Component {
                 requestForget={requestForget}
                 settings={settings}
                 endEpoch={endEpoch}
+                chartType={settings.historical ? 'mountain' : undefined}
+                granularity={settings.historical ? 0 : undefined}
                 onSettingsChange={this.saveSettings}
                 isConnectionOpened={isConnectionOpened}
             />

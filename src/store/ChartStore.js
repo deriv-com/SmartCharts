@@ -207,10 +207,6 @@ class ChartStore {
         this.isMobile = isMobile;
         this.state = this.mainStore.state;
 
-        if (settings.historical) {
-            this.onHistorical();
-        }
-
         this.mainStore.notifier.onMessage = onMessage;
         this.granularity = (granularity !== undefined) ? granularity : this.defaults.granularity;
         const engineParams = {
@@ -522,13 +518,6 @@ class ChartStore {
             this.stxx.destroy();
             this.stxx = null;
         }
-    }
-
-    @action.bound onHistorical() {
-        this.contextPromise.then(() => {
-            this.mainStore.chartType.setType('mountain');
-            this.changeSymbol(undefined, 0);
-        });
     }
 }
 
