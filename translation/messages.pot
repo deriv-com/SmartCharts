@@ -140,6 +140,9 @@ msgstr ""
 msgid "HIGH"
 msgstr ""
 
+msgid "Historical Data Mode"
+msgstr ""
+
 msgid "Hollow Candle"
 msgstr ""
 

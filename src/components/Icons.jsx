@@ -49,9 +49,6 @@ import PositionLeft from '../../sass/icons/chart settings/setting/ic-position-le
 import PositionBottom from '../../sass/icons/chart settings/setting/ic-position-bottom.svg';
 import Back from '../../sass/icons/back/ic-back.svg';
 import DrawCursor from '../../sass/icons/pencil/ic-pencil.svg';
-import Calendar from '../../sass/icons/datetime/ic-calendar.svg';
-import Time from '../../sass/icons/datetime/ic-time.svg';
-import CloseCircle from '../../sass/icons/datetime/ic-close-circle.svg';
 
 
 import Warning from '../../sass/icons/alert message/warning.svg';
@@ -106,7 +103,7 @@ import MarketBull from '../../sass/icons/active-symbols/volatility/bull market/i
 import OTCBadge from '../../sass/icons/active-symbols/ic-otcbadge.svg';
 import SmartFX from '../../sass/icons/active-symbols/ic-smartfx-placeholder.svg';
 
-const Wrapper = SvgLogo => (props) => {
+export const Wrapper = SvgLogo => (props) => {
     let { className, 'tooltip-title': tooltip, ...p } = props; // eslint-disable-line prefer-const
     className = `ic-icon ${className || ''}`;
     const vb = SvgLogo.viewBox.split(' ').slice(2);
@@ -172,9 +169,6 @@ export const SettingIcon = Wrapper(Edit);
 export const ArrowIcon = Wrapper(Arrow);
 export const FavoriteIcon = Wrapper(Star);
 export const DownloadIcon = Wrapper(Download);
-export const CalendarIcon = Wrapper(Calendar);
-export const TimeIcon = Wrapper(Time);
-export const CloseCircleIcon = Wrapper(CloseCircle);
 
 
 export const PositionLeftIcon = Wrapper(PositionLeft);

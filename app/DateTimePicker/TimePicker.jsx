@@ -4,11 +4,13 @@
 import { observer } from 'mobx-react';
 import moment from 'moment';
 import React from 'react';
-import {
-    TimeIcon,
-    CloseCircleIcon,
-} from '../../src/components/Icons.jsx';
 import './time-picker.scss';
+import { Wrapper } from '../../src/components/Icons.jsx';
+import Time from '../icons/ic-time.svg';
+import CloseCircle from '../icons/ic-close-circle.svg';
+
+const TimeIcon = Wrapper(Time);
+const CloseCircleIcon = Wrapper(CloseCircle);
 
 const isBeforeDate = (compare_moment, start_moment, should_only_check_hour) => {
     const now_moment = moment.utc(start_moment);
@@ -93,7 +95,7 @@ class TimePickerDropdown extends React.Component {
                     className={`${preClass}-panel`}
                     onClick={toggle}
                 >
-                    <span className={value ? '' : 'placeholder'}>{value || 'Select time'}</span>
+                    <span className={value ? '' : 'placeholder'}>{t.translate(value || 'Select time')}</span>
                     {(!('is_clearable' in this.props) || this.props.is_clearable)
                         && (<CloseCircleIcon
                             className={`${preClass}-clear`}
@@ -107,7 +109,7 @@ class TimePickerDropdown extends React.Component {
                         ref={this.saveHourRef}
                         className={`${preClass}-hours`}
                     >
-                        <div className="list-title center-text"><strong>Hour</strong></div>
+                        <div className="list-title center-text"><strong>{t.translate('Hour')}</strong></div>
                         <div className="list-container">
                             {this.hours.map((h, key) => {
                                 start_moment_clone.hour(h);
@@ -128,7 +130,7 @@ class TimePickerDropdown extends React.Component {
                         ref={this.saveMinuteRef}
                         className={`${preClass}-minutes`}
                     >
-                        <div className="list-title center-text"><strong>Minute</strong></div>
+                        <div className="list-title center-text"><strong>{t.translate('Minute')}</strong></div>
                         <div className="list-container">
                             {this.minutes.map((mm, key) => {
                                 start_moment_clone.hour(hour).minute(mm);

@@ -12,13 +12,13 @@ import Share from './Share.jsx';
 import '../../sass/components/_chart-controls.scss';
 
 
-export const RenderDefaultControls = ({ isMobile, isHistorical }) => (
+export const RenderDefaultControls = ({ isMobile }) => (
     <>
         {isMobile ? '' : <CrosshairToggle />}
         <ChartTypes />
         <Timeperiod />
         <StudyLegend />
-        {isHistorical ? '' : <Comparison />}
+        <Comparison />
         <DrawTools />
         <Views />
         <Share />
@@ -28,7 +28,6 @@ export const RenderDefaultControls = ({ isMobile, isHistorical }) => (
 
 const ChartControls = ({
     isMobile,
-    isHistorical,
     hasOpenMenu,
     widgets,
     context,
@@ -37,7 +36,7 @@ const ChartControls = ({
 
     return (
         <div className={`cq-chart-controls ${hasOpenMenu ? ' active' : ''}`}>
-            { context ? <Controls isMobile={isMobile} isHistorical={isHistorical} /> : null }
+            { context ? <Controls isMobile={isMobile} /> : null }
         </div>
     );
 };
@@ -52,7 +51,6 @@ export default connect(({ chart,
     timeperiod,
     chartSetting }) => ({
     isMobile: chart.isMobile,
-    isHistorical: chartSetting.historical,
     context: chart.context,
     hasOpenMenu: (
         chartType.menu.open

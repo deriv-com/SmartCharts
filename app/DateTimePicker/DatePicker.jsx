@@ -2,10 +2,10 @@ import React from 'react';
 import moment from 'moment';
 import Calendar from './Calendar.jsx';
 import './date-picker.scss';
-import {
-    CalendarIcon,
-} from '../../src/components/Icons.jsx';
+import { Wrapper } from '../../src/components/Icons.jsx';
+import CalendarIC from '../icons/ic-calendar.svg';
 
+const CalendarIcon = Wrapper(CalendarIC);
 class DatePickerInput extends React.PureComponent {
     render() {
         const { value, format } = this.props;
@@ -17,8 +17,8 @@ class DatePickerInput extends React.PureComponent {
                 name={this.props.name}
                 className={this.props.class_name}
                 readOnly={this.props.is_read_only}
-                placeholder={this.props.placeholder
-                    || (this.props.mode === 'duration' ? 'Select a duration' : 'Select date')}
+                placeholder={t.translate(this.props.placeholder
+                    || (this.props.mode === 'duration' ? 'Select a duration' : 'Select date'))}
                 onChange={this.props.onChange}
                 onClick={this.props.onClick}
                 value={input_value}
@@ -171,7 +171,7 @@ export default class DatePicker extends React.PureComponent {
                         mode={this.props.mode}
                         name={this.props.name}
                         format={this.props.format}
-                        placeholder={this.props.placeholder}
+                        placeholder={t.translate(this.props.placeholder)}
                         is_read_only
                         value={this.state.value}
                     />
@@ -190,7 +190,7 @@ export default class DatePicker extends React.PureComponent {
                             mode={this.props.mode}
                             name={this.props.name}
                             onChange={this.onChangeInput}
-                            placeholder={this.props.placeholder}
+                            placeholder={t.translate(this.props.placeholder)}
                             is_read_only={'is_read_only' in this.props ? this.props.is_read_only : false}
                             value={this.state.value}
                         />

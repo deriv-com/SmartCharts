@@ -11,7 +11,7 @@ export default class ChartSettingStore {
         this.mainStore = mainStore;
         this.menu = new MenuStore(mainStore, { route: 'setting' });
         this.ChartSettingMenu = this.menu.connect(Menu);
-        reaction(() => this.context, () => {
+        reaction(() => mainStore.state.settings, () => {
             this.setSettings(mainStore.state.settings);
         });
     }
@@ -161,9 +161,5 @@ export default class ChartSettingStore {
         if (this.historical === value) { return; }
         this.historical = value;
         this.saveSetting();
-
-        if (this.historical) {
-            this.mainStore.chart.onHistorical();
-        }
     }
 }

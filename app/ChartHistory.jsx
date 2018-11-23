@@ -30,9 +30,9 @@ class ChartHistory extends React.Component {
     render() {
         return (
             <div className="ciq-chart-history">
-                <strong>Historical Data:</strong>
+                <strong>{t.translate('Historical Data')}:</strong>
                 <DatePicker
-                    placeholder="select date"
+                    placeholder={t.translate('select date')}
                     name="date"
                     format="DD MMMM YYYY"
                     has_today_btn

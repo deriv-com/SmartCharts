@@ -207,6 +207,10 @@ class ChartStore {
         this.isMobile = isMobile;
         this.state = this.mainStore.state;
 
+        if (settings.historical) {
+            this.onHistorical();
+        }
+
         this.mainStore.notifier.onMessage = onMessage;
         this.granularity = (granularity !== undefined) ? granularity : this.defaults.granularity;
         const engineParams = {
@@ -522,7 +526,6 @@ class ChartStore {
 
     @action.bound onHistorical() {
         this.contextPromise.then(() => {
-            // console.log('asdas');
             this.mainStore.chartType.setType('mountain');
             this.changeSymbol(undefined, 0);
         });
