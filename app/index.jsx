@@ -84,7 +84,7 @@ const chartId = '1';
 const appId  = localStorage.getItem('config.app_id') || 12812;
 const serverUrl = getServerUrl();
 const language = new URLSearchParams(window.location.search).get('l') || getLanguageStorage();
-const today = moment().format('YYYY/MM/DD');
+const today = moment().format('YYYY/MM/DD 00:00');
 const connectionManager = new ConnectionManager({
     appId,
     language,
