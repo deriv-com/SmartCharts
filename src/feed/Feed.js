@@ -13,6 +13,7 @@ class Feed {
     get endEpoch() { return this._mainStore.state.endEpoch; }
     get granularity() { return this._mainStore.chart.granularity; }
     get context() { return this._mainStore.chart.context; }
+    _lastDataTimer;
     _activeStreams = {};
     _isConnectionOpened = true;
 
@@ -176,6 +177,7 @@ class Feed {
         callback({ quotes });
 
         this._emitDataUpdate(quotes, comparisonChartSymbol);
+        this.dataBreathing();
     }
 
     async fetchPaginationData(symbol, suggestedStartDate, endDate, params, callback) {
@@ -262,6 +264,8 @@ class Feed {
         }
 
         this._emitDataUpdate(quotes, comparisonChartSymbol);
+
+        this.dataBreathing();
     }
 
     _emitDataUpdate(quotes, comparisonChartSymbol) {
@@ -292,6 +296,17 @@ class Feed {
             const { times } = history;
             return +times[0];
         }
+    }
+
+    /**
+     * check if feed has no data for 20 second
+     * then call refrechChart
+     */
+    dataBreathing() {
+        clearTimeout(this._lastDataTimer);
+        this._lastDataTimer = setTimeout(() => {
+            this._mainStore.chart.refreshChart();
+        }, 20000);
     }
 
     onMasterDataUpdate(callback) {
