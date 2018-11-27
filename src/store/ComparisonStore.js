@@ -90,6 +90,8 @@ export default class ComparisonStore {
             symbolObject,
             isComparison: true,
             display: symbolObject.name,
+            fillGaps: true,
+            gapDisplayStyle: true,
             color,
             pattern,
             width,

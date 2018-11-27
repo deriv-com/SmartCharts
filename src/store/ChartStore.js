@@ -226,6 +226,7 @@ class ChartStore {
                     width: -10,
                     justifyRight: true,
                 },
+                gaplines: true,
             },
             minimumLeftBars: 2,
             yTolerance: 999999, // disable vertical scrolling
