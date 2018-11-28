@@ -17,13 +17,12 @@
 
 .cq-crosshair {
     display: none;
-    opacity: 0;
 }
 
 .stx-crosshair-on .cq-crosshair {
     position: relative;
     display: block;
-    opacity: 1;
+    opacity: 0;
     z-index: 30;
     top: 0;
     left: 0;
