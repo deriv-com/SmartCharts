@@ -1,13 +1,17 @@
 .ciq-chart-dialog {
     width: var(--table-width);
     height: 80vh;
-    padding-right: 10px;
+    left: auto;
     @include themify($themes) {
         background: themed('DialogBodyBg');
     }
 
     .ciq-list {
         max-height: 100%;
+    }
+    .simplebar-track.vertical {
+        margin-top: 45px;
+        right: 16px;
     }
 }
 
@@ -40,7 +44,7 @@
         width: 75px;
     }
     td:nth-child(3), th:nth-child(3) {
-        width: 75px;
+        width: 100px;
     }
     td:nth-child(4), th:nth-child(4) {
         width: 75px;
