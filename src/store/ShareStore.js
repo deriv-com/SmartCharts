@@ -62,8 +62,8 @@ export default class ShareStore {
         const header = `Date,Time,${isTick ? this.marketDisplayName : 'Open,High,Low,Close'}`;
         const lines = [header];
         this.stx.masterData.forEach(({ DT, Open, High, Low, Close }) => {
-            const year = DT.getUTCFullYear();
-            const month = DT.getUTCMonth() + 1; // months from 1-12
+            const year = DT.getFullYear();
+            const month = DT.getMonth() + 1; // months from 1-12
             const day = DT.getUTCDate();
             const hours = DT.getHours();
             const minutes = DT.getMinutes();

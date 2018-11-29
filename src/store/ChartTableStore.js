@@ -42,8 +42,8 @@ export default class ChartTableStore {
     @action.bound updateTableData({ DT, Open, High, Low, Close }) {
         this.isTick = this.mainStore.timeperiod.timeUnit === 'tick';
 
-        const year = DT.getUTCFullYear();
-        const month = DT.getUTCMonth() + 1;
+        const year = DT.getFullYear();
+        const month = DT.getMonth() + 1;
         const day = DT.getUTCDate();
         const hours = DT.getHours();
         const minutes = DT.getMinutes();
