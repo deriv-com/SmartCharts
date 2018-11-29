@@ -2,6 +2,9 @@
     width: var(--table-width);
     height: 80vh;
     padding-right: 10px;
+    @include themify($themes) {
+        background: themed('DialogBodyBg');
+    }
 
     .ciq-list {
         max-height: 100%;
@@ -24,36 +27,69 @@
 .ciq-chart-table {
     width: 100%;
     border-collapse: collapse;
+    table-layout: fixed;
+
+    @include themify($themes) {
+        background: themed('DialogHeadBg');
+    }
+
+    td:nth-child(1), th:nth-child(1) {
+        width: 145px;
+    }
+    td:nth-child(2), th:nth-child(2) {
+        width: 75px;
+    }
+    td:nth-child(3), th:nth-child(3) {
+        width: 75px;
+    }
+    td:nth-child(4), th:nth-child(4) {
+        width: 75px;
+    }
+    td:nth-child(5), th:nth-child(5) {
+        width: 75px;
+    }
+    td:nth-child(6), th:nth-child(6) {
+        width: 100px;
+    }
+    tbody {
+        display: block;
+        margin-top: 40px;
+    }
+    .cq-change-cell {
+        display: inline-flex;
+
+        .ic-icon {
+            padding: 8px 0 0 20px;
+        }
+    }
 }
 
 .ciq-table-head {
-    height: 40px;
+    width: var(--table-width);
+    position: fixed;
+    display: block;
     @include themify($themes) {
         background: themed('DialogBodyBg');
         color: themed('DefaultText');
+    }
+
+    .ciq-table-cell {
+        line-height: 40px;
     }
 }
 
 .ciq-table-row {
     @include themify($themes) {
-        border-bottom: 2px solid themed('DialogBodyBg');
+        border-bottom: 1px solid themed('DialogBodyBg');
     }
 
-    .first {
-        padding-left: 30px !important;
-    }
     .ciq-table-cell {
         text-align: center;
         height: 30px;
-        padding: 0 15px;
-        white-space: nowrap;
         @include themify($themes) {
             color: themed('DefaultText');
         }
 
-        .cq-change-cell {
-            display: flex;
-        }
         .cq-change:after {
             margin: 3px 0 0 5px;
         }

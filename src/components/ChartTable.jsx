@@ -14,7 +14,7 @@ const ChartTable = ({
     setOpen,
 }) => {
     const SymbolIcon = ItemIconMap[symbol.symbol] || SymbolPlaceholderIcon;
-    const width = isTick ? '340px' : '545px';
+    const width = isTick ? '320px' : '565px';
 
     return (
         <div className={`cq-dialog-overlay ${open ? 'cq-dialog-active' : ''}`} style={{ '--table-width': width }}>
@@ -66,7 +66,7 @@ const ChartTable = ({
                         )
                         :                        (
                             <table className="ciq-chart-table">
-                                <tbody>
+                                <thead>
                                     <tr className="ciq-table-head">
                                         <th className="ciq-table-cell">{t.translate('Date')}</th>
                                         {isTick
@@ -80,15 +80,21 @@ const ChartTable = ({
                                                 </React.Fragment>
                                             )
                                         }
-                                        <th className="ciq-table-cell">{t.translate('Change')}</th>
+                                        <th className="ciq-table-cell">
+                                            <div className="cq-change-cell">
+                                                {t.translate('Change')}
+                                                <CloseIcon className="icon-close-menu" onClick={() => setOpen(false)} />
+                                            </div>
+                                        </th>
                                     </tr>
-
+                                </thead>
+                                <tbody>
                                     {tableData.map((item, idx) => (
                                         <tr
                                             key={`chartTable-${idx}`} // eslint-disable-line react/no-array-index-key
                                             className="ciq-table-row"
                                         >
-                                            <td className="ciq-table-cell first">{item.Date}</td>
+                                            <td className="ciq-table-cell">{item.Date}</td>
                                             {isTick && <td className="ciq-table-cell">{item.Close}</td>}
                                             {!isTick
                                         && [
