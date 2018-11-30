@@ -255,7 +255,8 @@ class ChartStore {
         animateChart(stxx, { stayPut: true });
 
         // connect chart to data
-        this.feed = new Feed(this.api, stxx, this.mainStore, this.tradingTimes);
+        const feed = new Feed(this.api, stxx, this.mainStore, this.tradingTimes);
+        this.feed = feed;
         stxx.attachQuoteFeed(this.feed, {
             refreshInterval: null,
         });
@@ -283,6 +284,14 @@ class ChartStore {
         const studiesStore = this.mainStore.studies;
         stxx.callbacks.studyOverlayEdit = studiesStore.editStudy;
         stxx.callbacks.studyPanelEdit = studiesStore.editStudy;
+        const chartiqHome = stxx.home;
+        stxx.home = function () {
+            if (settings.historical) {
+                feed.onRangeChanged();
+            } else {
+                chartiqHome.apply(this, {});
+            }
+        };
 
         this.activeSymbols.retrieveActiveSymbols().then(() => {
             this.tradingTimes.initialize().then(action(() => {
