@@ -238,7 +238,8 @@ class ChartStore {
             chartLayout.chartType = 'mountain';
             engineParams.chart.tension = chartLayout.tension = 0.5;
         }
-        const rangeSpan = this.getRangeSpan();
+        const getRangeSpan = () => this.getRangeSpan();
+        const rangeSpan = getRangeSpan();
         if (rangeSpan) {
             chartLayout = { ...chartLayout, ...rangeSpan };
         }
@@ -255,8 +256,7 @@ class ChartStore {
         animateChart(stxx, { stayPut: true });
 
         // connect chart to data
-        const feed = new Feed(this.api, stxx, this.mainStore, this.tradingTimes);
-        this.feed = feed;
+        this.feed = new Feed(this.api, stxx, this.mainStore, this.tradingTimes);
         stxx.attachQuoteFeed(this.feed, {
             refreshInterval: null,
         });
@@ -286,8 +286,11 @@ class ChartStore {
         stxx.callbacks.studyPanelEdit = studiesStore.editStudy;
         const chartiqHome = stxx.home;
         stxx.home = function () {
-            if (settings.historical) {
-                feed.onRangeChanged();
+            if (chartSetting.historical) {
+                const { range } = getRangeSpan();
+                stxx.setRange(range, () => {
+                    stxx.scrollTo(stxx.chart, 10);
+                });
             } else {
                 chartiqHome.apply(this, {});
             }

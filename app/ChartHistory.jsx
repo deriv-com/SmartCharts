@@ -12,21 +12,22 @@ class ChartHistory extends React.Component {
             time: '00:00',
         };
     }
-    onChange({ target }) {
-        if (target.name === 'date') {
-            this.setState({
-                date: target.value,
-            });
-        }
 
-        if (target.name === 'time') {
-            this.setState({
-                time: target.value,
-            });
-        }
-
-        this.props.onChange(`${this.state.date} ${this.state.time}`);
+    onChangeDate({ target }) {
+        const date = target.value;
+        this.setState({ date }, this.updateStore);
     }
+
+    onChangeTime({ target }) {
+        const time = target.value;
+        this.setState({ time }, this.updateStore);
+    }
+
+    updateStore() {
+        const { date, time } = this.state;
+        this.props.onChange(`${date} ${time}`);
+    }
+
     render() {
         return (
             <div className="ciq-chart-history">
@@ -37,7 +38,7 @@ class ChartHistory extends React.Component {
                     format="DD MMMM YYYY"
                     has_today_btn
                     value={this.state.date}
-                    onChange={e => this.onChange(e)}
+                    onChange={e => this.onChangeDate(e)}
                     min_date={moment.utc().subtract(1, 'years').toDate()}
                     max_date={moment.utc().toDate()}
                 />
@@ -46,7 +47,7 @@ class ChartHistory extends React.Component {
                     name="time"
                     is_clearable
                     value={this.state.time}
-                    onChange={e => this.onChange(e)}
+                    onChange={e => this.onChangeTime(e)}
                 />
             </div>
         );
