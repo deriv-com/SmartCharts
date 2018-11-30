@@ -238,8 +238,7 @@ class ChartStore {
             chartLayout.chartType = 'mountain';
             engineParams.chart.tension = chartLayout.tension = 0.5;
         }
-        const getRangeSpan = () => this.getRangeSpan();
-        const rangeSpan = getRangeSpan();
+        const rangeSpan = this.getRangeSpan();
         if (rangeSpan) {
             chartLayout = { ...chartLayout, ...rangeSpan };
         }
@@ -284,17 +283,6 @@ class ChartStore {
         const studiesStore = this.mainStore.studies;
         stxx.callbacks.studyOverlayEdit = studiesStore.editStudy;
         stxx.callbacks.studyPanelEdit = studiesStore.editStudy;
-        const chartiqHome = stxx.home;
-        stxx.home = function () {
-            if (chartSetting.historical) {
-                const { range } = getRangeSpan();
-                stxx.setRange(range, () => {
-                    stxx.scrollTo(stxx.chart, 10);
-                });
-            } else {
-                chartiqHome.apply(this, {});
-            }
-        };
 
         this.activeSymbols.retrieveActiveSymbols().then(() => {
             this.tradingTimes.initialize().then(action(() => {
@@ -353,6 +341,18 @@ class ChartStore {
                 this.resizeObserver.observe(modalNode);
             });
         }
+
+        const originalHome = CIQ.ChartEngine.prototype.home.bind(stxx);
+        CIQ.ChartEngine.prototype.home = () => {
+            if (this.mainStore.chartSetting.historical) {
+                const { range } = this.getRangeSpan();
+                stxx.setRange(range, () => {
+                    stxx.draw();
+                });
+            } else {
+                originalHome();
+            }
+        };
     }
 
     onMarketOpenClosedChange = (changes) => {
