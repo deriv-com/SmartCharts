@@ -64,7 +64,7 @@ export default class ShareStore {
         this.stx.masterData.forEach(({ DT, Open, High, Low, Close }) => {
             const year = DT.getFullYear();
             const month = DT.getMonth() + 1; // months from 1-12
-            const day = DT.getUTCDate();
+            const day = DT.getDate();
             const hours = DT.getHours();
             const minutes = DT.getMinutes();
 

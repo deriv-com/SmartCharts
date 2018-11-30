@@ -44,7 +44,7 @@ export default class ChartTableStore {
 
         const year = DT.getFullYear();
         const month = DT.getMonth() + 1;
-        const day = DT.getUTCDate();
+        const day = DT.getDate();
         const hours = DT.getHours();
         const minutes = DT.getMinutes();
         const seconds = DT.getSeconds();
