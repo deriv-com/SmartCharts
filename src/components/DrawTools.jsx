@@ -47,7 +47,7 @@ const DrawTools = ({
                             className="ciq-list-item"
                             onClick={() => selectTool(it.id)}
                         >
-                            {t.translate(it.text)}
+                            {it.text}
                         </div>
                     ))}
                 </div>
