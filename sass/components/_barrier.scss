@@ -60,11 +60,6 @@
     right: 0px;
     border-radius: 5px;
     border: 1px solid inherit;
-
-    .price {
-        padding: 1px 10px;
-        font-size: 14px;
-    }
 }
 
 /*hover*/
@@ -98,17 +93,17 @@
 /*hover*/
 
 .price {
+    font-size: 14px;
     font-weight: 300;
     display: block;
-    float: left;
-    width: 45px;
+    padding: 1px 6px;
     line-height: 23px;
     overflow: hidden;
 
 }
 
 .draggable .price {
-    padding: 1px 16px;
+    padding-right: 16px;
 
     &:after {
         content: '≡';
