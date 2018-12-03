@@ -316,7 +316,7 @@ class CrosshairStore {
     updateTooltipPosition() {
         this.isArrowLeft = CIQ.ChartEngine.crosshairX <= MAX_TOOLTIP_WIDTH;
         this.left = CIQ.ChartEngine.crosshairX;
-        this.top = CIQ.ChartEngine.crosshairY;
+        this.top = CIQ.ChartEngine.crosshairY - this.stx.top;
     }
 }
 
