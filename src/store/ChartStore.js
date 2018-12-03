@@ -398,7 +398,10 @@ class ChartStore {
             }
             this.state.restoreDrawings();
 
-            if (Object.keys(this.stxx.chart.series).length) this.stxx.setChartScale('percent');
+            if (Object.keys(this.stxx.chart.series).length) {
+                this.stxx.setChartScale('percent');
+                this.stxx.draw();
+            }
         };
         const rangeSpan = this.getRangeSpan();
         this.stxx.newChart(symbolObj, null, null, onChartLoad, { ...params, ...rangeSpan });
