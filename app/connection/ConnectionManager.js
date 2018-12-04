@@ -12,6 +12,7 @@ class ConnectionManager extends EventEmitter {
         this._counterReqId = 1;
         this._initialize();
         this._pendingRequests = { };
+        this._bufferedRequests = [];
     }
 
     _initialize() {
@@ -59,6 +60,7 @@ class ConnectionManager extends EventEmitter {
             this._connectionOpened = undefined;
         }
         this.emit(ConnectionManager.EVENT_CONNECTION_REOPEN);
+        this._sendBufferedRequests();
         if (!this._pingTimer) {
             this._pingTimer = setInterval(this._pingCheck.bind(this), 15000);
         }
@@ -85,7 +87,10 @@ class ConnectionManager extends EventEmitter {
         }
 
         Object.keys(this._pendingRequests).forEach((req_id) => {
-            this._pendingRequests[req_id].reject('Pending requests are rejected as connection is closed.');
+            const data = this._pendingRequests[req_id].data;
+            if (+data.time !== 1) {
+                this._bufferedRequests.push(data);
+            }
         });
         this._pendingRequests = { };
         this.emit(ConnectionManager.EVENT_CONNECTION_CLOSE);
@@ -108,6 +113,13 @@ class ConnectionManager extends EventEmitter {
                 delete this._pendingRequests[req_id];
             }
         }, timeout);
+    }
+
+    _sendBufferedRequests() {
+        while (this._bufferedRequests.length > 0) {
+            const data = this._bufferedRequests.shift();
+            this.send(data);
+        }
     }
 
     async send(data, timeout) {
