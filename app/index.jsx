@@ -96,6 +96,7 @@ const requestAPI = connectionManager.send.bind(connectionManager);
 const requestSubscribe = streamManager.subscribe.bind(streamManager);
 const requestForget = streamManager.forget.bind(streamManager);
 
+
 class App extends Component {
     startingLanguage = 'en';
 
@@ -111,6 +112,7 @@ class App extends Component {
             settings = { language };
         }
         if (settings.historical) {
+            this.cleanComparison();
             endEpoch = (new Date(`${today}:00Z`).valueOf() / 1000);
         }
         connectionManager.on(
@@ -130,6 +132,17 @@ class App extends Component {
             || JSON.stringify(this.state.settings) !== JSON.stringify(nextState.settings);
     }
     */
+    cleanComparison = () => {
+        try {
+            const layout_string = localStorage.getItem(`layout-${chartId}`),
+                layout = JSON.parse(layout_string !== '' ? layout_string : '{}');
+
+            layout.symbols.splice(1, layout.symbols.length - 1);
+            localStorage.setItem(`layout-${chartId}`, JSON.stringify(layout));
+        } catch (e) {
+            console.log(e);
+        }
+    }
 
     symbolChange = (symbol) => {
         logEvent(LogCategories.ChartTitle, LogActions.MarketSelector, symbol);
@@ -151,7 +164,8 @@ class App extends Component {
             window.location.href = `${origin}${pathname}?${url.toString()}`;
         }
         if (settings.historical) {
-            this.handleDateChange(today);
+            this.cleanComparison();
+            window.location.reload(false);
         } else {
             this.handleDateChange('');
         }
