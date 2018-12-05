@@ -331,7 +331,10 @@ class Feed {
 
     _onConnectionReopened() {
         const keys = Object.keys(this._activeStreams);
-        if (keys.length === 0) { return; }
+        if (keys.length === 0) { 
+            location.reload();
+            return; 
+        }
         const { granularity } = this._unpackKey(keys[0]);
         const elapsedSeconds = (this._serverTime.getUTCDate() - this._connectionClosedDate) / 1000 | 0;
         const maxIdleSeconds = (granularity || 1) * this._stx.chart.maxTicks;
