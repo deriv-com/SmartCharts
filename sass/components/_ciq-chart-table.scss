@@ -106,7 +106,8 @@
 .smartcharts-mobile {
     .ciq-chart-dialog {
         width: calc(100% - 20px) !important;
-        height: 90%;
+        height: calc(100% - 50px) !important;
+        top: 10px;
 
         .simplebar-track.vertical {
             margin-top: 0;
