@@ -223,6 +223,18 @@ class ChartStore {
         const studiesStore = this.mainStore.studies;
         stxx.callbacks.studyOverlayEdit = studiesStore.editStudy;
         stxx.callbacks.studyPanelEdit = studiesStore.editStudy;
+        /**
+         * this piece of code added to fix comparison graph
+         * while removing comparison by right-clicking on their
+         * graph, which happened on ChartIQ v6.2.2. this issue
+         * should be fixed by their next release
+         */
+        stxx.append('deleteHighlighted', function () {
+            if (Object.keys(this.chart.series).length) {
+                this.setChartScale('percent');
+                this.draw();
+            }
+        });
 
         this.activeSymbols.retrieveActiveSymbols().then(() => {
             this.tradingTimes.initialize().then(action(() => {
