@@ -53,7 +53,7 @@ export default class ChartTableStore {
         const time = `${hours > 9 ? hours : `0${hours}`}:${minutes > 9 ? minutes : `0${minutes}`}:${seconds > 9 ? seconds : `0${seconds}`}`;
         const dateTime = `${date} ${time}`;
 
-        const lastTick =  this.tableData[0] || {};
+        const lastTick =  this.tableData.length > 0 ? this.tableData[0] : {};
         const change = Close - lastTick.Close || 0;
         let status = '';
         if (Math.sign(change) !== 0) status = Math.sign(change) === 1 ? 'up' :  'down';
