@@ -9,7 +9,7 @@ const CalendarIcon = Wrapper(CalendarIC);
 class DatePickerInput extends React.PureComponent {
     render() {
         const { value, format } = this.props;
-        const input_value = format ? moment(value).format(format) : value;
+        const input_value = format ? moment(value, 'YYYY-MM-DD').format(format) : value;
 
         return (
             <input
@@ -189,6 +189,7 @@ export default class DatePicker extends React.PureComponent {
                             class_name="calendar-input"
                             mode={this.props.mode}
                             name={this.props.name}
+                            format={this.props.format}
                             onChange={this.onChangeInput}
                             placeholder={t.translate(this.props.placeholder)}
                             is_read_only={'is_read_only' in this.props ? this.props.is_read_only : false}

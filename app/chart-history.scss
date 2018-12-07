@@ -54,16 +54,25 @@
     border-right: none;
     border-left: none;
 
-    .time-picker .time-picker-dropdown.active {
+    .time-picker .time-picker-dropdown {
         bottom: calc(100% + 10px);
-        top: auto;
-        right: 0px;
+        top: auto !important;
+        right: 0px !important;
+
+        &.active {
+            bottom: calc(100% + 10px);
+        }
     }
-    .datepicker-container .datepicker-calendar.show > div.calendar {
-        bottom: calc(100% + 8px);
-        top: auto;
-        right: -55px;
-        left: auto;
+    .datepicker-container .datepicker-calendar {
+        > div.calendar {
+            bottom: calc(100% - 8px);
+            top: auto !important;
+            right: -55px !important;
+            left: auto !important;
+        }
+        &.show > div.calendar {
+            bottom: calc(100% + 8px);
+        }
     }
 }
 
