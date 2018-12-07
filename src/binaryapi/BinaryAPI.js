@@ -56,11 +56,15 @@ export default class BinaryAPI {
     static createTickHistoryRequest({ symbol, granularity, start, end, subscribe, adjust_start_time = 1 }) {
         const request = {
             ticks_history: symbol,
-            granularity: +granularity,
             style: +granularity ? 'candles' : 'ticks',
             end: 'latest',
             count: BinaryAPI.DEFAULT_COUNT,
         };
+
+        if (granularity) {
+            //granularity will only be set if style=candles
+            request.granularity = +granularity;
+        }
 
         if (adjust_start_time) {
             request.adjust_start_time = adjust_start_time;
