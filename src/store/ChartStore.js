@@ -278,6 +278,7 @@ class ChartStore {
         // TODO: excluded studies
 
         this.loader.show();
+        this.loader.setState('chart-engine');
 
         const studiesStore = this.mainStore.studies;
         stxx.callbacks.studyOverlayEdit = studiesStore.editStudy;
@@ -299,6 +300,7 @@ class ChartStore {
                 }
 
                 this.context = context;
+                this.loader.setState('market-symbol');
 
                 stxx.container.addEventListener('mouseenter', this.onMouseEnter);
                 stxx.container.addEventListener('mouseleave', this.onMouseLeave);
@@ -339,6 +341,7 @@ class ChartStore {
     }
 
     onMarketOpenClosedChange = (changes) => {
+        this.loader.setState('trading-time');
         const symbolObjects = this.stxx.getSymbols().map(item => item.symbolObject);
         let shouldRefreshChart = false;
         for (const { symbol, name } of symbolObjects) {

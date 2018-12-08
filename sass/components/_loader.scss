@@ -1,4 +1,4 @@
-.cq-loader, .cq-comparison-loader, .cq-loading {
+.cq-loader .cq-loader-spin, .cq-comparison-loader, .cq-loading {
     background-image: svg-load('./icons/loading/loading-spin.svg');
     background-size: cover;
 }
@@ -6,17 +6,35 @@
 .cq-loader {
     display: none;
     position: absolute;
-    height: 50px;
-    width: 50px;
-    left: 50%;
-    top: 50%;
-    margin-left: -25px;
-    margin-top: -25px;
-    z-index: 1;
+    height: 100%;
+    width: 100%;
+    top: 0px;
+    left: 0px;
 
     &.show {
         display: block;
         z-index: 9;
+    }
+    .cq-loader-spin {
+        position: absolute;
+        height: 50px;
+        width: 50px;
+        left: 50%;
+        top: 50%;
+        margin-left: -25px;
+        margin-top: -45px;
+        z-index: 1;
+    }
+    .cq-loader-status {
+        padding-top: 5px;
+        position: absolute;
+        height: 20px;
+        width: 200px;
+        left: 50%;
+        top: 50%;
+        margin-left: -100px;
+        margin-top: 10px;
+        text-align: center;
     }
 }
 
