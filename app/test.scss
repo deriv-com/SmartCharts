@@ -15,6 +15,7 @@
     .chart-instance {
         position: relative;
         grid-column: col-start/span 6;
+        height: 500px;
     }
     .side-chart {
         grid-column-start: 7;

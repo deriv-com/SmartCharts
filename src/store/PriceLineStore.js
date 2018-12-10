@@ -48,7 +48,7 @@ export default class PriceLineStore {
     static get EVENT_DRAG_RELEASED() { return 'EVENT_DRAG_RELEASED'; }
 
     @computed get priceDisplay() {
-        let display = this._price.toFixed(this.pip);
+        let display = this.draggable ? this._price.toFixed(this.pip) : this._price;
         if (this.relative && this._price > 0) { display = `+${display}`; }
         return display;
     }
