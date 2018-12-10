@@ -13,6 +13,7 @@ class Feed {
     get endEpoch() { return this._mainStore.state.endEpoch; }
     get granularity() { return this._mainStore.chart.granularity; }
     get context() { return this._mainStore.chart.context; }
+    get loader() { return this._mainStore.loader; }
     _activeStreams = {};
     _isConnectionOpened = true;
 
@@ -172,7 +173,7 @@ class Feed {
             callback({ quotes: [] });
             return;
         }
-
+        this.loader.setState('chart-data');
         callback({ quotes });
 
         this._emitDataUpdate(quotes, comparisonChartSymbol);
