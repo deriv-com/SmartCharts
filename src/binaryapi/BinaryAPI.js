@@ -62,7 +62,7 @@ export default class BinaryAPI {
         };
 
         if (granularity) {
-            //granularity will only be set if style=candles
+            // granularity will only be set if style=candles
             request.granularity = +granularity;
         }
 
