@@ -332,7 +332,7 @@ class Feed {
     _onConnectionReopened() {
         const keys = Object.keys(this._activeStreams);
         if (keys.length === 0) { 
-            window.location.reload();
+            this._mainStore.chart.refreshChart();
             return; 
         }
         const { granularity } = this._unpackKey(keys[0]);
