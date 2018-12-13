@@ -12,6 +12,8 @@ class ConnectionManager extends EventEmitter {
         this._counterReqId = 1;
         this._initialize();
         this._pendingRequests = { };
+        this._bufferedRequests = [];
+
     }
 
     _initialize() {
@@ -59,6 +61,8 @@ class ConnectionManager extends EventEmitter {
             this._connectionOpened = undefined;
         }
         this.emit(ConnectionManager.EVENT_CONNECTION_REOPEN);
+        this._sendBufferedRequests();
+
         if (!this._pingTimer) {
             this._pingTimer = setInterval(this._pingCheck.bind(this), 15000);
         }
@@ -66,7 +70,7 @@ class ConnectionManager extends EventEmitter {
 
     _pingCheck() {
         if (this._websocket.readyState === WebSocket.OPEN) {
-            this.send({ ping: 1 }, 5000)
+            this.send({ ping: 1 }, undefined, 5000)
                 .catch(() => {
                     if (this._websocket.readyState === WebSocket.OPEN) {
                         console.error('Server unresponsive. Creating new connection...');
@@ -86,7 +90,9 @@ class ConnectionManager extends EventEmitter {
 
         Object.keys(this._pendingRequests).forEach((req_id) => {
             console.log(`Pending requests are rejected as connection is closed. Request Id= ${req_id}`);
+            this._bufferedRequests.push(this._pendingRequests[req_id]);
         });
+        
         this._pendingRequests = { };
         this.emit(ConnectionManager.EVENT_CONNECTION_CLOSE);
     }
@@ -110,7 +116,15 @@ class ConnectionManager extends EventEmitter {
         }, timeout);
     }
 
-    async send(data, timeout) {
+    _sendBufferedRequests() {
+        while (this._bufferedRequests.length > 0) {
+            const req = this._bufferedRequests.shift();
+            this.send( req.data , req);
+        }
+    }
+    
+    async send(data, promise, timeout) {
+
         const req = Object.assign({}, data);
         req.req_id = this._counterReqId++;
 
@@ -122,7 +136,7 @@ class ConnectionManager extends EventEmitter {
         }
 
         this._websocket.send(JSON.stringify(req));
-        this._pendingRequests[req.req_id] = new PendingPromise(req);
+        this._pendingRequests[req.req_id] = promise ? promise: new PendingPromise(req);
         if (timeout) {
             this._timeoutRequest(req.req_id, timeout);
         }

@@ -326,7 +326,7 @@ class Feed {
         for (const key in this._activeStreams) {
             this._activeStreams[key].pause();
         }
-        this._connectionClosedDate = this._serverTime.getUTCDate();
+        this._connectionClosedDate = new Date();
     }
 
     _onConnectionReopened() {
@@ -336,7 +336,7 @@ class Feed {
             return; 
         }
         const { granularity } = this._unpackKey(keys[0]);
-        const elapsedSeconds = (this._serverTime.getUTCDate() - this._connectionClosedDate) / 1000 | 0;
+        const elapsedSeconds = (new Date() - this._connectionClosedDate) / 1000 | 0;
         const maxIdleSeconds = (granularity || 1) * this._stx.chart.maxTicks;
         if (elapsedSeconds >= maxIdleSeconds) {
             this._mainStore.chart.refreshChart();
