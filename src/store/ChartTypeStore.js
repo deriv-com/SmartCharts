@@ -15,13 +15,14 @@ import {
     PointFigureIcon,
     RangeBarsIcon,
     RenkoIcon,
+    TableIcon,
     SplineIcon,
 } from '../components/Icons.jsx';
 import SettingsDialogStore from './SettingsDialogStore';
 import List from '../components/List.jsx';
 import Menu from '../components/Menu.jsx';
 import SettingsDialog from '../components/SettingsDialog.jsx';
-import { logEvent } from  '../utils/ga';
+import { logEvent, LogCategories, LogActions } from  '../utils/ga';
 
 function getChartTypes() {
     return [
@@ -39,6 +40,7 @@ function getChartTypes() {
         { id: 'renko',         text: t.translate('Renko'),          candleOnly: true,  icon: RenkoIcon,       settingsOnClick: true },
         { id: 'rangebars',     text: t.translate('Range Bars'),     candleOnly: true,  icon: RangeBarsIcon,   settingsOnClick: true },
         { id: 'pandf',         text: t.translate('Point & Figure'), candleOnly: true,  icon: PointFigureIcon, settingsOnClick: true },
+        { id: 'table',         text: t.translate('Table'),          candleOnly: false, icon: TableIcon         },
     ];
 }
 
@@ -161,10 +163,15 @@ export default class ChartTypeStore {
     }
 
     @action.bound setType(type) {
+        logEvent(LogCategories.ChartControl, LogActions.ChartType, type.text);
         if (typeof type === 'string') {
             type = this.types.find(t => t.id === type);
         }
         if (type.id === this.type.id) {
+            return;
+        }
+        if (type.id === 'table') {
+            this.mainStore.chartTable.setOpen(true);
             return;
         }
         if (type.id === 'spline') {
@@ -185,7 +192,6 @@ export default class ChartTypeStore {
             }
         }
         this.type = type;
-        logEvent('Chart Control', 'Chart Type', type.text);
     }
 
     @action.bound showAggregateDialog(aggregateId) {

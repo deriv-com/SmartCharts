@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { FavoriteIcon } from './Icons.jsx';
 import FavoriteStore from '../store/FavoriteStore';
-import { logEvent } from '../utils/ga';
+import { logEvent, LogCategories, LogActions } from '../utils/ga';
 
 class Favorite extends Component {
     store = FavoriteStore.getInstance();
@@ -28,7 +28,7 @@ class Favorite extends Component {
         const isFavorite = this.isFavorite(category, id);
         if (isFavorite !== this.state.isFavorite) {
             this.setState({ isFavorite });
-            logEvent('Categorical Display', 'Favorite', `${isFavorite ? 'Add ' : 'Remove '} ${id}`);
+            logEvent(LogCategories.CategoricalDisplay, LogActions.Favorite, `${isFavorite ? 'Add ' : 'Remove '} ${id}`);
         }
     };
 

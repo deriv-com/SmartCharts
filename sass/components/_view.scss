@@ -1,14 +1,14 @@
 .ciq-views {
     .cq-menu-dropdown {
         width: 280px;
-        height: 200px;
+        height: 196px;
 
         .template-name {
             display: flex;
             align-items: center;
             height: 32px;
-            padding: 0 0 0 16px;
-            margin: 16px 11px 0 0;
+            padding: 0 4px 0 16px;
+            margin: 16px 7px 0 0;
             box-sizing: border-box;
             @include themify($themes) {
                 border: 1px solid themed('ListLiBorder');
@@ -46,14 +46,30 @@
         }
         .content {
             display: block;
-            height: 145px;
-            padding: 0px 5px 16px 16px;
+            height: 140px;
+            padding: 0 9px 0 16px;
+            position: relative;
 
             .ciq-list {
-                height: 115px;
-                overflow: auto;
+                max-height: 107px !important;
+                width: 100%;
+                padding: 0px !important;
                 display: block;
 
+                .simplebar-offset {
+                    right: -20px !important;
+
+                    .simplebar-content {
+                        padding-right: 29px !important;
+
+                        .ciq-list-inner {
+                            min-width: 248px;
+                        }
+                    }
+                }
+                .simplebar-track.horizontal {
+                    display: none;
+                }
                 .ciq-list-item {
                     align-items: center;
                     justify-content: flex-start;
@@ -84,7 +100,7 @@
                         border-top: none;
                         margin-top: 0;
                     }
-                    &:nth-last-child(-n+3) {
+                    &:last-child {
                         margin-bottom: 0px !important;
                     }
                 }
@@ -92,7 +108,15 @@
         }
     }
     .ovrwrit-alrt {
-        margin: 16px 0 0 -16px;
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        width: 100%;
+        height: 100%;
+        z-index: 40;
+        @include themify($themes) {
+            background-color: themed('DialogBodyBg');
+        }
 
         .ovrwrit-alrt-title {
             text-align: center;
@@ -139,8 +163,13 @@
                 flex: none;
             }
         }
-        .content .ciq-list .ciq-list-item .ic-icon {
-            opacity: 1;
+        .content .ciq-list {
+            .ciq-list-inner {
+                width: 100%;
+            }
+            .ciq-list-item .ic-icon {
+                opacity: 1;
+            }
         }
     }
 }

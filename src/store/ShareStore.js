@@ -2,7 +2,7 @@ import { observable, action, computed, when } from 'mobx';
 import MenuStore from './MenuStore';
 import { downloadFileInBrowser } from '../utils';
 import Menu from '../components/Menu.jsx';
-import { logEvent } from  '../utils/ga';
+import { logEvent, LogCategories, LogActions } from  '../utils/ga';
 
 export default class ShareStore {
     constructor(mainStore) {
@@ -42,7 +42,7 @@ export default class ShareStore {
                 html2canvas.default(this.screenshotArea).then(canvas => this._onCanvasReady(canvas, newTab));
             });
 
-        logEvent('Chart Control', 'Download', 'Download PNG');
+        logEvent(LogCategories.ChartControl, LogActions.Download, 'Download PNG');
     }
 
     @action.bound _onCanvasReady(canvas, newTab) {
@@ -61,17 +61,12 @@ export default class ShareStore {
         const isTick = this.timeUnit === 'tick';
         const header = `Date,Time,${isTick ? this.marketDisplayName : 'Open,High,Low,Close'}`;
         const lines = [header];
-        this.stx.masterData.forEach((row) => {
-            const {
-                DT, Open, High, Low, Close,
-            } = row;
-
-            const year = DT.getUTCFullYear();
-            const month = DT.getUTCMonth() + 1; // months from 1-12
-            const day = DT.getUTCDate();
-            const hours = DT.getUTCHours();
-            const minutes = DT.getUTCMinutes();
-            // const seconds = DT.getUTCSeconds();
+        this.stx.masterData.forEach(({ DT, Open, High, Low, Close }) => {
+            const year = DT.getFullYear();
+            const month = DT.getMonth() + 1; // months from 1-12
+            const day = DT.getDate();
+            const hours = DT.getHours();
+            const minutes = DT.getMinutes();
 
             const date = `${year}-${month > 9 ? month : `0${month}`}-${day > 9 ? day : `0${day}`}`;
             const time = `${hours > 9 ? hours : `0${hours}`}:${minutes > 9 ? minutes : `0${minutes}`}`;
@@ -94,7 +89,7 @@ export default class ShareStore {
             this.createNewTab(),
         );
 
-        logEvent('Chart Control', 'Download', 'Download CSV');
+        logEvent(LogCategories.ChartControl, LogActions.Download, 'Download CSV');
     }
 
     onContextReady = () => {

@@ -7,7 +7,7 @@ import Loader from './Loader.jsx';
 import Barrier from './Barrier.jsx';
 import CurrentSpot from './CurrentSpot.jsx';
 import DrawingCursor from './DrawingCursor.jsx';
-
+import ChartTable from './ChartTable.jsx';
 /* css + scss */
 import '../../sass/main.scss';
 
@@ -27,10 +27,10 @@ class Chart extends Component {
 
     componentDidMount() {
         const { updateProps, init, ...props } = this.props;
-        updateProps(props);
-        init(this.root.current, this.modalNode.current, props);
         initGA();
         logPageView();
+        updateProps(props);
+        init(this.root.current, this.modalNode.current, props);
     }
 
     componentWillReceiveProps(nextProps) {
@@ -118,6 +118,7 @@ class Chart extends Component {
                     <DrawToolsSettingsDialog />
                     <AggregateChartSettingsDialog />
                     <StudySettingsDialog />
+                    <ChartTable />
                 </div>
             </div>
         );

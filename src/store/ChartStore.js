@@ -270,7 +270,7 @@ class ChartStore {
 
         // only one instance of keystrokeHub should exist
         if (ChartStore.keystrokeHub === undefined) {
-            ChartStore.keystrokeHub = new KeystrokeHub(document.body, context, {
+            ChartStore.keystrokeHub = new KeystrokeHub(document.body, null, {
                 cb: KeystrokeHub.defaultHotKeys,
             });
         }
@@ -299,8 +299,10 @@ class ChartStore {
                 }
 
                 this.context = context;
+
                 stxx.container.addEventListener('mouseenter', this.onMouseEnter);
                 stxx.container.addEventListener('mouseleave', this.onMouseLeave);
+
                 this.contextPromise.resolve(this.context);
                 this.resizeScreen();
 
@@ -370,12 +372,20 @@ class ChartStore {
 
     @action.bound onMouseEnter() {
         this.cursorInChart = true;
-        ChartStore.keystrokeHub.setActiveContext(this.context);
+        /*
+        * Disable key press events for chart until we can get it not to
+        * interfere with key presses outside the chart:
+        */
+        // ChartStore.keystrokeHub.setActiveContext(this.context);
     }
 
     @action.bound onMouseLeave() {
         this.cursorInChart = false;
-        ChartStore.keystrokeHub.setActiveContext(null);
+        /*
+        * Disable key press events for chart until we can get it not to
+        * interfere with key presses outside the chart:
+        */
+        // ChartStore.keystrokeHub.setActiveContext(null);
     }
 
     @action.bound updateCurrentActiveSymbol() {
