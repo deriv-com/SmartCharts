@@ -28,5 +28,25 @@
     .cq-dialog {
         left: 10px;
         width: calc(100% - 20px);
+
+        .cq-titlebar {
+            height: 40px;
+            display: flex;
+            align-items: center;
+            padding: 0 15px;
+            @include themify($themes) {
+                color: themed('DialogHeadText');
+                border-bottom: 2px solid themed('DialogBodyBg');
+            }
+
+            :last-child {
+                margin-left: auto;
+            }
+            .cq-title {
+                font-size: 14px;
+                font-weight: bold;
+                padding-left: 10px;
+            }
+        }
     }
 }
