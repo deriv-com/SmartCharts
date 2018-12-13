@@ -88,7 +88,6 @@ class ConnectionManager extends EventEmitter {
         }
 
         Object.keys(this._pendingRequests).forEach((req_id) => {
-            console.log(`Pending requests are rejected as connection is closed. Request Id= ${req_id}`);
             this._bufferedRequests.push(this._pendingRequests[req_id]);
         });
 
