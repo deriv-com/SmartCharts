@@ -59,7 +59,7 @@ class ConnectionManager extends EventEmitter {
             this._connectionOpened = undefined;
         }
         this.emit(ConnectionManager.EVENT_CONNECTION_REOPEN);
-        this._sendBufferedRequests();
+        this._resendPendingRequests();
 
         if (!this._pingTimer) {
             this._pingTimer = setInterval(this._pingCheck.bind(this), 15000);
@@ -108,7 +108,7 @@ class ConnectionManager extends EventEmitter {
         }, timeout);
     }
 
-    _sendBufferedRequests() {
+    _resendPendingRequests() {
         Object.keys(this._pendingRequests).forEach((req_id) => {
             const req = this._pendingRequests[req_id];
             this.send(req.data);
