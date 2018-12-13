@@ -1,5 +1,5 @@
 import React from 'react';
-import PerfectScrollbar from 'react-perfect-scrollbar';
+import 'simplebar';
 import '../../sass/components/_ciq-list.scss';
 
 const List = ({
@@ -14,7 +14,9 @@ const List = ({
                + ` ${it.disabled ? 'disabled' : ''}`
                + ` ${it.active ? 'active' : ''}`;
     return (
-        <PerfectScrollbar
+        <div
+            data-simplebar
+            data-simplebar-auto-hide="false"
             className="ciq-list"
             style={height && { height: `${height}px` }}
         >
@@ -27,7 +29,7 @@ const List = ({
                     {renderRow(it)}
                 </div>
             ))}
-        </PerfectScrollbar>
+        </div>
     );
 };
 

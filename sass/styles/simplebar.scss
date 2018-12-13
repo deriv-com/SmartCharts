@@ -1,0 +1,12 @@
+
+.simplebar-scrollbar {
+    right: 0px;
+    width: 6px;
+
+    &:before {
+        opacity: 1;
+        @include themify($themes) {
+            background: themed('ListScroll');
+        }
+    }
+}
