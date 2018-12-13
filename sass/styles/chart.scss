@@ -116,6 +116,21 @@ html, body {
     background: no-repeat center;
 }
 
+/* Up/Down Arrow indicators */
+.cq-change {
+    &:after {
+        float: left;
+        margin-top: 5px;
+        margin-right: 5px;
+        @include triangle-base(6px);
+    }
+    &.up:after {
+        border-bottom: 8px solid rgb(76, 175, 80);
+    }
+    &.down:after {
+        border-top: 8px solid rgb(249, 84, 84);
+    }
+}
 /* --------------------------------------------------------- CHART CONTROLS --------------------------------------------------------- */
 
 .stx_chart_controls { /* Chart Control module */
