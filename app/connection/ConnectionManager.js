@@ -13,7 +13,6 @@ class ConnectionManager extends EventEmitter {
         this._initialize();
         this._pendingRequests = { };
         this._bufferedRequests = [];
-
     }
 
     _initialize() {
@@ -92,8 +91,7 @@ class ConnectionManager extends EventEmitter {
             console.log(`Pending requests are rejected as connection is closed. Request Id= ${req_id}`);
             this._bufferedRequests.push(this._pendingRequests[req_id]);
         });
-        
-        this._pendingRequests = { };
+
         this.emit(ConnectionManager.EVENT_CONNECTION_CLOSE);
     }
 
@@ -119,14 +117,13 @@ class ConnectionManager extends EventEmitter {
     _sendBufferedRequests() {
         while (this._bufferedRequests.length > 0) {
             const req = this._bufferedRequests.shift();
-            this.send( req.data , req);
+            this.send(req.data);
         }
     }
-    
-    async send(data, promise, timeout) {
 
+    async send(data, timeout) {
         const req = Object.assign({}, data);
-        req.req_id = this._counterReqId++;
+        req.req_id = req.req_id || this._counterReqId++;
 
         if (this._websocket.readyState !== WebSocket.OPEN) {
             if (!this._connectionOpened) {
@@ -136,7 +133,9 @@ class ConnectionManager extends EventEmitter {
         }
 
         this._websocket.send(JSON.stringify(req));
-        this._pendingRequests[req.req_id] = promise ? promise: new PendingPromise(req);
+        if (!this._pendingRequests[data.req_id]) {
+            this._pendingRequests[req.req_id] = new PendingPromise(req);
+        }
         if (timeout) {
             this._timeoutRequest(req.req_id, timeout);
         }
