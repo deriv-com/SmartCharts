@@ -69,7 +69,7 @@ class ConnectionManager extends EventEmitter {
 
     _pingCheck() {
         if (this._websocket.readyState === WebSocket.OPEN) {
-            this.send({ ping: 1 }, undefined, 5000)
+            this.send({ ping: 1 }, 5000)
                 .catch(() => {
                     if (this._websocket.readyState === WebSocket.OPEN) {
                         console.error('Server unresponsive. Creating new connection...');
