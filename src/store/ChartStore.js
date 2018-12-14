@@ -429,7 +429,7 @@ class ChartStore {
     setMainSeriesDisplay(name) {
         // Set display name of main series (to be shown in crosshair tooltip)
         this.stxx.chart.seriesRenderers._main_series.seriesParams[0].display = name;
-        //TODO 
+        // TODO
         this.stxx.chart.seriesRenderers._main_series.seriesParams[0].field = 'Close';
     }
 
