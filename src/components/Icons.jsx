@@ -16,6 +16,7 @@ import PointFigure from '../../sass/icons/chart settings/chart types/ic-pointfig
 import RangeBars from '../../sass/icons/chart settings/chart types/ic-rangebars-normal.svg';
 import Renko from '../../sass/icons/chart settings/chart types/ic-renko-normal.svg';
 import Spline from '../../sass/icons/chart settings/chart types/spline/ic-spline-normal.svg';
+import Table from '../../sass/icons/chart settings/chart types/table/table.svg';
 import Png from '../../sass/icons/download/ic-png.svg';
 import Csv from '../../sass/icons/download/ic-csv.svg';
 
@@ -143,6 +144,7 @@ export const OHLCIcon = Wrapper(OHLC);
 export const PointFigureIcon = Wrapper(PointFigure);
 export const RangeBarsIcon = Wrapper(RangeBars);
 export const RenkoIcon = Wrapper(Renko);
+export const TableIcon = Wrapper(Table);
 
 export const AddIcon = Wrapper(Add);
 export const ZoomInIcon = Wrapper(Add);
