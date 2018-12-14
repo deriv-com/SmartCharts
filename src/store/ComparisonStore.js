@@ -52,10 +52,6 @@ export default class ComparisonStore {
 
     removeComparison(symbolObj) {
         this.context.stx.removeSeries(symbolObj.symbol);
-        if (Object.keys(this.context.stx.chart.series).length) {
-            this.context.stx.setChartScale('percent');
-            this.context.stx.draw();
-        }
     }
 
     @computed get activeComparisons() {

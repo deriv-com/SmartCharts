@@ -184,10 +184,6 @@ export default class ChartTypeStore {
                 this.stx.setChartType(type.id);
             }
         }
-        if (Object.keys(this.stx.chart.series).length) {
-            this.stx.setChartScale('percent');
-            this.stx.draw();
-        }
 
         this.type = type;
         logEvent(LogCategories.ChartControl, LogActions.ChartType, type.text);
