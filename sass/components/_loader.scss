@@ -3,6 +3,12 @@
     background-size: cover;
 }
 
+.smartcharts-dark {
+    .cq-loader .cq-loader-spin, .cq-comparison-loader, .cq-loading {
+        background-image: svg-load('./icons/loading/loading-spin-white.svg');
+    }
+}
+
 .cq-loader {
     display: none;
     position: absolute;
@@ -24,6 +30,9 @@
         margin-left: -25px;
         margin-top: -45px;
         z-index: 1;
+        @include themify($themes) {
+            stroke: themed('Loading');
+        }
     }
     .cq-loader-status {
         padding-top: 5px;
@@ -35,6 +44,9 @@
         margin-left: -100px;
         margin-top: 10px;
         text-align: center;
+        @include themify($themes) {
+            color: themed('Loading');
+        }
     }
 }
 

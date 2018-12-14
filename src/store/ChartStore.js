@@ -317,6 +317,7 @@ class ChartStore {
                     }
                 });
 
+                this.loader.setState('trading-time');
                 this.tradingTimes.onMarketOpenCloseChanged(this.onMarketOpenClosedChange);
 
                 setTimeout(action(() => {
@@ -341,7 +342,7 @@ class ChartStore {
     }
 
     onMarketOpenClosedChange = (changes) => {
-        this.loader.setState('trading-time');
+        console.log('onMarketOpenClosedChange');
         const symbolObjects = this.stxx.getSymbols().map(item => item.symbolObject);
         let shouldRefreshChart = false;
         for (const { symbol, name } of symbolObjects) {
