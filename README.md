@@ -460,7 +460,7 @@ Now you should be able to see your SmartCharts app on `brucebinary.binary.sx/myf
 
 Alternatively you can deploy directly to the domain itself (note that this **erases all folders**; could be useful for cleanup). In our example, the following command will deploy to `brucebinary.binary.sx`:
 
-    yarn build-travis && yarn gh-pages
+    yarn build-travis && echo 'brucebinary.binary.sx' > CNAME && yarn gh-pages
 
 > Note: `yarn build-travis` will add hashing inside `index.html`; **do not push those changes to git!**
 
