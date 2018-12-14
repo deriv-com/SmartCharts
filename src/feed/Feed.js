@@ -298,6 +298,10 @@ class Feed {
         this._emitter.on(Feed.EVENT_MASTER_DATA_UPDATE, callback);
     }
 
+    offMasterDataUpdate(callback) {
+        this._emitter.off(Feed.EVENT_MASTER_DATA_UPDATE, callback);
+    }
+
     onComparisonDataUpdate(callback) {
         this._emitter.on(Feed.EVENT_COMPARISON_DATA_UPDATE, callback);
     }
