@@ -17,7 +17,7 @@
                 display: flex;
                 justify-content: center;
                 cursor: pointer;
-                margin: 8px 9px 8px 0;
+                margin: 8px 0;
                 border-radius: 3px;
 
                 @include themify($themes) {
@@ -26,11 +26,10 @@
             }
             .ciq-list {
                 max-height: 260px;
-            }
-            .scrollbar-container {
-                .ciq-list-item {
-                    &:first-child {
-                        margin-top: 0px;
+
+                .cq-draw-buttons + .ciq-list-item {
+                    @include themify($themes) {
+                        border-top: 1px solid themed('DropdownBorder');
                     }
                 }
             }

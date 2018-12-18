@@ -1,0 +1,142 @@
+.ciq-chart-dialog {
+    width: var(--table-width);
+    height: 80vh;
+    left: auto;
+
+    .ciq-list {
+        max-height: 100%;
+    }
+    .simplebar-track.vertical {
+        margin-top: 45px;
+        right: 16px;
+    }
+}
+
+.cq-dialog-overlay {
+    @include themify($themes) {
+        background: themed('DialogOverlay');
+    }
+    visibility: hidden;
+    bottom: 0;
+}
+
+.cq-dialog-active {
+    visibility: visible;
+    z-index: 1;
+}
+
+.ciq-chart-table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+
+    td:nth-child(1), th:nth-child(1) {
+        width: 145px;
+    }
+    td:nth-child(2), th:nth-child(2) {
+        width: 75px;
+    }
+    td:nth-child(3), th:nth-child(3) {
+        width: 100px;
+    }
+    td:nth-child(4), th:nth-child(4) {
+        width: 75px;
+    }
+    td:nth-child(5), th:nth-child(5) {
+        width: 75px;
+    }
+    td:nth-child(6), th:nth-child(6) {
+        width: 100px;
+    }
+    tbody {
+        display: block;
+        margin-top: 40px;
+    }
+    .cq-change-cell {
+        display: inline-flex;
+
+        .ic-icon {
+            padding: 8px 0 0 20px;
+        }
+    }
+}
+
+.ciq-table-head {
+    width: var(--table-width);
+    position: fixed;
+    display: block;
+    @include themify($themes) {
+        background: themed('DialogBodyBg');
+        color: themed('DefaultText');
+    }
+
+    .ciq-table-cell {
+        line-height: 40px;
+    }
+}
+
+.ciq-table-row {
+    @include themify($themes) {
+        border-bottom: 1px solid themed('DialogBodyBg');
+    }
+
+    .ciq-table-cell {
+        text-align: center;
+        height: 30px;
+        @include themify($themes) {
+            color: themed('DefaultText');
+        }
+
+        .cq-change:after {
+            margin: 3px 0 0 5px;
+        }
+        .up {
+            @include themify($themes) {
+                color: $COLOR_LIGHT_GREEN;
+            }
+        }
+        .down {
+            @include themify($themes) {
+                color: $COLOR_LIGHT_RED;
+            }
+        }
+    }
+}
+
+.smartcharts-mobile {
+    .ciq-chart-dialog {
+        width: calc(100% - 20px) !important;
+        height: calc(100% - 66px) !important;
+        top: 10px;
+
+        .simplebar-track.vertical {
+            margin-top: 0;
+            right: 0;
+        }
+    }
+    .ciq-chart-table {
+        tbody {
+            display: table-row-group;
+            margin-top: 0;
+        }
+        .ciq-table-cell {
+            display: flex;
+            padding: 5px 5px 5px 20px !important;
+            text-align: left;
+            font-size: 12px;
+            height: 20px;
+
+            .ciq-table-date {
+                flex: 1;
+            }
+            > div {
+                padding-right: 5px;
+
+                > span {
+                    font-weight: bold;
+                    padding-right: 5px;
+                }
+            }
+        }
+    }
+}

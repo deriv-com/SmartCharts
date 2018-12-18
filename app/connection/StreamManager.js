@@ -166,7 +166,7 @@ class StreamManager {
     }
 
     _getKey({ ticks_history: symbol, granularity }) {
-        return `${symbol}-${granularity}`;
+        return `${symbol}-${granularity || 0}`;
     }
 
     static cloneTickHistoryResponse({ history, candles, ...others }) {
