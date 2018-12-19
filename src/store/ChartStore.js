@@ -21,64 +21,6 @@ function renderSVGString(icon) {
     return `<svg width="${vb[0]}" height="${vb[1]}"><use xlink:href="${__webpack_public_path__ + icon.url}" /></svg>`;
 }
 
-function myCreateYAxisLabel(panel, txt, y, backgroundColor, color, ctx, yAxis) {
-    if (panel.yAxis.drawPriceLabels === false || panel.yAxis.noDraw) return;
-    const yax = yAxis || panel.yAxis;
-    if (yax.noDraw || !yax.width) return;
-    const context = ctx || this.chart.context;
-    const margin = 3;
-    const height = this.getCanvasFontSize('stx_yaxis') + (margin << 1);
-    this.canvasFont('stx_yaxis', context);
-    this.drawBorders = yax.displayBorder;
-    const tickWidth = this.drawBorders ? 3 : 0; // pixel width of tick off edge of border
-    let width;
-    try {
-        width = context.measureText(txt).width + tickWidth + (margin << 1);
-    } catch (e) {
-        width = yax.width;
-    } // Firefox doesn't like this in hidden iframe
-
-    let x = yax.left - margin + 3;
-    if (yax.width < 0) x += (yax.width - width);
-    let textx = x + margin + tickWidth;
-    let radius = 3;
-    const position = (yax.position === null ? panel.chart.yAxis.position : yax.position);
-    if (position === 'left') {
-        x = yax.left + yax.width + margin - 3;
-        width *= -1;
-        if (yax.width < 0) x -= (yax.width + width);
-        textx = x - margin - tickWidth;
-        radius = -3;
-        context.textAlign = 'right';
-    }
-    if (y + (height >> 1) > yax.bottom) y = yax.bottom - (height >> 1);
-    if (y - (height >> 1) < yax.top)    y = yax.top    + (height >> 1);
-
-    if (typeof (CIQ[this.yaxisLabelStyle]) === 'undefined') {
-        this.yaxisLabelStyle = 'roundRectArrow'; // in case of user error, set a default.
-    }
-    let yaxisLabelStyle = this.yaxisLabelStyle;
-    if (yax.yaxisLabelStyle) yaxisLabelStyle = yax.yaxisLabelStyle;
-    const params = {
-        ctx: context,
-        x,
-        y,
-        top: y - (height >> 1),
-        width,
-        height,
-        radius,
-        backgroundColor,
-        fill: true,
-        stroke: false,
-        margin: {
-            left: textx - x,
-            top: 1,
-        },
-        txt,
-        color,
-    };
-    CIQ[yaxisLabelStyle](params);
-}
 
 class ChartStore {
     static keystrokeHub;
@@ -174,8 +116,6 @@ class ChartStore {
     };
 
     @action.bound _initChart(rootNode, modalNode, props) {
-        CIQ.ChartEngine.prototype.createYAxisLabel = myCreateYAxisLabel;
-
         this.rootNode = rootNode;
         this.modalNode = modalNode;
         this.chartNode = this.rootNode.querySelector('.ciq-chart-area');
@@ -226,6 +166,7 @@ class ChartStore {
                     width: -10,
                     justifyRight: true,
                 },
+                gaplines: true,
             },
             minimumLeftBars: 2,
             yTolerance: 999999, // disable vertical scrolling
@@ -492,6 +433,11 @@ class ChartStore {
     setMainSeriesDisplay(name) {
         // Set display name of main series (to be shown in crosshair tooltip)
         this.stxx.chart.seriesRenderers._main_series.seriesParams[0].display = name;
+        // TODO, we use to use `field` field to recgnize main seris and show 
+        // it's crosshair, as in ChartIQ 6.2.2 they are going to remove this field
+        // we should find another way of detecting main series price, till then
+        // we found this temporary solution.
+        this.stxx.chart.seriesRenderers._main_series.seriesParams[0].field = 'Close';
     }
 
     // Makes requests to tick history API that will replace
