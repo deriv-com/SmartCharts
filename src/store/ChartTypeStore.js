@@ -191,6 +191,7 @@ export default class ChartTypeStore {
                 this.stx.setChartType(type.id);
             }
         }
+
         this.type = type;
     }
 
