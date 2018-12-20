@@ -29,7 +29,10 @@ export default class ActiveSymbols {
         }
         this._tradingTimes.onMarketOpenCloseChanged(action((changes) => {
             for (const symbol in changes) {
-                this.symbolMap[symbol].exchange_is_open = changes[symbol];
+                const symObj = this.symbolMap[symbol];
+                if (symObj) {
+                    symObj.exchange_is_open = changes[symbol];
+                }
             }
             this.changes = changes;
         }));
