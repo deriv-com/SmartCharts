@@ -38,7 +38,6 @@ class ChartStore {
     stxx = null;
     api = null;
     defaults = {
-        symbol: 'R_100',
         granularity: 0,
         chartType: 'mountain',
     };
@@ -286,7 +285,8 @@ class ChartStore {
 
                 if (!isRestoreSuccess) {
                     this.changeSymbol(
-                        symbol || this.defaults.symbol,
+                        // default to first available symbol
+                        symbol || Object.keys(this.activeSymbols.symbolMap)[0],
                         this.granularity,
                     );
                 }
