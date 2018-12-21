@@ -463,3 +463,5 @@ Alternatively you can deploy directly to the domain itself (note that this **era
     yarn build-travis && echo 'brucebinary.binary.sx' > CNAME && yarn gh-pages
 
 > Note: `yarn build-travis` will add hashing inside `index.html`; **do not push those changes to git!**
+
+There may be occasions where you would want to deploy development versions of the webpack bundles. Quick way to do this is to change the [`--mode` parameter](https://webpack.js.org/concepts/mode/) in `build` npm command in `package.json` to from `production` to `development`.

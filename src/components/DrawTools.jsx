@@ -8,7 +8,7 @@ const DrawTools = ({
     selectTool,
     DrawToolsMenu,
     menuOpen,
-    DrawList,
+    drawToolsItems,
 }) => (
     <DrawToolsMenu
         className="ciq-draw-tools"
@@ -23,21 +23,35 @@ const DrawTools = ({
 
         <DrawToolsMenu.Body>
             <div className="body">
-                <div className="cq-draw-buttons">
-                    <div className="cq-draw-button" onClick={clearAll}>
-                        <ClearIcon />
-                        <span>{t.translate('Clear All')}</span>
+                <div
+                    data-simplebar
+                    className="ciq-list"
+                >
+                    <div className="cq-draw-buttons">
+                        <div className="cq-draw-button" onClick={clearAll}>
+                            <ClearIcon />
+                            <span>{t.translate('Clear All')}</span>
+                        </div>
+                        <div
+                            className="cq-draw-button"
+                            onClick={() => selectTool('measure')}
+                            style={{ display: 'none'  /* TODO: measurement tool doesn't show measurement */ }}
+                        >
+                            <MeasureIcon />
+                            <span>{t.translate('Measure')}</span>
+                        </div>
                     </div>
-                    <div
-                        className="cq-draw-button"
-                        onClick={() => selectTool('measure')}
-                        style={{ display: 'none'  /* TODO: measurement tool doesn't show measurement */ }}
-                    >
-                        <MeasureIcon />
-                        <span>{t.translate('Measure')}</span>
-                    </div>
+                    {drawToolsItems.map(it => (
+                        <div
+                            key={it.id}
+                            className="ciq-list-item"
+                            onClick={() => selectTool(it.id)}
+                        >
+                            {it.text}
+                        </div>
+                    ))}
                 </div>
-                <DrawList />
+
             </div>
         </DrawToolsMenu.Body>
     </DrawToolsMenu>
@@ -48,5 +62,5 @@ export default connect(({ drawTools: dt }) => ({
     selectTool: dt.selectTool,
     DrawToolsMenu: dt.DrawToolsMenu,
     menuOpen: dt.menu.open,
-    DrawList: dt.DrawList,
+    drawToolsItems: dt.drawToolsItems,
 }))(DrawTools);
