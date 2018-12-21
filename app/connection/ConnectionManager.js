@@ -12,6 +12,7 @@ class ConnectionManager extends EventEmitter {
         this._counterReqId = 1;
         this._initialize();
         this._pendingRequests = { };
+        this._bufferedRequests = [];
     }
 
     _initialize() {
@@ -59,7 +60,7 @@ class ConnectionManager extends EventEmitter {
             this._connectionOpened = undefined;
         }
         this.emit(ConnectionManager.EVENT_CONNECTION_REOPEN);
-        this._resendPendingRequests();
+        this._sendBufferedRequests();
 
         if (!this._pingTimer) {
             this._pingTimer = setInterval(this._pingCheck.bind(this), 15000);
@@ -86,6 +87,10 @@ class ConnectionManager extends EventEmitter {
             this._pingTimer = undefined;
         }
 
+        Object.keys(this._pendingRequests).forEach((req_id) => {
+            this._bufferedRequests.push(this._pendingRequests[req_id]);
+        });
+
         this.emit(ConnectionManager.EVENT_CONNECTION_CLOSE);
     }
 
@@ -108,11 +113,11 @@ class ConnectionManager extends EventEmitter {
         }, timeout);
     }
 
-    _resendPendingRequests() {
-        Object.keys(this._pendingRequests).forEach((req_id) => {
-            const req = this._pendingRequests[req_id];
+    _sendBufferedRequests() {
+        while (this._bufferedRequests.length > 0) {
+            const req = this._bufferedRequests.shift();
             this.send(req.data);
-        });
+        }
     }
 
     async send(data, timeout) {
