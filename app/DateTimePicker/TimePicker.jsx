@@ -12,24 +12,16 @@ import CloseCircle from '../icons/ic-close-circle.svg';
 const TimeIcon = Wrapper(Time);
 const CloseCircleIcon = Wrapper(CloseCircle);
 
-const isBeforeDate = (compare_moment, start_moment, should_only_check_hour) => {
-    const now_moment = moment.utc(start_moment);
-    if (should_only_check_hour) {
-        now_moment.minute(0).second(0);
-    }
-    return compare_moment.isBefore(now_moment) && now_moment.unix() !== compare_moment.unix();
-};
 const isSessionAvailable = (
-    sessions               = [],
     compare_moment         = moment.utc(),
-    start_moment           = moment.utc(),
+    end_moment           = moment.utc(),
     should_only_check_hour = false,
-) => (
-    !isBeforeDate(compare_moment, undefined, should_only_check_hour)
-    && !isBeforeDate(compare_moment, start_moment, should_only_check_hour)
-        && (!sessions.length
-            || !!sessions.find(session => compare_moment.isBetween(should_only_check_hour ? session.open.clone().minute(0) : session.open, session.close, null, '[]')))
-);
+) => {
+    if (should_only_check_hour) {
+        end_moment.minute(0).second(0);
+    }
+    return compare_moment.isBefore(end_moment);
+};
 
 class TimePickerDropdown extends React.Component {
     constructor(props) {
@@ -85,10 +77,11 @@ class TimePickerDropdown extends React.Component {
     }
 
     render() {
-        const { preClass, value, toggle, start_date, sessions } = this.props;
-        const start_moment       = moment(start_date * 1000 || undefined).utc();
+        const { preClass, value, toggle, start_date } = this.props;
+        const start_moment       = moment(start_date * 1000 || undefined);
         const start_moment_clone = start_moment.clone().minute(0).second(0);
         const [hour, minute]   = (value || '00:00').split(':');
+        const end_moment = moment().utc();
         return (
             <div className={`${preClass}-dropdown ${this.props.className}`}>
                 <div
@@ -113,7 +106,8 @@ class TimePickerDropdown extends React.Component {
                         <div className="list-container">
                             {this.hours.map((h, key) => {
                                 start_moment_clone.hour(h);
-                                const is_enabled = isSessionAvailable(sessions, start_moment_clone, start_moment, true);
+                                const is_enabled = isSessionAvailable(start_moment_clone, end_moment, true);
+
                                 return (
                                     <div
                                         className={`list-item${hour === h ? ' selected' : ''}${is_enabled ? '' : ' disabled'}`}
@@ -134,7 +128,7 @@ class TimePickerDropdown extends React.Component {
                         <div className="list-container">
                             {this.minutes.map((mm, key) => {
                                 start_moment_clone.hour(hour).minute(mm);
-                                const is_enabled = isSessionAvailable(sessions, start_moment_clone, start_moment);
+                                const is_enabled = isSessionAvailable(start_moment_clone, end_moment);
                                 return (
                                     <div
                                         className={`list-item${minute === mm ? ' selected' : ''}${is_enabled ? '' : ' disabled'}`}
@@ -165,9 +159,16 @@ class TimePicker extends React.Component {
         document.addEventListener('mousedown', this.handleClickOutside);
     }
 
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.focus) {
+            this.toggleDropDown();
+        }
+    }
+
     componentWillUnmount() {
         document.removeEventListener('mousedown', this.handleClickOutside);
     }
+
 
     toggleDropDown = () => {
         const is_open = this.state.is_open;

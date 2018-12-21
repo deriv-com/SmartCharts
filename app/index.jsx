@@ -123,7 +123,13 @@ class App extends Component {
             ConnectionManager.EVENT_CONNECTION_REOPEN,
             () => this.setState({ isConnectionOpened: true }),
         );
-        this.state = { settings, isConnectionOpened: true, endEpoch };
+        this.state = {
+            settings,
+            endEpoch,
+            chartType: undefined,
+            granularity: undefined,
+            isConnectionOpened: true,
+        };
     }
 
     /*
@@ -164,6 +170,10 @@ class App extends Component {
             window.location.href = `${origin}${pathname}?${url.toString()}`;
         }
         if (settings.historical) {
+            this.setState({
+                chartType: 'mountain',
+                granularity: 0,
+            });
             this.cleanComparison();
             window.location.reload(false);
         } else {
@@ -190,8 +200,21 @@ class App extends Component {
     renderControls = () => (
         <>
             {isMobile ? '' : <CrosshairToggle />}
-            <ChartTypes />
-            <Timeperiod />
+            <ChartTypes
+                onChange={(type) => {
+                    console.log('type', type);
+                    this.setState({
+                        chartType: type,
+                    });
+                }}
+            />
+            <Timeperiod
+                onChange={(timePeriod) => {
+                    this.setState({
+                        granularity: timePeriod,
+                    });
+                }}
+            />
             <StudyLegend />
             {this.state.settings.historical ? '' : <Comparison />}
             <DrawTools />
@@ -223,8 +246,8 @@ class App extends Component {
                 requestForget={requestForget}
                 settings={settings}
                 endEpoch={endEpoch}
-                chartType={settings.historical ? 'mountain' : undefined}
-                granularity={settings.historical ? 0 : undefined}
+                chartType={this.state.chartType}
+                granularity={this.state.granularity}
                 onSettingsChange={this.saveSettings}
                 isConnectionOpened={isConnectionOpened}
             />

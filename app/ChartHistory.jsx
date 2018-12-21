@@ -9,18 +9,26 @@ class ChartHistory extends React.Component {
         super(props);
         this.state = {
             date: moment().format('YYYY/MM/DD'),
+            focusOnDate: false,
+            focusOnTime: false,
             time: '00:00',
         };
     }
 
+    componentDidMount() {
+        this.setState({
+            focusOnDate: true,
+        });
+    }
+
     onChangeDate({ target }) {
         const date = target.value;
-        this.setState({ date }, this.updateStore);
+        this.setState({ date, focusOnDate: false, focusOnTime: true });
     }
 
     onChangeTime({ target }) {
         const time = target.value;
-        this.setState({ time }, this.updateStore);
+        this.setState({ time, focusOnDate: false, focusOnTime: false }, this.updateStore);
     }
 
     updateStore() {
@@ -36,6 +44,7 @@ class ChartHistory extends React.Component {
                     placeholder={t.translate('select date')}
                     name="date"
                     format="DD MMMM YYYY"
+                    focus={this.state.focusOnDate}
                     has_today_btn
                     value={this.state.date}
                     onChange={e => this.onChangeDate(e)}
@@ -45,7 +54,9 @@ class ChartHistory extends React.Component {
                 <TimePicker
                     placeholder="time"
                     name="time"
+                    focus={this.state.focusOnTime}
                     is_clearable
+                    start_date={moment(this.state.date, 'YYYY/MM/DD').valueOf() / 1000}
                     value={this.state.time}
                     onChange={e => this.onChangeTime(e)}
                 />

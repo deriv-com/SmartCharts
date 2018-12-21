@@ -43,16 +43,21 @@ export default class DatePicker extends React.PureComponent {
         super(props);
         this.state = {
             value                : props.value || '',
-            is_datepicker_visible: false,
+            is_datepicker_visible: props.focus || false,
         };
     }
-
 
     componentWillMount() {
         document.addEventListener('click', this.onClickOutside, true);
     }
 
-    componentWillReceiveProps({ value, mode }) {
+    componentWillReceiveProps({ value, mode, focus }) {
+        if (typeof focus === 'boolean') {
+            this.setState({
+                is_datepicker_visible: focus,
+            });
+        }
+
         if (value === this.state.value) return;
         this.updateDatePickerValue(value, mode);
     }
@@ -69,9 +74,6 @@ export default class DatePicker extends React.PureComponent {
     onClickOutside = (e) => {
         if (!this.mainNode.contains(e.target) && this.state.is_datepicker_visible) {
             this.setState({ is_datepicker_visible: false });
-            if (!!this.state.value && this.props.mode !== 'duration') {
-                this.updateDatePickerValue(formatDate(this.state.value));
-            }
         }
     }
 
