@@ -283,7 +283,6 @@ class ChartStore {
     }
 
     onMarketOpenClosedChange = (changes) => {
-        console.log('onMarketOpenClosedChange');
         const symbolObjects = this.stxx.getSymbols().map(item => item.symbolObject);
         let shouldRefreshChart = false;
         for (const { symbol, name } of symbolObjects) {
