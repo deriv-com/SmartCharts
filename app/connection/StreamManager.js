@@ -87,7 +87,7 @@ class StreamManager {
 
     _forgetStream(key) {
         const stream = this._streams[key];
-        if (stream) {
+        if (stream && stream.subscriberCount !== 0) {
             // Note that destroying a stream also removes all subscribed events
             stream.destroy();
             delete this._streams[key];
