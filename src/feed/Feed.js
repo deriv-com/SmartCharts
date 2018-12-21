@@ -13,6 +13,7 @@ class Feed {
     get endEpoch() { return this._mainStore.state.endEpoch; }
     get granularity() { return this._mainStore.chart.granularity; }
     get context() { return this._mainStore.chart.context; }
+    get loader() { return this._mainStore.loader; }
     _activeStreams = {};
     _isConnectionOpened = true;
 
@@ -94,6 +95,7 @@ class Feed {
         }
         const comparisonChartSymbol = isComparisonChart ? symbol : undefined;
         const symbolName = symbolObject.name;
+        this.loader.setState('chart-data');
 
         if (this._tradingTimes.isFeedUnavailable(symbol)) {
             this._mainStore.notifier.notifyFeedUnavailable(symbolName);
@@ -172,7 +174,6 @@ class Feed {
             callback({ quotes: [] });
             return;
         }
-
         callback({ quotes });
 
         this._emitDataUpdate(quotes, comparisonChartSymbol);
