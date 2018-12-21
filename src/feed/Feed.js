@@ -95,6 +95,7 @@ class Feed {
         }
         const comparisonChartSymbol = isComparisonChart ? symbol : undefined;
         const symbolName = symbolObject.name;
+        this.loader.setState('chart-data');
 
         if (this._tradingTimes.isFeedUnavailable(symbol)) {
             this._mainStore.notifier.notifyFeedUnavailable(symbolName);
@@ -173,7 +174,6 @@ class Feed {
             callback({ quotes: [] });
             return;
         }
-        this.loader.setState('chart-data');
         callback({ quotes });
 
         this._emitDataUpdate(quotes, comparisonChartSymbol);

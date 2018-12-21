@@ -98,6 +98,9 @@ class ChartStore {
     }
 
     init = (rootNode, modalNode, props) => {
+        this.loader.show();
+        this.loader.setState('chart-engine');
+
         if (window.CIQ) {
             this._initChart(rootNode, modalNode, props);
         } else {
@@ -217,14 +220,13 @@ class ChartStore {
 
         // TODO: excluded studies
 
-        this.loader.show();
-        this.loader.setState('chart-engine');
-
         const studiesStore = this.mainStore.studies;
         stxx.callbacks.studyOverlayEdit = studiesStore.editStudy;
         stxx.callbacks.studyPanelEdit = studiesStore.editStudy;
 
+        this.loader.setState('market-symbol');
         this.activeSymbols.retrieveActiveSymbols().then(() => {
+            this.loader.setState('trading-time');
             this.tradingTimes.initialize().then(action(() => {
                 // In the odd event that chart is destroyed by the time
                 // the request finishes, just calmly return...
@@ -241,7 +243,6 @@ class ChartStore {
                 }
 
                 this.context = context;
-                this.loader.setState('market-symbol');
 
                 stxx.container.addEventListener('mouseenter', this.onMouseEnter);
                 stxx.container.addEventListener('mouseleave', this.onMouseLeave);
@@ -258,7 +259,6 @@ class ChartStore {
                     }
                 });
 
-                this.loader.setState('trading-time');
                 this.tradingTimes.onMarketOpenCloseChanged(this.onMarketOpenClosedChange);
 
                 setTimeout(action(() => {
