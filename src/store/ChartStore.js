@@ -38,7 +38,6 @@ class ChartStore {
     stxx = null;
     api = null;
     defaults = {
-        symbol: 'R_100',
         granularity: 0,
         chartType: 'mountain',
     };
@@ -235,7 +234,8 @@ class ChartStore {
 
                 if (!isRestoreSuccess) {
                     this.changeSymbol(
-                        symbol || this.defaults.symbol,
+                        // default to first available symbol
+                        symbol || Object.keys(this.activeSymbols.symbolMap)[0],
                         this.granularity,
                     );
                 }
@@ -433,7 +433,7 @@ class ChartStore {
     setMainSeriesDisplay(name) {
         // Set display name of main series (to be shown in crosshair tooltip)
         this.stxx.chart.seriesRenderers._main_series.seriesParams[0].display = name;
-        // TODO, we use to use `field` field to recgnize main seris and show 
+        // TODO, we use to use `field` field to recgnize main seris and show
         // it's crosshair, as in ChartIQ 6.2.2 they are going to remove this field
         // we should find another way of detecting main series price, till then
         // we found this temporary solution.
