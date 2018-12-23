@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Italian\n"
 "Language: it_IT\n"
-"PO-Revision-Date: 2018-12-21 08:01\n"
+"PO-Revision-Date: 2018-12-23 09:41\n"
 
 msgid " already exists."
 msgstr "Già esistente."
@@ -235,7 +235,7 @@ msgid "RESET"
 msgstr "REIMPOSTA"
 
 msgid "Retrieving Chart Data..."
-msgstr ""
+msgstr "Recupero dati del grafico in corso..."
 
 msgid "Retrieving Chart Engine..."
 msgstr ""
