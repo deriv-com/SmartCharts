@@ -1,26 +1,10 @@
 <svg  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24" height="16" viewBox="0 0 24 16">
-  <defs>
-    <clipPath id="clip-path" transform="translate(0 0)">
-      <polyline points="0 0 8 0 8 16 0 16 0 0" fill="none"/>
-    </clipPath>
-    <clipPath id="clip-path-2" transform="translate(0 0)">
-      <polyline points="16 0 24 0 24 16 16 16 16 0" fill="none"/>
-    </clipPath>
-    <clipPath id="clip-path-3" transform="translate(0 0)">
-      <polyline points="8 0 16 0 16 16 8 16 8 0" fill="none"/>
-    </clipPath>
-    <clipPath id="clip-path-4" transform="translate(0 0)">
-      <polyline points="0 0 24 0 24 16 0 16 0 0" fill="none"/>
-    </clipPath>
-  </defs>
   <title>italy</title>
   <g>
     <g>
-      <path d="M2,0H0V16H2a2,2,0,0,1-2-2V2A2,2,0,0,1,2,0" transform="translate(0 0)" fill="#fff"/>
       <path d="M8,1H2.5A1.5,1.5,0,0,0,1,2.5v11A1.5,1.5,0,0,0,2.5,15H8V1M2.5,0H2A2,2,0,0,0,0,2V14a2,2,0,0,0,2,2h.5A2.5,2.5,0,0,1,0,13.5H0V2.5H0A2.5,2.5,0,0,1,2.5,0" transform="translate(0 0)" fill="#1bb65d"/>
     </g>
     <g>
-      <path d="M24,14a2,2,0,0,1-2,2h2V14M24,0H22a2,2,0,0,1,2,2V0" transform="translate(0 0)" fill="#fff"/>
       <path d="M21.5,1H16V15h5.5A1.5,1.5,0,0,0,23,13.5V2.5A1.5,1.5,0,0,0,21.5,1M22,0h-.5A2.5,2.5,0,0,1,24,2.5v11A2.5,2.5,0,0,1,21.5,16H22a2,2,0,0,0,2-2V2a2,2,0,0,0-2-2" transform="translate(0 0)" fill="#e43d4c"/>
     </g>
     <g>

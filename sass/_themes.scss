@@ -20,7 +20,7 @@ $COLOR_LIGHT_BLUE  : #1565c0;
 $COLOR_BLUE        : #2a3052;
 $COLOR_DARK_BLUE   : #15212d;
 $COLOR_DARK_GRAY   : #d2d3da;
-$COLOR_LIGHT_BLACK : #333333;
+$COLOR_LIGHT_BLACK : #5c5c5c;
 $COLOR_BLACK       : #000000;
 
 // Dark Theme Colors
@@ -36,6 +36,7 @@ $themes: (
         DefaultBg:  $COLOR_WHITE,
         DefaultText: $COLOR_LIGHT_BLACK,
         DefaultBorder: $COLOR_GRAY,
+        Loading: $COLOR_BLACK,
         ChartBg: $COLOR_WHITE,
         ChartBorder: $COLOR_GRAY,
         ChartText: $COLOR_DARK_GRAY,
@@ -52,11 +53,16 @@ $themes: (
         MenuHoverIconBg: $COLOR_BRAND_BLUE_5,
         MenuActiveBg: $COLOR_BRAND_BLUE_5,
         MenuActiveText: $COLOR_LIGHT_BLACK,
+        MenuActiveIcon: $COLOR_BLUE,
         MenuActiveBorder: $COLOR_BLUE,
         ChartTitleBg: $COLOR_WHITE,
         ChartTitleText: $COLOR_BLUE,
         ChartTitleBorder: $COLOR_GRAY,
+        ChartTitleArrow: $COLOR_LIGHT_BLACK,
         ChartTitlePriceText: $COLOR_LIGHT_BLACK,
+        ChartTitleSymbolText: $COLOR_BLUE,
+        ChartTitleActiveArrow: $COLOR_BLUE,
+        ListScroll: $COLOR_BRANDBLUE_40,
         ListLiBg: $COLOR_WHITE,
         ListLiText: $COLOR_LIGHT_BLACK,
         ListLiBorder: $COLOR_GRAY,
@@ -75,6 +81,7 @@ $themes: (
         DialogFootText: $COLOR_LIGHT_BLACK,
         DialogFootBorder: $COLOR_WHITE,
         DialogSettingBodyBg: $COLOR_WHITE,
+        DialogOverlay: rgba($COLOR_WHITE, 0.7),
         ChartTypeText: $COLOR_LIGHT_BLACK,
         ChartTypeListIcon: $COLOR_LIGHT_BLACK,
         ChartTypeActiveListIcon: $COLOR_BLUE,
@@ -96,8 +103,9 @@ $themes: (
         DropdownText: $COLOR_LIGHT_BLACK,
         DropdownBg: $COLOR_WHITE,
         DropdownBorder: $COLOR_GRAY,
-        DropdownActiveBg: $COLOR_WHITE,
-        DropdownActiveText: $COLOR_WHITE,
+        DropdownActiveBg: $COLOR_BRAND_BLUE_5,
+        DropdownActiveText: $COLOR_BLUE,
+        DropdownActiveBorder: $COLOR_BLUE,
         SliderText: $COLOR_BLUE,
         SliderHandleBg: $COLOR_WHITE,
         SliderHandleBorder: $COLOR_BLUE,
@@ -158,6 +166,7 @@ $themes: (
         DefaultBg:              $COLOR_BLUE,
         DefaultText:            $COLOR_WHITE,
         DefaultBorder:          $COLOR_BRANDBLUE_85,
+        Loading: $COLOR_WHITE,
         ChartBg: $COLOR_BLUE,
         ChartBorder: $COLOR_BRANDBLUE_85,
         ChartText: $COLOR_BRANDBLUE_85,
@@ -179,7 +188,11 @@ $themes: (
         ChartTitleBg: $COLOR_BLUE,
         ChartTitleText: $COLOR_BRANDBLUE_40,
         ChartTitleBorder: $COLOR_BRANDBLUE_85,
+        ChartTitleArrow: $COLOR_BRANDBLUE_40,
         ChartTitlePriceText: $COLOR_BRANDBLUE_95,
+        ChartTitleSymbolText: $COLOR_WHITE,
+        ChartTitleActiveArrow: $COLOR_WHITE,
+        ListScroll: $COLOR_BRANDBLUE_40,
         ListLiBg: $COLOR_BLUE,
         ListLiText: $COLOR_BRANDBLUE_40,
         ListLiBorder: $COLOR_BRANDBLUE_85,
@@ -198,6 +211,7 @@ $themes: (
         DialogFootText: $COLOR_WHITE,
         DialogFootBorder: $COLOR_BRANDBLUE_95,
         DialogSettingBodyBg: $COLOR_BRANDBLUE_95,
+        DialogOverlay: rgba($COLOR_BLUE, 0.7),
         ChartTypeText: $COLOR_BRANDBLUE_40,
         ChartTypeListIcon: $COLOR_BRANDBLUE_40,
         ChartTypeActiveListIcon: $COLOR_WHITE,
@@ -221,6 +235,7 @@ $themes: (
         DropdownBorder: $COLOR_BRANDBLUE_85,
         DropdownActiveBg: $COLOR_BRANDBLUE_85,
         DropdownActiveText: $COLOR_BRANDBLUE_40,
+        DropdownActiveBorder: $COLOR_WHITE,
         SliderText: $COLOR_WHITE,
         SliderHandleBg: $COLOR_BLUE,
         SliderHandleBorder: $COLOR_WHITE,
@@ -294,4 +309,3 @@ $themes: (
 @function themed($key) {
     @return map-get($theme-map, $key);
 }
-

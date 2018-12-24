@@ -1,6 +1,4 @@
 /* eslint-disable no-new, react/jsx-indent, react/no-danger, react/jsx-indent-props */
-import '@babel/polyfill';
-
 import Barrier from './components/Barrier.jsx';
 import PendingPromise from './utils/PendingPromise';
 import ChartTypes from './components/ChartTypes.jsx';
@@ -20,8 +18,11 @@ import AssetInformation from './components/AssetInformation.jsx';
 import Marker from './components/Marker.jsx';
 import CurrentSpot from './components/CurrentSpot.jsx';
 import { createObjectFromLocalStorage } from './utils';
+import { logEvent, LogCategories, LogActions } from './utils/ga';
 
-import './SplinePlotter';
+function setSmartChartsPublicPath(path) {
+    __webpack_public_path__ = path; // eslint-disable-line
+}
 
 export {
     AssetInformation,
@@ -37,12 +38,16 @@ export {
     DrawTools,
     Marker,
     PendingPromise,
+    setSmartChartsPublicPath,
     Share,
     SmartChart,
     StudyLegend,
     Timeperiod,
     CurrentSpot,
     Views,
+    logEvent,
+    LogCategories,
+    LogActions,
 };
 
 export default {
@@ -59,10 +64,14 @@ export default {
     DrawTools,
     Marker,
     PendingPromise,
+    setSmartChartsPublicPath,
     Share,
     SmartChart,
     StudyLegend,
     Timeperiod,
     CurrentSpot,
     Views,
+    logEvent,
+    LogCategories,
+    LogActions,
 };

@@ -101,7 +101,7 @@ describe('Test mergeTickHistory (Ticks)', () => {
         msg_type: 'history',
     };
     it('Merge 2 cleanly divided tick arrays', () => {
-        const b = {
+        const b = { history: {
             prices: [
                 '184.7690',
                 '184.7956',
@@ -116,19 +116,19 @@ describe('Test mergeTickHistory (Ticks)', () => {
                 '1532340078',
                 '1532340080',
             ],
-        };
-        expect(() => mergeTickHistory(partA.history, b))
+        } };
+        expect(() => mergeTickHistory(partA, b))
             .to.throw('Cannot merge tick data with no overlaps!');
     });
 
     it('Merge 2 overlapping tick data arrays', () => {
-        const merged = mergeTickHistory(partA.history, partB.history);
-        expect(merged).to.deep.equal(fullTickHistoryResponse.history);
+        const merged = mergeTickHistory(partA, partB);
+        expect(merged.history).to.deep.equal(fullTickHistoryResponse.history);
     });
 
     it('Merge 2 overlapping tick data arrays, swap order but result must be the same', () => {
-        const merged = mergeTickHistory(partB.history, partA.history);
-        expect(merged).to.deep.equal(fullTickHistoryResponse.history);
+        const merged = mergeTickHistory(partB, partA);
+        expect(merged.history).to.deep.equal(fullTickHistoryResponse.history);
     });
 });
 
@@ -335,8 +335,8 @@ describe('Test mergeTickHistory (Candles)', () => {
             },
             msg_type: 'candles',
         };
-        const merged = mergeTickHistory(partA.candles, partB.candles);
-        expect(merged).to.deep.equal(full.candles);
+        const merged = mergeTickHistory(partA, partB);
+        expect(merged.candles).to.deep.equal(full.candles);
     });
 
     it('Merge 2 overlapping candle data arrays; patch future', () => {
@@ -457,8 +457,8 @@ describe('Test mergeTickHistory (Candles)', () => {
             },
             msg_type: 'candles',
         };
-        const merged = mergeTickHistory(partB.candles, partA.candles);
-        expect(merged).to.deep.equal(full.candles);
+        const merged = mergeTickHistory(partB, partA);
+        expect(merged.candles).to.deep.equal(full.candles);
     });
 
     const smallGapPartA = {
@@ -566,8 +566,8 @@ describe('Test mergeTickHistory (Candles)', () => {
     };
 
     it('Merge 2 overlapping candle data arrays; patch future (1 overlap, PartB takes precedence)', () => {
-        const merged = mergeTickHistory(smallGapPartA.candles, smallGapPartB.candles);
-        expect(merged).to.deep.equal(full.candles);
+        const merged = mergeTickHistory(smallGapPartA, smallGapPartB);
+        expect(merged.candles).to.deep.equal(full.candles);
     });
 
     it('Merge 2 overlapping candle data arrays; patch future (1 overlap, PartA takes precedence)', () => {
@@ -644,8 +644,8 @@ describe('Test mergeTickHistory (Candles)', () => {
             },
         ];
         // second parameter will always take precedence over first!
-        const merged = mergeTickHistory(smallGapPartB.candles, smallGapPartA.candles);
-        expect(merged).to.deep.equal(otherFull);
+        const merged = mergeTickHistory(smallGapPartB, smallGapPartA);
+        expect(merged.candles).to.deep.equal(otherFull);
     });
 
     it('Cannot merge candle data with no overlaps', () => {
@@ -704,7 +704,7 @@ describe('Test mergeTickHistory (Candles)', () => {
             },
             msg_type: 'candles',
         };
-        expect(() => mergeTickHistory(smallGapPartA.candles, incompleteB.candles))
+        expect(() => mergeTickHistory(smallGapPartA, incompleteB))
             .to.throw('Candle data cannot be merged!');
     });
 });

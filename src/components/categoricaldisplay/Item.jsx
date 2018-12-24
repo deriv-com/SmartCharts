@@ -50,12 +50,6 @@ const ActiveOptions = ({ activeOptions, item }) => (
     )
 );
 
-export const BlankItem = () => (
-    <div
-        className="cq-item"
-    />
-);
-
 export const NormalItem = ({ onSelectItem, item, favoritesId }) => (
     <div
         className={`cq-item ${item.selected ? 'selected ' : ''}`}

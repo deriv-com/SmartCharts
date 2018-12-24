@@ -6,7 +6,8 @@
         overflow: visible !important;
 
         .body {
-            padding: 0px 5px 0px 16px;
+            padding: 0px 7px 0px 16px;
+            overflow: visible;
 
             .cq-draw-buttons {
                 display: flex;
@@ -16,18 +17,19 @@
                 display: flex;
                 justify-content: center;
                 cursor: pointer;
-                margin: 8px 11px 8px 0;
+                margin: 8px 0;
                 border-radius: 3px;
 
-                @include svg-icon-stroke('DialogHeadIcon');
-                @include themify {
+                @include themify($themes) {
                     border: solid themed('DropdownBorder') 1px;
                 }
             }
-            .scrollbar-container {
-                .ciq-list-item {
-                    &:first-child {
-                        margin-top: 0px;
+            .ciq-list {
+                max-height: 260px;
+
+                .cq-draw-buttons + .ciq-list-item {
+                    @include themify($themes) {
+                        border-top: 1px solid themed('DropdownBorder');
                     }
                 }
             }

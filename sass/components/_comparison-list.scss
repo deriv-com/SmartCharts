@@ -2,10 +2,9 @@
 .cq-comparison {
     $icon-size: 1.3em;
     position: relative;
-    width: fit-content;
     margin-top: 25px;
     margin-left: 12px;
-    display: block;
+    display: inline-block;
 
     .cq-comparison-label {
         margin-left: 0.8em;
@@ -38,7 +37,7 @@
                 background: themed('ComparisonItemHoverBg');
             }
 
-            svg, path, g {
+            svg {
                 @include themify($themes) {
                     fill: themed('ComparisonItemIcon');
                 }

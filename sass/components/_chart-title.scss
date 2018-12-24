@@ -17,7 +17,12 @@
                 display: block;
                 margin-right: 0px;
                 width: 24px;
-                transform: scale(1);
+
+                svg {
+                    @include themify($themes) {
+                        fill: themed('ChartTitleArrow');
+                    }
+                }
             }
         }
         &.stxMenuActive > .cq-menu-btn > .cq-symbol-select-btn {
@@ -26,7 +31,13 @@
             }
 
             > .ic-icon.cq-symbol-dropdown {
-                transform: rotate(180deg);
+                svg {
+                    transform: rotate(180deg);
+
+                    @include themify($themes) {
+                        fill: themed('ChartTitleActiveArrow');
+                    }
+                }
             }
         }
     }
@@ -50,6 +61,11 @@
 
         > .ic-icon.cq-symbol-dropdown {
             display: none;
+            position: relative;
+
+            svg {
+                transition: transform 0.2s ease-in-out;
+            }
         }
         > .ic-icon, > .ic-frx, > .ic-wld, > .ic-otc {
             height: $large-icon-size;
@@ -67,10 +83,8 @@
             flex-direction: column;
 
             .cq-market {
-                font-size: 12px;
-                font-weight: bold;
+                font-size: 10px;
                 line-height: 1.5;
-                width: fit-content;
             }
         }
         .cq-symbol,
@@ -87,8 +101,10 @@
             text-align: left;
         }
         .cq-symbol {
-            font-size: 16px;
-            font-weight: 700;
+            font-weight: bold;
+            @include themify($themes) {
+                color: themed('ChartTitleSymbolText');
+            }
         }
         .cq-chart-price > * {
             position: relative;
@@ -96,21 +112,6 @@
         .cq-chart-price {
             margin-left: 9px;
             vertical-align: text-bottom;
-            /* Up/Down Arrow indicators */
-            .cq-change {
-                &:after {
-                    float: left;
-                    margin-top: 5px;
-                    margin-right: 5px;
-                    @include triangle-base(6px);
-                }
-                &.up:after {
-                    border-bottom: 8px solid rgb(76, 175, 80);
-                }
-                &.down:after {
-                    border-top: 8px solid rgb(249, 84, 84);
-                }
-            }
         }
     }
     .cq-menu-dropdown {
@@ -130,11 +131,11 @@
 }
 
 /* Mobile Style */
-.smartcharts.smartcharts-mobile {
+.smartcharts-mobile {
     .cq-top-ui-widgets {
         width: 100%;
         padding: 0px;
-        margin: 0px;
+        margin: 0 !important;
         z-index: 3;
     }
     .cq-chart-title {
@@ -148,7 +149,6 @@
         }
         .cq-menu-dropdown {
             width: 100%;
-            transition: none !important;
 
             &.open {
                 margin: 0px;

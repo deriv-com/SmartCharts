@@ -10,27 +10,20 @@
     box-sizing: border-box;
     text-align: center;
 
-    &.brand-blue {
-        svg path {
-            fill: #2a3052;
+    &.ciq-favorite, &.ic-favorite {
+        svg {
+            fill: none !important;
+            @include themify($themes) {
+                stroke: themed('MenuIcon');
+            }
         }
     }
     &.ciq-active-favorite {
-        svg > g > g > path {
+        svg {
             @include themify($themes) {
                 fill: themed('StarIconFav') !important;
                 stroke: themed('StarIconFav') !important;
             }
-        }
-    }
-    &.ic-clear {
-        background: #4b5794;
-
-        &.fill svg path {
-            fill: #ffffff;
-        }
-        &.stroke svg path {
-            stroke: #ffffff;
         }
     }
     &.margin {
@@ -54,47 +47,46 @@
     }
 }
 
-.ciq-tooltip {
-    position: relative;
-    font-size: 12px;
+.cq-chart-controls .cq-menu-btn,
+.cq-filter,
+.cq-active-options,
+.titlebar > .icons,
+.cq-draw-button,
+.cq-lookup-input,
+.template-name,
+.ciq-views .ciq-list-item,
+.ciq-chart-dialog,
+.cq-menu-dropdown .title, // Close icon right of dropdown title in mobile mode
+.ciq-chart-types .ciq-list-item {
+    .ic-icon > svg {
+        @include themify($themes) {
+            fill: themed('MenuIcon');
+            stroke: themed('MenuIcon');
+        }
+    }
+}
 
-    &:after {
-        position: absolute;
-        opacity: 0;
-        pointer-events: none;
-        height: 16px;
-        width: 65px;
-        line-height: 16px;
-        bottom: 32px;
-        content: attr(tooltip-title);
-        left: -100%;
-        padding: 8px;
-        z-index: 98;
-        transition: opacity 0.3s;
-        border-radius: 4px;
-        @include themify($themes) {
-            color: themed('TooltipText');
-            background: themed('TooltipBg');
-            box-shadow: themed('TooltipShadow');
-        }
+.stx-ico-up {
+    transform: rotate(180deg); // reuse the down icon by rotating the up icon
+}
+
+.stx-btn-panel > span > svg {
+    @include themify($themes) {
+        fill: themed('MenuIcon');
+        stroke: themed('MenuIcon');
     }
-    &:before {
-        position: absolute;
-        opacity: 0;
-        pointer-events: none;
-        border: solid;
-        border-width: 4px 4px 0px;
-        bottom: 28px;
-        content: '';
-        left: 40%;
-        z-index: 99;
-        transition: opacity 0.3s;
+}
+
+.cq-chart-controls .stxMenuActive .cq-menu-btn .ic-icon,
+.cq-lookup-input > input:focus + .ic-icon,
+.ciq-aggregate-setting > .ic-icon:hover,
+.cq-active-options .ic-icon:hover,
+.ciq-chart-types .ciq-list-item .active.ic-icon {
+    svg {
         @include themify($themes) {
-            border-color: themed('TooltipBg') transparent;
+            fill: themed('MenuActiveIcon');
+            stroke: themed('MenuActiveIcon');
         }
-    }
-    &:hover:after, &:hover:before {
-        opacity: 1;
     }
 }
 
@@ -138,24 +130,19 @@
     }
 }
 
-.ic-frxXPDUSD > svg > g > g > g > path:first-child {
-    fill: #e9eaf0;
-}
-
-.ic-frxXPTUSD > svg > g > g > g > path:first-child {
-    fill: #f4f3f3;
-}
-
-.ic-frxXAGUSD > svg > g > g > g > path:first-child {
-    fill: #e1e1e1;
-}
-
-.no-stroke {
-    stroke: none !important;
-}
-
-.no-fill {
-    fill: none !important;
+.ic-icon {
+    &.ic-frxXAUUSD > svg {
+        fill: #ffd700;
+    }
+    &.ic-frxXPDUSD > svg {
+        fill: #e9eaf0;
+    }
+    &.ic-frxXPTUSD > svg {
+        fill: #f4f3f3;
+    }
+    &.ic-frxXAGUSD > svg {
+        fill: #e1e1e1;
+    }
 }
 
 .smartcharts-mobile {

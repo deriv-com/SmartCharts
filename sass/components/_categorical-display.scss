@@ -3,17 +3,21 @@
     width: 632px;
     padding: 0 !important;
     display: flex;
+    height: 100%;
     text-align: left;
     overflow: hidden;
-    transition: opacity 1s;
     border-radius: 3px;
-    box-shadow: 0px, 2px, 4px, rgba(0, 0, 0, 0.2);
     @include themify($themes) {
         color: themed('CatDisplayText');
     }
 
     .cq-lookup-filters {
         width: 34%;
+        @include themify($themes) {
+            background: themed('CatDisplayFilterBg');
+        }
+    }
+    .cq-filter-panel {
         @include themify($themes) {
             background: themed('CatDisplayFilterBg');
         }
@@ -72,40 +76,20 @@
             font-size: 9px;
             top: 7px;
             transition: right, opacity 0.2s ease-in-out;
-            @include svg-icon-color('CatDisplayFilterIcon');
-        }
-        > input:focus + .ic-icon svg path {
-            @include themify($themes) {
-                fill: themed('CatDisplayFilterIcon');
-            }
         }
     }
     .category {
-        padding-top: 40px;
-        padding-bottom: 3em;
+        padding-top: 3em;
+        padding-bottom: 1em;
+        padding-right: 1em;
         position: relative;
 
         &:last-child {
             padding-bottom: 2.5em;
         }
-        &.category-active {
-            .category-content {
-                .cq-active-item {
-                    .cq-active-options {
-                        .ic-icon {
-                            path {
-                                @include themify($themes) {
-                                    fill: themed('CatDisplayCatContentIcon');
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
     }
     .category-content {
-        margin: 0.4em 1em 0em;
+        margin: 0.4em 0.3em 0em 1em;
         border-radius: 3px;
         @include themify($themes) {
             background-color: themed('CatDisplayCatContentBg');
@@ -113,12 +97,12 @@
         }
     }
     .subcategory {
-        font-weight: 500;
         padding: 0 0 0 1.2em;
-        font-size: 1.1em;
+        font-size: 12px;
         border-radius: 3px 3px 0 0;
         display: flex;
         height: 40px;
+        font-weight: bold;
         align-items: center;
         @include themify($themes) {
             color: themed('CatDisplayCatContentTitleText');
@@ -126,25 +110,38 @@
     }
     .category-title {
         display: block;
-        font-size: 1.4em;
-        font-weight: 500;
+        font-size: 12px;
+        font-weight: bold;
         padding: 0 0.7em;
-        line-height: 38px;
+        line-height: 40px;
         position: absolute;
         top: 0;
+        width: 90%;
+        transform: translate3d(0, 0, 0);
         @include themify($themes) {
             color: themed('CatDisplayCatTitleText');
         }
 
-        &.fixed {
-            position: fixed;
-            width: 100%;
-            z-index: 1;
-            top: 0px;
+        &.sticky-top,
+        &.sticky-bottom {
+            z-index: 8;
+            padding-top: 0px;
+            height: 40px;
             @include themify($themes) {
                 background-color: themed('DialogBodyBg');
                 border-bottom: 1px solid themed('CatDisplayCatContentBorder');
             }
+        }
+        &.sticky-bottom {
+            position: absolute;
+            top: auto !important;
+            bottom: 0px !important;
+        }
+        &.sticky-top {
+            position: fixed;
+            top: 0px;
+            z-index: 9;
+            padding-right: 25px;
         }
     }
     .cq-filter {
@@ -170,24 +167,10 @@
             }
 
             .ic-icon {
-                &.ic-active {
-                    path, rect, circle {
-                        @include themify($themes) {
-                            fill: themed('CatDisplayActiveFilterIcon');
-                        }
-                    }
-                }
-                &.ic-forex,
-                &.ic-commodities,
-                &.ic-volidx,
-                &.ic-favorite,
-                &.ic-indicators,
-                &.ic-stocks,
-                &.ic-indices {
-                    path, rect, circle {
-                        @include themify($themes) {
-                            stroke: themed('CatDisplayActiveFilterIcon');
-                        }
+                svg {
+                    @include themify($themes) {
+                        fill: themed('CatDisplayActiveFilterIcon');
+                        stroke: themed('CatDisplayActiveFilterIcon');
                     }
                 }
             }
@@ -199,27 +182,6 @@
             height: $small-icon-size;
             margin-bottom: 2px;
             margin-right: 1.3em;
-
-            &.ic-active {
-                path, rect, circle {
-                    @include themify($themes) {
-                        fill: themed('CatDisplayFilterIcon');
-                    }
-                }
-            }
-            &.ic-forex,
-            &.ic-commodities,
-            &.ic-volidx,
-            &.ic-favorite,
-            &.ic-indicators,
-            &.ic-stocks,
-            &.ic-indices {
-                path, rect, circle {
-                    @include themify($themes) {
-                        stroke: themed('CatDisplayFilterIcon');
-                    }
-                }
-            }
         }
     }
     .cq-item,
@@ -246,20 +208,10 @@
             display: flex;
             align-items: center;
         }
-        .right {
-            .ic-icon.ciq-favorite {
-                path {
-                    @include themify($themes) {
-                        stroke: themed('CatDisplayCatContentIcon');
-                    }
-                }
-            }
-        }
         .closed-market {
             border: 1px solid #f44336;
             color: #f44336;
             padding: 3px 6px;
-            object-fit: contain;
             font-size: 0.64em;
             border-radius: 3px;
         }
@@ -291,6 +243,10 @@
         @include themify($themes) {
             border-left: 1px solid themed('CatDisplayBorder');
         }
+
+        .simplebar-scrollbar {
+            right: 3px;
+        }
     }
     .ciq-item-display {
         display: inline-block;
@@ -300,11 +256,6 @@
         padding: 0.9em 1.2em;
         border-radius: 3px;
     }
-}
-
-.stxMenuActive .cq-categorical-display {
-    opacity: 1;
-    height: 100%;
 }
 
 /* Active Symbol Icons */
@@ -361,13 +312,16 @@
     }
 }
 
-.smartcharts-desktop {
-    &.smartcharts-480 {
+.smartcharts-480 {
+    .smartcharts-desktop {
         .cq-categorical-display {
             width: 450px;
         }
     }
-    &.smartcharts-900 {
+}
+
+.smartcharts-900 {
+    .smartcharts-desktop {
         .cq-categorical-display {
             width: 550px;
         }
@@ -382,18 +336,13 @@
 
         .cq-lookup-filters {
             width: 100%;
-            height: 10.5em;
             border-right: none;
-            max-height: 200px;
-            overflow: hidden;
+            position: relative;
+            z-index: 9;
             transition: max-height 0.2s ease-in;
+            margin-bottom: -2px;
             @include themify($themes) {
                 border-bottom: 1px solid themed('CatDisplaySearchBorder');
-            }
-
-            &.scroll-down {
-                max-height: 0;
-                transition: max-height 0.2s ease-out;
             }
         }
         .cq-lookup-input {
@@ -404,7 +353,7 @@
             width: 100%;
 
             .category:last-child {
-                padding-bottom: 13em;
+                padding-bottom: 3em;
             }
         }
         .cq-item, .cq-active-item {
@@ -417,7 +366,7 @@
             .cq-filter {
                 border-right: none;
                 background: transparent;
-                padding: 0px 20px;
+                padding: 7px 20px;
                 line-height: 3em;
 
                 &.cq-active-filter {

@@ -1,13 +1,11 @@
+$transition-duration: 300ms;
+
 .ciq-menu {
     position: relative;
     @include themify($themes) {
         color: themed('MenuText');
     }
 
-    > .ic-icon,
-    > .cq-toggle {
-        @include svg-icon-color('MenuIcon');
-    }
     > span {
         padding: 0 12px 0 0;
         position: relative;
@@ -22,6 +20,8 @@
 }
 
 .cq-menu-dropdown {
+    display: block;
+    line-height: 2.1em;
     position: absolute;
     overflow: hidden;
     height: auto;
@@ -29,28 +29,21 @@
     bottom: 5em;
     pointer-events: none;
     opacity: 0;
-    z-index: -3;
-    transition: visibility 150ms ease-out, z-index 150ms ease-out, transform 150ms ease-out, opacity 150ms ease-out;
-    box-shadow: 0px, 2px, 4px, rgba(0, 0, 0, 0.2);
+    z-index: 3;
+    transition: transform $transition-duration, opacity $transition-duration;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+    margin-top: 5px;
     @include themify($themes) {
         color: themed('DialogBodyText');
         border: 1px solid themed('DialogBorder');
         background-color: themed('DialogBodyBg');
     }
 
-    &.open {
-        visibility: visible;
-        z-index: 3;
+    &.cq-menu-dropdown-enter-done, &.cq-menu-dropdown-enter-active {
+        opacity: 1;
     }
     &.cq-menu-dropdown-enter-done {
         pointer-events: initial;
-    }
-    /* cq-menu can be once removed from the menu button but no further. Anything further is a sub-menu */
-    .stxMenuActive > &,
-    .stxMenuActive > * > & {
-        opacity: 1;
-        height: auto;
-        margin-top: 5px;
     }
     .title {
         height: 40px;
@@ -75,13 +68,6 @@
         > .ic-icon {
             @include themify($themes) {
                 color: themed('DialogHeadIcon');
-            }
-
-            svg, path, g {
-                @include themify($themes) {
-                    color: themed('DialogHeadIcon');
-                    fill: themed('DialogHeadIcon');
-                }
             }
         }
     }
@@ -119,21 +105,63 @@
         }
     }
     .cq-modal-dropdown {
-        height: inherit;
+        border: none;
         pointer-events: none;
+        z-index: 1;
+        position: fixed;
+        height: inherit;
+        width: 100%;
+        top: 0;
 
-        .cq-menu-overlay {
-            .cq-menu-dropdown {
-                bottom: 0;
-                box-shadow: none;
-                border-radius: 0;
-                width: 100%;
-                position: absolute;
+        &.stxMenuActive {
+            z-index: 2;
+        }
+        &.ciq-studies, &.cq-comparison-new, &.cq-chart-title {
+            .cq-menu-overlay .cq-menu-dropdown {
+                /* for studies and comparison dropdown, fill screen in mobile */
+                height: 100%;
 
-                .icon-close-menu {
-                    pointer-events: initial;
-                    opacity: 1;
+                .title {
+                    border-bottom: none !important;
                 }
+            }
+        }
+        .cq-menu-overlay {
+            position: relative;
+            transition: opacity $transition-duration;
+            background: rgba(0, 0, 0, 0.3);
+            height: inherit;
+            width: 100%;
+            padding: 0;
+            opacity: 0;
+        }
+        &.stxMenuActive .cq-menu-overlay {
+            opacity: 1;
+            pointer-events: initial;
+            visibility: visible;
+        }
+        &.cq-chart-title .cq-menu-dropdown {
+            transform: translateY(-3em);
+        }
+        .cq-scroll-panel {
+            border-left: none;
+        }
+        .cq-menu-dropdown {
+            height: auto;
+            bottom: 0;
+            box-shadow: none;
+            border-radius: 0;
+            width: 100%;
+            position: absolute;
+            transform: translateY(3em);
+            border: none;
+
+            &.cq-menu-dropdown-enter-done, &.cq-menu-dropdown-enter-active {
+                transform: translateY(0em);
+            }
+            .icon-close-menu {
+                pointer-events: initial;
+                opacity: 1;
             }
         }
     }

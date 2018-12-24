@@ -1,4 +1,5 @@
 import Stream from './Stream';
+import { mergeTickHistory } from './tickUtils';
 
 class StreamManager {
     MAX_CACHE_TICKS = 5000;
@@ -136,16 +137,23 @@ class StreamManager {
         }
 
         let tickHistoryResponse = this._tickHistoryCache[key];
-        if (tickHistoryResponse) {
-            // TODO: expand/slice tick data if cached ticks does not fit in date range
-            // If cache data is available, send a copy otherwise we risk
-            // mutating the cache outside of StreamManager
-            tickHistoryResponse = StreamManager.cloneTickHistoryResponse(tickHistoryResponse);
-        } else {
+        if (!tickHistoryResponse) {
             tickHistoryResponse = await this._tickHistoryPromises[key];
         }
 
-        callback(tickHistoryResponse);
+        const responseStart = tickHistoryResponse.echo_req.start;
+        if (responseStart > request.start) { // request needs more data
+            const patchRequest = { ...request };
+            delete patchRequest.subscribe;
+            const { history, candles } = tickHistoryResponse;
+            patchRequest.end = history ? +history.times[0] : candles[0].epoch;
+            const patch = await this._connection.send(patchRequest);
+            tickHistoryResponse = mergeTickHistory(tickHistoryResponse, patch);
+        }
+
+        // If cache data is available, send a copy otherwise we risk
+        // mutating the cache outside of StreamManager
+        callback(StreamManager.cloneTickHistoryResponse(tickHistoryResponse));
         stream.onStream(callback);
     }
 
@@ -158,7 +166,7 @@ class StreamManager {
     }
 
     _getKey({ ticks_history: symbol, granularity }) {
-        return `${symbol}-${granularity}`;
+        return `${symbol}-${granularity || 0}`;
     }
 
     static cloneTickHistoryResponse({ history, candles, ...others }) {

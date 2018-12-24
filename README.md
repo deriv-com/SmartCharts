@@ -57,22 +57,25 @@ The job of loading the active symbols or trading times or stream data from cache
 
 Some important notes on your webpack.config.js (refer to `app/webpack.config.js`):
 
- - The ChartIQ library and the smartcharts CSS file will need to be copied from the npm library (remember to include in your `index.html`). In the example we use the `copy-webpack-plugin` webpack plugin to do this:
+ - smartcharts CSS file will need to be copied from the npm library (remember to include in your `index.html`). 
+ - smartcharts consist of a few chunks (which has filenames `*.smartcharts.*`), which it downloads asynchronously during runtime. Therefore, it needs to know where the library user places its chunks via the `setSmartChartsPublicPath` function:
+ 
+ ```js
+import { setSmartChartsPublicPath } from '@binary-com/smartcharts';
+
+// SmartCharts chunk are deployed to https://mysite.com/dist/*
+setSmartChartsPublicPath('/dist/');
+```
+ 
+ We can use the `copy-webpack-plugin` webpack plugin to copy over SmartCharts chunks:
  
  ```js
 new CopyWebpackPlugin([
-    { from: './node_modules/@binary-com/smartcharts/dist/chartiq.min.js' },
+    { from: './node_modules/@binary-com/smartcharts/dist/*.smartcharts.*' },
     { from: './node_modules/@binary-com/smartcharts/dist/smartcharts.css' },
 ])
 ```
 
- - You need to expose `CIQ` (the ChartIQ library) as a global object:
- 
-```js
-externals: {
-    CIQ: 'CIQ'
-}
-```
 
 ### API
 
@@ -290,6 +293,32 @@ Each time a new translation string is added to the code, you need to update the 
 Once the new `messages.pot` is merged into the `dev` branch, it will automatically be updated in [CrowdIn](https://crowdin.com/project/smartcharts/settings#files). You should expect to see a PR with the title **New Crowdin translations**
  in a few minutes; this PR will update the `*.po` files.
  
+ ### Dealing With SVGs
+ 
+ SmartCharts has 2 ways of utilizing SVG files: as CSS background image and as external SVG.
+ 
+##### CSS Background Image SVG
+
+These SVG are added inline into the CSS via [postcss-inline-svg](https://github.com/TrySound/postcss-inline-svg). Currently the only place where this is used is the loader, because if the external SVG is not loaded yet we would at least want a loading screen to be present.
+ 
+ ##### External SVG
+ 
+ The SVG files included in the `js` and `jsx` files are automatically put together into a sprite sheet. Manipulating external SVG can be tricky - developers can only control stroke and fill color of the whole SVG file via CSS:
+ 
+ ```scss
+.ic-icon.active {
+    svg {
+        stroke: #2e8836;
+        fill: #ff3d38;
+    }
+}
+```
+ 
+ **Important Note:** These stroke and fill colors will not be affected by CSS if the corresponding attributes are declared in the SVG file. Therefore, it is not uncommon SmartCharts developers would need to tweak the SVG files by hand to be able to manipulate its color. 
+ 
+ This has much less freedom compared to [inline SVG](https://github.com/MoOx/react-svg-inline) where a developer can control individual parts of the SVG, but having external SVG results in a much smaller library, and allows parts of the code not rendered by React to use them. External SVG is also cached by the browser (using shadow DOM), so though the same SVG may be used multiple times, only one copy exists in the DOM.
+
+ 
  ### State Management and the `connect` Method
  
  SmartCharts uses a variation of [Mobdux](https://medium.com/@cameronfletcher92/mobdux-combining-the-good-parts-of-mobx-and-redux-61bac90ee448) to assist with state management using Mobx.
@@ -431,6 +460,8 @@ Now you should be able to see your SmartCharts app on `brucebinary.binary.sx/myf
 
 Alternatively you can deploy directly to the domain itself (note that this **erases all folders**; could be useful for cleanup). In our example, the following command will deploy to `brucebinary.binary.sx`:
 
-    yarn build-travis && yarn gh-pages
+    yarn build-travis && echo 'brucebinary.binary.sx' > CNAME && yarn gh-pages
 
 > Note: `yarn build-travis` will add hashing inside `index.html`; **do not push those changes to git!**
+
+There may be occasions where you would want to deploy development versions of the webpack bundles. Quick way to do this is to change the [`--mode` parameter](https://webpack.js.org/concepts/mode/) in `build` npm command in `package.json` to from `production` to `development`.

@@ -157,8 +157,11 @@ class CrosshairStore {
                 dupMap.Open = dupMap.High = dupMap.Low = 1;
             }
         }
+
+
         if (this.showSeries) {
             const renderers = stx.chart.seriesRenderers;
+
             for (const renderer in renderers) {
                 const rendererToDisplay = renderers[renderer];
                 const panel = stx.panels[rendererToDisplay.params.panel];
@@ -166,8 +169,10 @@ class CrosshairStore {
                 if (!yAxis && rendererToDisplay.params.shareYAxis) {
                     yAxis = panel.yAxis;
                 }
+
                 for (let id = 0; id < rendererToDisplay.seriesParams.length; id++) {
                     const seriesParams = rendererToDisplay.seriesParams[id];
+
                     // if a series has a symbol and a field then it maybe a object chain
                     let sKey = seriesParams.symbol;
                     const subField = seriesParams.field;
@@ -309,9 +314,9 @@ class CrosshairStore {
     }
 
     updateTooltipPosition() {
-        this.isArrowLeft = CIQ.ChartEngine.crosshairX <= MAX_TOOLTIP_WIDTH;
-        this.left = CIQ.ChartEngine.crosshairX;
-        this.top = CIQ.ChartEngine.crosshairY;
+        this.left = CIQ.ChartEngine.crosshairX - this.stx.left;
+        this.top = CIQ.ChartEngine.crosshairY - this.stx.top;
+        this.isArrowLeft = this.left <= MAX_TOOLTIP_WIDTH;
     }
 }
 

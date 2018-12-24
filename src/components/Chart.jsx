@@ -7,15 +7,16 @@ import Loader from './Loader.jsx';
 import Barrier from './Barrier.jsx';
 import CurrentSpot from './CurrentSpot.jsx';
 import DrawingCursor from './DrawingCursor.jsx';
-
+import ChartTable from './ChartTable.jsx';
 /* css + scss */
-import '../../sass/app.scss';
+import '../../sass/main.scss';
 
 import './ui';
 
 import ChartControls from './ChartControls.jsx';
 import Crosshair from './Crosshair.jsx';
 import { connect } from '../store/Connect';
+import { initGA, logPageView } from '../utils/ga';
 
 class Chart extends Component {
     constructor(props) {
@@ -26,6 +27,8 @@ class Chart extends Component {
 
     componentDidMount() {
         const { updateProps, init, ...props } = this.props;
+        initGA();
+        logPageView();
         updateProps(props);
         init(this.root.current, this.modalNode.current, props);
     }
@@ -70,50 +73,53 @@ class Chart extends Component {
         const TopWidgets = topWidgets || this.defaultTopWidgets;
 
         return (
-            <div
-                className={`smartcharts smartcharts-${theme} ${contextWidth} smartcharts-${isMobile ? 'mobile' : 'desktop'}`}
-                ref={this.modalNode}
-            >
+            <div className={`smartcharts smartcharts-${theme} ${contextWidth}`}>
                 <div
-                    className="cq-context"
-                    ref={this.root}
+                    className={`smartcharts-${isMobile ? 'mobile' : 'desktop'}`}
+                    ref={this.modalNode}
                 >
-                    <div className={` ${currentPosition}`}>
-                        <div className="ciq-chart-area">
-                            <div className="ciq-chart">
-                                <RenderInsideChart at="holder">
-                                    {barriers.map((barr, idx) => (
-                                        <Barrier
-                                            key={`barrier-${idx}`} // eslint-disable-line react/no-array-index-key
-                                            {...barr}
-                                        />
-                                    ))}
-                                </RenderInsideChart>
-                                <RenderInsideChart at="subholder">
-                                    {children}
-                                    <CurrentSpot />
-                                </RenderInsideChart>
-                                <div className="cq-top-ui-widgets">
-                                    <TopWidgets />
-                                </div>
-                                <div className={`chartContainer ${isDrawing ? 'ciq-draw-mode' : ''}`} style={{ height: chartContainerHeight }}>
-                                    <Crosshair />
-                                    <DrawingCursor />
-                                </div>
-                                <Loader />
-                                {!isChartAvailable && (
-                                    <div className="cq-chart-unavailable">
-                                        {t.translate('Chart data is not available for this symbol.')}
+                    <div
+                        className="cq-context"
+                        ref={this.root}
+                    >
+                        <div className={` ${currentPosition}`}>
+                            <div className="ciq-chart-area">
+                                <div className="ciq-chart">
+                                    <RenderInsideChart at="holder">
+                                        {barriers.map((barr, idx) => (
+                                            <Barrier
+                                                key={`barrier-${idx}`} // eslint-disable-line react/no-array-index-key
+                                                {...barr}
+                                            />
+                                        ))}
+                                    </RenderInsideChart>
+                                    <RenderInsideChart at="subholder">
+                                        {children}
+                                        <CurrentSpot />
+                                    </RenderInsideChart>
+                                    <div className="cq-top-ui-widgets">
+                                        <TopWidgets />
                                     </div>
-                                )}
+                                    <div className={`chartContainer ${isDrawing ? 'ciq-draw-mode' : ''}`} style={{ height: chartContainerHeight }}>
+                                        <Crosshair />
+                                        <DrawingCursor />
+                                    </div>
+                                    <Loader />
+                                    {!isChartAvailable && (
+                                        <div className="cq-chart-unavailable">
+                                            {t.translate('Chart data is not available for this symbol.')}
+                                        </div>
+                                    )}
+                                </div>
+                                <ChartControls widgets={chartControlsWidgets} />
                             </div>
-                            <ChartControls widgets={chartControlsWidgets} />
                         </div>
                     </div>
+                    <DrawToolsSettingsDialog />
+                    <AggregateChartSettingsDialog />
+                    <StudySettingsDialog />
+                    <ChartTable />
                 </div>
-                <DrawToolsSettingsDialog />
-                <AggregateChartSettingsDialog />
-                <StudySettingsDialog />
             </div>
         );
     }

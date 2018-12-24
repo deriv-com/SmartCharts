@@ -1,46 +1,20 @@
 .ciq-chart-types {
-    .cq-menu-btn {
-        .ic-icon {
-            path, circle, rect {
-                @include themify($themes) {
-                    fill: themed('ChartTypeListIcon');
-                    stroke: themed('ChartTypeListIcon');
-                }
-            }
-            &.active {
-                path, circle, rect {
-                    @include themify($themes) {
-                        fill: themed('MenuActiveIcon');
-                        stroke: themed('MenuActiveIcon');
-                    }
-                }
-            }
-        }
-    }
     .cq-menu-dropdown {
         width: 200px;
         box-sizing: border-box;
 
         .body {
-            padding: 0px 5px 0px 16px;
+            padding: 0px 9px 0px 16px;
         }
     }
     .ciq-list {
         .ciq-list-item {
+            &:first-child {
+                margin-top: 16px;
+            }
             &.active {
                 @include themify($themes) {
                     border-right: 2px solid themed('ChartTypeActiveListBorderRight');
-                }
-
-                > .left {
-                    .ic-icon {
-                        path, circle, rect {
-                            @include themify($themes) {
-                                fill: themed('ChartTypeActiveListIcon');
-                                stroke: themed('ChartTypeActiveListIcon');
-                            }
-                        }
-                    }
                 }
             }
             padding: 0;
@@ -49,30 +23,13 @@
             > .left {
                 display: inline-flex;
                 align-items: center;
-
-                .ic-icon {
-                    path, circle, rect {
-                        @include themify($themes) {
-                            fill: themed('ChartTypeListIcon');
-                            stroke: themed('ChartTypeListIcon');
-                        }
-                    }
-                }
             }
             > .ciq-aggregate-setting {
                 margin-right: 5px;
-
-                > .ic-icon {
-                    > svg > path {
-                        @include themify($themes) {
-                            fill: themed('ChartTypeListIcon');
-                        }
-                    }
-                    &:hover > svg > path {
-                        @include themify($themes) {
-                            fill: themed('ChartTypeActiveListIcon');
-                        }
-                    }
+            }
+            :last-child {
+                .ic-icon > svg {
+                    stroke: none;
                 }
             }
         }
@@ -83,9 +40,6 @@
     .ciq-chart-types {
         .ciq-toggle-asset-information {
             margin: 15px 15px 0;
-        }
-        .ciq-list {
-            margin: 0 15px;
         }
     }
 }

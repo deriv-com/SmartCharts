@@ -3,17 +3,6 @@ import { CloseIcon, SearchIcon } from './Icons.jsx';
 import { connect } from '../store/Connect';
 
 class SearchInput extends Component {
-    constructor(props) {
-        super(props);
-        this.searchInput = React.createRef();
-    }
-
-    componentDidMount() {
-        if (!this.props.isMobile) {
-            setTimeout(() => this.searchInput.current.focus(), 0);
-        }
-    }
-
     clearFilterText = () => {
         this.props.onChange('');
     };
@@ -23,13 +12,13 @@ class SearchInput extends Component {
     };
 
     render() {
-        const { placeholder, value } = this.props;
+        const { placeholder, value, searchInput } = this.props;
 
         return (
             <div className={`cq-lookup-input ${value.trim() !== '' ? 'active' : ''}`}>
                 <input
                     value={value}
-                    ref={this.searchInput}
+                    ref={searchInput}
                     onChange={this.onChange}
                     type="text"
                     spellCheck="off"

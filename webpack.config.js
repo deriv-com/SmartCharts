@@ -4,27 +4,58 @@ const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPl
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const StyleLintPlugin = require('stylelint-webpack-plugin');
-const UglifyJs = require('uglify-js');
-const write = require('write');
+const SpriteLoaderPlugin = require('svg-sprite-loader/plugin');
 
 const production = process.env.NODE_ENV === 'production';
 const isApp = process.env.BUILD_MODE === 'app';
+const BUILD_MODE = isApp ? process.env.BUILD_MODE : 'lib';
 
 const output =  {
-    publicPath: '/dist/',
     path: path.resolve(__dirname, 'dist'),
     filename: 'smartcharts.js',
+    chunkFilename: '[name]-[chunkhash:6].smartcharts.js',
     libraryExport: 'default',
     library: 'smartcharts',
     libraryTarget: 'umd',
+    hashDigestLength: 6,
 };
 
 const config = {
     devtool: 'source-map',
     entry: path.resolve(__dirname, './src/index.js'),
     output,
+    resolve: {
+        alias: {
+            '@binary-com/smartcharts': path.resolve(__dirname, 'src/'),
+            chartiq: path.resolve(__dirname, 'chartiq/chartiq.js'),
+        },
+    },
+    devServer: {
+        publicPath: '/dist/',
+    },
     module: {
         rules: [
+            {
+                test: /\.svg$/,
+                use: [
+                    {
+                        loader: 'svg-sprite-loader',
+                        options: {
+                            extract: true,
+                            spriteFilename: 'sprite-[hash:6].smartcharts.svg',
+                        },
+                    },
+                    {
+                        loader: 'svgo-loader',
+                        options: {
+                            plugins: [
+                                { removeUselessStrokeAndFill: false },
+                                { removeUnknownsAndDefaults: false },
+                            ],
+                        },
+                    },
+                ],
+            },
             {
                 test: /\.(s*)css$/,
                 use: [
@@ -74,7 +105,21 @@ const config = {
             },
             {
                 test: /\.po$/,
-                loader: 'json-loader!po-loader',
+                loader: [path.resolve('./loaders/translation-loader.js'), 'json-loader', 'po-loader'],
+            },
+            {
+                test: /\.pot$/,
+                loader: [path.resolve('./loaders/pot-loader.js'), 'json-loader', 'po-loader'],
+            },
+            {
+                include: path.resolve(__dirname, 'src/utils/ga.js'),
+                use :[{
+                    loader: path.resolve('./loaders/exclude-block-loader.js'),
+                    options: {
+                        start:`@START-EXCLUDE: '${BUILD_MODE}'`,
+                        end: '@END-EXCLUDE'
+                    },
+                }],
             },
         ],
     },
@@ -83,10 +128,10 @@ const config = {
             t: [path.resolve(__dirname, './src/Translation.js'), 't'],
         }),
         new MiniCssExtractPlugin({ filename: 'smartcharts.css' }),
-        new StyleLintPlugin()
+        new StyleLintPlugin(),
+        new SpriteLoaderPlugin(),
     ],
     externals: {
-        chartiq: 'CIQ',
         mobx: 'mobx',
         react: {
             root: 'React',
@@ -112,11 +157,6 @@ const config = {
     },
 };
 
-const copyChartIqOptions = {
-    from: './chartiq/chartiq.js',
-    to: 'chartiq.min.js',
-};
-
 if (production) {
     config.plugins.push(
         new webpack.DefinePlugin({
@@ -124,32 +164,7 @@ if (production) {
                 NODE_ENV: JSON.stringify('production'),
             },
         }),
-        new CopyWebpackPlugin([
-            {
-                ...copyChartIqOptions,
-                transform(fileContent) {
-                    // compress chartiq and output sourcemap
-                    const url = 'chartiq.min.js.map';
-                    const options = {
-                        sourceMap: {
-                            filename: 'chartiq.js',
-                            includeSources: true,
-                            url,
-                        },
-                    };
-                    console.log('\nCompressing ChartIQ library...');
-                    const result = UglifyJs.minify(fileContent.toString(), options);
-                    let chartiqSourceMap = result.map.toString();
-                    // add chartiq path, otherwise the file only shows up as "0"
-                    chartiqSourceMap = chartiqSourceMap.replace('"sources":["0"]', '"sources":["webpack://smartcharts/./chartiq/chartiq.js"]');
-                    write.sync(`${output.path}/${url}`, chartiqSourceMap);
-                    return result.code.toString();
-                },
-            },
-        ]),
     );
-} else {
-    config.plugins.push(new CopyWebpackPlugin([copyChartIqOptions]));
 }
 
 if (process.env.ANALYZE_BUNDLE) {
@@ -158,18 +173,12 @@ if (process.env.ANALYZE_BUNDLE) {
 
 if (isApp) {
     config.entry = path.resolve(__dirname, './app/index.jsx');
-    config.resolve = {
-        alias: {
-            '@binary-com/smartcharts': path.resolve(__dirname, 'src/'),
-        },
-    };
     config.plugins.push(new CopyWebpackPlugin([
         { from: './sass/favicons/*.png' },
         { from: './node_modules/@babel/polyfill/dist/polyfill.min.js', to: 'babel-polyfill.min.js' },
-        { from: './app/browser-detection.js'},
-        { from: './app/assets/*.svg'},
-        { from: './chartiq/html2canvas.min.js' },
-        { from: './nojs-smartcharts.css'},
+        { from: './app/browser-detection.js' },
+        { from: './app/assets/*.svg' },
+        { from: './nojs-smartcharts.css' },
         {
             from: production
                 ? './node_modules/react/umd/react.production.min.js'
@@ -195,9 +204,7 @@ if (isApp) {
             to: 'mobx-react.js',
         },
         {
-            from: production
-                ? './node_modules/react-transition-group/dist/react-transition-group.min.js'
-                : './node_modules/react-transition-group/dist/react-transition-group.js',
+            from: './node_modules/react-transition-group/dist/react-transition-group.js',
             to: 'react-transition-group.js',
         },
     ]));

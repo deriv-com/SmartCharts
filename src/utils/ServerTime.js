@@ -1,9 +1,11 @@
 import { getUTCEpoch, getLocalDate, getUTCDate } from './index';
+import PendingPromise from './PendingPromise';
 
 class ServerTime {
     static _instance;
 
     clockStarted = false;
+    clockStartedPromise = new PendingPromise();
 
     async init(api) {
         this._api = api;
@@ -12,12 +14,15 @@ class ServerTime {
             clearInterval(this.getTimeInterval);
             await this.requestTime();
             this.getTimeInterval = setInterval(this.requestTime.bind(this), 30000);
+        } else {
+            return this.clockStartedPromise;
         }
     }
 
     async requestTime() {
         this.clientTimeAtRequest = getUTCEpoch(new Date());
         await this._api.getServerTime().then(this._timeResponse);
+        this.clockStartedPromise.resolve();
     }
 
     _timeResponse = (response) => {
@@ -32,10 +37,10 @@ class ServerTime {
 
         const serverTime = response.time;
         const clientTimeAtResponse = getUTCEpoch(new Date());
-        this.serverTimeAtResponse = serverTime + ((clientTimeAtResponse - this.clientTimeAtRequest)/2);
-        
+        this.serverTimeAtResponse = serverTime + ((clientTimeAtResponse - this.clientTimeAtRequest) / 2);
+
         const updateTime = () => {
-            this.serverTimeAtResponse+=1;
+            this.serverTimeAtResponse += 1;
         };
 
         clearInterval(this.updateTimeInterval);
@@ -58,9 +63,11 @@ class ServerTime {
         return new Date(getUTCDate(this.getEpoch()));
     }
 
-    static getInstance()
-    {
-        this._instance = this._instance || (this._instance = new this());
+    static getInstance() {
+        if (!this._instance) {
+            this._instance = new ServerTime();
+        }
+
         return this._instance;
     }
 }

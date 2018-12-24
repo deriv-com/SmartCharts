@@ -9,12 +9,11 @@ const StudyLegend = ({
     StudyMenu,
     menuOpen,
     StudyCategoricalDisplay,
-    onCloseMenu,
     isMobile,
     activeStudiesNo,
 }) => (
     <StudyMenu
-        className="ciq-studies collapse"
+        className="ciq-studies"
         isOpened={isOpened}
         setOpen={setOpen}
         isMobile={isMobile}
@@ -28,9 +27,7 @@ const StudyLegend = ({
             <NotificationBadge notificationCount={activeStudiesNo} />
         </StudyMenu.Title>
         <StudyMenu.Body>
-            <StudyCategoricalDisplay
-                closeMenu={() => onCloseMenu()}
-            />
+            <StudyCategoricalDisplay />
         </StudyMenu.Body>
     </StudyMenu>
 );
@@ -41,7 +38,6 @@ export default connect(({ studies: st, chart }) => ({
     StudyMenu: st.StudyMenu,
     menuOpen: st.menu.open,
     StudyCategoricalDisplay: st.StudyCategoricalDisplay,
-    onCloseMenu: st.menu.onTitleClick,
     isMobile: chart.isMobile,
     activeStudiesNo: st.activeStudies.data.length,
 }))(StudyLegend);

@@ -1,6 +1,7 @@
 export default class BinaryAPI {
     static get DEFAULT_COUNT() { return 1000; }
     streamRequests = {};
+    tradingTimesCache = null;
     constructor(requestAPI, requestSubscribe, requestForget) {
         this.requestAPI = requestAPI;
         this.requestSubscribe = requestSubscribe;
@@ -18,8 +19,18 @@ export default class BinaryAPI {
         return this.requestAPI({ time: 1 });
     }
 
-    getTradingTimes(trading_times = 'today') {
-        return this.requestAPI({ trading_times });
+    async getTradingTimes(trading_times = 'today') {
+        if (this.tradingTimesCache && this.tradingTimesCache.trading_times === trading_times) {
+            return { ...this.tradingTimesCache };
+        }
+
+        const response = await this.requestAPI({ trading_times });
+
+        if (trading_times !== 'today') {
+            this.tradingTimesCache = { ...response };
+        }
+
+        return response;
     }
 
     getTickHistory(params) {
@@ -45,11 +56,15 @@ export default class BinaryAPI {
     static createTickHistoryRequest({ symbol, granularity, start, end, subscribe, adjust_start_time = 1 }) {
         const request = {
             ticks_history: symbol,
-            granularity: +granularity,
             style: +granularity ? 'candles' : 'ticks',
             end: 'latest',
             count: BinaryAPI.DEFAULT_COUNT,
         };
+
+        if (granularity) {
+            // granularity will only be set if style=candles
+            request.granularity = +granularity;
+        }
 
         if (adjust_start_time) {
             request.adjust_start_time = adjust_start_time;

@@ -1,10 +1,8 @@
 import { observable, action, computed, when } from 'mobx';
 import MenuStore from './MenuStore';
-import { loadScript, downloadFileInBrowser } from '../utils';
-import PendingPromise from '../utils/PendingPromise';
+import { downloadFileInBrowser } from '../utils';
 import Menu from '../components/Menu.jsx';
-
-const html2canvasCDN = 'https://charts.binary.com/dist/html2canvas.min.js';
+import { logEvent, LogCategories, LogActions } from  '../utils/ga';
 
 export default class ShareStore {
     constructor(mainStore) {
@@ -32,27 +30,19 @@ export default class ShareStore {
         return !!navigator.platform && /iPad|iPhone|iPod/.test(navigator.platform) ? window.open() : null;
     }
 
-    loadHtml2Canvas() {
-        if (this._promise_html2canas) {
-            return this._promise_html2canvas;
-        }
-        this._promise_html2canvas = new PendingPromise();
-        loadScript(html2canvasCDN, () => this._promise_html2canvas.resolve());
-        return this._promise_html2canvas;
-    }
-
     @action.bound downloadPNG() {
         this.isLoadingPNG = true;
         const newTab = this.createNewTab();
 
-        this.loadHtml2Canvas()
-            .then(() => window.html2canvas(this.screenshotArea))
-            .then(() => {
+        import(/* webpackChunkName: "html2canvas" */ '../../chartiq/html2canvas.min.js')
+            .then((html2canvas) => {
                 // since react rerenders is not immediate, we use CIQ.appendClassName to
                 // immediately append/unappend class name before taking screenshot.
                 CIQ.appendClassName(this.screenshotArea, 'ciq-screenshot');
-                window.html2canvas(this.screenshotArea).then(canvas => this._onCanvasReady(canvas, newTab));
+                html2canvas.default(this.screenshotArea).then(canvas => this._onCanvasReady(canvas, newTab));
             });
+
+        logEvent(LogCategories.ChartControl, LogActions.Download, 'Download PNG');
     }
 
     @action.bound _onCanvasReady(canvas, newTab) {
@@ -71,17 +61,12 @@ export default class ShareStore {
         const isTick = this.timeUnit === 'tick';
         const header = `Date,Time,${isTick ? this.marketDisplayName : 'Open,High,Low,Close'}`;
         const lines = [header];
-        this.stx.masterData.forEach((row) => {
-            const {
-                DT, Open, High, Low, Close,
-            } = row;
-
-            const year = DT.getUTCFullYear();
-            const month = DT.getUTCMonth() + 1; // months from 1-12
-            const day = DT.getUTCDate();
-            const hours = DT.getUTCHours();
-            const minutes = DT.getUTCMinutes();
-            // const seconds = DT.getUTCSeconds();
+        this.stx.masterData.forEach(({ DT, Open, High, Low, Close }) => {
+            const year = DT.getFullYear();
+            const month = DT.getMonth() + 1; // months from 1-12
+            const day = DT.getDate();
+            const hours = DT.getHours();
+            const minutes = DT.getMinutes();
 
             const date = `${year}-${month > 9 ? month : `0${month}`}-${day > 9 ? day : `0${day}`}`;
             const time = `${hours > 9 ? hours : `0${hours}`}:${minutes > 9 ? minutes : `0${minutes}`}`;
@@ -103,6 +88,8 @@ export default class ShareStore {
             'text/csv;charset=utf-8;',
             this.createNewTab(),
         );
+
+        logEvent(LogCategories.ChartControl, LogActions.Download, 'Download CSV');
     }
 
     onContextReady = () => {

@@ -1,74 +1,33 @@
-import ResizeObserver from 'resize-observer-polyfill';
 import { action, observable, reaction, computed } from 'mobx';
 import PendingPromise from '../utils/PendingPromise';
 import Context from '../components/ui/Context';
 import KeystrokeHub from '../components/ui/KeystrokeHub';
-import '../components/ui/Animation';
+import animateChart from '../components/ui/Animation';
+import plotSpline from '../SplinePlotter';
 import { Feed } from '../feed';
 import { ActiveSymbols, BinaryAPI, TradingTimes } from '../binaryapi';
 import { calculateTimeUnitInterval, getUTCDate, cloneCategories } from '../utils';
 
-CIQ.ChartEngine.prototype.createYAxisLabel = function (panel, txt, y, backgroundColor, color, ctx, yAxis) {
-    if (panel.yAxis.drawPriceLabels === false || panel.yAxis.noDraw) return;
-    const yax = yAxis || panel.yAxis;
-    if (yax.noDraw || !yax.width) return;
-    const context = ctx || this.chart.context;
-    const margin = 3;
-    const height = this.getCanvasFontSize('stx_yaxis') + (margin << 1);
-    this.canvasFont('stx_yaxis', context);
-    this.drawBorders = yax.displayBorder;
-    const tickWidth = this.drawBorders ? 3 : 0; // pixel width of tick off edge of border
-    let width;
-    try {
-        width = context.measureText(txt).width + tickWidth + (margin << 1);
-    } catch (e) {
-        width = yax.width;
-    } // Firefox doesn't like this in hidden iframe
+import ResizeIcon from '../../sass/icons/chart/resize-icon.svg';
+import EditIcon from '../../sass/icons/edit/ic-edit.svg';
+import DeleteIcon from '../../sass/icons/delete/ic-delete.svg';
+import DownIcon from '../../sass/icons/chart/ic-down.svg';
+import JumpToTodayIcon from '../../sass/icons/chart/jump-to-today.svg';
+import MaximizeIcon from '../../sass/icons/chart/ic-maximize.svg';
 
-    let x = yax.left - margin + 3;
-    if (yax.width < 0) x += (yax.width - width);
-    let textx = x + margin + tickWidth;
-    let radius = 3;
-    const position = (yax.position === null ? panel.chart.yAxis.position : yax.position);
-    if (position === 'left') {
-        x = yax.left + yax.width + margin - 3;
-        width *= -1;
-        if (yax.width < 0) x -= (yax.width + width);
-        textx = x - margin - tickWidth;
-        radius = -3;
-        context.textAlign = 'right';
-    }
-    if (y + (height >> 1) > yax.bottom) y = yax.bottom - (height >> 1);
-    if (y - (height >> 1) < yax.top)    y = yax.top    + (height >> 1);
+function renderSVGString(icon) {
+    const vb = icon.viewBox.split(' ').slice(2);
+    // eslint-disable-next-line no-undef
+    return `<svg width="${vb[0]}" height="${vb[1]}"><use xlink:href="${__webpack_public_path__ + icon.url}" /></svg>`;
+}
 
-    if (typeof (CIQ[this.yaxisLabelStyle]) === 'undefined') {
-        this.yaxisLabelStyle = 'roundRectArrow'; // in case of user error, set a default.
-    }
-    let yaxisLabelStyle = this.yaxisLabelStyle;
-    if (yax.yaxisLabelStyle) yaxisLabelStyle = yax.yaxisLabelStyle;
-    const params = {
-        ctx: context,
-        x,
-        y,
-        top: y - (height >> 1),
-        width,
-        height,
-        radius,
-        backgroundColor,
-        fill: true,
-        stroke: false,
-        margin: {
-            left: textx - x,
-            top: 1,
-        },
-        txt,
-        color,
-    };
-    CIQ[yaxisLabelStyle](params);
-};
 
 class ChartStore {
     static keystrokeHub;
+    static chartCount = 0;
+    static tradingTimes;
+    static activeSymbols;
+
     constructor(mainStore) {
         this.mainStore = mainStore;
     }
@@ -79,7 +38,6 @@ class ChartStore {
     stxx = null;
     api = null;
     defaults = {
-        symbol: 'R_100',
         granularity: 0,
         chartType: 'mountain',
     };
@@ -98,6 +56,7 @@ class ChartStore {
     @observable chartContainerHeight;
     @observable isMobile = false;
     @observable cursorInChart = false;
+    @observable shouldRenderDialogs = false;
 
     get loader() { return this.mainStore.loader; }
     get routingStore() {
@@ -138,7 +97,27 @@ class ChartStore {
         setTimeout(this.updateCanvas, this.isMobile ? 500 : 100);
     }
 
-    @action.bound init(rootNode, modalNode, props) {
+    init = (rootNode, modalNode, props) => {
+        this.loader.show();
+        this.loader.setState('chart-engine');
+
+        if (window.CIQ) {
+            this._initChart(rootNode, modalNode, props);
+        } else {
+            import(/* webpackChunkName: "chartiq" */ 'chartiq').then(action(({ CIQ, SplinePlotter }) => {
+                CIQ.ChartEngine.htmlControls.baselineHandle = `<div class="stx-baseline-handle" style="display: none;">${renderSVGString(ResizeIcon)}</div>`;
+                CIQ.ChartEngine.htmlControls.iconsTemplate = `<div class="stx-panel-control"><div class="stx-panel-title"></div><div class="stx-btn-panel"><span class="stx-ico-up">${renderSVGString(DownIcon)}</span></div><div class="stx-btn-panel"><span class="stx-ico-focus">${renderSVGString(MaximizeIcon)}</span></div><div class="stx-btn-panel"><span class="stx-ico-down">${renderSVGString(DownIcon)}</span></div><div class="stx-btn-panel"><span class="stx-ico-edit">${renderSVGString(EditIcon)}</span></div><div class="stx-btn-panel"><span class="stx-ico-close">${renderSVGString(DeleteIcon)}</span></div></div>`;
+                CIQ.ChartEngine.htmlControls.mSticky = `<div class="stx_sticky"> <span class="mStickyInterior"></span> <span class="mStickyRightClick"><span class="overlayEdit stx-btn" style="display:none"><span class="ic-edit">${renderSVGString(EditIcon)}</span><span class="ic-delete">${renderSVGString(DeleteIcon)}</span></span> <span class="overlayTrashCan stx-btn" style="display:none"><span class="ic-edit">${renderSVGString(EditIcon)}</span><span class="ic-delete">${renderSVGString(DeleteIcon)}</span></span> <span class="mouseDeleteInstructions"><span>(</span><span class="mouseDeleteText">right-click to delete</span><span class="mouseManageText">right-click to manage</span><span>)</span></span></span></div>`;
+                CIQ.ChartEngine.htmlControls.home = `<div class="stx_jump_today" style="display:none">${renderSVGString(JumpToTodayIcon)}</div>`;
+
+                window.CIQ = CIQ;
+                SplinePlotter.plotSpline = plotSpline;
+                this._initChart(rootNode, modalNode, props);
+            }));
+        }
+    };
+
+    @action.bound _initChart(rootNode, modalNode, props) {
         this.rootNode = rootNode;
         this.modalNode = modalNode;
         this.chartNode = this.rootNode.querySelector('.ciq-chart-area');
@@ -158,8 +137,11 @@ class ChartStore {
             onSettingsChange,
         } = props;
         this.api = new BinaryAPI(requestAPI, requestSubscribe, requestForget);
-        this.tradingTimes = new TradingTimes(this.api);
-        this.activeSymbols = new ActiveSymbols(this.api, this.tradingTimes);
+
+        // trading times and active symbols can be reused across multiple charts
+        this.tradingTimes = ChartStore.tradingTimes || (ChartStore.tradingTimes = new TradingTimes(this.api));
+        this.activeSymbols = ChartStore.activeSymbols || (ChartStore.activeSymbols = new ActiveSymbols(this.api, this.tradingTimes));
+
         const { chartSetting } = this.mainStore;
         chartSetting.setSettings(settings);
         chartSetting.onSettingsChange = onSettingsChange;
@@ -186,6 +168,7 @@ class ChartStore {
                     width: -10,
                     justifyRight: true,
                 },
+                gaplines: true,
             },
             minimumLeftBars: 2,
             yTolerance: 999999, // disable vertical scrolling
@@ -204,13 +187,14 @@ class ChartStore {
         engineParams.layout = chartLayout;
 
         const stxx = this.stxx = new CIQ.ChartEngine(engineParams);
+        ChartStore.chartCount += 1;
 
         const deleteElement = stxx.chart.panel.holder.parentElement.querySelector('.mouseDeleteText');
         const manageElement = stxx.chart.panel.holder.parentElement.querySelector('.mouseManageText');
-        deleteElement.textConent = t.translate('right-click to delete');
-        manageElement.textConent = t.translate('right-click to manage');
+        deleteElement.textContent = t.translate('right-click to delete');
+        manageElement.textContent = t.translate('right-click to manage');
 
-        CIQ.Animation(stxx, { stayPut: true });
+        animateChart(stxx, { stayPut: true });
 
         // connect chart to data
         this.feed = new Feed(this.api, stxx, this.mainStore, this.tradingTimes);
@@ -229,21 +213,21 @@ class ChartStore {
 
         // only one instance of keystrokeHub should exist
         if (ChartStore.keystrokeHub === undefined) {
-            ChartStore.keystrokeHub = new KeystrokeHub(document.body, context, {
+            ChartStore.keystrokeHub = new KeystrokeHub(document.body, null, {
                 cb: KeystrokeHub.defaultHotKeys,
             });
         }
 
         // TODO: excluded studies
 
-        this.loader.show();
-
         const studiesStore = this.mainStore.studies;
         stxx.callbacks.studyOverlayEdit = studiesStore.editStudy;
         stxx.callbacks.studyPanelEdit = studiesStore.editStudy;
 
-        this.tradingTimes.initialize().then(() => {
-            this.activeSymbols.retrieveActiveSymbols().then(action(() => {
+        this.loader.setState('market-symbol');
+        this.activeSymbols.retrieveActiveSymbols().then(() => {
+            this.loader.setState('trading-time');
+            this.tradingTimes.initialize().then(action(() => {
                 // In the odd event that chart is destroyed by the time
                 // the request finishes, just calmly return...
                 if (stxx.isDestroyed) { return; }
@@ -252,14 +236,17 @@ class ChartStore {
 
                 if (!isRestoreSuccess) {
                     this.changeSymbol(
-                        symbol || this.defaults.symbol,
+                        // default to first available symbol
+                        symbol || Object.keys(this.activeSymbols.symbolMap)[0],
                         this.granularity,
                     );
                 }
 
                 this.context = context;
+
                 stxx.container.addEventListener('mouseenter', this.onMouseEnter);
                 stxx.container.addEventListener('mouseleave', this.onMouseLeave);
+
                 this.contextPromise.resolve(this.context);
                 this.resizeScreen();
 
@@ -273,11 +260,26 @@ class ChartStore {
                 });
 
                 this.tradingTimes.onMarketOpenCloseChanged(this.onMarketOpenClosedChange);
+
+                setTimeout(action(() => {
+                    // Defer the render of the dialogs and dropdowns; this enables
+                    // considerable performance improvements for slower devices.
+                    this.shouldRenderDialogs = true;
+                }), 500);
             }));
         });
 
-        this.resizeObserver = new ResizeObserver(this.resizeScreen);
-        this.resizeObserver.observe(modalNode);
+        if ('ResizeObserver' in window) {
+            this.resizeObserver = new ResizeObserver(this.resizeScreen);
+            this.resizeObserver.observe(modalNode);
+        } else {
+            import(/* webpackChunkName: "resize-observer-polyfill" */ 'resize-observer-polyfill').then(({ default: ResizeObserver }) => {
+                window.ResizeObserver = ResizeObserver;
+                if (stxx.isDestroyed || !modalNode) { return; }
+                this.resizeObserver = new ResizeObserver(this.resizeScreen);
+                this.resizeObserver.observe(modalNode);
+            });
+        }
     }
 
     onMarketOpenClosedChange = (changes) => {
@@ -314,18 +316,28 @@ class ChartStore {
 
     @action.bound onMouseEnter() {
         this.cursorInChart = true;
-        ChartStore.keystrokeHub.setActiveContext(this.context);
+        /*
+        * Disable key press events for chart until we can get it not to
+        * interfere with key presses outside the chart:
+        */
+        // ChartStore.keystrokeHub.setActiveContext(this.context);
     }
 
     @action.bound onMouseLeave() {
         this.cursorInChart = false;
-        ChartStore.keystrokeHub.setActiveContext(null);
+        /*
+        * Disable key press events for chart until we can get it not to
+        * interfere with key presses outside the chart:
+        */
+        // ChartStore.keystrokeHub.setActiveContext(null);
     }
 
     @action.bound updateCurrentActiveSymbol() {
         const { symbolObject } = this.stxx.chart;
         this.currentActiveSymbol = symbolObject;
         this.stxx.chart.yAxis.decimalPlaces = symbolObject.decimal_places;
+
+        this.setMainSeriesDisplay(symbolObject.name);
     }
 
     @action.bound setChartAvailability(status) {
@@ -362,21 +374,26 @@ class ChartStore {
 
         const { chartType: chartTypeStore } = this.mainStore;
         if (chartTypeStore.chartTypeProp === undefined) {
-            const isTick = this.stxx.layout.timeUnit === 'second';
-            const isCandle = chartTypeStore.isCandle;
-            if (isCandle && isTick) {
-                // Tick charts cannot be represented with candles
-                chartTypeStore.setType('mountain');
-            } else if (!isTick && !isCandle) {
-                chartTypeStore.setType('candle');
-            }
+            this.contextPromise.then(() => {
+                const isTick = this.stxx.layout.timeUnit === 'second';
+                const isCandle = chartTypeStore.isCandle;
+                if (isCandle && isTick) {
+                    // Tick charts cannot be represented with candles
+                    chartTypeStore.setType('mountain');
+                } else if (!isTick && !isCandle) {
+                    chartTypeStore.setType('candle');
+                }
+            });
         }
     }
 
     // Calling newChart with symbolObj as undefined refreshes the chart
     @action.bound newChart(symbolObj = this.currentActiveSymbol, params) {
+        this.stxx.chart.symbolDisplay = symbolObj.name;
         this.loader.show();
         const onChartLoad = (err) => {
+            this.setMainSeriesDisplay(symbolObj.name);
+
             this.loader.hide();
             if (err) {
                 /* TODO, symbol not found error */
@@ -412,6 +429,16 @@ class ChartStore {
         }
     }
 
+    setMainSeriesDisplay(name) {
+        // Set display name of main series (to be shown in crosshair tooltip)
+        this.stxx.chart.seriesRenderers._main_series.seriesParams[0].display = name;
+        // TODO, we use to use `field` field to recgnize main seris and show
+        // it's crosshair, as in ChartIQ 6.2.2 they are going to remove this field
+        // we should find another way of detecting main series price, till then
+        // we found this temporary solution.
+        this.stxx.chart.seriesRenderers._main_series.seriesParams[0].field = 'Close';
+    }
+
     // Makes requests to tick history API that will replace
     // Existing chart tick/ohlc data
     @action.bound refreshChart() {
@@ -419,21 +446,31 @@ class ChartStore {
     }
 
     @action.bound destroy() {
-        this.resizeObserver.disconnect();
-        this.tradingTimes.destructor();
+        ChartStore.chartCount -= 1;
+
+        if (this.resizeObserver) { this.resizeObserver.disconnect(); }
+        if (this.tradingTimes && ChartStore.chartCount === 0) {
+            ChartStore.tradingTimes = null;
+            this.tradingTimes.destructor();
+        }
+
         // Destroying the chart does not unsubscribe the streams;
         // we need to manually unsubscribe them.
-        this.feed.unsubscribeAll();
-        this.feed = null;
+        if (this.feed) {
+            this.feed.unsubscribeAll();
+            this.feed = null;
+        }
         if (ChartStore.keystrokeHub.context === this.context) {
             ChartStore.keystrokeHub.setActiveContext(null);
         }
-        this.stxx.container.removeEventListener('mouseenter', this.onMouseEnter);
-        this.stxx.container.removeEventListener('mouseleave', this.onMouseLeave);
-        this.stxx.updateChartData = function () {}; // prevent any data from entering the chart
-        this.stxx.isDestroyed = true;
-        this.stxx.destroy();
-        this.stxx = null;
+        if (this.stxx) {
+            this.stxx.container.removeEventListener('mouseenter', this.onMouseEnter);
+            this.stxx.container.removeEventListener('mouseleave', this.onMouseLeave);
+            this.stxx.updateChartData = function () {}; // prevent any data from entering the chart
+            this.stxx.isDestroyed = true;
+            this.stxx.destroy();
+            this.stxx = null;
+        }
     }
 }
 

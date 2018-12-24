@@ -1,10 +1,13 @@
 import { observable, action, computed } from 'mobx';
 import { stableSort, cloneCategories } from '../utils';
+import PendingPromise from '../utils/PendingPromise';
 
 export default class ActiveSymbols {
     @observable changes = {};
     @observable categorizedSymbols = [];
     symbolMap = {};
+    symbolsPromise = new PendingPromise();
+    isRetrievingSymbols = false;
 
     constructor(api, tradingTimes) {
         this._api = api;
@@ -12,9 +15,12 @@ export default class ActiveSymbols {
     }
 
     @action.bound async retrieveActiveSymbols() {
-        if (this.processedSymbols) {
+        if (this.isRetrievingSymbols) {
+            await this.symbolsPromise;
             return this.activeSymbols;
         }
+
+        this.isRetrievingSymbols = true;
         const { active_symbols } = await this._api.getActiveSymbols();
         this.processedSymbols = this._processSymbols(active_symbols);
         this.categorizedSymbols = this._categorizeActiveSymbols(this.processedSymbols);
@@ -23,10 +29,14 @@ export default class ActiveSymbols {
         }
         this._tradingTimes.onMarketOpenCloseChanged(action((changes) => {
             for (const symbol in changes) {
-                this.symbolMap[symbol].exchange_is_open = changes[symbol];
+                const symObj = this.symbolMap[symbol];
+                if (symObj) {
+                    symObj.exchange_is_open = changes[symbol];
+                }
             }
             this.changes = changes;
         }));
+        this.symbolsPromise.resolve();
         return this.activeSymbols;
     }
 

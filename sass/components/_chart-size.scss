@@ -33,13 +33,19 @@
 .cq-chart-control-left {
     .cq-chart-size {
         width: 100px !important;
-        min-height: 116px;
+        min-height: 124px;
         flex-flow: column;
+
+        .cq-menu-btn {
+            &:first-child {
+                margin-bottom: 16px;
+            }
+        }
     }
 }
 
-.smartcharts-desktop {
-    &.smartcharts-480 {
+.smartcharts-480 {
+    .smartcharts-desktop {
         .cq-chart-control-bottom {
             .cq-chart-controls {
                 .cq-chart-size {
@@ -50,7 +56,10 @@
             }
         }
     }
-    &.smartcharts-900 {
+}
+
+.smartcharts-900 {
+    .smartcharts-desktop {
         .cq-chart-control-bottom {
             .cq-chart-controls {
                 .cq-chart-size {
@@ -61,7 +70,10 @@
             }
         }
     }
-    &.smartcharts-1280 {
+}
+
+.smartcharts-1280 {
+    .smartcharts-desktop {
         .cq-chart-control-bottom {
             .cq-chart-controls {
                 .cq-chart-size {
