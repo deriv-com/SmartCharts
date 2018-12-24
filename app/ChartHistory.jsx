@@ -23,7 +23,7 @@ class ChartHistory extends React.Component {
 
     onChangeDate({ target }) {
         const date = target.value;
-        this.setState({ date, focusOnDate: false, focusOnTime: true });
+        this.setState({ date, focusOnDate: false, focusOnTime: true }, this.updateStore);
     }
 
     onChangeTime({ target }) {

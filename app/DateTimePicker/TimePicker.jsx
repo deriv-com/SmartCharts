@@ -20,7 +20,9 @@ const isSessionAvailable = (
     if (should_only_check_hour) {
         end_moment.minute(0).second(0);
     }
-    return compare_moment.isBefore(end_moment);
+    const offset = (new Date()).getTimezoneOffset() * 60 * 1000;
+    const end_time = end_moment.valueOf() + offset;
+    return (end_time - compare_moment.valueOf() > 0);
 };
 
 class TimePickerDropdown extends React.Component {
@@ -107,7 +109,6 @@ class TimePickerDropdown extends React.Component {
                             {this.hours.map((h, key) => {
                                 start_moment_clone.hour(h);
                                 const is_enabled = isSessionAvailable(start_moment_clone, end_moment, true);
-
                                 return (
                                     <div
                                         className={`list-item${hour === h ? ' selected' : ''}${is_enabled ? '' : ' disabled'}`}
