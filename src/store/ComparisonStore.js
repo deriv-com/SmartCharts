@@ -79,6 +79,12 @@ export default class ComparisonStore {
         this.removeComparison(symbolObject);
     }
 
+    @action.bound removeAll() {
+        this.comparisonSymbols.forEach((x) => {
+            this.onDeleteItem(x);
+        });
+    }
+
     @action.bound onSelectItem(symbolObject) {
         logEvent(LogCategories.ChartControl, LogActions.Comparison, `Add ${symbolObject.name}`);
         const context = this.context;

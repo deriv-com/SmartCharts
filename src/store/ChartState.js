@@ -9,10 +9,12 @@ class ChartState {
     @observable symbol;
     @observable isConnectionOpened;
     @observable settings;
+    get comparisonStore() { return this.mainStore.comparison; }
     get stxx() { return this.chartStore.stxx; }
     get context() { return this.chartStore.context; }
 
     constructor(mainStore) {
+        this.mainStore = mainStore;
         this.chartStore = mainStore.chart;
         when(() => this.context, this.onContextReady);
     }
@@ -23,7 +25,7 @@ class ChartState {
         this.stxx.addEventListener('drawing', this.saveDrawings.bind(this));
     };
 
-    @action.bound updateProps({ id, settings, isConnectionOpened, symbol, granularity, chartType, startEpoch, endEpoch }) {
+    @action.bound updateProps({ id, settings, isConnectionOpened, symbol, granularity, chartType, startEpoch, endEpoch, removeAllComparisons }) {
         this.chartId = id;
         this.settings = settings;
         this.isConnectionOpened = isConnectionOpened;
@@ -32,6 +34,10 @@ class ChartState {
         this.chartType = chartType;
         this.startEpoch = startEpoch;
         this.endEpoch = endEpoch;
+
+        if (removeAllComparisons) {
+            this.comparisonStore.removeAll();
+        }
     }
 
     saveLayout() {

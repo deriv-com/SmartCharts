@@ -112,7 +112,7 @@ class App extends Component {
             settings = { language };
         }
         if (settings.historical) {
-            this.cleanComparison();
+            this.removeAllComparisons();
             endEpoch = (new Date(`${today}:00Z`).valueOf() / 1000);
         }
         connectionManager.on(
@@ -138,10 +138,10 @@ class App extends Component {
             || JSON.stringify(this.state.settings) !== JSON.stringify(nextState.settings);
     }
     */
-    cleanComparison = () => {
+    removeAllComparisons = () => {
         try {
-            const layout_string = localStorage.getItem(`layout-${chartId}`),
-                layout = JSON.parse(layout_string !== '' ? layout_string : '{}');
+            const layoutString = localStorage.getItem(`layout-${chartId}`),
+                layout = JSON.parse(layoutString !== '' ? layoutString : '{}');
 
             layout.symbols.splice(1, layout.symbols.length - 1);
             localStorage.setItem(`layout-${chartId}`, JSON.stringify(layout));
@@ -173,9 +173,9 @@ class App extends Component {
             this.setState({
                 chartType: 'mountain',
                 granularity: 0,
+                endEpoch: (new Date(`${today}:00Z`).valueOf() / 1000),
             });
-            this.cleanComparison();
-            window.location.reload(false);
+            this.removeAllComparisons();
         } else {
             this.handleDateChange('');
         }
@@ -239,6 +239,7 @@ class App extends Component {
                 isMobile={isMobile}
                 onMessage={this.onMessage}
                 enableRouting
+                removeAllComparisons={settings.historical}
                 topWidgets={this.renderTopWidgets}
                 chartControlsWidgets={this.renderControls}
                 requestAPI={requestAPI}
