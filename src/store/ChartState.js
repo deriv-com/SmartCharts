@@ -61,6 +61,11 @@ class ChartState {
             symbolDat.symbolObject = updatedSymbol;
             if (symbolDat.parameters) {
                 symbolDat.parameters.display = updatedSymbol.name;
+
+                // These gap settings are default when new comparisons are added,
+                // but for backward support we need to set them here.
+                symbolDat.parameters.fillGaps = true;
+                symbolDat.parameters.gapDisplayStyle = true;
             }
         }
 

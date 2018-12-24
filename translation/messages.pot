@@ -221,6 +221,18 @@ msgstr ""
 msgid "RESET"
 msgstr ""
 
+msgid "Retrieving Chart Data..."
+msgstr ""
+
+msgid "Retrieving Chart Engine..."
+msgstr ""
+
+msgid "Retrieving market symbols..."
+msgstr ""
+
+msgid "Retrieving trading times..."
+msgstr ""
+
 msgid "Reversal"
 msgstr ""
 
