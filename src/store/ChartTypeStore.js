@@ -163,7 +163,7 @@ export default class ChartTypeStore {
     }
 
     @action.bound setType(type) {
-        logEvent(LogCategories.ChartControl, LogActions.ChartType, type.text);
+        logEvent(LogCategories.ChartControl, LogActions.ChartType, type);
         if (typeof type === 'string') {
             type = this.types.find(t => t.id === type);
         }

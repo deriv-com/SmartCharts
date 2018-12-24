@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Vietnamese\n"
 "Language: vi_VN\n"
-"PO-Revision-Date: 2018-09-25 09:32\n"
+"PO-Revision-Date: 2018-12-21 08:02\n"
 
 msgid " already exists."
 msgstr " đã tồn tại."
@@ -233,6 +233,18 @@ msgstr "Renko"
 
 msgid "RESET"
 msgstr "THIẾT LẬP LẠI"
+
+msgid "Retrieving Chart Data..."
+msgstr ""
+
+msgid "Retrieving Chart Engine..."
+msgstr ""
+
+msgid "Retrieving market symbols..."
+msgstr ""
+
+msgid "Retrieving trading times..."
+msgstr ""
 
 msgid "Reversal"
 msgstr "Đảo ngược"
