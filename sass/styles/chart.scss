@@ -15,7 +15,7 @@ html, body {
     font-family: $base-font;
     font-size: 12px;
     position: relative; /* chart container must be relative for internal DOM elements to be correct */
-    z-index: 1;
+    z-index: 3;
     transition: height 0.4s ease-in-out;
     @include themify($themes) {
         background: themed('ChartBg');
@@ -31,6 +31,7 @@ html, body {
 .ciq-chart {
     height: auto;
     width: 100%;
+    z-index: 2;
     @include themify($themes) {
         background: themed('ChartBg');
     }
@@ -42,8 +43,8 @@ html, body {
         left: 10px;
     }
     .chartContainer {
-        width: calc(100% - 90px);
-        margin-left: 90px;
+        width: calc(100% - 100px);
+        margin-left: 100px;
     }
 }
 
