@@ -52,10 +52,10 @@ const ChartTable = ({
                                                     {isTick && <div><span>{t.translate('Close')}</span>{item.Close}</div>}
                                                     {!isTick
                                                     && [
-                                                        <div><span>{t.translate('O')}</span>{item.Open}</div>,
-                                                        <div><span>{t.translate('H')}</span>{item.High}</div>,
-                                                        <div><span>{t.translate('L')}</span>{item.Low}</div>,
-                                                        <div><span>{t.translate('C')}</span>{item.Close}</div>,
+                                                        <div key="item-open"><span>{t.translate('O')}</span>{item.Open}</div>,
+                                                        <div key="item-high"><span>{t.translate('H')}</span>{item.High}</div>,
+                                                        <div key="item-low"><span>{t.translate('L')}</span>{item.Low}</div>,
+                                                        <div key="item-close"><span>{t.translate('C')}</span>{item.Close}</div>,
                                                     ]}
                                                 </div>
                                             </td>
@@ -98,10 +98,10 @@ const ChartTable = ({
                                             {isTick && <td className="ciq-table-cell">{item.Close}</td>}
                                             {!isTick
                                         && [
-                                            <td className="ciq-table-cell">{item.Open}</td>,
-                                            <td className="ciq-table-cell">{item.High}</td>,
-                                            <td className="ciq-table-cell">{item.Low}</td>,
-                                            <td className="ciq-table-cell">{item.Close}</td>,
+                                            <td key="td-open" className="ciq-table-cell">{item.Open}</td>,
+                                            <td key="td-high" className="ciq-table-cell">{item.High}</td>,
+                                            <td key="td-low" className="ciq-table-cell">{item.Low}</td>,
+                                            <td key="td-close" className="ciq-table-cell">{item.Close}</td>,
                                         ]}
                                             <td className="ciq-table-cell">
                                                 <div className="cq-change-cell">

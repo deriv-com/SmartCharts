@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: German\n"
 "Language: de_DE\n"
-"PO-Revision-Date: 2018-09-25 09:31\n"
+"PO-Revision-Date: 2018-12-23 20:41\n"
 
 msgid " already exists."
 msgstr " existiert bereits."
@@ -233,6 +233,18 @@ msgstr "Renko"
 
 msgid "RESET"
 msgstr "Zurücksetzen"
+
+msgid "Retrieving Chart Data..."
+msgstr "Chartdaten werden abgerufen"
+
+msgid "Retrieving Chart Engine..."
+msgstr "Chart-Engine wird abgerufen"
+
+msgid "Retrieving market symbols..."
+msgstr "Markt-Symbole werden abgerufen..."
+
+msgid "Retrieving trading times..."
+msgstr "Handelszeiten werden abgerufen..."
 
 msgid "Reversal"
 msgstr "Umkehrung"
