@@ -1,6 +1,6 @@
 import EventEmitter from 'event-emitter-es6';
-import RobustWebsocket from './robust-websocket';
 import { PendingPromise } from '@binary-com/smartcharts'; // eslint-disable-line import/no-extraneous-dependencies,import/no-unresolved
+import RobustWebsocket from './robust-websocket';
 
 class ConnectionManager extends EventEmitter {
     static get EVENT_CONNECTION_CLOSE() { return 'CONNECTION_CLOSE'; }
