@@ -54,10 +54,8 @@ class CrosshairStore {
     @action.bound renderCrosshairTooltip() {
         const dateStr = this.stx.controls.floatDate.innerHTML;
         if (dateStr) {
-            const date = new Date(dateStr);
-            let seconds = date.getSeconds();
-            seconds =  seconds !== 0 ? `:${seconds}` : '';
-            this.stx.controls.floatDate.innerHTML = `${date.getDate()}-${date.getMonth() + 1} ${date.getHours()}:${date.getMinutes()}${seconds}`;
+            const month = dateStr.substring(0, 2);
+            this.stx.controls.floatDate.innerHTML = dateStr.replace(dateStr.substring(0, 2), dateStr.substring(3, 5)).replace(dateStr.substring(2, 5), `-${month}`);
         }
 
         // if no tooltip exists, then skip
