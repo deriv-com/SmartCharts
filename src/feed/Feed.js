@@ -13,6 +13,7 @@ class Feed {
     get endEpoch() { return this._mainStore.state.endEpoch; }
     get granularity() { return this._mainStore.chart.granularity; }
     get context() { return this._mainStore.chart.context; }
+    get loader() { return this._mainStore.loader; }
     _activeStreams = {};
     _isConnectionOpened = true;
 
@@ -93,6 +94,7 @@ class Feed {
         }
         const comparisonChartSymbol = isComparisonChart ? symbol : undefined;
         const symbolName = symbolObject.name;
+        this.loader.setState('chart-data');
 
         if (this._tradingTimes.isFeedUnavailable(symbol)) {
             this._mainStore.notifier.notifyFeedUnavailable(symbolName);
@@ -171,7 +173,6 @@ class Feed {
             callback({ quotes: [] });
             return;
         }
-
         callback({ quotes });
 
         this._emitDataUpdate(quotes, comparisonChartSymbol);
@@ -329,14 +330,14 @@ class Feed {
         for (const key in this._activeStreams) {
             this._activeStreams[key].pause();
         }
-        this._connectionClosedDate = this._serverTime.getUTCDate();
+        this._connectionClosedDate = new Date();
     }
 
     _onConnectionReopened() {
         const keys = Object.keys(this._activeStreams);
         if (keys.length === 0) { return; }
         const { granularity } = this._unpackKey(keys[0]);
-        const elapsedSeconds = (this._serverTime.getUTCDate() - this._connectionClosedDate) / 1000 | 0;
+        const elapsedSeconds = (new Date() - this._connectionClosedDate) / 1000 | 0;
         const maxIdleSeconds = (granularity || 1) * this._stx.chart.maxTicks;
         if (elapsedSeconds >= maxIdleSeconds) {
             this._mainStore.chart.refreshChart();
