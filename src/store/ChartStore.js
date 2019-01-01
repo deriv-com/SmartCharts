@@ -135,6 +135,7 @@ class ChartStore {
             onMessage,
             settings,
             onSettingsChange,
+            supportsAnimation = true,
         } = props;
         this.api = new BinaryAPI(requestAPI, requestSubscribe, requestForget);
 
@@ -147,6 +148,7 @@ class ChartStore {
         chartSetting.onSettingsChange = onSettingsChange;
         this.isMobile = isMobile;
         this.state = this.mainStore.state;
+        this.supportsAnimation = supportsAnimation;
 
         this.mainStore.notifier.onMessage = onMessage;
         this.granularity = (granularity !== undefined) ? granularity : this.defaults.granularity;

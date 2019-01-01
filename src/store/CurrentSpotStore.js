@@ -22,7 +22,7 @@ class CurrectSpotStore {
         const chart = this.stx.chart;
         const layout = this.stx.layout;
         const mainSeriesRenderer = this.stx.mainSeriesRenderer;
-        let visible = true;
+        let visible = mainSeriesRenderer.supportsAnimation = this.mainStore.chart.supportsAnimation;
 
         if (chart.dataSet
             && chart.dataSet.length
