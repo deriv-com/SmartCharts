@@ -9,10 +9,14 @@
     align-items: center;
     box-sizing: border-box;
     border-radius: 2px;
+    transition: z-index 0.3s linear;
     @include themify($themes) {
         background: themed('MenuBg');
     }
 
+    &.active {
+        z-index: 5;
+    }
     .ciq-menu {
         width: 100px;
 
@@ -175,7 +179,6 @@
 
     .ciq-menu {
         height: 54px;
-        margin-bottom: 16px;
 
         .stxMenuActive {
             @include themify($themes) {
