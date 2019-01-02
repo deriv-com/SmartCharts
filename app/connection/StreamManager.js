@@ -41,7 +41,9 @@ class StreamManager {
         // It is not its responsibility to reestablish the streams upon reconnection.
         this._streamIds = {}; // set it to blank so that forget requests do not get called
         for (const key of Object.keys(this._streams)) {
-            this._forgetStream(key);
+            if (this._streams[key].subscriberCount !== 0) {
+                this._forgetStream(key);
+            }
         }
     }
 
