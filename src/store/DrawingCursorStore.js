@@ -24,8 +24,8 @@ export default class DrawingCursorStore {
 
         if (this.isDrawing) {
             this.display = 'block';
-            this.left = epX;
-            this.top = epY - 16;
+            this.left = epX - this.stx.left;
+            this.top = epY - this.stx.top - 16;
         } else {
             this.display = 'none';
         }
