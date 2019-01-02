@@ -61,6 +61,8 @@ class TimePickerDropdown extends React.Component {
                     [is_type_selected]: true,
                 });
                 this.props.onChange(`${type === 'h' ? value : prev_hour}:${type === 'm' ? value : prev_minute}`);
+            } else {
+                this.props.toggle();
             }
         }
     };
@@ -162,7 +164,7 @@ class TimePicker extends React.Component {
 
     componentWillReceiveProps(nextProps) {
         if (nextProps.focus) {
-            this.toggleDropDown();
+            this.setState({ is_open: true });
         }
     }
 
@@ -199,6 +201,9 @@ class TimePicker extends React.Component {
         if (this.wrapper_ref && !this.wrapper_ref.contains(event.target)) {
             if (this.state.is_open) {
                 this.setState({ is_open: false });
+                if (this.props.disableFocus) {
+                    this.props.disableFocus();
+                }
             }
         }
     };

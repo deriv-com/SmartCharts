@@ -161,5 +161,6 @@ export default class ChartSettingStore {
         if (this.historical === value) { return; }
         this.historical = value;
         this.saveSetting();
+        this.menu.setOpen(false);
     }
 }

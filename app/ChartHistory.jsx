@@ -31,6 +31,10 @@ class ChartHistory extends React.Component {
         this.setState({ time, focusOnDate: false, focusOnTime: false }, this.updateStore);
     }
 
+    onDisableFocus() {
+        this.setState({ focusOnDate: false, focusOnTime: false });
+    }
+
     updateStore() {
         const { date, time } = this.state;
         this.props.onChange(`${date} ${time}`);
@@ -45,6 +49,7 @@ class ChartHistory extends React.Component {
                     name="date"
                     format="DD MMMM YYYY"
                     focus={this.state.focusOnDate}
+                    disableFocus={() => this.onDisableFocus()}
                     has_today_btn
                     value={this.state.date}
                     onChange={e => this.onChangeDate(e)}
@@ -55,6 +60,7 @@ class ChartHistory extends React.Component {
                     placeholder="time"
                     name="time"
                     focus={this.state.focusOnTime}
+                    disableFocus={() => this.onDisableFocus()}
                     is_clearable
                     start_date={moment(this.state.date, 'YYYY/MM/DD').valueOf() / 1000}
                     value={this.state.time}
