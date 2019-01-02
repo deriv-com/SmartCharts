@@ -1,6 +1,6 @@
 import EventEmitter from 'event-emitter-es6';
-import RobustWebsocket from 'robust-websocket';
 import { PendingPromise } from '@binary-com/smartcharts'; // eslint-disable-line import/no-extraneous-dependencies,import/no-unresolved
+import RobustWebsocket from './robust-websocket';
 
 class ConnectionManager extends EventEmitter {
     static get EVENT_CONNECTION_CLOSE() { return 'CONNECTION_CLOSE'; }
@@ -12,6 +12,7 @@ class ConnectionManager extends EventEmitter {
         this._counterReqId = 1;
         this._initialize();
         this._pendingRequests = { };
+        this._bufferedRequests = [];
     }
 
     _initialize() {
@@ -59,6 +60,8 @@ class ConnectionManager extends EventEmitter {
             this._connectionOpened = undefined;
         }
         this.emit(ConnectionManager.EVENT_CONNECTION_REOPEN);
+        this._sendBufferedRequests();
+
         if (!this._pingTimer) {
             this._pingTimer = setInterval(this._pingCheck.bind(this), 15000);
         }
@@ -85,9 +88,9 @@ class ConnectionManager extends EventEmitter {
         }
 
         Object.keys(this._pendingRequests).forEach((req_id) => {
-            this._pendingRequests[req_id].reject('Pending requests are rejected as connection is closed.');
+            this._bufferedRequests.push(this._pendingRequests[req_id]);
         });
-        this._pendingRequests = { };
+
         this.emit(ConnectionManager.EVENT_CONNECTION_CLOSE);
     }
 
@@ -110,9 +113,16 @@ class ConnectionManager extends EventEmitter {
         }, timeout);
     }
 
+    _sendBufferedRequests() {
+        while (this._bufferedRequests.length > 0) {
+            const req = this._bufferedRequests.shift();
+            this.send(req.data);
+        }
+    }
+
     async send(data, timeout) {
         const req = Object.assign({}, data);
-        req.req_id = this._counterReqId++;
+        req.req_id = req.req_id || this._counterReqId++;
 
         if (this._websocket.readyState !== WebSocket.OPEN) {
             if (!this._connectionOpened) {
@@ -122,7 +132,9 @@ class ConnectionManager extends EventEmitter {
         }
 
         this._websocket.send(JSON.stringify(req));
-        this._pendingRequests[req.req_id] = new PendingPromise(req);
+        if (!this._pendingRequests[data.req_id]) {
+            this._pendingRequests[req.req_id] = new PendingPromise(req);
+        }
         if (timeout) {
             this._timeoutRequest(req.req_id, timeout);
         }
