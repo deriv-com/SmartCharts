@@ -16,6 +16,7 @@
     padding: 4px 8px;
     transform: rotate(90deg);
     max-width: 80px;
+    opacity: var(--doorbell-opacity);
 }
 
 #doorbell form {
