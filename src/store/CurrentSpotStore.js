@@ -15,14 +15,14 @@ class CurrectSpotStore {
     get stx() { return this.context.stx; }
 
     onContextReady = () => {
-        this.stx.append('draw', this.updateSpot);
+        if (this.mainStore.state.supportsAnimation) this.stx.append('draw', this.updateSpot);
     }
 
     @action.bound updateSpot() {
         const chart = this.stx.chart;
         const layout = this.stx.layout;
         const mainSeriesRenderer = this.stx.mainSeriesRenderer;
-        let visible = mainSeriesRenderer.supportsAnimation = this.mainStore.chart.supportsAnimation;
+        let visible = true;
 
         if (chart.dataSet
             && chart.dataSet.length
