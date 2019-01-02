@@ -103,7 +103,7 @@ barriers | Draw chart barriers. Refer to [Barriers API](#barriers-api) for usage
 enableRouting | Enable routing for dialogs. Defaults to `false`
 isConnectionOpened | Sets the connection status. If set, upon reconnection smartcharts will either patch missing tick data or refresh the chart, depending on granularity; if not set, it is assumed that connection is always opened. Defaults to `undefined`.
 onMessage | SmartCharts will send notifications via this callback, should it be provided. Each notification will have the following structure: `{ text, type, category }`.
-
+isAnimationEnabled | Determine whether chart animation is enabled or disabled. It may needs to be disabled for better performance. Defaults to `true`.
 ### Chart Settings
 
 | Attribute | Description |
@@ -223,7 +223,7 @@ Certain chart parameters can be set either by props or from the chart UI:
    - `granularity` - set by `<TimePeriod >`
    - `chartType` - set by `<ChartTypes />`
   
-  This creates conflicts in deciding which is the single source of truth. To circumvent this, if these props are set (not `undefined`), selecting options in its corresponding components will not have any affect affect on the chart; the prop values take precedence. To have control over both the UI and the props, we provide library users the option to _override_ component behaviour via `onChange` prop. For example, to retrieve the symbol a client chooses:
+  This creates conflicts in deciding which is the single source of truth. To circumvent this, if these props are set (not `undefined`), selecting options in its corresponding components will not have any affect on the chart; the prop values take precedence. To have control over both the UI and the props, we provide library users the option to _override_ component behaviour via `onChange` prop. For example, to retrieve the symbol a client chooses:
  
  ```jsx
 <ChartTitle

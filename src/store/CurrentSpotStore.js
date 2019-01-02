@@ -15,7 +15,7 @@ class CurrectSpotStore {
     get stx() { return this.context.stx; }
 
     onContextReady = () => {
-        this.stx.append('draw', this.updateSpot);
+        if (this.mainStore.state.isAnimationEnabled) this.stx.append('draw', this.updateSpot);
     }
 
     @action.bound updateSpot() {
