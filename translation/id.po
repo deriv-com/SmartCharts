@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Indonesian\n"
 "Language: id_ID\n"
-"PO-Revision-Date: 2018-12-21 08:01\n"
+"PO-Revision-Date: 2018-12-27 04:21\n"
 
 msgid " already exists."
 msgstr " sudah tersedia."
@@ -61,10 +61,10 @@ msgid "Channel"
 msgstr "Kanal"
 
 msgid "Chart data is not available for this symbol."
-msgstr "Data chart tidak tersedia untuk simbol ini."
+msgstr "Data grafik tidak tersedia untuk simbol ini."
 
 msgid "Chart types"
-msgstr "Jenis chart"
+msgstr "Jenis grafik"
 
 msgid "Clear All"
 msgstr "Hapus Semua"
@@ -235,16 +235,16 @@ msgid "RESET"
 msgstr "ULANG"
 
 msgid "Retrieving Chart Data..."
-msgstr ""
+msgstr "Mengambil Data Grafik..."
 
 msgid "Retrieving Chart Engine..."
-msgstr ""
+msgstr "Mengambil Mesin Grafik..."
 
 msgid "Retrieving market symbols..."
-msgstr ""
+msgstr "Mengambil simbol pasar..."
 
 msgid "Retrieving trading times..."
-msgstr ""
+msgstr "Mengambil waktu trading..."
 
 msgid "Reversal"
 msgstr "Reversal"
@@ -850,7 +850,7 @@ msgid "Use Volume"
 msgstr "Volume Digunakan"
 
 msgid "Volume Chart"
-msgstr "Volume Chart"
+msgstr "Volume Grafik"
 
 msgid "Up Volume"
 msgstr "Volume Atas"
