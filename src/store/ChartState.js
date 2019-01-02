@@ -23,7 +23,7 @@ class ChartState {
         this.stxx.addEventListener('drawing', this.saveDrawings.bind(this));
     };
 
-    @action.bound updateProps({ id, settings, isConnectionOpened, symbol, granularity, chartType, startEpoch, endEpoch, supportsAnimation }) {
+    @action.bound updateProps({ id, settings, isConnectionOpened, symbol, granularity, chartType, startEpoch, endEpoch, isAnimationEnabled = true }) {
         this.chartId = id;
         this.settings = settings;
         this.isConnectionOpened = isConnectionOpened;
@@ -32,7 +32,7 @@ class ChartState {
         this.chartType = chartType;
         this.startEpoch = startEpoch;
         this.endEpoch = endEpoch;
-        this.supportsAnimation = supportsAnimation || supportsAnimation === undefined;
+        this.isAnimationEnabled = isAnimationEnabled;
     }
 
     saveLayout() {
