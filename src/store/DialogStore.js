@@ -33,6 +33,12 @@ export default class DialogStore {
             } else {
                 activeDialog = undefined;
             }
+
+            // Hide doorbell button when dialog opens in mobile devices
+            const drbllBtn = document.getElementById('doorbell-button');
+            if (drbllBtn) {
+                drbllBtn.style.setProperty('--doorbell-opacity', this.mainStore.chart.isMobile && val ? 0 : 1);
+            }
         }
     }
 

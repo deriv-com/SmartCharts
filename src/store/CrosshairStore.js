@@ -42,7 +42,6 @@ class CrosshairStore {
         const storedState = this.stx.layout.crosshair;
         this.state = (typeof storedState !== 'number') ? 0 : storedState;
         this.stx.append('headsUpHR', this.renderCrosshairTooltip);
-        this.stx.append('createDataSegment', this.renderCrosshairTooltip);
     };
 
     @action.bound toggleState() {
@@ -53,6 +52,12 @@ class CrosshairStore {
     }
 
     @action.bound renderCrosshairTooltip() {
+        const dateStr = this.stx.controls.floatDate.innerHTML;
+        if (dateStr) {
+            const month = dateStr.substring(0, 2);
+            this.stx.controls.floatDate.innerHTML = dateStr.replace(dateStr.substring(0, 2), dateStr.substring(3, 5)).replace(dateStr.substring(2, 5), `-${month}`);
+        }
+
         // if no tooltip exists, then skip
         if (this.state !== 2) return;
 
