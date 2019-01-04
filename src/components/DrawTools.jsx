@@ -1,8 +1,8 @@
 import React from 'react';
+import SimpleBar from 'simplebar-react';
 import { connect } from '../store/Connect';
 import { DrawIcon, ClearIcon, MeasureIcon } from './Icons.jsx';
 import '../../sass/components/_draw-tools.scss';
-import SimpleBar from 'simplebar-react';
 
 const DrawTools = ({
     clearAll,

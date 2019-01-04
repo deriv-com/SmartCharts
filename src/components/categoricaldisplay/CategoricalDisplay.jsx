@@ -14,7 +14,10 @@ class CategoricalDisplay extends React.Component {
         } = this.props;
 
         return (
-            <div className="cq-categorical-display">
+            <div
+                className="cq-categorical-display"
+                ref={setScrollPanel}
+            >
                 <div className="cq-lookup-filters">
                     <SearchInput />
                     <FilterPanel />
@@ -22,7 +25,6 @@ class CategoricalDisplay extends React.Component {
                 <SimpleBar
                     style={{ height:300 }}
                     className="cq-scroll-panel"
-                    ref={setScrollPanel}
                 >
                     <ResultsPanel
                         onSelectItem={onSelectItem}
