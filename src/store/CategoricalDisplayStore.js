@@ -1,6 +1,5 @@
 import React from 'react';
 import { action, observable, computed, reaction } from 'mobx';
-import SimpleBar from 'simplebar';
 import { connect } from './Connect';
 import { cloneCategories, cloneCategory } from '../utils';
 import SearchInput from '../components/SearchInput.jsx';
@@ -273,7 +272,8 @@ export default class CategoricalDisplayStore {
     }
 
     @action.bound setScrollPanel(element) {
-        this.scrollPanel = element ? (new SimpleBar(element)).getScrollElement() : null;
+        alert();
+        this.scrollPanel = element;
     }
 
     connect = connect(() => ({

@@ -1,27 +1,36 @@
 import React from 'react';
 import '../../../sass/components/_categorical-display.scss';
+import SimpleBar from 'simplebar-react';
 
-const CategoricalDisplay = ({
-    onSelectItem,
-    setScrollPanel,
-    ResultsPanel,
-    FilterPanel,
-    SearchInput,
-}) => (
-    <div className="cq-categorical-display">
-        <div className="cq-lookup-filters">
-            <SearchInput />
-            <FilterPanel />
-        </div>
-        <div
-            className="cq-scroll-panel"
-            ref={setScrollPanel}
-        >
-            <ResultsPanel
-                onSelectItem={onSelectItem}
-            />
-        </div>
-    </div>
-);
+class CategoricalDisplay extends React.Component {
+    render() {
+        const {
+            onSelectItem,
+            setScrollPanel,
+            ResultsPanel,
+            FilterPanel,
+            SearchInput,
+
+        } = this.props;
+
+        return (
+            <div className="cq-categorical-display">
+                <div className="cq-lookup-filters">
+                    <SearchInput />
+                    <FilterPanel />
+                </div>
+                <SimpleBar
+                    style={{ height:300 }}
+                    className="cq-scroll-panel"
+                    ref={setScrollPanel}
+                >
+                    <ResultsPanel
+                        onSelectItem={onSelectItem}
+                    />
+                </SimpleBar>
+            </div>
+        );
+    }
+}
 
 export default CategoricalDisplay;
