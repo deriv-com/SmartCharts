@@ -10,16 +10,16 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
-"PO-Revision-Date: 2018-12-21 08:01\n"
+"PO-Revision-Date: 2019-01-04 19:52\n"
 
 msgid " already exists."
-msgstr ""
+msgstr " уже существует."
 
 msgid "[symbol] feed is delayed by [delay] minutes"
-msgstr ""
+msgstr "Данные для [symbol] запаздывают на [delay] мин."
 
 msgid "[symbol] market is now opened."
-msgstr ""
+msgstr "Рынок [symbol] открыт."
 
 msgid "[symbol] market is presently closed."
 msgstr "Рынок [symbol] закрыт в данный момент."
@@ -31,7 +31,7 @@ msgid "Active"
 msgstr "Активные"
 
 msgid "Add New"
-msgstr ""
+msgstr "Новинки"
 
 msgid "Annotation"
 msgstr "Примечание"
@@ -52,7 +52,7 @@ msgid "Callout"
 msgstr "Сноска"
 
 msgid "CANCEL"
-msgstr ""
+msgstr "ОТМЕНА"
 
 msgid "Candle"
 msgstr "Свеча"
@@ -109,16 +109,16 @@ msgid "Dot"
 msgstr "Точечный"
 
 msgid "Download"
-msgstr ""
+msgstr "Загрузить"
 
 msgid "Download as CSV"
-msgstr ""
+msgstr "Загрузить как CSV"
 
 msgid "Download as PNG"
-msgstr ""
+msgstr "Загрузить как PNG"
 
 msgid "Download Chart"
-msgstr ""
+msgstr "Загрузить график"
 
 msgid "Draw tools"
 msgstr "Ср-ва отображения"
@@ -196,7 +196,7 @@ msgid "OPEN"
 msgstr "ОТКРЫТИЕ"
 
 msgid "OVERWRITE"
-msgstr ""
+msgstr "НАЛОЖЕНИЕ"
 
 msgid "Pitchfork"
 msgstr "Вилка"
@@ -235,7 +235,7 @@ msgid "RESET"
 msgstr "СБРОСИТЬ"
 
 msgid "Retrieving Chart Data..."
-msgstr ""
+msgstr "Получение данных графика..."
 
 msgid "Retrieving Chart Engine..."
 msgstr ""
