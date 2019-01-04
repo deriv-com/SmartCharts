@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
-"PO-Revision-Date: 2019-01-04 19:52\n"
+"PO-Revision-Date: 2019-01-04 20:01\n"
 
 msgid " already exists."
 msgstr " уже существует."
@@ -196,7 +196,7 @@ msgid "OPEN"
 msgstr "ОТКРЫТИЕ"
 
 msgid "OVERWRITE"
-msgstr "НАЛОЖЕНИЕ"
+msgstr "ПЕРЕЗАПИСАТЬ"
 
 msgid "Pitchfork"
 msgstr "Вилка"
@@ -238,13 +238,13 @@ msgid "Retrieving Chart Data..."
 msgstr "Получение данных графика..."
 
 msgid "Retrieving Chart Engine..."
-msgstr ""
+msgstr "Получение данных из Chart Engine..."
 
 msgid "Retrieving market symbols..."
-msgstr ""
+msgstr "Получение рыночных данных..."
 
 msgid "Retrieving trading times..."
-msgstr ""
+msgstr "Получение времени торговли..."
 
 msgid "Reversal"
 msgstr "Разворот"
@@ -295,7 +295,7 @@ msgid "Spline"
 msgstr "Кривая"
 
 msgid "SPOT"
-msgstr ""
+msgstr "СПОТ"
 
 msgid "Streaming for [symbol] is not available due to license restrictions"
 msgstr "Потоковые котировки для [symbol] недоступны из-за лицензионных ограничений"
@@ -331,7 +331,7 @@ msgid "Vertical"
 msgstr "Вертикаль"
 
 msgid "Would you like to overwrite it?"
-msgstr ""
+msgstr "Хотите перезаписать?"
 
 msgid "Zoom in"
 msgstr "Увеличить"
