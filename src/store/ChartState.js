@@ -1,3 +1,4 @@
+/* eslint-disable no-new */
 import { action, observable, when } from 'mobx';
 import { createObjectFromLocalStorage, calculateTimeUnitInterval, calculateGranularity } from '../utils';
 
@@ -21,6 +22,100 @@ class ChartState {
         this.stxx.addEventListener('layout', this.saveLayout.bind(this));
         this.stxx.addEventListener('symbolChange', this.saveLayout.bind(this));
         this.stxx.addEventListener('drawing', this.saveDrawings.bind(this));
+
+        setTimeout(() => {
+            const markerTypes = ['dividend', 'news', 'earnings'];
+            let newNode;
+
+            // for (let i = this.stxx.masterData.length - 20; i < this.stxx.masterData.length; i++) {
+            //     const point = this.stxx.masterData[i];
+            //     // #####################
+            //     // #####################
+            //     const r = Math.floor(Math.random() * (markerTypes.length + 1));
+            //     if (r === markerTypes.length) continue; // randomize
+            //     newNode = document.getElementById('stxEventPrototype').cloneNode(true);
+            //     newNode.id = null;
+            //     newNode.innerHTML = ' ';
+            //     CIQ.appendClassName(newNode, markerTypes[0]);
+
+            //     console.log(this.stxx.masterData[i].DT.getTime() - this.stxx.masterData[i - 1].DT.getTime());
+
+            //     new CIQ.Marker({
+            //         stx: this.stxx,
+            //         xPositioner: 'date',
+            //         x: point.DT,
+            //         label: 'events',
+            //         node: newNode,
+            //     });
+            //     // #####################
+            //     // #####################
+            //     const epoch = (point.DT.getTime() + 500);
+            //     this.stxx.updateChartData(
+            //         [
+            //             {
+            //                 Date: (new Date(epoch + 200)),
+            //                 Close: null,
+            //                 Volume: 4505569,
+            //             },
+            //         ],
+            //         null,
+            //         { useAsLastSale:true },
+            //     );
+            // }
+            // this.stxx.draw();
+
+
+            for (let i = this.stxx.masterData.length - 20; i < this.stxx.masterData.length; i++) {
+                const point = this.stxx.masterData[i];
+                // #####################
+                // #####################
+                let r = Math.floor(Math.random() * (markerTypes.length + 1));
+                if (r === markerTypes.length) continue; // randomize
+                newNode = document.getElementById('stxEventPrototype').cloneNode(true);
+                newNode.id = null;
+                newNode.innerHTML = ' ';
+                CIQ.appendClassName(newNode, markerTypes[0]);
+
+                console.log(this.stxx.masterData[i].DT.getTime() - this.stxx.masterData[i - 1].DT.getTime());
+
+                new CIQ.Marker({
+                    stx: this.stxx,
+                    xPositioner: 'date',
+                    x: point.DT,
+                    label: 'events',
+                    node: newNode,
+                });
+                // #####################
+                // #####################
+                const epoch = (point.DT.getTime() + 500);
+                this.stxx.updateChartData(
+                    [
+                        {
+                            Date: (new Date(epoch + 200)),
+                            Close: null,
+                            Volume: 4505569,
+                        },
+                    ],
+                    null,
+                    { useAsLastSale:true },
+                );
+
+                r = Math.floor(Math.random() * (markerTypes.length + 1));
+                if (r === markerTypes.length) continue; // randomize
+                newNode = document.getElementById('stxEventPrototype').cloneNode(true);
+                newNode.id = null;
+                newNode.innerHTML = ' ';
+                CIQ.appendClassName(newNode, markerTypes[1]);
+                new CIQ.Marker({
+                    stx: this.stxx,
+                    xPositioner: 'date',
+                    x: (new Date(epoch)),
+                    label: 'events',
+                    node: newNode,
+                });
+            }
+            this.stxx.draw();
+        }, 800);
     };
 
     @action.bound updateProps({ id, settings, isConnectionOpened, symbol, granularity, chartType, startEpoch, endEpoch, isAnimationEnabled = true }) {

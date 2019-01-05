@@ -12,6 +12,11 @@
     width: 100%;
     height: 100vh;
 
+    .chart-main {
+        position: relative;
+        grid-column: col-start/span 12;
+        height: 500px;
+    }
     .chart-instance {
         position: relative;
         grid-column: col-start/span 6;
@@ -80,3 +85,95 @@
 #doorbell-background {
     opacity: 0;
 }
+
+.myEvents {
+    position: absolute;
+    text-align: center;
+    width: 20px;
+    height: 20px;
+    line-height: 20px;
+    color: #fff;
+}
+
+.myEvents.dividend {
+    background-color: #0000ff;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    -ms-border-radius: 50%;
+    border-radius: 50%;
+}
+
+.myEvents.news {
+    background-color: #ff0000;
+    width: 15px;
+    height: 15px;
+    line-height: 15px;
+}
+
+.myEvents.earnings {
+    background-color: #ff9900;
+    border: 5px solid #ff9900;
+}
+
+.myEvents.rhombus .shape {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    left: 0px;
+    background-color: #ff9900;
+    border: 2px solid #000;
+    color: #000;
+    -webkit-transform: rotate(45deg);
+    /* Saf3.1+, Chrome */
+    -moz-transform: rotate(45deg);
+    /* FF3.5+ */
+    -ms-transform: rotate(45deg);
+    /* IE9 */
+    -o-transform: rotate(45deg);
+    /* Opera 10.5 */
+    transform: rotate(45deg);
+}
+
+.myEvents.rhombus .label {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    left: 2px;
+}
+
+.myEvents.hoverMarker {
+    background-color: pink;
+    border: 2px solid #000;
+}
+
+.tooltip {
+    display: inline;
+    position: relative;
+}
+
+.hoverMarker:hover .tooltip:after {
+    background: #333;
+    background: rgba(0, 0, 0, .8);
+    border-radius: 5px;
+    bottom: 26px;
+    color: #fff;
+    content: attr(title);
+    left: 20%;
+    padding: 5px 15px;
+    position: absolute;
+    z-index: 98;
+    width: 30px;
+    content: attr(title);
+}
+
+.hoverMarker:hover .tooltip:before {
+    border: solid;
+    border-color: #333 transparent;
+    border-width: 11px 6px 0 6px;
+    bottom: 20px;
+    content: "";
+    left: 50%;
+    position: absolute;
+    z-index: 99;
+}
+

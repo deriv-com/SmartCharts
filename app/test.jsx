@@ -118,7 +118,7 @@ class App extends React.Component {
         }] : [];
         return (
             <div className="grid">
-                <div className="chart-instance">
+                <div className="chart-main">
                     <SmartChart
                         onSymbolChange={symbol => console.log('Symbol has changed to:', symbol)}
                         isMobile={isMobile}
@@ -129,15 +129,8 @@ class App extends React.Component {
                         barriers={barriers}
                     />
                 </div>
-                <div className="side-chart">
-                    <SmartChart
-                        isMobile={isMobile}
-                        requestAPI={requestAPI}
-                        requestSubscribe={requestSubscribe}
-                        requestForget={requestForget}
-                    />
-                </div>
                 <div className="bottom-blob">
+                    <div id="stxEventPrototype" className="myEvents" />
                     <label htmlFor="barrierType">
                         Choose barrier type:&nbsp;
                         <select defaultValue="" id="barrierType" onChange={this.handleBarrierTypeChange}>
