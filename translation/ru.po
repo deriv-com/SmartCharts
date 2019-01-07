@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
-"PO-Revision-Date: 2019-01-04 20:01\n"
+"PO-Revision-Date: 2019-01-07 11:22\n"
 
 msgid " already exists."
 msgstr " уже существует."
@@ -31,7 +31,7 @@ msgid "Active"
 msgstr "Активные"
 
 msgid "Add New"
-msgstr "Новинки"
+msgstr "Добавить новый"
 
 msgid "Annotation"
 msgstr "Примечание"
