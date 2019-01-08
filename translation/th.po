@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Thai\n"
 "Language: th_TH\n"
-"PO-Revision-Date: 2018-12-21 08:02\n"
+"PO-Revision-Date: 2019-01-02 16:02\n"
 
 msgid " already exists."
 msgstr " มีอยู่แล้ว"
@@ -235,16 +235,16 @@ msgid "RESET"
 msgstr "RESET"
 
 msgid "Retrieving Chart Data..."
-msgstr ""
+msgstr "กำลังโหลดข้อมูลของแผนภูมิ..."
 
 msgid "Retrieving Chart Engine..."
-msgstr ""
+msgstr "กำลังโหลดเครื่องมือแผนภูมิ..."
 
 msgid "Retrieving market symbols..."
-msgstr ""
+msgstr "กำลังโหลดข้อมูลตลาด..."
 
 msgid "Retrieving trading times..."
-msgstr ""
+msgstr "กำลังโหลดข้อมูลเวลาซื้อขาย..."
 
 msgid "Reversal"
 msgstr "กลับตัว"
