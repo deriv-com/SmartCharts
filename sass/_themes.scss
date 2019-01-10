@@ -22,6 +22,7 @@ $COLOR_DARK_BLUE   : #15212d;
 $COLOR_DARK_GRAY   : #d2d3da;
 $COLOR_LIGHT_BLACK : #5c5c5c;
 $COLOR_BLACK       : #000000;
+$COLOR_ORANGE      : #ff9933;
 
 // Dark Theme Colors
 $COLOR_BRANDBLUE_5 : #f4f4f6;
@@ -40,7 +41,7 @@ $themes: (
         ChartBg: $COLOR_WHITE,
         ChartBorder: $COLOR_GRAY,
         ChartText: $COLOR_DARK_GRAY,
-        ChartCandleBg: $COLOR_BLUE,
+        ChartCandleBg: $COLOR_ORANGE,
         ChartCandleText: $COLOR_WHITE,
         ChartGrid: rgba($COLOR_BRANDBLUE_40, 0.08),
         ChartIndicateText: $COLOR_LIGHT_BLACK,
@@ -170,7 +171,7 @@ $themes: (
         ChartBg: $COLOR_BLUE,
         ChartBorder: $COLOR_BRANDBLUE_85,
         ChartText: $COLOR_BRANDBLUE_85,
-        ChartCandleBg: $COLOR_WHITE,
+        ChartCandleBg: $COLOR_ORANGE,
         ChartCandleText: $COLOR_BLUE,
         ChartGrid: rgba($COLOR_BRANDBLUE_40, 0.08),
         ChartIndicateText: $COLOR_WHITE,
