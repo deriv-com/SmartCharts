@@ -1,4 +1,5 @@
 import { action, computed, observable, when } from 'mobx';
+import moment from 'moment';
 
 class CurrectSpotStore {
     constructor(mainStore) {
@@ -9,10 +10,12 @@ class CurrectSpotStore {
     @observable top = 0;
     @observable left = 0;
     @observable show = false;
+    @observable historical = false;
     @computed get pip() { return this.mainStore.chart.currentActiveSymbol.decimal_places; }
 
     get context() { return this.mainStore.chart.context; }
     get stx() { return this.context.stx; }
+    get state() { return this.mainStore.state; }
 
     onContextReady = () => {
         this.stx.append('draw', this.updateSpot);
@@ -34,6 +37,7 @@ class CurrectSpotStore {
             const price = currentQuote.Close;
             const x = this.stx.pixelFromTick(currentQuote.tick, chart) + (chart.lastTickOffset || 0);
             const y = this.stx.pixelFromPrice(price, panel);
+
             if (chart.yAxis.left > x
                 && chart.yAxis.top <= y
                 && chart.yAxis.bottom >= y) {
@@ -46,7 +50,8 @@ class CurrectSpotStore {
                 visible = false;
             }
         }
-
+        this.historical = this.state.endEpoch
+            ? moment.utc(this.state.endEpoch * 1000).format('DD MMMM YYYY - HH:mm') : false;
         this.show = visible && (layout.chartType !== 'candle'
                 && layout.chartType !== 'colored_bar'
                 && layout.chartType !== 'hollow_candle');
