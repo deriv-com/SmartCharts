@@ -1,4 +1,5 @@
 import React from 'react';
+import SimpleBar from 'simplebar-react';
 import { connect } from '../store/Connect';
 import { DrawIcon, ClearIcon, MeasureIcon } from './Icons.jsx';
 import '../../sass/components/_draw-tools.scss';
@@ -23,8 +24,7 @@ const DrawTools = ({
 
         <DrawToolsMenu.Body>
             <div className="body">
-                <div
-                    data-simplebar
+                <SimpleBar
                     className="ciq-list"
                 >
                     <div className="cq-draw-buttons">
@@ -50,7 +50,7 @@ const DrawTools = ({
                             {it.text}
                         </div>
                     ))}
-                </div>
+                </SimpleBar>
 
             </div>
         </DrawToolsMenu.Body>
