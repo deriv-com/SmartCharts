@@ -1,5 +1,6 @@
 import React from 'react';
 import '../../../sass/components/_categorical-display.scss';
+import SimpleBar from 'simplebar-react';
 
 const CategoricalDisplay = ({
     onSelectItem,
@@ -8,19 +9,21 @@ const CategoricalDisplay = ({
     FilterPanel,
     SearchInput,
 }) => (
-    <div className="cq-categorical-display">
+    <div
+        className="cq-categorical-display"
+        ref={setScrollPanel}
+    >
         <div className="cq-lookup-filters">
             <SearchInput />
             <FilterPanel />
         </div>
-        <div
+        <SimpleBar
             className="cq-scroll-panel"
-            ref={setScrollPanel}
         >
             <ResultsPanel
                 onSelectItem={onSelectItem}
             />
-        </div>
+        </SimpleBar>
     </div>
 );
 

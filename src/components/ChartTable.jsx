@@ -1,5 +1,5 @@
 import React from 'react';
-import 'simplebar';
+import SimpleBar from 'simplebar-react';
 import { CloseIcon, ItemIconMap, SymbolPlaceholderIcon } from './Icons.jsx';
 import { connect } from '../store/Connect';
 import '../../sass/components/_ciq-chart-table.scss';
@@ -28,8 +28,7 @@ const ChartTable = ({
                     </div>
                 )
                 }
-                <div
-                    data-simplebar
+                <SimpleBar
                     data-simplebar-auto-hide="false"
                     className="ciq-list"
                 >
@@ -117,7 +116,7 @@ const ChartTable = ({
                             </table>
                         )
                     }
-                </div>
+                </SimpleBar>
             </>
             </Dialog>
         </div>

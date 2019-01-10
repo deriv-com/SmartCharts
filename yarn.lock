@@ -7016,7 +7016,7 @@ promise-inflight@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/promise-inflight/-/promise-inflight-1.0.1.tgz#98472870bf228132fcbdd868129bad12c3c029e3"
 
-prop-types@^15.6.2:
+prop-types@^15.6.1, prop-types@^15.6.2:
   version "15.6.2"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.6.2.tgz#05d5ca77b4453e985d60fc7ff8c859094a497102"
   dependencies:
@@ -7858,12 +7858,20 @@ simple-swizzle@^0.2.2:
   dependencies:
     is-arrayish "^0.3.1"
 
-simplebar@^3.1.0-beta.2:
-  version "3.1.0-beta.2"
-  resolved "https://registry.yarnpkg.com/simplebar/-/simplebar-3.1.0-beta.2.tgz#9418a6be394e39f269d96ce2356c0aed1597fa9b"
+simplebar-react@^0.1.1:
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/simplebar-react/-/simplebar-react-0.1.1.tgz#4ead66c943c60212a5c0592b8cc44c952f4dcabf"
+  dependencies:
+    prop-types "^15.6.1"
+    simplebar "^3.1.1"
+
+simplebar@^3.1.1:
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/simplebar/-/simplebar-3.1.1.tgz#ddd9d854205baf45cb6e4a62a5e8952218a0a9fa"
   dependencies:
     can-use-dom "^0.1.0"
     lodash.debounce "^4.0.8"
+    lodash.memoize "^4.1.2"
     lodash.throttle "^4.1.1"
     resize-observer-polyfill "^1.5.0"
     scrollbarwidth "^0.1.3"

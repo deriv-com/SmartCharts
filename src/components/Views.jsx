@@ -1,5 +1,5 @@
 import React from 'react';
-import 'simplebar';
+import SimpleBar from 'simplebar-react';
 import { connect } from '../store/Connect';
 import ViewStore from '../store/ViewStore';
 import {
@@ -97,9 +97,8 @@ const Views = ({
                         }
                     </span>
                 </div>
-                <div
+                <SimpleBar
                     className="ciq-list"
-                    data-simplebar
                     data-simplebar-auto-hide="false"
                 >
                     <div className="ciq-list-inner">
@@ -114,7 +113,7 @@ const Views = ({
                             ))
                         }
                     </div>
-                </div>
+                </SimpleBar>
             </div>
         </ViewsMenu.Body>
     </ViewsMenu>

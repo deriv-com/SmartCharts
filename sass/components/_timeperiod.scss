@@ -154,11 +154,11 @@
 
 .cq-chart-control-left {
     .ciq-period {
-        > .cq-menu-btn {
-            > .bt-priod {
-                .ic-priod {
-                    padding: 6px 20px;
-                }
+        .cq-menu-btn {
+            padding: 14px 5px 3px !important;
+
+            .bt-priod {
+                line-height: 1.8em;
             }
         }
     }

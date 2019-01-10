@@ -15,7 +15,6 @@ html, body {
     font-family: $base-font;
     font-size: 12px;
     position: relative; /* chart container must be relative for internal DOM elements to be correct */
-    z-index: 1;
     transition: height 0.4s ease-in-out;
     @include themify($themes) {
         background: themed('ChartBg');
@@ -31,6 +30,7 @@ html, body {
 .ciq-chart {
     height: auto;
     width: 100%;
+    z-index: 4;
     @include themify($themes) {
         background: themed('ChartBg');
     }
@@ -42,8 +42,8 @@ html, body {
         left: 10px;
     }
     .chartContainer {
-        width: calc(100% - 90px);
-        margin-left: 90px;
+        width: calc(100% - 100px);
+        margin-left: 100px;
     }
 }
 
@@ -256,7 +256,7 @@ html, body {
 .mSticky {
     position: absolute;
     display: none;
-    z-index: 40;
+    z-index: 44;
     font-size: 12px;
     text-align: center;
     white-space: nowrap;
@@ -407,7 +407,7 @@ html, body {
     color: #fff;
     padding: 1px 6px;
     text-align: center;
-    width: 70px;
+    width: auto;
 }
 
 .stx-float-price { /* Corsshair Floating y-axis value label*/
@@ -741,7 +741,7 @@ html, body {
     display: block;
     position: absolute;
     overflow: hidden;
-    z-index: 20;
+    z-index: 4;
 }
 
 .stx-subholder {
@@ -809,7 +809,7 @@ html, body {
     cursor: ns-resize;
     z-index: 20;
     @include themify($themes) {
-        box-shadow: 0 0 0px 8px themed('ChartBg');
+        box-shadow: 0 0 0px 2px themed('ChartBg');
         background: themed('ChartBg');
     }
 

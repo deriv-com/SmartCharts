@@ -1,6 +1,6 @@
 {
   "name": "@binary-com/smartcharts",
-  "version": "0.3.4",
+  "version": "0.3.6",
   "main": "dist/smartcharts.js",
   "author": "amin@binary.com",
   "contributors": [
@@ -99,7 +99,7 @@
     "react-dom": "^16.4.0",
     "react-transition-group": "^2.5.0",
     "regenerator-runtime": "^0.11.1",
-    "resize-observer-polyfill": "^1.5.0",
+    "resize-observer-polyfill": "^1.5.1",
     "rimraf": "^2.6.2",
     "sass-loader": "^7.0.1",
     "sinon": "^7.0.0",
@@ -122,7 +122,7 @@
     "lodash.debounce": "^4.0.8",
     "moment": "^2.22.2",
     "resize-observer-polyfill": "^1.5.0",
-    "simplebar": "^3.1.0-beta.2",
+    "simplebar-react": "^0.1.1",
     "url-search-params-polyfill": "^5.0.0",
     "why-did-you-update": "^0.1.1"
   },

@@ -1,5 +1,5 @@
 import React from 'react';
-import 'simplebar';
+import SimpleBar from 'simplebar-react';
 import '../../sass/components/_ciq-list.scss';
 
 const List = ({
@@ -14,8 +14,7 @@ const List = ({
                + ` ${it.disabled ? 'disabled' : ''}`
                + ` ${it.active ? 'active' : ''}`;
     return (
-        <div
-            data-simplebar
+        <SimpleBar
             data-simplebar-auto-hide="false"
             className="ciq-list"
             style={height && { height: `${height}px` }}
@@ -29,7 +28,7 @@ const List = ({
                     {renderRow(it)}
                 </div>
             ))}
-        </div>
+        </SimpleBar>
     );
 };
 

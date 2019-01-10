@@ -254,7 +254,7 @@ class ChartStore {
         deleteElement.textContent = t.translate('right-click to delete');
         manageElement.textContent = t.translate('right-click to manage');
 
-        animateChart(stxx, { stayPut: true });
+        if (this.state.isAnimationEnabled) animateChart(stxx, { stayPut: true });
 
         // connect chart to data
         this.feed = new Feed(this.api, stxx, this.mainStore, this.tradingTimes);
