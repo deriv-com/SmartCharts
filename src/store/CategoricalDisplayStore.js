@@ -272,7 +272,7 @@ export default class CategoricalDisplayStore {
     }
 
     @action.bound setScrollPanel(element) {
-        this.scrollPanel =  element.querySelector('.simplebar-content');
+        this.scrollPanel = element ? element.querySelector('.simplebar-content') : null;
     }
 
     connect = connect(() => ({
