@@ -24,10 +24,10 @@ class CurrectSpotStore {
         const mainSeriesRenderer = this.stx.mainSeriesRenderer;
         let visible = true;
 
+
         if (chart.dataSet
             && chart.dataSet.length
-            && mainSeriesRenderer
-            && mainSeriesRenderer.supportsAnimation) {
+            && mainSeriesRenderer) {
             const panel = chart.panel;
             const currentQuote = this.stx.currentQuote();
             if (!currentQuote) { return; }
@@ -47,9 +47,7 @@ class CurrectSpotStore {
             }
         }
 
-        this.show = visible && (layout.chartType !== 'candle'
-                && layout.chartType !== 'colored_bar'
-                && layout.chartType !== 'hollow_candle');
+        this.show = visible && (layout.aggregationType !== 'pandf');
     }
 }
 
