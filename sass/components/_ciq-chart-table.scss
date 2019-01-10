@@ -1,15 +1,6 @@
 .ciq-chart-dialog {
     width: var(--table-width);
-    height: 80vh;
     left: auto;
-
-    .ciq-list {
-        max-height: 100%;
-    }
-    .simplebar-track.vertical {
-        margin-top: 45px;
-        right: 16px;
-    }
 }
 
 .cq-dialog-overlay {
@@ -108,11 +99,6 @@
         width: calc(100% - 20px) !important;
         height: calc(100% - 66px) !important;
         top: 10px;
-
-        .simplebar-track.vertical {
-            margin-top: 0;
-            right: 0;
-        }
     }
     .ciq-chart-table {
         tbody {

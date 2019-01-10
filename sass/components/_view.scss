@@ -8,7 +8,7 @@
             align-items: center;
             height: 32px;
             padding: 0 4px 0 16px;
-            margin: 16px 7px 0 0;
+            margin: 16px 0 0;
             box-sizing: border-box;
             @include themify($themes) {
                 border: 1px solid themed('ListLiBorder');
@@ -56,20 +56,6 @@
                 padding: 0px !important;
                 display: block;
 
-                .simplebar-offset {
-                    right: -20px !important;
-
-                    .simplebar-content {
-                        padding-right: 29px !important;
-
-                        .ciq-list-inner {
-                            min-width: 248px;
-                        }
-                    }
-                }
-                .simplebar-track.horizontal {
-                    display: none;
-                }
                 .ciq-list-item {
                     align-items: center;
                     justify-content: flex-start;

@@ -1,29 +1,34 @@
 import React from 'react';
 import '../../../sass/components/_categorical-display.scss';
-import SimpleBar from 'simplebar-react';
+import Scrollbars from 'tt-react-custom-scrollbars';
 
 const CategoricalDisplay = ({
     onSelectItem,
+    updateScrollSpy,
     setScrollPanel,
     ResultsPanel,
     FilterPanel,
     SearchInput,
+    isMobile,
 }) => (
     <div
         className="cq-categorical-display"
-        ref={setScrollPanel}
     >
         <div className="cq-lookup-filters">
             <SearchInput />
             <FilterPanel />
         </div>
-        <SimpleBar
+        <Scrollbars
             className="cq-scroll-panel"
+            autoHide
+            onScroll={updateScrollSpy}
+            ref={setScrollPanel}
+            style={{ width: isMobile ? '100%' : '66%' }}
         >
             <ResultsPanel
                 onSelectItem={onSelectItem}
             />
-        </SimpleBar>
+        </Scrollbars>
     </div>
 );
 

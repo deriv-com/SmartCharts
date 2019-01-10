@@ -6,7 +6,7 @@
         overflow: visible !important;
 
         .body {
-            padding: 0px 7px 0px 16px;
+            padding: 0px 7px;
             overflow: visible;
 
             .cq-draw-buttons {
@@ -25,8 +25,6 @@
                 }
             }
             .ciq-list {
-                max-height: 260px;
-
                 .cq-draw-buttons + .ciq-list-item {
                     @include themify($themes) {
                         border-top: 1px solid themed('DropdownBorder');

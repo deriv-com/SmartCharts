@@ -1,5 +1,5 @@
 import React from 'react';
-import SimpleBar from 'simplebar-react';
+import Scrollbars from 'tt-react-custom-scrollbars';
 import { connect } from '../store/Connect';
 import { DrawIcon, ClearIcon, MeasureIcon } from './Icons.jsx';
 import '../../sass/components/_draw-tools.scss';
@@ -24,7 +24,10 @@ const DrawTools = ({
 
         <DrawToolsMenu.Body>
             <div className="body">
-                <SimpleBar
+                <Scrollbars
+                    autoHide
+                    autoHeight
+                    autoHeightMax={260}
                     className="ciq-list"
                 >
                     <div className="cq-draw-buttons">
@@ -50,7 +53,7 @@ const DrawTools = ({
                             {it.text}
                         </div>
                     ))}
-                </SimpleBar>
+                </Scrollbars>
 
             </div>
         </DrawToolsMenu.Body>
