@@ -97,17 +97,17 @@
 
 .myEvents.dividend {
     background-color: #0000ff;
-    -webkit-border-radius: 50%;
-    -moz-border-radius: 50%;
-    -ms-border-radius: 50%;
-    border-radius: 50%;
+    width: 20px;
+    height: 30px;
+    line-height: 30px;
 }
 
 .myEvents.news {
     background-color: #ff0000;
-    width: 15px;
+    width: 20px;
     height: 15px;
     line-height: 15px;
+    font-size: 8px;
 }
 
 .myEvents.earnings {
@@ -142,7 +142,7 @@
 }
 
 .myEvents.hoverMarker {
-    background-color: pink;
+    background-color: #ff9977;
     border: 2px solid #000;
 }
 
@@ -153,11 +153,10 @@
 
 .hoverMarker:hover .tooltip:after {
     background: #333;
-    background: rgba(0, 0, 0, .8);
+    background: rgba(0, 0, 0, 0.8);
     border-radius: 5px;
     bottom: 26px;
     color: #fff;
-    content: attr(title);
     left: 20%;
     padding: 5px 15px;
     position: absolute;
@@ -169,11 +168,10 @@
 .hoverMarker:hover .tooltip:before {
     border: solid;
     border-color: #333 transparent;
-    border-width: 11px 6px 0 6px;
+    border-width: 11px 6px 0;
     bottom: 20px;
-    content: "";
+    content: ' ';
     left: 50%;
     position: absolute;
     z-index: 99;
 }
-
