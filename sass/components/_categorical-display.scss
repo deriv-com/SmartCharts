@@ -116,7 +116,7 @@
         line-height: 40px;
         position: absolute;
         top: 0;
-        width: 90%;
+        width: 100%;
         transform: translate3d(0, 0, 0);
         @include themify($themes) {
             color: themed('CatDisplayCatTitleText');

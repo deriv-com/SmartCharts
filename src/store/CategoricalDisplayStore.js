@@ -124,7 +124,7 @@ export default class CategoricalDisplayStore {
             this.scrollDown();
         }
 
-        this.activeHeadOffset = (this.mainStore.chart.isMobile ? scrollPanelTop : 0);
+        this.activeHeadOffset = (this.mainStore.chart.isMobile ? this.scrollPanel.container.offsetTop  : 0);
         this.scrollTop = scrollTop;
         this.activeCategoryKey = activeMenuId || this.filteredItems[0].categoryId;
         this.activeHeadTop = activeHeadTop;
