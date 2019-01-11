@@ -21,6 +21,7 @@
         line-height: normal;
         letter-spacing: normal;
         padding-top: 9px;
+        white-space: nowrap;
         @include themify($themes) {
             color: themed('ChartHistoryColor');
         }
@@ -32,6 +33,10 @@
     }
     .datepicker-container {
         margin-left: 8px;
+
+        .datepicker-display-wrapper .datepicker-display {
+            max-width: 165px;
+        }
     }
     .time-picker {
         width: 80px;
@@ -50,28 +55,42 @@
     left: 0px;
     top: auto;
     margin: 0px;
-    width: 100%;
+    width: calc(100% - 20px);
     border-right: none;
     border-left: none;
+    padding-right: 10px;
+    padding-left: 10px;
+    display: flex;
+    justify-content: space-around;
 
-    .time-picker .time-picker-dropdown {
-        bottom: calc(100% + 10px);
-        top: auto !important;
-        right: 0px !important;
+    .time-picker {
+        min-width: 72px;
 
-        &.active {
+        .time-picker-dropdown {
             bottom: calc(100% + 10px);
+            top: auto !important;
+            right: 0px !important;
+
+            &.active {
+                bottom: calc(100% + 10px);
+            }
         }
     }
-    .datepicker-container .datepicker-calendar {
-        > div.calendar {
-            bottom: calc(100% - 8px);
-            top: auto !important;
-            right: -55px !important;
-            left: auto !important;
+    .datepicker-container {
+        .datepicker-display-wrapper .datepicker-display {
+            max-width: 140px;
+            padding: 4px 7px;
         }
-        &.show > div.calendar {
-            bottom: calc(100% + 8px);
+        .datepicker-calendar {
+            > div.calendar {
+                bottom: calc(100% - 8px);
+                top: auto !important;
+                right: -55px !important;
+                left: auto !important;
+            }
+            &.show > div.calendar {
+                bottom: calc(100% + 8px);
+            }
         }
     }
 }

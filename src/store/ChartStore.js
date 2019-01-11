@@ -452,7 +452,6 @@ class ChartStore {
         this.loader.show();
         const onChartLoad = (err) => {
             this.setMainSeriesDisplay(symbolObj.name);
-
             this.loader.hide();
             if (err) {
                 /* TODO, symbol not found error */

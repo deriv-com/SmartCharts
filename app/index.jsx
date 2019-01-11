@@ -157,8 +157,21 @@ class App extends Component {
     };
 
     saveSettings = (settings) => {
+        const prevSetting = this.state.settings;
         console.log('settings updated:', settings);
         localStorage.setItem('smartchart-setting', JSON.stringify(settings));
+
+
+        if (!prevSetting.historical && settings.historical) {
+            this.setState({
+                chartType: 'mountain',
+                granularity: 0,
+                endEpoch: (new Date(`${today}:00Z`).valueOf() / 1000),
+            });
+            this.removeAllComparisons();
+        } else if (!settings.historical) {
+            this.handleDateChange('');
+        }
 
         this.setState({ settings });
         if (this.startingLanguage !== settings.language) {
@@ -168,16 +181,6 @@ class App extends Component {
             url.delete('l');
             url.set('l', settings.language);
             window.location.href = `${origin}${pathname}?${url.toString()}`;
-        }
-        if (settings.historical) {
-            this.setState({
-                chartType: 'mountain',
-                granularity: 0,
-                endEpoch: (new Date(`${today}:00Z`).valueOf() / 1000),
-            });
-            this.removeAllComparisons();
-        } else {
-            this.handleDateChange('');
         }
     };
 

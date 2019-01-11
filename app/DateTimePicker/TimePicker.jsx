@@ -13,15 +13,15 @@ const TimeIcon = Wrapper(Time);
 const CloseCircleIcon = Wrapper(CloseCircle);
 
 const isSessionAvailable = (
-    compare_moment         = moment.utc(),
-    end_moment           = moment.utc(),
-    should_only_check_hour = false,
+    compare_moment          = moment().utc(),
+    end_moment              = moment().utc(),
+    should_only_check_hour  = false,
 ) => {
-    if (should_only_check_hour) {
-        end_moment.minute(0).second(0);
-    }
+    const end_compare = should_only_check_hour
+        ? end_moment.clone().minute(0).second(0) : end_moment;
+
     const offset = (new Date()).getTimezoneOffset() * 60 * 1000;
-    const end_time = end_moment.valueOf() + offset;
+    const end_time = end_compare.valueOf() + offset;
     return (end_time - compare_moment.valueOf() > 0);
 };
 
@@ -54,13 +54,35 @@ class TimePickerDropdown extends React.Component {
     selectOption = (type, value, is_enabled = true) => {
         if (is_enabled) {
             const [prev_hour, prev_minute] = (this.props.value || '00:00').split(':');
-            if ((type === 'h' && value !== prev_hour) || (type === 'm' && value !== prev_minute)) {
+            const start_moment          = moment(this.props.start_date * 1000 || undefined);
+            const start_moment_clone    = start_moment.clone().minute(0).second(0);
+
+            if (
+                (type === 'h' && value !== prev_hour)
+                || (type === 'm' && value !== prev_minute)
+            ) {
                 const is_type_selected = type === 'h' ? 'is_hour_selected' : 'is_minute_selected';
                 this.setState({
                     last_updated_type : type,
                     [is_type_selected]: true,
                 });
-                this.props.onChange(`${type === 'h' ? value : prev_hour}:${type === 'm' ? value : prev_minute}`);
+                let selected_time = `${type === 'h' ? value : prev_hour}:${type === 'm' ? value : prev_minute}`;
+                let desire_time = start_moment_clone.hour(type === 'h' ? value : prev_hour).minute(type === 'm' ? value : prev_minute);
+                let last_available_min;
+
+                if (type === 'h' && !isSessionAvailable(desire_time)) {
+                    this.minutes.forEach((min) => {
+                        desire_time = start_moment_clone.hour(value).minute(min);
+                        if (isSessionAvailable(desire_time)) {
+                            last_available_min = min;
+                        }
+                    });
+                    if (last_available_min) {
+                        selected_time = `${value}:${last_available_min}`;
+                    }
+                }
+
+                this.props.onChange(selected_time);
             } else {
                 this.props.toggle();
             }
@@ -132,6 +154,7 @@ class TimePickerDropdown extends React.Component {
                             {this.minutes.map((mm, key) => {
                                 start_moment_clone.hour(hour).minute(mm);
                                 const is_enabled = isSessionAvailable(start_moment_clone, end_moment);
+
                                 return (
                                     <div
                                         className={`list-item${minute === mm ? ' selected' : ''}${is_enabled ? '' : ' disabled'}`}

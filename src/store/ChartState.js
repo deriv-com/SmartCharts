@@ -108,6 +108,7 @@ class ChartState {
                 this.restoreDrawings(this.stxx, this.stxx.chart.symbol);
                 if (this.chartStore.loader) {
                     this.chartStore.loader.hide();
+                    this.stxx.home();
                 }
 
                 this.chartStore.setMainSeriesDisplay(this.stxx.chart.symbolObject.name);
