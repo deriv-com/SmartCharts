@@ -129,9 +129,10 @@ class ChartStore {
             const yax = yAxis || panel.yAxis;
             if (yax.noDraw || !yax.width) return;
             const context = ctx || this.chart.context;
-            const margin = 3;
             // SmartChart Team: this prop modified
+            const margin = 9;
             const height = 24;
+            let radius = 0;
             this.canvasFont('stx_yaxis', context);
             const tickWidth = this.drawBorders ? 3 : 0; // pixel width of tick off edge of border
             let width;
@@ -141,15 +142,11 @@ class ChartStore {
 
             let x = yax.left - margin + 3;
             if (yax.width < 0) x += (yax.width - width);
-            let textx = x + margin + tickWidth;
-            // SmartChart Team: this prop modified
-            let radius = 0;
             const position = (yax.position === null ? panel.chart.yAxis.position : yax.position);
             if (position === 'left') {
                 x = yax.left + yax.width + margin - 3;
                 width *= -1;
                 if (yax.width < 0) x -= (yax.width + width);
-                textx = x - margin - tickWidth;
                 radius = -3;
                 context.textAlign = 'right';
             }
@@ -165,14 +162,14 @@ class ChartStore {
                 ctx:context,
                 x,
                 y,
-                top:y - (height / 2),
+                top: y - (height / 2),
                 width,
                 height,
                 radius,
                 backgroundColor,
                 fill: true,
                 stroke: false,
-                margin:{ left:textx - x, top:1 },
+                margin:{ left: 8, top: 1 },
                 txt,
                 color,
             };
