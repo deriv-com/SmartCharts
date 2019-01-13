@@ -14,7 +14,9 @@ class Feed {
     get granularity() { return this._mainStore.chart.granularity; }
     get context() { return this._mainStore.chart.context; }
     get loader() { return this._mainStore.loader; }
+    get comparisonSymbols() { return this._mainStore.comparison.comparisonSymbols; }
     _activeStreams = {};
+    _symbol=null;
     _isConnectionOpened = true;
 
     constructor(binaryApi, stx, mainStore, tradingTimes) {
@@ -145,9 +147,22 @@ class Feed {
                 return;
             }
 
+            if (this.comparisonSymbols.length
+                && this._symbol !== null
+                && this._symbol !== this._stx.chart.symbol
+            ) {
+                this._symbol = this._stx.chart.symbol;
+                callback({ quotes: [] });
+                subscription.forget();
+                return;
+            }
+            this._symbol = this._stx.chart.symbol;
+
+
             subscription.onChartData((tickResponse) => {
                 this._appendChartData(tickResponse, key, comparisonChartSymbol);
             });
+
 
             // if symbol is changed before request is completed, past request needs to be forgotten:
             if (!isComparisonChart && this._stx.chart.symbol !== symbol) {
