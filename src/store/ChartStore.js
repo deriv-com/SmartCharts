@@ -176,6 +176,79 @@ class ChartStore {
                 this.controls.floatDate.innerHTML = moment(date.DT).format('DD MMMM YYYY - hh:mm');
             }
         });
+        CIQ.ChartEngine.prototype.home = function (params) {
+            this.swipe.amplitude = 0;
+            const layout = this.layout;
+            if (typeof params !== 'object') {
+                // backward compatibility
+                params = {
+                    maintainWhitespace: params,
+                };
+            }
+
+            function resetPanelZooms(stx) {
+                for (const p in stx.panels) {
+                    const yAxes = stx.panels[p].yaxisLHS.concat(stx.panels[p].yaxisRHS);
+                    for (let a = 0; a < yAxes.length; a++) stx.calculateYAxisMargins(yAxes[a]);
+                }
+            }
+            function scrollToCallback(self, chart, exactScroll) {
+                return function () {
+                    resetPanelZooms(self);
+                    chart.scroll = exactScroll;
+                    self.draw();
+                };
+            }
+            if (typeof params.maintainWhitespace === 'undefined') params.maintainWhitespace = true;  // maintain the whitespace unless set to false
+
+            this.cancelTouchSingleClick = true;
+            if (!this.chart.dataSet || !this.chart.dataSet.length) {
+                // to clear out anything that may have been on the screen. Otherwise we still show stale data.
+                this.draw();
+                return;
+            }
+            this.micropixels = 0;
+            const barsDisplayedOnScreen = Math.floor(this.chart.width / layout.candleWidth);
+            for (const chartName in this.charts) {
+                const chart = this.charts[chartName];
+                if (params.chart && params.chart !== chart) continue;
+
+                let whitespace = 0;
+                if (params.maintainWhitespace && this.preferences.whitespace >= 0) whitespace = this.preferences.whitespace;
+                if (params.whitespace || params.whitespace === 0) whitespace = params.whitespace;
+                const leftMargin = this.getLabelOffsetInPixels(chart, layout.chartType);
+                if (leftMargin > whitespace) whitespace = leftMargin;
+
+                let exactScroll = Math.min(barsDisplayedOnScreen, chart.dataSet.length); // the scroll must be the number of bars you want to see.
+                if (this.chart.allowScrollPast) exactScroll = barsDisplayedOnScreen; // If whitespace allowed on left of screen
+                this.micropixels = this.chart.width - (exactScroll * layout.candleWidth) - whitespace;
+                this.preferences.whitespace = whitespace;
+                while (this.micropixels > layout.candleWidth) { // If micropixels is larger than a candle then scroll back further
+                    exactScroll++;
+                    this.micropixels -= layout.candleWidth;
+                }
+                while (this.micropixels < 0) {
+                    exactScroll--;
+                    this.micropixels += layout.candleWidth;
+                }
+                this.micropixels -= layout.candleWidth;
+                exactScroll++;
+                if ((!this.mainSeriesRenderer || !this.mainSeriesRenderer.standaloneBars) && !this.standaloneBars[layout.chartType]) this.micropixels += layout.candleWidth / 2; // bar charts display at beginning of candle
+
+                if (this.isHistoricalMode()) {
+                    exactScroll = parseInt(exactScroll * 0.9, 10);
+                }
+
+                if (params.animate) {
+                    const self = this;
+                    this.scrollTo(chart, exactScroll, scrollToCallback(self, chart, exactScroll));
+                } else {
+                    chart.scroll = exactScroll;
+                    resetPanelZooms(this);
+                }
+            }
+            this.draw();
+        };
 
         this.rootNode = rootNode;
         this.modalNode = modalNode;

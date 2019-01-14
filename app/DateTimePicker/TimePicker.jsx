@@ -175,6 +175,7 @@ class TimePickerDropdown extends React.Component {
 class TimePicker extends React.Component {
     constructor(props) {
         super(props);
+        this.minutes  = [...Array(12).keys()].map(a => `0${a * 5}`.slice(-2));
         this.state = {
             is_open: false,
             value : props.value || '00:00',
@@ -187,6 +188,24 @@ class TimePicker extends React.Component {
 
     componentWillReceiveProps(nextProps) {
         if (nextProps.focus) {
+            const [prev_hour, prev_minute] = (this.state.value || '00:00').split(':');
+            const start_moment          = moment(this.props.start_date * 1000 || undefined);
+            const start_moment_clone    = start_moment.clone().minute(0).second(0);
+            let desire_time           = start_moment_clone.hour(prev_hour).minute(prev_minute);
+            let last_available_min;
+            if (!isSessionAvailable(desire_time)) {
+                const hour = moment().utc().format('HH');
+                this.minutes.forEach((min) => {
+                    desire_time = start_moment_clone.hour(hour).minute(min);
+                    if (isSessionAvailable(desire_time)) {
+                        last_available_min = min;
+                    }
+                });
+                this.setState({
+                    value: `${hour}:${last_available_min}`,
+                }, this.handleChange(`${hour}:${last_available_min}`));
+            }
+
             this.setState({ is_open: true });
         }
     }
@@ -235,13 +254,13 @@ class TimePicker extends React.Component {
         const prefix_class = 'time-picker';
         const {
             is_nativepicker,
-            value,
             name,
             is_align_right,
             placeholder,
             start_date,
             sessions,
         } = this.props;
+        const { value } = this.state;
         return (
             <div
                 ref={this.saveRef}

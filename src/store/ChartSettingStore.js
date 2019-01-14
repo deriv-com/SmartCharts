@@ -161,6 +161,14 @@ export default class ChartSettingStore {
         if (this.historical === value) { return; }
         this.historical = value;
         this.saveSetting();
+        /**
+        * Chart should fix its height & width after the position changed,
+        * for that purpose we stay some 10 ms so that position varaible update
+        * on chart context then ask chart to update itself hight & width
+        */
+        setTimeout(() => {
+            this.mainStore.chart.resizeScreen();
+        }, 10);
         this.menu.setOpen(false);
     }
 }
