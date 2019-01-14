@@ -31,7 +31,7 @@ const ChartTable = ({
                 <Scrollbars
                     autoHeight
                     autoHide
-                    autoHeightMax={600}
+                    autoHeightMax="80vh"
                     className="ciq-list"
                 >
                     {isMobile
