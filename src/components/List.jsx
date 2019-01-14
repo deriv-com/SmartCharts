@@ -17,7 +17,6 @@ const List = ({
         <Scrollbars
             className="ciq-list"
             autoHeight
-            autoHide
             style={height && { height: `${height}px` }}
         >
             {items.map((it, idx) => (

@@ -25,7 +25,6 @@ const DrawTools = ({
         <DrawToolsMenu.Body>
             <div className="body">
                 <Scrollbars
-                    autoHide
                     autoHeight
                     autoHeightMax={260}
                     className="ciq-list"

@@ -56,7 +56,6 @@
     width: var(--table-width);
     position: fixed;
     display: block;
-    z-index: 1;
     @include themify($themes) {
         background: themed('DialogBodyBg');
         color: themed('DefaultText');

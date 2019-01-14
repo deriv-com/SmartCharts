@@ -98,7 +98,6 @@ const Views = ({
                     </span>
                 </div>
                 <Scrollbars
-                    autoHide
                     className="ciq-list"
                 >
                     {

@@ -30,7 +30,6 @@ const ChartTable = ({
                 }
                 <Scrollbars
                     autoHeight
-                    autoHide
                     autoHeightMax="80vh"
                     className="ciq-list"
                 >
