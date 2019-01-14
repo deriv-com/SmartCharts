@@ -1,6 +1,11 @@
 .ciq-chart-dialog {
     width: var(--table-width);
     left: auto;
+
+    .ciq-list > :last-child {
+        top: 42px !important;
+    }
+
 }
 
 .cq-dialog-overlay {
@@ -100,6 +105,10 @@
         height: calc(100% - 66px) !important;
         top: 10px;
         overflow: hidden;
+
+        .ciq-list > :last-child {
+            top: 2px !important;
+        }
     }
     .ciq-chart-table {
         tbody {
