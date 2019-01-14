@@ -20,7 +20,6 @@ const CategoricalDisplay = ({
         </div>
         <Scrollbars
             className="cq-scroll-panel"
-            autoHide
             onScroll={updateScrollSpy}
             ref={setScrollPanel}
             style={{ width: isMobile ? '100%' : '66%' }}
