@@ -1,5 +1,5 @@
 import React from 'react';
-import SimpleBar from 'simplebar-react';
+import Scrollbars from 'tt-react-custom-scrollbars';
 import { connect } from '../store/Connect';
 import ViewStore from '../store/ViewStore';
 import {
@@ -97,23 +97,20 @@ const Views = ({
                         }
                     </span>
                 </div>
-                <SimpleBar
+                <Scrollbars
                     className="ciq-list"
-                    data-simplebar-auto-hide="false"
                 >
-                    <div className="ciq-list-inner">
-                        {
-                            views.map((view, i) => (
-                                <ViewItem
-                                    view={view}
-                                    key={view.name}
-                                    onClick={e => applyLayout(i, e)}
-                                    remove={e => remove(i, e)}
-                                />
-                            ))
-                        }
-                    </div>
-                </SimpleBar>
+                    {
+                        views.map((view, i) => (
+                            <ViewItem
+                                view={view}
+                                key={view.name}
+                                onClick={e => applyLayout(i, e)}
+                                remove={e => remove(i, e)}
+                            />
+                        ))
+                    }
+                </Scrollbars>
             </div>
         </ViewsMenu.Body>
     </ViewsMenu>
