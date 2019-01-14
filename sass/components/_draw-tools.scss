@@ -6,7 +6,7 @@
         overflow: visible !important;
 
         .body {
-            padding: 0px 7px 0px 16px;
+            padding: 16px;
             overflow: visible;
 
             .cq-draw-buttons {
@@ -17,7 +17,7 @@
                 display: flex;
                 justify-content: center;
                 cursor: pointer;
-                margin: 8px 0;
+                margin: 0 0 8px;
                 border-radius: 3px;
 
                 @include themify($themes) {
@@ -25,7 +25,7 @@
                 }
             }
             .ciq-list {
-                max-height: 260px;
+                padding-right: 9px;
 
                 .cq-draw-buttons + .ciq-list-item {
                     @include themify($themes) {
