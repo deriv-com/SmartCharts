@@ -88,9 +88,9 @@ export default class CategoricalDisplayStore {
     isUserScrolling = true;
     lastFilteredItems = [];
 
-    get context() {
-        return this.mainStore.chart.context;
-    }
+    get chart() { return this.mainStore.chart; }
+
+    get context() { return this.chart.context; }
 
     @action.bound updateScrollSpy() {
         if (this.pauseScrollSpy || !this.scrollPanel) { return; }
@@ -98,7 +98,7 @@ export default class CategoricalDisplayStore {
 
 
         const categoryTitleHeight = 40;
-        const scrollPanelTop = this.scrollPanel.getBoundingClientRect().top;
+        const scrollPanelTop = this.scrollPanel.container.getBoundingClientRect().top;
         let activeHeadTop = 0;
         let activeMenuId = null;
 
@@ -117,14 +117,15 @@ export default class CategoricalDisplayStore {
             }
         }
 
-        if (this.scrollTop > this.scrollPanel.scrollTop) {
+        const scrollTop = this.scrollPanel.getValues().top;
+        if (this.scrollTop > scrollTop) {
             this.scrollUp();
         } else {
             this.scrollDown();
         }
 
-        this.activeHeadOffset = (this.mainStore.chart.isMobile ? scrollPanelTop : 0);
-        this.scrollTop = this.scrollPanel.scrollTop;
+        this.activeHeadOffset = (this.chart.isMobile ? this.scrollPanel.container.offsetTop  : 0);
+        this.scrollTop = scrollTop;
         this.activeCategoryKey = activeMenuId || this.filteredItems[0].categoryId;
         this.activeHeadTop = activeHeadTop;
         this.activeHeadKey = this.scrollTop === 0 ? null : this.activeCategoryKey;
@@ -152,7 +153,6 @@ export default class CategoricalDisplayStore {
                 }
             }
         }
-        this.scrollPanel.addEventListener('scroll', this.updateScrollSpy);
     }
 
     @computed get favoritesCategory()  {
@@ -262,7 +262,7 @@ export default class CategoricalDisplayStore {
             // TODO: Scroll animation
             this.pauseScrollSpy = true;
             this.isUserScrolling = false;
-            this.scrollPanel.scrollTop = el.offsetTop;
+            this.scrollPanel.scrollTop(el.offsetTop);
             this.activeCategoryKey = category.categoryId;
             this.activeHeadKey = null;
             // scrollTop takes some time to take affect, so we need
@@ -272,11 +272,12 @@ export default class CategoricalDisplayStore {
     }
 
     @action.bound setScrollPanel(element) {
-        this.scrollPanel = element ? element.querySelector('.simplebar-content') : null;
+        this.scrollPanel =  element;
     }
 
     connect = connect(() => ({
         filteredItems: this.filteredItems,
+        updateScrollSpy: this.updateScrollSpy,
         setScrollPanel: this.setScrollPanel,
         isScrollingDown: this.isScrollingDown,
         scrollUp: this.scrollUp,
@@ -285,5 +286,6 @@ export default class CategoricalDisplayStore {
         ResultsPanel: this.ResultsPanel,
         FilterPanel: this.FilterPanel,
         SearchInput: this.SearchInput,
+        isMobile: this.chart.isMobile,
     }))
 }

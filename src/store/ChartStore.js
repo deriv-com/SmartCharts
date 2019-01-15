@@ -120,6 +120,7 @@ class ChartStore {
     };
 
     @action.bound _initChart(rootNode, modalNode, props) {
+        const _self = this;
         /**
          * only home button click part modified to avoid calling
          * newChart() on home function while historical enable
@@ -235,8 +236,8 @@ class ChartStore {
                 exactScroll++;
                 if ((!this.mainSeriesRenderer || !this.mainSeriesRenderer.standaloneBars) && !this.standaloneBars[layout.chartType]) this.micropixels += layout.candleWidth / 2; // bar charts display at beginning of candle
 
-                if (this.isHistoricalMode()) {
-                    exactScroll = parseInt(exactScroll * 0.9, 10);
+                if (this.isHistoricalMode() && _self.isMobile) {
+                    exactScroll = parseInt(exactScroll * 0.8, 10);
                 }
 
                 if (params.animate) {

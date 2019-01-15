@@ -58,10 +58,7 @@ class Feed {
 
         const dtLeft =  new Date((this.startEpoch || this.endEpoch - rangeTime) * 1000);
         const dtRight = new Date(this.endEpoch * 1000);
-        this._stx.setRange({ dtLeft, dtRight, periodicity }, () => {
-            this._stx.draw();
-            this._stx.home();
-        });
+        this._stx.setRange({ dtLeft, dtRight, periodicity }, () => this._stx.draw());
     };
 
     // although not used, subscribe is overridden so that unsubscribe will be called by ChartIQ
@@ -179,6 +176,9 @@ class Feed {
         callback({ quotes });
 
         this._emitDataUpdate(quotes, comparisonChartSymbol);
+        if (this.endEpoch) {
+            this._stx.home();
+        }
     }
 
     async fetchPaginationData(symbol, suggestedStartDate, endDate, params, callback) {
