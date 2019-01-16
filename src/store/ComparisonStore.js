@@ -185,7 +185,7 @@ export default class ComparisonStore {
                         color: prm.color,
                         price: comp && comp.Close,
                         prevPrice: comp && comp.iqPrevClose,
-                        symbolObject: symbolObject,
+                        symbolObject,
                     });
                 }
             }
