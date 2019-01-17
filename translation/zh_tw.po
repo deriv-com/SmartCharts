@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Chinese Traditional\n"
 "Language: zh_TW\n"
-"PO-Revision-Date: 2018-12-21 08:01\n"
+"PO-Revision-Date: 2019-01-12 02:31\n"
 
 msgid " already exists."
 msgstr " 已經存在。"
@@ -235,16 +235,16 @@ msgid "RESET"
 msgstr "重置"
 
 msgid "Retrieving Chart Data..."
-msgstr ""
+msgstr "正在恢復圖表資料..."
 
 msgid "Retrieving Chart Engine..."
-msgstr ""
+msgstr "正在恢復圖表引擎..."
 
 msgid "Retrieving market symbols..."
-msgstr ""
+msgstr "正在恢復市場符號..."
 
 msgid "Retrieving trading times..."
-msgstr ""
+msgstr "正在恢復交易時間..."
 
 msgid "Reversal"
 msgstr "反向"

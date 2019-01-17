@@ -116,7 +116,7 @@
         line-height: 40px;
         position: absolute;
         top: 0;
-        width: 90%;
+        width: 100%;
         transform: translate3d(0, 0, 0);
         @include themify($themes) {
             color: themed('CatDisplayCatTitleText');
@@ -237,15 +237,9 @@
     }
     .cq-scroll-panel {
         position: relative;
-        height: 53vh;
         min-height: 320px;
-        width: 66%;
         @include themify($themes) {
             border-left: 1px solid themed('CatDisplayBorder');
-        }
-
-        .simplebar-scrollbar {
-            right: 3px;
         }
     }
     .ciq-item-display {
@@ -349,9 +343,6 @@
             margin: 1.2em 1em 0.5em;
         }
         .cq-scroll-panel {
-            height: 100%;
-            width: 100%;
-
             .category:last-child {
                 padding-bottom: 3em;
             }

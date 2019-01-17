@@ -1,5 +1,5 @@
 import React from 'react';
-import SimpleBar from 'simplebar-react';
+import { Scrollbars } from 'tt-react-custom-scrollbars';
 import { CloseIcon, ItemIconMap, SymbolPlaceholderIcon } from './Icons.jsx';
 import { connect } from '../store/Connect';
 import '../../sass/components/_ciq-chart-table.scss';
@@ -28,8 +28,9 @@ const ChartTable = ({
                     </div>
                 )
                 }
-                <SimpleBar
-                    data-simplebar-auto-hide="false"
+                <Scrollbars
+                    autoHeight
+                    autoHeightMax="80vh"
                     className="ciq-list"
                 >
                     {isMobile
@@ -116,7 +117,7 @@ const ChartTable = ({
                             </table>
                         )
                     }
-                </SimpleBar>
+                </Scrollbars>
             </>
             </Dialog>
         </div>
