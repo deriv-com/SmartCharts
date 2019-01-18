@@ -147,22 +147,18 @@ class Feed {
                 return;
             }
 
-            if (this.comparisonSymbols.length
-                && this._symbol !== null
-                && this._symbol !== this._stx.chart.symbol
-            ) {
-                this._symbol = this._stx.chart.symbol;
-                callback({ quotes: [] });
-                subscription.forget();
-                return;
-            }
-            this._symbol = this._stx.chart.symbol;
-
-
             subscription.onChartData((tickResponse) => {
                 this._appendChartData(tickResponse, key, comparisonChartSymbol);
             });
 
+            if (this._symbol !== null && this._symbol !== this._stx.chart.symbol) {
+                Object.keys(this._activeStreams).forEach((sym) => {
+                    if (this._stx.chart.symbol !== sym) {
+                        this._forgetStream(sym);
+                    }
+                });
+                this._symbol = this._stx.chart.symbol;
+            }
 
             // if symbol is changed before request is completed, past request needs to be forgotten:
             if (!isComparisonChart && this._stx.chart.symbol !== symbol) {
@@ -178,6 +174,8 @@ class Feed {
             // Although market is closed, we display the past tick history data
             getHistoryOnly = true;
         }
+
+        this._symbol = this._stx.chart.symbol;
 
         if (getHistoryOnly) {
             const response = await this._binaryApi.getTickHistory(tickHistoryRequest);

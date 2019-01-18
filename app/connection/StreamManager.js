@@ -74,7 +74,7 @@ class StreamManager {
                     candles.shift();
                 }
             }
-        } else if (tick) {
+        } else if (tick && this._tickHistoryCache[key]) {
             const { prices, times } = this._tickHistoryCache[key].history;
             const { quote: price, epoch: time } = tick;
             prices.push(price);
@@ -148,9 +148,11 @@ class StreamManager {
             const patchRequest = { ...request };
             delete patchRequest.subscribe;
             const { history, candles } = tickHistoryResponse;
-            patchRequest.end = history ? +history.times[0] : candles[0].epoch;
-            const patch = await this._connection.send(patchRequest);
-            tickHistoryResponse = mergeTickHistory(tickHistoryResponse, patch);
+            if (history) {
+                patchRequest.end = history ? +history.times[0] : candles[0].epoch;
+                const patch = await this._connection.send(patchRequest);
+                tickHistoryResponse = mergeTickHistory(tickHistoryResponse, patch);
+            }
         }
 
         // If cache data is available, send a copy otherwise we risk

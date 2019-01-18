@@ -2126,6 +2126,10 @@ core-js@^2.4.0, core-js@^2.5.7:
   version "2.5.7"
   resolved "https://registry.yarnpkg.com/core-js/-/core-js-2.5.7.tgz#f972608ff0cead68b841a16a932d0b183791814e"
 
+core-js@^2.6.2:
+  version "2.6.2"
+  resolved "https://registry.yarnpkg.com/core-js/-/core-js-2.6.2.tgz#267988d7268323b349e20b4588211655f0e83944"
+
 core-util-is@1.0.2, core-util-is@~1.0.0:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/core-util-is/-/core-util-is-1.0.2.tgz#b5fd54220aa2bc5ab57aab7140c940754503c1a7"
@@ -7012,7 +7016,7 @@ promise-inflight@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/promise-inflight/-/promise-inflight-1.0.1.tgz#98472870bf228132fcbdd868129bad12c3c029e3"
 
-prop-types@^15.6.2:
+prop-types@^15.6.1, prop-types@^15.6.2:
   version "15.6.2"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.6.2.tgz#05d5ca77b4453e985d60fc7ff8c859094a497102"
   dependencies:
@@ -7636,10 +7640,6 @@ ripemd160@^2.0.0, ripemd160@^2.0.1:
     hash-base "^3.0.0"
     inherits "^2.0.1"
 
-robust-websocket@^0.3.0:
-  version "0.3.0"
-  resolved "https://registry.yarnpkg.com/robust-websocket/-/robust-websocket-0.3.0.tgz#eb4bc5c17fd8d4351b466b21afb491da420e7d7a"
-
 run-async@^2.2.0:
   version "2.3.0"
   resolved "https://registry.yarnpkg.com/run-async/-/run-async-2.3.0.tgz#0371ab4ae0bdd720d4166d7dfda64ff7a445a6c0"
@@ -7862,12 +7862,21 @@ simple-swizzle@^0.2.2:
   dependencies:
     is-arrayish "^0.3.1"
 
-simplebar@^3.1.0-beta.2:
-  version "3.1.0-beta.2"
-  resolved "https://registry.yarnpkg.com/simplebar/-/simplebar-3.1.0-beta.2.tgz#9418a6be394e39f269d96ce2356c0aed1597fa9b"
+simplebar-react@^0.1.1:
+  version "0.1.4"
+  resolved "https://registry.yarnpkg.com/simplebar-react/-/simplebar-react-0.1.4.tgz#6b795166840b1cce55c2d45a0a9c7ede6cb59cee"
+  dependencies:
+    prop-types "^15.6.1"
+    simplebar "^3.1.3"
+
+simplebar@^3.1.3:
+  version "3.1.3"
+  resolved "https://registry.yarnpkg.com/simplebar/-/simplebar-3.1.3.tgz#fa6c669d080d1a7514b277b2e27807bba1a6e118"
   dependencies:
     can-use-dom "^0.1.0"
+    core-js "^2.6.2"
     lodash.debounce "^4.0.8"
+    lodash.memoize "^4.1.2"
     lodash.throttle "^4.1.1"
     resize-observer-polyfill "^1.5.0"
     scrollbarwidth "^0.1.3"
