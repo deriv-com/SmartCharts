@@ -7,11 +7,9 @@ import React from 'react';
 import './time-picker.scss';
 import { Wrapper } from '../../src/components/Icons.jsx';
 import Time from '../icons/ic-time.svg';
-import CloseCircle from '../icons/ic-close-circle.svg';
+
 
 const TimeIcon = Wrapper(Time);
-const CloseCircleIcon = Wrapper(CloseCircle);
-
 const isSessionAvailable = (
     compare_moment          = moment().utc(),
     end_moment              = moment().utc(),
@@ -115,13 +113,6 @@ class TimePickerDropdown extends React.Component {
                     onClick={toggle}
                 >
                     <span className={value ? '' : 'placeholder'}>{t.translate(value || 'Select time')}</span>
-                    {(!('is_clearable' in this.props) || this.props.is_clearable)
-                        && (<CloseCircleIcon
-                            className={`${preClass}-clear`}
-                            onClick={this.clear}
-                        />
-                        )
-                    }
                 </div>
                 <div className={`${preClass}-selector`}>
                     <div

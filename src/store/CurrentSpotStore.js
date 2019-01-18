@@ -30,7 +30,8 @@ class CurrectSpotStore {
         if (chart.dataSet
             && chart.dataSet.length
             && mainSeriesRenderer
-            && mainSeriesRenderer.supportsAnimation) {
+            // && mainSeriesRenderer.supportsAnimation
+        ) {
             const panel = chart.panel;
             const currentQuote = this.stx.currentQuote();
             if (!currentQuote) { return; }
@@ -52,9 +53,15 @@ class CurrectSpotStore {
         }
         this.historical = this.state.endEpoch
             ? moment.utc(this.state.endEpoch * 1000).format('DD MMMM YYYY - HH:mm') : false;
-        this.show = visible && (layout.chartType !== 'candle'
-                && layout.chartType !== 'colored_bar'
-                && layout.chartType !== 'hollow_candle');
+        this.show = visible
+                && (
+                    this.historical
+                    || (
+                        layout.chartType !== 'candle'
+                        && layout.chartType !== 'colored_bar'
+                        && layout.chartType !== 'hollow_candle'
+                    )
+                );
     }
 }
 

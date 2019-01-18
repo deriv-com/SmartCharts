@@ -12,6 +12,7 @@ class ChartState {
     get comparisonStore() { return this.mainStore.comparison; }
     get stxx() { return this.chartStore.stxx; }
     get context() { return this.chartStore.context; }
+    get chartTypeStore() { return this.mainStore.chartType; }
 
     constructor(mainStore) {
         this.mainStore = mainStore;
@@ -30,12 +31,18 @@ class ChartState {
         this.settings = settings;
         this.isConnectionOpened = isConnectionOpened;
         this.symbol = symbol;
-        this.granularity = granularity;
-        this.chartType = chartType;
         this.startEpoch = startEpoch;
         this.endEpoch = endEpoch;
         this.isAnimationEnabled = isAnimationEnabled;
 
+        if (this.granularity !== granularity) {
+            this.granularity = granularity;
+            this.chartStore.setChartType(granularity === 0);
+        }
+        if (this.chartType !== chartType) {
+            this.chartType = chartType;
+            this.chartTypeStore.setType(chartType);
+        }
         if (removeAllComparisons) {
             this.comparisonStore.removeAll();
         }

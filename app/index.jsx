@@ -205,7 +205,6 @@ class App extends Component {
             {isMobile ? '' : <CrosshairToggle />}
             <ChartTypes
                 onChange={(type) => {
-                    console.log('type', type);
                     this.setState({
                         chartType: type,
                     });

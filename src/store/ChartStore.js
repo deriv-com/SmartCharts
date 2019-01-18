@@ -508,15 +508,19 @@ class ChartStore {
         const { chartType: chartTypeStore } = this.mainStore;
         if (chartTypeStore.chartTypeProp === undefined) {
             this.contextPromise.then(() => {
-                const isTick = this.stxx.layout.timeUnit === 'second';
-                const isCandle = chartTypeStore.isCandle;
-                if (isCandle && isTick) {
-                    // Tick charts cannot be represented with candles
-                    chartTypeStore.setType('mountain');
-                } else if (!isTick && !isCandle) {
-                    chartTypeStore.setType('candle');
-                }
+                this.setChartType(this.stxx.layout.timeUnit === 'second');
             });
+        }
+    }
+
+    @action.bound setChartType(isTick) {
+        const { chartType: chartTypeStore } = this.mainStore;
+        const isCandle = chartTypeStore.isCandle;
+        if (isCandle && isTick) {
+            // Tick charts cannot be represented with candles
+            chartTypeStore.setType('mountain');
+        } else if (!isTick && !isCandle) {
+            chartTypeStore.setType('candle');
         }
     }
 
