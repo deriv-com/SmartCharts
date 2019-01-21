@@ -1,5 +1,5 @@
 import React from 'react';
-import SimpleBar from 'simplebar-react';
+import Scrollbars from 'tt-react-custom-scrollbars';
 import '../../sass/components/_ciq-list.scss';
 
 const List = ({
@@ -14,9 +14,9 @@ const List = ({
                + ` ${it.disabled ? 'disabled' : ''}`
                + ` ${it.active ? 'active' : ''}`;
     return (
-        <SimpleBar
-            data-simplebar-auto-hide="false"
+        <Scrollbars
             className="ciq-list"
+            autoHeight
             style={height && { height: `${height}px` }}
         >
             {items.map((it, idx) => (
@@ -28,7 +28,7 @@ const List = ({
                     {renderRow(it)}
                 </div>
             ))}
-        </SimpleBar>
+        </Scrollbars>
     );
 };
 
