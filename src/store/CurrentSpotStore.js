@@ -24,6 +24,7 @@ class CurrectSpotStore {
         const mainSeriesRenderer = this.stx.mainSeriesRenderer;
         let visible = true;
 
+
         if (chart.dataSet
             && chart.dataSet.length
             && mainSeriesRenderer
@@ -48,8 +49,8 @@ class CurrectSpotStore {
         }
 
         this.show = visible && (layout.chartType !== 'candle'
-                && layout.chartType !== 'colored_bar'
-                && layout.chartType !== 'hollow_candle');
+            && layout.chartType !== 'colored_bar'
+            && layout.chartType !== 'hollow_candle');
     }
 }
 

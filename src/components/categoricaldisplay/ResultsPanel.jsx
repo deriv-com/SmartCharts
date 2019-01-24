@@ -51,9 +51,9 @@ const Category = ({ category, Item, setCategoryElement, onSelectItem, activeHead
             ))
             : category.data.length > 0 && (
                 <div className="category-content">
-                    {category.data.map(item => (
+                    {category.data.map((item, idx) => (
                         <Item
-                            key={item.display}
+                            key={`${item.display}-${idx}`}// eslint-disable-line react/no-array-index-key
                             item={item}
                             onSelectItem={onSelectItem}
                         />
