@@ -504,7 +504,7 @@ html, body {
 /* Default color for line and bar Charts */
 .stx_line_chart, .stx_bar_chart {
     @include themify($themes) {
-        color: themed('ChartTitleText');
+        color: themed('DefaultBorder');
     }
 }
 
@@ -530,10 +530,12 @@ html, body {
 }
 
 .stx_mountain_chart { /* Default color for mountain Charts */
-    color: rgba(0, 156, 255, 0.01); /* background color for mountain */
-    background-color: rgba(0, 102, 255, 0.5); /* Optional gradient */
-    border: #009cff; /* Optional line color */
-    width: 2px; /* Optional line width */
+    width: 1px; /* Optional line width */
+    @include themify($themes) {
+        border: themed('DefaultBorder');
+        background-color: themed('ChartMountainBg'); /* Optional gradient */
+        color: themed('ChartMountainBgShade'); /* background color for mountain */
+    }
 }
 
 .stx_histogram_down { /* Down Bar color */
