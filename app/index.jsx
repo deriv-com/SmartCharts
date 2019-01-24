@@ -103,6 +103,9 @@ class App extends Component {
     constructor(props) {
         super(props);
         this.notifier = new ChartNotifier();
+        let chartType;
+        let isChartTypeCandle;
+        let granularity;
         let endEpoch;
         let settings = createObjectFromLocalStorage('smartchart-setting');
         if (settings) {
@@ -114,6 +117,9 @@ class App extends Component {
         if (settings.historical) {
             this.removeAllComparisons();
             endEpoch = (new Date(`${today}:00Z`).valueOf() / 1000);
+            chartType = 'mountain';
+            isChartTypeCandle = false;
+            granularity = 0;
         }
         connectionManager.on(
             ConnectionManager.EVENT_CONNECTION_CLOSE,
@@ -126,8 +132,9 @@ class App extends Component {
         this.state = {
             settings,
             endEpoch,
-            chartType: undefined,
-            granularity: undefined,
+            chartType,
+            isChartTypeCandle,
+            granularity,
             isConnectionOpened: true,
         };
     }
@@ -165,6 +172,7 @@ class App extends Component {
         if (!prevSetting.historical && settings.historical) {
             this.setState({
                 chartType: 'mountain',
+                isChartTypeCandle: false,
                 granularity: 0,
                 endEpoch: (new Date(`${today}:00Z`).valueOf() / 1000),
             });
@@ -204,9 +212,10 @@ class App extends Component {
         <>
             {isMobile ? '' : <CrosshairToggle />}
             <ChartTypes
-                onChange={(type) => {
+                onChange={(chartType, isChartTypeCandle) => {
                     this.setState({
-                        chartType: type,
+                        chartType,
+                        isChartTypeCandle,
                     });
                 }}
             />
@@ -215,6 +224,21 @@ class App extends Component {
                     this.setState({
                         granularity: timePeriod,
                     });
+
+                    const isCandle = this.state.isChartTypeCandle;
+                    if (isCandle && timePeriod === 0) {
+                        console.log('mountain');
+                        this.setState({
+                            chartType: 'mountain',
+                            isChartTypeCandle: false,
+                        });
+                    } else if (!isCandle && timePeriod !== 0) {
+                        console.log('candle');
+                        this.setState({
+                            chartType: 'candle',
+                            isChartTypeCandle: true,
+                        });
+                    }
                 }}
             />
             <StudyLegend />

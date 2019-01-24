@@ -1,3 +1,4 @@
+/* eslint-disable no-new */
 import { action, observable, when } from 'mobx';
 import { createObjectFromLocalStorage, calculateTimeUnitInterval, calculateGranularity } from '../utils';
 
@@ -37,7 +38,6 @@ class ChartState {
 
         if (this.granularity !== granularity) {
             this.granularity = granularity;
-            this.chartStore.setChartType(granularity === 0);
         }
         if (this.chartType !== chartType) {
             this.chartType = chartType;
@@ -46,6 +46,45 @@ class ChartState {
         if (removeAllComparisons) {
             this.comparisonStore.removeAll();
         }
+        when(() => this.stxx, this.onDataReady);
+    }
+    onDataReady = () => {
+        console.log('onDataReady');
+        if (!this.stxx || !this.stxx.masterData) return;
+
+        const masterData = this.stxx.masterData;
+        const lastData = masterData[masterData.length - 2];
+        const epoch = lastData.DT.getTime();
+
+        console.log('e1', this.endEpoch * 1000);
+        console.log('e2', lastData.DT.getTime());
+
+        this.stxx.updateChartData(
+            {
+                DT: epoch,
+                Close: null,
+            },
+            null,
+            { useAsLastSale: true, fillGaps: true },
+        );
+        this.stxx.createDataSet();
+        this.stxx.draw();
+
+        setTimeout(() => {
+            const newNode = document.getElementById('stxEventPrototype').cloneNode(true);
+            newNode.id = null;
+            newNode.innerHTML = 'H';
+            CIQ.appendClassName(newNode, 'myEvents');
+            new CIQ.Marker({
+                stx: this.stxx,
+                xPositioner: 'date',
+                x: (new Date(epoch)),
+                label: 'events',
+                node: newNode,
+            });
+            this.stxx.draw();
+            console.log('draw point');
+        }, 800);
     }
 
     saveLayout() {
