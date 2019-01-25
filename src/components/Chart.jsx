@@ -78,7 +78,6 @@ class Chart extends Component {
                     className={`smartcharts-${isMobile ? 'mobile' : 'desktop'}`}
                     ref={this.modalNode}
                 >
-                    <div id="stxEventPrototype" />
                     <div
                         className="cq-context"
                         ref={this.root}
