@@ -1,6 +1,6 @@
 /* eslint-disable no-new */
 import { action, observable, when } from 'mobx';
-import { createObjectFromLocalStorage, getUTCDate, calculateTimeUnitInterval, calculateGranularity } from '../utils';
+import { createObjectFromLocalStorage, calculateTimeUnitInterval, calculateGranularity } from '../utils';
 
 class ChartState {
     @observable granularity;
@@ -10,7 +10,6 @@ class ChartState {
     @observable symbol;
     @observable isConnectionOpened;
     @observable settings;
-    @observable marker;
     get comparisonStore() { return this.mainStore.comparison; }
     get stxx() { return this.chartStore.stxx; }
     get context() { return this.chartStore.context; }
@@ -47,51 +46,6 @@ class ChartState {
         if (removeAllComparisons) {
             this.comparisonStore.removeAll();
         }
-        when(() => this.stxx, this.onDataReady);
-    }
-    onDataReady = () => {
-        console.log('onDataReady');
-        if (!this.stxx || !this.stxx.masterData) return;
-
-        // const masterData = this.stxx.masterData;
-        // const lastData = masterData[masterData.length - 1];
-
-        const epoch = (new Date(getUTCDate(this.endEpoch)));
-        console.log(epoch, this.granularity);
-        // console.log('e1', this.endEpoch * 1000);
-        // console.log('e2', lastData.DT.getTime());
-
-        this.stxx.updateChartData(
-            {
-                DT: epoch,
-                Value: 4000,
-            },
-            null,
-            { useAsLastSale: true, fillGaps: true },
-        );
-        this.stxx.createDataSet();
-        this.stxx.draw();
-
-        if (this.marker) {
-            this.marker.remove();
-        }
-
-
-        setTimeout(() => {
-            const newNode = document.getElementById('stxEventPrototype').cloneNode(true);
-            newNode.id = null;
-            newNode.innerHTML = 'H';
-            CIQ.appendClassName(newNode, 'myEvents');
-            this.marker = new CIQ.Marker({
-                stx: this.stxx,
-                xPositioner: 'date',
-                x: epoch,
-                label: 'events',
-                node: newNode,
-            });
-            this.stxx.draw();
-        }, 800);
-
     }
 
     saveLayout() {
