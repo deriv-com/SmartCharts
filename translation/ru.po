@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
-"PO-Revision-Date: 2019-01-07 11:22\n"
+"PO-Revision-Date: 2019-01-24 08:51\n"
 
 msgid " already exists."
 msgstr " уже существует."
@@ -364,7 +364,7 @@ msgid "Type"
 msgstr "Тип"
 
 msgid "Offset"
-msgstr "Офсет"
+msgstr "Оффсет"
 
 msgid "MA"
 msgstr "MA"
@@ -1063,7 +1063,7 @@ msgid "Lips Period"
 msgstr "Период усреднения зеленой линии"
 
 msgid "Lips Offset"
-msgstr "Смещение зеленый линии"
+msgstr "Смещение зеленой линии"
 
 msgid "Show Fractals"
 msgstr "Показать фракталы"
