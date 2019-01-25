@@ -256,6 +256,59 @@ class ChartStore {
         this.chartNode = this.rootNode.querySelector('.ciq-chart-area');
         this.chartControlsNode = this.rootNode.querySelector('.cq-chart-controls');
 
+        // monkey patching to handle radius and height for `current price label`
+        CIQ.ChartEngine.prototype.createYAxisLabel = function (panel, txt, y, backgroundColor, color, ctx, yAxis) {
+            if (panel.yAxis.drawPriceLabels === false || panel.yAxis.noDraw) return;
+            const yax = yAxis || panel.yAxis;
+            if (yax.noDraw || !yax.width) return;
+            const context = ctx || this.chart.context;
+            // SmartChart Team: this prop modified
+            const margin = 9;
+            const height = 24;
+            let radius = 0;
+            this.canvasFont('stx_yaxis', context);
+            const tickWidth = this.drawBorders ? 3 : 0; // pixel width of tick off edge of border
+            let width;
+            try {
+                width = context.measureText(txt).width + tickWidth + margin * 2;
+            } catch (e) { width = yax.width; } // Firefox doesn't like this in hidden iframe
+
+            let x = yax.left - margin + 3;
+            if (yax.width < 0) x += (yax.width - width);
+            const position = (yax.position === null ? panel.chart.yAxis.position : yax.position);
+            if (position === 'left') {
+                x = yax.left + yax.width + margin - 3;
+                width *= -1;
+                if (yax.width < 0) x -= (yax.width + width);
+                radius = -3;
+                context.textAlign = 'right';
+            }
+            if (y + (height / 2) > yax.bottom) y = yax.bottom - (height / 2);
+            if (y - (height / 2) < yax.top) y = yax.top + (height / 2);
+
+            if (typeof (CIQ[this.yaxisLabelStyle]) === 'undefined') {
+                this.yaxisLabelStyle = 'roundRectArrow';  // in case of user error, set a default.
+            }
+            let yaxisLabelStyle = this.yaxisLabelStyle;
+            if (yax.yaxisLabelStyle) yaxisLabelStyle = yax.yaxisLabelStyle;
+            const params = {
+                ctx:context,
+                x,
+                y,
+                top: y - (height / 2),
+                width,
+                height,
+                radius,
+                backgroundColor,
+                fill: true,
+                stroke: false,
+                margin:{ left: 8, top: 1 },
+                txt,
+                color,
+            };
+            CIQ[yaxisLabelStyle](params);
+        };
+
         const {
             symbol,
             chartType,

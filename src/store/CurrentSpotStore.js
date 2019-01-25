@@ -27,6 +27,7 @@ class CurrectSpotStore {
         const mainSeriesRenderer = this.stx.mainSeriesRenderer;
         let visible = true;
 
+
         if (chart.dataSet
             && chart.dataSet.length
             && mainSeriesRenderer

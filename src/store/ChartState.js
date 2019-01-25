@@ -1,6 +1,6 @@
 /* eslint-disable no-new */
 import { action, observable, when } from 'mobx';
-import { createObjectFromLocalStorage, calculateTimeUnitInterval, calculateGranularity } from '../utils';
+import { createObjectFromLocalStorage, getUTCDate, calculateTimeUnitInterval, calculateGranularity } from '../utils';
 
 class ChartState {
     @observable granularity;
@@ -10,6 +10,7 @@ class ChartState {
     @observable symbol;
     @observable isConnectionOpened;
     @observable settings;
+    @observable marker;
     get comparisonStore() { return this.mainStore.comparison; }
     get stxx() { return this.chartStore.stxx; }
     get context() { return this.chartStore.context; }
@@ -52,17 +53,18 @@ class ChartState {
         console.log('onDataReady');
         if (!this.stxx || !this.stxx.masterData) return;
 
-        const masterData = this.stxx.masterData;
-        const lastData = masterData[masterData.length - 2];
-        const epoch = lastData.DT.getTime();
+        // const masterData = this.stxx.masterData;
+        // const lastData = masterData[masterData.length - 1];
 
-        console.log('e1', this.endEpoch * 1000);
-        console.log('e2', lastData.DT.getTime());
+        const epoch = (new Date(getUTCDate(this.endEpoch)));
+        console.log(epoch, this.granularity);
+        // console.log('e1', this.endEpoch * 1000);
+        // console.log('e2', lastData.DT.getTime());
 
         this.stxx.updateChartData(
             {
                 DT: epoch,
-                Close: null,
+                Value: 4000,
             },
             null,
             { useAsLastSale: true, fillGaps: true },
@@ -70,21 +72,26 @@ class ChartState {
         this.stxx.createDataSet();
         this.stxx.draw();
 
+        if (this.marker) {
+            this.marker.remove();
+        }
+
+
         setTimeout(() => {
             const newNode = document.getElementById('stxEventPrototype').cloneNode(true);
             newNode.id = null;
             newNode.innerHTML = 'H';
             CIQ.appendClassName(newNode, 'myEvents');
-            new CIQ.Marker({
+            this.marker = new CIQ.Marker({
                 stx: this.stxx,
                 xPositioner: 'date',
-                x: (new Date(epoch)),
+                x: epoch,
                 label: 'events',
                 node: newNode,
             });
             this.stxx.draw();
-            console.log('draw point');
         }, 800);
+
     }
 
     saveLayout() {
