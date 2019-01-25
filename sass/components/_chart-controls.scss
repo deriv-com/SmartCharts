@@ -18,7 +18,7 @@
         z-index: 5;
     }
     .ciq-menu {
-        width: 100px;
+        width: 50px;
 
         > span {
             margin: 0;
@@ -120,7 +120,7 @@
     }
     .cq-toggle {
         cursor: pointer;
-        padding: 0.35em 2.6em;
+        // padding: 0.35em 2.6em;
         color: #575757;
     }
 }
@@ -274,7 +274,7 @@
         .cq-chart-control-bottom {
             .cq-chart-controls {
                 .ciq-menu {
-                    width: 60px;
+                    width: 50px;
 
                     .cq-menu-btn {
                         padding: 8px 5px;
@@ -299,14 +299,14 @@
     .smartcharts-desktop {
         .cq-chart-controls {
             .ciq-menu {
-                width: 100px;
+                width: auto;
 
                 .cq-menu-btn {
                     > .ic-icon {
                         padding: 0.35em 0.5em;
                     }
                     .ic-subtitle {
-                        display: block;
+                        display: none;
                     }
                 }
                 .notification-badge {
