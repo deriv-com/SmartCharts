@@ -419,25 +419,35 @@ class ChartStore {
             params = { periodicity: calculateTimeUnitInterval(granularity) };
         }
 
-        this.newChart(symbolObj, params);
-
-        if (symbolObj) {
-            this.updateCurrentActiveSymbol();
-        }
-
-        const { chartType: chartTypeStore } = this.mainStore;
-        if (chartTypeStore.chartTypeProp === undefined) {
-            this.contextPromise.then(() => {
-                const isTick = this.stxx.layout.timeUnit === 'second';
-                const isCandle = chartTypeStore.isCandle;
-                if (isCandle && isTick) {
-                    // Tick charts cannot be represented with candles
-                    chartTypeStore.setType('mountain');
-                } else if (!isTick && !isCandle) {
-                    chartTypeStore.setType('candle');
+        if (params === undefined && symbolObj) {
+            for (const field in this.stxx.chart.series) {
+                if (this.stxx.chart.series[field].parameters.bucket !== 'study') {
+                    this.stxx.removeSeries(field);
                 }
-            });
+            }
         }
+
+        setTimeout(() => {
+            this.newChart(symbolObj, params);
+
+            if (symbolObj) {
+                this.updateCurrentActiveSymbol();
+            }
+
+            const { chartType: chartTypeStore } = this.mainStore;
+            if (chartTypeStore.chartTypeProp === undefined) {
+                this.contextPromise.then(() => {
+                    const isTick = this.stxx.layout.timeUnit === 'second';
+                    const isCandle = chartTypeStore.isCandle;
+                    if (isCandle && isTick) {
+                        // Tick charts cannot be represented with candles
+                        chartTypeStore.setType('mountain');
+                    } else if (!isTick && !isCandle) {
+                        chartTypeStore.setType('candle');
+                    }
+                });
+            }
+        }, 30);
     }
 
     // Calling newChart with symbolObj as undefined refreshes the chart
