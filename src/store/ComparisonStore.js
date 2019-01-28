@@ -178,12 +178,14 @@ export default class ComparisonStore {
                     const srs = stx.chart.series[sybl];
                     const prm = srs.parameters;
                     const comp = q[sybl];
+                    // Symbol from cache may be in different language, so replace it with server's
+                    const symbolObject = this.mainStore.chart.activeSymbols.getSymbolObj(prm.symbolObject.symbol);
 
                     comparisons.push({
                         color: prm.color,
                         price: comp && comp.Close,
                         prevPrice: comp && comp.iqPrevClose,
-                        symbolObject: prm.symbolObject,
+                        symbolObject,
                     });
                 }
             }
