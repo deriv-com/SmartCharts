@@ -8,6 +8,7 @@ import Barrier from './Barrier.jsx';
 import CurrentSpot from './CurrentSpot.jsx';
 import DrawingCursor from './DrawingCursor.jsx';
 import ChartTable from './ChartTable.jsx';
+import LastDigits from './LastDigits.jsx';
 /* css + scss */
 import '../../sass/main.scss';
 
@@ -110,6 +111,7 @@ class Chart extends Component {
                                             {t.translate('Chart data is not available for this symbol.')}
                                         </div>
                                     )}
+                                    <LastDigits />
                                 </div>
                                 <ChartControls widgets={chartControlsWidgets} />
                             </div>

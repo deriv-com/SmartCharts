@@ -1,0 +1,24 @@
+.cq-last-digits {
+    position: relative;
+    bottom: 90px;
+    left: calc(50% - 100px);
+
+    .cq-bar {
+        width: 10px;
+        background-color: #555975;
+        position: absolute;
+        bottom: 40px;
+        border-bottom-left-radius: 16px;
+        border-bottom-right-radius: 16px;
+        border-top-left-radius: 16px;
+        border-top-right-radius: 16px;
+
+        .cq-bar-title {
+            color: #7f8397;
+            position: absolute;
+            bottom: -16px;
+            width: 10px;
+            text-align: center;
+        }
+    }
+}
