@@ -18,7 +18,7 @@
         z-index: 5;
     }
     .ciq-menu {
-        width: 50px;
+        width: auto;
 
         > span {
             margin: 0;
@@ -48,6 +48,7 @@
                         }
 
                         .ic-subtitle {
+                            display: none;
                             font-weight: bold;
                             @include themify($themes) {
                                 color: themed('MenuActiveText');
@@ -86,6 +87,7 @@
                     }
                 }
                 .ic-subtitle {
+                    display: none;
                     font-weight: normal;
                     line-height: normal;
                     text-align: center;
