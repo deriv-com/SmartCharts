@@ -19,6 +19,20 @@
             bottom: -16px;
             width: 10px;
             text-align: center;
+
+            &.min {
+                color: #ff0000;
+            }
+            &.max {
+                color: #00ff00;
+            }
+
+        }
+        &.min {
+            background-color: #ff0000 !important;
+        }
+        &.max {
+            background-color: #00ff00 !important;
         }
     }
 }

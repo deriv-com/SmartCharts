@@ -2,21 +2,21 @@ import React from 'react';
 import { connect } from '../store/Connect';
 import '../../sass/components/_last-digits.scss';
 
-const Bar = ({ x, y }) => (
-    <div className="cq-bar" style={{ height: y, left : x * 30  }}>
-        <span className="cq-bar-title">{x}</span>
+const Bar = ({ x, bar }) => (
+    <div className={`cq-bar ${bar.cName}`} style={{ height: bar.height, left : x * 30  }}>
+        <span className={`cq-bar-title ${bar.cName}`}>{x}</span>
     </div>
 );
 
 const LastDigits = ({
-    heights,
+    bars,
 }) => (
     <div className="cq-last-digits">
-        {heights.map((y, idx) => (
+        {bars.map((bar, idx) => (
             <Bar
                 key={`bar-${idx}`}// eslint-disable-line react/no-array-index-key
                 x={idx}
-                y={y}
+                bar={bar}
             />
         ))
         }
@@ -25,5 +25,5 @@ const LastDigits = ({
 );
 
 export default connect(({ lastDigits : l }) => ({
-    heights:l.heights,
+    bars:l.bars,
 }))(LastDigits);
