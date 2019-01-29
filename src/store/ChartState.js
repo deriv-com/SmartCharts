@@ -39,7 +39,7 @@ class ChartState {
         if (this.granularity !== granularity) {
             this.granularity = granularity;
         }
-        if (this.chartType !== chartType) {
+        if (this.chartType !== chartType && this.context) {
             this.chartType = chartType;
             this.chartTypeStore.setType(chartType);
         }

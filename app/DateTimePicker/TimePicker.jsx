@@ -15,12 +15,18 @@ const isSessionAvailable = (
     end_moment              = moment().utc(),
     should_only_check_hour  = false,
 ) => {
+    const offset = (new Date()).getTimezoneOffset() * 60 * 1000;
     const end_compare = should_only_check_hour
         ? end_moment.clone().minute(0).second(0) : end_moment;
+    const start_compare = end_compare.clone().subtract(1, 'year');
 
-    const offset = (new Date()).getTimezoneOffset() * 60 * 1000;
     const end_time = end_compare.valueOf() + offset;
-    return (end_time - compare_moment.valueOf() > 0);
+    const start_time = start_compare.valueOf() + offset;
+
+    return (
+        (end_time - compare_moment.valueOf() > 0)
+        && (compare_moment.valueOf() - start_time > 0)
+    );
 };
 
 class TimePickerDropdown extends React.Component {

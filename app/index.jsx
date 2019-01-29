@@ -90,6 +90,13 @@ const connectionManager = new ConnectionManager({
     language,
     endpoint: serverUrl,
 });
+const IntervalEnum = {
+    second: 1,
+    minute: 60,
+    hour: 3600,
+    day: 24 * 3600,
+    year: 365 * 24 * 3600,
+};
 
 const streamManager = new StreamManager(connectionManager);
 const requestAPI = connectionManager.send.bind(connectionManager);
@@ -103,11 +110,14 @@ class App extends Component {
     constructor(props) {
         super(props);
         this.notifier = new ChartNotifier();
+        const layoutString = localStorage.getItem(`layout-${chartId}`),
+            layout = JSON.parse(layoutString !== '' ? layoutString : '{}');
         let chartType;
         let isChartTypeCandle;
         let granularity;
         let endEpoch;
         let settings = createObjectFromLocalStorage('smartchart-setting');
+
         if (settings) {
             settings.language = language;
             this.startingLanguage = settings.language;
@@ -120,7 +130,21 @@ class App extends Component {
             chartType = 'mountain';
             isChartTypeCandle = false;
             granularity = 0;
+            if (layout) {
+                granularity = layout.timeUnit === 'second' ? 0 : parseInt(layout.interval * IntervalEnum[layout.timeUnit], 10);
+
+                if (layout.chartType === 'candle' && layout.aggregationType !== 'ohlc') {
+                    chartType = layout.aggregationType;
+                } else {
+                    chartType = layout.chartType;
+                }
+
+                if (['mountain', 'line', 'colored_line', 'spline', 'baseline'].indexOf(chartType) === -1) {
+                    isChartTypeCandle = true;
+                }
+            }
         }
+
         connectionManager.on(
             ConnectionManager.EVENT_CONNECTION_CLOSE,
             () => this.setState({ isConnectionOpened: false }),
@@ -224,16 +248,13 @@ class App extends Component {
                     this.setState({
                         granularity: timePeriod,
                     });
-
                     const isCandle = this.state.isChartTypeCandle;
                     if (isCandle && timePeriod === 0) {
-                        console.log('mountain');
                         this.setState({
                             chartType: 'mountain',
                             isChartTypeCandle: false,
                         });
                     } else if (!isCandle && timePeriod !== 0) {
-                        console.log('candle');
                         this.setState({
                             chartType: 'candle',
                             isChartTypeCandle: true,

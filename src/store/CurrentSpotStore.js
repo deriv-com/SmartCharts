@@ -31,7 +31,6 @@ class CurrectSpotStore {
         if (chart.dataSet
             && chart.dataSet.length
             && mainSeriesRenderer
-            && mainSeriesRenderer.supportsAnimation
         ) {
             const panel = chart.panel;
             const currentQuote = this.stx.currentQuote();
