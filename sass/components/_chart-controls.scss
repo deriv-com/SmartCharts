@@ -3,7 +3,7 @@
     position: absolute;
     display: flex;
     box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.12);
-    z-index: 2;
+    z-index: 9;
     // flex-wrap: wrap;
     justify-content: center;
     align-items: stretch;
@@ -257,7 +257,7 @@
                     width: 40px;
 
                     .cq-menu-btn {
-                        padding: 8px 5px;
+                        // padding: 8px 5px;
 
                         > .ic-icon {
                             padding: 0.35em 0em;
