@@ -36,6 +36,9 @@ class ChartState {
         this.endEpoch = endEpoch;
         this.isAnimationEnabled = isAnimationEnabled;
 
+        if (this.stxx) {
+            this.stxx.drawPriceLabels = !!this.endEpoch;
+        }
         if (this.granularity !== granularity && this.context) {
             this.granularity = granularity;
             this.chartStore.changeSymbol(undefined, granularity);
