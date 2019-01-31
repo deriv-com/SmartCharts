@@ -119,7 +119,8 @@ const Timeperiod = ({
                     </div>
                 </div>
             </TimePeriodMenu.Body>
-        </TimePeriodMenu>);
+        </TimePeriodMenu>
+    );
 };
 
 export default connect(({ timeperiod: s }) => ({

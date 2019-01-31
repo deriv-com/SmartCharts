@@ -35,7 +35,6 @@ $transition-duration: 300ms;
     margin-top: 5px;
     @include themify($themes) {
         color: themed('DialogBodyText');
-        border: 1px solid themed('DialogBorder');
         background-color: themed('DialogBodyBg');
     }
 

@@ -68,7 +68,8 @@ const Views = ({
                                     {t.translate('OVERWRITE')}
                                 </div>
                             </div>
-                        </div>)
+                        </div>
+                    )
                 }
                 <div className="template-name">
                     {

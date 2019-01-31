@@ -40,13 +40,9 @@
                 right: 4px;
                 opacity: 1;
                 border-radius: 50%;
-                @include themify($themes) {
-                    background: themed('CatDisplaySearchIconBg');
-                }
 
-                path {
-                    fill: transparent;
-                    stroke: transparent;
+                svg {
+                    stroke: transparent !important;
                 }
             }
         }
@@ -58,7 +54,7 @@
             outline: 0;
             width: calc(100% - 40px);
             background-color: transparent;
-            border-radius: 3px;
+            border-radius: 4px;
             @include placeholder {
                 @include themify($themes) {
                     opacity: 0.4;
@@ -225,6 +221,7 @@
         &:hover,
         &.selected {
             @include themify($themes) {
+                color: themed('CatDisplayActiveFilterText');
                 background: themed('CatDisplayCatContentHover');
                 border-bottom-color: themed('CatDisplayCatContentHover');
             }
