@@ -6,7 +6,7 @@
     height: 100%;
     text-align: left;
     overflow: hidden;
-    border-radius: 3px;
+    border-radius: 4px;
     @include themify($themes) {
         color: themed('CatDisplayText');
     }
@@ -25,7 +25,7 @@
     .cq-lookup-input {
         margin: 1.5em 1.1em 1.6em 1.3em;
         position: relative;
-        border-radius: 3px;
+        border-radius: 4px;
         @include themify($themes) {
             color: themed('CatDisplayText');
             border: 1px solid themed('CatDisplaySearchBorder');
@@ -39,6 +39,15 @@
             > .icon-reset {
                 right: 4px;
                 opacity: 1;
+                border-radius: 50%;
+                @include themify($themes) {
+                    background: themed('CatDisplaySearchIconBg');
+                }
+
+                path {
+                    fill: transparent;
+                    stroke: transparent;
+                }
             }
         }
         > input {
@@ -159,10 +168,8 @@
         }
         &.cq-active-filter {
             font-weight: 800;
-            border-right: 2px solid;
             @include themify($themes) {
                 color: themed('CatDisplayActiveFilterText');
-                border-color: themed('CatDisplayActiveFilterBorder');
                 background-color: themed('CatDisplayActiveFilterBg');
             }
 
@@ -219,6 +226,7 @@
         &.selected {
             @include themify($themes) {
                 background: themed('CatDisplayCatContentHover');
+                border-bottom-color: themed('CatDisplayCatContentHover');
             }
         }
     }

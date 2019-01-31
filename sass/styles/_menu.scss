@@ -84,7 +84,7 @@ $transition-duration: 300ms;
     .cq-categorical-display {
         .cq-lookup-filters {
             @include themify($themes) {
-                background: themed('DialogHeadBg');
+                background: themed('CatDisplayFilterBg');
             }
         }
     }

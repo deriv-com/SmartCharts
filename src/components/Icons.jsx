@@ -23,6 +23,7 @@ import Csv from '../../sass/icons/download/ic-csv.svg';
 
 import Add from '../../sass/icons/chart settings/zoom-in/ic-zoomin-light.svg';
 import Close from '../../sass/icons/close/ic-close.svg';
+import CloseCircle from '../../sass/icons/close/ic-close-circle.svg';
 import Comparison from '../../sass/icons/chart settings/comparison/ic-comparison-normal.svg';
 import CrosshairOff from '../../sass/icons/chart settings/crosshair/ic-crosshair-off.svg';
 import CrosshairOn from '../../sass/icons/chart settings/crosshair/ic-crosshair-on.svg';
@@ -149,6 +150,7 @@ export const TableIcon = Wrapper(Table);
 export const AddIcon = Wrapper(Add);
 export const ZoomInIcon = Wrapper(Add);
 export const CloseIcon = Wrapper(Close);
+export const CloseCircleIcon = Wrapper(CloseCircle);
 export const ComparisonIcon = Wrapper(Comparison);
 export const CrosshairOffIcon = Wrapper(CrosshairOff);
 export const CrosshairOnIcon = Wrapper(CrosshairOn);
