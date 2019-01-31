@@ -63,6 +63,9 @@ class ChartStore {
     get routingStore() {
         return this.mainStore.routing;
     }
+    get stateStore() {
+        return this.mainStore.state;
+    }
 
     updateHeight(position) {
         const historicalMobile = this.mainStore.chartSetting.historical && this.isMobile;
@@ -251,6 +254,9 @@ class ChartStore {
                 }
             }
             this.draw();
+        };
+        CIQ.ChartEngine.prototype.isHistoricalMode = function () {
+            return !!_self.stateStore.endEpoch;
         };
 
         this.rootNode = rootNode;

@@ -116,7 +116,8 @@ const ChartSetting = ({
                     </div>
                 </div>
             </div>
-        </div>);
+        </div>
+    );
     const renderLanguage = () => (
         <div>
             <div className="title">
@@ -136,10 +137,12 @@ const ChartSetting = ({
                         >
                             {language.icon}
                             <span className="ciq-icon-text">{language.name}</span>
-                        </div>))}
+                        </div>
+                    ))}
                 </div>
             </div>
-        </div>);
+        </div>
+    );
     return (
         <ChartSettingMenu className="cq-chart-setting">
             <ChartSettingMenu.Title>

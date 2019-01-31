@@ -36,8 +36,9 @@ class ChartState {
         this.endEpoch = endEpoch;
         this.isAnimationEnabled = isAnimationEnabled;
 
-        if (this.granularity !== granularity) {
+        if (this.granularity !== granularity && this.context) {
             this.granularity = granularity;
+            this.chartStore.changeSymbol(undefined, granularity);
         }
         if (this.chartType !== chartType && this.context) {
             this.chartType = chartType;
