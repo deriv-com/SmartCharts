@@ -10,16 +10,16 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: French\n"
 "Language: fr_FR\n"
-"PO-Revision-Date: 2018-12-21 08:01\n"
+"PO-Revision-Date: 2019-02-01 03:12\n"
 
 msgid " already exists."
 msgstr " existe déja."
 
 msgid "[symbol] feed is delayed by [delay] minutes"
-msgstr ""
+msgstr "l'alimentation [symbol] est retardée de [delay] minutes"
 
 msgid "[symbol] market is now opened."
-msgstr ""
+msgstr "le marché [symbol] est maintenant ouvert."
 
 msgid "[symbol] market is presently closed."
 msgstr "Le marché [symbol] est actuellement fermé."
@@ -112,7 +112,7 @@ msgid "Download"
 msgstr "Télécharger"
 
 msgid "Download as CSV"
-msgstr ""
+msgstr "Télécharger au format CSV"
 
 msgid "Download as PNG"
 msgstr ""
