@@ -12,9 +12,9 @@ export const CalendarYears = ({ calendar_date, isPeriodDisabled, onClick, select
     }
     return (
         <div className="calendar-year-panel">
-            {years.map((year, idx) => (
+            {years.map(year => (
                 <span
-                    key={idx}
+                    key={year}
                     className={`calendar-year ${isPeriodDisabled(moment_date.year(year), 'year') ? 'disabled' : ''} ${(year === selected_year) ? 'active' : ''}`}
                     onClick={onClick.year}
                     data-year={year}

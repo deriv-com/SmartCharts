@@ -61,17 +61,33 @@ function CalendarHeader({ calendar_date, isPeriodDisabled, onClick, onSelect, ca
     const is_year_view   = calendar_view === 'year';
     const is_decade_view = calendar_view === 'decade';
     const moment_date    = moment.utc(calendar_date);
+    const onPreviousYearClick = () => {
+        if (is_date_view || is_month_view) onClick.previousYear();
+
+        if (is_year_view) onClick.previousDecade();
+
+        if (is_decade_view) onClick.previousCentury();
+    };
+    const onNextYearClick = () => {
+        if (is_date_view || is_month_view) onClick.nextYear();
+
+        if (is_year_view) onClick.nextDecade();
+
+        if (is_decade_view) onClick.nextCentury();
+    };
+    const onSelectYearClick = () => {
+        if (is_date_view || is_month_view) {
+            onSelect.year();
+        } else {
+            onSelect.decade();
+        }
+    };
 
     return (
         <div className="calendar-header">
             <CalendarButton
                 className={`calendar-prev-year-btn ${isPeriodDisabled(moment_date.clone().subtract(1, 'month'), 'month') ? 'hidden' : ''}`}
-                onClick={() => (
-                    (is_date_view || is_month_view) && onClick.previousYear())
-                    || (is_year_view   && onClick.previousDecade())
-                    || (is_decade_view && onClick.previousCentury()
-                    )
-                }
+                onClick={onPreviousYearClick}
             />
             <CalendarButton
                 className={`calendar-prev-month-btn ${isPeriodDisabled(moment_date.clone().subtract(1, 'month'), 'month') ? 'hidden' : ''}`}
@@ -92,7 +108,7 @@ function CalendarHeader({ calendar_date, isPeriodDisabled, onClick, onSelect, ca
                 }
                 <CalendarButton
                     className="calendar-select-year-btn"
-                    onClick={() => ((is_date_view || is_month_view) ? onSelect.year() : onSelect.decade())}
+                    onClick={onSelectYearClick}
                 >
                     { (is_date_view || is_month_view) && moment_date.year() }
                     { is_year_view   && `${moment_date.clone().subtract(1, 'years').year()}-${moment_date.clone().add(10, 'years').year()}`  }
@@ -107,11 +123,7 @@ function CalendarHeader({ calendar_date, isPeriodDisabled, onClick, onSelect, ca
             />
             <CalendarButton
                 className={`calendar-next-year-btn ${isPeriodDisabled(moment_date.clone().add(1, 'month'), 'month') ? 'hidden' : ''}`}
-                onClick={() => (
-                    ((is_date_view || is_month_view) && onClick.nextYear())
-                    || (is_year_view   && onClick.nextDecade())
-                    || (is_decade_view && onClick.nextCentury())
-                )}
+                onClick={onNextYearClick}
             />
         </div>
     );

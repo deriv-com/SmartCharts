@@ -6,26 +6,22 @@ import { Wrapper } from '../../src/components/Icons.jsx';
 import CalendarIC from '../icons/ic-calendar.svg';
 
 const CalendarIcon = Wrapper(CalendarIC);
-class DatePickerInput extends React.PureComponent {
-    render() {
-        const { value, format } = this.props;
-        const input_value = format ? moment(value, 'YYYY-MM-DD').format(format) : value;
-
-        return (
-            <input
-                id={this.props.id}
-                name={this.props.name}
-                className={this.props.class_name}
-                readOnly={this.props.is_read_only}
-                placeholder={t.translate(this.props.placeholder
-                    || (this.props.mode === 'duration' ? 'Select a duration' : 'Select date'))}
-                onChange={this.props.onChange}
-                onClick={this.props.onClick}
-                value={input_value}
-            />
-        );
-    }
-}
+const  DatePickerInput = ({ value, format, id, name, class_name, is_read_only, placeholder, onChange, onClick, mode }) => {
+    const input_value = format ? moment(value, 'YYYY-MM-DD').format(format) : value;
+    return (
+        <input
+            id={id}
+            name={name}
+            className={class_name}
+            readOnly={is_read_only}
+            placeholder={t.translate(placeholder
+                || (mode === 'duration' ? 'Select a duration' : 'Select date'))}
+            onChange={onChange}
+            onClick={onClick}
+            value={input_value}
+        />
+    );
+};
 const formatDate = (date, date_format = 'YYYY-MM-DD') => moment(date || undefined, date_format).format(date_format);
 
 /**
@@ -47,19 +43,16 @@ export default class DatePicker extends React.PureComponent {
         };
     }
 
-    componentWillMount() {
+    componentDidMount() {
         document.addEventListener('click', this.onClickOutside, true);
     }
 
-    componentWillReceiveProps({ value, mode, focus }) {
-        if (typeof focus === 'boolean') {
-            this.setState({
-                is_datepicker_visible: focus,
-            });
+    componentDidUpdate(prevProps, prevState) {
+        if (this.props.focus === true
+            && prevProps.focus !== this.props.focus
+            && prevState.is_datepicker_visible !== this.props.focus) {
+            this.handleVisibility();
         }
-
-        if (value === this.state.value) return;
-        this.updateDatePickerValue(value, mode);
     }
 
     componentWillUnmount() {

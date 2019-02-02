@@ -29,7 +29,7 @@ const isSessionAvailable = (
     );
 };
 
-class TimePickerDropdown extends React.Component {
+class TimePickerDropdown extends React.PureComponent {
     constructor(props) {
         super(props);
         this.hours    = [...Array(24).keys()].map(a => `0${a}`.slice(-2));
@@ -110,8 +110,13 @@ class TimePickerDropdown extends React.Component {
         const { preClass, value, toggle, start_date } = this.props;
         const start_moment       = moment(start_date * 1000 || undefined);
         const start_moment_clone = start_moment.clone().minute(0).second(0);
-        const [hour, minute]   = (value || '00:00').split(':');
         const end_moment = moment().utc();
+        let [hour, minute] = ['00', '00'];
+
+        if (value.match(/^\d{2,}:\d{2}$/)) {
+            [hour, minute] = value.split(':');
+        }
+
         return (
             <div className={`${preClass}-dropdown ${this.props.className}`}>
                 <div
@@ -142,10 +147,7 @@ class TimePickerDropdown extends React.Component {
                             })}
                         </div>
                     </div>
-                    <div
-                        ref={this.saveMinuteRef}
-                        className={`${preClass}-minutes`}
-                    >
+                    <div className={`${preClass}-minutes`}>
                         <div className="list-title center-text"><strong>{t.translate('Minute')}</strong></div>
                         <div className="list-container">
                             {this.minutes.map((mm, key) => {
@@ -169,7 +171,7 @@ class TimePickerDropdown extends React.Component {
     }
 }
 
-class TimePicker extends React.Component {
+class TimePicker extends React.PureComponent {
     constructor(props) {
         super(props);
         this.minutes  = [...Array(12).keys()].map(a => `0${a * 5}`.slice(-2));
@@ -183,12 +185,20 @@ class TimePicker extends React.Component {
         document.addEventListener('mousedown', this.handleClickOutside);
     }
 
-    componentWillReceiveProps(nextProps) {
+    componentDidUpdate(prevProps, prevState) {
+        if (this.props.focus === true
+            && prevProps.focus !== this.props.focus
+            && prevState.is_open !== this.props.focus) {
+            this.toggleDropDown();
+        }
+    }
+
+    static getDerivedStateFromProps(nextProps, prevState) {
         if (nextProps.focus) {
-            const [prev_hour, prev_minute] = (this.state.value || '00:00').split(':');
-            const start_moment          = moment(this.props.start_date * 1000 || undefined);
+            const [prev_hour, prev_minute] = (prevState.value || '00:00').split(':');
+            const start_moment          = moment(nextProps.start_date * 1000 || undefined);
             const start_moment_clone    = start_moment.clone().minute(0).second(0);
-            let desire_time           = start_moment_clone.hour(prev_hour).minute(prev_minute);
+            let desire_time             = start_moment_clone.hour(prev_hour).minute(prev_minute);
             let last_available_min;
             if (!isSessionAvailable(desire_time)) {
                 const hour = moment().utc().format('HH');
@@ -198,13 +208,15 @@ class TimePicker extends React.Component {
                         last_available_min = min;
                     }
                 });
-                this.setState({
-                    value: `${hour}:${last_available_min}`,
-                }, this.handleChange(`${hour}:${last_available_min}`));
-            }
+                this.handleChange(`${hour}:${last_available_min}`);
 
-            this.setState({ is_open: true });
+                return ({
+                    value: `${hour}:${last_available_min}`,
+                });
+            }
         }
+
+        return null;
     }
 
     componentWillUnmount() {

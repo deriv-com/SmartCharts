@@ -52,7 +52,7 @@ class CurrectSpotStore {
             }
         }
         this.historical = this.state.endEpoch
-            ? moment.utc(this.state.endEpoch * 1000).format('DD MMMM YYYY - HH:mm') : false;
+            ? moment.unix(this.state.endEpoch).utc().format('DD MMMM YYYY - HH:mm') : false;
         this.show = visible
                 && (
                     this.historical

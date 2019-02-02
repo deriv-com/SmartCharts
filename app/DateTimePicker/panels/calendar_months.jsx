@@ -26,12 +26,12 @@ export const CalendarMonths = ({ calendar_date, isPeriodDisabled, onClick, selec
         <div className="calendar-month-panel">
             {Object.keys(month_headers).map((month, idx) => (
                 <span
-                    key={idx}
+                    key={month}
                     className={`calendar-month ${(idx === selected_month) ? 'active' : ''} ${isPeriodDisabled(moment_date.month(month), 'month') ? 'disabled' : ''} `}
                     onClick={onClick.month}
                     data-month={idx}
                 >
-                    {month_headers[month]}
+                    {t.translate(month_headers[month])}
                 </span>
             ))}
         </div>

@@ -4,7 +4,7 @@ import DatePicker from './DateTimePicker/DatePicker.jsx';
 import TimePicker from './DateTimePicker/TimePicker.jsx';
 import './chart-history.scss';
 
-class ChartHistory extends React.Component {
+class ChartHistory extends React.PureComponent {
     constructor(props) {
         super(props);
         this.state = {
@@ -21,17 +21,17 @@ class ChartHistory extends React.Component {
         });
     }
 
-    onChangeDate({ target }) {
+    onChangeDate = ({ target }) => {
         const date = target.value;
         this.setState({ date, focusOnDate: false, focusOnTime: true }, this.updateStore);
     }
 
-    onChangeTime({ target }) {
+    onChangeTime = ({ target }) => {
         const time = target.value;
         this.setState({ time, focusOnDate: false, focusOnTime: false }, this.updateStore);
     }
 
-    onDisableFocus() {
+    onDisableFocus = () => {
         this.setState({ focusOnDate: false, focusOnTime: false });
     }
 
@@ -49,10 +49,10 @@ class ChartHistory extends React.Component {
                     name="date"
                     format="DD MMMM YYYY"
                     focus={this.state.focusOnDate}
-                    disableFocus={() => this.onDisableFocus()}
+                    disableFocus={this.onDisableFocus}
                     has_today_btn
                     value={this.state.date}
-                    onChange={e => this.onChangeDate(e)}
+                    onChange={this.onChangeDate}
                     min_date={moment.utc().subtract(1, 'years').toDate()}
                     max_date={moment.utc().toDate()}
                 />
@@ -60,11 +60,11 @@ class ChartHistory extends React.Component {
                     placeholder="time"
                     name="time"
                     focus={this.state.focusOnTime}
-                    disableFocus={() => this.onDisableFocus()}
+                    disableFocus={this.onDisableFocus}
                     is_clearable
                     start_date={moment(this.state.date, 'YYYY/MM/DD').valueOf() / 1000}
                     value={this.state.time}
-                    onChange={e => this.onChangeTime(e)}
+                    onChange={this.onChangeTime}
                 />
             </div>
         );
