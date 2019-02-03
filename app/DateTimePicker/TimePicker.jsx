@@ -191,38 +191,38 @@ class TimePicker extends React.PureComponent {
             && prevState.is_open !== this.props.focus) {
             this.toggleDropDown();
         }
-    }
 
-    static getDerivedStateFromProps(nextProps, prevState) {
-        if (nextProps.focus) {
+        if (this.props.focus) {
             const [prev_hour, prev_minute] = (prevState.value || '00:00').split(':');
-            const start_moment          = moment(nextProps.start_date * 1000 || undefined);
+            const start_moment          = moment(this.props.start_date * 1000 || undefined);
             const start_moment_clone    = start_moment.clone().minute(0).second(0);
-            let desire_time             = start_moment_clone.hour(prev_hour).minute(prev_minute);
-            let last_available_min;
+            const desire_time             = start_moment_clone.hour(prev_hour).minute(prev_minute);
             if (!isSessionAvailable(desire_time)) {
-                const hour = moment().utc().format('HH');
-                this.minutes.forEach((min) => {
-                    desire_time = start_moment_clone.hour(hour).minute(min);
-                    if (isSessionAvailable(desire_time)) {
-                        last_available_min = min;
-                    }
-                });
-                this.handleChange(`${hour}:${last_available_min}`);
-
-                return ({
-                    value: `${hour}:${last_available_min}`,
-                });
+                this.findAvailabeTime(start_moment_clone);
             }
         }
-
-        return null;
     }
 
     componentWillUnmount() {
         document.removeEventListener('mousedown', this.handleClickOutside);
     }
 
+    findAvailabeTime = (start_moment_clone) => {
+        let last_available_min,
+            desire_time;
+        const hour = moment().utc().format('HH');
+        this.minutes.forEach((min) => {
+            desire_time = start_moment_clone.hour(hour).minute(min);
+            if (isSessionAvailable(desire_time)) {
+                last_available_min = min;
+            }
+        });
+        this.handleChange(`${hour}:${last_available_min}`);
+
+        this.setState({
+            value: `${hour}:${last_available_min}`,
+        });
+    }
 
     toggleDropDown = () => {
         const is_open = this.state.is_open;

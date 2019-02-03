@@ -47,7 +47,7 @@ function CalendarFooter({ footer, has_today_btn, onClick }) {
             { has_today_btn
                 && (
                     <CalendarButton className="calendar-footer-btn">
-                        <span onClick={onClick}>Today</span>
+                        <span onClick={onClick}>{t.translate('Today')}</span>
                     </CalendarButton>
                 )
             }
@@ -246,7 +246,7 @@ class Calendar extends React.PureComponent {
         });
 
         if (onSelect) {
-            onSelect(now, true);
+            onSelect(now, false);
         }
     };
 
