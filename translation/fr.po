@@ -10,16 +10,16 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: French\n"
 "Language: fr_FR\n"
-"PO-Revision-Date: 2018-12-21 08:01\n"
+"PO-Revision-Date: 2019-02-01 03:22\n"
 
 msgid " already exists."
 msgstr " existe déja."
 
 msgid "[symbol] feed is delayed by [delay] minutes"
-msgstr ""
+msgstr "l'alimentation [symbol] est retardée de [delay] minutes"
 
 msgid "[symbol] market is now opened."
-msgstr ""
+msgstr "le marché [symbol] est maintenant ouvert."
 
 msgid "[symbol] market is presently closed."
 msgstr "Le marché [symbol] est actuellement fermé."
@@ -112,10 +112,10 @@ msgid "Download"
 msgstr "Télécharger"
 
 msgid "Download as CSV"
-msgstr ""
+msgstr "Télécharger au format CSV"
 
 msgid "Download as PNG"
-msgstr ""
+msgstr "Télécharger au format PNG"
 
 msgid "Download Chart"
 msgstr "Télécharger le graphique"
@@ -235,16 +235,16 @@ msgid "RESET"
 msgstr "REINITIALISATION"
 
 msgid "Retrieving Chart Data..."
-msgstr ""
+msgstr "Récupération des données du graphique..."
 
 msgid "Retrieving Chart Engine..."
-msgstr ""
+msgstr "Récupération du moteur graphique..."
 
 msgid "Retrieving market symbols..."
-msgstr ""
+msgstr "Récupération des symboles marché..."
 
 msgid "Retrieving trading times..."
-msgstr ""
+msgstr "Récupération des temps de trading..."
 
 msgid "Reversal"
 msgstr "Renversement"
@@ -295,7 +295,7 @@ msgid "Spline"
 msgstr "Spline"
 
 msgid "SPOT"
-msgstr ""
+msgstr "SPOT"
 
 msgid "Streaming for [symbol] is not available due to license restrictions"
 msgstr "Diffusion en continu pour [symbol] n’est pas disponible en raison de restrictions de licence"
