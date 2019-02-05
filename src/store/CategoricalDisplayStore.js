@@ -92,6 +92,8 @@ export default class CategoricalDisplayStore {
 
     get context() { return this.chart.context; }
 
+    get height() { return this.chart.chartContainerHeight - 150; }
+
     @action.bound updateScrollSpy() {
         if (this.pauseScrollSpy || !this.scrollPanel) { return; }
         if (this.filteredItems.length === 0) { return; }
@@ -287,5 +289,6 @@ export default class CategoricalDisplayStore {
         FilterPanel: this.FilterPanel,
         SearchInput: this.SearchInput,
         isMobile: this.chart.isMobile,
+        height: this.height,
     }))
 }

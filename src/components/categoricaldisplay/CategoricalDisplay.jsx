@@ -10,9 +10,11 @@ const CategoricalDisplay = ({
     FilterPanel,
     SearchInput,
     isMobile,
+    height,
 }) => (
     <div
         className="cq-categorical-display"
+        style={{ height }}
     >
         <div className="cq-lookup-filters">
             <SearchInput />

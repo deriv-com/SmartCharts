@@ -10,7 +10,7 @@
 
             &:hover {
                 @include themify($themes) {
-                    border: solid 1px themed('menuActiveBorder');
+                    border: solid 1px themed('ChartTitleActiveBorder');
                 }
             }
             > .ic-icon.cq-symbol-dropdown {
@@ -27,7 +27,7 @@
         }
         &.stxMenuActive > .cq-menu-btn > .cq-symbol-select-btn {
             @include themify($themes) {
-                border: 1px solid themed('menuActiveBorder');
+                border: 1px solid themed('ChartTitleActiveBorder');
             }
 
             > .ic-icon.cq-symbol-dropdown {
@@ -45,6 +45,14 @@
         @include themify($themes) {
             background: themed('ChartTitleBg');
             border: solid 1px themed('ChartTitleBorder');
+            box-shadow: 0 0 2px themed('ChartTitleActiveShadow');
+        }
+    }
+    .cq-menu-btn {
+        padding: 8px;
+        border-radius: 4px;
+        @include themify($themes) {
+            background: themed('ChartTitleSubBg');
         }
     }
     .cq-symbol-select-btn {
@@ -119,6 +127,9 @@
         left: 0px;
         bottom: auto;
         transform: translateX(0) translateY(-3em);
+        @include themify($themes) {
+            background: themed('CatDisplayBg');
+        }
 
         &.cq-menu-dropdown-enter-done, &.cq-menu-dropdown-enter-active {
             opacity: 1;

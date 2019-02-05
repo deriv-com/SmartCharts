@@ -9,6 +9,8 @@
     border-radius: 4px;
     @include themify($themes) {
         color: themed('CatDisplayText');
+        background: themed('CatDisplayBg');
+        box-shadow: 0 2px 8px 0 themed('CatDisplayShadow');
     }
 
     .cq-lookup-filters {
@@ -34,8 +36,17 @@
         &.active {
             @include themify($themes) {
                 border-color: themed('CatDisplayActiveSearchBorder');
+                box-shadow: 0 0 2px themed('CatDisplayActiveSearchShadow');
             }
 
+            > .ic-icon {
+                svg {
+                    @include themify($themes) {
+                        fill: themed('CatDisplayActiveSearchIcon');
+                        stroke: themed('CatDisplayActiveSearchIcon');
+                    }
+                }
+            }
             > .icon-reset {
                 right: 4px;
                 opacity: 1;
@@ -69,6 +80,13 @@
             position: absolute;
             top: 5px;
             left: 5px;
+
+            svg {
+                @include themify($themes) {
+                    fill: themed('CatDisplaySearchIcon');
+                    stroke: themed('CatDisplaySearchIcon');
+                }
+            }
         }
         > .icon-reset {
             position: absolute;
@@ -96,7 +114,7 @@
     }
     .category-content {
         margin: 0.4em 0.3em 0em 1em;
-        border-radius: 3px;
+        border-radius: 4px;
         @include themify($themes) {
             background-color: themed('CatDisplayCatContentBg');
             border: 1px solid themed('CatDisplayCatContentBorder');
@@ -105,7 +123,7 @@
     .subcategory {
         padding: 0 0 0 1.2em;
         font-size: 12px;
-        border-radius: 3px 3px 0 0;
+        border-radius: 4px 4px 0 0;
         display: flex;
         height: 40px;
         font-weight: bold;
@@ -134,7 +152,7 @@
             padding-top: 0px;
             height: 40px;
             @include themify($themes) {
-                background-color: themed('DialogBodyBg');
+                background-color: themed('CatDisplayBg');
                 border-bottom: 1px solid themed('CatDisplayCatContentBorder');
             }
         }
@@ -155,16 +173,10 @@
         line-height: 3.4em;
         text-align: left;
         cursor: pointer;
-        transition: background-color 0.3s;
         box-sizing: border-box;
 
-        &.cq-hover-style:hover {
-            @include themify($themes) {
-                background: themed('CatDisplayActiveFilterBg');
-            }
-        }
+        &.cq-hover-style:hover,
         &.cq-active-filter {
-            font-weight: 800;
             @include themify($themes) {
                 color: themed('CatDisplayActiveFilterText');
                 background-color: themed('CatDisplayActiveFilterBg');
@@ -178,6 +190,9 @@
                     }
                 }
             }
+        }
+        &.cq-active-filter {
+            font-weight: 800;
         }
         .ic-icon {
             display: inline-flex;
@@ -202,10 +217,10 @@
         }
 
         &:first-child {
-            border-radius: 3px 3px 0 0;
+            border-radius: 4px 4px 0 0;
         }
         &:last-child {
-            border-radius: 0 0 3px 3px;
+            border-radius: 0 0 4px 4px;
             border-bottom: none;
         }
         .left, .right {
@@ -217,7 +232,7 @@
             color: #f44336;
             padding: 3px 6px;
             font-size: 0.64em;
-            border-radius: 3px;
+            border-radius: 4px;
         }
         &:hover,
         &.selected {
@@ -225,6 +240,17 @@
                 color: themed('CatDisplayActiveFilterText');
                 background: themed('CatDisplayCatContentHover');
                 border-bottom-color: themed('CatDisplayCatContentHover');
+            }
+
+            .right {
+                .ic-icon {
+                    svg {
+                        @include themify($themes) {
+                            fill: themed('CatDisplayCatContentHoverIcon');
+                            stroke: themed('CatDisplayCatContentHoverIcon');
+                        }
+                    }
+                }
             }
         }
     }
@@ -254,16 +280,12 @@
     }
     .empty-category {
         padding: 0.9em 1.2em;
-        border-radius: 3px;
+        border-radius: 4px;
     }
 }
 
 /* Active Symbol Icons */
 .cq-categorical-display .results-panel {
-    @include themify($themes) {
-        background: themed('CatDisplayBg');
-    }
-
     .cq-active-options {
         float: right;
         display: inline-flex;
