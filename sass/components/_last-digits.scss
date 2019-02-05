@@ -2,7 +2,11 @@
     position: absolute;
     bottom: 90px;
     left: calc(50% - 150px);
+    visibility: hidden;
 
+    &.show {
+        visibility: visible;
+    }
     .cq-bar {
         width: 10px;
         @include themify($themes) {

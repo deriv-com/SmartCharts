@@ -13,7 +13,16 @@ export default class LastDigitsStore {
         return this.mainStore.chart.currentActiveSymbol.decimal_places;
     }
 
-    @observable digits = [];
+    @computed get isVisible() {
+        return this.mainStore.state.showLastDigits;
+    }
+
+
+    @computed get marketDisplayName() {
+        return this.mainStore.chart.currentActiveSymbol ? this.mainStore.chart.currentActiveSymbol.name : '';
+    }
+
+    digits = [];
     @observable bars = [];
 
     @action.bound showLastDigits() {

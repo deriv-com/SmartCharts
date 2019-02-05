@@ -9,9 +9,11 @@ const Bar = ({ x, bar }) => (
 );
 
 const LastDigits = ({
+    isVisible,
     bars,
+    marketDisplayName,
 }) => (
-    <div className="cq-last-digits">
+    <div className={`cq-last-digits ${isVisible ? 'show' : ''}`}>
         <div>
             {bars.map((bar, idx) => (
                 <Bar
@@ -22,10 +24,12 @@ const LastDigits = ({
             ))
             }
         </div>
-        <div className="cq-bar-footer">{t.translate('Last digits stats for latest 1000 ticks on Volatility 100 Index')}</div>
+        <div className="cq-bar-footer">{t.translate('Last digits stats for latest 1000 ticks on ') + marketDisplayName }</div>
     </div>
 );
 
 export default connect(({ lastDigits : l }) => ({
+    isVisible:l.isVisible,
     bars:l.bars,
+    marketDisplayName:l.marketDisplayName,
 }))(LastDigits);
