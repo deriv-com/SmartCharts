@@ -1,11 +1,13 @@
 .cq-last-digits {
-    position: relative;
+    position: absolute;
     bottom: 90px;
-    left: calc(50% - 100px);
+    left: calc(50% - 150px);
 
     .cq-bar {
         width: 10px;
-        background-color: #555975;
+        @include themify($themes) {
+            background-image: linear-gradient(to bottom, themed('LastdigitsBarBg'), rgba(themed('LastdigitsBarBg'), 0.5) var(--bar-gradiant)); /* stylelint-disable-line plugin/no-unsupported-browser-features */
+        }
         position: absolute;
         bottom: 40px;
         border-bottom-left-radius: 16px;
@@ -14,25 +16,49 @@
         border-top-right-radius: 16px;
 
         .cq-bar-title {
-            color: #7f8397;
+            @include themify($themes) {
+                color: themed('LastdigitsBarText');
+            }
             position: absolute;
             bottom: -16px;
             width: 10px;
             text-align: center;
 
             &.min {
-                color: #ff0000;
+                @include themify($themes) {
+                    color: themed('LastdigitsMinBarBg');
+                }
             }
             &.max {
-                color: #00ff00;
+                @include themify($themes) {
+                    color: themed('LastdigitsMaxBarBg');
+                }
             }
-
         }
         &.min {
-            background-color: #ff0000 !important;
+            @include themify($themes) {
+                background-color: themed('LastdigitsMinBarBg');
+                background-image: none;
+            }
         }
         &.max {
-            background-color: #00ff00 !important;
+            @include themify($themes) {
+                background-image: linear-gradient(to bottom, themed('LastdigitsMaxBarBg'), rgba(themed('LastdigitsMaxBarBg'), 0.5) var(--bar-gradiant)); /* stylelint-disable-line plugin/no-unsupported-browser-features */
+            }
+        }
+        // &:after {
+        //     position: absolute;
+        //     height: 50px;
+        //     bottom: 0;
+        //     content: '';
+        //     background-image: linear-gradient(#ff0000, #00ff00 60px); /* stylelint-disable-line plugin/no-unsupported-browser-features */
+        // }
+    }
+    .cq-bar-footer {
+        text-align: center;
+        width: 325px;
+        @include themify($themes) {
+            color: themed('LastdigitsBarText');
         }
     }
 }

@@ -26,7 +26,6 @@ $COLOR_DARK_BLUE_1  : #0b0e18;
 $COLOR_DARK_BLUE_2  : #101320;
 $COLOR_DARK_BLUE_3  : #191c31;
 $COLOR_DARK_BLUE_4  : #202641;
-$COLOR_LIGHT_BLUE_1 : #7f8397;
 
 $themes: (
     light: (
@@ -160,6 +159,10 @@ $themes: (
         CrosshairAxis: rgba($COLOR_GRAY, 0.32),
         CrosshairLabel: rgba($COLOR_GRAY, 0.88),
         StarIconFav: $COLOR_ORANGE,
+        LastdigitsBarBg: $COLOR_DARK_GRAY,
+        LastdigitsMaxBarBg: $COLOR_GREEN,
+        LastdigitsMinBarBg: $COLOR_RED,
+        LastdigitsBarText: $COLOR_LIGHT_BLUE_1,
     ),
     dark: (
         DefaultMain:            $COLOR_BRAND_BLUE,
@@ -291,6 +294,10 @@ $themes: (
         CrosshairAxis: $COLOR_WHITE,
         CrosshairLabel: $COLOR_LIGHT_BLUE_3,
         StarIconFav: $COLOR_ORANGE,
+        LastdigitsBarBg: $COLOR_DARK_GRAY,
+        LastdigitsMaxBarBg: $COLOR_GREEN,
+        LastdigitsMinBarBg: $COLOR_RED,
+        LastdigitsBarText: $COLOR_LIGHT_BLUE_1,
     ),
 );
 

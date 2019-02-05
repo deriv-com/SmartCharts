@@ -41,6 +41,7 @@ export default class LastDigitsStore {
         const max = Math.max(...this.digits);
         this.digits.forEach((digit, idx) => {
             this.bars[idx].height = Math.round(((this.maxHeight - this.minHeight) * (digit - min) / (max - min)) + this.minHeight);
+            this.bars[idx].gradiant = this.bars[idx].height > 50 ? ((this.bars[idx].height * 50) / this.maxHeight) : 0;
             if (digit === min) this.bars[idx].cName = 'min';
             else if (digit === max) this.bars[idx].cName = 'max';
             else this.bars[idx].cName = '';
