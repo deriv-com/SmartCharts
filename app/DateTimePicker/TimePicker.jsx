@@ -113,7 +113,7 @@ class TimePickerDropdown extends React.PureComponent {
         const end_moment = moment().utc();
         let [hour, minute] = ['00', '00'];
 
-        if (value.match(/^\d{2,}:\d{2}$/)) {
+        if (value.match(/^([0-9]|[0-1][0-9]|2[0-3]):([0-9]|[0-5][0-9])(:([0-9]|[0-5][0-9]))?$/)) {
             [hour, minute] = value.split(':');
         }
 
@@ -126,10 +126,7 @@ class TimePickerDropdown extends React.PureComponent {
                     <span className={value ? '' : 'placeholder'}>{t.translate(value || 'Select time')}</span>
                 </div>
                 <div className={`${preClass}-selector`}>
-                    <div
-                        ref={this.saveHourRef}
-                        className={`${preClass}-hours`}
-                    >
+                    <div className={`${preClass}-hours`}>
                         <div className="list-title center-text"><strong>{t.translate('Hour')}</strong></div>
                         <div className="list-container">
                             {this.hours.map((h, key) => {

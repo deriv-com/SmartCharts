@@ -31,7 +31,7 @@ export const CalendarMonths = ({ calendar_date, isPeriodDisabled, onClick, selec
                     onClick={onClick.month}
                     data-month={idx}
                 >
-                    {t.translate(month_headers[month])}
+                    {month_headers[month]}
                 </span>
             ))}
         </div>
