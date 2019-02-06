@@ -52,13 +52,6 @@
                 background-image: linear-gradient(to bottom, themed('LastdigitsMaxBarBg'), rgba(themed('LastdigitsMaxBarBg'), 0.5) var(--bar-gradiant)); /* stylelint-disable-line plugin/no-unsupported-browser-features */
             }
         }
-        // &:after {
-        //     position: absolute;
-        //     height: 50px;
-        //     bottom: 0;
-        //     content: '';
-        //     background-image: linear-gradient(#ff0000, #00ff00 60px); /* stylelint-disable-line plugin/no-unsupported-browser-features */
-        // }
     }
     .cq-bar-footer {
         text-align: center;
