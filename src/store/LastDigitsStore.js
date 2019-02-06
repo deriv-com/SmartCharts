@@ -9,12 +9,16 @@ export default class LastDigitsStore {
     get context() { return this.mainStore.chart.context; }
     get stx() { return this.context.stx; }
 
-    minHeight = 50;
+    minHeight = 40;
     maxHeight = 100;
     gradiantLine = this.maxHeight / 2;
     digits = [];
     latestData = [];
     @observable bars = [];
+
+    get api() {
+        return this.mainStore.chart.api;
+    }
 
     @computed get decimalPlaces() {
         return this.mainStore.chart.currentActiveSymbol.decimal_places;
@@ -35,7 +39,7 @@ export default class LastDigitsStore {
                 this.digits.push(0);
                 this.bars.push({ height:0, cName:'' });
             }
-            const tickHistory = await this.mainStore.chart.api.getTickHistory({ symbol :this.mainStore.chart.currentActiveSymbol.symbol });
+            const tickHistory = await this.api.getTickHistory({ symbol :this.mainStore.chart.currentActiveSymbol.symbol });
             this.latestData = tickHistory.history.prices;
             this.latestData.forEach((price) => {
                 const lastDigit = price.slice(-1);
