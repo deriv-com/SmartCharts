@@ -9,7 +9,7 @@ class ChartState {
     @observable symbol;
     @observable isConnectionOpened;
     @observable settings;
-    @observable showLastDigits;
+    @observable showLastDigitStats;
     get stxx() { return this.chartStore.stxx; }
     get context() { return this.chartStore.context; }
 
@@ -24,7 +24,7 @@ class ChartState {
         this.stxx.addEventListener('drawing', this.saveDrawings.bind(this));
     };
 
-    @action.bound updateProps({ id, settings, isConnectionOpened, symbol, granularity, chartType, startEpoch, endEpoch, isAnimationEnabled = true, showLastDigits = false,
+    @action.bound updateProps({ id, settings, isConnectionOpened, symbol, granularity, chartType, startEpoch, endEpoch, isAnimationEnabled = true, showLastDigitStats = false,
     }) {
         this.chartId = id;
         this.settings = settings;
@@ -35,7 +35,7 @@ class ChartState {
         this.startEpoch = startEpoch;
         this.endEpoch = endEpoch;
         this.isAnimationEnabled = isAnimationEnabled;
-        this.showLastDigits = showLastDigits;
+        this.showLastDigitStats = showLastDigitStats;
     }
 
     saveLayout() {

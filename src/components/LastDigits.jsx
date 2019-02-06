@@ -3,7 +3,7 @@ import { connect } from '../store/Connect';
 import '../../sass/components/_last-digits.scss';
 
 const Bar = ({ x, bar }) => (
-    <div className={`cq-bar ${bar.cName}`} style={{ height: bar.height, left : (x * 35), '--bar-gradiant': `${bar.gradiant}%` }}>
+    <div className={`cq-bar ${bar.cName}`} style={{ height: bar.height, left : (x * 35), '--bar-gradiant': `${bar.gradiantLine}%` }}>
         <span className={`cq-bar-title ${bar.cName}`}>{x}</span>
     </div>
 );

@@ -115,9 +115,9 @@ class App extends Component {
             ConnectionManager.EVENT_CONNECTION_REOPEN,
             () => this.setState({ isConnectionOpened: true }),
         );
-        this.state = { settings, isConnectionOpened: true, showLastDigits:false };
+        this.state = { settings, isConnectionOpened: true, showLastDigitStats:false };
         setTimeout(() => {
-            this.setState({ showLastDigits:true });
+            this.setState({ showLastDigitStats:true });
         }, 5000);
     }
 
@@ -180,13 +180,13 @@ class App extends Component {
     }
 
     render() {
-        const { settings, isConnectionOpened, symbol, showLastDigits } = this.state;
+        const { settings, isConnectionOpened, symbol, showLastDigitStats } = this.state;
 
         return (
             <SmartChart
                 id={chartId}
                 symbol={symbol}
-                showLastDigits={showLastDigits}
+                showLastDigitStats={showLastDigitStats}
                 isMobile={isMobile}
                 onMessage={this.onMessage}
                 enableRouting
