@@ -3,18 +3,18 @@ import moment from 'moment';
 import React from 'react';
 
 const getMonthHeaders = () => ({
-    Jan: 'Jan',
-    Feb: 'Feb',
-    Mar: 'Mar',
-    Apr: 'Apr',
-    May: 'May',
-    Jun: 'Jun',
-    Jul: 'Jul',
-    Aug: 'Aug',
-    Sep: 'Sep',
-    Oct: 'Oct',
-    Nov: 'Nov',
-    Dec: 'Dec',
+    Jan: t.translate('Jan'),
+    Feb: t.translate('Feb'),
+    Mar: t.translate('Mar'),
+    Apr: t.translate('Apr'),
+    May: t.translate('May'),
+    Jun: t.translate('Jun'),
+    Jul: t.translate('Jul'),
+    Aug: t.translate('Aug'),
+    Sep: t.translate('Sep'),
+    Oct: t.translate('Oct'),
+    Nov: t.translate('Nov'),
+    Dec: t.translate('Dec'),
 });
 
 export const CalendarMonths = ({ calendar_date, isPeriodDisabled, onClick, selected_date }) => {
