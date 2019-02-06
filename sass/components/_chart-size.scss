@@ -32,7 +32,7 @@
 
 .cq-chart-control-left {
     .cq-chart-size {
-        width: 100px !important;
+        // width: 100px !important;
         min-height: 114px;
         flex-flow: column;
     }
@@ -58,7 +58,8 @@
             .cq-chart-controls {
                 .cq-chart-size {
                     .cq-menu-btn {
-                        width: 50px;
+                        width: auto;
+                        min-width: 45px;
                     }
                 }
             }

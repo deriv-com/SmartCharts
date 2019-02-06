@@ -532,7 +532,7 @@ html, body {
 .stx_mountain_chart { /* Default color for mountain Charts */
     width: 1px; /* Optional line width */
     @include themify($themes) {
-        border: themed('DefaultBorder');
+        border: themed('ChartBorder');
         background-color: themed('ChartMountainBg'); /* Optional gradient */
         color: themed('ChartMountainBgShade'); /* background color for mountain */
     }
