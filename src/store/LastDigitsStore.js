@@ -9,7 +9,7 @@ export default class LastDigitsStore {
     get context() { return this.mainStore.chart.context; }
     get stx() { return this.context.stx; }
 
-    minHeight = 5;
+    minHeight = 50;
     maxHeight = 100;
     gradiantLine = this.maxHeight / 2;
     digits = [];
@@ -28,34 +28,40 @@ export default class LastDigitsStore {
         return this.mainStore.chart.currentActiveSymbol ? this.mainStore.chart.currentActiveSymbol.name : '';
     }
 
-    @action.bound showLastDigitStats() {
+    @action.bound async showLastDigitStats() {
         if (!this.context) return;
         if (this.mainStore.state.showLastDigitStats) {
             for (let i = 0; i < 10; i++) {
                 this.digits.push(0);
                 this.bars.push({ height:0, cName:'' });
             }
-            this.latestData = this.stx.masterData.slice(-1000);
-            this.latestData.forEach(row => this.updateHistogram(row));
-            this.mainStore.chart.feed.onMasterDataUpdate(this.updateHistogram);
+            const tickHistory = await this.mainStore.chart.api.getTickHistory({ symbol :this.mainStore.chart.currentActiveSymbol.symbol });
+            this.latestData = tickHistory.history.prices;
+            this.latestData.forEach((price) => {
+                const lastDigit = price.slice(-1);
+                this.digits[lastDigit]++;
+            });
+            this.updateBars();
+            this.mainStore.chart.feed.onMasterDataUpdate(this.onMasterDataUpdate);
         } else {
             this.digits = [];
             this.bars = [];
             this.latestData = [];
-            this.mainStore.chart.feed.offMasterDataUpdate(this.updateHistogram);
+            this.mainStore.chart.feed.offMasterDataUpdate(this.onMasterDataUpdate);
         }
     }
 
-    @action.bound updateHistogram(data) {
-        const lastDigit = data.Close.toFixed(this.decimalPlaces).slice(-1);
-        this.latestData.push(data);
+    @action.bound onMasterDataUpdate({ Close }) {
+        const firstDigit = this.latestData.shift().slice(-1);
+        const price =  Close.toFixed(this.decimalPlaces);
+        const lastDigit = price.slice(-1);
+        this.latestData.push(price);
         this.digits[lastDigit]++;
+        this.digits[firstDigit]--;
+        this.updateBars();
+    }
 
-        if (this.latestData.length > 1000) {
-            const firstDigit = this.latestData.shift();
-            this.digits[firstDigit]--;
-        }
-
+    @action.bound updateBars() {
         const min = Math.min(...this.digits);
         const max = Math.max(...this.digits);
         this.digits.forEach((digit, idx) => {
