@@ -40,7 +40,7 @@ export default class LastDigitsStore {
             }
 
             if (this.stx.masterData && this.stx.masterData.length >= this.count) {
-                this.latestData  = this.stx.masterData.slice(-1000).map(x => x.Close.toString());
+                this.latestData  = this.stx.masterData.slice(-this.count).map(x => x.Close.toString());
             } else {
                 const tickHistory = await this.api.getTickHistory({ symbol :this.mainStore.chart.currentActiveSymbol.symbol, count:this.count });
                 this.latestData = tickHistory && tickHistory.history ? tickHistory.history.prices : [];
