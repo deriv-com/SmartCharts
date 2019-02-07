@@ -24,7 +24,7 @@ const CategoricalDisplay = ({
             className="cq-scroll-panel"
             onScroll={updateScrollSpy}
             ref={setScrollPanel}
-            style={{ width: isMobile ? '100%' : '66%' }}
+            style={{ width: isMobile ? '100%' : '312px' }}
         >
             <ResultsPanel
                 onSelectItem={onSelectItem}

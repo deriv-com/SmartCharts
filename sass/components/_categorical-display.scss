@@ -1,6 +1,6 @@
 
 .cq-categorical-display {
-    width: 632px;
+    width: 512px;
     padding: 0 !important;
     display: flex;
     height: 100%;
@@ -14,7 +14,7 @@
     }
 
     .cq-lookup-filters {
-        width: 34%;
+        width: 200px;
         @include themify($themes) {
             background: themed('CatDisplayFilterBg');
         }
@@ -48,7 +48,8 @@
                 }
             }
             > .icon-reset {
-                right: 4px;
+                right: 8px;
+                top: 10px;
                 opacity: 1;
                 border-radius: 50%;
 
@@ -60,7 +61,7 @@
         > input {
             padding-left: 34px;
             line-height: 2.6em;
-            font-size: 1em;
+            font-size: 14px;
             border: none;
             outline: 0;
             width: calc(100% - 40px);
@@ -78,8 +79,8 @@
         }
         > .ic-icon {
             position: absolute;
-            top: 5px;
-            left: 5px;
+            top: 8px;
+            left: 8px;
 
             svg {
                 @include themify($themes) {
@@ -105,7 +106,6 @@
     .category {
         padding-top: 3em;
         padding-bottom: 1em;
-        padding-right: 1em;
         position: relative;
 
         &:last-child {
@@ -113,7 +113,7 @@
         }
     }
     .category-content {
-        margin: 0.4em 0.3em 0em 1em;
+        margin: 16px;
         border-radius: 4px;
         @include themify($themes) {
             background-color: themed('CatDisplayCatContentBg');
@@ -122,7 +122,7 @@
     }
     .subcategory {
         padding: 0 0 0 1.2em;
-        font-size: 12px;
+        font-size: 14px;
         border-radius: 4px 4px 0 0;
         display: flex;
         height: 40px;
@@ -134,7 +134,7 @@
     }
     .category-title {
         display: block;
-        font-size: 12px;
+        font-size: 14px;
         font-weight: bold;
         padding: 0 0.7em;
         line-height: 40px;
@@ -170,10 +170,11 @@
     }
     .cq-filter {
         padding-left: 1.6em;
-        line-height: 3.4em;
+        line-height: 2.9em;
         text-align: left;
         cursor: pointer;
         box-sizing: border-box;
+        font-size: 14px;
 
         &.cq-hover-style:hover,
         &.cq-active-filter {
@@ -212,6 +213,7 @@
         align-items: center;
         justify-content: space-between;
         line-height: initial;
+        font-size: 14px;
         @include themify($themes) {
             border-bottom: 1px solid themed('CatDisplayCatContentBorder');
         }
@@ -334,22 +336,6 @@
     }
 }
 
-.smartcharts-480 {
-    .smartcharts-desktop {
-        .cq-categorical-display {
-            width: 450px;
-        }
-    }
-}
-
-.smartcharts-900 {
-    .smartcharts-desktop {
-        .cq-categorical-display {
-            width: 550px;
-        }
-    }
-}
-
 .smartcharts-mobile {
     .cq-categorical-display {
         flex-direction: column;
@@ -368,7 +354,7 @@
             }
         }
         .cq-lookup-input {
-            margin: 1.2em 1em 0.5em;
+            margin: 16px 8px;
         }
         .cq-scroll-panel {
             .category:last-child {
