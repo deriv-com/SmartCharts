@@ -319,7 +319,7 @@ html, body {
     width: 30px !important;
 
     svg {
-        fill: $COLOR_LIGHT_BLUE_3;
+        fill: $COLOR_LIGHT_BLUE_2;
     }
     &.ic-delete {
         display: none;
@@ -532,7 +532,7 @@ html, body {
 .stx_mountain_chart { /* Default color for mountain Charts */
     width: 1px; /* Optional line width */
     @include themify($themes) {
-        border: themed('DefaultBorder');
+        border: themed('ChartBorder');
         background-color: themed('ChartMountainBg'); /* Optional gradient */
         color: themed('ChartMountainBgShade'); /* background color for mountain */
     }
@@ -896,6 +896,42 @@ $spot-color: #0298d3;
         position: relative;
         left: -2.3px;
         line-height: 5px;
+    }
+    &.cq-endpoint {
+        position: absolute;
+        text-align: center;
+        width: 1px;
+        height: 100%;
+        line-height: 20px;
+        color: #ffffff;
+        bottom: 0px !important;
+        top: 0px !important;
+        animation: none;
+        @include themify($themes) {
+            border-left: 2px dashed themed('ChartCandleBg');
+        }
+
+        &:before {
+            content: '\25CF';
+            font-size: 18px;
+            color: $spot-color;
+            position: relative;
+            left: -2.3px;
+            line-height: 5px;
+            display: none;
+        }
+        .cq-endpoint-label {
+            width: 145px;
+            padding: 1px 9px;
+            border-radius: 4px;
+            position: absolute;
+            top: calc(100% - 22px);
+            transform: translateX(-50%);
+            @include themify($themes) {
+                background-color: themed('ChartCandleBg');
+                color: themed('DefaultMain');
+            }
+        }
     }
 }
 

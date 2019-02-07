@@ -18,7 +18,7 @@ const ChartTypes = ({
 
     const onItemClick = (idx, chartType) => {
         if (Type.id !== chartType.id) {
-            onChange(chartType.id);
+            onChange(chartType.id, chartType.candleOnly);
         }
         setOpen(false);
     };
