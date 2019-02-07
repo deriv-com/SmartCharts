@@ -390,6 +390,7 @@ class ChartStore {
         this.currentActiveSymbol = symbolObject;
         this.stxx.chart.yAxis.decimalPlaces = symbolObject.decimal_places;
 
+        this.mainStore.lastDigits.showLastDigitStats();
         this.setMainSeriesDisplay(symbolObject.name);
     }
 

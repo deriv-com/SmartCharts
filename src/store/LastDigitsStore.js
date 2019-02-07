@@ -33,6 +33,10 @@ export default class LastDigitsStore {
     }
 
     @action.bound async showLastDigitStats() {
+        this.digits = [];
+        this.bars = [];
+        this.latestData = [];
+
         if (this.mainStore.state.showLastDigitStats) {
             for (let i = 0; i < 10; i++) {
                 this.digits.push(0);
@@ -53,9 +57,6 @@ export default class LastDigitsStore {
             this.updateBars();
             this.mainStore.chart.feed.onMasterDataUpdate(this.onMasterDataUpdate);
         } else {
-            this.digits = [];
-            this.bars = [];
-            this.latestData = [];
             this.mainStore.chart.feed.offMasterDataUpdate(this.onMasterDataUpdate);
         }
     }
