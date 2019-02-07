@@ -93,7 +93,7 @@ export default class CategoricalDisplayStore {
     get context() { return this.chart.context; }
 
     get height() {
-        return this.chart.chartContainerHeight - (this.chart.isMobile ? 0 : 150);
+        return this.chart.chartContainerHeight - (this.chart.isMobile ? 0 : 120);
     }
 
     @action.bound updateScrollSpy() {

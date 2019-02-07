@@ -25,7 +25,7 @@
         }
     }
     .cq-lookup-input {
-        margin: 1.5em 1.1em 1.6em 1.3em;
+        margin: 16px 8px;
         position: relative;
         border-radius: 4px;
         @include themify($themes) {
@@ -48,10 +48,7 @@
                 }
             }
             > .icon-reset {
-                right: 8px;
-                top: 10px;
                 opacity: 1;
-                border-radius: 50%;
 
                 svg {
                     stroke: transparent !important;
@@ -60,7 +57,7 @@
         }
         > input {
             padding-left: 34px;
-            line-height: 2.6em;
+            line-height: 2em;
             font-size: 14px;
             border: none;
             outline: 0;
@@ -79,8 +76,8 @@
         }
         > .ic-icon {
             position: absolute;
-            top: 8px;
-            left: 8px;
+            top: 3px;
+            left: 3px;
 
             svg {
                 @include themify($themes) {
@@ -91,14 +88,15 @@
         }
         > .icon-reset {
             position: absolute;
-            right: 0px;
             opacity: 0;
             left: auto;
             height: 20px;
             width: 20px;
             line-height: 28px;
             font-size: 9px;
-            top: 7px;
+            right: 6px;
+            top: 6px;
+            border-radius: 50%;
             cursor: pointer;
             transition: right, opacity 0.2s ease-in-out;
         }
@@ -136,7 +134,7 @@
         display: block;
         font-size: 14px;
         font-weight: bold;
-        padding: 0 0.7em;
+        padding: 0 16px;
         line-height: 40px;
         position: absolute;
         top: 0;
