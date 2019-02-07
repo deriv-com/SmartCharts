@@ -85,6 +85,7 @@ export default function animateChart(stx, animationParameters, easeMachine) {
         }
 
         function completeLastBar(record) {
+            if (!chart.masterData) { return; }
             for (let md = chart.masterData.length - 1; md >= 0; md--) {
                 const bar = chart.masterData[md];
                 if (bar.Close || bar.Close === 0) {

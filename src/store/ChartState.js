@@ -1,3 +1,4 @@
+/* eslint-disable no-new */
 import { action, observable, when } from 'mobx';
 import { createObjectFromLocalStorage, calculateTimeUnitInterval, calculateGranularity } from '../utils';
 
@@ -9,10 +10,13 @@ class ChartState {
     @observable symbol;
     @observable isConnectionOpened;
     @observable settings;
+    get comparisonStore() { return this.mainStore.comparison; }
     get stxx() { return this.chartStore.stxx; }
     get context() { return this.chartStore.context; }
+    get chartTypeStore() { return this.mainStore.chartType; }
 
     constructor(mainStore) {
+        this.mainStore = mainStore;
         this.chartStore = mainStore.chart;
         when(() => this.context, this.onContextReady);
     }
@@ -23,16 +27,29 @@ class ChartState {
         this.stxx.addEventListener('drawing', this.saveDrawings.bind(this));
     };
 
-    @action.bound updateProps({ id, settings, isConnectionOpened, symbol, granularity, chartType, startEpoch, endEpoch, isAnimationEnabled = true }) {
+    @action.bound updateProps({ id, settings, isConnectionOpened, symbol, granularity, chartType, startEpoch, endEpoch, removeAllComparisons, isAnimationEnabled = true }) {
         this.chartId = id;
         this.settings = settings;
         this.isConnectionOpened = isConnectionOpened;
         this.symbol = symbol;
-        this.granularity = granularity;
-        this.chartType = chartType;
         this.startEpoch = startEpoch;
         this.endEpoch = endEpoch;
         this.isAnimationEnabled = isAnimationEnabled;
+
+        if (this.stxx) {
+            this.stxx.drawPriceLabels = !!this.endEpoch;
+        }
+        if (this.granularity !== granularity && this.context) {
+            this.granularity = granularity;
+            this.chartStore.changeSymbol(undefined, granularity);
+        }
+        if (this.chartType !== chartType && this.context) {
+            this.chartType = chartType;
+            this.chartTypeStore.setType(chartType);
+        }
+        if (removeAllComparisons) {
+            this.comparisonStore.removeAll();
+        }
     }
 
     saveLayout() {
@@ -102,6 +119,7 @@ class ChartState {
                 this.restoreDrawings(this.stxx, this.stxx.chart.symbol);
                 if (this.chartStore.loader) {
                     this.chartStore.loader.hide();
+                    this.stxx.home();
                 }
 
                 this.chartStore.setMainSeriesDisplay(this.stxx.chart.symbolObject.name);
