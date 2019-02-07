@@ -1,5 +1,4 @@
 import { action, observable, reaction, computed } from 'mobx';
-import moment from 'moment';
 import PendingPromise from '../utils/PendingPromise';
 import Context from '../components/ui/Context';
 import KeystrokeHub from '../components/ui/KeystrokeHub';
@@ -174,12 +173,6 @@ class ChartStore {
                 }
             }
         };
-        CIQ.ChartEngine.prototype.append('headsUpHR', function () {
-            const date = this.currentPanel.chart.xaxis[this.barFromPixel(this.cx)];
-            if (date && date.DT) {
-                this.controls.floatDate.innerHTML = moment(date.DT).format('DD MMMM YYYY - hh:mm');
-            }
-        });
         CIQ.ChartEngine.prototype.home = function (params) {
             this.swipe.amplitude = 0;
             const layout = this.layout;
