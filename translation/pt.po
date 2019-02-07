@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Portuguese\n"
 "Language: pt_PT\n"
-"PO-Revision-Date: 2018-12-21 08:01\n"
+"PO-Revision-Date: 2019-02-07 10:43\n"
 
 msgid " already exists."
 msgstr " já existe."
@@ -48,6 +48,9 @@ msgstr "Linha de base"
 msgid "Box Size"
 msgstr "Tamanho da caixa"
 
+msgid "C"
+msgstr ""
+
 msgid "Callout"
 msgstr "Período de disponibilidade"
 
@@ -57,17 +60,26 @@ msgstr "CANCELAR"
 msgid "Candle"
 msgstr "Vela"
 
+msgid "Change"
+msgstr ""
+
 msgid "Channel"
 msgstr "Canal"
 
 msgid "Chart data is not available for this symbol."
 msgstr "Dados de gráficos não estão disponíveis para este símbolo."
 
+msgid "Chart Table"
+msgstr ""
+
 msgid "Chart types"
 msgstr "Tipos de gráficos"
 
 msgid "Clear All"
 msgstr "Limpar Todos"
+
+msgid "Close"
+msgstr ""
 
 msgid "CLOSE"
 msgstr "FECHAR"
@@ -95,6 +107,9 @@ msgstr "Linha Cruzada"
 
 msgid "Dark Mode"
 msgstr "Modo escuro"
+
+msgid "Date"
+msgstr ""
 
 msgid "Day"
 msgstr "Dia"
@@ -147,11 +162,20 @@ msgstr "Gann Fan"
 msgid "Gartley"
 msgstr "Gartley"
 
+msgid "H"
+msgstr ""
+
 msgid "Heikin Ashi"
 msgstr "Heikin Ashi"
 
+msgid "High"
+msgstr ""
+
 msgid "HIGH"
 msgstr "ALTO"
+
+msgid "Historical Data Mode"
+msgstr ""
 
 msgid "Hollow Candle"
 msgstr "Vela vazia"
@@ -171,6 +195,9 @@ msgstr "Intervalo"
 msgid "Kagi"
 msgstr "Kagi"
 
+msgid "L"
+msgstr ""
+
 msgid "Language"
 msgstr "Idioma"
 
@@ -179,6 +206,9 @@ msgstr "Linha"
 
 msgid "Line Break"
 msgstr "Quebra de linha"
+
+msgid "Low"
+msgstr ""
 
 msgid "LOW"
 msgstr "BAIXO"
@@ -189,8 +219,14 @@ msgstr "Medir"
 msgid "Minute"
 msgstr "Minuto"
 
+msgid "O"
+msgstr ""
+
 msgid "OHLC"
 msgstr "OHLC"
+
+msgid "Open"
+msgstr ""
 
 msgid "OPEN"
 msgstr "ABRIR"
@@ -240,10 +276,10 @@ msgstr ""
 msgid "Retrieving Chart Engine..."
 msgstr ""
 
-msgid "Retrieving market symbols..."
+msgid "Retrieving Market Symbols..."
 msgstr ""
 
-msgid "Retrieving trading times..."
+msgid "Retrieving Trading Times..."
 msgstr ""
 
 msgid "Reversal"
@@ -299,6 +335,9 @@ msgstr "PREÇO"
 
 msgid "Streaming for [symbol] is not available due to license restrictions"
 msgstr "Transmissão ao vivo do [symbol] não está disponível devido a restrições de licença"
+
+msgid "Table"
+msgstr ""
 
 msgid "Template name"
 msgstr "Nome do modelo"
