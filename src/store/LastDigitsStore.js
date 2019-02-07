@@ -1,14 +1,14 @@
-import { observable, action, computed, reaction } from 'mobx';
+import { observable, action, computed } from 'mobx';
 
 export default class LastDigitsStore {
     constructor(mainStore) {
         this.mainStore = mainStore;
-        reaction(() => this.mainStore.state.showLastDigitStats, this.showLastDigitStats);
     }
 
     get context() { return this.mainStore.chart.context; }
     get stx() { return this.context.stx; }
 
+    count = 1000;
     minHeight = 40;
     maxHeight = 100;
     gradiantLine = this.maxHeight / 2;
@@ -33,14 +33,19 @@ export default class LastDigitsStore {
     }
 
     @action.bound async showLastDigitStats() {
-        if (!this.context) return;
         if (this.mainStore.state.showLastDigitStats) {
             for (let i = 0; i < 10; i++) {
                 this.digits.push(0);
                 this.bars.push({ height:0, cName:'' });
             }
-            const tickHistory = await this.api.getTickHistory({ symbol :this.mainStore.chart.currentActiveSymbol.symbol });
-            this.latestData = tickHistory.history.prices;
+
+            if (this.stx.masterData && this.stx.masterData.length >= this.count) {
+                this.latestData  = this.stx.masterData.slice(-1000).map(x => x.Close.toString());
+            } else {
+                const tickHistory = await this.api.getTickHistory({ symbol :this.mainStore.chart.currentActiveSymbol.symbol, count:this.count });
+                this.latestData = tickHistory && tickHistory.history ? tickHistory.history.prices : [];
+            }
+
             this.latestData.forEach((price) => {
                 const lastDigit = price.slice(-1);
                 this.digits[lastDigit]++;

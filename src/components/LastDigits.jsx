@@ -8,27 +8,36 @@ const Bar = ({ x, bar }) => (
     </div>
 );
 
-const LastDigits = ({
-    isVisible,
-    bars,
-    marketDisplayName,
-}) => (
-    <div className={`cq-last-digits ${isVisible ? 'show' : ''}`}>
-        <div>
-            {bars.map((bar, idx) => (
-                <Bar
-                    key={`bar-${idx}`}// eslint-disable-line react/no-array-index-key
-                    x={idx}
-                    bar={bar}
-                />
-            ))
-            }
-        </div>
-        <div className="cq-bar-footer">{t.translate('Last digits stats for latest 1000 ticks on ') + marketDisplayName }</div>
-    </div>
-);
+class LastDigits extends React.Component {
+    componentDidMount() {
+        this.props.showLastDigitStats();
+    }
+
+    render() {
+        const {
+            isVisible,
+            bars,
+            marketDisplayName } = this.props;
+        return (
+            <div className={`cq-last-digits ${isVisible ? 'show' : ''}`}>
+                <div>
+                    {bars.map((bar, idx) => (
+                        <Bar
+                            key={`bar-${idx}`}// eslint-disable-line react/no-array-index-key
+                            x={idx}
+                            bar={bar}
+                        />
+                    ))
+                    }
+                </div>
+                <div className="cq-bar-footer">{t.translate('Last digits stats for latest 1000 ticks on ') + marketDisplayName }</div>
+            </div>
+        );
+    }
+}
 
 export default connect(({ lastDigits : l }) => ({
+    showLastDigitStats:l.showLastDigitStats,
     isVisible:l.isVisible,
     bars:l.bars,
     marketDisplayName:l.marketDisplayName,
