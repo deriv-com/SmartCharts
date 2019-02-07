@@ -1,8 +1,9 @@
-import { observable, action, computed } from 'mobx';
+import { observable, action, computed, reaction } from 'mobx';
 
 export default class LastDigitsStore {
     constructor(mainStore) {
         this.mainStore = mainStore;
+        reaction(() => this.mainStore.chart.currentActiveSymbol, this.showLastDigitStats);
     }
 
     get context() { return this.mainStore.chart.context; }
@@ -36,6 +37,7 @@ export default class LastDigitsStore {
         this.digits = [];
         this.bars = [];
         this.latestData = [];
+        this.mainStore.chart.feed.offMasterDataUpdate(this.onMasterDataUpdate);
 
         if (this.mainStore.state.showLastDigitStats) {
             for (let i = 0; i < 10; i++) {
@@ -56,8 +58,6 @@ export default class LastDigitsStore {
             });
             this.updateBars();
             this.mainStore.chart.feed.onMasterDataUpdate(this.onMasterDataUpdate);
-        } else {
-            this.mainStore.chart.feed.offMasterDataUpdate(this.onMasterDataUpdate);
         }
     }
 
