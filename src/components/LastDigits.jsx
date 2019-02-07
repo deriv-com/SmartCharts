@@ -13,6 +13,12 @@ class LastDigits extends React.Component {
         this.props.showLastDigitStats();
     }
 
+    componentDidUpdate({ marketDisplayName }) {
+        if (this.props.marketDisplayName !== marketDisplayName) {
+            this.props.showLastDigitStats();
+        }
+    }
+
     componentWillUnmount() {
         this.props.showLastDigitStats();
     }

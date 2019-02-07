@@ -1,9 +1,8 @@
-import { observable, action, computed, reaction } from 'mobx';
+import { observable, action, computed } from 'mobx';
 
 export default class LastDigitsStore {
     constructor(mainStore) {
         this.mainStore = mainStore;
-        reaction(() => this.mainStore.chart.currentActiveSymbol, this.showLastDigitStats);
     }
 
     get context() { return this.mainStore.chart.context; }
