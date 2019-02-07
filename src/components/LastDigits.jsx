@@ -13,6 +13,10 @@ class LastDigits extends React.Component {
         this.props.showLastDigitStats();
     }
 
+    componentWillUnmount() {
+        this.props.showLastDigitStats();
+    }
+
     render() {
         const {
             isVisible,
