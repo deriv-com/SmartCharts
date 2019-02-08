@@ -809,7 +809,6 @@ html, body {
     width: 100%;
     overflow: hidden;
     cursor: ns-resize;
-    z-index: 20;
     @include themify($themes) {
         box-shadow: 0 0 0px 2px themed('ChartBg');
         background: themed('ChartBg');
