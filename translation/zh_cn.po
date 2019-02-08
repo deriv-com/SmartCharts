@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
-"PO-Revision-Date: 2019-01-12 02:31\n"
+"PO-Revision-Date: 2019-02-07 10:43\n"
 
 msgid " already exists."
 msgstr " 已经存在。"
@@ -48,6 +48,9 @@ msgstr "基线"
 msgid "Box Size"
 msgstr "箱尺寸"
 
+msgid "C"
+msgstr ""
+
 msgid "Callout"
 msgstr "卖出"
 
@@ -57,17 +60,26 @@ msgstr "取消"
 msgid "Candle"
 msgstr "蜡烛"
 
+msgid "Change"
+msgstr ""
+
 msgid "Channel"
 msgstr "通道"
 
 msgid "Chart data is not available for this symbol."
 msgstr "此符号不可用于图表数据。"
 
+msgid "Chart Table"
+msgstr ""
+
 msgid "Chart types"
 msgstr "图表类型"
 
 msgid "Clear All"
 msgstr "全部清除"
+
+msgid "Close"
+msgstr ""
 
 msgid "CLOSE"
 msgstr "收盘"
@@ -95,6 +107,9 @@ msgstr "十字线"
 
 msgid "Dark Mode"
 msgstr "暗模式"
+
+msgid "Date"
+msgstr ""
 
 msgid "Day"
 msgstr "白天"
@@ -147,11 +162,20 @@ msgstr "江恩角度线"
 msgid "Gartley"
 msgstr "Gartley形态"
 
+msgid "H"
+msgstr ""
+
 msgid "Heikin Ashi"
 msgstr "Heikin Ashi烛图"
 
+msgid "High"
+msgstr ""
+
 msgid "HIGH"
 msgstr "高"
+
+msgid "Historical Data Mode"
+msgstr ""
 
 msgid "Hollow Candle"
 msgstr "空心蜡烛"
@@ -171,6 +195,9 @@ msgstr "间隔"
 msgid "Kagi"
 msgstr "Kagi图指标"
 
+msgid "L"
+msgstr ""
+
 msgid "Language"
 msgstr "语言"
 
@@ -179,6 +206,9 @@ msgstr "曲线"
 
 msgid "Line Break"
 msgstr "线中断图"
+
+msgid "Low"
+msgstr ""
 
 msgid "LOW"
 msgstr "低"
@@ -189,8 +219,14 @@ msgstr "测量"
 msgid "Minute"
 msgstr "分钟"
 
+msgid "O"
+msgstr ""
+
 msgid "OHLC"
 msgstr "OHLC条形图"
+
+msgid "Open"
+msgstr ""
 
 msgid "OPEN"
 msgstr "开盘"
@@ -240,11 +276,11 @@ msgstr "正在恢复图表数据..."
 msgid "Retrieving Chart Engine..."
 msgstr "正在恢复图表引擎..."
 
-msgid "Retrieving market symbols..."
-msgstr "正在恢复市场符号..."
+msgid "Retrieving Market Symbols..."
+msgstr ""
 
-msgid "Retrieving trading times..."
-msgstr "正在恢复交易时间..."
+msgid "Retrieving Trading Times..."
+msgstr ""
 
 msgid "Reversal"
 msgstr "逆转"
@@ -299,6 +335,9 @@ msgstr "点"
 
 msgid "Streaming for [symbol] is not available due to license restrictions"
 msgstr "由于许可限制, [symbol] 串流不可用"
+
+msgid "Table"
+msgstr ""
 
 msgid "Template name"
 msgstr "模板名称"

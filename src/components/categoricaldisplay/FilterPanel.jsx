@@ -13,7 +13,8 @@ const Filter = ({ activeCategoryKey, handleFilterClick, category, isMobile }) =>
         >
             {CategoryIcon && <CategoryIcon className={`ic-${category.categoryId}`} />}
             <span className="cq-filter-text">{t.translate(category.categoryName)}</span>
-        </div>);
+        </div>
+    );
 };
 
 export const FilterPanel = ({ filteredItems, handleFilterClick, activeCategoryKey, isMobile }) => (

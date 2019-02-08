@@ -64,6 +64,8 @@ const ChartSetting = ({
     closeMenu,
     assetInformation,
     setAssetInformation,
+    historical,
+    setHistorical,
     isMobile,
 }) => {
     const renderMain = () => (
@@ -94,6 +96,15 @@ const ChartSetting = ({
                         </div>
                     </div>
                     {!isMobile ? <AssetInformationToggle value={assetInformation} onChange={setAssetInformation} /> : ''}
+                    <div className="ciq-list-item">
+                        <span className="ciq-icon-text">{t.translate('Historical Data Mode')}</span>
+                        <div className="ciq-action">
+                            <Switch
+                                value={historical}
+                                onChange={setHistorical}
+                            />
+                        </div>
+                    </div>
                     <div
                         className="ciq-list-item ciq-list-item-lng"
                         onClick={() => setView('language')}
@@ -105,7 +116,8 @@ const ChartSetting = ({
                     </div>
                 </div>
             </div>
-        </div>);
+        </div>
+    );
     const renderLanguage = () => (
         <div>
             <div className="title">
@@ -125,10 +137,12 @@ const ChartSetting = ({
                         >
                             {language.icon}
                             <span className="ciq-icon-text">{language.name}</span>
-                        </div>))}
+                        </div>
+                    ))}
                 </div>
             </div>
-        </div>);
+        </div>
+    );
     return (
         <ChartSettingMenu className="cq-chart-setting">
             <ChartSettingMenu.Title>
@@ -179,5 +193,7 @@ export default connect(({ chartSetting: s, chart: c }) => ({
     closeMenu: s.menu.onTitleClick,
     assetInformation: s.assetInformation,
     setAssetInformation: s.setAssetInformation,
+    historical: s.historical,
+    setHistorical: s.setHistorical,
     isMobile: c.isMobile,
 }))(ChartSetting);

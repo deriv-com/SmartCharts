@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Polish\n"
 "Language: pl_PL\n"
-"PO-Revision-Date: 2018-12-21 08:01\n"
+"PO-Revision-Date: 2019-02-07 10:43\n"
 
 msgid " already exists."
 msgstr " już istnieje."
@@ -48,6 +48,9 @@ msgstr "Linia bazowa"
 msgid "Box Size"
 msgstr "Rozmiar ramki"
 
+msgid "C"
+msgstr ""
+
 msgid "Callout"
 msgstr "Wezwanie"
 
@@ -57,17 +60,26 @@ msgstr "ANULUJ"
 msgid "Candle"
 msgstr "Świeca"
 
+msgid "Change"
+msgstr ""
+
 msgid "Channel"
 msgstr "Kanał"
 
 msgid "Chart data is not available for this symbol."
 msgstr "Dane wykresowe są niedostępne dla tego symbolu."
 
+msgid "Chart Table"
+msgstr ""
+
 msgid "Chart types"
 msgstr "Rodzaje wykresów"
 
 msgid "Clear All"
 msgstr "Wyczyść wszystko"
+
+msgid "Close"
+msgstr ""
 
 msgid "CLOSE"
 msgstr "ZAMKNIĘCIE"
@@ -95,6 +107,9 @@ msgstr "Linia krzyżowa"
 
 msgid "Dark Mode"
 msgstr "Tryb ciemny"
+
+msgid "Date"
+msgstr ""
 
 msgid "Day"
 msgstr "Dzień"
@@ -147,11 +162,20 @@ msgstr "Wachlarz Ganna"
 msgid "Gartley"
 msgstr "Formacja Gartleya"
 
+msgid "H"
+msgstr ""
+
 msgid "Heikin Ashi"
 msgstr "Heikin Ashi"
 
+msgid "High"
+msgstr ""
+
 msgid "HIGH"
 msgstr "WYSOKIE"
+
+msgid "Historical Data Mode"
+msgstr ""
 
 msgid "Hollow Candle"
 msgstr "Świeca pusta"
@@ -171,6 +195,9 @@ msgstr "odstępu"
 msgid "Kagi"
 msgstr "Kagi"
 
+msgid "L"
+msgstr ""
+
 msgid "Language"
 msgstr "Język"
 
@@ -179,6 +206,9 @@ msgstr "Linia"
 
 msgid "Line Break"
 msgstr "Podział linii"
+
+msgid "Low"
+msgstr ""
 
 msgid "LOW"
 msgstr "NISKIE"
@@ -189,8 +219,14 @@ msgstr "Środek"
 msgid "Minute"
 msgstr "Minuta"
 
+msgid "O"
+msgstr ""
+
 msgid "OHLC"
 msgstr "OHLC"
+
+msgid "Open"
+msgstr ""
 
 msgid "OPEN"
 msgstr "OTWARCIE"
@@ -240,10 +276,10 @@ msgstr ""
 msgid "Retrieving Chart Engine..."
 msgstr ""
 
-msgid "Retrieving market symbols..."
+msgid "Retrieving Market Symbols..."
 msgstr ""
 
-msgid "Retrieving trading times..."
+msgid "Retrieving Trading Times..."
 msgstr ""
 
 msgid "Reversal"
@@ -299,6 +335,9 @@ msgstr "SPOT"
 
 msgid "Streaming for [symbol] is not available due to license restrictions"
 msgstr "Z powodu ograniczeń licencyjnych przesyłanie strumieniowe dla [symbol] jest niedostępne"
+
+msgid "Table"
+msgstr ""
 
 msgid "Template name"
 msgstr "Nazwa szablonu"
