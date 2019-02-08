@@ -32,6 +32,9 @@ $COLOR_BRANDBLUE_95: #353b5b;
 $COLOR_BRANDBLUE_85: #4a4f6c;
 $COLOR_BRANDBLUE_75: #60647e;
 
+$COLOR_LIGHT_BLACK_4_SOLID: #f4f4f6;
+$COLOR_DARK_BLUE_8: rgba(127, 131, 151, 0.3);
+
 $themes: (
     light: (
         DefaultMain: $COLOR_WHITE,
@@ -60,12 +63,16 @@ $themes: (
         MenuActiveIcon: $COLOR_BRAND_BLUE,
         MenuActiveBorder: $COLOR_BRAND_BLUE,
         ChartTitleBg: $COLOR_WHITE,
-        ChartTitleText: $COLOR_BRAND_BLUE,
-        ChartTitleBorder: $COLOR_GRAY,
-        ChartTitleArrow: $COLOR_GRAY,
-        ChartTitlePriceText: $COLOR_GRAY,
-        ChartTitleSymbolText: $COLOR_BRAND_BLUE,
-        ChartTitleActiveArrow: $COLOR_BRAND_BLUE,
+        ChartTitleSubBg: $COLOR_LIGHT_BLACK_4_SOLID,
+        ChartTitleText: $COLOR_LIGHT_BLACK_1,
+        ChartTitleBorder: $COLOR_WHITE,
+        ChartTitleArrow: $COLOR_LIGHT_BLACK_1,
+        ChartTitlePriceText: $COLOR_LIGHT_BLACK_1,
+        ChartTitleSymbolText: $COLOR_LIGHT_BLACK_1,
+        ChartTitleHoverBorder: $COLOR_LIGHT_GRAY_3,
+        ChartTitleActiveBorder: $COLOR_LIGHT_GRAY_3,
+        ChartTitleActiveShadow: $COLOR_LIGHT_GRAY_2,
+        ChartTitleActiveArrow: $COLOR_LIGHT_BLACK_1,
         ChartControlBoxBorder: $COLOR_LIGHT_BLACK_4,
         ListScroll: $COLOR_LIGHT_BLUE_1,
         ListLiBg: $COLOR_WHITE,
@@ -188,7 +195,6 @@ $themes: (
         ChartHistoryPickerBodyActiveBg: $COLOR_BRAND_BLUE,
         ChartHistoryPickerBodyActiveColor: $COLOR_WHITE,
         ChartHistoryPickerBodyActiveBorder: $COLOR_BRAND_BLUE
-
     ),
     dark: (
         DefaultMain:            $COLOR_BRAND_BLUE,
@@ -217,12 +223,16 @@ $themes: (
         MenuActiveIcon: $COLOR_WHITE,
         MenuActiveBorder: $COLOR_WHITE,
         ChartTitleBg: $COLOR_DARK_BLUE_2,
+        ChartTitleSubBg: $COLOR_DARK_BLUE_3,
         ChartTitleText: $COLOR_WHITE,
-        ChartTitleBorder: $COLOR_LIGHT_BLUE_2,
+        ChartTitleBorder: $COLOR_DARK_BLUE_2,
         ChartTitleArrow: $COLOR_LIGHT_BLUE_1,
-        ChartTitlePriceText: $COLOR_BRAND_BLUE,
+        ChartTitlePriceText: $COLOR_GRAY,
         ChartTitleSymbolText: $COLOR_WHITE,
-        ChartTitleActiveArrow: $COLOR_WHITE,
+        ChartTitleHoverBorder: $COLOR_GRAY,
+        ChartTitleActiveBorder: $COLOR_GRAY,
+        ChartTitleActiveShadow: $COLOR_DARK_BLUE_8,
+        ChartTitleActiveArrow: $COLOR_GRAY,
         ChartControlBoxBorder: $COLOR_DARK_BLUE_3,
         ListScroll: $COLOR_LIGHT_BLUE_1,
         ListLiBg: $COLOR_BRAND_BLUE,
