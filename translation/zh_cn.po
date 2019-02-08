@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
-"PO-Revision-Date: 2019-02-07 10:43\n"
+"PO-Revision-Date: 2019-02-08 09:42\n"
 
 msgid " already exists."
 msgstr " 已经存在。"
@@ -49,7 +49,7 @@ msgid "Box Size"
 msgstr "箱尺寸"
 
 msgid "C"
-msgstr ""
+msgstr "C"
 
 msgid "Callout"
 msgstr "卖出"
@@ -61,7 +61,7 @@ msgid "Candle"
 msgstr "蜡烛"
 
 msgid "Change"
-msgstr ""
+msgstr "变动"
 
 msgid "Channel"
 msgstr "通道"
@@ -70,7 +70,7 @@ msgid "Chart data is not available for this symbol."
 msgstr "此符号不可用于图表数据。"
 
 msgid "Chart Table"
-msgstr ""
+msgstr "图表"
 
 msgid "Chart types"
 msgstr "图表类型"
@@ -79,7 +79,7 @@ msgid "Clear All"
 msgstr "全部清除"
 
 msgid "Close"
-msgstr ""
+msgstr "收盘"
 
 msgid "CLOSE"
 msgstr "收盘"
@@ -109,7 +109,7 @@ msgid "Dark Mode"
 msgstr "暗模式"
 
 msgid "Date"
-msgstr ""
+msgstr "日期"
 
 msgid "Day"
 msgstr "白天"
@@ -163,19 +163,19 @@ msgid "Gartley"
 msgstr "Gartley形态"
 
 msgid "H"
-msgstr ""
+msgstr "H"
 
 msgid "Heikin Ashi"
 msgstr "Heikin Ashi烛图"
 
 msgid "High"
-msgstr ""
+msgstr "高"
 
 msgid "HIGH"
 msgstr "高"
 
 msgid "Historical Data Mode"
-msgstr ""
+msgstr "历史数据模式"
 
 msgid "Hollow Candle"
 msgstr "空心蜡烛"
@@ -196,7 +196,7 @@ msgid "Kagi"
 msgstr "Kagi图指标"
 
 msgid "L"
-msgstr ""
+msgstr "L"
 
 msgid "Language"
 msgstr "语言"
@@ -208,7 +208,7 @@ msgid "Line Break"
 msgstr "线中断图"
 
 msgid "Low"
-msgstr ""
+msgstr "低"
 
 msgid "LOW"
 msgstr "低"
@@ -220,13 +220,13 @@ msgid "Minute"
 msgstr "分钟"
 
 msgid "O"
-msgstr ""
+msgstr "O"
 
 msgid "OHLC"
 msgstr "OHLC条形图"
 
 msgid "Open"
-msgstr ""
+msgstr "开盘"
 
 msgid "OPEN"
 msgstr "开盘"
@@ -277,10 +277,10 @@ msgid "Retrieving Chart Engine..."
 msgstr "正在恢复图表引擎..."
 
 msgid "Retrieving Market Symbols..."
-msgstr ""
+msgstr "正在恢复市场符号..."
 
 msgid "Retrieving Trading Times..."
-msgstr ""
+msgstr "正在恢复交易时间..."
 
 msgid "Reversal"
 msgstr "逆转"
@@ -337,7 +337,7 @@ msgid "Streaming for [symbol] is not available due to license restrictions"
 msgstr "由于许可限制, [symbol] 串流不可用"
 
 msgid "Table"
-msgstr ""
+msgstr "表"
 
 msgid "Template name"
 msgstr "模板名称"
