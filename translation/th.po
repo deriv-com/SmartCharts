@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Thai\n"
 "Language: th_TH\n"
-"PO-Revision-Date: 2019-02-07 10:43\n"
+"PO-Revision-Date: 2019-02-08 03:32\n"
 
 msgid " already exists."
 msgstr " มีอยู่แล้ว"
@@ -49,7 +49,7 @@ msgid "Box Size"
 msgstr "ขนาดกล่อง"
 
 msgid "C"
-msgstr ""
+msgstr "C"
 
 msgid "Callout"
 msgstr "คำบรรยายภาพ"
@@ -61,7 +61,7 @@ msgid "Candle"
 msgstr "แท่งเทียน"
 
 msgid "Change"
-msgstr ""
+msgstr "การเปลี่ยนแปลง"
 
 msgid "Channel"
 msgstr "ช่อง"
@@ -70,7 +70,7 @@ msgid "Chart data is not available for this symbol."
 msgstr "ไม่มีข้อมูลแผนภูมิสำหรับสัญลักษณ์นี้"
 
 msgid "Chart Table"
-msgstr ""
+msgstr "ตารางแผนภูมิ"
 
 msgid "Chart types"
 msgstr "ชนิดแผนภูมิ"
@@ -79,7 +79,7 @@ msgid "Clear All"
 msgstr "ล้างทั้งหมด"
 
 msgid "Close"
-msgstr ""
+msgstr "ปิด"
 
 msgid "CLOSE"
 msgstr "CLOSE"
@@ -109,7 +109,7 @@ msgid "Dark Mode"
 msgstr "รูปแบบโทนมืด"
 
 msgid "Date"
-msgstr ""
+msgstr "วันที่"
 
 msgid "Day"
 msgstr "วัน"
@@ -163,19 +163,19 @@ msgid "Gartley"
 msgstr "Gartley"
 
 msgid "H"
-msgstr ""
+msgstr "H"
 
 msgid "Heikin Ashi"
 msgstr "Heikin Ashi"
 
 msgid "High"
-msgstr ""
+msgstr "สูง"
 
 msgid "HIGH"
 msgstr "HIGH"
 
 msgid "Historical Data Mode"
-msgstr ""
+msgstr "โหมดข้อมูลเก่า"
 
 msgid "Hollow Candle"
 msgstr "เทียนกลวง"
@@ -196,7 +196,7 @@ msgid "Kagi"
 msgstr "Kagi"
 
 msgid "L"
-msgstr ""
+msgstr "L"
 
 msgid "Language"
 msgstr "ภาษา"
@@ -208,7 +208,7 @@ msgid "Line Break"
 msgstr "เส้นแบ่งบรรทัด"
 
 msgid "Low"
-msgstr ""
+msgstr "ต่ำ"
 
 msgid "LOW"
 msgstr "LOW"
@@ -220,13 +220,13 @@ msgid "Minute"
 msgstr "นาที"
 
 msgid "O"
-msgstr ""
+msgstr "O"
 
 msgid "OHLC"
 msgstr "OHLC"
 
 msgid "Open"
-msgstr ""
+msgstr "เปิด"
 
 msgid "OPEN"
 msgstr "OPEN"
@@ -277,10 +277,10 @@ msgid "Retrieving Chart Engine..."
 msgstr "กำลังโหลดเครื่องมือแผนภูมิ..."
 
 msgid "Retrieving Market Symbols..."
-msgstr ""
+msgstr "กำลังเรียกข้อมูลสัญลักษณ์ตลาด..."
 
 msgid "Retrieving Trading Times..."
-msgstr ""
+msgstr "กำลังเรียกข้อมูลเวลาซื้อขาย..."
 
 msgid "Reversal"
 msgstr "กลับตัว"
@@ -337,7 +337,7 @@ msgid "Streaming for [symbol] is not available due to license restrictions"
 msgstr "การสตรีมสำหรับ [symbol] ไม่พร้อมใช้งาน เนื่องจากข้อจำกัดสิทธิ์การใช้งาน"
 
 msgid "Table"
-msgstr ""
+msgstr "ตาราง"
 
 msgid "Template name"
 msgstr "ชื่อแม่แบบ"
