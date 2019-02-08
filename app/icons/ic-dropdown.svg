@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 47.1 (45422) - http://www.bohemiancoding.com/sketch -->
+    <title>icons/system/light/dropdown/ic-dropdown</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Symbols" stroke="none" stroke-width="1" fill-rule="evenodd">
+        <g id="icons/system/light/dropdown/ic-dropdown">
+            <path d="M13.1636636,5.13002996 C13.3679924,4.9442765 13.6842166,4.95933479 13.86997,5.1636636 C14.0557235,5.36799241 14.0406652,5.68421657 13.8363364,5.86997004 L8.3363364,10.86997 C8.14562578,11.0433433 7.85437422,11.0433433 7.6636636,10.86997 L2.1636636,5.86997004 C1.95933479,5.68421657 1.9442765,5.36799241 2.13002996,5.1636636 C2.31578343,4.95933479 2.63200759,4.9442765 2.8363364,5.13002996 L8,9.8242696 L13.1636636,5.13002996 Z" id="Path-12"></path>
+        </g>
+    </g>
+</svg>

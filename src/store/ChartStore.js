@@ -62,12 +62,16 @@ class ChartStore {
     get routingStore() {
         return this.mainStore.routing;
     }
+    get stateStore() {
+        return this.mainStore.state;
+    }
 
     updateHeight(position) {
+        const historicalMobile = this.mainStore.chartSetting.historical && this.isMobile;
         const panelPosition = position || this.mainStore.chartSetting.position;
         const offsetHeight = (panelPosition === 'left') ? 0 : this.chartControlsNode.offsetHeight;
         this.chartHeight = this.chartNode.offsetHeight;
-        this.chartContainerHeight = this.chartHeight - offsetHeight;
+        this.chartContainerHeight = this.chartHeight - offsetHeight - (historicalMobile ? 45 : 0);
     }
 
     updateCanvas = () => {
@@ -118,6 +122,136 @@ class ChartStore {
     };
 
     @action.bound _initChart(rootNode, modalNode, props) {
+        const _self = this;
+        /**
+         * only home button click part modified to avoid calling
+         * newChart() on home function while historical enable
+         */
+        CIQ.ChartEngine.prototype.registerHTMLElements = function () {
+            const c = this.chart.container;
+            for (const control in CIQ.ChartEngine.htmlControls) {
+                if (typeof this.chart[control] === 'undefined' && typeof this.controls[control] === 'undefined') {
+                    if (!this.allowZoom && control === 'chartControls') continue;
+                    let el = this.container.querySelector(`.${control}`, c);
+                    if (el) {
+                        this.chart[control] = el;
+                        this.controls[control] = el;
+                    } else {
+                        const rawHTML = CIQ.ChartEngine.htmlControls[control];
+                        if (!rawHTML) continue;
+                        const div = document.createElement('DIV');
+                        div.innerHTML = rawHTML;
+                        el = div.firstChild;
+                        c.appendChild(el);
+                        this.chart[control] = el;
+                        this.controls[control] = el;
+                        CIQ.appendClassName(el, control);
+                    }
+                }
+            }
+            const chartControls = this.controls.chartControls, home = this.controls.home;
+            if (chartControls) {
+                const zoomIn = this.container.querySelector('.stx-zoom-in', chartControls);
+                const zoomOut = this.container.querySelector('.stx-zoom-out', chartControls);
+
+                CIQ.safeClickTouch(zoomIn, (function (self) { return function (e) { self.zoomIn(e); e.stopPropagation(); }; }(this)));
+                CIQ.safeClickTouch(zoomOut, (function (self) { return function (e) { self.zoomOut(e); e.stopPropagation(); }; }(this)));
+                if (!CIQ.touchDevice) {
+                    this.makeModal(zoomIn);
+                    this.makeModal(zoomOut);
+                }
+            }
+            if (home) {
+                CIQ.safeClickTouch(home, (function (self) {
+                    return function (e) {
+                        e.stopPropagation();
+                        self.home({ animate: true });
+                    };
+                }(this)));
+                if (!CIQ.touchDevice) {
+                    this.makeModal(home);
+                }
+            }
+        };
+        CIQ.ChartEngine.prototype.home = function (params) {
+            this.swipe.amplitude = 0;
+            const layout = this.layout;
+            if (typeof params !== 'object') {
+                // backward compatibility
+                params = {
+                    maintainWhitespace: params,
+                };
+            }
+
+            function resetPanelZooms(stx) {
+                for (const p in stx.panels) {
+                    const yAxes = stx.panels[p].yaxisLHS.concat(stx.panels[p].yaxisRHS);
+                    for (let a = 0; a < yAxes.length; a++) stx.calculateYAxisMargins(yAxes[a]);
+                }
+            }
+            function scrollToCallback(self, chart, exactScroll) {
+                return function () {
+                    resetPanelZooms(self);
+                    chart.scroll = exactScroll;
+                    self.draw();
+                };
+            }
+            if (typeof params.maintainWhitespace === 'undefined') params.maintainWhitespace = true;  // maintain the whitespace unless set to false
+
+            this.cancelTouchSingleClick = true;
+            if (!this.chart.dataSet || !this.chart.dataSet.length) {
+                // to clear out anything that may have been on the screen. Otherwise we still show stale data.
+                this.draw();
+                return;
+            }
+            this.micropixels = 0;
+            const barsDisplayedOnScreen = Math.floor(this.chart.width / layout.candleWidth);
+            for (const chartName in this.charts) {
+                const chart = this.charts[chartName];
+                if (params.chart && params.chart !== chart) continue;
+
+                let whitespace = 0;
+                if (params.maintainWhitespace && this.preferences.whitespace >= 0) whitespace = this.preferences.whitespace;
+                if (params.whitespace || params.whitespace === 0) whitespace = params.whitespace;
+                const leftMargin = this.getLabelOffsetInPixels(chart, layout.chartType);
+                if (leftMargin > whitespace) whitespace = leftMargin;
+
+                let exactScroll = Math.min(barsDisplayedOnScreen, chart.dataSet.length); // the scroll must be the number of bars you want to see.
+                if (this.chart.allowScrollPast) exactScroll = barsDisplayedOnScreen; // If whitespace allowed on left of screen
+                this.micropixels = this.chart.width - (exactScroll * layout.candleWidth) - whitespace;
+                this.preferences.whitespace = whitespace;
+                while (this.micropixels > layout.candleWidth) { // If micropixels is larger than a candle then scroll back further
+                    exactScroll++;
+                    this.micropixels -= layout.candleWidth;
+                }
+                while (this.micropixels < 0) {
+                    exactScroll--;
+                    this.micropixels += layout.candleWidth;
+                }
+                this.micropixels -= layout.candleWidth;
+                exactScroll++;
+                if ((!this.mainSeriesRenderer || !this.mainSeriesRenderer.standaloneBars) && !this.standaloneBars[layout.chartType]) this.micropixels += layout.candleWidth / 2; // bar charts display at beginning of candle
+
+                if (this.isHistoricalMode() && _self.isMobile) {
+                    exactScroll = parseInt(exactScroll * 0.8, 10);
+                } else if (this.isHistoricalMode() && _self.isMobile) {
+                    exactScroll = parseInt(exactScroll * 0.9, 10);
+                }
+
+                if (params.animate) {
+                    const self = this;
+                    this.scrollTo(chart, exactScroll, scrollToCallback(self, chart, exactScroll));
+                } else {
+                    chart.scroll = exactScroll;
+                    resetPanelZooms(this);
+                }
+            }
+            this.draw();
+        };
+        CIQ.ChartEngine.prototype.isHistoricalMode = function () {
+            return !!_self.stateStore.endEpoch;
+        };
+
         this.rootNode = rootNode;
         this.modalNode = modalNode;
         this.chartNode = this.rootNode.querySelector('.ciq-chart-area');
@@ -401,7 +535,6 @@ class ChartStore {
         if (typeof symbolObj === 'string') {
             symbolObj = this.activeSymbols.getSymbolObj(symbolObj);
         }
-
         const isSymbolAvailable = symbolObj && this.currentActiveSymbol;
 
         if (

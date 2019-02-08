@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Vietnamese\n"
 "Language: vi_VN\n"
-"PO-Revision-Date: 2019-01-09 10:12\n"
+"PO-Revision-Date: 2019-02-07 10:43\n"
 
 msgid " already exists."
 msgstr " đã tồn tại."
@@ -48,6 +48,9 @@ msgstr "Đường cơ sở"
 msgid "Box Size"
 msgstr "Kích thước hộp"
 
+msgid "C"
+msgstr ""
+
 msgid "Callout"
 msgstr "Chú thích"
 
@@ -57,17 +60,26 @@ msgstr "HỦY BỎ"
 msgid "Candle"
 msgstr "Nến"
 
+msgid "Change"
+msgstr ""
+
 msgid "Channel"
 msgstr "Kênh"
 
 msgid "Chart data is not available for this symbol."
 msgstr "Biểu đồ dữ liệu không khả dụng cho ký hiệu này."
 
+msgid "Chart Table"
+msgstr ""
+
 msgid "Chart types"
 msgstr "Loại biểu đồ"
 
 msgid "Clear All"
 msgstr "Xóa tất cả"
+
+msgid "Close"
+msgstr ""
 
 msgid "CLOSE"
 msgstr "ĐÓNG"
@@ -95,6 +107,9 @@ msgstr "Đường giao nhau"
 
 msgid "Dark Mode"
 msgstr "Chế độ tối"
+
+msgid "Date"
+msgstr ""
 
 msgid "Day"
 msgstr "Ngày"
@@ -147,11 +162,20 @@ msgstr "Cánh quạt Gann"
 msgid "Gartley"
 msgstr "Gartley"
 
+msgid "H"
+msgstr ""
+
 msgid "Heikin Ashi"
 msgstr "Heikin Ashi"
 
+msgid "High"
+msgstr ""
+
 msgid "HIGH"
 msgstr "CAO"
+
+msgid "Historical Data Mode"
+msgstr ""
 
 msgid "Hollow Candle"
 msgstr "Nến rỗng"
@@ -171,6 +195,9 @@ msgstr "Khoảng Thời Gian"
 msgid "Kagi"
 msgstr "Kagi"
 
+msgid "L"
+msgstr ""
+
 msgid "Language"
 msgstr "Ngôn ngữ"
 
@@ -179,6 +206,9 @@ msgstr "Dòng kẻ"
 
 msgid "Line Break"
 msgstr "Ngắt dòng"
+
+msgid "Low"
+msgstr ""
 
 msgid "LOW"
 msgstr "THẤP"
@@ -189,8 +219,14 @@ msgstr "Đo"
 msgid "Minute"
 msgstr "Phút"
 
+msgid "O"
+msgstr ""
+
 msgid "OHLC"
 msgstr "OHLC"
+
+msgid "Open"
+msgstr ""
 
 msgid "OPEN"
 msgstr "MỞ"
@@ -240,11 +276,11 @@ msgstr "Lấy dữ liệu biểu đồ..."
 msgid "Retrieving Chart Engine..."
 msgstr "Lấy công cụ biểu đồ..."
 
-msgid "Retrieving market symbols..."
-msgstr "Lấy ký hiệu thị trường..."
+msgid "Retrieving Market Symbols..."
+msgstr ""
 
-msgid "Retrieving trading times..."
-msgstr "Lấy thời gian giao dịch..."
+msgid "Retrieving Trading Times..."
+msgstr ""
 
 msgid "Reversal"
 msgstr "Đảo ngược"
@@ -299,6 +335,9 @@ msgstr "VỊ TRÍ"
 
 msgid "Streaming for [symbol] is not available due to license restrictions"
 msgstr "Truyền cho [symbol] không khả dụng do các hạn chế cấp phép"
+
+msgid "Table"
+msgstr ""
 
 msgid "Template name"
 msgstr "Tên mẫu"
