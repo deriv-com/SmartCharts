@@ -419,6 +419,13 @@ class ChartStore {
             params = { periodicity: calculateTimeUnitInterval(granularity) };
         }
 
+        if (params === undefined && symbolObj) {
+            // Remove comparisons before symbol changes
+            for (const field in this.stxx.chart.series) {
+                this.stxx.removeSeries(field);
+            }
+        }
+
         this.newChart(symbolObj, params);
 
         if (symbolObj) {
