@@ -174,8 +174,8 @@
         box-sizing: border-box;
         font-size: 14px;
 
-        &.cq-hover-style:hover,
         &.cq-active-filter {
+            font-weight: 800;
             @include themify($themes) {
                 color: themed('CatDisplayActiveFilterText');
                 background-color: themed('CatDisplayActiveFilterBg');
@@ -190,8 +190,10 @@
                 }
             }
         }
-        &.cq-active-filter {
-            font-weight: 800;
+        &:hover {
+            @include themify($themes) {
+                background-color: themed('CatDisplayHoverFilterBg');
+            }
         }
         .ic-icon {
             display: inline-flex;
@@ -234,20 +236,37 @@
             font-size: 0.64em;
             border-radius: 4px;
         }
-        &:hover,
-        &.selected {
+        &:hover {
             @include themify($themes) {
-                color: themed('CatDisplayActiveFilterText');
-                background: themed('CatDisplayCatContentHover');
-                border-bottom-color: themed('CatDisplayCatContentHover');
+                color: themed('CatDisplayCatHoverContentText');
+                background: themed('CatDisplayCatHoverContentBg');
+                border-bottom-color: themed('CatDisplayCatHoverContentBg');
             }
 
             .right {
                 .ic-icon {
                     svg {
                         @include themify($themes) {
-                            fill: themed('CatDisplayCatContentHoverIcon');
-                            stroke: themed('CatDisplayCatContentHoverIcon');
+                            fill: themed('CatDisplayCatHoverContentIcon');
+                            stroke: themed('CatDisplayCatHoverContentIcon');
+                        }
+                    }
+                }
+            }
+        }
+        &.selected {
+            @include themify($themes) {
+                color: themed('CatDisplayCatActiveContentText');
+                background: themed('CatDisplayCatActiveContentBg');
+                border-bottom-color: themed('CatDisplayCatActiveContentBg');
+            }
+
+            .right {
+                .ic-icon {
+                    svg {
+                        @include themify($themes) {
+                            fill: themed('CatDisplayCatActiveContentIcon');
+                            stroke: themed('CatDisplayCatActiveContentIcon');
                         }
                     }
                 }
