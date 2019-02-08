@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Vietnamese\n"
 "Language: vi_VN\n"
-"PO-Revision-Date: 2019-02-07 10:43\n"
+"PO-Revision-Date: 2019-02-07 11:22\n"
 
 msgid " already exists."
 msgstr " đã tồn tại."
@@ -49,7 +49,7 @@ msgid "Box Size"
 msgstr "Kích thước hộp"
 
 msgid "C"
-msgstr ""
+msgstr "C"
 
 msgid "Callout"
 msgstr "Chú thích"
@@ -61,7 +61,7 @@ msgid "Candle"
 msgstr "Nến"
 
 msgid "Change"
-msgstr ""
+msgstr "Thay đổi"
 
 msgid "Channel"
 msgstr "Kênh"
@@ -70,7 +70,7 @@ msgid "Chart data is not available for this symbol."
 msgstr "Biểu đồ dữ liệu không khả dụng cho ký hiệu này."
 
 msgid "Chart Table"
-msgstr ""
+msgstr "Bảng Biểu Đồ"
 
 msgid "Chart types"
 msgstr "Loại biểu đồ"
@@ -79,7 +79,7 @@ msgid "Clear All"
 msgstr "Xóa tất cả"
 
 msgid "Close"
-msgstr ""
+msgstr "Đóng"
 
 msgid "CLOSE"
 msgstr "ĐÓNG"
@@ -109,7 +109,7 @@ msgid "Dark Mode"
 msgstr "Chế độ tối"
 
 msgid "Date"
-msgstr ""
+msgstr "Ngày"
 
 msgid "Day"
 msgstr "Ngày"
@@ -163,19 +163,19 @@ msgid "Gartley"
 msgstr "Gartley"
 
 msgid "H"
-msgstr ""
+msgstr "H"
 
 msgid "Heikin Ashi"
 msgstr "Heikin Ashi"
 
 msgid "High"
-msgstr ""
+msgstr "Cao"
 
 msgid "HIGH"
 msgstr "CAO"
 
 msgid "Historical Data Mode"
-msgstr ""
+msgstr "Chế độ dữ liệu lịch sử"
 
 msgid "Hollow Candle"
 msgstr "Nến rỗng"
@@ -196,7 +196,7 @@ msgid "Kagi"
 msgstr "Kagi"
 
 msgid "L"
-msgstr ""
+msgstr "L"
 
 msgid "Language"
 msgstr "Ngôn ngữ"
@@ -208,7 +208,7 @@ msgid "Line Break"
 msgstr "Ngắt dòng"
 
 msgid "Low"
-msgstr ""
+msgstr "Thấp"
 
 msgid "LOW"
 msgstr "THẤP"
@@ -220,13 +220,13 @@ msgid "Minute"
 msgstr "Phút"
 
 msgid "O"
-msgstr ""
+msgstr "O"
 
 msgid "OHLC"
 msgstr "OHLC"
 
 msgid "Open"
-msgstr ""
+msgstr "Mở"
 
 msgid "OPEN"
 msgstr "MỞ"
@@ -277,10 +277,10 @@ msgid "Retrieving Chart Engine..."
 msgstr "Lấy công cụ biểu đồ..."
 
 msgid "Retrieving Market Symbols..."
-msgstr ""
+msgstr "Đang tải ký hiệu thị trường..."
 
 msgid "Retrieving Trading Times..."
-msgstr ""
+msgstr "Đang tải thời gian giao dịch..."
 
 msgid "Reversal"
 msgstr "Đảo ngược"
@@ -337,7 +337,7 @@ msgid "Streaming for [symbol] is not available due to license restrictions"
 msgstr "Truyền cho [symbol] không khả dụng do các hạn chế cấp phép"
 
 msgid "Table"
-msgstr ""
+msgstr "Bảng biểu"
 
 msgid "Template name"
 msgstr "Tên mẫu"
