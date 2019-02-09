@@ -119,7 +119,12 @@ export default class ChartSettingStore {
     @action.bound setTheme(theme) {
         if (this.theme === theme) { return; }
         this.theme = theme;
-        if (this.context) { this.stx.clearStyles(); }
+
+        if (this.context) {
+            this.stx.clearStyles();
+            this.stx.setStyle('stx_grid', 'color', theme === 'light' ? '#f4f4f6' : '#191c31');
+            this.stx.draw();
+        }
         logEvent(LogCategories.ChartControl, LogActions.ChartSetting, `Change theme to ${theme}`);
         this.saveSetting();
     }
