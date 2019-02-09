@@ -32,6 +32,7 @@ $COLOR_BRANDBLUE_40: #aaacba;
 $COLOR_BRANDBLUE_95: #353b5b;
 $COLOR_BRANDBLUE_85: #4a4f6c;
 $COLOR_BRANDBLUE_75: #60647e;
+$COLOR_DARK_BLUE_8 : rgba(127, 131, 151, 0.3);
 
 $themes: (
     light: (
@@ -146,12 +147,14 @@ $themes: (
         CatDisplayShadow: $COLOR_LIGHT_GRAY_1,
         CatDisplayText: $COLOR_LIGHT_BLACK_1,
         CatDisplayBorder: $COLOR_LIGHT_BLACK_4_SOLID,
-        CatDisplaySearchText: $COLOR_BRAND_BLUE,
-        CatDisplaySearchBorder: $COLOR_LIGHT_GRAY_3,
-        CatDisplaySearchIconBg: $COLOR_LIGHT_GRAY_1,
-        CatDisplayActiveSearchBorder: $COLOR_GRAY,
-        CatDisplayActiveSearchShadow: $COLOR_LIGHT_GRAY_2,
+        CatDisplaySearchIcon: $COLOR_LIGHT_BLACK_3,
+        CatDisplaySearchText: $COLOR_LIGHT_BLACK_3,
+        CatDisplaySearchBorder: $COLOR_LIGHT_BLACK_3,
+        CatDisplayActiveSearchText: $COLOR_BRAND_BLUE,
         CatDisplayActiveSearchIcon: $COLOR_BRAND_BLUE,
+        CatDisplayActiveSearchIconClose: $COLOR_LIGHT_GRAY_3,
+        CatDisplayActiveSearchBorder: $COLOR_LIGHT_GRAY_3,
+        CatDisplayActiveSearchShadow: $COLOR_LIGHT_GRAY_2,
         CatDisplayFilterBg: $COLOR_WHITE,
         CatDisplayFilterText: $COLOR_LIGHT_BLACK_1,
         CatDisplayFilterIcon: $COLOR_GRAY,
@@ -202,7 +205,6 @@ $themes: (
         ChartHistoryPickerBodyActiveBg: $COLOR_BRAND_BLUE,
         ChartHistoryPickerBodyActiveColor: $COLOR_WHITE,
         ChartHistoryPickerBodyActiveBorder: $COLOR_BRAND_BLUE
-
     ),
     dark: (
         DefaultMain:            $COLOR_BRAND_BLUE,
@@ -315,12 +317,14 @@ $themes: (
         CatDisplayShadow: $COLOR_DARK_BLUE_3,
         CatDisplayText: $COLOR_LIGHT_BLUE_1,
         CatDisplayBorder: $COLOR_DARK_BLUE_3,
-        CatDisplaySearchIconBg: $COLOR_LIGHT_BLUE_1,
-        CatDisplaySearchText: $COLOR_WHITE,
-        CatDisplaySearchBorder: $COLOR_LIGHT_BLUE_2,
-        CatDisplayActiveSearchBorder: $COLOR_GRAY,
-        CatDisplayActiveSearchShadow: $COLOR_LIGHT_BLACK_1,
+        CatDisplaySearchIcon: $COLOR_DARK_BLUE_8,
+        CatDisplaySearchText: $COLOR_DARK_BLUE_8,
+        CatDisplaySearchBorder: $COLOR_DARK_BLUE_8,
+        CatDisplayActiveSearchText: $COLOR_WHITE,
         CatDisplayActiveSearchIcon: $COLOR_GRAY,
+        CatDisplayActiveSearchIconClose: $COLOR_GRAY,
+        CatDisplayActiveSearchBorder: $COLOR_GRAY,
+        CatDisplayActiveSearchShadow: $COLOR_DARK_BLUE_8,
         CatDisplayFilterBg: $COLOR_DARK_BLUE_2,
         CatDisplayFilterText: $COLOR_GRAY,
         CatDisplayFilterIcon: $COLOR_GRAY,

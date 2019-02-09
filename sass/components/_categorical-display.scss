@@ -27,18 +27,15 @@
     .cq-lookup-input {
         margin: 16px 8px;
         position: relative;
-        border-radius: 4px;
-        @include themify($themes) {
-            color: themed('CatDisplayText');
-            border: 1px solid themed('CatDisplaySearchBorder');
-        }
 
         &.active {
-            @include themify($themes) {
-                border-color: themed('CatDisplayActiveSearchBorder');
-                box-shadow: 0 0 2px themed('CatDisplayActiveSearchShadow');
+            input {
+                @include themify($themes) {
+                    color: themed('CatDisplayActiveSearchText');
+                    border-color: themed('CatDisplayActiveSearchBorder');
+                    box-shadow: 0 0 2px themed('CatDisplayActiveSearchShadow');
+                }
             }
-
             > .ic-icon {
                 svg {
                     @include themify($themes) {
@@ -52,6 +49,9 @@
 
                 svg {
                     stroke: transparent !important;
+                    @include themify($themes) {
+                        fill: themed('CatDisplayActiveSearchIconClose');
+                    }
                 }
             }
         }
@@ -64,20 +64,37 @@
             width: calc(100% - 40px);
             background-color: transparent;
             border-radius: 4px;
+            @include themify($themes) {
+                border: 1px solid themed('CatDisplaySearchBorder');
+                color: themed('CatDisplaySearchText');
+            }
             @include placeholder {
                 @include themify($themes) {
-                    opacity: 0.4;
                     color: themed('CatDisplaySearchText');
                 }
             }
-            @include themify($themes) {
-                color: themed('CatDisplaySearchText');
+
+            &:focus {
+                @include themify($themes) {
+                    border-color: themed('CatDisplayActiveSearchBorder');
+                    color: themed('CatDisplayActiveSearchText');
+                }
+
+                & + .ic-icon {
+                    svg {
+                        @include themify($themes) {
+                            fill: themed('CatDisplayActiveSearchIcon');
+                            stroke: themed('CatDisplayActiveSearchIcon');
+                        }
+                    }
+                }
             }
+
         }
         > .ic-icon {
             position: absolute;
-            top: 3px;
-            left: 3px;
+            top: 4px;
+            left: 4px;
 
             svg {
                 @include themify($themes) {
@@ -94,8 +111,8 @@
             width: 20px;
             line-height: 28px;
             font-size: 9px;
-            right: 6px;
-            top: 6px;
+            right: 8px;
+            top: 7px;
             border-radius: 50%;
             cursor: pointer;
             transition: right, opacity 0.2s ease-in-out;
@@ -228,6 +245,16 @@
         .left, .right {
             display: flex;
             align-items: center;
+        }
+        .right {
+            .ic-icon {
+                svg {
+                    @include themify($themes) {
+                        fill: themed('CatDisplayCatContentIcon');
+                        stroke: themed('CatDisplayCatContentIcon');
+                    }
+                }
+            }
         }
         .closed-market {
             border: 1px solid #f44336;
