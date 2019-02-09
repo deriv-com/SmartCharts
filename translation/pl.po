@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Polish\n"
 "Language: pl_PL\n"
-"PO-Revision-Date: 2019-02-07 10:43\n"
+"PO-Revision-Date: 2019-02-09 18:52\n"
 
 msgid " already exists."
 msgstr " już istnieje."
@@ -49,7 +49,7 @@ msgid "Box Size"
 msgstr "Rozmiar ramki"
 
 msgid "C"
-msgstr ""
+msgstr "C"
 
 msgid "Callout"
 msgstr "Wezwanie"
@@ -61,7 +61,7 @@ msgid "Candle"
 msgstr "Świeca"
 
 msgid "Change"
-msgstr ""
+msgstr "Zmiana"
 
 msgid "Channel"
 msgstr "Kanał"
