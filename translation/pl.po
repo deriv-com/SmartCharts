@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Polish\n"
 "Language: pl_PL\n"
-"PO-Revision-Date: 2019-02-07 10:43\n"
+"PO-Revision-Date: 2019-02-09 19:01\n"
 
 msgid " already exists."
 msgstr " już istnieje."
@@ -49,7 +49,7 @@ msgid "Box Size"
 msgstr "Rozmiar ramki"
 
 msgid "C"
-msgstr ""
+msgstr "Z"
 
 msgid "Callout"
 msgstr "Wezwanie"
@@ -61,7 +61,7 @@ msgid "Candle"
 msgstr "Świeca"
 
 msgid "Change"
-msgstr ""
+msgstr "Zmiana"
 
 msgid "Channel"
 msgstr "Kanał"
@@ -70,7 +70,7 @@ msgid "Chart data is not available for this symbol."
 msgstr "Dane wykresowe są niedostępne dla tego symbolu."
 
 msgid "Chart Table"
-msgstr ""
+msgstr "Tabela wykresu"
 
 msgid "Chart types"
 msgstr "Rodzaje wykresów"
@@ -79,7 +79,7 @@ msgid "Clear All"
 msgstr "Wyczyść wszystko"
 
 msgid "Close"
-msgstr ""
+msgstr "Zamknij"
 
 msgid "CLOSE"
 msgstr "ZAMKNIĘCIE"
@@ -109,7 +109,7 @@ msgid "Dark Mode"
 msgstr "Tryb ciemny"
 
 msgid "Date"
-msgstr ""
+msgstr "Data"
 
 msgid "Day"
 msgstr "Dzień"
@@ -163,19 +163,19 @@ msgid "Gartley"
 msgstr "Formacja Gartleya"
 
 msgid "H"
-msgstr ""
+msgstr "W"
 
 msgid "Heikin Ashi"
 msgstr "Heikin Ashi"
 
 msgid "High"
-msgstr ""
+msgstr "Wysoki"
 
 msgid "HIGH"
 msgstr "WYSOKIE"
 
 msgid "Historical Data Mode"
-msgstr ""
+msgstr "Tryb danych historycznych"
 
 msgid "Hollow Candle"
 msgstr "Świeca pusta"
@@ -196,7 +196,7 @@ msgid "Kagi"
 msgstr "Kagi"
 
 msgid "L"
-msgstr ""
+msgstr "N"
 
 msgid "Language"
 msgstr "Język"
@@ -208,7 +208,7 @@ msgid "Line Break"
 msgstr "Podział linii"
 
 msgid "Low"
-msgstr ""
+msgstr "Niski"
 
 msgid "LOW"
 msgstr "NISKIE"
@@ -220,13 +220,13 @@ msgid "Minute"
 msgstr "Minuta"
 
 msgid "O"
-msgstr ""
+msgstr "O"
 
 msgid "OHLC"
 msgstr "OHLC"
 
 msgid "Open"
-msgstr ""
+msgstr "Otwórz"
 
 msgid "OPEN"
 msgstr "OTWARCIE"
@@ -271,16 +271,16 @@ msgid "RESET"
 msgstr "RESETUJ"
 
 msgid "Retrieving Chart Data..."
-msgstr ""
+msgstr "Pobieranie danych wykresu..."
 
 msgid "Retrieving Chart Engine..."
-msgstr ""
+msgstr "Pobieranie silnika wykresu..."
 
 msgid "Retrieving Market Symbols..."
-msgstr ""
+msgstr "Pobierania symboli rynkowych..."
 
 msgid "Retrieving Trading Times..."
-msgstr ""
+msgstr "Pobieranie godzin handlu..."
 
 msgid "Reversal"
 msgstr "Odwrotność"
@@ -337,7 +337,7 @@ msgid "Streaming for [symbol] is not available due to license restrictions"
 msgstr "Z powodu ograniczeń licencyjnych przesyłanie strumieniowe dla [symbol] jest niedostępne"
 
 msgid "Table"
-msgstr ""
+msgstr "Tabela"
 
 msgid "Template name"
 msgstr "Nazwa szablonu"
