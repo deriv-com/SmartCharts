@@ -10,6 +10,7 @@ class ChartState {
     @observable symbol;
     @observable isConnectionOpened;
     @observable settings;
+    @observable showLastDigitStats;
     get comparisonStore() { return this.mainStore.comparison; }
     get stxx() { return this.chartStore.stxx; }
     get context() { return this.chartStore.context; }
@@ -27,7 +28,7 @@ class ChartState {
         this.stxx.addEventListener('drawing', this.saveDrawings.bind(this));
     };
 
-    @action.bound updateProps({ id, settings, isConnectionOpened, symbol, granularity, chartType, startEpoch, endEpoch, removeAllComparisons, isAnimationEnabled = true }) {
+    @action.bound updateProps({ id, settings, isConnectionOpened, symbol, granularity, chartType, startEpoch, endEpoch, removeAllComparisons, isAnimationEnabled = true, showLastDigitStats = false }) {
         this.chartId = id;
         this.settings = settings;
         this.isConnectionOpened = isConnectionOpened;
@@ -35,6 +36,7 @@ class ChartState {
         this.startEpoch = startEpoch;
         this.endEpoch = endEpoch;
         this.isAnimationEnabled = isAnimationEnabled;
+        this.showLastDigitStats = showLastDigitStats;
 
         if (this.stxx) {
             this.stxx.drawPriceLabels = !!this.endEpoch;
