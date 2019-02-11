@@ -556,6 +556,7 @@ class ChartStore {
             // Remove comparisons before symbol changes
             for (const field in this.stxx.chart.series) {
                 this.stxx.removeSeries(field);
+                this.stxx.draw();
             }
         }
 
