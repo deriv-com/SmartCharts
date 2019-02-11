@@ -53,12 +53,12 @@ export default class BinaryAPI {
         return this.requestForget(request, callback);
     }
 
-    static createTickHistoryRequest({ symbol, granularity, start, end, subscribe, adjust_start_time = 1 }) {
+    static createTickHistoryRequest({ symbol, granularity, start, end, subscribe, adjust_start_time = 1, count }) {
         const request = {
             ticks_history: symbol,
             style: +granularity ? 'candles' : 'ticks',
             end: 'latest',
-            count: BinaryAPI.DEFAULT_COUNT,
+            count: count || BinaryAPI.DEFAULT_COUNT,
         };
 
         if (granularity) {
