@@ -67,12 +67,12 @@ const ChartTypes = ({
 };
 
 export default connect(({ chartType, state }) => ({
-    chartId: state.chartId,
-    ChartTypeMenu: chartType.ChartTypeMenu,
-    ChartTypeList: chartType.ChartTypeList,
-    menuOpen: chartType.menu.open,
-    onChange: chartType.setTypeFromUI,
-    setOpen: chartType.menu.setOpen,
+    chartId            : state.chartId,
+    ChartTypeMenu      : chartType.ChartTypeMenu,
+    ChartTypeList      : chartType.ChartTypeList,
+    menuOpen           : chartType.menu.open,
+    onChange           : chartType.setTypeFromUI,
+    setOpen            : chartType.menu.setOpen,
     showAggregateDialog: chartType.showAggregateDialog,
-    Type: chartType.type,
+    Type               : chartType.type,
 }))(ChartTypes);
