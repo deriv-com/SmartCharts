@@ -372,3 +372,8 @@ $themes: (
 @function themed($key) {
     @return map-get($theme-map, $key);
 }
+
+:export {
+    lightchartgrid: map-get(map-get($themes, 'light'), 'ChartGrid');
+    darkchartgrid: map-get(map-get($themes, 'dark'), 'ChartGrid');
+}
