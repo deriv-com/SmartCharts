@@ -1,0 +1,63 @@
+.cq-last-digits {
+    position: absolute;
+    bottom: 100px;
+    left: calc(50% - 150px);
+    visibility: hidden;
+
+    &.show {
+        visibility: visible;
+    }
+    .cq-bar {
+        width: 10px;
+        @include themify($themes) {
+            background-image: linear-gradient(to bottom, themed('LastdigitsBarBg'), rgba(themed('LastdigitsBarBg'), 0.5) var(--bar-gradiant)); /* stylelint-disable-line plugin/no-unsupported-browser-features */
+        }
+        position: absolute;
+        bottom: 40px;
+        -webkit-transition: height 0.8s ease-in-out; /* For Safari 3.1 to 6.0 */
+        transition: height 0.8s ease-in-out;
+        border-bottom-left-radius: 16px;
+        border-bottom-right-radius: 16px;
+        border-top-left-radius: 16px;
+        border-top-right-radius: 16px;
+
+        .cq-bar-title {
+            @include themify($themes) {
+                color: themed('LastdigitsBarText');
+            }
+            position: absolute;
+            bottom: -16px;
+            width: 10px;
+            text-align: center;
+
+            &.min {
+                @include themify($themes) {
+                    color: themed('LastdigitsMinBarBg');
+                }
+            }
+            &.max {
+                @include themify($themes) {
+                    color: themed('LastdigitsMaxBarBg');
+                }
+            }
+        }
+        &.min {
+            @include themify($themes) {
+                background-color: themed('LastdigitsMinBarBg');
+                background-image: none;
+            }
+        }
+        &.max {
+            @include themify($themes) {
+                background-image: linear-gradient(to bottom, themed('LastdigitsMaxBarBg'), rgba(themed('LastdigitsMaxBarBg'), 0.5) var(--bar-gradiant)); /* stylelint-disable-line plugin/no-unsupported-browser-features */
+            }
+        }
+    }
+    .cq-bar-footer {
+        text-align: center;
+        width: 325px;
+        @include themify($themes) {
+            color: themed('LastdigitsBarText');
+        }
+    }
+}

@@ -183,6 +183,10 @@ $themes: (
         CrosshairAxis: rgba($COLOR_GRAY, 0.32),
         CrosshairLabel: rgba($COLOR_GRAY, 0.88),
         StarIconFav: $COLOR_ORANGE,
+        LastdigitsBarBg: $COLOR_LIGHT_GRAY_2,
+        LastdigitsMaxBarBg: $COLOR_DARK_GREEN,
+        LastdigitsMinBarBg: $COLOR_RED,
+        LastdigitsBarText: $COLOR_LIGHT_BLUE_1,
         ChartHistoryBg: $COLOR_LIGHT_GRAY_1,
         ChartHistoryColor: $COLOR_LIGHT_BLACK,
         ChartHistoryBorder: $COLOR_GRAY,
@@ -354,6 +358,10 @@ $themes: (
         CrosshairAxis: $COLOR_WHITE,
         CrosshairLabel: $COLOR_LIGHT_BLUE_2,
         StarIconFav: $COLOR_ORANGE,
+        LastdigitsBarBg: $COLOR_DARK_GRAY,
+        LastdigitsMaxBarBg: $COLOR_GREEN,
+        LastdigitsMinBarBg: $COLOR_RED,
+        LastdigitsBarText: $COLOR_LIGHT_BLUE_1,
         ChartHistoryBg: $COLOR_BRANDBLUE_95,
         ChartHistoryColor: $COLOR_BRANDBLUE_40,
         ChartHistoryBorder: $COLOR_BRANDBLUE_85,
@@ -396,4 +404,9 @@ $themes: (
 
 @function themed($key) {
     @return map-get($theme-map, $key);
+}
+
+:export {
+    lightchartgrid: map-get(map-get($themes, 'light'), 'ChartGrid');
+    darkchartgrid: map-get(map-get($themes, 'dark'), 'ChartGrid');
 }
