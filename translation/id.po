@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Indonesian\n"
 "Language: id_ID\n"
-"PO-Revision-Date: 2019-02-07 10:43\n"
+"PO-Revision-Date: 2019-02-11 05:22\n"
 
 msgid " already exists."
 msgstr " sudah tersedia."
@@ -49,7 +49,7 @@ msgid "Box Size"
 msgstr "Box Size"
 
 msgid "C"
-msgstr ""
+msgstr "C"
 
 msgid "Callout"
 msgstr "Callout"
@@ -163,7 +163,7 @@ msgid "Gartley"
 msgstr "Gartley"
 
 msgid "H"
-msgstr ""
+msgstr "H"
 
 msgid "Heikin Ashi"
 msgstr "Heikin Ashi"
@@ -196,7 +196,7 @@ msgid "Kagi"
 msgstr "Kagi"
 
 msgid "L"
-msgstr ""
+msgstr "L"
 
 msgid "Language"
 msgstr "Bahasa"
@@ -220,7 +220,7 @@ msgid "Minute"
 msgstr "Menit"
 
 msgid "O"
-msgstr ""
+msgstr "O"
 
 msgid "OHLC"
 msgstr "OHLC"
