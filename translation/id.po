@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Indonesian\n"
 "Language: id_ID\n"
-"PO-Revision-Date: 2019-02-11 05:22\n"
+"PO-Revision-Date: 2019-02-11 05:42\n"
 
 msgid " already exists."
 msgstr " sudah tersedia."
@@ -61,7 +61,7 @@ msgid "Candle"
 msgstr "Candle"
 
 msgid "Change"
-msgstr ""
+msgstr "Change"
 
 msgid "Channel"
 msgstr "Kanal"
@@ -79,7 +79,7 @@ msgid "Clear All"
 msgstr "Hapus Semua"
 
 msgid "Close"
-msgstr ""
+msgstr "Close"
 
 msgid "CLOSE"
 msgstr "CLOSE"
@@ -109,7 +109,7 @@ msgid "Dark Mode"
 msgstr "Dark Mode"
 
 msgid "Date"
-msgstr ""
+msgstr "Tanggal"
 
 msgid "Day"
 msgstr "Hari"
@@ -169,7 +169,7 @@ msgid "Heikin Ashi"
 msgstr "Heikin Ashi"
 
 msgid "High"
-msgstr ""
+msgstr "High"
 
 msgid "HIGH"
 msgstr "HIGH"
@@ -208,7 +208,7 @@ msgid "Line Break"
 msgstr "Line Break"
 
 msgid "Low"
-msgstr ""
+msgstr "Low"
 
 msgid "LOW"
 msgstr "LOW"
@@ -226,7 +226,7 @@ msgid "OHLC"
 msgstr "OHLC"
 
 msgid "Open"
-msgstr ""
+msgstr "Open"
 
 msgid "OPEN"
 msgstr "OPEN"
@@ -337,7 +337,7 @@ msgid "Streaming for [symbol] is not available due to license restrictions"
 msgstr "Streaming untuk [symbol] tidak tersedia berhubung batasan lisensi"
 
 msgid "Table"
-msgstr ""
+msgstr "Tabel"
 
 msgid "Template name"
 msgstr "Nama pola"
