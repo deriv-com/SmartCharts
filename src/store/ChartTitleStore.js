@@ -30,6 +30,7 @@ export default class ChartTitleStore {
             isVisible: this.isVisible && this.isShowChartPrice,
             status: this.animatedPrice.status,
             todayChange: this.todayChange,
+            todayChangePercent: this.todayChangePercent,
             SpotPrice,
         }))(ChartPrice);
 
@@ -40,6 +41,7 @@ export default class ChartTitleStore {
     }
 
     @observable todayChange = null;
+    @observable todayChangePercent = null;
     @observable isVisible = false;
 
     get chart() { return this.mainStore.chart; }
@@ -76,6 +78,7 @@ export default class ChartTitleStore {
             this.animatedPrice.setPrice(currentPrice, oldPrice);
             if (oldPrice) {
                 this.todayChange = Math.abs(currentPrice - oldPrice).toFixed(this.decimalPlaces);
+                this.todayChangePercent = ((this.todayChange / oldPrice) * 100).toFixed(2);
             }
         }
     }
