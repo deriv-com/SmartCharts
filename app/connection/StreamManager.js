@@ -57,7 +57,6 @@ class StreamManager {
     }
 
     _cacheTick(key, { ohlc, tick }) {
-        if (!this._tickHistoryCache[key]) return;
         if (ohlc) {
             const candles = this._tickHistoryCache[key].candles;
             const {
