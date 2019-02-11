@@ -242,8 +242,4 @@ export default class ChartTypeStore {
     }
 
     @observable type = getChartTypes()[0];
-
-    @computed get chartId() {
-        return this.mainStore.state.chartId;
-    }
 }

@@ -5,15 +5,15 @@ import '../../sass/components/_timeperiod.scss';
 
 const Timeperiod = ({
     chartId,
-    onChange,
+    enabled,
     interval,
     timeUnit,
     interval_display,
-    timeUnit_display,
-    TimePeriodMenu,
-    setOpen,
     isMobile,
-    enabled,
+    onChange,
+    setOpen,
+    TimePeriodMenu,
+    timeUnit_display,
 }) => {
     const onGranularityClick = (granularity) => {
         onChange(granularity, chartId);
@@ -124,14 +124,14 @@ const Timeperiod = ({
     );
 };
 
-export default connect(({ timeperiod: s }) => ({
-    chartId: s.chartId,
-    onChange: s.setGranularity,
-    timeUnit: s.timeUnit,
-    interval: s.interval,
+export default connect(({ timeperiod: s, state }) => ({
+    chartId         : state.chartId,
+    timeUnit        : s.timeUnit,
+    interval        : s.interval,
     interval_display: s.interval_display,
+    isMobile        : s.mainStore.chart.isMobile,
+    onChange        : s.setGranularity,
+    setOpen         : s.menu.setOpen,
+    TimePeriodMenu  : s.TimePeriodMenu,
     timeUnit_display: s.timeUnit_display,
-    TimePeriodMenu: s.TimePeriodMenu,
-    setOpen: s.menu.setOpen,
-    isMobile: s.mainStore.chart.isMobile,
 }))(Timeperiod);

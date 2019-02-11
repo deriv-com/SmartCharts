@@ -5,15 +5,15 @@ import { SettingIcon } from './Icons.jsx';
 import '../../sass/components/_chart-types.scss';
 
 const ChartTypes = ({
-    Type,
-    ChartTypeMenu,
-    menuOpen,
-    setOpen,
-    onChange,
     chartId,
     ChartTypeList,
-    showAggregateDialog,
+    ChartTypeMenu,
     enabled,
+    menuOpen,
+    onChange,
+    setOpen,
+    showAggregateDialog,
+    Type,
 }) => {
     if (Type === undefined) return (null);
 
@@ -66,13 +66,13 @@ const ChartTypes = ({
     );
 };
 
-export default connect(({ chartType }) => ({
-    Type: chartType.type,
-    setOpen: chartType.menu.setOpen,
-    onChange: chartType.setTypeFromUI,
-    showAggregateDialog: chartType.showAggregateDialog,
-    menuOpen: chartType.menu.open,
-    chartId: chartType.chartId,
+export default connect(({ chartType, state }) => ({
+    chartId: state.chartId,
     ChartTypeMenu: chartType.ChartTypeMenu,
     ChartTypeList: chartType.ChartTypeList,
+    menuOpen: chartType.menu.open,
+    onChange: chartType.setTypeFromUI,
+    setOpen: chartType.menu.setOpen,
+    showAggregateDialog: chartType.showAggregateDialog,
+    Type: chartType.type,
 }))(ChartTypes);
