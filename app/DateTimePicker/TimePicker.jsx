@@ -107,12 +107,10 @@ class TimePickerDropdown extends React.PureComponent {
     }
 
     render() {
-        const { preClass, value, toggle, start_date } = this.props;
+        const { preClass, value, toggle, start_date, end_moment } = this.props;
         const start_moment       = moment(start_date * 1000 || undefined);
         const start_moment_clone = start_moment.clone().minute(0).second(0);
-        const end_moment = moment().utc();
         let [hour, minute] = ['00', '00'];
-
         if (value.match(/^([0-9]|[0-1][0-9]|2[0-3]):([0-9]|[0-5][0-9])(:([0-9]|[0-5][0-9]))?$/)) {
             [hour, minute] = value.split(':');
         }
@@ -173,6 +171,8 @@ class TimePicker extends React.PureComponent {
         super(props);
         this.minutes  = [...Array(12).keys()].map(a => `0${a * 5}`.slice(-2));
         this.state = {
+            diffTime: 0,
+            end_moment: moment().utc(),
             is_open: false,
             value : props.value || '00:00',
         };
@@ -198,10 +198,24 @@ class TimePicker extends React.PureComponent {
                 this.findAvailabeTime(start_moment_clone);
             }
         }
+
+        if (this.props.diffTime !== prevProps.diffTime) {
+            this.updateEndTime();
+        }
     }
 
     componentWillUnmount() {
         document.removeEventListener('mousedown', this.handleClickOutside);
+    }
+
+    updateEndTime = () => {
+        const { diffTime } = this.props;
+        const time = moment().utc().unix() - diffTime;
+        const end_moment = moment(time * 1000).utc();
+        this.setState({
+            end_moment,
+            diffTime,
+        });
     }
 
     findAvailabeTime = (start_moment_clone) => {
@@ -306,6 +320,7 @@ class TimePicker extends React.PureComponent {
                                     onChange={this.handleChange}
                                     preClass={prefix_class}
                                     start_date={start_date}
+                                    end_moment={this.state.end_moment}
                                     value={value}
                                     sessions={sessions}
                                     is_clearable={this.props.is_clearable}

@@ -27,6 +27,7 @@ import { configure } from 'mobx';
 import './app.scss';
 import './doorbell';
 import { whyDidYouUpdate }  from 'why-did-you-update';
+import { BinaryAPI /* , ActiveSymbols, TradingTimes */ } from './binaryapi';
 import { ConnectionManager, StreamManager } from './connection';
 import Notification from './Notification.jsx';
 import ChartNotifier from './ChartNotifier.js';
@@ -110,6 +111,7 @@ class App extends Component {
     constructor(props) {
         super(props);
         this.notifier = new ChartNotifier();
+        this.api = new BinaryAPI(requestAPI, requestSubscribe, requestForget);
         const layoutString = localStorage.getItem(`layout-${chartId}`),
             layout = JSON.parse(layoutString !== '' ? layoutString : '{}');
         let chartType;
@@ -160,7 +162,22 @@ class App extends Component {
             isChartTypeCandle,
             granularity,
             isConnectionOpened: true,
+            diffTime: 0,
         };
+    }
+
+    /**
+     * Find diference of clinet time and server time,
+     * to use for historical data endMoment
+     */
+    componentDidMount() {
+        const currentTime = moment().utc().unix();
+        this.api.getServerTime()
+            .then((x) => {
+                this.setState({
+                    diffTime: (currentTime - x.time),
+                });
+            });
     }
 
     /*
@@ -223,7 +240,7 @@ class App extends Component {
     renderTopWidgets = () => (
         <>
             <ChartTitle onChange={this.symbolChange} />
-            {this.state.settings.historical ? <ChartHistory onChange={this.handleDateChange} /> : ''}
+            {this.state.settings.historical ? <ChartHistory onChange={this.handleDateChange} diffTime={this.state.diffTime} /> : ''}
             <AssetInformation />
             <ComparisonList />
             <Notification

@@ -63,6 +63,7 @@ class ChartHistory extends React.PureComponent {
                     disableFocus={this.onDisableFocus}
                     is_clearable
                     start_date={moment(this.state.date, 'YYYY/MM/DD').valueOf() / 1000}
+                    diffTime={this.props.diffTime}
                     value={this.state.time}
                     onChange={this.onChangeTime}
                 />
