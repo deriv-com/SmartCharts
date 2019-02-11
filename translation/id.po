@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Indonesian\n"
 "Language: id_ID\n"
-"PO-Revision-Date: 2019-02-11 07:03\n"
+"PO-Revision-Date: 2019-02-11 07:12\n"
 
 msgid " already exists."
 msgstr " sudah tersedia."
@@ -175,7 +175,7 @@ msgid "HIGH"
 msgstr "HIGH"
 
 msgid "Historical Data Mode"
-msgstr ""
+msgstr "Mode Data Historis"
 
 msgid "Hollow Candle"
 msgstr "Hollow Candle"
