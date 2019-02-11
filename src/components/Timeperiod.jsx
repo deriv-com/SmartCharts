@@ -4,6 +4,7 @@ import { connect } from '../store/Connect';
 import '../../sass/components/_timeperiod.scss';
 
 const Timeperiod = ({
+    chartId,
     onChange,
     interval,
     timeUnit,
@@ -15,7 +16,7 @@ const Timeperiod = ({
     enabled,
 }) => {
     const onGranularityClick = (granularity) => {
-        onChange(granularity);
+        onChange(granularity, chartId);
         setOpen(false);
     };
     return (
@@ -124,6 +125,7 @@ const Timeperiod = ({
 };
 
 export default connect(({ timeperiod: s }) => ({
+    chartId: s.chartId,
     onChange: s.setGranularity,
     timeUnit: s.timeUnit,
     interval: s.interval,

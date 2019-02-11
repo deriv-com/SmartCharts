@@ -10,6 +10,7 @@ const ChartTypes = ({
     menuOpen,
     setOpen,
     onChange,
+    chartId,
     ChartTypeList,
     showAggregateDialog,
     enabled,
@@ -18,7 +19,7 @@ const ChartTypes = ({
 
     const onItemClick = (idx, chartType) => {
         if (Type.id !== chartType.id) {
-            onChange(chartType.id, chartType.candleOnly);
+            onChange(chartType.id, chartType.candleOnly, chartId);
         }
         setOpen(false);
     };
@@ -71,6 +72,7 @@ export default connect(({ chartType }) => ({
     onChange: chartType.setTypeFromUI,
     showAggregateDialog: chartType.showAggregateDialog,
     menuOpen: chartType.menu.open,
+    chartId: chartType.chartId,
     ChartTypeMenu: chartType.ChartTypeMenu,
     ChartTypeList: chartType.ChartTypeList,
 }))(ChartTypes);
