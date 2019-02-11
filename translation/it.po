@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Italian\n"
 "Language: it_IT\n"
-"PO-Revision-Date: 2018-12-23 10:21\n"
+"PO-Revision-Date: 2019-02-07 10:43\n"
 
 msgid " already exists."
 msgstr "Già esistente."
@@ -48,6 +48,9 @@ msgstr "Linea di riferimento"
 msgid "Box Size"
 msgstr "Unità di escursione"
 
+msgid "C"
+msgstr ""
+
 msgid "Callout"
 msgstr "Fumetto"
 
@@ -57,17 +60,26 @@ msgstr "ANNULLA"
 msgid "Candle"
 msgstr "Candela"
 
+msgid "Change"
+msgstr ""
+
 msgid "Channel"
 msgstr "Canale"
 
 msgid "Chart data is not available for this symbol."
 msgstr "I dati del grafico non sono disponibili per questo simbolo."
 
+msgid "Chart Table"
+msgstr ""
+
 msgid "Chart types"
 msgstr "Tipologie di grafico"
 
 msgid "Clear All"
 msgstr "Cancella tutto"
+
+msgid "Close"
+msgstr ""
 
 msgid "CLOSE"
 msgstr "CHIUSURA"
@@ -95,6 +107,9 @@ msgstr "Crossline"
 
 msgid "Dark Mode"
 msgstr "Modalità scura"
+
+msgid "Date"
+msgstr ""
 
 msgid "Day"
 msgstr "Giorno"
@@ -147,11 +162,20 @@ msgstr "Ventaglio Gann"
 msgid "Gartley"
 msgstr "Gartley"
 
+msgid "H"
+msgstr ""
+
 msgid "Heikin Ashi"
 msgstr "Heikin Ashi"
 
+msgid "High"
+msgstr ""
+
 msgid "HIGH"
 msgstr "MASSIMO"
+
+msgid "Historical Data Mode"
+msgstr ""
 
 msgid "Hollow Candle"
 msgstr "Candela vuota"
@@ -171,6 +195,9 @@ msgstr "Intervallo"
 msgid "Kagi"
 msgstr "Kagi"
 
+msgid "L"
+msgstr ""
+
 msgid "Language"
 msgstr "Lingua"
 
@@ -179,6 +206,9 @@ msgstr "Linea"
 
 msgid "Line Break"
 msgstr "Line Break"
+
+msgid "Low"
+msgstr ""
 
 msgid "LOW"
 msgstr "MINIMO"
@@ -189,8 +219,14 @@ msgstr "Misura"
 msgid "Minute"
 msgstr "Minuto"
 
+msgid "O"
+msgstr ""
+
 msgid "OHLC"
 msgstr "OHLC"
+
+msgid "Open"
+msgstr ""
 
 msgid "OPEN"
 msgstr "APERTURA"
@@ -240,11 +276,11 @@ msgstr "Recupero dati del grafico in corso..."
 msgid "Retrieving Chart Engine..."
 msgstr "Recupero del Chart Engine in corso..."
 
-msgid "Retrieving market symbols..."
-msgstr "Recupero simboli di mercato in corso..."
+msgid "Retrieving Market Symbols..."
+msgstr ""
 
-msgid "Retrieving trading times..."
-msgstr "Recupero orari di trading in corso..."
+msgid "Retrieving Trading Times..."
+msgstr ""
 
 msgid "Reversal"
 msgstr "Reversal"
@@ -299,6 +335,9 @@ msgstr "SPOT"
 
 msgid "Streaming for [symbol] is not available due to license restrictions"
 msgstr "[symbol] in streaming non è disponibile a causa delle limitazioni della licenza"
+
+msgid "Table"
+msgstr ""
 
 msgid "Template name"
 msgstr "Nome del modello"

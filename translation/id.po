@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Indonesian\n"
 "Language: id_ID\n"
-"PO-Revision-Date: 2018-12-27 04:21\n"
+"PO-Revision-Date: 2019-02-11 06:02\n"
 
 msgid " already exists."
 msgstr " sudah tersedia."
@@ -48,6 +48,9 @@ msgstr "Baseline"
 msgid "Box Size"
 msgstr "Box Size"
 
+msgid "C"
+msgstr "C"
+
 msgid "Callout"
 msgstr "Callout"
 
@@ -57,17 +60,26 @@ msgstr "BATAL"
 msgid "Candle"
 msgstr "Candle"
 
+msgid "Change"
+msgstr "Change"
+
 msgid "Channel"
 msgstr "Kanal"
 
 msgid "Chart data is not available for this symbol."
 msgstr "Data grafik tidak tersedia untuk simbol ini."
 
+msgid "Chart Table"
+msgstr ""
+
 msgid "Chart types"
 msgstr "Jenis grafik"
 
 msgid "Clear All"
 msgstr "Hapus Semua"
+
+msgid "Close"
+msgstr "Close"
 
 msgid "CLOSE"
 msgstr "CLOSE"
@@ -95,6 +107,9 @@ msgstr "Crossline"
 
 msgid "Dark Mode"
 msgstr "Dark Mode"
+
+msgid "Date"
+msgstr "Tanggal"
 
 msgid "Day"
 msgstr "Hari"
@@ -147,11 +162,20 @@ msgstr "Kipas Gann"
 msgid "Gartley"
 msgstr "Gartley"
 
+msgid "H"
+msgstr "H"
+
 msgid "Heikin Ashi"
 msgstr "Heikin Ashi"
 
+msgid "High"
+msgstr "High"
+
 msgid "HIGH"
 msgstr "HIGH"
+
+msgid "Historical Data Mode"
+msgstr ""
 
 msgid "Hollow Candle"
 msgstr "Hollow Candle"
@@ -171,6 +195,9 @@ msgstr "Interval"
 msgid "Kagi"
 msgstr "Kagi"
 
+msgid "L"
+msgstr "L"
+
 msgid "Language"
 msgstr "Bahasa"
 
@@ -179,6 +206,9 @@ msgstr "Garis"
 
 msgid "Line Break"
 msgstr "Line Break"
+
+msgid "Low"
+msgstr "Low"
 
 msgid "LOW"
 msgstr "LOW"
@@ -189,8 +219,14 @@ msgstr "Mengukur"
 msgid "Minute"
 msgstr "Menit"
 
+msgid "O"
+msgstr "O"
+
 msgid "OHLC"
 msgstr "OHLC"
+
+msgid "Open"
+msgstr "Open"
 
 msgid "OPEN"
 msgstr "OPEN"
@@ -235,16 +271,16 @@ msgid "RESET"
 msgstr "ULANG"
 
 msgid "Retrieving Chart Data..."
-msgstr "Mengambil Data Grafik..."
+msgstr "Menampilkan Data Grafik..."
 
 msgid "Retrieving Chart Engine..."
-msgstr "Mengambil Mesin Grafik..."
+msgstr "Menampilkan Mesin Grafik..."
 
-msgid "Retrieving market symbols..."
-msgstr "Mengambil simbol pasar..."
+msgid "Retrieving Market Symbols..."
+msgstr "Menampilkan Simbol Pasar..."
 
-msgid "Retrieving trading times..."
-msgstr "Mengambil waktu trading..."
+msgid "Retrieving Trading Times..."
+msgstr "Menampilkan Waktu Trading..."
 
 msgid "Reversal"
 msgstr "Reversal"
@@ -299,6 +335,9 @@ msgstr "SPOT"
 
 msgid "Streaming for [symbol] is not available due to license restrictions"
 msgstr "Streaming untuk [symbol] tidak tersedia berhubung batasan lisensi"
+
+msgid "Table"
+msgstr "Tabel"
 
 msgid "Template name"
 msgstr "Nama pola"

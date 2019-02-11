@@ -5186,7 +5186,7 @@ var __js_span_ =
 				self.setCandleWidth(previousCandleWidth);
 				self.layout.interval =  previousInterval;
 				self.layout.periodicity = previousPeriodicity;
-				self.layout.timeUnit= previousTimeUnit;
+				self.layout.timeUnit = previousTimeUnit;
 				if(cb) cb(err);
 				return;
 			}

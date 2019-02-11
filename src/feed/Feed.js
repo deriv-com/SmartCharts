@@ -58,8 +58,10 @@ class Feed {
 
         const dtLeft =  new Date((this.startEpoch || this.endEpoch - rangeTime) * 1000);
         const dtRight = new Date(this.endEpoch * 1000);
-
-        this._stx.setRange({ dtLeft, dtRight, periodicity }, () => this._stx.draw());
+        this._stx.setRange({ dtLeft, dtRight, periodicity }, () => {
+            this._stx.draw();
+            this._stx.home();
+        });
     };
 
     // although not used, subscribe is overridden so that unsubscribe will be called by ChartIQ
@@ -281,6 +283,10 @@ class Feed {
                 symbol: comparisonChartSymbol,
                 ...dataUpdate,
             });
+        }
+
+        if (this.endEpoch) {
+            this._stx.home();
         }
     }
 

@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Dutch\n"
 "Language: nl_NL\n"
-"PO-Revision-Date: 2018-12-21 08:01\n"
+"PO-Revision-Date: 2019-02-07 10:43\n"
 
 msgid " already exists."
 msgstr ""
@@ -48,6 +48,9 @@ msgstr ""
 msgid "Box Size"
 msgstr ""
 
+msgid "C"
+msgstr ""
+
 msgid "Callout"
 msgstr ""
 
@@ -57,16 +60,25 @@ msgstr ""
 msgid "Candle"
 msgstr ""
 
+msgid "Change"
+msgstr ""
+
 msgid "Channel"
 msgstr ""
 
 msgid "Chart data is not available for this symbol."
 msgstr ""
 
+msgid "Chart Table"
+msgstr ""
+
 msgid "Chart types"
 msgstr ""
 
 msgid "Clear All"
+msgstr ""
+
+msgid "Close"
 msgstr ""
 
 msgid "CLOSE"
@@ -94,6 +106,9 @@ msgid "Crossline"
 msgstr ""
 
 msgid "Dark Mode"
+msgstr ""
+
+msgid "Date"
 msgstr ""
 
 msgid "Day"
@@ -147,10 +162,19 @@ msgstr ""
 msgid "Gartley"
 msgstr ""
 
+msgid "H"
+msgstr ""
+
 msgid "Heikin Ashi"
 msgstr ""
 
+msgid "High"
+msgstr ""
+
 msgid "HIGH"
+msgstr ""
+
+msgid "Historical Data Mode"
 msgstr ""
 
 msgid "Hollow Candle"
@@ -171,6 +195,9 @@ msgstr ""
 msgid "Kagi"
 msgstr ""
 
+msgid "L"
+msgstr ""
+
 msgid "Language"
 msgstr ""
 
@@ -178,6 +205,9 @@ msgid "Line"
 msgstr ""
 
 msgid "Line Break"
+msgstr ""
+
+msgid "Low"
 msgstr ""
 
 msgid "LOW"
@@ -189,7 +219,13 @@ msgstr ""
 msgid "Minute"
 msgstr ""
 
+msgid "O"
+msgstr ""
+
 msgid "OHLC"
+msgstr ""
+
+msgid "Open"
 msgstr ""
 
 msgid "OPEN"
@@ -240,10 +276,10 @@ msgstr ""
 msgid "Retrieving Chart Engine..."
 msgstr ""
 
-msgid "Retrieving market symbols..."
+msgid "Retrieving Market Symbols..."
 msgstr ""
 
-msgid "Retrieving trading times..."
+msgid "Retrieving Trading Times..."
 msgstr ""
 
 msgid "Reversal"
@@ -298,6 +334,9 @@ msgid "SPOT"
 msgstr ""
 
 msgid "Streaming for [symbol] is not available due to license restrictions"
+msgstr ""
+
+msgid "Table"
 msgstr ""
 
 msgid "Template name"

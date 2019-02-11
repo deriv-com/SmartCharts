@@ -26,6 +26,12 @@ $COLOR_DARK_BLUE_2  : #101320;
 $COLOR_DARK_BLUE_3  : #191c31;
 $COLOR_DARK_BLUE_4  : #202641;
 
+$COLOR_LIGHT_BLACK : #5c5c5c;
+$COLOR_BRANDBLUE_40: #aaacba;
+$COLOR_BRANDBLUE_95: #353b5b;
+$COLOR_BRANDBLUE_85: #4a4f6c;
+$COLOR_BRANDBLUE_75: #60647e;
+
 $themes: (
     light: (
         DefaultMain: $COLOR_WHITE,
@@ -163,6 +169,30 @@ $themes: (
         LastdigitsMaxBarBg: $COLOR_DARK_GREEN,
         LastdigitsMinBarBg: $COLOR_RED,
         LastdigitsBarText: $COLOR_LIGHT_BLUE_1,
+        ChartHistoryBg: $COLOR_LIGHT_GRAY_1,
+        ChartHistoryColor: $COLOR_LIGHT_BLACK,
+        ChartHistoryBorder: $COLOR_GRAY,
+        ChartHistoryPickerBg: $COLOR_WHITE,
+        ChartHistoryPickerBorder: $COLOR_GRAY,
+        ChartHistoryPickerColor: $COLOR_LIGHT_BLACK,
+        ChartHistoryPickerIcon: $COLOR_LIGHT_BLACK,
+        ChartHistoryPickerActiveBorder: $COLOR_BRAND_BLUE,
+        ChartHistoryPickerActiveColor: $COLOR_LIGHT_BLACK,
+        ChartHistoryPickerActiveIcon: $COLOR_BRAND_BLUE,
+        ChartHistoryPickerTopColor: $COLOR_BRANDBLUE_40,
+        ChartHistoryPickerHeaderBg: $COLOR_WHITE,
+        ChartHistoryPickerHeaderBorder: $COLOR_GRAY,
+        ChartHistoryPickerHeaderColor: $COLOR_BLACK,
+        ChartHistoryPickerHeaderIcon: $COLOR_BRANDBLUE_40,
+        ChartHistoryPickerFooterBg: $COLOR_WHITE,
+        ChartHistoryPickerFooterBorder: $COLOR_GRAY,
+        ChartHistoryPickerFooterColor: $COLOR_BRAND_BLUE,
+        ChartHistoryPickerBodyColor: $COLOR_BRAND_BLUE,
+        ChartHistoryPickerBodyDisableColor: $COLOR_DARK_GRAY,
+        ChartHistoryPickerBodyActiveBg: $COLOR_BRAND_BLUE,
+        ChartHistoryPickerBodyActiveColor: $COLOR_WHITE,
+        ChartHistoryPickerBodyActiveBorder: $COLOR_BRAND_BLUE
+
     ),
     dark: (
         DefaultMain:            $COLOR_BRAND_BLUE,
@@ -299,6 +329,29 @@ $themes: (
         LastdigitsMaxBarBg: $COLOR_GREEN,
         LastdigitsMinBarBg: $COLOR_RED,
         LastdigitsBarText: $COLOR_LIGHT_BLUE_1,
+        ChartHistoryBg: $COLOR_BRANDBLUE_95,
+        ChartHistoryColor: $COLOR_BRANDBLUE_40,
+        ChartHistoryBorder: $COLOR_BRANDBLUE_85,
+        ChartHistoryPickerBg: $COLOR_BRANDBLUE_95,
+        ChartHistoryPickerBorder: $COLOR_BRANDBLUE_85,
+        ChartHistoryPickerColor: $COLOR_WHITE,
+        ChartHistoryPickerIcon: $COLOR_BRANDBLUE_40,
+        ChartHistoryPickerActiveBorder: $COLOR_WHITE,
+        ChartHistoryPickerActiveColor: $COLOR_WHITE,
+        ChartHistoryPickerActiveIcon: $COLOR_WHITE,
+        ChartHistoryPickerTopColor: $COLOR_BRANDBLUE_40,
+        ChartHistoryPickerHeaderBg: $COLOR_BRAND_BLUE,
+        ChartHistoryPickerHeaderBorder: $COLOR_BRAND_BLUE,
+        ChartHistoryPickerHeaderColor: $COLOR_WHITE,
+        ChartHistoryPickerHeaderIcon: $COLOR_BRANDBLUE_40,
+        ChartHistoryPickerFooterBg: $COLOR_BRANDBLUE_95,
+        ChartHistoryPickerFooterBorder: $COLOR_BRANDBLUE_85,
+        ChartHistoryPickerFooterColor: $COLOR_WHITE,
+        ChartHistoryPickerBodyColor: $COLOR_BRANDBLUE_40,
+        ChartHistoryPickerBodyDisableColor: $COLOR_BRANDBLUE_75,
+        ChartHistoryPickerBodyActiveBg: $COLOR_WHITE,
+        ChartHistoryPickerBodyActiveColor: $COLOR_BRAND_BLUE,
+        ChartHistoryPickerBodyActiveBorder: $COLOR_WHITE
     ),
 );
 
