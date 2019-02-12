@@ -26,37 +26,42 @@ class ChartState {
         setTimeout(() => {
             const masterData = this.stxx.masterData;
             const lastData = masterData[masterData.length - 1];
+            const times = [];
 
-            for (let i = 1; i <= 10; i++) {
-                const epoch = lastData.DT.getTime() + (1000 * i);
+            // Make points
+            for (let i = 1; i <= 3; i++) {
+                times.push(lastData.DT.getTime() + (60 * 1000 * (i * 2 - 1)));
+            }
+
+
+            times.forEach((ts) => {
+                // ### add bar
                 this.stxx.updateChartData(
                     {
-                        DT: epoch,
-                        // Date: (new Date(epoch)),
-                        // Close: null,
+                        DT: (new Date(ts)),
+                        Close: null,
                     },
                     null,
                     { useAsLastSale: true, fillGaps: true },
                 );
-            }
+            });
             this.stxx.createDataSet();
             this.stxx.draw();
 
             setTimeout(() => {
-                for (let i = 0; i <= 10; i++) {
-                    const epoch = lastData.DT.getTime() + (1000 * i);
+                times.forEach((ts, indx) => {
                     const newNode = document.getElementById('stxEventPrototype').cloneNode(true);
                     newNode.id = null;
-                    newNode.innerHTML = i;
+                    newNode.innerHTML = indx;
                     CIQ.appendClassName(newNode, 'dividend');
                     new CIQ.Marker({
                         stx: this.stxx,
                         xPositioner: 'date',
-                        x: (new Date(epoch)),
+                        x: (new Date(ts)),
                         label: 'events',
                         node: newNode,
                     });
-                }
+                });
                 this.stxx.draw();
             }, 800);
         }, 800);

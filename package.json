@@ -23,7 +23,7 @@
     "instrument": false
   },
   "scripts": {
-    "build": "rimraf dist && cross-env NODE_ENV=production webpack --mode=production --optimize-minimize --progress",
+    "build": "rimraf dist && cross-env NODE_ENV=development webpack --mode=development --optimize-minimize --progress",
     "build:app": "cross-env BUILD_MODE='app' yarn build",
     "build-travis": "yarn build:app && node scripts/update-hashes.js",
     "analyze": "cross-env ANALYZE_BUNDLE=true yarn build",
@@ -34,7 +34,7 @@
     "gh-pages": "gh-pages --dist '.' --src '{index.html,manifest.json,sw.js,dist/**,CNAME}'",
     "gh-pages:folder": "yarn gh-pages --src '{index.html,manifest.json,sw.js,dist/**}' --dest $1",
     "translations": "yarn build && node scripts/extract-translations.js ./dist/smartcharts.js",
-    "deploy:production": "yarn build-travis && echo 'charts.binary.com' > CNAME  && yarn gh-pages --repo 'git@github.com:binary-com/SmartCharts.git'",
+    "deploy:development": "yarn build-travis && echo 'charts.binary.com' > CNAME  && yarn gh-pages --repo 'git@github.com:binary-com/SmartCharts.git'",
     "deploy:beta": "yarn build-travis && yarn gh-pages --repo 'git@github.com:binary-com/SmartCharts.git' --dest './beta'"
   },
   "devDependencies": {

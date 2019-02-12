@@ -127,6 +127,7 @@ class App extends React.Component {
                         requestSubscribe={requestSubscribe}
                         requestForget={requestForget}
                         barriers={barriers}
+                        granularity={120}
                     />
                 </div>
                 <div className="bottom-blob">
