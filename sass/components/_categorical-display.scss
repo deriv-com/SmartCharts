@@ -121,7 +121,7 @@
     }
     .category {
         padding-top: 3em;
-        padding-bottom: 1em;
+        padding-bottom: 16px;
         position: relative;
 
         &:last-child {
@@ -129,10 +129,14 @@
         }
     }
     .category-content {
-        margin: 16px;
+        margin: 0 16px 4px;
         border-radius: 4px;
         @include themify($themes) {
             border: 1px solid themed('CatDisplayCatContentBorder');
+        }
+
+        &:last-child {
+            margin-bottom: 0px;
         }
     }
     .subcategory {
@@ -145,6 +149,7 @@
         align-items: center;
         @include themify($themes) {
             color: themed('CatDisplayCatContentTitleText');
+            background-color: themed('CatDisplayCatContentBg');
         }
     }
     .category-title {
