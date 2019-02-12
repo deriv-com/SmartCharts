@@ -33,7 +33,7 @@
                 @include themify($themes) {
                     color: themed('CatDisplayActiveSearchText');
                     border-color: themed('CatDisplayActiveSearchBorder');
-                    box-shadow: 0 0 2px themed('CatDisplayActiveSearchShadow');
+                    box-shadow: 0 0 0 2px themed('CatDisplayActiveSearchShadow');
                 }
             }
             > .ic-icon {
@@ -78,6 +78,7 @@
                 @include themify($themes) {
                     border-color: themed('CatDisplayActiveSearchBorder');
                     color: themed('CatDisplayActiveSearchText');
+                    box-shadow: 0 0 0 2px themed('CatDisplayActiveSearchShadow');
                 }
 
                 & + .ic-icon {
@@ -131,7 +132,6 @@
         margin: 16px;
         border-radius: 4px;
         @include themify($themes) {
-            background-color: themed('CatDisplayCatContentBg');
             border: 1px solid themed('CatDisplayCatContentBorder');
         }
     }
@@ -232,7 +232,8 @@
         line-height: initial;
         font-size: 14px;
         @include themify($themes) {
-            border-bottom: 1px solid themed('CatDisplayCatContentBorder');
+            border-bottom: 1px solid themed('CatDisplayBg');
+            background-color: themed('CatDisplayCatContentBg');
         }
 
         &:first-child {
@@ -267,7 +268,6 @@
             @include themify($themes) {
                 color: themed('CatDisplayCatHoverContentText');
                 background: themed('CatDisplayCatHoverContentBg');
-                border-bottom-color: themed('CatDisplayCatHoverContentBg');
             }
 
             .right {
@@ -285,7 +285,6 @@
             @include themify($themes) {
                 color: themed('CatDisplayCatActiveContentText');
                 background: themed('CatDisplayCatActiveContentBg');
-                border-bottom-color: themed('CatDisplayCatActiveContentBg');
             }
 
             .right {
@@ -327,6 +326,9 @@
     .empty-category {
         padding: 0.9em 1.2em;
         border-radius: 4px;
+        @include themify($themes) {
+            background-color: themed('CatDisplayCatContentBg');
+        }
     }
 }
 

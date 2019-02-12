@@ -23,7 +23,7 @@
         &.stxMenuActive > .cq-menu-btn > .cq-symbol-select-btn {
             @include themify($themes) {
                 border: solid 1px themed('ChartTitleActiveBorder');
-                box-shadow: 0 0 2px themed('ChartTitleActiveShadow');
+                box-shadow: 0 0 0 2px themed('ChartTitleActiveShadow');
             }
 
             > .ic-icon.cq-symbol-dropdown {
