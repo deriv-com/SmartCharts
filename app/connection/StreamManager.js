@@ -22,7 +22,7 @@ class StreamManager {
     _onTick(data) {
         const key = this._getKey(data.echo_req);
 
-        if (this._streams[key]) {
+        if (this._streams[key] && this._tickHistoryCache[key]) {
             this._streamIds[key] = data[data.msg_type].id;
             this._cacheTick(key, data);
             this._streams[key].emitTick(data);
