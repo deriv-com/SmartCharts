@@ -372,6 +372,7 @@ class ChartStore {
 
                     if (this.preferences.currentPriceLine === true && this.isHome()) {
                         panel.chart.context.globalCompositeOperation = 'destination-over';
+                        // Draw the current price line from current spot
                         this.plotLine(x, panel.right - 16, y, y, backgroundColor, 'segment', panel.chart.context, panel, {
                             pattern: 'dashed',
                             lineWidth: 1,
