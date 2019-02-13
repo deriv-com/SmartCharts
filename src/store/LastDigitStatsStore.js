@@ -1,6 +1,6 @@
 import { observable, action, computed } from 'mobx';
 
-export default class LastDigitsStore {
+export default class LastDigitStatsStore {
     constructor(mainStore) {
         this.mainStore = mainStore;
     }

@@ -8,7 +8,7 @@ const Bar = ({ x, bar }) => (
     </div>
 );
 
-class LastDigits extends React.Component {
+class LastDigitStats extends React.Component {
     componentDidMount() {
         this.props.showLastDigitStats();
     }
@@ -46,9 +46,9 @@ class LastDigits extends React.Component {
     }
 }
 
-export default connect(({ lastDigits : l }) => ({
+export default connect(({ lastDigitStats : l }) => ({
     showLastDigitStats:l.showLastDigitStats,
     isVisible:l.isVisible,
     bars:l.bars,
     marketDisplayName:l.marketDisplayName,
-}))(LastDigits);
+}))(LastDigitStats);

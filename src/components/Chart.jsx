@@ -8,7 +8,7 @@ import Barrier from './Barrier.jsx';
 import CurrentSpot from './CurrentSpot.jsx';
 import DrawingCursor from './DrawingCursor.jsx';
 import ChartTable from './ChartTable.jsx';
-import LastDigits from './LastDigits.jsx';
+import LastDigitStats from './LastDigitStats.jsx';
 /* css + scss */
 import '../../sass/main.scss';
 
@@ -113,7 +113,7 @@ class Chart extends Component {
                                         </div>
                                     )}
                                     {showLastDigitStats && (
-                                        <LastDigits />
+                                        <LastDigitStats />
                                     )}
                                 </div>
                                 <ChartControls widgets={chartControlsWidgets} />
