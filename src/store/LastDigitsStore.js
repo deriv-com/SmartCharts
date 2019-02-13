@@ -11,7 +11,6 @@ export default class LastDigitsStore {
     count = 1000;
     minHeight = 40;
     maxHeight = 100;
-    gradiantLine = this.maxHeight / 2;
     digits = [];
     latestData = [];
     @observable bars = [];
@@ -75,7 +74,6 @@ export default class LastDigitsStore {
         const max = Math.max(...this.digits);
         this.digits.forEach((digit, idx) => {
             this.bars[idx].height = Math.round(((this.maxHeight - this.minHeight) * (digit - min) / (max - min)) + this.minHeight);
-            this.bars[idx].gradiantLine = this.bars[idx].height > this.gradiantLine ? ((this.bars[idx].height * this.gradiantLine) / this.maxHeight) : 0;
             if (digit === min) this.bars[idx].cName = 'min';
             else if (digit === max) this.bars[idx].cName = 'max';
             else this.bars[idx].cName = '';

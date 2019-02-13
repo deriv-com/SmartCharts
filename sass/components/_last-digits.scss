@@ -10,7 +10,7 @@
     .cq-bar {
         width: 10px;
         @include themify($themes) {
-            background-image: linear-gradient(to bottom, themed('LastdigitsBarBg'), rgba(themed('LastdigitsBarBg'), 0.5) var(--bar-gradiant)); /* stylelint-disable-line plugin/no-unsupported-browser-features */
+            background-color: themed('LastdigitsBarBg');
         }
         position: absolute;
         bottom: 40px;
@@ -44,12 +44,11 @@
         &.min {
             @include themify($themes) {
                 background-color: themed('LastdigitsMinBarBg');
-                background-image: none;
             }
         }
         &.max {
             @include themify($themes) {
-                background-image: linear-gradient(to bottom, themed('LastdigitsMaxBarBg'), rgba(themed('LastdigitsMaxBarBg'), 0.5) var(--bar-gradiant)); /* stylelint-disable-line plugin/no-unsupported-browser-features */
+                background-color: themed('LastdigitsMaxBarBg');
             }
         }
     }
