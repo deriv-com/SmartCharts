@@ -7,48 +7,52 @@
     &.show {
         visibility: visible;
     }
-    .cq-bar {
-        width: 10px;
-        @include themify($themes) {
-            background-color: themed('LastdigitsBarBg');
-        }
-        position: absolute;
-        bottom: 40px;
-        -webkit-transition: height 0.8s ease-in-out; /* For Safari 3.1 to 6.0 */
-        transition: height 0.8s ease-in-out;
-        border-bottom-left-radius: 16px;
-        border-bottom-right-radius: 16px;
-        border-top-left-radius: 16px;
-        border-top-right-radius: 16px;
+    .cq-bars {
+        height: 100px;
 
-        .cq-bar-title {
+        .cq-bar {
+            width: 10px;
             @include themify($themes) {
-                color: themed('LastdigitsBarText');
+                background-color: themed('LastdigitsBarBg');
             }
             position: absolute;
-            bottom: -16px;
-            width: 10px;
-            text-align: center;
+            bottom: 40px;
+            -webkit-transition: height 0.8s ease-in-out; /* For Safari 3.1 to 6.0 */
+            transition: height 0.8s ease-in-out;
+            border-bottom-left-radius: 16px;
+            border-bottom-right-radius: 16px;
+            border-top-left-radius: 16px;
+            border-top-right-radius: 16px;
 
+            .cq-bar-title {
+                @include themify($themes) {
+                    color: themed('LastdigitsBarText');
+                }
+                position: absolute;
+                bottom: -16px;
+                width: 10px;
+                text-align: center;
+
+                &.min {
+                    @include themify($themes) {
+                        color: themed('LastdigitsMinBarBg');
+                    }
+                }
+                &.max {
+                    @include themify($themes) {
+                        color: themed('LastdigitsMaxBarBg');
+                    }
+                }
+            }
             &.min {
                 @include themify($themes) {
-                    color: themed('LastdigitsMinBarBg');
+                    background-color: themed('LastdigitsMinBarBg');
                 }
             }
             &.max {
                 @include themify($themes) {
-                    color: themed('LastdigitsMaxBarBg');
+                    background-color: themed('LastdigitsMaxBarBg');
                 }
-            }
-        }
-        &.min {
-            @include themify($themes) {
-                background-color: themed('LastdigitsMinBarBg');
-            }
-        }
-        &.max {
-            @include themify($themes) {
-                background-color: themed('LastdigitsMaxBarBg');
             }
         }
     }

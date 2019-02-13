@@ -30,7 +30,7 @@ class LastDigitStats extends React.Component {
             marketDisplayName } = this.props;
         return (
             <div className={`cq-last-digits ${isVisible ? 'show' : ''}`}>
-                <div>
+                <div className="cq-bars">
                     {bars.map((bar, idx) => (
                         <Bar
                             key={`bar-${idx}`}// eslint-disable-line react/no-array-index-key

@@ -9,8 +9,6 @@ export default class LastDigitStatsStore {
     get stx() { return this.context.stx; }
 
     count = 1000;
-    minHeight = 40;
-    maxHeight = 100;
     digits = [];
     latestData = [];
     @observable bars = [];
@@ -35,7 +33,9 @@ export default class LastDigitStatsStore {
         this.digits = [];
         this.bars = [];
         this.latestData = [];
-        this.mainStore.chart.feed.offMasterDataUpdate(this.onMasterDataUpdate);
+        if (this.mainStore.chart && this.mainStore.chart.feed) {
+            this.mainStore.chart.feed.offMasterDataUpdate(this.onMasterDataUpdate);
+        }
 
         if (this.mainStore.state.showLastDigitStats) {
             for (let i = 0; i < 10; i++) {
@@ -73,7 +73,7 @@ export default class LastDigitStatsStore {
         const min = Math.min(...this.digits);
         const max = Math.max(...this.digits);
         this.digits.forEach((digit, idx) => {
-            this.bars[idx].height = Math.round(((this.maxHeight - this.minHeight) * (digit - min) / (max - min)) + this.minHeight);
+            this.bars[idx].height = `${(digit / 10) * 5}%`;
             if (digit === min) this.bars[idx].cName = 'min';
             else if (digit === max) this.bars[idx].cName = 'max';
             else this.bars[idx].cName = '';
