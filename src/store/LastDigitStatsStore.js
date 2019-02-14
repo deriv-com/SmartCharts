@@ -73,7 +73,7 @@ export default class LastDigitStatsStore {
         const min = Math.min(...this.digits);
         const max = Math.max(...this.digits);
         this.digits.forEach((digit, idx) => {
-            this.bars[idx].height = `${(digit / 10) * 5}%`;
+            this.bars[idx].height = digit / 10;
             if (digit === min) this.bars[idx].cName = 'min';
             else if (digit === max) this.bars[idx].cName = 'max';
             else this.bars[idx].cName = '';

@@ -9,7 +9,24 @@
     }
     .cq-bars {
         height: 100px;
+        @include themify($themes) {
+            color: themed('LastdigitsBarText');
+        }
 
+        .min {
+            @include themify($themes) {
+                color: themed('LastdigitsMinBarBg');
+            }
+        }
+        .max {
+            @include themify($themes) {
+                color: themed('LastdigitsMaxBarBg');
+            }
+        }
+        .cq-bar-value {
+            margin: -16px 0 0 -6px;
+            transition: opacity 0.8s linear;
+        }
         .cq-bar {
             width: 10px;
             @include themify($themes) {
@@ -25,24 +42,10 @@
             border-top-right-radius: 16px;
 
             .cq-bar-title {
-                @include themify($themes) {
-                    color: themed('LastdigitsBarText');
-                }
                 position: absolute;
                 bottom: -16px;
                 width: 10px;
                 text-align: center;
-
-                &.min {
-                    @include themify($themes) {
-                        color: themed('LastdigitsMinBarBg');
-                    }
-                }
-                &.max {
-                    @include themify($themes) {
-                        color: themed('LastdigitsMaxBarBg');
-                    }
-                }
             }
             &.min {
                 @include themify($themes) {
