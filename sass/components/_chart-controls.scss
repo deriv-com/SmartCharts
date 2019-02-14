@@ -4,7 +4,6 @@
     display: flex;
     box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.12);
     z-index: 9;
-    // flex-wrap: wrap;
     justify-content: center;
     align-items: stretch;
     box-sizing: border-box;
@@ -127,7 +126,6 @@
     }
     .cq-toggle {
         cursor: pointer;
-        // padding: 0.35em 2.6em;
         color: #575757;
     }
 }
@@ -279,8 +277,6 @@
                     min-width: 45px;
 
                     .cq-menu-btn {
-                        // padding: 8px 5px;
-
                         > .ic-icon {
                             padding: 0.35em 0em;
                         }
