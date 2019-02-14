@@ -259,9 +259,11 @@ class ChartStore {
                 const chart = this.charts[chartName];
                 const panel = chart.panel;
                 const currentQuote = this.currentQuote();
-                const x = this.pixelFromTick(currentQuote.tick, chart) + (chart.lastTickOffset || 0);
-                // Change the panel position to current spot position for drawing current price line
-                panel.left = x;
+                if (currentQuote) {
+                    const x = this.pixelFromTick(currentQuote.tick, chart) + (chart.lastTickOffset || 0);
+                    // Change the panel position to current spot position for drawing current price line
+                    panel.left = x;
+                }
                 panel.right -= 16;
             }
         });
