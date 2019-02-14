@@ -103,7 +103,6 @@ class Chart extends Component {
                                     <div className="cq-top-ui-widgets">
                                         {React.Children.map(<TopWidgets />, child => React.cloneElement(child, {
                                             MainProp: {} }))}
-                                        <tt />
                                     </div>
                                     <div className={`chartContainer ${isDrawing ? 'ciq-draw-mode' : ''}`} style={{ height: chartContainerHeight }}>
                                         <Crosshair />

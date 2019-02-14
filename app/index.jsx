@@ -27,7 +27,7 @@ import { configure } from 'mobx';
 import './app.scss';
 import './doorbell';
 import { whyDidYouUpdate }  from 'why-did-you-update';
-import { BinaryAPI /* , ActiveSymbols, TradingTimes */ } from './binaryapi';
+import { BinaryAPI, ActiveSymbols, TradingTimes } from './binaryapi';
 import { ConnectionManager, StreamManager } from './connection';
 import Notification from './Notification.jsx';
 import ChartNotifier from './ChartNotifier.js';
@@ -111,7 +111,11 @@ class App extends Component {
     constructor(props) {
         super(props);
         this.notifier = new ChartNotifier();
+        this.symbolTradingTimes = null;
         this.api = new BinaryAPI(requestAPI, requestSubscribe, requestForget);
+        this.tradingTimes = new TradingTimes(this.api);
+        this.activeSymbols = new ActiveSymbols(this.api, this.tradingTimes);
+
         const layoutString = localStorage.getItem(`layout-${chartId}`),
             layout = JSON.parse(layoutString !== '' ? layoutString : '{}');
         let chartType;
@@ -119,6 +123,20 @@ class App extends Component {
         let granularity;
         let endEpoch;
         let settings = createObjectFromLocalStorage('smartchart-setting');
+        let symbol;
+
+        if (layout && layout.symbols[0]) {
+            symbol = layout.symbols[0].symbol;
+        }
+
+        this.tradingTimes.initialize().then(() => {
+            if (symbol && this.tradingTimes._tradingTimesMap) {
+                const symbolTrading = this.tradingTimes._tradingTimesMap[symbol];
+                this.symbolTradingTimes = (symbolTrading && symbolTrading.times)
+                    ? symbolTrading.times
+                    : null;
+            }
+        });
 
         if (settings) {
             settings.language = language;
@@ -202,6 +220,11 @@ class App extends Component {
         logEvent(LogCategories.ChartTitle, LogActions.MarketSelector, symbol);
         this.notifier.removeByCategory('activesymbol');
         this.setState({ symbol });
+
+        const symbolTrading = this.tradingTimes._tradingTimesMap[symbol];
+        this.symbolTradingTimes = (symbolTrading && symbolTrading.times)
+            ? symbolTrading.times
+            : null;
     };
 
     saveSettings = (settings) => {
@@ -240,7 +263,12 @@ class App extends Component {
     renderTopWidgets = () => (
         <>
             <ChartTitle onChange={this.symbolChange} />
-            {this.state.settings.historical ? <ChartHistory onChange={this.handleDateChange} diffTime={this.state.diffTime} /> : ''}
+            {this.state.settings.historical ? (
+                <ChartHistory
+                    onChange={this.handleDateChange}
+                    diffTime={this.state.diffTime}
+                />
+            ) : ''}
             <AssetInformation />
             <ComparisonList />
             <Notification
