@@ -252,6 +252,29 @@ class ChartStore {
             return !!_self.stateStore.endEpoch;
         };
 
+        CIQ.ChartEngine.prototype.prepend('drawCurrentHR', function (...args) { // eslint-disable-line no-unused-vars
+            const mainSeriesRenderer = this.mainSeriesRenderer || {};
+            if (mainSeriesRenderer.noCurrentHR) return;
+            for (const chartName in this.charts) {
+                const chart = this.charts[chartName];
+                const panel = chart.panel;
+                const currentQuote = this.currentQuote();
+                const x = this.pixelFromTick(currentQuote.tick, chart) + (chart.lastTickOffset || 0);
+                // Change the panel.left to current spot position for drawing current price line
+                panel.left = x;
+            }
+        });
+        CIQ.ChartEngine.prototype.append('drawCurrentHR', function (...args) { // eslint-disable-line no-unused-vars
+            const mainSeriesRenderer = this.mainSeriesRenderer || {};
+            if (mainSeriesRenderer.noCurrentHR) return;
+            for (const chartName in this.charts) {
+                const chart = this.charts[chartName];
+                const panel = chart.panel;
+                // Set the panel.left to its original value
+                panel.left = 0;
+            }
+        });
+
         this.rootNode = rootNode;
         this.modalNode = modalNode;
         this.chartNode = this.rootNode.querySelector('.ciq-chart-area');
@@ -308,81 +331,6 @@ class ChartStore {
                 color,
             };
             CIQ[yaxisLabelStyle](params);
-        };
-
-        CIQ.ChartEngine.prototype.drawCurrentHR = function (...args) {
-            if (this.runPrepend('drawCurrentHR', ...args)) return;
-            let backgroundColor, color;
-            const mainSeriesRenderer = this.mainSeriesRenderer || {};
-            if (mainSeriesRenderer.noCurrentHR) return;
-            const highLowBars = mainSeriesRenderer.highLowBars || this.highLowBars[this.layout.chartType];
-            for (const chartName in this.charts) {
-                const chart = this.charts[chartName];
-                const panel = chart.panel;
-                const yAxis = panel.yAxis;
-                if (panel.hidden) continue;
-                if (yAxis.drawCurrentPriceLabel === false || yAxis.noDraw) continue;
-                if (!mainSeriesRenderer.params) continue;
-                let whichSet = yAxis.whichSet;
-                if (!whichSet) whichSet = 'dataSet';
-                if (this.isHistoricalModeSet && whichSet !== 'dataSegment') continue;
-                let l = chart[whichSet].length; const cw = this.layout.candleWidth;
-                if (whichSet === 'dataSegment') {
-                    // this crazy equation just to find the last bar displaying at least 50% on the screen
-                    while (l > (chart.width - this.micropixels + (cw) / 2 + 1) / cw) l--;
-                }
-                if (l && chart[whichSet][l - 1]) {
-                    let field = chart.defaultPlotField;
-                    if (!field || highLowBars) field = 'Close';
-                    let prevClose, currentClose;
-                    do {
-                        prevClose = chart[whichSet][--l][field];
-                        currentClose = prevClose;
-                        if (l === 0) break;
-                    } while (currentClose === null);
-                    if (whichSet === 'dataSet' && chart.currentQuote) {
-                        currentClose = chart.currentQuote[field];
-                    } else if (chart[whichSet].length >= 2) {
-                        const pquote = chart[whichSet][l - 1];
-                        if (pquote) prevClose = pquote[field];
-                    }
-                    if (currentClose < prevClose) {
-                        backgroundColor = this.canvasStyle('stx_current_hr_down').backgroundColor;
-                        color = this.canvasStyle('stx_current_hr_down').color;
-                    } else {
-                        backgroundColor = this.canvasStyle('stx_current_hr_up').backgroundColor;
-                        color = this.canvasStyle('stx_current_hr_up').color;
-                    }
-                    if (chart.transformFunc) currentClose = chart.transformFunc(this, chart, currentClose);
-                    let txt;
-                    // If a chart panel, then always display at least the number of decimal places as calculated by masterData (panel.chart.decimalPlaces)
-                    // but if we are zoomed to high granularity then expand all the way out to the y-axis significant digits (panel.yAxis.printDecimalPlaces)
-                    let labelDecimalPlaces = Math.max(panel.yAxis.printDecimalPlaces, panel.chart.decimalPlaces);
-                    // ... and never display more decimal places than the symbol is supposed to be quoting at
-                    if (yAxis.maxDecimalPlaces || yAxis.maxDecimalPlaces === 0) labelDecimalPlaces = Math.min(labelDecimalPlaces, yAxis.maxDecimalPlaces);
-                    if (yAxis.priceFormatter) {
-                        txt = yAxis.priceFormatter(this, panel, currentClose, labelDecimalPlaces);
-                    } else {
-                        txt = this.formatYAxisPrice(currentClose, panel, labelDecimalPlaces);
-                    }
-                    const currentQuote = this.currentQuote();
-                    const y = this.pixelFromTransformedValue(currentClose, panel);
-                    const x = this.pixelFromTick(currentQuote.tick, chart) + (chart.lastTickOffset || 0);
-                    this.createYAxisLabel(panel, txt, y, backgroundColor, color);
-
-                    if (this.preferences.currentPriceLine === true && this.isHome()) {
-                        panel.chart.context.globalCompositeOperation = 'destination-over';
-                        // Draw the current price line from current spot
-                        this.plotLine(x, panel.right - 16, y, y, backgroundColor, 'segment', panel.chart.context, panel, {
-                            pattern: 'dashed',
-                            lineWidth: 1,
-                            opacity: 0.8,
-                        });
-                        panel.chart.context.globalCompositeOperation = 'source-over';
-                    }
-                }
-            }
-            this.runAppend('drawCurrentHR', ...args);
         };
 
         const {
