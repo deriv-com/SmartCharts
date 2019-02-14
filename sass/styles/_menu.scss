@@ -35,7 +35,6 @@ $transition-duration: 300ms;
     margin-top: 5px;
     @include themify($themes) {
         color: themed('DialogBodyText');
-        border: 1px solid themed('DialogBorder');
         background-color: themed('DialogBodyBg');
     }
 
@@ -84,7 +83,7 @@ $transition-duration: 300ms;
     .cq-categorical-display {
         .cq-lookup-filters {
             @include themify($themes) {
-                background: themed('DialogHeadBg');
+                background: themed('CatDisplayFilterBg');
             }
         }
     }
