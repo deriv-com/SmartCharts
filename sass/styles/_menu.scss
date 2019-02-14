@@ -47,15 +47,12 @@ $transition-duration: 300ms;
     .title {
         height: 20px;
         line-height: 20px;
-        font-size: 1em;
-        display: flex;
-        padding: 1em;
+        padding: 1em 1.6em;
 
         .title-text {
             display: block;
-            font-size: 1em;
+            font-size: 1.2em;
             font-weight: 400;
-            //padding: 0 0.7em;
         }
 
         @include themify($themes) {
