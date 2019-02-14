@@ -97,6 +97,7 @@ html, body {
     margin: 3px 2px;
     opacity: 0;
     transition: opacity 0.5s;
+    display: none;
     @include themify($themes) {
         background-color: themed('ChartBg');
     }
@@ -106,6 +107,9 @@ html, body {
     }
     &:active svg { /* Scale up when active */
         transform: scale(1.2, 1.2);
+    }
+    &.stx-show {
+        display: block;
     }
 }
 

@@ -52,7 +52,7 @@ export default class StudyLegendStore {
             if (panel) {
                 // Hide the up arrow from first indicator to prevent user
                 // from moving the indicator panel above the main chart
-                this.stx.panels[panel].up.style.display = 'none';
+                this.stx.panels[panel].up.className = 'stx-btn-panel';
             }
         });
         this.renderLegend();
