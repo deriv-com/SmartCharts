@@ -252,7 +252,7 @@ class ChartStore {
             return !!_self.stateStore.endEpoch;
         };
 
-        CIQ.ChartEngine.prototype.prepend('drawCurrentHR', function (...args) { // eslint-disable-line no-unused-vars
+        CIQ.ChartEngine.prototype.prepend('drawCurrentHR', function () {
             const mainSeriesRenderer = this.mainSeriesRenderer || {};
             if (mainSeriesRenderer.noCurrentHR) return;
             for (const chartName in this.charts) {
@@ -264,7 +264,7 @@ class ChartStore {
                 panel.left = x;
             }
         });
-        CIQ.ChartEngine.prototype.append('drawCurrentHR', function (...args) { // eslint-disable-line no-unused-vars
+        CIQ.ChartEngine.prototype.append('drawCurrentHR', function () {
             const mainSeriesRenderer = this.mainSeriesRenderer || {};
             if (mainSeriesRenderer.noCurrentHR) return;
             for (const chartName in this.charts) {
