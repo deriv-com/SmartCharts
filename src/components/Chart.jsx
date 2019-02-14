@@ -72,6 +72,9 @@ class Chart extends Component {
         const contextWidth =  !isMobile ? `smartcharts-${containerWidth}` : '';
         const TopWidgets = topWidgets || this.defaultTopWidgets;
 
+        React.Children.map(TopWidgets(), child => React.cloneElement(child, { foo: 'bar' }));
+
+
         return (
             <div className={`smartcharts smartcharts-${theme} ${contextWidth}`}>
                 <div
@@ -98,7 +101,9 @@ class Chart extends Component {
                                         <CurrentSpot />
                                     </RenderInsideChart>
                                     <div className="cq-top-ui-widgets">
-                                        <TopWidgets />
+                                        {React.Children.map(<TopWidgets />, child => React.cloneElement(child, {
+                                            MainProp: {} }))}
+                                        <tt />
                                     </div>
                                     <div className={`chartContainer ${isDrawing ? 'ciq-draw-mode' : ''}`} style={{ height: chartContainerHeight }}>
                                         <Crosshair />

@@ -7,6 +7,7 @@ import './chart-history.scss';
 class ChartHistory extends React.PureComponent {
     constructor(props) {
         super(props);
+        console.log('props', props);
         this.state = {
             date: moment().format('YYYY/MM/DD'),
             focusOnDate: false,
@@ -19,6 +20,10 @@ class ChartHistory extends React.PureComponent {
         this.setState({
             focusOnDate: true,
         });
+    }
+
+    componentDidUpdate() {
+        console.log('componentDidUpdate', this.props);
     }
 
     onChangeDate = ({ target }) => {
