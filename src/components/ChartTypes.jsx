@@ -5,20 +5,21 @@ import { SettingIcon } from './Icons.jsx';
 import '../../sass/components/_chart-types.scss';
 
 const ChartTypes = ({
-    Type,
-    ChartTypeMenu,
-    menuOpen,
-    setOpen,
-    onChange,
+    chartId,
     ChartTypeList,
-    showAggregateDialog,
+    ChartTypeMenu,
     enabled,
+    menuOpen,
+    onChange,
+    setOpen,
+    showAggregateDialog,
+    Type,
 }) => {
     if (Type === undefined) return (null);
 
     const onItemClick = (idx, chartType) => {
         if (Type.id !== chartType.id) {
-            onChange(chartType.id, chartType.candleOnly);
+            onChange(chartType.id, chartType.candleOnly, chartId);
         }
         setOpen(false);
     };
@@ -65,12 +66,13 @@ const ChartTypes = ({
     );
 };
 
-export default connect(({ chartType }) => ({
-    Type: chartType.type,
-    setOpen: chartType.menu.setOpen,
-    onChange: chartType.setTypeFromUI,
+export default connect(({ chartType, state }) => ({
+    chartId            : state.chartId,
+    ChartTypeMenu      : chartType.ChartTypeMenu,
+    ChartTypeList      : chartType.ChartTypeList,
+    menuOpen           : chartType.menu.open,
+    onChange           : chartType.setTypeFromUI,
+    setOpen            : chartType.menu.setOpen,
     showAggregateDialog: chartType.showAggregateDialog,
-    menuOpen: chartType.menu.open,
-    ChartTypeMenu: chartType.ChartTypeMenu,
-    ChartTypeList: chartType.ChartTypeList,
+    Type               : chartType.type,
 }))(ChartTypes);
