@@ -29,13 +29,15 @@ class ChartState {
             const times = [];
 
             // Make points
-            for (let i = 1; i <= 3; i++) {
-                times.push(lastData.DT.getTime() + (60 * 1000 * (i * 2 - 1)));
-            }
+            [1, 3, 5].forEach((x) => {
+                times.push(lastData.DT.getTime() + (60 * 1000 * x));
+            });
 
-
+            /**
+             * ### Add Bar
+             * try adding invisible bar in the placess which
+             * there are no bar.
             times.forEach((ts) => {
-                // ### add bar
                 this.stxx.updateChartData(
                     {
                         DT: (new Date(ts)),
@@ -47,8 +49,15 @@ class ChartState {
             });
             this.stxx.createDataSet();
             this.stxx.draw();
+             */
 
             setTimeout(() => {
+                /**
+                 * ### Add Marker
+                 * adding marker on the points between interval range
+                 * interval is 2 minues, so this code suppose to add
+                 * marker within 1 minutes
+                 */
                 times.forEach((ts, indx) => {
                     const newNode = document.getElementById('stxEventPrototype').cloneNode(true);
                     newNode.id = null;
