@@ -45,17 +45,17 @@ $transition-duration: 300ms;
         pointer-events: initial;
     }
     .title {
-        height: 40px;
-        line-height: 40px;
-        font-size: 16px;
+        height: 20px;
+        line-height: 20px;
+        font-size: 1em;
         display: flex;
+        padding: 1em;
 
         .title-text {
             display: block;
-            font-size: 16px;
-            line-height: 40px;
+            font-size: 1em;
             font-weight: 400;
-            padding: 0 0.7em;
+            //padding: 0 0.7em;
         }
 
         @include themify($themes) {
