@@ -148,7 +148,10 @@ class Feed {
             }
 
             subscription.onChartData((tickResponse) => {
-                this._appendChartData(tickResponse, key, comparisonChartSymbol);
+                // Append comming ticks to chart only if it belongs to selected symbol after symbol changes
+                if (isComparisonChart || symbol === this._stx.chart.symbol) {
+                    this._appendChartData(tickResponse, key, comparisonChartSymbol);
+                }
             });
 
             // if symbol is changed before request is completed, past request needs to be forgotten:
@@ -360,6 +363,7 @@ class Feed {
         const { symbol } = this._unpackKey(key);
         const comparisonChartSymbol = (this._stx.chart.symbol !== symbol) ? symbol : undefined;
         this._activeStreams[key].resume().then((quotes) => {
+            console.log('_resumeStream', key);
             this._appendChartData(quotes, key, comparisonChartSymbol);
         });
     }
