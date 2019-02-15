@@ -37,6 +37,7 @@ class ChartState {
              * ### Add Bar
              * try adding invisible bar in the placess which
              * there are no bar.
+             */
             times.forEach((ts) => {
                 this.stxx.updateChartData(
                     {
@@ -44,12 +45,11 @@ class ChartState {
                         Close: null,
                     },
                     null,
-                    { useAsLastSale: true, fillGaps: true },
+                    { fillGaps: true },
                 );
             });
             this.stxx.createDataSet();
             this.stxx.draw();
-             */
 
             setTimeout(() => {
                 /**
@@ -65,7 +65,7 @@ class ChartState {
                     CIQ.appendClassName(newNode, 'dividend');
                     new CIQ.Marker({
                         stx: this.stxx,
-                        xPositioner: 'date',
+                        yPositioner: 'top',
                         x: (new Date(ts)),
                         label: 'events',
                         node: newNode,
