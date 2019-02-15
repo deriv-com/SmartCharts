@@ -363,7 +363,6 @@ class Feed {
         const { symbol } = this._unpackKey(key);
         const comparisonChartSymbol = (this._stx.chart.symbol !== symbol) ? symbol : undefined;
         this._activeStreams[key].resume().then((quotes) => {
-            console.log('_resumeStream', key);
             this._appendChartData(quotes, key, comparisonChartSymbol);
         });
     }
