@@ -966,13 +966,8 @@ $spot-color: #0298d3;
             margin-left: -2px !important;
         }
     }
-    .stx-panel-control {
-        .stx-panel-title {
-            border: none;
-        }
-        .stx-btn-panel {
-            //CSS images cause cross origin security error when export png
-            display: none !important;
-        }
+    .ciq-chart.ciq-screenshot .stx-btn-panel {
+        //CSS images cause cross origin security error when export png
+        display: none !important;
     }
 }
