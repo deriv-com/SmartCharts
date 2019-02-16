@@ -16,9 +16,11 @@ export default class MarkerStore {
     @observable display;
     @observable left;
     @observable bottom;
+    get stxx() { return this.chartStore.stxx; }
 
     constructor(mainStore) {
         this.mainStore = mainStore;
+        this.chartStore = mainStore.chart;
         this.stx = this.mainStore.chart.context.stx;
         this.chart = this.stx.chart;
         this.panel = this.chart.panel;
@@ -45,6 +47,7 @@ export default class MarkerStore {
         let isUpdatePositionRequired = false;
         updatePropIfChanged(this, { x, xPositioner }, () => { isUpdateMarkerTickRequired = true; });
         updatePropIfChanged(this, { y, yPositioner }, () => { isUpdatePositionRequired   = true; });
+
         if (isUpdateMarkerTickRequired) {
             this.updateMarkerTick(); // also calls updatePosition
         } else if (isUpdatePositionRequired) {
@@ -82,12 +85,21 @@ export default class MarkerStore {
             if (dummyMarker.params.xPositioner === 'date'
                 && !this.isDistantFuture
                 && this.stx.masterData[this.tick]
-                && this.stx.masterData[this.tick].DT.valueOf() !== dummyMarker.params.x.valueOf()) {
-                console.log('Marker will not be shown because there is no tick data in ', dummyMarker.params.x);
-                this.hideMarker();
-                this.tick = null;
-                this.destructor();
-                return;
+                && this.stx.masterData[this.tick].DT.valueOf() !== dummyMarker.params.x.valueOf()
+            ) {
+                /**
+                 * Adding an invisible bar if the bar
+                 * does not exist on the masterData
+                 */
+                this.stxx.updateChartData(
+                    {
+                        DT: dummyMarker.params.x,
+                        Close: null,
+                    },
+                    null,
+                    { fillGaps: true },
+                );
+                this.stxx.createDataSet();
             }
 
             if (this.xPositioner === 'bar' && this.x) {
