@@ -119,16 +119,19 @@ html, body {
 /* Up/Down Arrow indicators */
 .cq-change {
     &:after {
-        float: left;
+        float: right;
         margin-top: 5px;
         margin-right: 5px;
         @include triangle-base(6px);
     }
     &.up:after {
-        border-bottom: 8px solid rgb(76, 175, 80);
+        border-bottom: 8px solid $COLOR_GREEN;
     }
     &.down:after {
-        border-top: 8px solid rgb(249, 84, 84);
+        border-top: 8px solid $COLOR_RED;
+    }
+    .cq-todays-change-percent {
+        padding-left: 3px;
     }
 }
 /* --------------------------------------------------------- CHART CONTROLS --------------------------------------------------------- */
@@ -782,16 +785,6 @@ html, body {
     font-family: 'Roboto';
 }
 
-/* --------------------------------------------------------- CHART AREA ELEMENTS --------------------------------------------------------- */
-
-.cq-down {
-    color: $chart-red;
-}
-
-.cq-up {
-    color: $chart-green;
-}
-
 /* --------------------------------------------------------- CHART SDK --------------------------------------------------------- */
 
 /* -------- Axis tabs and current Prices -------- */
@@ -809,7 +802,6 @@ html, body {
     width: 100%;
     overflow: hidden;
     cursor: ns-resize;
-    z-index: 20;
     @include themify($themes) {
         box-shadow: 0 0 0px 2px themed('ChartBg');
         background: themed('ChartBg');

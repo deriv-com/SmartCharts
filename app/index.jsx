@@ -25,7 +25,6 @@ import moment from 'moment';
 import 'url-search-params-polyfill';
 import { configure } from 'mobx';
 import './app.scss';
-import './doorbell';
 import { whyDidYouUpdate }  from 'why-did-you-update';
 import { BinaryAPI, ActiveSymbols, TradingTimes } from './binaryapi';
 import { ConnectionManager, StreamManager } from './connection';

@@ -4,47 +4,6 @@
     display: flex;
 }
 
-/* Doorbell */
-
-#doorbell-button {
-    left: -30px;
-    bottom: 30%;
-    background: #4c5794;
-    color: #fff;
-    border: 1px solid #4c5794;
-    border-bottom: none;
-    padding: 4px 8px;
-    transform: rotate(90deg);
-    max-width: 80px;
-    opacity: var(--doorbell-opacity);
-}
-
-#doorbell form {
-    box-shadow: none;
-    border: 1px solid #4c4c4c;
-
-    input, textarea {
-        outline: 0;
-
-        &:focus {
-            border: 1px solid #4c5794;
-        }
-    }
-    #doorbell-submit-button {
-        color: #4c5794;
-        border: none;
-        background: #fff;
-
-        &:hover {
-            background: #fff;
-        }
-    }
-}
-
-#doorbell-background {
-    opacity: 0;
-}
-
 .smartcharts-mobile {
     /*
       For charts app, we want the chart controls to still

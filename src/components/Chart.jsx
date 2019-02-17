@@ -8,6 +8,7 @@ import Barrier from './Barrier.jsx';
 import CurrentSpot from './CurrentSpot.jsx';
 import DrawingCursor from './DrawingCursor.jsx';
 import ChartTable from './ChartTable.jsx';
+import LastDigits from './LastDigits.jsx';
 /* css + scss */
 import '../../sass/main.scss';
 
@@ -66,6 +67,7 @@ class Chart extends Component {
             isDrawing,
             theme,
             position,
+            showLastDigitStats,
         } = this.props;
 
         const currentPosition = `cq-chart-control-${(position && !isMobile) ? position : 'bottom'}`;
@@ -114,6 +116,9 @@ class Chart extends Component {
                                             {t.translate('Chart data is not available for this symbol.')}
                                         </div>
                                     )}
+                                    {showLastDigitStats && (
+                                        <LastDigits />
+                                    )}
                                 </div>
                                 <ChartControls widgets={chartControlsWidgets} />
                             </div>
@@ -142,4 +147,5 @@ export default connect(({ chart, drawTools, studies, chartSetting, chartType, st
     isDrawing: drawingCursor.isDrawing,
     theme: chartSetting.theme,
     position: chartSetting.position,
+    showLastDigitStats:state.showLastDigitStats,
 }))(Chart);

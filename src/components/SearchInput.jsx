@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { CloseIcon, SearchIcon } from './Icons.jsx';
+import { CloseCircleIcon, SearchIcon } from './Icons.jsx';
 import { connect } from '../store/Connect';
 
 class SearchInput extends Component {
@@ -28,7 +28,7 @@ class SearchInput extends Component {
                     placeholder={placeholder}
                 />
                 <SearchIcon />
-                <CloseIcon className="icon-reset" onClick={this.clearFilterText} />
+                <CloseCircleIcon className="icon-reset" onClick={this.clearFilterText} />
             </div>
         );
     }
