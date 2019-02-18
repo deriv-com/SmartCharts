@@ -43,6 +43,8 @@ export default class LastDigitStatsStore {
                 this.bars.push({ height:0, cName:'' });
             }
 
+            this.updateChartMargin(150);
+
             if (this.stx.masterData && this.stx.masterData.length >= this.count) {
                 this.latestData  = this.stx.masterData.slice(-this.count).map(x => x.Close.toString());
             } else {
@@ -56,7 +58,15 @@ export default class LastDigitStatsStore {
             });
             this.updateBars();
             this.mainStore.chart.feed.onMasterDataUpdate(this.onMasterDataUpdate);
+        } else {
+            this.updateChartMargin(50);
         }
+    }
+
+    updateChartMargin =(margin) => {
+        this.stx.chart.yAxis.initialMarginBottom = margin;
+        this.stx.calculateYAxisMargins(this.stx.chart.panel.yAxis);
+        this.stx.draw();
     }
 
     @action.bound onMasterDataUpdate({ Close }) {
