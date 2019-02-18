@@ -1,7 +1,7 @@
 .cq-last-digits {
     position: absolute;
     bottom: 85px;
-    left: calc(50% - 170px);
+    left: calc(50% - 150px);
     visibility: hidden;
 
     &.show {
@@ -44,9 +44,10 @@
 
             .cq-bar-title {
                 position: absolute;
-                bottom: -16px;
+                bottom: -20px;
                 width: 10px;
                 text-align: center;
+                font-size: 14px;
             }
             &.min {
                 @include themify($themes) {
@@ -62,8 +63,7 @@
     }
     .cq-bar-footer {
         text-align: center;
-        width: 370px;
-        font-size: 14px;
+        width: 325px;
 
         @include themify($themes) {
             color: themed('LastdigitsBarFooter');
