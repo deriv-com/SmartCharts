@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: French\n"
 "Language: fr_FR\n"
-"PO-Revision-Date: 2019-02-18 01:42\n"
+"PO-Revision-Date: 2019-02-18 01:56\n"
 
 msgid " already exists."
 msgstr " existe déja."
@@ -49,7 +49,7 @@ msgid "Box Size"
 msgstr "Taille de la boîte"
 
 msgid "C"
-msgstr ""
+msgstr "C"
 
 msgid "Callout"
 msgstr "Légende"
@@ -61,7 +61,7 @@ msgid "Candle"
 msgstr "Bougie"
 
 msgid "Change"
-msgstr ""
+msgstr "Changement"
 
 msgid "Channel"
 msgstr "Canal"
@@ -79,7 +79,7 @@ msgid "Clear All"
 msgstr "Tout Effacer"
 
 msgid "Close"
-msgstr ""
+msgstr "Fermeture"
 
 msgid "CLOSE"
 msgstr "CLOTURE"
@@ -109,7 +109,7 @@ msgid "Dark Mode"
 msgstr "Mode Sombre"
 
 msgid "Date"
-msgstr ""
+msgstr "Date"
 
 msgid "Day"
 msgstr "Jour"
@@ -163,13 +163,13 @@ msgid "Gartley"
 msgstr "Gartley"
 
 msgid "H"
-msgstr ""
+msgstr "H"
 
 msgid "Heikin Ashi"
 msgstr "Heikin Ashi"
 
 msgid "High"
-msgstr ""
+msgstr "Haut"
 
 msgid "HIGH"
 msgstr "PLUS HAUT"
