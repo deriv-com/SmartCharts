@@ -1,7 +1,7 @@
 .cq-last-digits {
     position: absolute;
     bottom: 85px;
-    left: calc(50% - 150px);
+    left: calc(50% - 170px);
     visibility: hidden;
 
     &.show {
@@ -62,9 +62,11 @@
     }
     .cq-bar-footer {
         text-align: center;
-        width: 325px;
+        width: 370px;
+        font-size: 14px;
+
         @include themify($themes) {
-            color: themed('LastdigitsBarText');
+            color: themed('LastdigitsBarFooter');
         }
     }
 }
