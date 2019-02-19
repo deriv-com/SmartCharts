@@ -104,18 +104,6 @@ class App extends React.Component {
                     this.setState({
                         granularity: timePeriod,
                     });
-                    // const isCandle = this.state.isChartTypeCandle;
-                    // if (isCandle && timePeriod === 0) {
-                    //     this.setState({
-                    //         chartType: 'mountain',
-                    //         isChartTypeCandle: false,
-                    //     });
-                    // } else if (!isCandle && timePeriod !== 0) {
-                    //     this.setState({
-                    //         chartType: 'candle',
-                    //         isChartTypeCandle: true,
-                    //     });
-                    // }
                 }}
             />
             {isMobile ? '' : <ChartSize />}
