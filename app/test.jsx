@@ -14,10 +14,12 @@ import { // eslint-disable-line import/no-extraneous-dependencies
     DrawTools,
     ChartSetting,
     Share,
+    Marker,
 } from '@binary-com/smartcharts'; // eslint-disable-line import/no-unresolved
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './test.scss';
+import moment from 'moment';
 import { ConnectionManager, StreamManager } from './connection';
 
 setSmartChartsPublicPath('./dist/');
@@ -46,20 +48,6 @@ const connectionManager = new ConnectionManager({
 
 const streamManager = new StreamManager(connectionManager);
 
-const renderControls = () => (
-    <>
-        {isMobile ? '' : <CrosshairToggle />}
-        <ChartTypes />
-        <StudyLegend />
-        <Comparison />
-        <DrawTools />
-        <Views />
-        <Share />
-        <Timeperiod />
-        {isMobile ? '' : <ChartSize />}
-        <ChartSetting />
-    </>
-);
 
 const requestAPI = connectionManager.send.bind(connectionManager);
 const requestSubscribe = streamManager.subscribe.bind(streamManager);
@@ -69,6 +57,7 @@ class App extends React.Component {
     state = {
         highLow: {},
         draggable: true,
+        granularity: 120,
     };
 
     onPriceLineDisableChange = (evt) => {
@@ -101,6 +90,39 @@ class App extends React.Component {
         this.setState({ ...nextState, barrierType });
     };
 
+    renderControls = () => (
+        <>
+            {isMobile ? '' : <CrosshairToggle />}
+            <ChartTypes />
+            <StudyLegend />
+            <Comparison />
+            <DrawTools />
+            <Views />
+            <Share />
+            <Timeperiod
+                onChange={(timePeriod) => {
+                    this.setState({
+                        granularity: timePeriod,
+                    });
+                    // const isCandle = this.state.isChartTypeCandle;
+                    // if (isCandle && timePeriod === 0) {
+                    //     this.setState({
+                    //         chartType: 'mountain',
+                    //         isChartTypeCandle: false,
+                    //     });
+                    // } else if (!isCandle && timePeriod !== 0) {
+                    //     this.setState({
+                    //         chartType: 'candle',
+                    //         isChartTypeCandle: true,
+                    //     });
+                    // }
+                }}
+            />
+            {isMobile ? '' : <ChartSize />}
+            <ChartSetting />
+        </>
+    );
+
     render() {
         const { barrierType, highLow : { high, low }, hidePriceLines, draggable, relative, shadeColor } = this.state;
         const barriers = barrierType ? [{
@@ -115,26 +137,37 @@ class App extends React.Component {
             high,
             low,
         }] : [];
+
+        const MarkerTimes = [];
+
+        for (let i = 0; i < 5; i++) {
+            MarkerTimes.push(moment().utc().second(0).subtract(i + 3, 'minutes')
+                .unix());
+        }
+
         return (
             <div className="grid">
                 <div className="chart-instance">
                     <SmartChart
                         onSymbolChange={symbol => console.log('Symbol has changed to:', symbol)}
                         isMobile={isMobile}
-                        chartControlsWidgets={renderControls}
+                        chartControlsWidgets={this.renderControls}
                         requestAPI={requestAPI}
                         requestSubscribe={requestSubscribe}
                         requestForget={requestForget}
                         barriers={barriers}
-                    />
-                </div>
-                <div className="side-chart">
-                    <SmartChart
-                        isMobile={isMobile}
-                        requestAPI={requestAPI}
-                        requestSubscribe={requestSubscribe}
-                        requestForget={requestForget}
-                    />
+                        granularity={this.state.granularity}
+                    >
+                        {MarkerTimes.map(x => (
+                            <Marker
+                                key={x}
+                                className="chart-marker-line"
+                                x={x}
+                                xPositioner="epoch"
+                                yPositioner="top"
+                            />
+                        ))}
+                    </SmartChart>
                 </div>
                 <div className="bottom-blob">
                     <label htmlFor="barrierType">
