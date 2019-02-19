@@ -35,12 +35,8 @@
             }
             position: absolute;
             bottom: 40px;
-            -webkit-transition: height 0.8s ease-in-out; /* For Safari 3.1 to 6.0 */
             transition: height 0.8s ease-in-out;
-            border-bottom-left-radius: 16px;
-            border-bottom-right-radius: 16px;
-            border-top-left-radius: 16px;
-            border-top-right-radius: 16px;
+            border-radius: 16px;
 
             .cq-bar-title {
                 position: absolute;

@@ -4,8 +4,8 @@ import '../../sass/components/_last-digits.scss';
 
 const Bar = ({ x, bar }) => (
     <div className={`cq-bar ${bar.cName}`} style={{ height: `${bar.height * 5}%`, left : (x * 35) }}>
-        <div className={`cq-bar-value ${bar.cName}`} style={{ opacity: `${bar.height === 0 ? 0 : 1}` }}>{`${bar.height.toFixed(1)}%`}</div>
-        <span className={`cq-bar-title ${bar.cName}`}>{x}</span>
+        <div className="cq-bar-value" style={{ opacity: `${bar.height === 0 ? 0 : 1}` }}>{`${bar.height.toFixed(1)}%`}</div>
+        <span className="cq-bar-title">{x}</span>
     </div>
 );
 
