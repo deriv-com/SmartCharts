@@ -391,6 +391,8 @@ class ChartStore {
 
         const stxx = this.stxx = new CIQ.ChartEngine(engineParams);
 
+        stxx.isAutoScale = settings.isAutoScale || false;
+
         ChartStore.chartCount += 1;
 
         const deleteElement = stxx.chart.panel.holder.parentElement.querySelector('.mouseDeleteText');
