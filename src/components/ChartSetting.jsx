@@ -125,7 +125,7 @@ const ChartSetting = ({
                     className="icon-back-menu"
                     onClick={() => setView()}
                 />
-                {t.translate('Language')}
+                <div className="title-text">{t.translate('Language')}</div>
             </div>
             <div className="body">
                 <div className="ciq-list ciq-list-language">

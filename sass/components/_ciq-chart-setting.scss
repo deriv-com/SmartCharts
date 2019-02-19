@@ -11,8 +11,7 @@
     }
     .title {
         > .icon-back-menu {
-            line-height: 45px;
-            margin: 0 5px 0 10px !important;
+            display: inline-block;
             cursor: pointer;
         }
     }
@@ -104,6 +103,11 @@
 
         &.container-language {
             height: 300px;
+
+            .title-text {
+                position: relative;
+                bottom: 4px;
+            }
         }
         .cq-setting-main,
         .cq-setting-language {

@@ -47,10 +47,10 @@ $transition-duration: 300ms;
     .title {
         height: 20px;
         line-height: 20px;
-        padding: 1em 1.6em;
+        padding: 1em 1.6em 0.3em;
 
         .title-text {
-            display: block;
+            display: inline-block;
             font-size: 1.2em;
             font-weight: 400;
         }
