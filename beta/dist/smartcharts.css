@@ -54,11 +54,12 @@ html,body{-ms-touch-action:none;margin:0px}
 .stx-btn:hover{color:#444444;border:solid 1px #c5c5c5;box-shadow:0px 1px 1px rgba(0,0,0,0.1),inset 0px -8px 6px rgba(100,100,100,0.03)}
 .stx-btn:active{color:#333;box-shadow:inset 0px 8px 6px rgba(100,100,100,0.03)}
 .stx-btn-panel,.stx-btn-panel span{display:inline-block;width:25px;height:25px;cursor:pointer;transition:-webkit-transform 0.2s;transition:transform 0.2s;transition:transform 0.2s, -webkit-transform 0.2s}
-.stx-btn-panel{margin:3px 2px;opacity:0;transition:opacity 0.5s}
+.stx-btn-panel{margin:3px 2px;opacity:0;transition:opacity 0.5s;display:none}
 .smartcharts-light .stx-btn-panel{background-color:#fff}
 .smartcharts-dark .stx-btn-panel{background-color:#101320}
 .stx-btn-panel:hover span,.stx-btn-panel:active span{opacity:1}
 .stx-btn-panel:active svg{-webkit-transform:scale(1.2, 1.2);transform:scale(1.2, 1.2)}
+.stx-btn-panel.stx-show{display:block}
 .stx-btn-panel>span{display:flex;justify-content:center;align-items:center;background:no-repeat center}
 .cq-change:after{float:right;margin-top:5px;margin-right:5px;content:'';width:0px;height:0px;display:block;border-left:6px solid transparent;border-right:6px solid transparent}
 .cq-change.up:after{border-bottom:8px solid #4bbfab}
