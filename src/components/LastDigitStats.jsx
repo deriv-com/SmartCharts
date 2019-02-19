@@ -16,7 +16,7 @@ class LastDigitStats extends React.Component {
 
     componentDidUpdate({ marketDisplayName }) {
         if (this.props.marketDisplayName !== marketDisplayName) {
-            this.props.showLastDigitStats();
+            this.props.changeSymbol();
         }
     }
 
@@ -52,4 +52,5 @@ export default connect(({ lastDigitStats : l }) => ({
     isVisible:l.isVisible,
     bars:l.bars,
     marketDisplayName:l.marketDisplayName,
+    changeSymbol: l.changeSymbol,
 }))(LastDigitStats);

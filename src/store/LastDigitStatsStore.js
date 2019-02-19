@@ -11,6 +11,7 @@ export default class LastDigitStatsStore {
     count = 1000;
     digits = [];
     latestData = [];
+    symbolChanged=false;
     @observable bars = [];
 
     get api() {
@@ -29,10 +30,15 @@ export default class LastDigitStatsStore {
         return this.mainStore.chart.currentActiveSymbol ? this.mainStore.chart.currentActiveSymbol.name : '';
     }
 
+    @action.bound changeSymbol() {
+        this.symbolChanged = true;
+    }
+
     @action.bound async showLastDigitStats() {
         this.digits = [];
         this.bars = [];
         this.latestData = [];
+        this.updateChartMargin(50);
         if (this.mainStore.chart && this.mainStore.chart.feed) {
             this.mainStore.chart.feed.offMasterDataUpdate(this.onMasterDataUpdate);
         }
@@ -46,7 +52,7 @@ export default class LastDigitStatsStore {
             this.updateChartMargin(150);
 
             if (this.stx.masterData && this.stx.masterData.length >= this.count) {
-                this.latestData  = this.stx.masterData.slice(-this.count).map(x => x.Close.toString());
+                this.latestData  = this.stx.masterData.slice(-this.count).map(x => x.Close.toFixed(this.decimalPlaces));
             } else {
                 const tickHistory = await this.api.getTickHistory({ symbol :this.mainStore.chart.currentActiveSymbol.symbol, count:this.count });
                 this.latestData = tickHistory && tickHistory.history ? tickHistory.history.prices : [];
@@ -58,8 +64,6 @@ export default class LastDigitStatsStore {
             });
             this.updateBars();
             this.mainStore.chart.feed.onMasterDataUpdate(this.onMasterDataUpdate);
-        } else {
-            this.updateChartMargin(50);
         }
     }
 
@@ -70,13 +74,19 @@ export default class LastDigitStatsStore {
     }
 
     @action.bound onMasterDataUpdate({ Close }) {
-        const firstDigit = this.latestData.shift().slice(-1);
-        const price =  Close.toFixed(this.decimalPlaces);
-        const lastDigit = price.slice(-1);
-        this.latestData.push(price);
-        this.digits[lastDigit]++;
-        this.digits[firstDigit]--;
-        this.updateBars();
+        if (this.symbolChanged) {
+            // Symbol has changed
+            this.showLastDigitStats();
+            this.symbolChanged = false;
+        } else {
+            const firstDigit = this.latestData.shift().slice(-1);
+            const price =  Close.toFixed(this.decimalPlaces);
+            const lastDigit = price.slice(-1);
+            this.latestData.push(price);
+            this.digits[lastDigit]++;
+            this.digits[firstDigit]--;
+            this.updateBars();
+        }
     }
 
     @action.bound updateBars() {
