@@ -20,7 +20,7 @@ import DrawingCursorStore from './DrawingCursorStore';
 import ChartState from './ChartState';
 import Notifier from './Notifier';
 import ChartTableStore from './ChartTableStore';
-import LastDigitsStore from './LastDigitsStore';
+import LastDigitStatsStore from './LastDigitStatsStore';
 
 export default class MainStore {
     notifier = new Notifier();
@@ -45,5 +45,5 @@ export default class MainStore {
     currentSpot = new CurrentSpotStore(this);
     drawingCursor = new DrawingCursorStore(this);
     chartTable = new ChartTableStore(this);
-    lastDigits= new LastDigitsStore(this);
+    lastDigitStats= new LastDigitStatsStore(this);
 }

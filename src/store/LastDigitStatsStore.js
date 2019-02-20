@@ -1,6 +1,6 @@
 import { observable, action, computed } from 'mobx';
 
-export default class LastDigitsStore {
+export default class LastDigitStatsStore {
     constructor(mainStore) {
         this.mainStore = mainStore;
     }
@@ -9,11 +9,9 @@ export default class LastDigitsStore {
     get stx() { return this.context.stx; }
 
     count = 1000;
-    minHeight = 40;
-    maxHeight = 100;
-    gradiantLine = this.maxHeight / 2;
     digits = [];
     latestData = [];
+    symbolChanged=false;
     @observable bars = [];
 
     get api() {
@@ -32,11 +30,18 @@ export default class LastDigitsStore {
         return this.mainStore.chart.currentActiveSymbol ? this.mainStore.chart.currentActiveSymbol.name : '';
     }
 
+    @action.bound changeSymbol() {
+        this.symbolChanged = true;
+    }
+
     @action.bound async showLastDigitStats() {
         this.digits = [];
         this.bars = [];
         this.latestData = [];
-        this.mainStore.chart.feed.offMasterDataUpdate(this.onMasterDataUpdate);
+        this.updateChartMargin(50);
+        if (this.mainStore.chart && this.mainStore.chart.feed) {
+            this.mainStore.chart.feed.offMasterDataUpdate(this.onMasterDataUpdate);
+        }
 
         if (this.mainStore.state.showLastDigitStats) {
             for (let i = 0; i < 10; i++) {
@@ -44,8 +49,10 @@ export default class LastDigitsStore {
                 this.bars.push({ height:0, cName:'' });
             }
 
+            this.updateChartMargin(150);
+
             if (this.stx.masterData && this.stx.masterData.length >= this.count) {
-                this.latestData  = this.stx.masterData.slice(-this.count).map(x => x.Close.toString());
+                this.latestData  = this.stx.masterData.slice(-this.count).map(x => x.Close.toFixed(this.decimalPlaces));
             } else {
                 const tickHistory = await this.api.getTickHistory({ symbol :this.mainStore.chart.currentActiveSymbol.symbol, count:this.count });
                 this.latestData = tickHistory && tickHistory.history ? tickHistory.history.prices : [];
@@ -60,22 +67,33 @@ export default class LastDigitsStore {
         }
     }
 
+    updateChartMargin =(margin) => {
+        this.stx.chart.yAxis.initialMarginBottom = margin;
+        this.stx.calculateYAxisMargins(this.stx.chart.panel.yAxis);
+        this.stx.draw();
+    }
+
     @action.bound onMasterDataUpdate({ Close }) {
-        const firstDigit = this.latestData.shift().slice(-1);
-        const price =  Close.toFixed(this.decimalPlaces);
-        const lastDigit = price.slice(-1);
-        this.latestData.push(price);
-        this.digits[lastDigit]++;
-        this.digits[firstDigit]--;
-        this.updateBars();
+        if (this.symbolChanged) {
+            // Symbol has changed
+            this.showLastDigitStats();
+            this.symbolChanged = false;
+        } else {
+            const firstDigit = this.latestData.shift().slice(-1);
+            const price =  Close.toFixed(this.decimalPlaces);
+            const lastDigit = price.slice(-1);
+            this.latestData.push(price);
+            this.digits[lastDigit]++;
+            this.digits[firstDigit]--;
+            this.updateBars();
+        }
     }
 
     @action.bound updateBars() {
         const min = Math.min(...this.digits);
         const max = Math.max(...this.digits);
         this.digits.forEach((digit, idx) => {
-            this.bars[idx].height = Math.round(((this.maxHeight - this.minHeight) * (digit - min) / (max - min)) + this.minHeight);
-            this.bars[idx].gradiantLine = this.bars[idx].height > this.gradiantLine ? ((this.bars[idx].height * this.gradiantLine) / this.maxHeight) : 0;
+            this.bars[idx].height = (digit * 100) / this.count;
             if (digit === min) this.bars[idx].cName = 'min';
             else if (digit === max) this.bars[idx].cName = 'max';
             else this.bars[idx].cName = '';
