@@ -185,7 +185,7 @@ export default class ChartSettingStore {
         if (this.isAutoScale === value) { return; }
 
         this.isAutoScale = value;
-        logEvent(LogCategories.ChartControl, LogActions.ChartSetting, `${value ? 'Show'  : 'Hide'} AutoScale`);
+        logEvent(LogCategories.ChartControl, LogActions.ChartSetting, ` Change AutoScale to ${value}`);
 
         this.saveSetting();
     }

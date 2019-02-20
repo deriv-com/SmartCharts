@@ -80,6 +80,15 @@ const ChartSetting = ({
                 <div className="ciq-list ciq-list-setting">
                     {!isMobile ? <ThemeToggle setPosition={setPosition} position={position} /> : ''}
                     <div className="ciq-list-item">
+                        <span className="ciq-icon-text">{t.translate('Auto Scale')}</span>
+                        <div className="ciq-action">
+                            <Switch
+                                value={isAutoScale}
+                                onChange={setAutoScale}
+                            />
+                        </div>
+                    </div>
+                    <div className="ciq-list-item">
                         <span className="ciq-icon-text">{t.translate('Dark Mode')}</span>
                         <div className="ciq-action">
                             <Switch
@@ -104,15 +113,6 @@ const ChartSetting = ({
                             <Switch
                                 value={historical}
                                 onChange={setHistorical}
-                            />
-                        </div>
-                    </div>
-                    <div className="ciq-list-item">
-                        <span className="ciq-icon-text">{t.translate('Auto Scale')}</span>
-                        <div className="ciq-action">
-                            <Switch
-                                value={isAutoScale}
-                                onChange={setAutoScale}
                             />
                         </div>
                     </div>
