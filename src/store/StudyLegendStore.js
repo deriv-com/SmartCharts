@@ -47,7 +47,7 @@ export default class StudyLegendStore {
         this.stx.callbacks.studyOverlayEdit = this.editStudy;
         this.stx.callbacks.studyPanelEdit = this.editStudy;
         this.stx.append('createDataSet', this.renderLegend);
-        this.stx.append('adjustPanelPositions', () => {
+        this.stx.append('drawPanels', () => {
             const panel = Object.keys(this.stx.panels)[1];
             if (panel) {
                 // Hide the up arrow from first indicator to prevent user
