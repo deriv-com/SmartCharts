@@ -3,19 +3,23 @@ import { connect } from '../store/Connect';
 import '../../sass/components/_last-digits.scss';
 
 const Bar = ({ x, bar }) => (
-    <div className={`cq-bar ${bar.cName}`} style={{ height: bar.height, left : (x * 35), '--bar-gradiant': `${bar.gradiantLine}%` }}>
-        <span className={`cq-bar-title ${bar.cName}`}>{x}</span>
+    <div
+        className={`cq-bar ${bar.cName}`}
+        style={{ height: `${bar.height * 5}%`, left : (x * 35) }}
+    >
+        <div className={`cq-bar-value ${bar.height && 'show'}`}>{`${bar.height.toFixed(1)}%`}</div>
+        <span className="cq-bar-title">{x}</span>
     </div>
 );
 
-class LastDigits extends React.Component {
+class LastDigitStats extends React.Component {
     componentDidMount() {
         this.props.showLastDigitStats();
     }
 
     componentDidUpdate({ marketDisplayName }) {
         if (this.props.marketDisplayName !== marketDisplayName) {
-            this.props.showLastDigitStats();
+            this.props.changeSymbol();
         }
     }
 
@@ -30,7 +34,7 @@ class LastDigits extends React.Component {
             marketDisplayName } = this.props;
         return (
             <div className={`cq-last-digits ${isVisible ? 'show' : ''}`}>
-                <div>
+                <div className="cq-bars">
                     {bars.map((bar, idx) => (
                         <Bar
                             key={`bar-${idx}`}// eslint-disable-line react/no-array-index-key
@@ -46,9 +50,10 @@ class LastDigits extends React.Component {
     }
 }
 
-export default connect(({ lastDigits : l }) => ({
+export default connect(({ lastDigitStats : l }) => ({
     showLastDigitStats:l.showLastDigitStats,
     isVisible:l.isVisible,
     bars:l.bars,
     marketDisplayName:l.marketDisplayName,
-}))(LastDigits);
+    changeSymbol: l.changeSymbol,
+}))(LastDigitStats);
