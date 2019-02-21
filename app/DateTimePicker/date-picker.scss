@@ -8,7 +8,7 @@ $COLOR_GRAY: #e9e9ed;
     outline: 0;
     box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.14);
     z-index: 999;
-    font-size: 14px;
+    font-size: 1.4em;
     box-sizing: border-box;
     width: 280px;
     border-radius: 4px;
@@ -24,7 +24,7 @@ $COLOR_GRAY: #e9e9ed;
         outline: none;
         width: 100%;
         box-sizing: border-box;
-        font-size: 14px;
+        font-size: 1.4em;
         font-weight: 300;
         height: 34px;
         padding: 6px 10px;
@@ -37,7 +37,7 @@ $COLOR_GRAY: #e9e9ed;
         }
     }
     .calendar-footer {
-        font-size: 14px;
+        font-size: 1.4em;
         display: grid;
         align-items: center;
         line-height: 38px;
@@ -150,7 +150,7 @@ $COLOR_GRAY: #e9e9ed;
             text-align: center;
             background: transparent;
             transition: all 0.3s;
-            font-size: 14px;
+            font-size: 1.4em;
             line-height: 24px;
             @include themify($themes) {
                 color: themed('ChartHistoryPickerBodyColor');
@@ -167,7 +167,7 @@ $COLOR_GRAY: #e9e9ed;
             }
             &.calendar-decade {
                 padding: 6px 4px;
-                font-size: 14px;
+                font-size: 1.4em;
             }
             &-header {
                 line-height: 18px;
@@ -252,7 +252,7 @@ $COLOR_GRAY: #e9e9ed;
     .datepicker-display, .datepicker-native-overlay {
         height: 28px;
         cursor: pointer;
-        font-size: 14px;
+        font-size: 1.4em;
         line-height: 100%;
         vertical-align: middle;
         padding: 4px 11px;

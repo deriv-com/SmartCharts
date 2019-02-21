@@ -58,7 +58,7 @@
         > input {
             padding-left: 34px;
             line-height: 2em;
-            font-size: 14px;
+            font-size: 1.4em;
             border: none;
             outline: 0;
             width: calc(100% - 40px);
@@ -111,7 +111,7 @@
             height: 20px;
             width: 20px;
             line-height: 28px;
-            font-size: 9px;
+            font-size: 0.9em;
             right: 8px;
             top: 7px;
             border-radius: 50%;
@@ -141,7 +141,7 @@
     }
     .subcategory {
         padding: 0 0 0 16px;
-        font-size: 14px;
+        font-size: 1.4em;
         border-radius: 4px 4px 0 0;
         display: flex;
         height: 40px;
@@ -154,7 +154,7 @@
     }
     .category-title {
         display: block;
-        font-size: 14px;
+        font-size: 1.4em;
         font-weight: bold;
         padding: 0 16px;
         line-height: 40px;
@@ -194,7 +194,7 @@
         text-align: left;
         cursor: pointer;
         box-sizing: border-box;
-        font-size: 14px;
+        font-size: 1.4em;
 
         &:hover {
             @include themify($themes) {
@@ -235,7 +235,7 @@
         align-items: center;
         justify-content: space-between;
         line-height: initial;
-        font-size: 14px;
+        font-size: 1.4em;
         @include themify($themes) {
             border-bottom: 1px solid themed('CatDisplayBg');
             background-color: themed('CatDisplayCatContentBg');
