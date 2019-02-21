@@ -24,6 +24,9 @@ html, body {
     &.ciq-draw-mode {
         cursor: none; /* stylelint-disable-line plugin/no-unsupported-browser-features */
     }
+    :last-child {
+        z-index: 1;
+    }
 }
 
 /* Chart Block */
@@ -401,6 +404,7 @@ html, body {
 .stx-float-price,
 .stx-float-date {
     border-radius: 3px;
+    color: #fff;
     @include themify($themes) {
         background-color: themed('CrosshairLabel');
     }
@@ -410,21 +414,15 @@ html, body {
     position: absolute;
     font-size: 12px;
     font-family: 'Helvetica';
-    z-index: 30;
-    color: #fff;
+    z-index: 3;
     padding: 1px 6px;
     text-align: center;
     width: auto;
 }
 
-.stx-float-price { /* Corsshair Floating y-axis value label*/
-    color: #fff;
-    background-color: #333;
-}
-
 .stx_crosshair { /* Standard Crosshair lines color */
     position: absolute;
-    z-index: 10;
+    z-index: 1;
     @include themify($themes) {
         background-color: themed('CrosshairAxis');
     }
@@ -443,7 +441,6 @@ html, body {
     height: 1px;
     width: 98%;
     margin-top: 0; /* since we're using border-top to draw the actual line */
-    z-index: 0;
 }
 
 .crossX, .stx_crosshair_x { /* Horizontal Crosshair line size */
