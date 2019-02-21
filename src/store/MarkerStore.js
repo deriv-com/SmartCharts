@@ -100,6 +100,10 @@ export default class MarkerStore {
                     { fillGaps: true },
                 );
                 this.stxx.createDataSet();
+
+                if (this.yPositioner !== 'top' && this.yPositioner !== 'on_candle') {
+                    this.yPositioner = 'top';
+                }
             }
 
             if (this.xPositioner === 'bar' && this.x) {
