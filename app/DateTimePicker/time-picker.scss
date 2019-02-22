@@ -150,6 +150,7 @@
                     }
                     &.disabled {
                         cursor: default;
+                        opacity: 0.6;
                         @include themify($themes) {
                             color: themed('ChartHistoryPickerBodyDisableColor');
                         }

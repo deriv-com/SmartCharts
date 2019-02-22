@@ -72,6 +72,42 @@ class TradingTimes {
         }
     }
 
+    async getForDate(date) {
+        await this._serverTime.init(this._api);
+
+
+        this.lastUpdateDate = date || 'today';
+        this._tradingTimesMap = [];
+
+        await this._updateTradeTimes();
+        this.tradingTimesPromise.resolve();
+
+        const periodicUpdate = async () => {
+            const changed = this._updateMarketOpenClosed();
+            if (Object.keys(changed).length > 0) {
+                this._emitter.emit(TradingTimes.EVENT_MARKET_OPEN_CLOSE_CHANGE, changed);
+            }
+            // Get tomorrow's date (UTC) and set it as next update if no nextDate available
+            const nextUpdateDate = new Date(`${this.lastUpdateDate}T00:00:00Z`);
+            nextUpdateDate.setDate(nextUpdateDate.getDate() + 1);
+
+            // Retain the current market open close status, because the trade times
+            // will now be the following day:
+            const isOpenMap = {};
+            for (const key in this._tradingTimesMap) {
+                isOpenMap[key] = this._tradingTimesMap[key].isOpened;
+            }
+
+            await this._updateTradeTimes();
+
+            for (const key in this._tradingTimesMap) {
+                this._tradingTimesMap[key].isOpened = isOpenMap[key];
+            }
+        };
+
+        await periodicUpdate();
+    }
+
     _updateMarketOpenClosed() {
         const changed = {};
         for (const symbol in this._tradingTimesMap) {
@@ -94,9 +130,7 @@ class TradingTimes {
             return;
         }
 
-        const now = this._serverTime.getLocalDate();
-        const dateStr = now.toISOString().substring(0, 11);
-        const getUTCDate = hour => new Date(`${dateStr}${hour}Z`);
+        const getUTCDate = hour => new Date(`${this.lastUpdateDate} ${hour}Z`);
 
         this._tradingTimesMap = {};
         const { markets } = response.trading_times;

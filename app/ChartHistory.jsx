@@ -7,11 +7,12 @@ import './chart-history.scss';
 class ChartHistory extends React.PureComponent {
     constructor(props) {
         super(props);
-        console.log('props', props);
+        this.tradingAPI = props.tradingAPI;
         this.state = {
-            date: moment().format('YYYY/MM/DD'),
+            date: moment().format('YYYY-MM-DD'),
             focusOnDate: false,
             focusOnTime: false,
+            sessions: props.tradingTime,
             time: '00:00',
         };
     }
@@ -19,16 +20,47 @@ class ChartHistory extends React.PureComponent {
     componentDidMount() {
         this.setState({
             focusOnDate: true,
+        }, this.updateTradingTime);
+    }
+
+    componentDidUpdate(prevProps) {
+        const { symbol } = this.props;
+        if (prevProps.symbol !== symbol) {
+            const symbolTrading = this.tradingAPI._tradingTimesMap[symbol];
+            const sessions = (symbolTrading && symbolTrading.times)
+                ? symbolTrading.times
+                : null;
+
+            this.updateSession(sessions);
+        }
+    }
+
+    updateTradingTime = () => {
+        const { date } = this.state;
+        const { symbol } = this.props;
+
+        this.tradingAPI.getForDate(date).then(() => {
+            if (symbol && this.tradingAPI._tradingTimesMap) {
+                const symbolTrading = this.tradingAPI._tradingTimesMap[symbol];
+                const sessions = (symbolTrading && symbolTrading.times)
+                    ? symbolTrading.times
+                    : null;
+
+                this.updateSession(sessions);
+            }
         });
     }
 
-    componentDidUpdate() {
-        console.log('componentDidUpdate', this.props);
+    updateSession = (sessions) => {
+        this.setState({
+            sessions,
+        });
     }
 
     onChangeDate = ({ target }) => {
         const date = target.value;
-        this.setState({ date, focusOnDate: false, focusOnTime: true }, this.updateStore);
+
+        this.setState({ date, focusOnDate: false, focusOnTime: true }, this.updateTradingTime);
     }
 
     onChangeTime = ({ target }) => {
@@ -69,6 +101,7 @@ class ChartHistory extends React.PureComponent {
                     is_clearable
                     start_date={moment(this.state.date, 'YYYY/MM/DD').valueOf() / 1000}
                     diffTime={this.props.diffTime}
+                    sessions={this.state.sessions}
                     value={this.state.time}
                     onChange={this.onChangeTime}
                 />

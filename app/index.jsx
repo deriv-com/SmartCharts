@@ -110,7 +110,6 @@ class App extends Component {
     constructor(props) {
         super(props);
         this.notifier = new ChartNotifier();
-        this.symbolTradingTimes = null;
         this.api = new BinaryAPI(requestAPI, requestSubscribe, requestForget);
         this.tradingTimes = new TradingTimes(this.api);
         this.activeSymbols = new ActiveSymbols(this.api, this.tradingTimes);
@@ -127,15 +126,6 @@ class App extends Component {
         if (layout && layout.symbols[0]) {
             symbol = layout.symbols[0].symbol;
         }
-
-        this.tradingTimes.initialize().then(() => {
-            if (symbol && this.tradingTimes._tradingTimesMap) {
-                const symbolTrading = this.tradingTimes._tradingTimesMap[symbol];
-                this.symbolTradingTimes = (symbolTrading && symbolTrading.times)
-                    ? symbolTrading.times
-                    : null;
-            }
-        });
 
         if (settings) {
             settings.language = language;
@@ -180,6 +170,7 @@ class App extends Component {
             granularity,
             isConnectionOpened: true,
             diffTime: 0,
+            symbol,
         };
     }
 
@@ -218,12 +209,8 @@ class App extends Component {
     symbolChange = (symbol) => {
         logEvent(LogCategories.ChartTitle, LogActions.MarketSelector, symbol);
         this.notifier.removeByCategory('activesymbol');
-        this.setState({ symbol });
 
-        const symbolTrading = this.tradingTimes._tradingTimesMap[symbol];
-        this.symbolTradingTimes = (symbolTrading && symbolTrading.times)
-            ? symbolTrading.times
-            : null;
+        this.setState({ symbol });
     };
 
     saveSettings = (settings) => {
@@ -256,7 +243,8 @@ class App extends Component {
     };
 
     handleDateChange = (value) => {
-        this.setState({ endEpoch: (value !== '') ? (new Date(`${value}:00Z`).valueOf() / 1000) : undefined });
+        const endEpoch = (value !== '') ? (new Date(`${value}:00Z`).valueOf() / 1000) : undefined;
+        this.setState({ endEpoch });
     };
 
     renderTopWidgets = () => (
@@ -264,8 +252,10 @@ class App extends Component {
             <ChartTitle onChange={this.symbolChange} />
             {this.state.settings.historical ? (
                 <ChartHistory
-                    onChange={this.handleDateChange}
                     diffTime={this.state.diffTime}
+                    symbol={this.state.symbol}
+                    tradingAPI={this.tradingTimes}
+                    onChange={this.handleDateChange}
                 />
             ) : ''}
             <AssetInformation />
