@@ -14,7 +14,7 @@
 
     .chart-instance {
         position: relative;
-        grid-column: col-start/span 6;
+        grid-column: col-start/span 12;
         height: 500px;
     }
     .side-chart {
@@ -39,4 +39,12 @@
             width: 60px;
         }
     }
+}
+
+.chart-marker-line {
+    background: #ff9900;
+    width: 3px;
+    height: 100%;
+    position: absolute;
+    top: 0px;
 }

@@ -40,7 +40,7 @@ class ChartState {
 
         if (this.stxx) {
             this.stxx.drawPriceLabels = !!this.endEpoch;
-            this.stxx.isAutoScale = this.settings.isAutoScale;
+            this.stxx.isAutoScale = this.settings ? this.settings.isAutoScale : false;
         }
         if (this.granularity !== granularity && this.context) {
             this.granularity = granularity;
