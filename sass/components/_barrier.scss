@@ -9,7 +9,7 @@
     &.horizontal {
         width: 100%;
         left: 0;
-        font-size: 10px;
+        font-size: 1em;
 
         &:hover {
             z-index: 105;
@@ -93,7 +93,7 @@
 /*hover*/
 
 .price {
-    font-size: 14px;
+    font-size: 1.4em;
     font-weight: 300;
     display: block;
     padding: 1px 6px;
