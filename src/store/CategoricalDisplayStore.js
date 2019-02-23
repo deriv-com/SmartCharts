@@ -85,6 +85,7 @@ export default class CategoricalDisplayStore {
     @observable activeHeadKey = undefined;
     @observable activeHeadTop = 0;
     @observable activeHeadOffset = undefined;
+    enableScroll = true;
     isUserScrolling = true;
     lastFilteredItems = [];
 
@@ -99,7 +100,10 @@ export default class CategoricalDisplayStore {
     @action.bound updateScrollSpy() {
         if (this.pauseScrollSpy || !this.scrollPanel) { return; }
         if (this.filteredItems.length === 0) { return; }
-
+        if (!this.enableScroll) {
+            this.enableScroll = true;
+            return;
+        }
 
         const categoryTitleHeight = 40;
         const scrollPanelTop = this.scrollPanel.container.getBoundingClientRect().top;
@@ -121,12 +125,13 @@ export default class CategoricalDisplayStore {
             }
         }
 
-        const scrollTop = this.scrollPanel.getValues().top;
+        const scrollTop = this.scrollPanel.getScrollTop();
         if (this.scrollTop > scrollTop) {
             this.scrollUp();
         } else {
             this.scrollDown();
         }
+
 
         this.activeHeadOffset = (this.chart.isMobile ? this.scrollPanel.container.offsetTop  : 0);
         this.scrollTop = scrollTop;
@@ -160,6 +165,7 @@ export default class CategoricalDisplayStore {
     }
 
     @computed get favoritesCategory()  {
+        this.enableScroll = false;
         const favoritesCategory = {
             categoryName: t.translate('Favorites'),
             categoryId: 'favorite',
@@ -267,6 +273,7 @@ export default class CategoricalDisplayStore {
             this.pauseScrollSpy = true;
             this.isUserScrolling = false;
             this.scrollPanel.scrollTop(el.offsetTop);
+            this.scrollTop = this.scrollPanel.getScrollTop();
             this.activeCategoryKey = category.categoryId;
             this.activeHeadKey = null;
             // scrollTop takes some time to take affect, so we need
