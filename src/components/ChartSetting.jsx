@@ -48,25 +48,27 @@ const ThemeToggle = ({
 );
 
 const ChartSetting = ({
-    ChartSettingMenu,
-    menuOpen,
-    selectedLanguage,
-    languages,
-    position,
-    setPosition,
-    setView,
-    view,
-    setLanguage,
-    theme,
-    setTheme,
-    countdown,
-    showCountdown,
-    closeMenu,
     assetInformation,
-    setAssetInformation,
+    ChartSettingMenu,
+    closeMenu,
+    countdown,
     historical,
-    setHistorical,
+    isAutoScale,
     isMobile,
+    languages,
+    menuOpen,
+    position,
+    selectedLanguage,
+    setAssetInformation,
+    setAutoScale,
+    setHistorical,
+    setLanguage,
+    setPosition,
+    setTheme,
+    setView,
+    showCountdown,
+    view,
+    theme,
 }) => {
     const renderMain = () => (
         <div>
@@ -77,6 +79,15 @@ const ChartSetting = ({
             <div className="body">
                 <div className="ciq-list ciq-list-setting">
                     {!isMobile ? <ThemeToggle setPosition={setPosition} position={position} /> : ''}
+                    <div className="ciq-list-item">
+                        <span className="ciq-icon-text">{t.translate('Auto Scale')}</span>
+                        <div className="ciq-action">
+                            <Switch
+                                value={isAutoScale}
+                                onChange={setAutoScale}
+                            />
+                        </div>
+                    </div>
                     <div className="ciq-list-item">
                         <span className="ciq-icon-text">{t.translate('Dark Mode')}</span>
                         <div className="ciq-action">
@@ -125,7 +136,7 @@ const ChartSetting = ({
                     className="icon-back-menu"
                     onClick={() => setView()}
                 />
-                {t.translate('Language')}
+                <div className="title-text">{t.translate('Language')}</div>
             </div>
             <div className="body">
                 <div className="ciq-list ciq-list-language">
@@ -177,23 +188,25 @@ const ChartSetting = ({
 };
 
 export default connect(({ chartSetting: s, chart: c }) => ({
-    ChartSettingMenu: s.ChartSettingMenu,
-    menuOpen: s.menu.dialog.open,
-    selectedLanguage: s.language,
-    languages: s.languages,
-    position: s.position,
-    setPosition: s.setPosition,
-    setView: s.setView,
-    view: s.view,
-    setLanguage: s.setLanguage,
-    theme: s.theme,
-    setTheme: s.setTheme,
-    countdown: s.countdown,
-    showCountdown: s.showCountdown,
-    closeMenu: s.menu.onTitleClick,
-    assetInformation: s.assetInformation,
+    assetInformation   : s.assetInformation,
+    ChartSettingMenu   : s.ChartSettingMenu,
+    closeMenu          : s.menu.onTitleClick,
+    countdown          : s.countdown,
+    historical         : s.historical,
+    isMobile           : c.isMobile,
+    isAutoScale        : s.isAutoScale,
+    languages          : s.languages,
+    menuOpen           : s.menu.dialog.open,
+    position           : s.position,
+    selectedLanguage   : s.language,
     setAssetInformation: s.setAssetInformation,
-    historical: s.historical,
-    setHistorical: s.setHistorical,
-    isMobile: c.isMobile,
+    setAutoScale       : s.setAutoScale,
+    setHistorical      : s.setHistorical,
+    setLanguage        : s.setLanguage,
+    setPosition        : s.setPosition,
+    setTheme           : s.setTheme,
+    setView            : s.setView,
+    showCountdown      : s.showCountdown,
+    theme              : s.theme,
+    view               : s.view,
 }))(ChartSetting);

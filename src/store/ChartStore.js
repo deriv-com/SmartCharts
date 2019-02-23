@@ -1,19 +1,30 @@
-import { action, observable, reaction, computed } from 'mobx';
-import PendingPromise from '../utils/PendingPromise';
-import Context from '../components/ui/Context';
-import KeystrokeHub from '../components/ui/KeystrokeHub';
-import animateChart from '../components/ui/Animation';
-import plotSpline from '../SplinePlotter';
-import { Feed } from '../feed';
-import { ActiveSymbols, BinaryAPI, TradingTimes } from '../binaryapi';
-import { calculateTimeUnitInterval, getUTCDate, cloneCategories } from '../utils';
+import {
+    action,
+    observable,
+    reaction,
+    computed }                 from 'mobx';
+import {
+    ActiveSymbols,
+    BinaryAPI,
+    TradingTimes }             from '../binaryapi';
+import inject                  from '../chartiq_injections';
+import Context                 from '../components/ui/Context';
+import KeystrokeHub            from '../components/ui/KeystrokeHub';
+import animateChart            from '../components/ui/Animation';
+import { Feed }                from '../feed';
+import plotSpline              from '../SplinePlotter';
+import {
+    calculateTimeUnitInterval,
+    getUTCDate,
+    cloneCategories }          from '../utils';
+import PendingPromise          from '../utils/PendingPromise';
 
-import ResizeIcon from '../../sass/icons/chart/resize-icon.svg';
-import EditIcon from '../../sass/icons/edit/ic-edit.svg';
-import DeleteIcon from '../../sass/icons/delete/ic-delete.svg';
-import DownIcon from '../../sass/icons/chart/ic-down.svg';
+import ResizeIcon      from '../../sass/icons/chart/resize-icon.svg';
+import EditIcon        from '../../sass/icons/edit/ic-edit.svg';
+import DeleteIcon      from '../../sass/icons/delete/ic-delete.svg';
+import DownIcon        from '../../sass/icons/chart/ic-down.svg';
 import JumpToTodayIcon from '../../sass/icons/chart/jump-to-today.svg';
-import MaximizeIcon from '../../sass/icons/chart/ic-maximize.svg';
+import MaximizeIcon    from '../../sass/icons/chart/ic-maximize.svg';
 
 function renderSVGString(icon) {
     const vb = icon.viewBox.split(' ').slice(2);
@@ -95,6 +106,7 @@ class ChartStore {
 
 
         this.updateHeight();
+        this.updateCanvas();
         // Height updates are not immediate, so we must resize the canvas with
         // a slight delay for it to pick up the correct chartContainer height.
         // In mobile devices, a longer delay is given as DOM updates are slower.
@@ -123,6 +135,10 @@ class ChartStore {
 
     @action.bound _initChart(rootNode, modalNode, props) {
         const _self = this;
+
+        // Add custom injections to the CIQ
+        inject();
+
         /**
          * only home button click part modified to avoid calling
          * newChart() on home function while historical enable
@@ -252,33 +268,6 @@ class ChartStore {
             return !!_self.stateStore.endEpoch;
         };
 
-        CIQ.ChartEngine.prototype.prepend('drawCurrentHR', function () {
-            const mainSeriesRenderer = this.mainSeriesRenderer || {};
-            if (mainSeriesRenderer.noCurrentHR) return;
-            for (const chartName in this.charts) {
-                const chart = this.charts[chartName];
-                const panel = chart.panel;
-                const currentQuote = this.currentQuote();
-                if (currentQuote) {
-                    const x = this.pixelFromTick(currentQuote.tick, chart) + (chart.lastTickOffset || 0);
-                    // Change the panel position to current spot position for drawing current price line
-                    panel.left = x;
-                }
-                panel.right -= 16;
-            }
-        });
-        CIQ.ChartEngine.prototype.append('drawCurrentHR', function () {
-            const mainSeriesRenderer = this.mainSeriesRenderer || {};
-            if (mainSeriesRenderer.noCurrentHR) return;
-            for (const chartName in this.charts) {
-                const chart = this.charts[chartName];
-                const panel = chart.panel;
-                // Set the panel position to its original value
-                panel.left = 0;
-                panel.right += 16;
-            }
-        });
-
         this.rootNode = rootNode;
         this.modalNode = modalNode;
         this.chartNode = this.rootNode.querySelector('.ciq-chart-area');
@@ -401,6 +390,9 @@ class ChartStore {
         engineParams.layout = chartLayout;
 
         const stxx = this.stxx = new CIQ.ChartEngine(engineParams);
+
+        stxx.isAutoScale = settings && settings.isAutoScale || false;
+
         ChartStore.chartCount += 1;
 
         const deleteElement = stxx.chart.panel.holder.parentElement.querySelector('.mouseDeleteText');
