@@ -175,16 +175,19 @@ class ChartState {
 
     CleanChart() {
         if (!this.cleanChart) return;
+        // Remove comparsions
         for (const field in this.stxx.chart.series) {
             this.stxx.removeSeries(field);
         }
+        // Remove indiactors
         for (const id in this.stxx.layout.studies) {
             const sd = this.stxx.layout.studies[id];
             CIQ.Studies.removeStudy(this.stxx, sd);
         }
-        this.mainStore.chart.changeSymbol(this.stxx.chart.symbol, 0);
+        this.stxx.clearDrawings();
+        this.mainStore.crosshair.state = 0;
         this.mainStore.chartType.setType('mountain');
-
+        this.mainStore.chart.changeSymbol(this.stxx.chart.symbol, 0);
         console.log('clean chart');
     }
 
@@ -198,6 +201,7 @@ class ChartState {
         if (!this.exportLayout) return;
         console.log('export layout');
         const currentLayout = this.stxx.exportLayout();
+        this.saveDrawings();
         this.onExportLayout(currentLayout);
     }
 }
