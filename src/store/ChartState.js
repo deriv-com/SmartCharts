@@ -1,5 +1,5 @@
 /* eslint-disable no-new */
-import { action, observable, when } from 'mobx';
+import { action, observable, when, reaction } from 'mobx';
 import { createObjectFromLocalStorage, calculateTimeUnitInterval, calculateGranularity } from '../utils';
 
 class ChartState {
@@ -11,6 +11,10 @@ class ChartState {
     @observable isConnectionOpened;
     @observable settings;
     @observable showLastDigitStats;
+    @observable exportLayout;
+    @observable cleanChart;
+    @observable importLayout;
+
     get comparisonStore() { return this.mainStore.comparison; }
     get stxx() { return this.chartStore.stxx; }
     get context() { return this.chartStore.context; }
@@ -20,6 +24,9 @@ class ChartState {
         this.mainStore = mainStore;
         this.chartStore = mainStore.chart;
         when(() => this.context, this.onContextReady);
+        reaction(() => this.exportLayout, this.ExportLayout.bind(this));
+        reaction(() => this.importLayout, this.ImportLayout.bind(this));
+        reaction(() => this.cleanChart, this.CleanChart.bind(this));
     }
 
     onContextReady = () => {
@@ -28,7 +35,7 @@ class ChartState {
         this.stxx.addEventListener('drawing', this.saveDrawings.bind(this));
     };
 
-    @action.bound updateProps({ id, settings, isConnectionOpened, symbol, granularity, chartType, startEpoch, endEpoch, removeAllComparisons, isAnimationEnabled = true, showLastDigitStats = false }) {
+    @action.bound updateProps({ id, settings, isConnectionOpened, symbol, granularity, chartType, startEpoch, endEpoch, exportLayout, onExportLayout, cleanChart, importLayout, layout, removeAllComparisons, isAnimationEnabled = true, showLastDigitStats = false }) {
         this.chartId = id;
         this.settings = settings;
         this.isConnectionOpened = isConnectionOpened;
@@ -37,6 +44,20 @@ class ChartState {
         this.endEpoch = endEpoch;
         this.isAnimationEnabled = isAnimationEnabled;
         this.showLastDigitStats = showLastDigitStats;
+
+        if (exportLayout !== this.exportLayout) {
+            this.exportLayout = exportLayout;
+            this.onExportLayout = onExportLayout;
+        }
+
+        if (cleanChart !== this.CleanChart) {
+            this.cleanChart = cleanChart;
+        }
+
+        if (importLayout !== this.importLayout) {
+            this.layout = layout;
+            this.importLayout = importLayout;
+        }
 
         if (this.stxx) {
             this.stxx.drawPriceLabels = !!this.endEpoch;
@@ -150,6 +171,34 @@ class ChartState {
             this.stxx.importDrawings(drawings);
             this.stxx.draw();
         }
+    }
+
+    CleanChart() {
+        if (!this.cleanChart) return;
+        for (const field in this.stxx.chart.series) {
+            this.stxx.removeSeries(field);
+        }
+        for (const id in this.stxx.layout.studies) {
+            const sd = this.stxx.layout.studies[id];
+            CIQ.Studies.removeStudy(this.stxx, sd);
+        }
+        this.mainStore.chart.changeSymbol(this.stxx.chart.symbol, 0);
+        this.mainStore.chartType.setType('mountain');
+
+        console.log('clean chart');
+    }
+
+    ImportLayout() {
+        if (!this.importLayout) return;
+        this.stxx.importLayout(this.layout);
+        console.log('import layout');
+    }
+
+    ExportLayout() {
+        if (!this.exportLayout) return;
+        console.log('export layout');
+        const currentLayout = this.stxx.exportLayout();
+        this.onExportLayout(currentLayout);
     }
 }
 

@@ -10,6 +10,14 @@ html, body {
     margin: 0px; /*to deal with iFraming which sets 8px by default in some browsers*/
 }
 
+.change-chart-checkbox {
+    position: absolute;
+    top: 50px;
+    right: 100px;
+    color: $chart-red;
+    z-index: 999;
+}
+
 .chartContainer { /* DIV that the canvas expands to. #chartContainer is only for backward compatibility with older libraries. */
     display: block;
     font-family: $base-font;
