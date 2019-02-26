@@ -121,6 +121,7 @@
     "event-emitter-es6": "^1.1.5",
     "lodash.debounce": "^4.0.8",
     "moment": "^2.22.2",
+    "prop-types": "^15.7.2",
     "tt-react-custom-scrollbars": "4.2.1-tt2",
     "url-search-params-polyfill": "^5.0.0",
     "why-did-you-update": "^0.1.1"
