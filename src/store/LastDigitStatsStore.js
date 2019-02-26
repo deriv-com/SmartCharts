@@ -68,6 +68,7 @@ export default class LastDigitStatsStore {
     }
 
     updateChartMargin =(margin) => {
+        if(!this.context || !this.stx) return;
         this.stx.chart.yAxis.initialMarginBottom = margin;
         this.stx.calculateYAxisMargins(this.stx.chart.panel.yAxis);
         this.stx.draw();
