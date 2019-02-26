@@ -11,13 +11,12 @@
     }
     .title {
         > .icon-back-menu {
-            line-height: 45px;
-            margin: 0 5px 0 10px !important;
+            display: inline-block;
             cursor: pointer;
         }
     }
     .body {
-        padding: 16px;
+        padding: 0 1.6em 1.6em;
         transition: height 500ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
         min-height: 190px;
 
@@ -97,13 +96,18 @@
         }
     }
     .cq-setting-container {
-        height: 300px;
+        height: 338px;
         width: 260px;
         position: relative;
         transition: height 250ms ease-out;
 
         &.container-language {
             height: 300px;
+
+            .title-text {
+                position: relative;
+                bottom: 4px;
+            }
         }
         .cq-setting-main,
         .cq-setting-language {

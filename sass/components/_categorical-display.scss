@@ -1,18 +1,20 @@
 
 .cq-categorical-display {
-    width: 632px;
+    width: 512px;
     padding: 0 !important;
     display: flex;
     height: 100%;
     text-align: left;
     overflow: hidden;
-    border-radius: 3px;
+    border-radius: 4px;
     @include themify($themes) {
         color: themed('CatDisplayText');
+        background: themed('CatDisplayBg');
+        box-shadow: 0 2px 8px 0 themed('CatDisplayShadow');
     }
 
     .cq-lookup-filters {
-        width: 34%;
+        width: 200px;
         @include themify($themes) {
             background: themed('CatDisplayFilterBg');
         }
@@ -23,65 +25,103 @@
         }
     }
     .cq-lookup-input {
-        margin: 1.5em 1.1em 1.6em 1.3em;
+        margin: 16px 8px;
         position: relative;
-        border-radius: 3px;
-        @include themify($themes) {
-            color: themed('CatDisplayText');
-            border: 1px solid themed('CatDisplaySearchBorder');
-        }
 
         &.active {
-            @include themify($themes) {
-                border-color: themed('CatDisplayActiveSearchBorder');
+            input {
+                @include themify($themes) {
+                    color: themed('CatDisplayActiveSearchText');
+                    border-color: themed('CatDisplayActiveSearchBorder');
+                    box-shadow: 0 0 0 2px themed('CatDisplayActiveSearchShadow');
+                }
             }
-
+            > .ic-icon {
+                svg {
+                    @include themify($themes) {
+                        fill: themed('CatDisplayActiveSearchIcon');
+                        stroke: themed('CatDisplayActiveSearchIcon');
+                    }
+                }
+            }
             > .icon-reset {
-                right: 4px;
                 opacity: 1;
+
+                svg {
+                    stroke: transparent !important;
+                    @include themify($themes) {
+                        fill: themed('CatDisplayActiveSearchIconClose');
+                    }
+                }
             }
         }
         > input {
             padding-left: 34px;
-            line-height: 2.6em;
-            font-size: 1em;
+            line-height: 2em;
+            font-size: 1.4em;
             border: none;
             outline: 0;
             width: calc(100% - 40px);
             background-color: transparent;
-            border-radius: 3px;
+            border-radius: 4px;
+            @include themify($themes) {
+                border: 1px solid themed('CatDisplaySearchBorder');
+                color: themed('CatDisplaySearchText');
+            }
             @include placeholder {
                 @include themify($themes) {
-                    opacity: 0.4;
                     color: themed('CatDisplaySearchText');
                 }
             }
-            @include themify($themes) {
-                color: themed('CatDisplaySearchText');
+
+            &:focus {
+                @include themify($themes) {
+                    border-color: themed('CatDisplayActiveSearchBorder');
+                    color: themed('CatDisplayActiveSearchText');
+                    box-shadow: 0 0 0 2px themed('CatDisplayActiveSearchShadow');
+                }
+
+                & + .ic-icon {
+                    svg {
+                        @include themify($themes) {
+                            fill: themed('CatDisplayActiveSearchIcon');
+                            stroke: themed('CatDisplayActiveSearchIcon');
+                        }
+                    }
+                }
             }
+
         }
         > .ic-icon {
             position: absolute;
-            top: 5px;
-            left: 5px;
+            top: 4px;
+            left: 4px;
+
+            svg {
+                @include themify($themes) {
+                    fill: themed('CatDisplaySearchIcon');
+                    stroke: themed('CatDisplaySearchIcon');
+                }
+            }
         }
         > .icon-reset {
             position: absolute;
-            right: 0px;
             opacity: 0;
             left: auto;
             height: 20px;
             width: 20px;
             line-height: 28px;
-            font-size: 9px;
+            font-size: 0.9em;
+            right: 8px;
             top: 7px;
+            border-radius: 50%;
+            cursor: pointer;
             transition: right, opacity 0.2s ease-in-out;
         }
     }
     .category {
         padding-top: 3em;
-        padding-bottom: 1em;
-        padding-right: 1em;
+        padding-bottom: 16px;
         position: relative;
 
         &:last-child {
@@ -89,30 +129,34 @@
         }
     }
     .category-content {
-        margin: 0.4em 0.3em 0em 1em;
-        border-radius: 3px;
+        margin: 0 16px 4px;
+        border-radius: 4px;
         @include themify($themes) {
-            background-color: themed('CatDisplayCatContentBg');
             border: 1px solid themed('CatDisplayCatContentBorder');
+        }
+
+        &:last-child {
+            margin-bottom: 0px;
         }
     }
     .subcategory {
-        padding: 0 0 0 1.2em;
-        font-size: 12px;
-        border-radius: 3px 3px 0 0;
+        padding: 0 0 0 16px;
+        font-size: 1.4em;
+        border-radius: 4px 4px 0 0;
         display: flex;
         height: 40px;
         font-weight: bold;
         align-items: center;
         @include themify($themes) {
             color: themed('CatDisplayCatContentTitleText');
+            background-color: themed('CatDisplayCatContentBg');
         }
     }
     .category-title {
         display: block;
-        font-size: 12px;
+        font-size: 1.4em;
         font-weight: bold;
-        padding: 0 0.7em;
+        padding: 0 16px;
         line-height: 40px;
         position: absolute;
         top: 0;
@@ -128,7 +172,7 @@
             padding-top: 0px;
             height: 40px;
             @include themify($themes) {
-                background-color: themed('DialogBodyBg');
+                background-color: themed('CatDisplayBg');
                 border-bottom: 1px solid themed('CatDisplayCatContentBorder');
             }
         }
@@ -146,23 +190,21 @@
     }
     .cq-filter {
         padding-left: 1.6em;
-        line-height: 3.4em;
+        line-height: 2.9em;
         text-align: left;
         cursor: pointer;
-        transition: background-color 0.3s;
         box-sizing: border-box;
+        font-size: 1.4em;
 
-        &.cq-hover-style:hover {
+        &:hover {
             @include themify($themes) {
-                background: themed('CatDisplayActiveFilterBg');
+                background-color: themed('CatDisplayHoverFilterBg');
             }
         }
         &.cq-active-filter {
             font-weight: 800;
-            border-right: 2px solid;
             @include themify($themes) {
                 color: themed('CatDisplayActiveFilterText');
-                border-color: themed('CatDisplayActiveFilterBorder');
                 background-color: themed('CatDisplayActiveFilterBg');
             }
 
@@ -193,32 +235,72 @@
         align-items: center;
         justify-content: space-between;
         line-height: initial;
+        font-size: 1.4em;
         @include themify($themes) {
-            border-bottom: 1px solid themed('CatDisplayCatContentBorder');
+            border-bottom: 1px solid themed('CatDisplayBg');
+            background-color: themed('CatDisplayCatContentBg');
         }
 
         &:first-child {
-            border-radius: 3px 3px 0 0;
+            border-radius: 4px 4px 0 0;
         }
         &:last-child {
-            border-radius: 0 0 3px 3px;
+            border-radius: 0 0 4px 4px;
             border-bottom: none;
         }
         .left, .right {
             display: flex;
             align-items: center;
         }
+        .right {
+            .ic-icon {
+                svg {
+                    @include themify($themes) {
+                        fill: themed('CatDisplayCatContentIcon');
+                        stroke: themed('CatDisplayCatContentIcon');
+                    }
+                }
+            }
+        }
         .closed-market {
             border: 1px solid #f44336;
             color: #f44336;
             padding: 3px 6px;
             font-size: 0.64em;
-            border-radius: 3px;
+            border-radius: 4px;
         }
-        &:hover,
+        &:hover {
+            @include themify($themes) {
+                color: themed('CatDisplayCatHoverContentText');
+                background: themed('CatDisplayCatHoverContentBg');
+            }
+
+            .right {
+                .ic-icon {
+                    svg {
+                        @include themify($themes) {
+                            fill: themed('CatDisplayCatHoverContentIcon');
+                            stroke: themed('CatDisplayCatHoverContentIcon');
+                        }
+                    }
+                }
+            }
+        }
         &.selected {
             @include themify($themes) {
-                background: themed('CatDisplayCatContentHover');
+                color: themed('CatDisplayCatActiveContentText');
+                background: themed('CatDisplayCatActiveContentBg');
+            }
+
+            .right {
+                .ic-icon {
+                    svg {
+                        @include themify($themes) {
+                            fill: themed('CatDisplayCatActiveContentIcon');
+                            stroke: themed('CatDisplayCatActiveContentIcon');
+                        }
+                    }
+                }
             }
         }
     }
@@ -248,16 +330,15 @@
     }
     .empty-category {
         padding: 0.9em 1.2em;
-        border-radius: 3px;
+        border-radius: 4px;
+        @include themify($themes) {
+            background-color: themed('CatDisplayCatContentBg');
+        }
     }
 }
 
 /* Active Symbol Icons */
 .cq-categorical-display .results-panel {
-    @include themify($themes) {
-        background: themed('CatDisplayBg');
-    }
-
     .cq-active-options {
         float: right;
         display: inline-flex;
@@ -306,22 +387,6 @@
     }
 }
 
-.smartcharts-480 {
-    .smartcharts-desktop {
-        .cq-categorical-display {
-            width: 450px;
-        }
-    }
-}
-
-.smartcharts-900 {
-    .smartcharts-desktop {
-        .cq-categorical-display {
-            width: 550px;
-        }
-    }
-}
-
 .smartcharts-mobile {
     .cq-categorical-display {
         flex-direction: column;
@@ -340,7 +405,7 @@
             }
         }
         .cq-lookup-input {
-            margin: 1.2em 1em 0.5em;
+            margin: 16px 8px;
         }
         .cq-scroll-panel {
             .category:last-child {

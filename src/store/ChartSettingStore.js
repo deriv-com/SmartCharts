@@ -80,27 +80,30 @@ export default class ChartSettingStore {
     @observable theme = 'light';
     @observable countdown = false;
     @observable historical = false;
+    @observable isAutoScale = false;
 
     @action.bound setSettings(settings) {
         if (settings === undefined) { return; }
-        const { theme, position, countdown, language, assetInformation, historical } = settings;
+        const { assetInformation, countdown, historical, language, position, isAutoScale, theme } = settings;
         if (theme            !== undefined) { this.setTheme(theme); }
         if (position         !== undefined) { this.setPosition(position); }
         if (countdown        !== undefined) { this.showCountdown(countdown); }
         if (language         !== undefined) { this.setLanguage(language); }
         if (assetInformation !== undefined) { this.setAssetInformation(assetInformation); }
         if (historical       !== undefined) { this.setHistorical(historical); }
+        if (isAutoScale      !== undefined) { this.setAutoScale(isAutoScale); }
     }
 
     saveSetting() {
         if (this.onSettingsChange) {
             this.onSettingsChange({
-                language: this.language.key,
-                position: this.position,
-                theme: this.theme,
-                countdown: this.countdown,
                 assetInformation: this.assetInformation,
-                historical: this.historical,
+                countdown       : this.countdown,
+                historical      : this.historical,
+                language        : this.language.key,
+                position        : this.position,
+                isAutoScale     : this.isAutoScale,
+                theme           : this.theme,
             });
         }
     }
@@ -176,5 +179,14 @@ export default class ChartSettingStore {
             this.mainStore.chart.resizeScreen();
         }, 10);
         this.menu.setOpen(false);
+    }
+
+    @action.bound setAutoScale(value) {
+        if (this.isAutoScale === value) { return; }
+
+        this.isAutoScale = value;
+        logEvent(LogCategories.ChartControl, LogActions.ChartSetting, ` Change AutoScale to ${value}`);
+
+        this.saveSetting();
     }
 }

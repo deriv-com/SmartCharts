@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
-"PO-Revision-Date: 2019-02-07 10:43\n"
+"PO-Revision-Date: 2019-02-12 03:31\n"
 
 msgid " already exists."
 msgstr " уже существует."
@@ -49,7 +49,7 @@ msgid "Box Size"
 msgstr "Размер ячейки"
 
 msgid "C"
-msgstr ""
+msgstr "Изм."
 
 msgid "Callout"
 msgstr "Сноска"
@@ -61,7 +61,7 @@ msgid "Candle"
 msgstr "Свеча"
 
 msgid "Change"
-msgstr ""
+msgstr "Изменение"
 
 msgid "Channel"
 msgstr "Канал"
@@ -70,7 +70,7 @@ msgid "Chart data is not available for this symbol."
 msgstr "График недоступен для данного актива."
 
 msgid "Chart Table"
-msgstr ""
+msgstr "График"
 
 msgid "Chart types"
 msgstr "Вид графика"
@@ -79,7 +79,7 @@ msgid "Clear All"
 msgstr "Очистить все"
 
 msgid "Close"
-msgstr ""
+msgstr "Закрытие"
 
 msgid "CLOSE"
 msgstr "ЗАКРЫТИЕ"
@@ -109,7 +109,7 @@ msgid "Dark Mode"
 msgstr "Тёмный режим"
 
 msgid "Date"
-msgstr ""
+msgstr "Дата"
 
 msgid "Day"
 msgstr "День"
@@ -163,19 +163,19 @@ msgid "Gartley"
 msgstr "Гартли"
 
 msgid "H"
-msgstr ""
+msgstr "Мак"
 
 msgid "Heikin Ashi"
 msgstr "Хейкен Аши"
 
 msgid "High"
-msgstr ""
+msgstr "Макс."
 
 msgid "HIGH"
 msgstr "МАКС."
 
 msgid "Historical Data Mode"
-msgstr ""
+msgstr "Исторические данные"
 
 msgid "Hollow Candle"
 msgstr "пустая свеча"
@@ -196,7 +196,7 @@ msgid "Kagi"
 msgstr "Каги"
 
 msgid "L"
-msgstr ""
+msgstr "Мин"
 
 msgid "Language"
 msgstr "Язык"
@@ -208,7 +208,7 @@ msgid "Line Break"
 msgstr "Разрыв линии"
 
 msgid "Low"
-msgstr ""
+msgstr "Мин."
 
 msgid "LOW"
 msgstr "МИН."
@@ -220,13 +220,13 @@ msgid "Minute"
 msgstr "Мин."
 
 msgid "O"
-msgstr ""
+msgstr "О"
 
 msgid "OHLC"
 msgstr "OHLC"
 
 msgid "Open"
-msgstr ""
+msgstr "Открытие"
 
 msgid "OPEN"
 msgstr "ОТКРЫТИЕ"
@@ -277,10 +277,10 @@ msgid "Retrieving Chart Engine..."
 msgstr "Получение данных из Chart Engine..."
 
 msgid "Retrieving Market Symbols..."
-msgstr ""
+msgstr "Получение рыночных данных..."
 
 msgid "Retrieving Trading Times..."
-msgstr ""
+msgstr "Получение времени торговли..."
 
 msgid "Reversal"
 msgstr "Разворот"
@@ -337,7 +337,7 @@ msgid "Streaming for [symbol] is not available due to license restrictions"
 msgstr "Потоковые котировки для [symbol] недоступны из-за лицензионных ограничений"
 
 msgid "Table"
-msgstr ""
+msgstr "Таблица"
 
 msgid "Template name"
 msgstr "Название шаблона"

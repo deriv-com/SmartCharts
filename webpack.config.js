@@ -9,6 +9,7 @@ const SpriteLoaderPlugin = require('svg-sprite-loader/plugin');
 const production = process.env.NODE_ENV === 'production';
 const isApp = process.env.BUILD_MODE === 'app';
 const BUILD_MODE = isApp ? process.env.BUILD_MODE : 'lib';
+const appEntryFile = isApp && process.env.APP_ENTRY ? process.env.APP_ENTRY : 'index';
 
 const output =  {
     path: path.resolve(__dirname, 'dist'),
@@ -172,7 +173,7 @@ if (process.env.ANALYZE_BUNDLE) {
 }
 
 if (isApp) {
-    config.entry = path.resolve(__dirname, './app/index.jsx');
+    config.entry = path.resolve(__dirname, `./app/${appEntryFile}.jsx`);
     config.plugins.push(new CopyWebpackPlugin([
         { from: './sass/favicons/*.png' },
         { from: './node_modules/@babel/polyfill/dist/polyfill.min.js', to: 'babel-polyfill.min.js' },
