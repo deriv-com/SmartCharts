@@ -51,7 +51,7 @@ export default class LastDigitStatsStore {
 
             this.updateChartMargin(150);
 
-            if (this.context && this.stx.masterData && this.stx.masterData.length >= this.count) {
+            if (this.stx.masterData && this.stx.masterData.length >= this.count) {
                 this.latestData  = this.stx.masterData.slice(-this.count).map(x => x.Close.toFixed(this.decimalPlaces));
             } else {
                 const tickHistory = await this.api.getTickHistory({ symbol :this.mainStore.chart.currentActiveSymbol.symbol, count:this.count });
@@ -68,7 +68,7 @@ export default class LastDigitStatsStore {
     }
 
     updateChartMargin =(margin) => {
-        if(!this.context || !this.stx) return;
+        if (!this.context || !this.stx) return;
         this.stx.chart.yAxis.initialMarginBottom = margin;
         this.stx.calculateYAxisMargins(this.stx.chart.panel.yAxis);
         this.stx.draw();
