@@ -96,6 +96,7 @@ startEpoch | Set the start epoch of the chart
 endEpoch | Set the end epoch of the chart
 chartControlsWidgets | Render function for chart control widgets. Refer to [Customising Components](#customising-components).
 topWidgets | Render function for top widgets. Refer to [Customising Components](#customising-components).
+bottomWidgets | Render function for bottom widgets. Refer to [Customising Components](#customising-components).
 isMobile | Switch between mobile or desktop view. Defaults to `false`.
 onSettingsChange | Callback that will be fired each time a setting is changed.
 settings | Sets the chart settings. Refer to [Chart Settings](#chart-settings)
@@ -105,7 +106,6 @@ isConnectionOpened | Sets the connection status. If set, upon reconnection smart
 onMessage | SmartCharts will send notifications via this callback, should it be provided. Each notification will have the following structure: `{ text, type, category }`.
 isAnimationEnabled | Determine whether chart animation is enabled or disabled. It may needs to be disabled for better performance. Defaults to `true`.
 showLastDigitStats | Shows last digits stats. Defaults to `false`.
-bottomWidgets | Render function for bottom widgets. Refer to [Customising Components](#customising-components).
 ### Chart Settings
 
 | Attribute | Description |
@@ -191,8 +191,14 @@ const renderTopWidgets = () => (
     </React.Fragment>
 );
 
+const renderBottomWidgets = () => (
+    <React.Fragment>
+        <div>Hi, I am a bottom widget!</div>
+    </React.Fragment>
+);
 const App = () => (
     <SmartChart
+        bottomWidgets={renderBottomWidgets}
         topWidgets={renderTopWidgets}
         chartControlsWidgets={()=>{}}
     >
