@@ -186,7 +186,9 @@ class ChartState {
             CIQ.Studies.removeStudy(this.stxx, sd);
         }
         this.stxx.clearDrawings();
-        this.mainStore.crosshair.state = 0;
+
+        this.mainStore.crosshair.setCrosshairState(0);
+
         this.mainStore.chartType.setType('mountain');
         this.mainStore.chart.changeSymbol(this.stxx.chart.symbol, 0);
         console.log('clean chart');
