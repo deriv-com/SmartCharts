@@ -185,6 +185,7 @@ class ChartState {
             const sd = this.stxx.layout.studies[id];
             CIQ.Studies.removeStudy(this.stxx, sd);
         }
+
         this.stxx.clearDrawings();
 
         this.mainStore.crosshair.setCrosshairState(0);
@@ -197,14 +198,18 @@ class ChartState {
     ImportLayout() {
         if (!this.importLayout) return;
         this.stxx.importLayout(this.layout);
-        console.log('import layout');
+
+        if (this.layout.drawings) {
+            this.stxx.importDrawings(this.layout.drawings);
+            this.stxx.draw();
+        }
     }
 
     ExportLayout() {
         if (!this.exportLayout) return;
         console.log('export layout');
         const currentLayout = this.stxx.exportLayout();
-        this.saveDrawings();
+        currentLayout.drawings = this.stxx.exportDrawings();
         this.onExportLayout(currentLayout);
     }
 }
