@@ -47,5 +47,5 @@ export default class MainStore {
     drawingCursor = new DrawingCursorStore(this);
     chartTable = new ChartTableStore(this);
     lastDigitStats= new LastDigitStatsStore(this);
-    bottomWidgetsContainerStore = new BottomWidgetsContainerStore(this);
+    bottomWidgetsContainer = new BottomWidgetsContainerStore(this);
 }

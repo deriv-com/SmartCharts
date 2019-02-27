@@ -55,7 +55,7 @@ BottomWidgetsContainer.defaultProps = {
 };
 
 
-export default connect(({ bottomWidgetsContainerStore: store }) => ({
+export default connect(({ bottomWidgetsContainer: store }) => ({
     bottom           : store.bottom,
     isReadyToShow    : store.isReadyToShow,
     top              : store.top,
