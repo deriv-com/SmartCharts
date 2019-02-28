@@ -1,3 +1,4 @@
+import BottomWidgetsContainerStore from './BottomWidgetsContainerStore';
 import TimeperiodStore from './TimeperiodStore';
 import ChartStore from './ChartStore';
 import ChartTypeStore from './ChartTypeStore';
@@ -46,4 +47,5 @@ export default class MainStore {
     drawingCursor = new DrawingCursorStore(this);
     chartTable = new ChartTableStore(this);
     lastDigitStats= new LastDigitStatsStore(this);
+    bottomWidgetsContainer = new BottomWidgetsContainerStore(this);
 }

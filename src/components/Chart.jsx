@@ -5,6 +5,7 @@ import ChartTitle from './ChartTitle.jsx';
 import AssetInformation from './AssetInformation.jsx';
 import Loader from './Loader.jsx';
 import Barrier from './Barrier.jsx';
+import BottomWidgetsContainer from './BottomWidgetsContainer.jsx';
 import CurrentSpot from './CurrentSpot.jsx';
 import DrawingCursor from './DrawingCursor.jsx';
 import ChartTable from './ChartTable.jsx';
@@ -53,6 +54,7 @@ class Chart extends Component {
 
     render() {
         const {
+            bottomWidgets,
             DrawToolsSettingsDialog,
             StudySettingsDialog,
             isMobile = false,
@@ -73,6 +75,7 @@ class Chart extends Component {
         const currentPosition = `cq-chart-control-${(position && !isMobile) ? position : 'bottom'}`;
         const contextWidth =  !isMobile ? `smartcharts-${containerWidth}` : '';
         const TopWidgets = topWidgets || this.defaultTopWidgets;
+        const BottomWidgets = !bottomWidgets && showLastDigitStats ? LastDigitStats : bottomWidgets;
 
         return (
             <div className={`smartcharts smartcharts-${theme} ${contextWidth}`}>
@@ -112,9 +115,12 @@ class Chart extends Component {
                                             {t.translate('Chart data is not available for this symbol.')}
                                         </div>
                                     )}
-                                    {showLastDigitStats && (
-                                        <LastDigitStats />
-                                    )}
+                                    <BottomWidgetsContainer>
+                                        {
+                                            BottomWidgets
+                                                && <BottomWidgets />
+                                        }
+                                    </BottomWidgetsContainer>
                                 </div>
                                 <ChartControls widgets={chartControlsWidgets} />
                             </div>
