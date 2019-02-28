@@ -160,6 +160,8 @@ export default class CategoricalDisplayStore {
     }
 
     @computed get favoritesCategory()  {
+        this.pauseScrollSpy = true;
+
         const favoritesCategory = {
             categoryName: t.translate('Favorites'),
             categoryId: 'favorite',
@@ -167,6 +169,7 @@ export default class CategoricalDisplayStore {
             emptyDescription: t.translate('There are no favorites yet.'),
             data: Object.keys(this.mainStore.favorites.favoritesMap[this.favoritesId]) || [],
         };
+        setTimeout(() => { this.pauseScrollSpy = false; }, 10);
         return favoritesCategory;
     }
 
@@ -271,7 +274,7 @@ export default class CategoricalDisplayStore {
             this.activeHeadKey = null;
             // scrollTop takes some time to take affect, so we need
             // a slight delay before enabling the scroll spy again
-            setTimeout(() => { this.pauseScrollSpy = false; }, 3);
+            setTimeout(() => { this.pauseScrollSpy = false; }, 10);
         }
     }
 
