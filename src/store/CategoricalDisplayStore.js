@@ -100,12 +100,10 @@ export default class CategoricalDisplayStore {
         if (this.pauseScrollSpy || !this.scrollPanel) { return; }
         if (this.filteredItems.length === 0) { return; }
 
-
         const categoryTitleHeight = 40;
         const scrollPanelTop = this.scrollPanel.container.getBoundingClientRect().top;
         let activeHeadTop = 0;
         let activeMenuId = null;
-
 
         for (const category of this.filteredItems) {
             const el = this.categoryElements[category.categoryId];
@@ -161,9 +159,6 @@ export default class CategoricalDisplayStore {
 
     @computed get favoritesCategory()  {
         this.pauseScrollSpy = true;
-        if (this.scrollPanel) {
-            this.scrollTop = this.scrollPanel.getValues().top;
-        }
         const favoritesCategory = {
             categoryName: t.translate('Favorites'),
             categoryId: 'favorite',
@@ -171,7 +166,7 @@ export default class CategoricalDisplayStore {
             emptyDescription: t.translate('There are no favorites yet.'),
             data: Object.keys(this.mainStore.favorites.favoritesMap[this.favoritesId]) || [],
         };
-        setTimeout(() => { this.pauseScrollSpy = false; }, 10);
+        setTimeout(() => { this.pauseScrollSpy = false; }, 30);
         return favoritesCategory;
     }
 
@@ -248,7 +243,9 @@ export default class CategoricalDisplayStore {
             filteredItems = this.lastFilteredItems;
         }
 
-        this.lastFilteredItems = filteredItems;
+        if (!this.pauseScrollSpy) {
+            this.lastFilteredItems = filteredItems;
+        }
         return filteredItems;
     }
 
@@ -272,12 +269,11 @@ export default class CategoricalDisplayStore {
             this.pauseScrollSpy = true;
             this.isUserScrolling = false;
             this.scrollPanel.scrollTop(el.offsetTop);
-            this.scrollTop = this.scrollPanel.getValues().top;
             this.activeCategoryKey = category.categoryId;
             this.activeHeadKey = null;
             // scrollTop takes some time to take affect, so we need
             // a slight delay before enabling the scroll spy again
-            setTimeout(() => { this.pauseScrollSpy = false; }, 10);
+            setTimeout(() => { this.pauseScrollSpy = false; }, 30);
         }
     }
 
