@@ -34,7 +34,7 @@ const isSessionAvailable = (
     return (
         (end_time - compare_time > 0)
         && (compare_time - start_time > 0)
-        && (((sessions && sessions.length) && inSession) || !sessions)
+        && inSession
     );
 };
 
@@ -211,7 +211,6 @@ class TimePicker extends React.PureComponent {
             const newSession = this.props.sessions && this.props.sessions[0];
             const oldSession = prevProps.sessions && prevProps.sessions.length ? prevProps.sessions[0] : null;
             if (newSession !== oldSession) {
-                console.log('sessions should change');
                 if (this.props.focus) {
                     const { sessions } = this.props;
                     const [prev_hour, prev_minute] = (prevState.value || '00:00').split(':');

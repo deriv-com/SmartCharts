@@ -148,7 +148,7 @@ class TradingTimes {
                     const isClosedAllDay = open.length === 1
                         && open[0] === '--'
                         && close[0] === '--';
-                    if (!isOpenAllDay && !isClosedAllDay) {
+                    if (!isClosedAllDay) {
                         _times = open.map((openTime, idx) => ({
                             open: getUTCDate(openTime),
                             close: getUTCDate(close[idx]),
