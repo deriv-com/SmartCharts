@@ -161,7 +161,9 @@ export default class CategoricalDisplayStore {
 
     @computed get favoritesCategory()  {
         this.pauseScrollSpy = true;
-
+        if (this.scrollPanel) {
+            this.scrollTop = this.scrollPanel.getValues().top;
+        }
         const favoritesCategory = {
             categoryName: t.translate('Favorites'),
             categoryId: 'favorite',
@@ -270,6 +272,7 @@ export default class CategoricalDisplayStore {
             this.pauseScrollSpy = true;
             this.isUserScrolling = false;
             this.scrollPanel.scrollTop(el.offsetTop);
+            this.scrollTop = this.scrollPanel.getValues().top;
             this.activeCategoryKey = category.categoryId;
             this.activeHeadKey = null;
             // scrollTop takes some time to take affect, so we need
