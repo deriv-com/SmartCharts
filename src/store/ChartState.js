@@ -1,6 +1,6 @@
 /* eslint-disable no-new */
 import { action, observable, when } from 'mobx';
-import { createObjectFromLocalStorage, calculateTimeUnitInterval, calculateGranularity } from '../utils';
+import { createObjectFromLocalStorage, calculateTimeUnitInterval, calculateGranularity, getUTCDate } from '../utils';
 
 class ChartState {
     @observable granularity;
@@ -11,6 +11,8 @@ class ChartState {
     @observable isConnectionOpened;
     @observable settings;
     @observable showLastDigitStats;
+    @observable scrollToEpoch;
+
     get comparisonStore() { return this.mainStore.comparison; }
     get stxx() { return this.chartStore.stxx; }
     get context() { return this.chartStore.context; }
@@ -28,7 +30,7 @@ class ChartState {
         this.stxx.addEventListener('drawing', this.saveDrawings.bind(this));
     };
 
-    @action.bound updateProps({ id, settings, isConnectionOpened, symbol, granularity, chartType, startEpoch, endEpoch, removeAllComparisons, isAnimationEnabled = true, showLastDigitStats = false }) {
+    @action.bound updateProps({ id, settings, isConnectionOpened, symbol, granularity, chartType, startEpoch, endEpoch, removeAllComparisons, isAnimationEnabled = true, showLastDigitStats = false, scrollToEpoch, scrollToEpochOffset = 0 }) {
         this.chartId = id;
         this.settings = settings;
         this.isConnectionOpened = isConnectionOpened;
@@ -37,6 +39,7 @@ class ChartState {
         this.endEpoch = endEpoch;
         this.isAnimationEnabled = isAnimationEnabled;
         this.showLastDigitStats = showLastDigitStats;
+        this.scrollToEpochOffset = scrollToEpochOffset;
 
         if (this.stxx) {
             this.stxx.drawPriceLabels = !!this.endEpoch;
@@ -52,6 +55,11 @@ class ChartState {
         }
         if (removeAllComparisons) {
             this.comparisonStore.removeAll();
+        }
+
+        if (this.scrollToEpoch !== scrollToEpoch && this.context) {
+            this.scrollToEpoch = scrollToEpoch;
+            this.scrollChartToLeft();
         }
     }
 
@@ -150,6 +158,23 @@ class ChartState {
         if (drawings) {
             this.stxx.importDrawings(drawings);
             this.stxx.draw();
+        }
+    }
+
+    scrollChartToLeft() {
+        if (this.scrollToEpoch) {
+            const startEntry = this.stxx.getDataSegment()
+                .reverse()
+                .find(entry =>  entry.DT <= new Date(getUTCDate(this.scrollToEpoch)));
+            this.stxx.setStartDate(startEntry.DT);
+            this.stxx.chart.scroll += this.scrollToEpochOffset;
+            this.stxx.chart.lockScroll = true;
+            this.stxx.allowScroll = false;
+            this.stxx.draw();
+        } else {
+            this.stxx.chart.lockScroll = false;
+            this.stxx.allowScroll = true;
+            this.stxx.home();
         }
     }
 }
