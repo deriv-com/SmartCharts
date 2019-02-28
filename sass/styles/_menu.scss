@@ -45,9 +45,10 @@ $transition-duration: 300ms;
         pointer-events: initial;
     }
     .title {
+        display: inline-block;
         height: 20px;
         line-height: 20px;
-        padding: 1em 1.6em 0.3em;
+        padding: 1em 1.6em 0.5em;
 
         .title-text {
             display: inline-block;
