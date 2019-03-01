@@ -108,7 +108,7 @@
                 border-radius: 0 0 0 4px;
                 width: 150px;
                 @include themify($themes) {
-                    border-right: 1px solid themed('ChartHistoryPickerBorder');
+                    border-right: 1px solid themed('ChartHistoryPickerTimeBorder');
                 }
             }
             .time-picker-minutes {

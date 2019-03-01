@@ -6,13 +6,13 @@ $COLOR_GRAY: #e9e9ed;
     top: 0;
     left: 0;
     outline: 0;
-    box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.14);
     z-index: 999;
     font-size: 14px;
     box-sizing: border-box;
     width: 280px;
     border-radius: 4px;
     @include themify($themes) {
+        box-shadow: 0 2px 8px 0 themed('ChartHistoryPickerShadow');
         background: themed('ChartHistoryPickerBg');
         border: 1px solid themed('ChartHistoryPickerBorder');
     }
@@ -139,6 +139,9 @@ $COLOR_GRAY: #e9e9ed;
         &.calendar-month-panel, &.calendar-year-panel, &.calendar-decade-panel, &.calendar-century-panel {
             grid-template-columns: repeat(3, 1fr);
         }
+        .calendar-date-header {
+            font-weight: bold;
+        }
         .calendar-date, .calendar-month, .calendar-year, .calendar-decade {
             justify-content: center;
             align-self: center;
@@ -150,7 +153,7 @@ $COLOR_GRAY: #e9e9ed;
             text-align: center;
             background: transparent;
             transition: all 0.3s;
-            font-size: 14px;
+            font-size: 12px;
             line-height: 24px;
             @include themify($themes) {
                 color: themed('ChartHistoryPickerBodyColor');
