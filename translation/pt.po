@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Portuguese\n"
 "Language: pt_PT\n"
-"PO-Revision-Date: 2019-03-01 07:03\n"
+"PO-Revision-Date: 2019-03-01 17:58\n"
 
 msgid " already exists."
 msgstr " já existe."
@@ -40,7 +40,7 @@ msgid "Asset Information"
 msgstr "Informações do ativo"
 
 msgid "Auto Scale"
-msgstr ""
+msgstr "Dimensionamento automático"
 
 msgid "Average Line"
 msgstr "Linha Média"
@@ -52,7 +52,7 @@ msgid "Box Size"
 msgstr "Tamanho da caixa"
 
 msgid "C"
-msgstr ""
+msgstr "C"
 
 msgid "Callout"
 msgstr "Período de disponibilidade"
@@ -64,7 +64,7 @@ msgid "Candle"
 msgstr "Vela"
 
 msgid "Change"
-msgstr ""
+msgstr "Alterar"
 
 msgid "Channel"
 msgstr "Canal"
@@ -73,7 +73,7 @@ msgid "Chart data is not available for this symbol."
 msgstr "Dados de gráficos não estão disponíveis para este símbolo."
 
 msgid "Chart Table"
-msgstr ""
+msgstr "Tabela do gráfico"
 
 msgid "Chart types"
 msgstr "Tipos de gráficos"
@@ -82,7 +82,7 @@ msgid "Clear All"
 msgstr "Limpar Todos"
 
 msgid "Close"
-msgstr ""
+msgstr "Fechar"
 
 msgid "CLOSE"
 msgstr "FECHAR"
@@ -112,7 +112,7 @@ msgid "Dark Mode"
 msgstr "Modo escuro"
 
 msgid "Date"
-msgstr ""
+msgstr "Data"
 
 msgid "Day"
 msgstr "Dia"
@@ -166,19 +166,19 @@ msgid "Gartley"
 msgstr "Gartley"
 
 msgid "H"
-msgstr ""
+msgstr "H"
 
 msgid "Heikin Ashi"
 msgstr "Heikin Ashi"
 
 msgid "High"
-msgstr ""
+msgstr "Alta"
 
 msgid "HIGH"
 msgstr "ALTO"
 
 msgid "Historical Data Mode"
-msgstr ""
+msgstr "Modo de data histórica"
 
 msgid "Hollow Candle"
 msgstr "Vela vazia"
@@ -199,13 +199,13 @@ msgid "Kagi"
 msgstr "Kagi"
 
 msgid "L"
-msgstr ""
+msgstr "L"
 
 msgid "Language"
 msgstr "Idioma"
 
 msgid "Last digits stats for latest 1000 ticks on "
-msgstr ""
+msgstr "Estatísticas do último dígito dos últimos 1000 ticks de "
 
 msgid "Line"
 msgstr "Linha"
@@ -214,7 +214,7 @@ msgid "Line Break"
 msgstr "Quebra de linha"
 
 msgid "Low"
-msgstr ""
+msgstr "Baixa"
 
 msgid "LOW"
 msgstr "BAIXO"
@@ -226,13 +226,13 @@ msgid "Minute"
 msgstr "Minuto"
 
 msgid "O"
-msgstr ""
+msgstr "O"
 
 msgid "OHLC"
 msgstr "OHLC"
 
 msgid "Open"
-msgstr ""
+msgstr "Abrir"
 
 msgid "OPEN"
 msgstr "ABRIR"
@@ -277,16 +277,16 @@ msgid "RESET"
 msgstr "REINICIAR"
 
 msgid "Retrieving Chart Data..."
-msgstr ""
+msgstr "Carregando dados do gráfico..."
 
 msgid "Retrieving Chart Engine..."
-msgstr ""
+msgstr "Carregando o motor do gráfico..."
 
 msgid "Retrieving Market Symbols..."
-msgstr ""
+msgstr "Carregando símbolos do mercado..."
 
 msgid "Retrieving Trading Times..."
-msgstr ""
+msgstr "Carregando horas de negociação..."
 
 msgid "Reversal"
 msgstr "Inversão"
@@ -343,7 +343,7 @@ msgid "Streaming for [symbol] is not available due to license restrictions"
 msgstr "Transmissão ao vivo do [symbol] não está disponível devido a restrições de licença"
 
 msgid "Table"
-msgstr ""
+msgstr "Tabela"
 
 msgid "Template name"
 msgstr "Nome do modelo"
