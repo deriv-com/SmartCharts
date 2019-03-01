@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
-"PO-Revision-Date: 2019-02-12 03:31\n"
+"PO-Revision-Date: 2019-03-01 07:03\n"
 
 msgid " already exists."
 msgstr " уже существует."
@@ -38,6 +38,9 @@ msgstr "Примечание"
 
 msgid "Asset Information"
 msgstr "Информация об активе"
+
+msgid "Auto Scale"
+msgstr ""
 
 msgid "Average Line"
 msgstr "Средняя линия"
@@ -200,6 +203,9 @@ msgstr "Мин"
 
 msgid "Language"
 msgstr "Язык"
+
+msgid "Last digits stats for latest 1000 ticks on "
+msgstr ""
 
 msgid "Line"
 msgstr "Линия"
