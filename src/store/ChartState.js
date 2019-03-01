@@ -11,7 +11,7 @@ class ChartState {
     @observable isConnectionOpened;
     @observable settings;
     @observable showLastDigitStats;
-    @observable exportLayout;
+    @observable onExportLayout;
     @observable cleanChart;
     @observable importLayout;
 
@@ -24,7 +24,7 @@ class ChartState {
         this.mainStore = mainStore;
         this.chartStore = mainStore.chart;
         when(() => this.context, this.onContextReady);
-        reaction(() => this.exportLayout, this.ExportLayout.bind(this));
+        reaction(() => this.onExportLayout, this.ExportLayout.bind(this));
         reaction(() => this.importLayout, this.ImportLayout.bind(this));
         reaction(() => this.cleanChart, this.CleanChart.bind(this));
     }
@@ -35,7 +35,7 @@ class ChartState {
         this.stxx.addEventListener('drawing', this.saveDrawings.bind(this));
     };
 
-    @action.bound updateProps({ id, settings, isConnectionOpened, symbol, granularity, chartType, startEpoch, endEpoch, exportLayout, onExportLayout, cleanChart, importLayout, layout, removeAllComparisons, isAnimationEnabled = true, showLastDigitStats = false }) {
+    @action.bound updateProps({ id, settings, isConnectionOpened, symbol, granularity, chartType, startEpoch, endEpoch, onExportLayout, cleanChart, importLayout, layout, removeAllComparisons, isAnimationEnabled = true, showLastDigitStats = false }) {
         this.chartId = id;
         this.settings = settings;
         this.isConnectionOpened = isConnectionOpened;
@@ -45,8 +45,8 @@ class ChartState {
         this.isAnimationEnabled = isAnimationEnabled;
         this.showLastDigitStats = showLastDigitStats;
 
-        if (exportLayout !== this.exportLayout) {
-            this.exportLayout = exportLayout;
+        if (onExportLayout !== this.onExportLayout) {
+            // this.exportLayout = exportLayout;
             this.onExportLayout = onExportLayout;
         }
 
@@ -208,7 +208,7 @@ class ChartState {
     }
 
     ExportLayout() {
-        if (!this.exportLayout) return;
+        if (!this.onExportLayout) return;
         const currentLayout = this.stxx.exportLayout();
         currentLayout.drawings = this.stxx.exportDrawings();
 
