@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Indonesian\n"
 "Language: id_ID\n"
-"PO-Revision-Date: 2019-02-11 08:33\n"
+"PO-Revision-Date: 2019-03-01 07:03\n"
 
 msgid " already exists."
 msgstr " sudah tersedia."
@@ -38,6 +38,9 @@ msgstr "Anotasi"
 
 msgid "Asset Information"
 msgstr "Informasi Aset"
+
+msgid "Auto Scale"
+msgstr ""
 
 msgid "Average Line"
 msgstr "Garis Rata-Rata"
@@ -200,6 +203,9 @@ msgstr "L"
 
 msgid "Language"
 msgstr "Bahasa"
+
+msgid "Last digits stats for latest 1000 ticks on "
+msgstr ""
 
 msgid "Line"
 msgstr "Garis"
