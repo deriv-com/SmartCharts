@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Chinese Traditional\n"
 "Language: zh_TW\n"
-"PO-Revision-Date: 2019-03-01 07:03\n"
+"PO-Revision-Date: 2019-03-01 09:43\n"
 
 msgid " already exists."
 msgstr " 已經存在。"
@@ -40,7 +40,7 @@ msgid "Asset Information"
 msgstr "資產資訊"
 
 msgid "Auto Scale"
-msgstr ""
+msgstr "自動縮放"
 
 msgid "Average Line"
 msgstr "平均線"
@@ -205,7 +205,7 @@ msgid "Language"
 msgstr "語言"
 
 msgid "Last digits stats for latest 1000 ticks on "
-msgstr ""
+msgstr "顯示最新1000跳點之最後統計數字 "
 
 msgid "Line"
 msgstr "列"
