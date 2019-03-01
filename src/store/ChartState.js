@@ -35,7 +35,7 @@ class ChartState {
         this.stxx.addEventListener('drawing', this.saveDrawings.bind(this));
     };
 
-    @action.bound updateProps({ id, settings, isConnectionOpened, symbol, granularity, chartType, startEpoch, endEpoch, onExportLayout, cleanChart, importLayout, layout, removeAllComparisons, isAnimationEnabled = true, showLastDigitStats = false }) {
+    @action.bound updateProps({ id, settings, isConnectionOpened, symbol, granularity, chartType, startEpoch, endEpoch, onExportLayout, cleanChart, importLayout, removeAllComparisons, isAnimationEnabled = true, showLastDigitStats = false }) {
         this.chartId = id;
         this.settings = settings;
         this.isConnectionOpened = isConnectionOpened;
@@ -46,7 +46,6 @@ class ChartState {
         this.showLastDigitStats = showLastDigitStats;
 
         if (onExportLayout !== this.onExportLayout) {
-            // this.exportLayout = exportLayout;
             this.onExportLayout = onExportLayout;
         }
 
@@ -55,7 +54,6 @@ class ChartState {
         }
 
         if (importLayout !== this.importLayout) {
-            this.layout = layout;
             this.importLayout = importLayout;
         }
 
@@ -193,16 +191,16 @@ class ChartState {
     }
 
     ImportLayout() {
-        if (!this.importLayout || !this.layout) return;
-        this.stxx.importLayout(this.layout);
+        if (!this.importLayout) return;
+        this.stxx.importLayout(this.importLayout);
 
-        this.mainStore.crosshair.setCrosshairState(this.layout.crosshair);
+        this.mainStore.crosshair.setCrosshairState(this.importLayout.crosshair);
 
-        this.mainStore.chart.changeSymbol(this.stxx.chart.symbol, this.layout.interval * 60);
-        this.mainStore.chartType.setType(this.layout.chartType);
+        this.mainStore.chart.changeSymbol(this.stxx.chart.symbol, this.importLayout.interval * 60);
+        this.mainStore.chartType.setType(this.importLayout.chartType);
 
-        if (this.layout.drawings) {
-            this.stxx.importDrawings(this.layout.drawings);
+        if (this.importLayout.drawings) {
+            this.stxx.importDrawings(this.importLayout.drawings);
             this.stxx.draw();
         }
     }
