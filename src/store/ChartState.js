@@ -188,15 +188,18 @@ class ChartState {
         this.stxx.clearDrawings();
         this.mainStore.crosshair.setCrosshairState(0);
 
-        this.mainStore.chartType.setType('mountain');
         this.mainStore.chart.changeSymbol(this.stxx.chart.symbol, 0);
+        this.mainStore.chartType.setType('mountain');
     }
 
     ImportLayout() {
-        if (!this.importLayout) return;
+        if (!this.importLayout || !this.layout) return;
         this.stxx.importLayout(this.layout);
 
         this.mainStore.crosshair.setCrosshairState(this.layout.crosshair);
+
+        this.mainStore.chart.changeSymbol(this.stxx.chart.symbol, this.layout.interval * 60);
+        this.mainStore.chartType.setType(this.layout.chartType);
 
         if (this.layout.drawings) {
             this.stxx.importDrawings(this.layout.drawings);
