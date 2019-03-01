@@ -219,19 +219,6 @@ class App extends Component {
         this.setState({ endEpoch: (value !== '') ? (new Date(`${value}:00Z`).valueOf() / 1000) : undefined });
     };
 
-    onExportLayout=(layout) => {
-        console.log('Layout exported');
-        this.layout = layout;
-    }
-
-    oncheckchange= (e) => {
-        if (e.target.checked) {
-            this.setState({ exportLayout: true, cleanChart: true, importLayout:false  });
-        } else {
-            this.setState({ importLayout : true, exportLayout:false, cleanChart:false });
-        }
-    }
-
     renderTopWidgets = () => (
         <>
             <ChartTitle onChange={this.symbolChange} />
@@ -289,36 +276,28 @@ class App extends Component {
     }
 
     render() {
-        const { settings, isConnectionOpened, symbol, endEpoch, exportLayout, cleanChart, importLayout } = this.state;
+        const { settings, isConnectionOpened, symbol, endEpoch } = this.state;
 
         return (
-            <>
-                <input className="change-chart-checkbox" type="checkbox" onChange={this.oncheckchange} />
-                <SmartChart
-                    id={chartId}
-                    symbol={symbol}
-                    isMobile={isMobile}
-                    onMessage={this.onMessage}
-                    enableRouting
-                    removeAllComparisons={settings.historical}
-                    topWidgets={this.renderTopWidgets}
-                    chartControlsWidgets={this.renderControls}
-                    requestAPI={requestAPI}
-                    requestSubscribe={requestSubscribe}
-                    requestForget={requestForget}
-                    settings={settings}
-                    endEpoch={endEpoch}
-                    chartType={this.state.chartType}
-                    granularity={this.state.granularity}
-                    onSettingsChange={this.saveSettings}
-                    isConnectionOpened={isConnectionOpened}
-                    exportLayout={exportLayout}
-                    onExportLayout={this.onExportLayout}
-                    cleanChart={cleanChart}
-                    importLayout={importLayout}
-                    layout={this.layout}
-                />
-            </>
+            <SmartChart
+                id={chartId}
+                symbol={symbol}
+                isMobile={isMobile}
+                onMessage={this.onMessage}
+                enableRouting
+                removeAllComparisons={settings.historical}
+                topWidgets={this.renderTopWidgets}
+                chartControlsWidgets={this.renderControls}
+                requestAPI={requestAPI}
+                requestSubscribe={requestSubscribe}
+                requestForget={requestForget}
+                settings={settings}
+                endEpoch={endEpoch}
+                chartType={this.state.chartType}
+                granularity={this.state.granularity}
+                onSettingsChange={this.saveSettings}
+                isConnectionOpened={isConnectionOpened}
+            />
         );
     }
 }
