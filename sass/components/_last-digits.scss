@@ -1,63 +1,73 @@
 .cq-last-digits {
     position: absolute;
-    bottom: 100px;
+    bottom: 45px;
     left: calc(50% - 150px);
     visibility: hidden;
 
     &.show {
         visibility: visible;
     }
-    .cq-bar {
-        width: 10px;
+    .cq-bars {
+        height: 70px;
         @include themify($themes) {
-            background-image: linear-gradient(to bottom, themed('LastdigitsBarBg'), rgba(themed('LastdigitsBarBg'), 0.5) var(--bar-gradiant)); /* stylelint-disable-line plugin/no-unsupported-browser-features */
+            color: themed('LastdigitsBarText');
         }
-        position: absolute;
-        bottom: 40px;
-        -webkit-transition: height 0.8s ease-in-out; /* For Safari 3.1 to 6.0 */
-        transition: height 0.8s ease-in-out;
-        border-bottom-left-radius: 16px;
-        border-bottom-right-radius: 16px;
-        border-top-left-radius: 16px;
-        border-top-right-radius: 16px;
 
-        .cq-bar-title {
+        .min {
             @include themify($themes) {
-                color: themed('LastdigitsBarText');
+                color: themed('LastdigitsMinBarBg');
+            }
+        }
+        .max {
+            @include themify($themes) {
+                color: themed('LastdigitsMaxBarBg');
+            }
+        }
+        .cq-bar-value {
+            margin: -16px 0 0 -5px;
+            transition: opacity 0.8s linear;
+            font-size: 10px;
+            opacity: 0;
+
+            &.show {
+                opacity: 1;
+            }
+        }
+        .cq-bar {
+            width: 10px;
+            @include themify($themes) {
+                background-color: themed('LastdigitsBarBg');
             }
             position: absolute;
-            bottom: -16px;
-            width: 10px;
-            text-align: center;
+            bottom: 40px;
+            transition: height 0.8s ease-in-out;
+            border-radius: 16px;
 
+            .cq-bar-title {
+                position: absolute;
+                bottom: -20px;
+                width: 10px;
+                text-align: center;
+                font-size: 14px;
+            }
             &.min {
                 @include themify($themes) {
-                    color: themed('LastdigitsMinBarBg');
+                    background-color: themed('LastdigitsMinBarBg');
                 }
             }
             &.max {
                 @include themify($themes) {
-                    color: themed('LastdigitsMaxBarBg');
+                    background-color: themed('LastdigitsMaxBarBg');
                 }
-            }
-        }
-        &.min {
-            @include themify($themes) {
-                background-color: themed('LastdigitsMinBarBg');
-                background-image: none;
-            }
-        }
-        &.max {
-            @include themify($themes) {
-                background-image: linear-gradient(to bottom, themed('LastdigitsMaxBarBg'), rgba(themed('LastdigitsMaxBarBg'), 0.5) var(--bar-gradiant)); /* stylelint-disable-line plugin/no-unsupported-browser-features */
             }
         }
     }
     .cq-bar-footer {
         text-align: center;
         width: 325px;
+
         @include themify($themes) {
-            color: themed('LastdigitsBarText');
+            color: themed('LastdigitsBarFooter');
         }
     }
 }

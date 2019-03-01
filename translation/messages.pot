@@ -26,6 +26,9 @@ msgstr ""
 msgid "Asset Information"
 msgstr ""
 
+msgid "Auto Scale"
+msgstr ""
+
 msgid "Average Line"
 msgstr ""
 
@@ -186,6 +189,9 @@ msgid "L"
 msgstr ""
 
 msgid "Language"
+msgstr ""
+
+msgid "Last digits stats for latest 1000 ticks on "
 msgstr ""
 
 msgid "Line"

@@ -302,7 +302,7 @@
     vertical-align: middle;
     display: inline-flex;
     font-family: serif;
-    font-size: 15px;
+    font-size: 1.5em;
 }
 
 .cq-changefontsize {
@@ -324,8 +324,4 @@
 .cq-chart-controls .ic-icon-with-sub {
     width: 24px;
     height: 24px;
-
-    > svg {
-        padding: 4px;
-    }
 }
