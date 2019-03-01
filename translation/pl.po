@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Polish\n"
 "Language: pl_PL\n"
-"PO-Revision-Date: 2019-02-09 19:01\n"
+"PO-Revision-Date: 2019-03-01 07:03\n"
 
 msgid " already exists."
 msgstr " już istnieje."
@@ -38,6 +38,9 @@ msgstr "Adnotacja"
 
 msgid "Asset Information"
 msgstr "Informacje o aktywach"
+
+msgid "Auto Scale"
+msgstr ""
 
 msgid "Average Line"
 msgstr "Linia średniej"
@@ -200,6 +203,9 @@ msgstr "N"
 
 msgid "Language"
 msgstr "Język"
+
+msgid "Last digits stats for latest 1000 ticks on "
+msgstr ""
 
 msgid "Line"
 msgstr "Linia"
