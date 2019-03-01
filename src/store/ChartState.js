@@ -12,7 +12,7 @@ class ChartState {
     @observable settings;
     @observable showLastDigitStats;
     @observable onExportLayout;
-    @observable cleanChart;
+    @observable clearChart;
     @observable importLayout;
 
     get comparisonStore() { return this.mainStore.comparison; }
@@ -26,7 +26,7 @@ class ChartState {
         when(() => this.context, this.onContextReady);
         reaction(() => this.onExportLayout, this.ExportLayout.bind(this));
         reaction(() => this.importLayout, this.ImportLayout.bind(this));
-        reaction(() => this.cleanChart, this.CleanChart.bind(this));
+        reaction(() => this.clearChart, this.ClearChart.bind(this));
     }
 
     onContextReady = () => {
@@ -35,7 +35,7 @@ class ChartState {
         this.stxx.addEventListener('drawing', this.saveDrawings.bind(this));
     };
 
-    @action.bound updateProps({ id, settings, isConnectionOpened, symbol, granularity, chartType, startEpoch, endEpoch, onExportLayout, cleanChart, importLayout, removeAllComparisons, isAnimationEnabled = true, showLastDigitStats = false }) {
+    @action.bound updateProps({ id, settings, isConnectionOpened, symbol, granularity, chartType, startEpoch, endEpoch, onExportLayout, clearChart, importLayout, removeAllComparisons, isAnimationEnabled = true, showLastDigitStats = false }) {
         this.chartId = id;
         this.settings = settings;
         this.isConnectionOpened = isConnectionOpened;
@@ -49,8 +49,8 @@ class ChartState {
             this.onExportLayout = onExportLayout;
         }
 
-        if (cleanChart !== this.CleanChart) {
-            this.cleanChart = cleanChart;
+        if (clearChart !== this.clearChart) {
+            this.clearChart = clearChart;
         }
 
         if (importLayout !== this.importLayout) {
@@ -172,8 +172,8 @@ class ChartState {
         }
     }
 
-    CleanChart() {
-        if (!this.cleanChart) return;
+    ClearChart() {
+        if (!this.clearChart) return;
         // Remove comparsions
         for (const field in this.stxx.chart.series) {
             this.stxx.removeSeries(field);
