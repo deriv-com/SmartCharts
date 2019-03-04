@@ -192,24 +192,26 @@ class ChartState {
 
     ImportLayout() {
         if (!this.importLayout) return;
-        this.stxx.importLayout(this.importLayout);
+        this.stxx.importLayout(this.importLayout, {
+            managePeriodicity: false,
+            cb: () => {
+                this.importLayout.series.forEach((symbol) => {
+                    const symbolObject = this.chartStore.activeSymbols.getSymbolObj(symbol);
+                    this.mainStore.comparison.onSelectItem(symbolObject);
+                });
+
+                setTimeout(() => {
+                    if (this.importLayout.drawings) {
+                        this.stxx.importDrawings(this.importLayout.drawings);
+                        this.stxx.draw();
+                    }
+                }, 500);
+            },
+        });
 
         this.mainStore.crosshair.setCrosshairState(this.importLayout.crosshair);
-
         this.mainStore.chart.changeSymbol(this.stxx.chart.symbol, this.importLayout.interval * 60);
         this.mainStore.chartType.setType(this.importLayout.chartType);
-
-        setTimeout(() => {
-            this.importLayout.series.forEach((symbol) => {
-                const symbolObject = this.chartStore.activeSymbols.getSymbolObj(symbol);
-                this.mainStore.comparison.onSelectItem(symbolObject);
-            });
-
-            if (this.importLayout.drawings) {
-                this.stxx.importDrawings(this.importLayout.drawings);
-                this.stxx.draw();
-            }
-        }, 500);
     }
 
     ExportLayout() {
