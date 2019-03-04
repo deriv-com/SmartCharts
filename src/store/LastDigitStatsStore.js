@@ -38,7 +38,6 @@ export default class LastDigitStatsStore {
         this.digits = [];
         this.bars = [];
         this.latestData = [];
-        this.updateChartMargin(50);
         if (this.mainStore.chart && this.mainStore.chart.feed) {
             this.mainStore.chart.feed.offMasterDataUpdate(this.onMasterDataUpdate);
         }
@@ -48,8 +47,6 @@ export default class LastDigitStatsStore {
                 this.digits.push(0);
                 this.bars.push({ height:0, cName:'' });
             }
-
-            this.updateChartMargin(150);
 
             if (this.stx.masterData && this.stx.masterData.length >= this.count) {
                 this.latestData  = this.stx.masterData.slice(-this.count).map(x => x.Close.toFixed(this.decimalPlaces));
@@ -65,12 +62,6 @@ export default class LastDigitStatsStore {
             this.updateBars();
             this.mainStore.chart.feed.onMasterDataUpdate(this.onMasterDataUpdate);
         }
-    }
-
-    updateChartMargin =(margin) => {
-        this.stx.chart.yAxis.initialMarginBottom = margin;
-        this.stx.calculateYAxisMargins(this.stx.chart.panel.yAxis);
-        this.stx.draw();
     }
 
     @action.bound onMasterDataUpdate({ Close }) {
