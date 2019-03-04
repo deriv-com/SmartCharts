@@ -200,6 +200,11 @@ class ChartState {
         this.mainStore.chartType.setType(this.importLayout.chartType);
 
         setTimeout(() => {
+            this.importLayout.series.forEach((symbol) => {
+                const symbolObject = this.chartStore.activeSymbols.getSymbolObj(symbol);
+                this.mainStore.comparison.onSelectItem(symbolObject);
+            });
+
             if (this.importLayout.drawings) {
                 this.stxx.importDrawings(this.importLayout.drawings);
                 this.stxx.draw();
@@ -211,6 +216,10 @@ class ChartState {
         if (!this.onExportLayout) return;
         const currentLayout = this.stxx.exportLayout();
         currentLayout.drawings = this.stxx.exportDrawings();
+        currentLayout.series = [];
+        for (const field in this.stxx.chart.series) {
+            currentLayout.series.push(field);
+        }
 
         this.onExportLayout(currentLayout);
     }
