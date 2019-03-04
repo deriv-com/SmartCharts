@@ -1,5 +1,5 @@
 /* eslint-disable no-new */
-import { action, observable, when, reaction } from 'mobx';
+import { action, observable, when } from 'mobx';
 import { createObjectFromLocalStorage, calculateTimeUnitInterval, calculateGranularity, getIntervalInSeconds } from '../utils';
 
 class ChartState {
@@ -13,7 +13,7 @@ class ChartState {
     @observable showLastDigitStats;
     @observable onExportLayout;
     @observable clearChart;
-    @observable importLayout;
+    @observable importedLayout;
 
     get comparisonStore() { return this.mainStore.comparison; }
     get stxx() { return this.chartStore.stxx; }
@@ -24,9 +24,6 @@ class ChartState {
         this.mainStore = mainStore;
         this.chartStore = mainStore.chart;
         when(() => this.context, this.onContextReady);
-        reaction(() => this.onExportLayout, this.ExportLayout.bind(this));
-        reaction(() => this.importLayout, this.ImportLayout.bind(this));
-        reaction(() => this.clearChart, this.ClearChart.bind(this));
     }
 
     onContextReady = () => {
@@ -35,7 +32,7 @@ class ChartState {
         this.stxx.addEventListener('drawing', this.saveDrawings.bind(this));
     };
 
-    @action.bound updateProps({ id, settings, isConnectionOpened, symbol, granularity, chartType, startEpoch, endEpoch, onExportLayout, clearChart, importLayout, removeAllComparisons, isAnimationEnabled = true, showLastDigitStats = false }) {
+    @action.bound updateProps({ id, settings, isConnectionOpened, symbol, granularity, chartType, startEpoch, endEpoch, onExportLayout, clearChart, importedLayout, removeAllComparisons, isAnimationEnabled = true, showLastDigitStats = false }) {
         this.chartId = id;
         this.settings = settings;
         this.isConnectionOpened = isConnectionOpened;
@@ -47,14 +44,17 @@ class ChartState {
 
         if (onExportLayout !== this.onExportLayout) {
             this.onExportLayout = onExportLayout;
+            this.exportLayout();
         }
 
         if (clearChart !== this.clearChart) {
             this.clearChart = clearChart;
+            this.cleanChart();
         }
 
-        if (JSON.stringify(importLayout) !== JSON.stringify(this.importLayout)) {
-            this.importLayout = importLayout;
+        if (JSON.stringify(importedLayout) !== JSON.stringify(this.importedLayout)) {
+            this.importedLayout = importedLayout;
+            this.importLayout();
         }
 
         if (this.stxx) {
@@ -172,7 +172,7 @@ class ChartState {
         }
     }
 
-    ClearChart() {
+    cleanChart() {
         if (!this.clearChart) return;
         // Remove comparsions
         for (const field in this.stxx.chart.series) {
@@ -184,39 +184,42 @@ class ChartState {
             CIQ.Studies.removeStudy(this.stxx, sd);
         }
         this.stxx.clearDrawings();
+
+        // TODO: use constant
         this.mainStore.crosshair.setCrosshairState(0);
 
+        // TODO: use constant
         this.mainStore.chart.changeSymbol(this.stxx.chart.symbol, 0);
         this.mainStore.chartType.setType('mountain');
     }
 
-    ImportLayout() {
-        if (!this.importLayout) return;
-        this.stxx.importLayout(this.importLayout, {
+    importLayout() {
+        if (!this.importedLayout) return;
+        this.stxx.importLayout(this.importedLayout, {
             managePeriodicity: false,
             cb: () => {
-                this.importLayout.series.forEach((symbol) => {
+                this.importedLayout.series.forEach((symbol) => {
                     const symbolObject = this.chartStore.activeSymbols.getSymbolObj(symbol);
                     this.mainStore.comparison.onSelectItem(symbolObject);
                 });
 
                 setTimeout(() => {
-                    if (this.importLayout.drawings) {
-                        this.stxx.importDrawings(this.importLayout.drawings);
+                    if (this.importedLayout.drawings) {
+                        this.stxx.importDrawings(this.importedLayout.drawings);
                         this.stxx.draw();
                     }
                 }, 500);
             },
         });
 
-        this.mainStore.crosshair.setCrosshairState(this.importLayout.crosshair);
-        const seconds = getIntervalInSeconds(this.importLayout);
+        this.mainStore.crosshair.setCrosshairState(this.importedLayout.crosshair);
+        const seconds = getIntervalInSeconds(this.importedLayout);
         const granularity = seconds === 1 ? 0 : seconds;
         this.mainStore.chart.changeSymbol(this.stxx.chart.symbol, granularity);
-        this.mainStore.chartType.setType(this.importLayout.chartType);
+        this.mainStore.chartType.setType(this.importedLayout.chartType);
     }
 
-    ExportLayout() {
+    exportLayout() {
         if (!this.onExportLayout) return;
         const currentLayout = this.stxx.exportLayout();
         currentLayout.drawings = this.stxx.exportDrawings();
