@@ -194,7 +194,7 @@ class ChartState {
     }
 
     importLayout() {
-        if (!this.importedLayout) return;
+        if (!this.importedLayout || !Object.keys(this.importedLayout).length) return;
         this.stxx.importLayout(this.importedLayout, {
             managePeriodicity: false,
             cb: () => {
