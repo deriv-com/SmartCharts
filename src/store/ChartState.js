@@ -1,6 +1,6 @@
 /* eslint-disable no-new */
 import { action, observable, when, reaction } from 'mobx';
-import { createObjectFromLocalStorage, calculateTimeUnitInterval, calculateGranularity } from '../utils';
+import { createObjectFromLocalStorage, calculateTimeUnitInterval, calculateGranularity, getIntervalInSeconds } from '../utils';
 
 class ChartState {
     @observable granularity;
@@ -210,7 +210,9 @@ class ChartState {
         });
 
         this.mainStore.crosshair.setCrosshairState(this.importLayout.crosshair);
-        this.mainStore.chart.changeSymbol(this.stxx.chart.symbol, this.importLayout.interval * 60);
+        const seconds = getIntervalInSeconds(this.importLayout);
+        const granularity = seconds === 1 ? 0 : seconds;
+        this.mainStore.chart.changeSymbol(this.stxx.chart.symbol, granularity);
         this.mainStore.chartType.setType(this.importLayout.chartType);
     }
 
