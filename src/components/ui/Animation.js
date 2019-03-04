@@ -73,6 +73,32 @@ export default function animateChart(stx, animationParameters, easeMachine) {
         }
     });
 
+    stx.append('updateChartData', function (appendQuotes, chart, params) {
+        // These chart types are the only types supported by animation
+        const supportedChartType = this.mainSeriesRenderer && this.mainSeriesRenderer.supportsAnimation;
+
+        // This injection is just for charts which are not supported by animation.
+        if (supportedChartType) {
+            return false;
+        }
+
+        chart = chart || this.chart;
+        if (chart.lockScroll) {
+            if (chart.maxTicks - chart.scroll <= chart.maxTicks / 4) {
+                chart.lockScroll = false;
+                chart.allowScroll = true;
+                return false;
+            }
+
+            const lastAppendQuote     = appendQuotes[appendQuotes.length - 1];
+            const lastDataSegmentItem = chart.dataSegment[chart.dataSegment.length - 1];
+            if (lastAppendQuote.DT > lastDataSegmentItem.DT
+                    && chart.scroll <= chart.dataSegment.length) {
+                chart.scroll++;
+            }
+        }
+    });
+
     stx.prepend('updateChartData', function (appendQuotes, chart, params) {
         const self = this;
         if (!chart) {
