@@ -167,7 +167,9 @@ class ChartState {
                 .reverse()
                 .find(entry =>  entry.DT <= new Date(getUTCDate(this.scrollToEpoch)));
             this.stxx.setStartDate(startEntry.DT);
-            this.stxx.chart.scroll += this.scrollToEpochOffset;
+            if (this.scrollToEpochOffset) {
+                this.stxx.chart.scroll += this.scrollToEpochOffset - this.stxx.chart.scroll;
+            }
             this.stxx.chart.lockScroll = true;
             this.stxx.allowScroll = false;
             this.stxx.draw();
