@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: French\n"
 "Language: fr_FR\n"
-"PO-Revision-Date: 2019-03-01 07:02\n"
+"PO-Revision-Date: 2019-03-04 03:31\n"
 
 msgid " already exists."
 msgstr " existe déja."
@@ -205,7 +205,7 @@ msgid "Language"
 msgstr "Langue"
 
 msgid "Last digits stats for latest 1000 ticks on "
-msgstr ""
+msgstr "Statistiques du dernier chiffre pour les derniers 1000 ticks sur "
 
 msgid "Line"
 msgstr "Ligne"
