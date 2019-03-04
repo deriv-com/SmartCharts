@@ -53,7 +53,7 @@ class ChartState {
             this.clearChart = clearChart;
         }
 
-        if (importLayout !== this.importLayout) {
+        if (JSON.stringify(importLayout) !== JSON.stringify(this.importLayout)) {
             this.importLayout = importLayout;
         }
 
@@ -199,10 +199,12 @@ class ChartState {
         this.mainStore.chart.changeSymbol(this.stxx.chart.symbol, this.importLayout.interval * 60);
         this.mainStore.chartType.setType(this.importLayout.chartType);
 
-        if (this.importLayout.drawings) {
-            this.stxx.importDrawings(this.importLayout.drawings);
-            this.stxx.draw();
-        }
+        setTimeout(() => {
+            if (this.importLayout.drawings) {
+                this.stxx.importDrawings(this.importLayout.drawings);
+                this.stxx.draw();
+            }
+        }, 500);
     }
 
     ExportLayout() {
