@@ -199,13 +199,15 @@ class ChartState {
             managePeriodicity: true,
             preserveTicksAndCandleWidth: true,
             cb: () => {
-                this.importedLayout.series.forEach((symbol) => {
-                    const symbolObject = this.chartStore.activeSymbols.getSymbolObj(symbol);
-                    this.mainStore.comparison.onSelectItem(symbolObject);
-                });
+                if (this.importedLayout && this.importedLayout.series) {
+                    this.importedLayout.series.forEach((symbol) => {
+                        const symbolObject = this.chartStore.activeSymbols.getSymbolObj(symbol);
+                        this.mainStore.comparison.onSelectItem(symbolObject);
+                    });
+                }
 
                 setTimeout(() => {
-                    if (this.importedLayout.drawings) {
+                    if (this.importedLayout && this.importedLayout.drawings) {
                         this.stxx.importDrawings(this.importedLayout.drawings);
                         this.stxx.draw();
                     }
