@@ -108,6 +108,7 @@ isAnimationEnabled | Determine whether chart animation is enabled or disabled. I
 showLastDigitStats | Shows last digits stats. Defaults to `false`.
 scrollToEpoch | Scrolls the chart to the leftmost side and sets the last spot/bar as the first visible sport/bar in the chart. Also, it disables scrolling until the chart reaches the 3/4 of the width of the main pane of the chart. Defaults to `null`.
 scrollToEpochOffset | Sets the number of spot/bar(s) which should be visible before the last spot/bar at the leftmost side of the chart (It should be used with `scrollToEpoch`). Defaults to `0`.
+zoom | Zoom in and Zoom out the chart. the value should be in percentage. If the value is positive the chart will be zoomed in otherwise it will be zoomed out.
 ### Chart Settings
 
 | Attribute | Description |

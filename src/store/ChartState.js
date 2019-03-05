@@ -30,7 +30,7 @@ class ChartState {
         this.stxx.addEventListener('drawing', this.saveDrawings.bind(this));
     };
 
-    @action.bound updateProps({ id, settings, isConnectionOpened, symbol, granularity, chartType, startEpoch, endEpoch, removeAllComparisons, isAnimationEnabled = true, showLastDigitStats = false, scrollToEpoch, scrollToEpochOffset = 0 }) {
+    @action.bound updateProps({ id, settings, isConnectionOpened, symbol, granularity, chartType, startEpoch, endEpoch, removeAllComparisons, isAnimationEnabled = true, showLastDigitStats = false, scrollToEpoch, scrollToEpochOffset = 0, zoom }) {
         this.chartId = id;
         this.settings = settings;
         this.isConnectionOpened = isConnectionOpened;
@@ -60,6 +60,17 @@ class ChartState {
         if (this.scrollToEpoch !== scrollToEpoch && this.context) {
             this.scrollToEpoch = scrollToEpoch;
             this.scrollChartToLeft();
+        }
+
+        if (this.zoom !== zoom) {
+            this.zoom = +zoom;
+            if (this.context && this.stxx && this.zoom) {
+                if (this.zoom >= 0) {
+                    this.stxx.zoomIn(null, (Math.abs(100 - this.zoom) || 0.01) / 100);
+                } else {
+                    this.stxx.zoomOut(null, (100 + Math.abs(this.zoom)) / 100);
+                }
+            }
         }
     }
 
