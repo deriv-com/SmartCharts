@@ -1,6 +1,6 @@
 /* eslint-disable no-new */
 import { action, observable, when } from 'mobx';
-import { createObjectFromLocalStorage, calculateTimeUnitInterval, calculateGranularity, getIntervalInSeconds } from '../utils';
+import { createObjectFromLocalStorage, calculateTimeUnitInterval, calculateGranularity } from '../utils';
 
 class ChartState {
     @observable granularity;
@@ -190,13 +190,14 @@ class ChartState {
 
         // TODO: use constant
         this.mainStore.chart.changeSymbol(this.stxx.chart.symbol, 0);
-        this.mainStore.chartType.setType('mountain');
+        this.mainStore.chartType.setType({ id:'linear' });
     }
 
     importLayout() {
         if (!this.importedLayout || !Object.keys(this.importedLayout).length) return;
         this.stxx.importLayout(this.importedLayout, {
-            managePeriodicity: false,
+            managePeriodicity: true,
+            preserveTicksAndCandleWidth: true,
             cb: () => {
                 this.importedLayout.series.forEach((symbol) => {
                     const symbolObject = this.chartStore.activeSymbols.getSymbolObj(symbol);
@@ -209,14 +210,13 @@ class ChartState {
                         this.stxx.draw();
                     }
                 }, 500);
+
+                this.stxx.changeOccurred('layout');
+                this.mainStore.studies.updateActiveStudies();
             },
         });
 
         this.mainStore.crosshair.setCrosshairState(this.importedLayout.crosshair);
-        const seconds = getIntervalInSeconds(this.importedLayout);
-        const granularity = seconds === 1 ? 0 : seconds;
-        this.mainStore.chart.changeSymbol(this.stxx.chart.symbol, granularity);
-        this.mainStore.chartType.setType(this.importedLayout.chartType);
     }
 
     exportLayout() {
