@@ -86,7 +86,7 @@ export default function animateChart(stx, animationParameters, easeMachine) {
         if (chart.lockScroll) {
             if (chart.maxTicks - chart.scroll <= chart.maxTicks / 4) {
                 chart.lockScroll = false;
-                chart.allowScroll = true;
+                this.allowScroll = true;
                 return false;
             }
 
