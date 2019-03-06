@@ -120,7 +120,7 @@ export default class TimeperiodStore {
         const stx = this.context.stx;
         const price = stx.currentQuote().Close;
         let x = stx.pixelFromPrice(price, stx.chart.panel);
-        const currentPriceLabelHeight = 18;
+        const currentPriceLabelHeight = 24;
         const maxRequiredSpaceForLabels = 60;
         x = x > stx.chart.panel.bottom - maxRequiredSpaceForLabels ? x - currentPriceLabelHeight : x + currentPriceLabelHeight;
         return x;
