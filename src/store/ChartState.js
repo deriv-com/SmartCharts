@@ -11,6 +11,10 @@ class ChartState {
     @observable isConnectionOpened;
     @observable settings;
     @observable showLastDigitStats;
+    @observable onExportLayout;
+    @observable clearChart;
+    @observable importedLayout;
+
     get comparisonStore() { return this.mainStore.comparison; }
     get stxx() { return this.chartStore.stxx; }
     get context() { return this.chartStore.context; }
@@ -28,7 +32,7 @@ class ChartState {
         this.stxx.addEventListener('drawing', this.saveDrawings.bind(this));
     };
 
-    @action.bound updateProps({ id, settings, isConnectionOpened, symbol, granularity, chartType, startEpoch, endEpoch, removeAllComparisons, isAnimationEnabled = true, showLastDigitStats = false }) {
+    @action.bound updateProps({ id, settings, isConnectionOpened, symbol, granularity, chartType, startEpoch, endEpoch, onExportLayout, clearChart, importedLayout, removeAllComparisons, isAnimationEnabled = true, showLastDigitStats = false }) {
         this.chartId = id;
         this.settings = settings;
         this.isConnectionOpened = isConnectionOpened;
@@ -37,6 +41,21 @@ class ChartState {
         this.endEpoch = endEpoch;
         this.isAnimationEnabled = isAnimationEnabled;
         this.showLastDigitStats = showLastDigitStats;
+
+        if (onExportLayout !== this.onExportLayout) {
+            this.onExportLayout = onExportLayout;
+            this.exportLayout();
+        }
+
+        if (clearChart !== this.clearChart) {
+            this.clearChart = clearChart;
+            this.cleanChart();
+        }
+
+        if (JSON.stringify(importedLayout) !== JSON.stringify(this.importedLayout)) {
+            this.importedLayout = importedLayout;
+            this.importLayout();
+        }
 
         if (this.stxx) {
             this.stxx.drawPriceLabels = !!this.endEpoch;
@@ -151,6 +170,67 @@ class ChartState {
             this.stxx.importDrawings(drawings);
             this.stxx.draw();
         }
+    }
+
+    cleanChart() {
+        if (!this.clearChart) return;
+        // Remove comparsions
+        for (const field in this.stxx.chart.series) {
+            this.stxx.removeSeries(field);
+        }
+        // Remove indiactors
+        for (const id in this.stxx.layout.studies) {
+            const sd = this.stxx.layout.studies[id];
+            CIQ.Studies.removeStudy(this.stxx, sd);
+        }
+        this.stxx.clearDrawings();
+
+        // TODO: use constant
+        this.mainStore.crosshair.setCrosshairState(0);
+
+        // TODO: use constant
+        this.mainStore.chart.changeSymbol(this.stxx.chart.symbol, 0);
+        this.mainStore.chartType.setType({ id:'linear' });
+    }
+
+    importLayout() {
+        if (!this.importedLayout || !Object.keys(this.importedLayout).length) return;
+        this.stxx.importLayout(this.importedLayout, {
+            managePeriodicity: true,
+            preserveTicksAndCandleWidth: true,
+            cb: () => {
+                if (this.importedLayout && this.importedLayout.series) {
+                    this.importedLayout.series.forEach((symbol) => {
+                        const symbolObject = this.chartStore.activeSymbols.getSymbolObj(symbol);
+                        this.mainStore.comparison.onSelectItem(symbolObject);
+                    });
+                }
+
+                setTimeout(() => {
+                    if (this.importedLayout && this.importedLayout.drawings) {
+                        this.stxx.importDrawings(this.importedLayout.drawings);
+                        this.stxx.draw();
+                    }
+                }, 500);
+
+                this.stxx.changeOccurred('layout');
+                this.mainStore.studies.updateActiveStudies();
+            },
+        });
+
+        this.mainStore.crosshair.setCrosshairState(this.importedLayout.crosshair);
+    }
+
+    exportLayout() {
+        if (!this.onExportLayout) return;
+        const currentLayout = this.stxx.exportLayout();
+        currentLayout.drawings = this.stxx.exportDrawings();
+        currentLayout.series = [];
+        for (const field in this.stxx.chart.series) {
+            currentLayout.series.push(field);
+        }
+
+        this.onExportLayout(currentLayout);
     }
 }
 

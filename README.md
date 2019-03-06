@@ -106,6 +106,9 @@ isConnectionOpened | Sets the connection status. If set, upon reconnection smart
 onMessage | SmartCharts will send notifications via this callback, should it be provided. Each notification will have the following structure: `{ text, type, category }`.
 isAnimationEnabled | Determine whether chart animation is enabled or disabled. It may needs to be disabled for better performance. Defaults to `true`.
 showLastDigitStats | Shows last digits stats. Defaults to `false`.
+clearChart | Clear the chart.
+onExportLayout | Export the layout and send it back using this callback.
+importedLayout | The layout to be imported to chart. It should be the layout that was exported in onExportLayout;
 ### Chart Settings
 
 | Attribute | Description |
