@@ -14,6 +14,8 @@ class ChartState {
     @observable onExportLayout;
     @observable clearChart;
     @observable importedLayout;
+    @observable isOnPagination = false;
+    @observable paginationEndEpoch;
 
     get comparisonStore() { return this.mainStore.comparison; }
     get stxx() { return this.chartStore.stxx; }
@@ -30,6 +32,9 @@ class ChartState {
         this.stxx.addEventListener('layout', this.saveLayout.bind(this));
         this.stxx.addEventListener('symbolChange', this.saveLayout.bind(this));
         this.stxx.addEventListener('drawing', this.saveDrawings.bind(this));
+
+        this.chartStore.feed.onStartPagination(this.setOnPagination.bind(this));
+        this.chartStore.feed.onPagination(this.setOnPagination.bind(this));
     };
 
     @action.bound updateProps({ id, settings, isConnectionOpened, symbol, granularity, chartType, startEpoch, endEpoch, onExportLayout, clearChart, importedLayout, removeAllComparisons, isAnimationEnabled = true, showLastDigitStats = false }) {
@@ -72,6 +77,11 @@ class ChartState {
         if (removeAllComparisons) {
             this.comparisonStore.removeAll();
         }
+    }
+
+    @action.bound setOnPagination({ end }) {
+        this.isOnPagination     = !this.isOnPagination;
+        this.paginationEndEpoch = this.isOnPagination ? end : null;
     }
 
     saveLayout() {

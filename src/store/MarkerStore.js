@@ -60,6 +60,11 @@ export default class MarkerStore {
     // Considering how often this function is called, it made more sense to have the offset
     // done in CSS.
     @action.bound updatePosition() {
+        // When the chart has not been initialized or there isn't any data in masterData it shouldn't position the markers.
+        if (!this.stx || !this.stx.masterData || this.stx.masterData.length <= 0) {
+            return;
+        }
+
         if (this.isDistantFuture) {
             const dummyMarker = this.getDummyMarker();
             this.stx.futureTickIfDisplayed(dummyMarker);
@@ -75,7 +80,7 @@ export default class MarkerStore {
         let left;
 
         if (this.xPositioner !== 'none') {
-            if (!this.tick) {
+            if (this.tick === null) {
                 this.hideMarker();
                 return;
             }
@@ -186,7 +191,7 @@ export default class MarkerStore {
         if (dummyMarker.params.future) {
             this.stx.futureTickIfDisplayed(dummyMarker);
             this.tick = dummyMarker.tick;
-            if (this.tick) {
+            if (this.tick !== null) {
                 this.isDistantFuture = false;
             } else {
                 this.isDistantFuture = true;
@@ -194,7 +199,7 @@ export default class MarkerStore {
             }
         }
 
-        if (this.tick) {
+        if (this.tick !== null) {
             this.updatePosition();
         } else {
             this.hideMarker();
