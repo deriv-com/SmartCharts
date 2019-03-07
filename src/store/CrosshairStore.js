@@ -45,10 +45,15 @@ class CrosshairStore {
     };
 
     @action.bound toggleState() {
-        this.state = (this.state + 1) % 3;
-        this.stx.layout.crosshair = this.state;
-        this.stx.doDisplayCrosshairs();
+        const state = (this.state + 1) % 3;
+        this.setCrosshairState(state);
         this.mainStore.state.saveLayout();
+    }
+
+    setCrosshairState(state) {
+        this.state = state;
+        this.stx.layout.crosshair = state;
+        this.stx.doDisplayCrosshairs();
     }
 
     @action.bound renderCrosshairTooltip() {
