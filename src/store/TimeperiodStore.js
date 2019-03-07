@@ -122,6 +122,10 @@ export default class TimeperiodStore {
         let x = stx.pixelFromPrice(price, stx.chart.panel);
         const currentPriceLabelHeight = 24;
         const maxRequiredSpaceForLabels = 60;
+        if (stx.chart.showCurrentPriceLine
+            && (stx.chart.currentPriceLabelPos < currentPriceLabelHeight
+                || stx.chart.currentPriceLabelPos + maxRequiredSpaceForLabels > stx.chart.panel.bottom)
+        ) x = stx.chart.currentPriceLabelPos;
         x = x > stx.chart.panel.bottom - maxRequiredSpaceForLabels ? x - currentPriceLabelHeight : x + currentPriceLabelHeight;
         return x;
     }

@@ -10,6 +10,7 @@ export const drawCurrentPriceLine = () => {
                 const x = this.pixelFromTick(currentQuote.tick, chart) + (chart.lastTickOffset || 0);
                 // Change the panel position to current spot position for drawing current price line
                 panel.left = x;
+                this.chart.showCurrentPriceLine = panel.left > window.innerWidth;
             }
             panel.right -= 16;
         }
