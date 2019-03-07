@@ -18,8 +18,8 @@ import { // eslint-disable-line import/no-extraneous-dependencies
 } from '@binary-com/smartcharts'; // eslint-disable-line import/no-unresolved
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './test.scss';
 import moment from 'moment';
+import './test.scss';
 import { ConnectionManager, StreamManager } from './connection';
 
 setSmartChartsPublicPath('./dist/');
@@ -111,8 +111,26 @@ class App extends React.Component {
         </>
     );
 
+    toggleStartEpoch = () => {
+        if (this.state.scrollToEpoch) {
+            this.setState({
+                scrollToEpoch: undefined,
+            });
+        } else {
+            this.setState({
+                scrollToEpoch: moment.utc().unix(),
+            });
+        }
+    };
+
+    onLeftOffset = (evt) => {
+        this.setState({
+            leftOffset: +evt.target.value,
+        });
+    };
+
     render() {
-        const { barrierType, highLow : { high, low }, hidePriceLines, draggable, relative, shadeColor } = this.state;
+        const { barrierType, highLow : { high, low }, hidePriceLines, draggable, relative, shadeColor, scrollToEpoch, leftOffset } = this.state;
         const barriers = barrierType ? [{
             shade: barrierType,
             shadeColor,
@@ -134,7 +152,7 @@ class App extends React.Component {
         }
 
         return (
-            <div className="grid">
+            <div className="grid" style={{ diplay: 'block' }}>
                 <div className="chart-instance">
                     <SmartChart
                         onSymbolChange={symbol => console.log('Symbol has changed to:', symbol)}
@@ -145,6 +163,8 @@ class App extends React.Component {
                         requestForget={requestForget}
                         barriers={barriers}
                         granularity={this.state.granularity}
+                        scrollToEpoch={scrollToEpoch}
+                        scrollToEpochOffset={leftOffset}
                     >
                         {MarkerTimes.map(x => (
                             <Marker
@@ -185,6 +205,10 @@ class App extends React.Component {
                         No PriceLine: <input type="checkbox" checked={hidePriceLines === undefined ? '' : hidePriceLines} onChange={this.onPriceLineDisableChange} />
                         Relative: <input type="checkbox" checked={relative === undefined ? '' : relative} onChange={this.onRelativeChange} />
                         Draggable: <input type="checkbox" checked={draggable === undefined ? '' : draggable} onChange={this.onDraggableChange} />
+                        <div>
+                            Toggle StartEpoch: <button type="button" onClick={this.toggleStartEpoch}>Toggle</button>
+                            LeftOffset(bars): <input type="number" value={leftOffset || 0} onChange={this.onLeftOffset} />
+                        </div>
                     </label>
                 </div>
             </div>
