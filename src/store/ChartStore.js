@@ -308,9 +308,6 @@ class ChartStore {
             }
             let yaxisLabelStyle = this.yaxisLabelStyle;
             if (yax.yaxisLabelStyle) yaxisLabelStyle = yax.yaxisLabelStyle;
-            if (this.currentQuote && this.currentQuote().Close.toString() === txt) {
-                this.chart.currentPriceLabelPos = y;
-            }
 
             const params = {
                 ctx:context,

@@ -118,16 +118,16 @@ export default class TimeperiodStore {
 
     @computed get remainLabelY() {
         const stx = this.context.stx;
-        const price = stx.currentQuote().Close;
-        let x = stx.pixelFromPrice(price, stx.chart.panel);
-        const currentPriceLabelHeight = 24;
-        const maxRequiredSpaceForLabels = 60;
-        if (stx.chart.showCurrentPriceLine
-            && (stx.chart.currentPriceLabelPos < currentPriceLabelHeight
-                || stx.chart.currentPriceLabelPos + maxRequiredSpaceForLabels > stx.chart.panel.bottom)
-        ) x = stx.chart.currentPriceLabelPos;
-        x = x > stx.chart.panel.bottom - maxRequiredSpaceForLabels ? x - currentPriceLabelHeight : x + currentPriceLabelHeight;
-        return x;
+        const topPos = 36;
+        const labelHeight = 24;
+        const bottomPos = 66;
+        let y = stx.chart.currentPriceLabelY + labelHeight;
+        if (stx.chart.currentPriceLabelY > stx.chart.panel.bottom - bottomPos) {
+            y =  stx.chart.panel.bottom - bottomPos;
+        } else if (stx.chart.currentPriceLabelY < stx.chart.panel.top) {
+            y = topPos;
+        }
+        return y;
     }
 
     @computed get timeUnit_display() {
