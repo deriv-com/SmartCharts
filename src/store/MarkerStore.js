@@ -212,7 +212,7 @@ export default class MarkerStore {
         let xPositioner = this.xPositioner;
         if (this.xPositioner === 'epoch') {
             xPositioner = 'date';
-            x = new Date(getUTCDate(x));
+            x = CIQ.strToDateTime(getUTCDate(x));
         }
 
         return {
