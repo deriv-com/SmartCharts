@@ -308,7 +308,6 @@ class ChartStore {
             }
             let yaxisLabelStyle = this.yaxisLabelStyle;
             if (yax.yaxisLabelStyle) yaxisLabelStyle = yax.yaxisLabelStyle;
-
             const params = {
                 ctx:context,
                 x,
