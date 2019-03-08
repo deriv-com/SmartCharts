@@ -1,6 +1,6 @@
 /* eslint-disable no-new */
 import { action, observable, when } from 'mobx';
-import { createObjectFromLocalStorage, calculateTimeUnitInterval, calculateGranularity } from '../utils';
+import { createObjectFromLocalStorage, calculateTimeUnitInterval, calculateGranularity, getUTCDate } from '../utils';
 
 class ChartState {
     @observable granularity;
@@ -11,6 +11,7 @@ class ChartState {
     @observable isConnectionOpened;
     @observable settings;
     @observable showLastDigitStats;
+    @observable scrollToEpoch;
     @observable onExportLayout;
     @observable clearChart;
     @observable importedLayout;
@@ -37,7 +38,7 @@ class ChartState {
         this.chartStore.feed.onPagination(this.setOnPagination.bind(this));
     };
 
-    @action.bound updateProps({ id, settings, isConnectionOpened, symbol, granularity, chartType, startEpoch, endEpoch, onExportLayout, clearChart, importedLayout, removeAllComparisons, isAnimationEnabled = true, showLastDigitStats = false }) {
+    @action.bound updateProps({ id, settings, isConnectionOpened, symbol, granularity, chartType, startEpoch, endEpoch, onExportLayout, clearChart, importedLayout, removeAllComparisons, isAnimationEnabled = true, showLastDigitStats = false, scrollToEpoch, scrollToEpochOffset = 0, zoom }) {
         this.chartId = id;
         this.settings = settings;
         this.isConnectionOpened = isConnectionOpened;
@@ -46,6 +47,7 @@ class ChartState {
         this.endEpoch = endEpoch;
         this.isAnimationEnabled = isAnimationEnabled;
         this.showLastDigitStats = showLastDigitStats;
+        this.scrollToEpochOffset = scrollToEpochOffset;
 
         if (onExportLayout !== this.onExportLayout) {
             this.onExportLayout = onExportLayout;
@@ -76,6 +78,22 @@ class ChartState {
         }
         if (removeAllComparisons) {
             this.comparisonStore.removeAll();
+        }
+
+        if (this.scrollToEpoch !== scrollToEpoch && this.context) {
+            this.scrollToEpoch = scrollToEpoch;
+            this.scrollChartToLeft();
+        }
+
+        if (this.zoom !== zoom) {
+            this.zoom = +zoom;
+            if (this.context && this.stxx && this.zoom) {
+                if (this.zoom >= 0) {
+                    this.stxx.zoomIn(null, (Math.abs(100 - this.zoom) || 0.01) / 100);
+                } else {
+                    this.stxx.zoomOut(null, (100 + Math.abs(this.zoom)) / 100);
+                }
+            }
         }
     }
 
@@ -179,6 +197,25 @@ class ChartState {
         if (drawings) {
             this.stxx.importDrawings(drawings);
             this.stxx.draw();
+        }
+    }
+
+    scrollChartToLeft() {
+        if (this.scrollToEpoch) {
+            const startEntry = this.stxx.getDataSegment()
+                .reverse()
+                .find(entry =>  entry.DT <= new Date(getUTCDate(this.scrollToEpoch)));
+            this.stxx.setStartDate(startEntry.DT);
+            if (this.scrollToEpochOffset) {
+                this.stxx.chart.scroll += this.scrollToEpochOffset - this.stxx.chart.scroll;
+            }
+            this.stxx.chart.lockScroll = true;
+            this.stxx.allowScroll = false;
+            this.stxx.draw();
+        } else {
+            this.stxx.chart.lockScroll = false;
+            this.stxx.allowScroll = true;
+            this.stxx.home();
         }
     }
 
