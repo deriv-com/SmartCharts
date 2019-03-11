@@ -124,6 +124,7 @@ export default class TimeperiodStore {
         let y = stx.chart.currentPriceLabelY + labelHeight;
         if (stx.chart.currentPriceLabelY > stx.chart.panel.bottom - bottomPos) {
             y =  stx.chart.panel.bottom - bottomPos;
+            y = y < stx.chart.currentPriceLabelY - labelHeight ? y : stx.chart.currentPriceLabelY - labelHeight;
         } else if (stx.chart.currentPriceLabelY < stx.chart.panel.top) {
             y = topPos;
         }
