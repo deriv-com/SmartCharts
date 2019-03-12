@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: German\n"
 "Language: de_DE\n"
-"PO-Revision-Date: 2019-03-01 07:03\n"
+"PO-Revision-Date: 2019-03-12 09:35\n"
 
 msgid " already exists."
 msgstr " existiert bereits."
@@ -52,7 +52,7 @@ msgid "Box Size"
 msgstr "Boxgröße"
 
 msgid "C"
-msgstr ""
+msgstr "C"
 
 msgid "Callout"
 msgstr "Angabe"
@@ -64,7 +64,7 @@ msgid "Candle"
 msgstr "Kerze"
 
 msgid "Change"
-msgstr ""
+msgstr "Veränderung"
 
 msgid "Channel"
 msgstr "Kanal"
@@ -82,7 +82,7 @@ msgid "Clear All"
 msgstr "Alle löschen"
 
 msgid "Close"
-msgstr ""
+msgstr "Schluss"
 
 msgid "CLOSE"
 msgstr "SCHLIEßEN"
@@ -112,7 +112,7 @@ msgid "Dark Mode"
 msgstr "Dark Modus"
 
 msgid "Date"
-msgstr ""
+msgstr "Datum"
 
 msgid "Day"
 msgstr "Tag"
@@ -166,13 +166,13 @@ msgid "Gartley"
 msgstr "Gartley"
 
 msgid "H"
-msgstr ""
+msgstr "H"
 
 msgid "Heikin Ashi"
 msgstr "Heikin Ashi"
 
 msgid "High"
-msgstr ""
+msgstr "Hoch"
 
 msgid "HIGH"
 msgstr "HOCH"
@@ -199,13 +199,13 @@ msgid "Kagi"
 msgstr "Kagi"
 
 msgid "L"
-msgstr ""
+msgstr "L"
 
 msgid "Language"
 msgstr "Sprache"
 
 msgid "Last digits stats for latest 1000 ticks on "
-msgstr ""
+msgstr "Statistik der letzten ziffern für die letzten 1000 ticks von "
 
 msgid "Line"
 msgstr "Linie"
@@ -214,7 +214,7 @@ msgid "Line Break"
 msgstr "Zeilenumbruch"
 
 msgid "Low"
-msgstr ""
+msgstr "Tief"
 
 msgid "LOW"
 msgstr "TIEF"
@@ -226,13 +226,13 @@ msgid "Minute"
 msgstr "Minute"
 
 msgid "O"
-msgstr ""
+msgstr "O"
 
 msgid "OHLC"
 msgstr "OHLC"
 
 msgid "Open"
-msgstr ""
+msgstr "Offen"
 
 msgid "OPEN"
 msgstr "OFFEN"
@@ -283,10 +283,10 @@ msgid "Retrieving Chart Engine..."
 msgstr "Chart-Engine wird abgerufen"
 
 msgid "Retrieving Market Symbols..."
-msgstr ""
+msgstr "Abrufen von Marktsymbolen..."
 
 msgid "Retrieving Trading Times..."
-msgstr ""
+msgstr "Abrufen von Handelszeiten..."
 
 msgid "Reversal"
 msgstr "Umkehrung"
@@ -343,7 +343,7 @@ msgid "Streaming for [symbol] is not available due to license restrictions"
 msgstr "Streaming für [symbol] ist auf Grund von Lizenzeinschränkungen nicht verfügbar"
 
 msgid "Table"
-msgstr ""
+msgstr "Tabelle"
 
 msgid "Template name"
 msgstr "Vorlagenname"
