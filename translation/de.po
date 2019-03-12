@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: German\n"
 "Language: de_DE\n"
-"PO-Revision-Date: 2019-03-12 09:35\n"
+"PO-Revision-Date: 2019-03-12 09:44\n"
 
 msgid " already exists."
 msgstr " existiert bereits."
@@ -40,7 +40,7 @@ msgid "Asset Information"
 msgstr "Anlgen-Informationen"
 
 msgid "Auto Scale"
-msgstr ""
+msgstr "Auto Skala"
 
 msgid "Average Line"
 msgstr "Durchschnittslinie"
@@ -73,7 +73,7 @@ msgid "Chart data is not available for this symbol."
 msgstr "Chart-Daten sind für dieses Symbol nicht verfügbar."
 
 msgid "Chart Table"
-msgstr ""
+msgstr "Diagrammtabelle"
 
 msgid "Chart types"
 msgstr "Charttypen"
@@ -178,7 +178,7 @@ msgid "HIGH"
 msgstr "HOCH"
 
 msgid "Historical Data Mode"
-msgstr ""
+msgstr "Historischer Datenmodus"
 
 msgid "Hollow Candle"
 msgstr "Hohlkerze"
