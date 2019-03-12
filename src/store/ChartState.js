@@ -69,8 +69,7 @@ class ChartState {
             this.stxx.isAutoScale = this.settings ? this.settings.isAutoScale : false;
         }
         if (this.granularity !== granularity && this.context) {
-            this.granularity = granularity;
-            this.chartStore.changeSymbol(undefined, granularity);
+            this.granularity = granularity === null ? undefined : granularity;
         }
         if (this.chartType !== chartType && this.context) {
             this.chartType = chartType;
