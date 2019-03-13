@@ -65,7 +65,8 @@ class ChartState {
         }
 
         if (this.stxx) {
-            this.stxx.drawPriceLabels = !!this.endEpoch;
+            this.stxx.chart.panel.yAxis.drawCurrentPriceLabel = !this.endEpoch;
+            this.stxx.preferences.currentPriceLine = !this.endEpoch;
             this.stxx.isAutoScale = this.settings ? this.settings.isAutoScale : false;
         }
         if (this.granularity !== granularity && this.context) {
