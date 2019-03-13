@@ -68,13 +68,11 @@ CIQ.ChartEngine.prototype.drawCurrentHR = function () {
                  x = this.pixelFromTick(currentQuote.tick, chart) + (chart.lastTickOffset || 0);
             }
             if (this.preferences.currentPriceLine === true && this.isHome()) {
-                panel.chart.context.globalCompositeOperation = 'destination-over';
-                this.plotLine(x, panel.right-16, y, y, backgroundColor, 'segment', panel.chart.context, panel, {
+                this.plotLine(x, panel.right-80, y, y, backgroundColor, 'segment', panel.chart.context, panel, {
                     pattern: 'dashed',
                     lineWidth: 1,
                     opacity: 0.8,
                 });
-                panel.chart.context.globalCompositeOperation = 'source-over';
             }
         }
     }
