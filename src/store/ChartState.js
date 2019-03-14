@@ -1,6 +1,6 @@
 /* eslint-disable no-new */
 import { action, observable, when } from 'mobx';
-import { createObjectFromLocalStorage, calculateTimeUnitInterval, calculateGranularity } from '../utils';
+import { createObjectFromLocalStorage, calculateTimeUnitInterval, calculateGranularity, getUTCDate } from '../utils';
 
 class ChartState {
     @observable granularity;
@@ -11,6 +11,13 @@ class ChartState {
     @observable isConnectionOpened;
     @observable settings;
     @observable showLastDigitStats;
+    @observable scrollToEpoch;
+    @observable onExportLayout;
+    @observable clearChart;
+    @observable importedLayout;
+    @observable isOnPagination = false;
+    @observable paginationEndEpoch;
+
     get comparisonStore() { return this.mainStore.comparison; }
     get stxx() { return this.chartStore.stxx; }
     get context() { return this.chartStore.context; }
@@ -26,9 +33,12 @@ class ChartState {
         this.stxx.addEventListener('layout', this.saveLayout.bind(this));
         this.stxx.addEventListener('symbolChange', this.saveLayout.bind(this));
         this.stxx.addEventListener('drawing', this.saveDrawings.bind(this));
+
+        this.chartStore.feed.onStartPagination(this.setOnPagination.bind(this));
+        this.chartStore.feed.onPagination(this.setOnPagination.bind(this));
     };
 
-    @action.bound updateProps({ id, settings, isConnectionOpened, symbol, granularity, chartType, startEpoch, endEpoch, removeAllComparisons, isAnimationEnabled = true, showLastDigitStats = false }) {
+    @action.bound updateProps({ id, settings, isConnectionOpened, symbol, granularity, chartType, startEpoch, endEpoch, onExportLayout, clearChart, importedLayout, removeAllComparisons, isAnimationEnabled = true, showLastDigitStats = false, scrollToEpoch, scrollToEpochOffset = 0, zoom }) {
         this.chartId = id;
         this.settings = settings;
         this.isConnectionOpened = isConnectionOpened;
@@ -37,14 +47,30 @@ class ChartState {
         this.endEpoch = endEpoch;
         this.isAnimationEnabled = isAnimationEnabled;
         this.showLastDigitStats = showLastDigitStats;
+        this.scrollToEpochOffset = scrollToEpochOffset;
+
+        if (onExportLayout !== this.onExportLayout) {
+            this.onExportLayout = onExportLayout;
+            this.exportLayout();
+        }
+
+        if (clearChart !== this.clearChart) {
+            this.clearChart = clearChart;
+            this.cleanChart();
+        }
+
+        if (JSON.stringify(importedLayout) !== JSON.stringify(this.importedLayout)) {
+            this.importedLayout = importedLayout;
+            this.importLayout();
+        }
 
         if (this.stxx) {
-            this.stxx.drawPriceLabels = !!this.endEpoch;
+            this.stxx.chart.panel.yAxis.drawCurrentPriceLabel = !this.endEpoch;
+            this.stxx.preferences.currentPriceLine = !this.endEpoch;
             this.stxx.isAutoScale = this.settings ? this.settings.isAutoScale : false;
         }
         if (this.granularity !== granularity && this.context) {
-            this.granularity = granularity;
-            this.chartStore.changeSymbol(undefined, granularity);
+            this.granularity = granularity === null ? undefined : granularity;
         }
         if (this.chartType !== chartType && this.context) {
             this.chartType = chartType;
@@ -53,6 +79,27 @@ class ChartState {
         if (removeAllComparisons) {
             this.comparisonStore.removeAll();
         }
+
+        if (this.scrollToEpoch !== scrollToEpoch && this.context) {
+            this.scrollToEpoch = scrollToEpoch;
+            this.scrollChartToLeft();
+        }
+
+        if (this.zoom !== zoom) {
+            this.zoom = +zoom;
+            if (this.context && this.stxx && this.zoom) {
+                if (this.zoom >= 0) {
+                    this.stxx.zoomIn(null, (Math.abs(100 - this.zoom) || 0.01) / 100);
+                } else {
+                    this.stxx.zoomOut(null, (100 + Math.abs(this.zoom)) / 100);
+                }
+            }
+        }
+    }
+
+    @action.bound setOnPagination({ end }) {
+        this.isOnPagination     = !this.isOnPagination;
+        this.paginationEndEpoch = this.isOnPagination ? end : null;
     }
 
     saveLayout() {
@@ -151,6 +198,86 @@ class ChartState {
             this.stxx.importDrawings(drawings);
             this.stxx.draw();
         }
+    }
+
+    scrollChartToLeft() {
+        if (this.scrollToEpoch) {
+            const startEntry = this.stxx.getDataSegment()
+                .reverse()
+                .find(entry =>  entry.DT <= new Date(getUTCDate(this.scrollToEpoch)));
+            this.stxx.setStartDate(startEntry.DT);
+            if (this.scrollToEpochOffset) {
+                this.stxx.chart.scroll += this.scrollToEpochOffset - this.stxx.chart.scroll;
+            }
+            this.stxx.chart.lockScroll = true;
+            this.stxx.allowScroll = false;
+            this.stxx.draw();
+        } else {
+            this.stxx.chart.lockScroll = false;
+            this.stxx.allowScroll = true;
+            this.stxx.home();
+        }
+    }
+
+    cleanChart() {
+        if (!this.clearChart) return;
+        // Remove comparsions
+        for (const field in this.stxx.chart.series) {
+            this.stxx.removeSeries(field);
+        }
+        // Remove indiactors
+        for (const id in this.stxx.layout.studies) {
+            const sd = this.stxx.layout.studies[id];
+            CIQ.Studies.removeStudy(this.stxx, sd);
+        }
+        this.stxx.clearDrawings();
+
+        // TODO: use constant
+        this.mainStore.crosshair.setCrosshairState(0);
+
+        // TODO: use constant
+        this.mainStore.chart.changeSymbol(this.stxx.chart.symbol, 0);
+        this.mainStore.chartType.setType({ id:'linear' });
+    }
+
+    importLayout() {
+        if (!this.importedLayout || !Object.keys(this.importedLayout).length) return;
+        this.stxx.importLayout(this.importedLayout, {
+            managePeriodicity: true,
+            preserveTicksAndCandleWidth: true,
+            cb: () => {
+                if (this.importedLayout && this.importedLayout.series) {
+                    this.importedLayout.series.forEach((symbol) => {
+                        const symbolObject = this.chartStore.activeSymbols.getSymbolObj(symbol);
+                        this.mainStore.comparison.onSelectItem(symbolObject);
+                    });
+                }
+
+                setTimeout(() => {
+                    if (this.importedLayout && this.importedLayout.drawings) {
+                        this.stxx.importDrawings(this.importedLayout.drawings);
+                        this.stxx.draw();
+                    }
+                }, 500);
+
+                this.stxx.changeOccurred('layout');
+                this.mainStore.studies.updateActiveStudies();
+            },
+        });
+
+        this.mainStore.crosshair.setCrosshairState(this.importedLayout.crosshair);
+    }
+
+    exportLayout() {
+        if (!this.onExportLayout) return;
+        const currentLayout = this.stxx.exportLayout();
+        currentLayout.drawings = this.stxx.exportDrawings();
+        currentLayout.series = [];
+        for (const field in this.stxx.chart.series) {
+            currentLayout.series.push(field);
+        }
+
+        this.onExportLayout(currentLayout);
     }
 }
 
