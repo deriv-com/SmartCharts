@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom <jy@binary.com>\n"
 "Language-Team: Thai\n"
 "Language: th_TH\n"
-"PO-Revision-Date: 2019-02-08 03:32\n"
+"PO-Revision-Date: 2019-03-07 10:05\n"
 
 msgid " already exists."
 msgstr " มีอยู่แล้ว"
@@ -38,6 +38,9 @@ msgstr "คำอธิบายประกอบ"
 
 msgid "Asset Information"
 msgstr "ข้อมูลสินทรัพย์"
+
+msgid "Auto Scale"
+msgstr "ปรับสัดส่วนอัตโนมัติ"
 
 msgid "Average Line"
 msgstr "เส้นค่าเฉลี่ย"
@@ -200,6 +203,9 @@ msgstr "L"
 
 msgid "Language"
 msgstr "ภาษา"
+
+msgid "Last digits stats for latest 1000 ticks on "
+msgstr "สถิติตัวเลขหลักสุดท้ายของ1000 ช่วงราคาล่าสุด "
 
 msgid "Line"
 msgstr "เส้น"
