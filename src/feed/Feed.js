@@ -8,6 +8,7 @@ import ServerTime from '../utils/ServerTime';
 class Feed {
     static get EVENT_MASTER_DATA_UPDATE() { return 'EVENT_MASTER_DATA_UPDATE'; }
     static get EVENT_COMPARISON_DATA_UPDATE() { return 'EVENT_COMPARISON_DATA_UPDATE'; }
+    static get EVENT_START_PAGINATION() { return 'EVENT_START_PAGINATION'; }
     static get EVENT_ON_PAGINATION() { return 'EVENT_ON_PAGINATION'; }
     get startEpoch() { return this._mainStore.state.startEpoch; }
     get endEpoch() { return this._mainStore.state.endEpoch; }
@@ -189,14 +190,23 @@ class Feed {
         const start = getUTCEpoch(suggestedStartDate);
         const { period, interval } = params;
         const granularity = calculateGranularity(period, interval);
+        const isMainChart = this._stx.chart.symbol === symbol;
+
+        if (isMainChart) { // ignore comparisons
+            this._emitter.emit(Feed.EVENT_START_PAGINATION, { start, end });
+        }
 
         await this._getPaginationData(symbol, granularity, start, end, callback);
     }
 
     async _getPaginationData(symbol, granularity, start, end, callback) {
+        const isMainChart = this._stx.chart.symbol === symbol;
         if (this.startEpoch && start < this.startEpoch
             || this.endEpoch && end > this.endEpoch) {
             callback({ moreAvailable: false, quotes: [] });
+            if (isMainChart) { // ignore comparisons
+                this._emitter.emit(Feed.EVENT_ON_PAGINATION, { start, end });
+            }
             return;
         }
 
@@ -232,7 +242,6 @@ class Feed {
         }
 
         callback(result);
-        const isMainChart = this._stx.chart.symbol === symbol;
         if (isMainChart) { // ignore comparisons
             this._emitter.emit(Feed.EVENT_ON_PAGINATION, { start, end });
         }
@@ -324,6 +333,13 @@ class Feed {
         this._emitter.off(Feed.EVENT_ON_PAGINATION, callback);
     }
 
+    onStartPagination(callback) {
+        this._emitter.on(Feed.EVENT_START_PAGINATION, callback);
+    }
+
+    offStartPagination(callback) {
+        this._emitter.off(Feed.EVENT_START_PAGINATION, callback);
+    }
     onConnectionChanged() {
         const isOpened = this._mainStore.state.isConnectionOpened;
         if (isOpened === undefined || isOpened === this._isConnectionOpened) { return; }

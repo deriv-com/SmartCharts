@@ -19,6 +19,7 @@ import ChartControls from './ChartControls.jsx';
 import Crosshair from './Crosshair.jsx';
 import { connect } from '../store/Connect';
 import { initGA, logPageView } from '../utils/ga';
+import PaginationLoader from './PaginationLoader.jsx';
 
 class Chart extends Component {
     constructor(props) {
@@ -58,6 +59,7 @@ class Chart extends Component {
             DrawToolsSettingsDialog,
             StudySettingsDialog,
             isMobile = false,
+            isOnPagination,
             isChartAvailable,
             barriers = [],
             children,
@@ -100,6 +102,11 @@ class Chart extends Component {
                                     </RenderInsideChart>
                                     <RenderInsideChart at="subholder">
                                         {children}
+
+                                        {
+                                            isOnPagination
+                                                && <PaginationLoader />
+                                        }
                                         <CurrentSpot />
                                     </RenderInsideChart>
                                     <div className="cq-top-ui-widgets">
@@ -150,4 +157,5 @@ export default connect(({ chart, drawTools, studies, chartSetting, chartType, st
     theme: chartSetting.theme,
     position: chartSetting.position,
     showLastDigitStats:state.showLastDigitStats,
+    isOnPagination: state.isOnPagination,
 }))(Chart);
