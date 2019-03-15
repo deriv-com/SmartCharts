@@ -42,24 +42,26 @@
             bottom: 0;
             z-index: -1;
 
-            /* stylelint-disable */
-            background: -webkit-repeating-linear-gradient(
+            @include themify($themes) {
+                /* stylelint-disable */
+                background: -webkit-repeating-linear-gradient(
                 145deg,
-                $COLOR_LIGHT_GRAY_2 1px,
-                $COLOR_LIGHT_GRAY_3 2px,
-                $COLOR_LIGHT_GRAY_3 11px,
-                $COLOR_LIGHT_GRAY_2 12px,
-                $COLOR_LIGHT_GRAY_2 20px,
-            );
-            background: repeating-linear-gradient(
+                rgba(255, 0, 0, 0) 1px,
+                themed('PaginationLoaderStripeColor') 2px,
+                themed('PaginationLoaderStripeColor') 11px,
+                rgba(255, 0, 0, 0) 12px,
+                rgba(255, 0, 0, 0) 20px,
+                );
+                background: repeating-linear-gradient(
                 -55deg,
-                $COLOR_LIGHT_GRAY_2 1px,
-                $COLOR_LIGHT_GRAY_3 2px,
-                $COLOR_LIGHT_GRAY_3 11px,
-                $COLOR_LIGHT_GRAY_2 12px,
-                $COLOR_LIGHT_GRAY_2 20px,
-            );
-            /* stylelint-enable */
+                rgba(255, 0, 0, 0) 1px,
+                themed('PaginationLoaderStripeColor') 2px,
+                themed('PaginationLoaderStripeColor') 11px,
+                rgba(255, 0, 0, 0) 12px,
+                rgba(255, 0, 0, 0) 20px,
+                );
+                /* stylelint-enable */
+            }
             -webkit-animation-name: move-background;
             -webkit-animation-duration: 0.6s;
             -webkit-animation-timing-function: linear;
