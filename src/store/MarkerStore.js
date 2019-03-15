@@ -16,6 +16,7 @@ export default class MarkerStore {
     @observable display;
     @observable left;
     @observable bottom;
+    @observable markerTs;
     get stxx() { return this.chartStore.stxx; }
 
     constructor(mainStore) {
@@ -42,6 +43,7 @@ export default class MarkerStore {
     @action.bound updateProps({ children, className, y, yPositioner, x, xPositioner }) {
         this.className = className;
         this.children = children;
+        this.markerTs = CIQ.strToDateTime(getUTCDate(x)).getTime();
 
         let isUpdateMarkerTickRequired = false;
         let isUpdatePositionRequired = false;
@@ -62,6 +64,12 @@ export default class MarkerStore {
     @action.bound updatePosition() {
         // When the chart has not been initialized or there isn't any data in masterData it shouldn't position the markers.
         if (!this.stx || !this.stx.masterData || this.stx.masterData.length <= 0) {
+            return;
+        }
+
+        const currentTickDate = this.stx.masterData[this.stx.masterData.length - 1].DT;
+        if (this.markerTs > currentTickDate.getTime() - 3000) {
+            this.hideMarker();
             return;
         }
 
