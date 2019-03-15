@@ -1,5 +1,4 @@
 import { action, computed, observable, when } from 'mobx';
-import moment from 'moment';
 
 class CurrectSpotStore {
     constructor(mainStore) {
@@ -10,7 +9,6 @@ class CurrectSpotStore {
     @observable top = 0;
     @observable left = 0;
     @observable show = false;
-    @observable historical = false;
     @computed get pip() { return this.mainStore.chart.currentActiveSymbol.decimal_places; }
 
     get context() { return this.mainStore.chart.context; }
@@ -51,17 +49,13 @@ class CurrectSpotStore {
                 visible = false;
             }
         }
-        this.historical = this.state.endEpoch
-            ? moment.unix(this.state.endEpoch).utc().format('DD MMMM YYYY - HH:mm') : false;
         this.show = visible
-                && (
-                    this.historical
-                    || (
-                        layout.chartType !== 'candle'
-                        && layout.chartType !== 'colored_bar'
-                        && layout.chartType !== 'hollow_candle'
-                    )
-                );
+            && !this.state.endEpoch
+            && (
+                layout.chartType !== 'candle'
+                && layout.chartType !== 'colored_bar'
+                && layout.chartType !== 'hollow_candle'
+            );
     }
 }
 
