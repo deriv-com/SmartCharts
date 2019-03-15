@@ -34,6 +34,9 @@ $COLOR_BRANDBLUE_85: #4a4f6c;
 $COLOR_BRANDBLUE_75: #60647e;
 $COLOR_DARK_BLUE_8 : rgba(127, 131, 151, 0.3);
 
+// TODO This color is not in the color schema of the dark theme, its name should be changed after it added the color schema
+$COLOR_DARK_STRIPE: #3f4463;
+
 $themes: (
     light: (
         DefaultMain: $COLOR_WHITE,
@@ -388,7 +391,7 @@ $themes: (
         ChartHistoryPickerBodyActiveBg: $COLOR_WHITE,
         ChartHistoryPickerBodyActiveColor: $COLOR_BRAND_BLUE,
         ChartHistoryPickerBodyActiveBorder: $COLOR_WHITE,
-        PaginationLoaderStripeColor: $COLOR_LIGHT_BLACK_4_SOLID
+        PaginationLoaderStripeColor: $COLOR_DARK_STRIPE
     ),
 );
 
