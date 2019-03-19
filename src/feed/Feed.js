@@ -200,9 +200,13 @@ class Feed {
     }
 
     async _getPaginationData(symbol, granularity, start, end, callback) {
+        const isMainChart = this._stx.chart.symbol === symbol;
         if (this.startEpoch && start < this.startEpoch
             || this.endEpoch && end > this.endEpoch) {
             callback({ moreAvailable: false, quotes: [] });
+            if (isMainChart) { // ignore comparisons
+                this._emitter.emit(Feed.EVENT_ON_PAGINATION, { start, end });
+            }
             return;
         }
 
@@ -238,7 +242,6 @@ class Feed {
         }
 
         callback(result);
-        const isMainChart = this._stx.chart.symbol === symbol;
         if (isMainChart) { // ignore comparisons
             this._emitter.emit(Feed.EVENT_ON_PAGINATION, { start, end });
         }
