@@ -66,6 +66,7 @@ class TradingTimes {
 
                 const waitPeriod =  nextUpdate - this._serverTime.getLocalDate();
                 this._updateTimer = setTimeout(periodicUpdate, waitPeriod);
+                
                 setInterval(periodicUpdate, 3600000);
             };
 
