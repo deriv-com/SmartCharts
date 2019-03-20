@@ -38,7 +38,7 @@ class ChartState {
         this.chartStore.feed.onPagination(this.setOnPagination.bind(this));
     };
 
-    @action.bound updateProps({ id, settings, isConnectionOpened, symbol, granularity, chartType, startEpoch, endEpoch, onExportLayout, clearChart, importedLayout, removeAllComparisons, isAnimationEnabled = true, showLastDigitStats = false, scrollToEpoch, scrollToEpochOffset = 0, zoom }) {
+    @action.bound updateProps({ id, settings, isConnectionOpened, symbol, granularity, chartType, startEpoch, endEpoch, onExportLayout, clearChart, importedLayout, isAnimationEnabled = true, showLastDigitStats = false, scrollToEpoch, scrollToEpochOffset = 0, zoom }) {
         this.chartId = id;
         this.settings = settings;
         this.isConnectionOpened = isConnectionOpened;
@@ -75,9 +75,6 @@ class ChartState {
         if (this.chartType !== chartType && this.context) {
             this.chartType = chartType;
             this.chartTypeStore.setType(chartType);
-        }
-        if (removeAllComparisons) {
-            this.comparisonStore.removeAll();
         }
 
         if (this.scrollToEpoch !== scrollToEpoch && this.context) {
