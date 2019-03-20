@@ -4,11 +4,16 @@ import sinon from 'sinon';
 import sinonChai from 'chai-sinon';
 import TradingTimes from '../TradingTimes';
 import DummyBinaryAPI from './DummyBinaryAPI';
+import jsdom from 'mocha-jsdom';
 
 chai.use(sinonChai);
 
 describe('TradingTimes test', async function () {
     const unlicensedSymbols = ['SPC', 'DFMGI', 'AS51'];
+
+    const dom = new JSDOM(``, {
+        url: "http://localhost:8080"
+    });
 
     beforeEach(async function () {
         this.clock = sinon.useFakeTimers({
