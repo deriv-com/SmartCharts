@@ -67,12 +67,6 @@ export default class MarkerStore {
             return;
         }
 
-        const currentTickDate = this.stx.masterData[this.stx.masterData.length - 1].DT;
-        if (this.markerTs > currentTickDate.getTime() - 3000) {
-            this.hideMarker();
-            return;
-        }
-
         if (this.isDistantFuture) {
             const dummyMarker = this.getDummyMarker();
             this.stx.futureTickIfDisplayed(dummyMarker);
@@ -138,6 +132,12 @@ export default class MarkerStore {
         }
 
         this.left = left;
+
+        const currentTickDate = this.stx.masterData[this.stx.masterData.length - 1].DT;
+        if (this.markerTs > currentTickDate.getTime()) {
+            this.hideMarker();
+            return;
+        }
 
         // Y axis positioning logic
         if (this.yPositioner === 'none') {
