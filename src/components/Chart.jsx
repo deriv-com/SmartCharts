@@ -93,6 +93,7 @@ class Chart extends Component {
                             <div className="ciq-chart-area">
                                 <div className="ciq-chart">
                                     <RenderInsideChart at="holder">
+                                        {children}
                                         {barriers.map((barr, idx) => (
                                             <Barrier
                                                 key={`barrier-${idx}`} // eslint-disable-line react/no-array-index-key
@@ -101,8 +102,6 @@ class Chart extends Component {
                                         ))}
                                     </RenderInsideChart>
                                     <RenderInsideChart at="subholder">
-                                        {children}
-
                                         {
                                             isOnPagination
                                                 && <PaginationLoader />
