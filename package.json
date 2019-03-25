@@ -1,6 +1,6 @@
 {
-  "name": "smartcharts-beta",
-  "version": "0.3.99",
+  "name": "@binary-com/smartcharts",
+  "version": "0.3.8",
   "main": "dist/smartcharts.js",
   "author": "amin@binary.com",
   "contributors": [
