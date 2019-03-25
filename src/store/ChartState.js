@@ -260,6 +260,12 @@ class ChartState {
                     }
                 }, 500);
 
+                const { timeUnit, interval } = this.importedLayout;
+                if (timeUnit) {
+                    const granularity = calculateGranularity(interval, timeUnit) || 0;
+                    this.mainStore.timeperiod.onGranularityChange(granularity);
+                }
+
                 this.stxx.changeOccurred('layout');
                 this.mainStore.studies.updateActiveStudies();
             },
@@ -276,7 +282,7 @@ class ChartState {
         for (const field in this.stxx.chart.series) {
             currentLayout.series.push(field);
         }
-
+        this.mainStore.timeperiod.onGranularityChange(0);
         this.onExportLayout(currentLayout);
     }
 }
