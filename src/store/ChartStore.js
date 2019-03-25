@@ -585,7 +585,7 @@ class ChartStore {
         }
 
         const { chartType: chartTypeStore } = this.mainStore;
-        if (chartTypeStore.chartTypeProp === undefined) {
+        if (!this.mainStore.chartType.type && !chartTypeStore.chartTypeProp) {
             this.contextPromise.then(() => {
                 const isTick = this.stxx.layout.timeUnit === 'second';
                 const isCandle = chartTypeStore.isCandle;
