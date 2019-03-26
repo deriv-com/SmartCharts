@@ -273,7 +273,7 @@ class Feed {
                 noCreateDataSet: true,
             });
         } else {
-            this._stx.updateChartData(quotes);
+            this._stx.updateChartData(quotes, null, { allowReplaceOHL: true });
         }
 
         this._emitDataUpdate(quotes, comparisonChartSymbol);
