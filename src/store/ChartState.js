@@ -238,8 +238,11 @@ class ChartState {
         // TODO: use constant
         this.mainStore.chart.changeSymbol(this.stxx.chart.symbol, 0);
         const mountain = this.chartTypeStore.chartTypes[0];
-        if (this.chartTypeStore.ocChartTypeChanged) this.chartTypeStore.ocChartTypeChanged(mountain);
-        else this.chartTypeStore.setType(mountain);
+        if (this.chartTypeStore.onChartTypeChanged) {
+            this.chartTypeStore.onChartTypeChanged(mountain);
+        } else {
+            this.chartTypeStore.setType(mountain);
+        }
     }
 
     importLayout() {
@@ -268,8 +271,8 @@ class ChartState {
                     if (this.mainStore.timeperiod.onGranularityChange) this.mainStore.timeperiod.onGranularityChange(granularity);
                 }
 
-                if (this.chartTypeStore.ocChartTypeChanged) {
-                    this.chartTypeStore.ocChartTypeChanged(this.importedLayout.chartType);
+                if (this.chartTypeStore.onChartTypeChanged) {
+                    this.chartTypeStore.onChartTypeChanged(this.importedLayout.chartType);
                 }
 
                 if (this.stxx.layout.tension) {

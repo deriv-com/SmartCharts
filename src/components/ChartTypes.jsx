@@ -14,7 +14,7 @@ const ChartTypes = ({
     setOpen,
     showAggregateDialog,
     Type,
-    ocChartTypeChanged,
+    onChartTypeChanged,
 }) => {
     if (Type === undefined) return (null);
 
@@ -25,7 +25,7 @@ const ChartTypes = ({
         setOpen(false);
     };
 
-    ocChartTypeChanged(onChange);
+    onChartTypeChanged(onChange);
 
     return (
         <ChartTypeMenu
@@ -78,5 +78,5 @@ export default connect(({ chartType, state }) => ({
     setOpen            : chartType.menu.setOpen,
     showAggregateDialog: chartType.showAggregateDialog,
     Type               : chartType.type,
-    ocChartTypeChanged : chartType.onChange,
+    onChartTypeChanged : chartType.onChange,
 }))(ChartTypes);

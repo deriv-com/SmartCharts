@@ -196,7 +196,7 @@ export default class ChartTypeStore {
     }
 
     @action.bound onChange(onChange) {
-        this.ocChartTypeChanged = onChange;
+        this.onChartTypeChanged = onChange;
     }
 
     @action.bound showAggregateDialog(aggregateId) {
@@ -246,5 +246,5 @@ export default class ChartTypeStore {
     }
 
     @observable type = getChartTypes()[0];
-    @observable ocChartTypeChanged;
+    onChartTypeChanged;
 }
