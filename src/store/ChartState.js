@@ -237,7 +237,9 @@ class ChartState {
 
         // TODO: use constant
         this.mainStore.chart.changeSymbol(this.stxx.chart.symbol, 0);
-        this.mainStore.chartType.setType({ id:'linear' });
+        const mountain = this.chartTypeStore.chartTypes[0];
+        if (this.chartTypeStore.ocChartTypeChanged) this.chartTypeStore.ocChartTypeChanged(mountain);
+        else this.chartTypeStore.setType(mountain);
     }
 
     importLayout() {
@@ -263,7 +265,17 @@ class ChartState {
                 const { timeUnit, interval } = this.importedLayout;
                 if (timeUnit) {
                     const granularity = calculateGranularity(interval, timeUnit) || 0;
-                    this.mainStore.timeperiod.onGranularityChange(granularity);
+                    if (this.mainStore.timeperiod.onGranularityChange) this.mainStore.timeperiod.onGranularityChange(granularity);
+                }
+
+                if (this.chartTypeStore.ocChartTypeChanged) {
+                    this.chartTypeStore.ocChartTypeChanged(this.importedLayout.chartType);
+                }
+
+                if (this.stxx.layout.tension) {
+                    // Line and spline they are both mountain so we need to seperate them here using tension
+                    const spline = this.chartTypeStore.chartTypes[3];
+                    this.chartTypeStore.setType(spline);
                 }
 
                 this.stxx.changeOccurred('layout');
@@ -282,7 +294,7 @@ class ChartState {
         for (const field in this.stxx.chart.series) {
             currentLayout.series.push(field);
         }
-        this.mainStore.timeperiod.onGranularityChange(0);
+        if (this.mainStore.timeperiod.onGranularityChange) this.mainStore.timeperiod.onGranularityChange(0);
         this.onExportLayout(currentLayout);
     }
 }

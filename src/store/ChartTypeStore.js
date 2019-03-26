@@ -174,11 +174,6 @@ export default class ChartTypeStore {
             this.mainStore.chartTable.setOpen(true);
             return;
         }
-        if (type.id === 'linear') {
-            this.stx.setChartType('mountain');
-            this.stx.chart.tension = 0;
-            return;
-        }
         if (type.id === 'spline') {
             // Spline is just a line with tension
             this.stx.chart.tension = this.stx.layout.tension = 0.5;
@@ -198,6 +193,10 @@ export default class ChartTypeStore {
         }
 
         this.type = type;
+    }
+
+    @action.bound onChange(onChange) {
+        this.ocChartTypeChanged = onChange;
     }
 
     @action.bound showAggregateDialog(aggregateId) {
@@ -247,4 +246,5 @@ export default class ChartTypeStore {
     }
 
     @observable type = getChartTypes()[0];
+    @observable ocChartTypeChanged;
 }
