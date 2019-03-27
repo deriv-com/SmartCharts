@@ -104,7 +104,7 @@
             border-radius: 100px;
             font-size: 1em;
             position: absolute;
-            top: 4px;
+            top: 1px;
             line-height: 18px;
             left: 55px;
             width: 16px;
@@ -112,6 +112,7 @@
             font-family: 'Roboto';
             font-weight: bold;
             text-align: center;
+            z-index: 999;
 
             &.x2 {
                 width: 24px;
@@ -288,7 +289,7 @@
                         }
                     }
                     .notification-badge {
-                        left: 39px;
+                        left: 30px;
                     }
                 }
             }
