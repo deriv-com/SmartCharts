@@ -46,7 +46,7 @@ class Feed {
         const rangeTime = ((this.granularity || 1) * this._stx.chart.maxTicks);
 
         // If the endEpoch is undefined _and_ there are no active streams, we initiate streaming
-        if (this.endEpoch === undefined) {
+        if (!this.endEpoch) {
             if (Object.keys(this._activeStreams).length === 0) {
                 // Set the end range to the future to trigger ChartIQ to start streaming
                 const future = now + 10;
