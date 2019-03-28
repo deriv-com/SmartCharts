@@ -623,9 +623,9 @@ class ChartStore {
         const paddingRatio = this.chartNode.clientWidth / this.RANGE_PADDING_PX;
         const elapsedSeconds = endEpoch - startEpoch;
         const epochPadding = elapsedSeconds / paddingRatio | 0;
-        if (startEpoch !== undefined || endEpoch !== undefined) {
-            const dtLeft  = (startEpoch !== undefined) ? new Date(getUTCDate(startEpoch - epochPadding)) : undefined;
-            const dtRight = (endEpoch   !== undefined) ? new Date(getUTCDate(endEpoch + epochPadding))   : undefined;
+        if (startEpoch || endEpoch) {
+            const dtLeft  = (startEpoch) ? new Date(getUTCDate(startEpoch - epochPadding)) : undefined;
+            const dtRight = (endEpoch) ? new Date(getUTCDate(endEpoch + epochPadding))   : undefined;
             const periodicity = calculateTimeUnitInterval(this.granularity);
             range = {
                 dtLeft,
