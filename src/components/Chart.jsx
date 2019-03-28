@@ -92,16 +92,15 @@ class Chart extends Component {
                         <div className={` ${currentPosition}`}>
                             <div className="ciq-chart-area">
                                 <div className="ciq-chart">
-                                    <RenderInsideChart at="holder">
-                                        {children}
+                                    <RenderInsideChart at="holder" />
+                                    <RenderInsideChart at="subholder">
                                         {barriers.map((barr, idx) => (
                                             <Barrier
                                                 key={`barrier-${idx}`} // eslint-disable-line react/no-array-index-key
                                                 {...barr}
                                             />
                                         ))}
-                                    </RenderInsideChart>
-                                    <RenderInsideChart at="subholder">
+                                        {children}
                                         {
                                             isOnPagination
                                                 && <PaginationLoader />

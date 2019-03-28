@@ -6,6 +6,8 @@ import PriceLine from '../components/PriceLine.jsx';
 import Shade from '../components/Shade.jsx';
 import { isValidProp } from '../utils';
 
+const LINE_OFFSET_HEIGHT = 30;
+
 export default class BarrierStore {
     static get SHADE_NONE_SINGLE() { return 'SHADE_NONE_SINGLE'; }
     static get SHADE_NONE_DOUBLE() { return 'SHADE_NONE_DOUBLE'; }
@@ -241,8 +243,9 @@ export default class BarrierStore {
 
     _shadeBetween() {
         const bottom = this._calcBottomShade(this._low_barrier);
+
         this.betweenShadeStore.top = this._high_barrier.top;
-        this.betweenShadeStore.bottom = bottom;
+        this.betweenShadeStore.bottom = bottom - LINE_OFFSET_HEIGHT;
     }
 
     _shadeBelow(barrier = this._high_barrier) {
@@ -253,7 +256,7 @@ export default class BarrierStore {
     _shadeAbove(barrier = this._high_barrier) {
         const bottom = this._calcBottomShade(barrier);
         this.aboveShadeStore.top = 0;
-        this.aboveShadeStore.bottom = bottom;
+        this.aboveShadeStore.bottom = bottom - LINE_OFFSET_HEIGHT;
     }
 
     _shadeOutside() {

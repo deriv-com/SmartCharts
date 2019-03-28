@@ -2,7 +2,7 @@ import EventEmitter from 'event-emitter-es6';
 import { action, computed, observable, when } from 'mobx';
 import { connect } from './Connect';
 
-const LINE_OFFSET_HEIGHT = 4;
+const LINE_OFFSET_HEIGHT = 50;
 const LINE_OFFSET_HEIGHT_HALF = LINE_OFFSET_HEIGHT >> 1;
 
 export default class PriceLineStore {
