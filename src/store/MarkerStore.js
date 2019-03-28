@@ -92,6 +92,12 @@ export default class MarkerStore {
                 && this.stx.masterData[this.tick]
                 && this.stx.masterData[this.tick].DT.valueOf() !== dummyMarker.params.x.valueOf()
             ) {
+                // if the marker is not distance future but it is greater than the last item in the masterData, it will be hidden.
+                if (this.stx.masterData[this.stx.masterData.length - 1].DT.valueOf() < dummyMarker.params.x.valueOf()) {
+                    this.hideMarker();
+                    return;
+                }
+
                 /**
                  * Adding an invisible bar if the bar
                  * does not exist on the masterData
