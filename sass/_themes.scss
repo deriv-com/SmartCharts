@@ -1,35 +1,36 @@
 /* stylelint-disable color-no-hex */
 /* stylelint-disable value-keyword-case */
 // Colours based on Zeplin style guide 28march 2019
-$COLOR_WHITE        : #ffffff;//
-$COLOR_BLACK        : #000000;//
-$COLOR_ORANGE       : #ff9933;//
-$COLOR_RED          : #e31c4b;//
-$COLOR_SKY_BLUE     : #2196f3;//
-$COLOR_GREEN_1      : #39b19d;///
-$COLOR_GREEN_2      : #2d9f93;///
-$COLOR_PURPLE       : #4f60ae;//
-$COLOR_DARK_BLUE_1  : #0b0e18;//
-$COLOR_DARK_BLUE_2  : #101320;//
-$COLOR_DARK_BLUE_3  : #191c31;//
-$COLOR_DARK_BLUE_4  : #202641;//
-$COLOR_DARK_BLUE_5  : #2a3052;// Brand Blue
-$COLOR_DARK_GRAY_1  : #282a37;///
-$COLOR_DARK_GRAY_2  : #303342;///
-$COLOR_DARK_GRAY_3  : #555975;///
-$COLOR_LIGHT_GRAY   : #7f8397;///
-$COLOR_LIGHT_GRAY_30: rgba($COLOR_LIGHT_GRAY, 0.3);///
+$COLOR_WHITE        : #ffffff;
+$COLOR_BLACK        : #000000;
+$COLOR_ORANGE       : #ff9933;
+$COLOR_RED          : #e31c4b;
+$COLOR_SKY_BLUE     : #2196f3;
+$COLOR_GREEN_1      : #39b19d;
+$COLOR_GREEN_2      : #2d9f93;
+$COLOR_PURPLE       : #4f60ae;
+$COLOR_DARK_BLUE_1  : #0b0e18;
+$COLOR_DARK_BLUE_2  : #101320;
+$COLOR_DARK_BLUE_3  : #191c31;
+$COLOR_DARK_BLUE_4  : #202641;
+$COLOR_DARK_BLUE_5  : #2a3052; /* Brand Blue */
+$COLOR_DARK_GRAY_1  : #282a37;
+$COLOR_DARK_GRAY_2  : #303342;
+$COLOR_DARK_GRAY_3  : #555975;
+$COLOR_LIGHT_GRAY   : #7f8397;
+$COLOR_LIGHT_GRAY_30: rgba($COLOR_LIGHT_GRAY, 0.3);
+$COLOR_LIGHT_GRAY_1 : #999cac;
+$COLOR_LIGHT_GRAY_2 : rgba($COLOR_LIGHT_GRAY_1, 0.32);
+$COLOR_LIGHT_BLACK_1: rgba($COLOR_BLACK, 0.8);
+$COLOR_LIGHT_BLACK_1_40: rgba($COLOR_BLACK, 0.4);
+$COLOR_LIGHT_BLACK_3: rgba($COLOR_BLACK, 0.16);
+$COLOR_LIGHT_BLACK_3_SOLID_1: #d6d6d6;
+$COLOR_LIGHT_BLACK_3_SOLID_2: #b3b3b3;
+$COLOR_LIGHT_BLACK_4: rgba($COLOR_BLACK, 0.04);
+$COLOR_LIGHT_BLACK_4_SOLID: #f4f4f6;
 
 //Legacy Colours. TODO: Check with design team, replace and remove these colours
-$COLOR_LIGHT_BLACK_1: rgba($COLOR_BLACK, 0.8);
-$COLOR_LIGHT_BLACK_2: rgba($COLOR_BLACK, 0.4);
-$COLOR_LIGHT_BLACK_3: rgba($COLOR_BLACK, 0.16);
-$COLOR_LIGHT_BLACK_4: rgba($COLOR_BLACK, 0.04);
-$COLOR_LIGHT_GRAY_1 : #fafafb;
-$COLOR_LIGHT_GRAY_2 : rgba(153, 156, 172, 0.32);
-$COLOR_LIGHT_GRAY_3 : #999cac;
 $COLOR_YELLOW       : #fef1cf;
-$COLOR_LIGHT_BLACK_4_SOLID: #f4f4f6;
 $COLOR_LIGHT_BLACK : #5c5c5c;
 $COLOR_BRANDBLUE_40: #aaacba;
 $COLOR_BRANDBLUE_95: #353b5b;
@@ -45,8 +46,8 @@ $themes: (
         DefaultBorder: $COLOR_LIGHT_GRAY,
         Loading: $COLOR_BLACK,
         ChartBg: $COLOR_WHITE,
-        ChartBorder: $COLOR_LIGHT_GRAY_3,
-        ChartText: $COLOR_LIGHT_GRAY_3,
+        ChartBorder: $COLOR_LIGHT_GRAY_1,
+        ChartText: $COLOR_LIGHT_GRAY_1,
         ChartCandleBg: $COLOR_ORANGE,
         ChartCandleText: $COLOR_WHITE,
         ChartGrid: $COLOR_LIGHT_BLACK_4,
@@ -71,8 +72,8 @@ $themes: (
         ChartTitleArrow: $COLOR_LIGHT_BLACK_1,
         ChartTitlePriceText: $COLOR_LIGHT_BLACK_1,
         ChartTitleSymbolText: $COLOR_LIGHT_BLACK_1,
-        ChartTitleHoverBorder: $COLOR_LIGHT_GRAY_3,
-        ChartTitleActiveBorder: $COLOR_LIGHT_GRAY_3,
+        ChartTitleHoverBorder: $COLOR_LIGHT_GRAY_1,
+        ChartTitleActiveBorder: $COLOR_LIGHT_GRAY_1,
         ChartTitleActiveShadow: $COLOR_LIGHT_GRAY_2,
         ChartTitleActiveArrow: $COLOR_LIGHT_BLACK_1,
         ChartControlBoxBorder: $COLOR_LIGHT_BLACK_4,
@@ -119,7 +120,7 @@ $themes: (
         DropdownBorder: $COLOR_LIGHT_GRAY_1,
         DropdownActiveBg: $COLOR_LIGHT_GRAY_1,
         DropdownActiveText: $COLOR_DARK_BLUE_5,
-        DropdownActiveBorder: $COLOR_LIGHT_GRAY_3,
+        DropdownActiveBorder: $COLOR_LIGHT_GRAY_1,
         SliderText: $COLOR_DARK_BLUE_5,
         SliderHandleBg: $COLOR_WHITE,
         SliderHandleBorder: $COLOR_DARK_BLUE_5,
@@ -156,14 +157,14 @@ $themes: (
         CatDisplaySearchBorder: $COLOR_LIGHT_BLACK_3,
         CatDisplayActiveSearchText: $COLOR_DARK_BLUE_5,
         CatDisplayActiveSearchIcon: $COLOR_DARK_BLUE_5,
-        CatDisplayActiveSearchIconClose: $COLOR_LIGHT_GRAY_3,
-        CatDisplayActiveSearchBorder: $COLOR_LIGHT_GRAY_3,
+        CatDisplayActiveSearchIconClose: $COLOR_LIGHT_GRAY_1,
+        CatDisplayActiveSearchBorder: $COLOR_LIGHT_GRAY_1,
         CatDisplayActiveSearchShadow: $COLOR_LIGHT_GRAY_2,
         CatDisplayFilterBg: $COLOR_WHITE,
         CatDisplayFilterText: $COLOR_LIGHT_BLACK_1,
         CatDisplayFilterIcon: $COLOR_LIGHT_GRAY,
         CatDisplayFilterInputText: $COLOR_WHITE,
-        CatDisplayActiveFilterBg: $COLOR_LIGHT_GRAY_3,
+        CatDisplayActiveFilterBg: $COLOR_LIGHT_GRAY_1,
         CatDisplayActiveFilterText: $COLOR_WHITE,
         CatDisplayActiveFilterIcon: $COLOR_WHITE,
         CatDisplayActiveFilterBorder: $COLOR_DARK_BLUE_5,
@@ -174,7 +175,7 @@ $themes: (
         CatDisplayCatContentTitleBg: $COLOR_WHITE,
         CatDisplayCatContentTitleText: $COLOR_LIGHT_BLACK_1,
         CatDisplayCatContentIcon: $COLOR_LIGHT_BLACK_1,
-        CatDisplayCatActiveContentBg: $COLOR_LIGHT_GRAY_3,
+        CatDisplayCatActiveContentBg: $COLOR_LIGHT_GRAY_1,
         CatDisplayCatActiveContentText: $COLOR_WHITE,
         CatDisplayCatActiveContentIcon: $COLOR_WHITE,
         CatDisplayCatHoverContentBg: $COLOR_LIGHT_BLACK_4,
@@ -186,7 +187,7 @@ $themes: (
         CrosshairAxis: rgba($COLOR_LIGHT_GRAY, 0.32),
         CrosshairLabel: rgba($COLOR_LIGHT_GRAY, 0.88),
         StarIconFav: $COLOR_ORANGE,
-        LastdigitsBarBg: $COLOR_LIGHT_GRAY_3,
+        LastdigitsBarBg: $COLOR_LIGHT_GRAY_1,
         LastdigitsMaxBarBg: $COLOR_GREEN_2,
         LastdigitsMinBarBg: $COLOR_RED,
         LastdigitsBarText: $COLOR_LIGHT_GRAY,
