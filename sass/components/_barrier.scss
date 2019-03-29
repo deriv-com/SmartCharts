@@ -66,6 +66,9 @@
     &:first-child {
         z-index: 108;
     }
+    &.hidden {
+        display: none;
+    }
 }
 
 /*hover*/

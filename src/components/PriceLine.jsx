@@ -26,10 +26,9 @@ class PriceLine extends Component {
         return (
             <>
                 <div
-                    className={`drag-price ${draggable ? 'draggable' : ''} ${isDragging ? 'dragging' : ''}`}
+                    className={`drag-price ${!visible ? 'hidden' : ''} ${draggable ? 'draggable' : ''} ${isDragging ? 'dragging' : ''}`}
                     style={{ top: labelTop, backgroundColor: color, color: '#fff' }}
                     ref={setDragLabel}
-                    hidden={!visible}
                 >
                     <div className="price">{priceDisplay}</div>
                 </div>
