@@ -42,6 +42,12 @@ export default class PriceLineStore {
             e => exitIfNotisDraggable(e, this._dragLine),
             e => exitIfNotisDraggable(e, this._endDrag),
         );
+        CIQ.safeDrag(
+            this._label,
+            e => exitIfNotisDraggable(e, this._startDrag),
+            e => exitIfNotisDraggable(e, this._dragLine),
+            e => exitIfNotisDraggable(e, this._endDrag),
+        );
     };
 
     static get EVENT_PRICE_CHANGED() { return 'EVENT_PRICE_CHANGED'; }
@@ -51,6 +57,10 @@ export default class PriceLineStore {
         let display = this.draggable ? this._price.toFixed(this.pip) : this._price;
         if (this.relative && this._price > 0) { display = `+${display}`; }
         return display;
+    }
+
+    get labelTop() {
+        return this.top - 2;
     }
 
     get price() {
@@ -98,6 +108,11 @@ export default class PriceLineStore {
         if (this._line) { this._draw(); }
     }
 
+    @action.bound setDragLabel(el) {
+        this._label = el;
+        if (this._label) { this._draw(); }
+    }
+
     _modalBegin() {
         if (this.stx.grabbingScreen) { return; }
         this.stx.editingAnnotation = true;
@@ -117,7 +132,7 @@ export default class PriceLineStore {
     }
 
     @action.bound _dragLine(e) {
-        if (!this._line) { return; }
+        if (!this._line && !this._label) { return; }
         const newTop = this._initialPosition + e.displacementY;
         const newCenter = newTop + LINE_OFFSET_HEIGHT_HALF;
         let newPrice = this._priceFromLocation(newCenter);
@@ -183,6 +198,9 @@ export default class PriceLineStore {
         if (this.visible && this._line) {
             this._updateTop();
         }
+        if (this.visible && this._label) {
+            this._updateTop();
+        }
     }
 
     onPriceChanged(callback) {
@@ -197,6 +215,8 @@ export default class PriceLineStore {
         priceDisplay: this.priceDisplay,
         visible: this.visible,
         setDragLine: this.setDragLine,
+        setDragLabel: this.setDragLabel,
+        labelTop: this.labelTop,
         className: this.className,
         draggable: this.draggable,
         isDragging: this.isDragging,

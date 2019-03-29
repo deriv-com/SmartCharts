@@ -60,6 +60,8 @@
     right: 0px;
     border-radius: 5px;
     border: 1px solid inherit;
+    z-index: 106;
+    margin: -11px 0 0 0;
 }
 
 /*hover*/
@@ -104,6 +106,7 @@
 
 .draggable .price {
     padding-right: 16px;
+    cursor: ns-resize;
 
     &:after {
         content: '≡';

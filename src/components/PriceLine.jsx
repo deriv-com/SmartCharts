@@ -13,6 +13,8 @@ class PriceLine extends Component {
             isDragging,
             priceDisplay,
             setDragLine,
+            setDragLabel,
+            labelTop,
             visible,
             zIndex,
             uncentered,
@@ -22,20 +24,27 @@ class PriceLine extends Component {
         } = this.props;
 
         return (
-            <div
-                className={`chart-line horizontal ${draggable ? 'draggable' : ''} ${isDragging ? 'dragging' : ''} ${className || ''}`}
-                style={{ top, zIndex, color: draggable ? color : '#FFF', borderColor: color }}
-                ref={setDragLine}
-                hidden={!visible}
-                uncentered={uncentered ? 'true' : undefined}
-                off-screen={offScreen ? 'true' : undefined}
-            >
-                <div className="drag-line" style={{ borderTopStyle: lineStyle }} />
-                <div className="draggable-area" />
-                <div className="drag-price" style={{ backgroundColor: draggable ? '#FFF' : color }}>
+            <>
+                <div
+                    className={`drag-price ${draggable ? 'draggable' : ''} ${isDragging ? 'dragging' : ''}`}
+                    style={{ top: labelTop, backgroundColor: color, color: '#fff' }}
+                    ref={setDragLabel}
+                    hidden={!visible}
+                >
                     <div className="price">{priceDisplay}</div>
                 </div>
-            </div>
+                <div
+                    className={`chart-line horizontal ${draggable ? 'draggable' : ''} ${isDragging ? 'dragging' : ''} ${className || ''}`}
+                    style={{ top, zIndex, color: draggable ? color : '#FFF', borderColor: color }}
+                    ref={setDragLine}
+                    hidden={!visible}
+                    uncentered={uncentered ? 'true' : undefined}
+                    off-screen={offScreen ? 'true' : undefined}
+                >
+                    <div className="drag-line" style={{ borderTopStyle: lineStyle }} />
+                    <div className="draggable-area" />
+                </div>
+            </>
         );
     }
 }
