@@ -103,11 +103,6 @@ const streamManager = new StreamManager(connectionManager);
 const requestAPI = connectionManager.send.bind(connectionManager);
 const requestSubscribe = streamManager.subscribe.bind(streamManager);
 const requestForget = streamManager.forget.bind(streamManager);
-const MarkerTimes = [];
-for (let i = 0; i < 5; i++) {
-    MarkerTimes.push(moment().utc().second(0).subtract(i + 3, 'minutes')
-        .unix());
-}
 
 class App extends Component {
     startingLanguage = 'en';
@@ -167,6 +162,7 @@ class App extends Component {
             isConnectionOpened: true,
             highLow: {},
             draggable: true,
+            markers: [],
         };
     }
 
@@ -317,6 +313,24 @@ class App extends Component {
         this.setState({ ...nextState, barrierType });
     };
 
+    onCircleMarker = () => {
+        let { markers } = this.state;
+        if (markers.length) {
+            markers = [];
+        } else {
+            for (let i = 0; i < 5; i++) {
+                markers.push({
+                    ts: moment().utc().second(0).subtract(i + 3, 'minutes')
+                        .unix(),
+                    className: 'chart-marker-line',
+                    xPositioner: 'epoch',
+                    yPositioner: 'top',
+                });
+            }
+        }
+        this.setState({ markers });
+    }
+
     toggleStartEpoch = () => {
         if (this.state.scrollToEpoch) {
             this.setState({
@@ -339,7 +353,7 @@ class App extends Component {
         const { settings, isConnectionOpened, symbol, endEpoch,
             barrierType, highLow : { high, low }, hidePriceLines,
             draggable, relative, shadeColor, scrollToEpoch,
-            leftOffset, foregroundColor } = this.state;
+            leftOffset, foregroundColor, markers } = this.state;
         const barriers = barrierType ? [{
             shade: barrierType,
             shadeColor,
@@ -379,18 +393,22 @@ class App extends Component {
                         scrollToEpoch={scrollToEpoch}
                         scrollToEpochOffset={leftOffset}
                     >
-                        {MarkerTimes.map(x => (
+                        {markers.map(x => (
                             <Marker
-                                key={x}
-                                className="chart-marker-line"
-                                x={x}
-                                xPositioner="epoch"
-                                yPositioner="top"
+                                key={x.ts}
+                                className={x.className}
+                                x={x.ts}
+                                xPositioner={x.xPositioner}
+                                yPositioner={x.yPositioner}
                             />
                         ))}
                     </SmartChart>
                 </div>
                 <div className="action-section">
+                    <div className="form-row">
+                        Circle Markers <br />
+                        <button type="button" onClick={this.onCircleMarker}>Toggle</button>
+                    </div>
                     <div className="form-row">
                         barrier type:&nbsp;
                         <select id="barrierType" onChange={this.onBarrierTypeChange}>
@@ -444,7 +462,6 @@ class App extends Component {
                             Toggle StartEpoch: <button type="button" onClick={this.toggleStartEpoch}>Toggle</button> <br />
                             LeftOffset(bars): <input type="number" value={leftOffset || 0} onChange={this.onLeftOffset} />
                     </div>
-                    <div className="form-row" />
                 </div>
             </div>
         );
