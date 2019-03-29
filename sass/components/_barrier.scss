@@ -60,8 +60,12 @@
     right: 0px;
     border-radius: 5px;
     border: 1px solid inherit;
-    z-index: 106;
+    z-index: 107;
     margin: -11px 0 0 0;
+
+    &:first-child {
+        z-index: 108;
+    }
 }
 
 /*hover*/

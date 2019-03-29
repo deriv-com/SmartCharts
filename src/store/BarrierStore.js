@@ -228,7 +228,7 @@ export default class BarrierStore {
         }
 
         if (this._low_barrier.visible && this._isBarriersOffScreen()) {
-            const order = (this._high_barrier.top === 0) ? null : 107;
+            const order = (this._high_barrier.top === 0) ? null : 101;
             this._high_barrier.zIndex = order;
         }
     }
