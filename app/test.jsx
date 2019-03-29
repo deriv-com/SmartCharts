@@ -406,7 +406,7 @@ class App extends Component {
                 </div>
                 <div className="action-section">
                     <div className="form-row">
-                        Circle Markers <br />
+                        Line Markers <br />
                         <button type="button" onClick={this.onCircleMarker}>Toggle</button>
                     </div>
                     <div className="form-row">
