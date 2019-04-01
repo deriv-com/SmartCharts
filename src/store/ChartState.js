@@ -241,7 +241,7 @@ class ChartState {
     }
 
     importLayout() {
-        if (!this.importedLayout || !Object.keys(this.importedLayout).length) return;
+        if (!this.stxx || !this.importedLayout || !Object.keys(this.importedLayout).length) return;
         this.stxx.importLayout(this.importedLayout, {
             managePeriodicity: true,
             preserveTicksAndCandleWidth: true,

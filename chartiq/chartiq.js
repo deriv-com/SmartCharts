@@ -21,7 +21,7 @@
 
 (function() {
 	var trialExpiration = undefined;
-	var licenseExpiration = "2019/04/01";
+	var licenseExpiration = "2020/04/01";
 	var domains = ["127.0.0.1","localhost","binary.com","binary.sx","binary.me","binary.bot"];
 	var filesystem = false;
 	var expiration;
