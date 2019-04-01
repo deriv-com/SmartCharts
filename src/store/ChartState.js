@@ -258,6 +258,9 @@ class ChartState {
                         this.stxx.importDrawings(this.importedLayout.drawings);
                         this.stxx.draw();
                     }
+                    if (this.importedLayout.isDone) {
+                        this.importedLayout.isDone();
+                    }
                 }, 500);
 
                 this.stxx.changeOccurred('layout');
