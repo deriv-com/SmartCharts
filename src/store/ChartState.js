@@ -241,7 +241,7 @@ class ChartState {
     }
 
     importLayout() {
-        if (!this.importedLayout || !Object.keys(this.importedLayout).length) return;
+        if (!this.stxx || !this.importedLayout || !Object.keys(this.importedLayout).length) return;
         this.stxx.importLayout(this.importedLayout, {
             managePeriodicity: true,
             preserveTicksAndCandleWidth: true,
@@ -257,6 +257,9 @@ class ChartState {
                     if (this.importedLayout && this.importedLayout.drawings) {
                         this.stxx.importDrawings(this.importedLayout.drawings);
                         this.stxx.draw();
+                    }
+                    if (this.importedLayout.isDone) {
+                        this.importedLayout.isDone();
                     }
                 }, 500);
 
