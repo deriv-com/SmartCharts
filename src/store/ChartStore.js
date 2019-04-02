@@ -368,10 +368,11 @@ class ChartStore {
                     initialMarginTop: 125,
                     initialMarginBottom: 10,
                     // position: 'left',
-                    width: -10,
+                    width: -6,
                     justifyRight: true,
                 },
                 gaplines: true,
+                yaxisPaddingRight: 48,
             },
             minimumLeftBars: 2,
             yTolerance: 999999, // disable vertical scrolling
@@ -449,6 +450,11 @@ class ChartStore {
                 }
 
                 this.context = context;
+
+                if (this.state.importedLayout) {
+                    // Check if there is a layout set by importedLayout porp, import it here after chart is loaded
+                    this.state.importLayout();
+                }
 
                 stxx.container.addEventListener('mouseenter', this.onMouseEnter);
                 stxx.container.addEventListener('mouseleave', this.onMouseLeave);
