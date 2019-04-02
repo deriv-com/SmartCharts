@@ -132,7 +132,7 @@ html, body {
         @include triangle-base(6px);
     }
     &.up:after {
-        border-bottom: 8px solid $COLOR_GREEN;
+        border-bottom: 8px solid $COLOR_GREEN_1;
     }
     &.down:after {
         border-top: 8px solid $COLOR_RED;
@@ -329,7 +329,7 @@ html, body {
     width: 30px !important;
 
     svg {
-        fill: $COLOR_LIGHT_BLUE_2;
+        fill: $COLOR_DARK_GRAY_3;
     }
     &.ic-delete {
         display: none;

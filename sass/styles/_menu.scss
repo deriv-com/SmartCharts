@@ -59,8 +59,6 @@ $transition-duration: 300ms;
 
         @include themify($themes) {
             color: themed('DialogHeadText');
-            background: themed('DialogHeadBg');
-            border-bottom: 1px solid themed('DialogHeadBorder');
         }
 
         > .ic-icon {
