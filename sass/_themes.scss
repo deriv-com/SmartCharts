@@ -51,16 +51,10 @@ $themes: (
         ChartCandleBg: $COLOR_ORANGE,
         ChartCandleText: $COLOR_WHITE,
         ChartGrid: $COLOR_LIGHT_BLACK_4,
-// <<<<<<< HEAD
-        // ChartIndicateText: $COLOR_GRAY,
-        // ChartIndicateDivide: $COLOR_GRAY,
-        // ChartMountainBorder: $COLOR_LIGHT_GRAY_3,
-        // ChartMountainBg: rgba(153, 156, 172, 0.36),
-// =======
         ChartIndicateText: $COLOR_LIGHT_GRAY,
         ChartIndicateDivide: $COLOR_LIGHT_GRAY,
-        ChartMountainBg: rgba(153, 156, 172, 0.16),
-// >>>>>>> upstream/dev
+        ChartMountainBorder: $COLOR_LIGHT_GRAY_1,
+        ChartMountainBg: rgba(153, 156, 172, 0.36),
         ChartMountainBgShade: rgba(255, 255, 255, 0),
         MenuBg: $COLOR_WHITE,
         MenuIcon: $COLOR_LIGHT_GRAY,
@@ -237,14 +231,9 @@ $themes: (
         ChartCandleText: $COLOR_WHITE,
         ChartGrid: $COLOR_DARK_BLUE_3,
         ChartIndicateText: $COLOR_WHITE,
-// <<<<<<< HEAD
-//         ChartIndicateDivide: $COLOR_LIGHT_BLUE_2,
-//         ChartMountainBorder: rgba($COLOR_WHITE, 1),
-//         ChartMountainBg: rgba(255, 255, 255, 0.36),
-// =======
         ChartIndicateDivide: $COLOR_DARK_GRAY_3,
-        ChartMountainBg: rgba(255, 255, 255, 0.16),
-// >>>>>>> upstream/dev
+        ChartMountainBorder: rgba($COLOR_WHITE, 1),
+        ChartMountainBg: rgba(255, 255, 255, 0.36),
         ChartMountainBgShade: rgba(16, 19, 32, 0),
         MenuBg: $COLOR_DARK_BLUE_2,
         MenuBorder: $COLOR_DARK_BLUE_5,
