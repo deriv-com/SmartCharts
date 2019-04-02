@@ -112,7 +112,7 @@ export default class TimeperiodStore {
         this.mainStore.chart.changeSymbol(undefined, granularity);
     }
 
-    @action.bound onChange(onchange) {
+    @action.bound updateProps(onchange) {
         this.onGranularityChange = onchange;
     }
 

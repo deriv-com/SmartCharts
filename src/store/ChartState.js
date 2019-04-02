@@ -237,11 +237,10 @@ class ChartState {
 
         // TODO: use constant
         this.mainStore.chart.changeSymbol(this.stxx.chart.symbol, 0);
-        const mountain = this.chartTypeStore.chartTypes[0];
         if (this.chartTypeStore.onChartTypeChanged) {
-            this.chartTypeStore.onChartTypeChanged(mountain);
+            this.chartTypeStore.onChartTypeChanged('mountain');
         } else {
-            this.chartTypeStore.setType(mountain);
+            this.chartTypeStore.setType('mountain');
         }
     }
 
@@ -277,8 +276,7 @@ class ChartState {
 
                 if (this.stxx.layout.tension) {
                     // Line and spline they are both mountain so we need to seperate them here using tension
-                    const spline = this.chartTypeStore.chartTypes[3];
-                    this.chartTypeStore.setType(spline);
+                    this.chartTypeStore.setType('spline');
                 }
 
                 this.stxx.changeOccurred('layout');

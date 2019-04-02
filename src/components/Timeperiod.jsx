@@ -14,14 +14,14 @@ const Timeperiod = ({
     setOpen,
     TimePeriodMenu,
     timeUnit_display,
-    onGranularityChange,
+    updateProps,
 }) => {
     const onGranularityClick = (granularity) => {
         onChange(granularity, chartId);
         setOpen(false);
     };
 
-    onGranularityChange(onChange);
+    updateProps(onChange);
 
     return (
         <TimePeriodMenu
@@ -138,5 +138,5 @@ export default connect(({ timeperiod: s, state }) => ({
     setOpen         : s.menu.setOpen,
     TimePeriodMenu  : s.TimePeriodMenu,
     timeUnit_display: s.timeUnit_display,
-    onGranularityChange: s.onChange,
+    updateProps     : s.updateProps,
 }))(Timeperiod);

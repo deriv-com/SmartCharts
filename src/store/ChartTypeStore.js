@@ -195,7 +195,7 @@ export default class ChartTypeStore {
         this.type = type;
     }
 
-    @action.bound onChange(onChange) {
+    @action.bound updateProps(onChange) {
         this.onChartTypeChanged = onChange;
     }
 
