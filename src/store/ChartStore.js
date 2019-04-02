@@ -368,11 +368,11 @@ class ChartStore {
                     initialMarginTop: 125,
                     initialMarginBottom: 10,
                     // position: 'left',
-                    width: -5,
+                    width: -6,
                     justifyRight: true,
                 },
                 gaplines: true,
-                yaxisPaddingRight: 50,
+                yaxisPaddingRight: 48,
             },
             minimumLeftBars: 2,
             yTolerance: 999999, // disable vertical scrolling
