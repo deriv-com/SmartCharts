@@ -17,7 +17,7 @@ class ChartState {
     @observable importedLayout;
     @observable isOnPagination = false;
     @observable paginationEndEpoch;
-    @observable chartControlsWidgets;
+    chartControlsWidgets;
 
     get comparisonStore() { return this.mainStore.comparison; }
     get stxx() { return this.chartStore.stxx; }
