@@ -129,7 +129,7 @@ class Chart extends Component {
                                         }
                                     </BottomWidgetsContainer>
                                 </div>
-                                <ChartControls widgets={chartControlsWidgets} />
+                                { chartControlsWidgets !== null && <ChartControls widgets={chartControlsWidgets} /> }
                             </div>
                         </div>
                     </div>
