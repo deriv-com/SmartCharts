@@ -368,10 +368,11 @@ class ChartStore {
                     initialMarginTop: 125,
                     initialMarginBottom: 10,
                     // position: 'left',
-                    width: -10,
+                    width: -6,
                     justifyRight: true,
                 },
                 gaplines: true,
+                yaxisPaddingRight: 48,
             },
             minimumLeftBars: 2,
             yTolerance: 999999, // disable vertical scrolling
@@ -449,6 +450,11 @@ class ChartStore {
                 }
 
                 this.context = context;
+
+                if (this.state.importedLayout) {
+                    // Check if there is a layout set by importedLayout porp, import it here after chart is loaded
+                    this.state.importLayout();
+                }
 
                 stxx.container.addEventListener('mouseenter', this.onMouseEnter);
                 stxx.container.addEventListener('mouseleave', this.onMouseLeave);
@@ -623,9 +629,9 @@ class ChartStore {
         const paddingRatio = this.chartNode.clientWidth / this.RANGE_PADDING_PX;
         const elapsedSeconds = endEpoch - startEpoch;
         const epochPadding = elapsedSeconds / paddingRatio | 0;
-        if (startEpoch !== undefined || endEpoch !== undefined) {
-            const dtLeft  = (startEpoch !== undefined) ? new Date(getUTCDate(startEpoch - epochPadding)) : undefined;
-            const dtRight = (endEpoch   !== undefined) ? new Date(getUTCDate(endEpoch + epochPadding))   : undefined;
+        if (startEpoch || endEpoch) {
+            const dtLeft  = (startEpoch) ? new Date(getUTCDate(startEpoch - epochPadding)) : undefined;
+            const dtRight = (endEpoch) ? new Date(getUTCDate(endEpoch + epochPadding))   : undefined;
             const periodicity = calculateTimeUnitInterval(this.granularity);
             range = {
                 dtLeft,
