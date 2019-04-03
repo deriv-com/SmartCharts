@@ -18,6 +18,7 @@ export default class BarrierStore {
 
     @observable shadeColor;
     @observable color;
+    @observable foregroundColor;
     @observable isBetweenShadeVisible = false;
     @observable isTopShadeVisible = false;
     @observable isBottomShadeVisible = false;
