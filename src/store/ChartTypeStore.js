@@ -135,10 +135,7 @@ export default class ChartTypeStore {
         this.aggregates = getAggregates();
         this.chartTypes = getChartTypes();
 
-        const chartType = this.getChartType(this.stx.layout);
-
-        const typeIdx = this.chartTypes.findIndex(t => t.id === chartType);
-        this.type = this.chartTypes[typeIdx];
+        this.setChartTypeFromLayout(this.stx.layout);
 
         reaction(() => this.mainStore.state.chartType, () => {
             if (this.mainStore.state.chartType !== undefined) {
@@ -242,7 +239,13 @@ export default class ChartTypeStore {
         }));
     }
 
-    getChartType(layout) {
+    @action.bound setChartTypeFromLayout(layout) {
+        const chartType = this.getChartTypeFromLayout(layout);
+        const typeIdx = this.chartTypes.findIndex(t => t.id === chartType);
+        this.type = this.chartTypes[typeIdx];
+    }
+
+    getChartTypeFromLayout(layout) {
         let chartType;
         if (layout.tension) { // We assume that if tension is set, spline is enabled
             chartType = 'spline';

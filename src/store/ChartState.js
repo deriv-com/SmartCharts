@@ -22,6 +22,7 @@ class ChartState {
     get stxx() { return this.chartStore.stxx; }
     get context() { return this.chartStore.context; }
     get chartTypeStore() { return this.mainStore.chartType; }
+    get timeperiodStore() { return this.mainStore.timeperiod; }
 
     constructor(mainStore) {
         this.mainStore = mainStore;
@@ -268,14 +269,15 @@ class ChartState {
                 }, 500);
 
                 const { timeUnit, interval } = this.importedLayout;
-                if (timeUnit) {
+                if (timeUnit && this.timeperiodStore.onGranularityChange) {
                     const granularity = calculateGranularity(interval, timeUnit) || 0;
-                    if (this.mainStore.timeperiod.onGranularityChange) this.mainStore.timeperiod.onGranularityChange(granularity);
+                    this.timeperiodStore.onGranularityChange(granularity);
                 }
 
                 if (this.chartTypeStore.onChartTypeChanged) {
-                    const chartType = this.chartTypeStore.getChartType(this.importedLayout);
-                    this.chartTypeStore.change(chartType);
+                    const chartType = this.chartTypeStore.getChartTypeFromLayout(this.importedLayout);
+                    this.chartTypeStore.setChartTypeFromLayout(this.importedLayout);
+                    this.chartTypeStore.onChartTypeChanged(chartType);
                 }
 
                 this.stxx.changeOccurred('layout');
@@ -294,7 +296,7 @@ class ChartState {
         for (const field in this.stxx.chart.series) {
             currentLayout.series.push(field);
         }
-        if (this.mainStore.timeperiod.onGranularityChange) this.mainStore.timeperiod.onGranularityChange(0);
+        if (this.timeperiodStore.onGranularityChange) this.timeperiodStore.onGranularityChange(0);
         this.onExportLayout(currentLayout);
     }
 }
