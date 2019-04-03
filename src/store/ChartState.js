@@ -22,6 +22,7 @@ class ChartState {
     get stxx() { return this.chartStore.stxx; }
     get context() { return this.chartStore.context; }
     get chartTypeStore() { return this.mainStore.chartType; }
+    get timeperiodStore() { return this.mainStore.timeperiod; }
 
     constructor(mainStore) {
         this.mainStore = mainStore;
@@ -237,7 +238,11 @@ class ChartState {
 
         // TODO: use constant
         this.mainStore.chart.changeSymbol(this.stxx.chart.symbol, 0);
-        this.mainStore.chartType.setType({ id:'linear' });
+        if (this.chartTypeStore.onChartTypeChanged) {
+            this.chartTypeStore.onChartTypeChanged('mountain');
+        } else {
+            this.chartTypeStore.setType('mountain');
+        }
     }
 
     importLayout() {
@@ -263,6 +268,18 @@ class ChartState {
                     }
                 }, 500);
 
+                const { timeUnit, interval } = this.importedLayout;
+                if (timeUnit && this.timeperiodStore.onGranularityChange) {
+                    const granularity = calculateGranularity(interval, timeUnit) || 0;
+                    this.timeperiodStore.onGranularityChange(granularity);
+                }
+
+                if (this.chartTypeStore.onChartTypeChanged) {
+                    const chartType = this.chartTypeStore.getChartTypeFromLayout(this.importedLayout);
+                    this.chartTypeStore.setChartTypeFromLayout(this.importedLayout);
+                    this.chartTypeStore.onChartTypeChanged(chartType);
+                }
+
                 this.stxx.changeOccurred('layout');
                 this.mainStore.studies.updateActiveStudies();
             },
@@ -279,7 +296,7 @@ class ChartState {
         for (const field in this.stxx.chart.series) {
             currentLayout.series.push(field);
         }
-
+        if (this.timeperiodStore.onGranularityChange) this.timeperiodStore.onGranularityChange(0);
         this.onExportLayout(currentLayout);
     }
 }
