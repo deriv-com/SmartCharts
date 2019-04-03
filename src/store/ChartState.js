@@ -263,9 +263,6 @@ class ChartState {
                         this.stxx.importDrawings(this.importedLayout.drawings);
                         this.stxx.draw();
                     }
-                    if (this.importedLayout.isDone) {
-                        this.importedLayout.isDone();
-                    }
                 }, 500);
 
                 const { timeUnit, interval } = this.importedLayout;
@@ -282,6 +279,11 @@ class ChartState {
 
                 this.stxx.changeOccurred('layout');
                 this.mainStore.studies.updateActiveStudies();
+                
+                if (this.importedLayout.isDone) {
+                    //Run the callback when layout import is done 
+                    this.importedLayout.isDone();
+                }
             },
         });
 
