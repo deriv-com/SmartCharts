@@ -125,6 +125,9 @@ export default class ChartTypeStore {
         this.AggregateChartSettingsDialog = this.settingsDialog.connect(SettingsDialog);
     }
 
+    @observable type = 'mountain';
+    onChartTypeChanged;
+
     get context() { return this.mainStore.chart.context; }
     get stx() { return this.context.stx; }
     get chartTypeProp() { return this.mainStore.state.chartType; }
@@ -135,6 +138,8 @@ export default class ChartTypeStore {
         this.aggregates = getAggregates();
         this.chartTypes = getChartTypes();
 
+        console.log(getChartTypes()[0]);
+
         this.setChartTypeFromLayout(this.stx.layout);
 
         reaction(() => this.mainStore.state.chartType, () => {
@@ -143,9 +148,6 @@ export default class ChartTypeStore {
             }
         });
     };
-
-    @observable type = getChartTypes()[0];
-    onChartTypeChanged;
 
     @action.bound setTypeFromUI(type) {
         if (this.chartTypeProp !== undefined) {
