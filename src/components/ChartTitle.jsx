@@ -1,5 +1,6 @@
-import React from 'react';
-import { connect } from '../store/Connect';
+import PropTypes    from 'prop-types';
+import React        from 'react';
+import { connect }  from '../store/Connect';
 import '../../sass/components/_chart-title.scss';
 
 const ChartTitle = ({
@@ -37,6 +38,10 @@ const ChartTitle = ({
             </ChartTitleMenu.Body>
         </ChartTitleMenu>
     );
+};
+
+ChartTitle.propTypes = {
+    onChange        : PropTypes.func,
 };
 
 export default connect(({ chartTitle: c, chart, state }) => ({

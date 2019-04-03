@@ -1,7 +1,8 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
-import React from 'react';
-import { connect } from '../store/Connect';
-import { SettingIcon } from './Icons.jsx';
+import PropTypes        from 'prop-types';
+import React            from 'react';
+import { connect }      from '../store/Connect';
+import { SettingIcon }  from './Icons.jsx';
 import '../../sass/components/_chart-types.scss';
 
 const ChartTypes = ({
@@ -64,6 +65,10 @@ const ChartTypes = ({
             </ChartTypeMenu.Body>
         </ChartTypeMenu>
     );
+};
+
+ChartTypes.propTypes = {
+    onChange        : PropTypes.func,
 };
 
 export default connect(({ chartType, state }) => ({

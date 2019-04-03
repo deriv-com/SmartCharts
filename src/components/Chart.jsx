@@ -163,7 +163,6 @@ Chart.propTypes = {
     settings            : PropTypes.object,
 };
 
-
 export default connect(({ chart, drawTools, studies, chartSetting, chartType, state, drawingCursor }) => ({
     init: chart.init,
     destroy: chart.destroy,

@@ -1,5 +1,6 @@
-import React from 'react';
-import Scrollbars from 'tt-react-custom-scrollbars';
+import PropTypes    from 'prop-types';
+import React        from 'react';
+import Scrollbars   from 'tt-react-custom-scrollbars';
 import '../../sass/components/_ciq-list.scss';
 
 const List = ({
@@ -30,6 +31,12 @@ const List = ({
             ))}
         </Scrollbars>
     );
+};
+
+List.propTypes = {
+    height      : PropTypes.number,
+    onItemClick : PropTypes.func,
+    items       : PropTypes.array,
 };
 
 export default List;
