@@ -274,12 +274,8 @@ class ChartState {
                 }
 
                 if (this.chartTypeStore.onChartTypeChanged) {
-                    this.chartTypeStore.onChartTypeChanged(this.importedLayout.chartType);
-                }
-
-                if (this.stxx.layout.tension) {
-                    // Line and spline they are both mountain so we need to seperate them here using tension
-                    this.chartTypeStore.setType('spline');
+                    const chartType = this.chartTypeStore.getChartType(this.importedLayout);
+                    this.chartTypeStore.change(chartType);
                 }
 
                 this.stxx.changeOccurred('layout');

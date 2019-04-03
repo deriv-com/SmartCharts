@@ -135,14 +135,8 @@ export default class ChartTypeStore {
         this.aggregates = getAggregates();
         this.chartTypes = getChartTypes();
 
-        let chartType;
-        if (this.stx.layout.tension) { // We assume that if tension is set, spline is enabled
-            chartType = 'spline';
-        } else if (this.aggregates[this.stx.layout.aggregationType]) {
-            chartType = this.stx.layout.aggregationType;
-        } else {
-            chartType = this.stx.layout.chartType;
-        }
+        const chartType = this.getChartType(this.stx.layout);
+
         const typeIdx = this.chartTypes.findIndex(t => t.id === chartType);
         this.type = this.chartTypes[typeIdx];
 
@@ -152,6 +146,9 @@ export default class ChartTypeStore {
             }
         });
     };
+
+    @observable type = getChartTypes()[0];
+    onChartTypeChanged;
 
     @action.bound setTypeFromUI(type) {
         if (this.chartTypeProp !== undefined) {
@@ -245,6 +242,15 @@ export default class ChartTypeStore {
         }));
     }
 
-    @observable type = getChartTypes()[0];
-    onChartTypeChanged;
+    getChartType(layout) {
+        let chartType;
+        if (layout.tension) { // We assume that if tension is set, spline is enabled
+            chartType = 'spline';
+        } else if (this.aggregates[layout.aggregationType]) {
+            chartType = layout.aggregationType;
+        } else {
+            chartType = layout.chartType;
+        }
+        return chartType;
+    }
 }
