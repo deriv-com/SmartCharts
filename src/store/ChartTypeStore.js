@@ -138,8 +138,6 @@ export default class ChartTypeStore {
         this.aggregates = getAggregates();
         this.chartTypes = getChartTypes();
 
-        console.log(getChartTypes()[0]);
-
         this.setChartTypeFromLayout(this.stx.layout);
 
         reaction(() => this.mainStore.state.chartType, () => {
