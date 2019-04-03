@@ -1,5 +1,5 @@
 $COLOR_BLUE: #2a3052;
-$COLOR_GRAY: #e9e9ed;
+$COLOR_LIGHT_GRAY: #e9e9ed;
 
 .calendar {
     position: absolute;
@@ -50,7 +50,7 @@ $COLOR_GRAY: #e9e9ed;
         }
 
         .calendar-footer-extra + .calendar-footer-btn {
-            border-top: 1px solid $COLOR_GRAY;
+            border-top: 1px solid $COLOR_LIGHT_GRAY;
             margin: 0 -12px;
         }
         .calendar-footer-btn {
@@ -316,7 +316,7 @@ $COLOR_GRAY: #e9e9ed;
         appearance: none;
 
         &:hover:not(:focus) {
-            border-color: $COLOR_GRAY;
+            border-color: $COLOR_LIGHT_GRAY;
         }
         &::-webkit-date-and-time-value {
             margin: 0;
