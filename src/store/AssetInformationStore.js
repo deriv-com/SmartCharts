@@ -35,7 +35,7 @@ export default class AssetInformationStore {
         this.open = (Open && !this.isTick) ? Open.toFixed(this.decimalPlaces) : null;
         this.high = (High && !this.isTick) ? High.toFixed(this.decimalPlaces) : null;
         this.low = (Low && !this.isTick) ? Low.toFixed(this.decimalPlaces) : null;
-        this.close = (High && !this.isTick) ? Close.toFixed(this.decimalPlaces) : null;
+        this.close = (Close && !this.isTick) ? Close.toFixed(this.decimalPlaces) : null;
         this.price = Close ? Close.toFixed(this.decimalPlaces) : null;
     }
 
