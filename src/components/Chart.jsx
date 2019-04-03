@@ -1,3 +1,4 @@
+import PropTypes            from 'prop-types';
 import React, { Component } from 'react';
 import RenderInsideChart from './RenderInsideChart.jsx';
 import ComparisonList from './ComparisonList.jsx';
@@ -142,6 +143,26 @@ class Chart extends Component {
         );
     }
 }
+
+Chart.propTypes = {
+    chart_id            : PropTypes.number,
+    endEpoch            : PropTypes.number,
+    granularity         : PropTypes.number,
+    symbol              : PropTypes.string,
+    chartType           : PropTypes.string,
+    requestAPI          : PropTypes.func,
+    requestSubscribe    : PropTypes.func,
+    requestForget       : PropTypes.func,
+    onSettingsChange    : PropTypes.func,
+    onMessage           : PropTypes.func,
+    isMobile            : PropTypes.bool,
+    enableRouting       : PropTypes.bool,
+    removeAllComparisons: PropTypes.bool,
+    topWidgets          : PropTypes.func,
+    chartControlsWidgets: PropTypes.func,
+    settings            : PropTypes.object,
+};
+
 
 export default connect(({ chart, drawTools, studies, chartSetting, chartType, state, drawingCursor }) => ({
     init: chart.init,
