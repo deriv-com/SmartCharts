@@ -279,7 +279,7 @@ class ChartState {
                         this.stxx.draw();
                     }
 
-                    if (this.importedLayout.isDone) {
+                    if (this.importedLayout && this.importedLayout.isDone) {
                         // Run the callback when layout import is done
                         this.importedLayout.isDone();
                     }
