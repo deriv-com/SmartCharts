@@ -37,6 +37,7 @@ export default class ChartTitleStore {
         this.SymbolSelectButton = connect(() => ({
             symbol: this.currentSymbol,
             ChartPrice: PriceDisplay,
+            symbolOpenTime: this.symbolOpenTime,
         }))(SymbolSelectButton);
     }
 
@@ -49,6 +50,8 @@ export default class ChartTitleStore {
     @computed get currentSymbol() { return this.mainStore.chart.currentActiveSymbol; }
     @computed get decimalPlaces() { return this.mainStore.chart.currentActiveSymbol.decimal_places; }
     @computed get isShowChartPrice() { return this.mainStore.chart.isChartAvailable; }
+    @computed get tradingTimes() { return this.mainStore.chart.tradingTimes; }
+    @computed get symbolOpenTime() { return this.tradingTimes._tradingTimesMap[this.currentSymbol.symbol].times[0].open; }
 
     onContextReady = () => {
         this.chart.feed.onMasterDataUpdate(this.update);
