@@ -94,7 +94,7 @@ granularity | Sets the granularity of the chart. Allowed values are 60, 120, 180
 chartType | Sets the chartType. Choose between `mountain` (Line), `line` (Dot), `colored_line` (Colored Dot),  `spline`,  `baseline`, `candle`, `colored_bar` (OHLC), `hollow_candle`, `heikinashi`, `kagi`, `linebreak`, `renko`, `rangebars`, and `pandf` (Point & Figure). Defaults to `mountain`. Refer [Props vs UI](#props-vs-ui) for usage details.
 startEpoch | Set the start epoch of the chart
 endEpoch | Set the end epoch of the chart
-chartControlsWidgets | Render function for chart control widgets. Refer to [Customising Components](#customising-components).
+chartControlsWidgets | Render function for chart control widgets. Set to `null` if you want to hide chart controls. Refer to [Customising Components](#customising-components).
 topWidgets | Render function for top widgets. Refer to [Customising Components](#customising-components).
 bottomWidgets | Render function for bottom widgets. Refer to [Customising Components](#customising-components).
 isMobile | Switch between mobile or desktop view. Defaults to `false`.
@@ -106,7 +106,7 @@ isConnectionOpened | Sets the connection status. If set, upon reconnection smart
 onMessage | SmartCharts will send notifications via this callback, should it be provided. Each notification will have the following structure: `{ text, type, category }`.
 isAnimationEnabled | Determine whether chart animation is enabled or disabled. It may needs to be disabled for better performance. Defaults to `true`.
 showLastDigitStats | Shows last digits stats. Defaults to `false`.
-scrollToEpoch | Scrolls the chart to the leftmost side and sets the last spot/bar as the first visible sport/bar in the chart. Also, it disables scrolling until the chart reaches the 3/4 of the width of the main pane of the chart. Defaults to `null`.
+scrollToEpoch | Scrolls the chart to the leftmost side and sets the last spot/bar as the first visible spot/bar in the chart. Also, it disables scrolling until the chart reaches the 3/4 of the width of the main pane of the chart. Defaults to `null`.
 scrollToEpochOffset | Sets the number of spot/bar(s) which should be visible before the last spot/bar at the leftmost side of the chart (It should be used with `scrollToEpoch`). Defaults to `0`.
 zoom | Zoom in and Zoom out the chart. the value should be in percentage. If the value is positive the chart will be zoomed in otherwise it will be zoomed out.
 clearChart | Clear the chart.
