@@ -37,6 +37,7 @@ import Minus from '../../sass/icons/chart settings/zoom-out/ic-zoomout-light.svg
 import Star from '../../sass/icons/favorite/ic-favorite-normal.svg';
 import Template from '../../sass/icons/chart settings/chart template/ic-charttemplate-normal.svg';
 import Tick from '../../sass/icons/tick/ic-tick.svg';
+import Time from '../../sass/icons/time/ic-time.svg';
 import Active from '../../sass/icons/sidebar/active/ic-active-normal.svg';
 import Commodities from '../../sass/icons/sidebar/commodities/ic-commodities-normal.svg';
 import Forex from '../../sass/icons/sidebar/forex/ic-forex-normal.svg';
@@ -167,6 +168,7 @@ export const CsvIcon = Wrapper(Csv);
 export const StarIcon = Wrapper(Star);
 export const TemplateIcon = Wrapper(Template);
 export const TickIcon = Wrapper(Tick);
+export const TimeIcon = Wrapper(Time);
 export const SearchIcon = Wrapper(Search);
 export const EditIcon = Wrapper(Edit);
 export const SettingIcon = Wrapper(Edit);

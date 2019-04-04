@@ -1,17 +1,19 @@
 import React from 'react';
-import { ItemIconMap, SymbolPlaceholderIcon, ArrowIcon } from './Icons.jsx';
+import { ItemIconMap, SymbolPlaceholderIcon, ArrowIcon, TimeIcon } from './Icons.jsx';
+import EditIcon from '../../sass/icons/edit/ic-edit.svg';
 
 export const SymbolInfo = ({
     symbol,
     ChartPrice,
 }) => {
+    console.log(symbol);
     const SymbolIcon = ItemIconMap[symbol.symbol] || SymbolPlaceholderIcon;
     return (
         <>
             {SymbolIcon && <SymbolIcon className={`ic-${symbol.symbol}`} />}
             <div className="cq-symbol-info">
                 <div className="cq-symbol">{symbol.name}</div>
-                <ChartPrice />
+                {symbol.exchange_is_open ? <ChartPrice /> : <ClosedSymbol />}
             </div>
         </>
     );
@@ -42,4 +44,10 @@ export const ChartPrice = ({
             </div>
         </div>
     )
+);
+
+const ClosedSymbol = () => (
+    <div>
+        <TimeIcon />
+    </div>
 );
