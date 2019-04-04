@@ -753,6 +753,10 @@ html, body {
 .stx-subholder {
     position: absolute;
     overflow: hidden;
+    @include themify($themes) {
+        border-right: 1px solid themed('ChartGrid');
+        border-bottom: 1px solid themed('ChartGrid');
+    }
 }
 
 /* -------- Colors for session shading -------- */
