@@ -258,16 +258,6 @@ class ChartState {
                     });
                 }
 
-                setTimeout(() => {
-                    if (this.importedLayout && this.importedLayout.drawings) {
-                        this.stxx.importDrawings(this.importedLayout.drawings);
-                        this.stxx.draw();
-                    }
-                    if (this.importedLayout.isDone) {
-                        this.importedLayout.isDone();
-                    }
-                }, 500);
-
                 const { timeUnit, interval } = this.importedLayout;
                 if (timeUnit && this.timeperiodStore.onGranularityChange) {
                     const granularity = calculateGranularity(interval, timeUnit) || 0;
@@ -282,6 +272,18 @@ class ChartState {
 
                 this.stxx.changeOccurred('layout');
                 this.mainStore.studies.updateActiveStudies();
+
+                setTimeout(() => {
+                    if (this.importedLayout && this.importedLayout.drawings) {
+                        this.stxx.importDrawings(this.importedLayout.drawings);
+                        this.stxx.draw();
+                    }
+
+                    if (this.importedLayout.isDone) {
+                        // Run the callback when layout import is done
+                        this.importedLayout.isDone();
+                    }
+                }, 500);
             },
         });
 
