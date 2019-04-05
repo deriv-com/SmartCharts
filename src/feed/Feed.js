@@ -45,13 +45,17 @@ class Feed {
         const periodicity = calculateTimeUnitInterval(this.granularity);
         const rangeTime = ((this.granularity || 1) * this._stx.chart.maxTicks);
 
+        if (!this.endEpoch && !this.startEpoch) {
+            this._stx.layout.range = {};
+            return;
+        }
         // If the endEpoch is undefined _and_ there are no active streams, we initiate streaming
         if (!this.endEpoch) {
             if (Object.keys(this._activeStreams).length === 0) {
                 // Set the end range to the future to trigger ChartIQ to start streaming
                 const future = now + 10;
                 const dtRight = new Date(future * 1000);
-                const dtLeft =  new Date((this.startEpoch || now - rangeTime) * 1000);
+                const dtLeft = this.startEpoch ? new Date(this.startEpoch) : undefined;
                 this._stx.setRange({ dtLeft, dtRight, periodicity }, () => this._stx.home());
             }
             return;
