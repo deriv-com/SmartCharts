@@ -127,6 +127,7 @@ export default class ChartSettingStore {
         if (this.context) {
             this.stx.clearStyles();
             this.stx.setStyle('stx_grid', 'color', Theme[`${theme}chartgrid`]);
+            this.stx.setStyle('stx_mountain_chart', 'borderTopColor', Theme[`${theme}chartborder`]);
             this.stx.draw();
         }
         logEvent(LogCategories.ChartControl, LogActions.ChartSetting, `Change theme to ${theme}`);
