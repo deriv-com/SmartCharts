@@ -112,7 +112,7 @@ export default class MarkerStore {
                 );
                 this.stxx.createDataSet();
 
-                if (this.yPositioner !== 'top' && this.yPositioner !== 'on_candle') {
+                if (this.yPositioner !== 'value' && this.yPositioner !== 'on_candle') {
                     this.yPositioner = 'top';
                 }
             }
