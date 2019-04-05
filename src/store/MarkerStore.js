@@ -112,7 +112,7 @@ export default class MarkerStore {
                 );
                 this.stxx.createDataSet();
 
-                if (this.yPositioner !== 'top' && this.yPositioner !== 'on_candle') {
+                if (this.yPositioner !== 'value' && this.yPositioner !== 'on_candle') {
                     this.yPositioner = 'top';
                 }
             }
@@ -135,7 +135,12 @@ export default class MarkerStore {
             }
         }
 
-        this.left = left;
+        this.left = left || null;
+
+        if (!this.left) {
+            this.hideMarker();
+            return;
+        }
 
         // Y axis positioning logic
         if (this.yPositioner === 'none') {
