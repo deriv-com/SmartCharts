@@ -80,7 +80,8 @@ class ChartStore {
     updateHeight(position) {
         const historicalMobile = this.mainStore.chartSetting.historical && this.isMobile;
         const panelPosition = position || this.mainStore.chartSetting.position;
-        const offsetHeight = (panelPosition === 'left') ? 0 : this.chartControlsNode.offsetHeight;
+        // TODO use constant here for chartcontrol height
+        const offsetHeight = (panelPosition === 'bottom' && this.stateStore.chartControlsWidgets) ? 40 : 0;
         this.chartHeight = this.chartNode.offsetHeight;
         this.chartContainerHeight = this.chartHeight - offsetHeight - (historicalMobile ? 45 : 0);
     }
@@ -368,10 +369,11 @@ class ChartStore {
                     initialMarginTop: 125,
                     initialMarginBottom: 10,
                     // position: 'left',
-                    width: -10,
+                    width: -6,
                     justifyRight: true,
                 },
                 gaplines: true,
+                yaxisPaddingRight: 48,
             },
             minimumLeftBars: 2,
             yTolerance: 999999, // disable vertical scrolling
@@ -449,6 +451,11 @@ class ChartStore {
                 }
 
                 this.context = context;
+
+                if (this.state.importedLayout) {
+                    // Check if there is a layout set by importedLayout porp, import it here after chart is loaded
+                    this.state.importLayout();
+                }
 
                 stxx.container.addEventListener('mouseenter', this.onMouseEnter);
                 stxx.container.addEventListener('mouseleave', this.onMouseLeave);
@@ -585,18 +592,14 @@ class ChartStore {
         }
 
         const { chartType: chartTypeStore } = this.mainStore;
-        if (chartTypeStore.chartTypeProp === undefined) {
-            this.contextPromise.then(() => {
-                const isTick = this.stxx.layout.timeUnit === 'second';
-                const isCandle = chartTypeStore.isCandle;
-                if (isCandle && isTick) {
-                    // Tick charts cannot be represented with candles
-                    chartTypeStore.setType('mountain');
-                } else if (!isTick && !isCandle) {
-                    chartTypeStore.setType('candle');
-                }
-            });
-        }
+        this.contextPromise.then(() => {
+            const isTick = this.stxx.layout.timeUnit === 'second';
+            const isCandle = chartTypeStore.isCandle;
+            if (isCandle && isTick) {
+                // Tick charts cannot be represented with candles
+                chartTypeStore.setType('mountain');
+            }
+        });
     }
 
     // Calling newChart with symbolObj as undefined refreshes the chart
