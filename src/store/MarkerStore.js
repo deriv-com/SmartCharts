@@ -135,7 +135,12 @@ export default class MarkerStore {
             }
         }
 
-        this.left = left;
+        this.left = left || null;
+
+        if (!this.left) {
+            this.hideMarker();
+            return;
+        }
 
         // Y axis positioning logic
         if (this.yPositioner === 'none') {
