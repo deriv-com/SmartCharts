@@ -39,4 +39,10 @@ List.propTypes = {
     items       : PropTypes.array,
 };
 
+List.defaultProps = {
+    height      : null,
+    onItemClick : () => null,
+    items       : [],
+};
+
 export default List;

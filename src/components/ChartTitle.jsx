@@ -41,7 +41,11 @@ const ChartTitle = ({
 };
 
 ChartTitle.propTypes = {
-    onChange        : PropTypes.func,
+    onChange    : PropTypes.func,
+};
+
+ChartTitle.defaultProps = {
+    onChange    : () => null,
 };
 
 export default connect(({ chartTitle: c, chart, state }) => ({

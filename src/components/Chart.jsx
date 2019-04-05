@@ -16,11 +16,19 @@ import '../../sass/main.scss';
 
 import './ui';
 
-import ChartControls from './ChartControls.jsx';
+import ChartControls, { RenderDefaultControls } from './ChartControls.jsx';
 import Crosshair from './Crosshair.jsx';
 import { connect } from '../store/Connect';
 import { initGA, logPageView } from '../utils/ga';
 import PaginationLoader from './PaginationLoader.jsx';
+
+const defaultTopWidgets = () => (
+    <>
+        <ChartTitle />
+        <AssetInformation />
+        <ComparisonList />
+    </>
+);
 
 class Chart extends Component {
     constructor(props) {
@@ -46,14 +54,6 @@ class Chart extends Component {
         this.props.destroy();
     }
 
-    defaultTopWidgets = () => (
-        <>
-            <ChartTitle />
-            <AssetInformation />
-            <ComparisonList />
-        </>
-    );
-
     render() {
         const {
             bottomWidgets,
@@ -77,7 +77,7 @@ class Chart extends Component {
 
         const currentPosition = `cq-chart-control-${(position && !isMobile) ? position : 'bottom'}`;
         const contextWidth =  !isMobile ? `smartcharts-${containerWidth}` : '';
-        const TopWidgets = topWidgets || this.defaultTopWidgets;
+        const TopWidgets = topWidgets || defaultTopWidgets;
         const BottomWidgets = !bottomWidgets && showLastDigitStats ? LastDigitStats : bottomWidgets;
 
         return (
@@ -145,22 +145,61 @@ class Chart extends Component {
 }
 
 Chart.propTypes = {
-    chart_id            : PropTypes.number,
-    endEpoch            : PropTypes.number,
-    granularity         : PropTypes.number,
-    symbol              : PropTypes.string,
-    chartType           : PropTypes.string,
-    requestAPI          : PropTypes.func,
-    requestSubscribe    : PropTypes.func,
-    requestForget       : PropTypes.func,
-    onSettingsChange    : PropTypes.func,
-    onMessage           : PropTypes.func,
-    isMobile            : PropTypes.bool,
-    enableRouting       : PropTypes.bool,
-    removeAllComparisons: PropTypes.bool,
-    topWidgets          : PropTypes.func,
-    chartControlsWidgets: PropTypes.func,
-    settings            : PropTypes.object,
+    id                              : PropTypes.string,
+    endEpoch                        : PropTypes.number,
+    granularity                     : PropTypes.number,
+    symbol                          : PropTypes.string,
+    chartType                       : PropTypes.string,
+    requestAPI                      : PropTypes.func.isRequired,
+    requestSubscribe                : PropTypes.func.isRequired,
+    requestForget                   : PropTypes.func.isRequired,
+    onSettingsChange                : PropTypes.func,
+    onMessage                       : PropTypes.func,
+    isMobile                        : PropTypes.bool,
+    enableRouting                   : PropTypes.bool,
+    removeAllComparisons            : PropTypes.bool,
+    topWidgets                      : PropTypes.func,
+    settings                        : PropTypes.object,
+    bottomWidgets                   : PropTypes.any,
+    DrawToolsSettingsDialog         : PropTypes.any.isRequired,
+    StudySettingsDialog             : PropTypes.any.isRequired,
+    isOnPagination                  : PropTypes.bool,
+    isChartAvailable                : PropTypes.bool,
+    barriers                        : PropTypes.array,
+    chartControlsWidgets            : PropTypes.any,
+    AggregateChartSettingsDialog    : PropTypes.any.isRequired,
+    chartContainerHeight            : PropTypes.number,
+    containerWidth                  : PropTypes.number,
+    isDrawing                       : PropTypes.bool,
+    theme                           : PropTypes.string,
+    position                        : PropTypes.string,
+    showLastDigitStats              : PropTypes.bool,
+};
+
+Chart.defaultProps = {
+    id                              : '1',
+    endEpoch                        : null,
+    granularity                     : 0,
+    symbol                          : undefined,
+    chartType                       : 'mountain',
+    onSettingsChange                : () => null,
+    onMessage                       : () => null,
+    isMobile                        : false,
+    enableRouting                   : false,
+    removeAllComparisons            : false,
+    topWidgets                      : defaultTopWidgets,
+    settings                        : {},
+    bottomWidgets                   : () => null,
+    isOnPagination                  : false,
+    isChartAvailable                : false,
+    barriers                        : [],
+    chartControlsWidgets            : RenderDefaultControls,
+    chartContainerHeight            : 500,
+    containerWidth                  : 480,
+    isDrawing                       : false,
+    theme                           : 'light',
+    position                        : 'bottom',
+    showLastDigitStats              : false,
 };
 
 export default connect(({ chart, drawTools, studies, chartSetting, chartType, state, drawingCursor }) => ({

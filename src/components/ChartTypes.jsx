@@ -71,6 +71,10 @@ ChartTypes.propTypes = {
     onChange        : PropTypes.func,
 };
 
+ChartTypes.defaultProps = {
+    onChange    : () => null,
+};
+
 export default connect(({ chartType, state }) => ({
     chartId            : state.chartId,
     ChartTypeMenu      : chartType.ChartTypeMenu,
