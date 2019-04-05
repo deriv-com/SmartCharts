@@ -146,8 +146,8 @@ html,body{-ms-touch-action:none;margin:0px}
 .stx_baseline_delta_mountain{background-color:rgba(163,102,255,0.5);color:rgba(163,102,255,0.01);padding:3px}
 .stx_colored_mountain_chart{background-color:rgba(163,102,255,0.5);color:rgba(163,102,255,0.01);width:2px;padding:4px}
 .stx_mountain_chart{width:1px}
-.smartcharts-light .stx_mountain_chart{border:#999cac;background-color:rgba(153,156,172,0.16);color:rgba(255,255,255,0)}
-.smartcharts-dark .stx_mountain_chart{border:#fff;background-color:rgba(255,255,255,0.16);color:rgba(16,19,32,0)}
+.smartcharts-light .stx_mountain_chart{border:#999cac;background-color:rgba(153,156,172,0.36);color:rgba(255,255,255,0)}
+.smartcharts-dark .stx_mountain_chart{border:#fff;background-color:rgba(255,255,255,0.36);color:rgba(16,19,32,0)}
 .stx_histogram_down{color:#f95454}
 .smartcharts-light .stx_histogram_down{border-left-color:#999cac}
 .smartcharts-dark .stx_histogram_down{border-left-color:#fff}
@@ -312,13 +312,13 @@ html,body{-ms-touch-action:none;margin:0px}
 .draggable.chart-line:hover.horizontal{cursor:ns-resize}
 .draggable.chart-line:hover.vertical{cursor:ew-resize}
 .hide-pricelines>.chart-line.horizontal{display:none}
-.drag-price{display:block;height:25px;top:-11px;position:absolute;right:0px;border-radius:5px;border:1px solid inherit}
+.drag-price{display:block;height:24px;top:-11px;position:absolute;right:0px;border:1px solid inherit}
 .no-touch .price-arrow span{position:absolute;top:4px;left:6px;display:block;width:15px;height:15px;background-position:-4px -488px;opacity:0;transition:opacity 0.2s}
 .no-touch .chart-line:hover .price-arrow{width:20px;height:23px}
 .no-touch .chart-line:hover .price-arrow span{opacity:1}
-.price{font-size:1.4em;font-weight:300;display:block;padding:1px 6px;line-height:23px;overflow:hidden}
+.price{font-size:12px;font-weight:300;display:block;padding:3px 6px;line-height:18px;overflow:hidden}
 .draggable .price{padding-right:16px}
-.draggable .price:after{content:'\2261';font-size:25px;position:absolute;right:1px;top:-1px;-webkit-transform:scaleX(0.8);transform:scaleX(0.8)}
+.draggable .price:after{content:'\2261';font-size:25px;position:absolute;right:1px;top:1px;-webkit-transform:scaleX(0.8);transform:scaleX(0.8)}
 .shade.hidden{opacity:0}
 .shade{position:absolute;width:100%;right:0px;opacity:0.3;transition:opacity 0.1s ease-out}
 .top-shade{background-image:linear-gradient(to bottom, transparent 30%, var(--shade-color))}
