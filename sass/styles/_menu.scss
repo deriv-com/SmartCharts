@@ -49,6 +49,7 @@ $transition-duration: 300ms;
         height: 20px;
         line-height: 20px;
         padding: 1em 1.6em 0.5em;
+        box-sizing: content-box;
 
         .title-text {
             display: inline-block;
@@ -58,8 +59,6 @@ $transition-duration: 300ms;
 
         @include themify($themes) {
             color: themed('DialogHeadText');
-            background: themed('DialogHeadBg');
-            border-bottom: 1px solid themed('DialogHeadBorder');
         }
 
         > .ic-icon {

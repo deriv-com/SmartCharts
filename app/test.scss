@@ -1,42 +1,25 @@
 /* Used for app only. Do not deploy with library! */
 
-#root {
-    display: flex;
-}
-
-.grid {
+.test-container {
     position: relative;
-    display: grid;
-    grid-template-rows: auto auto;
-    grid-template-columns: repeat(12, [col-start] 1fr); /* stylelint-disable-line plugin/no-unsupported-browser-features */
-    width: 100%;
-    height: 100vh;
+    height: calc(100vh - 30px);
+    padding: 15px 5px;
+    display: flex;
+    background: #f4f4f6;
 
-    .chart-instance {
+    .chart-section {
         position: relative;
-        grid-column: col-start/span 12;
-        height: 500px;
+        height: 100%;
+        width: calc(100vw - 160px);
+        border-radius: 5px;
     }
-    .side-chart {
-        grid-column-start: 7;
-        grid-column-end: span 6;
-        position: relative;
-    }
-    .bottom-chart {
-        position: relative;
-        grid-column: col-start/span 12;
-    }
-    .bottom-blob {
-        font-family: sans-serif;
-        grid-column: col-start/span 12;
-        background-color: #dfdfdf;
-        text-align: center;
-        line-height: 100px;
-        transition: line-height 0.5s;
-        vertical-align: middle;
+    .action-section {
+        height: 100%;
+        width: 150px;
 
-        input[type='number'] {
-            width: 60px;
+        .form-row {
+            padding: 5px 10px;
+            display: block;
         }
     }
 }
@@ -47,4 +30,12 @@
     height: 100%;
     position: absolute;
     top: 0px;
+}
+
+.chart-marker-circle {
+    border-radius: 50%;
+    border: 6px solid #baccff;
+    padding: 5px;
+    background: transparent;
+    margin: 0 0px -8px -8px;
 }
