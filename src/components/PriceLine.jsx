@@ -19,12 +19,13 @@ class PriceLine extends Component {
             offScreen,
             lineStyle,
             color,
+            foregroundColor,
         } = this.props;
 
         return (
             <div
                 className={`chart-line horizontal ${draggable ? 'draggable' : ''} ${isDragging ? 'dragging' : ''} ${className || ''}`}
-                style={{ top, zIndex, color: draggable ? color : '#FFF', borderColor: color }}
+                style={{ top, zIndex, color: foregroundColor, borderColor: color }}
                 ref={setDragLine}
                 hidden={!visible}
                 uncentered={uncentered ? 'true' : undefined}
@@ -32,7 +33,7 @@ class PriceLine extends Component {
             >
                 <div className="drag-line" style={{ borderTopStyle: lineStyle }} />
                 <div className="draggable-area" />
-                <div className="drag-price" style={{ backgroundColor: draggable ? '#FFF' : color }}>
+                <div className="drag-price" style={{ backgroundColor: color }}>
                     <div className="price">{priceDisplay}</div>
                 </div>
             </div>

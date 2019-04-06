@@ -14,11 +14,15 @@ const Timeperiod = ({
     setOpen,
     TimePeriodMenu,
     timeUnit_display,
+    updateProps,
 }) => {
     const onGranularityClick = (granularity) => {
         onChange(granularity, chartId);
         setOpen(false);
     };
+
+    updateProps(onChange);
+
     return (
         <TimePeriodMenu
             className="ciq-period"
@@ -134,4 +138,5 @@ export default connect(({ timeperiod: s, state }) => ({
     setOpen         : s.menu.setOpen,
     TimePeriodMenu  : s.TimePeriodMenu,
     timeUnit_display: s.timeUnit_display,
+    updateProps     : s.updateProps,
 }))(Timeperiod);

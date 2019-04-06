@@ -75,7 +75,7 @@ class Chart extends Component {
             showLastDigitStats,
         } = this.props;
 
-        const currentPosition = `cq-chart-control-${(position && !isMobile) ? position : 'bottom'}`;
+        const currentPosition = `cq-chart-control-${(chartControlsWidgets && position && !isMobile) ? position : 'bottom'}`;
         const contextWidth =  !isMobile ? `smartcharts-${containerWidth}` : '';
         const TopWidgets = topWidgets || defaultTopWidgets;
         const BottomWidgets = !bottomWidgets && showLastDigitStats ? LastDigitStats : bottomWidgets;
@@ -130,7 +130,9 @@ class Chart extends Component {
                                         }
                                     </BottomWidgetsContainer>
                                 </div>
-                                <ChartControls widgets={chartControlsWidgets} />
+                                { chartControlsWidgets !== null
+                                    && <ChartControls widgets={chartControlsWidgets} />
+                                }
                             </div>
                         </div>
                     </div>

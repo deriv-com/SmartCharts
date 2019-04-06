@@ -18,6 +18,7 @@ export default class BarrierStore {
 
     @observable shadeColor;
     @observable color;
+    @observable foregroundColor;
     @observable isBetweenShadeVisible = false;
     @observable isTopShadeVisible = false;
     @observable isBottomShadeVisible = false;
@@ -81,10 +82,11 @@ export default class BarrierStore {
     }
 
     @action.bound updateProps({
-        color, shadeColor, shade, high, low, relative, draggable, onChange, hidePriceLines, lineStyle,
+        color, foregroundColor, shadeColor, shade, high, low, relative, draggable, onChange, hidePriceLines, lineStyle,
     }) {
         this.initializePromise.then(action(() => {
             if (color) { this.color = color; }
+            if (foregroundColor) { this.foregroundColor = foregroundColor; }
             if (shadeColor) { this.shadeColor = shadeColor; }
             if (shade) { this.shadeState = `SHADE_${shade}`.toUpperCase(); }
             if (relative !== undefined) { this.relative = relative; }
