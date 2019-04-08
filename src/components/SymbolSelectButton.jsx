@@ -7,7 +7,6 @@ export const SymbolInfo = ({
     symbolOpenTime,
 }) => {
     const SymbolIcon = ItemIconMap[symbol.symbol] || SymbolPlaceholderIcon;
-    console.log(symbolOpenTime);
     return (
         <>
             {SymbolIcon && <SymbolIcon className={`ic-${symbol.symbol}`} />}
@@ -25,6 +24,7 @@ export const SymbolSelectButton = ({
 }) => (
     <div className="cq-symbol-select-btn">
         <SymbolInfo symbol={symbol} ChartPrice={ChartPrice} symbolOpenTime={symbolOpenTime} />
+        {!symbol.exchange_is_open && <div className="cq-symbol-closed-text">Closed</div>}
         <ArrowIcon className="cq-symbol-dropdown" />
     </div>
 );
@@ -48,8 +48,8 @@ export const ChartPrice = ({
 );
 
 const ClosedSymbol = symbolOpenTime => (
-    <div>
-        <TimeIcon />
-        <span>Opens in:{symbolOpenTime.symbolOpenTime}</span>
+    <div className="cq-chart-closed">
+        <TimeIcon className="cq-closed-icon" />
+        <span className="cq-closed-opening">Opens in: <strong>{symbolOpenTime.symbolOpenTime}</strong></span>
     </div>
 );

@@ -1,5 +1,4 @@
 import EventEmitter from 'event-emitter-es6';
-import { getUTCEpoch } from '@binary-com/smartcharts/utils';
 import ServerTime from '../utils/ServerTime';
 import PendingPromise from '../utils/PendingPromise';
 
