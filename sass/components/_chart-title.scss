@@ -129,6 +129,13 @@
                 line-height: 22px;
                 font-size: 1.2em;
                 text-align: left;
+
+                .cq-closed-opening-time {
+                    font-weight: bold;
+                    @include themify($themes) {
+                        color: themed('ChartTitleText');
+                    }
+                }
             }
         }
         .cq-symbol-closed-text {

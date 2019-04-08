@@ -50,6 +50,6 @@ export const ChartPrice = ({
 const ClosedSymbol = symbolOpenTime => (
     <div className="cq-chart-closed">
         <TimeIcon className="cq-closed-icon" />
-        <span className="cq-closed-opening">Opens in: <strong>{symbolOpenTime.symbolOpenTime}</strong></span>
+        <div className="cq-closed-opening">Opens in: <span className="cq-closed-opening-time">{symbolOpenTime.symbolOpenTime}</span></div>
     </div>
 );
