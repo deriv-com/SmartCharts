@@ -489,9 +489,10 @@ html, body {
 }
 
 .stx_grid_border { /* Default Grid borders */
-    color: #999999;
+    @include themify($themes) {
+        color: themed('ChartGrid');
+    }
     border-style: solid;
-    opacity: 0;
 }
 
 /* -------- Chart Type Styles -------- */
@@ -753,10 +754,6 @@ html, body {
 .stx-subholder {
     position: absolute;
     overflow: hidden;
-    @include themify($themes) {
-        border-right: 1px solid themed('ChartGrid');
-        border-bottom: 1px solid themed('ChartGrid');
-    }
 }
 
 /* -------- Colors for session shading -------- */
