@@ -1,4 +1,5 @@
 import EventEmitter from 'event-emitter-es6';
+import { getUTCEpoch } from '@binary-com/smartcharts/utils';
 import ServerTime from '../utils/ServerTime';
 import PendingPromise from '../utils/PendingPromise';
 
@@ -108,6 +109,7 @@ class TradingTimes {
                     const { times, symbol, feed_license, delay_amount } = symbolObj;
                     const { open, close } = times;
                     let _times;
+                    let symbolOpenTime;
                     const isOpenAllDay = open.length === 1
                         && open[0] === '00:00:00'
                         && close[0] === '23:59:59';
@@ -119,6 +121,7 @@ class TradingTimes {
                             open: getUTCDate(openTime),
                             close: getUTCDate(close[idx]),
                         }));
+                        symbolOpenTime = (_times[0].open).toLocaleTimeString();
                     }
                     this._tradingTimesMap[symbol] = {
                         feed_license,
@@ -126,6 +129,7 @@ class TradingTimes {
                         times: _times,
                         isOpenAllDay,
                         isClosedAllDay,
+                        symbolOpenTime,
                     };
                 }
             }

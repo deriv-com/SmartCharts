@@ -7,6 +7,7 @@ export const SymbolInfo = ({
     symbolOpenTime,
 }) => {
     const SymbolIcon = ItemIconMap[symbol.symbol] || SymbolPlaceholderIcon;
+    console.log(symbolOpenTime);
     return (
         <>
             {SymbolIcon && <SymbolIcon className={`ic-${symbol.symbol}`} />}
@@ -49,6 +50,6 @@ export const ChartPrice = ({
 const ClosedSymbol = symbolOpenTime => (
     <div>
         <TimeIcon />
-        { symbolOpenTime.toString() }
+        <span>Opens in:{symbolOpenTime.symbolOpenTime}</span>
     </div>
 );
