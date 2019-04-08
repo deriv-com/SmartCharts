@@ -237,7 +237,12 @@ class ChartState {
         this.mainStore.crosshair.setCrosshairState(0);
 
         // TODO: use constant
-        this.mainStore.chart.changeSymbol(this.stxx.chart.symbol, 0);
+        if (this.timeperiodStore.onGranularityChange) {
+            this.timeperiodStore.onGranularityChange(0);
+        } else {
+            this.mainStore.chart.changeSymbol(this.stxx.chart.symbol, 0);
+        }
+
         if (this.chartTypeStore.onChartTypeChanged) {
             this.chartTypeStore.onChartTypeChanged('mountain');
         } else {
@@ -279,9 +284,9 @@ class ChartState {
 
                 this.stxx.changeOccurred('layout');
                 this.mainStore.studies.updateActiveStudies();
-                
+
                 if (this.importedLayout.isDone) {
-                    //Run the callback when layout import is done 
+                    // Run the callback when layout import is done
                     this.importedLayout.isDone();
                 }
             },
@@ -298,7 +303,6 @@ class ChartState {
         for (const field in this.stxx.chart.series) {
             currentLayout.series.push(field);
         }
-        if (this.timeperiodStore.onGranularityChange) this.timeperiodStore.onGranularityChange(0);
         this.onExportLayout(currentLayout);
     }
 }
