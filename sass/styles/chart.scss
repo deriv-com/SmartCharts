@@ -790,7 +790,7 @@ html, body {
     @include themify($themes) {
         color: themed('ChartText');
     }
-    font-size: 10px;
+    font-size: 12px;
     font-family: 'Roboto';
     font-weight: bold;
 }
