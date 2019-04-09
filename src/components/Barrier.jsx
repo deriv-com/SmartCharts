@@ -3,8 +3,9 @@ import { connect } from '../store/Connect';
 import BarrierStore from '../store/BarrierStore';
 
 const Barrier = ({
-    shadeColor = '#4caf50',
-    color = '#000',
+    shadeColor = '#39b19d',
+    color = '#39b19d',
+    foregroundColor = '#ffffff',
     HighPriceLine,
     LowPriceLine,
     AboveShade,
@@ -18,8 +19,8 @@ const Barrier = ({
         className={`barrier ${hidePriceLines ? 'hide-pricelines' : ''}`}
         style={{ '--shade-color': shadeColor }}
     >
-        <HighPriceLine lineStyle={lineStyle} color={color} />
-        <LowPriceLine  lineStyle={lineStyle} color={color} />
+        <HighPriceLine lineStyle={lineStyle} color={color} foregroundColor={foregroundColor} />
+        <LowPriceLine  lineStyle={lineStyle} color={color} foregroundColor={foregroundColor} />
         <AboveShade />
         <BetweenShade />
         <BelowShade />
@@ -36,6 +37,7 @@ export default connect(
         BelowShade: store.BelowShade,
         shadeColor: store.shadeColor,
         color: store.color,
+        foregroundColor: store.foregroundColor,
         hidePriceLines: store.hidePriceLines,
         lineStyle: store.lineStyle,
         isInitialized: store.isInitialized,

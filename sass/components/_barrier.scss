@@ -54,11 +54,10 @@
 
 .drag-price {
     display: block;
-    height: 25px;
+    height: 24px;
     top: -11px;
     position: absolute;
     right: 0px;
-    border-radius: 5px;
     border: 1px solid inherit;
 }
 
@@ -93,11 +92,11 @@
 /*hover*/
 
 .price {
-    font-size: 1.4em;
+    font-size: 12px;
     font-weight: 300;
     display: block;
-    padding: 1px 6px;
-    line-height: 23px;
+    padding: 3px 6px;
+    line-height: 18px;
     overflow: hidden;
 
 }
@@ -110,7 +109,7 @@
         font-size: 25px;
         position: absolute;
         right: 1px;
-        top: -1px;
+        top: 1px;
         transform: scaleX(0.8);
     }
 }
