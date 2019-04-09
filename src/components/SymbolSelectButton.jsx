@@ -12,7 +12,10 @@ export const SymbolInfo = ({
             {SymbolIcon && <SymbolIcon className={`ic-${symbol.symbol}`} />}
             <div className="cq-symbol-info">
                 <div className="cq-symbol">{symbol.name}</div>
-                {symbol.exchange_is_open ? <ChartPrice /> : <ClosedSymbol symbolOpenTime={symbolOpenTime} />}
+                { symbol.exchange_is_open
+                    ? <ChartPrice />
+                    : <ClosedSymbol symbolOpenTime={symbolOpenTime} />
+                }
             </div>
         </>
     );
