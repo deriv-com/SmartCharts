@@ -1,7 +1,8 @@
-import React from 'react';
-import { connect } from '../store/Connect';
+import PropTypes        from 'prop-types';
+import React            from 'react';
+import { connect }      from '../store/Connect';
 import { CrosshairOffIcon, CrosshairOnIcon, CrosshairTooltipIcon } from './Icons.jsx';
-import { Toggle } from './Form.jsx';
+import { Toggle }       from './Form.jsx';
 
 const CrosshairToggle = ({
     toggleState,
@@ -23,6 +24,16 @@ const CrosshairToggle = ({
             </div>
         </div>
     );
+};
+
+CrosshairToggle.propTypes = {
+    toggleState     : PropTypes.func,
+    state           : PropTypes.number,
+};
+
+CrosshairToggle.defaultProps = {
+    toggleState     : () => null,
+    state           : 0,
 };
 
 export default connect(({ crosshair }) => ({

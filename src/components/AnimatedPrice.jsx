@@ -1,4 +1,5 @@
-import React from 'react';
+import PropTypes    from 'prop-types';
+import React        from 'react';
 
 const AnimatedPrice = ({
     isIncrease,
@@ -12,6 +13,21 @@ const AnimatedPrice = ({
             <div className={classes}>{price}</div>
         </>
     );
+};
+
+AnimatedPrice.propTypes = {
+    isIncrease  : PropTypes.bool,
+    price       : PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.number,
+    ]),
+    className   : PropTypes.string,
+};
+
+AnimatedPrice.defaultProps = {
+    isIncrease  : false,
+    price       : '0',
+    className   : '',
 };
 
 export default AnimatedPrice;

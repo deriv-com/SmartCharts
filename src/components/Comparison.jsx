@@ -1,7 +1,8 @@
-import React from 'react';
-import { connect } from '../store/Connect';
-import NotificationBadge from './NotificationBadge.jsx';
-import { ComparisonIcon } from './Icons.jsx';
+import PropTypes            from 'prop-types';
+import React                from 'react';
+import { connect }          from '../store/Connect';
+import NotificationBadge    from './NotificationBadge.jsx';
+import { ComparisonIcon }   from './Icons.jsx';
 
 const Comparison = ({
     ComparisonSelector,
@@ -27,6 +28,20 @@ const Comparison = ({
         </ComparisonMenu.Body>
     </ComparisonMenu>
 );
+
+Comparison.propTypes = {
+    ComparisonSelector  : PropTypes.any.isRequired,
+    ComparisonMenu      : PropTypes.any.isRequired,
+    menuOpen            : PropTypes.bool,
+    isMobile            : PropTypes.bool,
+    activeComparisonsNo : PropTypes.number,
+};
+
+Comparison.defaultProps = {
+    menuOpen            : false,
+    isMobile            : false,
+    activeComparisonsNo : 1,
+};
 
 export default connect(({ comparison: c, chart }) => ({
     ComparisonSelector: c.ComparisonSelector,

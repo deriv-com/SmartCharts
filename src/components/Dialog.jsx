@@ -1,4 +1,5 @@
-import React  from 'react';
+import PropTypes    from 'prop-types';
+import React        from 'react';
 import '../../sass/components/_ciq-dialog.scss';
 
 const Dialog = ({
@@ -14,5 +15,19 @@ const Dialog = ({
         {children}
     </div>
 );
+
+Dialog.propTypes = {
+    open                : PropTypes.bool,
+    children            : PropTypes.any,
+    onContainerClick    : PropTypes.func,
+    className           : PropTypes.string,
+};
+
+Dialog.defaultProps = {
+    open                : PropTypes.bool,
+    children            : PropTypes.any,
+    onContainerClick    : PropTypes.func,
+    className           : PropTypes.string,
+};
 
 export default Dialog;

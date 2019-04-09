@@ -41,11 +41,25 @@ const ChartTitle = ({
 };
 
 ChartTitle.propTypes = {
-    onChange    : PropTypes.func,
+    chartId             : PropTypes.string,
+    ChartTitleMenu      : PropTypes.any.isRequired,
+    currentSymbol       : PropTypes.object,
+    enabled             : PropTypes.bool,
+    isMobile            : PropTypes.bool,
+    MarketSelector      : PropTypes.any.isRequired,
+    onChange            : PropTypes.func,
+    SymbolSelectButton  : PropTypes.any,
+    setMenuOpen         : PropTypes.func,
 };
 
 ChartTitle.defaultProps = {
-    onChange    : () => null,
+    chartId             : '',
+    currentSymbol       : undefined,
+    enabled             : true,
+    isMobile            : false,
+    onChange            : () => null,
+    SymbolSelectButton  : null,
+    setMenuOpen         : () => null,
 };
 
 export default connect(({ chartTitle: c, chart, state }) => ({

@@ -1,10 +1,11 @@
-import React from 'react';
+import PropTypes    from 'prop-types';
+import React        from 'react';
 import {
     ZoomInIcon,
     ZoomOutIcon,
 } from './Icons.jsx';
 import '../../sass/components/_chart-size.scss';
-import { connect } from '../store/Connect';
+import { connect }  from '../store/Connect';
 
 const ChartSize = ({
     zoomIn,
@@ -19,6 +20,16 @@ const ChartSize = ({
         </div>
     </div>
 );
+
+ChartSize.propTypes = {
+    zoomIn      : PropTypes.func,
+    zoomOut     : PropTypes.func,
+};
+
+ChartSize.defaultProps = {
+    zoomIn      : () => null,
+    zoomOut     : () => null,
+};
 
 export default connect(({ chartSize }) => ({
     zoomIn: chartSize.zoomIn,

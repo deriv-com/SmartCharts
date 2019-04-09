@@ -1,6 +1,7 @@
-import React from 'react';
-import { connect } from '../store/Connect';
-import MarkerStore from '../store/MarkerStore';
+import PropTypes    from 'prop-types';
+import React        from 'react';
+import { connect }  from '../store/Connect';
+import MarkerStore  from '../store/MarkerStore';
 import '../../sass/components/_markers.scss';
 
 const Marker = ({
@@ -14,6 +15,22 @@ const Marker = ({
         {children}
     </div>
 );
+
+Marker.propTypes = {
+    display     : PropTypes.string,
+    left        : PropTypes.number,
+    bottom      : PropTypes.number,
+    children    : PropTypes.any,
+    className   : PropTypes.string,
+};
+
+Marker.defaultProps = {
+    display     : 'none',
+    left        : 0,
+    bottom      : 0,
+    children    : null,
+    className   : '',
+};
 
 export default connect(
     store => ({

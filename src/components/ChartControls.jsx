@@ -1,14 +1,15 @@
-import React from 'react';
-import { connect } from '../store/Connect';
-import ChartTypes from './ChartTypes.jsx';
-import StudyLegend from './StudyLegend.jsx';
-import Comparison from './Comparison.jsx';
-import Views from './Views.jsx';
-import CrosshairToggle from './CrosshairToggle.jsx';
-import Timeperiod from './Timeperiod.jsx';
-import ChartSize from './ChartSize.jsx';
-import DrawTools from './DrawTools.jsx';
-import Share from './Share.jsx';
+import PropTypes        from 'prop-types';
+import React            from 'react';
+import { connect }      from '../store/Connect';
+import ChartTypes       from './ChartTypes.jsx';
+import StudyLegend      from './StudyLegend.jsx';
+import Comparison       from './Comparison.jsx';
+import Views            from './Views.jsx';
+import CrosshairToggle  from './CrosshairToggle.jsx';
+import Timeperiod       from './Timeperiod.jsx';
+import ChartSize        from './ChartSize.jsx';
+import DrawTools        from './DrawTools.jsx';
+import Share            from './Share.jsx';
 import '../../sass/components/_chart-controls.scss';
 
 
@@ -39,6 +40,20 @@ const ChartControls = ({
             { context ? <Controls isMobile={isMobile} /> : null }
         </div>
     );
+};
+
+ChartControls.propTypes = {
+    isMobile        : PropTypes.bool,
+    hasOpenMenu     : PropTypes.bool,
+    widgets         : PropTypes.any,
+    context         : PropTypes.any,
+};
+
+ChartControls.defaultProps = {
+    isMobile        : false,
+    hasOpenMenu     : false,
+    widgets         : RenderDefaultControls,
+    context         : null,
 };
 
 export default connect(({ chart,

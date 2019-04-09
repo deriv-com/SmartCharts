@@ -1,6 +1,7 @@
-import React from 'react';
-import { connect } from '../store/Connect';
-import { DeleteIcon } from './Icons.jsx';
+import PropTypes        from 'prop-types';
+import React            from 'react';
+import { connect }      from '../store/Connect';
+import { DeleteIcon }   from './Icons.jsx';
 import '../../sass/components/_comparison-list.scss';
 
 const ComparisonListItem = ({
@@ -36,6 +37,18 @@ const ComparisonList = ({
         ))}
     </div>
 );
+
+ComparisonList.propTypes = {
+    comparisonSymbols   : PropTypes.array,
+    animatedPrices      : PropTypes.any,
+    onDeleteItem        : PropTypes.func,
+};
+
+ComparisonList.defaultProps = {
+    comparisonSymbols   : PropTypes.array,
+    animatedPrices      : PropTypes.any,
+    onDeleteItem        : () => null,
+};
 
 export default connect(({ comparisonList: c }) => ({
     comparisonSymbols: c.comparisonSymbols,

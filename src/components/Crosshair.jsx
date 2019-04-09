@@ -1,5 +1,6 @@
-import React from 'react';
-import { connect } from '../store/Connect';
+import PropTypes        from 'prop-types';
+import React            from 'react';
+import { connect }      from '../store/Connect';
 import '../../sass/components/_ciq-crosshair.scss';
 
 const Crosshair = ({
@@ -26,6 +27,24 @@ const Crosshair = ({
         </div>
     </div>
 );
+
+Crosshair.propTypes = {
+    left            : PropTypes.number,
+    top             : PropTypes.number,
+    rows            : PropTypes.array,
+    isArrowLeft     : PropTypes.bool,
+    state           : PropTypes.number,
+    cursorInChart   : PropTypes.bool,
+};
+
+Crosshair.defaultProps = {
+    left            : 0,
+    top             : 0,
+    rows            : [],
+    isArrowLeft     : false,
+    state           : 1,
+    cursorInChart   : false,
+};
 
 export default connect(({ crosshair: c, chart }) => ({
     left: c.left,

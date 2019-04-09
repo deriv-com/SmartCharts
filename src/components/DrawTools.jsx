@@ -1,6 +1,7 @@
-import React from 'react';
-import Scrollbars from 'tt-react-custom-scrollbars';
-import { connect } from '../store/Connect';
+import PropTypes    from 'prop-types';
+import React        from 'react';
+import Scrollbars   from 'tt-react-custom-scrollbars';
+import { connect }  from '../store/Connect';
 import { DrawIcon, ClearIcon, MeasureIcon } from './Icons.jsx';
 import '../../sass/components/_draw-tools.scss';
 
@@ -58,6 +59,21 @@ const DrawTools = ({
         </DrawToolsMenu.Body>
     </DrawToolsMenu>
 );
+
+DrawTools.propTypes = {
+    clearAll        : PropTypes.func,
+    selectTool      : PropTypes.func,
+    DrawToolsMenu   : PropTypes.any.isRequired,
+    menuOpen        : PropTypes.bool,
+    drawToolsItems  : PropTypes.array,
+};
+
+DrawTools.defaultProps = {
+    clearAll        : () => null,
+    selectTool      : () => null,
+    menuOpen        : false,
+    drawToolsItems  : [],
+};
 
 export default connect(({ drawTools: dt }) => ({
     clearAll: dt.clearAll,

@@ -1,5 +1,6 @@
-import React from 'react';
-import { connect } from '../store/Connect';
+import PropTypes    from 'prop-types';
+import React        from 'react';
+import { connect }  from '../store/Connect';
 
 const Loader = ({
     isActive,
@@ -12,6 +13,19 @@ const Loader = ({
         </div>
     </div>
 );
+
+Loader.propTypes = {
+    isActive        : PropTypes.bool,
+    currentState    : PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.bool,
+    ]),
+};
+
+Loader.defaultProps = {
+    isActive        : false,
+    currentState    : '',
+};
 
 export default connect(({ loader: l }) => ({
     isActive: l.isActive,

@@ -1,4 +1,5 @@
-import React from 'react';
+import PropTypes        from 'prop-types';
+import React            from 'react';
 import {
     Switch,
     NumericInput,
@@ -7,10 +8,9 @@ import {
     Pattern,
     DropDown,
     NumberColorPicker,
-    FontSetting,
-} from './Form.jsx';
-import { DeleteIcon } from './Icons.jsx';
-import Favorite from './Favorite.jsx';
+    FontSetting }       from './Form.jsx';
+import { DeleteIcon }   from './Icons.jsx';
+import Favorite         from './Favorite.jsx';
 import '../../sass/components/_ciq-settings-dialog.scss';
 
 const SettingsPanel = ({
@@ -211,5 +211,38 @@ const SettingsDialog = ({
         </Dialog>
     </div>
 );
+
+SettingsDialog.propTypes = {
+    id              : PropTypes.string,
+    items           : PropTypes.array, // [{ id, title, value, defaultValue, type }]
+    title           : PropTypes.string,
+    description     : PropTypes.string,
+    activeTab       : PropTypes.string,
+    setOpen         : PropTypes.func,
+    showTabs        : PropTypes.bool,
+    onTabClick      : PropTypes.func,
+    onDeleteClick   : PropTypes.func,
+    favoritesId     : PropTypes.string,
+    onResetClick    : PropTypes.func,
+    onItemChange    : PropTypes.func,
+    Dialog          : PropTypes.any.isRequired,
+    open            : PropTypes.bool,
+};
+
+SettingsDialog.defaultProps = {
+    id              : '',
+    items           : [],
+    title           : '',
+    description     : '',
+    activeTab       : '',
+    setOpen         : () => null,
+    showTabs        : false,
+    onTabClick      : () => null,
+    onDeleteClick   : () => null,
+    favoritesId     : '',
+    onResetClick    : () => null,
+    onItemChange    : () => null,
+    open            : false,
+};
 
 export default SettingsDialog;

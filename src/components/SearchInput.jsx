@@ -1,6 +1,9 @@
+import PropTypes            from 'prop-types';
 import React, { Component } from 'react';
-import { CloseCircleIcon, SearchIcon } from './Icons.jsx';
-import { connect } from '../store/Connect';
+import {
+    CloseCircleIcon,
+    SearchIcon   }          from './Icons.jsx';
+import { connect }          from '../store/Connect';
 
 class SearchInput extends Component {
     clearFilterText = () => {
@@ -33,6 +36,18 @@ class SearchInput extends Component {
         );
     }
 }
+
+SearchInput.propTypes = {
+    placeholder : PropTypes.string,
+    value       : PropTypes.string,
+    searchInput : PropTypes.object,
+};
+
+SearchInput.defaultProps = {
+    placeholder : '',
+    value       : '',
+    searchInput : null,
+};
 
 export default connect(({ chart: c }) => ({
     isMobile: c.isMobile,

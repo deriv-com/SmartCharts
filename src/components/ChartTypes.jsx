@@ -65,17 +65,32 @@ const ChartTypes = ({
                         )}
                     </ChartTypeList>
                 </div>
-            </ChartTypeMenu.Body>
+            </ChartTypeMenu.Body>w
         </ChartTypeMenu>
     );
 };
 
 ChartTypes.propTypes = {
-    onChange        : PropTypes.func,
+    chartId             : PropTypes.string,
+    ChartTypeList       : PropTypes.any.isRequired,
+    ChartTypeMenu       : PropTypes.any.isRequired,
+    enabled             : PropTypes.bool,
+    menuOpen            : PropTypes.bool,
+    onChange            : PropTypes.func,
+    setOpen             : PropTypes.func,
+    showAggregateDialog : PropTypes.func,
+    Type                : PropTypes.any.isRequired,
+    updateProps         : PropTypes.func,
 };
 
 ChartTypes.defaultProps = {
-    onChange    : () => null,
+    chartId             : '',
+    enabled             : false,
+    menuOpen            : false,
+    onChange            : () => null,
+    setOpen             : () => null,
+    showAggregateDialog : () => null,
+    updateProps         : () => null,
 };
 
 export default connect(({ chartType, state }) => ({

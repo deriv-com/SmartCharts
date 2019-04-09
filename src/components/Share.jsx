@@ -1,5 +1,6 @@
-import React from 'react';
-import { connect } from '../store/Connect';
+import PropTypes    from 'prop-types';
+import React        from 'react';
+import { connect }  from '../store/Connect';
 import {
     DownloadIcon,
     PngIcon,
@@ -54,6 +55,21 @@ const Share = ({
         </ShareMenu.Body>
     </ShareMenu>
 );
+
+Share.propTypes = {
+    ShareMenu       : PropTypes.any.isRequired,
+    menuOpen        : PropTypes.bool,
+    downloadPNG     : PropTypes.func,
+    downloadCSV     : PropTypes.func,
+    isLoadingPNG    : PropTypes.bool,
+};
+
+Share.defaultProps = {
+    menuOpen        : false,
+    downloadPNG     : () => null,
+    downloadCSV     : () => null,
+    isLoadingPNG    : false,
+};
 
 export default connect(({ share: d }) => ({
     ShareMenu: d.ShareMenu,

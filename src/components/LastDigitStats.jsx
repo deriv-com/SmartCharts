@@ -1,5 +1,6 @@
-import React from 'react';
-import { connect } from '../store/Connect';
+import PropTypes    from 'prop-types';
+import React        from 'react';
+import { connect }  from '../store/Connect';
 import '../../sass/components/_last-digits.scss';
 
 const Bar = ({ x, bar }) => (
@@ -49,6 +50,22 @@ class LastDigitStats extends React.Component {
         );
     }
 }
+
+LastDigitStats.propTypes = {
+    showLastDigitStats  : PropTypes.func,
+    isVisible           : PropTypes.bool,
+    bars                : PropTypes.array,
+    marketDisplayName   : PropTypes.string,
+    changeSymbol        : PropTypes.func,
+};
+
+LastDigitStats.defaultProps = {
+    showLastDigitStats  : () => null,
+    isVisible           : false,
+    bars                : [],
+    marketDisplayName   : '',
+    changeSymbol        : () => null,
+};
 
 export default connect(({ lastDigitStats : l }) => ({
     showLastDigitStats:l.showLastDigitStats,

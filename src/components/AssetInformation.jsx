@@ -1,5 +1,6 @@
-import React from 'react';
-import { connect } from '../store/Connect';
+import PropTypes    from 'prop-types';
+import React        from 'react';
+import { connect }  from '../store/Connect';
 import '../../sass/components/_ciq-asset-information.scss';
 
 const AssetInformation = ({
@@ -20,6 +21,24 @@ const AssetInformation = ({
         {low && <div> <div>{t.translate('LOW')}:</div> <div>{low}</div> </div>}
     </div>
 );
+
+AssetInformation.propTypes = {
+    price       : PropTypes.string,
+    open        : PropTypes.number,
+    close       : PropTypes.number,
+    high        : PropTypes.number,
+    low         : PropTypes.number,
+    visible     : PropTypes.bool,
+};
+
+AssetInformation.defaultProps = {
+    price       : '0',
+    open        : 0,
+    close       : 0,
+    high        : 0,
+    low         : 0,
+    visible     : false,
+};
 
 export default connect(({ assetInformation: ai }) => ({
     price: ai.price,
