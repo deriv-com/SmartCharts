@@ -28,7 +28,7 @@ export const SymbolSelectButton = ({
     <div className="cq-symbol-select-btn">
         <SymbolInfo symbol={symbol} ChartPrice={ChartPrice} symbolOpenTime={symbolOpenTime} />
         { !symbol.exchange_is_open
-            && <div className="cq-symbol-closed-text">Closed</div>
+            && <div className="cq-symbol-closed-text">{t.translate('Closed')}</div>
         }
         <ArrowIcon className="cq-symbol-dropdown" />
     </div>
@@ -55,6 +55,8 @@ export const ChartPrice = ({
 const ClosedSymbol = symbolOpenTime => (
     <div className="cq-chart-closed">
         <TimeIcon className="cq-closed-icon" />
-        <div className="cq-closed-opening">Opens in: <span className="cq-closed-opening-time">{symbolOpenTime.symbolOpenTime}</span></div>
+        <div className="cq-closed-opening">
+            {t.translate('Opens in')}: <span className="cq-closed-opening-time">{symbolOpenTime.symbolOpenTime}</span>
+        </div>
     </div>
 );
