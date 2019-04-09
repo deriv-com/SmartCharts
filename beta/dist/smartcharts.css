@@ -206,6 +206,9 @@ html,body{-ms-touch-action:none;margin:0px}
 .stx_yaxis,.stx_xaxis,.stx_xaxis_dark{font-size:10px;font-family:'Roboto'}
 .smartcharts-light .stx_yaxis,.smartcharts-light .stx_xaxis,.smartcharts-light .stx_xaxis_dark{color:#999cac}
 .smartcharts-dark .stx_yaxis,.smartcharts-dark .stx_xaxis,.smartcharts-dark .stx_xaxis_dark{color:#555975}
+.stx_price_label{font-size:12px;font-family:'Roboto';font-weight:bold}
+.smartcharts-light .stx_price_label{color:#999cac}
+.smartcharts-dark .stx_price_label{color:#555975}
 .stx-holder:hover .stx-btn-panel{opacity:1;transition:opacity 0.5s, height 0.3s}
 .stx-ico-handle{opacity:1;position:absolute;left:0%;height:1px;width:100%;overflow:hidden;cursor:ns-resize}
 .smartcharts-light .stx-ico-handle{box-shadow:0 0 0px 2px #fff;background:#fff}
