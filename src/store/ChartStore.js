@@ -371,6 +371,9 @@ class ChartStore {
                     // position: 'left',
                     displayBorder: true,
                 },
+                xAxis: {
+                    displayBorder: true,
+                },
                 gaplines: true,
                 yaxisPaddingRight: 48,
             },

@@ -485,13 +485,14 @@ html, body {
     }
     width: 1px;
     opacity: 1;
-    border-style: solid;
+    border: none;
 }
 
 .stx_grid_border { /* Default Grid borders */
     @include themify($themes) {
-        color: themed('ChartGrid');
+        border-color: themed('ChartAreaBorder');
     }
+    opacity: 0.2;
     border-style: solid;
 }
 
@@ -772,11 +773,12 @@ html, body {
 
 .stx_grid_dark { /* Default Grid dividers */
     @include themify($themes) {
-        color: themed('ChartGrid');
+        color: themed('ChartText');
     }
     opacity: 1;
-    opacity: 0.9;
+    opacity: 0.95;
     border-style: solid;
+    border: none;
 }
 
 .stx_yaxis, .stx_xaxis, .stx_xaxis_dark {
