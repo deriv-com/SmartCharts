@@ -240,14 +240,16 @@ export default class BarrierStore {
     }
 
     _calcBottomShade(barrier) {
-        return this.chart.panel.height - barrier.top;
+        const studyPanel = this.mainStore.chart.modalNode.querySelector('.stx-panel-study');
+
+        return this.chart.panel.height - barrier.top - (!studyPanel ? LINE_OFFSET_HEIGHT : 0);
     }
 
     _shadeBetween() {
         const bottom = this._calcBottomShade(this._low_barrier);
 
         this.betweenShadeStore.top = this._high_barrier.top;
-        this.betweenShadeStore.bottom = bottom - LINE_OFFSET_HEIGHT;
+        this.betweenShadeStore.bottom = bottom;
     }
 
     _shadeBelow(barrier = this._high_barrier) {
@@ -258,7 +260,7 @@ export default class BarrierStore {
     _shadeAbove(barrier = this._high_barrier) {
         const bottom = this._calcBottomShade(barrier);
         this.aboveShadeStore.top = 0;
-        this.aboveShadeStore.bottom = bottom - LINE_OFFSET_HEIGHT;
+        this.aboveShadeStore.bottom = bottom;
     }
 
     _shadeOutside() {
