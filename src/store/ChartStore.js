@@ -369,8 +369,10 @@ class ChartStore {
                     initialMarginTop: 125,
                     initialMarginBottom: 10,
                     // position: 'left',
-                    width: -6,
-                    justifyRight: true,
+                    displayBorder: true,
+                },
+                xAxis: {
+                    displayBorder: true,
                 },
                 gaplines: true,
                 yaxisPaddingRight: 48,
