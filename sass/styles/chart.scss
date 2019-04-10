@@ -786,6 +786,15 @@ html, body {
     font-family: 'Roboto';
 }
 
+.stx_price_label {
+    @include themify($themes) {
+        color: themed('ChartText');
+    }
+    font-size: 12px;
+    font-family: 'Roboto';
+    font-weight: bold;
+}
+
 /* --------------------------------------------------------- CHART SDK --------------------------------------------------------- */
 
 /* -------- Axis tabs and current Prices -------- */
