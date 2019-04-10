@@ -120,7 +120,7 @@ class TradingTimes {
                             open: getUTCDate(openTime),
                             close: getUTCDate(close[idx]),
                         }));
-                        symbolOpenTime = (_times[0].open).toLocaleTimeString();
+                        symbolOpenTime = open[0];
                     }
                     this._tradingTimesMap[symbol] = {
                         feed_license,
