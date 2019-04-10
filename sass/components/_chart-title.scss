@@ -121,6 +121,8 @@
         .cq-chart-closed {
             .cq-closed-icon {
                 line-height: 28px;
+                width: 12px;
+                margin-right: 5px;
                 @include themify($themes) {
                     fill: themed('TimeIconColor');
                 }
