@@ -284,14 +284,14 @@ class ChartStore {
             const margin = 9;
             const height = 24;
             let radius = 0;
-            this.canvasFont('stx_yaxis', context);
+            this.canvasFont('stx_price_label', context);
             const tickWidth = this.drawBorders ? 3 : 0; // pixel width of tick off edge of border
             let width;
             try {
                 width = context.measureText(txt).width + tickWidth + margin * 2;
             } catch (e) { width = yax.width; } // Firefox doesn't like this in hidden iframe
 
-            let x = yax.left - margin + 3;
+            let x = yax.left - margin + 15;
             if (yax.width < 0) x += (yax.width - width);
             const position = (yax.position === null ? panel.chart.yAxis.position : yax.position);
             if (position === 'left') {

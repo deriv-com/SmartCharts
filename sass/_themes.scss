@@ -421,4 +421,6 @@ $themes: (
 :export {
     lightchartgrid: map-get(map-get($themes, 'light'), 'ChartGrid');
     darkchartgrid: map-get(map-get($themes, 'dark'), 'ChartGrid');
+    lightchartmountainborder: map-get(map-get($themes, 'light'), 'ChartMountainBorder');
+    darkchartmountainborder: map-get(map-get($themes, 'dark'), 'ChartMountainBorder');
 }
