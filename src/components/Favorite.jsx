@@ -1,6 +1,7 @@
+import PropTypes            from 'prop-types';
 import React, { Component } from 'react';
-import { FavoriteIcon } from './Icons.jsx';
-import FavoriteStore from '../store/FavoriteStore';
+import { FavoriteIcon }     from './Icons.jsx';
+import FavoriteStore        from '../store/FavoriteStore';
 import { logEvent, LogCategories, LogActions } from '../utils/ga';
 
 class Favorite extends Component {
@@ -52,5 +53,15 @@ class Favorite extends Component {
         );
     }
 }
+
+Favorite.propTypes = {
+    category    : PropTypes.string,
+    id          : PropTypes.string,
+};
+
+Favorite.defaultProps = {
+    category    : '',
+    id          : '',
+};
 
 export default Favorite;

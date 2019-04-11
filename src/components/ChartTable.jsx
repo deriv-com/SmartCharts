@@ -1,7 +1,8 @@
-import React from 'react';
-import { Scrollbars } from 'tt-react-custom-scrollbars';
+import PropTypes        from 'prop-types';
+import React            from 'react';
+import { Scrollbars }   from 'tt-react-custom-scrollbars';
 import { CloseIcon, ItemIconMap, SymbolPlaceholderIcon } from './Icons.jsx';
-import { connect } from '../store/Connect';
+import { connect }      from '../store/Connect';
 import '../../sass/components/_ciq-chart-table.scss';
 
 const ChartTable = ({
@@ -122,6 +123,25 @@ const ChartTable = ({
             </Dialog>
         </div>
     );
+};
+
+ChartTable.propTypes = {
+    isMobile    : PropTypes.bool,
+    tableData   : PropTypes.array,
+    Dialog      : PropTypes.any.isRequired,
+    open        : PropTypes.bool,
+    isTick      : PropTypes.bool,
+    symbol      : PropTypes.object,
+    setOpen     : PropTypes.func,
+};
+
+ChartTable.defaultProps = {
+    isMobile    : false,
+    tableData   : [],
+    open        : false,
+    isTick      : false,
+    symbol      : {},
+    setOpen     : () => null,
 };
 
 export default connect(({  chart, chartTable }) => ({

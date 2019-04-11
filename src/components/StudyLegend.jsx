@@ -1,7 +1,8 @@
-import React from 'react';
-import NotificationBadge from './NotificationBadge.jsx';
-import { connect } from '../store/Connect';
-import { IndicatorIcon } from './Icons.jsx';
+import PropTypes            from 'prop-types';
+import React                from 'react';
+import NotificationBadge    from './NotificationBadge.jsx';
+import { connect }          from '../store/Connect';
+import { IndicatorIcon }    from './Icons.jsx';
 
 const StudyLegend = ({
     isOpened,
@@ -31,6 +32,24 @@ const StudyLegend = ({
         </StudyMenu.Body>
     </StudyMenu>
 );
+
+StudyLegend.propTypes = {
+    isOpened                    : PropTypes.bool,
+    setOpen                     : PropTypes.func,
+    StudyMenu                   : PropTypes.any.isRequired,
+    menuOpen                    : PropTypes.bool,
+    StudyCategoricalDisplay     : PropTypes.any.isRequired,
+    isMobile                    : PropTypes.bool,
+    activeStudiesNo             : PropTypes.number,
+};
+
+StudyLegend.defaultProps = {
+    isOpened                    : false,
+    setOpen                     : () => null,
+    menuOpen                    : false,
+    isMobile                    : false,
+    activeStudiesNo             : 1,
+};
 
 export default connect(({ studies: st, chart }) => ({
     isOpened: st.open,

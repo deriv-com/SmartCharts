@@ -83,35 +83,35 @@ new CopyWebpackPlugin([
 
 Props marked with `*` are **mandatory**:
 
-| Props | Description |
---------|--------------
-requestAPI* | SmartCharts will make single API calls by passing the request input directly to this method, and expects a `Promise` to be returned.
-requestSubscribe* | SmartCharts will make streaming calls via this method. `requestSubscribe` expects 2 parameters `(request, callback) => {}`: the `request` input and a `callback` in which response will be passed to for each time a response is available. Keep track of this `callback` as SmartCharts will pass this to you to forget the subscription (via `requestForget`).
-requestForget* | When SmartCharts no longer needs a subscription (made via `requestSubscribe`), it will call this method (passing in `request` and `callback` passed from `requestSubscribe`) to halt the subscription.
-id | Uniquely identifies a chart's indicators, comparisons, symbol and layout; saving them to local storage and loading them when page refresh. If not set, SmartCharts renders a fresh chart with default values on each refresh. Defaults to `undefined`.
+| Props | Description | Prop Type
+--------|--------------|--------------
+requestAPI* | SmartCharts will make single API calls by passing the request input directly to this method, and expects a `Promise` to be returned. | 
+requestSubscribe* | SmartCharts will make streaming calls via this method. `requestSubscribe` expects 2 parameters `(request, callback) => {}`: the `request` input and a `callback` in which response will be passed to for each time a response is available. Keep track of this `callback` as SmartCharts will pass this to you to forget the subscription (via `requestForget`).| 
+requestForget* | When SmartCharts no longer needs a subscription (made via `requestSubscribe`), it will call this method (passing in `request` and `callback` passed from `requestSubscribe`) to halt the subscription. | 
+id | Uniquely identifies a chart's indicators, comparisons, symbol and layout; saving them to local storage and loading them when page refresh. If not set, SmartCharts renders a fresh chart with default values on each refresh. Defaults to `undefined`. | string
 symbol | Sets the main chart symbol. Defaults to `R_100`. Refer [Props vs UI](#props-vs-ui) for usage details.
-granularity | Sets the granularity of the chart. Allowed values are 60, 120, 180, 300, 600, 900, 1800, 3600, 7200, 14400, 28800, 86400. Defaults to 0. Refer [Props vs UI](#props-vs-ui) for usage details.
-chartType | Sets the chartType. Choose between `mountain` (Line), `line` (Dot), `colored_line` (Colored Dot),  `spline`,  `baseline`, `candle`, `colored_bar` (OHLC), `hollow_candle`, `heikinashi`, `kagi`, `linebreak`, `renko`, `rangebars`, and `pandf` (Point & Figure). Defaults to `mountain`. Refer [Props vs UI](#props-vs-ui) for usage details.
-startEpoch | Set the start epoch of the chart
-endEpoch | Set the end epoch of the chart
-chartControlsWidgets | Render function for chart control widgets. Set to `null` if you want to hide chart controls. Refer to [Customising Components](#customising-components).
-topWidgets | Render function for top widgets. Refer to [Customising Components](#customising-components).
-bottomWidgets | Render function for bottom widgets. Refer to [Customising Components](#customising-components).
-isMobile | Switch between mobile or desktop view. Defaults to `false`.
-onSettingsChange | Callback that will be fired each time a setting is changed.
-settings | Sets the chart settings. Refer to [Chart Settings](#chart-settings)
-barriers | Draw chart barriers. Refer to [Barriers API](#barriers-api) for usage details
-enableRouting | Enable routing for dialogs. Defaults to `false`
-isConnectionOpened | Sets the connection status. If set, upon reconnection smartcharts will either patch missing tick data or refresh the chart, depending on granularity; if not set, it is assumed that connection is always opened. Defaults to `undefined`.
-onMessage | SmartCharts will send notifications via this callback, should it be provided. Each notification will have the following structure: `{ text, type, category }`.
-isAnimationEnabled | Determine whether chart animation is enabled or disabled. It may needs to be disabled for better performance. Defaults to `true`.
-showLastDigitStats | Shows last digits stats. Defaults to `false`.
-scrollToEpoch | Scrolls the chart to the leftmost side and sets the last spot/bar as the first visible spot/bar in the chart. Also, it disables scrolling until the chart reaches the 3/4 of the width of the main pane of the chart. Defaults to `null`.
-scrollToEpochOffset | Sets the number of spot/bar(s) which should be visible before the last spot/bar at the leftmost side of the chart (It should be used with `scrollToEpoch`). Defaults to `0`.
-zoom | Zoom in and Zoom out the chart. the value should be in percentage. If the value is positive the chart will be zoomed in otherwise it will be zoomed out.
-clearChart | Clear the chart.
-onExportLayout | Export the layout and send it back using this callback.
-importedLayout | The layout to be imported to chart. It should be the layout that was exported in onExportLayout;
+granularity | Sets the granularity of the chart. Allowed values are 60, 120, 180, 300, 600, 900, 1800, 3600, 7200, 14400, 28800, 86400. Defaults to 0. Refer [Props vs UI](#props-vs-ui) for usage details. | string
+chartType | Sets the chartType. Choose between `mountain` (Line), `line` (Dot), `colored_line` (Colored Dot),  `spline`,  `baseline`, `candle`, `colored_bar` (OHLC), `hollow_candle`, `heikinashi`, `kagi`, `linebreak`, `renko`, `rangebars`, and `pandf` (Point & Figure). Defaults to `mountain`. Refer [Props vs UI](#props-vs-ui) for usage details. | string
+startEpoch | Set the start epoch of the chart | number
+endEpoch | Set the end epoch of the chart | number
+chartControlsWidgets | Render function for chart control widgets. Set to `null` if you want to hide chart controls. Refer to [Customising Components](#customising-components). | function
+topWidgets | Render function for top widgets. Refer to [Customising Components](#customising-components). | function
+bottomWidgets | Render function for bottom widgets. Refer to [Customising Components](#customising-components). | function
+isMobile | Switch between mobile or desktop view. Defaults to `false`. | boolean
+onSettingsChange | Callback that will be fired each time a setting is changed. | function
+settings | Sets the chart settings. Refer to [Chart Settings](#chart-settings) | object
+barriers | Draw chart barriers. Refer to [Barriers API](#barriers-api) for usage details | array
+enableRouting | Enable routing for dialogs. Defaults to `false` | boolean
+isConnectionOpened | Sets the connection status. If set, upon reconnection smartcharts will either patch missing tick data or refresh the chart, depending on granularity; if not set, it is assumed that connection is always opened. Defaults to `undefined`. | boolean
+onMessage | SmartCharts will send notifications via this callback, should it be provided. Each notification will have the following structure: `{ text, type, category }`. | funciton
+isAnimationEnabled | Determine whether chart animation is enabled or disabled. It may needs to be disabled for better performance. Defaults to `true`. | boolean
+showLastDigitStats | Shows last digits stats. Defaults to `false`. | boolean
+scrollToEpoch | Scrolls the chart to the leftmost side and sets the last spot/bar as the first visible spot/bar in the chart. Also, it disables scrolling until the chart reaches the 3/4 of the width of the main pane of the chart. Defaults to `null`. | number
+scrollToEpochOffset | Sets the number of spot/bar(s) which should be visible before the last spot/bar at the leftmost side of the chart (It should be used with `scrollToEpoch`). Defaults to `0`. | number
+zoom | Zoom in and Zoom out the chart. the value should be in percentage. If the value is positive the chart will be zoomed in otherwise it will be zoomed out. | number
+clearChart | Clear the chart. | boolean
+onExportLayout | Export the layout and send it back using this callback. | function
+importedLayout | The layout to be imported to chart. It should be the layout that was exported in onExportLayout; | object
 ### Chart Settings
 
 | Attribute | Description |

@@ -16,7 +16,7 @@ import '../../sass/main.scss';
 
 import './ui';
 
-import ChartControls, { RenderDefaultControls } from './ChartControls.jsx';
+import ChartControls from './ChartControls.jsx';
 import Crosshair from './Crosshair.jsx';
 import { connect } from '../store/Connect';
 import { initGA, logPageView } from '../utils/ga';
@@ -147,14 +147,24 @@ class Chart extends Component {
 }
 
 Chart.propTypes = {
-    id                              : PropTypes.string,
-    endEpoch                        : PropTypes.number,
-    granularity                     : PropTypes.number,
-    symbol                          : PropTypes.string,
-    chartType                       : PropTypes.string,
     requestAPI                      : PropTypes.func.isRequired,
     requestSubscribe                : PropTypes.func.isRequired,
     requestForget                   : PropTypes.func.isRequired,
+    id                              : PropTypes.string,
+    granularity                     : PropTypes.oneOf([
+        0, 60, 120, 180, 300, 600,
+        900, 1800, 3600, 7200,
+        14400, 28800, 86400,
+    ]),
+    symbol                          : PropTypes.string,
+    chartType                       : PropTypes.oneOf(['mountain', 'line',
+        'colored_line', 'spline', 'baseline',
+        'candle', 'colored_bar', 'hollow_candle',
+        'heikinashi', 'kagi', 'linebreak',
+        'renko', 'rangebars', 'pandf']),
+    startEpoch                      : PropTypes.number,
+    endEpoch                        : PropTypes.number,
+    chartControlsWidgets            : PropTypes.any,
     onSettingsChange                : PropTypes.func,
     onMessage                       : PropTypes.func,
     isMobile                        : PropTypes.bool,
@@ -168,7 +178,6 @@ Chart.propTypes = {
     isOnPagination                  : PropTypes.bool,
     isChartAvailable                : PropTypes.bool,
     barriers                        : PropTypes.array,
-    chartControlsWidgets            : PropTypes.any,
     AggregateChartSettingsDialog    : PropTypes.any.isRequired,
     chartContainerHeight            : PropTypes.number,
     containerWidth                  : PropTypes.number,
@@ -176,13 +185,22 @@ Chart.propTypes = {
     theme                           : PropTypes.string,
     position                        : PropTypes.string,
     showLastDigitStats              : PropTypes.bool,
+    isConnectionOpened              : PropTypes.bool,
+    isAnimationEnabled              : PropTypes.bool,
+    scrollToEpoch                   : PropTypes.number,
+    scrollToEpochOffset             : PropTypes.number,
+    zoom                            : PropTypes.number,
+    clearChart                      : PropTypes.bool,
+    onExportLayout                  : PropTypes.func,
+    importedLayout                  : PropTypes.func,
 };
 
 Chart.defaultProps = {
-    id                              : '1',
+    id                              : undefined,
+    startEpoch                      : null,
     endEpoch                        : null,
     granularity                     : 0,
-    symbol                          : undefined,
+    symbol                          : 'R_100',
     chartType                       : 'mountain',
     onSettingsChange                : () => null,
     onMessage                       : () => null,
@@ -195,13 +213,21 @@ Chart.defaultProps = {
     isOnPagination                  : false,
     isChartAvailable                : false,
     barriers                        : [],
-    chartControlsWidgets            : RenderDefaultControls,
+    chartControlsWidgets            : null,
     chartContainerHeight            : 500,
     containerWidth                  : 480,
     isDrawing                       : false,
     theme                           : 'light',
     position                        : 'bottom',
     showLastDigitStats              : false,
+    isConnectionOpened              : undefined,
+    isAnimationEnabled              : true,
+    scrollToEpoch                   : 0,
+    scrollToEpochOffset             : 0,
+    zoom                            : 0,
+    clearChart                      : false,
+    onExportLayout                  : null,
+    importedLayout                  : null,
 };
 
 export default connect(({ chart, drawTools, studies, chartSetting, chartType, state, drawingCursor }) => ({

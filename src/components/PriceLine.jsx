@@ -1,3 +1,4 @@
+import PropTypes            from 'prop-types';
 import React, { Component } from 'react';
 
 class PriceLine extends Component {
@@ -40,5 +41,37 @@ class PriceLine extends Component {
         );
     }
 }
+
+PriceLine.propTypes = {
+    top             : PropTypes.number,
+    className       : PropTypes.string,
+    draggable       : PropTypes.bool,
+    isDragging      : PropTypes.bool,
+    priceDisplay    : PropTypes.number,
+    setDragLine     : PropTypes.any,
+    visible         : PropTypes.bool,
+    zIndex          : PropTypes.number,
+    uncentered      : PropTypes.bool,
+    offScreen       : PropTypes.bool,
+    lineStyle       : PropTypes.string,
+    color           : PropTypes.string,
+    foregroundColor : PropTypes.string,
+};
+
+PriceLine.defaultProps = {
+    top             : 0,
+    className       : '',
+    draggable       : false,
+    isDragging      : false,
+    priceDisplay    : 0,
+    setDragLine     : null,
+    visible         : false,
+    zIndex          : 0,
+    uncentered      : false,
+    offScreen       : false,
+    lineStyle       : '',
+    color           : '',
+    foregroundColor : '',
+};
 
 export default PriceLine;

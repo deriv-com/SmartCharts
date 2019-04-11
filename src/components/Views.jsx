@@ -1,7 +1,8 @@
-import React from 'react';
-import Scrollbars from 'tt-react-custom-scrollbars';
-import { connect } from '../store/Connect';
-import ViewStore from '../store/ViewStore';
+import PropTypes    from 'prop-types';
+import React        from 'react';
+import Scrollbars   from 'tt-react-custom-scrollbars';
+import { connect }  from '../store/Connect';
+import ViewStore    from '../store/ViewStore';
 import {
     BackIcon,
     TemplateIcon,
@@ -117,12 +118,37 @@ const Views = ({
     </ViewsMenu>
 );
 
+Views.propTypes = {
+    ViewsMenu       : PropTypes.any.isRequired,
+    views           : PropTypes.array,
+    routes          : PropTypes.object,
+    onChange        : PropTypes.func,
+    remove          : PropTypes.func,
+    onSubmit        : PropTypes.func,
+    applyLayout     : PropTypes.func,
+    menuOpen        : PropTypes.bool,
+    inputRef        : PropTypes.any,
+    currentRoute    : PropTypes.string,
+    templateName    : PropTypes.string,
+};
+
+Views.defaultProps = {
+    views           : [],
+    routes          : {},
+    onChange        : () => null,
+    remove          : () => null,
+    onSubmit        : () => null,
+    applyLayout     : () => null,
+    menuOpen        : false,
+    inputRef        : null,
+    currentRoute    : '',
+    templateName    : '',
+};
+
 export default connect(({ view: s }) => ({
     ViewsMenu: s.ViewsMenu,
     views: ViewStore.views,
     routes: s.routes,
-    onOverwrite: s.onOverwrite,
-    onCancel: s.onCancel,
     onChange: s.onChange,
     remove: s.remove,
     onSubmit: s.onSubmit,

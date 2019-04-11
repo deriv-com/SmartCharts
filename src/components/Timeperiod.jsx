@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
-import React from 'react';
-import { connect } from '../store/Connect';
+import PropTypes    from 'prop-types';
+import React        from 'react';
+import { connect }  from '../store/Connect';
 import '../../sass/components/_timeperiod.scss';
 
 const Timeperiod = ({
@@ -126,6 +127,31 @@ const Timeperiod = ({
             </TimePeriodMenu.Body>
         </TimePeriodMenu>
     );
+};
+
+Timeperiod.propTypes = {
+    chartId             : PropTypes.string,
+    timeUnit            : PropTypes.string,
+    interval            : PropTypes.number,
+    interval_display    : PropTypes.number,
+    isMobile            : PropTypes.bool,
+    onChange            : PropTypes.func,
+    setOpen             : PropTypes.func,
+    TimePeriodMenu      : PropTypes.any.isRequired,
+    timeUnit_display    : PropTypes.string,
+    updateProps         : PropTypes.func,
+};
+
+Timeperiod.defaultProps = {
+    chartId             : '',
+    timeUnit            : '',
+    interval            : 0,
+    interval_display    : 0,
+    isMobile            : false,
+    onChange            : () => null,
+    setOpen             : () => null,
+    timeUnit_display    : '',
+    updateProps         : () => null,
 };
 
 export default connect(({ timeperiod: s, state }) => ({
