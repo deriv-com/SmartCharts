@@ -45,9 +45,10 @@ $themes: (
         DefaultText: $COLOR_LIGHT_GRAY,
         DefaultBorder: $COLOR_LIGHT_GRAY,
         Loading: $COLOR_BLACK,
+        ChartAreaBorder: $COLOR_LIGHT_GRAY_2,
         ChartBg: $COLOR_WHITE,
         ChartBorder: $COLOR_LIGHT_GRAY_1,
-        ChartText: $COLOR_LIGHT_GRAY_1,
+        ChartText: $COLOR_DARK_GRAY_3,
         ChartCandleBg: $COLOR_ORANGE,
         ChartCandleText: $COLOR_WHITE,
         ChartGrid: $COLOR_LIGHT_BLACK_4,
@@ -57,8 +58,8 @@ $themes: (
         ChartMountainBg: rgba(153, 156, 172, 0.36),
         ChartMountainBgShade: rgba(255, 255, 255, 0),
         MenuBg: $COLOR_WHITE,
-        MenuIcon: $COLOR_LIGHT_GRAY,
-        MenuText: $COLOR_LIGHT_GRAY,
+        MenuIcon: $COLOR_LIGHT_BLACK_1,
+        MenuText: $COLOR_LIGHT_BLACK_1,
         MenuBorder: $COLOR_LIGHT_GRAY_1,
         MenuHoverBg: $COLOR_LIGHT_BLACK_3,
         MenuHoverIconBg: $COLOR_LIGHT_GRAY_1,
@@ -224,6 +225,7 @@ $themes: (
         DefaultText:            $COLOR_WHITE,
         DefaultBorder:          $COLOR_WHITE,
         Loading: $COLOR_WHITE,
+        ChartAreaBorder: $COLOR_LIGHT_GRAY_30,
         ChartBg: $COLOR_DARK_BLUE_2,
         ChartBorder: $COLOR_WHITE,
         ChartText: $COLOR_DARK_GRAY_3,
@@ -419,4 +421,6 @@ $themes: (
 :export {
     lightchartgrid: map-get(map-get($themes, 'light'), 'ChartGrid');
     darkchartgrid: map-get(map-get($themes, 'dark'), 'ChartGrid');
+    lightchartmountainborder: map-get(map-get($themes, 'light'), 'ChartMountainBorder');
+    darkchartmountainborder: map-get(map-get($themes, 'dark'), 'ChartMountainBorder');
 }

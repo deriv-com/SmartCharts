@@ -89,7 +89,7 @@ const Views = ({
                                     />
                                 </span>
                             )
-                            : <span className="add-new" onClick={main}> {t.translate('Add New')} </span>
+                            : <span className="add-new" onClick={main}> {t.translate('Add new')} </span>
                     }
                     <span className="icon">
                         {
