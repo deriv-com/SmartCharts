@@ -63,6 +63,7 @@ class ChartStore {
     @observable context = null;
     @observable currentActiveSymbol;
     @observable isChartAvailable = true;
+    @observable isChartClosed = false;
     @observable chartHeight;
     @observable chartContainerHeight;
     @observable isMobile = false;

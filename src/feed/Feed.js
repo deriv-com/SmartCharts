@@ -24,6 +24,7 @@ class Feed {
         this._mainStore = mainStore;
         this._serverTime = ServerTime.getInstance();
         this._tradingTimes = tradingTimes;
+        this.isMarketOpen = true;
         reaction(() => mainStore.state.isConnectionOpened, this.onConnectionChanged.bind(this));
         when(() => this.context, this.onContextReady);
 
@@ -181,6 +182,16 @@ class Feed {
 
             // Although market is closed, we display the past tick history data
             getHistoryOnly = true;
+        }
+        if (this.isMarketOpen !== this._tradingTimes.isMarketOpened(symbol)) {
+            this.isMarketOpen = this._tradingTimes.isMarketOpened(symbol);
+            if (this.isMarketOpen) {
+                this._mainStore.chart.isChartClosed = false;
+                this._mainStore.state.setChartMarketClosedTheme(false);
+            } else {
+                this._mainStore.chart.isChartClosed = true;
+                this._mainStore.state.setChartMarketClosedTheme(true);
+            }
         }
 
         if (getHistoryOnly) {

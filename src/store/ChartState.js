@@ -1,6 +1,7 @@
 /* eslint-disable no-new */
 import { action, observable, when } from 'mobx';
 import { createObjectFromLocalStorage, calculateTimeUnitInterval, calculateGranularity, getUTCDate } from '../utils';
+import Theme from '../../sass/_themes.scss';
 
 class ChartState {
     @observable granularity;
@@ -107,6 +108,15 @@ class ChartState {
     @action.bound setOnPagination({ end }) {
         this.isOnPagination     = !this.isOnPagination;
         this.paginationEndEpoch = this.isOnPagination ? end : null;
+    }
+
+    @action.bound setChartMarketClosedTheme(state, appTheme) {
+        const theme = appTheme || this.mainStore.chartSetting.theme;
+        if (state) {
+            this.stxx.setStyle('stx_mountain_chart', 'borderTopColor', Theme[`${theme}chartmountainborder-closed`]);
+        } else {
+            this.stxx.setStyle('stx_mountain_chart', 'borderTopColor', Theme[`${theme}chartmountainborder`]);
+        }
     }
 
     saveLayout() {
