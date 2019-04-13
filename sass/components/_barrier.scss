@@ -27,7 +27,6 @@
             height: 2px;
             float: left;
             width: 100%;
-            margin-left: -10px;
             position: relative;
             border-color: inherit;
             border-top-width: 2px;
@@ -57,10 +56,11 @@
     height: 24px;
     top: -11px;
     position: absolute;
-    right: 0px;
+    right: -50px;
     border: 1px solid inherit;
     z-index: 107;
     margin: -11px 0 0 0;
+    min-width: 52px;
 
     &:first-child {
         z-index: 108;
