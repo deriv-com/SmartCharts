@@ -57,7 +57,9 @@ $themes: (
         ChartMountainBorder: $COLOR_LIGHT_GRAY_1,
         ChartMountainBorderClosed: $COLOR_LIGHT_BLACK_3_SOLID_1,
         ChartMountainBg: rgba(153, 156, 172, 0.36),
+        ChartMountainBgClosed: rgba(255, 255, 255, 0),
         ChartMountainBgShade: rgba(255, 255, 255, 0),
+        ChartMountainBgShadeClosed: rgba(214, 214, 214, 0.16),
         MenuBg: $COLOR_WHITE,
         MenuIcon: $COLOR_LIGHT_BLACK_1,
         MenuText: $COLOR_LIGHT_BLACK_1,
@@ -237,9 +239,11 @@ $themes: (
         ChartIndicateText: $COLOR_WHITE,
         ChartIndicateDivide: $COLOR_DARK_GRAY_3,
         ChartMountainBorder: rgba($COLOR_WHITE, 1),
-        ChartMountainBorderClosed: rgba($COLOR_WHITE, 0.36),
+        ChartMountainBorderClosed: $COLOR_DARK_GRAY_2,
         ChartMountainBg: rgba(255, 255, 255, 0.36),
+        ChartMountainBgClosed: rgba(48, 51, 66, 0.16),
         ChartMountainBgShade: rgba(16, 19, 32, 0),
+        ChartMountainBgShadeClosed: rgba(16, 19, 32, 0),
         MenuBg: $COLOR_DARK_BLUE_2,
         MenuBorder: $COLOR_DARK_BLUE_5,
         MenuIcon: $COLOR_LIGHT_GRAY,
@@ -429,4 +433,12 @@ $themes: (
     darkchartmountainborder: map-get(map-get($themes, 'dark'), 'ChartMountainBorder');
     lightchartmountainborder-closed: map-get(map-get($themes, 'light'), 'ChartMountainBorderClosed');
     darkchartmountainborder-closed: map-get(map-get($themes, 'dark'), 'ChartMountainBorderClosed');
+    lightchartmountainbg: map-get(map-get($themes, 'light'), 'ChartMountainBg');
+    darkchartmountainbg: map-get(map-get($themes, 'dark'), 'ChartMountainBg');
+    lightchartmountainbg-closed: map-get(map-get($themes, 'light'), 'ChartMountainBgClosed');
+    darkchartmountainbg-closed: map-get(map-get($themes, 'dark'), 'ChartMountainBgClosed');
+    lightchartmountainbgshade: map-get(map-get($themes, 'light'), 'ChartMountainBgShade');
+    darkchartmountainbgshade: map-get(map-get($themes, 'dark'), 'ChartMountainBgShade');
+    lightchartmountainbgshade-closed: map-get(map-get($themes, 'light'), 'ChartMountainBgShadeClosed');
+    darkchartmountainbgshade-closed: map-get(map-get($themes, 'dark'), 'ChartMountainBgShadeClosed');
 }

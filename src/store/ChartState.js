@@ -114,8 +114,12 @@ class ChartState {
         const theme = appTheme || this.mainStore.chartSetting.theme;
         if (state) {
             this.stxx.setStyle('stx_mountain_chart', 'borderTopColor', Theme[`${theme}chartmountainborder-closed`]);
+            this.stxx.setStyle('stx_mountain_chart', 'background-color', Theme[`${theme}chartmountainbg-closed`]);
+            this.stxx.setStyle('stx_mountain_chart', 'color', Theme[`${theme}chartmountainbgshade-closed`]);
         } else {
             this.stxx.setStyle('stx_mountain_chart', 'borderTopColor', Theme[`${theme}chartmountainborder`]);
+            this.stxx.setStyle('stx_mountain_chart', 'background-color', Theme[`${theme}chartmountainborderbg`]);
+            this.stxx.setStyle('stx_mountain_chart', 'color', Theme[`${theme}chartmountainbgshade`]);
         }
     }
 
