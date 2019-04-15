@@ -185,13 +185,8 @@ class Feed {
         }
         if (this.isMarketOpen !== this._tradingTimes.isMarketOpened(symbol)) {
             this.isMarketOpen = this._tradingTimes.isMarketOpened(symbol);
-            if (this.isMarketOpen) {
-                this._mainStore.chart.setChartClosed(false);
-                this._mainStore.state.setChartMarketClosedTheme(false);
-            } else {
-                this._mainStore.chart.setChartClosed(true);
-                this._mainStore.state.setChartMarketClosedTheme(true);
-            }
+            this._mainStore.chart.setChartClosed(!this.isMarketOpen);
+            this._mainStore.state.setChartMarketClosedTheme(!this.isMarketOpen);
         }
 
         if (getHistoryOnly) {
