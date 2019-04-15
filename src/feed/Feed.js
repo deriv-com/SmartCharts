@@ -31,7 +31,7 @@ class Feed {
     }
 
     onContextReady = () => {
-        reaction(() => [this.startEpoch, this.endEpoch], this.onRangeChanged);
+        // reaction(() => [this.startEpoch, this.endEpoch], this.onRangeChanged);
     };
 
     onRangeChanged = () => {

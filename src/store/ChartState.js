@@ -211,7 +211,8 @@ class ChartState {
         if (this.scrollToEpoch) {
             const startEntry = this.stxx.getDataSegment()
                 .reverse()
-                .find(entry =>  entry.DT <= new Date(getUTCDate(this.scrollToEpoch)));
+                .find(entry =>  entry && entry.DT <= new Date(getUTCDate(this.scrollToEpoch)));
+            if (!startEntry) return;
             this.stxx.setStartDate(startEntry.DT);
             if (this.scrollToEpochOffset) {
                 this.stxx.chart.scroll += this.scrollToEpochOffset - this.stxx.chart.scroll;
@@ -270,9 +271,13 @@ class ChartState {
                 }
 
                 const { timeUnit, interval } = this.importedLayout;
-                if (timeUnit && this.timeperiodStore.onGranularityChange) {
+                if (timeUnit) {
                     const granularity = calculateGranularity(interval, timeUnit) || 0;
-                    this.timeperiodStore.onGranularityChange(granularity);
+                    if (this.timeperiodStore.onGranularityChange) {
+                        this.timeperiodStore.onGranularityChange(granularity);
+                    } else {
+                        this.chartStore.granularity = granularity;
+                    }
                 }
 
                 if (this.chartTypeStore.onChartTypeChanged) {
