@@ -566,6 +566,10 @@ class ChartStore {
         this.isChartAvailable = status;
     }
 
+    @action.bound setChartClosed(status) {
+        this.isChartClosed = status;
+    }
+
     @action.bound changeSymbol(symbolObj, granularity) {
         if (typeof symbolObj === 'string') {
             symbolObj = this.activeSymbols.getSymbolObj(symbolObj);
