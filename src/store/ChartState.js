@@ -112,15 +112,14 @@ class ChartState {
 
     @action.bound setChartMarketClosedTheme(state, appTheme) {
         const theme = appTheme || this.mainStore.chartSetting.theme;
-        if (state) {
-            this.stxx.setStyle('stx_mountain_chart', 'borderTopColor', Theme[`${theme}chartmountainborder-closed`]);
-            this.stxx.setStyle('stx_mountain_chart', 'background-color', Theme[`${theme}chartmountainbg-closed`]);
-            this.stxx.setStyle('stx_mountain_chart', 'color', Theme[`${theme}chartmountainbgshade-closed`]);
-        } else {
-            this.stxx.setStyle('stx_mountain_chart', 'borderTopColor', Theme[`${theme}chartmountainborder`]);
-            this.stxx.setStyle('stx_mountain_chart', 'background-color', Theme[`${theme}chartmountainborderbg`]);
-            this.stxx.setStyle('stx_mountain_chart', 'color', Theme[`${theme}chartmountainbgshade`]);
-        }
+        const suffix = state ? '-closed' : '';
+        this.stxx.setStyle('stx_mountain_chart', 'borderTopColor', Theme[`${theme}chartmountainborder${suffix}`]);
+        this.stxx.setStyle('stx_mountain_chart', 'background-color', Theme[`${theme}chartmountainbg${suffix}`]);
+        this.stxx.setStyle('stx_mountain_chart', 'color', Theme[`${theme}chartmountainbgshade${suffix}`]);
+        this.stxx.setStyle('stx_current_hr_down', 'color', Theme[`${theme}chartcandletext${suffix}`]);
+        this.stxx.setStyle('stx_current_hr_up', 'color', Theme[`${theme}chartcandletext${suffix}`]);
+        this.stxx.setStyle('stx_current_hr_down', 'background-color', Theme[`${theme}chartcandlebg${suffix}`]);
+        this.stxx.setStyle('stx_current_hr_up', 'background-color', Theme[`${theme}chartcandlebg${suffix}`]);
     }
 
     saveLayout() {

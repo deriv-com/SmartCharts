@@ -61,6 +61,7 @@ class Chart extends Component {
             isMobile = false,
             isOnPagination,
             isChartAvailable,
+            isChartClosed,
             barriers = [],
             children,
             chartControlsWidgets,
@@ -91,7 +92,7 @@ class Chart extends Component {
                     >
                         <div className={` ${currentPosition}`}>
                             <div className="ciq-chart-area">
-                                <div className="ciq-chart">
+                                <div className={`ciq-chart ${isChartClosed ? 'closed-chart' : ''}`}>
                                     <RenderInsideChart at="holder">
                                         {barriers.map((barr, idx) => (
                                             <Barrier
@@ -152,6 +153,7 @@ export default connect(({ chart, drawTools, studies, chartSetting, chartType, st
     DrawToolsSettingsDialog : drawTools.DrawToolsSettingsDialog,
     AggregateChartSettingsDialog : chartType.AggregateChartSettingsDialog,
     isChartAvailable: chart.isChartAvailable,
+    isChartClosed: chart.isChartClosed,
     updateProps: state.updateProps,
     chartContainerHeight: chart.chartContainerHeight,
     containerWidth: chart.containerWidth,

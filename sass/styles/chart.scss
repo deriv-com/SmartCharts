@@ -892,15 +892,17 @@ $spot-color: #0298d3;
     animation: pulse 1.6s infinite;
     margin-left: -3px;
     margin-top: -3px;
-    box-shadow: 0 0 0 rgba($COLOR_ORANGE, 0.6);
+    box-shadow: 0 0 0 rgba($COLOR_DARK_BLUE_5, 0.6);
 
     &:before {
         content: '\25CF';
         font-size: 18px;
-        color: $COLOR_ORANGE;
         position: relative;
         left: -2.3px;
         line-height: 5px;
+        @include themify($themes) {
+            color: themed('ChartCandleBg');
+        }
     }
     &.cq-endpoint {
         position: absolute;
@@ -913,7 +915,7 @@ $spot-color: #0298d3;
         top: 0px !important;
         animation: none;
         @include themify($themes) {
-            border-left: 2px dashed themed('ChartCandleBg');
+            border-left: 2px dashed themed('SwitchOnBg');
         }
 
         &:before {
@@ -934,7 +936,19 @@ $spot-color: #0298d3;
             transform: translateX(-50%);
             @include themify($themes) {
                 background-color: themed('ChartCandleBg');
-                color: themed('DefaultMain');
+                color: themed('ChartCandleText');
+            }
+        }
+    }
+}
+
+.closed-chart {
+    .cq-spot {
+        animation: none;
+
+        &:before {
+            @include themify($themes) {
+                color: themed('ChartCandleBgClosed');
             }
         }
     }
