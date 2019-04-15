@@ -1,9 +1,10 @@
 import React from 'react';
-import { ItemIconMap, SymbolPlaceholderIcon, ArrowIcon } from './Icons.jsx';
+import { ItemIconMap, SymbolPlaceholderIcon, ArrowIcon, TimeIcon } from './Icons.jsx';
 
 export const SymbolInfo = ({
     symbol,
     ChartPrice,
+    symbolOpenTime,
 }) => {
     const SymbolIcon = ItemIconMap[symbol.symbol] || SymbolPlaceholderIcon;
     return (
@@ -11,7 +12,10 @@ export const SymbolInfo = ({
             {SymbolIcon && <SymbolIcon className={`ic-${symbol.symbol}`} />}
             <div className="cq-symbol-info">
                 <div className="cq-symbol">{symbol.name}</div>
-                <ChartPrice />
+                { symbol.exchange_is_open
+                    ? <ChartPrice />
+                    : <ClosedSymbol symbolOpenTime={symbolOpenTime} />
+                }
             </div>
         </>
     );
@@ -19,9 +23,13 @@ export const SymbolInfo = ({
 export const SymbolSelectButton = ({
     symbol,
     ChartPrice,
+    symbolOpenTime,
 }) => (
     <div className="cq-symbol-select-btn">
-        <SymbolInfo symbol={symbol} ChartPrice={ChartPrice} />
+        <SymbolInfo symbol={symbol} ChartPrice={ChartPrice} symbolOpenTime={symbolOpenTime} />
+        { !symbol.exchange_is_open
+            && <div className="cq-symbol-closed-text">{t.translate('Closed')}</div>
+        }
         <ArrowIcon className="cq-symbol-dropdown" />
     </div>
 );
@@ -42,4 +50,13 @@ export const ChartPrice = ({
             </div>
         </div>
     )
+);
+
+const ClosedSymbol = symbolOpenTime => (
+    <div className="cq-chart-closed">
+        <TimeIcon className="cq-closed-icon" />
+        <div className="cq-closed-opening">
+            {t.translate('Opens in')}: <span className="cq-closed-opening-time">{symbolOpenTime.symbolOpenTime}</span>
+        </div>
+    </div>
 );
