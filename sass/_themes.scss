@@ -50,13 +50,18 @@ $themes: (
         ChartBorder: $COLOR_LIGHT_GRAY_1,
         ChartText: $COLOR_DARK_GRAY_3,
         ChartCandleBg: $COLOR_ORANGE,
+        ChartCandleBgClosed: $COLOR_LIGHT_BLACK_3_SOLID_1,
         ChartCandleText: $COLOR_WHITE,
+        ChartCandleTextClosed: $COLOR_LIGHT_BLACK_3,
         ChartGrid: $COLOR_LIGHT_BLACK_4,
         ChartIndicateText: $COLOR_LIGHT_GRAY,
         ChartIndicateDivide: $COLOR_LIGHT_GRAY,
         ChartMountainBorder: $COLOR_LIGHT_GRAY_1,
+        ChartMountainBorderClosed: $COLOR_LIGHT_BLACK_3_SOLID_1,
         ChartMountainBg: rgba(153, 156, 172, 0.36),
+        ChartMountainBgClosed: rgba(255, 255, 255, 0),
         ChartMountainBgShade: rgba(255, 255, 255, 0),
+        ChartMountainBgShadeClosed: rgba(214, 214, 214, 0.16),
         MenuBg: $COLOR_WHITE,
         MenuIcon: $COLOR_LIGHT_BLACK_1,
         MenuText: $COLOR_LIGHT_BLACK_1,
@@ -231,13 +236,18 @@ $themes: (
         ChartBorder: $COLOR_WHITE,
         ChartText: $COLOR_DARK_GRAY_3,
         ChartCandleBg: $COLOR_ORANGE,
+        ChartCandleBgClosed: $COLOR_DARK_GRAY_2,
         ChartCandleText: $COLOR_WHITE,
+        ChartCandleTextClosed: $COLOR_LIGHT_GRAY_30,
         ChartGrid: $COLOR_DARK_BLUE_3,
         ChartIndicateText: $COLOR_WHITE,
         ChartIndicateDivide: $COLOR_DARK_GRAY_3,
         ChartMountainBorder: rgba($COLOR_WHITE, 1),
+        ChartMountainBorderClosed: $COLOR_DARK_GRAY_2,
         ChartMountainBg: rgba(255, 255, 255, 0.36),
+        ChartMountainBgClosed: rgba(48, 51, 66, 0.16),
         ChartMountainBgShade: rgba(16, 19, 32, 0),
+        ChartMountainBgShadeClosed: rgba(16, 19, 32, 0),
         MenuBg: $COLOR_DARK_BLUE_2,
         MenuBorder: $COLOR_DARK_BLUE_5,
         MenuIcon: $COLOR_LIGHT_GRAY,
@@ -423,6 +433,4 @@ $themes: (
 :export {
     lightchartgrid: map-get(map-get($themes, 'light'), 'ChartGrid');
     darkchartgrid: map-get(map-get($themes, 'dark'), 'ChartGrid');
-    lightchartmountainborder: map-get(map-get($themes, 'light'), 'ChartMountainBorder');
-    darkchartmountainborder: map-get(map-get($themes, 'dark'), 'ChartMountainBorder');
 }

@@ -61,6 +61,7 @@ class Chart extends Component {
             isMobile = false,
             isOnPagination,
             isChartAvailable,
+            isChartClosed,
             barriers = [],
             children,
             chartControlsWidgets,
@@ -82,14 +83,14 @@ class Chart extends Component {
         return (
             <div className={`smartcharts smartcharts-${theme} ${contextWidth}`}>
                 <div
-                    className={`smartcharts-${isMobile ? 'mobile' : 'desktop'}`}
+                    className={`smartcharts-${isMobile ? 'mobile' : 'desktop'} ${isChartClosed ? 'chart-closed' : ''}`}
                     ref={this.modalNode}
                 >
                     <div
                         className="cq-context"
                         ref={this.root}
                     >
-                        <div className={` ${currentPosition}`}>
+                        <div className={` ${currentPosition} `}>
                             <div className="ciq-chart-area">
                                 <div className="ciq-chart">
                                     <RenderInsideChart at="holder">
@@ -152,6 +153,7 @@ export default connect(({ chart, drawTools, studies, chartSetting, chartType, st
     DrawToolsSettingsDialog : drawTools.DrawToolsSettingsDialog,
     AggregateChartSettingsDialog : chartType.AggregateChartSettingsDialog,
     isChartAvailable: chart.isChartAvailable,
+    isChartClosed: state.isChartClosed,
     updateProps: state.updateProps,
     chartContainerHeight: chart.chartContainerHeight,
     containerWidth: chart.containerWidth,

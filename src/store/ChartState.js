@@ -9,6 +9,7 @@ class ChartState {
     @observable endEpoch;
     @observable symbol;
     @observable isConnectionOpened;
+    @observable isChartClosed = false;
     @observable settings;
     @observable showLastDigitStats;
     @observable scrollToEpoch;
@@ -107,6 +108,10 @@ class ChartState {
     @action.bound setOnPagination({ end }) {
         this.isOnPagination     = !this.isOnPagination;
         this.paginationEndEpoch = this.isOnPagination ? end : null;
+    }
+
+    @action.bound setMarketClosed(status) {
+        this.isChartClosed = status;
     }
 
     saveLayout() {
