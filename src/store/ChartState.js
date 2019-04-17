@@ -45,8 +45,7 @@ class ChartState {
         this.settings = settings;
         this.isConnectionOpened = isConnectionOpened;
         this.symbol = symbol;
-        this.startEpoch = startEpoch;
-        this.endEpoch = endEpoch;
+
         this.isAnimationEnabled = isAnimationEnabled;
         this.showLastDigitStats = showLastDigitStats;
         this.scrollToEpochOffset = scrollToEpochOffset;
@@ -64,6 +63,12 @@ class ChartState {
         if (JSON.stringify(importedLayout) !== JSON.stringify(this.importedLayout)) {
             this.importedLayout = importedLayout;
             this.importLayout();
+        }
+
+        if (this.startEpoch !== startEpoch || this.endEpoch !== endEpoch) {
+            this.startEpoch = startEpoch;
+            this.endEpoch = endEpoch;
+            this.chartStore.feed.onRangeChanged();
         }
 
         if (this.stxx) {
