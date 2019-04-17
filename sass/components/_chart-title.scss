@@ -11,6 +11,7 @@
             > .ic-icon.cq-symbol-dropdown {
                 display: block;
                 margin-right: 0px;
+                margin-left: 10px;
                 width: 24px;
 
                 svg {
@@ -86,7 +87,7 @@
         .cq-symbol-info {
             display: flex;
             flex-direction: column;
-            margin: 0 20px;
+            margin: 0 10px 0 20px;
 
             .cq-market {
                 font-size: 1em;
@@ -117,10 +118,50 @@
                 color: themed('ChartTitleSymbolText');
             }
         }
-        .cq-chart-price > * {
+        .cq-chart-closed {
+            .cq-closed-icon {
+                width: 12px;
+                margin-right: 5px;
+                height: 12px;
+                margin-top: 3px;
+                @include themify($themes) {
+                    fill: themed('TimeIconColor');
+                }
+
+                svg {
+                    left: 0;
+                    position: absolute;
+                }
+            }
+            .cq-closed-opening {
+                font-size: 1.2em;
+                text-align: left;
+                line-height: 1.5;
+
+                .cq-closed-opening-time {
+                    font-weight: bold;
+                    @include themify($themes) {
+                        color: themed('ChartTitleText');
+                    }
+                }
+            }
+        }
+        .cq-symbol-closed-text {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            text-align: center;
+            width: 48px;
+            height: 20px;
+            border: 2px solid $COLOR_RED;
+            color: $COLOR_RED;
+            border-radius: 4px;
+            text-transform: uppercase;
+        }
+        .cq-chart-price > *, .cq-chart-closed > * {
             position: relative;
         }
-        .cq-chart-price {
+        .cq-chart-price, .cq-chart-closed {
             display: flex;
             vertical-align: text-bottom;
             @include themify($themes) {

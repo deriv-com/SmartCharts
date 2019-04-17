@@ -286,12 +286,17 @@ class ChartStore {
             let radius = 0;
             this.canvasFont('stx_price_label', context);
             const tickWidth = this.drawBorders ? 3 : 0; // pixel width of tick off edge of border
+            const textWidth = context.measureText(txt).width;
             let width;
             try {
-                width = context.measureText(txt).width + tickWidth + margin * 2;
+                if (textWidth + margin > yax.width) {
+                    width = textWidth + tickWidth + margin * 2;
+                } else {
+                    width = yax.width + margin;
+                }
             } catch (e) { width = yax.width; } // Firefox doesn't like this in hidden iframe
 
-            let x = yax.left - margin + 15;
+            let x = this.width - width;
             if (yax.width < 0) x += (yax.width - width);
             const position = (yax.position === null ? panel.chart.yAxis.position : yax.position);
             if (position === 'left') {
@@ -370,12 +375,13 @@ class ChartStore {
                     initialMarginBottom: 10,
                     // position: 'left',
                     displayBorder: true,
+                    justifyRight: true,
                 },
                 xAxis: {
                     displayBorder: true,
                 },
                 gaplines: true,
-                yaxisPaddingRight: 48,
+                dynamicYAxis: true,
             },
             minimumLeftBars: 2,
             yTolerance: 999999, // disable vertical scrolling
