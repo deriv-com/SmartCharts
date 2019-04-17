@@ -1,5 +1,5 @@
 import EventEmitter from 'event-emitter-es6';
-import { reaction, when } from 'mobx';
+import { reaction } from 'mobx';
 import { TickHistoryFormatter } from './TickHistoryFormatter';
 import { calculateGranularity, getUTCEpoch, calculateTimeUnitInterval } from '../utils';
 import { RealtimeSubscription, DelayedSubscription } from './subscription';
@@ -25,22 +25,12 @@ class Feed {
         this._serverTime = ServerTime.getInstance();
         this._tradingTimes = tradingTimes;
         reaction(() => mainStore.state.isConnectionOpened, this.onConnectionChanged.bind(this));
-        when(() => this.context, this.onContextReady);
 
         this._emitter = new EventEmitter({ emitDelay: 0 });
     }
 
-    onContextReady = () => {
-        // reaction(() => [this.startEpoch, this.endEpoch], this.onRangeChanged);
-    };
-
     onRangeChanged = () => {
         const now = this._serverTime.getEpoch();
-        if (this.endEpoch && this.endEpoch > now) {
-            // endEpoch cannot be set in the future or ChartIQ will
-            // trigger a fetchInitialData request in stx.setRange
-            return;
-        }
 
         const periodicity = calculateTimeUnitInterval(this.granularity);
         const rangeTime = ((this.granularity || 1) * this._stx.chart.maxTicks);
@@ -177,7 +167,6 @@ class Feed {
             this._activeStreams[key] = subscription;
         } else {
             this._mainStore.notifier.notifyMarketClose(symbolName);
-
             // Although market is closed, we display the past tick history data
             getHistoryOnly = true;
         }
