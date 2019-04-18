@@ -28,6 +28,8 @@ $COLOR_LIGHT_BLACK_3_SOLID_1: #d6d6d6;
 $COLOR_LIGHT_BLACK_3_SOLID_2: #b3b3b3;
 $COLOR_LIGHT_BLACK_4: rgba($COLOR_BLACK, 0.04);
 $COLOR_LIGHT_BLACK_4_SOLID: #f4f4f6;
+$COLOR_RED_CHART: #f95454;
+$COLOR_GREEN_CHART: #4caf50;
 
 //Legacy Colours. TODO: Check with design team, replace and remove these colours
 $COLOR_YELLOW       : #fef1cf;
@@ -45,6 +47,8 @@ $themes: (
         DefaultText: $COLOR_LIGHT_GRAY,
         DefaultBorder: $COLOR_LIGHT_GRAY,
         Loading: $COLOR_BLACK,
+        ChartRed: $COLOR_RED_CHART,
+        ChartGreen: $COLOR_GREEN_CHART,
         ChartAreaBorder: $COLOR_LIGHT_GRAY_2,
         ChartBg: $COLOR_WHITE,
         ChartBorder: $COLOR_LIGHT_GRAY_1,
@@ -53,7 +57,7 @@ $themes: (
         ChartCandleBgClosed: $COLOR_LIGHT_BLACK_3_SOLID_1,
         ChartCandleText: $COLOR_WHITE,
         ChartCandleTextClosed: $COLOR_LIGHT_BLACK_3,
-        ChartGrid: $COLOR_LIGHT_BLACK_4,
+        ChartGrid: rgba($COLOR_LIGHT_GRAY_2, 0.32),
         ChartIndicateText: $COLOR_LIGHT_GRAY,
         ChartIndicateDivide: $COLOR_LIGHT_GRAY,
         ChartMountainBorder: $COLOR_LIGHT_GRAY_1,
@@ -231,6 +235,8 @@ $themes: (
         DefaultText:            $COLOR_WHITE,
         DefaultBorder:          $COLOR_WHITE,
         Loading: $COLOR_WHITE,
+        ChartRed: $COLOR_RED_CHART,
+        ChartGreen: $COLOR_GREEN_CHART,
         ChartAreaBorder: $COLOR_LIGHT_GRAY_30,
         ChartBg: $COLOR_DARK_BLUE_2,
         ChartBorder: $COLOR_WHITE,

@@ -148,13 +148,16 @@ class Feed {
         let getHistoryOnly = false;
         let quotes;
         if (end) { // When there is end; no streaming required
+            this._mainStore.state.setMarketClosed(true);
+
+            this._stx.clearStyles();
             tickHistoryRequest.end = end;
             getHistoryOnly = true;
-            this._stx.clearStyles();
-            this._mainStore.state.setMarketClosed(true);
-            this._stx.draw();
         } else if (this._tradingTimes.isMarketOpened(symbol)) {
             let subscription;
+            this._mainStore.state.setMarketClosed(false);
+
+            this._stx.clearStyles();
             const delay = this._tradingTimes.getDelayedMinutes(symbol);
             if (delay > 0) {
                 this._mainStore.notifier.notifyDelayedMarket(symbolName, delay);
@@ -191,10 +194,9 @@ class Feed {
             }
 
             this._activeStreams[key] = subscription;
-            this._stx.clearStyles();
-            this._mainStore.state.setMarketClosed(false);
-            this._stx.draw();
         } else {
+            this._mainStore.state.setMarketClosed(true);
+            this._stx.clearStyles();
             // Although market is closed, we display the past tick history data
             getHistoryOnly = true;
             this._mainStore.notifier.notifyMarketClose(symbolName);
@@ -203,9 +205,6 @@ class Feed {
         if (getHistoryOnly) {
             const response = await this._binaryApi.getTickHistory(tickHistoryRequest);
             quotes = TickHistoryFormatter.formatHistory(response);
-            this._stx.clearStyles();
-            this._mainStore.state.setMarketClosed(true);
-            this._stx.draw();
         }
 
         if (!quotes) {

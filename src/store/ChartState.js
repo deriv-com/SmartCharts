@@ -1,6 +1,7 @@
 /* eslint-disable no-new */
 import { action, observable, when } from 'mobx';
 import { createObjectFromLocalStorage, calculateTimeUnitInterval, calculateGranularity, getUTCDate } from '../utils';
+import Theme from '../../sass/_themes.scss';
 
 class ChartState {
     @observable granularity;
