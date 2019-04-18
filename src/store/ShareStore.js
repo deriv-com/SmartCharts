@@ -67,9 +67,11 @@ export default class ShareStore {
             const day = DT.getDate();
             const hours = DT.getHours();
             const minutes = DT.getMinutes();
+            const seconds = DT.getSeconds();
+            const formattedSeconds = seconds > 9 ? `:${seconds}` : `:0${seconds}`;
 
             const date = `${year}-${month > 9 ? month : `0${month}`}-${day > 9 ? day : `0${day}`}`;
-            const time = `${hours > 9 ? hours : `0${hours}`}:${minutes > 9 ? minutes : `0${minutes}`}`;
+            const time = `${hours > 9 ? hours : `0${hours}`}:${minutes > 9 ? minutes : `0${minutes}`}${isTick ? formattedSeconds : ''}`;
             if (isTick && Close) { lines.push(`${date},${time},${Close}`); }
             if (!isTick && Open && High && Low && Close) {
                 lines.push([
