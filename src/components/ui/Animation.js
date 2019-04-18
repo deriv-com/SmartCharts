@@ -85,7 +85,7 @@ export default function animateChart(stx, animationParameters, easeMachine) {
         chart = chart || this.chart;
         if (chart.lockScroll) {
             if (chart.maxTicks - chart.scroll <= chart.maxTicks / 4) {
-                chart.lockScroll = false;
+                // chart.lockScroll = false;
                 this.allowScroll = true;
                 return false;
             }
@@ -262,20 +262,27 @@ export default function animateChart(stx, animationParameters, easeMachine) {
                             this.micropixels -= candleWidth;
                         }
                     }
+
+                    if (chart.lockScroll && chart.scroll > chart.maxTicks - 1) {
+                        this.setMaxTicks(chart.maxTicks + 1);
+                    }
                     if (chart.scroll <= chart.maxTicks) {
                         this.previousMicroPixels = this.micropixels;
                         this.nextMicroPixels = this.micropixels + candleWidth;
                         beginningOffset = candleWidth * -1;
-                        if ((chart.dataSegment && chart.dataSegment.length < chart.maxTicks - animationParameters.ticksFromEdgeOfScreen && !animationParameters.stayPut) || chart.lockScroll) {
+                        if (chart.dataSegment && chart.dataSegment.length < chart.maxTicks - animationParameters.ticksFromEdgeOfScreen && !animationParameters.stayPut) {
                             this.nextMicroPixels = this.micropixels;
                             chart.scroll++;
 
                             // Disable lockScroll and allow users to scroll the chart when chart reach the 3/4 of the pane's width
                             if (chart.maxTicks - chart.scroll <= chart.maxTicks / 4) {
-                                chart.lockScroll = false;
+                                // chart.lockScroll = false;
                                 this.allowScroll = true;
                             }
+                        } else if (chart.lockScroll) {
+                            chart.scroll++;
                         }
+
                         chart.animatingHorizontalScroll = linearChart; // When the chart advances we also animate the horizontal scroll by incrementing micropixels
                         chart.previousDataSetLength = chart.dataSet.length;
                     } else {
