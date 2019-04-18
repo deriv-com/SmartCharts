@@ -1,5 +1,5 @@
 import EventEmitter from 'event-emitter-es6';
-import { reaction } from 'mobx';
+import { reaction, when } from 'mobx';
 import { TickHistoryFormatter } from './TickHistoryFormatter';
 import { calculateGranularity, getUTCEpoch, calculateTimeUnitInterval } from '../utils';
 import { RealtimeSubscription, DelayedSubscription } from './subscription';
@@ -31,7 +31,7 @@ class Feed {
     }
 
     onContextReady = () => {
-        // reaction(() => [this.startEpoch, this.endEpoch], this.onRangeChanged);
+        reaction(() => [this.startEpoch, this.endEpoch], this.onRangeChanged);
         this._stx.append('updateChartData', () => this.scaleChart());
     };
 
@@ -190,6 +190,7 @@ class Feed {
             this._activeStreams[key] = subscription;
         } else {
             this._mainStore.notifier.notifyMarketClose(symbolName);
+            
             // Although market is closed, we display the past tick history data
             getHistoryOnly = true;
         }
