@@ -9,13 +9,13 @@ export class Timer extends React.Component {
         };
     }
     componentDidMount() {
-        this.intervalID = setInterval(
+        this.timerInterval = setInterval(
             () => this.tick(),
             1000,
         );
     }
     componentWillUnmount() {
-        clearInterval(this.intervalID);
+        clearInterval(this.timerInterval);
     }
     tick() {
         this.setState({
@@ -26,7 +26,7 @@ export class Timer extends React.Component {
     render() {
         return (
             <span>
-                {displayMilliseconds(86400000 - (this.state.time - this.props.symbolOpenTime.symbolOpenTime))}
+                {this.props.symbolOpenTime.symbolOpenTime ? displayMilliseconds(86400000 - (this.state.time - this.props.symbolOpenTime.symbolOpenTime)) : '--'}
             </span>
         );
     }

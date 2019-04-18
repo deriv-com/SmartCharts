@@ -53,7 +53,7 @@ export default class ChartTitleStore {
     @computed get tradingTimes() { return this.mainStore.chart.tradingTimes; }
     @computed get symbolOpenTime() {
         const times = this.tradingTimes._tradingTimesMap[this.currentSymbol.symbol].times;
-        return times ? times[0].open : {};
+        return times ? times[0].open : null;
     }
 
     onContextReady = () => {
