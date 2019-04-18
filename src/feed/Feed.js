@@ -190,7 +190,7 @@ class Feed {
             this._activeStreams[key] = subscription;
         } else {
             this._mainStore.notifier.notifyMarketClose(symbolName);
-            
+
             // Although market is closed, we display the past tick history data
             getHistoryOnly = true;
         }
