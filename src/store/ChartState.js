@@ -91,9 +91,9 @@ class ChartState {
             this.zoom = +zoom;
             if (this.context && this.stxx && this.zoom) {
                 if (this.zoom >= 0) {
-                    this.stxx.zoomIn(null, (Math.abs(100 - this.zoom) || 0.01) / 100);
+                    // this.stxx.zoomIn(null, (Math.abs(100 - this.zoom) || 0.01) / 100);
                 } else {
-                    this.stxx.zoomOut(null, (100 + Math.abs(this.zoom)) / 100);
+                    // this.stxx.zoomOut(null, (100 + Math.abs(this.zoom)) / 100);
                 }
             }
         }
@@ -209,20 +209,35 @@ class ChartState {
 
     scrollChartToLeft() {
         if (this.scrollToEpoch) {
-            const startEntry = this.stxx.getDataSegment()
-                .reverse()
-                .find(entry =>  entry.DT <= new Date(getUTCDate(this.scrollToEpoch)));
-            this.stxx.setStartDate(startEntry.DT);
-            if (this.scrollToEpochOffset) {
-                this.stxx.chart.scroll += this.scrollToEpochOffset - this.stxx.chart.scroll;
+            let startEntry = this.stxx.chart.dataSet
+                .find(entry =>  entry.DT.valueOf() === new Date(getUTCDate(this.scrollToEpoch)).valueOf());
+
+            if (!startEntry) {
+                startEntry = {
+                    DT: new Date(getUTCDate(this.scrollToEpoch)),
+                    Close: null,
+                };
+
+                /**
+                 * Adding an invisible bar if the bar
+                 * does not exist on the masterData
+                 */
+                this.stxx.updateChartData(
+                    startEntry,
+                    null,
+                    { fillGaps: true },
+                );
+                this.stxx.createDataSet();
             }
             this.stxx.chart.lockScroll = true;
-            this.stxx.allowScroll = false;
+            const tick = this.stxx.tickFromDate(startEntry.DT);
+            this.stxx.chart.scroll = this.stxx.chart.dataSet.length - tick;
+            this.stxx.setMaxTicks(3);
             this.stxx.draw();
         } else {
             this.stxx.chart.lockScroll = false;
-            this.stxx.allowScroll = true;
             this.stxx.home();
+            this.stxx.draw();
         }
     }
 
@@ -286,6 +301,12 @@ class ChartState {
                     }
 
                     if (this.importedLayout && this.importedLayout.isDone) {
+                        if (this.importedLayout.previousMaxTicks) {
+                            this.stxx.setMaxTicks(this.importedLayout.previousMaxTicks);
+                            this.stxx.home();
+                            delete this.importLayout.previousMaxTicks;
+                        }
+
                         // Run the callback when layout import is done
                         this.importedLayout.isDone();
                     }
@@ -305,6 +326,8 @@ class ChartState {
             currentLayout.series.push(field);
         }
         if (this.timeperiodStore.onGranularityChange) this.timeperiodStore.onGranularityChange(0);
+        currentLayout.previousMaxTicks = this.stxx.chart.maxTicks;
+
         this.onExportLayout(currentLayout);
     }
 }
