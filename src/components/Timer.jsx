@@ -22,19 +22,12 @@ export class Timer extends React.Component {
             time: new Date().getTime(),
         });
     }
+    // 86400000 = 24 hour * 60 min * 60s * 1000ms
     render() {
-        console.log(this.props.symbolOpenTime.symbolOpenTime);
-        const until = () => {
-            const until = this.props.symbolOpenTime.symbolOpenTime - this.state.time;
-            while (until < 0) {
-
-            }
-        };
-
         return (
-            <p className="App-clock">
-                {/* The time is {this.props.symbolOpenTime.symbolOpenTime - this.state.time} */}
-            </p>
+            <span>
+                {displayMilliseconds(86400000 - (this.state.time - this.props.symbolOpenTime.symbolOpenTime))}
+            </span>
         );
     }
 }

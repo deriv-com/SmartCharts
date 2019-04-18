@@ -8,7 +8,6 @@ export const SymbolInfo = ({
     symbolOpenTime,
 }) => {
     const SymbolIcon = ItemIconMap[symbol.symbol] || SymbolPlaceholderIcon;
-    console.log(symbolOpenTime);
     return (
         <>
             {SymbolIcon && <SymbolIcon className={`ic-${symbol.symbol}`} />}
@@ -58,9 +57,8 @@ const ClosedSymbol = symbolOpenTime => (
     <div className="cq-chart-closed">
         <TimeIcon className="cq-closed-icon" />
         <div className="cq-closed-opening">
-            {/*
-            {t.translate('Opens in')}: <span className="cq-closed-opening-time"><Timer symbolOpenTime={symbolOpenTime} /></span>
-            */}
+            {t.translate('Opens in: ')}
+            <span className="cq-closed-opening-time"><Timer symbolOpenTime={symbolOpenTime} /></span>
         </div>
     </div>
 );
