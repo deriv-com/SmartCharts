@@ -34,6 +34,11 @@ export default class BarrierStore {
 
     @computed get pip() { return this.mainStore.chart.currentActiveSymbol.decimal_places; }
 
+    get context() { return this.mainStore.chart.context; }
+    get stx() { return this.context.stx; }
+    get chart() { return this.stx.chart; }
+    get stxx() { return this.mainStore.chart.stxx; }
+
     constructor(mainStore) {
         this.mainStore = mainStore;
         this._high_barrier = new PriceLineStore(this.mainStore);
@@ -67,11 +72,6 @@ export default class BarrierStore {
 
         when(() => this.stxx, this.onContextReady);
     }
-
-    get context() { return this.mainStore.chart.context; }
-    get stx() { return this.context.stx; }
-    get chart() { return this.stx.chart; }
-    get stxx() { return this.mainStore.chart.stxx; }
 
     onContextReady = () => {
         const { stx } = this.context;
@@ -157,7 +157,7 @@ export default class BarrierStore {
     }
 
     @action.bound calculateLabelRight() {
-        this.labelRight = this.mainStore.chart.stxx.chart.yAxis.width * -1;
+        this.labelRight = this.yAxisWidth * -1;
     }
 
     @computed get yAxisWidth() {
