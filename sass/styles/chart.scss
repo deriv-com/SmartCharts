@@ -984,7 +984,7 @@ $spot-color: #0298d3;
             color: themed('ChartMountainBorderClosed');
         }
     }
-    .stx_current_hr_up, .stx_current_hr_up {
+    .stx_current_hr_up, .stx_current_hr_down {
         @include themify($themes) {
             color: themed('ChartCandleTextClosed');
             background-color: themed('ChartCandleBgClosed');
