@@ -113,7 +113,7 @@ export default class TimeperiodStore {
     }
 
     @action.bound updateProps(onchange) {
-        if (onChange !== undefined) {
+        if (this.mainStore.state.granularity !== undefined) {
             this.onGranularityChange = onchange;
         }
     }
