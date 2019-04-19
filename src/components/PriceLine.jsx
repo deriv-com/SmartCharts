@@ -22,13 +22,14 @@ class PriceLine extends Component {
             lineStyle,
             color,
             foregroundColor,
+            right,
         } = this.props;
 
         return (
             <>
                 <div
                     className={`drag-price ${!visible ? 'hidden' : ''} ${draggable ? 'draggable' : ''} ${isDragging ? 'dragging' : ''}`}
-                    style={{ top: labelTop, backgroundColor: color, color: foregroundColor }}
+                    style={{ top: labelTop, backgroundColor: color, color: foregroundColor, right }}
                     ref={setDragLabel}
                 >
                     <div className="price">{priceDisplay}</div>

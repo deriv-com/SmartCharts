@@ -152,6 +152,7 @@ class App extends Component {
             ConnectionManager.EVENT_CONNECTION_REOPEN,
             () => this.setState({ isConnectionOpened: true }),
         );
+
         this.state = {
             settings,
             endEpoch,
@@ -160,6 +161,7 @@ class App extends Component {
             granularity,
             isConnectionOpened: true,
             highLow: {},
+            barrierType: '',
             draggable: true,
             markers: [],
         };
@@ -282,8 +284,12 @@ class App extends Component {
         this.setState({ hidePriceLines: evt.target.checked });
     };
 
-    onColorChange =(evt) => {
+    onShadeColorChange = (evt) => {
         this.setState({ shadeColor: evt.target.value });
+    }
+
+    onColorChange = (evt) => {
+        this.setState({ color: evt.target.value });
     }
 
     onFGColorChange = (evt) => {
@@ -291,7 +297,11 @@ class App extends Component {
     }
 
     onHighLowChange = (evt) => {
-        this.setState({ highLow: { [evt.target.id]: +evt.target.value } });
+        const { highLow } = this.state;
+
+        this.setState({
+            highLow: Object.assign(highLow, { [evt.target.id]: +evt.target.value }),
+        });
     };
 
     onRelativeChange = (evt) => {
@@ -367,12 +377,12 @@ class App extends Component {
         const { settings, isConnectionOpened, symbol, endEpoch,
             barrierType, highLow : { high, low }, hidePriceLines,
             draggable, relative, shadeColor, scrollToEpoch,
-            leftOffset, foregroundColor, markers } = this.state;
+            leftOffset, color, foregroundColor, markers } = this.state;
         const barriers = barrierType ? [{
             shade: barrierType,
             shadeColor,
             foregroundColor: foregroundColor || null,
-            color: settings.theme === 'light' ? '#39b19d' : '#555975',
+            color: color || (settings.theme === 'light' ? '#39b19d' : '#555975'),
             onChange: this.handleBarrierChange,
             relative,
             draggable,
@@ -430,19 +440,31 @@ class App extends Component {
                     </div>
                     <div className="form-row">
                         barrier type:&nbsp;
-                        <select id="barrierType" onChange={this.onBarrierTypeChange}>
+                        <select onChange={this.onBarrierTypeChange}>
+                            <option value="">disable</option>
                             <option value="NONE_SINGLE">NONE_SINGLE</option>
                             <option value="NONE_DOUBLE">NONE_DOUBLE</option>
                             <option value="ABOVE">ABOVE</option>
                             <option value="BELOW">BELOW</option>
                             <option value="BETWEEN">BETWEEN</option>
                             <option value="OUTSIDE">OUTSIDE</option>
-                            <option value="">disable</option>
+                        </select>
+                    </div>
+                    <div className="form-row">
+                        barrier shade bg color:&nbsp;
+                        <select onChange={this.onShadeColorChange}>
+                            <option value="GREEN">GREEN</option>
+                            <option value="RED">RED</option>
+                            <option value="YELLOW">YELLOW</option>
+                            <option value="ORANGERED">ORANGERED</option>
+                            <option value="PURPLE">PURPLE</option>
+                            <option value="BLUE">BLUE</option>
+                            <option value="DEEPPINK">DEEPPINK</option>
                         </select>
                     </div>
                     <div className="form-row">
                         barrier bg color:&nbsp;
-                        <select id="barrierBGColor" onChange={this.onColorChange}>
+                        <select onChange={this.onColorChange}>
                             <option value="GREEN">GREEN</option>
                             <option value="RED">RED</option>
                             <option value="YELLOW">YELLOW</option>

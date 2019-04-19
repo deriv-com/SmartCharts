@@ -1,4 +1,4 @@
-import { observable, action, computed } from 'mobx';
+import { observable, action, computed, when } from 'mobx';
 import PriceLineStore from './PriceLineStore';
 import ShadeStore from './ShadeStore';
 import PendingPromise from '../utils/PendingPromise';
@@ -27,8 +27,10 @@ export default class BarrierStore {
     @observable hidePriceLines = false;
     @observable lineStyle = undefined;
     @observable isInitialized = false;
+    @observable labelRight = null;
     @observable initializePromise = new PendingPromise();
     _shadeState;
+    _onBarrierChange = null;
 
     @computed get pip() { return this.mainStore.chart.currentActiveSymbol.decimal_places; }
 
@@ -62,6 +64,23 @@ export default class BarrierStore {
 
         this.HighPriceLine = this._high_barrier.connect(PriceLine);
         this.LowPriceLine = this._low_barrier.connect(PriceLine);
+
+        when(() => this.stxx, this.onContextReady);
+    }
+
+    get context() { return this.mainStore.chart.context; }
+    get stx() { return this.context.stx; }
+    get chart() { return this.stx.chart; }
+    get stxx() { return this.mainStore.chart.stxx; }
+
+    onContextReady = () => {
+        const { stx } = this.context;
+        stx.addEventListener('symbolChange', this.onSymbolChanged);
+        this.calculateLabelRight();
+    };
+
+    onSymbolChanged = () => {
+        this.calculateLabelRight();
     }
 
     @action.bound init() {
@@ -121,6 +140,7 @@ export default class BarrierStore {
                     return this._high_barrier.realPrice;
                 }
             }
+            this.calculateLabelRight();
 
             return newPrice;
         };
@@ -130,16 +150,19 @@ export default class BarrierStore {
             if (newPrice > this._high_barrier.realPrice) {
                 return this._low_barrier.realPrice;
             }
+            this.calculateLabelRight();
 
             return newPrice;
         };
     }
 
-    get context() { return this.mainStore.chart.context; }
-    get stx() { return this.context.stx; }
-    get chart() { return this.stx.chart; }
+    @action.bound calculateLabelRight() {
+        this.labelRight = this.mainStore.chart.stxx.chart.yAxis.width * -1;
+    }
 
-    _onBarrierChange = null;
+    @computed get yAxisWidth() {
+        return this.mainStore.chart.stxx.chart.yAxis.width;
+    }
 
     set onBarrierChange(callback) {
         if (this._onBarrierChange !== callback) {

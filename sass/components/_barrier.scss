@@ -56,10 +56,10 @@
     height: 24px;
     top: -11px;
     position: absolute;
-    right: -50px;
+    right: 0px;
     border: 1px solid inherit;
     z-index: 107;
-    margin: -11px 0 0 0;
+    margin: -9px 0 0 0;
     min-width: 52px;
 
     &:first-child {
@@ -111,14 +111,14 @@
 }
 
 .draggable .price {
-    padding-right: 16px;
+    padding-left: 16px;
     cursor: ns-resize;
 
     &:after {
         content: '≡';
         font-size: 25px;
         position: absolute;
-        right: 1px;
+        left: 1px;
         top: 1px;
         transform: scaleX(0.8);
     }
