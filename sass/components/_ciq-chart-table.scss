@@ -88,7 +88,7 @@
         }
         .up {
             @include themify($themes) {
-                color: $COLOR_GREEN;
+                color: $COLOR_GREEN_1;
             }
         }
         .down {

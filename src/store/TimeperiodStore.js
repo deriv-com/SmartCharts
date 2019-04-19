@@ -19,6 +19,8 @@ export default class TimeperiodStore {
     get isTick() { return this.timeUnit === 'tick'; }
     @observable timeUnit = null;
     @observable interval = null;
+    onGranularityChange;
+
     remain = null;
 
     onContextReady = () => {
@@ -108,6 +110,12 @@ export default class TimeperiodStore {
         }
         logEvent(LogCategories.ChartControl, LogActions.Interval, granularity.toString());
         this.mainStore.chart.changeSymbol(undefined, granularity);
+    }
+
+    @action.bound updateProps(onchange) {
+        if (this.mainStore.state.granularity !== undefined) {
+            this.onGranularityChange = onchange;
+        }
     }
 
     @action.bound updateDisplay() {

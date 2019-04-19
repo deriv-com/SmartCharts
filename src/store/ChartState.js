@@ -17,11 +17,13 @@ class ChartState {
     @observable importedLayout;
     @observable isOnPagination = false;
     @observable paginationEndEpoch;
+    chartControlsWidgets;
 
     get comparisonStore() { return this.mainStore.comparison; }
     get stxx() { return this.chartStore.stxx; }
     get context() { return this.chartStore.context; }
     get chartTypeStore() { return this.mainStore.chartType; }
+    get timeperiodStore() { return this.mainStore.timeperiod; }
 
     constructor(mainStore) {
         this.mainStore = mainStore;
@@ -38,13 +40,14 @@ class ChartState {
         this.chartStore.feed.onPagination(this.setOnPagination.bind(this));
     };
 
-    @action.bound updateProps({ id, settings, isConnectionOpened, symbol, granularity, chartType, startEpoch, endEpoch, onExportLayout, clearChart, importedLayout, removeAllComparisons, isAnimationEnabled = true, showLastDigitStats = false, scrollToEpoch, scrollToEpochOffset = 0, zoom }) {
+    @action.bound updateProps({ id, settings, isConnectionOpened, symbol, granularity, chartType, startEpoch, endEpoch, onExportLayout, clearChart, importedLayout, removeAllComparisons, isAnimationEnabled = true, showLastDigitStats = false, scrollToEpoch, scrollToEpochOffset = 0, zoom, chartControlsWidgets }) {
         this.chartId = id;
         this.settings = settings;
         this.isConnectionOpened = isConnectionOpened;
         this.symbol = symbol;
         this.startEpoch = startEpoch;
         this.endEpoch = endEpoch;
+
         this.isAnimationEnabled = isAnimationEnabled;
         this.showLastDigitStats = showLastDigitStats;
         this.scrollToEpochOffset = scrollToEpochOffset;
@@ -89,11 +92,16 @@ class ChartState {
             this.zoom = +zoom;
             if (this.context && this.stxx && this.zoom) {
                 if (this.zoom >= 0) {
-                    this.stxx.zoomIn(null, (Math.abs(100 - this.zoom) || 0.01) / 100);
+                    // this.stxx.zoomIn(null, (Math.abs(100 - this.zoom) || 0.01) / 100);
                 } else {
-                    this.stxx.zoomOut(null, (100 + Math.abs(this.zoom)) / 100);
+                    // this.stxx.zoomOut(null, (100 + Math.abs(this.zoom)) / 100);
                 }
             }
+        }
+
+        if (chartControlsWidgets !== this.chartControlsWidgets) {
+            this.chartControlsWidgets = chartControlsWidgets;
+            if (this.stxx) this.mainStore.chart.updateHeight();
         }
     }
 
@@ -202,20 +210,35 @@ class ChartState {
 
     scrollChartToLeft() {
         if (this.scrollToEpoch) {
-            const startEntry = this.stxx.getDataSegment()
-                .reverse()
-                .find(entry =>  entry.DT <= new Date(getUTCDate(this.scrollToEpoch)));
-            this.stxx.setStartDate(startEntry.DT);
-            if (this.scrollToEpochOffset) {
-                this.stxx.chart.scroll += this.scrollToEpochOffset - this.stxx.chart.scroll;
+            let startEntry = this.stxx.chart.dataSet
+                .find(entry =>  entry.DT.valueOf() === new Date(getUTCDate(this.scrollToEpoch)).valueOf());
+
+            if (!startEntry) {
+                startEntry = {
+                    DT: new Date(getUTCDate(this.scrollToEpoch)),
+                    Close: null,
+                };
+
+                /**
+                 * Adding an invisible bar if the bar
+                 * does not exist on the masterData
+                 */
+                this.stxx.updateChartData(
+                    startEntry,
+                    null,
+                    { fillGaps: true },
+                );
+                this.stxx.createDataSet();
             }
             this.stxx.chart.lockScroll = true;
-            this.stxx.allowScroll = false;
+            const tick = this.stxx.tickFromDate(startEntry.DT);
+            this.stxx.chart.scroll = this.stxx.chart.dataSet.length - tick;
+            this.stxx.setMaxTicks(3);
             this.stxx.draw();
         } else {
             this.stxx.chart.lockScroll = false;
-            this.stxx.allowScroll = true;
             this.stxx.home();
+            this.stxx.draw();
         }
     }
 
@@ -236,12 +259,21 @@ class ChartState {
         this.mainStore.crosshair.setCrosshairState(0);
 
         // TODO: use constant
-        this.mainStore.chart.changeSymbol(this.stxx.chart.symbol, 0);
-        this.mainStore.chartType.setType({ id:'linear' });
+        if (this.timeperiodStore.onGranularityChange) {
+            this.timeperiodStore.onGranularityChange(0);
+        } else {
+            this.mainStore.chart.changeSymbol(this.stxx.chart.symbol, 0);
+        }
+
+        if (this.chartTypeStore.onChartTypeChanged) {
+            this.chartTypeStore.onChartTypeChanged('mountain');
+        } else {
+            this.chartTypeStore.setType('mountain');
+        }
     }
 
     importLayout() {
-        if (!this.importedLayout || !Object.keys(this.importedLayout).length) return;
+        if (!this.stxx || !this.importedLayout || !Object.keys(this.importedLayout).length) return;
         this.stxx.importLayout(this.importedLayout, {
             managePeriodicity: true,
             preserveTicksAndCandleWidth: true,
@@ -253,15 +285,42 @@ class ChartState {
                     });
                 }
 
+                const { timeUnit, interval } = this.importedLayout;
+                if (timeUnit) {
+                    const granularity = calculateGranularity(interval, timeUnit) || 0;
+                    if (this.timeperiodStore.onGranularityChange) {
+                        this.timeperiodStore.onGranularityChange(granularity);
+                    } else {
+                        this.chartStore.granularity = granularity;
+                    }
+                }
+
+                if (this.chartTypeStore.onChartTypeChanged) {
+                    const chartType = this.chartTypeStore.getChartTypeFromLayout(this.importedLayout);
+                    this.chartTypeStore.setChartTypeFromLayout(this.importedLayout);
+                    this.chartTypeStore.onChartTypeChanged(chartType);
+                }
+
+                this.stxx.changeOccurred('layout');
+                this.mainStore.studies.updateActiveStudies();
+
                 setTimeout(() => {
                     if (this.importedLayout && this.importedLayout.drawings) {
                         this.stxx.importDrawings(this.importedLayout.drawings);
                         this.stxx.draw();
                     }
-                }, 500);
 
-                this.stxx.changeOccurred('layout');
-                this.mainStore.studies.updateActiveStudies();
+                    if (this.importedLayout && this.importedLayout.isDone) {
+                        if (this.importedLayout.previousMaxTicks) {
+                            this.stxx.setMaxTicks(this.importedLayout.previousMaxTicks);
+                            this.stxx.home();
+                            delete this.importLayout.previousMaxTicks;
+                        }
+
+                        // Run the callback when layout import is done
+                        this.importedLayout.isDone();
+                    }
+                }, 500);
             },
         });
 
@@ -276,6 +335,7 @@ class ChartState {
         for (const field in this.stxx.chart.series) {
             currentLayout.series.push(field);
         }
+        currentLayout.previousMaxTicks = this.stxx.chart.maxTicks;
 
         this.onExportLayout(currentLayout);
     }

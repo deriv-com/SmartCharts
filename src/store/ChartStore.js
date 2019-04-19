@@ -80,7 +80,8 @@ class ChartStore {
     updateHeight(position) {
         const historicalMobile = this.mainStore.chartSetting.historical && this.isMobile;
         const panelPosition = position || this.mainStore.chartSetting.position;
-        const offsetHeight = (panelPosition === 'left') ? 0 : this.chartControlsNode.offsetHeight;
+        // TODO use constant here for chartcontrol height
+        const offsetHeight = (panelPosition === 'bottom' && this.stateStore.chartControlsWidgets) ? 40 : 0;
         this.chartHeight = this.chartNode.offsetHeight;
         this.chartContainerHeight = this.chartHeight - offsetHeight - (historicalMobile ? 45 : 0);
     }
@@ -283,14 +284,19 @@ class ChartStore {
             const margin = 9;
             const height = 24;
             let radius = 0;
-            this.canvasFont('stx_yaxis', context);
+            this.canvasFont('stx_price_label', context);
             const tickWidth = this.drawBorders ? 3 : 0; // pixel width of tick off edge of border
+            const textWidth = context.measureText(txt).width;
             let width;
             try {
-                width = context.measureText(txt).width + tickWidth + margin * 2;
+                if (textWidth + margin > yax.width) {
+                    width = textWidth + tickWidth + margin * 2;
+                } else {
+                    width = yax.width + margin;
+                }
             } catch (e) { width = yax.width; } // Firefox doesn't like this in hidden iframe
 
-            let x = yax.left - margin + 3;
+            let x = this.width - width;
             if (yax.width < 0) x += (yax.width - width);
             const position = (yax.position === null ? panel.chart.yAxis.position : yax.position);
             if (position === 'left') {
@@ -368,10 +374,14 @@ class ChartStore {
                     initialMarginTop: 125,
                     initialMarginBottom: 10,
                     // position: 'left',
-                    width: -10,
+                    displayBorder: true,
                     justifyRight: true,
                 },
+                xAxis: {
+                    displayBorder: true,
+                },
                 gaplines: true,
+                dynamicYAxis: true,
             },
             minimumLeftBars: 2,
             yTolerance: 999999, // disable vertical scrolling
@@ -450,6 +460,11 @@ class ChartStore {
 
                 this.context = context;
 
+                if (this.state.importedLayout) {
+                    // Check if there is a layout set by importedLayout porp, import it here after chart is loaded
+                    this.state.importLayout();
+                }
+
                 stxx.container.addEventListener('mouseenter', this.onMouseEnter);
                 stxx.container.addEventListener('mouseleave', this.onMouseLeave);
 
@@ -460,7 +475,7 @@ class ChartStore {
                     this.state.symbol,
                     this.state.granularity,
                 ], () => {
-                    if (this.state.symbol !== undefined || this.state.granularity !== undefined) {
+                    if ((this.state.symbol !== undefined || this.state.granularity !== undefined) && !this.state.importedLayout) {
                         this.changeSymbol(this.state.symbol, this.state.granularity);
                     }
                 });
@@ -585,18 +600,14 @@ class ChartStore {
         }
 
         const { chartType: chartTypeStore } = this.mainStore;
-        if (chartTypeStore.chartTypeProp === undefined) {
-            this.contextPromise.then(() => {
-                const isTick = this.stxx.layout.timeUnit === 'second';
-                const isCandle = chartTypeStore.isCandle;
-                if (isCandle && isTick) {
-                    // Tick charts cannot be represented with candles
-                    chartTypeStore.setType('mountain');
-                } else if (!isTick && !isCandle) {
-                    chartTypeStore.setType('candle');
-                }
-            });
-        }
+        this.contextPromise.then(() => {
+            const isTick = this.stxx.layout.timeUnit === 'second';
+            const isCandle = chartTypeStore.isCandle;
+            if (isCandle && isTick) {
+                // Tick charts cannot be represented with candles
+                chartTypeStore.setType('mountain');
+            }
+        });
     }
 
     // Calling newChart with symbolObj as undefined refreshes the chart
@@ -623,9 +634,9 @@ class ChartStore {
         const paddingRatio = this.chartNode.clientWidth / this.RANGE_PADDING_PX;
         const elapsedSeconds = endEpoch - startEpoch;
         const epochPadding = elapsedSeconds / paddingRatio | 0;
-        if (startEpoch !== undefined || endEpoch !== undefined) {
-            const dtLeft  = (startEpoch !== undefined) ? new Date(getUTCDate(startEpoch - epochPadding)) : undefined;
-            const dtRight = (endEpoch   !== undefined) ? new Date(getUTCDate(endEpoch + epochPadding))   : undefined;
+        if (startEpoch || endEpoch) {
+            const dtLeft  = (startEpoch) ? new Date(getUTCDate(startEpoch - epochPadding)) : undefined;
+            const dtRight = (endEpoch) ? new Date(getUTCDate(endEpoch + epochPadding))   : undefined;
             const periodicity = calculateTimeUnitInterval(this.granularity);
             range = {
                 dtLeft,
