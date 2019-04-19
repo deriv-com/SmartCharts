@@ -37,7 +37,7 @@ class Feed {
 
     onRangeChanged = () => {
         const now = this._serverTime.getEpoch();
-        const periodicity = calculateTimeUnitInterval(this.granularity);
+        const periodicity = this.endEpoch || this.startEpoch ? calculateTimeUnitInterval(this.granularity) : null;
         const rangeTime = ((this.granularity || 1) * this._stx.chart.maxTicks);
         let dtLeft = null;
         let dtRight = null;
