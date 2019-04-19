@@ -155,7 +155,6 @@ class Feed {
         } else if (this._tradingTimes.isMarketOpened(symbol)) {
             let subscription;
             const delay = this._tradingTimes.getDelayedMinutes(symbol);
-            console.log('subsribe');
             if (delay > 0) {
                 this._mainStore.notifier.notifyDelayedMarket(symbolName, delay);
 
