@@ -36,8 +36,10 @@ class Feed {
     };
 
     onRangeChanged = () => {
+        if (this._mainStore.state.importedLayout) return;
+
         const now = this._serverTime.getEpoch();
-        const periodicity = this.endEpoch || this.startEpoch ? calculateTimeUnitInterval(this.granularity) : null;
+        const periodicity = calculateTimeUnitInterval(this.granularity);
         const rangeTime = ((this.granularity || 1) * this._stx.chart.maxTicks);
         let dtLeft = null;
         let dtRight = null;
@@ -153,6 +155,7 @@ class Feed {
         } else if (this._tradingTimes.isMarketOpened(symbol)) {
             let subscription;
             const delay = this._tradingTimes.getDelayedMinutes(symbol);
+            console.log('subsribe');
             if (delay > 0) {
                 this._mainStore.notifier.notifyDelayedMarket(symbolName, delay);
 
