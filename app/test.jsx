@@ -440,7 +440,7 @@ class App extends Component {
                     </div>
                     <div className="form-row">
                         barrier type:&nbsp;
-                        <select onChange={this.onBarrierTypeChange}>
+                        <select onChange={this.onBarrierTypeChange} defaultValue={barrierType}>
                             <option value="">disable</option>
                             <option value="NONE_SINGLE">NONE_SINGLE</option>
                             <option value="NONE_DOUBLE">NONE_DOUBLE</option>
