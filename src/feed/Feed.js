@@ -32,51 +32,64 @@ class Feed {
 
     onContextReady = () => {
         reaction(() => [this.startEpoch, this.endEpoch], this.onRangeChanged);
+        this._stx.append('updateChartData', () => this.scaleChart());
     };
 
     onRangeChanged = () => {
         const now = this._serverTime.getEpoch();
-        if (this.endEpoch && this.endEpoch > now) {
-            // endEpoch cannot be set in the future or ChartIQ will
-            // trigger a fetchInitialData request in stx.setRange
-            return;
-        }
-
         const periodicity = calculateTimeUnitInterval(this.granularity);
         const rangeTime = ((this.granularity || 1) * this._stx.chart.maxTicks);
+        let dtLeft = null;
+        let dtRight = null;
 
-        // TODO This if condition will be deleted in the future PRs. It'll fix the issue for the time bieng.
-        if (!this.endEpoch && !this.startEpoch) {
-            this._stx.setRange({
-                dtLeft: undefined,
-                dtRight: undefined,
-            }, () => {
-                delete this._stx.layout.range;
-                this._mainStore.state.saveLayout();
-                this._stx.home();
-            });
-            return;
-        }
-
-        // If the endEpoch is undefined _and_ there are no active streams, we initiate streaming
-        if (!this.endEpoch) {
-            if (Object.keys(this._activeStreams).length === 0) {
+        if (!this.endEpoch
+            && Object.keys(this._activeStreams).length === 0) {
+            if (this.startEpoch) {
                 // Set the end range to the future to trigger ChartIQ to start streaming
                 const future = now + 10;
-                const dtRight = new Date(future * 1000);
-                const dtLeft = this.startEpoch ? new Date(this.startEpoch) : undefined;
-                this._stx.setRange({ dtLeft, dtRight, periodicity }, () => this._stx.home());
+                dtRight = new Date(future * 1000);
+                dtLeft = this.startEpoch ? new Date(this.startEpoch) : undefined;
             }
-            return;
+        } else if (this.endEpoch) {
+            dtLeft =  new Date((this.startEpoch || this.endEpoch - rangeTime) * 1000);
+            dtRight = new Date(this.endEpoch * 1000);
         }
 
-        const dtLeft =  new Date((this.startEpoch || this.endEpoch - rangeTime) * 1000);
-        const dtRight = new Date(this.endEpoch * 1000);
         this._stx.setRange({ dtLeft, dtRight, periodicity }, () => {
-            this._stx.draw();
-            this._stx.home();
+            if (!this.endEpoch && !this.startEpoch) {
+                this._stx.home();
+                delete this._stx.layout.range;
+            } else {
+                this.scaleChart();
+            }
+            this._mainStore.state.saveLayout();
+            this.loader.hide();
         });
     };
+
+    scaleChart() {
+        if (this.startEpoch) {
+            if (!this.endEpoch) {
+                this._stx.maxMasterDataSize = 0;
+                this._stx.setStartDate(this._stx.chart.dataSet[0].DT);
+                this._stx.setMaxTicks(this._stx.chart.dataSet.length, { padding: 150 });
+                this._stx.draw();
+            } else {
+                this._stx.chart.isDisplayFullMode = false;
+                this._stx.setMaxTicks(this._stx.chart.dataSet.length);
+                this._stx.chart.scroll = this._stx.chart.dataSet.length; // + (this._stx.chart.maxTicks - this._stx.chart.dataSet);
+                this._stx.chart.lockScroll = false;
+
+                this._stx.draw();
+            }
+        }
+
+        if (this._mainStore.state.scrollToEpoch) {
+            // this._mainStore.state.scrollChartToLeft();
+        }
+
+        this.loader.hide();
+    }
 
     // although not used, subscribe is overridden so that unsubscribe will be called by ChartIQ
     subscribe() {}
@@ -104,7 +117,6 @@ class Feed {
         const isComparisonChart = this._stx.chart.symbol !== symbol;
         let start = this.startEpoch || (suggestedStartDate / 1000 | 0);
         const end = this.endEpoch;
-        const now = this._serverTime.getEpoch() | 0;
         if (isComparisonChart) {
             // Strange issue where comparison series is offset by timezone...
             start -= suggestedStartDate.getTimezoneOffset() * 60;
@@ -135,7 +147,7 @@ class Feed {
 
         let getHistoryOnly = false;
         let quotes;
-        if (end && now > end) { // end is in the past; no streaming required
+        if (end) { // When there is end; no streaming required
             tickHistoryRequest.end = end;
             getHistoryOnly = true;
         } else if (this._tradingTimes.isMarketOpened(symbol)) {
@@ -308,10 +320,6 @@ class Feed {
                 symbol: comparisonChartSymbol,
                 ...dataUpdate,
             });
-        }
-
-        if (this.endEpoch) {
-            this._stx.home();
         }
     }
 
