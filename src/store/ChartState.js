@@ -48,6 +48,7 @@ class ChartState {
         this.symbol = symbol;
         this.startEpoch = startEpoch;
         this.endEpoch = endEpoch;
+
         this.isAnimationEnabled = isAnimationEnabled;
         this.showLastDigitStats = showLastDigitStats;
         this.scrollToEpochOffset = scrollToEpochOffset;
@@ -263,7 +264,12 @@ class ChartState {
         this.mainStore.crosshair.setCrosshairState(0);
 
         // TODO: use constant
-        this.mainStore.chart.changeSymbol(this.stxx.chart.symbol, 0);
+        if (this.timeperiodStore.onGranularityChange) {
+            this.timeperiodStore.onGranularityChange(0);
+        } else {
+            this.mainStore.chart.changeSymbol(this.stxx.chart.symbol, 0);
+        }
+
         if (this.chartTypeStore.onChartTypeChanged) {
             this.chartTypeStore.onChartTypeChanged('mountain');
         } else {
@@ -285,9 +291,13 @@ class ChartState {
                 }
 
                 const { timeUnit, interval } = this.importedLayout;
-                if (timeUnit && this.timeperiodStore.onGranularityChange) {
+                if (timeUnit) {
                     const granularity = calculateGranularity(interval, timeUnit) || 0;
-                    this.timeperiodStore.onGranularityChange(granularity);
+                    if (this.timeperiodStore.onGranularityChange) {
+                        this.timeperiodStore.onGranularityChange(granularity);
+                    } else {
+                        this.chartStore.granularity = granularity;
+                    }
                 }
 
                 if (this.chartTypeStore.onChartTypeChanged) {
@@ -330,7 +340,6 @@ class ChartState {
         for (const field in this.stxx.chart.series) {
             currentLayout.series.push(field);
         }
-        if (this.timeperiodStore.onGranularityChange) this.timeperiodStore.onGranularityChange(0);
         currentLayout.previousMaxTicks = this.stxx.chart.maxTicks;
 
         this.onExportLayout(currentLayout);
