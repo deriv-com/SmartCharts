@@ -218,7 +218,8 @@ $themes: (
         ChartHistoryPickerBodyActiveBg: $COLOR_DARK_BLUE_5,
         ChartHistoryPickerBodyActiveColor: $COLOR_WHITE,
         ChartHistoryPickerBodyActiveBorder: $COLOR_DARK_BLUE_5,
-        PaginationLoaderStripeColor: $COLOR_LIGHT_BLACK_4_SOLID
+        PaginationLoaderStripeColor: $COLOR_LIGHT_BLACK_4_SOLID,
+        WidgetBg: $COLOR_LIGHT_BLACK_4_SOLID
     ),
     dark: (
         DefaultMain:            $COLOR_DARK_BLUE_5,
@@ -398,7 +399,8 @@ $themes: (
         ChartHistoryPickerBodyActiveBg: $COLOR_WHITE,
         ChartHistoryPickerBodyActiveColor: $COLOR_DARK_BLUE_5,
         ChartHistoryPickerBodyActiveBorder: $COLOR_WHITE,
-        PaginationLoaderStripeColor: $COLOR_DARK_BLUE_4
+        PaginationLoaderStripeColor: $COLOR_DARK_BLUE_4,
+        WidgetBg: $COLOR_LIGHT_BLACK_4_SOLID
     ),
 );
 

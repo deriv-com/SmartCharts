@@ -10,6 +10,7 @@ import CurrentSpot from './CurrentSpot.jsx';
 import DrawingCursor from './DrawingCursor.jsx';
 import ChartTable from './ChartTable.jsx';
 import LastDigitStats from './LastDigitStats.jsx';
+import Widget from './Widget.jsx';
 /* css + scss */
 import '../../sass/main.scss';
 
@@ -108,6 +109,7 @@ class Chart extends Component {
                                                 && <PaginationLoader />
                                         }
                                         <CurrentSpot />
+                                        <Widget />
                                     </RenderInsideChart>
                                     <div className="cq-top-ui-widgets">
                                         <TopWidgets />
