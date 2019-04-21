@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-globals */
 import {
     action,
     observable,
@@ -314,6 +315,7 @@ class ChartStore {
             }
             let yaxisLabelStyle = this.yaxisLabelStyle;
             if (yax.yaxisLabelStyle) yaxisLabelStyle = yax.yaxisLabelStyle;
+
             const params = {
                 ctx:context,
                 x,
@@ -330,6 +332,41 @@ class ChartStore {
                 color,
             };
             CIQ[yaxisLabelStyle](params);
+        };
+        CIQ.ChartEngine.prototype.updateFloatHRLabel = function (panel) {
+            const arr = panel.yaxisLHS.concat(panel.yaxisRHS);
+            const cy = this.crossYActualPos ? this.crossYActualPos : this.cy;
+            if (this.floatCanvas.isDirty) CIQ.clearCanvas(this.floatCanvas, this);
+            if (this.controls.crossX && this.controls.crossX.style.display === 'none') return;
+            if (this.controls.crossY) {
+                let crosshairWidth = panel.width;
+                if (this.yaxisLabelStyle === 'roundRectArrow') crosshairWidth -= 7;
+                this.controls.crossY.style.left = `${panel.left}px`;
+                this.controls.crossY.style.width = `${crosshairWidth}px`;
+            }
+            for (let i = 0; i < arr.length; i++) {
+                const yAxis = arr[i];
+                let price = this.transformedPriceFromPixel(cy, panel, yAxis);
+                if (isNaN(price)) continue;
+                if ((yAxis.min || yAxis.min === 0) && price < yAxis.min) continue;
+                if ((yAxis.max || yAxis.max === 0) && price > yAxis.max) continue;
+                let labelDecimalPlaces = null;
+                if (yAxis !== panel.chart.yAxis) { // If a study panel, this logic allows the cursor to print more decimal places than the yaxis default for panels
+                    labelDecimalPlaces = this.decimalPlacesFromPriceTick(yAxis.priceTick);
+                    if (yAxis.decimalPlaces || yAxis.decimalPlaces === 0) labelDecimalPlaces = yAxis.decimalPlaces;
+                }
+                if (yAxis.priceFormatter) {
+                    price = yAxis.priceFormatter(this, panel, price, labelDecimalPlaces);
+                } else {
+                    price = this.formatYAxisPrice(price, panel, labelDecimalPlaces, yAxis);
+                }
+
+                const style = this.canvasStyle('stx-float-price');
+                this.yaxisLabelStyle = 'rect';
+                this.createYAxisLabel(panel, price, cy, style.backgroundColor, style.color, this.floatCanvas.context, yAxis);
+                this.floatCanvas.isDirty = true;
+                this.yaxisLabelStyle = 'roundRectArrow';
+            }
         };
 
         const {

@@ -418,9 +418,11 @@ html, body {
     font-size: 12px;
     font-family: 'Helvetica';
     z-index: 3;
-    padding: 1px 6px;
+    padding: 3px 6px;
     text-align: center;
     width: auto;
+    height: 18px;
+    line-height: 18px;
 }
 
 .stx_crosshair { /* Standard Crosshair lines color */
