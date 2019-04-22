@@ -274,6 +274,10 @@ class ChartState {
 
     importLayout() {
         if (!this.stxx || !this.importedLayout || !Object.keys(this.importedLayout).length) return;
+
+        // Clear current chart state
+        this.stxx.layout.interval = 0;
+
         this.stxx.importLayout(this.importedLayout, {
             managePeriodicity: true,
             preserveTicksAndCandleWidth: true,
