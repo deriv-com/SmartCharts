@@ -150,12 +150,9 @@ class ChartState {
             layoutData = { ...layoutData, ...periodicity };
         } else {
             // update this.granularity with chartLayout
-            const { timeUnit, interval } = layoutData;
-            if (timeUnit) {
-                this.chartStore.granularity = calculateGranularity(interval, timeUnit);
-            } else {
-                this.chartStore.granularity = 86400; // 1 day
-            }
+            const { timeUnit, interval, periodicity } = layoutData;
+            const period = timeUnit ? interval : periodicity;
+            this.chartStore.granularity = calculateGranularity(period, timeUnit || interval);
         }
 
         if (this.startEpoch || this.endEpoch) {
@@ -289,14 +286,13 @@ class ChartState {
                     });
                 }
 
-                const { timeUnit, interval } = this.importedLayout;
-                if (timeUnit) {
-                    const granularity = calculateGranularity(interval, timeUnit) || 0;
-                    if (this.timeperiodStore.onGranularityChange) {
-                        this.timeperiodStore.onGranularityChange(granularity);
-                    } else {
-                        this.chartStore.granularity = granularity;
-                    }
+                const { timeUnit, interval, periodicity } = this.importedLayout;
+                const period = timeUnit ? interval : periodicity;
+                const granularity = calculateGranularity(period, timeUnit || interval);
+                if (this.timeperiodStore.onGranularityChange) {
+                    this.timeperiodStore.onGranularityChange(granularity);
+                } else {
+                    this.chartStore.granularity = granularity;
                 }
 
                 if (this.chartTypeStore.onChartTypeChanged) {
