@@ -979,9 +979,15 @@ $spot-color: #0298d3;
     .stx_hollow_candle_down, .stx_hollow_candle_up, .stx_hollow_candle_even,
     .stx_volume_up, .stx_volume_down, .stx_volume_even,
     .stx_pandf_down, .stx_pandf_up, .stx_pandf_even,
-    .stx_kagi_up, .stx_kagi_down, .stx_kagi_even {
+    .stx_kagi_up, .stx_kagi_down, .stx_kagi_even,
+    .stx_candle_shadow, .stx_candle_shadow_up, .stx_candle_shadow_down, .stx_candle_shadow_even {
         @include themify($themes) {
             color: themed('ChartMountainBorderClosed');
+        }
+    }
+    .stx_candle_down, .stx_candle_up, .stx_candle_even {
+        @include themify($themes) {
+            border: themed('ChartMountainBorderClosed');
         }
     }
     .stx_current_hr_up, .stx_current_hr_down {
