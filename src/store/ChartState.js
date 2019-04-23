@@ -328,7 +328,7 @@ class ChartState {
     }
 
     exportLayout() {
-        if (!this.onExportLayout) return;
+        if (!this.onExportLayout || !this.stxx) return;
         const currentLayout = this.stxx.exportLayout();
         currentLayout.drawings = this.stxx.exportDrawings();
         currentLayout.series = [];
