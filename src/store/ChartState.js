@@ -272,8 +272,11 @@ class ChartState {
     importLayout() {
         if (!this.stxx || !this.importedLayout || !Object.keys(this.importedLayout).length) return;
 
-        // Clear current chart interval to make sure importedlayout works as expected if it has same interval
-        if (Object.keys(this.mainStore.chart.feed._activeStreams).length === 0) this.stxx.layout.interval = undefined;
+        /* Clear current chart interval to make sure importedlayout works as expected
+        if it has same interval with previous state of chart but there is no stream for it */
+        if (Object.keys(this.mainStore.chart.feed._activeStreams).length === 0) {
+            this.stxx.layout.interval = undefined;
+        }
 
         this.stxx.importLayout(this.importedLayout, {
             managePeriodicity: true,
