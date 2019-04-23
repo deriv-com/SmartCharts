@@ -64,6 +64,7 @@ class Feed {
             }
             this._mainStore.state.saveLayout();
             this.loader.hide();
+            this._mainStore.state.setChartStatus('ready');
         });
     };
 
@@ -89,6 +90,7 @@ class Feed {
         }
 
         this.loader.hide();
+        this._mainStore.state.setChartStatus('ready');
     }
 
     // although not used, subscribe is overridden so that unsubscribe will be called by ChartIQ

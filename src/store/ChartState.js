@@ -9,6 +9,7 @@ class ChartState {
     @observable endEpoch;
     @observable symbol;
     @observable isConnectionOpened;
+    @observable chartStatusListener;
     @observable settings;
     @observable showLastDigitStats;
     @observable scrollToEpoch;
@@ -40,10 +41,12 @@ class ChartState {
         this.chartStore.feed.onPagination(this.setOnPagination.bind(this));
     };
 
-    @action.bound updateProps({ id, settings, isConnectionOpened, symbol, granularity, chartType, startEpoch, endEpoch, onExportLayout, clearChart, importedLayout, removeAllComparisons, isAnimationEnabled = true, showLastDigitStats = false, scrollToEpoch, scrollToEpochOffset = 0, zoom, chartControlsWidgets }) {
+    @action.bound updateProps({ id, settings, isConnectionOpened, chartStatusListener, symbol, granularity, chartType, startEpoch, endEpoch, onExportLayout, clearChart, importedLayout, removeAllComparisons, isAnimationEnabled = true, showLastDigitStats = false, scrollToEpoch, scrollToEpochOffset = 0, zoom, chartControlsWidgets }) {
         this.chartId = id;
         this.settings = settings;
         this.isConnectionOpened = isConnectionOpened;
+        this.chartStatusListener = chartStatusListener;
+        this.status = 'loading';
         this.symbol = symbol;
         this.startEpoch = startEpoch;
         this.endEpoch = endEpoch;
@@ -108,6 +111,13 @@ class ChartState {
     @action.bound setOnPagination({ end }) {
         this.isOnPagination     = !this.isOnPagination;
         this.paginationEndEpoch = this.isOnPagination ? end : null;
+    }
+
+    @action.bound setChartStatus(status) {
+        if (this.status !== status) {
+            this.status = status;
+            this.chartStatusListener(status);
+        }
     }
 
     saveLayout() {
@@ -177,6 +187,7 @@ class ChartState {
                 this.restoreDrawings(this.stxx, this.stxx.chart.symbol);
                 if (this.chartStore.loader) {
                     this.chartStore.loader.hide();
+                    this.mainStore.state.setChartStatus('ready');
                     this.stxx.home();
                 }
 

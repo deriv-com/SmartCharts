@@ -80,7 +80,10 @@ export default class ViewStore {
 
     @action.bound applyLayout(idx, e) {
         if (e.nativeEvent.is_item_removed) { return; }
-        if (this.loader) { this.loader.show(); }
+        if (this.loader) {
+            this.loader.show();
+        }
+        this.mainStore.state.setChartStatus('loading');
         const stx = this.stx;
 
         const importLayout = () => {
@@ -88,6 +91,7 @@ export default class ViewStore {
                 stx.changeOccurred('layout');
                 this.mainStore.studies.updateActiveStudies();
                 if (this.loader) { this.loader.hide(); }
+                this.mainStore.state.setChartStatus('ready');
             };
             stx.importLayout(ViewStore.views[idx].layout, {
                 managePeriodicity: true,
