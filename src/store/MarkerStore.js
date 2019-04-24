@@ -66,7 +66,7 @@ export default class MarkerStore {
             return;
         }
 
-        if (this.isDistantFuture) {
+        if (this.isDistantFuture && this.mainStore.chart.xaxis.length > 0) {
             const dummyMarker = this.getDummyMarker();
             this.stx.futureTickIfDisplayed(dummyMarker);
             if (dummyMarker.tick) {
@@ -201,7 +201,7 @@ export default class MarkerStore {
 
         this.stx.setMarkerTick(dummyMarker);
         this.tick = dummyMarker.tick;
-        if (dummyMarker.params.future) {
+        if (dummyMarker.params.future && this.mainStore.chart.xaxis.length > 0) {
             this.stx.futureTickIfDisplayed(dummyMarker);
             this.tick = dummyMarker.tick;
             if (this.tick !== null) {

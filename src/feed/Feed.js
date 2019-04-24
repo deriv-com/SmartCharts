@@ -46,6 +46,9 @@ class Feed {
         let dtLeft = null;
         let dtRight = null;
 
+        this.loader.show();
+        this.loader.setState('chart-data');
+
         if (!this.endEpoch
             && Object.keys(this._activeStreams).length === 0) {
             if (this.startEpoch) {
@@ -91,8 +94,6 @@ class Feed {
         if (this._mainStore.state.scrollToEpoch) {
             // this._mainStore.state.scrollChartToLeft();
         }
-
-        this.loader.hide();
     }
 
     // although not used, subscribe is overridden so that unsubscribe will be called by ChartIQ
