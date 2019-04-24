@@ -254,19 +254,6 @@ class ChartState {
 
         // TODO: use constant
         this.mainStore.crosshair.setCrosshairState(0);
-
-        // TODO: use constant
-        if (this.timeperiodStore.onGranularityChange) {
-            this.timeperiodStore.onGranularityChange(0);
-        } else {
-            this.mainStore.chart.changeSymbol(this.stxx.chart.symbol, 0);
-        }
-
-        if (this.chartTypeStore.onChartTypeChanged) {
-            this.chartTypeStore.onChartTypeChanged('mountain');
-        } else {
-            this.chartTypeStore.setType('mountain');
-        }
     }
 
     importLayout() {
@@ -292,10 +279,9 @@ class ChartState {
                 const { timeUnit, interval, periodicity } = this.importedLayout;
                 const period = timeUnit ? interval : periodicity;
                 const granularity = calculateGranularity(period, timeUnit || interval);
+                this.chartStore.granularity = granularity;
                 if (this.timeperiodStore.onGranularityChange) {
                     this.timeperiodStore.onGranularityChange(granularity);
-                } else {
-                    this.chartStore.granularity = granularity;
                 }
 
                 if (this.chartTypeStore.onChartTypeChanged) {
