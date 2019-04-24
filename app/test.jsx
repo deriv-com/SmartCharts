@@ -331,6 +331,14 @@ class App extends Component {
         this.setState({ markers });
     }
 
+    onWidget = () => {
+        const { widget } = this.state;
+
+        this.setState({
+            widget: !widget,
+        });
+    }
+
     toggleStartEpoch = () => {
         if (this.state.scrollToEpoch) {
             this.setState({
@@ -353,7 +361,7 @@ class App extends Component {
         const { settings, isConnectionOpened, symbol, endEpoch,
             barrierType, highLow : { high, low }, hidePriceLines,
             draggable, relative, shadeColor, scrollToEpoch,
-            leftOffset, foregroundColor, markers } = this.state;
+            leftOffset, foregroundColor, markers, widget } = this.state;
         const barriers = barrierType ? [{
             shade: barrierType,
             shadeColor,
@@ -377,6 +385,7 @@ class App extends Component {
                         isMobile={isMobile}
                         onMessage={this.onMessage}
                         enableRouting
+                        enableWidget={widget}
                         removeAllComparisons={settings.historical}
                         topWidgets={this.renderTopWidgets}
                         chartControlsWidgets={this.renderControls}
@@ -405,6 +414,10 @@ class App extends Component {
                     </SmartChart>
                 </div>
                 <div className="action-section">
+                    <div className="form-row">
+                        Widget <br />
+                        <button type="button" onClick={this.onWidget}>Toggle</button>
+                    </div>
                     <div className="form-row">
                         Line Markers <br />
                         <button type="button" onClick={this.onCircleMarker}>Toggle</button>

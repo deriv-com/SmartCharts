@@ -73,15 +73,18 @@ class Chart extends Component {
             theme,
             position,
             showLastDigitStats,
+            isFullscreen,
+            enableWidget,
         } = this.props;
 
         const currentPosition = `cq-chart-control-${(chartControlsWidgets && position && !isMobile) ? position : 'bottom'}`;
         const contextWidth =  !isMobile ? `smartcharts-${containerWidth}` : '';
         const TopWidgets = topWidgets || this.defaultTopWidgets;
         const BottomWidgets = !bottomWidgets && showLastDigitStats ? LastDigitStats : bottomWidgets;
+        const fullscreen = isFullscreen ? 'smartcharts--fullscreen' : '';
 
         return (
-            <div className={`smartcharts smartcharts-${theme} ${contextWidth}`}>
+            <div className={`smartcharts smartcharts-${theme} ${enableWidget ? 'smartcharts--widget' : ''} ${fullscreen} ${contextWidth}`}>
                 <div
                     className={`smartcharts-${isMobile ? 'mobile' : 'desktop'}`}
                     ref={this.modalNode}
@@ -109,7 +112,7 @@ class Chart extends Component {
                                                 && <PaginationLoader />
                                         }
                                         <CurrentSpot />
-                                        <Widget />
+                                        {enableWidget && <Widget /> }
                                     </RenderInsideChart>
                                     <div className="cq-top-ui-widgets">
                                         <TopWidgets />
@@ -162,4 +165,5 @@ export default connect(({ chart, drawTools, studies, chartSetting, chartType, st
     position: chartSetting.position,
     showLastDigitStats:state.showLastDigitStats,
     isOnPagination: state.isOnPagination,
+    isFullscreen: chart.isFullscreen,
 }))(Chart);

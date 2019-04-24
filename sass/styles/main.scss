@@ -140,6 +140,17 @@
             right: 100px;
         }
     }
+    &--fullscreen {
+        position: fixed;
+        top: 0px;
+        left: 0px;
+        z-index: 100;
+    }
+    &--widget {
+        .home {
+            display: none !important;
+        }
+    }
 }
 
 @import 'menu';

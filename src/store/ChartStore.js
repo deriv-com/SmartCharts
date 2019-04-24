@@ -68,6 +68,7 @@ class ChartStore {
     @observable isMobile = false;
     @observable cursorInChart = false;
     @observable shouldRenderDialogs = false;
+    @observable isFullscreen = false;
 
     get loader() { return this.mainStore.loader; }
     get routingStore() {
@@ -551,6 +552,11 @@ class ChartStore {
         * interfere with key presses outside the chart:
         */
         // ChartStore.keystrokeHub.setActiveContext(null);
+    }
+
+    @action.bound onFullScreen() {
+        this.isFullscreen = !this.isFullscreen;
+        console.log('onFullScreen', this.isFullscreen);
     }
 
     @action.bound updateCurrentActiveSymbol() {
