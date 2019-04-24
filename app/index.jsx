@@ -254,9 +254,7 @@ class App extends Component {
         this.notifier.notify(e);
     };
 
-    getChartStatus = (status) => {
-        console.log(status);
-    };
+    getChartStatus = status => status;
 
     render() {
         const { settings, isConnectionOpened, symbol, endEpoch } = this.state;
