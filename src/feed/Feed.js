@@ -36,6 +36,8 @@ class Feed {
     };
 
     onRangeChanged = () => {
+        if (this._mainStore.state.importedLayout) return;
+
         const now = this._serverTime.getEpoch();
         const periodicity = calculateTimeUnitInterval(this.granularity);
         const rangeTime = ((this.granularity || 1) * this._stx.chart.maxTicks);

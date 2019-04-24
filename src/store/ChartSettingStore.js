@@ -80,7 +80,7 @@ export default class ChartSettingStore {
     @observable theme = 'light';
     @observable countdown = false;
     @observable historical = false;
-    @observable isAutoScale = false;
+    @observable isAutoScale = true;
 
     @action.bound setSettings(settings) {
         if (settings === undefined) { return; }
