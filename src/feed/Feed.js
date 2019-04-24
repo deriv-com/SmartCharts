@@ -36,6 +36,8 @@ class Feed {
     };
 
     onRangeChanged = () => {
+        /* When layout is importing and range is changing as the same time we dont need to set the range,
+        the imported layout witll take care of it. */
         if (this._mainStore.state.importedLayout) return;
 
         const now = this._serverTime.getEpoch();
