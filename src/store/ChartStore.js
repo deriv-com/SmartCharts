@@ -401,7 +401,7 @@ class ChartStore {
 
         const stxx = this.stxx = new CIQ.ChartEngine(engineParams);
 
-        stxx.isAutoScale = settings && settings.isAutoScale || false;
+        stxx.isAutoScale = settings && settings.isAutoScale !== false;
 
         ChartStore.chartCount += 1;
 
@@ -475,7 +475,7 @@ class ChartStore {
                     this.state.symbol,
                     this.state.granularity,
                 ], () => {
-                    if (this.state.symbol !== undefined || this.state.granularity !== undefined) {
+                    if ((this.state.symbol !== undefined || this.state.granularity !== undefined) && !this.state.importedLayout) {
                         this.changeSymbol(this.state.symbol, this.state.granularity);
                     }
                 });

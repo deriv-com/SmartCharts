@@ -47,6 +47,7 @@ class ChartState {
         this.symbol = symbol;
         this.startEpoch = startEpoch;
         this.endEpoch = endEpoch;
+
         this.isAnimationEnabled = isAnimationEnabled;
         this.showLastDigitStats = showLastDigitStats;
         this.scrollToEpochOffset = scrollToEpochOffset;
@@ -69,7 +70,7 @@ class ChartState {
         if (this.stxx) {
             this.stxx.chart.panel.yAxis.drawCurrentPriceLabel = !this.endEpoch;
             this.stxx.preferences.currentPriceLine = !this.endEpoch;
-            this.stxx.isAutoScale = this.settings ? this.settings.isAutoScale : false;
+            this.stxx.isAutoScale = this.settings && settings.isAutoScale !== false;
         }
         if (this.granularity !== granularity && this.context) {
             this.granularity = granularity === null ? undefined : granularity;
@@ -149,12 +150,9 @@ class ChartState {
             layoutData = { ...layoutData, ...periodicity };
         } else {
             // update this.granularity with chartLayout
-            const { timeUnit, interval } = layoutData;
-            if (timeUnit) {
-                this.chartStore.granularity = calculateGranularity(interval, timeUnit);
-            } else {
-                this.chartStore.granularity = 86400; // 1 day
-            }
+            const { timeUnit, interval, periodicity } = layoutData;
+            const period = timeUnit ? interval : periodicity;
+            this.chartStore.granularity = calculateGranularity(period, timeUnit || interval);
         }
 
         if (this.startEpoch || this.endEpoch) {
@@ -258,7 +256,12 @@ class ChartState {
         this.mainStore.crosshair.setCrosshairState(0);
 
         // TODO: use constant
-        this.mainStore.chart.changeSymbol(this.stxx.chart.symbol, 0);
+        if (this.timeperiodStore.onGranularityChange) {
+            this.timeperiodStore.onGranularityChange(0);
+        } else {
+            this.mainStore.chart.changeSymbol(this.stxx.chart.symbol, 0);
+        }
+
         if (this.chartTypeStore.onChartTypeChanged) {
             this.chartTypeStore.onChartTypeChanged('mountain');
         } else {
@@ -268,6 +271,10 @@ class ChartState {
 
     importLayout() {
         if (!this.stxx || !this.importedLayout || !Object.keys(this.importedLayout).length) return;
+
+        // Clear current chart interval to make sure importedlayout works as expected if it has same interval
+        if (Object.keys(this.mainStore.chart.feed._activeStreams).length === 0) this.stxx.layout.interval = undefined;
+
         this.stxx.importLayout(this.importedLayout, {
             managePeriodicity: true,
             preserveTicksAndCandleWidth: true,
@@ -279,10 +286,13 @@ class ChartState {
                     });
                 }
 
-                const { timeUnit, interval } = this.importedLayout;
-                if (timeUnit && this.timeperiodStore.onGranularityChange) {
-                    const granularity = calculateGranularity(interval, timeUnit) || 0;
+                const { timeUnit, interval, periodicity } = this.importedLayout;
+                const period = timeUnit ? interval : periodicity;
+                const granularity = calculateGranularity(period, timeUnit || interval);
+                if (this.timeperiodStore.onGranularityChange) {
                     this.timeperiodStore.onGranularityChange(granularity);
+                } else {
+                    this.chartStore.granularity = granularity;
                 }
 
                 if (this.chartTypeStore.onChartTypeChanged) {
@@ -318,14 +328,13 @@ class ChartState {
     }
 
     exportLayout() {
-        if (!this.onExportLayout) return;
+        if (!this.onExportLayout || !this.stxx) return;
         const currentLayout = this.stxx.exportLayout();
         currentLayout.drawings = this.stxx.exportDrawings();
         currentLayout.series = [];
         for (const field in this.stxx.chart.series) {
             currentLayout.series.push(field);
         }
-        if (this.timeperiodStore.onGranularityChange) this.timeperiodStore.onGranularityChange(0);
         currentLayout.previousMaxTicks = this.stxx.chart.maxTicks;
 
         this.onExportLayout(currentLayout);
