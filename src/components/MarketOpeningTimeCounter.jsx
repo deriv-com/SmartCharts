@@ -1,7 +1,7 @@
 import React from 'react';
 import { displayMilliseconds } from '../utils/index';
 
-export class Timer extends React.Component {
+export class MarketOpeningTimeCounter extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -24,9 +24,17 @@ export class Timer extends React.Component {
     }
     // 86400000 = 24 hour * 60 min * 60s * 1000ms
     render() {
+        let timeUntilOpenTime = null;
+        const symbolOpenTime = this.props.symbolOpenTime.symbolOpenTime || {};
+        const openTime = symbolOpenTime.openTime || null;
+        const openTimeIsToday = symbolOpenTime ? symbolOpenTime.isToday : false;
+        if (openTime) {
+            timeUntilOpenTime = openTimeIsToday
+                ? displayMilliseconds(openTime.getTime() - this.state.time) : displayMilliseconds(86400000 - (this.state.time - openTime.getTime()));
+        }
         return (
             <span>
-                {this.props.symbolOpenTime.symbolOpenTime ? displayMilliseconds(86400000 - (this.state.time - this.props.symbolOpenTime.symbolOpenTime)) : '--'}
+                {timeUntilOpenTime}
             </span>
         );
     }
