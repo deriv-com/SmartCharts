@@ -201,14 +201,18 @@ export default class MarkerStore {
 
         this.stx.setMarkerTick(dummyMarker);
         this.tick = dummyMarker.tick;
-        if (dummyMarker.params.future && this.mainStore.chart.xaxis && this.mainStore.chart.xaxis.length > 0) {
-            this.stx.futureTickIfDisplayed(dummyMarker);
-            this.tick = dummyMarker.tick;
-            if (this.tick !== null) {
-                this.isDistantFuture = false;
+        if (dummyMarker.params.future) {
+            this.isDistantFuture = true;
+
+            if (this.mainStore.chart.xaxis && this.mainStore.chart.xaxis.length) {
+                this.stx.futureTickIfDisplayed(dummyMarker);
+                this.tick = dummyMarker.tick;
+                if (this.tick !== null) {
+                    this.isDistantFuture = false;
+                }
             } else {
-                this.isDistantFuture = true;
                 this.hideMarker();
+                return;
             }
         }
 
