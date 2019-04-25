@@ -254,26 +254,16 @@ class ChartState {
 
         // TODO: use constant
         this.mainStore.crosshair.setCrosshairState(0);
-
-        // TODO: use constant
-        if (this.timeperiodStore.onGranularityChange) {
-            this.timeperiodStore.onGranularityChange(0);
-        } else {
-            this.mainStore.chart.changeSymbol(this.stxx.chart.symbol, 0);
-        }
-
-        if (this.chartTypeStore.onChartTypeChanged) {
-            this.chartTypeStore.onChartTypeChanged('mountain');
-        } else {
-            this.chartTypeStore.setType('mountain');
-        }
     }
 
     importLayout() {
         if (!this.stxx || !this.importedLayout || !Object.keys(this.importedLayout).length) return;
 
-        // Clear current chart interval to make sure importedlayout works as expected if it has same interval
-        if (Object.keys(this.mainStore.chart.feed._activeStreams).length === 0) this.stxx.layout.interval = undefined;
+        /* Clear current chart interval to make sure importedlayout works as expected
+        if it has same interval with previous state of chart but there is no stream for it */
+        if (Object.keys(this.mainStore.chart.feed._activeStreams).length === 0) {
+            this.stxx.layout.interval = undefined;
+        }
 
         this.stxx.importLayout(this.importedLayout, {
             managePeriodicity: true,
@@ -289,10 +279,9 @@ class ChartState {
                 const { timeUnit, interval, periodicity } = this.importedLayout;
                 const period = timeUnit ? interval : periodicity;
                 const granularity = calculateGranularity(period, timeUnit || interval);
+                this.chartStore.granularity = granularity;
                 if (this.timeperiodStore.onGranularityChange) {
                     this.timeperiodStore.onGranularityChange(granularity);
-                } else {
-                    this.chartStore.granularity = granularity;
                 }
 
                 if (this.chartTypeStore.onChartTypeChanged) {
