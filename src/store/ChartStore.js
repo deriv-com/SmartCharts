@@ -402,7 +402,7 @@ class ChartStore {
 
         const stxx = this.stxx = new CIQ.ChartEngine(engineParams);
 
-        stxx.isAutoScale = settings && settings.isAutoScale || false;
+        stxx.isAutoScale = settings && settings.isAutoScale !== false;
 
         ChartStore.chartCount += 1;
 

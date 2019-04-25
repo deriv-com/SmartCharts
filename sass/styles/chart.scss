@@ -403,11 +403,14 @@ html, body {
 
 .stx-float-price,
 .stx-float-date {
-    border-radius: 3px;
     color: #fff;
     @include themify($themes) {
         background-color: themed('CrosshairLabel');
     }
+}
+
+.stx-float-price {
+    border-radius: 3px;
 }
 
 .stx-float-date { /* Crosshair Floating x-axis date label*/
@@ -415,9 +418,12 @@ html, body {
     font-size: 12px;
     font-family: 'Helvetica';
     z-index: 3;
-    padding: 1px 6px;
+    padding: 3px 6px;
     text-align: center;
     width: auto;
+    height: 18px;
+    line-height: 18px;
+    font-weight: bold;
 }
 
 .stx_crosshair { /* Standard Crosshair lines color */

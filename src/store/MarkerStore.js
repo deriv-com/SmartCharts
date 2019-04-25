@@ -16,7 +16,6 @@ export default class MarkerStore {
     @observable display;
     @observable left;
     @observable bottom;
-    get stxx() { return this.chartStore.stxx; }
 
     constructor(mainStore) {
         this.mainStore = mainStore;
@@ -67,7 +66,7 @@ export default class MarkerStore {
             return;
         }
 
-        if (this.isDistantFuture) {
+        if (this.isDistantFuture && this.mainStore.chart.xaxis && this.mainStore.chart.xaxis.length > 0) {
             const dummyMarker = this.getDummyMarker();
             this.stx.futureTickIfDisplayed(dummyMarker);
             if (dummyMarker.tick) {
@@ -91,8 +90,8 @@ export default class MarkerStore {
             // TODO: Temporary solution until ChartIQ can support displaying markers in dates with no tick data
             if (dummyMarker.params.xPositioner === 'date'
                 && !this.isDistantFuture
-                && this.stx.masterData[this.tick]
-                && this.stx.masterData[this.tick].DT.valueOf() !== dummyMarker.params.x.valueOf()
+                && this.stx.chart.dataSet[this.tick]
+                && this.stx.chart.dataSet[this.tick].DT.valueOf() !== dummyMarker.params.x.valueOf()
             ) {
                 // if the marker is not distance future but it is greater than the last item in the masterData, it will be hidden.
                 if (this.stx.masterData[this.stx.masterData.length - 1].DT.valueOf() < dummyMarker.params.x.valueOf()) {
@@ -104,7 +103,7 @@ export default class MarkerStore {
                  * Adding an invisible bar if the bar
                  * does not exist on the masterData
                  */
-                this.stxx.updateChartData(
+                this.stx.updateChartData(
                     {
                         DT: dummyMarker.params.x,
                         Close: null,
@@ -112,7 +111,7 @@ export default class MarkerStore {
                     null,
                     { fillGaps: true },
                 );
-                this.stxx.createDataSet();
+                this.stx.createDataSet();
 
                 if (this.yPositioner !== 'value' && this.yPositioner !== 'on_candle' && this.yPositioner !== 'top') {
                     this.yPositioner = 'none';
@@ -203,13 +202,17 @@ export default class MarkerStore {
         this.stx.setMarkerTick(dummyMarker);
         this.tick = dummyMarker.tick;
         if (dummyMarker.params.future) {
-            this.stx.futureTickIfDisplayed(dummyMarker);
-            this.tick = dummyMarker.tick;
-            if (this.tick !== null) {
-                this.isDistantFuture = false;
+            this.isDistantFuture = true;
+
+            if (this.mainStore.chart.xaxis && this.mainStore.chart.xaxis.length) {
+                this.stx.futureTickIfDisplayed(dummyMarker);
+                this.tick = dummyMarker.tick;
+                if (this.tick !== null) {
+                    this.isDistantFuture = false;
+                }
             } else {
-                this.isDistantFuture = true;
                 this.hideMarker();
+                return;
             }
         }
 
@@ -220,7 +223,7 @@ export default class MarkerStore {
              * Adding an invisible bar if the bar
              * does not exist on the masterData
              */
-            this.stxx.updateChartData(
+            this.stx.updateChartData(
                 {
                     DT: dummyMarker.params.x,
                     Close: null,
@@ -228,7 +231,7 @@ export default class MarkerStore {
                 null,
                 { fillGaps: true },
             );
-            this.stxx.createDataSet();
+            this.stx.createDataSet();
 
             this.stx.setMarkerTick(dummyMarker);
             this.tick = dummyMarker.tick;
