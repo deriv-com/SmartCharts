@@ -70,7 +70,7 @@ class ChartState {
         if (this.stxx) {
             this.stxx.chart.panel.yAxis.drawCurrentPriceLabel = !this.endEpoch;
             this.stxx.preferences.currentPriceLine = !this.endEpoch;
-            this.stxx.isAutoScale = this.settings ? this.settings.isAutoScale : false;
+            this.stxx.isAutoScale = this.settings && settings.isAutoScale !== false;
         }
         if (this.granularity !== granularity && this.context) {
             this.granularity = granularity === null ? undefined : granularity;
