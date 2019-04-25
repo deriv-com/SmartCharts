@@ -23,6 +23,12 @@
             @include themify($themes) {
                 background-color: themed('WidgetBg');
             }
+
+            svg {
+                @include themify($themes) {
+                    fill: themed('WidgetColor');
+                }
+            }
         }
     }
 }
