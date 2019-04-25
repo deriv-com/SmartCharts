@@ -7,6 +7,7 @@ import { CategoricalDisplay } from '../components/categoricaldisplay';
 import AnimatedPrice from '../components/AnimatedPrice.jsx';
 import { ChartPrice, SymbolSelectButton } from '../components/SymbolSelectButton.jsx';
 import { connect } from './Connect';
+import ServerTime from '../utils/ServerTime';
 
 export default class ChartTitleStore {
     constructor(mainStore) {
@@ -21,6 +22,7 @@ export default class ChartTitleStore {
             favoritesId: 'chartTitle&Comparison',
             mainStore,
         });
+        this.serverTime = ServerTime.getInstance();
 
         this.ChartTitleMenu = this.menu.connect(Menu);
         this.MarketSelector = this.categoricalDisplay.connect(CategoricalDisplay);
@@ -54,7 +56,7 @@ export default class ChartTitleStore {
     @computed get symbolOpenTime() {
         const times = this.tradingTimes._tradingTimesMap[this.currentSymbol.symbol].times;
         const openTime = times ? times[0].open : null;
-        const now = new Date().getTime();
+        const now = this.serverTime.getLocalDate().getTime();
         const isToday = openTime ? openTime.getTime() > now : false;
         return { openTime, isToday };
     }

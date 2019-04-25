@@ -1,11 +1,14 @@
 import React from 'react';
 import { displayMilliseconds } from '../utils/index';
+import ServerTime from '../utils/ServerTime';
 
 export class MarketOpeningTimeCounter extends React.Component {
     constructor(props) {
         super(props);
+        this.serverTime = ServerTime.getInstance();
+
         this.state = {
-            time: new Date().getTime(),
+            time: this.serverTime.getLocalDate().getTime(),
         };
     }
     componentDidMount() {
@@ -19,7 +22,7 @@ export class MarketOpeningTimeCounter extends React.Component {
     }
     tick() {
         this.setState({
-            time: new Date().getTime(),
+            time: this.serverTime.getLocalDate().getTime(),
         });
     }
     // 86400000 = 24 hour * 60 min * 60s * 1000ms
