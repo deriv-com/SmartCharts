@@ -20,6 +20,7 @@
             cursor: pointer;
             margin: auto;
             line-height: 41px;
+            transition: none;
             @include themify($themes) {
                 background-color: themed('WidgetBg');
             }
