@@ -200,8 +200,9 @@ class Feed {
             getHistoryOnly = true;
         }
 
-        this._mainStore.state.setChartClosed(!this._tradingTimes.isMarketOpened(symbol));
-        this._mainStore.state.setChartTheme(this._mainStore.chartSetting.theme, !this._tradingTimes.isMarketOpened(symbol));
+        const isChartClosed = !this._tradingTimes.isMarketOpened(symbol);
+        this._mainStore.state.setChartClosed(isChartClosed);
+        this._mainStore.state.setChartTheme(this._mainStore.chartSetting.theme, isChartClosed);
 
         if (getHistoryOnly) {
             const response = await this._binaryApi.getTickHistory(tickHistoryRequest);
