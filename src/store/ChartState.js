@@ -46,7 +46,7 @@ class ChartState {
         this.settings = settings;
         this.isConnectionOpened = isConnectionOpened;
         this.chartStatusListener = chartStatusListener;
-        this.status = 'loading';
+        this.chartStatus = false;
         this.symbol = symbol;
         this.startEpoch = startEpoch;
         this.endEpoch = endEpoch;
@@ -113,9 +113,9 @@ class ChartState {
         this.paginationEndEpoch = this.isOnPagination ? end : null;
     }
 
-    @action.bound setChartStatus(status) {
-        if (this.status !== status) {
-            this.status = status;
+    @action.bound setChartIsReady(status) {
+        if (this.chartStatus !== status) {
+            this.chartStatus = status;
             this.chartStatusListener(status);
         }
     }
@@ -184,7 +184,7 @@ class ChartState {
                 this.restoreDrawings(this.stxx, this.stxx.chart.symbol);
                 if (this.chartStore.loader) {
                     this.chartStore.loader.hide();
-                    this.mainStore.state.setChartStatus('ready');
+                    this.mainStore.state.setChartIsReady(true);
                     this.stxx.home();
                 }
 

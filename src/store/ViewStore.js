@@ -83,7 +83,7 @@ export default class ViewStore {
         if (this.loader) {
             this.loader.show();
         }
-        this.mainStore.state.setChartStatus('loading');
+        this.mainStore.state.setChartIsReady(false);
         const stx = this.stx;
 
         const importLayout = () => {
@@ -91,7 +91,7 @@ export default class ViewStore {
                 stx.changeOccurred('layout');
                 this.mainStore.studies.updateActiveStudies();
                 if (this.loader) { this.loader.hide(); }
-                this.mainStore.state.setChartStatus('ready');
+                this.mainStore.state.setChartIsReady(true);
             };
             stx.importLayout(ViewStore.views[idx].layout, {
                 managePeriodicity: true,
