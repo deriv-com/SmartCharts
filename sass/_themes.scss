@@ -50,7 +50,9 @@ $themes: (
         ChartBorder: $COLOR_LIGHT_GRAY_1,
         ChartText: $COLOR_DARK_GRAY_3,
         ChartCandleBg: $COLOR_ORANGE,
+        ChartCandleBgClosed: $COLOR_LIGHT_BLACK_3_SOLID_1,
         ChartCandleText: $COLOR_WHITE,
+        ChartCandleTextClosed: $COLOR_LIGHT_BLACK_3,
         ChartGrid: $COLOR_LIGHT_BLACK_4,
         ChartIndicateText: $COLOR_LIGHT_GRAY,
         ChartIndicateDivide: $COLOR_LIGHT_GRAY,
@@ -231,7 +233,9 @@ $themes: (
         ChartBorder: $COLOR_WHITE,
         ChartText: $COLOR_DARK_GRAY_3,
         ChartCandleBg: $COLOR_ORANGE,
+        ChartCandleBgClosed: $COLOR_DARK_GRAY_2,
         ChartCandleText: $COLOR_WHITE,
+        ChartCandleTextClosed: $COLOR_LIGHT_GRAY_30,
         ChartGrid: $COLOR_DARK_BLUE_3,
         ChartIndicateText: $COLOR_WHITE,
         ChartIndicateDivide: $COLOR_DARK_GRAY_3,
@@ -425,4 +429,8 @@ $themes: (
     darkchartgrid: map-get(map-get($themes, 'dark'), 'ChartGrid');
     lightchartmountainborder: map-get(map-get($themes, 'light'), 'ChartMountainBorder');
     darkchartmountainborder: map-get(map-get($themes, 'dark'), 'ChartMountainBorder');
+    lightcandletextclosed: map-get(map-get($themes, 'light'), 'ChartCandleTextClosed');
+    darkcandletextclosed: map-get(map-get($themes, 'dark'), 'ChartCandleTextClosed');
+    lightcandlebgclosed: map-get(map-get($themes, 'light'), 'ChartCandleBgClosed');
+    darkcandlebgclosed: map-get(map-get($themes, 'dark'), 'ChartCandleBgClosed');
 }
