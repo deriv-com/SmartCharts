@@ -475,7 +475,7 @@ class ChartStore {
                     this.state.symbol,
                     this.state.granularity,
                 ], () => {
-                    if ((this.state.symbol !== undefined || this.state.granularity !== undefined) && !this.state.importedLayout) {
+                    if (this.state.symbol !== undefined || (this.state.granularity !== undefined && !this.state.importedLayout)) {
                         this.changeSymbol(this.state.symbol, this.state.granularity);
                     }
                 });
