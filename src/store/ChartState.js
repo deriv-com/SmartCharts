@@ -184,7 +184,7 @@ class ChartState {
                 this.restoreDrawings(this.stxx, this.stxx.chart.symbol);
                 if (this.chartStore.loader) {
                     this.chartStore.loader.hide();
-                    this.mainStore.state.setChartStatus('ready');
+                    this.setChartStatus('ready');
                     this.stxx.home();
                 }
 
