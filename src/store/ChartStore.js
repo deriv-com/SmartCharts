@@ -475,7 +475,8 @@ class ChartStore {
                     this.state.symbol,
                     this.state.granularity,
                 ], () => {
-                    if ((this.state.symbol !== undefined || this.state.granularity !== undefined) && !this.state.importedLayout) {
+                    console.log('reaction', this.state.symbol, this.state.importedLayout);
+                    if (this.state.symbol !== undefined || (this.state.granularity !== undefined && !this.state.importedLayout)) {
                         this.changeSymbol(this.state.symbol, this.state.granularity);
                     }
                 });
@@ -566,6 +567,8 @@ class ChartStore {
     }
 
     @action.bound changeSymbol(symbolObj, granularity) {
+        console.log('change symbol', symbolObj);
+
         if (typeof symbolObj === 'string') {
             symbolObj = this.activeSymbols.getSymbolObj(symbolObj);
         }
