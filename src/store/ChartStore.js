@@ -68,6 +68,7 @@ class ChartStore {
     @observable isMobile = false;
     @observable cursorInChart = false;
     @observable shouldRenderDialogs = false;
+    @observable yAxiswidth = 0;
 
     get loader() { return this.mainStore.loader; }
     get routingStore() {
@@ -76,6 +77,8 @@ class ChartStore {
     get stateStore() {
         return this.mainStore.state;
     }
+
+    @computed get pip() { return this.currentActiveSymbol.decimal_places; }
 
     updateHeight(position) {
         const historicalMobile = this.mainStore.chartSetting.historical && this.isMobile;
@@ -314,6 +317,15 @@ class ChartStore {
             }
             let yaxisLabelStyle = this.yaxisLabelStyle;
             if (yax.yaxisLabelStyle) yaxisLabelStyle = yax.yaxisLabelStyle;
+
+            // try to place price label in the y-axis
+            width -= 16;
+            x += 24;
+            if (this.chart.yAxis.width < width) {
+                this.chart.yAxis.width = width;
+                this.calculateYAxisPositions();
+            }
+
             const params = {
                 ctx:context,
                 x,
@@ -325,7 +337,7 @@ class ChartStore {
                 backgroundColor,
                 fill: true,
                 stroke: false,
-                margin:{ left: 8, top: 1 },
+                margin:{ left: 0, top: 1 },
                 txt,
                 color,
             };
@@ -610,6 +622,19 @@ class ChartStore {
         });
     }
 
+    @action.bound calculateYaxisWidth = (price) => {
+        const { context } = this.context.stx.chart;
+
+        const priceWidth = context.measureText(price.toFixed(this.pip)).width + 20;
+        if (priceWidth > this.yAxiswidth) {
+            this.yAxiswidth = priceWidth;
+
+            this.stxx.chart.yAxis.width = priceWidth;
+            this.stxx.calculateYAxisPositions();
+            this.stxx.draw();
+        }
+    }
+
     // Calling newChart with symbolObj as undefined refreshes the chart
     @action.bound newChart(symbolObj = this.currentActiveSymbol, params) {
         this.stxx.chart.symbolDisplay = symbolObj.name;
@@ -623,7 +648,10 @@ class ChartStore {
                 return;
             }
             this.state.restoreDrawings();
+            const { Close } = this.context.stx.currentQuote();
+            this.calculateYaxisWidth(Close);
         };
+        this.yAxiswidth = 0;
         const rangeSpan = this.getRangeSpan();
         this.stxx.newChart(symbolObj, null, null, onChartLoad, { ...params, ...rangeSpan });
     }

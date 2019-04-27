@@ -114,22 +114,26 @@ export default class BarrierStore {
     _setupConstrainBarrierPrices() {
         // barrier 1 cannot go below barrier 2
         this._high_barrier.priceConstrainer = (newPrice) => {
+            let nextPrice = newPrice;
             if (this._low_barrier.visible) {
                 if (newPrice < this._low_barrier.realPrice) {
-                    return this._high_barrier.realPrice;
+                    nextPrice = this._high_barrier.realPrice;
                 }
             }
+            this.mainStore.chart.calculateYaxisWidth(nextPrice);
 
-            return newPrice;
+            return nextPrice;
         };
 
         // barrier 2 cannot go above barrier 1
         this._low_barrier.priceConstrainer = (newPrice) => {
+            let nextPrice = newPrice;
             if (newPrice > this._high_barrier.realPrice) {
-                return this._low_barrier.realPrice;
+                nextPrice = this._low_barrier.realPrice;
             }
+            this.mainStore.chart.calculateYaxisWidth(nextPrice);
 
-            return newPrice;
+            return nextPrice;
         };
     }
 

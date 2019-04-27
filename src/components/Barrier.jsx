@@ -14,16 +14,17 @@ const Barrier = ({
     hidePriceLines,
     lineStyle,
     isInitialized,
+    yAxiswidth,
 }) => (isInitialized && (
     <div
         className={`barrier ${hidePriceLines ? 'hide-pricelines' : ''}`}
         style={{ '--shade-color': shadeColor }}
     >
-        <HighPriceLine lineStyle={lineStyle} color={color} foregroundColor={foregroundColor} />
-        <LowPriceLine  lineStyle={lineStyle} color={color} foregroundColor={foregroundColor} />
-        <AboveShade />
-        <BetweenShade />
-        <BelowShade />
+        <HighPriceLine width={yAxiswidth} lineStyle={lineStyle} color={color} foregroundColor={foregroundColor} />
+        <LowPriceLine  width={yAxiswidth} lineStyle={lineStyle} color={color} foregroundColor={foregroundColor} />
+        <AboveShade right={yAxiswidth} />
+        <BetweenShade right={yAxiswidth} />
+        <BelowShade right={yAxiswidth} />
     </div>
 ));
 
