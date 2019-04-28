@@ -227,10 +227,12 @@ class ChartState {
                 );
                 this.stxx.createDataSet();
             }
+
             this.stxx.chart.lockScroll = true;
             const tick = this.stxx.tickFromDate(startEntry.DT);
-            this.stxx.chart.scroll = this.stxx.chart.dataSet.length - tick;
-            this.stxx.setMaxTicks(3);
+            const tickLeft = this.stxx.chart.dataSet.length - tick;
+            this.stxx.chart.scroll = tickLeft;
+            this.stxx.setMaxTicks(tickLeft > 3 ? tickLeft : 3);
             this.stxx.draw();
         } else {
             this.stxx.chart.lockScroll = false;

@@ -8,12 +8,12 @@ const Widget = ({
     zoomIn,
     zoomOut,
     home,
-    fullscreen,
+    onScale,
 }) => (
     <div
         className="cq-widget"
     >
-        <div className="cq-widget__item" onClick={fullscreen}>
+        <div className="cq-widget__item" onClick={onScale}>
             <ScaleFullIcon />
         </div>
         <div className="cq-widget__item" onClick={home}>
@@ -30,5 +30,5 @@ export default connect(({ chartSize, widget }) => ({
     zoomIn: chartSize.zoomIn,
     zoomOut: chartSize.zoomOut,
     home: widget.onHome,
-    fullscreen: widget.onFullscreen,
+    onScale: widget.onScale,
 }))(Widget);
