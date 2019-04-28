@@ -60,7 +60,7 @@ import Success from '../../sass/icons/alert message/success.svg';
 import Info from '../../sass/icons/alert message/info.svg';
 
 import Home from '../../sass/icons/widgets/ic-home.svg';
-import ScaleFull from '../../sass/icons/widgets/ic-scale-full.svg';
+import Scale from '../../sass/icons/widgets/ic-scale-full.svg';
 
 import SymbolPlaceholder from '../../sass/icons/placeholder/ic-placeholder.svg';
 import AUD from '../../sass/icons/flags/aud.svg';
@@ -185,7 +185,7 @@ export const PositionBottomIcon = Wrapper(PositionBottom);
 export const BackIcon = Wrapper(Back);
 
 export const HomeIcon = Wrapper(Home);
-export const ScaleFullIcon = Wrapper(ScaleFull);
+export const ScaleIcon = Wrapper(Scale);
 
 export const MetalIcon = Wrapper(Metal);
 

@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from '../store/Connect';
 import '../../sass/components/_ciq-widget.scss';
 
-import { ZoomInIcon, ZoomOutIcon, HomeIcon, ScaleFullIcon } from './Icons.jsx';
+import { ZoomInIcon, ZoomOutIcon, HomeIcon, ScaleIcon } from './Icons.jsx';
 
 const Widget = ({
     zoomIn,
@@ -14,7 +14,7 @@ const Widget = ({
         className="cq-widget"
     >
         <div className="cq-widget__item" onClick={onScale}>
-            <ScaleFullIcon />
+            <ScaleIcon />
         </div>
         <div className="cq-widget__item" onClick={home}>
             <HomeIcon />
