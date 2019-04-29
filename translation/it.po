@@ -7,10 +7,10 @@ msgstr ""
 "X-Crowdin-File: /dev/translation/messages.pot\n"
 "Project-Id-Version: smartcharts\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Last-Translator: binarycom <jy@binary.com>\n"
+"Last-Translator: binarycom\n"
 "Language-Team: Italian\n"
 "Language: it_IT\n"
-"PO-Revision-Date: 2019-03-04 15:08\n"
+"PO-Revision-Date: 2019-04-26 10:05\n"
 
 msgid " already exists."
 msgstr "Già esistente."
@@ -166,13 +166,13 @@ msgid "Gartley"
 msgstr "Gartley"
 
 msgid "H"
-msgstr "A"
+msgstr "M"
 
 msgid "Heikin Ashi"
 msgstr "Heikin Ashi"
 
 msgid "High"
-msgstr "Alto"
+msgstr "Massimo"
 
 msgid "HIGH"
 msgstr "MASSIMO"
@@ -214,7 +214,7 @@ msgid "Line Break"
 msgstr "Line Break"
 
 msgid "Low"
-msgstr "Basso"
+msgstr "Minimo"
 
 msgid "LOW"
 msgstr "MINIMO"
