@@ -22,9 +22,9 @@ const Barrier = ({
     >
         <HighPriceLine width={yAxiswidth} lineStyle={lineStyle} color={color} foregroundColor={foregroundColor} />
         <LowPriceLine  width={yAxiswidth} lineStyle={lineStyle} color={color} foregroundColor={foregroundColor} />
-        <AboveShade right={yAxiswidth} />
-        <BetweenShade right={yAxiswidth} />
-        <BelowShade right={yAxiswidth} />
+        <AboveShade />
+        <BetweenShade />
+        <BelowShade />
     </div>
 ));
 
