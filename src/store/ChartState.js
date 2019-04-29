@@ -46,7 +46,7 @@ class ChartState {
         this.settings = settings;
         this.isConnectionOpened = isConnectionOpened;
         this.chartStatusListener = chartStatusListener;
-        this.chartStatus = false;
+        this.isChartReady = false;
         this.symbol = symbol;
         this.startEpoch = startEpoch;
         this.endEpoch = endEpoch;
