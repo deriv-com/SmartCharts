@@ -113,10 +113,10 @@ class ChartState {
         this.paginationEndEpoch = this.isOnPagination ? end : null;
     }
 
-    @action.bound setChartIsReady(status) {
-        if (this.chartStatus !== status) {
-            this.chartStatus = status;
-            this.chartStatusListener(status);
+    @action.bound setChartIsReady(isChartReady) {
+        if (this.isChartReady !== isChartReady) {
+            this.isChartReady = isChartReady;
+            this.chartStatusListener(isChartReady);
         }
     }
 
