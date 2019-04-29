@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom\n"
 "Language-Team: Italian\n"
 "Language: it_IT\n"
-"PO-Revision-Date: 2019-04-26 10:05\n"
+"PO-Revision-Date: 2019-04-29 13:53\n"
 
 msgid " already exists."
 msgstr "Già esistente."
@@ -376,7 +376,7 @@ msgid "Vertical"
 msgstr "Verticale"
 
 msgid "Would you like to overwrite it?"
-msgstr "Desideri sovrascrivere?"
+msgstr "Desideri sovrascriverlo?"
 
 msgid "Zoom in"
 msgstr "Zoom avanti"
