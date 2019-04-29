@@ -129,9 +129,9 @@ class ChartState {
             this.stxx.setStyle('stx_bar_down', 'color', closedChartColor);
             this.stxx.setStyle('stx_bar_even', 'color', closedChartColor);
             // candle chart
-            this.stxx.setStyle('stx_candle_up', 'color', closedChartColor);
-            this.stxx.setStyle('stx_candle_down', 'color', closedChartColor);
-            this.stxx.setStyle('stx_candle_even', 'color', closedChartColor);
+            this.stxx.setStyle('stx_candle_up', 'color', Theme[`${theme}chartclosedcandle`]);
+            this.stxx.setStyle('stx_candle_down', 'color', Theme[`${theme}chartclosedcandle`]);
+            this.stxx.setStyle('stx_candle_even', 'color', Theme[`${theme}chartclosedcandle`]);
             // candle wick
             this.stxx.setStyle('stx_candle_shadow_up', 'color', closedChartColor);
             this.stxx.setStyle('stx_candle_shadow_down', 'color', closedChartColor);
