@@ -72,7 +72,6 @@ class Chart extends Component {
             theme,
             position,
             showLastDigitStats,
-            yAxiswidth,
         } = this.props;
 
         const currentPosition = `cq-chart-control-${(chartControlsWidgets && position && !isMobile) ? position : 'bottom'}`;
@@ -97,7 +96,6 @@ class Chart extends Component {
                                     <RenderInsideChart at="holder">
                                         {barriers.map((barr, idx) => (
                                             <Barrier
-                                                yAxiswidth={yAxiswidth}
                                                 key={`barrier-${idx}`} // eslint-disable-line react/no-array-index-key
                                                 {...barr}
                                             />
@@ -163,5 +161,4 @@ export default connect(({ chart, drawTools, studies, chartSetting, chartType, st
     position: chartSetting.position,
     showLastDigitStats:state.showLastDigitStats,
     isOnPagination: state.isOnPagination,
-    yAxiswidth: chart.yAxiswidth,
 }))(Chart);

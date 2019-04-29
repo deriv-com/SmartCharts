@@ -43,6 +43,7 @@ export default connect(
         lineStyle: store.lineStyle,
         isInitialized: store.isInitialized,
         destructor: store.destructor,
+        yAxiswidth: store.yAxiswidth,
     }),
     BarrierStore,
 )(Barrier);

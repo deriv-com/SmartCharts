@@ -319,8 +319,8 @@ class ChartStore {
             if (yax.yaxisLabelStyle) yaxisLabelStyle = yax.yaxisLabelStyle;
 
             // try to place price label in the y-axis
-            width -= 16;
-            x += 24;
+            width -= 14;
+            x += 22;
             if (this.chart.yAxis.width < width) {
                 this.chart.yAxis.width = width;
                 this.calculateYAxisPositions();
