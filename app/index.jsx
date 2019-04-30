@@ -252,7 +252,9 @@ class App extends Component {
 
     onMessage = (e) => {
         this.notifier.notify(e);
-    }
+    };
+
+    getIsChartReady = isChartReady => isChartReady;
 
     render() {
         const { settings, isConnectionOpened, symbol, endEpoch } = this.state;
@@ -260,6 +262,7 @@ class App extends Component {
         return (
             <SmartChart
                 id={chartId}
+                chartStatusListener={isChartReady => this.getIsChartReady(isChartReady)}
                 symbol={symbol}
                 isMobile={isMobile}
                 onMessage={this.onMessage}
