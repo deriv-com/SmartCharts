@@ -141,9 +141,9 @@ class ChartState {
             this.stxx.setStyle('stx_candle_shadow_down', 'color', closedChartColor);
             this.stxx.setStyle('stx_candle_shadow_even', 'color', closedChartColor);
             // hollow candle
-            this.stxx.setStyle('stx_hollow_candle_up', 'color', closedChartColor);
-            this.stxx.setStyle('stx_hollow_candle_down', 'color', closedChartColor);
-            this.stxx.setStyle('stx_hollow_candle_even', 'color', closedChartColor);
+            this.stxx.setStyle('stx_hollow_candle_up', 'color', Theme[`${theme}chartclosedcandle`]);
+            this.stxx.setStyle('stx_hollow_candle_down', 'color', Theme[`${theme}chartclosedcandle`]);
+            this.stxx.setStyle('stx_hollow_candle_even', 'color', Theme[`${theme}chartclosedcandle`]);
             // baseline chart
             this.stxx.setStyle('stx_baseline_up', 'color', closedChartColor);
             this.stxx.setStyle('stx_baseline_down', 'color', closedChartColor);
