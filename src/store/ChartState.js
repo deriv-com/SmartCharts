@@ -37,6 +37,7 @@ class ChartState {
         this.stxx.addEventListener('layout', this.saveLayout.bind(this));
         this.stxx.addEventListener('symbolChange', this.saveLayout.bind(this));
         this.stxx.addEventListener('drawing', this.saveDrawings.bind(this));
+        this.stxx.addEventListener('move', this.scrollListener.bind(this));
 
         this.chartStore.feed.onStartPagination(this.setOnPagination.bind(this));
         this.chartStore.feed.onPagination(this.setOnPagination.bind(this));
@@ -287,8 +288,8 @@ class ChartState {
             }
             this.stxx.chart.lockScroll = true;
             const tick = this.stxx.tickFromDate(startEntry.DT);
-            this.stxx.chart.scroll = this.stxx.chart.dataSet.length - tick;
-            this.stxx.setMaxTicks(3);
+            this.stxx.setMaxTicks(5, { padding: 150 });
+            this.stxx.chart.scroll = this.stxx.chart.dataSet.length - tick + 1;
             this.stxx.draw();
         } else {
             this.stxx.chart.lockScroll = false;
@@ -385,6 +386,14 @@ class ChartState {
         currentLayout.previousMaxTicks = this.stxx.chart.maxTicks;
 
         this.onExportLayout(currentLayout);
+    }
+
+    scrollListener({ grab }) {
+        if (grab && this.stxx.chart.lockScroll) {
+            this.stxx.chart.lockScroll = false;
+            this.stxx.setMaxTicks(this.stxx.maxTicks - (150 / this.stxx.layout.candleWidth), { padding: 0 });
+            this.stxx.home();
+        }
     }
 }
 
