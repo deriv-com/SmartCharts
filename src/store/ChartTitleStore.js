@@ -58,7 +58,6 @@ export default class ChartTitleStore {
         const now = this.serverTime.getLocalDate().getTime();
         const timeAfterNow = times ? times.find(time => time.open.getTime() > now) : null;
         const openTime = timeAfterNow;
-        console.log(this.tradingTimes._tradingTimesMap[this.currentSymbol.symbol]);
 
         return { openTime };
     }
