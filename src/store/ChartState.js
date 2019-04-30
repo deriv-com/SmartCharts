@@ -163,6 +163,7 @@ class ChartState {
             this.stxx.setStyle('stx_current_hr_up', 'background-color', Theme[`${theme}candlebgclosed`]);
         } else {
             this.stxx.setStyle('stx_mountain_chart', 'borderTopColor', Theme[`${theme}chartmountainborder`]);
+            this.stxx.setStyle('stx_line_chart', 'color', Theme[`${theme}chartmountainborder`]);
         }
         this.stxx.draw();
     }
