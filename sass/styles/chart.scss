@@ -940,7 +940,19 @@ $spot-color: #0298d3;
             transform: translateX(-50%);
             @include themify($themes) {
                 background-color: themed('ChartCandleBg');
-                color: themed('DefaultMain');
+                color: themed('ChartCandleText');
+            }
+        }
+    }
+}
+
+.closed-chart {
+    .cq-spot {
+        animation: none;
+
+        &:before {
+            @include themify($themes) {
+                color: themed('ChartCandleBgClosed');
             }
         }
     }
