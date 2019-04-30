@@ -30,10 +30,8 @@ export class MarketOpeningTimeCounter extends React.Component {
         let timeUntilOpenTime = null;
         const symbolOpenTime = this.props.symbolOpenTime.symbolOpenTime || {};
         const openTime = symbolOpenTime.openTime || null;
-        const openTimeIsToday = symbolOpenTime ? symbolOpenTime.isToday : false;
         if (openTime) {
-            timeUntilOpenTime = openTimeIsToday
-                ? displayMilliseconds(openTime.getTime() - this.state.time) : displayMilliseconds(86400000 - (this.state.time - openTime.getTime()));
+            timeUntilOpenTime = displayMilliseconds(openTime.getTime() - this.state.time);
         }
         return (
             <span>

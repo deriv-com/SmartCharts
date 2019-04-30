@@ -55,10 +55,12 @@ export default class ChartTitleStore {
     @computed get tradingTimes() { return this.mainStore.chart.tradingTimes; }
     @computed get symbolOpenTime() {
         const times = this.tradingTimes._tradingTimesMap[this.currentSymbol.symbol].times;
-        const openTime = times ? times[0].open : null;
         const now = this.serverTime.getLocalDate().getTime();
-        const isToday = openTime ? openTime.getTime() > now : false;
-        return { openTime, isToday };
+        const timeAfterNow = times ? times.find(time => time.open.getTime() > now) : null;
+        const openTime = timeAfterNow;
+        console.log(this.tradingTimes._tradingTimesMap[this.currentSymbol.symbol]);
+
+        return { openTime };
     }
 
     onContextReady = () => {
