@@ -10,6 +10,7 @@ class ChartState {
     @observable endEpoch;
     @observable symbol;
     @observable isConnectionOpened;
+    @observable chartStatusListener;
     @observable settings;
     @observable showLastDigitStats;
     @observable scrollToEpoch;
@@ -43,10 +44,12 @@ class ChartState {
         this.chartStore.feed.onPagination(this.setOnPagination.bind(this));
     };
 
-    @action.bound updateProps({ id, settings, isConnectionOpened, symbol, granularity, chartType, startEpoch, endEpoch, onExportLayout, clearChart, importedLayout, removeAllComparisons, isAnimationEnabled = true, showLastDigitStats = false, scrollToEpoch, scrollToEpochOffset = 0, zoom, chartControlsWidgets }) {
+    @action.bound updateProps({ id, settings, isConnectionOpened, chartStatusListener, symbol, granularity, chartType, startEpoch, endEpoch, onExportLayout, clearChart, importedLayout, removeAllComparisons, isAnimationEnabled = true, showLastDigitStats = false, scrollToEpoch, scrollToEpochOffset = 0, zoom, chartControlsWidgets }) {
         this.chartId = id;
         this.settings = settings;
         this.isConnectionOpened = isConnectionOpened;
+        this.chartStatusListener = chartStatusListener;
+        this.isChartReady = false;
         this.symbol = symbol;
         this.startEpoch = startEpoch;
         this.endEpoch = endEpoch;
@@ -169,6 +172,13 @@ class ChartState {
         this.paginationEndEpoch = this.isOnPagination ? end : null;
     }
 
+    @action.bound setChartIsReady(isChartReady) {
+        if (this.isChartReady !== isChartReady) {
+            this.isChartReady = isChartReady;
+            this.chartStatusListener(isChartReady);
+        }
+    }
+
     saveLayout() {
         if (!this.chartId) return;
         const layoutData = this.stxx.exportLayout(true);
@@ -233,6 +243,7 @@ class ChartState {
                 this.restoreDrawings(this.stxx, this.stxx.chart.symbol);
                 if (this.chartStore.loader) {
                     this.chartStore.loader.hide();
+                    this.setChartIsReady(true);
                     this.stxx.home();
                 }
 

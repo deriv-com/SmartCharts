@@ -71,6 +71,7 @@ class Feed {
             }
             this._mainStore.state.saveLayout();
             this.loader.hide();
+            this._mainStore.state.setChartIsReady(true);
         });
     };
 
@@ -94,6 +95,7 @@ class Feed {
         if (this._mainStore.state.scrollToEpoch) {
             // this._mainStore.state.scrollChartToLeft();
         }
+        this._mainStore.state.setChartIsReady(true);
     }
 
     // although not used, subscribe is overridden so that unsubscribe will be called by ChartIQ
