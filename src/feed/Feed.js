@@ -83,8 +83,8 @@ class Feed {
                 this._stx.draw();
             } else {
                 this._stx.chart.isDisplayFullMode = false;
-                this._stx.setMaxTicks(this._stx.chart.dataSet.length);
-                this._stx.chart.scroll = this._stx.chart.dataSet.length; // + (this._stx.chart.maxTicks - this._stx.chart.dataSet);
+                this._stx.setMaxTicks(this._stx.chart.dataSet.length + 2);
+                this._stx.scrollTo(this._stx.chart, this._stx.chart.dataSet.length + 1);
                 this._stx.chart.lockScroll = false;
 
                 this._stx.draw();
