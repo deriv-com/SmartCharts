@@ -239,7 +239,10 @@ html,body{-ms-touch-action:none;margin:0px}
 .cq-spot.cq-endpoint:before{content:'\25CF';font-size:18px;color:#0298d3;position:relative;left:-2.3px;line-height:5px;display:none}
 .cq-spot.cq-endpoint .cq-endpoint-label{width:145px;padding:1px 9px;border-radius:4px;position:absolute;top:calc(100% - 22px);-webkit-transform:translateX(-50%);transform:translateX(-50%)}
 .smartcharts-light .cq-spot.cq-endpoint .cq-endpoint-label{background-color:#f93;color:#fff}
-.smartcharts-dark .cq-spot.cq-endpoint .cq-endpoint-label{background-color:#f93;color:#2a3052}
+.smartcharts-dark .cq-spot.cq-endpoint .cq-endpoint-label{background-color:#f93;color:#fff}
+.closed-chart .cq-spot{-webkit-animation:none;animation:none}
+.smartcharts-light .closed-chart .cq-spot:before{color:#d6d6d6}
+.smartcharts-dark .closed-chart .cq-spot:before{color:#303342}
 @-webkit-keyframes pulse{0%{box-shadow:0 0 0 0 rgba(255,153,51,0.6)}70%{box-shadow:0 0 0 10px rgba(255,153,51,0)}100%{box-shadow:0 0 0 0 rgba(255,153,51,0)}}
 @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(255,153,51,0.6)}70%{box-shadow:0 0 0 10px rgba(255,153,51,0)}100%{box-shadow:0 0 0 0 rgba(255,153,51,0)}}
 .smartcharts-mobile .mSticky{background:none}
