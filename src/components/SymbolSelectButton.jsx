@@ -57,7 +57,7 @@ const ClosedSymbol = symbolOpenTime => (
     <div className="cq-chart-closed">
         <TimeIcon className="cq-closed-icon" />
         <div className="cq-closed-opening">
-            {t.translate('Opens in: ')}
+            {t.translate('Opens in:')} &nbsp;
             <span className="cq-closed-opening-time"><MarketOpeningTimeCounter symbolOpenTime={symbolOpenTime} /></span>
         </div>
     </div>
