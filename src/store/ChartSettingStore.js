@@ -4,7 +4,6 @@ import MenuStore from './MenuStore';
 import { FlagIcons } from '../components/Icons.jsx';
 import Menu from '../components/Menu.jsx';
 import { logEvent, LogCategories, LogActions } from '../utils/ga';
-import Theme from '../../sass/_themes.scss';
 
 export default class ChartSettingStore {
     constructor(mainStore) {
@@ -125,10 +124,7 @@ export default class ChartSettingStore {
         this.theme = theme;
 
         if (this.context) {
-            this.stx.clearStyles();
-            this.stx.setStyle('stx_grid', 'color', Theme[`${theme}chartgrid`]);
-            this.stx.setStyle('stx_mountain_chart', 'borderTopColor', Theme[`${theme}chartmountainborder`]);
-            this.stx.draw();
+            this.mainStore.state.setChartTheme(theme);
         }
         logEvent(LogCategories.ChartControl, LogActions.ChartSetting, `Change theme to ${theme}`);
         this.saveSetting();

@@ -1,11 +1,15 @@
-import { maintainSpanSize }     from './resizing';
-import { drawCurrentPriceLine } from './currentHR';
-import { maintainHeadsUpHR } from './headsUpHR';
+import { drawCurrentPriceLine }   from './currentHR';
+import { maintainHeadsUpHR }      from './headsUpHR';
+import { manageMasterDataLength } from './manageMasterDataLength';
+import { maintainSpanSize }       from './resizing';
+import { setMaxTicks }            from './setMaxTicks';
 
 const inject = () => {
-    maintainSpanSize();
     drawCurrentPriceLine();
     maintainHeadsUpHR();
+    maintainSpanSize();
+    manageMasterDataLength();
+    setMaxTicks();
 };
 
 export default inject;

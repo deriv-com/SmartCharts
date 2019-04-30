@@ -84,8 +84,8 @@ class Feed {
                 this._stx.draw();
             } else {
                 this._stx.chart.isDisplayFullMode = false;
-                this._stx.setMaxTicks(this._stx.chart.dataSet.length);
-                this._stx.chart.scroll = this._stx.chart.dataSet.length; // + (this._stx.chart.maxTicks - this._stx.chart.dataSet);
+                this._stx.setMaxTicks(this._stx.chart.dataSet.length + 2);
+                this._stx.scrollTo(this._stx.chart, this._stx.chart.dataSet.length + 1);
                 this._stx.chart.lockScroll = false;
 
                 this._stx.draw();
@@ -201,6 +201,10 @@ class Feed {
             // Although market is closed, we display the past tick history data
             getHistoryOnly = true;
         }
+
+        const isChartClosed = !this._tradingTimes.isMarketOpened(symbol);
+        this._mainStore.state.setChartClosed(isChartClosed);
+        this._mainStore.state.setChartTheme(this._mainStore.chartSetting.theme, isChartClosed);
 
         if (getHistoryOnly) {
             const response = await this._binaryApi.getTickHistory(tickHistoryRequest);
