@@ -116,6 +116,7 @@ class ChartStore {
 
     init = (rootNode, modalNode, props) => {
         this.loader.show();
+        this.mainStore.state.setChartIsReady(false);
         this.loader.setState('chart-engine');
 
         if (window.CIQ) {
@@ -614,10 +615,12 @@ class ChartStore {
     @action.bound newChart(symbolObj = this.currentActiveSymbol, params) {
         this.stxx.chart.symbolDisplay = symbolObj.name;
         this.loader.show();
+        this.mainStore.state.setChartIsReady(false);
         const onChartLoad = (err) => {
             this.setMainSeriesDisplay(symbolObj.name);
 
             this.loader.hide();
+            this.mainStore.state.setChartIsReady(true);
             if (err) {
                 /* TODO, symbol not found error */
                 return;
