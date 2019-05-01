@@ -175,7 +175,9 @@ class ChartState {
     @action.bound setChartIsReady(isChartReady) {
         if (this.isChartReady !== isChartReady) {
             this.isChartReady = isChartReady;
-            this.chartStatusListener(isChartReady);
+            if (this.chartStatusListener || typeof this.chartStatusListener === 'function') {
+                this.chartStatusListener(isChartReady);
+            }
         }
     }
 
