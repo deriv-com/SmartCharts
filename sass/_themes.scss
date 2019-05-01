@@ -38,6 +38,9 @@ $COLOR_BRANDBLUE_85: #4a4f6c;
 $COLOR_BRANDBLUE_75: #60647e;
 $COLOR_DARK_BLUE_8 : rgba(127, 131, 151, 0.3);
 
+$COLOR_CHART_CLOSED_CANDLE_LIGHT: #d4d5dc;
+$COLOR_CHART_CLOSED_CANDLE_DARK: #3a3c4b;
+
 $themes: (
     light: (
         DefaultMain: $COLOR_WHITE,
@@ -50,13 +53,16 @@ $themes: (
         ChartBorder: $COLOR_LIGHT_GRAY_1,
         ChartText: $COLOR_DARK_GRAY_3,
         ChartCandleBg: $COLOR_ORANGE,
+        ChartCandleBgClosed: $COLOR_LIGHT_BLACK_3_SOLID_1,
         ChartCandleText: $COLOR_WHITE,
+        ChartCandleTextClosed: $COLOR_LIGHT_BLACK_3,
         ChartGrid: $COLOR_LIGHT_BLACK_4,
         ChartIndicateText: $COLOR_LIGHT_GRAY,
         ChartIndicateDivide: $COLOR_LIGHT_GRAY,
         ChartMountainBorder: $COLOR_LIGHT_GRAY_1,
         ChartMountainBg: rgba(153, 156, 172, 0.36),
         ChartMountainBgShade: rgba(255, 255, 255, 0),
+        ChartClosedCandleColor: $COLOR_LIGHT_BLACK_3_SOLID_1,
         MenuBg: $COLOR_WHITE,
         MenuIcon: $COLOR_LIGHT_BLACK_1,
         MenuText: $COLOR_LIGHT_BLACK_1,
@@ -231,13 +237,16 @@ $themes: (
         ChartBorder: $COLOR_WHITE,
         ChartText: $COLOR_DARK_GRAY_3,
         ChartCandleBg: $COLOR_ORANGE,
+        ChartCandleBgClosed: $COLOR_DARK_GRAY_2,
         ChartCandleText: $COLOR_WHITE,
+        ChartCandleTextClosed: $COLOR_LIGHT_GRAY_30,
         ChartGrid: $COLOR_DARK_BLUE_3,
         ChartIndicateText: $COLOR_WHITE,
         ChartIndicateDivide: $COLOR_DARK_GRAY_3,
         ChartMountainBorder: rgba($COLOR_WHITE, 1),
         ChartMountainBg: rgba(255, 255, 255, 0.36),
         ChartMountainBgShade: rgba(16, 19, 32, 0),
+        ChartClosedCandleColor: $COLOR_DARK_GRAY_2,
         MenuBg: $COLOR_DARK_BLUE_2,
         MenuBorder: $COLOR_DARK_BLUE_5,
         MenuIcon: $COLOR_LIGHT_GRAY,
@@ -425,4 +434,10 @@ $themes: (
     darkchartgrid: map-get(map-get($themes, 'dark'), 'ChartGrid');
     lightchartmountainborder: map-get(map-get($themes, 'light'), 'ChartMountainBorder');
     darkchartmountainborder: map-get(map-get($themes, 'dark'), 'ChartMountainBorder');
+    lightcandletextclosed: map-get(map-get($themes, 'light'), 'ChartCandleTextClosed');
+    darkcandletextclosed: map-get(map-get($themes, 'dark'), 'ChartCandleTextClosed');
+    lightcandlebgclosed: map-get(map-get($themes, 'light'), 'ChartCandleBgClosed');
+    darkcandlebgclosed: map-get(map-get($themes, 'dark'), 'ChartCandleBgClosed');
+    lightchartclosedcandle: map-get(map-get($themes, 'light'), 'ChartClosedCandleColor');
+    darkchartclosedcandle: map-get(map-get($themes, 'dark'), 'ChartClosedCandleColor');
 }
