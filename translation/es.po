@@ -7,10 +7,10 @@ msgstr ""
 "X-Crowdin-File: /dev/translation/messages.pot\n"
 "Project-Id-Version: smartcharts\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Last-Translator: binarycom <jy@binary.com>\n"
+"Last-Translator: binarycom\n"
 "Language-Team: Spanish\n"
 "Language: es_ES\n"
-"PO-Revision-Date: 2019-03-01 07:03\n"
+"PO-Revision-Date: 2019-05-02 09:11\n"
 
 msgid " already exists."
 msgstr ""
@@ -28,7 +28,7 @@ msgid "\"Mass Index\" or \"Doji Star\""
 msgstr ""
 
 msgid "Active"
-msgstr ""
+msgstr "Activo"
 
 msgid "Add New"
 msgstr ""
@@ -61,10 +61,10 @@ msgid "CANCEL"
 msgstr ""
 
 msgid "Candle"
-msgstr ""
+msgstr "Vela"
 
 msgid "Change"
-msgstr ""
+msgstr "Cambiar"
 
 msgid "Channel"
 msgstr ""
@@ -82,10 +82,10 @@ msgid "Clear All"
 msgstr ""
 
 msgid "Close"
-msgstr ""
+msgstr "Cerrar"
 
 msgid "CLOSE"
-msgstr ""
+msgstr "CERRAR"
 
 msgid "CLOSED"
 msgstr ""
@@ -103,7 +103,7 @@ msgid "Countdown"
 msgstr ""
 
 msgid "Crosshair"
-msgstr ""
+msgstr "Punto de mira"
 
 msgid "Crossline"
 msgstr ""
@@ -112,10 +112,10 @@ msgid "Dark Mode"
 msgstr ""
 
 msgid "Date"
-msgstr ""
+msgstr "Fecha"
 
 msgid "Day"
-msgstr ""
+msgstr "Día"
 
 msgid "DONE"
 msgstr ""
@@ -124,10 +124,10 @@ msgid "Doodle"
 msgstr ""
 
 msgid "Dot"
-msgstr ""
+msgstr "Punto"
 
 msgid "Download"
-msgstr ""
+msgstr "Descargar"
 
 msgid "Download as CSV"
 msgstr ""
@@ -145,7 +145,7 @@ msgid "Ellipse"
 msgstr ""
 
 msgid "Favorites"
-msgstr ""
+msgstr "Favoritos"
 
 msgid "Fib Arc"
 msgstr ""
@@ -202,40 +202,40 @@ msgid "L"
 msgstr ""
 
 msgid "Language"
-msgstr ""
+msgstr "Idioma"
 
 msgid "Last digits stats for latest 1000 ticks on "
 msgstr ""
 
 msgid "Line"
-msgstr ""
+msgstr "Línea"
 
 msgid "Line Break"
 msgstr ""
 
 msgid "Low"
-msgstr ""
+msgstr "Bajo"
 
 msgid "LOW"
-msgstr ""
+msgstr "BAJO"
 
 msgid "Measure"
 msgstr ""
 
 msgid "Minute"
-msgstr ""
+msgstr "Minuto"
 
 msgid "O"
 msgstr ""
 
 msgid "OHLC"
-msgstr ""
+msgstr "Gráfico OHLC"
 
 msgid "Open"
-msgstr ""
+msgstr "Abierto"
 
 msgid "OPEN"
-msgstr ""
+msgstr "ABIERTO"
 
 msgid "OVERWRITE"
 msgstr ""
@@ -301,13 +301,13 @@ msgid "right-click to manage"
 msgstr ""
 
 msgid "Search..."
-msgstr ""
+msgstr "Buscar..."
 
 msgid "Segment"
 msgstr ""
 
 msgid "Settings"
-msgstr ""
+msgstr "Configuración"
 
 msgid "Shape - Arrow"
 msgstr ""
@@ -343,7 +343,7 @@ msgid "Streaming for [symbol] is not available due to license restrictions"
 msgstr ""
 
 msgid "Table"
-msgstr ""
+msgstr "Tabla"
 
 msgid "Template name"
 msgstr ""
@@ -388,7 +388,7 @@ msgid "RSI"
 msgstr ""
 
 msgid "Period"
-msgstr ""
+msgstr "Período"
 
 msgid "Show Zones"
 msgstr ""
@@ -406,7 +406,7 @@ msgid "Field"
 msgstr ""
 
 msgid "Type"
-msgstr ""
+msgstr "Tipo"
 
 msgid "Offset"
 msgstr ""
@@ -427,7 +427,7 @@ msgid "Signal Period"
 msgstr ""
 
 msgid "Signal"
-msgstr ""
+msgstr "Señal"
 
 msgid "Increasing Bar"
 msgstr ""
@@ -781,7 +781,7 @@ msgid "Tolerance Percentage"
 msgstr ""
 
 msgid "Bollinger Bands"
-msgstr ""
+msgstr "Bandas de Bollinger"
 
 msgid "Bollinger Bands Top"
 msgstr ""
@@ -925,7 +925,7 @@ msgid "Display 3 Standard Deviation (3σ)"
 msgstr ""
 
 msgid "Average"
-msgstr ""
+msgstr "Promedio"
 
 msgid "1 Standard Deviation (1σ)"
 msgstr ""
@@ -1000,7 +1000,7 @@ msgid "MA Period"
 msgstr ""
 
 msgid "Multiplier"
-msgstr ""
+msgstr "Multiplicador"
 
 msgid "STARC Bands Top"
 msgstr ""
@@ -1168,7 +1168,7 @@ msgid "Gain"
 msgstr ""
 
 msgid "Loss"
-msgstr ""
+msgstr "Pérdida"
 
 msgid "Beta"
 msgstr ""
