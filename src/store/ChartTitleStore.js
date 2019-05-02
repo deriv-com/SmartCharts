@@ -7,6 +7,7 @@ import { CategoricalDisplay } from '../components/categoricaldisplay';
 import AnimatedPrice from '../components/AnimatedPrice.jsx';
 import { ChartPrice, SymbolSelectButton } from '../components/SymbolSelectButton.jsx';
 import { connect } from './Connect';
+import { isObjectOfTypeDate } from '../utils/index';
 import ServerTime from '../utils/ServerTime';
 
 export default class ChartTitleStore {
@@ -56,7 +57,11 @@ export default class ChartTitleStore {
     @computed get symbolOpenTime() {
         const times = this.tradingTimes._tradingTimesMap[this.currentSymbol.symbol].times;
         const now = this.serverTime.getLocalDate().getTime();
-        const openTime = times ? times.find(time => time.open.getTime() > now) : null;
+        let openTime = times ? times.find(time => time.open.getTime() > now) : null;
+
+        if (!isObjectOfTypeDate(openTime)) {
+            openTime = null;
+        }
 
         return { openTime };
     }
