@@ -10,55 +10,55 @@ msgstr ""
 "Last-Translator: binarycom\n"
 "Language-Team: Spanish\n"
 "Language: es_ES\n"
-"PO-Revision-Date: 2019-05-02 09:11\n"
+"PO-Revision-Date: 2019-05-03 21:22\n"
 
 msgid " already exists."
-msgstr ""
+msgstr " ya existe."
 
 msgid "[symbol] feed is delayed by [delay] minutes"
-msgstr ""
+msgstr "la cadena [symbol] está retrasada por [delay] minutos"
 
 msgid "[symbol] market is now opened."
-msgstr ""
+msgstr "el mercado [symbol] está ahora abierto."
 
 msgid "[symbol] market is presently closed."
-msgstr ""
+msgstr "el mercado [symbol] está ahora cerrado."
 
 msgid "\"Mass Index\" or \"Doji Star\""
-msgstr ""
+msgstr "\"Índice en Masa\" o \"Patrón Doji Star\""
 
 msgid "Active"
 msgstr "Activo"
 
 msgid "Add New"
-msgstr ""
+msgstr "Agregar Nuevo"
 
 msgid "Annotation"
-msgstr ""
+msgstr "Notas"
 
 msgid "Asset Information"
-msgstr ""
+msgstr "Información del activo"
 
 msgid "Auto Scale"
-msgstr ""
+msgstr "Auto Escala"
 
 msgid "Average Line"
-msgstr ""
+msgstr "Línea Promedio"
 
 msgid "Baseline"
-msgstr ""
+msgstr "Línea Base"
 
 msgid "Box Size"
-msgstr ""
+msgstr "Tamaño del Cuadro"
 
 msgid "C"
-msgstr ""
+msgstr "C"
 
 msgid "Callout"
-msgstr ""
+msgstr "Leyenda"
 
 msgid "CANCEL"
-msgstr ""
+msgstr "CANCELAR"
 
 msgid "Candle"
 msgstr "Vela"
@@ -67,19 +67,19 @@ msgid "Change"
 msgstr "Cambiar"
 
 msgid "Channel"
-msgstr ""
+msgstr "Canal"
 
 msgid "Chart data is not available for this symbol."
-msgstr ""
+msgstr "El gráfico de datos no está disponible para este símbolo."
 
 msgid "Chart Table"
-msgstr ""
+msgstr "Tabla de Datos"
 
 msgid "Chart types"
-msgstr ""
+msgstr "Tipos de Gráficos"
 
 msgid "Clear All"
-msgstr ""
+msgstr "Vaciar Todo"
 
 msgid "Close"
 msgstr "Cerrar"
@@ -88,28 +88,28 @@ msgid "CLOSE"
 msgstr "CERRAR"
 
 msgid "CLOSED"
-msgstr ""
+msgstr "CERRADO"
 
 msgid "Colored Dot"
-msgstr ""
+msgstr "Punto Coloreado"
 
 msgid "Comparison"
-msgstr ""
+msgstr "Comparación"
 
 msgid "Continuous"
-msgstr ""
+msgstr "Continuo"
 
 msgid "Countdown"
-msgstr ""
+msgstr "Cuenta regresiva"
 
 msgid "Crosshair"
 msgstr "Punto de mira"
 
 msgid "Crossline"
-msgstr ""
+msgstr "Retícula"
 
 msgid "Dark Mode"
-msgstr ""
+msgstr "Modo Nocturno"
 
 msgid "Date"
 msgstr "Fecha"
@@ -118,10 +118,10 @@ msgid "Day"
 msgstr "Día"
 
 msgid "DONE"
-msgstr ""
+msgstr "HECHO"
 
 msgid "Doodle"
-msgstr ""
+msgstr "Garabato"
 
 msgid "Dot"
 msgstr "Punto"
@@ -130,19 +130,19 @@ msgid "Download"
 msgstr "Descargar"
 
 msgid "Download as CSV"
-msgstr ""
+msgstr "Descargar como CSV"
 
 msgid "Download as PNG"
-msgstr ""
+msgstr "Descargar como PNG"
 
 msgid "Download Chart"
-msgstr ""
+msgstr "Descargar Gráfico"
 
 msgid "Draw tools"
-msgstr ""
+msgstr "Herramientas de Dibujo"
 
 msgid "Ellipse"
-msgstr ""
+msgstr "Elipse"
 
 msgid "Favorites"
 msgstr "Favoritos"
