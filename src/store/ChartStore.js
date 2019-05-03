@@ -278,6 +278,8 @@ class ChartStore {
         this.chartNode = this.rootNode.querySelector('.ciq-chart-area');
         this.chartControlsNode = this.rootNode.querySelector('.cq-chart-controls');
 
+        CIQ.Plotter.prototype.yAxiswidth = () => this.yAxiswidth;
+
         // monkey patching to handle radius and height for `current price label`
         CIQ.ChartEngine.prototype.createYAxisLabel = function (panel, txt, y, backgroundColor, color, ctx, yAxis) {
             if (panel.yAxis.drawPriceLabels === false || panel.yAxis.noDraw) return;
@@ -403,7 +405,7 @@ class ChartStore {
                     initialMarginBottom: 10,
                     // position: 'left',
                     displayBorder: true,
-                    justifyRight: true,
+                    justifyRight: false,
                 },
                 xAxis: {
                     displayBorder: true,
