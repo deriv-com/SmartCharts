@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom\n"
 "Language-Team: Spanish\n"
 "Language: es_ES\n"
-"PO-Revision-Date: 2019-05-03 21:22\n"
+"PO-Revision-Date: 2019-05-03 21:44\n"
 
 msgid " already exists."
 msgstr " ya existe."
@@ -184,16 +184,16 @@ msgid "Hollow Candle"
 msgstr ""
 
 msgid "Horizontal"
-msgstr ""
+msgstr "Horizontal"
 
 msgid "Hour"
-msgstr ""
+msgstr "Hora"
 
 msgid "Indicators"
-msgstr ""
+msgstr "Indicadores"
 
 msgid "Interval"
-msgstr ""
+msgstr "Intérvalo"
 
 msgid "Kagi"
 msgstr ""
