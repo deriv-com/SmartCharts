@@ -1,6 +1,7 @@
 /* eslint-disable no-new */
 import { action, observable, when } from 'mobx';
 import { createObjectFromLocalStorage, calculateTimeUnitInterval, calculateGranularity, getUTCDate } from '../utils';
+import Theme from '../../sass/_themes.scss';
 
 class ChartState {
     @observable granularity;
@@ -9,6 +10,7 @@ class ChartState {
     @observable endEpoch;
     @observable symbol;
     @observable isConnectionOpened;
+    @observable chartStatusListener;
     @observable settings;
     @observable showLastDigitStats;
     @observable scrollToEpoch;
@@ -17,6 +19,7 @@ class ChartState {
     @observable importedLayout;
     @observable isOnPagination = false;
     @observable paginationEndEpoch;
+    @observable isChartClosed = false;
     chartControlsWidgets;
 
     get comparisonStore() { return this.mainStore.comparison; }
@@ -35,18 +38,22 @@ class ChartState {
         this.stxx.addEventListener('layout', this.saveLayout.bind(this));
         this.stxx.addEventListener('symbolChange', this.saveLayout.bind(this));
         this.stxx.addEventListener('drawing', this.saveDrawings.bind(this));
+        this.stxx.addEventListener('move', this.scrollListener.bind(this));
 
         this.chartStore.feed.onStartPagination(this.setOnPagination.bind(this));
         this.chartStore.feed.onPagination(this.setOnPagination.bind(this));
     };
 
-    @action.bound updateProps({ id, settings, isConnectionOpened, symbol, granularity, chartType, startEpoch, endEpoch, onExportLayout, clearChart, importedLayout, removeAllComparisons, isAnimationEnabled = true, showLastDigitStats = false, scrollToEpoch, scrollToEpochOffset = 0, zoom, chartControlsWidgets }) {
+    @action.bound updateProps({ id, settings, isConnectionOpened, chartStatusListener, symbol, granularity, chartType, startEpoch, endEpoch, onExportLayout, clearChart, importedLayout, removeAllComparisons, isAnimationEnabled = true, showLastDigitStats = false, scrollToEpoch, scrollToEpochOffset = 0, zoom, chartControlsWidgets }) {
         this.chartId = id;
         this.settings = settings;
         this.isConnectionOpened = isConnectionOpened;
+        this.chartStatusListener = chartStatusListener;
+        this.isChartReady = false;
         this.symbol = symbol;
         this.startEpoch = startEpoch;
         this.endEpoch = endEpoch;
+        this.rootNode = this.mainStore.chart.rootNode;
 
         this.isAnimationEnabled = isAnimationEnabled;
         this.showLastDigitStats = showLastDigitStats;
@@ -105,9 +112,76 @@ class ChartState {
         }
     }
 
+    @action.bound setChartClosed(isClosed) {
+        this.isChartClosed = isClosed;
+    }
+
+    @action.bound setChartTheme(theme, isChartClosed = this.isChartClosed) {
+        this.stxx.clearStyles();
+        this.stxx.setStyle('stx_grid', 'color', Theme[`${theme}chartgrid`]);
+        this.rootNode.querySelector('.chartContainer').style.backgroundColor = Theme[`${theme}chartbg`];
+        if (isChartClosed) {
+            const closedChartColor = 'rgba(129, 133, 152, 0.35)';
+            this.stxx.setStyle('stx_mountain_chart', 'borderTopColor', closedChartColor);
+            this.stxx.setStyle('stx_mountain_chart', 'background-color', 'transparent');
+            this.stxx.setStyle('stx_mountain_chart', 'color', 'transparent');
+            // line chart
+            this.stxx.setStyle('stx_line_chart', 'color', closedChartColor);
+            this.stxx.setStyle('stx_line_up', 'color', closedChartColor);
+            this.stxx.setStyle('stx_line_down', 'color', closedChartColor);
+            this.stxx.setStyle('stx_line_even', 'color', closedChartColor);
+            // bar chart
+            this.stxx.setStyle('stx_bar_up', 'color', closedChartColor);
+            this.stxx.setStyle('stx_bar_down', 'color', closedChartColor);
+            this.stxx.setStyle('stx_bar_even', 'color', closedChartColor);
+            // candle chart
+            this.stxx.setStyle('stx_candle_up', 'color', Theme[`${theme}chartclosedcandle`]);
+            this.stxx.setStyle('stx_candle_down', 'color', Theme[`${theme}chartclosedcandle`]);
+            this.stxx.setStyle('stx_candle_even', 'color', Theme[`${theme}chartclosedcandle`]);
+            // candle wick
+            this.stxx.setStyle('stx_candle_shadow_up', 'color', closedChartColor);
+            this.stxx.setStyle('stx_candle_shadow_down', 'color', closedChartColor);
+            this.stxx.setStyle('stx_candle_shadow_even', 'color', closedChartColor);
+            // hollow candle
+            this.stxx.setStyle('stx_hollow_candle_up', 'color', Theme[`${theme}chartclosedcandle`]);
+            this.stxx.setStyle('stx_hollow_candle_down', 'color', Theme[`${theme}chartclosedcandle`]);
+            this.stxx.setStyle('stx_hollow_candle_even', 'color', Theme[`${theme}chartclosedcandle`]);
+            // baseline chart
+            this.stxx.setStyle('stx_baseline_up', 'color', closedChartColor);
+            this.stxx.setStyle('stx_baseline_down', 'color', closedChartColor);
+            this.stxx.setStyle('stx_baseline_even', 'color', closedChartColor);
+            // kagi
+            this.stxx.setStyle('stx_kagi_up', 'color', closedChartColor);
+            this.stxx.setStyle('stx_kagi_down', 'color', closedChartColor);
+            // this.stxx.setStyle('stx_kagi_even', 'color', closedChartColor);
+            // pandf
+            this.stxx.setStyle('stx_pandf_up', 'color', closedChartColor);
+            this.stxx.setStyle('stx_pandf_down', 'color', closedChartColor);
+            // current price text color
+            this.stxx.setStyle('stx_current_hr_down', 'color', Theme[`${theme}candletextclosed`]);
+            this.stxx.setStyle('stx_current_hr_up', 'color', Theme[`${theme}candletextclosed`]);
+            // current price bg color
+            this.stxx.setStyle('stx_current_hr_down', 'background-color', Theme[`${theme}candlebgclosed`]);
+            this.stxx.setStyle('stx_current_hr_up', 'background-color', Theme[`${theme}candlebgclosed`]);
+        } else {
+            this.stxx.setStyle('stx_mountain_chart', 'borderTopColor', Theme[`${theme}chartmountainborder`]);
+            this.stxx.setStyle('stx_line_chart', 'color', Theme[`${theme}chartmountainborder`]);
+        }
+        this.stxx.draw();
+    }
+
     @action.bound setOnPagination({ end }) {
         this.isOnPagination     = !this.isOnPagination;
         this.paginationEndEpoch = this.isOnPagination ? end : null;
+    }
+
+    @action.bound setChartIsReady(isChartReady) {
+        if (this.isChartReady !== isChartReady) {
+            this.isChartReady = isChartReady;
+            if (this.chartStatusListener && typeof this.chartStatusListener === 'function') {
+                this.chartStatusListener(isChartReady);
+            }
+        }
     }
 
     saveLayout() {
@@ -174,6 +248,7 @@ class ChartState {
                 this.restoreDrawings(this.stxx, this.stxx.chart.symbol);
                 if (this.chartStore.loader) {
                     this.chartStore.loader.hide();
+                    this.setChartIsReady(true);
                     this.stxx.home();
                 }
 
@@ -229,8 +304,8 @@ class ChartState {
             }
             this.stxx.chart.lockScroll = true;
             const tick = this.stxx.tickFromDate(startEntry.DT);
-            this.stxx.chart.scroll = this.stxx.chart.dataSet.length - tick;
-            this.stxx.setMaxTicks(3);
+            this.stxx.setMaxTicks(5, { padding: 150 });
+            this.stxx.chart.scroll = this.stxx.chart.dataSet.length - tick + 1;
             this.stxx.draw();
         } else {
             this.stxx.chart.lockScroll = false;
@@ -327,6 +402,14 @@ class ChartState {
         currentLayout.previousMaxTicks = this.stxx.chart.maxTicks;
 
         this.onExportLayout(currentLayout);
+    }
+
+    scrollListener({ grab }) {
+        if (grab && this.stxx.chart.lockScroll) {
+            this.stxx.chart.lockScroll = false;
+            this.stxx.setMaxTicks(this.stxx.maxTicks - (150 / this.stxx.layout.candleWidth), { padding: 0 });
+            this.stxx.home();
+        }
     }
 }
 
