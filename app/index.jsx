@@ -76,7 +76,7 @@ function getLanguageStorage() {
 
 function getServerUrl() {
     const local = localStorage.getItem('config.server_url');
-    return `wss://${local || 'ws.binaryws.com'}/websockets/v3`;
+    return `wss://${local || 'frontend.binaryws.com'}/websockets/v3`;
 }
 
 const chartId = '1';
