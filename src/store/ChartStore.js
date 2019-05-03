@@ -287,7 +287,8 @@ class ChartStore {
             // SmartChart Team: this prop modified
             const margin = 9;
             const height = 24;
-            let radius = 0;
+            let radius = 0,
+                left = 0;
             this.canvasFont('stx_price_label', context);
             const tickWidth = this.drawBorders ? 3 : 0; // pixel width of tick off edge of border
             const textWidth = context.measureText(txt).width;
@@ -300,11 +301,11 @@ class ChartStore {
                 }
             } catch (e) { width = yax.width; } // Firefox doesn't like this in hidden iframe
 
-            let x = this.width - width;
+            let x = this.width - this.chart.yAxis.width;
+
             if (yax.width < 0) x += (yax.width - width);
             const position = (yax.position === null ? panel.chart.yAxis.position : yax.position);
             if (position === 'left') {
-                x = yax.left + yax.width + margin - 3;
                 width *= -1;
                 if (yax.width < 0) x -= (yax.width + width);
                 radius = -3;
@@ -321,11 +322,25 @@ class ChartStore {
 
             // try to place price label in the y-axis
             width -= 14;
-            x += 22;
+            x += 14;
             if (this.chart.yAxis.width < width) {
                 this.chart.yAxis.width = width;
                 this.calculateYAxisPositions();
+            } else  {
+                width = this.chart.yAxis.width;
             }
+
+            switch (this.labelType) {
+            case 'crosshair':
+                x -= 14;
+                left = 14;
+                break;
+            case 'countdown':
+                left = 16;
+                break;
+            default:
+            }
+
 
             const params = {
                 ctx:context,
@@ -338,7 +353,7 @@ class ChartStore {
                 backgroundColor,
                 fill: true,
                 stroke: false,
-                margin:{ left: 0, top: 1 },
+                margin:{ left, top: 1 },
                 txt,
                 color,
             };
