@@ -7,7 +7,6 @@ import { CategoricalDisplay } from '../components/categoricaldisplay';
 import AnimatedPrice from '../components/AnimatedPrice.jsx';
 import { ChartPrice, SymbolSelectButton } from '../components/SymbolSelectButton.jsx';
 import { connect } from './Connect';
-import { isObjectOfTypeDate } from '../utils/index';
 import ServerTime from '../utils/ServerTime';
 
 export default class ChartTitleStore {
