@@ -53,6 +53,7 @@ class ChartState {
         this.symbol = symbol;
         this.startEpoch = startEpoch;
         this.endEpoch = endEpoch;
+        this.rootNode = this.mainStore.chart.rootNode;
 
         this.isAnimationEnabled = isAnimationEnabled;
         this.showLastDigitStats = showLastDigitStats;
@@ -118,6 +119,7 @@ class ChartState {
     @action.bound setChartTheme(theme, isChartClosed = this.isChartClosed) {
         this.stxx.clearStyles();
         this.stxx.setStyle('stx_grid', 'color', Theme[`${theme}chartgrid`]);
+        this.rootNode.querySelector('.chartContainer').style.backgroundColor = Theme[`${theme}chartbg`];
         if (isChartClosed) {
             const closedChartColor = 'rgba(129, 133, 152, 0.35)';
             this.stxx.setStyle('stx_mountain_chart', 'borderTopColor', closedChartColor);
@@ -141,9 +143,9 @@ class ChartState {
             this.stxx.setStyle('stx_candle_shadow_down', 'color', closedChartColor);
             this.stxx.setStyle('stx_candle_shadow_even', 'color', closedChartColor);
             // hollow candle
-            this.stxx.setStyle('stx_hollow_candle_up', 'color', closedChartColor);
-            this.stxx.setStyle('stx_hollow_candle_down', 'color', closedChartColor);
-            this.stxx.setStyle('stx_hollow_candle_even', 'color', closedChartColor);
+            this.stxx.setStyle('stx_hollow_candle_up', 'color', Theme[`${theme}chartclosedcandle`]);
+            this.stxx.setStyle('stx_hollow_candle_down', 'color', Theme[`${theme}chartclosedcandle`]);
+            this.stxx.setStyle('stx_hollow_candle_even', 'color', Theme[`${theme}chartclosedcandle`]);
             // baseline chart
             this.stxx.setStyle('stx_baseline_up', 'color', closedChartColor);
             this.stxx.setStyle('stx_baseline_down', 'color', closedChartColor);
@@ -163,6 +165,7 @@ class ChartState {
             this.stxx.setStyle('stx_current_hr_up', 'background-color', Theme[`${theme}candlebgclosed`]);
         } else {
             this.stxx.setStyle('stx_mountain_chart', 'borderTopColor', Theme[`${theme}chartmountainborder`]);
+            this.stxx.setStyle('stx_line_chart', 'color', Theme[`${theme}chartmountainborder`]);
         }
         this.stxx.draw();
     }
@@ -175,7 +178,9 @@ class ChartState {
     @action.bound setChartIsReady(isChartReady) {
         if (this.isChartReady !== isChartReady) {
             this.isChartReady = isChartReady;
-            this.chartStatusListener(isChartReady);
+            if (this.chartStatusListener && typeof this.chartStatusListener === 'function') {
+                this.chartStatusListener(isChartReady);
+            }
         }
     }
 
