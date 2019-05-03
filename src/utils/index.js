@@ -186,7 +186,3 @@ export function cloneCategories(categories, transformItem = x => x) {
 
     return categorized;
 }
-
-export function isObjectOfTypeDate(date) {
-    return Object.prototype.toString.call(date) === '[object Date]';
-}
