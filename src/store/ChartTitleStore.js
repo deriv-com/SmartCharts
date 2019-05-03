@@ -59,7 +59,7 @@ export default class ChartTitleStore {
         const now = this.serverTime.getLocalDate().getTime();
         let openTime = times ? times.find(time => time.open.getTime() > now) : null;
 
-        if (!isObjectOfTypeDate(openTime)) {
+        if (!(openTime instanceof Date)) {
             openTime = null;
         }
 
