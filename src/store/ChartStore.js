@@ -338,7 +338,8 @@ class ChartStore {
                 left = 14;
                 break;
             case 'countdown':
-                left = 16;
+                x -= 14;
+                left = (this.chart.yAxis.width - textWidth) / 2;
                 break;
             default:
             }
