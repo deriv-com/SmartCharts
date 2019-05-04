@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom\n"
 "Language-Team: Spanish\n"
 "Language: es_ES\n"
-"PO-Revision-Date: 2019-05-04 14:22\n"
+"PO-Revision-Date: 2019-05-04 14:33\n"
 
 msgid " already exists."
 msgstr " ya existe."
@@ -1093,7 +1093,7 @@ msgid "Alligator"
 msgstr "Indicador Alligator"
 
 msgid "Jaw Period"
-msgstr ""
+msgstr "Período Jaw"
 
 msgid "Jaw Offset"
 msgstr ""
@@ -1111,10 +1111,10 @@ msgid "Lips Offset"
 msgstr ""
 
 msgid "Show Fractals"
-msgstr ""
+msgstr "Mostrar Fractales"
 
 msgid "Jaw"
-msgstr ""
+msgstr "Jaw"
 
 msgid "Teeth"
 msgstr ""
@@ -1123,37 +1123,37 @@ msgid "Lips"
 msgstr ""
 
 msgid "Gator Oscillator"
-msgstr ""
+msgstr "Oscilador Gator"
 
 msgid "Ichimoku Clouds"
-msgstr ""
+msgstr "Nubes Ichimoku"
 
 msgid "Conversion Line Period"
-msgstr ""
+msgstr "Período de Línea de Conversión"
 
 msgid "Base Line Period"
-msgstr ""
+msgstr "Período de Línea Base"
 
 msgid "Leading Span B Period"
-msgstr ""
+msgstr "Período de Lapso Principal B"
 
 msgid "Lagging Span Period"
-msgstr ""
+msgstr "Período de Lapso de Retraso"
 
 msgid "Conversion Line"
-msgstr ""
+msgstr "Línea de Conversión"
 
 msgid "Base Line"
-msgstr ""
+msgstr "Línea Base"
 
 msgid "Leading Span A"
-msgstr ""
+msgstr "Lapso Principal A"
 
 msgid "Leading Span B"
-msgstr ""
+msgstr "Lapso Principal B"
 
 msgid "Lagging Span"
-msgstr ""
+msgstr "Lapso de Retraso"
 
 msgid "Price Relative"
 msgstr ""
