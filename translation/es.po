@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom\n"
 "Language-Team: Spanish\n"
 "Language: es_ES\n"
-"PO-Revision-Date: 2019-05-04 13:22\n"
+"PO-Revision-Date: 2019-05-04 13:32\n"
 
 msgid " already exists."
 msgstr " ya existe."
@@ -478,28 +478,28 @@ msgid "Intercept"
 msgstr "Intercepto"
 
 msgid "Time Series Forecast"
-msgstr ""
+msgstr "Predicción de Series Temporales"
 
 msgid "Vertical Horizontal Filter"
-msgstr ""
+msgstr "Filtro Horizontal Vertical"
 
 msgid "Result"
-msgstr ""
+msgstr "Resultado"
 
 msgid "TRIX"
-msgstr ""
+msgstr "TRIX"
 
 msgid "Standard Deviation"
-msgstr ""
+msgstr "Desviación Estándar"
 
 msgid "Standard Deviations"
-msgstr ""
+msgstr "Desviaciones Estándar"
 
 msgid "Moving Average Type"
-msgstr ""
+msgstr "Tipo de Media Móvil"
 
 msgid "Trade Volume Index"
-msgstr ""
+msgstr "Índice de Volumen de Comercio"
 
 msgid "Min Tick Value"
 msgstr ""
@@ -646,22 +646,22 @@ msgid "Coppock Curve"
 msgstr ""
 
 msgid "Short RoC"
-msgstr ""
+msgstr "RoC Corto"
 
 msgid "Long RoC"
-msgstr ""
+msgstr "RoC Largo"
 
 msgid "Chande Momentum Oscillator"
-msgstr ""
+msgstr "Oscilador de Momento de Chande"
 
 msgid "Chande Forecast Oscillator"
-msgstr ""
+msgstr "Oscilador de Predicción de Chande"
 
 msgid "Intraday Momentum Index"
-msgstr ""
+msgstr "Índice de Trading Intradiario"
 
 msgid "RAVI"
-msgstr ""
+msgstr "RAVI"
 
 msgid "Random Walk Index"
 msgstr ""
