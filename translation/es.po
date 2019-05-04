@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom\n"
 "Language-Team: Spanish\n"
 "Language: es_ES\n"
-"PO-Revision-Date: 2019-05-04 13:58\n"
+"PO-Revision-Date: 2019-05-04 14:02\n"
 
 msgid " already exists."
 msgstr " ya existe."
@@ -973,7 +973,7 @@ msgid "Green"
 msgstr "Verde"
 
 msgid "Fade"
-msgstr ""
+msgstr "Desvanecer"
 
 msgid "Fake"
 msgstr ""
