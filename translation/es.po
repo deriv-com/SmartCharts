@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom\n"
 "Language-Team: Spanish\n"
 "Language: es_ES\n"
-"PO-Revision-Date: 2019-05-04 13:12\n"
+"PO-Revision-Date: 2019-05-04 13:22\n"
 
 msgid " already exists."
 msgstr " ya existe."
@@ -439,43 +439,43 @@ msgid "Stochastics"
 msgstr "Estocástico"
 
 msgid "Smooth"
-msgstr ""
+msgstr "Liso"
 
 msgid "Fast"
-msgstr ""
+msgstr "Rápido"
 
 msgid "Slow"
-msgstr ""
+msgstr "Lento"
 
 msgid "Aroon"
-msgstr ""
+msgstr "Aroon"
 
 msgid "Aroon Up"
-msgstr ""
+msgstr "Aroon-up"
 
 msgid "Aroon Down"
-msgstr ""
+msgstr "Aroon-down"
 
 msgid "Aroon Oscillator"
-msgstr ""
+msgstr "Oscilador Aroon"
 
 msgid "Linear Reg R2"
-msgstr ""
+msgstr "Regresión Lineal R2"
 
 msgid "RSquared"
-msgstr ""
+msgstr "RCuadrado"
 
 msgid "Linear Reg Forecast"
-msgstr ""
+msgstr "Regresión Lineal de Predicción"
 
 msgid "Forecast"
-msgstr ""
+msgstr "Predicción"
 
 msgid "Linear Reg Intercept"
-msgstr ""
+msgstr "Intercepto de Regresión Lineal"
 
 msgid "Intercept"
-msgstr ""
+msgstr "Intercepto"
 
 msgid "Time Series Forecast"
 msgstr ""
