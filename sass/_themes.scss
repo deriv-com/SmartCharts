@@ -55,7 +55,7 @@ $themes: (
         ChartIndicateText: $COLOR_LIGHT_GRAY,
         ChartIndicateDivide: $COLOR_LIGHT_GRAY,
         ChartMountainBorder: $COLOR_LIGHT_GRAY_1,
-        ChartMountainBg: rgba(153, 156, 172, 0.36),
+        ChartMountainBg: rgba(153, 156, 172, 0.16),
         ChartMountainBgShade: rgba(255, 255, 255, 0),
         MenuBg: $COLOR_WHITE,
         MenuIcon: $COLOR_LIGHT_BLACK_1,
@@ -429,4 +429,8 @@ $themes: (
     darkchartgrid: map-get(map-get($themes, 'dark'), 'ChartGrid');
     lightchartmountainborder: map-get(map-get($themes, 'light'), 'ChartMountainBorder');
     darkchartmountainborder: map-get(map-get($themes, 'dark'), 'ChartMountainBorder');
+    lightchartmountainbg: map-get(map-get($themes, 'light'), 'ChartMountainBg');
+    darkchartmountainbg: map-get(map-get($themes, 'dark'), 'ChartMountainBg');
+    lightchartmountainbgshade: map-get(map-get($themes, 'light'), 'ChartMountainBgShade');
+    darkchartmountainbgshade: map-get(map-get($themes, 'dark'), 'ChartMountainBgShade');
 }
