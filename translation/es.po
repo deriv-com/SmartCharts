@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom\n"
 "Language-Team: Spanish\n"
 "Language: es_ES\n"
-"PO-Revision-Date: 2019-05-04 14:02\n"
+"PO-Revision-Date: 2019-05-04 14:12\n"
 
 msgid " already exists."
 msgstr " ya existe."
@@ -745,7 +745,7 @@ msgid "MA Env Bottom"
 msgstr "Envolutra MA Inferior"
 
 msgid "Fractal Chaos Bands"
-msgstr "Rango de Caos Fractal"
+msgstr "Bandas de Caos Fractal"
 
 msgid "Fractal High"
 msgstr "Fractal Alto"
@@ -763,7 +763,7 @@ msgid "Gopalakrishnan Range Index"
 msgstr "Índice de Rango Gopalakrishnan"
 
 msgid "Prime Number Bands"
-msgstr "Rango de Números Primos"
+msgstr "Bandas de Números Primos"
 
 msgid "Prime Bands Top"
 msgstr "Rangos Primos Superiores"
@@ -784,13 +784,13 @@ msgid "Bollinger Bands"
 msgstr "Bandas de Bollinger"
 
 msgid "Bollinger Bands Top"
-msgstr "Rangos de Bollinger Superiores"
+msgstr "Bandas de Bollinger Superiores"
 
 msgid "Bollinger Bands Median"
-msgstr "Media de Rangos de Bollinger"
+msgstr "Media de Bandas de Bollinger"
 
 msgid "Bollinger Bands Bottom"
-msgstr "Rangos de Bollinger Inferiores"
+msgstr "Bandas de Bollinger Inferiores"
 
 msgid "Donchian Channel"
 msgstr "Canal de Donchian"
@@ -976,61 +976,61 @@ msgid "Fade"
 msgstr "Desvanecer"
 
 msgid "Fake"
-msgstr ""
+msgstr "Fake"
 
 msgid "Squat"
-msgstr ""
+msgstr "Squat"
 
 msgid "ATR Bands"
-msgstr ""
+msgstr "Rangos ATR"
 
 msgid "ATR Bands Top"
-msgstr ""
+msgstr "Rangos ATR Superiores"
 
 msgid "ATR Bands Bottom"
-msgstr ""
+msgstr "Rangos ATR Inferiores"
 
 msgid "ATR Bands Channel"
-msgstr ""
+msgstr "Canal de Rangos ATR"
 
 msgid "STARC Bands"
-msgstr ""
+msgstr "Rangos STARC"
 
 msgid "MA Period"
-msgstr ""
+msgstr "Período MA"
 
 msgid "Multiplier"
 msgstr "Multiplicador"
 
 msgid "STARC Bands Top"
-msgstr ""
+msgstr "Rangos STARC Superiores"
 
 msgid "STARC Bands Median"
-msgstr ""
+msgstr "Media de Rangos STARC"
 
 msgid "STARC Bands Bottom"
-msgstr ""
+msgstr "Rangos STARC Inferiores"
 
 msgid "ATR Trailing Stops"
-msgstr ""
+msgstr "Stops de Arrastre ATR"
 
 msgid "Plot Type"
-msgstr ""
+msgstr "Tipos de Plot"
 
 msgid "HighLow"
-msgstr ""
+msgstr "HighLow"
 
 msgid "Buy Stops"
-msgstr ""
+msgstr "Stops de Compra"
 
 msgid "Sell Stops"
-msgstr ""
+msgstr "Stops de Venta"
 
 msgid "Bollinger %b"
-msgstr ""
+msgstr "Bollinger %b"
 
 msgid "%b"
-msgstr ""
+msgstr "%b"
 
 msgid "Bollinger Bandwidth"
 msgstr ""
