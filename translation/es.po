@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom\n"
 "Language-Team: Spanish\n"
 "Language: es_ES\n"
-"PO-Revision-Date: 2019-05-04 13:02\n"
+"PO-Revision-Date: 2019-05-04 13:12\n"
 
 msgid " already exists."
 msgstr " ya existe."
@@ -376,34 +376,34 @@ msgid "Vertical"
 msgstr "Vertical"
 
 msgid "Would you like to overwrite it?"
-msgstr ""
+msgstr "¿Desea sobre-escribirlo?"
 
 msgid "Zoom in"
-msgstr ""
+msgstr "Acercar"
 
 msgid "Zoom out"
-msgstr ""
+msgstr "Alejar"
 
 msgid "RSI"
-msgstr ""
+msgstr "IFR"
 
 msgid "Period"
 msgstr "Período"
 
 msgid "Show Zones"
-msgstr ""
+msgstr "Mostrar Zonas"
 
 msgid "OverBought"
-msgstr ""
+msgstr "SobreCompra"
 
 msgid "OverSold"
-msgstr ""
+msgstr "SobreVenta"
 
 msgid "Moving Average"
-msgstr ""
+msgstr "Media Móvil"
 
 msgid "Field"
-msgstr ""
+msgstr "Campo"
 
 msgid "Type"
 msgstr "Tipo"
@@ -415,28 +415,28 @@ msgid "MA"
 msgstr ""
 
 msgid "MACD"
-msgstr ""
+msgstr "MACD"
 
 msgid "Fast MA Period"
-msgstr ""
+msgstr "Período de MA rápida"
 
 msgid "Slow MA Period"
-msgstr ""
+msgstr "Período de MA lenta"
 
 msgid "Signal Period"
-msgstr ""
+msgstr "Periodo de Señal MA"
 
 msgid "Signal"
 msgstr "Señal"
 
 msgid "Increasing Bar"
-msgstr ""
+msgstr "Barra de Incremento"
 
 msgid "Decreasing Bar"
-msgstr ""
+msgstr "Barra de Reducción"
 
 msgid "Stochastics"
-msgstr ""
+msgstr "Estocástico"
 
 msgid "Smooth"
 msgstr ""
