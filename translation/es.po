@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom\n"
 "Language-Team: Spanish\n"
 "Language: es_ES\n"
-"PO-Revision-Date: 2019-05-04 14:33\n"
+"PO-Revision-Date: 2019-05-04 14:46\n"
 
 msgid " already exists."
 msgstr " ya existe."
@@ -64,7 +64,7 @@ msgid "Candle"
 msgstr "Vela"
 
 msgid "Change"
-msgstr "Cambiar"
+msgstr "Cambio"
 
 msgid "Channel"
 msgstr "Canal"
@@ -1156,34 +1156,34 @@ msgid "Lagging Span"
 msgstr "Lapso de Retraso"
 
 msgid "Price Relative"
-msgstr ""
+msgstr "Relación de Precio"
 
 msgid "Comparison Symbol"
-msgstr ""
+msgstr "Símbolo de Comparación"
 
 msgid "Performance Index"
-msgstr ""
+msgstr "Índice de Rendimiento"
 
 msgid "Gain"
-msgstr ""
+msgstr "Ganancia"
 
 msgid "Loss"
 msgstr "Pérdida"
 
 msgid "Beta"
-msgstr ""
+msgstr "Beta"
 
 msgid "Ulcer Index"
-msgstr ""
+msgstr "Índice Ulcer"
 
 msgid "Balance of Power"
-msgstr ""
+msgstr "Balance de Poder (BOP)"
 
 msgid "Trend Intensity Index"
-msgstr ""
+msgstr "Índice de Intensidad de la Tendencia"
 
 msgid "TII"
-msgstr ""
+msgstr "TII"
 
 msgid "Choppiness Index"
 msgstr ""
@@ -1315,35 +1315,35 @@ msgid "Volume Profile"
 msgstr ""
 
 msgid "Bars Color"
-msgstr ""
+msgstr "Colores de Barras"
 
 msgid "Vortex Indicator"
-msgstr ""
+msgstr "Indicador de Vórtice (VI)"
 
 msgid "+VI"
-msgstr ""
+msgstr "+VI"
 
 msgid "-VI"
-msgstr ""
+msgstr "-VI"
 
 msgid "ZigZag"
-msgstr ""
+msgstr "ZigZag"
 
 msgid "Distance(%)"
-msgstr ""
+msgstr "Distancia(%)"
 
 msgid "Psychological Line"
-msgstr ""
+msgstr "Línea Psicológica"
 
 msgid "Moving Average Deviation"
-msgstr ""
+msgstr "Desviación de la Media Móvil"
 
 msgid "Shinohara Intensity Ratio"
-msgstr ""
+msgstr "Proporción de Intensidad de Shinohara"
 
 msgid "Strong Ratio"
-msgstr ""
+msgstr "Proporción Intensa"
 
 msgid "Weak Ratio"
-msgstr ""
+msgstr "Proporción Débil"
 
