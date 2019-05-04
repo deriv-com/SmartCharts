@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom\n"
 "Language-Team: Spanish\n"
 "Language: es_ES\n"
-"PO-Revision-Date: 2019-05-03 21:44\n"
+"PO-Revision-Date: 2019-05-04 13:02\n"
 
 msgid " already exists."
 msgstr " ya existe."
@@ -340,40 +340,40 @@ msgid "SPOT"
 msgstr ""
 
 msgid "Streaming for [symbol] is not available due to license restrictions"
-msgstr ""
+msgstr "La transmisión para [symbol] no está disponible debido a restricciones de licencias"
 
 msgid "Table"
 msgstr "Tabla"
 
 msgid "Template name"
-msgstr ""
+msgstr "Nombre de la plantilla"
 
 msgid "Templates"
-msgstr ""
+msgstr "Plantillas"
 
 msgid "There are no active comparisons yet."
-msgstr ""
+msgstr "No hay comparaciones activas cargadas."
 
 msgid "There are no active indicators yet."
-msgstr ""
+msgstr "No hay indicadores activos cargados."
 
 msgid "There are no favorites yet."
-msgstr ""
+msgstr "No hay favoritos cargados."
 
 msgid "Tick"
-msgstr ""
+msgstr "Tick"
 
 msgid "Time Cycle"
-msgstr ""
+msgstr "Ciclo de Tiempo"
 
 msgid "Tirone Levels"
-msgstr ""
+msgstr "Niveles de Tirone"
 
 msgid "Underlying Assets"
-msgstr ""
+msgstr "Activos Subyacentes"
 
 msgid "Vertical"
-msgstr ""
+msgstr "Vertical"
 
 msgid "Would you like to overwrite it?"
 msgstr ""
