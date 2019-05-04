@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom\n"
 "Language-Team: Spanish\n"
 "Language: es_ES\n"
-"PO-Revision-Date: 2019-05-04 13:32\n"
+"PO-Revision-Date: 2019-05-04 13:43\n"
 
 msgid " already exists."
 msgstr " ya existe."
@@ -664,58 +664,58 @@ msgid "RAVI"
 msgstr "RAVI"
 
 msgid "Random Walk Index"
-msgstr ""
+msgstr "Índice de Recorrido Aleatorio"
 
 msgid "Random Walk High"
-msgstr ""
+msgstr "Recorrido Aleatorio Alto"
 
 msgid "Random Walk Low"
-msgstr ""
+msgstr "Recorrido Aleatorio Bajo"
 
 msgid "ADX/DMS"
-msgstr ""
+msgstr "ADX/DMS"
 
 msgid "Smoothing Period"
-msgstr ""
+msgstr "Período de Suavizamiento"
 
 msgid "Series"
-msgstr ""
+msgstr "Series"
 
 msgid "Shading"
-msgstr ""
+msgstr "Sombreado"
 
 msgid "Histogram"
-msgstr ""
+msgstr "Histograma"
 
 msgid "+DI"
-msgstr ""
+msgstr "+DI"
 
 msgid "-DI"
-msgstr ""
+msgstr "-DI"
 
 msgid "ADX"
-msgstr ""
+msgstr "ADX"
 
 msgid "Positive Bar"
-msgstr ""
+msgstr "Barra Positiva"
 
 msgid "Negative Bar"
-msgstr ""
+msgstr "Barra Negativa"
 
 msgid "High Low Bands"
-msgstr ""
+msgstr "Rangos High-Low"
 
 msgid "Shift Percentage"
-msgstr ""
+msgstr "Porcentaje de Cambio"
 
 msgid "Channel Fill"
-msgstr ""
+msgstr "Relleno del Canal"
 
 msgid "High Low Top"
-msgstr ""
+msgstr "High-Low Superior"
 
 msgid "High Low Median"
-msgstr ""
+msgstr "Media High-Low"
 
 msgid "High Low Bottom"
 msgstr ""
