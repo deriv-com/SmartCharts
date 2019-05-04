@@ -331,6 +331,8 @@ class ChartStore {
                 width = this.chart.yAxis.width;
             }
 
+            let left = ((width - textWidth) / 2);
+
             switch (this.labelType) {
             case 'crosshair':
                 x -= 14;
@@ -339,9 +341,9 @@ class ChartStore {
                 x -= 14;
                 break;
             default:
+                left  -= 8;
             }
 
-            const left = ((width - textWidth) / 2) - 8;
 
             const params = {
                 ctx:context,
