@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom\n"
 "Language-Team: Spanish\n"
 "Language: es_ES\n"
-"PO-Revision-Date: 2019-05-04 14:12\n"
+"PO-Revision-Date: 2019-05-04 14:22\n"
 
 msgid " already exists."
 msgstr " ya existe."
@@ -703,7 +703,7 @@ msgid "Negative Bar"
 msgstr "Barra Negativa"
 
 msgid "High Low Bands"
-msgstr "Rangos High-Low"
+msgstr "Bandas High-Low"
 
 msgid "Shift Percentage"
 msgstr "Porcentaje de Cambio"
@@ -766,13 +766,13 @@ msgid "Prime Number Bands"
 msgstr "Bandas de Números Primos"
 
 msgid "Prime Bands Top"
-msgstr "Rangos Primos Superiores"
+msgstr "Bandas de Números Primos Superiores"
 
 msgid "Prime Bands Bottom"
-msgstr "Rangos Primos Inferiores"
+msgstr "Bandas de Números Primos Inferiores"
 
 msgid "Prime Bands Channel"
-msgstr "Canal de Rangos Primos"
+msgstr "Canal de Bandas de Números Primos"
 
 msgid "Prime Number Oscillator"
 msgstr "Oscilador de Números Primos"
@@ -982,19 +982,19 @@ msgid "Squat"
 msgstr "Squat"
 
 msgid "ATR Bands"
-msgstr "Rangos ATR"
+msgstr "Bandas ATR"
 
 msgid "ATR Bands Top"
-msgstr "Rangos ATR Superiores"
+msgstr "Bandas ATR Superiores"
 
 msgid "ATR Bands Bottom"
-msgstr "Rangos ATR Inferiores"
+msgstr "Bandas ATR Inferiores"
 
 msgid "ATR Bands Channel"
-msgstr "Canal de Rangos ATR"
+msgstr "Canal de Bandas ATR"
 
 msgid "STARC Bands"
-msgstr "Rangos STARC"
+msgstr "Bandas STARC"
 
 msgid "MA Period"
 msgstr "Período MA"
@@ -1003,13 +1003,13 @@ msgid "Multiplier"
 msgstr "Multiplicador"
 
 msgid "STARC Bands Top"
-msgstr "Rangos STARC Superiores"
+msgstr "Bandas STARC Superiores"
 
 msgid "STARC Bands Median"
-msgstr "Media de Rangos STARC"
+msgstr "Media de Bandas STARC"
 
 msgid "STARC Bands Bottom"
-msgstr "Rangos STARC Inferiores"
+msgstr "Bandas STARC Inferiores"
 
 msgid "ATR Trailing Stops"
 msgstr "Stops de Arrastre ATR"
@@ -1033,64 +1033,64 @@ msgid "%b"
 msgstr "%b"
 
 msgid "Bollinger Bandwidth"
-msgstr ""
+msgstr "Ancho de Bandas Bollinger"
 
 msgid "Bandwidth"
-msgstr ""
+msgstr "Ancho de Bandas"
 
 msgid "Donchian Width"
-msgstr ""
+msgstr "Ancho de Líneas Donchian"
 
 msgid "Relative Vigor Index"
-msgstr ""
+msgstr "Índice de Vigor Relativo (RVI)"
 
 msgid "Rel Vig"
-msgstr ""
+msgstr "Vig Rel"
 
 msgid "RelVigSignal"
-msgstr ""
+msgstr "SeñalVigRel"
 
 msgid "Elder Impulse System"
-msgstr ""
+msgstr "Sistema de Impulso Elder"
 
 msgid "Bullish"
-msgstr ""
+msgstr "Alcista"
 
 msgid "Bearish"
-msgstr ""
+msgstr "Bajista"
 
 msgid "Neutral"
-msgstr ""
+msgstr "Neutral"
 
 msgid "Pivot Points"
-msgstr ""
+msgstr "Puntos Pivote"
 
 msgid "Pivot"
-msgstr ""
+msgstr "Pivote"
 
 msgid "Resistance 1"
-msgstr ""
+msgstr "Resistencia 1"
 
 msgid "Support 1"
-msgstr ""
+msgstr "Soporte 1"
 
 msgid "Resistance 2"
-msgstr ""
+msgstr "Resistencia 2"
 
 msgid "Support 2"
-msgstr ""
+msgstr "Soporte 2"
 
 msgid "Resistance 3"
-msgstr ""
+msgstr "Resistencia 3"
 
 msgid "Support 3"
-msgstr ""
+msgstr "Soporte 3"
 
 msgid "VWAP"
-msgstr ""
+msgstr "VWAP"
 
 msgid "Alligator"
-msgstr ""
+msgstr "Indicador Alligator"
 
 msgid "Jaw Period"
 msgstr ""
