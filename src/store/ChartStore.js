@@ -401,7 +401,7 @@ class ChartStore {
                 yAxis: {
                     // Put some top margin so chart doesn't get blocked by chart title
                     initialMarginTop: 125,
-                    initialMarginBottom: 10,
+                    initialMarginBottom: 50,
                     // position: 'left',
                     displayBorder: true,
                     justifyRight: false,
