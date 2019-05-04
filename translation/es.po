@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom\n"
 "Language-Team: Spanish\n"
 "Language: es_ES\n"
-"PO-Revision-Date: 2019-05-04 13:43\n"
+"PO-Revision-Date: 2019-05-04 13:58\n"
 
 msgid " already exists."
 msgstr " ya existe."
@@ -718,85 +718,85 @@ msgid "High Low Median"
 msgstr "Media High-Low"
 
 msgid "High Low Bottom"
-msgstr ""
+msgstr "High-Low Inferior"
 
 msgid "High Minus Low"
-msgstr ""
+msgstr "High Menos Low"
 
 msgid "Median Price"
-msgstr ""
+msgstr "Valor Medio"
 
 msgid "Moving Average Envelope"
-msgstr ""
+msgstr "Envoltura de Media Móvil"
 
 msgid "Shift Type"
-msgstr ""
+msgstr "Tipo de Cambio"
 
 msgid "Shift"
-msgstr ""
+msgstr "Cambio"
 
 msgid "MA Env Top"
-msgstr ""
+msgstr "Envoltura MA Superior"
 
 msgid "MA Env Median"
-msgstr ""
+msgstr "Envoltura MA Media"
 
 msgid "MA Env Bottom"
-msgstr ""
+msgstr "Envolutra MA Inferior"
 
 msgid "Fractal Chaos Bands"
-msgstr ""
+msgstr "Rango de Caos Fractal"
 
 msgid "Fractal High"
-msgstr ""
+msgstr "Fractal Alto"
 
 msgid "Fractal Low"
-msgstr ""
+msgstr "Fractal Bajo"
 
 msgid "Fractal Channel"
-msgstr ""
+msgstr "Canal de Fractal"
 
 msgid "Fractal Chaos Oscillator"
-msgstr ""
+msgstr "Oscilador de Caos Fractal"
 
 msgid "Gopalakrishnan Range Index"
-msgstr ""
+msgstr "Índice de Rango Gopalakrishnan"
 
 msgid "Prime Number Bands"
-msgstr ""
+msgstr "Rango de Números Primos"
 
 msgid "Prime Bands Top"
-msgstr ""
+msgstr "Rangos Primos Superiores"
 
 msgid "Prime Bands Bottom"
-msgstr ""
+msgstr "Rangos Primos Inferiores"
 
 msgid "Prime Bands Channel"
-msgstr ""
+msgstr "Canal de Rangos Primos"
 
 msgid "Prime Number Oscillator"
-msgstr ""
+msgstr "Oscilador de Números Primos"
 
 msgid "Tolerance Percentage"
-msgstr ""
+msgstr "Porcentaje de Tolerancia"
 
 msgid "Bollinger Bands"
 msgstr "Bandas de Bollinger"
 
 msgid "Bollinger Bands Top"
-msgstr ""
+msgstr "Rangos de Bollinger Superiores"
 
 msgid "Bollinger Bands Median"
-msgstr ""
+msgstr "Media de Rangos de Bollinger"
 
 msgid "Bollinger Bands Bottom"
-msgstr ""
+msgstr "Rangos de Bollinger Inferiores"
 
 msgid "Donchian Channel"
-msgstr ""
+msgstr "Canal de Donchian"
 
 msgid "High Period"
-msgstr ""
+msgstr "Período al Alza"
 
 msgid "Low Period"
 msgstr ""
@@ -952,25 +952,25 @@ msgid "PMOSignal"
 msgstr ""
 
 msgid "Relative Volatility"
-msgstr ""
+msgstr "Volatilidad Relativa"
 
 msgid "STD Period"
-msgstr ""
+msgstr "Período STD"
 
 msgid "Rel Vol"
-msgstr ""
+msgstr "Vol Rel"
 
 msgid "Awesome Oscillator"
-msgstr ""
+msgstr "Oscilador Asombroso (AO)"
 
 msgid "Market Facilitation Index"
-msgstr ""
+msgstr "Índice de Facilidad de Negociación de Mercado (MFI)"
 
 msgid "Scale Factor"
-msgstr ""
+msgstr "Factor de Escala"
 
 msgid "Green"
-msgstr ""
+msgstr "Verde"
 
 msgid "Fade"
 msgstr ""
