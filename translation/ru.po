@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom\n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
-"PO-Revision-Date: 2019-05-06 01:42\n"
+"PO-Revision-Date: 2019-05-06 06:33\n"
 
 msgid " already exists."
 msgstr " уже существует."
@@ -1348,8 +1348,8 @@ msgid "Weak Ratio"
 msgstr "Слабое соотношение"
 
 msgid "Closed"
-msgstr ""
+msgstr "Закрыто"
 
 msgid "Opens in:"
-msgstr ""
+msgstr "Открывается в:"
 
