@@ -84,14 +84,13 @@ export default function animateChart(stx, animationParameters, easeMachine) {
 
         chart = chart || this.chart;
         if (chart.lockScroll) {
-            if (chart.maxTicks - chart.scroll <= chart.maxTicks / 4) {
-                // chart.lockScroll = false;
-                this.allowScroll = true;
-                return false;
-            }
-
             const lastAppendQuote     = appendQuotes[appendQuotes.length - 1];
             const lastDataSegmentItem = chart.dataSegment[chart.dataSegment.length - 1];
+
+            if (!lastAppendQuote || !lastDataSegmentItem) {
+                return;
+            }
+
             if (lastAppendQuote.DT > lastDataSegmentItem.DT
                     && chart.scroll <= chart.dataSegment.length) {
                 chart.scroll++;
@@ -225,8 +224,9 @@ export default function animateChart(stx, animationParameters, easeMachine) {
             }
             if (!quote || !quote.Close || !this.prevQuote || !this.prevQuote.Close) {
                 if (this.prevQuote && !this.prevQuote.Close) {
-                    chart.scroll++;
-                    this.setMaxTicks(chart.maxTicks + 1);
+                    const pervScroll = chart.scroll;
+                    this.setMaxTicks(chart.maxTicks + 1, { padding: 150 });
+                    chart.scroll = pervScroll + 1;
                 }
                 return false;
             }
@@ -274,17 +274,18 @@ export default function animateChart(stx, animationParameters, easeMachine) {
                         this.nextMicroPixels = this.micropixels + candleWidth;
                         beginningOffset = candleWidth * -1;
                         if ((chart.dataSegment && chart.dataSegment.length < chart.maxTicks - animationParameters.ticksFromEdgeOfScreen && !animationParameters.stayPut) || chart.lockScroll) {
-                            if (chart.lockScroll) {
-                                this.setMaxTicks(chart.maxTicks + 1);
+                            if (chart.lockScroll && chart.maxTicks - chart.scroll  <= 2) {
+                                const pervScroll = chart.scroll;
+                                this.setMaxTicks(chart.maxTicks + 1, { padding: 150 });
+                                chart.scroll = pervScroll + 1;
+                            } else {
+                                chart.scroll++;
                             }
 
                             this.nextMicroPixels = this.micropixels;
-                            chart.scroll++;
-                        } else if (chart.lockScroll) {
-                            chart.scroll++;
                         }
 
-                        chart.animatingHorizontalScroll = linearChart; // When the chart advances we also animate the horizontal scroll by incrementing micropixels
+                        chart.animatingHorizontalScroll = linearChart && !chart.lockScroll; // When the chart advances we also animate the horizontal scroll by incrementing micropixels
                         chart.previousDataSetLength = chart.dataSet.length;
                     } else {
                         chart.scroll++;
