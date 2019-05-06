@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom\n"
 "Language-Team: Indonesian\n"
 "Language: id_ID\n"
-"PO-Revision-Date: 2019-05-06 02:02\n"
+"PO-Revision-Date: 2019-05-06 02:12\n"
 
 msgid " already exists."
 msgstr " sudah tersedia."
@@ -1351,5 +1351,5 @@ msgid "Closed"
 msgstr "Tutup"
 
 msgid "Opens in:"
-msgstr ""
+msgstr "Dibuka dalam:"
 
