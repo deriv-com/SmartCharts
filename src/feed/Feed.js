@@ -1,7 +1,7 @@
 import EventEmitter from 'event-emitter-es6';
 import { reaction, when } from 'mobx';
 import { TickHistoryFormatter } from './TickHistoryFormatter';
-import { calculateGranularity, getUTCEpoch, calculateTimeUnitInterval } from '../utils';
+import { calculateGranularity, getUTCEpoch, calculateTimeUnitInterval, getUTCDate } from '../utils';
 import { RealtimeSubscription, DelayedSubscription } from './subscription';
 import ServerTime from '../utils/ServerTime';
 
@@ -31,7 +31,7 @@ class Feed {
     }
 
     onContextReady = () => {
-        reaction(() => [this.startEpoch, this.endEpoch], this.onRangeChanged);
+        reaction(() => [this.startEpoch], this.onRangeChanged);
         this._stx.append('updateChartData', () => this.scaleChart());
     };
 
@@ -46,20 +46,17 @@ class Feed {
         let dtLeft = null;
         let dtRight = null;
 
-        this.loader.show();
-        this.loader.setState('chart-data');
-
         if (!this.endEpoch
             && Object.keys(this._activeStreams).length === 0) {
             if (this.startEpoch) {
                 // Set the end range to the future to trigger ChartIQ to start streaming
                 const future = now + 10;
-                dtRight = new Date(future * 1000);
-                dtLeft = this.startEpoch ? new Date(this.startEpoch) : undefined;
+                dtRight = new Date(getUTCDate(future));
+                dtLeft = this.startEpoch ? new Date(getUTCDate(this.startEpoch)) : undefined;
             }
         } else if (this.endEpoch) {
-            dtLeft =  new Date((this.startEpoch || this.endEpoch - rangeTime) * 1000);
-            dtRight = new Date(this.endEpoch * 1000);
+            dtLeft =  new Date(getUTCDate(this.startEpoch || this.endEpoch - rangeTime));
+            dtRight = new Date(getUTCDate(this.endEpoch));
         }
 
         this._stx.setRange({ dtLeft, dtRight, periodicity }, () => {
@@ -67,10 +64,14 @@ class Feed {
                 this._stx.home();
                 delete this._stx.layout.range;
             } else {
+                const startTick = this._stx.tickFromDate(dtLeft);
+                const endTick = this._stx.tickFromDate(dtRight);
+                const length = this._stx.masterData.length;
+                this._stx.masterData.splice(0, startTick);
+                this._stx.masterData.splice(endTick - startTick + 1, length - endTick);
                 this.scaleChart();
             }
             this._mainStore.state.saveLayout();
-            this.loader.hide();
             this._mainStore.state.setChartIsReady(true);
         });
     };
