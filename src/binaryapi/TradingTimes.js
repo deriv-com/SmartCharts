@@ -108,7 +108,6 @@ class TradingTimes {
                     const { times, symbol, feed_license, delay_amount } = symbolObj;
                     const { open, close } = times;
                     let _times;
-                    let symbolOpenTime;
                     const isOpenAllDay = open.length === 1
                         && open[0] === '00:00:00'
                         && close[0] === '23:59:59';
@@ -120,7 +119,6 @@ class TradingTimes {
                             open: getUTCDate(openTime),
                             close: getUTCDate(close[idx]),
                         }));
-                        symbolOpenTime = open[0];
                     }
                     this._tradingTimesMap[symbol] = {
                         feed_license,
@@ -128,7 +126,6 @@ class TradingTimes {
                         times: _times,
                         isOpenAllDay,
                         isClosedAllDay,
-                        symbolOpenTime,
                     };
                 }
             }

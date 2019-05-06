@@ -1,5 +1,6 @@
 import React from 'react';
 import { ItemIconMap, SymbolPlaceholderIcon, ArrowIcon, TimeIcon } from './Icons.jsx';
+import { MarketOpeningTimeCounter } from './MarketOpeningTimeCounter.jsx';
 
 export const SymbolInfo = ({
     symbol,
@@ -7,15 +8,15 @@ export const SymbolInfo = ({
     symbolOpenTime,
 }) => {
     const SymbolIcon = ItemIconMap[symbol.symbol] || SymbolPlaceholderIcon;
+    const hasOpenTime = !symbol.exchange_is_open && symbolOpenTime.openTime;
+    const hasNoOpenTime = !symbol.exchange_is_open && !symbolOpenTime.openTime;
     return (
         <>
             {SymbolIcon && <SymbolIcon className={`ic-${symbol.symbol}`} />}
             <div className="cq-symbol-info">
-                <div className="cq-symbol">{symbol.name}</div>
-                { symbol.exchange_is_open
-                    ? <ChartPrice />
-                    : <ClosedSymbol symbolOpenTime={symbolOpenTime} />
-                }
+                <div className={`cq-symbol ${hasNoOpenTime ? 'closed-no-opentime' : ''}`}>{symbol.name}</div>
+                { symbol.exchange_is_open && <ChartPrice />}
+                {hasOpenTime  && <ClosedSymbol symbolOpenTime={symbolOpenTime} /> }
             </div>
         </>
     );
@@ -56,7 +57,8 @@ const ClosedSymbol = symbolOpenTime => (
     <div className="cq-chart-closed">
         <TimeIcon className="cq-closed-icon" />
         <div className="cq-closed-opening">
-            {t.translate('Opens in')}: <span className="cq-closed-opening-time">{symbolOpenTime.symbolOpenTime}</span>
+            {t.translate('Opens in:')} &nbsp;
+            <span className="cq-closed-opening-time"><MarketOpeningTimeCounter symbolOpenTime={symbolOpenTime} /></span>
         </div>
     </div>
 );
