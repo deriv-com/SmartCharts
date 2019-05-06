@@ -89,6 +89,13 @@ const connectionManager = new ConnectionManager({
     language,
     endpoint: serverUrl,
 });
+const IntervalEnum = {
+    second: 1,
+    minute: 60,
+    hour: 3600,
+    day: 24 * 3600,
+    year: 365 * 24 * 3600,
+};
 
 const streamManager = new StreamManager(connectionManager);
 const requestAPI = connectionManager.send.bind(connectionManager);
@@ -104,8 +111,8 @@ class App extends Component {
         this.notifier = new ChartNotifier();
         const layoutString = localStorage.getItem(`layout-${chartId}`),
             layout = JSON.parse(layoutString !== '' ? layoutString : '{}');
-        // let chartType;
-        // let granularity;
+        let chartType;
+        let granularity;
         let endEpoch;
         let settings = createObjectFromLocalStorage('smartchart-setting');
 
@@ -118,16 +125,16 @@ class App extends Component {
         if (settings.historical) {
             this.removeAllComparisons();
             endEpoch = (new Date(`${today}:00Z`).valueOf() / 1000);
-            // chartType = 'mountain';
-            // granularity = 0;
+            chartType = 'mountain';
+            granularity = 0;
             if (layout) {
-                // granularity = layout.timeUnit === 'second' ? 0 : parseInt(layout.interval * IntervalEnum[layout.timeUnit], 10);
+                granularity = layout.timeUnit === 'second' ? 0 : parseInt(layout.interval * IntervalEnum[layout.timeUnit], 10);
 
-                // if (layout.chartType === 'candle' && layout.aggregationType !== 'ohlc') {
-                //     chartType = layout.aggregationType;
-                // } else {
-                //     chartType = layout.chartType;
-                // }
+                if (layout.chartType === 'candle' && layout.aggregationType !== 'ohlc') {
+                    chartType = layout.aggregationType;
+                } else {
+                    chartType = layout.chartType;
+                }
             }
         }
 
@@ -142,12 +149,10 @@ class App extends Component {
         this.state = {
             settings,
             endEpoch,
+            chartType,
+            granularity,
             isConnectionOpened: true,
         };
-
-        setTimeout(() => {
-            this.setState({ startEpoch:1556781674, endEpoch:1556782154 });
-        }, 10000);
     }
 
     /*
@@ -182,6 +187,8 @@ class App extends Component {
 
         if (!prevSetting.historical && settings.historical) {
             this.setState({
+                chartType: 'mountain',
+                granularity: 0,
                 endEpoch: (new Date(`${today}:00Z`).valueOf() / 1000),
             });
             this.removeAllComparisons();
@@ -219,8 +226,20 @@ class App extends Component {
     renderControls = () => (
         <>
             {isMobile ? '' : <CrosshairToggle />}
-            <ChartTypes />
-            <Timeperiod />
+            <ChartTypes
+                onChange={(chartType) => {
+                    this.setState({
+                        chartType,
+                    });
+                }}
+            />
+            <Timeperiod
+                onChange={(timePeriod) => {
+                    this.setState({
+                        granularity: timePeriod,
+                    });
+                }}
+            />
             <StudyLegend />
             {this.state.settings.historical ? '' : <Comparison />}
             <DrawTools />
@@ -238,7 +257,7 @@ class App extends Component {
     getIsChartReady = isChartReady => isChartReady;
 
     render() {
-        const { settings, isConnectionOpened, symbol, startEpoch, endEpoch, clearChart } = this.state;
+        const { settings, isConnectionOpened, symbol, endEpoch } = this.state;
 
         return (
             <SmartChart
@@ -255,11 +274,11 @@ class App extends Component {
                 requestSubscribe={requestSubscribe}
                 requestForget={requestForget}
                 settings={settings}
-                startEpoch={startEpoch}
                 endEpoch={endEpoch}
+                chartType={this.state.chartType}
+                granularity={this.state.granularity}
                 onSettingsChange={this.saveSettings}
                 isConnectionOpened={isConnectionOpened}
-                clearChart={clearChart}
             />
         );
     }
