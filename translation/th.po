@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom\n"
 "Language-Team: Thai\n"
 "Language: th_TH\n"
-"PO-Revision-Date: 2019-05-06 01:42\n"
+"PO-Revision-Date: 2019-05-06 02:12\n"
 
 msgid " already exists."
 msgstr " มีอยู่แล้ว"
@@ -1348,8 +1348,8 @@ msgid "Weak Ratio"
 msgstr "อัตราส่วนความอ่อนแอ"
 
 msgid "Closed"
-msgstr ""
+msgstr "ปิด"
 
 msgid "Opens in:"
-msgstr ""
+msgstr "เปิดใน:"
 
