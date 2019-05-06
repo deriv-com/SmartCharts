@@ -302,7 +302,16 @@ class ChartStore {
                 }
             } catch (e) { width = yax.width; } // Firefox doesn't like this in hidden iframe
 
+            width -= 14;
+            if (this.chart.yAxis.width < width) {
+                this.chart.yAxis.width = width;
+                this.calculateYAxisPositions();
+            } else  {
+                width = this.chart.yAxis.width;
+            }
+
             let x = this.width - this.chart.yAxis.width;
+            let left = ((width - textWidth) / 2);
 
             if (yax.width < 0) x += (yax.width - width);
             const position = (yax.position === null ? panel.chart.yAxis.position : yax.position);
@@ -321,29 +330,10 @@ class ChartStore {
             let yaxisLabelStyle = this.yaxisLabelStyle;
             if (yax.yaxisLabelStyle) yaxisLabelStyle = yax.yaxisLabelStyle;
 
-            // try to place price label in the y-axis
-            width -= 14;
-            x += 14;
-            if (this.chart.yAxis.width < width) {
-                this.chart.yAxis.width = width;
-                this.calculateYAxisPositions();
-            } else  {
-                width = this.chart.yAxis.width;
-            }
-
-            let left = ((width - textWidth) / 2);
-
-            switch (this.labelType) {
-            case 'crosshair':
-                x -= 14;
-                break;
-            case 'countdown':
-                x -= 14;
-                break;
-            default:
+            if (this.labelType !== 'crosshair' && this.labelType !== 'countdown') {
+                x += 14;
                 left  -= 8;
             }
-
 
             const params = {
                 ctx:context,
