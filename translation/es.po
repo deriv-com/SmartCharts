@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom\n"
 "Language-Team: Spanish\n"
 "Language: es_ES\n"
-"PO-Revision-Date: 2019-05-07 22:01\n"
+"PO-Revision-Date: 2019-05-07 22:02\n"
 
 msgid " already exists."
 msgstr " ya existe."
@@ -916,25 +916,25 @@ msgid "Display Average"
 msgstr "Promedio de Visualización"
 
 msgid "Display 1 Standard Deviation (1σ)"
-msgstr ""
+msgstr "Visualizar 1 Desviación Estándar (1σ)"
 
 msgid "Display 2 Standard Deviation (2σ)"
-msgstr ""
+msgstr "Visualizar 2 Desviaciones Estándar (2σ)"
 
 msgid "Display 3 Standard Deviation (3σ)"
-msgstr ""
+msgstr "Visualizar 3 Desviaciones Estándar (3σ)"
 
 msgid "Average"
 msgstr "Promedio"
 
 msgid "1 Standard Deviation (1σ)"
-msgstr ""
+msgstr "1 Desviación Estándar (1σ)"
 
 msgid "2 Standard Deviation (2σ)"
-msgstr ""
+msgstr "2 Desviaciones Estándar (2σ)"
 
 msgid "3 Standard Deviation (3σ)"
-msgstr ""
+msgstr "3 Desviaciones Estándar (3σ)"
 
 msgid "Correlation Coefficient"
 msgstr ""
