@@ -29,6 +29,7 @@ export default class BarrierStore {
     _shadeState;
 
     @computed get pip() { return this.mainStore.chart.currentActiveSymbol.decimal_places; }
+    @computed get yAxisWidth() { return this.mainStore.chart.yAxiswidth; }
 
     constructor(mainStore) {
         this.mainStore = mainStore;
@@ -114,22 +115,19 @@ export default class BarrierStore {
     _setupConstrainBarrierPrices() {
         // barrier 1 cannot go below barrier 2
         this._high_barrier.priceConstrainer = (newPrice) => {
-            if (this._low_barrier.visible) {
-                if (newPrice < this._low_barrier.realPrice) {
-                    return this._high_barrier.realPrice;
-                }
-            }
+            const nextPrice = (this._low_barrier.visible && (newPrice < this._low_barrier.realPrice))
+                ? this._high_barrier.realPrice : newPrice;
+            this.mainStore.chart.calculateYaxisWidth(nextPrice);
 
-            return newPrice;
+            return nextPrice;
         };
 
         // barrier 2 cannot go above barrier 1
         this._low_barrier.priceConstrainer = (newPrice) => {
-            if (newPrice > this._high_barrier.realPrice) {
-                return this._low_barrier.realPrice;
-            }
+            const nextPrice = (newPrice > this._high_barrier.realPrice) ? this._low_barrier.realPrice : newPrice;
 
-            return newPrice;
+            this.mainStore.chart.calculateYaxisWidth(nextPrice);
+            return nextPrice;
         };
     }
 
@@ -257,17 +255,20 @@ export default class BarrierStore {
         const bottom = this._calcBottomShade(this._low_barrier);
         this.betweenShadeStore.top = this._high_barrier.top;
         this.betweenShadeStore.bottom = bottom;
+        this.betweenShadeStore.right = this.yAxisWidth;
     }
 
     _shadeBelow(barrier = this._high_barrier) {
         this.belowShadeStore.top = barrier.top;
         this.belowShadeStore.bottom = 0;
+        this.belowShadeStore.right = this.yAxisWidth;
     }
 
     _shadeAbove(barrier = this._high_barrier) {
         const bottom = this._calcBottomShade(barrier);
         this.aboveShadeStore.top = 0;
         this.aboveShadeStore.bottom = bottom;
+        this.aboveShadeStore.right = this.yAxisWidth;
     }
 
     _shadeOutside() {

@@ -7,10 +7,10 @@ msgstr ""
 "X-Crowdin-File: /dev/translation/messages.pot\n"
 "Project-Id-Version: smartcharts\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Last-Translator: binarycom <jy@binary.com>\n"
+"Last-Translator: binarycom\n"
 "Language-Team: Chinese Traditional\n"
 "Language: zh_TW\n"
-"PO-Revision-Date: 2019-03-01 09:43\n"
+"PO-Revision-Date: 2019-05-07 00:57\n"
 
 msgid " already exists."
 msgstr " 已經存在。"
@@ -1346,4 +1346,10 @@ msgstr "強比例"
 
 msgid "Weak Ratio"
 msgstr "弱比例"
+
+msgid "Closed"
+msgstr "已收盤"
+
+msgid "Opens in:"
+msgstr "離開盤時間還有:"
 
