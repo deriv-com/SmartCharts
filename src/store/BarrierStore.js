@@ -136,6 +136,7 @@ export default class BarrierStore {
     get context() { return this.mainStore.chart.context; }
     get stx() { return this.context.stx; }
     get chart() { return this.stx.chart; }
+    get chartHeight() { return this.mainStore.chart.chartHeight; }
 
     _onBarrierChange = null;
 
@@ -217,6 +218,9 @@ export default class BarrierStore {
     @action.bound _drawShadedArea() {
         if (!this.isInitialized) { return; }
 
+        this._optimizeTop(this._low_barrier);
+        this._optimizeTop(this._high_barrier);
+
         if (this._shadeState === BarrierStore.SHADE_ABOVE) {
             this._shadeAbove();
         } else if (this._shadeState === BarrierStore.SHADE_BELOW) {
@@ -239,6 +243,14 @@ export default class BarrierStore {
 
     _calcBottomShade(barrier) {
         return this.chart.panel.height - barrier.top;
+    }
+
+    _optimizeTop(barrier) {
+        if (barrier.top + 30 > this.chart.panel.height) {
+            barrier.top = this.chart.panel.height - 30;
+        } else if (barrier.top < 10) {
+            barrier.top = 10;
+        }
     }
 
     _shadeBetween() {
