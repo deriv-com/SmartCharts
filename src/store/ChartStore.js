@@ -278,7 +278,7 @@ class ChartStore {
         this.chartNode = this.rootNode.querySelector('.ciq-chart-area');
         this.chartControlsNode = this.rootNode.querySelector('.cq-chart-controls');
 
-        CIQ.Plotter.prototype.yAxiswidth = () => this.yAxiswidth;
+        CIQ.Plotter.prototype.getYAxixWidth = () => this.yAxiswidth;
 
         // monkey patching to handle radius and height for `current price label`
         CIQ.ChartEngine.prototype.createYAxisLabel = function (panel, txt, y, backgroundColor, color, ctx, yAxis) {
@@ -302,6 +302,8 @@ class ChartStore {
                 }
             } catch (e) { width = yax.width; } // Firefox doesn't like this in hidden iframe
 
+            // some y-axis label has style of `roundRectArrow` and some has `rect`, we reduce
+            // 14px which is about the `roundRectArrow` style arrow to make the label all fit
             width -= 14;
             if (this.chart.yAxis.width < width) {
                 this.chart.yAxis.width = width;
@@ -330,6 +332,8 @@ class ChartStore {
             let yaxisLabelStyle = this.yaxisLabelStyle;
             if (yax.yaxisLabelStyle) yaxisLabelStyle = yax.yaxisLabelStyle;
 
+            // as crosshair and countdown style is `rect`, so due to previous rule we should
+            // increase there x position to fit the y-axis
             if (this.labelType !== 'crosshair' && this.labelType !== 'countdown') {
                 x += 14;
                 left  -= 8;

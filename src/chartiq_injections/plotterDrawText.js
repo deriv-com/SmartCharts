@@ -1,9 +1,13 @@
 export const plotterDrawText = () => {
+    // Plotter.drawTex duty is to write y-axis labels,which located in the Plotter
+    // as there isn't any option to make y-axis text align center, and also there
+    // isn't any injection for drawText, we have to do a monkey patching for handling
+    // this issue
     CIQ.Plotter.prototype.drawText = function (context, series) {
         for (let i = 0; i < series.text.length; i++) {
             const textObj = series.text[i];
             const w = textObj.width ? textObj.width : context.measureText(textObj.text).width;
-            const offset = ((this.yAxiswidth() - w) / 2);
+            const offset = ((this.getYAxixWidth() - w) / 2);
             if (textObj.bg) {
                 const h = textObj.height ? textObj.height : 12;
                 const prev = context.fillStyle;
