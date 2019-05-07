@@ -79,9 +79,11 @@ class Chart extends Component {
         const contextWidth =  !isMobile ? `smartcharts-${containerWidth}` : '';
         const TopWidgets = topWidgets || this.defaultTopWidgets;
         const BottomWidgets = !bottomWidgets && showLastDigitStats ? LastDigitStats : bottomWidgets;
+        // if there are any markers, then increase the subholder z-index
+        const HasMarkers = children.length ? 'smartcharts--has-markers' : '';
 
         return (
-            <div className={`smartcharts smartcharts-${theme} ${contextWidth}`}>
+            <div className={`smartcharts smartcharts-${theme} ${contextWidth} ${HasMarkers}`}>
                 <div
                     className={`smartcharts-${isMobile ? 'mobile' : 'desktop'}`}
                     ref={this.modalNode}

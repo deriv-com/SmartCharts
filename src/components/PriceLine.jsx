@@ -20,6 +20,7 @@ class PriceLine extends Component {
             lineStyle,
             color,
             foregroundColor,
+            width,
         } = this.props;
 
         return (
@@ -33,7 +34,7 @@ class PriceLine extends Component {
             >
                 <div className="drag-line" style={{ borderTopStyle: lineStyle }} />
                 <div className="draggable-area" />
-                <div className="drag-price" style={{ backgroundColor: color }}>
+                <div className="drag-price" style={{ backgroundColor: color, width }}>
                     <div className="price">{priceDisplay}</div>
                 </div>
             </div>
