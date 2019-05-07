@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom\n"
 "Language-Team: Spanish\n"
 "Language: es_ES\n"
-"PO-Revision-Date: 2019-05-07 21:23\n"
+"PO-Revision-Date: 2019-05-07 21:38\n"
 
 msgid " already exists."
 msgstr " ya existe."
@@ -250,52 +250,52 @@ msgid "Position"
 msgstr "Posición"
 
 msgid "Price Lines"
-msgstr ""
+msgstr "Líneas de Precios"
 
 msgid "Quadrant Lines"
-msgstr ""
+msgstr "Líneas de Cuadrantes"
 
 msgid "Range"
-msgstr ""
+msgstr "Rango"
 
 msgid "Range Bars"
-msgstr ""
+msgstr "Barras de Rango"
 
 msgid "Ray"
 msgstr ""
 
 msgid "Rectangle"
-msgstr ""
+msgstr "Rectángulo"
 
 msgid "Regression Line"
-msgstr ""
+msgstr "Línea de Regresión"
 
 msgid "Renko"
-msgstr ""
+msgstr "Renko"
 
 msgid "RESET"
-msgstr ""
+msgstr "RESET"
 
 msgid "Retrieving Chart Data..."
-msgstr ""
+msgstr "Obteniendo Datos del Gráfico..."
 
 msgid "Retrieving Chart Engine..."
-msgstr ""
+msgstr "Obteniendo Motores del Gráfico..."
 
 msgid "Retrieving Market Symbols..."
-msgstr ""
+msgstr "Obteniendo Símbolos de Mercado..."
 
 msgid "Retrieving Trading Times..."
-msgstr ""
+msgstr "Obteniendo Horarios de Trading..."
 
 msgid "Reversal"
-msgstr ""
+msgstr "Reversal"
 
 msgid "Reversal Percentage"
-msgstr ""
+msgstr "Porcentaje de Reversal"
 
 msgid "right-click to delete"
-msgstr ""
+msgstr "clic derecho para eliminar"
 
 msgid "right-click to manage"
 msgstr ""
