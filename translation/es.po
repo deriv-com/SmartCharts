@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom\n"
 "Language-Team: Spanish\n"
 "Language: es_ES\n"
-"PO-Revision-Date: 2019-05-07 21:42\n"
+"PO-Revision-Date: 2019-05-07 22:01\n"
 
 msgid " already exists."
 msgstr " ya existe."
@@ -331,13 +331,13 @@ msgid "Speed Resistance Arc"
 msgstr "Arc de Resistencia de Velocidad"
 
 msgid "Speed Resistance Line"
-msgstr ""
+msgstr "Línea de Resistencia de Velocidad"
 
 msgid "Spline"
-msgstr ""
+msgstr "Spline"
 
 msgid "SPOT"
-msgstr ""
+msgstr "PUNTO"
 
 msgid "Streaming for [symbol] is not available due to license restrictions"
 msgstr "La transmisión para [symbol] no está disponible debido a restricciones de licencias"
@@ -643,7 +643,7 @@ msgid "QStick"
 msgstr ""
 
 msgid "Coppock Curve"
-msgstr ""
+msgstr "Curva de Coppock"
 
 msgid "Short RoC"
 msgstr "RoC Corto"
@@ -799,121 +799,121 @@ msgid "High Period"
 msgstr "Período al Alza"
 
 msgid "Low Period"
-msgstr ""
+msgstr "Precio Bajo"
 
 msgid "Donchian High"
-msgstr ""
+msgstr "Alto de Líneas Donchian"
 
 msgid "Donchian Median"
-msgstr ""
+msgstr "Media de Líneas Donchian"
 
 msgid "Donchian Low"
-msgstr ""
+msgstr "Bajo de Líneas Donchian"
 
 msgid "Highest High Value"
-msgstr ""
+msgstr "El mayor de los precios altos"
 
 msgid "Lowest Low Value"
-msgstr ""
+msgstr "El menor de los precios bajos"
 
 msgid "Mass Index"
-msgstr ""
+msgstr "Índice de Masa"
 
 msgid "Bulge Threshold"
-msgstr ""
+msgstr "Límite de Bulge"
 
 msgid "Keltner Channel"
-msgstr ""
+msgstr "Canal de Keltner"
 
 msgid "Keltner Top"
-msgstr ""
+msgstr "Keltner Máximo"
 
 msgid "Keltner Median"
-msgstr ""
+msgstr "Media de Keltner"
 
 msgid "Keltner Bottom"
-msgstr ""
+msgstr "Keltner Mínimo"
 
 msgid "Parabolic SAR"
-msgstr ""
+msgstr "SAR Parabólico"
 
 msgid "Minimum AF"
-msgstr ""
+msgstr "AF Mínimo"
 
 msgid "Maximum AF"
-msgstr ""
+msgstr "AF Máximo"
 
 msgid "Klinger Volume Oscillator"
-msgstr ""
+msgstr "Oscilador de Volumen de Klinger"
 
 msgid "Signal Periods"
-msgstr ""
+msgstr "Períodos de Señal"
 
 msgid "Klinger"
-msgstr ""
+msgstr "Klinger"
 
 msgid "KlingerSignal"
-msgstr ""
+msgstr "Señal de Klinger"
 
 msgid "Elder Ray Index"
-msgstr ""
+msgstr "Índice de Elder-Ray"
 
 msgid "Elder Bull Power"
-msgstr ""
+msgstr "Bull Power de Elder"
 
 msgid "Elder Bear Power"
-msgstr ""
+msgstr "Bear Power de Elder"
 
 msgid "Elder Force Index"
-msgstr ""
+msgstr "Índice de Fuerza de Elder"
 
 msgid "Linear Reg Slope"
-msgstr ""
+msgstr "Pendiente Lineal Reg"
 
 msgid "Slope"
-msgstr ""
+msgstr "Pendiente"
 
 msgid "Center Of Gravity"
-msgstr ""
+msgstr "Centro de Gravedad"
 
 msgid "Typical Price"
-msgstr ""
+msgstr "Precio Típico"
 
 msgid "Weighted Close"
-msgstr ""
+msgstr "Indicador Weighted Close (WCL)"
 
 msgid "Money Flow Index"
-msgstr ""
+msgstr "Índice de Flujo de Capital"
 
 msgid "Williams %R"
-msgstr ""
+msgstr "Williams %R"
 
 msgid "Accumulation/Distribution"
-msgstr ""
+msgstr "Acumulación/Distribución"
 
 msgid "Use Volume"
-msgstr ""
+msgstr "Volumen Acumulado"
 
 msgid "Volume Chart"
-msgstr ""
+msgstr "Gráfico de Volumen"
 
 msgid "Up Volume"
-msgstr ""
+msgstr "Volumen de Subida"
 
 msgid "Down Volume"
-msgstr ""
+msgstr "Volumen de Bajada"
 
 msgid "Volume Underlay"
-msgstr ""
+msgstr "Volumen Base"
 
 msgid "Valuation Lines"
-msgstr ""
+msgstr "Líneas de Valoración"
 
 msgid "Average Type"
-msgstr ""
+msgstr "Tipo de Promedio"
 
 msgid "Display Average"
-msgstr ""
+msgstr "Promedio de Visualización"
 
 msgid "Display 1 Standard Deviation (1σ)"
 msgstr ""
