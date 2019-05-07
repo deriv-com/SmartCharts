@@ -6,6 +6,7 @@ export default class ShadeStore {
     @observable bottom = 0;
     @observable visible = false;
     @observable className = '';
+    @observable right = 0;
 
     constructor(className)  {
         this.className = className;
@@ -16,5 +17,6 @@ export default class ShadeStore {
         bottom: this.bottom,
         visible: this.visible,
         className: this.className,
+        right: this.right,
     }));
 }

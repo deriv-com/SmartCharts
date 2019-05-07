@@ -31,3 +31,11 @@
     position: absolute;
     top: 0px;
 }
+
+.chart-marker-circle {
+    border-radius: 50%;
+    border: 6px solid #baccff;
+    padding: 5px;
+    background: transparent;
+    margin: 0 0px -8px -8px;
+}
