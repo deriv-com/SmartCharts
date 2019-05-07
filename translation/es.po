@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom\n"
 "Language-Team: Spanish\n"
 "Language: es_ES\n"
-"PO-Revision-Date: 2019-05-07 22:02\n"
+"PO-Revision-Date: 2019-05-07 22:19\n"
 
 msgid " already exists."
 msgstr " ya existe."
@@ -544,10 +544,10 @@ msgid "%K Periods"
 msgstr ""
 
 msgid "%K Smoothing Periods"
-msgstr ""
+msgstr "%K Períodos de Suavizamiento"
 
 msgid "%K Double Smoothing Periods"
-msgstr ""
+msgstr "%K Períodos de Suavizamiento Doble"
 
 msgid "%D Periods"
 msgstr ""
@@ -937,13 +937,13 @@ msgid "3 Standard Deviation (3σ)"
 msgstr "3 Desviaciones Estándar (3σ)"
 
 msgid "Correlation Coefficient"
-msgstr ""
+msgstr "Coeficiente de Correlación"
 
 msgid "Price Momentum Oscillator"
-msgstr ""
+msgstr "Oscilator de Impulso del Precio"
 
 msgid "Double Smoothing Period"
-msgstr ""
+msgstr "Doble Período de Suavizamiento"
 
 msgid "PMO"
 msgstr ""
