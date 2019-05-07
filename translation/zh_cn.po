@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom\n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
-"PO-Revision-Date: 2019-05-06 01:42\n"
+"PO-Revision-Date: 2019-05-07 00:57\n"
 
 msgid " already exists."
 msgstr " 已经存在。"
@@ -1348,8 +1348,8 @@ msgid "Weak Ratio"
 msgstr "弱比例"
 
 msgid "Closed"
-msgstr ""
+msgstr "已收盘"
 
 msgid "Opens in:"
-msgstr ""
+msgstr "离开盘时间还有："
 
