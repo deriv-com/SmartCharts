@@ -29,7 +29,7 @@ export default class BarrierStore {
     _shadeState;
 
     @computed get pip() { return this.mainStore.chart.currentActiveSymbol.decimal_places; }
-    @computed get yAxiswidth() { return this.mainStore.chart.yAxiswidth; }
+    @computed get yAxisWidth() { return this.mainStore.chart.yAxiswidth; }
 
     constructor(mainStore) {
         this.mainStore = mainStore;
@@ -243,20 +243,20 @@ export default class BarrierStore {
         const bottom = this._calcBottomShade(this._low_barrier);
         this.betweenShadeStore.top = this._high_barrier.top;
         this.betweenShadeStore.bottom = bottom;
-        this.betweenShadeStore.right = this.yAxiswidth;
+        this.betweenShadeStore.right = this.yAxisWidth;
     }
 
     _shadeBelow(barrier = this._high_barrier) {
         this.belowShadeStore.top = barrier.top;
         this.belowShadeStore.bottom = 0;
-        this.belowShadeStore.right = this.yAxiswidth;
+        this.belowShadeStore.right = this.yAxisWidth;
     }
 
     _shadeAbove(barrier = this._high_barrier) {
         const bottom = this._calcBottomShade(barrier);
         this.aboveShadeStore.top = 0;
         this.aboveShadeStore.bottom = bottom;
-        this.aboveShadeStore.right = this.yAxiswidth;
+        this.aboveShadeStore.right = this.yAxisWidth;
     }
 
     _shadeOutside() {
