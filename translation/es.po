@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom\n"
 "Language-Team: Spanish\n"
 "Language: es_ES\n"
-"PO-Revision-Date: 2019-05-06 01:42\n"
+"PO-Revision-Date: 2019-05-07 21:23\n"
 
 msgid " already exists."
 msgstr " ya existe."
@@ -148,40 +148,40 @@ msgid "Favorites"
 msgstr "Favoritos"
 
 msgid "Fib Arc"
-msgstr ""
+msgstr "Arco de Fib"
 
 msgid "Fib Fan"
-msgstr ""
+msgstr "Abanico de Fib"
 
 msgid "Fib Retracement"
-msgstr ""
+msgstr "Retrocesos de Fibonacci"
 
 msgid "Fib Time Zone"
-msgstr ""
+msgstr "Zona Horaria de Fib"
 
 msgid "Gann Fan"
-msgstr ""
+msgstr "Abanico de Gann"
 
 msgid "Gartley"
-msgstr ""
+msgstr "Gartley"
 
 msgid "H"
-msgstr ""
+msgstr "H"
 
 msgid "Heikin Ashi"
-msgstr ""
+msgstr "Heikin Ashi"
 
 msgid "High"
-msgstr ""
+msgstr "Máximo"
 
 msgid "HIGH"
-msgstr ""
+msgstr "MÁXIMO"
 
 msgid "Historical Data Mode"
-msgstr ""
+msgstr "Modo de Datos Históricos"
 
 msgid "Hollow Candle"
-msgstr ""
+msgstr "Velas Huecas"
 
 msgid "Horizontal"
 msgstr "Horizontal"
@@ -196,22 +196,22 @@ msgid "Interval"
 msgstr "Intérvalo"
 
 msgid "Kagi"
-msgstr ""
+msgstr "Kagi"
 
 msgid "L"
-msgstr ""
+msgstr "L"
 
 msgid "Language"
 msgstr "Idioma"
 
 msgid "Last digits stats for latest 1000 ticks on "
-msgstr ""
+msgstr "Estadísticas para los últimos dígitos de los 1000 ticks más recientes en adelante "
 
 msgid "Line"
 msgstr "Línea"
 
 msgid "Line Break"
-msgstr ""
+msgstr "Salto de Línea"
 
 msgid "Low"
 msgstr "Bajo"
@@ -220,13 +220,13 @@ msgid "LOW"
 msgstr "BAJO"
 
 msgid "Measure"
-msgstr ""
+msgstr "Medida"
 
 msgid "Minute"
 msgstr "Minuto"
 
 msgid "O"
-msgstr ""
+msgstr "O"
 
 msgid "OHLC"
 msgstr "Gráfico OHLC"
@@ -238,16 +238,16 @@ msgid "OPEN"
 msgstr "ABIERTO"
 
 msgid "OVERWRITE"
-msgstr ""
+msgstr "SOBREESCRIBIR"
 
 msgid "Pitchfork"
-msgstr ""
+msgstr "Tridentes"
 
 msgid "Point & Figure"
-msgstr ""
+msgstr "Punto & Cifra"
 
 msgid "Position"
-msgstr ""
+msgstr "Posición"
 
 msgid "Price Lines"
 msgstr ""
