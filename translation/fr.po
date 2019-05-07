@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom\n"
 "Language-Team: French\n"
 "Language: fr_FR\n"
-"PO-Revision-Date: 2019-05-06 01:42\n"
+"PO-Revision-Date: 2019-05-07 09:13\n"
 
 msgid " already exists."
 msgstr " existe déja."
@@ -1348,7 +1348,7 @@ msgid "Weak Ratio"
 msgstr "Faible Ratio"
 
 msgid "Closed"
-msgstr ""
+msgstr "Fermé"
 
 msgid "Opens in:"
 msgstr ""
