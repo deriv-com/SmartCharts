@@ -24,9 +24,9 @@
             }
         }
         .cq-bar-value {
-            margin: -16px 0 0 -5px;
+            margin: -16px 0 0 -6px;
             transition: opacity 0.8s linear;
-            font-size: 10px;
+            font-size: 12px;
             opacity: 0;
 
             &.show {
@@ -65,6 +65,7 @@
     .cq-bar-footer {
         text-align: center;
         width: 325px;
+        font-size: 12px;
 
         @include themify($themes) {
             color: themed('LastdigitsBarFooter');
