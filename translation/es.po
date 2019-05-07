@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom\n"
 "Language-Team: Spanish\n"
 "Language: es_ES\n"
-"PO-Revision-Date: 2019-05-07 21:38\n"
+"PO-Revision-Date: 2019-05-07 21:42\n"
 
 msgid " already exists."
 msgstr " ya existe."
@@ -298,37 +298,37 @@ msgid "right-click to delete"
 msgstr "clic derecho para eliminar"
 
 msgid "right-click to manage"
-msgstr ""
+msgstr "clic derecho para administrar"
 
 msgid "Search..."
 msgstr "Buscar..."
 
 msgid "Segment"
-msgstr ""
+msgstr "Segmento"
 
 msgid "Settings"
 msgstr "Configuración"
 
 msgid "Shape - Arrow"
-msgstr ""
+msgstr "Forma - Flecha"
 
 msgid "Shape - Check"
-msgstr ""
+msgstr "Forma - Check"
 
 msgid "Shape - Cross"
-msgstr ""
+msgstr "Forma - Cruz"
 
 msgid "Shape - Focus"
-msgstr ""
+msgstr "Forma - Enfoque"
 
 msgid "Shape - Heart"
-msgstr ""
+msgstr "Forma - Corazón"
 
 msgid "Shape - Star"
-msgstr ""
+msgstr "Forma - Estrella"
 
 msgid "Speed Resistance Arc"
-msgstr ""
+msgstr "Arc de Resistencia de Velocidad"
 
 msgid "Speed Resistance Line"
 msgstr ""
