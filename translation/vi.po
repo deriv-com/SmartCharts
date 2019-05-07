@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom\n"
 "Language-Team: Vietnamese\n"
 "Language: vi_VN\n"
-"PO-Revision-Date: 2019-05-07 08:53\n"
+"PO-Revision-Date: 2019-05-07 11:43\n"
 
 msgid " already exists."
 msgstr " đã tồn tại."
@@ -1351,5 +1351,5 @@ msgid "Closed"
 msgstr "Đã đóng"
 
 msgid "Opens in:"
-msgstr ""
+msgstr "Mở vào:"
 
