@@ -9,17 +9,20 @@ const Widget = ({
     zoomOut,
     home,
     onScale,
+    enableHome,
 }) => (
     <div
-        className="cq-widget"
+        className="ciq-widget"
     >
-        <div className="cq-widget__item" onClick={onScale}>
+        {enableHome ? (
+            <div className="ciq-widget__item" onClick={home}>
+                <HomeIcon />
+            </div>
+        ) : ''}
+        <div className="ciq-widget__item" onClick={onScale}>
             <ScaleIcon />
         </div>
-        <div className="cq-widget__item" onClick={home}>
-            <HomeIcon />
-        </div>
-        <div className="cq-widget__item cq-widget__item--zoom">
+        <div className="ciq-widget__item ciq-widget__item--zoom">
             <ZoomInIcon onClick={zoomIn} />
             <ZoomOutIcon onClick={zoomOut} />
         </div>
@@ -31,4 +34,5 @@ export default connect(({ chartSize, widget }) => ({
     zoomOut: chartSize.zoomOut,
     home: widget.onHome,
     onScale: widget.onScale,
+    enableHome: widget.enableHome,
 }))(Widget);

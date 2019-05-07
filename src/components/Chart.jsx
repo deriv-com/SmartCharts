@@ -74,16 +74,18 @@ class Chart extends Component {
             theme,
             position,
             showLastDigitStats,
-            enableWidget,
+            enabledNavigationWidget,
         } = this.props;
 
         const currentPosition = `cq-chart-control-${(chartControlsWidgets && position && !isMobile) ? position : 'bottom'}`;
         const contextWidth =  !isMobile ? `smartcharts-${containerWidth}` : '';
         const TopWidgets = topWidgets || this.defaultTopWidgets;
         const BottomWidgets = !bottomWidgets && showLastDigitStats ? LastDigitStats : bottomWidgets;
+        // if there are any markers, then increase the subholder z-index
+        const HasMarkers = children.length ? 'smartcharts--has-markers' : '';
 
         return (
-            <div className={`smartcharts smartcharts-${theme} ${enableWidget ? 'smartcharts--widget' : ''} ${contextWidth}`}>
+            <div className={`smartcharts smartcharts-${theme} ${enabledNavigationWidget ? 'smartcharts--widget' : ''} ${HasMarkers} ${contextWidth}`}>
                 <div
                     className={`smartcharts-${isMobile ? 'mobile' : 'desktop'}`}
                     ref={this.modalNode}
@@ -111,7 +113,7 @@ class Chart extends Component {
                                                 && <PaginationLoader />
                                         }
                                         <CurrentSpot />
-                                        {enableWidget && <Widget /> }
+                                        {enabledNavigationWidget && <Widget /> }
                                     </RenderInsideChart>
                                     <div className="cq-top-ui-widgets">
                                         <TopWidgets />
