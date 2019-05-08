@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom\n"
 "Language-Team: Spanish\n"
 "Language: es_ES\n"
-"PO-Revision-Date: 2019-05-08 21:03\n"
+"PO-Revision-Date: 2019-05-08 21:12\n"
 
 msgid " already exists."
 msgstr " ya existe."
@@ -508,10 +508,10 @@ msgid "Swing Index"
 msgstr "Índice de Swing"
 
 msgid "Limit Move Value"
-msgstr ""
+msgstr "Valor de Movimiento Límite"
 
 msgid "Accumulative Swing Index"
-msgstr ""
+msgstr "Índice Acumulativo de Swing"
 
 msgid "Price Rate of Change"
 msgstr ""
