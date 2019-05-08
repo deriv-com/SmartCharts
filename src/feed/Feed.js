@@ -303,6 +303,12 @@ class Feed {
         if (!this._activeStreams[key]) {
             quotes = [];
         }
+
+        if (quotes.length) {
+            const { Close } = quotes[0];
+            this._mainStore.chart.calculateYaxisWidth(Close);
+        }
+
         if (comparisonChartSymbol) {
             this._stx.updateChartData(quotes, null, {
                 secondarySeries: comparisonChartSymbol,

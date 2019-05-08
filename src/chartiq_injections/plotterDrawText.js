@@ -6,8 +6,8 @@ export const plotterDrawText = () => {
     CIQ.Plotter.prototype.drawText = function (context, series) {
         for (let i = 0; i < series.text.length; i++) {
             const textObj = series.text[i];
-            const w = textObj.width ? textObj.width : context.measureText(textObj.text).width;
-            const offset = ((this.getYAxisWidth() - w) / 2);
+            const w = context.measureText(textObj.text).width;
+            const offset = this.getYAxisWidth() ? ((this.getYAxisWidth() - w) / 2) : 0;
             if (textObj.bg) {
                 const h = textObj.height ? textObj.height : 12;
                 const prev = context.fillStyle;
