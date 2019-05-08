@@ -35,7 +35,7 @@ export default class BottomWidgetsContainerStore {
         this.totalHeight     = Object.keys(this.stx.panels).reduce((acc, key) => acc + this.stx.panels[key].height, 0);
         const margin         = this.totalHeight > this.mainChartHeight ? 0 : 30;
         this.top             = this.mainChartHeight - margin - 200;
-        this.bottom          = this.totalHeight - this.mainChartHeight + margin + 40;
+        this.bottom          = this.totalHeight - this.mainChartHeight + margin + 10;
     }
 
     updateChartMargin = (margin) => {
