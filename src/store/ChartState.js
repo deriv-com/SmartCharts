@@ -10,6 +10,7 @@ class ChartState {
     @observable endEpoch;
     @observable symbol;
     @observable isConnectionOpened;
+    @observable isChartReady = false;
     @observable chartStatusListener;
     @observable settings;
     @observable showLastDigitStats;
@@ -49,7 +50,6 @@ class ChartState {
         this.settings = settings;
         this.isConnectionOpened = isConnectionOpened;
         this.chartStatusListener = chartStatusListener;
-        this.isChartReady = false;
         this.symbol = symbol;
 
         this.rootNode = this.mainStore.chart.rootNode;

@@ -69,6 +69,8 @@ CIQ.ChartEngine.prototype.drawCurrentHR = function () {
                 x = this.pixelFromTick(currentQuote.tick, chart) + (chart.lastTickOffset || 0);
                 endOfLine -= this.chart.context.measureText(txt).width * 0.4 // Draw the chart from the current spot to the beginning of the price label
             }
+            endOfLine += 24; // we move the "x" psoition forward by 24 on createYAxisLabel in chartStore.js
+
             if (this.preferences.currentPriceLine === true && this.isHome()) {
                 this.plotLine(x, endOfLine, y, y, backgroundColor, 'segment', panel.chart.context, panel, {
                     pattern: 'dashed',

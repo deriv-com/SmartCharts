@@ -140,6 +140,11 @@
             right: 100px;
         }
     }
+    &--has-markers {
+        .stx-subholder {
+            z-index: 108 !important;
+        }
+    }
 }
 
 @import 'menu';
