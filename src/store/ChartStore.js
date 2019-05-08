@@ -624,6 +624,7 @@ class ChartStore {
             this.updateCurrentActiveSymbol();
         }
 
+        this.updateYaxisWidth();
         const { chartType: chartTypeStore } = this.mainStore;
         this.contextPromise.then(() => {
             const isTick = this.stxx.layout.timeUnit === 'second';
@@ -649,8 +650,11 @@ class ChartStore {
     }
 
     @action.bound updateYaxisWidth = () => {
-        const { Close } = this.context.stx.currentQuote();
-        this.calculateYaxisWidth(Close);
+        const currentQuote = this.context.stx.currentQuote();
+        if (currentQuote) {
+            const { Close } = currentQuote;
+            this.calculateYaxisWidth(Close);
+        }
     }
 
     // Calling newChart with symbolObj as undefined refreshes the chart
