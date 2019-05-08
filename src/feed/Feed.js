@@ -31,20 +31,23 @@ class Feed {
     }
 
     onContextReady = () => {
-        reaction(() => [this.startEpoch, this.endEpoch], this.onRangeChanged);
-        this._stx.append('updateChartData', () => this.scaleChart());
+        // TODO scalechart needs to be refactor based on new changes in setrange
+        // this._stx.append('updateChartData', () => this.scaleChart());
     };
 
     onRangeChanged = () => {
         /* When layout is importing and range is changing as the same time we dont need to set the range,
         the imported layout witll take care of it. */
-        if (this._mainStore.state.importedLayout) return;
+        /* When clear the chart we create a new chart so no set range is needed */
+        if (this._mainStore.state.importedLayout || this._mainStore.state.clearChart) return;
 
         const now = this._serverTime.getEpoch();
         const periodicity = calculateTimeUnitInterval(this.granularity);
         const rangeTime = ((this.granularity || 1) * this._stx.chart.maxTicks);
         let dtLeft = null;
         let dtRight = null;
+
+        this._mainStore.state.setChartIsReady(false);
 
         if (!this.endEpoch
             && Object.keys(this._activeStreams).length === 0) {
@@ -64,11 +67,6 @@ class Feed {
                 this._stx.home();
                 delete this._stx.layout.range;
             } else {
-                const startTick = this._stx.tickFromDate(dtLeft);
-                const endTick = this._stx.tickFromDate(dtRight);
-                const length = this._stx.masterData.length;
-                this._stx.masterData.splice(0, startTick);
-                this._stx.masterData.splice(endTick - startTick + 1, length - endTick);
                 this.scaleChart();
             }
             this._mainStore.state.saveLayout();
@@ -123,7 +121,7 @@ class Feed {
         const localDate = this._serverTime.getLocalDate();
         suggestedStartDate = suggestedStartDate > localDate ? localDate : suggestedStartDate;
         const isComparisonChart = this._stx.chart.symbol !== symbol;
-        let start = this.startEpoch || (suggestedStartDate / 1000 | 0);
+        let start = this.startEpoch || Math.floor(suggestedStartDate / 1000 | 0);
         const end = this.endEpoch;
         if (isComparisonChart) {
             // Strange issue where comparison series is offset by timezone...
@@ -249,14 +247,14 @@ class Feed {
 
         const now = this._serverTime.getEpoch();
         // Tick history data only goes as far back as 3 years:
-        const startLimit = now - (2.8 * 365 * 24 * 60 * 60 /* == 3 Years */);
+        const startLimit = now - Math.ceil(2.8 * 365 * 24 * 60 * 60); /* == 3 Years */
         let result = { quotes: [] };
         if (end > startLimit) {
             try {
                 const response = await this._binaryApi.getTickHistory({
                     symbol,
                     granularity,
-                    start: Math.max(start, startLimit),
+                    start: Math.floor(Math.max(start, startLimit)),
                     end,
                 });
                 const firstEpoch = Feed.getFirstEpoch(response);

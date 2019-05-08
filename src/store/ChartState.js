@@ -38,7 +38,7 @@ class ChartState {
         this.stxx.addEventListener('layout', this.saveLayout.bind(this));
         this.stxx.addEventListener('symbolChange', this.saveLayout.bind(this));
         this.stxx.addEventListener('drawing', this.saveDrawings.bind(this));
-        this.stxx.addEventListener('move', this.scrollListener.bind(this));
+        // this.stxx.addEventListener('move', this.scrollListener.bind(this));
 
         this.chartStore.feed.onStartPagination(this.setOnPagination.bind(this));
         this.chartStore.feed.onPagination(this.setOnPagination.bind(this));
@@ -51,8 +51,7 @@ class ChartState {
         this.chartStatusListener = chartStatusListener;
         this.isChartReady = false;
         this.symbol = symbol;
-        this.startEpoch = startEpoch;
-        this.endEpoch = endEpoch;
+
         this.rootNode = this.mainStore.chart.rootNode;
 
         this.isAnimationEnabled = isAnimationEnabled;
@@ -86,6 +85,19 @@ class ChartState {
             this.chartType = chartType;
             this.chartTypeStore.setType(chartType);
         }
+
+        if (this.startEpoch !== startEpoch || this.endEpoch !== endEpoch) {
+            this.startEpoch = startEpoch;
+            this.endEpoch = endEpoch;
+            /* Here you need to create a new chart with the range that has been set but the granularity hasn't change */
+            if (this.startEpoch && this.endEpoch && this.granularity === this.mainStore.chart.granularity && !scrollToEpoch) {
+                console.log('new chart after set start epoch');
+                this.mainStore.chart.newChart();
+            } else {
+                this.mainStore.chart.feed.onRangeChanged();
+            }
+        }
+
         if (removeAllComparisons) {
             this.comparisonStore.removeAll();
         }
@@ -339,6 +351,9 @@ class ChartState {
         if (Object.keys(this.mainStore.chart.feed._activeStreams).length === 0) {
             this.stxx.layout.interval = undefined;
         }
+
+        // Clear start and end epoch before importing that layout
+        this.startEpoch = this.endEpoch = null;
 
         this.stxx.importLayout(this.importedLayout, {
             managePeriodicity: true,
