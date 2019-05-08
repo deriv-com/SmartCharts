@@ -121,7 +121,7 @@ class Feed {
         const localDate = this._serverTime.getLocalDate();
         suggestedStartDate = suggestedStartDate > localDate ? localDate : suggestedStartDate;
         const isComparisonChart = this._stx.chart.symbol !== symbol;
-        let start = this.startEpoch || (suggestedStartDate / 1000 | 0);
+        let start = this.startEpoch || Math.floor(suggestedStartDate / 1000 | 0);
         const end = this.endEpoch;
         if (isComparisonChart) {
             // Strange issue where comparison series is offset by timezone...
@@ -247,14 +247,14 @@ class Feed {
 
         const now = this._serverTime.getEpoch();
         // Tick history data only goes as far back as 3 years:
-        const startLimit = now - (2.8 * 365 * 24 * 60 * 60 /* == 3 Years */);
+        const startLimit = now - Math.ceil(2.8 * 365 * 24 * 60 * 60); /* == 3 Years */
         let result = { quotes: [] };
         if (end > startLimit) {
             try {
                 const response = await this._binaryApi.getTickHistory({
                     symbol,
                     granularity,
-                    start: Math.max(start, startLimit),
+                    start: Math.floor(Math.max(start, startLimit)),
                     end,
                 });
                 const firstEpoch = Feed.getFirstEpoch(response);
