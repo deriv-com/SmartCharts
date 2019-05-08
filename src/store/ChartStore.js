@@ -648,6 +648,11 @@ class ChartStore {
         }
     }
 
+    @action.bound updateYaxisWidth = () => {
+        const { Close } = this.context.stx.currentQuote();
+        this.calculateYaxisWidth(Close);
+    }
+
     // Calling newChart with symbolObj as undefined refreshes the chart
     @action.bound newChart(symbolObj = this.currentActiveSymbol, params) {
         this.stxx.chart.symbolDisplay = symbolObj.name;
@@ -656,6 +661,7 @@ class ChartStore {
         const onChartLoad = (err) => {
             this.setMainSeriesDisplay(symbolObj.name);
 
+            this.updateYaxisWidth();
             this.loader.hide();
             this.mainStore.state.setChartIsReady(true);
             if (err) {
@@ -663,8 +669,6 @@ class ChartStore {
                 return;
             }
             this.state.restoreDrawings();
-            const { Close } = this.context.stx.currentQuote();
-            this.calculateYaxisWidth(Close);
         };
         this.yAxiswidth = 0;
         const rangeSpan = this.getRangeSpan();

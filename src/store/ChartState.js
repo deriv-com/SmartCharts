@@ -247,6 +247,7 @@ class ChartState {
                 }
                 this.restoreDrawings(this.stxx, this.stxx.chart.symbol);
                 if (this.chartStore.loader) {
+                    this.chartStore.updateYaxisWidth();
                     this.chartStore.loader.hide();
                     this.setChartIsReady(true);
                     this.stxx.home();

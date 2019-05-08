@@ -70,6 +70,7 @@ class Feed {
                 this.scaleChart();
             }
             this._mainStore.state.saveLayout();
+            this._mainStore.chart.updateYaxisWidth();
             this.loader.hide();
             this._mainStore.state.setChartIsReady(true);
         });
@@ -302,11 +303,6 @@ class Feed {
         this._forgetIfEndEpoch(key);
         if (!this._activeStreams[key]) {
             quotes = [];
-        }
-
-        if (quotes.length) {
-            const { Close } = quotes[0];
-            this._mainStore.chart.calculateYaxisWidth(Close);
         }
 
         if (comparisonChartSymbol) {
