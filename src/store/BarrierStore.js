@@ -134,7 +134,6 @@ export default class BarrierStore {
     get context() { return this.mainStore.chart.context; }
     get stx() { return this.context.stx; }
     get chart() { return this.stx.chart; }
-    get chartHeight() { return this.mainStore.chart.chartHeight; }
 
     _onBarrierChange = null;
 
