@@ -90,7 +90,7 @@ class ChartState {
             this.startEpoch = startEpoch;
             this.endEpoch = endEpoch;
             if (isStaticChart && this.stxx) {
-                // Create a new chart if it is a sta load
+                // Create a new chart if it is a static chart
                 this.mainStore.chart.newChart();
             } else if (this.mainStore.chart.feed) {
                 this.mainStore.chart.feed.onRangeChanged();
