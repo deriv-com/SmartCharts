@@ -45,7 +45,7 @@ class ChartState {
         this.chartStore.feed.onPagination(this.setOnPagination.bind(this));
     };
 
-    @action.bound updateProps({ id, settings, isConnectionOpened, chartStatusListener, symbol, granularity, chartType, startEpoch, endEpoch, onExportLayout, clearChart, importedLayout, removeAllComparisons, isAnimationEnabled = true, showLastDigitStats = false, scrollToEpoch, scrollToEpochOffset = 0, zoom, chartControlsWidgets }) {
+    @action.bound updateProps({ id, settings, isConnectionOpened, chartStatusListener, symbol, granularity, chartType, isStaticChart, startEpoch, endEpoch, onExportLayout, clearChart, importedLayout, removeAllComparisons, isAnimationEnabled = true, showLastDigitStats = false, scrollToEpoch, scrollToEpochOffset = 0, zoom, chartControlsWidgets }) {
         this.chartId = id;
         this.settings = settings;
         this.isConnectionOpened = isConnectionOpened;
@@ -89,11 +89,10 @@ class ChartState {
         if (this.startEpoch !== startEpoch || this.endEpoch !== endEpoch) {
             this.startEpoch = startEpoch;
             this.endEpoch = endEpoch;
-            /* Here you need to create a new chart with the range that has been set but the granularity hasn't change */
-            if (this.startEpoch && this.endEpoch && this.granularity === this.mainStore.chart.granularity && !scrollToEpoch) {
-                console.log('new chart after set start epoch');
+            if (isStaticChart && this.stxx) {
+                // Create a new chart if it is a sta load
                 this.mainStore.chart.newChart();
-            } else {
+            } else if (this.mainStore.chart.feed) {
                 this.mainStore.chart.feed.onRangeChanged();
             }
         }

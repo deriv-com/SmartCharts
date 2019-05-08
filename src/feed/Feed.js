@@ -1,5 +1,5 @@
 import EventEmitter from 'event-emitter-es6';
-import { reaction, when } from 'mobx';
+import { reaction } from 'mobx';
 import { TickHistoryFormatter } from './TickHistoryFormatter';
 import { calculateGranularity, getUTCEpoch, calculateTimeUnitInterval, getUTCDate } from '../utils';
 import { RealtimeSubscription, DelayedSubscription } from './subscription';
@@ -25,15 +25,9 @@ class Feed {
         this._serverTime = ServerTime.getInstance();
         this._tradingTimes = tradingTimes;
         reaction(() => mainStore.state.isConnectionOpened, this.onConnectionChanged.bind(this));
-        when(() => this.context, this.onContextReady);
 
         this._emitter = new EventEmitter({ emitDelay: 0 });
     }
-
-    onContextReady = () => {
-        // TODO scalechart needs to be refactor based on new changes in setrange
-        // this._stx.append('updateChartData', () => this.scaleChart());
-    };
 
     onRangeChanged = () => {
         /* When layout is importing and range is changing as the same time we dont need to set the range,
