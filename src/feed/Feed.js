@@ -305,7 +305,6 @@ class Feed {
         if (!this._activeStreams[key]) {
             quotes = [];
         }
-
         if (comparisonChartSymbol) {
             this._stx.updateChartData(quotes, null, {
                 secondarySeries: comparisonChartSymbol,
