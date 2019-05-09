@@ -624,7 +624,6 @@ class ChartStore {
             this.updateCurrentActiveSymbol();
         }
 
-        this.updateYaxisWidth();
         const { chartType: chartTypeStore } = this.mainStore;
         this.contextPromise.then(() => {
             const isTick = this.stxx.layout.timeUnit === 'second';
@@ -665,7 +664,6 @@ class ChartStore {
         const onChartLoad = (err) => {
             this.setMainSeriesDisplay(symbolObj.name);
 
-            this.updateYaxisWidth();
             this.loader.hide();
             this.mainStore.state.setChartIsReady(true);
             if (err) {

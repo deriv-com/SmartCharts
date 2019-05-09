@@ -71,7 +71,6 @@ class Feed {
                 this.scaleChart();
             }
             this._mainStore.state.saveLayout();
-            this._mainStore.chart.updateYaxisWidth();
             this.loader.hide();
             this._mainStore.state.setChartIsReady(true);
         });
@@ -219,6 +218,8 @@ class Feed {
             return;
         }
         callback({ quotes });
+
+        this._mainStore.chart.updateYaxisWidth();
 
         this._emitDataUpdate(quotes, comparisonChartSymbol);
     }
