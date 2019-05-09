@@ -3,7 +3,6 @@ import {
     observable,
     when }     from 'mobx';
 
-
 export default class BottomWidgetsContainerStore {
     @observable bottom          = 0;
     @observable isReadyToShow   = false;
@@ -31,11 +30,12 @@ export default class BottomWidgetsContainerStore {
     }
 
     @action.bound updateChartHeight() {
-        this.mainChartHeight = this.stx.panels.chart.height;
-        this.totalHeight     = Object.keys(this.stx.panels).reduce((acc, key) => acc + this.stx.panels[key].height, 0);
-        const margin         = this.totalHeight > this.mainChartHeight ? 0 : 30;
-        this.top             = this.mainChartHeight - margin - 200;
-        this.bottom          = this.totalHeight - this.mainChartHeight + margin + 10;
+        this.mainChartHeight      = this.stx.panels.chart.height;
+        this.totalHeight          = Object.keys(this.stx.panels).reduce((acc, key) => acc + this.stx.panels[key].height, 0);
+        const margin              = this.totalHeight > this.mainChartHeight ? 0 : 30;
+        const chartControlsHeight = this.mainStore.state.chartControlsWidgets ? 40 : 0;
+        this.top                  = this.mainChartHeight - margin - 200;
+        this.bottom               = this.totalHeight - this.mainChartHeight + margin + chartControlsHeight;
     }
 
     updateChartMargin = (margin) => {
