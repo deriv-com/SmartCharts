@@ -153,17 +153,6 @@ class App extends Component {
             () => this.setState({ isConnectionOpened: true }),
         );
 
-        const markers = [];
-
-        for (let i = 0; i < 15; i++) {
-            markers.push({
-                ts: moment().utc().second(0).subtract(i + 3, 'minutes')
-                    .unix(),
-                className: 'chart-marker-circle',
-                xPositioner: 'epoch',
-                yPositioner: 'value',
-            });
-        }
 
         this.state = {
             settings,
@@ -173,9 +162,9 @@ class App extends Component {
             granularity,
             isConnectionOpened: true,
             highLow: {},
-            barrierType: 'OUTSIDE',
+            barrierType: '',
             draggable: true,
-            markers,
+            markers: [],
         };
     }
 
