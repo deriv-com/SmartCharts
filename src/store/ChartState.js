@@ -89,8 +89,8 @@ class ChartState {
         if (this.startEpoch !== startEpoch || this.endEpoch !== endEpoch) {
             this.startEpoch = startEpoch;
             this.endEpoch = endEpoch;
-            if (isStaticChart && this.stxx) {
-                // Create a new chart if it is a static chart
+            if (isStaticChart && this.stxx && this.granularity === this.mainStore.chart.granularity) {
+                // Reload the chart if it is a static chart and the granularity hasn't changed
                 this.mainStore.chart.newChart();
             } else if (this.mainStore.chart.feed) {
                 this.mainStore.chart.feed.onRangeChanged();
