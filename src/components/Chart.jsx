@@ -85,7 +85,7 @@ class Chart extends Component {
         const HasMarkers = children && children.length ? 'smartcharts--has-markers' : '';
 
         return (
-            <div className={`smartcharts smartcharts-${theme} ${enabledNavigationWidget ? 'smartcharts--widget' : ''} ${HasMarkers} ${contextWidth}`}>
+            <div className={`smartcharts smartcharts-${theme} ${enabledNavigationWidget ? 'smartcharts--navigation-widget' : ''} ${HasMarkers} ${contextWidth}`}>
                 <div
                     className={`smartcharts-${isMobile ? 'mobile' : 'desktop'}`}
                     ref={this.modalNode}
