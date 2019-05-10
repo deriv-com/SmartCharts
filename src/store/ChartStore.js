@@ -623,16 +623,6 @@ class ChartStore {
         if (symbolObj) {
             this.updateCurrentActiveSymbol();
         }
-
-        const { chartType: chartTypeStore } = this.mainStore;
-        this.contextPromise.then(() => {
-            const isTick = this.stxx.layout.timeUnit === 'second';
-            const isCandle = chartTypeStore.isCandle;
-            if (isCandle && isTick) {
-                // Tick charts cannot be represented with candles
-                chartTypeStore.setType('mountain');
-            }
-        });
     }
 
     @action.bound calculateYaxisWidth = (price) => {
