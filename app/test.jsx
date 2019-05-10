@@ -439,7 +439,7 @@ class App extends Component {
                 </div>
                 <div className="action-section">
                     <div className="form-row">
-                        Widget <br />
+                        Navigation Widget <br />
                         <button type="button" onClick={this.onWidget}>Toggle</button>
                     </div>
                     <div className="form-row">

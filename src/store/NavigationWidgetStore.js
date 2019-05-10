@@ -1,6 +1,7 @@
 import { observable, action, when } from 'mobx';
+import { getUTCEpoch } from '../utils';
 
-export default class WidgetStore {
+export default class NavigationWidgetStore {
     @observable stx;
     @observable enableHome = false;
 
@@ -28,6 +29,14 @@ export default class WidgetStore {
     }
 
     @action.bound onScale() {
-        this.stateStore.scrollChartToLeft();
+        let scrollToEpoch = null;
+
+        if (!this.stateStore.scrollToEpoch) {
+            const { dataSet } = this.stxx.chart;
+            if (dataSet && dataSet.length) {
+                scrollToEpoch = getUTCEpoch(dataSet[0].DT);
+            }
+        }
+        this.stateStore.scrollChartToLeft(scrollToEpoch);
     }
 }

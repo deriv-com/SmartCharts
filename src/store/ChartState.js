@@ -118,13 +118,13 @@ class ChartState {
 
     @action.bound setChartTheme(theme, isChartClosed = this.isChartClosed) {
         this.stxx.clearStyles();
-        this.stxx.setStyle('stx_grid', 'color', Theme[`${theme}chartgrid`]);
-        this.rootNode.querySelector('.chartContainer').style.backgroundColor = Theme[`${theme}chartbg`];
+        this.stxx.setStyle('stx_grid', 'color', Theme[`${theme}_chart_grid`]);
+        this.rootNode.querySelector('.chartContainer').style.backgroundColor = Theme[`${theme}_chart_bg`];
         if (isChartClosed) {
             const closedChartColor = 'rgba(129, 133, 152, 0.35)';
             this.stxx.setStyle('stx_mountain_chart', 'borderTopColor', closedChartColor);
-            this.stxx.setStyle('stx_mountain_chart', 'backgroundColor', Theme[`${theme}chartmountainbg`]);
-            this.stxx.setStyle('stx_mountain_chart', 'color', Theme[`${theme}chartmountainbgshade`]);
+            this.stxx.setStyle('stx_mountain_chart', 'backgroundColor', Theme[`${theme}_chart_mountain_bg`]);
+            this.stxx.setStyle('stx_mountain_chart', 'color', Theme[`${theme}_chart_mountain_bg_shade`]);
 
             // line chart
             this.stxx.setStyle('stx_line_chart', 'color', closedChartColor);
@@ -136,17 +136,17 @@ class ChartState {
             this.stxx.setStyle('stx_bar_down', 'color', closedChartColor);
             this.stxx.setStyle('stx_bar_even', 'color', closedChartColor);
             // candle chart
-            this.stxx.setStyle('stx_candle_up', 'color', Theme[`${theme}chartclosedcandle`]);
-            this.stxx.setStyle('stx_candle_down', 'color', Theme[`${theme}chartclosedcandle`]);
-            this.stxx.setStyle('stx_candle_even', 'color', Theme[`${theme}chartclosedcandle`]);
+            this.stxx.setStyle('stx_candle_up', 'color', Theme[`${theme}_chart_closed_candle`]);
+            this.stxx.setStyle('stx_candle_down', 'color', Theme[`${theme}_chart_closed_candle`]);
+            this.stxx.setStyle('stx_candle_even', 'color', Theme[`${theme}_chart_closed_candle`]);
             // candle wick
             this.stxx.setStyle('stx_candle_shadow_up', 'color', closedChartColor);
             this.stxx.setStyle('stx_candle_shadow_down', 'color', closedChartColor);
             this.stxx.setStyle('stx_candle_shadow_even', 'color', closedChartColor);
             // hollow candle
-            this.stxx.setStyle('stx_hollow_candle_up', 'color', Theme[`${theme}chartclosedcandle`]);
-            this.stxx.setStyle('stx_hollow_candle_down', 'color', Theme[`${theme}chartclosedcandle`]);
-            this.stxx.setStyle('stx_hollow_candle_even', 'color', Theme[`${theme}chartclosedcandle`]);
+            this.stxx.setStyle('stx_hollow_candle_up', 'color', Theme[`${theme}_chart_closed_candle`]);
+            this.stxx.setStyle('stx_hollow_candle_down', 'color', Theme[`${theme}_chart_closed_candle`]);
+            this.stxx.setStyle('stx_hollow_candle_even', 'color', Theme[`${theme}_chart_closed_candle`]);
             // baseline chart
             this.stxx.setStyle('stx_baseline_up', 'color', closedChartColor);
             this.stxx.setStyle('stx_baseline_down', 'color', closedChartColor);
@@ -159,17 +159,17 @@ class ChartState {
             this.stxx.setStyle('stx_pandf_up', 'color', closedChartColor);
             this.stxx.setStyle('stx_pandf_down', 'color', closedChartColor);
             // current price text color
-            this.stxx.setStyle('stx_current_hr_down', 'color', Theme[`${theme}candletextclosed`]);
-            this.stxx.setStyle('stx_current_hr_up', 'color', Theme[`${theme}candletextclosed`]);
+            this.stxx.setStyle('stx_current_hr_down', 'color', Theme[`${theme}_candle_text_closed`]);
+            this.stxx.setStyle('stx_current_hr_up', 'color', Theme[`${theme}_candle_text_closed`]);
             // current price bg color
-            this.stxx.setStyle('stx_current_hr_down', 'background-color', Theme[`${theme}candlebgclosed`]);
-            this.stxx.setStyle('stx_current_hr_up', 'background-color', Theme[`${theme}candlebgclosed`]);
+            this.stxx.setStyle('stx_current_hr_down', 'background-color', Theme[`${theme}_candle_bg_closed`]);
+            this.stxx.setStyle('stx_current_hr_up', 'background-color', Theme[`${theme}_candle_bg_closed`]);
         } else {
-            this.stxx.setStyle('stx_mountain_chart', 'borderTopColor', Theme[`${theme}chartmountainborder`]);
-            this.stxx.setStyle('stx_mountain_chart', 'backgroundColor', Theme[`${theme}chartmountainbg`]);
-            this.stxx.setStyle('stx_mountain_chart', 'color', Theme[`${theme}chartmountainbgshade`]);
+            this.stxx.setStyle('stx_mountain_chart', 'borderTopColor', Theme[`${theme}_chart_mountain_border`]);
+            this.stxx.setStyle('stx_mountain_chart', 'backgroundColor', Theme[`${theme}_chart_mountain_bg`]);
+            this.stxx.setStyle('stx_mountain_chart', 'color', Theme[`${theme}_chart_mountain_bg_shade`]);
 
-            this.stxx.setStyle('stx_line_chart', 'color', Theme[`${theme}chartmountainborder`]);
+            this.stxx.setStyle('stx_line_chart', 'color', Theme[`${theme}_chart_mountain_border`]);
         }
         this.stxx.draw();
     }
@@ -284,14 +284,15 @@ class ChartState {
         }
     }
 
-    scrollChartToLeft() {
-        if (this.scrollToEpoch) {
+    scrollChartToLeft(epoch) {
+        if (this.scrollToEpoch || epoch) {
+            const scrollToEpoch = this.scrollToEpoch || epoch;
             let startEntry = this.stxx.chart.dataSet
-                .find(entry =>  entry.DT.valueOf() === new Date(getUTCDate(this.scrollToEpoch)).valueOf());
+                .find(entry =>  entry.DT.valueOf() === new Date(getUTCDate(scrollToEpoch)).valueOf());
 
             if (!startEntry) {
                 startEntry = {
-                    DT: new Date(getUTCDate(this.scrollToEpoch)),
+                    DT: new Date(getUTCDate(scrollToEpoch)),
                     Close: null,
                 };
 
@@ -310,7 +311,7 @@ class ChartState {
             this.stxx.chart.lockScroll = true;
             const tick = this.stxx.tickFromDate(startEntry.DT);
             const tickLeft = this.stxx.chart.dataSet.length - tick;
-            this.stxx.chart.scroll = tickLeft + 1;
+            this.stxx.chart.scroll = tickLeft + (tick === 0 ? 0 : 1);
             this.stxx.setMaxTicks(tickLeft > 3 ? tickLeft : 3, { padding: 150 });
             this.stxx.draw();
         } else {

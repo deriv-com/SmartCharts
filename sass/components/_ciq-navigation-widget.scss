@@ -1,5 +1,5 @@
 
-.ciq-widget {
+.ciq-navigation-widget {
     width: 32px;
     position: absolute;
     bottom: 2.5em;
@@ -22,12 +22,12 @@
             line-height: 41px;
             transition: none;
             @include themify($themes) {
-                background-color: themed('WidgetBg');
+                background-color: themed('NavigationWidgetBg');
             }
 
             svg {
                 @include themify($themes) {
-                    fill: themed('WidgetColor');
+                    fill: themed('NavigationWidgetColor');
                 }
             }
         }
