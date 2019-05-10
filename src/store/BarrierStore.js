@@ -30,6 +30,7 @@ export default class BarrierStore {
 
     @computed get pip() { return this.mainStore.chart.currentActiveSymbol.decimal_places; }
     @computed get yAxisWidth() { return this.mainStore.chart.yAxiswidth; }
+    @computed get priceLabelWidth() { return this.yAxisWidth + 1; }
 
     constructor(mainStore) {
         this.mainStore = mainStore;
