@@ -326,7 +326,7 @@ html,body{-ms-touch-action:none;margin:0px}
 .no-touch .price-arrow span{position:absolute;top:4px;left:6px;display:block;width:15px;height:15px;background-position:-4px -488px;opacity:0;transition:opacity 0.2s}
 .no-touch .chart-line:hover .price-arrow{width:20px;height:23px}
 .no-touch .chart-line:hover .price-arrow span{opacity:1}
-.price{font-size:12px;font-weight:bold;display:block;padding:3px 6px;line-height:18px;overflow:hidden}
+.price{font-size:12px;font-weight:bold;display:block;padding:3px 6px;line-height:18px;overflow:hidden;text-align:center}
 .draggable .price{padding-left:16px}
 .draggable .price:after{font-weight:normal;content:'\2261';font-size:25px;position:absolute;left:1px;top:1px;-webkit-transform:scaleX(0.8);transform:scaleX(0.8)}
 .shade.hidden{opacity:0}
