@@ -82,7 +82,7 @@ class Chart extends Component {
         const TopWidgets = topWidgets || this.defaultTopWidgets;
         const BottomWidgets = !bottomWidgets && showLastDigitStats ? LastDigitStats : bottomWidgets;
         // if there are any markers, then increase the subholder z-index
-        const HasMarkers = children.length ? 'smartcharts--has-markers' : '';
+        const HasMarkers = children && children.length ? 'smartcharts--has-markers' : '';
 
         return (
             <div className={`smartcharts smartcharts-${theme} ${enabledNavigationWidget ? 'smartcharts--widget' : ''} ${HasMarkers} ${contextWidth}`}>
