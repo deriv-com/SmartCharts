@@ -219,6 +219,8 @@ class Feed {
         }
         callback({ quotes });
 
+        this._mainStore.chart.updateYaxisWidth();
+
         this._emitDataUpdate(quotes, comparisonChartSymbol);
     }
 
