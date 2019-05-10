@@ -159,7 +159,8 @@
             flex-direction: column;
             justify-content: center;
             text-align: center;
-            width: 48px;
+            width: auto;
+            padding: 0 5px;
             height: 20px;
             border: 2px solid $COLOR_RED;
             color: $COLOR_RED;
