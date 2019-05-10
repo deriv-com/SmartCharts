@@ -356,10 +356,10 @@ class App extends Component {
     }
 
     onWidget = () => {
-        const { widget } = this.state;
+        const { enabledNavigationWidget } = this.state;
 
         this.setState({
-            widget: !widget,
+            enabledNavigationWidget: !enabledNavigationWidget,
         });
     }
 
@@ -385,7 +385,8 @@ class App extends Component {
         const { settings, isConnectionOpened, symbol, endEpoch,
             barrierType, highLow : { high, low }, hidePriceLines,
             draggable, relative, shadeColor, scrollToEpoch,
-            leftOffset, color, foregroundColor, markers, widget } = this.state;
+            leftOffset, color, foregroundColor, markers,
+            enabledNavigationWidget } = this.state;
         const barriers = barrierType ? [{
             shade: barrierType,
             shadeColor,
@@ -409,7 +410,7 @@ class App extends Component {
                         isMobile={isMobile}
                         onMessage={this.onMessage}
                         enableRouting
-                        enabledNavigationWidget={widget}
+                        enabledNavigationWidget={enabledNavigationWidget}
                         removeAllComparisons={settings.historical}
                         topWidgets={this.renderTopWidgets}
                         chartControlsWidgets={this.renderControls}
