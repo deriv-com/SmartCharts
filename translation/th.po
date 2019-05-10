@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom\n"
 "Language-Team: Thai\n"
 "Language: th_TH\n"
-"PO-Revision-Date: 2019-05-06 02:12\n"
+"PO-Revision-Date: 2019-05-10 10:24\n"
 
 msgid " already exists."
 msgstr " มีอยู่แล้ว"
@@ -88,7 +88,7 @@ msgid "CLOSE"
 msgstr "CLOSE"
 
 msgid "CLOSED"
-msgstr "CLOSED"
+msgstr "ปิดแล้ว"
 
 msgid "Colored Dot"
 msgstr "จุดสี"
