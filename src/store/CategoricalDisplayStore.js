@@ -18,13 +18,14 @@ export default class CategoricalDisplayStore {
     }) {
         reaction(getIsShown, () => {
             if (getIsShown()) {
-                this.clickedCategoryKey = '';
-                this.activeCategoryKey = this.mainStore.chart.currentActiveSymbol ? this.mainStore.chart.currentActiveSymbol.market : 'favourites';
-                const el = this.mainStore.chart.rootNode.querySelector(`.category-${this.activeCategoryKey}`);
+                this.clickedCategoryKey = null;
+                this.activeCategoryKey = this.mainStore.chart.currentActiveSymbol ? this.mainStore.chart.currentActiveSymbol.market : 'favorite';
+                const el = this.categoryElements[this.activeCategoryKey];
                 if (el) {
                     this.pauseScrollSpy = true;
                     this.isUserScrolling = false;
                     this.scrollPanel.scrollTop(el.offsetTop);
+                    this.activeHeadKey = null;
                     setTimeout(() => { this.pauseScrollSpy = false; }, 20);
                 }
                 if (!this.isInit) { this.init(); }
@@ -41,7 +42,7 @@ export default class CategoricalDisplayStore {
         this.favoritesId = favoritesId;
         this.categoryElements = {};
         this.mainStore = mainStore;
-        this.activeCategoryKey = this.mainStore.chart.currentActiveSymbol ? this.mainStore.chart.currentActiveSymbol.market : 'favourites';
+        this.activeCategoryKey = this.mainStore.chart.currentActiveSymbol ? this.mainStore.chart.currentActiveSymbol.market : 'favorite';
         this.isInit = false;
         this.searchInput = React.createRef();
 
@@ -91,7 +92,7 @@ export default class CategoricalDisplayStore {
     @observable scrollPanel;
     @observable filterText = '';
     @observable activeCategoryKey = '';
-    @observable clickedCategoryKey = '';
+    @observable clickedCategoryKey = null;
     @observable isScrollingDown = false;
     scrollTop = undefined;
     @observable activeHeadKey = undefined;
@@ -132,6 +133,7 @@ export default class CategoricalDisplayStore {
         }
 
         const scrollTop = this.scrollPanel.getValues().top;
+
         if (this.scrollTop > scrollTop) {
             this.scrollUp();
         } else {
@@ -140,9 +142,9 @@ export default class CategoricalDisplayStore {
 
         this.activeHeadOffset = (this.chart.isMobile ? this.scrollPanel.container.offsetTop  : 0);
         this.scrollTop = scrollTop;
-        this.activeCategoryKey = activeMenuId || this.filteredItems[0].categoryId;
+        this.clickedCategoryKey = activeMenuId || this.filteredItems[0].categoryId;
         this.activeHeadTop = activeHeadTop;
-        this.activeHeadKey = this.scrollTop === 0 ? null : this.activeCategoryKey;
+        this.activeHeadKey = this.scrollTop === 0 ? null : this.clickedCategoryKey;
     }
 
     @action.bound scrollUp() {
@@ -282,7 +284,6 @@ export default class CategoricalDisplayStore {
             this.isUserScrolling = false;
             this.scrollPanel.scrollTop(el.offsetTop);
             this.clickedCategoryKey = category.categoryId;
-            // this.activeCategoryKey = '';
             this.activeHeadKey = null;
             // scrollTop takes some time to take affect, so we need
             // a slight delay before enabling the scroll spy again
