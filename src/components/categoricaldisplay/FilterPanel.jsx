@@ -3,9 +3,9 @@ import {
     CategoryIconMap,
 } from '../Icons.jsx';
 
-const Filter = ({ clickedCategoryKey, activeCategoryKey, handleFilterClick, category, isMobile }) => {
+const Filter = ({ focusedCategoryKey, activeCategoryKey, handleFilterClick, category, isMobile }) => {
     const CategoryIcon = CategoryIconMap[category.categoryId];
-    const isActive = clickedCategoryKey && clickedCategoryKey.length ? clickedCategoryKey === category.categoryId : activeCategoryKey === category.categoryId;
+    const isActive = focusedCategoryKey && focusedCategoryKey.length ? focusedCategoryKey === category.categoryId : activeCategoryKey === category.categoryId;
     return (
         <div
             className={`cq-filter ${isActive ? 'cq-active-filter' : ''} ${!isMobile ? 'cq-hover-style' : ''}`}
@@ -17,7 +17,7 @@ const Filter = ({ clickedCategoryKey, activeCategoryKey, handleFilterClick, cate
     );
 };
 
-export const FilterPanel = ({ filteredItems, handleFilterClick, clickedCategoryKey, activeCategoryKey, isMobile }) => (
+export const FilterPanel = ({ filteredItems, handleFilterClick, focusedCategoryKey, activeCategoryKey, isMobile }) => (
     <div className="cq-filter-panel">
         { filteredItems.map(category => (
             <Filter
@@ -25,7 +25,7 @@ export const FilterPanel = ({ filteredItems, handleFilterClick, clickedCategoryK
                 category={category}
                 handleFilterClick={handleFilterClick}
                 activeCategoryKey={activeCategoryKey}
-                clickedCategoryKey={clickedCategoryKey}
+                focusedCategoryKey={focusedCategoryKey}
                 isMobile={isMobile}
             />
         ))}

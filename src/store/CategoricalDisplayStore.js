@@ -18,7 +18,7 @@ export default class CategoricalDisplayStore {
     }) {
         reaction(getIsShown, () => {
             if (getIsShown()) {
-                this.clickedCategoryKey = null;
+                this.focusedCategoryKey = null;
                 this.activeCategoryKey = this.mainStore.chart.currentActiveSymbol ? this.mainStore.chart.currentActiveSymbol.market : 'favorite';
                 const el = this.categoryElements[this.activeCategoryKey];
                 if (el) {
@@ -77,7 +77,7 @@ export default class CategoricalDisplayStore {
             filteredItems: this.filteredItems,
             handleFilterClick: this.handleFilterClick,
             activeCategoryKey: this.activeCategoryKey,
-            clickedCategoryKey: this.clickedCategoryKey,
+            focusedCategoryKey: this.focusedCategoryKey,
         }))(FilterPanel);
 
         this.SearchInput = connect(() => ({
@@ -92,7 +92,7 @@ export default class CategoricalDisplayStore {
     @observable scrollPanel;
     @observable filterText = '';
     @observable activeCategoryKey = '';
-    @observable clickedCategoryKey = null;
+    @observable focusedCategoryKey = null;
     @observable isScrollingDown = false;
     scrollTop = undefined;
     @observable activeHeadKey = undefined;
@@ -142,9 +142,9 @@ export default class CategoricalDisplayStore {
 
         this.activeHeadOffset = (this.chart.isMobile ? this.scrollPanel.container.offsetTop  : 0);
         this.scrollTop = scrollTop;
-        this.clickedCategoryKey = activeMenuId || this.filteredItems[0].categoryId;
+        this.focusedCategoryKey = activeMenuId || this.filteredItems[0].categoryId;
         this.activeHeadTop = activeHeadTop;
-        this.activeHeadKey = this.scrollTop === 0 ? null : this.clickedCategoryKey;
+        this.activeHeadKey = this.scrollTop === 0 ? null : this.focusedCategoryKey;
     }
 
     @action.bound scrollUp() {
@@ -283,7 +283,7 @@ export default class CategoricalDisplayStore {
             this.pauseScrollSpy = true;
             this.isUserScrolling = false;
             this.scrollPanel.scrollTop(el.offsetTop);
-            this.clickedCategoryKey = category.categoryId;
+            this.focusedCategoryKey = category.categoryId;
             this.activeHeadKey = null;
             // scrollTop takes some time to take affect, so we need
             // a slight delay before enabling the scroll spy again

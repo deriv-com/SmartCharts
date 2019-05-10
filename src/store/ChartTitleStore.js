@@ -75,6 +75,7 @@ export default class ChartTitleStore {
             console.error('Changing symbol does nothing because symbol prop is being set. Consider overriding the onChange prop in <ChartTitle />');
             return;
         }
+
         this.chart.changeSymbol(symbolObj);
     }
 
