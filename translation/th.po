@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom\n"
 "Language-Team: Thai\n"
 "Language: th_TH\n"
-"PO-Revision-Date: 2019-05-06 02:12\n"
+"PO-Revision-Date: 2019-05-10 10:33\n"
 
 msgid " already exists."
 msgstr " มีอยู่แล้ว"
@@ -85,10 +85,10 @@ msgid "Close"
 msgstr "ปิด"
 
 msgid "CLOSE"
-msgstr "CLOSE"
+msgstr "ปิด"
 
 msgid "CLOSED"
-msgstr "CLOSED"
+msgstr "ปิดแล้ว"
 
 msgid "Colored Dot"
 msgstr "จุดสี"
@@ -235,7 +235,7 @@ msgid "Open"
 msgstr "เปิด"
 
 msgid "OPEN"
-msgstr "OPEN"
+msgstr "เปิด"
 
 msgid "OVERWRITE"
 msgstr "OVERWRITE"
@@ -1348,7 +1348,7 @@ msgid "Weak Ratio"
 msgstr "อัตราส่วนความอ่อนแอ"
 
 msgid "Closed"
-msgstr "ปิด"
+msgstr "ปิดแล้ว"
 
 msgid "Opens in:"
 msgstr "เปิดใน:"
