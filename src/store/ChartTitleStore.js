@@ -39,6 +39,7 @@ export default class ChartTitleStore {
         this.SymbolSelectButton = connect(() => ({
             symbol: this.currentSymbol,
             ChartPrice: PriceDisplay,
+            isSymbolOpen: this.isSymbolOpen,
             symbolOpenTime: this.symbolOpenTime,
         }))(SymbolSelectButton);
     }
@@ -50,6 +51,7 @@ export default class ChartTitleStore {
     get chart() { return this.mainStore.chart; }
     get context() { return this.mainStore.chart.context; }
     @computed get currentSymbol() { return this.mainStore.chart.currentActiveSymbol; }
+    @computed get isSymbolOpen() { return this.currentSymbol.exchange_is_open; }
     @computed get decimalPlaces() { return this.mainStore.chart.currentActiveSymbol.decimal_places; }
     @computed get isShowChartPrice() { return this.mainStore.chart.isChartAvailable; }
     @computed get tradingTimes() { return this.mainStore.chart.tradingTimes; }
