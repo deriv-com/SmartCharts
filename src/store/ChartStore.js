@@ -397,7 +397,7 @@ class ChartStore {
                 yAxis: {
                     // Put some top margin so chart doesn't get blocked by chart title
                     initialMarginTop: 125,
-                    initialMarginBottom: 50,
+                    initialMarginBottom: 100,
                     // position: 'left',
                     displayBorder: true,
                     justifyRight: false,
@@ -648,6 +648,14 @@ class ChartStore {
         }
     }
 
+    @action.bound updateYaxisWidth = () => {
+        const currentQuote = this.context.stx.currentQuote();
+        if (currentQuote) {
+            const { Close } = currentQuote;
+            this.calculateYaxisWidth(Close);
+        }
+    }
+
     // Calling newChart with symbolObj as undefined refreshes the chart
     @action.bound newChart(symbolObj = this.currentActiveSymbol, params) {
         this.stxx.chart.symbolDisplay = symbolObj.name;
@@ -663,8 +671,6 @@ class ChartStore {
                 return;
             }
             this.state.restoreDrawings();
-            const { Close } = this.context.stx.currentQuote();
-            this.calculateYaxisWidth(Close);
         };
         this.yAxiswidth = 0;
         const rangeSpan = this.getRangeSpan();
