@@ -28,6 +28,7 @@ class ChartState {
     get context() { return this.chartStore.context; }
     get chartTypeStore() { return this.mainStore.chartType; }
     get timeperiodStore() { return this.mainStore.timeperiod; }
+    get loader() { return this.mainStore.loader; }
 
     constructor(mainStore) {
         this.mainStore = mainStore;
@@ -345,6 +346,9 @@ class ChartState {
     importLayout() {
         if (!this.stxx || !this.importedLayout || !Object.keys(this.importedLayout).length) return;
 
+        this.loader.show();
+        this.loader.setState('chart-data');
+
         /* Clear current chart interval to make sure importedlayout works as expected
         if it has same interval with previous state of chart but there is no stream for it */
         if (Object.keys(this.mainStore.chart.feed._activeStreams).length === 0) {
@@ -397,6 +401,8 @@ class ChartState {
 
                         // Run the callback when layout import is done
                         this.importedLayout.isDone();
+
+                        this.loader.hide();
                     }
                 }, 500);
             },
