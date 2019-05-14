@@ -70,6 +70,14 @@ export default class ChartTitleStore {
     onContextReady = () => {
         this.chart.feed.onMasterDataUpdate(this.update);
         this.update();
+
+        this.tradingTimes.onMarketOpenCloseChanged(action((changes) => {
+            for (const symbol in changes) {
+                if (this.currentSymbol.symbol === symbol) {
+                    this.currentSymbol.exchange_is_open = changes[symbol];
+                }
+            }
+        }));
     };
 
     @action.bound setSymbol(symbolObj) {

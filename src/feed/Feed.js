@@ -1,5 +1,5 @@
 import EventEmitter from 'event-emitter-es6';
-import { reaction, when } from 'mobx';
+import { action, reaction, when } from 'mobx';
 import { TickHistoryFormatter } from './TickHistoryFormatter';
 import { calculateGranularity, getUTCEpoch, calculateTimeUnitInterval } from '../utils';
 import { RealtimeSubscription, DelayedSubscription } from './subscription';
@@ -203,9 +203,19 @@ class Feed {
             getHistoryOnly = true;
         }
 
-        const isChartClosed = !this._tradingTimes.isMarketOpened(symbol);
+        let isChartClosed = !this._tradingTimes.isMarketOpened(symbol);
         this._mainStore.state.setChartClosed(isChartClosed);
         this._mainStore.state.setChartTheme(this._mainStore.chartSetting.theme, isChartClosed);
+
+        this._mainStore.chart.tradingTimes.onMarketOpenCloseChanged(action((changes) => {
+            for (const sy in changes) {
+                if (this._mainStore.chart.currentActiveSymbol.symbol === sy) {
+                    isChartClosed = !changes[sy];
+                    this._mainStore.state.setChartClosed(isChartClosed);
+                    this._mainStore.state.setChartTheme(this._mainStore.chartSetting.theme, isChartClosed);
+                }
+            }
+        }));
 
         if (getHistoryOnly) {
             const response = await this._binaryApi.getTickHistory(tickHistoryRequest);
