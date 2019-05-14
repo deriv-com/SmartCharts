@@ -82,8 +82,7 @@ class ChartState {
         if (this.granularity !== granularity && this.context) {
             if (calculateTimeUnitInterval(granularity).timeUnit === 'second' && (this.mainStore.chartType.isCandle || this.mainStore.chartType.isTypeCandle(chartType))) {
                 chartType = 'mountain';
-            } else {
-                chartType = this.chartType;
+                this.chartTypeStore.onChartTypeChanged(chartType);
             }
             this.granularity = granularity === null ? undefined : granularity;
         }
