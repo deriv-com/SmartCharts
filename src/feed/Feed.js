@@ -47,6 +47,7 @@ class Feed {
         let dtRight = null;
 
         this.loader.show();
+        this._mainStore.state.setChartIsReady(false);
         this.loader.setState('chart-data');
 
         if (!this.endEpoch
@@ -217,6 +218,8 @@ class Feed {
             return;
         }
         callback({ quotes });
+
+        this._mainStore.chart.updateYaxisWidth();
 
         this._emitDataUpdate(quotes, comparisonChartSymbol);
     }

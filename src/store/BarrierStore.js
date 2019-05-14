@@ -30,6 +30,7 @@ export default class BarrierStore {
 
     @computed get pip() { return this.mainStore.chart.currentActiveSymbol.decimal_places; }
     @computed get yAxisWidth() { return this.mainStore.chart.yAxiswidth; }
+    @computed get priceLabelWidth() { return this.yAxisWidth + 1; }
 
     constructor(mainStore) {
         this.mainStore = mainStore;
@@ -215,6 +216,9 @@ export default class BarrierStore {
     @action.bound _drawShadedArea() {
         if (!this.isInitialized) { return; }
 
+        this._optimizeTop(this._low_barrier);
+        this._optimizeTop(this._high_barrier);
+
         if (this._shadeState === BarrierStore.SHADE_ABOVE) {
             this._shadeAbove();
         } else if (this._shadeState === BarrierStore.SHADE_BELOW) {
@@ -237,6 +241,14 @@ export default class BarrierStore {
 
     _calcBottomShade(barrier) {
         return this.chart.panel.height - barrier.top;
+    }
+
+    _optimizeTop(barrier) {
+        if (barrier.top + 30 > this.chart.panel.height) {
+            barrier.top = this.chart.panel.height - 30;
+        } else if (barrier.top < 10) {
+            barrier.top = 10;
+        }
     }
 
     _shadeBetween() {
