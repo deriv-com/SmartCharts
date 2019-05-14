@@ -52,7 +52,7 @@ const ActiveOptions = ({ activeOptions, item }) => (
 
 export const NormalItem = ({ onSelectItem, item, favoritesId }) => (
     <div
-        className={`cq-item ${item.selected ? 'selected ' : ''}`}
+        className={`cq-item ${item.selected ? 'selected ' : ''} submarket-item-${item.itemId}`}
         onClick={e => item.enabled && onSelectItem(item.dataObject, e)}
         disabled={!item.enabled}
     >
