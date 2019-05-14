@@ -605,6 +605,20 @@ class ChartStore {
             return;
         }
 
+        let isChartClosed = !this.mainStore.chart.tradingTimes.isMarketOpened(symbolObj.symbol);
+        this.mainStore.state.setChartClosed(isChartClosed);
+        this.mainStore.state.setChartTheme(this.mainStore.chartSetting.theme, isChartClosed);
+
+        this.mainStore.chart.tradingTimes.onMarketOpenCloseChanged(action((changes) => {
+            for (const sy in changes) {
+                if (symbolObj.symbol === sy) {
+                    isChartClosed = !changes[sy];
+                    this.mainStore.state.setChartClosed(isChartClosed);
+                    this.mainStore.state.setChartTheme(this.mainStore.chartSetting.theme, isChartClosed);
+                }
+            }
+        }));
+
         let params;
         if (granularity !== undefined) {
             this.granularity = granularity;
