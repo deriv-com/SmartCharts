@@ -485,7 +485,7 @@ class ChartStore {
 
                 this.context = context;
 
-                this.chartClosedOpenThemeChange(!this.currentActiveSymbol.symbol.exchange_is_open);
+                this.chartClosedOpenThemeChange(!this.currentActiveSymbol.exchange_is_open);
 
                 this.mainStore.chart.tradingTimes.onMarketOpenCloseChanged(action((changes) => {
                     for (const sy in changes) {
