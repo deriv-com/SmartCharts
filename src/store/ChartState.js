@@ -80,6 +80,10 @@ class ChartState {
             this.stxx.isAutoScale = this.settings && settings.isAutoScale !== false;
         }
         if (this.granularity !== granularity && this.context) {
+            if (calculateTimeUnitInterval(granularity).timeUnit === 'second' && (this.mainStore.chartType.isCandle || this.mainStore.chartType.isTypeCandle(chartType))) {
+                chartType = 'mountain';
+                this.chartTypeStore.onChartTypeChanged(chartType);
+            }
             this.granularity = granularity === null ? undefined : granularity;
         }
         if (this.chartType !== chartType && this.context) {
