@@ -256,4 +256,11 @@ export default class ChartTypeStore {
         }
         return chartType;
     }
+
+    isTypeCandle(type) {
+        if (typeof type === 'string') {
+            type = this.types.find(t => t.id === type);
+        }
+        return notCandles.indexOf(type.id) === -1;
+    }
 }
