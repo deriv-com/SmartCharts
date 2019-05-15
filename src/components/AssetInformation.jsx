@@ -24,10 +24,10 @@ const AssetInformation = ({
 
 AssetInformation.propTypes = {
     price       : PropTypes.string,
-    open        : PropTypes.number,
-    close       : PropTypes.number,
-    high        : PropTypes.number,
-    low         : PropTypes.number,
+    open        : PropTypes.string,
+    close       : PropTypes.string,
+    high        : PropTypes.string,
+    low         : PropTypes.string,
     visible     : PropTypes.bool,
 };
 

@@ -16,18 +16,18 @@ const AnimatedPrice = ({
 };
 
 AnimatedPrice.propTypes = {
-    isIncrease  : PropTypes.bool,
-    price       : PropTypes.oneOfType([
+    isIncrease: PropTypes.bool,
+    price     : PropTypes.oneOfType([
         PropTypes.string,
         PropTypes.number,
     ]),
-    className   : PropTypes.string,
+    className : PropTypes.string,
 };
 
 AnimatedPrice.defaultProps = {
-    isIncrease  : false,
-    price       : '0',
-    className   : '',
+    isIncrease: false,
+    price     : '0',
+    className : '',
 };
 
 export default AnimatedPrice;

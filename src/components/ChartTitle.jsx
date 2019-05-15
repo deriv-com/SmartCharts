@@ -43,22 +43,18 @@ const ChartTitle = ({
 ChartTitle.propTypes = {
     chartId             : PropTypes.string,
     ChartTitleMenu      : PropTypes.any.isRequired,
-    currentSymbol       : PropTypes.object,
     enabled             : PropTypes.bool,
     isMobile            : PropTypes.bool,
     MarketSelector      : PropTypes.any.isRequired,
     onChange            : PropTypes.func,
-    SymbolSelectButton  : PropTypes.any,
     setMenuOpen         : PropTypes.func,
 };
 
 ChartTitle.defaultProps = {
     chartId             : '',
-    currentSymbol       : undefined,
     enabled             : true,
     isMobile            : false,
     onChange            : () => null,
-    SymbolSelectButton  : null,
     setMenuOpen         : () => null,
 };
 

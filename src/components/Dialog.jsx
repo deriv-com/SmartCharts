@@ -18,16 +18,12 @@ const Dialog = ({
 
 Dialog.propTypes = {
     open                : PropTypes.bool,
-    children            : PropTypes.any,
     onContainerClick    : PropTypes.func,
-    className           : PropTypes.string,
 };
 
 Dialog.defaultProps = {
-    open                : PropTypes.bool,
-    children            : PropTypes.any,
-    onContainerClick    : PropTypes.func,
-    className           : PropTypes.string,
+    open                : false,
+    onContainerClick    : () => null,
 };
 
 export default Dialog;

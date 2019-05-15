@@ -66,7 +66,7 @@ class Chart extends Component {
             children,
             chartControlsWidgets,
             AggregateChartSettingsDialog,
-            topWidgets,
+            topWidgets: TopWidgets,
             chartContainerHeight,
             containerWidth,
             isChartClosed,
@@ -78,7 +78,6 @@ class Chart extends Component {
 
         const currentPosition = `cq-chart-control-${(chartControlsWidgets && position && !isMobile) ? position : 'bottom'}`;
         const contextWidth =  !isMobile ? `smartcharts-${containerWidth}` : '';
-        const TopWidgets = topWidgets || defaultTopWidgets;
         const BottomWidgets = !bottomWidgets && showLastDigitStats ? LastDigitStats : bottomWidgets;
         // if there are any markers, then increase the subholder z-index
         const HasMarkers = children && children.length ? 'smartcharts--has-markers' : '';
@@ -184,7 +183,7 @@ Chart.propTypes = {
     AggregateChartSettingsDialog    : PropTypes.any.isRequired,
     chartContainerHeight            : PropTypes.number,
     containerWidth                  : PropTypes.number,
-    isDrawing                       : PropTypes.bool,
+    isDrawing                       : PropTypes.any,
     theme                           : PropTypes.string,
     position                        : PropTypes.string,
     showLastDigitStats              : PropTypes.bool,

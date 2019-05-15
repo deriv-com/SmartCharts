@@ -1,4 +1,3 @@
-import PropTypes            from 'prop-types';
 import React, { Component } from 'react';
 import {
     CloseCircleIcon,
@@ -36,18 +35,6 @@ class SearchInput extends Component {
         );
     }
 }
-
-SearchInput.propTypes = {
-    placeholder : PropTypes.string,
-    value       : PropTypes.string,
-    searchInput : PropTypes.object,
-};
-
-SearchInput.defaultProps = {
-    placeholder : '',
-    value       : '',
-    searchInput : null,
-};
 
 export default connect(({ chart: c }) => ({
     isMobile: c.isMobile,

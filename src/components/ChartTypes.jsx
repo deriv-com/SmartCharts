@@ -71,7 +71,6 @@ const ChartTypes = ({
 };
 
 ChartTypes.propTypes = {
-    chartId             : PropTypes.string,
     ChartTypeList       : PropTypes.any.isRequired,
     ChartTypeMenu       : PropTypes.any.isRequired,
     enabled             : PropTypes.bool,
@@ -84,8 +83,7 @@ ChartTypes.propTypes = {
 };
 
 ChartTypes.defaultProps = {
-    chartId             : '',
-    enabled             : false,
+    enabled             : true,
     menuOpen            : false,
     onChange            : () => null,
     setOpen             : () => null,

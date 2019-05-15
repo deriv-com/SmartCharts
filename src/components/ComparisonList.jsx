@@ -40,13 +40,13 @@ const ComparisonList = ({
 
 ComparisonList.propTypes = {
     comparisonSymbols   : PropTypes.array,
-    animatedPrices      : PropTypes.any,
+    animatedPrices      : PropTypes.array,
     onDeleteItem        : PropTypes.func,
 };
 
 ComparisonList.defaultProps = {
-    comparisonSymbols   : PropTypes.array,
-    animatedPrices      : PropTypes.any,
+    comparisonSymbols   : [],
+    animatedPrices      : [],
     onDeleteItem        : () => null,
 };
 
