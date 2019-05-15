@@ -80,7 +80,7 @@ class ChartState {
             this.stxx.isAutoScale = this.settings && settings.isAutoScale !== false;
         }
         if (this.granularity !== granularity && this.context) {
-            if (calculateTimeUnitInterval(granularity).timeUnit === 'second' && (this.mainStore.chartType.isCandle || this.mainStore.chartType.isTypeCandle(chartType))) {
+            if (calculateTimeUnitInterval(granularity).timeUnit === 'second' && (this.mainStore.chartType.isCandle || (chartType && this.mainStore.chartType.isTypeCandle(chartType)))) {
                 chartType = 'mountain';
                 this.chartTypeStore.onChartTypeChanged(chartType);
             }
