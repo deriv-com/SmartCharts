@@ -28,6 +28,7 @@ class ChartState {
     get context() { return this.chartStore.context; }
     get chartTypeStore() { return this.mainStore.chartType; }
     get timeperiodStore() { return this.mainStore.timeperiod; }
+    get loader() { return this.mainStore.loader; }
 
     constructor(mainStore) {
         this.mainStore = mainStore;
@@ -39,20 +40,19 @@ class ChartState {
         this.stxx.addEventListener('layout', this.saveLayout.bind(this));
         this.stxx.addEventListener('symbolChange', this.saveLayout.bind(this));
         this.stxx.addEventListener('drawing', this.saveDrawings.bind(this));
-        this.stxx.addEventListener('move', this.scrollListener.bind(this));
+        // this.stxx.addEventListener('move', this.scrollListener.bind(this));
 
         this.chartStore.feed.onStartPagination(this.setOnPagination.bind(this));
         this.chartStore.feed.onPagination(this.setOnPagination.bind(this));
     };
 
-    @action.bound updateProps({ id, settings, isConnectionOpened, chartStatusListener, symbol, granularity, chartType, startEpoch, endEpoch, onExportLayout, clearChart, importedLayout, removeAllComparisons, isAnimationEnabled = true, showLastDigitStats = false, scrollToEpoch, scrollToEpochOffset = 0, zoom, chartControlsWidgets }) {
+    @action.bound updateProps({ id, settings, isConnectionOpened, chartStatusListener, symbol, granularity, chartType, isStaticChart, startEpoch, endEpoch, onExportLayout, clearChart, importedLayout, removeAllComparisons, isAnimationEnabled = true, showLastDigitStats = false, scrollToEpoch, scrollToEpochOffset = 0, zoom, chartControlsWidgets }) {
         this.chartId = id;
         this.settings = settings;
         this.isConnectionOpened = isConnectionOpened;
         this.chartStatusListener = chartStatusListener;
         this.symbol = symbol;
-        this.startEpoch = startEpoch;
-        this.endEpoch = endEpoch;
+
         this.rootNode = this.mainStore.chart.rootNode;
 
         this.isAnimationEnabled = isAnimationEnabled;
@@ -90,6 +90,18 @@ class ChartState {
             this.chartType = chartType;
             this.chartTypeStore.setType(chartType);
         }
+
+        if (this.startEpoch !== startEpoch || this.endEpoch !== endEpoch) {
+            this.startEpoch = startEpoch;
+            this.endEpoch = endEpoch;
+            if (isStaticChart && this.stxx && this.granularity === this.mainStore.chart.granularity) {
+                // Reload the chart if it is a static chart and the granularity hasn't changed
+                this.mainStore.chart.newChart();
+            } else if (this.mainStore.chart.feed) {
+                this.mainStore.chart.feed.onRangeChanged();
+            }
+        }
+
         if (removeAllComparisons) {
             this.comparisonStore.removeAll();
         }
@@ -338,11 +350,17 @@ class ChartState {
     importLayout() {
         if (!this.stxx || !this.importedLayout || !Object.keys(this.importedLayout).length) return;
 
+        this.loader.show();
+        this.loader.setState('chart-data');
+
         /* Clear current chart interval to make sure importedlayout works as expected
         if it has same interval with previous state of chart but there is no stream for it */
         if (Object.keys(this.mainStore.chart.feed._activeStreams).length === 0) {
             this.stxx.layout.interval = undefined;
         }
+
+        // Clear start and end epoch before importing that layout
+        this.startEpoch = this.endEpoch = null;
 
         this.stxx.importLayout(this.importedLayout, {
             managePeriodicity: true,
@@ -387,6 +405,8 @@ class ChartState {
 
                         // Run the callback when layout import is done
                         this.importedLayout.isDone();
+
+                        this.loader.hide();
                     }
                 }, 500);
             },
