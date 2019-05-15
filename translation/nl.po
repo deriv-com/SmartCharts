@@ -7,10 +7,10 @@ msgstr ""
 "X-Crowdin-File: /dev/translation/messages.pot\n"
 "Project-Id-Version: smartcharts\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Last-Translator: binarycom <jy@binary.com>\n"
+"Last-Translator: binarycom\n"
 "Language-Team: Dutch\n"
 "Language: nl_NL\n"
-"PO-Revision-Date: 2019-03-01 07:03\n"
+"PO-Revision-Date: 2019-05-06 01:42\n"
 
 msgid " already exists."
 msgstr ""
@@ -1345,5 +1345,11 @@ msgid "Strong Ratio"
 msgstr ""
 
 msgid "Weak Ratio"
+msgstr ""
+
+msgid "Closed"
+msgstr ""
+
+msgid "Opens in:"
 msgstr ""
 

@@ -68,6 +68,7 @@ class ChartStore {
     @observable isMobile = false;
     @observable cursorInChart = false;
     @observable shouldRenderDialogs = false;
+    @observable yAxiswidth = 0;
 
     get loader() { return this.mainStore.loader; }
     get routingStore() {
@@ -76,6 +77,8 @@ class ChartStore {
     get stateStore() {
         return this.mainStore.state;
     }
+
+    @computed get pip() { return this.currentActiveSymbol.decimal_places; }
 
     updateHeight(position) {
         const historicalMobile = this.mainStore.chartSetting.historical && this.isMobile;
@@ -116,6 +119,7 @@ class ChartStore {
 
     init = (rootNode, modalNode, props) => {
         this.loader.show();
+        this.mainStore.state.setChartIsReady(false);
         this.loader.setState('chart-engine');
 
         if (window.CIQ) {
@@ -274,6 +278,8 @@ class ChartStore {
         this.chartNode = this.rootNode.querySelector('.ciq-chart-area');
         this.chartControlsNode = this.rootNode.querySelector('.cq-chart-controls');
 
+        CIQ.Plotter.prototype.getYAxisWidth = () => this.yAxiswidth;
+
         // monkey patching to handle radius and height for `current price label`
         CIQ.ChartEngine.prototype.createYAxisLabel = function (panel, txt, y, backgroundColor, color, ctx, yAxis) {
             if (panel.yAxis.drawPriceLabels === false || panel.yAxis.noDraw) return;
@@ -296,11 +302,22 @@ class ChartStore {
                 }
             } catch (e) { width = yax.width; } // Firefox doesn't like this in hidden iframe
 
-            let x = this.width - width;
+            // some y-axis label has style of `roundRectArrow` and some has `rect`, we reduce
+            // 14px which is about the `roundRectArrow` style arrow to make the label all fit
+            width -= 14;
+            if (this.chart.yAxis.width < width) {
+                this.chart.yAxis.width = width;
+                this.calculateYAxisPositions();
+            } else  {
+                width = this.chart.yAxis.width;
+            }
+
+            let x = this.width - this.chart.yAxis.width;
+            let left = ((width - textWidth) / 2);
+
             if (yax.width < 0) x += (yax.width - width);
             const position = (yax.position === null ? panel.chart.yAxis.position : yax.position);
             if (position === 'left') {
-                x = yax.left + yax.width + margin - 3;
                 width *= -1;
                 if (yax.width < 0) x -= (yax.width + width);
                 radius = -3;
@@ -314,6 +331,14 @@ class ChartStore {
             }
             let yaxisLabelStyle = this.yaxisLabelStyle;
             if (yax.yaxisLabelStyle) yaxisLabelStyle = yax.yaxisLabelStyle;
+
+            // as crosshair and countdown style is `rect`, so due to previous rule we should
+            // increase there x position to fit the y-axis
+            if (this.labelType !== 'crosshair' && this.labelType !== 'countdown') {
+                x += 14;
+                left  -= 8;
+            }
+
             const params = {
                 ctx:context,
                 x,
@@ -325,7 +350,7 @@ class ChartStore {
                 backgroundColor,
                 fill: true,
                 stroke: false,
-                margin:{ left: 8, top: 1 },
+                margin:{ left, top: 1 },
                 txt,
                 color,
             };
@@ -372,10 +397,10 @@ class ChartStore {
                 yAxis: {
                     // Put some top margin so chart doesn't get blocked by chart title
                     initialMarginTop: 125,
-                    initialMarginBottom: 10,
+                    initialMarginBottom: 100,
                     // position: 'left',
                     displayBorder: true,
-                    justifyRight: true,
+                    justifyRight: false,
                 },
                 xAxis: {
                     displayBorder: true,
@@ -401,7 +426,7 @@ class ChartStore {
 
         const stxx = this.stxx = new CIQ.ChartEngine(engineParams);
 
-        stxx.isAutoScale = settings && settings.isAutoScale || false;
+        stxx.isAutoScale = settings && settings.isAutoScale !== false;
 
         ChartStore.chartCount += 1;
 
@@ -475,7 +500,7 @@ class ChartStore {
                     this.state.symbol,
                     this.state.granularity,
                 ], () => {
-                    if ((this.state.symbol !== undefined || this.state.granularity !== undefined) && !this.state.importedLayout) {
+                    if (this.state.symbol !== undefined || (this.state.granularity !== undefined && !this.state.importedLayout)) {
                         this.changeSymbol(this.state.symbol, this.state.granularity);
                     }
                 });
@@ -610,20 +635,44 @@ class ChartStore {
         });
     }
 
+    @action.bound calculateYaxisWidth = (price) => {
+        const { context } = this.context.stx.chart;
+
+        const priceWidth = context.measureText(price.toFixed(this.pip)).width + 20;
+        if (priceWidth > this.yAxiswidth) {
+            this.yAxiswidth = priceWidth;
+
+            this.stxx.chart.yAxis.width = priceWidth;
+            this.stxx.calculateYAxisPositions();
+            this.stxx.draw();
+        }
+    }
+
+    @action.bound updateYaxisWidth = () => {
+        const currentQuote = this.context.stx.currentQuote();
+        if (currentQuote) {
+            const { Close } = currentQuote;
+            this.calculateYaxisWidth(Close);
+        }
+    }
+
     // Calling newChart with symbolObj as undefined refreshes the chart
     @action.bound newChart(symbolObj = this.currentActiveSymbol, params) {
         this.stxx.chart.symbolDisplay = symbolObj.name;
         this.loader.show();
+        this.mainStore.state.setChartIsReady(false);
         const onChartLoad = (err) => {
             this.setMainSeriesDisplay(symbolObj.name);
 
             this.loader.hide();
+            this.mainStore.state.setChartIsReady(true);
             if (err) {
                 /* TODO, symbol not found error */
                 return;
             }
             this.state.restoreDrawings();
         };
+        this.yAxiswidth = 0;
         const rangeSpan = this.getRangeSpan();
         this.stxx.newChart(symbolObj, null, null, onChartLoad, { ...params, ...rangeSpan });
     }

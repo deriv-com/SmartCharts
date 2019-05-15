@@ -114,7 +114,7 @@ class App extends Component {
             layout = JSON.parse(layoutString !== '' ? layoutString : '{}');
         let chartType;
         let isChartTypeCandle;
-        let granularity;
+        let granularity = 60;
         let endEpoch;
         let settings = createObjectFromLocalStorage('smartchart-setting');
 
@@ -129,7 +129,6 @@ class App extends Component {
             endEpoch = (new Date(`${today}:00Z`).valueOf() / 1000);
             chartType = 'mountain';
             isChartTypeCandle = false;
-            granularity = 0;
             if (layout) {
                 granularity = layout.timeUnit === 'second' ? 0 : parseInt(layout.interval * IntervalEnum[layout.timeUnit], 10);
 
@@ -153,6 +152,8 @@ class App extends Component {
             ConnectionManager.EVENT_CONNECTION_REOPEN,
             () => this.setState({ isConnectionOpened: true }),
         );
+
+
         this.state = {
             settings,
             endEpoch,
@@ -161,6 +162,7 @@ class App extends Component {
             granularity,
             isConnectionOpened: true,
             highLow: {},
+            barrierType: '',
             draggable: true,
             markers: [],
         };
@@ -283,8 +285,12 @@ class App extends Component {
         this.setState({ hidePriceLines: evt.target.checked });
     };
 
-    onColorChange =(evt) => {
+    onShadeColorChange = (evt) => {
         this.setState({ shadeColor: evt.target.value });
+    }
+
+    onColorChange = (evt) => {
+        this.setState({ color: evt.target.value });
     }
 
     onFGColorChange = (evt) => {
@@ -292,7 +298,11 @@ class App extends Component {
     }
 
     onHighLowChange = (evt) => {
-        this.setState({ highLow: { [evt.target.id]: +evt.target.value } });
+        const { highLow } = this.state;
+
+        this.setState({
+            highLow: Object.assign(highLow, { [evt.target.id]: +evt.target.value }),
+        });
     };
 
     onRelativeChange = (evt) => {
@@ -313,11 +323,12 @@ class App extends Component {
         this.setState({ ...nextState, barrierType });
     };
 
-    onCircleMarker = () => {
+    onAddMArker = (evt) => {
         let { markers } = this.state;
-        if (markers.length) {
-            markers = [];
-        } else {
+        markers = [];
+
+        switch (evt.target.value) {
+        case 'LINE':
             for (let i = 0; i < 5; i++) {
                 markers.push({
                     ts: moment().utc().second(0).subtract(i + 3, 'minutes')
@@ -327,6 +338,20 @@ class App extends Component {
                     yPositioner: 'top',
                 });
             }
+            break;
+        case 'CIRCLE':
+            for (let i = 0; i < 15; i++) {
+                markers.push({
+                    ts: moment().utc().second(0).subtract(i + 3, 'minutes')
+                        .unix(),
+                    className: 'chart-marker-circle',
+                    xPositioner: 'epoch',
+                    yPositioner: 'value',
+                });
+            }
+            break;
+        default:
+            markers = [];
         }
         this.setState({ markers });
     }
@@ -353,12 +378,12 @@ class App extends Component {
         const { settings, isConnectionOpened, symbol, endEpoch,
             barrierType, highLow : { high, low }, hidePriceLines,
             draggable, relative, shadeColor, scrollToEpoch,
-            leftOffset, foregroundColor, markers } = this.state;
+            leftOffset, color, foregroundColor, markers } = this.state;
         const barriers = barrierType ? [{
             shade: barrierType,
             shadeColor,
             foregroundColor: foregroundColor || null,
-            color: settings.theme === 'light' ? '#39b19d' : '#555975',
+            color: color || (settings.theme === 'light' ? '#39b19d' : '#555975'),
             onChange: this.handleBarrierChange,
             relative,
             draggable,
@@ -406,24 +431,41 @@ class App extends Component {
                 </div>
                 <div className="action-section">
                     <div className="form-row">
-                        Line Markers <br />
-                        <button type="button" onClick={this.onCircleMarker}>Toggle</button>
+                        Markers <br />
+                        <select onChange={this.onAddMArker}>
+                            <option value="">None</option>
+                            <option value="LINE">Line</option>
+                            <option value="CIRCLE">Circle</option>
+                        </select>
+
                     </div>
                     <div className="form-row">
                         barrier type:&nbsp;
-                        <select id="barrierType" onChange={this.onBarrierTypeChange}>
+                        <select onChange={this.onBarrierTypeChange} defaultValue={barrierType}>
+                            <option value="">disable</option>
                             <option value="NONE_SINGLE">NONE_SINGLE</option>
                             <option value="NONE_DOUBLE">NONE_DOUBLE</option>
                             <option value="ABOVE">ABOVE</option>
                             <option value="BELOW">BELOW</option>
                             <option value="BETWEEN">BETWEEN</option>
                             <option value="OUTSIDE">OUTSIDE</option>
-                            <option value="">disable</option>
+                        </select>
+                    </div>
+                    <div className="form-row">
+                        barrier shade bg color:&nbsp;
+                        <select onChange={this.onShadeColorChange}>
+                            <option value="GREEN">GREEN</option>
+                            <option value="RED">RED</option>
+                            <option value="YELLOW">YELLOW</option>
+                            <option value="ORANGERED">ORANGERED</option>
+                            <option value="PURPLE">PURPLE</option>
+                            <option value="BLUE">BLUE</option>
+                            <option value="DEEPPINK">DEEPPINK</option>
                         </select>
                     </div>
                     <div className="form-row">
                         barrier bg color:&nbsp;
-                        <select id="barrierBGColor" onChange={this.onColorChange}>
+                        <select onChange={this.onColorChange}>
                             <option value="GREEN">GREEN</option>
                             <option value="RED">RED</option>
                             <option value="YELLOW">YELLOW</option>

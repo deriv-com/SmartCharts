@@ -99,6 +99,7 @@ topWidgets | Render function for top widgets. Refer to [Customising Components](
 bottomWidgets | Render function for bottom widgets. Refer to [Customising Components](#customising-components). | function
 isMobile | Switch between mobile or desktop view. Defaults to `false`. | boolean
 onSettingsChange | Callback that will be fired each time a setting is changed. | function
+chartStatusListener | Callback that will be fired each time the loading state of the chart is changed, It will be called with `true` when the chart is loaded completely.
 settings | Sets the chart settings. Refer to [Chart Settings](#chart-settings) | object
 barriers | Draw chart barriers. Refer to [Barriers API](#barriers-api) for usage details | array
 enableRouting | Enable routing for dialogs. Defaults to `false` | boolean

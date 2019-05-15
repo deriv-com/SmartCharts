@@ -7,10 +7,10 @@ msgstr ""
 "X-Crowdin-File: /dev/translation/messages.pot\n"
 "Project-Id-Version: smartcharts\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Last-Translator: binarycom <jy@binary.com>\n"
+"Last-Translator: binarycom\n"
 "Language-Team: Thai\n"
 "Language: th_TH\n"
-"PO-Revision-Date: 2019-03-07 10:05\n"
+"PO-Revision-Date: 2019-05-10 10:33\n"
 
 msgid " already exists."
 msgstr " มีอยู่แล้ว"
@@ -85,10 +85,10 @@ msgid "Close"
 msgstr "ปิด"
 
 msgid "CLOSE"
-msgstr "CLOSE"
+msgstr "ปิด"
 
 msgid "CLOSED"
-msgstr "CLOSED"
+msgstr "ปิดแล้ว"
 
 msgid "Colored Dot"
 msgstr "จุดสี"
@@ -235,7 +235,7 @@ msgid "Open"
 msgstr "เปิด"
 
 msgid "OPEN"
-msgstr "OPEN"
+msgstr "เปิด"
 
 msgid "OVERWRITE"
 msgstr "OVERWRITE"
@@ -1346,4 +1346,10 @@ msgstr "อัตราส่วนความแข็งแรง"
 
 msgid "Weak Ratio"
 msgstr "อัตราส่วนความอ่อนแอ"
+
+msgid "Closed"
+msgstr "ปิดแล้ว"
+
+msgid "Opens in:"
+msgstr "เปิดใน:"
 

@@ -1336,3 +1336,9 @@ msgstr ""
 
 msgid "Weak Ratio"
 msgstr ""
+
+msgid "Closed"
+msgstr ""
+
+msgid "Opens in:"
+msgstr ""
