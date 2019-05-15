@@ -626,6 +626,7 @@ class ChartStore {
     }
 
     @action.bound calculateYaxisWidth = (price) => {
+        if (!price) return;
         const { context } = this.context.stx.chart;
 
         const priceWidth = context.measureText(price.toFixed(this.pip)).width + 20;
