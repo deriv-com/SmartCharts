@@ -23,7 +23,7 @@ export default class ChartTitleStore {
             mainStore,
             id: 'market_dropdown',
             getCurrentActiveCategory: () => (this.mainStore.chart.currentActiveSymbol ? this.mainStore.chart.currentActiveSymbol.market : 'favorite'),
-            getActiveSubCategory: () => (this.mainStore.chart.currentActiveSymbol ? this.mainStore.chart.currentActiveSymbol.symbol : ''),
+            getCurrentActiveSubCategory: () => (this.mainStore.chart.currentActiveSymbol ? this.mainStore.chart.currentActiveSymbol.symbol : ''),
         });
         this.serverTime = ServerTime.getInstance();
 

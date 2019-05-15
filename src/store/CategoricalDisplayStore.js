@@ -17,13 +17,13 @@ export default class CategoricalDisplayStore {
         mainStore,
         id,
         getCurrentActiveCategory,
-        getActiveSubCategory,
+        getCurrentActiveSubCategory,
     }) {
         reaction(getIsShown, () => {
             if (getIsShown()) {
                 this.focusedCategoryKey = null;
                 this.activeCategoryKey = this.getCurrentActiveCategory ? this.getCurrentActiveCategory() : 'favorite';
-                this.activeSubCategory = this.getActiveSubCategory ? this.getActiveSubCategory() : '';
+                this.activeSubCategory = this.getCurrentActiveSubCategory ? this.getCurrentActiveSubCategory() : '';
                 const el = this.categoryElements[this.activeCategoryKey];
                 const activeSubCategoryClassName = this.id ? `.${this.id}-subcategory-item-${this.activeSubCategory}` : `.subcategory-item-${this.activeSubCategory}`;
                 const el_active_sub_category = this.mainStore.chart.rootNode.querySelector(activeSubCategoryClassName);
@@ -55,7 +55,7 @@ export default class CategoricalDisplayStore {
         this.categoryElements = {};
         this.mainStore = mainStore;
         this.getCurrentActiveCategory = getCurrentActiveCategory;
-        this.getActiveSubCategory = getActiveSubCategory;
+        this.getCurrentActiveSubCategory = getCurrentActiveSubCategory;
         this.isInit = false;
         this.searchInput = React.createRef();
 
