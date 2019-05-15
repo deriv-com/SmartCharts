@@ -485,6 +485,16 @@ class ChartStore {
 
                 this.context = context;
 
+                this.chartClosedOpenThemeChange(!this.currentActiveSymbol.symbol.exchange_is_open);
+
+                this.mainStore.chart.tradingTimes.onMarketOpenCloseChanged(action((changes) => {
+                    for (const sy in changes) {
+                        if (this.currentActiveSymbol.symbol === sy) {
+                            this.chartClosedOpenThemeChange(!changes[sy]);
+                        }
+                    }
+                }));
+
                 if (this.state.importedLayout) {
                     // Check if there is a layout set by importedLayout porp, import it here after chart is loaded
                     this.state.importLayout();
@@ -535,8 +545,12 @@ class ChartStore {
             if (symbol in changes) {
                 if (changes[symbol]) {
                     shouldRefreshChart = true;
+                    this.mainStore.state.setChartTheme(this.mainStore.chartSetting.theme, false);
+                    this.mainStore.state.setChartClosed(false);
                     this.mainStore.notifier.notifyMarketOpen(name);
                 } else {
+                    this.mainStore.state.setChartTheme(this.mainStore.chartSetting.theme, true);
+                    this.mainStore.state.setChartClosed(true);
                     this.mainStore.notifier.notifyMarketClose(name);
                 }
             }
@@ -546,6 +560,11 @@ class ChartStore {
             this.refreshChart();
         }
     };
+
+    chartClosedOpenThemeChange(isChartClosed) {
+        this.mainStore.state.setChartClosed(isChartClosed);
+        this.mainStore.state.setChartTheme(this.mainStore.chartSetting.theme, isChartClosed);
+    }
 
     @computed get categorizedSymbols() {
         if (!this.activeSymbols || this.activeSymbols.categorizedSymbols.length === 0) return [];
@@ -605,20 +624,6 @@ class ChartStore {
             return;
         }
 
-        let isChartClosed = !this.mainStore.chart.tradingTimes.isMarketOpened(symbolObj.symbol);
-        this.mainStore.state.setChartClosed(isChartClosed);
-        this.mainStore.state.setChartTheme(this.mainStore.chartSetting.theme, isChartClosed);
-
-        this.mainStore.chart.tradingTimes.onMarketOpenCloseChanged(action((changes) => {
-            for (const sy in changes) {
-                if (symbolObj.symbol === sy) {
-                    isChartClosed = !changes[sy];
-                    this.mainStore.state.setChartClosed(isChartClosed);
-                    this.mainStore.state.setChartTheme(this.mainStore.chartSetting.theme, isChartClosed);
-                }
-            }
-        }));
-
         let params;
         if (granularity !== undefined) {
             this.granularity = granularity;
@@ -633,6 +638,8 @@ class ChartStore {
         }
 
         this.newChart(symbolObj, params);
+
+        this.chartClosedOpenThemeChange(!symbolObj.exchange_is_open);
 
         if (symbolObj) {
             this.updateCurrentActiveSymbol();
