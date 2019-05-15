@@ -23,15 +23,16 @@ export default class CategoricalDisplayStore {
                 this.activeSubMarket = this.mainStore.chart.currentActiveSymbol ? this.mainStore.chart.currentActiveSymbol.symbol : '';
                 const el = this.categoryElements[this.activeCategoryKey];
                 const el_active_submarket = this.mainStore.chart.rootNode.querySelector(`.submarket-item-${this.activeSubMarket}`);
+                this.activeHeadKey = this.activeCategoryKey || null;
+
                 if (el) {
                     this.pauseScrollSpy = true;
                     this.isUserScrolling = false;
+                    this.scrollPanel.scrollTop(el.offsetTop);
+
                     if (el_active_submarket) {
-                        this.scrollPanel.scrollTop(el.offsetTop + el_active_submarket.offsetTop);
-                    } else {
-                        this.scrollPanel.scrollTop(el.offsetTop);
+                        this.scrollPanel.scrollTop(el.offsetTop + el_active_submarket.offsetTop - 40);
                     }
-                    this.activeHeadKey = null;
                     setTimeout(() => { this.pauseScrollSpy = false; }, 20);
                 }
                 if (!this.isInit) { this.init(); }
