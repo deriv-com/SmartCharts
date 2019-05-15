@@ -637,19 +637,10 @@ class ChartStore {
         if (symbolObj) {
             this.updateCurrentActiveSymbol();
         }
-
-        const { chartType: chartTypeStore } = this.mainStore;
-        this.contextPromise.then(() => {
-            const isTick = this.stxx.layout.timeUnit === 'second';
-            const isCandle = chartTypeStore.isCandle;
-            if (isCandle && isTick) {
-                // Tick charts cannot be represented with candles
-                chartTypeStore.setType('mountain');
-            }
-        });
     }
 
     @action.bound calculateYaxisWidth = (price) => {
+        if (!price) return;
         const { context } = this.context.stx.chart;
 
         const priceWidth = context.measureText(price.toFixed(this.pip)).width + 20;
@@ -663,10 +654,13 @@ class ChartStore {
     }
 
     @action.bound updateYaxisWidth = () => {
-        const currentQuote = this.context.stx.currentQuote();
-        if (currentQuote) {
-            const { Close } = currentQuote;
-            this.calculateYaxisWidth(Close);
+        if (this.stxx.masterData && this.stxx.masterData.length) {
+            const currentQuote = this.context.stx.currentQuote();
+            if (currentQuote && currentQuote.Close) {
+                this.calculateYaxisWidth(currentQuote.Close);
+            } else {
+                this.calculateYaxisWidth(this.stxx.masterData.slice(-1).Close);
+            }
         }
     }
 
