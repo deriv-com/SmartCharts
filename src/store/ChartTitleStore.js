@@ -21,6 +21,9 @@ export default class ChartTitleStore {
             placeholderText: t.translate('Search...'),
             favoritesId: 'chartTitle&Comparison',
             mainStore,
+            id: 'market_dropdown',
+            getCurrentActiveCategory: () => (this.mainStore.chart.currentActiveSymbol ? this.mainStore.chart.currentActiveSymbol.market : 'favorite'),
+            getActiveSubCategory: () => (this.mainStore.chart.currentActiveSymbol ? this.mainStore.chart.currentActiveSymbol.symbol : ''),
         });
         this.serverTime = ServerTime.getInstance();
 
