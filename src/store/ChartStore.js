@@ -640,10 +640,13 @@ class ChartStore {
     }
 
     @action.bound updateYaxisWidth = () => {
-        const currentQuote = this.context.stx.currentQuote();
-        if (currentQuote) {
-            const { Close } = currentQuote;
-            this.calculateYaxisWidth(Close);
+        if (this.stxx.masterData && this.stxx.masterData.length) {
+            const currentQuote = this.context.stx.currentQuote();
+            if (currentQuote && currentQuote.Close) {
+                this.calculateYaxisWidth(currentQuote.Close);
+            } else {
+                this.calculateYaxisWidth(this.stxx.masterData.slice(-1).Close);
+            }
         }
     }
 
