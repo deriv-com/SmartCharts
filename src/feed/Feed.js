@@ -78,7 +78,7 @@ class Feed {
             } else {
                 this._stx.chart.isDisplayFullMode = false;
                 this._stx.setMaxTicks(this._stx.chart.dataSet.length + 2);
-                this._stx.scrollTo(this._stx.chart, this._stx.chart.dataSet.length + 1);
+                this._stx.home();
                 this._stx.chart.lockScroll = false;
 
                 this._stx.draw();
