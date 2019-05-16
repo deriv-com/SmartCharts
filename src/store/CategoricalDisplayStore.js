@@ -15,23 +15,28 @@ export default class CategoricalDisplayStore {
         placeholderText,
         favoritesId,
         mainStore,
+        id,
+        getCurrentActiveCategory,
+        getCurrentActiveSubCategory,
     }) {
         reaction(getIsShown, () => {
             if (getIsShown()) {
                 this.focusedCategoryKey = null;
-                this.activeCategoryKey = this.mainStore.chart.currentActiveSymbol ? this.mainStore.chart.currentActiveSymbol.market : 'favorite';
-                this.activeSubMarket = this.mainStore.chart.currentActiveSymbol ? this.mainStore.chart.currentActiveSymbol.symbol : '';
+                this.activeCategoryKey = this.getCurrentActiveCategory ? this.getCurrentActiveCategory() : 'favorite';
+                this.activeSubCategory = this.getCurrentActiveSubCategory ? this.getCurrentActiveSubCategory() : '';
                 const el = this.categoryElements[this.activeCategoryKey];
-                const el_active_submarket = this.mainStore.chart.rootNode.querySelector(`.submarket-item-${this.activeSubMarket}`);
+                const activeSubCategoryClassName = this.id ? `.${this.id}-subcategory-item-${this.activeSubCategory}` : `.subcategory-item-${this.activeSubCategory}`;
+                const el_active_sub_category = this.mainStore.chart.rootNode.querySelector(activeSubCategoryClassName);
+                this.activeHeadKey = this.activeCategoryKey || null;
+
                 if (el) {
                     this.pauseScrollSpy = true;
                     this.isUserScrolling = false;
-                    if (el_active_submarket) {
-                        this.scrollPanel.scrollTop(el.offsetTop + el_active_submarket.offsetTop);
-                    } else {
-                        this.scrollPanel.scrollTop(el.offsetTop);
+                    this.scrollPanel.scrollTop(el.offsetTop);
+
+                    if (el_active_sub_category) {
+                        this.scrollPanel.scrollTop(el.offsetTop + el_active_sub_category.offsetTop - 40);
                     }
-                    this.activeHeadKey = null;
                     setTimeout(() => { this.pauseScrollSpy = false; }, 20);
                 }
                 if (!this.isInit) { this.init(); }
@@ -46,14 +51,17 @@ export default class CategoricalDisplayStore {
         this.onSelectItem = onSelectItem;
         this.getActiveCategory = getActiveCategory;
         this.favoritesId = favoritesId;
+        this.id = id;
         this.categoryElements = {};
         this.mainStore = mainStore;
-        this.activeCategoryKey = this.mainStore.chart.currentActiveSymbol ? this.mainStore.chart.currentActiveSymbol.market : 'favorite';
+        this.getCurrentActiveCategory = getCurrentActiveCategory;
+        this.getCurrentActiveSubCategory = getCurrentActiveSubCategory;
         this.isInit = false;
         this.searchInput = React.createRef();
 
         const normalItem = connect(() => ({
             favoritesId,
+            id,
         }))(NormalItem);
 
         const activeItem = connect(() => ({

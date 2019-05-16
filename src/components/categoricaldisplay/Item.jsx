@@ -50,16 +50,19 @@ const ActiveOptions = ({ activeOptions, item }) => (
     )
 );
 
-export const NormalItem = ({ onSelectItem, item, favoritesId }) => (
-    <div
-        className={`cq-item ${item.selected ? 'selected ' : ''} submarket-item-${item.itemId}`}
-        onClick={e => item.enabled && onSelectItem(item.dataObject, e)}
-        disabled={!item.enabled}
-    >
-        <ItemLeft item={item} />
-        <ItemRight item={item} favoritesId={favoritesId} />
-    </div>
-);
+export const NormalItem = ({ onSelectItem, item, favoritesId, id }) => {
+    const itemClass = id ? `${id}-subcategory-item-${item.itemId}` : `subcategory-item-${item.itemId}`;
+    return (
+        <div
+            className={`cq-item ${item.selected ? 'selected ' : ''} ${itemClass}`}
+            onClick={e => item.enabled && onSelectItem(item.dataObject, e)}
+            disabled={!item.enabled}
+        >
+            <ItemLeft item={item} />
+            <ItemRight item={item} favoritesId={favoritesId} />
+        </div>
+    );
+};
 
 export const ActiveItem = ({ item, favoritesId, activeOptions }) => (
     <div
