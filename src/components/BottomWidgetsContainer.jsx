@@ -49,16 +49,16 @@ class BottomWidgetsContainer extends React.Component {
 }
 
 BottomWidgetsContainer.propTypes = {
-    bottom           : PropTypes.number,
-    isReadyToShow    : PropTypes.bool,
-    top              : PropTypes.number,
+    bottom: PropTypes.number,
+    isReadyToShow: PropTypes.bool,
+    top: PropTypes.number,
     updateChartMargin: PropTypes.func.isRequired,
 };
 
 BottomWidgetsContainer.defaultProps = {
-    bottom       : 0,
+    bottom: 0,
     isReadyToShow: false,
-    top          : 0,
+    top: 0,
 };
 
 

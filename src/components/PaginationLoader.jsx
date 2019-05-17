@@ -19,11 +19,11 @@ const PaginationLoader = ({ epoch }) => (
 );
 
 PaginationLoader.propTypes = {
-    epoch       : PropTypes.number,
+    epoch: PropTypes.number,
 };
 
 PaginationLoader.defaultProps = {
-    epoch       : 0,
+    epoch: 0,
 };
 
 export default connect(({ state }) => ({

@@ -61,18 +61,18 @@ const DrawTools = ({
 );
 
 DrawTools.propTypes = {
-    clearAll        : PropTypes.func,
-    selectTool      : PropTypes.func,
-    DrawToolsMenu   : PropTypes.any.isRequired,
-    menuOpen        : PropTypes.bool,
-    drawToolsItems  : PropTypes.array,
+    clearAll: PropTypes.func,
+    selectTool: PropTypes.func,
+    DrawToolsMenu: PropTypes.any.isRequired,
+    menuOpen: PropTypes.bool,
+    drawToolsItems: PropTypes.array,
 };
 
 DrawTools.defaultProps = {
-    clearAll        : () => null,
-    selectTool      : () => null,
-    menuOpen        : false,
-    drawToolsItems  : [],
+    clearAll: () => null,
+    selectTool: () => null,
+    menuOpen: false,
+    drawToolsItems: [],
 };
 
 export default connect(({ drawTools: dt }) => ({

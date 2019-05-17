@@ -52,19 +52,19 @@ class LastDigitStats extends React.Component {
 }
 
 LastDigitStats.propTypes = {
-    showLastDigitStats  : PropTypes.func,
-    isVisible           : PropTypes.bool,
-    bars                : PropTypes.array,
-    marketDisplayName   : PropTypes.string,
-    changeSymbol        : PropTypes.func,
+    showLastDigitStats: PropTypes.func,
+    isVisible: PropTypes.bool,
+    bars: PropTypes.array,
+    marketDisplayName: PropTypes.string,
+    changeSymbol: PropTypes.func,
 };
 
 LastDigitStats.defaultProps = {
-    showLastDigitStats  : () => null,
-    isVisible           : false,
-    bars                : [],
-    marketDisplayName   : '',
-    changeSymbol        : () => null,
+    showLastDigitStats: () => null,
+    isVisible: false,
+    bars: [],
+    marketDisplayName: '',
+    changeSymbol: () => null,
 };
 
 export default connect(({ lastDigitStats : l }) => ({

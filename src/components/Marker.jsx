@@ -17,19 +17,19 @@ const Marker = ({
 );
 
 Marker.propTypes = {
-    display     : PropTypes.string,
-    left        : PropTypes.number,
-    bottom      : PropTypes.number,
-    children    : PropTypes.any,
-    className   : PropTypes.string,
+    display: PropTypes.string,
+    left: PropTypes.number,
+    bottom: PropTypes.number,
+    children: PropTypes.any,
+    className: PropTypes.string,
 };
 
 Marker.defaultProps = {
-    display     : 'none',
-    left        : 0,
-    bottom      : 0,
-    children    : null,
-    className   : '',
+    display: 'none',
+    left: 0,
+    bottom: 0,
+    children: null,
+    className: '',
 };
 
 export default connect(

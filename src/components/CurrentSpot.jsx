@@ -16,15 +16,15 @@ const CurrentSpot = ({
 );
 
 CurrentSpot.propTypes = {
-    left    : PropTypes.number,
-    top     : PropTypes.number,
-    show    : PropTypes.bool,
+    left: PropTypes.number,
+    top: PropTypes.number,
+    show: PropTypes.bool,
 };
 
 CurrentSpot.defaultProps = {
-    left    : 0,
-    top     : 0,
-    show    : false,
+    left: 0,
+    top: 0,
+    show: false,
 };
 
 export default connect(({ currentSpot: cs }) => ({

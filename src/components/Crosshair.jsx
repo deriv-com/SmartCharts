@@ -29,21 +29,21 @@ const Crosshair = ({
 );
 
 Crosshair.propTypes = {
-    left            : PropTypes.number,
-    top             : PropTypes.number,
-    rows            : PropTypes.array,
-    isArrowLeft     : PropTypes.bool,
-    state           : PropTypes.number,
-    cursorInChart   : PropTypes.bool,
+    left: PropTypes.number,
+    top: PropTypes.number,
+    rows: PropTypes.array,
+    isArrowLeft: PropTypes.bool,
+    state: PropTypes.number,
+    cursorInChart: PropTypes.bool,
 };
 
 Crosshair.defaultProps = {
-    left            : 0,
-    top             : 0,
-    rows            : [],
-    isArrowLeft     : false,
-    state           : 1,
-    cursorInChart   : false,
+    left: 0,
+    top: 0,
+    rows: [],
+    isArrowLeft: false,
+    state: 1,
+    cursorInChart: false,
 };
 
 export default connect(({ crosshair: c, chart }) => ({

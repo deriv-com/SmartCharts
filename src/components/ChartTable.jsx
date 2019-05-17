@@ -126,22 +126,22 @@ const ChartTable = ({
 };
 
 ChartTable.propTypes = {
-    isMobile    : PropTypes.bool,
-    tableData   : PropTypes.array,
-    Dialog      : PropTypes.any.isRequired,
-    open        : PropTypes.bool,
-    isTick      : PropTypes.bool,
-    symbol      : PropTypes.object,
-    setOpen     : PropTypes.func,
+    isMobile: PropTypes.bool,
+    tableData: PropTypes.array,
+    Dialog: PropTypes.any.isRequired,
+    open: PropTypes.bool,
+    isTick: PropTypes.bool,
+    symbol: PropTypes.object,
+    setOpen: PropTypes.func,
 };
 
 ChartTable.defaultProps = {
-    isMobile    : false,
-    tableData   : [],
-    open        : false,
-    isTick      : false,
-    symbol      : {},
-    setOpen     : () => null,
+    isMobile: false,
+    tableData: [],
+    open: false,
+    isTick: false,
+    symbol: {},
+    setOpen: () => null,
 };
 
 export default connect(({  chart, chartTable }) => ({

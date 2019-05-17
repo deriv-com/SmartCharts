@@ -119,30 +119,30 @@ const Views = ({
 );
 
 Views.propTypes = {
-    ViewsMenu       : PropTypes.any.isRequired,
-    views           : PropTypes.array,
-    routes          : PropTypes.object,
-    onChange        : PropTypes.func,
-    remove          : PropTypes.func,
-    onSubmit        : PropTypes.func,
-    applyLayout     : PropTypes.func,
-    menuOpen        : PropTypes.bool,
-    inputRef        : PropTypes.any,
-    currentRoute    : PropTypes.string,
-    templateName    : PropTypes.string,
+    ViewsMenu: PropTypes.any.isRequired,
+    views: PropTypes.array,
+    routes: PropTypes.object,
+    onChange: PropTypes.func,
+    remove: PropTypes.func,
+    onSubmit: PropTypes.func,
+    applyLayout: PropTypes.func,
+    menuOpen: PropTypes.bool,
+    inputRef: PropTypes.any,
+    currentRoute: PropTypes.string,
+    templateName: PropTypes.string,
 };
 
 Views.defaultProps = {
-    views           : [],
-    routes          : {},
-    onChange        : () => null,
-    remove          : () => null,
-    onSubmit        : () => null,
-    applyLayout     : () => null,
-    menuOpen        : false,
-    inputRef        : null,
-    currentRoute    : '',
-    templateName    : '',
+    views: [],
+    routes: {},
+    onChange: () => null,
+    remove: () => null,
+    onSubmit: () => null,
+    applyLayout: () => null,
+    menuOpen: false,
+    inputRef: null,
+    currentRoute: '',
+    templateName: '',
 };
 
 export default connect(({ view: s }) => ({

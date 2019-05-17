@@ -30,17 +30,17 @@ const Comparison = ({
 );
 
 Comparison.propTypes = {
-    ComparisonSelector  : PropTypes.any.isRequired,
-    ComparisonMenu      : PropTypes.any.isRequired,
-    menuOpen            : PropTypes.bool,
-    isMobile            : PropTypes.bool,
-    activeComparisonsNo : PropTypes.number,
+    ComparisonSelector: PropTypes.any.isRequired,
+    ComparisonMenu: PropTypes.any.isRequired,
+    menuOpen: PropTypes.bool,
+    isMobile: PropTypes.bool,
+    activeComparisonsNo: PropTypes.number,
 };
 
 Comparison.defaultProps = {
-    menuOpen            : false,
-    isMobile            : false,
-    activeComparisonsNo : 1,
+    menuOpen: false,
+    isMobile: false,
+    activeComparisonsNo: 1,
 };
 
 export default connect(({ comparison: c, chart }) => ({

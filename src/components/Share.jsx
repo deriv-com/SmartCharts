@@ -57,18 +57,18 @@ const Share = ({
 );
 
 Share.propTypes = {
-    ShareMenu       : PropTypes.any.isRequired,
-    menuOpen        : PropTypes.bool,
-    downloadPNG     : PropTypes.func,
-    downloadCSV     : PropTypes.func,
-    isLoadingPNG    : PropTypes.bool,
+    ShareMenu: PropTypes.any.isRequired,
+    menuOpen: PropTypes.bool,
+    downloadPNG: PropTypes.func,
+    downloadCSV: PropTypes.func,
+    isLoadingPNG: PropTypes.bool,
 };
 
 Share.defaultProps = {
-    menuOpen        : false,
-    downloadPNG     : () => null,
-    downloadCSV     : () => null,
-    isLoadingPNG    : false,
+    menuOpen: false,
+    downloadPNG: () => null,
+    downloadCSV: () => null,
+    isLoadingPNG: false,
 };
 
 export default connect(({ share: d }) => ({

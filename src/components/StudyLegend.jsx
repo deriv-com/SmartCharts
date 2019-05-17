@@ -34,21 +34,21 @@ const StudyLegend = ({
 );
 
 StudyLegend.propTypes = {
-    isOpened                    : PropTypes.bool,
-    setOpen                     : PropTypes.func,
-    StudyMenu                   : PropTypes.any.isRequired,
-    menuOpen                    : PropTypes.bool,
-    StudyCategoricalDisplay     : PropTypes.any.isRequired,
-    isMobile                    : PropTypes.bool,
-    activeStudiesNo             : PropTypes.number,
+    isOpened: PropTypes.bool,
+    setOpen: PropTypes.func,
+    StudyMenu: PropTypes.any.isRequired,
+    menuOpen: PropTypes.bool,
+    StudyCategoricalDisplay: PropTypes.any.isRequired,
+    isMobile: PropTypes.bool,
+    activeStudiesNo: PropTypes.number,
 };
 
 StudyLegend.defaultProps = {
-    isOpened                    : false,
-    setOpen                     : () => null,
-    menuOpen                    : false,
-    isMobile                    : false,
-    activeStudiesNo             : 1,
+    isOpened: false,
+    setOpen: () => null,
+    menuOpen: false,
+    isMobile: false,
+    activeStudiesNo: 1,
 };
 
 export default connect(({ studies: st, chart }) => ({

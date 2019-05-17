@@ -15,16 +15,16 @@ const Loader = ({
 );
 
 Loader.propTypes = {
-    isActive        : PropTypes.bool,
-    currentState    : PropTypes.oneOfType([
+    isActive: PropTypes.bool,
+    currentState: PropTypes.oneOfType([
         PropTypes.string,
         PropTypes.bool,
     ]),
 };
 
 Loader.defaultProps = {
-    isActive        : false,
-    currentState    : '',
+    isActive: false,
+    currentState: '',
 };
 
 export default connect(({ loader: l }) => ({

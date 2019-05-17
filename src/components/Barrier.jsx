@@ -30,26 +30,26 @@ const Barrier = ({
 ));
 
 Barrier.propTypes = {
-    shadeColor          : PropTypes.string,
-    color               : PropTypes.string,
-    foregroundColor     : PropTypes.string,
-    HighPriceLine       : PropTypes.node.isRequired,
-    LowPriceLine        : PropTypes.node.isRequired,
-    AboveShade          : PropTypes.node.isRequired,
-    BetweenShade        : PropTypes.node.isRequired,
-    BelowShade          : PropTypes.node.isRequired,
-    hidePriceLines      : PropTypes.bool,
-    lineStyle           : PropTypes.string,
-    isInitialized       : PropTypes.bool,
+    shadeColor: PropTypes.string,
+    color: PropTypes.string,
+    foregroundColor: PropTypes.string,
+    HighPriceLine: PropTypes.node.isRequired,
+    LowPriceLine: PropTypes.node.isRequired,
+    AboveShade: PropTypes.node.isRequired,
+    BetweenShade: PropTypes.node.isRequired,
+    BelowShade: PropTypes.node.isRequired,
+    hidePriceLines: PropTypes.bool,
+    lineStyle: PropTypes.string,
+    isInitialized: PropTypes.bool,
 };
 
 Barrier.defaultProps = {
-    shadeColor          : '#39b19d',
-    color               : '#39b19d',
-    foregroundColor     : '#ffffff',
-    hidePriceLines      : false,
-    lineStyle           : 'solid',
-    isInitialized       : false,
+    shadeColor: '#39b19d',
+    color: '#39b19d',
+    foregroundColor: '#ffffff',
+    hidePriceLines: false,
+    lineStyle: 'solid',
+    isInitialized: false,
 };
 
 export default connect(

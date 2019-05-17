@@ -130,28 +130,28 @@ const Timeperiod = ({
 };
 
 Timeperiod.propTypes = {
-    chartId             : PropTypes.string,
-    timeUnit            : PropTypes.string,
-    interval            : PropTypes.number,
-    interval_display    : PropTypes.number,
-    isMobile            : PropTypes.bool,
-    onChange            : PropTypes.func,
-    setOpen             : PropTypes.func,
-    TimePeriodMenu      : PropTypes.any.isRequired,
-    timeUnit_display    : PropTypes.string,
-    updateProps         : PropTypes.func,
+    chartId: PropTypes.string,
+    timeUnit: PropTypes.string,
+    interval: PropTypes.number,
+    interval_display: PropTypes.number,
+    isMobile: PropTypes.bool,
+    onChange: PropTypes.func,
+    setOpen: PropTypes.func,
+    TimePeriodMenu: PropTypes.any.isRequired,
+    timeUnit_display: PropTypes.string,
+    updateProps: PropTypes.func,
 };
 
 Timeperiod.defaultProps = {
-    chartId             : '',
-    timeUnit            : '',
-    interval            : 0,
-    interval_display    : 0,
-    isMobile            : false,
-    onChange            : () => null,
-    setOpen             : () => null,
-    timeUnit_display    : '',
-    updateProps         : () => null,
+    chartId: '',
+    timeUnit: '',
+    interval: 0,
+    interval_display: 0,
+    isMobile: false,
+    onChange: () => null,
+    setOpen: () => null,
+    timeUnit_display: '',
+    updateProps: () => null,
 };
 
 export default connect(({ timeperiod: s, state }) => ({

@@ -39,15 +39,15 @@ const ComparisonList = ({
 );
 
 ComparisonList.propTypes = {
-    comparisonSymbols   : PropTypes.array,
-    animatedPrices      : PropTypes.array,
-    onDeleteItem        : PropTypes.func,
+    comparisonSymbols: PropTypes.array,
+    animatedPrices: PropTypes.array,
+    onDeleteItem: PropTypes.func,
 };
 
 ComparisonList.defaultProps = {
-    comparisonSymbols   : [],
-    animatedPrices      : [],
-    onDeleteItem        : () => null,
+    comparisonSymbols: [],
+    animatedPrices: [],
+    onDeleteItem: () => null,
 };
 
 export default connect(({ comparisonList: c }) => ({

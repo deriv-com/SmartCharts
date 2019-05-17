@@ -22,13 +22,13 @@ const ChartSize = ({
 );
 
 ChartSize.propTypes = {
-    zoomIn      : PropTypes.func,
-    zoomOut     : PropTypes.func,
+    zoomIn: PropTypes.func,
+    zoomOut: PropTypes.func,
 };
 
 ChartSize.defaultProps = {
-    zoomIn      : () => null,
-    zoomOut     : () => null,
+    zoomIn: () => null,
+    zoomOut: () => null,
 };
 
 export default connect(({ chartSize }) => ({

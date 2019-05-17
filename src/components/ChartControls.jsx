@@ -43,17 +43,17 @@ const ChartControls = ({
 };
 
 ChartControls.propTypes = {
-    isMobile        : PropTypes.bool,
-    hasOpenMenu     : PropTypes.bool,
-    widgets         : PropTypes.any,
-    context         : PropTypes.any,
+    isMobile: PropTypes.bool,
+    hasOpenMenu: PropTypes.bool,
+    widgets: PropTypes.any,
+    context: PropTypes.any,
 };
 
 ChartControls.defaultProps = {
-    isMobile        : false,
-    hasOpenMenu     : false,
-    widgets         : RenderDefaultControls,
-    context         : null,
+    isMobile: false,
+    hasOpenMenu: false,
+    widgets: RenderDefaultControls,
+    context: null,
 };
 
 export default connect(({ chart,

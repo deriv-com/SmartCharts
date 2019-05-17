@@ -15,15 +15,15 @@ const DrawingCursor = ({
 );
 
 DrawingCursor.propTypes = {
-    display     : PropTypes.string,
-    left        : PropTypes.number,
-    top         : PropTypes.number,
+    display: PropTypes.string,
+    left: PropTypes.number,
+    top: PropTypes.number,
 };
 
 DrawingCursor.defaultProps = {
-    display     : 'none',
-    left        : 0,
-    top         : 0,
+    display: 'none',
+    left: 0,
+    top: 0,
 };
 
 export default connect(({ drawingCursor : dc }) => ({

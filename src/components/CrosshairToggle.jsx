@@ -27,13 +27,13 @@ const CrosshairToggle = ({
 };
 
 CrosshairToggle.propTypes = {
-    toggleState     : PropTypes.func,
-    state           : PropTypes.number,
+    toggleState: PropTypes.func,
+    state: PropTypes.number,
 };
 
 CrosshairToggle.defaultProps = {
-    toggleState     : () => null,
-    state           : 0,
+    toggleState: () => null,
+    state: 0,
 };
 
 export default connect(({ crosshair }) => ({

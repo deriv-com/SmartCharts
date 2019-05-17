@@ -34,15 +34,15 @@ const List = ({
 };
 
 List.propTypes = {
-    height      : PropTypes.number,
-    onItemClick : PropTypes.func,
-    items       : PropTypes.array,
+    height: PropTypes.number,
+    onItemClick: PropTypes.func,
+    items: PropTypes.array,
 };
 
 List.defaultProps = {
-    height      : null,
-    onItemClick : () => null,
-    items       : [],
+    height: null,
+    onItemClick: () => null,
+    items: [],
 };
 
 export default List;

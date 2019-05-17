@@ -23,21 +23,21 @@ const AssetInformation = ({
 );
 
 AssetInformation.propTypes = {
-    price       : PropTypes.string,
-    open        : PropTypes.string,
-    close       : PropTypes.string,
-    high        : PropTypes.string,
-    low         : PropTypes.string,
-    visible     : PropTypes.bool,
+    price: PropTypes.string,
+    open: PropTypes.string,
+    close: PropTypes.string,
+    high: PropTypes.string,
+    low: PropTypes.string,
+    visible: PropTypes.bool,
 };
 
 AssetInformation.defaultProps = {
-    price       : '0',
-    open        : 0,
-    close       : 0,
-    high        : 0,
-    low         : 0,
-    visible     : false,
+    price: '0',
+    open: 0,
+    close: 0,
+    high: 0,
+    low: 0,
+    visible: false,
 };
 
 export default connect(({ assetInformation: ai }) => ({

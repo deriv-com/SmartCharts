@@ -55,13 +55,13 @@ class Favorite extends Component {
 }
 
 Favorite.propTypes = {
-    category    : PropTypes.string,
-    id          : PropTypes.string,
+    category: PropTypes.string,
+    id: PropTypes.string,
 };
 
 Favorite.defaultProps = {
-    category    : '',
-    id          : '',
+    category: '',
+    id: '',
 };
 
 export default Favorite;
