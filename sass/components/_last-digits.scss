@@ -71,4 +71,11 @@
             color: themed('LastdigitsBarFooter');
         }
     }
+    &.minimized {
+        bottom: 5px;
+
+        .cq-bars {
+            height: 25px;
+        }
+    }
 }

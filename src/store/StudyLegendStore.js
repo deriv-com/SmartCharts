@@ -88,10 +88,49 @@ export default class StudyLegendStore {
     }
 
     @action.bound onSelectItem(item) {
-        const sd = CIQ.Studies.addStudy(this.stx, item);
-        this.changeStudyPanelTitle(sd);
-        logEvent(LogCategories.ChartControl, LogActions.Indicator, `Add ${item}`);
-        this.menu.setOpen(false);
+        const overlay = CIQ.Studies.studyLibrary[item].overlay || false;
+        if ((!overlay && Object.keys(this.stx.panels).length < 6) || overlay) {
+            const sd = CIQ.Studies.addStudy(this.stx, item);
+            this.changeStudyPanelTitle(sd);
+            logEvent(LogCategories.ChartControl, LogActions.Indicator, `Add ${item}`);
+            this.menu.setOpen(false);
+        } else {
+            this.mainStore.notifier.notify({
+                text: t.translate('You can enable up to 5 off-chart indicators at a time.'),
+            });
+        }
+    }
+
+    @action.bound updateHeight(st, ratioHeight) {
+        const parameters = CIQ.Studies.studyLibrary[st].parameters;
+        const height = ratioHeight ? 1 / Object.keys(this.stx.panels).length : null;
+        if (parameters && parameters.init) {
+            CIQ.Studies.studyLibrary[st].parameters.init.heightPercentage = height;
+        } else if (parameters) {
+            CIQ.Studies.studyLibrary[st].parameters.init = { heightPercentage: height };
+        } else {
+            CIQ.Studies.studyLibrary[st].parameters = { init: { heightPercentage: height } };
+        }
+    }
+
+    @action.bound updateStyle() {
+        if (Object.keys(this.stx.panels).length > 2) {
+            Object.keys(CIQ.Studies.studyLibrary).forEach((st) => {
+                if (!CIQ.Studies.studyLibrary[st].overlay) {
+                    CIQ.Studies.studyLibrary[st].panelHeight = 80;
+                    this.updateHeight(st, true);
+                }
+            });
+            this.mainStore.state.ShouldMinimiseLastDigits = true;
+        } else {
+            Object.keys(CIQ.Studies.studyLibrary).forEach((st) => {
+                if (!CIQ.Studies.studyLibrary[st].overlay) {
+                    CIQ.Studies.studyLibrary[st].panelHeight = null;
+                    this.updateHeight(st);
+                }
+            });
+            this.mainStore.state.ShouldMinimiseLastDigits = false;
+        }
     }
 
     @action.bound editStudy(study) {
@@ -240,6 +279,7 @@ export default class StudyLegendStore {
         if (!this.shouldRenderLegend()) { return; }
 
         this.updateActiveStudies();
+        this.updateStyle();
     };
 
     @action.bound updateActiveStudies() {

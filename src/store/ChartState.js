@@ -21,6 +21,7 @@ class ChartState {
     @observable isOnPagination = false;
     @observable paginationEndEpoch;
     @observable isChartClosed = false;
+    @observable ShouldMinimiseLastDigits = false;
     chartControlsWidgets;
 
     get comparisonStore() { return this.mainStore.comparison; }

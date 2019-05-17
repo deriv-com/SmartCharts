@@ -31,9 +31,10 @@ class LastDigitStats extends React.Component {
         const {
             isVisible,
             bars,
-            marketDisplayName } = this.props;
+            marketDisplayName,
+            ShouldMinimiseLastDigits } = this.props;
         return (
-            <div className={`cq-last-digits ${isVisible ? 'show' : ''}`}>
+            <div className={`cq-last-digits ${isVisible ? 'show' : ''} ${ShouldMinimiseLastDigits ? 'minimized' : ''}`}>
                 <div className="cq-bars">
                     {bars.map((bar, idx) => (
                         <Bar
@@ -50,10 +51,11 @@ class LastDigitStats extends React.Component {
     }
 }
 
-export default connect(({ lastDigitStats : l }) => ({
+export default connect(({ lastDigitStats : l, state }) => ({
     showLastDigitStats:l.showLastDigitStats,
     isVisible:l.isVisible,
     bars:l.bars,
     marketDisplayName:l.marketDisplayName,
     changeSymbol: l.changeSymbol,
+    ShouldMinimiseLastDigits: state.ShouldMinimiseLastDigits,
 }))(LastDigitStats);
