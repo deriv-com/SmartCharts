@@ -211,7 +211,7 @@ class ChartState {
     restoreLayout() {
         let layoutData = createObjectFromLocalStorage(`layout-${this.chartId}`);
 
-        if (!layoutData) return false;
+        if (!layoutData || !layoutData.symbols.length) return false;
 
         // prop values will always take precedence
         if (this.symbol !== undefined && this.symbol !== layoutData.symbols[0].symbol) {
