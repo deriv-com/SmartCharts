@@ -65,10 +65,8 @@ Share.propTypes = {
 };
 
 Share.defaultProps = {
-    menuOpen: false,
     downloadPNG: () => null,
     downloadCSV: () => null,
-    isLoadingPNG: false,
 };
 
 export default connect(({ share: d }) => ({

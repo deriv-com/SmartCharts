@@ -22,10 +22,6 @@ PaginationLoader.propTypes = {
     epoch: PropTypes.number,
 };
 
-PaginationLoader.defaultProps = {
-    epoch: 0,
-};
-
 export default connect(({ state }) => ({
     epoch: state.paginationEndEpoch,
 }))(PaginationLoader);

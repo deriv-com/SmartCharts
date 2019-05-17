@@ -61,9 +61,7 @@ LastDigitStats.propTypes = {
 
 LastDigitStats.defaultProps = {
     showLastDigitStats: () => null,
-    isVisible: false,
     bars: [],
-    marketDisplayName: '',
     changeSymbol: () => null,
 };
 

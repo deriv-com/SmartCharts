@@ -21,13 +21,10 @@ AnimatedPrice.propTypes = {
         PropTypes.string,
         PropTypes.number,
     ]),
-    className: PropTypes.string,
 };
 
 AnimatedPrice.defaultProps = {
-    isIncrease: false,
     price: '0',
-    className: '',
 };
 
 export default AnimatedPrice;

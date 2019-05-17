@@ -44,10 +44,7 @@ StudyLegend.propTypes = {
 };
 
 StudyLegend.defaultProps = {
-    isOpened: false,
     setOpen: () => null,
-    menuOpen: false,
-    isMobile: false,
     activeStudiesNo: 1,
 };
 

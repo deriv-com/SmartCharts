@@ -40,7 +40,6 @@ List.propTypes = {
 };
 
 List.defaultProps = {
-    height: null,
     onItemClick: () => null,
     items: [],
 };

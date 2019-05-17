@@ -230,19 +230,12 @@ SettingsDialog.propTypes = {
 };
 
 SettingsDialog.defaultProps = {
-    id: '',
     items: [],
-    title: '',
-    description: '',
-    activeTab: '',
     setOpen: () => null,
-    showTabs: false,
     onTabClick: () => null,
     onDeleteClick: () => null,
-    favoritesId: '',
     onResetClick: () => null,
     onItemChange: () => null,
-    open: false,
 };
 
 export default SettingsDialog;

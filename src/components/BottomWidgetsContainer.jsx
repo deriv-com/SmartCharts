@@ -57,7 +57,6 @@ BottomWidgetsContainer.propTypes = {
 
 BottomWidgetsContainer.defaultProps = {
     bottom: 0,
-    isReadyToShow: false,
     top: 0,
 };
 

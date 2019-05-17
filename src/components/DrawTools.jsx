@@ -71,7 +71,6 @@ DrawTools.propTypes = {
 DrawTools.defaultProps = {
     clearAll: () => null,
     selectTool: () => null,
-    menuOpen: false,
     drawToolsItems: [],
 };
 

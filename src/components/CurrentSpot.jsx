@@ -24,7 +24,6 @@ CurrentSpot.propTypes = {
 CurrentSpot.defaultProps = {
     left: 0,
     top: 0,
-    show: false,
 };
 
 export default connect(({ currentSpot: cs }) => ({

@@ -143,14 +143,8 @@ Timeperiod.propTypes = {
 };
 
 Timeperiod.defaultProps = {
-    chartId: '',
-    timeUnit: '',
-    interval: 0,
-    interval_display: 0,
-    isMobile: false,
     onChange: () => null,
     setOpen: () => null,
-    timeUnit_display: '',
     updateProps: () => null,
 };
 

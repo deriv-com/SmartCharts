@@ -41,9 +41,7 @@ Crosshair.defaultProps = {
     left: 0,
     top: 0,
     rows: [],
-    isArrowLeft: false,
     state: 1,
-    cursorInChart: false,
 };
 
 export default connect(({ crosshair: c, chart }) => ({

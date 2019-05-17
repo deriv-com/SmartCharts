@@ -136,10 +136,7 @@ ChartTable.propTypes = {
 };
 
 ChartTable.defaultProps = {
-    isMobile: false,
     tableData: [],
-    open: false,
-    isTick: false,
     symbol: {},
     setOpen: () => null,
 };

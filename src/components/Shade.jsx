@@ -24,8 +24,6 @@ Shade.propTypes = {
 Shade.defaultProps = {
     top: 0,
     bottom: 0,
-    visible: false,
-    className: '',
 };
 
 export default Shade;

@@ -90,6 +90,7 @@
                 "some": [ "nesting", "id" ]
             },
             "allowChildren": false,
-        }]
+        }],
+        "react/require-default-props": 0
     }
 }

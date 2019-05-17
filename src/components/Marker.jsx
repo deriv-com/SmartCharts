@@ -28,8 +28,6 @@ Marker.defaultProps = {
     display: 'none',
     left: 0,
     bottom: 0,
-    children: null,
-    className: '',
 };
 
 export default connect(

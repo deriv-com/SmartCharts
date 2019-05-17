@@ -37,7 +37,6 @@ AssetInformation.defaultProps = {
     close: 0,
     high: 0,
     low: 0,
-    visible: false,
 };
 
 export default connect(({ assetInformation: ai }) => ({

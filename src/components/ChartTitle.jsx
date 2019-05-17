@@ -51,9 +51,7 @@ ChartTitle.propTypes = {
 };
 
 ChartTitle.defaultProps = {
-    chartId: '',
     enabled: true,
-    isMobile: false,
     onChange: () => null,
     setMenuOpen: () => null,
 };

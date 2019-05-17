@@ -59,9 +59,4 @@ Favorite.propTypes = {
     id: PropTypes.string,
 };
 
-Favorite.defaultProps = {
-    category: '',
-    id: '',
-};
-
 export default Favorite;

@@ -22,7 +22,6 @@ Dialog.propTypes = {
 };
 
 Dialog.defaultProps = {
-    open: false,
     onContainerClick: () => null,
 };
 

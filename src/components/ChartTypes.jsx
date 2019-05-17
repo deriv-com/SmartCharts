@@ -65,7 +65,7 @@ const ChartTypes = ({
                         )}
                     </ChartTypeList>
                 </div>
-            </ChartTypeMenu.Body>w
+            </ChartTypeMenu.Body>
         </ChartTypeMenu>
     );
 };
@@ -84,7 +84,6 @@ ChartTypes.propTypes = {
 
 ChartTypes.defaultProps = {
     enabled: true,
-    menuOpen: false,
     onChange: () => null,
     setOpen: () => null,
     showAggregateDialog: () => null,

@@ -47,9 +47,7 @@ Barrier.defaultProps = {
     shadeColor: '#39b19d',
     color: '#39b19d',
     foregroundColor: '#ffffff',
-    hidePriceLines: false,
     lineStyle: 'solid',
-    isInitialized: false,
 };
 
 export default connect(

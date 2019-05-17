@@ -139,10 +139,6 @@ Views.defaultProps = {
     remove: () => null,
     onSubmit: () => null,
     applyLayout: () => null,
-    menuOpen: false,
-    inputRef: null,
-    currentRoute: '',
-    templateName: '',
 };
 
 export default connect(({ view: s }) => ({

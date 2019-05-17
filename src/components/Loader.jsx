@@ -22,11 +22,6 @@ Loader.propTypes = {
     ]),
 };
 
-Loader.defaultProps = {
-    isActive: false,
-    currentState: '',
-};
-
 export default connect(({ loader: l }) => ({
     isActive: l.isActive,
     currentState: l.currentState,

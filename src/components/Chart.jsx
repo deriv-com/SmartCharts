@@ -198,38 +198,23 @@ Chart.propTypes = {
 };
 
 Chart.defaultProps = {
-    id: undefined,
-    startEpoch: null,
-    endEpoch: null,
     granularity: 0,
     symbol: 'R_100',
     chartType: 'mountain',
     onSettingsChange: () => null,
     onMessage: () => null,
-    isMobile: false,
-    enableRouting: false,
-    removeAllComparisons: false,
     topWidgets: defaultTopWidgets,
     settings: {},
     bottomWidgets: () => null,
-    isOnPagination: false,
-    isChartAvailable: false,
     barriers: [],
-    chartControlsWidgets: null,
     chartContainerHeight: 500,
     containerWidth: 480,
-    isDrawing: false,
     theme: 'light',
     position: 'bottom',
-    showLastDigitStats: false,
-    isConnectionOpened: undefined,
     isAnimationEnabled: true,
     scrollToEpoch: 0,
     scrollToEpochOffset: 0,
     zoom: 0,
-    clearChart: false,
-    onExportLayout: null,
-    importedLayout: null,
 };
 
 export default connect(({ chart, drawTools, studies, chartSetting, chartType, state, drawingCursor }) => ({

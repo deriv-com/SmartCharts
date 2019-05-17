@@ -50,10 +50,7 @@ ChartControls.propTypes = {
 };
 
 ChartControls.defaultProps = {
-    isMobile: false,
-    hasOpenMenu: false,
     widgets: RenderDefaultControls,
-    context: null,
 };
 
 export default connect(({ chart,

@@ -38,8 +38,6 @@ Comparison.propTypes = {
 };
 
 Comparison.defaultProps = {
-    menuOpen: false,
-    isMobile: false,
     activeComparisonsNo: 1,
 };
 
