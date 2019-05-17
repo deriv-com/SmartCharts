@@ -160,7 +160,8 @@ export default class MarkerStore {
 
         // Y axis positioning logic
         if (this.yPositioner.toLowerCase() === 'none') {
-            this.bottom = undefined;
+            // set the bottom value if there's a bottomWidget, else set it to undefined
+            this.bottom = this.stx.chart.yAxis.initialMarginBottom === 200 ? 125 : 20;
             this.showMarker();
             return;
         }

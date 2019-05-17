@@ -1,7 +1,7 @@
 import EventEmitter from 'event-emitter-es6';
-import { reaction, when } from 'mobx';
+import { reaction } from 'mobx';
 import { TickHistoryFormatter } from './TickHistoryFormatter';
-import { calculateGranularity, getUTCEpoch, calculateTimeUnitInterval } from '../utils';
+import { calculateGranularity, getUTCEpoch, calculateTimeUnitInterval, getUTCDate } from '../utils';
 import { RealtimeSubscription, DelayedSubscription } from './subscription';
 import ServerTime from '../utils/ServerTime';
 
@@ -25,20 +25,15 @@ class Feed {
         this._serverTime = ServerTime.getInstance();
         this._tradingTimes = tradingTimes;
         reaction(() => mainStore.state.isConnectionOpened, this.onConnectionChanged.bind(this));
-        when(() => this.context, this.onContextReady);
 
         this._emitter = new EventEmitter({ emitDelay: 0 });
     }
 
-    onContextReady = () => {
-        reaction(() => [this.startEpoch, this.endEpoch], this.onRangeChanged);
-        this._stx.append('updateChartData', () => this.scaleChart());
-    };
-
     onRangeChanged = () => {
         /* When layout is importing and range is changing as the same time we dont need to set the range,
         the imported layout witll take care of it. */
-        if (this._mainStore.state.importedLayout) return;
+        /* When clear the chart we create a new chart so no set range is needed */
+        if (this._mainStore.state.importedLayout || this._mainStore.state.clearChart) return;
 
         const now = this._serverTime.getEpoch();
         const periodicity = calculateTimeUnitInterval(this.granularity);
@@ -46,21 +41,19 @@ class Feed {
         let dtLeft = null;
         let dtRight = null;
 
-        this.loader.show();
         this._mainStore.state.setChartIsReady(false);
-        this.loader.setState('chart-data');
 
         if (!this.endEpoch
             && Object.keys(this._activeStreams).length === 0) {
             if (this.startEpoch) {
                 // Set the end range to the future to trigger ChartIQ to start streaming
                 const future = now + 10;
-                dtRight = new Date(future * 1000);
-                dtLeft = this.startEpoch ? new Date(this.startEpoch) : undefined;
+                dtRight = new Date(getUTCDate(future));
+                dtLeft = this.startEpoch ? new Date(getUTCDate(this.startEpoch)) : undefined;
             }
         } else if (this.endEpoch) {
-            dtLeft =  new Date((this.startEpoch || this.endEpoch - rangeTime) * 1000);
-            dtRight = new Date(this.endEpoch * 1000);
+            dtLeft =  new Date(getUTCDate(this.startEpoch || this.endEpoch - rangeTime));
+            dtRight = new Date(getUTCDate(this.endEpoch));
         }
 
         this._stx.setRange({ dtLeft, dtRight, periodicity }, () => {
@@ -71,7 +64,6 @@ class Feed {
                 this.scaleChart();
             }
             this._mainStore.state.saveLayout();
-            this.loader.hide();
             this._mainStore.state.setChartIsReady(true);
         });
     };
@@ -202,10 +194,6 @@ class Feed {
             // Although market is closed, we display the past tick history data
             getHistoryOnly = true;
         }
-
-        const isChartClosed = !this._tradingTimes.isMarketOpened(symbol);
-        this._mainStore.state.setChartClosed(isChartClosed);
-        this._mainStore.state.setChartTheme(this._mainStore.chartSetting.theme, isChartClosed);
 
         if (getHistoryOnly) {
             const response = await this._binaryApi.getTickHistory(tickHistoryRequest);
