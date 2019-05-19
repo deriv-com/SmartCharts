@@ -33,10 +33,10 @@ AssetInformation.propTypes = {
 
 AssetInformation.defaultProps = {
     price: '0',
-    open: 0,
-    close: 0,
-    high: 0,
-    low: 0,
+    open: '0',
+    close: '0',
+    high: '0',
+    low: '0',
 };
 
 export default connect(({ assetInformation: ai }) => ({

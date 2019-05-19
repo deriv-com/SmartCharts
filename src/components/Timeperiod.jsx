@@ -132,7 +132,10 @@ const Timeperiod = ({
 Timeperiod.propTypes = {
     chartId: PropTypes.string,
     timeUnit: PropTypes.string,
-    interval: PropTypes.number,
+    interval: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.number,
+    ]),
     interval_display: PropTypes.number,
     isMobile: PropTypes.bool,
     onChange: PropTypes.func,

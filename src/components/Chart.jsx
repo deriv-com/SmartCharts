@@ -163,7 +163,7 @@ Chart.propTypes = {
         'colored_line', 'spline', 'baseline',
         'candle', 'colored_bar', 'hollow_candle',
         'heikinashi', 'kagi', 'linebreak',
-        'renko', 'rangebars', 'pandf']),
+        'renko', 'rangebars', 'pandf', 'table']),
     startEpoch: PropTypes.number,
     endEpoch: PropTypes.number,
     chartControlsWidgets: PropTypes.any,
