@@ -29,13 +29,7 @@ class Feed {
         this._emitter = new EventEmitter({ emitDelay: 0 });
     }
 
-    onRangeChanged = () => {
-        /* When layout is importing and range is changing as the same time we dont need to set the range,
-        the imported layout witll take care of it. */
-        /* When clear the chart we create a new chart so no set range is needed */
-        if (this._mainStore.state.importedLayout || this._mainStore.state.clearChart) return;
-
-        const now = this._serverTime.getEpoch();
+    onRangeChanged = (forceLoad) => {
         const periodicity = calculateTimeUnitInterval(this.granularity);
         const rangeTime = ((this.granularity || 1) * this._stx.chart.maxTicks);
         let dtLeft = null;
@@ -43,20 +37,25 @@ class Feed {
 
         this._mainStore.state.setChartIsReady(false);
 
-        if (!this.endEpoch
-            && Object.keys(this._activeStreams).length === 0) {
+        if (!this.endEpoch) {
             if (this.startEpoch) {
-                // Set the end range to the future to trigger ChartIQ to start streaming
-                const future = now + 10;
-                dtRight = new Date(getUTCDate(future));
+                const key = this._getKey({
+                    symbol     : this._mainStore.state.symbol,
+                    granularity: this._mainStore.state.granularity,
+                });
+
+                if (this._activeStreams[key]) {
+                    this._forgetStream(key);
+                }
+
                 dtLeft = this.startEpoch ? new Date(getUTCDate(this.startEpoch)) : undefined;
             }
-        } else if (this.endEpoch) {
+        } else {
             dtLeft =  new Date(getUTCDate(this.startEpoch || this.endEpoch - rangeTime));
             dtRight = new Date(getUTCDate(this.endEpoch));
         }
 
-        this._stx.setRange({ dtLeft, dtRight, periodicity }, () => {
+        this._stx.setRange({ dtLeft, dtRight, periodicity, forceLoad }, () => {
             if (!this.endEpoch && !this.startEpoch) {
                 this._stx.home();
                 delete this._stx.layout.range;
@@ -72,22 +71,17 @@ class Feed {
         if (this.startEpoch) {
             if (!this.endEpoch) {
                 this._stx.maxMasterDataSize = 0;
-                this._stx.setStartDate(this._stx.chart.dataSet[0].DT);
-                this._stx.setMaxTicks(this._stx.chart.dataSet.length, { padding: 150 });
-                this._stx.draw();
+                this._stx.chart.lockScroll = true;
             } else {
                 this._stx.chart.isDisplayFullMode = false;
-                this._stx.setMaxTicks(this._stx.chart.dataSet.length + 2);
-                this._stx.scrollTo(this._stx.chart, this._stx.chart.dataSet.length + 1);
                 this._stx.chart.lockScroll = false;
-
-                this._stx.draw();
             }
+
+            this._stx.setMaxTicks(this._stx.chart.dataSet.length + (Math.floor(this._stx.chart.dataSet.length / 5) || 2));
+            this._stx.chart.scroll = this._stx.chart.dataSet.length + (Math.floor(this._stx.chart.dataSet.length / 10) || 1);
+            this._stx.draw();
         }
 
-        if (this._mainStore.state.scrollToEpoch) {
-            // this._mainStore.state.scrollChartToLeft();
-        }
         this._mainStore.state.setChartIsReady(true);
     }
 
