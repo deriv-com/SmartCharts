@@ -347,6 +347,7 @@ class ChartState {
             this.stxx.setMaxTicks(5);
             this.stxx.chart.scroll = this.stxx.chart.dataSet.length - tick + 1;
             this.stxx.chart.entryTick = tick;
+            this.stxx.maxMasterDataSize = 0;
             this.stxx.draw();
         } else if (this.startEpoch) {
             this.stxx.chart.lockScroll = true;
