@@ -82,11 +82,6 @@ class ChartState {
             this.importLayout();
         }
 
-        if (this.stxx) {
-            this.stxx.chart.panel.yAxis.drawCurrentPriceLabel = !this.endEpoch;
-            this.stxx.preferences.currentPriceLine = !this.endEpoch;
-            this.stxx.isAutoScale = this.settings && settings.isAutoScale !== false;
-        }
         if (granularity !== undefined && this.granularity !== granularity && this.context) {
             if (calculateTimeUnitInterval(granularity).timeUnit === 'second' && (this.mainStore.chartType.isCandle || (chartType && this.mainStore.chartType.isTypeCandle(chartType)))) {
                 chartType = 'mountain';
@@ -146,6 +141,12 @@ class ChartState {
         if (chartControlsWidgets !== this.chartControlsWidgets) {
             this.chartControlsWidgets = chartControlsWidgets;
             if (this.stxx) this.mainStore.chart.updateHeight();
+        }
+
+        if (this.stxx) {
+            this.stxx.chart.panel.yAxis.drawCurrentPriceLabel = !this.endEpoch;
+            this.stxx.preferences.currentPriceLine = !this.endEpoch;
+            this.stxx.isAutoScale = this.settings && settings.isAutoScale !== false;
         }
     }
 
