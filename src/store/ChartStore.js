@@ -687,6 +687,7 @@ class ChartStore {
                 return;
             }
             this.state.restoreDrawings();
+            this.mainStore.chart.feed.scaleChart();
         };
         this.yAxiswidth = 0;
         const rangeSpan = this.getRangeSpan();
@@ -697,7 +698,7 @@ class ChartStore {
         const { startEpoch, endEpoch } = this.state;
         let range, span;
         const paddingRatio = this.chartNode.clientWidth / this.RANGE_PADDING_PX;
-        const elapsedSeconds = endEpoch - startEpoch;
+        const elapsedSeconds = (endEpoch || startEpoch) - (startEpoch || endEpoch);
         const epochPadding = elapsedSeconds / paddingRatio | 0;
         if (startEpoch || endEpoch) {
             const dtLeft  = (startEpoch) ? new Date(getUTCDate(startEpoch - epochPadding)) : undefined;
