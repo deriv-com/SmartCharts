@@ -76,7 +76,7 @@ export default class MarkerStore {
         }
 
         // X axis positioning logic
-        const { dataSet } = this.chart;
+        // const { dataSet } = this.chart;
         let quote = null;
         let left;
 
