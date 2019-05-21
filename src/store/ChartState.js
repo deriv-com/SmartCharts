@@ -372,7 +372,7 @@ class ChartState {
         this.stxx.clearDrawings();
 
         // TODO: use constant
-        this.mainStore.crosshair.setCrosshairState(0);
+        this.mainStore.crosshair.setCrosshairState(2);
     }
 
     importLayout() {
