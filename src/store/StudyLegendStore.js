@@ -101,6 +101,8 @@ export default class StudyLegendStore {
         }
     }
 
+    // Temporary prevent user from adding more than 5 off-chart indicators
+    // All traces can be removed after new design fir studies
     @action.bound updateHeight(st, ratioHeight) {
         const parameters = CIQ.Studies.studyLibrary[st].parameters;
         const height = ratioHeight ? 1 / Object.keys(this.stx.panels).length : null;
@@ -113,6 +115,8 @@ export default class StudyLegendStore {
         }
     }
 
+    // Temporary prevent user from adding more than 5 off-chart indicators
+    // All traces can be removed after new design fir studies
     @action.bound updateStyle() {
         if (Object.keys(this.stx.panels).length > 2) {
             Object.keys(CIQ.Studies.studyLibrary).forEach((st) => {
@@ -121,7 +125,7 @@ export default class StudyLegendStore {
                     this.updateHeight(st, true);
                 }
             });
-            this.mainStore.state.ShouldMinimiseLastDigits = true;
+            this.mainStore.state.setShouldMinimiseLastDigit(true);
         } else {
             Object.keys(CIQ.Studies.studyLibrary).forEach((st) => {
                 if (!CIQ.Studies.studyLibrary[st].overlay) {
@@ -129,7 +133,7 @@ export default class StudyLegendStore {
                     this.updateHeight(st);
                 }
             });
-            this.mainStore.state.ShouldMinimiseLastDigits = false;
+            this.mainStore.state.setShouldMinimiseLastDigit(false);
         }
     }
 
@@ -279,6 +283,8 @@ export default class StudyLegendStore {
         if (!this.shouldRenderLegend()) { return; }
 
         this.updateActiveStudies();
+        // Temporary prevent user from adding more than 5 off-chart indicators
+        // All traces can be removed after new design fir studies
         this.updateStyle();
     };
 
