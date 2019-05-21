@@ -177,7 +177,7 @@ export default class PriceLineStore {
             this.offScreen = false;
         }
 
-        this.top = top | 0;
+        this.top = Math.round(top) | 0;
     }
 
     _draw() {
