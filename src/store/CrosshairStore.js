@@ -25,7 +25,7 @@ class CrosshairStore {
     @observable top = 0;
     @observable left = -50000;
     @observable rows = [];
-    @observable state = 0;
+    @observable state = 2;
     @observable isArrowLeft = true;
     node = null;
     lastBar = {};
@@ -40,7 +40,8 @@ class CrosshairStore {
 
     onContextReady = () => {
         const storedState = this.stx.layout.crosshair;
-        this.state = (typeof storedState !== 'number') ? 0 : storedState;
+        this.state = (typeof storedState !== 'number') ? 2 : storedState;
+        this.setCrosshairState(this.state);
         this.stx.append('headsUpHR', this.renderCrosshairTooltip);
     };
 
