@@ -90,6 +90,7 @@ class ChartStore {
     }
 
     updateCanvas = () => {
+        if (!this.stxx) { return; }
         if (this.stxx.slider) {
             this.stxx.slider.display(this.stxx.layout.rangeSlider);
         }
