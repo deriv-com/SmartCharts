@@ -287,6 +287,7 @@ class Feed {
         this._forgetIfEndEpoch(key);
         if (!this._activeStreams[key]) {
             quotes = [];
+            return;
         }
         if (comparisonChartSymbol) {
             this._stx.updateChartData(quotes, null, {

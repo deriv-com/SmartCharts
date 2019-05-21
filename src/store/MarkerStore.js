@@ -112,6 +112,7 @@ export default class MarkerStore {
                     { fillGaps: true },
                 );
                 this.stx.createDataSet();
+                this.tick += 1;
 
                 if (this.yPositioner !== 'value' && this.yPositioner !== 'on_candle' && this.yPositioner !== 'top') {
                     this.yPositioner = 'none';
@@ -125,10 +126,10 @@ export default class MarkerStore {
                 }
                 left = this.stx.pixelFromBar(this.x, this.chart);
             } else {
-                if (this.tick < dataSet.length) quote = dataSet[this.tick];
+                if (this.tick < this.stx.chart.dataSet.length) quote = this.stx.chart.dataSet[this.tick];
                 left = this.stx.pixelFromTick(this.tick, this.chart) - this.chart.left;
             }
-            if (!quote) quote = dataSet[dataSet.length - 1]; // Future ticks based off the value of the current quote
+            if (!quote) quote = this.stx.chart.dataSet[this.stx.chart.dataSet.length - 1]; // Future ticks based off the value of the current quote
             const isMarkerExceedRange = left < -MARKER_MAX_WIDTH || left > this.chart.width + MARKER_MAX_WIDTH;
             if (isMarkerExceedRange) {
                 this.hideMarker();
@@ -153,7 +154,7 @@ export default class MarkerStore {
                 const bar = this.stx.barFromPixel(this.left, this.chart);
                 if (bar >= 0) {
                     quote = this.chart.xaxis[bar].data;
-                    if (!quote) quote = dataSet[dataSet.length - 1]; // Future ticks based off the value of the current quote
+                    if (!quote) quote = this.stx.chart.dataSet[this.stx.chart.dataSet.length - 1]; // Future ticks based off the value of the current quote
                 }
             }
         }

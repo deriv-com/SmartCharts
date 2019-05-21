@@ -222,11 +222,15 @@ export default function animateChart(stx, animationParameters, easeMachine) {
                 this.prevQuote = appendQuotes[0];
                 completeLastBar(this.prevQuote);
             }
-            if (!quote || !quote.Close || !this.prevQuote || !this.prevQuote.Close) {
-                if (this.prevQuote && !this.prevQuote.Close) {
-                    const pervScroll = chart.scroll;
-                    this.setMaxTicks(chart.maxTicks + 1);
-                    chart.scroll = pervScroll + 1;
+            if (!quote || !quote.Close || !this.prevQuote /* || !this.prevQuote.Close */) {
+                if (this.prevQuote /* && !this.prevQuote.Close */) {
+                    if (chart.lockScroll) {
+                        if (chart.entryTick !== null && chart.entryTick !== undefined) {
+                            const visibleTicks = chart.dataSet.length - chart.entryTick + 1;
+                            this.setMaxTicks(visibleTicks + 3);
+                            chart.scroll = visibleTicks + 1;
+                        }
+                    }
                 }
                 return false;
             }
@@ -285,7 +289,7 @@ export default function animateChart(stx, animationParameters, easeMachine) {
                     } else if (chart.lockScroll) {
                         if (chart.entryTick !== undefined && chart.entryTick !== null) {
                             const dataLen = chart.dataSet.length;
-                            const visibleTicks = dataLen - chart.entryTick;
+                            const visibleTicks = dataLen - chart.entryTick + 1;
                             this.setMaxTicks(visibleTicks + 3);
                             chart.scroll = visibleTicks + 1;
                         } else {
