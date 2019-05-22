@@ -40,13 +40,13 @@ export default class BottomWidgetsContainerStore {
 
     updateChartMargin = (margin) => {
         if (this.context && this.stx) {
-            const zoomNumber = this.stx.chart.panel.yAxis.zoom;
+            if (margin === 200 && Object.keys(this.stx.panels).length > 3) {
+                margin = 100;
+                this.stx.chart.yAxis.initialMarginTop = 10;
+            }
+
             this.stx.chart.yAxis.initialMarginBottom = margin;
             this.stx.calculateYAxisMargins(this.stx.chart.panel.yAxis);
-            if (this.mainStore.state.showLastDigitStats) {
-                // yAxis zoom resets on initialMarginBottom changes, below line is to prevent it
-                this.stx.chart.panel.yAxis.zoom = zoomNumber;
-            }
             this.stx.draw();
             this.mainStore.state.setShouldMinimiseLastDigit(this.stx.chart.panel.height < 460);
         }

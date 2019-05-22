@@ -133,6 +133,7 @@ class TradingTimes {
     }
 
     isFeedUnavailable(symbol) {
+        if (!this._tradingTimesMap) { return; }
         if (!(symbol in this._tradingTimesMap)) {
             console.error('Symbol not in _tradingTimesMap:', symbol, ' trading map:', this._tradingTimesMap);
             return false;
@@ -145,6 +146,7 @@ class TradingTimes {
     }
 
     isMarketOpened(symbol) {
+        if (!this._tradingTimesMap) { return; }
         if (!(symbol in this._tradingTimesMap)) {
             console.error('Symbol not in _tradingTimesMap:', symbol, ' trading map:', this._tradingTimesMap);
             return false;
