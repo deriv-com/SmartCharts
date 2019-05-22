@@ -114,9 +114,10 @@ export default class TimeperiodStore {
         this.mainStore.chart.changeSymbol(undefined, granularity);
     }
 
-    @action.bound updateProps(onchange) {
+    @action.bound updateProps(onChange) {
         if (this.mainStore.state.granularity !== undefined) {
-            this.onGranularityChange = onchange;
+            this.onGranularityChange = typeof onChange === 'function' ? onChange : () => {};
+            this.onGranularityChange(this.mainStore.state.granularity);
         }
     }
 
