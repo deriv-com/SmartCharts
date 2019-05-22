@@ -40,7 +40,6 @@ export default class BottomWidgetsContainerStore {
 
     updateChartMargin = (margin) => {
         if (this.context && this.stx) {
-            console.log(this.stx.chart.panel.height);
             const zoomNumber = this.stx.chart.panel.yAxis.zoom;
             this.stx.chart.yAxis.initialMarginBottom = margin;
             this.stx.calculateYAxisMargins(this.stx.chart.panel.yAxis);
