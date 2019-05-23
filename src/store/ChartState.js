@@ -308,12 +308,14 @@ class ChartState {
                 this.stxx.createDataSet();
             }
 
-            this.stxx.chart.lockScroll = true;
+            this.stxx.chart.lockScroll = false;
             const tick = this.stxx.tickFromDate(startEntry.DT);
             const tickLeft = this.stxx.chart.dataSet.length - tick;
-            this.stxx.chart.scroll = tickLeft + (tick === 0 ? 0 : 1);
             this.stxx.setMaxTicks(tickLeft > 3 ? tickLeft : 3, { padding: 150 });
             this.stxx.draw();
+            const oldScroll = this.stxx.chart.scroll;
+            this.stxx.zoomSet(this.stxx.layout.candleWidth, this.stxx.chart);
+            this.stxx.chart.scroll = oldScroll;
         } else {
             this.stxx.chart.lockScroll = false;
             this.stxx.home();
