@@ -7,7 +7,9 @@ class ChartState {
     @observable granularity;
     @observable chartType;
     @observable startEpoch;
+    @observable startEpochMargin;
     @observable endEpoch;
+    @observable endEpochMargin;
     @observable symbol;
     @observable isConnectionOpened;
     @observable isChartReady = false;
@@ -48,7 +50,29 @@ class ChartState {
         this.granularity = this.chartStore.granularity;
     };
 
-    @action.bound updateProps({ id, settings, isConnectionOpened, chartStatusListener, symbol, granularity, chartType, isStaticChart, startEpoch, endEpoch, onExportLayout, clearChart, importedLayout, removeAllComparisons, isAnimationEnabled = true, showLastDigitStats = false, scrollToEpoch, scrollToEpochOffset = 0, zoom, chartControlsWidgets }) {
+    @action.bound updateProps({
+        chartControlsWidgets,
+        chartStatusListener,
+        chartType,
+        clearChart,
+        endEpoch,
+        id,
+        importedLayout,
+        isAnimationEnabled = true,
+        isConnectionOpened,
+        isStaticChart,
+        granularity,
+        margin = 0,
+        onExportLayout,
+        removeAllComparisons,
+        scrollToEpoch,
+        scrollToEpochOffset = 0,
+        settings,
+        showLastDigitStats = false,
+        startEpoch,
+        symbol,
+        zoom,
+    }) {
         let isGranularityChanged = false;
         let isSymbolChanged = false;
         this.chartId = id;
@@ -99,9 +123,14 @@ class ChartState {
             this.chartTypeStore.setType(chartType);
         }
 
+        if (this.margin !== margin) {
+            this.margin = margin;
+        }
+
         if (this.startEpoch !== startEpoch || this.endEpoch !== endEpoch) {
             this.startEpoch = startEpoch;
             this.endEpoch = endEpoch;
+
             if (isStaticChart && this.stxx && this.granularity === this.mainStore.chart.granularity) {
                 // Reload the chart if it is a static chart and the granularity hasn't changed
                 this.mainStore.chart.newChart();
