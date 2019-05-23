@@ -90,6 +90,7 @@ class ChartStore {
     }
 
     updateCanvas = () => {
+        if (!this.stxx) { return; }
         if (this.stxx.slider) {
             this.stxx.slider.display(this.stxx.layout.rangeSlider);
         }
@@ -485,6 +486,16 @@ class ChartStore {
 
                 this.context = context;
 
+                this.chartClosedOpenThemeChange(!this.currentActiveSymbol.exchange_is_open);
+
+                this.mainStore.chart.tradingTimes.onMarketOpenCloseChanged(action((changes) => {
+                    for (const sy in changes) {
+                        if (this.currentActiveSymbol.symbol === sy) {
+                            this.chartClosedOpenThemeChange(!changes[sy]);
+                        }
+                    }
+                }));
+
                 if (this.state.importedLayout) {
                     // Check if there is a layout set by importedLayout porp, import it here after chart is loaded
                     this.state.importLayout();
@@ -535,8 +546,12 @@ class ChartStore {
             if (symbol in changes) {
                 if (changes[symbol]) {
                     shouldRefreshChart = true;
+                    this.mainStore.state.setChartTheme(this.mainStore.chartSetting.theme, false);
+                    this.mainStore.state.setChartClosed(false);
                     this.mainStore.notifier.notifyMarketOpen(name);
                 } else {
+                    this.mainStore.state.setChartTheme(this.mainStore.chartSetting.theme, true);
+                    this.mainStore.state.setChartClosed(true);
                     this.mainStore.notifier.notifyMarketClose(name);
                 }
             }
@@ -546,6 +561,11 @@ class ChartStore {
             this.refreshChart();
         }
     };
+
+    chartClosedOpenThemeChange(isChartClosed) {
+        this.mainStore.state.setChartClosed(isChartClosed);
+        this.mainStore.state.setChartTheme(this.mainStore.chartSetting.theme, isChartClosed);
+    }
 
     @computed get categorizedSymbols() {
         if (!this.activeSymbols || this.activeSymbols.categorizedSymbols.length === 0) return [];
@@ -620,22 +640,15 @@ class ChartStore {
 
         this.newChart(symbolObj, params);
 
+        this.chartClosedOpenThemeChange(!symbolObj.exchange_is_open);
+
         if (symbolObj) {
             this.updateCurrentActiveSymbol();
         }
-
-        const { chartType: chartTypeStore } = this.mainStore;
-        this.contextPromise.then(() => {
-            const isTick = this.stxx.layout.timeUnit === 'second';
-            const isCandle = chartTypeStore.isCandle;
-            if (isCandle && isTick) {
-                // Tick charts cannot be represented with candles
-                chartTypeStore.setType('mountain');
-            }
-        });
     }
 
     @action.bound calculateYaxisWidth = (price) => {
+        if (!price) return;
         const { context } = this.context.stx.chart;
 
         const priceWidth = context.measureText(price.toFixed(this.pip)).width + 20;
@@ -649,10 +662,13 @@ class ChartStore {
     }
 
     @action.bound updateYaxisWidth = () => {
-        const currentQuote = this.context.stx.currentQuote();
-        if (currentQuote) {
-            const { Close } = currentQuote;
-            this.calculateYaxisWidth(Close);
+        if (this.stxx.masterData && this.stxx.masterData.length) {
+            const currentQuote = this.context.stx.currentQuote();
+            if (currentQuote && currentQuote.Close) {
+                this.calculateYaxisWidth(currentQuote.Close);
+            } else {
+                this.calculateYaxisWidth(this.stxx.masterData.slice(-1).Close);
+            }
         }
     }
 
@@ -671,6 +687,7 @@ class ChartStore {
                 return;
             }
             this.state.restoreDrawings();
+            this.mainStore.chart.feed.scaleChart();
         };
         this.yAxiswidth = 0;
         const rangeSpan = this.getRangeSpan();
@@ -681,7 +698,7 @@ class ChartStore {
         const { startEpoch, endEpoch } = this.state;
         let range, span;
         const paddingRatio = this.chartNode.clientWidth / this.RANGE_PADDING_PX;
-        const elapsedSeconds = endEpoch - startEpoch;
+        const elapsedSeconds = (endEpoch || startEpoch) - (startEpoch || endEpoch);
         const epochPadding = elapsedSeconds / paddingRatio | 0;
         if (startEpoch || endEpoch) {
             const dtLeft  = (startEpoch) ? new Date(getUTCDate(startEpoch - epochPadding)) : undefined;

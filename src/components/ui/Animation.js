@@ -222,11 +222,15 @@ export default function animateChart(stx, animationParameters, easeMachine) {
                 this.prevQuote = appendQuotes[0];
                 completeLastBar(this.prevQuote);
             }
-            if (!quote || !quote.Close || !this.prevQuote || !this.prevQuote.Close) {
-                if (this.prevQuote && !this.prevQuote.Close) {
-                    const pervScroll = chart.scroll;
-                    this.setMaxTicks(chart.maxTicks + 1, { padding: 150 });
-                    chart.scroll = pervScroll + 1;
+            if (!quote || !quote.Close || !this.prevQuote /* || !this.prevQuote.Close */) {
+                if (this.prevQuote /* && !this.prevQuote.Close */) {
+                    if (chart.lockScroll) {
+                        if (chart.entryTick !== null && chart.entryTick !== undefined) {
+                            const visibleTicks = chart.dataSet.length - chart.entryTick + 1;
+                            this.setMaxTicks(visibleTicks + 3);
+                            chart.scroll = visibleTicks + 1;
+                        }
+                    }
                 }
                 return false;
             }
@@ -262,33 +266,38 @@ export default function animateChart(stx, animationParameters, easeMachine) {
             if (chartJustAdvanced) {
                 if (this.animations.zoom.hasCompleted) {
                     const candleWidth = this.layout.candleWidth;
-                    if (chart.scroll <= chart.maxTicks) {
+                    if (chart.scroll <= chart.maxTicks && !chart.lockScroll) {
                         while (this.micropixels > 0) { // If micropixels is larger than a candle then scroll back further
                             chart.scroll++;
                             this.micropixels -= candleWidth;
                         }
                     }
 
-                    if (chart.scroll <= chart.maxTicks) {
+                    if (chart.scroll <= chart.maxTicks && !chart.lockScroll) {
                         this.previousMicroPixels = this.micropixels;
                         this.nextMicroPixels = this.micropixels + candleWidth;
                         beginningOffset = candleWidth * -1;
-                        if ((chart.dataSegment && chart.dataSegment.length < chart.maxTicks - animationParameters.ticksFromEdgeOfScreen && !animationParameters.stayPut) || chart.lockScroll) {
-                            if (chart.lockScroll && chart.maxTicks - chart.scroll  <= 2) {
-                                const pervScroll = chart.scroll;
-                                this.setMaxTicks(chart.maxTicks + 1, { padding: 150 });
-                                chart.scroll = pervScroll + 1;
-                            } else {
-                                chart.scroll++;
-                            }
-
+                        if (chart.dataSegment
+                            && chart.dataSegment.length < chart.maxTicks - animationParameters.ticksFromEdgeOfScreen
+                            && !animationParameters.stayPut) {
+                            chart.scroll++;
                             this.nextMicroPixels = this.micropixels;
                         }
 
                         chart.animatingHorizontalScroll = linearChart && !chart.lockScroll; // When the chart advances we also animate the horizontal scroll by incrementing micropixels
                         chart.previousDataSetLength = chart.dataSet.length;
+                    } else if (chart.lockScroll) {
+                        if (chart.entryTick !== undefined && chart.entryTick !== null) {
+                            const dataLen = chart.dataSet.length;
+                            const visibleTicks = dataLen - chart.entryTick + 1;
+                            this.setMaxTicks(visibleTicks + 3);
+                            chart.scroll = visibleTicks + 1;
+                        } else {
+                            this.setMaxTicks(chart.dataSet.length + (Math.floor(chart.dataSet.length / 5) || 2));
+                            chart.scroll = chart.dataSet.length + (Math.floor(chart.dataSet.length / 10) || 1);
+                        }
                     } else {
-                        chart.scroll++;
+                        chart.scroll += 1;
                     }
                 } else {
                     return false;

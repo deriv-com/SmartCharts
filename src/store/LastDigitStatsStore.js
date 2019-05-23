@@ -38,7 +38,7 @@ export default class LastDigitStatsStore {
         this.digits = [];
         this.bars = [];
         this.latestData = [];
-        if (this.mainStore.chart && this.mainStore.chart.feed) {
+        if (this.mainStore.chart && this.mainStore.chart.feed && !this.mainStore.state.showLastDigitStats) {
             this.mainStore.chart.feed.offMasterDataUpdate(this.onMasterDataUpdate);
         }
 
@@ -60,7 +60,10 @@ export default class LastDigitStatsStore {
                 this.digits[lastDigit]++;
             });
             this.updateBars();
-            this.mainStore.chart.feed.onMasterDataUpdate(this.onMasterDataUpdate);
+
+            if (this.mainStore.chart.feed) {
+                this.mainStore.chart.feed.onMasterDataUpdate(this.onMasterDataUpdate);
+            }
         }
     }
 

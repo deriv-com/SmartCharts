@@ -76,7 +76,7 @@ export default class MarkerStore {
         }
 
         // X axis positioning logic
-        const { dataSet } = this.chart;
+        // const { dataSet } = this.chart;
         let quote = null;
         let left;
 
@@ -112,6 +112,7 @@ export default class MarkerStore {
                     { fillGaps: true },
                 );
                 this.stx.createDataSet();
+                this.tick += 1;
 
                 if (this.yPositioner !== 'value' && this.yPositioner !== 'on_candle' && this.yPositioner !== 'top') {
                     this.yPositioner = 'none';
@@ -125,10 +126,10 @@ export default class MarkerStore {
                 }
                 left = this.stx.pixelFromBar(this.x, this.chart);
             } else {
-                if (this.tick < dataSet.length) quote = dataSet[this.tick];
+                if (this.tick < this.stx.chart.dataSet.length) quote = this.stx.chart.dataSet[this.tick];
                 left = this.stx.pixelFromTick(this.tick, this.chart) - this.chart.left;
             }
-            if (!quote) quote = dataSet[dataSet.length - 1]; // Future ticks based off the value of the current quote
+            if (!quote) quote = this.stx.chart.dataSet[this.stx.chart.dataSet.length - 1]; // Future ticks based off the value of the current quote
             const isMarkerExceedRange = left < -MARKER_MAX_WIDTH || left > this.chart.width + MARKER_MAX_WIDTH;
             if (isMarkerExceedRange) {
                 this.hideMarker();
@@ -153,14 +154,15 @@ export default class MarkerStore {
                 const bar = this.stx.barFromPixel(this.left, this.chart);
                 if (bar >= 0) {
                     quote = this.chart.xaxis[bar].data;
-                    if (!quote) quote = dataSet[dataSet.length - 1]; // Future ticks based off the value of the current quote
+                    if (!quote) quote = this.stx.chart.dataSet[this.stx.chart.dataSet.length - 1]; // Future ticks based off the value of the current quote
                 }
             }
         }
 
         // Y axis positioning logic
         if (this.yPositioner.toLowerCase() === 'none') {
-            this.bottom = undefined;
+            // set the bottom value if there's a bottomWidget, else set it to undefined
+            this.bottom = this.stx.chart.yAxis.initialMarginBottom === 200 ? 125 : 20;
             this.showMarker();
             return;
         }

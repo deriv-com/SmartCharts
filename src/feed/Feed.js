@@ -1,7 +1,7 @@
 import EventEmitter from 'event-emitter-es6';
-import { reaction, when } from 'mobx';
+import { reaction } from 'mobx';
 import { TickHistoryFormatter } from './TickHistoryFormatter';
-import { calculateGranularity, getUTCEpoch, calculateTimeUnitInterval } from '../utils';
+import { calculateGranularity, getUTCEpoch, calculateTimeUnitInterval, getUTCDate } from '../utils';
 import { RealtimeSubscription, DelayedSubscription } from './subscription';
 import ServerTime from '../utils/ServerTime';
 
@@ -25,45 +25,37 @@ class Feed {
         this._serverTime = ServerTime.getInstance();
         this._tradingTimes = tradingTimes;
         reaction(() => mainStore.state.isConnectionOpened, this.onConnectionChanged.bind(this));
-        when(() => this.context, this.onContextReady);
 
         this._emitter = new EventEmitter({ emitDelay: 0 });
     }
 
-    onContextReady = () => {
-        reaction(() => [this.startEpoch, this.endEpoch], this.onRangeChanged);
-        this._stx.append('updateChartData', () => this.scaleChart());
-    };
-
-    onRangeChanged = () => {
-        /* When layout is importing and range is changing as the same time we dont need to set the range,
-        the imported layout witll take care of it. */
-        if (this._mainStore.state.importedLayout) return;
-
-        const now = this._serverTime.getEpoch();
+    onRangeChanged = (forceLoad) => {
         const periodicity = calculateTimeUnitInterval(this.granularity);
         const rangeTime = ((this.granularity || 1) * this._stx.chart.maxTicks);
         let dtLeft = null;
         let dtRight = null;
 
-        this.loader.show();
         this._mainStore.state.setChartIsReady(false);
-        this.loader.setState('chart-data');
 
-        if (!this.endEpoch
-            && Object.keys(this._activeStreams).length === 0) {
+        if (!this.endEpoch) {
             if (this.startEpoch) {
-                // Set the end range to the future to trigger ChartIQ to start streaming
-                const future = now + 10;
-                dtRight = new Date(future * 1000);
-                dtLeft = this.startEpoch ? new Date(this.startEpoch) : undefined;
+                const key = this._getKey({
+                    symbol     : this._mainStore.state.symbol,
+                    granularity: this._mainStore.state.granularity,
+                });
+
+                if (this._activeStreams[key]) {
+                    this._forgetStream(key);
+                }
+
+                dtLeft = this.startEpoch ? new Date(getUTCDate(this.startEpoch)) : undefined;
             }
-        } else if (this.endEpoch) {
-            dtLeft =  new Date((this.startEpoch || this.endEpoch - rangeTime) * 1000);
-            dtRight = new Date(this.endEpoch * 1000);
+        } else {
+            dtLeft =  new Date(getUTCDate(this.startEpoch || this.endEpoch - rangeTime));
+            dtRight = new Date(getUTCDate(this.endEpoch));
         }
 
-        this._stx.setRange({ dtLeft, dtRight, periodicity }, () => {
+        this._stx.setRange({ dtLeft, dtRight, periodicity, forceLoad }, () => {
             if (!this.endEpoch && !this.startEpoch) {
                 this._stx.home();
                 delete this._stx.layout.range;
@@ -71,7 +63,6 @@ class Feed {
                 this.scaleChart();
             }
             this._mainStore.state.saveLayout();
-            this.loader.hide();
             this._mainStore.state.setChartIsReady(true);
         });
     };
@@ -80,22 +71,17 @@ class Feed {
         if (this.startEpoch) {
             if (!this.endEpoch) {
                 this._stx.maxMasterDataSize = 0;
-                this._stx.setStartDate(this._stx.chart.dataSet[0].DT);
-                this._stx.setMaxTicks(this._stx.chart.dataSet.length, { padding: 150 });
-                this._stx.draw();
+                this._stx.chart.lockScroll = true;
             } else {
                 this._stx.chart.isDisplayFullMode = false;
-                this._stx.setMaxTicks(this._stx.chart.dataSet.length + 2);
-                this._stx.scrollTo(this._stx.chart, this._stx.chart.dataSet.length + 1);
                 this._stx.chart.lockScroll = false;
-
-                this._stx.draw();
             }
+
+            this._stx.setMaxTicks(this._stx.chart.dataSet.length + (Math.floor(this._stx.chart.dataSet.length / 5) || 2));
+            this._stx.chart.scroll = this._stx.chart.dataSet.length + (Math.floor(this._stx.chart.dataSet.length / 10) || 1);
+            this._stx.draw();
         }
 
-        if (this._mainStore.state.scrollToEpoch) {
-            // this._mainStore.state.scrollChartToLeft();
-        }
         this._mainStore.state.setChartIsReady(true);
     }
 
@@ -203,10 +189,6 @@ class Feed {
             getHistoryOnly = true;
         }
 
-        const isChartClosed = !this._tradingTimes.isMarketOpened(symbol);
-        this._mainStore.state.setChartClosed(isChartClosed);
-        this._mainStore.state.setChartTheme(this._mainStore.chartSetting.theme, isChartClosed);
-
         if (getHistoryOnly) {
             const response = await this._binaryApi.getTickHistory(tickHistoryRequest);
             quotes = TickHistoryFormatter.formatHistory(response);
@@ -305,6 +287,7 @@ class Feed {
         this._forgetIfEndEpoch(key);
         if (!this._activeStreams[key]) {
             quotes = [];
+            return;
         }
         if (comparisonChartSymbol) {
             this._stx.updateChartData(quotes, null, {
