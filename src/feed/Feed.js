@@ -49,11 +49,11 @@ class Feed {
                     this._forgetStream(key);
                 }
 
-                dtLeft = this.startEpoch ? new Date(getUTCDate(this.startEpoch)) : undefined;
+                dtLeft = this.startEpoch ? CIQ.strToDateTime(getUTCDate(this.startEpoch)) : undefined;
             }
         } else {
-            dtLeft =  new Date(getUTCDate(this.startEpoch || this.endEpoch - rangeTime));
-            dtRight = new Date(getUTCDate(this.endEpoch));
+            dtLeft =  CIQ.strToDateTime(getUTCDate(this.startEpoch || this.endEpoch - rangeTime));
+            dtRight = CIQ.strToDateTime(getUTCDate(this.endEpoch));
         }
 
         this._stx.setRange({ dtLeft, dtRight, periodicity, forceLoad }, () => {
