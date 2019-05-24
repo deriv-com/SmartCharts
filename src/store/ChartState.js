@@ -176,6 +176,7 @@ class ChartState {
             this.stxx.chart.panel.yAxis.drawCurrentPriceLabel = !this.endEpoch;
             this.stxx.preferences.currentPriceLine = !this.endEpoch;
             this.stxx.isAutoScale = this.settings && settings.isAutoScale !== false;
+            this.stxx.draw();
         }
     }
 
