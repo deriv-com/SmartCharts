@@ -42,7 +42,7 @@ class TradingTimes {
                 if (!nextUpdate) {
                     const now = this._serverTime.getLocalDate();
                     // Get tomorrow's date (UTC) and set it as next update if no nextDate available
-                    const nextUpdateDate = CIQ.strToDateTime(`${this.lastUpdateDate}T00:00:00Z`);
+                    const nextUpdateDate = new Date(`${this.lastUpdateDate}T00:00:00Z`);
                     nextUpdateDate.setDate(nextUpdateDate.getDate() + 1);
                     // if somehow the next update date is in the past, use the current date
                     this.lastUpdateDate = ((now > nextUpdateDate) ? now : nextUpdateDate).toISOString().substring(0, 10);
@@ -96,7 +96,7 @@ class TradingTimes {
 
         const now = this._serverTime.getLocalDate();
         const dateStr = now.toISOString().substring(0, 11);
-        const getUTCDate = hour => CIQ.strToDateTime(`${dateStr}${hour}Z`);
+        const getUTCDate = hour => new Date(`${dateStr}${hour}Z`);
 
         this._tradingTimesMap = {};
         const { markets } = response.trading_times;
