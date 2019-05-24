@@ -82,8 +82,6 @@ class Feed {
             this._stx.chart.scroll = this._stx.chart.dataSet.length + (Math.floor(this._stx.chart.dataSet.length / 10) || 1);
             this._stx.draw();
         }
-
-        this._mainStore.state.setChartIsReady(true);
     }
 
     // although not used, subscribe is overridden so that unsubscribe will be called by ChartIQ
@@ -206,6 +204,7 @@ class Feed {
         callback({ quotes });
 
         this._mainStore.chart.updateYaxisWidth();
+        this.scaleChart();
 
         this._emitDataUpdate(quotes, comparisonChartSymbol);
     }
