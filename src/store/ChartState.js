@@ -325,7 +325,6 @@ class ChartState {
             },
         });
 
-
         this.chartStore.updateCurrentActiveSymbol();
 
         return true;
