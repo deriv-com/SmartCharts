@@ -193,8 +193,8 @@ Chart.propTypes = {
     scrollToEpochOffset: PropTypes.number,
     zoom: PropTypes.number,
     clearChart: PropTypes.bool,
-    onExportLayout: PropTypes.func,
-    importedLayout: PropTypes.func,
+    onExportLayout: PropTypes.any,
+    importedLayout: PropTypes.any,
 };
 
 Chart.defaultProps = {
