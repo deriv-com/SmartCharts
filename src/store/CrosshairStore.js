@@ -9,7 +9,9 @@ class CrosshairStore {
         when(() => this.context, this.onContextReady);
     }
 
-    @computed get decimalPlaces() { return this.mainStore.chart.currentActiveSymbol.decimal_places; }
+    @computed get activeSymbol() { return this.mainStore.chart.currentActiveSymbol; }
+
+    @computed get decimalPlaces() { return this.activeSymbol.decimal_places; }
 
     get showOhl() {
         return this.stx.layout.timeUnit !== 'second';
@@ -186,23 +188,34 @@ class CrosshairStore {
                 for (let id = 0; id < rendererToDisplay.seriesParams.length; id++) {
                     const seriesParams = rendererToDisplay.seriesParams[id];
 
-                    // if a series has a symbol and a field then it maybe a object chain
-                    let sKey = seriesParams.symbol;
-                    const subField = seriesParams.field;
-                    if (!sKey) {
-                        sKey = subField;
-                    } else if (subField && sKey !== subField) {
-                        sKey = CIQ.createObjectChainNames(sKey, subField)[0];
-                    }
-                    const display = seriesParams.display || seriesParams.symbol || seriesParams.field;
-                    if (sKey && !dupMap[display]) {
+                    if (seriesParams.display === this.activeSymbol.symbol) {
+                        const display = this.activeSymbol.name;
                         fields.push({
-                            member: sKey,
+                            member: 'Close',
                             display,
                             panel,
                             yAxis,
                         });
                         dupMap[display] = 1;
+                    } else {
+                        // if a series has a symbol and a field then it maybe a object chain
+                        let sKey = seriesParams.symbol;
+                        const subField = seriesParams.field;
+                        if (!sKey) {
+                            sKey = subField;
+                        } else if (subField && sKey !== subField) {
+                            sKey = CIQ.createObjectChainNames(sKey, subField)[0];
+                        }
+                        const display = seriesParams.display || seriesParams.symbol || seriesParams.field;
+                        if (sKey && (!dupMap[display] || seriesParams.symbol === undefined)) {
+                            fields.push({
+                                member: sKey,
+                                display,
+                                panel,
+                                yAxis,
+                            });
+                            dupMap[display] = 1;
+                        }
                     }
                 }
             }
