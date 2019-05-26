@@ -323,7 +323,7 @@ class ChartState {
         }
     }
 
-    scrollChartToLeft(epoch) {
+    scrollChartToLeft = (epoch) => {
         this.mainStore.chart.feed.offMasterDataUpdate(this.scrollChartToLeft);
         if ((this.scrollToEpoch || epoch) && !this.startEpoch) {
             const scrollToEpoch = this.scrollToEpoch || epoch;
