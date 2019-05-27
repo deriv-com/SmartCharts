@@ -88,15 +88,14 @@ export default class StudyLegendStore {
     }
 
     @action.bound onSelectItem(item) {
-        const overlay = CIQ.Studies.studyLibrary[item].overlay || false;
-        if ((!overlay && Object.keys(this.stx.panels).length < 6) || overlay) {
+        if (this.stx.layout && Object.keys(this.stx.layout.studies || []).length < 5) {
             const sd = CIQ.Studies.addStudy(this.stx, item);
             this.changeStudyPanelTitle(sd);
             logEvent(LogCategories.ChartControl, LogActions.Indicator, `Add ${item}`);
             this.menu.setOpen(false);
         } else {
             this.mainStore.notifier.notify({
-                text: t.translate('You can enable up to 5 off-chart indicators at a time.'),
+                text: t.translate('You can\'t have more that than 5 open Indicators.'),
             });
         }
     }
