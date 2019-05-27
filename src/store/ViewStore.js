@@ -98,6 +98,12 @@ export default class ViewStore {
                 preserveTicksAndCandleWidth: true,
                 cb: finishImportLayout,
             });
+            // This condition is to make spline chart appear as spline chart
+            // Both line chart and spline chart are of type mountain but with different tensions
+            if (ViewStore.views[idx].layout.chartType === 'mountain') {
+                const tension = ViewStore.views[idx].layout.tension;
+                this.stx.chart.tension = this.stx.layout.tension = tension;
+            }
             this.menu.setOpen(false);
             logEvent(LogCategories.ChartControl, LogActions.Template, 'Load Template');
         };
