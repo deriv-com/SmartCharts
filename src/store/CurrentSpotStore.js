@@ -20,6 +20,10 @@ class CurrectSpotStore {
     }
 
     @action.bound updateSpot() {
+        if (this.state.endEpoch) {
+            this.show = false;
+            return;
+        }
         const chart = this.stx.chart;
         const layout = this.stx.layout;
         const mainSeriesRenderer = this.stx.mainSeriesRenderer;

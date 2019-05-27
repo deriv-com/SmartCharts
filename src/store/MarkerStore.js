@@ -117,23 +117,24 @@ export default class MarkerStore {
                 if (this.yPositioner !== 'value' && this.yPositioner !== 'on_candle' && this.yPositioner !== 'top') {
                     this.yPositioner = 'none';
                 }
-            }
-
-            if (this.xPositioner === 'bar' && this.x) {
-                if (this.x < this.chart.xaxis.length) {
-                    const xaxis = this.chart.xaxis[this.x];
-                    if (xaxis) quote = xaxis.data;
-                }
-                left = this.stx.pixelFromBar(this.x, this.chart);
             } else {
-                if (this.tick < this.stx.chart.dataSet.length) quote = this.stx.chart.dataSet[this.tick];
-                left = this.stx.pixelFromTick(this.tick, this.chart) - this.chart.left;
-            }
-            if (!quote) quote = this.stx.chart.dataSet[this.stx.chart.dataSet.length - 1]; // Future ticks based off the value of the current quote
-            const isMarkerExceedRange = left < -MARKER_MAX_WIDTH || left > this.chart.width + MARKER_MAX_WIDTH;
-            if (isMarkerExceedRange) {
-                this.hideMarker();
-                return;
+                // else draw
+                if (this.xPositioner === 'bar' && this.x) {
+                    if (this.x < this.chart.xaxis.length) {
+                        const xaxis = this.chart.xaxis[this.x];
+                        if (xaxis) quote = xaxis.data;
+                    }
+                    left = this.stx.pixelFromBar(this.x, this.chart);
+                } else {
+                    if (this.tick < this.stx.chart.dataSet.length) quote = this.stx.chart.dataSet[this.tick];
+                    left = this.stx.pixelFromTick(this.tick, this.chart) - this.chart.left;
+                }
+                if (!quote) quote = this.stx.chart.dataSet[this.stx.chart.dataSet.length - 1]; // Future ticks based off the value of the current quote
+                const isMarkerExceedRange = left < -MARKER_MAX_WIDTH || left > this.chart.width + MARKER_MAX_WIDTH;
+                if (isMarkerExceedRange) {
+                    this.hideMarker();
+                    return;
+                }
             }
         }
 
