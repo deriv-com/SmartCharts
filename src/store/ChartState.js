@@ -83,6 +83,10 @@ class ChartState {
         if (this.symbol !== symbol) {
             this.symbol = symbol;
             isSymbolChanged = true;
+
+            if (this.mainStore.chart && this.mainStore.chart.feed) {
+                this.mainStore.chart.feed.onMasterDataUpdate(this.scrollChartToLeft);
+            }
         }
 
         this.rootNode = this.mainStore.chart.rootNode;
