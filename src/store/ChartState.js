@@ -355,6 +355,7 @@ class ChartState {
 
     scrollChartToLeft = () => {
         this.mainStore.chart.feed.offMasterDataUpdate(this.scrollChartToLeft);
+        this.stxx.chart.entryTick = null;
         if (this.scrollToEpoch && !this.startEpoch) {
             let startEntry = this.stxx.chart.dataSet
                 .find(entry =>  entry.DT.valueOf() === new Date(getUTCDate(this.scrollToEpoch)).valueOf());
