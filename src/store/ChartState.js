@@ -110,8 +110,8 @@ class ChartState {
             this.importLayout();
         }
 
-        if (granularity !== undefined && this.granularity !== granularity && this.context) {
-            if (calculateTimeUnitInterval(granularity).timeUnit === 'second' && (this.mainStore.chartType.isCandle || (chartType && this.mainStore.chartType.isTypeCandle(chartType)))) {
+        if (granularity !== undefined && this.granularity !== granularity) {
+            if (this.context && calculateTimeUnitInterval(granularity).timeUnit === 'second' && (this.mainStore.chartType.isCandle || (chartType && this.mainStore.chartType.isTypeCandle(chartType)))) {
                 chartType = 'mountain';
 
                 if (this.chartTypeStore.onChartTypeChanged) {
