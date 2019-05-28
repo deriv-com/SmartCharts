@@ -280,16 +280,22 @@ class Feed {
 
     _forgetIfEndEpoch(key) {
         const subscription = this._activeStreams[key];
+        let result = true;
+
         if (!subscription) { return; }
+
         const lastEpoch = subscription.lastStreamEpoch;
         if (this.endEpoch && lastEpoch > this.endEpoch) {
+            if (this._activeStreams[key] && this.granularity === 0) {
+                result = false;
+            }
             this._forgetStream(key);
         }
+        return result;
     }
 
     _appendChartData(quotes, key, comparisonChartSymbol) {
-        this._forgetIfEndEpoch(key);
-        if (!this._activeStreams[key]) {
+        if (this._forgetIfEndEpoch(key) && !this._activeStreams[key]) {
             quotes = [];
             return;
         }
