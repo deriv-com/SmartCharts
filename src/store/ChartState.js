@@ -83,6 +83,10 @@ class ChartState {
         if (this.symbol !== symbol) {
             this.symbol = symbol;
             isSymbolChanged = true;
+
+            if (this.mainStore.chart && this.mainStore.chart.feed) {
+                this.mainStore.chart.feed.onMasterDataUpdate(this.scrollChartToLeft);
+            }
         }
 
         this.rootNode = this.mainStore.chart.rootNode;
@@ -106,8 +110,8 @@ class ChartState {
             this.importLayout();
         }
 
-        if (granularity !== undefined && this.granularity !== granularity && this.context) {
-            if (calculateTimeUnitInterval(granularity).timeUnit === 'second' && (this.mainStore.chartType.isCandle || (chartType && this.mainStore.chartType.isTypeCandle(chartType)))) {
+        if (granularity !== undefined && this.granularity !== granularity) {
+            if (this.context && calculateTimeUnitInterval(granularity).timeUnit === 'second' && (this.mainStore.chartType.isCandle || (chartType && this.mainStore.chartType.isTypeCandle(chartType)))) {
                 chartType = 'mountain';
 
                 if (this.chartTypeStore.onChartTypeChanged) {
@@ -351,6 +355,7 @@ class ChartState {
 
     scrollChartToLeft = () => {
         this.mainStore.chart.feed.offMasterDataUpdate(this.scrollChartToLeft);
+        this.stxx.chart.entryTick = null;
         if (this.scrollToEpoch && !this.startEpoch) {
             let startEntry = this.stxx.chart.dataSet
                 .find(entry =>  entry.DT.valueOf() === CIQ.strToDateTime(getUTCDate(this.scrollToEpoch)).valueOf());
