@@ -1,4 +1,4 @@
-import { action, observable, when } from 'mobx';
+import { action, observable, when, computed } from 'mobx';
 import { sameBar } from '../utils';
 
 const MAX_TOOLTIP_WIDTH = 315;
@@ -8,6 +8,10 @@ class CrosshairStore {
         this.mainStore = mainStore;
         when(() => this.context, this.onContextReady);
     }
+
+    @computed get activeSymbol() { return this.mainStore.chart.currentActiveSymbol; }
+
+    @computed get decimalPlaces() { return this.activeSymbol.decimal_places; }
 
     get showOhl() {
         return this.stx.layout.timeUnit !== 'second';
@@ -25,7 +29,7 @@ class CrosshairStore {
     @observable top = 0;
     @observable left = -50000;
     @observable rows = [];
-    @observable state = 0;
+    @observable state = 2;
     @observable isArrowLeft = true;
     node = null;
     lastBar = {};
@@ -40,7 +44,8 @@ class CrosshairStore {
 
     onContextReady = () => {
         const storedState = this.stx.layout.crosshair;
-        this.state = (typeof storedState !== 'number') ? 0 : storedState;
+        this.state = (typeof storedState !== 'number') ? 2 : storedState;
+        this.setCrosshairState(this.state);
         this.stx.append('headsUpHR', this.renderCrosshairTooltip);
     };
 
@@ -183,23 +188,34 @@ class CrosshairStore {
                 for (let id = 0; id < rendererToDisplay.seriesParams.length; id++) {
                     const seriesParams = rendererToDisplay.seriesParams[id];
 
-                    // if a series has a symbol and a field then it maybe a object chain
-                    let sKey = seriesParams.symbol;
-                    const subField = seriesParams.field;
-                    if (!sKey) {
-                        sKey = subField;
-                    } else if (subField && sKey !== subField) {
-                        sKey = CIQ.createObjectChainNames(sKey, subField)[0];
-                    }
-                    const display = seriesParams.display || seriesParams.symbol || seriesParams.field;
-                    if (sKey && !dupMap[display]) {
+                    if (seriesParams.display === this.activeSymbol.symbol) {
+                        const display = this.activeSymbol.name;
                         fields.push({
-                            member: sKey,
+                            member: 'Close',
                             display,
                             panel,
                             yAxis,
                         });
                         dupMap[display] = 1;
+                    } else {
+                        // if a series has a symbol and a field then it maybe a object chain
+                        let sKey = seriesParams.symbol;
+                        const subField = seriesParams.field;
+                        if (!sKey) {
+                            sKey = subField;
+                        } else if (subField && sKey !== subField) {
+                            sKey = CIQ.createObjectChainNames(sKey, subField)[0];
+                        }
+                        const display = seriesParams.display || seriesParams.symbol || seriesParams.field;
+                        if (sKey && (!dupMap[display] || seriesParams.symbol === undefined)) {
+                            fields.push({
+                                member: sKey,
+                                display,
+                                panel,
+                                yAxis,
+                            });
+                            dupMap[display] = 1;
+                        }
                     }
                 }
             }
@@ -249,7 +265,7 @@ class CrosshairStore {
         const rows = [];
         for (const obj of fields) {
             const { member: name, display: displayName, panel, yAxis } = obj;
-            let labelDecimalPlaces = null;
+            let labelDecimalPlaces = this.decimalPlaces;
             if (yAxis) {
                 if (panel !== panel.chart.panel) {
                     // If a study panel, use yAxis settings to determine decimal places
@@ -287,7 +303,7 @@ class CrosshairStore {
                 }
                 if (dsField.constructor === Number) {
                     if (!yAxis) { // raw value
-                        fieldValue = dsField;
+                        fieldValue = dsField.toFixed(labelDecimalPlaces);
                     } else if (yAxis.originalPriceFormatter && yAxis.originalPriceFormatter.func) { // in comparison mode with custom formatter
                         fieldValue = yAxis.originalPriceFormatter.func(stx, panel, dsField, labelDecimalPlaces);
                     } else if (yAxis.priceFormatter && yAxis.priceFormatter !== CIQ.Comparison.priceFormat) { // using custom formatter
