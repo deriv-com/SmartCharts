@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom\n"
 "Language-Team: Spanish\n"
 "Language: es_ES\n"
-"PO-Revision-Date: 2019-05-28 23:22\n"
+"PO-Revision-Date: 2019-05-28 23:32\n"
 
 msgid " already exists."
 msgstr " ya existe."
@@ -532,7 +532,7 @@ msgid "Index"
 msgstr "Índice"
 
 msgid "Negative Volume Index"
-msgstr ""
+msgstr "Índice de Volumen Negativo"
 
 msgid "On Balance Volume"
 msgstr ""
