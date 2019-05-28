@@ -418,6 +418,8 @@ class Feed {
         let endTickIndex = null;
         let trimmedQuotes = quotes;
 
+        if (!trimmedQuotes.length) return [];
+
         if (this.startEpoch && this.margin) {
             startTickIndex = trimmedQuotes.findIndex(tick => CIQ.strToDateTime(tick.Date) >= CIQ.strToDateTime(getUTCDate(this.startEpoch)));
             if (startTickIndex) {
