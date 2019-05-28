@@ -358,11 +358,11 @@ class ChartState {
         this.stxx.chart.entryTick = null;
         if (this.scrollToEpoch && !this.startEpoch) {
             let startEntry = this.stxx.chart.dataSet
-                .find(entry =>  entry.DT.valueOf() === new Date(getUTCDate(this.scrollToEpoch)).valueOf());
+                .find(entry =>  entry.DT.valueOf() === CIQ.strToDateTime(getUTCDate(this.scrollToEpoch)).valueOf());
 
             if (!startEntry) {
                 startEntry = {
-                    DT: new Date(getUTCDate(this.scrollToEpoch)),
+                    DT: CIQ.strToDateTime(getUTCDate(this.scrollToEpoch)),
                     Close: null,
                 };
 

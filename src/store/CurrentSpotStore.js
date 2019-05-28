@@ -1,6 +1,6 @@
 import { action, computed, observable, when } from 'mobx';
 
-class CurrectSpotStore {
+class CurrentSpotStore {
     constructor(mainStore) {
         this.mainStore = mainStore;
         when(() => this.context, this.onContextReady);
@@ -59,4 +59,4 @@ class CurrectSpotStore {
     }
 }
 
-export default CurrectSpotStore;
+export default CurrentSpotStore;
