@@ -43453,8 +43453,8 @@ var __js_core_utility_ =
 		if(color1=="transparent") color1="rgba(0,0,0,0)";
 		if(color2=="transparent") color2="rgba(0,0,0,0)";
 		var alpha=/^rgba\(.*,(.+)\)/;
-		var rgba1=color1.match(alpha);
-		var rgba2=color2.match(alpha);
+		var rgba1=String(color1).match(alpha);
+		var rgba2=String(color2).match(alpha);
 		rgba1=rgba1?parseFloat(rgba1[1]):1;
 		rgba2=rgba2?parseFloat(rgba2[1]):1;
 		if(rgba1!=rgba2) return false;
