@@ -227,7 +227,7 @@ class Feed {
         const isMainChart = this._stx.chart.symbol === symbol;
         // TODO There is no need to get historical data before startTime
         if (this.startEpoch /* && start < this.startEpoch */
-            || (this.endEpoch && end >= this.endEpoch)) {
+            || (this.endEpoch && end > this.endEpoch)) {
             callback({ moreAvailable: false, quotes: [] });
             if (isMainChart) { // ignore comparisons
                 this._emitter.emit(Feed.EVENT_ON_PAGINATION, { start, end });
