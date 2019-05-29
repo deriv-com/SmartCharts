@@ -12,11 +12,12 @@ class SearchInput extends Component {
     };
 
     render() {
-        const { placeholder, value, searchInput } = this.props;
+        const { placeholder, value, searchInput, searchInputClassName } = this.props;
 
         return (
             <div className={`cq-lookup-input ${value.trim() !== '' ? 'active' : ''}`}>
                 <input
+                    className={searchInputClassName}
                     value={value}
                     ref={searchInput}
                     onChange={this.onChange}
