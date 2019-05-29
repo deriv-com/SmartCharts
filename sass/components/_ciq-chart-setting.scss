@@ -14,7 +14,7 @@
             display: inline-block;
             cursor: pointer;
             @include themify($themes) {
-                color: themed('ChartSettingHeadText');
+                color: themed('DialogSettingHeadText');
             }
         }
     }
