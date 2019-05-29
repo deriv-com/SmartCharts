@@ -23,6 +23,7 @@ class ChartState {
     @observable isOnPagination = false;
     @observable paginationEndEpoch;
     @observable isChartClosed = false;
+    @observable isStaticChart = false;
     chartControlsWidgets;
 
     get comparisonStore() { return this.mainStore.comparison; }
@@ -79,6 +80,7 @@ class ChartState {
         this.settings = settings;
         this.isConnectionOpened = isConnectionOpened;
         this.chartStatusListener = chartStatusListener;
+        this.isStaticChart = isStaticChart;
 
         if (this.symbol !== symbol) {
             this.symbol = symbol;
