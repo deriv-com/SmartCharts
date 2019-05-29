@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom\n"
 "Language-Team: Spanish\n"
 "Language: es_ES\n"
-"PO-Revision-Date: 2019-05-08 21:12\n"
+"PO-Revision-Date: 2019-05-24 14:55\n"
 
 msgid " already exists."
 msgstr " ya existe."
@@ -262,7 +262,7 @@ msgid "Range Bars"
 msgstr "Barras de Rango"
 
 msgid "Ray"
-msgstr ""
+msgstr "Rayo"
 
 msgid "Rectangle"
 msgstr "Rectángulo"
