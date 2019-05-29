@@ -227,7 +227,7 @@ export default function animateChart(stx, animationParameters, easeMachine) {
                     if (chart.lockScroll) {
                         if (chart.entryTick !== null && chart.entryTick !== undefined) {
                             const visibleTicks = chart.dataSet.length - chart.entryTick + 1;
-                            this.setMaxTicks(visibleTicks + 2);
+                            this.setMaxTicks(visibleTicks + 3);
                             chart.scroll = visibleTicks + 1;
                         }
                     }
