@@ -286,7 +286,7 @@ class Feed {
 
         const lastEpoch = subscription.lastStreamEpoch;
         if (this.endEpoch && lastEpoch > this.endEpoch) {
-            if (this._activeStreams[key] && this.granularity === 0) {
+            if (this._activeStreams[key] && this.granularity === 0 && !this._mainStore.state.isStaticChart) {
                 result = false;
             }
             this._forgetStream(key);
