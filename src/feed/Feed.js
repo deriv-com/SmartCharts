@@ -429,7 +429,7 @@ class Feed {
 
         if (this.startEpoch && this.margin) {
             startTickIndex = trimmedQuotes.findIndex(tick => CIQ.strToDateTime(tick.Date) >= CIQ.strToDateTime(getUTCDate(this.startEpoch)));
-            if (startTickIndex) {
+            if (startTickIndex > -1) {
                 trimmedQuotes = trimmedQuotes.slice(startTickIndex - 1);
             }
         }
@@ -437,7 +437,7 @@ class Feed {
         if (this.endEpoch && this.margin) {
             endTickIndex = trimmedQuotes.findIndex(tick => CIQ.strToDateTime(tick.Date) >= CIQ.strToDateTime(getUTCDate(this.endEpoch)));
 
-            if (endTickIndex) {
+            if (endTickIndex > -1) {
                 const addon = trimmedQuotes[endTickIndex].Date === getUTCDate(this.endEpoch) ? 2 : 1;
                 trimmedQuotes = trimmedQuotes.slice(0, endTickIndex + addon);
             }
