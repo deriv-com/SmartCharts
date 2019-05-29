@@ -49,11 +49,11 @@ class Feed {
                     this._forgetStream(key);
                 }
 
-                dtLeft = this.startEpoch ? new Date(getUTCDate(this.startEpoch)) : undefined;
+                dtLeft = this.startEpoch ? CIQ.strToDateTime(getUTCDate(this.startEpoch)) : undefined;
             }
         } else {
-            dtLeft =  new Date(getUTCDate(this.startEpoch || this.endEpoch - rangeTime));
-            dtRight = new Date(getUTCDate(this.endEpoch));
+            dtLeft =  CIQ.strToDateTime(getUTCDate(this.startEpoch || this.endEpoch - rangeTime));
+            dtRight = CIQ.strToDateTime(getUTCDate(this.endEpoch));
         }
 
         this._stx.setRange({ dtLeft, dtRight, periodicity, forceLoad }, () => {
@@ -225,8 +225,9 @@ class Feed {
 
     async _getPaginationData(symbol, granularity, start, end, callback) {
         const isMainChart = this._stx.chart.symbol === symbol;
-        if (this.startEpoch && start < this.startEpoch
-            || this.endEpoch && end > this.endEpoch) {
+        // TODO There is no need to get historical data before startTime
+        if (this.startEpoch /* && start < this.startEpoch */
+            || (this.endEpoch && end > this.endEpoch)) {
             callback({ moreAvailable: false, quotes: [] });
             if (isMainChart) { // ignore comparisons
                 this._emitter.emit(Feed.EVENT_ON_PAGINATION, { start, end });
@@ -418,6 +419,8 @@ class Feed {
         let endTickIndex = null;
         let trimmedQuotes = quotes;
 
+        if (!trimmedQuotes.length) return [];
+
         if (this.startEpoch && this.margin) {
             startTickIndex = trimmedQuotes.findIndex(tick => CIQ.strToDateTime(tick.Date) >= CIQ.strToDateTime(getUTCDate(this.startEpoch)));
             if (startTickIndex) {
@@ -428,8 +431,8 @@ class Feed {
         if (this.endEpoch && this.margin) {
             endTickIndex = trimmedQuotes.findIndex(tick => CIQ.strToDateTime(tick.Date) >= CIQ.strToDateTime(getUTCDate(this.endEpoch)));
 
-            const addon = trimmedQuotes[endTickIndex].Date === getUTCDate(this.endEpoch) ? 2 : 1;
             if (endTickIndex) {
+                const addon = trimmedQuotes[endTickIndex].Date === getUTCDate(this.endEpoch) ? 2 : 1;
                 trimmedQuotes = trimmedQuotes.slice(0, endTickIndex + addon);
             }
         }
