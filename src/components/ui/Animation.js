@@ -225,12 +225,13 @@ export default function animateChart(stx, animationParameters, easeMachine) {
             if (!quote || !quote.Close || !this.prevQuote /* || !this.prevQuote.Close */) {
                 if (this.prevQuote /* && !this.prevQuote.Close */) {
                     if (chart.lockScroll) {
+                        const visibleTicks = chart.dataSet.length - chart.entryTick + 1;
                         if (quote.Close === null) {
+                            chart.scroll = visibleTicks + 1; // for invisible ticks, scroll anyway
                             return false;
                         }
 
                         if (chart.entryTick !== null && chart.entryTick !== undefined) {
-                            const visibleTicks = chart.dataSet.length - chart.entryTick + 1;
                             this.setMaxTicks(visibleTicks + 3);
                             chart.scroll = visibleTicks + 1;
                         }
