@@ -104,7 +104,7 @@ export default class StudyLegendStore {
     }
 
     // Temporary prevent user from adding more than 5 indicators
-    // All traces can be removed after new design fir studies
+    // All traces can be removed after new design for studies
     @action.bound updateStyle() {
         const should_minimise_last_digit = Object.keys(this.stx.panels).length > 2;
         Object.keys(CIQ.Studies.studyLibrary).forEach((st) => {
@@ -262,7 +262,7 @@ export default class StudyLegendStore {
 
         this.updateActiveStudies();
         // Temporary prevent user from adding more than 5 indicators
-        // All traces can be removed after new design fir studies
+        // All traces can be removed after new design for studies
         this.updateStyle();
     };
 
