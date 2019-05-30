@@ -69,14 +69,17 @@ export default class StudyLegendStore {
 
     get categorizedStudies() {
         const data = [];
+        const excludedStudies = { Beta: true };
         Object.keys(CIQ.Studies.studyLibrary).forEach((studyId) => {
-            const study = CIQ.Studies.studyLibrary[studyId];
-            data.push({
-                enabled: true,
-                display: t.translate(study.name),
-                dataObject: studyId,
-                itemId: studyId,
-            });
+            if (!excludedStudies[studyId]) {
+                const study = CIQ.Studies.studyLibrary[studyId];
+                data.push({
+                    enabled: true,
+                    display: t.translate(study.name),
+                    dataObject: studyId,
+                    itemId: studyId,
+                });
+            }
         });
         const category = {
             categoryName: t.translate('Indicators'),

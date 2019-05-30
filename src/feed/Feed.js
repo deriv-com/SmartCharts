@@ -285,11 +285,15 @@ class Feed {
         if (!subscription) { return; }
 
         const lastEpoch = subscription.lastStreamEpoch;
-        if (this.endEpoch && lastEpoch > this.endEpoch) {
-            if (this._activeStreams[key] && this.granularity === 0 && !this._mainStore.state.isStaticChart) {
+        if (this.endEpoch && lastEpoch + this.granularity > this.endEpoch) {
+            if (this._activeStreams[key] && this.granularity === 0 && !this._mainStore.state.isStaticChart
+                 && CIQ.strToDateTime(getUTCDate(this.endEpoch)).valueOf() >= this._stx.chart.dataSet.slice(-1)[0].DT.valueOf()
+            ) {
                 result = false;
             }
             this._forgetStream(key);
+        } else {
+            result = false;
         }
         return result;
     }
@@ -299,6 +303,19 @@ class Feed {
             quotes = [];
             return;
         }
+
+        if (this.endEpoch && CIQ.strToDateTime(getUTCDate(this.endEpoch)).valueOf() !== this._stx.chart.dataSet.slice(-1)[0].DT.valueOf()) {
+            this._stx.updateChartData(
+                [{
+                    DT: CIQ.strToDateTime(getUTCDate(this.endEpoch)),
+                    Close: null,
+                }],
+                null,
+                { fillGaps: true },
+            );
+            this._stx.createDataSet();
+        }
+
         if (comparisonChartSymbol) {
             this._stx.updateChartData(quotes, null, {
                 secondarySeries: comparisonChartSymbol,
