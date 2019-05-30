@@ -98,7 +98,7 @@ export default class StudyLegendStore {
             this.menu.setOpen(false);
         } else {
             this.mainStore.notifier.notify({
-                text: t.translate('You can\'t have more that than 5 open Indicators.'),
+                text: t.translate('You can\'t have more than 5 open Indicators.'),
             });
         }
     }
@@ -106,21 +106,13 @@ export default class StudyLegendStore {
     // Temporary prevent user from adding more than 5 off-chart indicators
     // All traces can be removed after new design fir studies
     @action.bound updateStyle() {
-        if (Object.keys(this.stx.panels).length > 2) {
-            Object.keys(CIQ.Studies.studyLibrary).forEach((st) => {
-                if (!CIQ.Studies.studyLibrary[st].overlay) {
-                    CIQ.Studies.studyLibrary[st].panelHeight = 80;
-                }
-            });
-            this.mainStore.state.setShouldMinimiseLastDigit(true);
-        } else {
-            Object.keys(CIQ.Studies.studyLibrary).forEach((st) => {
-                if (!CIQ.Studies.studyLibrary[st].overlay) {
-                    CIQ.Studies.studyLibrary[st].panelHeight = null;
-                }
-            });
-            this.mainStore.state.setShouldMinimiseLastDigit(false);
-        }
+        const should_minimise_last_digit = Object.keys(this.stx.panels).length > 2;
+        Object.keys(CIQ.Studies.studyLibrary).forEach((st) => {
+            if (!CIQ.Studies.studyLibrary[st].overlay) {
+                CIQ.Studies.studyLibrary[st].panelHeight = should_minimise_last_digit ? 80 : null;
+            }
+        });
+        this.mainStore.state.setShouldMinimiseLastDigit(should_minimise_last_digit);
     }
 
     @action.bound editStudy(study) {
