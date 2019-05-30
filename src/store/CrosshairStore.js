@@ -1,5 +1,6 @@
 import { action, observable, when, computed } from 'mobx';
 import { sameBar } from '../utils';
+import Theme from '../../sass/_themes.scss';
 
 const MAX_TOOLTIP_WIDTH = 315;
 
@@ -49,6 +50,16 @@ class CrosshairStore {
         this.stx.append('headsUpHR', this.renderCrosshairTooltip);
     };
 
+    @action.bound setFloatPriceLabelStyle(theme = this.mainStore.chartSetting.theme) {
+        if (this.state === 2) {
+            this.stx.setStyle('stx-float-price', 'color', 'transparent');
+            this.stx.setStyle('stx-float-price', 'background-color', 'transparent');
+        } else {
+            this.stx.setStyle('stx-float-price', 'color', '#fff');
+            this.stx.setStyle('stx-float-price', 'background-color', Theme[`${theme}floatpricecolor`]);
+        }
+    }
+
     @action.bound toggleState() {
         const state = (this.state + 1) % 3;
         this.setCrosshairState(state);
@@ -67,6 +78,8 @@ class CrosshairStore {
             const month = dateStr.substring(0, 2);
             this.stx.controls.floatDate.innerHTML = dateStr.replace(dateStr.substring(0, 2), dateStr.substring(3, 5)).replace(dateStr.substring(2, 5), `-${month}`);
         }
+
+        this.setFloatPriceLabelStyle();
 
         // if no tooltip exists, then skip
         if (this.state !== 2) return;
