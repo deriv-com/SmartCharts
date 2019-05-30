@@ -498,8 +498,16 @@ class ChartState {
     }
 
     scrollListener({ grab }) {
-        if (grab && this.stxx.chart.lockScroll) {
-            this.stxx.chart.lockScroll = false;
+        if (grab && this.stxx && this.stxx.chart) {
+            if (this.stxx.chart.lockScroll) this.stxx.chart.lockScroll = false;
+
+            const dataSegment = this.stxx.chart.dataSegment;
+            if (dataSegment) {
+                const startPointOnChartData = dataSegment[0];
+                const barsDisplayedOnScreen = Math.floor(this.stxx.chart.width / this.stxx.layout.candleWidth);
+                const isEndOfScroll = startPointOnChartData && (startPointOnChartData.Date > this.stxx.masterData[0].Date);
+                this.stxx.minimumLeftBars = isEndOfScroll ? 2 : barsDisplayedOnScreen - 1;
+            }
         }
     }
 }
