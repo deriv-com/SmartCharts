@@ -56,7 +56,7 @@ class CrosshairStore {
             this.stx.setStyle('stx-float-price', 'background-color', 'transparent');
         } else {
             this.stx.setStyle('stx-float-price', 'color', '#fff');
-            this.stx.setStyle('stx-float-price', 'background-color', Theme[`${theme}floatpricecolor`]);
+            this.stx.setStyle('stx-float-price', 'background-color', Theme[`${theme}floatpricebg`]);
         }
     }
 
