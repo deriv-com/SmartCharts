@@ -60,7 +60,7 @@ class ServerTime {
     }
 
     getUTCDate() {
-        return new Date(getUTCDate(this.getEpoch()));
+        return CIQ.strToDateTime(getUTCDate(this.getEpoch()));
     }
 
     static getInstance() {
