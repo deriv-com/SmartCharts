@@ -223,10 +223,11 @@ export default function animateChart(stx, animationParameters, easeMachine) {
                 completeLastBar(this.prevQuote);
             }
             if (!quote || !quote.Close || !this.prevQuote /* || !this.prevQuote.Close */) {
-                if (this.prevQuote /* && !this.prevQuote.Close */) {
-                    if (chart.lockScroll) {
+                if (this.prevQuote /* && quote && quote.Close === null <] [> && !this.prevQuote.Close */) {
+                    if (chart.lockScroll /* && quote.DT >= this.prevQuote.DT */) {
                         if (quote.Close === null) {
-                            return false;
+                            tickAnimator.stop();
+                            unanimateScroll();
                         }
 
                         if (chart.entryTick !== null && chart.entryTick !== undefined) {
