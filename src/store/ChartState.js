@@ -507,7 +507,7 @@ class ChartState {
                 const startPointOnChartData = dataSegment[0];
                 const barsDisplayedOnScreen = Math.floor(this.stxx.chart.width / this.stxx.layout.candleWidth);
                 const isEndOfScroll = startPointOnChartData && (startPointOnChartData.Date > this.stxx.masterData[0].Date);
-                this.stxx.minimumLeftBars = isEndOfScroll ? 2 : barsDisplayedOnScreen - 1;
+                this.stxx.minimumLeftBars = isEndOfScroll ? 2 : barsDisplayedOnScreen;
             }
         }
     }
