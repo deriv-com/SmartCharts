@@ -280,19 +280,42 @@ class Feed {
 
     _forgetIfEndEpoch(key) {
         const subscription = this._activeStreams[key];
+        let result = true;
+
         if (!subscription) { return; }
+
         const lastEpoch = subscription.lastStreamEpoch;
         if (this.endEpoch && lastEpoch > this.endEpoch) {
+            if (this._activeStreams[key] && this.granularity === 0 && !this._mainStore.state.isStaticChart
+                 && CIQ.strToDateTime(getUTCDate(this.endEpoch)).valueOf() >= this._stx.chart.dataSet.slice(-1)[0].DT.valueOf()
+            ) {
+                result = false;
+            }
             this._forgetStream(key);
+        } else {
+            result = false;
         }
+        return result;
     }
 
     _appendChartData(quotes, key, comparisonChartSymbol) {
-        this._forgetIfEndEpoch(key);
-        if (!this._activeStreams[key]) {
+        if (this._forgetIfEndEpoch(key) && !this._activeStreams[key]) {
             quotes = [];
             return;
         }
+
+        if (this.endEpoch && CIQ.strToDateTime(getUTCDate(this.endEpoch)).valueOf() !== this._stx.chart.dataSet.slice(-1)[0].DT.valueOf()) {
+            this._stx.updateChartData(
+                [{
+                    DT: CIQ.strToDateTime(getUTCDate(this.endEpoch)),
+                    Close: null,
+                }],
+                null,
+                { fillGaps: true },
+            );
+            this._stx.createDataSet();
+        }
+
         if (comparisonChartSymbol) {
             this._stx.updateChartData(quotes, null, {
                 secondarySeries: comparisonChartSymbol,
@@ -423,7 +446,7 @@ class Feed {
 
         if (this.startEpoch && this.margin) {
             startTickIndex = trimmedQuotes.findIndex(tick => CIQ.strToDateTime(tick.Date) >= CIQ.strToDateTime(getUTCDate(this.startEpoch)));
-            if (startTickIndex) {
+            if (startTickIndex > -1) {
                 trimmedQuotes = trimmedQuotes.slice(startTickIndex - 1);
             }
         }
@@ -431,7 +454,7 @@ class Feed {
         if (this.endEpoch && this.margin) {
             endTickIndex = trimmedQuotes.findIndex(tick => CIQ.strToDateTime(tick.Date) >= CIQ.strToDateTime(getUTCDate(this.endEpoch)));
 
-            if (endTickIndex) {
+            if (endTickIndex > -1) {
                 const addon = trimmedQuotes[endTickIndex].Date === getUTCDate(this.endEpoch) ? 2 : 1;
                 trimmedQuotes = trimmedQuotes.slice(0, endTickIndex + addon);
             }
