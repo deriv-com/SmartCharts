@@ -103,7 +103,7 @@ export default class StudyLegendStore {
         }
     }
 
-    // Temporary prevent user from adding more than 5 off-chart indicators
+    // Temporary prevent user from adding more than 5 indicators
     // All traces can be removed after new design fir studies
     @action.bound updateStyle() {
         const should_minimise_last_digit = Object.keys(this.stx.panels).length > 2;
@@ -261,7 +261,7 @@ export default class StudyLegendStore {
         if (!this.shouldRenderLegend()) { return; }
 
         this.updateActiveStudies();
-        // Temporary prevent user from adding more than 5 off-chart indicators
+        // Temporary prevent user from adding more than 5 indicators
         // All traces can be removed after new design fir studies
         this.updateStyle();
     };
