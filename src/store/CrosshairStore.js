@@ -54,9 +54,15 @@ class CrosshairStore {
         if (this.state === 2) {
             this.stx.setStyle('stx-float-price', 'color', 'transparent');
             this.stx.setStyle('stx-float-price', 'background-color', 'transparent');
+            this.stx.controls.floatDate.style.color = 'transparent';
+            this.stx.controls.floatDate.style.backgroundColor = 'transparent';
+            this.stx.controls.crossX.style.height = `calc(100% - ${this.stx.xaxisHeight}px)`;
         } else {
             this.stx.setStyle('stx-float-price', 'color', '#fff');
-            this.stx.setStyle('stx-float-price', 'background-color', Theme[`${theme}floatpricebg`]);
+            this.stx.setStyle('stx-float-price', 'background-color', Theme[`${theme}floatlabelsbg`]);
+            this.stx.controls.floatDate.style.color = '#fff';
+            this.stx.controls.floatDate.style.backgroundColor = Theme[`${theme}floatlabelsbg`];
+            this.stx.controls.crossX.style.height = '100%';
         }
     }
 
