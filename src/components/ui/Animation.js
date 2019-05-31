@@ -180,14 +180,14 @@ export default function animateChart(stx, animationParameters, easeMachine) {
                 const q = CIQ.clone(quote);
                 q.Close = Math.round(newClose * animationParameters.granularity) / animationParameters.granularity; // <<------ IMPORTANT! Use 1000000 for small price increments, otherwise animation will be in increments of .0001
                 // q.Close = Math.round(newClose*chart.roundit)/chart.roundit; // to ensure decimal points don't go out too far for interim values
-                if (chartJustAdvanced) {
-                    if (!q.Open && q.Open !== 0) q.Open = q.Close;
-                    if (!q.High && q.High !== 0) q.High = Math.max(q.Open, q.Close);
-                    if (!q.Low && q.Low !== 0) q.Low = Math.min(q.Open, q.Close);
-                } else {
-                    if (quote.Close > prevQuote.High) q.High = q.Close;
-                    if (quote.Close < prevQuote.Low) q.Low = q.Close;
-                }
+                // if (chartJustAdvanced) {
+                //     if (!q.Open && q.Open !== 0) q.Open = q.Close;
+                //     if (!q.High && q.High !== 0) q.High = Math.max(q.Open, q.Close);
+                //     if (!q.Low && q.Low !== 0) q.Low = Math.min(q.Open, q.Close);
+                // } else {
+                //     if (quote.Close > prevQuote.High) q.High = q.Close;
+                //     if (quote.Close < prevQuote.Low) q.Low = q.Close;
+                // }
                 if (chart.animatingHorizontalScroll) {
                     self.micropixels = newData.micropixels;
                     chart.lastTickOffset = newData.lineOffset;
@@ -223,8 +223,13 @@ export default function animateChart(stx, animationParameters, easeMachine) {
                 completeLastBar(this.prevQuote);
             }
             if (!quote || !quote.Close || !this.prevQuote /* || !this.prevQuote.Close */) {
-                if (this.prevQuote /* && !this.prevQuote.Close */) {
-                    if (chart.lockScroll) {
+                if (this.prevQuote /* && quote && quote.Close === null <] [> && !this.prevQuote.Close */) {
+                    if (chart.lockScroll /* && quote.DT >= this.prevQuote.DT */) {
+                        if (quote.Close === null) {
+                            tickAnimator.stop();
+                            unanimateScroll();
+                        }
+
                         if (chart.entryTick !== null && chart.entryTick !== undefined) {
                             const visibleTicks = chart.dataSet.length - chart.entryTick + 1;
                             this.setMaxTicks(visibleTicks + 3);
@@ -233,6 +238,15 @@ export default function animateChart(stx, animationParameters, easeMachine) {
                     }
                 }
                 return false;
+            }
+
+            if (this.prevQuote.Close === null) {
+                const beforeCurrentQuote = this.chart.dataSet[this.chart.dataSet.length - 2];
+                if (beforeCurrentQuote && beforeCurrentQuote.Close) {
+                    this.prevQuote = beforeCurrentQuote;
+                } else {
+                    return false;
+                }
             }
 
             if (this.extendedHours && chart.market.market_def) {
