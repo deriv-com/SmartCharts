@@ -284,6 +284,7 @@ export default class StudyLegendStore {
                     parameters: sd.parameters,
                 },
             });
+            this.updateStyle();
         });
 
         this.activeStudies.data = studies;
