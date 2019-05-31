@@ -427,6 +427,15 @@ class App extends Component {
                         scrollToEpoch={scrollToEpoch}
                         scrollToEpochOffset={leftOffset}
                     >
+                        {endEpoch ? (
+                            <Marker
+                                className="chart-marker-historical"
+                                x={endEpoch}
+                                xPositioner="epoch"
+                                yPositioner="top"
+                            ><span>{moment(endEpoch * 1000).utc().format('DD MMMM YYYY - HH:mm')}</span>
+                            </Marker>
+                        ) : ''}
                         {markers.map(x => (
                             <Marker
                                 key={x.ts}
@@ -513,8 +522,8 @@ class App extends Component {
                         Draggable: <input type="checkbox" checked={draggable === undefined ? '' : draggable} onChange={this.onDraggableChange} />
                     </div>
                     <div className="form-row">
-                            Toggle StartEpoch: <button type="button" onClick={this.toggleStartEpoch}>Toggle</button> <br />
-                            LeftOffset(bars): <input type="number" value={leftOffset || 0} onChange={this.onLeftOffset} />
+                        Toggle StartEpoch: <button type="button" onClick={this.toggleStartEpoch}>Toggle</button> <br />
+                        LeftOffset(bars): <input type="number" value={leftOffset || 0} onChange={this.onLeftOffset} />
                     </div>
                 </div>
             </div>

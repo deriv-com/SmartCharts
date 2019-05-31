@@ -15,6 +15,7 @@ class Feed {
     get granularity() { return this._mainStore.chart.granularity; }
     get context() { return this._mainStore.chart.context; }
     get loader() { return this._mainStore.loader; }
+    get margin() { return this._mainStore.state.margin; }
     _activeStreams = {};
     _isConnectionOpened = true;
 
@@ -48,11 +49,11 @@ class Feed {
                     this._forgetStream(key);
                 }
 
-                dtLeft = this.startEpoch ? new Date(getUTCDate(this.startEpoch)) : undefined;
+                dtLeft = this.startEpoch ? CIQ.strToDateTime(getUTCDate(this.startEpoch)) : undefined;
             }
         } else {
-            dtLeft =  new Date(getUTCDate(this.startEpoch || this.endEpoch - rangeTime));
-            dtRight = new Date(getUTCDate(this.endEpoch));
+            dtLeft =  CIQ.strToDateTime(getUTCDate(this.startEpoch || this.endEpoch - rangeTime));
+            dtRight = CIQ.strToDateTime(getUTCDate(this.endEpoch));
         }
 
         this._stx.setRange({ dtLeft, dtRight, periodicity, forceLoad }, () => {
@@ -81,8 +82,6 @@ class Feed {
             this._stx.chart.scroll = this._stx.chart.dataSet.length + (Math.floor(this._stx.chart.dataSet.length / 10) || 1);
             this._stx.draw();
         }
-
-        this._mainStore.state.setChartIsReady(true);
     }
 
     // although not used, subscribe is overridden so that unsubscribe will be called by ChartIQ
@@ -110,7 +109,8 @@ class Feed {
         suggestedStartDate = suggestedStartDate > localDate ? localDate : suggestedStartDate;
         const isComparisonChart = this._stx.chart.symbol !== symbol;
         let start = this.startEpoch || Math.floor(suggestedStartDate / 1000 | 0);
-        const end = this.endEpoch;
+        start = this.margin && this.startEpoch ? start - this.margin : start;
+        const end = this.margin && this.endEpoch ? this.endEpoch + this.margin : this.endEpoch;
         if (isComparisonChart) {
             // Strange issue where comparison series is offset by timezone...
             start -= suggestedStartDate.getTimezoneOffset() * 60;
@@ -199,9 +199,12 @@ class Feed {
             callback({ quotes: [] });
             return;
         }
+
+        quotes = this._trimQuotes(quotes);
         callback({ quotes });
 
         this._mainStore.chart.updateYaxisWidth();
+        this.scaleChart();
 
         this._emitDataUpdate(quotes, comparisonChartSymbol);
     }
@@ -222,8 +225,9 @@ class Feed {
 
     async _getPaginationData(symbol, granularity, start, end, callback) {
         const isMainChart = this._stx.chart.symbol === symbol;
-        if (this.startEpoch && start < this.startEpoch
-            || this.endEpoch && end > this.endEpoch) {
+        // TODO There is no need to get historical data before startTime
+        if (this.startEpoch /* && start < this.startEpoch */
+            || (this.endEpoch && end > this.endEpoch)) {
             callback({ moreAvailable: false, quotes: [] });
             if (isMainChart) { // ignore comparisons
                 this._emitter.emit(Feed.EVENT_ON_PAGINATION, { start, end });
@@ -276,19 +280,42 @@ class Feed {
 
     _forgetIfEndEpoch(key) {
         const subscription = this._activeStreams[key];
+        let result = true;
+
         if (!subscription) { return; }
+
         const lastEpoch = subscription.lastStreamEpoch;
-        if (this.endEpoch && lastEpoch > this.endEpoch) {
+        if (this.endEpoch && lastEpoch + this.granularity > this.endEpoch) {
+            if (this._activeStreams[key] && this.granularity === 0 && !this._mainStore.state.isStaticChart
+                 && CIQ.strToDateTime(getUTCDate(this.endEpoch)).valueOf() >= this._stx.chart.dataSet.slice(-1)[0].DT.valueOf()
+            ) {
+                result = false;
+            }
             this._forgetStream(key);
+        } else {
+            result = false;
         }
+        return result;
     }
 
     _appendChartData(quotes, key, comparisonChartSymbol) {
-        this._forgetIfEndEpoch(key);
-        if (!this._activeStreams[key]) {
+        if (this._forgetIfEndEpoch(key) && !this._activeStreams[key]) {
             quotes = [];
             return;
         }
+
+        if (this.endEpoch && CIQ.strToDateTime(getUTCDate(this.endEpoch)).valueOf() !== this._stx.chart.dataSet.slice(-1)[0].DT.valueOf()) {
+            this._stx.updateChartData(
+                [{
+                    DT: CIQ.strToDateTime(getUTCDate(this.endEpoch)),
+                    Close: null,
+                }],
+                null,
+                { fillGaps: true },
+            );
+            this._stx.createDataSet();
+        }
+
         if (comparisonChartSymbol) {
             this._stx.updateChartData(quotes, null, {
                 secondarySeries: comparisonChartSymbol,
@@ -408,6 +435,31 @@ class Feed {
     _unpackKey(key) {
         const [symbol, granularity] = key.split('-');
         return { symbol, granularity: +granularity };
+    }
+
+    _trimQuotes(quotes = []) {
+        let startTickIndex = null;
+        let endTickIndex = null;
+        let trimmedQuotes = quotes;
+
+        if (!trimmedQuotes.length) return [];
+
+        if (this.startEpoch && this.margin) {
+            startTickIndex = trimmedQuotes.findIndex(tick => CIQ.strToDateTime(tick.Date) >= CIQ.strToDateTime(getUTCDate(this.startEpoch)));
+            if (startTickIndex > -1) {
+                trimmedQuotes = trimmedQuotes.slice(startTickIndex - 1);
+            }
+        }
+
+        if (this.endEpoch && this.margin) {
+            endTickIndex = trimmedQuotes.findIndex(tick => CIQ.strToDateTime(tick.Date) >= CIQ.strToDateTime(getUTCDate(this.endEpoch)));
+
+            if (endTickIndex > -1) {
+                const addon = trimmedQuotes[endTickIndex].Date === getUTCDate(this.endEpoch) ? 2 : 1;
+                trimmedQuotes = trimmedQuotes.slice(0, endTickIndex + addon);
+            }
+        }
+        return trimmedQuotes;
     }
 }
 
