@@ -90,11 +90,11 @@ export default class MarkerStore {
             // TODO: Temporary solution until ChartIQ can support displaying markers in dates with no tick data
             if (dummyMarker.params.xPositioner === 'date'
                 && !this.isDistantFuture
-                && this.stx.chart.dataSet[this.tick]
-                && this.stx.chart.dataSet[this.tick].DT.valueOf() !== dummyMarker.params.x.valueOf()
+                && this.stx.masterData[this.tick]
+                && this.stx.masterData[this.tick].DT.valueOf() !== dummyMarker.params.x.valueOf()
             ) {
                 // if the marker is not distance future but it is greater than the last item in the masterData, it will be hidden.
-                if (this.stx.masterData[this.stx.masterData.length - 1].DT.valueOf() < dummyMarker.params.x.valueOf()) {
+                if (this.yPositioner !== 'none' && this.stx.masterData[this.stx.masterData.length - 1].DT.valueOf() < dummyMarker.params.x.valueOf()) {
                     this.hideMarker();
                     return;
                 }
@@ -112,7 +112,9 @@ export default class MarkerStore {
                     { fillGaps: true },
                 );
                 this.stx.createDataSet();
-                this.tick += 1;
+                // this.tick += 1;
+                this.stx.setMarkerTick(dummyMarker);
+                this.tick = dummyMarker.tick;
 
                 if (this.yPositioner !== 'value' && this.yPositioner !== 'on_candle' && this.yPositioner !== 'top') {
                     this.yPositioner = 'none';
