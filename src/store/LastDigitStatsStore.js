@@ -73,7 +73,7 @@ export default class LastDigitStatsStore {
             this.showLastDigitStats();
             this.symbolChanged = false;
         } else {
-            const firstDigit = this.latestData.shift().slice(-1);
+            const firstDigit = this.latestData.shift().toString().slice(-1);
             const price =  Close.toFixed(this.decimalPlaces);
             const lastDigit = price.toString().slice(-1);
             this.latestData.push(price);
