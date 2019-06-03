@@ -66,13 +66,15 @@
         text-align: center;
         width: 325px;
         font-size: 12px;
+        top: 10px;
+        position: relative;
 
         @include themify($themes) {
             color: themed('LastdigitsBarFooter');
         }
     }
     &.minimised {
-        bottom: 5px;
+        bottom: 10px;
 
         .cq-bars {
             height: 25px;
