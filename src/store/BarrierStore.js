@@ -29,8 +29,7 @@ export default class BarrierStore {
     _shadeState;
 
     @computed get pip() { return this.mainStore.chart.currentActiveSymbol.decimal_places; }
-    @computed get yAxisWidth() { return this.mainStore.chart.yAxiswidth; }
-    @computed get priceLabelWidth() { return this.yAxisWidth + 1; }
+    @computed get yAxisWidth() { return this.chart ? this.chart.yAxis.width : null; }
 
     constructor(mainStore) {
         this.mainStore = mainStore;

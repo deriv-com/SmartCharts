@@ -14,14 +14,13 @@ const Barrier = ({
     hidePriceLines,
     lineStyle,
     isInitialized,
-    priceLabelWidth,
 }) => (isInitialized && (
     <div
         className={`barrier ${hidePriceLines ? 'hide-pricelines' : ''}`}
         style={{ '--shade-color': shadeColor }}
     >
-        <HighPriceLine width={priceLabelWidth} lineStyle={lineStyle} color={color} foregroundColor={foregroundColor} />
-        <LowPriceLine  width={priceLabelWidth} lineStyle={lineStyle} color={color} foregroundColor={foregroundColor} />
+        <HighPriceLine lineStyle={lineStyle} color={color} foregroundColor={foregroundColor} />
+        <LowPriceLine  lineStyle={lineStyle} color={color} foregroundColor={foregroundColor} />
         <AboveShade />
         <BetweenShade />
         <BelowShade />
@@ -43,7 +42,6 @@ export default connect(
         lineStyle: store.lineStyle,
         isInitialized: store.isInitialized,
         destructor: store.destructor,
-        priceLabelWidth: store.priceLabelWidth,
     }),
     BarrierStore,
 )(Barrier);

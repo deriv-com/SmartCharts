@@ -91,6 +91,8 @@ class ChartState {
             }
         }
 
+        if (this.endEpoch && this.startEpoch) { return; }
+
         this.rootNode = this.mainStore.chart.rootNode;
 
         this.isAnimationEnabled = isAnimationEnabled;
@@ -177,6 +179,7 @@ class ChartState {
             this.chartControlsWidgets = chartControlsWidgets;
             if (this.stxx) this.mainStore.chart.updateHeight();
         }
+
 
         if (this.stxx) {
             this.stxx.chart.panel.yAxis.drawCurrentPriceLabel = !this.endEpoch;
@@ -390,11 +393,8 @@ class ChartState {
             const tick = this.stxx.tickFromDate(startEntry.DT);
             const tickLeft = this.stxx.chart.dataSet.length - tick;
             this.stxx.setMaxTicks(tickLeft > 3 ? tickLeft : 3, { padding: 150 });
+            this.stxx.chart.scroll += 125;
             this.stxx.draw();
-
-            // const oldScroll = this.stxx.chart.scroll;
-            // this.stxx.zoomSet(this.stxx.layout.candleWidth, this.stxx.chart);
-            // this.stxx.chart.scroll = oldScroll;
         } else {
             this.stxx.chart.lockScroll = true;
             this.stxx.home();

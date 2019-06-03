@@ -17,6 +17,7 @@ export default class PriceLineStore {
     @observable uncentered = false;
 
     @computed get pip() { return this.mainStore.chart.currentActiveSymbol.decimal_places; }
+    @computed get yAxisWidth() { return this.chart ? (this.chart.yAxis.width + 6) : null; }
 
     constructor(mainStore) {
         this.mainStore = mainStore;
@@ -206,5 +207,6 @@ export default class PriceLineStore {
         offScreen: this.offScreen,
         uncentered: this.uncentered,
         top: this.top,
+        yAxisWidth: this.yAxisWidth,
     }));
 }
