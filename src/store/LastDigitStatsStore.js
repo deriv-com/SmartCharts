@@ -56,7 +56,7 @@ export default class LastDigitStatsStore {
             }
 
             this.latestData.forEach((price) => {
-                const lastDigit = price.toString().slice(-1);
+                const lastDigit = price.toFixed(this.decimalPlaces).toString().slice(-1);
                 this.digits[lastDigit]++;
             });
             this.updateBars();
