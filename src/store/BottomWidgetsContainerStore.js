@@ -33,7 +33,8 @@ export default class BottomWidgetsContainerStore {
         this.mainChartHeight      = this.stx.panels.chart.height;
         this.totalHeight          = Object.keys(this.stx.panels).reduce((acc, key) => (acc + (this.stx.panels[key].hidden ? 0 : this.stx.panels[key].height)), 0);
         const margin              = this.totalHeight > this.mainChartHeight ? 0 : 30;
-        const chartControlsHeight = this.mainStore.state.chartControlsWidgets ? 40 : 0;
+        const panelPosition       =  this.mainStore.chartSetting.position;
+        const chartControlsHeight = panelPosition === 'bottom' && this.mainStore.state.chartControlsWidgets ? 40 : 0;
         this.top                  = this.mainChartHeight - margin - 200;
         this.bottom               = this.totalHeight - this.mainChartHeight + margin + chartControlsHeight;
     }
