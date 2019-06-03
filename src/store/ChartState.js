@@ -382,7 +382,7 @@ class ChartState {
             this.stxx.chart.lockScroll = true;
             const tick = this.stxx.tickFromDate(startEntry.DT);
             this.stxx.setMaxTicks(5);
-            this.stxx.chart.scroll = this.stxx.chart.dataSet.length - tick + 1;
+            this.stxx.chart.scroll = this.stxx.chart.dataSet.length - tick;
             this.stxx.chart.entryTick = tick;
             this.stxx.maxMasterDataSize = 0;
             this.stxx.draw();
