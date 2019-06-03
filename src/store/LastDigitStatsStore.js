@@ -11,7 +11,7 @@ export default class LastDigitStatsStore {
     count = 1000;
     digits = [];
     latestData = [];
-    symbolChanged=false;
+    symbolChanged = false;
     @observable bars = [];
 
     get api() {
@@ -72,7 +72,7 @@ export default class LastDigitStatsStore {
             // Symbol has changed
             this.showLastDigitStats();
             this.symbolChanged = false;
-        } else {
+        } else if (this.latestData.length) {
             const firstDigit = this.latestData.shift().slice(-1);
             const price =  Close.toFixed(this.decimalPlaces);
             const lastDigit = price.toString().slice(-1);
