@@ -75,7 +75,7 @@ export default class LastDigitStatsStore {
         } else {
             const firstDigit = this.latestData.shift().toString().slice(-1);
             const price =  Close.toFixed(this.decimalPlaces);
-            const lastDigit = price.toString().slice(-1);
+            const lastDigit = price.slice(-1);
             this.latestData.push(price);
             this.digits[lastDigit]++;
             this.digits[firstDigit]--;
