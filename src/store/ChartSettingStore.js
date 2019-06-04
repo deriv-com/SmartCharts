@@ -125,6 +125,7 @@ export default class ChartSettingStore {
 
         if (this.context) {
             this.mainStore.state.setChartTheme(theme);
+            this.mainStore.crosshair.setFloatPriceLabelStyle(theme);
         }
         logEvent(LogCategories.ChartControl, LogActions.ChartSetting, `Change theme to ${theme}`);
         this.saveSetting();

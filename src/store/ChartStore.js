@@ -700,8 +700,8 @@ class ChartStore {
         const elapsedSeconds = (endEpoch || startEpoch) - (startEpoch || endEpoch);
         const epochPadding = elapsedSeconds / paddingRatio | 0;
         if (startEpoch || endEpoch) {
-            const dtLeft  = (startEpoch) ? new Date(getUTCDate(startEpoch - epochPadding)) : undefined;
-            const dtRight = (endEpoch) ? new Date(getUTCDate(endEpoch + epochPadding))   : undefined;
+            const dtLeft  = (startEpoch) ? CIQ.strToDateTime(getUTCDate(startEpoch - epochPadding)) : undefined;
+            const dtRight = (endEpoch) ? CIQ.strToDateTime(getUTCDate(endEpoch + epochPadding))   : undefined;
             const periodicity = calculateTimeUnitInterval(this.granularity);
             range = {
                 dtLeft,
