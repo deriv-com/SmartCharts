@@ -30,6 +30,10 @@ export default class LastDigitStatsStore {
         return this.mainStore.chart.currentActiveSymbol ? this.mainStore.chart.currentActiveSymbol.name : '';
     }
 
+    @computed get shouldMinimiseLastDigits() {
+        return this.mainStore.state.shouldMinimiseLastDigits;
+    }
+
     @action.bound changeSymbol() {
         this.symbolChanged = true;
     }

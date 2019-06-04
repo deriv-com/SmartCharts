@@ -133,8 +133,6 @@ export default class ChartSettingStore {
 
     @action.bound setPosition(value) {
         if (this.position === value) { return; }
-        this.mainStore.state.setIsPositionChanging(true);
-
         this.position = value;
         if (this.context) { this.stx.clearStyles(); }
         logEvent(LogCategories.ChartControl, LogActions.ChartSetting, 'Change Position');

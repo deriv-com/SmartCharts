@@ -32,10 +32,9 @@ class LastDigitStats extends React.Component {
             isVisible,
             bars,
             marketDisplayName,
-            shouldMinimiseLastDigits,
-            isPositionChanging } = this.props;
+            shouldMinimiseLastDigits } = this.props;
         return (
-            <div className={`cq-last-digits ${isVisible && !isPositionChanging ? 'show' : ''} ${shouldMinimiseLastDigits ? 'minimised' : ''}`}>
+            <div className={`cq-last-digits ${isVisible ? 'show' : ''} ${shouldMinimiseLastDigits ? 'minimised' : ''}`}>
                 <div className="cq-bars">
                     {bars.map((bar, idx) => (
                         <Bar
@@ -52,12 +51,11 @@ class LastDigitStats extends React.Component {
     }
 }
 
-export default connect(({ lastDigitStats : l, state }) => ({
+export default connect(({ lastDigitStats : l }) => ({
     showLastDigitStats:l.showLastDigitStats,
     isVisible:l.isVisible,
     bars:l.bars,
     marketDisplayName:l.marketDisplayName,
     changeSymbol: l.changeSymbol,
-    shouldMinimiseLastDigits: state.shouldMinimiseLastDigits,
-    isPositionChanging: state.isPositionChanging,
+    shouldMinimiseLastDigits: l.shouldMinimiseLastDigits,
 }))(LastDigitStats);
