@@ -80,7 +80,10 @@ export default class ViewStore {
 
     @action.bound applyLayout(idx, e) {
         if (e.nativeEvent.is_item_removed) { return; }
-        if (this.loader) { this.loader.show(); }
+        if (this.loader) {
+            this.loader.show();
+        }
+        this.mainStore.state.setChartIsReady(false);
         const stx = this.stx;
 
         const importLayout = () => {
@@ -88,12 +91,23 @@ export default class ViewStore {
                 stx.changeOccurred('layout');
                 this.mainStore.studies.updateActiveStudies();
                 if (this.loader) { this.loader.hide(); }
+                this.mainStore.state.setChartIsReady(true);
             };
             stx.importLayout(ViewStore.views[idx].layout, {
                 managePeriodicity: true,
                 preserveTicksAndCandleWidth: true,
                 cb: finishImportLayout,
             });
+            // This condition is to make spline chart appear as spline chart
+            // Both line chart and spline chart are of type mountain but with different tensions
+            let chartType = ViewStore.views[idx].layout.chartType;
+            if (chartType === 'mountain') {
+                const tension = ViewStore.views[idx].layout.tension;
+                if (tension === 0.5) {
+                    chartType = 'spline';
+                }
+            }
+            this.mainStore.chartType.setType(chartType);
             this.menu.setOpen(false);
             logEvent(LogCategories.ChartControl, LogActions.Template, 'Load Template');
         };

@@ -18,6 +18,7 @@ import { // eslint-disable-line import/no-extraneous-dependencies,import/no-unre
     logEvent,
     LogCategories,
     LogActions,
+    Marker,
 } from '@binary-com/smartcharts'; // eslint-disable-line import/no-unresolved
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
@@ -76,7 +77,7 @@ function getLanguageStorage() {
 
 function getServerUrl() {
     const local = localStorage.getItem('config.server_url');
-    return `wss://${local || 'ws.binaryws.com'}/websockets/v3`;
+    return `wss://${local || 'frontend.binaryws.com'}/websockets/v3`;
 }
 
 const chartId = '1';
@@ -112,7 +113,6 @@ class App extends Component {
         const layoutString = localStorage.getItem(`layout-${chartId}`),
             layout = JSON.parse(layoutString !== '' ? layoutString : '{}');
         let chartType;
-        let isChartTypeCandle;
         let granularity;
         let endEpoch;
         let settings = createObjectFromLocalStorage('smartchart-setting');
@@ -127,7 +127,6 @@ class App extends Component {
             this.removeAllComparisons();
             endEpoch = (new Date(`${today}:00Z`).valueOf() / 1000);
             chartType = 'mountain';
-            isChartTypeCandle = false;
             granularity = 0;
             if (layout) {
                 granularity = layout.timeUnit === 'second' ? 0 : parseInt(layout.interval * IntervalEnum[layout.timeUnit], 10);
@@ -136,10 +135,6 @@ class App extends Component {
                     chartType = layout.aggregationType;
                 } else {
                     chartType = layout.chartType;
-                }
-
-                if (['mountain', 'line', 'colored_line', 'spline', 'baseline'].indexOf(chartType) === -1) {
-                    isChartTypeCandle = true;
                 }
             }
         }
@@ -156,7 +151,6 @@ class App extends Component {
             settings,
             endEpoch,
             chartType,
-            isChartTypeCandle,
             granularity,
             isConnectionOpened: true,
         };
@@ -195,7 +189,6 @@ class App extends Component {
         if (!prevSetting.historical && settings.historical) {
             this.setState({
                 chartType: 'mountain',
-                isChartTypeCandle: false,
                 granularity: 0,
                 endEpoch: (new Date(`${today}:00Z`).valueOf() / 1000),
             });
@@ -235,10 +228,9 @@ class App extends Component {
         <>
             {isMobile ? '' : <CrosshairToggle />}
             <ChartTypes
-                onChange={(chartType, isChartTypeCandle) => {
+                onChange={(chartType) => {
                     this.setState({
                         chartType,
-                        isChartTypeCandle,
                     });
                 }}
             />
@@ -247,18 +239,6 @@ class App extends Component {
                     this.setState({
                         granularity: timePeriod,
                     });
-                    const isCandle = this.state.isChartTypeCandle;
-                    if (isCandle && timePeriod === 0) {
-                        this.setState({
-                            chartType: 'mountain',
-                            isChartTypeCandle: false,
-                        });
-                    } else if (!isCandle && timePeriod !== 0) {
-                        this.setState({
-                            chartType: 'candle',
-                            isChartTypeCandle: true,
-                        });
-                    }
                 }}
             />
             <StudyLegend />
@@ -273,7 +253,9 @@ class App extends Component {
 
     onMessage = (e) => {
         this.notifier.notify(e);
-    }
+    };
+
+    getIsChartReady = isChartReady => isChartReady;
 
     render() {
         const { settings, isConnectionOpened, symbol, endEpoch } = this.state;
@@ -281,6 +263,7 @@ class App extends Component {
         return (
             <SmartChart
                 id={chartId}
+                chartStatusListener={isChartReady => this.getIsChartReady(isChartReady)}
                 symbol={symbol}
                 isMobile={isMobile}
                 onMessage={this.onMessage}
@@ -297,7 +280,17 @@ class App extends Component {
                 granularity={this.state.granularity}
                 onSettingsChange={this.saveSettings}
                 isConnectionOpened={isConnectionOpened}
-            />
+            >
+                {endEpoch ? (
+                    <Marker
+                        className="chart-marker-historical"
+                        x={endEpoch}
+                        xPositioner="epoch"
+                        yPositioner="top"
+                    ><span>{moment(endEpoch * 1000).utc().format('DD MMMM YYYY - HH:mm')}</span>
+                    </Marker>
+                ) : ''}
+            </SmartChart>
         );
     }
 }

@@ -132,7 +132,7 @@ html, body {
         @include triangle-base(6px);
     }
     &.up:after {
-        border-bottom: 8px solid $COLOR_GREEN;
+        border-bottom: 8px solid $COLOR_GREEN_1;
     }
     &.down:after {
         border-top: 8px solid $COLOR_RED;
@@ -329,7 +329,7 @@ html, body {
     width: 30px !important;
 
     svg {
-        fill: $COLOR_LIGHT_BLUE_2;
+        fill: $COLOR_DARK_GRAY_3;
     }
     &.ic-delete {
         display: none;
@@ -403,11 +403,14 @@ html, body {
 
 .stx-float-price,
 .stx-float-date {
-    border-radius: 3px;
     color: #fff;
     @include themify($themes) {
         background-color: themed('CrosshairLabel');
     }
+}
+
+.stx-float-price {
+    border-radius: 3px;
 }
 
 .stx-float-date { /* Crosshair Floating x-axis date label*/
@@ -415,9 +418,12 @@ html, body {
     font-size: 12px;
     font-family: 'Helvetica';
     z-index: 3;
-    padding: 1px 6px;
+    padding: 3px 6px;
     text-align: center;
     width: auto;
+    height: 18px;
+    line-height: 18px;
+    font-weight: bold;
 }
 
 .stx_crosshair { /* Standard Crosshair lines color */
@@ -485,13 +491,15 @@ html, body {
     }
     width: 1px;
     opacity: 1;
-    border-style: solid;
+    border: none;
 }
 
 .stx_grid_border { /* Default Grid borders */
-    color: #999999;
+    @include themify($themes) {
+        border-color: themed('ChartAreaBorder');
+    }
+    opacity: 0.2;
     border-style: solid;
-    opacity: 0;
 }
 
 /* -------- Chart Type Styles -------- */
@@ -536,7 +544,7 @@ html, body {
 .stx_mountain_chart { /* Default color for mountain Charts */
     width: 1px; /* Optional line width */
     @include themify($themes) {
-        border: themed('ChartBorder');
+        border: themed('ChartMountainBorder');
         background-color: themed('ChartMountainBg'); /* Optional gradient */
         color: themed('ChartMountainBgShade'); /* background color for mountain */
     }
@@ -771,11 +779,12 @@ html, body {
 
 .stx_grid_dark { /* Default Grid dividers */
     @include themify($themes) {
-        color: themed('ChartGrid');
+        color: themed('ChartText');
     }
     opacity: 1;
-    opacity: 0.9;
+    opacity: 0.95;
     border-style: solid;
+    border: none;
 }
 
 .stx_yaxis, .stx_xaxis, .stx_xaxis_dark {
@@ -784,6 +793,15 @@ html, body {
     }
     font-size: 10px;
     font-family: 'Roboto';
+}
+
+.stx_price_label {
+    @include themify($themes) {
+        color: themed('ChartText');
+    }
+    font-size: 12px;
+    font-family: 'Roboto';
+    font-weight: bold;
 }
 
 /* --------------------------------------------------------- CHART SDK --------------------------------------------------------- */
@@ -922,7 +940,19 @@ $spot-color: #0298d3;
             transform: translateX(-50%);
             @include themify($themes) {
                 background-color: themed('ChartCandleBg');
-                color: themed('DefaultMain');
+                color: themed('ChartCandleText');
+            }
+        }
+    }
+}
+
+.closed-chart {
+    .cq-spot {
+        animation: none;
+
+        &:before {
+            @include themify($themes) {
+                color: themed('ChartCandleBgClosed');
             }
         }
     }

@@ -6,11 +6,18 @@ import '../../sass/components/_bottom-widget-container.scss';
 
 
 class BottomWidgetsContainer extends React.Component {
+    shouldComponentUpdate({ nextChildren }) {
+        if (React.Children.count(this.props.children) === React.Children.count(nextChildren)) {
+            return false;
+        }
+        return true;
+    }
+
     componentDidUpdate() {
         if (React.Children.count(this.props.children)) {
             this.props.updateChartMargin(200);
         } else {
-            this.props.updateChartMargin(50);
+            this.props.updateChartMargin(100);
         }
     }
     render() {

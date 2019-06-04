@@ -125,6 +125,9 @@ export default class ChartTypeStore {
         this.AggregateChartSettingsDialog = this.settingsDialog.connect(SettingsDialog);
     }
 
+    @observable type = 'mountain';
+    onChartTypeChanged;
+
     get context() { return this.mainStore.chart.context; }
     get stx() { return this.context.stx; }
     get chartTypeProp() { return this.mainStore.state.chartType; }
@@ -135,16 +138,7 @@ export default class ChartTypeStore {
         this.aggregates = getAggregates();
         this.chartTypes = getChartTypes();
 
-        let chartType;
-        if (this.stx.layout.tension) { // We assume that if tension is set, spline is enabled
-            chartType = 'spline';
-        } else if (this.aggregates[this.stx.layout.aggregationType]) {
-            chartType = this.stx.layout.aggregationType;
-        } else {
-            chartType = this.stx.layout.chartType;
-        }
-        const typeIdx = this.chartTypes.findIndex(t => t.id === chartType);
-        this.type = this.chartTypes[typeIdx];
+        this.setChartTypeFromLayout(this.stx.layout);
 
         reaction(() => this.mainStore.state.chartType, () => {
             if (this.mainStore.state.chartType !== undefined) {
@@ -174,11 +168,6 @@ export default class ChartTypeStore {
             this.mainStore.chartTable.setOpen(true);
             return;
         }
-        if (type.id === 'linear') {
-            this.stx.setChartType('mountain');
-            this.stx.chart.tension = 0;
-            return;
-        }
         if (type.id === 'spline') {
             // Spline is just a line with tension
             this.stx.chart.tension = this.stx.layout.tension = 0.5;
@@ -198,6 +187,10 @@ export default class ChartTypeStore {
         }
 
         this.type = type;
+    }
+
+    @action.bound updateProps(onChange) {
+        this.onChartTypeChanged = onChange;
     }
 
     @action.bound showAggregateDialog(aggregateId) {
@@ -246,5 +239,28 @@ export default class ChartTypeStore {
         }));
     }
 
-    @observable type = getChartTypes()[0];
+    @action.bound setChartTypeFromLayout(layout) {
+        const chartType = this.getChartTypeFromLayout(layout);
+        const typeIdx = this.chartTypes.findIndex(t => t.id === chartType);
+        this.type = this.chartTypes[typeIdx];
+    }
+
+    getChartTypeFromLayout(layout) {
+        let chartType;
+        if (layout.tension) { // We assume that if tension is set, spline is enabled
+            chartType = 'spline';
+        } else if (this.aggregates[layout.aggregationType]) {
+            chartType = layout.aggregationType;
+        } else {
+            chartType = layout.chartType;
+        }
+        return chartType;
+    }
+
+    isTypeCandle(type) {
+        if (typeof type === 'string') {
+            type = this.types.find(t => t.id === type);
+        }
+        return notCandles.indexOf(type.id) === -1;
+    }
 }

@@ -68,19 +68,22 @@ class Chart extends Component {
             topWidgets,
             chartContainerHeight,
             containerWidth,
+            isChartClosed,
             isDrawing,
             theme,
             position,
             showLastDigitStats,
         } = this.props;
 
-        const currentPosition = `cq-chart-control-${(position && !isMobile) ? position : 'bottom'}`;
+        const currentPosition = `cq-chart-control-${(chartControlsWidgets && position && !isMobile) ? position : 'bottom'}`;
         const contextWidth =  !isMobile ? `smartcharts-${containerWidth}` : '';
         const TopWidgets = topWidgets || this.defaultTopWidgets;
         const BottomWidgets = !bottomWidgets && showLastDigitStats ? LastDigitStats : bottomWidgets;
+        // if there are any markers, then increase the subholder z-index
+        const HasMarkers = children && children.length ? 'smartcharts--has-markers' : '';
 
         return (
-            <div className={`smartcharts smartcharts-${theme} ${contextWidth}`}>
+            <div className={`smartcharts smartcharts-${theme} ${contextWidth} ${HasMarkers}`}>
                 <div
                     className={`smartcharts-${isMobile ? 'mobile' : 'desktop'}`}
                     ref={this.modalNode}
@@ -91,7 +94,7 @@ class Chart extends Component {
                     >
                         <div className={` ${currentPosition}`}>
                             <div className="ciq-chart-area">
-                                <div className="ciq-chart">
+                                <div className={`ciq-chart ${isChartClosed ? 'closed-chart' : ''}`}>
                                     <RenderInsideChart at="holder">
                                         {barriers.map((barr, idx) => (
                                             <Barrier
@@ -129,7 +132,9 @@ class Chart extends Component {
                                         }
                                     </BottomWidgetsContainer>
                                 </div>
-                                <ChartControls widgets={chartControlsWidgets} />
+                                { chartControlsWidgets !== null
+                                    && <ChartControls widgets={chartControlsWidgets} />
+                                }
                             </div>
                         </div>
                     </div>
@@ -153,6 +158,7 @@ export default connect(({ chart, drawTools, studies, chartSetting, chartType, st
     updateProps: state.updateProps,
     chartContainerHeight: chart.chartContainerHeight,
     containerWidth: chart.containerWidth,
+    isChartClosed: state.isChartClosed,
     isDrawing: drawingCursor.isDrawing,
     theme: chartSetting.theme,
     position: chartSetting.position,

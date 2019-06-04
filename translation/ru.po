@@ -7,10 +7,10 @@ msgstr ""
 "X-Crowdin-File: /dev/translation/messages.pot\n"
 "Project-Id-Version: smartcharts\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Last-Translator: binarycom <jy@binary.com>\n"
+"Last-Translator: binarycom\n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
-"PO-Revision-Date: 2019-03-01 07:03\n"
+"PO-Revision-Date: 2019-05-06 06:33\n"
 
 msgid " already exists."
 msgstr " уже существует."
@@ -40,7 +40,7 @@ msgid "Asset Information"
 msgstr "Информация об активе"
 
 msgid "Auto Scale"
-msgstr ""
+msgstr "Авто масштаб"
 
 msgid "Average Line"
 msgstr "Средняя линия"
@@ -205,7 +205,7 @@ msgid "Language"
 msgstr "Язык"
 
 msgid "Last digits stats for latest 1000 ticks on "
-msgstr ""
+msgstr "Последняя десятичная начинается с последних 1000 тиков для "
 
 msgid "Line"
 msgstr "Линия"
@@ -1346,4 +1346,10 @@ msgstr "Сильное соотношение"
 
 msgid "Weak Ratio"
 msgstr "Слабое соотношение"
+
+msgid "Closed"
+msgstr "Закрыто"
+
+msgid "Opens in:"
+msgstr "Открывается в:"
 

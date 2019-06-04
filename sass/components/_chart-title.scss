@@ -11,6 +11,7 @@
             > .ic-icon.cq-symbol-dropdown {
                 display: block;
                 margin-right: 0px;
+                margin-left: 10px;
                 width: 24px;
 
                 svg {
@@ -86,7 +87,7 @@
         .cq-symbol-info {
             display: flex;
             flex-direction: column;
-            margin: 0 20px;
+            margin: 0 10px 0 20px;
 
             .cq-market {
                 font-size: 1em;
@@ -116,11 +117,60 @@
             @include themify($themes) {
                 color: themed('ChartTitleSymbolText');
             }
+
+            &.closed-no-opentime {
+                // To make the cq-symbol-btn have the same height with and without opening time (or price):
+                // We add the following quantity to line-height of cq-symbol (The height which was occupied by price)
+                // (1.2 * 1.5) / 1.6 = 1.125 ~~ 1.13;
+                // ((font-size of cq-chart-price * line-height of cq-chart-price) / font-size of cq-symbol)
+                line-height: calc(24px + 1.13em);
+            }
         }
-        .cq-chart-price > * {
+        .cq-chart-closed {
+            .cq-closed-icon {
+                width: 12px;
+                margin-right: 5px;
+                height: 12px;
+                margin-top: 3px;
+                @include themify($themes) {
+                    fill: themed('TimeIconColor');
+                }
+
+                svg {
+                    left: 0;
+                    position: absolute;
+                }
+            }
+            .cq-closed-opening {
+                font-size: 1.2em;
+                text-align: left;
+                line-height: 1.5;
+
+                .cq-closed-opening-time {
+                    font-weight: bold;
+                    @include themify($themes) {
+                        color: themed('ChartTitleText');
+                    }
+                }
+            }
+        }
+        .cq-symbol-closed-text {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            text-align: center;
+            width: auto;
+            padding: 0 5px;
+            height: 20px;
+            border: 2px solid $COLOR_RED;
+            color: $COLOR_RED;
+            border-radius: 4px;
+            text-transform: uppercase;
+        }
+        .cq-chart-price > *, .cq-chart-closed > * {
             position: relative;
         }
-        .cq-chart-price {
+        .cq-chart-price, .cq-chart-closed {
             display: flex;
             vertical-align: text-bottom;
             @include themify($themes) {
@@ -129,7 +179,7 @@
         }
     }
     .cq-menu-dropdown {
-        box-shadow: 0 0 0.63em 0.03em rgba(0, 0, 0, 0.14);
+        box-shadow: 0 4px 6px 0 rgba(0, 0, 0, 0.24);
         left: 0px;
         bottom: auto;
         transform: translateX(0) translateY(-3em);

@@ -48,7 +48,7 @@ export default class PriceLineStore {
     static get EVENT_DRAG_RELEASED() { return 'EVENT_DRAG_RELEASED'; }
 
     @computed get priceDisplay() {
-        let display = this.draggable ? this._price.toFixed(this.pip) : this._price;
+        let display = this._price.toFixed(this.pip);
         if (this.relative && this._price > 0) { display = `+${display}`; }
         return display;
     }
@@ -74,7 +74,8 @@ export default class PriceLineStore {
 
         this._relative = value;
         // convert between relative and absolute
-        let currentPrice = this.stx.currentQuote().Close;
+        const currentQuote = this.stx.currentQuote();
+        let currentPrice =  currentQuote ? currentQuote.Close : 0;
         if (this._relative) { currentPrice = -currentPrice; }
         this.price = this._price + currentPrice;
     }
@@ -176,7 +177,7 @@ export default class PriceLineStore {
             this.offScreen = false;
         }
 
-        this.top = top | 0;
+        this.top = Math.round(top) | 0;
     }
 
     _draw() {

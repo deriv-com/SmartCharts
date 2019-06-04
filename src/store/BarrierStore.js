@@ -18,6 +18,7 @@ export default class BarrierStore {
 
     @observable shadeColor;
     @observable color;
+    @observable foregroundColor;
     @observable isBetweenShadeVisible = false;
     @observable isTopShadeVisible = false;
     @observable isBottomShadeVisible = false;
@@ -28,6 +29,8 @@ export default class BarrierStore {
     _shadeState;
 
     @computed get pip() { return this.mainStore.chart.currentActiveSymbol.decimal_places; }
+    @computed get yAxisWidth() { return this.mainStore.chart.yAxiswidth; }
+    @computed get priceLabelWidth() { return this.yAxisWidth + 1; }
 
     constructor(mainStore) {
         this.mainStore = mainStore;
@@ -81,10 +84,11 @@ export default class BarrierStore {
     }
 
     @action.bound updateProps({
-        color, shadeColor, shade, high, low, relative, draggable, onChange, hidePriceLines, lineStyle,
+        color, foregroundColor, shadeColor, shade, high, low, relative, draggable, onChange, hidePriceLines, lineStyle,
     }) {
         this.initializePromise.then(action(() => {
             if (color) { this.color = color; }
+            if (foregroundColor) { this.foregroundColor = foregroundColor; }
             if (shadeColor) { this.shadeColor = shadeColor; }
             if (shade) { this.shadeState = `SHADE_${shade}`.toUpperCase(); }
             if (relative !== undefined) { this.relative = relative; }
@@ -112,22 +116,19 @@ export default class BarrierStore {
     _setupConstrainBarrierPrices() {
         // barrier 1 cannot go below barrier 2
         this._high_barrier.priceConstrainer = (newPrice) => {
-            if (this._low_barrier.visible) {
-                if (newPrice < this._low_barrier.realPrice) {
-                    return this._high_barrier.realPrice;
-                }
-            }
+            const nextPrice = (this._low_barrier.visible && (newPrice < this._low_barrier.realPrice))
+                ? this._high_barrier.realPrice : newPrice;
+            this.mainStore.chart.calculateYaxisWidth(nextPrice);
 
-            return newPrice;
+            return nextPrice;
         };
 
         // barrier 2 cannot go above barrier 1
         this._low_barrier.priceConstrainer = (newPrice) => {
-            if (newPrice > this._high_barrier.realPrice) {
-                return this._low_barrier.realPrice;
-            }
+            const nextPrice = (newPrice > this._high_barrier.realPrice) ? this._low_barrier.realPrice : newPrice;
 
-            return newPrice;
+            this.mainStore.chart.calculateYaxisWidth(nextPrice);
+            return nextPrice;
         };
     }
 
@@ -215,6 +216,9 @@ export default class BarrierStore {
     @action.bound _drawShadedArea() {
         if (!this.isInitialized) { return; }
 
+        this._optimizeTop(this._low_barrier);
+        this._optimizeTop(this._high_barrier);
+
         if (this._shadeState === BarrierStore.SHADE_ABOVE) {
             this._shadeAbove();
         } else if (this._shadeState === BarrierStore.SHADE_BELOW) {
@@ -239,21 +243,32 @@ export default class BarrierStore {
         return this.chart.panel.height - barrier.top;
     }
 
+    _optimizeTop(barrier) {
+        if (barrier.top + 30 > this.chart.panel.height) {
+            barrier.top = this.chart.panel.height - 30;
+        } else if (barrier.top < 10) {
+            barrier.top = 10;
+        }
+    }
+
     _shadeBetween() {
         const bottom = this._calcBottomShade(this._low_barrier);
         this.betweenShadeStore.top = this._high_barrier.top;
         this.betweenShadeStore.bottom = bottom;
+        this.betweenShadeStore.right = this.yAxisWidth;
     }
 
     _shadeBelow(barrier = this._high_barrier) {
         this.belowShadeStore.top = barrier.top;
         this.belowShadeStore.bottom = 0;
+        this.belowShadeStore.right = this.yAxisWidth;
     }
 
     _shadeAbove(barrier = this._high_barrier) {
         const bottom = this._calcBottomShade(barrier);
         this.aboveShadeStore.top = 0;
         this.aboveShadeStore.bottom = bottom;
+        this.aboveShadeStore.right = this.yAxisWidth;
     }
 
     _shadeOutside() {
