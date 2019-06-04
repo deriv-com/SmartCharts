@@ -64,10 +64,11 @@
     }
     .cq-bar-footer {
         text-align: center;
-        width: 325px;
+        width: 475px;
         font-size: 12px;
-        top: 8px;
-        position: relative;
+        top: 60px;
+        position: absolute;
+        left: -75px;
 
         @include themify($themes) {
             color: themed('LastdigitsBarFooter');
@@ -78,6 +79,9 @@
 
         .cq-bars {
             height: 25px;
+        }
+        .cq-bar-footer {
+            top: 8px;
         }
     }
 }
