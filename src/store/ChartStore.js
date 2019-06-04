@@ -256,7 +256,7 @@ class ChartStore {
 
                 if (this.isHistoricalMode() && _self.isMobile) {
                     exactScroll = parseInt(exactScroll * 0.8, 10);
-                } else if (this.isHistoricalMode() && _self.isMobile) {
+                } else if (this.isHistoricalMode()) {
                     exactScroll = parseInt(exactScroll * 0.9, 10);
                 }
 
