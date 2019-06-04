@@ -447,4 +447,6 @@ $themes: (
     dark_chart_closed_candle: map-get(map-get($themes, 'dark'), 'ChartClosedCandleColor');
     light_chart_bg: map-get(map-get($themes, 'light'), 'ChartBg');
     dark_chart_bg: map-get(map-get($themes, 'dark'), 'ChartBg');
+    light_float_labels_bg: map-get(map-get($themes, 'light'), 'CrosshairLabel');
+    dark_float_labels_bg: map-get(map-get($themes, 'dark'), 'CrosshairLabel');
 }

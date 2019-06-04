@@ -640,8 +640,6 @@ class ChartStore {
 
         this.newChart(symbolObj, params);
 
-        this.chartClosedOpenThemeChange(!symbolObj.exchange_is_open);
-
         if (symbolObj) {
             this.updateCurrentActiveSymbol();
         }
@@ -692,6 +690,7 @@ class ChartStore {
         this.yAxiswidth = 0;
         const rangeSpan = this.getRangeSpan();
         this.stxx.newChart(symbolObj, null, null, onChartLoad, { ...params, ...rangeSpan });
+        this.chartClosedOpenThemeChange(!symbolObj.exchange_is_open);
     }
 
     getRangeSpan() {
