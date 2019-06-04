@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom\n"
 "Language-Team: Spanish\n"
 "Language: es_ES\n"
-"PO-Revision-Date: 2019-05-24 14:55\n"
+"PO-Revision-Date: 2019-05-29 00:09\n"
 
 msgid " already exists."
 msgstr " ya existe."
@@ -409,7 +409,7 @@ msgid "Type"
 msgstr "Tipo"
 
 msgid "Offset"
-msgstr ""
+msgstr "Intervalo"
 
 msgid "MA"
 msgstr "MA"
@@ -514,28 +514,28 @@ msgid "Accumulative Swing Index"
 msgstr "Índice Acumulativo de Swing"
 
 msgid "Price Rate of Change"
-msgstr ""
+msgstr "Precio de la Tasa de Cambio"
 
 msgid "Volume Rate of Change"
-msgstr ""
+msgstr "Volumen de Tasa de Cambio"
 
 msgid "Momentum Indicator"
-msgstr ""
+msgstr "Indicador de Momento"
 
 msgid "Price Volume Trend"
-msgstr ""
+msgstr "Tendencia del Volumen de Precios"
 
 msgid "Positive Volume Index"
-msgstr ""
+msgstr "Índice de Volumen Positivo"
 
 msgid "Index"
-msgstr ""
+msgstr "Índice"
 
 msgid "Negative Volume Index"
-msgstr ""
+msgstr "Índice de Volumen Negativo"
 
 msgid "On Balance Volume"
-msgstr ""
+msgstr "Volumen de Saldo"
 
 msgid "Stochastic Momentum Index"
 msgstr ""
