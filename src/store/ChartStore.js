@@ -116,6 +116,7 @@ class ChartStore {
         // a slight delay for it to pick up the correct chartContainer height.
         // In mobile devices, a longer delay is given as DOM updates are slower.
         setTimeout(this.updateCanvas, this.isMobile ? 500 : 100);
+        setTimeout(() => this.mainStore.state.setIsPositionChanging(false), this.isMobile ? 1000 : 500);
     }
 
     init = (rootNode, modalNode, props) => {

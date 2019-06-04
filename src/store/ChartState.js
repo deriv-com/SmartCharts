@@ -25,6 +25,7 @@ class ChartState {
     @observable isChartClosed = false;
     @observable shouldMinimiseLastDigits = false;
     @observable isStaticChart = false;
+    @observable isPositionChanging = false;
     chartControlsWidgets;
 
     get comparisonStore() { return this.mainStore.comparison; }
@@ -185,6 +186,10 @@ class ChartState {
             this.stxx.isAutoScale = this.settings && settings.isAutoScale !== false;
             this.stxx.draw();
         }
+    }
+
+    @action.bound setIsPositionChanging(isPositionChanging) {
+        this.isPositionChanging = isPositionChanging;
     }
 
     @action.bound setChartClosed(isClosed) {
