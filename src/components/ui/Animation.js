@@ -84,14 +84,13 @@ export default function animateChart(stx, animationParameters, easeMachine) {
 
         chart = chart || this.chart;
         if (chart.lockScroll) {
-            if (chart.maxTicks - chart.scroll <= chart.maxTicks / 4) {
-                chart.lockScroll = false;
-                this.allowScroll = true;
-                return false;
-            }
-
             const lastAppendQuote     = appendQuotes[appendQuotes.length - 1];
             const lastDataSegmentItem = chart.dataSegment[chart.dataSegment.length - 1];
+
+            if (!lastAppendQuote || !lastDataSegmentItem) {
+                return;
+            }
+
             if (lastAppendQuote.DT > lastDataSegmentItem.DT
                     && chart.scroll <= chart.dataSegment.length) {
                 chart.scroll++;
@@ -181,14 +180,14 @@ export default function animateChart(stx, animationParameters, easeMachine) {
                 const q = CIQ.clone(quote);
                 q.Close = Math.round(newClose * animationParameters.granularity) / animationParameters.granularity; // <<------ IMPORTANT! Use 1000000 for small price increments, otherwise animation will be in increments of .0001
                 // q.Close = Math.round(newClose*chart.roundit)/chart.roundit; // to ensure decimal points don't go out too far for interim values
-                if (chartJustAdvanced) {
-                    if (!q.Open && q.Open !== 0) q.Open = q.Close;
-                    if (!q.High && q.High !== 0) q.High = Math.max(q.Open, q.Close);
-                    if (!q.Low && q.Low !== 0) q.Low = Math.min(q.Open, q.Close);
-                } else {
-                    if (quote.Close > prevQuote.High) q.High = q.Close;
-                    if (quote.Close < prevQuote.Low) q.Low = q.Close;
-                }
+                // if (chartJustAdvanced) {
+                //     if (!q.Open && q.Open !== 0) q.Open = q.Close;
+                //     if (!q.High && q.High !== 0) q.High = Math.max(q.Open, q.Close);
+                //     if (!q.Low && q.Low !== 0) q.Low = Math.min(q.Open, q.Close);
+                // } else {
+                //     if (quote.Close > prevQuote.High) q.High = q.Close;
+                //     if (quote.Close < prevQuote.Low) q.Low = q.Close;
+                // }
                 if (chart.animatingHorizontalScroll) {
                     self.micropixels = newData.micropixels;
                     chart.lastTickOffset = newData.lineOffset;
@@ -223,7 +222,32 @@ export default function animateChart(stx, animationParameters, easeMachine) {
                 this.prevQuote = appendQuotes[0];
                 completeLastBar(this.prevQuote);
             }
-            if (!quote || !quote.Close || !this.prevQuote || !this.prevQuote.Close) return false;
+            if (!quote || !quote.Close || !this.prevQuote /* || !this.prevQuote.Close */) {
+                if (this.prevQuote /* && quote && quote.Close === null <] [> && !this.prevQuote.Close */) {
+                    if (chart.lockScroll /* && quote.DT >= this.prevQuote.DT */) {
+                        if (quote.Close === null) {
+                            tickAnimator.stop();
+                            unanimateScroll();
+                        }
+
+                        if (chart.entryTick !== null && chart.entryTick !== undefined) {
+                            const visibleTicks = chart.dataSet.length - chart.entryTick + 1;
+                            this.setMaxTicks(visibleTicks + 3);
+                            chart.scroll = visibleTicks + 1;
+                        }
+                    }
+                }
+                return false;
+            }
+
+            if (this.prevQuote.Close === null) {
+                const beforeCurrentQuote = this.chart.dataSet[this.chart.dataSet.length - 2];
+                if (beforeCurrentQuote && beforeCurrentQuote.Close) {
+                    this.prevQuote = beforeCurrentQuote;
+                } else {
+                    return false;
+                }
+            }
 
             if (this.extendedHours && chart.market.market_def) {
                 // Filter out unwanted sessions
@@ -256,30 +280,38 @@ export default function animateChart(stx, animationParameters, easeMachine) {
             if (chartJustAdvanced) {
                 if (this.animations.zoom.hasCompleted) {
                     const candleWidth = this.layout.candleWidth;
-                    if (chart.scroll <= chart.maxTicks) {
+                    if (chart.scroll <= chart.maxTicks && !chart.lockScroll) {
                         while (this.micropixels > 0) { // If micropixels is larger than a candle then scroll back further
                             chart.scroll++;
                             this.micropixels -= candleWidth;
                         }
                     }
-                    if (chart.scroll <= chart.maxTicks) {
+
+                    if (chart.scroll <= chart.maxTicks && !chart.lockScroll) {
                         this.previousMicroPixels = this.micropixels;
                         this.nextMicroPixels = this.micropixels + candleWidth;
                         beginningOffset = candleWidth * -1;
-                        if ((chart.dataSegment && chart.dataSegment.length < chart.maxTicks - animationParameters.ticksFromEdgeOfScreen && !animationParameters.stayPut) || chart.lockScroll) {
-                            this.nextMicroPixels = this.micropixels;
+                        if (chart.dataSegment
+                            && chart.dataSegment.length < chart.maxTicks - animationParameters.ticksFromEdgeOfScreen
+                            && !animationParameters.stayPut) {
                             chart.scroll++;
-
-                            // Disable lockScroll and allow users to scroll the chart when chart reach the 3/4 of the pane's width
-                            if (chart.maxTicks - chart.scroll <= chart.maxTicks / 4) {
-                                chart.lockScroll = false;
-                                this.allowScroll = true;
-                            }
+                            this.nextMicroPixels = this.micropixels;
                         }
-                        chart.animatingHorizontalScroll = linearChart; // When the chart advances we also animate the horizontal scroll by incrementing micropixels
+
+                        chart.animatingHorizontalScroll = linearChart && !chart.lockScroll; // When the chart advances we also animate the horizontal scroll by incrementing micropixels
                         chart.previousDataSetLength = chart.dataSet.length;
+                    } else if (chart.lockScroll) {
+                        if (chart.entryTick !== undefined && chart.entryTick !== null) {
+                            const dataLen = chart.dataSet.length;
+                            const visibleTicks = dataLen - chart.entryTick + 1;
+                            this.setMaxTicks(visibleTicks + 3);
+                            chart.scroll = visibleTicks + 1;
+                        } else {
+                            this.setMaxTicks(chart.dataSet.length + (Math.floor(chart.dataSet.length / 5) || 2));
+                            chart.scroll = chart.dataSet.length + (Math.floor(chart.dataSet.length / 10) || 1);
+                        }
                     } else {
-                        chart.scroll++;
+                        chart.scroll += 1;
                     }
                 } else {
                     return false;

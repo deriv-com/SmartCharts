@@ -1,14 +1,19 @@
 /* eslint-disable no-new */
 import { action, observable, when } from 'mobx';
 import { createObjectFromLocalStorage, calculateTimeUnitInterval, calculateGranularity, getUTCDate } from '../utils';
+import Theme from '../../sass/_themes.scss';
 
 class ChartState {
     @observable granularity;
     @observable chartType;
     @observable startEpoch;
+    @observable startEpochMargin;
     @observable endEpoch;
+    @observable endEpochMargin;
     @observable symbol;
     @observable isConnectionOpened;
+    @observable isChartReady = false;
+    @observable chartStatusListener;
     @observable settings;
     @observable showLastDigitStats;
     @observable scrollToEpoch;
@@ -17,6 +22,8 @@ class ChartState {
     @observable importedLayout;
     @observable isOnPagination = false;
     @observable paginationEndEpoch;
+    @observable isChartClosed = false;
+    @observable isStaticChart = false;
     chartControlsWidgets;
 
     get comparisonStore() { return this.mainStore.comparison; }
@@ -24,6 +31,7 @@ class ChartState {
     get context() { return this.chartStore.context; }
     get chartTypeStore() { return this.mainStore.chartType; }
     get timeperiodStore() { return this.mainStore.timeperiod; }
+    get loader() { return this.mainStore.loader; }
 
     constructor(mainStore) {
         this.mainStore = mainStore;
@@ -31,22 +39,60 @@ class ChartState {
         when(() => this.context, this.onContextReady);
     }
 
-    onContextReady = () => {
+    @action.bound onContextReady = () => {
         this.stxx.addEventListener('layout', this.saveLayout.bind(this));
         this.stxx.addEventListener('symbolChange', this.saveLayout.bind(this));
         this.stxx.addEventListener('drawing', this.saveDrawings.bind(this));
+        this.stxx.addEventListener('move', this.scrollListener.bind(this));
 
         this.chartStore.feed.onStartPagination(this.setOnPagination.bind(this));
         this.chartStore.feed.onPagination(this.setOnPagination.bind(this));
+
+        this.granularity = this.chartStore.granularity;
     };
 
-    @action.bound updateProps({ id, settings, isConnectionOpened, symbol, granularity, chartType, startEpoch, endEpoch, onExportLayout, clearChart, importedLayout, removeAllComparisons, isAnimationEnabled = true, showLastDigitStats = false, scrollToEpoch, scrollToEpochOffset = 0, zoom, chartControlsWidgets }) {
+    @action.bound updateProps({
+        chartControlsWidgets,
+        chartStatusListener,
+        chartType,
+        clearChart,
+        endEpoch,
+        id,
+        importedLayout,
+        isAnimationEnabled = true,
+        isConnectionOpened,
+        isStaticChart,
+        granularity,
+        margin = 0,
+        onExportLayout,
+        removeAllComparisons,
+        scrollToEpoch,
+        scrollToEpochOffset = 0,
+        settings,
+        showLastDigitStats = false,
+        startEpoch,
+        symbol,
+        zoom,
+    }) {
+        let isGranularityChanged = false;
+        let isSymbolChanged = false;
         this.chartId = id;
         this.settings = settings;
         this.isConnectionOpened = isConnectionOpened;
-        this.symbol = symbol;
-        this.startEpoch = startEpoch;
-        this.endEpoch = endEpoch;
+        this.chartStatusListener = chartStatusListener;
+        this.isStaticChart = isStaticChart;
+
+        if (this.symbol !== symbol) {
+            this.symbol = symbol;
+            isSymbolChanged = true;
+
+            if (this.mainStore.chart && this.mainStore.chart.feed) {
+                this.mainStore.chart.feed.onMasterDataUpdate(this.scrollChartToLeft);
+            }
+        }
+
+        this.rootNode = this.mainStore.chart.rootNode;
+
         this.isAnimationEnabled = isAnimationEnabled;
         this.showLastDigitStats = showLastDigitStats;
         this.scrollToEpochOffset = scrollToEpochOffset;
@@ -66,34 +112,63 @@ class ChartState {
             this.importLayout();
         }
 
-        if (this.stxx) {
-            this.stxx.chart.panel.yAxis.drawCurrentPriceLabel = !this.endEpoch;
-            this.stxx.preferences.currentPriceLine = !this.endEpoch;
-            this.stxx.isAutoScale = this.settings ? this.settings.isAutoScale : false;
-        }
-        if (this.granularity !== granularity && this.context) {
+        if (granularity !== undefined && this.granularity !== granularity) {
+            if (this.context && calculateTimeUnitInterval(granularity).timeUnit === 'second' && (this.mainStore.chartType.isCandle || (chartType && this.mainStore.chartType.isTypeCandle(chartType)))) {
+                chartType = 'mountain';
+
+                if (this.chartTypeStore.onChartTypeChanged) {
+                    this.chartTypeStore.onChartTypeChanged(chartType);
+                }
+            }
+
+            isGranularityChanged = true;
             this.granularity = granularity === null ? undefined : granularity;
         }
         if (this.chartType !== chartType && this.context) {
             this.chartType = chartType;
             this.chartTypeStore.setType(chartType);
         }
+
+        if (this.margin !== margin) {
+            this.margin = margin;
+        }
+
+        if (this.startEpoch !== startEpoch || this.endEpoch !== endEpoch) {
+            this.startEpoch = startEpoch;
+            this.endEpoch = endEpoch;
+
+            if (isStaticChart && this.stxx && this.granularity === this.mainStore.chart.granularity) {
+                // Reload the chart if it is a static chart and the granularity hasn't changed
+                this.mainStore.chart.newChart();
+            } else if (this.mainStore.chart.feed) {
+                /* When layout is importing and range is changing as the same time we dont need to set the range,
+                   the imported layout witll take care of it. */
+                if (!this.importedLayout && !isGranularityChanged && !this.scrollToEpoch) {
+                    this.mainStore.chart.feed.onRangeChanged(true);
+                }
+            }
+        }
+
         if (removeAllComparisons) {
             this.comparisonStore.removeAll();
         }
 
         if (this.scrollToEpoch !== scrollToEpoch && this.context) {
             this.scrollToEpoch = scrollToEpoch;
-            this.scrollChartToLeft();
+            if (isSymbolChanged || isGranularityChanged) {
+                this.mainStore.chart.feed.onMasterDataUpdate(this.scrollChartToLeft);
+            } else {
+                this.scrollChartToLeft();
+            }
         }
 
         if (this.zoom !== zoom) {
             this.zoom = +zoom;
             if (this.context && this.stxx && this.zoom) {
                 if (this.zoom >= 0) {
-                    this.stxx.zoomIn(null, (Math.abs(100 - this.zoom) || 0.01) / 100);
+                    // this.stxx.zoomIn(null, (Math.abs(100 - this.zoom) || 0.01) / 100);
                 } else {
-                    this.stxx.zoomOut(null, (100 + Math.abs(this.zoom)) / 100);
+                    // this.stxx.zoomOut(null, (100 + Math.abs(this.zoom)) / 100);
                 }
             }
         }
@@ -102,11 +177,86 @@ class ChartState {
             this.chartControlsWidgets = chartControlsWidgets;
             if (this.stxx) this.mainStore.chart.updateHeight();
         }
+
+        if (this.stxx) {
+            this.stxx.chart.panel.yAxis.drawCurrentPriceLabel = !this.endEpoch;
+            this.stxx.preferences.currentPriceLine = !this.endEpoch;
+            this.stxx.isAutoScale = this.settings && settings.isAutoScale !== false;
+            this.stxx.draw();
+        }
+    }
+
+    @action.bound setChartClosed(isClosed) {
+        this.isChartClosed = isClosed;
+    }
+
+    @action.bound setChartTheme(theme, isChartClosed = this.isChartClosed) {
+        this.stxx.clearStyles();
+        this.stxx.setStyle('stx_grid', 'color', Theme[`${theme}chartgrid`]);
+        if (!this.rootNode) return;
+        this.rootNode.querySelector('.chartContainer').style.backgroundColor = Theme[`${theme}chartbg`];
+        if (isChartClosed) {
+            const closedChartColor = 'rgba(129, 133, 152, 0.35)';
+            this.stxx.setStyle('stx_mountain_chart', 'borderTopColor', closedChartColor);
+            this.stxx.setStyle('stx_mountain_chart', 'background-color', 'transparent');
+            this.stxx.setStyle('stx_mountain_chart', 'color', 'transparent');
+            // line chart
+            this.stxx.setStyle('stx_line_chart', 'color', closedChartColor);
+            this.stxx.setStyle('stx_line_up', 'color', closedChartColor);
+            this.stxx.setStyle('stx_line_down', 'color', closedChartColor);
+            this.stxx.setStyle('stx_line_even', 'color', closedChartColor);
+            // bar chart
+            this.stxx.setStyle('stx_bar_up', 'color', closedChartColor);
+            this.stxx.setStyle('stx_bar_down', 'color', closedChartColor);
+            this.stxx.setStyle('stx_bar_even', 'color', closedChartColor);
+            // candle chart
+            this.stxx.setStyle('stx_candle_up', 'color', Theme[`${theme}chartclosedcandle`]);
+            this.stxx.setStyle('stx_candle_down', 'color', Theme[`${theme}chartclosedcandle`]);
+            this.stxx.setStyle('stx_candle_even', 'color', Theme[`${theme}chartclosedcandle`]);
+            // candle wick
+            this.stxx.setStyle('stx_candle_shadow_up', 'color', closedChartColor);
+            this.stxx.setStyle('stx_candle_shadow_down', 'color', closedChartColor);
+            this.stxx.setStyle('stx_candle_shadow_even', 'color', closedChartColor);
+            // hollow candle
+            this.stxx.setStyle('stx_hollow_candle_up', 'color', Theme[`${theme}chartclosedcandle`]);
+            this.stxx.setStyle('stx_hollow_candle_down', 'color', Theme[`${theme}chartclosedcandle`]);
+            this.stxx.setStyle('stx_hollow_candle_even', 'color', Theme[`${theme}chartclosedcandle`]);
+            // baseline chart
+            this.stxx.setStyle('stx_baseline_up', 'color', closedChartColor);
+            this.stxx.setStyle('stx_baseline_down', 'color', closedChartColor);
+            this.stxx.setStyle('stx_baseline_even', 'color', closedChartColor);
+            // kagi
+            this.stxx.setStyle('stx_kagi_up', 'color', closedChartColor);
+            this.stxx.setStyle('stx_kagi_down', 'color', closedChartColor);
+            // this.stxx.setStyle('stx_kagi_even', 'color', closedChartColor);
+            // pandf
+            this.stxx.setStyle('stx_pandf_up', 'color', closedChartColor);
+            this.stxx.setStyle('stx_pandf_down', 'color', closedChartColor);
+            // current price text color
+            this.stxx.setStyle('stx_current_hr_down', 'color', Theme[`${theme}candletextclosed`]);
+            this.stxx.setStyle('stx_current_hr_up', 'color', Theme[`${theme}candletextclosed`]);
+            // current price bg color
+            this.stxx.setStyle('stx_current_hr_down', 'background-color', Theme[`${theme}candlebgclosed`]);
+            this.stxx.setStyle('stx_current_hr_up', 'background-color', Theme[`${theme}candlebgclosed`]);
+        } else {
+            this.stxx.setStyle('stx_mountain_chart', 'borderTopColor', Theme[`${theme}chartmountainborder`]);
+            this.stxx.setStyle('stx_line_chart', 'color', Theme[`${theme}chartmountainborder`]);
+        }
+        this.stxx.draw();
     }
 
     @action.bound setOnPagination({ end }) {
         this.isOnPagination     = !this.isOnPagination;
         this.paginationEndEpoch = this.isOnPagination ? end : null;
+    }
+
+    @action.bound setChartIsReady(isChartReady) {
+        if (this.isChartReady !== isChartReady) {
+            this.isChartReady = isChartReady;
+            if (this.chartStatusListener && typeof this.chartStatusListener === 'function') {
+                this.chartStatusListener(isChartReady);
+            }
+        }
     }
 
     saveLayout() {
@@ -120,7 +270,7 @@ class ChartState {
     restoreLayout() {
         let layoutData = createObjectFromLocalStorage(`layout-${this.chartId}`);
 
-        if (!layoutData) return false;
+        if (!layoutData || !layoutData.symbols.length) return false;
 
         // prop values will always take precedence
         if (this.symbol !== undefined && this.symbol !== layoutData.symbols[0].symbol) {
@@ -149,12 +299,9 @@ class ChartState {
             layoutData = { ...layoutData, ...periodicity };
         } else {
             // update this.granularity with chartLayout
-            const { timeUnit, interval } = layoutData;
-            if (timeUnit) {
-                this.chartStore.granularity = calculateGranularity(interval, timeUnit);
-            } else {
-                this.chartStore.granularity = 86400; // 1 day
-            }
+            const { timeUnit, interval, periodicity } = layoutData;
+            const period = timeUnit ? interval : periodicity;
+            this.chartStore.granularity = calculateGranularity(period, timeUnit || interval);
         }
 
         if (this.startEpoch || this.endEpoch) {
@@ -176,6 +323,7 @@ class ChartState {
                 this.restoreDrawings(this.stxx, this.stxx.chart.symbol);
                 if (this.chartStore.loader) {
                     this.chartStore.loader.hide();
+                    this.setChartIsReady(true);
                     this.stxx.home();
                 }
 
@@ -207,22 +355,43 @@ class ChartState {
         }
     }
 
-    scrollChartToLeft() {
-        if (this.scrollToEpoch) {
-            const startEntry = this.stxx.getDataSegment()
-                .reverse()
-                .find(entry =>  entry.DT <= new Date(getUTCDate(this.scrollToEpoch)));
-            this.stxx.setStartDate(startEntry.DT);
-            if (this.scrollToEpochOffset) {
-                this.stxx.chart.scroll += this.scrollToEpochOffset - this.stxx.chart.scroll;
+    scrollChartToLeft = () => {
+        this.mainStore.chart.feed.offMasterDataUpdate(this.scrollChartToLeft);
+        this.stxx.chart.entryTick = null;
+        if (this.scrollToEpoch && !this.startEpoch) {
+            let startEntry = this.stxx.chart.dataSet
+                .find(entry =>  entry.DT.valueOf() === CIQ.strToDateTime(getUTCDate(this.scrollToEpoch)).valueOf());
+
+            if (!startEntry) {
+                startEntry = {
+                    DT: CIQ.strToDateTime(getUTCDate(this.scrollToEpoch)),
+                    Close: null,
+                };
+
+                /**
+                 * Adding an invisible bar if the bar
+                 * does not exist on the masterData
+                 */
+                this.stxx.updateChartData(
+                    startEntry,
+                    null,
+                    { fillGaps: true },
+                );
+                this.stxx.createDataSet();
             }
             this.stxx.chart.lockScroll = true;
-            this.stxx.allowScroll = false;
+            const tick = this.stxx.tickFromDate(startEntry.DT);
+            this.stxx.setMaxTicks(5);
+            this.stxx.chart.scroll = this.stxx.chart.dataSet.length - tick + 1;
+            this.stxx.chart.entryTick = tick;
+            this.stxx.maxMasterDataSize = 0;
             this.stxx.draw();
+        } else if (this.startEpoch) {
+            this.stxx.chart.lockScroll = true;
         } else {
             this.stxx.chart.lockScroll = false;
-            this.stxx.allowScroll = true;
             this.stxx.home();
+            this.stxx.draw();
         }
     }
 
@@ -240,19 +409,24 @@ class ChartState {
         this.stxx.clearDrawings();
 
         // TODO: use constant
-        this.mainStore.crosshair.setCrosshairState(0);
-
-        // TODO: use constant
-        this.mainStore.chart.changeSymbol(this.stxx.chart.symbol, 0);
-        if (this.chartTypeStore.onChartTypeChanged) {
-            this.chartTypeStore.onChartTypeChanged('mountain');
-        } else {
-            this.chartTypeStore.setType('mountain');
-        }
+        this.mainStore.crosshair.setCrosshairState(2);
     }
 
     importLayout() {
         if (!this.stxx || !this.importedLayout || !Object.keys(this.importedLayout).length) return;
+
+        this.loader.show();
+        this.loader.setState('chart-data');
+
+        /* Clear current chart interval to make sure importedlayout works as expected
+        if it has same interval with previous state of chart but there is no stream for it */
+        if (Object.keys(this.mainStore.chart.feed._activeStreams).length === 0) {
+            this.stxx.layout.interval = undefined;
+        }
+
+        // Clear start and end epoch before importing that layout
+        this.startEpoch = this.endEpoch = null;
+
         this.stxx.importLayout(this.importedLayout, {
             managePeriodicity: true,
             preserveTicksAndCandleWidth: true,
@@ -264,9 +438,11 @@ class ChartState {
                     });
                 }
 
-                const { timeUnit, interval } = this.importedLayout;
-                if (timeUnit && this.timeperiodStore.onGranularityChange) {
-                    const granularity = calculateGranularity(interval, timeUnit) || 0;
+                const { timeUnit, interval, periodicity } = this.importedLayout;
+                const period = timeUnit ? interval : periodicity;
+                const granularity = calculateGranularity(period, timeUnit || interval);
+                this.chartStore.granularity = granularity;
+                if (this.timeperiodStore.onGranularityChange) {
                     this.timeperiodStore.onGranularityChange(granularity);
                 }
 
@@ -286,26 +462,45 @@ class ChartState {
                     }
 
                     if (this.importedLayout && this.importedLayout.isDone) {
+                        if (this.importedLayout.previousMaxTicks) {
+                            this.stxx.setMaxTicks(this.importedLayout.previousMaxTicks);
+                            this.stxx.home();
+                            delete this.importLayout.previousMaxTicks;
+                        }
+
                         // Run the callback when layout import is done
                         this.importedLayout.isDone();
+
+                        this.loader.hide();
                     }
                 }, 500);
             },
         });
 
         this.mainStore.crosshair.setCrosshairState(this.importedLayout.crosshair);
+
+        this.stxx.chart.lockScroll = false;
+        this.stxx.chart.entryTick = undefined;
+        this.stxx.maxMasterDataSize = 5000;
     }
 
     exportLayout() {
-        if (!this.onExportLayout) return;
+        if (!this.onExportLayout || !this.stxx) return;
         const currentLayout = this.stxx.exportLayout();
         currentLayout.drawings = this.stxx.exportDrawings();
         currentLayout.series = [];
         for (const field in this.stxx.chart.series) {
             currentLayout.series.push(field);
         }
-        if (this.timeperiodStore.onGranularityChange) this.timeperiodStore.onGranularityChange(0);
+        currentLayout.previousMaxTicks = this.stxx.chart.maxTicks;
+
         this.onExportLayout(currentLayout);
+    }
+
+    scrollListener({ grab }) {
+        if (grab && this.stxx.chart.lockScroll) {
+            this.stxx.chart.lockScroll = false;
+        }
     }
 }
 

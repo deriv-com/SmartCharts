@@ -117,6 +117,14 @@
             @include themify($themes) {
                 color: themed('ChartTitleSymbolText');
             }
+
+            &.closed-no-opentime {
+                // To make the cq-symbol-btn have the same height with and without opening time (or price):
+                // We add the following quantity to line-height of cq-symbol (The height which was occupied by price)
+                // (1.2 * 1.5) / 1.6 = 1.125 ~~ 1.13;
+                // ((font-size of cq-chart-price * line-height of cq-chart-price) / font-size of cq-symbol)
+                line-height: calc(24px + 1.13em);
+            }
         }
         .cq-chart-closed {
             .cq-closed-icon {
@@ -151,7 +159,8 @@
             flex-direction: column;
             justify-content: center;
             text-align: center;
-            width: 48px;
+            width: auto;
+            padding: 0 5px;
             height: 20px;
             border: 2px solid $COLOR_RED;
             color: $COLOR_RED;

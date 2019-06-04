@@ -1,5 +1,6 @@
-import { action, observable, when } from 'mobx';
+import { action, observable, when, computed } from 'mobx';
 import { sameBar } from '../utils';
+import Theme from '../../sass/_themes.scss';
 
 const MAX_TOOLTIP_WIDTH = 315;
 
@@ -8,6 +9,10 @@ class CrosshairStore {
         this.mainStore = mainStore;
         when(() => this.context, this.onContextReady);
     }
+
+    @computed get activeSymbol() { return this.mainStore.chart.currentActiveSymbol; }
+
+    @computed get decimalPlaces() { return this.activeSymbol.decimal_places; }
 
     get showOhl() {
         return this.stx.layout.timeUnit !== 'second';
@@ -25,7 +30,7 @@ class CrosshairStore {
     @observable top = 0;
     @observable left = -50000;
     @observable rows = [];
-    @observable state = 0;
+    @observable state = 2;
     @observable isArrowLeft = true;
     node = null;
     lastBar = {};
@@ -40,9 +45,26 @@ class CrosshairStore {
 
     onContextReady = () => {
         const storedState = this.stx.layout.crosshair;
-        this.state = (typeof storedState !== 'number') ? 0 : storedState;
+        this.state = (typeof storedState !== 'number') ? 2 : storedState;
+        this.setCrosshairState(this.state);
         this.stx.append('headsUpHR', this.renderCrosshairTooltip);
     };
+
+    @action.bound setFloatPriceLabelStyle(theme = this.mainStore.chartSetting.theme) {
+        if (this.state === 2) {
+            this.stx.setStyle('stx-float-price', 'color', 'transparent');
+            this.stx.setStyle('stx-float-price', 'background-color', 'transparent');
+            this.stx.controls.floatDate.style.color = 'transparent';
+            this.stx.controls.floatDate.style.backgroundColor = 'transparent';
+            this.stx.controls.crossX.style.height = `calc(100% - ${this.stx.xaxisHeight}px)`;
+        } else {
+            this.stx.setStyle('stx-float-price', 'color', '#fff');
+            this.stx.setStyle('stx-float-price', 'background-color', Theme[`${theme}floatlabelsbg`]);
+            this.stx.controls.floatDate.style.color = '#fff';
+            this.stx.controls.floatDate.style.backgroundColor = Theme[`${theme}floatlabelsbg`];
+            this.stx.controls.crossX.style.height = '100%';
+        }
+    }
 
     @action.bound toggleState() {
         const state = (this.state + 1) % 3;
@@ -62,6 +84,8 @@ class CrosshairStore {
             const month = dateStr.substring(0, 2);
             this.stx.controls.floatDate.innerHTML = dateStr.replace(dateStr.substring(0, 2), dateStr.substring(3, 5)).replace(dateStr.substring(2, 5), `-${month}`);
         }
+
+        this.setFloatPriceLabelStyle();
 
         // if no tooltip exists, then skip
         if (this.state !== 2) return;
@@ -183,23 +207,34 @@ class CrosshairStore {
                 for (let id = 0; id < rendererToDisplay.seriesParams.length; id++) {
                     const seriesParams = rendererToDisplay.seriesParams[id];
 
-                    // if a series has a symbol and a field then it maybe a object chain
-                    let sKey = seriesParams.symbol;
-                    const subField = seriesParams.field;
-                    if (!sKey) {
-                        sKey = subField;
-                    } else if (subField && sKey !== subField) {
-                        sKey = CIQ.createObjectChainNames(sKey, subField)[0];
-                    }
-                    const display = seriesParams.display || seriesParams.symbol || seriesParams.field;
-                    if (sKey && !dupMap[display]) {
+                    if (seriesParams.display === this.activeSymbol.symbol) {
+                        const display = this.activeSymbol.name;
                         fields.push({
-                            member: sKey,
+                            member: 'Close',
                             display,
                             panel,
                             yAxis,
                         });
                         dupMap[display] = 1;
+                    } else {
+                        // if a series has a symbol and a field then it maybe a object chain
+                        let sKey = seriesParams.symbol;
+                        const subField = seriesParams.field;
+                        if (!sKey) {
+                            sKey = subField;
+                        } else if (subField && sKey !== subField) {
+                            sKey = CIQ.createObjectChainNames(sKey, subField)[0];
+                        }
+                        const display = seriesParams.display || seriesParams.symbol || seriesParams.field;
+                        if (sKey && (!dupMap[display] || seriesParams.symbol === undefined)) {
+                            fields.push({
+                                member: sKey,
+                                display,
+                                panel,
+                                yAxis,
+                            });
+                            dupMap[display] = 1;
+                        }
                     }
                 }
             }
@@ -249,7 +284,7 @@ class CrosshairStore {
         const rows = [];
         for (const obj of fields) {
             const { member: name, display: displayName, panel, yAxis } = obj;
-            let labelDecimalPlaces = null;
+            let labelDecimalPlaces = this.decimalPlaces;
             if (yAxis) {
                 if (panel !== panel.chart.panel) {
                     // If a study panel, use yAxis settings to determine decimal places
@@ -287,7 +322,7 @@ class CrosshairStore {
                 }
                 if (dsField.constructor === Number) {
                     if (!yAxis) { // raw value
-                        fieldValue = dsField;
+                        fieldValue = dsField.toFixed(labelDecimalPlaces);
                     } else if (yAxis.originalPriceFormatter && yAxis.originalPriceFormatter.func) { // in comparison mode with custom formatter
                         fieldValue = yAxis.originalPriceFormatter.func(stx, panel, dsField, labelDecimalPlaces);
                     } else if (yAxis.priceFormatter && yAxis.priceFormatter !== CIQ.Comparison.priceFormat) { // using custom formatter

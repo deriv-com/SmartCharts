@@ -57,7 +57,7 @@
     height: 24px;
     top: -11px;
     position: absolute;
-    right: 0px;
+    right: -1px;
     border: 1px solid inherit;
 }
 
@@ -93,22 +93,23 @@
 
 .price {
     font-size: 12px;
-    font-weight: 300;
+    font-weight: bold;
     display: block;
     padding: 3px 6px;
     line-height: 18px;
     overflow: hidden;
-
+    text-align: center;
 }
 
 .draggable .price {
-    padding-right: 16px;
+    padding-left: 16px;
 
     &:after {
+        font-weight: normal;
         content: '≡';
         font-size: 25px;
         position: absolute;
-        right: 1px;
+        left: 1px;
         top: 1px;
         transform: scaleX(0.8);
     }

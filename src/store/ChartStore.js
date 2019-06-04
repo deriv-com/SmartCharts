@@ -68,6 +68,7 @@ class ChartStore {
     @observable isMobile = false;
     @observable cursorInChart = false;
     @observable shouldRenderDialogs = false;
+    @observable yAxiswidth = 0;
 
     get loader() { return this.mainStore.loader; }
     get routingStore() {
@@ -76,6 +77,8 @@ class ChartStore {
     get stateStore() {
         return this.mainStore.state;
     }
+
+    @computed get pip() { return this.currentActiveSymbol.decimal_places; }
 
     updateHeight(position) {
         const historicalMobile = this.mainStore.chartSetting.historical && this.isMobile;
@@ -87,6 +90,7 @@ class ChartStore {
     }
 
     updateCanvas = () => {
+        if (!this.stxx) { return; }
         if (this.stxx.slider) {
             this.stxx.slider.display(this.stxx.layout.rangeSlider);
         }
@@ -116,6 +120,7 @@ class ChartStore {
 
     init = (rootNode, modalNode, props) => {
         this.loader.show();
+        this.mainStore.state.setChartIsReady(false);
         this.loader.setState('chart-engine');
 
         if (window.CIQ) {
@@ -274,6 +279,8 @@ class ChartStore {
         this.chartNode = this.rootNode.querySelector('.ciq-chart-area');
         this.chartControlsNode = this.rootNode.querySelector('.cq-chart-controls');
 
+        CIQ.Plotter.prototype.getYAxisWidth = () => this.yAxiswidth;
+
         // monkey patching to handle radius and height for `current price label`
         CIQ.ChartEngine.prototype.createYAxisLabel = function (panel, txt, y, backgroundColor, color, ctx, yAxis) {
             if (panel.yAxis.drawPriceLabels === false || panel.yAxis.noDraw) return;
@@ -286,16 +293,32 @@ class ChartStore {
             let radius = 0;
             this.canvasFont('stx_price_label', context);
             const tickWidth = this.drawBorders ? 3 : 0; // pixel width of tick off edge of border
+            const textWidth = context.measureText(txt).width;
             let width;
             try {
-                width = context.measureText(txt).width + tickWidth + margin * 2;
+                if (textWidth + margin > yax.width) {
+                    width = textWidth + tickWidth + margin * 2;
+                } else {
+                    width = yax.width + margin;
+                }
             } catch (e) { width = yax.width; } // Firefox doesn't like this in hidden iframe
 
-            let x = yax.left - margin + 15;
+            // some y-axis label has style of `roundRectArrow` and some has `rect`, we reduce
+            // 14px which is about the `roundRectArrow` style arrow to make the label all fit
+            width -= 14;
+            if (this.chart.yAxis.width < width) {
+                this.chart.yAxis.width = width;
+                this.calculateYAxisPositions();
+            } else  {
+                width = this.chart.yAxis.width;
+            }
+
+            let x = this.width - this.chart.yAxis.width;
+            let left = ((width - textWidth) / 2);
+
             if (yax.width < 0) x += (yax.width - width);
             const position = (yax.position === null ? panel.chart.yAxis.position : yax.position);
             if (position === 'left') {
-                x = yax.left + yax.width + margin - 3;
                 width *= -1;
                 if (yax.width < 0) x -= (yax.width + width);
                 radius = -3;
@@ -309,6 +332,14 @@ class ChartStore {
             }
             let yaxisLabelStyle = this.yaxisLabelStyle;
             if (yax.yaxisLabelStyle) yaxisLabelStyle = yax.yaxisLabelStyle;
+
+            // as crosshair and countdown style is `rect`, so due to previous rule we should
+            // increase there x position to fit the y-axis
+            if (this.labelType !== 'crosshair' && this.labelType !== 'countdown') {
+                x += 14;
+                left  -= 8;
+            }
+
             const params = {
                 ctx:context,
                 x,
@@ -320,7 +351,7 @@ class ChartStore {
                 backgroundColor,
                 fill: true,
                 stroke: false,
-                margin:{ left: 8, top: 1 },
+                margin:{ left, top: 1 },
                 txt,
                 color,
             };
@@ -367,15 +398,16 @@ class ChartStore {
                 yAxis: {
                     // Put some top margin so chart doesn't get blocked by chart title
                     initialMarginTop: 125,
-                    initialMarginBottom: 10,
+                    initialMarginBottom: 100,
                     // position: 'left',
                     displayBorder: true,
+                    justifyRight: false,
                 },
                 xAxis: {
                     displayBorder: true,
                 },
                 gaplines: true,
-                yaxisPaddingRight: 48,
+                dynamicYAxis: true,
             },
             minimumLeftBars: 2,
             yTolerance: 999999, // disable vertical scrolling
@@ -395,7 +427,7 @@ class ChartStore {
 
         const stxx = this.stxx = new CIQ.ChartEngine(engineParams);
 
-        stxx.isAutoScale = settings && settings.isAutoScale || false;
+        stxx.isAutoScale = settings && settings.isAutoScale !== false;
 
         ChartStore.chartCount += 1;
 
@@ -454,6 +486,16 @@ class ChartStore {
 
                 this.context = context;
 
+                this.chartClosedOpenThemeChange(!this.currentActiveSymbol.exchange_is_open);
+
+                this.mainStore.chart.tradingTimes.onMarketOpenCloseChanged(action((changes) => {
+                    for (const sy in changes) {
+                        if (this.currentActiveSymbol.symbol === sy) {
+                            this.chartClosedOpenThemeChange(!changes[sy]);
+                        }
+                    }
+                }));
+
                 if (this.state.importedLayout) {
                     // Check if there is a layout set by importedLayout porp, import it here after chart is loaded
                     this.state.importLayout();
@@ -469,7 +511,7 @@ class ChartStore {
                     this.state.symbol,
                     this.state.granularity,
                 ], () => {
-                    if (this.state.symbol !== undefined || this.state.granularity !== undefined) {
+                    if (this.state.symbol !== undefined || (this.state.granularity !== undefined && !this.state.importedLayout)) {
                         this.changeSymbol(this.state.symbol, this.state.granularity);
                     }
                 });
@@ -504,8 +546,12 @@ class ChartStore {
             if (symbol in changes) {
                 if (changes[symbol]) {
                     shouldRefreshChart = true;
+                    this.mainStore.state.setChartTheme(this.mainStore.chartSetting.theme, false);
+                    this.mainStore.state.setChartClosed(false);
                     this.mainStore.notifier.notifyMarketOpen(name);
                 } else {
+                    this.mainStore.state.setChartTheme(this.mainStore.chartSetting.theme, true);
+                    this.mainStore.state.setChartClosed(true);
                     this.mainStore.notifier.notifyMarketClose(name);
                 }
             }
@@ -515,6 +561,11 @@ class ChartStore {
             this.refreshChart();
         }
     };
+
+    chartClosedOpenThemeChange(isChartClosed) {
+        this.mainStore.state.setChartClosed(isChartClosed);
+        this.mainStore.state.setChartTheme(this.mainStore.chartSetting.theme, isChartClosed);
+    }
 
     @computed get categorizedSymbols() {
         if (!this.activeSymbols || this.activeSymbols.categorizedSymbols.length === 0) return [];
@@ -592,45 +643,65 @@ class ChartStore {
         if (symbolObj) {
             this.updateCurrentActiveSymbol();
         }
+    }
 
-        const { chartType: chartTypeStore } = this.mainStore;
-        this.contextPromise.then(() => {
-            const isTick = this.stxx.layout.timeUnit === 'second';
-            const isCandle = chartTypeStore.isCandle;
-            if (isCandle && isTick) {
-                // Tick charts cannot be represented with candles
-                chartTypeStore.setType('mountain');
+    @action.bound calculateYaxisWidth = (price) => {
+        if (!price) return;
+        const { context } = this.context.stx.chart;
+
+        const priceWidth = context.measureText(price.toFixed(this.pip)).width + 20;
+        if (priceWidth > this.yAxiswidth) {
+            this.yAxiswidth = priceWidth;
+
+            this.stxx.chart.yAxis.width = priceWidth;
+            this.stxx.calculateYAxisPositions();
+            this.stxx.draw();
+        }
+    }
+
+    @action.bound updateYaxisWidth = () => {
+        if (this.stxx.masterData && this.stxx.masterData.length) {
+            const currentQuote = this.context.stx.currentQuote();
+            if (currentQuote && currentQuote.Close) {
+                this.calculateYaxisWidth(currentQuote.Close);
+            } else {
+                this.calculateYaxisWidth(this.stxx.masterData.slice(-1).Close);
             }
-        });
+        }
     }
 
     // Calling newChart with symbolObj as undefined refreshes the chart
     @action.bound newChart(symbolObj = this.currentActiveSymbol, params) {
         this.stxx.chart.symbolDisplay = symbolObj.name;
         this.loader.show();
+        this.mainStore.state.setChartIsReady(false);
         const onChartLoad = (err) => {
             this.setMainSeriesDisplay(symbolObj.name);
 
             this.loader.hide();
+            this.mainStore.state.setChartIsReady(true);
             if (err) {
                 /* TODO, symbol not found error */
                 return;
             }
             this.state.restoreDrawings();
+            this.mainStore.chart.feed.scaleChart();
         };
+        this.yAxiswidth = 0;
         const rangeSpan = this.getRangeSpan();
         this.stxx.newChart(symbolObj, null, null, onChartLoad, { ...params, ...rangeSpan });
+        this.chartClosedOpenThemeChange(!symbolObj.exchange_is_open);
     }
 
     getRangeSpan() {
         const { startEpoch, endEpoch } = this.state;
         let range, span;
         const paddingRatio = this.chartNode.clientWidth / this.RANGE_PADDING_PX;
-        const elapsedSeconds = endEpoch - startEpoch;
+        const elapsedSeconds = (endEpoch || startEpoch) - (startEpoch || endEpoch);
         const epochPadding = elapsedSeconds / paddingRatio | 0;
         if (startEpoch || endEpoch) {
-            const dtLeft  = (startEpoch) ? new Date(getUTCDate(startEpoch - epochPadding)) : undefined;
-            const dtRight = (endEpoch) ? new Date(getUTCDate(endEpoch + epochPadding))   : undefined;
+            const dtLeft  = (startEpoch) ? CIQ.strToDateTime(getUTCDate(startEpoch - epochPadding)) : undefined;
+            const dtRight = (endEpoch) ? CIQ.strToDateTime(getUTCDate(endEpoch + epochPadding))   : undefined;
             const periodicity = calculateTimeUnitInterval(this.granularity);
             range = {
                 dtLeft,

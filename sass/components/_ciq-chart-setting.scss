@@ -25,7 +25,7 @@
 
             .ciq-list-item {
                 height: 38px;
-                line-height: 38px;
+                line-height: normal;
                 cursor: default;
 
                 &.ciq-list-item-lng {
@@ -75,6 +75,8 @@
                 display: inline-block;
                 width: 50%;
                 height: 36px;
+                line-height: 36px;
+                padding: 0;
                 padding-left: 10px;
 
                 &:nth-child(2n) {

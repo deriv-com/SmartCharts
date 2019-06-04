@@ -90,7 +90,9 @@ export default class TimeperiodStore {
 
                     if (this.remain && stx.currentQuote() !== null) {
                         stx.yaxisLabelStyle = 'rect';
+                        stx.labelType = 'countdown';
                         stx.createYAxisLabel(stx.chart.panel, this.remain, this.remainLabelY, '#15212d', '#FFFFFF');
+                        stx.labelType = null;
                         stx.yaxisLabelStyle = 'roundRectArrow';
                     }
                 });
@@ -112,8 +114,11 @@ export default class TimeperiodStore {
         this.mainStore.chart.changeSymbol(undefined, granularity);
     }
 
-    @action.bound updateProps(onchange) {
-        this.onGranularityChange = onchange;
+    @action.bound updateProps(onChange) {
+        if (this.mainStore.state.granularity !== undefined) {
+            this.onGranularityChange = typeof onChange === 'function' ? onChange : () => {};
+            this.onGranularityChange(this.mainStore.state.granularity);
+        }
     }
 
     @action.bound updateDisplay() {
