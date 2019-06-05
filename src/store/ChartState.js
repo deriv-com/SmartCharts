@@ -178,7 +178,6 @@ class ChartState {
             if (this.stxx) this.mainStore.chart.updateHeight();
         }
 
-
         if (this.stxx) {
             this.stxx.chart.panel.yAxis.drawCurrentPriceLabel = !this.endEpoch;
             this.stxx.preferences.currentPriceLine = !this.endEpoch;
@@ -392,9 +391,13 @@ class ChartState {
             const tickLeft = this.stxx.chart.dataSet.length - tick;
             this.stxx.setMaxTicks(tickLeft + (Math.floor(tickLeft / 5) || 2));
             this.stxx.chart.scroll = tickLeft + (Math.floor(tickLeft / 10) || 1);
+            this.stxx.chart.entryTick = tickLeft;
+            this.stxx.maxMasterDataSize = 0;
             this.stxx.draw();
-        } else {
+        } else if (this.startEpoch) {
             this.stxx.chart.lockScroll = true;
+        } else {
+            this.stxx.chart.lockScroll = false;
             this.stxx.home();
             this.stxx.draw();
         }
