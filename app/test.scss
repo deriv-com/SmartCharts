@@ -39,3 +39,24 @@
     background: transparent;
     margin: 0 0px -8px -8px;
 }
+
+.chart-marker-historical {
+    width: 2px;
+    height: 100%;
+    border-left: 1.5px dashed #2a3052;
+    top: 0px;
+    position: absolute;
+
+    span {
+        background: #2a3052;
+        border-radius: 3px;
+        white-space: nowrap;
+        left: -54px;
+        position: absolute;
+        bottom: 0px;
+        padding: 1px 9px;
+        color: #fff;
+        font-size: 10px;
+        line-height: 14px;
+    }
+}

@@ -18,6 +18,7 @@ import { // eslint-disable-line import/no-extraneous-dependencies,import/no-unre
     logEvent,
     LogCategories,
     LogActions,
+    Marker,
 } from '@binary-com/smartcharts'; // eslint-disable-line import/no-unresolved
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
@@ -279,7 +280,17 @@ class App extends Component {
                 granularity={this.state.granularity}
                 onSettingsChange={this.saveSettings}
                 isConnectionOpened={isConnectionOpened}
-            />
+            >
+                {endEpoch ? (
+                    <Marker
+                        className="chart-marker-historical"
+                        x={endEpoch}
+                        xPositioner="epoch"
+                        yPositioner="top"
+                    ><span>{moment(endEpoch * 1000).utc().format('DD MMMM YYYY - HH:mm')}</span>
+                    </Marker>
+                ) : ''}
+            </SmartChart>
         );
     }
 }

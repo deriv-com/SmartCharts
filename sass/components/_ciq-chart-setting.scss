@@ -13,6 +13,9 @@
         > .icon-back-menu {
             display: inline-block;
             cursor: pointer;
+            @include themify($themes) {
+                color: themed('DialogSettingHeadText');
+            }
         }
     }
     .body {
