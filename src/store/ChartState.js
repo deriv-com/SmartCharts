@@ -391,7 +391,7 @@ class ChartState {
             const tickLeft = this.stxx.chart.dataSet.length - tick;
             this.stxx.setMaxTicks(tickLeft + (Math.floor(tickLeft / 5) || 2));
             this.stxx.chart.scroll = tickLeft + (Math.floor(tickLeft / 10) || 1);
-            this.stxx.chart.entryTick = tickLeft;
+            this.stxx.chart.entryTick = tick;
             this.stxx.maxMasterDataSize = 0;
             this.stxx.draw();
         } else if (this.startEpoch) {
