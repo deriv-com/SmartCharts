@@ -91,8 +91,6 @@ class ChartState {
             }
         }
 
-        if (this.endEpoch && this.startEpoch) { return; }
-
         this.rootNode = this.mainStore.chart.rootNode;
 
         this.isAnimationEnabled = isAnimationEnabled;
@@ -392,8 +390,8 @@ class ChartState {
             this.stxx.chart.lockScroll = false;
             const tick = this.stxx.tickFromDate(startEntry.DT);
             const tickLeft = this.stxx.chart.dataSet.length - tick;
-            this.stxx.setMaxTicks(tickLeft > 3 ? tickLeft : 3, { padding: 150 });
-            this.stxx.chart.scroll += 125;
+            this.stxx.setMaxTicks(tickLeft + (Math.floor(tickLeft / 5) || 2));
+            this.stxx.chart.scroll = tickLeft + (Math.floor(tickLeft / 10) || 1);
             this.stxx.draw();
         } else {
             this.stxx.chart.lockScroll = true;
