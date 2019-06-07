@@ -665,10 +665,8 @@ class ChartStore {
             if (currentQuote && currentQuote.Close) {
                 this.calculateYaxisWidth(currentQuote.Close);
             } else {
-                const lastDataWitClose = this.stxx.masterData
-                    .filter(x => x.Close).slice(-1);
-
-                this.calculateYaxisWidth(lastDataWitClose[0].Close);
+                const lastDataWitClose = this.stxx.masterData.find(x => x.Close);
+                this.calculateYaxisWidth(lastDataWitClose.Close);
             }
         }
     }
