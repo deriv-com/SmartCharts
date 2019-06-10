@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom\n"
 "Language-Team: Spanish\n"
 "Language: es_ES\n"
-"PO-Revision-Date: 2019-06-10 16:07\n"
+"PO-Revision-Date: 2019-06-10 16:20\n"
 
 msgid " already exists."
 msgstr " ya existe."
@@ -628,10 +628,10 @@ msgid "ATR"
 msgstr "ATR"
 
 msgid "Ehler Fisher Transform"
-msgstr ""
+msgstr "Cambio Ehler Fisher"
 
 msgid "EF"
-msgstr ""
+msgstr "EF"
 
 msgid "EF Trigger"
 msgstr ""
@@ -640,7 +640,7 @@ msgid "Schaff Trend Cycle"
 msgstr ""
 
 msgid "QStick"
-msgstr ""
+msgstr "QStick"
 
 msgid "Coppock Curve"
 msgstr "Curva de Coppock"
@@ -946,10 +946,10 @@ msgid "Double Smoothing Period"
 msgstr "Doble Período de Suavizamiento"
 
 msgid "PMO"
-msgstr ""
+msgstr "PMO"
 
 msgid "PMOSignal"
-msgstr ""
+msgstr "SeñalPMO"
 
 msgid "Relative Volatility"
 msgstr "Volatilidad Relativa"
@@ -1258,10 +1258,10 @@ msgid "Heaviest SMA Period"
 msgstr ""
 
 msgid "KST"
-msgstr ""
+msgstr "KST"
 
 msgid "KSTSignal"
-msgstr ""
+msgstr "SeñalKST"
 
 msgid "Pring's Special K"
 msgstr ""
