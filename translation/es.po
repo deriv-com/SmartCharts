@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom\n"
 "Language-Team: Spanish\n"
 "Language: es_ES\n"
-"PO-Revision-Date: 2019-05-29 00:09\n"
+"PO-Revision-Date: 2019-06-10 15:23\n"
 
 msgid " already exists."
 msgstr " ya existe."
@@ -538,10 +538,10 @@ msgid "On Balance Volume"
 msgstr "Volumen de Saldo"
 
 msgid "Stochastic Momentum Index"
-msgstr ""
+msgstr "Índice de Momento Estocástico"
 
 msgid "%K Periods"
-msgstr ""
+msgstr "Períodos %K"
 
 msgid "%K Smoothing Periods"
 msgstr "%K Períodos de Suavizamiento"
@@ -550,16 +550,16 @@ msgid "%K Double Smoothing Periods"
 msgstr "%K Períodos de Suavizamiento Doble"
 
 msgid "%D Periods"
-msgstr ""
+msgstr "Períodos %D"
 
 msgid "%D Moving Average Type"
 msgstr ""
 
 msgid "%K"
-msgstr ""
+msgstr "%K"
 
 msgid "%D"
-msgstr ""
+msgstr "%D"
 
 msgid "Historical Volatility"
 msgstr ""
