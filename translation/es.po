@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom\n"
 "Language-Team: Spanish\n"
 "Language: es_ES\n"
-"PO-Revision-Date: 2019-06-10 15:23\n"
+"PO-Revision-Date: 2019-06-10 15:39\n"
 
 msgid " already exists."
 msgstr " ya existe."
@@ -553,7 +553,7 @@ msgid "%D Periods"
 msgstr "Períodos %D"
 
 msgid "%D Moving Average Type"
-msgstr ""
+msgstr "Tipo de Media Móvil %D"
 
 msgid "%K"
 msgstr "%K"
@@ -562,13 +562,13 @@ msgid "%D"
 msgstr "%D"
 
 msgid "Historical Volatility"
-msgstr ""
+msgstr "Volatilidad histórica"
 
 msgid "Days Per Year"
-msgstr ""
+msgstr "Días Al Año"
 
 msgid "Pretty Good Oscillator"
-msgstr ""
+msgstr "Oscilador Bastante Bueno"
 
 msgid "Ultimate Oscillator"
 msgstr ""
