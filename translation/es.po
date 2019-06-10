@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom\n"
 "Language-Team: Spanish\n"
 "Language: es_ES\n"
-"PO-Revision-Date: 2019-06-10 15:50\n"
+"PO-Revision-Date: 2019-06-10 16:07\n"
 
 msgid " already exists."
 msgstr " ya existe."
@@ -619,13 +619,13 @@ msgid "Detrended Price Oscillator"
 msgstr "Oscilador del Precio Detectado"
 
 msgid "True Range"
-msgstr ""
+msgstr "Rango Verdadero"
 
 msgid "Average True Range"
-msgstr ""
+msgstr "Rango Verdadero Medio"
 
 msgid "ATR"
-msgstr ""
+msgstr "ATR"
 
 msgid "Ehler Fisher Transform"
 msgstr ""
@@ -1348,8 +1348,8 @@ msgid "Weak Ratio"
 msgstr "Proporción Débil"
 
 msgid "Closed"
-msgstr ""
+msgstr "Cerrado"
 
 msgid "Opens in:"
-msgstr ""
+msgstr "Abre en:"
 
