@@ -501,7 +501,7 @@ class ChartState {
         if (grab && this.stxx.chart.lockScroll) {
             this.stxx.chart.lockScroll = false;
         }
-        if (this.stxx && this.stxx.chart) {
+        if (grab && this.stxx && this.stxx.chart) {
             const dataSegment = this.stxx.chart.dataSegment;
             if (dataSegment) {
                 const startPointOnChartData = dataSegment[0];
