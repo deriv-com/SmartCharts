@@ -109,7 +109,7 @@ export default class StudyLegendStore {
         const should_minimise_last_digit = Object.keys(this.stx.panels).length > 2;
         Object.keys(CIQ.Studies.studyLibrary).forEach((st) => {
             if (!CIQ.Studies.studyLibrary[st].overlay) {
-                CIQ.Studies.studyLibrary[st].panelHeight = should_minimise_last_digit ? 80 : null;
+                CIQ.Studies.studyLibrary[st].panelHeight = should_minimise_last_digit ? 80 : 100;
             }
         });
         this.mainStore.state.setShouldMinimiseLastDigit(should_minimise_last_digit);
