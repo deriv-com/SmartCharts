@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom\n"
 "Language-Team: Spanish\n"
 "Language: es_ES\n"
-"PO-Revision-Date: 2019-06-10 16:20\n"
+"PO-Revision-Date: 2019-06-10 16:23\n"
 
 msgid " already exists."
 msgstr " ya existe."
@@ -634,7 +634,7 @@ msgid "EF"
 msgstr "EF"
 
 msgid "EF Trigger"
-msgstr ""
+msgstr "Disparador EF"
 
 msgid "Schaff Trend Cycle"
 msgstr ""
