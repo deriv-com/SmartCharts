@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom\n"
 "Language-Team: Spanish\n"
 "Language: es_ES\n"
-"PO-Revision-Date: 2019-06-10 15:39\n"
+"PO-Revision-Date: 2019-06-10 15:50\n"
 
 msgid " already exists."
 msgstr " ya existe."
@@ -571,52 +571,52 @@ msgid "Pretty Good Oscillator"
 msgstr "Oscilador Bastante Bueno"
 
 msgid "Ultimate Oscillator"
-msgstr ""
+msgstr "Oscilador Último"
 
 msgid "Cycle 1"
-msgstr ""
+msgstr "Ciclo 1"
 
 msgid "Cycle 2"
-msgstr ""
+msgstr "Ciclo 2"
 
 msgid "Cycle 3"
-msgstr ""
+msgstr "Ciclo 3"
 
 msgid "Volume Oscillator"
-msgstr ""
+msgstr "Oscilador del Volumen"
 
 msgid "Short Cycle"
-msgstr ""
+msgstr "Ciclo Breve"
 
 msgid "Long Cycle"
-msgstr ""
+msgstr "Ciclo Largo"
 
 msgid "Points Or Percent"
-msgstr ""
+msgstr "Puntos o Porcentajes"
 
 msgid "Twiggs Money Flow"
-msgstr ""
+msgstr "Flujo de Dinero Twiggs"
 
 msgid "Chaikin Money Flow"
-msgstr ""
+msgstr "Flujo de Dinero Chaikin"
 
 msgid "Chaikin Volatility"
-msgstr ""
+msgstr "Volatilidad Chaikin"
 
 msgid "Rate Of Change"
-msgstr ""
+msgstr "Tasa de Cambio"
 
 msgid "Price Oscillator"
-msgstr ""
+msgstr "Oscilador del Precio"
 
 msgid "Ease of Movement"
-msgstr ""
+msgstr "Facilidad de Movimiento"
 
 msgid "Commodity Channel Index"
-msgstr ""
+msgstr "Índice de Canal de Materias Primas"
 
 msgid "Detrended Price Oscillator"
-msgstr ""
+msgstr "Oscilador del Precio Detectado"
 
 msgid "True Range"
 msgstr ""
@@ -1195,34 +1195,34 @@ msgid "Rainbow Moving Average"
 msgstr ""
 
 msgid "SMA1"
-msgstr ""
+msgstr "SMA1"
 
 msgid "SMA2"
-msgstr ""
+msgstr "SMA2"
 
 msgid "SMA3"
-msgstr ""
+msgstr "SMA3"
 
 msgid "SMA4"
-msgstr ""
+msgstr "SMA4"
 
 msgid "SMA5"
-msgstr ""
+msgstr "SMA5"
 
 msgid "SMA6"
-msgstr ""
+msgstr "SMA6"
 
 msgid "SMA7"
-msgstr ""
+msgstr "SMA7"
 
 msgid "SMA8"
-msgstr ""
+msgstr "SMA8"
 
 msgid "SMA9"
-msgstr ""
+msgstr "SMA9"
 
 msgid "SMA10"
-msgstr ""
+msgstr "SMA10"
 
 msgid "Rainbow Oscillator"
 msgstr ""
