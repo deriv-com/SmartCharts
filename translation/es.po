@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom\n"
 "Language-Team: Spanish\n"
 "Language: es_ES\n"
-"PO-Revision-Date: 2019-05-29 00:09\n"
+"PO-Revision-Date: 2019-06-11 11:36\n"
 
 msgid " already exists."
 msgstr " ya existe."
@@ -538,10 +538,10 @@ msgid "On Balance Volume"
 msgstr "Volumen de Saldo"
 
 msgid "Stochastic Momentum Index"
-msgstr ""
+msgstr "Índice de Momento Estocástico"
 
 msgid "%K Periods"
-msgstr ""
+msgstr "Períodos %K"
 
 msgid "%K Smoothing Periods"
 msgstr "%K Períodos de Suavizamiento"
@@ -550,97 +550,97 @@ msgid "%K Double Smoothing Periods"
 msgstr "%K Períodos de Suavizamiento Doble"
 
 msgid "%D Periods"
-msgstr ""
+msgstr "Períodos %D"
 
 msgid "%D Moving Average Type"
-msgstr ""
+msgstr "Tipo de Media Móvil %D"
 
 msgid "%K"
-msgstr ""
+msgstr "%K"
 
 msgid "%D"
-msgstr ""
+msgstr "%D"
 
 msgid "Historical Volatility"
-msgstr ""
+msgstr "Volatilidad histórica"
 
 msgid "Days Per Year"
-msgstr ""
+msgstr "Días Al Año"
 
 msgid "Pretty Good Oscillator"
-msgstr ""
+msgstr "Oscilador Bastante Bueno"
 
 msgid "Ultimate Oscillator"
-msgstr ""
+msgstr "Oscilador Último"
 
 msgid "Cycle 1"
-msgstr ""
+msgstr "Ciclo 1"
 
 msgid "Cycle 2"
-msgstr ""
+msgstr "Ciclo 2"
 
 msgid "Cycle 3"
-msgstr ""
+msgstr "Ciclo 3"
 
 msgid "Volume Oscillator"
-msgstr ""
+msgstr "Oscilador del Volumen"
 
 msgid "Short Cycle"
-msgstr ""
+msgstr "Ciclo Breve"
 
 msgid "Long Cycle"
-msgstr ""
+msgstr "Ciclo Largo"
 
 msgid "Points Or Percent"
-msgstr ""
+msgstr "Puntos o Porcentajes"
 
 msgid "Twiggs Money Flow"
-msgstr ""
+msgstr "Flujo de Dinero Twiggs"
 
 msgid "Chaikin Money Flow"
-msgstr ""
+msgstr "Flujo de Dinero Chaikin"
 
 msgid "Chaikin Volatility"
-msgstr ""
+msgstr "Volatilidad Chaikin"
 
 msgid "Rate Of Change"
-msgstr ""
+msgstr "Tasa de Cambio"
 
 msgid "Price Oscillator"
-msgstr ""
+msgstr "Oscilador del Precio"
 
 msgid "Ease of Movement"
-msgstr ""
+msgstr "Facilidad de Movimiento"
 
 msgid "Commodity Channel Index"
-msgstr ""
+msgstr "Índice de Canal de Materias Primas"
 
 msgid "Detrended Price Oscillator"
-msgstr ""
+msgstr "Oscilador del Precio Detectado"
 
 msgid "True Range"
-msgstr ""
+msgstr "Rango Verdadero"
 
 msgid "Average True Range"
-msgstr ""
+msgstr "Rango Verdadero Medio"
 
 msgid "ATR"
-msgstr ""
+msgstr "ATR"
 
 msgid "Ehler Fisher Transform"
-msgstr ""
+msgstr "Cambio Ehler Fisher"
 
 msgid "EF"
-msgstr ""
+msgstr "EF"
 
 msgid "EF Trigger"
-msgstr ""
+msgstr "Disparador EF"
 
 msgid "Schaff Trend Cycle"
-msgstr ""
+msgstr "Ciclo de Tendencia de Schaff"
 
 msgid "QStick"
-msgstr ""
+msgstr "QStick"
 
 msgid "Coppock Curve"
 msgstr "Curva de Coppock"
@@ -946,10 +946,10 @@ msgid "Double Smoothing Period"
 msgstr "Doble Período de Suavizamiento"
 
 msgid "PMO"
-msgstr ""
+msgstr "PMO"
 
 msgid "PMOSignal"
-msgstr ""
+msgstr "SeñalPMO"
 
 msgid "Relative Volatility"
 msgstr "Volatilidad Relativa"
@@ -1096,19 +1096,19 @@ msgid "Jaw Period"
 msgstr "Período Jaw"
 
 msgid "Jaw Offset"
-msgstr ""
+msgstr "Mándibula Offset"
 
 msgid "Teeth Period"
-msgstr ""
+msgstr "Período de dientes"
 
 msgid "Teeth Offset"
-msgstr ""
+msgstr "Dientes offset"
 
 msgid "Lips Period"
-msgstr ""
+msgstr "Período de Labios"
 
 msgid "Lips Offset"
-msgstr ""
+msgstr "Labios offset"
 
 msgid "Show Fractals"
 msgstr "Mostrar Fractales"
@@ -1117,10 +1117,10 @@ msgid "Jaw"
 msgstr "Jaw"
 
 msgid "Teeth"
-msgstr ""
+msgstr "Dientes"
 
 msgid "Lips"
-msgstr ""
+msgstr "Labios"
 
 msgid "Gator Oscillator"
 msgstr "Oscilador Gator"
@@ -1186,133 +1186,133 @@ msgid "TII"
 msgstr "TII"
 
 msgid "Choppiness Index"
-msgstr ""
+msgstr "Índice de Choppiness"
 
 msgid "Disparity Index"
-msgstr ""
+msgstr "Índice de Disparidad"
 
 msgid "Rainbow Moving Average"
-msgstr ""
+msgstr "Media Móvil Arco Iris"
 
 msgid "SMA1"
-msgstr ""
+msgstr "SMA1"
 
 msgid "SMA2"
-msgstr ""
+msgstr "SMA2"
 
 msgid "SMA3"
-msgstr ""
+msgstr "SMA3"
 
 msgid "SMA4"
-msgstr ""
+msgstr "SMA4"
 
 msgid "SMA5"
-msgstr ""
+msgstr "SMA5"
 
 msgid "SMA6"
-msgstr ""
+msgstr "SMA6"
 
 msgid "SMA7"
-msgstr ""
+msgstr "SMA7"
 
 msgid "SMA8"
-msgstr ""
+msgstr "SMA8"
 
 msgid "SMA9"
-msgstr ""
+msgstr "SMA9"
 
 msgid "SMA10"
-msgstr ""
+msgstr "SMA10"
 
 msgid "Rainbow Oscillator"
-msgstr ""
+msgstr "Oscilador Arco Iris"
 
 msgid "HHV/LLV Lookback"
-msgstr ""
+msgstr "Lookback HHV/LLV"
 
 msgid "Pring's Know Sure Thing"
-msgstr ""
+msgstr "Know Sure Thing de Pring"
 
 msgid "Lightest Rate of Change Period"
-msgstr ""
+msgstr "Ritmo Más Ligero de Período de Cambio"
 
 msgid "Lightest SMA Period"
-msgstr ""
+msgstr "SMA de Período Más Ligero"
 
 msgid "Light Rate of Change Period"
-msgstr ""
+msgstr "Ritmo Ligero de Período de Cambio"
 
 msgid "Light SMA Period"
-msgstr ""
+msgstr "SMA de Período Ligero"
 
 msgid "Heavy Rate of Change Period"
-msgstr ""
+msgstr "Ritmo Lento de Período de Cambio"
 
 msgid "Heavy SMA Period"
-msgstr ""
+msgstr "SMA de Período Lento"
 
 msgid "Heaviest Rate of Change Period"
-msgstr ""
+msgstr "Ritmo Más Lento de Período de Cambio"
 
 msgid "Heaviest SMA Period"
-msgstr ""
+msgstr "SMA de Período Más Lento"
 
 msgid "KST"
-msgstr ""
+msgstr "KST"
 
 msgid "KSTSignal"
-msgstr ""
+msgstr "SeñalKST"
 
 msgid "Pring's Special K"
 msgstr ""
 
 msgid "Darvas Box"
-msgstr ""
+msgstr "Caja de Darvas"
 
 msgid "ATH Lookback Period"
-msgstr ""
+msgstr "Período Lookback ATH"
 
 msgid "Exit Field"
-msgstr ""
+msgstr "Campo Exit"
 
 msgid "Ghost Boxes"
-msgstr ""
+msgstr "Cajas de Espectro"
 
 msgid "Stop Levels"
-msgstr ""
+msgstr "Niveles Stop"
 
 msgid "Level Offset"
-msgstr ""
+msgstr "Niveles Offset"
 
 msgid "Price Minimum"
-msgstr ""
+msgstr "Precio Mínimo"
 
 msgid "Volume Spike"
-msgstr ""
+msgstr "Aumento de Volumen"
 
 msgid "Volume % of Avg"
-msgstr ""
+msgstr "% de Volumen de Med"
 
 msgid "Darvas"
-msgstr ""
+msgstr "Darvas"
 
 msgid "Ghost"
-msgstr ""
+msgstr "Espectro"
 
 msgid "Levels"
-msgstr ""
+msgstr "Niveles"
 
 msgid "Supertrend"
-msgstr ""
+msgstr "Tendencia Estupenda"
 
 msgid "Uptrend"
-msgstr ""
+msgstr "Tendencia Alcista"
 
 msgid "Downtrend"
-msgstr ""
+msgstr "Tendencia Bajista"
 
 msgid "Volume Profile"
-msgstr ""
+msgstr "Perfil del Volumen"
 
 msgid "Bars Color"
 msgstr "Colores de Barras"
@@ -1348,8 +1348,8 @@ msgid "Weak Ratio"
 msgstr "Proporción Débil"
 
 msgid "Closed"
-msgstr ""
+msgstr "Cerrado"
 
 msgid "Opens in:"
-msgstr ""
+msgstr "Abre en:"
 

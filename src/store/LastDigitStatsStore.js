@@ -60,7 +60,7 @@ export default class LastDigitStatsStore {
             }
 
             this.latestData.forEach((price) => {
-                const lastDigit = price.toString().slice(-1);
+                const lastDigit = (+price).toFixed(this.decimalPlaces).slice(-1);
                 this.digits[lastDigit]++;
             });
             this.updateBars();
@@ -77,10 +77,10 @@ export default class LastDigitStatsStore {
             this.showLastDigitStats();
             this.symbolChanged = false;
         } else if (this.latestData.length) {
-            const firstDigit = this.latestData.shift().slice(-1);
-            const price =  Close.toFixed(this.decimalPlaces);
-            const lastDigit = price.toString().slice(-1);
-            this.latestData.push(price);
+            const firstDigit = (+this.latestData.shift()).toFixed(this.decimalPlaces).slice(-1);
+            const price =  (+Close).toFixed(this.decimalPlaces);
+            const lastDigit = price.slice(-1);
+            this.latestData.push(+price);
             this.digits[lastDigit]++;
             this.digits[firstDigit]--;
             this.updateBars();
