@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom\n"
 "Language-Team: Spanish\n"
 "Language: es_ES\n"
-"PO-Revision-Date: 2019-06-11 11:18\n"
+"PO-Revision-Date: 2019-06-11 11:23\n"
 
 msgid " already exists."
 msgstr " ya existe."
@@ -1186,13 +1186,13 @@ msgid "TII"
 msgstr "TII"
 
 msgid "Choppiness Index"
-msgstr ""
+msgstr "Índice de Choppiness"
 
 msgid "Disparity Index"
-msgstr ""
+msgstr "Índice de Disparidad"
 
 msgid "Rainbow Moving Average"
-msgstr ""
+msgstr "Media Móvil Arco Iris"
 
 msgid "SMA1"
 msgstr "SMA1"
@@ -1225,7 +1225,7 @@ msgid "SMA10"
 msgstr "SMA10"
 
 msgid "Rainbow Oscillator"
-msgstr ""
+msgstr "Oscilador Arco Iris"
 
 msgid "HHV/LLV Lookback"
 msgstr ""
