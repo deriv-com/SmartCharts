@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom\n"
 "Language-Team: Spanish\n"
 "Language: es_ES\n"
-"PO-Revision-Date: 2019-06-11 11:00\n"
+"PO-Revision-Date: 2019-06-11 11:04\n"
 
 msgid " already exists."
 msgstr " ya existe."
@@ -1105,7 +1105,7 @@ msgid "Teeth Offset"
 msgstr ""
 
 msgid "Lips Period"
-msgstr "Período Labios"
+msgstr "Período de Labios"
 
 msgid "Lips Offset"
 msgstr "Labios offset"
