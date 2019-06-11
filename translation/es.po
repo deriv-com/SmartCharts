@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom\n"
 "Language-Team: Spanish\n"
 "Language: es_ES\n"
-"PO-Revision-Date: 2019-06-11 10:25\n"
+"PO-Revision-Date: 2019-06-11 10:44\n"
 
 msgid " already exists."
 msgstr " ya existe."
@@ -1291,7 +1291,7 @@ msgid "Volume Spike"
 msgstr "Aumento de Volumen"
 
 msgid "Volume % of Avg"
-msgstr ""
+msgstr "% de Volumen de Med"
 
 msgid "Darvas"
 msgstr "Darvas"
