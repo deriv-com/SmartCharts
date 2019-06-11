@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom\n"
 "Language-Team: Spanish\n"
 "Language: es_ES\n"
-"PO-Revision-Date: 2019-06-11 10:20\n"
+"PO-Revision-Date: 2019-06-11 10:25\n"
 
 msgid " already exists."
 msgstr " ya existe."
@@ -1285,10 +1285,10 @@ msgid "Level Offset"
 msgstr "Niveles Offset"
 
 msgid "Price Minimum"
-msgstr ""
+msgstr "Precio Mínimo"
 
 msgid "Volume Spike"
-msgstr ""
+msgstr "Aumento de Volumen"
 
 msgid "Volume % of Avg"
 msgstr ""
