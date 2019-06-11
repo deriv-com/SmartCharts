@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom\n"
 "Language-Team: Spanish\n"
 "Language: es_ES\n"
-"PO-Revision-Date: 2019-06-11 11:23\n"
+"PO-Revision-Date: 2019-06-11 11:36\n"
 
 msgid " already exists."
 msgstr " ya existe."
@@ -1228,34 +1228,34 @@ msgid "Rainbow Oscillator"
 msgstr "Oscilador Arco Iris"
 
 msgid "HHV/LLV Lookback"
-msgstr ""
+msgstr "Lookback HHV/LLV"
 
 msgid "Pring's Know Sure Thing"
-msgstr ""
+msgstr "Know Sure Thing de Pring"
 
 msgid "Lightest Rate of Change Period"
-msgstr ""
+msgstr "Ritmo Más Ligero de Período de Cambio"
 
 msgid "Lightest SMA Period"
-msgstr ""
+msgstr "SMA de Período Más Ligero"
 
 msgid "Light Rate of Change Period"
-msgstr ""
+msgstr "Ritmo Ligero de Período de Cambio"
 
 msgid "Light SMA Period"
-msgstr ""
+msgstr "SMA de Período Ligero"
 
 msgid "Heavy Rate of Change Period"
-msgstr ""
+msgstr "Ritmo Lento de Período de Cambio"
 
 msgid "Heavy SMA Period"
-msgstr ""
+msgstr "SMA de Período Lento"
 
 msgid "Heaviest Rate of Change Period"
-msgstr ""
+msgstr "Ritmo Más Lento de Período de Cambio"
 
 msgid "Heaviest SMA Period"
-msgstr ""
+msgstr "SMA de Período Más Lento"
 
 msgid "KST"
 msgstr "KST"
