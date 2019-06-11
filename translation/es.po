@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom\n"
 "Language-Team: Spanish\n"
 "Language: es_ES\n"
-"PO-Revision-Date: 2019-06-10 16:23\n"
+"PO-Revision-Date: 2019-06-11 10:16\n"
 
 msgid " already exists."
 msgstr " ya existe."
@@ -1300,19 +1300,19 @@ msgid "Ghost"
 msgstr ""
 
 msgid "Levels"
-msgstr ""
+msgstr "Niveles"
 
 msgid "Supertrend"
-msgstr ""
+msgstr "Tendencia Estupenda"
 
 msgid "Uptrend"
-msgstr ""
+msgstr "Tendencia Alcista"
 
 msgid "Downtrend"
-msgstr ""
+msgstr "Tendencia Bajista"
 
 msgid "Volume Profile"
-msgstr ""
+msgstr "Perfil del Volumen"
 
 msgid "Bars Color"
 msgstr "Colores de Barras"
