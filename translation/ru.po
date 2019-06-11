@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom\n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
-"PO-Revision-Date: 2019-06-09 23:12\n"
+"PO-Revision-Date: 2019-06-11 07:36\n"
 
 msgid " already exists."
 msgstr " уже существует."
@@ -52,7 +52,7 @@ msgid "Box Size"
 msgstr "Размер ячейки"
 
 msgid "C"
-msgstr "Изм."
+msgstr "З"
 
 msgid "Callout"
 msgstr "Сноска"
