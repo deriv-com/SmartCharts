@@ -90,16 +90,17 @@ $themes: (
         ListActiveLiText: $COLOR_DARK_BLUE_5,
         ListActiveLiBorder: $COLOR_LIGHT_GRAY,
         DialogBorder: $COLOR_LIGHT_GRAY_1,
-        DialogHeadBg: $COLOR_LIGHT_GRAY_1,
+        DialogHeadBg: $COLOR_LIGHT_BLACK_4_SOLID,
         DialogHeadText: $COLOR_LIGHT_GRAY,
-        DialogHeadBorder: $COLOR_LIGHT_GRAY,
+        DialogHeadBorder: $COLOR_LIGHT_BLACK_4_SOLID,
         DialogHeadIcon: $COLOR_LIGHT_GRAY,
         DialogHeadActiveBorder: $COLOR_LIGHT_GRAY,
         DialogBodyBg: $COLOR_WHITE,
         DialogBodyText: $COLOR_LIGHT_GRAY,
-        DialogFootBg: $COLOR_LIGHT_GRAY_1,
-        DialogFootText: $COLOR_LIGHT_GRAY,
+        DialogFootBg: $COLOR_LIGHT_BLACK_4_SOLID,
+        DialogFootText: $COLOR_LIGHT_BLACK_1,
         DialogFootBorder: $COLOR_WHITE,
+        DialogSettingHeadText: $COLOR_BLACK,
         DialogSettingBodyBg: $COLOR_WHITE,
         DialogOverlay: rgba($COLOR_WHITE, 0.7),
         ChartTypeText: $COLOR_LIGHT_GRAY,
@@ -282,8 +283,9 @@ $themes: (
         DialogBodyBg: $COLOR_DARK_BLUE_3,
         DialogBodyText: $COLOR_LIGHT_GRAY,
         DialogFootBg: $COLOR_DARK_BLUE_3,
-        DialogFootText: $COLOR_WHITE,
+        DialogFootText: $COLOR_LIGHT_GRAY,
         DialogFootBorder: $COLOR_DARK_BLUE_3,
+        DialogSettingHeadText: $COLOR_WHITE,
         DialogSettingBodyBg: $COLOR_DARK_BLUE_2,
         DialogOverlay: rgba($COLOR_DARK_BLUE_5, 0.7),
         ChartTypeText: $COLOR_LIGHT_GRAY,
@@ -320,8 +322,8 @@ $themes: (
         SwitchOffBg: $COLOR_DARK_GRAY_3,
         SwitchOnBg: $COLOR_GREEN_1,
         ComparisonItemText: $COLOR_WHITE,
-        ComparisonItemIcon: $COLOR_LIGHT_GRAY,
-        ComparisonItemHoverBg: $COLOR_DARK_GRAY_3,
+        ComparisonItemIcon: $COLOR_WHITE,
+        ComparisonItemHoverBg: $COLOR_DARK_BLUE_5,
         TimeBg: $COLOR_DARK_BLUE_2,
         TimeUnitBg: $COLOR_DARK_BLUE_2,
         TimeUnitColor: $COLOR_LIGHT_GRAY,
@@ -439,4 +441,6 @@ $themes: (
     darkchartclosedcandle: map-get(map-get($themes, 'dark'), 'ChartClosedCandleColor');
     lightchartbg: map-get(map-get($themes, 'light'), 'ChartBg');
     darkchartbg: map-get(map-get($themes, 'dark'), 'ChartBg');
+    lightfloatlabelsbg: map-get(map-get($themes, 'light'), 'CrosshairLabel');
+    darkfloatlabelsbg: map-get(map-get($themes, 'dark'), 'CrosshairLabel');
 }

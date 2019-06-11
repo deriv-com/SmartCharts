@@ -23,17 +23,25 @@
         justify-content: space-between;
         align-items: center;
         @include themify($themes) {
-            color: themed('DialogHeadText');
+            color: themed('DialogSettingHeadText');
         }
 
         .title {
             font-size: 1.4em;
             padding-left: 16px;
+            font-weight: bold;
         }
         .icons {
             display: flex;
             align-items: center;
             height: 50px;
+            cursor: pointer;
+
+            svg {
+                @include themify($themes) {
+                    fill: themed('DialogSettingHeadText');
+                }
+            }
         }
         &.no-tabs {
             @include themify($themes) {
