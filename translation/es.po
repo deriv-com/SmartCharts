@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom\n"
 "Language-Team: Spanish\n"
 "Language: es_ES\n"
-"PO-Revision-Date: 2019-06-11 10:16\n"
+"PO-Revision-Date: 2019-06-11 10:20\n"
 
 msgid " already exists."
 msgstr " ya existe."
@@ -1267,22 +1267,22 @@ msgid "Pring's Special K"
 msgstr ""
 
 msgid "Darvas Box"
-msgstr ""
+msgstr "Caja de Darvas"
 
 msgid "ATH Lookback Period"
 msgstr ""
 
 msgid "Exit Field"
-msgstr ""
+msgstr "Campo Exit"
 
 msgid "Ghost Boxes"
 msgstr ""
 
 msgid "Stop Levels"
-msgstr ""
+msgstr "Niveles Stop"
 
 msgid "Level Offset"
-msgstr ""
+msgstr "Niveles Offset"
 
 msgid "Price Minimum"
 msgstr ""
@@ -1294,7 +1294,7 @@ msgid "Volume % of Avg"
 msgstr ""
 
 msgid "Darvas"
-msgstr ""
+msgstr "Darvas"
 
 msgid "Ghost"
 msgstr ""
