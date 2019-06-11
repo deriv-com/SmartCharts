@@ -501,13 +501,14 @@ class ChartState {
         if (grab && this.stxx.chart.lockScroll) {
             this.stxx.chart.lockScroll = false;
         }
-        if (grab && this.stxx && this.stxx.chart) {
+        if (this.stxx && this.stxx.chart) {
             const dataSegment = this.stxx.chart.dataSegment;
-            if (dataSegment) {
+            if (this.stxx.masterData.length <= dataSegment.length) {
+                this.stxx.chart.lockScroll = true;
+            } else if (dataSegment) {
                 const startPointOnChartData = dataSegment[0];
-                const barsDisplayedOnScreen = Math.floor(this.stxx.chart.width / this.stxx.layout.candleWidth);
                 const isEndOfScroll = startPointOnChartData && (startPointOnChartData.Date > this.stxx.masterData[0].Date);
-                this.stxx.minimumLeftBars = isEndOfScroll ? 2 : barsDisplayedOnScreen;
+                this.stxx.minimumLeftBars = isEndOfScroll ? 2 : this.stxx.chart.maxTicks;
             }
         }
     }
