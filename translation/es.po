@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom\n"
 "Language-Team: Spanish\n"
 "Language: es_ES\n"
-"PO-Revision-Date: 2019-06-11 10:44\n"
+"PO-Revision-Date: 2019-06-11 11:00\n"
 
 msgid " already exists."
 msgstr " ya existe."
@@ -1105,10 +1105,10 @@ msgid "Teeth Offset"
 msgstr ""
 
 msgid "Lips Period"
-msgstr ""
+msgstr "Período Labios"
 
 msgid "Lips Offset"
-msgstr ""
+msgstr "Labios offset"
 
 msgid "Show Fractals"
 msgstr "Mostrar Fractales"
@@ -1117,10 +1117,10 @@ msgid "Jaw"
 msgstr "Jaw"
 
 msgid "Teeth"
-msgstr ""
+msgstr "Dientes"
 
 msgid "Lips"
-msgstr ""
+msgstr "Labios"
 
 msgid "Gator Oscillator"
 msgstr "Oscilador Gator"
@@ -1270,13 +1270,13 @@ msgid "Darvas Box"
 msgstr "Caja de Darvas"
 
 msgid "ATH Lookback Period"
-msgstr ""
+msgstr "Período Lookback ATH"
 
 msgid "Exit Field"
 msgstr "Campo Exit"
 
 msgid "Ghost Boxes"
-msgstr ""
+msgstr "Cajas de Espectro"
 
 msgid "Stop Levels"
 msgstr "Niveles Stop"
@@ -1297,7 +1297,7 @@ msgid "Darvas"
 msgstr "Darvas"
 
 msgid "Ghost"
-msgstr ""
+msgstr "Espectro"
 
 msgid "Levels"
 msgstr "Niveles"
