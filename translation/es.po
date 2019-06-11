@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom\n"
 "Language-Team: Spanish\n"
 "Language: es_ES\n"
-"PO-Revision-Date: 2019-06-11 11:04\n"
+"PO-Revision-Date: 2019-06-11 11:18\n"
 
 msgid " already exists."
 msgstr " ya existe."
@@ -637,7 +637,7 @@ msgid "EF Trigger"
 msgstr "Disparador EF"
 
 msgid "Schaff Trend Cycle"
-msgstr ""
+msgstr "Ciclo de Tendencia de Schaff"
 
 msgid "QStick"
 msgstr "QStick"
@@ -1096,13 +1096,13 @@ msgid "Jaw Period"
 msgstr "Período Jaw"
 
 msgid "Jaw Offset"
-msgstr ""
+msgstr "Mándibula Offset"
 
 msgid "Teeth Period"
-msgstr ""
+msgstr "Período de dientes"
 
 msgid "Teeth Offset"
-msgstr ""
+msgstr "Dientes offset"
 
 msgid "Lips Period"
 msgstr "Período de Labios"
