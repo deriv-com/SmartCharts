@@ -28,6 +28,7 @@ export default class StudyLegendStore {
             placeholderText: t.translate('"Mass Index" or "Doji Star"'),
             favoritesId: 'indicators',
             mainStore,
+            searchInputClassName: () => this.searchInputClassName,
         });
         this.settingsDialog = new SettingsDialogStore({
             mainStore,
@@ -59,6 +60,7 @@ export default class StudyLegendStore {
     };
 
     previousStudies = { };
+    searchInputClassName;
     @observable activeStudies = {
         categoryName: t.translate('Active'),
         categoryId: 'active',
@@ -113,6 +115,10 @@ export default class StudyLegendStore {
             }
         });
         this.mainStore.state.setShouldMinimiseLastDigit(should_minimise_last_digit);
+    }
+
+    @action.bound updateProps(searchInputClassName) {
+        this.searchInputClassName = searchInputClassName;
     }
 
     @action.bound editStudy(study) {
