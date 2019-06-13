@@ -24,6 +24,7 @@ export default class ChartTitleStore {
             id: 'market_dropdown',
             getCurrentActiveCategory: () => (this.mainStore.chart.currentActiveSymbol ? this.mainStore.chart.currentActiveSymbol.market : 'favorite'),
             getCurrentActiveSubCategory: () => (this.mainStore.chart.currentActiveSymbol ? this.mainStore.chart.currentActiveSymbol.symbol : ''),
+            searchInputClassName: () => this.searchInputClassName,
         });
         this.serverTime = ServerTime.getInstance();
 
@@ -50,6 +51,7 @@ export default class ChartTitleStore {
     @observable todayChange = null;
     @observable todayChangePercent = null;
     @observable isVisible = false;
+    searchInputClassName;
 
     get chart() { return this.mainStore.chart; }
     get context() { return this.mainStore.chart.context; }
@@ -82,6 +84,10 @@ export default class ChartTitleStore {
             }
         }));
     };
+
+    @action.bound updateProps(searchInputClassName) {
+        this.searchInputClassName = searchInputClassName;
+    }
 
     @action.bound setSymbol(symbolObj) {
         if (this.mainStore.state.symbol !== undefined) {
