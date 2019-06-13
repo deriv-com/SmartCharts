@@ -156,7 +156,11 @@ class ChartState {
         if (this.scrollToEpoch !== scrollToEpoch && this.context) {
             this.scrollToEpoch = scrollToEpoch;
             if (isSymbolChanged || isGranularityChanged) {
-                this.mainStore.chart.feed.onMasterDataUpdate(this.scrollChartToLeft);
+                let isScrollChartToLeft = false;
+                this.mainStore.chart.feed.onMasterDataUpdate(() => {
+                    if (!isScrollChartToLeft) this.scrollChartToLeft();
+                    isScrollChartToLeft = true;
+                });
             } else {
                 this.scrollChartToLeft();
             }
@@ -386,7 +390,7 @@ class ChartState {
                 this.stxx.createDataSet();
             }
 
-            this.stxx.chart.lockScroll = false;
+            this.stxx.chart.lockScroll = true;
             const tick = this.stxx.tickFromDate(startEntry.DT);
             const tickLeft = this.stxx.chart.dataSet.length - tick;
             this.stxx.setMaxTicks(tickLeft + (Math.floor(tickLeft / 5) || 2));

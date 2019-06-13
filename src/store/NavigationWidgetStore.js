@@ -3,7 +3,7 @@ import { getUTCEpoch } from '../utils';
 
 export default class NavigationWidgetStore {
     @observable stx;
-    @observable enableHome = false;
+    @observable isHomeEnabled = false;
 
     get chart() { return this.mainStore.chart; }
     get stateStore() { return this.mainStore.state; }
@@ -15,16 +15,16 @@ export default class NavigationWidgetStore {
     }
 
     onContextReady = () => {
-        this.stx = this.mainStore.chart.context.stx;
+        this.stx = this.mainStore.chart.stxx;
         this.stxx.addEventListener('move', this.scrollListener.bind(this));
     };
 
     @action.bound scrollListener() {
-        this.enableHome = !this.stx.isHome();
+        this.isHomeEnabled = !this.stx.isHome();
     }
 
     @action.bound onHome() {
-        this.enableHome = false;
+        this.isHomeEnabled = false;
         this.stx.home();
     }
 

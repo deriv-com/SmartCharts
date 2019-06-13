@@ -9,12 +9,12 @@ const NavigationWidget = ({
     zoomOut,
     home,
     onScale,
-    enableHome,
+    isHomeEnabled,
 }) => (
     <div
         className="ciq-navigation-widget"
     >
-        {enableHome ? (
+        {isHomeEnabled ? (
             <div className="ciq-navigation-widget__item" onClick={home}>
                 <HomeIcon />
             </div>
@@ -34,5 +34,5 @@ export default connect(({ chartSize, navigationWidget }) => ({
     zoomOut: chartSize.zoomOut,
     home: navigationWidget.onHome,
     onScale: navigationWidget.onScale,
-    enableHome: navigationWidget.enableHome,
+    isHomeEnabled: navigationWidget.isHomeEnabled,
 }))(NavigationWidget);
