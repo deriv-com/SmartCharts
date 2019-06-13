@@ -28,6 +28,7 @@ export default class StudyLegendStore {
             placeholderText: t.translate('"Mass Index" or "Doji Star"'),
             favoritesId: 'indicators',
             mainStore,
+            searchInputClassName: () => this.searchInputClassName,
         });
         this.settingsDialog = new SettingsDialogStore({
             mainStore,
@@ -59,6 +60,7 @@ export default class StudyLegendStore {
     };
 
     previousStudies = { };
+    searchInputClassName;
     @observable activeStudies = {
         categoryName: t.translate('Active'),
         categoryId: 'active',
@@ -95,6 +97,10 @@ export default class StudyLegendStore {
         this.changeStudyPanelTitle(sd);
         logEvent(LogCategories.ChartControl, LogActions.Indicator, `Add ${item}`);
         this.menu.setOpen(false);
+    }
+
+    @action.bound updateProps(searchInputClassName) {
+        this.searchInputClassName = searchInputClassName;
     }
 
     @action.bound editStudy(study) {
