@@ -18,6 +18,7 @@ export default class CategoricalDisplayStore {
         id,
         getCurrentActiveCategory,
         getCurrentActiveSubCategory,
+        searchInputClassName,
     }) {
         reaction(getIsShown, () => {
             if (getIsShown()) {
@@ -58,6 +59,7 @@ export default class CategoricalDisplayStore {
         this.getCurrentActiveSubCategory = getCurrentActiveSubCategory;
         this.isInit = false;
         this.searchInput = React.createRef();
+        this.searchInputClassName = searchInputClassName;
 
         const normalItem = connect(() => ({
             favoritesId,
@@ -99,6 +101,7 @@ export default class CategoricalDisplayStore {
             value: this.filterText,
             onChange: this.setFilterText,
             searchInput: this.searchInput,
+            searchInputClassName: this.searchInputClassName,
         }))(SearchInput);
     }
 

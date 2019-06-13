@@ -16,6 +16,7 @@ const swatchColors = [
 export default class ComparisonStore {
     @observable comparisonSymbols = [];
     currentActiveSymbol; // just used to track if symbol has changed
+    searchInputClassName;
 
     constructor(mainStore) {
         this.mainStore = mainStore;
@@ -33,12 +34,17 @@ export default class ComparisonStore {
             placeholderText: t.translate('Search...'),
             favoritesId: 'chartTitle&Comparison',
             mainStore,
+            searchInputClassName: () => this.searchInputClassName,
         });
         this.ComparisonSelector = this.categoricalDisplay.connect(CategoricalDisplay);
         when(() => this.context, this.onContextReady);
     }
 
     get context() { return this.mainStore.chart.context; }
+
+    @action.bound updateProps(searchInputClassName) {
+        this.searchInputClassName = searchInputClassName;
+    }
 
     @action.bound updateComparisonPrices(data) {
         const comparison = this.comparisonSymbols.find(x => x.symbolObject.symbol === data.symbol);
