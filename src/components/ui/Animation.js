@@ -233,7 +233,7 @@ export default function animateChart(stx, animationParameters, easeMachine) {
                         if (chart.entryTick !== null && chart.entryTick !== undefined) {
                             const visibleTicks = chart.dataSet.length - chart.entryTick + 1;
                             this.setMaxTicks(visibleTicks + 3);
-                            chart.scroll = visibleTicks;
+                            chart.scroll = visibleTicks + 1;
                         }
                     }
                 }
@@ -305,7 +305,7 @@ export default function animateChart(stx, animationParameters, easeMachine) {
                             const dataLen = chart.dataSet.length;
                             const visibleTicks = dataLen - chart.entryTick + 1;
                             this.setMaxTicks(visibleTicks + 3);
-                            chart.scroll = visibleTicks;
+                            chart.scroll = visibleTicks + 1;
                         } else {
                             this.setMaxTicks(chart.dataSet.length + (Math.floor(chart.dataSet.length / 5) || 2));
                             chart.scroll = chart.dataSet.length + (Math.floor(chart.dataSet.length / 10) || 1);
