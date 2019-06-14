@@ -29,6 +29,8 @@ export default class StudyLegendStore {
             favoritesId: 'indicators',
             mainStore,
             searchInputClassName: () => this.searchInputClassName,
+            ItemWrapper: () => this.ItemWrapper,
+            itemWrapperProps: () => this.itemWrapperProps,
         });
         this.settingsDialog = new SettingsDialogStore({
             mainStore,
@@ -61,6 +63,10 @@ export default class StudyLegendStore {
 
     previousStudies = { };
     searchInputClassName;
+    ItemWrapper;
+    itemWrapperProps;
+    hasReachedLimitListener;
+    @observable hasReachedLimits = false;
     @observable activeStudies = {
         categoryName: t.translate('Active'),
         categoryId: 'active',
@@ -117,8 +123,11 @@ export default class StudyLegendStore {
         this.mainStore.state.setShouldMinimiseLastDigit(should_minimise_last_digit);
     }
 
-    @action.bound updateProps(searchInputClassName) {
+    @action.bound updateProps({ searchInputClassName, ItemWrapper, itemWrapperProps, hasReachedLimitListener }) {
         this.searchInputClassName = searchInputClassName;
+        this.ItemWrapper = ItemWrapper;
+        this.itemWrapperProps = itemWrapperProps;
+        this.hasReachedLimitListener = hasReachedLimitListener;
     }
 
     @action.bound editStudy(study) {
@@ -294,6 +303,13 @@ export default class StudyLegendStore {
         });
 
         this.activeStudies.data = studies;
+        const hasReachedLimit = studies.length >= 5;
+        if (this.hasReachedLimits !== hasReachedLimit) {
+            this.hasReachedLimits = hasReachedLimit;
+            if (this.hasReachedLimitListener && typeof this.hasReachedLimitListener === 'function') {
+                this.hasReachedLimitListener(hasReachedLimit);
+            }
+        }
     }
 
     @action.bound clearStudies() {

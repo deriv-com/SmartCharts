@@ -13,6 +13,8 @@ const CategoricalDisplay = ({
     height,
     id,
     searchInputClassName,
+    ItemWrapper,
+    itemWrapperProps,
 }) => (
     <div
         className="cq-categorical-display"
@@ -23,17 +25,35 @@ const CategoricalDisplay = ({
             <SearchInput searchInputClassName={searchInputClassName} />
             <FilterPanel />
         </div>
-        <Scrollbars
-            className="cq-scroll-panel"
-            onScroll={updateScrollSpy}
-            ref={setScrollPanel}
-            style={{ width: isMobile ? '100%' : '312px' }}
-        >
-            <ResultsPanel
-                onSelectItem={onSelectItem}
-                id={id}
-            />
-        </Scrollbars>
+        { ItemWrapper ? (
+            <ItemWrapper {...itemWrapperProps}>
+                <Scrollbars
+                    className="cq-scroll-panel"
+                    onScroll={updateScrollSpy}
+                    ref={setScrollPanel}
+                    style={{ width: isMobile ? '100%' : '312px' }}
+                >
+                    <ResultsPanel
+                        onSelectItem={onSelectItem}
+                        id={id}
+                    />
+                </Scrollbars>
+            </ItemWrapper>
+        ) : (
+            <Scrollbars
+                className="cq-scroll-panel"
+                onScroll={updateScrollSpy}
+                ref={setScrollPanel}
+                style={{ width: isMobile ? '100%' : '312px' }}
+            >
+                <ResultsPanel
+                    onSelectItem={onSelectItem}
+                    id={id}
+                />
+            </Scrollbars>
+        )
+        }
+
     </div>
 );
 
