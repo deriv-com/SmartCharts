@@ -10,6 +10,7 @@ const Comparison = ({
     menuOpen,
     isMobile,
     activeComparisonsNo,
+    searchInputClassName,
 }) => (
     <ComparisonMenu
         className="cq-comparison-new cq-symbols-display"
@@ -24,7 +25,7 @@ const Comparison = ({
             <NotificationBadge notificationCount={activeComparisonsNo} />
         </ComparisonMenu.Title>
         <ComparisonMenu.Body>
-            <ComparisonSelector />
+            <ComparisonSelector searchInputClassName={searchInputClassName} />
         </ComparisonMenu.Body>
     </ComparisonMenu>
 );

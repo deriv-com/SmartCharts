@@ -13,6 +13,7 @@ const ChartTitle = ({
     onChange,
     SymbolSelectButton,
     setMenuOpen,
+    searchInputClassName,
 }) => {
     if (!currentSymbol) { return null; }
 
@@ -28,6 +29,7 @@ const ChartTitle = ({
             </ChartTitleMenu.Title>
             <ChartTitleMenu.Body>
                 <MarketSelector
+                    searchInputClassName={searchInputClassName}
                     onSelectItem={(x) => {
                         if (x.symbol !== currentSymbol.symbol) {
                             onChange(x.symbol, chartId);

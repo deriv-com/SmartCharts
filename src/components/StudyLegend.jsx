@@ -12,6 +12,7 @@ const StudyLegend = ({
     StudyCategoricalDisplay,
     isMobile,
     activeStudiesNo,
+    searchInputClassName,
 }) => (
     <StudyMenu
         className="ciq-studies"
@@ -28,7 +29,7 @@ const StudyLegend = ({
             <NotificationBadge notificationCount={activeStudiesNo} />
         </StudyMenu.Title>
         <StudyMenu.Body>
-            <StudyCategoricalDisplay />
+            <StudyCategoricalDisplay searchInputClassName={searchInputClassName} />
         </StudyMenu.Body>
     </StudyMenu>
 );
