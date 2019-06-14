@@ -2,7 +2,6 @@ import { observable, action, when } from 'mobx';
 import { getUTCEpoch } from '../utils';
 
 export default class NavigationWidgetStore {
-    @observable stx;
     @observable isHomeEnabled = false;
 
     get chart() { return this.mainStore.chart; }
@@ -15,17 +14,16 @@ export default class NavigationWidgetStore {
     }
 
     onContextReady = () => {
-        this.stx = this.mainStore.chart.stxx;
         this.stxx.addEventListener('move', this.scrollListener.bind(this));
     };
 
     @action.bound scrollListener() {
-        this.isHomeEnabled = !this.stx.isHome();
+        this.isHomeEnabled = !this.stxx.isHome();
     }
 
     @action.bound onHome() {
         this.isHomeEnabled = false;
-        this.stx.home();
+        this.stxx.home();
     }
 
     @action.bound onScale() {
