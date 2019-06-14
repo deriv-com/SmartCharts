@@ -43,6 +43,13 @@
  *    new CIQ.Animation(stxx, {tension:0.3});  //Default animation with splining tension of 0.3
  *
  */
+
+Math.easeOutCirc = function (t, b, c, d) {
+    t /= d;
+    t--;
+    return c * Math.sqrt(1 - t * t) + b;
+};
+
 export default function animateChart(stx, animationParameters, easeMachine) {
     let params = {
         stayPut: false,
@@ -52,7 +59,8 @@ export default function animateChart(stx, animationParameters, easeMachine) {
     animationParameters = CIQ.extend(params, animationParameters);
 
     if (params.tension) stx.chart.tension = animationParameters.tension;
-    stx.tickAnimator = easeMachine || new CIQ.EaseMachine(Math.easeOutCubic, 500);
+    stx.tickAnimator = easeMachine || new CIQ.EaseMachine(Math.easeOutCubic, 1000);
+
 
     let filterSession = false;
     let nextBoundary = null;
@@ -135,7 +143,10 @@ export default function animateChart(stx, animationParameters, easeMachine) {
                 completeLastBar({ Close:close });
             }
         }
-        const tickAnimator = self.tickAnimator;
+
+        let tickAnimator = self.tickAnimator;
+        if (stx.chart.lockScroll) tickAnimator = new CIQ.EaseMachine(Math.easeOutCirc, 100);
+
         // These chart types are the only types supported by animation
         const supportedChartType = this.mainSeriesRenderer && this.mainSeriesRenderer.supportsAnimation;
         if (supportedChartType) {
