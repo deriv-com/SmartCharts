@@ -20647,6 +20647,7 @@ var __js_core_core_ =
 	 * @memberof CIQ
 	 */
 	CIQ.clearCanvas=function(canvas, stx){
+		if (!canvas) canvas = this.stx.chart.tempCanvas;
 		canvas.isDirty=false;
 		var ctx=canvas.context;
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -43477,7 +43478,7 @@ var __js_core_utility_ =
 		if(!CIQ.colorToHexMapping) CIQ.colorToHexMapping={};
 		if(!color || color=="transparent") color="#000000";
 		if(CIQ.colorToHexMapping[color]) return CIQ.colorToHexMapping[color];
-		if (color.substr(0, 1) === '#') {
+		if (color.toString().substr(0, 1) === '#') {
 			if(color.length==4){
 				color=CIQ.colorToHexMapping[color]="#"+Array(3).join(color.substr(1,1))+Array(3).join(color.substr(2,1))+Array(3).join(color.substr(3,1));
 			}
@@ -43502,7 +43503,7 @@ var __js_core_utility_ =
 				value = getComputedStyle(ta).getPropertyValue("color");
 				digits = /(.*?)rgb\((\d+), ?(\d+), ?(\d+)\)/.exec(value);
 				if(digits) return CIQ.colorToHex(value);
-				else if (value.substr(0, 1) === '#') return value;
+				else if (value.toString().substr(0, 1) === '#') return value;
 				return color;
 			}
 			value = ta.createTextRange().queryCommandValue("ForeColor");

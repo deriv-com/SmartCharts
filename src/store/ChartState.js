@@ -379,17 +379,36 @@ class ChartState {
                 );
                 this.stxx.createDataSet();
             }
-            this.stxx.chart.lockScroll = true;
-            const tick = this.stxx.tickFromDate(startEntry.DT);
-            this.stxx.setMaxTicks(5);
-            this.stxx.chart.scroll = this.stxx.chart.dataSet.length - tick;
-            this.stxx.chart.entryTick = tick;
             this.stxx.maxMasterDataSize = 0;
+            const tick = this.stxx.tickFromDate(startEntry.DT);
+            const scrollAnimator = new CIQ.EaseMachine(Math.easeInOutCubic, 1500);
+            const scrollToTarget = this.stxx.chart.dataSegment.length;
+            scrollAnimator.run((bar) => {
+                bar = Math.ceil(bar); // round-up for precision
+                const scroll = this.stxx.chart.dataSegment.length - bar;
+                if (scroll <= 2 || bar === scrollToTarget) {
+                    /**
+                     * Stop scrolling and draw markers if
+                     * the scroll value is off-screen or if the animator has reached target.
+                     * We check scroll <= '2' because sometimes the chart is scrolled so that the first
+                     * bar is partially hidden off-screen
+                     */
+                    scrollAnimator.stop();
+                    this.stxx.chart.entryTick = tick;
+                    this.stxx.chart.lockScroll = true;
+                    this.stxx.chart.isScrollLocationChanged = true; // set to true to draw markers
+                } else {
+                    this.stxx.chart.scroll = scroll;
+                }
+            },
+            0, scrollToTarget);
             this.stxx.draw();
         } else if (this.startEpoch) {
             this.stxx.chart.lockScroll = true;
+            this.stxx.chart.isScrollLocationChanged = true;
         } else {
             this.stxx.chart.lockScroll = false;
+            this.stxx.chart.isScrollLocationChanged = false;
             this.stxx.home();
             this.stxx.draw();
         }
