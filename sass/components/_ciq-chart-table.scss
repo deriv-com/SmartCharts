@@ -25,6 +25,9 @@
     width: 100%;
     border-collapse: collapse;
     table-layout: fixed;
+    @include themify($themes) {
+        background: themed('ChartTableBg');
+    }
 
     td:nth-child(1), th:nth-child(1) {
         width: 145px;
@@ -53,6 +56,7 @@
 
         .ic-icon {
             padding: 8px 0 0 20px;
+            cursor: pointer;
         }
     }
 }
@@ -62,8 +66,9 @@
     position: fixed;
     display: block;
     @include themify($themes) {
-        background: themed('DialogBodyBg');
-        color: themed('DefaultText');
+        background: themed('ChartHeadBg');
+        color: themed('ChartHeadText');
+        border-bottom: 1px solid themed('ChartHeadBorder');
     }
 
     .ciq-table-cell {
@@ -73,14 +78,14 @@
 
 .ciq-table-row {
     @include themify($themes) {
-        border-bottom: 1px solid themed('DialogBodyBg');
+        border-bottom: 1px solid themed('ChartBodyBorder');
     }
 
     .ciq-table-cell {
         text-align: center;
         height: 30px;
         @include themify($themes) {
-            color: themed('DefaultText');
+            color: themed('ChartBodyText');
         }
 
         .cq-change:after {
