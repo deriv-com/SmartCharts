@@ -115,7 +115,7 @@ class Chart extends Component {
                                         <CurrentSpot />
                                         {
                                             enabledNavigationWidget
-                                            && <NavigationWidget />
+                                                && <NavigationWidget />
                                         }
                                     </RenderInsideChart>
                                     <div className="cq-top-ui-widgets">
