@@ -10,6 +10,7 @@ import CurrentSpot from './CurrentSpot.jsx';
 import DrawingCursor from './DrawingCursor.jsx';
 import ChartTable from './ChartTable.jsx';
 import LastDigitStats from './LastDigitStats.jsx';
+import HighestLowestMarker from './HighestLowestMarker.jsx';
 /* css + scss */
 import '../../sass/main.scss';
 
@@ -58,6 +59,7 @@ class Chart extends Component {
             bottomWidgets,
             DrawToolsSettingsDialog,
             StudySettingsDialog,
+            isCandle,
             isMobile = false,
             isOnPagination,
             isChartAvailable,
@@ -110,6 +112,10 @@ class Chart extends Component {
                                             isOnPagination
                                                 && <PaginationLoader />
                                         }
+                                        {
+                                            !isCandle
+                                                && <HighestLowestMarker />
+                                        }
                                         <CurrentSpot />
                                     </RenderInsideChart>
                                     <div className="cq-top-ui-widgets">
@@ -154,6 +160,7 @@ export default connect(({ chart, drawTools, studies, chartSetting, chartType, st
     StudySettingsDialog : studies.StudySettingsDialog,
     DrawToolsSettingsDialog : drawTools.DrawToolsSettingsDialog,
     AggregateChartSettingsDialog : chartType.AggregateChartSettingsDialog,
+    isCandle: chartType.isCandle,
     isChartAvailable: chart.isChartAvailable,
     updateProps: state.updateProps,
     chartContainerHeight: chart.chartContainerHeight,
