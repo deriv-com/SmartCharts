@@ -14,6 +14,7 @@ const StudyLegend = ({
     searchInputClassName,
     ItemWrapper,
     itemWrapperProps,
+    disableAll,
 }) => (
     <StudyMenu
         className="ciq-studies"
@@ -34,6 +35,7 @@ const StudyLegend = ({
                 searchInputClassName={searchInputClassName}
                 ItemWrapper={ItemWrapper}
                 itemWrapperProps={itemWrapperProps}
+                disableAll={disableAll}
             />
         </StudyMenu.Body>
     </StudyMenu>
@@ -49,4 +51,5 @@ export default connect(({ studies: st, chart }) => ({
     activeStudiesNo: st.activeStudies.data.length,
     ItemWrapper: st.ItemWrapper,
     itemWrapperProps: st.itemWrapperProps,
+    disableAll: st.hasReachedLimits,
 }))(StudyLegend);
