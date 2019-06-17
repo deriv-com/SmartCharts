@@ -128,6 +128,7 @@ export default class StudyLegendStore {
         this.ItemWrapper = ItemWrapper;
         this.itemWrapperProps = itemWrapperProps;
         this.hasReachedLimitListener = hasReachedLimitListener;
+        this.setReachedLimit();
     }
 
     @action.bound editStudy(study) {
@@ -281,6 +282,14 @@ export default class StudyLegendStore {
         this.updateStyle();
     };
 
+    @action.bound setReachedLimit() {
+        const hasReachedLimit = this.activeStudies.data.length >= 5;
+        this.hasReachedLimits = hasReachedLimit;
+        if (this.hasReachedLimitListener && typeof this.hasReachedLimitListener === 'function') {
+            this.hasReachedLimitListener(hasReachedLimit);
+        }
+    }
+
     @action.bound updateActiveStudies() {
         const stx = this.stx;
         const studies = [];
@@ -303,13 +312,7 @@ export default class StudyLegendStore {
         });
 
         this.activeStudies.data = studies;
-        const hasReachedLimit = studies.length >= 5;
-        if (this.hasReachedLimits !== hasReachedLimit) {
-            this.hasReachedLimits = hasReachedLimit;
-            if (this.hasReachedLimitListener && typeof this.hasReachedLimitListener === 'function') {
-                this.hasReachedLimitListener(hasReachedLimit);
-            }
-        }
+        this.setReachedLimit();
     }
 
     @action.bound clearStudies() {
