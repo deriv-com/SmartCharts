@@ -504,7 +504,7 @@ class ChartState {
         if (this.stxx && this.stxx.chart) {
             const dataSegment = this.stxx.chart.dataSegment;
             if (this.stxx.masterData.length <= dataSegment.length) {
-                this.stxx.chart.lockScroll = true;
+                this.stxx.minimumLeftBars = 2;
             } else if (dataSegment) {
                 const startPointOnChartData = dataSegment[0];
                 const isEndOfScroll = startPointOnChartData && (startPointOnChartData.Date > this.stxx.masterData[0].Date);
