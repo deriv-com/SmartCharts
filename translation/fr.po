@@ -7,19 +7,19 @@ msgstr ""
 "X-Crowdin-File: /dev/translation/messages.pot\n"
 "Project-Id-Version: smartcharts\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Last-Translator: binarycom <jy@binary.com>\n"
+"Last-Translator: binarycom\n"
 "Language-Team: French\n"
 "Language: fr_FR\n"
-"PO-Revision-Date: 2018-12-21 08:01\n"
+"PO-Revision-Date: 2019-05-07 09:24\n"
 
 msgid " already exists."
 msgstr " existe déja."
 
 msgid "[symbol] feed is delayed by [delay] minutes"
-msgstr ""
+msgstr "l'alimentation [symbol] est retardée de [delay] minutes"
 
 msgid "[symbol] market is now opened."
-msgstr ""
+msgstr "le marché [symbol] est maintenant ouvert."
 
 msgid "[symbol] market is presently closed."
 msgstr "Le marché [symbol] est actuellement fermé."
@@ -39,6 +39,9 @@ msgstr "Annotation"
 msgid "Asset Information"
 msgstr "Informations sur l'actif"
 
+msgid "Auto Scale"
+msgstr "Échelle Automatique"
+
 msgid "Average Line"
 msgstr "Ligne de la moyenne"
 
@@ -47,6 +50,9 @@ msgstr "Ligne de base"
 
 msgid "Box Size"
 msgstr "Taille de la boîte"
+
+msgid "C"
+msgstr "C"
 
 msgid "Callout"
 msgstr "Légende"
@@ -57,17 +63,26 @@ msgstr "ANNULATION"
 msgid "Candle"
 msgstr "Bougie"
 
+msgid "Change"
+msgstr "Changement"
+
 msgid "Channel"
 msgstr "Canal"
 
 msgid "Chart data is not available for this symbol."
 msgstr "L'information graphique n'est pas disponible pour ce symbole."
 
+msgid "Chart Table"
+msgstr "Table Graphique"
+
 msgid "Chart types"
 msgstr "Types de graphique"
 
 msgid "Clear All"
 msgstr "Tout Effacer"
+
+msgid "Close"
+msgstr "Fermeture"
 
 msgid "CLOSE"
 msgstr "CLOTURE"
@@ -96,6 +111,9 @@ msgstr "Ligne de Croisement"
 msgid "Dark Mode"
 msgstr "Mode Sombre"
 
+msgid "Date"
+msgstr "Date"
+
 msgid "Day"
 msgstr "Jour"
 
@@ -112,10 +130,10 @@ msgid "Download"
 msgstr "Télécharger"
 
 msgid "Download as CSV"
-msgstr ""
+msgstr "Télécharger au format CSV"
 
 msgid "Download as PNG"
-msgstr ""
+msgstr "Télécharger au format PNG"
 
 msgid "Download Chart"
 msgstr "Télécharger le graphique"
@@ -147,11 +165,20 @@ msgstr "Éventail Gann"
 msgid "Gartley"
 msgstr "Gartley"
 
+msgid "H"
+msgstr "H"
+
 msgid "Heikin Ashi"
 msgstr "Heikin Ashi"
 
+msgid "High"
+msgstr "Haut"
+
 msgid "HIGH"
 msgstr "PLUS HAUT"
+
+msgid "Historical Data Mode"
+msgstr "Mode de Données Historiques"
 
 msgid "Hollow Candle"
 msgstr "Bougie Creuse"
@@ -171,14 +198,23 @@ msgstr "Intervalle"
 msgid "Kagi"
 msgstr "Kagi"
 
+msgid "L"
+msgstr "B"
+
 msgid "Language"
 msgstr "Langue"
+
+msgid "Last digits stats for latest 1000 ticks on "
+msgstr "Statistiques du dernier chiffre pour les derniers 1000 ticks sur "
 
 msgid "Line"
 msgstr "Ligne"
 
 msgid "Line Break"
 msgstr "Line Break"
+
+msgid "Low"
+msgstr "Bas"
 
 msgid "LOW"
 msgstr "PLUS BAS"
@@ -189,8 +225,14 @@ msgstr "Mesure"
 msgid "Minute"
 msgstr "Minute"
 
+msgid "O"
+msgstr "O"
+
 msgid "OHLC"
 msgstr "OHLC"
+
+msgid "Open"
+msgstr "Ouverture"
 
 msgid "OPEN"
 msgstr "OUVERTURE"
@@ -235,16 +277,16 @@ msgid "RESET"
 msgstr "REINITIALISATION"
 
 msgid "Retrieving Chart Data..."
-msgstr ""
+msgstr "Récupération des données du graphique..."
 
 msgid "Retrieving Chart Engine..."
-msgstr ""
+msgstr "Récupération du moteur graphique..."
 
-msgid "Retrieving market symbols..."
-msgstr ""
+msgid "Retrieving Market Symbols..."
+msgstr "Récupération des Symboles du Marché..."
 
-msgid "Retrieving trading times..."
-msgstr ""
+msgid "Retrieving Trading Times..."
+msgstr "Récupération des Temps de Trading..."
 
 msgid "Reversal"
 msgstr "Renversement"
@@ -295,10 +337,13 @@ msgid "Spline"
 msgstr "Spline"
 
 msgid "SPOT"
-msgstr ""
+msgstr "SPOT"
 
 msgid "Streaming for [symbol] is not available due to license restrictions"
 msgstr "Diffusion en continu pour [symbol] n’est pas disponible en raison de restrictions de licence"
+
+msgid "Table"
+msgstr "Tableau"
 
 msgid "Template name"
 msgstr "Nom du modèle"
@@ -1301,4 +1346,10 @@ msgstr "Ratio fort"
 
 msgid "Weak Ratio"
 msgstr "Faible Ratio"
+
+msgid "Closed"
+msgstr "Fermé"
+
+msgid "Opens in:"
+msgstr "Ouverture dans :"
 

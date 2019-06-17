@@ -7,10 +7,10 @@ msgstr ""
 "X-Crowdin-File: /dev/translation/messages.pot\n"
 "Project-Id-Version: smartcharts\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Last-Translator: binarycom <jy@binary.com>\n"
+"Last-Translator: binarycom\n"
 "Language-Team: German\n"
 "Language: de_DE\n"
-"PO-Revision-Date: 2018-12-23 20:41\n"
+"PO-Revision-Date: 2019-05-08 03:42\n"
 
 msgid " already exists."
 msgstr " existiert bereits."
@@ -39,6 +39,9 @@ msgstr "Anmerkung"
 msgid "Asset Information"
 msgstr "Anlgen-Informationen"
 
+msgid "Auto Scale"
+msgstr "Auto Skala"
+
 msgid "Average Line"
 msgstr "Durchschnittslinie"
 
@@ -47,6 +50,9 @@ msgstr "Baseline"
 
 msgid "Box Size"
 msgstr "Boxgröße"
+
+msgid "C"
+msgstr "C"
 
 msgid "Callout"
 msgstr "Angabe"
@@ -57,17 +63,26 @@ msgstr "ABBRECHEN"
 msgid "Candle"
 msgstr "Kerze"
 
+msgid "Change"
+msgstr "Veränderung"
+
 msgid "Channel"
 msgstr "Kanal"
 
 msgid "Chart data is not available for this symbol."
 msgstr "Chart-Daten sind für dieses Symbol nicht verfügbar."
 
+msgid "Chart Table"
+msgstr "Diagrammtabelle"
+
 msgid "Chart types"
 msgstr "Charttypen"
 
 msgid "Clear All"
 msgstr "Alle löschen"
+
+msgid "Close"
+msgstr "Schluss"
 
 msgid "CLOSE"
 msgstr "SCHLIEßEN"
@@ -95,6 +110,9 @@ msgstr "Kreuzlinie"
 
 msgid "Dark Mode"
 msgstr "Dark Modus"
+
+msgid "Date"
+msgstr "Datum"
 
 msgid "Day"
 msgstr "Tag"
@@ -147,11 +165,20 @@ msgstr "Gann Fan"
 msgid "Gartley"
 msgstr "Gartley"
 
+msgid "H"
+msgstr "H"
+
 msgid "Heikin Ashi"
 msgstr "Heikin Ashi"
 
+msgid "High"
+msgstr "Hoch"
+
 msgid "HIGH"
 msgstr "HOCH"
+
+msgid "Historical Data Mode"
+msgstr "Historischer Datenmodus"
 
 msgid "Hollow Candle"
 msgstr "Hohlkerze"
@@ -171,14 +198,23 @@ msgstr "Intervall"
 msgid "Kagi"
 msgstr "Kagi"
 
+msgid "L"
+msgstr "L"
+
 msgid "Language"
 msgstr "Sprache"
+
+msgid "Last digits stats for latest 1000 ticks on "
+msgstr "Statistik der letzten ziffern für die letzten 1000 ticks von "
 
 msgid "Line"
 msgstr "Linie"
 
 msgid "Line Break"
 msgstr "Zeilenumbruch"
+
+msgid "Low"
+msgstr "Tief"
 
 msgid "LOW"
 msgstr "TIEF"
@@ -189,8 +225,14 @@ msgstr "Messen"
 msgid "Minute"
 msgstr "Minute"
 
+msgid "O"
+msgstr "O"
+
 msgid "OHLC"
 msgstr "OHLC"
+
+msgid "Open"
+msgstr "Offen"
 
 msgid "OPEN"
 msgstr "OFFEN"
@@ -240,11 +282,11 @@ msgstr "Chartdaten werden abgerufen"
 msgid "Retrieving Chart Engine..."
 msgstr "Chart-Engine wird abgerufen"
 
-msgid "Retrieving market symbols..."
-msgstr "Markt-Symbole werden abgerufen..."
+msgid "Retrieving Market Symbols..."
+msgstr "Abrufen von Marktsymbolen..."
 
-msgid "Retrieving trading times..."
-msgstr "Handelszeiten werden abgerufen..."
+msgid "Retrieving Trading Times..."
+msgstr "Abrufen von Handelszeiten..."
 
 msgid "Reversal"
 msgstr "Umkehrung"
@@ -299,6 +341,9 @@ msgstr "SPOT"
 
 msgid "Streaming for [symbol] is not available due to license restrictions"
 msgstr "Streaming für [symbol] ist auf Grund von Lizenzeinschränkungen nicht verfügbar"
+
+msgid "Table"
+msgstr "Tabelle"
 
 msgid "Template name"
 msgstr "Vorlagenname"
@@ -1301,4 +1346,10 @@ msgstr "Hohe Quote"
 
 msgid "Weak Ratio"
 msgstr "Schwache Quote"
+
+msgid "Closed"
+msgstr "Geschlossen"
+
+msgid "Opens in:"
+msgstr "Öffnet sich:"
 

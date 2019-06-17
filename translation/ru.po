@@ -7,10 +7,10 @@ msgstr ""
 "X-Crowdin-File: /dev/translation/messages.pot\n"
 "Project-Id-Version: smartcharts\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Last-Translator: binarycom <jy@binary.com>\n"
+"Last-Translator: binarycom\n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
-"PO-Revision-Date: 2019-01-24 08:51\n"
+"PO-Revision-Date: 2019-06-11 07:36\n"
 
 msgid " already exists."
 msgstr " уже существует."
@@ -39,6 +39,9 @@ msgstr "Примечание"
 msgid "Asset Information"
 msgstr "Информация об активе"
 
+msgid "Auto Scale"
+msgstr "Авто масштаб"
+
 msgid "Average Line"
 msgstr "Средняя линия"
 
@@ -47,6 +50,9 @@ msgstr "Основная линия"
 
 msgid "Box Size"
 msgstr "Размер ячейки"
+
+msgid "C"
+msgstr "З"
 
 msgid "Callout"
 msgstr "Сноска"
@@ -57,17 +63,26 @@ msgstr "ОТМЕНА"
 msgid "Candle"
 msgstr "Свеча"
 
+msgid "Change"
+msgstr "Изменение"
+
 msgid "Channel"
 msgstr "Канал"
 
 msgid "Chart data is not available for this symbol."
 msgstr "График недоступен для данного актива."
 
+msgid "Chart Table"
+msgstr "График"
+
 msgid "Chart types"
 msgstr "Вид графика"
 
 msgid "Clear All"
 msgstr "Очистить все"
+
+msgid "Close"
+msgstr "Закрытие"
 
 msgid "CLOSE"
 msgstr "ЗАКРЫТИЕ"
@@ -95,6 +110,9 @@ msgstr "Линия пересечения"
 
 msgid "Dark Mode"
 msgstr "Тёмный режим"
+
+msgid "Date"
+msgstr "Дата"
 
 msgid "Day"
 msgstr "День"
@@ -147,11 +165,20 @@ msgstr "Веер Ганна"
 msgid "Gartley"
 msgstr "Гартли"
 
+msgid "H"
+msgstr "Мак"
+
 msgid "Heikin Ashi"
 msgstr "Хейкен Аши"
 
+msgid "High"
+msgstr "Макс."
+
 msgid "HIGH"
 msgstr "МАКС."
+
+msgid "Historical Data Mode"
+msgstr "Исторические данные"
 
 msgid "Hollow Candle"
 msgstr "пустая свеча"
@@ -171,14 +198,23 @@ msgstr "Интервал"
 msgid "Kagi"
 msgstr "Каги"
 
+msgid "L"
+msgstr "Мин"
+
 msgid "Language"
 msgstr "Язык"
+
+msgid "Last digits stats for latest 1000 ticks on "
+msgstr "Статистика последних десятичных в последних 1000 тиков для "
 
 msgid "Line"
 msgstr "Линия"
 
 msgid "Line Break"
 msgstr "Разрыв линии"
+
+msgid "Low"
+msgstr "Мин."
 
 msgid "LOW"
 msgstr "МИН."
@@ -189,8 +225,14 @@ msgstr "Измерить"
 msgid "Minute"
 msgstr "Мин."
 
+msgid "O"
+msgstr "О"
+
 msgid "OHLC"
 msgstr "OHLC"
+
+msgid "Open"
+msgstr "Открытие"
 
 msgid "OPEN"
 msgstr "ОТКРЫТИЕ"
@@ -240,10 +282,10 @@ msgstr "Получение данных графика..."
 msgid "Retrieving Chart Engine..."
 msgstr "Получение данных из Chart Engine..."
 
-msgid "Retrieving market symbols..."
+msgid "Retrieving Market Symbols..."
 msgstr "Получение рыночных данных..."
 
-msgid "Retrieving trading times..."
+msgid "Retrieving Trading Times..."
 msgstr "Получение времени торговли..."
 
 msgid "Reversal"
@@ -299,6 +341,9 @@ msgstr "СПОТ"
 
 msgid "Streaming for [symbol] is not available due to license restrictions"
 msgstr "Потоковые котировки для [symbol] недоступны из-за лицензионных ограничений"
+
+msgid "Table"
+msgstr "Таблица"
 
 msgid "Template name"
 msgstr "Название шаблона"
@@ -1301,4 +1346,10 @@ msgstr "Сильное соотношение"
 
 msgid "Weak Ratio"
 msgstr "Слабое соотношение"
+
+msgid "Closed"
+msgstr "Закрыто"
+
+msgid "Opens in:"
+msgstr "Открывается в:"
 

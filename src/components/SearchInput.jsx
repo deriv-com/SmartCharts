@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { CloseIcon, SearchIcon } from './Icons.jsx';
+import { CloseCircleIcon, SearchIcon } from './Icons.jsx';
 import { connect } from '../store/Connect';
 
 class SearchInput extends Component {
@@ -12,11 +12,12 @@ class SearchInput extends Component {
     };
 
     render() {
-        const { placeholder, value, searchInput } = this.props;
+        const { placeholder, value, searchInput, searchInputClassName } = this.props;
 
         return (
             <div className={`cq-lookup-input ${value.trim() !== '' ? 'active' : ''}`}>
                 <input
+                    className={searchInputClassName}
                     value={value}
                     ref={searchInput}
                     onChange={this.onChange}
@@ -28,7 +29,7 @@ class SearchInput extends Component {
                     placeholder={placeholder}
                 />
                 <SearchIcon />
-                <CloseIcon className="icon-reset" onClick={this.clearFilterText} />
+                <CloseCircleIcon className="icon-reset" onClick={this.clearFilterText} />
             </div>
         );
     }

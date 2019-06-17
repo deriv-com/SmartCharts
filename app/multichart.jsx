@@ -18,7 +18,6 @@ import { // eslint-disable-line import/no-extraneous-dependencies
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './test.scss';
-import './doorbell';
 import { ConnectionManager, StreamManager } from './connection';
 
 setSmartChartsPublicPath('./dist/');

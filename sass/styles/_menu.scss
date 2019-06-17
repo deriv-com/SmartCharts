@@ -35,7 +35,6 @@ $transition-duration: 300ms;
     margin-top: 5px;
     @include themify($themes) {
         color: themed('DialogBodyText');
-        border: 1px solid themed('DialogBorder');
         background-color: themed('DialogBodyBg');
     }
 
@@ -46,23 +45,20 @@ $transition-duration: 300ms;
         pointer-events: initial;
     }
     .title {
-        height: 40px;
-        line-height: 40px;
-        font-size: 16px;
-        display: flex;
+        display: inline-block;
+        height: 20px;
+        line-height: 20px;
+        padding: 1em 1.6em 0.5em;
+        box-sizing: content-box;
 
         .title-text {
-            display: block;
-            font-size: 16px;
-            line-height: 40px;
+            display: inline-block;
+            font-size: 1.2em;
             font-weight: 400;
-            padding: 0 0.7em;
         }
 
         @include themify($themes) {
             color: themed('DialogHeadText');
-            background: themed('DialogHeadBg');
-            border-bottom: 1px solid themed('DialogHeadBorder');
         }
 
         > .ic-icon {
@@ -84,7 +80,7 @@ $transition-duration: 300ms;
     .cq-categorical-display {
         .cq-lookup-filters {
             @include themify($themes) {
-                background: themed('DialogHeadBg');
+                background: themed('CatDisplayFilterBg');
             }
         }
     }
@@ -107,7 +103,7 @@ $transition-duration: 300ms;
     .cq-modal-dropdown {
         border: none;
         pointer-events: none;
-        z-index: 1;
+        z-index: -1;
         position: fixed;
         height: inherit;
         width: 100%;

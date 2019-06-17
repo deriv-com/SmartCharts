@@ -5,9 +5,11 @@ import ChartTitle from './ChartTitle.jsx';
 import AssetInformation from './AssetInformation.jsx';
 import Loader from './Loader.jsx';
 import Barrier from './Barrier.jsx';
+import BottomWidgetsContainer from './BottomWidgetsContainer.jsx';
 import CurrentSpot from './CurrentSpot.jsx';
 import DrawingCursor from './DrawingCursor.jsx';
 import ChartTable from './ChartTable.jsx';
+import LastDigitStats from './LastDigitStats.jsx';
 /* css + scss */
 import '../../sass/main.scss';
 
@@ -17,6 +19,7 @@ import ChartControls from './ChartControls.jsx';
 import Crosshair from './Crosshair.jsx';
 import { connect } from '../store/Connect';
 import { initGA, logPageView } from '../utils/ga';
+import PaginationLoader from './PaginationLoader.jsx';
 
 class Chart extends Component {
     constructor(props) {
@@ -52,9 +55,11 @@ class Chart extends Component {
 
     render() {
         const {
+            bottomWidgets,
             DrawToolsSettingsDialog,
             StudySettingsDialog,
             isMobile = false,
+            isOnPagination,
             isChartAvailable,
             barriers = [],
             children,
@@ -63,17 +68,22 @@ class Chart extends Component {
             topWidgets,
             chartContainerHeight,
             containerWidth,
+            isChartClosed,
             isDrawing,
             theme,
             position,
+            showLastDigitStats,
         } = this.props;
 
-        const currentPosition = `cq-chart-control-${(position && !isMobile) ? position : 'bottom'}`;
+        const currentPosition = `cq-chart-control-${(chartControlsWidgets && position && !isMobile) ? position : 'bottom'}`;
         const contextWidth =  !isMobile ? `smartcharts-${containerWidth}` : '';
         const TopWidgets = topWidgets || this.defaultTopWidgets;
+        const BottomWidgets = !bottomWidgets && showLastDigitStats ? LastDigitStats : bottomWidgets;
+        // if there are any markers, then increase the subholder z-index
+        const HasMarkers = children && children.length ? 'smartcharts--has-markers' : '';
 
         return (
-            <div className={`smartcharts smartcharts-${theme} ${contextWidth}`}>
+            <div className={`smartcharts smartcharts-${theme} ${contextWidth} ${HasMarkers}`}>
                 <div
                     className={`smartcharts-${isMobile ? 'mobile' : 'desktop'}`}
                     ref={this.modalNode}
@@ -84,7 +94,7 @@ class Chart extends Component {
                     >
                         <div className={` ${currentPosition}`}>
                             <div className="ciq-chart-area">
-                                <div className="ciq-chart">
+                                <div className={`ciq-chart ${isChartClosed ? 'closed-chart' : ''}`}>
                                     <RenderInsideChart at="holder">
                                         {barriers.map((barr, idx) => (
                                             <Barrier
@@ -95,6 +105,11 @@ class Chart extends Component {
                                     </RenderInsideChart>
                                     <RenderInsideChart at="subholder">
                                         {children}
+
+                                        {
+                                            isOnPagination
+                                                && <PaginationLoader />
+                                        }
                                         <CurrentSpot />
                                     </RenderInsideChart>
                                     <div className="cq-top-ui-widgets">
@@ -110,8 +125,16 @@ class Chart extends Component {
                                             {t.translate('Chart data is not available for this symbol.')}
                                         </div>
                                     )}
+                                    <BottomWidgetsContainer>
+                                        {
+                                            BottomWidgets
+                                                && <BottomWidgets />
+                                        }
+                                    </BottomWidgetsContainer>
                                 </div>
-                                <ChartControls widgets={chartControlsWidgets} />
+                                { chartControlsWidgets !== null
+                                    && <ChartControls widgets={chartControlsWidgets} />
+                                }
                             </div>
                         </div>
                     </div>
@@ -135,7 +158,10 @@ export default connect(({ chart, drawTools, studies, chartSetting, chartType, st
     updateProps: state.updateProps,
     chartContainerHeight: chart.chartContainerHeight,
     containerWidth: chart.containerWidth,
+    isChartClosed: state.isChartClosed,
     isDrawing: drawingCursor.isDrawing,
     theme: chartSetting.theme,
     position: chartSetting.position,
+    showLastDigitStats:state.showLastDigitStats,
+    isOnPagination: state.isOnPagination,
 }))(Chart);

@@ -7,10 +7,10 @@ msgstr ""
 "X-Crowdin-File: /dev/translation/messages.pot\n"
 "Project-Id-Version: smartcharts\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Last-Translator: binarycom <jy@binary.com>\n"
+"Last-Translator: binarycom\n"
 "Language-Team: Portuguese\n"
 "Language: pt_PT\n"
-"PO-Revision-Date: 2018-12-21 08:01\n"
+"PO-Revision-Date: 2019-05-08 03:42\n"
 
 msgid " already exists."
 msgstr " já existe."
@@ -39,6 +39,9 @@ msgstr "Anotação"
 msgid "Asset Information"
 msgstr "Informações do ativo"
 
+msgid "Auto Scale"
+msgstr "Dimensionamento automático"
+
 msgid "Average Line"
 msgstr "Linha Média"
 
@@ -47,6 +50,9 @@ msgstr "Linha de base"
 
 msgid "Box Size"
 msgstr "Tamanho da caixa"
+
+msgid "C"
+msgstr "C"
 
 msgid "Callout"
 msgstr "Período de disponibilidade"
@@ -57,17 +63,26 @@ msgstr "CANCELAR"
 msgid "Candle"
 msgstr "Vela"
 
+msgid "Change"
+msgstr "Alterar"
+
 msgid "Channel"
 msgstr "Canal"
 
 msgid "Chart data is not available for this symbol."
 msgstr "Dados de gráficos não estão disponíveis para este símbolo."
 
+msgid "Chart Table"
+msgstr "Tabela do gráfico"
+
 msgid "Chart types"
 msgstr "Tipos de gráficos"
 
 msgid "Clear All"
 msgstr "Limpar Todos"
+
+msgid "Close"
+msgstr "Fechar"
 
 msgid "CLOSE"
 msgstr "FECHAR"
@@ -95,6 +110,9 @@ msgstr "Linha Cruzada"
 
 msgid "Dark Mode"
 msgstr "Modo escuro"
+
+msgid "Date"
+msgstr "Data"
 
 msgid "Day"
 msgstr "Dia"
@@ -147,11 +165,20 @@ msgstr "Gann Fan"
 msgid "Gartley"
 msgstr "Gartley"
 
+msgid "H"
+msgstr "H"
+
 msgid "Heikin Ashi"
 msgstr "Heikin Ashi"
 
+msgid "High"
+msgstr "Alta"
+
 msgid "HIGH"
 msgstr "ALTO"
+
+msgid "Historical Data Mode"
+msgstr "Modo de data histórica"
 
 msgid "Hollow Candle"
 msgstr "Vela vazia"
@@ -171,14 +198,23 @@ msgstr "Intervalo"
 msgid "Kagi"
 msgstr "Kagi"
 
+msgid "L"
+msgstr "L"
+
 msgid "Language"
 msgstr "Idioma"
+
+msgid "Last digits stats for latest 1000 ticks on "
+msgstr "Estatísticas do último dígito dos últimos 1000 ticks de "
 
 msgid "Line"
 msgstr "Linha"
 
 msgid "Line Break"
 msgstr "Quebra de linha"
+
+msgid "Low"
+msgstr "Baixa"
 
 msgid "LOW"
 msgstr "BAIXO"
@@ -189,8 +225,14 @@ msgstr "Medir"
 msgid "Minute"
 msgstr "Minuto"
 
+msgid "O"
+msgstr "O"
+
 msgid "OHLC"
 msgstr "OHLC"
+
+msgid "Open"
+msgstr "Abrir"
 
 msgid "OPEN"
 msgstr "ABRIR"
@@ -235,16 +277,16 @@ msgid "RESET"
 msgstr "REINICIAR"
 
 msgid "Retrieving Chart Data..."
-msgstr ""
+msgstr "Carregando dados do gráfico..."
 
 msgid "Retrieving Chart Engine..."
-msgstr ""
+msgstr "Carregando o motor do gráfico..."
 
-msgid "Retrieving market symbols..."
-msgstr ""
+msgid "Retrieving Market Symbols..."
+msgstr "Carregando símbolos do mercado..."
 
-msgid "Retrieving trading times..."
-msgstr ""
+msgid "Retrieving Trading Times..."
+msgstr "Carregando horas de negociação..."
 
 msgid "Reversal"
 msgstr "Inversão"
@@ -299,6 +341,9 @@ msgstr "PREÇO"
 
 msgid "Streaming for [symbol] is not available due to license restrictions"
 msgstr "Transmissão ao vivo do [symbol] não está disponível devido a restrições de licença"
+
+msgid "Table"
+msgstr "Tabela"
 
 msgid "Template name"
 msgstr "Nome do modelo"
@@ -1301,4 +1346,10 @@ msgstr "Ratio Forte"
 
 msgid "Weak Ratio"
 msgstr "Ratio Fraca"
+
+msgid "Closed"
+msgstr "Fechado"
+
+msgid "Opens in:"
+msgstr "Abre a porta:"
 

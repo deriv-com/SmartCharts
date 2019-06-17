@@ -35,6 +35,7 @@ const Views = ({
     remove,
     inputRef,
     templateName,
+    searchInputClassName,
 }) => (
     <ViewsMenu
         className="ciq-views"
@@ -68,7 +69,8 @@ const Views = ({
                                     {t.translate('OVERWRITE')}
                                 </div>
                             </div>
-                        </div>)
+                        </div>
+                    )
                 }
                 <div className="template-name">
                     {
@@ -78,7 +80,7 @@ const Views = ({
                                     <BackIcon onClick={cancel} />
                                     <input
                                         ref={inputRef}
-                                        className="view-input"
+                                        className={`view-input ${searchInputClassName || ''}`}
                                         value={templateName}
                                         placeholder={t.translate('Template name')}
                                         maxLength={20}
@@ -87,7 +89,7 @@ const Views = ({
                                     />
                                 </span>
                             )
-                            : <span className="add-new" onClick={main}> {t.translate('Add New')} </span>
+                            : <span className="add-new" onClick={main}> {t.translate('Add new')} </span>
                     }
                     <span className="icon">
                         {

@@ -1,6 +1,6 @@
 import { action, computed, observable, when } from 'mobx';
 
-class CurrectSpotStore {
+class CurrentSpotStore {
     constructor(mainStore) {
         this.mainStore = mainStore;
         when(() => this.context, this.onContextReady);
@@ -13,12 +13,17 @@ class CurrectSpotStore {
 
     get context() { return this.mainStore.chart.context; }
     get stx() { return this.context.stx; }
+    get state() { return this.mainStore.state; }
 
     onContextReady = () => {
         if (this.mainStore.state.isAnimationEnabled) this.stx.append('draw', this.updateSpot);
     }
 
     @action.bound updateSpot() {
+        if (this.state.endEpoch) {
+            this.show = false;
+            return;
+        }
         const chart = this.stx.chart;
         const layout = this.stx.layout;
         const mainSeriesRenderer = this.stx.mainSeriesRenderer;
@@ -28,13 +33,14 @@ class CurrectSpotStore {
         if (chart.dataSet
             && chart.dataSet.length
             && mainSeriesRenderer
-            && mainSeriesRenderer.supportsAnimation) {
+        ) {
             const panel = chart.panel;
             const currentQuote = this.stx.currentQuote();
             if (!currentQuote) { return; }
             const price = currentQuote.Close;
             const x = this.stx.pixelFromTick(currentQuote.tick, chart) + (chart.lastTickOffset || 0);
             const y = this.stx.pixelFromPrice(price, panel);
+
             if (chart.yAxis.left > x
                 && chart.yAxis.top <= y
                 && chart.yAxis.bottom >= y) {
@@ -47,11 +53,14 @@ class CurrectSpotStore {
                 visible = false;
             }
         }
-
-        this.show = visible && (layout.chartType !== 'candle'
-            && layout.chartType !== 'colored_bar'
-            && layout.chartType !== 'hollow_candle');
+        this.show = visible
+            && !this.state.endEpoch
+            && (
+                layout.chartType !== 'candle'
+                && layout.chartType !== 'colored_bar'
+                && layout.chartType !== 'hollow_candle'
+            );
     }
 }
 
-export default CurrectSpotStore;
+export default CurrentSpotStore;

@@ -19,6 +19,7 @@ export default class MarkerStore {
 
     constructor(mainStore) {
         this.mainStore = mainStore;
+        this.chartStore = mainStore.chart;
         this.stx = this.mainStore.chart.context.stx;
         this.chart = this.stx.chart;
         this.panel = this.chart.panel;
@@ -26,7 +27,7 @@ export default class MarkerStore {
 
         this.mainStore.chart.feed.onPagination(this.updateMarkerTick);
         this._listenerId = this.stx.addEventListener('newChart', this.updateMarkerTick);
-        this._injectionId = this.stx.prepend('positionMarkers', this.updatePosition);
+        this._injectionId = this.stx.prepend('positionMarkers', this.updateMarkerTick);
     }
 
     @action.bound destructor() {
@@ -45,10 +46,13 @@ export default class MarkerStore {
         let isUpdatePositionRequired = false;
         updatePropIfChanged(this, { x, xPositioner }, () => { isUpdateMarkerTickRequired = true; });
         updatePropIfChanged(this, { y, yPositioner }, () => { isUpdatePositionRequired   = true; });
+
+        // TODO this condition isn't needed any more if the current algorithm works.
         if (isUpdateMarkerTickRequired) {
             this.updateMarkerTick(); // also calls updatePosition
         } else if (isUpdatePositionRequired) {
-            this.updatePosition();
+            // this.updatePosition();
+            this.updateMarkerTick();
         }
     }
 
@@ -57,7 +61,12 @@ export default class MarkerStore {
     // Considering how often this function is called, it made more sense to have the offset
     // done in CSS.
     @action.bound updatePosition() {
-        if (this.isDistantFuture) {
+        // When the chart has not been initialized or there isn't any data in masterData it shouldn't position the markers.
+        if (!this.stx || !this.stx.masterData || this.stx.masterData.length <= 0) {
+            return;
+        }
+
+        if (this.isDistantFuture && this.chart.xaxis && this.chart.xaxis.length > 0) {
             const dummyMarker = this.getDummyMarker();
             this.stx.futureTickIfDisplayed(dummyMarker);
             if (dummyMarker.tick) {
@@ -67,27 +76,49 @@ export default class MarkerStore {
         }
 
         // X axis positioning logic
-        const { dataSet } = this.chart;
+        // const { dataSet } = this.chart;
         let quote = null;
         let left;
 
         if (this.xPositioner !== 'none') {
-            if (!this.tick) {
+            const dummyMarker = this.getDummyMarker();
+            if (this.yPositioner !== 'none' && this.tick === null) {
                 this.hideMarker();
                 return;
             }
 
             // TODO: Temporary solution until ChartIQ can support displaying markers in dates with no tick data
-            const dummyMarker = this.getDummyMarker();
             if (dummyMarker.params.xPositioner === 'date'
                 && !this.isDistantFuture
                 && this.stx.masterData[this.tick]
-                && this.stx.masterData[this.tick].DT.valueOf() !== dummyMarker.params.x.valueOf()) {
-                console.log('Marker will not be shown because there is no tick data in ', dummyMarker.params.x);
-                this.hideMarker();
-                this.tick = null;
-                this.destructor();
-                return;
+                && this.stx.masterData[this.tick].DT.valueOf() !== dummyMarker.params.x.valueOf()
+            ) {
+                // if the marker is not distance future but it is greater than the last item in the masterData, it will be hidden.
+                if (this.yPositioner !== 'none' && this.stx.masterData[this.stx.masterData.length - 1].DT.valueOf() < dummyMarker.params.x.valueOf()) {
+                    this.hideMarker();
+                    return;
+                }
+
+                /**
+                 * Adding an invisible bar if the bar
+                 * does not exist on the masterData
+                 */
+                this.stx.updateChartData(
+                    {
+                        DT: dummyMarker.params.x,
+                        Close: null,
+                    },
+                    null,
+                    { fillGaps: true },
+                );
+                this.stx.createDataSet();
+                // this.tick += 1;
+                this.stx.setMarkerTick(dummyMarker);
+                this.tick = dummyMarker.tick;
+
+                if (this.yPositioner !== 'value' && this.yPositioner !== 'on_candle' && this.yPositioner !== 'top') {
+                    this.yPositioner = 'none';
+                }
             }
 
             if (this.xPositioner === 'bar' && this.x) {
@@ -97,10 +128,10 @@ export default class MarkerStore {
                 }
                 left = this.stx.pixelFromBar(this.x, this.chart);
             } else {
-                if (this.tick < dataSet.length) quote = dataSet[this.tick];
+                if (this.tick < this.stx.chart.dataSet.length) quote = this.stx.chart.dataSet[this.tick];
                 left = this.stx.pixelFromTick(this.tick, this.chart) - this.chart.left;
             }
-            if (!quote) quote = dataSet[dataSet.length - 1]; // Future ticks based off the value of the current quote
+            if (!quote) quote = this.stx.chart.dataSet[this.stx.chart.dataSet.length - 1]; // Future ticks based off the value of the current quote
             const isMarkerExceedRange = left < -MARKER_MAX_WIDTH || left > this.chart.width + MARKER_MAX_WIDTH;
             if (isMarkerExceedRange) {
                 this.hideMarker();
@@ -108,12 +139,10 @@ export default class MarkerStore {
             }
         }
 
-        this.left = left;
+        this.left = left || null;
 
-        // Y axis positioning logic
-        if (this.yPositioner === 'none') {
-            this.bottom = undefined;
-            this.showMarker();
+        if (!this.left) {
+            this.hideMarker();
             return;
         }
 
@@ -127,10 +156,19 @@ export default class MarkerStore {
                 const bar = this.stx.barFromPixel(this.left, this.chart);
                 if (bar >= 0) {
                     quote = this.chart.xaxis[bar].data;
-                    if (!quote) quote = dataSet[dataSet.length - 1]; // Future ticks based off the value of the current quote
+                    if (!quote) quote = this.stx.chart.dataSet[this.stx.chart.dataSet.length - 1]; // Future ticks based off the value of the current quote
                 }
             }
         }
+
+        // Y axis positioning logic
+        if (this.yPositioner.toLowerCase() === 'none') {
+            // set the bottom value if there's a bottomWidget, else set it to undefined
+            this.bottom = this.stx.chart.yAxis.initialMarginBottom === 200 ? 125 : 20;
+            this.showMarker();
+            return;
+        }
+
         const height = this.panel.yAxis.bottom;
         let bottom = 0;
 
@@ -168,20 +206,48 @@ export default class MarkerStore {
         this.stx.setMarkerTick(dummyMarker);
         this.tick = dummyMarker.tick;
         if (dummyMarker.params.future) {
-            this.stx.futureTickIfDisplayed(dummyMarker);
-            this.tick = dummyMarker.tick;
-            if (this.tick) {
-                this.isDistantFuture = false;
+            this.isDistantFuture = true;
+
+            if (this.chart.xaxis && this.chart.xaxis.length) {
+                this.stx.futureTickIfDisplayed(dummyMarker);
+                this.tick = dummyMarker.tick;
+                if (this.tick !== null) {
+                    this.isDistantFuture = false;
+                }
             } else {
-                this.isDistantFuture = true;
                 this.hideMarker();
+                return;
             }
         }
 
-        if (this.tick) {
+        if (this.tick !== null) {
             this.updatePosition();
         } else {
-            this.hideMarker();
+            /**
+             * Adding an invisible bar if the bar
+             * does not exist on the masterData
+             */
+            this.stx.updateChartData(
+                {
+                    DT: dummyMarker.params.x,
+                    Close: null,
+                },
+                null,
+                { fillGaps: true },
+            );
+            this.stx.createDataSet();
+
+            this.stx.setMarkerTick(dummyMarker);
+            this.tick = dummyMarker.tick;
+
+            if (this.tick !== null) {
+                if (this.yPositioner !== 'value' && this.yPositioner !== 'on_candle' && this.yPositioner !== 'top') {
+                    this.yPositioner = 'none';
+                }
+                this.updatePosition();
+            } else {
+                this.hideMarker();
+            }
         }
     }
 
@@ -191,7 +257,7 @@ export default class MarkerStore {
         let xPositioner = this.xPositioner;
         if (this.xPositioner === 'epoch') {
             xPositioner = 'date';
-            x = new Date(getUTCDate(x));
+            x = CIQ.strToDateTime(getUTCDate(x));
         }
 
         return {

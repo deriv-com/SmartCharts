@@ -3,14 +3,16 @@ import { connect } from '../store/Connect';
 import '../../sass/components/_chart-title.scss';
 
 const ChartTitle = ({
-    currentSymbol,
+    chartId,
     ChartTitleMenu,
-    MarketSelector,
-    SymbolSelectButton,
-    setMenuOpen,
-    onChange,
+    currentSymbol,
     enabled,
     isMobile,
+    MarketSelector,
+    onChange,
+    SymbolSelectButton,
+    setMenuOpen,
+    searchInputClassName,
 }) => {
     if (!currentSymbol) { return null; }
 
@@ -26,9 +28,10 @@ const ChartTitle = ({
             </ChartTitleMenu.Title>
             <ChartTitleMenu.Body>
                 <MarketSelector
+                    searchInputClassName={searchInputClassName}
                     onSelectItem={(x) => {
                         if (x.symbol !== currentSymbol.symbol) {
-                            onChange(x.symbol);
+                            onChange(x.symbol, chartId);
                         }
                         setMenuOpen(false);
                     }}
@@ -38,12 +41,13 @@ const ChartTitle = ({
     );
 };
 
-export default connect(({ chartTitle: c, chart }) => ({
-    currentSymbol: c.currentSymbol,
-    ChartTitleMenu: c.ChartTitleMenu,
-    MarketSelector: c.MarketSelector,
-    setMenuOpen: c.menu.setOpen,
-    onChange: c.setSymbol,
+export default connect(({ chartTitle: c, chart, state }) => ({
+    chartId           : state.chartId,
+    ChartTitleMenu    : c.ChartTitleMenu,
+    currentSymbol     : c.currentSymbol,
+    isMobile          : chart.isMobile,
+    MarketSelector    : c.MarketSelector,
+    onChange          : c.setSymbol,
+    setMenuOpen       : c.menu.setOpen,
     SymbolSelectButton: c.SymbolSelectButton,
-    isMobile: chart.isMobile,
 }))(ChartTitle);

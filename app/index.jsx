@@ -18,17 +18,19 @@ import { // eslint-disable-line import/no-extraneous-dependencies,import/no-unre
     logEvent,
     LogCategories,
     LogActions,
+    Marker,
 } from '@binary-com/smartcharts'; // eslint-disable-line import/no-unresolved
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
+import moment from 'moment';
 import 'url-search-params-polyfill';
 import { configure } from 'mobx';
 import './app.scss';
-import './doorbell';
 import { whyDidYouUpdate }  from 'why-did-you-update';
 import { ConnectionManager, StreamManager } from './connection';
 import Notification from './Notification.jsx';
 import ChartNotifier from './ChartNotifier.js';
+import ChartHistory from './ChartHistory.jsx';
 
 setSmartChartsPublicPath('./dist/');
 
@@ -75,24 +77,32 @@ function getLanguageStorage() {
 
 function getServerUrl() {
     const local = localStorage.getItem('config.server_url');
-    return `wss://${local || 'ws.binaryws.com'}/websockets/v3`;
+    return `wss://${local || 'frontend.binaryws.com'}/websockets/v3`;
 }
 
 const chartId = '1';
 const appId  = localStorage.getItem('config.app_id') || 12812;
 const serverUrl = getServerUrl();
 const language = new URLSearchParams(window.location.search).get('l') || getLanguageStorage();
-
+const today = moment().format('YYYY/MM/DD 00:00');
 const connectionManager = new ConnectionManager({
     appId,
     language,
     endpoint: serverUrl,
 });
+const IntervalEnum = {
+    second: 1,
+    minute: 60,
+    hour: 3600,
+    day: 24 * 3600,
+    year: 365 * 24 * 3600,
+};
 
 const streamManager = new StreamManager(connectionManager);
 const requestAPI = connectionManager.send.bind(connectionManager);
 const requestSubscribe = streamManager.subscribe.bind(streamManager);
 const requestForget = streamManager.forget.bind(streamManager);
+
 
 class App extends Component {
     startingLanguage = 'en';
@@ -100,13 +110,35 @@ class App extends Component {
     constructor(props) {
         super(props);
         this.notifier = new ChartNotifier();
+        const layoutString = localStorage.getItem(`layout-${chartId}`),
+            layout = JSON.parse(layoutString !== '' ? layoutString : '{}');
+        let chartType;
+        let granularity;
+        let endEpoch;
         let settings = createObjectFromLocalStorage('smartchart-setting');
+
         if (settings) {
             settings.language = language;
             this.startingLanguage = settings.language;
         } else {
             settings = { language };
         }
+        if (settings.historical) {
+            this.removeAllComparisons();
+            endEpoch = (new Date(`${today}:00Z`).valueOf() / 1000);
+            chartType = 'mountain';
+            granularity = 0;
+            if (layout) {
+                granularity = layout.timeUnit === 'second' ? 0 : parseInt(layout.interval * IntervalEnum[layout.timeUnit], 10);
+
+                if (layout.chartType === 'candle' && layout.aggregationType !== 'ohlc') {
+                    chartType = layout.aggregationType;
+                } else {
+                    chartType = layout.chartType;
+                }
+            }
+        }
+
         connectionManager.on(
             ConnectionManager.EVENT_CONNECTION_CLOSE,
             () => this.setState({ isConnectionOpened: false }),
@@ -115,7 +147,13 @@ class App extends Component {
             ConnectionManager.EVENT_CONNECTION_REOPEN,
             () => this.setState({ isConnectionOpened: true }),
         );
-        this.state = { settings, isConnectionOpened: true };
+        this.state = {
+            settings,
+            endEpoch,
+            chartType,
+            granularity,
+            isConnectionOpened: true,
+        };
     }
 
     /*
@@ -124,6 +162,17 @@ class App extends Component {
             || JSON.stringify(this.state.settings) !== JSON.stringify(nextState.settings);
     }
     */
+    removeAllComparisons = () => {
+        try {
+            const layoutString = localStorage.getItem(`layout-${chartId}`),
+                layout = JSON.parse(layoutString !== '' ? layoutString : '{}');
+
+            layout.symbols.splice(1, layout.symbols.length - 1);
+            localStorage.setItem(`layout-${chartId}`, JSON.stringify(layout));
+        } catch (e) {
+            console.log(e);
+        }
+    }
 
     symbolChange = (symbol) => {
         logEvent(LogCategories.ChartTitle, LogActions.MarketSelector, symbol);
@@ -132,8 +181,21 @@ class App extends Component {
     };
 
     saveSettings = (settings) => {
+        const prevSetting = this.state.settings;
         console.log('settings updated:', settings);
         localStorage.setItem('smartchart-setting', JSON.stringify(settings));
+
+
+        if (!prevSetting.historical && settings.historical) {
+            this.setState({
+                chartType: 'mountain',
+                granularity: 0,
+                endEpoch: (new Date(`${today}:00Z`).valueOf() / 1000),
+            });
+            this.removeAllComparisons();
+        } else if (!settings.historical) {
+            this.handleDateChange('');
+        }
 
         this.setState({ settings });
         if (this.startingLanguage !== settings.language) {
@@ -146,9 +208,14 @@ class App extends Component {
         }
     };
 
+    handleDateChange = (value) => {
+        this.setState({ endEpoch: (value !== '') ? (new Date(`${value}:00Z`).valueOf() / 1000) : undefined });
+    };
+
     renderTopWidgets = () => (
         <>
             <ChartTitle onChange={this.symbolChange} />
+            {this.state.settings.historical ? <ChartHistory onChange={this.handleDateChange} /> : ''}
             <AssetInformation />
             <ComparisonList />
             <Notification
@@ -160,10 +227,22 @@ class App extends Component {
     renderControls = () => (
         <>
             {isMobile ? '' : <CrosshairToggle />}
-            <ChartTypes />
-            <Timeperiod />
+            <ChartTypes
+                onChange={(chartType) => {
+                    this.setState({
+                        chartType,
+                    });
+                }}
+            />
+            <Timeperiod
+                onChange={(timePeriod) => {
+                    this.setState({
+                        granularity: timePeriod,
+                    });
+                }}
+            />
             <StudyLegend />
-            <Comparison />
+            {this.state.settings.historical ? '' : <Comparison />}
             <DrawTools />
             <Views />
             <Share />
@@ -174,27 +253,44 @@ class App extends Component {
 
     onMessage = (e) => {
         this.notifier.notify(e);
-    }
+    };
+
+    getIsChartReady = isChartReady => isChartReady;
 
     render() {
-        const { settings, isConnectionOpened, symbol } = this.state;
+        const { settings, isConnectionOpened, symbol, endEpoch } = this.state;
 
         return (
             <SmartChart
                 id={chartId}
+                chartStatusListener={isChartReady => this.getIsChartReady(isChartReady)}
                 symbol={symbol}
                 isMobile={isMobile}
                 onMessage={this.onMessage}
                 enableRouting
+                removeAllComparisons={settings.historical}
                 topWidgets={this.renderTopWidgets}
                 chartControlsWidgets={this.renderControls}
                 requestAPI={requestAPI}
                 requestSubscribe={requestSubscribe}
                 requestForget={requestForget}
                 settings={settings}
+                endEpoch={endEpoch}
+                chartType={this.state.chartType}
+                granularity={this.state.granularity}
                 onSettingsChange={this.saveSettings}
                 isConnectionOpened={isConnectionOpened}
-            />
+            >
+                {endEpoch ? (
+                    <Marker
+                        className="chart-marker-historical"
+                        x={endEpoch}
+                        xPositioner="epoch"
+                        yPositioner="top"
+                    ><span>{moment(endEpoch * 1000).utc().format('DD MMMM YYYY - HH:mm')}</span>
+                    </Marker>
+                ) : ''}
+            </SmartChart>
         );
     }
 }

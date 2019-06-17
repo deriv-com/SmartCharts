@@ -16,7 +16,7 @@
         position: relative;
         justify-content: space-between;
         padding: 5px 10px;
-        font-size: 12px;
+        font-size: 1.2em;
         height: 18px;
         opacity: 1;
         transition: background 0.2s 0s, padding 0.2s 0s, opacity 0.2s 0.2s, height 0.2s 0.4s, font-size 0s 0.4s, margin 0.2s 0.4s;
@@ -29,6 +29,10 @@
             justify-content: flex-end;
             margin-left: 1.5em;
             margin-right: 5px;
+            font-weight: bold;
+            @include themify($themes) {
+                color: themed('DefaultText');
+            }
         }
         &:hover {
             box-shadow: 0 2px 8px 0 rgba(42, 48, 82, 0.14);

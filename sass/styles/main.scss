@@ -14,7 +14,6 @@
 /* Basic Buttons */
 .annotationCancel,
 .annotationSave {
-    // font-size:$font-size-button;
     font-weight: 700;
     text-transform: uppercase;
     display: inline-block;
@@ -141,6 +140,11 @@
             right: 100px;
         }
     }
+    &--has-markers {
+        .stx-subholder {
+            z-index: 108 !important;
+        }
+    }
 }
 
 @import 'menu';
@@ -153,6 +157,6 @@
     width: 100%;
     top: 50%;
     z-index: 1;
-    font-size: 17px;
+    font-size: 1.7em;
     color: #878787;
 }

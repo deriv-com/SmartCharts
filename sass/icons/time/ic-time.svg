@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12">
+    <path id="icons/system/dark/time/ic-time" stroke-width="1" fill-rule="evenodd" d="M6 11.25A5.25 5.25 0 1 0 6 .75a5.25 5.25 0 0 0 0 10.5zM6 12A6 6 0 1 1 6 0a6 6 0 0 1 0 12zm2.14-4.39a.375.375 0 1 1-.53.53L5.735 6.265A.375.375 0 0 1 5.625 6V2.625a.375.375 0 0 1 .75 0v3.22L8.14 7.61z"/>
+</svg>

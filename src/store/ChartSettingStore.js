@@ -78,25 +78,31 @@ export default class ChartSettingStore {
     @observable position = 'bottom';
     @observable theme = 'light';
     @observable countdown = false;
+    @observable historical = false;
+    @observable isAutoScale = true;
 
     @action.bound setSettings(settings) {
         if (settings === undefined) { return; }
-        const { theme, position, countdown, language, assetInformation } = settings;
+        const { assetInformation, countdown, historical, language, position, isAutoScale, theme } = settings;
         if (theme            !== undefined) { this.setTheme(theme); }
         if (position         !== undefined) { this.setPosition(position); }
         if (countdown        !== undefined) { this.showCountdown(countdown); }
         if (language         !== undefined) { this.setLanguage(language); }
         if (assetInformation !== undefined) { this.setAssetInformation(assetInformation); }
+        if (historical       !== undefined) { this.setHistorical(historical); }
+        if (isAutoScale      !== undefined) { this.setAutoScale(isAutoScale); }
     }
 
     saveSetting() {
         if (this.onSettingsChange) {
             this.onSettingsChange({
-                language: this.language.key,
-                position: this.position,
-                theme: this.theme,
-                countdown: this.countdown,
                 assetInformation: this.assetInformation,
+                countdown       : this.countdown,
+                historical      : this.historical,
+                language        : this.language.key,
+                position        : this.position,
+                isAutoScale     : this.isAutoScale,
+                theme           : this.theme,
             });
         }
     }
@@ -116,7 +122,11 @@ export default class ChartSettingStore {
     @action.bound setTheme(theme) {
         if (this.theme === theme) { return; }
         this.theme = theme;
-        if (this.context) { this.stx.clearStyles(); }
+
+        if (this.context) {
+            this.mainStore.state.setChartTheme(theme);
+            this.mainStore.crosshair.setFloatPriceLabelStyle(theme);
+        }
         logEvent(LogCategories.ChartControl, LogActions.ChartSetting, `Change theme to ${theme}`);
         this.saveSetting();
     }
@@ -150,6 +160,30 @@ export default class ChartSettingStore {
         if (this.countdown === value) { return; }
         this.countdown = value;
         logEvent(LogCategories.ChartControl, LogActions.ChartSetting, `${value ? 'Show'  : 'Hide'} Countdown`);
+
+        this.saveSetting();
+    }
+
+    @action.bound setHistorical(value) {
+        if (this.historical === value) { return; }
+        this.historical = value;
+        this.saveSetting();
+        /**
+        * Chart should fix its height & width after the position changed,
+        * for that purpose we stay some 10 ms so that position varaible update
+        * on chart context then ask chart to update itself hight & width
+        */
+        setTimeout(() => {
+            this.mainStore.chart.resizeScreen();
+        }, 10);
+        this.menu.setOpen(false);
+    }
+
+    @action.bound setAutoScale(value) {
+        if (this.isAutoScale === value) { return; }
+
+        this.isAutoScale = value;
+        logEvent(LogCategories.ChartControl, LogActions.ChartSetting, ` Change AutoScale to ${value}`);
 
         this.saveSetting();
     }

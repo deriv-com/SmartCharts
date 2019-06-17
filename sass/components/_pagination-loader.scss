@@ -1,0 +1,76 @@
+@-webkit-keyframes move-background {
+    from {
+        -webkit-transform: translateX(0);
+    }
+    to {
+        -webkit-transform: translateX(46px);
+    }
+}
+
+@keyframes move-background {
+    from {
+        transform: translateX(0);
+    }
+    to {
+        transform: translateX(46px);
+    }
+}
+
+.pagination {
+    top: 0;
+    bottom: 0 !important;
+
+    &__loader {
+        color: $COLOR_BLACK;
+        position: relative;
+        height: 100%;
+        text-align: center;
+        overflow: hidden;
+        /**
+         * TODO
+         * The current impelementaion of MarkerStore just set the left attribute to the marker's style,
+         * the line below should be removed whenever the MarkerSotre is able to set right attribute to the marker.
+         **/
+        margin-left: -10000px;
+        opacity: 0.7;
+
+        &-background {
+            position: absolute;
+            left: -46px;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            z-index: -1;
+
+            @include themify($themes) {
+                /* stylelint-disable */
+                background: -webkit-repeating-linear-gradient(
+                145deg,
+                rgba(255, 0, 0, 0) 1px,
+                themed('PaginationLoaderStripeColor') 2px,
+                themed('PaginationLoaderStripeColor') 11px,
+                rgba(255, 0, 0, 0) 12px,
+                rgba(255, 0, 0, 0) 20px,
+                );
+                background: repeating-linear-gradient(
+                -55deg,
+                rgba(255, 0, 0, 0) 1px,
+                themed('PaginationLoaderStripeColor') 2px,
+                themed('PaginationLoaderStripeColor') 11px,
+                rgba(255, 0, 0, 0) 12px,
+                rgba(255, 0, 0, 0) 20px,
+                );
+                /* stylelint-enable */
+            }
+            -webkit-animation-name: move-background;
+            -webkit-animation-duration: 0.6s;
+            -webkit-animation-timing-function: linear;
+            -webkit-animation-iteration-count: infinite;
+
+            animation-name: move-background;
+            animation-duration: 0.6s;
+            animation-timing-function: linear;
+            animation-iteration-count: infinite;
+        }
+    }
+}

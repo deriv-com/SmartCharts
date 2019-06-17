@@ -23,6 +23,7 @@ import Csv from '../../sass/icons/download/ic-csv.svg';
 
 import Add from '../../sass/icons/chart settings/zoom-in/ic-zoomin-light.svg';
 import Close from '../../sass/icons/close/ic-close.svg';
+import CloseCircle from '../../sass/icons/close/ic-close-circle.svg';
 import Comparison from '../../sass/icons/chart settings/comparison/ic-comparison-normal.svg';
 import CrosshairOff from '../../sass/icons/chart settings/crosshair/ic-crosshair-off.svg';
 import CrosshairOn from '../../sass/icons/chart settings/crosshair/ic-crosshair-on.svg';
@@ -36,6 +37,7 @@ import Minus from '../../sass/icons/chart settings/zoom-out/ic-zoomout-light.svg
 import Star from '../../sass/icons/favorite/ic-favorite-normal.svg';
 import Template from '../../sass/icons/chart settings/chart template/ic-charttemplate-normal.svg';
 import Tick from '../../sass/icons/tick/ic-tick.svg';
+import Time from '../../sass/icons/time/ic-time.svg';
 import Active from '../../sass/icons/sidebar/active/ic-active-normal.svg';
 import Commodities from '../../sass/icons/sidebar/commodities/ic-commodities-normal.svg';
 import Forex from '../../sass/icons/sidebar/forex/ic-forex-normal.svg';
@@ -104,7 +106,7 @@ import MarketBull from '../../sass/icons/active-symbols/volatility/bull market/i
 import OTCBadge from '../../sass/icons/active-symbols/ic-otcbadge.svg';
 import SmartFX from '../../sass/icons/active-symbols/ic-smartfx-placeholder.svg';
 
-const Wrapper = SvgLogo => (props) => {
+export const Wrapper = SvgLogo => (props) => {
     let { className, 'tooltip-title': tooltip, ...p } = props; // eslint-disable-line prefer-const
     className = `ic-icon ${className || ''}`;
     const vb = SvgLogo.viewBox.split(' ').slice(2);
@@ -149,6 +151,7 @@ export const TableIcon = Wrapper(Table);
 export const AddIcon = Wrapper(Add);
 export const ZoomInIcon = Wrapper(Add);
 export const CloseIcon = Wrapper(Close);
+export const CloseCircleIcon = Wrapper(CloseCircle);
 export const ComparisonIcon = Wrapper(Comparison);
 export const CrosshairOffIcon = Wrapper(CrosshairOff);
 export const CrosshairOnIcon = Wrapper(CrosshairOn);
@@ -165,6 +168,7 @@ export const CsvIcon = Wrapper(Csv);
 export const StarIcon = Wrapper(Star);
 export const TemplateIcon = Wrapper(Template);
 export const TickIcon = Wrapper(Tick);
+export const TimeIcon = Wrapper(Time);
 export const SearchIcon = Wrapper(Search);
 export const EditIcon = Wrapper(Edit);
 export const SettingIcon = Wrapper(Edit);

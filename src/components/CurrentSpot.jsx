@@ -7,12 +7,10 @@ const CurrentSpot = ({
     show,
 }) => (show
     && (
-        <div>
-            <span
-                className="cq-spot"
-                style={{ top, left }}
-            />
-        </div>
+        <span
+            className="cq-spot"
+            style={{ top, left }}
+        />
     )
 );
 

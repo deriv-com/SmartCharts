@@ -28,6 +28,7 @@ export default class StudyLegendStore {
             placeholderText: t.translate('"Mass Index" or "Doji Star"'),
             favoritesId: 'indicators',
             mainStore,
+            searchInputClassName: () => this.searchInputClassName,
         });
         this.settingsDialog = new SettingsDialogStore({
             mainStore,
@@ -47,7 +48,7 @@ export default class StudyLegendStore {
         this.stx.callbacks.studyOverlayEdit = this.editStudy;
         this.stx.callbacks.studyPanelEdit = this.editStudy;
         this.stx.append('createDataSet', this.renderLegend);
-        this.stx.append('adjustPanelPositions', () => {
+        this.stx.append('drawPanels', () => {
             const panel = Object.keys(this.stx.panels)[1];
             if (panel) {
                 // Hide the up arrow from first indicator to prevent user
@@ -59,6 +60,7 @@ export default class StudyLegendStore {
     };
 
     previousStudies = { };
+    searchInputClassName;
     @observable activeStudies = {
         categoryName: t.translate('Active'),
         categoryId: 'active',
@@ -69,14 +71,17 @@ export default class StudyLegendStore {
 
     get categorizedStudies() {
         const data = [];
+        const excludedStudies = { Beta: true };
         Object.keys(CIQ.Studies.studyLibrary).forEach((studyId) => {
-            const study = CIQ.Studies.studyLibrary[studyId];
-            data.push({
-                enabled: true,
-                display: t.translate(study.name),
-                dataObject: studyId,
-                itemId: studyId,
-            });
+            if (!excludedStudies[studyId]) {
+                const study = CIQ.Studies.studyLibrary[studyId];
+                data.push({
+                    enabled: true,
+                    display: t.translate(study.name),
+                    dataObject: studyId,
+                    itemId: studyId,
+                });
+            }
         });
         const category = {
             categoryName: t.translate('Indicators'),
@@ -92,6 +97,10 @@ export default class StudyLegendStore {
         this.changeStudyPanelTitle(sd);
         logEvent(LogCategories.ChartControl, LogActions.Indicator, `Add ${item}`);
         this.menu.setOpen(false);
+    }
+
+    @action.bound updateProps(searchInputClassName) {
+        this.searchInputClassName = searchInputClassName;
     }
 
     @action.bound editStudy(study) {

@@ -7,10 +7,10 @@ msgstr ""
 "X-Crowdin-File: /dev/translation/messages.pot\n"
 "Project-Id-Version: smartcharts\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Last-Translator: binarycom <jy@binary.com>\n"
+"Last-Translator: binarycom\n"
 "Language-Team: Thai\n"
 "Language: th_TH\n"
-"PO-Revision-Date: 2019-01-02 16:02\n"
+"PO-Revision-Date: 2019-05-10 10:33\n"
 
 msgid " already exists."
 msgstr " มีอยู่แล้ว"
@@ -39,6 +39,9 @@ msgstr "คำอธิบายประกอบ"
 msgid "Asset Information"
 msgstr "ข้อมูลสินทรัพย์"
 
+msgid "Auto Scale"
+msgstr "ปรับสัดส่วนอัตโนมัติ"
+
 msgid "Average Line"
 msgstr "เส้นค่าเฉลี่ย"
 
@@ -47,6 +50,9 @@ msgstr "เส้นฐาน"
 
 msgid "Box Size"
 msgstr "ขนาดกล่อง"
+
+msgid "C"
+msgstr "C"
 
 msgid "Callout"
 msgstr "คำบรรยายภาพ"
@@ -57,11 +63,17 @@ msgstr "CANCEL"
 msgid "Candle"
 msgstr "แท่งเทียน"
 
+msgid "Change"
+msgstr "การเปลี่ยนแปลง"
+
 msgid "Channel"
 msgstr "ช่อง"
 
 msgid "Chart data is not available for this symbol."
 msgstr "ไม่มีข้อมูลแผนภูมิสำหรับสัญลักษณ์นี้"
+
+msgid "Chart Table"
+msgstr "ตารางแผนภูมิ"
 
 msgid "Chart types"
 msgstr "ชนิดแผนภูมิ"
@@ -69,11 +81,14 @@ msgstr "ชนิดแผนภูมิ"
 msgid "Clear All"
 msgstr "ล้างทั้งหมด"
 
+msgid "Close"
+msgstr "ปิด"
+
 msgid "CLOSE"
-msgstr "CLOSE"
+msgstr "ปิด"
 
 msgid "CLOSED"
-msgstr "CLOSED"
+msgstr "ปิดแล้ว"
 
 msgid "Colored Dot"
 msgstr "จุดสี"
@@ -95,6 +110,9 @@ msgstr "Crossline"
 
 msgid "Dark Mode"
 msgstr "รูปแบบโทนมืด"
+
+msgid "Date"
+msgstr "วันที่"
 
 msgid "Day"
 msgstr "วัน"
@@ -147,11 +165,20 @@ msgstr "Gann Fan"
 msgid "Gartley"
 msgstr "Gartley"
 
+msgid "H"
+msgstr "H"
+
 msgid "Heikin Ashi"
 msgstr "Heikin Ashi"
 
+msgid "High"
+msgstr "สูง"
+
 msgid "HIGH"
 msgstr "HIGH"
+
+msgid "Historical Data Mode"
+msgstr "โหมดข้อมูลเก่า"
 
 msgid "Hollow Candle"
 msgstr "เทียนกลวง"
@@ -171,14 +198,23 @@ msgstr "ช่วง"
 msgid "Kagi"
 msgstr "Kagi"
 
+msgid "L"
+msgstr "L"
+
 msgid "Language"
 msgstr "ภาษา"
+
+msgid "Last digits stats for latest 1000 ticks on "
+msgstr "สถิติตัวเลขหลักสุดท้ายของ1000 ช่วงราคาล่าสุด "
 
 msgid "Line"
 msgstr "เส้น"
 
 msgid "Line Break"
 msgstr "เส้นแบ่งบรรทัด"
+
+msgid "Low"
+msgstr "ต่ำ"
 
 msgid "LOW"
 msgstr "LOW"
@@ -189,11 +225,17 @@ msgstr "วัด"
 msgid "Minute"
 msgstr "นาที"
 
+msgid "O"
+msgstr "O"
+
 msgid "OHLC"
 msgstr "OHLC"
 
+msgid "Open"
+msgstr "เปิด"
+
 msgid "OPEN"
-msgstr "OPEN"
+msgstr "เปิด"
 
 msgid "OVERWRITE"
 msgstr "OVERWRITE"
@@ -240,11 +282,11 @@ msgstr "กำลังโหลดข้อมูลของแผนภูม
 msgid "Retrieving Chart Engine..."
 msgstr "กำลังโหลดเครื่องมือแผนภูมิ..."
 
-msgid "Retrieving market symbols..."
-msgstr "กำลังโหลดข้อมูลตลาด..."
+msgid "Retrieving Market Symbols..."
+msgstr "กำลังเรียกข้อมูลสัญลักษณ์ตลาด..."
 
-msgid "Retrieving trading times..."
-msgstr "กำลังโหลดข้อมูลเวลาซื้อขาย..."
+msgid "Retrieving Trading Times..."
+msgstr "กำลังเรียกข้อมูลเวลาซื้อขาย..."
 
 msgid "Reversal"
 msgstr "กลับตัว"
@@ -299,6 +341,9 @@ msgstr "SPOT"
 
 msgid "Streaming for [symbol] is not available due to license restrictions"
 msgstr "การสตรีมสำหรับ [symbol] ไม่พร้อมใช้งาน เนื่องจากข้อจำกัดสิทธิ์การใช้งาน"
+
+msgid "Table"
+msgstr "ตาราง"
 
 msgid "Template name"
 msgstr "ชื่อแม่แบบ"
@@ -1301,4 +1346,10 @@ msgstr "อัตราส่วนความแข็งแรง"
 
 msgid "Weak Ratio"
 msgstr "อัตราส่วนความอ่อนแอ"
+
+msgid "Closed"
+msgstr "ปิดแล้ว"
+
+msgid "Opens in:"
+msgstr "เปิดใน:"
 

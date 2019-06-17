@@ -1,48 +1,16 @@
 /* Used for app only. Do not deploy with library! */
 
+html {
+    font-size: 62.5%; /* 1rem = 10px */
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.004); //stylelint-disable-line number-max-precision
+    text-rendering: optimizeLegibility !important; //stylelint-disable-line plugin/no-unsupported-browser-features
+    -webkit-font-smoothing: antialiased !important;
+    -moz-osx-font-smoothing: grayscale !important;
+}
+
 #root {
     display: flex;
-}
-
-/* Doorbell */
-
-#doorbell-button {
-    left: -30px;
-    bottom: 30%;
-    background: #4c5794;
-    color: #fff;
-    border: 1px solid #4c5794;
-    border-bottom: none;
-    padding: 4px 8px;
-    transform: rotate(90deg);
-    max-width: 80px;
-    opacity: var(--doorbell-opacity);
-}
-
-#doorbell form {
-    box-shadow: none;
-    border: 1px solid #4c4c4c;
-
-    input, textarea {
-        outline: 0;
-
-        &:focus {
-            border: 1px solid #4c5794;
-        }
-    }
-    #doorbell-submit-button {
-        color: #4c5794;
-        border: none;
-        background: #fff;
-
-        &:hover {
-            background: #fff;
-        }
-    }
-}
-
-#doorbell-background {
-    opacity: 0;
+    font-size: 1rem;
 }
 
 .smartcharts-mobile {
@@ -56,5 +24,26 @@
         .cq-menu-overlay {
             height: calc(100% - 40px);
         }
+    }
+}
+
+.chart-marker-historical {
+    width: 2px;
+    height: 100%;
+    border-left: 1.5px dashed #2a3052;
+    top: 0px;
+    position: absolute;
+
+    span {
+        background: #2a3052;
+        border-radius: 3px;
+        white-space: nowrap;
+        left: -54px;
+        position: absolute;
+        bottom: 0px;
+        padding: 1px 9px;
+        color: #fff;
+        font-size: 10px;
+        line-height: 14px;
     }
 }

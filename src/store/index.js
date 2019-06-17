@@ -1,3 +1,4 @@
+import BottomWidgetsContainerStore from './BottomWidgetsContainerStore';
 import TimeperiodStore from './TimeperiodStore';
 import ChartStore from './ChartStore';
 import ChartTypeStore from './ChartTypeStore';
@@ -20,6 +21,7 @@ import DrawingCursorStore from './DrawingCursorStore';
 import ChartState from './ChartState';
 import Notifier from './Notifier';
 import ChartTableStore from './ChartTableStore';
+import LastDigitStatsStore from './LastDigitStatsStore';
 
 export default class MainStore {
     notifier = new Notifier();
@@ -44,4 +46,6 @@ export default class MainStore {
     currentSpot = new CurrentSpotStore(this);
     drawingCursor = new DrawingCursorStore(this);
     chartTable = new ChartTableStore(this);
+    lastDigitStats= new LastDigitStatsStore(this);
+    bottomWidgetsContainer = new BottomWidgetsContainerStore(this);
 }

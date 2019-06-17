@@ -19,6 +19,8 @@ export default class TimeperiodStore {
     get isTick() { return this.timeUnit === 'tick'; }
     @observable timeUnit = null;
     @observable interval = null;
+    onGranularityChange;
+
     remain = null;
 
     onContextReady = () => {
@@ -88,7 +90,9 @@ export default class TimeperiodStore {
 
                     if (this.remain && stx.currentQuote() !== null) {
                         stx.yaxisLabelStyle = 'rect';
+                        stx.labelType = 'countdown';
                         stx.createYAxisLabel(stx.chart.panel, this.remain, this.remainLabelY, '#15212d', '#FFFFFF');
+                        stx.labelType = null;
                         stx.yaxisLabelStyle = 'roundRectArrow';
                     }
                 });
@@ -110,6 +114,13 @@ export default class TimeperiodStore {
         this.mainStore.chart.changeSymbol(undefined, granularity);
     }
 
+    @action.bound updateProps(onChange) {
+        if (this.mainStore.state.granularity !== undefined) {
+            this.onGranularityChange = typeof onChange === 'function' ? onChange : () => {};
+            this.onGranularityChange(this.mainStore.state.granularity);
+        }
+    }
+
     @action.bound updateDisplay() {
         const stx = this.context.stx;
         this.timeUnit = getTimeUnit(stx.layout);
@@ -118,12 +129,17 @@ export default class TimeperiodStore {
 
     @computed get remainLabelY() {
         const stx = this.context.stx;
-        const price = stx.currentQuote().Close;
-        let x = stx.pixelFromPrice(price, stx.chart.panel);
-        const currentPriceLabelHeight = 18;
-        const maxRequiredSpaceForLabels = 60;
-        x = x > stx.chart.panel.bottom - maxRequiredSpaceForLabels ? x - currentPriceLabelHeight : x + currentPriceLabelHeight;
-        return x;
+        const topPos = 36;
+        const labelHeight = 24;
+        const bottomPos = 66;
+        let y = stx.chart.currentPriceLabelY + labelHeight;
+        if (stx.chart.currentPriceLabelY > stx.chart.panel.bottom - bottomPos) {
+            y =  stx.chart.panel.bottom - bottomPos;
+            y = y < stx.chart.currentPriceLabelY - labelHeight ? y : stx.chart.currentPriceLabelY - labelHeight;
+        } else if (stx.chart.currentPriceLabelY < stx.chart.panel.top) {
+            y = topPos;
+        }
+        return y;
     }
 
     @computed get timeUnit_display() {

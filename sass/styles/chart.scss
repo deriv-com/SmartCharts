@@ -24,6 +24,9 @@ html, body {
     &.ciq-draw-mode {
         cursor: none; /* stylelint-disable-line plugin/no-unsupported-browser-features */
     }
+    :last-child {
+        z-index: 1;
+    }
 }
 
 /* Chart Block */
@@ -97,6 +100,7 @@ html, body {
     margin: 3px 2px;
     opacity: 0;
     transition: opacity 0.5s;
+    display: none;
     @include themify($themes) {
         background-color: themed('ChartBg');
     }
@@ -106,6 +110,9 @@ html, body {
     }
     &:active svg { /* Scale up when active */
         transform: scale(1.2, 1.2);
+    }
+    &.stx-show {
+        display: block;
     }
 }
 
@@ -119,16 +126,19 @@ html, body {
 /* Up/Down Arrow indicators */
 .cq-change {
     &:after {
-        float: left;
+        float: right;
         margin-top: 5px;
         margin-right: 5px;
         @include triangle-base(6px);
     }
     &.up:after {
-        border-bottom: 8px solid rgb(76, 175, 80);
+        border-bottom: 8px solid $COLOR_GREEN_1;
     }
     &.down:after {
-        border-top: 8px solid rgb(249, 84, 84);
+        border-top: 8px solid $COLOR_RED;
+    }
+    .cq-todays-change-percent {
+        padding-left: 3px;
     }
 }
 /* --------------------------------------------------------- CHART CONTROLS --------------------------------------------------------- */
@@ -319,7 +329,7 @@ html, body {
     width: 30px !important;
 
     svg {
-        fill: $COLOR_BRANDBLUE_75;
+        fill: $COLOR_DARK_GRAY_3;
     }
     &.ic-delete {
         display: none;
@@ -393,31 +403,32 @@ html, body {
 
 .stx-float-price,
 .stx-float-date {
-    border-radius: 3px;
+    color: #fff;
     @include themify($themes) {
         background-color: themed('CrosshairLabel');
     }
 }
 
-.stx-float-date { /* Crosshair Floating x-axis date label*/
-    position: absolute;
-    font-size: 10px;
-    font-family: 'Helvetica';
-    z-index: 30;
-    color: #fff;
-    padding: 1px 6px;
-    text-align: center;
-    width: auto;
+.stx-float-price {
+    border-radius: 3px;
 }
 
-.stx-float-price { /* Corsshair Floating y-axis value label*/
-    color: #fff;
-    background-color: #333;
+.stx-float-date { /* Crosshair Floating x-axis date label*/
+    position: absolute;
+    font-size: 12px;
+    font-family: 'Helvetica';
+    z-index: 3;
+    padding: 3px 6px;
+    text-align: center;
+    width: auto;
+    height: 18px;
+    line-height: 18px;
+    font-weight: bold;
 }
 
 .stx_crosshair { /* Standard Crosshair lines color */
     position: absolute;
-    z-index: 10;
+    z-index: 1;
     @include themify($themes) {
         background-color: themed('CrosshairAxis');
     }
@@ -436,7 +447,6 @@ html, body {
     height: 1px;
     width: 98%;
     margin-top: 0; /* since we're using border-top to draw the actual line */
-    z-index: 0;
 }
 
 .crossX, .stx_crosshair_x { /* Horizontal Crosshair line size */
@@ -453,7 +463,7 @@ html, body {
 
 .stx_panels { /* Panel Title text */
     font-family: 'Helvetica';
-    font-size: 10px;
+    font-size: 12px;
     color: #fff;
 }
 
@@ -481,13 +491,15 @@ html, body {
     }
     width: 1px;
     opacity: 1;
-    border-style: solid;
+    border: none;
 }
 
 .stx_grid_border { /* Default Grid borders */
-    color: #999999;
+    @include themify($themes) {
+        border-color: themed('ChartAreaBorder');
+    }
+    opacity: 0.2;
     border-style: solid;
-    opacity: 0;
 }
 
 /* -------- Chart Type Styles -------- */
@@ -504,7 +516,7 @@ html, body {
 /* Default color for line and bar Charts */
 .stx_line_chart, .stx_bar_chart {
     @include themify($themes) {
-        color: themed('ChartTitleText');
+        color: themed('DefaultBorder');
     }
 }
 
@@ -530,10 +542,12 @@ html, body {
 }
 
 .stx_mountain_chart { /* Default color for mountain Charts */
-    color: rgba(0, 156, 255, 0.01); /* background color for mountain */
-    background-color: rgba(0, 102, 255, 0.5); /* Optional gradient */
-    border: #009cff; /* Optional line color */
-    width: 2px; /* Optional line width */
+    width: 1px; /* Optional line width */
+    @include themify($themes) {
+        border: themed('ChartMountainBorder');
+        background-color: themed('ChartMountainBg'); /* Optional gradient */
+        color: themed('ChartMountainBgShade'); /* background color for mountain */
+    }
 }
 
 .stx_histogram_down { /* Down Bar color */
@@ -765,11 +779,12 @@ html, body {
 
 .stx_grid_dark { /* Default Grid dividers */
     @include themify($themes) {
-        color: themed('ChartGrid');
+        color: themed('ChartText');
     }
     opacity: 1;
-    opacity: 0.9;
+    opacity: 0.95;
     border-style: solid;
+    border: none;
 }
 
 .stx_yaxis, .stx_xaxis, .stx_xaxis_dark {
@@ -780,14 +795,13 @@ html, body {
     font-family: 'Roboto';
 }
 
-/* --------------------------------------------------------- CHART AREA ELEMENTS --------------------------------------------------------- */
-
-.cq-down {
-    color: $chart-red;
-}
-
-.cq-up {
-    color: $chart-green;
+.stx_price_label {
+    @include themify($themes) {
+        color: themed('ChartText');
+    }
+    font-size: 12px;
+    font-family: 'Roboto';
+    font-weight: bold;
 }
 
 /* --------------------------------------------------------- CHART SDK --------------------------------------------------------- */
@@ -807,7 +821,6 @@ html, body {
     width: 100%;
     overflow: hidden;
     cursor: ns-resize;
-    z-index: 20;
     @include themify($themes) {
         box-shadow: 0 0 0px 2px themed('ChartBg');
         background: themed('ChartBg');
@@ -894,6 +907,54 @@ $spot-color: #0298d3;
         position: relative;
         left: -2.3px;
         line-height: 5px;
+    }
+    &.cq-endpoint {
+        position: absolute;
+        text-align: center;
+        width: 1px;
+        height: 100%;
+        line-height: 20px;
+        color: #ffffff;
+        bottom: 0px !important;
+        top: 0px !important;
+        animation: none;
+        @include themify($themes) {
+            border-left: 2px dashed themed('ChartCandleBg');
+        }
+
+        &:before {
+            content: '\25CF';
+            font-size: 18px;
+            color: $spot-color;
+            position: relative;
+            left: -2.3px;
+            line-height: 5px;
+            display: none;
+        }
+        .cq-endpoint-label {
+            width: 145px;
+            padding: 1px 9px;
+            border-radius: 4px;
+            position: absolute;
+            top: calc(100% - 22px);
+            transform: translateX(-50%);
+            @include themify($themes) {
+                background-color: themed('ChartCandleBg');
+                color: themed('ChartCandleText');
+            }
+        }
+    }
+}
+
+.closed-chart {
+    .cq-spot {
+        animation: none;
+
+        &:before {
+            @include themify($themes) {
+                color: themed('ChartCandleBgClosed');
+            }
+        }
     }
 }
 

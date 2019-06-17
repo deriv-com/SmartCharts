@@ -4,20 +4,25 @@ import { connect } from '../store/Connect';
 import '../../sass/components/_timeperiod.scss';
 
 const Timeperiod = ({
-    onChange,
+    chartId,
+    enabled,
     interval,
     timeUnit,
     interval_display,
-    timeUnit_display,
-    TimePeriodMenu,
-    setOpen,
     isMobile,
-    enabled,
+    onChange,
+    setOpen,
+    TimePeriodMenu,
+    timeUnit_display,
+    updateProps,
 }) => {
     const onGranularityClick = (granularity) => {
-        onChange(granularity);
+        onChange(granularity, chartId);
         setOpen(false);
     };
+
+    updateProps(onChange);
+
     return (
         <TimePeriodMenu
             className="ciq-period"
@@ -119,16 +124,19 @@ const Timeperiod = ({
                     </div>
                 </div>
             </TimePeriodMenu.Body>
-        </TimePeriodMenu>);
+        </TimePeriodMenu>
+    );
 };
 
-export default connect(({ timeperiod: s }) => ({
-    onChange: s.setGranularity,
-    timeUnit: s.timeUnit,
-    interval: s.interval,
+export default connect(({ timeperiod: s, state }) => ({
+    chartId         : state.chartId,
+    timeUnit        : s.timeUnit,
+    interval        : s.interval,
     interval_display: s.interval_display,
+    isMobile        : s.mainStore.chart.isMobile,
+    onChange        : s.setGranularity,
+    setOpen         : s.menu.setOpen,
+    TimePeriodMenu  : s.TimePeriodMenu,
     timeUnit_display: s.timeUnit_display,
-    TimePeriodMenu: s.TimePeriodMenu,
-    setOpen: s.menu.setOpen,
-    isMobile: s.mainStore.chart.isMobile,
+    updateProps     : s.updateProps,
 }))(Timeperiod);

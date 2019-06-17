@@ -2506,7 +2506,7 @@
 		//	  for local time zone adjustment and daylight saving time adjustment imposed by
 		//	  ES5, 15.9.1.7 and 15.9.1.8.
 		// ###TODO###
-		var d = new Date(date);
+		var d = CIQ.strtoDateTime(date);
 
 		// 2. Return a Record with fields [[weekday]], [[era]], [[year]], [[month]], [[day]],
 		//	  [[hour]], [[minute]], [[second]], and [[inDST]], each with the corresponding

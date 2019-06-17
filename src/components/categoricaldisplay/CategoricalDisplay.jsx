@@ -10,22 +10,28 @@ const CategoricalDisplay = ({
     FilterPanel,
     SearchInput,
     isMobile,
+    height,
+    id,
+    searchInputClassName,
 }) => (
     <div
         className="cq-categorical-display"
+        style={{ height }}
+        id={id}
     >
         <div className="cq-lookup-filters">
-            <SearchInput />
+            <SearchInput searchInputClassName={searchInputClassName} />
             <FilterPanel />
         </div>
         <Scrollbars
             className="cq-scroll-panel"
             onScroll={updateScrollSpy}
             ref={setScrollPanel}
-            style={{ width: isMobile ? '100%' : '66%' }}
+            style={{ width: isMobile ? '100%' : '312px' }}
         >
             <ResultsPanel
                 onSelectItem={onSelectItem}
+                id={id}
             />
         </Scrollbars>
     </div>
