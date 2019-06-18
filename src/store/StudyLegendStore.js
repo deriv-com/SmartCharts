@@ -307,7 +307,7 @@ export default class StudyLegendStore {
     @action.bound updateActiveStudies() {
         const stx = this.stx;
         const studies = [];
-        Object.keys(stx.layout.studies || []).forEach((id, idx) => {
+        Object.keys(stx.layout.studies || []).forEach((id) => {
             const sd = stx.layout.studies[id];
             if (sd.customLegend) { return; }
 
