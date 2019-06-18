@@ -81,6 +81,9 @@ export default class StudyLegendStore {
         Object.keys(CIQ.Studies.studyLibrary).forEach((studyId) => {
             if (!excludedStudies[studyId]) {
                 const study = CIQ.Studies.studyLibrary[studyId];
+                if (!CIQ.Studies.studyLibrary[studyId].overlay) {
+                    CIQ.Studies.studyLibrary[studyId].panelHeight = 80;
+                }
                 data.push({
                     enabled: true,
                     display: t.translate(study.name),
@@ -115,11 +118,6 @@ export default class StudyLegendStore {
     // TODO All traces can be removed after new design for studies
     @action.bound updateStyle() {
         const should_minimise_last_digit = Object.keys(this.stx.panels).length > 2;
-        Object.keys(CIQ.Studies.studyLibrary).forEach((st) => {
-            if (!CIQ.Studies.studyLibrary[st].overlay) {
-                CIQ.Studies.studyLibrary[st].panelHeight = should_minimise_last_digit ? 80 : 100;
-            }
-        });
         this.mainStore.state.setShouldMinimiseLastDigit(should_minimise_last_digit);
     }
 
@@ -236,6 +234,7 @@ export default class StudyLegendStore {
         if (Object.keys(updates).length === 0) return;
         this.helper.updateStudy(updates);
         this.updateActiveStudies();
+        this.updateStyle();
         this.stx.draw();
         this.changeStudyPanelTitle(this.helper.sd);
         this.settingsDialog.title = t.translate(this.helper.sd.libraryEntry.name);
@@ -308,7 +307,6 @@ export default class StudyLegendStore {
                     parameters: sd.parameters,
                 },
             });
-            this.updateStyle();
         });
 
         this.activeStudies.data = studies;
