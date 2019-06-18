@@ -381,7 +381,7 @@ class ChartState {
             }
             this.stxx.maxMasterDataSize = 0;
             const tick = this.stxx.tickFromDate(startEntry.DT);
-            const scrollAnimator = new CIQ.EaseMachine(Math.easeInOutCubic, 1500);
+            const scrollAnimator = new CIQ.EaseMachine(Math.easeOutCubic, 1000);
             const scrollToTarget = this.stxx.chart.dataSegment.length;
             scrollAnimator.run((bar) => {
                 bar = Math.ceil(bar); // round-up for precision
