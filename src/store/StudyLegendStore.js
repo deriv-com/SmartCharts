@@ -49,6 +49,8 @@ export default class StudyLegendStore {
     onContextReady = () => {
         this.stx.callbacks.studyOverlayEdit = this.editStudy;
         this.stx.callbacks.studyPanelEdit = this.editStudy;
+        // to remove studies if user has already more than 5
+        this.removeExtraStudies();
         this.stx.append('createDataSet', this.renderLegend);
         this.stx.append('drawPanels', () => {
             const panel = Object.keys(this.stx.panels)[1];
@@ -99,6 +101,20 @@ export default class StudyLegendStore {
             data,
         };
         return [category];
+    }
+
+    @action.bound removeExtraStudies() {
+        const studiesKeys = Object.keys(this.stx.layout.studies);
+        if (studiesKeys.length > 5) {
+            Object.keys(this.stx.layout.studies).forEach((study, idx) => {
+                if (idx >= 5) {
+                    setTimeout(() => {
+                        CIQ.Studies.removeStudy(this.stx, this.stx.layout.studies[study]);
+                        this.renderLegend();
+                    }, 0);
+                }
+            });
+        }
     }
 
     @action.bound onSelectItem(item) {
@@ -291,8 +307,7 @@ export default class StudyLegendStore {
     @action.bound updateActiveStudies() {
         const stx = this.stx;
         const studies = [];
-        console.log(stx.layout.studies);
-        Object.keys(stx.layout.studies || []).forEach((id) => {
+        Object.keys(stx.layout.studies || []).forEach((id, idx) => {
             const sd = stx.layout.studies[id];
             if (sd.customLegend) { return; }
 
