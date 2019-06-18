@@ -234,7 +234,6 @@ export default class StudyLegendStore {
         if (Object.keys(updates).length === 0) return;
         this.helper.updateStudy(updates);
         this.updateActiveStudies();
-        this.updateStyle();
         this.stx.draw();
         this.changeStudyPanelTitle(this.helper.sd);
         this.settingsDialog.title = t.translate(this.helper.sd.libraryEntry.name);
@@ -292,6 +291,7 @@ export default class StudyLegendStore {
     @action.bound updateActiveStudies() {
         const stx = this.stx;
         const studies = [];
+        console.log(stx.layout.studies);
         Object.keys(stx.layout.studies || []).forEach((id) => {
             const sd = stx.layout.studies[id];
             if (sd.customLegend) { return; }
