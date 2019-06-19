@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom\n"
 "Language-Team: Spanish\n"
 "Language: es_ES\n"
-"PO-Revision-Date: 2019-06-11 11:36\n"
+"PO-Revision-Date: 2019-06-11 11:45\n"
 
 msgid " already exists."
 msgstr " ya existe."
@@ -1264,7 +1264,7 @@ msgid "KSTSignal"
 msgstr "SeñalKST"
 
 msgid "Pring's Special K"
-msgstr ""
+msgstr "Special K de Pring"
 
 msgid "Darvas Box"
 msgstr "Caja de Darvas"
