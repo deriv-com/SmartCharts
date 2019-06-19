@@ -24,6 +24,7 @@ class ChartState {
     @observable paginationEndEpoch;
     @observable isChartClosed = false;
     @observable isStaticChart = false;
+    @observable hasReachedEndOfData = false;
     chartControlsWidgets;
 
     get comparisonStore() { return this.mainStore.comparison; }
@@ -184,6 +185,10 @@ class ChartState {
             this.stxx.isAutoScale = this.settings && settings.isAutoScale !== false;
             this.stxx.draw();
         }
+    }
+
+    @action.bound hasReachedEndOfData(hasReachedEndOfData) {
+        this.hasReachedEndOfData = hasReachedEndOfData;
     }
 
     @action.bound setChartClosed(isClosed) {
@@ -503,12 +508,11 @@ class ChartState {
         }
         if (this.stxx && this.stxx.chart) {
             const dataSegment = this.stxx.chart.dataSegment;
-            if (this.stxx.masterData.length <= dataSegment.length) {
+            if (this.stxx.masterData.length < dataSegment.length) {
                 this.stxx.minimumLeftBars = 2;
             } else if (dataSegment) {
-                const startPointOnChartData = dataSegment[0];
-                const isEndOfScroll = startPointOnChartData && (startPointOnChartData.Date > this.stxx.masterData[0].Date);
-                this.stxx.minimumLeftBars = isEndOfScroll ? 2 : this.stxx.chart.maxTicks;
+                const noMoreScroll = this.hasReachedEndOfData || this.stxx.masterData.length === this.stxx.maxMasterDataSize;
+                this.stxx.minimumLeftBars = noMoreScroll ? this.stxx.chart.maxTicks : 2;
             }
         }
     }

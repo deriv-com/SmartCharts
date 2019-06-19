@@ -210,6 +210,7 @@ class Feed {
     }
 
     async fetchPaginationData(symbol, suggestedStartDate, endDate, params, callback) {
+        this.setHasReachedEndOfData(false);
         const end   = getUTCEpoch(endDate);
         const start = getUTCEpoch(suggestedStartDate);
         const { period, interval } = params;
@@ -231,6 +232,7 @@ class Feed {
             callback({ moreAvailable: false, quotes: [] });
             if (isMainChart) { // ignore comparisons
                 this._emitter.emit(Feed.EVENT_ON_PAGINATION, { start, end });
+                this.setHasReachedEndOfData(true);
             }
             return;
         }
@@ -253,6 +255,7 @@ class Feed {
                     if (newStart <= startLimit) {
                         // Passed available range. Prevent anymore pagination requests:
                         callback({ moreAvailable: false, quotes: [] });
+                        this.setHasReachedEndOfData(true);
                         return;
                     }
                     // Recursively extend the date range for more data until we exceed available range
@@ -269,6 +272,12 @@ class Feed {
         callback(result);
         if (isMainChart) { // ignore comparisons
             this._emitter.emit(Feed.EVENT_ON_PAGINATION, { start, end });
+        }
+    }
+
+    setHasReachedEndOfData(hasReachedEndOfData) {
+        if (this._mainStore.state.hasReachedEndOfData !== hasReachedEndOfData) {
+            this._mainStore.state.hasReachedEndOfData = hasReachedEndOfData;
         }
     }
 
