@@ -32,7 +32,9 @@ const Category = ({ category, Item, setCategoryElement, onSelectItem, activeHead
             style={{ top: (activeHeadKey === category.categoryId) ? activeHeadOffset : null }}
         >{t.translate(category.categoryName)}
             {
-                category.categoryNamePostfix
+                ((category.categoryNamePostfixShowIfActive && activeHeadKey === category.categoryId)
+                    || !category.categoryNamePostfixShowIfActive)
+                && category.categoryNamePostfix
                 && (
                     <span className="category-name-postfix">
                         {t.translate(category.categoryNamePostfix)}

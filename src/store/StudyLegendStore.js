@@ -91,8 +91,11 @@ export default class StudyLegendStore {
                 });
             }
         });
+        const categoryNamePostfix = `(${this.activeStudies.data.length}/5)`;
         const category = {
             categoryName: t.translate('Indicators'),
+            categoryNamePostfix,
+            categoryNamePostfixShowIfActive: true,
             categoryId: 'indicators',
             categorySubtitle: t.translate('Up to 5 active indicators allowed.'),
             hasSubcategory: false,
@@ -293,7 +296,6 @@ export default class StudyLegendStore {
     @action.bound setReachedLimit() {
         const hasReachedLimit = this.activeStudies.data.length >= 5;
         this.hasReachedLimits = hasReachedLimit;
-        console.log(this.hasReachedLimits);
     }
 
     @action.bound updateActiveStudies() {
@@ -318,6 +320,7 @@ export default class StudyLegendStore {
 
         this.activeStudies.data = studies;
         this.activeStudies.categoryNamePostfix = t.translate(`(${studies.length}/5)`);
+        this.category.categoryNamePostfix = t.translate(`(${studies.length}/5)`);
         this.setReachedLimit();
     }
 
