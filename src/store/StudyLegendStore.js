@@ -80,9 +80,6 @@ export default class StudyLegendStore {
         Object.keys(CIQ.Studies.studyLibrary).forEach((studyId) => {
             if (!excludedStudies[studyId]) {
                 const study = CIQ.Studies.studyLibrary[studyId];
-                if (!CIQ.Studies.studyLibrary[studyId].overlay) {
-                    CIQ.Studies.studyLibrary[studyId].panelHeight = 80;
-                }
                 data.push({
                     enabled: true,
                     display: t.translate(study.name),
