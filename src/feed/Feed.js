@@ -263,6 +263,11 @@ class Feed {
                     return;
                 }
                 result.quotes = TickHistoryFormatter.formatHistory(response);
+
+                if (firstEpoch <= startLimit) {
+                    callback({ moreAvailable: false, quotes: [] });
+                    this.setHasReachedEndOfData(true);
+                }
             } catch (err) {
                 console.error(err);
                 result = { error: err };
