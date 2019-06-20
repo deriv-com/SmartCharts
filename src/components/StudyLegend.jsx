@@ -46,5 +46,4 @@ export default connect(({ studies: st, chart }) => ({
     isMobile: chart.isMobile,
     activeStudiesNo: st.activeStudies.data.length,
     disableAll: st.hasReachedLimits,
-    updateProps: st.updateProps,
 }))(StudyLegend);

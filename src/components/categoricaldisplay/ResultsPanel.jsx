@@ -37,7 +37,7 @@ const Category = ({ category, Item, setCategoryElement, onSelectItem, activeHead
                 && category.categoryNamePostfix
                 && (
                     <span className="category-name-postfix">
-                        {t.translate(category.categoryNamePostfix)}
+                        {category.categoryNamePostfix}
                     </span>
                 )
             }

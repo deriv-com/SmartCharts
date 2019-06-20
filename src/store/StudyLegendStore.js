@@ -126,10 +126,6 @@ export default class StudyLegendStore {
             this.changeStudyPanelTitle(sd);
             logEvent(LogCategories.ChartControl, LogActions.Indicator, `Add ${item}`);
             this.menu.setOpen(false);
-        } else {
-            this.mainStore.notifier.notify({
-                text: t.translate('You can\'t have more than 5 open Indicators.'),
-            });
         }
     }
 
@@ -321,7 +317,7 @@ export default class StudyLegendStore {
         });
 
         this.activeStudies.data = studies;
-        this.activeStudies.categoryNamePostfix = t.translate(`(${studies.length}/5)`);
+        this.activeStudies.categoryNamePostfix = `(${studies.length}/5)`;
         this.setReachedLimit();
     }
 
