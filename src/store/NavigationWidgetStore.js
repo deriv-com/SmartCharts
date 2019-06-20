@@ -15,6 +15,9 @@ export default class NavigationWidgetStore {
 
     onContextReady = () => {
         this.stxx.addEventListener('move', this.scrollListener.bind(this));
+        this.stxx.prepend('mouseWheel', () => {
+            this.stxx.chart.lockScroll = false;
+        });
     };
 
     @action.bound scrollListener() {

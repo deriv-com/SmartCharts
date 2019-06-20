@@ -392,11 +392,17 @@ class ChartState {
 
             this.stxx.chart.lockScroll = true;
             const tick = this.stxx.tickFromDate(startEntry.DT);
-            const tickLeft = this.stxx.chart.dataSet.length - tick;
-            this.stxx.setMaxTicks(tickLeft + (Math.floor(tickLeft / 5) || 2));
-            this.stxx.chart.scroll = tickLeft + (Math.floor(tickLeft / 10) || 1);
+            let tickLeft = this.stxx.chart.dataSet.length - tick;
             this.stxx.chart.entryTick = tick;
-            this.stxx.maxMasterDataSize = 0;
+            if (!this.endEpoch) {
+                this.stxx.setMaxTicks(tickLeft + 3);
+                this.stxx.chart.scroll = tickLeft + 1;
+            } else {
+                tickLeft++;
+                this.stxx.setMaxTicks(tickLeft + (Math.floor(tickLeft / 5) || 2));
+                this.stxx.chart.scroll = tickLeft + (Math.floor(tickLeft / 10) || 1);
+                this.stxx.maxMasterDataSize = 0;
+            }
             this.stxx.draw();
         } else if (this.startEpoch) {
             this.stxx.chart.lockScroll = true;

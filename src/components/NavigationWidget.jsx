@@ -14,11 +14,12 @@ const NavigationWidget = ({
     <div
         className="ciq-navigation-widget"
     >
-        {isHomeEnabled ? (
-            <div className="ciq-navigation-widget__item" onClick={home}>
-                <HomeIcon />
-            </div>
-        ) : ''}
+        <div
+            className={`ciq-navigation-widget__item ${!isHomeEnabled ? 'ciq-navigation-widget__item--hidden' : ''}`}
+            onClick={home}
+        >
+            <HomeIcon />
+        </div>
         <div className="ciq-navigation-widget__item" onClick={onScale}>
             <ScaleIcon />
         </div>
