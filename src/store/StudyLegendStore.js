@@ -105,16 +105,18 @@ export default class StudyLegendStore {
     }
 
     @action.bound removeExtraStudies() {
-        const studiesKeys = Object.keys(this.stx.layout.studies);
-        if (studiesKeys.length > 5) {
-            Object.keys(this.stx.layout.studies).forEach((study, idx) => {
-                if (idx >= 5) {
-                    setTimeout(() => {
-                        CIQ.Studies.removeStudy(this.stx, this.stx.layout.studies[study]);
-                        this.renderLegend();
-                    }, 0);
-                }
-            });
+        if (this.stx.layout && this.stx.layout.studies) {
+            const studiesKeys = Object.keys(this.stx.layout.studies);
+            if (studiesKeys.length > 5) {
+                Object.keys(this.stx.layout.studies).forEach((study, idx) => {
+                    if (idx >= 5) {
+                        setTimeout(() => {
+                            CIQ.Studies.removeStudy(this.stx, this.stx.layout.studies[study]);
+                            this.renderLegend();
+                        }, 0);
+                    }
+                });
+            }
         }
     }
 
@@ -320,7 +322,6 @@ export default class StudyLegendStore {
 
         this.activeStudies.data = studies;
         this.activeStudies.categoryNamePostfix = t.translate(`(${studies.length}/5)`);
-        this.category.categoryNamePostfix = t.translate(`(${studies.length}/5)`);
         this.setReachedLimit();
     }
 
