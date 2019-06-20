@@ -13,25 +13,39 @@ function getItemCount(category) {
     return count;
 }
 
-const CategoryTitleClassName = (categoryId, activeHeadKey, activeHeadTop) => {
+const CategoryTitleClassName = (categoryId, activeHeadKey, activeHeadTop, categorySubtitle) => {
     let TitleClassName = '';
     if (activeHeadKey === categoryId) {
         TitleClassName = activeHeadTop < 0 ? 'sticky-bottom' : 'sticky-top';
     }
 
-    return `category-title ${TitleClassName}`;
+    return `category-title ${TitleClassName} ${categorySubtitle ? 'has-subtitle' : ''}`;
 };
-
 
 const Category = ({ category, Item, setCategoryElement, onSelectItem, activeHeadKey, activeHeadTop, activeHeadOffset, disableAll }) => (
     <div
-        className={`category category-${category.categoryId}`}
+        className={`category category-${category.categoryId} ${category.categorySubtitle ? 'category-has-subtitle' : ''}`}
         ref={el => setCategoryElement(el, category.categoryId)}
     >
         <div
-            className={CategoryTitleClassName(category.categoryId, activeHeadKey, activeHeadTop)}
+            className={CategoryTitleClassName(category.categoryId, activeHeadKey, activeHeadTop, category.categorySubtitle)}
             style={{ top: (activeHeadKey === category.categoryId) ? activeHeadOffset : null }}
         >{t.translate(category.categoryName)}
+            {
+                category.categoryNamePostfix
+                && (
+                    <span className="category-name-postfix">
+                        {t.translate(category.categoryNamePostfix)}
+                    </span>
+                )
+            }
+            {
+                category.categorySubtitle && (
+                    <div className="category-subtitle">
+                        {t.translate(category.categorySubtitle)}
+                    </div>
+                )
+            }
         </div>
         { category.hasSubcategory
             ? category.data.map(subcategory => getItemCount(subcategory) > 0 && (

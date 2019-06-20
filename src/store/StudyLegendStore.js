@@ -29,8 +29,7 @@ export default class StudyLegendStore {
             favoritesId: 'indicators',
             mainStore,
             searchInputClassName: () => this.searchInputClassName,
-            ItemWrapper: () => this.ItemWrapper,
-            itemWrapperProps: () => this.itemWrapperProps,
+            limitInfo: t.translate('Up to 5 active indicators allowed.'),
         });
         this.settingsDialog = new SettingsDialogStore({
             mainStore,
@@ -65,12 +64,10 @@ export default class StudyLegendStore {
 
     previousStudies = { };
     searchInputClassName;
-    ItemWrapper;
-    itemWrapperProps;
-    hasReachedLimitListener;
     @observable hasReachedLimits = false;
     @observable activeStudies = {
         categoryName: t.translate('Active'),
+        categoryNamePostfix: '',
         categoryId: 'active',
         hasSubcategory: false,
         emptyDescription: t.translate('There are no active indicators yet.'),
@@ -97,6 +94,7 @@ export default class StudyLegendStore {
         const category = {
             categoryName: t.translate('Indicators'),
             categoryId: 'indicators',
+            categorySubtitle: t.translate('Up to 5 active indicators allowed.'),
             hasSubcategory: false,
             data,
         };
@@ -137,12 +135,8 @@ export default class StudyLegendStore {
         this.mainStore.state.setShouldMinimiseLastDigit(should_minimise_last_digit);
     }
 
-    @action.bound updateProps({ searchInputClassName, ItemWrapper, itemWrapperProps, hasReachedLimitListener }) {
+    @action.bound updateProps({ searchInputClassName }) {
         this.searchInputClassName = searchInputClassName;
-        this.ItemWrapper = ItemWrapper;
-        this.itemWrapperProps = itemWrapperProps;
-        this.hasReachedLimitListener = hasReachedLimitListener;
-        this.setReachedLimit();
     }
 
     @action.bound editStudy(study) {
@@ -299,9 +293,7 @@ export default class StudyLegendStore {
     @action.bound setReachedLimit() {
         const hasReachedLimit = this.activeStudies.data.length >= 5;
         this.hasReachedLimits = hasReachedLimit;
-        if (this.hasReachedLimitListener && typeof this.hasReachedLimitListener === 'function') {
-            this.hasReachedLimitListener(hasReachedLimit);
-        }
+        console.log(this.hasReachedLimits);
     }
 
     @action.bound updateActiveStudies() {
@@ -325,6 +317,7 @@ export default class StudyLegendStore {
         });
 
         this.activeStudies.data = studies;
+        this.activeStudies.categoryNamePostfix = t.translate(`(${studies.length}/5)`);
         this.setReachedLimit();
     }
 
