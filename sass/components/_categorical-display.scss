@@ -256,7 +256,6 @@
         @include themify($themes) {
             border-bottom: 1px solid themed('CatDisplayBg');
             background-color: themed('CatDisplayCatContentBg');
-            color: themed('CatDisplayActiveText');
         }
 
         &:first-child {
@@ -322,6 +321,17 @@
                         }
                     }
                 }
+            }
+        }
+    }
+    .cq-active-item {
+        @include themify($themes) {
+            color: themed('CatDisplayActiveText');
+        }
+
+        &:hover {
+            @include themify($themes) {
+                color: themed('CatDisplayActiveText');
             }
         }
     }
