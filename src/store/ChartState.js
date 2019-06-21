@@ -420,8 +420,6 @@ class ChartState {
                     this.stxx.chart.entryTick = tick;
                     this.stxx.chart.lockScroll = true;
                     this.stxx.chart.isScrollLocationChanged = true; // set to true to draw markers
-                } else {
-                    this.stxx.chart.scroll = scroll;
                 }
             },
             0, scrollToTarget);
