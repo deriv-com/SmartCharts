@@ -4,6 +4,7 @@
     position: absolute;
     bottom: 2.5em;
     left: 2.5em;
+    z-index: 3 !important;
 
     &__item {
         margin-bottom: 8px;

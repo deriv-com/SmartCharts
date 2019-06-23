@@ -156,11 +156,7 @@ class ChartState {
         if (this.scrollToEpoch !== scrollToEpoch && this.context) {
             this.scrollToEpoch = scrollToEpoch;
             if (isSymbolChanged || isGranularityChanged) {
-                let isScrollChartToLeft = false;
-                this.mainStore.chart.feed.onMasterDataUpdate(() => {
-                    if (!isScrollChartToLeft) this.scrollChartToLeft();
-                    isScrollChartToLeft = true;
-                });
+                this.mainStore.chart.feed.onMasterDataUpdate(this.scrollChartToLeft);
             } else {
                 this.scrollChartToLeft();
             }
@@ -365,10 +361,9 @@ class ChartState {
 
     scrollChartToLeft = (epoch) => {
         const scrollToEpoch = this.scrollToEpoch || epoch;
+        this.mainStore.chart.feed.offMasterDataUpdate(this.scrollChartToLeft);
 
-        this.mainStore.chart.feed.offMasterDataUpdate(scrollToEpoch);
-        this.stxx.chart.entryTick = null;
-        if (scrollToEpoch) {
+        if (scrollToEpoch && !this.startEpoch) {
             let startEntry = this.stxx.chart.dataSet
                 .find(entry =>  entry.DT.valueOf() === CIQ.strToDateTime(getUTCDate(scrollToEpoch)).valueOf());
 
@@ -389,27 +384,16 @@ class ChartState {
                 );
                 this.stxx.createDataSet();
             }
+            this.stxx.maxMasterDataSize = 0;
 
-            this.stxx.chart.lockScroll = true;
             const tick = this.stxx.tickFromDate(startEntry.DT);
-            let tickLeft = this.stxx.chart.dataSet.length - tick;
-            this.stxx.chart.entryTick = tick;
-            if (!this.endEpoch) {
-                this.stxx.setMaxTicks(tickLeft + 3);
-                this.stxx.chart.scroll = tickLeft + 1;
-            } else {
-                tickLeft++;
-                this.stxx.setMaxTicks(tickLeft + (Math.floor(tickLeft / 5) || 2));
-                this.stxx.chart.scroll = tickLeft + (Math.floor(tickLeft / 10) || 1);
-                this.stxx.maxMasterDataSize = 0;
-            }
-
             const scrollAnimator = new CIQ.EaseMachine(Math.easeOutCubic, 1000);
             const scrollToTarget = this.stxx.chart.dataSegment.length;
             scrollAnimator.run((bar) => {
                 bar = Math.ceil(bar); // round-up for precision
                 const scroll = this.stxx.chart.dataSegment.length - bar;
                 if (scroll <= 2 || bar === scrollToTarget) {
+                    // console.log('A1');
                     /**
                      * Stop scrolling and draw markers if
                      * the scroll value is off-screen or if the animator has reached target.
@@ -420,14 +404,51 @@ class ChartState {
                     this.stxx.chart.entryTick = tick;
                     this.stxx.chart.lockScroll = true;
                     this.stxx.chart.isScrollLocationChanged = true; // set to true to draw markers
+                } else {
+                    const tickLeft = this.stxx.chart.dataSet.length - tick;
+                    this.stxx.setMaxTicks(tickLeft + (Math.floor(tickLeft / 5) || 2));
+                    this.stxx.chart.scroll = tickLeft + (Math.floor(tickLeft / 10) || 1);
                 }
             },
             0, scrollToTarget);
-
             this.stxx.draw();
         } else if (this.startEpoch) {
             this.stxx.chart.lockScroll = true;
             this.stxx.chart.isScrollLocationChanged = true;
+
+            let startEntry = this.stxx.chart.dataSet
+                .find(entry =>  entry.DT.valueOf() === CIQ.strToDateTime(getUTCDate(scrollToEpoch)).valueOf());
+
+            if (!startEntry) {
+                startEntry = {
+                    DT: CIQ.strToDateTime(getUTCDate(scrollToEpoch)),
+                    Close: null,
+                };
+
+                /**
+                 * Adding an invisible bar if the bar
+                 * does not exist on the masterData
+                 */
+                this.stxx.updateChartData(
+                    startEntry,
+                    null,
+                    { fillGaps: true },
+                );
+                this.stxx.createDataSet();
+            }
+            this.stxx.maxMasterDataSize = 0;
+
+            const tick = this.stxx.tickFromDate(startEntry.DT);
+            let tickLeft = this.stxx.chart.dataSet.length - tick;
+            if (!this.endEpoch && tickLeft < 6) {
+                this.stxx.setMaxTicks(tickLeft + 3);
+                this.stxx.chart.scroll = tickLeft + 1;
+            } else {
+                tickLeft++;
+                this.stxx.setMaxTicks(tickLeft + (Math.floor(tickLeft / 5) || 2));
+                this.stxx.chart.scroll = tickLeft + (Math.floor(tickLeft / 10) || 1);
+            }
+            this.stxx.draw();
         } else {
             this.stxx.chart.lockScroll = false;
             this.stxx.chart.isScrollLocationChanged = false;
