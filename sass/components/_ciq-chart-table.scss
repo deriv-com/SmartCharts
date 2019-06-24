@@ -83,7 +83,7 @@
 
     .ciq-table-cell {
         text-align: center;
-        height: 30px;
+        padding: 17px 16px;
         @include themify($themes) {
             color: themed('ChartBodyText');
         }
