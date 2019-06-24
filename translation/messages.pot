@@ -1342,3 +1342,6 @@ msgstr ""
 
 msgid "Opens in:"
 msgstr ""
+
+msgid "Up to 5 active indicators allowed."
+msgstr ""
