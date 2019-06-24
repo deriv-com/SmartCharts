@@ -12,6 +12,8 @@ export default class ChartTableStore {
 
     get context() { return this.mainStore.chart.context; }
     get stx() { return this.context.stx; }
+    get state() { return this.mainStore.state; }
+    get chartTypeStore() { return this.mainStore.chartType; }
 
     @computed get open() { return this.dialog.open; }
     @action.bound setOpen(value) {
@@ -36,6 +38,10 @@ export default class ChartTableStore {
         } else {
             this.mainStore.chart.feed.offMasterDataUpdate(this.updateTableData);
             this.tableData =  [];
+            if (this.state.prevChartType) {
+                this.state.chartType = this.state.prevChartType;
+                this.chartTypeStore.setType(this.state.prevChartType);
+            }
         }
     }
 

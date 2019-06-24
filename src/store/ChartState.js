@@ -6,6 +6,7 @@ import Theme from '../../sass/_themes.scss';
 class ChartState {
     @observable granularity;
     @observable chartType;
+    @observable prevChartType;
     @observable startEpoch;
     @observable startEpochMargin;
     @observable endEpoch;
@@ -125,6 +126,8 @@ class ChartState {
             this.granularity = granularity === null ? undefined : granularity;
         }
         if (this.chartType !== chartType && this.context) {
+            if (chartType === 'table') this.prevChartType = this.chartTypeStore.type.id;
+
             this.chartType = chartType;
             this.chartTypeStore.setType(chartType);
         }
