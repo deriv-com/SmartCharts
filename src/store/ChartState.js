@@ -535,10 +535,12 @@ class ChartState {
             const dataSegment = this.stxx.chart.dataSegment;
             const whiteSpace = this.chartStore.isMobile ? 50 : 150;
             if (this.stxx.masterData.length < this.stxx.chart.maxTicks - whiteSpace) {
-                this.stxx.minimumLeftBars = dataSegment.length;
+                this.stxx.minimumLeftBars = this.stxx.chart.maxTicks;
             } else if (dataSegment) {
-                const noMoreScroll = this.hasReachedEndOfData || this.stxx.masterData.length === this.stxx.maxMasterDataSize;
-                this.stxx.minimumLeftBars = noMoreScroll ? this.stxx.chart.maxTicks : 2;
+                const startPointOnChartData = dataSegment[0];
+                const isEndOfScroll = startPointOnChartData && (startPointOnChartData.Date > this.stxx.masterData[0].Date);
+                const noMoreScroll = this.hasReachedEndOfData || (this.stxx.masterData.length === this.stxx.maxMasterDataSize);
+                this.stxx.minimumLeftBars = noMoreScroll && !isEndOfScroll ? this.stxx.chart.maxTicks : 2;
             }
         }
     }

@@ -103,6 +103,7 @@ class Feed {
     }
 
     async fetchInitialData(symbol, suggestedStartDate, suggestedEndDate, params, callback) {
+        this.setHasReachedEndOfData(false);
         const { period, interval, symbolObject } = params;
         const granularity = calculateGranularity(period, interval);
         const key = this._getKey({ symbol, granularity });
@@ -211,7 +212,6 @@ class Feed {
     }
 
     async fetchPaginationData(symbol, suggestedStartDate, endDate, params, callback) {
-        this.setHasReachedEndOfData(false);
         const end   = getUTCEpoch(endDate);
         const start = getUTCEpoch(suggestedStartDate);
         const { period, interval } = params;
