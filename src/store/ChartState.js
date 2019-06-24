@@ -23,6 +23,7 @@ class ChartState {
     @observable isOnPagination = false;
     @observable paginationEndEpoch;
     @observable isChartClosed = false;
+    @observable shouldMinimiseLastDigits = false;
     @observable isStaticChart = false;
     chartControlsWidgets;
 
@@ -257,6 +258,10 @@ class ChartState {
                 this.chartStatusListener(isChartReady);
             }
         }
+    }
+
+    @action.bound setShouldMinimiseLastDigit(status) {
+        this.shouldMinimiseLastDigits = status;
     }
 
     saveLayout() {

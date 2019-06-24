@@ -13,6 +13,7 @@ const CategoricalDisplay = ({
     height,
     id,
     searchInputClassName,
+    disableAll,
 }) => (
     <div
         className="cq-categorical-display"
@@ -32,6 +33,7 @@ const CategoricalDisplay = ({
             <ResultsPanel
                 onSelectItem={onSelectItem}
                 id={id}
+                disableAll={disableAll}
             />
         </Scrollbars>
     </div>
