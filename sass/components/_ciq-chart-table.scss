@@ -66,9 +66,9 @@
     position: fixed;
     display: block;
     @include themify($themes) {
-        background: themed('ChartHeadBg');
-        color: themed('ChartHeadText');
-        border-bottom: 1px solid themed('ChartHeadBorder');
+        background: themed('ChartTableHeadBg');
+        color: themed('ChartTableHeadText');
+        border-bottom: 1px solid themed('ChartTableHeadBorder');
     }
 
     .ciq-table-cell {
@@ -78,14 +78,14 @@
 
 .ciq-table-row {
     @include themify($themes) {
-        border-bottom: 1px solid themed('ChartBodyBorder');
+        border-bottom: 1px solid themed('ChartTableBodyBorder');
     }
 
     .ciq-table-cell {
         text-align: center;
         padding: 17px 16px;
         @include themify($themes) {
-            color: themed('ChartBodyText');
+            color: themed('ChartTableBodyText');
         }
 
         .cq-change:after {
