@@ -13,10 +13,14 @@
     }
     &__fill {
         &-red {
-            background-color: #ff0000;
+            @include themify ($themes) {
+                background-color: themed('LowestSpotColor');
+            }
         }
         &-blue {
-            background-color: #0000ff;
+            @include themify ($themes) {
+                background-color: themed('HighestSpotColor');
+            }
         }
     }
     &__label {
@@ -41,7 +45,7 @@
             border-style: solid;
         }
         &[data-label-pos='top'] {
-            border-radius: 6px 6px 6px 0px;
+            border-radius: 3px 3px 3px 0px;
             margin-top: -40px;
 
             &:after {
@@ -52,7 +56,7 @@
             }
         }
         &[data-label-pos='bottom'] {
-            border-radius: 0px 6px 6px;
+            border-radius: 0px 3px 3px;
             margin-top: 15px;
 
             &:after {
