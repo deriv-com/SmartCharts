@@ -63,6 +63,7 @@ class Chart extends Component {
             isMobile = false,
             isOnPagination,
             isChartAvailable,
+            isHighestLowestMarkerEnabled,
             barriers = [],
             children,
             chartControlsWidgets,
@@ -113,7 +114,7 @@ class Chart extends Component {
                                                 && <PaginationLoader />
                                         }
                                         {
-                                            !isCandle
+                                            !isCandle && isHighestLowestMarkerEnabled
                                                 && <HighestLowestMarker />
                                         }
                                         <CurrentSpot />
@@ -171,4 +172,5 @@ export default connect(({ chart, drawTools, studies, chartSetting, chartType, st
     position: chartSetting.position,
     showLastDigitStats:state.showLastDigitStats,
     isOnPagination: state.isOnPagination,
+    isHighestLowestMarkerEnabled: chartSetting.isHighestLowestMarkerEnabled,
 }))(Chart);

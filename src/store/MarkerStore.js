@@ -67,7 +67,7 @@ export default class MarkerStore {
     // done in CSS.
     @action.bound updatePosition() {
         // Don't position the markers when the chart hasn't been scrolled to the leftmost of the screen
-        if (!this.shouldDrawMarkers) return;
+        // if (!this.shouldDrawMarkers) return;
 
         // When the chart has not been initialized or there isn't any data in masterData it shouldn't position the markers.
         if (!this.stx || !this.stx.masterData || this.stx.masterData.length <= 0) {

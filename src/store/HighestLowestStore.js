@@ -1,6 +1,7 @@
 import {
     action,
     observable,
+    reaction,
     when }                 from 'mobx';
 
 
@@ -12,40 +13,38 @@ class HighestLowestStore {
     get context() { return this.mainStore.chart.context; }
     get stx()     { return this.mainStore.chart.stxx; }
 
+    get isHighestLowestMarkerEnabled() { return this.mainStore.chartSetting.isHighestLowestMarkerEnabled; }
+    get decimalPlaces() { return this.mainStore.chart.currentActiveSymbol.decimal_places || 0; }
+
     constructor(mainStore) {
         this.mainStore = mainStore;
 
         when(() => this.context, this.onContextReady);
+        reaction(() => this.isHighestLowestMarkerEnabled, this.enableMarker);
     }
 
-    @action.bound onContextReady = () => {
-        // this.feed.onMasterDataUpdate(this.calculateHighestLowest);
-        this.stx.append('draw', this.calculateHighestLowest);
+    enableMarker = () => {
+        if (this.isHighestLowestMarkerEnabled) {
+            this.stx.append('createDataSegment', this.calculateHighestLowestByNewData);
+        }
+    }
+
+    onContextReady = () => {
+        this.enableMarker();
     };
 
-    @action.bound calculateHighestLowest = () => {
+    @action.bound calculateHighestLowestByNewData = () => {
         if (this.stx.chart && this.stx.chart.dataSegment.length) {
-            const firstItem = this.stx.chart.dataSegment[0];
-            const lastItem  = this.stx.chart.dataSegment.slice(-1)[0];
-            if (this.highest && this.lowest
-                && this.firstItem && this.lastItem
-                && this.highest.DT > firstItem.DT && this.lowest.DT > firstItem.DT
-                && this.highest.Close > lastItem.Close && this.lowest.Close < lastItem.Close) {
-                return;
-            }
-
             this.highest = undefined;
             this.lowest  = undefined;
-            this.stx.chart.dataSegment.forEach((tick) => {
-                this.highest = this.highest && this.highest.Close > tick.Close ? this.highest : tick;
-                this.lowest  = this.lowest && this.lowest.Close < tick.Close ? this.lowest : tick;
+            this.stx.chart.isScrollLocationChanged = false;
+            this.stx.chart.dataSegment.slice(1).forEach((tick) => {
+                this.highest = this.highest && this.highest.Close > tick.Close && this.highest.DT < tick.DT ? this.highest : tick;
+                this.lowest  = this.lowest && this.lowest.Close < tick.Close && this.lowest.DT < tick.DT ? this.lowest : tick;
+                this.stx.chart.isScrollLocationChanged = true;
             });
         }
     };
-
-    destroy() {
-        // this.feed.offMasterDataUpdate(this.calculateHighestLowest);
-    }
 }
 
 

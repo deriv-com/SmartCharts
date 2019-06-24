@@ -80,29 +80,32 @@ export default class ChartSettingStore {
     @observable countdown = false;
     @observable historical = false;
     @observable isAutoScale = true;
+    @observable isHighestLowestMarkerEnabled = false;
 
     @action.bound setSettings(settings) {
         if (settings === undefined) { return; }
-        const { assetInformation, countdown, historical, language, position, isAutoScale, theme } = settings;
-        if (theme            !== undefined) { this.setTheme(theme); }
-        if (position         !== undefined) { this.setPosition(position); }
-        if (countdown        !== undefined) { this.showCountdown(countdown); }
-        if (language         !== undefined) { this.setLanguage(language); }
-        if (assetInformation !== undefined) { this.setAssetInformation(assetInformation); }
-        if (historical       !== undefined) { this.setHistorical(historical); }
-        if (isAutoScale      !== undefined) { this.setAutoScale(isAutoScale); }
+        const { assetInformation, countdown, historical, language, position, isAutoScale, isHighestLowestMarkerEnabled, theme } = settings;
+        if (theme                        !== undefined) { this.setTheme(theme); }
+        if (position                     !== undefined) { this.setPosition(position); }
+        if (countdown                    !== undefined) { this.showCountdown(countdown); }
+        if (language                     !== undefined) { this.setLanguage(language); }
+        if (assetInformation             !== undefined) { this.setAssetInformation(assetInformation); }
+        if (historical                   !== undefined) { this.setHistorical(historical); }
+        if (isAutoScale                  !== undefined) { this.setAutoScale(isAutoScale); }
+        if (isHighestLowestMarkerEnabled !== undefined) { this.setAutoScale(isAutoScale); }
     }
 
     saveSetting() {
         if (this.onSettingsChange) {
             this.onSettingsChange({
-                assetInformation: this.assetInformation,
-                countdown       : this.countdown,
-                historical      : this.historical,
-                language        : this.language.key,
-                position        : this.position,
-                isAutoScale     : this.isAutoScale,
-                theme           : this.theme,
+                assetInformation            : this.assetInformation,
+                countdown                   : this.countdown,
+                historical                  : this.historical,
+                language                    : this.language.key,
+                position                    : this.position,
+                isAutoScale                 : this.isAutoScale,
+                isHighestLowestMarkerEnabled: this.isHighestLowestMarkerEnabled,
+                theme                       : this.theme,
             });
         }
     }
@@ -184,6 +187,15 @@ export default class ChartSettingStore {
 
         this.isAutoScale = value;
         logEvent(LogCategories.ChartControl, LogActions.ChartSetting, ` Change AutoScale to ${value}`);
+
+        this.saveSetting();
+    }
+
+    @action.bound toggleHighestLowestMarker(value) {
+        if (this.isHighestLowestMarkerEnabled === value) { return; }
+
+        this.isHighestLowestMarkerEnabled = value;
+        logEvent(LogCategories.ChartControl, LogActions.ChartSetting, ` ${value ? 'Show' : 'Hide'} HighestLowestMarker.`);
 
         this.saveSetting();
     }
