@@ -80,6 +80,7 @@ class Feed {
 
             this._stx.setMaxTicks(this._stx.chart.dataSet.length + (Math.floor(this._stx.chart.dataSet.length / 5) || 2));
             this._stx.chart.scroll = this._stx.chart.dataSet.length + (Math.floor(this._stx.chart.dataSet.length / 10) || 1);
+            this._stx.chart.isScrollLocationChanged = true;
             this._stx.draw();
         }
     }
