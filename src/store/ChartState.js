@@ -24,6 +24,7 @@ class ChartState {
     @observable paginationEndEpoch;
     @observable isChartClosed = false;
     @observable isStaticChart = false;
+    @observable refreshActiveSymbols = false;
     chartControlsWidgets;
 
     get comparisonStore() { return this.mainStore.comparison; }
@@ -65,6 +66,7 @@ class ChartState {
         granularity,
         margin = 0,
         onExportLayout,
+        refreshActiveSymbols,
         removeAllComparisons,
         scrollToEpoch,
         scrollToEpochOffset = 0,
@@ -89,6 +91,13 @@ class ChartState {
             if (this.mainStore.chart && this.mainStore.chart.feed) {
                 this.mainStore.chart.feed.onMasterDataUpdate(this.scrollChartToLeft);
             }
+        }
+
+        if (this.chartStore.activeSymbols
+            && (this.refreshActiveSymbols !== refreshActiveSymbols)) {
+            this.chartStore.activeSymbols.retrieveActiveSymbols(true).then(() => {
+                this.refreshActiveSymbols = refreshActiveSymbols;
+            });
         }
 
         this.rootNode = this.mainStore.chart.rootNode;
