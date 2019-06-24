@@ -13,25 +13,41 @@ function getItemCount(category) {
     return count;
 }
 
-const CategoryTitleClassName = (categoryId, activeHeadKey, activeHeadTop) => {
+const CategoryTitleClassName = (categoryId, activeHeadKey, activeHeadTop, categorySubtitle) => {
     let TitleClassName = '';
     if (activeHeadKey === categoryId) {
         TitleClassName = activeHeadTop < 0 ? 'sticky-bottom' : 'sticky-top';
     }
 
-    return `category-title ${TitleClassName}`;
+    return `category-title ${TitleClassName} ${categorySubtitle ? 'has-subtitle' : ''}`;
 };
 
-
-const Category = ({ category, Item, setCategoryElement, onSelectItem, activeHeadKey, activeHeadTop, activeHeadOffset }) => (
+const Category = ({ category, Item, setCategoryElement, onSelectItem, activeHeadKey, activeHeadTop, activeHeadOffset, disableAll }) => (
     <div
-        className={`category category-${category.categoryId}`}
+        className={`category category-${category.categoryId} ${category.categorySubtitle ? 'category-has-subtitle' : ''}`}
         ref={el => setCategoryElement(el, category.categoryId)}
     >
         <div
-            className={CategoryTitleClassName(category.categoryId, activeHeadKey, activeHeadTop)}
+            className={CategoryTitleClassName(category.categoryId, activeHeadKey, activeHeadTop, category.categorySubtitle)}
             style={{ top: (activeHeadKey === category.categoryId) ? activeHeadOffset : null }}
         >{t.translate(category.categoryName)}
+            {
+                ((category.categoryNamePostfixShowIfActive && activeHeadKey === category.categoryId)
+                    || !category.categoryNamePostfixShowIfActive)
+                && category.categoryNamePostfix
+                && (
+                    <span className="category-name-postfix">
+                        {category.categoryNamePostfix}
+                    </span>
+                )
+            }
+            {
+                category.categorySubtitle && (
+                    <div className="category-subtitle">
+                        {t.translate(category.categorySubtitle)}
+                    </div>
+                )
+            }
         </div>
         { category.hasSubcategory
             ? category.data.map(subcategory => getItemCount(subcategory) > 0 && (
@@ -45,6 +61,7 @@ const Category = ({ category, Item, setCategoryElement, onSelectItem, activeHead
                             key={item.display}
                             item={item}
                             onSelectItem={onSelectItem}
+                            disableAll={disableAll}
                         />
                     ))}
                 </div>
@@ -56,6 +73,7 @@ const Category = ({ category, Item, setCategoryElement, onSelectItem, activeHead
                             key={`${item.display}-${idx}`}// eslint-disable-line react/no-array-index-key
                             item={item}
                             onSelectItem={onSelectItem}
+                            disableAll={disableAll}
                         />
                     ))}
                 </div>
@@ -68,7 +86,7 @@ const Category = ({ category, Item, setCategoryElement, onSelectItem, activeHead
     </div>
 );
 
-export const ResultsPanel = ({ filteredItems, onSelectItem, getItemType, setCategoryElement, activeHeadKey, activeHeadTop, activeHeadOffset }) => (
+export const ResultsPanel = ({ filteredItems, onSelectItem, getItemType, setCategoryElement, activeHeadKey, activeHeadTop, activeHeadOffset, disableAll }) => (
     <div className="results-panel">
         { filteredItems.map(category => (getItemCount(category) > 0 || category.emptyDescription) && (
             <Category
@@ -80,6 +98,7 @@ export const ResultsPanel = ({ filteredItems, onSelectItem, getItemType, setCate
                 activeHeadKey={activeHeadKey}
                 activeHeadTop={activeHeadTop}
                 activeHeadOffset={activeHeadOffset}
+                disableAll={disableAll}
             />
         )) }
     </div>
