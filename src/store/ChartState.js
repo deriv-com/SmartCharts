@@ -50,6 +50,7 @@ class ChartState {
         this.chartStore.feed.onPagination(this.setOnPagination.bind(this));
 
         this.granularity = this.chartStore.granularity;
+        this.stxx.maxMasterDataSize = this.chartStore.getMaxMasterDataSize(this.granularity);
     };
 
     @action.bound updateProps({
@@ -508,8 +509,9 @@ class ChartState {
         }
         if (this.stxx && this.stxx.chart) {
             const dataSegment = this.stxx.chart.dataSegment;
-            if (this.stxx.masterData.length < dataSegment.length) {
-                this.stxx.minimumLeftBars = 2;
+            const whiteSpace = this.chartStore.isMobile ? 50 : 150;
+            if (this.stxx.masterData.length < this.stxx.chart.maxTicks - whiteSpace) {
+                this.stxx.minimumLeftBars = dataSegment.length;
             } else if (dataSegment) {
                 const noMoreScroll = this.hasReachedEndOfData || this.stxx.masterData.length === this.stxx.maxMasterDataSize;
                 this.stxx.minimumLeftBars = noMoreScroll ? this.stxx.chart.maxTicks : 2;

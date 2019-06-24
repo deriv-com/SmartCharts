@@ -386,7 +386,7 @@ class ChartStore {
         this.mainStore.notifier.onMessage = onMessage;
         this.granularity = (granularity !== undefined) ? granularity : this.defaults.granularity;
         const engineParams = {
-            maxMasterDataSize: 5000, // cap size so tick_history requests do not become too large
+            maxMasterDataSize: this.getMaxMasterDataSize(this.granularity), // cap size so tick_history requests do not become too large
             markerDelay: null, // disable 25ms delay for placement of markers
             container: this.rootNode.querySelector('.chartContainer'),
             controls: { chartControls: null }, // hide the default zoom buttons
@@ -562,6 +562,10 @@ class ChartStore {
         }
     };
 
+    getMaxMasterDataSize(granularity) {
+        return granularity === 86400 ? Math.floor(2.8 * 365) : 5000;
+    }
+
     chartClosedOpenThemeChange(isChartClosed) {
         this.mainStore.state.setChartClosed(isChartClosed);
         this.mainStore.state.setChartTheme(this.mainStore.chartSetting.theme, isChartClosed);
@@ -628,6 +632,7 @@ class ChartStore {
         let params;
         if (granularity !== undefined) {
             this.granularity = granularity;
+            this.stxx.maxMasterDataSize = this.getMaxMasterDataSize(this.granularity);
             params = { periodicity: calculateTimeUnitInterval(granularity) };
         }
 
