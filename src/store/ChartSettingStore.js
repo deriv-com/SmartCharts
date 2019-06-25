@@ -80,7 +80,7 @@ export default class ChartSettingStore {
     @observable countdown = false;
     @observable historical = false;
     @observable isAutoScale = true;
-    @observable isHighestLowestMarkerEnabled = false;
+    @observable isHighestLowestMarkerEnabled = true;
 
     @action.bound setSettings(settings) {
         if (settings === undefined) { return; }
