@@ -1,6 +1,6 @@
 import React from 'react';
 import { Scrollbars } from 'tt-react-custom-scrollbars';
-import { CloseIcon, ItemIconMap, SymbolPlaceholderIcon } from './Icons.jsx';
+import { CloseBoldIcon, ItemIconMap, SymbolPlaceholderIcon } from './Icons.jsx';
 import { connect } from '../store/Connect';
 import '../../sass/components/_ciq-chart-table.scss';
 
@@ -24,7 +24,7 @@ const ChartTable = ({
                     <div className="cq-titlebar">
                         {SymbolIcon && <SymbolIcon className={`ic-${symbol.symbol}`} />}
                         <div className="cq-title">{`${symbol.name} ${t.translate('Chart Table')}`}</div>
-                        <CloseIcon className="icon-close-menu" onClick={() => setOpen(false)} />
+                        <CloseBoldIcon className="icon-close-menu" onClick={() => setOpen(false)} />
                     </div>
                 )
                 }
@@ -83,7 +83,7 @@ const ChartTable = ({
                                         <th className="ciq-table-cell">
                                             <div className="cq-change-cell">
                                                 {t.translate('Change')}
-                                                <CloseIcon className="icon-close-menu" onClick={() => setOpen(false)} />
+                                                <CloseBoldIcon className="icon-close-menu" onClick={() => setOpen(false)} />
                                             </div>
                                         </th>
                                     </tr>

@@ -55,8 +55,10 @@
         display: inline-flex;
 
         .ic-icon {
-            padding: 8px 0 0 20px;
             cursor: pointer;
+            position: absolute;
+            right: 2px;
+            top: 11px;
 
             svg {
                 padding: 3px;
@@ -82,7 +84,12 @@
     }
 
     .ciq-table-cell {
-        line-height: 40px;
+        font-size: 14px;
+        font-weight: bold;
+        font-style: normal;
+        line-height: 1.43;
+        letter-spacing: normal;
+        padding: 12px 10px;
     }
 }
 
@@ -93,7 +100,12 @@
 
     .ciq-table-cell {
         text-align: center;
-        padding: 17px 16px;
+        padding: 12px 10px;
+        font-size: 14px;
+        font-weight: normal;
+        font-style: normal;
+        line-height: 1.43;
+        letter-spacing: normal;
         @include themify($themes) {
             color: themed('ChartTableBodyText');
         }
