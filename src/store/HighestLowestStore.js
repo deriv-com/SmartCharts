@@ -39,8 +39,10 @@ class HighestLowestStore {
             this.lowest  = undefined;
             this.stx.chart.isScrollLocationChanged = false;
             this.stx.chart.dataSegment.slice(1).forEach((tick) => {
-                this.highest = (this.highest && this.highest.Close > tick.Close && this.highest.DT < tick.DT) || tick.Close === null  ? this.highest : tick;
-                this.lowest  = (this.lowest && this.lowest.Close < tick.Close && this.lowest.DT < tick.DT) || tick.Close === null  ? this.lowest : tick;
+                this.highest = (this.highest && this.highest.Close > tick.Close && this.highest.DT < tick.DT)
+                    || (tick && tick.Close === null)  ? this.highest : tick;
+                this.lowest  = (this.lowest && this.lowest.Close < tick.Close && this.lowest.DT < tick.DT)
+                    || (tick && tick.Close === null)  ? this.lowest : tick;
                 this.stx.chart.isScrollLocationChanged = true;
             });
         }
