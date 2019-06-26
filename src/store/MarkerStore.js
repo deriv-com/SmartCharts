@@ -32,7 +32,9 @@ export default class MarkerStore {
 
     @computed get shouldDrawMarkers() {
         // Checks if the chart has been scrolled to the leftmost of the screen
-        return this.stx.chart.isScrollLocationChanged;
+        // TODO: uncomment next line when the fix of markers is done and remove the extra return
+        // return this.stx.chart.isScrollLocationChanged;
+        return true;
     }
 
     @action.bound destructor() {
