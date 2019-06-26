@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom\n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
-"PO-Revision-Date: 2019-06-24 05:22\n"
+"PO-Revision-Date: 2019-06-26 04:16\n"
 
 msgid " already exists."
 msgstr " уже существует."
@@ -1354,5 +1354,5 @@ msgid "Opens in:"
 msgstr "Открывается в:"
 
 msgid "Up to 5 active indicators allowed."
-msgstr ""
+msgstr "До пяти индикаторов одновременно."
 
