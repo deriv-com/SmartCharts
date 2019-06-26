@@ -25,7 +25,7 @@ class ChartState {
     @observable isChartClosed = false;
     @observable shouldMinimiseLastDigits = false;
     @observable isStaticChart = false;
-    @observable refreshActiveSymbols = false;
+    @observable refreshActiveSymbols;
     chartControlsWidgets;
 
     get comparisonStore() { return this.mainStore.comparison; }
@@ -96,9 +96,8 @@ class ChartState {
 
         if (this.chartStore.activeSymbols
             && (this.refreshActiveSymbols !== refreshActiveSymbols)) {
-            this.chartStore.activeSymbols.retrieveActiveSymbols(true).then(() => {
-                this.refreshActiveSymbols = refreshActiveSymbols;
-            });
+            this.refreshActiveSymbols = refreshActiveSymbols;
+            this.chartStore.activeSymbols.retrieveActiveSymbols(true);
         }
 
         this.rootNode = this.mainStore.chart.rootNode;
