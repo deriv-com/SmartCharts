@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom\n"
 "Language-Team: Vietnamese\n"
 "Language: vi_VN\n"
-"PO-Revision-Date: 2019-06-24 05:22\n"
+"PO-Revision-Date: 2019-06-26 04:16\n"
 
 msgid " already exists."
 msgstr " đã tồn tại."
@@ -1354,5 +1354,5 @@ msgid "Opens in:"
 msgstr "Mở vào:"
 
 msgid "Up to 5 active indicators allowed."
-msgstr ""
+msgstr "Được phép chọn tối đa 5 chỉ số hoạt động."
 
