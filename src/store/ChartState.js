@@ -25,6 +25,7 @@ class ChartState {
     @observable isChartClosed = false;
     @observable shouldMinimiseLastDigits = false;
     @observable isStaticChart = false;
+    @observable noTradingTimesForStartEpoch = false;
     chartControlsWidgets;
 
     get comparisonStore() { return this.mainStore.comparison; }
@@ -74,6 +75,7 @@ class ChartState {
         startEpoch,
         symbol,
         zoom,
+        noTradingTimesForStartEpoch,
     }) {
         let isGranularityChanged = false;
         let isSymbolChanged = false;
@@ -82,6 +84,7 @@ class ChartState {
         this.isConnectionOpened = isConnectionOpened;
         this.chartStatusListener = chartStatusListener;
         this.isStaticChart = isStaticChart;
+        this.noTradingTimesForStartEpoch = noTradingTimesForStartEpoch;
 
         if (this.symbol !== symbol) {
             this.symbol = symbol;

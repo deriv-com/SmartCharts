@@ -280,6 +280,7 @@ class App extends Component {
                 granularity={this.state.granularity}
                 onSettingsChange={this.saveSettings}
                 isConnectionOpened={isConnectionOpened}
+                noTradingTimesForStartEpoch
             >
                 {endEpoch ? (
                     <Marker
