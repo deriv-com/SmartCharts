@@ -14,7 +14,7 @@ export default class ActiveSymbols {
         this._tradingTimes = tradingTimes;
     }
 
-    @action.bound async retrieveActiveSymbols(retrieve_new_active_symbols = false) {
+    @action.bound async retrieveActiveSymbols(retrieveNewActiveSymbols = false) {
         if (this.isRetrievingSymbols && !retrieve_new_active_symbols) {
             await this.symbolsPromise;
             return this.activeSymbols;
