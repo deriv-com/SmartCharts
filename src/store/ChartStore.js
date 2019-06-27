@@ -563,7 +563,12 @@ class ChartStore {
     };
 
     getMaxMasterDataSize(granularity) {
-        return granularity === 86400 ? Math.floor(2.8 * 365) : 5000;
+        let maxMasterDataSize = 5000;
+        // When granularity is 1 day
+        if (granularity === 86400) maxMasterDataSize = Math.floor(2.8 * 365);
+        // When granularity is 8 hours
+        else if (granularity === 28800) maxMasterDataSize = Math.floor(2.8 * 365 * 3);
+        return maxMasterDataSize;
     }
 
     chartClosedOpenThemeChange(isChartClosed) {
