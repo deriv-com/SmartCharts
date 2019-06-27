@@ -75,7 +75,7 @@ class ChartState {
         startEpoch,
         symbol,
         zoom,
-        noTradingTimesForStartEpoch,
+        shouldFetchTradingTimes = true,
     }) {
         let isGranularityChanged = false;
         let isSymbolChanged = false;
@@ -84,7 +84,7 @@ class ChartState {
         this.isConnectionOpened = isConnectionOpened;
         this.chartStatusListener = chartStatusListener;
         this.isStaticChart = isStaticChart;
-        this.noTradingTimesForStartEpoch = noTradingTimesForStartEpoch;
+        this.shouldFetchTradingTimes = shouldFetchTradingTimes;
 
         if (this.symbol !== symbol) {
             this.symbol = symbol;
