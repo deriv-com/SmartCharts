@@ -1,14 +1,14 @@
-import { observable, action, computed, when } from 'mobx';
+import { when } from 'mobx';
 
 export default class AssetInformationStore {
     constructor(mainStore) {
         this.mainStore = mainStore;
         when(() => this.context, this.onContextReady);
     }
-    @computed get decimalPlaces() {
+    get decimalPlaces() {
         return this.mainStore.chart.currentActiveSymbol.decimal_places;
     }
-    @computed get isTick() {
+    get isTick() {
         return this.mainStore.timeperiod.timeUnit === 'tick';
     }
 
@@ -20,8 +20,12 @@ export default class AssetInformationStore {
         this.stx.prepend('headsUpHR', this.update);
     };
 
-    @action.bound update() {
-        if (!this.visible) { return; }
+    update = () => {
+        const container = this.context.topNode.querySelector('.ciq-asset-information');
+        if (!this.visible) {
+            container.innerHTML = '';
+            return;
+        }
 
         const bar = this.stx.barFromPixel(this.stx.cx);
         const prices = this.stx.chart.xaxis[bar];
@@ -31,16 +35,20 @@ export default class AssetInformationStore {
         const {
             Open, High, Low, Close,
         } = prices.data || { };
-        this.open = (Open && !this.isTick) ? Open.toFixed(this.decimalPlaces) : null;
-        this.high = (High && !this.isTick) ? High.toFixed(this.decimalPlaces) : null;
-        this.low = (Low && !this.isTick) ? Low.toFixed(this.decimalPlaces) : null;
-        this.close = (Close && !this.isTick) ? Close.toFixed(this.decimalPlaces) : null;
-        this.price = Close ? Close.toFixed(this.decimalPlaces) : null;
-    }
+        const open = (Open && !this.isTick) ? Open.toFixed(this.decimalPlaces) : null;
+        const high = (High && !this.isTick) ? High.toFixed(this.decimalPlaces) : null;
+        const low = (Low && !this.isTick) ? Low.toFixed(this.decimalPlaces) : null;
+        const close = (Close && !this.isTick) ? Close.toFixed(this.decimalPlaces) : null;
+        const price = Close ? Close.toFixed(this.decimalPlaces) : null;
 
-    @observable price = null;
-    @observable open = null;
-    @observable high = null;
-    @observable low = null;
-    @observable close = null;
+        // The value of the div is set by VanillaJS to improve the preformace of the chart.
+        if (container) {
+            container.innerHTML = `
+                ${price ? `<div> <div>${t.translate('SPOT')}:</div> <div>${price}</div> </div>`  : ''}
+                ${open  ? `<div> <div>${t.translate('OPEN')}:</div> <div>${open}</div> </div>`   : ''}
+                ${close ? `<div> <div>${t.translate('CLOSE')}:</div> <div>${close}</div> </div>` : ''}
+                ${high  ? `<div> <div>${t.translate('HIGH')}:</div> <div>${high}</div> </div>`   : ''}
+                ${low   ? `<div> <div>${t.translate('LOW')}:</div> <div>${low}</div> </div>`     : ''}`;
+        }
+    }
 }
