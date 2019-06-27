@@ -15,7 +15,7 @@ export default class ActiveSymbols {
     }
 
     @action.bound async retrieveActiveSymbols(retrieveNewActiveSymbols = false) {
-        if (this.isRetrievingSymbols && !retrieve_new_active_symbols) {
+        if (this.isRetrievingSymbols && !retrieveNewActiveSymbols) {
             await this.symbolsPromise;
             return this.activeSymbols;
         }
