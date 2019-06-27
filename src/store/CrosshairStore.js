@@ -38,7 +38,9 @@ class CrosshairStore {
         const storedState = this.stx.layout.crosshair;
         const state = (typeof storedState !== 'number') ? 2 : storedState;
         this.setCrosshairState(state);
-        this.stx.append('headsUpHR', () => this.renderCrosshairTooltip());
+
+        this.stx.append('headsUpHR',
+            () => this.renderCrosshairTooltip());
     };
 
     setFloatPriceLabelStyle(theme = this.mainStore.chartSetting.theme) {
@@ -76,13 +78,9 @@ class CrosshairStore {
     renderCrosshairTooltip() {
         // if no tooltip exists, then skip
         if (this.state !== 2) return;
-        const dateStr = this.stx.controls.floatDate.innerHTML;
-        if (dateStr) {
-            const month = dateStr.substring(0, 2);
-            this.stx.controls.floatDate.innerHTML = dateStr.replace(dateStr.substring(0, 2), dateStr.substring(3, 5)).replace(dateStr.substring(2, 5), `-${month}`);
-        }
 
-        const { stx } = this;
+        const stx = this.stx;
+
         const { crossX, crossY } = stx.controls;
         // crosshairs are not on
         if ((crossX && crossX.style.display === 'none')
@@ -355,6 +353,8 @@ class CrosshairStore {
         return rows;
     }
 
+    // YES! we are manually patching DOM, Because we don't want to pay
+    // for react reconciler & mox tracking observables.
     updateTooltipPosition({ top, left, rows }) {
         const crosshair = this.stx.container.querySelector('.cq-crosshair');
 
