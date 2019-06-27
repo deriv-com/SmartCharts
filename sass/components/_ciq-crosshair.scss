@@ -64,15 +64,6 @@
                 border-left: 6px solid themed('CrosshairBg');
             }
         }
-        &.arrow-left {
-            transform: translateX(30px) translateY(-50%);
-        }
-        &.arrow-right {
-            transform: translateX(calc(-100% - 30px)) translateY(-50%);
-        }
-        &.arrow-left:after, &.arrow-right:before {
-            display: block;
-        }
         .row {
             font-size: 1.2em;
             line-height: 18px;
@@ -85,6 +76,16 @@
                 font-weight: bold;
             }
         }
+    }
+    &.arrow-left .cq-crosshair-content {
+        transform: translateX(30px) translateY(-50%);
+    }
+    &.arrow-right .cq-crosshair-content {
+        transform: translateX(calc(-100% - 30px)) translateY(-50%);
+    }
+    &.arrow-left  .cq-crosshair-content:after,
+    &.arrow-right .cq-crosshair-content:before {
+        display: block;
     }
     &.active {
         pointer-events: initial;
