@@ -8,7 +8,7 @@ class TradingTimes {
     isInitialized = false;
     tradingTimesPromise = new PendingPromise();
 
-    constructor(api, needsNoTradingTimes) {
+    constructor(api, shouldFetchTradingTimes = true) {
         this._needsNoTradingTimes = needsNoTradingTimes;
         this._api = api;
         this._serverTime = ServerTime.getInstance();
