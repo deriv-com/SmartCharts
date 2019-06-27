@@ -25,7 +25,7 @@ class ChartState {
     @observable isChartClosed = false;
     @observable shouldMinimiseLastDigits = false;
     @observable isStaticChart = false;
-    @observable noTradingTimesForStartEpoch = false;
+    @observable shouldFetchTradingTimes = true;
     chartControlsWidgets;
 
     get comparisonStore() { return this.mainStore.comparison; }
