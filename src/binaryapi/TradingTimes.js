@@ -9,7 +9,7 @@ class TradingTimes {
     tradingTimesPromise = new PendingPromise();
 
     constructor(api, shouldFetchTradingTimes = true) {
-        this._needsNoTradingTimes = needsNoTradingTimes;
+        this._shouldFetchTradingTimes = shouldFetchTradingTimes;
         this._api = api;
         this._serverTime = ServerTime.getInstance();
         this._emitter = new EventEmitter({ emitDelay: 0 });
