@@ -29,7 +29,7 @@ class TradingTimes {
 
         this.lastUpdateDate = this._serverTime.getLocalDate().toISOString().substring(0, 10);
 
-        if (!this._tradingTimesMap && !this._needsNoTradingTimes) {
+        if (!this._tradingTimesMap && this._shouldFetchTradingTimes) {
             await this._updateTradeTimes();
             this.tradingTimesPromise.resolve();
 
