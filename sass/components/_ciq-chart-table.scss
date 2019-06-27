@@ -4,8 +4,8 @@
 
     .ciq-list > :last-child {
         top: 42px !important;
+        margin-right: 10px;
     }
-
 }
 
 .cq-dialog-overlay {
@@ -57,17 +57,19 @@
         .ic-icon {
             cursor: pointer;
             position: absolute;
-            right: 2px;
-            top: 11px;
+            right: 12px;
+            top: 10px;
+            border-radius: 4px;
 
-            svg {
-                padding: 3px;
-
-                &:hover {
-                    @include themify($themes) {
-                        background: themed('ChartTableHeadHover');
-                    }
+            &:hover {
+                @include themify($themes) {
+                    background: themed('ChartTableHeadHover');
                 }
+            }
+            svg {
+                width: 16px;
+                height: 16px;
+                stroke: none;
             }
         }
     }
