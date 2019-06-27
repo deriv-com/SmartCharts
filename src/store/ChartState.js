@@ -253,7 +253,6 @@ class ChartState {
     }
 
     @action.bound setOnPagination({ end }) {
-        // TODO: remove next line when the fix of markers is done
         this.stxx.chart.isScrollLocationChanged = true;
         this.isOnPagination     = !this.isOnPagination;
         this.paginationEndEpoch = this.isOnPagination ? end : null;
