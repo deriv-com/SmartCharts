@@ -18,7 +18,6 @@ export default class AssetInformationStore {
 
     onContextReady = () => {
         this.stx.prepend('headsUpHR', this.update);
-        this.stx.prepend('createXAxis', this.update);
     };
 
     @action.bound update() {
