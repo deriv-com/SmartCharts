@@ -29,8 +29,13 @@
         background: themed('ChartTableBg');
     }
 
+    th,td {
+        text-align: right;
+    }
     td:nth-child(1), th:nth-child(1) {
-        width: 165px;
+        width: 185px;
+        padding-left: 24px;
+        text-align: left;
     }
     td:nth-child(2), th:nth-child(2) {
         width: 95px;
@@ -45,21 +50,23 @@
         width: 95px;
     }
     td:nth-child(6), th:nth-child(6) {
-        width: 120px;
+        width: 60px;
+        padding-right: 4px;
     }
-    tbody {
-        display: block;
-        margin-top: 40px;
+    td:nth-child(7), th:nth-child(7) {
+        width: 50px;
+        text-align: left;
+        padding-left: 4px;
     }
-    .cq-change-cell {
-        display: inline-flex;
+    th:nth-child(7) {
+        text-align: center;
 
         .ic-icon {
             cursor: pointer;
             position: absolute;
-            right: 12px;
             top: 10px;
             border-radius: 4px;
+            right: 12px;
 
             &:hover {
                 @include themify($themes) {
@@ -72,6 +79,13 @@
                 stroke: none;
             }
         }
+    }
+    tbody {
+        display: block;
+        margin-top: 40px;
+    }
+    .cq-change-cell {
+        display: inline-flex;
     }
 }
 
@@ -101,7 +115,6 @@
     }
 
     .ciq-table-cell {
-        text-align: center;
         padding: 12px 10px;
         font-size: 14px;
         font-weight: normal;

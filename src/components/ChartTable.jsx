@@ -83,8 +83,10 @@ const ChartTable = ({
                                         <th className="ciq-table-cell">
                                             <div className="cq-change-cell">
                                                 {t.translate('Change')}
-                                                <CloseBoldIcon className="icon-close-menu" onClick={() => setOpen(false)} />
                                             </div>
+                                        </th>
+                                        <th className="ciq-table-cell">
+                                            <CloseBoldIcon className="icon-close-menu" onClick={() => setOpen(false)} />
                                         </th>
                                     </tr>
                                 </thead>
@@ -106,6 +108,10 @@ const ChartTable = ({
                                             <td className="ciq-table-cell">
                                                 <div className="cq-change-cell">
                                                     <div className={`${item.Status ? item.Status : 'up'}`}>{item.Change}</div>
+                                                </div>
+                                            </td>
+                                            <td className="ciq-table-cell">
+                                                <div className="cq-change-cell">
                                                     <div className={`cq-change ${item.Status}`} />
                                                 </div>
                                             </td>
