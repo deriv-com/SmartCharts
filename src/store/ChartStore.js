@@ -255,9 +255,9 @@ class ChartStore {
                 if ((!this.mainSeriesRenderer || !this.mainSeriesRenderer.standaloneBars) && !this.standaloneBars[layout.chartType]) this.micropixels += layout.candleWidth / 2; // bar charts display at beginning of candle
 
                 if (this.isHistoricalMode() && _self.isMobile) {
-                    exactScroll = parseInt(exactScroll * 0.8, 10);
+                    exactScroll = parseInt(exactScroll * 0.8);
                 } else if (this.isHistoricalMode()) {
-                    exactScroll = parseInt(exactScroll * 0.9, 10);
+                    exactScroll = parseInt(exactScroll * 0.9);
                 }
 
                 if (params.animate) {
@@ -426,6 +426,19 @@ class ChartStore {
         engineParams.layout = chartLayout;
 
         const stxx = this.stxx = new CIQ.ChartEngine(engineParams);
+        const tickAnimator = new CIQ.EaseMachine(Math.easeOutCubic, 500);
+
+        // chartiq's requestAnimationFrame for tickAnimator is being executed right after
+        // the mouse wheel callback, this is a performance bottleneck, causing each frame to take
+        // another 10 to 15ms to render, we override the mousewheel behavior to fix that.
+        stxx.animations.zoom = {
+            run: (fc, startValues, endValues) => {
+                stxx.scrollwheel_is_on = true; // this is used in Animation.js
+                tickAnimator.stop();
+                fc(endValues);
+            },
+            hasCompleted: true,
+        };
 
         stxx.isAutoScale = settings && settings.isAutoScale !== false;
 
@@ -436,7 +449,7 @@ class ChartStore {
         deleteElement.textContent = t.translate('right-click to delete');
         manageElement.textContent = t.translate('right-click to manage');
 
-        if (this.state.isAnimationEnabled) animateChart(stxx, { stayPut: true });
+        if (this.state.isAnimationEnabled) animateChart(stxx, { stayPut: true }, tickAnimator);
 
         // connect chart to data
         this.feed = new Feed(this.api, stxx, this.mainStore, this.tradingTimes);
