@@ -728,6 +728,26 @@ class ChartStore {
         this.stxx.chart.seriesRenderers._main_series.seriesParams[0].field = 'Close';
     }
 
+    destroyFeed() {
+        if (this.feed && !Object.keys(this.feed._isSubscriptionInitializing).length) {
+            this.feed.unsubscribeAll();
+            this.feed = null;
+            if (ChartStore.keystrokeHub.context === this.context) {
+                ChartStore.keystrokeHub.setActiveContext(null);
+            }
+            if (this.stxx) {
+                this.stxx.container.removeEventListener('mouseenter', this.onMouseEnter);
+                this.stxx.container.removeEventListener('mouseleave', this.onMouseLeave);
+                this.stxx.updateChartData = function () {}; // prevent any data from entering the chart
+                this.stxx.isDestroyed = true;
+                this.stxx.destroy();
+                this.stxx = null;
+            }
+        } else if (this.feed && this.feed._isSubscriptionInitializing) {
+            setTimeout(() => this.destroyFeed, 500);
+        }
+    }
+
     // Makes requests to tick history API that will replace
     // Existing chart tick/ohlc data
     @action.bound refreshChart() {
@@ -745,21 +765,7 @@ class ChartStore {
 
         // Destroying the chart does not unsubscribe the streams;
         // we need to manually unsubscribe them.
-        if (this.feed) {
-            this.feed.unsubscribeAll();
-            this.feed = null;
-        }
-        if (ChartStore.keystrokeHub.context === this.context) {
-            ChartStore.keystrokeHub.setActiveContext(null);
-        }
-        if (this.stxx) {
-            this.stxx.container.removeEventListener('mouseenter', this.onMouseEnter);
-            this.stxx.container.removeEventListener('mouseleave', this.onMouseLeave);
-            this.stxx.updateChartData = function () {}; // prevent any data from entering the chart
-            this.stxx.isDestroyed = true;
-            this.stxx.destroy();
-            this.stxx = null;
-        }
+        this.destroyFeed();
     }
 }
 
