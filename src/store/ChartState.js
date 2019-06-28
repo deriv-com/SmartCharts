@@ -25,6 +25,7 @@ class ChartState {
     @observable isChartClosed = false;
     @observable shouldMinimiseLastDigits = false;
     @observable isStaticChart = false;
+    @observable prevChartType;
     chartControlsWidgets;
 
     get comparisonStore() { return this.mainStore.comparison; }
@@ -126,6 +127,7 @@ class ChartState {
             this.granularity = granularity === null ? undefined : granularity;
         }
         if (this.chartType !== chartType && this.context) {
+            if (chartType === 'table') this.prevChartType = this.chartTypeStore.type.id;
             this.chartType = chartType;
             this.chartTypeStore.setType(chartType);
         }
