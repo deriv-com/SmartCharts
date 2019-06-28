@@ -1,4 +1,4 @@
-import { observable, action, computed } from 'mobx';
+import { observable, action, computed, runInAction } from 'mobx';
 import { stableSort, cloneCategories } from '../utils';
 import PendingPromise from '../utils/PendingPromise';
 
@@ -14,16 +14,18 @@ export default class ActiveSymbols {
         this._tradingTimes = tradingTimes;
     }
 
-    @action.bound async retrieveActiveSymbols() {
-        if (this.isRetrievingSymbols) {
+    @action.bound async retrieveActiveSymbols(retrieveNewActiveSymbols = false) {
+        if (this.isRetrievingSymbols && !retrieveNewActiveSymbols) {
             await this.symbolsPromise;
             return this.activeSymbols;
         }
 
         this.isRetrievingSymbols = true;
         const { active_symbols } = await this._api.getActiveSymbols();
-        this.processedSymbols = this._processSymbols(active_symbols);
-        this.categorizedSymbols = this._categorizeActiveSymbols(this.processedSymbols);
+        runInAction(() => {
+            this.processedSymbols = this._processSymbols(active_symbols);
+            this.categorizedSymbols = this._categorizeActiveSymbols(this.processedSymbols);
+        });
         for (const symbolObj of this.processedSymbols) {
             this.symbolMap[symbolObj.symbol] = symbolObj;
         }

@@ -9,10 +9,7 @@ export default class BinaryAPI {
     }
 
     getActiveSymbols() {
-        return this.requestAPI({
-            active_symbols: 'brief',
-            product_type: 'basic',
-        });
+        return this.requestAPI({ active_symbols: 'brief' });
     }
 
     getServerTime() {

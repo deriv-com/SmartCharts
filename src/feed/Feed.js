@@ -103,6 +103,7 @@ class Feed {
     }
 
     async fetchInitialData(symbol, suggestedStartDate, suggestedEndDate, params, callback) {
+        this.setHasReachedEndOfData(false);
         const { period, interval, symbolObject } = params;
         const granularity = calculateGranularity(period, interval);
         const key = this._getKey({ symbol, granularity });
@@ -232,6 +233,7 @@ class Feed {
             callback({ moreAvailable: false, quotes: [] });
             if (isMainChart) { // ignore comparisons
                 this._emitter.emit(Feed.EVENT_ON_PAGINATION, { start, end });
+                this.setHasReachedEndOfData(true);
             }
             return;
         }
@@ -254,6 +256,7 @@ class Feed {
                     if (newStart <= startLimit) {
                         // Passed available range. Prevent anymore pagination requests:
                         callback({ moreAvailable: false, quotes: [] });
+                        this.setHasReachedEndOfData(true);
                         return;
                     }
                     // Recursively extend the date range for more data until we exceed available range
@@ -261,6 +264,11 @@ class Feed {
                     return;
                 }
                 result.quotes = TickHistoryFormatter.formatHistory(response);
+
+                if (firstEpoch <= startLimit) {
+                    callback({ moreAvailable: false, quotes: [] });
+                    this.setHasReachedEndOfData(true);
+                }
             } catch (err) {
                 console.error(err);
                 result = { error: err };
@@ -270,6 +278,12 @@ class Feed {
         callback(result);
         if (isMainChart) { // ignore comparisons
             this._emitter.emit(Feed.EVENT_ON_PAGINATION, { start, end });
+        }
+    }
+
+    setHasReachedEndOfData(hasReachedEndOfData) {
+        if (this._mainStore.state.hasReachedEndOfData !== hasReachedEndOfData) {
+            this._mainStore.state.hasReachedEndOfData = hasReachedEndOfData;
         }
     }
 
