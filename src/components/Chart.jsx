@@ -60,6 +60,7 @@ class Chart extends Component {
             DrawToolsSettingsDialog,
             StudySettingsDialog,
             isCandle,
+            isSpline,
             isMobile = false,
             isOnPagination,
             isChartAvailable,
@@ -114,7 +115,7 @@ class Chart extends Component {
                                                 && <PaginationLoader />
                                         }
                                         {
-                                            !isCandle && isHighestLowestMarkerEnabled
+                                            !isCandle && !isSpline && isHighestLowestMarkerEnabled
                                                 && <HighestLowestMarker />
                                         }
                                         <CurrentSpot />
@@ -163,6 +164,7 @@ export default connect(({ chart, drawTools, studies, chartSetting, chartType, st
     AggregateChartSettingsDialog : chartType.AggregateChartSettingsDialog,
     isCandle: chartType.isCandle,
     isChartAvailable: chart.isChartAvailable,
+    isSpline: chartType.isSpline,
     updateProps: state.updateProps,
     chartContainerHeight: chart.chartContainerHeight,
     containerWidth: chart.containerWidth,

@@ -2,12 +2,15 @@ import {
     action,
     observable,
     reaction,
-    when }                 from 'mobx';
+    when }             from 'mobx';
+import { getUTCEpoch } from '../utils';
 
 
 class HighestLowestStore {
-    @observable highest;
-    @observable lowest;
+    @observable highestDate;
+    @observable highestPrice;
+    @observable lowestDate
+    @observable lowestPrice;
 
     get feed()    { return this.mainStore.chart.feed; }
     get context() { return this.mainStore.chart.context; }
@@ -35,14 +38,25 @@ class HighestLowestStore {
 
     @action.bound calculateHighestLowestByNewData = () => {
         if (this.stx.chart && this.stx.chart.dataSegment.length) {
-            this.highest = undefined;
-            this.lowest  = undefined;
             this.stx.chart.isScrollLocationChanged = false;
-            this.stx.chart.dataSegment.slice(1).forEach((tick) => {
-                this.highest = (this.highest && this.highest.Close > tick.Close && this.highest.DT < tick.DT)
-                    || (tick && tick.Close === null)  ? this.highest : tick;
-                this.lowest  = (this.lowest && this.lowest.Close < tick.Close && this.lowest.DT < tick.DT)
-                    || (tick && tick.Close === null)  ? this.lowest : tick;
+            this.highestPrice = undefined;
+            this.lowestPrice  = undefined;
+            this.stx.chart.dataSegment.forEach((tick) => {
+                if (!tick) { return; }
+
+                const highest = (+this.highestPrice > tick.Close && this.highestDate < tick.DT)
+                    || (tick && tick.Close === null)  ? null : tick;
+                const lowest  = (+this.lowestPrice < tick.Close && this.lowestDate < tick.DT)
+                    || (tick && tick.Close === null)  ? null : tick;
+
+                if (highest) {
+                    this.highestDate  = getUTCEpoch(CIQ.strToDateTime(highest.Date));
+                    this.highestPrice = highest.Close.toFixed(this.decimalPlaces);
+                }
+                if (lowest) {
+                    this.lowestDate  = getUTCEpoch(CIQ.strToDateTime(lowest.Date));
+                    this.lowestPrice = lowest.Close.toFixed(this.decimalPlaces);
+                }
                 this.stx.chart.isScrollLocationChanged = true;
             });
         }

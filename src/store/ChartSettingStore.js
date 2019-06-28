@@ -170,6 +170,7 @@ export default class ChartSettingStore {
     @action.bound setHistorical(value) {
         if (this.historical === value) { return; }
         this.historical = value;
+        this.isHighestLowestMarkerEnabled = !value;
         this.saveSetting();
         /**
         * Chart should fix its height & width after the position changed,

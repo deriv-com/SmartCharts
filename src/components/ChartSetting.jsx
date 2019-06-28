@@ -127,7 +127,7 @@ const ChartSetting = ({
                             {selectedLanguage.icon}
                         </div>
                     </div>
-                    <div className="ciq-list-item">
+                    <div className={`ciq-list-item ${historical && 'disabled'}`}>
                         <span className="ciq-icon-text">{t.translate('Show Highest/Lowest Spot')}</span>
                         <div className="ciq-action">
                             <Switch
