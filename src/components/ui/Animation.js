@@ -85,7 +85,7 @@ export default function animateChart(stx, animationParameters, easeMachine) {
         chart = chart || this.chart;
         if (chart.lockScroll) {
             const lastAppendQuote     = appendQuotes[appendQuotes.length - 1];
-            const lastDataSegmentItem = chart.dataSegment[chart.dataSegment.length - 1];
+            const lastDataSegmentItem = chart.dataSegment ? chart.dataSegment[chart.dataSegment.length - 1] : null;
 
             if (!lastAppendQuote || !lastDataSegmentItem) {
                 return;
