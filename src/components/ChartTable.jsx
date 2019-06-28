@@ -14,7 +14,7 @@ const ChartTable = ({
     setOpen,
 }) => {
     const SymbolIcon = ItemIconMap[symbol.symbol] || SymbolPlaceholderIcon;
-    const width = isTick ? '320px' : '500px';
+    const width = isTick ? '380px' : '690px';
 
     return (
         <div className={`cq-dialog-overlay ${open ? 'cq-dialog-active' : ''}`} style={{ '--table-width': width }}>
@@ -80,7 +80,7 @@ const ChartTable = ({
                                                 </React.Fragment>
                                             )
                                         }
-                                        <th className="ciq-table-cell">
+                                        <th className="ciq-table-cell before-last-child">
                                             <div className="cq-change-cell">
                                                 {t.translate('Change')}
                                             </div>
@@ -105,7 +105,7 @@ const ChartTable = ({
                                             <td key="td-low" className="ciq-table-cell">{item.Low}</td>,
                                             <td key="td-close" className="ciq-table-cell">{item.Close}</td>,
                                         ]}
-                                            <td className="ciq-table-cell">
+                                            <td className="ciq-table-cell before-last-child">
                                                 <div className="cq-change-cell">
                                                     <div className={`${item.Status ? item.Status : 'up'}`}>{item.Change}</div>
                                                 </div>

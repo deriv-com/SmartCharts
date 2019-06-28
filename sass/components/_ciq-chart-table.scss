@@ -33,19 +33,21 @@
         text-align: right;
 
         &:last-child {
+            width: 50px !important;
             text-align: left;
+            padding-left: 4px;
         }
     }
     td:nth-child(1), th:nth-child(1) {
-        width: 145px;
-        padding-left: 10px;
+        width: 180px;
+        padding-left: 24px;
         text-align: left;
     }
     td:nth-child(2), th:nth-child(2) {
-        width: 60px;
+        width: 105px;
     }
     td:nth-child(3), th:nth-child(3) {
-        width: 60px;
+        width: 110px;
     }
     td:nth-child(4), th:nth-child(4) {
         width: 60px;
@@ -57,12 +59,7 @@
         width: 40px;
         padding-right: 4px;
     }
-    td:nth-child(7), th:nth-child(7) {
-        width: 30px;
-        text-align: left;
-        padding-left: 4px;
-    }
-    th:nth-child(7) {
+    th:last-child {
         text-align: center;
 
         .ic-icon {
@@ -109,7 +106,12 @@
         font-style: normal;
         line-height: 1.43;
         letter-spacing: normal;
-        padding: 12px 2px;
+        padding: 12px 10px;
+
+        &.before-last-child {
+            width: 60px !important;
+            padding-right: 4px;
+        }
     }
 }
 
@@ -129,6 +131,10 @@
             color: themed('ChartTableBodyText');
         }
 
+        &.before-last-child {
+            width: 60px !important;
+            padding-right: 4px;
+        }
         .cq-change:after {
             margin: 3px 0 0 5px;
         }
