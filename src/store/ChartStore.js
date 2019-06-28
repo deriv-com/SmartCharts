@@ -741,6 +741,8 @@ class ChartStore {
                 this.stxx.updateChartData = function () {}; // prevent any data from entering the chart
                 this.stxx.isDestroyed = true;
                 this.stxx.destroy();
+                CIQ.ChartEngine.prototype.remove('headsUpHR');
+                CIQ.ChartEngine.prototype.remove('resizeChart');
                 this.stxx = null;
             }
         } else if (this.feed && this.feed._isSubscriptionInitializing) {
