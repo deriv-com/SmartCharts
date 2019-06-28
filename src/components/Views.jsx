@@ -35,6 +35,7 @@ const Views = ({
     remove,
     inputRef,
     templateName,
+    searchInputClassName,
 }) => (
     <ViewsMenu
         className="ciq-views"
@@ -79,7 +80,7 @@ const Views = ({
                                     <BackIcon onClick={cancel} />
                                     <input
                                         ref={inputRef}
-                                        className="view-input"
+                                        className={`view-input ${searchInputClassName || ''}`}
                                         value={templateName}
                                         placeholder={t.translate('Template name')}
                                         maxLength={20}

@@ -127,6 +127,9 @@
         &:last-child {
             padding-bottom: 2.5em;
         }
+        &.category-has-subtitle {
+            padding-top: 6.5em;
+        }
     }
     .category-content {
         margin: 0 16px 4px;
@@ -175,6 +178,10 @@
                 background-color: themed('CatDisplayBg');
                 border-bottom: 1px solid themed('CatDisplayCatContentBorder');
             }
+
+            &.has-subtitle {
+                height: 60px;
+            }
         }
         &.sticky-bottom {
             position: absolute;
@@ -186,6 +193,16 @@
             top: 0px;
             z-index: 9;
             padding-right: 25px;
+        }
+        .category-name-postfix {
+            margin-left: 5px;
+        }
+        .category-subtitle {
+            font-weight: normal;
+            line-height: normal;
+            @include themify($themes) {
+                color: themed('CatDisplayCatSubTitleText');
+            }
         }
     }
     .cq-filter {
@@ -307,6 +324,17 @@
             }
         }
     }
+    .cq-active-item {
+        @include themify($themes) {
+            color: themed('CatDisplayActiveText');
+        }
+
+        &:hover {
+            @include themify($themes) {
+                color: themed('CatDisplayActiveText');
+            }
+        }
+    }
     .cq-item {
         cursor: pointer;
     }
@@ -314,7 +342,9 @@
         cursor: default;
 
         &:not(.selected) {
-            color: #c5c5c5 !important;
+            @include themify($themes) {
+                color: themed('CatDisplayCatContentDisabled');
+            }
         }
         &.selected {
             background-color: #f2f3f8;

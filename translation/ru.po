@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom\n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
-"PO-Revision-Date: 2019-05-06 06:33\n"
+"PO-Revision-Date: 2019-06-26 04:16\n"
 
 msgid " already exists."
 msgstr " уже существует."
@@ -52,7 +52,7 @@ msgid "Box Size"
 msgstr "Размер ячейки"
 
 msgid "C"
-msgstr "Изм."
+msgstr "З"
 
 msgid "Callout"
 msgstr "Сноска"
@@ -205,7 +205,7 @@ msgid "Language"
 msgstr "Язык"
 
 msgid "Last digits stats for latest 1000 ticks on "
-msgstr "Последняя десятичная начинается с последних 1000 тиков для "
+msgstr "Статистика последних десятичных в последних 1000 тиков для "
 
 msgid "Line"
 msgstr "Линия"
@@ -1352,4 +1352,7 @@ msgstr "Закрыто"
 
 msgid "Opens in:"
 msgstr "Открывается в:"
+
+msgid "Up to 5 active indicators allowed."
+msgstr "До пяти индикаторов одновременно."
 

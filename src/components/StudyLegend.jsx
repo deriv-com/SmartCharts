@@ -11,6 +11,8 @@ const StudyLegend = ({
     StudyCategoricalDisplay,
     isMobile,
     activeStudiesNo,
+    searchInputClassName,
+    disableAll,
 }) => (
     <StudyMenu
         className="ciq-studies"
@@ -27,7 +29,10 @@ const StudyLegend = ({
             <NotificationBadge notificationCount={activeStudiesNo} />
         </StudyMenu.Title>
         <StudyMenu.Body>
-            <StudyCategoricalDisplay />
+            <StudyCategoricalDisplay
+                searchInputClassName={searchInputClassName}
+                disableAll={disableAll}
+            />
         </StudyMenu.Body>
     </StudyMenu>
 );
@@ -40,4 +45,5 @@ export default connect(({ studies: st, chart }) => ({
     StudyCategoricalDisplay: st.StudyCategoricalDisplay,
     isMobile: chart.isMobile,
     activeStudiesNo: st.activeStudies.data.length,
+    disableAll: st.hasReachedLimits,
 }))(StudyLegend);

@@ -12,6 +12,8 @@ const CategoricalDisplay = ({
     isMobile,
     height,
     id,
+    searchInputClassName,
+    disableAll,
 }) => (
     <div
         className="cq-categorical-display"
@@ -19,7 +21,7 @@ const CategoricalDisplay = ({
         id={id}
     >
         <div className="cq-lookup-filters">
-            <SearchInput />
+            <SearchInput searchInputClassName={searchInputClassName} />
             <FilterPanel />
         </div>
         <Scrollbars
@@ -31,6 +33,7 @@ const CategoricalDisplay = ({
             <ResultsPanel
                 onSelectItem={onSelectItem}
                 id={id}
+                disableAll={disableAll}
             />
         </Scrollbars>
     </div>

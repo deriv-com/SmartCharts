@@ -1,4 +1,4 @@
-import { observable, action, computed } from 'mobx';
+import { observable, action, computed, runInAction } from 'mobx';
 import { stableSort, cloneCategories } from '../utils';
 import PendingPromise from '../utils/PendingPromise';
 
@@ -14,16 +14,18 @@ export default class ActiveSymbols {
         this._tradingTimes = tradingTimes;
     }
 
-    @action.bound async retrieveActiveSymbols() {
-        if (this.isRetrievingSymbols) {
+    @action.bound async retrieveActiveSymbols(retrieveNewActiveSymbols = false) {
+        if (this.isRetrievingSymbols && !retrieveNewActiveSymbols) {
             await this.symbolsPromise;
             return this.activeSymbols;
         }
 
         this.isRetrievingSymbols = true;
         const { active_symbols } = await this._api.getActiveSymbols();
-        this.processedSymbols = this._processSymbols(active_symbols);
-        this.categorizedSymbols = this._categorizeActiveSymbols(this.processedSymbols);
+        runInAction(() => {
+            this.processedSymbols = this._processSymbols(active_symbols);
+            this.categorizedSymbols = this._categorizeActiveSymbols(this.processedSymbols);
+        });
         for (const symbolObj of this.processedSymbols) {
             this.symbolMap[symbolObj.symbol] = symbolObj;
         }
@@ -69,7 +71,7 @@ export default class ActiveSymbols {
                 market_display_name: s.market_display_name,
                 submarket_display_name: s.submarket_display_name,
                 exchange_is_open: !!s.exchange_is_open,
-                decimal_places: s.pip.length - 2,
+                decimal_places: s.pip.toString().length - 2,
             });
         }
 

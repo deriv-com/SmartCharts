@@ -23,7 +23,10 @@ class ChartState {
     @observable isOnPagination = false;
     @observable paginationEndEpoch;
     @observable isChartClosed = false;
+    @observable shouldMinimiseLastDigits = false;
     @observable isStaticChart = false;
+    @observable refreshActiveSymbols;
+    @observable hasReachedEndOfData = false;
     chartControlsWidgets;
 
     get comparisonStore() { return this.mainStore.comparison; }
@@ -49,6 +52,7 @@ class ChartState {
         this.chartStore.feed.onPagination(this.setOnPagination.bind(this));
 
         this.granularity = this.chartStore.granularity;
+        this.stxx.maxMasterDataSize = this.chartStore.getMaxMasterDataSize(this.granularity);
     };
 
     @action.bound updateProps({
@@ -65,6 +69,7 @@ class ChartState {
         granularity,
         margin = 0,
         onExportLayout,
+        refreshActiveSymbols,
         removeAllComparisons,
         scrollToEpoch,
         scrollToEpochOffset = 0,
@@ -89,6 +94,12 @@ class ChartState {
             if (this.mainStore.chart && this.mainStore.chart.feed) {
                 this.mainStore.chart.feed.onMasterDataUpdate(this.scrollChartToLeft);
             }
+        }
+
+        if (this.chartStore.activeSymbols
+            && (this.refreshActiveSymbols !== refreshActiveSymbols)) {
+            this.refreshActiveSymbols = refreshActiveSymbols;
+            this.chartStore.activeSymbols.retrieveActiveSymbols(true);
         }
 
         this.rootNode = this.mainStore.chart.rootNode;
@@ -186,6 +197,10 @@ class ChartState {
         }
     }
 
+    @action.bound hasReachedEndOfData(hasReachedEndOfData) {
+        this.hasReachedEndOfData = hasReachedEndOfData;
+    }
+
     @action.bound setChartClosed(isClosed) {
         this.isChartClosed = isClosed;
     }
@@ -246,6 +261,7 @@ class ChartState {
     }
 
     @action.bound setOnPagination({ end }) {
+        this.stxx.chart.isScrollLocationChanged = true;
         this.isOnPagination     = !this.isOnPagination;
         this.paginationEndEpoch = this.isOnPagination ? end : null;
     }
@@ -257,6 +273,10 @@ class ChartState {
                 this.chartStatusListener(isChartReady);
             }
         }
+    }
+
+    @action.bound setShouldMinimiseLastDigit(status) {
+        this.shouldMinimiseLastDigits = status;
     }
 
     saveLayout() {
@@ -379,17 +399,36 @@ class ChartState {
                 );
                 this.stxx.createDataSet();
             }
-            this.stxx.chart.lockScroll = true;
-            const tick = this.stxx.tickFromDate(startEntry.DT);
-            this.stxx.setMaxTicks(5);
-            this.stxx.chart.scroll = this.stxx.chart.dataSet.length - tick + 1;
-            this.stxx.chart.entryTick = tick;
             this.stxx.maxMasterDataSize = 0;
+            const tick = this.stxx.tickFromDate(startEntry.DT);
+            const scrollAnimator = new CIQ.EaseMachine(Math.easeOutCubic, 1000);
+            const scrollToTarget = this.stxx.chart.dataSegment.length;
+            scrollAnimator.run((bar) => {
+                bar = Math.ceil(bar); // round-up for precision
+                const scroll = this.stxx.chart.dataSegment.length - bar;
+                if (scroll <= 2 || bar === scrollToTarget) {
+                    /**
+                     * Stop scrolling and draw markers if
+                     * the scroll value is off-screen or if the animator has reached target.
+                     * We check scroll <= '2' because sometimes the chart is scrolled so that the first
+                     * bar is partially hidden off-screen
+                     */
+                    scrollAnimator.stop();
+                    this.stxx.chart.entryTick = tick;
+                    this.stxx.chart.lockScroll = true;
+                    this.stxx.chart.isScrollLocationChanged = true; // set to true to draw markers
+                } else {
+                    this.stxx.chart.scroll = scroll;
+                }
+            },
+            0, scrollToTarget);
             this.stxx.draw();
         } else if (this.startEpoch) {
             this.stxx.chart.lockScroll = true;
+            this.stxx.chart.isScrollLocationChanged = true;
         } else {
             this.stxx.chart.lockScroll = false;
+            this.stxx.chart.isScrollLocationChanged = false;
             this.stxx.home();
             this.stxx.draw();
         }
@@ -500,6 +539,17 @@ class ChartState {
     scrollListener({ grab }) {
         if (grab && this.stxx.chart.lockScroll) {
             this.stxx.chart.lockScroll = false;
+        }
+        if (this.stxx && this.stxx.chart) {
+            const dataSegment = this.stxx.chart.dataSegment;
+            const whiteSpace = this.chartStore.isMobile ? 50 : 150;
+            if (this.stxx.masterData.length < this.stxx.chart.maxTicks - whiteSpace) {
+                this.stxx.minimumLeftBars = this.stxx.chart.maxTicks - whiteSpace;
+            } else if (dataSegment) {
+                const hasReachedRight = this.stxx.chart.scroll <= this.stxx.chart.maxTicks - 1;
+                const noMoreScroll = this.hasReachedEndOfData || (this.stxx.masterData.length === this.stxx.maxMasterDataSize);
+                this.stxx.minimumLeftBars = noMoreScroll && !hasReachedRight ? this.stxx.chart.maxTicks : 2;
+            }
         }
     }
 }

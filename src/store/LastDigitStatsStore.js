@@ -11,7 +11,7 @@ export default class LastDigitStatsStore {
     count = 1000;
     digits = [];
     latestData = [];
-    symbolChanged=false;
+    symbolChanged = false;
     @observable bars = [];
 
     get api() {
@@ -28,6 +28,10 @@ export default class LastDigitStatsStore {
 
     @computed get marketDisplayName() {
         return this.mainStore.chart.currentActiveSymbol ? this.mainStore.chart.currentActiveSymbol.name : '';
+    }
+
+    @computed get shouldMinimiseLastDigits() {
+        return this.mainStore.state.shouldMinimiseLastDigits;
     }
 
     @action.bound changeSymbol() {
@@ -56,7 +60,7 @@ export default class LastDigitStatsStore {
             }
 
             this.latestData.forEach((price) => {
-                const lastDigit = price.toString().slice(-1);
+                const lastDigit = (+price).toFixed(this.decimalPlaces).slice(-1);
                 this.digits[lastDigit]++;
             });
             this.updateBars();
@@ -72,11 +76,11 @@ export default class LastDigitStatsStore {
             // Symbol has changed
             this.showLastDigitStats();
             this.symbolChanged = false;
-        } else {
-            const firstDigit = this.latestData.shift().slice(-1);
-            const price =  Close.toFixed(this.decimalPlaces);
-            const lastDigit = price.toString().slice(-1);
-            this.latestData.push(price);
+        } else if (this.latestData.length) {
+            const firstDigit = (+this.latestData.shift()).toFixed(this.decimalPlaces).slice(-1);
+            const price =  (+Close).toFixed(this.decimalPlaces);
+            const lastDigit = price.slice(-1);
+            this.latestData.push(+price);
             this.digits[lastDigit]++;
             this.digits[firstDigit]--;
             this.updateBars();

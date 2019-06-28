@@ -28,6 +28,8 @@ export default class StudyLegendStore {
             placeholderText: t.translate('"Mass Index" or "Doji Star"'),
             favoritesId: 'indicators',
             mainStore,
+            searchInputClassName: () => this.searchInputClassName,
+            limitInfo: t.translate('Up to 5 active indicators allowed.'),
         });
         this.settingsDialog = new SettingsDialogStore({
             mainStore,
@@ -46,6 +48,8 @@ export default class StudyLegendStore {
     onContextReady = () => {
         this.stx.callbacks.studyOverlayEdit = this.editStudy;
         this.stx.callbacks.studyPanelEdit = this.editStudy;
+        // to remove studies if user has already more than 5
+        this.removeExtraStudies();
         this.stx.append('createDataSet', this.renderLegend);
         this.stx.append('drawPanels', () => {
             const panel = Object.keys(this.stx.panels)[1];
@@ -59,8 +63,11 @@ export default class StudyLegendStore {
     };
 
     previousStudies = { };
+    searchInputClassName;
+    @observable hasReachedLimits = false;
     @observable activeStudies = {
         categoryName: t.translate('Active'),
+        categoryNamePostfix: '',
         categoryId: 'active',
         hasSubcategory: false,
         emptyDescription: t.translate('There are no active indicators yet.'),
@@ -81,20 +88,53 @@ export default class StudyLegendStore {
                 });
             }
         });
+        const categoryNamePostfix = `(${this.activeStudies.data.length}/5)`;
         const category = {
             categoryName: t.translate('Indicators'),
+            categoryNamePostfix,
+            categoryNamePostfixShowIfActive: true,
             categoryId: 'indicators',
+            categorySubtitle: t.translate('Up to 5 active indicators allowed.'),
             hasSubcategory: false,
             data,
         };
         return [category];
     }
 
+    @action.bound removeExtraStudies() {
+        if (this.stx.layout && this.stx.layout.studies) {
+            const studiesKeys = Object.keys(this.stx.layout.studies);
+            if (studiesKeys.length > 5) {
+                Object.keys(this.stx.layout.studies).forEach((study, idx) => {
+                    if (idx >= 5) {
+                        setTimeout(() => {
+                            CIQ.Studies.removeStudy(this.stx, this.stx.layout.studies[study]);
+                            this.renderLegend();
+                        }, 0);
+                    }
+                });
+            }
+        }
+    }
+
     @action.bound onSelectItem(item) {
-        const sd = CIQ.Studies.addStudy(this.stx, item);
-        this.changeStudyPanelTitle(sd);
-        logEvent(LogCategories.ChartControl, LogActions.Indicator, `Add ${item}`);
-        this.menu.setOpen(false);
+        if (this.stx.layout && Object.keys(this.stx.layout.studies || []).length < 5) {
+            const sd = CIQ.Studies.addStudy(this.stx, item);
+            this.changeStudyPanelTitle(sd);
+            logEvent(LogCategories.ChartControl, LogActions.Indicator, `Add ${item}`);
+            this.menu.setOpen(false);
+        }
+    }
+
+    // Temporary prevent user from adding more than 5 indicators
+    // TODO All traces can be removed after new design for studies
+    @action.bound updateStyle() {
+        const should_minimise_last_digit = Object.keys(this.stx.panels).length > 2;
+        this.mainStore.state.setShouldMinimiseLastDigit(should_minimise_last_digit);
+    }
+
+    @action.bound updateProps({ searchInputClassName }) {
+        this.searchInputClassName = searchInputClassName;
     }
 
     @action.bound editStudy(study) {
@@ -243,7 +283,15 @@ export default class StudyLegendStore {
         if (!this.shouldRenderLegend()) { return; }
 
         this.updateActiveStudies();
+        // Temporary prevent user from adding more than 5 indicators
+        // All traces can be removed after new design for studies
+        this.updateStyle();
     };
+
+    @action.bound setReachedLimit() {
+        const hasReachedLimit = this.activeStudies.data.length >= 5;
+        this.hasReachedLimits = hasReachedLimit;
+    }
 
     @action.bound updateActiveStudies() {
         const stx = this.stx;
@@ -266,6 +314,8 @@ export default class StudyLegendStore {
         });
 
         this.activeStudies.data = studies;
+        this.activeStudies.categoryNamePostfix = `(${studies.length}/5)`;
+        this.setReachedLimit();
     }
 
     @action.bound clearStudies() {
