@@ -25,6 +25,7 @@ class ChartState {
     @observable isChartClosed = false;
     @observable shouldMinimiseLastDigits = false;
     @observable isStaticChart = false;
+    @observable hasReachedEndOfData = false;
     chartControlsWidgets;
 
     get comparisonStore() { return this.mainStore.comparison; }
@@ -50,6 +51,7 @@ class ChartState {
         this.chartStore.feed.onPagination(this.setOnPagination.bind(this));
 
         this.granularity = this.chartStore.granularity;
+        this.stxx.maxMasterDataSize = this.chartStore.getMaxMasterDataSize(this.granularity);
     };
 
     @action.bound updateProps({
@@ -187,6 +189,10 @@ class ChartState {
         }
     }
 
+    @action.bound hasReachedEndOfData(hasReachedEndOfData) {
+        this.hasReachedEndOfData = hasReachedEndOfData;
+    }
+
     @action.bound setChartClosed(isClosed) {
         this.isChartClosed = isClosed;
     }
@@ -247,6 +253,7 @@ class ChartState {
     }
 
     @action.bound setOnPagination({ end }) {
+        this.stxx.chart.isScrollLocationChanged = true;
         this.isOnPagination     = !this.isOnPagination;
         this.paginationEndEpoch = this.isOnPagination ? end : null;
     }
@@ -524,6 +531,17 @@ class ChartState {
     scrollListener({ grab }) {
         if (grab && this.stxx.chart.lockScroll) {
             this.stxx.chart.lockScroll = false;
+        }
+        if (this.stxx && this.stxx.chart) {
+            const dataSegment = this.stxx.chart.dataSegment;
+            const whiteSpace = this.chartStore.isMobile ? 50 : 150;
+            if (this.stxx.masterData.length < this.stxx.chart.maxTicks - whiteSpace) {
+                this.stxx.minimumLeftBars = this.stxx.chart.maxTicks - whiteSpace;
+            } else if (dataSegment) {
+                const hasReachedRight = this.stxx.chart.scroll <= this.stxx.chart.maxTicks - 1;
+                const noMoreScroll = this.hasReachedEndOfData || (this.stxx.masterData.length === this.stxx.maxMasterDataSize);
+                this.stxx.minimumLeftBars = noMoreScroll && !hasReachedRight ? this.stxx.chart.maxTicks : 2;
+            }
         }
     }
 }
