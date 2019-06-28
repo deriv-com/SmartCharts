@@ -25,6 +25,7 @@ class ChartState {
     @observable isChartClosed = false;
     @observable shouldMinimiseLastDigits = false;
     @observable isStaticChart = false;
+    @observable refreshActiveSymbols;
     @observable hasReachedEndOfData = false;
     chartControlsWidgets;
 
@@ -68,6 +69,7 @@ class ChartState {
         granularity,
         margin = 0,
         onExportLayout,
+        refreshActiveSymbols,
         removeAllComparisons,
         scrollToEpoch,
         scrollToEpochOffset = 0,
@@ -92,6 +94,12 @@ class ChartState {
             if (this.mainStore.chart && this.mainStore.chart.feed) {
                 this.mainStore.chart.feed.onMasterDataUpdate(this.scrollChartToLeft);
             }
+        }
+
+        if (this.chartStore.activeSymbols
+            && (this.refreshActiveSymbols !== refreshActiveSymbols)) {
+            this.refreshActiveSymbols = refreshActiveSymbols;
+            this.chartStore.activeSymbols.retrieveActiveSymbols(true);
         }
 
         this.rootNode = this.mainStore.chart.rootNode;
