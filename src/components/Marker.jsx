@@ -17,7 +17,7 @@ const Marker = ({
 );
 
 Marker.propTypes = {
-    display: PropTypes.string,
+    display: PropTypes.oneOf(['none', null]),
     left: PropTypes.number,
     bottom: PropTypes.number,
     children: PropTypes.any,
@@ -25,7 +25,7 @@ Marker.propTypes = {
 };
 
 Marker.defaultProps = {
-    display: 'none',
+    display: null,
     left: 0,
     bottom: 0,
 };
