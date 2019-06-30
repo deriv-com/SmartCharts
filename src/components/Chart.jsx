@@ -113,14 +113,14 @@ class Chart extends Component {
                                                 && <PaginationLoader />
                                         }
                                         <CurrentSpot />
-                                        {
-                                            enabledNavigationWidget
-                                                && <NavigationWidget />
-                                        }
                                     </RenderInsideChart>
                                     <div className="cq-top-ui-widgets">
                                         <TopWidgets />
                                     </div>
+                                    {
+                                        enabledNavigationWidget
+                                            && <NavigationWidget />
+                                    }
                                     <div className={`chartContainer ${isDrawing ? 'ciq-draw-mode' : ''}`} style={{ height: chartContainerHeight }}>
                                         <Crosshair />
                                         <DrawingCursor />
