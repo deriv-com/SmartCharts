@@ -13,11 +13,17 @@ export default class ChartSizeStore {
 
     @action.bound zoomIn() {
         logEvent(LogCategories.ChartControl, LogActions.ChartSize, 'zoom In');
-        if (this.stx) { this.stx.chart.lockScroll = false; this.stx.zoomIn(); }
+        if (this.stx) {
+            this.stx.chart.lockScroll = false;
+            this.stx.zoomIn();
+        }
     }
 
     @action.bound zoomOut() {
         logEvent(LogCategories.ChartControl, LogActions.ChartSize, 'zoom Out');
-        if (this.stx) { this.stx.chart.lockScroll = false; this.stx.zoomOut(); }
+        if (this.stx) {
+            this.stx.chart.lockScroll = false;
+            this.stx.zoomOut();
+        }
     }
 }

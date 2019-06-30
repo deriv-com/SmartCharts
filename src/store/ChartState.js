@@ -413,7 +413,6 @@ class ChartState {
                 bar = Math.ceil(bar); // round-up for precision
                 const scroll = this.stxx.chart.dataSegment.length - bar;
                 if (scroll <= 2 || bar === scrollToTarget) {
-                    // console.log('A1');
                     /**
                      * Stop scrolling and draw markers if
                      * the scroll value is off-screen or if the animator has reached target.
