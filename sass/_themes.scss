@@ -225,7 +225,11 @@ $themes: (
         ChartHistoryPickerBodyActiveBg: $COLOR_DARK_BLUE_5,
         ChartHistoryPickerBodyActiveColor: $COLOR_WHITE,
         ChartHistoryPickerBodyActiveBorder: $COLOR_DARK_BLUE_5,
-        PaginationLoaderStripeColor: $COLOR_LIGHT_BLACK_4_SOLID
+        PaginationLoaderStripeColor: $COLOR_LIGHT_BLACK_4_SOLID,
+        HighestLowestMarkerLabelBg: $COLOR_LIGHT_BLACK_3,
+        HighestLowestMarkerLabelText: $COLOR_LIGHT_BLACK_1,
+        HighestSpotColor: $COLOR_GREEN_1,
+        LowestSpotColor: $COLOR_RED
     ),
     dark: (
         DefaultMain:            $COLOR_DARK_BLUE_5,
@@ -412,7 +416,11 @@ $themes: (
         ChartHistoryPickerBodyActiveBg: $COLOR_WHITE,
         ChartHistoryPickerBodyActiveColor: $COLOR_DARK_BLUE_5,
         ChartHistoryPickerBodyActiveBorder: $COLOR_WHITE,
-        PaginationLoaderStripeColor: $COLOR_DARK_BLUE_4
+        PaginationLoaderStripeColor: $COLOR_DARK_BLUE_4,
+        HighestLowestMarkerLabelBg: $COLOR_DARK_GRAY_2,
+        HighestLowestMarkerLabelText: $COLOR_WHITE,
+        HighestSpotColor: $COLOR_GREEN_1,
+        LowestSpotColor: $COLOR_RED
     ),
 );
 
