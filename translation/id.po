@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom\n"
 "Language-Team: Indonesian\n"
 "Language: id_ID\n"
-"PO-Revision-Date: 2019-05-06 02:12\n"
+"PO-Revision-Date: 2019-06-25 05:21\n"
 
 msgid " already exists."
 msgstr " sudah tersedia."
@@ -1352,4 +1352,7 @@ msgstr "Tutup"
 
 msgid "Opens in:"
 msgstr "Dibuka dalam:"
+
+msgid "Up to 5 active indicators allowed."
+msgstr "Dibenarkan hingga 5 indikator aktif."
 
