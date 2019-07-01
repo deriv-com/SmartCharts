@@ -129,7 +129,7 @@ class App extends Component {
             chartType = 'mountain';
             granularity = 0;
             if (layout) {
-                granularity = layout.timeUnit === 'second' ? 0 : parseInt(layout.interval * IntervalEnum[layout.timeUnit], 10);
+                granularity = layout.timeUnit === 'second' ? 0 : parseInt(layout.interval * IntervalEnum[layout.timeUnit], 10); // eslint-disable-line
 
                 if (layout.chartType === 'candle' && layout.aggregationType !== 'ohlc') {
                     chartType = layout.aggregationType;
