@@ -113,6 +113,7 @@ zoom | Zoom in and Zoom out the chart. the value should be in percentage. If the
 clearChart | Clear the chart.
 onExportLayout | Export the layout and send it back using this callback.
 importedLayout | The layout to be imported to chart. It should be the layout that was exported in onExportLayout;
+shouldFetchTradingTimes | Determine whether an API call for fetching trading times is necessary for the new chart or not. Defaults to `true`
 ### Chart Settings
 
 | Attribute | Description |
