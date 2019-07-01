@@ -25,6 +25,8 @@ class ChartState {
     @observable isChartClosed = false;
     @observable shouldMinimiseLastDigits = false;
     @observable isStaticChart = false;
+    @observable shouldFetchTradingTimes = true;
+    @observable refreshActiveSymbols;
     @observable hasReachedEndOfData = false;
     chartControlsWidgets;
 
@@ -68,6 +70,7 @@ class ChartState {
         granularity,
         margin = 0,
         onExportLayout,
+        refreshActiveSymbols,
         removeAllComparisons,
         scrollToEpoch,
         scrollToEpochOffset = 0,
@@ -76,6 +79,7 @@ class ChartState {
         startEpoch,
         symbol,
         zoom,
+        shouldFetchTradingTimes = true,
     }) {
         let isGranularityChanged = false;
         let isSymbolChanged = false;
@@ -84,6 +88,7 @@ class ChartState {
         this.isConnectionOpened = isConnectionOpened;
         this.chartStatusListener = chartStatusListener;
         this.isStaticChart = isStaticChart;
+        this.shouldFetchTradingTimes = shouldFetchTradingTimes;
 
         if (this.symbol !== symbol) {
             this.symbol = symbol;
@@ -92,6 +97,12 @@ class ChartState {
             if (this.mainStore.chart && this.mainStore.chart.feed) {
                 this.mainStore.chart.feed.onMasterDataUpdate(this.scrollChartToLeft);
             }
+        }
+
+        if (this.chartStore.activeSymbols
+            && (this.refreshActiveSymbols !== refreshActiveSymbols)) {
+            this.refreshActiveSymbols = refreshActiveSymbols;
+            this.chartStore.activeSymbols.retrieveActiveSymbols(true);
         }
 
         this.rootNode = this.mainStore.chart.rootNode;

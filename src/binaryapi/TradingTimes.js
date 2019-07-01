@@ -8,7 +8,8 @@ class TradingTimes {
     isInitialized = false;
     tradingTimesPromise = new PendingPromise();
 
-    constructor(api) {
+    constructor(api, shouldFetchTradingTimes = true) {
+        this._shouldFetchTradingTimes = shouldFetchTradingTimes;
         this._api = api;
         this._serverTime = ServerTime.getInstance();
         this._emitter = new EventEmitter({ emitDelay: 0 });
@@ -28,7 +29,7 @@ class TradingTimes {
 
         this.lastUpdateDate = this._serverTime.getLocalDate().toISOString().substring(0, 10);
 
-        if (!this._tradingTimesMap) {
+        if (!this._tradingTimesMap && this._shouldFetchTradingTimes) {
             await this._updateTradeTimes();
             this.tradingTimesPromise.resolve();
 
