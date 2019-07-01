@@ -255,9 +255,9 @@ class ChartStore {
                 if ((!this.mainSeriesRenderer || !this.mainSeriesRenderer.standaloneBars) && !this.standaloneBars[layout.chartType]) this.micropixels += layout.candleWidth / 2; // bar charts display at beginning of candle
 
                 if (this.isHistoricalMode() && _self.isMobile) {
-                    exactScroll = parseInt(exactScroll * 0.8);
+                    exactScroll = parseInt(exactScroll * 0.8, 10);
                 } else if (this.isHistoricalMode()) {
-                    exactScroll = parseInt(exactScroll * 0.9);
+                    exactScroll = parseInt(exactScroll * 0.9, 10);
                 }
 
                 if (params.animate) {
