@@ -61,7 +61,7 @@ export default class ChartTitleStore {
     @computed get isShowChartPrice() { return this.mainStore.chart.isChartAvailable; }
     @computed get tradingTimes() { return this.mainStore.chart.tradingTimes; }
     @computed get symbolOpenTime() {
-        const times = this.tradingTimes._tradingTimesMap[this.currentSymbol.symbol].times;
+        const times = this.tradingTimes._tradingTimesMap && this.tradingTimes._tradingTimesMap.length ? this.tradingTimes._tradingTimesMap[this.currentSymbol.symbol].times : [];
         const now = this.serverTime.getLocalDate().getTime();
         let openTime = times ? times.find(time => time.open.getTime() > now) : null;
 
