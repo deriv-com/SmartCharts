@@ -14,7 +14,11 @@ const ChartTable = ({
     setOpen,
 }) => {
     const SymbolIcon = ItemIconMap[symbol.symbol] || SymbolPlaceholderIcon;
-    const width = isTick ? '360px' : '565px';
+    const width = isTick ? '400px' : '704px';
+
+    const handleClose = () => {
+        setOpen(false);
+    };
 
     return (
         <div className={`cq-dialog-overlay ${open ? 'cq-dialog-active' : ''}`} style={{ '--table-width': width }}>
@@ -24,7 +28,7 @@ const ChartTable = ({
                     <div className="cq-titlebar">
                         {SymbolIcon && <SymbolIcon className={`ic-${symbol.symbol}`} />}
                         <div className="cq-title">{`${symbol.name} ${t.translate('Chart Table')}`}</div>
-                        <CloseBoldIcon className="icon-close-menu" onClick={() => setOpen(false)} />
+                        <CloseBoldIcon className="icon-close-menu" onClick={handleClose} />
                     </div>
                 )
                 }
@@ -86,7 +90,7 @@ const ChartTable = ({
                                             </div>
                                         </th>
                                         <th className="ciq-table-cell">
-                                            <CloseBoldIcon className="icon-close-menu" onClick={() => setOpen(false)} />
+                                            <CloseBoldIcon className="icon-close-menu" onClick={handleClose} />
                                         </th>
                                     </tr>
                                 </thead>

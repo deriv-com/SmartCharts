@@ -39,7 +39,7 @@
         }
     }
     td:nth-child(1), th:nth-child(1) {
-        width: 180px;
+        width: 240px;
         padding-left: 24px;
         text-align: left;
     }
@@ -47,13 +47,13 @@
         width: 70px;
     }
     td:nth-child(3), th:nth-child(3) {
-        width: 70px;
+        width: 90px;
     }
     td:nth-child(4), th:nth-child(4) {
-        width: 70px;
+        width: 90px;
     }
     td:nth-child(5), th:nth-child(5) {
-        width: 70px;
+        width: 90px;
     }
     td:nth-child(6), th:nth-child(6) {
         width: 40px;
@@ -83,7 +83,7 @@
     }
     tbody {
         display: block;
-        margin-top: 40px;
+        margin-top: 52px;
     }
     .cq-change-cell {
         display: inline-flex;
@@ -106,7 +106,7 @@
         font-style: normal;
         line-height: 1.43;
         letter-spacing: normal;
-        padding: 12px 10px;
+        padding: 16px;
 
         &.before-last-child {
             width: 60px !important;
@@ -121,7 +121,7 @@
     }
 
     .ciq-table-cell {
-        padding: 12px 2px;
+        padding: 16px;
         font-size: 14px;
         font-weight: normal;
         font-style: normal;
@@ -172,7 +172,7 @@
             padding: 5px 5px 5px 20px !important;
             text-align: left;
             font-size: 1.2em;
-            height: 20px;
+            height: 52px;
 
             .ciq-table-date {
                 flex: 1;
