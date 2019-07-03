@@ -31,8 +31,10 @@ export default class MarkerStore {
     }
 
     @computed get shouldDrawMarkers() {
-        // Checks if the chart has been scrolled to the leftmost of the screen
-        return this.stx.chart.isScrollLocationChanged;
+        // if this.y === null, we know line markers is passed, so check if chart has
+        // been scrolled to the leftmost of the screen
+        // else return true in order to show chart-loader when loading historical data
+        return this.y === null ? this.stx.chart.isScrollLocationChanged : true;
     }
 
     @action.bound destructor() {

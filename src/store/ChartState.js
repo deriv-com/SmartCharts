@@ -93,10 +93,6 @@ class ChartState {
         if (this.symbol !== symbol) {
             this.symbol = symbol;
             isSymbolChanged = true;
-
-            if (this.mainStore.chart && this.mainStore.chart.feed) {
-                this.mainStore.chart.feed.onMasterDataUpdate(this.scrollChartToLeft);
-            }
         }
 
         if (this.chartStore.activeSymbols
@@ -265,7 +261,6 @@ class ChartState {
     }
 
     @action.bound setOnPagination({ end }) {
-        this.stxx.chart.isScrollLocationChanged = true;
         this.isOnPagination     = !this.isOnPagination;
         this.paginationEndEpoch = this.isOnPagination ? end : null;
     }
