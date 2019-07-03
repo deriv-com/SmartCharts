@@ -92,7 +92,7 @@ export default class ChartSettingStore {
         if (assetInformation             !== undefined) { this.setAssetInformation(assetInformation); }
         if (historical                   !== undefined) { this.setHistorical(historical); }
         if (isAutoScale                  !== undefined) { this.setAutoScale(isAutoScale); }
-        if (isHighestLowestMarkerEnabled !== undefined) { this.setAutoScale(isAutoScale); }
+        if (isHighestLowestMarkerEnabled !== undefined) { this.toggleHighestLowestMarker(isHighestLowestMarkerEnabled); }
     }
 
     saveSetting() {
