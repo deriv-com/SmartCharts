@@ -93,6 +93,10 @@ class ChartState {
         if (this.symbol !== symbol) {
             this.symbol = symbol;
             isSymbolChanged = true;
+
+            if (this.mainStore.chart && this.mainStore.chart.feed) {
+                this.mainStore.chart.feed.onMasterDataUpdate(this.scrollChartToLeft);
+            }
         }
 
         if (this.chartStore.activeSymbols
@@ -422,6 +426,7 @@ class ChartState {
             this.stxx.draw();
         } else if (this.startEpoch) {
             this.stxx.chart.lockScroll = true;
+            this.stxx.chart.isScrollLocationChanged = true;
         } else {
             this.stxx.chart.lockScroll = false;
             this.stxx.chart.isScrollLocationChanged = false;
