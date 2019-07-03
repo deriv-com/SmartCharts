@@ -29,6 +29,7 @@ class ChartState {
     @observable refreshActiveSymbols;
     @observable hasReachedEndOfData = false;
     chartControlsWidgets;
+    isGranularityChanged = false;
 
     get comparisonStore() { return this.mainStore.comparison; }
     get stxx() { return this.chartStore.stxx; }
@@ -81,7 +82,6 @@ class ChartState {
         zoom,
         shouldFetchTradingTimes = true,
     }) {
-        let isGranularityChanged = false;
         let isSymbolChanged = false;
         this.chartId = id;
         this.settings = settings;
@@ -135,9 +135,10 @@ class ChartState {
                 }
             }
 
-            isGranularityChanged = true;
+            this.isGranularityChanged = true;
             this.granularity = granularity === null ? undefined : granularity;
         }
+
         if (this.chartType !== chartType && this.context) {
             this.chartType = chartType;
             this.chartTypeStore.setType(chartType);
@@ -157,7 +158,7 @@ class ChartState {
             } else if (this.mainStore.chart.feed) {
                 /* When layout is importing and range is changing as the same time we dont need to set the range,
                    the imported layout witll take care of it. */
-                if (!this.importedLayout && !isGranularityChanged && !this.scrollToEpoch) {
+                if (!this.importedLayout && !this.isGranularityChanged && !this.scrollToEpoch) {
                     this.mainStore.chart.feed.onRangeChanged(true);
                 }
             }
@@ -169,7 +170,7 @@ class ChartState {
 
         if (this.scrollToEpoch !== scrollToEpoch && this.context) {
             this.scrollToEpoch = scrollToEpoch;
-            if (isSymbolChanged || isGranularityChanged) {
+            if (isSymbolChanged || this.isGranularityChanged) {
                 this.mainStore.chart.feed.onMasterDataUpdate(this.scrollChartToLeft);
             } else {
                 this.scrollChartToLeft();
@@ -379,7 +380,6 @@ class ChartState {
     }
 
     scrollChartToLeft = () => {
-        this.mainStore.chart.feed.offMasterDataUpdate(this.scrollChartToLeft);
         this.stxx.chart.entryTick = null;
         if (this.scrollToEpoch && !this.startEpoch) {
             let startEntry = this.stxx.chart.dataSet
@@ -403,7 +403,6 @@ class ChartState {
                 this.stxx.createDataSet();
             }
             this.stxx.maxMasterDataSize = 0;
-            const tick = this.stxx.tickFromDate(startEntry.DT);
             const scrollAnimator = new CIQ.EaseMachine(Math.easeOutCubic, 1000);
             const scrollToTarget = this.stxx.chart.dataSegment.length;
             scrollAnimator.run((bar) => {
@@ -417,7 +416,7 @@ class ChartState {
                      * bar is partially hidden off-screen
                      */
                     scrollAnimator.stop();
-                    this.stxx.chart.entryTick = tick;
+                    this.stxx.chart.entryTick = this.stxx.tickFromDate(startEntry.DT);
                     this.stxx.chart.lockScroll = true;
                     this.stxx.chart.isScrollLocationChanged = true; // set to true to draw markers
                 } else {
@@ -428,13 +427,13 @@ class ChartState {
             this.stxx.draw();
         } else if (this.startEpoch) {
             this.stxx.chart.lockScroll = true;
-            this.stxx.chart.isScrollLocationChanged = true;
         } else {
             this.stxx.chart.lockScroll = false;
             this.stxx.chart.isScrollLocationChanged = false;
             this.stxx.home();
             this.stxx.draw();
         }
+        this.mainStore.chart.feed.offMasterDataUpdate(this.scrollChartToLeft);
     }
 
     cleanChart() {
