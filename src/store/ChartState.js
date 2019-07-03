@@ -29,7 +29,6 @@ class ChartState {
     @observable refreshActiveSymbols;
     @observable hasReachedEndOfData = false;
     chartControlsWidgets;
-    isGranularityChanged = false;
 
     get comparisonStore() { return this.mainStore.comparison; }
     get stxx() { return this.chartStore.stxx; }
@@ -82,7 +81,6 @@ class ChartState {
         zoom,
         shouldFetchTradingTimes = true,
     }) {
-        let isSymbolChanged = false;
         this.chartId = id;
         this.settings = settings;
         this.isConnectionOpened = isConnectionOpened;
@@ -92,7 +90,6 @@ class ChartState {
 
         if (this.symbol !== symbol) {
             this.symbol = symbol;
-            isSymbolChanged = true;
 
             if (this.mainStore.chart && this.mainStore.chart.feed) {
                 this.mainStore.chart.feed.onMasterDataUpdate(this.scrollChartToLeft);
@@ -135,7 +132,6 @@ class ChartState {
                 }
             }
 
-            this.isGranularityChanged = true;
             this.granularity = granularity === null ? undefined : granularity;
         }
 
@@ -158,7 +154,7 @@ class ChartState {
             } else if (this.mainStore.chart.feed) {
                 /* When layout is importing and range is changing as the same time we dont need to set the range,
                    the imported layout witll take care of it. */
-                if (!this.importedLayout && !this.isGranularityChanged && !this.scrollToEpoch) {
+                if (!this.importedLayout && !this.scrollToEpoch) {
                     this.mainStore.chart.feed.onRangeChanged(true);
                 }
             }
@@ -170,11 +166,7 @@ class ChartState {
 
         if (this.scrollToEpoch !== scrollToEpoch && this.context) {
             this.scrollToEpoch = scrollToEpoch;
-            if (isSymbolChanged || this.isGranularityChanged) {
-                this.mainStore.chart.feed.onMasterDataUpdate(this.scrollChartToLeft);
-            } else {
-                this.scrollChartToLeft();
-            }
+            this.mainStore.chart.feed.onMasterDataUpdate(this.scrollChartToLeft);
         }
 
         if (this.zoom !== zoom) {
