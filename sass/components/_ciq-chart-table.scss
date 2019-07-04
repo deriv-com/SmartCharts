@@ -3,7 +3,7 @@
     left: auto;
 
     .ciq-list > :last-child {
-        top: 42px !important;
+        top: 15px !important;
         margin-right: 10px;
     }
 }
@@ -31,29 +31,41 @@
 
     th,td {
         text-align: right;
+        box-sizing: border-box;
 
+        &.before-last-child {
+            min-width: 90px !important;
+            max-width: 90px !important;
+            padding-right: 4px;
+        }
         &:last-child {
-            width: 50px !important;
+            min-width: 50px !important;
+            max-width: 50px !important;
             text-align: left;
             padding-left: 4px;
         }
     }
     td:nth-child(1), th:nth-child(1) {
-        width: 240px;
+        min-width: 200px;
+        max-width: 200px;
         padding-left: 24px;
         text-align: left;
     }
     td:nth-child(2), th:nth-child(2) {
-        width: 70px;
+        min-width: 90px;
+        max-width: 90px;
     }
     td:nth-child(3), th:nth-child(3) {
-        width: 90px;
+        min-width: 90px;
+        max-width: 90px;
     }
     td:nth-child(4), th:nth-child(4) {
-        width: 90px;
+        min-width: 90px;
+        max-width: 90px;
     }
     td:nth-child(5), th:nth-child(5) {
-        width: 90px;
+        min-width: 90px;
+        max-width: 90px;
     }
     td:nth-child(6), th:nth-child(6) {
         width: 40px;
@@ -83,7 +95,6 @@
     }
     tbody {
         display: block;
-        margin-top: 52px;
     }
     .cq-change-cell {
         display: inline-flex;
@@ -92,7 +103,6 @@
 
 .ciq-table-head {
     width: var(--table-width);
-    position: fixed;
     display: block;
     @include themify($themes) {
         background: themed('ChartTableHeadBg');
@@ -107,11 +117,6 @@
         line-height: 1.43;
         letter-spacing: normal;
         padding: 16px;
-
-        &.before-last-child {
-            width: 60px !important;
-            padding-right: 4px;
-        }
     }
 }
 
@@ -131,10 +136,6 @@
             color: themed('ChartTableBodyText');
         }
 
-        &.before-last-child {
-            width: 60px !important;
-            padding-right: 4px;
-        }
         .cq-change:after {
             margin: 3px 0 0 5px;
         }

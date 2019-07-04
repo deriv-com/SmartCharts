@@ -14,7 +14,7 @@ const ChartTable = ({
     setOpen,
 }) => {
     const SymbolIcon = ItemIconMap[symbol.symbol] || SymbolPlaceholderIcon;
-    const width = isTick ? '400px' : '704px';
+    const width = isTick ? '430px' : '704px';
 
     const handleClose = () => {
         setOpen(false);
@@ -32,6 +32,34 @@ const ChartTable = ({
                     </div>
                 )
                 }
+                {isMobile ? '' : (
+                    <table className="ciq-chart-table">
+                        <thead>
+                            <tr className="ciq-table-head">
+                                <th className="ciq-table-cell">{t.translate('Date')}</th>
+                                {isTick
+                                    ? <th className="ciq-table-cell">{t.translate('Tick')}</th>
+                                    :                                                (
+                                        <React.Fragment>
+                                            <th className="ciq-table-cell">{t.translate('Open')}</th>
+                                            <th className="ciq-table-cell">{t.translate('High')}</th>
+                                            <th className="ciq-table-cell">{t.translate('Low')}</th>
+                                            <th className="ciq-table-cell">{t.translate('Close')}</th>
+                                        </React.Fragment>
+                                    )
+                                }
+                                <th className="ciq-table-cell before-last-child">
+                                    <div className="cq-change-cell">
+                                        {t.translate('Change')}
+                                    </div>
+                                </th>
+                                <th className="ciq-table-cell">
+                                    <CloseBoldIcon className="icon-close-menu" onClick={handleClose} />
+                                </th>
+                            </tr>
+                        </thead>
+                    </table>
+                )}
                 <Scrollbars
                     autoHeight
                     autoHeightMax="80vh"
@@ -70,30 +98,6 @@ const ChartTable = ({
                         )
                         :                        (
                             <table className="ciq-chart-table">
-                                <thead>
-                                    <tr className="ciq-table-head">
-                                        <th className="ciq-table-cell">{t.translate('Date')}</th>
-                                        {isTick
-                                            ? <th className="ciq-table-cell">{t.translate('Tick')}</th>
-                                            :                                                (
-                                                <React.Fragment>
-                                                    <th className="ciq-table-cell">{t.translate('Open')}</th>
-                                                    <th className="ciq-table-cell">{t.translate('High')}</th>
-                                                    <th className="ciq-table-cell">{t.translate('Low')}</th>
-                                                    <th className="ciq-table-cell">{t.translate('Close')}</th>
-                                                </React.Fragment>
-                                            )
-                                        }
-                                        <th className="ciq-table-cell before-last-child">
-                                            <div className="cq-change-cell">
-                                                {t.translate('Change')}
-                                            </div>
-                                        </th>
-                                        <th className="ciq-table-cell">
-                                            <CloseBoldIcon className="icon-close-menu" onClick={handleClose} />
-                                        </th>
-                                    </tr>
-                                </thead>
                                 <tbody>
                                     {tableData.map((item, idx) => (
                                         <tr
