@@ -740,9 +740,14 @@ class ChartStore {
     }
 
     destroyFeed() {
-        if (this.feed && !Object.keys(this.feed._isSubscriptionInitializing).length) {
-            this.feed.unsubscribeAll();
-            this.feed = null;
+        if (this.mainStore.state.isSubscriptionInitializing
+            && !Object.keys(this.mainStore.state.isSubscriptionInitializing).length) {
+            CIQ.ChartEngine.prototype.remove('resizeChart');
+            CIQ.ChartEngine.prototype.remove('headsUpHR');
+            if (this.feed) {
+                this.feed.unsubscribeAll();
+                this.feed = null;
+            }
             if (ChartStore.keystrokeHub.context === this.context) {
                 ChartStore.keystrokeHub.setActiveContext(null);
             }
@@ -752,12 +757,11 @@ class ChartStore {
                 this.stxx.updateChartData = function () {}; // prevent any data from entering the chart
                 this.stxx.isDestroyed = true;
                 this.stxx.destroy();
-                CIQ.ChartEngine.prototype.remove('headsUpHR');
-                CIQ.ChartEngine.prototype.remove('resizeChart');
                 this.stxx = null;
             }
-        } else if (this.feed && this.feed._isSubscriptionInitializing) {
-            setTimeout(() => this.destroyFeed, 500);
+        } else if (this.mainStore.state.isSubscriptionInitializing
+            && Object.keys(this.mainStore.state.isSubscriptionInitializing).length) {
+            setTimeout(() => this.destroyFeed(), 500);
         }
     }
 

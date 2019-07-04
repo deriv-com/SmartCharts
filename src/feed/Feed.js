@@ -18,7 +18,6 @@ class Feed {
     get margin() { return this._mainStore.state.margin; }
     _activeStreams = {};
     _isConnectionOpened = true;
-    _isSubscriptionInitializing = {};
 
     constructor(binaryApi, stx, mainStore, tradingTimes) {
         this._stx = stx;
@@ -108,7 +107,7 @@ class Feed {
         const { period, interval, symbolObject } = params;
         const granularity = calculateGranularity(period, interval);
         const key = this._getKey({ symbol, granularity });
-        this._isSubscriptionInitializing[key] = true;
+        this._mainStore.state.isSubscriptionInitializing[key] = true;
         const localDate = this._serverTime.getLocalDate();
         suggestedStartDate = suggestedStartDate > localDate ? localDate : suggestedStartDate;
         const isComparisonChart = this._stx.chart.symbol !== symbol;
@@ -206,7 +205,7 @@ class Feed {
 
         quotes = this._trimQuotes(quotes);
         callback({ quotes });
-        if (this._activeStreams[key] && this._isSubscriptionInitializing[key]) delete this._isSubscriptionInitializing[key];
+        if (this._activeStreams[key] && this._mainStore.state.isSubscriptionInitializing[key]) delete this._mainStore.state.isSubscriptionInitializing[key];
 
         this._mainStore.chart.updateYaxisWidth();
         this.scaleChart();

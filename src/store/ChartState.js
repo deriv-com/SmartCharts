@@ -29,6 +29,7 @@ class ChartState {
     @observable refreshActiveSymbols;
     @observable hasReachedEndOfData = false;
     chartControlsWidgets;
+    @observable isSubscriptionInitializing = {};
 
     get comparisonStore() { return this.mainStore.comparison; }
     get stxx() { return this.chartStore.stxx; }
