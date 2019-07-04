@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom\n"
 "Language-Team: Spanish\n"
 "Language: es_ES\n"
-"PO-Revision-Date: 2019-07-04 21:12\n"
+"PO-Revision-Date: 2019-07-04 21:22\n"
 
 msgid " already exists."
 msgstr " ya existe."
@@ -742,7 +742,7 @@ msgid "MA Env Median"
 msgstr "Envoltura MA Media"
 
 msgid "MA Env Bottom"
-msgstr "Envolutra MA Inferior"
+msgstr "Envoltura MA Inferior"
 
 msgid "Fractal Chaos Bands"
 msgstr "Bandas de Caos Fractal"
@@ -961,7 +961,7 @@ msgid "Rel Vol"
 msgstr "Vol Rel"
 
 msgid "Awesome Oscillator"
-msgstr "Oscilador Asombroso (AO)"
+msgstr "Oscilador Awesome (AO)"
 
 msgid "Market Facilitation Index"
 msgstr "Índice de Facilidad de Negociación de Mercado (MFI)"
