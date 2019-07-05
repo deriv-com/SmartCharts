@@ -132,6 +132,7 @@ export default class ChartTypeStore {
     get stx() { return this.context.stx; }
     get chartTypeProp() { return this.mainStore.state.chartType; }
     get isCandle() { return notCandles.indexOf(this.type.id) === -1; }
+    get isSpline() { return this.type.id === 'spline'; }
     get isAggregateChart() { return !!aggregateCharts.find(t => t.id === this.stx.layout.aggregationType); }
 
     onContextReady = () => {

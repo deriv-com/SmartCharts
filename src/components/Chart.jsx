@@ -11,6 +11,7 @@ import DrawingCursor from './DrawingCursor.jsx';
 import ChartTable from './ChartTable.jsx';
 import LastDigitStats from './LastDigitStats.jsx';
 import NavigationWidget from './NavigationWidget.jsx';
+import HighestLowestMarker from './HighestLowestMarker.jsx';
 /* css + scss */
 import '../../sass/main.scss';
 
@@ -59,9 +60,12 @@ class Chart extends Component {
             bottomWidgets,
             DrawToolsSettingsDialog,
             StudySettingsDialog,
+            isCandle,
+            isSpline,
             isMobile = false,
             isOnPagination,
             isChartAvailable,
+            isHighestLowestMarkerEnabled,
             barriers = [],
             children,
             chartControlsWidgets,
@@ -112,6 +116,10 @@ class Chart extends Component {
                                             isOnPagination
                                                 && <PaginationLoader />
                                         }
+                                        {
+                                            !isCandle && !isSpline && isHighestLowestMarkerEnabled
+                                                && <HighestLowestMarker />
+                                        }
                                         <CurrentSpot />
                                     </RenderInsideChart>
                                     <div className="cq-top-ui-widgets">
@@ -160,7 +168,9 @@ export default connect(({ chart, drawTools, studies, chartSetting, chartType, st
     StudySettingsDialog : studies.StudySettingsDialog,
     DrawToolsSettingsDialog : drawTools.DrawToolsSettingsDialog,
     AggregateChartSettingsDialog : chartType.AggregateChartSettingsDialog,
+    isCandle: chartType.isCandle,
     isChartAvailable: chart.isChartAvailable,
+    isSpline: chartType.isSpline,
     updateProps: state.updateProps,
     chartContainerHeight: chart.chartContainerHeight,
     containerWidth: chart.containerWidth,
@@ -170,4 +180,5 @@ export default connect(({ chart, drawTools, studies, chartSetting, chartType, st
     position: chartSetting.position,
     showLastDigitStats:state.showLastDigitStats,
     isOnPagination: state.isOnPagination,
+    isHighestLowestMarkerEnabled: chartSetting.isHighestLowestMarkerEnabled,
 }))(Chart);
