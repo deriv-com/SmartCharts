@@ -38,7 +38,6 @@ class HighestLowestStore {
 
     @action.bound calculateHighestLowestByNewData = () => {
         if (this.stx.chart && this.stx.chart.dataSegment.length) {
-            this.stx.chart.isScrollLocationChanged = false;
             this.highestPrice = undefined;
             this.lowestPrice  = undefined;
             this.stx.chart.dataSegment.forEach((tick) => {
@@ -57,7 +56,6 @@ class HighestLowestStore {
                     this.lowestDate  = getUTCEpoch(CIQ.strToDateTime(lowest.Date));
                     this.lowestPrice = lowest.Close.toFixed(this.decimalPlaces);
                 }
-                this.stx.chart.isScrollLocationChanged = true;
             });
         }
     };
