@@ -740,29 +740,23 @@ class ChartStore {
     }
 
     destroyFeed() {
-        if (this.mainStore.state.isSubscriptionInitializing
-            && !Object.keys(this.mainStore.state.isSubscriptionInitializing).length) {
-            CIQ.ChartEngine.prototype.remove('resizeChart');
-            CIQ.ChartEngine.prototype.remove('headsUpHR');
-            if (this.feed) {
-                this.feed.unsubscribeAll();
-                this.feed = null;
-            }
-            if (ChartStore.keystrokeHub.context === this.context) {
-                ChartStore.keystrokeHub.setActiveContext(null);
-            }
-            if (this.stxx) {
-                this.stxx.container.removeEventListener('mouseenter', this.onMouseEnter);
-                this.stxx.container.removeEventListener('mouseleave', this.onMouseLeave);
-                this.stxx.updateChartData = function () {}; // prevent any data from entering the chart
-                this.stxx.isDestroyed = true;
-                this.stxx.destroy();
-                this.stxx = null;
-            }
-        } else if (this.mainStore.state.isSubscriptionInitializing
-            && Object.keys(this.mainStore.state.isSubscriptionInitializing).length) {
-            setTimeout(() => this.destroyFeed(), 500);
+        if (this.feed) {
+            this.feed.unsubscribeAll();
+            this.feed = null;
         }
+        if (ChartStore.keystrokeHub.context === this.context) {
+            ChartStore.keystrokeHub.setActiveContext(null);
+        }
+        if (this.stxx) {
+            this.stxx.container.removeEventListener('mouseenter', this.onMouseEnter);
+            this.stxx.container.removeEventListener('mouseleave', this.onMouseLeave);
+            this.stxx.updateChartData = function () {}; // prevent any data from entering the chart
+            this.stxx.isDestroyed = true;
+            this.stxx.destroy();
+            this.stxx = null;
+        }
+        CIQ.ChartEngine.prototype.remove('resizeChart');
+        CIQ.ChartEngine.prototype.remove('headsUpHR');
     }
 
     // Makes requests to tick history API that will replace
@@ -772,17 +766,25 @@ class ChartStore {
     }
 
     @action.bound destroy() {
-        ChartStore.chartCount -= 1;
+        if (this.mainStore.state.isSubscriptionInitializing
+            && !Object.keys(this.mainStore.state.isSubscriptionInitializing).length) {
+            ChartStore.chartCount -= 1;
 
-        if (this.resizeObserver) { this.resizeObserver.disconnect(); }
-        if (this.tradingTimes && ChartStore.chartCount === 0) {
-            ChartStore.tradingTimes = null;
-            this.tradingTimes.destructor();
+            if (this.resizeObserver) {
+                this.resizeObserver.disconnect();
+            }
+            if (this.tradingTimes && ChartStore.chartCount === 0) {
+                ChartStore.tradingTimes = null;
+                this.tradingTimes.destructor();
+            }
+
+            // Destroying the chart does not unsubscribe the streams;
+            // we need to manually unsubscribe them.
+            this.destroyFeed();
+        } else if (this.mainStore.state.isSubscriptionInitializing
+            && Object.keys(this.mainStore.state.isSubscriptionInitializing).length) {
+            setTimeout(() => this.destroy(), 500);
         }
-
-        // Destroying the chart does not unsubscribe the streams;
-        // we need to manually unsubscribe them.
-        this.destroyFeed();
     }
 }
 
