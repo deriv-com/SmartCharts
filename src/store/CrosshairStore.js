@@ -39,8 +39,7 @@ class CrosshairStore {
         const state = (typeof storedState !== 'number') ? 2 : storedState;
         this.setCrosshairState(state);
 
-        this.stx.append('headsUpHR',
-            () => this.renderCrosshairTooltip());
+        this.stx.append('headsUpHR', this.renderCrosshairTooltip);
     };
 
     setFloatPriceLabelStyle(theme = this.mainStore.chartSetting.theme) {
@@ -75,7 +74,7 @@ class CrosshairStore {
         this.stx.doDisplayCrosshairs();
     }
 
-    renderCrosshairTooltip() {
+    renderCrosshairTooltip = () => {
         // if no tooltip exists, then skip
         if (this.state !== 2) return;
 
