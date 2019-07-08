@@ -106,7 +106,11 @@ class FastMarker extends Component {
     render() {
         const { className, children } = this.props;
         return (
-            <div className={className} ref={this.setRef}>
+            <div
+                className={className}
+                ref={this.setRef}
+                style={{ position: 'absolute' }}
+            >
                 {children}
             </div>
         );
