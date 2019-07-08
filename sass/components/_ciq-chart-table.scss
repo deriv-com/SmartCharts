@@ -1,3 +1,5 @@
+/* stylelint-disable plugin/no-unsupported-browser-features */
+
 .ciq-chart-dialog {
     width: var(--table-width);
     left: auto;
@@ -14,6 +16,13 @@
     }
     visibility: hidden;
     bottom: 0;
+
+    .cq-dialog--cover {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        filter: blur(2px);
+    }
 }
 
 .cq-dialog-active {

@@ -22,6 +22,7 @@ const ChartTable = ({
 
     return (
         <div className={`cq-dialog-overlay ${open ? 'cq-dialog-active' : ''}`} style={{ '--table-width': width }}>
+            <div className="cq-dialog--cover" />
             <Dialog className="cq-dialog ciq-chart-dialog">
             <>
                 {isMobile && (

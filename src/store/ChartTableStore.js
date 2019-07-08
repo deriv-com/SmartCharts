@@ -36,7 +36,7 @@ export default class ChartTableStore {
             this.stx.masterData.forEach(row => this.updateTableData(row));
             this.mainStore.chart.feed.onMasterDataUpdate(this.updateTableData);
         } else {
-            this.mainStore.chart.feed.offMasterDataUpdate(this.updateTableData);
+            if (this.mainStore.chart.feed) this.mainStore.chart.feed.offMasterDataUpdate(this.updateTableData);
             this.tableData =  [];
             if (this.chartTypeStore.onChartTypeChanged && this.state.prevChartType) {
                 this.chartTypeStore.onChartTypeChanged(this.state.prevChartType);
