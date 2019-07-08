@@ -74,6 +74,12 @@ class HighestLowestStore {
             });
         }
 
+        if (this.highest.Close === this.lowest.Close || !this.highest || !this.lowest) {
+            this.highestRef.setPosition({ epoch: null, price: null });
+            this.lowestRef.setPosition({ epoch: null, price: null });
+            return;
+        }
+
         if (this.highest) {
             const price = this.highest.Close.toFixed(this.decimalPlaces);
 
