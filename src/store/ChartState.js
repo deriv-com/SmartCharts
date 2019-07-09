@@ -84,66 +84,67 @@ class ChartState {
     }) {
         this.chartId = id;
         this.chartStatusListener = chartStatusListener;
+        this.endEpoch = endEpoch;
         this.isAnimationEnabled = isAnimationEnabled;
         this.isConnectionOpened = isConnectionOpened;
         this.isStaticChart = isStaticChart;
+        this.margin = margin;
         this.scrollToEpochOffset = scrollToEpochOffset;
         this.settings = settings;
         this.shouldFetchTradingTimes = shouldFetchTradingTimes;
         this.showLastDigitStats = showLastDigitStats;
-
         this.startEpoch = startEpoch;
-        this.endEpoch = endEpoch;
-        this.margin = margin;
 
-        switch (true) {
-        case (symbol !== this.symbol): {
+        if (chartControlsWidgets !== this.chartControlsWidgets) {
+            this.chartControlsWidgets = chartControlsWidgets;
+            if (this.stxx) this.mainStore.chart.updateHeight();
+        }
+
+        if (symbol !== this.symbol) {
             this.symbol = symbol;
             if (this.mainStore.chart && this.mainStore.chart.feed) {
                 this.mainStore.chart.feed.onMasterDataUpdate(this.scrollChartToLeft);
             }
-            break;
         }
-        case (chartType !== this.chartType): {
+
+        if (chartType !== this.chartType && this.context) {
             this.setChartType(chartType);
-            break;
-        }
-        case (granularity !== undefined && granularity !== this.granularity): {
+        } else if (granularity !== undefined && granularity !== this.granularity) {
             this.setChartGranularity(granularity);
-            break;
         }
-        case (this.chartStore.activeSymbols && (refreshActiveSymbols !== this.refreshActiveSymbols)): {
+
+        if (this.chartStore.activeSymbols && (refreshActiveSymbols !== this.refreshActiveSymbols)) {
             this.refreshActiveSymbols = refreshActiveSymbols;
             this.chartStore.activeSymbols.retrieveActiveSymbols(this.refreshActiveSymbols);
-            break;
         }
-        case (!isStaticChart && scrollToEpoch !== this.scrollToEpoch): {
+
+        if (!isStaticChart && scrollToEpoch && scrollToEpoch !== this.scrollToEpoch) {
             this.scrollToEpoch = scrollToEpoch;
             if (this.mainStore.chart && this.mainStore.chart.feed) {
                 this.mainStore.chart.feed.onMasterDataUpdate(this.scrollChartToLeft);
             }
-            break;
         }
-        case (clearChart && clearChart !== this.clearChart): {
+
+        if (clearChart !== this.clearChart) {
             this.clearChart = clearChart;
             this.cleanChart();
-            break;
         }
-        case (importedLayout && JSON.stringify(importedLayout) !== JSON.stringify(this.importedLayout)): {
+
+        if (importedLayout && JSON.stringify(importedLayout) !== JSON.stringify(this.importedLayout)) {
             this.importedLayout = importedLayout;
             this.importLayout();
-            break;
         }
-        case (onExportLayout !== this.onExportLayout): {
+
+        if (onExportLayout !== this.onExportLayout) {
             this.onExportLayout = onExportLayout;
             this.exportLayout();
-            break;
         }
-        case removeAllComparisons: {
+
+        if (removeAllComparisons) {
             this.comparisonStore.removeAll();
-            break;
         }
-        case (zoom !== this.zoom): {
+
+        if (zoom !== this.zoom) {
             this.zoom = +zoom;
             if (this.context && this.stxx && this.zoom) {
                 if (this.zoom >= 0) {
@@ -152,11 +153,6 @@ class ChartState {
                     // this.stxx.zoomOut(null, (100 + Math.abs(this.zoom)) / 100);
                 }
             }
-            break;
-        }
-        default:
-            this.toggleChartControlsWidgets(chartControlsWidgets);
-            break;
         }
 
         if (this.stxx) {
@@ -245,34 +241,25 @@ class ChartState {
     }
 
     @action.bound setChartGranularity(granularity) {
-        if (granularity !== undefined && granularity !== this.granularity) {
-            const isTimeUnitSecond = calculateTimeUnitInterval(granularity).timeUnit === 'second';
-            const isChartTypeCandle = this.mainStore.chartType.isCandle
-                || (this.chartType && this.mainStore.chartType.isTypeCandle(this.chartType));
+        const isTimeUnitSecond = calculateTimeUnitInterval(granularity).timeUnit === 'second';
+        const isChartTypeCandle = this.mainStore.chartType.isCandle
+            || (this.chartType && this.mainStore.chartType.isTypeCandle(this.chartType));
 
-            if (this.context && isTimeUnitSecond && isChartTypeCandle) {
-                this.setChartType('mountain'); // if granularity is zero, set the chartType to 'mountain'
-            }
-            this.granularity = granularity === null ? undefined : granularity;
+        if (this.context && isTimeUnitSecond && isChartTypeCandle) {
+            this.setChartType('mountain'); // if granularity is zero, set the chartType to 'mountain'
         }
+        this.granularity = granularity === null ? undefined : granularity;
     }
 
     @action.bound setChartType(chartType) {
-        if (chartType !== this.chartType && this.context) {
-            this.chartType = chartType;
-            if (this.chartTypeStore.onChartTypeChanged) {
-                this.chartTypeStore.onChartTypeChanged(chartType);
-            }
+        this.chartType = chartType;
+        if (this.chartTypeStore.onChartTypeChanged) {
+            this.chartTypeStore.onChartTypeChanged(chartType);
         }
     }
 
     @action.bound setShouldMinimiseLastDigit(status) {
         this.shouldMinimiseLastDigits = status;
-    }
-
-    @action.bound toggleChartControlsWidgets(chartControlsWidgets) {
-        this.chartControlsWidgets = chartControlsWidgets;
-        if (this.stxx) this.mainStore.chart.updateHeight();
     }
 
     saveLayout() {
