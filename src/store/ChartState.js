@@ -96,16 +96,20 @@ class ChartState {
         this.endEpoch = endEpoch;
         this.margin = margin;
 
-        // IMPORTANT! Set chartType first then set chart granularity
-        this.setChartType(chartType);
-        this.setChartGranularity(granularity);
-
         switch (true) {
         case (symbol !== this.symbol): {
             this.symbol = symbol;
             if (this.mainStore.chart && this.mainStore.chart.feed) {
                 this.mainStore.chart.feed.onMasterDataUpdate(this.scrollChartToLeft);
             }
+            break;
+        }
+        case (chartType !== this.chartType): {
+            this.setChartType(chartType);
+            break;
+        }
+        case (granularity !== undefined && granularity !== this.granularity): {
+            this.setChartGranularity(granularity);
             break;
         }
         case (this.chartStore.activeSymbols && (refreshActiveSymbols !== this.refreshActiveSymbols)): {
