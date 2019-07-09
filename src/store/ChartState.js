@@ -52,6 +52,7 @@ class ChartState {
         this.chartStore.feed.onStartPagination(this.setOnPagination.bind(this));
         this.chartStore.feed.onPagination(this.setOnPagination.bind(this));
 
+        this.rootNode = this.mainStore.chart.rootNode;
         this.granularity = this.chartStore.granularity;
         this.stxx.maxMasterDataSize = this.chartStore.getMaxMasterDataSize(this.granularity);
     };
@@ -75,101 +76,70 @@ class ChartState {
         scrollToEpoch,
         scrollToEpochOffset = 0,
         settings,
+        shouldFetchTradingTimes = true,
         showLastDigitStats = false,
         startEpoch,
         symbol,
         zoom,
-        shouldFetchTradingTimes = true,
     }) {
         this.chartId = id;
-        this.settings = settings;
-        this.isConnectionOpened = isConnectionOpened;
         this.chartStatusListener = chartStatusListener;
+        this.isAnimationEnabled = isAnimationEnabled;
+        this.isConnectionOpened = isConnectionOpened;
         this.isStaticChart = isStaticChart;
+        this.scrollToEpochOffset = scrollToEpochOffset;
+        this.settings = settings;
         this.shouldFetchTradingTimes = shouldFetchTradingTimes;
+        this.showLastDigitStats = showLastDigitStats;
 
-        if (this.symbol !== symbol) {
+        this.startEpoch = startEpoch;
+        this.endEpoch = endEpoch;
+        this.margin = margin;
+
+        // IMPORTANT! Set chartType first then set chart granularity
+        this.setChartType(chartType);
+        this.setChartGranularity(granularity);
+
+        switch (true) {
+        case (symbol !== this.symbol): {
             this.symbol = symbol;
-
             if (this.mainStore.chart && this.mainStore.chart.feed) {
                 this.mainStore.chart.feed.onMasterDataUpdate(this.scrollChartToLeft);
             }
+            break;
         }
-
-        if (this.chartStore.activeSymbols
-            && (this.refreshActiveSymbols !== refreshActiveSymbols)) {
+        case (this.chartStore.activeSymbols && (refreshActiveSymbols !== this.refreshActiveSymbols)): {
             this.refreshActiveSymbols = refreshActiveSymbols;
-            this.chartStore.activeSymbols.retrieveActiveSymbols(true);
+            this.chartStore.activeSymbols.retrieveActiveSymbols(this.refreshActiveSymbols);
+            break;
         }
-
-        this.rootNode = this.mainStore.chart.rootNode;
-
-        this.isAnimationEnabled = isAnimationEnabled;
-        this.showLastDigitStats = showLastDigitStats;
-        this.scrollToEpochOffset = scrollToEpochOffset;
-
-        if (onExportLayout !== this.onExportLayout) {
-            this.onExportLayout = onExportLayout;
-            this.exportLayout();
+        case (!isStaticChart && scrollToEpoch !== this.scrollToEpoch): {
+            this.scrollToEpoch = scrollToEpoch;
+            if (this.mainStore.chart && this.mainStore.chart.feed) {
+                this.mainStore.chart.feed.onMasterDataUpdate(this.scrollChartToLeft);
+            }
+            break;
         }
-
-        if (clearChart !== this.clearChart) {
+        case (clearChart && clearChart !== this.clearChart): {
             this.clearChart = clearChart;
             this.cleanChart();
+            break;
         }
-
-        if (JSON.stringify(importedLayout) !== JSON.stringify(this.importedLayout)) {
+        case (importedLayout && JSON.stringify(importedLayout) !== JSON.stringify(this.importedLayout)): {
             this.importedLayout = importedLayout;
             this.importLayout();
+            break;
         }
-
-        if (granularity !== undefined && this.granularity !== granularity) {
-            if (this.context && calculateTimeUnitInterval(granularity).timeUnit === 'second' && (this.mainStore.chartType.isCandle || (chartType && this.mainStore.chartType.isTypeCandle(chartType)))) {
-                chartType = 'mountain';
-
-                if (this.chartTypeStore.onChartTypeChanged) {
-                    this.chartTypeStore.onChartTypeChanged(chartType);
-                }
-            }
-
-            this.granularity = granularity === null ? undefined : granularity;
+        case (onExportLayout !== this.onExportLayout): {
+            this.onExportLayout = onExportLayout;
+            this.exportLayout();
+            break;
         }
-
-        if (this.chartType !== chartType && this.context) {
-            this.chartType = chartType;
-            this.chartTypeStore.setType(chartType);
-        }
-
-        if (this.margin !== margin) {
-            this.margin = margin;
-        }
-
-        if (this.startEpoch !== startEpoch || this.endEpoch !== endEpoch) {
-            this.startEpoch = startEpoch;
-            this.endEpoch = endEpoch;
-
-            if (isStaticChart && this.stxx && this.granularity === this.mainStore.chart.granularity) {
-                // Reload the chart if it is a static chart and the granularity hasn't changed
-                this.mainStore.chart.newChart();
-            } else if (this.mainStore.chart.feed) {
-                /* When layout is importing and range is changing as the same time we dont need to set the range,
-                   the imported layout witll take care of it. */
-                if (!this.importedLayout && !this.scrollToEpoch) {
-                    this.mainStore.chart.feed.onRangeChanged(true);
-                }
-            }
-        }
-
-        if (removeAllComparisons) {
+        case removeAllComparisons: {
             this.comparisonStore.removeAll();
+            break;
         }
-
-        if (this.scrollToEpoch !== scrollToEpoch && this.context) {
-            this.scrollToEpoch = scrollToEpoch;
-            this.mainStore.chart.feed.onMasterDataUpdate(this.scrollChartToLeft);
-        }
-
-        if (this.zoom !== zoom) {
+        case (zoom !== this.zoom): {
             this.zoom = +zoom;
             if (this.context && this.stxx && this.zoom) {
                 if (this.zoom >= 0) {
@@ -178,17 +148,17 @@ class ChartState {
                     // this.stxx.zoomOut(null, (100 + Math.abs(this.zoom)) / 100);
                 }
             }
+            break;
         }
-
-        if (chartControlsWidgets !== this.chartControlsWidgets) {
-            this.chartControlsWidgets = chartControlsWidgets;
-            if (this.stxx) this.mainStore.chart.updateHeight();
+        default:
+            this.toggleChartControlsWidgets(chartControlsWidgets);
+            break;
         }
 
         if (this.stxx) {
             this.stxx.chart.panel.yAxis.drawCurrentPriceLabel = !this.endEpoch;
             this.stxx.preferences.currentPriceLine = !this.endEpoch;
-            this.stxx.isAutoScale = this.settings && settings.isAutoScale !== false;
+            this.stxx.isAutoScale = this.settings && this.settings.isAutoScale !== false;
             this.stxx.draw();
         }
     }
@@ -270,8 +240,35 @@ class ChartState {
         }
     }
 
+    @action.bound setChartGranularity(granularity) {
+        if (granularity !== undefined && granularity !== this.granularity) {
+            const isTimeUnitSecond = calculateTimeUnitInterval(granularity).timeUnit === 'second';
+            const isChartTypeCandle = this.mainStore.chartType.isCandle
+                || (this.chartType && this.mainStore.chartType.isTypeCandle(this.chartType));
+
+            if (this.context && isTimeUnitSecond && isChartTypeCandle) {
+                this.setChartType('mountain'); // if granularity is zero, set the chartType to 'mountain'
+            }
+            this.granularity = granularity === null ? undefined : granularity;
+        }
+    }
+
+    @action.bound setChartType(chartType) {
+        if (chartType !== this.chartType && this.context) {
+            this.chartType = chartType;
+            if (this.chartTypeStore.onChartTypeChanged) {
+                this.chartTypeStore.onChartTypeChanged(chartType);
+            }
+        }
+    }
+
     @action.bound setShouldMinimiseLastDigit(status) {
         this.shouldMinimiseLastDigits = status;
+    }
+
+    @action.bound toggleChartControlsWidgets(chartControlsWidgets) {
+        this.chartControlsWidgets = chartControlsWidgets;
+        if (this.stxx) this.mainStore.chart.updateHeight();
     }
 
     saveLayout() {
