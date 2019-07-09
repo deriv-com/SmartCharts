@@ -25,22 +25,9 @@ class FastMarker extends Component {
     price = null;
     date = null;
     elem = null;
-    context = null;
+    ctx = null;
     stx = null;
     injectionId = null;
-
-    constructor(props) {
-        super(props);
-
-        const { contextPromise } = props;
-
-        contextPromise.then((context) => {
-            this.context = context;
-            this.stx = this.context.stx;
-
-            this.injectionId = this.stx.append('draw', this.updateCSS);
-        });
-    }
 
     setPosition = ({ epoch, price }) => {
         this.price = +price;
@@ -49,7 +36,7 @@ class FastMarker extends Component {
     }
 
     updateCSS = () => {
-        if (!this.elem || !this.context) { return; }
+        if (!this.elem || !this.ctx) { return; }
         if (!this.date || !this.price) {
             this.elem.style.visibility = 'hidden';
             return;
@@ -96,10 +83,20 @@ class FastMarker extends Component {
         }
 
         if (ref !== null) {
-            this.updateCSS();
+            const { contextPromise } = this.props;
+
+            contextPromise.then((ctx) => {
+                this.ctx = ctx;
+                this.stx = this.ctx.stx;
+
+                this.injectionId = this.stx.append('draw', this.updateCSS);
+                this.updateCSS();
+            });
         } else if (this.injectionId) {
             // remove the injection on unmount
             this.stx.removeInjection(this.injectionId);
+            this.ctx = null;
+            this.stx = null;
         }
     }
 

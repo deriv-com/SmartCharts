@@ -24,9 +24,20 @@ class HighestLowestStore {
         reaction(() => this.isHighestLowestMarkerEnabled, this.enableMarker);
     }
 
+    clearInjection = () => {
+        if (this.injectionId) {
+            this.highestRef = null;
+            this.lowestRef = null;
+            this.stx.removeInjection(this.injectionId);
+            this.injectionId = null;
+        }
+    }
+
     enableMarker = () => {
         if (this.isHighestLowestMarkerEnabled) {
             this.injectionId = this.stx.append('createDataSegment', this.calculateHighestLowestByNewData);
+        } else {
+            this.clearInjection();
         }
     }
 
@@ -34,9 +45,6 @@ class HighestLowestStore {
         this.highestRef = ref;
         if (ref !== null) {
             this.highestRef.value = ref.div.querySelector('.spot__value');
-        } else if (this.injectionId) {
-            this.stx.removeInjection(this.injectionId);
-            this.injectionId = null;
         }
     }
     setLowestRef = (ref) => {
@@ -44,16 +52,11 @@ class HighestLowestStore {
 
         if (ref !== null) {
             this.lowestRef.value = ref.div.querySelector('.spot__value');
-        } else if (this.injectionId) {
-            this.stx.removeInjection(this.injectionId);
-            this.injectionId = null;
         }
     }
 
 
-    onContextReady = () => {
-        this.enableMarker();
-    };
+    onContextReady = this.enableMarker;
 
     calculateHighestLowestByNewData = () => {
         if (!this.highestRef || !this.lowestRef) { return; }
@@ -74,7 +77,7 @@ class HighestLowestStore {
             });
         }
 
-        if (this.highest.Close === this.lowest.Close || !this.highest || !this.lowest) {
+        if (!this.highest || !this.lowest || this.highest.Close === this.lowest.Close) {
             this.highestRef.setPosition({ epoch: null, price: null });
             this.lowestRef.setPosition({ epoch: null, price: null });
             return;
