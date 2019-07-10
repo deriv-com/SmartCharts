@@ -145,6 +145,11 @@
             z-index: 108 !important;
         }
     }
+    &--navigation-widget {
+        .home {
+            display: none !important;
+        }
+    }
 }
 
 @import 'menu';

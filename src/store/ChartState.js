@@ -1,6 +1,6 @@
 /* eslint-disable no-new */
 import { action, observable, when } from 'mobx';
-import { createObjectFromLocalStorage, calculateTimeUnitInterval, calculateGranularity, getUTCDate } from '../utils';
+import { createObjectFromLocalStorage, calculateTimeUnitInterval, calculateGranularity, getUTCDate, getUTCEpoch } from '../utils';
 import Theme from '../../sass/_themes.scss';
 
 class ChartState {
@@ -370,15 +370,17 @@ class ChartState {
         }
     }
 
-    scrollChartToLeft = () => {
+    scrollChartToLeft = (date) => {
+        const scrollToEpoch = this.scrollToEpoch
+                            || (date && getUTCEpoch(date.DT));
         this.stxx.chart.entryTick = null;
-        if (this.scrollToEpoch && !this.startEpoch) {
+        if (scrollToEpoch) {
             let startEntry = this.stxx.chart.dataSet
-                .find(entry =>  entry.DT.valueOf() === CIQ.strToDateTime(getUTCDate(this.scrollToEpoch)).valueOf());
+                .find(entry =>  entry.DT.valueOf() === CIQ.strToDateTime(getUTCDate(scrollToEpoch)).valueOf());
 
             if (!startEntry) {
                 startEntry = {
-                    DT: CIQ.strToDateTime(getUTCDate(this.scrollToEpoch)),
+                    DT: CIQ.strToDateTime(getUTCDate(scrollToEpoch)),
                     Close: null,
                 };
 
@@ -393,29 +395,14 @@ class ChartState {
                 );
                 this.stxx.createDataSet();
             }
-            this.stxx.maxMasterDataSize = 0;
-            const scrollAnimator = new CIQ.EaseMachine(Math.easeOutCubic, 1000);
-            const scrollToTarget = this.stxx.chart.dataSegment.length;
-            scrollAnimator.run((bar) => {
-                bar = Math.ceil(bar); // round-up for precision
-                const scroll = this.stxx.chart.dataSegment.length - bar;
-                if (scroll <= 2 || bar === scrollToTarget) {
-                    /**
-                     * Stop scrolling and draw markers if
-                     * the scroll value is off-screen or if the animator has reached target.
-                     * We check scroll <= '2' because sometimes the chart is scrolled so that the first
-                     * bar is partially hidden off-screen
-                     */
-                    scrollAnimator.stop();
-                    this.stxx.chart.entryTick = this.stxx.tickFromDate(startEntry.DT);
-                    this.stxx.chart.lockScroll = true;
-                    this.stxx.chart.isScrollLocationChanged = true; // set to true to draw markers
-                } else {
-                    this.stxx.chart.scroll = scroll;
-                }
-            },
-            0, scrollToTarget);
-            this.stxx.draw();
+
+            const tick = this.stxx.tickFromDate(startEntry.DT);
+            const startTick = this.stxx.chart.dataSet.length - tick;
+            this.stxx.chart.lockScroll = true;
+            this.stxx.chart.isScrollLocationChanged = true; // set to true to draw markers
+
+            if (!this.startEpoch) this.scrollChartToLeftAnimator(startTick, startEntry);
+            else this.scrollChartToLeftGraph(startTick, startEntry);
         } else if (this.startEpoch) {
             this.stxx.chart.lockScroll = true;
             this.stxx.chart.isScrollLocationChanged = true;
@@ -426,6 +413,44 @@ class ChartState {
             this.stxx.draw();
         }
         this.mainStore.chart.feed.offMasterDataUpdate(this.scrollChartToLeft);
+    }
+
+    scrollChartToLeftAnimator = (startTick, startEntry) => {
+        this.stxx.maxMasterDataSize = 0;
+        const scrollAnimator = new CIQ.EaseMachine(Math.easeOutCubic, 1000);
+        const scrollToTarget = this.stxx.chart.dataSegment.length;
+        scrollAnimator.run((bar) => {
+            bar = Math.ceil(bar); // round-up for precision
+            const scroll = this.stxx.chart.dataSegment.length - bar;
+            if (scroll <= 2 || bar === scrollToTarget) {
+                /**
+                 * Stop scrolling and draw markers if
+                 * the scroll value is off-screen or if the animator has reached target.
+                 * We check scroll <= '2' because sometimes the chart is scrolled so that the first
+                 * bar is partially hidden off-screen
+                 */
+                scrollAnimator.stop();
+                this.stxx.chart.entryTick = this.stxx.tickFromDate(startEntry.DT);
+            }
+        },
+        0, scrollToTarget);
+
+        this.stxx.setMaxTicks(startTick + 3);
+        this.stxx.chart.scroll = startTick + 1;
+
+        this.stxx.draw();
+    }
+    scrollChartToLeftGraph = (startTick, startEntry) => {
+        this.stxx.chart.entryTick = this.stxx.tickFromDate(startEntry.DT);
+        if (!this.endEpoch) {
+            this.stxx.setMaxTicks(startTick + 3);
+            this.stxx.chart.scroll = startTick + 1;
+        } else {
+            startTick++;
+            this.stxx.setMaxTicks(startTick + (Math.floor(startTick / 5) || 2));
+            this.stxx.chart.scroll = startTick + (Math.floor(startTick / 10) || 1);
+        }
+        this.stxx.draw();
     }
 
     cleanChart() {

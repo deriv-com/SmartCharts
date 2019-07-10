@@ -124,6 +124,7 @@ lang | Sets the language. Defaults to `en`.
 position | Sets the position of the chart controls. Choose between `left` and `bottom`. In mobile this is always `bottom`. Defaults to `bottom`.
 assetInformation | Show or hide the asset information. In mobile this will be always be `false`. Defaults to `true`.
 isHighestLowestMarkerEnabled | Show or hide the highest and lowest tick on the chart. Defaults to `false`.
+enabledNavigationWidget | Show or hide navigation widget. Defaults to `false`
 
 #### Barriers API
 

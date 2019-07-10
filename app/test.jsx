@@ -373,12 +373,17 @@ class App extends Component {
             leftOffset: +evt.target.value,
         });
     };
-
+    onWidget = () => {
+        const { enabledNavigationWidget } = this.state;
+        this.setState({
+            enabledNavigationWidget: !enabledNavigationWidget,
+        });
+    }
     render() {
         const { settings, isConnectionOpened, symbol, endEpoch,
             barrierType, highLow : { high, low }, hidePriceLines,
             draggable, relative, shadeColor, scrollToEpoch,
-            leftOffset, color, foregroundColor, markers } = this.state;
+            leftOffset, color, foregroundColor, markers, enabledNavigationWidget } = this.state;
         const barriers = barrierType ? [{
             shade: barrierType,
             shadeColor,
@@ -417,6 +422,7 @@ class App extends Component {
                         barriers={barriers}
                         scrollToEpoch={scrollToEpoch}
                         scrollToEpochOffset={leftOffset}
+                        enabledNavigationWidget={enabledNavigationWidget}
                     >
                         {endEpoch ? (
                             <Marker
@@ -439,6 +445,10 @@ class App extends Component {
                     </SmartChart>
                 </div>
                 <div className="action-section">
+                    <div className="form-row">
+                        Navigation Widget <br />
+                        <button type="button" onClick={this.onWidget}>Toggle</button>
+                    </div>
                     <div className="form-row">
                         Markers <br />
                         <select onChange={this.onAddMArker}>

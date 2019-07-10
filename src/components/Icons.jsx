@@ -52,7 +52,10 @@ import PositionLeft from '../../sass/icons/chart settings/setting/ic-position-le
 import PositionBottom from '../../sass/icons/chart settings/setting/ic-position-bottom.svg';
 import Back from '../../sass/icons/back/ic-back.svg';
 import DrawCursor from '../../sass/icons/pencil/ic-pencil.svg';
-
+import Home from '../../sass/icons/navigation-widgets/ic-home.svg';
+import Scale from '../../sass/icons/navigation-widgets/ic-scale11.svg';
+import Zoomin from '../../sass/icons/navigation-widgets/ic-zoomin.svg';
+import Zoomout from '../../sass/icons/navigation-widgets/ic-zoomout.svg';
 
 import Warning from '../../sass/icons/alert message/warning.svg';
 import Error from '../../sass/icons/alert message/error.svg';
@@ -180,7 +183,10 @@ export const DownloadIcon = Wrapper(Download);
 export const PositionLeftIcon = Wrapper(PositionLeft);
 export const PositionBottomIcon = Wrapper(PositionBottom);
 export const BackIcon = Wrapper(Back);
-
+export const HomeIcon = Wrapper(Home);
+export const ScaleIcon = Wrapper(Scale);
+export const ZoominIcon = Wrapper(Zoomin);
+export const ZoomoutIcon = Wrapper(Zoomout);
 
 export const MetalIcon = Wrapper(Metal);
 
