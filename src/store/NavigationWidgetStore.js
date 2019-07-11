@@ -39,5 +39,6 @@ export default class NavigationWidgetStore {
             }
         }
         this.stateStore.scrollChartToLeft(scrollToEpoch);
+        this.isHomeEnabled = false;
     }
 }
