@@ -1,5 +1,5 @@
 import { observable, action, when } from 'mobx';
-import { getUTCEpoch } from '../utils';
+import debounce from 'lodash.debounce';
 
 export default class NavigationWidgetStore {
     @observable isHomeEnabled = false;
@@ -20,9 +20,9 @@ export default class NavigationWidgetStore {
         });
     };
 
-    @action.bound scrollListener() {
+    @action.bound scrollListener = debounce(() => {
         this.isHomeEnabled = !this.stxx.isHome();
-    }
+    }, 50, { leading: true, trailing: false });
 
     @action.bound onHome() {
         this.isHomeEnabled = false;
@@ -30,15 +30,12 @@ export default class NavigationWidgetStore {
     }
 
     @action.bound onScale() {
-        let scrollToEpoch = null;
+        let point = null;
 
-        if (!this.stateStore.scrollToEpoch) {
-            const { dataSet } = this.stxx.chart;
-            if (dataSet && dataSet.length) {
-                scrollToEpoch = getUTCEpoch(dataSet[0].DT);
-            }
-        }
-        this.stateStore.scrollChartToLeft(scrollToEpoch);
         this.isHomeEnabled = false;
+        const { dataSet } = this.stxx.chart;
+        if (dataSet && dataSet.length) point = dataSet[0];
+
+        this.stateStore.scrollChartToLeft(point);
     }
 }
