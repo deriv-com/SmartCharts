@@ -1,8 +1,8 @@
 import { observable, action, when } from 'mobx';
-import debounce from 'lodash.debounce';
 
 export default class NavigationWidgetStore {
     @observable isHomeEnabled = false;
+    moveTimer;
 
     get chart() { return this.mainStore.chart; }
     get stateStore() { return this.mainStore.state; }
@@ -14,15 +14,18 @@ export default class NavigationWidgetStore {
     }
 
     onContextReady = () => {
-        this.stxx.addEventListener('move', this.scrollListener.bind(this));
+        this.stxx.addEventListener('move', () => {
+            clearTimeout(this.moveTimer);
+            this.moveTimer = setTimeout(this.updateHomeButton, 50);
+        });
         this.stxx.prepend('mouseWheel', () => {
             this.stxx.chart.lockScroll = false;
         });
     };
 
-    @action.bound scrollListener = debounce(() => {
+    @action.bound updateHomeButton = () => {
         this.isHomeEnabled = !this.stxx.isHome();
-    }, 50, { leading: true, trailing: false });
+    }
 
     @action.bound onHome() {
         this.isHomeEnabled = false;
