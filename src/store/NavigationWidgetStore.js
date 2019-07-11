@@ -39,6 +39,6 @@ export default class NavigationWidgetStore {
         const { dataSet } = this.stxx.chart;
         if (dataSet && dataSet.length) point = dataSet[0];
 
-        this.stateStore.scrollChartToLeft(point);
+        this.stateStore.scrollChartToLeft(point, true);
     }
 }
