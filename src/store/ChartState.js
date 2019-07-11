@@ -387,15 +387,7 @@ class ChartState {
                 );
                 this.stxx.createDataSet();
             }
-
-            const tick = this.stxx.tickFromDate(startEntry.DT);
-            const startTick = this.stxx.chart.dataSet.length - tick;
-            this.stxx.chart.lockScroll = true;
-            this.stxx.chart.isScrollLocationChanged = true; // set to true to draw markers
-
-            // if (!this.startEpoch) this.scrollChartToLeftAnimator(startTick, startEntry);
-            // else
-            this.scrollChartToLeftGraph(startTick, startEntry);
+            this.scrollChartToLeftAnimator(startEntry);
         } else if (this.startEpoch) {
             this.stxx.chart.lockScroll = true;
             this.stxx.chart.isScrollLocationChanged = true;
@@ -408,7 +400,7 @@ class ChartState {
         this.mainStore.chart.feed.offMasterDataUpdate(this.scrollChartToLeft);
     }
 
-    scrollChartToLeftAnimator = (startTick, startEntry) => {
+    scrollChartToLeftAnimator = (startEntry) => {
         this.stxx.maxMasterDataSize = 0;
         const scrollAnimator = new CIQ.EaseMachine(Math.easeOutCubic, 1000);
         const scrollToTarget = this.stxx.chart.dataSegment.length;
@@ -424,25 +416,11 @@ class ChartState {
                  */
                 scrollAnimator.stop();
                 this.stxx.chart.entryTick = this.stxx.tickFromDate(startEntry.DT);
+                this.stxx.chart.lockScroll = true;
+                this.stxx.chart.isScrollLocationChanged = true; // set to true to draw markers
             }
         },
         0, scrollToTarget);
-
-        this.stxx.setMaxTicks(startTick + 3);
-        this.stxx.chart.scroll = startTick + 1;
-
-        this.stxx.draw();
-    }
-    scrollChartToLeftGraph = (startTick, startEntry) => {
-        this.stxx.chart.entryTick = this.stxx.tickFromDate(startEntry.DT);
-        if (!this.endEpoch) {
-            this.stxx.setMaxTicks(startTick + 3);
-            this.stxx.chart.scroll = startTick + 1;
-        } else {
-            startTick++;
-            this.stxx.setMaxTicks(startTick + (Math.floor(startTick / 5) || 2));
-            this.stxx.chart.scroll = startTick + (Math.floor(startTick / 10) || 1);
-        }
         this.stxx.draw();
     }
 
