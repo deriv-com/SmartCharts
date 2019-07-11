@@ -174,7 +174,9 @@ class ChartState {
     setChartTheme(theme, isChartClosed = this.isChartClosed) {
         this.stxx.clearStyles();
         this.stxx.setStyle('stx_grid', 'color', Theme[`${theme}chartgrid`]);
-        if (!this.rootNode) return;
+        if (!this.rootNode) {
+            this.rootNode = this.mainStore.chart.rootNode;
+        }
         this.rootNode.querySelector('.chartContainer').style.backgroundColor = Theme[`${theme}chartbg`];
         // change chart colors to grey if the current market is closed and it is not a static chart
         if (isChartClosed && !this.isStaticChart) {
