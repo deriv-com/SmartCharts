@@ -363,7 +363,7 @@ class ChartState {
     }
 
     scrollChartToLeft = (leftTick, force) => {
-        const scrollToEpoch = this.scrollToEpoch || getUTCEpoch(leftTick && leftTick.DT);
+        const scrollToEpoch = this.scrollToEpoch || (leftTick && getUTCEpoch(leftTick.DT));
         this.stxx.chart.entryTick = null;
 
         if (scrollToEpoch) {
