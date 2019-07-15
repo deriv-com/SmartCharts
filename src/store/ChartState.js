@@ -155,6 +155,8 @@ class ChartState {
             }
         }
 
+        this.mainStore.chartSetting.setSettings(this.settings);
+
         if (this.stxx) {
             this.stxx.chart.panel.yAxis.drawCurrentPriceLabel = !this.endEpoch;
             this.stxx.preferences.currentPriceLine = !this.endEpoch;

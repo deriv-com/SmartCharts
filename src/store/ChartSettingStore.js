@@ -82,7 +82,7 @@ export default class ChartSettingStore {
     @observable isAutoScale = true;
     @observable isHighestLowestMarkerEnabled = true;
 
-    @action.bound setSettings(settings) {
+    setSettings(settings) {
         if (settings === undefined) { return; }
         const { assetInformation, countdown, historical, language, position, isAutoScale, isHighestLowestMarkerEnabled, theme } = settings;
         if (theme                        !== undefined) { this.setTheme(theme); }
