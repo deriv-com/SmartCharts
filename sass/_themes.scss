@@ -229,7 +229,8 @@ $themes: (
         HighestLowestMarkerLabelBg: $COLOR_LIGHT_BLACK_3,
         HighestLowestMarkerLabelText: $COLOR_LIGHT_BLACK_1,
         HighestSpotColor: $COLOR_GREEN_1,
-        LowestSpotColor: $COLOR_RED
+        LowestSpotColor: $COLOR_RED,
+        ChartBackgroundOpacity: 0.05
     ),
     dark: (
         DefaultMain:            $COLOR_DARK_BLUE_5,
@@ -420,7 +421,8 @@ $themes: (
         HighestLowestMarkerLabelBg: $COLOR_DARK_GRAY_2,
         HighestLowestMarkerLabelText: $COLOR_WHITE,
         HighestSpotColor: $COLOR_GREEN_1,
-        LowestSpotColor: $COLOR_RED
+        LowestSpotColor: $COLOR_RED,
+        ChartBackgroundOpacity: 0.4
     ),
 );
 

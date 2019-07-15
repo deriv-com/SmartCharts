@@ -81,6 +81,8 @@ class ChartState {
         zoom,
         shouldFetchTradingTimes = true,
     }) {
+        let isSymbolChanged = false;
+
         this.chartId = id;
         this.settings = settings;
         this.isConnectionOpened = isConnectionOpened;
@@ -90,9 +92,10 @@ class ChartState {
 
         if (this.symbol !== symbol) {
             this.symbol = symbol;
+            isSymbolChanged = true;
 
             if (this.mainStore.chart && this.mainStore.chart.feed) {
-                this.mainStore.chart.feed.onMasterDataUpdate(this.scrollChartToLeft);
+                this.mainStore.chart.feed.onMasterDataReinitialize(this.scrollChartToLeft);
             }
         }
 
@@ -164,7 +167,7 @@ class ChartState {
             this.comparisonStore.removeAll();
         }
 
-        if (this.scrollToEpoch !== scrollToEpoch && this.context) {
+        if (this.scrollToEpoch !== scrollToEpoch && this.context && !isSymbolChanged) {
             this.scrollToEpoch = scrollToEpoch;
             this.mainStore.chart.feed.onMasterDataUpdate(this.scrollChartToLeft);
         }
@@ -394,37 +397,33 @@ class ChartState {
                 this.stxx.createDataSet();
             }
             this.stxx.maxMasterDataSize = 0;
-            const scrollAnimator = new CIQ.EaseMachine(Math.easeOutCubic, 1000);
-            const scrollToTarget = this.stxx.chart.dataSegment.length;
-            scrollAnimator.run((bar) => {
-                bar = Math.ceil(bar); // round-up for precision
-                const scroll = this.stxx.chart.dataSegment.length - bar;
-                if (scroll <= 2 || bar === scrollToTarget) {
-                    /**
-                     * Stop scrolling and draw markers if
-                     * the scroll value is off-screen or if the animator has reached target.
-                     * We check scroll <= '2' because sometimes the chart is scrolled so that the first
-                     * bar is partially hidden off-screen
-                     */
-                    scrollAnimator.stop();
-                    this.stxx.chart.entryTick = this.stxx.tickFromDate(startEntry.DT);
-                    this.stxx.chart.lockScroll = true;
-                    this.stxx.chart.isScrollLocationChanged = true; // set to true to draw markers
-                } else {
-                    this.stxx.chart.scroll = scroll;
-                }
-            },
-            0, scrollToTarget);
+            this.stxx.micropixels = 0;
             this.stxx.draw();
+            this.stxx.chart.entryTick = this.stxx.tickFromDate(startEntry.DT); // the calculation of entry tick should be done after draw
+
+            const scrollToTarget = this.stxx.chart.dataSet.length - this.stxx.chart.entryTick;
+
+            if (this.stxx.animations.liveScroll && this.stxx.animations.liveScroll.running) {
+                this.stxx.animations.liveScroll.stop();
+            }
+
+            this.stxx.scrollTo(this.stxx.chart, scrollToTarget, () => {
+                this.stxx.setMaxTicks(5);
+                this.stxx.micropixels = 0;
+                this.stxx.chart.lockAutoScroll = true;
+                this.stxx.chart.isScrollLocationChanged = true; // set to true to draw markers
+                this.stxx.draw();
+            });
         } else if (this.startEpoch) {
-            this.stxx.chart.lockScroll = true;
+            this.stxx.chart.lockAutoScroll = true;
             this.stxx.chart.isScrollLocationChanged = true;
         } else {
-            this.stxx.chart.lockScroll = false;
+            this.stxx.chart.lockAutoScroll = false;
             this.stxx.chart.isScrollLocationChanged = false;
             this.stxx.home();
             this.stxx.draw();
         }
+        this.mainStore.chart.feed.offMasterDataReinitialize(this.scrollChartToLeft);
         this.mainStore.chart.feed.offMasterDataUpdate(this.scrollChartToLeft);
     }
 
@@ -512,7 +511,7 @@ class ChartState {
 
         this.mainStore.crosshair.setCrosshairState(this.importedLayout.crosshair);
 
-        this.stxx.chart.lockScroll = false;
+        this.stxx.chart.lockAutoScroll = false;
         this.stxx.chart.entryTick = undefined;
         this.stxx.maxMasterDataSize = 5000;
     }
@@ -531,8 +530,8 @@ class ChartState {
     }
 
     scrollListener({ grab }) {
-        if (grab && this.stxx.chart.lockScroll) {
-            this.stxx.chart.lockScroll = false;
+        if (grab && this.stxx.chart.lockAutoScroll) {
+            this.stxx.chart.lockAutoScroll = false;
         }
         if (this.stxx && this.stxx.chart) {
             const dataSegment = this.stxx.chart.dataSegment;

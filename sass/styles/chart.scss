@@ -761,6 +761,28 @@ html, body {
 .stx-subholder {
     position: absolute;
     overflow: hidden;
+
+    &:before {
+        content: ' ';
+        display: block;
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 1;
+        @include themify($themes) {
+            opacity: themed('ChartBackgroundOpacity');
+        }
+        background-image: url('https://static.cdnpub.info/traderoom/map.png'); // TODO the image's url should be changed after getting new image from UI/UX team.
+        background-repeat: no-repeat;
+        background-position: 50% 0;
+        -ms-background-size: cover;
+        -o-background-size: cover;
+        -moz-background-size: cover;
+        -webkit-background-size: cover;
+        background-size: cover;
+    }
 }
 
 /* -------- Colors for session shading -------- */
