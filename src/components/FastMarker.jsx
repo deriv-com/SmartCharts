@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from '../store/Connect';
 import { getUTCDate } from  '../utils';
 
-// Render given Components under stx-holder.
+// Render given Components under stx-subholder.
 // This component is used to position a marker on the chart.
 //
 // USAGE:
@@ -16,10 +16,14 @@ import { getUTCDate } from  '../utils';
 //
 //  <FastMarker
 //      markerRef={setRef}
+//      threshold={optional visibility threshold}
 //      className="your-css-class"
 //  >
 //     <your content here/>
 //  </FastMarker>
+//
+//  - the chart can have a zoom level, if `threshold` is provided
+//    the marker will only be shown if it's within that zoom threshold.
 
 class FastMarker extends Component {
     price = null;
@@ -48,7 +52,11 @@ class FastMarker extends Component {
 
         let top = 0, left = 0, show = true;
 
-        if (chart.dataSet
+        const threshold = +this.props.threshold || 0;
+        show = !threshold || stx.layout.candleWidth >= threshold;
+
+        if (show
+            && chart.dataSet
             && chart.dataSet.length
             && stx.mainSeriesRenderer
         ) {
