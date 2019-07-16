@@ -37,7 +37,7 @@ class FastMarker extends Component {
 
     updateCSS = () => {
         if (!this.elem || !this.ctx) { return; }
-        if (!this.date || !this.price) {
+        if (!this.date) {
             this.elem.style.visibility = 'hidden';
             return;
         }
@@ -53,7 +53,14 @@ class FastMarker extends Component {
             && stx.mainSeriesRenderer
         ) {
             const x = stx.pixelFromDate(this.date, chart);
-            const y = stx.pixelFromPrice(this.price, chart.panel);
+
+            // set the y value if there's a bottomWidget (used for vertical lines).
+            let y = this.stx.chart.yAxis.initialMarginBottom === 200 ? 125 : 20;
+
+            // use the price if it's provided (use for spot markers).
+            if (this.price) {
+                y = stx.pixelFromPrice(this.price, chart.panel);
+            }
 
             if (chart.yAxis.left > x
                 && chart.yAxis.top <= y
