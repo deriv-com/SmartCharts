@@ -699,6 +699,7 @@ class ChartStore {
 
     // Calling newChart with symbolObj as undefined refreshes the chart
     @action.bound newChart(symbolObj = this.currentActiveSymbol, params) {
+        if (!symbolObj) return;
         this.stxx.chart.symbolDisplay = symbolObj.name;
         this.loader.show();
         this.mainStore.state.setChartIsReady(false);
