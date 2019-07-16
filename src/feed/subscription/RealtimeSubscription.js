@@ -48,7 +48,6 @@ class RealtimeSubscription extends Subscription {
             if (this._stx.isDestroyed) {
                 const subscriptionId = resp.subscription.id;
                 this._binaryApi.forgetStream(subscriptionId);
-                console.error('No data should be coming in when chart is destroyed!');
                 return;
             }
             // We assume that 1st response is the history, and subsequent
