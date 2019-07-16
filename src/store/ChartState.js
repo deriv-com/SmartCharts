@@ -28,6 +28,7 @@ class ChartState {
     @observable shouldFetchTradingTimes = true;
     @observable refreshActiveSymbols;
     @observable hasReachedEndOfData = false;
+
     chartControlsWidgets;
 
     get comparisonStore() { return this.mainStore.comparison; }

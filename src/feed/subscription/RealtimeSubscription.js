@@ -46,6 +46,8 @@ class RealtimeSubscription extends Subscription {
         const tickHistoryPromise = new PendingPromise();
         const processTickHistory = (resp) => {
             if (this._stx.isDestroyed) {
+                const subscriptionId = resp.subscription.id;
+                this._binaryApi.forgetStream(subscriptionId);
                 console.error('No data should be coming in when chart is destroyed!');
                 return;
             }
