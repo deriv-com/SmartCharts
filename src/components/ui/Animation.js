@@ -91,15 +91,17 @@ export default function animateChart(stx, animationParameters, easeMachine) {
         }
 
         function completeLastBar(record) {
-            for (let md = chart.masterData.length - 1; md >= 0; md--) {
-                const bar = chart.masterData[md];
-                if (bar.Close || bar.Close === 0) {
-                    bar.Close = record.Close;
-                    if (record.LastSize) bar.LastSize = record.LastSize;
-                    if (record.LastTime) bar.LastTime = record.LastTime;
-                    self.updateCurrentMarketData({ Close:bar.Close, DT:bar.DT, LastSize:bar.LastSize, LastTime:bar.LastTime });
-                    self.createDataSet(null, null, { appending:true });
-                    return;
+            if (chart.masterData && chart.masterData.length) {
+                for (let md = chart.masterData.length - 1; md >= 0; md--) {
+                    const bar = chart.masterData[md];
+                    if (bar.Close || bar.Close === 0) {
+                        bar.Close = record.Close;
+                        if (record.LastSize) bar.LastSize = record.LastSize;
+                        if (record.LastTime) bar.LastTime = record.LastTime;
+                        self.updateCurrentMarketData({ Close:bar.Close, DT:bar.DT, LastSize:bar.LastSize, LastTime:bar.LastTime });
+                        self.createDataSet(null, null, { appending:true });
+                        return;
+                    }
                 }
             }
         }

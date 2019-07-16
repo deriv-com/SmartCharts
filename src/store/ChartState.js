@@ -113,7 +113,9 @@ class ChartState {
 
         if (chartType !== this.chartType && this.context) {
             this.setChartType(chartType);
-        } else if (granularity !== undefined && granularity !== this.granularity) {
+        }
+
+        if (granularity !== undefined && granularity !== this.granularity) {
             this.setChartGranularity(granularity);
         }
 
@@ -122,9 +124,9 @@ class ChartState {
             this.chartStore.activeSymbols.retrieveActiveSymbols(this.refreshActiveSymbols);
         }
 
-        if (!isStaticChart && scrollToEpoch && scrollToEpoch !== this.scrollToEpoch && !isSymbolChanged) {
+        if (!isStaticChart && scrollToEpoch !== this.scrollToEpoch) {
             this.scrollToEpoch = scrollToEpoch;
-            if (this.mainStore.chart && this.mainStore.chart.feed) {
+            if (this.mainStore.chart && this.mainStore.chart.feed && !isSymbolChanged) {
                 this.mainStore.chart.feed.onMasterDataUpdate(this.scrollChartToLeft);
             }
         }
