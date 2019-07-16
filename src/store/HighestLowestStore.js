@@ -1,16 +1,14 @@
 import {
-    action,
-    observable,
     reaction,
     when }             from 'mobx';
 import { getUTCEpoch } from '../utils';
 
 
 class HighestLowestStore {
-    @observable highestDate;
-    @observable highestPrice;
-    @observable lowestDate
-    @observable lowestPrice;
+    highest = null;
+    lowest = null;
+
+    injectionId = null;
 
     get feed()    { return this.mainStore.chart.feed; }
     get context() { return this.mainStore.chart.context; }
@@ -26,37 +24,82 @@ class HighestLowestStore {
         reaction(() => this.isHighestLowestMarkerEnabled, this.enableMarker);
     }
 
-    enableMarker = () => {
-        if (this.isHighestLowestMarkerEnabled) {
-            this.stx.append('createDataSegment', this.calculateHighestLowestByNewData);
+    clearInjection = () => {
+        if (this.injectionId) {
+            this.highestRef = null;
+            this.lowestRef = null;
+            this.stx.removeInjection(this.injectionId);
+            this.injectionId = null;
         }
     }
 
-    onContextReady = () => {
-        this.enableMarker();
-    };
+    enableMarker = () => {
+        if (this.isHighestLowestMarkerEnabled) {
+            this.injectionId = this.stx.append('createDataSegment', this.calculateHighestLowestByNewData);
+        } else {
+            this.clearInjection();
+        }
+    }
 
-    @action.bound calculateHighestLowestByNewData = () => {
+    setHighestRef = (ref) => {
+        this.highestRef = ref;
+        if (ref !== null) {
+            this.highestRef.value = ref.div.querySelector('.spot__value');
+        }
+    }
+    setLowestRef = (ref) => {
+        this.lowestRef = ref;
+
+        if (ref !== null) {
+            this.lowestRef.value = ref.div.querySelector('.spot__value');
+        }
+    }
+
+
+    onContextReady = this.enableMarker;
+
+    calculateHighestLowestByNewData = () => {
+        if (!this.highestRef || !this.lowestRef) { return; }
+
         if (this.stx.chart && this.stx.chart.dataSegment.length) {
-            this.highestPrice = undefined;
-            this.lowestPrice  = undefined;
+            this.highest = null;
+            this.lowest  = null;
+
             this.stx.chart.dataSegment.forEach((tick) => {
                 if (!tick) { return; }
 
-                const highest = (+this.highestPrice > tick.Close && this.highestDate < tick.DT)
-                    || (tick && tick.Close === null)  ? null : tick;
-                const lowest  = (+this.lowestPrice < tick.Close && this.lowestDate < tick.DT)
-                    || (tick && tick.Close === null)  ? null : tick;
-
-                if (highest) {
-                    this.highestDate  = getUTCEpoch(CIQ.strToDateTime(highest.Date));
-                    this.highestPrice = highest.Close.toFixed(this.decimalPlaces);
+                if (!this.highest || this.highest.Close <= tick.Close) {
+                    this.highest = tick;
                 }
-                if (lowest) {
-                    this.lowestDate  = getUTCEpoch(CIQ.strToDateTime(lowest.Date));
-                    this.lowestPrice = lowest.Close.toFixed(this.decimalPlaces);
+                if (!this.lowest || this.lowest.Close >= tick.Close) {
+                    this.lowest = tick;
                 }
             });
+        }
+
+        if (!this.highest || !this.lowest || this.highest.Close === this.lowest.Close) {
+            this.highestRef.setPosition({ epoch: null, price: null });
+            this.lowestRef.setPosition({ epoch: null, price: null });
+            return;
+        }
+
+        if (this.highest) {
+            const price = this.highest.Close.toFixed(this.decimalPlaces);
+
+            this.highestRef.setPosition({
+                epoch: getUTCEpoch(CIQ.strToDateTime(this.highest.Date)),
+                price,
+            });
+
+            this.highestRef.value.textContent = price;
+        }
+        if (this.lowest) {
+            const price = this.lowest.Close.toFixed(this.decimalPlaces);
+            this.lowestRef.setPosition({
+                epoch: getUTCEpoch(CIQ.strToDateTime(this.lowest.Date)),
+                price,
+            });
+            this.lowestRef.value.textContent = price;
         }
     };
 }

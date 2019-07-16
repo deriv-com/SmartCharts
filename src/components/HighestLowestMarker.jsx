@@ -1,42 +1,41 @@
-import React, { memo } from 'react';
-import Marker          from './Marker.jsx';
+import React  from 'react';
+import FastMarker from './FastMarker.jsx';
 import { connect }     from '../store/Connect';
 
 import '../../sass/components/_highest-lowest-marker.scss';
 
-const HighestLowestMarker = memo(({
-    highestDate,
-    highestPrice,
-    lowestDate,
-    lowestPrice,
+const HighestLowestMarker = ({
+    setHighestRef,
+    setLowestRef,
 }) => (
-    highestPrice && lowestPrice && highestDate !== lowestDate
-        ? <>
-    <Marker
-        x={highestDate}
-        xPositioner="epoch"
-        y={+highestPrice}
-        yPositioner="value"
-    >
-        <span className="spot__shape-circule spot__fill-blue" />
-        <span className="spot__label" data-label-pos="top"> {`${t.translate('H')}: ${highestPrice}`} </span>
-    </Marker>
-    <Marker
-        x={lowestDate}
-        xPositioner="epoch"
-        y={+lowestPrice}
-        yPositioner="value"
-    >
-        <span className="spot__shape-circule spot__fill-red" />
-        <span className="spot__label" data-label-pos="bottom"> {`${t.translate('L')} : ${lowestPrice}`} </span>
-    </Marker>
-    </>
-        : <></>
-));
+    <>
+        <FastMarker
+            markerRef={setHighestRef}
+            className="ciq-highest-price"
+        >
+            <span className="spot__shape-circule spot__fill-blue" />
+            <span className="spot__label" data-label-pos="top">
+                <span>{`${t.translate('H')}: `}</span>
+                <span className="spot__value" />
+            </span>
+        </FastMarker>
 
-export default connect(({ highestLowest:s }) => ({
-    highestDate  : s.highestDate,
-    highestPrice : s.highestPrice,
-    lowestDate   : s.lowestDate,
-    lowestPrice  : s.lowestPrice,
+        <FastMarker
+            markerRef={setLowestRef}
+            className="ciq-lowest-price"
+        >
+            <span className="spot__shape-circule spot__fill-red" />
+            <span className="spot__label" data-label-pos="bottom">
+                <span>{`${t.translate('L')} : `}</span>
+                <span className="spot__value" />
+            </span>
+        </FastMarker>
+    </>
+);
+
+export default connect((
+    { highestLowest:s },
+) => ({
+    setHighestRef : s.setHighestRef,
+    setLowestRef : s.setLowestRef,
 }))(HighestLowestMarker);

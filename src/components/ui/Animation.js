@@ -80,6 +80,10 @@ export default function animateChart(stx, animationParameters, easeMachine) {
     });
 
     stx.prepend('updateChartData', function (appendQuotes, chart, params) {
+        if (this.scrollwheel_is_on) {
+            this.scrollwheel_is_on = false;
+            return false; // skipt the animation
+        }
         const self = this;
         if (!chart) {
             chart = self.chart;
@@ -179,7 +183,8 @@ export default function animateChart(stx, animationParameters, easeMachine) {
                     unanimateScroll();
                 }
             };
-        }
+        } /* end function */
+
         if (supportedChartType) {
             const quote = appendQuotes[appendQuotes.length - 1];
             this.prevQuote = this.currentQuote();  // <---- prevQuote logic has been changed to prevent forward/back jitter when more than one tick comes in between animations
@@ -209,12 +214,14 @@ export default function animateChart(stx, animationParameters, easeMachine) {
             }
             chart.closePendingAnimation = quote.Close;
             const start = (chartJustAdvanced && !linearChart) ? quote.Open : this.prevQuote.Close;
+
             tickAnimator.run(cb(quote, CIQ.clone(this.prevQuote), chartJustAdvanced), {
                 Close: start,
                 micropixels: this.nextMicroPixels,
                 lineOffset: beginningOffset,
             }, { Close: quote.Close, micropixels: this.micropixels, lineOffset: 0 });
-            return true; // bypass default behavior in favor of animation
+
+            return true; // bypass default behavior if the animation is on
         }
     });
 
