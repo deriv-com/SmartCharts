@@ -7,16 +7,12 @@ class PriceLine extends Component {
 
     render() {
         const {
-            top,
             className,
             draggable,
             isDragging,
             priceDisplay,
             setDragLine,
             visible,
-            zIndex,
-            uncentered,
-            offScreen,
             lineStyle,
             color,
             foregroundColor,
@@ -26,11 +22,9 @@ class PriceLine extends Component {
         return (
             <div
                 className={`chart-line horizontal ${draggable ? 'draggable' : ''} ${isDragging ? 'dragging' : ''} ${className || ''}`}
-                style={{ top, zIndex, color: foregroundColor, borderColor: color }}
+                style={{ top: 0, color: foregroundColor, borderColor: color }}
                 ref={setDragLine}
                 hidden={!visible}
-                uncentered={uncentered ? 'true' : undefined}
-                off-screen={offScreen ? 'true' : undefined}
             >
                 <div className="drag-line" style={{ borderTopStyle: lineStyle }} />
                 <div className="draggable-area" />
