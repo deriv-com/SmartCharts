@@ -61,19 +61,7 @@ class FastMarker extends Component {
             && stx.mainSeriesRenderer
         ) {
             const x = stx.pixelFromDate(this.date, chart);
-
-            // set the y value if there's a bottomWidget (used for vertical lines).
-            let y = this.stx.chart.yAxis.initialMarginBottom === 200 ? 125 : 20;
-
-            // set the y value to 0 if this.price is equal to 0 (used for pagination loader).
-            if (this.price === 0) {
-                y = this.price;
-            }
-
-            // use the price if it's provided (used for spot markers).
-            if (this.price) {
-                y = stx.pixelFromPrice(this.price, chart.panel);
-            }
+            const y = this.price ? stx.pixelFromPrice(this.price, chart.panel) : 0;
 
             if (chart.yAxis.left > x
                 && chart.yAxis.top <= y
