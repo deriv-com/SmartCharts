@@ -38,7 +38,8 @@
             color: themed('CrosshairText');
             background: themed('CrosshairBg');
         }
-        display: flex;
+        display: none;
+        // we make it display flex in js
         flex-direction: column;
 
         &:after,

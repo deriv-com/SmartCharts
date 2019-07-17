@@ -148,6 +148,7 @@ class CrosshairStore {
             left: CIQ.ChartEngine.crosshairX - this.stx.left,
             top: CIQ.ChartEngine.crosshairY - this.stx.top,
             rows,
+            show: true,
         });
     }
 
@@ -354,7 +355,7 @@ class CrosshairStore {
 
     // YES! we are manually patching DOM, Because we don't want to pay
     // for react reconciler & mox tracking observables.
-    updateTooltipPosition({ top, left, rows }) {
+    updateTooltipPosition({ top, left, rows, show = false }) {
         const crosshair = this.stx.container.querySelector('.cq-crosshair');
 
         crosshair.style.transform = `translate(${left}px, ${top}px)`;
@@ -375,6 +376,9 @@ class CrosshairStore {
                     <span>${r.name !== 'DT' ? r.value : ''}</span>
                 </div>
             `).join('');
+            if (show) {
+                content.style.display = 'flex';
+            }
         }
     }
 }
