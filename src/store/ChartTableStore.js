@@ -54,7 +54,7 @@ export default class ChartTableStore {
         const minutes = DT.getMinutes();
         const seconds = DT.getSeconds();
 
-        const date = `${year}-${month > 9 ? month : `0${month}`}-${day > 9 ? day : `0${day}`}`;
+        const date = `${day > 9 ? day : `0${day}`}-${month > 9 ? month : `0${month}`}-${year}`;
         const time = `${hours > 9 ? hours : `0${hours}`}:${minutes > 9 ? minutes : `0${minutes}`}:${seconds > 9 ? seconds : `0${seconds}`}`;
         const dateTime = `${date} ${time}`;
 
@@ -67,8 +67,13 @@ export default class ChartTableStore {
             this.tableData.unshift({ Date:dateTime, Close, Change:Math.abs(change).toFixed(this.decimalPlaces), Status: status });
         } else if (!this.isTick && Open && High && Low && Close) {
             if (lastTick.Date === dateTime) {
+                const firstItemChange = Close - this.tableData[1].Close;
+                let firstItemStatus = '';
+                if (Math.sign(firstItemChange) !== 0) firstItemStatus = (Math.sign(firstItemChange) === 1 ? 'up' : 'down');
+
                 lastTick.Close = Close.toFixed(this.decimalPlaces);
-                lastTick.Change = Math.abs(Close - this.tableData[1].Close).toFixed(this.decimalPlaces);
+                lastTick.Change = Math.abs(firstItemChange).toFixed(this.decimalPlaces);
+                lastTick.Status = firstItemStatus;
             } else {
                 this.tableData.unshift(
                     {
