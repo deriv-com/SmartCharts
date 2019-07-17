@@ -108,15 +108,17 @@ class Chart extends Component {
                                         ))}
                                     </RenderInsideChart>
                                     <RenderInsideChart at="subholder">
+                                        {
+                                            !isCandle && !isSpline && isHighestLowestMarkerEnabled
+                                                && <HighestLowestMarker />
+                                        }
+                                    </RenderInsideChart>
+                                    <RenderInsideChart at="subholder">
                                         {children}
 
                                         {
                                             isOnPagination
                                                 && <PaginationLoader />
-                                        }
-                                        {
-                                            !isCandle && !isSpline && isHighestLowestMarkerEnabled
-                                                && <HighestLowestMarker />
                                         }
                                         <CurrentSpot />
                                     </RenderInsideChart>

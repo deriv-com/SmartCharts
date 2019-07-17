@@ -1,15 +1,10 @@
-import { action, computed, observable, when } from 'mobx';
+import { when } from 'mobx';
 
 class CurrentSpotStore {
     constructor(mainStore) {
         this.mainStore = mainStore;
         when(() => this.context, this.onContextReady);
     }
-
-    @observable top = 0;
-    @observable left = 0;
-    @observable show = false;
-    @computed get pip() { return this.mainStore.chart.currentActiveSymbol.decimal_places; }
 
     get context() { return this.mainStore.chart.context; }
     get stx() { return this.context.stx; }
@@ -19,47 +14,53 @@ class CurrentSpotStore {
         if (this.mainStore.state.isAnimationEnabled) this.stx.append('draw', this.updateSpot);
     }
 
-    @action.bound updateSpot() {
+    updateSpot = () => {
+        const stx = this.stx;
+        const cq_spot = this.context.topNode.querySelector('.cq-spot');
+
         if (this.state.endEpoch) {
-            this.show = false;
+            cq_spot.style.display = 'none';
             return;
         }
-        const chart = this.stx.chart;
-        const layout = this.stx.layout;
-        const mainSeriesRenderer = this.stx.mainSeriesRenderer;
-        let visible = true;
+        const chart = stx.chart;
+        const layout = stx.layout;
+        const mainSeriesRenderer = stx.mainSeriesRenderer;
 
+        let top = 0,
+            left = 0,
+            show = true;
 
         if (chart.dataSet
             && chart.dataSet.length
             && mainSeriesRenderer
         ) {
             const panel = chart.panel;
-            const currentQuote = this.stx.currentQuote();
+            const currentQuote = stx.currentQuote();
             if (!currentQuote) { return; }
             const price = currentQuote.Close;
-            const x = this.stx.pixelFromTick(currentQuote.tick, chart) + (chart.lastTickOffset || 0);
-            const y = this.stx.pixelFromPrice(price, panel);
+            const x = stx.pixelFromTick(currentQuote.tick, chart) + (chart.lastTickOffset || 0);
+            const y = stx.pixelFromPrice(price, panel);
 
             if (chart.yAxis.left > x
                 && chart.yAxis.top <= y
                 && chart.yAxis.bottom >= y) {
                 // Limit precision to reduce wobbly-ness in the spot:
-                this.top = +y.toFixed(this.pip);
-                if (Math.abs(this.left - x) >= 1) {
-                    this.left = Math.round(x);
-                }
+                top = +y;
+                left = Math.round(x);
             } else {
-                visible = false;
+                show = false;
             }
         }
-        this.show = visible
-            && !this.state.endEpoch
-            && (
-                layout.chartType !== 'candle'
+        show = show && (
+            layout.chartType !== 'candle'
                 && layout.chartType !== 'colored_bar'
                 && layout.chartType !== 'hollow_candle'
-            );
+        ) && !this.state.endEpoch;
+
+        // YES! we are manually patching DOM, Because we don't want to pay
+        // for react reconciler & mox tracking observables.
+        cq_spot.style.transform = `translate(${left}px, ${top}px)`;
+        cq_spot.style.display = show ? 'initial' : 'none';
     }
 }
 

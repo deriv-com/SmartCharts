@@ -25,6 +25,7 @@ import DeleteIcon      from '../../sass/icons/delete/ic-delete.svg';
 import DownIcon        from '../../sass/icons/chart/ic-down.svg';
 import JumpToTodayIcon from '../../sass/icons/chart/jump-to-today.svg';
 import MaximizeIcon    from '../../sass/icons/chart/ic-maximize.svg';
+import '../utils/raf';
 
 function renderSVGString(icon) {
     const vb = icon.viewBox.split(' ').slice(2);
@@ -255,9 +256,9 @@ class ChartStore {
                 if ((!this.mainSeriesRenderer || !this.mainSeriesRenderer.standaloneBars) && !this.standaloneBars[layout.chartType]) this.micropixels += layout.candleWidth / 2; // bar charts display at beginning of candle
 
                 if (this.isHistoricalMode() && _self.isMobile) {
-                    exactScroll = parseInt(exactScroll * 0.8, 10);
+                    exactScroll = parseInt(exactScroll * 0.8, 10); // eslint-disable-line
                 } else if (this.isHistoricalMode()) {
-                    exactScroll = parseInt(exactScroll * 0.9, 10);
+                    exactScroll = parseInt(exactScroll * 0.9, 10); // eslint-disable-line
                 }
 
                 if (params.animate) {
@@ -425,6 +426,20 @@ class ChartStore {
         engineParams.layout = chartLayout;
 
         const stxx = this.stxx = new CIQ.ChartEngine(engineParams);
+        const tickAnimator = new CIQ.EaseMachine(Math.easeOutCubic, 500);
+
+        // macos trackpad is so sensetive that i'll break our zoom animation.
+        // unofortunately there is no way to detect a trackpad from javascript,
+        // here we drop 'wheel' events shorter that 40ms
+        // TODO: email chariq support to fix this.
+        const org_run = stxx.animations.zoom.run.bind(stxx.animations.zoom);
+        let wheelInMotion = false;
+        stxx.animations.zoom.run = (fc, startValues, endValues) => {
+            if (wheelInMotion) return;
+            wheelInMotion = true;
+            setTimeout(() => { wheelInMotion = false; }, 40);
+            return org_run(fc, startValues, endValues);
+        };
 
         stxx.isAutoScale = settings && settings.isAutoScale !== false;
 
@@ -435,7 +450,7 @@ class ChartStore {
         deleteElement.textContent = t.translate('right-click to delete');
         manageElement.textContent = t.translate('right-click to manage');
 
-        if (this.state.isAnimationEnabled) animateChart(stxx, { stayPut: true });
+        if (this.state.isAnimationEnabled) animateChart(stxx, { stayPut: true }, tickAnimator);
 
         // connect chart to data
         this.feed = new Feed(this.api, stxx, this.mainStore, this.tradingTimes);
@@ -684,6 +699,7 @@ class ChartStore {
 
     // Calling newChart with symbolObj as undefined refreshes the chart
     @action.bound newChart(symbolObj = this.currentActiveSymbol, params) {
+        if (!symbolObj) return;
         this.stxx.chart.symbolDisplay = symbolObj.name;
         this.loader.show();
         this.mainStore.state.setChartIsReady(false);
