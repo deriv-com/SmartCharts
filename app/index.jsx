@@ -282,7 +282,7 @@ class App extends Component {
                 isConnectionOpened={isConnectionOpened}
                 shouldFetchTradingTimes
             >
-                {endEpoch ? (
+                {endEpoch && this.getIsChartReady() ? (
                     <Marker
                         className="chart-marker-historical"
                         x={endEpoch}

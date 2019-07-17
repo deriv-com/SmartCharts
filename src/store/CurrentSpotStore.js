@@ -15,11 +15,11 @@ class CurrentSpotStore {
     }
 
     updateSpot = () => {
+        let show = false;
         const stx = this.stx;
         const cq_spot = this.context.topNode.querySelector('.cq-spot');
 
         if (this.state.endEpoch) {
-            cq_spot.style.display = 'none';
             return;
         }
         const chart = stx.chart;
@@ -27,8 +27,7 @@ class CurrentSpotStore {
         const mainSeriesRenderer = stx.mainSeriesRenderer;
 
         let top = 0,
-            left = 0,
-            show = true;
+            left = 0;
 
         if (chart.dataSet
             && chart.dataSet.length
@@ -47,9 +46,8 @@ class CurrentSpotStore {
                 // Limit precision to reduce wobbly-ness in the spot:
                 top = +y;
                 left = Math.round(x);
-            } else {
-                show = false;
             }
+            show = true;
         }
         show = show && (
             layout.chartType !== 'candle'

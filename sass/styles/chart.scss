@@ -900,6 +900,7 @@ $spot-color: #0298d3;
     margin-top: -3px;
     box-shadow: 0 0 0 rgba($COLOR_ORANGE, 0.6);
     z-index: -2 !important;
+    display: none;
 
     &:before {
         content: '\25CF';
