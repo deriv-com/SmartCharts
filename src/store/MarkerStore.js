@@ -13,7 +13,7 @@ export default class MarkerStore {
     children;
     x;
     y;
-    @observable display;
+    @observable display = 'none';
     @observable left;
     @observable bottom;
 
