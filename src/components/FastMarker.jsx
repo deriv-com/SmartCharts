@@ -49,6 +49,7 @@ class FastMarker extends Component {
         const elem = this.elem;
         const stx = this.stx;
         const chart = stx.chart;
+        window.stx = stx;
 
         let top = 0, left = 0, show = true;
 
@@ -60,7 +61,25 @@ class FastMarker extends Component {
             && chart.dataSet.length
             && stx.mainSeriesRenderer
         ) {
-            const x = stx.pixelFromDate(this.date, chart);
+            const tick_idx = stx.tickFromDate(this.date, chart);
+            let x = stx.pixelFromTick(tick_idx, chart);
+
+            // ChartIQ doesn't support placing markers in the middle of ticks.
+            const bar_idx = tick_idx - chart.dataSet.length + chart.scroll;
+            const bar = chart.dataSegment[bar_idx];
+            // Here we interpolate the pixel distance between two adjacent ticks.
+            if (bar && bar.DT < this.date) {
+                const bar_next = chart.dataSegment[bar_idx + 1];
+                const bar_prev = bar_idx > 0 ? chart.dataSegment[bar_idx - 1] : null;
+                if (bar_next && bar_next.Close && bar_next.DT > this.date) {
+                    const pixelx_to_next_bar = stx.pixelFromTick(tick_idx + 1, chart) - x;
+                    x +=  (this.date - bar.DT) / (bar_next.DT - bar.DT) * pixelx_to_next_bar;
+                } else if (bar_prev && bar_prev.Close) {
+                    const pixelx_from_prev_bar = x - stx.pixelFromTick(tick_idx - 1, chart);
+                    x +=  (this.date - bar.DT) / (bar.DT - bar_prev.DT) * pixelx_from_prev_bar;
+                }
+            }
+
             const y = this.price ? stx.pixelFromPrice(this.price, chart.panel) : 0;
 
             if (chart.yAxis.left > x
