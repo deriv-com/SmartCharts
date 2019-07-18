@@ -428,10 +428,10 @@ class ChartStore {
         const stxx = this.stxx = new CIQ.ChartEngine(engineParams);
         const tickAnimator = new CIQ.EaseMachine(Math.easeOutCubic, 500);
 
-        // macos trackpad is so sensetive that i'll break our zoom animation.
-        // unofortunately there is no way to detect a trackpad from javascript,
+        // macos trackpad is so sensitive that it'll break our zoom animation.
+        // unfortunately there is no way to detect a trackpad from javascript,
         // here we drop 'wheel' events shorter that 40ms
-        // TODO: email chariq support to fix this.
+        // TODO: email chartiq support to fix this.
         const org_run = stxx.animations.zoom.run.bind(stxx.animations.zoom);
         let wheelInMotion = false;
         stxx.animations.zoom.run = (fc, startValues, endValues) => {

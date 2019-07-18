@@ -6,6 +6,7 @@ class PaginationLoaderStore {
 
     get feed()    { return this.mainStore.chart.feed; }
     get context() { return this.mainStore.chart.context; }
+    get stx()     { return this.mainStore.chart.stxx; }
 
     constructor(mainStore) {
         this.mainStore = mainStore;
@@ -15,7 +16,17 @@ class PaginationLoaderStore {
     onContextReady = () => {
         this.feed.onStartPagination(this.setOnPagination.bind(this));
         this.feed.onPagination(this.setOnPagination.bind(this));
+
+        // this injection will stop the swiping and mouse wheel
+        // operations when isOnPagination is true
+        this.stx.prepend('mouseWheel', this.onMouseWheel);
     };
+
+    onMouseWheel = (e) => {
+        e.preventDefault();
+        if (this.isOnPagination) return true; // skip swiping
+        // continue swiping
+    }
 
     setRef = (ref) => {
         this.ref = ref;
