@@ -77,6 +77,18 @@ class FastMarker extends Component {
                     const pixelx_from_prev_bar = x - stx.pixelFromTick(tick_idx - 1, chart);
                     x +=  (this.date - bar.DT) / (bar.DT - bar_prev.DT) * pixelx_from_prev_bar;
                 }
+
+                // We don't want to touch master data on marker draw.
+                // However our design requires a tooltip on start time marker,
+                // and crosshair gets the tooltip from master data
+                // TODO: remove the following hack.
+                stx.updateChartData(
+                    { DT: this.date, Close: null },
+                    null,
+                    { fillGaps: true },
+                );
+                stx.createDataSet();
+                // end TODO
             }
 
             const y = this.price ? stx.pixelFromPrice(this.price, chart.panel) : 0;
