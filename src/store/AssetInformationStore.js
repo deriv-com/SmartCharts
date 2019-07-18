@@ -32,6 +32,7 @@ export default class AssetInformationStore {
         // do not query dom on each frame
         if (!this._container) {
             this._container = this.context.topNode.querySelector('.ciq-asset-information');
+            if (!this._container) return;
 
             this._spot = this._container.querySelector('.ciq-ai-spot');
             this._open = this._container.querySelector('.ciq-ai-open');

@@ -116,7 +116,7 @@ export default class ChartSettingStore {
 
     @action.bound setLanguage(lng) {
         if (lng === this.language.key) { return; }
-        this.language = this.languages.find(item => item.key === lng);
+        this.language = this.languages.find(item => item.key === lng) || this.defaultLanguage;
         t.setLanguage(lng);
         logEvent(LogCategories.ChartControl, LogActions.ChartSetting, `Change language to ${lng}`);
         this.saveSetting();
