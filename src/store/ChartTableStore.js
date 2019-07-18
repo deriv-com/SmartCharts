@@ -71,6 +71,8 @@ export default class ChartTableStore {
                 let firstItemStatus = '';
                 if (Math.sign(firstItemChange) !== 0) firstItemStatus = (Math.sign(firstItemChange) === 1 ? 'up' : 'down');
 
+                lastTick.High = High.toFixed(this.decimalPlaces);
+                lastTick.Low = Low.toFixed(this.decimalPlaces);
                 lastTick.Close = Close.toFixed(this.decimalPlaces);
                 lastTick.Change = Math.abs(firstItemChange).toFixed(this.decimalPlaces);
                 lastTick.Status = firstItemStatus;
