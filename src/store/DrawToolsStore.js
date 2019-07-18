@@ -37,7 +37,6 @@ export default class DrawToolsStore {
 
     onContextReady = () => {
         document.addEventListener('keydown', this.closeOnEscape, false);
-        this.stx.addEventListener('drawing', this.noTool);
         this.stx.prepend('deleteHighlighted', this.onDeleteHighlighted);
         this.drawToolsItems = [
             { id: 'annotation',  text: t.translate('Annotation') },
@@ -124,11 +123,9 @@ export default class DrawToolsStore {
     }
 
     noTool = () => {
-        const count = this.stx.drawingObjects.length;
-        if ((this.menu.open && this.context) || this._pervDrawingObjectCount !== count) {
+        if (this.menu.open && this.context) {
             this.stx.changeVectorType('');
         }
-        this._pervDrawingObjectCount = count;
     };
 
     @action.bound clearAll() {
