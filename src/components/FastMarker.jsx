@@ -49,7 +49,6 @@ class FastMarker extends Component {
         const elem = this.elem;
         const stx = this.stx;
         const chart = stx.chart;
-        window.stx = stx;
 
         let top = 0, left = 0, show = true;
 
