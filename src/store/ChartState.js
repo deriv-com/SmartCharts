@@ -86,7 +86,6 @@ class ChartState {
 
         this.chartId = id;
         this.chartStatusListener = chartStatusListener;
-        this.endEpoch = endEpoch;
         this.isAnimationEnabled = isAnimationEnabled;
         this.isConnectionOpened = isConnectionOpened;
         this.isStaticChart = isStaticChart;
@@ -95,7 +94,6 @@ class ChartState {
         this.settings = settings;
         this.shouldFetchTradingTimes = shouldFetchTradingTimes;
         this.showLastDigitStats = showLastDigitStats;
-        this.startEpoch = startEpoch;
 
         if (chartControlsWidgets !== this.chartControlsWidgets) {
             this.chartControlsWidgets = chartControlsWidgets;
@@ -111,6 +109,12 @@ class ChartState {
             }
         }
 
+        if (onExportLayout !== this.onExportLayout) {
+            this.onExportLayout = onExportLayout;
+            this.exportLayout();
+        }
+
+
         if (chartType !== this.chartType && this.context) {
             this.setChartType(chartType);
         }
@@ -124,13 +128,6 @@ class ChartState {
             this.chartStore.activeSymbols.retrieveActiveSymbols(this.refreshActiveSymbols);
         }
 
-        if (!isStaticChart && scrollToEpoch !== this.scrollToEpoch) {
-            this.scrollToEpoch = scrollToEpoch;
-            if (this.mainStore.chart && this.mainStore.chart.feed && !isSymbolChanged) {
-                this.mainStore.chart.feed.onMasterDataUpdate(this.scrollChartToLeft);
-            }
-        }
-
         if (clearChart !== this.clearChart) {
             this.clearChart = clearChart;
             this.cleanChart();
@@ -141,9 +138,28 @@ class ChartState {
             this.importLayout();
         }
 
-        if (onExportLayout !== this.onExportLayout) {
-            this.onExportLayout = onExportLayout;
-            this.exportLayout();
+        if (!isStaticChart && scrollToEpoch !== this.scrollToEpoch) {
+            this.scrollToEpoch = scrollToEpoch;
+            if (this.mainStore.chart && this.mainStore.chart.feed && !isSymbolChanged) {
+                this.mainStore.chart.feed.onMasterDataUpdate(this.scrollChartToLeft);
+            }
+        }
+
+        // This if statement should be always after setting `this.scrollToEpoch` value
+        if (this.startEpoch !== startEpoch || this.endEpoch !== endEpoch) {
+            this.startEpoch = startEpoch;
+            this.endEpoch = endEpoch;
+
+            if (isStaticChart && this.stxx && this.granularity === this.mainStore.chart.granularity) {
+                // Reload the chart if it is a static chart and the granularity hasn't changed
+                this.mainStore.chart.newChart();
+            } else if (this.mainStore.chart.feed) {
+                /* When layout is importing and range is changing as the same time we dont need to set the range,
+                   the imported layout witll take care of it. */
+                if (!this.importedLayout && !this.scrollToEpoch) {
+                    this.mainStore.chart.feed.onRangeChanged(true);
+                }
+            }
         }
 
         if (removeAllComparisons) {

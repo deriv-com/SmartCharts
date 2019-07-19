@@ -47,6 +47,10 @@
 
 import { calculateGranularity } from '../../utils';
 
+Math.linearTween = function (t, b, c, d) {
+    return c * t / d + b;
+};
+
 export default function animateChart(stx, animationParameters, easeMachine) {
     let params = {
         stayPut: false,
@@ -225,70 +229,49 @@ export default function animateChart(stx, animationParameters, easeMachine) {
         }
     });
 
-    stx.prepend('updateChartData', function () {
-        stx.prevQuote = this.currentQuote();
-        stx.isNewTick = true;
+    stx.prepend('updateChartData', function (newQuotes) {
+        stx.prevQuote = this.currentQuote() || newQuotes[0];
+        stx.isNewTick = !this.prevQuote || newQuotes.slice(-1)[0].DT > this.prevQuote.DT;
         stx.chart.granularity = calculateGranularity(this.layout.interval, this.layout.timeUnit);
         stx.chart.lockScroll = !stx.chart.granularity;
     });
 
     stx.append('updateChartData', function (newQuotes) {
-        if (!stx.chart.lockAutoScroll && newQuotes && newQuotes.length) {
-            stx.animations.liveScroll = stx.animations.liveScroll || new CIQ.EaseMachine(Math.easeOutCubic, 3000);
-            if (stx.isHome() && this.prevQuote && newQuotes.slice(-1)[0].DT > this.prevQuote.DT && stx.chart.granularity === 0) {
-                if (!stx.animations.liveScroll.running) {
-                    let ticksPassed = 0;
-                    stx.animations.liveScroll.run((x) => {
-                        if (!stx.isHome() || ticksPassed >= 2 || stx.chart.lockAutoScroll) {
-                            this.animations.liveScroll.stop();
-                        }
+        if (stx.isHome() && !stx.chart.lockAutoScroll && newQuotes && newQuotes.length && stx.isNewTick) {
+            const timeInterval = newQuotes.slice(-1)[0].DT - this.prevQuote.DT;
 
-                        if (Math.abs(this.micropixels / this.layout.candleWidth) < 1) {
-                            let interval = 0;
-                            try {
-                                interval = Math.floor((this.chart.dataSegment.slice(-1)[0].DT.getTime() - this.chart.dataSegment.slice(-2)[0].DT.getTime()) / 1000);
-                            } catch (err) {
-                                interval = 2;
-                            }
-                            interval = Math.floor((interval || 2) / (stx.chart.granularity || 1));
-                            const temp = this.micropixels - (this.layout.candleWidth / (50 * (interval + ticksPassed)));
-                            this.micropixels = temp || temp === 0 ? temp : this.micropixels;
-                            this.draw();
-                        } else {
-                            const sign = this.micropixels < 0 ? -1 : 1;
-                            this.micropixels = (Math.abs(this.micropixels) - this.layout.candleWidth) * sign;
+            if (stx.animations.liveScroll) {
+                this.chart.scroll--;
+                this.micropixels = this.micropixels > 0 ? this.layout.candleWidth - this.micropixels : this.layout.candleWidth + this.micropixels;
+            }
 
-                            if (stx.isNewTick) {
-                                if (this.chart.scroll < this.chart.maxTicks) {
-                                    this.chart.scroll = this.chart.dataSegment.length - 1;
-                                } else {
-                                    this.chart.scroll = this.chart.dataSegment.length - Math.floor(this.chart.maxTicks / 5);
-                                }
-                                ticksPassed = ticksPassed > 1 ? ticksPassed - 1 : 0;
-                            } else {
-                                this.chart.scroll--;
-                                ticksPassed++;
-                            }
+            stx.animations.liveScroll = stx.animations.liveScroll || new CIQ.EaseMachine(Math.linearTween, timeInterval + 1000);
 
-                            this.draw();
-                            this.animations.liveScroll.currentValues.default = 0;
-                            this.animations.liveScroll.startTime = new Date().getTime();
-                        }
-                        stx.isNewTick = false;
-                    }, 0, this.layout.candleWidth);
+            if (stx.animations.liveScroll.running) {
+                stx.animations.liveScroll.stop();
+            }
+
+            stx.animations.liveScroll.run((bar) => {
+                this.micropixels = -bar;
+                this.draw();
+            }, 0, stx.layout.candleWidth);
+        } else if (!stx.isHome() || stx.chart.lockAutoScroll) {
+            if (stx.animations.liveScroll) {
+                stx.animations.liveScroll.stop();
+            }
+
+            if (stx.chart.lockAutoScroll) {
+                if (stx.isNewTick && this.chart.entryTick !== null && this.chart.entryTick !== undefined) {
+                    const visibleTicks = this.chart.dataSet.length - (this.chart.entryTick || 0) + 1;
+                    this.setMaxTicks(visibleTicks + 3);
+                } else if (stx.isNewTick) {
+                    this.setMaxTicks(this.chart.dataSet.length + (Math.floor(this.chart.dataSet.length / 5) || 2));
+                    this.chart.scroll = this.chart.dataSet.length + (Math.floor(this.chart.dataSet.length / 10) || 1);
                 }
-            }
-        } else if (stx.chart.lockAutoScroll) {
-            if (stx.isNewTick && this.chart.entryTick !== null && this.chart.entryTick !== undefined) {
-                const visibleTicks = this.chart.dataSet.length - (this.chart.entryTick || 0) + 1;
-                this.setMaxTicks(visibleTicks + 3);
-            } else {
-                this.setMaxTicks(this.chart.dataSet.length + (Math.floor(this.chart.dataSet.length / 5) || 2));
-                this.chart.scroll = this.chart.dataSet.length + (Math.floor(this.chart.dataSet.length / 10) || 1);
-            }
 
-            this.micropixels = 0;
-            this.draw();
+                this.micropixels = 0;
+                this.draw();
+            }
         }
     });
 }

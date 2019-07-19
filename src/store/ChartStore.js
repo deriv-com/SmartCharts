@@ -25,7 +25,7 @@ import DeleteIcon      from '../../sass/icons/delete/ic-delete.svg';
 import DownIcon        from '../../sass/icons/chart/ic-down.svg';
 import JumpToTodayIcon from '../../sass/icons/chart/jump-to-today.svg';
 import MaximizeIcon    from '../../sass/icons/chart/ic-maximize.svg';
-import '../utils/raf';
+// import '../utils/raf';
 
 function renderSVGString(icon) {
     const vb = icon.viewBox.split(' ').slice(2);
