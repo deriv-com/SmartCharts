@@ -126,14 +126,17 @@
 .shade {
     position: absolute;
     width: 100%;
-    right: 0px;
+    top: -120px;
+    left: 0;
+    right: 0;
+    height: 120px !important;
     opacity: 0.3;
     transition: opacity 0.1s ease-out;
 }
 
 /* css gradients are only partially supported in Safari, but will work here since colors are not premultiplied */
 .top-shade {
-    background-image: linear-gradient(to bottom, transparent 30%, var(--shade-color)); /* stylelint-disable-line plugin/no-unsupported-browser-features */
+    background-image: linear-gradient(to bottom, transparent, var(--shade-color)); /* stylelint-disable-line plugin/no-unsupported-browser-features */
 }
 
 .between-shade {
@@ -142,5 +145,5 @@
 }
 
 .bottom-shade {
-    background-image: linear-gradient(to bottom, var(--shade-color), transparent 70%); /* stylelint-disable-line plugin/no-unsupported-browser-features */
+    background-image: linear-gradient(to bottom, var(--shade-color), transparent); /* stylelint-disable-line plugin/no-unsupported-browser-features */
 }

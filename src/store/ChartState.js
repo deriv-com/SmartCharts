@@ -20,8 +20,6 @@ class ChartState {
     @observable onExportLayout;
     @observable clearChart;
     @observable importedLayout;
-    @observable isOnPagination = false;
-    @observable paginationEndEpoch;
     @observable isChartClosed = false;
     @observable shouldMinimiseLastDigits = false;
     @observable isStaticChart = false;
@@ -48,9 +46,6 @@ class ChartState {
         this.stxx.addEventListener('symbolChange', this.saveLayout.bind(this));
         this.stxx.addEventListener('drawing', this.saveDrawings.bind(this));
         this.stxx.addEventListener('move', this.scrollListener.bind(this));
-
-        this.chartStore.feed.onStartPagination(this.setOnPagination.bind(this));
-        this.chartStore.feed.onPagination(this.setOnPagination.bind(this));
 
         this.rootNode = this.mainStore.chart.rootNode;
         this.granularity = this.chartStore.granularity;
@@ -228,11 +223,6 @@ class ChartState {
             this.stxx.setStyle('stx_line_chart', 'color', Theme[`${theme}_chart_mountain_border`]);
         }
         this.stxx.draw();
-    }
-
-    @action.bound setOnPagination({ end }) {
-        this.isOnPagination     = !this.isOnPagination;
-        this.paginationEndEpoch = this.isOnPagination ? end : null;
     }
 
     @action.bound setChartIsReady(isChartReady) {

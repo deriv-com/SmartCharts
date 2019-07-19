@@ -242,6 +242,7 @@ class Feed {
         // Tick history data only goes as far back as 3 years:
         const startLimit = now - Math.ceil(2.8 * 365 * 24 * 60 * 60); /* == 3 Years */
         let result = { quotes: [] };
+        let firstEpoch;
         if (end > startLimit) {
             try {
                 const response = await this._binaryApi.getTickHistory({
@@ -250,7 +251,7 @@ class Feed {
                     start: Math.floor(Math.max(start, startLimit)),
                     end,
                 });
-                const firstEpoch = Feed.getFirstEpoch(response);
+                firstEpoch = Feed.getFirstEpoch(response);
                 if (firstEpoch === undefined || firstEpoch === end) {
                     const newStart = start - (end - start);
                     if (newStart <= startLimit) {
@@ -277,7 +278,10 @@ class Feed {
 
         callback(result);
         if (isMainChart) { // ignore comparisons
-            this._emitter.emit(Feed.EVENT_ON_PAGINATION, { start, end });
+            // prevent overlapping by setting pagination end as firstEpoch
+            // if 'end' is greater than firstEpoch from feed
+            const paginationEnd = end > firstEpoch ? firstEpoch : end;
+            this._emitter.emit(Feed.EVENT_ON_PAGINATION, { start, end: paginationEnd });
         }
     }
 

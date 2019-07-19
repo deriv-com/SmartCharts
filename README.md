@@ -156,7 +156,7 @@ draggable | Toggles whether users can drag the price lines and change the barrie
 high* | Sets the price of the high barrier.
 low* | Sets the price of the low barrier.
 
-#### Marker API
+#### ~~Marker API~~ (Depricated)
 
 Markers provide a way for developers to place DOM elements inside the chart that are positioned based on date, values or tick location. Unlike [CharIQ's Markers](http://documentation.chartiq.com/tutorial-Markers.html#main), we only allow markers to be placed on the main chart. Also note that this Marker implementation does not factor the width and height of the marker; this is expensive to calculate, so we expect you to offset this in CSS.
 
@@ -183,6 +183,41 @@ y | y position of the chart; depends on `yPositioner`.
 yPositioner | Determines y position. Choose between `value` or `none`. Defaults to `value`.
 
 There are more options for `xPositioner` and `yPositioner` in [ChartIQ docs](http://documentation.chartiq.com/CIQ.Marker.html#main). What we document here is the most common use case.
+
+#### Marker API
+
+Use `FastMarker` to render given Components under stx-subholder.
+It will keep the marker position on the chart.
+
+```jsx
+ <FastMarker
+     markerRef={setRef}
+     threshold={optional visibility threshold}
+     className="your-css-class"
+ >
+    <your content here/>
+ </FastMarker>
+
+```
+
+USAGE:
+
+ - `setRef({setPosition, div})` will be called onMount.
+ - `setRef(null)` will be called when the marker unmounts.
+ - `div` is the dom element containing the marker with `your-css-class`
+    - any content update should be done using `div` and vanilla js
+    - use `div.querySelector('...')` to get a dom reference in order to update your content.
+    - avoid doning expensive DOM operations on `div` such as style changes.
+ - `setPosition({epoch, price})` is a function that you will use to update the `div` position.
+     - epoch is the tick unix epoch from api
+     - price is the tick price, it could be `null` if you want to draw a vertical line.
+ - call `setPosition({epoch: null, price: null})` to hide the marker.
+
+
+PROPS:
+ - `threshold` (optional): the chart has a zoom level, the marker will be only shown within that threshold.
+ - `markerRef` (required): pass the `setRef` callback using this property
+ - `className` (optional): avoid expoensive css transition or keyframe animations on this class.
 
 
 ### Customising Components
