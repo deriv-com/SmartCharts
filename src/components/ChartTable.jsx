@@ -14,7 +14,7 @@ const ChartTable = ({
     setOpen,
 }) => {
     const SymbolIcon = ItemIconMap[symbol.symbol] || SymbolPlaceholderIcon;
-    const width = isTick ? '430px' : '704px';
+    const width = isTick ? '415px' : '704px';
 
     const handleClose = () => {
         setOpen(false);

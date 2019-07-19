@@ -55,22 +55,22 @@
         }
     }
     td:nth-child(1), th:nth-child(1) {
-        min-width: 200px;
-        max-width: 200px;
+        min-width: 175px;
+        max-width: 175px;
         padding-left: 24px;
         text-align: left;
     }
     td:nth-child(2), th:nth-child(2) {
-        min-width: 90px;
-        max-width: 90px;
+        min-width: 100px;
+        max-width: 100px;
     }
     td:nth-child(3), th:nth-child(3) {
-        min-width: 90px;
-        max-width: 90px;
+        min-width: 100px;
+        max-width: 100px;
     }
     td:nth-child(4), th:nth-child(4) {
-        min-width: 90px;
-        max-width: 90px;
+        min-width: 100px;
+        max-width: 100px;
     }
     td:nth-child(5), th:nth-child(5) {
         min-width: 90px;
@@ -126,7 +126,7 @@
         font-style: normal;
         line-height: 1.43;
         letter-spacing: normal;
-        padding: 16px;
+        padding: 16px 5px;
     }
 }
 
@@ -136,7 +136,7 @@
     }
 
     .ciq-table-cell {
-        padding: 16px;
+        padding: 16px 5px;
         font-size: 14px;
         font-weight: normal;
         font-style: normal;
