@@ -68,6 +68,10 @@ export default class ChartSettingStore {
             key: 'zh_tw',
             name: '繁體中文',
             icon: <FlagIcons.ChineseTraditional />,
+        }, {
+            key: 'es',
+            name: 'espanyol',
+            icon: <FlagIcons.Spanish />,
         },
     ];
     defaultLanguage = {};

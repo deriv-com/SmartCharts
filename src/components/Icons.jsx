@@ -239,6 +239,7 @@ export const FlagIcons = {
     Chinese: Wrapper(Chinese),
     ChineseTraditional: Wrapper(ChineseTraditional),
     Poland: Wrapper(PLN),
+    Spanish: Wrapper(Spanish),
 };
 
 
