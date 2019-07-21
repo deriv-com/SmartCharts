@@ -356,11 +356,7 @@ class App extends Component {
     }
 
     onWidget = () => {
-        const { enabledNavigationWidget } = this.state;
-
-        this.setState({
-            enabledNavigationWidget: !enabledNavigationWidget,
-        });
+        this.setState(prevState => ({ enabledNavigationWidget: !prevState.enabledNavigationWidget }));
     }
 
     toggleStartEpoch = () => {
