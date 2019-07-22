@@ -73,6 +73,7 @@ class Chart extends Component {
             chartContainerHeight,
             containerWidth,
             isChartClosed,
+            isChartReady,
             isDrawing,
             theme,
             position,
@@ -114,7 +115,7 @@ class Chart extends Component {
                                         }
                                     </RenderInsideChart>
                                     <RenderInsideChart at="subholder">
-                                        {children}
+                                        {isChartReady && children}
 
                                         {
                                             isOnPagination
@@ -171,6 +172,7 @@ export default connect(({ chart, drawTools, studies, chartSetting, chartType, st
     chartContainerHeight: chart.chartContainerHeight,
     containerWidth: chart.containerWidth,
     isChartClosed: state.isChartClosed,
+    isChartReady: state.isChartReady,
     isDrawing: drawingCursor.isDrawing,
     theme: chartSetting.theme,
     position: chartSetting.position,
