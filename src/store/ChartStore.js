@@ -366,13 +366,14 @@ class ChartStore {
             requestAPI,
             requestSubscribe,
             requestForget,
+            requestForgetStream,
             isMobile,
             enableRouting,
             onMessage,
             settings,
             onSettingsChange,
         } = props;
-        this.api = new BinaryAPI(requestAPI, requestSubscribe, requestForget);
+        this.api = new BinaryAPI(requestAPI, requestSubscribe, requestForget, requestForgetStream);
         // trading times and active symbols can be reused across multiple charts
         this.tradingTimes = ChartStore.tradingTimes || (ChartStore.tradingTimes = new TradingTimes(this.api, this.mainStore.state.shouldFetchTradingTimes));
         this.activeSymbols = ChartStore.activeSymbols || (ChartStore.activeSymbols = new ActiveSymbols(this.api, this.tradingTimes));
@@ -560,12 +561,10 @@ class ChartStore {
             if (symbol in changes) {
                 if (changes[symbol]) {
                     shouldRefreshChart = true;
-                    this.mainStore.state.setChartTheme(this.mainStore.chartSetting.theme, false);
-                    this.mainStore.state.setChartClosed(false);
+                    this.chartClosedOpenThemeChange(false);
                     this.mainStore.notifier.notifyMarketOpen(name);
                 } else {
-                    this.mainStore.state.setChartTheme(this.mainStore.chartSetting.theme, true);
-                    this.mainStore.state.setChartClosed(true);
+                    this.chartClosedOpenThemeChange(true);
                     this.mainStore.notifier.notifyMarketClose(name);
                 }
             }

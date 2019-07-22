@@ -2,10 +2,11 @@ export default class BinaryAPI {
     static get DEFAULT_COUNT() { return 1000; }
     streamRequests = {};
     tradingTimesCache = null;
-    constructor(requestAPI, requestSubscribe, requestForget) {
+    constructor(requestAPI, requestSubscribe, requestForget, requestForgetStream) {
         this.requestAPI = requestAPI;
         this.requestSubscribe = requestSubscribe;
         this.requestForget = requestForget;
+        this.requestForgetStream = requestForgetStream;
     }
 
     getActiveSymbols() {
@@ -48,6 +49,10 @@ export default class BinaryAPI {
         const { request, callback } = this.streamRequests[key];
         delete this.streamRequests[key];
         return this.requestForget(request, callback);
+    }
+
+    forgetStream(subscription_id) {
+        return this.requestForgetStream(subscription_id);
     }
 
     static createTickHistoryRequest({ symbol, granularity, start, end, subscribe, adjust_start_time = 1, count }) {
