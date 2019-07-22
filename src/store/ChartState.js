@@ -150,6 +150,8 @@ class ChartState {
             }
         }
 
+        this.mainStore.chartSetting.setSettings(this.settings);
+
         if (this.stxx) {
             this.stxx.chart.panel.yAxis.drawCurrentPriceLabel = !this.endEpoch;
             this.stxx.preferences.currentPriceLine = !this.endEpoch;
@@ -166,12 +168,15 @@ class ChartState {
         this.isChartClosed = isClosed;
     }
 
-    @action.bound setChartTheme(theme, isChartClosed = this.isChartClosed) {
+    setChartTheme(theme, isChartClosed = this.isChartClosed) {
         this.stxx.clearStyles();
         this.stxx.setStyle('stx_grid', 'color', Theme[`${theme}chartgrid`]);
-        if (!this.rootNode) return;
+        if (!this.rootNode) {
+            this.rootNode = this.mainStore.chart.rootNode;
+        }
         this.rootNode.querySelector('.chartContainer').style.backgroundColor = Theme[`${theme}chartbg`];
-        if (isChartClosed) {
+        // change chart colors to grey if the current market is closed and it is not a static chart
+        if (isChartClosed && !this.isStaticChart) {
             const closedChartColor = 'rgba(129, 133, 152, 0.35)';
             this.stxx.setStyle('stx_mountain_chart', 'borderTopColor', closedChartColor);
             this.stxx.setStyle('stx_mountain_chart', 'background-color', 'transparent');
