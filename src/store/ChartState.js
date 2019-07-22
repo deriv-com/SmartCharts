@@ -407,21 +407,21 @@ class ChartState {
     }
 
     cleanChart() {
-        if (this.clearChart && this.isChartReady) {
-            // Remove comparsions
-            for (const field in this.stxx.chart.series) {
-                this.stxx.removeSeries(field);
-            }
-            // Remove indiactors
-            for (const id in this.stxx.layout.studies) {
-                const sd = this.stxx.layout.studies[id];
-                CIQ.Studies.removeStudy(this.stxx, sd);
-            }
-            this.stxx.clearDrawings();
+        if (!this.clearChart || !this.isChartReady) return;
 
-            // TODO: use constant
-            this.mainStore.crosshair.setCrosshairState(2);
+        // Remove comparsions
+        for (const field in this.stxx.chart.series) {
+            this.stxx.removeSeries(field);
         }
+        // Remove indiactors
+        for (const id in this.stxx.layout.studies) {
+            const sd = this.stxx.layout.studies[id];
+            CIQ.Studies.removeStudy(this.stxx, sd);
+        }
+        this.stxx.clearDrawings();
+
+        // TODO: use constant
+        this.mainStore.crosshair.setCrosshairState(2);
     }
 
     importLayout() {
