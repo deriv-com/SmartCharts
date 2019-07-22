@@ -62,7 +62,6 @@ class Chart extends Component {
             isCandle,
             isSpline,
             isMobile = false,
-            isOnPagination,
             isChartAvailable,
             isHighestLowestMarkerEnabled,
             barriers = [],
@@ -108,16 +107,14 @@ class Chart extends Component {
                                         ))}
                                     </RenderInsideChart>
                                     <RenderInsideChart at="subholder">
-                                        {children}
-
-                                        {
-                                            isOnPagination
-                                                && <PaginationLoader />
-                                        }
                                         {
                                             !isCandle && !isSpline && isHighestLowestMarkerEnabled
                                                 && <HighestLowestMarker />
                                         }
+                                    </RenderInsideChart>
+                                    <RenderInsideChart at="subholder">
+                                        {children}
+                                        <PaginationLoader />
                                         <CurrentSpot />
                                     </RenderInsideChart>
                                     <div className="cq-top-ui-widgets">
@@ -173,6 +170,5 @@ export default connect(({ chart, drawTools, studies, chartSetting, chartType, st
     theme: chartSetting.theme,
     position: chartSetting.position,
     showLastDigitStats:state.showLastDigitStats,
-    isOnPagination: state.isOnPagination,
     isHighestLowestMarkerEnabled: chartSetting.isHighestLowestMarkerEnabled,
 }))(Chart);
