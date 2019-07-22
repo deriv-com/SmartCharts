@@ -1,5 +1,5 @@
 import React from 'react';
-import { observable, action, reaction } from 'mobx';
+import { observable, action, when } from 'mobx';
 import MenuStore from './MenuStore';
 import { FlagIcons } from '../components/Icons.jsx';
 import Menu from '../components/Menu.jsx';
@@ -11,7 +11,7 @@ export default class ChartSettingStore {
         this.mainStore = mainStore;
         this.menu = new MenuStore(mainStore, { route: 'setting' });
         this.ChartSettingMenu = this.menu.connect(Menu);
-        reaction(() => mainStore.state.settings, () => {
+        when(() => this.context, () => {
             this.setSettings(mainStore.state.settings);
         });
     }
@@ -82,7 +82,7 @@ export default class ChartSettingStore {
     @observable isAutoScale = true;
     @observable isHighestLowestMarkerEnabled = true;
 
-    @action.bound setSettings(settings) {
+    setSettings(settings) {
         if (settings === undefined) { return; }
         const { assetInformation, countdown, historical, language, position, isAutoScale, isHighestLowestMarkerEnabled, theme } = settings;
         if (theme                        !== undefined) { this.setTheme(theme); }

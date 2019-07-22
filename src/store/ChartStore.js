@@ -562,12 +562,10 @@ class ChartStore {
             if (symbol in changes) {
                 if (changes[symbol]) {
                     shouldRefreshChart = true;
-                    this.mainStore.state.setChartTheme(this.mainStore.chartSetting.theme, false);
-                    this.mainStore.state.setChartClosed(false);
+                    this.chartClosedOpenThemeChange(false);
                     this.mainStore.notifier.notifyMarketOpen(name);
                 } else {
-                    this.mainStore.state.setChartTheme(this.mainStore.chartSetting.theme, true);
-                    this.mainStore.state.setChartClosed(true);
+                    this.chartClosedOpenThemeChange(true);
                     this.mainStore.notifier.notifyMarketClose(name);
                 }
             }
