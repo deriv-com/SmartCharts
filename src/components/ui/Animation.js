@@ -60,7 +60,7 @@ export default function animateChart(stx, animationParameters, easeMachine) {
     animationParameters = CIQ.extend(params, animationParameters);
 
     if (params.tension) stx.chart.tension = animationParameters.tension;
-    stx.tickAnimator = easeMachine || new CIQ.EaseMachine(Math.easeOutCubic, 1000);
+    stx.tickAnimator = easeMachine || new CIQ.EaseMachine(Math.easeOutCubic, 1500);
 
     stx.addEventListener(['symbolChange', 'layout'], function (obj) {
         stx.chart.granularity = calculateGranularity(this.layout.interval, this.layout.timeUnit);
