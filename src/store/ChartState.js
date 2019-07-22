@@ -78,6 +78,7 @@ class ChartState {
         zoom,
     }) {
         let isSymbolChanged = false;
+        let isGranularityChanged = false;
 
         this.chartId = id;
         this.chartStatusListener = chartStatusListener;
@@ -116,6 +117,11 @@ class ChartState {
 
         if (granularity !== undefined && granularity !== this.granularity) {
             this.setChartGranularity(granularity);
+
+            isGranularityChanged = true;
+            if (this.mainStore.chart && this.mainStore.chart.feed && !isSymbolChanged) {
+                this.mainStore.chart.feed.onMasterDataReinitialize(this.scrollChartToLeft);
+            }
         }
 
         if (this.chartStore.activeSymbols && (refreshActiveSymbols !== this.refreshActiveSymbols)) {
@@ -135,7 +141,7 @@ class ChartState {
 
         if (!isStaticChart && scrollToEpoch !== this.scrollToEpoch) {
             this.scrollToEpoch = scrollToEpoch;
-            if (this.mainStore.chart && this.mainStore.chart.feed && !isSymbolChanged) {
+            if (this.mainStore.chart && this.mainStore.chart.feed && !isSymbolChanged && !isGranularityChanged) {
                 this.mainStore.chart.feed.onMasterDataUpdate(this.scrollChartToLeft);
             }
         }

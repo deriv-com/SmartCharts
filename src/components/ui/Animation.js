@@ -256,7 +256,7 @@ export default function animateChart(stx, animationParameters, easeMachine) {
                 this.draw();
             }, 0, stx.layout.candleWidth);
         } else if (!stx.isHome() || stx.chart.lockAutoScroll) {
-            if (stx.animations.liveScroll) {
+            if (stx.animations.liveScroll.running) {
                 stx.animations.liveScroll.stop();
             }
 
