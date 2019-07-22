@@ -412,7 +412,8 @@ class ChartState {
     }
 
     cleanChart() {
-        if (!this.clearChart) return;
+        if (!this.clearChart || !this.isChartReady) return;
+
         // Remove comparsions
         for (const field in this.stxx.chart.series) {
             this.stxx.removeSeries(field);
