@@ -134,9 +134,12 @@ class ChartState {
             this.cleanChart();
         }
 
-        if (importedLayout && JSON.stringify(importedLayout) !== JSON.stringify(this.importedLayout)) {
+        if (JSON.stringify(importedLayout) !== JSON.stringify(this.importedLayout)) {
             this.importedLayout = importedLayout;
-            this.importLayout();
+
+            if (this.importedLayout) {
+                this.importLayout();
+            }
         }
 
         if (!isStaticChart && scrollToEpoch !== this.scrollToEpoch) {
