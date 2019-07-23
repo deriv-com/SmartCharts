@@ -52,7 +52,9 @@ export default class BinaryAPI {
     }
 
     forgetStream(subscription_id) {
-        return this.requestForgetStream(subscription_id);
+        if (this.requestForgetStream && typeof this.this.requestForgetStream === 'function') {
+            return this.requestForgetStream(subscription_id);
+        }
     }
 
     static createTickHistoryRequest({ symbol, granularity, start, end, subscribe, adjust_start_time = 1, count }) {
