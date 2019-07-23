@@ -138,6 +138,7 @@ class App extends Component {
                 }
             }
         }
+        settings.isHighestLowestMarkerEnabled = false;
 
         connectionManager.on(
             ConnectionManager.EVENT_CONNECTION_CLOSE,
