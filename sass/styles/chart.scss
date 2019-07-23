@@ -764,7 +764,7 @@ html, body {
 
     &:before {
         content: ' ';
-        display: block;
+        display: none; // TODO the value should be change to `block` after receiving new background.;
         position: absolute;
         left: 0;
         top: 0;
