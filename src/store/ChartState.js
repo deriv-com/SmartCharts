@@ -26,6 +26,7 @@ class ChartState {
     @observable shouldFetchTradingTimes = true;
     @observable refreshActiveSymbols;
     @observable hasReachedEndOfData = false;
+    @observable prevChartType;
     chartControlsWidgets;
 
     get comparisonStore() { return this.mainStore.comparison; }
@@ -112,6 +113,7 @@ class ChartState {
 
 
         if (chartType !== this.chartType && this.context) {
+            if (chartType === 'table') this.prevChartType = this.chartTypeStore.type.id;
             this.setChartType(chartType);
         }
 

@@ -32,8 +32,9 @@ export default class DrawToolsStore {
     get stx() { return this.context.stx; }
 
     activeDrawing = null;
+    isContinuous = false;
 
-    drawToolsItems = []
+    drawToolsItems = [];
 
     onContextReady = () => {
         document.addEventListener('keydown', this.closeOnEscape, false);
@@ -125,7 +126,7 @@ export default class DrawToolsStore {
 
     noTool = () => {
         const count = this.stx.drawingObjects.length;
-        if ((this.menu.open && this.context) || this._pervDrawingObjectCount !== count) {
+        if ((this.menu.open && this.context) || (!this.isContinuous && this._pervDrawingObjectCount !== count)) {
             this.stx.changeVectorType('');
         }
         this._pervDrawingObjectCount = count;
@@ -137,10 +138,14 @@ export default class DrawToolsStore {
     }
 
     @action.bound selectTool(id) {
+        this.isContinuous = false;
         logEvent(LogCategories.ChartControl, LogActions.DrawTools, `Add ${id}`);
         const stx = this.context.stx;
         stx.clearMeasure(); // TODO remove this line
         stx.changeVectorType(id);
+        if (id === 'continuous') {
+            this.isContinuous = true;
+        }
         this.menu.setOpen(false);
         // let drawingParameters = CIQ.Drawing.getDrawingParameters(stx, id);
     }
