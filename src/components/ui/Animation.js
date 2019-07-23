@@ -229,14 +229,18 @@ export default function animateChart(stx, animationParameters, easeMachine) {
         }
     });
 
-    stx.prepend('updateChartData', function (newQuotes) {
+    stx.prepend('updateChartData', function (newQuotes, chart, params) {
+        if (params.secondarySeries) return;
+
         stx.prevQuote = this.currentQuote() || newQuotes[0];
         stx.isNewTick = !this.prevQuote || newQuotes.slice(-1)[0].DT > this.prevQuote.DT;
         stx.chart.granularity = calculateGranularity(this.layout.interval, this.layout.timeUnit);
         stx.chart.lockScroll = !stx.chart.granularity;
     });
 
-    stx.append('updateChartData', function (newQuotes) {
+    stx.append('updateChartData', function (newQuotes, chart, params) {
+        if (params.secondarySeries) return;
+
         if (stx.isHome() && !stx.chart.lockAutoScroll && newQuotes && newQuotes.length && stx.isNewTick) {
             const timeInterval = newQuotes.slice(-1)[0].DT - this.prevQuote.DT;
 
