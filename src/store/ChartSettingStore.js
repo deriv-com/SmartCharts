@@ -5,80 +5,90 @@ import { FlagIcons } from '../components/Icons.jsx';
 import Menu from '../components/Menu.jsx';
 import { logEvent, LogCategories, LogActions } from '../utils/ga';
 
+const languageList = [
+    {
+        key: 'en',
+        name: 'English',
+        icon: <FlagIcons.USD />,
+    }, {
+        key: 'pt',
+        name: 'Português',
+        icon: <FlagIcons.Portugal />,
+    }, {
+        key: 'de',
+        name: 'Deutsch',
+        icon: <FlagIcons.German />,
+    }, {
+        key: 'ru',
+        name: 'Русский',
+        icon: <FlagIcons.Russia />,
+    }, {
+        key: 'fr',
+        name: 'French',
+        icon: <FlagIcons.French />,
+    }, {
+        key: 'th',
+        name: 'Thai',
+        icon: <FlagIcons.Thailand />,
+    }, {
+        key: 'id',
+        name: 'Indonesia',
+        icon: <FlagIcons.Indonesia />,
+    }, {
+        key: 'vi',
+        name: 'Tiếng Việt',
+        icon: <FlagIcons.Vietnam />,
+    }, {
+        key: 'it',
+        name: 'Italiano',
+        icon: <FlagIcons.Italy />,
+    }, {
+        key: 'zh_cn',
+        name: '简体中文',
+        icon: <FlagIcons.Chinese />,
+    }, {
+        key: 'pl',
+        name: 'Polish',
+        icon: <FlagIcons.Poland />,
+    }, {
+        key: 'zh_tw',
+        name: '繁體中文',
+        icon: <FlagIcons.ChineseTraditional />,
+    }, {
+        key: 'es',
+        name: 'espanyol',
+        icon: <FlagIcons.Spanish />,
+    },
+];
+
 export default class ChartSettingStore {
     constructor(mainStore) {
-        this.defaultLanguage = this.languages[0];
         this.mainStore = mainStore;
         this.menu = new MenuStore(mainStore, { route: 'setting' });
         this.ChartSettingMenu = this.menu.connect(Menu);
+
+        reaction(() => mainStore.chart.supported_languages, () => {
+            this.languages = languageList.filter(lng => mainStore.chart.supported_languages.indexOf(lng.key.toUpperCase()) !== -1);
+            this.language = this.languages[0];
+            this.defaultLanguage = this.languages[0];
+        });
+
         reaction(() => mainStore.state.settings, () => {
-            this.setSettings(mainStore.state.settings);
+            if (this.languages.length && this.language) {
+                this.setSettings(mainStore.state.settings);
+            }
         });
     }
 
     get context() { return this.mainStore.chart.context; }
     get stx() { return this.context.stx; }
 
-    languages = [
-        {
-            key: 'en',
-            name: 'English',
-            icon: <FlagIcons.USD />,
-        }, {
-            key: 'pt',
-            name: 'Português',
-            icon: <FlagIcons.Portugal />,
-        }, {
-            key: 'de',
-            name: 'Deutsch',
-            icon: <FlagIcons.German />,
-        }, {
-            key: 'ru',
-            name: 'Русский',
-            icon: <FlagIcons.Russia />,
-        }, {
-            key: 'fr',
-            name: 'French',
-            icon: <FlagIcons.French />,
-        }, {
-            key: 'th',
-            name: 'Thai',
-            icon: <FlagIcons.Thailand />,
-        }, {
-            key: 'id',
-            name: 'Indonesia',
-            icon: <FlagIcons.Indonesia />,
-        }, {
-            key: 'vi',
-            name: 'Tiếng Việt',
-            icon: <FlagIcons.Vietnam />,
-        }, {
-            key: 'it',
-            name: 'Italiano',
-            icon: <FlagIcons.Italy />,
-        }, {
-            key: 'zh_cn',
-            name: '简体中文',
-            icon: <FlagIcons.Chinese />,
-        }, {
-            key: 'pl',
-            name: 'Polish',
-            icon: <FlagIcons.Poland />,
-        }, {
-            key: 'zh_tw',
-            name: '繁體中文',
-            icon: <FlagIcons.ChineseTraditional />,
-        }, {
-            key: 'es',
-            name: 'espanyol',
-            icon: <FlagIcons.Spanish />,
-        },
-    ];
+    languages = [];
     defaultLanguage = {};
     onSettingsChange;
     @observable assetInformation = true;
     @observable view = '';
-    @observable language = this.languages[0];
+    @observable language = null;
     @observable position = 'bottom';
     @observable theme = 'light';
     @observable countdown = false;
@@ -119,10 +129,14 @@ export default class ChartSettingStore {
     }
 
     @action.bound setLanguage(lng) {
-        if (lng === this.language.key) { return; }
-        this.language = this.languages.find(item => item.key === lng) || this.defaultLanguage;
-        t.setLanguage(lng);
-        logEvent(LogCategories.ChartControl, LogActions.ChartSetting, `Change language to ${lng}`);
+        if (!this.languages.length) { return; }
+        if (this.language && lng === this.language.key) { return; }
+
+        const supported = this.mainStore.chart.supported_languages.find(item => item === lng.toUpperCase());
+        this.language = (supported && this.languages.find(item => item.key === lng))
+                        || this.defaultLanguage;
+        t.setLanguage(this.language.key);
+        logEvent(LogCategories.ChartControl, LogActions.ChartSetting, `Change language to ${this.language.key}`);
         this.saveSetting();
     }
 
