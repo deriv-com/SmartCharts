@@ -52,7 +52,7 @@ export default class BinaryAPI {
     }
 
     forgetStream(subscription_id) {
-        if (this.requestForgetStream && typeof this.this.requestForgetStream === 'function') {
+        if (this.requestForgetStream && typeof this.requestForgetStream === 'function') {
             return this.requestForgetStream(subscription_id);
         }
     }
