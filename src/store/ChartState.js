@@ -162,7 +162,7 @@ class ChartState {
             } else if (this.mainStore.chart.feed) {
                 /* When layout is importing and range is changing as the same time we dont need to set the range,
                    the imported layout witll take care of it. */
-                if (!this.importedLayout && !this.scrollToEpoch) {
+                if (!this.importedLayout && !this.scrollToEpoch && !isSymbolChanged && !isGranularityChanged) {
                     this.mainStore.chart.feed.onRangeChanged(true);
                 }
             }
