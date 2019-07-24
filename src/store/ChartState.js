@@ -27,6 +27,7 @@ class ChartState {
     @observable refreshActiveSymbols;
     @observable hasReachedEndOfData = false;
     @observable prevChartType;
+    @observable isChartChanging = false;
     chartControlsWidgets;
 
     get comparisonStore() { return this.mainStore.comparison; }
@@ -145,6 +146,7 @@ class ChartState {
         }
 
         if (!isStaticChart && scrollToEpoch !== this.scrollToEpoch) {
+            this.setIsChartChanging(true);
             this.scrollToEpoch = scrollToEpoch;
             if (this.mainStore.chart && this.mainStore.chart.feed && !isSymbolChanged && !isGranularityChanged) {
                 this.mainStore.chart.feed.onMasterDataUpdate(this.scrollChartToLeft);
@@ -163,6 +165,7 @@ class ChartState {
                 /* When layout is importing and range is changing as the same time we dont need to set the range,
                    the imported layout witll take care of it. */
                 if (!this.importedLayout && !this.scrollToEpoch) {
+                    this.setChartIsReady(false);
                     this.mainStore.chart.feed.onRangeChanged(true);
                 }
             }
@@ -191,6 +194,10 @@ class ChartState {
             this.stxx.isAutoScale = this.settings && this.settings.isAutoScale !== false;
             this.stxx.draw();
         }
+    }
+
+    @action.bound setIsChartChanging(isChanging) {
+        this.isChartChanging = isChanging;
     }
 
     @action.bound hasReachedEndOfData(hasReachedEndOfData) {
@@ -436,6 +443,7 @@ class ChartState {
             this.stxx.home();
             this.stxx.draw();
         }
+        this.setIsChartChanging(false);
         this.mainStore.chart.feed.offMasterDataReinitialize(this.scrollChartToLeft);
         this.mainStore.chart.feed.offMasterDataUpdate(this.scrollChartToLeft);
     }

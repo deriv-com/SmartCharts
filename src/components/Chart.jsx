@@ -112,8 +112,10 @@ class Chart extends Component {
                                                 && <HighestLowestMarker />
                                         }
                                     </RenderInsideChart>
-                                    <RenderInsideChart at="subholder">
+                                    <RenderInsideChart at="subholder" hideInChartChange>
                                         {children}
+                                    </RenderInsideChart>
+                                    <RenderInsideChart at="subholder">
                                         <PaginationLoader />
                                         <CurrentSpot />
                                     </RenderInsideChart>
