@@ -555,7 +555,11 @@ class ChartState {
             } else if (dataSegment) {
                 const hasReachedRight = this.stxx.chart.scroll <= this.stxx.chart.maxTicks - 1;
                 const noMoreScroll = this.hasReachedEndOfData || (this.stxx.masterData.length === this.stxx.maxMasterDataSize);
-                this.stxx.minimumLeftBars = noMoreScroll && !hasReachedRight ? this.stxx.chart.maxTicks : 2;
+                let defaultMinimumBars = this.mainStore.chart.defaultMinimumBars;
+                if (this.stxx.chart.maxTicks - 10 > 50) {
+                    defaultMinimumBars = 50;
+                }
+                this.stxx.minimumLeftBars = noMoreScroll && !hasReachedRight ? this.stxx.chart.maxTicks : Math.min(this.stxx.chart.maxTicks, defaultMinimumBars);
             }
         }
     }
