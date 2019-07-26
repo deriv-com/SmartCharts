@@ -1,6 +1,6 @@
 import React from 'react';
 import { Scrollbars } from 'tt-react-custom-scrollbars';
-import { CloseIcon, ItemIconMap, SymbolPlaceholderIcon } from './Icons.jsx';
+import { CloseBoldIcon, ItemIconMap, SymbolPlaceholderIcon } from './Icons.jsx';
 import { connect } from '../store/Connect';
 import '../../sass/components/_ciq-chart-table.scss';
 
@@ -14,20 +14,53 @@ const ChartTable = ({
     setOpen,
 }) => {
     const SymbolIcon = ItemIconMap[symbol.symbol] || SymbolPlaceholderIcon;
-    const width = isTick ? '320px' : '565px';
+    const width = isTick ? '415px' : '704px';
+
+    const handleClose = () => {
+        setOpen(false);
+    };
 
     return (
         <div className={`cq-dialog-overlay ${open ? 'cq-dialog-active' : ''}`} style={{ '--table-width': width }}>
+            <div className="cq-dialog--cover" />
             <Dialog className="cq-dialog ciq-chart-dialog">
             <>
                 {isMobile && (
                     <div className="cq-titlebar">
                         {SymbolIcon && <SymbolIcon className={`ic-${symbol.symbol}`} />}
                         <div className="cq-title">{`${symbol.name} ${t.translate('Chart Table')}`}</div>
-                        <CloseIcon className="icon-close-menu" onClick={() => setOpen(false)} />
+                        <CloseBoldIcon className="icon-close-menu" onClick={handleClose} />
                     </div>
                 )
                 }
+                {isMobile ? '' : (
+                    <table className="ciq-chart-table">
+                        <thead>
+                            <tr className="ciq-table-head">
+                                <th className="ciq-table-cell">{t.translate('Date')}</th>
+                                {isTick
+                                    ? <th className="ciq-table-cell">{t.translate('Tick')}</th>
+                                    :                                                (
+                                        <React.Fragment>
+                                            <th className="ciq-table-cell">{t.translate('Open')}</th>
+                                            <th className="ciq-table-cell">{t.translate('High')}</th>
+                                            <th className="ciq-table-cell">{t.translate('Low')}</th>
+                                            <th className="ciq-table-cell">{t.translate('Close')}</th>
+                                        </React.Fragment>
+                                    )
+                                }
+                                <th className="ciq-table-cell before-last-child">
+                                    <div className="cq-change-cell">
+                                        {t.translate('Change')}
+                                    </div>
+                                </th>
+                                <th className="ciq-table-cell">
+                                    <CloseBoldIcon className="icon-close-menu" onClick={handleClose} />
+                                </th>
+                            </tr>
+                        </thead>
+                    </table>
+                )}
                 <Scrollbars
                     autoHeight
                     autoHeightMax="80vh"
@@ -66,28 +99,6 @@ const ChartTable = ({
                         )
                         :                        (
                             <table className="ciq-chart-table">
-                                <thead>
-                                    <tr className="ciq-table-head">
-                                        <th className="ciq-table-cell">{t.translate('Date')}</th>
-                                        {isTick
-                                            ? <th className="ciq-table-cell">{t.translate('Tick')}</th>
-                                            :                                                (
-                                                <React.Fragment>
-                                                    <th className="ciq-table-cell">{t.translate('Open')}</th>
-                                                    <th className="ciq-table-cell">{t.translate('High')}</th>
-                                                    <th className="ciq-table-cell">{t.translate('Low')}</th>
-                                                    <th className="ciq-table-cell">{t.translate('Close')}</th>
-                                                </React.Fragment>
-                                            )
-                                        }
-                                        <th className="ciq-table-cell">
-                                            <div className="cq-change-cell">
-                                                {t.translate('Change')}
-                                                <CloseIcon className="icon-close-menu" onClick={() => setOpen(false)} />
-                                            </div>
-                                        </th>
-                                    </tr>
-                                </thead>
                                 <tbody>
                                     {tableData.map((item, idx) => (
                                         <tr
@@ -103,9 +114,13 @@ const ChartTable = ({
                                             <td key="td-low" className="ciq-table-cell">{item.Low}</td>,
                                             <td key="td-close" className="ciq-table-cell">{item.Close}</td>,
                                         ]}
-                                            <td className="ciq-table-cell">
+                                            <td className="ciq-table-cell before-last-child">
                                                 <div className="cq-change-cell">
                                                     <div className={`${item.Status ? item.Status : 'up'}`}>{item.Change}</div>
+                                                </div>
+                                            </td>
+                                            <td className="ciq-table-cell">
+                                                <div className="cq-change-cell">
                                                     <div className={`cq-change ${item.Status}`} />
                                                 </div>
                                             </td>

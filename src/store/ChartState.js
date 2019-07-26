@@ -1,6 +1,6 @@
 /* eslint-disable no-new */
 import { action, observable, when } from 'mobx';
-import { createObjectFromLocalStorage, calculateTimeUnitInterval, calculateGranularity, getUTCDate, getUTCEpoch } from '../utils';
+import { createObjectFromLocalStorage, calculateTimeUnitInterval, calculateGranularity, getUTCDate } from '../utils';
 import Theme from '../../sass/_themes.scss';
 
 class ChartState {
@@ -26,6 +26,7 @@ class ChartState {
     @observable shouldFetchTradingTimes = true;
     @observable refreshActiveSymbols;
     @observable hasReachedEndOfData = false;
+    @observable prevChartType;
     chartControlsWidgets;
 
     get comparisonStore() { return this.mainStore.comparison; }
@@ -77,9 +78,11 @@ class ChartState {
         symbol,
         zoom,
     }) {
+        let isSymbolChanged = false;
+        let isGranularityChanged = false;
+
         this.chartId = id;
         this.chartStatusListener = chartStatusListener;
-        this.endEpoch = endEpoch;
         this.isAnimationEnabled = isAnimationEnabled;
         this.isConnectionOpened = isConnectionOpened;
         this.isStaticChart = isStaticChart;
@@ -88,7 +91,6 @@ class ChartState {
         this.settings = settings;
         this.shouldFetchTradingTimes = shouldFetchTradingTimes;
         this.showLastDigitStats = showLastDigitStats;
-        this.startEpoch = startEpoch;
 
         if (chartControlsWidgets !== this.chartControlsWidgets) {
             this.chartControlsWidgets = chartControlsWidgets;
@@ -97,15 +99,31 @@ class ChartState {
 
         if (symbol !== this.symbol) {
             this.symbol = symbol;
+            isSymbolChanged = true;
+
             if (this.mainStore.chart && this.mainStore.chart.feed) {
-                this.mainStore.chart.feed.onMasterDataUpdate(this.scrollChartToLeft);
+                this.mainStore.chart.feed.onMasterDataReinitialize(this.scrollChartToLeft);
             }
         }
 
+        if (onExportLayout !== this.onExportLayout) {
+            this.onExportLayout = onExportLayout;
+            this.exportLayout();
+        }
+
+
         if (chartType !== this.chartType && this.context) {
+            if (chartType === 'table') this.prevChartType = this.chartTypeStore.type.id;
             this.setChartType(chartType);
-        } else if (granularity !== undefined && granularity !== this.granularity) {
+        }
+
+        if (granularity !== undefined && granularity !== this.granularity) {
             this.setChartGranularity(granularity);
+
+            isGranularityChanged = true;
+            if (this.mainStore.chart && this.mainStore.chart.feed && !isSymbolChanged) {
+                this.mainStore.chart.feed.onMasterDataReinitialize(this.scrollChartToLeft);
+            }
         }
 
         if (this.chartStore.activeSymbols && (refreshActiveSymbols !== this.refreshActiveSymbols)) {
@@ -113,26 +131,41 @@ class ChartState {
             this.chartStore.activeSymbols.retrieveActiveSymbols(this.refreshActiveSymbols);
         }
 
-        if (!isStaticChart && scrollToEpoch && scrollToEpoch !== this.scrollToEpoch) {
-            this.scrollToEpoch = scrollToEpoch;
-            if (this.mainStore.chart && this.mainStore.chart.feed) {
-                this.mainStore.chart.feed.onMasterDataUpdate(this.scrollChartToLeft);
-            }
-        }
-
         if (clearChart !== this.clearChart) {
             this.clearChart = clearChart;
             this.cleanChart();
         }
 
-        if (importedLayout && JSON.stringify(importedLayout) !== JSON.stringify(this.importedLayout)) {
+        if (JSON.stringify(importedLayout) !== JSON.stringify(this.importedLayout)) {
             this.importedLayout = importedLayout;
-            this.importLayout();
+
+            if (this.importedLayout) {
+                this.importLayout();
+            }
         }
 
-        if (onExportLayout !== this.onExportLayout) {
-            this.onExportLayout = onExportLayout;
-            this.exportLayout();
+        if (!isStaticChart && scrollToEpoch !== this.scrollToEpoch) {
+            this.scrollToEpoch = scrollToEpoch;
+            if (this.mainStore.chart && this.mainStore.chart.feed && !isSymbolChanged && !isGranularityChanged) {
+                this.mainStore.chart.feed.onMasterDataUpdate(this.scrollChartToLeft);
+            }
+        }
+
+        // This if statement should be always after setting `this.scrollToEpoch` value
+        if (this.startEpoch !== startEpoch || this.endEpoch !== endEpoch) {
+            this.startEpoch = startEpoch;
+            this.endEpoch = endEpoch;
+
+            if (isStaticChart && this.stxx && this.granularity === this.mainStore.chart.granularity) {
+                // Reload the chart if it is a static chart and the granularity hasn't changed
+                this.mainStore.chart.newChart();
+            } else if (this.mainStore.chart.feed) {
+                /* When layout is importing and range is changing as the same time we dont need to set the range,
+                   the imported layout witll take care of it. */
+                if (!this.importedLayout && !this.scrollToEpoch) {
+                    this.mainStore.chart.feed.onRangeChanged(true);
+                }
+            }
         }
 
         if (removeAllComparisons) {
@@ -357,17 +390,15 @@ class ChartState {
         }
     }
 
-    scrollChartToLeft = (leftTick, force) => {
-        const scrollToEpoch = this.scrollToEpoch || (leftTick && getUTCEpoch(leftTick.DT));
+    scrollChartToLeft = () => {
         this.stxx.chart.entryTick = null;
-
-        if (scrollToEpoch) {
+        if (this.scrollToEpoch && !this.startEpoch) {
             let startEntry = this.stxx.chart.dataSet
-                .find(entry =>  entry.DT.valueOf() === CIQ.strToDateTime(getUTCDate(scrollToEpoch)).valueOf());
+                .find(entry =>  entry.DT.valueOf() === CIQ.strToDateTime(getUTCDate(this.scrollToEpoch)).valueOf());
 
             if (!startEntry) {
                 startEntry = {
-                    DT: CIQ.strToDateTime(getUTCDate(scrollToEpoch)),
+                    DT: CIQ.strToDateTime(getUTCDate(this.scrollToEpoch)),
                     Close: null,
                 };
 
@@ -382,55 +413,34 @@ class ChartState {
                 );
                 this.stxx.createDataSet();
             }
-
-            if (!force && !this.startEpoch) {
-                this.stxx.maxMasterDataSize = 0;
-                const scrollAnimator = new CIQ.EaseMachine(Math.easeOutCubic, 1000);
-                const scrollToTarget = this.stxx.chart.dataSegment.length;
-                scrollAnimator.run((bar) => {
-                    bar = Math.ceil(bar); // round-up for precision
-                    const scroll = this.stxx.chart.dataSegment.length - bar;
-                    if (scroll <= 2 || bar === scrollToTarget) {
-                        /**
-                         * Stop scrolling and draw markers if
-                         * the scroll value is off-screen or if the animator has reached target.
-                         * We check scroll <= '2' because sometimes the chart is scrolled so that the first
-                         * bar is partially hidden off-screen
-                         */
-                        scrollAnimator.stop();
-                        this.stxx.chart.entryTick = this.stxx.tickFromDate(startEntry.DT);
-                        this.stxx.chart.lockScroll = true;
-                        this.stxx.chart.isScrollLocationChanged = true; // set to true to draw markers
-                    } else {
-                        this.stxx.chart.scroll = scroll;
-                    }
-                },
-                0, scrollToTarget);
-            } else {
-                const tick = this.stxx.tickFromDate(startEntry.DT);
-                const leftTickDistance = this.stxx.chart.dataSet.length - tick;
-                this.stxx.chart.lockScroll = true;
-                this.stxx.chart.isScrollLocationChanged = true; // set to true to draw markers
-
-                this.stxx.chart.entryTick = this.stxx.tickFromDate(startEntry.DT);
-                if (!this.endEpoch) {
-                    this.stxx.setMaxTicks(leftTickDistance + 3);
-                    this.stxx.chart.scroll = leftTickDistance + 1;
-                } else {
-                    this.stxx.setMaxTicks(leftTickDistance + (Math.floor(leftTickDistance / 5) || 2));
-                    this.stxx.chart.scroll = leftTickDistance + (Math.floor(leftTickDistance / 10) || 1);
-                }
-            }
+            this.stxx.maxMasterDataSize = 0;
+            this.stxx.micropixels = 0;
             this.stxx.draw();
+            this.stxx.chart.entryTick = this.stxx.tickFromDate(startEntry.DT); // the calculation of entry tick should be done after draw
+
+            const scrollToTarget = this.stxx.chart.dataSet.length - this.stxx.chart.entryTick;
+
+            if (this.stxx.animations.liveScroll && this.stxx.animations.liveScroll.running) {
+                this.stxx.animations.liveScroll.stop();
+            }
+
+            this.stxx.scrollTo(this.stxx.chart, scrollToTarget, () => {
+                this.stxx.setMaxTicks(5);
+                this.stxx.micropixels = 0;
+                this.stxx.chart.lockAutoScroll = true;
+                this.stxx.chart.isScrollLocationChanged = true; // set to true to draw markers
+                this.stxx.draw();
+            });
         } else if (this.startEpoch) {
-            this.stxx.chart.lockScroll = true;
+            this.stxx.chart.lockAutoScroll = true;
             this.stxx.chart.isScrollLocationChanged = true;
         } else {
-            this.stxx.chart.lockScroll = false;
+            this.stxx.chart.lockAutoScroll = false;
             this.stxx.chart.isScrollLocationChanged = false;
             this.stxx.home();
             this.stxx.draw();
         }
+        this.mainStore.chart.feed.offMasterDataReinitialize(this.scrollChartToLeft);
         this.mainStore.chart.feed.offMasterDataUpdate(this.scrollChartToLeft);
     }
 
@@ -519,7 +529,7 @@ class ChartState {
 
         this.mainStore.crosshair.setCrosshairState(this.importedLayout.crosshair);
 
-        this.stxx.chart.lockScroll = false;
+        this.stxx.chart.lockAutoScroll = false;
         this.stxx.chart.entryTick = undefined;
         this.stxx.maxMasterDataSize = 5000;
     }
@@ -537,9 +547,10 @@ class ChartState {
         this.onExportLayout(currentLayout);
     }
 
+
     scrollListener({ grab }) {
-        if (grab && this.stxx.chart.lockScroll) {
-            this.stxx.chart.lockScroll = false;
+        if (grab && this.stxx.chart.lockAutoScroll) {
+            this.stxx.chart.lockAutoScroll = false;
         }
         if (this.stxx && this.stxx.chart) {
             const dataSegment = this.stxx.chart.dataSegment;
@@ -549,7 +560,11 @@ class ChartState {
             } else if (dataSegment) {
                 const hasReachedRight = this.stxx.chart.scroll <= this.stxx.chart.maxTicks - 1;
                 const noMoreScroll = this.hasReachedEndOfData || (this.stxx.masterData.length === this.stxx.maxMasterDataSize);
-                this.stxx.minimumLeftBars = noMoreScroll && !hasReachedRight ? this.stxx.chart.maxTicks : 2;
+                let defaultMinimumBars = this.mainStore.chart.defaultMinimumBars;
+                if (this.stxx.chart.maxTicks - 10 > 50) {
+                    defaultMinimumBars = 50;
+                }
+                this.stxx.minimumLeftBars = noMoreScroll && !hasReachedRight ? this.stxx.chart.maxTicks : Math.min(this.stxx.chart.maxTicks, defaultMinimumBars);
             }
         }
     }

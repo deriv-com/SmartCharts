@@ -15,6 +15,7 @@ export default class ChartSizeStore {
         logEvent(LogCategories.ChartControl, LogActions.ChartSize, 'zoom In');
         if (this.stx) {
             this.stx.chart.lockScroll = false;
+            this.stx.chart.lockAutoScroll = false;
             this.stx.zoomIn();
         }
     }
@@ -23,6 +24,7 @@ export default class ChartSizeStore {
         logEvent(LogCategories.ChartControl, LogActions.ChartSize, 'zoom Out');
         if (this.stx) {
             this.stx.chart.lockScroll = false;
+            this.stx.chart.lockAutoScroll = false;
             this.stx.zoomOut();
         }
     }

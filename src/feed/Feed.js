@@ -7,6 +7,7 @@ import ServerTime from '../utils/ServerTime';
 
 class Feed {
     static get EVENT_MASTER_DATA_UPDATE() { return 'EVENT_MASTER_DATA_UPDATE'; }
+    static get EVENT_MASTER_DATA_REINITIALIZE() { return 'EVENT_MASTER_DATA_REASSIGN'; }
     static get EVENT_COMPARISON_DATA_UPDATE() { return 'EVENT_COMPARISON_DATA_UPDATE'; }
     static get EVENT_START_PAGINATION() { return 'EVENT_START_PAGINATION'; }
     static get EVENT_ON_PAGINATION() { return 'EVENT_ON_PAGINATION'; }
@@ -72,10 +73,10 @@ class Feed {
         if (this.startEpoch) {
             if (!this.endEpoch) {
                 this._stx.maxMasterDataSize = 0;
-                this._stx.chart.lockScroll = true;
+                this._stx.chart.lockAutoScroll = true;
             } else {
                 this._stx.chart.isDisplayFullMode = false;
-                this._stx.chart.lockScroll = false;
+                this._stx.chart.lockAutoScroll = false;
             }
 
             this._stx.setMaxTicks(this._stx.chart.dataSet.length + (Math.floor(this._stx.chart.dataSet.length / 5) || 2));
@@ -209,7 +210,7 @@ class Feed {
         this._mainStore.chart.updateYaxisWidth();
         this.scaleChart();
 
-        this._emitDataUpdate(quotes, comparisonChartSymbol);
+        this._emitDataUpdate(quotes, comparisonChartSymbol, true);
     }
 
     async fetchPaginationData(symbol, suggestedStartDate, endDate, params, callback) {
@@ -342,13 +343,16 @@ class Feed {
                 noCreateDataSet: true,
             });
         } else {
-            this._stx.updateChartData(quotes, null, { allowReplaceOHL: true });
+            this._stx.updateChartData(quotes, null, {
+                appending: !this._mainStore.state.granularity,
+                allowReplaceOHL: true,
+            });
         }
 
         this._emitDataUpdate(quotes, comparisonChartSymbol);
     }
 
-    _emitDataUpdate(quotes, comparisonChartSymbol) {
+    _emitDataUpdate(quotes, comparisonChartSymbol, isChartReinitialized = false) {
         const prev = quotes[quotes.length - 2];
         const prevClose = (prev !== undefined) ? prev.Close : undefined;
         const dataUpdate = {
@@ -357,8 +361,12 @@ class Feed {
         };
 
         if (!comparisonChartSymbol) {
-            this._emitter.emit(Feed.EVENT_MASTER_DATA_UPDATE, dataUpdate);
-            this._mainStore.chart.setChartAvailability(true);
+            if (isChartReinitialized) {
+                this._emitter.emit(Feed.EVENT_MASTER_DATA_REINITIALIZE);
+                this._mainStore.chart.setChartAvailability(true);
+            } else {
+                this._emitter.emit(Feed.EVENT_MASTER_DATA_UPDATE, dataUpdate);
+            }
         } else {
             this._emitter.emit(Feed.EVENT_COMPARISON_DATA_UPDATE, {
                 symbol: comparisonChartSymbol,
@@ -384,6 +392,14 @@ class Feed {
 
     offMasterDataUpdate(callback) {
         this._emitter.off(Feed.EVENT_MASTER_DATA_UPDATE, callback);
+    }
+
+    onMasterDataReinitialize(callback) {
+        this._emitter.on(Feed.EVENT_MASTER_DATA_REINITIALIZE, callback);
+    }
+
+    offMasterDataReinitialize(callback) {
+        this._emitter.off(Feed.EVENT_MASTER_DATA_REINITIALIZE, callback);
     }
 
     onComparisonDataUpdate(callback) {
