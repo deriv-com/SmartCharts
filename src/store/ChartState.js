@@ -1,6 +1,6 @@
 /* eslint-disable no-new */
 import { action, observable, when } from 'mobx';
-import { createObjectFromLocalStorage, calculateTimeUnitInterval, calculateGranularity, getUTCDate } from '../utils';
+import { createObjectFromLocalStorage, calculateTimeUnitInterval, calculateGranularity, getUTCDate, getUTCEpoch } from '../utils';
 import Theme from '../../sass/_themes.scss';
 
 class ChartState {
@@ -390,15 +390,17 @@ class ChartState {
         }
     }
 
-    scrollChartToLeft = () => {
+    scrollChartToLeft = (leftTick, force) => {
+        const scrollToEpoch = this.scrollToEpoch || (leftTick && getUTCEpoch(leftTick.DT));
         this.stxx.chart.entryTick = null;
-        if (this.scrollToEpoch && !this.startEpoch) {
+
+        if (this.scrollToEpoch && !this.startEpoch && !force) {
             let startEntry = this.stxx.chart.dataSet
-                .find(entry =>  entry.DT.valueOf() === CIQ.strToDateTime(getUTCDate(this.scrollToEpoch)).valueOf());
+                .find(entry =>  entry.DT.valueOf() === CIQ.strToDateTime(getUTCDate(scrollToEpoch)).valueOf());
 
             if (!startEntry) {
                 startEntry = {
-                    DT: CIQ.strToDateTime(getUTCDate(this.scrollToEpoch)),
+                    DT: CIQ.strToDateTime(getUTCDate(scrollToEpoch)),
                     Close: null,
                 };
 
@@ -431,9 +433,22 @@ class ChartState {
                 this.stxx.chart.isScrollLocationChanged = true; // set to true to draw markers
                 this.stxx.draw();
             });
-        } else if (this.startEpoch) {
+        } else if (scrollToEpoch && this.startEpoch || force) {
             this.stxx.chart.lockAutoScroll = true;
             this.stxx.chart.isScrollLocationChanged = true;
+            const startToEpoch = this.startEpoch || scrollToEpoch;
+
+            this.stxx.chart.entryTick = this.stxx.tickFromDate(getUTCDate(startToEpoch)); // the calculation of entry tick should be done after draw
+            const scrollToTarget = this.stxx.chart.dataSet.length - this.stxx.chart.entryTick;
+
+            if (!this.endEpoch) {
+                this.stxx.setMaxTicks(scrollToTarget + 3);
+                this.stxx.chart.scroll = scrollToTarget + 1;
+            } else {
+                this.stxx.setMaxTicks(scrollToTarget + (Math.floor(scrollToTarget / 5) || 2));
+                this.stxx.chart.scroll = scrollToTarget + (Math.floor(scrollToTarget / 10) || 1);
+            }
+            this.stxx.draw();
         } else {
             this.stxx.chart.lockAutoScroll = false;
             this.stxx.chart.isScrollLocationChanged = false;
@@ -546,7 +561,6 @@ class ChartState {
 
         this.onExportLayout(currentLayout);
     }
-
 
     scrollListener({ grab }) {
         if (grab && this.stxx.chart.lockAutoScroll) {
