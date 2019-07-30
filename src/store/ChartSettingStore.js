@@ -5,12 +5,69 @@ import { FlagIcons } from '../components/Icons.jsx';
 import Menu from '../components/Menu.jsx';
 import { logEvent, LogCategories, LogActions } from '../utils/ga';
 
+const languageList = [
+    {
+        key: 'en',
+        name: 'English',
+        icon: <FlagIcons.USD />,
+    }, {
+        key: 'pt',
+        name: 'Português',
+        icon: <FlagIcons.Portugal />,
+    }, {
+        key: 'de',
+        name: 'Deutsch',
+        icon: <FlagIcons.German />,
+    }, {
+        key: 'ru',
+        name: 'Русский',
+        icon: <FlagIcons.Russia />,
+    }, {
+        key: 'fr',
+        name: 'French',
+        icon: <FlagIcons.French />,
+    }, {
+        key: 'th',
+        name: 'Thai',
+        icon: <FlagIcons.Thailand />,
+    }, {
+        key: 'id',
+        name: 'Indonesia',
+        icon: <FlagIcons.Indonesia />,
+    }, {
+        key: 'vi',
+        name: 'Tiếng Việt',
+        icon: <FlagIcons.Vietnam />,
+    }, {
+        key: 'it',
+        name: 'Italiano',
+        icon: <FlagIcons.Italy />,
+    }, {
+        key: 'zh_cn',
+        name: '简体中文',
+        icon: <FlagIcons.Chinese />,
+    }, {
+        key: 'pl',
+        name: 'Polish',
+        icon: <FlagIcons.Poland />,
+    }, {
+        key: 'zh_tw',
+        name: '繁體中文',
+        icon: <FlagIcons.ChineseTraditional />,
+    }, {
+        key: 'es',
+        name: 'espanyol',
+        icon: <FlagIcons.Spanish />,
+    },
+];
+
 export default class ChartSettingStore {
     constructor(mainStore) {
         this.defaultLanguage = this.languages[0];
         this.mainStore = mainStore;
         this.menu = new MenuStore(mainStore, { route: 'setting' });
         this.ChartSettingMenu = this.menu.connect(Menu);
+        this.init();
         when(() => this.context, () => {
             this.setSettings(mainStore.state.settings);
         });
@@ -19,62 +76,12 @@ export default class ChartSettingStore {
     get context() { return this.mainStore.chart.context; }
     get stx() { return this.context.stx; }
 
-    languages = [
-        {
-            key: 'en',
-            name: 'English',
-            icon: <FlagIcons.USD />,
-        }, {
-            key: 'pt',
-            name: 'Português',
-            icon: <FlagIcons.Portugal />,
-        }, {
-            key: 'de',
-            name: 'Deutsch',
-            icon: <FlagIcons.German />,
-        }, {
-            key: 'ru',
-            name: 'Русский',
-            icon: <FlagIcons.Russia />,
-        }, {
-            key: 'fr',
-            name: 'French',
-            icon: <FlagIcons.French />,
-        }, {
-            key: 'th',
-            name: 'Thai',
-            icon: <FlagIcons.Thailand />,
-        }, {
-            key: 'id',
-            name: 'Indonesia',
-            icon: <FlagIcons.Indonesia />,
-        }, {
-            key: 'vi',
-            name: 'Tiếng Việt',
-            icon: <FlagIcons.Vietnam />,
-        }, {
-            key: 'it',
-            name: 'Italiano',
-            icon: <FlagIcons.Italy />,
-        }, {
-            key: 'zh_cn',
-            name: '简体中文',
-            icon: <FlagIcons.Chinese />,
-        }, {
-            key: 'pl',
-            name: 'Polish',
-            icon: <FlagIcons.Poland />,
-        }, {
-            key: 'zh_tw',
-            name: '繁體中文',
-            icon: <FlagIcons.ChineseTraditional />,
-        },
-    ];
+    languages = [];
     defaultLanguage = {};
     onSettingsChange;
     @observable assetInformation = true;
     @observable view = '';
-    @observable language = this.languages[0];
+    @observable language = null;
     @observable position = 'bottom';
     @observable theme = 'light';
     @observable countdown = false;
@@ -82,43 +89,59 @@ export default class ChartSettingStore {
     @observable isAutoScale = true;
     @observable isHighestLowestMarkerEnabled = true;
 
-    setSettings(settings) {
-        if (settings === undefined) { return; }
-        const { assetInformation, countdown, historical, language, position, isAutoScale, isHighestLowestMarkerEnabled, theme } = settings;
-        if (theme                        !== undefined) { this.setTheme(theme); }
-        if (position                     !== undefined) { this.setPosition(position); }
-        if (countdown                    !== undefined) { this.showCountdown(countdown); }
-        if (language                     !== undefined) { this.setLanguage(language); }
-        if (assetInformation             !== undefined) { this.setAssetInformation(assetInformation); }
-        if (historical                   !== undefined) { this.setHistorical(historical); }
-        if (isAutoScale                  !== undefined) { this.setAutoScale(isAutoScale); }
-        if (isHighestLowestMarkerEnabled !== undefined) { this.toggleHighestLowestMarker(isHighestLowestMarkerEnabled); }
+   @action.bound init(activeLanguages) {
+        if (activeLanguages) {
+            this.languages = activeLanguages
+                .map(lngKey => languageList.find(lng => lng.key.toUpperCase() === lngKey) || null)
+                .filter(x => x);
+            this.language = this.languages[0];
+        } else {
+            this.languages = languageList;
+            this.language = this.languages[0];
+        }
+
+        // set default language as the first item of active languages or Eng
+        this.defaultLanguage = this.languages[0] || languageList[0];
     }
 
-    saveSetting() {
-        if (this.onSettingsChange) {
-            this.onSettingsChange({
-                assetInformation            : this.assetInformation,
-                countdown                   : this.countdown,
-                historical                  : this.historical,
-                language                    : this.language.key,
-                position                    : this.position,
-                isAutoScale                 : this.isAutoScale,
-                isHighestLowestMarkerEnabled: this.isHighestLowestMarkerEnabled,
-                theme                       : this.theme,
-            });
-        }
-    }
+   setSettings(settings) {
+       if (settings === undefined) { return; }
+       const { assetInformation, countdown, historical, language, position, isAutoScale, isHighestLowestMarkerEnabled, theme } = settings;
+       if (theme                        !== undefined) { this.setTheme(theme); }
+       if (position                     !== undefined) { this.setPosition(position); }
+       if (countdown                    !== undefined) { this.showCountdown(countdown); }
+       if (language                     !== undefined) { this.setLanguage(language); }
+       if (assetInformation             !== undefined) { this.setAssetInformation(assetInformation); }
+       if (historical                   !== undefined) { this.setHistorical(historical); }
+       if (isAutoScale                  !== undefined) { this.setAutoScale(isAutoScale); }
+       if (isHighestLowestMarkerEnabled !== undefined) { this.toggleHighestLowestMarker(isHighestLowestMarkerEnabled); }
+   }
+
+   saveSetting() {
+       if (this.onSettingsChange) {
+           this.onSettingsChange({
+               assetInformation            : this.assetInformation,
+               countdown                   : this.countdown,
+               historical                  : this.historical,
+               language                    : this.language.key,
+               position                    : this.position,
+               isAutoScale                 : this.isAutoScale,
+               isHighestLowestMarkerEnabled: this.isHighestLowestMarkerEnabled,
+               theme                       : this.theme,
+           });
+       }
+   }
 
     @action.bound setView(view) {
-        this.view = view || '';
-    }
+       this.view = view || '';
+   }
 
     @action.bound setLanguage(lng) {
-        if (lng === this.language.key) { return; }
-        this.language = this.languages.find(item => item.key === lng);
-        t.setLanguage(lng);
-        logEvent(LogCategories.ChartControl, LogActions.ChartSetting, `Change language to ${lng}`);
+        if (!this.languages.length) { return; }
+        if (this.language && lng === this.language.key) { return; }
+        this.language = this.languages.find(item => item.key === lng) || this.defaultLanguage;
+        t.setLanguage(this.language.key);
+        logEvent(LogCategories.ChartControl, LogActions.ChartSetting, `Change language to ${this.language.key}`);
         this.saveSetting();
     }
 
