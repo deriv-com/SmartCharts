@@ -97,6 +97,9 @@ const IntervalEnum = {
     day: 24 * 3600,
     year: 365 * 24 * 3600,
 };
+const activeLanguages = ['EN', 'ID', 'RU', 'FR', 'IT',
+    'PT', 'PL', 'DE', 'ZH_CN', 'VI', 'ZH_TW',
+    'TH'];
 
 const streamManager = new StreamManager(connectionManager);
 const requestAPI = connectionManager.send.bind(connectionManager);
@@ -247,7 +250,9 @@ class App extends Component {
             <Views />
             <Share />
             {isMobile ? '' : <ChartSize />}
-            <ChartSetting />
+            <ChartSetting
+                activeLanguages={activeLanguages}
+            />
         </>
     );
 

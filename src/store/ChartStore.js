@@ -25,7 +25,7 @@ import DeleteIcon      from '../../sass/icons/delete/ic-delete.svg';
 import DownIcon        from '../../sass/icons/chart/ic-down.svg';
 import JumpToTodayIcon from '../../sass/icons/chart/jump-to-today.svg';
 import MaximizeIcon    from '../../sass/icons/chart/ic-maximize.svg';
-import '../utils/raf';
+// import '../utils/raf';
 
 function renderSVGString(icon) {
     const vb = icon.viewBox.split(' ').slice(2);
@@ -60,7 +60,6 @@ class ChartStore {
     holderStyle;
     state;
     onMessage = null;
-    @observable supported_languages = null;
     @observable containerWidth = null;
     @observable context = null;
     @observable currentActiveSymbol;
@@ -379,6 +378,9 @@ class ChartStore {
         this.tradingTimes = ChartStore.tradingTimes || (ChartStore.tradingTimes = new TradingTimes(this.api, this.mainStore.state.shouldFetchTradingTimes));
         this.activeSymbols = ChartStore.activeSymbols || (ChartStore.activeSymbols = new ActiveSymbols(this.api, this.tradingTimes));
 
+        const { chartSetting } = this.mainStore;
+        chartSetting.setSettings(settings);
+        chartSetting.onSettingsChange = onSettingsChange;
         this.isMobile = isMobile;
         this.state = this.mainStore.state;
 
@@ -480,73 +482,64 @@ class ChartStore {
         stxx.callbacks.studyPanelEdit = studiesStore.editStudy;
 
         this.loader.setState('market-symbol');
+        this.activeSymbols.retrieveActiveSymbols().then(() => {
+            this.loader.setState('trading-time');
+            this.tradingTimes.initialize().then(action(() => {
+                // In the odd event that chart is destroyed by the time
+                // the request finishes, just calmly return...
+                if (stxx.isDestroyed) { return; }
 
-        this.api.getWebsiteStatus().then(action((res) => {
-            this.supported_languages = res.website_status.supported_languages;
+                const isRestoreSuccess = this.state.restoreLayout();
 
-            const { chartSetting } = this.mainStore;
-            chartSetting.setSettings(settings);
-            chartSetting.onSettingsChange = onSettingsChange;
+                if (!isRestoreSuccess) {
+                    this.changeSymbol(
+                        // default to first available symbol
+                        symbol || Object.keys(this.activeSymbols.symbolMap)[0],
+                        this.granularity,
+                    );
+                }
 
-            this.activeSymbols.retrieveActiveSymbols().then(() => {
-                this.loader.setState('trading-time');
-                this.tradingTimes.initialize().then(action(() => {
-                    // In the odd event that chart is destroyed by the time
-                    // the request finishes, just calmly return...
-                    if (stxx.isDestroyed) { return; }
+                this.context = context;
 
-                    const isRestoreSuccess = this.state.restoreLayout();
+                this.chartClosedOpenThemeChange(!this.currentActiveSymbol.exchange_is_open);
 
-                    if (!isRestoreSuccess) {
-                        this.changeSymbol(
-                            // default to first available symbol
-                            symbol || Object.keys(this.activeSymbols.symbolMap)[0],
-                            this.granularity,
-                        );
-                    }
-
-                    this.context = context;
-
-                    this.chartClosedOpenThemeChange(!this.currentActiveSymbol.exchange_is_open);
-
-                    this.mainStore.chart.tradingTimes.onMarketOpenCloseChanged(action((changes) => {
-                        for (const sy in changes) {
-                            if (this.currentActiveSymbol.symbol === sy) {
-                                this.chartClosedOpenThemeChange(!changes[sy]);
-                            }
+                this.mainStore.chart.tradingTimes.onMarketOpenCloseChanged(action((changes) => {
+                    for (const sy in changes) {
+                        if (this.currentActiveSymbol.symbol === sy) {
+                            this.chartClosedOpenThemeChange(!changes[sy]);
                         }
-                    }));
-
-                    if (this.state.importedLayout) {
-                        // Check if there is a layout set by importedLayout porp, import it here after chart is loaded
-                        this.state.importLayout();
                     }
-
-                    stxx.container.addEventListener('mouseenter', this.onMouseEnter);
-                    stxx.container.addEventListener('mouseleave', this.onMouseLeave);
-
-                    this.contextPromise.resolve(this.context);
-                    this.resizeScreen();
-
-                    reaction(() => [
-                        this.state.symbol,
-                        this.state.granularity,
-                    ], () => {
-                        if (this.state.symbol !== undefined || (this.state.granularity !== undefined && !this.state.importedLayout)) {
-                            this.changeSymbol(this.state.symbol, this.state.granularity);
-                        }
-                    });
-
-                    this.tradingTimes.onMarketOpenCloseChanged(this.onMarketOpenClosedChange);
-
-                    setTimeout(action(() => {
-                        // Defer the render of the dialogs and dropdowns; this enables
-                        // considerable performance improvements for slower devices.
-                        this.shouldRenderDialogs = true;
-                    }), 500);
                 }));
-            });
-        }));
+
+                if (this.state.importedLayout) {
+                    // Check if there is a layout set by importedLayout porp, import it here after chart is loaded
+                    this.state.importLayout();
+                }
+
+                stxx.container.addEventListener('mouseenter', this.onMouseEnter);
+                stxx.container.addEventListener('mouseleave', this.onMouseLeave);
+
+                this.contextPromise.resolve(this.context);
+                this.resizeScreen();
+
+                reaction(() => [
+                    this.state.symbol,
+                    this.state.granularity,
+                ], () => {
+                    if (this.state.symbol !== undefined || (this.state.granularity !== undefined && !this.state.importedLayout)) {
+                        this.changeSymbol(this.state.symbol, this.state.granularity);
+                    }
+                });
+
+                this.tradingTimes.onMarketOpenCloseChanged(this.onMarketOpenClosedChange);
+
+                setTimeout(action(() => {
+                    // Defer the render of the dialogs and dropdowns; this enables
+                    // considerable performance improvements for slower devices.
+                    this.shouldRenderDialogs = true;
+                }), 500);
+            }));
+        });
 
         if ('ResizeObserver' in window) {
             this.resizeObserver = new ResizeObserver(this.resizeScreen);
@@ -568,12 +561,10 @@ class ChartStore {
             if (symbol in changes) {
                 if (changes[symbol]) {
                     shouldRefreshChart = true;
-                    this.mainStore.state.setChartTheme(this.mainStore.chartSetting.theme, false);
-                    this.mainStore.state.setChartClosed(false);
+                    this.chartClosedOpenThemeChange(false);
                     this.mainStore.notifier.notifyMarketOpen(name);
                 } else {
-                    this.mainStore.state.setChartTheme(this.mainStore.chartSetting.theme, true);
-                    this.mainStore.state.setChartClosed(true);
+                    this.chartClosedOpenThemeChange(true);
                     this.mainStore.notifier.notifyMarketClose(name);
                 }
             }

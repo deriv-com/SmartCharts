@@ -66,17 +66,9 @@ export default class ChartSettingStore {
         this.mainStore = mainStore;
         this.menu = new MenuStore(mainStore, { route: 'setting' });
         this.ChartSettingMenu = this.menu.connect(Menu);
-
-        reaction(() => mainStore.chart.supported_languages, () => {
-            this.languages = languageList.filter(lng => mainStore.chart.supported_languages.indexOf(lng.key.toUpperCase()) !== -1);
-            this.language = this.languages[0];
-            this.defaultLanguage = this.languages[0];
-        });
-
+        this.init();
         reaction(() => mainStore.state.settings, () => {
-            if (this.languages.length && this.language) {
-                this.setSettings(mainStore.state.settings);
-            }
+            this.setSettings(mainStore.state.settings);
         });
     }
 
@@ -95,6 +87,21 @@ export default class ChartSettingStore {
     @observable historical = false;
     @observable isAutoScale = true;
     @observable isHighestLowestMarkerEnabled = true;
+
+    @action.bound init(activeLanguages) {
+        if (activeLanguages) {
+            this.languages = activeLanguages
+                .map(lngKey => languageList.find(lng => lng.key.toUpperCase() === lngKey) || null)
+                .filter(x => x);
+            this.language = this.languages[0];
+        } else {
+            this.languages = languageList;
+            this.language = this.languages[0];
+        }
+
+        // set default language as the first item of active languages or Eng
+        this.defaultLanguage = this.languages[0] || languageList[0];
+    }
 
     @action.bound setSettings(settings) {
         if (settings === undefined) { return; }
@@ -131,10 +138,7 @@ export default class ChartSettingStore {
     @action.bound setLanguage(lng) {
         if (!this.languages.length) { return; }
         if (this.language && lng === this.language.key) { return; }
-
-        const supported = this.mainStore.chart.supported_languages.find(item => item === lng.toUpperCase());
-        this.language = (supported && this.languages.find(item => item.key === lng))
-                        || this.defaultLanguage;
+        this.language = this.languages.find(item => item.key === lng) || this.defaultLanguage;
         t.setLanguage(this.language.key);
         logEvent(LogCategories.ChartControl, LogActions.ChartSetting, `Change language to ${this.language.key}`);
         this.saveSetting();
