@@ -1,5 +1,5 @@
 import React from 'react';
-import { observable, action, reaction } from 'mobx';
+import { observable, action, when } from 'mobx';
 import MenuStore from './MenuStore';
 import { FlagIcons } from '../components/Icons.jsx';
 import Menu from '../components/Menu.jsx';
@@ -11,7 +11,7 @@ export default class ChartSettingStore {
         this.mainStore = mainStore;
         this.menu = new MenuStore(mainStore, { route: 'setting' });
         this.ChartSettingMenu = this.menu.connect(Menu);
-        reaction(() => mainStore.state.settings, () => {
+        when(() => this.context, () => {
             this.setSettings(mainStore.state.settings);
         });
     }
@@ -80,29 +80,32 @@ export default class ChartSettingStore {
     @observable countdown = false;
     @observable historical = false;
     @observable isAutoScale = true;
+    @observable isHighestLowestMarkerEnabled = true;
 
-    @action.bound setSettings(settings) {
+    setSettings(settings) {
         if (settings === undefined) { return; }
-        const { assetInformation, countdown, historical, language, position, isAutoScale, theme } = settings;
-        if (theme            !== undefined) { this.setTheme(theme); }
-        if (position         !== undefined) { this.setPosition(position); }
-        if (countdown        !== undefined) { this.showCountdown(countdown); }
-        if (language         !== undefined) { this.setLanguage(language); }
-        if (assetInformation !== undefined) { this.setAssetInformation(assetInformation); }
-        if (historical       !== undefined) { this.setHistorical(historical); }
-        if (isAutoScale      !== undefined) { this.setAutoScale(isAutoScale); }
+        const { assetInformation, countdown, historical, language, position, isAutoScale, isHighestLowestMarkerEnabled, theme } = settings;
+        if (theme                        !== undefined) { this.setTheme(theme); }
+        if (position                     !== undefined) { this.setPosition(position); }
+        if (countdown                    !== undefined) { this.showCountdown(countdown); }
+        if (language                     !== undefined) { this.setLanguage(language); }
+        if (assetInformation             !== undefined) { this.setAssetInformation(assetInformation); }
+        if (historical                   !== undefined) { this.setHistorical(historical); }
+        if (isAutoScale                  !== undefined) { this.setAutoScale(isAutoScale); }
+        if (isHighestLowestMarkerEnabled !== undefined) { this.toggleHighestLowestMarker(isHighestLowestMarkerEnabled); }
     }
 
     saveSetting() {
         if (this.onSettingsChange) {
             this.onSettingsChange({
-                assetInformation: this.assetInformation,
-                countdown       : this.countdown,
-                historical      : this.historical,
-                language        : this.language.key,
-                position        : this.position,
-                isAutoScale     : this.isAutoScale,
-                theme           : this.theme,
+                assetInformation            : this.assetInformation,
+                countdown                   : this.countdown,
+                historical                  : this.historical,
+                language                    : this.language.key,
+                position                    : this.position,
+                isAutoScale                 : this.isAutoScale,
+                isHighestLowestMarkerEnabled: this.isHighestLowestMarkerEnabled,
+                theme                       : this.theme,
             });
         }
     }
@@ -167,6 +170,7 @@ export default class ChartSettingStore {
     @action.bound setHistorical(value) {
         if (this.historical === value) { return; }
         this.historical = value;
+        this.isHighestLowestMarkerEnabled = !value;
         this.saveSetting();
         /**
         * Chart should fix its height & width after the position changed,
@@ -184,6 +188,15 @@ export default class ChartSettingStore {
 
         this.isAutoScale = value;
         logEvent(LogCategories.ChartControl, LogActions.ChartSetting, ` Change AutoScale to ${value}`);
+
+        this.saveSetting();
+    }
+
+    @action.bound toggleHighestLowestMarker(value) {
+        if (this.isHighestLowestMarkerEnabled === value) { return; }
+
+        this.isHighestLowestMarkerEnabled = value;
+        logEvent(LogCategories.ChartControl, LogActions.ChartSetting, ` ${value ? 'Show' : 'Hide'} HighestLowestMarker.`);
 
         this.saveSetting();
     }

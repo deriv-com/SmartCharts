@@ -213,11 +213,8 @@ export default class BarrierStore {
         this._low_barrier.draggable = value;
     }
 
-    @action.bound _drawShadedArea() {
+    _drawShadedArea = () => {
         if (!this.isInitialized) { return; }
-
-        this._optimizeTop(this._low_barrier);
-        this._optimizeTop(this._high_barrier);
 
         if (this._shadeState === BarrierStore.SHADE_ABOVE) {
             this._shadeAbove();
@@ -239,36 +236,28 @@ export default class BarrierStore {
         return this._high_barrier.offScreen && this._low_barrier.offScreen;
     }
 
-    _calcBottomShade(barrier) {
-        return this.chart.panel.height - barrier.top;
-    }
-
-    _optimizeTop(barrier) {
-        if (barrier.top + 30 > this.chart.panel.height) {
-            barrier.top = this.chart.panel.height - 30;
-        } else if (barrier.top < 10) {
-            barrier.top = 10;
-        }
-    }
-
     _shadeBetween() {
-        const bottom = this._calcBottomShade(this._low_barrier);
-        this.betweenShadeStore.top = this._high_barrier.top;
-        this.betweenShadeStore.bottom = bottom;
-        this.betweenShadeStore.right = this.yAxisWidth;
+        this.betweenShadeStore.setPosition({
+            top : this._high_barrier.top,
+            bottom : this._low_barrier.top,
+            right : this.yAxisWidth,
+        });
     }
 
     _shadeBelow(barrier = this._high_barrier) {
-        this.belowShadeStore.top = barrier.top;
-        this.belowShadeStore.bottom = 0;
-        this.belowShadeStore.right = this.yAxisWidth;
+        this.belowShadeStore.setPosition({
+            top: barrier.top,
+            bottom: 0,
+            right: this.yAxisWidth,
+        });
     }
 
     _shadeAbove(barrier = this._high_barrier) {
-        const bottom = this._calcBottomShade(barrier);
-        this.aboveShadeStore.top = 0;
-        this.aboveShadeStore.bottom = bottom;
-        this.aboveShadeStore.right = this.yAxisWidth;
+        this.aboveShadeStore.setPosition({
+            top: 0,
+            bottom: barrier.top,
+            right: this.yAxisWidth,
+        });
     }
 
     _shadeOutside() {

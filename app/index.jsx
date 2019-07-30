@@ -129,7 +129,7 @@ class App extends Component {
             chartType = 'mountain';
             granularity = 0;
             if (layout) {
-                granularity = layout.timeUnit === 'second' ? 0 : parseInt(layout.interval * IntervalEnum[layout.timeUnit], 10);
+                granularity = layout.timeUnit === 'second' ? 0 : parseInt(layout.interval * IntervalEnum[layout.timeUnit], 10); // eslint-disable-line
 
                 if (layout.chartType === 'candle' && layout.aggregationType !== 'ohlc') {
                     chartType = layout.aggregationType;
@@ -138,6 +138,7 @@ class App extends Component {
                 }
             }
         }
+        settings.isHighestLowestMarkerEnabled = false;
 
         connectionManager.on(
             ConnectionManager.EVENT_CONNECTION_CLOSE,
@@ -280,6 +281,7 @@ class App extends Component {
                 granularity={this.state.granularity}
                 onSettingsChange={this.saveSettings}
                 isConnectionOpened={isConnectionOpened}
+                shouldFetchTradingTimes
             >
                 {endEpoch ? (
                     <Marker

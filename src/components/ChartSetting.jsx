@@ -54,6 +54,7 @@ const ChartSetting = ({
     countdown,
     historical,
     isAutoScale,
+    isHighestLowestMarkerEnabled,
     isMobile,
     languages,
     menuOpen,
@@ -69,6 +70,7 @@ const ChartSetting = ({
     showCountdown,
     view,
     theme,
+    toggleHighestLowestMarker,
 }) => {
     const renderMain = () => (
         <div>
@@ -123,6 +125,15 @@ const ChartSetting = ({
                         <span className="ciq-icon-text">{t.translate('Language')}</span>
                         <div className="ciq-action">
                             {selectedLanguage.icon}
+                        </div>
+                    </div>
+                    <div className={`ciq-list-item ${historical && 'disabled'}`}>
+                        <span className="ciq-icon-text">{t.translate('Show Highest/Lowest Spot')}</span>
+                        <div className="ciq-action">
+                            <Switch
+                                value={isHighestLowestMarkerEnabled}
+                                onChange={toggleHighestLowestMarker}
+                            />
                         </div>
                     </div>
                 </div>
@@ -188,25 +199,27 @@ const ChartSetting = ({
 };
 
 export default connect(({ chartSetting: s, chart: c }) => ({
-    assetInformation   : s.assetInformation,
-    ChartSettingMenu   : s.ChartSettingMenu,
-    closeMenu          : s.menu.onTitleClick,
-    countdown          : s.countdown,
-    historical         : s.historical,
-    isMobile           : c.isMobile,
-    isAutoScale        : s.isAutoScale,
-    languages          : s.languages,
-    menuOpen           : s.menu.dialog.open,
-    position           : s.position,
-    selectedLanguage   : s.language,
-    setAssetInformation: s.setAssetInformation,
-    setAutoScale       : s.setAutoScale,
-    setHistorical      : s.setHistorical,
-    setLanguage        : s.setLanguage,
-    setPosition        : s.setPosition,
-    setTheme           : s.setTheme,
-    setView            : s.setView,
-    showCountdown      : s.showCountdown,
-    theme              : s.theme,
-    view               : s.view,
+    assetInformation            : s.assetInformation,
+    ChartSettingMenu            : s.ChartSettingMenu,
+    closeMenu                   : s.menu.onTitleClick,
+    countdown                   : s.countdown,
+    historical                  : s.historical,
+    isMobile                    : c.isMobile,
+    isAutoScale                 : s.isAutoScale,
+    isHighestLowestMarkerEnabled: s.isHighestLowestMarkerEnabled,
+    languages                   : s.languages,
+    menuOpen                    : s.menu.dialog.open,
+    position                    : s.position,
+    selectedLanguage            : s.language,
+    setAssetInformation         : s.setAssetInformation,
+    setAutoScale                : s.setAutoScale,
+    setHistorical               : s.setHistorical,
+    setLanguage                 : s.setLanguage,
+    setPosition                 : s.setPosition,
+    setTheme                    : s.setTheme,
+    setView                     : s.setView,
+    showCountdown               : s.showCountdown,
+    theme                       : s.theme,
+    toggleHighestLowestMarker   : s.toggleHighestLowestMarker,
+    view                        : s.view,
 }))(ChartSetting);

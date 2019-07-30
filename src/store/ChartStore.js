@@ -25,6 +25,7 @@ import DeleteIcon      from '../../sass/icons/delete/ic-delete.svg';
 import DownIcon        from '../../sass/icons/chart/ic-down.svg';
 import JumpToTodayIcon from '../../sass/icons/chart/jump-to-today.svg';
 import MaximizeIcon    from '../../sass/icons/chart/ic-maximize.svg';
+// import '../utils/raf';
 
 function renderSVGString(icon) {
     const vb = icon.viewBox.split(' ').slice(2);
@@ -59,6 +60,7 @@ class ChartStore {
     holderStyle;
     state;
     onMessage = null;
+    defaultMinimumBars = 5;
     @observable containerWidth = null;
     @observable context = null;
     @observable currentActiveSymbol;
@@ -255,9 +257,9 @@ class ChartStore {
                 if ((!this.mainSeriesRenderer || !this.mainSeriesRenderer.standaloneBars) && !this.standaloneBars[layout.chartType]) this.micropixels += layout.candleWidth / 2; // bar charts display at beginning of candle
 
                 if (this.isHistoricalMode() && _self.isMobile) {
-                    exactScroll = parseInt(exactScroll * 0.8, 10);
+                    exactScroll = parseInt(exactScroll * 0.8, 10); // eslint-disable-line
                 } else if (this.isHistoricalMode()) {
-                    exactScroll = parseInt(exactScroll * 0.9, 10);
+                    exactScroll = parseInt(exactScroll * 0.9, 10); // eslint-disable-line
                 }
 
                 if (params.animate) {
@@ -365,16 +367,16 @@ class ChartStore {
             requestAPI,
             requestSubscribe,
             requestForget,
+            requestForgetStream,
             isMobile,
             enableRouting,
             onMessage,
             settings,
             onSettingsChange,
         } = props;
-        this.api = new BinaryAPI(requestAPI, requestSubscribe, requestForget);
-
+        this.api = new BinaryAPI(requestAPI, requestSubscribe, requestForget, requestForgetStream);
         // trading times and active symbols can be reused across multiple charts
-        this.tradingTimes = ChartStore.tradingTimes || (ChartStore.tradingTimes = new TradingTimes(this.api));
+        this.tradingTimes = ChartStore.tradingTimes || (ChartStore.tradingTimes = new TradingTimes(this.api, this.mainStore.state.shouldFetchTradingTimes));
         this.activeSymbols = ChartStore.activeSymbols || (ChartStore.activeSymbols = new ActiveSymbols(this.api, this.tradingTimes));
 
         const { chartSetting } = this.mainStore;
@@ -409,7 +411,7 @@ class ChartStore {
                 gaplines: true,
                 dynamicYAxis: true,
             },
-            minimumLeftBars: 2,
+            minimumLeftBars: this.defaultMinimumBars,
             yTolerance: 999999, // disable vertical scrolling
         };
         let chartLayout = {
@@ -426,6 +428,26 @@ class ChartStore {
         engineParams.layout = chartLayout;
 
         const stxx = this.stxx = new CIQ.ChartEngine(engineParams);
+        const tickAnimator = new CIQ.EaseMachine(Math.easeOutCubic, 500);
+
+        let defaultMinimumBars = this.defaultMinimumBars;
+        if (stxx.chart.maxTicks - 10 > 50) {
+            defaultMinimumBars = 50;
+        }
+        stxx.minimumLeftBars = Math.min(stxx.chart.maxTicks, defaultMinimumBars);
+
+        // macos trackpad is so sensitive that it'll break our zoom animation.
+        // unfortunately there is no way to detect a trackpad from javascript,
+        // here we drop 'wheel' events shorter that 40ms
+        // TODO: email chartiq support to fix this.
+        const org_run = stxx.animations.zoom.run.bind(stxx.animations.zoom);
+        let wheelInMotion = false;
+        stxx.animations.zoom.run = (fc, startValues, endValues) => {
+            if (wheelInMotion) return;
+            wheelInMotion = true;
+            setTimeout(() => { wheelInMotion = false; }, 40);
+            return org_run(fc, startValues, endValues);
+        };
 
         stxx.isAutoScale = settings && settings.isAutoScale !== false;
 
@@ -436,7 +458,8 @@ class ChartStore {
         deleteElement.textContent = t.translate('right-click to delete');
         manageElement.textContent = t.translate('right-click to manage');
 
-        if (this.state.isAnimationEnabled) animateChart(stxx, { stayPut: true });
+        if (this.state.isAnimationEnabled) animateChart(stxx, { stayPut: true }, tickAnimator);
+        stxx.chart.lockScroll = true;
 
         // connect chart to data
         this.feed = new Feed(this.api, stxx, this.mainStore, this.tradingTimes);
@@ -546,12 +569,10 @@ class ChartStore {
             if (symbol in changes) {
                 if (changes[symbol]) {
                     shouldRefreshChart = true;
-                    this.mainStore.state.setChartTheme(this.mainStore.chartSetting.theme, false);
-                    this.mainStore.state.setChartClosed(false);
+                    this.chartClosedOpenThemeChange(false);
                     this.mainStore.notifier.notifyMarketOpen(name);
                 } else {
-                    this.mainStore.state.setChartTheme(this.mainStore.chartSetting.theme, true);
-                    this.mainStore.state.setChartClosed(true);
+                    this.chartClosedOpenThemeChange(true);
                     this.mainStore.notifier.notifyMarketClose(name);
                 }
             }
@@ -685,6 +706,7 @@ class ChartStore {
 
     // Calling newChart with symbolObj as undefined refreshes the chart
     @action.bound newChart(symbolObj = this.currentActiveSymbol, params) {
+        if (!symbolObj) return;
         this.stxx.chart.symbolDisplay = symbolObj.name;
         this.loader.show();
         this.mainStore.state.setChartIsReady(false);
