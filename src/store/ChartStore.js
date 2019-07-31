@@ -60,6 +60,7 @@ class ChartStore {
     holderStyle;
     state;
     onMessage = null;
+    defaultMinimumBars = 5;
     @observable containerWidth = null;
     @observable context = null;
     @observable currentActiveSymbol;
@@ -410,7 +411,7 @@ class ChartStore {
                 gaplines: true,
                 dynamicYAxis: true,
             },
-            minimumLeftBars: 2,
+            minimumLeftBars: this.defaultMinimumBars,
             yTolerance: 999999, // disable vertical scrolling
         };
         let chartLayout = {
@@ -428,6 +429,12 @@ class ChartStore {
 
         const stxx = this.stxx = new CIQ.ChartEngine(engineParams);
         const tickAnimator = new CIQ.EaseMachine(Math.easeOutCubic, 500);
+
+        let defaultMinimumBars = this.defaultMinimumBars;
+        if (stxx.chart.maxTicks - 10 > 50) {
+            defaultMinimumBars = 50;
+        }
+        stxx.minimumLeftBars = Math.min(stxx.chart.maxTicks, defaultMinimumBars);
 
         // macos trackpad is so sensitive that it'll break our zoom animation.
         // unfortunately there is no way to detect a trackpad from javascript,
