@@ -98,6 +98,7 @@ const IntervalEnum = {
     day: 24 * 3600,
     year: 365 * 24 * 3600,
 };
+const activeLanguagesList = ['EN', 'ID', 'FR', 'IT', 'PT', 'DE'];
 
 const streamManager = new StreamManager(connectionManager);
 const requestAPI = connectionManager.send.bind(connectionManager);
@@ -117,6 +118,12 @@ class App extends Component {
         let granularity = 60;
         let endEpoch;
         let settings = createObjectFromLocalStorage('smartchart-setting');
+        let activeLanguages = null;
+
+
+        if (new URLSearchParams(window.location.search).get('activeLanguages') === 'true') {
+            activeLanguages = activeLanguagesList;
+        }
 
         if (settings) {
             settings.language = language;
@@ -160,6 +167,7 @@ class App extends Component {
             chartType,
             isChartTypeCandle,
             granularity,
+            activeLanguages,
             isConnectionOpened: true,
             highLow: {},
             barrierType: '',
@@ -273,7 +281,9 @@ class App extends Component {
             <Views />
             <Share />
             {isMobile ? '' : <ChartSize />}
-            <ChartSetting />
+            <ChartSetting
+                activeLanguages={this.state.activeLanguages}
+            />
         </>
     );
 
@@ -374,6 +384,18 @@ class App extends Component {
         });
     };
 
+    onActiveLanguage = () => {
+        const { activeLanguages } = this.state;
+        const baseUrl = `${window.location.protocol}//${window.location.host}${window.location.pathname}`;
+        window.location.href = `${baseUrl}?activeLanguages=${!activeLanguages}`;
+    }
+
+    onLanguage = (evt) => {
+        const { activeLanguages } = this.state;
+        const baseUrl = `${window.location.protocol}//${window.location.host}${window.location.pathname}`;
+        window.location.href = `${baseUrl}?l=${evt.target.value}&activeLanguages=${!!activeLanguages}`;
+    }
+
     render() {
         const { settings, isConnectionOpened, symbol, endEpoch,
             barrierType, highLow : { high, low }, hidePriceLines,
@@ -439,6 +461,21 @@ class App extends Component {
                     </SmartChart>
                 </div>
                 <div className="action-section">
+                    <div className="form-row">
+                        Active Language: <button type="button" onClick={this.onActiveLanguage}>Toggle</button>
+                    </div>
+                    <div className="form-row">
+                        Language <br />
+                        <select onChange={this.onLanguage}>
+                            <option value="">None</option>
+                            <option value="en">English</option>
+                            <option value="pt">Português</option>
+                            <option value="de">Deutsch</option>
+                            <option value="fr">French</option>
+                            <option value="pl">Polish</option>
+                            <option value="ar">Arabic(not supported)</option>
+                        </select>
+                    </div>
                     <div className="form-row">
                         Markers <br />
                         <select onChange={this.onAddMArker}>
