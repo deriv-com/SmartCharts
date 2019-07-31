@@ -41,15 +41,6 @@ class Feed {
 
         if (!this.endEpoch) {
             if (this.startEpoch) {
-                const key = this._getKey({
-                    symbol     : this._mainStore.state.symbol,
-                    granularity: this._mainStore.state.granularity,
-                });
-
-                if (this._activeStreams[key]) {
-                    this._forgetStream(key);
-                }
-
                 dtLeft = this.startEpoch ? CIQ.strToDateTime(getUTCDate(this.startEpoch)) : undefined;
             }
         } else {
@@ -91,6 +82,9 @@ class Feed {
 
     // Do not call explicitly! Method below is called by ChartIQ when unsubscribing symbols.
     unsubscribe({ symbol, period, interval }) {
+        // the chart forgets the ticks_history of the main chart symbol before sending a new request in fetchInitialData function.
+        if (this._stx.chart.symbol === symbol) return;
+
         const granularity = calculateGranularity(period, interval);
         const key = this._getKey({ symbol, granularity });
         this._forgetStream(key);
@@ -159,6 +153,11 @@ class Feed {
             }
 
             try {
+                // The chart should forget all ticks_history subscriptions when the symbol/granularity of the main chart is changed before sending the new request.
+                if (!isComparisonChart) {
+                    this.unsubscribeAll();
+                }
+
                 quotes = await subscription.initialFetch();
             } catch (error) {
                 const { message: text } = error;
