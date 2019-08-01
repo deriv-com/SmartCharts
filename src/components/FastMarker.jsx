@@ -60,7 +60,14 @@ class FastMarker extends Component {
             && chart.dataSet.length
             && stx.mainSeriesRenderer
         ) {
-            const tick_idx = stx.tickFromDate(this.date, chart);
+            let tick_idx = stx.tickFromDate(this.date, chart);
+
+            if (tick_idx > -1 && stx.chart.dataSet[tick_idx]
+                && stx.chart.dataSet[tick_idx].Close !== this.price) {
+                delete stx.chart.tickCache[this.date.getTime()];
+                tick_idx = stx.tickFromDate(this.date, chart);
+            }
+
             let x = stx.pixelFromTick(tick_idx, chart);
 
             // ChartIQ doesn't support placing markers in the middle of ticks.
