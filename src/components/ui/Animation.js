@@ -265,12 +265,12 @@ export default function animateChart(stx, animationParameters, easeMachine) {
             }
 
             if (stx.chart.lockAutoScroll) {
-                if (stx.isNewTick && this.chart.entryTick !== null && this.chart.entryTick !== undefined) {
-                    const visibleTicks = this.chart.dataSet.length - (this.chart.entryTick || 0) + 1;
+                if (stx.isNewTick && (this.chart.entryTick || this.chart.entryTick === 0)) {
+                    const visibleTicks = this.chart.dataSet.length - this.chart.entryTick + 1;
                     this.setMaxTicks(visibleTicks + 3);
                 } else if (stx.isNewTick) {
                     this.setMaxTicks(this.chart.dataSet.length + (Math.floor(this.chart.dataSet.length / 5) || 2));
-                    this.chart.scroll = this.chart.dataSet.length + (Math.floor(this.chart.dataSet.length / 10) || 1);
+                    this.chart.scroll = this.chart.dataSet.length;
                 }
 
                 this.micropixels = 0;
