@@ -101,7 +101,7 @@ class ChartState {
             this.symbol = symbol;
             isSymbolChanged = true;
 
-            if (this.mainStore.chart && this.mainStore.chart.feed) {
+            if (this.mainStore.chart && this.mainStore.chart.feed && scrollToEpoch) {
                 this.mainStore.chart.feed.onMasterDataReinitialize(this.scrollChartToLeft);
             }
         }
@@ -121,7 +121,7 @@ class ChartState {
             this.setChartGranularity(granularity);
 
             isGranularityChanged = true;
-            if (this.mainStore.chart && this.mainStore.chart.feed && !isSymbolChanged) {
+            if (this.mainStore.chart && this.mainStore.chart.feed && !isSymbolChanged && scrollToEpoch) {
                 this.mainStore.chart.feed.onMasterDataReinitialize(this.scrollChartToLeft);
             }
         }
@@ -165,7 +165,7 @@ class ChartState {
         if (!isStaticChart && scrollToEpoch !== this.scrollToEpoch) {
             this.scrollToEpoch = scrollToEpoch;
             if (this.mainStore.chart && this.mainStore.chart.feed && !isSymbolChanged && !isGranularityChanged) {
-                this.mainStore.chart.feed.onMasterDataUpdate(this.scrollChartToLeft);
+                this.scrollChartToLeft();
             }
         }
 
