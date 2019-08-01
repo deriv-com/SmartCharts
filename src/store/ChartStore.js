@@ -430,11 +430,12 @@ class ChartStore {
         const stxx = this.stxx = new CIQ.ChartEngine(engineParams);
         const tickAnimator = new CIQ.EaseMachine(Math.easeOutCubic, 500);
 
-        let defaultMinimumBars = this.defaultMinimumBars;
-        if (stxx.chart.maxTicks - 10 > 50) {
-            defaultMinimumBars = 50;
-        }
-        stxx.minimumLeftBars = Math.min(stxx.chart.maxTicks, defaultMinimumBars);
+        // TODO this part of the code prevent the chart to go to home after refreshing the page when the chart was zoomed in before.
+        // let defaultMinimumBars = this.defaultMinimumBars;
+        // if (stxx.chart.maxTicks - 10 > 50) {
+        //     defaultMinimumBars = 50;
+        // }
+        // stxx.minimumLeftBars = Math.min(stxx.chart.maxTicks, defaultMinimumBars);
 
         // macos trackpad is so sensitive that it'll break our zoom animation.
         // unfortunately there is no way to detect a trackpad from javascript,

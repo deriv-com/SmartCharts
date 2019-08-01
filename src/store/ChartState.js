@@ -421,6 +421,8 @@ class ChartState {
                 this.stxx.animations.liveScroll.stop();
             }
 
+            this.stxx.minimumLeftBars = 1;
+
             this.stxx.scrollTo(this.stxx.chart, scrollToTarget, () => {
                 this.stxx.setMaxTicks(5);
                 this.stxx.micropixels = 0;
@@ -429,9 +431,12 @@ class ChartState {
                 this.stxx.draw();
             });
         } else if (this.startEpoch) {
+            this.stxx.chart.entryTick = null;
+            this.stxx.chart.scroll = this.stxx.dataSet.length;
             this.stxx.chart.lockAutoScroll = true;
             this.stxx.chart.isScrollLocationChanged = true;
         } else {
+            this.stxx.chart.entryTick = null;
             this.stxx.chart.lockAutoScroll = false;
             this.stxx.chart.isScrollLocationChanged = false;
             this.stxx.home();
@@ -470,6 +475,8 @@ class ChartState {
         if (Object.keys(this.mainStore.chart.feed._activeStreams).length === 0) {
             this.stxx.layout.interval = undefined;
         }
+
+        this.stxx.minimumLeftBars = this.mainStore.chart.defaultMinimumBars;
 
         // Clear start and end epoch before importing that layout
         this.startEpoch = this.endEpoch = null;
