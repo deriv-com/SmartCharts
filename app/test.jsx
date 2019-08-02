@@ -118,6 +118,7 @@ class App extends Component {
         let granularity = 0;
         let endEpoch;
         let settings = createObjectFromLocalStorage('smartchart-setting');
+        const activeLanguage = new URLSearchParams(window.location.search).get('activeLanguage') === 'true';
 
         if (settings) {
             settings.language = language;
@@ -161,7 +162,7 @@ class App extends Component {
             chartType,
             isChartTypeCandle,
             granularity,
-            activeLanguage: false,
+            activeLanguage,
             isConnectionOpened: true,
             highLow: {},
             barrierType: '',
@@ -383,8 +384,9 @@ class App extends Component {
     }
 
     onLanguage = (evt) => {
+        const { activeLanguage } = this.state;
         const baseUrl = `${window.location.protocol}//${window.location.host}${window.location.pathname}`;
-        window.location.href = `${baseUrl}?l=${evt.target.value}`;
+        window.location.href = `${baseUrl}?l=${evt.target.value}&activeLanguage=${activeLanguage}`;
     }
 
     render() {
@@ -454,7 +456,7 @@ class App extends Component {
                 <div className="action-section">
                     <div className="form-row">
                         Active Language:
-                        <button type="button" onClick={this.onActiveLanguage}>{activeLanguage ? 'OFF' : 'ON'}</button>
+                        <button type="button" onClick={this.onActiveLanguage}>{activeLanguage ? 'ON' : 'OFF'}</button>
                     </div>
                     <div className="form-row">
                         Language <br />
