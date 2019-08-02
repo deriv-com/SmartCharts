@@ -89,7 +89,7 @@ export default class ChartSettingStore {
     @observable isAutoScale = true;
     @observable isHighestLowestMarkerEnabled = true;
 
-   @action.bound init(activeLanguages) {
+    @action.bound init(activeLanguages) {
         if (activeLanguages) {
             this.languages = activeLanguages
                 .map(lngKey => languageList.find(lng => lng.key.toUpperCase() === lngKey) || null)
@@ -104,37 +104,67 @@ export default class ChartSettingStore {
         this.defaultLanguage = this.languages[0] || languageList[0];
     }
 
-   setSettings(settings) {
-       if (settings === undefined) { return; }
-       const { assetInformation, countdown, historical, language, position, isAutoScale, isHighestLowestMarkerEnabled, theme } = settings;
-       if (theme                        !== undefined) { this.setTheme(theme); }
-       if (position                     !== undefined) { this.setPosition(position); }
-       if (countdown                    !== undefined) { this.showCountdown(countdown); }
-       if (language                     !== undefined) { this.setLanguage(language); }
-       if (assetInformation             !== undefined) { this.setAssetInformation(assetInformation); }
-       if (historical                   !== undefined) { this.setHistorical(historical); }
-       if (isAutoScale                  !== undefined) { this.setAutoScale(isAutoScale); }
-       if (isHighestLowestMarkerEnabled !== undefined) { this.toggleHighestLowestMarker(isHighestLowestMarkerEnabled); }
-   }
+    @action.bound updateProps(activeLanguages) {
+        const isDifferentLanguages = !(
+            (!activeLanguages && languageList.every(x => this.languages.find(y => y.key === x.key)))
+            || (
+                activeLanguages
+                && this.languages.length === activeLanguages.length
+                && this.languages.every(x => activeLanguages.indexOf(x.key.toUpperCase()) !== -1)
+            )
+        );
 
-   saveSetting() {
-       if (this.onSettingsChange) {
-           this.onSettingsChange({
-               assetInformation            : this.assetInformation,
-               countdown                   : this.countdown,
-               historical                  : this.historical,
-               language                    : this.language.key,
-               position                    : this.position,
-               isAutoScale                 : this.isAutoScale,
-               isHighestLowestMarkerEnabled: this.isHighestLowestMarkerEnabled,
-               theme                       : this.theme,
-           });
-       }
-   }
+        if (isDifferentLanguages) {
+            this.setView(''); // return the view back to chart setting list
+
+            if (activeLanguages) {
+                this.languages = activeLanguages
+                    .map(lngKey => languageList.find(lng => lng.key.toUpperCase() === lngKey) || null)
+                    .filter(x => x);
+            } else this.languages = languageList;
+
+            // set default language as the first item of active languages or Eng
+            this.defaultLanguage = this.languages[0];
+
+            if (this.language && !this.languages.find(x => x.key === this.language.key)) {
+                this.setLanguage(this.languages[0].key);
+            } else if (!this.language) {
+                this.language = this.languages[0];
+            }
+        }
+    }
+
+    setSettings(settings) {
+        if (settings === undefined) { return; }
+        const { assetInformation, countdown, historical, language, position, isAutoScale, isHighestLowestMarkerEnabled, theme } = settings;
+        if (theme                        !== undefined) { this.setTheme(theme); }
+        if (position                     !== undefined) { this.setPosition(position); }
+        if (countdown                    !== undefined) { this.showCountdown(countdown); }
+        if (language                     !== undefined) { this.setLanguage(language); }
+        if (assetInformation             !== undefined) { this.setAssetInformation(assetInformation); }
+        if (historical                   !== undefined) { this.setHistorical(historical); }
+        if (isAutoScale                  !== undefined) { this.setAutoScale(isAutoScale); }
+        if (isHighestLowestMarkerEnabled !== undefined) { this.toggleHighestLowestMarker(isHighestLowestMarkerEnabled); }
+    }
+
+    saveSetting() {
+        if (this.onSettingsChange) {
+            this.onSettingsChange({
+                assetInformation            : this.assetInformation,
+                countdown                   : this.countdown,
+                historical                  : this.historical,
+                language                    : this.language.key,
+                position                    : this.position,
+                isAutoScale                 : this.isAutoScale,
+                isHighestLowestMarkerEnabled: this.isHighestLowestMarkerEnabled,
+                theme                       : this.theme,
+            });
+        }
+    }
 
     @action.bound setView(view) {
-       this.view = view || '';
-   }
+        this.view = view || '';
+    }
 
     @action.bound setLanguage(lng) {
         if (!this.languages.length) { return; }

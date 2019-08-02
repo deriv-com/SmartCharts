@@ -53,6 +53,11 @@ class ChartSetting extends Component {
         init(activeLanguages);
     }
 
+    componentDidUpdate() {
+        const { updateProps, activeLanguages } = this.props;
+        updateProps(activeLanguages);
+    }
+
     render() {
         const {
             assetInformation,
@@ -232,4 +237,5 @@ export default connect(({ chartSetting: s, chart: c }) => ({
     toggleHighestLowestMarker   : s.toggleHighestLowestMarker,
     view                        : s.view,
     init                        : s.init,
+    updateProps                 : s.updateProps,
 }))(ChartSetting);

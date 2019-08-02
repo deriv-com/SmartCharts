@@ -115,15 +115,9 @@ class App extends Component {
             layout = JSON.parse(layoutString !== '' ? layoutString : '{}');
         let chartType;
         let isChartTypeCandle;
-        let granularity = 60;
+        let granularity = 0;
         let endEpoch;
         let settings = createObjectFromLocalStorage('smartchart-setting');
-        let activeLanguages = null;
-
-
-        if (new URLSearchParams(window.location.search).get('activeLanguages') === 'true') {
-            activeLanguages = activeLanguagesList;
-        }
 
         if (settings) {
             settings.language = language;
@@ -134,7 +128,7 @@ class App extends Component {
         if (settings.historical) {
             this.removeAllComparisons();
             endEpoch = (new Date(`${today}:00Z`).valueOf() / 1000);
-            chartType = 'mountain';
+            chartType = 'line';
             isChartTypeCandle = false;
             if (layout) {
                 granularity = layout.timeUnit === 'second' ? 0 : parseInt(layout.interval * IntervalEnum[layout.timeUnit], 10);
@@ -167,7 +161,7 @@ class App extends Component {
             chartType,
             isChartTypeCandle,
             granularity,
-            activeLanguages,
+            activeLanguage: false,
             isConnectionOpened: true,
             highLow: {},
             barrierType: '',
@@ -282,7 +276,7 @@ class App extends Component {
             <Share />
             {isMobile ? '' : <ChartSize />}
             <ChartSetting
-                activeLanguages={this.state.activeLanguages}
+                activeLanguages={this.state.activeLanguage ? activeLanguagesList : null}
             />
         </>
     );
@@ -385,22 +379,19 @@ class App extends Component {
     };
 
     onActiveLanguage = () => {
-        const { activeLanguages } = this.state;
-        const baseUrl = `${window.location.protocol}//${window.location.host}${window.location.pathname}`;
-        window.location.href = `${baseUrl}?activeLanguages=${!activeLanguages}`;
+        this.setState(prevState => ({ activeLanguage: !prevState.activeLanguage }));
     }
 
     onLanguage = (evt) => {
-        const { activeLanguages } = this.state;
         const baseUrl = `${window.location.protocol}//${window.location.host}${window.location.pathname}`;
-        window.location.href = `${baseUrl}?l=${evt.target.value}&activeLanguages=${!!activeLanguages}`;
+        window.location.href = `${baseUrl}?l=${evt.target.value}`;
     }
 
     render() {
         const { settings, isConnectionOpened, symbol, endEpoch,
             barrierType, highLow : { high, low }, hidePriceLines,
             draggable, relative, shadeColor, scrollToEpoch,
-            leftOffset, color, foregroundColor, markers } = this.state;
+            leftOffset, color, foregroundColor, markers, activeLanguage } = this.state;
         const barriers = barrierType ? [{
             shade: barrierType,
             shadeColor,
@@ -462,7 +453,8 @@ class App extends Component {
                 </div>
                 <div className="action-section">
                     <div className="form-row">
-                        Active Language: <button type="button" onClick={this.onActiveLanguage}>Toggle</button>
+                        Active Language:
+                        <button type="button" onClick={this.onActiveLanguage}>{activeLanguage ? 'OFF' : 'ON'}</button>
                     </div>
                     <div className="form-row">
                         Language <br />
