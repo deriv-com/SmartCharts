@@ -266,6 +266,7 @@ export default function animateChart(stx, animationParameters, easeMachine) {
 
             if (stx.chart.lockAutoScroll) {
                 if (stx.isNewTick && (this.chart.entryTick || this.chart.entryTick === 0)) {
+                    this.micropixels = 0;
                     const visibleTicks = this.chart.dataSet.length - this.chart.entryTick + 1;
                     this.setMaxTicks(visibleTicks + 3);
                 } else if (stx.isNewTick) {

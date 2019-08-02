@@ -62,6 +62,10 @@ class Feed {
 
     scaleChart() {
         if (this.startEpoch) {
+            if (this._stx.animations.liveScroll && this._stx.animations.liveScroll.running) {
+                this._stx.animations.liveScroll.stop();
+            }
+
             if (!this.endEpoch) {
                 this._stx.maxMasterDataSize = 0;
                 this._stx.chart.lockAutoScroll = true;
@@ -71,7 +75,7 @@ class Feed {
             }
 
             this._stx.setMaxTicks(this._stx.chart.dataSet.length + (Math.floor(this._stx.chart.dataSet.length / 5) || 2));
-            this._stx.chart.scroll = this._stx.chart.dataSet.length + (Math.floor(this._stx.chart.dataSet.length / 10) || 1);
+            this._stx.chart.scroll = this._stx.chart.dataSet.length;
             this._stx.chart.isScrollLocationChanged = true;
             this._stx.draw();
         }
