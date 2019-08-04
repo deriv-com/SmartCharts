@@ -67,7 +67,6 @@ export default class ChartSettingStore {
         this.mainStore = mainStore;
         this.menu = new MenuStore(mainStore, { route: 'setting' });
         this.ChartSettingMenu = this.menu.connect(Menu);
-        this.init();
         when(() => this.context, () => {
             this.setSettings(mainStore.state.settings);
         });
@@ -89,54 +88,19 @@ export default class ChartSettingStore {
     @observable isAutoScale = true;
     @observable isHighestLowestMarkerEnabled = true;
 
-    @action.bound init(activeLanguages) {
-        if (activeLanguages) {
-            this.languages = activeLanguages
-                .map(lngKey => languageList.find(lng => lng.key.toUpperCase() === lngKey) || null)
-                .filter(x => x);
-            this.language = this.languages[0];
-        } else {
-            this.languages = languageList;
-            this.language = this.languages[0];
-        }
+    setSettings(settings) {
+        if (settings === undefined) { return; }
+        const { assetInformation, countdown, historical, language, position, isAutoScale, isHighestLowestMarkerEnabled, theme, activeLanguages } = settings;
 
-        // set default language as the first item of active languages or Eng
-        this.defaultLanguage = this.languages[0] || languageList[0];
-    }
-
-    @action.bound updateProps(activeLanguages) {
-        const isDifferentLanguages = !(
+        if (!(
             (!activeLanguages && languageList.every(x => this.languages.find(y => y.key === x.key)))
             || (
                 activeLanguages
                 && this.languages.length === activeLanguages.length
                 && this.languages.every(x => activeLanguages.indexOf(x.key.toUpperCase()) !== -1)
             )
-        );
+        )) { this.updateActiveLanguage(activeLanguages); }
 
-        if (isDifferentLanguages) {
-            this.setView(''); // return the view back to chart setting list
-
-            if (activeLanguages) {
-                this.languages = activeLanguages
-                    .map(lngKey => languageList.find(lng => lng.key.toUpperCase() === lngKey) || null)
-                    .filter(x => x);
-            } else this.languages = languageList;
-
-            // set default language as the first item of active languages or Eng
-            this.defaultLanguage = this.languages[0];
-
-            if (this.language && !this.languages.find(x => x.key === this.language.key)) {
-                this.setLanguage(this.languages[0].key);
-            } else if (!this.language) {
-                this.language = this.languages[0];
-            }
-        }
-    }
-
-    setSettings(settings) {
-        if (settings === undefined) { return; }
-        const { assetInformation, countdown, historical, language, position, isAutoScale, isHighestLowestMarkerEnabled, theme } = settings;
         if (theme                        !== undefined) { this.setTheme(theme); }
         if (position                     !== undefined) { this.setPosition(position); }
         if (countdown                    !== undefined) { this.showCountdown(countdown); }
@@ -164,6 +128,25 @@ export default class ChartSettingStore {
 
     @action.bound setView(view) {
         this.view = view || '';
+    }
+
+    @action.bound updateActiveLanguage(activeLanguages) {
+        this.setView(''); // return the view back to chart setting list
+
+        if (activeLanguages) {
+            this.languages = activeLanguages
+                .map(lngKey => languageList.find(lng => lng.key.toUpperCase() === lngKey) || null)
+                .filter(x => x);
+        } else this.languages = languageList;
+
+        // set default language as the first item of active languages or Eng
+        this.defaultLanguage = this.languages[0];
+
+        if (this.language && !this.languages.find(x => x.key === this.language.key)) {
+            this.setLanguage(this.languages[0].key);
+        } else if (!this.language) {
+            this.language = this.languages[0];
+        }
     }
 
     @action.bound setLanguage(lng) {

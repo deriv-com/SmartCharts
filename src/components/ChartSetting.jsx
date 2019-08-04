@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 
-import React, { Component } from 'react';
+import React from 'react';
 import { CSSTransition } from 'react-transition-group';
 import { connect } from '../store/Connect';
 import { Switch } from './Form.jsx';
@@ -47,170 +47,156 @@ const ThemeToggle = ({
     </div>
 );
 
-class ChartSetting extends Component {
-    componentDidMount() {
-        const { init, activeLanguages } = this.props;
-        init(activeLanguages);
-    }
-
-    componentDidUpdate() {
-        const { updateProps, activeLanguages } = this.props;
-        updateProps(activeLanguages);
-    }
-
-    render() {
-        const {
-            assetInformation,
-            ChartSettingMenu,
-            closeMenu,
-            countdown,
-            historical,
-            isAutoScale,
-            isHighestLowestMarkerEnabled,
-            isMobile,
-            languages,
-            menuOpen,
-            position,
-            selectedLanguage,
-            setAssetInformation,
-            setAutoScale,
-            setHistorical,
-            setLanguage,
-            setPosition,
-            setTheme,
-            setView,
-            showCountdown,
-            view,
-            theme,
-            toggleHighestLowestMarker,
-        } = this.props;
-
-        const renderMain = () => (
-            <div>
-                <div className="title">
-                    <div className="title-text"> {t.translate('Settings')} </div>
-                    <CloseIcon className="icon-close-menu" onClick={() => closeMenu()} />
+const ChartSetting = ({
+    assetInformation,
+    ChartSettingMenu,
+    closeMenu,
+    countdown,
+    historical,
+    isAutoScale,
+    isHighestLowestMarkerEnabled,
+    isMobile,
+    languages,
+    menuOpen,
+    position,
+    selectedLanguage,
+    setAssetInformation,
+    setAutoScale,
+    setHistorical,
+    setLanguage,
+    setPosition,
+    setTheme,
+    setView,
+    showCountdown,
+    view,
+    theme,
+    toggleHighestLowestMarker,
+}) => {
+    const renderMain = () => (
+        <div>
+            <div className="title">
+                <div className="title-text"> {t.translate('Settings')} </div>
+                <CloseIcon className="icon-close-menu" onClick={() => closeMenu()} />
+            </div>
+            <div className="body">
+                <div className="ciq-list ciq-list-setting">
+                    {!isMobile ? <ThemeToggle setPosition={setPosition} position={position} /> : ''}
+                    <div className="ciq-list-item">
+                        <span className="ciq-icon-text">{t.translate('Auto Scale')}</span>
+                        <div className="ciq-action">
+                            <Switch
+                                value={isAutoScale}
+                                onChange={setAutoScale}
+                            />
+                        </div>
+                    </div>
+                    <div className="ciq-list-item">
+                        <span className="ciq-icon-text">{t.translate('Dark Mode')}</span>
+                        <div className="ciq-action">
+                            <Switch
+                                value={(theme === 'dark')}
+                                onChange={checked => setTheme(checked ? 'dark' : 'light')}
+                            />
+                        </div>
+                    </div>
+                    <div className="ciq-list-item">
+                        <span className="ciq-icon-text">{t.translate('Countdown')}</span>
+                        <div className="ciq-action">
+                            <Switch
+                                value={countdown}
+                                onChange={showCountdown}
+                            />
+                        </div>
+                    </div>
+                    {!isMobile ? <AssetInformationToggle value={assetInformation} onChange={setAssetInformation} /> : ''}
+                    <div className="ciq-list-item">
+                        <span className="ciq-icon-text">{t.translate('Historical Data Mode')}</span>
+                        <div className="ciq-action">
+                            <Switch
+                                value={historical}
+                                onChange={setHistorical}
+                            />
+                        </div>
+                    </div>
+                    <div
+                        className="ciq-list-item ciq-list-item-lng"
+                        onClick={() => setView('language')}
+                    >
+                        <span className="ciq-icon-text">{t.translate('Language')}</span>
+                        <div className="ciq-action">
+                            {selectedLanguage.icon}
+                        </div>
+                    </div>
+                    <div className={`ciq-list-item ${historical && 'disabled'}`}>
+                        <span className="ciq-icon-text">{t.translate('Show Highest/Lowest Spot')}</span>
+                        <div className="ciq-action">
+                            <Switch
+                                value={isHighestLowestMarkerEnabled}
+                                onChange={toggleHighestLowestMarker}
+                            />
+                        </div>
+                    </div>
                 </div>
-                <div className="body">
-                    <div className="ciq-list ciq-list-setting">
-                        {!isMobile ? <ThemeToggle setPosition={setPosition} position={position} /> : ''}
-                        <div className="ciq-list-item">
-                            <span className="ciq-icon-text">{t.translate('Auto Scale')}</span>
-                            <div className="ciq-action">
-                                <Switch
-                                    value={isAutoScale}
-                                    onChange={setAutoScale}
-                                />
-                            </div>
-                        </div>
-                        <div className="ciq-list-item">
-                            <span className="ciq-icon-text">{t.translate('Dark Mode')}</span>
-                            <div className="ciq-action">
-                                <Switch
-                                    value={(theme === 'dark')}
-                                    onChange={checked => setTheme(checked ? 'dark' : 'light')}
-                                />
-                            </div>
-                        </div>
-                        <div className="ciq-list-item">
-                            <span className="ciq-icon-text">{t.translate('Countdown')}</span>
-                            <div className="ciq-action">
-                                <Switch
-                                    value={countdown}
-                                    onChange={showCountdown}
-                                />
-                            </div>
-                        </div>
-                        {!isMobile ? <AssetInformationToggle value={assetInformation} onChange={setAssetInformation} /> : ''}
-                        <div className="ciq-list-item">
-                            <span className="ciq-icon-text">{t.translate('Historical Data Mode')}</span>
-                            <div className="ciq-action">
-                                <Switch
-                                    value={historical}
-                                    onChange={setHistorical}
-                                />
-                            </div>
-                        </div>
+            </div>
+        </div>
+    );
+    const renderLanguage = () => (
+        <div>
+            <div className="title">
+                <BackIcon
+                    className="icon-back-menu"
+                    onClick={() => setView()}
+                />
+                <div className="title-text">{t.translate('Language')}</div>
+            </div>
+            <div className="body">
+                <div className="ciq-list ciq-list-language">
+                    {languages.map(language => (
                         <div
-                            className="ciq-list-item ciq-list-item-lng"
-                            onClick={() => setView('language')}
+                            className={`ciq-list-item ${(selectedLanguage.key === language.key) ? 'selected' : ''}`}
+                            key={language.key}
+                            onClick={() => setLanguage(language.key)}
                         >
-                            <span className="ciq-icon-text">{t.translate('Language')}</span>
-                            <div className="ciq-action">
-                                {selectedLanguage.icon}
-                            </div>
+                            {language.icon}
+                            <span className="ciq-icon-text">{language.name}</span>
                         </div>
-                        <div className={`ciq-list-item ${historical && 'disabled'}`}>
-                            <span className="ciq-icon-text">{t.translate('Show Highest/Lowest Spot')}</span>
-                            <div className="ciq-action">
-                                <Switch
-                                    value={isHighestLowestMarkerEnabled}
-                                    onChange={toggleHighestLowestMarker}
-                                />
-                            </div>
-                        </div>
-                    </div>
+                    ))}
                 </div>
             </div>
-        );
-        const renderLanguage = () => (
-            <div>
-                <div className="title">
-                    <BackIcon
-                        className="icon-back-menu"
-                        onClick={() => setView()}
-                    />
-                    <div className="title-text">{t.translate('Language')}</div>
-                </div>
-                <div className="body">
-                    <div className="ciq-list ciq-list-language">
-                        {languages.map(language => (
-                            <div
-                                className={`ciq-list-item ${(selectedLanguage.key === language.key) ? 'selected' : ''}`}
-                                key={language.key}
-                                onClick={() => setLanguage(language.key)}
-                            >
-                                {language.icon}
-                                <span className="ciq-icon-text">{language.name}</span>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            </div>
-        );
-        return (
-            <ChartSettingMenu className="cq-chart-setting">
-                <ChartSettingMenu.Title>
-                    <SettingIcon
-                        className={`ic-icon-with-sub ${menuOpen ? 'active' : ''}`}
-                        tooltip-title={t.translate('Settings')}
-                    />
-                </ChartSettingMenu.Title>
-                <ChartSettingMenu.Body>
-                    <div className={`cq-setting-container container-${view === '' ? 'main' : view}`}>
-                        <CSSTransition
-                            in={view === ''}
-                            timeout={250}
-                            classNames="cq-setting-main animate"
-                            unmountOnExit
-                        >
-                            {renderMain()}
-                        </CSSTransition>
+        </div>
+    );
+    return (
+        <ChartSettingMenu className="cq-chart-setting">
+            <ChartSettingMenu.Title>
+                <SettingIcon
+                    className={`ic-icon-with-sub ${menuOpen ? 'active' : ''}`}
+                    tooltip-title={t.translate('Settings')}
+                />
+            </ChartSettingMenu.Title>
+            <ChartSettingMenu.Body>
+                <div className={`cq-setting-container container-${view === '' ? 'main' : view}`}>
+                    <CSSTransition
+                        in={view === ''}
+                        timeout={250}
+                        classNames="cq-setting-main animate"
+                        unmountOnExit
+                    >
+                        {renderMain()}
+                    </CSSTransition>
 
-                        <CSSTransition
-                            in={view === 'language'}
-                            timeout={250}
-                            classNames="cq-setting-language animate"
-                            unmountOnExit
-                        >
-                            {renderLanguage()}
-                        </CSSTransition>
-                    </div>
-                </ChartSettingMenu.Body>
-            </ChartSettingMenu>
-        );
-    }
-}
+                    <CSSTransition
+                        in={view === 'language'}
+                        timeout={250}
+                        classNames="cq-setting-language animate"
+                        unmountOnExit
+                    >
+                        {renderLanguage()}
+                    </CSSTransition>
+                </div>
+            </ChartSettingMenu.Body>
+        </ChartSettingMenu>
+    );
+};
 
 export default connect(({ chartSetting: s, chart: c }) => ({
     assetInformation            : s.assetInformation,
@@ -236,6 +222,4 @@ export default connect(({ chartSetting: s, chart: c }) => ({
     theme                       : s.theme,
     toggleHighestLowestMarker   : s.toggleHighestLowestMarker,
     view                        : s.view,
-    init                        : s.init,
-    updateProps                 : s.updateProps,
 }))(ChartSetting);

@@ -126,6 +126,7 @@ class App extends Component {
         } else {
             settings = { language };
         }
+        settings.activeLanguages = activeLanguage ? activeLanguagesList : null;
         if (settings.historical) {
             this.removeAllComparisons();
             endEpoch = (new Date(`${today}:00Z`).valueOf() / 1000);
@@ -220,6 +221,7 @@ class App extends Component {
             const url = new URLSearchParams(search);
             url.delete('l');
             url.set('l', settings.language);
+            url.set('activeLanguage', prevSetting.activeLanguages ? 'true' : 'false');
             window.location.href = `${origin}${pathname}?${url.toString()}`;
         }
     };
@@ -276,9 +278,7 @@ class App extends Component {
             <Views />
             <Share />
             {isMobile ? '' : <ChartSize />}
-            <ChartSetting
-                activeLanguages={this.state.activeLanguage ? activeLanguagesList : null}
-            />
+            <ChartSetting />
         </>
     );
 
@@ -380,13 +380,19 @@ class App extends Component {
     };
 
     onActiveLanguage = () => {
-        this.setState(prevState => ({ activeLanguage: !prevState.activeLanguage }));
+        this.setState(prevState => ({
+            activeLanguage: !prevState.activeLanguage,
+            settings: {
+                ...prevState.settings,
+                activeLanguages: !prevState.activeLanguage ? activeLanguagesList : null,
+            },
+        }));
     }
 
     onLanguage = (evt) => {
-        const { activeLanguage } = this.state;
+        const { settings } = this.state;
         const baseUrl = `${window.location.protocol}//${window.location.host}${window.location.pathname}`;
-        window.location.href = `${baseUrl}?l=${evt.target.value}&activeLanguage=${activeLanguage}`;
+        window.location.href = `${baseUrl}?l=${evt.target.value}&activeLanguage=${settings.activeLanguages}`;
     }
 
     render() {
