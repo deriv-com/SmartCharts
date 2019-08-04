@@ -392,7 +392,7 @@ class App extends Component {
     onLanguage = (evt) => {
         const { settings } = this.state;
         const baseUrl = `${window.location.protocol}//${window.location.host}${window.location.pathname}`;
-        window.location.href = `${baseUrl}?l=${evt.target.value}&activeLanguage=${settings.activeLanguages}`;
+        window.location.href = `${baseUrl}?l=${evt.target.value}&activeLanguage=${settings.activeLanguages ? 'true' : 'false'}`;
     }
 
     render() {
