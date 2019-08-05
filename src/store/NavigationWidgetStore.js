@@ -6,6 +6,7 @@ export default class NavigationWidgetStore {
 
     get chart() { return this.mainStore.chart; }
     get stateStore() { return this.mainStore.state; }
+    get crosshairStore() { return this.mainStore.crosshair; }
     get stxx() { return this.chart.stxx; }
 
     constructor(mainStore) {
@@ -25,6 +26,14 @@ export default class NavigationWidgetStore {
 
     @action.bound updateHomeButton = () => {
         this.isHomeEnabled = !this.stxx.isHome();
+    }
+
+    @action.bound onMouseEnter() {
+        this.crosshairStore.updateVisibility(false);
+    }
+
+    @action.bound onMouseLeave() {
+        this.crosshairStore.updateVisibility(true);
     }
 
     @action.bound onHome() {

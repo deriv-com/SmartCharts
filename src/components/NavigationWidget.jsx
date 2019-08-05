@@ -10,9 +10,13 @@ const NavigationWidget = ({
     home,
     onScale,
     isHomeEnabled,
+    onMouseEnter,
+    onMouseLeave,
 }) => (
     <div
         className="ciq-navigation-widget"
+        onMouseEnter={onMouseEnter}
+        onMouseLeave={onMouseLeave}
     >
         <div
             className={`ciq-navigation-widget__item ${!isHomeEnabled ? 'ciq-navigation-widget__item--hidden' : ''}`}
@@ -36,4 +40,6 @@ export default connect(({ chartSize, navigationWidget }) => ({
     home: navigationWidget.onHome,
     onScale: navigationWidget.onScale,
     isHomeEnabled: navigationWidget.isHomeEnabled,
+    onMouseEnter: navigationWidget.onMouseEnter,
+    onMouseLeave: navigationWidget.onMouseLeave,
 }))(NavigationWidget);

@@ -352,6 +352,13 @@ class CrosshairStore {
         return rows;
     }
 
+    updateVisibility = (visible) => {
+        const crosshair = this.stx.container.querySelector('.cq-crosshair');
+
+        if (visible) crosshair.style.opacity = 1;
+        else crosshair.style.opacity = 0;
+    }
+
     // YES! we are manually patching DOM, Because we don't want to pay
     // for react reconciler & mox tracking observables.
     updateTooltipPosition({ top, left, rows }) {
