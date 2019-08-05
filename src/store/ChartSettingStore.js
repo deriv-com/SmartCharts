@@ -142,10 +142,11 @@ export default class ChartSettingStore {
         // set default language as the first item of active languages or Eng
         this.defaultLanguage = this.languages[0];
 
-        if (this.language && !this.languages.find(x => x.key === this.language.key)) {
+        if (
+            (this.language && !this.languages.find(x => x.key === this.language.key))
+            || !this.language
+        ) {
             this.setLanguage(this.languages[0].key);
-        } else if (!this.language) {
-            this.language = this.languages[0];
         }
     }
 
