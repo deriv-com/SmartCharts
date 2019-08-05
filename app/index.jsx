@@ -127,6 +127,8 @@ class App extends Component {
         } else {
             settings = { language };
         }
+
+        settings.activeLanguages = activeLanguages;
         if (settings.historical) {
             this.removeAllComparisons();
             endEpoch = (new Date(`${today}:00Z`).valueOf() / 1000);
@@ -252,9 +254,7 @@ class App extends Component {
             <Views />
             <Share />
             {isMobile ? '' : <ChartSize />}
-            <ChartSetting
-                activeLanguages={activeLanguages}
-            />
+            <ChartSetting />
         </>
     );
 
