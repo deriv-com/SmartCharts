@@ -396,7 +396,7 @@ class ChartState {
             if (startEntry) {
                 this.stxx.chart.entryTick = this.stxx.tickFromDate(startEntry.DT);
             } else {
-                this.stxx.chart.entryTick = this.stxx.chart.dataSet.length;
+                this.stxx.chart.entryTick = this.stxx.chart.dataSet.length - 1;
             }
 
             const scrollToTarget = this.stxx.chart.dataSet.length - this.stxx.chart.entryTick + 1;

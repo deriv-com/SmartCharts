@@ -350,6 +350,7 @@ class Feed {
                 appending: !this._mainStore.state.granularity,
                 allowReplaceOHL: true,
             });
+            this._stx.createDataSet();
         }
 
         this._emitDataUpdate(quotes, comparisonChartSymbol);
