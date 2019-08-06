@@ -97,6 +97,10 @@ const IntervalEnum = {
     day: 24 * 3600,
     year: 365 * 24 * 3600,
 };
+const activeLanguages = ['EN', 'ID', 'RU', 'ES', 'FR', 'IT',
+    'PT', 'PL', 'DE', 'ZH_CN', 'VI', 'ZH_TW',
+    'TH'];
+
 
 const streamManager = new StreamManager(connectionManager);
 const requestAPI = connectionManager.send.bind(connectionManager);
@@ -123,6 +127,8 @@ class App extends Component {
         } else {
             settings = { language };
         }
+
+        settings.activeLanguages = activeLanguages;
         if (settings.historical) {
             this.removeAllComparisons();
             endEpoch = (new Date(`${today}:00Z`).valueOf() / 1000);
