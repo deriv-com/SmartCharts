@@ -1,7 +1,7 @@
-import { when } from 'mobx';
+import { action, observable, when } from 'mobx';
 
 class PaginationLoaderStore {
-    isOnPagination = false;
+    @observable isOnPagination = false;
     paginationEndEpoch = null;
 
     get feed()    { return this.mainStore.chart.feed; }
@@ -39,11 +39,13 @@ class PaginationLoaderStore {
         }
     }
 
-    setOnPagination = ({ end }) => {
-        if (!this.ref) { return; }
+    @action.bound setOnPagination = ({ end }) => {
         this.isOnPagination     = !this.isOnPagination;
         this.paginationEndEpoch = this.isOnPagination ? end : null;
-        this.ref.setPosition({ epoch: this.paginationEndEpoch, price: 0 });
+
+        if (this.ref) {
+            this.ref.setPosition({ epoch: this.paginationEndEpoch, price: 0 });
+        }
     }
 }
 

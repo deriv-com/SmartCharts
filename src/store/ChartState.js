@@ -102,7 +102,7 @@ class ChartState {
             this.symbol = symbol;
             isSymbolChanged = true;
 
-            if (this.mainStore.chart && this.mainStore.chart.feed) {
+            if (this.mainStore.chart && this.mainStore.chart.feed && scrollToEpoch) {
                 this.mainStore.chart.feed.onMasterDataReinitialize(this.scrollChartToLeft);
             }
         }
@@ -122,7 +122,7 @@ class ChartState {
             this.setChartGranularity(granularity);
 
             isGranularityChanged = true;
-            if (this.mainStore.chart && this.mainStore.chart.feed && !isSymbolChanged) {
+            if (this.mainStore.chart && this.mainStore.chart.feed && !isSymbolChanged && scrollToEpoch) {
                 this.mainStore.chart.feed.onMasterDataReinitialize(this.scrollChartToLeft);
             }
         }
@@ -144,15 +144,7 @@ class ChartState {
                 this.importLayout();
             }
         }
-
-        if (!isStaticChart && scrollToEpoch !== this.scrollToEpoch) {
-            this.setIsChartChanging(true);
-            this.scrollToEpoch = scrollToEpoch;
-            if (this.mainStore.chart && this.mainStore.chart.feed && !isSymbolChanged && !isGranularityChanged) {
-                this.mainStore.chart.feed.onMasterDataUpdate(this.scrollChartToLeft);
-            }
-        }
-
+      
         // This if statement should be always after setting `this.scrollToEpoch` value
         if (this.startEpoch !== startEpoch || this.endEpoch !== endEpoch) {
             this.startEpoch = startEpoch;
@@ -164,10 +156,17 @@ class ChartState {
             } else if (this.mainStore.chart.feed) {
                 /* When layout is importing and range is changing as the same time we dont need to set the range,
                    the imported layout witll take care of it. */
-                if (!this.importedLayout && !this.scrollToEpoch) {
-                    this.setChartIsReady(false);
+                if (!this.importedLayout && !this.scrollToEpoch && !isSymbolChanged && !isGranularityChanged) {
                     this.mainStore.chart.feed.onRangeChanged(true);
                 }
+            }
+        }
+
+        // Please always assign scrollToEpoch after startEpoch and keep this if statement exactly after above if clause
+        if (!isStaticChart && scrollToEpoch !== this.scrollToEpoch) {
+            this.scrollToEpoch = scrollToEpoch;
+            if (this.mainStore.chart && this.mainStore.chart.feed && !isSymbolChanged && !isGranularityChanged) {
+                this.scrollChartToLeft();
             }
         }
 
@@ -396,48 +395,39 @@ class ChartState {
     scrollChartToLeft = () => {
         this.stxx.chart.entryTick = null;
         if (this.scrollToEpoch && !this.startEpoch) {
-            let startEntry = this.stxx.chart.dataSet
+            const startEntry = this.stxx.chart.dataSet
                 .find(entry =>  entry.DT.valueOf() === CIQ.strToDateTime(getUTCDate(this.scrollToEpoch)).valueOf());
 
-            if (!startEntry) {
-                startEntry = {
-                    DT: CIQ.strToDateTime(getUTCDate(this.scrollToEpoch)),
-                    Close: null,
-                };
-
-                /**
-                 * Adding an invisible bar if the bar
-                 * does not exist on the masterData
-                 */
-                this.stxx.updateChartData(
-                    startEntry,
-                    null,
-                    { fillGaps: true },
-                );
-                this.stxx.createDataSet();
+            if (startEntry) {
+                this.stxx.chart.entryTick = this.stxx.tickFromDate(startEntry.DT);
+            } else {
+                this.stxx.chart.entryTick = this.stxx.chart.dataSet.length - 1;
             }
-            this.stxx.maxMasterDataSize = 0;
-            this.stxx.micropixels = 0;
-            this.stxx.draw();
-            this.stxx.chart.entryTick = this.stxx.tickFromDate(startEntry.DT); // the calculation of entry tick should be done after draw
 
-            const scrollToTarget = this.stxx.chart.dataSet.length - this.stxx.chart.entryTick;
+            const scrollToTarget = this.stxx.chart.dataSet.length - this.stxx.chart.entryTick + 1;
 
             if (this.stxx.animations.liveScroll && this.stxx.animations.liveScroll.running) {
                 this.stxx.animations.liveScroll.stop();
             }
 
+            this.stxx.minimumLeftBars = 1;
+            this.stxx.micropixels = 0;
+
             this.stxx.scrollTo(this.stxx.chart, scrollToTarget, () => {
                 this.stxx.setMaxTicks(5);
                 this.stxx.micropixels = 0;
-                this.stxx.chart.lockAutoScroll = true;
                 this.stxx.chart.isScrollLocationChanged = true; // set to true to draw markers
                 this.stxx.draw();
+
+                // This assignment should be always after draw()
+                this.stxx.chart.lockAutoScroll = true;
             });
         } else if (this.startEpoch) {
+            this.stxx.chart.entryTick = null;
             this.stxx.chart.lockAutoScroll = true;
             this.stxx.chart.isScrollLocationChanged = true;
         } else {
+            this.stxx.chart.entryTick = null;
             this.stxx.chart.lockAutoScroll = false;
             this.stxx.chart.isScrollLocationChanged = false;
             this.stxx.home();
@@ -477,6 +467,8 @@ class ChartState {
         if (Object.keys(this.mainStore.chart.feed._activeStreams).length === 0) {
             this.stxx.layout.interval = undefined;
         }
+
+        this.stxx.minimumLeftBars = this.mainStore.chart.defaultMinimumBars;
 
         // Clear start and end epoch before importing that layout
         this.startEpoch = this.endEpoch = null;
@@ -555,7 +547,7 @@ class ChartState {
         if (grab && this.stxx.chart.lockAutoScroll) {
             this.stxx.chart.lockAutoScroll = false;
         }
-        if (this.stxx && this.stxx.chart) {
+        if (this.stxx && this.stxx.chart && !this.stxx.chart.lockAutoScroll) {
             const dataSegment = this.stxx.chart.dataSegment;
             const whiteSpace = this.chartStore.isMobile ? 50 : 150;
             if (this.stxx.masterData.length < this.stxx.chart.maxTicks - whiteSpace) {
