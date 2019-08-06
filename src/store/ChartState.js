@@ -27,7 +27,7 @@ class ChartState {
     @observable refreshActiveSymbols;
     @observable hasReachedEndOfData = false;
     @observable prevChartType;
-    @observable isChartChanging = false;
+    @observable isChartScrollingToEpoch = false;
     chartControlsWidgets;
 
     get comparisonStore() { return this.mainStore.comparison; }
@@ -144,7 +144,7 @@ class ChartState {
                 this.importLayout();
             }
         }
-      
+
         // This if statement should be always after setting `this.scrollToEpoch` value
         if (this.startEpoch !== startEpoch || this.endEpoch !== endEpoch) {
             this.startEpoch = startEpoch;
@@ -166,6 +166,7 @@ class ChartState {
         if (!isStaticChart && scrollToEpoch !== this.scrollToEpoch) {
             this.scrollToEpoch = scrollToEpoch;
             if (this.mainStore.chart && this.mainStore.chart.feed && !isSymbolChanged && !isGranularityChanged) {
+                this.setIsChartScrollingToEpoch(true);
                 this.scrollChartToLeft();
             }
         }
@@ -195,8 +196,8 @@ class ChartState {
         }
     }
 
-    @action.bound setIsChartChanging(isChanging) {
-        this.isChartChanging = isChanging;
+    @action.bound setIsChartScrollingToEpoch(isScrollingToEpoch) {
+        this.isChartScrollingToEpoch = isScrollingToEpoch;
     }
 
     @action.bound hasReachedEndOfData(hasReachedEndOfData) {
@@ -405,7 +406,6 @@ class ChartState {
             }
 
             const scrollToTarget = this.stxx.chart.dataSet.length - this.stxx.chart.entryTick + 1;
-
             if (this.stxx.animations.liveScroll && this.stxx.animations.liveScroll.running) {
                 this.stxx.animations.liveScroll.stop();
             }
@@ -421,6 +421,7 @@ class ChartState {
 
                 // This assignment should be always after draw()
                 this.stxx.chart.lockAutoScroll = true;
+                this.setIsChartScrollingToEpoch(false);
             });
         } else if (this.startEpoch) {
             this.stxx.chart.entryTick = null;
@@ -433,7 +434,6 @@ class ChartState {
             this.stxx.home();
             this.stxx.draw();
         }
-        this.setIsChartChanging(false);
         this.mainStore.chart.feed.offMasterDataReinitialize(this.scrollChartToLeft);
         this.mainStore.chart.feed.offMasterDataUpdate(this.scrollChartToLeft);
     }

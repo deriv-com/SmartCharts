@@ -27,7 +27,7 @@ class RenderInsideChart extends Component {
 
     render() {
         if (!this.props.isChartReady) return null;
-        if (this.props.hideInChartChange && this.props.isChartChanging) return null;
+        if (this.props.hideInScrollToEpoch && this.props.isChartScrollingToEpoch) return null;
         if (this.container) {
             return ReactDOM.createPortal(
                 this.props.children,
@@ -41,5 +41,5 @@ class RenderInsideChart extends Component {
 export default connect(({ chart, state }) => ({
     contextPromise: chart.contextPromise,
     isChartReady: state.isChartReady,
-    isChartChanging: state.isChartChanging,
+    isChartScrollingToEpoch: state.isChartScrollingToEpoch,
 }))(RenderInsideChart);

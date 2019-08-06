@@ -112,7 +112,7 @@ class Chart extends Component {
                                                 && <HighestLowestMarker />
                                         }
                                     </RenderInsideChart>
-                                    <RenderInsideChart at="subholder" hideInChartChange>
+                                    <RenderInsideChart at="subholder" hideInScrollToEpoch>
                                         {children}
                                     </RenderInsideChart>
                                     <RenderInsideChart at="subholder">
